@@ -23,6 +23,7 @@ public class DatasourceConfig {
         config.setMaxLifetime(MINUTES.toMillis(15));
         config.setUsername(properties.getUsername());
         config.setPassword(properties.getPassword());
+        log.info("Creating datasource user={} url={}", config.getUsername(), config.getJdbcUrl());
         return new HikariDataSource(config);
     }
 
