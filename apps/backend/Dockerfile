@@ -9,7 +9,7 @@ ENV MAIN_CLASS=org.springframework.boot.loader.JarLauncher
 ENV JAVA_OPTS="-Xmx850m \
                --enable-preview \
                -Djava.security.egd=file:/dev/./urandom"
-COPY run_java.sh /
+COPY run-java.sh /
 
 COPY --from=builder application/dependencies/ ./
 RUN true
