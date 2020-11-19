@@ -1,0 +1,76 @@
+name: Frontend
+
+on:
+    push:
+        paths:
+            - ".github/workflows/etterlevelse-frontend.yml"
+            - "apps/frontend/**"
+
+env:
+    IMAGE: docker.pkg.github.com/${{ github.repository }}/etterlevelsefront${{ github.ref == 'refs/heads/prod' }}:${{ github.sha }}
+
+defaults:
+  run:
+    working-directory: apps/frontend
+
+jobs:
+    build:
+        name: Frontend - build and push docker
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v1
+            - name: Set up node
+              uses: actions/setup-node@v1
+              with:
+                  node-version: "13.x"
+            
+            - name: npm install
+              run: npm i
+            - name: use prod config
+              if: github.ref == 'refs/heads/prod'
+              run: cp .env.prod .env
+            - name: add version
+              env:
+                GITHUB_SHA: ${{ github.sha }}
+              run: echo "REACT_APP_GIT_VERSION=${GITHUB_SHA}" >> .env
+            
+            - name: Build
+              run: CI=false npm run build
+            - name: Docker
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              run: |
+                  docker build --tag ${IMAGE} .
+                  docker login docker.pkg.github.com -u ${GITHUB_REPOSITORY} -p ${GITHUB_TOKEN}
+                  docker push ${IMAGE}
+
+    deploy-preprod:
+        name: Frontend - deploy Dev GCP
+        needs: build
+        if: github.ref == 'refs/heads/master'
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v1
+            - uses: nais/deploy/actions/deploy@v1
+              env:
+                  APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+                  CLUSTER: dev-gcp
+                  RESOURCE: apps/frontend/nais/frontend-gcp.yaml
+                  VARS: apps/frontend/nais/frontend-dev-gcp-vars.yaml
+                  ENVIRONMENT: dev-gcp:teamdatajegerne:etterlevelse-frontend
+
+    deploy-prod:
+        name: Frontend - deploy Prod GCP
+        needs: build
+        if: github.ref == 'refs/heads/prod'
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v1
+            - uses: nais/deploy/actions/deploy@v1
+              env:
+                  APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+                  CLUSTER: prod-gcp
+                  RESOURCE: apps/frontend/nais/frontend-gcp.yaml
+                  VARS: apps/frontend/nais/frontend-prod-gcp-vars.yaml
+                  ENVIRONMENT: prod-gcp:teamdatajegerne:etterlevelse-frontend

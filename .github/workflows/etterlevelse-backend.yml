@@ -1,0 +1,73 @@
+name: Backend
+
+on:
+  push:
+    paths:
+      - '.github/workflows/etterlevelse-backend.yml'
+      - 'apps/backend/**'
+
+env:
+  IMAGE: docker.pkg.github.com/${{ github.repository }}/etterlevelsebackend:${{ github.sha }}
+
+defaults:
+  run:
+    working-directory: apps/backend
+
+jobs:
+  build:
+    name: Backend - build and push docker
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/cache@v1.1.2
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+
+      - name: Set up JDK 15
+        uses: actions/setup-java@v1
+        with:
+          java-version: '15.x'
+      - name: Build
+        run: mvn compile
+      - name: Test and Package
+        run: mvn package
+
+      - name: docker
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          docker build --tag ${IMAGE} .
+          docker login docker.pkg.github.com -u ${GITHUB_REPOSITORY} -p ${GITHUB_TOKEN}
+          docker push ${IMAGE}
+
+  deploy-preprod:
+    name: Backend - deploy Dev GCP
+    needs: build
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: nais/deploy/actions/deploy@v1
+        env:
+          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+          CLUSTER: dev-gcp
+          RESOURCE: apps/backend/nais/backend-gcp.yaml
+          VARS: apps/backend/nais/backend-dev-gcp-vars.yaml
+          ENVIRONMENT: dev-gcp:teamdatajegerne:etterlevelse-backend
+
+  deploy-prod:
+    name: Backend - deploy Prod GCP
+    needs: build
+    if: github.ref == 'refs/heads/prod'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: nais/deploy/actions/deploy@v1
+        env:
+          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+          CLUSTER: prod-gcp
+          RESOURCE: apps/backend/nais/backend-gcp.yaml
+          VARS: apps/backend/nais/backend-prod-gcp-vars.yaml
+          ENVIRONMENT: prod-gcp:teamdatajegerne:etterlevelse-backend
