@@ -22,6 +22,9 @@ public class SecurityConfig {
                 registry.addMapping("/oauth2/callback")
                         .allowedOrigins("*");
                 registry.addMapping("/**")
+                        .allowCredentials(true)
+                        .allowedHeaders("*")
+                        .allowedMethods("*")
                         .allowedOrigins("http://" + Constants.APP_POD_NAME);
             }
         };
