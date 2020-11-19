@@ -22,7 +22,7 @@ public class SecurityConfig {
                 registry.addMapping("/oauth2/callback")
                         .allowedOrigins("*");
                 registry.addMapping("/**")
-                        .allowedOrigins("https://" + Constants.APP_POD_NAME);
+                        .allowedOrigins("http://" + Constants.APP_POD_NAME);
             }
         };
     }
