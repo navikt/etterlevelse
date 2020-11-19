@@ -4,6 +4,7 @@ import * as React from 'react'
 import {BrowserRouter as Router} from 'react-router-dom'
 import {Client as Styletron} from 'styletron-engine-atomic'
 import {Provider as StyletronProvider} from 'styletron-react'
+import SideBar from './components/Navigation/SideBar'
 import Routes from './routes'
 import Header from './components/Header'
 import {ampli} from './services/Amplitude'
@@ -43,7 +44,7 @@ const Main = (props) => {
           <Router history={history}>
             <Block {...containerProps}>
               <Block display={['none', 'none', 'block', 'block']}>
-                <Block>sidebar</Block>
+                <SideBar/>
               </Block>
 
               <Block width="100%">

@@ -111,7 +111,7 @@ const Header = () => {
 
         <NavigationList $align={ALIGN.left}>
           <NavigationItem $style={{paddingLeft: 0}}>
-            mainsearch
+            Main search todo
           </NavigationItem>
         </NavigationList>
 
