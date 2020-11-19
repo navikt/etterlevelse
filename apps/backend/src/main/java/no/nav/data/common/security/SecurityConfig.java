@@ -1,6 +1,5 @@
 package no.nav.data.common.security;
 
-import no.nav.data.Constants;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -15,7 +14,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public WebMvcConfigurer corsConfigurer() {
+    public WebMvcConfigurer corsConfigurer(SecurityProperties securityProperties) {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
@@ -25,7 +24,7 @@ public class SecurityConfig {
                         .allowCredentials(true)
                         .allowedHeaders("*")
                         .allowedMethods("*")
-                        .allowedOrigins("http://" + Constants.APP_POD_NAME);
+                        .allowedOrigins(securityProperties.findBaseUrl());
             }
         };
     }
