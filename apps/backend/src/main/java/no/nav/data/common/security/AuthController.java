@@ -31,6 +31,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import static no.nav.data.Constants.APP_POD_NAME;
 import static no.nav.data.Constants.COOKIE_NAME;
 import static no.nav.data.common.utils.Constants.SESSION_LENGTH;
 import static org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames.CODE;
@@ -150,7 +151,11 @@ public class AuthController {
     }
 
     private String callbackRedirectUri(HttpServletRequest request) {
-        String redirectUri = UriComponentsBuilder.fromHttpUrl(buildFullRequestUrl(request).replace(Constants.APP_POD_NAME, baseUrl))
+        String url = buildFullRequestUrl(request);
+        if (url.contains(APP_POD_NAME)) {
+            url = baseUrl;
+        }
+        String redirectUri = UriComponentsBuilder.fromHttpUrl(url)
                 .replacePath(OAUTH_2_CALLBACK_URL)
                 .replaceQuery(null).build().toUriString();
         Assert.isTrue(securityProperties.isValidRedirectUri(redirectUri), "Invalid redirect uri " + redirectUri);
