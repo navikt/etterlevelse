@@ -10,4 +10,5 @@ public class Constants {
     public static final String DEV_ENV = "dev-gcp";
     public static final String PREF_DOMAIN = "nav.no";
     public static final String APP_ID = "etterlevelse";
+    public static final String APP_POD_NAME = "etterlevelse-backend";
 }
