@@ -1,5 +1,6 @@
 package no.nav.data.common.security;
 
+import no.nav.data.Constants;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -20,6 +21,8 @@ public class SecurityConfig {
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/oauth2/callback")
                         .allowedOrigins("*");
+                registry.addMapping("/**")
+                        .allowedOrigins("https://" + Constants.APP_POD_NAME);
             }
         };
     }

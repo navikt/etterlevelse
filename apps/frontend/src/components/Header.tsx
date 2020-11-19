@@ -17,6 +17,7 @@ import BurgerMenu from './Navigation/Burger'
 import RouteLink from './common/RouteLink'
 import {ampli} from '../services/Amplitude'
 import {user} from '../services/User'
+import {writeLog} from '../api/LogApi'
 
 
 const LoginButton = (props: {location: string}) => {
@@ -92,9 +93,12 @@ const Header = () => {
   const [url, setUrl] = useState(window.location.href)
   const location = useLocation()
   const source = useQueryParam('source')
-  if (source && !sourceReported) {
+  if (!sourceReported) {
     sourceReported = true
-    ampli.logEvent('etterlevelse_source', {source})
+    writeLog('info', 'pageload', `pageload from ${source}`)
+    if (source) {
+      ampli.logEvent('etterlevelse_source', {source})
+    }
   }
 
   useAwait(user.wait())
