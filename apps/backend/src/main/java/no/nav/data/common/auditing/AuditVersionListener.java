@@ -79,16 +79,19 @@ public class AuditVersionListener {
     public static AuditVersion convertAuditVersion(Object entity, Action action) {
         try {
             String tableName;
+            int version;
             if (entity instanceof GenericStorage gs) {
                 tableName = gs.getType();
+                version = gs.getVersion() == null ? 0 : gs.getVersion() + 1;
             } else {
                 tableName = AuditVersion.tableName(((Auditable) entity).getClass());
+                version = -1;
             }
             String id = getIdForObject(entity);
             String data = wr.writeValueAsString(entity);
             String user = Optional.ofNullable(MdcUtils.getUser()).orElse("no user set");
             return AuditVersion.builder()
-                    .action(action).table(tableName).tableId(id).data(data).user(user)
+                    .action(action).table(tableName).tableId(id).data(data).user(user).version(version)
                     .build();
         } catch (JsonProcessingException e) {
             log.error("failed to serialize object", e);

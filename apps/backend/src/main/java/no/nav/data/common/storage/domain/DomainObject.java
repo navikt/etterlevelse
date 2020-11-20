@@ -14,6 +14,13 @@ public interface DomainObject {
 
     void setId(UUID id);
 
+    default Integer getVersion() {
+        return -1;
+    }
+
+    default void setVersion(Integer version) {
+    }
+
     @JsonIgnore
     ChangeStamp getChangeStamp();
 
@@ -34,7 +41,7 @@ public interface DomainObject {
                 .build();
     }
 
-     static <T extends DomainObject> T max(T obj1, T obj2) {
-         return Stream.of(obj1, obj2).max(Comparator.comparing(o -> o.getChangeStamp().getCreatedDate())).orElse(null);
+    static <T extends DomainObject> T max(T obj1, T obj2) {
+        return Stream.of(obj1, obj2).max(Comparator.comparing(o -> o.getChangeStamp().getCreatedDate())).orElse(null);
     }
 }

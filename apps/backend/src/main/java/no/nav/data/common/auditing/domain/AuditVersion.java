@@ -55,6 +55,9 @@ public class AuditVersion {
     @Column(name = "USER_ID", nullable = false, updatable = false)
     private String user;
 
+    @Column(name = "VERSION", nullable = false, updatable = false)
+    private Integer version;
+
     @Type(type = "jsonb")
     @Column(name = "DATA", nullable = false, updatable = false)
     private String data;

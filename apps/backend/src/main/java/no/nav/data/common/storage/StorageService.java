@@ -52,6 +52,8 @@ public class StorageService {
         var storage = object.getId() != null ? getStorage(object.getId(), object.getClass()) : new GenericStorage().generateId();
         storage.setDomainObjectData(object);
         var saved = repository.save(storage);
+        // flush to update changestamp and versions
+        repository.flush();
         //noinspection unchecked
         return (T) saved.getDomainObjectData(object.getClass());
     }

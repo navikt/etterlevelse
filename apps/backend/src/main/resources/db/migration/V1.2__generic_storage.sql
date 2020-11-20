@@ -5,8 +5,9 @@ CREATE TABLE IF NOT EXISTS GENERIC_STORAGE
     DATA               JSONB     NOT NULL,
     CREATED_BY         TEXT      NOT NULL,
     CREATED_DATE       TIMESTAMP NOT NULL,
-    LAST_MODIFIED_BY   TEXT,
-    LAST_MODIFIED_DATE TIMESTAMP
+    LAST_MODIFIED_BY   TEXT      NOT NULL,
+    LAST_MODIFIED_DATE TIMESTAMP NOT NULL,
+    VERSION            NUMERIC   NOT NULL
 );
 
 create index if not exists gs_type_idx on generic_storage (type);

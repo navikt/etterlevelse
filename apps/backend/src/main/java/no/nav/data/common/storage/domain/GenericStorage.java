@@ -64,6 +64,7 @@ public class GenericStorage extends Auditable {
         validateType(clazz);
         T object = JsonUtils.toObject(data, clazz);
         object.setChangeStamp(new ChangeStamp(getCreatedBy(), getCreatedDate(), getLastModifiedBy(), getLastModifiedDate()));
+        object.setVersion(getVersion());
         return object;
     }
 
