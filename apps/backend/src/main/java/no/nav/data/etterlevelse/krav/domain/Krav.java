@@ -23,15 +23,15 @@ public class Krav implements DomainObject {
 
     private Integer kravNr;
     private Integer kravVersjon;
-    private String kortNavn;
+    private String navn;
     private String beskrivelse;
     private String hensikt;
     private String utdypendeBeskrivelse;
-    private String utdypendeDokumentasjon;
-    private List<String> relevanteImplementasjoner;
+    private List<String> dokumentasjon;
+    private List<String> implementasjoner;
     private List<String> begreper;
     private List<String> kontaktPersoner;
-    private List<String> relevanteRettskilder;
+    private List<String> rettskilder;
     private List<String> tagg;
     private List<String> klassifiseringer;
     private Periode periode;
