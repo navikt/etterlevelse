@@ -27,7 +27,7 @@ public class Etterlevelse implements DomainObject {
     private List<String> dokumentasjon;
     private EtterlevelseStatus status;
     private LocalDate fristForFerdigstillelse;
-    private Integer kravNr;
+    private Integer kravNummer;
     private Integer kravVersjon;
 
     public enum EtterlevelseStatus {

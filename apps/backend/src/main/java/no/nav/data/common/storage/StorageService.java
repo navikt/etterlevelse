@@ -120,4 +120,7 @@ public class StorageService {
         return repository.deleteByTypeAndCreatedDateBefore(TypeRegistration.typeOf(aClass), time);
     }
 
+    public <T extends DomainObject> List<T> findByNameAndType(String name, String type) {
+        return convert(repository.findByNameAndType(name, type), gs -> gs.getDomainObjectData(TypeRegistration.classFrom(type)));
+    }
 }

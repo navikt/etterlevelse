@@ -21,6 +21,9 @@ public interface GenericStorageRepository extends JpaRepository<GenericStorage, 
 
     Page<GenericStorage> findAllByType(String type, Pageable pageable);
 
+    @Query(value = "select * from generic_storage where data ->> 'name' ilike ?1 and type = ?2", nativeQuery = true)
+    List<GenericStorage> findByNameAndType(String name, String type);
+
     long countByType(String type);
 
     long deleteByTypeAndCreatedDateBefore(String type, LocalDateTime time);

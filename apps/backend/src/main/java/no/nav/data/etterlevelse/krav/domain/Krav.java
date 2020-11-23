@@ -2,16 +2,22 @@ package no.nav.data.etterlevelse.krav.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Builder.Default;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import no.nav.data.common.storage.domain.ChangeStamp;
 import no.nav.data.common.storage.domain.DomainObject;
+import no.nav.data.etterlevelse.codelist.CodelistService;
 import no.nav.data.etterlevelse.codelist.codeusage.dto.InstanceId;
+import no.nav.data.etterlevelse.codelist.domain.ListName;
 import no.nav.data.etterlevelse.common.domain.Periode;
+import no.nav.data.etterlevelse.krav.dto.KravRequest;
 import no.nav.data.etterlevelse.krav.dto.KravResponse;
 
 import java.util.List;
 import java.util.UUID;
+
+import static no.nav.data.common.utils.StreamUtils.copyOf;
 
 @Data
 @Builder
@@ -23,8 +29,9 @@ public class Krav implements DomainObject {
     private ChangeStamp changeStamp;
     private Integer version;
 
-    private Integer kravNr;
-    private Integer kravVersjon;
+    private Integer kravNummer;
+    @Default
+    private Integer kravVersjon = 1;
     private String navn;
     private String beskrivelse;
     private String hensikt;
@@ -40,7 +47,7 @@ public class Krav implements DomainObject {
     private String avdeling;
     private String underavdeling;
 
-    // Kodeverk
+    // Codelist RELEVANS
     private String relevansFor;
     private KravStatus status;
 
@@ -50,9 +57,53 @@ public class Krav implements DomainObject {
 
     }
 
+    public Krav convert(KravRequest request) {
+        if (!request.isUpdate()) {
+            setId(UUID.randomUUID());
+        }
+        navn = request.getNavn();
+        beskrivelse = request.getBeskrivelse();
+        hensikt = request.getHensikt();
+        utdypendeBeskrivelse = request.getUtdypendeBeskrivelse();
+
+        dokumentasjon = copyOf(request.getDokumentasjon());
+        implementasjoner = copyOf(request.getImplementasjoner());
+        begreper = copyOf(request.getBegreper());
+        kontaktPersoner = copyOf(request.getKontaktPersoner());
+        rettskilder = copyOf(request.getRettskilder());
+        tagger = copyOf(request.getTagger());
+
+        avdeling = request.getAvdeling();
+        underavdeling = request.getUnderavdeling();
+        relevansFor = request.getRelevansFor();
+        status = request.getStatus();
+
+        return this;
+    }
+
     public KravResponse convertToResponse() {
-        // TODO
-        return KravResponse.builder().build();
+        return KravResponse.builder()
+                .id(id)
+                .changeStamp(convertChangeStampResponse())
+                .version(version)
+                .kravNummer(kravNummer)
+                .kravVersjon(kravVersjon)
+                .navn(navn)
+                .beskrivelse(beskrivelse)
+                .hensikt(hensikt)
+                .utdypendeBeskrivelse(utdypendeBeskrivelse)
+                .dokumentasjon(copyOf(dokumentasjon))
+                .implementasjoner(copyOf(implementasjoner))
+                .begreper(copyOf(begreper))
+                .kontaktPersoner(copyOf(kontaktPersoner))
+                .rettskilder(copyOf(rettskilder))
+                .tagger(copyOf(tagger))
+                .periode(periode)
+                .avdeling(avdeling)
+                .underavdeling(underavdeling)
+                .relevansFor(CodelistService.getCodelistResponse(ListName.RELEVANS, relevansFor))
+                .status(status)
+                .build();
     }
 
     public InstanceId convertToInstanceId() {

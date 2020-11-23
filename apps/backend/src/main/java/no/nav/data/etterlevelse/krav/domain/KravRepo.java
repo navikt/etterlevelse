@@ -12,4 +12,12 @@ public interface KravRepo extends JpaRepository<GenericStorage, UUID> {
     @Query(value = "select * from generic_storage where data ->> 'relevansFor' = ?1 and type = 'Krav'", nativeQuery = true)
     List<GenericStorage> findByRelevans(String code);
 
+    @Query(value = "select * from generic_storage where data ->> 'name' ilike %?1%", nativeQuery = true)
+    List<GenericStorage> findByNameContaining(String name);
+
+    @Query(value = "select nextval('krav_nummer')", nativeQuery = true)
+    int nextKravNummer();
+
+    @Query(value = "select max(data -> 'kravVersjon') + 1 from generic_storage where type = 'Krav' and data -> 'kravNummer' = ?1", nativeQuery = true)
+    int nextKravVersjon(Integer kravNummer);
 }
