@@ -32,20 +32,15 @@ public class Krav implements DomainObject {
     private List<String> begreper;
     private List<String> kontaktPersoner;
     private List<String> rettskilder;
-    private List<String> tagg;
-    private List<String> klassifiseringer;
+    private List<String> tagger;
     private Periode periode;
 
     private String avdeling;
-    private String seksjon;
+    private String underavdeling;
 
-    private Relevans relevansFor;
+    // Kodeverk
+    private String relevansFor;
     private KravStatus status;
-
-    public enum Relevans {
-        SAKSBEHANDLING,
-        INNSYN
-    }
 
     public enum KravStatus {
         UNDER_REDIGERING,
