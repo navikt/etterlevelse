@@ -10,9 +10,6 @@ public interface RequestElement extends Validated {
     String getId();
 
     @JsonIgnore
-    String getIdentifyingFields();
-
-    @JsonIgnore
     default String getRequestType() {
         return StringUtils.substringBeforeLast(getClass().getSimpleName(), "Request");
     }

@@ -1,5 +1,7 @@
 package no.nav.data.common.storage.domain;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -16,6 +18,8 @@ public interface GenericStorageRepository extends JpaRepository<GenericStorage, 
     Optional<GenericStorage> findByType(String type);
 
     List<GenericStorage> findAllByType(String type);
+
+    Page<GenericStorage> findAllByType(String type, Pageable pageable);
 
     long countByType(String type);
 

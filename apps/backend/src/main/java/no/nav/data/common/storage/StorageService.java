@@ -6,6 +6,8 @@ import no.nav.data.common.storage.domain.DomainObject;
 import no.nav.data.common.storage.domain.GenericStorage;
 import no.nav.data.common.storage.domain.GenericStorageRepository;
 import no.nav.data.common.storage.domain.TypeRegistration;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -95,6 +97,10 @@ public class StorageService {
 
     public <T extends DomainObject> List<T> getAll(Class<T> type) {
         return convert(repository.findAllByType(TypeRegistration.typeOf(type)), gs -> gs.getDomainObjectData(type));
+    }
+
+    public <T extends DomainObject> Page<T> getAll(Class<T> type, Pageable pageable) {
+        return repository.findAllByType(TypeRegistration.typeOf(type), pageable).map(gs -> gs.getDomainObjectData(type));
     }
 
     public <T extends DomainObject> Optional<GenericStorage> getSingleton(Class<T> type) {

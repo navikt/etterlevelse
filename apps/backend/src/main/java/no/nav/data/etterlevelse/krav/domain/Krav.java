@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import no.nav.data.common.storage.domain.ChangeStamp;
 import no.nav.data.common.storage.domain.DomainObject;
 import no.nav.data.etterlevelse.common.domain.Periode;
+import no.nav.data.etterlevelse.krav.dto.KravResponse;
 
 import java.util.List;
 import java.util.UUID;
@@ -44,7 +45,12 @@ public class Krav implements DomainObject {
 
     public enum KravStatus {
         UNDER_REDIGERING,
-        FERDIG
+        FERDIG;
+    }
+
+    public KravResponse convertToResponse() {
+        // TODO
+        return KravResponse.builder().build();
     }
 
 }

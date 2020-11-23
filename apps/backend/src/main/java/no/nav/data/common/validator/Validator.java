@@ -196,12 +196,12 @@ public class Validator<T extends Validated> {
     void validateRepositoryValues(RequestElement request, boolean existInRepository) {
         if (creatingExistingElement(request.isUpdate(), existInRepository)) {
             validationErrors.add(new ValidationError(getFieldName("id"), "creatingExisting",
-                    String.format("The %s %s already exists and therefore cannot be created", request.getRequestType(), request.getIdentifyingFields())));
+                    String.format("The %s %s already exists and therefore cannot be created", request.getRequestType(), request.getId())));
         }
 
         if (updatingNonExistingElement(request.isUpdate(), existInRepository)) {
             validationErrors.add(new ValidationError(getFieldName("id"), "updatingNonExisting",
-                    String.format("The %s %s does not exist and therefore cannot be updated", request.getRequestType(), request.getIdentifyingFields())));
+                    String.format("The %s %s does not exist and therefore cannot be updated", request.getRequestType(), request.getId())));
         }
     }
 
