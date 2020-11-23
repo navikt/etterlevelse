@@ -6,8 +6,12 @@ import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.storage.StorageService;
 import no.nav.data.common.storage.domain.DomainObject;
 import no.nav.data.common.storage.domain.TypeRegistration;
+import no.nav.data.etterlevelse.codelist.CodelistService;
+import no.nav.data.etterlevelse.codelist.domain.ListName;
+import org.apache.commons.lang3.EnumUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.Assert;
+import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
@@ -42,6 +46,15 @@ public class Validator<T extends Validated> {
     private static final String ERROR_MESSAGE_ENUM = "%s was invalid for type %s";
     private static final String ERROR_MESSAGE_DATE = "%s date is not a valid format";
     private static final String ERROR_MESSAGE_UUID = "%s uuid is not a valid format";
+
+
+    private static final String ERROR_TYPE_CODELIST = "fieldIsInvalidCodelist";
+    private static final String ERROR_TYPE_CODELIST_CODE = "fieldIsInvalidCodelistCode";
+    private static final String ERROR_MESSAGE_CODELIST = "%s: %s code not found in codelist %s";
+    private static final String ERROR_MESSAGE_CODELIST_CODE = "%s: %s code has invalid format (alphanumeric and underscore)";
+    private static final String ERROR_TYPE_IMMUTABLE_CODELIST = "codelistIsOfImmutableType";
+    private static final String ERROR_MESSAGE_IMMUTABLE_CODELIST = "%s is an immutable type of codelist. For amendments, please contact team #datajegerne";
+    private static final Pattern CODE_PATTERN = Pattern.compile("^[A-Z0-9_]+$");
 
     private final List<ValidationError> validationErrors = new ArrayList<>();
     private final String parentField;
@@ -159,6 +172,62 @@ public class Validator<T extends Validated> {
             UUID.fromString(fieldValue);
         } catch (Exception e) {
             validationErrors.add(new ValidationError(getFieldName(fieldName), ERROR_TYPE_UUID, String.format(ERROR_MESSAGE_UUID, fieldValue)));
+        }
+    }
+
+    public void checkCodelistCode(String fieldName, String fieldValue) {
+        if (checkBlank(fieldName, fieldValue)) {
+            return;
+        }
+        if (!CODE_PATTERN.matcher(fieldValue).matches()) {
+            validationErrors
+                    .add(new ValidationError(getFieldName(fieldName), ERROR_TYPE_CODELIST_CODE, String.format(ERROR_MESSAGE_CODELIST_CODE, getFieldName(fieldName), fieldValue)));
+        }
+    }
+
+    public static void checkIfCodelistIsOfImmutableType(String list) {
+        if (EnumUtils.isValidEnum(ListName.class, list)) {
+            checkIfCodelistIsOfImmutableType(ListName.valueOf(list));
+        }
+    }
+
+    public static void checkIfCodelistIsOfImmutableType(ListName listName) {
+        if (listName == null) { // add actual checks if we have immutables
+            ValidationError error = new ValidationError("listName", ERROR_TYPE_IMMUTABLE_CODELIST, String.format(ERROR_MESSAGE_IMMUTABLE_CODELIST, listName));
+            throw new ValidationException(List.of(error), "");
+        }
+    }
+
+    public void checkRequiredCodelist(String fieldName, String fieldValue, ListName listName) {
+        if (checkBlank(fieldName, fieldValue)) {
+            return;
+        }
+        checkCode(fieldName, fieldValue, listName);
+    }
+
+    public void checkCodelist(String fieldName, String fieldValue, ListName listName) {
+        if (fieldValue == null) {
+            return;
+        }
+        checkCode(fieldName, fieldValue, listName);
+    }
+
+    private void checkCode(String fieldName, String fieldValue, ListName listName) {
+        if (CodelistService.getCodelist(listName, fieldValue) == null) {
+            validationErrors
+                    .add(new ValidationError(getFieldName(fieldName), ERROR_TYPE_CODELIST, String.format(ERROR_MESSAGE_CODELIST, getFieldName(fieldName), fieldValue, listName)));
+        }
+    }
+
+    public void checkCodelists(String fieldName, Collection<String> values, ListName listName) {
+        AtomicInteger i = new AtomicInteger(0);
+        safeStream(values).forEach(value -> checkRequiredCodelist(String.format("%s[%d]", fieldName, i.getAndIncrement()), value, listName));
+    }
+
+    public void checkRequiredCodelists(String fieldName, Collection<String> values, ListName listName) {
+        checkCodelists(fieldName, values, listName);
+        if (CollectionUtils.isEmpty(values)) {
+            validationErrors.add(new ValidationError(getFieldName(fieldName), ERROR_TYPE_MISSING, String.format(ERROR_MESSAGE_MISSING, getFieldName(fieldName))));
         }
     }
 

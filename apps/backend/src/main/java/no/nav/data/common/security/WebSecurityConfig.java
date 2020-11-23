@@ -41,13 +41,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         );
 
         allowGetAndOptions(http,
-                "/settings/**"
+                "/settings/**",
+                "/krav/**",
+                "/codelist/**"
         );
 
         adminOnly(http,
                 "/audit/**",
                 "/settings/**",
-                "/location/**"
+                "/codelist/**"
         );
 
         http.authorizeRequests().antMatchers("/logout").authenticated();

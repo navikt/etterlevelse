@@ -1,0 +1,5 @@
+package no.nav.data.etterlevelse.codelist.domain;
+
+public enum ListName {
+    RELEVANS
+}

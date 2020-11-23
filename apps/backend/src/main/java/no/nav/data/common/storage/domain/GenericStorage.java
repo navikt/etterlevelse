@@ -9,16 +9,19 @@ import no.nav.data.common.auditing.domain.Auditable;
 import no.nav.data.common.security.azure.support.MailLog;
 import no.nav.data.common.utils.JsonUtils;
 import no.nav.data.common.utils.StreamUtils;
+import no.nav.data.etterlevelse.krav.domain.Krav;
 import org.hibernate.annotations.Type;
 import org.springframework.util.Assert;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Consumer;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 import static no.nav.data.common.utils.StreamUtils.convert;
@@ -45,6 +48,9 @@ public class GenericStorage extends Auditable {
     @Column(name = "DATA", nullable = false)
     private JsonNode data;
 
+    @Transient
+    private DomainObject domainObjectCache;
+
     public GenericStorage generateId() {
         Assert.isTrue(id == null, "id already set");
         id = UUID.randomUUID();
@@ -57,15 +63,20 @@ public class GenericStorage extends Auditable {
         object.setId(id);
         type = object.type();
         data = JsonUtils.toJsonNode(object);
+        domainObjectCache = object;
         return this;
     }
 
+    @SuppressWarnings("unchecked")
     public <T extends DomainObject> T getDomainObjectData(Class<T> clazz) {
         validateType(clazz);
-        T object = JsonUtils.toObject(data, clazz);
-        object.setChangeStamp(new ChangeStamp(getCreatedBy(), getCreatedDate(), getLastModifiedBy(), getLastModifiedDate()));
-        object.setVersion(getVersion());
-        return object;
+        if (domainObjectCache == null) {
+            T object = JsonUtils.toObject(data, clazz);
+            object.setChangeStamp(new ChangeStamp(getCreatedBy(), getCreatedDate(), getLastModifiedBy(), getLastModifiedDate()));
+            object.setVersion(getVersion());
+            domainObjectCache = object;
+        }
+        return (T) domainObjectCache;
     }
 
     public <T extends DomainObject> void validateType(Class<T> clazz) {
@@ -82,5 +93,18 @@ public class GenericStorage extends Auditable {
 
     public static <T extends DomainObject> List<T> to(List<GenericStorage> collection, Class<T> type) {
         return convert(collection, item -> item.getDomainObjectData(type));
+    }
+
+    public Krav toKrav() {
+        return getDomainObjectData(Krav.class);
+    }
+
+    /**
+     * Edit object and update data on entity
+     */
+    public void asKrav(Consumer<Krav> consumer) {
+        Krav krav = toKrav();
+        consumer.accept(krav);
+        setDomainObjectData(krav);
     }
 }

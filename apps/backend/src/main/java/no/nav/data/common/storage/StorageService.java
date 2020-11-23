@@ -103,6 +103,11 @@ public class StorageService {
         return repository.findAllByType(TypeRegistration.typeOf(type), pageable).map(gs -> gs.getDomainObjectData(type));
     }
 
+    public <T extends DomainObject> List<T> getAllById(Class<T> type, List<UUID> ids) {
+        List<GenericStorage> allById = repository.findAllById(ids);
+        return convert(allById, gs -> gs.getDomainObjectData(type));
+    }
+
     public <T extends DomainObject> Optional<GenericStorage> getSingleton(Class<T> type) {
         return repository.findByType(TypeRegistration.typeOf(type));
     }
@@ -114,4 +119,5 @@ public class StorageService {
     public long deleteCreatedOlderThan(Class<? extends DomainObject> aClass, LocalDateTime time) {
         return repository.deleteByTypeAndCreatedDateBefore(TypeRegistration.typeOf(aClass), time);
     }
+
 }

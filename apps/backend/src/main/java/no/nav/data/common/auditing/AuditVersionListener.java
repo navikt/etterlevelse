@@ -19,6 +19,7 @@ import no.nav.data.common.storage.domain.GenericStorage;
 import no.nav.data.common.utils.HibernateUtils;
 import no.nav.data.common.utils.JsonUtils;
 import no.nav.data.common.utils.MdcUtils;
+import no.nav.data.etterlevelse.codelist.domain.Codelist;
 import org.hibernate.proxy.HibernateProxy;
 import org.springframework.util.Assert;
 
@@ -100,6 +101,9 @@ public class AuditVersionListener {
     }
 
     public static String getIdForObject(Object entity) {
+        if (entity instanceof Codelist codelist) {
+            return codelist.getList() + "-" + codelist.getCode();
+        }
         UUID uuid = HibernateUtils.getId(entity);
         Assert.notNull(uuid, "entity has not set id");
         return uuid.toString();
