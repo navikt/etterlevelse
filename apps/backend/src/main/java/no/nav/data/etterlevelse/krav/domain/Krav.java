@@ -58,9 +58,6 @@ public class Krav implements DomainObject {
     }
 
     public Krav convert(KravRequest request) {
-        if (!request.isUpdate()) {
-            setId(UUID.randomUUID());
-        }
         navn = request.getNavn();
         beskrivelse = request.getBeskrivelse();
         hensikt = request.getHensikt();

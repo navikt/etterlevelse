@@ -6,6 +6,7 @@ import no.nav.data.common.validator.Validator;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravRepo;
 import no.nav.data.etterlevelse.krav.dto.KravRequest;
+import no.nav.data.etterlevelse.krav.dto.KravRequest.Fields;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,24 +26,26 @@ public class KravService extends DomainService<Krav> {
         this.repo = repo;
     }
 
+    public List<Krav> getByKravNummer(Integer kravNummer) {
+        return GenericStorage.to(repo.findByKravNummer(kravNummer), Krav.class);
+    }
+
     public Krav save(KravRequest request) {
         Validator.validate(request, storage)
                 .addValidations(this::validateName)
+                .addValidations(this::validateKravNummer)
                 .ifErrorsThrowValidationException();
 
         var krav = request.isUpdate() ? storage.get(request.getIdAsUUID(), Krav.class) : new Krav();
         krav.convert(request);
-        // todo validate nr/versjon
-        if (!request.isUpdate()) {
-            krav.setKravNummer(repo.nextKravNummer());
-        }
         if (request.isNyKravVersjon()) {
             krav.setKravNummer(request.getKravNummer());
             krav.setKravVersjon(repo.nextKravVersjon(request.getKravNummer()));
+        } else if (!request.isUpdate()) {
+            krav.setKravNummer(repo.nextKravNummer());
         }
 
-        storage.save(krav);
-        return krav;
+        return storage.save(krav);
     }
 
     public List<Krav> search(String name) {
@@ -61,6 +64,15 @@ public class KravService extends DomainService<Krav> {
         var items = filter(storage.findByNameAndType(name, validator.getItem().getRequestType()), t -> !t.getId().equals(validator.getItem().getIdAsUUID()));
         if (!items.isEmpty()) {
             validator.addError("name", ALREADY_EXISTS, "name '" + name + "' already in use");
+        }
+    }
+
+    private void validateKravNummer(Validator<KravRequest> validator) {
+        KravRequest req = validator.getItem();
+        if (req.isNyKravVersjon() && req.getKravNummer() != null) {
+            if (getByKravNummer(req.getKravNummer()).isEmpty()) {
+                validator.addError(Fields.kravNummer, Validator.DOES_NOT_EXIST, "KravNummer %d does not exist".formatted(req.getKravNummer()));
+            }
         }
     }
 }
