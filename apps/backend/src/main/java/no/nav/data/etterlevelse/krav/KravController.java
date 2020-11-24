@@ -108,4 +108,8 @@ public class KravController {
         var krav = service.delete(id);
         return ResponseEntity.ok(krav.convertToResponse());
     }
+
+    static class KravPage extends RestResponsePage<KravResponse> {
+
+    }
 }

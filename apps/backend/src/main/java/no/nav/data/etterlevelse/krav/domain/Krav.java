@@ -74,6 +74,7 @@ public class Krav implements DomainObject {
         underavdeling = request.getUnderavdeling();
         relevansFor = request.getRelevansFor();
         status = request.getStatus();
+        periode = request.getPeriode();
 
         return this;
     }
