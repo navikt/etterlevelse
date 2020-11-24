@@ -36,7 +36,7 @@ const SideBar = () => {
     <Block {...sideBarProps}>
       <Brand/>
       <Block {...items}>
-        <NavItem to="/notfound" text="N/A"/>
+        <NavItem to="/krav" text="Krav"/>
       </Block>
       <Block position="absolute" bottom="0" width="100%">
         <Block display="flex" justifyContent="center">
