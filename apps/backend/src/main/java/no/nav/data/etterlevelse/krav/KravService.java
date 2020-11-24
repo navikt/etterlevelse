@@ -14,7 +14,6 @@ import java.util.UUID;
 
 import static no.nav.data.common.utils.StreamUtils.convert;
 import static no.nav.data.common.utils.StreamUtils.filter;
-import static no.nav.data.common.validator.Validator.ALREADY_EXISTS;
 
 @Service
 public class KravService extends DomainService<Krav> {
@@ -63,15 +62,16 @@ public class KravService extends DomainService<Krav> {
         }
         var items = filter(storage.findByNameAndType(name, validator.getItem().getRequestType()), t -> !t.getId().equals(validator.getItem().getIdAsUUID()));
         if (!items.isEmpty()) {
-            validator.addError("name", ALREADY_EXISTS, "name '" + name + "' already in use");
+            validator.addError(Fields.navn, Validator.ALREADY_EXISTS, "name '%s' already in use".formatted(name));
         }
     }
 
     private void validateKravNummer(Validator<KravRequest> validator) {
-        KravRequest req = validator.getItem();
-        if (req.isNyKravVersjon() && req.getKravNummer() != null) {
-            if (getByKravNummer(req.getKravNummer()).isEmpty()) {
-                validator.addError(Fields.kravNummer, Validator.DOES_NOT_EXIST, "KravNummer %d does not exist".formatted(req.getKravNummer()));
+        Integer kravNummer = validator.getItem().getKravNummer();
+        boolean nyKravVersjon = validator.getItem().isNyKravVersjon();
+        if (nyKravVersjon && kravNummer != null) {
+            if (getByKravNummer(kravNummer).isEmpty()) {
+                validator.addError(Fields.kravNummer, Validator.DOES_NOT_EXIST, "KravNummer %d does not exist".formatted(kravNummer));
             }
         }
     }

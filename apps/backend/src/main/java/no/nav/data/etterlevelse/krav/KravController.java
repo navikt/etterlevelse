@@ -50,6 +50,14 @@ public class KravController {
         return ResponseEntity.ok(new RestResponsePage<>(page).convert(Krav::convertToResponse));
     }
 
+    @Operation(summary = "Get Krav by KravNummer")
+    @ApiResponse(description = "ok")
+    @GetMapping("/kravnummer/{kravNummer}")
+    public ResponseEntity<RestResponsePage<KravResponse>> getById(@PathVariable Integer kravNummer) {
+        log.info("Get Krav for kravNummer={}", kravNummer);
+        return ResponseEntity.ok(new RestResponsePage<>(service.getByKravNummer(kravNummer)).convert(Krav::convertToResponse));
+    }
+
     @Operation(summary = "Get One Krav")
     @ApiResponse(description = "ok")
     @GetMapping("/{id}")
