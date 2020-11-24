@@ -20,7 +20,8 @@ export enum AuditAction {
 }
 
 export enum ObjectType {
-  Settings = "Settings"
+  Settings = "Settings",
+  Krav = "Krav"
 }
 
 export type NavigableItem = ObjectType

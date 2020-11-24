@@ -65,6 +65,7 @@ const AdminOptions = () => {
   const history = useHistory()
   const pages = [
     {label: intl.audit, href: '/admin/audit'},
+    {label: 'Kodeverk', href: '/admin/codelist'},
     {label: intl.mailLog, href: '/admin/maillog'},
     {label: intl.settings, href: '/admin/settings'}
   ]
