@@ -39,7 +39,6 @@ public class CodelistRequest implements RequestElement {
     }
 
     private Boolean update;
-    private int requestIndex;
 
     @JsonIgnore
     @Override
