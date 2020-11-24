@@ -48,6 +48,8 @@ export const urlForObject = (type: NavigableItem, id: string, audit?: AuditItem)
   switch (type) {
     case ObjectType.Settings:
       return `/admin/settings`
+    case ObjectType.Krav:
+      return `/krav/${id}`
   }
   console.warn('couldn\'t find object type ' + type)
   return ''
