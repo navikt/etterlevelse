@@ -46,7 +46,7 @@ public class KravController {
     @GetMapping
     public ResponseEntity<RestResponsePage<KravResponse>> getAll(PageParameters pageParameters) {
         log.info("Get all Krav");
-        Page<Krav> page = service.getAll(pageParameters.createIdSortedPage());
+        Page<Krav> page = service.getAll(pageParameters);
         return ResponseEntity.ok(new RestResponsePage<>(page).convert(Krav::convertToResponse));
     }
 
@@ -56,6 +56,14 @@ public class KravController {
     public ResponseEntity<RestResponsePage<KravResponse>> getById(@PathVariable Integer kravNummer) {
         log.info("Get Krav for kravNummer={}", kravNummer);
         return ResponseEntity.ok(new RestResponsePage<>(service.getByKravNummer(kravNummer)).convert(Krav::convertToResponse));
+    }
+
+    @Operation(summary = "Get One Krav by KravNummer and KravVersjon")
+    @ApiResponse(description = "ok")
+    @GetMapping("/kravnummer/{kravNummer}/{kravVersjon}")
+    public ResponseEntity<KravResponse> getById(@PathVariable Integer kravNummer, @PathVariable Integer kravVersjon) {
+        log.info("Get Krav for kravNummer={} kravVersjon={}", kravNummer, kravVersjon);
+        return ResponseEntity.ok(service.getByKravNummer(kravNummer, kravVersjon).convertToResponse());
     }
 
     @Operation(summary = "Get One Krav")

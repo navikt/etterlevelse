@@ -37,6 +37,16 @@ public class KravIT extends IntegrationTestBase {
     }
 
     @Test
+    void getKravByNummer() {
+        var krav = storageService.save(Krav.builder().navn("Krav 1").kravNummer(50).build());
+
+        var resp = restTemplate.getForEntity("/krav/kravnummer/{nummer}/{versjon}", KravResponse.class, krav.getKravNummer(), krav.getKravVersjon());
+        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
+        KravResponse kravResp = resp.getBody();
+        assertThat(kravResp).isNotNull();
+    }
+
+    @Test
     void getAllKrav() {
         storageService.save(Krav.builder().navn("Krav 1").kravNummer(50).build());
 

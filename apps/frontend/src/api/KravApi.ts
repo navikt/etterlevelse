@@ -1,5 +1,5 @@
 import axios from "axios";
-import {emptyPage, Krav, KravStatus, PageResponse} from '../constants'
+import {emptyPage, Krav, KravStatus, Or, PageResponse} from '../constants'
 import {env} from '../util/env'
 import {useEffect, useState} from 'react'
 
@@ -9,6 +9,10 @@ export const getKravPage = async (pageNumber: number, pageSize: number) => {
 
 export const getKrav = async (id: string) => {
   return (await axios.get<Krav>(`${env.backendBaseUrl}/krav/${id}`)).data
+}
+
+export const getKravByKravNummer = async (kravNummer: string, kravVersjon: string) => {
+  return (await axios.get<Krav>(`${env.backendBaseUrl}/krav/${kravNummer}/${kravVersjon}`)).data
 }
 
 export const createKrav = async (krav: Krav) => {
@@ -45,12 +49,15 @@ export const useKravPage = (pageSize: number) => {
   return [data, prevPage, nextPage] as [PageResponse<Krav>, () => void, () => void]
 }
 
-export const useKrav = (id?: string, krav?: Krav) => {
+export type KravId = Or<{id?: string}, {kravNummer: string, kravVersjon: string}>
+
+export const useKrav = (params?: KravId, krav?: Krav) => {
   const [data, setData] = useState<Krav | undefined>(krav)
 
   useEffect(() => {
-    id && getKrav(id).then(setData)
-  }, [id])
+    params?.id && getKrav(params.id).then(setData)
+    params?.kravNummer && getKravByKravNummer(params.kravNummer, params.kravVersjon).then(setData)
+  }, [params])
 
   return [data, setData] as [Krav | undefined, (k: Krav) => void]
 }
@@ -74,5 +81,6 @@ export const mapToFormVal = (krav: Partial<Krav>): Krav => ({
   underavdeling: krav.underavdeling || '',
   periode: krav.periode,
   relevansFor: krav.relevansFor,
-  status: krav.status || KravStatus.UNDER_REDIGERING
+  status: krav.status || KravStatus.UNDER_REDIGERING,
+  nyKravVersjon: krav.nyKravVersjon || false
 })

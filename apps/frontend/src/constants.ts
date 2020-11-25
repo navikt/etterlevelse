@@ -31,10 +31,13 @@ export interface ChangeStamp {
   lastModifiedDate: string;
 }
 
-export interface Krav {
-  id: string
+export interface DomainObject {
   changeStamp: ChangeStamp
   version: number
+}
+
+export interface Krav extends DomainObject {
+  id: string
 
   kravNummer: number
   kravVersjon: number
@@ -53,6 +56,8 @@ export interface Krav {
   underavdeling: string
   relevansFor?: Code
   status: KravStatus
+
+  nyKravVersjon: boolean
 }
 
 export interface Periode {

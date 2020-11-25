@@ -1,5 +1,6 @@
 package no.nav.data.etterlevelse.krav;
 
+import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.storage.StorageService;
 import no.nav.data.common.storage.domain.GenericStorage;
 import no.nav.data.common.validator.Validator;
@@ -7,6 +8,7 @@ import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravRepo;
 import no.nav.data.etterlevelse.krav.dto.KravRequest;
 import no.nav.data.etterlevelse.krav.dto.KravRequest.Fields;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,8 +27,16 @@ public class KravService extends DomainService<Krav> {
         this.repo = repo;
     }
 
-    public List<Krav> getByKravNummer(Integer kravNummer) {
+    Page<Krav> getAll(PageParameters pageParameters) {
+        return storage.getAll(type, pageParameters.createIdSortedPage());
+    }
+
+    public List<Krav> getByKravNummer(int kravNummer) {
         return GenericStorage.to(repo.findByKravNummer(kravNummer), Krav.class);
+    }
+
+    public Krav getByKravNummer(int kravNummer, int kravVersjon) {
+        return repo.findByKravNummer(kravNummer, kravVersjon).toKrav();
     }
 
     public Krav save(KravRequest request) {

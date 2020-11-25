@@ -24,4 +24,5 @@ public class DomainService<T extends DomainObject> {
     Page<T> getAll(Pageable pageable) {
         return storage.getAll(type, pageable);
     }
+
 }

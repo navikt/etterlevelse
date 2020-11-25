@@ -1,7 +1,7 @@
 import {Block} from 'baseui/block'
 import {H2} from 'baseui/typography'
 import {useParams} from 'react-router-dom'
-import {mapToFormVal, useKrav} from '../api/KravApi'
+import {KravId, mapToFormVal, useKrav} from '../api/KravApi'
 import {Spinner} from '../components/common/Spinner'
 import React, {useState} from 'react'
 import {Krav, KravStatus} from '../constants'
@@ -24,23 +24,31 @@ export const kravStatus = (status: KravStatus) => {
 }
 
 export const KravPage = () => {
-  const urlId = useParams<{id: string}>().id
+  const params = useParams<KravId>()
+  const urlId = params.id
   const id = urlId === 'ny' ? undefined : urlId
-  const [krav, setKrav] = useKrav(id, !id ? mapToFormVal({}) : undefined)
+  const [krav, setKrav] = useKrav(params, !id ? mapToFormVal({}) : undefined)
   const [edit, setEdit] = useState(!id)
 
   if (!edit && !krav) return <Spinner size={'40px'}/>
+
+  const newVersion = () => {
+    if (!krav) return
+    setKrav({...krav, id: '', kravVersjon: krav.kravVersjon + 1, nyKravVersjon: true})
+    setEdit(true)
+  }
 
   return (
     <Block>
 
       <Block display='flex' justifyContent='space-between' alignItems='center'>
-        <H2>Krav: {krav?.id ? kravName(krav) : 'Ny'}</H2>
+        <H2>Krav: {krav && krav?.kravNummer !== 0 ? kravName(krav) : 'Ny'}</H2>
 
         <Block>
           <RouteLink href={'/krav'}>
             <Button size='compact' kind='tertiary'>Tilbake</Button>
           </RouteLink>
+          {krav?.id && !edit && <Button size='compact' kind='secondary' onClick={newVersion} marginLeft>Ny versjon</Button>}
           {krav?.id && <Button size='compact' onClick={() => setEdit(!edit)} marginLeft>{edit ? 'Avbryt' : 'Rediger'}</Button>}
         </Block>
       </Block>
