@@ -2,7 +2,10 @@ import {Code} from './services/Codelist'
 
 export type RecursivePartial<T> = {
   [P in keyof T]?: T[P] extends (infer U)[] ? RecursivePartial<U>[] : T[P] extends object ? RecursivePartial<T[P]> : T[P];
-};
+}
+
+type Not<T> = { [key in keyof T]?: never }
+export type Or<T, U> = (T & Not<U>) | (U & Not<T>)
 
 export interface UserInfo {
   loggedIn: boolean;
