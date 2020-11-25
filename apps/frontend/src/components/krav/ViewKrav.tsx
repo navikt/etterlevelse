@@ -10,18 +10,22 @@ export const ViewKrav = ({krav}: {krav: Krav}) => {
   return (
     <Block>
       <Label title='Beskrivelse'>{krav.beskrivelse}</Label>
+      <Label title='Hensikt' margin={theme.sizing.scale200}>{krav.hensikt}</Label>
+
       <Label title='Utdypende beskrivelse'>{krav.utdypendeBeskrivelse}</Label>
-      <Label title='Hensikt'>{krav.hensikt}</Label>
       <Label title='Dokumentasjon'>{krav.dokumentasjon.join(', ')}</Label>
+      <Label title='Rettskilder'>{krav.rettskilder.join(', ')}</Label>
+      
       <Label title='Relevante implementasjoner'>{krav.implementasjoner.join(', ')}</Label>
       <Label title='Begreper'>{krav.begreper.join(', ')}</Label>
-      <Label title='Kontaktpersoner'>{krav.kontaktPersoner.join(', ')}</Label>
-      <Label title='Rettskilder'>{krav.rettskilder.join(', ')}</Label>
       <Label title='Tagger'>{krav.tagger.join(', ')}</Label>
+      <Label title='Relevant for'>{krav.relevansFor?.shortName}</Label>
+
       <Label title='Periode'>{krav.periode?.start} {krav.periode?.slutt}</Label>
+
+      <Label title='Kontaktpersoner'>{krav.kontaktPersoner.join(', ')}</Label>
       <Label title='Avdeling'>{krav.avdeling}</Label>
       <Label title='Underavdeling'>{krav.underavdeling}</Label>
-      <Label title='Relevant for'>{krav.relevansFor?.shortName}</Label>
       <Label title='Status'>{kravStatus(krav.status)}</Label>
     </Block>
   )
