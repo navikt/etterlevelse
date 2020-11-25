@@ -1,25 +1,25 @@
-import { SORT_DIRECTION, SortableHeadCell, StyledBody, StyledCell, StyledHead, StyledHeadCell, StyledRow, StyledTable } from 'baseui/table'
+import {SORT_DIRECTION, SortableHeadCell, StyledBody, StyledCell, StyledHead, StyledHeadCell, StyledRow, StyledTable} from 'baseui/table'
 import * as React from 'react'
-import { ReactNode, useContext, useState } from 'react'
-import { withStyle } from 'baseui'
-import { StyleObject } from 'styletron-standard'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronDown, faFilter, faSort, faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons'
-import { Block } from 'baseui/block'
-import { Label2 } from 'baseui/typography'
-import { TableConfig, TableState, useTable } from '../../util/hooks'
-import { theme } from '../../util'
-import { paddingAll } from './Style'
-import { intl } from '../../util/intl/intl'
-import { StatefulSelect } from 'baseui/select'
-import { Modal, ModalBody, ModalHeader } from 'baseui/modal'
-import { Input } from 'baseui/input'
+import {ReactNode, useContext, useState} from 'react'
+import {withStyle} from 'baseui'
+import {StyleObject} from 'styletron-standard'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faChevronDown, faFilter, faSort, faSortDown, faSortUp} from '@fortawesome/free-solid-svg-icons'
+import {Block} from 'baseui/block'
+import {Label2} from 'baseui/typography'
+import {TableConfig, TableState, useTable} from '../../util/hooks'
+import {theme} from '../../util'
+import {paddingAll} from './Style'
+import {intl} from '../../util/intl/intl'
+import {StatefulSelect} from 'baseui/select'
+import {Modal, ModalBody, ModalHeader} from 'baseui/modal'
+import {Input} from 'baseui/input'
 import * as _ from 'lodash'
-import { PLACEMENT, StatefulPopover } from 'baseui/popover'
-import { StatefulMenu } from 'baseui/menu'
+import {PLACEMENT, StatefulPopover} from 'baseui/popover'
+import {StatefulMenu} from 'baseui/menu'
 import Button from './Button'
-import { KIND } from 'baseui/button'
-import { Pagination } from 'baseui/pagination'
+import {KIND} from 'baseui/button'
+import {Pagination} from 'baseui/pagination'
 
 // Use this for entire app, or recreate maybe, added here as I needed it for audit
 
@@ -259,4 +259,8 @@ export const Cell = (props: {
       {props.children}
     </StyledCell>
   )
+}
+
+export const disableEnter = (e: React.KeyboardEvent<any>) => {
+  if (e.key === 'Enter' && !e.shiftKey) e.preventDefault()
 }

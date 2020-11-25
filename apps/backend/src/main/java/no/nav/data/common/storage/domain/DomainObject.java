@@ -14,10 +14,12 @@ public interface DomainObject {
 
     void setId(UUID id);
 
+    @JsonIgnore
     default Integer getVersion() {
         return -1;
     }
 
+    @JsonIgnore
     default void setVersion(Integer version) {
     }
 
