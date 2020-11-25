@@ -27,9 +27,9 @@ export const ViewKrav = ({krav}: {krav: Krav}) => {
   )
 }
 
-const Label = (props: {title: string, children: React.ReactNode}) => {
+const Label = (props: {title: string, margin?: string, children: React.ReactNode}) => {
   return (
-    <Block display='flex' marginBottom={theme.sizing.scale100}>
+    <Block display='flex' marginBottom={props.margin || theme.sizing.scale100}>
       <LabelSmall marginRight={theme.sizing.scale400}>{props.title}: </LabelSmall>
       <LabelSmall>{props.children}</LabelSmall>
     </Block>
