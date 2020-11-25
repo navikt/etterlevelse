@@ -10,12 +10,14 @@ export const ViewKrav = ({krav}: {krav: Krav}) => {
   return (
     <Block>
       <Label title='Beskrivelse'>{krav.beskrivelse}</Label>
-      <Label title='Hensikt' margin={theme.sizing.scale200}>{krav.hensikt}</Label>
+      <Label title='Hensikt'>{krav.hensikt}</Label>
+
+      <Block height={theme.sizing.scale100}/>
 
       <Label title='Utdypende beskrivelse'>{krav.utdypendeBeskrivelse}</Label>
       <Label title='Dokumentasjon'>{krav.dokumentasjon.join(', ')}</Label>
       <Label title='Rettskilder'>{krav.rettskilder.join(', ')}</Label>
-      
+
       <Label title='Relevante implementasjoner'>{krav.implementasjoner.join(', ')}</Label>
       <Label title='Begreper'>{krav.begreper.join(', ')}</Label>
       <Label title='Tagger'>{krav.tagger.join(', ')}</Label>
@@ -31,9 +33,9 @@ export const ViewKrav = ({krav}: {krav: Krav}) => {
   )
 }
 
-const Label = (props: {title: string, margin?: string, children: React.ReactNode}) => {
+const Label = (props: {title: string, children: React.ReactNode}) => {
   return (
-    <Block display='flex' marginBottom={props.margin || theme.sizing.scale100}>
+    <Block display='flex' marginBottom={theme.sizing.scale100}>
       <LabelSmall marginRight={theme.sizing.scale400}>{props.title}: </LabelSmall>
       <LabelSmall>{props.children}</LabelSmall>
     </Block>
