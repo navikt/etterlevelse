@@ -28,7 +28,7 @@ public class KravService extends DomainService<Krav> {
     }
 
     Page<Krav> getAll(PageParameters pageParameters) {
-        return storage.getAll(type, pageParameters.createIdSortedPage());
+        return repo.findAll(pageParameters.createPage()).map(GenericStorage::toKrav);
     }
 
     public List<Krav> getByKravNummer(int kravNummer) {

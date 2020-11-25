@@ -22,6 +22,11 @@ public class PageParameters {
     @Schema(defaultValue = "20", minimum = "1", maximum = "250")
     private int pageSize = 20;
 
+    public Pageable createPage() {
+        validate();
+        return PageRequest.of(pageNumber, pageSize);
+    }
+
     public Pageable createIdSortedPage() {
         validate();
         return PageRequest.of(pageNumber, pageSize, Sort.by("id"));

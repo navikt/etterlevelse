@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from 'axios'
 import {emptyPage, Krav, KravStatus, Or, PageResponse} from '../constants'
 import {env} from '../util/env'
 import {useEffect, useState} from 'react'
