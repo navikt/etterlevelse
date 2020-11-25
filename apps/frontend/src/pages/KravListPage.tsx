@@ -6,6 +6,7 @@ import Button from '../components/common/Button'
 import {theme} from '../util'
 import {ObjectLink} from '../components/common/RouteLink'
 import {ObjectType} from '../components/admin/audit/AuditTypes'
+import {kravName} from './KravPage'
 
 
 export const KravListPage = () => {
@@ -18,7 +19,7 @@ export const KravListPage = () => {
 
       <Block display='flex' flexDirection='column'>
         {krav.content.map((k, i) =>
-          <ObjectLink id={k.id} type={ObjectType.Krav} key={i}>#{krav.pageSize * krav.pageNumber + i + 1} {k.navn}</ObjectLink>
+          <ObjectLink id={k.id} type={ObjectType.Krav} key={i}>#{krav.pageSize * krav.pageNumber + i + 1} {kravName(k)}</ObjectLink>
         )}
       </Block>
       <Block display='flex' alignItems='center' marginTop={theme.sizing.scale1000}>
