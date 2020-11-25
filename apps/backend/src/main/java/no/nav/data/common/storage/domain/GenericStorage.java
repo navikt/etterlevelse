@@ -1,5 +1,6 @@
 package no.nav.data.common.storage.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -49,6 +50,7 @@ public class GenericStorage extends Auditable {
     private JsonNode data;
 
     @Transient
+    @JsonIgnore
     private DomainObject domainObjectCache;
 
     public GenericStorage generateId() {
