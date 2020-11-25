@@ -56,13 +56,10 @@ export const urlForObject = (type: NavigableItem, id: string, audit?: AuditItem)
 }
 
 export const ObjectLink = (props: ObjectLinkProps) => {
-  const [useCss] = useStyletron();
-  const linkCss = useCss({textDecoration: 'none'});
-
   const link =
     props.disable ? props.children :
       <RouteLink href={urlForObject(props.type, props.id, props.audit)}
-                 className={props.hideUnderline ? linkCss : undefined}>
+                 hideUnderline={props.hideUnderline}>
         {props.children}
       </RouteLink>
 
