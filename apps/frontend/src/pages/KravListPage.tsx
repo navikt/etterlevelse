@@ -1,10 +1,10 @@
 import {Block} from 'baseui/block'
-import {H1, LabelSmall} from 'baseui/typography'
+import {H2, LabelSmall} from 'baseui/typography'
 import React from 'react'
 import {useKravPage} from '../api/KravApi'
 import Button from '../components/common/Button'
 import {theme} from '../util'
-import {ObjectLink} from '../components/common/RouteLink'
+import RouteLink, {ObjectLink} from '../components/common/RouteLink'
 import {ObjectType} from '../components/admin/audit/AuditTypes'
 import {kravName} from './KravPage'
 
@@ -12,14 +12,23 @@ import {kravName} from './KravPage'
 export const KravListPage = () => {
   const [krav, prev, next] = useKravPage(20)
 
-
   return (
     <Block>
-      <H1>Krav</H1>
+      <Block display='flex' justifyContent='space-between' alignItems='center'>
+        <H2>Krav</H2>
+
+        <Block>
+          <RouteLink href={'/krav/ny'}>
+            <Button size='compact'>Ny</Button>
+          </RouteLink>
+        </Block>
+      </Block>
 
       <Block display='flex' flexDirection='column'>
         {krav.content.map((k, i) =>
-          <ObjectLink id={k.id} type={ObjectType.Krav} key={i}>#{krav.pageSize * krav.pageNumber + i + 1} {kravName(k)}</ObjectLink>
+          <Block key={k.id} marginBottom={theme.sizing.scale300}>
+            <ObjectLink id={k.id} type={ObjectType.Krav}>#{krav.pageSize * krav.pageNumber + i + 1} {kravName(k)}</ObjectLink>
+          </Block>
         )}
       </Block>
       <Block display='flex' alignItems='center' marginTop={theme.sizing.scale1000}>

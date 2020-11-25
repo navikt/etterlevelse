@@ -57,11 +57,10 @@ export const OptionField = (props: {label: string, name: keyof Krav} & Or<{optio
       {(p: FieldProps<string | Code>) =>
         <FormControl label={props.label} error={p.meta.error}>
           <Select options={options}
-                  value={options.filter(o => o.id === (props.listName ? (p.field.value as Code).code : p.field.value))}
+                  value={options.filter(o => o.id === (props.listName ? (p.field.value as Code | undefined)?.code : p.field.value))}
                   onChange={s => {
                     const val = s.option?.id
                     const toSet = props.listName && val ? codelist.getCode(props.listName, val as string) : val
-                    console.log(toSet)
                     return p.form.setFieldValue(props.name, toSet)
                   }}
           />

@@ -45,14 +45,14 @@ export const useKravPage = (pageSize: number) => {
   return [data, prevPage, nextPage] as [PageResponse<Krav>, () => void, () => void]
 }
 
-export const useKrav = (id: string) => {
-  const [data, setData] = useState<Krav>()
+export const useKrav = (id?: string, krav?: Krav) => {
+  const [data, setData] = useState<Krav | undefined>(krav)
 
   useEffect(() => {
-    getKrav(id).then(setData)
+    id && getKrav(id).then(setData)
   }, [id])
 
-  return [data, setData] as [Krav, (k: Krav) => void]
+  return [data, setData] as [Krav | undefined, (k: Krav) => void]
 }
 export const mapToFormVal = (krav: Partial<Krav>): Krav => ({
   id: krav.id || '',
