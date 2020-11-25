@@ -12,7 +12,7 @@ export const getKrav = async (id: string) => {
 }
 
 export const getKravByKravNummer = async (kravNummer: string, kravVersjon: string) => {
-  return (await axios.get<Krav>(`${env.backendBaseUrl}/krav/${kravNummer}/${kravVersjon}`)).data
+  return (await axios.get<Krav>(`${env.backendBaseUrl}/krav/kravnummer/${kravNummer}/${kravVersjon}`)).data
 }
 
 export const createKrav = async (krav: Krav) => {

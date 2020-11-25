@@ -4,8 +4,7 @@ import React from 'react'
 import {useKravPage} from '../api/KravApi'
 import Button from '../components/common/Button'
 import {theme} from '../util'
-import RouteLink, {ObjectLink} from '../components/common/RouteLink'
-import {ObjectType} from '../components/admin/audit/AuditTypes'
+import RouteLink from '../components/common/RouteLink'
 import {kravName} from './KravPage'
 
 
@@ -27,7 +26,7 @@ export const KravListPage = () => {
       <Block display='flex' flexDirection='column'>
         {krav.content.map((k, i) =>
           <Block key={k.id} marginBottom={theme.sizing.scale300}>
-            <ObjectLink id={k.id} type={ObjectType.Krav}>#{krav.pageSize * krav.pageNumber + i + 1} {kravName(k)}</ObjectLink>
+            <RouteLink href={`/krav/${k.kravNummer}/${k.kravVersjon}`}>#{krav.pageSize * krav.pageNumber + i + 1} {kravName(k)}</RouteLink>
           </Block>
         )}
       </Block>

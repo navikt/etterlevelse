@@ -1,6 +1,6 @@
 import {Block} from 'baseui/block'
 import {H2} from 'baseui/typography'
-import {useParams} from 'react-router-dom'
+import {useHistory, useParams} from 'react-router-dom'
 import {KravId, mapToFormVal, useKrav} from '../api/KravApi'
 import {Spinner} from '../components/common/Spinner'
 import React, {useState} from 'react'
@@ -28,7 +28,8 @@ export const KravPage = () => {
   const urlId = params.id
   const id = urlId === 'ny' ? undefined : urlId
   const [krav, setKrav] = useKrav(params, !id ? mapToFormVal({}) : undefined)
-  const [edit, setEdit] = useState(!id)
+  const [edit, setEdit] = useState(urlId === 'ny')
+  const history = useHistory()
 
   if (!edit && !krav) return <Spinner size={'40px'}/>
 
@@ -55,7 +56,12 @@ export const KravPage = () => {
 
       {!edit && krav && <ViewKrav krav={krav}/>}
       {edit && krav && <EditKrav krav={krav} close={k => {
-        k && setKrav(k)
+        if (k) {
+          setKrav(k)
+          if (k.id !== id) {
+            history.push(`/krav/${k.kravNummer}/${k.kravVersjon}`)
+          }
+        }
         setEdit(false)
       }}/>}
     </Block>
