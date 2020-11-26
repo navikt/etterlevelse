@@ -43,7 +43,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         allowGetAndOptions(http,
                 "/settings/**",
                 "/krav/**",
-                "/codelist/**"
+                "/codelist/**",
+                "/team/**"
         );
 
         adminOnly(http,

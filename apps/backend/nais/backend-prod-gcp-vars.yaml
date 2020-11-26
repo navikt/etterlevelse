@@ -2,6 +2,7 @@ ingresses:
   - https://etterlevelse-api.intern.nav.no
 replies:
   - https://etterlevelse.intern.nav.no/oauth2/callback
+teamcat_ingress: teamkatalog-api.fss-pub.nais.io
 env:
   - name: ETTERLEV_SECURITY_REDIRECT_URIS
     value: https://etterlevelse.intern.nav.no

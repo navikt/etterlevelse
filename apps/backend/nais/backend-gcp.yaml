@@ -65,4 +65,4 @@ spec:
         - application: etterlevelse-frontend
     outbound:
       external:
-        - host: teamkatalog-api.dev-fss-pub.nais.io
+        - host: {{teamcat_ingress}}
