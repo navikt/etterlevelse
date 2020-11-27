@@ -11,7 +11,7 @@ import {RenderTagList} from './TagList'
 import {Select, Value} from 'baseui/select'
 import {Code, codelist, ListName} from '../../services/Codelist'
 import {SearchType} from '../../api/TeamApi'
-
+import * as _ from 'lodash'
 
 export const InputField = (props: {label: string, name: keyof Krav}) => (
   <Field name={props.name}>
@@ -81,6 +81,12 @@ export const MultiSearchField = (props: {label: string, name: string, search: Se
           <Block>
             <Block display='flex'>
               <Select
+                placeholder={'Søk '+ _.lowerFirst(props.label)}
+                maxDropdownHeight='400px'
+                filterOptions={o=>o}
+                searchable
+                noResultsMsg='Ingen resultat'
+
                 options={results}
                 onChange={({value}) => {
                   value.length && p.push(value[0].id)
