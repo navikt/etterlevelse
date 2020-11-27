@@ -6,10 +6,11 @@ import Button from '../components/common/Button'
 import {theme} from '../util'
 import RouteLink from '../components/common/RouteLink'
 import {kravName} from './KravPage'
+import {Spinner} from '../components/common/Spinner'
 
 
 export const KravListPage = () => {
-  const [krav, prev, next] = useKravPage(20)
+  const [krav, prev, next, loading] = useKravPage(8)
 
   return (
     <Block>
@@ -24,11 +25,12 @@ export const KravListPage = () => {
       </Block>
 
       <Block display='flex' flexDirection='column'>
-        {krav.content.map((k, i) =>
+        {!loading && krav.content.map((k, i) =>
           <Block key={k.id} marginBottom={theme.sizing.scale300}>
             <RouteLink href={`/krav/${k.kravNummer}/${k.kravVersjon}`}>#{krav.pageSize * krav.pageNumber + i + 1} {kravName(k)}</RouteLink>
           </Block>
         )}
+        {loading && <Spinner size={theme.sizing.scale2400}/>}
       </Block>
       <Block display='flex' alignItems='center' marginTop={theme.sizing.scale1000}>
         <LabelSmall marginRight={theme.sizing.scale400}>Side {krav.pageNumber + 1}/{krav.pages}</LabelSmall>

@@ -38,15 +38,20 @@ function kravToKravDto(krav: Krav) {
 export const useKravPage = (pageSize: number) => {
   const [data, setData] = useState<PageResponse<Krav>>(emptyPage)
   const [page, setPage] = useState<number>(0)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    getKravPage(page, pageSize).then(setData)
+    setLoading(true)
+    getKravPage(page, pageSize).then(r => {
+      setData(r)
+      setLoading(false)
+    })
   }, [page, pageSize])
 
   const prevPage = () => setPage(Math.max(0, page - 1))
   const nextPage = () => setPage(Math.min(data?.pages ? data.pages - 1 : 0, page + 1))
 
-  return [data, prevPage, nextPage] as [PageResponse<Krav>, () => void, () => void]
+  return [data, prevPage, nextPage, loading] as [PageResponse<Krav>, () => void, () => void, boolean]
 }
 
 export type KravId = Or<{id?: string}, {kravNummer: string, kravVersjon: string}>

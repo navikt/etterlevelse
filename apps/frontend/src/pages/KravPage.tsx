@@ -2,15 +2,14 @@ import {Block} from 'baseui/block'
 import {H2} from 'baseui/typography'
 import {useHistory, useParams} from 'react-router-dom'
 import {KravId, useKrav} from '../api/KravApi'
-import {Spinner} from '../components/common/Spinner'
 import React, {useState} from 'react'
 import {Krav, KravStatus} from '../constants'
 import Button from '../components/common/Button'
 import {ViewKrav} from '../components/krav/ViewKrav'
 import {EditKrav} from '../components/krav/EditKrav'
 import RouteLink from '../components/common/RouteLink'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faSpinner} from '@fortawesome/free-solid-svg-icons'
+import {Skeleton} from 'baseui/skeleton'
+import {theme} from '../util'
 
 export const kravName = (krav: Krav) => `${krav.kravNummer}.${krav.kravVersjon} - ${krav.navn}`
 
@@ -44,12 +43,7 @@ export const KravPage = () => {
 
       <Block display='flex' justifyContent='space-between' alignItems='center'>
 
-        {loading &&
-        <Block>
-          <H2>Krav: <FontAwesomeIcon icon={faSpinner} spin/> Laster</H2>
-          <Spinner size={'40px'}/>
-        </Block>
-        }
+        {loading && <LoadingSkeleton/>}
         {!loading && <>
           <H2>Krav: {krav && krav?.kravNummer !== 0 ? kravName(krav) : 'Ny'}</H2>
           <Block>
@@ -76,3 +70,22 @@ export const KravPage = () => {
   )
 }
 
+const LoadingSkeleton = () =>
+  <Block width='100%'>
+    <Block display='flex' justifyContent='space-between' alignItems='center' width='100%'>
+      <H2 display='flex' alignItems='center'>
+
+        Krav:
+        <Block marginRight={theme.sizing.scale400}/>
+        <Skeleton height={theme.sizing.scale1000} width='400px' animation/>
+      </H2>
+      <Block display='flex'>
+        <Skeleton height={theme.sizing.scale1000} width='40px' animation/>
+        <Block marginRight={theme.sizing.scale400}/>
+        <Skeleton height={theme.sizing.scale1000} width='40px' animation/>
+      </Block>
+    </Block>
+    <Block maxWidth='600px'>
+      <Skeleton rows={12} animation/>
+    </Block>
+  </Block>
