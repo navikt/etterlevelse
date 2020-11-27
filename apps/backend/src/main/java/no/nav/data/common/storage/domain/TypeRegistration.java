@@ -1,6 +1,7 @@
 package no.nav.data.common.storage.domain;
 
 import no.nav.data.common.validator.RequestElement;
+import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 
 import java.util.HashMap;
@@ -16,6 +17,7 @@ public final class TypeRegistration {
 
     static {
         addDomainClass(Krav.class, true);
+        addDomainClass(Etterlevelse.class, true);
     }
 
     private TypeRegistration() {

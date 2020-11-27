@@ -1,0 +1,60 @@
+package no.nav.data.etterlevelse.etterlevelse.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.FieldNameConstants;
+import no.nav.data.common.validator.RequestElement;
+import no.nav.data.common.validator.Validator;
+import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse.EtterlevelseStatus;
+
+import java.time.LocalDate;
+import java.util.List;
+
+import static no.nav.data.common.utils.StringUtils.formatList;
+import static org.apache.commons.lang3.StringUtils.trimToNull;
+
+@Data
+@Builder
+@FieldNameConstants
+@NoArgsConstructor
+@AllArgsConstructor
+public class EtterlevelseRequest implements RequestElement {
+
+    private String id;
+
+    private String behandling;
+    private Integer kravNummer;
+    private Integer kravVersjon;
+
+    private boolean etterleves;
+    private String begrunnelse;
+    private List<String> dokumentasjon;
+    private LocalDate fristForFerdigstillelse;
+    private EtterlevelseStatus status;
+
+    private Boolean update;
+
+    @Override
+    public void format() {
+        setId(trimToNull(id));
+        setBehandling(trimToNull(behandling));
+
+        setBegrunnelse(trimToNull(begrunnelse));
+        setDokumentasjon(formatList(dokumentasjon));
+
+        if (status == null) {
+            status = EtterlevelseStatus.UNDER_REDIGERING;
+        }
+    }
+
+    @Override
+    public void validateFieldValues(Validator<?> validator) {
+        validator.checkUUID(Fields.id, id);
+        validator.checkId(this);
+        validator.checkBlank(Fields.behandling, behandling);
+        validator.checkNull(Fields.kravNummer, kravNummer);
+        validator.checkNull(Fields.kravVersjon, kravVersjon);
+    }
+}

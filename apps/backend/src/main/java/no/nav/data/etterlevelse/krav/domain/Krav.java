@@ -10,6 +10,7 @@ import no.nav.data.common.storage.domain.DomainObject;
 import no.nav.data.etterlevelse.codelist.CodelistService;
 import no.nav.data.etterlevelse.codelist.codeusage.dto.InstanceId;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
+import no.nav.data.etterlevelse.common.domain.KravId;
 import no.nav.data.etterlevelse.common.domain.Periode;
 import no.nav.data.etterlevelse.krav.dto.KravRequest;
 import no.nav.data.etterlevelse.krav.dto.KravResponse;
@@ -23,7 +24,7 @@ import static no.nav.data.common.utils.StreamUtils.copyOf;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Krav implements DomainObject {
+public class Krav implements DomainObject, KravId {
 
     private UUID id;
     private ChangeStamp changeStamp;

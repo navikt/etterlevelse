@@ -1,4 +1,4 @@
-package no.nav.data.etterlevelse.krav;
+package no.nav.data.etterlevelse.common.domain;
 
 import no.nav.data.common.storage.StorageService;
 import no.nav.data.common.storage.domain.DomainObject;
@@ -17,11 +17,11 @@ public class DomainService<T extends DomainObject> {
         this.type = type;
     }
 
-    T get(UUID uuid) {
+    public T get(UUID uuid) {
         return storage.get(uuid, type);
     }
 
-    Page<T> getAll(Pageable pageable) {
+    public Page<T> getAll(Pageable pageable) {
         return storage.getAll(type, pageable);
     }
 

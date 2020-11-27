@@ -10,6 +10,7 @@ import no.nav.data.common.auditing.domain.Auditable;
 import no.nav.data.common.security.azure.support.MailLog;
 import no.nav.data.common.utils.JsonUtils;
 import no.nav.data.common.utils.StreamUtils;
+import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import org.hibernate.annotations.Type;
 import org.springframework.util.Assert;
@@ -98,6 +99,10 @@ public class GenericStorage extends Auditable {
 
     public Krav toKrav() {
         return getDomainObjectData(Krav.class);
+    }
+
+    public Etterlevelse toEtterlevelse() {
+        return getDomainObjectData(Etterlevelse.class);
     }
 
     /**

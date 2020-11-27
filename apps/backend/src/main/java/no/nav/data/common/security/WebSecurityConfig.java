@@ -42,8 +42,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         allowGetAndOptions(http,
                 "/settings/**",
-                "/krav/**",
                 "/codelist/**",
+
+                "/krav/**",
+                "/etterlevelse/**",
+
                 "/team/**"
         );
 

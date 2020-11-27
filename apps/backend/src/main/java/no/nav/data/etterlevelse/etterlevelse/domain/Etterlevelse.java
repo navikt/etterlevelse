@@ -6,32 +6,75 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import no.nav.data.common.storage.domain.ChangeStamp;
 import no.nav.data.common.storage.domain.DomainObject;
+import no.nav.data.etterlevelse.codelist.codeusage.dto.InstanceId;
+import no.nav.data.etterlevelse.common.domain.KravId;
+import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseRequest;
+import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseResponse;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
+import static no.nav.data.common.utils.StreamUtils.copyOf;
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Etterlevelse implements DomainObject {
+public class Etterlevelse implements DomainObject, KravId {
 
     private UUID id;
     private ChangeStamp changeStamp;
     private Integer version;
 
     private String behandling;
+    private Integer kravNummer;
+    private Integer kravVersjon;
+
     private boolean etterleves;
     private String begrunnelse;
     private List<String> dokumentasjon;
-    private EtterlevelseStatus status;
     private LocalDate fristForFerdigstillelse;
-    private Integer kravNummer;
-    private Integer kravVersjon;
+    private EtterlevelseStatus status;
 
     public enum EtterlevelseStatus {
         UNDER_REDIGERING,
         FERDIG
+    }
+
+    public Etterlevelse convert(EtterlevelseRequest request) {
+        behandling = request.getBehandling();
+        kravNummer = request.getKravNummer();
+        kravVersjon = request.getKravVersjon();
+
+        etterleves = request.isEtterleves();
+        begrunnelse = request.getBegrunnelse();
+        dokumentasjon = copyOf(request.getDokumentasjon());
+        fristForFerdigstillelse = request.getFristForFerdigstillelse();
+        status = request.getStatus();
+
+        return this;
+    }
+
+    public EtterlevelseResponse convertToResponse() {
+        return EtterlevelseResponse.builder()
+                .id(id)
+                .changeStamp(convertChangeStampResponse())
+                .version(version)
+
+                .behandling(behandling)
+                .kravNummer(kravNummer)
+                .kravVersjon(kravVersjon)
+
+                .etterleves(etterleves)
+                .begrunnelse(begrunnelse)
+                .dokumentasjon(copyOf(dokumentasjon))
+                .fristForFerdigstillelse(fristForFerdigstillelse)
+                .status(status)
+                .build();
+    }
+
+    public InstanceId convertToInstanceId() {
+        return new InstanceId(id.toString(), behandling + "-" + kravId());
     }
 }
