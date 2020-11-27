@@ -26,9 +26,10 @@ export const kravStatus = (status: KravStatus) => {
 export const KravPage = () => {
   const params = useParams<KravId>()
   const urlId = params.id
-  const id = urlId === 'ny' ? undefined : urlId
-  const [krav, setKrav] = useKrav(params, !id ? mapToFormVal({}) : undefined)
-  const [edit, setEdit] = useState(urlId === 'ny')
+  let isCreateNew = urlId === 'ny'
+  const id = isCreateNew ? undefined : urlId
+  const [krav, setKrav] = useKrav(params, isCreateNew ? mapToFormVal({}) : undefined)
+  const [edit, setEdit] = useState(isCreateNew)
   const history = useHistory()
 
   if (!edit && !krav) return <Spinner size={'40px'}/>
