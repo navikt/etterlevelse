@@ -9,6 +9,8 @@ import Button from '../components/common/Button'
 import {ViewKrav} from '../components/krav/ViewKrav'
 import {EditKrav} from '../components/krav/EditKrav'
 import RouteLink from '../components/common/RouteLink'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faSpinner} from '@fortawesome/free-solid-svg-icons'
 
 export const kravName = (krav: Krav) => `${krav.kravNummer}.${krav.kravVersjon} - ${krav.navn}`
 
@@ -29,7 +31,7 @@ export const KravPage = () => {
   const [edit, setEdit] = useState(krav && !krav.id)
   const history = useHistory()
 
-  if (!edit && !krav) return <Spinner size={'40px'}/>
+  const loading = !edit && !krav
 
   const newVersion = () => {
     if (!krav) return
@@ -41,18 +43,26 @@ export const KravPage = () => {
     <Block>
 
       <Block display='flex' justifyContent='space-between' alignItems='center'>
-        <H2>Krav: {krav && krav?.kravNummer !== 0 ? kravName(krav) : 'Ny'}</H2>
 
+        {loading &&
         <Block>
-          <RouteLink href={'/krav'}>
-            <Button size='compact' kind='tertiary'>Tilbake</Button>
-          </RouteLink>
-          {krav?.id && !edit && <Button size='compact' kind='secondary' onClick={newVersion} marginLeft>Ny versjon</Button>}
-          {krav?.id && <Button size='compact' onClick={() => setEdit(!edit)} marginLeft>{edit ? 'Avbryt' : 'Rediger'}</Button>}
+          <H2>Krav: <FontAwesomeIcon icon={faSpinner} spin/> Laster</H2>
+          <Spinner size={'40px'}/>
         </Block>
+        }
+        {!loading && <>
+          <H2>Krav: {krav && krav?.kravNummer !== 0 ? kravName(krav) : 'Ny'}</H2>
+          <Block>
+            <RouteLink href={'/krav'}>
+              <Button size='compact' kind='tertiary'>Tilbake</Button>
+            </RouteLink>
+            {krav?.id && !edit && <Button size='compact' kind='secondary' onClick={newVersion} marginLeft>Ny versjon</Button>}
+            {krav?.id && <Button size='compact' onClick={() => setEdit(!edit)} marginLeft>{edit ? 'Avbryt' : 'Rediger'}</Button>}
+          </Block>
+        </>}
       </Block>
 
-      {!edit && krav && <ViewKrav krav={krav}/>}
+      {!edit && krav && !loading && <ViewKrav krav={krav}/>}
       {edit && krav && <EditKrav krav={krav} close={k => {
         if (k) {
           setKrav(k)
