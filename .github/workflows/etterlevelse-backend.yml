@@ -37,7 +37,7 @@ jobs:
         uses: EnricoMi/publish-unit-test-result-action@v1.5
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          files: surefire-reports/**/*.xml
+          files: target/surefire-reports/**/*.xml
 
       - name: docker
         env:
