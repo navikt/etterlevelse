@@ -47,13 +47,18 @@ export const usePersonLookup = () => {
       for (const id of ids) {
         if (!people[id]) {
           tasks.push((async () => {
-            const person = await getResourceById(id)
-            next[id] = person.fullName
+            try {
+              const person = await getResourceById(id)
+              next[id] = person.fullName
+              setPeople({...next})
+            } catch (e) {
+              console.debug("err fetching person", e)
+            }
           })())
         }
       }
       await Promise.all(tasks)
-      setPeople(next)
+      setPeople({...next})
     })()
   }, [ids])
 
