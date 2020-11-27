@@ -1,7 +1,7 @@
 import {Block} from 'baseui/block'
 import {H2} from 'baseui/typography'
 import {useHistory, useParams} from 'react-router-dom'
-import {KravId, mapToFormVal, useKrav} from '../api/KravApi'
+import {KravId, useKrav} from '../api/KravApi'
 import {Spinner} from '../components/common/Spinner'
 import React, {useState} from 'react'
 import {Krav, KravStatus} from '../constants'
@@ -25,11 +25,8 @@ export const kravStatus = (status: KravStatus) => {
 
 export const KravPage = () => {
   const params = useParams<KravId>()
-  const urlId = params.id
-  let isCreateNew = urlId === 'ny'
-  const id = isCreateNew ? undefined : urlId
-  const [krav, setKrav] = useKrav(params, isCreateNew ? mapToFormVal({}) : undefined)
-  const [edit, setEdit] = useState(isCreateNew)
+  const [krav, setKrav] = useKrav(params)
+  const [edit, setEdit] = useState(krav && !krav.id)
   const history = useHistory()
 
   if (!edit && !krav) return <Spinner size={'40px'}/>
@@ -59,7 +56,7 @@ export const KravPage = () => {
       {edit && krav && <EditKrav krav={krav} close={k => {
         if (k) {
           setKrav(k)
-          if (k.id !== id) {
+          if (k.id !== krav.id) {
             history.push(`/krav/${k.kravNummer}/${k.kravVersjon}`)
           }
         }

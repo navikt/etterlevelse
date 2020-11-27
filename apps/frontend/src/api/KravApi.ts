@@ -51,11 +51,12 @@ export const useKravPage = (pageSize: number) => {
 
 export type KravId = Or<{id?: string}, {kravNummer: string, kravVersjon: string}>
 
-export const useKrav = (params?: KravId, krav?: Krav) => {
-  const [data, setData] = useState<Krav | undefined>(krav)
+export const useKrav = (params: KravId) => {
+  const isCreateNew = params.id === 'ny'
+  const [data, setData] = useState<Krav | undefined>(isCreateNew ? mapToFormVal({}) : undefined)
 
   useEffect(() => {
-    params?.id && getKrav(params.id).then(setData)
+    params?.id && !isCreateNew && getKrav(params.id).then(setData)
     params?.kravNummer && getKravByKravNummer(params.kravNummer, params.kravVersjon).then(setData)
   }, [params])
 
