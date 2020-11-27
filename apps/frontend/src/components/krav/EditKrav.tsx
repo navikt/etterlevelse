@@ -8,9 +8,12 @@ import React from 'react'
 import * as yup from 'yup'
 import {ListName} from '../../services/Codelist'
 import {kravStatus} from '../../pages/KravPage'
-import {InputField, MultiInputField, OptionField} from '../common/Inputs'
+import {InputField, MultiInputField, MultiSearchField, OptionField} from '../common/Inputs'
+import {usePersonLookup, usePersonSearch} from '../../api/TeamApi'
 
 export const EditKrav = ({krav, close}: {krav: Krav, close: (k?: Krav) => void}) => {
+  const personSearch = usePersonSearch()
+  const personLookup = usePersonLookup()
 
   const submit = (krav: Krav) => {
     if (krav.id) {
@@ -37,7 +40,7 @@ export const EditKrav = ({krav, close}: {krav: Krav, close: (k?: Krav) => void})
           <MultiInputField label='Dokumentasjon' name='dokumentasjon'/>
           <MultiInputField label='Relevante implementasjoner' name='implementasjoner'/>
           <MultiInputField label='Begreper' name='begreper'/>
-          <MultiInputField label='Kontaktpersoner' name='kontaktPersoner'/>
+          <MultiSearchField label='Kontaktpersoner' name='kontaktPersoner' search={personSearch} itemLabel={personLookup}/>
           <MultiInputField label='Rettskilder' name='rettskilder'/>
           <MultiInputField label='Tagger' name='tagger'/>
 

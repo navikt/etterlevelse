@@ -7,9 +7,10 @@ import {Block} from 'baseui/block'
 import Button from './Button'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faPlus} from '@fortawesome/free-solid-svg-icons'
-import {renderTagList} from './TagList'
+import {RenderTagList} from './TagList'
 import {Select, Value} from 'baseui/select'
 import {Code, codelist, ListName} from '../../services/Codelist'
+import {SearchType} from '../../api/TeamApi'
 
 
 export const InputField = (props: {label: string, name: keyof Krav}) => (
@@ -41,7 +42,7 @@ export const MultiInputField = (props: {label: string, name: keyof Krav}) => {
               />
               <Button type='button' onClick={add} marginLeft><FontAwesomeIcon icon={faPlus}/> </Button>
             </Block>
-            {renderTagList(p.form.values[props.name] as string[], p.remove)}
+            <RenderTagList list={p.form.values[props.name] as string[]} onRemove={p.remove}/>
           </Block>
         </FormControl>
       )
@@ -67,5 +68,32 @@ export const OptionField = (props: {label: string, name: keyof Krav} & Or<{optio
         </FormControl>
       }
     </Field>
+  )
+}
+
+export const MultiSearchField = (props: {label: string, name: string, search: SearchType, itemLabel?: (id: string) => string}) => {
+  const [results, setSearch, loading] = props.search
+
+  return (
+    <FieldArray name={props.name}>
+      {(p: FieldArrayRenderProps) =>
+        <FormControl label={props.label} error={p.form.errors[props.name]}>
+          <Block>
+            <Block display='flex'>
+              <Select
+                options={results}
+                onChange={({value}) => {
+                  value.length && p.push(value[0].id)
+                }}
+                onInputChange={event => setSearch(event.currentTarget.value)}
+                isLoading={loading}
+              />
+            </Block>
+            <RenderTagList list={(p.form.values[props.name] as string[])
+            .map(v => props.itemLabel ? props.itemLabel(v) : v)} onRemove={p.remove}/>
+          </Block>
+        </FormControl>
+      }
+    </FieldArray>
   )
 }

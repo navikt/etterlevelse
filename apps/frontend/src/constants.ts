@@ -1,5 +1,6 @@
 import {Code} from './services/Codelist'
 
+export type map = {[id: string]: string}
 export type RecursivePartial<T> = {
   [P in keyof T]?: T[P] extends (infer U)[] ? RecursivePartial<U>[] : T[P] extends object ? RecursivePartial<T[P]> : T[P];
 }
@@ -72,3 +73,13 @@ export enum KravStatus {
 }
 
 export const emptyPage = {content: [], numberOfElements: 0, pageNumber: 0, pages: 0, pageSize: 1, totalElements: 0}
+
+
+export interface TeamResource {
+  navIdent: string;
+  givenName: string;
+  familyName: string;
+  fullName: string;
+  email: string;
+  resourceType: string;
+}

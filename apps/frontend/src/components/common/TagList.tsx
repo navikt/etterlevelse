@@ -1,7 +1,7 @@
 import * as React from "react"
 import {Tag, VARIANT} from "baseui/tag"
 
-export function renderTagList(list: string[], onRemove: (i: number) => void) {
+export const RenderTagList = ({list, onRemove}: {list: string[], onRemove: (i: number) => void}) => {
   return (
     <React.Fragment>
       {list && list.length > 0

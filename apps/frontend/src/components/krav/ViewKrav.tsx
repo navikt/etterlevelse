@@ -4,9 +4,12 @@ import React from 'react'
 import {kravStatus} from '../../pages/KravPage'
 import {LabelSmall} from 'baseui/typography'
 import {theme} from '../../util'
+import {usePersonLookup} from '../../api/TeamApi'
 
 
 export const ViewKrav = ({krav}: {krav: Krav}) => {
+  const people = usePersonLookup()
+
   return (
     <Block>
       <Label title='Beskrivelse'>{krav.beskrivelse}</Label>
@@ -25,7 +28,7 @@ export const ViewKrav = ({krav}: {krav: Krav}) => {
 
       <Label title='Periode'>{krav.periode?.start} {krav.periode?.slutt}</Label>
 
-      <Label title='Kontaktpersoner'>{krav.kontaktPersoner.join(', ')}</Label>
+      <Label title='Kontaktpersoner'>{krav.kontaktPersoner.map(people).join(', ')}</Label>
       <Label title='Avdeling'>{krav.avdeling}</Label>
       <Label title='Underavdeling'>{krav.underavdeling}</Label>
       <Label title='Status'>{kravStatus(krav.status)}</Label>
