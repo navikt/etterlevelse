@@ -37,8 +37,14 @@ export const ViewKrav = ({krav}: {krav: Krav}) => {
 
       <Block height={theme.sizing.scale600}/>
 
-      <Label title='Kontaktpersoner'>{krav.kontaktPersoner.map(ident =>
-        <StyledLink target="_blank" rel="noopener noreferrer" href={teamKatPersonLink(ident)}>{people(ident)}      </StyledLink>)}
+      <Label title='Kontaktpersoner'>
+        <Block display='flex'>
+          {krav.kontaktPersoner.map((ident, i) =>
+            <Block key={i} marginRight={theme.sizing.scale200}>
+              <StyledLink target="_blank" rel="noopener noreferrer" href={teamKatPersonLink(ident)}>{people(ident)}      </StyledLink>
+            </Block>
+          )}
+        </Block>
       </Label>
       <Label title='Avdeling'>{krav.avdeling}</Label>
       <Label title='Underavdeling'>{krav.underavdeling}</Label>
