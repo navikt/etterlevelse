@@ -68,6 +68,7 @@ export const MultiInputField = (props: {label: string, name: string}) => {
             <Block display='flex'>
               <Input onKeyDown={onKey} value={val}
                      onChange={e => setVal((e.target as HTMLInputElement).value)}
+                     onBlur={add}
               />
               <Button type='button' onClick={add} marginLeft><FontAwesomeIcon icon={faPlus}/> </Button>
             </Block>
