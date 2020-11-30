@@ -29,6 +29,8 @@ export const updateKrav = async (krav: Krav) => {
 function kravToKravDto(krav: Krav) {
   const dto = {
     ...krav,
+    avdeling: krav.avdeling?.code,
+    underavdeling: krav.underavdeling?.code,
     relevansFor: krav.relevansFor?.code
   }
   delete dto.changeStamp
