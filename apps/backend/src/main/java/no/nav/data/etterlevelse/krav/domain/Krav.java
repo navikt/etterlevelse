@@ -45,7 +45,9 @@ public class Krav implements DomainObject, KravId {
     private List<String> tagger;
     private Periode periode;
 
+    // Codelist AVDELING
     private String avdeling;
+    // Codelist UNDERAVDELING
     private String underavdeling;
 
     // Codelist RELEVANS
@@ -98,8 +100,8 @@ public class Krav implements DomainObject, KravId {
                 .rettskilder(copyOf(rettskilder))
                 .tagger(copyOf(tagger))
                 .periode(periode)
-                .avdeling(avdeling)
-                .underavdeling(underavdeling)
+                .avdeling(CodelistService.getCodelistResponse(ListName.AVDELING, avdeling))
+                .underavdeling(CodelistService.getCodelistResponse(ListName.UNDERAVDELING, underavdeling))
                 .relevansFor(CodelistService.getCodelistResponse(ListName.RELEVANS, relevansFor))
                 .status(status)
                 .build();

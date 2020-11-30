@@ -38,8 +38,8 @@ public class KravResponse {
     private List<String> tagger;
     private Periode periode;
 
-    private String avdeling;
-    private String underavdeling;
+    private CodelistResponse avdeling;
+    private CodelistResponse underavdeling;
 
     private CodelistResponse relevansFor;
     private KravStatus status;

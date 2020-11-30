@@ -53,8 +53,8 @@ export interface Krav extends DomainObject {
   rettskilder: string[]
   tagger: string[]
   periode?: Periode
-  avdeling: string
-  underavdeling: string
+  avdeling?: Code
+  underavdeling?: Code
   relevansFor?: Code
   status: KravStatus
 

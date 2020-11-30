@@ -15,6 +15,7 @@ import no.nav.data.etterlevelse.krav.domain.Krav.KravStatus;
 import java.util.List;
 
 import static no.nav.data.common.utils.StringUtils.formatList;
+import static no.nav.data.common.utils.StringUtils.toUpperCaseAndTrim;
 import static org.apache.commons.lang3.StringUtils.trimToNull;
 
 @Data
@@ -39,7 +40,9 @@ public class KravRequest implements RequestElement {
     private List<String> tagger;
     private Periode periode;
 
+    @Schema(description = "Codelist AVDELING")
     private String avdeling;
+    @Schema(description = "Codelist UNDERAVDELING")
     private String underavdeling;
 
     @Schema(description = "Codelist RELEVANS")
@@ -56,8 +59,9 @@ public class KravRequest implements RequestElement {
         setBeskrivelse(trimToNull(beskrivelse));
         setHensikt(trimToNull(hensikt));
         setUtdypendeBeskrivelse(trimToNull(utdypendeBeskrivelse));
-        setAvdeling(trimToNull(avdeling));
-        setUnderavdeling(trimToNull(underavdeling));
+        setRelevansFor(toUpperCaseAndTrim(relevansFor));
+        setAvdeling(toUpperCaseAndTrim(avdeling));
+        setUnderavdeling(toUpperCaseAndTrim(underavdeling));
 
         setDokumentasjon(formatList(dokumentasjon));
         setImplementasjoner(formatList(implementasjoner));
@@ -79,6 +83,8 @@ public class KravRequest implements RequestElement {
         if (nyKravVersjon) {
             validator.checkNull(Fields.kravNummer, kravNummer);
         }
+        validator.checkCodelist(Fields.avdeling, avdeling, ListName.AVDELING);
+        validator.checkCodelist(Fields.underavdeling, underavdeling, ListName.UNDERAVDELING);
         validator.checkCodelist(Fields.relevansFor, relevansFor, ListName.RELEVANS);
     }
 }

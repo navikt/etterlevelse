@@ -41,7 +41,11 @@ public class CodeUsageControllerIT extends IntegrationTestBase {
     class findAllCodeUsageOfListname {
 
         @ParameterizedTest
-        @CsvSource({"RELEVANS,2"})
+        @CsvSource({
+                "RELEVANS,2",
+                "AVDELING,1",
+                "UNDERAVDELING,1"
+        })
         void shouldFindCodeUsage(String list, int expectedCodesInUse) {
             ResponseEntity<CodelistUsageResponse> response = restTemplate
                     .exchange(String.format("/codelist/usage/find/%s", list), HttpMethod.GET, HttpEntity.EMPTY, CodelistUsageResponse.class);
@@ -56,11 +60,16 @@ public class CodeUsageControllerIT extends IntegrationTestBase {
     class findCodeUsageByListNameAndCode {
 
         @ParameterizedTest
-        @CsvSource({"RELEVANS,REL1,1", "RELEVANS,REL2,0",})
+        @CsvSource({
+                "RELEVANS,REL1,1",
+                "RELEVANS,REL2,0",
+                "AVDELING,AVD1,1",
+                "UNDERAVDELING,UNDAVD1,1"
+        })
         void findKrav(String list, String code, int expectedCount) {
             var response = getForListAndCode(list, code);
 
-            assertThat(expectedCount).isEqualTo(countKrav(response));
+            assertThat(countKrav(response)).isEqualTo(expectedCount);
         }
 
         @ParameterizedTest
@@ -78,7 +87,11 @@ public class CodeUsageControllerIT extends IntegrationTestBase {
     class replaceCodelist {
 
         @ParameterizedTest
-        @CsvSource({"RELEVANS,REL1,1"})
+        @CsvSource({
+                "RELEVANS,REL1,1",
+                "AVDELING,AVD1,1",
+                "UNDERAVDELING,UNDAVD1,1"
+        })
         void replaceCodelistUsage(String list, String code, int krav) {
             String newCode = "REPLACECODE";
             codelistService.save(List.of(createCodelistRequest(list, newCode)));
@@ -105,15 +118,17 @@ public class CodeUsageControllerIT extends IntegrationTestBase {
 
     private void createTestData() {
         createCodelistsByRequests();
-        storageService.save(Krav.builder().relevansFor("REL1").build());
-        storageService.save(Krav.builder().relevansFor("REL3").build());
+        storageService.save(Krav.builder().avdeling("AVD1").relevansFor("REL1").build());
+        storageService.save(Krav.builder().underavdeling("UNDAVD1").relevansFor("REL3").build());
     }
 
     private void createCodelistsByRequests() {
         List<CodelistRequest> requests = List.of(
                 createCodelistRequest(ListName.RELEVANS.name(), "REL1"),
                 createCodelistRequest(ListName.RELEVANS.name(), "REL2"),
-                createCodelistRequest(ListName.RELEVANS.name(), "REL3")
+                createCodelistRequest(ListName.RELEVANS.name(), "REL3"),
+                createCodelistRequest(ListName.AVDELING.name(), "AVD1"),
+                createCodelistRequest(ListName.UNDERAVDELING.name(), "UNDAVD1")
         );
         codelistService.save(requests);
     }

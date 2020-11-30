@@ -60,8 +60,8 @@ export const EditKrav = ({krav, close}: {krav: Krav, close: (k?: Krav) => void})
           <Block height={theme.sizing.scale600}/>
 
           <MultiSearchField label='Kontaktpersoner' name='kontaktPersoner' search={personSearch} itemLabel={personLookup}/>
-          <InputField label='Avdeling' name='avdeling'/>
-          <InputField label='Underavdeling' name='underavdeling'/>
+          <OptionField label='Avdeling' name='avdeling' listName={ListName.AVDELING}/>
+          <OptionField label='Underavdeling' name='underavdeling' listName={ListName.UNDERAVDELING}/>
           <OptionField label='Status' name='status' options={Object.values(KravStatus).map(id => ({id, label: kravStatus(id)}))}/>
 
         </Block>

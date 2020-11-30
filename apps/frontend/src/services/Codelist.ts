@@ -3,6 +3,8 @@ import {getAllCodelists} from '../api/CodelistApi'
 import * as yup from 'yup';
 
 export enum ListName {
+  AVDELING = 'AVDELING',
+  UNDERAVDELING = 'UNDERAVDELING',
   RELEVANS = 'RELEVANS'
 }
 

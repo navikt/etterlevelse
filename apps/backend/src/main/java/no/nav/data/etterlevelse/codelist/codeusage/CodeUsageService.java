@@ -71,6 +71,8 @@ public class CodeUsageService {
         if (usage.isInUse()) {
             switch (listName) {
                 case RELEVANS -> usage.getKrav().forEach(gs -> gs.asKrav(k -> k.setRelevansFor(newCode)));
+                case AVDELING -> usage.getKrav().forEach(gs -> gs.asKrav(k -> k.setAvdeling(newCode)));
+                case UNDERAVDELING -> usage.getKrav().forEach(gs -> gs.asKrav(k -> k.setUnderavdeling(newCode)));
             }
         }
         return usage;
@@ -79,8 +81,9 @@ public class CodeUsageService {
     private List<GenericStorage> findKrav(ListName listName, String code) {
         return switch (listName) {
             case RELEVANS -> kravRepo.findByRelevans(code);
+            case AVDELING -> kravRepo.findByAvdeling(code);
+            case UNDERAVDELING -> kravRepo.findByUnderavdeling(code);
         };
     }
-
 
 }
