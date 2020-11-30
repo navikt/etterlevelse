@@ -1,7 +1,7 @@
 import * as React from 'react'
 import {useEffect, useRef, useState} from 'react'
 import {Block} from 'baseui/block'
-import {Label2, Label4} from 'baseui/typography'
+import {Label2} from 'baseui/typography'
 import {Select, Value} from 'baseui/select'
 import {Button} from 'baseui/button'
 
@@ -20,7 +20,7 @@ const UsageTable = (props: {usage: CodeUsage, rows: number}) => {
     <Table
       emptyText={'i bruk'}
       hoverColor={theme.colors.primary100}
-      data={[]}
+      data={usage.inUse ? [0] : []}
       headers={[
         {title: 'Krav'}
       ]}
@@ -29,7 +29,7 @@ const UsageTable = (props: {usage: CodeUsage, rows: number}) => {
         return (
           <Row key={index} $style={{borderBottomStyle: 'none'}}>
             {krav && <Cell>
-              {it && <ObjectLink id={kr.id} type={ObjectType.Krav} withHistory={true}>{it.name}</ObjectLink>}
+              {kr && <ObjectLink id={kr.id} type={ObjectType.Krav} withHistory={true}>{kr.name}</ObjectLink>}
             </Cell>}
           </Row>
         )
@@ -74,7 +74,6 @@ export const Usage = (props: {usage?: CodeUsage, refresh: () => void}) => {
 
       {usage && <UsageTable usage={usage} rows={maxRows}/>}
       {!usage && <StyledSpinnerNext/>}
-      {noUsage && <Label4 marginTop=".5rem">Bruke ikke funnet</Label4>}
     </Block>
   )
 }
