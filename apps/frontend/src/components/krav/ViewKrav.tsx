@@ -2,31 +2,38 @@ import {Krav} from '../../constants'
 import {Block} from 'baseui/block'
 import React from 'react'
 import {kravStatus} from '../../pages/KravPage'
-import {LabelSmall} from 'baseui/typography'
 import {theme} from '../../util'
 import {usePersonLookup} from '../../api/TeamApi'
+import DataText from '../common/DataText'
+import {Markdown} from '../common/Markdown'
 
 
 export const ViewKrav = ({krav}: {krav: Krav}) => {
   const people = usePersonLookup()
 
   return (
-    <Block>
-      <Label title='Beskrivelse'>{krav.beskrivelse}</Label>
+    <Block width='100%'>
       <Label title='Hensikt'>{krav.hensikt}</Label>
+      <Label title='Beskrivelse' markdown>{krav.beskrivelse}</Label>
 
-      <Block height={theme.sizing.scale100}/>
+      <Block height={theme.sizing.scale600}/>
 
-      <Label title='Utdypende beskrivelse'>{krav.utdypendeBeskrivelse}</Label>
-      <Label title='Dokumentasjon'>{krav.dokumentasjon.join(', ')}</Label>
+      <Label title='Utdypende beskrivelse' markdown>{krav.utdypendeBeskrivelse}</Label>
+      <Label title='Dokumentasjon' markdown>{krav.dokumentasjon.join(', ')}</Label>
       <Label title='Rettskilder'>{krav.rettskilder.join(', ')}</Label>
 
-      <Label title='Relevante implementasjoner'>{krav.implementasjoner.join(', ')}</Label>
+      <Block height={theme.sizing.scale600}/>
+
+      <Label title='Relevante implementasjoner' markdown>{krav.implementasjoner.join(', ')}</Label>
       <Label title='Begreper'>{krav.begreper.join(', ')}</Label>
       <Label title='Tagger'>{krav.tagger.join(', ')}</Label>
       <Label title='Relevant for'>{krav.relevansFor?.shortName}</Label>
 
+      <Block height={theme.sizing.scale600}/>
+
       <Label title='Periode'>{krav.periode?.start} {krav.periode?.slutt}</Label>
+
+      <Block height={theme.sizing.scale600}/>
 
       <Label title='Kontaktpersoner'>{krav.kontaktPersoner.map(people).join(', ')}</Label>
       <Label title='Avdeling'>{krav.avdeling}</Label>
@@ -36,11 +43,10 @@ export const ViewKrav = ({krav}: {krav: Krav}) => {
   )
 }
 
-const Label = (props: {title: string, children: React.ReactNode}) => {
+const Label = (props: {title: string, children: React.ReactNode, markdown?: boolean}) => {
   return (
-    <Block display='flex' marginBottom={theme.sizing.scale100}>
-      <LabelSmall marginRight={theme.sizing.scale400}>{props.title}: </LabelSmall>
-      <LabelSmall>{props.children}</LabelSmall>
-    </Block>
+    <DataText label={props.title}>
+      {props.markdown ? <Markdown source={props.children as string}/> : props.children }
+    </DataText>
   )
 }

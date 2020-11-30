@@ -8,8 +8,10 @@ import React from 'react'
 import * as yup from 'yup'
 import {ListName} from '../../services/Codelist'
 import {kravStatus} from '../../pages/KravPage'
-import {InputField, MultiInputField, MultiSearchField, OptionField} from '../common/Inputs'
+import {InputField, MultiInputField, MultiSearchField, OptionField, TextAreaField} from '../common/Inputs'
 import {usePersonLookup, usePersonSearch} from '../../api/TeamApi'
+import {theme} from '../../util'
+import {LabelMedium} from 'baseui/typography'
 
 export const EditKrav = ({krav, close}: {krav: Krav, close: (k?: Krav) => void}) => {
   const personSearch = usePersonSearch()
@@ -33,21 +35,32 @@ export const EditKrav = ({krav, close}: {krav: Krav, close: (k?: Krav) => void})
         <Block>
 
           <InputField label='Navn' name='navn'/>
-          <InputField label='Beskrivelse' name='beskrivelse'/>
-          <InputField label='Utdypende beskrivelse' name='utdypendeBeskrivelse'/>
-          <InputField label='Hensikt' name='hensikt'/>
+          <TextAreaField label='Hensikt' name='hensikt'/>
+          <TextAreaField label='Beskrivelse' name='beskrivelse'/>
 
+          <Block height={theme.sizing.scale600}/>
+
+          <TextAreaField label='Utdypende beskrivelse' name='utdypendeBeskrivelse'/>
           <MultiInputField label='Dokumentasjon' name='dokumentasjon'/>
+          <MultiInputField label='Rettskilder' name='rettskilder'/>
+
+          <Block height={theme.sizing.scale600}/>
+
           <MultiInputField label='Relevante implementasjoner' name='implementasjoner'/>
           <MultiInputField label='Begreper' name='begreper'/>
-          <MultiSearchField label='Kontaktpersoner' name='kontaktPersoner' search={personSearch} itemLabel={personLookup}/>
-          <MultiInputField label='Rettskilder' name='rettskilder'/>
           <MultiInputField label='Tagger' name='tagger'/>
+          <OptionField label='Relevans for' name='relevansFor' listName={ListName.RELEVANS}/>
 
+          <Block height={theme.sizing.scale600}/>
+
+          <LabelMedium>Periode</LabelMedium>
+          {/*todo*/}
+
+          <Block height={theme.sizing.scale600}/>
+
+          <MultiSearchField label='Kontaktpersoner' name='kontaktPersoner' search={personSearch} itemLabel={personLookup}/>
           <InputField label='Avdeling' name='avdeling'/>
           <InputField label='Underavdeling' name='underavdeling'/>
-
-          <OptionField label='Relevans for' name='relevansFor' listName={ListName.RELEVANS}/>
           <OptionField label='Status' name='status' options={Object.values(KravStatus).map(id => ({id, label: kravStatus(id)}))}/>
 
         </Block>

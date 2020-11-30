@@ -12,12 +12,23 @@ import {Select, Value} from 'baseui/select'
 import {Code, codelist, ListName} from '../../services/Codelist'
 import {SearchType} from '../../api/TeamApi'
 import * as _ from 'lodash'
+import {Textarea} from 'baseui/textarea'
 
 export const InputField = (props: {label: string, name: keyof Krav}) => (
   <Field name={props.name}>
     {(p: FieldProps) =>
       <FormControl label={props.label} error={p.meta.error}>
         <Input {...p.field}/>
+      </FormControl>
+    }
+  </Field>
+)
+
+export const TextAreaField = (props: {label: string, name: keyof Krav}) => (
+  <Field name={props.name}>
+    {(p: FieldProps) =>
+      <FormControl label={props.label} error={p.meta.error}>
+        <Textarea rows={6} {...p.field}/>
       </FormControl>
     }
   </Field>
