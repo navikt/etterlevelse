@@ -98,7 +98,7 @@ export const MultiInputField = (props: {label: string, name: string}) => {
               />
               <Button type='button' onClick={add} marginLeft><FontAwesomeIcon icon={faPlus}/> </Button>
             </Block>
-            <RenderTagList list={p.form.values[props.name] as string[]} onRemove={p.remove}/>
+            <RenderTagList list={p.form.values[props.name] as string[]} onRemove={p.remove} wide/>
           </Block>
         </FormControl>
       )
@@ -152,7 +152,7 @@ export const MultiSearchField = (props: {label: string, name: string, search: Se
               />
             </Block>
             <RenderTagList list={(p.form.values[props.name] as string[])
-            .map(v => props.itemLabel ? props.itemLabel(v) : v)} onRemove={p.remove}/>
+            .map(v => props.itemLabel ? props.itemLabel(v) : v)} onRemove={p.remove} wide/>
           </Block>
         </FormControl>
       }

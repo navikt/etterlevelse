@@ -40,21 +40,19 @@ export const KravPage = () => {
 
   return (
     <Block>
-
-      <Block display='flex' justifyContent='space-between' alignItems='center'>
-
-        {loading && <LoadingSkeleton/>}
-        {!loading && <>
-          <H2>Krav: {krav && krav?.kravNummer !== 0 ? kravName(krav) : 'Ny'}</H2>
-          <Block>
+      {loading && <LoadingSkeleton/>}
+      {!loading && <>
+        <Block>
+          <Block display='flex' justifyContent='flex-end'>
             <RouteLink href={'/krav'}>
               <Button size='compact' kind='tertiary'>Tilbake</Button>
             </RouteLink>
             {krav?.id && !edit && <Button size='compact' kind='secondary' onClick={newVersion} marginLeft>Ny versjon</Button>}
             {krav?.id && <Button size='compact' onClick={() => setEdit(!edit)} marginLeft>{edit ? 'Avbryt' : 'Rediger'}</Button>}
           </Block>
-        </>}
-      </Block>
+          <H2>Krav: {krav && krav?.kravNummer !== 0 ? kravName(krav) : 'Ny'}</H2>
+        </Block>
+      </>}
 
       {!edit && krav && !loading && <ViewKrav krav={krav}/>}
       {edit && krav && <EditKrav krav={krav} close={k => {

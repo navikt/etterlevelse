@@ -1,7 +1,7 @@
 import * as React from "react"
 import {Tag, VARIANT} from "baseui/tag"
 
-export const RenderTagList = ({list, onRemove}: {list: string[], onRemove: (i: number) => void}) => {
+export const RenderTagList = ({list, onRemove, wide}: {list: string[], onRemove: (i: number) => void, wide?: boolean}) => {
   return (
     <React.Fragment>
       {list && list.length > 0
@@ -12,6 +12,13 @@ export const RenderTagList = ({list, onRemove}: {list: string[], onRemove: (i: n
                 key={item}
                 variant={VARIANT.outlined}
                 onActionClick={() => onRemove(index)}
+                overrides={{
+                  Text: {
+                    style: {
+                      maxWidth:undefined
+                    }
+                  }
+                }}
               >
                 {item}
               </Tag>

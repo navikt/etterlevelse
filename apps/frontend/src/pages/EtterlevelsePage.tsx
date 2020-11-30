@@ -25,7 +25,7 @@ export const etterlevelseStatus = (status: EtterlevelseStatus) => {
 }
 
 export const EtterlevelsePage = () => {
-  const params = useParams<{id?:string}>()
+  const params = useParams<{id?: string}>()
   const [etterlevelse, setEtterlevelse] = useEtterlevelse(params.id)
   const [edit, setEdit] = useState(etterlevelse && !etterlevelse.id)
   const history = useHistory()
@@ -34,20 +34,18 @@ export const EtterlevelsePage = () => {
 
   return (
     <Block>
-
-      <Block display='flex' justifyContent='space-between' alignItems='center'>
-
         {loading && <LoadingSkeleton/>}
         {!loading && <>
-          <H2>Etterlevelse: {etterlevelse && etterlevelse?.kravNummer !== 0 ? etterlevelseName(etterlevelse) : 'Ny'}</H2>
           <Block>
-            <RouteLink href={'/etterlevelse'}>
-              <Button size='compact' kind='tertiary'>Tilbake</Button>
-            </RouteLink>
-            {etterlevelse?.id && <Button size='compact' onClick={() => setEdit(!edit)} marginLeft>{edit ? 'Avbryt' : 'Rediger'}</Button>}
+            <Block display='flex' justifyContent='flex-end'>
+              <RouteLink href={'/etterlevelse'}>
+                <Button size='compact' kind='tertiary'>Tilbake</Button>
+              </RouteLink>
+              {etterlevelse?.id && <Button size='compact' onClick={() => setEdit(!edit)} marginLeft>{edit ? 'Avbryt' : 'Rediger'}</Button>}
+            </Block>
+            <H2>Etterlevelse: {etterlevelse && etterlevelse?.kravNummer !== 0 ? etterlevelseName(etterlevelse) : 'Ny'}</H2>
           </Block>
         </>}
-      </Block>
 
       {!edit && etterlevelse && !loading && <ViewEtterlevelse etterlevelse={etterlevelse}/>}
       {edit && etterlevelse && <EditEtterlevelse etterlevelse={etterlevelse} close={k => {
