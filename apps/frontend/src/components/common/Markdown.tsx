@@ -8,7 +8,7 @@ import remarkGfm from 'remark-gfm'
  */
 export const Markdown = (props: {source?: string, escapeHtml?: boolean, noMargin?: boolean, verbatim?: boolean}) => {
   const renderers = {
-    paragraph: (parProps: any) => props.noMargin ? <React.Fragment {...parProps}/> : <Paragraph2 {...parProps}/>
+    paragraph: (parProps: any) => props.noMargin ? <Paragraph2 {...parProps} marginTop={0} marginBottom={0}/> : <Paragraph2 {...parProps}/>
   }
   return <ReactMarkdown source={props.source || ''}
                         escapeHtml={props.escapeHtml}
