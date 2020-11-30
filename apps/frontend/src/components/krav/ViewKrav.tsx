@@ -6,6 +6,8 @@ import {theme} from '../../util'
 import {usePersonLookup} from '../../api/TeamApi'
 import DataText from '../common/DataText'
 import {Markdown} from '../common/Markdown'
+import {StyledLink} from 'baseui/link'
+import {teamKatPersonLink} from '../../util/config'
 
 
 export const ViewKrav = ({krav}: {krav: Krav}) => {
@@ -35,7 +37,9 @@ export const ViewKrav = ({krav}: {krav: Krav}) => {
 
       <Block height={theme.sizing.scale600}/>
 
-      <Label title='Kontaktpersoner'>{krav.kontaktPersoner.map(people).join(', ')}</Label>
+      <Label title='Kontaktpersoner'>{krav.kontaktPersoner.map(ident =>
+        <StyledLink target="_blank" rel="noopener noreferrer" href={teamKatPersonLink(ident)}>{people(ident)}      </StyledLink>)}
+      </Label>
       <Label title='Avdeling'>{krav.avdeling}</Label>
       <Label title='Underavdeling'>{krav.underavdeling}</Label>
       <Label title='Status'>{kravStatus(krav.status)}</Label>
