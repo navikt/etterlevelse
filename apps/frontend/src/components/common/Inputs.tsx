@@ -57,10 +57,11 @@ export const MultiInputField = (props: {label: string, name: string}) => {
   return (
     <FieldArray name={props.name}>{(p: FieldArrayRenderProps) => {
       const add = () => {
+        if (!val) return
         p.push(val);
         setVal('')
       }
-      const onKey = (e: React.KeyboardEvent) => (e.key === 'Enter' && val) && add()
+      const onKey = (e: React.KeyboardEvent) => (e.key === 'Enter') && add()
 
       return (
         <FormControl label={props.label} error={p.form.errors[props.name]}>
