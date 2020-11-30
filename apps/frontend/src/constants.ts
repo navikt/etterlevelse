@@ -64,7 +64,6 @@ export interface Krav extends DomainObject {
 export interface Periode {
   start: string
   slutt: string
-  isActive: boolean
 }
 
 export enum KravStatus {

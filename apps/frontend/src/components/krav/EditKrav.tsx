@@ -8,7 +8,7 @@ import React from 'react'
 import * as yup from 'yup'
 import {ListName} from '../../services/Codelist'
 import {kravStatus} from '../../pages/KravPage'
-import {InputField, MultiInputField, MultiSearchField, OptionField, TextAreaField} from '../common/Inputs'
+import {DateField, InputField, MultiInputField, MultiSearchField, OptionField, TextAreaField} from '../common/Inputs'
 import {usePersonLookup, usePersonSearch} from '../../api/TeamApi'
 import {theme} from '../../util'
 import {LabelMedium} from 'baseui/typography'
@@ -54,7 +54,8 @@ export const EditKrav = ({krav, close}: {krav: Krav, close: (k?: Krav) => void})
           <Block height={theme.sizing.scale600}/>
 
           <LabelMedium>Periode</LabelMedium>
-          {/*todo*/}
+          <DateField label='Start' name='periode.start'/>
+          <DateField label='Slutt' name='periode.slutt'/>
 
           <Block height={theme.sizing.scale600}/>
 

@@ -1,4 +1,4 @@
-import {Krav, Or} from '../../constants'
+import {Or} from '../../constants'
 import {Field, FieldArray, FieldArrayRenderProps, FieldProps} from 'formik'
 import {FormControl} from 'baseui/form-control'
 import {Input} from 'baseui/input'
@@ -13,8 +13,10 @@ import {Code, codelist, ListName} from '../../services/Codelist'
 import {SearchType} from '../../api/TeamApi'
 import * as _ from 'lodash'
 import {Textarea} from 'baseui/textarea'
+import {Datepicker} from 'baseui/datepicker'
+import moment from 'moment'
 
-export const InputField = (props: {label: string, name: keyof Krav}) => (
+export const InputField = (props: {label: string, name: string}) => (
   <Field name={props.name}>
     {(p: FieldProps) =>
       <FormControl label={props.label} error={p.meta.error}>
@@ -24,7 +26,7 @@ export const InputField = (props: {label: string, name: keyof Krav}) => (
   </Field>
 )
 
-export const TextAreaField = (props: {label: string, name: keyof Krav}) => (
+export const TextAreaField = (props: {label: string, name: string}) => (
   <Field name={props.name}>
     {(p: FieldProps) =>
       <FormControl label={props.label} error={p.meta.error}>
@@ -34,7 +36,20 @@ export const TextAreaField = (props: {label: string, name: keyof Krav}) => (
   </Field>
 )
 
-export const MultiInputField = (props: {label: string, name: keyof Krav}) => {
+export const DateField = (props: {label: string, name: string}) => (
+  <Field name={props.name}>
+    {(p: FieldProps) =>
+      <FormControl label={props.label} error={p.meta.error}>
+        <Datepicker value={p.field.value ? moment(p.field.value).toDate() : undefined} onChange={({date}) => {
+          const dateSingle = Array.isArray(date) ? date[0] : date
+          if (dateSingle) p.form.setFieldValue(props.name, dateSingle.toISOString().split('T')[0])
+        }}/>
+      </FormControl>
+    }
+  </Field>
+)
+
+export const MultiInputField = (props: {label: string, name: string}) => {
   const [val, setVal] = useState('')
   return (
     <FieldArray name={props.name}>{(p: FieldArrayRenderProps) => {
@@ -62,7 +77,7 @@ export const MultiInputField = (props: {label: string, name: keyof Krav}) => {
   )
 }
 
-export const OptionField = (props: {label: string, name: keyof Krav} & Or<{options: Value}, {listName: ListName}>) => {
+export const OptionField = (props: {label: string, name: string} & Or<{options: Value}, {listName: ListName}>) => {
   const options: Value = props.options || codelist.getParsedOptions(props.listName)
   return (
     <Field name={props.name}>
@@ -92,9 +107,9 @@ export const MultiSearchField = (props: {label: string, name: string, search: Se
           <Block>
             <Block display='flex'>
               <Select
-                placeholder={'Søk '+ _.lowerFirst(props.label)}
+                placeholder={'Søk ' + _.lowerFirst(props.label)}
                 maxDropdownHeight='400px'
-                filterOptions={o=>o}
+                filterOptions={o => o}
                 searchable
                 noResultsMsg='Ingen resultat'
 
