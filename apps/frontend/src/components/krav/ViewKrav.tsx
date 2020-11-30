@@ -48,8 +48,8 @@ export const ViewKrav = ({krav}: {krav: Krav}) => {
           )}
         </Block>
       </Label>
-      <Label title='Avdeling'>{krav.avdeling}</Label>
-      <Label title='Underavdeling'>{krav.underavdeling}</Label>
+      <Label title='Avdeling'>{krav.avdeling?.shortName}</Label>
+      <Label title='Underavdeling'>{krav.underavdeling?.shortName}</Label>
       <Label title='Status'>{kravStatus(krav.status)}</Label>
     </Block>
   )
