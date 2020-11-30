@@ -7,15 +7,17 @@ public class CodelistStub {
 
     public static void initializeCodelist() {
         CodelistCache.init();
-        add(ListName.RELEVANS, "SAK", "Sak", "Saken");
-        add(ListName.RELEVANS, "INNSYN", "Innsyn", "Inns");
+        add(ListName.RELEVANS, "SAK", "Sak");
+        add(ListName.RELEVANS, "INNSYN", "Innsyn");
+        add(ListName.AVDELING, "AVDELING", "Avdeling");
+        add(ListName.UNDERAVDELING, "UNDERAVDELING", "Underavdeling");
     }
 
-    private static void add(ListName source, String code, String name, String desc) {
-        CodelistCache.set(create(source, code, name, desc));
+    private static void add(ListName source, String code, String name) {
+        CodelistCache.set(create(source, code, name));
     }
 
-    private static Codelist create(ListName list, String code, String name, String description) {
-        return Codelist.builder().list(list).code(code).shortName(name).description(description).build();
+    private static Codelist create(ListName list, String code, String name) {
+        return Codelist.builder().list(list).code(code).shortName(name).description("description").build();
     }
 }

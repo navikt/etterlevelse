@@ -5,6 +5,7 @@ import no.nav.data.IntegrationTestBase.Initializer;
 import no.nav.data.common.auditing.domain.AuditVersionRepository;
 import no.nav.data.common.storage.StorageService;
 import no.nav.data.common.storage.domain.GenericStorageRepository;
+import no.nav.data.etterlevelse.codelist.CodelistStub;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -47,6 +48,7 @@ public abstract class IntegrationTestBase {
     void setUpBase() {
         repository.deleteAll();
         auditVersionRepository.deleteAll();
+        CodelistStub.initializeCodelist();
     }
 
     @AfterEach

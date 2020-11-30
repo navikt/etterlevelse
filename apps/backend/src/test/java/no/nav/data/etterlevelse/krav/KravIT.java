@@ -74,7 +74,7 @@ public class KravIT extends IntegrationTestBase {
                 .utdypendeBeskrivelse("utbesk")
                 .hensikt("hensikt")
                 .relevansFor("SAK")
-                .avdeling("avd").underavdeling("underavd")
+                .avdeling("AVDELING").underavdeling("UNDERAVDELING")
                 .begreper(List.of("beg"))
                 .dokumentasjon(List.of("dok"))
                 .implementasjoner(List.of("impl"))
@@ -107,8 +107,8 @@ public class KravIT extends IntegrationTestBase {
         assertThat(krav.getUtdypendeBeskrivelse()).isEqualTo("utbesk");
         assertThat(krav.getHensikt()).isEqualTo("hensikt");
         assertThat(krav.getRelevansFor().getCode()).isEqualTo("SAK");
-        assertThat(krav.getAvdeling()).isEqualTo("avd");
-        assertThat(krav.getUnderavdeling()).isEqualTo("underavd");
+        assertThat(krav.getAvdeling().getCode()).isEqualTo("AVDELING");
+        assertThat(krav.getUnderavdeling().getCode()).isEqualTo("UNDERAVDELING");
         assertThat(krav.getBegreper()).containsOnly("beg");
         assertThat(krav.getDokumentasjon()).containsOnly("dok");
         assertThat(krav.getImplementasjoner()).containsOnly("impl");
