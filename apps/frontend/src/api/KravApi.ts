@@ -2,6 +2,7 @@ import axios from 'axios'
 import {emptyPage, Krav, KravStatus, Or, PageResponse} from '../constants'
 import {env} from '../util/env'
 import {useEffect, useState} from 'react'
+import {maxDate, navStartDate} from '../util/config'
 
 export const getKravPage = async (pageNumber: number, pageSize: number) => {
   return (await axios.get<PageResponse<Krav>>(`${env.backendBaseUrl}/krav?pageNumber=${pageNumber}&pageSize=${pageSize}`)).data
@@ -85,7 +86,7 @@ export const mapToFormVal = (krav: Partial<Krav>): Krav => ({
   hensikt: krav.hensikt || '',
   avdeling: krav.avdeling || '',
   underavdeling: krav.underavdeling || '',
-  periode: krav.periode || {start: '', slutt: ''},
+  periode: krav.periode || {start: navStartDate, slutt: maxDate},
   relevansFor: krav.relevansFor,
   status: krav.status || KravStatus.UNDER_REDIGERING,
   nyKravVersjon: krav.nyKravVersjon || false

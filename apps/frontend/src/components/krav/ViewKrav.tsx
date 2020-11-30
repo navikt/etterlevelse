@@ -8,7 +8,9 @@ import DataText from '../common/DataText'
 import {Markdown} from '../common/Markdown'
 import {StyledLink} from 'baseui/link'
 import {teamKatPersonLink} from '../../util/config'
+import moment from 'moment'
 
+const formatDate = (date?: string) => date && moment(date).format('ll')
 
 export const ViewKrav = ({krav}: {krav: Krav}) => {
   const people = usePersonLookup()
@@ -33,7 +35,7 @@ export const ViewKrav = ({krav}: {krav: Krav}) => {
 
       <Block height={theme.sizing.scale600}/>
 
-      <Label title='Periode'>{krav.periode?.start && 'Fra:'} {krav.periode?.start} {krav.periode?.slutt && 'Til:'} {krav.periode?.slutt}</Label>
+      <Label title='Periode'>{krav.periode?.start && 'Fra:'} {formatDate(krav.periode?.start)} {krav.periode?.slutt && 'Til:'} {formatDate(krav.periode?.slutt)}</Label>
 
       <Block height={theme.sizing.scale600}/>
 

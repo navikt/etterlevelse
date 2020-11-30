@@ -9,3 +9,5 @@ export const documentationLink = 'https://dataplattform.gitbook.io/nada/kataloge
 export const markdownLink = 'https://guides.github.com/features/mastering-markdown/'
 
 export const teamKatPersonLink = (teamId: string) => `${env.teamKatBaseUrl}resource/${teamId}`
+export const navStartDate = '2006-07-01'
+export const maxDate = '9999-12-31'
