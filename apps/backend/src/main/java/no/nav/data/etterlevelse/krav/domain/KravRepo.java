@@ -26,7 +26,7 @@ public interface KravRepo extends JpaRepository<GenericStorage, UUID> {
     @Query(value = "select * from generic_storage where data ->> 'underavdeling' = ?1 and type = 'Krav'", nativeQuery = true)
     List<GenericStorage> findByUnderavdeling(String code);
 
-    @Query(value = "select * from generic_storage where data ->> 'name' ilike %?1% and type = 'Krav'", nativeQuery = true)
+    @Query(value = "select * from generic_storage where data ->> 'navn' ilike %?1% and type = 'Krav'", nativeQuery = true)
     List<GenericStorage> findByNameContaining(String name);
 
     @Query(value = "select * from generic_storage where data -> 'kravNummer' = to_jsonb(?1) and type = 'Krav'", nativeQuery = true)
