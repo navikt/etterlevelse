@@ -31,7 +31,7 @@ export const ViewKrav = ({krav}: {krav: Krav}) => {
 
       <Block height={theme.sizing.scale600}/>
 
-      <Label title='Periode'>{krav.periode?.start} {krav.periode?.slutt}</Label>
+      <Label title='Periode'>{krav.periode?.start && 'Fra:'} {krav.periode?.start} {krav.periode?.slutt && 'Til:'} {krav.periode?.slutt}</Label>
 
       <Block height={theme.sizing.scale600}/>
 
@@ -46,7 +46,7 @@ export const ViewKrav = ({krav}: {krav: Krav}) => {
 const Label = (props: {title: string, children: React.ReactNode, markdown?: boolean}) => {
   return (
     <DataText label={props.title}>
-      {props.markdown ? <Markdown source={props.children as string}/> : props.children }
+      {props.markdown ? <Markdown source={props.children as string}/> : props.children}
     </DataText>
   )
 }
