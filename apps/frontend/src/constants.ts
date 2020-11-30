@@ -61,9 +61,27 @@ export interface Krav extends DomainObject {
   nyKravVersjon: boolean
 }
 
+export interface Etterlevelse extends DomainObject {
+  id: string
+
+  behandling: string
+  kravNummer: number
+  kravVersjon: number
+  etterleves: boolean
+  begrunnelse: string
+  dokumentasjon: string[]
+  fristForFerdigstillelse: string
+  status: EtterlevelseStatus
+}
+
 export interface Periode {
   start: string
   slutt: string
+}
+
+export enum EtterlevelseStatus {
+  UNDER_REDIGERING = 'UNDER_REDIGERING',
+  FERDIG = 'FERDIG'
 }
 
 export enum KravStatus {

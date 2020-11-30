@@ -70,6 +70,7 @@ export const useKrav = (params: KravId) => {
 
   return [data, setData] as [Krav | undefined, (k: Krav) => void]
 }
+
 export const mapToFormVal = (krav: Partial<Krav>): Krav => ({
   id: krav.id || '',
   navn: krav.navn || '',

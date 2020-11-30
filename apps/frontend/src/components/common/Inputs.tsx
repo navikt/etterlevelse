@@ -15,6 +15,7 @@ import * as _ from 'lodash'
 import {Textarea} from 'baseui/textarea'
 import {Datepicker} from 'baseui/datepicker'
 import moment from 'moment'
+import {Radio, RadioGroup} from 'baseui/radio'
 
 export const InputField = (props: {label: string, name: string}) => (
   <Field name={props.name}>
@@ -36,6 +37,30 @@ export const TextAreaField = (props: {label: string, name: string}) => (
   </Field>
 )
 
+const YES = "YES", NO = "NO", UNCLARIFIED = "UNCLARIFIED"
+const boolToRadio = (bool?: boolean) => bool === undefined ? UNCLARIFIED : bool ? YES : NO
+const radioToBool = (radio: string) => radio === UNCLARIFIED ? undefined : radio === YES
+export const BoolField = (props: {label: string, name: string, nullable?: boolean}) => (
+  <Field name={props.name}>
+    {(p: FieldProps) =>
+      <FormControl label={props.label} error={p.meta.error}>
+        <RadioGroup value={boolToRadio(p.field.value)} align="horizontal"
+                    overrides={{RadioGroupRoot: {style: {width: "100%", justifyContent: "stretch"}}}}
+                    onChange={
+                      (e) => {
+                        p.form.setFieldValue(props.name, radioToBool((e.target as HTMLInputElement).value))
+                      }
+                    }
+        >
+          <Radio overrides={{Label: {style: {marginRight: "2rem"}}}} value={YES}>Ja</Radio>
+          <Radio overrides={{Label: {style: {marginRight: "2rem"}}}} value={NO}>Nei</Radio>
+          {props.nullable && <Radio overrides={{Label: {style: {marginRight: "2rem"}}}} value={UNCLARIFIED}>Uavklart</Radio>}
+        </RadioGroup>
+      </FormControl>
+    }
+  </Field>
+)
+
 export const DateField = (props: {label: string, name: string}) => (
   <Field name={props.name}>
     {(p: FieldProps) =>
@@ -44,9 +69,9 @@ export const DateField = (props: {label: string, name: string}) => (
           formatString={'dd-MM-yyyy'}
           value={p.field.value ? moment(p.field.value).toDate() : undefined}
           onChange={({date}) => {
-          const dateSingle = Array.isArray(date) ? date[0] : date
-          if (dateSingle) p.form.setFieldValue(props.name, dateSingle.toISOString().split('T')[0])
-        }}/>
+            const dateSingle = Array.isArray(date) ? date[0] : date
+            if (dateSingle) p.form.setFieldValue(props.name, dateSingle.toISOString().split('T')[0])
+          }}/>
       </FormControl>
     }
   </Field>

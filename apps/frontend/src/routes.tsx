@@ -10,6 +10,8 @@ import {SettingsPage} from './components/admin/settings/SettingsPage'
 import {MailLogPage} from './components/admin/maillog/MailLogPage'
 import {KravListPage} from './pages/KravListPage'
 import {KravPage} from './pages/KravPage'
+import {EtterlevelseListPage} from './pages/EtterlevelseListPage'
+import {EtterlevelsePage} from './pages/EtterlevelsePage'
 
 const Routes = (): JSX.Element => (
   <Root>
@@ -19,6 +21,9 @@ const Routes = (): JSX.Element => (
       <Route exact path="/krav" component={KravListPage}/>
       <Route exact path="/krav/:id" component={KravPage}/>
       <Route exact path="/krav/:kravNummer/:kravVersjon" component={KravPage}/>
+
+      <Route exact path="/etterlevelse" component={EtterlevelseListPage}/>
+      <Route exact path="/etterlevelse/:id" component={EtterlevelsePage}/>
 
       <Route exact path="/admin/codelist/:listname?" component={CodeListPage}/>
       <Route exact path="/admin/audit/:id?/:auditId?" component={AuditPage}/>

@@ -58,7 +58,7 @@ export const ViewKrav = ({krav}: {krav: Krav}) => {
 const Label = (props: {title: string, children: React.ReactNode, markdown?: boolean}) => {
   return (
     <DataText label={props.title}>
-      {props.markdown ? <Markdown source={props.children as string}/> : props.children}
+      {props.markdown ? <Markdown source={props.children as string} noMargin/> : props.children}
     </DataText>
   )
 }
