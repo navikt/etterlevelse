@@ -159,3 +159,32 @@ export const MultiSearchField = (props: {label: string, name: string, search: Se
     </FieldArray>
   )
 }
+
+
+export const SearchField = (props: {label: string, name: string, search: SearchType, itemLabel?: (id: string) => string}) => {
+  const [results, setSearch, loading] = props.search
+
+  return (
+    <Field name={props.name}>
+      {(p: FieldProps<string>) =>
+        <FormControl label={props.label} error={p.meta.error}>
+          <Select
+            placeholder={'Søk ' + _.lowerFirst(props.label)}
+            maxDropdownHeight='400px'
+            filterOptions={o => o}
+            searchable
+            noResultsMsg='Ingen resultat'
+
+            options={results}
+            value={[{id: p.field.value, label: props.itemLabel ? props.itemLabel(p.field.value) : p.field.value}]}
+            onChange={({value}) => {
+              p.form.setFieldValue(props.name, value.length ? value[0].id as string : '')
+            }}
+            onInputChange={event => setSearch(event.currentTarget.value)}
+            isLoading={loading}
+          />
+        </FormControl>
+      }
+    </Field>
+  )
+}

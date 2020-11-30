@@ -1,7 +1,7 @@
 import {Block} from 'baseui/block'
 import {H2} from 'baseui/typography'
 import {useHistory, useParams} from 'react-router-dom'
-import {KravId, useKrav} from '../api/KravApi'
+import {KravIdParams, useKrav} from '../api/KravApi'
 import React, {useState} from 'react'
 import {Krav, KravStatus} from '../constants'
 import Button from '../components/common/Button'
@@ -25,7 +25,7 @@ export const kravStatus = (status: KravStatus) => {
 }
 
 export const KravPage = () => {
-  const params = useParams<KravId>()
+  const params = useParams<KravIdParams>()
   const [krav, setKrav] = useKrav(params)
   const [edit, setEdit] = useState(krav && !krav.id)
   const history = useHistory()

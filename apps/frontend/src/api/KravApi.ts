@@ -3,6 +3,7 @@ import {emptyPage, Krav, KravStatus, Or, PageResponse} from '../constants'
 import {env} from '../util/env'
 import {useEffect, useState} from 'react'
 import {maxDate, navStartDate} from '../util/config'
+import {useSearch} from '../util/hooks'
 
 export const getKravPage = async (pageNumber: number, pageSize: number) => {
   return (await axios.get<PageResponse<Krav>>(`${env.backendBaseUrl}/krav?pageNumber=${pageNumber}&pageSize=${pageSize}`)).data
@@ -12,7 +13,11 @@ export const getKrav = async (id: string) => {
   return (await axios.get<Krav>(`${env.backendBaseUrl}/krav/${id}`)).data
 }
 
-export const getKravByKravNummer = async (kravNummer: string, kravVersjon: string) => {
+export const searchKrav = async (name: string) => {
+  return (await axios.get<PageResponse<Krav>>(`${env.backendBaseUrl}/krav/search/${name}`)).data.content
+}
+
+export const getKravByKravNummer = async (kravNummer: number | string, kravVersjon: number | string) => {
   return (await axios.get<Krav>(`${env.backendBaseUrl}/krav/kravnummer/${kravNummer}/${kravVersjon}`)).data
 }
 
@@ -57,19 +62,23 @@ export const useKravPage = (pageSize: number) => {
   return [data, prevPage, nextPage, loading] as [PageResponse<Krav>, () => void, () => void, boolean]
 }
 
-export type KravId = Or<{id?: string}, {kravNummer: string, kravVersjon: string}>
+export type KravIdParams = Or<{id?: string}, {kravNummer: string, kravVersjon: string}>
+export type KravId = Or<{id?: string}, {kravNummer: number, kravVersjon: number}>
 
-export const useKrav = (params: KravId) => {
+export const useKrav = (params: KravId | KravIdParams, onlyLoadOnce?: boolean) => {
   const isCreateNew = params.id === 'ny'
   const [data, setData] = useState<Krav | undefined>(isCreateNew ? mapToFormVal({}) : undefined)
 
   useEffect(() => {
+    if (data && onlyLoadOnce) return
     params?.id && !isCreateNew && getKrav(params.id).then(setData)
     params?.kravNummer && getKravByKravNummer(params.kravNummer, params.kravVersjon).then(setData)
   }, [params])
 
-  return [data, setData] as [Krav | undefined, (k: Krav) => void]
+  return [data, setData] as [Krav | undefined, (k?: Krav) => void]
 }
+
+export const useSearchKrav = () => useSearch(searchKrav)
 
 export const mapToFormVal = (krav: Partial<Krav>): Krav => ({
   id: krav.id || '',
