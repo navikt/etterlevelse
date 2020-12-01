@@ -19,8 +19,8 @@ export const ViewEtterlevelse = ({etterlevelse}: {etterlevelse: Etterlevelse}) =
 
       <Block height={theme.sizing.scale600}/>
 
-      <Label title='Begrunnelse' markdown>{etterlevelse.begrunnelse}</Label>
-      <Label title='Dokumentasjon' markdown>{etterlevelse.dokumentasjon.join(', ')}</Label>
+      <Label title='Begrunnelse' markdown={etterlevelse.begrunnelse}/>
+      <Label title='Dokumentasjon' markdown={etterlevelse.dokumentasjon}/>
 
       <Block height={theme.sizing.scale600}/>
 
@@ -33,10 +33,12 @@ export const ViewEtterlevelse = ({etterlevelse}: {etterlevelse: Etterlevelse}) =
   )
 }
 
-const Label = (props: {title: string, children: React.ReactNode, markdown?: boolean}) => {
+const Label = (props: {title: string, children?: React.ReactNode, markdown?: string | string[]}) => {
   return (
     <DataText label={props.title}>
-      {props.markdown ? <Markdown source={props.children as string} noMargin/> : props.children}
+      {props.markdown ?
+        <Markdown sources={Array.isArray(props.markdown) ? props.markdown : [props.markdown]} noMargin shortenLinks/>
+        : props.children}
     </DataText>
   )
 }

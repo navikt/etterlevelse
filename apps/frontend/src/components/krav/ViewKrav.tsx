@@ -18,17 +18,17 @@ export const ViewKrav = ({krav}: {krav: Krav}) => {
   return (
     <Block width='100%'>
       <Label title='Hensikt'>{krav.hensikt}</Label>
-      <Label title='Beskrivelse' markdown>{krav.beskrivelse}</Label>
+      <Label title='Beskrivelse' markdown={krav.beskrivelse}/>
 
       <Block height={theme.sizing.scale600}/>
 
-      <Label title='Utdypende beskrivelse' markdown>{krav.utdypendeBeskrivelse}</Label>
-      <Label title='Dokumentasjon' markdown>{krav.dokumentasjon.join(', ')}</Label>
-      <Label title='Rettskilder'>{krav.rettskilder.join(', ')}</Label>
+      <Label title='Utdypende beskrivelse' markdown={krav.utdypendeBeskrivelse}/>
+      <Label title='Dokumentasjon' markdown={krav.dokumentasjon}/>
+      <Label title='Rettskilder' markdown={krav.rettskilder}/>
 
       <Block height={theme.sizing.scale600}/>
 
-      <Label title='Relevante implementasjoner' markdown>{krav.implementasjoner.join(', ')}</Label>
+      <Label title='Relevante implementasjoner' markdown={krav.implementasjoner}/>
       <Label title='Begreper'>{krav.begreper.join(', ')}</Label>
       <Label title='Tagger'>{krav.tagger.join(', ')}</Label>
       <Label title='Relevant for'>{krav.relevansFor?.shortName}</Label>
@@ -55,10 +55,12 @@ export const ViewKrav = ({krav}: {krav: Krav}) => {
   )
 }
 
-const Label = (props: {title: string, children: React.ReactNode, markdown?: boolean}) => {
+const Label = (props: {title: string, children?: React.ReactNode, markdown?: string | string[]}) => {
   return (
     <DataText label={props.title}>
-      {props.markdown ? <Markdown source={props.children as string} noMargin/> : props.children}
+      {props.markdown ?
+        <Markdown sources={Array.isArray(props.markdown) ? props.markdown : [props.markdown]} noMargin shortenLinks/>
+        : props.children}
     </DataText>
   )
 }
