@@ -9,9 +9,11 @@ import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravRepo;
 import no.nav.data.etterlevelse.krav.dto.KravRequest;
 import no.nav.data.etterlevelse.krav.dto.KravRequest.Fields;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -59,7 +61,11 @@ public class KravService extends DomainService<Krav> {
     }
 
     public List<Krav> search(String name) {
-        return convert(repo.findByNameContaining(name), GenericStorage::toKrav);
+        List<GenericStorage> byNameContaining = new ArrayList<>(repo.findByNameContaining(name));
+        if (StringUtils.isNumeric(name)) {
+            byNameContaining.addAll(repo.findByKravNummer(Integer.parseInt(name)));
+        }
+        return convert(byNameContaining, GenericStorage::toKrav);
     }
 
     public Krav delete(UUID id) {

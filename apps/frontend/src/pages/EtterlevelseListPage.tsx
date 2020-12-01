@@ -10,7 +10,7 @@ import {Spinner} from '../components/common/Spinner'
 
 
 export const EtterlevelseListPage = () => {
-  const [etterlevelse, prev, next, loading] = useEtterlevelsePage(8)
+  const [etterlevelse, prev, next, loading] = useEtterlevelsePage(20)
 
   return (
     <Block>

@@ -10,7 +10,7 @@ import {Spinner} from '../components/common/Spinner'
 
 
 export const KravListPage = () => {
-  const [krav, prev, next, loading] = useKravPage(8)
+  const [krav, prev, next, loading] = useKravPage(20)
 
   return (
     <Block>
