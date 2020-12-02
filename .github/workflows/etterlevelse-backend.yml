@@ -33,12 +33,6 @@ jobs:
         run: mvn compile
       - name: Test and Package
         run: mvn package
-      - name: Publish Unit Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v1.5
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          files: apps/backend/target/surefire-reports/**/*.xml
-
       - name: docker
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
