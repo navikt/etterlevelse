@@ -3,9 +3,14 @@ ingresses:
 replies:
   - https://etterlevelse.intern.nav.no/oauth2/callback
 teamcat_ingress: teamkatalog-api.fss-pub.nais.io
+polly_ingress: polly.fss-pub.nais.io
 env:
   - name: ETTERLEV_SECURITY_REDIRECT_URIS
     value: https://etterlevelse.intern.nav.no
+  - name: CLIENT_TEAMCAT_URL
+    value: https://teamkatalog-api.fss-pub.nais.io
+  - name: CLIENT_POLLY_URL
+    value: https://polly.fss-pub.nais.io
   - name: AZURE_CLIENT_GROUPS
     value: 2ee0ef50-718c-43d3-8c05-c839f2dc2490
   - name: AZURE_CLIENT_GROUPS_ADMIN

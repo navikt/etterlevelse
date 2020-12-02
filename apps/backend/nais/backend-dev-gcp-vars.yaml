@@ -6,11 +6,14 @@ replies:
   - http://localhost:8080/oauth2/callback
   - http://localhost:3000/oauth2/callback
 teamcat_ingress: teamkatalog-api.dev-fss-pub.nais.io
+polly_ingress: polly.dev-fss-pub.nais.io
 env:
   - name: ETTERLEV_SECURITY_REDIRECT_URIS
     value: https://etterlevelse.dev.intern.nav.no,https://etterlevelse-api.dev.intern.nav.no,http://localhost:3000
   - name: CLIENT_TEAMCAT_URL
     value: https://teamkatalog-api.dev-fss-pub.nais.io
+  - name: CLIENT_POLLY_URL
+    value: https://polly.dev-fss-pub.nais.io
   - name: AZURE_CLIENT_GROUPS
     value: 2ee0ef50-718c-43d3-8c05-c839f2dc2490
   - name: AZURE_CLIENT_GROUPS_ADMIN

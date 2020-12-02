@@ -66,3 +66,4 @@ spec:
     outbound:
       external:
         - host: {{teamcat_ingress}}
+        - host: {{polly_ingress}}
