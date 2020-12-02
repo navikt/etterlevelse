@@ -17,14 +17,14 @@
     <properties>
         <java.version>15</java.version>
 
-        <springdoc-openapi-ui.version>1.4.8</springdoc-openapi-ui.version>
+        <springdoc-openapi-ui.version>1.5.0</springdoc-openapi-ui.version>
         <hibernate-types-52.version>2.10.0</hibernate-types-52.version>
         <simpleclient.version>0.9.0</simpleclient.version>
-        <logstash-logback-encoder.version>6.4</logstash-logback-encoder.version>
-        <shedlock.version>4.15.1</shedlock.version>
+        <logstash-logback-encoder.version>6.5</logstash-logback-encoder.version>
+        <shedlock.version>4.16.0</shedlock.version>
         <commons-collections4.version>4.4</commons-collections4.version>
 
-        <microsoft-graph.version>2.3.2</microsoft-graph.version>
+        <microsoft-graph.version>2.4.1</microsoft-graph.version>
         <msal4j.version>1.8.0</msal4j.version>
 
         <!-- transitive versions -->
@@ -32,9 +32,10 @@
         <commons-io.version>2.8.0</commons-io.version>
         <guava.version>30.0-jre</guava.version>
         <json-smart.version>2.3</json-smart.version>
+        <jna.version>5.5.0</jna.version>
 
         <!-- Test -->
-        <testcontainers.version>1.14.3</testcontainers.version>
+        <testcontainers.version>1.15.0</testcontainers.version>
         <wiremock.version>2.27.2</wiremock.version>
     </properties>
 
@@ -287,6 +288,11 @@
                 <groupId>net.minidev</groupId>
                 <artifactId>json-smart</artifactId>
                 <version>${json-smart.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.java.dev.jna</groupId>
+                <artifactId>jna</artifactId>
+                <version>${jna.version}</version>
             </dependency>
 
             <!-- test-->
