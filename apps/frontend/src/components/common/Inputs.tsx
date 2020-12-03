@@ -79,6 +79,15 @@ export const DateField = (props: {label: string, name: string}) => (
 
 export const MultiInputField = (props: {label: string, name: string}) => {
   const [val, setVal] = useState('')
+  const inputRef = React.useRef<HTMLInputElement>(null)
+
+  let onClick = (p: FieldArrayRenderProps, i: number) => {
+    setVal(p.form.values[props.name][i])
+    p.remove(i)
+    console.log(inputRef)
+    inputRef?.current?.focus()
+  }
+
   return (
     <FieldArray name={props.name}>{(p: FieldArrayRenderProps) => {
       const add = () => {
@@ -92,13 +101,17 @@ export const MultiInputField = (props: {label: string, name: string}) => {
         <FormControl label={props.label} error={p.form.errors[props.name]}>
           <Block>
             <Block display='flex'>
-              <Input onKeyDown={onKey} value={val}
+              <Input onKeyDown={onKey} value={val} inputRef={inputRef}
                      onChange={e => setVal((e.target as HTMLInputElement).value)}
                      onBlur={add}
               />
               <Button type='button' onClick={add} marginLeft><FontAwesomeIcon icon={faPlus}/> </Button>
             </Block>
-            <RenderTagList list={p.form.values[props.name] as string[]} onRemove={p.remove} wide/>
+            <RenderTagList
+              wide
+              list={p.form.values[props.name] as string[]}
+              onRemove={p.remove}
+              onClick={(i) => onClick(p, i)}/>
           </Block>
         </FormControl>
       )

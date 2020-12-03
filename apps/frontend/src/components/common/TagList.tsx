@@ -1,7 +1,8 @@
 import * as React from "react"
 import {Tag, VARIANT} from "baseui/tag"
+import {theme} from '../../util'
 
-export const RenderTagList = ({list, onRemove, wide}: {list: string[], onRemove: (i: number) => void, wide?: boolean}) => {
+export const RenderTagList = ({list, onRemove, onClick, wide}: {list: string[], onRemove: (i: number) => void, onClick?: (i: number) => void, wide?: boolean}) => {
   return (
     <React.Fragment>
       {list && list.length > 0
@@ -11,11 +12,12 @@ export const RenderTagList = ({list, onRemove, wide}: {list: string[], onRemove:
               <Tag
                 key={item}
                 variant={VARIANT.outlined}
+                onClick={onClick ? () => onClick(index) : undefined}
                 onActionClick={() => onRemove(index)}
                 overrides={{
                   Text: {
                     style: {
-                      maxWidth:undefined
+                      maxWidth: wide ? undefined : theme.sizing.scale4800
                     }
                   }
                 }}
