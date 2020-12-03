@@ -21,6 +21,7 @@ import com.microsoft.graph.models.extensions.IGraphServiceClient;
 import com.microsoft.graph.models.extensions.User;
 import com.microsoft.graph.options.QueryOption;
 import com.microsoft.graph.requests.extensions.GraphServiceClient;
+import com.nimbusds.oauth2.sdk.pkce.CodeChallengeMethod;
 import io.prometheus.client.Summary;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.Constants;
@@ -37,6 +38,8 @@ import no.nav.data.common.security.dto.Credential;
 import no.nav.data.common.security.dto.GraphData;
 import no.nav.data.common.security.dto.OAuthState;
 import no.nav.data.common.utils.MetricUtils;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.GrantedAuthority;
@@ -49,6 +52,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URI;
+import java.net.URL;
 import java.time.Duration;
 import java.util.List;
 import java.util.Objects;
@@ -151,11 +155,18 @@ public class AzureTokenProvider implements TokenProvider {
 
     @Override
     public String createAuthRequestRedirectUrl(String postLoginRedirectUri, String postLoginErrorUri, String redirectUri) {
-        return confidentialClientApplication.getAuthorizationRequestUrl(AuthorizationRequestUrlParameters
+        var auth = authService.createAuth();
+        var codeVerifier = auth.getCodeVerifier();
+        var s256 = DigestUtils.sha256(codeVerifier);
+        var codeChallenge = Base64.encodeBase64URLSafeString(s256);
+        URL url = confidentialClientApplication.getAuthorizationRequestUrl(AuthorizationRequestUrlParameters
                 .builder(redirectUri, MICROSOFT_GRAPH_SCOPES)
-                .state(new OAuthState(postLoginRedirectUri, postLoginErrorUri).toJson(encryptor))
+                .state(new OAuthState(auth.getId().toString(), postLoginRedirectUri, postLoginErrorUri).toJson(encryptor))
                 .responseMode(ResponseMode.FORM_POST)
-                .build()).toString();
+                .codeChallengeMethod(CodeChallengeMethod.S256.getValue())
+                .codeChallenge(codeChallenge)
+                .build());
+        return url.toString();
     }
 
     public GraphData getGraphData(String accessToken) {
@@ -169,16 +180,18 @@ public class AzureTokenProvider implements TokenProvider {
     }
 
     @Override
-    public String createSession(String code, String redirectUri) {
+    public String createSession(String sessionId, String code, String redirectUri) {
         try {
             log.debug("Looking up token for auth code");
+            var codeVerifier = authService.getCodeVerifier(sessionId);
             var authResult = msalClient.acquireToken(AuthorizationCodeParameters
                     .builder(code, new URI(redirectUri))
                     .scopes(MICROSOFT_GRAPH_SCOPES)
+                    .codeVerifier(codeVerifier)
                     .build()).get();
             String userId = StringUtils.substringBefore(authResult.account().homeAccountId(), ".");
             String refreshToken = getRefreshTokenFromAuthResult(authResult);
-            return authService.createAuth(userId, refreshToken);
+            return authService.initAuth(userId, refreshToken, sessionId);
         } catch (Exception e) {
             log.error("Failed to get token for auth code", e);
             throw new TechnicalException("Failed to get token for auth code", e);

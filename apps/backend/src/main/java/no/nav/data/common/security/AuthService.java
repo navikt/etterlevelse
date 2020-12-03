@@ -10,6 +10,8 @@ import no.nav.data.common.utils.Constants;
 import no.nav.data.common.utils.MetricUtils;
 import no.nav.data.common.utils.StringUtils;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.crypto.keygen.KeyGenerators;
+import org.springframework.security.crypto.keygen.StringKeyGenerator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +27,7 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @Transactional
 public class AuthService {
 
+    private static final StringKeyGenerator keyGenerator = KeyGenerators.string();
     private static final Gauge uniqueUsers = MetricUtils.gauge()
             .labels("hour").labels("day").labels("week").labels("twoweek")
             .labelNames("period")
@@ -37,6 +40,12 @@ public class AuthService {
     public AuthService(AuthRepository authRepository, Encryptor refreshTokenEncryptor) {
         this.authRepository = authRepository;
         this.encryptor = refreshTokenEncryptor;
+    }
+
+    public String getCodeVerifier(String sessionId) {
+        return authRepository.findById(StringUtils.toUUID(sessionId))
+                .orElseThrow(() -> new NotFoundException("couldn't find session"))
+                .getCodeVerifier();
     }
 
     public Auth getAuth(String sessionId, String sessionKey) {
@@ -53,16 +62,24 @@ public class AuthService {
         return auth;
     }
 
-    public String createAuth(String userId, String refreshToken) {
-        var enc = encryptor.encrypt(refreshToken);
-        var auth = authRepository.save(Auth.builder()
+    public Auth createAuth() {
+        String codeVerifier = genChallengeKey();
+        return authRepository.save(Auth.builder()
                 .generateId()
-                .userId(userId)
-                .encryptedRefreshToken(enc.cipher())
+                .userId("")
+                .encryptedRefreshToken(codeVerifier)
                 .initiated(LocalDateTime.now())
                 .lastActive(LocalDateTime.now())
-                .build())
-                .addSecret(encryptor, enc.salt());
+                .build());
+    }
+
+    public String initAuth(String userId, String refreshToken, String id) {
+        var enc = encryptor.encrypt(refreshToken);
+        var auth = authRepository.findById(UUID.fromString(id)).orElseThrow();
+        auth.setUserId(userId);
+        auth.setEncryptedRefreshToken(enc.cipher());
+        auth.setLastActive(LocalDateTime.now());
+        auth.addSecret(encryptor, enc.salt());
         return auth.session();
     }
 
@@ -90,5 +107,14 @@ public class AuthService {
 
     private long countActiveLast(Duration duration) {
         return authRepository.countDistinctUserIdByLastActiveAfter(LocalDateTime.now().minus(duration));
+    }
+
+    private String genChallengeKey() {
+        var len = 64;
+        StringBuilder sb = new StringBuilder();
+        do {
+            sb.append(keyGenerator.generateKey());
+        } while (sb.length() < len);
+        return sb.toString();
     }
 }

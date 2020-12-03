@@ -2,7 +2,7 @@ package no.nav.data.common.security;
 
 public interface TokenProvider {
 
-    String createSession(String code, String fullRequestUrlWithoutQuery);
+    String createSession(String sessionId, String code, String fullRequestUrlWithoutQuery);
 
     void destroySession();
 

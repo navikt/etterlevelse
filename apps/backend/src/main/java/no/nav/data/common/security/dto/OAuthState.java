@@ -20,14 +20,16 @@ import static org.springframework.security.web.util.UrlUtils.isValidRedirectUrl;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class OAuthState {
 
+    private String sessionId;
     private String redirectUri;
     private String errorUri;
 
     public OAuthState(String redirectUri) {
-        this(redirectUri, null);
+        this(null, redirectUri, null);
     }
 
-    public OAuthState(String redirectUri, String errorUri) {
+    public OAuthState(String sessionId, String redirectUri, String errorUri) {
+        this.sessionId = sessionId;
         this.redirectUri = redirectUri;
         this.errorUri = errorUri != null ? errorUri : redirectUri;
         validate();
@@ -44,6 +46,7 @@ public class OAuthState {
         var json = encryptor.decrypt(encryptedJson);
         OAuthState state = JsonUtils.toObject(json, OAuthState.class);
         state.validate();
+        Assert.isTrue(state.getSessionId() != null, "SessionId is null");
         return state;
     }
 

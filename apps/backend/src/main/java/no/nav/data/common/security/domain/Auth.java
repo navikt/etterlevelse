@@ -32,6 +32,7 @@ public class Auth {
     @Column(name = "USER_ID")
     private String userId;
     @Column(name = "REFRESH_TOKEN")
+    // Doubles as CodeVerifier before session is created
     private String encryptedRefreshToken;
     @Column(name = "INITIATED")
     private LocalDateTime initiated;
@@ -63,6 +64,11 @@ public class Auth {
 
     public String session() {
         return getId().toString().replace("-", "") + sessionKey;
+    }
+
+    public String getCodeVerifier() {
+        Assert.isTrue(encryptedRefreshToken.length() <= 128, "This session does not contain a CodeVerifier");
+        return encryptedRefreshToken;
     }
 
     public static class AuthBuilder {
