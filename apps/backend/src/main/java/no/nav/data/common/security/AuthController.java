@@ -145,7 +145,7 @@ public class AuthController {
     private String callbackRedirectUri(HttpServletRequest request) {
         String url = buildFullRequestUrl(request);
         if (url.contains(APP_POD_NAME)) {
-            url = baseUrl;
+            url = securityProperties.findBaseUrl();
         }
         String redirectUri = UriComponentsBuilder.fromHttpUrl(url)
                 .replacePath(OAUTH_2_CALLBACK_URL)
