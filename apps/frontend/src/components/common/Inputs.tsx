@@ -84,7 +84,6 @@ export const MultiInputField = (props: {label: string, name: string}) => {
   let onClick = (p: FieldArrayRenderProps, i: number) => {
     setVal(p.form.values[props.name][i])
     p.remove(i)
-    console.log(inputRef)
     inputRef?.current?.focus()
   }
 
