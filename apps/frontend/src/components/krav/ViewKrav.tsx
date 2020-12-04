@@ -3,17 +3,16 @@ import {Block} from 'baseui/block'
 import React from 'react'
 import {kravStatus} from '../../pages/KravPage'
 import {theme} from '../../util'
-import {usePersonLookup} from '../../api/TeamApi'
 import DataText from '../common/DataText'
 import {Markdown} from '../common/Markdown'
 import {StyledLink} from 'baseui/link'
 import {teamKatPersonLink} from '../../util/config'
 import moment from 'moment'
+import {PersonName} from '../common/PersonName'
 
 const formatDate = (date?: string) => date && moment(date).format('ll')
 
 export const ViewKrav = ({krav}: {krav: Krav}) => {
-  const people = usePersonLookup()
 
   return (
     <Block width='100%'>
@@ -43,7 +42,7 @@ export const ViewKrav = ({krav}: {krav: Krav}) => {
         <Block display='flex'>
           {krav.kontaktPersoner.map((ident, i) =>
             <Block key={i} marginRight={theme.sizing.scale200}>
-              <StyledLink target="_blank" rel="noopener noreferrer" href={teamKatPersonLink(ident)}>{people(ident)}      </StyledLink>
+              <StyledLink target="_blank" rel="noopener noreferrer" href={teamKatPersonLink(ident)}><PersonName ident={ident}/></StyledLink>
             </Block>
           )}
         </Block>

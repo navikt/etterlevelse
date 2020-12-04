@@ -2,7 +2,7 @@ import * as React from "react"
 import {Tag, VARIANT} from "baseui/tag"
 import {theme} from '../../util'
 
-export const RenderTagList = ({list, onRemove, onClick, wide}: {list: string[], onRemove: (i: number) => void, onClick?: (i: number) => void, wide?: boolean}) => {
+export const RenderTagList = ({list, onRemove, onClick, wide}: {list: React.ReactNode[], onRemove: (i: number) => void, onClick?: (i: number) => void, wide?: boolean}) => {
   return (
     <React.Fragment>
       {list && list.length > 0
@@ -10,7 +10,7 @@ export const RenderTagList = ({list, onRemove, onClick, wide}: {list: string[], 
           <React.Fragment key={index}>
             {item ? (
               <Tag
-                key={item}
+                key={index}
                 variant={VARIANT.outlined}
                 onClick={onClick ? () => onClick(index) : undefined}
                 onActionClick={() => onRemove(index)}

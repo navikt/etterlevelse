@@ -9,13 +9,13 @@ import * as yup from 'yup'
 import {ListName} from '../../services/Codelist'
 import {kravStatus} from '../../pages/KravPage'
 import {DateField, InputField, MultiInputField, MultiSearchField, OptionField, TextAreaField} from '../common/Inputs'
-import {usePersonLookup, usePersonSearch} from '../../api/TeamApi'
+import {usePersonSearch} from '../../api/TeamApi'
 import {theme} from '../../util'
 import {LabelMedium} from 'baseui/typography'
+import {PersonName} from '../common/PersonName'
 
 export const EditKrav = ({krav, close}: {krav: Krav, close: (k?: Krav) => void}) => {
   const personSearch = usePersonSearch()
-  const personLookup = usePersonLookup()
 
   const submit = (krav: Krav) => {
     if (krav.id) {
@@ -59,7 +59,7 @@ export const EditKrav = ({krav, close}: {krav: Krav, close: (k?: Krav) => void})
 
           <Block height={theme.sizing.scale600}/>
 
-          <MultiSearchField label='Kontaktpersoner' name='kontaktPersoner' search={personSearch} itemLabel={personLookup}/>
+          <MultiSearchField label='Kontaktpersoner' name='kontaktPersoner' search={personSearch} itemLabel={(id)=><PersonName ident={id}/>}/>
           <OptionField label='Avdeling' name='avdeling' listName={ListName.AVDELING}/>
           <OptionField label='Underavdeling' name='underavdeling' listName={ListName.UNDERAVDELING}/>
           <OptionField label='Status' name='status' options={Object.values(KravStatus).map(id => ({id, label: kravStatus(id)}))}/>

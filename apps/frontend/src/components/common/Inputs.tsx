@@ -139,7 +139,7 @@ export const OptionField = (props: {label: string, name: string} & Or<{options: 
   )
 }
 
-export const MultiSearchField = (props: {label: string, name: string, search: SearchType, itemLabel?: (id: string) => string}) => {
+export const MultiSearchField = (props: {label: string, name: string, search: SearchType, itemLabel?: (id: string) => React.ReactNode}) => {
   const [results, setSearch, loading] = props.search
 
   return (

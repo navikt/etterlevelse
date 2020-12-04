@@ -1,7 +1,7 @@
 import axios from 'axios'
 import {map, PageResponse, TeamResource} from '../constants'
 import {env} from '../util/env'
-import {useDebouncedState} from '../util/hooks'
+import {useDebouncedState, useForceUpdate} from '../util/hooks'
 import {Option} from 'baseui/select'
 import {Dispatch, SetStateAction, useEffect, useState} from 'react'
 
@@ -36,38 +36,18 @@ export const usePersonSearch = () => {
   return [searchResult, setResourceSearch, loading] as SearchType
 }
 
-export const usePersonLookup = () => {
-  const [ids, setIds] = useState<string[]>([])
-  const [people, setPeople] = useState<map>({})
+const people: map = {}
+const addPerson = (person: TeamResource, done: () => void) => {
+  people[person.navIdent] = person.fullName
+  done()
+}
 
-  useEffect(() => {
-    (async () => {
-      const next: map = {...people}
-      const tasks: Promise<any>[] = []
-      for (const id of ids) {
-        if (!people[id]) {
-          tasks.push((async () => {
-            try {
-              const person = await getResourceById(id)
-              next[id] = person.fullName
-              setPeople({...next})
-            } catch (e) {
-              console.debug("err fetching person", e)
-            }
-          })())
-        }
-      }
-      await Promise.all(tasks)
-      setPeople({...next})
-    })()
-  }, [ids])
-
-  const lookup = (id: string) => {
-    if (ids.indexOf(id) < 0) setIds([...ids, id])
+export const usePersonName = () => {
+  const update = useForceUpdate()
+  return (id: string) => {
+    if (!people[id]) getResourceById(id).then(p => addPerson(p, update)).catch(e => console.debug("err fetching person", e))
     return people[id] || id
   }
-
-  return lookup
 }
 
 export type SearchType = [Option[], Dispatch<SetStateAction<string>>, boolean]
