@@ -45,7 +45,7 @@ const addPerson = (person: TeamResource, done: () => void) => {
 export const usePersonName = () => {
   const update = useForceUpdate()
   return (id: string) => {
-    if (!people[id]) getResourceById(id).then(p => addPerson(p, update)).catch(e => console.debug("err fetching person", e))
+    if (!people[id]) getResourceById(id).then(p => addPerson(p, update)).catch(e => console.debug('err fetching person', e))
     return people[id] || id
   }
 }

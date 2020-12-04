@@ -37,24 +37,24 @@ export const TextAreaField = (props: {label: string, name: string}) => (
   </Field>
 )
 
-const YES = "YES", NO = "NO", UNCLARIFIED = "UNCLARIFIED"
+const YES = 'YES', NO = 'NO', UNCLARIFIED = 'UNCLARIFIED'
 const boolToRadio = (bool?: boolean) => bool === undefined ? UNCLARIFIED : bool ? YES : NO
 const radioToBool = (radio: string) => radio === UNCLARIFIED ? undefined : radio === YES
 export const BoolField = (props: {label: string, name: string, nullable?: boolean}) => (
   <Field name={props.name}>
     {(p: FieldProps) =>
       <FormControl label={props.label} error={p.meta.error}>
-        <RadioGroup value={boolToRadio(p.field.value)} align="horizontal"
-                    overrides={{RadioGroupRoot: {style: {width: "100%", justifyContent: "stretch"}}}}
+        <RadioGroup value={boolToRadio(p.field.value)} align='horizontal'
+                    overrides={{RadioGroupRoot: {style: {width: '100%', justifyContent: 'stretch'}}}}
                     onChange={
                       (e) => {
                         p.form.setFieldValue(props.name, radioToBool((e.target as HTMLInputElement).value))
                       }
                     }
         >
-          <Radio overrides={{Label: {style: {marginRight: "2rem"}}}} value={YES}>Ja</Radio>
-          <Radio overrides={{Label: {style: {marginRight: "2rem"}}}} value={NO}>Nei</Radio>
-          {props.nullable && <Radio overrides={{Label: {style: {marginRight: "2rem"}}}} value={UNCLARIFIED}>Uavklart</Radio>}
+          <Radio overrides={{Label: {style: {marginRight: '2rem'}}}} value={YES}>Ja</Radio>
+          <Radio overrides={{Label: {style: {marginRight: '2rem'}}}} value={NO}>Nei</Radio>
+          {props.nullable && <Radio overrides={{Label: {style: {marginRight: '2rem'}}}} value={UNCLARIFIED}>Uavklart</Radio>}
         </RadioGroup>
       </FormControl>
     }
@@ -91,7 +91,7 @@ export const MultiInputField = (props: {label: string, name: string}) => {
     <FieldArray name={props.name}>{(p: FieldArrayRenderProps) => {
       const add = () => {
         if (!val) return
-        p.push(val);
+        p.push(val)
         setVal('')
       }
       const onKey = (e: React.KeyboardEvent) => (e.key === 'Enter') && add()
