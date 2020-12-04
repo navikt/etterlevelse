@@ -21,6 +21,7 @@ import io.prometheus.client.Counter;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.security.AppIdMapping;
 import no.nav.data.common.security.AuthController;
+import no.nav.data.common.security.RoleSupport;
 import no.nav.data.common.security.domain.Auth;
 import no.nav.data.common.security.dto.Credential;
 import no.nav.data.common.utils.MetricUtils;
@@ -54,13 +55,15 @@ public class AADStatelessAuthenticationFilter extends OncePerRequestFilter {
     private static final Counter counter = initCounter();
 
     private final AzureTokenProvider azureTokenProvider;
+    private final RoleSupport roleSupport;
     private final List<String> allowedAppIds;
     private final OIDCProviderMetadata oidcProviderMetadata;
     private final JWKSource<SecurityContext> keySource;
 
-    public AADStatelessAuthenticationFilter(AzureTokenProvider azureTokenProvider, AppIdMapping appIdMapping,
+    public AADStatelessAuthenticationFilter(AzureTokenProvider azureTokenProvider, RoleSupport roleSupport, AppIdMapping appIdMapping,
             AADAuthenticationProperties aadAuthProps, ResourceRetriever resourceRetriever, OIDCProviderMetadata oidcProviderMetadata) {
         this.azureTokenProvider = azureTokenProvider;
+        this.roleSupport = roleSupport;
         this.allowedAppIds = List.copyOf(appIdMapping.getIds());
         this.oidcProviderMetadata = oidcProviderMetadata;
 
@@ -98,10 +101,9 @@ public class AADStatelessAuthenticationFilter extends OncePerRequestFilter {
         if (credential != null) {
             try {
                 var principal = buildUserPrincipal(credential.getAccessToken());
-                var graphData = azureTokenProvider.getGraphData(credential.getAccessToken());
-                var grantedAuthorities = azureTokenProvider.lookupGrantedAuthorities(principal.getStringListClaim("groups"));
+                var grantedAuthorities = roleSupport.lookupGrantedAuthorities(principal.getStringListClaim("groups"));
                 var authentication = new PreAuthenticatedAuthenticationToken(principal, credential, grantedAuthorities);
-                authentication.setDetails(new AzureUserInfo(principal, grantedAuthorities, graphData.getNavIdent()));
+                authentication.setDetails(new AzureUserInfo(principal, grantedAuthorities));
                 authentication.setAuthenticated(true);
                 log.trace("Request token verification success for subject {} with roles {}.", AzureUserInfo.getUserId(principal), grantedAuthorities);
                 SecurityContextHolder.getContext().setAuthentication(authentication);

@@ -31,9 +31,9 @@ public class AzureUserInfo implements UserInfo {
     String email;
     List<String> groups;
 
-    public AzureUserInfo(JWTClaimsSet jwtClaimsSet, Set<GrantedAuthority> grantedAuthorities, String navIdent) {
+    public AzureUserInfo(JWTClaimsSet jwtClaimsSet, Set<GrantedAuthority> grantedAuthorities) {
         this.appId = getAppId(jwtClaimsSet);
-        this.ident = navIdent;
+        this.ident = getClaim(jwtClaimsSet, AzureConstants.IDENT_CLAIM);
         this.userId = getUserId(jwtClaimsSet);
 
         this.name = getClaim(jwtClaimsSet, StandardClaimNames.NAME);

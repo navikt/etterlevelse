@@ -11,6 +11,7 @@ import com.nimbusds.openid.connect.sdk.op.OIDCProviderConfigurationRequest;
 import com.nimbusds.openid.connect.sdk.op.OIDCProviderMetadata;
 import no.nav.data.common.exceptions.TechnicalException;
 import no.nav.data.common.security.AppIdMapping;
+import no.nav.data.common.security.RoleSupport;
 import no.nav.data.common.utils.MdcExecutor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Bean;
@@ -28,9 +29,10 @@ public class AzureConfig {
     }
 
     @Bean
-    public AADStatelessAuthenticationFilter aadStatelessAuthenticationFilter(ResourceRetriever resourceRetriever, AADAuthenticationProperties aadAuthProps,
+    public AADStatelessAuthenticationFilter aadStatelessAuthenticationFilter(
+            ResourceRetriever resourceRetriever, AADAuthenticationProperties aadAuthProps, RoleSupport roleSupport,
             AzureTokenProvider azureTokenProvider, AppIdMapping appIdMapping, OIDCProviderMetadata oidcProviderMetadata) {
-        return new AADStatelessAuthenticationFilter(azureTokenProvider, appIdMapping, aadAuthProps, resourceRetriever, oidcProviderMetadata);
+        return new AADStatelessAuthenticationFilter(azureTokenProvider, roleSupport, appIdMapping, aadAuthProps, resourceRetriever, oidcProviderMetadata);
     }
 
     @Bean
