@@ -16,7 +16,7 @@ import java.util.List;
 public class Behandling {
 
     private String id;
-    private String name;
+    private String navn;
     private int nummer;
 
     private ExternalCode overordnetFormaal;

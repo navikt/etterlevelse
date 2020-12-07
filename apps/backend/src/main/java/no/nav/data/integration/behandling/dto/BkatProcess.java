@@ -30,7 +30,7 @@ public class BkatProcess {
         return Behandling.builder()
                 .id(id)
                 .nummer(number)
-                .name(name)
+                .navn(name)
                 .formaal(description)
                 .overordnetFormaal(toCode(purposes.get(0)))
                 .avdeling(toCode(affiliation.getDepartment()))

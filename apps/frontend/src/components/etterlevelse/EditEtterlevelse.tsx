@@ -1,4 +1,4 @@
-import {Etterlevelse, EtterlevelseStatus} from '../../constants'
+import {Behandling, Etterlevelse, EtterlevelseStatus} from '../../constants'
 import {Field, FieldProps, Form, Formik, FormikProps} from 'formik'
 import {createEtterlevelse, mapToFormVal, updateEtterlevelse} from '../../api/EtterlevelseApi'
 import {disableEnter} from '../common/Table'
@@ -13,6 +13,7 @@ import {FormControl} from 'baseui/form-control'
 import {Select} from 'baseui/select'
 import {useKrav, useSearchKrav} from '../../api/KravApi'
 import {kravName} from '../../pages/KravPage'
+import {behandlingName, useBehandling, useSearchBehandling} from '../../api/BehandlingApi'
 
 export const EditEtterlevelse = ({etterlevelse, close}: {etterlevelse: Etterlevelse, close: (k?: Etterlevelse) => void}) => {
 
@@ -33,6 +34,7 @@ export const EditEtterlevelse = ({etterlevelse, close}: {etterlevelse: Etterleve
       <Form onKeyDown={disableEnter}>
         <Block>
 
+          <SearchBehandling id={form.values.behandling}/>
           <InputField label='Behandling' name='behandling'/>
           {/*<InputField label='Krav-nummer' name='kravNummer'/>*/}
           {/*<InputField label='Krav-versjon' name='kravVersjon'/>*/}
@@ -90,6 +92,38 @@ export const SearchKrav = (props: {kravNummer: number, kravVersjon: number}) => 
               setKrav(kravSelect)
               p.form.setFieldValue('kravNummer', kravSelect?.kravNummer)
               p.form.setFieldValue('kravVersjon', kravSelect?.kravVersjon)
+            }}
+            onInputChange={event => setSearch(event.currentTarget.value)}
+            isLoading={loading}
+          />
+        </FormControl>
+      }
+      }
+    </Field>
+  )
+}
+
+export const SearchBehandling = (props: {id: string}) => {
+  const [results, setSearch, loading] = useSearchBehandling()
+  const [behandling, setBehandling] = useBehandling(props.id)
+
+  return (
+    <Field name={'behandling'}>
+      {(p: FieldProps<string>) => {
+        return <FormControl label={'Behandling'} error={p.meta.error}>
+          <Select
+            placeholder={'Søk behandling'}
+            maxDropdownHeight='400px'
+            filterOptions={o => o}
+            searchable
+            noResultsMsg='Ingen resultat'
+
+            options={results.map(k => ({id: k.id, label: behandlingName(k)}))}
+            value={behandling ? [{id: behandling.id, label: behandlingName(behandling)}] : []}
+            onChange={({value}) => {
+              const select = value.length ? results.find(k => k.id === value[0].id)! : undefined
+              setBehandling(select)
+              p.form.setFieldValue('behandling', select?.id)
             }}
             onInputChange={event => setSearch(event.currentTarget.value)}
             isLoading={loading}

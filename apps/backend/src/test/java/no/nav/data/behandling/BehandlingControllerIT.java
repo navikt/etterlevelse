@@ -39,7 +39,7 @@ class BehandlingControllerIT extends IntegrationTestBase {
     private void assertResponseProcess(Behandling behandling) {
         assertThat(behandling).isEqualTo(Behandling.builder()
                 .id("74288ec1-c45d-4b9f-b799-33539981a690")
-                .name("process name")
+                .navn("process name")
                 .nummer(101)
                 .formaal("formaal")
                 .overordnetFormaal(ExternalCode.builder().list("FORMAAL").code("FOR").shortName("For").description("desc").external(true).build())

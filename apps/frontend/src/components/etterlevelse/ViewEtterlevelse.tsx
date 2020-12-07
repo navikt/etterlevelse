@@ -7,14 +7,16 @@ import DataText from '../common/DataText'
 import {Markdown} from '../common/Markdown'
 import moment from 'moment'
 import RouteLink from '../common/RouteLink'
+import {behandlingName, useBehandling} from '../../api/BehandlingApi'
 
 const formatDate = (date?: string) => date && moment(date).format('ll')
 
 export const ViewEtterlevelse = ({etterlevelse}: {etterlevelse: Etterlevelse}) => {
+  const [behandling] = useBehandling(etterlevelse.behandling)
 
   return (
     <Block width='100%'>
-      <Label title='Behandling'>{etterlevelse.behandling}</Label>
+      <Label title='Behandling'>{behandlingName(behandling)}</Label>
       <Label title='Krav'><RouteLink href={`/krav/${etterlevelse.kravNummer}/${etterlevelse.kravVersjon}`}>{etterlevelse.kravNummer}.{etterlevelse.kravVersjon}</RouteLink></Label>
 
       <Block height={theme.sizing.scale600}/>

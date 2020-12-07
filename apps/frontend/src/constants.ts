@@ -74,6 +74,18 @@ export interface Etterlevelse extends DomainObject {
   status: EtterlevelseStatus
 }
 
+export interface Behandling {
+  id: string
+  navn: string
+  nummer: number
+  overordnetFormaal: ExternalCode
+  formaal: string
+  avdeling: ExternalCode
+  linjer: ExternalCode[]
+  systemer: ExternalCode[]
+  teams: string[]
+}
+
 export interface Periode {
   start: string
   slutt: string
@@ -99,4 +111,11 @@ export interface TeamResource {
   fullName: string;
   email: string;
   resourceType: string;
+}
+
+export interface ExternalCode {
+  list: string;
+  code: string;
+  shortName: string;
+  description: string;
 }
