@@ -3,6 +3,7 @@ package no.nav.data;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
+import no.nav.data.integration.behandling.BkatMocks;
 import no.nav.data.integration.team.TeamcatMocks;
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
@@ -35,6 +36,7 @@ public class WiremockExtension implements Extension, BeforeAllCallback, BeforeEa
 
     private void stubCommon() {
         TeamcatMocks.mock();
+        BkatMocks.mock();
     }
 
     static WireMockServer getWiremock() {
