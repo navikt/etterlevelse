@@ -12,6 +12,7 @@ import {KravListPage} from './pages/KravListPage'
 import {KravPage} from './pages/KravPage'
 import {EtterlevelseListPage} from './pages/EtterlevelseListPage'
 import {EtterlevelsePage} from './pages/EtterlevelsePage'
+import {BehandlingPage} from './pages/BehandlingPage'
 
 const Routes = (): JSX.Element => (
   <Root>
@@ -24,6 +25,8 @@ const Routes = (): JSX.Element => (
 
       <Route exact path="/etterlevelse" component={EtterlevelseListPage}/>
       <Route exact path="/etterlevelse/:id" component={EtterlevelsePage}/>
+
+      <Route exact path="/behandling/:id" component={BehandlingPage}/>
 
       <Route exact path="/admin/codelist/:listname?" component={CodeListPage}/>
       <Route exact path="/admin/audit/:id?/:auditId?" component={AuditPage}/>

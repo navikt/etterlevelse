@@ -1,5 +1,5 @@
 import {Block} from 'baseui/block'
-import {H2} from 'baseui/typography'
+import {HeadingLarge} from 'baseui/typography'
 import {useHistory, useParams} from 'react-router-dom'
 import {KravIdParams, useKrav} from '../api/KravApi'
 import React, {useState} from 'react'
@@ -8,8 +8,7 @@ import Button from '../components/common/Button'
 import {ViewKrav} from '../components/krav/ViewKrav'
 import {EditKrav} from '../components/krav/EditKrav'
 import RouteLink from '../components/common/RouteLink'
-import {Skeleton} from 'baseui/skeleton'
-import {theme} from '../util'
+import {LoadingSkeleton} from '../components/common/LoadingSkeleton'
 
 export const kravName = (krav: Krav) => `${krav.kravNummer}.${krav.kravVersjon} - ${krav.navn}`
 
@@ -40,7 +39,7 @@ export const KravPage = () => {
 
   return (
     <Block>
-      {loading && <LoadingSkeleton/>}
+      {loading && <LoadingSkeleton header='Krav'/>}
       {!loading && <>
         <Block>
           <Block display='flex' justifyContent='flex-end'>
@@ -50,7 +49,7 @@ export const KravPage = () => {
             {krav?.id && !edit && <Button size='compact' kind='secondary' onClick={newVersion} marginLeft>Ny versjon</Button>}
             {krav?.id && <Button size='compact' onClick={() => setEdit(!edit)} marginLeft>{edit ? 'Avbryt' : 'Rediger'}</Button>}
           </Block>
-          <H2>Krav: {krav && krav?.kravNummer !== 0 ? kravName(krav) : 'Ny'}</H2>
+          <HeadingLarge>Krav: {krav && krav?.kravNummer !== 0 ? kravName(krav) : 'Ny'}</HeadingLarge>
         </Block>
       </>}
 
@@ -67,23 +66,3 @@ export const KravPage = () => {
     </Block>
   )
 }
-
-const LoadingSkeleton = () =>
-  <Block width='100%'>
-    <Block display='flex' justifyContent='space-between' alignItems='center' width='100%'>
-      <H2 display='flex' alignItems='center'>
-
-        Krav:
-        <Block marginRight={theme.sizing.scale400}/>
-        <Skeleton height={theme.sizing.scale1000} width='400px' animation/>
-      </H2>
-      <Block display='flex'>
-        <Skeleton height={theme.sizing.scale1000} width='40px' animation/>
-        <Block marginRight={theme.sizing.scale400}/>
-        <Skeleton height={theme.sizing.scale1000} width='40px' animation/>
-      </Block>
-    </Block>
-    <Block maxWidth='600px'>
-      <Skeleton rows={12} animation/>
-    </Block>
-  </Block>

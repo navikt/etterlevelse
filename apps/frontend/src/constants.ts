@@ -79,8 +79,8 @@ export interface Behandling {
   navn: string
   nummer: number
   overordnetFormaal: ExternalCode
-  formaal: string
-  avdeling: ExternalCode
+  formaal?: string
+  avdeling?: ExternalCode
   linjer: ExternalCode[]
   systemer: ExternalCode[]
   teams: string[]
