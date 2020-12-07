@@ -50,6 +50,8 @@ export const urlForObject = (type: NavigableItem, id: string, audit?: AuditItem)
       return `/admin/settings`
     case ObjectType.Krav:
       return `/krav/${id}`
+    case ObjectType.Etterlevelse:
+      return `/etterlevelse/${id}`
   }
   console.warn('couldn\'t find object type ' + type)
   return ''
