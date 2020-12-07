@@ -12,9 +12,10 @@ type DataTextProps = {
 
 const DataText = (props: DataTextProps) => {
   if (props.hideComponent) return null
+  const labelWidth = '160px'
   return (
     <Block display='flex' marginBottom='1rem' width='100%'>
-      <Block minWidth='150px' paddingRight={theme.sizing.scale400}>
+      <Block minWidth={labelWidth} maxWidth={labelWidth} paddingRight={theme.sizing.scale400}>
         <Label2>{props.label}</Label2>
       </Block>
       <Block font='ParagraphMedium'>
