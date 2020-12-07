@@ -9,6 +9,7 @@ import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseRequest;
 import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseResponse;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -53,23 +54,40 @@ public class EtterlevelseIT extends IntegrationTestBase {
         assertThat(body.getNumberOfElements()).isOne();
     }
 
-    @Test
-    void getAllEtterlevelse() {
-        storageService.save(Etterlevelse.builder().kravNummer(50).kravVersjon(1).build());
-        storageService.save(Etterlevelse.builder().kravNummer(50).kravVersjon(2).build());
+    @Nested
+    class GetAll {
 
-        var resp = restTemplate.getForEntity("/etterlevelse?pageSize=1", EtterlevelsePage.class);
-        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
-        var body = resp.getBody();
-        assertThat(body).isNotNull();
-        assertThat(body.getNumberOfElements()).isOne();
-        assertThat(body.getTotalElements()).isEqualTo(2L);
+        @Test
+        void getAllEtterlevelse() {
+            storageService.save(Etterlevelse.builder().kravNummer(50).kravVersjon(1).build());
+            storageService.save(Etterlevelse.builder().kravNummer(50).kravVersjon(2).build());
 
-        resp = restTemplate.getForEntity("/etterlevelse?pageSize=2&pageNumber=1", EtterlevelsePage.class);
-        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
-        body = resp.getBody();
-        assertThat(body).isNotNull();
-        assertThat(body.getNumberOfElements()).isZero();
+            var resp = restTemplate.getForEntity("/etterlevelse?pageSize=1", EtterlevelsePage.class);
+            assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
+            var body = resp.getBody();
+            assertThat(body).isNotNull();
+            assertThat(body.getNumberOfElements()).isOne();
+            assertThat(body.getTotalElements()).isEqualTo(2L);
+
+            resp = restTemplate.getForEntity("/etterlevelse?pageSize=2&pageNumber=1", EtterlevelsePage.class);
+            assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
+            body = resp.getBody();
+            assertThat(body).isNotNull();
+            assertThat(body.getNumberOfElements()).isZero();
+        }
+
+        @Test
+        void getByBehandling() {
+            var b1 = storageService.save(Etterlevelse.builder().behandling("b1").build());
+            storageService.save(Etterlevelse.builder().behandling("b2").build());
+
+            var resp = restTemplate.getForEntity("/etterlevelse?behandling={behandling}", EtterlevelsePage.class, "b1");
+            assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
+            var body = resp.getBody();
+            assertThat(body).isNotNull();
+            assertThat(body.getNumberOfElements()).isOne();
+            assertThat(body.getContent().get(0).getId()).isEqualTo(b1.getId());
+        }
     }
 
     @Test

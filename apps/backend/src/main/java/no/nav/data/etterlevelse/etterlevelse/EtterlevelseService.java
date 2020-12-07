@@ -44,6 +44,10 @@ public class EtterlevelseService extends DomainService<Etterlevelse> {
         return GenericStorage.to(repo.findByKravNummer(kravNummer, kravVersjon), Etterlevelse.class);
     }
 
+    public List<Etterlevelse> getByBehandling(String behandlingId) {
+        return GenericStorage.to(repo.findByBehandling(behandlingId), Etterlevelse.class);
+    }
+
     public Etterlevelse save(EtterlevelseRequest request) {
         Validator.validate(request, storage)
                 .addValidations(this::validateKravNummer)

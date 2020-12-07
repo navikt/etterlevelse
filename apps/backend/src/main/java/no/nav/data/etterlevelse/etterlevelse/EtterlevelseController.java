@@ -20,8 +20,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import javax.validation.Valid;
@@ -42,7 +44,15 @@ public class EtterlevelseController {
     @Operation(summary = "Get All Etterlevelse")
     @ApiResponse(description = "ok")
     @GetMapping
-    public ResponseEntity<RestResponsePage<EtterlevelseResponse>> getAll(PageParameters pageParameters) {
+    public ResponseEntity<RestResponsePage<EtterlevelseResponse>> getAll(
+            PageParameters pageParameters,
+            @RequestParam(required = false) String behandling
+    ) {
+        if (behandling != null) {
+            log.info("Get all Etterlevelse for behandling={}", behandling);
+            List<Etterlevelse> etterlevelseList = service.getByBehandling(behandling);
+            return ResponseEntity.ok(new RestResponsePage<>(etterlevelseList).convert(Etterlevelse::convertToResponse));
+        }
         log.info("Get all Etterlevelse");
         Page<Etterlevelse> page = service.getAll(pageParameters);
         return ResponseEntity.ok(new RestResponsePage<>(page).convert(Etterlevelse::convertToResponse));
