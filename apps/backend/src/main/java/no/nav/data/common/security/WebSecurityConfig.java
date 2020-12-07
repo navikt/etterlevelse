@@ -46,6 +46,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
                 "/krav/**",
                 "/etterlevelse/**",
+                "/behandling/**",
 
                 "/team/**"
         );
