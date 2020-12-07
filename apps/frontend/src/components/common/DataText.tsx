@@ -13,14 +13,12 @@ type DataTextProps = {
 const DataText = (props: DataTextProps) => {
   if (props.hideComponent) return null
   return (
-    <Block display='flex' alignContent='flex-start' marginBottom='1rem' width='100%'>
-      <Block width='15%' paddingRight={theme.sizing.scale400} maxWidth='300px'>
+    <Block display='flex' marginBottom='1rem' width='100%'>
+      <Block minWidth='150px' paddingRight={theme.sizing.scale400}>
         <Label2>{props.label}</Label2>
       </Block>
-      <Block width='80%'>
-        <Block font='ParagraphMedium'>
-          {props.children}
-        </Block>
+      <Block font='ParagraphMedium'>
+        {props.children}
       </Block>
     </Block>
   )
