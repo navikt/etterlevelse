@@ -7,7 +7,7 @@ import Button from '../common/Button'
 import React from 'react'
 import * as yup from 'yup'
 import {etterlevelseStatus} from '../../pages/EtterlevelsePage'
-import {BoolField, DateField, InputField, MultiInputField, OptionField, TextAreaField} from '../common/Inputs'
+import {BoolField, DateField, MultiInputField, OptionField, TextAreaField} from '../common/Inputs'
 import {theme} from '../../util'
 import {FormControl} from 'baseui/form-control'
 import {Select} from 'baseui/select'
@@ -35,9 +35,6 @@ export const EditEtterlevelse = ({etterlevelse, close}: {etterlevelse: Etterleve
         <Block>
 
           <SearchBehandling id={form.values.behandling}/>
-          <InputField label='Behandling' name='behandling'/>
-          {/*<InputField label='Krav-nummer' name='kravNummer'/>*/}
-          {/*<InputField label='Krav-versjon' name='kravVersjon'/>*/}
           <SearchKrav kravNummer={form.values.kravNummer} kravVersjon={form.values.kravVersjon}/>
 
           <Block height={theme.sizing.scale600}/>

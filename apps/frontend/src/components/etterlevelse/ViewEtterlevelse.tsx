@@ -8,6 +8,8 @@ import {Markdown} from '../common/Markdown'
 import moment from 'moment'
 import RouteLink from '../common/RouteLink'
 import {behandlingName, useBehandling} from '../../api/BehandlingApi'
+import {StyledLink} from 'baseui/link'
+import {behandlingLink} from '../../util/config'
 
 const formatDate = (date?: string) => date && moment(date).format('ll')
 
@@ -16,8 +18,16 @@ export const ViewEtterlevelse = ({etterlevelse}: {etterlevelse: Etterlevelse}) =
 
   return (
     <Block width='100%'>
-      <Label title='Behandling'>{behandlingName(behandling)}</Label>
-      <Label title='Krav'><RouteLink href={`/krav/${etterlevelse.kravNummer}/${etterlevelse.kravVersjon}`}>{etterlevelse.kravNummer}.{etterlevelse.kravVersjon}</RouteLink></Label>
+      <Label title='Behandling'>
+        {behandling ?
+          <StyledLink href={behandlingLink(behandling.id)} target="_blank" rel="noopener noreferrer">
+            {behandlingName(behandling)}
+          </StyledLink>
+          : etterlevelse.behandling}
+      </Label>
+      <Label title='Krav'>
+        <RouteLink href={`/krav/${etterlevelse.kravNummer}/${etterlevelse.kravVersjon}`}>{etterlevelse.kravNummer}.{etterlevelse.kravVersjon}</RouteLink>
+      </Label>
 
       <Block height={theme.sizing.scale600}/>
 
