@@ -12,10 +12,11 @@ import no.nav.data.integration.team.dto.MemberResponse;
 @NoArgsConstructor
 public class Member {
 
+    private String navIdent;
     private String name;
     private String email;
 
     public MemberResponse convertToResponse() {
-        return MemberResponse.builder().name(name).email(email).build();
+        return MemberResponse.builder().navIdent(navIdent).name(name).email(email).build();
     }
 }

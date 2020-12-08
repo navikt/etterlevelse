@@ -8,8 +8,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.behandling.dto.Behandling;
 import no.nav.data.common.rest.RestResponsePage;
+import no.nav.data.common.security.SecurityUtils;
 import no.nav.data.integration.behandling.BkatClient;
 import no.nav.data.integration.behandling.dto.BkatProcess;
+import no.nav.data.integration.team.domain.Team;
+import no.nav.data.integration.team.teamcat.TeamcatTeamClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,7 +20,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collection;
 import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 @Slf4j
 @RestController
@@ -27,12 +33,27 @@ import java.util.List;
 public class BehandlingController {
 
     private final BkatClient client;
+    private final TeamcatTeamClient teamClient;
 
     @Operation(summary = "Get Behandlinger")
     @ApiResponses(value = {@ApiResponse(description = "Behandlinger fetched")})
     @GetMapping
-    public ResponseEntity<RestResponsePage<Behandling>> findBehandlinger(@RequestParam String teamId) {
-        List<BkatProcess> processes = client.getProcessesForTeam(teamId);
+    public ResponseEntity<RestResponsePage<Behandling>> findBehandlinger(
+            @RequestParam(required = false) Boolean myBehandlinger,
+            @RequestParam(required = false) String teamId
+    ) {
+        List<BkatProcess> processes;
+        if (teamId == null || Boolean.TRUE.equals(myBehandlinger)) {
+            String currentIdent = SecurityUtils.getCurrentIdent();
+            processes = teamClient.getAllTeams().stream()
+                    .filter(team -> team.getMembers().stream().anyMatch(m -> m.getNavIdent().equals(currentIdent)))
+                    .map(Team::getId)
+                    .map(client::getProcessesForTeam)
+                    .flatMap(Collection::stream)
+                    .collect(toList());
+        } else {
+            processes = client.getProcessesForTeam(teamId);
+        }
         return ResponseEntity.ok(new RestResponsePage<>(processes).convert(BkatProcess::convertToBehandling));
     }
 
