@@ -19,6 +19,7 @@ public class BkatClient {
     private final WebClient client;
     private final LoadingCache<String, List<BkatProcess>> processSearchCache;
     private final LoadingCache<String, BkatProcess> processCache;
+    private final LoadingCache<String, List<BkatProcess>> processTeamCache;
 
     public BkatClient(WebClient.Builder webClientBuilder, BkatProperties properties) {
         this.client = webClientBuilder
@@ -34,6 +35,10 @@ public class BkatClient {
                 Caffeine.newBuilder().recordStats()
                         .expireAfterAccess(Duration.ofMinutes(10))
                         .maximumSize(300).build(this::getProcess0));
+        this.processTeamCache = MetricUtils.register("bkatProcessTeamCache",
+                Caffeine.newBuilder().recordStats()
+                        .expireAfterAccess(Duration.ofMinutes(10))
+                        .maximumSize(100).build(this::findProcessesForTeam));
     }
 
     public BkatProcess getProcess(String id) {
@@ -42,6 +47,25 @@ public class BkatClient {
 
     public List<BkatProcess> findProcesses(String search) {
         return processSearchCache.get(search);
+    }
+
+    public List<BkatProcess> getProcessesForTeam(String teamId) {
+        return processTeamCache.get(teamId);
+    }
+
+    private List<BkatProcess> findProcessesForTeam(String teamId) {
+        return getAll("/process?productTeam={teamId}", teamId);
+    }
+
+    private List<BkatProcess> getAll(String url, String param) {
+        var res = client.get()
+                .uri(url, param)
+                .retrieve()
+                .bodyToMono(ProcessPage.class)
+                .block();
+        Assert.isTrue(res != null, "response is null");
+
+        return res.getContent();
     }
 
     private BkatProcess getProcess0(String id) {

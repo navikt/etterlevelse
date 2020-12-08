@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -27,6 +28,14 @@ public class BehandlingController {
 
     private final BkatClient client;
 
+    @Operation(summary = "Get Behandlinger")
+    @ApiResponses(value = {@ApiResponse(description = "Behandlinger fetched")})
+    @GetMapping
+    public ResponseEntity<RestResponsePage<Behandling>> findBehandlinger(@RequestParam String teamId) {
+        List<BkatProcess> processes = client.getProcessesForTeam(teamId);
+        return ResponseEntity.ok(new RestResponsePage<>(processes).convert(BkatProcess::convertToBehandling));
+    }
+
     @Operation(summary = "Get Behandling")
     @ApiResponses(value = {@ApiResponse(description = "Behandling fetched")})
     @GetMapping("/{id}")
@@ -35,10 +44,10 @@ public class BehandlingController {
         return ResponseEntity.ok(process.convertToBehandling());
     }
 
-    @Operation(summary = "Get Behandlinger")
+    @Operation(summary = "Search Behandlinger")
     @ApiResponses(value = {@ApiResponse(description = "Behandlinger fetched")})
     @GetMapping("/search/{search}")
-    public ResponseEntity<RestResponsePage<Behandling>> findBehandlinger(@PathVariable String search) {
+    public ResponseEntity<RestResponsePage<Behandling>> searchBehandlinger(@PathVariable String search) {
         if (search == null || search.replace(" ", "").length() < 3) {
             return ResponseEntity.badRequest().build();
 
