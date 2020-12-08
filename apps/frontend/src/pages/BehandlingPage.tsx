@@ -15,6 +15,7 @@ import {ObjectLink} from '../components/common/RouteLink'
 import {ObjectType} from '../components/admin/audit/AuditTypes'
 import DataText from '../components/common/DataText'
 import {Markdown} from '../components/common/Markdown'
+import {TeamName} from '../components/common/TeamName'
 
 export const BehandlingPage = () => {
   const params = useParams<{id?: string}>()
@@ -42,7 +43,15 @@ export const BehandlingPage = () => {
         <Label title='Avdeling'>{behandling.avdeling?.shortName}</Label>
         <Label title='Linjer'>{behandling.linjer.map(l => l.shortName).join(', ')}</Label>
         <Label title='Systemer'>{behandling.systemer.map(l => l.shortName).join(', ')}</Label>
-        <Label title='Team'>{behandling.teams.join(', ')}</Label>
+        <Label title='Team'>
+          <Block display='flex'>
+            {behandling.teams.map(t =>
+              <Block key={t} marginRight={theme.sizing.scale600}>
+                <TeamName id={t} link/>
+              </Block>
+            )}
+          </Block>
+        </Label>
       </Block>
 
       <Block marginTop={theme.sizing.scale2400}>

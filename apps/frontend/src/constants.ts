@@ -1,6 +1,5 @@
 import {Code} from './services/Codelist'
 
-export type map = {[id: string]: string}
 export type RecursivePartial<T> = {
   [P in keyof T]?: T[P] extends (infer U)[] ? RecursivePartial<U>[] : T[P] extends object ? RecursivePartial<T[P]> : T[P];
 }
@@ -111,6 +110,21 @@ export interface TeamResource {
   fullName: string;
   email: string;
   resourceType: string;
+}
+
+export interface Team {
+  id: string;
+  name: string;
+  description: string;
+  productAreaId?: string;
+  slackChannel?: string;
+  tags: string[];
+  members: Member[];
+}
+
+export interface Member {
+  name?: string;
+  email?: string;
 }
 
 export interface ExternalCode {

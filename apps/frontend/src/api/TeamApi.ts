@@ -1,5 +1,5 @@
 import axios from 'axios'
-import {map, PageResponse, TeamResource} from '../constants'
+import {PageResponse, Team, TeamResource} from '../constants'
 import {env} from '../util/env'
 import {useDebouncedState, useForceUpdate} from '../util/hooks'
 import {Option} from 'baseui/select'
@@ -11,6 +11,16 @@ export const getResourceById = async (resourceId: string) => {
 
 export const searchResourceByName = async (resourceName: string) => {
   return (await axios.get<PageResponse<TeamResource>>(`${env.backendBaseUrl}/team/resource/search/${resourceName}`)).data
+}
+
+export const getTeam = async (teamId: string) => {
+  const data = (await axios.get<Team>(`${env.backendBaseUrl}/team/${teamId}`)).data
+  data.members = data.members.sort((a, b) => (a.name || '').localeCompare(b.name || ''))
+  return data
+}
+
+export const searchTeam = async (teamSearch: string) => {
+  return (await axios.get<PageResponse<Team>>(`${env.backendBaseUrl}/team/search/${teamSearch}`)).data
 }
 
 export const mapTeamResourceToOption = (teamResource: TeamResource) => ({id: teamResource.navIdent, label: teamResource.fullName})
@@ -36,17 +46,33 @@ export const usePersonSearch = () => {
   return [searchResult, setResourceSearch, loading] as SearchType
 }
 
-const people: map = {}
+const people: Map<string, string> = new Map<string, string>()
+const teams: Map<string, Team> = new Map<string, Team>()
+
 const addPerson = (person: TeamResource, done: () => void) => {
-  people[person.navIdent] = person.fullName
+  people.set(person.navIdent, person.fullName)
+  done()
+}
+
+const addTeam = (team: Team, done: () => void) => {
+  teams.set(team.id, team)
   done()
 }
 
 export const usePersonName = () => {
   const update = useForceUpdate()
   return (id: string) => {
-    if (!people[id]) getResourceById(id).then(p => addPerson(p, update)).catch(e => console.debug('err fetching person', e))
-    return people[id] || id
+    if (!people.has(id)) getResourceById(id).then(p => addPerson(p, update)).catch(e => console.debug('err fetching person', e))
+    return people.get(id) || id
+  }
+}
+
+export const useTeam = () => {
+  const update = useForceUpdate()
+  return (id: string) => {
+    if (!teams.has(id)) getTeam(id).then(p => addTeam(p, update)).catch(e => console.debug('err fetching team', e))
+    const team = teams.get(id)
+    return [team?.name || id, team] as [string, Team | undefined]
   }
 }
 

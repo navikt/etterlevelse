@@ -5,8 +5,6 @@ import {kravStatus} from '../../pages/KravPage'
 import {theme} from '../../util'
 import DataText from '../common/DataText'
 import {Markdown} from '../common/Markdown'
-import {StyledLink} from 'baseui/link'
-import {teamKatPersonLink} from '../../util/config'
 import moment from 'moment'
 import {PersonName} from '../common/PersonName'
 import Button from '../common/Button'
@@ -73,7 +71,7 @@ const KontaktPersoner = ({kontaktPersoner}: {kontaktPersoner: string[]}) => (
   <Block display='flex'>
     {kontaktPersoner.map((ident, i) =>
       <Block key={i} marginRight={theme.sizing.scale200}>
-        <StyledLink target="_blank" rel="noopener noreferrer" href={teamKatPersonLink(ident)}><PersonName ident={ident}/></StyledLink>
+        <PersonName ident={ident} link/>
       </Block>
     )}
   </Block>
