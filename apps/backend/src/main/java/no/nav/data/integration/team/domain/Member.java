@@ -17,6 +17,10 @@ public class Member {
     private String email;
 
     public MemberResponse convertToResponse() {
-        return MemberResponse.builder().navIdent(navIdent).name(name).email(email).build();
+        return MemberResponse.builder()
+                .navIdent(navIdent)
+                .name(name)
+                .email(email)
+                .build();
     }
 }

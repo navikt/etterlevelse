@@ -16,7 +16,11 @@ public class TeamKatMember {
     private Resource resource;
 
     public Member convertToMember() {
-        return Member.builder().name(resource.fullName).email(resource.email).build();
+        return Member.builder()
+                .navIdent(navIdent)
+                .name(resource.fullName)
+                .email(resource.email)
+                .build();
     }
 
     @Data
