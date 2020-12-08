@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.data.behandling.dto.Behandling;
 import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.common.security.SecurityUtils;
+import no.nav.data.common.utils.StreamUtils;
 import no.nav.data.integration.behandling.BkatClient;
 import no.nav.data.integration.behandling.dto.BkatProcess;
 import no.nav.data.integration.team.domain.Team;
@@ -51,6 +52,7 @@ public class BehandlingController {
                     .map(client::getProcessesForTeam)
                     .flatMap(Collection::stream)
                     .collect(toList());
+            processes = StreamUtils.distinctByKey(processes, BkatProcess::getId);
         } else {
             processes = client.getProcessesForTeam(teamId);
         }

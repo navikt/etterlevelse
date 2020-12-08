@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.NotFoundException;
 import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.RestResponsePage;
-import no.nav.data.common.utils.StreamUtils;
+import no.nav.data.common.security.SecurityUtils;
 import no.nav.data.integration.team.domain.ProductArea;
 import no.nav.data.integration.team.domain.Team;
 import no.nav.data.integration.team.dto.ProductAreaResponse;
@@ -21,8 +21,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -30,6 +32,7 @@ import java.util.stream.Stream;
 import static java.util.Comparator.comparing;
 import static no.nav.data.common.utils.StartsWithComparator.startsWith;
 import static no.nav.data.common.utils.StreamUtils.convert;
+import static no.nav.data.common.utils.StreamUtils.filter;
 import static org.apache.commons.lang3.StringUtils.containsIgnoreCase;
 
 @Slf4j
@@ -51,9 +54,14 @@ public class TeamController {
     @Operation(summary = "Get all teams")
     @ApiResponse(description = "Teams fetched")
     @GetMapping
-    public RestResponsePage<TeamResponse> findAllTeams() {
+    public RestResponsePage<TeamResponse> findAllTeams(@RequestParam(required = false) Boolean myTeams) {
         log.info("Received a request for all teams");
-        return new RestResponsePage<>(convert(teamsService.getAllTeams(), Team::convertToResponse));
+        List<Team> teams = teamsService.getAllTeams();
+        if (Boolean.TRUE.equals(myTeams)) {
+            var ident = SecurityUtils.getCurrentIdent();
+            teams = filter(teams, t -> t.getMembers().stream().anyMatch(m -> m.getNavIdent().equals(ident)));
+        }
+        return new RestResponsePage<>(convert(teams, Team::convertToResponse));
     }
 
     @Operation(summary = "Get team")
@@ -76,7 +84,7 @@ public class TeamController {
         if (name.length() < 3) {
             throw new ValidationException("Search teams must be at least 3 characters");
         }
-        var teams = StreamUtils.filter(teamsService.getAllTeams(), team -> containsIgnoreCase(team.getName(), name));
+        var teams = filter(teamsService.getAllTeams(), team -> containsIgnoreCase(team.getName(), name));
         teams.sort(comparing(Team::getName, startsWith(name)));
         log.info("Returned {} teams", teams.size());
         return new ResponseEntity<>(new RestResponsePage<>(convert(teams, Team::convertToResponse)), HttpStatus.OK);
@@ -112,7 +120,7 @@ public class TeamController {
         if (name.length() < 3) {
             throw new ValidationException("Search product area must be at least 3 characters");
         }
-        var pas = StreamUtils.filter(teamsService.getAllProductAreas(), pa -> containsIgnoreCase(pa.getName(), name));
+        var pas = filter(teamsService.getAllProductAreas(), pa -> containsIgnoreCase(pa.getName(), name));
         pas.sort(comparing(ProductArea::getName, startsWith(name)));
         log.info("Returned {} pas", pas.size());
         return new ResponseEntity<>(new RestResponsePage<>(convert(pas, ProductArea::convertToResponse)), HttpStatus.OK);
