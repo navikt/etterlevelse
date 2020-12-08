@@ -38,6 +38,7 @@ const SideBar = () => {
       <Block {...items}>
         <NavItem to="/krav" text="Krav"/>
         <NavItem to="/etterlevelse" text="Etterlevelse"/>
+        <NavItem to="/behandling" text="Behandling"/>
       </Block>
       <Block position="absolute" bottom="0" width="100%">
         <Block display="flex" justifyContent="center">

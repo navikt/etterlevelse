@@ -6,8 +6,10 @@ import {useMyBehandlinger} from '../api/BehandlingApi'
 import {ListItem, ListItemLabel} from 'baseui/list'
 import {TeamName} from '../components/common/TeamName'
 import {useMyTeams} from '../api/TeamApi'
-import {ChevronRight} from 'baseui/icon'
 import RouteLink from '../components/common/RouteLink'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faGlassCheers, faUsers} from '@fortawesome/free-solid-svg-icons'
+import {theme} from '../util'
 
 
 export const MyBehandlingerPage = () => {
@@ -24,12 +26,13 @@ export const MyBehandlingerPage = () => {
       <HeadingSmall>Team</HeadingSmall>
       <ul>
         {teams.map(t =>
-          <React.Fragment key={t.id}>
-            <ListItem key={t.id}>
+          <Block key={t.id} marginBottom={theme.sizing.scale800}>
+            <ListItem key={t.id} artwork={() => <FontAwesomeIcon icon={faUsers} color={theme.colors.positive300}/>}>
               <ListItemLabel><TeamName id={t.id} link/></ListItemLabel>
             </ListItem>
+            <Block paddingLeft={theme.sizing.scale700}>
             {behandlinger.filter(b => b.teams.indexOf(t.id) >= 0).map(b =>
-              <ListItem sublist key={b.id} artwork={ChevronRight}>
+              <ListItem sublist key={b.id} artwork={() => <FontAwesomeIcon icon={faGlassCheers} color={theme.colors.negative400}/>}>
                 <ListItemLabel sublist>
                   <RouteLink href={`/behandling/${b.id}`}>
                     {b.navn}
@@ -37,7 +40,8 @@ export const MyBehandlingerPage = () => {
                 </ListItemLabel>
               </ListItem>
             )}
-          </React.Fragment>
+            </Block>
+          </Block>
         )}
       </ul>
     </Block>
