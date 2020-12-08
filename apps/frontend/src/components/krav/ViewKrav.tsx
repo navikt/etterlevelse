@@ -68,7 +68,7 @@ const AllInfo = ({krav}: {krav: Krav}) => (
 )
 
 const KontaktPersoner = ({kontaktPersoner}: {kontaktPersoner: string[]}) => (
-  <Block display='flex'>
+  <Block display='flex' flexWrap>
     {kontaktPersoner.map((ident, i) =>
       <Block key={i} marginRight={theme.sizing.scale200}>
         <PersonName ident={ident} link/>

@@ -44,7 +44,7 @@ export const BehandlingPage = () => {
         <Label title='Linjer'>{behandling.linjer.map(l => l.shortName).join(', ')}</Label>
         <Label title='Systemer'>{behandling.systemer.map(l => l.shortName).join(', ')}</Label>
         <Label title='Team'>
-          <Block display='flex'>
+          <Block display='flex' flexWrap>
             {behandling.teams.map(t =>
               <Block key={t} marginRight={theme.sizing.scale600}>
                 <TeamName id={t} link/>
