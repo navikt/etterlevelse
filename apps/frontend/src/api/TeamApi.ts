@@ -83,13 +83,14 @@ export const useTeam = () => {
 
 export const useMyTeams = () => {
   const [data, setData] = useState<Team []>([])
+  const ident = user.getIdent()
 
   useEffect(() => {
-    user.isLoggedIn() && myTeams().then(setData).catch(e => {
+    ident && myTeams().then(setData).catch(e => {
       setData([])
       console.log('couldn\'t find teams', e)
     })
-  }, [user.getIdent()])
+  }, [ident])
 
   return data
 }

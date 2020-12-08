@@ -4,10 +4,13 @@ import * as React from 'react'
 import {BrowserRouter as Router} from 'react-router-dom'
 import {Client as Styletron} from 'styletron-engine-atomic'
 import {Provider as StyletronProvider} from 'styletron-react'
+import Header from './components/Header'
 import SideBar from './components/Navigation/SideBar'
 import Routes from './routes'
-import Header from './components/Header'
 import {ampli} from './services/Amplitude'
+import {codelist} from './services/Codelist'
+import {user} from './services/User'
+import {useAwait} from './util/hooks'
 import {useNetworkStatus} from './util/network'
 import {customTheme} from './util/theme'
 
@@ -36,6 +39,8 @@ ampli.logEvent('visit_count_etterlevelse')
 
 const Main = (props) => {
   const {history} = props
+  useAwait(user.wait())
+  useAwait(codelist.wait())
 
   return (
     <React.Fragment>

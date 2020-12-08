@@ -6,6 +6,8 @@ import {useMyBehandlinger} from '../api/BehandlingApi'
 import {ListItem, ListItemLabel} from 'baseui/list'
 import {TeamName} from '../components/common/TeamName'
 import {useMyTeams} from '../api/TeamApi'
+import {ChevronRight} from 'baseui/icon'
+import RouteLink from '../components/common/RouteLink'
 
 
 export const MyBehandlingerPage = () => {
@@ -22,16 +24,20 @@ export const MyBehandlingerPage = () => {
       <HeadingSmall>Team</HeadingSmall>
       <ul>
         {teams.map(t =>
-          <ListItem key={t.id}>
-            <ListItemLabel><TeamName id={t.id} link/></ListItemLabel>
-            <ul>
-              {behandlinger.filter(b => b.teams.indexOf(t.id) >= 0).map(b =>
-                <ListItem key={b.id}>
-                  <ListItemLabel sublist>{b.navn}</ListItemLabel>
-                </ListItem>
-              )}
-            </ul>
-          </ListItem>
+          <React.Fragment key={t.id}>
+            <ListItem key={t.id}>
+              <ListItemLabel><TeamName id={t.id} link/></ListItemLabel>
+            </ListItem>
+            {behandlinger.filter(b => b.teams.indexOf(t.id) >= 0).map(b =>
+              <ListItem sublist key={b.id} artwork={ChevronRight}>
+                <ListItemLabel sublist>
+                  <RouteLink href={`/behandling/${b.id}`}>
+                    {b.navn}
+                  </RouteLink>
+                </ListItemLabel>
+              </ListItem>
+            )}
+          </React.Fragment>
         )}
       </ul>
     </Block>

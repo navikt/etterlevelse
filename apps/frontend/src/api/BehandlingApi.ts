@@ -34,13 +34,14 @@ export const useSearchBehandling = () => useSearch(searchBehandling)
 
 export const useMyBehandlinger = () => {
   const [data, setData] = useState<Behandling []>([])
+  const ident = user.getIdent()
 
   useEffect(() => {
-    user.isLoggedIn() && getBehandlinger().then(setData).catch(e => {
+    ident && getBehandlinger().then(setData).catch(e => {
       setData([])
       console.log('couldn\'t find behandlinger', e)
     })
-  }, [user.getIdent()])
+  }, [ident])
 
   return data
 }
