@@ -22,7 +22,7 @@ export const ViewEtterlevelse = ({etterlevelse}: {etterlevelse: Etterlevelse}) =
           <RouteLink href={`/behandling/${behandling.id}`}>
             {behandlingName(behandling)}
           </RouteLink>
-          : <> <Spinner size={theme.sizing.scale600}/>{etterlevelse.behandlingId}</>}
+          : etterlevelse.behandlingId && <> <Spinner size={theme.sizing.scale600}/>{etterlevelse.behandlingId}</>}
       </Label>
       <Label title='Krav'>
         <RouteLink href={`/krav/${etterlevelse.kravNummer}/${etterlevelse.kravVersjon}`}>{etterlevelse.kravNummer}.{etterlevelse.kravVersjon}</RouteLink>
