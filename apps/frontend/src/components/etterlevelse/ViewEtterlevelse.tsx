@@ -8,11 +8,12 @@ import {Markdown} from '../common/Markdown'
 import moment from 'moment'
 import RouteLink from '../common/RouteLink'
 import {behandlingName, useBehandling} from '../../api/BehandlingApi'
+import {Spinner} from '../common/Spinner'
 
 const formatDate = (date?: string) => date && moment(date).format('ll')
 
 export const ViewEtterlevelse = ({etterlevelse}: {etterlevelse: Etterlevelse}) => {
-  const [behandling] = useBehandling(etterlevelse.behandling)
+  const [behandling] = useBehandling(etterlevelse.behandlingId)
 
   return (
     <Block width='100%'>
@@ -21,7 +22,7 @@ export const ViewEtterlevelse = ({etterlevelse}: {etterlevelse: Etterlevelse}) =
           <RouteLink href={`/behandling/${behandling.id}`}>
             {behandlingName(behandling)}
           </RouteLink>
-          : etterlevelse.behandling}
+          : <> <Spinner size={theme.sizing.scale600}/>{etterlevelse.behandlingId}</>}
       </Label>
       <Label title='Krav'>
         <RouteLink href={`/krav/${etterlevelse.kravNummer}/${etterlevelse.kravVersjon}`}>{etterlevelse.kravNummer}.{etterlevelse.kravVersjon}</RouteLink>

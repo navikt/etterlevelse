@@ -64,7 +64,7 @@ export interface Krav extends DomainObject {
 export interface Etterlevelse extends DomainObject {
   id: string
 
-  behandling: string
+  behandlingId: string
   kravNummer: number
   kravVersjon: number
   etterleves: boolean

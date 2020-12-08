@@ -27,7 +27,7 @@ public class Etterlevelse implements DomainObject, KravId {
     private ChangeStamp changeStamp;
     private Integer version;
 
-    private String behandling;
+    private String behandlingId;
     private Integer kravNummer;
     private Integer kravVersjon;
 
@@ -43,7 +43,7 @@ public class Etterlevelse implements DomainObject, KravId {
     }
 
     public Etterlevelse convert(EtterlevelseRequest request) {
-        behandling = request.getBehandling();
+        behandlingId = request.getBehandlingId();
         kravNummer = request.getKravNummer();
         kravVersjon = request.getKravVersjon();
 
@@ -62,7 +62,7 @@ public class Etterlevelse implements DomainObject, KravId {
                 .changeStamp(convertChangeStampResponse())
                 .version(version)
 
-                .behandling(behandling)
+                .behandlingId(behandlingId)
                 .kravNummer(kravNummer)
                 .kravVersjon(kravVersjon)
 
@@ -75,6 +75,6 @@ public class Etterlevelse implements DomainObject, KravId {
     }
 
     public InstanceId convertToInstanceId() {
-        return new InstanceId(id.toString(), behandling + "-" + kravId());
+        return new InstanceId(id.toString(), behandlingId + "-" + kravId());
     }
 }

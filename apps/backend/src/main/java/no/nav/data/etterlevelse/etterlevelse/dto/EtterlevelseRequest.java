@@ -24,7 +24,7 @@ public class EtterlevelseRequest implements RequestElement {
 
     private String id;
 
-    private String behandling;
+    private String behandlingId;
     private Integer kravNummer;
     private Integer kravVersjon;
 
@@ -39,7 +39,7 @@ public class EtterlevelseRequest implements RequestElement {
     @Override
     public void format() {
         setId(trimToNull(id));
-        setBehandling(trimToNull(behandling));
+        setBehandlingId(trimToNull(behandlingId));
 
         setBegrunnelse(trimToNull(begrunnelse));
         setDokumentasjon(formatList(dokumentasjon));
@@ -53,7 +53,7 @@ public class EtterlevelseRequest implements RequestElement {
     public void validateFieldValues(Validator<?> validator) {
         validator.checkUUID(Fields.id, id);
         validator.checkId(this);
-        validator.checkBlank(Fields.behandling, behandling);
+        validator.checkBlank(Fields.behandlingId, behandlingId);
         validator.checkNull(Fields.kravNummer, kravNummer);
         validator.checkNull(Fields.kravVersjon, kravVersjon);
     }

@@ -34,7 +34,7 @@ export const EditEtterlevelse = ({etterlevelse, close}: {etterlevelse: Etterleve
       <Form onKeyDown={disableEnter}>
         <Block>
 
-          <SearchBehandling id={form.values.behandling}/>
+          <SearchBehandling id={form.values.behandlingId}/>
           <SearchKrav kravNummer={form.values.kravNummer} kravVersjon={form.values.kravVersjon}/>
 
           <Block height={theme.sizing.scale600}/>

@@ -78,8 +78,8 @@ public class EtterlevelseIT extends IntegrationTestBase {
 
         @Test
         void getByBehandling() {
-            var b1 = storageService.save(Etterlevelse.builder().behandling("b1").build());
-            storageService.save(Etterlevelse.builder().behandling("b2").build());
+            var b1 = storageService.save(Etterlevelse.builder().behandlingId("b1").build());
+            storageService.save(Etterlevelse.builder().behandlingId("b2").build());
 
             var resp = restTemplate.getForEntity("/etterlevelse?behandling={behandling}", EtterlevelsePage.class, "b1");
             assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -94,7 +94,7 @@ public class EtterlevelseIT extends IntegrationTestBase {
     void createEtterlevelse() {
         var krav = storageService.save(Krav.builder().kravNummer(50).build());
         var req = EtterlevelseRequest.builder()
-                .behandling("behandling1")
+                .behandlingId("behandling1")
                 .kravNummer(krav.getKravNummer())
                 .kravVersjon(krav.getKravVersjon())
 
@@ -120,7 +120,7 @@ public class EtterlevelseIT extends IntegrationTestBase {
         assertThat(etterlevelse.getChangeStamp()).isNotNull();
         assertThat(etterlevelse.getVersion()).isEqualTo(0);
 
-        assertThat(etterlevelse.getBehandling()).isEqualTo("behandling1");
+        assertThat(etterlevelse.getBehandlingId()).isEqualTo("behandling1");
         assertThat(etterlevelse.getKravNummer()).isEqualTo(50);
         assertThat(etterlevelse.getKravVersjon()).isEqualTo(1);
 
@@ -134,9 +134,9 @@ public class EtterlevelseIT extends IntegrationTestBase {
     @Test
     void updateEtterlevelse() {
         var krav = storageService.save(Krav.builder().kravNummer(50).kravVersjon(1).build());
-        var etterlevelse = storageService.save(Etterlevelse.builder().behandling("b1").kravNummer(krav.getKravNummer()).kravVersjon(krav.getKravVersjon()).build());
+        var etterlevelse = storageService.save(Etterlevelse.builder().behandlingId("b1").kravNummer(krav.getKravNummer()).kravVersjon(krav.getKravVersjon()).build());
         var req = EtterlevelseRequest.builder()
-                .behandling("b2")
+                .behandlingId("b2")
                 .kravNummer(krav.getKravNummer())
                 .kravVersjon(krav.getKravVersjon())
                 .id(etterlevelse.getId().toString())
@@ -145,7 +145,7 @@ public class EtterlevelseIT extends IntegrationTestBase {
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
         EtterlevelseResponse etterlevelseResp = resp.getBody();
         assertThat(etterlevelseResp).isNotNull();
-        assertThat(etterlevelseResp.getBehandling()).isEqualTo("b2");
+        assertThat(etterlevelseResp.getBehandlingId()).isEqualTo("b2");
     }
 
     @Test

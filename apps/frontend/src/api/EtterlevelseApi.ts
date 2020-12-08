@@ -77,7 +77,7 @@ export const useEtterlevelseForBehandling = (behandlingId?: string) => {
 
 export const mapToFormVal = (etterlevelse: Partial<Etterlevelse>): Etterlevelse => ({
   id: etterlevelse.id || '',
-  behandling: etterlevelse.behandling || '',
+  behandlingId: etterlevelse.behandlingId || '',
   kravNummer: etterlevelse.kravNummer || 0,
   kravVersjon: etterlevelse.kravVersjon || 0,
   changeStamp: etterlevelse.changeStamp || {lastModifiedDate: '', lastModifiedBy: ''},
