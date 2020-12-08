@@ -23,7 +23,7 @@ public interface EtterlevelseRepo extends JpaRepository<GenericStorage, UUID> {
     @Query(value = "select * from generic_storage where data -> 'kravNummer' = to_jsonb(?1) and data -> 'kravVersjon' = to_jsonb(?2) and type = 'Etterlevelse'", nativeQuery = true)
     List<GenericStorage> findByKravNummer(int nummer, int versjon);
 
-    @Query(value = "select * from generic_storage where data ->> 'behandling' = ?1 and type = 'Etterlevelse'", nativeQuery = true)
+    @Query(value = "select * from generic_storage where data ->> 'behandlingId' = ?1 and type = 'Etterlevelse'", nativeQuery = true)
     List<GenericStorage> findByBehandling(String behandlingId);
 
 }

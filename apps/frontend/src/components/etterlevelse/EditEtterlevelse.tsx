@@ -105,7 +105,7 @@ export const SearchBehandling = (props: {id: string}) => {
   const [behandling, setBehandling] = useBehandling(props.id)
 
   return (
-    <Field name={'behandling'}>
+    <Field name={'behandlingId'}>
       {(p: FieldProps<string>) => {
         return <FormControl label={'Behandling'} error={p.meta.error}>
           <Select
@@ -120,7 +120,7 @@ export const SearchBehandling = (props: {id: string}) => {
             onChange={({value}) => {
               const select = value.length ? results.find(k => k.id === value[0].id)! : undefined
               setBehandling(select)
-              p.form.setFieldValue('behandling', select?.id)
+              p.form.setFieldValue('behandlingId', select?.id)
             }}
             onInputChange={event => setSearch(event.currentTarget.value)}
             isLoading={loading}
