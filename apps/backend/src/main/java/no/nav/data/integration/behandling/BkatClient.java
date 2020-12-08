@@ -30,7 +30,7 @@ public class BkatClient {
         this.processSearchCache = MetricUtils.register("bkatProcessSearchCache",
                 Caffeine.newBuilder().recordStats()
                         .expireAfterAccess(Duration.ofMinutes(10))
-                        .maximumSize(100).build(this::findProcesses0));
+                        .maximumSize(100).build(this::search));
         this.processCache = MetricUtils.register("bkatProcessCache",
                 Caffeine.newBuilder().recordStats()
                         .expireAfterAccess(Duration.ofMinutes(10))
@@ -53,41 +53,27 @@ public class BkatClient {
         return processTeamCache.get(teamId);
     }
 
-    private List<BkatProcess> findProcessesForTeam(String teamId) {
-        return getAll("/process?productTeam={teamId}", teamId);
-    }
-
-    private List<BkatProcess> getAll(String url, String param) {
-        var res = client.get()
-                .uri(url, param)
-                .retrieve()
-                .bodyToMono(ProcessPage.class)
-                .block();
-        Assert.isTrue(res != null, "response is null");
-
-        return res.getContent();
-    }
-
     private BkatProcess getProcess0(String id) {
+        return get("/process/{id}", id, BkatProcess.class);
+    }
+
+    private List<BkatProcess> search(String search) {
+        return get("/process/search/{search}", search, ProcessPage.class).getContent();
+    }
+
+    private List<BkatProcess> findProcessesForTeam(String teamId) {
+        return get("/process?productTeam={teamId}", teamId, ProcessPage.class).getContent();
+    }
+
+    private <T> T get(String uri, String param, Class<T> response) {
         var res = client.get()
-                .uri("/process/{id}", id)
+                .uri(uri, param)
                 .retrieve()
-                .bodyToMono(BkatProcess.class)
+                .bodyToMono(response)
                 .block();
         Assert.isTrue(res != null, "response is null");
 
         return res;
-    }
-
-    private List<BkatProcess> findProcesses0(String search) {
-        var res = client.get()
-                .uri("/process/search/{search}", search)
-                .retrieve()
-                .bodyToMono(ProcessPage.class)
-                .block();
-        Assert.isTrue(res != null, "response is null");
-
-        return res.getContent();
     }
 
     private static class ProcessPage extends RestResponsePage<BkatProcess> {
