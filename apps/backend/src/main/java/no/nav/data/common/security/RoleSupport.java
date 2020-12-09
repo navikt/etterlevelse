@@ -43,6 +43,9 @@ public class RoleSupport {
         if (securityProperties.getAdminGroups().contains(group)) {
             return AppRole.ADMIN.name();
         }
+        if (securityProperties.getKraveierGroups().contains(group)) {
+            return AppRole.KRAVEIER.name();
+        }
         // for future - add team -> system roles here
         return null;
     }

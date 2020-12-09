@@ -20,6 +20,7 @@ public class SecurityProperties {
     private String encKey = "";
     private List<String> writeGroups;
     private List<String> adminGroups;
+    private List<String> kraveierGroups;
     private List<String> redirectUris;
     private String env;
     private List<String> devEmailAllowList;
