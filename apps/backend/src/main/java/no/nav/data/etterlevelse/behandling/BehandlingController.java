@@ -1,4 +1,4 @@
-package no.nav.data.behandling;
+package no.nav.data.etterlevelse.behandling;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -6,12 +6,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import no.nav.data.behandling.dto.Behandling;
+import no.nav.data.common.exceptions.NotFoundException;
 import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.common.security.SecurityUtils;
 import no.nav.data.common.utils.StreamUtils;
-import no.nav.data.integration.behandling.BkatClient;
-import no.nav.data.integration.behandling.dto.BkatProcess;
+import no.nav.data.etterlevelse.behandling.dto.Behandling;
 import no.nav.data.integration.team.domain.Team;
 import no.nav.data.integration.team.teamcat.TeamcatTeamClient;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +32,7 @@ import static java.util.stream.Collectors.toList;
 @RequiredArgsConstructor
 public class BehandlingController {
 
-    private final BkatClient client;
+    private final BehandlingService service;
     private final TeamcatTeamClient teamClient;
 
     @Operation(summary = "Get Behandlinger")
@@ -43,28 +42,31 @@ public class BehandlingController {
             @RequestParam(required = false) Boolean myBehandlinger,
             @RequestParam(required = false) String teamId
     ) {
-        List<BkatProcess> processes;
+        List<Behandling> behandlinger;
         if (teamId == null || Boolean.TRUE.equals(myBehandlinger)) {
             String currentIdent = SecurityUtils.getCurrentIdent();
-            processes = teamClient.getAllTeams().stream()
+            behandlinger = teamClient.getAllTeams().stream()
                     .filter(team -> team.getMembers().stream().anyMatch(m -> m.getNavIdent().equals(currentIdent)))
                     .map(Team::getId)
-                    .map(client::getProcessesForTeam)
+                    .map(service::getBehandlingerForTeam)
                     .flatMap(Collection::stream)
                     .collect(toList());
-            processes = StreamUtils.distinctByKey(processes, BkatProcess::getId);
+            behandlinger = StreamUtils.distinctByKey(behandlinger, Behandling::getId);
         } else {
-            processes = client.getProcessesForTeam(teamId);
+            behandlinger = service.getBehandlingerForTeam(teamId);
         }
-        return ResponseEntity.ok(new RestResponsePage<>(processes).convert(BkatProcess::convertToBehandling));
+        return ResponseEntity.ok(new RestResponsePage<>(behandlinger));
     }
 
     @Operation(summary = "Get Behandling")
     @ApiResponses(value = {@ApiResponse(description = "Behandling fetched")})
     @GetMapping("/{id}")
     public ResponseEntity<Behandling> getBehandling(@PathVariable String id) {
-        BkatProcess process = client.getProcess(id);
-        return ResponseEntity.ok(process.convertToBehandling());
+        Behandling behandlinger = service.getBehandling(id);
+        if (behandlinger == null) {
+            throw new NotFoundException("behandling %s not found".formatted(id));
+        }
+        return ResponseEntity.ok(behandlinger);
     }
 
     @Operation(summary = "Search Behandlinger")
@@ -75,8 +77,8 @@ public class BehandlingController {
             return ResponseEntity.badRequest().build();
 
         }
-        List<BkatProcess> processes = client.findProcesses(search);
-        return ResponseEntity.ok(new RestResponsePage<>(processes).convert(BkatProcess::convertToBehandling));
+        List<Behandling> behandlingList = service.findBehandlinger(search);
+        return ResponseEntity.ok(new RestResponsePage<>(behandlingList));
     }
 
     static class BehandlingPage extends RestResponsePage<Behandling> {

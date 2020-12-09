@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import no.nav.data.common.rest.ChangeStampResponse;
+import no.nav.data.etterlevelse.behandling.dto.Behandling;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse.EtterlevelseStatus;
 
 import java.time.LocalDate;
@@ -16,7 +17,7 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonPropertyOrder({"id", "behandlingId", "kravNummer", "kravVersjon", "etterleves", "begrunnelse", "dokumentasjon", "fristForFerdigstillelse", "status"})
+@JsonPropertyOrder({"id", "behandlingId", "kravNummer", "kravVersjon", "etterleves", "begrunnelse", "dokumentasjon", "fristForFerdigstillelse", "status", "behandling"})
 public class EtterlevelseResponse {
 
     private UUID id;
@@ -24,6 +25,7 @@ public class EtterlevelseResponse {
     private Integer version;
 
     private String behandlingId;
+    private Behandling behandling;
     private Integer kravNummer;
     private Integer kravVersjon;
 

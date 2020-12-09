@@ -7,12 +7,14 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -66,10 +68,14 @@ public final class StreamUtils {
         return list == null ? Collections.emptyList() : List.copyOf(list);
     }
 
-    public static <T> List<T> union(List<? extends T> listA, List<? extends T> listB) {
+    public static <T> List<T> union(Collection<? extends T> listA, Collection<? extends T> listB) {
         ArrayList<T> list = new ArrayList<>(listA);
         list.addAll(listB);
         return list;
+    }
+
+    public static <K, V> Map<K, V> toMap(Iterable<V> from, Function<? super V, K> keyExtractor) {
+        return safeStream(from).collect(Collectors.toMap(keyExtractor, Function.identity()));
     }
 
     public static <T> List<T> distinctByKey(Iterable<T> from, Function<? super T, ?> keyExtractor) {

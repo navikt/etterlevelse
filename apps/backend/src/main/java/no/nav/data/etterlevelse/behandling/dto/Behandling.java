@@ -1,4 +1,4 @@
-package no.nav.data.behandling.dto;
+package no.nav.data.etterlevelse.behandling.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
