@@ -3,6 +3,8 @@ import ReactMarkdown from 'react-markdown/with-html'
 import {Paragraph2} from 'baseui/typography'
 import remarkGfm from 'remark-gfm'
 import {StatefulTooltip} from 'baseui/tooltip'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faExternalLinkAlt} from '@fortawesome/free-solid-svg-icons'
 
 export const Markdown = (props: {source?: string, sources?: string[], escapeHtml?: boolean, noMargin?: boolean, shortenLinks?: boolean}) => {
   const renderers = {
@@ -12,8 +14,9 @@ export const Markdown = (props: {source?: string, sources?: string[], escapeHtml
     },
     link: (linkProps: any) => {
       const {children, href} = linkProps
+      const content = props.shortenLinks ? <span>Lenke <FontAwesomeIcon size='sm' icon={faExternalLinkAlt}/></span> : children
       return <StatefulTooltip content={href}>
-        <a href={href} target='_blank' rel='noopener noreferrer'>{children}</a>
+        <a href={href} target='_blank' rel='noopener noreferrer'>{content}</a>
       </StatefulTooltip>
     }
   }
