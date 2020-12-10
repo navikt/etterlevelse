@@ -35,7 +35,7 @@ export const MyBehandlingerPage = () => {
               <ListItem sublist key={b.id} artwork={() => <FontAwesomeIcon icon={faGlassCheers} color={theme.colors.negative400}/>}>
                 <ListItemLabel sublist>
                   <RouteLink href={`/behandling/${b.id}`}>
-                    {b.navn}
+                    {b.overordnetFormaal.shortName} - {b.navn}
                   </RouteLink>
                 </ListItemLabel>
               </ListItem>
