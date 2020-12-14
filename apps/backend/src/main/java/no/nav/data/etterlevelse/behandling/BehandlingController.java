@@ -34,7 +34,7 @@ import static java.util.stream.Collectors.toList;
 
 @Slf4j
 @RestController
-@Tag(description = "Behandlingskatalog", name = "Integration")
+@Tag(name = "Behandling", description = "Behandling from Behandlingskatalogen")
 @RequestMapping("/behandling")
 @RequiredArgsConstructor
 public class BehandlingController {
