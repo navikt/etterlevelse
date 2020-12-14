@@ -9,16 +9,13 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 import java.util.UUID;
 
-public interface KravRepo extends JpaRepository<GenericStorage, UUID> {
+public interface KravRepo extends JpaRepository<GenericStorage, UUID>, KravRepoCustom {
 
     @Override
     @Query(value = "select * from generic_storage where type = 'Krav' order by data -> 'kravNummer', data -> 'kravVersjon'",
             countQuery = "select count(1) from generic_storage where type = 'Krav'",
             nativeQuery = true)
     Page<GenericStorage> findAll(Pageable pageable);
-
-    @Query(value = "select * from generic_storage where data ->> 'relevansFor' = ?1 and type = 'Krav'", nativeQuery = true)
-    List<GenericStorage> findByRelevans(String code);
 
     @Query(value = "select * from generic_storage where data ->> 'avdeling' = ?1 and type = 'Krav'", nativeQuery = true)
     List<GenericStorage> findByAvdeling(String code);

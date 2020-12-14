@@ -118,8 +118,8 @@ public class CodeUsageControllerIT extends IntegrationTestBase {
 
     private void createTestData() {
         createCodelistsByRequests();
-        storageService.save(Krav.builder().avdeling("AVD1").relevansFor("REL1").build());
-        storageService.save(Krav.builder().underavdeling("UNDAVD1").relevansFor("REL3").build());
+        storageService.save(Krav.builder().avdeling("AVD1").relevansFor(List.of("REL1")).build());
+        storageService.save(Krav.builder().underavdeling("UNDAVD1").relevansFor(List.of("REL3")).build());
     }
 
     private void createCodelistsByRequests() {

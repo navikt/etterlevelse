@@ -50,7 +50,7 @@ const AllInfo = ({krav}: {krav: Krav}) => (
     <Label title='Relevante implementasjoner' markdown={krav.implementasjoner}/>
     <Label title='Begreper'>{krav.begreper.join(', ')}</Label>
     <Label title='Tagger'>{krav.tagger.join(', ')}</Label>
-    <Label title='Relevant for'>{krav.relevansFor?.shortName}</Label>
+    <Label title='Relevant for'>{krav.relevansFor.map(c => c.shortName).join(', ')}</Label>
 
     <Block height={theme.sizing.scale600}/>
 

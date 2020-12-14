@@ -138,6 +138,34 @@ export const OptionField = (props: {label: string, name: string} & Or<{options: 
     </Field>
   )
 }
+export const MultiOptionField = (props: {label: string, name: string} & Or<{options: Value}, {listName: ListName}>) => {
+  const options: Value = props.options || codelist.getParsedOptions(props.listName)
+
+  return (
+    <FieldArray name={props.name}>
+      {(p: FieldArrayRenderProps) =>
+        <FormControl label={props.label} error={p.form.errors[props.name]}>
+          <Block>
+            <Block display='flex'>
+              <Select
+                placeholder={'Velg ' + _.lowerFirst(props.label)}
+                maxDropdownHeight='400px'
+
+                options={options}
+                onChange={({value}) => {
+                  value.length && p.push(props.listName ? codelist.getCode(props.listName, value[0].id as string) : value[0].id)
+                }}
+              />
+            </Block>
+            <RenderTagList list={(p.form.values[props.name] as any[])
+            .map(v => props.listName ? (v as Code).shortName : v)} onRemove={p.remove} wide/>
+          </Block>
+        </FormControl>
+      }
+    </FieldArray>
+  )
+}
+
 
 export const MultiSearchField = (props: {label: string, name: string, search: SearchType, itemLabel?: (id: string) => React.ReactNode}) => {
   const [results, setSearch, loading] = props.search

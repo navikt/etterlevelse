@@ -242,7 +242,7 @@ class CodelistControllerIT extends IntegrationTestBase {
         @Test
         void shouldThrowCodelistNotErasableException_whenCodelistToBeDeletedIsStillInUse() {
             saveCodelist(createCodelist(ListName.RELEVANS, "DELETE_CODE"));
-            storageService.save(Krav.builder().relevansFor("DELETE_CODE").build());
+            storageService.save(Krav.builder().relevansFor(List.of("DELETE_CODE")).build());
             assertTrue(repository.findByListAndCode(ListName.RELEVANS, "DELETE_CODE").isPresent());
 
             ResponseEntity<String> responseEntity = restTemplate.exchange("/codelist/RELEVANS/DELETE_CODE", HttpMethod.DELETE, HttpEntity.EMPTY, String.class);

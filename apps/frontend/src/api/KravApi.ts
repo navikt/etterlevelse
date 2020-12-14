@@ -36,7 +36,7 @@ function kravToKravDto(krav: Krav) {
     ...krav,
     avdeling: krav.avdeling?.code,
     underavdeling: krav.underavdeling?.code,
-    relevansFor: krav.relevansFor?.code
+    relevansFor: krav.relevansFor.map(c => c.code)
   }
   delete dto.changeStamp
   delete dto.version
@@ -99,7 +99,7 @@ export const mapToFormVal = (krav: Partial<Krav>): Krav => ({
   avdeling: krav.avdeling,
   underavdeling: krav.underavdeling,
   periode: krav.periode || {start: navStartDate, slutt: maxDate},
-  relevansFor: krav.relevansFor,
+  relevansFor: krav.relevansFor || [],
   status: krav.status || KravStatus.UNDER_REDIGERING,
   nyKravVersjon: krav.nyKravVersjon || false
 })

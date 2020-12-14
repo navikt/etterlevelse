@@ -51,7 +51,7 @@ public class Krav implements DomainObject, KravId {
     private String underavdeling;
 
     // Codelist RELEVANS
-    private String relevansFor;
+    private List<String> relevansFor;
     private KravStatus status;
 
     public enum KravStatus {
@@ -75,7 +75,7 @@ public class Krav implements DomainObject, KravId {
 
         avdeling = request.getAvdeling();
         underavdeling = request.getUnderavdeling();
-        relevansFor = request.getRelevansFor();
+        relevansFor = copyOf(request.getRelevansFor());
         status = request.getStatus();
         periode = request.getPeriode();
 
@@ -102,7 +102,7 @@ public class Krav implements DomainObject, KravId {
                 .periode(periode)
                 .avdeling(CodelistService.getCodelistResponse(ListName.AVDELING, avdeling))
                 .underavdeling(CodelistService.getCodelistResponse(ListName.UNDERAVDELING, underavdeling))
-                .relevansFor(CodelistService.getCodelistResponse(ListName.RELEVANS, relevansFor))
+                .relevansFor(CodelistService.getCodelistResponseList(ListName.RELEVANS, relevansFor))
                 .status(status)
                 .build();
     }

@@ -41,7 +41,7 @@ public class KravResponse {
     private CodelistResponse avdeling;
     private CodelistResponse underavdeling;
 
-    private CodelistResponse relevansFor;
+    private List<CodelistResponse> relevansFor;
     private KravStatus status;
 
 }

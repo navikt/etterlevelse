@@ -54,7 +54,7 @@ export interface Krav extends DomainObject {
   periode?: Periode
   avdeling?: Code
   underavdeling?: Code
-  relevansFor?: Code
+  relevansFor: Code[]
   status: KravStatus
 
   nyKravVersjon: boolean

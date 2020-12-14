@@ -15,6 +15,7 @@ import no.nav.data.etterlevelse.krav.domain.Krav.KravStatus;
 import java.util.List;
 
 import static no.nav.data.common.utils.StringUtils.formatList;
+import static no.nav.data.common.utils.StringUtils.formatListToUppercase;
 import static no.nav.data.common.utils.StringUtils.toUpperCaseAndTrim;
 import static org.apache.commons.lang3.StringUtils.trimToNull;
 
@@ -46,7 +47,7 @@ public class KravRequest implements RequestElement {
     private String underavdeling;
 
     @Schema(description = "Codelist RELEVANS")
-    private String relevansFor;
+    private List<String> relevansFor;
     private KravStatus status;
     private boolean nyKravVersjon;
 
@@ -59,7 +60,7 @@ public class KravRequest implements RequestElement {
         setBeskrivelse(trimToNull(beskrivelse));
         setHensikt(trimToNull(hensikt));
         setUtdypendeBeskrivelse(trimToNull(utdypendeBeskrivelse));
-        setRelevansFor(toUpperCaseAndTrim(relevansFor));
+        setRelevansFor(formatListToUppercase(relevansFor));
         setAvdeling(toUpperCaseAndTrim(avdeling));
         setUnderavdeling(toUpperCaseAndTrim(underavdeling));
 
@@ -85,6 +86,6 @@ public class KravRequest implements RequestElement {
         }
         validator.checkCodelist(Fields.avdeling, avdeling, ListName.AVDELING);
         validator.checkCodelist(Fields.underavdeling, underavdeling, ListName.UNDERAVDELING);
-        validator.checkCodelist(Fields.relevansFor, relevansFor, ListName.RELEVANS);
+        validator.checkCodelists(Fields.relevansFor, relevansFor, ListName.RELEVANS);
     }
 }

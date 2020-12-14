@@ -18,6 +18,7 @@ import java.time.Duration;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static java.util.Collections.replaceAll;
 import static java.util.stream.Collectors.toList;
 import static no.nav.data.common.utils.StreamUtils.convert;
 
@@ -66,11 +67,12 @@ public class CodeUsageService {
         });
     }
 
+    @SuppressWarnings({"ResultOfMethodCallIgnored"})
     public CodeUsage replaceUsage(ListName listName, String oldCode, String newCode) {
         var usage = findCodeUsage(listName, oldCode);
         if (usage.isInUse()) {
             switch (listName) {
-                case RELEVANS -> usage.getKrav().forEach(gs -> gs.asKrav(k -> k.setRelevansFor(newCode)));
+                case RELEVANS -> usage.getKrav().forEach(gs -> gs.asKrav(k -> replaceAll(k.getRelevansFor(), oldCode, newCode)));
                 case AVDELING -> usage.getKrav().forEach(gs -> gs.asKrav(k -> k.setAvdeling(newCode)));
                 case UNDERAVDELING -> usage.getKrav().forEach(gs -> gs.asKrav(k -> k.setUnderavdeling(newCode)));
             }

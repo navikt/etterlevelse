@@ -8,7 +8,7 @@ import React from 'react'
 import * as yup from 'yup'
 import {ListName} from '../../services/Codelist'
 import {kravStatus} from '../../pages/KravPage'
-import {DateField, InputField, MultiInputField, MultiSearchField, OptionField, TextAreaField} from '../common/Inputs'
+import {DateField, InputField, MultiInputField, MultiOptionField, MultiSearchField, OptionField, TextAreaField} from '../common/Inputs'
 import {usePersonSearch} from '../../api/TeamApi'
 import {theme} from '../../util'
 import {LabelMedium} from 'baseui/typography'
@@ -49,7 +49,7 @@ export const EditKrav = ({krav, close}: {krav: Krav, close: (k?: Krav) => void})
           <MultiInputField label='Relevante implementasjoner' name='implementasjoner'/>
           <MultiInputField label='Begreper' name='begreper'/>
           <MultiInputField label='Tagger' name='tagger'/>
-          <OptionField label='Relevans for' name='relevansFor' listName={ListName.RELEVANS}/>
+          <MultiOptionField label='Relevans for' name='relevansFor' listName={ListName.RELEVANS}/>
 
           <Block height={theme.sizing.scale600}/>
 
