@@ -31,7 +31,7 @@ public class BehandlingData implements DomainObject {
     private List<String> relevansFor;
 
     public List<CodelistResponse> relevansForAsCodes() {
-        return CodelistService.getCodelistResponseList(ListName.AVDELING, relevansFor);
+        return CodelistService.getCodelistResponseList(ListName.RELEVANS, relevansFor);
     }
 
     public void convert(BehandlingRequest request) {
