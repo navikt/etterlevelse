@@ -46,7 +46,7 @@ spec:
     failureThreshold: 30
   prometheus:
     enabled: true
-    path: internal/metrics
+    path: /internal/metrics
   envFrom:
     - secret: etterlevelse-enckey
   env:
