@@ -10,6 +10,7 @@ import no.nav.data.common.auditing.domain.Auditable;
 import no.nav.data.common.security.azure.support.MailLog;
 import no.nav.data.common.utils.JsonUtils;
 import no.nav.data.common.utils.StreamUtils;
+import no.nav.data.etterlevelse.behandling.domain.BehandlingData;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import org.hibernate.annotations.Type;
@@ -105,12 +106,16 @@ public class GenericStorage extends Auditable {
         return getDomainObjectData(Etterlevelse.class);
     }
 
+    public BehandlingData toBehandlingData() {
+        return getDomainObjectData(BehandlingData.class);
+    }
+
     /**
      * Edit object and update data on entity
      */
-    public void asKrav(Consumer<Krav> consumer) {
-        Krav krav = toKrav();
-        consumer.accept(krav);
-        setDomainObjectData(krav);
+    public <T extends DomainObject> void asType(Consumer<T> consumer, Class<T> type) {
+        var object = getDomainObjectData(type);
+        consumer.accept(object);
+        setDomainObjectData(object);
     }
 }

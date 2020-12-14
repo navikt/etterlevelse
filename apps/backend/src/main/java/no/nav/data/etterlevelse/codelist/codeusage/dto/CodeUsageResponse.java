@@ -18,6 +18,7 @@ public class CodeUsageResponse {
     private ListName listName;
     private String code;
     private List<InstanceId> krav = new ArrayList<>();
+    private List<InstanceId> behandlinger = new ArrayList<>();
 
     public CodeUsageResponse(ListName listName, String code) {
         this.listName = listName;

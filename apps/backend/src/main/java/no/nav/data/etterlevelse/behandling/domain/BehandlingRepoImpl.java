@@ -1,4 +1,4 @@
-package no.nav.data.etterlevelse.krav.domain;
+package no.nav.data.etterlevelse.behandling.domain;
 
 import lombok.RequiredArgsConstructor;
 import no.nav.data.common.storage.domain.GenericStorage;
@@ -14,14 +14,14 @@ import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
-public class KravRepoImpl implements KravRepoCustom {
+public class BehandlingRepoImpl implements BehandlingRepoCustom {
 
     private final NamedParameterJdbcTemplate jdbcTemplate;
     private final GenericStorageRepository repository;
 
     @Override
     public List<GenericStorage> findByRelevans(String code) {
-        var resp = jdbcTemplate.queryForList("select id from generic_storage where data #> '{relevansFor}' ?? :code and type = 'Krav'",
+        var resp = jdbcTemplate.queryForList("select id from generic_storage where data #> '{relevansFor}' ?? :code and type = 'BehandlingData'",
                 new MapSqlParameterSource().addValue("code", code));
         return fetch(resp);
     }

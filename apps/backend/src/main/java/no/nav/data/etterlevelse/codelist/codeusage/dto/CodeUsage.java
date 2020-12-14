@@ -19,6 +19,7 @@ public class CodeUsage {
     private ListName listName;
     private String code;
     private List<GenericStorage> krav = new ArrayList<>();
+    private List<GenericStorage> behandlinger = new ArrayList<>();
 
     public CodeUsage(ListName listName, String code) {
         this.listName = listName;
@@ -32,6 +33,7 @@ public class CodeUsage {
     public CodeUsageResponse convertToResponse() {
         CodeUsageResponse response = new CodeUsageResponse(listName, code);
         response.setKrav(convert(krav, k -> k.toKrav().convertToInstanceId()));
+        response.setBehandlinger(convert(behandlinger, k -> k.toBehandlingData().convertToInstanceId()));
         return response;
     }
 }

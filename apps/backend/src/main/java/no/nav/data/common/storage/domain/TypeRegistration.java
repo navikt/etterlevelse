@@ -1,8 +1,10 @@
 package no.nav.data.common.storage.domain;
 
 import no.nav.data.common.validator.RequestElement;
+import no.nav.data.etterlevelse.behandling.domain.BehandlingData;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.krav.domain.Krav;
+import org.springframework.util.Assert;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -18,6 +20,7 @@ public final class TypeRegistration {
     static {
         addDomainClass(Krav.class, true);
         addDomainClass(Etterlevelse.class, true);
+        addDomainClass(BehandlingData.class, true);
     }
 
     private TypeRegistration() {
@@ -37,7 +40,9 @@ public final class TypeRegistration {
     }
 
     public static String typeOf(Class<?> clazz) {
-        return classToType.get(clazz);
+        String typeString = classToType.get(clazz);
+        Assert.notNull(typeString, "Class %s is not a registered type".formatted(clazz));
+        return typeString;
     }
 
     public static String typeOfRequest(RequestElement request) {

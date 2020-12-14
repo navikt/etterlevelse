@@ -1,9 +1,14 @@
 package no.nav.data.etterlevelse.behandling;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import no.nav.data.common.storage.StorageService;
+import no.nav.data.common.storage.domain.GenericStorage;
 import no.nav.data.common.utils.StreamUtils;
+import no.nav.data.common.validator.Validator;
+import no.nav.data.etterlevelse.behandling.domain.BehandlingData;
+import no.nav.data.etterlevelse.behandling.domain.BehandlingRepo;
 import no.nav.data.etterlevelse.behandling.dto.Behandling;
+import no.nav.data.etterlevelse.behandling.dto.BehandlingRequest;
 import no.nav.data.integration.behandling.BkatClient;
 import no.nav.data.integration.behandling.dto.BkatProcess;
 import org.springframework.stereotype.Service;
@@ -12,17 +17,37 @@ import java.util.List;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class BehandlingService {
 
     private final BkatClient bkatClient;
+    private final StorageService storage;
+    private final BehandlingRepo repo;
+
+    public BehandlingService(StorageService storage, BkatClient bkatClient, BehandlingRepo repo) {
+        this.bkatClient = bkatClient;
+        this.storage = storage;
+        this.repo = repo;
+    }
+
+    public Behandling save(BehandlingRequest request) {
+        Validator.validate(request)
+                .ifErrorsThrowValidationException();
+        var behandling = getBehandling(request.getId());
+
+        BehandlingData bd = behandling.getBehandlingData();
+        bd.convert(request);
+        bd = storage.save(bd);
+
+        behandling.includeData(bd);
+        return behandling;
+    }
 
     public Behandling getBehandling(String id) {
         BkatProcess process = bkatClient.getProcess(id);
         if (process == null) {
             return null;
         }
-        return process.convertToBehandling();
+        return convert(process);
     }
 
     public List<Behandling> getBehandlingerForTeam(String teamId) {
@@ -33,11 +58,24 @@ public class BehandlingService {
         return convert(bkatClient.findProcesses(search));
     }
 
-    private List<Behandling> convert(List<BkatProcess> processes) {
-        return StreamUtils.convert(processes, BkatProcess::convertToBehandling);
-    }
-
     public List<Behandling> findAllById(List<String> ids) {
         return convert(bkatClient.getProcessesById(ids));
+    }
+
+    private List<Behandling> convert(List<BkatProcess> processes) {
+        List<String> ids = StreamUtils.convert(processes, BkatProcess::getId);
+        var datas = repo.findByBehandlingIds(ids);
+        return StreamUtils.convert(processes, p -> convert(p, datas));
+    }
+
+    private Behandling convert(BkatProcess process) {
+        return convert(process, repo.findByBehandlingIds(List.of(process.getId())));
+    }
+
+    private Behandling convert(BkatProcess process, List<GenericStorage> behandlingDatas) {
+        Behandling convert = process.convertToBehandling();
+        StreamUtils.tryFind(behandlingDatas, bd -> bd.toBehandlingData().getBehandlingId().equals(process.getId()))
+                .ifPresentOrElse(bd -> convert.includeData(bd.toBehandlingData()), () -> convert.includeData(new BehandlingData()));
+        return convert;
     }
 }
