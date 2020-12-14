@@ -140,27 +140,27 @@ export const OptionField = (props: {label: string, name: string} & Or<{options: 
 }
 export const MultiOptionField = (props: {label: string, name: string} & Or<{options: Value}, {listName: ListName}>) => {
   const options: Value = props.options || codelist.getParsedOptions(props.listName)
-
   return (
     <FieldArray name={props.name}>
-      {(p: FieldArrayRenderProps) =>
-        <FormControl label={props.label} error={p.form.errors[props.name]}>
+      {(p: FieldArrayRenderProps) => {
+        const selectedIds = (p.form.values[props.name] as any[]).map(v => props.listName ? (v as Code).code : v)
+        return <FormControl label={props.label} error={p.form.errors[props.name]}>
           <Block>
             <Block display='flex'>
               <Select
                 placeholder={'Velg ' + _.lowerFirst(props.label)}
                 maxDropdownHeight='400px'
 
-                options={options}
+                options={options.filter(o => selectedIds.indexOf(o.id) < 0)}
                 onChange={({value}) => {
                   value.length && p.push(props.listName ? codelist.getCode(props.listName, value[0].id as string) : value[0].id)
                 }}
               />
             </Block>
-            <RenderTagList list={(p.form.values[props.name] as any[])
-            .map(v => props.listName ? (v as Code).shortName : v)} onRemove={p.remove} wide/>
+            <RenderTagList list={selectedIds.map(v => options.find(o => o.id === v)?.label)} onRemove={p.remove} wide/>
           </Block>
         </FormControl>
+      }
       }
     </FieldArray>
   )
@@ -183,7 +183,7 @@ export const MultiSearchField = (props: {label: string, name: string, search: Se
                 searchable
                 noResultsMsg='Ingen resultat'
 
-                options={results}
+                options={results.filter(o => (p.form.values[props.name] as any[]).indexOf(o.id) < 0)}
                 onChange={({value}) => {
                   value.length && p.push(value[0].id)
                 }}
