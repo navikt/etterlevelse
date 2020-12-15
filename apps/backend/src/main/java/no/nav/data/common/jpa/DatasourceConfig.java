@@ -20,7 +20,7 @@ public class DatasourceConfig {
         config.setJdbcUrl(properties.getUrl());
         config.setMinimumIdle(1);
         config.setMaximumPoolSize(2);
-        config.setMaxLifetime(MINUTES.toMillis(15));
+        config.setMaxLifetime(MINUTES.toMillis(9));
         config.setUsername(properties.getUsername());
         config.setPassword(properties.getPassword());
         log.info("Creating datasource user={} url={}", config.getUsername(), config.getJdbcUrl());
