@@ -20,6 +20,7 @@ public class DatasourceConfig {
         config.setJdbcUrl(properties.getUrl());
         config.setMinimumIdle(1);
         config.setMaximumPoolSize(2);
+        config.setIdleTimeout(MINUTES.toMillis(5));
         config.setMaxLifetime(MINUTES.toMillis(9));
         config.setUsername(properties.getUsername());
         config.setPassword(properties.getPassword());
