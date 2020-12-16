@@ -2,6 +2,7 @@ package no.nav.data.integration.behandling;
 
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
+import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.common.utils.MetricUtils;
 import no.nav.data.common.web.TraceHeaderFilter;
@@ -17,7 +18,7 @@ import java.util.Map;
 
 import static no.nav.data.common.utils.StreamUtils.toMap;
 
-
+@Slf4j
 @Service
 public class BkatClient {
 
@@ -67,7 +68,9 @@ public class BkatClient {
     }
 
     private Map<String, BkatProcess> getProcesses0(Iterable<? extends String> uncachedIds) {
-        return toMap(post("/process/shortbyid", uncachedIds, ProcessPage.class).getContent(), BkatProcess::getId);
+        Map<String, BkatProcess> map = toMap(post("/process/shortbyid", uncachedIds, ProcessPage.class).getContent(), BkatProcess::getId);
+        log.info("fetched {} processes from bkat", map.size());
+        return map;
     }
 
     private List<BkatProcess> search(String search) {
