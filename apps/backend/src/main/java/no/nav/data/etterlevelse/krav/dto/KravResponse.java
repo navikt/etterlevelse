@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import no.nav.data.common.rest.ChangeStampResponse;
 import no.nav.data.etterlevelse.codelist.dto.CodelistResponse;
 import no.nav.data.etterlevelse.common.domain.Periode;
+import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseResponse;
 import no.nav.data.etterlevelse.krav.domain.Krav.KravStatus;
 
 import java.util.List;
@@ -43,5 +44,8 @@ public class KravResponse {
 
     private List<CodelistResponse> relevansFor;
     private KravStatus status;
+
+
+    private List<EtterlevelseResponse> etterlevelser;
 
 }

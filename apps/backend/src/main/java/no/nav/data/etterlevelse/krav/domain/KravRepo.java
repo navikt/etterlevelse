@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface KravRepo extends JpaRepository<GenericStorage, UUID>, KravRepoCustom {
@@ -30,7 +31,7 @@ public interface KravRepo extends JpaRepository<GenericStorage, UUID>, KravRepoC
     List<GenericStorage> findByKravNummer(int nummer);
 
     @Query(value = "select * from generic_storage where data -> 'kravNummer' = to_jsonb(?1) and data -> 'kravVersjon' = to_jsonb(?2) and type = 'Krav'", nativeQuery = true)
-    GenericStorage findByKravNummer(int nummer, int versjon);
+    Optional<GenericStorage> findByKravNummer(int nummer, int versjon);
 
     @Query(value = "select nextval('krav_nummer')", nativeQuery = true)
     int nextKravNummer();

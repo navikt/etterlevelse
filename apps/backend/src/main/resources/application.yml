@@ -1,0 +1,96 @@
+DB_DATABASE: postgres
+DB_HOST: localhost
+DB_PASSWORD: password
+DB_PORT: 5433
+DB_USERNAME: postgres
+
+management:
+  endpoint:
+    health:
+      show-details: always
+    metrics:
+      enabled: false
+    prometheus:
+      enabled: true
+    security:
+      enabled: false
+  endpoints:
+    web:
+      base-path: /internal
+      exposure:
+        include: info,health,prometheus
+      path-mapping:
+        prometheus: metrics
+  info:
+    git:
+      mode: simple
+server:
+  error:
+    include-message: always
+  port: 8080
+  shutdown: graceful
+spring:
+  datasource:
+    password: ${DB_PASSWORD}
+    url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_DATABASE}
+    username: ${DB_USERNAME}
+  flyway:
+    baseline-on-migrate: true
+    schemas: public
+  jpa:
+    hibernate:
+      ddl-auto: none
+    open-in-view: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQL10Dialect
+        jdbc:
+          lob:
+            non_contextual_creation: true
+  lifecycle:
+    timeout-per-shutdown-phase: 20s
+  main:
+    cloud-platform: kubernetes
+
+springdoc:
+  api-docs:
+    path: /swagger-docs
+  packages-to-scan: no.nav.data
+  paths-to-exclude: /error, /internal/**
+
+azure:
+  activedirectory:
+    allowed-app-id-mappings: ${AZURE_APP_PRE_AUTHORIZED_APPS:[{"clientId":"appId","name":"thisapp"},{"clientId":"appId2","name":"otherapp"}]}
+    client-id: ${AZURE_APP_CLIENT_ID:client-id}
+    client-secret: ${AZURE_APP_CLIENT_SECRET:client-secret}
+    well-known: ${AZURE_APP_WELL_KNOWN_URL:https://login.microsoftonline.com/62366534-1ec3-4962-8869-9b5535279d0b/v2.0/.well-known/openid-configuration}
+
+etterlev:
+  security:
+    admin-groups: ${AZURE_CLIENT_GROUPS_ADMIN:teamdatajegerne}
+    enc-key: ${AZURE_TOKEN_ENC_KEY:tokenkey}
+    env: ${NAIS_CLUSTER_NAME:local}
+    kraveier-groups: ${AZURE_CLIENT_GROUPS_KRAVEIER:teamdatajegerne}
+    redirectUris: http://localhost:3000
+    write-groups: ${AZURE_CLIENT_GROUPS:teamdatajegerne}
+
+graphql:
+  servlet:
+    corsEnabled: false
+    maxQueryDepth: 50
+    exception-handlers-enabled: true
+  playground:
+    tabs:
+      - name: Get krav
+        query: classpath:playground/get_krav.graphql
+        variables: classpath:playground/get_krav_variables.json
+
+client:
+  behandlingskatalog:
+    base-url: ${client.polly.url:https://something}
+  teamcat:
+    product-areas-url: ${client.teamcat.url}/productarea
+    resource-search-url: ${client.teamcat.url}/resource/search/{searchTerm}
+    resource-url: ${client.teamcat.url}/resource/{ident}
+    teams-url: ${client.teamcat.url}/team
+    url: https://teamcat/api

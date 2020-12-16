@@ -37,7 +37,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 "/oauth2/callback",
                 "/userinfo",
                 "/internal/**",
-                "/swagger*/**"
+                "/swagger*/**",
+
+                // Graphql
+                "/playground*/**",
+                "/voyager*/**",
+                "/vendor/voyager*/**",
+                "/vendor/playground**",
+                "/graphql*/**"
         );
 
         allowGetAndOptions(http,

@@ -1,0 +1,101 @@
+type Krav {
+    id: ID!
+    changeStamp: ChangeStamp!
+    version: Int!
+
+    kravNummer: Int!
+    kravVersjon: Int!
+    navn: String!
+    beskrivelse: String
+    utdypendeBeskrivelse: String
+    dokumentasjon: [String!]!
+    implementasjoner: [String!]!
+    begreper: [String!]!
+    kontaktPersoner: [String!]!
+    rettskilder: [String!]!
+    tagger: [String!]!
+    periode: Periode
+
+    avdeling: Code
+    underavdeling: Code
+    relevansFor: [Code!]!
+    status: KravStatus!
+
+    etterlevelser: [Etterlevelse]
+}
+
+enum KravStatus {
+    UNDER_REDIGERING,
+    FERDIG
+}
+
+type Etterlevelse {
+    id: ID!
+    changeStamp: ChangeStamp!
+    version: Int!
+
+    behandlingId: String!
+    behandling: Behandling!
+    kravNummer: Int!
+    kravVersjon: Int!
+
+    etterleves: Boolean
+    begrunnelse: String
+    dokumentasjon: [String!]!
+    fristForFerdigstillelse: Date
+    status: EtterlevelseStatus
+}
+
+enum EtterlevelseStatus {
+    UNDER_REDIGERING,
+    FERDIG
+}
+
+type Behandling {
+    id: String!
+    navn: String!
+    nummer: Int!
+
+    overordnetFormaal: ExternalCode!
+    formaal: String
+
+    avdeling: ExternalCode
+    linjer: [ExternalCode!]!
+    systemer: [ExternalCode!]!
+    teams: [String!]!
+
+    relevansFor: [Code!]!
+
+}
+
+type Periode {
+    start: Date
+    slutt: Date
+}
+
+type ChangeStamp {
+    lastModifiedBy: String!
+    lastModifiedDate: DateTime!
+}
+
+type Code {
+    list: ListName!
+    code: String!
+    shortName: String!
+    description: String
+    invalidCode: Boolean
+}
+
+type ExternalCode {
+    list: String!
+    code: String!
+    shortName: String!
+    description: String
+    external: Boolean
+}
+
+enum ListName {
+    RELEVANS
+    AVDELING
+    UNDERAVDELING
+}

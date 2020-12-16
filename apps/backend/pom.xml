@@ -23,6 +23,8 @@
         <logstash-logback-encoder.version>6.5</logstash-logback-encoder.version>
         <shedlock.version>4.16.0</shedlock.version>
         <commons-collections4.version>4.4</commons-collections4.version>
+        <graphql-spring-boot-starter.version>8.0.0</graphql-spring-boot-starter.version>
+        <graphql.version>15.0.0</graphql.version>
 
         <microsoft-graph.version>2.4.1</microsoft-graph.version>
         <msal4j.version>1.8.0</msal4j.version>
@@ -68,6 +70,34 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webflux</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.graphql-java-kickstart</groupId>
+            <artifactId>graphql-spring-boot-starter</artifactId>
+            <version>${graphql-spring-boot-starter.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.graphql-java</groupId>
+            <artifactId>graphql-java-extended-scalars</artifactId>
+            <version>${graphql.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.graphql-java</groupId>
+                    <artifactId>graphql-java</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.graphql-java-kickstart</groupId>
+            <artifactId>playground-spring-boot-starter</artifactId>
+            <version>${graphql-spring-boot-starter.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.graphql-java-kickstart</groupId>
+            <artifactId>voyager-spring-boot-starter</artifactId>
+            <version>${graphql-spring-boot-starter.version}</version>
+            <scope>runtime</scope>
         </dependency>
 
         <!-- Security -->
@@ -231,7 +261,7 @@
             <version>${testcontainers.version}</version>
             <scope>test</scope>
         </dependency>
-            <dependency>
+        <dependency>
             <groupId>com.github.tomakehurst</groupId>
             <artifactId>wiremock-standalone</artifactId>
             <version>${wiremock.version}</version>

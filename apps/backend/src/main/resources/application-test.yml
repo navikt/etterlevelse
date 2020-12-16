@@ -1,0 +1,12 @@
+client:
+    behandlingskatalog:
+        base-url: http://localhost:${wiremock.server.port:8080}/bkat
+    teamcat:
+        url: http://localhost:${wiremock.server.port:8080}/teamcat
+etterlev:
+    security:
+        enabled: false
+spring:
+    main:
+        allow-bean-definition-overriding: true
+        lazy-initialization: true

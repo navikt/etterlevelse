@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 import javax.validation.Valid;
 
@@ -63,7 +64,11 @@ public class KravController {
     @GetMapping("/kravnummer/{kravNummer}/{kravVersjon}")
     public ResponseEntity<KravResponse> getById(@PathVariable Integer kravNummer, @PathVariable Integer kravVersjon) {
         log.info("Get Krav for kravNummer={} kravVersjon={}", kravNummer, kravVersjon);
-        return ResponseEntity.ok(service.getByKravNummer(kravNummer, kravVersjon).convertToResponse());
+        Optional<KravResponse> response = service.getByKravNummer(kravNummer, kravVersjon).map(Krav::convertToResponse);
+        if (response.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(response.get());
     }
 
     @Operation(summary = "Get One Krav")

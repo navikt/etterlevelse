@@ -67,8 +67,8 @@ public class EtterlevelseService extends DomainService<Etterlevelse> {
         Integer kravNummer = validator.getItem().getKravNummer();
         Integer kravVersjon = validator.getItem().getKravVersjon();
         if (kravNummer != null && kravVersjon != null) {
-            var krav = kravRepo.findByKravNummer(kravNummer, kravVersjon).toKrav();
-            if (krav == null) {
+            var krav = kravRepo.findByKravNummer(kravNummer, kravVersjon);
+            if (krav.isEmpty()) {
                 validator.addError(Fields.kravNummer, Validator.DOES_NOT_EXIST, "KravNummer %d KravVersjon %d does not exist".formatted(kravNummer, kravVersjon));
             }
         }

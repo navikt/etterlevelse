@@ -1,0 +1,11 @@
+scalar DateTime
+scalar Date
+
+# Queries
+
+type Query {
+    krav(id: ID!): Krav
+    kravByNummer(nummer: Int!, versjon: Int!): Krav
+
+    etterlevelse(id: ID!) : Etterlevelse
+}

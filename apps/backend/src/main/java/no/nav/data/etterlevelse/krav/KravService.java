@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static no.nav.data.common.utils.StreamUtils.convert;
@@ -38,8 +39,9 @@ public class KravService extends DomainService<Krav> {
         return GenericStorage.to(repo.findByKravNummer(kravNummer), Krav.class);
     }
 
-    public Krav getByKravNummer(int kravNummer, int kravVersjon) {
-        return repo.findByKravNummer(kravNummer, kravVersjon).toKrav();
+    public Optional<Krav> getByKravNummer(int kravNummer, int kravVersjon) {
+        return repo.findByKravNummer(kravNummer, kravVersjon)
+                .map(GenericStorage::toKrav);
     }
 
     public Krav save(KravRequest request) {
