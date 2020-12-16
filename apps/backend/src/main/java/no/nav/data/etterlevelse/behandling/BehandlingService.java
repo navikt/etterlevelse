@@ -13,7 +13,11 @@ import no.nav.data.integration.behandling.BkatClient;
 import no.nav.data.integration.behandling.dto.BkatProcess;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -59,10 +63,15 @@ public class BehandlingService {
     }
 
     public List<Behandling> findAllById(List<String> ids) {
-        return convert(bkatClient.getProcessesById(ids));
+        return convert(bkatClient.getProcessesById(ids).values());
     }
 
-    private List<Behandling> convert(List<BkatProcess> processes) {
+    public Map<String, Behandling> findAllByIdMapped(Collection<String> ids) {
+        return bkatClient.getProcessesById(ids).entrySet().stream()
+                .collect(Collectors.toMap(Entry::getKey, e -> e.getValue().convertToBehandling()));
+    }
+
+    private List<Behandling> convert(Collection<BkatProcess> processes) {
         List<String> ids = StreamUtils.convert(processes, BkatProcess::getId);
         var datas = repo.findByBehandlingIds(ids);
         return StreamUtils.convert(processes, p -> convert(p, datas));
@@ -72,7 +81,7 @@ public class BehandlingService {
         return convert(process, repo.findByBehandlingIds(List.of(process.getId())));
     }
 
-    private Behandling convert(BkatProcess process, List<GenericStorage> behandlingDatas) {
+    private Behandling convert(BkatProcess process, Collection<GenericStorage> behandlingDatas) {
         Behandling convert = process.convertToBehandling();
         StreamUtils.tryFind(behandlingDatas, bd -> bd.toBehandlingData().getBehandlingId().equals(process.getId()))
                 .ifPresentOrElse(bd -> convert.includeData(bd.toBehandlingData()), () -> convert.includeData(new BehandlingData()));

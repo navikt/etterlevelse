@@ -10,12 +10,14 @@ import java.util.List;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.okJson;
+import static com.github.tomakehurst.wiremock.client.WireMock.post;
 import static no.nav.data.common.utils.JsonUtils.toJson;
 
 public class BkatMocks {
 
     public static void mock() {
         WireMock.stubFor(get("/bkat/process/74288ec1-c45d-4b9f-b799-33539981a690").willReturn(okJson(toJson(processMockResponse()))));
+        WireMock.stubFor(post("/bkat/process/shortbyid").willReturn(okJson(toJson(new RestResponsePage<>(List.of(processMockResponse()))))));
         WireMock.stubFor(get("/bkat/process/search/name").willReturn(okJson(toJson(new RestResponsePage<>(List.of(processMockResponse()))))));
     }
 

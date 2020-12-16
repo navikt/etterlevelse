@@ -11,7 +11,7 @@ import org.springframework.util.Assert;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.time.Duration;
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -50,9 +50,8 @@ public class BkatClient {
         return processCache.get(id);
     }
 
-    public List<BkatProcess> getProcessesById(List<String> ids) {
-        var processes = processCache.getAll(ids, this::getProcesses0);
-        return new ArrayList<>(processes.values());
+    public Map<String, BkatProcess> getProcessesById(Collection<String> ids) {
+        return processCache.getAll(ids, this::getProcesses0);
     }
 
     public List<BkatProcess> findProcesses(String search) {
