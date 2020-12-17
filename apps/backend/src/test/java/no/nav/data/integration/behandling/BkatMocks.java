@@ -21,7 +21,7 @@ public class BkatMocks {
         WireMock.stubFor(get("/bkat/process/search/name").willReturn(okJson(toJson(new RestResponsePage<>(List.of(processMockResponse()))))));
     }
 
-    private static BkatProcess processMockResponse() {
+    public static BkatProcess processMockResponse() {
         return BkatProcess.builder()
                 .id("74288ec1-c45d-4b9f-b799-33539981a690")
                 .name("process name")

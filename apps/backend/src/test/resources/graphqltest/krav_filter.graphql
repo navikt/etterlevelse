@@ -1,0 +1,6 @@
+query getKrav($relevans: String!) {
+    kravFor(relevans: $relevans){
+        id
+        navn
+    }
+}

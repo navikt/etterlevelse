@@ -22,7 +22,7 @@ public class GraphQlConfig {
     }
 
     @Bean
-    public Executor graphQLExectuor() {
+    public Executor graphQLExecutor() {
         return MdcExecutor.newThreadPool(10, "graphqlex");
     }
 

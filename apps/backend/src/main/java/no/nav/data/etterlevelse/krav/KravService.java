@@ -7,6 +7,7 @@ import no.nav.data.common.validator.Validator;
 import no.nav.data.etterlevelse.common.domain.DomainService;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravRepo;
+import no.nav.data.etterlevelse.krav.domain.dto.KravFilter;
 import no.nav.data.etterlevelse.krav.dto.KravRequest;
 import no.nav.data.etterlevelse.krav.dto.KravRequest.Fields;
 import org.apache.commons.lang3.StringUtils;
@@ -68,6 +69,10 @@ public class KravService extends DomainService<Krav> {
             byNameContaining.addAll(repo.findByKravNummer(Integer.parseInt(name)));
         }
         return convert(byNameContaining, GenericStorage::toKrav);
+    }
+
+    public List<Krav> getByFilter(KravFilter filter) {
+        return convert(repo.findBy(filter), GenericStorage::toKrav);
     }
 
     public Krav delete(UUID id) {

@@ -5,7 +5,8 @@ scalar Date
 
 type Query {
     krav(id: ID!): Krav
-    kravByNummer(nummer: Int!, versjon: Int!): Krav
+    kravForNummer(nummer: Int!, versjon: Int!): Krav
+    kravFor(relevans: String): [Krav!]!
 
     etterlevelse(id: ID!) : Etterlevelse
 }

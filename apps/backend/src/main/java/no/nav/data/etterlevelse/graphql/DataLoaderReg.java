@@ -19,7 +19,7 @@ public class DataLoaderReg {
 
     public static final String BEHANDLING = "BEHANDLING_LOADER";
 
-    private final Executor graphQLExectuor;
+    private final Executor graphQLExecutor;
     private final BehandlingService behandlingService;
 
     public DataLoaderRegistry create() {
@@ -31,6 +31,6 @@ public class DataLoaderReg {
         return DataLoader.newMappedDataLoader(
                 (Set<String> set) -> CompletableFuture.supplyAsync(() ->
                                 behandlingService.findAllByIdMapped(set)
-                        , graphQLExectuor));
+                        , graphQLExecutor));
     }
 }

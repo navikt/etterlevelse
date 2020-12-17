@@ -8,10 +8,14 @@ import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
 import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseResponse;
 import no.nav.data.etterlevelse.krav.KravService;
 import no.nav.data.etterlevelse.krav.domain.Krav;
+import no.nav.data.etterlevelse.krav.domain.dto.KravFilter;
 import no.nav.data.etterlevelse.krav.dto.KravResponse;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.UUID;
+
+import static no.nav.data.common.utils.StreamUtils.convert;
 
 @Slf4j
 @Component
@@ -31,11 +35,20 @@ public class QueryResolver implements GraphQLQueryResolver {
         }
     }
 
-    public KravResponse kravByNummer(int nummer, Integer versjon) {
+    public KravResponse kravForNummer(int nummer, Integer versjon) {
         log.info("krav {}.{}", nummer, versjon);
 
         return kravService.getByKravNummer(nummer, versjon).map(Krav::convertToResponse)
                 .orElse(null);
+    }
+
+    public List<KravResponse> kravFor(String relevans) {
+        var filter = KravFilter.builder()
+                .relevans(relevans)
+                .build();
+        log.info("krav filter {}", filter);
+
+        return convert(kravService.getByFilter(filter), Krav::convertToResponse);
     }
 
     public EtterlevelseResponse etterlevelse(UUID id) {
