@@ -18,8 +18,8 @@ query getKravByNummer($nummer: Int!, $versjon: Int!) {
     }
 }
 
-query getKravByFilter($relevans: String) {
-    krav(relevans: $relevans) {
+query getKravByFilter($relevans: String, $nummer: Int) {
+    krav(relevans: $relevans, nummer: $nummer) {
         id
         navn
         periode {
