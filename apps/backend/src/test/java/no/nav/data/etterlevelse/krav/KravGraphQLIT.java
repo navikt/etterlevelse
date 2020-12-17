@@ -37,7 +37,7 @@ class KravGraphQLIT extends GraphQLTestBase {
         var var = Map.of("nummer", krav.getKravNummer().toString(), "versjon", krav.getKravVersjon().toString());
         var response = graphQLTestTemplate.perform("graphqltest/krav_get.graphql", vars(var));
 
-        assertThat(response, "kravForNummer")
+        assertThat(response, "kravByNummer")
                 .hasNoErrors()
                 .hasField("navn", "Krav 1")
                 .hasField("etterlevelser[0].behandlingId", behandling.getId())
@@ -56,10 +56,10 @@ class KravGraphQLIT extends GraphQLTestBase {
                 .relevansFor(List.of("INNSYN"))
                 .build());
 
-        var var = Map.of("relevans", "SAK");
+        var var = Map.of("relevans", "SAK", "nummer", "50");
         var response = graphQLTestTemplate.perform("graphqltest/krav_filter.graphql", vars(var));
 
-        assertThat(response, "kravFor")
+        assertThat(response, "krav")
                 .hasNoErrors()
                 .hasSize(1)
                 .hasField("[0].id", krav.getId().toString());

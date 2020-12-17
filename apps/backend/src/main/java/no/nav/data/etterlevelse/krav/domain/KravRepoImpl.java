@@ -34,6 +34,10 @@ public class KravRepoImpl implements KravRepoCustom {
             query += " and data #> '{relevansFor}' ?? :relevans ";
             par.addValue("relevans", filter.getRelevans());
         }
+        if (filter.getNummer() != null) {
+            query += " and data -> 'kravNummer' = to_jsonb(:kravNummer) ";
+            par.addValue("kravNummer", filter.getNummer());
+        }
 
         return fetch(jdbcTemplate.queryForList(query, par));
     }

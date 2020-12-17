@@ -1,5 +1,25 @@
-query getKrav($nummer: Int!, $versjon: Int!) {
-    kravForNummer(nummer: $nummer, versjon: $versjon){
+query getKravByNummer($nummer: Int!, $versjon: Int!) {
+    kravByNummer(nummer: $nummer, versjon: $versjon) {
+        id
+        navn
+        periode {
+            start
+            slutt
+        }
+        etterlevelser {
+            id
+            begrunnelse
+            behandlingId
+            behandling {
+                navn
+                nummer
+            }
+        }
+    }
+}
+
+query getKravByFilter($relevans: String) {
+    krav(relevans: $relevans) {
         id
         navn
         periode {

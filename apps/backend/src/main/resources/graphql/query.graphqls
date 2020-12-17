@@ -4,9 +4,9 @@ scalar Date
 # Queries
 
 type Query {
-    krav(id: ID!): Krav
-    kravForNummer(nummer: Int!, versjon: Int!): Krav
-    kravFor(relevans: String): [Krav!]!
+    kravById(id: ID!): Krav
+    kravByNummer(nummer: Int!, versjon: Int!): Krav
+    krav(relevans: String, nummer: Int): [Krav!]!
 
-    etterlevelse(id: ID!) : Etterlevelse
+    etterlevelseById(id: ID!) : Etterlevelse
 }

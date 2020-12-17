@@ -25,7 +25,7 @@ public class QueryResolver implements GraphQLQueryResolver {
     private final KravService kravService;
     private final EtterlevelseService etterlevelseService;
 
-    public KravResponse krav(UUID id) {
+    public KravResponse kravById(UUID id) {
         log.info("krav {}", id);
 
         try {
@@ -35,23 +35,25 @@ public class QueryResolver implements GraphQLQueryResolver {
         }
     }
 
-    public KravResponse kravForNummer(int nummer, Integer versjon) {
+    public KravResponse kravByNummer(int nummer, Integer versjon) {
         log.info("krav {}.{}", nummer, versjon);
 
         return kravService.getByKravNummer(nummer, versjon).map(Krav::convertToResponse)
                 .orElse(null);
     }
 
-    public List<KravResponse> kravFor(String relevans) {
+    public List<KravResponse> krav(String relevans, Integer nummer) {
         var filter = KravFilter.builder()
                 .relevans(relevans)
+                .nummer(nummer)
                 .build();
+        filter.validate();
         log.info("krav filter {}", filter);
 
         return convert(kravService.getByFilter(filter), Krav::convertToResponse);
     }
 
-    public EtterlevelseResponse etterlevelse(UUID id) {
+    public EtterlevelseResponse etterlevelseById(UUID id) {
         log.info("etterlevelse {}", id);
 
         return etterlevelseService.get(id).convertToResponse();
