@@ -81,9 +81,11 @@ graphql:
     exception-handlers-enabled: true
   playground:
     tabs:
-      - name: Get krav
+      - name: Get krav for filter
         query: classpath:playground/get_krav.graphql
-        variables: classpath:playground/get_krav_variables.json
+      - name: Get krav for nummer
+        query: classpath:playground/get_krav_for_nummer.graphql
+        variables: classpath:playground/get_krav_for_nummer_variables.json
 
 client:
   behandlingskatalog:

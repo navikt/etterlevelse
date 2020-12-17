@@ -1,5 +1,5 @@
-query getKravByFilter {
-    krav(relevans: "INTERN_SKJERMFLATE", nummer: null) {
+query getKravByNummer($nummer: Int!, $versjon: Int!) {
+    kravByNummer(nummer: $nummer, versjon: $versjon) {
         id
         navn
         periode {
