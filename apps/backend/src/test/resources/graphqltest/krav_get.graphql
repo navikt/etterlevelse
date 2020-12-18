@@ -6,6 +6,10 @@ query getKrav($nummer: Int!, $versjon: Int!) {
             start
             slutt
         }
+        changeStamp {
+            lastModifiedBy
+            lastModifiedDate
+        }
         etterlevelser {
             id
             begrunnelse
