@@ -50,6 +50,7 @@ public class KravResponse {
     // GraphQL only
     @JsonIgnore
     private List<EtterlevelseResponse> etterlevelser;
+    @JsonIgnore
     private List<Resource> kontaktPersonerData;
 
 }
