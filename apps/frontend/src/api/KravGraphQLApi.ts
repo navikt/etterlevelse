@@ -24,7 +24,7 @@ const kravtableQuery = `query getKravByFilter ($relevans: String, $nummer: Int){
     }
 }`
 
-type KravFilters = {relevans?: string, nummer?: number}
+export type KravFilters = {relevans?: string, nummer?: number}
 type KravFilterType = Krav & {etterlevelser: Etterlevelse[]}
 export const getKrav = async (variables: KravFilters) => {
   return (await axios.post<GraphQLResponse<{krav: KravFilterType[]}>>(`${env.backendBaseUrl}/graphql`, {
