@@ -26,7 +26,7 @@ public class TeamcatMocks {
         WireMock.stubFor(get("/teamcat/resource/search/fam").willReturn(okJson(toJson(new RestResponsePage<>(List.of(resource("A123456"), resource("A123457")))))));
         WireMock.stubFor(get("/teamcat/resource/A123456").willReturn(okJson(toJson(resource("A123456")))));
         WireMock.stubFor(get("/teamcat/resource/A123457").willReturn(okJson(toJson(resource("A123457")))));
-        WireMock.stubFor(post("/teamcat/resource/multi").withRequestBody(WireMock.equalTo(toJson(List.of("A123456", "A123457"))))
+        WireMock.stubFor(post("/teamcat/resource/multi").withRequestBody(WireMock.equalTo(toJson(List.of("A123456", "A123457", "notfound"))))
                 .willReturn(okJson(toJson(new RestResponsePage<>(List.of(resource("A123456"), resource("A123457")))))));
         WireMock.stubFor(get("/teamcat/resource/A999999").willReturn(notFound().withBody(notFoundJson())));
     }

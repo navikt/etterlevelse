@@ -22,7 +22,7 @@ type Krav {
     status: KravStatus!
 
     etterlevelser: [Etterlevelse!]!
-    kontaktPersonerData: [Resource!]!
+    kontaktPersonerData: [Resource]!
 }
 
 enum KravStatus {

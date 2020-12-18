@@ -28,7 +28,7 @@ class KravGraphQLIT extends GraphQLTestBase {
         var krav = storageService.save(Krav.builder()
                 .navn("Krav 1").kravNummer(50).kravVersjon(1)
                 .relevansFor(List.of("SAK"))
-                .kontaktPersoner(List.of("A123456", "A123457"))
+                .kontaktPersoner(List.of("A123456", "A123457", "notfound"))
                 .build());
         storageService.save(Etterlevelse.builder()
                 .kravNummer(krav.getKravNummer()).kravVersjon(krav.getKravVersjon())
@@ -41,11 +41,14 @@ class KravGraphQLIT extends GraphQLTestBase {
         assertThat(response, "kravByNummer")
                 .hasNoErrors()
                 .hasField("navn", "Krav 1")
-                .hasSize("kontaktPersoner", 2)
+                .hasSize("kontaktPersoner", 3)
                 .hasField("kontaktPersoner[0]", "A123456")
                 .hasField("kontaktPersoner[1]", "A123457")
+                .hasField("kontaktPersoner[2]", "notfound")
+                .hasSize("kontaktPersonerData", 3)
                 .hasField("kontaktPersonerData[0].fullName", "Given Family")
                 .hasField("kontaktPersonerData[1].fullName", "Given Family")
+                .hasField("kontaktPersonerData[2]", null)
                 .hasField("etterlevelser[0].behandlingId", behandling.getId())
                 .hasField("etterlevelser[0].behandling.navn", behandling.getNavn());
     }
