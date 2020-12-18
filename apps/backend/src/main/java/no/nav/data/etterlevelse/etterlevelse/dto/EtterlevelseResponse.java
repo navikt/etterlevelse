@@ -25,7 +25,6 @@ public class EtterlevelseResponse {
     private Integer version;
 
     private String behandlingId;
-    private Behandling behandling;
     private Integer kravNummer;
     private Integer kravVersjon;
 
@@ -34,5 +33,8 @@ public class EtterlevelseResponse {
     private List<String> dokumentasjon;
     private LocalDate fristForFerdigstillelse;
     private EtterlevelseStatus status;
+
+    // TODO only graphql
+    private Behandling behandling;
 
 }

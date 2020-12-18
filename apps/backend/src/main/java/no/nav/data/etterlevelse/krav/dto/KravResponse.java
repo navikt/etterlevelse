@@ -1,5 +1,6 @@
 package no.nav.data.etterlevelse.krav.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -45,7 +46,8 @@ public class KravResponse {
     private List<CodelistResponse> relevansFor;
     private KravStatus status;
 
-
+    // GraphQL only
+    @JsonIgnore
     private List<EtterlevelseResponse> etterlevelser;
 
 }
