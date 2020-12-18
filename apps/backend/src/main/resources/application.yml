@@ -94,5 +94,6 @@ client:
     product-areas-url: ${client.teamcat.url}/productarea
     resource-search-url: ${client.teamcat.url}/resource/search/{searchTerm}
     resource-url: ${client.teamcat.url}/resource/{ident}
+    resources-url: ${client.teamcat.url}/resource/multi
     teams-url: ${client.teamcat.url}/team
     url: https://teamcat/api

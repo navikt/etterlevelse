@@ -21,7 +21,8 @@ type Krav {
     relevansFor: [Code!]!
     status: KravStatus!
 
-    etterlevelser: [Etterlevelse]
+    etterlevelser: [Etterlevelse!]!
+    kontaktPersonerData: [Resource!]!
 }
 
 enum KravStatus {
@@ -66,6 +67,20 @@ type Behandling {
 
     relevansFor: [Code!]!
 
+}
+
+type Resource {
+    navIdent: String!
+    givenName: String!
+    familyName: String!
+    fullName: String!
+    email: String!
+    resourceType: ResourceType!
+}
+
+enum ResourceType {
+    INTERNAL
+    EXTERNAL
 }
 
 type Periode {

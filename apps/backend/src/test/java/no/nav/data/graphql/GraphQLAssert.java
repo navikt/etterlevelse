@@ -49,8 +49,9 @@ public class GraphQLAssert extends AbstractAssert<GraphQLAssert, GraphQLResponse
 
     public GraphQLAssert hasSize(String path, int i) {
         isNotNull();
-        objects.assertEqual(info, actual.get("$.data.%s%s.length()".formatted(path == null ? "" : "." + path, queryName), int.class), i);
-
+        String lengthPath = "$.data.%s%s.length()".formatted(queryName, path == null ? "" : "." + path);
+        objects.assertEqual(info, actual.get(lengthPath, int.class), i);
         return this;
     }
+
 }
