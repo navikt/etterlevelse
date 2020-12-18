@@ -26,6 +26,11 @@ export interface PageResponse<T> {
   content: T[];
 }
 
+export interface GraphQLResponse<T> {
+  errors?: {message: string}[]
+  data: T
+}
+
 export interface ChangeStamp {
   lastModifiedBy: string;
   lastModifiedDate: string;

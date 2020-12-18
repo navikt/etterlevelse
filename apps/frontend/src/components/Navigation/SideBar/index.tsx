@@ -39,6 +39,10 @@ const SideBar = () => {
         <NavItem to="/krav" text="Krav"/>
         <NavItem to="/etterlevelse" text="Etterlevelse"/>
         <NavItem to="/behandling" text="Behandling"/>
+
+        <Block height={theme.sizing.scale600}/>
+
+        <NavItem to="/relevans" text="Relevans"/>
       </Block>
       <Block position="absolute" bottom="0" width="100%">
         <Block display="flex" justifyContent="center">

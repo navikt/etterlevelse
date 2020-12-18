@@ -153,3 +153,10 @@ export const codeListSchema = () =>
     shortName: yup.string().required(required),
     description: yup.string().required(required),
   });
+
+export const codelistCompareField = (field: string) => {
+  return (a: any, b: any) => codelistCompare(a[field] as Code | undefined, b[field] as Code | undefined)
+}
+export const codelistCompare = (a?: Code, b?: Code) => {
+  return (a?.shortName || '').localeCompare(b?.shortName || '')
+}
