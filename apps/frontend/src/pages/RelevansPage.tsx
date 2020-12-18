@@ -10,7 +10,7 @@ import {useKravFilter} from '../api/KravGraphQLApi'
 import {kravStatus} from './KravPage'
 import {Spinner} from '../components/common/Spinner'
 
-
+// TODO refactor kravtabell to more generic reusable component
 export const RelevansPage = () => {
   const {relevans} = useParams()
   const [data, loading] = useKravFilter({relevans})

@@ -1,3 +1,5 @@
+import {ListName} from '../../../services/Codelist'
+
 export interface AuditItem {
   action: AuditAction;
   id: string;
@@ -25,4 +27,5 @@ export enum ObjectType {
   Etterlevelse = "Etterlevelse"
 }
 
-export type NavigableItem = ObjectType
+export type NavigableItem = ObjectType |
+  ListName.RELEVANS

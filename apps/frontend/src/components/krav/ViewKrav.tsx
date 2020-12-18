@@ -8,6 +8,8 @@ import {Markdown} from '../common/Markdown'
 import moment from 'moment'
 import {PersonName} from '../common/PersonName'
 import Button from '../common/Button'
+import {DotTags} from '../common/DotTag'
+import {ListName} from '../../services/Codelist'
 
 const formatDate = (date?: string) => date && moment(date).format('ll')
 
@@ -50,7 +52,7 @@ const AllInfo = ({krav}: {krav: Krav}) => (
     <Label title='Relevante implementasjoner' markdown={krav.implementasjoner}/>
     <Label title='Begreper'>{krav.begreper.join(', ')}</Label>
     <Label title='Tagger'>{krav.tagger.join(', ')}</Label>
-    <Label title='Relevant for'>{krav.relevansFor.map(c => c.shortName).join(', ')}</Label>
+    <Label title='Relevant for'><DotTags list={ListName.RELEVANS} codes={krav.relevansFor} linkCodelist/></Label>
 
     <Block height={theme.sizing.scale600}/>
 

@@ -6,6 +6,7 @@ import {useStyletron} from 'baseui'
 import {Block} from 'baseui/block'
 import {AuditButton} from '../admin/audit/AuditButton'
 import {KIND} from 'baseui/button'
+import {ListName} from '../../services/Codelist'
 
 type RouteLinkProps = {
   href: string,
@@ -52,6 +53,8 @@ export const urlForObject = (type: NavigableItem, id: string, audit?: AuditItem)
       return `/krav/${id}`
     case ObjectType.Etterlevelse:
       return `/etterlevelse/${id}`
+    case ListName.RELEVANS:
+      return `/relevans/${id}`
   }
   console.warn('couldn\'t find object type ' + type)
   return ''
