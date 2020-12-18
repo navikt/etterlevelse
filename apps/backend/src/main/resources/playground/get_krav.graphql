@@ -1,10 +1,14 @@
 query getKravByFilter {
-    krav(relevans: "INTERN_SKJERMFLATE", nummer: null) {
+    krav(filter: {relevans: "INTERN_SKJERMFLATE", nummer: null}) {
         id
         navn
         periode {
             start
             slutt
+        }
+        kontaktPersonerData {
+            navIdent
+            fullName
         }
         etterlevelser {
             id

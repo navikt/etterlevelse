@@ -1,5 +1,5 @@
 query getKrav($relevans: String!, $nummer: Int) {
-    krav(relevans: $relevans, nummer: $nummer){
+    krav(filter: {relevans: $relevans, nummer: $nummer}) {
         id
         navn
     }

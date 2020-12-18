@@ -10,6 +10,7 @@ import no.nav.data.etterlevelse.krav.KravService;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.dto.KravFilter;
 import no.nav.data.etterlevelse.krav.dto.KravResponse;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -42,13 +43,12 @@ public class QueryResolver implements GraphQLQueryResolver {
                 .orElse(null);
     }
 
-    public List<KravResponse> krav(String relevans, Integer nummer) {
-        var filter = KravFilter.builder()
-                .relevans(relevans)
-                .nummer(nummer)
-                .build();
-        filter.validate();
+    public List<KravResponse> krav(KravFilter filter, Integer skip, Integer first) {
         log.info("krav filter {}", filter);
+
+        if (filter == null || filter.isEmpty()) {
+            return convert(kravService.getAll(PageRequest.of(skip, Math.max(first, 50))).getContent(), Krav::convertToResponse);
+        }
 
         return convert(kravService.getByFilter(filter), Krav::convertToResponse);
     }

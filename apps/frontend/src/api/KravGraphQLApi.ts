@@ -4,7 +4,7 @@ import {Etterlevelse, GraphQLResponse, Krav} from '../constants'
 import {useEffect, useState} from 'react'
 
 const kravtableQuery = `query getKravByFilter ($relevans: String, $nummer: Int){
-    krav(relevans: $relevans, nummer: $nummer) {
+    krav(filter: {relevans: $relevans, nummer: $nummer}) {
         id
         navn
         kravNummer
