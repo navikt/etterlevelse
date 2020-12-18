@@ -8,11 +8,12 @@ import {theme} from '../util'
 import {Cell, Row, Table} from '../components/common/Table'
 import {useKravFilter} from '../api/KravGraphQLApi'
 import {kravStatus} from './KravPage'
+import {Spinner} from '../components/common/Spinner'
 
 
 export const RelevansPage = () => {
   const {relevans} = useParams()
-  const data = useKravFilter({relevans})
+  const [data, loading] = useKravFilter({relevans})
 
   if (!relevans) {
     return <Block>
@@ -27,13 +28,15 @@ export const RelevansPage = () => {
     </Block>
   }
 
-  let code = codelist.getCode(ListName.RELEVANS, relevans)
+  const code = codelist.getCode(ListName.RELEVANS, relevans)
   return (
     <Block>
       <HeadingMedium>Relevans: {code?.shortName}</HeadingMedium>
       <ParagraphMedium>{code?.description}</ParagraphMedium>
 
       <Block marginTop={theme.sizing.scale1200}>
+        {loading && <Spinner size={theme.sizing.scale2400}/>}
+        {!loading &&
         <Table
           data={data}
           emptyText='krav'
@@ -71,7 +74,7 @@ export const RelevansPage = () => {
               )
             })
           }}
-        />
+        />}
       </Block>
     </Block>
   )
