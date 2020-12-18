@@ -42,8 +42,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // Graphql
                 "/playground*/**",
                 "/voyager*/**",
-                "/vendor/voyager*/**",
-                "/vendor/playground**",
+                "/vendor/voyager/**",
+                "/vendor/playground/**",
                 "/graphql*/**"
         );
 
