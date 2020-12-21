@@ -32,7 +32,7 @@ export const RelevansPage = () => {
       <Block marginTop={theme.sizing.scale1200}>
         <Block>
           <HeadingSmall marginBottom={theme.sizing.scale200}>Krav</HeadingSmall>
-          <KravFilterTable filter={{relevans}}/>
+          <KravFilterTable filter={{relevans: [relevans]}}/>
         </Block>
       </Block>
     </Block>

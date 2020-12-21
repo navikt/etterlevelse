@@ -78,7 +78,7 @@ export interface Etterlevelse extends DomainObject {
   status: EtterlevelseStatus
 }
 
-export interface Behandling {
+export interface Behandling extends BehandlingEtterlevData {
   id: string
   navn: string
   nummer: number
@@ -88,6 +88,11 @@ export interface Behandling {
   linjer: ExternalCode[]
   systemer: ExternalCode[]
   teams: string[]
+}
+
+export interface BehandlingEtterlevData {
+  id: string
+  relevansFor: Code[]
 }
 
 export interface Periode {

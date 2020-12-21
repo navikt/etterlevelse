@@ -3,13 +3,12 @@ import {Block} from 'baseui/block'
 import React, {useState} from 'react'
 import {kravStatus} from '../../pages/KravPage'
 import {theme} from '../../util'
-import DataText from '../common/DataText'
-import {Markdown} from '../common/Markdown'
 import moment from 'moment'
 import {PersonName} from '../common/PersonName'
 import Button from '../common/Button'
 import {DotTags} from '../common/DotTag'
 import {ListName} from '../../services/Codelist'
+import {Label} from '../common/PropertyLabel'
 
 const formatDate = (date?: string) => date && moment(date).format('ll')
 
@@ -78,13 +77,3 @@ const KontaktPersoner = ({kontaktPersoner}: {kontaktPersoner: string[]}) => (
     )}
   </Block>
 )
-
-const Label = (props: {title: string, children?: React.ReactNode, markdown?: string | string[]}) => {
-  return (
-    <DataText label={props.title}>
-      {props.markdown ?
-        <Markdown sources={Array.isArray(props.markdown) ? props.markdown : [props.markdown]} noMargin shortenLinks/>
-        : props.children}
-    </DataText>
-  )
-}

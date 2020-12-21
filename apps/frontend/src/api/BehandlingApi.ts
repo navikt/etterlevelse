@@ -1,5 +1,5 @@
 import axios from 'axios'
-import {Behandling, PageResponse} from '../constants'
+import {Behandling, BehandlingEtterlevData, PageResponse} from '../constants'
 import {env} from '../util/env'
 import {useSearch} from '../util/hooks'
 import {useEffect, useState} from 'react'
@@ -8,12 +8,18 @@ import {user} from '../services/User'
 export const getBehandling = async (id: string) => {
   return (await axios.get<Behandling>(`${env.backendBaseUrl}/behandling/${id}`)).data
 }
+
 export const getBehandlinger = async () => {
   return (await axios.get<PageResponse<Behandling>>(`${env.backendBaseUrl}/behandling?myBehandlinger=true`)).data.content
 }
 
 export const searchBehandling = async (name: string) => {
   return (await axios.get<PageResponse<Behandling>>(`${env.backendBaseUrl}/behandling/search/${name}`)).data.content
+}
+
+export const updateBehandling = async (behandling: BehandlingEtterlevData) => {
+  const dto = {id: behandling.id, relevansFor: behandling.relevansFor.map(c => c.code)}
+  return (await axios.put<Behandling>(`${env.backendBaseUrl}/behandling/${behandling.id}`, dto)).data
 }
 
 export const useBehandling = (id?: string) => {
@@ -44,4 +50,11 @@ export const useMyBehandlinger = () => {
   }, [ident])
 
   return data
+}
+
+export const mapToFormVal = (behandling: Partial<Behandling> & {id: string}): BehandlingEtterlevData => {
+  return {
+    id: behandling.id,
+    relevansFor: behandling.relevansFor || []
+  }
 }

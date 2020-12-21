@@ -3,7 +3,7 @@ import {env} from '../util/env'
 import {Etterlevelse, GraphQLResponse, Krav} from '../constants'
 import {useEffect, useState} from 'react'
 
-const kravtableQuery = `query getKravByFilter ($relevans: String, $nummer: Int){
+const kravtableQuery = `query getKravByFilter ($relevans: [String!], $nummer: Int){
     krav(filter: {relevans: $relevans, nummer: $nummer}) {
         id
         navn
@@ -24,7 +24,7 @@ const kravtableQuery = `query getKravByFilter ($relevans: String, $nummer: Int){
     }
 }`
 
-export type KravFilters = {relevans?: string, nummer?: number}
+export type KravFilters = {relevans?: string[], nummer?: number}
 type KravFilterType = Krav & {etterlevelser: Etterlevelse[]}
 export const getKrav = async (variables: KravFilters) => {
   return (await axios.post<GraphQLResponse<{krav: KravFilterType[]}>>(`${env.backendBaseUrl}/graphql`, {

@@ -42,6 +42,7 @@ export const KravPage = () => {
       {loading && <LoadingSkeleton header='Krav'/>}
       {!loading && <>
         <Block>
+          <HeadingLarge>Krav: {krav && krav?.kravNummer !== 0 ? kravName(krav) : 'Ny'}</HeadingLarge>
           <Block display='flex' justifyContent='flex-end'>
             <RouteLink href={'/krav'}>
               <Button size='compact' kind='tertiary'>Tilbake</Button>
@@ -49,7 +50,6 @@ export const KravPage = () => {
             {krav?.id && !edit && <Button size='compact' kind='secondary' onClick={newVersion} marginLeft>Ny versjon</Button>}
             {krav?.id && <Button size='compact' onClick={() => setEdit(!edit)} marginLeft>{edit ? 'Avbryt' : 'Rediger'}</Button>}
           </Block>
-          <HeadingLarge>Krav: {krav && krav?.kravNummer !== 0 ? kravName(krav) : 'Ny'}</HeadingLarge>
         </Block>
       </>}
 
