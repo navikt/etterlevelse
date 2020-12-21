@@ -7,7 +7,7 @@ scalar NonNegativeInt
 type Query {
     kravById(id: ID!): Krav
     kravByNummer(nummer: Int!, versjon: Int!): Krav
-    krav(filter: KravFilter, first: NonNegativeInt = 0, skip: NonNegativeInt = 0): [Krav!]!
+    krav(filter: KravFilter, skip: NonNegativeInt = 0, first: NonNegativeInt = 0): [Krav!]!
 
     etterlevelseById(id: ID!) : Etterlevelse
 }
