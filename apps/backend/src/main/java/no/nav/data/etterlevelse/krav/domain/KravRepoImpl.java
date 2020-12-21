@@ -31,7 +31,7 @@ public class KravRepoImpl implements KravRepoCustom {
         var par = new MapSqlParameterSource();
 
         if (filter.getRelevans() != null) {
-            query += " and data -> 'relevansFor' ??& array[ :relevans ] ";
+            query += " and data -> 'relevansFor' ??| array[ :relevans ] ";
             par.addValue("relevans", filter.getRelevans());
         }
         if (filter.getNummer() != null) {
