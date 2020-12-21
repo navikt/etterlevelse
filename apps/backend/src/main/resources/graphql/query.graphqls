@@ -13,6 +13,6 @@ type Query {
 }
 
 input KravFilter {
-    relevans: String
+    relevans: [String!]
     nummer: Int
 }

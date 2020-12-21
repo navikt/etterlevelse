@@ -4,7 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
+
+import java.util.List;
+
+import static no.nav.data.common.utils.StringUtils.formatList;
 
 @Data
 @Builder
@@ -12,11 +15,16 @@ import org.apache.commons.lang3.StringUtils;
 @NoArgsConstructor
 public class KravFilter {
 
-    private String relevans;
+    private List<String> relevans;
     private Integer nummer;
 
+
+    public List<String> getRelevans() {
+        return formatList(relevans);
+    }
+
     public boolean isEmpty() {
-        return StringUtils.isEmpty(relevans) &&
+        return getRelevans().isEmpty() &&
                 nummer == null
                 ;
     }
