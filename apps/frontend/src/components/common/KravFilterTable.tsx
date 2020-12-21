@@ -7,7 +7,7 @@ import RouteLink from './RouteLink'
 import {kravStatus} from '../../pages/KravPage'
 import React from 'react'
 
-export const KravFilterTable = (props: {filter: KravFilters}) => {
+export const KravFilterTable = (props: {filter: KravFilters, emptyText?: string}) => {
   const [data, loading] = useKravFilter(props.filter)
 
   return (
@@ -15,7 +15,7 @@ export const KravFilterTable = (props: {filter: KravFilters}) => {
       <Spinner size={theme.sizing.scale2400}/> :
       <Table
         data={data}
-        emptyText='krav'
+        emptyText={props.emptyText || 'krav'}
         headers={[
           {title: 'Nummer', column: 'kravNummer', small: true},
           {title: 'Navn', column: 'navn'},

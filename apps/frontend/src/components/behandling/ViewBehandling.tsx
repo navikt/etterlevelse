@@ -1,5 +1,5 @@
 import {Block} from 'baseui/block'
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import {theme} from '../../util'
 import {TeamName} from '../common/TeamName'
 import {DotTags} from '../common/DotTag'
@@ -10,8 +10,16 @@ import {ObjectType} from '../admin/audit/AuditTypes'
 import {etterlevelseName} from '../../pages/EtterlevelsePage'
 import {Behandling, Etterlevelse} from '../../constants'
 import {Label} from '../common/PropertyLabel'
+import {KravFilters} from '../../api/KravGraphQLApi'
+import {KravFilterTable} from '../common/KravFilterTable'
+
+function filterForBehandling(behandling: Behandling): KravFilters {
+  return {relevans: behandling.relevansFor.map(c => c.code)}
+}
 
 export const ViewBehandling = ({behandling, etterlevelser}: {behandling: Behandling, etterlevelser: Etterlevelse[]}) => {
+  const [kravFilter, setKravFilter] = useState({})
+  useEffect(() => setKravFilter(filterForBehandling(behandling)), [behandling])
 
   return (
     <Block>
@@ -38,7 +46,7 @@ export const ViewBehandling = ({behandling, etterlevelser}: {behandling: Behandl
       </Block>
 
       <Block marginTop={theme.sizing.scale2400}>
-        <HeadingSmall>Etterlevelser</HeadingSmall>
+        <HeadingSmall marginBottom={theme.sizing.scale800}>Etterlevelser</HeadingSmall>
         {etterlevelser.map((e) => {
           return (
             <Block key={e.id}>
@@ -48,6 +56,11 @@ export const ViewBehandling = ({behandling, etterlevelser}: {behandling: Behandl
             </Block>
           )
         })}
+      </Block>
+
+      <Block marginTop={theme.sizing.scale2400}>
+        <HeadingSmall marginBottom={theme.sizing.scale400}>Krav for behandling</HeadingSmall>
+        <KravFilterTable filter={kravFilter} emptyText='data på behandling som spesifiserer aktuelle krav'/>
       </Block>
     </Block>
   )

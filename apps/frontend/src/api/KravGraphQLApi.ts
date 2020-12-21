@@ -36,7 +36,7 @@ export const getKrav = async (variables: KravFilters) => {
 
 export const useKravFilter = (variables: KravFilters) => {
   const values = Object.values(variables)
-  const filterActive = !!values.find(v => !!v)
+  const filterActive = !!values.find(v => Array.isArray(v) ? !!v.length : !!v)
 
   const [data, setData] = useState<KravFilterType []>([])
   const [loading, setLoading] = useState(filterActive)
