@@ -23,8 +23,8 @@ public class GraphQlConfig {
     }
 
     @Bean
-    public GraphQLScalarType positiveInt() {
-        return ExtendedScalars.PositiveInt;
+    public GraphQLScalarType nonNegativeInt() {
+        return ExtendedScalars.NonNegativeInt;
     }
 
     @Bean
