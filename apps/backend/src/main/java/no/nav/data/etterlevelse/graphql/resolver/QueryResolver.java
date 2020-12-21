@@ -47,10 +47,15 @@ public class QueryResolver implements GraphQLQueryResolver {
         log.info("krav filter {}", filter);
 
         if (filter == null || filter.isEmpty()) {
-            return convert(kravService.getAll(PageRequest.of(skip, Math.max(first, 50))).getContent(), Krav::convertToResponse);
+            int pageSize = Math.max(Math.min(first, 50), 1);
+            int page = Math.max(skip / pageSize - 1, 0);
+            return convert(kravService.getAll(PageRequest.of(page, pageSize)).getContent(), Krav::convertToResponse);
         }
 
-        return convert(kravService.getByFilter(filter), Krav::convertToResponse);
+        List<Krav> filtered = kravService.getByFilter(filter);
+        var actualSkip = Math.min(skip, filtered.size());
+        var last = first == 0 ? filtered.size() : Math.min(actualSkip + first, filtered.size());
+        return convert(filtered.subList(actualSkip, last), Krav::convertToResponse);
     }
 
     public EtterlevelseResponse etterlevelseById(UUID id) {

@@ -23,6 +23,11 @@ public class GraphQlConfig {
     }
 
     @Bean
+    public GraphQLScalarType positiveInt() {
+        return ExtendedScalars.PositiveInt;
+    }
+
+    @Bean
     public Executor graphQLExecutor() {
         return MdcExecutor.newThreadPool(10, "graphqlex");
     }

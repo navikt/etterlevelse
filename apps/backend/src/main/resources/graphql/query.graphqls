@@ -1,12 +1,13 @@
 scalar DateTime
 scalar Date
+scalar PositiveInt
 
 # Queries
 
 type Query {
     kravById(id: ID!): Krav
     kravByNummer(nummer: Int!, versjon: Int!): Krav
-    krav(filter: KravFilter, first: Int = 0, skip: Int = 10): [Krav!]!
+    krav(filter: KravFilter, first: PositiveInt = 0, skip: PositiveInt = 0): [Krav!]!
 
     etterlevelseById(id: ID!) : Etterlevelse
 }
