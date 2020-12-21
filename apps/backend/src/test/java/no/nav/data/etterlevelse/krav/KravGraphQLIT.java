@@ -74,6 +74,35 @@ class KravGraphQLIT extends GraphQLTestBase {
                 .hasField("[0].id", krav.getId().toString());
     }
 
+    @Test
+    @SneakyThrows
+    void kravPaged() {
+        for (int i = 0; i < 10; i++) {
+            storageService.save(Krav.builder()
+                    .navn("Krav " + i).kravNummer(50 + i).kravVersjon(1)
+                    .relevansFor(List.of("SAK"))
+                    .build());
+        }
+
+        // all
+        assertThat(graphQLTestTemplate.perform("graphqltest/krav_filter.graphql", vars(Map.of("relevans", "SAK"))), "krav")
+                .hasNoErrors().hasSize(10);
+
+        // size 3, 2nd page
+        assertThat(graphQLTestTemplate.perform("graphqltest/krav_filter.graphql", vars(Map.of("pageNumber", "1", "pageSize", "3"))), "krav")
+                .hasNoErrors().hasSize(3)
+                .hasField("[0].navn", "Krav 3")
+                .hasField("[1].navn", "Krav 4")
+                .hasField("[2].navn", "Krav 5");
+
+        // size 3, 2nd page with filter
+        assertThat(graphQLTestTemplate.perform("graphqltest/krav_filter.graphql", vars(Map.of("relevans", "SAK", "pageNumber", "1", "pageSize", "3"))), "krav")
+                .hasNoErrors().hasSize(3)
+                .hasField("[0].navn", "Krav 3")
+                .hasField("[1].navn", "Krav 4")
+                .hasField("[2].navn", "Krav 5");
+    }
+
     private ObjectNode vars(Map<String, String> map) {
         var on = om.createObjectNode();
         map.entrySet().forEach(e -> on.put(e.getKey(), e.getValue()));

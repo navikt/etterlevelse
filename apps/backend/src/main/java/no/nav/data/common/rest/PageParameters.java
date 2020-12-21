@@ -10,6 +10,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
+import java.util.List;
+
 @Slf4j
 @Data
 @AllArgsConstructor
@@ -35,6 +37,13 @@ public class PageParameters {
     public Pageable createSortedPageByFieldDescending(String fieldName) {
         validate();
         return PageRequest.of(pageNumber, pageSize, Sort.by(fieldName).descending());
+    }
+
+    public <T> List<T> sublist(List<T> list) {
+        var page = createPage();
+        int start = (int) Math.min(page.getOffset(), list.size());
+        int end = (int) Math.min(page.next().getOffset(), list.size());
+        return list.subList(start, end);
     }
 
     private void validate() {

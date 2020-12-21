@@ -38,7 +38,8 @@ public class GraphQLAssert extends AbstractAssert<GraphQLAssert, GraphQLResponse
 
     public GraphQLAssert hasField(String field, String value) {
         isNotNull();
-        var actualValue = actual.get("$.data.%s.%s".formatted(queryName, field));
+        String path = "$.data.%s.%s".formatted(queryName, field);
+        var actualValue = actual.get(path);
         objects.assertEqual(info, actualValue, value);
         return this;
     }

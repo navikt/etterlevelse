@@ -1,5 +1,5 @@
-query getKrav($relevans: String!, $nummer: Int) {
-    krav(filter: {relevans: $relevans, nummer: $nummer}) {
+query getKrav($relevans: String, $nummer: Int, $pageNumber: NonNegativeInt, $pageSize: NonNegativeInt) {
+    krav(filter: {relevans: $relevans, nummer: $nummer}, pageNumber: $pageNumber, pageSize: $pageSize) {
         id
         navn
     }
