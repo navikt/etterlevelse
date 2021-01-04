@@ -21,7 +21,7 @@ export const KravListPage = () => {
         <Block>
           {user.isKraveier() &&
           <RouteLink href={'/krav/ny'}>
-            <Button size='compact'>Ny</Button>
+            <Button size='compact'>Legg til nytt krav</Button>
           </RouteLink>}
         </Block>
       </Block>

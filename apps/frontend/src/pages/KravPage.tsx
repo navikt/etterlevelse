@@ -49,7 +49,7 @@ export const KravPage = () => {
             <RouteLink href={'/krav'}>
               <Button size='compact' kind='tertiary'>Tilbake</Button>
             </RouteLink>
-            {krav?.id && user.isKraveier() && !edit && <Button size='compact' kind='secondary' onClick={newVersion} marginLeft>Ny versjon</Button>}
+            {krav?.id && user.isKraveier() && !edit && <Button size='compact' kind='secondary' onClick={newVersion} marginLeft>Ny versjon av krav</Button>}
             {krav?.id && user.isKraveier() && <Button size='compact' onClick={() => setEdit(!edit)} marginLeft>{edit ? 'Avbryt' : 'Rediger'}</Button>}
           </Block>
         </Block>

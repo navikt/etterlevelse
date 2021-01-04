@@ -21,7 +21,7 @@ export const EtterlevelseListPage = () => {
         <Block>
           {user.canWrite() &&
           <RouteLink href={'/etterlevelse/ny'}>
-            <Button size='compact'>Ny</Button>
+            <Button size='compact'>Ny etterlevelse</Button>
           </RouteLink>}
         </Block>
       </Block>
