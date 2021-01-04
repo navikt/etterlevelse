@@ -1,10 +1,13 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import ReactMarkdown from 'react-markdown/with-html'
 import {Paragraph2} from 'baseui/typography'
 import remarkGfm from 'remark-gfm'
 import {StatefulTooltip} from 'baseui/tooltip'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faExternalLinkAlt} from '@fortawesome/free-solid-svg-icons'
+import {useDebouncedState} from '../../util/hooks'
+import MdEditor from 'react-markdown-editor-lite'
+import 'react-markdown-editor-lite/lib/index.css'
 
 export const Markdown = (props: {source?: string, sources?: string[], escapeHtml?: boolean, noMargin?: boolean, shortenLinks?: boolean}) => {
   const renderers = {
@@ -38,3 +41,19 @@ const shortenUrls = (source: string) =>
 
 const urlRegex = /http[s]?:\/\/.*/
 const isLink = (text: string) => urlRegex.test(text)
+
+
+export const MarkdownEditor = (props: {initialValue: string, setValue: (v: string) => void}) => {
+  // Reduce UI lag by only updating field at set interval
+  const [val, setVal] = useDebouncedState(props.initialValue, 300)
+  useEffect(() => {
+    props.setValue(val)
+  }, [val])
+
+  return <MdEditor
+    style={{height: '400px'}}
+    defaultValue={val}
+    renderHTML={txt => <Markdown source={txt}/>}
+    onChange={data => setVal(data.text)}
+  />
+}

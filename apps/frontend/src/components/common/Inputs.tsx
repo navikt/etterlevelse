@@ -16,8 +16,9 @@ import {Textarea} from 'baseui/textarea'
 import {Datepicker} from 'baseui/datepicker'
 import moment from 'moment'
 import {Radio, RadioGroup} from 'baseui/radio'
+import {MarkdownEditor} from './Markdown'
 
-const FieldWrapper = ({children}: {children: React.ReactElement}) => {
+const FieldWrapper = ({children}: {children: React.ReactNode}) => {
   return (
     <Block marginBottom='1.5rem'>
       {children}
@@ -37,17 +38,22 @@ export const InputField = (props: {label: string, name: string}) => (
   </FieldWrapper>
 )
 
-export const TextAreaField = (props: {label: string, name: string}) => (
-  <FieldWrapper>
-    <Field name={props.name}>
-      {(p: FieldProps) =>
-        <FormControl label={props.label} error={p.meta.error}>
-          <Textarea rows={8} {...p.field}/>
-        </FormControl>
-      }
-    </Field>
-  </FieldWrapper>
-)
+export const TextAreaField = (props: {label: string, name: string, markdown?: boolean}) => {
+  return (
+    <FieldWrapper>
+      <Field name={props.name}>
+        {(p: FieldProps) =>
+          <FormControl label={props.label} error={p.meta.error}>
+            <>
+              {props.markdown && <MarkdownEditor initialValue={p.field.value} setValue={v => p.form.setFieldValue(props.name, v)}/>}
+              {!props.markdown && <Textarea rows={8} {...p.field}/>}
+            </>
+          </FormControl>
+        }
+      </Field>
+    </FieldWrapper>
+  )
+}
 
 const YES = 'YES', NO = 'NO', UNCLARIFIED = 'UNCLARIFIED'
 const boolToRadio = (bool?: boolean) => bool === undefined ? UNCLARIFIED : bool ? YES : NO

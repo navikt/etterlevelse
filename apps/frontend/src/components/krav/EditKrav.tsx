@@ -33,9 +33,9 @@ export const EditKrav = ({krav, close}: {krav: Krav, close: (k?: Krav) => void})
         <Block>
           <InputField label='Navn' name='navn'/>
           <TextAreaField label='Hensikt' name='hensikt'/>
-          <TextAreaField label='Beskrivelse' name='beskrivelse'/>
+          <TextAreaField label='Beskrivelse' name='beskrivelse' markdown/>
 
-          <TextAreaField label='Utfyllende beskrivelse' name='utdypendeBeskrivelse'/>
+          <TextAreaField label='Utfyllende beskrivelse' name='utdypendeBeskrivelse' markdown/>
           <MultiInputField label='Dokumentasjon' name='dokumentasjon'/>
           <MultiInputField label='Rettskilder' name='rettskilder'/>
 
@@ -48,7 +48,7 @@ export const EditKrav = ({krav, close}: {krav: Krav, close: (k?: Krav) => void})
           <DateField label='Gyldig tom' name='periode.slutt'/>
 
           <OptionField label='Status' name='status' options={Object.values(KravStatus).map(id => ({id, label: kravStatus(id)}))}/>
-          <MultiSearchField label='Kontaktpersoner' name='kontaktPersoner' search={personSearch} itemLabel={(id)=><PersonName ident={id}/>}/>
+          <MultiSearchField label='Kontaktpersoner' name='kontaktPersoner' search={personSearch} itemLabel={(id) => <PersonName ident={id}/>}/>
           <OptionField label='Avdeling' name='avdeling' listName={ListName.AVDELING}/>
           <OptionField label='Underavdeling' name='underavdeling' listName={ListName.UNDERAVDELING}/>
 
