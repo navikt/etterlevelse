@@ -9,6 +9,7 @@ import {ViewEtterlevelse} from '../components/etterlevelse/ViewEtterlevelse'
 import {EditEtterlevelse} from '../components/etterlevelse/EditEtterlevelse'
 import RouteLink from '../components/common/RouteLink'
 import {LoadingSkeleton} from '../components/common/LoadingSkeleton'
+import {user} from '../services/User'
 
 export const etterlevelseName = (etterlevelse: Etterlevelse) => `${etterlevelse.kravNummer}.${etterlevelse.kravVersjon} - ${etterlevelse.begrunnelse}`
 
@@ -40,7 +41,7 @@ export const EtterlevelsePage = () => {
               <RouteLink href={'/etterlevelse'}>
                 <Button size='compact' kind='tertiary'>Tilbake</Button>
               </RouteLink>
-              {etterlevelse?.id && <Button size='compact' onClick={() => setEdit(!edit)} marginLeft>{edit ? 'Avbryt' : 'Rediger'}</Button>}
+              {etterlevelse?.id && user.canWrite() && <Button size='compact' onClick={() => setEdit(!edit)} marginLeft>{edit ? 'Avbryt' : 'Rediger'}</Button>}
             </Block>
             <HeadingLarge>Etterlevelse: {etterlevelse && etterlevelse?.kravNummer !== 0 ? etterlevelseName(etterlevelse) : 'Ny'}</HeadingLarge>
           </Block>

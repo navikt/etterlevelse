@@ -86,7 +86,7 @@ class UserService {
   }
 
   public isKraveier(): boolean {
-    return this.hasGroup(Group.KRAVEIER);
+    return this.hasGroup(Group.KRAVEIER) || this.isAdmin();
   }
 
   async wait() {

@@ -7,6 +7,7 @@ import {theme} from '../util'
 import RouteLink from '../components/common/RouteLink'
 import {kravName} from './KravPage'
 import {Spinner} from '../components/common/Spinner'
+import {user} from '../services/User'
 
 
 export const KravListPage = () => {
@@ -18,9 +19,10 @@ export const KravListPage = () => {
         <H2>Krav</H2>
 
         <Block>
+          {user.isKraveier() &&
           <RouteLink href={'/krav/ny'}>
             <Button size='compact'>Ny</Button>
-          </RouteLink>
+          </RouteLink>}
         </Block>
       </Block>
 

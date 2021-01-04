@@ -14,6 +14,7 @@ import Button from '../components/common/Button'
 import {ViewBehandling} from '../components/behandling/ViewBehandling'
 import {EditBehandling} from '../components/behandling/EditBehandling'
 import {theme} from '../util'
+import {user} from '../services/User'
 
 export const BehandlingPage = () => {
   const params = useParams<{id?: string}>()
@@ -36,7 +37,9 @@ export const BehandlingPage = () => {
           <RouteLink href={'/behandling'}>
             <Button size='compact' kind='tertiary'>Tilbake</Button>
           </RouteLink>
+          {user.canWrite() &&
           <Button size='compact' onClick={() => setEdit(!edit)} marginLeft>{edit ? 'Avbryt' : 'Rediger'}</Button>
+          }
         </Block>
       </Block>
 

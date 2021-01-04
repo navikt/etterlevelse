@@ -7,6 +7,7 @@ import {theme} from '../util'
 import RouteLink from '../components/common/RouteLink'
 import {etterlevelseName} from './EtterlevelsePage'
 import {Spinner} from '../components/common/Spinner'
+import {user} from '../services/User'
 
 
 export const EtterlevelseListPage = () => {
@@ -18,9 +19,10 @@ export const EtterlevelseListPage = () => {
         <H2>Etterlevelse</H2>
 
         <Block>
+          {user.canWrite() &&
           <RouteLink href={'/etterlevelse/ny'}>
             <Button size='compact'>Ny</Button>
-          </RouteLink>
+          </RouteLink>}
         </Block>
       </Block>
 
