@@ -67,7 +67,7 @@ public class TeamController {
     @Operation(summary = "Get team")
     @ApiResponse(description = "Teams fetched")
     @GetMapping("/{teamId}")
-    public ResponseEntity<TeamResponse> getTeamByName(@PathVariable String teamId) {
+    public ResponseEntity<TeamResponse> getTeamById(@PathVariable String teamId) {
         log.info("Received request for Team with id {}", teamId);
         Optional<Team> team = teamsService.getTeam(teamId);
         if (team.isEmpty()) {
