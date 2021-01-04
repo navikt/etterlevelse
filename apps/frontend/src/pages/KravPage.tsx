@@ -10,6 +10,7 @@ import {EditKrav} from '../components/krav/EditKrav'
 import RouteLink from '../components/common/RouteLink'
 import {LoadingSkeleton} from '../components/common/LoadingSkeleton'
 import {user} from '../services/User'
+import {theme} from '../util'
 
 export const kravName = (krav: Krav) => `${krav.kravNummer}.${krav.kravVersjon} - ${krav.navn}`
 
@@ -44,7 +45,7 @@ export const KravPage = () => {
       {!loading && <>
         <Block>
           <HeadingLarge>Krav: {krav && krav?.kravNummer !== 0 ? kravName(krav) : 'Ny'}</HeadingLarge>
-          <Block display='flex' justifyContent='flex-end'>
+          <Block display='flex' justifyContent='flex-end' marginBottom={theme.sizing.scale600}>
             <RouteLink href={'/krav'}>
               <Button size='compact' kind='tertiary'>Tilbake</Button>
             </RouteLink>

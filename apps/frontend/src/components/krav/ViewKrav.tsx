@@ -20,19 +20,10 @@ export const ViewKrav = ({krav}: {krav: Krav}) => {
       <Label title='Hensikt'>{krav.hensikt}</Label>
       <Label title='Beskrivelse' markdown={krav.beskrivelse}/>
 
-      <Block height={theme.sizing.scale600}/>
+      <Block height={theme.sizing.scale800}/>
 
       {expand && <AllInfo krav={krav}/>}
-      {!expand && <Block display='flex'>
-        <Block width='50%'>
-          <Label title='Avdeling'>{krav.avdeling?.shortName}</Label>
-        </Block>
-        <Block width='50%'>
-          <Label title='Kontaktpersoner'>
-            <KontaktPersoner kontaktPersoner={krav.kontaktPersoner}/>
-          </Label>
-        </Block>
-      </Block>}
+      {!expand && <MediumInfo krav={krav}/>}
       <Block display='flex' justifyContent='flex-end'>
         <Button onClick={() => setExpand(!expand)}>{`Vis ${expand ? 'mindre' : 'mer'} om krav`}</Button>
       </Block>
@@ -40,31 +31,42 @@ export const ViewKrav = ({krav}: {krav: Krav}) => {
   )
 }
 
+const MediumInfo = ({krav}: {krav: Krav}) => (
+  <>
+    <Label title='Status'>{kravStatus(krav.status)}</Label>
+    <Block display='flex'>
+      <Block width='50%'>
+        <Label title='Underavdeling'>{krav.underavdeling?.shortName}</Label>
+      </Block>
+      <Block width='50%'>
+        <Label title='Kontaktpersoner'>
+          <KontaktPersoner kontaktPersoner={krav.kontaktPersoner}/>
+        </Label>
+      </Block>
+    </Block>
+  </>
+)
+
 const AllInfo = ({krav}: {krav: Krav}) => (
   <>
-    <Label title='Utdypende beskrivelse' markdown={krav.utdypendeBeskrivelse}/>
+    <Label title='Utfyllende beskrivelse' markdown={krav.utdypendeBeskrivelse}/>
     <Label title='Dokumentasjon' markdown={krav.dokumentasjon}/>
     <Label title='Rettskilder' markdown={krav.rettskilder}/>
 
-    <Block height={theme.sizing.scale600}/>
-
+    <Label title='Tagger'>{krav.tagger.join(', ')}</Label>
+    <Label title='Kravet er relevant for'><DotTags list={ListName.RELEVANS} codes={krav.relevansFor} linkCodelist/></Label>
     <Label title='Relevante implementasjoner' markdown={krav.implementasjoner}/>
     <Label title='Begreper'>{krav.begreper.join(', ')}</Label>
-    <Label title='Tagger'>{krav.tagger.join(', ')}</Label>
-    <Label title='Relevant for'><DotTags list={ListName.RELEVANS} codes={krav.relevansFor} linkCodelist/></Label>
 
-    <Block height={theme.sizing.scale600}/>
+    {krav.periode?.start && <Label title='Gyldig fom'>{formatDate(krav.periode?.start)}</Label>}
+    {krav.periode?.slutt && <Label title='Gyldig tom'>{formatDate(krav.periode?.slutt)}</Label>}
 
-    <Label title='Periode'>{krav.periode?.start && 'Fra:'} {formatDate(krav.periode?.start)} {krav.periode?.slutt && 'Til:'} {formatDate(krav.periode?.slutt)}</Label>
-
-    <Block height={theme.sizing.scale600}/>
-
+    <Label title='Status'>{kravStatus(krav.status)}</Label>
     <Label title='Kontaktpersoner'>
       <KontaktPersoner kontaktPersoner={krav.kontaktPersoner}/>
     </Label>
     <Label title='Avdeling'>{krav.avdeling?.shortName}</Label>
     <Label title='Underavdeling'>{krav.underavdeling?.shortName}</Label>
-    <Label title='Status'>{kravStatus(krav.status)}</Label>
   </>
 )
 

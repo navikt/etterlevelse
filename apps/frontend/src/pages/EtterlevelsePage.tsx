@@ -10,6 +10,7 @@ import {EditEtterlevelse} from '../components/etterlevelse/EditEtterlevelse'
 import RouteLink from '../components/common/RouteLink'
 import {LoadingSkeleton} from '../components/common/LoadingSkeleton'
 import {user} from '../services/User'
+import {theme} from '../util'
 
 export const etterlevelseName = (etterlevelse: Etterlevelse) => `${etterlevelse.kravNummer}.${etterlevelse.kravVersjon} - ${etterlevelse.begrunnelse}`
 
@@ -34,18 +35,18 @@ export const EtterlevelsePage = () => {
 
   return (
     <Block>
-        {loading && <LoadingSkeleton header='Etterlevelse'/>}
-        {!loading && <>
-          <Block>
-            <Block display='flex' justifyContent='flex-end'>
-              <RouteLink href={'/etterlevelse'}>
-                <Button size='compact' kind='tertiary'>Tilbake</Button>
-              </RouteLink>
-              {etterlevelse?.id && user.canWrite() && <Button size='compact' onClick={() => setEdit(!edit)} marginLeft>{edit ? 'Avbryt' : 'Rediger'}</Button>}
-            </Block>
-            <HeadingLarge>Etterlevelse: {etterlevelse && etterlevelse?.kravNummer !== 0 ? etterlevelseName(etterlevelse) : 'Ny'}</HeadingLarge>
+      {loading && <LoadingSkeleton header='Etterlevelse'/>}
+      {!loading && <>
+        <Block>
+          <HeadingLarge>Etterlevelse: {etterlevelse && etterlevelse?.kravNummer !== 0 ? etterlevelseName(etterlevelse) : 'Ny'}</HeadingLarge>
+          <Block display='flex' justifyContent='flex-end' marginBottom={theme.sizing.scale600}>
+            <RouteLink href={'/etterlevelse'}>
+              <Button size='compact' kind='tertiary'>Tilbake</Button>
+            </RouteLink>
+            {etterlevelse?.id && user.canWrite() && <Button size='compact' onClick={() => setEdit(!edit)} marginLeft>{edit ? 'Avbryt' : 'Rediger'}</Button>}
           </Block>
-        </>}
+        </Block>
+      </>}
 
       {!edit && etterlevelse && !loading && <ViewEtterlevelse etterlevelse={etterlevelse}/>}
       {edit && etterlevelse && <EditEtterlevelse etterlevelse={etterlevelse} close={k => {

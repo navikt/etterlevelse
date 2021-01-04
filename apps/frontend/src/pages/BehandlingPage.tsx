@@ -33,7 +33,7 @@ export const BehandlingPage = () => {
             <FontAwesomeIcon size={'sm'} icon={faExternalLinkAlt}/>
           </StyledLink>
         </HeadingLarge>
-        <Block display='flex' justifyContent='flex-end'>
+        <Block display='flex' justifyContent='flex-end' marginBottom={theme.sizing.scale600}>
           <RouteLink href={'/behandling'}>
             <Button size='compact' kind='tertiary'>Tilbake</Button>
           </RouteLink>
