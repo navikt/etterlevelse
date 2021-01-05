@@ -22,7 +22,7 @@ type Krav {
     status: KravStatus!
 
     etterlevelser: [Etterlevelse!]!
-    kontaktPersonerData: [Resource]!
+    kontaktPersonerData: [Resource!]!
 }
 
 enum KravStatus {
@@ -71,11 +71,11 @@ type Behandling {
 
 type Resource {
     navIdent: String!
-    givenName: String!
-    familyName: String!
-    fullName: String!
-    email: String!
-    resourceType: ResourceType!
+    givenName: String
+    familyName: String
+    fullName: String
+    email: String
+    resourceType: ResourceType
 }
 
 enum ResourceType {

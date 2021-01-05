@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static java.util.function.Predicate.not;
+import static no.nav.data.common.utils.StreamUtils.safeStream;
 import static no.nav.data.common.utils.StreamUtils.toMap;
 
 @Slf4j
@@ -76,7 +78,13 @@ public class TeamcatResourceClient {
         Assert.isTrue(response.getBody() != null, "response is null");
         List<Resource> resources = response.getBody().getContent();
         log.info("fetched {} resources from teamkat", resources.size());
-        return toMap(resources, Resource::getNavIdent);
+        Map<String, Resource> results = toMap(resources, Resource::getNavIdent);
+
+        safeStream(idents)
+                .filter(not(results.keySet()::contains))
+                .forEach(ident -> results.put(ident, new Resource(ident)));
+
+        return results;
     }
 
     private RestResponsePage<Resource> doSearch(String name) {

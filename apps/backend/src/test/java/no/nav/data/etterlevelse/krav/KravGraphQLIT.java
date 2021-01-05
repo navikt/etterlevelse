@@ -48,7 +48,7 @@ class KravGraphQLIT extends GraphQLTestBase {
                 .hasSize("kontaktPersonerData", 3)
                 .hasField("kontaktPersonerData[0].fullName", "Given Family")
                 .hasField("kontaktPersonerData[1].fullName", "Given Family")
-                .hasField("kontaktPersonerData[2]", null)
+                .hasField("kontaktPersonerData[2].fullName", null)
                 .hasField("etterlevelser[0].behandlingId", behandling.getId())
                 .hasField("etterlevelser[0].behandling.navn", behandling.getNavn());
     }

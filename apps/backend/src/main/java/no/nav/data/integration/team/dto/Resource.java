@@ -17,4 +17,8 @@ public class Resource {
     private String fullName;
     private String email;
     private ResourceType resourceType;
+
+    public Resource(String navIdent) {
+        this.navIdent = navIdent;
+    }
 }
