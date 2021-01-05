@@ -10,7 +10,7 @@
     "@fortawesome/react-fontawesome": "^0.1.12",
     "@types/shortid": "0.0.29",
     "amplitude-js": "^7.3.2",
-    "axios": "^0.21.0",
+    "axios": "^0.21.1",
     "baseui": "^9.104.0",
     "core-js": "^3.7.0",
     "formik": "^2.2.4",
@@ -29,7 +29,7 @@
     "styletron-engine-atomic": "^1.4.6",
     "styletron-react": "^5.2.7",
     "typescript": "^3.9.7",
-    "yup": "^0.31.0"
+    "yup": "^0.32.8"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -77,7 +77,7 @@
     "@types/react-helmet": "^6.1.0",
     "@types/react-router-dom": "^5.1.6",
     "@types/styletron-react": "^5.0.2",
-    "@types/yup": "^0.28.3",
+    "@types/yup": "^0.29.11",
     "http-proxy-middleware": "^1.0.6",
     "react-helmet": "^6.1.0",
     "react-localization": "^1.0.15",

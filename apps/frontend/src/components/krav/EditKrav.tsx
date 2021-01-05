@@ -65,5 +65,5 @@ export const EditKrav = ({krav, close}: {krav: Krav, close: (k?: Krav) => void})
 }
 
 const kravSchema = () => {
-  return yup.object<Krav>()
+  return yup.object({})
 }

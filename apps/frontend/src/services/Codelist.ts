@@ -146,8 +146,8 @@ export interface CategoryUsage {
 }
 
 const required = 'Påkrevd'
-export const codeListSchema = () =>
-  yup.object<CodeListFormValues>({
+export const codeListSchema: () => yup.SchemaOf<CodeListFormValues> = () =>
+  yup.object({
     list: yup.mixed().required(required),
     code: yup.string().required(required),
     shortName: yup.string().required(required),

@@ -64,7 +64,7 @@ export const EditEtterlevelse = ({etterlevelse, close}: {etterlevelse: Etterleve
 }
 
 const etterlevelseSchema = () => {
-  return yup.object<Etterlevelse>()
+  return yup.object({})
 }
 
 export const SearchKrav = (props: {kravNummer: number, kravVersjon: number}) => {

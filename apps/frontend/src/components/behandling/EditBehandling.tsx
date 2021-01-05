@@ -43,5 +43,5 @@ export const EditBehandling = ({behandling, close}: {behandling: Behandling, clo
 }
 
 const behandlingSchema = () => {
-  return yup.object<BehandlingEtterlevData>()
+  return yup.object({})
 }
