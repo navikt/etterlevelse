@@ -69,13 +69,14 @@ export const useKrav = (params: KravId | KravIdParams, onlyLoadOnce?: boolean) =
   const isCreateNew = params.id === 'ny'
   const [data, setData] = useState<Krav | undefined>(isCreateNew ? mapToFormVal({}) : undefined)
 
-  useEffect(() => {
+  let load = () => {
     if (data && onlyLoadOnce) return
     params?.id && !isCreateNew && getKrav(params.id).then(setData)
     params?.kravNummer && getKravByKravNummer(params.kravNummer, params.kravVersjon).then(setData)
-  }, [params])
+  }
+  useEffect(load, [params])
 
-  return [data, setData] as [Krav | undefined, (k?: Krav) => void]
+  return [data, setData, load] as [Krav | undefined, (k?: Krav) => void, () => void]
 }
 
 export const useSearchKrav = () => useSearch(searchKrav)

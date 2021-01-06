@@ -2,7 +2,7 @@ import {Block} from 'baseui/block'
 import {HeadingLarge} from 'baseui/typography'
 import {useHistory, useParams} from 'react-router-dom'
 import {KravIdParams, useKrav} from '../api/KravApi'
-import React, {useRef, useState} from 'react'
+import React, {useEffect, useRef, useState} from 'react'
 import {Krav, KravStatus} from '../constants'
 import Button from '../components/common/Button'
 import {ViewKrav} from '../components/krav/ViewKrav'
@@ -28,7 +28,7 @@ export const kravStatus = (status: KravStatus) => {
 
 export const KravPage = () => {
   const params = useParams<KravIdParams>()
-  const [krav, setKrav] = useKrav(params)
+  const [krav, setKrav, reloadKrav] = useKrav(params)
   const [edit, setEdit] = useState(krav && !krav.id)
   const history = useHistory()
   const formRef = useRef<FormikProps<any>>()
@@ -41,6 +41,11 @@ export const KravPage = () => {
     setEdit(true)
   }
 
+  useEffect(() => {
+    // hent krav på ny ved avbryt ny versjon
+    if (!edit && !krav?.id && krav?.nyKravVersjon) reloadKrav()
+  }, [edit])
+
   return (
     <Block>
       {loading && <LoadingSkeleton header='Krav'/>}
@@ -52,7 +57,7 @@ export const KravPage = () => {
               <Button size='compact' kind='tertiary'>Tilbake</Button>
             </RouteLink>
             {krav?.id && user.isKraveier() && !edit && <Button size='compact' kind='secondary' onClick={newVersion} marginLeft>Ny versjon av krav</Button>}
-            {krav?.id && user.isKraveier() && <Button size='compact' onClick={() => setEdit(!edit)} marginLeft>{edit ? 'Avbryt' : 'Rediger'}</Button>}
+            {(edit || (krav?.id && user.isKraveier())) && <Button size='compact' onClick={() => setEdit(!edit)} marginLeft>{edit ? 'Avbryt' : 'Rediger'}</Button>}
             {edit && <Button size='compact' onClick={() => !formRef.current?.isSubmitting && formRef.current?.submitForm()} marginLeft>Lagre</Button>}
           </Block>
         </Block>
