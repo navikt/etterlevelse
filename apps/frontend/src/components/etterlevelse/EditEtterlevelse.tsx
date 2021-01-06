@@ -17,11 +17,11 @@ import {behandlingName, useBehandling, useSearchBehandling} from '../../api/Beha
 
 export const EditEtterlevelse = ({etterlevelse, close}: {etterlevelse: Etterlevelse, close: (k?: Etterlevelse) => void}) => {
 
-  const submit = (etterlevelse: Etterlevelse) => {
+  const submit = async (etterlevelse: Etterlevelse) => {
     if (etterlevelse.id) {
-      updateEtterlevelse(etterlevelse).then(k => close(k))
+      close(await updateEtterlevelse(etterlevelse))
     } else {
-      createEtterlevelse(etterlevelse).then(k => close(k))
+      close(await createEtterlevelse(etterlevelse))
     }
   }
 
@@ -30,12 +30,12 @@ export const EditEtterlevelse = ({etterlevelse, close}: {etterlevelse: Etterleve
       onSubmit={submit}
       initialValues={mapToFormVal(etterlevelse)}
       validationSchema={etterlevelseSchema()}
-    >{(form: FormikProps<Etterlevelse>) => (
+    >{({values, isSubmitting}: FormikProps<Etterlevelse>) => (
       <Form onKeyDown={disableEnter}>
         <Block>
 
-          <SearchBehandling id={form.values.behandlingId}/>
-          <SearchKrav kravNummer={form.values.kravNummer} kravVersjon={form.values.kravVersjon}/>
+          <SearchBehandling id={values.behandlingId}/>
+          <SearchKrav kravNummer={values.kravNummer} kravVersjon={values.kravVersjon}/>
 
           <Block height={theme.sizing.scale600}/>
 
@@ -55,7 +55,7 @@ export const EditEtterlevelse = ({etterlevelse, close}: {etterlevelse: Etterleve
 
         <Block display='flex' justifyContent='flex-end'>
           <Button type='button' kind='secondary' marginRight onClick={close}>Avbryt</Button>
-          <Button type='submit'>Lagre</Button>
+          <Button type='submit' disabled={isSubmitting}>Lagre</Button>
         </Block>
       </Form>
     )}

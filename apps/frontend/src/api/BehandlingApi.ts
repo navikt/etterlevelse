@@ -35,7 +35,7 @@ export const useBehandling = (id?: string) => {
   return [data, setData] as [Behandling | undefined, (k: Behandling | undefined) => void]
 }
 
-export const behandlingName = (k?: Behandling) => k ? k.overordnetFormaal.shortName + ': ' + k.navn : ''
+export const behandlingName = (k?: Behandling) => k ? k.overordnetFormaal.shortName + ' - ' + k.navn : ''
 export const useSearchBehandling = () => useSearch(searchBehandling)
 
 export const useMyBehandlinger = () => {

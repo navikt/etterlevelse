@@ -13,20 +13,14 @@ import Button from '../common/Button'
 
 export const EditBehandling = ({behandling, close}: {behandling: Behandling, close: (behandling?: BehandlingEtterlevData) => void}) => {
 
-  const submit = (b: BehandlingEtterlevData) => {
-    updateBehandling(b).then(k => close(k))
-  }
-
   return (<Formik
-      onSubmit={submit}
+      onSubmit={async (b: BehandlingEtterlevData) => close(await updateBehandling(b))}
       initialValues={mapToFormVal(behandling)}
       validationSchema={behandlingSchema()}
-    >{() => (
+    >{({isSubmitting}) => (
       <Form onKeyDown={disableEnter}>
         <Block>
-          <Label title='Navn'>{behandling.navn}</Label>
-          <Label title='Nummer'>{behandling.nummer}</Label>
-          <Label title='Overordnet formål'>{behandling.overordnetFormaal.shortName}</Label>
+          <Label title='Endrer egenskaper for'>behandling {behandling.nummer}</Label>
 
           <MultiOptionField label='Relevans for' name='relevansFor' listName={ListName.RELEVANS}/>
 
@@ -34,7 +28,7 @@ export const EditBehandling = ({behandling, close}: {behandling: Behandling, clo
 
         <Block display='flex' justifyContent='flex-end'>
           <Button type='button' kind='secondary' marginRight onClick={close}>Avbryt</Button>
-          <Button type='submit'>Lagre</Button>
+          <Button type='submit' disabled={isSubmitting}>Lagre</Button>
         </Block>
       </Form>
     )}

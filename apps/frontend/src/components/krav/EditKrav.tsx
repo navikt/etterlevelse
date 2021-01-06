@@ -15,11 +15,11 @@ import {PersonName} from '../common/PersonName'
 export const EditKrav = ({krav, close}: {krav: Krav, close: (k?: Krav) => void}) => {
   const personSearch = usePersonSearch()
 
-  const submit = (krav: Krav) => {
+  const submit = async (krav: Krav) => {
     if (krav.id) {
-      updateKrav(krav).then(k => close(k))
+      close(await updateKrav(krav))
     } else {
-      createKrav(krav).then(k => close(k))
+      close(await createKrav(krav))
     }
   }
 
@@ -28,7 +28,7 @@ export const EditKrav = ({krav, close}: {krav: Krav, close: (k?: Krav) => void})
       onSubmit={submit}
       initialValues={mapToFormVal(krav)}
       validationSchema={kravSchema()}
-    >{() => (
+    >{({isSubmitting}) => (
       <Form onKeyDown={disableEnter}>
         <Block>
           <InputField label='Navn' name='navn'/>
@@ -56,7 +56,7 @@ export const EditKrav = ({krav, close}: {krav: Krav, close: (k?: Krav) => void})
 
         <Block display='flex' justifyContent='flex-end'>
           <Button type='button' kind='secondary' marginRight onClick={close}>Avbryt</Button>
-          <Button type='submit'>Lagre</Button>
+          <Button type='submit' disabled={isSubmitting}>Lagre</Button>
         </Block>
       </Form>
     )}
