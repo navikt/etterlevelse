@@ -12,7 +12,13 @@ import {DateField, InputField, MultiInputField, MultiOptionField, MultiSearchFie
 import {usePersonSearch} from '../../api/TeamApi'
 import {PersonName} from '../common/PersonName'
 
-export const EditKrav = ({krav, close}: {krav: Krav, close: (k?: Krav) => void}) => {
+type EditKravProps = {
+  krav: Krav,
+  close: (k?: Krav) => void,
+  formRef: React.Ref<any>
+}
+
+export const EditKrav = ({krav, close}: EditKravProps) => {
   const personSearch = usePersonSearch()
 
   const submit = async (krav: Krav) => {

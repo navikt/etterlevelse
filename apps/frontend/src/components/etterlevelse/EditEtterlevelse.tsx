@@ -15,7 +15,13 @@ import {useKrav, useSearchKrav} from '../../api/KravApi'
 import {kravName} from '../../pages/KravPage'
 import {behandlingName, useBehandling, useSearchBehandling} from '../../api/BehandlingApi'
 
-export const EditEtterlevelse = ({etterlevelse, close}: {etterlevelse: Etterlevelse, close: (k?: Etterlevelse) => void}) => {
+type EditEttlevProps = {
+  etterlevelse: Etterlevelse,
+  close: (k?: Etterlevelse) => void,
+  formRef: React.Ref<any>
+}
+
+export const EditEtterlevelse = ({etterlevelse, close, formRef}: EditEttlevProps) => {
 
   const submit = async (etterlevelse: Etterlevelse) => {
     if (etterlevelse.id) {
@@ -30,6 +36,7 @@ export const EditEtterlevelse = ({etterlevelse, close}: {etterlevelse: Etterleve
       onSubmit={submit}
       initialValues={mapToFormVal(etterlevelse)}
       validationSchema={etterlevelseSchema()}
+      innerRef={formRef}
     >{({values, isSubmitting}: FormikProps<Etterlevelse>) => (
       <Form onKeyDown={disableEnter}>
         <Block>

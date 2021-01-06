@@ -11,13 +11,20 @@ import * as yup from 'yup'
 import Button from '../common/Button'
 
 
-export const EditBehandling = ({behandling, close}: {behandling: Behandling, close: (behandling?: BehandlingEtterlevData) => void}) => {
+type EditBehProps = {
+  behandling: Behandling,
+  close: (behandling?: BehandlingEtterlevData) => void,
+  formRef: React.Ref<any>
+}
+
+export const EditBehandling = ({behandling, close, formRef}: EditBehProps) => {
 
   return (<Formik
       onSubmit={async (b: BehandlingEtterlevData) => close(await updateBehandling(b))}
       initialValues={mapToFormVal(behandling)}
       validationSchema={behandlingSchema()}
-    >{({isSubmitting}) => (
+      innerRef={formRef}
+    >{({isSubmitting, isValid, errors}) => (
       <Form onKeyDown={disableEnter}>
         <Block>
           <Label title='Endrer egenskaper for'>behandling {behandling.nummer}</Label>
@@ -27,6 +34,7 @@ export const EditBehandling = ({behandling, close}: {behandling: Behandling, clo
         </Block>
 
         <Block display='flex' justifyContent='flex-end'>
+          <Block>{!isValid && JSON.stringify(errors)}</Block>
           <Button type='button' kind='secondary' marginRight onClick={close}>Avbryt</Button>
           <Button type='submit' disabled={isSubmitting}>Lagre</Button>
         </Block>

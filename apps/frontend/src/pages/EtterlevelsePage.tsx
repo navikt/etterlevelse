@@ -2,7 +2,7 @@ import {Block} from 'baseui/block'
 import {HeadingLarge} from 'baseui/typography'
 import {useHistory, useParams} from 'react-router-dom'
 import {useEtterlevelse} from '../api/EtterlevelseApi'
-import React, {useState} from 'react'
+import React, {useRef, useState} from 'react'
 import {Etterlevelse, EtterlevelseStatus} from '../constants'
 import Button from '../components/common/Button'
 import {ViewEtterlevelse} from '../components/etterlevelse/ViewEtterlevelse'
@@ -11,6 +11,7 @@ import RouteLink from '../components/common/RouteLink'
 import {LoadingSkeleton} from '../components/common/LoadingSkeleton'
 import {user} from '../services/User'
 import {theme} from '../util'
+import {FormikProps} from 'formik'
 
 export const etterlevelseName = (etterlevelse: Etterlevelse) => `${etterlevelse.kravNummer}.${etterlevelse.kravVersjon} - ${etterlevelse.begrunnelse}`
 
@@ -29,6 +30,7 @@ export const EtterlevelsePage = () => {
   const params = useParams<{id?: string}>()
   const [etterlevelse, setEtterlevelse] = useEtterlevelse(params.id)
   const [edit, setEdit] = useState(etterlevelse && !etterlevelse.id)
+  const formRef = useRef<FormikProps<any>>()
   const history = useHistory()
 
   const loading = !edit && !etterlevelse
@@ -44,12 +46,13 @@ export const EtterlevelsePage = () => {
               <Button size='compact' kind='tertiary'>Tilbake</Button>
             </RouteLink>
             {etterlevelse?.id && user.canWrite() && <Button size='compact' onClick={() => setEdit(!edit)} marginLeft>{edit ? 'Avbryt' : 'Rediger'}</Button>}
+            {edit && <Button size='compact' onClick={() => !formRef.current?.isSubmitting && formRef.current?.submitForm()} marginLeft>Lagre</Button>}
           </Block>
         </Block>
       </>}
 
       {!edit && etterlevelse && !loading && <ViewEtterlevelse etterlevelse={etterlevelse}/>}
-      {edit && etterlevelse && <EditEtterlevelse etterlevelse={etterlevelse} close={k => {
+      {edit && etterlevelse && <EditEtterlevelse etterlevelse={etterlevelse} formRef={formRef} close={k => {
         if (k) {
           setEtterlevelse(k)
           if (k.id !== etterlevelse.id) {

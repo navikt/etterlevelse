@@ -2,7 +2,7 @@ import {Block} from 'baseui/block'
 import {HeadingLarge} from 'baseui/typography'
 import {useHistory, useParams} from 'react-router-dom'
 import {KravIdParams, useKrav} from '../api/KravApi'
-import React, {useState} from 'react'
+import React, {useRef, useState} from 'react'
 import {Krav, KravStatus} from '../constants'
 import Button from '../components/common/Button'
 import {ViewKrav} from '../components/krav/ViewKrav'
@@ -11,6 +11,7 @@ import RouteLink from '../components/common/RouteLink'
 import {LoadingSkeleton} from '../components/common/LoadingSkeleton'
 import {user} from '../services/User'
 import {theme} from '../util'
+import {FormikProps} from 'formik'
 
 export const kravName = (krav: Krav) => `${krav.kravNummer}.${krav.kravVersjon} - ${krav.navn}`
 
@@ -30,6 +31,7 @@ export const KravPage = () => {
   const [krav, setKrav] = useKrav(params)
   const [edit, setEdit] = useState(krav && !krav.id)
   const history = useHistory()
+  const formRef = useRef<FormikProps<any>>()
 
   const loading = !edit && !krav
 
@@ -51,12 +53,13 @@ export const KravPage = () => {
             </RouteLink>
             {krav?.id && user.isKraveier() && !edit && <Button size='compact' kind='secondary' onClick={newVersion} marginLeft>Ny versjon av krav</Button>}
             {krav?.id && user.isKraveier() && <Button size='compact' onClick={() => setEdit(!edit)} marginLeft>{edit ? 'Avbryt' : 'Rediger'}</Button>}
+            {edit && <Button size='compact' onClick={() => !formRef.current?.isSubmitting && formRef.current?.submitForm()} marginLeft>Lagre</Button>}
           </Block>
         </Block>
       </>}
 
       {!edit && krav && !loading && <ViewKrav krav={krav}/>}
-      {edit && krav && <EditKrav krav={krav} close={k => {
+      {edit && krav && <EditKrav krav={krav} formRef={formRef} close={k => {
         if (k) {
           setKrav(k)
           if (k.id !== krav.id) {
