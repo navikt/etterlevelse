@@ -20,7 +20,7 @@
         <springdoc-openapi-ui.version>1.5.2</springdoc-openapi-ui.version>
         <hibernate-types-52.version>2.10.1</hibernate-types-52.version>
         <simpleclient.version>0.9.0</simpleclient.version>
-        <logstash-logback-encoder.version>6.5</logstash-logback-encoder.version>
+        <logstash-logback-encoder.version>6.6</logstash-logback-encoder.version>
         <shedlock.version>4.19.1</shedlock.version>
         <commons-collections4.version>4.4</commons-collections4.version>
         <graphql-spring-boot-starter.version>8.1.0</graphql-spring-boot-starter.version>
