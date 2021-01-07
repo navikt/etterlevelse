@@ -11,8 +11,11 @@ import no.nav.data.etterlevelse.krav.dto.KravResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.util.LinkedMultiValueMap;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -171,5 +174,38 @@ public class KravIT extends IntegrationTestBase {
         restTemplate.delete("/krav/{id}", krav.getId());
 
         assertThat(storageService.getAll(Krav.class)).isEmpty();
+    }
+
+    @Test
+    void uploadImages() {
+        var krav = storageService.save(Krav.builder().navn("Krav 1").build());
+
+        var headers = new HttpHeaders();
+        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+        var body = new LinkedMultiValueMap<String, Object>();
+        var req = new HttpEntity<>(body, headers);
+        byte[] imageOne = {1, 2, 3};
+        addImage(body, "image1.png", imageOne);
+        addImage(body, "image2.png", new byte[]{4, 5, 6});
+
+        var res = restTemplate.postForEntity("/krav/{id}/files", req, String[].class, krav.getId());
+        assertThat(res.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        assertThat(res.getBody()).isNotNull();
+        assertThat(res.getBody()).hasSize(2);
+        String id1 = res.getBody()[0];
+
+        var imageRes = restTemplate.getForEntity("/krav/{id}/files/{fileId}", byte[].class, krav.getId(), id1);
+        assertThat(imageRes.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(imageRes.getBody()).isNotNull();
+        assertThat(imageRes.getBody()).isEqualTo(imageOne);
+    }
+
+    private void addImage(LinkedMultiValueMap<String, Object> body, final String name, byte[] content) {
+        var imageHeaders = new LinkedMultiValueMap<String, String>();
+        imageHeaders.add(HttpHeaders.CONTENT_DISPOSITION, "form-data; name=file; filename=" + name + ";");
+        imageHeaders.add(HttpHeaders.CONTENT_TYPE, MediaType.IMAGE_PNG_VALUE);
+        var imageEntity = new HttpEntity<>(content, imageHeaders);
+
+        body.add("file", imageEntity);
     }
 }

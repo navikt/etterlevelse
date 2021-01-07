@@ -47,7 +47,9 @@ public class StorageService {
     public <T extends DomainObject> List<GenericStorage> saveAll(Collection<T> objects) {
         Assert.isTrue(objects.stream().noneMatch(o -> o.getId() != null), "Cannot use saveAll on existing object");
         var storages = convert(objects, o -> new GenericStorage().generateId().setDomainObjectData(o));
-        return repository.saveAll(storages);
+        List<GenericStorage> storageList = repository.saveAll(storages);
+        repository.flush();
+        return storageList;
     }
 
     public <T extends DomainObject> T save(T object) {

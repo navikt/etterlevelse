@@ -3,16 +3,20 @@ package no.nav.data.etterlevelse.krav;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.etterlevelse.krav.domain.Krav;
+import no.nav.data.etterlevelse.krav.domain.KravImage;
 import no.nav.data.etterlevelse.krav.dto.KravRequest;
 import no.nav.data.etterlevelse.krav.dto.KravResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,11 +24,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import static no.nav.data.common.utils.StreamUtils.convert;
@@ -120,6 +128,44 @@ public class KravController {
         log.info("Delete Krav id={}", id);
         var krav = service.delete(id);
         return ResponseEntity.ok(krav.convertToResponse());
+    }
+
+    @Operation(summary = "Get Krav image")
+    @ApiResponse(description = "ok")
+    @GetMapping("/{id}/files/{fileId}")
+    public ResponseEntity<byte[]> getFileById(@PathVariable UUID id, @PathVariable UUID fileId, HttpServletResponse response) {
+        log.info("Get Krav id={} fileId={}", id, fileId);
+        KravImage image = service.getImage(id, fileId);
+        response.setContentType(image.getType());
+        return ResponseEntity.ok().body(image.getContent());
+    }
+
+    @Operation(summary = "Upload krav images")
+    @ApiResponse(responseCode = "201", description = "Images saved")
+    @PostMapping("/{id}/files")
+    public ResponseEntity<List<String>> uploadFiles(
+            @PathVariable UUID id,
+            @RequestParam("file") List<MultipartFile> files) {
+        log.info("Krav {} upload {} images", id, files.size());
+        var krav = service.get(id);
+        var images = service.saveImages(convert(files, f -> KravImage.builder()
+                .kravId(krav.getId())
+                .name(f.getName())
+                .type(f.getContentType())
+                .content(getBytes(f))
+                .build()));
+        images.forEach(i -> Assert.isTrue(validImage(i), () -> "Invalid image " + i.getName() + " " + i.getType()));
+        return new ResponseEntity<>(convert(images, i -> i.getId().toString()), HttpStatus.CREATED);
+    }
+
+    private boolean validImage(KravImage i) {
+        return List.of(MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE).contains(i.getType())
+                && i.getContent().length > 0;
+    }
+
+    @SneakyThrows
+    private byte[] getBytes(MultipartFile f) {
+        return f.getBytes();
     }
 
     static class KravPage extends RestResponsePage<KravResponse> {

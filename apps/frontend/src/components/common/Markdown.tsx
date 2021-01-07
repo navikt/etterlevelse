@@ -55,5 +55,9 @@ export const MarkdownEditor = (props: {initialValue: string, setValue: (v: strin
     defaultValue={val}
     renderHTML={txt => <Markdown source={txt}/>}
     onChange={data => setVal(data.text)}
+    onImageUpload={(file, callback) => {
+      console.log(file, callback)
+    }
+    }
   />
 }

@@ -6,6 +6,7 @@ import no.nav.data.common.storage.domain.GenericStorage;
 import no.nav.data.common.validator.Validator;
 import no.nav.data.etterlevelse.common.domain.DomainService;
 import no.nav.data.etterlevelse.krav.domain.Krav;
+import no.nav.data.etterlevelse.krav.domain.KravImage;
 import no.nav.data.etterlevelse.krav.domain.KravRepo;
 import no.nav.data.etterlevelse.krav.domain.dto.KravFilter;
 import no.nav.data.etterlevelse.krav.dto.KravRequest;
@@ -77,6 +78,14 @@ public class KravService extends DomainService<Krav> {
 
     public Krav delete(UUID id) {
         return storage.delete(id, Krav.class);
+    }
+
+    public List<KravImage> saveImages(List<KravImage> images) {
+        return GenericStorage.to(storage.saveAll(images), KravImage.class);
+    }
+
+    public KravImage getImage(UUID kravId, UUID fileId) {
+        return repo.findKravImage(kravId, fileId).getDomainObjectData(KravImage.class);
     }
 
     private void validateName(Validator<KravRequest> validator) {

@@ -38,4 +38,8 @@ public interface KravRepo extends JpaRepository<GenericStorage, UUID>, KravRepoC
 
     @Query(value = "select max(cast(data -> 'kravVersjon' as integer)) + 1 from generic_storage where type = 'Krav' and data -> 'kravNummer' = to_jsonb(?1)", nativeQuery = true)
     int nextKravVersjon(Integer kravNummer);
+
+    @Query(value = "select * from generic_storage where data ->> 'kravId' = cast(?1 as text) and id = ?2 and type = 'KravImage'", nativeQuery = true)
+    GenericStorage findKravImage(UUID kravId, UUID fileId);
+
 }

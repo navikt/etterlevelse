@@ -1,4 +1,5 @@
 import {IStrings} from './langdef'
+import MdEditor from 'react-markdown-editor-lite'
 
 export const no: IStrings = {
   CREATE: 'Opprett',
@@ -29,6 +30,39 @@ export const no: IStrings = {
   view: 'Vis',
   settings: 'Instillinger'
 };
+
+// Markdown norsk locale
+MdEditor.addLocale('nb', {
+  clearTip: 'Bekreft tøm innhold',
+  btnHeader: 'Tittel',
+  btnClear: 'Tøm',
+  btnBold: 'Fet',
+  btnItalic: 'Kursiv',
+  btnUnderline: 'Understrek',
+  btnStrikethrough: 'Strek',
+  btnUnordered: 'Liste',
+  btnOrdered: 'Nummerert liste',
+  btnQuote: 'Sitat',
+  btnLineBreak: 'Linjeskift',
+  btnInlineCode: 'Kodelinje',
+  btnCode: 'Kode',
+  btnTable: 'Tabell',
+  btnImage: 'Bilde',
+  btnLink: 'Lenke',
+  btnUndo: 'Angre',
+  btnRedo: 'Redo',
+  btnFullScreen: 'Fullskjerm',
+  btnExitFullScreen: 'Avslutt fullskjerm',
+  btnModeEditor: 'Editor',
+  btnModePreview: 'Forhåndsvisning',
+  btnModeAll: 'Editor og forhåndsvisning',
+  selectTabMap: 'Tillat tab',
+  tab: 'Tab',
+  spaces: 'Mellomrom',
+})
+// react tror useLocale er en hook...
+const setMdLocale = MdEditor.useLocale
+setMdLocale('nb')
 
 export const en: IStrings = {
   CREATE: 'Create',
