@@ -41,9 +41,9 @@ export const EditKrav = ({krav, close}: EditKravProps) => {
         <Block>
           <InputField label='Navn' name='navn'/>
           <TextAreaField label='Hensikt' name='hensikt'/>
-          <TextAreaField label='Beskrivelse' name='beskrivelse' markdown onImageUpload={onImageUpload(krav.id)}/>
+          <TextAreaField label='Beskrivelse' name='beskrivelse' markdown shortenLinks onImageUpload={onImageUpload(krav.id)}/>
 
-          <TextAreaField label='Utfyllende beskrivelse' name='utdypendeBeskrivelse' markdown onImageUpload={onImageUpload(krav.id)}/>
+          <TextAreaField label='Utfyllende beskrivelse' name='utdypendeBeskrivelse' markdown shortenLinks onImageUpload={onImageUpload(krav.id)}/>
           <MultiInputField label='Dokumentasjon' name='dokumentasjon'/>
           <MultiInputField label='Rettskilder' name='rettskilder'/>
 

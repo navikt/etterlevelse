@@ -43,7 +43,13 @@ const urlRegex = /http[s]?:\/\/.*/
 const isLink = (text: string) => urlRegex.test(text)
 
 
-export const MarkdownEditor = (props: {initialValue: string, setValue: (v: string) => void, onImageUpload?: (file: File) => Promise<string>}) => {
+type MarkdownEditorProps = {
+  initialValue: string,
+  setValue: (v: string) => void,
+  shortenLinks?: boolean
+  onImageUpload?: (file: File) => Promise<string>
+}
+export const MarkdownEditor = (props: MarkdownEditorProps) => {
   // Reduce UI lag by only updating field at set interval
   const [val, setVal] = useDebouncedState(props.initialValue, 300)
   useEffect(() => {
@@ -53,7 +59,7 @@ export const MarkdownEditor = (props: {initialValue: string, setValue: (v: strin
   return <MdEditor
     style={{height: '400px'}}
     defaultValue={val}
-    renderHTML={txt => <Markdown source={txt}/>}
+    renderHTML={txt => <Markdown source={txt} shortenLinks={props.shortenLinks}/>}
     onChange={data => setVal(data.text)}
     onImageUpload={props.onImageUpload}
   />
