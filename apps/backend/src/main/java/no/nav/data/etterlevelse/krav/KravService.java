@@ -113,7 +113,7 @@ public class KravService extends DomainService<Krav> {
         }
     }
 
-    @SchedulerLock(name = "clean_krav_images")
+    @SchedulerLock(name = "clean_krav_images", lockAtLeastFor = "PT5M")
     @Scheduled(initialDelayString = "PT1M", fixedRateString = "PT10M")
     public void cleanupImages() {
         var deletes = repo.cleanupImages();

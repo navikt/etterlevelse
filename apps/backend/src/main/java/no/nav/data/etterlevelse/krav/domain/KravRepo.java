@@ -51,7 +51,7 @@ public interface KravRepo extends JpaRepository<GenericStorage, UUID>, KravRepoC
               select 1 from generic_storage krav 
                 where krav.type = 'Krav' 
                 and cast(krav.id as text) = image.data ->> 'kravId'
-                and jsonb_path_exists(krav.data, cast('$.** ? (@.type() == "string" && @ like_regex "' || image.id || '")' as jsonpath))
+                and jsonb_path_exists(krav.data, cast('$.** ? (@.type() == "string" && @ like_regex "$imageId")' as jsonpath), jsonb_build_object('imageId', image.id))
             )""")
     int cleanupImages();
 
