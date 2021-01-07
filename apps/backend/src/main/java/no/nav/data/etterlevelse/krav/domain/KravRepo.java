@@ -49,7 +49,7 @@ public interface KravRepo extends JpaRepository<GenericStorage, UUID>, KravRepoC
     @Query(nativeQuery = true, value = """
             delete from generic_storage image 
               where type = 'KravImage'
-              and last_modified_date < now() at time zone 'Europe/Oslo' - interval '10 minute'
+              and last_modified_date < now() at time zone 'Europe/Oslo' - interval '60 minute'
               and not exists (
               select 1 from generic_storage krav 
                 where krav.type = 'Krav' 
