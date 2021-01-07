@@ -4,11 +4,13 @@ import no.nav.data.common.storage.domain.GenericStorage;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import javax.transaction.Transactional;
 
 public interface KravRepo extends JpaRepository<GenericStorage, UUID>, KravRepoCustom {
 
@@ -41,5 +43,16 @@ public interface KravRepo extends JpaRepository<GenericStorage, UUID>, KravRepoC
 
     @Query(value = "select * from generic_storage where data ->> 'kravId' = cast(?1 as text) and id = ?2 and type = 'KravImage'", nativeQuery = true)
     GenericStorage findKravImage(UUID kravId, UUID fileId);
+
+    @Modifying
+    @Transactional
+    @Query(nativeQuery = true, value = """
+            delete from generic_storage image where type = 'KravImage' and not exists (
+              select 1 from generic_storage krav 
+                where krav.type = 'Krav' 
+                and cast(krav.id as text) = image.data ->> 'kravId'
+                and jsonb_path_exists(krav.data, cast('$.** ? (@.type() == "string" && @ like_regex "' || image.id || '")' as jsonpath))
+            )""")
+    int cleanupImages();
 
 }

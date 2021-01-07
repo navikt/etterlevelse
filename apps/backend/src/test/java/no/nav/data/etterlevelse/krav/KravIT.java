@@ -6,10 +6,12 @@ import no.nav.data.etterlevelse.common.domain.Periode;
 import no.nav.data.etterlevelse.krav.KravController.KravPage;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.Krav.KravStatus;
+import no.nav.data.etterlevelse.krav.domain.KravImage;
 import no.nav.data.etterlevelse.krav.dto.KravRequest;
 import no.nav.data.etterlevelse.krav.dto.KravResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -23,6 +25,9 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class KravIT extends IntegrationTestBase {
+
+    @Autowired
+    KravService kravService;
 
     @BeforeEach
     void setUp() {
@@ -198,6 +203,13 @@ public class KravIT extends IntegrationTestBase {
         assertThat(imageRes.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(imageRes.getBody()).isNotNull();
         assertThat(imageRes.getBody()).isEqualTo(imageOne);
+
+        krav.setHensikt(id1);
+        storageService.save(krav);
+
+        assertThat(storageService.getAll(KravImage.class)).hasSize(2);
+        kravService.cleanupImages();
+        assertThat(storageService.getAll(KravImage.class)).hasSize(1);
     }
 
     private void addImage(LinkedMultiValueMap<String, Object> body, final String name, byte[] content) {
