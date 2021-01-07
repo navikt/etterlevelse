@@ -11,6 +11,8 @@ import {kravStatus} from '../../pages/KravPage'
 import {DateField, InputField, MultiInputField, MultiOptionField, MultiSearchField, OptionField, TextAreaField} from '../common/Inputs'
 import {usePersonSearch} from '../../api/TeamApi'
 import {PersonName} from '../common/PersonName'
+import axios from 'axios'
+import {env} from '../../util/env'
 
 type EditKravProps = {
   krav: Krav,
@@ -39,9 +41,9 @@ export const EditKrav = ({krav, close}: EditKravProps) => {
         <Block>
           <InputField label='Navn' name='navn'/>
           <TextAreaField label='Hensikt' name='hensikt'/>
-          <TextAreaField label='Beskrivelse' name='beskrivelse' markdown/>
+          <TextAreaField label='Beskrivelse' name='beskrivelse' markdown onImageUpload={onImageUpload(krav.id)}/>
 
-          <TextAreaField label='Utfyllende beskrivelse' name='utdypendeBeskrivelse' markdown/>
+          <TextAreaField label='Utfyllende beskrivelse' name='utdypendeBeskrivelse' markdown onImageUpload={onImageUpload(krav.id)}/>
           <MultiInputField label='Dokumentasjon' name='dokumentasjon'/>
           <MultiInputField label='Rettskilder' name='rettskilder'/>
 
@@ -68,6 +70,15 @@ export const EditKrav = ({krav, close}: EditKravProps) => {
     )}
     </Formik>
   )
+}
+
+const onImageUpload = (kravId: string) => async (file: File) => {
+  const config = {headers: {'content-type': 'multipart/form-data'}}
+  const formData = new FormData()
+  formData.append('file', file)
+  const id = (await axios.post<string[]>(`${env.backendBaseUrl}/krav/${kravId}/files`, formData, config)).data[0]
+
+  return `/api/krav/${kravId}/files/${id}`
 }
 
 const kravSchema = () => {

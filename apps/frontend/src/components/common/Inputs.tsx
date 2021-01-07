@@ -38,14 +38,14 @@ export const InputField = (props: {label: string, name: string}) => (
   </FieldWrapper>
 )
 
-export const TextAreaField = (props: {label: string, name: string, markdown?: boolean}) => {
+export const TextAreaField = (props: {label: string, name: string, markdown?: boolean, onImageUpload?: (file: File) => Promise<string>}) => {
   return (
     <FieldWrapper>
       <Field name={props.name}>
         {(p: FieldProps) =>
           <FormControl label={props.label} error={p.meta.error}>
             <>
-              {props.markdown && <MarkdownEditor initialValue={p.field.value} setValue={v => p.form.setFieldValue(props.name, v)}/>}
+              {props.markdown && <MarkdownEditor initialValue={p.field.value} setValue={v => p.form.setFieldValue(props.name, v)} onImageUpload={props.onImageUpload}/>}
               {!props.markdown && <Textarea rows={8} {...p.field}/>}
             </>
           </FormControl>
