@@ -47,11 +47,14 @@ public interface KravRepo extends JpaRepository<GenericStorage, UUID>, KravRepoC
     @Modifying
     @Transactional
     @Query(nativeQuery = true, value = """
-            delete from generic_storage image where type = 'KravImage' and not exists (
+            delete from generic_storage image 
+              where type = 'KravImage'
+              and last_modified_date < now() at time zone 'Europe/Oslo' - interval '10 minute'
+              and not exists (
               select 1 from generic_storage krav 
                 where krav.type = 'Krav' 
                 and cast(krav.id as text) = image.data ->> 'kravId'
-                and jsonb_path_exists(krav.data, cast('$.** ? (@.type() == "string" && @ like_regex "$imageId")' as jsonpath), jsonb_build_object('imageId', image.id))
+                and jsonb_path_exists(krav.data, cast('$.** ? (@.type() == "string" && @ like_regex "' || image.id || '")' as jsonpath))
             )""")
     int cleanupImages();
 

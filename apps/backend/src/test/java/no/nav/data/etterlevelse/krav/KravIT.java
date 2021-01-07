@@ -207,6 +207,7 @@ public class KravIT extends IntegrationTestBase {
         krav.setHensikt(id1);
         storageService.save(krav);
 
+        jdbcTemplate.update("update generic_storage set last_modified_date = now() - interval '15 minute' where type = 'KravImage'");
         assertThat(storageService.getAll(KravImage.class)).hasSize(2);
         kravService.cleanupImages();
         assertThat(storageService.getAll(KravImage.class)).hasSize(1);
