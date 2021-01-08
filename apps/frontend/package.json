@@ -67,7 +67,7 @@
     "@testing-library/jest-dom": "^5.11.5",
     "@testing-library/react": "^10.4.8",
     "@testing-library/user-event": "^12.2.2",
-    "@types/amplitude-js": "^5.11.0",
+    "@types/amplitude-js": "^7.0.0",
     "@types/jest": "^26.0.15",
     "@types/lodash": "^4.14.165",
     "@types/node": "^14.14.7",
