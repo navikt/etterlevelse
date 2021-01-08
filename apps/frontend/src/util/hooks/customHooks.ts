@@ -3,7 +3,8 @@ import {useLocation} from 'react-router-dom'
 
 export function useDebouncedState<T>(
   initialValue: T,
-  delay: number
+  delay: number,
+  passThrough?: (val: T) => void
 ): [T, Dispatch<SetStateAction<T>>, T] {
   const [value, setValue] = useState<T>(initialValue)
   const [debouncedValue, setDebouncedValue] = useState<T>(value)
@@ -11,6 +12,7 @@ export function useDebouncedState<T>(
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedValue(value)
+      passThrough && passThrough(value)
     }, delay)
     return () => {
       clearTimeout(handler)

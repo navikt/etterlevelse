@@ -14,9 +14,9 @@ const DataText = (props: DataTextProps) => {
   if (props.hideComponent) return null
   const labelWidth = '12rem'
   return (
-    <Block display='flex' marginBottom='2rem' width='100%' alignItems='center'>
+    <Block display='flex' marginBottom='2rem' width='100%'>
       <Block minWidth={labelWidth} maxWidth={labelWidth} paddingRight={theme.sizing.scale400}>
-        <Label2>{props.label}</Label2>
+        <Label2 $style={{lineHeight: theme.sizing.scale800}}>{props.label}</Label2>
       </Block>
       <Block font='ParagraphMedium'>
         {props.children}

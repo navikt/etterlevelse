@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React from 'react'
 import ReactMarkdown from 'react-markdown/with-html'
 import {Paragraph2} from 'baseui/typography'
 import remarkGfm from 'remark-gfm'
@@ -39,12 +39,10 @@ type MarkdownEditorProps = {
   shortenLinks?: boolean
   onImageUpload?: (file: File) => Promise<string>
 }
+
 export const MarkdownEditor = (props: MarkdownEditorProps) => {
   // Reduce UI lag by only updating field at set interval
-  const [val, setVal] = useDebouncedState(props.initialValue, 300)
-  useEffect(() => {
-    props.setValue(val)
-  }, [val])
+  const [val, setVal] = useDebouncedState(props.initialValue, 300,props.setValue)
 
   return <MdEditor
     style={{height: '400px'}}
