@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
+import no.nav.data.common.utils.ImageUtils;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravImage;
 import no.nav.data.etterlevelse.krav.dto.KravRequest;
@@ -133,11 +134,17 @@ public class KravController {
     @Operation(summary = "Get Krav image")
     @ApiResponse(description = "ok")
     @GetMapping("/{id}/files/{fileId}")
-    public ResponseEntity<byte[]> getFileById(@PathVariable UUID id, @PathVariable UUID fileId, HttpServletResponse response) {
+    public ResponseEntity<byte[]> getFileById(@PathVariable UUID id, @PathVariable UUID fileId,
+            @RequestParam(required = false, value = "w") Integer w,
+            HttpServletResponse response) {
         log.info("Get Krav id={} fileId={}", id, fileId);
         KravImage image = service.getImage(id, fileId);
-        response.setContentType(image.getType());
-        return ResponseEntity.ok().body(image.getContent());
+        if (w == null) {
+            response.setContentType(image.getType());
+            return ResponseEntity.ok().body(image.getContent());
+        }
+        response.setContentType(MediaType.IMAGE_PNG_VALUE);
+        return ResponseEntity.ok().body(ImageUtils.resize(image.getContent(), w));
     }
 
     @Operation(summary = "Upload krav images")

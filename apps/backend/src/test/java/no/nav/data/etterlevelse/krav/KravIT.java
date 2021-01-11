@@ -1,5 +1,6 @@
 package no.nav.data.etterlevelse.krav;
 
+import lombok.SneakyThrows;
 import no.nav.data.IntegrationTestBase;
 import no.nav.data.etterlevelse.codelist.CodelistStub;
 import no.nav.data.etterlevelse.common.domain.Periode;
@@ -12,6 +13,7 @@ import no.nav.data.etterlevelse.krav.dto.KravResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -181,6 +183,7 @@ public class KravIT extends IntegrationTestBase {
         assertThat(storageService.getAll(Krav.class)).isEmpty();
     }
 
+    @SneakyThrows
     @Test
     void uploadImages() {
         var krav = storageService.save(Krav.builder().navn("Krav 1").build());
@@ -189,25 +192,30 @@ public class KravIT extends IntegrationTestBase {
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
         var body = new LinkedMultiValueMap<String, Object>();
         var req = new HttpEntity<>(body, headers);
-        byte[] imageOne = {1, 2, 3};
-        addImage(body, "image1.png", imageOne);
-        addImage(body, "image2.png", new byte[]{4, 5, 6});
+        byte[] image = new ClassPathResource("img.png").getInputStream().readAllBytes();
+        addImage(body, "image1.png", image);
+        addImage(body, "image2.png", image);
 
         var res = restTemplate.postForEntity("/krav/{id}/files", req, String[].class, krav.getId());
         assertThat(res.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         assertThat(res.getBody()).isNotNull();
         assertThat(res.getBody()).hasSize(2);
         String id1 = res.getBody()[0];
+        String id2 = res.getBody()[1];
 
         var imageRes = restTemplate.getForEntity("/krav/{id}/files/{fileId}", byte[].class, krav.getId(), id1);
         assertThat(imageRes.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(imageRes.getBody()).isNotNull();
-        assertThat(imageRes.getBody()).isEqualTo(imageOne);
+        assertThat(imageRes.getBody()).isEqualTo(image);
+
+        var imageResized = restTemplate.getForEntity("/krav/{id}/files/{fileId}?w=20", byte[].class, krav.getId(), id2);
+        assertThat(imageResized.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(imageResized.getBody()).isNotNull();
 
         krav.setHensikt(id1);
         storageService.save(krav);
 
-        jdbcTemplate.update("update generic_storage set last_modified_date = now() - interval '15 minute' where type = 'KravImage'");
+        jdbcTemplate.update("update generic_storage set last_modified_date = now() - interval '65 minute' where type = 'KravImage'");
         assertThat(storageService.getAll(KravImage.class)).hasSize(2);
         kravService.cleanupImages();
         assertThat(storageService.getAll(KravImage.class)).hasSize(1);
