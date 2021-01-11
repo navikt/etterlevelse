@@ -11,7 +11,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.stream.Collectors;
+
+import static no.nav.data.common.utils.StreamUtils.convert;
 
 @Repository
 @RequiredArgsConstructor
@@ -43,7 +44,6 @@ public class KravRepoImpl implements KravRepoCustom {
     }
 
     private List<GenericStorage> fetch(List<Map<String, Object>> resp) {
-        List<UUID> ids = resp.stream().map(i -> ((UUID) i.values().iterator().next())).collect(Collectors.toList());
-        return repository.findAllById(ids);
+        return repository.findAllById(convert(resp, i -> (UUID) i.values().iterator().next()));
     }
 }
