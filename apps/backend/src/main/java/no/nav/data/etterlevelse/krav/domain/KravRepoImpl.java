@@ -30,7 +30,7 @@ public class KravRepoImpl implements KravRepoCustom {
         var query = "select id from generic_storage where type = 'Krav' ";
         var par = new MapSqlParameterSource();
 
-        if (filter.getRelevans() != null) {
+        if (!filter.getRelevans().isEmpty()) {
             query += " and data -> 'relevansFor' ??| array[ :relevans ] ";
             par.addValue("relevans", filter.getRelevans());
         }
