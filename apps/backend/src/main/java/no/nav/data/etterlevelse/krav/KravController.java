@@ -140,7 +140,7 @@ public class KravController {
         KravImage image = service.getImage(id, fileId);
         if (w == null) {
             return ResponseEntity.ok()
-                    .header(HttpHeaders.CONTENT_TYPE, MediaType.IMAGE_PNG_VALUE)
+                    .header(HttpHeaders.CONTENT_TYPE, image.getType())
                     .body(image.getContent());
         }
         return ResponseEntity.ok()
