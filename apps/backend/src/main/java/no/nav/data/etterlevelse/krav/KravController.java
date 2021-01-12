@@ -158,7 +158,7 @@ public class KravController {
         var krav = service.get(id);
         var images = service.saveImages(convert(files, f -> KravImage.builder()
                 .kravId(krav.getId())
-                .name(f.getName())
+                .name(f.getOriginalFilename())
                 .type(f.getContentType())
                 .content(getBytes(f))
                 .build()));
