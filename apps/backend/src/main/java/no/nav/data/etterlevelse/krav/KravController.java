@@ -14,6 +14,7 @@ import no.nav.data.etterlevelse.krav.domain.KravImage;
 import no.nav.data.etterlevelse.krav.dto.KravRequest;
 import no.nav.data.etterlevelse.krav.dto.KravResponse;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +34,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import static no.nav.data.common.utils.StreamUtils.convert;
@@ -135,16 +135,17 @@ public class KravController {
     @ApiResponse(description = "ok")
     @GetMapping("/{id}/files/{fileId}")
     public ResponseEntity<byte[]> getFileById(@PathVariable UUID id, @PathVariable UUID fileId,
-            @RequestParam(required = false, value = "w") Integer w,
-            HttpServletResponse response) {
+            @RequestParam(required = false, value = "w") Integer w) {
         log.info("Get Krav id={} fileId={}", id, fileId);
         KravImage image = service.getImage(id, fileId);
         if (w == null) {
-            response.setContentType(image.getType());
-            return ResponseEntity.ok().body(image.getContent());
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_TYPE, MediaType.IMAGE_PNG_VALUE)
+                    .body(image.getContent());
         }
-        response.setContentType(MediaType.IMAGE_PNG_VALUE);
-        return ResponseEntity.ok().body(ImageUtils.resize(image.getContent(), w));
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.IMAGE_PNG_VALUE)
+                .body(ImageUtils.resize(image.getContent(), w));
     }
 
     @Operation(summary = "Upload krav images")
