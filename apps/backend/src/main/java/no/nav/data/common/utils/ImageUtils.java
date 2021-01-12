@@ -15,11 +15,10 @@ public class ImageUtils {
     @SneakyThrows
     public static byte[] resize(byte[] content, Integer width) {
         var image = ImageIO.read(new ByteArrayInputStream(content));
-
-        var bi = new BufferedImage(image.getWidth(), image.getHeight(), image.getType());
         int height = (int) ((double) width / image.getWidth() * image.getHeight());
-        var newImg = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-        var si = bi.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+
+        var si = image.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+        var newImg = new BufferedImage(width, height, image.getType());
         var g = newImg.createGraphics();
         g.drawImage(si, 0, 0, null);
         g.dispose();
