@@ -15,4 +15,5 @@ type Query {
 input KravFilter {
     relevans: [String!]
     nummer: Int
+    behandlingId: String
 }
