@@ -4,22 +4,24 @@ import {theme} from '../../util'
 import {TeamName} from '../common/TeamName'
 import {DotTags} from '../common/DotTag'
 import {ListName} from '../../services/Codelist'
-import {HeadingSmall, LabelMedium} from 'baseui/typography'
-import {ObjectLink} from '../common/RouteLink'
-import {ObjectType} from '../admin/audit/AuditTypes'
-import {etterlevelseName} from '../../pages/EtterlevelsePage'
-import {Behandling, Etterlevelse} from '../../constants'
+import {HeadingSmall} from 'baseui/typography'
+import RouteLink from '../common/RouteLink'
+import {etterlevelseStatus} from '../../pages/EtterlevelsePage'
+import {Behandling, Etterlevelse, EtterlevelseStatus} from '../../constants'
 import {Label} from '../common/PropertyLabel'
-import {KravFilters} from '../../api/KravGraphQLApi'
-import {KravFilterTable} from '../common/KravFilterTable'
+import {KravFilters, useKravFilter} from '../../api/KravGraphQLApi'
+import {Spinner} from '../common/Spinner'
+import {Cell, Row, Table} from '../common/Table'
+import moment from 'moment'
+import Button from '../common/Button'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faEdit, faPlus} from '@fortawesome/free-solid-svg-icons'
 
 function filterForBehandling(behandling: Behandling): KravFilters {
   return {relevans: behandling.relevansFor.map(c => c.code)}
 }
 
 export const ViewBehandling = ({behandling, etterlevelser}: {behandling: Behandling, etterlevelser: Etterlevelse[]}) => {
-  const [kravFilter, setKravFilter] = useState({})
-  useEffect(() => setKravFilter(filterForBehandling(behandling)), [behandling])
 
   return (
     <Block>
@@ -45,23 +47,123 @@ export const ViewBehandling = ({behandling, etterlevelser}: {behandling: Behandl
         <Label title={'Relevans'}><DotTags list={ListName.RELEVANS} codes={behandling.relevansFor} linkCodelist/></Label>
       </Block>
 
-      <Block marginTop={theme.sizing.scale2400}>
-        <HeadingSmall marginBottom={theme.sizing.scale800}>Etterlevelser</HeadingSmall>
-        {etterlevelser.map((e) => {
-          return (
-            <Block key={e.id}>
-              <ObjectLink id={e.id} type={ObjectType.Etterlevelse}>
-                <LabelMedium>{etterlevelseName(e)}</LabelMedium>
-              </ObjectLink>
-            </Block>
-          )
-        })}
-      </Block>
+      {/*<Block marginTop={theme.sizing.scale2400}>*/}
+      {/*  <HeadingSmall marginBottom={theme.sizing.scale800}>Etterlevelser</HeadingSmall>*/}
+      {/*  {etterlevelser.map((e) => {*/}
+      {/*    return (*/}
+      {/*      <Block key={e.id}>*/}
+      {/*        <ObjectLink id={e.id} type={ObjectType.Etterlevelse}>*/}
+      {/*          <LabelMedium>{etterlevelseName(e)}</LabelMedium>*/}
+      {/*        </ObjectLink>*/}
+      {/*      </Block>*/}
+      {/*    )*/}
+      {/*  })}*/}
+      {/*</Block>*/}
 
       <Block marginTop={theme.sizing.scale2400}>
         <HeadingSmall marginBottom={theme.sizing.scale400}>Krav for behandling</HeadingSmall>
-        <KravFilterTable filter={kravFilter} emptyText='data på behandling som spesifiserer aktuelle krav'/>
+        <KravTable behandling={behandling}/>
       </Block>
     </Block>
+  )
+}
+const behandlingKravQuery = `query getKravByFilter ($relevans: [String!], $nummer: Int){
+  krav(filter: {relevans: $relevans, nummer: $nummer}) {
+    id
+    navn
+    kravNummer
+    kravVersjon
+    etterlevelser {
+      id
+      etterleves
+      fristForFerdigstillelse
+      status
+      behandling {
+        nummer
+      }
+    }
+  }
+}`
+
+type KravTableData = {
+  kravNummer: number
+  kravVersjon: number
+  navn: string
+  etterlevelseId?: string
+  etterleves: boolean
+  frist?: string
+  etterlevelseStatus?: EtterlevelseStatus
+}
+
+const KravTable = (props: {behandling: Behandling}) => {
+  const [kravFilter, setKravFilter] = useState({})
+  useEffect(() => setKravFilter(filterForBehandling(props.behandling)), [props.behandling])
+  const [rawData, loading] = useKravFilter(kravFilter, behandlingKravQuery)
+  const [data, setData] = useState<KravTableData[]>([])
+
+  useEffect(() => {
+    const mapped = rawData.map(krav => {
+      let etterlevelse = krav.etterlevelser.find(e => e.behandling.nummer === props.behandling.nummer)
+      return ({
+        kravNummer: krav.kravNummer,
+        kravVersjon: krav.kravVersjon,
+        navn: krav.navn,
+        etterlevelseId: etterlevelse?.id,
+        etterleves: !!etterlevelse?.etterleves,
+        frist: etterlevelse?.fristForFerdigstillelse,
+        etterlevelseStatus: etterlevelse?.status
+      })
+    })
+    setData(mapped.filter(k => k.etterlevelseId || !mapped.find(k2 => k2.kravNummer === k.kravNummer && k2.kravVersjon > k.kravVersjon)))
+  }, [rawData])
+
+  const [edit, setEdit] = useState<string | undefined>()
+  const [createNew, setCreateNew] = useState(false)
+
+
+  return (
+    loading ?
+      <Spinner size={theme.sizing.scale2400}/> :
+      <Table
+        data={data}
+        emptyText={'data på behandling som spesifiserer aktuelle krav'}
+        headers={[
+          {title: 'Nummer', column: 'kravNummer', small: true},
+          {title: 'Navn', column: 'navn'},
+          {title: 'Etterleves', column: 'etterleves'},
+          {title: 'Frist', column: 'frist'},
+          {title: 'Status', column: 'etterlevelseStatus'},
+          {title: '', small: true},
+        ]}
+        config={{
+          initialSortColumn: 'kravNummer',
+          useDefaultStringCompare: true,
+          sorting: {
+            kravNummer: (a, b) => a.kravNummer === b.kravNummer ? a.kravVersjon - b.kravVersjon : a.kravNummer - b.kravNummer,
+          }
+        }}
+        render={state => {
+          return state.data.map((krav, i) => {
+            return (
+              <Row key={i}>
+                <Cell small>{krav.kravNummer}.{krav.kravVersjon}</Cell>
+                <Cell>
+                  <RouteLink href={`/krav/${krav.kravNummer}/${krav.kravVersjon}`}>{krav.navn}</RouteLink>
+                </Cell>
+                <Cell>
+                  {!krav.etterlevelseId && (krav.etterleves ? 'Ja' : 'Nei')}
+                  {krav.etterlevelseId && <RouteLink href={`/etterlevelse/${krav.etterlevelseId}`}>{krav.etterleves ? 'Ja' : 'Nei'}</RouteLink>}
+                </Cell>
+                <Cell>{krav.frist && moment(krav.frist).format('ll')}</Cell>
+                <Cell>{etterlevelseStatus(krav.etterlevelseStatus)}</Cell>
+                <Cell small $style={{justifyContent: 'flex-end'}}>
+                  {krav.etterlevelseId && <Button size='compact' kind='tertiary' onClick={() => setEdit(krav.etterlevelseId)}><FontAwesomeIcon icon={faEdit}/></Button>}
+                  {!krav.etterlevelseId && <Button size='compact' kind='tertiary' onClick={() => setCreateNew(true)}><FontAwesomeIcon icon={faPlus}/></Button>}
+                </Cell>
+              </Row>
+            )
+          })
+        }}
+      />
   )
 }

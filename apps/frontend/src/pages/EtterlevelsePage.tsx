@@ -15,7 +15,8 @@ import {FormikProps} from 'formik'
 
 export const etterlevelseName = (etterlevelse: Etterlevelse) => `${etterlevelse.kravNummer}.${etterlevelse.kravVersjon} - ${etterlevelse.begrunnelse}`
 
-export const etterlevelseStatus = (status: EtterlevelseStatus) => {
+export const etterlevelseStatus = (status?: EtterlevelseStatus) => {
+  if (!status) return ''
   switch (status) {
     case EtterlevelseStatus.UNDER_REDIGERING:
       return 'Under redigering'
