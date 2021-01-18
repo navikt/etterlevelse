@@ -16,12 +16,13 @@ import {kravName} from '../../pages/KravPage'
 import {behandlingName, useBehandling, useSearchBehandling} from '../../api/BehandlingApi'
 
 type EditEttlevProps = {
-  etterlevelse: Etterlevelse,
-  close: (k?: Etterlevelse) => void,
-  formRef: React.Ref<any>
+  etterlevelse: Etterlevelse
+  close: (k?: Etterlevelse) => void
+  formRef?: React.Ref<any>
+  lockBehandlingAndKrav?: boolean
 }
 
-export const EditEtterlevelse = ({etterlevelse, close, formRef}: EditEttlevProps) => {
+export const EditEtterlevelse = ({etterlevelse, close, formRef, lockBehandlingAndKrav}: EditEttlevProps) => {
 
   const submit = async (etterlevelse: Etterlevelse) => {
     if (etterlevelse.id) {
@@ -41,8 +42,10 @@ export const EditEtterlevelse = ({etterlevelse, close, formRef}: EditEttlevProps
       <Form onKeyDown={disableEnter}>
         <Block>
 
-          <SearchBehandling id={values.behandlingId}/>
-          <SearchKrav kravNummer={values.kravNummer} kravVersjon={values.kravVersjon}/>
+          {!lockBehandlingAndKrav && <>
+            <SearchBehandling id={values.behandlingId}/>
+            <SearchKrav kravNummer={values.kravNummer} kravVersjon={values.kravVersjon}/>
+          </>}
 
           <Block height={theme.sizing.scale600}/>
 
