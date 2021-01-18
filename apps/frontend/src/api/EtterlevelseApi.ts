@@ -3,17 +3,22 @@ import {emptyPage, Etterlevelse, EtterlevelseStatus, PageResponse} from '../cons
 import {env} from '../util/env'
 import {useEffect, useState} from 'react'
 import * as queryString from 'querystring'
+import {KravId} from './KravApi'
 
 export const getEtterlevelsePage = async (pageNumber: number, pageSize: number) => {
   return (await axios.get<PageResponse<Etterlevelse>>(`${env.backendBaseUrl}/etterlevelse?pageNumber=${pageNumber}&pageSize=${pageSize}`)).data
 }
 
-export const getEtterlevelseFor = async (query:{behandling:string}) => {
+export const getEtterlevelseFor = async (query: {behandling: string}) => {
   return (await axios.get<PageResponse<Etterlevelse>>(`${env.backendBaseUrl}/etterlevelse?${queryString.stringify(query)}`)).data.content
 }
 
 export const getEtterlevelse = async (id: string) => {
   return (await axios.get<Etterlevelse>(`${env.backendBaseUrl}/etterlevelse/${id}`)).data
+}
+
+export const deleteEtterlevelse = async (id: string) => {
+  return (await axios.delete<Etterlevelse>(`${env.backendBaseUrl}/etterlevelse/${id}`)).data
 }
 
 export const createEtterlevelse = async (etterlevelse: Etterlevelse) => {
@@ -54,9 +59,13 @@ export const useEtterlevelsePage = (pageSize: number) => {
   return [data, prevPage, nextPage, loading] as [PageResponse<Etterlevelse>, () => void, () => void, boolean]
 }
 
-export const useEtterlevelse = (id?: string) => {
+export const useEtterlevelse = (id?: string, behandlingId?: string, kravId?: KravId) => {
   const isCreateNew = id === 'ny'
-  const [data, setData] = useState<Etterlevelse | undefined>(isCreateNew ? mapToFormVal({}) : undefined)
+  const [data, setData] = useState<Etterlevelse | undefined>(isCreateNew ? mapToFormVal({
+    behandlingId,
+    kravVersjon: kravId?.kravVersjon,
+    kravNummer: kravId?.kravNummer
+  }) : undefined)
 
   useEffect(() => {
     id && !isCreateNew && getEtterlevelse(id).then(setData)
@@ -69,7 +78,7 @@ export const useEtterlevelseForBehandling = (behandlingId?: string) => {
   const [data, setData] = useState<Etterlevelse[]>([])
 
   useEffect(() => {
-    behandlingId && getEtterlevelseFor({behandling:behandlingId}).then(setData)
+    behandlingId && getEtterlevelseFor({behandling: behandlingId}).then(setData)
   }, [behandlingId])
 
   return data

@@ -18,7 +18,7 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faEdit, faPlus} from '@fortawesome/free-solid-svg-icons'
 import {Modal, ModalBody, ModalHeader} from 'baseui/modal'
 import {EditEtterlevelse} from '../etterlevelse/EditEtterlevelse'
-import {updateEtterlevelse, useEtterlevelse} from '../../api/EtterlevelseApi'
+import {useEtterlevelse} from '../../api/EtterlevelseApi'
 import {KravId, useKrav} from '../../api/KravApi'
 import {ViewKrav} from '../krav/ViewKrav'
 import {kravName} from '../../pages/KravPage'
@@ -101,18 +101,24 @@ const KravTable = (props: {behandling: Behandling}) => {
         kravNummer: krav.kravNummer,
         kravVersjon: krav.kravVersjon,
         navn: krav.navn,
-        etterlevelseId: etterlevelse?.id,
-        etterleves: !!etterlevelse?.etterleves,
-        frist: etterlevelse?.fristForFerdigstillelse,
-        etterlevelseStatus: etterlevelse?.status
+        ...mapEtterlevelseData(etterlevelse)
       })
     })
     setData(mapped.filter(k => k.etterlevelseId || !mapped.find(k2 => k2.kravNummer === k.kravNummer && k2.kravVersjon > k.kravVersjon)))
   }, [rawData])
 
   const [edit, setEdit] = useState<string | undefined>()
-  const [createNew, setCreateNew] = useState(false)
+  const [kravId, setKravId] = useState<KravId | undefined>()
 
+  const mapEtterlevelseData = (etterlevelse?: Etterlevelse) => ({
+    etterlevelseId: etterlevelse?.id,
+    etterleves: !!etterlevelse?.etterleves,
+    frist: etterlevelse?.fristForFerdigstillelse,
+    etterlevelseStatus: etterlevelse?.status
+  })
+  const update = (etterlevelse: Etterlevelse) => {
+    setData(data.map(e => e.kravVersjon === etterlevelse.kravVersjon && e.kravNummer == etterlevelse.kravNummer ? {...e, ...mapEtterlevelseData(etterlevelse)} : e))
+  }
 
   return (
     loading ?
@@ -152,7 +158,10 @@ const KravTable = (props: {behandling: Behandling}) => {
                   <Cell>{etterlevelseStatus(krav.etterlevelseStatus)}</Cell>
                   <Cell small $style={{justifyContent: 'flex-end'}}>
                     {krav.etterlevelseId && <Button size='compact' kind='tertiary' onClick={() => setEdit(krav.etterlevelseId)}><FontAwesomeIcon icon={faEdit}/></Button>}
-                    {!krav.etterlevelseId && <Button size='compact' kind='tertiary' onClick={() => setCreateNew(true)}><FontAwesomeIcon icon={faPlus}/></Button>}
+                    {!krav.etterlevelseId && <Button size='compact' kind='tertiary' onClick={() => {
+                      setKravId(toKravId(krav))
+                      setEdit('ny')
+                    }}><FontAwesomeIcon icon={faPlus}/></Button>}
                   </Cell>
                 </Row>
               )
@@ -165,9 +174,12 @@ const KravTable = (props: {behandling: Behandling}) => {
                unstable_ModalBackdropScroll
                size={'full'}
         >
-          <ModalHeader>Rediger etterlevelse</ModalHeader>
+          <ModalHeader>{edit == 'ny' ? 'Ny' : 'Rediger'} etterlevelse</ModalHeader>
           <ModalBody>
-            <EditModal etterlevelseId={edit} close={() => setEdit(undefined)}/>
+            <EditModal etterlevelseId={edit} behandlingId={props.behandling.id} kravId={kravId} close={e => {
+              setEdit(undefined)
+              e && update(e)
+            }}/>
           </ModalBody>
         </Modal>
         }
@@ -175,21 +187,21 @@ const KravTable = (props: {behandling: Behandling}) => {
   )
 }
 
+const toKravId = (it: {kravVersjon: number, kravNummer: number}) => ({kravNummer: it.kravNummer, kravVersjon: it.kravVersjon})
 
-const EditModal = (props: {etterlevelseId: string, close: () => void}) => {
-  const [etterlevelse] = useEtterlevelse(props.etterlevelseId)
+const EditModal = (props: {etterlevelseId: string, behandlingId: string, kravId?: KravId, close: (e?: Etterlevelse) => void}) => {
+  const [etterlevelse] = useEtterlevelse(props.etterlevelseId, props.behandlingId, props.kravId)
   if (!etterlevelse) return <Spinner size={theme.sizing.scale800}/>
 
   return (
     <Block>
-      {etterlevelse && <KravView krav={{kravNummer: etterlevelse.kravNummer, kravVersjon: etterlevelse.kravVersjon}}/>}
+      {etterlevelse && <KravView krav={toKravId(etterlevelse)}/>}
       <EditEtterlevelse
         etterlevelse={etterlevelse}
         lockBehandlingAndKrav
         close={e => {
-        e && updateEtterlevelse(e)
-        props.close()
-      }}/>
+          props.close(e)
+        }}/>
     </Block>
   )
 }
@@ -204,7 +216,7 @@ const KravView = (props: {krav: KravId}) => {
       {krav && view &&
       <Block>
         <HeadingSmall>{kravName(krav)}</HeadingSmall>
-        <ViewKrav krav={krav} />
+        <ViewKrav krav={krav}/>
       </Block>
       }
     </Block>

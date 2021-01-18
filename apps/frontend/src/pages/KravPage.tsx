@@ -1,7 +1,7 @@
 import {Block} from 'baseui/block'
 import {HeadingLarge} from 'baseui/typography'
 import {useHistory, useParams} from 'react-router-dom'
-import {KravIdParams, useKrav} from '../api/KravApi'
+import {deleteKrav, KravIdParams, useKrav} from '../api/KravApi'
 import React, {useEffect, useRef, useState} from 'react'
 import {Krav, KravStatus} from '../constants'
 import Button from '../components/common/Button'
@@ -12,6 +12,7 @@ import {LoadingSkeleton} from '../components/common/LoadingSkeleton'
 import {user} from '../services/User'
 import {theme} from '../util'
 import {FormikProps} from 'formik'
+import {DeleteItem} from '../components/DeleteItem'
 
 export const kravName = (krav: Krav) => `${krav.kravNummer}.${krav.kravVersjon} - ${krav.navn}`
 
@@ -57,6 +58,7 @@ export const KravPage = () => {
               <Button size='compact' kind='tertiary'>Tilbake</Button>
             </RouteLink>
             {krav?.id && user.isKraveier() && !edit && <Button size='compact' kind='secondary' onClick={newVersion} marginLeft>Ny versjon av krav</Button>}
+            {krav?.id && user.isKraveier() && <DeleteItem fun={() => deleteKrav(krav.id)} redirect={'/krav'}/>}
             {(edit || (krav?.id && user.isKraveier())) && <Button size='compact' onClick={() => setEdit(!edit)} marginLeft>{edit ? 'Avbryt' : 'Rediger'}</Button>}
             {edit && <Button size='compact' onClick={() => !formRef.current?.isSubmitting && formRef.current?.submitForm()} marginLeft>Lagre</Button>}
           </Block>

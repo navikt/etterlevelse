@@ -13,6 +13,10 @@ export const getKrav = async (id: string) => {
   return (await axios.get<Krav>(`${env.backendBaseUrl}/krav/${id}`)).data
 }
 
+export const deleteKrav = async (id: string) => {
+  return (await axios.delete<Krav>(`${env.backendBaseUrl}/krav/${id}`)).data
+}
+
 export const searchKrav = async (name: string) => {
   return (await axios.get<PageResponse<Krav>>(`${env.backendBaseUrl}/krav/search/${name}`)).data.content
 }

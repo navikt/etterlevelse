@@ -1,7 +1,7 @@
 import {Block} from 'baseui/block'
 import {HeadingLarge} from 'baseui/typography'
 import {useHistory, useParams} from 'react-router-dom'
-import {useEtterlevelse} from '../api/EtterlevelseApi'
+import {deleteEtterlevelse, useEtterlevelse} from '../api/EtterlevelseApi'
 import React, {useRef, useState} from 'react'
 import {Etterlevelse, EtterlevelseStatus} from '../constants'
 import Button from '../components/common/Button'
@@ -12,6 +12,7 @@ import {LoadingSkeleton} from '../components/common/LoadingSkeleton'
 import {user} from '../services/User'
 import {theme} from '../util'
 import {FormikProps} from 'formik'
+import {DeleteItem} from '../components/DeleteItem'
 
 export const etterlevelseName = (etterlevelse: Etterlevelse) => `${etterlevelse.kravNummer}.${etterlevelse.kravVersjon} - ${etterlevelse.begrunnelse}`
 
@@ -47,6 +48,7 @@ export const EtterlevelsePage = () => {
               <Button size='compact' kind='tertiary'>Tilbake</Button>
             </RouteLink>
             {etterlevelse?.id && user.canWrite() && <Button size='compact' onClick={() => setEdit(!edit)} marginLeft>{edit ? 'Avbryt' : 'Rediger'}</Button>}
+            {etterlevelse?.id && user.canWrite() && <DeleteItem fun={() => deleteEtterlevelse(etterlevelse.id)} redirect={'/etterlevelse'}/>}
             {edit && <Button size='compact' onClick={() => !formRef.current?.isSubmitting && formRef.current?.submitForm()} marginLeft>Lagre</Button>}
           </Block>
         </Block>
