@@ -16,4 +16,5 @@ input KravFilter {
     relevans: [String!]
     nummer: Int
     behandlingId: String
+    underavdeling: String
 }

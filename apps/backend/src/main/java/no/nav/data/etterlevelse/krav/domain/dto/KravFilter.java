@@ -18,6 +18,7 @@ public class KravFilter {
     private List<String> relevans;
     private Integer nummer;
     private String behandlingId;
+    private String underavdeling;
 
     public List<String> getRelevans() {
         return formatList(relevans);
@@ -26,7 +27,8 @@ public class KravFilter {
     public boolean isEmpty() {
         return getRelevans().isEmpty() &&
                 nummer == null &&
-                behandlingId == null
+                behandlingId == null &&
+                underavdeling == null
                 ;
     }
 

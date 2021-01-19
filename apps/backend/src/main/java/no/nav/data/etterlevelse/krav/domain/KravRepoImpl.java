@@ -59,6 +59,10 @@ public class KravRepoImpl implements KravRepoCustom {
                 par.addValue("behandlingId", filter.getBehandlingId());
             }
         }
+        if (filter.getUnderavdeling() != null) {
+            query += " and data ->> 'underavdeling' = :underavdeling ";
+            par.addValue("underavdeling", filter.getUnderavdeling());
+        }
 
         return fetch(jdbcTemplate.queryForList(query, par));
     }
