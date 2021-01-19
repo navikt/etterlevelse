@@ -5,8 +5,8 @@ import {TeamName} from '../common/TeamName'
 import {DotTags} from '../common/DotTag'
 import {ListName} from '../../services/Codelist'
 import {HeadingSmall} from 'baseui/typography'
-import RouteLink from '../common/RouteLink'
-import {etterlevelseStatus} from '../../pages/EtterlevelsePage'
+import RouteLink, {ObjectLink} from '../common/RouteLink'
+import {etterlevelseName, etterlevelseStatus} from '../../pages/EtterlevelsePage'
 import {Behandling, Etterlevelse, EtterlevelseStatus} from '../../constants'
 import {Label} from '../common/PropertyLabel'
 import {KravFilters, useKravFilter} from '../../api/KravGraphQLApi'
@@ -15,7 +15,7 @@ import {Cell, Row, Table} from '../common/Table'
 import moment from 'moment'
 import Button from '../common/Button'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faEdit, faPlus} from '@fortawesome/free-solid-svg-icons'
+import {faEdit, faEye, faPlus} from '@fortawesome/free-solid-svg-icons'
 import {Modal, ModalBody, ModalHeader} from 'baseui/modal'
 import {EditEtterlevelse} from '../etterlevelse/EditEtterlevelse'
 import {useEtterlevelse} from '../../api/EtterlevelseApi'
@@ -23,6 +23,8 @@ import {KravId, useKrav} from '../../api/KravApi'
 import {ViewKrav} from '../krav/ViewKrav'
 import {kravName, kravNumView} from '../../pages/KravPage'
 import {gql} from 'graphql.macro';
+import {ViewEtterlevelse} from '../etterlevelse/ViewEtterlevelse'
+import {ObjectType} from '../admin/audit/AuditTypes'
 
 function filterForBehandling(behandling: Behandling): KravFilters {
   return {behandlingId: behandling.id}
@@ -110,6 +112,7 @@ const KravTable = (props: {behandling: Behandling}) => {
     setData(mapped.filter(k => k.etterlevelseId || !mapped.find(k2 => k2.kravNummer === k.kravNummer && k2.kravVersjon > k.kravVersjon)))
   }, [rawData])
 
+  const [viewEtterlevelse, setViewEtterlevelse] = useState<string | undefined>()
   const [edit, setEdit] = useState<string | undefined>()
   const [kravId, setKravId] = useState<KravId | undefined>()
 
@@ -155,14 +158,16 @@ const KravTable = (props: {behandling: Behandling}) => {
                     <RouteLink href={`/krav/${krav.kravNummer}/${krav.kravVersjon}`}>{krav.navn}</RouteLink>
                   </Cell>
                   <Cell>
-                    {!krav.etterlevelseId && (krav.etterleves ? 'Ja' : 'Nei')}
-                    {krav.etterlevelseId && <RouteLink href={`/etterlevelse/${krav.etterlevelseId}`}>{krav.etterleves ? 'Ja' : 'Nei'}</RouteLink>}
+                    {krav.etterleves ? 'Ja' : 'Nei'}
                   </Cell>
                   <Cell>{krav.frist && moment(krav.frist).format('ll')}</Cell>
                   <Cell>{etterlevelseStatus(krav.etterlevelseStatus)}</Cell>
                   <Cell small $style={{justifyContent: 'flex-end'}}>
-                    {krav.etterlevelseId && <Button size='compact' kind='tertiary' onClick={() => setEdit(krav.etterlevelseId)}><FontAwesomeIcon icon={faEdit}/></Button>}
-                    {!krav.etterlevelseId && <Button size='compact' kind='tertiary' onClick={() => {
+                    {krav.etterlevelseId &&
+                    <Button tooltip='Vis etterlevelse' size='compact' kind='tertiary' onClick={() => setViewEtterlevelse(krav.etterlevelseId)}><FontAwesomeIcon icon={faEye}/></Button>}
+
+                    {krav.etterlevelseId && <Button tooltip='Rediger' size='compact' kind='tertiary' onClick={() => setEdit(krav.etterlevelseId)}><FontAwesomeIcon icon={faEdit}/></Button>}
+                    {!krav.etterlevelseId && <Button tooltip='Opprett' size='compact' kind='tertiary' onClick={() => {
                       setKravId(toKravId(krav))
                       setEdit('ny')
                     }}><FontAwesomeIcon icon={faPlus}/></Button>}
@@ -172,6 +177,9 @@ const KravTable = (props: {behandling: Behandling}) => {
             })
           }}
         />
+        <Modal isOpen={!!viewEtterlevelse} onClose={() => setViewEtterlevelse(undefined)} unstable_ModalBackdropScroll>
+          <EtterlevelseModal id={viewEtterlevelse}/>
+        </Modal>
         {edit &&
         <Modal isOpen={!!edit}
                onClose={() => setEdit(undefined)}
@@ -195,6 +203,21 @@ const KravTable = (props: {behandling: Behandling}) => {
         }
       </>
   )
+}
+
+const EtterlevelseModal = (props: {id?: string}) => {
+  const [etterlevelse] = useEtterlevelse(props.id)
+  if (!etterlevelse) return <Spinner size={theme.sizing.scale800}/>
+  return <>
+    <ModalHeader>
+      <ObjectLink type={ObjectType.Etterlevelse} id={props.id}>
+        <Block marginRight={theme.sizing.scale400}>Etterlevelse av {etterlevelseName(etterlevelse)}</Block>
+      </ObjectLink>
+    </ModalHeader>
+    <ModalBody>
+      <ViewEtterlevelse etterlevelse={etterlevelse}/>
+    </ModalBody>
+  </>
 }
 
 const toKravId = (it: {kravVersjon: number, kravNummer: number}) => ({kravNummer: it.kravNummer, kravVersjon: it.kravVersjon})

@@ -15,7 +15,7 @@ import {FormikProps} from 'formik'
 import {DeleteItem} from '../components/DeleteItem'
 import {kravNumView} from './KravPage'
 
-export const etterlevelseName = (etterlevelse: Etterlevelse) => `${kravNumView(etterlevelse)} - ${etterlevelse.begrunnelse || ''}`
+export const etterlevelseName = (etterlevelse: Etterlevelse) => `${kravNumView(etterlevelse)}`
 
 export const etterlevelseStatus = (status?: EtterlevelseStatus) => {
   if (!status) return ''
