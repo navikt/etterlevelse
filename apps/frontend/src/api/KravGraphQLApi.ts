@@ -3,8 +3,8 @@ import {env} from '../util/env'
 import {Behandling, Etterlevelse, GraphQLResponse, Krav} from '../constants'
 import {useEffect, useState} from 'react'
 
-const kravtableQuery = `query getKravByFilter ($relevans: [String!], $nummer: Int){
-  krav(filter: {relevans: $relevans, nummer: $nummer}) {
+const kravtableQuery = `query getKravByFilter ($relevans: [String!], $nummer: Int, $behandlingId: String){
+  krav(filter: {relevans: $relevans, nummer: $nummer, behandlingId: $behandlingId}) {
     id
     navn
     kravNummer
@@ -24,7 +24,7 @@ const kravtableQuery = `query getKravByFilter ($relevans: [String!], $nummer: In
   }
 }`
 
-export type KravFilters = {relevans?: string[], nummer?: number}
+export type KravFilters = {relevans?: string[], nummer?: number, behandlingId?: string}
 type KravFilterType = Krav & {etterlevelser: (Etterlevelse & {behandling: Behandling})[]}
 
 export const getKrav = async (variables: KravFilters, query: string) => {
@@ -50,7 +50,7 @@ export const useKravFilter = (variables: KravFilters, query?: string) => {
         setLoading(false)
       })
     }
-  }, [variables.relevans, variables.nummer, query])
+  }, [variables.relevans, variables.nummer, variables.behandlingId, query])
 
   return [data, loading] as [KravFilterType[], boolean]
 }

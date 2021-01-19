@@ -24,7 +24,7 @@ import {ViewKrav} from '../krav/ViewKrav'
 import {kravName} from '../../pages/KravPage'
 
 function filterForBehandling(behandling: Behandling): KravFilters {
-  return {relevans: behandling.relevansFor.map(c => c.code)}
+  return {behandlingId: behandling.id}
 }
 
 export const ViewBehandling = ({behandling, etterlevelser}: {behandling: Behandling, etterlevelser: Etterlevelse[]}) => {
@@ -60,8 +60,8 @@ export const ViewBehandling = ({behandling, etterlevelser}: {behandling: Behandl
     </Block>
   )
 }
-const behandlingKravQuery = `query getKravByFilter ($relevans: [String!], $nummer: Int){
-  krav(filter: {relevans: $relevans, nummer: $nummer}) {
+const behandlingKravQuery = `query getKravByFilter ($behandlingId: String!){
+  krav(filter: {behandlingId: $behandlingId}) {
     id
     navn
     kravNummer
