@@ -37,7 +37,7 @@ const MediumInfo = ({krav}: {krav: Krav}) => (
     <Label title='Status'>{kravStatus(krav.status)}</Label>
     <Block display='flex'>
       <Block width='50%'>
-        <Label title='Underavdeling'>{krav.underavdeling?.shortName}</Label>
+        <Label title='Underavdeling'><ObjectLink id={krav.underavdeling?.code} type={ListName.UNDERAVDELING}>{krav.underavdeling?.shortName}</ObjectLink></Label>
       </Block>
       <Block width='50%'>
         <Label title='Kontaktpersoner'>
