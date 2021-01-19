@@ -10,6 +10,8 @@ type Query {
     krav(filter: KravFilter, pageNumber: NonNegativeInt = 0, pageSize: NonNegativeInt = 0): [Krav!]!
 
     etterlevelseById(id: ID!) : Etterlevelse
+
+    behandling(filter: BehandlingFilter, pageNumber: NonNegativeInt = 0, pageSize: NonNegativeInt = 0): BehandlingPage
 }
 
 input KravFilter {
@@ -17,4 +19,8 @@ input KravFilter {
     nummer: Int
     behandlingId: String
     underavdeling: String
+}
+
+input BehandlingFilter {
+    relevans: [String!]
 }

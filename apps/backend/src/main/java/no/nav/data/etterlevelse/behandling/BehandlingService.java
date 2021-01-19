@@ -1,6 +1,7 @@
 package no.nav.data.etterlevelse.behandling;
 
 import lombok.extern.slf4j.Slf4j;
+import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.common.storage.StorageService;
 import no.nav.data.common.storage.domain.GenericStorage;
 import no.nav.data.common.utils.StreamUtils;
@@ -8,9 +9,11 @@ import no.nav.data.common.validator.Validator;
 import no.nav.data.etterlevelse.behandling.domain.BehandlingData;
 import no.nav.data.etterlevelse.behandling.domain.BehandlingRepo;
 import no.nav.data.etterlevelse.behandling.dto.Behandling;
+import no.nav.data.etterlevelse.behandling.dto.BehandlingFilter;
 import no.nav.data.etterlevelse.behandling.dto.BehandlingRequest;
 import no.nav.data.integration.behandling.BkatClient;
 import no.nav.data.integration.behandling.dto.BkatProcess;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -18,6 +21,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
+
+import static no.nav.data.common.utils.StreamUtils.convert;
 
 @Slf4j
 @Service
@@ -51,19 +56,19 @@ public class BehandlingService {
         if (process == null) {
             return null;
         }
-        return convert(process);
+        return convertBehandling(process);
     }
 
     public List<Behandling> getBehandlingerForTeam(String teamId) {
-        return convert(bkatClient.getProcessesForTeam(teamId));
+        return convertBehandlinger(bkatClient.getProcessesForTeam(teamId));
     }
 
     public List<Behandling> findBehandlinger(String search) {
-        return convert(bkatClient.findProcesses(search));
+        return convertBehandlinger(bkatClient.findProcesses(search));
     }
 
     public List<Behandling> findAllById(List<String> ids) {
-        return convert(bkatClient.getProcessesById(ids).values());
+        return convertBehandlinger(bkatClient.getProcessesById(ids).values());
     }
 
     public Map<String, Behandling> findAllByIdMapped(Collection<String> ids) {
@@ -71,17 +76,29 @@ public class BehandlingService {
                 .collect(Collectors.toMap(Entry::getKey, e -> e.getValue().convertToBehandling()));
     }
 
-    private List<Behandling> convert(Collection<BkatProcess> processes) {
-        List<String> ids = StreamUtils.convert(processes, BkatProcess::getId);
+    public List<Behandling> getByFilter(BehandlingFilter filter) {
+        List<GenericStorage> datas = repo.findByRelevans(filter.getRelevans());
+        List<String> behandlingIds = convert(GenericStorage.to(datas, BehandlingData.class), BehandlingData::getBehandlingId);
+        Collection<BkatProcess> processes = bkatClient.getProcessesById(behandlingIds).values();
+        return convert(processes, p -> convertBeh(p, datas));
+    }
+
+    public RestResponsePage<Behandling> getAll(Pageable page) {
+        RestResponsePage<BkatProcess> behPage = bkatClient.findByPage(page.getPageNumber(), page.getPageSize());
+        return behPage.convertBatch(this::convertBehandlinger);
+    }
+
+    private List<Behandling> convertBehandlinger(Collection<BkatProcess> processes) {
+        List<String> ids = convert(processes, BkatProcess::getId);
         var datas = repo.findByBehandlingIds(ids);
-        return StreamUtils.convert(processes, p -> convert(p, datas));
+        return convert(processes, p -> convertBeh(p, datas));
     }
 
-    private Behandling convert(BkatProcess process) {
-        return convert(process, repo.findByBehandlingIds(List.of(process.getId())));
+    private Behandling convertBehandling(BkatProcess process) {
+        return convertBeh(process, repo.findByBehandlingIds(List.of(process.getId())));
     }
 
-    private Behandling convert(BkatProcess process, Collection<GenericStorage> behandlingDatas) {
+    private Behandling convertBeh(BkatProcess process, Collection<GenericStorage> behandlingDatas) {
         Behandling convert = process.convertToBehandling();
         StreamUtils.tryFind(behandlingDatas, bd -> bd.toBehandlingData().getBehandlingId().equals(process.getId()))
                 .ifPresentOrElse(bd -> convert.includeData(bd.toBehandlingData()), () -> convert.includeData(new BehandlingData()));

@@ -2,6 +2,7 @@ package no.nav.data.etterlevelse.krav;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.graphql.spring.boot.test.GraphQLResponse;
 import lombok.SneakyThrows;
 import no.nav.data.common.utils.JsonUtils;
 import no.nav.data.etterlevelse.behandling.dto.Behandling;
@@ -10,6 +11,7 @@ import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.graphql.GraphQLTestBase;
 import no.nav.data.integration.behandling.BkatMocks;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -54,108 +56,111 @@ class KravGraphQLIT extends GraphQLTestBase {
                 .hasField("etterlevelser[0].behandling.navn", behandling.getNavn());
     }
 
-    @Test
-    @SneakyThrows
-    void kravFilter() {
-        var krav = storageService.save(Krav.builder()
-                .navn("Krav 1").kravNummer(50).kravVersjon(1)
-                .relevansFor(List.of("SAK"))
-                .build());
-        storageService.save(Krav.builder()
-                .navn("Krav 2").kravNummer(51).kravVersjon(1)
-                .relevansFor(List.of("INNSYN"))
-                .build());
+    @Nested
+    class KravFilter {
 
-        var var = Map.of("relevans", "SAK", "nummer", "50");
-        var response = graphQLTestTemplate.perform("graphqltest/krav_filter.graphql", vars(var));
+        @Test
+        @SneakyThrows
+        void kravFilter() {
+            var krav = storageService.save(Krav.builder()
+                    .navn("Krav 1").kravNummer(50).kravVersjon(1)
+                    .relevansFor(List.of("SAK"))
+                    .build());
+            storageService.save(Krav.builder()
+                    .navn("Krav 2").kravNummer(51).kravVersjon(1)
+                    .relevansFor(List.of("INNSYN"))
+                    .build());
 
-        assertThat(response, "krav")
-                .hasNoErrors()
-                .hasSize(1)
-                .hasField("[0].id", krav.getId().toString());
-    }
+            var var = Map.of("relevans", "SAK", "nummer", "50");
+            var response = graphQLTestTemplate.perform("graphqltest/krav_filter.graphql", vars(var));
 
-    @Test
-    @SneakyThrows
-    void kravForBehandling() {
-        var krav = storageService.save(Krav.builder()
-                .navn("Krav 1").kravNummer(50).kravVersjon(1)
-                .relevansFor(List.of("SAK"))
-                .build());
-        var krav2 = storageService.save(Krav.builder()
-                .navn("Krav 2").kravNummer(51).kravVersjon(1)
-                .relevansFor(List.of("INNSYN"))
-                .build());
-        storageService.save(Krav.builder()
-                .navn("Krav 3").kravNummer(52).kravVersjon(1)
-                .relevansFor(List.of("INNSYN"))
-                .build());
-        storageService.save(Etterlevelse.builder()
-                .kravNummer(51).kravVersjon(1)
-                .behandlingId(behandling.getId())
-                .build());
+            assertThat(response, "krav")
+                    .hasNoErrors()
+                    .hasSize(1)
+                    .hasField("[0].id", krav.getId().toString());
+        }
 
-        behandlingService.save(BehandlingRequest.builder()
-                .id(behandling.getId())
-                .update(true)
-                .relevansFor(List.of("SAK"))
-                .build());
+        @Test
+        @SneakyThrows
+        void kravForBehandling() {
+            var krav = storageService.save(Krav.builder()
+                    .navn("Krav 1").kravNummer(50).kravVersjon(1)
+                    .relevansFor(List.of("SAK"))
+                    .build());
+            var krav2 = storageService.save(Krav.builder()
+                    .navn("Krav 2").kravNummer(51).kravVersjon(1)
+                    .relevansFor(List.of("INNSYN"))
+                    .build());
+            storageService.save(Krav.builder()
+                    .navn("Krav 3").kravNummer(52).kravVersjon(1)
+                    .relevansFor(List.of("INNSYN"))
+                    .build());
+            storageService.save(Etterlevelse.builder()
+                    .kravNummer(51).kravVersjon(1)
+                    .behandlingId(behandling.getId())
+                    .build());
 
-        var var = Map.of("behandlingId", behandling.getId());
-        var response = graphQLTestTemplate.perform("graphqltest/krav_filter.graphql", vars(var));
+            behandlingService.save(BehandlingRequest.builder()
+                    .id(behandling.getId())
+                    .update(true)
+                    .relevansFor(List.of("SAK"))
+                    .build());
 
-        assertThat(response, "krav")
-                .hasNoErrors()
-                .hasSize(2)
-                .hasField("[0].id", krav.getId().toString())
-                .hasField("[1].id", krav2.getId().toString());
-    }
+            var var = Map.of("behandlingId", behandling.getId());
+            var response = graphQLTestTemplate.perform("graphqltest/krav_filter.graphql", vars(var));
 
-    @Test
-    @SneakyThrows
-    void kravForBehandlingNoRelevans() {
-        var krav = storageService.save(Krav.builder()
-                .navn("Krav 1").kravNummer(50).kravVersjon(1)
-                .relevansFor(List.of("SAK"))
-                .build());
-        storageService.save(Krav.builder()
-                .navn("Krav 2").kravNummer(51).kravVersjon(1)
-                .relevansFor(List.of("INNSYN"))
-                .build());
-        storageService.save(Etterlevelse.builder()
-                .kravNummer(50).kravVersjon(1)
-                .behandlingId(behandling.getId())
-                .build());
+            assertThat(response, "krav")
+                    .hasNoErrors()
+                    .hasSize(2)
+                    .hasField("[0].id", krav.getId().toString())
+                    .hasField("[1].id", krav2.getId().toString());
+        }
 
-        var var = Map.of("behandlingId", behandling.getId());
-        var response = graphQLTestTemplate.perform("graphqltest/krav_filter.graphql", vars(var));
+        @Test
+        @SneakyThrows
+        void kravForBehandlingNoRelevans() {
+            var krav = storageService.save(Krav.builder()
+                    .navn("Krav 1").kravNummer(50).kravVersjon(1)
+                    .relevansFor(List.of("SAK"))
+                    .build());
+            storageService.save(Krav.builder()
+                    .navn("Krav 2").kravNummer(51).kravVersjon(1)
+                    .relevansFor(List.of("INNSYN"))
+                    .build());
+            storageService.save(Etterlevelse.builder()
+                    .kravNummer(50).kravVersjon(1)
+                    .behandlingId(behandling.getId())
+                    .build());
 
-        assertThat(response, "krav")
-                .hasNoErrors()
-                .hasSize(1)
-                .hasField("[0].id", krav.getId().toString());
-    }
+            var var = Map.of("behandlingId", behandling.getId());
+            var response = graphQLTestTemplate.perform("graphqltest/krav_filter.graphql", vars(var));
 
+            assertThat(response, "krav")
+                    .hasNoErrors()
+                    .hasSize(1)
+                    .hasField("[0].id", krav.getId().toString());
+        }
 
-    @Test
-    @SneakyThrows
-    void kravForUnderleverandor() {
-        var krav = storageService.save(Krav.builder()
-                .navn("Krav 1").kravNummer(50).kravVersjon(1)
-                .underavdeling("AVD1")
-                .build());
-        storageService.save(Krav.builder()
-                .navn("Krav 2").kravNummer(51).kravVersjon(1)
-                .underavdeling("AVD2")
-                .build());
+        @Test
+        @SneakyThrows
+        void kravForUnderleverandor() {
+            var krav = storageService.save(Krav.builder()
+                    .navn("Krav 1").kravNummer(50).kravVersjon(1)
+                    .underavdeling("AVD1")
+                    .build());
+            storageService.save(Krav.builder()
+                    .navn("Krav 2").kravNummer(51).kravVersjon(1)
+                    .underavdeling("AVD2")
+                    .build());
 
-        var var = Map.of("underavdeling", "AVD1");
-        var response = graphQLTestTemplate.perform("graphqltest/krav_filter.graphql", vars(var));
+            var var = Map.of("underavdeling", "AVD1");
+            var response = graphQLTestTemplate.perform("graphqltest/krav_filter.graphql", vars(var));
 
-        assertThat(response, "krav")
-                .hasNoErrors()
-                .hasSize(1)
-                .hasField("[0].id", krav.getId().toString());
+            assertThat(response, "krav")
+                    .hasNoErrors()
+                    .hasSize(1)
+                    .hasField("[0].id", krav.getId().toString());
+        }
     }
 
     @Test
@@ -185,6 +190,50 @@ class KravGraphQLIT extends GraphQLTestBase {
                 .hasField("[0].navn", "Krav 3")
                 .hasField("[1].navn", "Krav 4")
                 .hasField("[2].navn", "Krav 5");
+    }
+
+    @Nested
+    class BehandlingQuery {
+
+        @Test
+        @SneakyThrows
+        void behandlingPage() {
+            var var = Map.of("pageNumber", "0", "pageSize", "20");
+            var response = graphQLTestTemplate.perform("graphqltest/behandling_filter.graphql", vars(var));
+
+            assertThat(response, "behandling")
+                    .hasNoErrors()
+                    .hasField("totalElements", "1")
+                    .hasField("numberOfElements", "1")
+                    .hasField("content[0].id", behandling.getId());
+        }
+
+        @Test
+        @SneakyThrows
+        void behandlingRelevans() {
+            behandlingService.save(BehandlingRequest.builder()
+                    .id(behandling.getId())
+                    .update(true)
+                    .relevansFor(List.of("SAK"))
+                    .build());
+
+            var var = Map.of("relevans", "SAK");
+            var response = graphQLTestTemplate.perform("graphqltest/behandling_filter.graphql", vars(var));
+
+            assertThat(response, "behandling")
+                    .hasNoErrors()
+                    .hasField("totalElements", "1")
+                    .hasField("numberOfElements", "1")
+                    .hasField("content[0].id", behandling.getId());
+
+            var innsynVar = Map.of("relevans", "INNSYN");
+            GraphQLResponse pageTwo = graphQLTestTemplate.perform("graphqltest/behandling_filter.graphql", vars(innsynVar));
+            assertThat(pageTwo, "behandling")
+                    .hasNoErrors()
+                    .hasField("totalElements", "0")
+                    .hasField("numberOfElements", "0");
+
+        }
     }
 
     private ObjectNode vars(Map<String, String> map) {

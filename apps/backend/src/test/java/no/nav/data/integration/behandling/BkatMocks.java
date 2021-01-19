@@ -17,6 +17,7 @@ public class BkatMocks {
 
     public static void mock() {
         WireMock.stubFor(get("/bkat/process/74288ec1-c45d-4b9f-b799-33539981a690").willReturn(okJson(toJson(processMockResponse()))));
+        WireMock.stubFor(get("/bkat/process?pageNumber=0&pageSize=20").willReturn(okJson(toJson(new RestResponsePage<>(List.of(processMockResponse()))))));
         WireMock.stubFor(post("/bkat/process/shortbyid").willReturn(okJson(toJson(new RestResponsePage<>(List.of(processMockResponse()))))));
         WireMock.stubFor(get("/bkat/process/search/name").willReturn(okJson(toJson(new RestResponsePage<>(List.of(processMockResponse()))))));
     }

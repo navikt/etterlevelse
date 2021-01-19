@@ -114,3 +114,13 @@ enum ListName {
     AVDELING
     UNDERAVDELING
 }
+
+type BehandlingPage {
+    pageNumber: Int!
+    pageSize: Int!
+    pages: Int!
+    numberOfElements: Int!
+    totalElements: Int!
+    paged: Boolean
+    content: [Behandling!]!
+}

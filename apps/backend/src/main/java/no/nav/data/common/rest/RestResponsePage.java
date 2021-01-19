@@ -7,6 +7,7 @@ import lombok.Getter;
 import no.nav.data.common.utils.StreamUtils;
 import org.springframework.data.domain.Page;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.function.Function;
 
@@ -54,5 +55,9 @@ public class RestResponsePage<T> {
 
     public <R> RestResponsePage<R> convert(Function<T, R> converter) {
         return new RestResponsePage<>(pageNumber, pageSize, pages, numberOfElements, totalElements, paged, StreamUtils.convert(content, converter));
+    }
+
+    public <R> RestResponsePage<R> convertBatch(Function<Collection<T>, List<R>> converter) {
+        return new RestResponsePage<>(pageNumber, pageSize, pages, numberOfElements, totalElements, paged, converter.apply(content));
     }
 }

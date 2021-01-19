@@ -1,5 +1,6 @@
 package no.nav.data.integration.behandling;
 
+import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +26,7 @@ public class BkatClient {
     private final WebClient client;
     private final LoadingCache<String, List<BkatProcess>> processSearchCache;
     private final LoadingCache<String, BkatProcess> processCache;
+    private final Cache<String, ProcessPage> processPageCache;
     private final LoadingCache<String, List<BkatProcess>> processTeamCache;
 
     public BkatClient(WebClient.Builder webClientBuilder, BkatProperties properties) {
@@ -41,6 +43,10 @@ public class BkatClient {
                 Caffeine.newBuilder().recordStats()
                         .expireAfterAccess(Duration.ofMinutes(10))
                         .maximumSize(300).build(this::getProcess0));
+        this.processPageCache = MetricUtils.register("bkatProcessPageCache",
+                Caffeine.newBuilder().recordStats()
+                        .expireAfterAccess(Duration.ofMinutes(10))
+                        .maximumSize(20).build());
         this.processTeamCache = MetricUtils.register("bkatProcessTeamCache",
                 Caffeine.newBuilder().recordStats()
                         .expireAfterAccess(Duration.ofMinutes(10))
@@ -63,8 +69,16 @@ public class BkatClient {
         return processTeamCache.get(teamId);
     }
 
+    public RestResponsePage<BkatProcess> findByPage(int pageNumber, int pageSize) {
+        return processPageCache.get("%d-%d".formatted(pageNumber, pageSize), key -> findByPage0(pageNumber, pageSize));
+    }
+
+    public ProcessPage findByPage0(int pageNumber, int pageSize) {
+        return get("/process?pageNumber={pageNumber}&pageSize={pageSize}", ProcessPage.class, pageNumber, pageSize);
+    }
+
     private BkatProcess getProcess0(String id) {
-        return get("/process/{id}", id, BkatProcess.class);
+        return get("/process/{id}", BkatProcess.class, id);
     }
 
     private Map<String, BkatProcess> getProcesses0(Iterable<? extends String> uncachedIds) {
@@ -74,16 +88,16 @@ public class BkatClient {
     }
 
     private List<BkatProcess> search(String search) {
-        return get("/process/search/{search}", search, ProcessPage.class).getContent();
+        return get("/process/search/{search}", ProcessPage.class, search).getContent();
     }
 
     private List<BkatProcess> findProcessesForTeam(String teamId) {
-        return get("/process?productTeam={teamId}", teamId, ProcessPage.class).getContent();
+        return get("/process?productTeam={teamId}", ProcessPage.class, teamId).getContent();
     }
 
-    private <T> T get(String uri, String param, Class<T> response) {
+    private <T> T get(String uri, Class<T> response, Object... params) {
         var res = client.get()
-                .uri(uri, param)
+                .uri(uri, params)
                 .retrieve()
                 .bodyToMono(response)
                 .block();

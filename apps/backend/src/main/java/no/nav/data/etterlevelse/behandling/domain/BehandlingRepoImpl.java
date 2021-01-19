@@ -26,6 +26,13 @@ public class BehandlingRepoImpl implements BehandlingRepoCustom {
         return fetch(resp);
     }
 
+    @Override
+    public List<GenericStorage> findByRelevans(List<String> codes) {
+        var resp = jdbcTemplate.queryForList("select id from generic_storage where data -> 'relevansFor' ??| array[ :relevans ] and type = 'BehandlingData'",
+                new MapSqlParameterSource().addValue("relevans", codes));
+        return fetch(resp);
+    }
+
     private List<GenericStorage> fetch(List<Map<String, Object>> resp) {
         List<UUID> ids = resp.stream().map(i -> ((UUID) i.values().iterator().next())).collect(Collectors.toList());
         return repository.findAllById(ids);

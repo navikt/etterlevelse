@@ -8,4 +8,6 @@ public interface BehandlingRepoCustom {
 
     List<GenericStorage> findByRelevans(String code);
 
+    List<GenericStorage> findByRelevans(List<String> codes);
+
 }
