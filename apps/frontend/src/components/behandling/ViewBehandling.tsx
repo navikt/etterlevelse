@@ -22,12 +22,13 @@ import {useEtterlevelse} from '../../api/EtterlevelseApi'
 import {KravId, useKrav} from '../../api/KravApi'
 import {ViewKrav} from '../krav/ViewKrav'
 import {kravName, kravNumView} from '../../pages/KravPage'
+import {gql} from 'graphql.macro';
 
 function filterForBehandling(behandling: Behandling): KravFilters {
   return {behandlingId: behandling.id}
 }
 
-export const ViewBehandling = ({behandling, etterlevelser}: {behandling: Behandling, etterlevelser: Etterlevelse[]}) => {
+export const ViewBehandling = ({behandling}: {behandling: Behandling}) => {
 
   return (
     <Block>
@@ -60,23 +61,25 @@ export const ViewBehandling = ({behandling, etterlevelser}: {behandling: Behandl
     </Block>
   )
 }
-const behandlingKravQuery = `query getKravByFilter ($behandlingId: String!){
-  krav(filter: {behandlingId: $behandlingId}) {
-    id
-    navn
-    kravNummer
-    kravVersjon
-    etterlevelser {
+
+const behandlingKravQuery = gql`
+  query getKravByFilter ($behandlingId: String!) {
+    krav(filter: {behandlingId: $behandlingId}) {
       id
-      etterleves
-      fristForFerdigstillelse
-      status
-      behandling {
-        nummer
+      navn
+      kravNummer
+      kravVersjon
+      etterlevelser {
+        id
+        etterleves
+        fristForFerdigstillelse
+        status
+        behandling {
+          nummer
+        }
       }
     }
-  }
-}`
+  }`;
 
 type KravTableData = {
   kravNummer: number
@@ -91,7 +94,7 @@ type KravTableData = {
 const KravTable = (props: {behandling: Behandling}) => {
   const [kravFilter, setKravFilter] = useState({})
   useEffect(() => setKravFilter(filterForBehandling(props.behandling)), [props.behandling])
-  const [rawData, loading] = useKravFilter(kravFilter, behandlingKravQuery)
+  const [rawData, loading] = useKravFilter(kravFilter, behandlingKravQuery.loc?.source.body)
   const [data, setData] = useState<KravTableData[]>([])
 
   useEffect(() => {
@@ -172,7 +175,13 @@ const KravTable = (props: {behandling: Behandling}) => {
         <Modal isOpen={!!edit}
                onClose={() => setEdit(undefined)}
                unstable_ModalBackdropScroll
-               size={'full'}
+               overrides={{
+                 Dialog: {
+                   style: {
+                     width: '70vw'
+                   }
+                 }
+               }}
         >
           <ModalHeader>{edit == 'ny' ? 'Ny' : 'Rediger'} etterlevelse</ModalHeader>
           <ModalBody>
@@ -212,10 +221,14 @@ const KravView = (props: {krav: KravId}) => {
 
   return (
     <Block>
-      <Button type='button' size='compact' onClick={() => setView(!view)}>{`${(view ? 'Skjul krav' : 'Vis krav')}`}</Button>
+      <Block display='flex' justifyContent='space-between' alignItems='center'>
+        {krav && <HeadingSmall>Krav: {kravName(krav)}</HeadingSmall>}
+        <Block>
+          <Button type='button' size='compact' onClick={() => setView(!view)}>{`${(view ? 'Skjul' : 'Vis mer')}`}</Button>
+        </Block>
+      </Block>
       {krav && view &&
       <Block>
-        <HeadingSmall>{kravName(krav)}</HeadingSmall>
         <ViewKrav krav={krav}/>
       </Block>
       }

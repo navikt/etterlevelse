@@ -8,7 +8,6 @@ import {behandlingLink} from '../util/config'
 import {HeadingLarge} from 'baseui/typography'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faExternalLinkAlt} from '@fortawesome/free-solid-svg-icons'
-import {useEtterlevelseForBehandling} from '../api/EtterlevelseApi'
 import RouteLink from '../components/common/RouteLink'
 import Button from '../components/common/Button'
 import {ViewBehandling} from '../components/behandling/ViewBehandling'
@@ -21,7 +20,6 @@ export const BehandlingPage = () => {
   const params = useParams<{id?: string}>()
   const [behandling, setBehandling] = useBehandling(params.id)
   const [edit, setEdit] = useState(false)
-  const etterlevelser = useEtterlevelseForBehandling(params.id)
   const formRef = useRef<FormikProps<any>>()
 
   if (!behandling) return <LoadingSkeleton header='Behandling'/>
@@ -45,7 +43,7 @@ export const BehandlingPage = () => {
         </Block>
       </Block>
 
-      {!edit && <ViewBehandling behandling={behandling} etterlevelser={etterlevelser}/>}
+      {!edit && <ViewBehandling behandling={behandling}/>}
       {edit && <EditBehandling behandling={behandling} formRef={formRef} close={k => {
         if (k) setBehandling({...behandling, ...k})
         setEdit(false)
