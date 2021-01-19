@@ -14,7 +14,8 @@ import {theme} from '../util'
 import {FormikProps} from 'formik'
 import {DeleteItem} from '../components/DeleteItem'
 
-export const kravName = (krav: Krav) => `${krav.kravNummer}.${krav.kravVersjon} - ${krav.navn}`
+export const kravNumView = (it: {kravVersjon: number, kravNummer: number}) => `K${it.kravNummer}.${it.kravVersjon}`
+export const kravName = (krav: Krav) => `${kravNumView(krav)} - ${krav.navn}`
 
 export const kravStatus = (status: KravStatus) => {
   switch (status) {

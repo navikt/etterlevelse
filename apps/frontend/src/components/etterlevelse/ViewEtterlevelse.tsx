@@ -8,6 +8,7 @@ import RouteLink from '../common/RouteLink'
 import {behandlingName, useBehandling} from '../../api/BehandlingApi'
 import {Spinner} from '../common/Spinner'
 import {Label} from '../common/PropertyLabel'
+import {kravNumView} from '../../pages/KravPage'
 
 const formatDate = (date?: string) => date && moment(date).format('ll')
 
@@ -24,7 +25,7 @@ export const ViewEtterlevelse = ({etterlevelse}: {etterlevelse: Etterlevelse}) =
           : etterlevelse.behandlingId && <> <Spinner size={theme.sizing.scale600}/>{etterlevelse.behandlingId}</>}
       </Label>
       <Label title='Krav'>
-        <RouteLink href={`/krav/${etterlevelse.kravNummer}/${etterlevelse.kravVersjon}`}>{etterlevelse.kravNummer}.{etterlevelse.kravVersjon}</RouteLink>
+        <RouteLink href={`/krav/${etterlevelse.kravNummer}/${etterlevelse.kravVersjon}`}>{kravNumView(etterlevelse)}</RouteLink>
       </Label>
 
       <Block height={theme.sizing.scale600}/>

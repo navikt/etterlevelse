@@ -4,7 +4,7 @@ import {theme} from '../../util'
 import {Cell, Row, Table} from './Table'
 import {codelistCompareField} from '../../services/Codelist'
 import RouteLink from './RouteLink'
-import {kravStatus} from '../../pages/KravPage'
+import {kravNumView, kravStatus} from '../../pages/KravPage'
 import React from 'react'
 
 export const KravFilterTable = (props: {filter: KravFilters, emptyText?: string}) => {
@@ -38,7 +38,7 @@ export const KravFilterTable = (props: {filter: KravFilters, emptyText?: string}
           return state.data.map((krav, i) => {
             return (
               <Row key={i}>
-                <Cell small>{krav.kravNummer}.{krav.kravVersjon}</Cell>
+                <Cell small>{kravNumView(krav)}</Cell>
                 <Cell>
                   <RouteLink href={`/krav/${krav.kravNummer}/${krav.kravVersjon}`}>{krav.navn}</RouteLink>
                 </Cell>

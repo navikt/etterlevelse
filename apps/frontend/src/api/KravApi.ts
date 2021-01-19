@@ -108,3 +108,4 @@ export const mapToFormVal = (krav: Partial<Krav>): Krav => ({
   status: krav.status || KravStatus.UNDER_REDIGERING,
   nyKravVersjon: krav.nyKravVersjon || false
 })
+

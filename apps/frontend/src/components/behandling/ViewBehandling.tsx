@@ -21,7 +21,7 @@ import {EditEtterlevelse} from '../etterlevelse/EditEtterlevelse'
 import {useEtterlevelse} from '../../api/EtterlevelseApi'
 import {KravId, useKrav} from '../../api/KravApi'
 import {ViewKrav} from '../krav/ViewKrav'
-import {kravName} from '../../pages/KravPage'
+import {kravName, kravNumView} from '../../pages/KravPage'
 
 function filterForBehandling(behandling: Behandling): KravFilters {
   return {behandlingId: behandling.id}
@@ -146,7 +146,7 @@ const KravTable = (props: {behandling: Behandling}) => {
             return state.data.map((krav, i) => {
               return (
                 <Row key={i}>
-                  <Cell small>{krav.kravNummer}.{krav.kravVersjon}</Cell>
+                  <Cell small>{kravNumView(krav)}</Cell>
                   <Cell>
                     <RouteLink href={`/krav/${krav.kravNummer}/${krav.kravVersjon}`}>{krav.navn}</RouteLink>
                   </Cell>
