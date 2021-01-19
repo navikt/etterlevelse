@@ -36,7 +36,7 @@ const RouteLink = (props: RouteLinkProps) => {
 export default RouteLink
 
 type ObjectLinkProps = {
-  id: string
+  id?: string
   type: NavigableItem
   audit?: AuditItem
   withHistory?: boolean
@@ -55,12 +55,15 @@ export const urlForObject = (type: NavigableItem, id: string, audit?: AuditItem)
       return `/etterlevelse/${id}`
     case ListName.RELEVANS:
       return `/relevans/${id}`
+    case ListName.UNDERAVDELING:
+      return `/underavdeling/${id}`
   }
   console.warn('couldn\'t find object type ' + type)
   return ''
 }
 
 export const ObjectLink = (props: ObjectLinkProps) => {
+  if (!props.id) return null
   const link =
     props.disable ? props.children :
       <RouteLink href={urlForObject(props.type, props.id, props.audit)}

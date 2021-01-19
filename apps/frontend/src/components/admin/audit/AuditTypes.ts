@@ -28,4 +28,5 @@ export enum ObjectType {
 }
 
 export type NavigableItem = ObjectType |
-  ListName.RELEVANS
+  ListName.RELEVANS |
+  ListName.UNDERAVDELING

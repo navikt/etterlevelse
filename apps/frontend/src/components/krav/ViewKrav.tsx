@@ -9,6 +9,7 @@ import Button from '../common/Button'
 import {DotTags} from '../common/DotTag'
 import {ListName} from '../../services/Codelist'
 import {Label} from '../common/PropertyLabel'
+import {ObjectLink} from '../common/RouteLink'
 
 const formatDate = (date?: string) => date && moment(date).format('ll')
 
@@ -66,7 +67,7 @@ const AllInfo = ({krav}: {krav: Krav}) => (
       <KontaktPersoner kontaktPersoner={krav.kontaktPersoner}/>
     </Label>
     <Label title='Avdeling'>{krav.avdeling?.shortName}</Label>
-    <Label title='Underavdeling'>{krav.underavdeling?.shortName}</Label>
+    <Label title='Underavdeling'><ObjectLink id={krav.underavdeling?.code} type={ListName.UNDERAVDELING}>{krav.underavdeling?.shortName}</ObjectLink></Label>
   </>
 )
 
