@@ -6,6 +6,7 @@ import {codelist, ListName} from '../services/Codelist'
 import RouteLink from '../components/common/RouteLink'
 import {theme} from '../util'
 import {KravFilterTable} from '../components/common/KravFilterTable'
+import {BehandlingFilterTable} from '../components/common/BehandlingFilterTable'
 
 export const RelevansPage = () => {
   const {relevans} = useParams()
@@ -30,11 +31,15 @@ export const RelevansPage = () => {
       <ParagraphMedium>{code?.description}</ParagraphMedium>
 
       <Block marginTop={theme.sizing.scale1200}>
-        <Block>
-          <HeadingSmall marginBottom={theme.sizing.scale200}>Krav</HeadingSmall>
-          <KravFilterTable filter={{relevans: [relevans]}}/>
-        </Block>
+        <HeadingSmall marginBottom={theme.sizing.scale200}>Krav</HeadingSmall>
+        <KravFilterTable filter={{relevans: [relevans]}}/>
       </Block>
+
+      <Block marginTop={theme.sizing.scale1200}>
+        <HeadingSmall marginBottom={theme.sizing.scale200}>Behandlinger</HeadingSmall>
+        <BehandlingFilterTable filter={{relevans: [relevans]}}/>
+      </Block>
+
     </Block>
   )
 }

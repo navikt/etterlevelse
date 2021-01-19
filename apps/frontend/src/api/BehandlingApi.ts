@@ -1,9 +1,10 @@
 import axios from 'axios'
-import {Behandling, BehandlingEtterlevData, PageResponse} from '../constants'
+import {Behandling, BehandlingEtterlevData, emptyPage, GraphQLResponse, PageResponse} from '../constants'
 import {env} from '../util/env'
 import {useSearch} from '../util/hooks'
 import {useEffect, useState} from 'react'
 import {user} from '../services/User'
+import {DocumentNode} from 'graphql'
 
 export const getBehandling = async (id: string) => {
   return (await axios.get<Behandling>(`${env.backendBaseUrl}/behandling/${id}`)).data
@@ -57,4 +58,39 @@ export const mapToFormVal = (behandling: Partial<Behandling> & {id: string}): Be
     id: behandling.id,
     relevansFor: behandling.relevansFor || []
   }
+}
+
+// GraphQL
+
+export type BehandlingFilters = {
+  relevans?: string[]
+}
+export type Page = {pageNumber?: number, pageSize?: number}
+
+export const getBehandlingGql = async (variables: BehandlingFilters & Page, query: string) => {
+  return (await axios.post<GraphQLResponse<{behandling: PageResponse<Behandling>}>>(`${env.backendBaseUrl}/graphql`, {
+    query,
+    variables
+  })).data.data.behandling
+}
+
+export const useBehandlingFilter = (filter: BehandlingFilters & Page, query: DocumentNode) => {
+  const values = Object.values(filter)
+  const filterActive = !!values.find(v => Array.isArray(v) ? !!v.length : !!v)
+
+  const [data, setData] = useState<PageResponse<Behandling>>(emptyPage)
+  const [loading, setLoading] = useState(filterActive)
+
+  useEffect(() => {
+    if (filterActive) {
+      setLoading(true)
+      setData(emptyPage)
+      getBehandlingGql(filter, query.loc?.source.body!).then(r => {
+        setData(r);
+        setLoading(false)
+      })
+    }
+  }, [filter.relevans, filter.pageNumber, filter.pageSize])
+
+  return [data, loading] as [PageResponse<Behandling>, boolean]
 }
