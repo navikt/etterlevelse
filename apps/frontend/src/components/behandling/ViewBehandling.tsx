@@ -143,6 +143,7 @@ const KravTable = (props: {behandling: Behandling}) => {
             useDefaultStringCompare: true,
             sorting: {
               kravNummer: (a, b) => a.kravNummer === b.kravNummer ? a.kravVersjon - b.kravVersjon : a.kravNummer - b.kravNummer,
+              etterleves: (a, b) => a.etterleves ? b.etterleves ? 0 : -1 : 1
             }
           }}
           render={state => {
