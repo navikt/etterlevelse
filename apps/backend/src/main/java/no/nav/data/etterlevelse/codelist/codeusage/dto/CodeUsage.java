@@ -30,7 +30,7 @@ public class CodeUsage {
         return !krav.isEmpty();
     }
 
-    public CodeUsageResponse convertToResponse() {
+    public CodeUsageResponse toResponse() {
         CodeUsageResponse response = new CodeUsageResponse(listName, code);
         response.setKrav(convert(krav, k -> k.toKrav().convertToInstanceId()));
         response.setBehandlinger(convert(behandlinger, k -> k.toBehandlingData().convertToInstanceId()));

@@ -130,7 +130,7 @@ public class AuthController {
         if (authentication == null || !authentication.isAuthenticated() || "anonymousUser".equals(authentication.getPrincipal())) {
             return ResponseEntity.ok(UserInfoResponse.noUser(securityProperties.isEnabled()));
         }
-        return ResponseEntity.ok(((UserInfo) authentication.getDetails()).convertToResponse());
+        return ResponseEntity.ok(((UserInfo) authentication.getDetails()).toResponse());
     }
 
     public static Cookie createCookie(String value, int maxAge, HttpServletRequest request) {

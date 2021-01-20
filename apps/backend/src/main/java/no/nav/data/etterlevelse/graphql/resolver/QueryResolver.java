@@ -36,7 +36,7 @@ public class QueryResolver implements GraphQLQueryResolver {
         log.info("krav {}", id);
 
         try {
-            return kravService.get(id).convertToResponse();
+            return kravService.get(id).toResponse();
         } catch (NotFoundException e) {
             return null;
         }
@@ -45,7 +45,7 @@ public class QueryResolver implements GraphQLQueryResolver {
     public KravResponse kravByNummer(int nummer, Integer versjon) {
         log.info("krav {}.{}", nummer, versjon);
 
-        return kravService.getByKravNummer(nummer, versjon).map(Krav::convertToResponse)
+        return kravService.getByKravNummer(nummer, versjon).map(Krav::toResponse)
                 .orElse(null);
     }
 
@@ -54,16 +54,16 @@ public class QueryResolver implements GraphQLQueryResolver {
         var pageInput = new PageParameters(page, pageSize);
 
         if (filter == null || filter.isEmpty()) {
-            return convert(kravService.getAll(pageInput.createPage()).getContent(), Krav::convertToResponse);
+            return convert(kravService.getAll(pageInput.createPage()).getContent(), Krav::toResponse);
         }
 
         List<Krav> filtered = kravService.getByFilter(filter);
         filtered.sort(comparing(Krav::getKravNummer).thenComparing(Krav::getKravVersjon));
         var all = pageSize == 0;
         if (all) {
-            return convert(filtered, Krav::convertToResponse);
+            return convert(filtered, Krav::toResponse);
         }
-        return convert(pageInput.sublist(filtered), Krav::convertToResponse);
+        return convert(pageInput.sublist(filtered), Krav::toResponse);
     }
 
     public RestResponsePage<Behandling> behandling(BehandlingFilter filter, Integer page, Integer pageSize) {
@@ -86,6 +86,6 @@ public class QueryResolver implements GraphQLQueryResolver {
     public EtterlevelseResponse etterlevelseById(UUID id) {
         log.info("etterlevelse {}", id);
 
-        return etterlevelseService.get(id).convertToResponse();
+        return etterlevelseService.get(id).toResponse();
     }
 }

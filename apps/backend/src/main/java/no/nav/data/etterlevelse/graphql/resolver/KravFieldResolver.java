@@ -30,7 +30,7 @@ public class KravFieldResolver implements GraphQLResolver<KravResponse> {
         Integer versjon = krav.getKravVersjon();
         log.info("etterlevelse for krav {}.{}", nummer, versjon);
 
-        return convert(etterlevelseService.getByKravNummer(nummer, versjon), Etterlevelse::convertToResponse);
+        return convert(etterlevelseService.getByKravNummer(nummer, versjon), Etterlevelse::toResponse);
     }
 
     public CompletableFuture<List<Resource>> kontaktPersonerData(KravResponse krav, DataFetchingEnvironment env) {

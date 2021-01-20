@@ -48,7 +48,7 @@ public class Codelist extends Auditable {
     @Column(name = "DATA")
     private JsonNode data;
 
-    public CodelistResponse convertToResponse() {
+    public CodelistResponse toResponse() {
         return CodelistResponse.builder()
                 .list(list)
                 .code(code)

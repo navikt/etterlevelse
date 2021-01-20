@@ -42,7 +42,7 @@ public class CodeUsageController {
         service.validateListName(list);
 
         List<CodeUsage> codeUsages = service.findCodeUsageOfList(ListName.valueOf(list));
-        var response = new CodelistUsageResponse(ListName.valueOf(list), convert(codeUsages, CodeUsage::convertToResponse));
+        var response = new CodelistUsageResponse(ListName.valueOf(list), convert(codeUsages, CodeUsage::toResponse));
         return ResponseEntity.ok(response);
     }
 
@@ -54,7 +54,7 @@ public class CodeUsageController {
         service.validateRequests(list, code);
 
         CodeUsage codeUsage = service.findCodeUsage(ListName.valueOf(list), code);
-        return ResponseEntity.ok(codeUsage.convertToResponse());
+        return ResponseEntity.ok(codeUsage.toResponse());
     }
 
     @Operation(summary = "Batch replace codelist value")
@@ -66,7 +66,7 @@ public class CodeUsageController {
 
         CodeUsage codeUsage = service.replaceUsage(request.getListAsListName(), request.getOldCode(), request.getNewCode());
         log.info("The code {} in list {} is used in: {}", request.getOldCode(), request.getListAsListName(), codeUsage);
-        return ResponseEntity.ok(codeUsage.convertToResponse());
+        return ResponseEntity.ok(codeUsage.toResponse());
     }
 
 }

@@ -23,7 +23,7 @@ public class MailLog implements DomainObject {
     private String subject;
     private String body;
 
-    public MailLogResponse convertToResponse() {
+    public MailLogResponse toResponse() {
         return MailLogResponse.builder()
                 .id(id)
                 .time(changeStamp.getCreatedDate())

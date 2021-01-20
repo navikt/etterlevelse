@@ -54,9 +54,9 @@ public class AuditController {
         Pageable pageable = paging.createSortedPageByFieldDescending(AuditVersion.Fields.time);
         Page<AuditResponse> page;
         if (table != null) {
-            page = repository.findByTable(table, pageable).map(AuditVersion::convertToResponse);
+            page = repository.findByTable(table, pageable).map(AuditVersion::toResponse);
         } else {
-            page = repository.findAll(pageable).map(AuditVersion::convertToResponse);
+            page = repository.findAll(pageable).map(AuditVersion::toResponse);
         }
         return new ResponseEntity<>(new RestResponsePage<>(page), HttpStatus.OK);
     }
@@ -67,7 +67,7 @@ public class AuditController {
     public ResponseEntity<AuditLogResponse> findForId(@PathVariable String id) {
         log.info("Received request for Audit with the id={}", id);
         List<AuditVersion> log = repository.findByTableIdOrderByTimeDesc(id);
-        return new ResponseEntity<>(new AuditLogResponse(id, convert(log, AuditVersion::convertToResponse)), HttpStatus.OK);
+        return new ResponseEntity<>(new AuditLogResponse(id, convert(log, AuditVersion::toResponse)), HttpStatus.OK);
     }
 
     @Operation(summary = "Get mail log")
@@ -76,7 +76,7 @@ public class AuditController {
     public ResponseEntity<RestResponsePage<MailLogResponse>> getAllMailLog(PageParameters paging) {
         log.info("Received request for MailLog {}", paging);
         Pageable pageable = paging.createSortedPageByFieldDescending("LAST_MODIFIED_DATE");
-        var page = mailLogRepository.findAll(pageable).map(GenericStorage::toMailLog).map(MailLog::convertToResponse);
+        var page = mailLogRepository.findAll(pageable).map(GenericStorage::toMailLog).map(MailLog::toResponse);
         return new ResponseEntity<>(new RestResponsePage<>(page), HttpStatus.OK);
     }
 
@@ -85,7 +85,7 @@ public class AuditController {
     @GetMapping("/maillog/{id}")
     public ResponseEntity<MailLogResponse> findMailLog(@PathVariable UUID id) {
         log.info("Received request for MailLog with the id={}", id);
-        return new ResponseEntity<>(storage.get(id, MailLog.class).convertToResponse(), HttpStatus.OK);
+        return new ResponseEntity<>(storage.get(id, MailLog.class).toResponse(), HttpStatus.OK);
     }
 
     @Operation(summary = "Get mail log for user")
@@ -94,7 +94,7 @@ public class AuditController {
     public ResponseEntity<RestResponsePage<MailLogResponse>> getMailLogForUser(@PathVariable String user) {
         log.info("Received request for MailLog for user {}", user);
         var list = mailLogRepository.findByTo(user);
-        return new ResponseEntity<>(new RestResponsePage<>(convert(list, gs -> gs.toMailLog().convertToResponse())), HttpStatus.OK);
+        return new ResponseEntity<>(new RestResponsePage<>(convert(list, gs -> gs.toMailLog().toResponse())), HttpStatus.OK);
     }
 
     static class AuditLogPage extends RestResponsePage<AuditResponse> {

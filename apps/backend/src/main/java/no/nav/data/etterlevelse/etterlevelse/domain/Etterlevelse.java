@@ -56,7 +56,7 @@ public class Etterlevelse implements DomainObject, KravId {
         return this;
     }
 
-    public EtterlevelseResponse convertToResponse() {
+    public EtterlevelseResponse toResponse() {
         return EtterlevelseResponse.builder()
                 .id(id)
                 .changeStamp(convertChangeStampResponse())

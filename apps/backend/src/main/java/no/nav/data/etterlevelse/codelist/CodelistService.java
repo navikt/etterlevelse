@@ -55,11 +55,11 @@ public class CodelistService {
         if (codelist == null) {
             return new CodelistResponse(listName, code, null, null, null);
         }
-        return codelist.convertToResponse();
+        return codelist.toResponse();
     }
 
     public static List<CodelistResponse> getCodelistResponseList(ListName listName) {
-        return convert(CodelistCache.getCodelist(listName), Codelist::convertToResponse);
+        return convert(CodelistCache.getCodelist(listName), Codelist::toResponse);
     }
 
     public static List<CodelistResponse> getCodelistResponseList(ListName listName, Collection<String> codes) {

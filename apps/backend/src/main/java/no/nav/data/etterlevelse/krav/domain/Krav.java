@@ -82,7 +82,7 @@ public class Krav implements DomainObject, KravId {
         return this;
     }
 
-    public KravResponse convertToResponse() {
+    public KravResponse toResponse() {
         return KravResponse.builder()
                 .id(id)
                 .changeStamp(convertChangeStampResponse())

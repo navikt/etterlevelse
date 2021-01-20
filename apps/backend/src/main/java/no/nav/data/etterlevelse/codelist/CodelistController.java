@@ -54,7 +54,7 @@ public class CodelistController {
         if (refresh) {
             service.refreshCache();
         }
-        return new AllCodelistResponse(CodelistService.getAll().stream().map(Codelist::convertToResponse).collect(Collectors.groupingBy(CodelistResponse::getList)));
+        return new AllCodelistResponse(CodelistService.getAll().stream().map(Codelist::toResponse).collect(Collectors.groupingBy(CodelistResponse::getList)));
     }
 
     @Operation(summary = "Get codes and descriptions for listName")
@@ -87,7 +87,7 @@ public class CodelistController {
         requests = StreamUtils.nullToEmptyList(requests);
         service.validateRequest(requests);
 
-        return service.save(requests).stream().map(Codelist::convertToResponse).collect(Collectors.toList());
+        return service.save(requests).stream().map(Codelist::toResponse).collect(Collectors.toList());
     }
 
     @Operation(summary = "Update Codelist")
@@ -98,7 +98,7 @@ public class CodelistController {
         requests = StreamUtils.nullToEmptyList(requests);
         service.validateRequest(requests);
 
-        return service.update(requests).stream().map(Codelist::convertToResponse).collect(Collectors.toList());
+        return service.update(requests).stream().map(Codelist::toResponse).collect(Collectors.toList());
     }
 
     @Operation(summary = "Delete Codelist")

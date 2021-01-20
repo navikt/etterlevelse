@@ -81,7 +81,7 @@ public class AzureUserInfo implements UserInfo {
         return groups.contains(AppRole.ADMIN.name());
     }
 
-    public UserInfoResponse convertToResponse() {
+    public UserInfoResponse toResponse() {
         return UserInfoResponse.builder()
                 .loggedIn(true)
                 .ident(ident)

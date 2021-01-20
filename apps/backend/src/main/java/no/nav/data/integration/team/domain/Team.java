@@ -24,13 +24,13 @@ public class Team {
     private List<String> tags;
     private List<Member> members;
 
-    public TeamResponse convertToResponseWithMembers() {
-        var resp = convertToResponse();
-        resp.setMembers(convert(members, Member::convertToResponse));
+    public TeamResponse toResponseWithMembers() {
+        var resp = toResponse();
+        resp.setMembers(convert(members, Member::toResponse));
         return resp;
     }
 
-    public TeamResponse convertToResponse() {
+    public TeamResponse toResponse() {
         return TeamResponse.builder()
                 .id(id)
                 .name(name)

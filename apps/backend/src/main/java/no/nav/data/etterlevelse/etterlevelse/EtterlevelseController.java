@@ -55,11 +55,11 @@ public class EtterlevelseController {
         if (behandling != null) {
             log.info("Get all Etterlevelse for behandling={}", behandling);
             List<Etterlevelse> etterlevelseList = service.getByBehandling(behandling);
-            return ResponseEntity.ok(new RestResponsePage<>(etterlevelseList).convert(Etterlevelse::convertToResponse));
+            return ResponseEntity.ok(new RestResponsePage<>(etterlevelseList).convert(Etterlevelse::toResponse));
         }
         log.info("Get all Etterlevelse");
         Page<Etterlevelse> page = service.getAll(pageParameters);
-        return ResponseEntity.ok(new RestResponsePage<>(page).convert(Etterlevelse::convertToResponse));
+        return ResponseEntity.ok(new RestResponsePage<>(page).convert(Etterlevelse::toResponse));
     }
 
     @Operation(summary = "Get Etterlevelse by KravNummer and KravVersjon, include behandling")
@@ -74,7 +74,7 @@ public class EtterlevelseController {
     }
 
     private EtterlevelseResponse toResponseWithBehandling(Etterlevelse etterlevelse, List<Behandling> behandlinger) {
-        EtterlevelseResponse response = etterlevelse.convertToResponse();
+        EtterlevelseResponse response = etterlevelse.toResponse();
         if (response.getBehandlingId() != null) {
             tryFind(behandlinger, b -> b.getId().equals(response.getBehandlingId()))
                     .ifPresent(response::setBehandling);
@@ -87,7 +87,7 @@ public class EtterlevelseController {
     @GetMapping("/{id}")
     public ResponseEntity<EtterlevelseResponse> getById(@PathVariable UUID id) {
         log.info("Get Etterlevelse id={}", id);
-        return ResponseEntity.ok(service.get(id).convertToResponse());
+        return ResponseEntity.ok(service.get(id).toResponse());
     }
 
     @Operation(summary = "Create Etterlevelse")
@@ -96,7 +96,7 @@ public class EtterlevelseController {
     public ResponseEntity<EtterlevelseResponse> createEtterlevelse(@RequestBody EtterlevelseRequest request) {
         log.info("Create Etterlevelse");
         var krav = service.save(request);
-        return new ResponseEntity<>(krav.convertToResponse(), HttpStatus.CREATED);
+        return new ResponseEntity<>(krav.toResponse(), HttpStatus.CREATED);
     }
 
     @Operation(summary = "Update Etterlevelse")
@@ -108,7 +108,7 @@ public class EtterlevelseController {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
         }
         var krav = service.save(request);
-        return ResponseEntity.ok(krav.convertToResponse());
+        return ResponseEntity.ok(krav.toResponse());
     }
 
     @Operation(summary = "Delete Etterlevelse")
@@ -117,7 +117,7 @@ public class EtterlevelseController {
     public ResponseEntity<EtterlevelseResponse> deleteEtterlevelseById(@PathVariable UUID id) {
         log.info("Delete Etterlevelse id={}", id);
         var krav = service.delete(id);
-        return ResponseEntity.ok(krav.convertToResponse());
+        return ResponseEntity.ok(krav.toResponse());
     }
 
     static class EtterlevelsePage extends RestResponsePage<EtterlevelseResponse> {

@@ -22,5 +22,5 @@ public interface UserInfo {
 
     boolean isAdmin();
 
-    UserInfoResponse convertToResponse();
+    UserInfoResponse toResponse();
 }

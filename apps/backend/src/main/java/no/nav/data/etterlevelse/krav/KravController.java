@@ -57,7 +57,7 @@ public class KravController {
     public ResponseEntity<RestResponsePage<KravResponse>> getAll(PageParameters pageParameters) {
         log.info("Get all Krav");
         Page<Krav> page = service.getAll(pageParameters);
-        return ResponseEntity.ok(new RestResponsePage<>(page).convert(Krav::convertToResponse));
+        return ResponseEntity.ok(new RestResponsePage<>(page).convert(Krav::toResponse));
     }
 
     @Operation(summary = "Get Krav by KravNummer")
@@ -65,7 +65,7 @@ public class KravController {
     @GetMapping("/kravnummer/{kravNummer}")
     public ResponseEntity<RestResponsePage<KravResponse>> getById(@PathVariable Integer kravNummer) {
         log.info("Get Krav for kravNummer={}", kravNummer);
-        return ResponseEntity.ok(new RestResponsePage<>(service.getByKravNummer(kravNummer)).convert(Krav::convertToResponse));
+        return ResponseEntity.ok(new RestResponsePage<>(service.getByKravNummer(kravNummer)).convert(Krav::toResponse));
     }
 
     @Operation(summary = "Get One Krav by KravNummer and KravVersjon")
@@ -73,7 +73,7 @@ public class KravController {
     @GetMapping("/kravnummer/{kravNummer}/{kravVersjon}")
     public ResponseEntity<KravResponse> getById(@PathVariable Integer kravNummer, @PathVariable Integer kravVersjon) {
         log.info("Get Krav for kravNummer={} kravVersjon={}", kravNummer, kravVersjon);
-        Optional<KravResponse> response = service.getByKravNummer(kravNummer, kravVersjon).map(Krav::convertToResponse);
+        Optional<KravResponse> response = service.getByKravNummer(kravNummer, kravVersjon).map(Krav::toResponse);
         if (response.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
@@ -85,7 +85,7 @@ public class KravController {
     @GetMapping("/{id}")
     public ResponseEntity<KravResponse> getById(@PathVariable UUID id) {
         log.info("Get Krav id={}", id);
-        return ResponseEntity.ok(service.get(id).convertToResponse());
+        return ResponseEntity.ok(service.get(id).toResponse());
     }
 
     @Operation(summary = "Search krav")
@@ -98,7 +98,7 @@ public class KravController {
         }
         var krav = service.search(name);
         log.info("Returned {} krav", krav.size());
-        return new ResponseEntity<>(new RestResponsePage<>(convert(krav, Krav::convertToResponse)), HttpStatus.OK);
+        return new ResponseEntity<>(new RestResponsePage<>(convert(krav, Krav::toResponse)), HttpStatus.OK);
     }
 
     @Operation(summary = "Create Krav")
@@ -107,7 +107,7 @@ public class KravController {
     public ResponseEntity<KravResponse> createKrav(@RequestBody KravRequest request) {
         log.info("Create Krav");
         var krav = service.save(request);
-        return new ResponseEntity<>(krav.convertToResponse(), HttpStatus.CREATED);
+        return new ResponseEntity<>(krav.toResponse(), HttpStatus.CREATED);
     }
 
     @Operation(summary = "Update Krav")
@@ -119,7 +119,7 @@ public class KravController {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
         }
         var krav = service.save(request);
-        return ResponseEntity.ok(krav.convertToResponse());
+        return ResponseEntity.ok(krav.toResponse());
     }
 
     @Operation(summary = "Delete Krav")
@@ -128,7 +128,7 @@ public class KravController {
     public ResponseEntity<KravResponse> deleteKravById(@PathVariable UUID id) {
         log.info("Delete Krav id={}", id);
         var krav = service.delete(id);
-        return ResponseEntity.ok(krav.convertToResponse());
+        return ResponseEntity.ok(krav.toResponse());
     }
 
     @Operation(summary = "Get Krav image")

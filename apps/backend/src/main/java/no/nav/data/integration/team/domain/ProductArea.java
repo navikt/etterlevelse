@@ -22,13 +22,13 @@ public class ProductArea {
     private List<String> tags;
     private List<Member> members;
 
-    public ProductAreaResponse convertToResponseWithMembers() {
-        var resp = convertToResponse();
-        resp.setMembers(convert(members, Member::convertToResponse));
+    public ProductAreaResponse toResponseWithMembers() {
+        var resp = toResponse();
+        resp.setMembers(convert(members, Member::toResponse));
         return resp;
     }
 
-    public ProductAreaResponse convertToResponse() {
+    public ProductAreaResponse toResponse() {
         return ProductAreaResponse.builder()
                 .id(id)
                 .name(name)

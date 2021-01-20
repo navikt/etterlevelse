@@ -77,7 +77,7 @@ public class AuditVersion {
         return (T) domainObjectCache;
     }
 
-    public AuditResponse convertToResponse() {
+    public AuditResponse toResponse() {
         return AuditResponse.builder()
                 .id(id.toString())
                 .action(action)
