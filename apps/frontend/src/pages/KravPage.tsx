@@ -1,5 +1,5 @@
 import {Block} from 'baseui/block'
-import {HeadingLarge} from 'baseui/typography'
+import {HeadingLarge, HeadingSmall} from 'baseui/typography'
 import {useHistory, useParams} from 'react-router-dom'
 import {deleteKrav, KravIdParams, useKrav} from '../api/KravApi'
 import React, {useEffect, useRef, useState} from 'react'
@@ -7,12 +7,22 @@ import {Krav, KravStatus} from '../constants'
 import Button from '../components/common/Button'
 import {ViewKrav} from '../components/krav/ViewKrav'
 import {EditKrav} from '../components/krav/EditKrav'
-import RouteLink from '../components/common/RouteLink'
+import RouteLink, {ObjectLink} from '../components/common/RouteLink'
 import {LoadingSkeleton} from '../components/common/LoadingSkeleton'
 import {user} from '../services/User'
 import {theme} from '../util'
 import {FormikProps} from 'formik'
 import {DeleteItem} from '../components/DeleteItem'
+import {useGraphQL} from '../api/GraphQLApi'
+import {Cell, Row, Table} from '../components/common/Table'
+import {KravGraphQl} from '../api/KravGraphQLApi'
+import {Spinner} from '../components/common/Spinner'
+import {gql} from 'graphql.macro'
+import {Teams} from '../components/common/TeamName'
+import {marginAll} from '../components/common/Style'
+import {ObjectType} from '../components/admin/audit/AuditTypes'
+import {behandlingName} from '../api/BehandlingApi'
+import {etterlevelseStatus} from './EtterlevelsePage'
 
 export const kravNumView = (it: {kravVersjon: number, kravNummer: number}) => `K${it.kravNummer}.${it.kravVersjon}`
 export const kravName = (krav: Krav) => `${kravNumView(krav)} - ${krav.navn}`
@@ -34,6 +44,7 @@ export const KravPage = () => {
   const [edit, setEdit] = useState(krav && !krav.id)
   const history = useHistory()
   const formRef = useRef<FormikProps<any>>()
+  const [etterlevelser, etterlevelserLoading] = useGraphQL<KravGraphQl | undefined>({id: krav?.id}, query)
 
   const loading = !edit && !krav
 
@@ -66,7 +77,38 @@ export const KravPage = () => {
         </Block>
       </>}
 
-      {!edit && krav && !loading && <ViewKrav krav={krav}/>}
+      {!edit && krav && !loading &&
+      <Block>
+        <ViewKrav krav={krav}/>
+
+        <Block>
+          <HeadingSmall>Kravet etterleves av</HeadingSmall>
+          <Block $style={{...marginAll('-' + theme.sizing.scale600)}}>
+            {etterlevelserLoading && <Spinner size={theme.sizing.scale800}/>}
+            {!etterlevelserLoading &&
+            <Table data={etterlevelser?.etterlevelser || []} emptyText='etterlevelser' headers={[
+              {title: 'Behandling'},
+              {title: 'Status'},
+              {title: 'System'},
+              {title: 'Team'},
+              {title: 'Avdeling'}
+            ]} render={state =>
+              state.data.map(etterlevelse =>
+                <Row key={etterlevelse.id}>
+                  <Cell><ObjectLink type={ObjectType.Behandling} id={etterlevelse.behandling.id}>{behandlingName(etterlevelse.behandling)}</ObjectLink></Cell>
+                  <Cell><ObjectLink type={ObjectType.Etterlevelse} id={etterlevelse.id}>
+                    {etterlevelseStatus(etterlevelse.status)}
+                  </ObjectLink></Cell>
+                  <Cell>{etterlevelse.behandling.systemer.map(s => s.shortName).join(", ")}</Cell>
+                  <Cell><Teams teams={etterlevelse.behandling.teams} link/></Cell>
+                  <Cell>{etterlevelse.behandling.avdeling?.shortName}</Cell>
+                </Row>
+              )
+            }/>}
+          </Block>
+        </Block>
+      </Block>}
+
       {edit && krav && <EditKrav krav={krav} formRef={formRef} close={k => {
         if (k) {
           setKrav(k)
@@ -76,6 +118,34 @@ export const KravPage = () => {
         }
         setEdit(false)
       }}/>}
+
     </Block>
   )
 }
+
+const query = gql`
+  query getEtterlelser($id: ID!) {
+    kravById(id: $id) {
+      etterlevelser {
+        id
+        behandling {
+          id
+          nummer
+          navn
+          overordnetFormaal {
+            shortName
+          }
+          systemer {
+            code
+            shortName
+          }
+          avdeling {
+            code
+            shortName
+          }
+          teams
+        }
+        status
+      }
+    }
+  }`

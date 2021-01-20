@@ -53,6 +53,8 @@ export const urlForObject = (type: NavigableItem, id: string, audit?: AuditItem)
       return `/krav/${id}`
     case ObjectType.Etterlevelse:
       return `/etterlevelse/${id}`
+    case ObjectType.Behandling:
+      return `/behandling/${id}`
     case ListName.RELEVANS:
       return `/relevans/${id}`
     case ListName.UNDERAVDELING:

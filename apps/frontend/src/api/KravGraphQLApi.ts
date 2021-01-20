@@ -25,10 +25,10 @@ const kravtableQuery = `query getKravByFilter ($relevans: [String!], $nummer: In
 }`
 
 export type KravFilters = {relevans?: string[], nummer?: number, behandlingId?: string, underavdeling?: string}
-type KravFilterType = Krav & {etterlevelser: (Etterlevelse & {behandling: Behandling})[]}
+export type KravGraphQl = Krav & {etterlevelser: (Etterlevelse & {behandling: Behandling})[]}
 
 export const getKrav = async (variables: KravFilters, query: string) => {
-  return (await axios.post<GraphQLResponse<{krav: KravFilterType[]}>>(`${env.backendBaseUrl}/graphql`, {
+  return (await axios.post<GraphQLResponse<{krav: KravGraphQl[]}>>(`${env.backendBaseUrl}/graphql`, {
     query,
     variables
   })).data.data.krav
@@ -38,7 +38,7 @@ export const useKravFilter = (variables: KravFilters, query?: string) => {
   const values = Object.values(variables)
   const filterActive = !!values.find(v => Array.isArray(v) ? !!v.length : !!v)
 
-  const [data, setData] = useState<KravFilterType []>([])
+  const [data, setData] = useState<KravGraphQl []>([])
   const [loading, setLoading] = useState(filterActive)
 
   useEffect(() => {
@@ -52,5 +52,5 @@ export const useKravFilter = (variables: KravFilters, query?: string) => {
     }
   }, [variables.relevans, variables.nummer, variables.behandlingId, query])
 
-  return [data, loading] as [KravFilterType[], boolean]
+  return [data, loading] as [KravGraphQl[], boolean]
 }

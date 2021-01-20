@@ -1,7 +1,7 @@
 import {Block} from 'baseui/block'
 import React, {useEffect, useState} from 'react'
 import {theme} from '../../util'
-import {TeamName} from '../common/TeamName'
+import {Teams} from '../common/TeamName'
 import {DotTags} from '../common/DotTag'
 import {ListName} from '../../services/Codelist'
 import {HeadingSmall} from 'baseui/typography'
@@ -45,13 +45,7 @@ export const ViewBehandling = ({behandling}: {behandling: Behandling}) => {
         <Label title='Linjer'>{behandling.linjer.map(l => l.shortName).join(', ')}</Label>
         <Label title='Systemer'>{behandling.systemer.map(l => l.shortName).join(', ')}</Label>
         <Label title='Team'>
-          <Block display='flex' flexWrap>
-            {behandling.teams.map(t =>
-              <Block key={t} marginRight={theme.sizing.scale600}>
-                <TeamName id={t} link/>
-              </Block>
-            )}
-          </Block>
+          <Teams teams={behandling.teams} link/>
         </Label>
         <Label title={'Relevans'}><DotTags list={ListName.RELEVANS} codes={behandling.relevansFor} linkCodelist/></Label>
       </Block>
