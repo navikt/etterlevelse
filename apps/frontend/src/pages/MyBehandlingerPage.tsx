@@ -1,26 +1,29 @@
-import {HeadingLarge, HeadingSmall, LabelLarge, LabelSmall} from 'baseui/typography'
+import {HeadingMedium, HeadingSmall, LabelLarge, LabelSmall} from 'baseui/typography'
 import {Block} from 'baseui/block'
 import React, {useState} from 'react'
 import {user} from '../services/User'
-import {useBehandlingFilter, useMyBehandlinger} from '../api/BehandlingApi'
+import {useBehandlingFilter, useMyBehandlinger, useSearchBehandling} from '../api/BehandlingApi'
 import {ListItem, ListItemLabel} from 'baseui/list'
 import {TeamName} from '../components/common/TeamName'
 import {useMyTeams} from '../api/TeamApi'
 import RouteLink from '../components/common/RouteLink'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faGlassCheers, faUsers} from '@fortawesome/free-solid-svg-icons'
+import {faTimesCircle, faUsers} from '@fortawesome/free-solid-svg-icons'
 import {theme} from '../util'
 import {gql} from 'graphql.macro'
 import Button from '../components/common/Button'
 import {Spinner} from '../components/common/Spinner'
+import {Behandling} from '../constants'
+import {StatefulInput} from 'baseui/input'
 
 
 export const MyBehandlingerPage = () => {
-  const behandlinger = useMyBehandlinger()
+  const myBehandlinger = useMyBehandlinger()
   const teams = useMyTeams()
   const pageSize = 20
   const [pageNumber, setPage] = useState(0)
   const [allBehandlinger, loadingAll] = useBehandlingFilter({pageNumber, pageSize}, query)
+  const [search, setSearch, searchLoading] = useSearchBehandling()
 
   const prev = () => setPage(Math.max(0, pageNumber - 1))
   const next = () => setPage(Math.min(allBehandlinger?.pages ? allBehandlinger.pages - 1 : 0, pageNumber + 1))
@@ -29,32 +32,40 @@ export const MyBehandlingerPage = () => {
 
   return (
     <>
-      <HeadingLarge>Mine behandlinger</HeadingLarge>
       {!loggedIn && <LabelLarge>Du må logge inn for å se dine behandlinger</LabelLarge>}
 
       <Block display='flex' flexWrap flexDirection='row'>
 
         <Block maxWidth='600px'>
-          <HeadingSmall>Alle behandlinger</HeadingSmall>
-          {loadingAll && <Spinner size={theme.sizing.scale800}/>}
-          {allBehandlinger.content.map(b =>
-            <ListItem sublist key={b.id} artwork={() => <FontAwesomeIcon icon={faGlassCheers} color={theme.colors.negative400}/>}>
-              <ListItemLabel sublist>
-                <RouteLink href={`/behandling/${b.id}`}>
-                  {b.overordnetFormaal.shortName} - {b.navn}
-                </RouteLink>
-              </ListItemLabel>
-            </ListItem>
-          )}
+          <HeadingMedium>Alle behandlinger</HeadingMedium>
 
-          <Block display='flex' alignItems='center' marginTop={theme.sizing.scale1000}>
-            <LabelSmall marginRight={theme.sizing.scale400}>Side {allBehandlinger.pageNumber + 1}/{allBehandlinger.pages}</LabelSmall>
-            <Button onClick={prev} size='compact' disabled={allBehandlinger.pageNumber === 0}>Forrige</Button>
-            <Button onClick={next} size='compact' disabled={allBehandlinger.pageNumber >= allBehandlinger.pages - 1}>Neste</Button>
+          <Block maxWidth='500px' marginBottom={theme.sizing.scale1000}>
+            <StatefulInput size='compact' placeholder='Søk' onChange={e => setSearch((e.target as HTMLInputElement).value)}
+                           endEnhancer={
+                             <Button onClick={() => setSearch('')} size='compact' kind='tertiary'><FontAwesomeIcon icon={faTimesCircle}/></Button>
+                           }/>
+            {searchLoading && <Block marginTop={theme.sizing.scale400}><Spinner size={theme.sizing.scale600}/></Block>}
           </Block>
+          {!!search.length && <Block>
+            <LabelSmall>Søkeresultat</LabelSmall>
+            {search.map(b => <BehandlingListItem key={b.id} behandling={b}/>)}
+          </Block>}
+
+          {!search.length && <Block>
+            {allBehandlinger.content.map(b => <BehandlingListItem key={b.id} behandling={b}/>)}
+            {loadingAll && <Spinner size={theme.sizing.scale800}/>}
+
+            <Block display='flex' alignItems='center' marginTop={theme.sizing.scale1000}>
+              <LabelSmall marginRight={theme.sizing.scale400}>Side {allBehandlinger.pageNumber + 1}/{allBehandlinger.pages}</LabelSmall>
+              <Button onClick={prev} size='compact' disabled={allBehandlinger.pageNumber === 0}>Forrige</Button>
+              <Button onClick={next} size='compact' disabled={allBehandlinger.pageNumber >= allBehandlinger.pages - 1}>Neste</Button>
+            </Block>
+          </Block>
+          }
         </Block>
 
         <Block marginLeft={theme.sizing.scale800} maxWidth='600px'>
+          <HeadingMedium>Mine behandlinger</HeadingMedium>
           <HeadingSmall>Team</HeadingSmall>
           <ul>
             {teams.map(t =>
@@ -63,14 +74,8 @@ export const MyBehandlingerPage = () => {
                   <ListItemLabel><TeamName id={t.id} link/></ListItemLabel>
                 </ListItem>
                 <Block paddingLeft={theme.sizing.scale700}>
-                  {behandlinger.filter(b => b.teams.indexOf(t.id) >= 0).map(b =>
-                    <ListItem sublist key={b.id} artwork={() => <FontAwesomeIcon icon={faGlassCheers} color={theme.colors.negative400}/>}>
-                      <ListItemLabel sublist>
-                        <RouteLink href={`/behandling/${b.id}`}>
-                          {b.overordnetFormaal.shortName} - {b.navn}
-                        </RouteLink>
-                      </ListItemLabel>
-                    </ListItem>
+                  {myBehandlinger.filter(b => b.teams.indexOf(t.id) >= 0).map(b =>
+                    <BehandlingListItem key={b.id} behandling={b}/>
                   )}
                 </Block>
               </Block>
@@ -83,6 +88,15 @@ export const MyBehandlingerPage = () => {
   )
 }
 
+const BehandlingListItem = (props: {behandling: Behandling}) =>
+  <ListItem sublist>
+    <ListItemLabel sublist>
+      <RouteLink href={`/behandling/${props.behandling.id}`}>
+        {props.behandling.nummer}: {props.behandling.overordnetFormaal.shortName} - {props.behandling.navn}
+      </RouteLink>
+    </ListItemLabel>
+  </ListItem>
+
 const query = gql`
   query getBehandling($relevans: [String!], $pageNumber: NonNegativeInt, $pageSize: NonNegativeInt){
     behandling(filter: {relevans: $relevans}, pageNumber: $pageNumber, pageSize: $pageSize) {
@@ -92,6 +106,7 @@ const query = gql`
       content {
         id
         navn
+        nummer
         overordnetFormaal {
           shortName
         }

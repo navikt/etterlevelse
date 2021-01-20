@@ -50,7 +50,7 @@ export function useAwait<T>(p: Promise<T>, setLoading?: Dispatch<SetStateAction<
   }, [])
 }
 
-type Refs = { [id: string]: RefObject<HTMLElement> }
+type Refs = {[id: string]: RefObject<HTMLElement>}
 
 export function useRefs(ids: string[]) {
   const refs: Refs = ids.reduce((acc, value) => {
@@ -80,6 +80,8 @@ export const useSearch = <T>(searchFunction: (term: string) => Promise<T[]>) => 
         setLoading(true);
         setSearchResult(await searchFunction(search));
         setLoading(false);
+      } else {
+        setSearchResult([])
       }
     })()
   }, [search]);
