@@ -86,5 +86,5 @@ export const useSearch = <T>(searchFunction: (term: string) => Promise<T[]>) => 
     })()
   }, [search]);
 
-  return [searchResult, setSearch, loading] as [T[], React.Dispatch<React.SetStateAction<string>>, boolean];
+  return [searchResult, setSearch, loading, search] as [T[], React.Dispatch<React.SetStateAction<string>>, boolean, string]
 };

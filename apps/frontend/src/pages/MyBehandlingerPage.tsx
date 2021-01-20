@@ -1,4 +1,4 @@
-import {HeadingMedium, HeadingSmall, LabelLarge, LabelSmall} from 'baseui/typography'
+import {HeadingMedium, HeadingSmall, LabelLarge, LabelSmall, LabelXSmall} from 'baseui/typography'
 import {Block} from 'baseui/block'
 import React, {useState} from 'react'
 import {user} from '../services/User'
@@ -23,7 +23,7 @@ export const MyBehandlingerPage = () => {
   const pageSize = 20
   const [pageNumber, setPage] = useState(0)
   const [allBehandlinger, loadingAll] = useBehandlingFilter({pageNumber, pageSize}, query)
-  const [search, setSearch, searchLoading] = useSearchBehandling()
+  const [search, setSearch, searchLoading, searchTerm] = useSearchBehandling()
 
   const prev = () => setPage(Math.max(0, pageNumber - 1))
   const next = () => setPage(Math.min(allBehandlinger?.pages ? allBehandlinger.pages - 1 : 0, pageNumber + 1))
@@ -46,12 +46,13 @@ export const MyBehandlingerPage = () => {
                            }/>
             {searchLoading && <Block marginTop={theme.sizing.scale400}><Spinner size={theme.sizing.scale600}/></Block>}
           </Block>
-          {!!search.length && <Block>
+          {!!searchTerm && <Block>
             <LabelSmall>Søkeresultat</LabelSmall>
             {search.map(b => <BehandlingListItem key={b.id} behandling={b}/>)}
+            {!search.length && <LabelXSmall>Ingen treff</LabelXSmall>}
           </Block>}
 
-          {!search.length && <Block>
+          {!searchTerm && <Block>
             {allBehandlinger.content.map(b => <BehandlingListItem key={b.id} behandling={b}/>)}
             {loadingAll && <Spinner size={theme.sizing.scale800}/>}
 
