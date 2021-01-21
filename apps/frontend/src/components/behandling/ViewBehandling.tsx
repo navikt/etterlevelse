@@ -7,9 +7,9 @@ import {ListName} from '../../services/Codelist'
 import {HeadingSmall} from 'baseui/typography'
 import RouteLink, {ObjectLink} from '../common/RouteLink'
 import {etterlevelseName, etterlevelseStatus} from '../../pages/EtterlevelsePage'
-import {Behandling, Etterlevelse, EtterlevelseStatus} from '../../constants'
+import {Behandling, Etterlevelse, EtterlevelseStatus, KravGraphQL} from '../../constants'
 import {Label} from '../common/PropertyLabel'
-import {KravFilters, useKravFilter} from '../../api/KravGraphQLApi'
+import {KravFilters} from '../../api/KravGraphQLApi'
 import {Spinner} from '../common/Spinner'
 import {Cell, Row, Table} from '../common/Table'
 import moment from 'moment'
@@ -25,6 +25,7 @@ import {kravName, kravNumView} from '../../pages/KravPage'
 import {gql} from 'graphql.macro';
 import {ViewEtterlevelse} from '../etterlevelse/ViewEtterlevelse'
 import {ObjectType} from '../admin/audit/AuditTypes'
+import {useQuery} from '@apollo/client'
 
 function filterForBehandling(behandling: Behandling): KravFilters {
   return {behandlingId: behandling.id}
@@ -90,11 +91,14 @@ type KravTableData = {
 const KravTable = (props: {behandling: Behandling}) => {
   const [kravFilter, setKravFilter] = useState({})
   useEffect(() => setKravFilter(filterForBehandling(props.behandling)), [props.behandling])
-  const [rawData, loading] = useKravFilter(kravFilter, behandlingKravQuery.loc?.source.body)
+  const {data: rawData, loading} = useQuery<{krav: KravGraphQL[]}>(behandlingKravQuery, {
+    variables: kravFilter,
+    fetchPolicy: 'cache-and-network'
+  })
   const [data, setData] = useState<KravTableData[]>([])
 
   useEffect(() => {
-    const mapped = rawData.map(krav => {
+    const mapped = (rawData?.krav || []).map(krav => {
       let etterlevelse = krav.etterlevelser.find(e => e.behandling.nummer === props.behandling.nummer)
       return ({
         kravNummer: krav.kravNummer,
@@ -158,9 +162,11 @@ const KravTable = (props: {behandling: Behandling}) => {
                   <Cell>{etterlevelseStatus(krav.etterlevelseStatus)}</Cell>
                   <Cell small $style={{justifyContent: 'flex-end'}}>
                     {krav.etterlevelseId &&
-                    <Button tooltip='Vis etterlevelse' size='compact' kind='tertiary' onClick={() => setViewEtterlevelse(krav.etterlevelseId)}><FontAwesomeIcon icon={faEye}/></Button>}
+                    <Button tooltip='Vis etterlevelse' size='compact' kind='tertiary' onClick={() => setViewEtterlevelse(krav.etterlevelseId)}><FontAwesomeIcon
+                      icon={faEye}/></Button>}
 
-                    {krav.etterlevelseId && <Button tooltip='Rediger' size='compact' kind='tertiary' onClick={() => setEdit(krav.etterlevelseId)}><FontAwesomeIcon icon={faEdit}/></Button>}
+                    {krav.etterlevelseId &&
+                    <Button tooltip='Rediger' size='compact' kind='tertiary' onClick={() => setEdit(krav.etterlevelseId)}><FontAwesomeIcon icon={faEdit}/></Button>}
                     {!krav.etterlevelseId && <Button tooltip='Opprett' size='compact' kind='tertiary' onClick={() => {
                       setKravId(toKravId(krav))
                       setEdit('ny')

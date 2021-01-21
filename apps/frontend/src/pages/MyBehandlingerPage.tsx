@@ -2,7 +2,7 @@ import {HeadingMedium, HeadingSmall, LabelLarge, LabelSmall, LabelXSmall} from '
 import {Block} from 'baseui/block'
 import React, {useState} from 'react'
 import {user} from '../services/User'
-import {useBehandlingFilter, useMyBehandlinger, useSearchBehandling} from '../api/BehandlingApi'
+import {useMyBehandlinger, useSearchBehandling} from '../api/BehandlingApi'
 import {ListItem, ListItemLabel} from 'baseui/list'
 import {TeamName} from '../components/common/TeamName'
 import {useMyTeams} from '../api/TeamApi'
@@ -13,8 +13,9 @@ import {theme} from '../util'
 import {gql} from 'graphql.macro'
 import Button from '../components/common/Button'
 import {Spinner} from '../components/common/Spinner'
-import {Behandling} from '../constants'
+import {Behandling, emptyPage, PageResponse} from '../constants'
 import {StatefulInput} from 'baseui/input'
+import {useQuery} from '@apollo/client'
 
 
 export const MyBehandlingerPage = () => {
@@ -22,7 +23,11 @@ export const MyBehandlingerPage = () => {
   const teams = useMyTeams()
   const pageSize = 20
   const [pageNumber, setPage] = useState(0)
-  const [allBehandlinger, loadingAll] = useBehandlingFilter({pageNumber, pageSize}, query)
+  const {data, loading: loadingAll} = useQuery<{behandlinger: PageResponse<Behandling>}>(query, {
+    variables: {pageNumber, pageSize},
+    fetchPolicy: 'cache-and-network'
+  })
+  const allBehandlinger = data?.behandlinger || emptyPage
   const [search, setSearch, searchLoading, searchTerm] = useSearchBehandling()
 
   const prev = () => setPage(Math.max(0, pageNumber - 1))
@@ -54,7 +59,7 @@ export const MyBehandlingerPage = () => {
 
           {!searchTerm && <Block>
             {allBehandlinger.content.map(b => <BehandlingListItem key={b.id} behandling={b}/>)}
-            {loadingAll && <Spinner size={theme.sizing.scale800}/>}
+            {loadingAll && !allBehandlinger && <Spinner size={theme.sizing.scale800}/>}
 
             <Block display='flex' alignItems='center' marginTop={theme.sizing.scale1000}>
               <LabelSmall marginRight={theme.sizing.scale400}>Side {allBehandlinger.pageNumber + 1}/{allBehandlinger.pages}</LabelSmall>
@@ -100,7 +105,7 @@ const BehandlingListItem = (props: {behandling: Behandling}) =>
 
 const query = gql`
   query getBehandling($relevans: [String!], $pageNumber: NonNegativeInt, $pageSize: NonNegativeInt){
-    behandling(filter: {relevans: $relevans}, pageNumber: $pageNumber, pageSize: $pageSize) {
+    behandlinger: behandling(filter: {relevans: $relevans}, pageNumber: $pageNumber, pageSize: $pageSize) {
       pageNumber
       pageSize
       pages

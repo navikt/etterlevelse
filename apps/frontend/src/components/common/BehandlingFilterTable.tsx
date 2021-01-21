@@ -6,7 +6,9 @@ import React from 'react'
 import {gql} from 'graphql.macro'
 import {ListName} from '../../services/Codelist'
 import {DotTags} from './DotTag'
-import {BehandlingFilters, useBehandlingFilter} from '../../api/BehandlingApi'
+import {BehandlingFilters} from '../../api/BehandlingApi'
+import {useQuery} from '@apollo/client'
+import {Behandling, PageResponse} from '../../constants'
 
 
 const query = gql`
@@ -30,13 +32,16 @@ const query = gql`
 `
 
 export const BehandlingFilterTable = (props: {filter: BehandlingFilters, emptyText?: string}) => {
-  const [data, loading] = useBehandlingFilter(props.filter, query)
+  const {data, loading} = useQuery<{behandling: PageResponse<Behandling>}>(query, {
+    variables: props.filter,
+    fetchPolicy: 'cache-and-network'
+  })
 
   return (
-    loading ?
+    loading && !data ?
       <Spinner size={theme.sizing.scale2400}/> :
       <Table
-        data={data.content}
+        data={data!.behandling.content}
         emptyText={props.emptyText || 'behandlinger'}
         headers={[
           {title: 'Nummer', column: 'nummer', small: true},

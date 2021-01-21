@@ -143,3 +143,11 @@ export interface ExternalCode {
   shortName: string;
   description: string;
 }
+
+export type EtterlevelseQL = Etterlevelse & {
+  behandling: Behandling
+}
+
+export type KravGraphQL = Krav & {
+  etterlevelser: (EtterlevelseQL)[]
+}

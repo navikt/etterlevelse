@@ -3,7 +3,7 @@ import {HeadingLarge, HeadingSmall} from 'baseui/typography'
 import {useHistory, useParams} from 'react-router-dom'
 import {deleteKrav, KravIdParams, useKrav} from '../api/KravApi'
 import React, {useEffect, useRef, useState} from 'react'
-import {Krav, KravStatus} from '../constants'
+import {Krav, KravGraphQL, KravStatus} from '../constants'
 import Button from '../components/common/Button'
 import {ViewKrav} from '../components/krav/ViewKrav'
 import {EditKrav} from '../components/krav/EditKrav'
@@ -14,7 +14,6 @@ import {theme} from '../util'
 import {FormikProps} from 'formik'
 import {DeleteItem} from '../components/DeleteItem'
 import {Cell, Row, Table} from '../components/common/Table'
-import {KravGraphQl} from '../api/KravGraphQLApi'
 import {Spinner} from '../components/common/Spinner'
 import {gql} from 'graphql.macro'
 import {Teams} from '../components/common/TeamName'
@@ -45,7 +44,7 @@ export const KravPage = () => {
   const history = useHistory()
   const formRef = useRef<FormikProps<any>>()
 
-  const {loading: etterlevelserLoading, data: ettlevQuery} = useQuery<{kravById: KravGraphQl}>(query, {
+  const {loading: etterlevelserLoading, data: ettlevQuery} = useQuery<{kravById: KravGraphQL}>(query, {
     variables: {
       id: krav?.id
     },

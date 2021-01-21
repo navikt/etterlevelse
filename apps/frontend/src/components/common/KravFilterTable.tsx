@@ -8,13 +8,13 @@ import {kravNumView, kravStatus} from '../../pages/KravPage'
 import React from 'react'
 
 export const KravFilterTable = (props: {filter: KravFilters, emptyText?: string}) => {
-  const [data, loading] = useKravFilter(props.filter)
+  const {data, loading} = useKravFilter(props.filter)
 
   return (
-    loading ?
+    loading && !data?.length ?
       <Spinner size={theme.sizing.scale2400}/> :
       <Table
-        data={data}
+        data={data || []}
         emptyText={props.emptyText || 'krav'}
         headers={[
           {title: 'Nummer', column: 'kravNummer', small: true},
