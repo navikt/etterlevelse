@@ -45,12 +45,12 @@ export const KravPage = () => {
   const history = useHistory()
   const formRef = useRef<FormikProps<any>>()
 
-  const {loading: etterlevelserLoading, error, data} = useQuery<{kravById: KravGraphQl}>(query, {
+  const {loading: etterlevelserLoading, data: ettlevQuery} = useQuery<{kravById: KravGraphQl}>(query, {
     variables: {
       id: krav?.id
-    }
+    },
+    fetchPolicy: 'cache-and-network'
   })
-  const etterlevelser = data?.kravById.etterlevelser
 
   const loadingKrav = !edit && !krav
 
@@ -92,7 +92,7 @@ export const KravPage = () => {
           <Block $style={{...marginAll('-' + theme.sizing.scale600)}}>
             {etterlevelserLoading && <Spinner size={theme.sizing.scale800}/>}
             {!etterlevelserLoading &&
-            <Table data={etterlevelser || []} emptyText='etterlevelser' headers={[
+            <Table data={ettlevQuery?.kravById.etterlevelser || []} emptyText='etterlevelser' headers={[
               {title: 'Behandling'},
               {title: 'Status'},
               {title: 'System'},
