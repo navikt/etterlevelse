@@ -32,10 +32,7 @@ const query = gql`
 `
 
 export const BehandlingFilterTable = (props: {filter: BehandlingFilters, emptyText?: string}) => {
-  const {data, loading} = useQuery<{behandling: PageResponse<Behandling>}>(query, {
-    variables: props.filter,
-    fetchPolicy: 'cache-and-network'
-  })
+  const {data, loading} = useQuery<{behandling: PageResponse<Behandling>}>(query, {variables: props.filter})
 
   return (
     loading && !data ?

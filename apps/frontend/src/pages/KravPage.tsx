@@ -40,16 +40,10 @@ export const kravStatus = (status: KravStatus) => {
 export const KravPage = () => {
   const params = useParams<KravIdParams>()
   const [krav, setKrav, reloadKrav] = useKrav(params)
+  const {loading: etterlevelserLoading, data: ettlevQuery} = useQuery<{kravById: KravGraphQL}>(query, {variables: {id: krav?.id}})
   const [edit, setEdit] = useState(krav && !krav.id)
   const history = useHistory()
   const formRef = useRef<FormikProps<any>>()
-
-  const {loading: etterlevelserLoading, data: ettlevQuery} = useQuery<{kravById: KravGraphQL}>(query, {
-    variables: {
-      id: krav?.id
-    },
-    fetchPolicy: 'cache-and-network'
-  })
 
   const loadingKrav = !edit && !krav
 

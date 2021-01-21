@@ -23,10 +23,7 @@ export const MyBehandlingerPage = () => {
   const teams = useMyTeams()
   const pageSize = 20
   const [pageNumber, setPage] = useState(0)
-  const {data, loading: loadingAll} = useQuery<{behandlinger: PageResponse<Behandling>}>(query, {
-    variables: {pageNumber, pageSize},
-    fetchPolicy: 'cache-and-network'
-  })
+  const {data, loading: loadingAll} = useQuery<{behandlinger: PageResponse<Behandling>}>(query, {variables: {pageNumber, pageSize}})
   const allBehandlinger = data?.behandlinger || emptyPage
   const [search, setSearch, searchLoading, searchTerm] = useSearchBehandling()
 

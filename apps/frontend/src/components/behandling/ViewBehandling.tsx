@@ -91,10 +91,7 @@ type KravTableData = {
 const KravTable = (props: {behandling: Behandling}) => {
   const [kravFilter, setKravFilter] = useState({})
   useEffect(() => setKravFilter(filterForBehandling(props.behandling)), [props.behandling])
-  const {data: rawData, loading} = useQuery<{krav: KravGraphQL[]}>(behandlingKravQuery, {
-    variables: kravFilter,
-    fetchPolicy: 'cache-and-network'
-  })
+  const {data: rawData, loading} = useQuery<{krav: KravGraphQL[]}>(behandlingKravQuery, {variables: kravFilter})
   const [data, setData] = useState<KravTableData[]>([])
 
   useEffect(() => {

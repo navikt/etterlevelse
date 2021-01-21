@@ -27,9 +27,8 @@ const kravtableQuery = gql`query getKravByFilter ($relevans: [String!], $nummer:
 export type KravFilters = {relevans?: string[], nummer?: number, behandlingId?: string, underavdeling?: string}
 
 export const useKravFilter = (variables: KravFilters, query?: DocumentNode) => {
-  const {data, loading} = useQuery<{krav: KravGraphQL[]}>(query || kravtableQuery, {
-    variables,
-    fetchPolicy: 'cache-and-network'
+  const {data, loading} = useQuery<{krav: KravGraphQL[]}, KravFilters>(query || kravtableQuery, {
+    variables
   })
   return {data: data?.krav, loading}
 }
