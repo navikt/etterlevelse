@@ -13,7 +13,6 @@ import {user} from '../services/User'
 import {theme} from '../util'
 import {FormikProps} from 'formik'
 import {DeleteItem} from '../components/DeleteItem'
-import {useGraphQL} from '../api/GraphQLApi'
 import {Cell, Row, Table} from '../components/common/Table'
 import {KravGraphQl} from '../api/KravGraphQLApi'
 import {Spinner} from '../components/common/Spinner'
@@ -23,6 +22,7 @@ import {marginAll} from '../components/common/Style'
 import {ObjectType} from '../components/admin/audit/AuditTypes'
 import {behandlingName} from '../api/BehandlingApi'
 import {etterlevelseStatus} from './EtterlevelsePage'
+import {useQuery} from '@apollo/client'
 
 export const kravNumView = (it: {kravVersjon: number, kravNummer: number}) => `K${it.kravNummer}.${it.kravVersjon}`
 export const kravName = (krav: Krav) => `${kravNumView(krav)} - ${krav.navn}`
@@ -44,9 +44,15 @@ export const KravPage = () => {
   const [edit, setEdit] = useState(krav && !krav.id)
   const history = useHistory()
   const formRef = useRef<FormikProps<any>>()
-  const [etterlevelser, etterlevelserLoading] = useGraphQL<KravGraphQl | undefined>({id: krav?.id}, query)
 
-  const loading = !edit && !krav
+  const {loading: etterlevelserLoading, error, data} = useQuery<{kravById: KravGraphQl}>(query, {
+    variables: {
+      id: krav?.id
+    }
+  })
+  const etterlevelser = data?.kravById.etterlevelser
+
+  const loadingKrav = !edit && !krav
 
   const newVersion = () => {
     if (!krav) return
@@ -61,8 +67,8 @@ export const KravPage = () => {
 
   return (
     <Block>
-      {loading && <LoadingSkeleton header='Krav'/>}
-      {!loading && <>
+      {loadingKrav && <LoadingSkeleton header='Krav'/>}
+      {!loadingKrav && <>
         <Block>
           <HeadingLarge>Krav: {krav && krav?.kravNummer !== 0 ? kravName(krav) : 'Ny'}</HeadingLarge>
           <Block display='flex' justifyContent='flex-end' marginBottom={theme.sizing.scale600}>
@@ -77,7 +83,7 @@ export const KravPage = () => {
         </Block>
       </>}
 
-      {!edit && krav && !loading &&
+      {!edit && krav && !loadingKrav &&
       <Block>
         <ViewKrav krav={krav}/>
 
@@ -86,7 +92,7 @@ export const KravPage = () => {
           <Block $style={{...marginAll('-' + theme.sizing.scale600)}}>
             {etterlevelserLoading && <Spinner size={theme.sizing.scale800}/>}
             {!etterlevelserLoading &&
-            <Table data={etterlevelser?.etterlevelser || []} emptyText='etterlevelser' headers={[
+            <Table data={etterlevelser || []} emptyText='etterlevelser' headers={[
               {title: 'Behandling'},
               {title: 'Status'},
               {title: 'System'},

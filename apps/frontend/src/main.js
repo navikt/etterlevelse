@@ -1,9 +1,11 @@
+import {ApolloProvider} from '@apollo/client'
 import {BaseProvider} from 'baseui'
 import {Block} from 'baseui/block'
 import * as React from 'react'
 import {BrowserRouter as Router} from 'react-router-dom'
 import {Client as Styletron} from 'styletron-engine-atomic'
 import {Provider as StyletronProvider} from 'styletron-react'
+import {apolloClient} from './api/ApolloClient'
 import Header from './components/Header'
 import SideBar from './components/Navigation/SideBar'
 import Routes from './routes'
@@ -46,23 +48,25 @@ const Main = (props) => {
     <React.Fragment>
       <StyletronProvider value={engine}>
         <BaseProvider theme={customTheme}>
-          <Router history={history}>
-            <Block {...containerProps}>
-              <Block display={['none', 'none', 'block', 'block']}>
-                <SideBar/>
-              </Block>
+          <ApolloProvider client={apolloClient}>
+            <Router history={history}>
+              <Block {...containerProps}>
+                <Block display={['none', 'none', 'block', 'block']}>
+                  <SideBar/>
+                </Block>
 
-              <Block width="100%">
-                <Block {...headerProps}>
-                  <Header/>
-                </Block>
-                <Block {...mainContentProps}>
-                  <Routes/>
+                <Block width="100%">
+                  <Block {...headerProps}>
+                    <Header/>
+                  </Block>
+                  <Block {...mainContentProps}>
+                    <Routes/>
+                  </Block>
                 </Block>
               </Block>
-            </Block>
-          </Router>
-          <ErrorModal/>
+            </Router>
+            <ErrorModal/>
+          </ApolloProvider>
         </BaseProvider>
       </StyletronProvider>
     </React.Fragment>
