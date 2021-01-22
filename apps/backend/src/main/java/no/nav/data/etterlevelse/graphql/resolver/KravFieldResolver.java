@@ -8,6 +8,8 @@ import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseResponse;
 import no.nav.data.etterlevelse.graphql.DataLoaderReg;
+import no.nav.data.etterlevelse.krav.domain.dto.KravFilter;
+import no.nav.data.etterlevelse.krav.domain.dto.KravFilter.Fields;
 import no.nav.data.etterlevelse.krav.dto.KravResponse;
 import no.nav.data.integration.team.dto.Resource;
 import org.dataloader.DataLoader;
@@ -24,8 +26,6 @@ import static no.nav.data.common.utils.StreamUtils.filter;
 @RequiredArgsConstructor
 public class KravFieldResolver implements GraphQLResolver<KravResponse> {
 
-    private static final String BEHANDLING_ID = "behandlingId";
-
     private final EtterlevelseService etterlevelseService;
 
     public List<EtterlevelseResponse> etterlevelser(KravResponse krav, boolean onlyForBehandling, DataFetchingEnvironment env) {
@@ -35,7 +35,7 @@ public class KravFieldResolver implements GraphQLResolver<KravResponse> {
 
         var etterlevelser = etterlevelseService.getByKravNummer(nummer, versjon);
         if (onlyForBehandling) {
-            String behandlingId = (String) env.getVariables().get(BEHANDLING_ID);
+            String behandlingId = KravFilter.get(env, Fields.behandlingId);
             if (behandlingId != null) {
                 etterlevelser = filter(etterlevelser, e -> behandlingId.equals(e.getBehandlingId()));
             }
