@@ -1,0 +1,9 @@
+query getKrav($behandlingId: String) {
+    krav(filter: {behandlingId: $behandlingId}) {
+        id
+        navn
+        etterlevelser (onlyForBehandling: true) {
+            id
+        }
+    }
+}

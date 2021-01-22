@@ -17,20 +17,30 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import static no.nav.data.common.utils.StreamUtils.convert;
+import static no.nav.data.common.utils.StreamUtils.filter;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class KravFieldResolver implements GraphQLResolver<KravResponse> {
 
+    private static final String BEHANDLING_ID = "behandlingId";
+
     private final EtterlevelseService etterlevelseService;
 
-    public List<EtterlevelseResponse> etterlevelser(KravResponse krav) {
+    public List<EtterlevelseResponse> etterlevelser(KravResponse krav, boolean onlyForBehandling, DataFetchingEnvironment env) {
         Integer nummer = krav.getKravNummer();
         Integer versjon = krav.getKravVersjon();
         log.info("etterlevelse for krav {}.{}", nummer, versjon);
 
-        return convert(etterlevelseService.getByKravNummer(nummer, versjon), Etterlevelse::toResponse);
+        var etterlevelser = etterlevelseService.getByKravNummer(nummer, versjon);
+        if (onlyForBehandling) {
+            String behandlingId = (String) env.getVariables().get(BEHANDLING_ID);
+            if (behandlingId != null) {
+                etterlevelser = filter(etterlevelser, e -> behandlingId.equals(e.getBehandlingId()));
+            }
+        }
+        return convert(etterlevelser, Etterlevelse::toResponse);
     }
 
     public CompletableFuture<List<Resource>> kontaktPersonerData(KravResponse krav, DataFetchingEnvironment env) {

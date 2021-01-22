@@ -66,7 +66,7 @@ const behandlingKravQuery = gql`
       navn
       kravNummer
       kravVersjon
-      etterlevelser {
+      etterlevelser (onlyForBehandling: true) {
         id
         etterleves
         fristForFerdigstillelse
@@ -76,7 +76,7 @@ const behandlingKravQuery = gql`
         }
       }
     }
-  }`;
+  }`
 
 type KravTableData = {
   kravNummer: number
@@ -96,7 +96,7 @@ const KravTable = (props: {behandling: Behandling}) => {
 
   useEffect(() => {
     const mapped = (rawData?.krav || []).map(krav => {
-      let etterlevelse = krav.etterlevelser.find(e => e.behandling.nummer === props.behandling.nummer)
+      const etterlevelse = krav.etterlevelser.length ? krav.etterlevelser[0] : undefined
       return ({
         kravNummer: krav.kravNummer,
         kravVersjon: krav.kravVersjon,

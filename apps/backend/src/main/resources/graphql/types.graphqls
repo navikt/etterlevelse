@@ -21,7 +21,7 @@ type Krav {
     relevansFor: [Code!]!
     status: KravStatus!
 
-    etterlevelser: [Etterlevelse!]!
+    etterlevelser(onlyForBehandling: Boolean): [Etterlevelse!]!
     kontaktPersonerData: [Resource!]!
 }
 
