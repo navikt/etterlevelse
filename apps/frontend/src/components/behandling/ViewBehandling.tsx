@@ -71,9 +71,6 @@ const behandlingKravQuery = gql`
         etterleves
         fristForFerdigstillelse
         status
-        behandling {
-          nummer
-        }
       }
     }
   }`
