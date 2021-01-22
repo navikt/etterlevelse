@@ -24,4 +24,7 @@ public class TeamResponse {
     private List<String> tags;
     private List<MemberResponse> members;
 
+    public TeamResponse(String id) {
+        this.id = id;
+    }
 }

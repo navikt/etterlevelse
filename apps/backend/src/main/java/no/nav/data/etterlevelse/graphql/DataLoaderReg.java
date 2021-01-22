@@ -13,6 +13,7 @@ import org.dataloader.DataLoader;
 import org.dataloader.DataLoaderRegistry;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
@@ -66,7 +67,11 @@ public class DataLoaderReg {
 
     private Map<String, TeamResponse> getTeams(Collection<String> ids) {
         var teams = filter(teamClient.getAllTeams(), t -> ids.contains(t.getId()));
-        return toMap(convert(teams, Team::toResponse), TeamResponse::getId);
+        Map<String, TeamResponse> map = toMap(convert(teams, Team::toResponse), TeamResponse::getId);
+        var missing = new ArrayList<>(ids);
+        missing.removeAll(map.keySet());
+        missing.forEach(id -> map.put(id, new TeamResponse(id)));
+        return map;
     }
 
 }

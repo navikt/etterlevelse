@@ -86,12 +86,12 @@ enum ResourceType {
 
 type Team {
     id: String!
-    name: String!
+    name: String
     description: String
     slackChannel: String
     productAreaId: String
-    tags: [String!]!
-    members: [Member!]!
+    tags: [String!]
+    members: [Member!]
 }
 
 # Todo cleanup member vs resource
