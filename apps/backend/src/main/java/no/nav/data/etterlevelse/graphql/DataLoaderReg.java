@@ -67,7 +67,7 @@ public class DataLoaderReg {
 
     private Map<String, TeamResponse> getTeams(Collection<String> ids) {
         var teams = filter(teamClient.getAllTeams(), t -> ids.contains(t.getId()));
-        Map<String, TeamResponse> map = toMap(convert(teams, Team::toResponse), TeamResponse::getId);
+        Map<String, TeamResponse> map = toMap(convert(teams, Team::toResponseWithMembers), TeamResponse::getId);
         var missing = new ArrayList<>(ids);
         missing.removeAll(map.keySet());
         missing.forEach(id -> map.put(id, new TeamResponse(id)));
