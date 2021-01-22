@@ -64,6 +64,7 @@ type Behandling {
     linjer: [ExternalCode!]!
     systemer: [ExternalCode!]!
     teams: [String!]!
+    teamsData: [Team!]!
 
     relevansFor: [Code!]!
 
@@ -81,6 +82,24 @@ type Resource {
 enum ResourceType {
     INTERNAL
     EXTERNAL
+}
+
+type Team {
+    id: String!
+    name: String!
+    description: String
+    slackChannel: String
+    productAreaId: String
+    tags: [String!]!
+    members: [Member!]!
+}
+
+# Todo cleanup member vs resource
+# Todo cleanup TeamRESPONSE but not ResourceRESPONSE
+type Member {
+    navIdent: String!
+    name: String
+    email: String
 }
 
 type Periode {

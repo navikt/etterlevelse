@@ -23,7 +23,7 @@ import static no.nav.data.common.utils.StreamUtils.filter;
 import static no.nav.data.common.utils.StreamUtils.safeStream;
 
 @Service
-public class TeamcatTeamClient  {
+public class TeamcatTeamClient {
 
     private final RestTemplate restTemplate;
     private final TeamcatProperties properties;
