@@ -18,7 +18,7 @@ import java.util.concurrent.CompletableFuture;
 @RequiredArgsConstructor
 public class BehandlingFieldResolver implements GraphQLResolver<Behandling> {
 
-    public CompletableFuture<List<TeamResponse>> behandling(Behandling behandling, DataFetchingEnvironment env) {
+    public CompletableFuture<List<TeamResponse>> teamsData(Behandling behandling, DataFetchingEnvironment env) {
         DataLoader<String, TeamResponse> loader = env.getDataLoader(DataLoaderReg.TEAM);
         return loader.loadMany(behandling.getTeams());
     }
