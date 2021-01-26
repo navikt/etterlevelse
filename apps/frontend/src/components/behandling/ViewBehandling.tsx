@@ -84,11 +84,10 @@ type KravTableData = {
 }
 
 const KravTable = (props: {behandling: Behandling}) => {
-  const [kravFilter, setKravFilter] = useState<KravFilters>({})
-  useEffect(() => setKravFilter(filterForBehandling(props.behandling)), [props.behandling])
+  const variables = filterForBehandling(props.behandling)
   const {data: rawData, loading} = useQuery<{krav: KravGraphQL[]}>(behandlingKravQuery, {
-    variables: kravFilter,
-    skip: !kravFilter?.behandlingId
+    variables,
+    skip: !variables?.behandlingId
   })
   const [data, setData] = useState<KravTableData[]>([])
 
