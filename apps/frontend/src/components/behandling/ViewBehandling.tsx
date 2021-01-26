@@ -27,9 +27,7 @@ import {ViewEtterlevelse} from '../etterlevelse/ViewEtterlevelse'
 import {ObjectType} from '../admin/audit/AuditTypes'
 import {useQuery} from '@apollo/client'
 
-function filterForBehandling(behandling: Behandling): KravFilters {
-  return {behandlingId: behandling.id}
-}
+const filterForBehandling = (behandling: Behandling): KravFilters => ({behandlingId: behandling.id})
 
 export const ViewBehandling = ({behandling}: {behandling: Behandling}) => {
 
@@ -86,9 +84,12 @@ type KravTableData = {
 }
 
 const KravTable = (props: {behandling: Behandling}) => {
-  const [kravFilter, setKravFilter] = useState({})
+  const [kravFilter, setKravFilter] = useState<KravFilters>({})
   useEffect(() => setKravFilter(filterForBehandling(props.behandling)), [props.behandling])
-  const {data: rawData, loading} = useQuery<{krav: KravGraphQL[]}>(behandlingKravQuery, {variables: kravFilter})
+  const {data: rawData, loading} = useQuery<{krav: KravGraphQL[]}>(behandlingKravQuery, {
+    variables: kravFilter,
+    skip: !kravFilter?.behandlingId
+  })
   const [data, setData] = useState<KravTableData[]>([])
 
   useEffect(() => {
