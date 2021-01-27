@@ -104,3 +104,6 @@ client:
     resources-url: ${client.teamcat.url}/resource/multi
     teams-url: ${client.teamcat.url}/team
     url: https://teamcat/api
+  slack:
+    base-url: https://slack.com/api
+    token: ${SLACK_TOKEN:token}

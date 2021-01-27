@@ -8,9 +8,8 @@ import React from 'react'
 import * as yup from 'yup'
 import {ListName} from '../../services/Codelist'
 import {kravStatus} from '../../pages/KravPage'
-import {DateField, InputField, MultiInputField, MultiOptionField, MultiSearchField, OptionField, TextAreaField} from '../common/Inputs'
+import {DateField, InputField, MultiInputField, MultiOptionField, OptionField, TextAreaField} from '../common/Inputs'
 import {usePersonSearch} from '../../api/TeamApi'
-import {PersonName} from '../common/PersonName'
 import axios from 'axios'
 import {env} from '../../util/env'
 
@@ -57,7 +56,7 @@ export const EditKrav = ({krav, close}: EditKravProps) => {
           <DateField label='Gyldig tom' name='periode.slutt'/>
 
           <OptionField label='Status' name='status' options={Object.values(KravStatus).map(id => ({id, label: kravStatus(id)}))}/>
-          <MultiSearchField label='Kontaktpersoner' name='kontaktPersoner' search={personSearch} itemLabel={(id) => <PersonName ident={id}/>}/>
+          {/*TODO add varslingsadresser*/}
           <OptionField label='Avdeling' name='avdeling' listName={ListName.AVDELING}/>
           <OptionField label='Underavdeling' name='underavdeling' listName={ListName.UNDERAVDELING}/>
 

@@ -10,6 +10,8 @@ import no.nav.data.etterlevelse.krav.domain.Krav.KravStatus;
 import no.nav.data.etterlevelse.krav.domain.KravImage;
 import no.nav.data.etterlevelse.krav.dto.KravRequest;
 import no.nav.data.etterlevelse.krav.dto.KravResponse;
+import no.nav.data.etterlevelse.varsel.domain.AdresseType;
+import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,7 +91,7 @@ public class KravIT extends IntegrationTestBase {
                 .begreper(List.of("beg"))
                 .dokumentasjon(List.of("dok"))
                 .implementasjoner(List.of("impl"))
-                .kontaktPersoner(List.of("person"))
+                .varslingsadresser(List.of(new Varslingsadresse("epost@epost.no", AdresseType.EPOST)))
                 .rettskilder(List.of("kilde"))
                 .tagger(List.of("tag"))
                 .status(KravStatus.UNDER_REDIGERING)
@@ -125,7 +127,7 @@ public class KravIT extends IntegrationTestBase {
         assertThat(krav.getBegreper()).containsOnly("beg");
         assertThat(krav.getDokumentasjon()).containsOnly("dok");
         assertThat(krav.getImplementasjoner()).containsOnly("impl");
-        assertThat(krav.getKontaktPersoner()).containsOnly("person");
+        assertThat(krav.getVarslingsadresser()).containsOnly(new Varslingsadresse("epost@epost.no", AdresseType.EPOST));
         assertThat(krav.getRettskilder()).containsOnly("kilde");
         assertThat(krav.getTagger()).containsOnly("tag");
         assertThat(krav.getStatus()).isEqualTo(KravStatus.UNDER_REDIGERING);

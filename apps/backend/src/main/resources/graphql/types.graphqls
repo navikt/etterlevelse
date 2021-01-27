@@ -7,14 +7,15 @@ type Krav {
     kravVersjon: Int!
     navn: String!
     beskrivelse: String
+    hensikt: String
     utdypendeBeskrivelse: String
     versjonEndringer: String
     dokumentasjon: [String!]!
     implementasjoner: [String!]!
     begreper: [String!]!
-    kontaktPersoner: [String!]!
     rettskilder: [String!]!
     tagger: [String!]!
+    varslingsadresser: [Varslingsadresse!]!
     periode: Periode
 
     avdeling: Code
@@ -23,12 +24,28 @@ type Krav {
     status: KravStatus!
 
     etterlevelser(onlyForBehandling: Boolean): [Etterlevelse!]!
-    kontaktPersonerData: [Resource!]!
 }
 
 enum KravStatus {
     UNDER_REDIGERING,
     FERDIG
+}
+
+type Varslingsadresse {
+    adresse: String!
+    type: AdresseType!
+    slackChannel: SlackChannel
+}
+
+enum AdresseType {
+    EPOST,
+    SLACK
+}
+
+type SlackChannel {
+    id: String!
+    name: String
+    members: NonNegativeInt
 }
 
 type Etterlevelse {

@@ -9,6 +9,8 @@ import no.nav.data.etterlevelse.behandling.dto.Behandling;
 import no.nav.data.etterlevelse.behandling.dto.BehandlingRequest;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.krav.domain.Krav;
+import no.nav.data.etterlevelse.varsel.domain.AdresseType;
+import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 import no.nav.data.graphql.GraphQLTestBase;
 import no.nav.data.integration.behandling.BkatMocks;
 import org.junit.jupiter.api.Nested;
@@ -31,7 +33,7 @@ class KravGraphQLIT extends GraphQLTestBase {
         var krav = storageService.save(Krav.builder()
                 .navn("Krav 1").kravNummer(50).kravVersjon(1)
                 .relevansFor(List.of("SAK"))
-                .kontaktPersoner(List.of("A123456", "A123457", "notfound"))
+                .varslingsadresser(List.of(new Varslingsadresse("xyz", AdresseType.SLACK), new Varslingsadresse("notfound", AdresseType.SLACK)))
                 .build());
         storageService.save(Etterlevelse.builder()
                 .kravNummer(krav.getKravNummer()).kravVersjon(krav.getKravVersjon())
@@ -41,17 +43,13 @@ class KravGraphQLIT extends GraphQLTestBase {
         var var = Map.of("nummer", krav.getKravNummer().toString(), "versjon", krav.getKravVersjon().toString());
         var response = graphQLTestTemplate.perform("graphqltest/krav_get.graphql", vars(var));
 
-        assertThat(response, "kravByNummer")
+        assertThat(response, "kravById")
                 .hasNoErrors()
                 .hasField("navn", "Krav 1")
-                .hasSize("kontaktPersoner", 3)
-                .hasField("kontaktPersoner[0]", "A123456")
-                .hasField("kontaktPersoner[1]", "A123457")
-                .hasField("kontaktPersoner[2]", "notfound")
-                .hasSize("kontaktPersonerData", 3)
-                .hasField("kontaktPersonerData[0].fullName", "Given Family")
-                .hasField("kontaktPersonerData[1].fullName", "Given Family")
-                .hasField("kontaktPersonerData[2].fullName", null)
+                .hasSize("varslingsadresser", 2)
+                .hasField("varslingsadresser[0].adresse", "xyz")
+                .hasField("varslingsadresser[0].slackChannel.name", "XYZ channel")
+                .hasField("varslingsadresser[1].adresse", "notfound")
                 .hasField("etterlevelser[0].behandlingId", behandling.getId())
                 .hasField("etterlevelser[0].behandling.navn", behandling.getNavn());
     }

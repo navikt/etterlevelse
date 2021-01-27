@@ -1,9 +1,9 @@
 import {Block} from 'baseui/block'
 import {HeadingLarge, HeadingSmall} from 'baseui/typography'
 import {useHistory, useParams} from 'react-router-dom'
-import {deleteKrav, KravIdParams, useKrav} from '../api/KravApi'
+import {deleteKrav, KravIdParams} from '../api/KravApi'
 import React, {useEffect, useRef, useState} from 'react'
-import {Krav, KravGraphQL, KravStatus} from '../constants'
+import {Krav, KravQL, KravStatus} from '../constants'
 import Button from '../components/common/Button'
 import {ViewKrav} from '../components/krav/ViewKrav'
 import {EditKrav} from '../components/krav/EditKrav'
@@ -39,16 +39,21 @@ export const kravStatus = (status: KravStatus) => {
 
 export const KravPage = () => {
   const params = useParams<KravIdParams>()
-  const [krav, setKrav, reloadKrav] = useKrav(params)
-  const {loading: etterlevelserLoading, data: ettlevQuery} = useQuery<{kravById: KravGraphQL}>(query, {
-    variables: {id: krav?.id},
-    skip: !krav?.id
+  const [krav, setKrav] = useState<KravQL | undefined>()
+  const {loading: kravLoading, data: kravQuery, refetch: reloadKrav} = useQuery<{kravById: KravQL}, KravIdParams>(query, {
+    variables: params,
+    skip: !params?.id && !params.kravNummer
   })
+  useEffect(() => {
+    if (kravQuery?.kravById) setKrav(kravQuery.kravById)
+  }, [kravQuery])
+
+  // todo split loading krav and subelements?
+  const etterlevelserLoading = kravLoading
+
   const [edit, setEdit] = useState(krav && !krav.id)
   const history = useHistory()
   const formRef = useRef<FormikProps<any>>()
-
-  const loadingKrav = !edit && !krav
 
   const newVersion = () => {
     if (!krav) return
@@ -63,8 +68,8 @@ export const KravPage = () => {
 
   return (
     <Block>
-      {loadingKrav && <LoadingSkeleton header='Krav'/>}
-      {!loadingKrav && <>
+      {kravLoading && <LoadingSkeleton header='Krav'/>}
+      {!kravLoading && <>
         <Block>
           <HeadingLarge>Krav: {krav && krav?.kravNummer !== 0 ? kravName(krav) : 'Ny'}</HeadingLarge>
           <Block display='flex' justifyContent='flex-end' marginBottom={theme.sizing.scale600}>
@@ -79,7 +84,7 @@ export const KravPage = () => {
         </Block>
       </>}
 
-      {!edit && krav && !loadingKrav &&
+      {!edit && krav && !kravLoading &&
       <Block>
         <ViewKrav krav={krav}/>
 
@@ -88,7 +93,7 @@ export const KravPage = () => {
           <Block $style={{...marginAll('-' + theme.sizing.scale600)}}>
             {etterlevelserLoading && <Spinner size={theme.sizing.scale800}/>}
             {!etterlevelserLoading &&
-            <Table data={ettlevQuery?.kravById.etterlevelser || []} emptyText='etterlevelser' headers={[
+            <Table data={krav?.etterlevelser || []} emptyText='etterlevelser' headers={[
               {title: 'Behandling'},
               {title: 'Status'},
               {title: 'System'},
@@ -113,9 +118,10 @@ export const KravPage = () => {
 
       {edit && krav && <EditKrav krav={krav} formRef={formRef} close={k => {
         if (k) {
-          setKrav(k)
           if (k.id !== krav.id) {
             history.push(`/krav/${k.kravNummer}/${k.kravVersjon}`)
+          } else {
+            reloadKrav()
           }
         }
         setEdit(false)
@@ -128,6 +134,49 @@ export const KravPage = () => {
 const query = gql`
   query getEtterlelser($id: ID!) {
     kravById(id: $id) {
+      id
+      kravNummer
+      kravVersjon
+
+      navn
+      beskrivelse
+      hensikt
+      utdypendeBeskrivelse
+      versjonEndringer
+
+      dokumentasjon
+      implementasjoner
+      begreper
+      varslingsadresser {
+        adresse
+        type
+        slackChannel {
+          id
+          name
+          members
+        }
+      }
+      rettskilder
+      tagger
+      periode {
+        start
+        slutt
+      }
+
+      avdeling {
+        code
+        shortName
+      }
+      underavdeling {
+        code
+        shortName
+      }
+      relevansFor {
+        code
+        shortName
+      }
+      status
+
       etterlevelser {
         id
         behandling {

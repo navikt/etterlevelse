@@ -54,7 +54,7 @@ export interface Krav extends DomainObject {
   dokumentasjon: string[]
   implementasjoner: string[]
   begreper: string[]
-  kontaktPersoner: string[]
+  varslingsadresser: Varslingsadresse[]
   rettskilder: string[]
   tagger: string[]
   periode?: Periode
@@ -64,6 +64,22 @@ export interface Krav extends DomainObject {
   status: KravStatus
 
   nyKravVersjon: boolean
+}
+
+export interface Varslingsadresse {
+  adresse: string
+  type: AdresseType
+}
+
+export interface SlackChannel {
+  id: string
+  name?: string
+  members?: number
+}
+
+export enum AdresseType {
+  EPOST = 'EPOST',
+  SLACK = 'SLACK'
 }
 
 export interface Etterlevelse extends DomainObject {
@@ -145,10 +161,15 @@ export interface ExternalCode {
   description: string;
 }
 
+export type KravQL = Omit<Krav, 'varslingsadresser'> & {
+  etterlevelser: EtterlevelseQL[]
+  varslingsadresser: VarslingsadresseQL[]
+}
+
 export type EtterlevelseQL = Etterlevelse & {
   behandling: Behandling
 }
 
-export type KravGraphQL = Krav & {
-  etterlevelser: (EtterlevelseQL)[]
+export type VarslingsadresseQL = Varslingsadresse & {
+  slackChannel: SlackChannel
 }

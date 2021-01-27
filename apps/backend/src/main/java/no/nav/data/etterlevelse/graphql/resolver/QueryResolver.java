@@ -32,21 +32,19 @@ public class QueryResolver implements GraphQLQueryResolver {
     private final EtterlevelseService etterlevelseService;
     private final BehandlingService behandlingService;
 
-    public KravResponse kravById(UUID id) {
-        log.info("krav {}", id);
-
-        try {
-            return kravService.get(id).toResponse();
-        } catch (NotFoundException e) {
-            return null;
+    public KravResponse kravById(UUID id, Integer nummer, Integer versjon) {
+        if (id != null) {
+            try {
+                return kravService.get(id).toResponse();
+            } catch (NotFoundException e) {
+                return null;
+            }
+        } else if (nummer != null && versjon != null) {
+            return kravService.getByKravNummer(nummer, versjon)
+                    .map(Krav::toResponse)
+                    .orElse(null);
         }
-    }
-
-    public KravResponse kravByNummer(int nummer, Integer versjon) {
-        log.info("krav {}.{}", nummer, versjon);
-
-        return kravService.getByKravNummer(nummer, versjon).map(Krav::toResponse)
-                .orElse(null);
+        return null;
     }
 
     public List<KravResponse> krav(KravFilter filter, Integer page, Integer pageSize) {

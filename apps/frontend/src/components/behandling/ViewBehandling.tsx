@@ -7,7 +7,7 @@ import {ListName} from '../../services/Codelist'
 import {HeadingSmall} from 'baseui/typography'
 import RouteLink, {ObjectLink} from '../common/RouteLink'
 import {etterlevelseName, etterlevelseStatus} from '../../pages/EtterlevelsePage'
-import {Behandling, Etterlevelse, EtterlevelseStatus, KravGraphQL} from '../../constants'
+import {Behandling, Etterlevelse, EtterlevelseStatus, KravQL} from '../../constants'
 import {Label} from '../common/PropertyLabel'
 import {KravFilters} from '../../api/KravGraphQLApi'
 import {Spinner} from '../common/Spinner'
@@ -85,7 +85,7 @@ type KravTableData = {
 
 const KravTable = (props: {behandling: Behandling}) => {
   const variables = filterForBehandling(props.behandling)
-  const {data: rawData, loading} = useQuery<{krav: KravGraphQL[]}>(behandlingKravQuery, {
+  const {data: rawData, loading} = useQuery<{krav: KravQL[]}>(behandlingKravQuery, {
     variables,
     skip: !variables?.behandlingId
   })

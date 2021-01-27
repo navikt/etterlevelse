@@ -11,9 +11,11 @@ import no.nav.data.common.validator.Validator;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
 import no.nav.data.etterlevelse.common.domain.Periode;
 import no.nav.data.etterlevelse.krav.domain.Krav.KravStatus;
+import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 
 import java.util.List;
 
+import static no.nav.data.common.utils.StreamUtils.copyOf;
 import static no.nav.data.common.utils.StringUtils.formatList;
 import static no.nav.data.common.utils.StringUtils.formatListToUppercase;
 import static no.nav.data.common.utils.StringUtils.toUpperCaseAndTrim;
@@ -37,7 +39,7 @@ public class KravRequest implements RequestElement {
     private List<String> dokumentasjon;
     private List<String> implementasjoner;
     private List<String> begreper;
-    private List<String> kontaktPersoner;
+    private List<Varslingsadresse> varslingsadresser;
     private List<String> rettskilder;
     private List<String> tagger;
     private Periode periode;
@@ -69,7 +71,7 @@ public class KravRequest implements RequestElement {
         setDokumentasjon(formatList(dokumentasjon));
         setImplementasjoner(formatList(implementasjoner));
         setBegreper(formatList(begreper));
-        setKontaktPersoner(formatList(kontaktPersoner));
+        setVarslingsadresser(copyOf(varslingsadresser));
         setRettskilder(formatList(rettskilder));
         setTagger(formatList(tagger));
 
@@ -89,5 +91,6 @@ public class KravRequest implements RequestElement {
         validator.checkCodelist(Fields.avdeling, avdeling, ListName.AVDELING);
         validator.checkCodelist(Fields.underavdeling, underavdeling, ListName.UNDERAVDELING);
         validator.checkCodelists(Fields.relevansFor, relevansFor, ListName.RELEVANS);
+        validator.validateType(Fields.varslingsadresser, varslingsadresser);
     }
 }

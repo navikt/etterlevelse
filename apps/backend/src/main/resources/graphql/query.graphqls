@@ -5,8 +5,7 @@ scalar NonNegativeInt
 # Queries
 
 type Query {
-    kravById(id: ID!): Krav
-    kravByNummer(nummer: Int!, versjon: Int!): Krav
+    kravById(id: ID, nummer: Int, versjon: Int): Krav
     krav(filter: KravFilter, pageNumber: NonNegativeInt = 0, pageSize: NonNegativeInt = 0): [Krav!]!
 
     etterlevelseById(id: ID!) : Etterlevelse

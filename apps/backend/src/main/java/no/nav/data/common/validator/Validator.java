@@ -10,6 +10,7 @@ import no.nav.data.etterlevelse.codelist.CodelistService;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
 import org.apache.commons.lang3.EnumUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
@@ -55,6 +56,8 @@ public class Validator<T extends Validated> {
     private static final String ERROR_TYPE_IMMUTABLE_CODELIST = "codelistIsOfImmutableType";
     private static final String ERROR_MESSAGE_IMMUTABLE_CODELIST = "%s is an immutable type of codelist. For amendments, please contact team #datajegerne";
     private static final Pattern CODE_PATTERN = Pattern.compile("^[A-Z0-9_]+$");
+
+    private static final EmailValidator emaailValidator = new EmailValidator();
 
     private final List<ValidationError> validationErrors = new ArrayList<>();
     private final String parentField;
@@ -228,6 +231,12 @@ public class Validator<T extends Validated> {
         checkCodelists(fieldName, values, listName);
         if (CollectionUtils.isEmpty(values)) {
             validationErrors.add(new ValidationError(getFieldName(fieldName), ERROR_TYPE_MISSING, String.format(ERROR_MESSAGE_MISSING, getFieldName(fieldName))));
+        }
+    }
+
+    public void checkEmail(String fieldName, String fieldValue) {
+        if (!emaailValidator.isValid(fieldValue, null)) {
+            validationErrors.add(new ValidationError(getFieldName(fieldName), "invalidEmail", "%s is an invalid email".formatted(fieldValue)));
         }
     }
 

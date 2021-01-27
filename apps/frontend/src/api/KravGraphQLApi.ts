@@ -1,4 +1,4 @@
-import {KravGraphQL} from '../constants'
+import {KravQL} from '../constants'
 import {gql} from 'graphql.macro'
 import {useQuery} from '@apollo/client'
 import {DocumentNode} from 'graphql'
@@ -27,7 +27,7 @@ const kravtableQuery = gql`query getKravByFilter ($relevans: [String!], $nummer:
 export type KravFilters = {relevans?: string[], nummer?: number, behandlingId?: string, underavdeling?: string}
 
 export const useKravFilter = (variables: KravFilters, query?: DocumentNode) => {
-  const {data, loading} = useQuery<{krav: KravGraphQL[]}, KravFilters>(query || kravtableQuery, {
+  const {data, loading} = useQuery<{krav: KravQL[]}, KravFilters>(query || kravtableQuery, {
     variables
   })
   return {data: data?.krav, loading}

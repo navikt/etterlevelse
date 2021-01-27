@@ -98,7 +98,7 @@ export const mapToFormVal = (krav: Partial<Krav>): Krav => ({
   dokumentasjon: krav.dokumentasjon || [],
   implementasjoner: krav.implementasjoner || [],
   begreper: krav.begreper || [],
-  kontaktPersoner: krav.kontaktPersoner || [],
+  varslingsadresser: krav.varslingsadresser || [],
   rettskilder: krav.rettskilder || [],
   tagger: krav.tagger || [],
   hensikt: krav.hensikt || '',

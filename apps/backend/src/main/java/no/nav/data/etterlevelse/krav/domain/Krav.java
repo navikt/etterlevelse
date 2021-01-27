@@ -14,6 +14,7 @@ import no.nav.data.etterlevelse.common.domain.KravId;
 import no.nav.data.etterlevelse.common.domain.Periode;
 import no.nav.data.etterlevelse.krav.dto.KravRequest;
 import no.nav.data.etterlevelse.krav.dto.KravResponse;
+import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 
 import java.util.List;
 import java.util.UUID;
@@ -41,7 +42,7 @@ public class Krav implements DomainObject, KravId {
     private List<String> dokumentasjon;
     private List<String> implementasjoner;
     private List<String> begreper;
-    private List<String> kontaktPersoner;
+    private List<Varslingsadresse> varslingsadresser;
     private List<String> rettskilder;
     private List<String> tagger;
     private Periode periode;
@@ -71,7 +72,7 @@ public class Krav implements DomainObject, KravId {
         dokumentasjon = copyOf(request.getDokumentasjon());
         implementasjoner = copyOf(request.getImplementasjoner());
         begreper = copyOf(request.getBegreper());
-        kontaktPersoner = copyOf(request.getKontaktPersoner());
+        varslingsadresser = copyOf(request.getVarslingsadresser());
         rettskilder = copyOf(request.getRettskilder());
         tagger = copyOf(request.getTagger());
 
@@ -99,7 +100,7 @@ public class Krav implements DomainObject, KravId {
                 .dokumentasjon(copyOf(dokumentasjon))
                 .implementasjoner(copyOf(implementasjoner))
                 .begreper(copyOf(begreper))
-                .kontaktPersoner(copyOf(kontaktPersoner))
+                .varslingsadresser(copyOf(varslingsadresser))
                 .rettskilder(copyOf(rettskilder))
                 .tagger(copyOf(tagger))
                 .periode(periode)

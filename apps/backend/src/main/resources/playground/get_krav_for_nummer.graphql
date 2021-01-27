@@ -1,5 +1,5 @@
-query getKravByNummer($nummer: Int!, $versjon: Int!) {
-    kravByNummer(nummer: $nummer, versjon: $versjon) {
+query getKravById($nummer: Int!, $versjon: Int!) {
+    kravById(nummer: $nummer, versjon: $versjon) {
         id
         navn
         periode {

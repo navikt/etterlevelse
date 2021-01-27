@@ -2,11 +2,13 @@ package no.nav.data.graphql;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.graphql.spring.boot.test.GraphQLResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.AbstractAssert;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
+@Slf4j
 public class GraphQLAssert extends AbstractAssert<GraphQLAssert, GraphQLResponse> {
 
     private final String queryName;
@@ -39,7 +41,13 @@ public class GraphQLAssert extends AbstractAssert<GraphQLAssert, GraphQLResponse
     public GraphQLAssert hasField(String field, String value) {
         isNotNull();
         String path = "$.data.%s.%s".formatted(queryName, field);
-        var actualValue = actual.get(path);
+        String actualValue = null;
+        try {
+            actualValue = actual.get(path);
+        } catch (Exception e) {
+            log.error("jsonpath error for body <" + actual.getRawResponse().getBody() + ">");
+            throw e;
+        }
         objects.assertEqual(info, actualValue, value);
         return this;
     }

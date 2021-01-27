@@ -6,9 +6,13 @@ query getKravByFilter {
             start
             slutt
         }
-        kontaktPersonerData {
-            navIdent
-            fullName
+        varslingsadresser {
+            adresse
+            type
+            slackChannel {
+                id
+                name
+            }
         }
         etterlevelser {
             id

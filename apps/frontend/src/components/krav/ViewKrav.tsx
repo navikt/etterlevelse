@@ -1,19 +1,20 @@
-import {Krav} from '../../constants'
+import {AdresseType, KravQL} from '../../constants'
 import {Block} from 'baseui/block'
 import React, {useState} from 'react'
 import {kravStatus} from '../../pages/KravPage'
 import {theme} from '../../util'
 import moment from 'moment'
-import {PersonName} from '../common/PersonName'
 import Button from '../common/Button'
 import {DotTags} from '../common/DotTag'
 import {ListName} from '../../services/Codelist'
 import {Label} from '../common/PropertyLabel'
 import {ObjectLink} from '../common/RouteLink'
+import {StyledLink} from 'baseui/link'
+import {slackLink} from '../../util/config'
 
 const formatDate = (date?: string) => date && moment(date).format('ll')
 
-export const ViewKrav = ({krav}: {krav: Krav}) => {
+export const ViewKrav = ({krav}: {krav: KravQL}) => {
   const [expand, setExpand] = useState(false)
 
   return (
@@ -32,23 +33,14 @@ export const ViewKrav = ({krav}: {krav: Krav}) => {
   )
 }
 
-const MediumInfo = ({krav}: {krav: Krav}) => (
+const MediumInfo = ({krav}: {krav: KravQL}) => (
   <>
     <Label title='Status'>{kravStatus(krav.status)}</Label>
-    <Block display='flex'>
-      <Block width='50%'>
-        <Label title='Underavdeling'><ObjectLink id={krav.underavdeling?.code} type={ListName.UNDERAVDELING}>{krav.underavdeling?.shortName}</ObjectLink></Label>
-      </Block>
-      <Block width='50%'>
-        <Label title='Kontaktpersoner'>
-          <KontaktPersoner kontaktPersoner={krav.kontaktPersoner}/>
-        </Label>
-      </Block>
-    </Block>
+    <Label title='Underavdeling'><ObjectLink id={krav.underavdeling?.code} type={ListName.UNDERAVDELING}>{krav.underavdeling?.shortName}</ObjectLink></Label>
   </>
 )
 
-const AllInfo = ({krav}: {krav: Krav}) => (
+const AllInfo = ({krav}: {krav: KravQL}) => (
   <>
     <Label title='Utfyllende beskrivelse' markdown={krav.utdypendeBeskrivelse}/>
     <Label title='Endringer fra forrige versjon' markdown={krav.versjonEndringer}/>
@@ -64,20 +56,17 @@ const AllInfo = ({krav}: {krav: Krav}) => (
     {krav.periode?.slutt && <Label title='Gyldig tom'>{formatDate(krav.periode?.slutt)}</Label>}
 
     <Label title='Status'>{kravStatus(krav.status)}</Label>
-    <Label title='Kontaktpersoner'>
-      <KontaktPersoner kontaktPersoner={krav.kontaktPersoner}/>
+    <Label title='Varslingsadresser'>
+      <ul>
+        {krav.varslingsadresser.map((va, i) =>
+          <li key={i}>
+            {va.type == AdresseType.EPOST && <Block>Epost: <StyledLink href={`mailto:${va.adresse}`}>{va.adresse}</StyledLink></Block>}
+            {va.type == AdresseType.SLACK && <Block>Slack: <StyledLink href={slackLink(va.adresse)}>{va.slackChannel?.name || va.adresse}</StyledLink></Block>}
+          </li>
+        )}
+      </ul>
     </Label>
     <Label title='Avdeling'>{krav.avdeling?.shortName}</Label>
     <Label title='Underavdeling'><ObjectLink id={krav.underavdeling?.code} type={ListName.UNDERAVDELING}>{krav.underavdeling?.shortName}</ObjectLink></Label>
   </>
-)
-
-const KontaktPersoner = ({kontaktPersoner}: {kontaktPersoner: string[]}) => (
-  <Block display='flex' flexWrap>
-    {kontaktPersoner.map((ident, i) =>
-      <Block key={i} marginRight={theme.sizing.scale200}>
-        <PersonName ident={ident} link/>
-      </Block>
-    )}
-  </Block>
 )
