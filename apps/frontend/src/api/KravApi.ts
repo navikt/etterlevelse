@@ -94,6 +94,7 @@ export const mapToFormVal = (krav: Partial<Krav>): Krav => ({
   version: -1,
   beskrivelse: krav.beskrivelse || '',
   utdypendeBeskrivelse: krav.utdypendeBeskrivelse || '',
+  versjonEndringer: krav.versjonEndringer || '',
   dokumentasjon: krav.dokumentasjon || [],
   implementasjoner: krav.implementasjoner || [],
   begreper: krav.begreper || [],

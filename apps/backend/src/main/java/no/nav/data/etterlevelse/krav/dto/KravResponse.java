@@ -33,6 +33,7 @@ public class KravResponse {
     private String beskrivelse;
     private String hensikt;
     private String utdypendeBeskrivelse;
+    private String versjonEndringer;
     private List<String> dokumentasjon;
     private List<String> implementasjoner;
     private List<String> begreper;

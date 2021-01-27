@@ -8,6 +8,7 @@ type Krav {
     navn: String!
     beskrivelse: String
     utdypendeBeskrivelse: String
+    versjonEndringer: String
     dokumentasjon: [String!]!
     implementasjoner: [String!]!
     begreper: [String!]!

@@ -82,6 +82,7 @@ public class KravIT extends IntegrationTestBase {
                 .navn("Krav 1")
                 .beskrivelse("beskrivelse")
                 .utdypendeBeskrivelse("utbesk")
+                .versjonEndringer("versjonEndringer")
                 .hensikt("hensikt")
                 .relevansFor(List.of("SAK"))
                 .avdeling("AVDELING").underavdeling("UNDERAVDELING")
@@ -115,6 +116,7 @@ public class KravIT extends IntegrationTestBase {
         assertThat(krav.getNavn()).isEqualTo("Krav 1");
         assertThat(krav.getBeskrivelse()).isEqualTo("beskrivelse");
         assertThat(krav.getUtdypendeBeskrivelse()).isEqualTo("utbesk");
+        assertThat(krav.getVersjonEndringer()).isEqualTo("versjonEndringer");
         assertThat(krav.getHensikt()).isEqualTo("hensikt");
         assertThat(krav.getRelevansFor()).hasSize(1);
         assertThat(krav.getRelevansFor().get(0).getCode()).isEqualTo("SAK");

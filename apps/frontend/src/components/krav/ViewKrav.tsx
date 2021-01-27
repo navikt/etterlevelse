@@ -51,6 +51,7 @@ const MediumInfo = ({krav}: {krav: Krav}) => (
 const AllInfo = ({krav}: {krav: Krav}) => (
   <>
     <Label title='Utfyllende beskrivelse' markdown={krav.utdypendeBeskrivelse}/>
+    <Label title='Endringer fra forrige versjon' markdown={krav.versjonEndringer}/>
     <Label title='Dokumentasjon' markdown={krav.dokumentasjon}/>
     <Label title='Rettskilder' markdown={krav.rettskilder}/>
 

@@ -37,6 +37,7 @@ public class Krav implements DomainObject, KravId {
     private String beskrivelse;
     private String hensikt;
     private String utdypendeBeskrivelse;
+    private String versjonEndringer;
     private List<String> dokumentasjon;
     private List<String> implementasjoner;
     private List<String> begreper;
@@ -65,6 +66,7 @@ public class Krav implements DomainObject, KravId {
         beskrivelse = request.getBeskrivelse();
         hensikt = request.getHensikt();
         utdypendeBeskrivelse = request.getUtdypendeBeskrivelse();
+        versjonEndringer = request.getVersjonEndringer();
 
         dokumentasjon = copyOf(request.getDokumentasjon());
         implementasjoner = copyOf(request.getImplementasjoner());
@@ -93,6 +95,7 @@ public class Krav implements DomainObject, KravId {
                 .beskrivelse(beskrivelse)
                 .hensikt(hensikt)
                 .utdypendeBeskrivelse(utdypendeBeskrivelse)
+                .versjonEndringer(versjonEndringer)
                 .dokumentasjon(copyOf(dokumentasjon))
                 .implementasjoner(copyOf(implementasjoner))
                 .begreper(copyOf(begreper))

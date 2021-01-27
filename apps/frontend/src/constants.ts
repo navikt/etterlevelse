@@ -50,6 +50,7 @@ export interface Krav extends DomainObject {
   beskrivelse: string
   hensikt: string
   utdypendeBeskrivelse: string
+  versjonEndringer: string
   dokumentasjon: string[]
   implementasjoner: string[]
   begreper: string[]
