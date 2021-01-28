@@ -71,3 +71,4 @@ spec:
       external:
         - host: {{teamcat_ingress}}
         - host: {{polly_ingress}}
+        - host: slack.com
