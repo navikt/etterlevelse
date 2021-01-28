@@ -57,14 +57,11 @@ const AllInfo = ({krav}: {krav: KravQL}) => (
 
     <Label title='Status'>{kravStatus(krav.status)}</Label>
     <Label title='Varslingsadresser'>
-      <ul>
-        {krav.varslingsadresser.map((va, i) =>
-          <li key={i}>
-            {va.type == AdresseType.EPOST && <Block>Epost: <StyledLink href={`mailto:${va.adresse}`}>{va.adresse}</StyledLink></Block>}
-            {va.type == AdresseType.SLACK && <Block>Slack: <StyledLink href={slackLink(va.adresse)}>{va.slackChannel?.name || va.adresse}</StyledLink></Block>}
-          </li>
-        )}
-      </ul>
+      <DotTags items={krav.varslingsadresser.map((va, i) => {
+          if (va.type === AdresseType.SLACK) return <Block>Slack: <StyledLink href={slackLink(va.adresse)}>{va.slackChannel?.name || va.adresse}</StyledLink></Block>
+          return <Block>Epost: <StyledLink href={`mailto:${va.adresse}`}>{va.adresse}</StyledLink></Block>
+        }
+      )}/>
     </Label>
     <Label title='Avdeling'>{krav.avdeling?.shortName}</Label>
     <Label title='Underavdeling'><ObjectLink id={krav.underavdeling?.code} type={ListName.UNDERAVDELING}>{krav.underavdeling?.shortName}</ObjectLink></Label>

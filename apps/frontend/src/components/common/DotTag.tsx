@@ -17,22 +17,23 @@ export const DotTag = (props: {children: ReactNode}) =>
     </Block>
   </Block>
 
-const Content = (props: {item: string, list?: ListName, linkCodelist?: boolean, markdown?: boolean}) => {
+const Content = (props: {item: ReactNode | string, list?: ListName, linkCodelist?: boolean, markdown?: boolean}) => {
   const {item, list, linkCodelist, markdown} = props
   if (list) {
+    const itemString = item as string
     if (linkCodelist) return (
-      <RouteLink href={urlForObject(list as ListName & NavigableItem, item)}>
-        {codelist.getShortname(list as ListName & NavigableItem, item)}
+      <RouteLink href={urlForObject(list as ListName & NavigableItem, itemString)}>
+        {codelist.getShortname(list as ListName & NavigableItem, itemString)}
       </RouteLink>
     )
-    return <>{codelist.getShortname(list, item)}</>
+    return <>{codelist.getShortname(list, itemString)}</>
   }
-  if (markdown) return <Markdown source={item} noMargin/>
+  if (markdown) return <Markdown source={item as string} noMargin/>
   return <>{item}</>
 }
 
 type DotTagsParams = {
-  items?: string[],
+  items?: ReactNode[],
   codes?: Code[],
   commaSeparator?: boolean,
   linkCodelist?: boolean

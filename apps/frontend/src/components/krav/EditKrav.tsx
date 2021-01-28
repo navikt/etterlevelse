@@ -14,6 +14,11 @@ import axios from 'axios'
 import {env} from '../../util/env'
 import {StatefulSelect} from 'baseui/select'
 import {FormControl} from 'baseui/form-control'
+import {RenderTagList} from '../common/TagList'
+import {Modal, ModalBody, ModalHeader} from 'baseui/modal'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faPlus} from '@fortawesome/free-solid-svg-icons'
+import {theme} from '../../util'
 
 type EditKravProps = {
   krav: Krav,
@@ -72,10 +77,11 @@ export const EditKrav = ({krav, close}: EditKravProps) => {
   )
 }
 
-const channelDesc = (channel: SlackChannel) => `#${channel?.name} ${channel.num_members}`
+const channelDesc = (channel: SlackChannel, long?: boolean) => `Slack: #${channel?.name} ${long ? channel.num_members : ''}`
 
 const Varslingsadresser = () => {
-  const [slackChannels, setSlackChannels] = useState<SlackChannel[]>([])
+  const [addSlack, setAddSlack] = useState<boolean>(false)
+  const [addEmail, setAddEmail] = useState<boolean>(false)
 
   return (
     <FieldWrapper>
@@ -84,19 +90,28 @@ const Varslingsadresser = () => {
           const varslingsadresser = (p.form.values as Krav).varslingsadresser
           return <Block>
             <FormControl label='Varslingsadresser'>
-              <SlackChannelSearch
-                slackChannels={varslingsadresser.filter(va => va.type === AdresseType.SLACK)}
-                p={p} addSlackChannel={channel => setSlackChannels([...slackChannels, channel])
-              }/>
+              <Block>
+                <Block marginBottom={theme.sizing.scale400}>
+                  <Button kind='secondary' size='compact' type='button' onClick={() => setAddSlack(true)}>
+                    <span><FontAwesomeIcon icon={faPlus}/> Legg til slack-kanal</span>
+                  </Button>
+                  <Button kind='secondary' size='compact' marginLeft type='button' onClick={() => setAddEmail(true)}>
+                    <span><FontAwesomeIcon icon={faPlus}/> Legg til epost</span>
+                  </Button>
+                </Block>
+                <VarslingsadresserTagList remove={p.remove} varslingsadresser={varslingsadresser}/>
+              </Block>
             </FormControl>
-            {varslingsadresser.map((v, i) => {
-                if (v.type === AdresseType.SLACK) {
-                  const channel = slackChannels.find(c => c.id === v.adresse)
-                  return <Block key={i}>{channel ? channelDesc(channel) : `Slack: ${v.adresse}`}</Block>
-                }
-                return <Block>{v.adresse}</Block>
-              }
-            )}
+
+            <Modal unstable_ModalBackdropScroll isOpen={addSlack} onClose={() => setAddSlack(false)}>
+              <ModalHeader>
+                Legg til Slack kanal
+              </ModalHeader>
+              <ModalBody>
+                <SlackChannelSearch p={p} close={() => setAddSlack(false)}/>
+              </ModalBody>
+            </Modal>
+
           </Block>
         }
         }
@@ -105,12 +120,45 @@ const Varslingsadresser = () => {
   )
 }
 
-const SlackChannelSearch = ({slackChannels, p, addSlackChannel}: {slackChannels: Varslingsadresse[], p: FieldArrayRenderProps, addSlackChannel: (c: SlackChannel) => void}) => {
-  const [slackSearch, setSlackSearch, loading] = useSlackChannelSearch()
+const VarslingsadresserTagList = ({varslingsadresser, remove}: {
+  varslingsadresser: Varslingsadresse[],
+  remove: (i: number) => void
+}) => {
+  const [slackChannels, setSlackChannels] = useState<SlackChannel[]>([])
 
   useEffect(() => {
-    slackChannels.forEach(c => getSlackChannelById(c.adresse).then(addSlackChannel))
-  }, [])
+    (async () => {
+      const channels = await Promise.all(
+        varslingsadresser
+        .filter(va => va.type === AdresseType.SLACK)
+        .filter(va => !slackChannels.find(sc => sc.id === va.adresse))
+        .map(c => getSlackChannelById(c.adresse))
+      )
+      setSlackChannels([...slackChannels, ...channels])
+    })()
+  }, [varslingsadresser])
+
+  return (
+    <RenderTagList
+      wide
+      list={varslingsadresser.map((v, i) => {
+          if (v.type === AdresseType.SLACK) {
+            const channel = slackChannels.find(c => c.id === v.adresse)
+            return <Block key={i}>{channel ? channelDesc(channel) : `Slack: ${v.adresse}`}</Block>
+          }
+          return <Block key={i}>Epost: {v.adresse}</Block>
+        }
+      )}
+      onRemove={remove}
+    />
+  )
+}
+
+const SlackChannelSearch = ({p, close}: {
+  p: FieldArrayRenderProps,
+  close: () => void
+}) => {
+  const [slackSearch, setSlackSearch, loading] = useSlackChannelSearch()
 
   return (
     <StatefulSelect
@@ -121,14 +169,14 @@ const SlackChannelSearch = ({slackChannels, p, addSlackChannel}: {slackChannels:
       noResultsMsg='Ingen resultat'
       getOptionLabel={args => {
         const channel = args.option as SlackChannel
-        return channelDesc(channel)
+        return channelDesc(channel, true)
       }}
 
       options={slackSearch}
       onChange={({value}) => {
         const channel = value[0] as SlackChannel
         p.push({type: AdresseType.SLACK, adresse: channel.id})
-        addSlackChannel(channel)
+        close()
       }}
       onInputChange={event => setSlackSearch(event.currentTarget.value)}
       isLoading={loading}
