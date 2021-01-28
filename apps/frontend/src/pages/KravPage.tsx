@@ -132,8 +132,8 @@ export const KravPage = () => {
 }
 
 const query = gql`
-  query getEtterlelser($id: ID!) {
-    kravById(id: $id) {
+  query getKravWithEtterlevelse($id: ID, $kravNummer: Int, $kravVersjon: Int) {
+    kravById(id: $id, nummer: $kravNummer, versjon: $kravVersjon) {
       id
       kravNummer
       kravVersjon

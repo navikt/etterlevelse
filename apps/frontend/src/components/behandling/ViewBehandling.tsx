@@ -19,7 +19,7 @@ import {faEdit, faEye, faPlus} from '@fortawesome/free-solid-svg-icons'
 import {Modal, ModalBody, ModalHeader} from 'baseui/modal'
 import {EditEtterlevelse} from '../etterlevelse/EditEtterlevelse'
 import {useEtterlevelse} from '../../api/EtterlevelseApi'
-import {KravId, useKrav} from '../../api/KravApi'
+import {kravFullQuery, KravId} from '../../api/KravApi'
 import {ViewKrav} from '../krav/ViewKrav'
 import {kravName, kravNumView} from '../../pages/KravPage'
 import {gql} from 'graphql.macro';
@@ -222,7 +222,7 @@ const EditModal = (props: {etterlevelseId: string, behandlingId: string, kravId?
 
   return (
     <Block>
-      {etterlevelse && <KravView krav={toKravId(etterlevelse)}/>}
+      {etterlevelse && <KravView kravId={toKravId(etterlevelse)}/>}
       <EditEtterlevelse
         etterlevelse={etterlevelse}
         lockBehandlingAndKrav
@@ -233,9 +233,13 @@ const EditModal = (props: {etterlevelseId: string, behandlingId: string, kravId?
   )
 }
 
-const KravView = (props: {krav: KravId}) => {
-  const [krav] = useKrav(props.krav, true)
+const KravView = (props: {kravId: KravId}) => {
+  const {data, loading} = useQuery<{kravById:KravQL}, KravId>(kravFullQuery, {
+    variables: props.kravId,
+    skip: !props.kravId.id && !props.kravId.kravNummer
+  })
   const [view, setView] = useState(false)
+  const krav = data?.kravById
 
   return (
     <Block>

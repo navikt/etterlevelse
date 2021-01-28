@@ -4,6 +4,7 @@ import {env} from '../util/env'
 import {useEffect, useState} from 'react'
 import {maxDate, navStartDate} from '../util/config'
 import {useSearch} from '../util/hooks'
+import {gql} from 'graphql.macro'
 
 export const getKravPage = async (pageNumber: number, pageSize: number) => {
   return (await axios.get<PageResponse<Krav>>(`${env.backendBaseUrl}/krav?pageNumber=${pageNumber}&pageSize=${pageSize}`)).data
@@ -110,3 +111,50 @@ export const mapToFormVal = (krav: Partial<Krav>): Krav => ({
   nyKravVersjon: krav.nyKravVersjon || false
 })
 
+export const kravFullQuery = gql`
+  query getKrav($id: ID, $kravNummer: Int, $kravVersjon: Int) {
+    kravById(id: $id, nummer: $kravNummer, versjon: $kravVersjon) {
+      id
+      kravNummer
+      kravVersjon
+
+      navn
+      beskrivelse
+      hensikt
+      utdypendeBeskrivelse
+      versjonEndringer
+
+      dokumentasjon
+      implementasjoner
+      begreper
+      varslingsadresser {
+        adresse
+        type
+        slackChannel {
+          id
+          name
+          members
+        }
+      }
+      rettskilder
+      tagger
+      periode {
+        start
+        slutt
+      }
+
+      avdeling {
+        code
+        shortName
+      }
+      underavdeling {
+        code
+        shortName
+      }
+      relevansFor {
+        code
+        shortName
+      }
+      status
+    }
+  }`
