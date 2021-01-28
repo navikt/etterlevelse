@@ -175,7 +175,7 @@ const SlackChannelSearch = ({p, close}: {
       options={slackSearch}
       onChange={({value}) => {
         const channel = value[0] as SlackChannel
-        p.push({type: AdresseType.SLACK, adresse: channel.id})
+        if (channel) p.push({type: AdresseType.SLACK, adresse: channel.id})
         close()
       }}
       onInputChange={event => setSlackSearch(event.currentTarget.value)}
