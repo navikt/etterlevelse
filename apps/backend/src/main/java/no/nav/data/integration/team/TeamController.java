@@ -149,7 +149,7 @@ public class TeamController {
 
     // Slack
 
-    @Operation(summary = "Search channels")
+    @Operation(summary = "Search slack channels")
     @ApiResponse(description = "Channels fetched")
     @GetMapping("/slack/channel/search/{name}")
     public ResponseEntity<RestResponsePage<Channel>> searchSlackChannel(@PathVariable String name) {
@@ -158,6 +158,15 @@ public class TeamController {
         var channels = slackClient.searchChannel(name);
         log.info("Returned {} channels", channels.size());
         return new ResponseEntity<>(new RestResponsePage<>(channels), HttpStatus.OK);
+    }
+
+    @Operation(summary = "Get slack channel")
+    @ApiResponse(description = "Channel fetched")
+    @GetMapping("/slack/channel/{id}")
+    public ResponseEntity<Channel> getSlackChannel(@PathVariable String id) {
+        log.info("Slack channel '{}'", id);
+        var channel = slackClient.getChannel(id);
+        return new ResponseEntity<>(channel, HttpStatus.OK);
     }
 
     private void validateLen(String name) {
