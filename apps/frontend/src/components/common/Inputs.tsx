@@ -18,7 +18,7 @@ import moment from 'moment'
 import {Radio, RadioGroup} from 'baseui/radio'
 import {MarkdownEditor} from './Markdown'
 
-const FieldWrapper = ({children}: {children: React.ReactNode}) => {
+export const FieldWrapper = ({children}: {children: React.ReactNode}) => {
   return (
     <Block marginBottom='1.5rem'>
       {children}

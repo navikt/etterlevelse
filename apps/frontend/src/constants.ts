@@ -74,7 +74,7 @@ export interface Varslingsadresse {
 export interface SlackChannel {
   id: string
   name?: string
-  members?: number
+  num_members?: number
 }
 
 export enum AdresseType {

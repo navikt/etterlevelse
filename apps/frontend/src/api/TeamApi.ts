@@ -1,7 +1,7 @@
 import axios from 'axios'
-import {PageResponse, Team, TeamResource} from '../constants'
+import {PageResponse, SlackChannel, Team, TeamResource} from '../constants'
 import {env} from '../util/env'
-import {useDebouncedState, useForceUpdate} from '../util/hooks'
+import {useDebouncedState, useForceUpdate, useSearch} from '../util/hooks'
 import {Option} from 'baseui/select'
 import {Dispatch, SetStateAction, useEffect, useState} from 'react'
 import {user} from '../services/User'
@@ -26,6 +26,14 @@ export const myTeams = async () => {
 
 export const searchTeam = async (teamSearch: string) => {
   return (await axios.get<PageResponse<Team>>(`${env.backendBaseUrl}/team/search/${teamSearch}`)).data
+}
+
+export const getSlackChannelById = async (id: string) => {
+  return (await axios.get<SlackChannel>(`${env.backendBaseUrl}/team/slack/channel/${id}`)).data
+}
+
+export const searchSlackChannel = async (name: string) => {
+  return (await axios.get<PageResponse<SlackChannel>>(`${env.backendBaseUrl}/team/slack/channel/search/${name}`)).data.content
 }
 
 export const mapTeamResourceToOption = (teamResource: TeamResource) => ({id: teamResource.navIdent, label: teamResource.fullName})
@@ -96,3 +104,5 @@ export const useMyTeams = () => {
 }
 
 export type SearchType = [Option[], Dispatch<SetStateAction<string>>, boolean]
+
+export const useSlackChannelSearch = () => useSearch(searchSlackChannel)
