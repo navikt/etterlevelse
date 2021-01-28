@@ -4,11 +4,14 @@ package no.nav.data.integration.team;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.NotFoundException;
 import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.common.security.SecurityUtils;
+import no.nav.data.integration.slack.SlackClient;
+import no.nav.data.integration.slack.dto.SlackDtos.Channel;
 import no.nav.data.integration.team.domain.ProductArea;
 import no.nav.data.integration.team.domain.Team;
 import no.nav.data.integration.team.dto.ProductAreaResponse;
@@ -38,16 +41,13 @@ import static org.apache.commons.lang3.StringUtils.containsIgnoreCase;
 @Slf4j
 @RestController
 @RequestMapping("/team")
+@RequiredArgsConstructor
 @Tag(name = "Team", description = "REST API for teams")
 public class TeamController {
 
     private final TeamcatTeamClient teamsService;
     private final TeamcatResourceClient resourceService;
-
-    public TeamController(TeamcatTeamClient teamsService, TeamcatResourceClient resourceService) {
-        this.teamsService = teamsService;
-        this.resourceService = resourceService;
-    }
+    private final SlackClient slackClient;
 
     // Teams
 
@@ -81,9 +81,7 @@ public class TeamController {
     @GetMapping("/search/{name}")
     public ResponseEntity<RestResponsePage<TeamResponse>> searchTeamByName(@PathVariable String name) {
         log.info("Received request for Team with the name like {}", name);
-        if (name.length() < 3) {
-            throw new ValidationException("Search teams must be at least 3 characters");
-        }
+        validateLen(name);
         var teams = filter(teamsService.getAllTeams(), team -> containsIgnoreCase(team.getName(), name));
         teams.sort(comparing(Team::getName, startsWith(name)));
         log.info("Returned {} teams", teams.size());
@@ -117,9 +115,7 @@ public class TeamController {
     @GetMapping("/productarea/search/{name}")
     public ResponseEntity<RestResponsePage<ProductAreaResponse>> searchProductAreaByName(@PathVariable String name) {
         log.info("Received request for product areas with the name like {}", name);
-        if (name.length() < 3) {
-            throw new ValidationException("Search product area must be at least 3 characters");
-        }
+        validateLen(name);
         var pas = filter(teamsService.getAllProductAreas(), pa -> containsIgnoreCase(pa.getName(), name));
         pas.sort(comparing(ProductArea::getName, startsWith(name)));
         log.info("Returned {} pas", pas.size());
@@ -133,9 +129,7 @@ public class TeamController {
     @GetMapping("/resource/search/{name}")
     public ResponseEntity<RestResponsePage<Resource>> searchResourceName(@PathVariable String name) {
         log.info("Resource search '{}'", name);
-        if (Stream.of(name.split(" ")).sorted().distinct().collect(Collectors.joining("")).length() < 3) {
-            throw new ValidationException("Search resource must be at least 3 characters");
-        }
+        validateLen(name);
         var resources = resourceService.search(name);
         log.info("Returned {} resources", resources.getPageSize());
         return new ResponseEntity<>(resources, HttpStatus.OK);
@@ -151,6 +145,25 @@ public class TeamController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(resource.get());
+    }
+
+    // Slack
+
+    @Operation(summary = "Search channels")
+    @ApiResponse(description = "Channels fetched")
+    @GetMapping("/slack/channel/search/{name}")
+    public ResponseEntity<RestResponsePage<Channel>> searchSlackChannel(@PathVariable String name) {
+        log.info("Slack channel search '{}'", name);
+        validateLen(name);
+        var channels = slackClient.searchChannel(name);
+        log.info("Returned {} channels", channels.size());
+        return new ResponseEntity<>(new RestResponsePage<>(channels), HttpStatus.OK);
+    }
+
+    private void validateLen(String name) {
+        if (Stream.of(name.split(" ")).sorted().distinct().collect(Collectors.joining("")).length() < 3) {
+            throw new ValidationException("Search must be at least 3 characters");
+        }
     }
 
     static class ResourcePage extends RestResponsePage<Resource> {
