@@ -40,7 +40,8 @@ type Varslingsadresse {
 
 enum AdresseType {
     EPOST,
-    SLACK
+    SLACK,
+    SLACK_USER
 }
 
 type SlackChannel {

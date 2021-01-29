@@ -4,6 +4,7 @@ export const navSlackTeamId = 'T5LNAMWNA'
 export const datajegerSlackChannelId = 'CG2S8D25D'
 
 export const slackLink = (channelId: string) => `slack://channel?team=${navSlackTeamId}&id=${channelId}`
+export const slackUserLink = (userId: string) => `slack://user?team=${navSlackTeamId}&id=${userId}`
 export const datajegerSlackLink = slackLink(datajegerSlackChannelId)
 export const githubRepo = 'https://github.com/navikt/etterlevelse'
 export const documentationLink = 'https://dataplattform.gitbook.io/nada/kataloger/etterlevelse'

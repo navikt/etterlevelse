@@ -17,11 +17,12 @@ import {FormControl} from 'baseui/form-control'
 import {RenderTagList} from '../common/TagList'
 import {Modal, ModalBody, ModalFooter, ModalHeader} from 'baseui/modal'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faEnvelope, faPlus, faPoundSign, faUser} from '@fortawesome/free-solid-svg-icons'
+import {faEnvelope, faPlus, faUser} from '@fortawesome/free-solid-svg-icons'
 import {theme} from '../../util'
 import {Input} from 'baseui/input'
 import {user} from '../../services/User'
 import {Notification} from 'baseui/notification'
+import {faSlackHash} from '@fortawesome/free-brands-svg-icons'
 
 type EditKravProps = {
   krav: Krav,
