@@ -1,4 +1,4 @@
-import {AdresseType, Krav, KravStatus, SlackChannel, Varslingsadresse} from '../../constants'
+import {AdresseType, Krav, KravStatus, SlackChannel, Varslingsadresse, VarslingsadresseQL} from '../../constants'
 import {FieldArray, FieldArrayRenderProps, Form, Formik} from 'formik'
 import {createKrav, mapToFormVal, updateKrav} from '../../api/KravApi'
 import {disableEnter} from '../common/Table'
@@ -145,13 +145,22 @@ const VarslingsadresserTagList = ({varslingsadresser, remove}: {
 
   useEffect(() => {
     (async () => {
+      const loadedChannels: SlackChannel[] = []
       const channels = await Promise.all(
         varslingsadresser
         .filter(va => va.type === AdresseType.SLACK)
         .filter(va => !slackChannels.find(sc => sc.id === va.adresse))
+        .filter(va => {
+          const vas = va as VarslingsadresseQL
+          if (vas.slackChannel) {
+            loadedChannels.push(vas.slackChannel)
+            return false
+          }
+          return true
+        })
         .map(c => getSlackChannelById(c.adresse))
       )
-      setSlackChannels([...slackChannels, ...channels])
+      setSlackChannels([...slackChannels, ...channels, ...loadedChannels])
     })()
   }, [varslingsadresser])
 
