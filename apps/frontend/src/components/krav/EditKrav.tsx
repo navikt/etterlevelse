@@ -1,4 +1,4 @@
-import {AdresseType, Krav, KravStatus, SlackChannel, Varslingsadresse, VarslingsadresseQL} from '../../constants'
+import {AdresseType, Krav, KravStatus, SlackChannel, SlackUser, TeamResource, Varslingsadresse, VarslingsadresseQL} from '../../constants'
 import {FieldArray, FieldArrayRenderProps, Form, Formik} from 'formik'
 import {createKrav, mapToFormVal, updateKrav} from '../../api/KravApi'
 import {disableEnter} from '../common/Table'
@@ -9,7 +9,7 @@ import * as yup from 'yup'
 import {ListName} from '../../services/Codelist'
 import {kravStatus} from '../../pages/KravPage'
 import {DateField, FieldWrapper, InputField, MultiInputField, MultiOptionField, OptionField, TextAreaField} from '../common/Inputs'
-import {getSlackChannelById, useSlackChannelSearch} from '../../api/TeamApi'
+import {getSlackChannelById, getSlackUserByEmail, getSlackUserById, usePersonSearch, useSlackChannelSearch} from '../../api/TeamApi'
 import axios from 'axios'
 import {env} from '../../util/env'
 import {StatefulSelect} from 'baseui/select'
@@ -17,7 +17,7 @@ import {FormControl} from 'baseui/form-control'
 import {RenderTagList} from '../common/TagList'
 import {Modal, ModalBody, ModalFooter, ModalHeader} from 'baseui/modal'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faPlus} from '@fortawesome/free-solid-svg-icons'
+import {faEnvelope, faPlus, faPoundSign, faUser} from '@fortawesome/free-solid-svg-icons'
 import {theme} from '../../util'
 import {Input} from 'baseui/input'
 import {user} from '../../services/User'
@@ -80,10 +80,11 @@ export const EditKrav = ({krav, close}: EditKravProps) => {
   )
 }
 
-const channelDesc = (channel: SlackChannel, long?: boolean) => `Slack: #${channel?.name} ${long ? channel.num_members : ''}`
+const channelDesc = (channel: SlackChannel, long?: boolean) => `Slack: #${channel.name} ${long ? channel.numMembers : ''}`
 
 const Varslingsadresser = () => {
-  const [addSlack, setAddSlack] = useState<boolean>(false)
+  const [addSlackChannel, setAddSlackChannel] = useState<boolean>(false)
+  const [addSlackUser, setAddSlackUser] = useState<boolean>(false)
   const [addEmail, setAddEmail] = useState<boolean>(false)
 
   return (
@@ -95,19 +96,26 @@ const Varslingsadresser = () => {
             <FormControl label='Varslingsadresser'>
               <Block>
                 <Block marginBottom={theme.sizing.scale400}>
-                  <Button kind='secondary' size='compact' type='button' onClick={() => setAddSlack(true)}>
-                    <span><FontAwesomeIcon icon={faPlus}/> Legg til slack-kanal</span>
+                  <Button kind='secondary' size='compact' type='button' onClick={() => setAddSlackChannel(true)}>
+                    <span><FontAwesomeIcon icon={faPoundSign}/> Legg til slack-kanal</span>
+                  </Button>
+                  <Button kind='secondary' size='compact' marginLeft type='button' onClick={() => setAddSlackUser(true)}>
+                    <span><FontAwesomeIcon icon={faUser}/> Legg til slack-bruker</span>
                   </Button>
                   <Button kind='secondary' size='compact' marginLeft type='button' onClick={() => setAddEmail(true)}>
-                    <span><FontAwesomeIcon icon={faPlus}/> Legg til epost</span>
+                    <span><FontAwesomeIcon icon={faEnvelope}/> Legg til epost</span>
                   </Button>
                 </Block>
                 <VarslingsadresserTagList remove={p.remove} varslingsadresser={varslingsadresser}/>
               </Block>
             </FormControl>
 
-            <AddModal title='Legg til Slack kanal' isOpen={addSlack} close={() => setAddSlack(false)}>
-              <SlackChannelSearch p={p} close={() => setAddSlack(false)}/>
+            <AddModal title='Legg til Slack kanal' isOpen={addSlackChannel} close={() => setAddSlackChannel(false)}>
+              <SlackChannelSearch p={p} close={() => setAddSlackChannel(false)}/>
+            </AddModal>
+
+            <AddModal title='Legg til Slack bruker' isOpen={addSlackUser} close={() => setAddSlackUser(false)}>
+              <SlackUserSearch p={p} close={() => setAddSlackUser(false)}/>
             </AddModal>
 
             <AddModal title='Legg til Epost adresse' isOpen={addEmail} close={() => setAddEmail(false)}>
@@ -142,10 +150,12 @@ const VarslingsadresserTagList = ({varslingsadresser, remove}: {
   remove: (i: number) => void
 }) => {
   const [slackChannels, setSlackChannels] = useState<SlackChannel[]>([])
+  const [slackUsers, setSlackUsers] = useState<SlackUser[]>([])
 
   useEffect(() => {
     (async () => {
       const loadedChannels: SlackChannel[] = []
+      const loadedUsers: SlackUser[] = []
       const channels = await Promise.all(
         varslingsadresser
         .filter(va => va.type === AdresseType.SLACK)
@@ -160,7 +170,24 @@ const VarslingsadresserTagList = ({varslingsadresser, remove}: {
         })
         .map(c => getSlackChannelById(c.adresse))
       )
+
+      const users = await Promise.all(
+        varslingsadresser
+        .filter(va => va.type === AdresseType.SLACK_USER)
+        .filter(va => !slackUsers.find(u => u.id === va.adresse))
+        .filter(va => {
+          const vas = va as VarslingsadresseQL
+          if (vas.slackUser) {
+            loadedUsers.push(vas.slackUser)
+            return false
+          }
+          return true
+        })
+        .map(c => getSlackUserById(c.adresse))
+      )
+
       setSlackChannels([...slackChannels, ...channels, ...loadedChannels])
+      setSlackUsers([...slackUsers, ...users, ...loadedUsers])
     })()
   }, [varslingsadresser])
 
@@ -171,6 +198,9 @@ const VarslingsadresserTagList = ({varslingsadresser, remove}: {
           if (v.type === AdresseType.SLACK) {
             const channel = slackChannels.find(c => c.id === v.adresse)
             return <Block key={i}>{channel ? channelDesc(channel) : `Slack: ${v.adresse}`}</Block>
+          } else if (v.type === AdresseType.SLACK_USER) {
+            const user = slackUsers.find(u => u.id === v.adresse)
+            return <Block key={i}>{user ? `Slack: ${user.name}` : `Slack: ${v.adresse}`}</Block>
           }
           return <Block key={i}>Epost: {v.adresse}</Block>
         }
@@ -181,6 +211,7 @@ const VarslingsadresserTagList = ({varslingsadresser, remove}: {
 }
 
 type AddVarslingsadresseProps = {p: FieldArrayRenderProps, close: () => void}
+
 const SlackChannelSearch = ({p, close}: AddVarslingsadresseProps) => {
   const [slackSearch, setSlackSearch, loading] = useSlackChannelSearch()
 
@@ -207,6 +238,44 @@ const SlackChannelSearch = ({p, close}: AddVarslingsadresseProps) => {
       onInputChange={event => setSlackSearch(event.currentTarget.value)}
       isLoading={loading}
     />
+  )
+}
+
+const SlackUserSearch = ({p, close}: AddVarslingsadresseProps) => {
+  const [slackSearch, setSlackSearch, loading] = usePersonSearch()
+  const [error, setError] = useState('')
+
+  return (
+    <Block display='flex' flexDirection='column'>
+      <StatefulSelect
+        placeholder={'Søk slack brukere'}
+        maxDropdownHeight='400px'
+        filterOptions={o => o}
+        searchable
+        noResultsMsg='Ingen resultat'
+        getOptionLabel={args => (args.option as TeamResource).fullName}
+        onFocus={() => setError('')}
+
+        options={slackSearch}
+        onChange={({value}) => {
+          const resource = value[0] as TeamResource
+          if (resource)
+            getSlackUserByEmail(resource.email)
+            .then(user => {
+              p.push({type: AdresseType.SLACK_USER, adresse: user.id})
+              close()
+            }).catch(e => {
+              setError('Fant ikke slack for bruker')
+            })
+        }}
+        onInputChange={event => setSlackSearch(event.currentTarget.value)}
+        isLoading={loading}
+      />
+      {error && <Notification kind='negative' overrides={{Body: {style: {marginBottom: '-25px'}}}}>
+        Ugyldig epostadress
+      </Notification>
+      }
+    </Block>
   )
 }
 

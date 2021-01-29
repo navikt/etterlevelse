@@ -1,7 +1,7 @@
 import axios from 'axios'
-import {PageResponse, SlackChannel, Team, TeamResource} from '../constants'
+import {PageResponse, SlackChannel, SlackUser, Team, TeamResource} from '../constants'
 import {env} from '../util/env'
-import {useDebouncedState, useForceUpdate, useSearch} from '../util/hooks'
+import {useForceUpdate, useSearch} from '../util/hooks'
 import {Option} from 'baseui/select'
 import {Dispatch, SetStateAction, useEffect, useState} from 'react'
 import {user} from '../services/User'
@@ -11,7 +11,7 @@ export const getResourceById = async (resourceId: string) => {
 }
 
 export const searchResourceByName = async (resourceName: string) => {
-  return (await axios.get<PageResponse<TeamResource>>(`${env.backendBaseUrl}/team/resource/search/${resourceName}`)).data
+  return (await axios.get<PageResponse<TeamResource>>(`${env.backendBaseUrl}/team/resource/search/${resourceName}`)).data.content
 }
 
 export const getTeam = async (teamId: string) => {
@@ -32,32 +32,19 @@ export const getSlackChannelById = async (id: string) => {
   return (await axios.get<SlackChannel>(`${env.backendBaseUrl}/team/slack/channel/${id}`)).data
 }
 
+export const getSlackUserByEmail = async (id: string) => {
+  return (await axios.get<SlackUser>(`${env.backendBaseUrl}/team/slack/user/email/${id}`)).data
+}
+
+export const getSlackUserById = async (id: string) => {
+  return (await axios.get<SlackUser>(`${env.backendBaseUrl}/team/slack/user/id/${id}`)).data
+}
+
 export const searchSlackChannel = async (name: string) => {
   return (await axios.get<PageResponse<SlackChannel>>(`${env.backendBaseUrl}/team/slack/channel/search/${name}`)).data.content
 }
 
 export const mapTeamResourceToOption = (teamResource: TeamResource) => ({id: teamResource.navIdent, label: teamResource.fullName})
-
-export const usePersonSearch = () => {
-  const [teamResourceSearch, setResourceSearch] = useDebouncedState<string>('', 200)
-  const [searchResult, setInfoTypeSearchResult] = useState<Option[]>([])
-  const [loading, setLoading] = useState<boolean>(false)
-
-  useEffect(() => {
-    const search = async () => {
-      if (teamResourceSearch && teamResourceSearch.length > 2) {
-        setLoading(true)
-        const res = await searchResourceByName(teamResourceSearch)
-        let options: Option[] = res.content.map(mapTeamResourceToOption)
-        setInfoTypeSearchResult(options)
-        setLoading(false)
-      }
-    }
-    search()
-  }, [teamResourceSearch])
-
-  return [searchResult, setResourceSearch, loading] as SearchType
-}
 
 const people: Map<string, string> = new Map<string, string>()
 const teams: Map<string, Team> = new Map<string, Team>()
@@ -105,4 +92,5 @@ export const useMyTeams = () => {
 
 export type SearchType = [Option[], Dispatch<SetStateAction<string>>, boolean]
 
+export const usePersonSearch = () => useSearch(searchResourceByName)
 export const useSlackChannelSearch = () => useSearch(searchSlackChannel)

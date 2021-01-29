@@ -10,8 +10,9 @@ import no.nav.data.common.exceptions.NotFoundException;
 import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.common.security.SecurityUtils;
+import no.nav.data.etterlevelse.varsel.domain.SlackChannel;
+import no.nav.data.etterlevelse.varsel.domain.SlackUser;
 import no.nav.data.integration.slack.SlackClient;
-import no.nav.data.integration.slack.dto.SlackDtos.Channel;
 import no.nav.data.integration.team.domain.ProductArea;
 import no.nav.data.integration.team.domain.Team;
 import no.nav.data.integration.team.dto.ProductAreaResponse;
@@ -152,7 +153,7 @@ public class TeamController {
     @Operation(summary = "Search slack channels")
     @ApiResponse(description = "Channels fetched")
     @GetMapping("/slack/channel/search/{name}")
-    public ResponseEntity<RestResponsePage<Channel>> searchSlackChannel(@PathVariable String name) {
+    public ResponseEntity<RestResponsePage<SlackChannel>> searchSlackChannel(@PathVariable String name) {
         log.info("Slack channel search '{}'", name);
         validateLen(name);
         var channels = slackClient.searchChannel(name);
@@ -163,10 +164,28 @@ public class TeamController {
     @Operation(summary = "Get slack channel")
     @ApiResponse(description = "Channel fetched")
     @GetMapping("/slack/channel/{id}")
-    public ResponseEntity<Channel> getSlackChannel(@PathVariable String id) {
+    public ResponseEntity<SlackChannel> getSlackChannel(@PathVariable String id) {
         log.info("Slack channel '{}'", id);
         var channel = slackClient.getChannel(id);
         return new ResponseEntity<>(channel, HttpStatus.OK);
+    }
+
+    @Operation(summary = "Get slack user by email")
+    @ApiResponse(description = "User fetched")
+    @GetMapping("/slack/user/email/{id}")
+    public ResponseEntity<SlackUser> getSlackUserByEmail(@PathVariable String email) {
+        log.info("Slack user email '{}'", email);
+        var user = slackClient.getUserByEmail(email);
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    @Operation(summary = "Get slack user by id")
+    @ApiResponse(description = "User fetched")
+    @GetMapping("/slack/user/id/{id}")
+    public ResponseEntity<SlackUser> getSlackUserById(@PathVariable String id) {
+        log.info("Slack user id '{}'", id);
+        var user = slackClient.getUserBySlackId(id);
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     private void validateLen(String name) {

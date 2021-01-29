@@ -7,6 +7,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import lombok.Data;
 import lombok.Value;
 import no.nav.data.common.utils.JsonUtils;
+import no.nav.data.etterlevelse.varsel.domain.SlackChannel;
+import no.nav.data.etterlevelse.varsel.domain.SlackUser;
 import org.springframework.util.Assert;
 
 import java.util.List;
@@ -111,7 +113,11 @@ public class SlackDtos {
         private String id;
         private String name;
         @JsonProperty("num_members")
-        private int members;
+        private Integer numMembers;
+
+        public SlackChannel toDomain() {
+            return new SlackChannel(id, name, numMembers);
+        }
     }
 
     @Data
@@ -124,7 +130,13 @@ public class SlackDtos {
         @Data
         public static class User {
 
-            String id;
+            private String id;
+            @JsonProperty("real_name")
+            private String name;
+
+            public SlackUser toDomain() {
+                return new SlackUser(id, name);
+            }
 
         }
     }

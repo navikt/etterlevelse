@@ -153,7 +153,11 @@ const query = gql`
         slackChannel {
           id
           name
-          members
+          numMembers
+        }
+        slackUser {
+          id
+          name
         }
       }
       rettskilder

@@ -74,12 +74,18 @@ export interface Varslingsadresse {
 export interface SlackChannel {
   id: string
   name?: string
-  num_members?: number
+  numMembers?: number
+}
+
+export interface SlackUser {
+  id: string
+  name?: string
 }
 
 export enum AdresseType {
   EPOST = 'EPOST',
-  SLACK = 'SLACK'
+  SLACK = 'SLACK',
+  SLACK_USER = 'SLACK_USER'
 }
 
 export interface Etterlevelse extends DomainObject {
@@ -171,5 +177,6 @@ export type EtterlevelseQL = Etterlevelse & {
 }
 
 export type VarslingsadresseQL = Varslingsadresse & {
-  slackChannel: SlackChannel
+  slackChannel?: SlackChannel
+  slackUser?: SlackUser
 }

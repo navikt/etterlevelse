@@ -35,6 +35,7 @@ type Varslingsadresse {
     adresse: String!
     type: AdresseType!
     slackChannel: SlackChannel
+    slackUser: SlackUser
 }
 
 enum AdresseType {
@@ -45,7 +46,12 @@ enum AdresseType {
 type SlackChannel {
     id: String!
     name: String
-    members: NonNegativeInt
+    numMembers: NonNegativeInt
+}
+
+type SlackUser {
+    id: String!
+    name: String
 }
 
 type Etterlevelse {

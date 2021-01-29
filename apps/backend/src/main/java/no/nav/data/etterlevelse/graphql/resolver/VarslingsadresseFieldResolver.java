@@ -4,9 +4,10 @@ import graphql.kickstart.tools.GraphQLResolver;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.etterlevelse.varsel.domain.AdresseType;
+import no.nav.data.etterlevelse.varsel.domain.SlackChannel;
+import no.nav.data.etterlevelse.varsel.domain.SlackUser;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 import no.nav.data.integration.slack.SlackClient;
-import no.nav.data.integration.slack.dto.SlackDtos.Channel;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -16,9 +17,16 @@ public class VarslingsadresseFieldResolver implements GraphQLResolver<Varslingsa
 
     private final SlackClient slackClient;
 
-    public Channel slackChannel(Varslingsadresse varslingsadresse) {
+    public SlackChannel slackChannel(Varslingsadresse varslingsadresse) {
         if (varslingsadresse.getType() == AdresseType.SLACK) {
             return slackClient.getChannel(varslingsadresse.getAdresse());
+        }
+        return null;
+    }
+
+    public SlackUser slackUser(Varslingsadresse varslingsadresse) {
+        if (varslingsadresse.getType() == AdresseType.SLACK_USER) {
+            return slackClient.getUserBySlackId(varslingsadresse.getAdresse());
         }
         return null;
     }
