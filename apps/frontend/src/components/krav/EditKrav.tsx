@@ -4,7 +4,7 @@ import {createKrav, mapToFormVal, updateKrav} from '../../api/KravApi'
 import {disableEnter} from '../common/Table'
 import {Block} from 'baseui/block'
 import Button from '../common/Button'
-import React, {useEffect, useState} from 'react'
+import React, {ReactNode, useEffect, useState} from 'react'
 import * as yup from 'yup'
 import {ListName} from '../../services/Codelist'
 import {kravStatus} from '../../pages/KravPage'
@@ -15,10 +15,13 @@ import {env} from '../../util/env'
 import {StatefulSelect} from 'baseui/select'
 import {FormControl} from 'baseui/form-control'
 import {RenderTagList} from '../common/TagList'
-import {Modal, ModalBody, ModalHeader} from 'baseui/modal'
+import {Modal, ModalBody, ModalFooter, ModalHeader} from 'baseui/modal'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faPlus} from '@fortawesome/free-solid-svg-icons'
 import {theme} from '../../util'
+import {Input} from 'baseui/input'
+import {user} from '../../services/User'
+import {Notification} from 'baseui/notification'
 
 type EditKravProps = {
   krav: Krav,
@@ -103,14 +106,13 @@ const Varslingsadresser = () => {
               </Block>
             </FormControl>
 
-            <Modal unstable_ModalBackdropScroll isOpen={addSlack} onClose={() => setAddSlack(false)}>
-              <ModalHeader>
-                Legg til Slack kanal
-              </ModalHeader>
-              <ModalBody>
-                <SlackChannelSearch p={p} close={() => setAddSlack(false)}/>
-              </ModalBody>
-            </Modal>
+            <AddModal title='Legg til Slack kanal' isOpen={addSlack} close={() => setAddSlack(false)}>
+              <SlackChannelSearch p={p} close={() => setAddSlack(false)}/>
+            </AddModal>
+
+            <AddModal title='Legg til Epost adresse' isOpen={addEmail} close={() => setAddEmail(false)}>
+              <AddEmail p={p} close={() => setAddEmail(false)}/>
+            </AddModal>
 
           </Block>
         }
@@ -119,6 +121,21 @@ const Varslingsadresser = () => {
     </FieldWrapper>
   )
 }
+
+const AddModal = ({isOpen, close, title, children}: {isOpen: boolean, close: () => void, title: string, children: ReactNode}) =>
+  <Modal unstable_ModalBackdropScroll isOpen={isOpen} onClose={close}>
+    <ModalHeader>
+      {title}
+    </ModalHeader>
+    <ModalBody>
+      {children}
+    </ModalBody>
+    <ModalFooter>
+      <Button kind='secondary' size='compact' type='button' onClick={close}>
+        Avbryt
+      </Button>
+    </ModalFooter>
+  </Modal>
 
 const VarslingsadresserTagList = ({varslingsadresser, remove}: {
   varslingsadresser: Varslingsadresse[],
@@ -154,11 +171,11 @@ const VarslingsadresserTagList = ({varslingsadresser, remove}: {
   )
 }
 
-const SlackChannelSearch = ({p, close}: {
-  p: FieldArrayRenderProps,
-  close: () => void
-}) => {
+type AddVarslingsadresseProps = {p: FieldArrayRenderProps, close: () => void}
+const SlackChannelSearch = ({p, close}: AddVarslingsadresseProps) => {
   const [slackSearch, setSlackSearch, loading] = useSlackChannelSearch()
+
+  const added = (p.form.values as Krav).varslingsadresser
 
   return (
     <StatefulSelect
@@ -172,7 +189,7 @@ const SlackChannelSearch = ({p, close}: {
         return channelDesc(channel, true)
       }}
 
-      options={slackSearch}
+      options={slackSearch.filter(ch => !added.find(va => va.adresse === ch.id))}
       onChange={({value}) => {
         const channel = value[0] as SlackChannel
         if (channel) p.push({type: AdresseType.SLACK, adresse: channel.id})
@@ -181,6 +198,45 @@ const SlackChannelSearch = ({p, close}: {
       onInputChange={event => setSlackSearch(event.currentTarget.value)}
       isLoading={loading}
     />
+  )
+}
+
+const emailValidator = yup.string().email()
+
+const AddEmail = ({p, close}: AddVarslingsadresseProps) => {
+  const [val, setVal] = useState('')
+  const [error, setError] = useState('')
+  const add = (adresse?: string) => {
+    const toAdd = adresse || val
+    if (!toAdd) return
+    const added = (p.form.values as Krav).varslingsadresser
+    if (!added.find(va => va.adresse === toAdd)) {
+      if (!emailValidator.isValidSync(toAdd)) {
+        setError('invalid email')
+        return
+      }
+      p.push({type: AdresseType.EPOST, adresse: toAdd})
+    }
+    close()
+  }
+  const onKey = (e: React.KeyboardEvent) => (e.key === 'Enter') && add()
+  return (
+    <Block display='flex' flexDirection='column'>
+      <Block display='flex'>
+        <Input onKeyDown={onKey} value={val} onFocus={() => setError('')}
+               onChange={e => setVal((e.target as HTMLInputElement).value)}
+               onBlur={() => add()}
+        />
+        <Block display='flex' justifyContent='space-between'>
+          <Button type='button' onClick={() => add(user.getEmail())} marginLeft>Meg </Button>
+          <Button type='button' onClick={add} marginLeft><FontAwesomeIcon icon={faPlus}/> </Button>
+        </Block>
+      </Block>
+      {error && <Notification kind='negative' overrides={{Body: {style: {marginBottom: '-25px'}}}}>
+        Ugyldig epostadress
+      </Notification>
+      }
+    </Block>
   )
 }
 
