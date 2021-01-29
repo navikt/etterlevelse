@@ -25,7 +25,7 @@ query getKrav($nummer: Int!, $versjon: Int!) {
             slackChannel {
                 id
                 name
-                members
+                numMembers
             }
         }
     }
