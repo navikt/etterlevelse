@@ -167,6 +167,9 @@ public class TeamController {
     public ResponseEntity<SlackChannel> getSlackChannel(@PathVariable String id) {
         log.info("Slack channel '{}'", id);
         var channel = slackClient.getChannel(id);
+        if (channel == null) {
+            throw new NotFoundException("no channel for id " + id);
+        }
         return new ResponseEntity<>(channel, HttpStatus.OK);
     }
 
@@ -176,6 +179,9 @@ public class TeamController {
     public ResponseEntity<SlackUser> getSlackUserByEmail(@PathVariable String email) {
         log.info("Slack user email '{}'", email);
         var user = slackClient.getUserByEmail(email);
+        if (user == null) {
+            throw new NotFoundException("no user for email " + email);
+        }
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
@@ -185,6 +191,9 @@ public class TeamController {
     public ResponseEntity<SlackUser> getSlackUserById(@PathVariable String id) {
         log.info("Slack user id '{}'", id);
         var user = slackClient.getUserBySlackId(id);
+        if (user == null) {
+            throw new NotFoundException("no user for id " + id);
+        }
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 

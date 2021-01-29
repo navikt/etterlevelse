@@ -23,6 +23,7 @@ import {Input} from 'baseui/input'
 import {user} from '../../services/User'
 import {Notification} from 'baseui/notification'
 import {faSlackHash} from '@fortawesome/free-brands-svg-icons'
+import {Spinner} from '../common/Spinner'
 
 type EditKravProps = {
   krav: Krav,
@@ -245,6 +246,7 @@ const SlackChannelSearch = ({p, close}: AddVarslingsadresseProps) => {
 const SlackUserSearch = ({p, close}: AddVarslingsadresseProps) => {
   const [slackSearch, setSlackSearch, loading] = usePersonSearch()
   const [error, setError] = useState('')
+  const [loadingSlackId, setLoadingSlackId] = useState(false)
 
   return (
     <Block display='flex' flexDirection='column'>
@@ -256,22 +258,26 @@ const SlackUserSearch = ({p, close}: AddVarslingsadresseProps) => {
         noResultsMsg='Ingen resultat'
         getOptionLabel={args => (args.option as TeamResource).fullName}
         onFocus={() => setError('')}
+        disabled={loadingSlackId}
 
         options={slackSearch}
         onChange={({value}) => {
           const resource = value[0] as TeamResource
           if (resource)
+            setLoadingSlackId(true)
             getSlackUserByEmail(resource.email)
             .then(user => {
               p.push({type: AdresseType.SLACK_USER, adresse: user.id})
               close()
             }).catch(e => {
               setError('Fant ikke slack for bruker')
+              setLoadingSlackId(false)
             })
         }}
         onInputChange={event => setSlackSearch(event.currentTarget.value)}
         isLoading={loading}
       />
+      {loadingSlackId && <Spinner size={theme.sizing.scale800}/> }
       {error && <Notification kind='negative' overrides={{Body: {style: {marginBottom: '-25px'}}}}>
         {error}
       </Notification>
