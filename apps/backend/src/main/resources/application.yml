@@ -93,6 +93,9 @@ graphql:
       - name: Get krav for nummer
         query: classpath:playground/get_krav_for_nummer.graphql
         variables: classpath:playground/get_krav_for_nummer_variables.json
+    settings:
+      request:
+        credentials: include
 
 client:
   behandlingskatalog:

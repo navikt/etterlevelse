@@ -98,7 +98,7 @@ const Varslingsadresser = () => {
               <Block>
                 <Block marginBottom={theme.sizing.scale400}>
                   <Button kind='secondary' size='compact' type='button' onClick={() => setAddSlackChannel(true)}>
-                    <span><FontAwesomeIcon icon={faPoundSign}/> Legg til slack-kanal</span>
+                    <span><FontAwesomeIcon icon={faSlackHash}/> Legg til slack-kanal</span>
                   </Button>
                   <Button kind='secondary' size='compact' marginLeft type='button' onClick={() => setAddSlackUser(true)}>
                     <span><FontAwesomeIcon icon={faUser}/> Legg til slack-bruker</span>
