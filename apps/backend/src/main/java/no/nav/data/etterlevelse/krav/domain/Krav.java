@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Builder.Default;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import no.nav.data.common.security.SecurityUtils;
 import no.nav.data.common.storage.domain.ChangeStamp;
 import no.nav.data.common.storage.domain.DomainObject;
 import no.nav.data.etterlevelse.codelist.CodelistService;
@@ -58,8 +59,7 @@ public class Krav implements DomainObject, KravId {
 
     public enum KravStatus {
         UNDER_REDIGERING,
-        FERDIG;
-
+        FERDIG
     }
 
     public Krav convert(KravRequest request) {
@@ -86,7 +86,7 @@ public class Krav implements DomainObject, KravId {
     }
 
     public KravResponse toResponse() {
-        return KravResponse.builder()
+        var response = KravResponse.builder()
                 .id(id)
                 .changeStamp(convertChangeStampResponse())
                 .version(version)
@@ -109,6 +109,11 @@ public class Krav implements DomainObject, KravId {
                 .relevansFor(CodelistService.getCodelistResponseList(ListName.RELEVANS, relevansFor))
                 .status(status)
                 .build();
+        if (!SecurityUtils.isKravEier()) {
+            response.getChangeStamp().setLastModifiedBy("Skjult");
+            response.setVarslingsadresser(List.of());
+        }
+        return response;
     }
 
     public InstanceId convertToInstanceId() {

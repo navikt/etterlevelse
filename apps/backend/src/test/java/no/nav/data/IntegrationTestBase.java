@@ -2,6 +2,7 @@ package no.nav.data;
 
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.IntegrationTestBase.Initializer;
+import no.nav.data.TestConfig.MockFilter;
 import no.nav.data.common.auditing.domain.AuditVersionRepository;
 import no.nav.data.common.storage.StorageService;
 import no.nav.data.common.storage.domain.GenericStorageRepository;
@@ -24,7 +25,7 @@ import org.testcontainers.containers.PostgreSQLContainer;
 @Slf4j
 @ActiveProfiles("test")
 @ExtendWith(WiremockExtension.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = {AppStarter.class})
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = {AppStarter.class, TestConfig.class})
 @ContextConfiguration(initializers = {Initializer.class})
 public abstract class IntegrationTestBase {
 
@@ -57,6 +58,7 @@ public abstract class IntegrationTestBase {
     @AfterEach
     void tearDownBase() {
         repository.deleteAll();
+        MockFilter.clearUser();
     }
 
     public static class Initializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {

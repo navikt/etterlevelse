@@ -11,6 +11,7 @@ import {Label} from '../common/PropertyLabel'
 import {ObjectLink} from '../common/RouteLink'
 import {StyledLink} from 'baseui/link'
 import {slackLink} from '../../util/config'
+import {user} from '../../services/User'
 
 const formatDate = (date?: string) => date && moment(date).format('ll')
 
@@ -56,7 +57,7 @@ const AllInfo = ({krav}: {krav: KravQL}) => (
     {krav.periode?.slutt && <Label title='Gyldig tom'>{formatDate(krav.periode?.slutt)}</Label>}
 
     <Label title='Status'>{kravStatus(krav.status)}</Label>
-    <Label title='Varslingsadresser'>
+    <Label title='Varslingsadresser' hide={!user.isKraveier()}>
       <DotTags items={krav.varslingsadresser.map((va, i) => {
           if (va.type === AdresseType.SLACK) return <Block>Slack: <StyledLink href={slackLink(va.adresse)}>{va.slackChannel?.name || va.adresse}</StyledLink></Block>
           return <Block>Epost: <StyledLink href={`mailto:${va.adresse}`}>{va.adresse}</StyledLink></Block>

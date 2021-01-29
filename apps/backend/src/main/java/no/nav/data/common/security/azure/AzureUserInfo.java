@@ -81,6 +81,11 @@ public class AzureUserInfo implements UserInfo {
         return groups.contains(AppRole.ADMIN.name());
     }
 
+    @Override
+    public boolean isKravEier() {
+        return groups.contains(AppRole.KRAVEIER.name()) || isAdmin();
+    }
+
     public UserInfoResponse toResponse() {
         return UserInfoResponse.builder()
                 .loggedIn(true)

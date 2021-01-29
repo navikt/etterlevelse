@@ -2,6 +2,7 @@ package no.nav.data.etterlevelse.krav;
 
 import lombok.SneakyThrows;
 import no.nav.data.IntegrationTestBase;
+import no.nav.data.TestConfig.MockFilter;
 import no.nav.data.etterlevelse.codelist.CodelistStub;
 import no.nav.data.etterlevelse.common.domain.Periode;
 import no.nav.data.etterlevelse.krav.KravController.KravPage;
@@ -36,6 +37,7 @@ public class KravIT extends IntegrationTestBase {
     @BeforeEach
     void setUp() {
         CodelistStub.initializeCodelist();
+        MockFilter.setUser(MockFilter.KRAVEIER);
     }
 
     @Test
@@ -80,7 +82,33 @@ public class KravIT extends IntegrationTestBase {
 
     @Test
     void createKrav() {
-        var req = KravRequest.builder()
+        var req = getKravRequest();
+
+        var resp = restTemplate.postForEntity("/krav", req, KravResponse.class);
+
+        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        KravResponse krav = resp.getBody();
+        assertThat(krav).isNotNull();
+
+        assertThat(krav.getId()).isNotNull();
+        assertThat(krav.getKravNummer()).isGreaterThanOrEqualTo(101);
+        assertThat(krav.getKravVersjon()).isEqualTo(1);
+
+        assertFields(krav);
+    }
+
+    @Test
+    void getKravEtterlever() {
+       var kravResp =  restTemplate.postForEntity("/krav", getKravRequest(), KravResponse.class);
+       MockFilter.setUser(null);
+        var resp = restTemplate.getForEntity("/krav/{id}", KravResponse.class, kravResp.getBody().getId());
+
+        assertThat(resp.getBody().getChangeStamp().getLastModifiedBy()).isEqualTo("Skjult");
+        assertThat(resp.getBody().getVarslingsadresser()).isEmpty();
+    }
+
+    private KravRequest getKravRequest() {
+        return KravRequest.builder()
                 .navn("Krav 1")
                 .beskrivelse("beskrivelse")
                 .utdypendeBeskrivelse("utbesk")
@@ -97,18 +125,6 @@ public class KravIT extends IntegrationTestBase {
                 .status(KravStatus.UNDER_REDIGERING)
                 .periode(new Periode(LocalDate.now().minusDays(1), LocalDate.now().plusDays(1)))
                 .build();
-
-        var resp = restTemplate.postForEntity("/krav", req, KravResponse.class);
-
-        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-        KravResponse krav = resp.getBody();
-        assertThat(krav).isNotNull();
-
-        assertThat(krav.getId()).isNotNull();
-        assertThat(krav.getKravNummer()).isGreaterThanOrEqualTo(101);
-        assertThat(krav.getKravVersjon()).isEqualTo(1);
-
-        assertFields(krav);
     }
 
     private void assertFields(KravResponse krav) {

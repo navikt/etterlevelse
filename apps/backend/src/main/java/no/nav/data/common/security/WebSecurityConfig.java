@@ -93,7 +93,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // In lightweight mvc tests where authfilter isnt initialized
         if (aadAuthFilter != null) {
             http.addFilterBefore(aadAuthFilter, UsernamePasswordAuthenticationFilter.class);
-            http.addFilterAfter(userFilter, AADStatelessAuthenticationFilter.class);
+            http.addFilterAfter(userFilter, aadAuthFilter.getClass());
         } else {
             http.addFilterAfter(userFilter, UsernamePasswordAuthenticationFilter.class);
         }

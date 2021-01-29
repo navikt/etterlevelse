@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.graphql.spring.boot.test.GraphQLResponse;
 import lombok.SneakyThrows;
+import no.nav.data.TestConfig.MockFilter;
 import no.nav.data.common.utils.JsonUtils;
 import no.nav.data.etterlevelse.behandling.dto.Behandling;
 import no.nav.data.etterlevelse.behandling.dto.BehandlingRequest;
@@ -13,6 +14,7 @@ import no.nav.data.etterlevelse.varsel.domain.AdresseType;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 import no.nav.data.graphql.GraphQLTestBase;
 import no.nav.data.integration.behandling.BkatMocks;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -26,6 +28,11 @@ class KravGraphQLIT extends GraphQLTestBase {
 
     private final Behandling behandling = BkatMocks.processMockResponse().convertToBehandling();
     private final ObjectMapper om = JsonUtils.getObjectMapper();
+
+    @BeforeEach
+    void setUp() {
+        MockFilter.setUser(MockFilter.KRAVEIER);
+    }
 
     @Test
     @SneakyThrows

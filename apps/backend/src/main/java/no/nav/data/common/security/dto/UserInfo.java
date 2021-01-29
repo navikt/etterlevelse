@@ -22,5 +22,7 @@ public interface UserInfo {
 
     boolean isAdmin();
 
+    boolean isKravEier();
+
     UserInfoResponse toResponse();
 }
