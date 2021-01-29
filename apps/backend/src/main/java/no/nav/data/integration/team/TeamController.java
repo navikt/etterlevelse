@@ -172,7 +172,7 @@ public class TeamController {
 
     @Operation(summary = "Get slack user by email")
     @ApiResponse(description = "User fetched")
-    @GetMapping("/slack/user/email/{id}")
+    @GetMapping("/slack/user/email/{email}")
     public ResponseEntity<SlackUser> getSlackUserByEmail(@PathVariable String email) {
         log.info("Slack user email '{}'", email);
         var user = slackClient.getUserByEmail(email);
