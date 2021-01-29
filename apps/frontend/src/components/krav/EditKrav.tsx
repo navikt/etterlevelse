@@ -272,7 +272,7 @@ const SlackUserSearch = ({p, close}: AddVarslingsadresseProps) => {
         isLoading={loading}
       />
       {error && <Notification kind='negative' overrides={{Body: {style: {marginBottom: '-25px'}}}}>
-        Ugyldig epostadress
+        {error}
       </Notification>
       }
     </Block>
@@ -290,7 +290,7 @@ const AddEmail = ({p, close}: AddVarslingsadresseProps) => {
     const added = (p.form.values as Krav).varslingsadresser
     if (!added.find(va => va.adresse === toAdd)) {
       if (!emailValidator.isValidSync(toAdd)) {
-        setError('invalid email')
+        setError('Ugyldig epostadress')
         return
       }
       p.push({type: AdresseType.EPOST, adresse: toAdd})
@@ -311,7 +311,7 @@ const AddEmail = ({p, close}: AddVarslingsadresseProps) => {
         </Block>
       </Block>
       {error && <Notification kind='negative' overrides={{Body: {style: {marginBottom: '-25px'}}}}>
-        Ugyldig epostadress
+        {error}
       </Notification>
       }
     </Block>
