@@ -123,6 +123,35 @@ export interface Periode {
   slutt: string
 }
 
+export interface Tilbakemelding {
+  id: string
+  kravNummer: number
+  kravVersjon: number
+  tittel: string
+  type: TilbakemeldingType
+  melderIdent: string
+  meldinger: TilbakemeldingMelding[]
+}
+
+export interface TilbakemeldingMelding {
+  meldingNr: number
+  fraIdent: string
+  rolle: Rolle
+  tid: string
+  innhold: string
+}
+
+export enum Rolle {
+  KRAVEIER = "KRAVEIER",
+  MELDER = "MELDER"
+}
+
+export enum TilbakemeldingType {
+  GOD = "GOD",
+  UKLAR = "UKLAR",
+  ANNET = "ANNET"
+}
+
 export enum EtterlevelseStatus {
   UNDER_REDIGERING = 'UNDER_REDIGERING',
   FERDIG = 'FERDIG'

@@ -3,7 +3,7 @@ import {HeadingLarge, HeadingSmall} from 'baseui/typography'
 import {useHistory, useParams} from 'react-router-dom'
 import {deleteKrav, KravIdParams, mapToFormVal} from '../api/KravApi'
 import React, {useEffect, useRef, useState} from 'react'
-import {Krav, KravQL, KravStatus} from '../constants'
+import {EtterlevelseQL, Krav, KravQL, KravStatus} from '../constants'
 import Button from '../components/common/Button'
 import {ViewKrav} from '../components/krav/ViewKrav'
 import {EditKrav} from '../components/krav/EditKrav'
@@ -22,6 +22,11 @@ import {ObjectType} from '../components/admin/audit/AuditTypes'
 import {behandlingName} from '../api/BehandlingApi'
 import {etterlevelseStatus} from './EtterlevelsePage'
 import {useQuery} from '@apollo/client'
+import {useTilbakemeldinger} from '../api/TilbakemeldingApi'
+import {PersonName} from '../components/common/PersonName'
+import {faPlus} from '@fortawesome/free-solid-svg-icons'
+import {Label} from '../components/common/PropertyLabel'
+import moment from 'moment'
 
 export const kravNumView = (it: {kravVersjon: number, kravNummer: number}) => `K${it.kravNummer}.${it.kravVersjon}`
 export const kravName = (krav: Krav) => `${kravNumView(krav)} - ${krav.navn}`
@@ -94,33 +99,8 @@ export const KravPage = () => {
       {!edit && krav && !kravLoading &&
       <Block>
         <ViewKrav krav={krav}/>
-
-        <Block>
-          <HeadingSmall>Kravet etterleves av</HeadingSmall>
-          <Block $style={{...marginAll('-' + theme.sizing.scale600)}}>
-            {etterlevelserLoading && <Spinner size={theme.sizing.scale800}/>}
-            {!etterlevelserLoading &&
-            <Table data={krav?.etterlevelser || []} emptyText='etterlevelser' headers={[
-              {title: 'Behandling'},
-              {title: 'Status'},
-              {title: 'System'},
-              {title: 'Team'},
-              {title: 'Avdeling'}
-            ]} render={state =>
-              state.data.map(etterlevelse =>
-                <Row key={etterlevelse.id}>
-                  <Cell><ObjectLink type={ObjectType.Behandling} id={etterlevelse.behandling.id}>{behandlingName(etterlevelse.behandling)}</ObjectLink></Cell>
-                  <Cell><ObjectLink type={ObjectType.Etterlevelse} id={etterlevelse.id}>
-                    {etterlevelseStatus(etterlevelse.status)}
-                  </ObjectLink></Cell>
-                  <Cell>{etterlevelse.behandling.systemer.map(s => s.shortName).join(", ")}</Cell>
-                  <Cell><Teams teams={etterlevelse.behandling.teams} link/></Cell>
-                  <Cell>{etterlevelse.behandling.avdeling?.shortName}</Cell>
-                </Row>
-              )
-            }/>}
-          </Block>
-        </Block>
+        <Etterlevelser loading={etterlevelserLoading} etterlevelser={krav.etterlevelser}/>
+        <Tilbakemeldinger krav={krav}/>
       </Block>}
 
       {edit && krav && <EditKrav krav={krav} formRef={formRef} close={k => {
@@ -134,6 +114,38 @@ export const KravPage = () => {
         setEdit(false)
       }}/>}
 
+    </Block>
+  )
+}
+
+const Etterlevelser = ({loading, etterlevelser}: {loading: boolean, etterlevelser?: EtterlevelseQL[]}) => {
+
+  return (
+    <Block>
+      <HeadingSmall>Kravet etterleves av</HeadingSmall>
+      <Block $style={{...marginAll('-' + theme.sizing.scale600)}}>
+        {loading && <Spinner size={theme.sizing.scale800}/>}
+        {!loading &&
+        <Table data={etterlevelser || []} emptyText='etterlevelser' headers={[
+          {title: 'Behandling'},
+          {title: 'Status'},
+          {title: 'System'},
+          {title: 'Team'},
+          {title: 'Avdeling'}
+        ]} render={state =>
+          state.data.map(etterlevelse =>
+            <Row key={etterlevelse.id}>
+              <Cell><ObjectLink type={ObjectType.Behandling} id={etterlevelse.behandling.id}>{behandlingName(etterlevelse.behandling)}</ObjectLink></Cell>
+              <Cell><ObjectLink type={ObjectType.Etterlevelse} id={etterlevelse.id}>
+                {etterlevelseStatus(etterlevelse.status)}
+              </ObjectLink></Cell>
+              <Cell>{etterlevelse.behandling.systemer.map(s => s.shortName).join(", ")}</Cell>
+              <Cell><Teams teams={etterlevelse.behandling.teams} link/></Cell>
+              <Cell>{etterlevelse.behandling.avdeling?.shortName}</Cell>
+            </Row>
+          )
+        }/>}
+      </Block>
     </Block>
   )
 }
@@ -211,3 +223,61 @@ const query = gql`
       }
     }
   }`
+
+
+const Tilbakemeldinger = (props: {krav: Krav}) => {
+  const [tilbakemeldinger, loading] = useTilbakemeldinger(props.krav.kravNummer, props.krav.kravVersjon)
+  const [focusNr, setFocusNr] = useState<string>()
+
+  return (
+    <Block marginTop={theme.sizing.scale2400}>
+      <HeadingSmall>Tilbakemeldinger</HeadingSmall>
+      <Block $style={{...marginAll('-' + theme.sizing.scale600)}}>
+        {loading && <Spinner size={theme.sizing.scale800}/>}
+        {!loading &&
+        <Table data={tilbakemeldinger} emptyText='tilbakemeldinger' headers={[
+          {title: 'Tittel'},
+          {title: 'Type'},
+          {title: 'Melder'},
+          {title: 'Meldinger'},
+        ]} render={state =>
+          state.data.map(tilbakemelding => {
+              const focused = tilbakemelding.id === focusNr
+              return (
+                <React.Fragment key={tilbakemelding.id}>
+                  <Row>
+                    <Cell>{tilbakemelding.tittel}</Cell>
+                    <Cell>{tilbakemelding.type}</Cell>
+                    <Cell><PersonName ident={tilbakemelding.melderIdent}/></Cell>
+                    <Cell>
+                      <Block display='flex' justifyContent='space-between' width='100%' alignItems='center'>
+                        <Block>
+                          {tilbakemelding.meldinger.length}
+                        </Block>
+                        <Block>
+                          <Button kind='tertiary' size='compact' onClick={() => focused ? setFocusNr(undefined) : setFocusNr(tilbakemelding.id)} icon={faPlus}/>
+                        </Block>
+                      </Block>
+                    </Cell>
+                  </Row>
+                  {focused && <Row>
+                    <Block margin={theme.sizing.scale600}>
+                      {tilbakemelding.meldinger.map(melding => (
+                        <Block key={melding.meldingNr} marginBottom={melding.meldingNr < tilbakemelding.meldinger.length ? theme.sizing.scale1000 : undefined}>
+                          <Label title='Nr' compact>{melding.meldingNr}</Label>
+                          <Label title='Melding' compact>{melding.innhold}</Label>
+                          <Label title='Fra' compact>{melding.rolle}: <PersonName ident={melding.fraIdent}/></Label>
+                          <Label title='Tidspunkt' compact>{moment(melding.tid).format('lll')}</Label>
+                        </Block>
+                      ))}
+                    </Block>
+                  </Row>}
+                </React.Fragment>
+              )
+            }
+          )
+        }/>}
+      </Block>
+    </Block>
+  )
+}
