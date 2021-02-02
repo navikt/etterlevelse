@@ -1,5 +1,7 @@
 package no.nav.data.common.storage.domain;
 
+import no.nav.data.common.mail.MailTask;
+import no.nav.data.common.security.azure.support.MailLog;
 import no.nav.data.common.validator.RequestElement;
 import no.nav.data.etterlevelse.behandling.domain.BehandlingData;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
@@ -25,6 +27,9 @@ public final class TypeRegistration {
         addDomainClass(BehandlingData.class, true);
         addDomainClass(Tilbakemelding.class, false);
         addDomainClass(KravImage.class, false);
+
+        addDomainClass(MailTask.class, false);
+        addDomainClass(MailLog.class, false);
     }
 
     private TypeRegistration() {
