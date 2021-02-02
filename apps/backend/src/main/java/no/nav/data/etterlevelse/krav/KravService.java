@@ -30,54 +30,51 @@ import static no.nav.data.common.utils.StreamUtils.filter;
 @Service
 public class KravService extends DomainService<Krav> {
 
-    private final KravRepo repo;
-
     public KravService(StorageService storage, KravRepo repo) {
-        super(storage, Krav.class);
-        this.repo = repo;
+        super(storage, repo, Krav.class);
     }
 
     Page<Krav> getAll(PageParameters pageParameters) {
-        return repo.findAll(pageParameters.createPage()).map(GenericStorage::toKrav);
+        return kravRepo.findAll(pageParameters.createPage()).map(GenericStorage::toKrav);
     }
 
     public List<Krav> getByKravNummer(int kravNummer) {
-        return GenericStorage.to(repo.findByKravNummer(kravNummer), Krav.class);
+        return GenericStorage.to(kravRepo.findByKravNummer(kravNummer), Krav.class);
     }
 
     public Optional<Krav> getByKravNummer(int kravNummer, int kravVersjon) {
-        return repo.findByKravNummer(kravNummer, kravVersjon)
+        return kravRepo.findByKravNummer(kravNummer, kravVersjon)
                 .map(GenericStorage::toKrav);
     }
 
     public Krav save(KravRequest request) {
         Validator.validate(request, storage)
                 .addValidations(this::validateName)
-                .addValidations(this::validateKravNummer)
+                .addValidations(this::validateKravNummerVersjon)
                 .ifErrorsThrowValidationException();
 
         var krav = request.isUpdate() ? storage.get(request.getIdAsUUID(), Krav.class) : new Krav();
         krav.convert(request);
         if (request.isNyKravVersjon()) {
             krav.setKravNummer(request.getKravNummer());
-            krav.setKravVersjon(repo.nextKravVersjon(request.getKravNummer()));
+            krav.setKravVersjon(kravRepo.nextKravVersjon(request.getKravNummer()));
         } else if (!request.isUpdate()) {
-            krav.setKravNummer(repo.nextKravNummer());
+            krav.setKravNummer(kravRepo.nextKravNummer());
         }
 
         return storage.save(krav);
     }
 
     public List<Krav> search(String name) {
-        List<GenericStorage> byNameContaining = new ArrayList<>(repo.findByNameContaining(name));
+        List<GenericStorage> byNameContaining = new ArrayList<>(kravRepo.findByNameContaining(name));
         if (StringUtils.isNumeric(name)) {
-            byNameContaining.addAll(repo.findByKravNummer(Integer.parseInt(name)));
+            byNameContaining.addAll(kravRepo.findByKravNummer(Integer.parseInt(name)));
         }
         return convert(byNameContaining, GenericStorage::toKrav);
     }
 
     public List<Krav> getByFilter(KravFilter filter) {
-        return convert(repo.findBy(filter), GenericStorage::toKrav);
+        return convert(kravRepo.findBy(filter), GenericStorage::toKrav);
     }
 
     public Krav delete(UUID id) {
@@ -89,7 +86,7 @@ public class KravService extends DomainService<Krav> {
     }
 
     public KravImage getImage(UUID kravId, UUID fileId) {
-        return repo.findKravImage(kravId, fileId).getDomainObjectData(KravImage.class);
+        return kravRepo.findKravImage(kravId, fileId).getDomainObjectData(KravImage.class);
     }
 
     private void validateName(Validator<KravRequest> validator) {
@@ -103,7 +100,7 @@ public class KravService extends DomainService<Krav> {
         }
     }
 
-    private void validateKravNummer(Validator<KravRequest> validator) {
+    private void validateKravNummerVersjon(Validator<KravRequest> validator) {
         Integer kravNummer = validator.getItem().getKravNummer();
         boolean nyKravVersjon = validator.getItem().isNyKravVersjon();
         if (nyKravVersjon && kravNummer != null) {
@@ -116,7 +113,7 @@ public class KravService extends DomainService<Krav> {
     @SchedulerLock(name = "clean_krav_images", lockAtLeastFor = "PT5M")
     @Scheduled(initialDelayString = "PT5M", fixedRateString = "PT1H")
     public void cleanupImages() {
-        var deletes = repo.cleanupImages();
+        var deletes = kravRepo.cleanupImages();
         log.info("Deleted {} unused krav images", deletes);
     }
 }

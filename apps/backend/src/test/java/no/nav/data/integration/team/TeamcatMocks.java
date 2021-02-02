@@ -11,6 +11,7 @@ import no.nav.data.integration.team.teamcat.TeamKatTeam;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.notFound;
 import static com.github.tomakehurst.wiremock.client.WireMock.okJson;
@@ -26,7 +27,7 @@ public class TeamcatMocks {
         WireMock.stubFor(get("/teamcat/resource/search/fam").willReturn(okJson(toJson(new RestResponsePage<>(List.of(resource("A123456"), resource("A123457")))))));
         WireMock.stubFor(get("/teamcat/resource/A123456").willReturn(okJson(toJson(resource("A123456")))));
         WireMock.stubFor(get("/teamcat/resource/A123457").willReturn(okJson(toJson(resource("A123457")))));
-        WireMock.stubFor(post("/teamcat/resource/multi").withRequestBody(WireMock.equalTo(toJson(List.of("A123456", "A123457", "notfound"))))
+        WireMock.stubFor(post("/teamcat/resource/multi").withRequestBody(equalTo(toJson(List.of("A123456", "A123457", "notfound"))))
                 .willReturn(okJson(toJson(new RestResponsePage<>(List.of(resource("A123456"), resource("A123457")))))));
         WireMock.stubFor(get("/teamcat/resource/A999999").willReturn(notFound().withBody(notFoundJson())));
     }

@@ -6,6 +6,7 @@ import com.github.benmanes.caffeine.cache.LoadingCache;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.NotFoundException;
 import no.nav.data.common.exceptions.TechnicalException;
+import no.nav.data.common.security.SecurityProperties;
 import no.nav.data.common.utils.JsonUtils;
 import no.nav.data.common.utils.MetricUtils;
 import no.nav.data.common.web.TraceHeaderRequestInterceptor;
@@ -58,16 +59,20 @@ public class SlackClient {
 
     private static final int MAX_BLOCKS_PER_MESSAGE = 50;
     private static final int MAX_CHARS_PER_BLOCK = 3000;
-    public static final String SINGLETON = "SINGLETON";
+    private static final String SINGLETON = "SINGLETON";
 
     private final TeamcatResourceClient resourceClient;
     private final RestTemplate restTemplate;
+    private final SecurityProperties securityProperties;
+
     private final Cache<String, User> userCache;
     private final LoadingCache<String, String> conversationCache;
     private final LoadingCache<String, Map<String, Channel>> channelCache;
 
-    public SlackClient(TeamcatResourceClient resourceClient, RestTemplateBuilder restTemplateBuilder, SlackProperties properties) {
+    public SlackClient(TeamcatResourceClient resourceClient, RestTemplateBuilder restTemplateBuilder,
+            SlackProperties properties, SecurityProperties securityProperties) {
         this.resourceClient = resourceClient;
+        this.securityProperties = securityProperties;
         restTemplate = restTemplateBuilder
                 .additionalInterceptors(TraceHeaderRequestInterceptor.correlationInterceptor())
                 .rootUri(properties.getBaseUrl())
@@ -182,11 +187,19 @@ public class SlackClient {
             if (userId == null) {
                 throw new NotFoundException("Couldn't find slack user for email" + email);
             }
+            sendMessageToUserId(userId, blocks);
+        } catch (Exception e) {
+            throw new TechnicalException("Failed to send message to " + email + " " + JsonUtils.toJson(blocks), e);
+        }
+    }
+
+    public void sendMessageToUserId(String userId, List<Block> blocks) {
+        try {
             var channel = openConversation(userId);
             List<List<Block>> partitions = ListUtils.partition(splitLongBlocks(blocks), MAX_BLOCKS_PER_MESSAGE);
             partitions.forEach(partition -> doSendMessageToChannel(channel, partition));
         } catch (Exception e) {
-            throw new TechnicalException("Failed to send message to " + email + " " + JsonUtils.toJson(blocks), e);
+            throw new TechnicalException("Failed to send message to " + userId + " " + JsonUtils.toJson(blocks), e);
         }
     }
 
@@ -201,8 +214,12 @@ public class SlackClient {
 
     private void doSendMessageToChannel(String channel, List<Block> blockKit) {
         var request = new PostMessageRequest(channel, blockKit);
-        var response = restTemplate.postForEntity(POST_MESSAGE, request, PostMessageResponse.class);
         try {
+            log.info("Sending slack message to {}", channel);
+            if (securityProperties.isDev()) {
+                blockKit.add(0, Block.header("[DEV]"));
+            }
+            var response = restTemplate.postForEntity(POST_MESSAGE, request, PostMessageResponse.class);
             checkResponse(response);
         } catch (Exception e) {
             throw new TechnicalException("Failed to send message to channel " + channel, e);
@@ -219,8 +236,7 @@ public class SlackClient {
         }
     }
 
-    @SuppressWarnings("unchecked")
-    private <T> T checkResponse(ResponseEntity<? extends Response> response) {
+    private <T extends Response> T checkResponse(ResponseEntity<T> response) {
         Assert.notNull(response.getBody(), "empty body");
         Assert.isTrue(response.getBody().isOk(), "Not ok error: " + response.getBody().getError());
         return (T) response.getBody();

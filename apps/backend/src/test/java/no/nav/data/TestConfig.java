@@ -62,7 +62,7 @@ public class TestConfig {
         private static AzureUserInfo user;
         public static AzureUserInfo KRAVEIER = new AzureUserInfo(new Builder()
                 .claim(StandardClaimNames.NAME, "Name Nameson")
-                .claim(AzureConstants.IDENT_CLAIM, "S123456")
+                .claim(AzureConstants.IDENT_CLAIM, "A123457")
                 .build(), Set.of(AppRole.KRAVEIER.toAuthority()));
 
         public MockFilter() throws URISyntaxException {
@@ -74,8 +74,15 @@ public class TestConfig {
             MockFilter.user = user;
         }
 
+        public static void setUser(String ident) {
+            MockFilter.user = new AzureUserInfo(new Builder()
+                    .claim(StandardClaimNames.NAME, "Name Nameson")
+                    .claim(AzureConstants.IDENT_CLAIM, ident)
+                    .build(), Set.of(AppRole.KRAVEIER.toAuthority()));
+        }
+
         public static void clearUser() {
-            setUser(null);
+            MockFilter.user = null;
         }
 
         @Override

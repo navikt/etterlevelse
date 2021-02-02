@@ -100,7 +100,7 @@ public class KravIT extends IntegrationTestBase {
     @Test
     void getKravEtterlever() {
        var kravResp =  restTemplate.postForEntity("/krav", getKravRequest(), KravResponse.class);
-       MockFilter.setUser(null);
+       MockFilter.clearUser();
         var resp = restTemplate.getForEntity("/krav/{id}", KravResponse.class, kravResp.getBody().getId());
 
         assertThat(resp.getBody().getChangeStamp().getLastModifiedBy()).isEqualTo("Skjult");

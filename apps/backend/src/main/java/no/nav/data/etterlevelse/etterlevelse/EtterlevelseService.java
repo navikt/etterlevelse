@@ -9,7 +9,6 @@ import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.etterlevelse.domain.EtterlevelseRepo;
 import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseRequest;
 import no.nav.data.etterlevelse.krav.domain.KravRepo;
-import no.nav.data.etterlevelse.krav.dto.KravRequest.Fields;
 import org.springframework.data.domain.Page;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
@@ -21,12 +20,10 @@ import java.util.UUID;
 public class EtterlevelseService extends DomainService<Etterlevelse> {
 
     private final EtterlevelseRepo repo;
-    private final KravRepo kravRepo;
 
     public EtterlevelseService(StorageService storage, EtterlevelseRepo repo, KravRepo kravRepo) {
-        super(storage, Etterlevelse.class);
+        super(storage, kravRepo, Etterlevelse.class);
         this.repo = repo;
-        this.kravRepo = kravRepo;
     }
 
     Page<Etterlevelse> getAll(PageParameters pageParameters) {
@@ -63,14 +60,4 @@ public class EtterlevelseService extends DomainService<Etterlevelse> {
         return storage.delete(id, Etterlevelse.class);
     }
 
-    private void validateKravNummer(Validator<EtterlevelseRequest> validator) {
-        Integer kravNummer = validator.getItem().getKravNummer();
-        Integer kravVersjon = validator.getItem().getKravVersjon();
-        if (kravNummer != null && kravVersjon != null) {
-            var krav = kravRepo.findByKravNummer(kravNummer, kravVersjon);
-            if (krav.isEmpty()) {
-                validator.addError(Fields.kravNummer, Validator.DOES_NOT_EXIST, "KravNummer %d KravVersjon %d does not exist".formatted(kravNummer, kravVersjon));
-            }
-        }
-    }
 }

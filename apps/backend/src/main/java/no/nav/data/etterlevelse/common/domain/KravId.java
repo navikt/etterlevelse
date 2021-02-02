@@ -7,6 +7,6 @@ public interface KravId {
     Integer getKravVersjon();
 
     default String kravId() {
-        return getKravNummer() + "." + getKravVersjon();
+        return "K%d.%d".formatted(getKravNummer(), getKravVersjon());
     }
 }

@@ -5,6 +5,7 @@ import no.nav.data.etterlevelse.behandling.domain.BehandlingData;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravImage;
+import no.nav.data.etterlevelse.krav.domain.Tilbakemelding;
 import org.springframework.util.Assert;
 
 import java.util.HashMap;
@@ -22,6 +23,7 @@ public final class TypeRegistration {
         addDomainClass(Krav.class, true);
         addDomainClass(Etterlevelse.class, true);
         addDomainClass(BehandlingData.class, true);
+        addDomainClass(Tilbakemelding.class, false);
         addDomainClass(KravImage.class, false);
     }
 

@@ -3,6 +3,7 @@ package no.nav.data.etterlevelse.krav;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.ValidationException;
@@ -11,8 +12,11 @@ import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.common.utils.ImageUtils;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravImage;
+import no.nav.data.etterlevelse.krav.dto.CreateTilbakemeldingRequest;
 import no.nav.data.etterlevelse.krav.dto.KravRequest;
 import no.nav.data.etterlevelse.krav.dto.KravResponse;
+import no.nav.data.etterlevelse.krav.dto.TilbakemeldingNewMeldingRequest;
+import no.nav.data.etterlevelse.krav.dto.TilbakemeldingResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -42,14 +46,11 @@ import static no.nav.data.common.utils.StreamUtils.convert;
 @RestController
 @RequestMapping("/krav")
 @Tag(name = "Krav", description = "Krav for behandlinger")
+@RequiredArgsConstructor
 public class KravController {
 
-
     private final KravService service;
-
-    public KravController(KravService service) {
-        this.service = service;
-    }
+    private final TilbakemeldingService tilbakemeldingService;
 
     @Operation(summary = "Get All Krav")
     @ApiResponse(description = "ok")
@@ -131,6 +132,8 @@ public class KravController {
         return ResponseEntity.ok(krav.toResponse());
     }
 
+    // Image
+
     @Operation(summary = "Get Krav image")
     @ApiResponse(description = "ok")
     @GetMapping("/{id}/files/{fileId}")
@@ -174,6 +177,26 @@ public class KravController {
     @SneakyThrows
     private byte[] getBytes(MultipartFile f) {
         return f.getBytes();
+    }
+
+    // Tilbakemelding
+
+    @Operation(summary = "Create Tilbakemelding")
+    @ApiResponse(responseCode = "201", description = "Tilbakemelding created")
+    @PostMapping("/tilbakemelding")
+    public ResponseEntity<TilbakemeldingResponse> createTilbakemelding(@RequestBody CreateTilbakemeldingRequest request) {
+        log.info("Create Tilbakemelding");
+        var tilbakemelding = tilbakemeldingService.create(request);
+        return new ResponseEntity<>(tilbakemelding.toResponse(), HttpStatus.CREATED);
+    }
+
+    @Operation(summary = "New Melding on Tilbakemelding")
+    @ApiResponse(description = "Melding added Tilbakemelding")
+    @PostMapping("/tilbakemelding/melding")
+    public ResponseEntity<TilbakemeldingResponse> createTilbakemelding(@RequestBody TilbakemeldingNewMeldingRequest request) {
+        log.info("New Melding on Tilbakemelding");
+        var tilbakemelding = tilbakemeldingService.newMelding(request);
+        return ResponseEntity.ok(tilbakemelding.toResponse());
     }
 
     static class KravPage extends RestResponsePage<KravResponse> {
