@@ -9,6 +9,7 @@ import no.nav.data.etterlevelse.common.domain.DomainService;
 import no.nav.data.etterlevelse.krav.domain.KravRepo;
 import no.nav.data.etterlevelse.krav.domain.Tilbakemelding;
 import no.nav.data.etterlevelse.krav.domain.Tilbakemelding.Melding;
+import no.nav.data.etterlevelse.krav.domain.TilbakemeldingRepo;
 import no.nav.data.etterlevelse.krav.dto.CreateTilbakemeldingRequest;
 import no.nav.data.etterlevelse.krav.dto.TilbakemeldingNewMeldingRequest;
 import no.nav.data.etterlevelse.varsel.UrlGenerator;
@@ -21,6 +22,9 @@ import org.apache.commons.lang3.NotImplementedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
+import static no.nav.data.common.storage.domain.GenericStorage.to;
 import static no.nav.data.etterlevelse.varsel.domain.Varsel.Paragraph.VarselUrl.url;
 
 @Slf4j
@@ -32,13 +36,21 @@ public class TilbakemeldingService extends DomainService<Tilbakemelding> {
     private final SlackClient slackClient;
     private final UrlGenerator urlGenerator;
 
+    private final TilbakemeldingRepo tilbakemeldingRepo;
+
     public TilbakemeldingService(StorageService storage, KravRepo kravRepo,
-            TeamcatResourceClient resourceClient, EmailService emailService, SlackClient slackClient, UrlGenerator urlGenerator) {
+            TeamcatResourceClient resourceClient, EmailService emailService, SlackClient slackClient, UrlGenerator urlGenerator,
+            TilbakemeldingRepo tilbakemeldingRepo) {
         super(storage, kravRepo, Tilbakemelding.class);
         this.urlGenerator = urlGenerator;
         this.resourceClient = resourceClient;
         this.emailService = emailService;
         this.slackClient = slackClient;
+        this.tilbakemeldingRepo = tilbakemeldingRepo;
+    }
+
+    public List<Tilbakemelding> getForKrav(int kravNummer, int kravVersjon) {
+        return to(tilbakemeldingRepo.findByKravNummer(kravNummer, kravVersjon), Tilbakemelding.class);
     }
 
     @Transactional
@@ -98,4 +110,5 @@ public class TilbakemeldingService extends DomainService<Tilbakemelding> {
             }
         }
     }
+
 }

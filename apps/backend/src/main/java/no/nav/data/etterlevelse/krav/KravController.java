@@ -12,6 +12,7 @@ import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.common.utils.ImageUtils;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravImage;
+import no.nav.data.etterlevelse.krav.domain.Tilbakemelding;
 import no.nav.data.etterlevelse.krav.dto.CreateTilbakemeldingRequest;
 import no.nav.data.etterlevelse.krav.dto.KravRequest;
 import no.nav.data.etterlevelse.krav.dto.KravResponse;
@@ -197,6 +198,19 @@ public class KravController {
         log.info("New Melding on Tilbakemelding");
         var tilbakemelding = tilbakemeldingService.newMelding(request);
         return ResponseEntity.ok(tilbakemelding.toResponse());
+    }
+
+    @Operation(summary = "Get Tilbakemeldinger for krav")
+    @ApiResponse(description = "Tilbakemeldinger for krav")
+    @GetMapping("/tilbakemelding/{kravNummer}/{kravVersjon}")
+    public ResponseEntity<RestResponsePage<TilbakemeldingResponse>> createTilbakemelding(@PathVariable int kravNummer, @PathVariable int kravVersjon) {
+        log.info("Get Tilbakemeldinger for krav K{}.{}", kravNummer, kravVersjon);
+        var tilbakemeldinger = tilbakemeldingService.getForKrav(kravNummer, kravVersjon);
+        return ResponseEntity.ok(new RestResponsePage<>(tilbakemeldinger).convert(Tilbakemelding::toResponse));
+    }
+
+    static class TilbakemeldingPage extends RestResponsePage<TilbakemeldingResponse> {
+
     }
 
     static class KravPage extends RestResponsePage<KravResponse> {
