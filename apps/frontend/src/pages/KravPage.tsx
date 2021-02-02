@@ -1,7 +1,7 @@
 import {Block} from 'baseui/block'
 import {HeadingLarge, HeadingSmall} from 'baseui/typography'
 import {useHistory, useParams} from 'react-router-dom'
-import {deleteKrav, KravIdParams} from '../api/KravApi'
+import {deleteKrav, KravIdParams, mapToFormVal} from '../api/KravApi'
 import React, {useEffect, useRef, useState} from 'react'
 import {Krav, KravQL, KravStatus} from '../constants'
 import Button from '../components/common/Button'
@@ -42,11 +42,18 @@ export const KravPage = () => {
   const [krav, setKrav] = useState<KravQL | undefined>()
   const {loading: kravLoading, data: kravQuery, refetch: reloadKrav} = useQuery<{kravById: KravQL}, KravIdParams>(query, {
     variables: params,
-    skip: !params?.id && !params.kravNummer
+    skip: !params?.id && params.id !== 'ny' && !params.kravNummer
   })
   useEffect(() => {
     if (kravQuery?.kravById) setKrav(kravQuery.kravById)
   }, [kravQuery])
+
+  useEffect(() => {
+    if (params.id === 'ny') {
+      setKrav(mapToFormVal({}) as KravQL)
+      setEdit(true)
+    }
+  }, [params.id])
 
   // todo split loading krav and subelements?
   const etterlevelserLoading = kravLoading
