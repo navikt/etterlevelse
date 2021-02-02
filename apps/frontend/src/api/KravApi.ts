@@ -133,7 +133,11 @@ export const kravFullQuery = gql`
         slackChannel {
           id
           name
-          members
+          numMembers
+        }
+        slackUser {
+          id
+          name
         }
       }
       rettskilder
