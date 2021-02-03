@@ -62,7 +62,12 @@ const addTeam = (team: Team, done: () => void) => {
 export const usePersonName = () => {
   const update = useForceUpdate()
   return (id: string) => {
-    if (!people.has(id)) getResourceById(id).then(p => addPerson(p, update)).catch(e => console.debug('err fetching person', e))
+    if (!people.has(id)) {
+      people.set(id, id)
+      getResourceById(id)
+      .then(p => addPerson(p, update))
+      .catch(e => console.debug('err fetching person', e))
+    }
     return people.get(id) || id
   }
 }
@@ -70,7 +75,12 @@ export const usePersonName = () => {
 export const useTeam = () => {
   const update = useForceUpdate()
   return (id: string) => {
-    if (!teams.has(id)) getTeam(id).then(p => addTeam(p, update)).catch(e => console.debug('err fetching team', e))
+    if (!teams.has(id)) {
+      teams.set(id, {id, name: id, description: '', members: [], tags: []})
+      getTeam(id)
+      .then(p => addTeam(p, update))
+      .catch(e => console.debug('err fetching team', e))
+    }
     const team = teams.get(id)
     return [team?.name || id, team] as [string, Team | undefined]
   }
