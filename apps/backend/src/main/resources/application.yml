@@ -71,7 +71,7 @@ azure:
     client-id: ${AZURE_APP_CLIENT_ID:client-id}
     client-secret: ${AZURE_APP_CLIENT_SECRET:client-secret}
     well-known: ${AZURE_APP_WELL_KNOWN_URL:https://login.microsoftonline.com/62366534-1ec3-4962-8869-9b5535279d0b/v2.0/.well-known/openid-configuration}
-    mail-user: ${AZURE_APP_MAIL_USER:mail-user}
+    mail-user: srvetterlevelse@nav.no
     mail-password: ${AZURE_APP_MAIL_PASSWORD:mail-password}
 
 etterlev:

@@ -24,15 +24,10 @@ public class AzureAdService implements EmailProvider {
     @Override
     public void sendMail(MailTask mailTask) {
         log.info("Sending mail {} to {}", mailTask.getSubject(), mailTask.getTo());
-        // TODO remove when mail user is set up
-        if (false) {
-            getMailGraphClient().me()
-                    .sendMail(compose(mailTask.getTo(), mailTask.getSubject(), mailTask.getBody()), false)
-                    .buildRequest()
-                    .post();
-        } else {
-            log.warn("skipping mail {}", mailTask);
-        }
+        getMailGraphClient().me()
+                .sendMail(compose(mailTask.getTo(), mailTask.getSubject(), mailTask.getBody()), false)
+                .buildRequest()
+                .post();
 
         storage.save(mailTask.toMailLog());
     }

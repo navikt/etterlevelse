@@ -50,6 +50,7 @@ spec:
   envFrom:
     - secret: etterlevelse-enckey
     - secret: etterlevelse-slack-token
+    - secret: etterlevelse-mail-pwd
   env:
   {{#each env}}
     - name: {{this.name}}
