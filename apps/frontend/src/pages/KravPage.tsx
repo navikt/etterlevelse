@@ -1,9 +1,9 @@
 import {Block} from 'baseui/block'
-import {HeadingLarge, HeadingSmall} from 'baseui/typography'
+import {HeadingLarge, HeadingSmall, ParagraphMedium, ParagraphXSmall} from 'baseui/typography'
 import {useHistory, useParams} from 'react-router-dom'
 import {deleteKrav, KravIdParams, mapToFormVal} from '../api/KravApi'
 import React, {useEffect, useRef, useState} from 'react'
-import {EtterlevelseQL, Krav, KravQL, KravStatus} from '../constants'
+import {EtterlevelseQL, Krav, KravQL, KravStatus, Rolle, Tilbakemelding} from '../constants'
 import Button from '../components/common/Button'
 import {ViewKrav} from '../components/krav/ViewKrav'
 import {EditKrav} from '../components/krav/EditKrav'
@@ -25,8 +25,9 @@ import {useQuery} from '@apollo/client'
 import {useTilbakemeldinger} from '../api/TilbakemeldingApi'
 import {PersonName} from '../components/common/PersonName'
 import {faPlus} from '@fortawesome/free-solid-svg-icons'
-import {Label} from '../components/common/PropertyLabel'
 import moment from 'moment'
+import {Card, CardOverrides} from 'baseui/card'
+import {colors} from 'baseui/tokens'
 
 export const kravNumView = (it: {kravVersjon: number, kravNummer: number}) => `K${it.kravNummer}.${it.kravVersjon}`
 export const kravName = (krav: Krav) => `${kravNumView(krav)} - ${krav.navn}`
@@ -260,24 +261,56 @@ const Tilbakemeldinger = (props: {krav: Krav}) => {
                       </Block>
                     </Cell>
                   </Row>
-                  {focused && <Row>
-                    <Block margin={theme.sizing.scale600}>
-                      {tilbakemelding.meldinger.map(melding => (
-                        <Block key={melding.meldingNr} marginBottom={melding.meldingNr < tilbakemelding.meldinger.length ? theme.sizing.scale1000 : undefined}>
-                          <Label title='Nr' compact>{melding.meldingNr}</Label>
-                          <Label title='Melding' compact>{melding.innhold}</Label>
-                          <Label title='Fra' compact>{melding.rolle}: <PersonName ident={melding.fraIdent}/></Label>
-                          <Label title='Tidspunkt' compact>{moment(melding.tid).format('lll')}</Label>
-                        </Block>
-                      ))}
-                    </Block>
-                  </Row>}
+                  {focused && <MessageList tilbakemelding={tilbakemelding}/>}
                 </React.Fragment>
               )
             }
           )
         }/>}
       </Block>
+    </Block>
+  )
+}
+
+const meldingCardOverrides = (isUser: boolean): CardOverrides => ({
+  Root: {
+    style: {
+      marginTop: theme.sizing.scale400,
+      width: 'fit-content',
+      maxWidth: '80%',
+      alignSelf: isUser ? 'flex-end' : 'flex-start',
+      backgroundColor: isUser ? theme.colors.inputFillActive : theme.colors.mono100,
+      borderRadius: '10px',
+      borderWidth: 0
+    }
+  }
+})
+
+const MessageList = ({tilbakemelding}: {tilbakemelding: Tilbakemelding}) => {
+  const userRole = tilbakemelding.melderIdent === user.getIdent() ? Rolle.MELDER : Rolle.KRAVEIER
+
+  return (
+    <Block padding={theme.sizing.scale600} width='100%' maxWidth='700px' display='flex' flexDirection='column' backgroundColor={colors.gray50}>
+      {tilbakemelding.meldinger.map(melding => {
+        return (
+          <Card key={melding.meldingNr} overrides={meldingCardOverrides(melding.rolle === userRole)}>
+            <Block display='flex' flexDirection='column'>
+              <ParagraphMedium marginTop={0} marginBottom={0}>{melding.innhold}</ParagraphMedium>
+              <ParagraphXSmall alignSelf={melding.rolle === userRole ? 'flex-end' : 'flex-start'} marginBottom={0}>
+                <PersonName ident={melding.fraIdent}/> {moment(melding.tid).format('lll')}
+              </ParagraphXSmall>
+            </Block>
+          </Card>
+        )
+      })}
+      {/*{tilbakemelding.meldinger.map(melding => (*/}
+      {/*  <Block key={melding.meldingNr} marginBottom={melding.meldingNr < tilbakemelding.meldinger.length ? theme.sizing.scale1000 : undefined}>*/}
+      {/*    <Label title='Nr' compact>{melding.meldingNr}</Label>*/}
+      {/*    <Label title='Melding' compact>{melding.innhold}</Label>*/}
+      {/*    <Label title='Fra' compact>{melding.rolle}: <PersonName ident={melding.fraIdent}/></Label>*/}
+      {/*    <Label title='Tidspunkt' compact>{moment(melding.tid).format('lll')}</Label>*/}
+      {/*  </Block>*/}
+      {/*))}*/}
     </Block>
   )
 }
