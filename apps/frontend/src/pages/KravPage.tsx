@@ -17,7 +17,7 @@ import {Cell, Row, Table} from '../components/common/Table'
 import {Spinner} from '../components/common/Spinner'
 import {gql} from 'graphql.macro'
 import {Teams} from '../components/common/TeamName'
-import {marginAll} from '../components/common/Style'
+import {hideBorder, marginAll} from '../components/common/Style'
 import {ObjectType} from '../components/admin/audit/AuditTypes'
 import {behandlingName} from '../api/BehandlingApi'
 import {etterlevelseStatus} from './EtterlevelsePage'
@@ -281,7 +281,7 @@ const meldingCardOverrides = (isUser: boolean): CardOverrides => ({
       alignSelf: isUser ? 'flex-end' : 'flex-start',
       backgroundColor: isUser ? theme.colors.inputFillActive : theme.colors.mono100,
       borderRadius: '10px',
-      borderWidth: 0
+      ...hideBorder
     }
   }
 })
