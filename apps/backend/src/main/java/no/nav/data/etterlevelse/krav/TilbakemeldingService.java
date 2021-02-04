@@ -61,6 +61,8 @@ public class TilbakemeldingService extends DomainService<Tilbakemelding> {
 
         var tilbakemelding = Tilbakemelding.create(request);
         var melding = tilbakemelding.getLastMelding();
+
+        tilbakemelding = storage.save(tilbakemelding);
         varsle(tilbakemelding, melding);
 
         log.info("New tilbakemelding {} på {} fra {}", tilbakemelding.getId(), tilbakemelding.kravId(), tilbakemelding.getMelder().getIdent());
