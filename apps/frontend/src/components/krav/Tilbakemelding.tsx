@@ -26,6 +26,7 @@ import {AddEmail, SlackChannelSearch, SlackUserSearch} from './Varslingsadresser
 import {VarslingsadresserTagList} from './EditKrav'
 import {useParams} from 'react-router-dom'
 import {useRefs} from '../../util/hooks'
+import {personIdentSort} from '../../api/TeamApi'
 
 export const Tilbakemeldinger = (props: {krav: Krav}) => {
   const [tilbakemeldinger, loading, add, replace] = useTilbakemeldinger(props.krav.kravNummer, props.krav.kravVersjon)
@@ -34,9 +35,9 @@ export const Tilbakemeldinger = (props: {krav: Krav}) => {
 
   const refs = useRefs<HTMLDivElement>(tilbakemeldinger.map(t => t.id))
 
-  useEffect(()=>{
+  useEffect(() => {
     !loading && focusNr && refs[focusNr]?.current?.scrollIntoView()
-  },[loading])
+  }, [loading])
 
   return (
     <Block marginTop={theme.sizing.scale2400}>
@@ -49,13 +50,23 @@ export const Tilbakemeldinger = (props: {krav: Krav}) => {
       <Block $style={{...marginAll('-' + theme.sizing.scale600)}}>
         {loading && <Spinner size={theme.sizing.scale800}/>}
         {!loading &&
-        <Table data={tilbakemeldinger} emptyText='tilbakemeldinger' headers={[
-          {title: 'Tittel'},
-          {title: 'Melder'},
-          {title: 'Type'},
-          {title: 'Sist svar'},
-          {title: 'Meldinger'},
-        ]} render={state =>
+        <Table data={tilbakemeldinger} emptyText='tilbakemeldinger'
+               config={{
+                 useDefaultStringCompare: true,
+                 initialSortColumn: 'id',
+                 sorting: {
+                   meldinger: (a, b) => b.meldinger.length - a.meldinger.length,
+                   id: (a, b) => moment(b.meldinger[b.meldinger.length - 1].tid).valueOf() - moment(a.meldinger[a.meldinger.length - 1].tid).valueOf(),
+                   melderIdent: (a, b) => personIdentSort(a.melderIdent, b.melderIdent)
+                 }
+               }}
+               headers={[
+                 {title: 'Tittel', column: 'tittel'},
+                 {title: 'Melder', column: 'melderIdent'},
+                 {title: 'Type', column: 'type'},
+                 {title: 'Sist svar', column: 'id'},
+                 {title: 'Meldinger', column: 'meldinger'},
+               ]} render={state =>
           state.data.map(tilbakemelding => {
               const focused = tilbakemelding.id === focusNr
               return (

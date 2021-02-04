@@ -46,42 +46,56 @@ export const searchSlackChannel = async (name: string) => {
 
 export const mapTeamResourceToOption = (teamResource: TeamResource) => ({id: teamResource.navIdent, label: teamResource.fullName})
 
-const people: Map<string, string> = new Map<string, string>()
-const teams: Map<string, Team> = new Map<string, Team>()
+// Overly complicated async fetch of people and teams
 
-const addPerson = (person: TeamResource, done: () => void) => {
-  people.set(person.navIdent, person.fullName)
-  done()
+const people: Map<string, {f: boolean, v: string}> = new Map<string, {f: boolean, v: string}>()
+const teams: Map<string, {f: boolean, v: Team}> = new Map<string, {f: boolean, v: Team}>()
+const psubs: Map<string, Function[]> = new Map<string, Function[]>()
+const tsubs: Map<string, Function[]> = new Map<string, Function[]>()
+
+const addPerson = (person: TeamResource) => {
+  people.set(person.navIdent, {f: true, v: person.fullName})
+  psubs.get(person.navIdent)?.forEach(f => f())
+  psubs.delete(person.navIdent)
+}
+const addTeam = (team: Team) => {
+  teams.set(team.id, {f: true, v: team})
+  tsubs.get(team.id)?.forEach(f => f())
+  tsubs.delete(team.id)
 }
 
-const addTeam = (team: Team, done: () => void) => {
-  teams.set(team.id, team)
-  done()
+const pSubscribe = (id: string, done: () => void) => {
+  !people.has(id) && people.set(id, {f: false, v: id})
+  psubs.has(id) ? psubs.set(id, [...psubs.get(id)!, done]) : psubs.set(id, [done])
+}
+const tSubscribe = (id: string, done: () => void) => {
+  !teams.has(id) && teams.set(id, {f: false, v: {id, name: id, description: '', members: [], tags: []}})
+  tsubs.has(id) ? tsubs.set(id, [...tsubs.get(id)!, done]) : tsubs.set(id, [done])
 }
 
 export const usePersonName = () => {
   const update = useForceUpdate()
   return (id: string) => {
-    if (!people.has(id)) {
-      people.set(id, id)
-      getResourceById(id)
-      .then(p => addPerson(p, update))
+    if (!people.get(id)?.f) {
+      if (!people.has(id)) getResourceById(id)
+      .then(p => addPerson(p))
       .catch(e => console.debug('err fetching person', e))
+      pSubscribe(id, update)
     }
-    return people.get(id) || id
+    return people.get(id)?.v || id
   }
 }
 
 export const useTeam = () => {
   const update = useForceUpdate()
   return (id: string) => {
-    if (!teams.has(id)) {
-      teams.set(id, {id, name: id, description: '', members: [], tags: []})
-      getTeam(id)
-      .then(p => addTeam(p, update))
+    if (!teams.get(id)?.f) {
+      if (!teams.has(id)) getTeam(id)
+      .then(t => addTeam(t))
       .catch(e => console.debug('err fetching team', e))
+      tSubscribe(id, update)
     }
-    const team = teams.get(id)
+    const team = teams.get(id)?.v
     return [team?.name || id, team] as [string, Team | undefined]
   }
 }
@@ -104,3 +118,8 @@ export type SearchType = [Option[], Dispatch<SetStateAction<string>>, boolean]
 
 export const usePersonSearch = () => useSearch(searchResourceByName)
 export const useSlackChannelSearch = () => useSearch(searchSlackChannel)
+
+/**
+ * Will not work unless the people have been loaded already (by using usePersonName hook etc)
+ */
+export const personIdentSort = (a: string, b: string) => (people.get(a)?.v || '').localeCompare(people.get(b)?.v || '')
