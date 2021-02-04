@@ -6,7 +6,7 @@ import {theme} from '../../util'
 import {HeadingSmall, ParagraphMedium, ParagraphXSmall} from 'baseui/typography'
 import Button from '../common/Button'
 import {faChevronDown, faChevronRight, faEnvelope, faPlus, faPlusCircle, faUser} from '@fortawesome/free-solid-svg-icons'
-import {hideBorder, marginAll} from '../common/Style'
+import {borderRadius, hideBorder, marginAll} from '../common/Style'
 import {Spinner} from '../common/Spinner'
 import {Cell, disableEnter, Row, Table} from '../common/Table'
 import {PersonName} from '../common/PersonName'
@@ -164,7 +164,7 @@ const meldingCardOverrides = (isUser: boolean): CardOverrides => ({
       maxWidth: '80%',
       alignSelf: isUser ? 'flex-end' : 'flex-start',
       backgroundColor: isUser ? theme.colors.inputFillActive : theme.colors.mono100,
-      borderRadius: '10px',
+      ...borderRadius('10px'),
       ...hideBorder
     }
   }
