@@ -24,20 +24,25 @@ import {faSlackHash} from '@fortawesome/free-brands-svg-icons'
 import {FormControl} from 'baseui/form-control'
 import {AddEmail, SlackChannelSearch, SlackUserSearch} from './Varslingsadresser'
 import {VarslingsadresserTagList} from './EditKrav'
-import {useParams} from 'react-router-dom'
-import {useRefs} from '../../util/hooks'
+import {useHistory} from 'react-router-dom'
+import {useQueryParam, useRefs} from '../../util/hooks'
 import {personIdentSort} from '../../api/TeamApi'
 
-export const Tilbakemeldinger = (props: {krav: Krav}) => {
-  const [tilbakemeldinger, loading, add, replace] = useTilbakemeldinger(props.krav.kravNummer, props.krav.kravVersjon)
-  const [focusNr, setFocusNr] = useState<string | undefined>(useParams<{tilbakemeldingId: string}>().tilbakemeldingId)
+export const Tilbakemeldinger = ({krav}: {krav: Krav}) => {
+  const [tilbakemeldinger, loading, add, replace] = useTilbakemeldinger(krav.kravNummer, krav.kravVersjon)
+  const [focusNr, setFocusNr] = useState<string | undefined>(useQueryParam('tilbakemeldingId'))
   const [addTilbakemelding, setAddTilbakemelding] = useState(false)
+  const history = useHistory()
 
   const refs = useRefs<HTMLDivElement>(tilbakemeldinger.map(t => t.id))
-
   useEffect(() => {
-    !loading && focusNr && refs[focusNr]?.current?.scrollIntoView()
+    !loading && focusNr && setTimeout(() => refs[focusNr]?.current?.scrollIntoView(), 100)
   }, [loading])
+
+  const setFocus = (id: string) => {
+    setFocusNr(id)
+    history.replace(`/krav/${krav.kravNummer}/${krav.kravVersjon}?tilbakemeldingId=${id}`)
+  }
 
   return (
     <Block marginTop={theme.sizing.scale2400}>
@@ -71,7 +76,7 @@ export const Tilbakemeldinger = (props: {krav: Krav}) => {
               const focused = tilbakemelding.id === focusNr
               return (
                 <React.Fragment key={tilbakemelding.id}>
-                  <div onClick={() => focused ? setFocusNr(undefined) : setFocusNr(tilbakemelding.id)} ref={refs[tilbakemelding.id]}>
+                  <div onClick={() => focused ? setFocusNr(undefined) : setFocus(tilbakemelding.id)} ref={refs[tilbakemelding.id]}>
                     <Row $style={{cursor: 'pointer'}}>
                       <Cell>{tilbakemelding.tittel}</Cell>
                       <Cell><PersonName ident={tilbakemelding.melderIdent}/></Cell>
@@ -96,10 +101,11 @@ export const Tilbakemeldinger = (props: {krav: Krav}) => {
           )
         }/>}
       </Block>
-      <AddTilbakemeldingModal open={addTilbakemelding} close={t => {
+      <AddTilbakemeldingModal krav={krav} open={addTilbakemelding} close={t => {
         t && add(t)
         setAddTilbakemelding(false)
-      }} krav={props.krav}/>
+      }}/>
+      <Block height='400px'/>
     </Block>
   )
 }

@@ -29,7 +29,7 @@ public class UrlGenerator {
     }
 
     public String tilbakemeldingUrl(Tilbakemelding tilbakemelding) {
-        return "%s/krav/%d/%d/tilbakemelding/%s".formatted(baseUrl, tilbakemelding.getKravNummer(), tilbakemelding.getKravVersjon(), tilbakemelding.getId());
+        return "%s/krav/%d/%d?tilbakemeldingId=%s".formatted(baseUrl, tilbakemelding.getKravNummer(), tilbakemelding.getKravVersjon(), tilbakemelding.getId());
     }
 
     public static UrlGenerator instance() {

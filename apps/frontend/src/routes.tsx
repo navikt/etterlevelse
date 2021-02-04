@@ -25,7 +25,6 @@ const Routes = (): JSX.Element => (
       <Route exact path="/krav" component={KravListPage}/>
       <Route exact path="/krav/:id" component={KravPage}/>
       <Route exact path="/krav/:kravNummer/:kravVersjon" component={KravPage}/>
-      <Route exact path="/krav/:kravNummer/:kravVersjon/tilbakemelding/:tilbakemeldingId" component={KravPage}/>
 
       <Route exact path="/etterlevelse" component={EtterlevelseListPage}/>
       <Route exact path="/etterlevelse/:id" component={EtterlevelsePage}/>
