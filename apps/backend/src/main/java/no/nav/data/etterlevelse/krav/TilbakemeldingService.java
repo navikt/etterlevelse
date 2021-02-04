@@ -97,7 +97,7 @@ public class TilbakemeldingService extends DomainService<Tilbakemelding> {
 
         var varsel = builder
                 .paragraph(new Paragraph("%s har lagt igjen en tilbakemelding på Krav %%s"
-                        .formatted(sender.getFullName()), url(urlGenerator.kravUrl(krav), kravId)))
+                        .formatted(sender.getFullName()), url(urlGenerator.tilbakemeldingUrl(tilbakemelding), kravId)))
                 .build();
 
         // TODO consider schedule slack messages async (like email) to guard against slack downtime
