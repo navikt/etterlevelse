@@ -34,11 +34,14 @@ export const useTilbakemeldinger = (kravNummer: number, kravVersjon: number) => 
     }
   }, [kravNummer, kravVersjon])
 
+  const add = (r: Tilbakemelding) => {
+    setData([...data, r])
+  }
   const replace = (r: Tilbakemelding) => {
     setData(data.map(t => t.id === r.id ? r : t))
   }
 
-  return [data, loading, replace] as [Tilbakemelding[], boolean, (t: Tilbakemelding) => void]
+  return [data, loading, add, replace] as [Tilbakemelding[], boolean, (t: Tilbakemelding) => void, (t: Tilbakemelding) => void]
 }
 
 export interface CreateTilbakemeldingRequest {

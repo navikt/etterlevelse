@@ -1,11 +1,11 @@
 import {AdresseType, Krav, Tilbakemelding, TilbakemeldingRolle, TilbakemeldingType, Varslingsadresse} from '../../constants'
-import {CreateTilbakemeldingRequest, tilbakemeldingNewMelding, TilbakemeldingNewMeldingRequest, useTilbakemeldinger} from '../../api/TilbakemeldingApi'
+import {createNewTilbakemelding, CreateTilbakemeldingRequest, tilbakemeldingNewMelding, TilbakemeldingNewMeldingRequest, useTilbakemeldinger} from '../../api/TilbakemeldingApi'
 import React, {useState} from 'react'
 import {Block} from 'baseui/block'
 import {theme} from '../../util'
 import {HeadingSmall, ParagraphMedium, ParagraphXSmall} from 'baseui/typography'
 import Button from '../common/Button'
-import {faChevronDown, faChevronRight, faPlus, faPlusCircle} from '@fortawesome/free-solid-svg-icons'
+import {faChevronDown, faChevronRight, faEnvelope, faPlus, faPlusCircle, faUser} from '@fortawesome/free-solid-svg-icons'
 import {hideBorder, marginAll} from '../common/Style'
 import {Spinner} from '../common/Spinner'
 import {Cell, disableEnter, Row, Table} from '../common/Table'
@@ -17,20 +17,25 @@ import {user} from '../../services/User'
 import {colors} from 'baseui/tokens'
 import {Modal, ModalBody, ModalFooter, ModalHeader} from 'baseui/modal'
 import {Form, Formik} from 'formik'
-import {TextAreaField} from '../common/Inputs'
+import {InputField, OptionField, TextAreaField} from '../common/Inputs'
 import * as yup from 'yup'
 import {Notification} from 'baseui/notification'
+import {faSlackHash} from '@fortawesome/free-brands-svg-icons'
+import {FormControl} from 'baseui/form-control'
+import {AddEmail, SlackChannelSearch, SlackUserSearch} from './Varslingsadresser'
+import {VarslingsadresserTagList} from './EditKrav'
 
 export const Tilbakemeldinger = (props: {krav: Krav}) => {
-  const [tilbakemeldinger, loading,replace] = useTilbakemeldinger(props.krav.kravNummer, props.krav.kravVersjon)
+  const [tilbakemeldinger, loading, add, replace] = useTilbakemeldinger(props.krav.kravNummer, props.krav.kravVersjon)
   const [focusNr, setFocusNr] = useState<string>()
+  const [addTilbakemelding, setAddTilbakemelding] = useState(false)
 
   return (
     <Block marginTop={theme.sizing.scale2400}>
       <Block display='flex' justifyContent='space-between' alignItems='center' width='100%'>
         <HeadingSmall>Tilbakemeldinger</HeadingSmall>
         <Block>
-          <Button kind='tertiary' size='compact' icon={faPlus}>Ny tilbakemelding</Button>
+          <Button kind='tertiary' size='compact' icon={faPlus} onClick={() => setAddTilbakemelding(true)}>Ny tilbakemelding</Button>
         </Block>
       </Block>
       <Block $style={{...marginAll('-' + theme.sizing.scale600)}}>
@@ -72,9 +77,84 @@ export const Tilbakemeldinger = (props: {krav: Krav}) => {
           )
         }/>}
       </Block>
+      <AddTilbakemeldingModal open={addTilbakemelding} close={t => {
+        t && add(t)
+        setAddTilbakemelding(false)
+      }} krav={props.krav}/>
     </Block>
   )
 }
+
+const AddTilbakemeldingModal = ({open, close, krav}: {open?: boolean, close: (add?: Tilbakemelding) => void, krav: Krav}) => {
+  const [error, setError] = useState()
+  const [adresseType, setAdresseType] = useState<AdresseType>()
+
+  const submit = (req: CreateTilbakemeldingRequest) => {
+    createNewTilbakemelding(req)
+    .then(close)
+    .catch(e => setError(e.error))
+  }
+
+  return (
+    <Modal unstable_ModalBackdropScroll isOpen={!!open} onClose={() => close()}>
+      <Formik
+        onSubmit={submit}
+        initialValues={newTilbakemelding(krav) as CreateTilbakemeldingRequest}
+        validationSchema={createTilbakemeldingSchema}
+      >{({isSubmitting, setFieldValue, values}) => {
+        const setVarslingsadresse = (v?: Varslingsadresse) => {
+          setFieldValue('varslingsadresse', v)
+          setAdresseType(undefined)
+        }
+        return (
+          <Form onKeyDown={disableEnter}>
+            <ModalHeader>
+              Ny melding
+            </ModalHeader>
+            <ModalBody>
+              <Block>
+                <InputField label='Tittel' name='tittel'/>
+                <TextAreaField label='Melding' name='foersteMelding'/>
+                <OptionField label='Type' name='type' clearable={false} options={Object.values(TilbakemeldingType).map(o => ({id: o, label: typeText(o)}))}/>
+                <FormControl label='Varslingsadresse'>
+                  <Block>
+                    <Block display={adresseType || values.varslingsadresse ? 'none' : 'flex'} flexDirection='column' marginTop={theme.sizing.scale600}>
+                      <Button kind='secondary' size='compact' type='button' onClick={() => setAdresseType(AdresseType.SLACK)}>
+                        <span><FontAwesomeIcon icon={faSlackHash}/>Slack-kanal</span>
+                      </Button>
+                      <Block marginTop={theme.sizing.scale400}/>
+                      <Button kind='secondary' size='compact' marginLeft type='button' onClick={() => setAdresseType(AdresseType.SLACK_USER)}>
+                        <span><FontAwesomeIcon icon={faUser}/>Slack-bruker</span>
+                      </Button>
+                      <Block marginTop={theme.sizing.scale400}/>
+                      <Button kind='secondary' size='compact' marginLeft type='button' onClick={() => setAdresseType(AdresseType.EPOST)}>
+                        <span><FontAwesomeIcon icon={faEnvelope}/>Epost</span>
+                      </Button>
+                    </Block>
+                    {adresseType === AdresseType.EPOST && <AddEmail add={setVarslingsadresse}/>}
+                    {adresseType === AdresseType.SLACK && <SlackChannelSearch add={setVarslingsadresse}/>}
+                    {adresseType === AdresseType.SLACK_USER && <SlackUserSearch add={setVarslingsadresse}/>}
+                    {values.varslingsadresse && <VarslingsadresserTagList varslingsadresser={[values.varslingsadresse]} remove={() => setVarslingsadresse(undefined)}/>}
+                  </Block>
+                </FormControl>
+              </Block>
+            </ModalBody>
+            <ModalFooter>
+              <Block display='flex' justifyContent='flex-end'>
+                <Block>
+                  {error && <Notification kind='negative' overrides={{Body: {style: {marginBottom: '-25px'}}}}>{error}</Notification>}
+                </Block>
+                <Button kind='secondary' size='compact' type='button' onClick={close}> Avbryt </Button>
+                <Button type='submit' marginLeft disabled={isSubmitting}>Lagre</Button>
+              </Block>
+            </ModalFooter>
+          </Form>
+        )
+      }}</Formik>
+    </Modal>
+  )
+}
+
 
 const meldingCardOverrides = (isUser: boolean): CardOverrides => ({
   Root: {
@@ -186,34 +266,33 @@ const typeText = (type: TilbakemeldingType) => {
   }
 }
 
-const newTilbakemelding = (krav: Krav): CreateTilbakemeldingRequest => ({
+const newTilbakemelding = (krav: Krav): Partial<CreateTilbakemeldingRequest> => ({
   kravNummer: krav.kravNummer,
   kravVersjon: krav.kravVersjon,
   tittel: '',
   foersteMelding: '',
   type: TilbakemeldingType.UKLAR,
-  varslingsadresse: {
-    adresse: '',
-    type: AdresseType.EPOST
-  }
+  varslingsadresse: undefined
 })
+
+const required = 'Påkrevd'
 
 const varslingsadresse: yup.SchemaOf<Varslingsadresse> = yup.object({
   adresse: yup.string().required(),
-  type: yup.mixed().oneOf(Object.values(AdresseType)).required()
+  type: yup.mixed().oneOf(Object.values(AdresseType)).required(required)
 })
 
 const createTilbakemeldingSchema: yup.SchemaOf<CreateTilbakemeldingRequest> = yup.object({
-  kravNummer: yup.number().required(),
-  kravVersjon: yup.number().required(),
-  tittel: yup.string().required(),
-  foersteMelding: yup.string().required(),
-  type: yup.mixed().oneOf(Object.values(TilbakemeldingType)).required(),
+  kravNummer: yup.number().required(required),
+  kravVersjon: yup.number().required(required),
+  tittel: yup.string().required(required),
+  foersteMelding: yup.string().required(required),
+  type: yup.mixed().oneOf(Object.values(TilbakemeldingType)).required(required),
   varslingsadresse: varslingsadresse
 })
 
 const newTilbakemeldingSchema: yup.SchemaOf<TilbakemeldingNewMeldingRequest> = yup.object({
-  tilbakemeldingId: yup.string().required(),
-  melding: yup.string().required(),
-  rolle: yup.mixed().oneOf(Object.values(TilbakemeldingRolle)).required(),
+  tilbakemeldingId: yup.string().required(required),
+  melding: yup.string().required(required),
+  rolle: yup.mixed().oneOf(Object.values(TilbakemeldingRolle)).required(required),
 })

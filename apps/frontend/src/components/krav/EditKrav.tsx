@@ -141,7 +141,7 @@ const AddModal = ({isOpen, close, title, children}: {isOpen: boolean, close: () 
     </ModalFooter>
   </Modal>
 
-const VarslingsadresserTagList = ({varslingsadresser, remove}: {
+export const VarslingsadresserTagList = ({varslingsadresser, remove}: {
   varslingsadresser: Varslingsadresse[],
   remove: (i: number) => void
 }) => {

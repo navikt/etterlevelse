@@ -1,5 +1,6 @@
 package no.nav.data.common.mail;
 
+import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import no.nav.data.common.security.SecurityProperties;
 import no.nav.data.common.storage.StorageService;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -21,7 +22,7 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     public void sendMail(MailTask mailTask) {
-        var toSend = securityProperties.isDev() ? mailTask.withSubject(mailTask.getSubject() + " [DEV]") : mailTask;
+        var toSend = securityProperties.isDev() ? mailTask.withSubject("[DEV] " + mailTask.getSubject()) : mailTask;
         emailProvider.sendMail(toSend);
     }
 
@@ -30,8 +31,9 @@ public class EmailServiceImpl implements EmailService {
         storage.save(mailTask);
     }
 
-    @Scheduled(initialDelayString = "PT3M", fixedRateString = "PT5M")
-    public void sendMails() {
+    @SchedulerLock(name = "sendMail")
+    @Scheduled(initialDelayString = "PT2M", fixedRateString = "PT1M")
+    public void sendMail() {
         var tasks = storage.getAll(MailTask.class);
 
         tasks.forEach(task -> {

@@ -13,7 +13,11 @@ import {user} from '../../services/User'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faPlus} from '@fortawesome/free-solid-svg-icons'
 
-type AddVarslingsadresseProps = {added: Varslingsadresse[], add: (v: Varslingsadresse) => void, close: () => void}
+type AddVarslingsadresseProps = {
+  add: (v: Varslingsadresse) => void,
+  added?: Varslingsadresse[],
+  close?: () => void
+}
 
 export const SlackChannelSearch = ({added, add, close}: AddVarslingsadresseProps) => {
   const [slackSearch, setSlackSearch, loading] = useSlackChannelSearch()
@@ -30,11 +34,11 @@ export const SlackChannelSearch = ({added, add, close}: AddVarslingsadresseProps
         return slackChannelView(channel, true)
       }}
 
-      options={slackSearch.filter(ch => !added.find(va => va.adresse === ch.id))}
+      options={slackSearch.filter(ch => !added || !added.find(va => va.adresse === ch.id))}
       onChange={({value}) => {
         const channel = value[0] as SlackChannel
         if (channel) add({type: AdresseType.SLACK, adresse: channel.id})
-        close()
+        close && close()
       }}
       onInputChange={event => setSlackSearch(event.currentTarget.value)}
       isLoading={loading}
@@ -42,7 +46,7 @@ export const SlackChannelSearch = ({added, add, close}: AddVarslingsadresseProps
   )
 }
 
-export const SlackUserSearch = ({added, add, close}: AddVarslingsadresseProps) => {
+export const SlackUserSearch = ({add, close}: AddVarslingsadresseProps) => {
   const [slackSearch, setSlackSearch, loading] = usePersonSearch()
   const [error, setError] = useState('')
   const [loadingSlackId, setLoadingSlackId] = useState(false)
@@ -67,7 +71,7 @@ export const SlackUserSearch = ({added, add, close}: AddVarslingsadresseProps) =
           getSlackUserByEmail(resource.email)
           .then(user => {
             add({type: AdresseType.SLACK_USER, adresse: user.id})
-            close()
+            close && close()
           }).catch(e => {
             setError('Fant ikke slack for bruker')
             setLoadingSlackId(false)
@@ -90,14 +94,14 @@ export const AddEmail = ({added, add: doAdd, close}: AddVarslingsadresseProps) =
   const add = (adresse?: string) => {
     const toAdd = adresse || val
     if (!toAdd) return
-    if (!added.find(va => va.adresse === toAdd)) {
+    if (!added || !added.find(va => va.adresse === toAdd)) {
       if (!emailValidator.isValidSync(toAdd)) {
         setError('Ugyldig epostadress')
         return
       }
       doAdd({type: AdresseType.EPOST, adresse: toAdd})
     }
-    close()
+    close && close()
   }
   const onKey = (e: React.KeyboardEvent) => (e.key === 'Enter') && add()
   return (

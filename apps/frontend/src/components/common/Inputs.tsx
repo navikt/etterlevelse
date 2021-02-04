@@ -30,7 +30,7 @@ export const InputField = (props: {label: string, name: string}) => (
   <FieldWrapper>
     <Field name={props.name}>
       {(p: FieldProps) =>
-        <FormControl label={props.label} error={p.meta.error}>
+        <FormControl label={props.label} error={p.meta.touched && p.meta.error}>
           <Input {...p.field}/>
         </FormControl>
       }
@@ -43,7 +43,7 @@ export const TextAreaField = (props: {label: string, name: string, markdown?: bo
     <FieldWrapper>
       <Field name={props.name}>
         {(p: FieldProps) =>
-          <FormControl label={props.label} error={p.meta.error}>
+          <FormControl label={props.label} error={p.meta.touched && p.meta.error}>
             <>
               {props.markdown && <MarkdownEditor initialValue={p.field.value} setValue={v => p.form.setFieldValue(props.name, v)}
                                                  onImageUpload={props.onImageUpload} shortenLinks={props.shortenLinks}/>}
@@ -63,7 +63,7 @@ export const BoolField = (props: {label: string, name: string, nullable?: boolea
   <FieldWrapper>
     <Field name={props.name}>
       {(p: FieldProps) =>
-        <FormControl label={props.label} error={p.meta.error}>
+        <FormControl label={props.label} error={p.meta.touched && p.meta.error}>
           <RadioGroup value={boolToRadio(p.field.value)} align='horizontal'
                       overrides={{RadioGroupRoot: {style: {width: '100%', justifyContent: 'stretch'}}}}
                       onChange={
@@ -86,7 +86,7 @@ export const DateField = (props: {label: string, name: string}) => (
   <FieldWrapper>
     <Field name={props.name}>
       {(p: FieldProps) =>
-        <FormControl label={props.label} error={p.meta.error}>
+        <FormControl label={props.label} error={p.meta.touched && p.meta.error}>
           <Datepicker
             formatString={'dd-MM-yyyy'}
             value={p.field.value ? moment(p.field.value).toDate() : undefined}
@@ -121,7 +121,7 @@ export const MultiInputField = (props: {label: string, name: string}) => {
         const onKey = (e: React.KeyboardEvent) => (e.key === 'Enter') && add()
 
         return (
-          <FormControl label={props.label} error={p.form.errors[props.name]}>
+          <FormControl label={props.label} error={p.form.touched[props.name] && p.form.errors[props.name]}>
             <Block>
               <Block display='flex'>
                 <Input onKeyDown={onKey} value={val} inputRef={inputRef}
@@ -144,14 +144,14 @@ export const MultiInputField = (props: {label: string, name: string}) => {
   )
 }
 
-export const OptionField = (props: {label: string, name: string} & Or<{options: Value}, {listName: ListName}>) => {
+export const OptionField = (props: {label: string, name: string, clearable?: boolean} & Or<{options: Value}, {listName: ListName}>) => {
   const options: Value = props.options || codelist.getParsedOptions(props.listName)
   return (
     <FieldWrapper>
       <Field name={props.name}>
         {(p: FieldProps<string | Code>) =>
-          <FormControl label={props.label} error={p.meta.error}>
-            <Select options={options}
+          <FormControl label={props.label} error={p.meta.touched && p.meta.error}>
+            <Select options={options} clearable={props.clearable}
                     value={options.filter(o => o.id === (props.listName ? (p.field.value as Code | undefined)?.code : p.field.value))}
                     onChange={s => {
                       const val = s.option?.id
@@ -172,7 +172,7 @@ export const MultiOptionField = (props: {label: string, name: string} & Or<{opti
       <FieldArray name={props.name}>
         {(p: FieldArrayRenderProps) => {
           const selectedIds = (p.form.values[props.name] as any[]).map(v => props.listName ? (v as Code).code : v)
-          return <FormControl label={props.label} error={p.form.errors[props.name]}>
+          return <FormControl label={props.label} error={p.form.touched[props.name] && p.form.errors[props.name]}>
             <Block>
               <Block display='flex'>
                 <Select
@@ -203,7 +203,7 @@ export const MultiSearchField = (props: {label: string, name: string, search: Se
     <FieldWrapper>
       <FieldArray name={props.name}>
         {(p: FieldArrayRenderProps) =>
-          <FormControl label={props.label} error={p.form.errors[props.name]}>
+          <FormControl label={props.label} error={p.form.touched[props.name] && p.form.errors[props.name]}>
             <Block>
               <Block display='flex'>
                 <Select
@@ -239,7 +239,7 @@ export const SearchField = (props: {label: string, name: string, search: SearchT
     <FieldWrapper>
       <Field name={props.name}>
         {(p: FieldProps<string>) =>
-          <FormControl label={props.label} error={p.meta.error}>
+          <FormControl label={props.label} error={p.meta.touched && p.meta.error}>
             <Select
               placeholder={'Søk ' + _.lowerFirst(props.label)}
               maxDropdownHeight='400px'
