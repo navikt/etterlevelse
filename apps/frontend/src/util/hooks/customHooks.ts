@@ -50,13 +50,13 @@ export function useAwait<T>(p: Promise<T>, setLoading?: Dispatch<SetStateAction<
   }, [])
 }
 
-type Refs = {[id: string]: RefObject<HTMLElement>}
+type Refs<T> = {[id: string]: RefObject<T>}
 
-export function useRefs(ids: string[]) {
-  const refs: Refs = ids.reduce((acc, value) => {
+export function useRefs<T>(ids: string[]) {
+  const refs: Refs<T> = ids.reduce((acc, value) => {
     acc[value] = React.createRef()
     return acc
-  }, {} as Refs) || {}
+  }, {} as Refs<T>) || {}
 
   return refs
 }

@@ -1,6 +1,6 @@
 import {AdresseType, Krav, Tilbakemelding, TilbakemeldingRolle, TilbakemeldingType, Varslingsadresse} from '../../constants'
 import {createNewTilbakemelding, CreateTilbakemeldingRequest, tilbakemeldingNewMelding, TilbakemeldingNewMeldingRequest, useTilbakemeldinger} from '../../api/TilbakemeldingApi'
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {Block} from 'baseui/block'
 import {theme} from '../../util'
 import {HeadingSmall, ParagraphMedium, ParagraphXSmall} from 'baseui/typography'
@@ -24,11 +24,19 @@ import {faSlackHash} from '@fortawesome/free-brands-svg-icons'
 import {FormControl} from 'baseui/form-control'
 import {AddEmail, SlackChannelSearch, SlackUserSearch} from './Varslingsadresser'
 import {VarslingsadresserTagList} from './EditKrav'
+import {useParams} from 'react-router-dom'
+import {useRefs} from '../../util/hooks'
 
 export const Tilbakemeldinger = (props: {krav: Krav}) => {
   const [tilbakemeldinger, loading, add, replace] = useTilbakemeldinger(props.krav.kravNummer, props.krav.kravVersjon)
-  const [focusNr, setFocusNr] = useState<string>()
+  const [focusNr, setFocusNr] = useState<string | undefined>(useParams<{tilbakemeldingId: string}>().tilbakemeldingId)
   const [addTilbakemelding, setAddTilbakemelding] = useState(false)
+
+  const refs = useRefs<HTMLDivElement>(tilbakemeldinger.map(t => t.id))
+
+  useEffect(()=>{
+    !loading && focusNr && refs[focusNr]?.current?.scrollIntoView()
+  },[loading])
 
   return (
     <Block marginTop={theme.sizing.scale2400}>
@@ -52,7 +60,7 @@ export const Tilbakemeldinger = (props: {krav: Krav}) => {
               const focused = tilbakemelding.id === focusNr
               return (
                 <React.Fragment key={tilbakemelding.id}>
-                  <div onClick={() => focused ? setFocusNr(undefined) : setFocusNr(tilbakemelding.id)}>
+                  <div onClick={() => focused ? setFocusNr(undefined) : setFocusNr(tilbakemelding.id)} ref={refs[tilbakemelding.id]}>
                     <Row $style={{cursor: 'pointer'}}>
                       <Cell>{tilbakemelding.tittel}</Cell>
                       <Cell><PersonName ident={tilbakemelding.melderIdent}/></Cell>

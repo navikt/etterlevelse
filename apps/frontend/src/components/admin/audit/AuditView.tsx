@@ -1,21 +1,21 @@
 import moment from "moment"
-import { Block } from "baseui/block"
+import {Block} from "baseui/block"
 import ReactJson from "react-json-view"
-import React, { useEffect, useState } from "react"
-import { Label1 } from "baseui/typography"
-import { AuditActionIcon, AuditLabel as Label } from "./AuditComponents"
-import { Card } from "baseui/card"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faBinoculars, faExchangeAlt, faTimes } from "@fortawesome/free-solid-svg-icons"
-import { PLACEMENT, StatefulTooltip } from "baseui/tooltip"
-import { StatefulPopover } from "baseui/popover"
+import React, {useEffect, useState} from "react"
+import {Label1} from "baseui/typography"
+import {AuditActionIcon, AuditLabel as Label} from "./AuditComponents"
+import {Card} from "baseui/card"
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
+import {faBinoculars, faExchangeAlt, faTimes} from "@fortawesome/free-solid-svg-icons"
+import {PLACEMENT, StatefulTooltip} from "baseui/tooltip"
+import {StatefulPopover} from "baseui/popover"
 import DiffViewer from "react-diff-viewer"
-import { StyledSpinnerNext } from "baseui/spinner"
-import { useRefs } from '../../../util/hooks'
-import { theme } from '../../../util'
-import { intl } from '../../../util/intl/intl'
-import { AuditAction, AuditLog } from './AuditTypes'
-import { ObjectLink } from '../../common/RouteLink'
+import {StyledSpinnerNext} from "baseui/spinner"
+import {useRefs} from '../../../util/hooks'
+import {theme} from '../../../util'
+import {intl} from '../../../util/intl/intl'
+import {AuditAction, AuditLog} from './AuditTypes'
+import {ObjectLink} from '../../common/RouteLink'
 import Button from '../../common/Button'
 
 type AuditViewProps = {
@@ -32,7 +32,7 @@ function initialOpen(auditLog?: AuditLog, auditId?: string) {
 
 export const AuditView = (props: AuditViewProps) => {
   const {auditLog, auditId, loading, viewId} = props
-  const refs = useRefs(auditLog?.audits.map(al => al.id) || [])
+  const refs = useRefs<HTMLElement>(auditLog?.audits.map(al => al.id) || [])
   const [open, setOpen] = useState(initialOpen(auditLog, auditId))
 
   useEffect(() => {
