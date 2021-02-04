@@ -3,9 +3,9 @@ import {createNewTilbakemelding, CreateTilbakemeldingRequest, tilbakemeldingNewM
 import React, {useEffect, useState} from 'react'
 import {Block} from 'baseui/block'
 import {theme} from '../../util'
-import {HeadingSmall, ParagraphMedium, ParagraphXSmall} from 'baseui/typography'
+import {HeadingSmall, LabelSmall, ParagraphMedium, ParagraphXSmall} from 'baseui/typography'
 import Button from '../common/Button'
-import {faChevronDown, faChevronRight, faEnvelope, faPlus, faPlusCircle, faUser} from '@fortawesome/free-solid-svg-icons'
+import {faChevronDown, faChevronRight, faEnvelope, faPlus, faPlusCircle, faSync, faUser} from '@fortawesome/free-solid-svg-icons'
 import {borderRadius, hideBorder, marginAll} from '../common/Style'
 import {Spinner} from '../common/Spinner'
 import {Cell, disableEnter, Row, Table} from '../common/Table'
@@ -27,6 +27,7 @@ import {VarslingsadresserTagList} from './EditKrav'
 import {useHistory} from 'react-router-dom'
 import {useQueryParam, useRefs} from '../../util/hooks'
 import {personIdentSort} from '../../api/TeamApi'
+import {Textarea} from 'baseui/textarea'
 
 export const Tilbakemeldinger = ({krav}: {krav: Krav}) => {
   const [tilbakemeldinger, loading, add, replace] = useTilbakemeldinger(krav.kravNummer, krav.kravVersjon)
@@ -143,22 +144,25 @@ const AddTilbakemeldingModal = ({open, close, krav}: {open?: boolean, close: (ad
                 <OptionField label='Type' name='type' clearable={false} options={Object.values(TilbakemeldingType).map(o => ({id: o, label: typeText(o)}))}/>
                 <FormControl label='Varslingsadresse'>
                   <Block>
-                    <Block display={adresseType || values.varslingsadresse ? 'none' : 'flex'} flexDirection='column' marginTop={theme.sizing.scale600}>
+                    <Block display='flex' flexDirection='column' marginTop={theme.sizing.scale600}>
+                      {adresseType === AdresseType.SLACK && <SlackChannelSearch add={setVarslingsadresse}/>}
+                      {adresseType !== AdresseType.SLACK && !values.varslingsadresse &&
                       <Button kind='secondary' size='compact' type='button' onClick={() => setAdresseType(AdresseType.SLACK)}>
                         <span><FontAwesomeIcon icon={faSlackHash}/>Slack-kanal</span>
-                      </Button>
+                      </Button>}
                       <Block marginTop={theme.sizing.scale400}/>
+                      {adresseType === AdresseType.SLACK_USER && <SlackUserSearch add={setVarslingsadresse}/>}
+                      {adresseType !== AdresseType.SLACK_USER && !values.varslingsadresse &&
                       <Button kind='secondary' size='compact' marginLeft type='button' onClick={() => setAdresseType(AdresseType.SLACK_USER)}>
                         <span><FontAwesomeIcon icon={faUser}/>Slack-bruker</span>
-                      </Button>
+                      </Button>}
                       <Block marginTop={theme.sizing.scale400}/>
+                      {adresseType === AdresseType.EPOST && <AddEmail add={setVarslingsadresse}/>}
+                      {adresseType !== AdresseType.EPOST && !values.varslingsadresse &&
                       <Button kind='secondary' size='compact' marginLeft type='button' onClick={() => setAdresseType(AdresseType.EPOST)}>
                         <span><FontAwesomeIcon icon={faEnvelope}/>Epost</span>
-                      </Button>
+                      </Button>}
                     </Block>
-                    {adresseType === AdresseType.EPOST && <AddEmail add={setVarslingsadresse}/>}
-                    {adresseType === AdresseType.SLACK && <SlackChannelSearch add={setVarslingsadresse}/>}
-                    {adresseType === AdresseType.SLACK_USER && <SlackUserSearch add={setVarslingsadresse}/>}
                     {values.varslingsadresse && <VarslingsadresserTagList varslingsadresser={[values.varslingsadresse]} remove={() => setVarslingsadresse(undefined)}/>}
                   </Block>
                 </FormControl>
@@ -196,8 +200,11 @@ const meldingCardOverrides = (isUser: boolean): CardOverrides => ({
 })
 
 const MessageList = ({tilbakemelding, setTilbakemelding}: {tilbakemelding: Tilbakemelding, setTilbakemelding: (t: Tilbakemelding) => void}) => {
-  const [addMelding, setAddMelding] = useState<TilbakemeldingRolle | undefined>()
+  const [showResponse, setShowResponse] = useState(false)
   const userRole = tilbakemelding.melderIdent === user.getIdent() ? TilbakemeldingRolle.MELDER : TilbakemeldingRolle.KRAVEIER
+  const melder = userRole === TilbakemeldingRolle.MELDER;
+  const melderOrKraveier = melder || user.isKraveier()
+
 
   return (
     <Block width='100%' display='flex' justifyContent='flex-end'>
@@ -214,63 +221,102 @@ const MessageList = ({tilbakemelding, setTilbakemelding}: {tilbakemelding: Tilba
             </Card>
           )
         })}
+
+        {!showResponse && melderOrKraveier &&
         <Block alignSelf='flex-end' marginTop={theme.sizing.scale800}>
-          {(userRole === TilbakemeldingRolle.MELDER || user.isKraveier()) &&
-          <Button icon={faPlusCircle} kind='tertiary' onClick={() => setAddMelding(TilbakemeldingRolle.MELDER)}>Ny melding til kraveier</Button>
-          }
-          {user.isKraveier() &&
-          <Button icon={faPlusCircle} kind='tertiary' marginLeft onClick={() => setAddMelding(TilbakemeldingRolle.KRAVEIER)}>Nytt svar fra kraveier</Button>
-          }
-        </Block>
+          <Button icon={faPlusCircle} size='compact' onClick={() => setShowResponse(true)}>Ny melding</Button>
+        </Block>}
+        {showResponse && <MeldingResponse
+          userRole={userRole} tilbakemeldingId={tilbakemelding.id}
+          close={t => {
+            setTilbakemelding(t)
+            setShowResponse(false)
+          }}/>}
       </Block>
-      <AddMeldingModal open={addMelding} close={updatedTilbakemelding => {
-        setAddMelding(undefined)
-        if (updatedTilbakemelding) setTilbakemelding(updatedTilbakemelding)
-      }} tilbakemelding={tilbakemelding}/>
     </Block>
   )
 }
 
-const AddMeldingModal = ({open, close, tilbakemelding}: {open?: TilbakemeldingRolle, close: (update?: Tilbakemelding) => void, tilbakemelding: Tilbakemelding}) => {
+const MeldingResponse = ({userRole, close, tilbakemeldingId}: {userRole: TilbakemeldingRolle, close: (t: Tilbakemelding) => void, tilbakemeldingId: string}) => {
+  const [response, setResponse] = useState('')
+  const [replyRole, setReplyRole] = useState(userRole)
   const [error, setError] = useState()
 
-  const submit = (req: TilbakemeldingNewMeldingRequest) => {
+  const [loading, setLoading] = useState(false)
+
+  const submit = () => {
+    const req: TilbakemeldingNewMeldingRequest = {
+      tilbakemeldingId: tilbakemeldingId,
+      rolle: replyRole,
+      melding: response
+    }
+    setLoading(true)
     tilbakemeldingNewMelding(req)
-    .then(close)
-    .catch(e => setError(e.error))
+    .then(r => {
+      close(r)
+    })
+    .catch(e => {
+      setError(e.error)
+      setLoading(false)
+    })
   }
 
   return (
-    <Modal unstable_ModalBackdropScroll isOpen={!!open} onClose={() => close()}>
-      <Formik
-        onSubmit={submit}
-        initialValues={{tilbakemeldingId: tilbakemelding.id, melding: '', rolle: open!}}
-        validationSchema={newTilbakemeldingSchema}
-      >{({isSubmitting}) => (
-        <Form onKeyDown={disableEnter}>
-          <ModalHeader>
-            Ny melding
-          </ModalHeader>
-          <ModalBody>
-            <Block>
-              <TextAreaField label='Melding' name='melding'/>
-            </Block>
-          </ModalBody>
-          <ModalFooter>
-            <Block display='flex' justifyContent='flex-end'>
-              <Block>
-                {error && <Notification kind='negative' overrides={{Body: {style: {marginBottom: '-25px'}}}}>{error}</Notification>}
-              </Block>
-              <Button kind='secondary' size='compact' type='button' onClick={close}> Avbryt </Button>
-              <Button type='submit' marginLeft disabled={isSubmitting}>Lagre</Button>
-            </Block>
-          </ModalFooter>
-        </Form>
-      )}</Formik>
-    </Modal>
+    <Card overrides={{
+      Root: {
+        style: {
+          alignSelf: 'flex-end',
+          marginTop: theme.sizing.scale800,
+          width: '90%',
+          backgroundColor: theme.colors.inputFillActive,
+          ...borderRadius('10px')
+        }
+      },
+      Contents: {
+        style: {
+          ...marginAll(theme.sizing.scale200)
+        }
+      },
+      Body: {
+        style: {
+          marginBottom: 0
+        }
+      }
+    }}>
+      <Block display='flex' alignItems='flex-end'>
+        <Textarea overrides={{
+          InputContainer: {
+            style: {
+              backgroundColor: theme.colors.inputFillActive
+            }
+          },
+          Input: {
+            style: {
+              backgroundColor: theme.colors.inputFillActive
+            }
+          }
+        }} onChange={e => setResponse((e.target as HTMLInputElement).value)} value={response}/>
+
+        <Block display='flex' justifyContent='space-between' flexDirection='column'
+               marginLeft={theme.sizing.scale400}>
+
+          {user.isKraveier() && !loading &&
+          <Block marginBottom={theme.sizing.scale400} display='flex' flexDirection='column'>
+            <LabelSmall alignSelf='center'>Rolle</LabelSmall>
+            <Button size='compact' icon={faSync}
+                    onClick={() => setReplyRole(replyRole === TilbakemeldingRolle.MELDER ? TilbakemeldingRolle.KRAVEIER : TilbakemeldingRolle.MELDER)}>
+              {rolleText(replyRole)}
+            </Button>
+          </Block>}
+
+          <Button size='compact' disabled={!response || loading} onClick={submit}>Lagre</Button>
+        </Block>
+        {error && <Notification kind='negative' overrides={{Body: {style: {marginBottom: '-25px'}}}}>{error}</Notification>}
+
+      </Block>
+    </Card>
   )
 }
-
 
 const rolleText = (rolle: TilbakemeldingRolle) => {
   switch (rolle) {
@@ -314,10 +360,4 @@ const createTilbakemeldingSchema: yup.SchemaOf<CreateTilbakemeldingRequest> = yu
   foersteMelding: yup.string().required(required),
   type: yup.mixed().oneOf(Object.values(TilbakemeldingType)).required(required),
   varslingsadresse: varslingsadresse
-})
-
-const newTilbakemeldingSchema: yup.SchemaOf<TilbakemeldingNewMeldingRequest> = yup.object({
-  tilbakemeldingId: yup.string().required(required),
-  melding: yup.string().required(required),
-  rolle: yup.mixed().oneOf(Object.values(TilbakemeldingRolle)).required(required),
 })
