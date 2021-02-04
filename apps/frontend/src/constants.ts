@@ -136,12 +136,12 @@ export interface Tilbakemelding {
 export interface TilbakemeldingMelding {
   meldingNr: number
   fraIdent: string
-  rolle: Rolle
+  rolle: TilbakemeldingRolle
   tid: string
   innhold: string
 }
 
-export enum Rolle {
+export enum TilbakemeldingRolle {
   KRAVEIER = "KRAVEIER",
   MELDER = "MELDER"
 }

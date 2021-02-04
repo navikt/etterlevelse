@@ -1,9 +1,9 @@
 import {Block} from 'baseui/block'
-import {HeadingLarge, HeadingSmall, ParagraphMedium, ParagraphXSmall} from 'baseui/typography'
+import {HeadingLarge, HeadingSmall} from 'baseui/typography'
 import {useHistory, useParams} from 'react-router-dom'
 import {deleteKrav, KravIdParams, mapToFormVal} from '../api/KravApi'
 import React, {useEffect, useRef, useState} from 'react'
-import {EtterlevelseQL, Krav, KravQL, KravStatus, Rolle, Tilbakemelding} from '../constants'
+import {EtterlevelseQL, Krav, KravQL, KravStatus} from '../constants'
 import Button from '../components/common/Button'
 import {ViewKrav} from '../components/krav/ViewKrav'
 import {EditKrav} from '../components/krav/EditKrav'
@@ -17,17 +17,12 @@ import {Cell, Row, Table} from '../components/common/Table'
 import {Spinner} from '../components/common/Spinner'
 import {gql} from 'graphql.macro'
 import {Teams} from '../components/common/TeamName'
-import {hideBorder, marginAll} from '../components/common/Style'
+import {marginAll} from '../components/common/Style'
 import {ObjectType} from '../components/admin/audit/AuditTypes'
 import {behandlingName} from '../api/BehandlingApi'
 import {etterlevelseStatus} from './EtterlevelsePage'
 import {useQuery} from '@apollo/client'
-import {useTilbakemeldinger} from '../api/TilbakemeldingApi'
-import {PersonName} from '../components/common/PersonName'
-import {faPlus} from '@fortawesome/free-solid-svg-icons'
-import moment from 'moment'
-import {Card, CardOverrides} from 'baseui/card'
-import {colors} from 'baseui/tokens'
+import {Tilbakemeldinger} from '../components/krav/Tilbakemelding'
 
 export const kravNumView = (it: {kravVersjon: number, kravNummer: number}) => `K${it.kravNummer}.${it.kravVersjon}`
 export const kravName = (krav: Krav) => `${kravNumView(krav)} - ${krav.navn}`
@@ -225,92 +220,3 @@ const query = gql`
     }
   }`
 
-
-const Tilbakemeldinger = (props: {krav: Krav}) => {
-  const [tilbakemeldinger, loading] = useTilbakemeldinger(props.krav.kravNummer, props.krav.kravVersjon)
-  const [focusNr, setFocusNr] = useState<string>()
-
-  return (
-    <Block marginTop={theme.sizing.scale2400}>
-      <HeadingSmall>Tilbakemeldinger</HeadingSmall>
-      <Block $style={{...marginAll('-' + theme.sizing.scale600)}}>
-        {loading && <Spinner size={theme.sizing.scale800}/>}
-        {!loading &&
-        <Table data={tilbakemeldinger} emptyText='tilbakemeldinger' headers={[
-          {title: 'Tittel'},
-          {title: 'Type'},
-          {title: 'Melder'},
-          {title: 'Meldinger'},
-        ]} render={state =>
-          state.data.map(tilbakemelding => {
-              const focused = tilbakemelding.id === focusNr
-              return (
-                <React.Fragment key={tilbakemelding.id}>
-                  <Row>
-                    <Cell>{tilbakemelding.tittel}</Cell>
-                    <Cell>{tilbakemelding.type}</Cell>
-                    <Cell><PersonName ident={tilbakemelding.melderIdent}/></Cell>
-                    <Cell>
-                      <Block display='flex' justifyContent='space-between' width='100%' alignItems='center'>
-                        <Block>
-                          {tilbakemelding.meldinger.length}
-                        </Block>
-                        <Block>
-                          <Button kind='tertiary' size='compact' onClick={() => focused ? setFocusNr(undefined) : setFocusNr(tilbakemelding.id)} icon={faPlus}/>
-                        </Block>
-                      </Block>
-                    </Cell>
-                  </Row>
-                  {focused && <MessageList tilbakemelding={tilbakemelding}/>}
-                </React.Fragment>
-              )
-            }
-          )
-        }/>}
-      </Block>
-    </Block>
-  )
-}
-
-const meldingCardOverrides = (isUser: boolean): CardOverrides => ({
-  Root: {
-    style: {
-      marginTop: theme.sizing.scale400,
-      width: 'fit-content',
-      maxWidth: '80%',
-      alignSelf: isUser ? 'flex-end' : 'flex-start',
-      backgroundColor: isUser ? theme.colors.inputFillActive : theme.colors.mono100,
-      borderRadius: '10px',
-      ...hideBorder
-    }
-  }
-})
-
-const MessageList = ({tilbakemelding}: {tilbakemelding: Tilbakemelding}) => {
-  const userRole = tilbakemelding.melderIdent === user.getIdent() ? Rolle.MELDER : Rolle.KRAVEIER
-
-  return (
-    <Block padding={theme.sizing.scale600} width='100%' maxWidth='700px' display='flex' flexDirection='column' backgroundColor={colors.gray50}>
-      {tilbakemelding.meldinger.map(melding => {
-        return (
-          <Card key={melding.meldingNr} overrides={meldingCardOverrides(melding.rolle === userRole)}>
-            <Block display='flex' flexDirection='column'>
-              <ParagraphMedium marginTop={0} marginBottom={0}>{melding.innhold}</ParagraphMedium>
-              <ParagraphXSmall alignSelf={melding.rolle === userRole ? 'flex-end' : 'flex-start'} marginBottom={0}>
-                <PersonName ident={melding.fraIdent}/> {moment(melding.tid).format('lll')}
-              </ParagraphXSmall>
-            </Block>
-          </Card>
-        )
-      })}
-      {/*{tilbakemelding.meldinger.map(melding => (*/}
-      {/*  <Block key={melding.meldingNr} marginBottom={melding.meldingNr < tilbakemelding.meldinger.length ? theme.sizing.scale1000 : undefined}>*/}
-      {/*    <Label title='Nr' compact>{melding.meldingNr}</Label>*/}
-      {/*    <Label title='Melding' compact>{melding.innhold}</Label>*/}
-      {/*    <Label title='Fra' compact>{melding.rolle}: <PersonName ident={melding.fraIdent}/></Label>*/}
-      {/*    <Label title='Tidspunkt' compact>{moment(melding.tid).format('lll')}</Label>*/}
-      {/*  </Block>*/}
-      {/*))}*/}
-    </Block>
-  )
-}
