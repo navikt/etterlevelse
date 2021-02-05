@@ -20,7 +20,7 @@ export const ViewKrav = ({krav}: {krav: KravQL}) => {
 
   return (
     <Block width='100%'>
-      <Label title='Hensikt'>{krav.hensikt}</Label>
+      <Label title='Hensikt' markdown={krav.hensikt}/>
       <Label title='Beskrivelse' markdown={krav.beskrivelse}/>
 
       <Block height={theme.sizing.scale800}/>
