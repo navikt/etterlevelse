@@ -27,7 +27,7 @@ type EditKravProps = {
   formRef: React.Ref<any>
 }
 
-export const EditKrav = ({krav, close}: EditKravProps) => {
+export const EditKrav = ({krav, close, formRef}: EditKravProps) => {
   const submit = async (krav: Krav) => {
     if (krav.id) {
       close(await updateKrav(krav))
@@ -41,6 +41,7 @@ export const EditKrav = ({krav, close}: EditKravProps) => {
       onSubmit={submit}
       initialValues={mapToFormVal(krav)}
       validationSchema={kravSchema()}
+      innerRef={formRef}
     >{({isSubmitting}) => (
       <Form onKeyDown={disableEnter}>
         <Block>
