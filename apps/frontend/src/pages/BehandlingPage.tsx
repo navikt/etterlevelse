@@ -38,7 +38,7 @@ export const BehandlingPage = () => {
             <Button size='compact' kind='tertiary'>Tilbake</Button>
           </RouteLink>
           {user.canWrite() &&
-          <Button size='compact' onClick={() => setEdit(!edit)} marginLeft>{edit ? 'Avbryt' : 'Rediger'}</Button>}
+          <Button size='compact' kind={edit ? 'secondary' : 'primary'} onClick={() => setEdit(!edit)} marginLeft>{edit ? 'Avbryt' : 'Rediger'}</Button>}
           {edit && <Button size='compact' onClick={() => !formRef.current?.isSubmitting && formRef.current?.submitForm()} marginLeft>Lagre</Button>}
         </Block>
       </Block>
