@@ -85,7 +85,7 @@ export const KravPage = () => {
               <Button size='compact' kind='tertiary'>Tilbake</Button>
             </RouteLink>
             {krav?.id && user.isKraveier() && !edit && <Button size='compact' kind='secondary' onClick={newVersion} marginLeft>Ny versjon av krav</Button>}
-            {krav?.id && user.isKraveier() && <DeleteItem fun={() => deleteKrav(krav.id)} redirect={'/krav'}/>}
+            {krav?.id && user.isKraveier() && !edit && <DeleteItem fun={() => deleteKrav(krav.id)} redirect={'/krav'}/>}
             {(edit || (krav?.id && user.isKraveier())) &&
             <Button size='compact' kind={edit ? 'secondary' : 'primary'} onClick={() => setEdit(!edit)} marginLeft>{edit ? 'Avbryt' : 'Rediger'}</Button>}
             {edit && <Button size='compact' onClick={() => !formRef.current?.isSubmitting && formRef.current?.submitForm()} marginLeft>Lagre</Button>}
