@@ -16,7 +16,7 @@ import {Card, CardOverrides} from 'baseui/card'
 import {user} from '../../services/User'
 import {colors} from 'baseui/tokens'
 import {Modal, ModalBody, ModalFooter, ModalHeader} from 'baseui/modal'
-import {Form, Formik} from 'formik'
+import {Field, FieldProps, Form, Formik} from 'formik'
 import {InputField, OptionField, TextAreaField} from '../common/Inputs'
 import * as yup from 'yup'
 import {Notification} from 'baseui/notification'
@@ -135,37 +135,41 @@ const AddTilbakemeldingModal = ({open, close, krav}: {open?: boolean, close: (ad
         return (
           <Form onKeyDown={disableEnter}>
             <ModalHeader>
-              Ny melding
+              Ny tilbakemelding
             </ModalHeader>
             <ModalBody>
               <Block>
                 <InputField label='Tittel' name='tittel'/>
                 <TextAreaField label='Melding' name='foersteMelding'/>
                 <OptionField label='Type' name='type' clearable={false} options={Object.values(TilbakemeldingType).map(o => ({id: o, label: typeText(o)}))}/>
-                <FormControl label='Varslingsadresse'>
-                  <Block>
-                    <Block display='flex' flexDirection='column' marginTop={theme.sizing.scale600}>
-                      {adresseType === AdresseType.SLACK && <SlackChannelSearch add={setVarslingsadresse}/>}
-                      {adresseType !== AdresseType.SLACK && !values.varslingsadresse &&
-                      <Button kind='secondary' size='compact' type='button' onClick={() => setAdresseType(AdresseType.SLACK)}>
-                        <span><FontAwesomeIcon icon={faSlackHash}/>Slack-kanal</span>
-                      </Button>}
-                      <Block marginTop={theme.sizing.scale400}/>
-                      {adresseType === AdresseType.SLACK_USER && <SlackUserSearch add={setVarslingsadresse}/>}
-                      {adresseType !== AdresseType.SLACK_USER && !values.varslingsadresse &&
-                      <Button kind='secondary' size='compact' marginLeft type='button' onClick={() => setAdresseType(AdresseType.SLACK_USER)}>
-                        <span><FontAwesomeIcon icon={faUser}/>Slack-bruker</span>
-                      </Button>}
-                      <Block marginTop={theme.sizing.scale400}/>
-                      {adresseType === AdresseType.EPOST && <AddEmail add={setVarslingsadresse}/>}
-                      {adresseType !== AdresseType.EPOST && !values.varslingsadresse &&
-                      <Button kind='secondary' size='compact' marginLeft type='button' onClick={() => setAdresseType(AdresseType.EPOST)}>
-                        <span><FontAwesomeIcon icon={faEnvelope}/>Epost</span>
-                      </Button>}
-                    </Block>
-                    {values.varslingsadresse && <VarslingsadresserTagList varslingsadresser={[values.varslingsadresse]} remove={() => setVarslingsadresse(undefined)}/>}
-                  </Block>
-                </FormControl>
+                <Field name='varslingsadresse.adresse'>
+                  {(p: FieldProps) =>
+                    <FormControl label='Varslingsadresse' error={p.meta.error}>
+                      <Block>
+                        <Block display='flex' flexDirection='column' marginTop={theme.sizing.scale600}>
+                          {adresseType === AdresseType.SLACK && <SlackChannelSearch add={setVarslingsadresse}/>}
+                          {adresseType !== AdresseType.SLACK && !values.varslingsadresse &&
+                          <Button kind='secondary' size='compact' type='button' icon={faSlackHash} onClick={() => setAdresseType(AdresseType.SLACK)}>
+                            Slack-kanal
+                          </Button>}
+                          <Block marginTop={theme.sizing.scale400}/>
+                          {adresseType === AdresseType.SLACK_USER && <SlackUserSearch add={setVarslingsadresse}/>}
+                          {adresseType !== AdresseType.SLACK_USER && !values.varslingsadresse &&
+                          <Button kind='secondary' size='compact' marginLeft type='button' icon={faUser} onClick={() => setAdresseType(AdresseType.SLACK_USER)}>
+                            Slack-bruker
+                          </Button>}
+                          <Block marginTop={theme.sizing.scale400}/>
+                          {adresseType === AdresseType.EPOST && <AddEmail add={setVarslingsadresse}/>}
+                          {adresseType !== AdresseType.EPOST && !values.varslingsadresse &&
+                          <Button kind='secondary' size='compact' marginLeft type='button' icon={faEnvelope} onClick={() => setAdresseType(AdresseType.EPOST)}>
+                            Epost
+                          </Button>}
+                        </Block>
+                        {values.varslingsadresse && <VarslingsadresserTagList varslingsadresser={[values.varslingsadresse]} remove={() => setVarslingsadresse(undefined)}/>}
+                      </Block>
+                    </FormControl>
+                  }
+                </Field>
               </Block>
             </ModalBody>
             <ModalFooter>
@@ -350,7 +354,7 @@ const newTilbakemelding = (krav: Krav): Partial<CreateTilbakemeldingRequest> => 
 const required = 'Påkrevd'
 
 const varslingsadresse: yup.SchemaOf<Varslingsadresse> = yup.object({
-  adresse: yup.string().required(),
+  adresse: yup.string().required(required),
   type: yup.mixed().oneOf(Object.values(AdresseType)).required(required)
 })
 
@@ -360,5 +364,5 @@ const createTilbakemeldingSchema: yup.SchemaOf<CreateTilbakemeldingRequest> = yu
   tittel: yup.string().required(required),
   foersteMelding: yup.string().required(required),
   type: yup.mixed().oneOf(Object.values(TilbakemeldingType)).required(required),
-  varslingsadresse: varslingsadresse
+  varslingsadresse: varslingsadresse.required(required)
 })
