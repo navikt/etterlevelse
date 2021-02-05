@@ -302,14 +302,15 @@ const MeldingResponse = ({userRole, close, tilbakemeldingId}: {userRole: Tilbake
 
           {user.isKraveier() && !loading &&
           <Block marginBottom={theme.sizing.scale400} display='flex' flexDirection='column'>
-            <LabelSmall alignSelf='center'>Rolle</LabelSmall>
+            <LabelSmall alignSelf='center'>Jeg er</LabelSmall>
             <Button size='compact' icon={faSync}
                     onClick={() => setReplyRole(replyRole === TilbakemeldingRolle.MELDER ? TilbakemeldingRolle.KRAVEIER : TilbakemeldingRolle.MELDER)}>
               {rolleText(replyRole)}
             </Button>
           </Block>}
+          {loading && <Spinner size={theme.sizing.scale800}/>}
 
-          <Button size='compact' disabled={!response || loading} onClick={submit}>Lagre</Button>
+          <Button size='compact' disabled={!response || loading} onClick={submit}>Send</Button>
         </Block>
         {error && <Notification kind='negative' overrides={{Body: {style: {marginBottom: '-25px'}}}}>{error}</Notification>}
 
@@ -329,9 +330,9 @@ const rolleText = (rolle: TilbakemeldingRolle) => {
 const typeText = (type: TilbakemeldingType) => {
   switch (type) {
     case TilbakemeldingType.GOD:
-      return 'God'
+      return 'God kravbeskrivelse'
     case TilbakemeldingType.UKLAR:
-      return 'Uklar'
+      return 'Uklar kravbeskrivelse'
     case TilbakemeldingType.ANNET:
       return 'Annet'
   }
