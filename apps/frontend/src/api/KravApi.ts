@@ -41,7 +41,8 @@ function kravToKravDto(krav: Krav) {
     ...krav,
     avdeling: krav.avdeling?.code,
     underavdeling: krav.underavdeling?.code,
-    relevansFor: krav.relevansFor.map(c => c.code)
+    relevansFor: krav.relevansFor.map(c => c.code),
+    regelverk: krav.regelverk.map(r => ({...r, lov: r.lov.code}))
   }
   delete dto.changeStamp
   delete dto.version
@@ -102,6 +103,7 @@ export const mapToFormVal = (krav: Partial<Krav>): Krav => ({
   varslingsadresser: krav.varslingsadresser || [],
   rettskilder: krav.rettskilder || [],
   tagger: krav.tagger || [],
+  regelverk: krav.regelverk || [],
   hensikt: krav.hensikt || '',
   avdeling: krav.avdeling,
   underavdeling: krav.underavdeling,
@@ -142,6 +144,13 @@ export const kravFullQuery = gql`
       }
       rettskilder
       tagger
+      regelverk {
+        lov {
+          code
+          shortName
+        }
+        spesifisering
+      }
       periode {
         start
         slutt

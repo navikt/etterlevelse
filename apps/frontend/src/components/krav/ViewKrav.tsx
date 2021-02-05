@@ -12,6 +12,7 @@ import {ObjectLink} from '../common/RouteLink'
 import {StyledLink} from 'baseui/link'
 import {slackLink, slackUserLink} from '../../util/config'
 import {user} from '../../services/User'
+import {LovViewList} from '../Lov'
 
 const formatDate = (date?: string) => date && moment(date).format('ll')
 
@@ -52,6 +53,9 @@ const AllInfo = ({krav}: {krav: KravQL}) => (
     <Label title='Kravet er relevant for'><DotTags list={ListName.RELEVANS} codes={krav.relevansFor} linkCodelist/></Label>
     <Label title='Relevante implementasjoner' markdown={krav.implementasjoner}/>
     <Label title='Begreper'>{krav.begreper.join(', ')}</Label>
+    <Label title='Regelverk' hide={!krav.regelverk.length}>
+      <LovViewList regelverk={krav.regelverk}/>
+    </Label>
 
     {krav.periode?.start && <Label title='Gyldig fom'>{formatDate(krav.periode?.start)}</Label>}
     {krav.periode?.slutt && <Label title='Gyldig tom'>{formatDate(krav.periode?.slutt)}</Label>}

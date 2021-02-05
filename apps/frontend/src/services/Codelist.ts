@@ -5,8 +5,11 @@ import * as yup from 'yup';
 export enum ListName {
   AVDELING = 'AVDELING',
   UNDERAVDELING = 'UNDERAVDELING',
-  RELEVANS = 'RELEVANS'
+  RELEVANS = 'RELEVANS',
+  LOV = 'LOV'
 }
+
+const LOVDATA_FORSKRIFT_PREFIX = 'FORSKRIFT_'
 
 class CodelistService {
   lists?: AllCodelists;
@@ -94,6 +97,10 @@ class CodelistService {
     return !currentSelected ? parsedOptions : parsedOptions.filter(option =>
       currentSelected.includes(option.id) ? null : option.id
     )
+  }
+
+  isForskrift(nationalLawCode?: string) {
+    return nationalLawCode && nationalLawCode.startsWith(LOVDATA_FORSKRIFT_PREFIX)
   }
 
   makeIdLabelForAllCodeLists() {

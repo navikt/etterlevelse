@@ -57,6 +57,7 @@ export interface Krav extends DomainObject {
   varslingsadresser: Varslingsadresse[]
   rettskilder: string[]
   tagger: string[]
+  regelverk: Regelverk[]
   periode?: Periode
   avdeling?: Code
   underavdeling?: Code
@@ -64,6 +65,11 @@ export interface Krav extends DomainObject {
   status: KravStatus
 
   nyKravVersjon: boolean
+}
+
+export interface Regelverk {
+  lov: Code
+  spesifisering?: string
 }
 
 export interface Varslingsadresse {

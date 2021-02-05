@@ -1,4 +1,4 @@
-import {AdresseType, Krav, KravStatus, SlackChannel, SlackUser, Varslingsadresse, VarslingsadresseQL} from '../../constants'
+import {AdresseType, Krav, KravStatus, Regelverk, SlackChannel, SlackUser, Varslingsadresse, VarslingsadresseQL} from '../../constants'
 import {FieldArray, FieldArrayRenderProps, Form, Formik} from 'formik'
 import {createKrav, mapToFormVal, updateKrav} from '../../api/KravApi'
 import {disableEnter} from '../common/Table'
@@ -6,7 +6,7 @@ import {Block} from 'baseui/block'
 import Button from '../common/Button'
 import React, {ReactNode, useEffect, useState} from 'react'
 import * as yup from 'yup'
-import {ListName} from '../../services/Codelist'
+import {codelist, ListName} from '../../services/Codelist'
 import {kravStatus} from '../../pages/KravPage'
 import {DateField, FieldWrapper, InputField, MultiInputField, MultiOptionField, OptionField, TextAreaField} from '../common/Inputs'
 import {getSlackChannelById, getSlackUserById} from '../../api/TeamApi'
@@ -20,6 +20,10 @@ import {faEnvelope, faUser} from '@fortawesome/free-solid-svg-icons'
 import {theme} from '../../util'
 import {faSlackHash} from '@fortawesome/free-brands-svg-icons'
 import {AddEmail, SlackChannelSearch, slackChannelView, SlackUserSearch} from './Varslingsadresser'
+import {LovView} from '../Lov'
+import {Input} from 'baseui/input'
+import {Select, Value} from 'baseui/select'
+import {LabelSmall} from 'baseui/typography'
 
 type EditKravProps = {
   krav: Krav,
@@ -58,6 +62,7 @@ export const EditKrav = ({krav, close, formRef}: EditKravProps) => {
           <MultiOptionField label='Kravet er relevant for' name='relevansFor' listName={ListName.RELEVANS}/>
           <MultiInputField label='Relevante implementasjoner' name='implementasjoner'/>
           <MultiInputField label='Begreper' name='begreper'/>
+          <RegelverkEdit/>
 
           <DateField label='Gyldig from' name='periode.start'/>
           <DateField label='Gyldig tom' name='periode.slutt'/>
@@ -79,6 +84,64 @@ export const EditKrav = ({krav, close, formRef}: EditKravProps) => {
   )
 }
 
+const RegelverkEdit = () => {
+  const [lov, setLov] = useState<Value>([])
+  const [text, setText] = useState('')
+  const controlRef = React.useRef<HTMLInputElement | HTMLDivElement>(null);
+
+  const regelverkObject = () => ({lov: codelist.getCode(ListName.LOV, lov[0].id as string)!, spesifisering: text})
+
+  return (
+    <FieldWrapper>
+      <FieldArray name='regelverk'>
+        {p => {
+          const add = () => {
+            if (!text || !lov.length) return
+            p.push(regelverkObject())
+            setLov([])
+            setText('')
+            controlRef.current?.focus()
+          }
+          return (
+            <FormControl label='Regelverk'>
+              <Block>
+                <Block>
+                  <Block display='flex'>
+                    <Block width='400px' marginRight={theme.sizing.scale400}>
+                      <Select
+                        controlRef={controlRef}
+                        placeholder={'Velg regelverk'}
+                        maxDropdownHeight='400px'
+
+                        value={lov}
+                        options={codelist.getParsedOptions(ListName.LOV)}
+                        onChange={({value}) => {
+                          setLov(value)
+                        }}
+                      />
+                    </Block>
+                    <Block width='100%'>
+                      <Input value={text}
+                             onChange={e => setText((e.target as HTMLInputElement).value)}
+                      />
+                    </Block>
+                  </Block>
+                  {!!lov.length && text && <Block display='flex' alignItems='center' marginTop={theme.sizing.scale400}>
+                    <Button type='button' size='compact' onClick={add} marginRight>Legg til</Button>
+                    <LabelSmall marginRight={theme.sizing.scale800}>Forhåndsvisning: </LabelSmall>
+                    <LovView regelverk={regelverkObject()}/>
+                  </Block>}
+                </Block>
+                <RenderTagList wide list={p.form.values.regelverk.map((r: Regelverk) => <LovView regelverk={r}/>)} onRemove={p.remove}/>
+              </Block>
+            </FormControl>
+          )
+        }}
+      </FieldArray>
+    </FieldWrapper>
+  )
+}
+
 const Varslingsadresser = () => {
   const [addSlackChannel, setAddSlackChannel] = useState<boolean>(false)
   const [addSlackUser, setAddSlackUser] = useState<boolean>(false)
@@ -89,7 +152,7 @@ const Varslingsadresser = () => {
       <FieldArray name='varslingsadresser'>
         {(p: FieldArrayRenderProps) => {
           const varslingsadresser = (p.form.values as Krav).varslingsadresser
-          return <Block>
+          return <>
             <FormControl label='Varslingsadresser'>
               <Block>
                 <Block marginBottom={theme.sizing.scale400}>
@@ -119,9 +182,8 @@ const Varslingsadresser = () => {
               <AddEmail added={(p.form.values as Krav).varslingsadresser} add={p.push} close={() => setAddEmail(false)}/>
             </AddModal>
 
-          </Block>
-        }
-        }
+          </>
+        }}
       </FieldArray>
     </FieldWrapper>
   )

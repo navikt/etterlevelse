@@ -177,6 +177,13 @@ const query = gql`
         }
       }
       rettskilder
+      regelverk {
+        lov {
+          code
+          shortName
+        }
+        spesifisering
+      }
       tagger
       periode {
         start
