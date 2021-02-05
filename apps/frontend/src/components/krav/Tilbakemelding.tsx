@@ -312,7 +312,7 @@ const MeldingResponse = ({userRole, close, tilbakemeldingId}: {userRole: Tilbake
               {rolleText(replyRole)}
             </Button>
           </Block>}
-          {loading && <Spinner size={theme.sizing.scale800}/>}
+          {loading && <Block alignSelf='center' marginBottom={theme.sizing.scale400}><Spinner size={theme.sizing.scale800}/></Block>}
 
           <Button size='compact' disabled={!response || loading} onClick={submit}>Send</Button>
         </Block>
