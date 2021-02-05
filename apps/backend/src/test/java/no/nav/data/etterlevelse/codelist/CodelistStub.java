@@ -11,6 +11,7 @@ public class CodelistStub {
         add(ListName.RELEVANS, "INNSYN", "Innsyn");
         add(ListName.AVDELING, "AVDELING", "Avdeling");
         add(ListName.UNDERAVDELING, "UNDERAVDELING", "Underavdeling");
+        add(ListName.LOV, "ARKIV", "Arkivloven");
     }
 
     private static void add(ListName source, String code, String name) {

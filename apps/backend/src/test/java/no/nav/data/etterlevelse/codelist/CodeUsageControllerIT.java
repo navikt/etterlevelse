@@ -7,6 +7,7 @@ import no.nav.data.etterlevelse.codelist.codeusage.dto.ReplaceCodelistRequest;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
 import no.nav.data.etterlevelse.codelist.dto.CodelistRequest;
 import no.nav.data.etterlevelse.krav.domain.Krav;
+import no.nav.data.etterlevelse.krav.domain.Regelverk;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -44,7 +45,8 @@ public class CodeUsageControllerIT extends IntegrationTestBase {
         @CsvSource({
                 "RELEVANS,2",
                 "AVDELING,1",
-                "UNDERAVDELING,1"
+                "UNDERAVDELING,1",
+                "LOV,1"
         })
         void shouldFindCodeUsage(String list, int expectedCodesInUse) {
             ResponseEntity<CodelistUsageResponse> response = restTemplate
@@ -64,7 +66,8 @@ public class CodeUsageControllerIT extends IntegrationTestBase {
                 "RELEVANS,REL1,1",
                 "RELEVANS,REL2,0",
                 "AVDELING,AVD1,1",
-                "UNDERAVDELING,UNDAVD1,1"
+                "UNDERAVDELING,UNDAVD1,1",
+                "LOV,ARKIV,1"
         })
         void findKrav(String list, String code, int expectedCount) {
             var response = getForListAndCode(list, code);
@@ -90,7 +93,8 @@ public class CodeUsageControllerIT extends IntegrationTestBase {
         @CsvSource({
                 "RELEVANS,REL1,1",
                 "AVDELING,AVD1,1",
-                "UNDERAVDELING,UNDAVD1,1"
+                "UNDERAVDELING,UNDAVD1,1",
+                "LOV,ARKIV,1"
         })
         void replaceCodelistUsage(String list, String code, int krav) {
             String newCode = "REPLACECODE";
@@ -119,7 +123,7 @@ public class CodeUsageControllerIT extends IntegrationTestBase {
     private void createTestData() {
         createCodelistsByRequests();
         storageService.save(Krav.builder().avdeling("AVD1").relevansFor(List.of("REL1")).build());
-        storageService.save(Krav.builder().underavdeling("UNDAVD1").relevansFor(List.of("REL3")).build());
+        storageService.save(Krav.builder().underavdeling("UNDAVD1").relevansFor(List.of("REL3")).regelverk(List.of(Regelverk.builder().lov("ARKIV").build())).build());
     }
 
     private void createCodelistsByRequests() {
@@ -128,7 +132,8 @@ public class CodeUsageControllerIT extends IntegrationTestBase {
                 createCodelistRequest(ListName.RELEVANS.name(), "REL2"),
                 createCodelistRequest(ListName.RELEVANS.name(), "REL3"),
                 createCodelistRequest(ListName.AVDELING.name(), "AVD1"),
-                createCodelistRequest(ListName.UNDERAVDELING.name(), "UNDAVD1")
+                createCodelistRequest(ListName.UNDERAVDELING.name(), "UNDAVD1"),
+                createCodelistRequest(ListName.LOV.name(), "ARKIV")
         );
         codelistService.save(requests);
     }

@@ -11,4 +11,6 @@ public interface KravRepoCustom {
 
     List<GenericStorage> findBy(KravFilter filter);
 
+    List<GenericStorage> findByLov(String lov);
+
 }

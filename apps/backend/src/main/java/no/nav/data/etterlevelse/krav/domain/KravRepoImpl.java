@@ -67,6 +67,13 @@ public class KravRepoImpl implements KravRepoCustom {
         return fetch(jdbcTemplate.queryForList(query, par));
     }
 
+    @Override
+    public List<GenericStorage> findByLov(String lov) {
+        var resp = jdbcTemplate.queryForList("select id from generic_storage where data #>'{regelverk}' @> :lov::jsonb",
+                new MapSqlParameterSource().addValue("lov", String.format("[{\"lov\": \"%s\"}]", lov)));
+        return fetch(resp);
+    }
+
     private List<GenericStorage> fetch(List<Map<String, Object>> resp) {
         return repository.findAllById(convert(resp, i -> (UUID) i.values().iterator().next()));
     }

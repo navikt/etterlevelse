@@ -3,7 +3,9 @@ package no.nav.data.etterlevelse.krav;
 import lombok.SneakyThrows;
 import no.nav.data.IntegrationTestBase;
 import no.nav.data.TestConfig.MockFilter;
+import no.nav.data.etterlevelse.codelist.CodelistService;
 import no.nav.data.etterlevelse.codelist.CodelistStub;
+import no.nav.data.etterlevelse.codelist.domain.ListName;
 import no.nav.data.etterlevelse.common.domain.Periode;
 import no.nav.data.etterlevelse.krav.KravController.KravPage;
 import no.nav.data.etterlevelse.krav.domain.Krav;
@@ -11,6 +13,8 @@ import no.nav.data.etterlevelse.krav.domain.Krav.KravStatus;
 import no.nav.data.etterlevelse.krav.domain.KravImage;
 import no.nav.data.etterlevelse.krav.dto.KravRequest;
 import no.nav.data.etterlevelse.krav.dto.KravResponse;
+import no.nav.data.etterlevelse.krav.dto.RegelverkRequest;
+import no.nav.data.etterlevelse.krav.dto.RegelverkResponse;
 import no.nav.data.etterlevelse.varsel.domain.AdresseType;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 import org.junit.jupiter.api.BeforeEach;
@@ -99,8 +103,8 @@ public class KravIT extends IntegrationTestBase {
 
     @Test
     void getKravEtterlever() {
-       var kravResp =  restTemplate.postForEntity("/krav", getKravRequest(), KravResponse.class);
-       MockFilter.clearUser();
+        var kravResp = restTemplate.postForEntity("/krav", getKravRequest(), KravResponse.class);
+        MockFilter.clearUser();
         var resp = restTemplate.getForEntity("/krav/{id}", KravResponse.class, kravResp.getBody().getId());
 
         assertThat(resp.getBody().getChangeStamp().getLastModifiedBy()).isEqualTo("Skjult");
@@ -122,6 +126,7 @@ public class KravIT extends IntegrationTestBase {
                 .varslingsadresser(List.of(new Varslingsadresse("epost@epost.no", AdresseType.EPOST)))
                 .rettskilder(List.of("kilde"))
                 .tagger(List.of("tag"))
+                .regelverk(List.of(RegelverkRequest.builder().lov("ARKIV").spesifisering("§1").build()))
                 .status(KravStatus.UNDER_REDIGERING)
                 .periode(new Periode(LocalDate.now().minusDays(1), LocalDate.now().plusDays(1)))
                 .build();
@@ -146,6 +151,7 @@ public class KravIT extends IntegrationTestBase {
         assertThat(krav.getVarslingsadresser()).containsOnly(new Varslingsadresse("epost@epost.no", AdresseType.EPOST));
         assertThat(krav.getRettskilder()).containsOnly("kilde");
         assertThat(krav.getTagger()).containsOnly("tag");
+        assertThat(krav.getRegelverk()).containsOnly(RegelverkResponse.builder().lov(CodelistService.getCodelistResponse(ListName.LOV, "ARKIV")).spesifisering("§1").build());
         assertThat(krav.getStatus()).isEqualTo(KravStatus.UNDER_REDIGERING);
         assertThat(krav.getPeriode()).isEqualTo(new Periode(LocalDate.now().minusDays(1), LocalDate.now().plusDays(1)));
     }

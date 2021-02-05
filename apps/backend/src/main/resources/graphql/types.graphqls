@@ -15,6 +15,7 @@ type Krav {
     begreper: [String!]!
     rettskilder: [String!]!
     tagger: [String!]!
+    regelverk: [Regelverk!]!
     varslingsadresser: [Varslingsadresse!]!
     periode: Periode
 
@@ -24,6 +25,11 @@ type Krav {
     status: KravStatus!
 
     etterlevelser(onlyForBehandling: Boolean): [Etterlevelse!]!
+}
+
+type Regelverk {
+    lov: Code!
+    spesifisering: String
 }
 
 enum KravStatus {

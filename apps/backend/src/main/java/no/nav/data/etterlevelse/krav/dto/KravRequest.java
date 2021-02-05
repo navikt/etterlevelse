@@ -42,6 +42,7 @@ public class KravRequest implements RequestElement {
     private List<Varslingsadresse> varslingsadresser;
     private List<String> rettskilder;
     private List<String> tagger;
+    private List<RegelverkRequest> regelverk;
     private Periode periode;
 
     @Schema(description = "Codelist AVDELING")
@@ -92,5 +93,6 @@ public class KravRequest implements RequestElement {
         validator.checkCodelist(Fields.underavdeling, underavdeling, ListName.UNDERAVDELING);
         validator.checkCodelists(Fields.relevansFor, relevansFor, ListName.RELEVANS);
         validator.validateType(Fields.varslingsadresser, varslingsadresser);
+        validator.validateType(Fields.regelverk, regelverk);
     }
 }

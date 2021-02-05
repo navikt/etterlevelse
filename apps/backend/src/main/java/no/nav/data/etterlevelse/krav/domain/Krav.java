@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import no.nav.data.common.security.SecurityUtils;
 import no.nav.data.common.storage.domain.ChangeStamp;
 import no.nav.data.common.storage.domain.DomainObject;
+import no.nav.data.common.utils.StreamUtils;
 import no.nav.data.etterlevelse.codelist.CodelistService;
 import no.nav.data.etterlevelse.codelist.codeusage.dto.InstanceId;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
@@ -46,6 +47,7 @@ public class Krav implements DomainObject, KravId {
     private List<Varslingsadresse> varslingsadresser;
     private List<String> rettskilder;
     private List<String> tagger;
+    private List<Regelverk> regelverk;
     private Periode periode;
 
     // Codelist AVDELING
@@ -75,6 +77,7 @@ public class Krav implements DomainObject, KravId {
         varslingsadresser = copyOf(request.getVarslingsadresser());
         rettskilder = copyOf(request.getRettskilder());
         tagger = copyOf(request.getTagger());
+        regelverk = StreamUtils.convert(request.getRegelverk(), Regelverk::convert);
 
         avdeling = request.getAvdeling();
         underavdeling = request.getUnderavdeling();
@@ -103,6 +106,7 @@ public class Krav implements DomainObject, KravId {
                 .varslingsadresser(copyOf(varslingsadresser))
                 .rettskilder(copyOf(rettskilder))
                 .tagger(copyOf(tagger))
+                .regelverk(StreamUtils.convert(regelverk, Regelverk::toResponse))
                 .periode(periode)
                 .avdeling(CodelistService.getCodelistResponse(ListName.AVDELING, avdeling))
                 .underavdeling(CodelistService.getCodelistResponse(ListName.UNDERAVDELING, underavdeling))

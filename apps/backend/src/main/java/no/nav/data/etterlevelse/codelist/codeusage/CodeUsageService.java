@@ -14,6 +14,7 @@ import no.nav.data.etterlevelse.codelist.codeusage.dto.CodeUsageRequest;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravRepo;
+import no.nav.data.etterlevelse.krav.domain.Regelverk;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +25,7 @@ import java.util.stream.Stream;
 import static java.util.Collections.replaceAll;
 import static java.util.stream.Collectors.toList;
 import static no.nav.data.common.utils.StreamUtils.convert;
+import static no.nav.data.common.utils.StreamUtils.safeStream;
 
 @Service
 @Transactional
@@ -84,9 +86,16 @@ public class CodeUsageService {
                 }
                 case AVDELING -> usage.getKrav().forEach(gs -> gs.asType(k -> k.setAvdeling(newCode), Krav.class));
                 case UNDERAVDELING -> usage.getKrav().forEach(gs -> gs.asType(k -> k.setUnderavdeling(newCode), Krav.class));
+                case LOV -> usage.getKrav().forEach(gs -> gs.asType(k -> replaceLov(oldCode, newCode, k.getRegelverk()), Krav.class));
             }
         }
         return usage;
+    }
+
+    private void replaceLov(String oldCode, String newCode, List<Regelverk> regelverk) {
+        safeStream(regelverk)
+                .filter(lb -> lb.getLov().equals(oldCode))
+                .forEach(lb -> lb.setLov(newCode));
     }
 
     private List<GenericStorage> findKrav(ListName listName, String code) {
@@ -94,6 +103,7 @@ public class CodeUsageService {
             case RELEVANS -> kravRepo.findByRelevans(code);
             case AVDELING -> kravRepo.findByAvdeling(code);
             case UNDERAVDELING -> kravRepo.findByUnderavdeling(code);
+            case LOV -> kravRepo.findByLov(code);
         };
     }
 

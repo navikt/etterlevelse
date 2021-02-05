@@ -40,6 +40,7 @@ public class KravResponse {
     private List<Varslingsadresse> varslingsadresser;
     private List<String> rettskilder;
     private List<String> tagger;
+    private List<RegelverkResponse> regelverk;
     private Periode periode;
 
     private CodelistResponse avdeling;
