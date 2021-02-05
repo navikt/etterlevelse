@@ -17,7 +17,7 @@ export const Markdown = (props: {source?: string, sources?: string[], escapeHtml
     },
     link: (linkProps: any) => {
       const {children, href, node} = linkProps
-      const content = props.shortenLinks && node.children[0].value.indexOf("http") === 0
+      const content = props.shortenLinks && node.children[0]?.value.indexOf("http") === 0
         ? <span>Lenke <FontAwesomeIcon size='sm' icon={faExternalLinkAlt}/></span> : children
       return <StatefulTooltip content={href}>
         <a href={href} target='_blank' rel='noopener noreferrer'>{content}</a>
