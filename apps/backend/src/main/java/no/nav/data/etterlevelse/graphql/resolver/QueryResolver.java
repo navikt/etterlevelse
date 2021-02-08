@@ -17,6 +17,7 @@ import no.nav.data.etterlevelse.krav.domain.dto.KravFilter;
 import no.nav.data.etterlevelse.krav.dto.KravResponse;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -55,7 +56,7 @@ public class QueryResolver implements GraphQLQueryResolver {
             return convert(kravService.getAll(pageInput.createPage()).getContent(), Krav::toResponse);
         }
 
-        List<Krav> filtered = kravService.getByFilter(filter);
+        List<Krav> filtered = new ArrayList<>(kravService.getByFilter(filter));
         filtered.sort(comparing(Krav::getKravNummer).thenComparing(Krav::getKravVersjon));
         var all = pageSize == 0;
         if (all) {
@@ -72,7 +73,7 @@ public class QueryResolver implements GraphQLQueryResolver {
             return behandlingService.getAll(pageInput.createPage());
         }
 
-        List<Behandling> filtered = behandlingService.getByFilter(filter);
+        List<Behandling> filtered = new ArrayList<>(behandlingService.getByFilter(filter));
         filtered.sort(comparing(Behandling::getNummer));
         var all = pageSize == 0;
         if (all) {
