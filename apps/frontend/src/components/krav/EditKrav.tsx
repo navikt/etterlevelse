@@ -152,6 +152,10 @@ const Varslingsadresser = () => {
       <FieldArray name='varslingsadresser'>
         {(p: FieldArrayRenderProps) => {
           const varslingsadresser = (p.form.values as Krav).varslingsadresser
+          const push = (v: Varslingsadresse) => {
+            if (!varslingsadresser.find(v2 => v2.adresse === v.adresse))
+              p.push(v)
+          }
           return <>
             <FormControl label='Varslingsadresser'>
               <Block>
@@ -171,15 +175,15 @@ const Varslingsadresser = () => {
             </FormControl>
 
             <AddModal title='Legg til Slack kanal' isOpen={addSlackChannel} close={() => setAddSlackChannel(false)}>
-              <SlackChannelSearch added={(p.form.values as Krav).varslingsadresser} add={p.push} close={() => setAddSlackChannel(false)}/>
+              <SlackChannelSearch added={(p.form.values as Krav).varslingsadresser} add={push} close={() => setAddSlackChannel(false)}/>
             </AddModal>
 
             <AddModal title='Legg til Slack bruker' isOpen={addSlackUser} close={() => setAddSlackUser(false)}>
-              <SlackUserSearch added={(p.form.values as Krav).varslingsadresser} add={p.push} close={() => setAddSlackUser(false)}/>
+              <SlackUserSearch added={(p.form.values as Krav).varslingsadresser} add={push} close={() => setAddSlackUser(false)}/>
             </AddModal>
 
             <AddModal title='Legg til Epost adresse' isOpen={addEmail} close={() => setAddEmail(false)}>
-              <AddEmail added={(p.form.values as Krav).varslingsadresser} add={p.push} close={() => setAddEmail(false)}/>
+              <AddEmail added={(p.form.values as Krav).varslingsadresser} add={push} close={() => setAddEmail(false)}/>
             </AddModal>
 
           </>

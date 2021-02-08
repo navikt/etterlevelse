@@ -51,35 +51,44 @@ export const SlackUserSearch = ({add, close}: AddVarslingsadresseProps) => {
   const [error, setError] = useState('')
   const [loadingSlackId, setLoadingSlackId] = useState(false)
 
+  const addEmail = (email: string) => {
+    getSlackUserByEmail(email)
+    .then(user => {
+      add({type: AdresseType.SLACK_USER, adresse: user.id})
+      close && close()
+    }).catch(e => {
+      setError('Fant ikke slack for bruker')
+      setLoadingSlackId(false)
+    })
+  }
+
   return (
     <Block display='flex' flexDirection='column'>
-      <StatefulSelect
-        placeholder={'Søk slack brukere'}
-        maxDropdownHeight='400px'
-        filterOptions={o => o}
-        searchable
-        noResultsMsg='Ingen resultat'
-        getOptionLabel={args => (args.option as TeamResource).fullName}
-        onFocus={() => setError('')}
-        disabled={loadingSlackId}
+      <Block display='flex'>
+        <StatefulSelect
+          placeholder={'Søk slack brukere'}
+          maxDropdownHeight='400px'
+          filterOptions={o => o}
+          searchable
+          noResultsMsg='Ingen resultat'
+          getOptionLabel={args => (args.option as TeamResource).fullName}
+          onFocus={() => setError('')}
+          disabled={loadingSlackId}
 
-        options={slackSearch}
-        onChange={({value}) => {
-          const resource = value[0] as TeamResource
-          if (resource)
-            setLoadingSlackId(true)
-          getSlackUserByEmail(resource.email)
-          .then(user => {
-            add({type: AdresseType.SLACK_USER, adresse: user.id})
-            close && close()
-          }).catch(e => {
-            setError('Fant ikke slack for bruker')
-            setLoadingSlackId(false)
-          })
-        }}
-        onInputChange={event => setSlackSearch(event.currentTarget.value)}
-        isLoading={loading}
-      />
+          options={slackSearch}
+          onChange={({value}) => {
+            const resource = value[0] as TeamResource
+            if (resource)
+              setLoadingSlackId(true)
+            addEmail(resource.email)
+          }}
+          onInputChange={event => setSlackSearch(event.currentTarget.value)}
+          isLoading={loading}
+        />
+        <Block>
+          <Button type='button' onClick={() => addEmail(user.getEmail())} marginLeft>Meg </Button>
+        </Block>
+      </Block>
       {loadingSlackId && <Spinner size={theme.sizing.scale800}/>}
       {error && <Notification kind='negative' overrides={{Body: {style: {marginBottom: '-25px'}}}}>{error}</Notification>}
     </Block>
