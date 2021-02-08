@@ -79,7 +79,11 @@ public class BehandlingService {
 
     public List<Behandling> getByFilter(BehandlingFilter filter) {
         if (!StringUtils.isBlank(filter.getId())) {
-            return List.of(convertBehandling(bkatClient.getProcess(filter.getId())));
+            BkatProcess process = bkatClient.getProcess(filter.getId());
+            if (process != null) {
+                return List.of(convertBehandling(process));
+            }
+            return List.of();
         }
         List<GenericStorage> datas = repo.findByRelevans(filter.getRelevans());
         List<String> behandlingIds = convert(GenericStorage.to(datas, BehandlingData.class), BehandlingData::getBehandlingId);
