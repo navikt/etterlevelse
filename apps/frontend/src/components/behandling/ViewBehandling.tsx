@@ -3,11 +3,11 @@ import React, {useEffect, useState} from 'react'
 import {theme} from '../../util'
 import {Teams} from '../common/TeamName'
 import {DotTags} from '../common/DotTag'
-import {ListName} from '../../services/Codelist'
+import {Code, ListName} from '../../services/Codelist'
 import {HeadingSmall} from 'baseui/typography'
 import RouteLink, {ObjectLink} from '../common/RouteLink'
 import {etterlevelseName, etterlevelseStatus} from '../../pages/EtterlevelsePage'
-import {Behandling, Etterlevelse, EtterlevelseStatus, KravQL} from '../../constants'
+import {Behandling, Etterlevelse, EtterlevelseStatus, KravQL, PageResponse} from '../../constants'
 import {Label} from '../common/PropertyLabel'
 import {KravFilters} from '../../api/KravGraphQLApi'
 import {Spinner} from '../common/Spinner'
@@ -26,6 +26,7 @@ import {gql} from 'graphql.macro';
 import {ViewEtterlevelse} from '../etterlevelse/ViewEtterlevelse'
 import {ObjectType} from '../admin/audit/AuditTypes'
 import {useQuery} from '@apollo/client'
+import {Chart} from '../Chart'
 
 const filterForBehandling = (behandling: Behandling): KravFilters => ({behandlingId: behandling.id})
 
@@ -50,8 +51,11 @@ export const ViewBehandling = ({behandling}: {behandling: Behandling}) => {
       </Block>
 
       <Block marginTop={theme.sizing.scale2400}>
-        <HeadingSmall marginBottom={theme.sizing.scale400}>Krav for behandling</HeadingSmall>
         <KravTable behandling={behandling}/>
+      </Block>
+
+      <Block marginTop={theme.sizing.scale2400}>
+        <BehandlingStats behandling={behandling}/>
       </Block>
     </Block>
   )
@@ -118,10 +122,17 @@ const KravTable = (props: {behandling: Behandling}) => {
     setData(data.map(e => e.kravVersjon === etterlevelse.kravVersjon && e.kravNummer == etterlevelse.kravNummer ? {...e, ...mapEtterlevelseData(etterlevelse)} : e))
   }
 
+  const head = <HeadingSmall marginBottom={theme.sizing.scale400}>Krav for behandling</HeadingSmall>
+
+
   return (
     loading ?
-      <Spinner size={theme.sizing.scale2400}/> :
       <>
+        {head}
+        <Spinner size={theme.sizing.scale2400}/>
+      </> :
+      <>
+        {head}
         <Table
           data={data}
           emptyText={'data på behandling som spesifiserer aktuelle krav'}
@@ -234,7 +245,7 @@ const EditModal = (props: {etterlevelseId: string, behandlingId: string, kravId?
 }
 
 const KravView = (props: {kravId: KravId}) => {
-  const {data, loading} = useQuery<{kravById:KravQL}, KravId>(kravFullQuery, {
+  const {data, loading} = useQuery<{kravById: KravQL}, KravId>(kravFullQuery, {
     variables: props.kravId,
     skip: !props.kravId.id && !props.kravId.kravNummer
   })
@@ -256,4 +267,120 @@ const KravView = (props: {kravId: KravId}) => {
       }
     </Block>
   )
+}
+
+const statsQuery = gql`
+  query getBehandlingStats($behandlingId: ID!) {
+    behandling(filter: { id: $behandlingId }) {
+      content {
+        stats {
+          fyltKrav {
+            kravNummer
+            kravVersjon
+            regelverk {
+              lov {
+                code
+                shortName
+              }
+            }
+          }
+          ikkeFyltKrav {
+            kravNummer
+            kravVersjon
+            regelverk {
+              lov {
+                code
+                shortName
+              }
+            }
+          }
+          lovStats {
+            lovCode {
+              code
+              shortName
+            }
+            fyltKrav {
+              kravNummer
+              kravVersjon
+            }
+            ikkeFyltKrav {
+              kravNummer
+              kravVersjon
+            }
+          }
+        }
+      }
+    }
+  }`
+
+
+const BehandlingStats = ({behandling}: {behandling: Behandling}) => {
+  const {data} = useQuery<{behandling: PageResponse<{stats: BehandlingStats}>}>(statsQuery, {
+    variables: {behandlingId: behandling.id}
+  })
+  const head = <HeadingSmall marginBottom={theme.sizing.scale800}>Stats</HeadingSmall>
+
+  const stats = data?.behandling.content[0].stats
+  if (!stats) return <>
+    {head}
+    <Spinner size={theme.sizing.scale800}/>
+  </>
+
+  return (
+    <>
+      {head}
+      <Block display='flex' flexDirection='column' marginTop={theme.sizing.scale800}>
+
+        <Block marginBottom={theme.sizing.scale800} display='flex'>
+          <Chart title='Krav totalt' data={[
+            {label: 'Fylt', size: stats.fyltKrav.length},
+            {label: 'Ikke fylt', size: stats.ikkeFyltKrav.length},
+          ]} size={100}/>
+        </Block>
+
+        <Table data={stats.lovStats.map(lov => ({
+          label: lov.lovCode.shortName,
+          fylt: lov.fyltKrav.length,
+          ikkeFylt: lov.fyltKrav.length,
+          empty: !lov.fyltKrav.length && !lov.ikkeFyltKrav.length
+
+        }))} emptyText={'krav'} headers={[
+          {title: 'Lov',},
+          {title: 'Fylt',},
+          {title: 'Ikke fylt',},
+        ]} render={state => state.data
+        .filter(lov => !lov.empty)
+        .map((lov, i) => (
+          <Row key={i}>
+            <Cell>{lov.label}</Cell>
+            <Cell>{lov.fylt}</Cell>
+            <Cell>{lov.ikkeFylt}</Cell>
+          </Row>
+        ))}/>
+
+        {/*<Block display='flex' width='100%' flexWrap justifyContent={'space-between'}>*/}
+        {/*  {stats.lovStats.filter(lov => lov.fyltKrav.length || lov.ikkeFyltKrav.length).map(lov => (*/}
+        {/*    <Block key={lov.lovCode.code} marginTop={theme.sizing.scale800}>*/}
+        {/*      <Chart title={lov.lovCode.shortName} data={[*/}
+        {/*        {label: 'Fylt', size: lov.fyltKrav.length},*/}
+        {/*        {label: 'Ikke fylt', size: lov.ikkeFyltKrav.length},*/}
+        {/*      ]} size={100}/>*/}
+        {/*    </Block>*/}
+        {/*  ))}*/}
+        {/*</Block>*/}
+      </Block>
+    </>
+  )
+}
+
+interface BehandlingStats {
+  fyltKrav: KravQL[]
+  ikkeFyltKrav: KravQL[]
+  lovStats: LovStats[]
+}
+
+interface LovStats {
+  lovCode: Code
+  fyltKrav: KravQL[]
+  ikkeFyltKrav: KravQL[]
 }
