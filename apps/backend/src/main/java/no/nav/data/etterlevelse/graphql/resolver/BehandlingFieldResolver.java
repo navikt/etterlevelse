@@ -9,7 +9,6 @@ import no.nav.data.etterlevelse.behandling.dto.BehandlingStats;
 import no.nav.data.etterlevelse.behandling.dto.BehandlingStats.LovStats;
 import no.nav.data.etterlevelse.codelist.CodelistService;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
-import no.nav.data.etterlevelse.codelist.dto.CodelistResponse;
 import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
 import no.nav.data.etterlevelse.graphql.DataLoaderReg;
 import no.nav.data.etterlevelse.krav.KravService;
@@ -44,8 +43,12 @@ public class BehandlingFieldResolver implements GraphQLResolver<Behandling> {
             return BehandlingStats.empty();
         }
 
-        var krav = convert(kravService.findForRelevans(convert(relevans, CodelistResponse::getCode)), Krav::toResponse);
         var etterlevelser = etterlevelseService.getByBehandling(behandling.getId());
+        var allKrav = kravService.findForBehandling(behandling.getId());
+        var krav = convert(filter(allKrav,
+                k -> etterlevelser.stream().anyMatch(e -> e.kravId().equals(k.kravId()))
+                        || allKrav.stream().noneMatch(k2 -> k2.getKravNummer().equals(k.getKravNummer()) && k2.getKravVersjon() > k.getKravVersjon())
+        ), Krav::toResponse);
 
         var fylt = filter(krav, k -> etterlevelser.stream().anyMatch(e -> e.kravId().equals(k.kravId())));
         var ikkeFylt = filter(krav, k -> !fylt.contains(k));
