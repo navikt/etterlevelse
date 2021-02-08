@@ -21,5 +21,6 @@ input KravFilter {
 }
 
 input BehandlingFilter {
+    id: ID
     relevans: [String!]
 }

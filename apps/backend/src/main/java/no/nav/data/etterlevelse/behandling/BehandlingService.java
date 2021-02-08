@@ -13,6 +13,7 @@ import no.nav.data.etterlevelse.behandling.dto.BehandlingFilter;
 import no.nav.data.etterlevelse.behandling.dto.BehandlingRequest;
 import no.nav.data.integration.behandling.BkatClient;
 import no.nav.data.integration.behandling.dto.BkatProcess;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -77,6 +78,9 @@ public class BehandlingService {
     }
 
     public List<Behandling> getByFilter(BehandlingFilter filter) {
+        if (!StringUtils.isBlank(filter.getId())) {
+            return List.of(convertBehandling(bkatClient.getProcess(filter.getId())));
+        }
         List<GenericStorage> datas = repo.findByRelevans(filter.getRelevans());
         List<String> behandlingIds = convert(GenericStorage.to(datas, BehandlingData.class), BehandlingData::getBehandlingId);
         Collection<BkatProcess> processes = bkatClient.getProcessesById(behandlingIds).values();
