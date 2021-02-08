@@ -98,7 +98,19 @@ type Behandling {
     teamsData: [Team!]!
 
     relevansFor: [Code!]!
+    stats: BehandlingStats!
+}
 
+type BehandlingStats {
+    fyltKrav: [Krav!]!
+    ikkeFyltKrav: [Krav!]!
+    lovStats: [LovStats!]!
+}
+
+type LovStats {
+    lovCode: Code!
+    fyltKrav: [Krav!]!
+    ikkeFyltKrav: [Krav!]!
 }
 
 type Resource {

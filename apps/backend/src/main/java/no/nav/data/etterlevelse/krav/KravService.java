@@ -81,6 +81,10 @@ public class KravService extends DomainService<Krav> {
         return storage.delete(id, Krav.class);
     }
 
+    public List<Krav> findForRelevans(List<String> relevans) {
+        return GenericStorage.to(kravRepo.findBy(KravFilter.builder().relevans(relevans).build()), Krav.class);
+    }
+
     public List<KravImage> saveImages(List<KravImage> images) {
         return GenericStorage.to(storage.saveAll(images), KravImage.class);
     }

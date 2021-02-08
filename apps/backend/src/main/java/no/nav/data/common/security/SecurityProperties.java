@@ -38,6 +38,6 @@ public class SecurityProperties {
     }
 
     public boolean isDevEmailAllowed(String email) {
-        return devEmailAllowList.stream().anyMatch(e -> email.toLowerCase().equals(e.toLowerCase()));
+        return devEmailAllowList.stream().anyMatch(email::equalsIgnoreCase);
     }
 }

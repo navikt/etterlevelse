@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import no.nav.data.common.rest.ChangeStampResponse;
 import no.nav.data.etterlevelse.codelist.dto.CodelistResponse;
+import no.nav.data.etterlevelse.common.domain.KravId;
 import no.nav.data.etterlevelse.common.domain.Periode;
 import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseResponse;
 import no.nav.data.etterlevelse.krav.domain.Krav.KravStatus;
@@ -21,7 +22,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonPropertyOrder({"id", "kravNummer", "kravVersjon", "navn", "beskrivelse", "hensikt"})
-public class KravResponse {
+public class KravResponse implements KravId {
 
     private UUID id;
     private ChangeStampResponse changeStamp;

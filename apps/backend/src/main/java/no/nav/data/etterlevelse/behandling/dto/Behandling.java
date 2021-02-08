@@ -41,6 +41,8 @@ public class Behandling {
     private BehandlingData behandlingData;
     @JsonIgnore
     private List<TeamResponse> teamsData;
+    @JsonIgnore
+    private BehandlingStats stats;
 
     public void includeData(BehandlingData bd) {
         behandlingData = bd;
