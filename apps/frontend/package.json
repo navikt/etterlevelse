@@ -86,6 +86,6 @@
     "react-helmet": "^6.1.0",
     "react-localization": "^1.0.15",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "4.0.1"
+    "react-scripts": "4.0.2"
   }
 }
