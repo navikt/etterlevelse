@@ -34,7 +34,7 @@
         <commons-io.version>2.8.0</commons-io.version>
         <guava.version>30.1-jre</guava.version>
         <json-smart.version>2.3</json-smart.version>
-        <jna.version>5.6.0</jna.version>
+        <jna.version>5.7.0</jna.version>
 
         <!-- Test -->
         <testcontainers.version>1.15.1</testcontainers.version>
