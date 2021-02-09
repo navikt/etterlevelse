@@ -50,13 +50,9 @@ export const ViewBehandling = ({behandling}: {behandling: Behandling}) => {
         <Label title={'Relevans'}><DotTags list={ListName.RELEVANS} codes={behandling.relevansFor} linkCodelist/></Label>
       </Block>
 
-      <Block marginTop={theme.sizing.scale2400}>
-        <KravTable behandling={behandling}/>
-      </Block>
+      <BehandlingStats behandling={behandling}/>
+      <KravTable behandling={behandling}/>
 
-      <Block marginTop={theme.sizing.scale2400}>
-        <BehandlingStats behandling={behandling}/>
-      </Block>
     </Block>
   )
 }
@@ -127,11 +123,11 @@ const KravTable = (props: {behandling: Behandling}) => {
 
   return (
     loading ?
-      <>
+      <Block marginTop={theme.sizing.scale2400}>
         {head}
         <Spinner size={theme.sizing.scale2400}/>
-      </> :
-      <>
+      </Block> :
+      <Block marginTop={theme.sizing.scale2400}>
         {head}
         <Table
           data={data}
@@ -206,7 +202,7 @@ const KravTable = (props: {behandling: Behandling}) => {
           </ModalBody>
         </Modal>
         }
-      </>
+      </Block>
   )
 }
 
@@ -321,55 +317,44 @@ const BehandlingStats = ({behandling}: {behandling: Behandling}) => {
   const head = <HeadingSmall marginBottom={theme.sizing.scale800}>Stats</HeadingSmall>
 
   const stats = data?.behandling.content[0].stats
-  if (!stats) return <>
+  if (!stats) return <Block marginTop={theme.sizing.scale2400}>
     {head}
     <Spinner size={theme.sizing.scale800}/>
-  </>
+  </Block>
 
   return (
-    <>
+    <Block marginTop={theme.sizing.scale2400}>
       {head}
-      <Block display='flex' flexDirection='column' marginTop={theme.sizing.scale800}>
+      <Block display='flex' width='100%' marginTop={theme.sizing.scale800} alignItems='center'>
 
-        <Block marginBottom={theme.sizing.scale800} display='flex'>
-          <Chart title='Krav totalt' data={[
-            {label: 'Fylt', size: stats.fyltKrav.length},
-            {label: 'Ikke fylt', size: stats.ikkeFyltKrav.length},
-          ]} size={100}/>
+        <Chart title='Krav totalt' data={[
+          {label: 'Utfylt', size: stats.fyltKrav.length},
+          {label: 'Ikke utfylt', size: stats.ikkeFyltKrav.length},
+        ]} size={75}/>
+
+        <Block $style={{flexGrow: 1}} marginLeft={theme.sizing.scale400}>
+          <Table data={stats.lovStats.map(lov => ({
+            label: lov.lovCode.shortName,
+            fylt: lov.fyltKrav.length,
+            ikkeFylt: lov.fyltKrav.length,
+            empty: !lov.fyltKrav.length && !lov.ikkeFyltKrav.length
+
+          }))} emptyText={'krav'} headers={[
+            {title: 'Lov',},
+            {title: 'Utfylt',},
+            {title: 'Ikke utfylt',},
+          ]} render={state => state.data
+          .filter(lov => !lov.empty)
+          .map((lov, i) => (
+            <Row key={i}>
+              <Cell>{lov.label}</Cell>
+              <Cell>{lov.fylt}</Cell>
+              <Cell>{lov.ikkeFylt}</Cell>
+            </Row>
+          ))}/>
         </Block>
-
-        <Table data={stats.lovStats.map(lov => ({
-          label: lov.lovCode.shortName,
-          fylt: lov.fyltKrav.length,
-          ikkeFylt: lov.fyltKrav.length,
-          empty: !lov.fyltKrav.length && !lov.ikkeFyltKrav.length
-
-        }))} emptyText={'krav'} headers={[
-          {title: 'Lov',},
-          {title: 'Fylt',},
-          {title: 'Ikke fylt',},
-        ]} render={state => state.data
-        .filter(lov => !lov.empty)
-        .map((lov, i) => (
-          <Row key={i}>
-            <Cell>{lov.label}</Cell>
-            <Cell>{lov.fylt}</Cell>
-            <Cell>{lov.ikkeFylt}</Cell>
-          </Row>
-        ))}/>
-
-        {/*<Block display='flex' width='100%' flexWrap justifyContent={'space-between'}>*/}
-        {/*  {stats.lovStats.filter(lov => lov.fyltKrav.length || lov.ikkeFyltKrav.length).map(lov => (*/}
-        {/*    <Block key={lov.lovCode.code} marginTop={theme.sizing.scale800}>*/}
-        {/*      <Chart title={lov.lovCode.shortName} data={[*/}
-        {/*        {label: 'Fylt', size: lov.fyltKrav.length},*/}
-        {/*        {label: 'Ikke fylt', size: lov.ikkeFyltKrav.length},*/}
-        {/*      ]} size={100}/>*/}
-        {/*    </Block>*/}
-        {/*  ))}*/}
-        {/*</Block>*/}
       </Block>
-    </>
+    </Block>
   )
 }
 
