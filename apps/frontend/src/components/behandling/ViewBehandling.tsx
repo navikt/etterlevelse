@@ -296,12 +296,16 @@ const statsQuery = gql`
               shortName
             }
             fyltKrav {
+              id
               kravNummer
               kravVersjon
+              navn
             }
             ikkeFyltKrav {
+              id
               kravNummer
               kravVersjon
+              navn
             }
           }
         }
@@ -314,9 +318,10 @@ const BehandlingStats = ({behandling}: {behandling: Behandling}) => {
   const {data} = useQuery<{behandling: PageResponse<{stats: BehandlingStats}>}>(statsQuery, {
     variables: {behandlingId: behandling.id}
   })
-  const head = <HeadingSmall marginBottom={theme.sizing.scale800}>Stats</HeadingSmall>
-
   const stats = data?.behandling.content[0].stats
+  const [expand, setExpand] = useState<string | undefined>()
+
+  const head = <HeadingSmall marginBottom={theme.sizing.scale800}>Stats</HeadingSmall>
   if (!stats) return <Block marginTop={theme.sizing.scale2400}>
     {head}
     <Spinner size={theme.sizing.scale800}/>
@@ -335,23 +340,40 @@ const BehandlingStats = ({behandling}: {behandling: Behandling}) => {
         <Block $style={{flexGrow: 1}} marginLeft={theme.sizing.scale400}>
           <Table data={stats.lovStats.map(lov => ({
             label: lov.lovCode.shortName,
-            fylt: lov.fyltKrav.length,
-            ikkeFylt: lov.fyltKrav.length,
-            empty: !lov.fyltKrav.length && !lov.ikkeFyltKrav.length
-
+            fylt: lov.fyltKrav,
+            ikkeFylt: lov.ikkeFyltKrav,
+            empty: !lov.fyltKrav.length && !lov.ikkeFyltKrav.length,
+            code: lov.lovCode.code
           }))} emptyText={'krav'} headers={[
             {title: 'Lov',},
             {title: 'Utfylt',},
             {title: 'Ikke utfylt',},
           ]} render={state => state.data
           .filter(lov => !lov.empty)
-          .map((lov, i) => (
-            <Row key={i}>
-              <Cell>{lov.label}</Cell>
-              <Cell>{lov.fylt}</Cell>
-              <Cell>{lov.ikkeFylt}</Cell>
-            </Row>
-          ))}/>
+          .map((lov, i) => {
+            const expanded = expand === lov.code
+            return (
+              <div key={i} onClick={() => expanded ? setExpand(undefined) : setExpand(lov.code)} style={{cursor: 'pointer'}}>
+                <Row>
+                  <Cell>{lov.label}</Cell>
+                  <Cell>{lov.fylt.length}</Cell>
+                  <Cell>{lov.ikkeFylt.length}</Cell>
+                </Row>
+                {expanded && lov.fylt.map(k => (
+                  <Row key={k.id} $style={{backgroundColor: theme.colors.positive50}}>
+                    <Cell small>Utfylt</Cell>
+                    <Cell $style={{justifyContent: 'flex-end'}}><ObjectLink type={ObjectType.Krav} id={k.id}>{kravName(k)}</ObjectLink></Cell>
+                  </Row>
+                ))}
+                {expanded && lov.ikkeFylt.map(k => (
+                  <Row key={k.id} $style={{backgroundColor: theme.colors.warning50}}>
+                    <Cell small>Ikke utfylt</Cell>
+                    <Cell $style={{justifyContent: 'flex-end'}}><ObjectLink type={ObjectType.Krav} id={k.id}>{kravName(k)}</ObjectLink></Cell>
+                  </Row>
+                ))}
+              </div>
+            )
+          })}/>
         </Block>
       </Block>
     </Block>
