@@ -33,8 +33,10 @@ type Regelverk {
 }
 
 enum KravStatus {
-    UNDER_REDIGERING,
-    FERDIG
+    UTKAST,
+    UNDER_ARBEID,
+    AKTIV,
+    UTGAATT
 }
 
 type Varslingsadresse {

@@ -109,7 +109,7 @@ export const mapToFormVal = (krav: Partial<Krav>): Krav => ({
   underavdeling: krav.underavdeling,
   periode: krav.periode || {start: navStartDate, slutt: maxDate},
   relevansFor: krav.relevansFor || [],
-  status: krav.status || KravStatus.UNDER_REDIGERING,
+  status: krav.status || KravStatus.UTKAST,
   nyKravVersjon: krav.nyKravVersjon || false
 })
 

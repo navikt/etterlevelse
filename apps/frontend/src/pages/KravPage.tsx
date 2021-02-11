@@ -27,11 +27,16 @@ export const kravNumView = (it: {kravVersjon: number, kravNummer: number}) => `K
 export const kravName = (krav: Krav) => `${kravNumView(krav)} - ${krav.navn}`
 
 export const kravStatus = (status: KravStatus) => {
+  if (!status) return ''
   switch (status) {
-    case KravStatus.UNDER_REDIGERING:
-      return 'Under redigering'
-    case KravStatus.FERDIG:
-      return 'Ferdig'
+    case KravStatus.UTKAST:
+      return 'Utkast'
+    case KravStatus.UNDER_ARBEID:
+      return 'Under arbeid'
+    case KravStatus.AKTIV:
+      return 'Aktiv'
+    case KravStatus.UTGAATT:
+      return 'Utgått'
     default:
       return status
   }

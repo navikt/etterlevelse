@@ -11,7 +11,7 @@ import no.nav.data.etterlevelse.codelist.dto.CodelistResponse;
 import no.nav.data.etterlevelse.common.domain.KravId;
 import no.nav.data.etterlevelse.common.domain.Periode;
 import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseResponse;
-import no.nav.data.etterlevelse.krav.domain.Krav.KravStatus;
+import no.nav.data.etterlevelse.krav.domain.KravStatus;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 
 import java.util.List;

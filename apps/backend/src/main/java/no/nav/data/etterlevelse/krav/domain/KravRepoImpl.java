@@ -1,8 +1,10 @@
 package no.nav.data.etterlevelse.krav.domain;
 
 import lombok.RequiredArgsConstructor;
+import no.nav.data.common.security.SecurityUtils;
 import no.nav.data.common.storage.domain.GenericStorage;
 import no.nav.data.common.storage.domain.GenericStorageRepository;
+import no.nav.data.common.utils.StreamUtils;
 import no.nav.data.etterlevelse.behandling.domain.BehandlingRepo;
 import no.nav.data.etterlevelse.common.domain.KravId;
 import no.nav.data.etterlevelse.krav.domain.dto.KravFilter;
@@ -41,7 +43,7 @@ public class KravRepoImpl implements KravRepoCustom {
         var query = "select id from generic_storage krav where type = 'Krav' ";
         var par = new MapSqlParameterSource();
 
-        List<KravId> kravIdSafeList = new ArrayList<>();
+        List<String> kravIdSafeList = new ArrayList<>();
         if (!filter.getRelevans().isEmpty()) {
             query += " and data -> 'relevansFor' ??| array[ :relevans ] ";
             par.addValue("relevans", filter.getRelevans());
@@ -51,7 +53,7 @@ public class KravRepoImpl implements KravRepoCustom {
             par.addValue("kravNummer", filter.getNummer());
         }
         if (filter.getBehandlingId() != null) {
-            kravIdSafeList.addAll(behandlingRepo.findKravIdsForBehandling(filter.getBehandlingId()));
+            kravIdSafeList.addAll(convert(behandlingRepo.findKravIdsForBehandling(filter.getBehandlingId()), KravId::kravId));
             query += """
                     and ( 
                      exists(select 1
@@ -80,14 +82,36 @@ public class KravRepoImpl implements KravRepoCustom {
         }
 
         List<GenericStorage> kravList = fetch(jdbcTemplate.queryForList(query, par));
-        if (!kravIdSafeList.isEmpty() && filter.getBehandlingId() != null) {
-            // If query for behandling, remove old versions of krav that fit it, unless they are in use by this behandling
-            kravList.removeIf(krav -> exists(kravList, k2 -> k2.toKrav().succeeds(krav.toKrav())) && !exists(kravIdSafeList, kid -> kid.kravId().equals(krav.toKrav().kravId())));
-        }
-        return kravList;
+        return StreamUtils.filter(kravList, krav -> filterStateAndStatus(kravList, krav, filter, kravIdSafeList));
     }
 
     private List<GenericStorage> fetch(List<Map<String, Object>> resp) {
         return repository.findAllById(convert(resp, i -> (UUID) i.values().iterator().next()));
+    }
+
+    /**
+     * true = keep
+     */
+    private boolean filterStateAndStatus(List<GenericStorage> all, GenericStorage test, KravFilter filter, List<String> kravIdSafeList) {
+        Krav krav = test.toKrav();
+
+        if (krav.getStatus() == KravStatus.UTKAST && !SecurityUtils.isKravEier()) {
+            return false;
+        }
+
+        if (kravIdSafeList.contains(krav.kravId())) {
+            return true;
+        }
+
+        // Filtrering for krav relevant for behandling
+        if (filter.getBehandlingId() != null) {
+            // TODO are we comparing to krav that are removed in output?
+            var succeeded = exists(all, k2 -> k2.toKrav().supersedes(krav));
+            return !succeeded
+                    && krav.getStatus() != KravStatus.UTKAST
+                    && krav.getStatus() != KravStatus.UTGAATT;
+        }
+
+        return true;
     }
 }

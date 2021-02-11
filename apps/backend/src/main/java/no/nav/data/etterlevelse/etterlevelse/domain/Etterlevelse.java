@@ -37,11 +37,6 @@ public class Etterlevelse implements DomainObject, KravId {
     private LocalDate fristForFerdigstillelse;
     private EtterlevelseStatus status;
 
-    public enum EtterlevelseStatus {
-        UNDER_REDIGERING,
-        FERDIG
-    }
-
     public Etterlevelse convert(EtterlevelseRequest request) {
         behandlingId = request.getBehandlingId();
         kravNummer = request.getKravNummer();

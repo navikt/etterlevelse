@@ -7,6 +7,7 @@ import no.nav.data.etterlevelse.behandling.dto.Behandling;
 import no.nav.data.etterlevelse.behandling.dto.BehandlingRequest;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.krav.domain.Krav;
+import no.nav.data.etterlevelse.krav.domain.KravStatus;
 import no.nav.data.etterlevelse.varsel.domain.AdresseType;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 import no.nav.data.graphql.GraphQLTestBase;
@@ -84,14 +85,21 @@ class KravGraphQLIT extends GraphQLTestBase {
         @Test
         @SneakyThrows
         void kravForBehandling() {
-            // gammel versjon av krav 50
+            List<String> behandlingRelevans = List.of("SAK");
+
+            behandlingService.save(BehandlingRequest.builder()
+                    .id(behandling.getId())
+                    .update(true)
+                    .relevansFor(behandlingRelevans)
+                    .build());
+
             storageService.save(Krav.builder()
-                    .navn("Krav 1").kravNummer(50).kravVersjon(1)
-                    .relevansFor(List.of("SAK"))
+                    .navn("gammel versjon av krav 50").kravNummer(50).kravVersjon(1)
+                    .relevansFor(behandlingRelevans)
                     .build());
             var krav50RelevansMatch = storageService.save(Krav.builder()
                     .navn("Krav 1").kravNummer(50).kravVersjon(2)
-                    .relevansFor(List.of("SAK"))
+                    .relevansFor(behandlingRelevans)
                     .build());
             var krav51MedEtterlevelse = storageService.save(Krav.builder()
                     .navn("Krav 2").kravNummer(51).kravVersjon(1)
@@ -101,21 +109,24 @@ class KravGraphQLIT extends GraphQLTestBase {
                     .navn("Krav 2").kravNummer(51).kravVersjon(2)
                     .relevansFor(List.of("INNSYN", "SAK"))
                     .build());
-            // irrelevant krav
             storageService.save(Krav.builder()
-                    .navn("Krav 3").kravNummer(52).kravVersjon(1)
+                    .navn("Irrelevant").kravNummer(52).kravVersjon(1)
                     .relevansFor(List.of("INNSYN"))
+                    .build());
+            storageService.save(Krav.builder()
+                    .navn("UTKAST").kravNummer(53).kravVersjon(1)
+                    .status(KravStatus.UTKAST)
+                    .relevansFor(behandlingRelevans)
+                    .build());
+            storageService.save(Krav.builder()
+                    .navn("UTGÅTT").kravNummer(54).kravVersjon(1)
+                    .status(KravStatus.UTGAATT)
+                    .relevansFor(behandlingRelevans)
                     .build());
 
             storageService.save(Etterlevelse.builder()
                     .kravNummer(51).kravVersjon(1)
                     .behandlingId(behandling.getId())
-                    .build());
-
-            behandlingService.save(BehandlingRequest.builder()
-                    .id(behandling.getId())
-                    .update(true)
-                    .relevansFor(List.of("SAK"))
                     .build());
 
             var var = Map.of("behandlingId", behandling.getId());

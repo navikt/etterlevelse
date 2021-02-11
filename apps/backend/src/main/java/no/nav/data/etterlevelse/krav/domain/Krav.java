@@ -12,8 +12,8 @@ import no.nav.data.common.utils.StreamUtils;
 import no.nav.data.etterlevelse.codelist.CodelistService;
 import no.nav.data.etterlevelse.codelist.codeusage.dto.InstanceId;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
-import no.nav.data.etterlevelse.common.domain.KravId;
 import no.nav.data.etterlevelse.common.domain.Periode;
+import no.nav.data.etterlevelse.krav.domain.dto.KravIdStatus;
 import no.nav.data.etterlevelse.krav.dto.KravRequest;
 import no.nav.data.etterlevelse.krav.dto.KravResponse;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
@@ -27,7 +27,7 @@ import static no.nav.data.common.utils.StreamUtils.copyOf;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Krav implements DomainObject, KravId {
+public class Krav implements DomainObject, KravIdStatus {
 
     private UUID id;
     private ChangeStamp changeStamp;
@@ -57,12 +57,8 @@ public class Krav implements DomainObject, KravId {
 
     // Codelist RELEVANS
     private List<String> relevansFor;
-    private KravStatus status;
-
-    public enum KravStatus {
-        UNDER_REDIGERING,
-        FERDIG
-    }
+    @Default
+    private KravStatus status = KravStatus.UNDER_ARBEID;
 
     public Krav convert(KravRequest request) {
         navn = request.getNavn();
