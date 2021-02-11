@@ -34,7 +34,7 @@ export const updateEtterlevelse = async (etterlevelse: Etterlevelse) => {
 function etterlevelseToEtterlevelseDto(etterlevelse: Etterlevelse) {
   const dto = {
     ...etterlevelse,
-  }
+  } as any
   delete dto.changeStamp
   delete dto.version
   return dto

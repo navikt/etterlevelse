@@ -8,7 +8,7 @@ import {theme} from '../util'
 import {KravFilterTable} from '../components/common/KravFilterTable'
 
 export const UnderavdelingPage = () => {
-  const {underavdeling} = useParams()
+  const {underavdeling} = useParams<{underavdeling: string}>()
 
   if (!underavdeling) {
     return <Block>

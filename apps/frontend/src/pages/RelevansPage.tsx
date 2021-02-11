@@ -9,7 +9,7 @@ import {KravFilterTable} from '../components/common/KravFilterTable'
 import {BehandlingFilterTable} from '../components/common/BehandlingFilterTable'
 
 export const RelevansPage = () => {
-  const {relevans} = useParams()
+  const {relevans} = useParams<{relevans: string}>()
 
   if (!relevans) {
     return <Block>

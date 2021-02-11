@@ -4,7 +4,7 @@ import {env} from '../util/env'
 import {useEffect, useState} from 'react'
 import {maxDate, navStartDate} from '../util/config'
 import {useSearch} from '../util/hooks'
-import {gql} from 'graphql.macro'
+import {gql} from '@apollo/client'
 
 export const getKravPage = async (pageNumber: number, pageSize: number) => {
   return (await axios.get<PageResponse<Krav>>(`${env.backendBaseUrl}/krav?pageNumber=${pageNumber}&pageSize=${pageSize}`)).data
@@ -43,7 +43,7 @@ function kravToKravDto(krav: Krav) {
     underavdeling: krav.underavdeling?.code,
     relevansFor: krav.relevansFor.map(c => c.code),
     regelverk: krav.regelverk.map(r => ({...r, lov: r.lov.code}))
-  }
+  } as any
   delete dto.changeStamp
   delete dto.version
   return dto

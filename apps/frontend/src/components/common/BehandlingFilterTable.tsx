@@ -3,11 +3,10 @@ import {theme} from '../../util'
 import {Cell, Row, Table} from './Table'
 import RouteLink from './RouteLink'
 import React from 'react'
-import {gql} from 'graphql.macro'
 import {ListName} from '../../services/Codelist'
 import {DotTags} from './DotTag'
 import {BehandlingFilters} from '../../api/BehandlingApi'
-import {useQuery} from '@apollo/client'
+import {gql, useQuery} from '@apollo/client'
 import {Behandling, PageResponse} from '../../constants'
 
 

@@ -22,10 +22,9 @@ import {useEtterlevelse} from '../../api/EtterlevelseApi'
 import {kravFullQuery, KravId} from '../../api/KravApi'
 import {ViewKrav} from '../krav/ViewKrav'
 import {kravName, kravNumView} from '../../pages/KravPage'
-import {gql} from 'graphql.macro';
 import {ViewEtterlevelse} from '../etterlevelse/ViewEtterlevelse'
 import {ObjectType} from '../admin/audit/AuditTypes'
-import {useQuery} from '@apollo/client'
+import {gql, useQuery} from '@apollo/client'
 import {Chart} from '../Chart'
 
 const filterForBehandling = (behandling: Behandling): KravFilters => ({behandlingId: behandling.id})

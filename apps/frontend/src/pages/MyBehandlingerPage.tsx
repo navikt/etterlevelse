@@ -10,12 +10,11 @@ import RouteLink from '../components/common/RouteLink'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faTimesCircle, faUsers} from '@fortawesome/free-solid-svg-icons'
 import {theme} from '../util'
-import {gql} from 'graphql.macro'
 import Button from '../components/common/Button'
 import {Spinner} from '../components/common/Spinner'
 import {Behandling, emptyPage, PageResponse} from '../constants'
 import {StatefulInput} from 'baseui/input'
-import {useQuery} from '@apollo/client'
+import {gql, useQuery} from '@apollo/client'
 
 
 export const MyBehandlingerPage = () => {
