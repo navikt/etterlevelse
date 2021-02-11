@@ -88,18 +88,29 @@ class KravGraphQLIT extends GraphQLTestBase {
         @Test
         @SneakyThrows
         void kravForBehandling() {
-            var krav = storageService.save(Krav.builder()
+            // gammel versjon av krav 50
+            storageService.save(Krav.builder()
                     .navn("Krav 1").kravNummer(50).kravVersjon(1)
                     .relevansFor(List.of("SAK"))
                     .build());
-            var krav2 = storageService.save(Krav.builder()
+            var krav50RelevansMatch = storageService.save(Krav.builder()
+                    .navn("Krav 1").kravNummer(50).kravVersjon(2)
+                    .relevansFor(List.of("SAK"))
+                    .build());
+            var krav51MedEtterlevelse = storageService.save(Krav.builder()
                     .navn("Krav 2").kravNummer(51).kravVersjon(1)
                     .relevansFor(List.of("INNSYN"))
                     .build());
+            var krav51NyesteVersjon = storageService.save(Krav.builder()
+                    .navn("Krav 2").kravNummer(51).kravVersjon(2)
+                    .relevansFor(List.of("INNSYN", "SAK"))
+                    .build());
+            // irrelevant krav
             storageService.save(Krav.builder()
                     .navn("Krav 3").kravNummer(52).kravVersjon(1)
                     .relevansFor(List.of("INNSYN"))
                     .build());
+
             storageService.save(Etterlevelse.builder()
                     .kravNummer(51).kravVersjon(1)
                     .behandlingId(behandling.getId())
@@ -116,9 +127,10 @@ class KravGraphQLIT extends GraphQLTestBase {
 
             assertThat(response, "krav")
                     .hasNoErrors()
-                    .hasSize(2)
-                    .hasField("[0].id", krav.getId().toString())
-                    .hasField("[1].id", krav2.getId().toString());
+                    .hasSize(3)
+                    .hasField("[0].id", krav50RelevansMatch.getId().toString())
+                    .hasField("[1].id", krav51MedEtterlevelse.getId().toString())
+                    .hasField("[2].id", krav51NyesteVersjon.getId().toString());
         }
 
         @Test

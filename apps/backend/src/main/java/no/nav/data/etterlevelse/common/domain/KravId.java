@@ -11,6 +11,6 @@ public interface KravId {
     }
 
     default boolean succeeds(KravId kid) {
-        return kid.getKravNummer().equals(getKravNummer()) && kid.getKravVersjon() > getKravVersjon();
+        return kid.getKravNummer().equals(getKravNummer()) && kid.getKravVersjon() < getKravVersjon();
     }
 }

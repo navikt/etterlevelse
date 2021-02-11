@@ -3,7 +3,7 @@ package no.nav.data.etterlevelse.krav.domain;
 import lombok.RequiredArgsConstructor;
 import no.nav.data.common.storage.domain.GenericStorage;
 import no.nav.data.common.storage.domain.GenericStorageRepository;
-import no.nav.data.etterlevelse.behandling.BehandlingService;
+import no.nav.data.etterlevelse.behandling.domain.BehandlingRepo;
 import no.nav.data.etterlevelse.common.domain.KravId;
 import no.nav.data.etterlevelse.krav.domain.dto.KravFilter;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -24,7 +24,7 @@ public class KravRepoImpl implements KravRepoCustom {
 
     private final NamedParameterJdbcTemplate jdbcTemplate;
     private final GenericStorageRepository repository;
-    private final BehandlingService behandlingService;
+    private final BehandlingRepo behandlingRepo;
 
     @Override
     public List<GenericStorage> findByRelevans(String code) {
@@ -51,13 +51,7 @@ public class KravRepoImpl implements KravRepoCustom {
             par.addValue("kravNummer", filter.getNummer());
         }
         if (filter.getBehandlingId() != null) {
-            kravIdSafeList.addAll(jdbcTemplate.queryForList("""
-                    select 
-                     data ->> 'kravVersjon' as kravVersjon, data ->> 'kravVersjon' as kravVersjon
-                     from generic_storage
-                     where type = 'Etterlevelse'
-                     and data ->> 'behandlingId' = :behandlingId
-                    """, new MapSqlParameterSource("behandlingId", filter.getBehandlingId()), KravId.class));
+            kravIdSafeList.addAll(behandlingRepo.findKravIdsForBehandling(filter.getBehandlingId()));
             query += """
                     and ( 
                      exists(select 1
