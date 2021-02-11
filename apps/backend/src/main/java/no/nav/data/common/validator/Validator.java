@@ -100,6 +100,11 @@ public class Validator<T extends Validated> {
         return (D) domainItem;
     }
 
+    @SuppressWarnings("unchecked")
+    public <D extends DomainObject> D getDomainItem(Class<D> type) {
+        return (D) domainItem;
+    }
+
     public void checkExists(String id, StorageService storage, Class<? extends DomainObject> aClass) {
         if (isUUID(id) && !storage.exists(UUID.fromString(id), aClass)) {
             String type = TypeRegistration.typeOf(aClass);

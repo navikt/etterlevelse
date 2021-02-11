@@ -8,6 +8,7 @@ import no.nav.data.common.validator.Validator;
 import no.nav.data.etterlevelse.common.domain.DomainService;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravImage;
+import no.nav.data.etterlevelse.krav.domain.KravStatus;
 import no.nav.data.etterlevelse.krav.domain.dto.KravFilter;
 import no.nav.data.etterlevelse.krav.dto.KravRequest;
 import no.nav.data.etterlevelse.krav.dto.KravRequest.Fields;
@@ -48,6 +49,7 @@ public class KravService extends DomainService<Krav> {
     public Krav save(KravRequest request) {
         Validator.validate(request, storage)
                 .addValidations(this::validateName)
+                .addValidations(this::validateStatus)
                 .addValidations(this::validateKravNummerVersjon)
                 .ifErrorsThrowValidationException();
 
@@ -103,11 +105,26 @@ public class KravService extends DomainService<Krav> {
     }
 
     private void validateKravNummerVersjon(Validator<KravRequest> validator) {
-        Integer kravNummer = validator.getItem().getKravNummer();
-        boolean nyKravVersjon = validator.getItem().isNyKravVersjon();
+        KravRequest req = validator.getItem();
+        Integer kravNummer = req.getKravNummer();
+        boolean nyKravVersjon = req.isNyKravVersjon();
         if (nyKravVersjon && kravNummer != null) {
             if (getByKravNummer(kravNummer).isEmpty()) {
                 validator.addError(Fields.kravNummer, Validator.DOES_NOT_EXIST, "KravNummer %d does not exist".formatted(kravNummer));
+            }
+        }
+    }
+
+    private void validateStatus(Validator<KravRequest> validator) {
+        KravRequest req = validator.getItem();
+        if (!req.isUpdate()) {
+            return;
+        }
+        Krav oldKrav = validator.getDomainItem(Krav.class);
+        if (req.getStatus() == KravStatus.UTKAST && oldKrav.getStatus() != KravStatus.UTKAST) {
+            var etterlevelser = etterlevelseRepo.findByKravNummer(oldKrav.getKravNummer(), oldKrav.getKravVersjon());
+            if (!etterlevelser.isEmpty()) {
+                validator.addError(Fields.status, "INVALID_STATUS", "Krav already contains %d etterlevelser, cannot change status to UTKAST".formatted(etterlevelser.size()));
             }
         }
     }

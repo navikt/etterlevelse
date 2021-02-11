@@ -164,8 +164,10 @@ export enum EtterlevelseStatus {
 }
 
 export enum KravStatus {
-  UNDER_REDIGERING = 'UNDER_REDIGERING',
-  FERDIG = 'FERDIG'
+  UTKAST = 'UTKAST',
+  UNDER_ARBEID = 'UNDER_ARBEID',
+  AKTIV = 'AKTIV',
+  UTGAATT = 'UTGAATT'
 }
 
 export const emptyPage = {content: [], numberOfElements: 0, pageNumber: 0, pages: 0, pageSize: 1, totalElements: 0}

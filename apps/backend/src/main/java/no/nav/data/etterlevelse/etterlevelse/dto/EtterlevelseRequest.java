@@ -8,7 +8,7 @@ import lombok.experimental.FieldNameConstants;
 import no.nav.data.common.validator.RequestElement;
 import no.nav.data.common.validator.Validator;
 import no.nav.data.etterlevelse.common.domain.KravId;
-import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse.EtterlevelseStatus;
+import no.nav.data.etterlevelse.etterlevelse.domain.EtterlevelseStatus;
 
 import java.time.LocalDate;
 import java.util.List;

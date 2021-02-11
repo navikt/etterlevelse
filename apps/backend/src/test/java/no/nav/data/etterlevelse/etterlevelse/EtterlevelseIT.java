@@ -4,13 +4,16 @@ import no.nav.data.IntegrationTestBase;
 import no.nav.data.etterlevelse.codelist.CodelistStub;
 import no.nav.data.etterlevelse.etterlevelse.EtterlevelseController.EtterlevelsePage;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
-import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse.EtterlevelseStatus;
+import no.nav.data.etterlevelse.etterlevelse.domain.EtterlevelseStatus;
 import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseRequest;
 import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseResponse;
 import no.nav.data.etterlevelse.krav.domain.Krav;
+import no.nav.data.etterlevelse.krav.domain.KravStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -90,45 +93,78 @@ public class EtterlevelseIT extends IntegrationTestBase {
         }
     }
 
-    @Test
-    void createEtterlevelse() {
-        var krav = storageService.save(Krav.builder().kravNummer(50).build());
-        var req = EtterlevelseRequest.builder()
-                .behandlingId("behandling1")
-                .kravNummer(krav.getKravNummer())
-                .kravVersjon(krav.getKravVersjon())
+    @Nested
+    class Create {
 
-                .begrunnelse("begrunnelse")
-                .dokumentasjon(List.of("dok"))
-                .etterleves(true)
-                .fristForFerdigstillelse(LocalDate.now())
-                .status(EtterlevelseStatus.UNDER_REDIGERING)
+        @Test
+        void createEtterlevelse() {
+            var krav = storageService.save(Krav.builder().kravNummer(50).build());
+            var req = EtterlevelseRequest.builder()
+                    .behandlingId("behandling1")
+                    .kravNummer(krav.getKravNummer())
+                    .kravVersjon(krav.getKravVersjon())
 
-                .build();
+                    .begrunnelse("begrunnelse")
+                    .dokumentasjon(List.of("dok"))
+                    .etterleves(true)
+                    .fristForFerdigstillelse(LocalDate.now())
+                    .status(EtterlevelseStatus.UNDER_REDIGERING)
 
-        var resp = restTemplate.postForEntity("/etterlevelse", req, EtterlevelseResponse.class);
+                    .build();
 
-        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-        var etterlevelse = resp.getBody();
-        assertThat(etterlevelse).isNotNull();
+            var resp = restTemplate.postForEntity("/etterlevelse", req, EtterlevelseResponse.class);
 
-        assertThat(etterlevelse.getId()).isNotNull();
-        assertFields(etterlevelse);
-    }
+            assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+            var etterlevelse = resp.getBody();
+            assertThat(etterlevelse).isNotNull();
 
-    private void assertFields(EtterlevelseResponse etterlevelse) {
-        assertThat(etterlevelse.getChangeStamp()).isNotNull();
-        assertThat(etterlevelse.getVersion()).isEqualTo(0);
+            assertThat(etterlevelse.getId()).isNotNull();
+            assertFields(etterlevelse);
+        }
 
-        assertThat(etterlevelse.getBehandlingId()).isEqualTo("behandling1");
-        assertThat(etterlevelse.getKravNummer()).isEqualTo(50);
-        assertThat(etterlevelse.getKravVersjon()).isEqualTo(1);
+        private void assertFields(EtterlevelseResponse etterlevelse) {
+            assertThat(etterlevelse.getChangeStamp()).isNotNull();
+            assertThat(etterlevelse.getVersion()).isEqualTo(0);
 
-        assertThat(etterlevelse.getBegrunnelse()).isEqualTo("begrunnelse");
-        assertThat(etterlevelse.getDokumentasjon()).containsOnly("dok");
-        assertThat(etterlevelse.isEtterleves()).isTrue();
-        assertThat(etterlevelse.getFristForFerdigstillelse()).isToday();
-        assertThat(etterlevelse.getStatus()).isEqualTo(EtterlevelseStatus.UNDER_REDIGERING);
+            assertThat(etterlevelse.getBehandlingId()).isEqualTo("behandling1");
+            assertThat(etterlevelse.getKravNummer()).isEqualTo(50);
+            assertThat(etterlevelse.getKravVersjon()).isEqualTo(1);
+
+            assertThat(etterlevelse.getBegrunnelse()).isEqualTo("begrunnelse");
+            assertThat(etterlevelse.getDokumentasjon()).containsOnly("dok");
+            assertThat(etterlevelse.isEtterleves()).isTrue();
+            assertThat(etterlevelse.getFristForFerdigstillelse()).isToday();
+            assertThat(etterlevelse.getStatus()).isEqualTo(EtterlevelseStatus.UNDER_REDIGERING);
+        }
+
+        @Test
+        void kravNotFound() {
+            var req = EtterlevelseRequest.builder()
+                    .kravNummer(50)
+                    .kravVersjon(1)
+                    .build();
+
+            var resp = restTemplate.postForEntity("/etterlevelse", req, String.class);
+
+            assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+            assertThat(resp.getBody()).contains("KravNummer 50 KravVersjon 1 does not exist");
+        }
+
+        @ParameterizedTest
+        @EnumSource(value = KravStatus.class, names = {"UTKAST", "UTGAATT"})
+        void wrongKravStatus(KravStatus status) {
+            var krav = storageService.save(Krav.builder().kravNummer(50).status(status).build());
+            var req = EtterlevelseRequest.builder()
+                    .kravNummer(krav.getKravNummer())
+                    .kravVersjon(krav.getKravVersjon())
+                    .build();
+
+            var resp = restTemplate.postForEntity("/etterlevelse", req, String.class);
+
+            assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+            assertThat(resp.getBody()).contains("Krav K50.1 kan ikke ettereleves med status");
+            assertThat(resp.getBody()).contains(status.name());
+        }
     }
 
     @Test

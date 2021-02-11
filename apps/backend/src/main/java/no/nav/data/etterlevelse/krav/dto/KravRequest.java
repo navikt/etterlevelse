@@ -10,7 +10,7 @@ import no.nav.data.common.validator.RequestElement;
 import no.nav.data.common.validator.Validator;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
 import no.nav.data.etterlevelse.common.domain.Periode;
-import no.nav.data.etterlevelse.krav.domain.Krav.KravStatus;
+import no.nav.data.etterlevelse.krav.domain.KravStatus;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 
 import java.util.List;
@@ -77,7 +77,7 @@ public class KravRequest implements RequestElement {
         setTagger(formatList(tagger));
 
         if (status == null) {
-            status = KravStatus.UNDER_REDIGERING;
+            status = KravStatus.UTKAST;
         }
     }
 

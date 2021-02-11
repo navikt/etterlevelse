@@ -7,6 +7,7 @@ import no.nav.data.etterlevelse.common.domain.DomainService;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.etterlevelse.domain.EtterlevelseRepo;
 import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseRequest;
+import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseRequest.Fields;
 import org.springframework.data.domain.Page;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
@@ -45,7 +46,7 @@ public class EtterlevelseService extends DomainService<Etterlevelse> {
 
     public Etterlevelse save(EtterlevelseRequest request) {
         Validator.validate(request, storage)
-                .addValidations(this::validateKravNummer)
+                .addValidations(this::validateKrav)
                 .ifErrorsThrowValidationException();
 
         var etterlevelse = request.isUpdate() ? storage.get(request.getIdAsUUID(), Etterlevelse.class) : new Etterlevelse();
@@ -56,6 +57,16 @@ public class EtterlevelseService extends DomainService<Etterlevelse> {
 
     public Etterlevelse delete(UUID id) {
         return storage.delete(id, Etterlevelse.class);
+    }
+
+    private void validateKrav(Validator<EtterlevelseRequest> validator) {
+        validateKravNummer(validator).ifPresent(krav -> {
+            if (!validator.getItem().isUpdate() && !krav.getStatus().kanEtterleves()) {
+                validator.addError(Fields.kravNummer, "FEIL_KRAVSTATUS", "Krav %s kan ikke ettereleves med status %s".formatted(
+                        krav.kravId(), krav.getStatus()
+                ));
+            }
+        });
     }
 
 }
