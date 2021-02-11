@@ -1,14 +1,12 @@
 package no.nav.data.etterlevelse.etterlevelse;
 
 import no.nav.data.common.rest.PageParameters;
-import no.nav.data.common.storage.StorageService;
 import no.nav.data.common.storage.domain.GenericStorage;
 import no.nav.data.common.validator.Validator;
 import no.nav.data.etterlevelse.common.domain.DomainService;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.etterlevelse.domain.EtterlevelseRepo;
 import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseRequest;
-import no.nav.data.etterlevelse.krav.domain.KravRepo;
 import org.springframework.data.domain.Page;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
@@ -21,8 +19,8 @@ public class EtterlevelseService extends DomainService<Etterlevelse> {
 
     private final EtterlevelseRepo repo;
 
-    public EtterlevelseService(StorageService storage, EtterlevelseRepo repo, KravRepo kravRepo) {
-        super(storage, kravRepo, Etterlevelse.class);
+    public EtterlevelseService(EtterlevelseRepo repo) {
+        super(Etterlevelse.class);
         this.repo = repo;
     }
 

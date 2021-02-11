@@ -3,10 +3,8 @@ package no.nav.data.etterlevelse.krav;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.mail.EmailService;
 import no.nav.data.common.mail.MailTask;
-import no.nav.data.common.storage.StorageService;
 import no.nav.data.common.validator.Validator;
 import no.nav.data.etterlevelse.common.domain.DomainService;
-import no.nav.data.etterlevelse.krav.domain.KravRepo;
 import no.nav.data.etterlevelse.krav.domain.Tilbakemelding;
 import no.nav.data.etterlevelse.krav.domain.Tilbakemelding.Melding;
 import no.nav.data.etterlevelse.krav.domain.TilbakemeldingRepo;
@@ -38,10 +36,9 @@ public class TilbakemeldingService extends DomainService<Tilbakemelding> {
 
     private final TilbakemeldingRepo tilbakemeldingRepo;
 
-    public TilbakemeldingService(StorageService storage, KravRepo kravRepo,
-            TeamcatResourceClient resourceClient, EmailService emailService, SlackClient slackClient, UrlGenerator urlGenerator,
-            TilbakemeldingRepo tilbakemeldingRepo) {
-        super(storage, kravRepo, Tilbakemelding.class);
+    public TilbakemeldingService(TeamcatResourceClient resourceClient, EmailService emailService, SlackClient slackClient,
+            UrlGenerator urlGenerator, TilbakemeldingRepo tilbakemeldingRepo) {
+        super(Tilbakemelding.class);
         this.urlGenerator = urlGenerator;
         this.resourceClient = resourceClient;
         this.emailService = emailService;

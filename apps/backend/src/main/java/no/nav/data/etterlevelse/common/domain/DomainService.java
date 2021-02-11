@@ -7,6 +7,7 @@ import no.nav.data.common.validator.Validated;
 import no.nav.data.common.validator.Validator;
 import no.nav.data.etterlevelse.krav.domain.KravRepo;
 import no.nav.data.etterlevelse.krav.dto.KravRequest.Fields;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -15,8 +16,10 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class DomainService<T extends DomainObject> {
 
-    protected final StorageService storage;
-    protected final KravRepo kravRepo;
+    @Autowired
+    protected StorageService storage;
+    @Autowired
+    protected KravRepo kravRepo;
     protected final Class<T> type;
 
     public T get(UUID uuid) {

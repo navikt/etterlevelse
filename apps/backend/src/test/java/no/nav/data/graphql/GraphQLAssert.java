@@ -45,8 +45,7 @@ public class GraphQLAssert extends AbstractAssert<GraphQLAssert, GraphQLResponse
         try {
             actualValue = actual.get(path);
         } catch (Exception e) {
-            log.error("jsonpath error for body <" + actual.getRawResponse().getBody() + ">");
-            throw e;
+            fail(e);
         }
         objects.assertEqual(info, actualValue, value);
         return this;
@@ -59,8 +58,17 @@ public class GraphQLAssert extends AbstractAssert<GraphQLAssert, GraphQLResponse
     public GraphQLAssert hasSize(String path, int i) {
         isNotNull();
         String lengthPath = "$.data.%s%s.length()".formatted(queryName, path == null ? "" : "." + path);
-        objects.assertEqual(info, actual.get(lengthPath, int.class), i);
+        try {
+            objects.assertEqual(info, actual.get(lengthPath, int.class), i);
+        } catch (Exception e) {
+            fail(e);
+        }
         return this;
+    }
+
+    private void fail(Exception e) {
+        String msg = "jsonpath error for body <" + actual.getRawResponse().getBody() + ">";
+        throw failure(e.getMessage() + "\n" + msg);
     }
 
 }

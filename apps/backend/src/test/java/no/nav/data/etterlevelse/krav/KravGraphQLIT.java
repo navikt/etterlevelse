@@ -1,11 +1,8 @@
 package no.nav.data.etterlevelse.krav;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.graphql.spring.boot.test.GraphQLResponse;
 import lombok.SneakyThrows;
 import no.nav.data.TestConfig.MockFilter;
-import no.nav.data.common.utils.JsonUtils;
 import no.nav.data.etterlevelse.behandling.dto.Behandling;
 import no.nav.data.etterlevelse.behandling.dto.BehandlingRequest;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
@@ -27,7 +24,6 @@ import static no.nav.data.graphql.GraphQLAssert.assertThat;
 class KravGraphQLIT extends GraphQLTestBase {
 
     private final Behandling behandling = BkatMocks.processMockResponse().convertToBehandling();
-    private final ObjectMapper om = JsonUtils.getObjectMapper();
 
     @BeforeEach
     void setUp() {
@@ -275,11 +271,5 @@ class KravGraphQLIT extends GraphQLTestBase {
                     .hasField("numberOfElements", "0");
 
         }
-    }
-
-    private ObjectNode vars(Map<String, String> map) {
-        var on = om.createObjectNode();
-        map.entrySet().forEach(e -> on.put(e.getKey(), e.getValue()));
-        return on;
     }
 }

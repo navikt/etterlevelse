@@ -3,13 +3,11 @@ package no.nav.data.etterlevelse.krav;
 import lombok.extern.slf4j.Slf4j;
 import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import no.nav.data.common.rest.PageParameters;
-import no.nav.data.common.storage.StorageService;
 import no.nav.data.common.storage.domain.GenericStorage;
 import no.nav.data.common.validator.Validator;
 import no.nav.data.etterlevelse.common.domain.DomainService;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravImage;
-import no.nav.data.etterlevelse.krav.domain.KravRepo;
 import no.nav.data.etterlevelse.krav.domain.dto.KravFilter;
 import no.nav.data.etterlevelse.krav.dto.KravRequest;
 import no.nav.data.etterlevelse.krav.dto.KravRequest.Fields;
@@ -30,8 +28,8 @@ import static no.nav.data.common.utils.StreamUtils.filter;
 @Service
 public class KravService extends DomainService<Krav> {
 
-    public KravService(StorageService storage, KravRepo repo) {
-        super(storage, repo, Krav.class);
+    public KravService() {
+        super(Krav.class);
     }
 
     Page<Krav> getAll(PageParameters pageParameters) {
