@@ -2,10 +2,11 @@ import {KravFilters, useKravFilter} from '../../api/KravGraphQLApi'
 import {Spinner} from './Spinner'
 import {theme} from '../../util'
 import {Cell, Row, Table} from './Table'
-import {codelistCompareField} from '../../services/Codelist'
+import {codelistCompareField, codelistsCompareField} from '../../services/Codelist'
 import RouteLink from './RouteLink'
 import {kravNumView, kravStatus} from '../../pages/KravPage'
 import React from 'react'
+import {KravQL} from '../../constants'
 
 export const KravFilterTable = (props: {filter: KravFilters, emptyText?: string}) => {
   const {data, loading} = useKravFilter(props.filter)
@@ -22,6 +23,7 @@ export const KravFilterTable = (props: {filter: KravFilters, emptyText?: string}
           {title: 'Etterlevelser', column: 'etterlevelser'},
           {title: 'Avdeling', column: 'avdeling'},
           {title: 'Underavdeling', column: 'underavdeling'},
+          {title: 'Lover', column: 'regelverk'},
           {title: 'Status', column: 'status'},
         ]}
         config={{
@@ -30,8 +32,8 @@ export const KravFilterTable = (props: {filter: KravFilters, emptyText?: string}
           sorting: {
             kravNummer: (a, b) => a.kravNummer === b.kravNummer ? a.kravVersjon - b.kravVersjon : a.kravNummer - b.kravNummer,
             avdeling: codelistCompareField('avdeling'),
-            underavdeling: codelistCompareField('underavdeling')
-
+            underavdeling: codelistCompareField('underavdeling'),
+            regelverk: codelistsCompareField<KravQL>(k => k.regelverk.map(r => r.lov), props.filter.lov)
           }
         }}
         render={state => {
@@ -45,6 +47,7 @@ export const KravFilterTable = (props: {filter: KravFilters, emptyText?: string}
                 <Cell>{krav.etterlevelser.length}</Cell>
                 <Cell>{krav.avdeling?.shortName}</Cell>
                 <Cell>{krav.underavdeling?.shortName}</Cell>
+                <Cell>{krav.regelverk.map(r => r.lov?.shortName).join(", ")}</Cell>
                 <Cell>{kravStatus(krav.status)}</Cell>
               </Row>
             )

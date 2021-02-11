@@ -162,8 +162,16 @@ export const codeListSchema: () => yup.SchemaOf<CodeListFormValues> = () =>
   });
 
 export const codelistCompareField = (field: string) => {
-  return (a: any, b: any) => codelistCompare(a[field] as Code | undefined, b[field] as Code | undefined)
+  return (a: any, b: any) => codelistCompare(a[field] as Code || undefined, b[field] as Code || undefined)
 }
+
+export const codelistsCompareField = <T>(ext: (o: T) => Code[], exclude?: string) => {
+  const getCode = (obj: any) => {
+    return (ext(obj) || []).filter(c => c.code !== exclude)[0] || undefined
+  }
+  return (a: any, b: any) => codelistCompare(getCode(a), getCode(b))
+}
+
 export const codelistCompare = (a?: Code, b?: Code) => {
   return (a?.shortName || '').localeCompare(b?.shortName || '')
 }

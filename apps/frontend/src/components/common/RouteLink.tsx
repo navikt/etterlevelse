@@ -80,3 +80,11 @@ export const ObjectLink = (props: ObjectLinkProps) => {
     </Block> :
     link
 }
+
+export const ExternalLink = ({href, children}: {href: string, children: React.ReactNode}) => {
+  return (
+    <StyledLink href={href} target="_blank" rel="noopener noreferrer">
+      {children}
+    </StyledLink>
+  )
+}

@@ -43,6 +43,7 @@ const SideBar = () => {
 
         <NavItem to="/relevans" text="Relevans" yMargin={theme.sizing.scale200}/>
         <NavItem to="/underavdeling" text="Underavdeling" yMargin={theme.sizing.scale200}/>
+        <NavItem to="/lov" text="Lov" yMargin={theme.sizing.scale200}/>
       </Block>
       <Block position="absolute" bottom="0" width="100%">
         <Block display="flex" justifyContent="center">
