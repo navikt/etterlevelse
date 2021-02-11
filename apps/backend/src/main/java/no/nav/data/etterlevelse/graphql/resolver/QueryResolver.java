@@ -9,6 +9,7 @@ import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.etterlevelse.behandling.BehandlingService;
 import no.nav.data.etterlevelse.behandling.dto.Behandling;
 import no.nav.data.etterlevelse.behandling.dto.BehandlingFilter;
+import no.nav.data.etterlevelse.behandling.dto.BehandlingStats.LovStats;
 import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
 import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseResponse;
 import no.nav.data.etterlevelse.krav.KravService;
@@ -80,6 +81,12 @@ public class QueryResolver implements GraphQLQueryResolver {
             return new RestResponsePage<>(filtered);
         }
         return pageInput.pageFrom(filtered);
+    }
+
+    public LovStats lovStats() {
+        // TODO
+        return LovStats.builder()
+                .build();
     }
 
     public EtterlevelseResponse etterlevelseById(UUID id) {

@@ -11,6 +11,8 @@ type Query {
     etterlevelseById(id: ID!) : Etterlevelse
 
     behandling(filter: BehandlingFilter, pageNumber: NonNegativeInt = 0, pageSize: NonNegativeInt = 0): BehandlingPage
+
+    lovStats: LovStats
 }
 
 input KravFilter {
@@ -18,6 +20,7 @@ input KravFilter {
     nummer: Int
     behandlingId: String
     underavdeling: String
+    lov: String
 }
 
 input BehandlingFilter {

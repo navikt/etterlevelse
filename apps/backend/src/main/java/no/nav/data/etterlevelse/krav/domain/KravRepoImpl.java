@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import no.nav.data.common.storage.domain.GenericStorage;
 import no.nav.data.common.storage.domain.GenericStorageRepository;
 import no.nav.data.etterlevelse.behandling.BehandlingService;
-import no.nav.data.etterlevelse.codelist.dto.CodelistResponse;
 import no.nav.data.etterlevelse.krav.domain.dto.KravFilter;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -30,8 +29,13 @@ public class KravRepoImpl implements KravRepoCustom {
     }
 
     @Override
+    public List<GenericStorage> findByLov(String lov) {
+        return findBy(KravFilter.builder().lov(lov).build());
+    }
+
+    @Override
     public List<GenericStorage> findBy(KravFilter filter) {
-        var query = "select id from generic_storage where type = 'Krav' ";
+        var query = "select id from generic_storage krav where type = 'Krav' ";
         var par = new MapSqlParameterSource();
 
         if (!filter.getRelevans().isEmpty()) {
@@ -43,35 +47,34 @@ public class KravRepoImpl implements KravRepoCustom {
             par.addValue("kravNummer", filter.getNummer());
         }
         if (filter.getBehandlingId() != null) {
-            var behandling = behandlingService.getBehandling(filter.getBehandlingId());
-            if (behandling != null) {
-                var behandlingQuery = """
-                         data ->> 'kravNummer' in (
-                            select data ->> 'kravNummer' from generic_storage where type = 'Etterlevelse' and data ->> 'behandlingId' = :behandlingId
-                          ) 
-                        """;
-                if (behandling.getRelevansFor().isEmpty()) {
-                    query += " and %s ".formatted(behandlingQuery);
-                } else {
-                    query += "and ( %s or data -> 'relevansFor' ??| array[ :relevans ] ) ".formatted(behandlingQuery);
-                    par.addValue("relevans", convert(behandling.getRelevansFor(), CodelistResponse::getCode));
-                }
-                par.addValue("behandlingId", filter.getBehandlingId());
-            }
+            query += """
+                    and ( 
+                     exists(select 1
+                               from generic_storage ettlev
+                               where ettlev.data ->> 'kravNummer' = krav.data ->> 'kravNummer'
+                                 and ettlev.data ->> 'kravVersjon' = krav.data ->> 'kravVersjon'
+                                 and type = 'Etterlevelse'
+                                 and data ->> 'behandlingId' = :behandlingId
+                            ) 
+                    or data -> 'relevansFor' ??| array(
+                     select jsonb_array_elements_text(data -> 'relevansFor')
+                      from generic_storage
+                      where data ->> 'behandlingId' = :behandlingId
+                        and type = 'BehandlingData') 
+                    ) 
+                    """;
+            par.addValue("behandlingId", filter.getBehandlingId());
         }
         if (filter.getUnderavdeling() != null) {
             query += " and data ->> 'underavdeling' = :underavdeling ";
             par.addValue("underavdeling", filter.getUnderavdeling());
         }
+        if (filter.getLov() != null) {
+            query += " and data #> '{regelverk}' @> :lov::jsonb ";
+            par.addValue("lov", String.format("[{\"lov\": \"%s\"}]", filter.getLov()));
+        }
 
         return fetch(jdbcTemplate.queryForList(query, par));
-    }
-
-    @Override
-    public List<GenericStorage> findByLov(String lov) {
-        var resp = jdbcTemplate.queryForList("select id from generic_storage where data #>'{regelverk}' @> :lov::jsonb",
-                new MapSqlParameterSource().addValue("lov", String.format("[{\"lov\": \"%s\"}]", lov)));
-        return fetch(resp);
     }
 
     private List<GenericStorage> fetch(List<Map<String, Object>> resp) {

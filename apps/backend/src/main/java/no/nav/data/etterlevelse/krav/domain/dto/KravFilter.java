@@ -23,6 +23,7 @@ public class KravFilter {
     private Integer nummer;
     private String behandlingId;
     private String underavdeling;
+    private String lov;
 
     public List<String> getRelevans() {
         return formatList(relevans);
@@ -32,7 +33,8 @@ public class KravFilter {
         return getRelevans().isEmpty() &&
                 nummer == null &&
                 behandlingId == null &&
-                underavdeling == null
+                underavdeling == null &&
+                lov == null
                 ;
     }
 
