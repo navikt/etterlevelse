@@ -9,4 +9,8 @@ public interface KravId {
     default String kravId() {
         return "K%d.%d".formatted(getKravNummer(), getKravVersjon());
     }
+
+    default boolean succeeds(KravId kid) {
+        return kid.getKravNummer().equals(getKravNummer()) && kid.getKravVersjon() > getKravVersjon();
+    }
 }

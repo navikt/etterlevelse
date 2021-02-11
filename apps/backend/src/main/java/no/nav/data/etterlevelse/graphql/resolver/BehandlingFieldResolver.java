@@ -44,14 +44,9 @@ public class BehandlingFieldResolver implements GraphQLResolver<Behandling> {
         }
 
         var etterlevelser = etterlevelseService.getByBehandling(behandling.getId());
-        var allKrav = kravService.findForBehandling(behandling.getId());
-        /** TODO move this filtering to {@link no.nav.data.etterlevelse.krav.domain.KravRepoCustom#findBy} for BehandlingId */
-        var krav = convert(filter(allKrav,
-                k -> etterlevelser.stream().anyMatch(e -> e.kravId().equals(k.kravId()))
-                        || allKrav.stream().noneMatch(k2 -> k2.getKravNummer().equals(k.getKravNummer()) && k2.getKravVersjon() > k.getKravVersjon())
-        ), Krav::toResponse);
+        var krav = convert(kravService.findForBehandling(behandling.getId()), Krav::toResponse);
 
-        var fylt = filter(krav, k -> etterlevelser.stream().anyMatch(e -> e.kravId().equals(k.kravId())));
+        var fylt = filter(krav, k -> etterlevelser.stream().anyMatch(e -> e.isEtterleves() && e.kravId().equals(k.kravId())));
         var ikkeFylt = filter(krav, k -> !fylt.contains(k));
 
         return BehandlingStats.builder()

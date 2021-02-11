@@ -100,7 +100,7 @@ const KravTable = (props: {behandling: Behandling}) => {
         ...mapEtterlevelseData(etterlevelse)
       })
     })
-    setData(mapped.filter(k => k.etterlevelseId || !mapped.find(k2 => k2.kravNummer === k.kravNummer && k2.kravVersjon > k.kravVersjon)))
+    setData(mapped)
   }, [rawData])
 
   const [viewEtterlevelse, setViewEtterlevelse] = useState<string | undefined>()

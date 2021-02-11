@@ -4,16 +4,19 @@ import lombok.RequiredArgsConstructor;
 import no.nav.data.common.storage.domain.GenericStorage;
 import no.nav.data.common.storage.domain.GenericStorageRepository;
 import no.nav.data.etterlevelse.behandling.BehandlingService;
+import no.nav.data.etterlevelse.common.domain.KravId;
 import no.nav.data.etterlevelse.krav.domain.dto.KravFilter;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import static no.nav.data.common.utils.StreamUtils.convert;
+import static no.nav.data.common.utils.StreamUtils.exists;
 
 @Repository
 @RequiredArgsConstructor
@@ -38,6 +41,7 @@ public class KravRepoImpl implements KravRepoCustom {
         var query = "select id from generic_storage krav where type = 'Krav' ";
         var par = new MapSqlParameterSource();
 
+        List<KravId> kravIdSafeList = new ArrayList<>();
         if (!filter.getRelevans().isEmpty()) {
             query += " and data -> 'relevansFor' ??| array[ :relevans ] ";
             par.addValue("relevans", filter.getRelevans());
@@ -47,6 +51,13 @@ public class KravRepoImpl implements KravRepoCustom {
             par.addValue("kravNummer", filter.getNummer());
         }
         if (filter.getBehandlingId() != null) {
+            kravIdSafeList.addAll(jdbcTemplate.queryForList("""
+                    select 
+                     data ->> 'kravVersjon' as kravVersjon, data ->> 'kravVersjon' as kravVersjon
+                     from generic_storage
+                     where type = 'Etterlevelse'
+                     and data ->> 'behandlingId' = :behandlingId
+                    """, new MapSqlParameterSource("behandlingId", filter.getBehandlingId()), KravId.class));
             query += """
                     and ( 
                      exists(select 1
@@ -74,7 +85,12 @@ public class KravRepoImpl implements KravRepoCustom {
             par.addValue("lov", String.format("[{\"lov\": \"%s\"}]", filter.getLov()));
         }
 
-        return fetch(jdbcTemplate.queryForList(query, par));
+        List<GenericStorage> kravList = fetch(jdbcTemplate.queryForList(query, par));
+        if (!kravIdSafeList.isEmpty() && filter.getBehandlingId() != null) {
+            // If query for behandling, remove old versions of krav that fit it, unless they are in use by this behandling
+            kravList.removeIf(krav -> exists(kravList, k2 -> k2.toKrav().succeeds(krav.toKrav())) && !exists(kravIdSafeList, kid -> kid.kravId().equals(krav.toKrav().kravId())));
+        }
+        return kravList;
     }
 
     private List<GenericStorage> fetch(List<Map<String, Object>> resp) {
