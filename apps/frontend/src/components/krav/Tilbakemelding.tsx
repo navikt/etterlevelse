@@ -245,8 +245,9 @@ const MeldingResponse = ({userRole, close, tilbakemeldingId}: {userRole: Tilbake
   const [response, setResponse] = useState('')
   const [replyRole, setReplyRole] = useState(userRole)
   const [error, setError] = useState()
-
   const [loading, setLoading] = useState(false)
+
+  const isMelder = userRole === TilbakemeldingRolle.MELDER
 
   const submit = () => {
     const req: TilbakemeldingNewMeldingRequest = {
@@ -304,7 +305,7 @@ const MeldingResponse = ({userRole, close, tilbakemeldingId}: {userRole: Tilbake
         <Block display='flex' justifyContent='space-between' flexDirection='column'
                marginLeft={theme.sizing.scale400}>
 
-          {user.isKraveier() && !loading &&
+          {user.isKraveier() && !loading && isMelder &&
           <Block marginBottom={theme.sizing.scale400} display='flex' flexDirection='column'>
             <LabelSmall alignSelf='center'>Jeg er</LabelSmall>
             <Button size='compact' icon={faSync}
