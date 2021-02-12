@@ -37,7 +37,7 @@
         <jna.version>5.7.0</jna.version>
 
         <!-- Test -->
-        <testcontainers.version>1.15.1</testcontainers.version>
+        <testcontainers.version>1.15.2</testcontainers.version>
         <wiremock.version>2.27.2</wiremock.version>
     </properties>
 
