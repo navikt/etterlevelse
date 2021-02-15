@@ -88,7 +88,7 @@ public class BkatClient {
     }
 
     private List<BkatProcess> search(String search) {
-        return get("/process/search/{search}", ProcessPage.class, search).getContent();
+        return get("/process/search/{search}?includePurpose=true", ProcessPage.class, search).getContent();
     }
 
     private List<BkatProcess> findProcessesForTeam(String teamId) {
