@@ -3,7 +3,6 @@ package no.nav.data.etterlevelse.krav;
 import lombok.extern.slf4j.Slf4j;
 import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import no.nav.data.common.rest.PageParameters;
-import no.nav.data.common.security.SecurityUtils;
 import no.nav.data.common.storage.domain.GenericStorage;
 import no.nav.data.common.validator.Validator;
 import no.nav.data.etterlevelse.common.domain.DomainService;
@@ -24,6 +23,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import static no.nav.data.common.security.SecurityUtils.isKravEier;
 import static no.nav.data.common.utils.StreamUtils.convert;
 import static no.nav.data.common.utils.StreamUtils.filter;
 
@@ -38,7 +38,7 @@ public class KravService extends DomainService<Krav> {
     public Page<Krav> getAll(PageParameters pageParameters) {
         Pageable page = pageParameters.createPage();
         Page<GenericStorage> all;
-        if (SecurityUtils.isKravEier()) {
+        if (isKravEier()) {
             all = kravRepo.findAll(page);
         } else {
             all = kravRepo.findAllNonUtkast(page);
@@ -59,6 +59,17 @@ public class KravService extends DomainService<Krav> {
                 .map(GenericStorage::toKrav);
     }
 
+    public List<Krav> search(String name) {
+        List<GenericStorage> byNameContaining = new ArrayList<>(kravRepo.findByNameContaining(name));
+        if (StringUtils.isNumeric(name)) {
+            byNameContaining.addAll(kravRepo.findByKravNummer(Integer.parseInt(name)));
+        }
+        if (!isKravEier()) {
+            byNameContaining.removeIf(gs -> gs.toKrav().getStatus().erUtkast());
+        }
+        return convert(byNameContaining, GenericStorage::toKrav);
+    }
+
     public Krav save(KravRequest request) {
         Validator.validate(request, storage)
                 .addValidations(this::validateName)
@@ -76,14 +87,6 @@ public class KravService extends DomainService<Krav> {
         }
 
         return storage.save(krav);
-    }
-
-    public List<Krav> search(String name) {
-        List<GenericStorage> byNameContaining = new ArrayList<>(kravRepo.findByNameContaining(name));
-        if (StringUtils.isNumeric(name)) {
-            byNameContaining.addAll(kravRepo.findByKravNummer(Integer.parseInt(name)));
-        }
-        return convert(byNameContaining, GenericStorage::toKrav);
     }
 
     public Krav delete(UUID id) {

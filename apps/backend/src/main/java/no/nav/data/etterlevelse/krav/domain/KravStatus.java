@@ -13,4 +13,8 @@ public enum KravStatus {
     public boolean kanEtterleves() {
         return this == AKTIV || this == UNDER_ARBEID;
     }
+
+    public boolean erUtkast() {
+        return this == UTKAST;
+    }
 }
