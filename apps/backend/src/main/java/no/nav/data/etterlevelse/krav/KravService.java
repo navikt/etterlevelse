@@ -3,6 +3,7 @@ package no.nav.data.etterlevelse.krav;
 import lombok.extern.slf4j.Slf4j;
 import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import no.nav.data.common.rest.PageParameters;
+import no.nav.data.common.security.SecurityUtils;
 import no.nav.data.common.storage.domain.GenericStorage;
 import no.nav.data.common.validator.Validator;
 import no.nav.data.etterlevelse.common.domain.DomainService;
@@ -14,6 +15,7 @@ import no.nav.data.etterlevelse.krav.dto.KravRequest;
 import no.nav.data.etterlevelse.krav.dto.KravRequest.Fields;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -33,8 +35,19 @@ public class KravService extends DomainService<Krav> {
         super(Krav.class);
     }
 
-    Page<Krav> getAll(PageParameters pageParameters) {
-        return kravRepo.findAll(pageParameters.createPage()).map(GenericStorage::toKrav);
+    public Page<Krav> getAll(PageParameters pageParameters) {
+        Pageable page = pageParameters.createPage();
+        Page<GenericStorage> all;
+        if (SecurityUtils.isKravEier()) {
+            all = kravRepo.findAll(page);
+        } else {
+            all = kravRepo.findAllNonUtkast(page);
+        }
+        return all.map(GenericStorage::toKrav);
+    }
+
+    public List<Krav> getByFilter(KravFilter filter) {
+        return convert(kravRepo.findBy(filter), GenericStorage::toKrav);
     }
 
     public List<Krav> getByKravNummer(int kravNummer) {
@@ -73,16 +86,12 @@ public class KravService extends DomainService<Krav> {
         return convert(byNameContaining, GenericStorage::toKrav);
     }
 
-    public List<Krav> getByFilter(KravFilter filter) {
-        return convert(kravRepo.findBy(filter), GenericStorage::toKrav);
-    }
-
     public Krav delete(UUID id) {
         return storage.delete(id, Krav.class);
     }
 
     public List<Krav> findForBehandling(String behandlingId) {
-        return GenericStorage.to(kravRepo.findBy(KravFilter.builder().behandlingId(behandlingId).build()), Krav.class);
+        return getByFilter(KravFilter.builder().behandlingId(behandlingId).build());
     }
 
     public List<KravImage> saveImages(List<KravImage> images) {

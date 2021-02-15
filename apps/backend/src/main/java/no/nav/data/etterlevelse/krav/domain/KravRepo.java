@@ -20,6 +20,11 @@ public interface KravRepo extends JpaRepository<GenericStorage, UUID>, KravRepoC
             nativeQuery = true)
     Page<GenericStorage> findAll(Pageable pageable);
 
+    @Query(value = "select * from generic_storage where type = 'Krav' and data ->> 'status' <> 'UTKAST' order by data -> 'kravNummer', data -> 'kravVersjon'",
+            countQuery = "select count(1) from generic_storage where type = 'Krav' and data ->> 'status' <> 'UTKAST'",
+            nativeQuery = true)
+    Page<GenericStorage> findAllNonUtkast(Pageable pageable);
+
     @Query(value = "select * from generic_storage where data ->> 'avdeling' = ?1 and type = 'Krav'", nativeQuery = true)
     List<GenericStorage> findByAvdeling(String code);
 
