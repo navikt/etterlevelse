@@ -18,6 +18,7 @@ import RouteLink from './common/RouteLink'
 import {ampli} from '../services/Amplitude'
 import {user} from '../services/User'
 import {writeLog} from '../api/LogApi'
+import MainSearch from './search/MainSearch'
 
 
 const LoginButton = (props: {location: string}) => {
@@ -116,7 +117,7 @@ const Header = () => {
 
         <NavigationList $align={ALIGN.left}>
           <NavigationItem $style={{paddingLeft: 0}}>
-            Main search todo
+            <MainSearch/>
           </NavigationItem>
         </NavigationList>
 

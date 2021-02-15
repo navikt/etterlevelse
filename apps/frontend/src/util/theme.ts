@@ -20,11 +20,8 @@ export const primitives: ThemePrimitives & {primary150: string, primary350: stri
 };
 
 export const searchResultColor = {
-  teamBackground: '#FFE9CC',
-  productAreaBackground: '#F5DBEB',
-  clusterBackground: '#D1E9EB',
-  resourceBackground: '#E5E5E5',
-  tagBackground: '#ECEFCC',
+  kravBackground: '#FFE9CC',
+  behandlingBackground: '#F5DBEB',
 }
 
 // Official type is wrong
