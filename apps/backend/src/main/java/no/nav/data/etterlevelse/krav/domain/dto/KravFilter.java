@@ -24,17 +24,19 @@ public class KravFilter {
     private String behandlingId;
     private String underavdeling;
     private String lov;
+    private boolean gjeldendeKrav;
 
     public List<String> getRelevans() {
         return formatList(relevans);
     }
 
     public boolean isEmpty() {
-        return getRelevans().isEmpty() &&
-                nummer == null &&
-                behandlingId == null &&
-                underavdeling == null &&
-                lov == null
+        return getRelevans().isEmpty()
+                && nummer == null
+                && behandlingId == null
+                && underavdeling == null
+                && lov == null
+                && !gjeldendeKrav
                 ;
     }
 

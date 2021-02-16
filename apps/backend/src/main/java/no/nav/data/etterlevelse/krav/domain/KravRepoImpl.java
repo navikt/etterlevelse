@@ -80,6 +80,10 @@ public class KravRepoImpl implements KravRepoCustom {
             query += " and data #> '{regelverk}' @> :lov::jsonb ";
             par.addValue("lov", String.format("[{\"lov\": \"%s\"}]", filter.getLov()));
         }
+        if (filter.isGjeldendeKrav()) {
+            query += " and data ->> 'status' in :gjeldendeStatuser ";
+            par.addValue("gjeldendeStatuser", KravStatus.gjeldende());
+        }
 
         List<GenericStorage> kravList = fetch(jdbcTemplate.queryForList(query, par));
         return StreamUtils.filter(kravList, krav -> filterStateAndStatus(kravList, krav, filter, kravIdSafeList));
@@ -110,6 +114,10 @@ public class KravRepoImpl implements KravRepoCustom {
             return !succeeded
                     && krav.getStatus() != KravStatus.UTKAST
                     && krav.getStatus() != KravStatus.UTGAATT;
+        }
+
+        if (filter.isGjeldendeKrav()) {
+            return exists(all, k2 -> k2.toKrav().supersedes(krav));
         }
 
         return true;

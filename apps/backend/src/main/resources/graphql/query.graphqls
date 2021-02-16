@@ -19,6 +19,7 @@ input KravFilter {
     behandlingId: String
     underavdeling: String
     lov: String
+    gjeldendeKrav: Boolean = false
 }
 
 input BehandlingFilter {

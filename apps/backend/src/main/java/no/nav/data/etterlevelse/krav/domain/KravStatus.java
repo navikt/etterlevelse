@@ -1,5 +1,7 @@
 package no.nav.data.etterlevelse.krav.domain;
 
+import java.util.List;
+
 public enum KravStatus {
     AKTIV,
     UNDER_ARBEID,
@@ -11,10 +13,14 @@ public enum KravStatus {
     }
 
     public boolean kanEtterleves() {
-        return this == AKTIV || this == UNDER_ARBEID;
+        return gjeldende().contains(this);
     }
 
     public boolean erUtkast() {
         return this == UTKAST;
+    }
+
+    public static List<KravStatus> gjeldende() {
+        return List.of(AKTIV, UNDER_ARBEID);
     }
 }
