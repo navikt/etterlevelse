@@ -109,11 +109,8 @@ public class KravRepoImpl implements KravRepoCustom {
 
         // Filtrering for krav relevant for behandling
         if (filter.getBehandlingId() != null) {
-            // TODO are we comparing to krav that are removed in output?
             var succeeded = exists(all, k2 -> k2.toKrav().supersedes(krav));
-            return !succeeded
-                    && krav.getStatus() != KravStatus.UTKAST
-                    && krav.getStatus() != KravStatus.UTGAATT;
+            return !succeeded && krav.getStatus().kanEtterleves();
         }
 
         if (filter.isGjeldendeKrav()) {
