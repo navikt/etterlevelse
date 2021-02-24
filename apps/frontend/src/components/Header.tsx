@@ -108,14 +108,14 @@ const Header = () => {
   useEffect(() => setUrl(window.location.href), [location.pathname])
 
   return (
-    <Block>
+    <Block width='100%'>
       <HeaderNavigation overrides={{Root: {style: {paddingBottom: 0, borderBottomStyle: 'none'}}}}>
         <Block display={["block", "block", "none", "none"]}>
           <BurgerMenu/>
         </Block>
 
 
-        <NavigationList $align={ALIGN.left}>
+        <NavigationList $align={ALIGN.left} $style={{paddingLeft: 0}}>
           <NavigationItem $style={{paddingLeft: 0}}>
             <MainSearch/>
           </NavigationItem>

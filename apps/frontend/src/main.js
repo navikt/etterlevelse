@@ -30,15 +30,9 @@ const containerProps = {
 const headerProps = {
   marginLeft,
   width,
-  marginBottom: '70px',
-}
-
-const mainContentProps = {
-  marginLeft,
-  width,
-  height: '100%',
   display: 'flex',
-  justifyContent: 'center',
+  flexDirection: 'column',
+  alignItems: 'center',
 }
 
 ampli.logEvent('visit_count_etterlevelse')
@@ -59,13 +53,12 @@ const Main = (props) => {
                   <SideBar/>
                 </Block>
 
-                <Block width="100%">
-                  <Block {...headerProps}>
+                <Block {...headerProps}>
+                  <Block>
                     <Header/>
                   </Block>
-                  <Block {...mainContentProps}>
-                    <Routes/>
-                  </Block>
+                  <Block marginBottom='50px'/>
+                  <Routes/>
                 </Block>
               </Block>
             </Router>
