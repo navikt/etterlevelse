@@ -17,14 +17,13 @@ import archiveImage from '../resources/img/archive.png'
 import archive2Image from '../resources/img/archive2.png'
 import hammerImage from '../resources/img/hammer.png'
 import keyboardImage from '../resources/img/keyboard.png'
-import lampImage from '../resources/img/lamp.png'
 import peopleImage from '../resources/img/people.png'
 import scalesImage from '../resources/img/scales.png'
 import cameraImage from '../resources/img/camera.png'
 import guardianImage from '../resources/img/guardian.png'
 import navImage from '../resources/img/nav-logo-red.svg'
 import moneyImage from '../resources/img/money.png'
-import defaultImage from '../resources/img/book.png'
+import bookImage from '../resources/img/book.png'
 
 const sectionProps: BlockProps = {
   display: 'flex',
@@ -67,7 +66,7 @@ const bilder: {[id: string]: string} = {
   ARKIV: archiveImage,
   FORSKRIFT_EFORVALTNING: keyboardImage,
   FOLKETRYGDLOVEN: peopleImage,
-  FORSKRIFT_UU: lampImage,
+  FORSKRIFT_UU: bookImage,
   FORVALTNINGSLOVEN: scalesImage,
   PERSONOPPLYSNINGSLOVEN: hammerImage,
 
@@ -83,7 +82,7 @@ const LawCard = (props: {lov: Code}) => {
     <FrontCard url={urlForObject(ListName.LOV, props.lov.code)}>
       <Block display='flex' width='100%'>
         <Block height='126px'>
-          <img src={bilder[props.lov.code] || defaultImage} width='160px' height='126px' style={{objectFit: 'cover'}} alt='Lov illustrasjon'/>
+          <img src={bilder[props.lov.code] || bookImage} width='160px' height='126px' style={{objectFit: 'cover'}} alt='Lov illustrasjon'/>
         </Block>
         <Block marginLeft={theme.sizing.scale600}>
           <LabelMedium marginBottom={0} $style={{
