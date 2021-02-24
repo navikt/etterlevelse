@@ -26,7 +26,7 @@ export const MainPage = () => {
           text={'Fyll ut hvordan du etterlever lover og regler i behandlinger du har ansvar for'}/>
       </Block>
 
-      <Block width={'100%'}>
+      <Block width={'100%'} marginTop={theme.sizing.scale400}>
         <Block height='345px' overflow={'hidden'}
                marginLeft={theme.sizing.scale200}
                marginRight={theme.sizing.scale200}>
