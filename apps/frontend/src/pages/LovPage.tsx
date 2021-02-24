@@ -9,6 +9,7 @@ import {KravFilterTable} from '../components/common/KravFilterTable'
 import {lovdataBase} from '../components/Lov'
 import {faExternalLinkAlt} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {LovBilde} from '../components/Images'
 
 export const LovPage = () => {
   const {lov} = useParams<{lov: string}>()
@@ -29,11 +30,17 @@ export const LovPage = () => {
   const code = codelist.getCode(ListName.LOV, lov)
   return (
     <Block>
-      <HeadingMedium>Lov: {code?.shortName}</HeadingMedium>
-      <ParagraphMedium>
-        {code && <ExternalLink href={lovdataBase(code.code)}>{code.shortName} på lovdata <FontAwesomeIcon icon={faExternalLinkAlt}/></ExternalLink>}
-      </ParagraphMedium>
-
+      <Block display='flex' justifyContent='space-between'>
+        <Block>
+          <HeadingMedium>Lov: {code?.shortName}</HeadingMedium>
+          <ParagraphMedium>
+            {code && <ExternalLink href={lovdataBase(code.code)}>{code.shortName} på lovdata <FontAwesomeIcon icon={faExternalLinkAlt}/></ExternalLink>}
+          </ParagraphMedium>
+        </Block>
+        <Block>
+          {code && <LovBilde code={code} ellipse height={'200px'}/>}
+        </Block>
+      </Block>
       <Block marginTop={theme.sizing.scale1200}>
         <Block>
           <HeadingSmall marginBottom={theme.sizing.scale200}>Krav</HeadingSmall>
