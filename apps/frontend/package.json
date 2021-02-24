@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@apollo/client": "^3.3.9",
+    "@fontsource/source-sans-pro": "^4.2.1",
     "@fortawesome/fontawesome-svg-core": "^1.2.34",
     "@fortawesome/free-brands-svg-icons": "^5.15.2",
     "@fortawesome/free-regular-svg-icons": "^5.15.2",
@@ -14,6 +15,7 @@
     "baseui": "^9.110.0",
     "core-js": "^3.8.3",
     "formik": "^2.2.6",
+    "graphql": "^15.5.0",
     "lodash": "^4.17.20",
     "moment": "^2.29.1",
     "randomcolor": "^0.6.2",

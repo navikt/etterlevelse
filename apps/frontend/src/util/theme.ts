@@ -2,6 +2,10 @@ import {createTheme, lightThemePrimitives} from "baseui";
 import {colors} from "baseui/tokens";
 import {Theme, ThemePrimitives} from "baseui/theme";
 import {RecursivePartial} from "../constants";
+import "@fontsource/source-sans-pro/400.css"
+import "@fontsource/source-sans-pro/600.css"
+import "@fontsource/source-sans-pro/700.css"
+import "@fontsource/source-sans-pro/900.css"
 
 export const primitives: ThemePrimitives & {primary150: string, primary350: string} = {
   ...lightThemePrimitives,
@@ -17,6 +21,7 @@ export const primitives: ThemePrimitives & {primary150: string, primary350: stri
   primary500: colors.blue500,
   primary600: colors.blue600,
   primary700: colors.blue700,
+  primaryFontFamily: 'Source Sans Pro',
 };
 
 export const searchResultColor = {
@@ -24,22 +29,7 @@ export const searchResultColor = {
   behandlingBackground: '#F5DBEB',
 }
 
-// Official type is wrong
-interface Borders {
-  radius400: string;
-  buttonBorderRadius: string;
-  inputBorderRadius: string;
-  popoverBorderRadius: string;
-  surfaceBorderRadius: string;
-}
-
-interface Colors {
-  inputEnhancerFill?: string;
-}
-
-type ThemeOverride = RecursivePartial<Theme> & {borders: Partial<Borders>; colors: Colors};
-
-const overrides: ThemeOverride = {
+const overrides: RecursivePartial<Theme> = {
   colors: {
     linkVisited: primitives.primary400,
     inputFill: primitives.primary50,
