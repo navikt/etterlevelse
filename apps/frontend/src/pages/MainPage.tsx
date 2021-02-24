@@ -77,7 +77,9 @@ const LawCard = (props: {lov: Code}) => {
   return (
     <FrontCard url={urlForObject(ListName.LOV, props.lov.code)}>
       <Block display='flex' width='100%'>
-        <img src={bilder[props.lov.code] || defaultImage} width='160px' height='126px' style={{objectFit: 'cover'}}/>
+        <Block height='126px'>
+          <img src={bilder[props.lov.code] || defaultImage} width='160px' height='126px' style={{objectFit: 'cover'}}/>
+        </Block>
         <Block marginLeft={theme.sizing.scale600}>
           <LabelMedium marginBottom={0} $style={{
             wordWrap: 'break-word',
