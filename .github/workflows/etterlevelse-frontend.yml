@@ -25,8 +25,8 @@ jobs:
               with:
                   node-version: "15.x"
             
-            - name: npm install
-              run: npm i
+            - name: install
+              run: yarn install
             - name: use prod config
               if: github.ref == 'refs/heads/prod'
               run: cp .env.prod .env
@@ -36,7 +36,7 @@ jobs:
               run: echo "REACT_APP_GIT_VERSION=${GITHUB_SHA}" >> .env
             
             - name: Build
-              run: CI=false npm run build
+              run: CI=false yarn run build
             - name: Docker
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
