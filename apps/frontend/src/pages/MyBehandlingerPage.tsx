@@ -37,6 +37,26 @@ export const MyBehandlingerPage = () => {
 
       <Block display='flex' flexWrap flexDirection='row' justifyContent='space-between'>
 
+        {user.isLoggedIn() && <Block marginLeft={theme.sizing.scale800} maxWidth='600px'>
+          <HeadingMedium>Mine behandlinger</HeadingMedium>
+          <HeadingSmall>Team</HeadingSmall>
+          <ul>
+            {teams.map(t =>
+              <Block key={t.id} marginBottom={theme.sizing.scale800}>
+                <ListItem key={t.id} artwork={() => <FontAwesomeIcon icon={faUsers} color={theme.colors.positive300}/>}
+                          overrides={{Root: {style: {backgroundColor: 'inherit'}}}}>
+                  <ListItemLabel><TeamName id={t.id} link/></ListItemLabel>
+                </ListItem>
+                <Block paddingLeft={theme.sizing.scale700}>
+                  {myBehandlinger.filter(b => b.teams.indexOf(t.id) >= 0).map(b =>
+                    <BehandlingListItem key={b.id} behandling={b}/>
+                  )}
+                </Block>
+              </Block>
+            )}
+          </ul>
+        </Block>}
+
         <Block maxWidth='600px'>
           <HeadingMedium>Alle behandlinger</HeadingMedium>
 
@@ -65,25 +85,6 @@ export const MyBehandlingerPage = () => {
           </Block>
           }
         </Block>
-
-        <Block marginLeft={theme.sizing.scale800} maxWidth='600px'>
-          <HeadingMedium>Mine behandlinger</HeadingMedium>
-          <HeadingSmall>Team</HeadingSmall>
-          <ul>
-            {teams.map(t =>
-              <Block key={t.id} marginBottom={theme.sizing.scale800}>
-                <ListItem key={t.id} artwork={() => <FontAwesomeIcon icon={faUsers} color={theme.colors.positive300}/>}>
-                  <ListItemLabel><TeamName id={t.id} link/></ListItemLabel>
-                </ListItem>
-                <Block paddingLeft={theme.sizing.scale700}>
-                  {myBehandlinger.filter(b => b.teams.indexOf(t.id) >= 0).map(b =>
-                    <BehandlingListItem key={b.id} behandling={b}/>
-                  )}
-                </Block>
-              </Block>
-            )}
-          </ul>
-        </Block>
       </Block>
 
     </>
@@ -91,7 +92,7 @@ export const MyBehandlingerPage = () => {
 }
 
 const BehandlingListItem = (props: {behandling: Behandling}) =>
-  <ListItem sublist>
+  <ListItem sublist overrides={{Root: {style: {backgroundColor: 'inherit'}}}}>
     <ListItemLabel sublist>
       <RouteLink href={`/behandling/${props.behandling.id}`}>
         {props.behandling.nummer}: {props.behandling.overordnetFormaal.shortName} - {props.behandling.navn}

@@ -22,8 +22,12 @@ const sidebarMargin = ['5px', '5px', `${180 + 40}px`, `${210 + 60}px`] //Width o
 
 const containerProps = {
   height: '100%',
+  minHeight: '100vh',
   display: 'flex',
+  backgroundColor: 'rgb(241,241,241)',
+  paddingBottom: '150px',
 }
+
 const headerProps = {
   marginLeft: sidebarMargin,
   width: ['100%', '95%', '75%', '75%'],
