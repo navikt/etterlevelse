@@ -33,8 +33,8 @@ export const MainPage = () => {
       </Block>
 
       <Block {...sectionProps}>
-        <Block height='345px' overflow={'hidden'} marginBottom={theme.sizing.scale800}>
-          <img style={{marginTop: '-235px', width: '100%'}} src={illustration} alt='illustrasjon'/>
+        <Block height='320px' overflow={'hidden'} marginBottom={theme.sizing.scale800}>
+          <img style={{marginTop: '-215px', width: '100%'}} src={illustration} alt='illustrasjon'/>
         </Block>
       </Block>
 
