@@ -18,7 +18,8 @@ import {customTheme} from './util/theme'
 
 const engine = new Styletron()
 
-const sidebarMargin = ['5px', '5px', `${180 + 20}px`, `${180 + 20}px`] //Width of sidebar + margin
+const marginLeft = ['5px', '5px', `180px`, `210px`] //Width of sidebar + margin
+const width = ['100%', '95%', '90%', '80%']
 
 const containerProps = {
   height: '100%',
@@ -27,15 +28,17 @@ const containerProps = {
 }
 
 const headerProps = {
-  marginLeft: sidebarMargin,
-  width: ['100%', '95%', '75%', '75%'],
+  marginLeft,
+  width,
   marginBottom: '70px',
 }
 
 const mainContentProps = {
-  marginLeft: sidebarMargin,
-  width: ['100%', '95%', '75%', '75%'],
+  marginLeft,
+  width,
   height: '100%',
+  display: 'flex',
+  justifyContent: 'center',
 }
 
 ampli.logEvent('visit_count_etterlevelse')
