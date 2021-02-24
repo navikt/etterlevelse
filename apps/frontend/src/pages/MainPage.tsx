@@ -26,32 +26,37 @@ import navImage from '../resources/img/nav-logo-red.svg'
 import moneyImage from '../resources/img/money.png'
 import defaultImage from '../resources/img/book.png'
 
+const sectionProps: BlockProps = {
+  display: 'flex',
+  width: '100%',
+  justifyContent: 'space-between',
+  flexWrap: true
+}
+
 export const MainPage = () => {
   return (
     <Block display='flex' flexDirection='column' width={'1100px'}>
-      <Block display='flex' width='100%' justifyContent={'space-between'}>
+      <Block {...sectionProps}>
         <ContentCard
           icon={pencilFill} url={'/behandling'} title={'Dokumenter etterlevelse'}
           text={'Fyll ut hvordan du etterlever lover og regler i behandlinger du har ansvar for'}/>
         <ContentCard
           icon={lawBook} url={'/krav'} title={'Opprett og vedlikehold krav'}
-          text={'Fyll ut hvordan du etterlever lover og regler i behandlinger du har ansvar for'}/>
+          text={'Kraveier kan jobbe med nye krav eller forbedre eksisterende krav'}/>
         <ContentCard
           icon={barChart} url={'/behandling'} title={'Se status på etterlevelse i staten'}
-          text={'Fyll ut hvordan du etterlever lover og regler i behandlinger du har ansvar for'}/>
+          text={'Se dashboard over status på etterlevelse i NAV, i våre produktområder og avdelinger'}/>
       </Block>
 
-      <Block width={'100%'} marginTop={theme.sizing.scale600} marginBottom={theme.sizing.scale600}>
-        <Block height='345px' overflow={'hidden'}>
+      <Block {...sectionProps}>
+        <Block height='345px' overflow={'hidden'} marginBottom={theme.sizing.scale800}>
           <img style={{marginTop: '-235px', width: '100%'}} src={illustration} alt='illustrasjon'/>
         </Block>
       </Block>
 
-      <Block display='flex' justifyContent='space-between' flexWrap width='100%'>
+      <Block {...sectionProps}>
         {codelist.getCodes(ListName.LOV).map(lov =>
-          <Block key={lov.code} width='350px' marginBottom={theme.sizing.scale400}>
-            <LawCard lov={lov}/>
-          </Block>
+          <LawCard key={lov.code} lov={lov}/>
         )}
       </Block>
     </Block>
@@ -78,7 +83,7 @@ const LawCard = (props: {lov: Code}) => {
     <FrontCard url={urlForObject(ListName.LOV, props.lov.code)}>
       <Block display='flex' width='100%'>
         <Block height='126px'>
-          <img src={bilder[props.lov.code] || defaultImage} width='160px' height='126px' style={{objectFit: 'cover'}}/>
+          <img src={bilder[props.lov.code] || defaultImage} width='160px' height='126px' style={{objectFit: 'cover'}} alt='Lov illustrasjon'/>
         </Block>
         <Block marginLeft={theme.sizing.scale600}>
           <LabelMedium marginBottom={0} $style={{
@@ -100,6 +105,7 @@ const cardOverrides = (hover: boolean): CardOverrides => {
         const base = {
           backgroundColor: 'white',
           width: '352px',
+          marginBottom: theme.sizing.scale800
         }
         return hover ? {
           ...base,
