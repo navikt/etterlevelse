@@ -1,5 +1,6 @@
 import * as React from "react";
 import {Helmet} from "react-helmet";
+import {Block} from 'baseui/block'
 
 interface RootProps {
   children: JSX.Element | Array<JSX.Element>;
@@ -8,13 +9,13 @@ interface RootProps {
 const Root = ({children}: RootProps): JSX.Element => {
 
   return (
-    <div>
+    <Block width='100%'>
       <Helmet>
         <meta charSet="utf-8"/>
         <title>Etterlevelse</title>
       </Helmet>
       {children}
-    </div>
+    </Block>
   );
 }
 
