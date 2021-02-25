@@ -15,31 +15,18 @@ import pencilFill from '../resources/icons/pencil-fill.svg'
 import lawBook from '../resources/icons/law-book-shield.svg'
 import barChart from '../resources/icons/bar-chart.svg'
 import illustration from '../resources/giammarco-boscaro-zeH-ljawHtg-unsplash.jpg'
-import {Code} from '../services/Codelist'
+import {Code, LovCodeData} from '../services/Codelist'
 import React from 'react'
 import {theme} from '../util'
 
 export {
-  archiveImage,
-  archive2Image,
-  hammerImage,
-  keyboardImage,
-  peopleImage,
-  scalesImage,
-  cameraImage,
-  guardianImage,
-  navImage,
-  moneyImage,
-  bookImage,
-
   pencilFill,
   lawBook,
   barChart,
-  illustration,
+  illustration
 }
 
-// TODO create configurable codelist
-const lovBilder: {[id: string]: string} = {
+export const lovBilder: {[id: string]: string} = {
   ARKIV: archiveImage,
   FORSKRIFT_EFORVALTNING: keyboardImage,
   FOLKETRYGDLOVEN: peopleImage,
@@ -54,7 +41,10 @@ const lovBilder: {[id: string]: string} = {
   VERGEMAALSLOVEN: guardianImage,
 }
 
-const bildeForLov = (code: Code) => lovBilder[code.code] || bookImage
+const bildeForLov = (code: Code) => {
+  const imageCode = ((code.data) as LovCodeData)?.image || code.code
+  return lovBilder[imageCode] || bookImage
+}
 
 export const LovBilde = (props: {code: Code, width?: string, height?: string, ellipse?: boolean}) => (
   <img src={bildeForLov(props.code)}

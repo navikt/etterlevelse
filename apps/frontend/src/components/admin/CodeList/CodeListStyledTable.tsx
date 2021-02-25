@@ -12,6 +12,7 @@ import {Code, CodeListFormValues, CodeUsage} from '../../../services/Codelist'
 import {deleteCodelist, getCodelistUsage, updateCodelist} from '../../../api/CodelistApi'
 import {Cell, Row, Table} from '../../common/Table'
 import Button from '../../common/Button'
+import {theme} from '../../../util'
 
 type TableCodelistProps = {
   tableData: Code[],
@@ -79,7 +80,12 @@ const CodeListTable = ({tableData, refresh}: TableCodelistProps) => {
                <Row key={index}>
                  <Cell small $style={{wordBreak: "break-word"}}>{row.code}</Cell>
                  <Cell small>{row.shortName}</Cell>
-                 <Cell $style={{width: '55%'}}>{row.description}</Cell>
+                 <Cell $style={{width: '55%'}}>
+                   <Block display='flex' flexDirection='column' width='100%'>
+                     <Block>{row.description}</Block>
+                     <Block $style={{wordBreak: 'break-word'}} color={theme.colors.negative300}>{row.data && JSON.stringify(row.data, null, 1)}</Block>
+                   </Block>
+                 </Cell>
                  <Cell small>
                    <Block display="flex" justifyContent="flex-end" width="100%">
                      <Button
@@ -125,7 +131,8 @@ const CodeListTable = ({tableData, refresh}: TableCodelistProps) => {
             list: selectedCode.list ?? '',
             code: selectedCode.code ?? '',
             shortName: selectedCode.shortName ?? '',
-            description: selectedCode.description ?? ''
+            description: selectedCode.description ?? '',
+            data: selectedCode.data || {}
           }}
           isOpen={showEditModal}
           onClose={() => {

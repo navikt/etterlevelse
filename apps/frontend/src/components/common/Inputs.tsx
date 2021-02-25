@@ -145,26 +145,32 @@ export const MultiInputField = (props: {label: string, name: string}) => {
 }
 
 export const OptionField = (props: {label: string, name: string, clearable?: boolean} & Or<{options: Value}, {listName: ListName}>) => {
-  const options: Value = props.options || codelist.getParsedOptions(props.listName)
   return (
     <FieldWrapper>
       <Field name={props.name}>
         {(p: FieldProps<string | Code>) =>
           <FormControl label={props.label} error={p.meta.touched && p.meta.error}>
-            <Select options={options} clearable={props.clearable}
-                    value={options.filter(o => o.id === (props.listName ? (p.field.value as Code | undefined)?.code : p.field.value))}
-                    onChange={s => {
-                      const val = s.option?.id
-                      const toSet = props.listName && val ? codelist.getCode(props.listName, val as string) : val
-                      return p.form.setFieldValue(props.name, toSet)
-                    }}
-            />
+            <OptionList {...props} onChange={(val => p.form.setFieldValue(props.name, val))} value={p.field.value}/>
           </FormControl>
         }
       </Field>
     </FieldWrapper>
   )
 }
+
+export const OptionList = (props: {clearable?: boolean, value?: Code | string, onChange: (val?: any) => void} & Or<{options: Value}, {listName: ListName}>) => {
+  const options: Value = props.options || codelist.getParsedOptions(props.listName)
+  return (
+    <Select options={options} clearable={props.clearable}
+            value={options.filter(o => o.id === (props.listName ? (props.value as Code | undefined)?.code : props.value))}
+            onChange={s => {
+              const val = s.option?.id
+              const toSet = props.listName && val ? codelist.getCode(props.listName, val as string) : val
+              return props.onChange(toSet)
+            }}
+    />)
+}
+
 export const MultiOptionField = (props: {label: string, name: string} & Or<{options: Value}, {listName: ListName}>) => {
   const options: Value = props.options || codelist.getParsedOptions(props.listName)
   return (

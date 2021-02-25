@@ -6,8 +6,9 @@ import {Field, FieldProps, Form, Formik} from "formik";
 import {Input, SIZE as InputSIZE} from "baseui/input";
 import {Textarea} from "baseui/textarea";
 import {Button, KIND} from "baseui/button";
-import {CodeListFormValues, codeListSchema} from '../../../services/Codelist'
+import {CodeListFormValues, codeListSchema, ListName} from '../../../services/Codelist'
 import {Error} from '../../common/ModalSchema'
+import {LovCodeDataForm} from './LovCode'
 
 const modalBlockProps: BlockProps = {
   width: '700px',
@@ -40,7 +41,7 @@ const CreateCodeListModal = ({isOpen, title, list, errorOnCreate, onClose, submi
       size={SIZE.auto}
       role={ROLE.dialog}
       isOpen={isOpen}
-      unstable_ModalBackdropScroll={true}
+      unstable_ModalBackdropScroll
       onClose={() => onClose()}
     >
       <Block {...modalBlockProps}>
@@ -55,10 +56,11 @@ const CreateCodeListModal = ({isOpen, title, list, errorOnCreate, onClose, submi
               code: "",
               shortName: "",
               description: "",
-            }
+              data: {}
+            } as CodeListFormValues
           }
           validationSchema={codeListSchema()}
-          render={(formik) => (
+          render={() => (
             <Form>
               <ModalHeader>{title}</ModalHeader>
               <ModalBody>
@@ -111,6 +113,8 @@ const CreateCodeListModal = ({isOpen, title, list, errorOnCreate, onClose, submi
                   />
                 </Block>
                 <Error fieldName="description"/>
+
+                {list === ListName.LOV && <LovCodeDataForm/>}
 
               </ModalBody>
               <ModalFooter>

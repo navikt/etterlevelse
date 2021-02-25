@@ -1,15 +1,16 @@
 import * as React from "react";
 import {Modal, ModalBody, ModalButton, ModalFooter, ModalHeader, ROLE, SIZE} from "baseui/modal";
 
-import {Field, FieldProps, Form, Formik,} from "formik";
+import {Field, FieldProps, Form, Formik, FormikProps,} from "formik";
 
 import {Button, KIND} from "baseui/button";
 import {Block, BlockProps} from "baseui/block";
 import {Label2} from "baseui/typography";
 import {Textarea} from "baseui/textarea";
 import {Input, SIZE as InputSIZE} from "baseui/input";
-import {CodeListFormValues, codeListSchema} from '../../../services/Codelist'
+import {CodeListFormValues, codeListSchema, ListName} from '../../../services/Codelist'
 import {Error} from '../../common/ModalSchema'
+import {LovCodeDataForm} from './LovCode'
 
 const modalBlockProps: BlockProps = {
   width: '700px',
@@ -41,7 +42,7 @@ const UpdateCodeListModal = ({title, initialValues, errorOnUpdate, isOpen, onClo
       isOpen={isOpen}
       animate
       autoFocus
-      unstable_ModalBackdropScroll={true}
+      unstable_ModalBackdropScroll
       size={SIZE.auto}
       role={ROLE.dialog}
     >
@@ -53,64 +54,69 @@ const UpdateCodeListModal = ({title, initialValues, errorOnUpdate, isOpen, onClo
           }}
           initialValues={{...initialValues}}
           validationSchema={codeListSchema()}
-          render={(formik) => (
-            <Form>
-              <ModalHeader>{title}</ModalHeader>
-              <ModalBody>
-                <Block {...rowBlockProps}>
-                  <Label2 marginRight={"1rem"} width="25%">
-                    Short name:
-                  </Label2>
-                  <Field
-                    name="shortName"
-                    render={({field}: FieldProps<CodeListFormValues>) => (
-                      <Input
-                        name="shortName"
-                        value={formik.values.shortName}
-                        onChange={formik.handleChange}
-                        type="input"
-                        size={InputSIZE.default}
-                      />
-                    )}
-                  />
-                </Block>
-                <Error fieldName="shortName"/>
-                <Block {...rowBlockProps}>
-                  <Label2 marginRight={"1rem"} width="25%">
-                    Description:
-                  </Label2>
-                  <Field
-                    name="description"
-                    render={({field}: FieldProps<CodeListFormValues>) => (
-                      <Textarea
-                        name="description"
-                        value={formik.values.description}
-                        onChange={formik.handleChange}
-                        type="input"
-                      />
-                    )}
-                  />
-                </Block>
-                <Error fieldName="description"/>
-              </ModalBody>
-              <ModalFooter>
-                <Block display="flex" justifyContent="flex-end">
-                  <Block marginRight="auto">{errorOnUpdate && <p>{errorOnUpdate}</p>}</Block>
-                  <Button
-                    type="button"
-                    kind={KIND.secondary}
-                    onClick={() => onClose()}
-                  >
-                    Avbryt
-                  </Button>
-                  <ModalButton type="submit">
-                    Lagre
-                  </ModalButton>
-                </Block>
-              </ModalFooter>
-            </Form>
-          )}
-        />
+        >{(formik: FormikProps<CodeListFormValues>) => (
+          <Form>
+            <ModalHeader>{title}</ModalHeader>
+            <ModalBody>
+
+              <Block {...rowBlockProps}>
+                <Label2 marginRight={"1rem"} width="25%">
+                  Short name:
+                </Label2>
+                <Field
+                  name="shortName"
+                  >{({field}: FieldProps<CodeListFormValues>) => (
+                    <Input
+                      name="shortName"
+                      value={formik.values.shortName}
+                      onChange={formik.handleChange}
+                      type="input"
+                      size={InputSIZE.default}
+                    />
+                  )}
+                </Field>
+              </Block>
+              <Error fieldName="shortName"/>
+
+              <Block {...rowBlockProps}>
+                <Label2 marginRight={"1rem"} width="25%">
+                  Description:
+                </Label2>
+                <Field
+                  name="description"
+                  >{({field}: FieldProps<CodeListFormValues>) => (
+                    <Textarea
+                      name="description"
+                      value={formik.values.description}
+                      onChange={formik.handleChange}
+                      type="input"
+                    />
+                  )}
+                </Field>
+              </Block>
+              <Error fieldName="description"/>
+
+              {initialValues.list === ListName.LOV && <LovCodeDataForm/>}
+
+            </ModalBody>
+            <ModalFooter>
+              <Block display="flex" justifyContent="flex-end">
+                <Block marginRight="auto">{errorOnUpdate && <p>{errorOnUpdate}</p>}</Block>
+                <Button
+                  type="button"
+                  kind={KIND.secondary}
+                  onClick={() => onClose()}
+                >
+                  Avbryt
+                </Button>
+                <ModalButton type="submit">
+                  Lagre
+                </ModalButton>
+              </Block>
+            </ModalFooter>
+          </Form>
+        )}
+        </Formik>
       </Block>
     </Modal>
   );

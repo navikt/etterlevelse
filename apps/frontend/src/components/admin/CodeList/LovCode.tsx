@@ -1,0 +1,114 @@
+import {Block, BlockProps} from 'baseui/block'
+import {Label2} from 'baseui/typography'
+import {Field, FieldProps} from 'formik'
+import {codelist, CodeListFormValues, ListName, LovCodeData} from '../../../services/Codelist'
+import * as React from 'react'
+import {Input, SIZE as InputSIZE} from 'baseui/input'
+import {OptionList} from '../../common/Inputs'
+import {Select} from 'baseui/select'
+import {lovBilder} from '../../Images'
+import {StatefulTooltip} from 'baseui/tooltip'
+import {faQuestionCircle} from '@fortawesome/free-solid-svg-icons'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {theme} from '../../../util'
+import Button from '../../common/Button'
+
+const rowBlockProps: BlockProps = {
+  display: 'flex',
+  width: '100%',
+  marginTop: '1rem',
+  alignItems: 'center',
+};
+
+export const LovCodeDataForm = () => {
+
+  const lovBildeOptions = Object.keys(lovBilder).map(id => ({
+    id,
+    label: id,
+    bilde: lovBilder[id]
+  }))
+
+  return (
+    <Block {...rowBlockProps} flexDirection='column'>
+      <Block {...rowBlockProps}>
+        <Label2 marginRight={"1rem"} width="25%">
+          Lovkode data
+        </Label2>
+      </Block>
+      <Field
+        name="data"
+      >{({field, form}: FieldProps<any, CodeListFormValues>) => {
+        const data = field.value as LovCodeData
+
+        const set = (val: Partial<LovCodeData>) => {
+          form.setFieldValue('data', {...data, ...val})
+        }
+
+        // Migrate old
+        if (!data.lovId && form.values.description) {
+          set({lovId: form.values.description})
+        }
+
+        return (
+          <>
+            <Block {...rowBlockProps}>
+              <Label2 marginRight={"1rem"} width="25%">
+                Lov ID:
+              </Label2>
+              <Input
+                type="input"
+                size={InputSIZE.default}
+                value={data.lovId}
+                onChange={str => set({lovId: (str.target as HTMLInputElement).value})}
+              />
+            </Block>
+
+            <Block {...rowBlockProps}>
+              <Label2 marginRight={"1rem"} width="25%">
+                Underavdeling:
+              </Label2>
+              <OptionList listName={ListName.UNDERAVDELING} value={codelist.getCode(ListName.UNDERAVDELING, data.underavdeling)}
+                          onChange={val => set({underavdeling: val.code})}/>
+            </Block>
+
+            <Block {...rowBlockProps}>
+              <Label2 marginRight={"1rem"} width="25%">
+                Bilde:
+                <StatefulTooltip content={<PreviewImages set={image => set({image})}/>}>
+                  <Block display='inline' marginLeft={theme.sizing.scale600}><FontAwesomeIcon color={theme.colors.primary400} icon={faQuestionCircle}/></Block>
+                </StatefulTooltip>
+              </Label2>
+              <Select options={lovBildeOptions} clearable={false}
+                      value={lovBildeOptions.filter(o => o.id === data.image)}
+                      onChange={s => {
+                        const image = s.option?.id as string
+                        return set({image})
+                      }}
+              />
+            </Block>
+          </>
+        )
+      }}
+      </Field>
+    </Block>
+  )
+}
+
+const PreviewImages = (props: {set: (key: string) => void}) => {
+  return (
+    <Block display='flex' flexDirection='column' height='80vh' overflow={'scrollY'}>
+      {Object.keys(lovBilder).map(key => (
+        <Button type='button' kind='tertiary' onClick={() => props.set(key)}>
+          <Block key={key} marginBottom={theme.sizing.scale600}>
+            <Block>
+              {key}
+            </Block>
+            <Block>
+              <img src={lovBilder[key]} alt={'preview' + key} width={'400px'}/>
+            </Block>
+          </Block>
+        </Button>
+      ))}
+    </Block>
+  )
+}

@@ -52,7 +52,7 @@ class CodelistService {
     return this.lists && this.lists.codelist[list] ? this.lists.codelist[list].sort((c1, c2) => c1.shortName.localeCompare(c2.shortName)) : []
   }
 
-  getCode(list: ListName, codeName: string): Code | undefined {
+  getCode(list: ListName, codeName?: string): Code | undefined {
     return this.getCodes(list).find(c => c.code === codeName)
   }
 
@@ -133,6 +133,7 @@ export interface CodeListFormValues {
   code: string;
   shortName?: string;
   description?: string;
+  data?: any;
 }
 
 export interface CodeUsage {
@@ -152,6 +153,12 @@ export interface CategoryUsage {
   codesInUse: CodeUsage[];
 }
 
+export interface LovCodeData {
+  lovId?: string,
+  underavdeling?: string,
+  image?: string,
+}
+
 const required = 'Påkrevd'
 export const codeListSchema: () => yup.SchemaOf<CodeListFormValues> = () =>
   yup.object({
@@ -159,6 +166,7 @@ export const codeListSchema: () => yup.SchemaOf<CodeListFormValues> = () =>
     code: yup.string().required(required),
     shortName: yup.string().required(required),
     description: yup.string().required(required),
+    data: yup.mixed(),
   });
 
 export const codelistCompareField = (field: string) => {

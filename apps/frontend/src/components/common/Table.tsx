@@ -107,7 +107,7 @@ export const Table = <T, K extends keyof T>(props: TableProps<T, K>) => {
           {props.render && props.render(table)}
           {props.renderRow && table.data.map((row, i) => (
             <Row key={i}>
-              {props.renderRow!(row).filter(colFilter)}
+              {props.renderRow!(row).filter(colFilter).map((cell, j) => <React.Fragment key={j}>{cell}</React.Fragment>)}
             </Row>
           ))}
           {!props.data.length && <Label2 margin="1rem">{intl.emptyTable} {props.emptyText}</Label2>}
