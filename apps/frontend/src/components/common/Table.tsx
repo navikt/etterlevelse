@@ -95,18 +95,19 @@ export const Table = <T, K extends keyof T>(props: TableProps<T, K>) => {
 
   const show = (col?: K) => !!col && !((props.config?.exclude || [])?.indexOf(col) >= 0)
   const columnState = props.headers.map(h => show(h.column))
+  const colFilter = (o: any, i: number) => columnState[i]
 
   return (
     <TableContext.Provider value={{...props, tableState: table}}>
       <StyleTable>
         <StyledHeader>
-          {props.headers.filter((h, i) => columnState[i]).map((h: any, i) => <HeadCell key={i} {...h} />)}
+          {props.headers.filter(colFilter).map((h: any, i) => <HeadCell key={i} {...h} />)}
         </StyledHeader>
         <StyledBody>
           {props.render && props.render(table)}
           {props.renderRow && table.data.map((row, i) => (
             <Row key={i}>
-              {props.renderRow!(row).filter((r, i) => columnState[i])}
+              {props.renderRow!(row).filter(colFilter)}
             </Row>
           ))}
           {!props.data.length && <Label2 margin="1rem">{intl.emptyTable} {props.emptyText}</Label2>}
