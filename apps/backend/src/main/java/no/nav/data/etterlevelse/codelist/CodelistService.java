@@ -106,6 +106,7 @@ public class CodelistService {
         Codelist codelist = byListAndCode.get(); // All request are validated at this point
         codelist.setShortName(request.getShortName());
         codelist.setDescription(request.getDescription());
+        codelist.setData(request.getData());
         return codelist;
     }
 
