@@ -37,8 +37,8 @@ export const LovCodeDataForm = () => {
       </Block>
       <Field
         name="data"
-      >{({field, form}: FieldProps<any, CodeListFormValues>) => {
-        const data = field.value as LovCodeData
+      >{({field, form}: FieldProps<LovCodeData, CodeListFormValues>) => {
+        const data = field.value
 
         const set = (val: Partial<LovCodeData>) => {
           form.setFieldValue('data', {...data, ...val})

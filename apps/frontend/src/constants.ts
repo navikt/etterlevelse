@@ -1,4 +1,4 @@
-import {Code} from './services/Codelist'
+import {Code, LovCode} from './services/Codelist'
 
 export type RecursivePartial<T> = {
   [P in keyof T]?: T[P] extends (infer U)[] ? RecursivePartial<U>[] : T[P] extends object ? RecursivePartial<T[P]> : T[P];
@@ -68,7 +68,7 @@ export interface Krav extends DomainObject {
 }
 
 export interface Regelverk {
-  lov: Code
+  lov: LovCode
   spesifisering?: string
 }
 
@@ -204,10 +204,11 @@ export interface ExternalCode {
   description: string;
 }
 
-export type KravQL = Omit<Krav, 'varslingsadresser'> & {
+// export type KravQL = Omit<Krav, 'varslingsadresser'> & {
+export type KravQL = Replace<Krav, {
   etterlevelser: EtterlevelseQL[]
   varslingsadresser: VarslingsadresseQL[]
-}
+}>
 
 export type EtterlevelseQL = Etterlevelse & {
   behandling: Behandling
@@ -217,3 +218,5 @@ export type VarslingsadresseQL = Varslingsadresse & {
   slackChannel?: SlackChannel
   slackUser?: SlackUser
 }
+
+export type Replace<T, K> = Omit<T, keyof K> & K

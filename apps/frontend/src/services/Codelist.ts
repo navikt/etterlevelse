@@ -1,6 +1,7 @@
 import {AxiosResponse} from 'axios'
 import {getAllCodelists} from '../api/CodelistApi'
 import * as yup from 'yup';
+import {Replace} from '../constants'
 
 export enum ListName {
   AVDELING = 'AVDELING',
@@ -51,6 +52,10 @@ class CodelistService {
   getCodes(list: ListName): Code[] {
     return this.lists && this.lists.codelist[list] ? this.lists.codelist[list].sort((c1, c2) => c1.shortName.localeCompare(c2.shortName)) : []
   }
+
+  // overloads
+  getCode(list: ListName.LOV, codeName?: string): LovCode | undefined
+  getCode(list: ListName, codeName?: string): Code | undefined
 
   getCode(list: ListName, codeName?: string): Code | undefined {
     return this.getCodes(list).find(c => c.code === codeName)
@@ -118,6 +123,8 @@ export interface AllCodelists {
 export interface List {
   [name: string]: Code[];
 }
+
+export type LovCode = Replace<Code, {data?: LovCodeData}>
 
 export interface Code {
   list: ListName;

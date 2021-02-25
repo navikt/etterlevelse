@@ -2,7 +2,7 @@ import {KravFilters, useKravFilter} from '../../api/KravGraphQLApi'
 import {Spinner} from './Spinner'
 import {theme} from '../../util'
 import {Cell, Table} from './Table'
-import {codelistCompareField, codelistsCompareField} from '../../services/Codelist'
+import {Code, codelistCompareField, codelistsCompareField} from '../../services/Codelist'
 import RouteLink from './RouteLink'
 import {kravNumView, kravStatus} from '../../pages/KravPage'
 import React from 'react'
@@ -33,7 +33,7 @@ export const KravFilterTable = (props: {filter: KravFilters, emptyText?: string,
             kravNummer: (a, b) => a.kravNummer === b.kravNummer ? a.kravVersjon - b.kravVersjon : a.kravNummer - b.kravNummer,
             avdeling: codelistCompareField('avdeling'),
             underavdeling: codelistCompareField('underavdeling'),
-            regelverk: codelistsCompareField<KravQL>(k => k.regelverk.map(r => r.lov), props.filter.lov)
+            regelverk: codelistsCompareField<KravQL>(k => k.regelverk.map(r => r.lov as Code), props.filter.lov)
           },
           exclude: props.exclude
         }}

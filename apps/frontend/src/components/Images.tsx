@@ -15,7 +15,7 @@ import pencilFill from '../resources/icons/pencil-fill.svg'
 import lawBook from '../resources/icons/law-book-shield.svg'
 import barChart from '../resources/icons/bar-chart.svg'
 import illustration from '../resources/giammarco-boscaro-zeH-ljawHtg-unsplash.jpg'
-import {Code, LovCodeData} from '../services/Codelist'
+import {LovCode} from '../services/Codelist'
 import React from 'react'
 import {theme} from '../util'
 
@@ -41,12 +41,12 @@ export const lovBilder: {[id: string]: string} = {
   VERGEMAALSLOVEN: guardianImage,
 }
 
-const bildeForLov = (code: Code) => {
-  const imageCode = ((code.data) as LovCodeData)?.image || code.code
+const bildeForLov = (code: LovCode) => {
+  const imageCode = code.data?.image || code.code
   return lovBilder[imageCode] || bookImage
 }
 
-export const LovBilde = (props: {code: Code, width?: string, height?: string, ellipse?: boolean}) => (
+export const LovBilde = (props: {code: LovCode, width?: string, height?: string, ellipse?: boolean}) => (
   <img src={bildeForLov(props.code)}
        width={props.width} height={props.height}
        style={{

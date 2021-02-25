@@ -1,6 +1,6 @@
 import React from 'react'
 import {StyledLink} from 'baseui/link'
-import {codelist, ListName, LovCodeData} from '../services/Codelist'
+import {codelist, ListName} from '../services/Codelist'
 import {env} from '../util/env'
 import {Regelverk} from '../constants'
 import {Block} from 'baseui/block'
@@ -35,8 +35,7 @@ export const LovView = (props: {regelverk?: Regelverk}) => {
 
 export const lovdataBase = (nationalLaw: string) => {
   const lov = codelist.getCode(ListName.LOV, nationalLaw)
-  const data = lov?.data as (LovCodeData | undefined)
-  const lovId = data?.lovId || lov?.description || ''
+  const lovId = lov?.data?.lovId || lov?.description || ''
   if (codelist.isForskrift(nationalLaw)) {
     return env.lovdataForskriftBaseUrl + lovId
   } else {
