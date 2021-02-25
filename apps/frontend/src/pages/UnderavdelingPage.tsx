@@ -32,7 +32,7 @@ export const UnderavdelingPage = () => {
       <Block marginTop={theme.sizing.scale1200}>
         <Block>
           <HeadingSmall marginBottom={theme.sizing.scale200}>Krav</HeadingSmall>
-          <KravFilterTable filter={{underavdeling}}/>
+          <KravFilterTable filter={{underavdeling}} exclude={['underavdeling']}/>
         </Block>
       </Block>
     </Block>

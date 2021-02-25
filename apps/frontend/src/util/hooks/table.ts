@@ -1,6 +1,6 @@
-import { SORT_DIRECTION } from "baseui/table"
-import { useEffect, useState } from "react"
-import { Option, Value } from 'baseui/select'
+import {SORT_DIRECTION} from "baseui/table"
+import {useEffect, useState} from "react"
+import {Option, Value} from 'baseui/select'
 
 export type TableConfig<T, K extends keyof T> = {
   sorting?: ColumnCompares<T>,
@@ -9,7 +9,8 @@ export type TableConfig<T, K extends keyof T> = {
   showLast?: (p: T) => boolean
   filter?: Filters<T>,
   pageSizes?: number[],
-  defaultPageSize?: number
+  defaultPageSize?: number,
+  exclude?: (keyof T)[]
 }
 export type Filters<T> = {
   [P in keyof T]?:

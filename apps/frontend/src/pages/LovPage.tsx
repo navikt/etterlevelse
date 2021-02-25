@@ -44,7 +44,7 @@ export const LovPage = () => {
       <Block marginTop={theme.sizing.scale1200}>
         <Block>
           <HeadingSmall marginBottom={theme.sizing.scale200}>Krav</HeadingSmall>
-          <KravFilterTable filter={{lov}}/>
+          <KravFilterTable filter={{lov}} exclude={['avdeling', 'underavdeling', 'regelverk']}/>
         </Block>
       </Block>
     </Block>

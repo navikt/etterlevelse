@@ -31,7 +31,8 @@ type TableProps<T, K extends keyof T> = {
   hoverColor?: string,
   emptyText: string,
   headers: HeadProps<T, K>[],
-  render: (state: TableState<T, K>) => ReactNode
+  render?: (state: TableState<T, K>) => ReactNode
+  renderRow?: (row: T) => ReactNode[]
   tableState?: TableState<T, K>
 }
 
@@ -82,7 +83,7 @@ const tableStyle = {
   ...paddingAll(theme.sizing.scale600)
 }
 
-type TableContextType<T, K extends keyof T> = TableProps<T, K> & { tableState: TableState<T, K> }
+type TableContextType<T, K extends keyof T> = TableProps<T, K> & {tableState: TableState<T, K>}
 const createTableContext = _.once(<T, K extends keyof T>() => React.createContext<TableContextType<T, K>>({} as TableContextType<T, K>))
 const useTableContext = <T, K extends keyof T>() => useContext(createTableContext<T, K>())
 
@@ -91,14 +92,23 @@ export const Table = <T, K extends keyof T>(props: TableProps<T, K>) => {
   const TableContext = createTableContext<T, K>()
 
   const StyleTable = withStyle(StyledTable, {...tableStyle, backgroundColor: props.backgroundColor, width: props.width || tableStyle.width})
+
+  const show = (col?: K) => !!col && !((props.config?.exclude || [])?.indexOf(col) >= 0)
+  const columnState = props.headers.map(h => show(h.column))
+
   return (
     <TableContext.Provider value={{...props, tableState: table}}>
       <StyleTable>
         <StyledHeader>
-          {props.headers.map((h: any, i) => <HeadCell key={i} {...h} />)}
+          {props.headers.filter((h, i) => columnState[i]).map((h: any, i) => <HeadCell key={i} {...h} />)}
         </StyledHeader>
         <StyledBody>
-          {props.render(table)}
+          {props.render && props.render(table)}
+          {props.renderRow && table.data.map((row, i) => (
+            <Row key={i}>
+              {props.renderRow!(row).filter((r, i) => columnState[i])}
+            </Row>
+          ))}
           {!props.data.length && <Label2 margin="1rem">{intl.emptyTable} {props.emptyText}</Label2>}
         </StyledBody>
       </StyleTable>
@@ -159,7 +169,7 @@ export const Row = (props: RowProps) => {
   return <StyleRow>{props.children}</StyleRow>
 }
 
-const SortDirectionIcon = (props: { direction: SORT_DIRECTION | null }) => {
+const SortDirectionIcon = (props: {direction: SORT_DIRECTION | null}) => {
   switch (props?.direction) {
     case SORT_DIRECTION.ASC:
       return <FontAwesomeIcon icon={faSortDown}/>

@@ -1,14 +1,14 @@
 import {KravFilters, useKravFilter} from '../../api/KravGraphQLApi'
 import {Spinner} from './Spinner'
 import {theme} from '../../util'
-import {Cell, Row, Table} from './Table'
+import {Cell, Table} from './Table'
 import {codelistCompareField, codelistsCompareField} from '../../services/Codelist'
 import RouteLink from './RouteLink'
 import {kravNumView, kravStatus} from '../../pages/KravPage'
 import React from 'react'
 import {KravQL} from '../../constants'
 
-export const KravFilterTable = (props: {filter: KravFilters, emptyText?: string}) => {
+export const KravFilterTable = (props: {filter: KravFilters, emptyText?: string, exclude?: (keyof KravQL)[]}) => {
   const {data, loading} = useKravFilter(props.filter)
 
   return (
@@ -34,25 +34,21 @@ export const KravFilterTable = (props: {filter: KravFilters, emptyText?: string}
             avdeling: codelistCompareField('avdeling'),
             underavdeling: codelistCompareField('underavdeling'),
             regelverk: codelistsCompareField<KravQL>(k => k.regelverk.map(r => r.lov), props.filter.lov)
-          }
+          },
+          exclude: props.exclude
         }}
-        render={state => {
-          return state.data.map((krav, i) => {
-            return (
-              <Row key={i}>
-                <Cell small>{kravNumView(krav)}</Cell>
-                <Cell>
-                  <RouteLink href={`/krav/${krav.kravNummer}/${krav.kravVersjon}`}>{krav.navn}</RouteLink>
-                </Cell>
-                <Cell>{krav.etterlevelser.length}</Cell>
-                <Cell>{krav.avdeling?.shortName}</Cell>
-                <Cell>{krav.underavdeling?.shortName}</Cell>
-                <Cell>{krav.regelverk.map(r => r.lov?.shortName).join(", ")}</Cell>
-                <Cell>{kravStatus(krav.status)}</Cell>
-              </Row>
-            )
-          })
-        }}
+        renderRow={krav => ([
+          <Cell small>{kravNumView(krav)}</Cell>,
+          <Cell>
+            <RouteLink href={`/krav/${krav.kravNummer}/${krav.kravVersjon}`}>{krav.navn}</RouteLink>
+          </Cell>,
+          <Cell>{krav.etterlevelser.length}</Cell>,
+          <Cell>{krav.avdeling?.shortName}</Cell>,
+          <Cell>{krav.underavdeling?.shortName}</Cell>,
+          <Cell>{krav.regelverk.map(r => r.lov?.shortName).join(", ")}</Cell>,
+          <Cell>{kravStatus(krav.status)}</Cell>,
+        ])
+        }
       />
   )
 }
