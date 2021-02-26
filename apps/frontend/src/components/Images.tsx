@@ -27,18 +27,17 @@ export {
 }
 
 export const lovBilder: {[id: string]: string} = {
-  ARKIV: archiveImage,
-  FORSKRIFT_EFORVALTNING: keyboardImage,
-  FOLKETRYGDLOVEN: peopleImage,
-  FORSKRIFT_UU: bookImage,
-  FORVALTNINGSLOVEN: scalesImage,
-  PERSONOPPLYSNINGSLOVEN: hammerImage,
-
-  FORSKRIFT_OFFENTLEG_ARKIV: archive2Image,
-  FORSKRIFT_OKONOMIREGLEMENTET: moneyImage,
-  NAV_LOVEN: navImage,
-  SIKKERHETSLOVEN: cameraImage,
-  VERGEMAALSLOVEN: guardianImage,
+  ARCHIVE: archiveImage,
+  ARCHIVE2: archive2Image,
+  KEYBOARD: keyboardImage,
+  PEOPLE: peopleImage,
+  BOOK: bookImage,
+  SCALES: scalesImage,
+  HAMMER: hammerImage,
+  MONEY: moneyImage,
+  NAV: navImage,
+  CAMERA: cameraImage,
+  GUARDIAN: guardianImage,
 }
 
 const bildeForLov = (code: LovCode) => {
