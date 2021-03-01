@@ -21,13 +21,14 @@ public class RoleSupport {
     private final SecurityProperties securityProperties;
 
     public Set<GrantedAuthority> lookupGrantedAuthorities(List<String> groupIds) {
+        log.debug("groupIds {}", groupIds);
         Set<GrantedAuthority> roles = groupIds.stream()
                 .map(this::roleFor)
                 .filter(Objects::nonNull)
                 .map(AppRole::toAuthority)
                 .collect(Collectors.toSet());
         roles.add(AppRole.READ.toAuthority());
-        log.trace("roles {}", convert(roles, GrantedAuthority::getAuthority));
+        log.debug("roles {}", convert(roles, GrantedAuthority::getAuthority));
         return roles;
     }
 
