@@ -48,9 +48,7 @@ spec:
     enabled: true
     path: /internal/metrics
   envFrom:
-    - secret: etterlevelse-enckey
-    - secret: etterlevelse-slack-token
-    - secret: etterlevelse-mail-pwd
+    - secret: etterlevelse-secrets
   env:
   {{#each env}}
     - name: {{this.name}}
