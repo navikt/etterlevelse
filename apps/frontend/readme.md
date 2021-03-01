@@ -1,8 +1,11 @@
 # Frontend for Etterlevelse
 
-todo soon (tm)
+### Requires node 15
 
+### Install deps
+`yarn install`
 
-React app
+### Run local, with port forward to dev
+`kubectl port-forward deployment/team-catalog-backend`
 
-you need node
+`yarn run start`
