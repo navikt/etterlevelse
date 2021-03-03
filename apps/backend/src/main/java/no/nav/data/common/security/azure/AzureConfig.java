@@ -9,6 +9,7 @@ import com.nimbusds.jose.util.ResourceRetriever;
 import com.nimbusds.oauth2.sdk.id.Issuer;
 import com.nimbusds.openid.connect.sdk.op.OIDCProviderConfigurationRequest;
 import com.nimbusds.openid.connect.sdk.op.OIDCProviderMetadata;
+import lombok.SneakyThrows;
 import no.nav.data.common.exceptions.TechnicalException;
 import no.nav.data.common.security.AppIdMapping;
 import no.nav.data.common.security.RoleSupport;
@@ -17,7 +18,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.net.MalformedURLException;
 import java.util.concurrent.ThreadPoolExecutor;
 
 @Configuration
@@ -46,7 +46,8 @@ public class AzureConfig {
     }
 
     @Bean
-    public ConfidentialClientApplication msalClient(AADAuthenticationProperties aadAuthProps, OIDCProviderMetadata oidcProviderMetadata) throws MalformedURLException {
+    @SneakyThrows
+    public ConfidentialClientApplication msalClient(AADAuthenticationProperties aadAuthProps, OIDCProviderMetadata oidcProviderMetadata) {
         return ConfidentialClientApplication
                 .builder(aadAuthProps.getClientId(), ClientCredentialFactory.createFromSecret(aadAuthProps.getClientSecret()))
                 .authority(oidcProviderMetadata.getAuthorizationEndpointURI().toString())
@@ -55,7 +56,8 @@ public class AzureConfig {
     }
 
     @Bean
-    public PublicClientApplication msalPublicClient(AADAuthenticationProperties aadAuthProps, OIDCProviderMetadata oidcProviderMetadata) throws MalformedURLException {
+    @SneakyThrows
+    public PublicClientApplication msalPublicClient(AADAuthenticationProperties aadAuthProps, OIDCProviderMetadata oidcProviderMetadata) {
         return PublicClientApplication
                 .builder(aadAuthProps.getClientId())
                 .authority(oidcProviderMetadata.getAuthorizationEndpointURI().toString())
