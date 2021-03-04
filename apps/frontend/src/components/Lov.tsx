@@ -33,9 +33,13 @@ export const LovView = (props: {regelverk?: Regelverk}) => {
   )
 }
 
-export const lovdataBase = (nationalLaw: string) => {
+const findLovId = (nationalLaw: string) => {
   const lov = codelist.getCode(ListName.LOV, nationalLaw)
-  const lovId = lov?.data?.lovId || lov?.description || ''
+  return lov?.data?.lovId || lov?.description || ''
+}
+
+export const lovdataBase = (nationalLaw: string) => {
+  const lovId = findLovId(nationalLaw)
   if (codelist.isForskrift(nationalLaw)) {
     return env.lovdataForskriftBaseUrl + lovId
   } else {
@@ -44,8 +48,7 @@ export const lovdataBase = (nationalLaw: string) => {
 }
 
 const legalBasisLinkProcessor = (law: string, text?: string) => {
-  const lawCode = codelist.getDescription(ListName.LOV, law)
-  if (!lawCode.match(/^\d+.*/)) {
+  if (!findLovId(law).match(/^\d+.*/)) {
     return text
   }
 
