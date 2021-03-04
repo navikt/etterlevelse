@@ -109,7 +109,7 @@ const UpdateCodeListModal = ({title, initialValues, errorOnUpdate, isOpen, onClo
                 >
                   Avbryt
                 </Button>
-                <ModalButton type="submit">
+                <ModalButton type="button" onClick={formik.submitForm}>
                   Lagre
                 </ModalButton>
               </Block>

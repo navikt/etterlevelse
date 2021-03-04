@@ -60,7 +60,7 @@ const CreateCodeListModal = ({isOpen, title, list, errorOnCreate, onClose, submi
             } as CodeListFormValues
           }
           validationSchema={codeListSchema()}
-          render={() => (
+          render={({submitForm}) => (
             <Form>
               <ModalHeader>{title}</ModalHeader>
               <ModalBody>
@@ -127,7 +127,7 @@ const CreateCodeListModal = ({isOpen, title, list, errorOnCreate, onClose, submi
                   >
                     Avbryt
                   </Button>
-                  <ModalButton type="submit">
+                  <ModalButton type="button" onClick={submitForm}>
                     Lagre
                   </ModalButton>
                 </Block>
