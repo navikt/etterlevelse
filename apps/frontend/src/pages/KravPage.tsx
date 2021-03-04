@@ -47,7 +47,7 @@ export const KravPage = () => {
   const [krav, setKrav] = useState<KravQL | undefined>()
   const {loading: kravLoading, data: kravQuery, refetch: reloadKrav} = useQuery<{kravById: KravQL}, KravIdParams>(query, {
     variables: params,
-    skip: !params?.id && params.id !== 'ny' && !params.kravNummer
+    skip: (!params.id || params.id === 'ny') && !params.kravNummer
   })
   useEffect(() => {
     if (kravQuery?.kravById) setKrav(kravQuery.kravById)
