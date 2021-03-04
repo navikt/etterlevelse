@@ -8,7 +8,7 @@ import Button from '../common/Button'
 import {faChevronDown, faChevronRight, faEnvelope, faPlus, faPlusCircle, faSync, faUser} from '@fortawesome/free-solid-svg-icons'
 import {borderRadius, hideBorder, marginAll} from '../common/Style'
 import {Spinner} from '../common/Spinner'
-import {Cell, disableEnter, Row, Table} from '../common/Table'
+import {Cell, Row, Table} from '../common/Table'
 import {PersonName} from '../common/PersonName'
 import moment from 'moment'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
@@ -127,13 +127,13 @@ const AddTilbakemeldingModal = ({open, close, krav}: {open?: boolean, close: (ad
         onSubmit={submit}
         initialValues={newTilbakemelding(krav) as CreateTilbakemeldingRequest}
         validationSchema={createTilbakemeldingSchema}
-      >{({isSubmitting, setFieldValue, values}) => {
+      >{({isSubmitting, setFieldValue, values, submitForm}) => {
         const setVarslingsadresse = (v?: Varslingsadresse) => {
           setFieldValue('varslingsadresse', v)
           setAdresseType(undefined)
         }
         return (
-          <Form onKeyDown={disableEnter}>
+          <Form>
             <ModalHeader>
               Ny tilbakemelding
             </ModalHeader>
@@ -178,7 +178,7 @@ const AddTilbakemeldingModal = ({open, close, krav}: {open?: boolean, close: (ad
                   {error && <Notification kind='negative' overrides={{Body: {style: {marginBottom: '-25px'}}}}>{error}</Notification>}
                 </Block>
                 <Button kind='secondary' size='compact' type='button' onClick={close}> Avbryt </Button>
-                <Button type='submit' marginLeft disabled={isSubmitting}>Lagre</Button>
+                <Button type='button' marginLeft disabled={isSubmitting} onClick={submitForm}>Lagre</Button>
               </Block>
             </ModalFooter>
           </Form>

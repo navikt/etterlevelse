@@ -1,7 +1,6 @@
 import {AdresseType, Krav, KravStatus, Regelverk, SlackChannel, SlackUser, Varslingsadresse, VarslingsadresseQL} from '../../constants'
 import {FieldArray, FieldArrayRenderProps, Form, Formik} from 'formik'
 import {createKrav, mapToFormVal, updateKrav} from '../../api/KravApi'
-import {disableEnter} from '../common/Table'
 import {Block} from 'baseui/block'
 import Button from '../common/Button'
 import React, {ReactNode, useEffect, useState} from 'react'
@@ -46,8 +45,8 @@ export const EditKrav = ({krav, close, formRef}: EditKravProps) => {
       initialValues={mapToFormVal(krav)}
       validationSchema={kravSchema()}
       innerRef={formRef}
-    >{({isSubmitting}) => (
-      <Form onKeyDown={disableEnter}>
+    >{({isSubmitting, submitForm}) => (
+      <Form>
         <Block>
           <InputField label='Navn' name='navn'/>
           <TextAreaField label='Hensikt' name='hensikt' markdown shortenLinks onImageUpload={onImageUpload(krav.id)}/>
@@ -76,7 +75,7 @@ export const EditKrav = ({krav, close, formRef}: EditKravProps) => {
 
         <Block display='flex' justifyContent='flex-end'>
           <Button type='button' kind='secondary' marginRight onClick={close}>Avbryt</Button>
-          <Button type='submit' disabled={isSubmitting}>Lagre</Button>
+          <Button type='button' disabled={isSubmitting} onClick={submitForm}>Lagre</Button>
         </Block>
       </Form>
     )}

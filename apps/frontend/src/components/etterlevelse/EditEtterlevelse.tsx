@@ -1,7 +1,6 @@
 import {Behandling, Etterlevelse, EtterlevelseStatus} from '../../constants'
 import {Field, FieldProps, Form, Formik, FormikProps} from 'formik'
 import {createEtterlevelse, mapToFormVal, updateEtterlevelse} from '../../api/EtterlevelseApi'
-import {disableEnter} from '../common/Table'
 import {Block} from 'baseui/block'
 import Button from '../common/Button'
 import React from 'react'
@@ -38,8 +37,8 @@ export const EditEtterlevelse = ({etterlevelse, close, formRef, lockBehandlingAn
       initialValues={mapToFormVal(etterlevelse)}
       validationSchema={etterlevelseSchema()}
       innerRef={formRef}
-    >{({values, isSubmitting}: FormikProps<Etterlevelse>) => (
-      <Form onKeyDown={disableEnter}>
+    >{({values, isSubmitting, submitForm}: FormikProps<Etterlevelse>) => (
+      <Form>
         <Block>
 
           {!lockBehandlingAndKrav && <>
@@ -65,7 +64,7 @@ export const EditEtterlevelse = ({etterlevelse, close, formRef, lockBehandlingAn
 
         <Block display='flex' justifyContent='flex-end'>
           <Button type='button' kind='secondary' marginRight onClick={close}>Avbryt</Button>
-          <Button type='submit' disabled={isSubmitting}>Lagre</Button>
+          <Button type='button' disabled={isSubmitting} onClick={submitForm}>Lagre</Button>
         </Block>
       </Form>
     )}

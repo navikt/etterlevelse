@@ -6,7 +6,6 @@ import {Label} from '../common/PropertyLabel'
 import {MultiOptionField} from '../common/Inputs'
 import {ListName} from '../../services/Codelist'
 import {Form, Formik} from 'formik'
-import {disableEnter} from '../common/Table'
 import * as yup from 'yup'
 import Button from '../common/Button'
 
@@ -24,8 +23,8 @@ export const EditBehandling = ({behandling, close, formRef}: EditBehProps) => {
       initialValues={mapToFormVal(behandling)}
       validationSchema={behandlingSchema()}
       innerRef={formRef}
-    >{({isSubmitting, isValid, errors}) => (
-      <Form onKeyDown={disableEnter}>
+    >{({isSubmitting, isValid, errors, submitForm}) => (
+      <Form>
         <Block>
           <Label title='Endrer egenskaper for'>behandling {behandling.nummer}</Label>
 
@@ -36,7 +35,7 @@ export const EditBehandling = ({behandling, close, formRef}: EditBehProps) => {
         <Block display='flex' justifyContent='flex-end'>
           <Block>{!isValid && JSON.stringify(errors)}</Block>
           <Button type='button' kind='secondary' marginRight onClick={close}>Avbryt</Button>
-          <Button type='submit' disabled={isSubmitting}>Lagre</Button>
+          <Button type='button' disabled={isSubmitting} onClick={submitForm}>Lagre</Button>
         </Block>
       </Form>
     )}
