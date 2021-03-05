@@ -18,6 +18,7 @@ type Krav {
     regelverk: [Regelverk!]!
     varslingsadresser: [Varslingsadresse!]!
     periode: Periode
+    suksesskriterier: [Suksesskriterie!]!
 
     avdeling: Code
     underavdeling: Code
@@ -25,6 +26,11 @@ type Krav {
     status: KravStatus!
 
     etterlevelser(onlyForBehandling: Boolean): [Etterlevelse!]!
+}
+
+type Suksesskriterie {
+    id: NonNegativeInt!
+    navn: String
 }
 
 type Regelverk {

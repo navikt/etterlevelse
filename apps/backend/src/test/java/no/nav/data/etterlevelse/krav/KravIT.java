@@ -15,6 +15,8 @@ import no.nav.data.etterlevelse.krav.dto.KravRequest;
 import no.nav.data.etterlevelse.krav.dto.KravResponse;
 import no.nav.data.etterlevelse.krav.dto.RegelverkRequest;
 import no.nav.data.etterlevelse.krav.dto.RegelverkResponse;
+import no.nav.data.etterlevelse.krav.dto.SuksesskriterieRequest;
+import no.nav.data.etterlevelse.krav.dto.SuksesskriterieResponse;
 import no.nav.data.etterlevelse.varsel.domain.AdresseType;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 import org.junit.jupiter.api.BeforeEach;
@@ -129,6 +131,7 @@ public class KravIT extends IntegrationTestBase {
                 .regelverk(List.of(RegelverkRequest.builder().lov("ARKIV").spesifisering("§1").build()))
                 .status(KravStatus.UTKAST)
                 .periode(new Periode(LocalDate.now().minusDays(1), LocalDate.now().plusDays(1)))
+                .suksesskriterier(List.of(SuksesskriterieRequest.builder().id(1).navn("suksess").build()))
                 .build();
     }
 
@@ -154,6 +157,7 @@ public class KravIT extends IntegrationTestBase {
         assertThat(krav.getRegelverk()).containsOnly(RegelverkResponse.builder().lov(CodelistService.getCodelistResponse(ListName.LOV, "ARKIV")).spesifisering("§1").build());
         assertThat(krav.getStatus()).isEqualTo(KravStatus.UTKAST);
         assertThat(krav.getPeriode()).isEqualTo(new Periode(LocalDate.now().minusDays(1), LocalDate.now().plusDays(1)));
+        assertThat(krav.getSuksesskriterier()).containsOnly(SuksesskriterieResponse.builder().id(1).navn("suksess").build());
     }
 
     @Test

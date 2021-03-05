@@ -16,6 +16,7 @@ import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 import java.util.List;
 
 import static no.nav.data.common.utils.StreamUtils.copyOf;
+import static no.nav.data.common.utils.StreamUtils.duplicates;
 import static no.nav.data.common.utils.StringUtils.formatList;
 import static no.nav.data.common.utils.StringUtils.formatListToUppercase;
 import static no.nav.data.common.utils.StringUtils.toUpperCaseAndTrim;
@@ -44,6 +45,8 @@ public class KravRequest implements RequestElement {
     private List<String> tagger;
     private List<RegelverkRequest> regelverk;
     private Periode periode;
+
+    private List<SuksesskriterieRequest> suksesskriterier;
 
     @Schema(description = "Codelist AVDELING")
     private String avdeling;
@@ -75,6 +78,7 @@ public class KravRequest implements RequestElement {
         setVarslingsadresser(copyOf(varslingsadresser));
         setRettskilder(formatList(rettskilder));
         setTagger(formatList(tagger));
+        setSuksesskriterier(copyOf(suksesskriterier));
 
         if (status == null) {
             status = KravStatus.UTKAST;
@@ -94,5 +98,11 @@ public class KravRequest implements RequestElement {
         validator.checkCodelists(Fields.relevansFor, relevansFor, ListName.RELEVANS);
         validator.validateType(Fields.varslingsadresser, varslingsadresser);
         validator.validateType(Fields.regelverk, regelverk);
+        validator.validateType(Fields.suksesskriterier, suksesskriterier);
+
+        if (duplicates(suksesskriterier, SuksesskriterieRequest::getId)) {
+            validator.addError(Fields.suksesskriterier, "DUPLICATE_SUKSESSKRITERIE", "Dukplikat på suksesskriterie id");
+        }
     }
+
 }

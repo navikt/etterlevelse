@@ -41,6 +41,7 @@ public class Krav implements DomainObject, KravIdStatus {
     private String hensikt;
     private String utdypendeBeskrivelse;
     private String versjonEndringer;
+
     private List<String> dokumentasjon;
     private List<String> implementasjoner;
     private List<String> begreper;
@@ -50,13 +51,15 @@ public class Krav implements DomainObject, KravIdStatus {
     private List<Regelverk> regelverk;
     private Periode periode;
 
+    private List<Suksesskriterie> suksesskriterier;
+
     // Codelist AVDELING
     private String avdeling;
     // Codelist UNDERAVDELING
     private String underavdeling;
-
     // Codelist RELEVANS
     private List<String> relevansFor;
+
     @Default
     private KravStatus status = KravStatus.UNDER_ARBEID;
 
@@ -81,6 +84,8 @@ public class Krav implements DomainObject, KravIdStatus {
         status = request.getStatus();
         periode = request.getPeriode();
 
+        suksesskriterier = StreamUtils.convert(request.getSuksesskriterier(), Suksesskriterie::convert);
+
         return this;
     }
 
@@ -103,6 +108,7 @@ public class Krav implements DomainObject, KravIdStatus {
                 .rettskilder(copyOf(rettskilder))
                 .tagger(copyOf(tagger))
                 .regelverk(StreamUtils.convert(regelverk, Regelverk::toResponse))
+                .suksesskriterier(StreamUtils.convert(suksesskriterier, Suksesskriterie::toResponse))
                 .periode(periode)
                 .avdeling(CodelistService.getCodelistResponse(ListName.AVDELING, avdeling))
                 .underavdeling(CodelistService.getCodelistResponse(ListName.UNDERAVDELING, underavdeling))

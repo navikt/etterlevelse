@@ -133,4 +133,9 @@ public final class StreamUtils {
     public static <T> boolean exists(Iterable<T> objects, Predicate<T> filter) {
         return tryFind(objects, filter).isPresent();
     }
+
+    public static <T> boolean duplicates(Collection<T> items, Function<? super T, ?> keyExctactor) {
+        var distinct = distinctByKey(items, keyExctactor);
+        return distinct.size() != items.size();
+    }
 }

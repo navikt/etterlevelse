@@ -44,6 +44,8 @@ public class KravResponse implements KravId {
     private List<RegelverkResponse> regelverk;
     private Periode periode;
 
+    private List<SuksesskriterieResponse> suksesskriterier;
+
     private CodelistResponse avdeling;
     private CodelistResponse underavdeling;
 
