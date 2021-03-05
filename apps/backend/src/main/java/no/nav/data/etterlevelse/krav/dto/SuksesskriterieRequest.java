@@ -29,5 +29,8 @@ public class SuksesskriterieRequest implements Validated {
     @Override
     public void validateFieldValues(Validator<?> validator) {
         validator.checkBlank(Fields.navn, navn);
+        if (id < 0) {
+            validator.addError(Fields.id, "NEGATIVE_ID", "Id cannot be negative");
+        }
     }
 }
