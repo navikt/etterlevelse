@@ -2,7 +2,6 @@ import {useHistory} from "react-router-dom";
 import {StyledLink} from "baseui/link"
 import React from "react"
 import {AuditItem, NavigableItem, ObjectType} from '../admin/audit/AuditTypes'
-import {useStyletron} from 'baseui'
 import {Block} from 'baseui/block'
 import {AuditButton} from '../admin/audit/AuditButton'
 import {KIND} from 'baseui/button'
@@ -17,11 +16,6 @@ type RouteLinkProps = {
 const RouteLink = (props: RouteLinkProps) => {
   const {hideUnderline, plain, ...restprops} = props
   const history = useHistory()
-  const [useCss] = useStyletron()
-  const css = useCss({
-    textDecoration: hideUnderline ? 'none' : undefined,
-    color: plain ? 'inherit !important' : undefined
-  })
 
   const onClick = (e: Event) => {
     e.preventDefault()
@@ -29,7 +23,10 @@ const RouteLink = (props: RouteLinkProps) => {
   }
 
   return (
-    <StyledLink className={css} {...restprops} onClick={onClick}/>
+    <StyledLink style={{
+      textDecoration: hideUnderline ? 'none' : undefined,
+      color: plain ? 'inherit !important' : undefined
+    }} {...restprops} onClick={onClick}/>
   )
 }
 
@@ -83,9 +80,12 @@ export const ObjectLink = (props: ObjectLinkProps) => {
     link
 }
 
-export const ExternalLink = ({href, children}: {href: string, children: React.ReactNode}) => {
+export const ExternalLink = ({href, children, hideUnderline}: {
+  href: string, hideUnderline?: boolean
+  children: React.ReactNode
+}) => {
   return (
-    <StyledLink href={href} target="_blank" rel="noopener noreferrer">
+    <StyledLink href={href} target="_blank" rel="noopener noreferrer" style={{textDecoration: hideUnderline ? 'none' : undefined}}>
       {children}
     </StyledLink>
   )

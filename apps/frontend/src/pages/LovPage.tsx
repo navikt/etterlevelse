@@ -15,7 +15,7 @@ export const LovPage = () => {
   const {lov} = useParams<{lov: string}>()
 
   if (!lov) {
-    return <Block>
+    return <Block width='100%'>
       <HeadingMedium>Velg lov</HeadingMedium>
       <Block>
         {codelist.getCodes(ListName.LOV).map((code) =>
@@ -34,7 +34,7 @@ export const LovPage = () => {
   const underavdeling = codelist.getCode(ListName.UNDERAVDELING, data.underavdeling)
 
   return (
-    <Block>
+    <Block width='100%'>
       <Block display='flex' justifyContent='space-between'>
         <Block>
           <HeadingMedium marginTop={0}>Lov: {code.shortName}</HeadingMedium>

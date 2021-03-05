@@ -35,7 +35,7 @@ export const MyBehandlingerPage = () => {
     <>
       {!loggedIn && <LabelLarge>Du må logge inn for å se dine behandlinger</LabelLarge>}
 
-      <Block display='flex' flexWrap flexDirection='row' justifyContent='space-between'>
+      <Block display='flex' flexWrap flexDirection='row' justifyContent='space-between' width='100%'>
 
         {user.isLoggedIn() && <Block marginLeft={theme.sizing.scale800} maxWidth='600px'>
           <HeadingMedium>Mine behandlinger</HeadingMedium>

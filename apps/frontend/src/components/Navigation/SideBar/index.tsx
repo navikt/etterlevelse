@@ -1,16 +1,9 @@
 import * as React from 'react'
 import {theme} from '../../../util'
 import {Block, BlockProps} from 'baseui/block'
-import {H6, Paragraph4} from 'baseui/typography'
-import NavLogo from '../../../resources/navlogo.svg'
+import {H6} from 'baseui/typography'
 import {StyledLink} from 'baseui/link'
 import NavItem from './NavItem'
-import SlackLogo from '../../../resources/Slack_Monochrome_White.svg'
-import {StatefulTooltip} from 'baseui/tooltip'
-import {env} from '../../../util/env'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faCodeBranch} from '@fortawesome/free-solid-svg-icons'
-import {datajegerSlackLink, documentationLink, githubRepo} from '../../../util/config'
 
 const sideBarProps: BlockProps = {
   position: 'fixed',
@@ -46,28 +39,7 @@ const SideBar = () => {
         <NavItem to="/lov" text="Lov" yMargin={theme.sizing.scale200}/>
       </Block>
       <Block position="absolute" bottom="0" width="100%">
-        <Block display="flex" justifyContent="center">
-          <Block paddingBottom={theme.sizing.scale600} width="40%">
-            <img src={NavLogo} alt='NAV logo' width="100%"/>
-          </Block>
-        </Block>
-        <a href={datajegerSlackLink} style={{textDecoration: 'none'}}
-           target="_blank" rel="noopener noreferrer">
-          <Block display="flex" justifyContent="center" paddingBottom={theme.sizing.scale400} alignItems="center">
-            <img src={SlackLogo} width="60px" alt="slack logo"/>
-            <Paragraph4 color={theme.colors.white}>#datajegerne </Paragraph4>
-          </Block>
-        </a>
-        <Block display="flex" justifyContent="center" paddingBottom={theme.sizing.scale400} alignItems="center">
-          <StatefulTooltip content={`Versjon: ${env.githubVersion}`}>
-            <a href={githubRepo} style={{textDecoration: 'none'}}
-               target="_blank" rel="noopener noreferrer">
-              <FontAwesomeIcon color={theme.colors.white} icon={faCodeBranch}/></a>
-          </StatefulTooltip>
-          <a href={documentationLink} style={{textDecoration: 'none'}} target="_blank" rel="noopener noreferrer">
-            <Paragraph4 marginLeft={theme.sizing.scale200} color={theme.colors.white}>Dokumentasjon </Paragraph4>
-          </a>
-        </Block>
+
       </Block>
     </Block>
   )

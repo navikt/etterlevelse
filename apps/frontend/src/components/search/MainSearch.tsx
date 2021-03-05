@@ -19,19 +19,20 @@ import {searchResultColor} from "../../util/theme"
 import {kravName} from '../../pages/KravPage'
 import {searchKrav} from '../../api/KravApi'
 import {behandlingName, searchBehandling} from '../../api/BehandlingApi'
+import {codelist, ListName} from '../../services/Codelist'
 
 shortid.characters('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@');
 
 type SearchItem = {id: string, sortKey: string, label: ReactElement, type: NavigableItem}
 
-type SearchType = 'all' | ObjectType.Krav | ObjectType.Behandling
+type SearchType = 'all' | ObjectType.Krav | ObjectType.Behandling | ListName.UNDERAVDELING
 
 type RadioProps = {
   $isHovered: boolean
   $checked: boolean
 }
 
-const responsiveWidth = ['300px', '400px', '400px', '600px']
+const responsiveWidth = ['300px', '400px', '400px', '500px']
 
 const SmallRadio = (value: SearchType, label: string) => {
   return (
@@ -93,6 +94,7 @@ const SelectType = (props: {type: SearchType, setType: (type: SearchType) => voi
         {SmallRadio('all', 'Alle')}
         {SmallRadio(ObjectType.Krav, 'Krav')}
         {SmallRadio(ObjectType.Behandling, 'Behandling')}
+        {SmallRadio(ListName.UNDERAVDELING, 'Underavdeling')}
       </RadioGroup>
     </Block>
   </Block>
@@ -110,6 +112,33 @@ const behandlingMap = (t: Behandling) => ({
   label: <SearchLabel name={behandlingName(t)} type={"Behandling"} backgroundColor={searchResultColor.behandlingBackground}/>,
   type: ObjectType.Behandling
 })
+
+const getCodelist = (search: string, list: ListName, typeName: string) => {
+  return codelist
+  .getCodes(list)
+  .filter(c => c.shortName.toLowerCase().indexOf(search.toLowerCase()) >= 0)
+  .map(c => ({
+    id: c.code,
+    sortKey: c.shortName,
+    label: <SearchLabel name={c.shortName} type={typeName}/>,
+    type: list
+  } as SearchItem))
+}
+
+const searchCodelist = (search: string,
+                        list: ListName & NavigableItem,
+                        typeName: string,
+                        backgroundColor: string,
+) =>
+  codelist
+  .getCodes(list)
+  .filter(c => c.shortName.toLowerCase().indexOf(search.toLowerCase()) >= 0)
+  .map(c => ({
+    id: c.code,
+    sortKey: c.shortName,
+    label: <SearchLabel name={c.shortName} type={typeName} backgroundColor={backgroundColor}/>,
+    type: list
+  }))
 
 const order = (type: NavigableItem) => {
   switch (type) {
@@ -129,36 +158,45 @@ const useMainSearch = (searchParam?: string) => {
 
   useEffect(() => {
     setSearchResult([])
-    if (search && search.replace(/ /g, '').length > 2) {
-      (async () => {
-        let results: SearchItem[] = []
-        let searches: Promise<any>[] = []
-        const compareFn = (a: SearchItem, b: SearchItem) => prefixBiasedSort(search, a.sortKey, b.sortKey)
-        const add = (items: SearchItem[]) => {
-          results = [...results, ...items]
-          results = results.filter((item, index, self) =>
-            index === self.findIndex((searchItem) => (
-              searchItem.id === item.id
-            ))
-          ).sort((a, b) => {
-            const same = a.type === b.type
-            const typeOrder = order(a.type) - order(b.type)
-            return same || typeOrder !== 0 ? typeOrder : compareFn(a, b)
-          })
-          setSearchResult(results)
-        }
-        setLoading(true)
 
-        if (type === 'all' || type === ObjectType.Krav) {
-          searches.push((async () => add((await searchKrav(search)).map(kravMap)))())
-        }
-        if (type === 'all' || type === ObjectType.Behandling) {
-          searches.push((async () => add((await searchBehandling(search)).map(behandlingMap)))())
-        }
+    if (type === ListName.UNDERAVDELING) {
+      setSearchResult(getCodelist(search, ListName.UNDERAVDELING, 'Underavdeling'))
+    } else {
+      if (search && search.replace(/ /g, '').length > 2) {
+        (async () => {
+          let results: SearchItem[] = []
+          let searches: Promise<any>[] = []
+          const compareFn = (a: SearchItem, b: SearchItem) => prefixBiasedSort(search, a.sortKey, b.sortKey)
+          const add = (items: SearchItem[]) => {
+            results = [...results, ...items]
+            results = results.filter((item, index, self) =>
+              index === self.findIndex((searchItem) => (
+                searchItem.id === item.id
+              ))
+            ).sort((a, b) => {
+              const same = a.type === b.type
+              const typeOrder = order(a.type) - order(b.type)
+              return same || typeOrder !== 0 ? typeOrder : compareFn(a, b)
+            })
+            setSearchResult(results)
+          }
+          setLoading(true)
 
-        await Promise.all(searches)
-        setLoading(false)
-      })()
+          if (type === 'all') {
+            add(searchCodelist(search, ListName.UNDERAVDELING, 'Underavdeling', searchResultColor.underavdelingBackground))
+          }
+
+          if (type === 'all' || type === ObjectType.Krav) {
+            searches.push((async () => add((await searchKrav(search)).map(kravMap)))())
+          }
+          if (type === 'all' || type === ObjectType.Behandling) {
+            searches.push((async () => add((await searchBehandling(search)).map(behandlingMap)))())
+          }
+
+          await Promise.all(searches)
+          setLoading(false)
+        })()
+      }
     }
   }, [search, type])
   return [setSearch, searchResult, loading, type, setType] as [(text: string) => void, SearchItem[], boolean, SearchType, (type: SearchType) => void]

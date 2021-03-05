@@ -23,7 +23,8 @@ export {
   pencilFill,
   lawBook,
   barChart,
-  illustration
+  illustration,
+  navImage
 }
 
 export const lovBilder: {[id: string]: string} = {

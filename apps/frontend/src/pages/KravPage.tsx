@@ -79,7 +79,7 @@ export const KravPage = () => {
   }, [edit])
 
   return (
-    <Block>
+    <Block width='100%'>
       {kravLoading && <LoadingSkeleton header='Krav'/>}
       {!kravLoading && <>
         <Block>

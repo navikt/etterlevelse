@@ -9,7 +9,7 @@ import {StyledLink} from 'baseui/link'
 import {useAwait, useQueryParam} from '../util/hooks'
 import {paddingAll} from './common/Style'
 import {theme} from '../util'
-import {Label2} from 'baseui/typography'
+import {HeadingMedium, Label2} from 'baseui/typography'
 import {intl} from '../util/intl/intl'
 import {StatefulMenu} from 'baseui/menu'
 import {TriangleDown} from 'baseui/icon'
@@ -117,6 +117,11 @@ const Header = () => {
 
         <NavigationList $align={ALIGN.left} $style={{paddingLeft: 0}}>
           <NavigationItem $style={{paddingLeft: 0}}>
+            <RouteLink href={'/'} hideUnderline>
+              <HeadingMedium marginBottom={0} marginTop={0}>Etterlevelse Beta</HeadingMedium>
+            </RouteLink>
+          </NavigationItem>
+          <NavigationItem>
             <MainSearch/>
           </NavigationItem>
         </NavigationList>

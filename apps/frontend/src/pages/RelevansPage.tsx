@@ -12,7 +12,7 @@ export const RelevansPage = () => {
   const {relevans} = useParams<{relevans: string}>()
 
   if (!relevans) {
-    return <Block>
+    return <Block width='100%'>
       <HeadingMedium>Velg relevans</HeadingMedium>
       <Block>
         {codelist.getCodes(ListName.RELEVANS).map((code) =>
@@ -26,7 +26,7 @@ export const RelevansPage = () => {
 
   const code = codelist.getCode(ListName.RELEVANS, relevans)
   return (
-    <Block>
+    <Block width='100%'>
       <HeadingMedium>Relevans: {code?.shortName}</HeadingMedium>
       <ParagraphMedium>{code?.description}</ParagraphMedium>
 

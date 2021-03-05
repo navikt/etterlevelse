@@ -51,7 +51,7 @@ export const AuditPage = () => {
   useEffect(() => lookupVersion(idSearch), [idSearch])
 
   return (
-    <>
+    <Block  width='100%'>
       <H4>{intl.audit}</H4>
       <Block marginBottom="1rem">
         <AuditLabel label={intl.searchId}>
@@ -66,6 +66,6 @@ export const AuditPage = () => {
       {error && <Paragraph2>{_.escape(error)}</Paragraph2>}
       {idInput && <AuditView auditLog={auditLog} auditId={params.auditId} loading={loading} viewId={lookupVersion}/>}
       <AuditRecentTable show={!idInput}/>
-    </>
+    </Block>
   )
 }

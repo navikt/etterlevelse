@@ -2,12 +2,13 @@ import {ApolloProvider} from '@apollo/client'
 import {BaseProvider} from 'baseui'
 import {Block} from 'baseui/block'
 import * as React from 'react'
+import {Helmet} from 'react-helmet'
 import {BrowserRouter as Router} from 'react-router-dom'
 import {Client as Styletron} from 'styletron-engine-atomic'
 import {Provider as StyletronProvider} from 'styletron-react'
 import {apolloClient} from './api/ApolloClient'
 import Header from './components/Header'
-import SideBar from './components/Navigation/SideBar'
+import {Footer} from './components/Navigation/Footer'
 import Routes from './routes'
 import {ampli} from './services/Amplitude'
 import {codelist} from './services/Codelist'
@@ -18,21 +19,16 @@ import {customTheme} from './util/theme'
 
 const engine = new Styletron()
 
-const marginLeft = ['5px', '5px', `180px`, `210px`] //Width of sidebar + margin
-const width = ['100%', '95%', '90%', '80%']
-
 const containerProps = {
   height: '100%',
   display: 'flex',
-  paddingBottom: '100px',
-}
-
-const headerProps = {
-  marginLeft,
-  width,
-  display: 'flex',
   flexDirection: 'column',
+
   alignItems: 'center',
+  paddingBottom: '100px',
+  paddingLeft: '40px',
+  paddingRight: '40px',
+  width: 'calc(100% - 80px)',
 }
 
 ampli.logEvent('visit_count_etterlevelse')
@@ -48,19 +44,20 @@ const Main = (props) => {
         <BaseProvider theme={customTheme}>
           <ApolloProvider client={apolloClient}>
             <Router history={history}>
-              <Block {...containerProps}>
-                <Block display={['none', 'none', 'block', 'block']}>
-                  <SideBar/>
-                </Block>
 
-                <Block {...headerProps}>
-                  <Block>
-                    <Header/>
-                  </Block>
-                  <Block marginBottom='50px'/>
-                  <Routes/>
-                </Block>
+              <Helmet>
+                <meta charSet="utf-8"/>
+                <title>Etterlevelse Beta</title>
+              </Helmet>
+
+              <Block {...containerProps}>
+                <Header/>
+                <Block marginBottom='50px'/>
+                <Routes/>
+                <Block marginBottom='100px'/>
+                <Footer/>
               </Block>
+
             </Router>
             <ErrorModal/>
           </ApolloProvider>

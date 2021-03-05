@@ -18,7 +18,7 @@ import CreateCodeListModal from './ModalCreateCodeList'
 import CodeListTable from './CodeListStyledTable'
 
 const CodeListPage = () => {
-  const params = useParams<{ listname?: string }>()
+  const params = useParams<{listname?: string}>()
   const history = useHistory()
   const [loading, setLoading] = React.useState(true)
   const [listname, setListname] = React.useState(params.listname)
@@ -63,7 +63,7 @@ const CodeListPage = () => {
     return <StyledSpinnerNext size={theme.sizing.scale2400}/>
   }
 
-  return <>
+  return <Block width='100%'>
     <H4>Administrering av kodeverk</H4>
     {loading ? <StyledSpinnerNext/> : (
       <Block display='flex' justifyContent='space-between' width='100%'>
@@ -112,7 +112,7 @@ const CodeListPage = () => {
       }
       submit={handleCreateCodelist}
     />
-  </>
+  </Block>
 }
 
 export default CodeListPage

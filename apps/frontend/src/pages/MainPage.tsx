@@ -28,7 +28,7 @@ export const MainPage = () => {
           icon={lawBook} url={'/krav'} title={'Opprett og vedlikehold krav'}
           text={'Kraveier kan jobbe med nye krav eller forbedre eksisterende krav'}/>
         <SectionCard
-          icon={barChart} url={'/behandling'} title={'Se status på etterlevelse i staten'}
+          icon={barChart} url={'/status'} title={'Se status på etterlevelse i etaten'}
           text={'Se dashboard over status på etterlevelse i NAV, i våre produktområder og avdelinger'}/>
       </Block>
 

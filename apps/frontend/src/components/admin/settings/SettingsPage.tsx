@@ -56,7 +56,7 @@ export const SettingsPage = () => {
 
 const FrontpageMessage = (props: {message?: string, setMessage: (message: string) => void}) => {
   return (
-    <>
+    <Block width='100%'>
       <Block alignItems="center" marginTop="1rem">
         <Label2 marginRight="1rem">Forsidemelding</Label2>
         <Block width="100%" display="flex">
@@ -70,6 +70,6 @@ const FrontpageMessage = (props: {message?: string, setMessage: (message: string
           </Block>
         </Block>
       </Block>
-    </>
+    </Block>
   )
 }

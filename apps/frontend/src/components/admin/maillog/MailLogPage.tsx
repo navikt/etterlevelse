@@ -52,7 +52,7 @@ export const MailLogPage = () => {
     }
   }, [limit, log.totalElements])
 
-  return <>
+  return <Block width='100%'>
     <H4>{intl.mailLog}</H4>
     {log?.content.map((l, i) => {
       let html = l.body
@@ -103,5 +103,5 @@ export const MailLogPage = () => {
         labels={{nextButton: intl.nextButton, prevButton: intl.prevButton}}
       />
     </Block>
-  </>
+  </Block>
 }

@@ -14,7 +14,7 @@ export const KravListPage = () => {
   const [krav, prev, next, loading] = useKravPage(20)
 
   return (
-    <Block>
+    <Block width='100%'>
       <Block display='flex' justifyContent='space-between' alignItems='center'>
         <H2>Krav</H2>
 

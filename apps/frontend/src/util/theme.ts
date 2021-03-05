@@ -27,6 +27,7 @@ export const primitives: ThemePrimitives & {primary150: string, primary350: stri
 export const searchResultColor = {
   kravBackground: '#FFE9CC',
   behandlingBackground: '#F5DBEB',
+  underavdelingBackground: '#99C2E8',
 }
 
 const overrides: RecursivePartial<Theme> = {

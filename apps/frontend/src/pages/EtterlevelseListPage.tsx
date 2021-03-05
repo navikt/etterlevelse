@@ -14,7 +14,7 @@ export const EtterlevelseListPage = () => {
   const [etterlevelse, prev, next, loading] = useEtterlevelsePage(20)
 
   return (
-    <Block>
+    <Block width='100%'>
       <Block display='flex' justifyContent='space-between' alignItems='center'>
         <H2>Etterlevelse</H2>
 

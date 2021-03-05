@@ -39,7 +39,7 @@ export const EtterlevelsePage = () => {
   const loading = !edit && !etterlevelse
 
   return (
-    <Block>
+    <Block width='100%'>
       {loading && <LoadingSkeleton header='Etterlevelse'/>}
       {!loading && <>
         <Block>

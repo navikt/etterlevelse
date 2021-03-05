@@ -11,7 +11,7 @@ export const UnderavdelingPage = () => {
   const {underavdeling} = useParams<{underavdeling: string}>()
 
   if (!underavdeling) {
-    return <Block>
+    return <Block width='100%'>
       <HeadingMedium>Velg underavdeling</HeadingMedium>
       <Block>
         {codelist.getCodes(ListName.UNDERAVDELING).map((code) =>
@@ -25,7 +25,7 @@ export const UnderavdelingPage = () => {
 
   const code = codelist.getCode(ListName.UNDERAVDELING, underavdeling)
   return (
-    <Block>
+    <Block width='100%'>
       <HeadingMedium>Underavdeling: {code?.shortName}</HeadingMedium>
       <ParagraphMedium>{code?.description}</ParagraphMedium>
 
