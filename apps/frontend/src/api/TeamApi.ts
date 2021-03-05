@@ -102,16 +102,21 @@ export const useTeam = () => {
 
 export const useMyTeams = () => {
   const [data, setData] = useState<Team []>([])
+  const [loading, setLoading] = useState(true)
   const ident = user.getIdent()
 
   useEffect(() => {
-    ident && myTeams().then(setData).catch(e => {
+    ident && myTeams().then(r => {
+      setData(r)
+      setLoading(false)
+    }).catch(e => {
       setData([])
+      setLoading(false)
       console.log('couldn\'t find teams', e)
     })
   }, [ident])
 
-  return data
+  return [data, loading] as [Team[], boolean]
 }
 
 export type SearchType = [Option[], Dispatch<SetStateAction<string>>, boolean]

@@ -18,28 +18,21 @@ import {gql, useQuery} from '@apollo/client'
 
 
 export const MyBehandlingerPage = () => {
-  const myBehandlinger = useMyBehandlinger()
-  const teams = useMyTeams()
-  const pageSize = 20
-  const [pageNumber, setPage] = useState(0)
-  const {data, loading: loadingAll} = useQuery<{behandlinger: PageResponse<Behandling>}>(query, {variables: {pageNumber, pageSize}})
-  const allBehandlinger = data?.behandlinger || emptyPage
-  const [search, setSearch, searchLoading, searchTerm] = useSearchBehandling()
-
-  const prev = () => setPage(Math.max(0, pageNumber - 1))
-  const next = () => setPage(Math.min(allBehandlinger?.pages ? allBehandlinger.pages - 1 : 0, pageNumber + 1))
+  const [myBehandlinger, myBehandlingerLoadin] = useMyBehandlinger()
+  const [teams, teamsLoading] = useMyTeams()
 
   const loggedIn = user.isLoggedIn()
+  const loading = myBehandlingerLoadin || teamsLoading
 
   return (
     <>
-      {!loggedIn && <LabelLarge>Du må logge inn for å se dine behandlinger</LabelLarge>}
-
       <Block display='flex' flexWrap flexDirection='row' justifyContent='space-between' width='100%'>
 
-        {user.isLoggedIn() && <Block marginLeft={theme.sizing.scale800} maxWidth='600px'>
+        {loggedIn && <Block marginLeft={theme.sizing.scale800} maxWidth='600px'>
           <HeadingMedium>Mine behandlinger</HeadingMedium>
           <HeadingSmall>Team</HeadingSmall>
+          {loading && <Spinner size={theme.sizing.scale800}/>}
+          {!loading && !teams.length && <LabelLarge>Du er ikke medlem av noen team</LabelLarge>}
           <ul>
             {teams.map(t =>
               <Block key={t.id} marginBottom={theme.sizing.scale800}>
@@ -57,37 +50,56 @@ export const MyBehandlingerPage = () => {
           </ul>
         </Block>}
 
-        <Block maxWidth='600px'>
-          <HeadingMedium>Alle behandlinger</HeadingMedium>
-
-          <Block maxWidth='500px' marginBottom={theme.sizing.scale1000}>
-            <StatefulInput size='compact' placeholder='Søk' onChange={e => setSearch((e.target as HTMLInputElement).value)}
-                           endEnhancer={
-                             <Button onClick={() => setSearch('')} size='compact' kind='tertiary'><FontAwesomeIcon icon={faTimesCircle}/></Button>
-                           }/>
-            {searchLoading && <Block marginTop={theme.sizing.scale400}><Spinner size={theme.sizing.scale600}/></Block>}
-          </Block>
-          {!!searchTerm && <Block>
-            <LabelSmall>Søkeresultat</LabelSmall>
-            {search.map(b => <BehandlingListItem key={b.id} behandling={b}/>)}
-            {!search.length && <LabelXSmall>Ingen treff</LabelXSmall>}
-          </Block>}
-
-          {!searchTerm && <Block>
-            {allBehandlinger.content.map(b => <BehandlingListItem key={b.id} behandling={b}/>)}
-            {loadingAll && !allBehandlinger && <Spinner size={theme.sizing.scale800}/>}
-
-            <Block display='flex' alignItems='center' marginTop={theme.sizing.scale1000}>
-              <LabelSmall marginRight={theme.sizing.scale400}>Side {allBehandlinger.pageNumber + 1}/{allBehandlinger.pages}</LabelSmall>
-              <Button onClick={prev} size='compact' disabled={allBehandlinger.pageNumber === 0}>Forrige</Button>
-              <Button onClick={next} size='compact' disabled={allBehandlinger.pageNumber >= allBehandlinger.pages - 1}>Neste</Button>
-            </Block>
-          </Block>
-          }
+        {!loggedIn && <Block display='flex' flexDirection='column'>
+          <LabelLarge>Du må logge inn for å se dine behandlinger</LabelLarge>
+          <Alle/>
         </Block>
+        }
       </Block>
 
     </>
+  )
+}
+
+const Alle = () => {
+  const pageSize = 20
+  const [pageNumber, setPage] = useState(0)
+  const {data, loading: loadingAll} = useQuery<{behandlinger: PageResponse<Behandling>}>(query, {variables: {pageNumber, pageSize}})
+  const allBehandlinger = data?.behandlinger || emptyPage
+  const [search, setSearch, searchLoading, searchTerm] = useSearchBehandling()
+
+  const prev = () => setPage(Math.max(0, pageNumber - 1))
+  const next = () => setPage(Math.min(allBehandlinger?.pages ? allBehandlinger.pages - 1 : 0, pageNumber + 1))
+
+  return (
+    <Block maxWidth='600px'>
+      <HeadingMedium>Alle behandlinger</HeadingMedium>
+
+      <Block maxWidth='500px' marginBottom={theme.sizing.scale1000}>
+        <StatefulInput size='compact' placeholder='Søk' onChange={e => setSearch((e.target as HTMLInputElement).value)}
+                       endEnhancer={
+                         <Button onClick={() => setSearch('')} size='compact' kind='tertiary'><FontAwesomeIcon icon={faTimesCircle}/></Button>
+                       }/>
+        {searchLoading && <Block marginTop={theme.sizing.scale400}><Spinner size={theme.sizing.scale600}/></Block>}
+      </Block>
+      {!!searchTerm && <Block>
+        <LabelSmall>Søkeresultat</LabelSmall>
+        {search.map(b => <BehandlingListItem key={b.id} behandling={b}/>)}
+        {!search.length && <LabelXSmall>Ingen treff</LabelXSmall>}
+      </Block>}
+
+      {!searchTerm && <Block>
+        {allBehandlinger.content.map(b => <BehandlingListItem key={b.id} behandling={b}/>)}
+        {loadingAll && !allBehandlinger && <Spinner size={theme.sizing.scale800}/>}
+
+        <Block display='flex' alignItems='center' marginTop={theme.sizing.scale1000}>
+          <LabelSmall marginRight={theme.sizing.scale400}>Side {allBehandlinger.pageNumber + 1}/{allBehandlinger.pages}</LabelSmall>
+          <Button onClick={prev} size='compact' disabled={allBehandlinger.pageNumber === 0}>Forrige</Button>
+          <Button onClick={next} size='compact' disabled={allBehandlinger.pageNumber >= allBehandlinger.pages - 1}>Neste</Button>
+        </Block>
+      </Block>
+      }
+    </Block>
   )
 }
 

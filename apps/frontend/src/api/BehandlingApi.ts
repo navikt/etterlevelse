@@ -40,16 +40,21 @@ export const useSearchBehandling = () => useSearch(searchBehandling)
 
 export const useMyBehandlinger = () => {
   const [data, setData] = useState<Behandling []>([])
+  const [loading, setLoading] = useState(true)
   const ident = user.getIdent()
 
   useEffect(() => {
-    ident && getBehandlinger().then(setData).catch(e => {
+    ident && getBehandlinger().then(r => {
+      setData(r)
+      setLoading(false)
+    }).catch(e => {
       setData([])
+      setLoading(false)
       console.log('couldn\'t find behandlinger', e)
     })
   }, [ident])
 
-  return data
+  return [data, loading] as [Behandling[], boolean]
 }
 
 export const mapToFormVal = (behandling: Partial<Behandling> & {id: string}): BehandlingEtterlevData => {
