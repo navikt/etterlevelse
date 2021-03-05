@@ -28,7 +28,7 @@ export const Footer = () => {
       </ExternalLink>
 
       <StatefulTooltip content={`Versjon: ${env.githubVersion}`}>
-        <ExternalLink href={githubRepo} hideUnderline> <FontAwesomeIcon icon={faCodeBranch}/> Github</ExternalLink>
+        <span><ExternalLink href={githubRepo} hideUnderline><FontAwesomeIcon icon={faCodeBranch}/> Github</ExternalLink></span>
       </StatefulTooltip>
 
       <ExternalLink href={documentationLink} hideUnderline>

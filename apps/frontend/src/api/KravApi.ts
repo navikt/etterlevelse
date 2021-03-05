@@ -110,6 +110,7 @@ export const mapToFormVal = (krav: Partial<Krav>): Krav => ({
   periode: krav.periode || {start: navStartDate, slutt: maxDate},
   relevansFor: krav.relevansFor || [],
   status: krav.status || KravStatus.UTKAST,
+  suksesskriterier: krav.suksesskriterier || [],
   nyKravVersjon: krav.nyKravVersjon || false
 })
 
@@ -167,6 +168,10 @@ export const kravFullQuery = gql`
       relevansFor {
         code
         shortName
+      }
+      suksesskriterier {
+        id
+        navn
       }
       status
     }

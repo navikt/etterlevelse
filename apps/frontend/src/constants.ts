@@ -63,8 +63,14 @@ export interface Krav extends DomainObject {
   underavdeling?: Code
   relevansFor: Code[]
   status: KravStatus
+  suksesskriterier: Suksesskriterie[]
 
   nyKravVersjon: boolean
+}
+
+export interface Suksesskriterie {
+  id: number
+  navn: string
 }
 
 export interface Regelverk {
