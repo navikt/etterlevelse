@@ -55,5 +55,7 @@ public class KravResponse implements KravId {
     // GraphQL only
     @JsonIgnore
     private List<EtterlevelseResponse> etterlevelser;
+    @JsonIgnore
+    private List<TilbakemeldingResponse> tilbakemeldinger;
 
 }

@@ -26,6 +26,40 @@ type Krav {
     status: KravStatus!
 
     etterlevelser(onlyForBehandling: Boolean): [Etterlevelse!]!
+    tilbakemeldinger: [Tilbakemelding!]!
+}
+
+type Tilbakemelding {
+    id: ID!
+    changeStamp: ChangeStamp!
+    version: Int!
+
+    kravNummer: Int!
+    kravVersjon: Int!
+
+    tittel: String!
+    type:TilbakemeldingsType!
+    melderIdent: String!
+    meldinger: [Melding!]!
+}
+
+enum TilbakemeldingsType {
+    GOD,
+    UKLAR,
+    ANNET
+}
+
+type Melding {
+    meldingNr: NonNegativeInt!
+    fraIdent: String!
+    rolle: Rolle!
+    tid: DateTime!
+    innhold: String!
+}
+
+enum Rolle {
+    KRAVEIER,
+    MELDER
 }
 
 type Suksesskriterie {

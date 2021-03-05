@@ -7,9 +7,12 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseResponse;
+import no.nav.data.etterlevelse.krav.TilbakemeldingService;
+import no.nav.data.etterlevelse.krav.domain.Tilbakemelding;
 import no.nav.data.etterlevelse.krav.domain.dto.KravFilter;
 import no.nav.data.etterlevelse.krav.domain.dto.KravFilter.Fields;
 import no.nav.data.etterlevelse.krav.dto.KravResponse;
+import no.nav.data.etterlevelse.krav.dto.TilbakemeldingResponse;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -23,6 +26,7 @@ import static no.nav.data.common.utils.StreamUtils.filter;
 public class KravFieldResolver implements GraphQLResolver<KravResponse> {
 
     private final EtterlevelseService etterlevelseService;
+    private final TilbakemeldingService tilbakemeldingService;
 
     public List<EtterlevelseResponse> etterlevelser(KravResponse krav, boolean onlyForBehandling, DataFetchingEnvironment env) {
         Integer nummer = krav.getKravNummer();
@@ -37,6 +41,11 @@ public class KravFieldResolver implements GraphQLResolver<KravResponse> {
             }
         }
         return convert(etterlevelser, Etterlevelse::toResponse);
+    }
+
+    public List<TilbakemeldingResponse> tilbakemeldinger(KravResponse krav) {
+        var tilbakemeldinger = tilbakemeldingService.getForKrav(krav.getKravNummer(), krav.getKravVersjon());
+        return convert(tilbakemeldinger, Tilbakemelding::toResponse);
     }
 
 }

@@ -12,7 +12,7 @@ const Root = ({children}: RootProps): JSX.Element => {
     <Block width='100%'>
       <Helmet>
         <meta charSet="utf-8"/>
-        <title>Etterlevelse</title>
+        <title>Etterlevelse Beta</title>
       </Helmet>
       {children}
     </Block>

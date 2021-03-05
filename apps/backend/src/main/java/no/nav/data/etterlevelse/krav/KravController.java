@@ -194,7 +194,7 @@ public class KravController {
     @Operation(summary = "New Melding on Tilbakemelding")
     @ApiResponse(description = "Melding added Tilbakemelding")
     @PostMapping("/tilbakemelding/melding")
-    public ResponseEntity<TilbakemeldingResponse> createTilbakemelding(@RequestBody TilbakemeldingNewMeldingRequest request) {
+    public ResponseEntity<TilbakemeldingResponse> tilbakemeldingNewMelding(@RequestBody TilbakemeldingNewMeldingRequest request) {
         log.info("New Melding on Tilbakemelding");
         var tilbakemelding = tilbakemeldingService.newMelding(request);
         return ResponseEntity.ok(tilbakemelding.toResponse());
@@ -203,7 +203,7 @@ public class KravController {
     @Operation(summary = "Get Tilbakemeldinger for krav")
     @ApiResponse(description = "Tilbakemeldinger for krav")
     @GetMapping("/tilbakemelding/{kravNummer}/{kravVersjon}")
-    public ResponseEntity<RestResponsePage<TilbakemeldingResponse>> createTilbakemelding(@PathVariable int kravNummer, @PathVariable int kravVersjon) {
+    public ResponseEntity<RestResponsePage<TilbakemeldingResponse>> getTilbakemeldinger(@PathVariable int kravNummer, @PathVariable int kravVersjon) {
         log.info("Get Tilbakemeldinger for krav K{}.{}", kravNummer, kravVersjon);
         var tilbakemeldinger = tilbakemeldingService.getForKrav(kravNummer, kravVersjon);
         return ResponseEntity.ok(new RestResponsePage<>(tilbakemeldinger).convert(Tilbakemelding::toResponse));
