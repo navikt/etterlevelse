@@ -16,7 +16,7 @@ export const Label = (props: LabelProps) => {
   return (
     <DataText label={props.title} compact={props.compact}>
       {props.markdown ?
-        <Markdown sources={Array.isArray(props.markdown) ? props.markdown : [props.markdown]} noMargin shortenLinks/>
+        <Markdown sources={Array.isArray(props.markdown) ? props.markdown : [props.markdown]} shortenLinks/>
         : props.children}
     </DataText>
   )
