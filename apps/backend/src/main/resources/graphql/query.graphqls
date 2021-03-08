@@ -20,6 +20,8 @@ input KravFilter {
     underavdeling: String
     lov: String
     gjeldendeKrav: Boolean = false
+    """min 1, max 20"""
+    sistRedigert: NonNegativeInt
 }
 
 input BehandlingFilter {

@@ -84,6 +84,21 @@ public class KravRepoImpl implements KravRepoCustom {
             query += " and data ->> 'status' in :gjeldendeStatuser ";
             par.addValue("gjeldendeStatuser", KravStatus.gjeldende());
         }
+        if (filter.getSistRedigert() != null) {
+            query += """
+                     and id in (
+                     select distinct on (table_id) table_id
+                     from audit_version
+                     where table_name = 'Krav' 
+                        and user_id = :user_id
+                        and exists (select 1 from generic_storage where id = cast(table_id as uuid))
+                     order by table_id, time desc
+                        limit :limit
+                     )
+                    """;
+            par.addValue("limit", filter.getSistRedigert())
+                    .addValue("user_id", SecurityUtils.getCurrentIdent());
+        }
 
         List<GenericStorage> kravList = fetch(jdbcTemplate.queryForList(query, par));
         return StreamUtils.filter(kravList, krav -> filterStateAndStatus(kravList, krav, filter, kravIdSafeList));

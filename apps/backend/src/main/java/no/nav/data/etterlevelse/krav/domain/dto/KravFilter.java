@@ -25,19 +25,32 @@ public class KravFilter {
     private String underavdeling;
     private String lov;
     private boolean gjeldendeKrav;
+    private Integer sistRedigert;
 
     public List<String> getRelevans() {
         return formatList(relevans);
     }
 
     public boolean isEmpty() {
+        validate();
         return getRelevans().isEmpty()
                 && nummer == null
                 && behandlingId == null
                 && underavdeling == null
                 && lov == null
                 && !gjeldendeKrav
+                && sistRedigert != null
                 ;
+    }
+
+    private void validate() {
+        if (sistRedigert != null) {
+            if (sistRedigert < 1) {
+                sistRedigert = null;
+            } else if (sistRedigert > 20) {
+                sistRedigert = 20;
+            }
+        }
     }
 
     public static <T> T get(DataFetchingEnvironment env, String field) {
