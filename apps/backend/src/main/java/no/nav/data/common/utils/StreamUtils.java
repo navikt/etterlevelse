@@ -65,7 +65,7 @@ public final class StreamUtils {
     }
 
     public static <T> List<T> copyOf(List<T> list) {
-        return list == null ? Collections.emptyList() : List.copyOf(list);
+        return list == null ? Collections.emptyList() : new ArrayList<>(list);
     }
 
     public static <T> List<T> union(Collection<? extends T> listA, Collection<? extends T> listB) {

@@ -13,7 +13,6 @@ import no.nav.data.etterlevelse.common.domain.Periode;
 import no.nav.data.etterlevelse.krav.domain.KravStatus;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.Comparator.comparing;
@@ -80,7 +79,7 @@ public class KravRequest implements RequestElement {
         setVarslingsadresser(copyOf(varslingsadresser));
         setRettskilder(formatList(rettskilder));
         setTagger(formatList(tagger));
-        setSuksesskriterier(new ArrayList<>(suksesskriterier));
+        setSuksesskriterier(copyOf(suksesskriterier));
         suksesskriterier.sort(comparing(SuksesskriterieRequest::getId));
 
         if (status == null) {
