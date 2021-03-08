@@ -2,7 +2,6 @@ import axios from 'axios'
 import {emptyPage, Krav, KravStatus, Or, PageResponse} from '../constants'
 import {env} from '../util/env'
 import {useEffect, useState} from 'react'
-import {maxDate, navStartDate} from '../util/config'
 import {useSearch} from '../util/hooks'
 import {gql} from '@apollo/client'
 
@@ -107,7 +106,7 @@ export const mapToFormVal = (krav: Partial<Krav>): Krav => ({
   hensikt: krav.hensikt || '',
   avdeling: krav.avdeling,
   underavdeling: krav.underavdeling,
-  periode: krav.periode || {start: navStartDate, slutt: maxDate},
+  periode: krav.periode || {start: undefined, slutt: undefined},
   relevansFor: krav.relevansFor || [],
   status: krav.status || KravStatus.UTKAST,
   suksesskriterier: krav.suksesskriterier || [],

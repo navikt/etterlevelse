@@ -88,11 +88,13 @@ export const DateField = (props: {label: string, name: string}) => (
       {(p: FieldProps) =>
         <FormControl label={props.label} error={p.meta.touched && p.meta.error}>
           <Datepicker
+            clearable
             formatString={'dd-MM-yyyy'}
             value={p.field.value ? moment(p.field.value).toDate() : undefined}
             onChange={({date}) => {
               const dateSingle = Array.isArray(date) ? date[0] : date
               if (dateSingle) p.form.setFieldValue(props.name, dateSingle.toISOString().split('T')[0])
+              else p.form.setFieldValue(props.name, undefined)
             }}/>
         </FormControl>
       }

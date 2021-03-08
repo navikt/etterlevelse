@@ -58,7 +58,7 @@ export interface Krav extends DomainObject {
   rettskilder: string[]
   tagger: string[]
   regelverk: Regelverk[]
-  periode?: Periode
+  periode: Periode
   avdeling?: Code
   underavdeling?: Code
   relevansFor: Code[]
@@ -131,8 +131,8 @@ export interface BehandlingEtterlevData {
 }
 
 export interface Periode {
-  start: string
-  slutt: string
+  start?: string
+  slutt?: string
 }
 
 export interface Tilbakemelding {
