@@ -29,7 +29,7 @@ export const ViewKrav = ({krav}: {krav: KravQL}) => {
       {expand && <AllInfo krav={krav}/>}
       {!expand && <MediumInfo krav={krav}/>}
       <Block display='flex' justifyContent='flex-end'>
-        <Button onClick={() => setExpand(!expand)}>{`Vis ${expand ? 'mindre' : 'mer'} om krav`}</Button>
+        <Button onClick={() => setExpand(!expand)}>{`${expand ? 'Skjul' : 'Vis'} detaljer`}</Button>
       </Block>
     </Block>
   )
