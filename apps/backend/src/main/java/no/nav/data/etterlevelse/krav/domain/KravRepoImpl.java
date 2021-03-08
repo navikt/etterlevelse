@@ -13,10 +13,12 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import static java.util.Comparator.comparing;
 import static no.nav.data.common.utils.StreamUtils.convert;
 import static no.nav.data.common.utils.StreamUtils.exists;
 
@@ -87,21 +89,34 @@ public class KravRepoImpl implements KravRepoCustom {
         if (filter.getSistRedigert() != null) {
             query += """
                      and cast(id as text) in (
-                     select distinct on (table_id) table_id
-                     from audit_version
-                     where table_name = 'Krav' 
-                        and user_id = :user_id
-                        and exists (select 1 from generic_storage where id = cast(table_id as uuid))
-                     order by table_id, time desc
-                        limit :limit
-                     )
+                       select table_id
+                         from (
+                                  select distinct on (table_id) table_id, time
+                                  from audit_version
+                                  where table_name = 'Krav'
+                                    and user_id = :user_id
+                                    and exists(select 1 from generic_storage where id = cast(table_id as uuid))
+                                  order by table_id, time desc
+                              ) sub
+                         order by time desc
+                         limit :limit
+                    )
                     """;
             par.addValue("limit", filter.getSistRedigert())
                     .addValue("user_id", SecurityUtils.getCurrentIdent());
         }
 
         List<GenericStorage> kravList = fetch(jdbcTemplate.queryForList(query, par));
-        return StreamUtils.filter(kravList, krav -> filterStateAndStatus(kravList, krav, filter, kravIdSafeList));
+        List<GenericStorage> filtered = StreamUtils.filter(kravList, krav -> filterStateAndStatus(kravList, krav, filter, kravIdSafeList));
+        sort(filter, filtered);
+        return filtered;
+    }
+
+    private void sort(KravFilter filter, List<GenericStorage> filtered) {
+        if (filter.getSistRedigert() != null) {
+            Comparator<GenericStorage> comparator = comparing(gs -> gs.toKrav().getChangeStamp().getLastModifiedDate());
+            filtered.sort(comparator.reversed());
+        }
     }
 
     private List<GenericStorage> fetch(List<Map<String, Object>> resp) {
