@@ -15,7 +15,7 @@ import {navImage} from '../Images'
 export const Footer = () => {
   return (
     <Block display='flex' justifyContent='space-between'
-           width='100%' maxWidth='600px'
+           width='100%' maxWidth='600px' marginBottom='100px'
            alignItems='center'>
 
       <img src={navImage} alt='NAV logo' width="85px"/>

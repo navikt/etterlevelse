@@ -105,7 +105,7 @@ export const Tilbakemeldinger = ({krav}: {krav: Krav}) => {
         t && add(t)
         setAddTilbakemelding(false)
       }}/>
-      <Block height='400px'/>
+      <Block height='100px'/>
     </Block>
   )
 }

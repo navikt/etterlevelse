@@ -20,12 +20,12 @@ import {customTheme} from './util/theme'
 const engine = new Styletron()
 
 const containerProps = {
-  height: '100%',
+  minHeight: '100vh',
   display: 'flex',
   flexDirection: 'column',
+  justifyContent: 'space-between',
 
   alignItems: 'center',
-  paddingBottom: '100px',
   paddingLeft: '40px',
   paddingRight: '40px',
   width: 'calc(100% - 80px)',
@@ -51,10 +51,11 @@ const Main = (props) => {
               </Helmet>
 
               <Block {...containerProps}>
-                <Header/>
-                <Block marginBottom='50px'/>
-                <Routes/>
-                <Block marginBottom='100px'/>
+                <Block marginBottom='100px'>
+                  <Header/>
+                  <Block marginBottom='50px'/>
+                  <Routes/>
+                </Block>
                 <Footer/>
               </Block>
 
