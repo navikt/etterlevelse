@@ -208,6 +208,11 @@ const query = gql`
       }
       status
 
+      suksesskriterier {
+        id
+        navn
+      }
+
       etterlevelser {
         id
         behandling {
