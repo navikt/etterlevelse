@@ -8,6 +8,8 @@ import {faExternalLinkAlt} from '@fortawesome/free-solid-svg-icons'
 import {useDebouncedState} from '../../util/hooks'
 import MdEditor from 'react-markdown-editor-lite'
 import 'react-markdown-editor-lite/lib/index.css'
+import {Block} from 'baseui/block'
+import {theme} from '../../util'
 
 export const Markdown = (props: {source?: string, sources?: string[], escapeHtml?: boolean, noMargin?: boolean, shortenLinks?: boolean}) => {
   const renderers = {
@@ -26,11 +28,16 @@ export const Markdown = (props: {source?: string, sources?: string[], escapeHtml
   }
 
   const sources: string[] = props.sources || (props.source ? [props.source] : [''])
-  return <ReactMarkdown source={sources.join(', ')}
-                        escapeHtml={props.escapeHtml}
-                        renderers={renderers}
-                        plugins={[remarkGfm]}
-  />
+  return <Block $style={{
+    // Fix font color in lists etc
+    color: theme.colors.contentPrimary
+  }}>
+    <ReactMarkdown source={sources.join(', ')}
+                   escapeHtml={props.escapeHtml}
+                   renderers={renderers}
+                   plugins={[remarkGfm]}
+    />
+  </Block>
 }
 
 type MarkdownEditorProps = {
@@ -42,10 +49,10 @@ type MarkdownEditorProps = {
 
 export const MarkdownEditor = (props: MarkdownEditorProps) => {
   // Reduce UI lag by only updating field at set interval
-  const [val, setVal] = useDebouncedState(props.initialValue, 300,props.setValue)
+  const [val, setVal] = useDebouncedState(props.initialValue, 300, props.setValue)
 
   return <MdEditor
-    style={{height: '400px'}}
+    style={{height: '500px'}}
     defaultValue={val}
     renderHTML={txt => <Markdown source={txt} shortenLinks={props.shortenLinks}/>}
     onChange={data => setVal(data.text)}
