@@ -17,6 +17,7 @@ import {Datepicker} from 'baseui/datepicker'
 import moment from 'moment'
 import {Radio, RadioGroup} from 'baseui/radio'
 import {MarkdownEditor} from './Markdown'
+import {ExternalLink} from './RouteLink'
 
 export const FieldWrapper = ({children}: {children: React.ReactNode}) => {
   return (
@@ -43,7 +44,12 @@ export const TextAreaField = (props: {label: string, name: string, markdown?: bo
     <FieldWrapper>
       <Field name={props.name}>
         {(p: FieldProps) =>
-          <FormControl label={props.label} error={p.meta.touched && p.meta.error}>
+          <FormControl label={props.label} error={p.meta.touched && p.meta.error}
+                       caption={props.markdown ?
+                         <Block>Feltet bruker <ExternalLink href='https://guides.github.com/features/mastering-markdown/'>Markdown</ExternalLink>, se her for mer
+                           informasjon om formatet
+                         </Block>
+                         : undefined}>
             <>
               {props.markdown && <MarkdownEditor initialValue={p.field.value} setValue={v => p.form.setFieldValue(props.name, v)}
                                                  onImageUpload={props.onImageUpload} shortenLinks={props.shortenLinks}/>}
