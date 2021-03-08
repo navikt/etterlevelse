@@ -86,7 +86,7 @@ public class KravRepoImpl implements KravRepoCustom {
         }
         if (filter.getSistRedigert() != null) {
             query += """
-                     and id in (
+                     and cast(id as text) in (
                      select distinct on (table_id) table_id
                      from audit_version
                      where table_name = 'Krav' 
