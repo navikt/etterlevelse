@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.UUID;
 
 import static java.util.Comparator.comparing;
-import static no.nav.data.common.utils.StreamUtils.convert;
 
 @Slf4j
 @Component
@@ -53,7 +52,7 @@ public class QueryResolver implements GraphQLQueryResolver {
         var pageInput = new PageParameters(page, pageSize);
 
         if (filter == null || filter.isEmpty()) {
-            return new RestResponsePage<>(kravService.getAll(pageInput.createPage()).getContent()).convert(Krav::toResponse);
+            return new RestResponsePage<>(kravService.getAll(pageInput.createPage())).convert(Krav::toResponse);
         }
 
         List<Krav> filtered = new ArrayList<>(kravService.getByFilter(filter));
@@ -64,7 +63,7 @@ public class QueryResolver implements GraphQLQueryResolver {
         if (all) {
             return new RestResponsePage<>(filtered).convert(Krav::toResponse);
         }
-        return pageInput.pageFrom(convert(filtered, Krav::toResponse));
+        return pageInput.pageFrom(filtered).convert(Krav::toResponse);
     }
 
     public RestResponsePage<Behandling> behandling(BehandlingFilter filter, Integer page, Integer pageSize) {

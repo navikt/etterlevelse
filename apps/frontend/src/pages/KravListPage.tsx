@@ -7,17 +7,28 @@ import RouteLink from '../components/common/RouteLink'
 import {user} from '../services/User'
 import {KravTable} from '../components/common/KravFilterTable'
 import {useKravFilter} from '../api/KravGraphQLApi'
+import {Button as BButton} from 'baseui/button'
+import {ButtonGroup} from 'baseui/button-group'
 
+enum Mode {
+  siste,
+  gjeldende,
+  alle
+}
 
 export const KravListPage = () => {
+  const [mode, setMode] = useState<Mode>(0)
   const [pageNumber, setPageNumber] = useState<number>(0)
-  const [pageSize, setPageSize] = useState<number>(20)
+  const [pageSize, setPageSize] = useState<number>(10)
+  const res = useKravFilter({
+    sistRedigert: mode === Mode.siste ? pageSize : undefined,
+    gjeldendeKrav: mode === Mode.gjeldende,
+    pageNumber, pageSize
+  })
 
-  const res = useKravFilter({sistRedigert: 10, pageNumber, pageSize})
-  let pages = res.data?.krav.pages || 1
-
+  const pages = res.data?.krav.pages || 1
   const prev = () => setPageNumber(Math.max(0, pageNumber - 1))
-  const next = () => setPageNumber(Math.min(pages ? pages - 1 : 0, pageNumber + 1))
+  const next = () => setPageNumber(Math.min(pages - 1, pageNumber + 1))
 
   return (
     <Block width='100%'>
@@ -31,17 +42,15 @@ export const KravListPage = () => {
           </RouteLink>}
         </Block>
       </Block>
+      <Block>
+        <ButtonGroup selected={mode} mode='radio' size={'compact'} onClick={(e, i) => setMode(i)}>
+          <BButton>Sist redigerte</BButton>
+          <BButton>Gjeldende</BButton>
+          <BButton>Alle</BButton>
+        </ButtonGroup>
+      </Block>
 
       <KravTable queryResult={res}/>
-
-      {/*<Block display='flex' flexDirection='column'>*/}
-      {/*  {!loading && krav.content.map((k, i) =>*/}
-      {/*    <Block key={k.id} marginBottom={theme.sizing.scale300}>*/}
-      {/*      <RouteLink href={`/krav/${k.kravNummer}/${k.kravVersjon}`}>#{krav.pageSize * krav.pageNumber + i + 1} {kravName(k)}</RouteLink>*/}
-      {/*    </Block>*/}
-      {/*  )}*/}
-      {/*  {loading && <Spinner size={theme.sizing.scale2400}/>}*/}
-      {/*</Block>*/}
       <Block display='flex' alignItems='center' marginTop={theme.sizing.scale1000}>
         <LabelSmall marginRight={theme.sizing.scale400}>Side {pageNumber + 1}/{pages}</LabelSmall>
         <Button onClick={prev} size='compact' disabled={pageNumber === 0}>Forrige</Button>

@@ -84,7 +84,7 @@ public class KravRepoImpl implements KravRepoCustom {
         }
         if (filter.isGjeldendeKrav()) {
             query += " and data ->> 'status' in :gjeldendeStatuser ";
-            par.addValue("gjeldendeStatuser", KravStatus.gjeldende());
+            par.addValue("gjeldendeStatuser", convert(KravStatus.gjeldende(), Enum::name));
         }
         if (filter.getSistRedigert() != null) {
             query += """

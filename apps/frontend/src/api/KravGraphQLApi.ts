@@ -2,8 +2,26 @@ import {KravQL, PageResponse} from '../constants'
 import {gql, useQuery} from '@apollo/client'
 import {DocumentNode} from 'graphql'
 
-const kravtableQuery = gql`query getKravByFilter ($relevans: [String!], $nummer: Int, $behandlingId: String, $underavdeling: String, $lov: String, $sistRedigert: NonNegativeInt, $pageSize: NonNegativeInt, $pageNumber: NonNegativeInt) {
-  krav(filter: {relevans: $relevans, nummer: $nummer, behandlingId: $behandlingId, underavdeling: $underavdeling, lov: $lov, sistRedigert: $sistRedigert}, pageSize: $pageSize, pageNumber: $pageNumber) {
+const kravtableQuery = gql`query getKravByFilter (
+  $relevans: [String!], $nummer: Int, $behandlingId: String, $underavdeling: String,
+  $lov: String, $sistRedigert: NonNegativeInt,
+  $gjeldendeKrav: Boolean,
+  $pageSize: NonNegativeInt, $pageNumber: NonNegativeInt) {
+  krav(filter: {
+    relevans: $relevans,
+    nummer: $nummer,
+    behandlingId: $behandlingId,
+    underavdeling: $underavdeling,
+    lov: $lov,
+    sistRedigert: $sistRedigert,
+    gjeldendeKrav: $gjeldendeKrav
+  }, pageSize: $pageSize, pageNumber: $pageNumber) {
+    pages
+    pageNumber
+    pageSize
+    paged
+    numberOfElements
+    totalElements
     content {
       id
       navn
@@ -37,6 +55,7 @@ export type KravFilters = {
   behandlingId?: string,
   underavdeling?: string,
   lov?: string,
+  gjeldendeKrav?: boolean
   sistRedigert?: number
   pageNumber?: number
   pageSize?: number

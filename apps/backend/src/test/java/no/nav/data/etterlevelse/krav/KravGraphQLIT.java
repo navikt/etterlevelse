@@ -186,6 +186,30 @@ class KravGraphQLIT extends GraphQLTestBase {
                     .hasField("content[0].id", krav.getId().toString());
         }
 
+
+        @Test
+        @SneakyThrows
+        void kravGjeldende() {
+            var krav = storageService.save(Krav.builder()
+                    .navn("Krav 1").kravNummer(50).kravVersjon(1)
+                    .underavdeling("AVD1")
+                    .status(KravStatus.AKTIV)
+                    .build());
+            storageService.save(Krav.builder()
+                    .navn("Krav 2").kravNummer(51).kravVersjon(1)
+                    .underavdeling("AVD2")
+                    .status(KravStatus.UTKAST)
+                    .build());
+
+            var var = Map.of("gjeldendeKrav", "true");
+            var response = graphQLTestTemplate.perform("graphqltest/krav_filter.graphql", vars(var));
+
+            assertThat(response, "krav")
+                    .hasNoErrors()
+                    .hasSize("content", 1)
+                    .hasField("content[0].id", krav.getId().toString());
+        }
+
         @Test
         @SneakyThrows
         void kravForBehandlingOnlyRelevenatEtterlevelse() {
