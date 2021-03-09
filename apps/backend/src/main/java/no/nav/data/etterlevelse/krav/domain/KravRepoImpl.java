@@ -94,7 +94,7 @@ public class KravRepoImpl implements KravRepoCustom {
                                   select distinct on (table_id) table_id, time
                                   from audit_version
                                   where table_name = 'Krav'
-                                    and user_id = :user_id
+                                    and user_id like :user_id
                                     and exists(select 1 from generic_storage where id = cast(table_id as uuid))
                                   order by table_id, time desc
                               ) sub
@@ -103,7 +103,7 @@ public class KravRepoImpl implements KravRepoCustom {
                     )
                     """;
             par.addValue("limit", filter.getSistRedigert())
-                    .addValue("user_id", SecurityUtils.getCurrentIdent());
+                    .addValue("user_id", SecurityUtils.getCurrentIdent() + "%");
         }
 
         List<GenericStorage> kravList = fetch(jdbcTemplate.queryForList(query, par));

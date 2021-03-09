@@ -39,7 +39,7 @@ public class KravFilter {
                 && underavdeling == null
                 && lov == null
                 && !gjeldendeKrav
-                && sistRedigert != null
+                && sistRedigert == null
                 ;
     }
 
