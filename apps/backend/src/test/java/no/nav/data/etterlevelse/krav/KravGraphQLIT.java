@@ -198,7 +198,7 @@ class KravGraphQLIT extends GraphQLTestBase {
             storageService.save(Krav.builder()
                     .navn("Krav 2").kravNummer(51).kravVersjon(1)
                     .underavdeling("AVD2")
-                    .status(KravStatus.UTKAST)
+                    .status(KravStatus.UTGAATT)
                     .build());
 
             var var = Map.of("gjeldendeKrav", "true");

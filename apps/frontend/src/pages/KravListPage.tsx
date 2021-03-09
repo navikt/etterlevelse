@@ -7,8 +7,12 @@ import RouteLink from '../components/common/RouteLink'
 import {user} from '../services/User'
 import {KravTable} from '../components/common/KravFilterTable'
 import {useKravFilter} from '../api/KravGraphQLApi'
-import {Button as BButton} from 'baseui/button'
+import {Button as BButton, KIND} from 'baseui/button'
 import {ButtonGroup} from 'baseui/button-group'
+import {faChevronDown} from '@fortawesome/free-solid-svg-icons'
+import {PLACEMENT} from 'baseui/tooltip'
+import {StatefulMenu} from 'baseui/menu'
+import {StatefulPopover} from 'baseui/popover'
 
 enum Mode {
   siste,
@@ -42,20 +46,49 @@ export const KravListPage = () => {
           </RouteLink>}
         </Block>
       </Block>
-      <Block>
-        <ButtonGroup selected={mode} mode='radio' size={'compact'} onClick={(e, i) => setMode(i)}>
-          <BButton>Sist redigerte</BButton>
-          <BButton>Gjeldende</BButton>
-          <BButton>Alle</BButton>
-        </ButtonGroup>
+      <Block display='flex' justifyContent='space-between' marginTop={theme.sizing.scale400} marginBottom={theme.sizing.scale800}>
+        <Block>
+          <ButtonGroup selected={mode} mode='radio' size={'compact'} onClick={(e, i) => {
+            setPageNumber(0)
+            setMode(i)
+          }}>
+            <BButton>Sist redigerte</BButton>
+            <BButton>Gjeldende</BButton>
+            <BButton>Alle</BButton>
+          </ButtonGroup>
+        </Block>
+
+        <Block display='flex'>
+          <StatefulPopover
+            content={({close}) => (
+              <StatefulMenu
+                items={[5, 10, 20, 50, 100].map(i => ({label: i,}))}
+                onItemSelect={({item}) => {
+                  setPageSize(item.label)
+                  close()
+                }}
+                overrides={{
+                  List: {
+                    style: {height: '150px', width: '100px'},
+                  },
+                }}
+              />
+            )}
+            placement={PLACEMENT.bottom}
+          >
+            <Block>
+              <Button kind={KIND.tertiary} iconEnd={faChevronDown}>{`${pageSize} rader`}</Button>
+            </Block>
+          </StatefulPopover>
+          <Block display='flex' alignItems='center'>
+            <LabelSmall marginRight={theme.sizing.scale400}>Side {pageNumber + 1}/{pages}</LabelSmall>
+            <Button onClick={prev} size='compact' disabled={pageNumber === 0}>Forrige</Button>
+            <Button onClick={next} size='compact' disabled={pageNumber >= pages - 1}>Neste</Button>
+          </Block>
+        </Block>
       </Block>
 
       <KravTable queryResult={res}/>
-      <Block display='flex' alignItems='center' marginTop={theme.sizing.scale1000}>
-        <LabelSmall marginRight={theme.sizing.scale400}>Side {pageNumber + 1}/{pages}</LabelSmall>
-        <Button onClick={prev} size='compact' disabled={pageNumber === 0}>Forrige</Button>
-        <Button onClick={next} size='compact' disabled={pageNumber >= pages - 1}>Neste</Button>
-      </Block>
     </Block>
   )
 }

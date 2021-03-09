@@ -83,7 +83,7 @@ public class KravRepoImpl implements KravRepoCustom {
             par.addValue("lov", String.format("[{\"lov\": \"%s\"}]", filter.getLov()));
         }
         if (filter.isGjeldendeKrav()) {
-            query += " and data ->> 'status' in :gjeldendeStatuser ";
+            query += " and data ->> 'status' in (:gjeldendeStatuser) ";
             par.addValue("gjeldendeStatuser", convert(KravStatus.gjeldende(), Enum::name));
         }
         if (filter.getSistRedigert() != null) {
@@ -144,7 +144,7 @@ public class KravRepoImpl implements KravRepoCustom {
         }
 
         if (filter.isGjeldendeKrav()) {
-            return exists(all, k2 -> k2.toKrav().supersedes(krav));
+            return !exists(all, k2 -> k2.toKrav().supersedes(krav));
         }
 
         return true;
