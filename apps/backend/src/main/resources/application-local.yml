@@ -3,6 +3,9 @@ client:
         base-url: http://localhost:${wiremock.server.port:8080}/bkat
     teamcat:
         url: http://localhost:${wiremock.server.port:8080}/teamcat
+    slack:
+      base-url: http://localhost:${wiremock.server.port:8080}/slack
+
 etterlev:
     security:
         enabled: false
@@ -10,3 +13,9 @@ spring:
     main:
         allow-bean-definition-overriding: true
         lazy-initialization: true
+
+DB_DATABASE: etterlevelsedb
+DB_HOST: localhost
+DB_PASSWORD: password
+DB_PORT: 5433
+DB_USERNAME: etterlevelse
