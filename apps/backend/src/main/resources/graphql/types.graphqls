@@ -228,3 +228,13 @@ type BehandlingPage {
     paged: Boolean
     content: [Behandling!]!
 }
+
+type KravPage {
+    pageNumber: Int!
+    pageSize: Int!
+    pages: Int!
+    numberOfElements: Int!
+    totalElements: Int!
+    paged: Boolean
+    content: [Krav!]!
+}

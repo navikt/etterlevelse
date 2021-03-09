@@ -6,16 +6,35 @@ import {Code, codelistCompareField, codelistsCompareField} from '../../services/
 import RouteLink from './RouteLink'
 import {kravNumView, kravStatus} from '../../pages/KravPage'
 import React from 'react'
-import {KravQL} from '../../constants'
+import {KravQL, PageResponse} from '../../constants'
+import {QueryResult} from '@apollo/client'
 
-export const KravFilterTable = (props: {filter: KravFilters, emptyText?: string, exclude?: (keyof KravQL)[]}) => {
-  const {data, loading} = useKravFilter(props.filter)
+type KravFilterTableProps = {
+  emptyText?: string,
+  exclude?: (keyof KravQL)[]
+  filter: KravFilters
+}
+
+type KravTableProps = {
+  emptyText?: string,
+  exclude?: (keyof KravQL)[]
+  queryResult: QueryResult<{krav: PageResponse<KravQL>}, KravFilters>
+}
+
+export const KravFilterTable = (props: KravFilterTableProps) => {
+  const res = useKravFilter(props.filter)
+  return <KravTable queryResult={res} exclude={props.exclude} emptyText={props.emptyText}/>
+}
+
+export const KravTable = (props: KravTableProps) => {
+  const queryResult = props.queryResult
+  const filter = queryResult.variables
 
   return (
-    loading && !data?.length ?
+    queryResult.loading && !queryResult.data?.krav?.numberOfElements ?
       <Spinner size={theme.sizing.scale2400}/> :
       <Table
-        data={data || []}
+        data={queryResult.data?.krav?.content || []}
         emptyText={props.emptyText || 'krav'}
         headers={[
           {title: 'Nummer', column: 'kravNummer', small: true},
@@ -33,7 +52,7 @@ export const KravFilterTable = (props: {filter: KravFilters, emptyText?: string,
             kravNummer: (a, b) => a.kravNummer === b.kravNummer ? a.kravVersjon - b.kravVersjon : a.kravNummer - b.kravNummer,
             avdeling: codelistCompareField('avdeling'),
             underavdeling: codelistCompareField('underavdeling'),
-            regelverk: codelistsCompareField<KravQL>(k => k.regelverk.map(r => r.lov as Code), props.filter.lov)
+            regelverk: codelistsCompareField<KravQL>(k => k.regelverk.map(r => r.lov as Code), filter?.lov)
           },
           exclude: props.exclude
         }}

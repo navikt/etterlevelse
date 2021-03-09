@@ -78,8 +78,8 @@ class KravGraphQLIT extends GraphQLTestBase {
 
             assertThat(response, "krav")
                     .hasNoErrors()
-                    .hasSize(1)
-                    .hasField("[0].id", krav.getId().toString());
+                    .hasSize("content", 1)
+                    .hasField("content[0].id", krav.getId().toString());
         }
 
         @Test
@@ -134,10 +134,10 @@ class KravGraphQLIT extends GraphQLTestBase {
 
             assertThat(response, "krav")
                     .hasNoErrors()
-                    .hasSize(3)
-                    .hasField("[0].id", krav50RelevansMatch.getId().toString())
-                    .hasField("[1].id", krav51MedEtterlevelse.getId().toString())
-                    .hasField("[2].id", krav51NyesteVersjon.getId().toString());
+                    .hasSize("content", 3)
+                    .hasField("content[0].id", krav50RelevansMatch.getId().toString())
+                    .hasField("content[1].id", krav51MedEtterlevelse.getId().toString())
+                    .hasField("content[2].id", krav51NyesteVersjon.getId().toString());
         }
 
         @Test
@@ -161,8 +161,8 @@ class KravGraphQLIT extends GraphQLTestBase {
 
             assertThat(response, "krav")
                     .hasNoErrors()
-                    .hasSize(1)
-                    .hasField("[0].id", krav.getId().toString());
+                    .hasSize("content", 1)
+                    .hasField("content[0].id", krav.getId().toString());
         }
 
         @Test
@@ -182,8 +182,8 @@ class KravGraphQLIT extends GraphQLTestBase {
 
             assertThat(response, "krav")
                     .hasNoErrors()
-                    .hasSize(1)
-                    .hasField("[0].id", krav.getId().toString());
+                    .hasSize("content", 1)
+                    .hasField("content[0].id", krav.getId().toString());
         }
 
         @Test
@@ -206,8 +206,8 @@ class KravGraphQLIT extends GraphQLTestBase {
 
             assertThat(response, "krav")
                     .hasNoErrors()
-                    .hasSize(1)
-                    .hasSize("[0].etterlevelser", 1);
+                    .hasSize("content", 1)
+                    .hasSize("content[0].etterlevelser", 1);
         }
     }
 
@@ -223,21 +223,21 @@ class KravGraphQLIT extends GraphQLTestBase {
 
         // all
         assertThat(graphQLTestTemplate.perform("graphqltest/krav_filter.graphql", vars(Map.of("relevans", "SAK"))), "krav")
-                .hasNoErrors().hasSize(10);
+                .hasNoErrors().hasSize("content", 10);
 
         // size 3, 2nd page
         assertThat(graphQLTestTemplate.perform("graphqltest/krav_filter.graphql", vars(Map.of("pageNumber", "1", "pageSize", "3"))), "krav")
-                .hasNoErrors().hasSize(3)
-                .hasField("[0].navn", "Krav 3")
-                .hasField("[1].navn", "Krav 4")
-                .hasField("[2].navn", "Krav 5");
+                .hasNoErrors().hasSize("content", 3)
+                .hasField("content[0].navn", "Krav 3")
+                .hasField("content[1].navn", "Krav 4")
+                .hasField("content[2].navn", "Krav 5");
 
         // size 3, 2nd page with filter
         assertThat(graphQLTestTemplate.perform("graphqltest/krav_filter.graphql", vars(Map.of("relevans", "SAK", "pageNumber", "1", "pageSize", "3"))), "krav")
-                .hasNoErrors().hasSize(3)
-                .hasField("[0].navn", "Krav 3")
-                .hasField("[1].navn", "Krav 4")
-                .hasField("[2].navn", "Krav 5");
+                .hasNoErrors().hasSize("content", 3)
+                .hasField("content[0].navn", "Krav 3")
+                .hasField("content[1].navn", "Krav 4")
+                .hasField("content[2].navn", "Krav 5");
     }
 
     @Nested

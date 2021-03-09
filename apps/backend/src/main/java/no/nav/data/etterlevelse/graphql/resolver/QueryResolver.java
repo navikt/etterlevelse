@@ -48,21 +48,23 @@ public class QueryResolver implements GraphQLQueryResolver {
         return null;
     }
 
-    public List<KravResponse> krav(KravFilter filter, Integer page, Integer pageSize) {
+    public RestResponsePage<KravResponse> krav(KravFilter filter, Integer page, Integer pageSize) {
         log.info("krav filter {}", filter);
         var pageInput = new PageParameters(page, pageSize);
 
         if (filter == null || filter.isEmpty()) {
-            return convert(kravService.getAll(pageInput.createPage()).getContent(), Krav::toResponse);
+            return new RestResponsePage<>(kravService.getAll(pageInput.createPage()).getContent()).convert(Krav::toResponse);
         }
 
         List<Krav> filtered = new ArrayList<>(kravService.getByFilter(filter));
-        filtered.sort(comparing(Krav::getKravNummer).thenComparing(Krav::getKravVersjon));
+        if (filter.getSistRedigert() != null) {
+            filtered.sort(comparing(Krav::getKravNummer).thenComparing(Krav::getKravVersjon));
+        }
         var all = pageSize == 0;
         if (all) {
-            return convert(filtered, Krav::toResponse);
+            return new RestResponsePage<>(filtered).convert(Krav::toResponse);
         }
-        return convert(pageInput.sublist(filtered), Krav::toResponse);
+        return pageInput.pageFrom(convert(filtered, Krav::toResponse));
     }
 
     public RestResponsePage<Behandling> behandling(BehandlingFilter filter, Integer page, Integer pageSize) {

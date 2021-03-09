@@ -1,39 +1,49 @@
-import {KravQL} from '../constants'
+import {KravQL, PageResponse} from '../constants'
 import {gql, useQuery} from '@apollo/client'
 import {DocumentNode} from 'graphql'
 
-const kravtableQuery = gql`query getKravByFilter ($relevans: [String!], $nummer: Int, $behandlingId: String, $underavdeling: String, $lov: String) {
-  krav(filter: {relevans: $relevans, nummer: $nummer, behandlingId: $behandlingId, underavdeling: $underavdeling, lov: $lov}) {
-    id
-    navn
-    kravNummer
-    kravVersjon
-    status
-    avdeling {
-      code
-      shortName
-    }
-    regelverk {
-      lov {
+const kravtableQuery = gql`query getKravByFilter ($relevans: [String!], $nummer: Int, $behandlingId: String, $underavdeling: String, $lov: String, $sistRedigert: NonNegativeInt, $pageSize: NonNegativeInt, $pageNumber: NonNegativeInt) {
+  krav(filter: {relevans: $relevans, nummer: $nummer, behandlingId: $behandlingId, underavdeling: $underavdeling, lov: $lov, sistRedigert: $sistRedigert}, pageSize: $pageSize, pageNumber: $pageNumber) {
+    content {
+      id
+      navn
+      kravNummer
+      kravVersjon
+      status
+      avdeling {
         code
         shortName
       }
-    }
-    underavdeling {
-      code
-      shortName
-    }
-    etterlevelser {
-      id
+      regelverk {
+        lov {
+          code
+          shortName
+        }
+      }
+      underavdeling {
+        code
+        shortName
+      }
+      etterlevelser {
+        id
+      }
     }
   }
 }`
 
-export type KravFilters = {relevans?: string[], nummer?: number, behandlingId?: string, underavdeling?: string, lov?: string}
+export type KravFilters = {
+  relevans?: string[],
+  nummer?: number,
+  behandlingId?: string,
+  underavdeling?: string,
+  lov?: string,
+  sistRedigert?: number
+  pageNumber?: number
+  pageSize?: number
+}
 
 export const useKravFilter = (variables: KravFilters, query?: DocumentNode) => {
-  const {data, loading} = useQuery<{krav: KravQL[]}, KravFilters>(query || kravtableQuery, {
+  return useQuery<{krav: PageResponse<KravQL>}, KravFilters>(query || kravtableQuery, {
     variables
   })
-  return {data: data?.krav, loading}
 }
