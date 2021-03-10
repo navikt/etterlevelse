@@ -4,5 +4,6 @@ public enum ListName {
     RELEVANS,
     AVDELING,
     UNDERAVDELING,
-    LOV
+    LOV,
+    TEMA,
 }
