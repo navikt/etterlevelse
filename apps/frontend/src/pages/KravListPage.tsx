@@ -21,7 +21,7 @@ enum Mode {
 }
 
 export const KravListPage = () => {
-  const [mode, setMode] = useState<Mode>(0)
+  const [mode, setMode] = useState<Mode>(user.isLoggedIn() ? Mode.siste : Mode.gjeldende)
   const [pageNumber, setPageNumber] = useState<number>(0)
   const [pageSize, setPageSize] = useState<number>(10)
   const res = useKravFilter({
@@ -52,7 +52,7 @@ export const KravListPage = () => {
             setPageNumber(0)
             setMode(i)
           }}>
-            <BButton>Sist redigerte</BButton>
+            <BButton disabled={!user.isLoggedIn()}>Sist redigerte</BButton>
             <BButton>Gjeldende</BButton>
             <BButton>Alle</BButton>
           </ButtonGroup>

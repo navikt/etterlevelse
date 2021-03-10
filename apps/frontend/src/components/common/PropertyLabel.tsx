@@ -9,14 +9,14 @@ type LabelProps = {
   title: string,
   hide?: boolean,
   compact?: boolean
-} & Or<{children: React.ReactNode}, {markdown: string | string[]}>
+} & Or<{children: React.ReactNode}, {markdown: string | string[], vertical?: boolean}>
 
 export const Label = (props: LabelProps) => {
   if (props.hide || (empty(props.children) && empty(props.markdown))) return null
   return (
     <DataText label={props.title} compact={props.compact}>
       {props.markdown ?
-        <Markdown sources={Array.isArray(props.markdown) ? props.markdown : [props.markdown]} shortenLinks/>
+        <Markdown sources={Array.isArray(props.markdown) ? props.markdown : [props.markdown]} vertical={props.vertical} shortenLinks/>
         : props.children}
     </DataText>
   )

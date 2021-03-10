@@ -22,6 +22,7 @@ export const ViewKrav = ({krav}: {krav: KravQL}) => {
   return (
     <Block width='100%'>
       <Label title='Hensikt' markdown={krav.hensikt}/>
+      <Label title='Suksesskriterier' markdown={krav.suksesskriterier.map(s => `${s.id}: ${s.navn}`)} vertical/>
       <Label title='Beskrivelse' markdown={krav.beskrivelse}/>
 
       <Block height={theme.sizing.scale800}/>
@@ -46,7 +47,6 @@ const AllInfo = ({krav}: {krav: KravQL}) => (
   <>
     <Label title='Utfyllende beskrivelse' markdown={krav.utdypendeBeskrivelse}/>
     <Label title='Endringer fra forrige versjon' markdown={krav.versjonEndringer}/>
-    <Label title='Suksesskriterier' markdown={krav.suksesskriterier.map(s => `${s.id}: ${s.navn}`)} />
     <Label title='Dokumentasjon' markdown={krav.dokumentasjon}/>
     <Label title='Regelverk' hide={!krav.regelverk.length}>
       <LovViewList regelverk={krav.regelverk}/>

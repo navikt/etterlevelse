@@ -11,7 +11,7 @@ import 'react-markdown-editor-lite/lib/index.css'
 import {Block} from 'baseui/block'
 import {theme} from '../../util'
 
-export const Markdown = (props: {source?: string, sources?: string[], escapeHtml?: boolean, noMargin?: boolean, shortenLinks?: boolean}) => {
+export const Markdown = (props: {source?: string, sources?: string[], escapeHtml?: boolean, noMargin?: boolean, shortenLinks?: boolean, vertical?: boolean}) => {
   const renderers = {
     paragraph: (parProps: any) => {
       const {children} = parProps
@@ -32,7 +32,7 @@ export const Markdown = (props: {source?: string, sources?: string[], escapeHtml
     // Fix font color in lists etc
     color: theme.colors.contentPrimary
   }}>
-    <ReactMarkdown source={sources.join(', ')}
+    <ReactMarkdown source={sources.join(props.vertical ? '\n\n' : ', ')}
                    escapeHtml={props.escapeHtml}
                    renderers={renderers}
                    plugins={[remarkGfm]}
