@@ -2,6 +2,7 @@ import React from 'react'
 import DataText from './DataText'
 import {Markdown} from './Markdown'
 import {Or} from '../../constants'
+import {Block} from 'baseui/block'
 
 const empty = (arg: any) => !arg || (Array.isArray(arg) && !arg.length)
 
@@ -16,7 +17,9 @@ export const Label = (props: LabelProps) => {
   return (
     <DataText label={props.title} compact={props.compact}>
       {props.markdown ?
-        <Markdown sources={Array.isArray(props.markdown) ? props.markdown : [props.markdown]} vertical={props.vertical} shortenLinks/>
+        <Block marginTop={'-1rem'} marginBottom={'-1rem'}>
+          <Markdown sources={Array.isArray(props.markdown) ? props.markdown : [props.markdown]} vertical={props.vertical} shortenLinks/>
+        </Block>
         : props.children}
     </DataText>
   )
