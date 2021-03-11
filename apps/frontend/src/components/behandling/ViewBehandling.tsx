@@ -59,15 +59,17 @@ export const ViewBehandling = ({behandling}: {behandling: Behandling}) => {
 const behandlingKravQuery = gql`
   query getKravByFilter ($behandlingId: String!) {
     krav(filter: {behandlingId: $behandlingId}) {
-      id
-      navn
-      kravNummer
-      kravVersjon
-      etterlevelser (onlyForBehandling: true) {
+      content{
         id
-        etterleves
-        fristForFerdigstillelse
-        status
+        navn
+        kravNummer
+        kravVersjon
+        etterlevelser (onlyForBehandling: true) {
+          id
+          etterleves
+          fristForFerdigstillelse
+          status
+        }
       }
     }
   }`

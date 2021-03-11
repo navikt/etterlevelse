@@ -6,11 +6,11 @@ scalar NonNegativeInt
 
 type Query {
     kravById(id: ID, nummer: Int, versjon: Int): Krav
-    krav(filter: KravFilter, pageNumber: NonNegativeInt = 0, pageSize: NonNegativeInt = 0): KravPage
+    krav(filter: KravFilter, pageNumber: NonNegativeInt = 0, pageSize: NonNegativeInt = 0): KravPage!
 
     etterlevelseById(id: ID!) : Etterlevelse
 
-    behandling(filter: BehandlingFilter, pageNumber: NonNegativeInt = 0, pageSize: NonNegativeInt = 0): BehandlingPage
+    behandling(filter: BehandlingFilter, pageNumber: NonNegativeInt = 0, pageSize: NonNegativeInt = 0): BehandlingPage!
 }
 
 input KravFilter {
