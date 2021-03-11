@@ -6,8 +6,8 @@ import {borderColor, marginAll} from '../components/common/Style'
 import {theme} from '../util'
 import {LabelMedium, ParagraphSmall} from 'baseui/typography'
 import {primitives} from '../util/theme'
-import {Code, codelist, ListName} from '../services/Codelist'
-import {barChart, illustration, lawBook, LovBilde, pencilFill} from '../components/Images'
+import {codelist, ListName, TemaCode} from '../services/Codelist'
+import {barChart, illustration, lawBook, pencilFill, TemaBilde} from '../components/Images'
 
 
 const sectionProps: BlockProps = {
@@ -39,27 +39,27 @@ export const MainPage = () => {
       </Block>
 
       <Block {...sectionProps}>
-        {codelist.getCodes(ListName.LOV).map(lov =>
-          <LawCard key={lov.code} lov={lov}/>
+        {codelist.getCodes(ListName.TEMA).map(tema =>
+          <TemaCard key={tema.code} tema={tema}/>
         )}
       </Block>
     </Block>
   )
 }
 
-const LawCard = (props: {lov: Code}) => {
+const TemaCard = (props: {tema: TemaCode}) => {
   return (
-    <FrontCard url={urlForObject(ListName.LOV, props.lov.code)}>
+    <FrontCard url={urlForObject(ListName.TEMA, props.tema.code)}>
       <Block display='flex' width='100%'>
         <Block height='126px'>
-          <LovBilde code={props.lov} height={'126px'} width={'160px'}/>
+          <TemaBilde code={props.tema} height={'126px'} width={'160px'}/>
         </Block>
         <Block marginLeft={theme.sizing.scale600}>
           <LabelMedium marginBottom={0} $style={{
             wordWrap: 'break-word',
             hyphens: 'auto'
           }}>
-            {props.lov.shortName}
+            {props.tema.shortName}
           </LabelMedium>
         </Block>
       </Block>

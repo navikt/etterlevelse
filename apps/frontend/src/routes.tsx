@@ -14,7 +14,7 @@ import {BehandlingPage} from './pages/BehandlingPage'
 import {MyBehandlingerPage} from './pages/MyBehandlingerPage'
 import {RelevansPage} from './pages/RelevansPage'
 import {UnderavdelingPage} from './pages/UnderavdelingPage'
-import {LovPage} from './pages/LovPage'
+import {TemaPage} from './pages/TemaPage'
 
 const Routes = (): JSX.Element => (
   <Switch>
@@ -32,7 +32,8 @@ const Routes = (): JSX.Element => (
 
     <Route exact path="/relevans/:relevans?" component={RelevansPage}/>
     <Route exact path="/underavdeling/:underavdeling?" component={UnderavdelingPage}/>
-    <Route exact path="/lov/:lov?" component={LovPage}/>
+    <Route exact path="/lov/:lov?" component={TemaPage}/>
+    <Route exact path="/tema/:tema?" component={TemaPage}/>
 
     <Route exact path="/admin/codelist/:listname?" component={CodeListPage}/>
     <Route exact path="/admin/audit/:id?/:auditId?" component={AuditPage}/>
