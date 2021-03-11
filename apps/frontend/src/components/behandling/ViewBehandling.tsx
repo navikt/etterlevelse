@@ -86,14 +86,14 @@ type KravTableData = {
 
 const KravTable = (props: {behandling: Behandling}) => {
   const variables = filterForBehandling(props.behandling)
-  const {data: rawData, loading} = useQuery<{krav: KravQL[]}>(behandlingKravQuery, {
+  const {data: rawData, loading} = useQuery<{krav: PageResponse<KravQL>}>(behandlingKravQuery, {
     variables,
     skip: !variables?.behandlingId
   })
   const [data, setData] = useState<KravTableData[]>([])
 
   useEffect(() => {
-    const mapped = (rawData?.krav || []).map(krav => {
+    const mapped = (rawData?.krav.content || []).map(krav => {
       const etterlevelse = krav.etterlevelser.length ? krav.etterlevelser[0] : undefined
       return ({
         kravNummer: krav.kravNummer,
