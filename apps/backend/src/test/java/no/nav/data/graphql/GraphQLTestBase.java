@@ -20,9 +20,9 @@ public abstract class GraphQLTestBase extends IntegrationTestBase {
         return om.createObjectNode();
     }
 
-    protected ObjectNode vars(Map<String, String> map) {
+    protected ObjectNode vars(Map<String, ? extends Object> map) {
         var on = om.createObjectNode();
-        map.forEach(on::put);
+        map.forEach((key, val) -> on.set(key, JsonUtils.toJsonNode(val)));
         return on;
     }
 }

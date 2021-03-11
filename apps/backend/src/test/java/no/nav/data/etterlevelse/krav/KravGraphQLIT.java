@@ -8,6 +8,7 @@ import no.nav.data.etterlevelse.behandling.dto.BehandlingRequest;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravStatus;
+import no.nav.data.etterlevelse.krav.domain.Regelverk;
 import no.nav.data.etterlevelse.varsel.domain.AdresseType;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 import no.nav.data.graphql.GraphQLTestBase;
@@ -186,6 +187,47 @@ class KravGraphQLIT extends GraphQLTestBase {
                     .hasField("content[0].id", krav.getId().toString());
         }
 
+        @Test
+        @SneakyThrows
+        void kravForLov() {
+            var krav = storageService.save(Krav.builder()
+                    .navn("Krav 1").kravNummer(50).kravVersjon(1)
+                    .regelverk(List.of(Regelverk.builder().lov("ARKIV").build()))
+                    .build());
+            storageService.save(Krav.builder()
+                    .navn("Krav 2").kravNummer(51).kravVersjon(1)
+                    .regelverk(List.of(Regelverk.builder().lov("PERSON").build()))
+                    .build());
+
+            var var = Map.of("lov", "ARKIV");
+            var response = graphQLTestTemplate.perform("graphqltest/krav_filter.graphql", vars(var));
+
+            assertThat(response, "krav")
+                    .hasNoErrors()
+                    .hasSize("content", 1)
+                    .hasField("content[0].id", krav.getId().toString());
+        }
+
+        @Test
+        @SneakyThrows
+        void kravForLover() {
+            var krav = storageService.save(Krav.builder()
+                    .navn("Krav 1").kravNummer(50).kravVersjon(1)
+                    .regelverk(List.of(Regelverk.builder().lov("ARKIV").build()))
+                    .build());
+            storageService.save(Krav.builder()
+                    .navn("Krav 2").kravNummer(51).kravVersjon(1)
+                    .regelverk(List.of(Regelverk.builder().lov("PERSON").build()))
+                    .build());
+
+            var var = Map.of("lover", List.of("ARKIV", "ANNET"));
+            var response = graphQLTestTemplate.perform("graphqltest/krav_filter.graphql", vars(var));
+
+            assertThat(response, "krav")
+                    .hasNoErrors()
+                    .hasSize("content", 1)
+                    .hasField("content[0].id", krav.getId().toString());
+        }
 
         @Test
         @SneakyThrows
