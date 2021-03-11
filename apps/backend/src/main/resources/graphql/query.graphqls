@@ -14,11 +14,14 @@ type Query {
 }
 
 input KravFilter {
-    relevans: [String!]
     nummer: Int
     behandlingId: String
     underavdeling: String
     lov: String
+    """ en av """
+    lover: [String!]
+    """ en av """
+    relevans: [String!]
     gjeldendeKrav: Boolean = false
     """min 1, max 20"""
     sistRedigert: NonNegativeInt
