@@ -13,7 +13,7 @@ export const TemaPage = () => {
 
   if (!tema) {
     return <Block width='100%'>
-      <HeadingMedium>Velg tema</HeadingMedium>
+      <HeadingMedium>Velg</HeadingMedium>
       <Block>
         {codelist.getCodes(ListName.TEMA).map((code) =>
           <Block key={code.code} marginBottom={theme.sizing.scale400}>
@@ -33,7 +33,7 @@ export const TemaPage = () => {
     <Block width='100%'>
       <Block display='flex' justifyContent='space-between'>
         <Block>
-          <HeadingMedium marginTop={0}>Tema: {code.shortName}</HeadingMedium>
+          <HeadingMedium marginTop={0}>{code.shortName}</HeadingMedium>
           <ParagraphMedium>{code.description}</ParagraphMedium>
         </Block>
         <Block>
