@@ -22,9 +22,11 @@ export const Markdown = (props: {source?: string, sources?: string[], escapeHtml
       const {children, href, node} = linkProps
       const content = props.shortenLinks && node.children[0]?.value.indexOf("http") === 0 ? 'Lenke' : children
       return <StatefulTooltip content={href}>
+        <span>
         <ExternalLink href={href}>
-          <span>{content} <FontAwesomeIcon size='sm' icon={faExternalLinkAlt}/></span>
+          {content} <FontAwesomeIcon size='sm' icon={faExternalLinkAlt}/>
         </ExternalLink>
+        </span>
       </StatefulTooltip>
     }
   }
