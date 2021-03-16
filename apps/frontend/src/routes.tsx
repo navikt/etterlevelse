@@ -1,6 +1,6 @@
-import * as React from 'react';
-import {Route, Switch} from 'react-router-dom';
-import {MainPage} from './pages/MainPage';
+import * as React from 'react'
+import {Route, Switch} from 'react-router-dom'
+import {MainPage} from './pages/MainPage'
 import NotFound from './pages/NotFound'
 import CodeListPage from './components/admin/CodeList/CodelistPage'
 import {AuditPage} from './components/admin/audit/AuditPage'

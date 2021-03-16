@@ -64,7 +64,7 @@ export const KravTable = (props: KravTableProps) => {
             <Cell>{krav.etterlevelser.length}</Cell>,
             <Cell>{krav.avdeling?.shortName}</Cell>,
             <Cell>{krav.underavdeling?.shortName}</Cell>,
-            <Cell>{krav.regelverk.map(r => r.lov?.shortName).join(", ")}</Cell>,
+            <Cell>{krav.regelverk.map(r => r.lov?.shortName).join(', ')}</Cell>,
             <Cell>{kravStatus(krav.status)}</Cell>,
           ])
           }

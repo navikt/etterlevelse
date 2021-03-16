@@ -1,4 +1,4 @@
-import {Behandling, Etterlevelse, EtterlevelseStatus} from '../../constants'
+import {Etterlevelse, EtterlevelseStatus} from '../../constants'
 import {Field, FieldProps, Form, Formik, FormikProps} from 'formik'
 import {createEtterlevelse, mapToFormVal, updateEtterlevelse} from '../../api/EtterlevelseApi'
 import {Block} from 'baseui/block'

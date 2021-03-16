@@ -1,8 +1,8 @@
-import * as React from "react";
-import {Modal, ModalBody, ModalFooter, ModalHeader} from "baseui/modal";
-import {Paragraph2} from "baseui/typography";
-import {Button} from "baseui/button";
-import {Block} from "baseui/block";
+import * as React from 'react'
+import {Modal, ModalBody, ModalFooter, ModalHeader} from 'baseui/modal'
+import {Paragraph2} from 'baseui/typography'
+import {Button} from 'baseui/button'
+import {Block} from 'baseui/block'
 import {CodeListFormValues} from '../../../services/Codelist'
 
 type ModalDeleteProps = {
@@ -12,7 +12,7 @@ type ModalDeleteProps = {
   errorOnDelete: any | undefined,
   submit: (code: CodeListFormValues) => void,
   onClose: () => void,
-};
+}
 
 const DeleteCodeListModal = ({title, initialValues, isOpen, errorOnDelete, submit, onClose}: ModalDeleteProps) => {
   return (
@@ -47,7 +47,7 @@ const DeleteCodeListModal = ({title, initialValues, isOpen, errorOnDelete, submi
         </Block>
       </ModalFooter>
     </Modal>
-  );
-};
+  )
+}
 
-export default DeleteCodeListModal;
+export default DeleteCodeListModal

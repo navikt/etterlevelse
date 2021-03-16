@@ -49,7 +49,7 @@ export const ViewBehandling = ({behandling}: {behandling: Behandling}) => {
         <Label title={'Relevans'}><DotTags list={ListName.RELEVANS} codes={behandling.relevansFor} linkCodelist/></Label>
       </Block>
 
-      <BehandlingStats behandling={behandling}/>
+      <BehandlingStatsView behandling={behandling}/>
       <KravTable behandling={behandling}/>
 
     </Block>
@@ -116,7 +116,7 @@ const KravTable = (props: {behandling: Behandling}) => {
     etterlevelseStatus: etterlevelse?.status
   })
   const update = (etterlevelse: Etterlevelse) => {
-    setData(data.map(e => e.kravVersjon === etterlevelse.kravVersjon && e.kravNummer == etterlevelse.kravNummer ? {...e, ...mapEtterlevelseData(etterlevelse)} : e))
+    setData(data.map(e => e.kravVersjon === etterlevelse.kravVersjon && e.kravNummer === etterlevelse.kravNummer ? {...e, ...mapEtterlevelseData(etterlevelse)} : e))
   }
 
   const head = <HeadingSmall marginBottom={theme.sizing.scale400}>Krav for behandling</HeadingSmall>
@@ -194,7 +194,7 @@ const KravTable = (props: {behandling: Behandling}) => {
                  }
                }}
         >
-          <ModalHeader>{edit == 'ny' ? 'Ny' : 'Rediger'} etterlevelse</ModalHeader>
+          <ModalHeader>{edit === 'ny' ? 'Ny' : 'Rediger'} etterlevelse</ModalHeader>
           <ModalBody>
             <EditModal etterlevelseId={edit} behandlingId={props.behandling.id} kravId={kravId} close={e => {
               setEdit(undefined)
@@ -242,7 +242,7 @@ const EditModal = (props: {etterlevelseId: string, behandlingId: string, kravId?
 }
 
 const KravView = (props: {kravId: KravId}) => {
-  const {data, loading} = useQuery<{kravById: KravQL}, KravId>(kravFullQuery, {
+  const {data} = useQuery<{kravById: KravQL}, KravId>(kravFullQuery, {
     variables: props.kravId,
     skip: !props.kravId.id && !props.kravId.kravNummer
   })
@@ -315,7 +315,7 @@ const statsQuery = gql`
   }`
 
 
-const BehandlingStats = ({behandling}: {behandling: Behandling}) => {
+const BehandlingStatsView = ({behandling}: {behandling: Behandling}) => {
   const {data} = useQuery<{behandling: PageResponse<{stats: BehandlingStats}>}>(statsQuery, {
     variables: {behandlingId: behandling.id}
   })

@@ -16,7 +16,7 @@ import {Regelverk} from '../../../constants'
 export const KravRegelverkEdit = () => {
   const [lov, setLov] = useState<Value>([])
   const [text, setText] = useState('')
-  const controlRef = React.useRef<HTMLInputElement | HTMLDivElement>(null);
+  const controlRef = React.useRef<HTMLInputElement | HTMLDivElement>(null)
 
   const regelverkObject = () => ({lov: codelist.getCode(ListName.LOV, lov[0].id as string)!, spesifisering: text})
 

@@ -2,26 +2,26 @@ import * as React from 'react'
 import {ReactElement, useEffect, useState} from 'react'
 import {Select, TYPE, Value} from 'baseui/select'
 import {theme} from '../../util'
-import {useDebouncedState, useQueryParam} from "../../util/hooks"
-import {prefixBiasedSort} from "../../util/sort"
-import {Block} from "baseui/block"
+import {useDebouncedState, useQueryParam} from '../../util/hooks'
+import {prefixBiasedSort} from '../../util/sort'
+import {Block} from 'baseui/block'
 import {useHistory, useLocation} from 'react-router-dom'
-import {urlForObject} from "../common/RouteLink"
-import Button from "../common/Button"
-import {faFilter} from "@fortawesome/free-solid-svg-icons"
-import {Radio, RadioGroup} from "baseui/radio"
-import {paddingZero} from "../common/Style"
-import SearchLabel from "./components/SearchLabel"
-import {NavigableItem, ObjectType} from "../admin/audit/AuditTypes"
+import {urlForObject} from '../common/RouteLink'
+import Button from '../common/Button'
+import {faFilter} from '@fortawesome/free-solid-svg-icons'
+import {Radio, RadioGroup} from 'baseui/radio'
+import {paddingZero} from '../common/Style'
+import SearchLabel from './components/SearchLabel'
+import {NavigableItem, ObjectType} from '../admin/audit/AuditTypes'
 import {Behandling, Krav} from '../../constants'
 import shortid from 'shortid'
-import {searchResultColor} from "../../util/theme"
+import {searchResultColor} from '../../util/theme'
 import {kravName} from '../../pages/KravPage'
 import {searchKrav} from '../../api/KravApi'
 import {behandlingName, searchBehandling} from '../../api/BehandlingApi'
 import {codelist, ListName} from '../../services/Codelist'
 
-shortid.characters('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@');
+shortid.characters('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@')
 
 type SearchItem = {id: string, sortKey: string, label: ReactElement, type: NavigableItem}
 
@@ -102,14 +102,14 @@ const SelectType = (props: {type: SearchType, setType: (type: SearchType) => voi
 const kravMap = (t: Krav) => ({
   id: t.id,
   sortKey: t.navn,
-  label: <SearchLabel name={kravName(t)} type={"Krav"} backgroundColor={searchResultColor.kravBackground}/>,
+  label: <SearchLabel name={kravName(t)} type={'Krav'} backgroundColor={searchResultColor.kravBackground}/>,
   type: ObjectType.Krav
 })
 
 const behandlingMap = (t: Behandling) => ({
   id: t.id,
   sortKey: t.navn,
-  label: <SearchLabel name={behandlingName(t)} type={"Behandling"} backgroundColor={searchResultColor.behandlingBackground}/>,
+  label: <SearchLabel name={behandlingName(t)} type={'Behandling'} backgroundColor={searchResultColor.behandlingBackground}/>,
   type: ObjectType.Behandling
 })
 
@@ -221,14 +221,14 @@ const MainSearch = () => {
         <Select
           backspaceRemoves
           startOpen={!!searchParam}
-          noResultsMsg={"Ingen"}
+          noResultsMsg={'Ingen'}
           autoFocus={location.pathname === '/'}
           isLoading={loading}
           maxDropdownHeight="400px"
           searchable={true}
           type={TYPE.search}
           options={searchResult}
-          placeholder={"Søk etter krav eller behandling"}
+          placeholder={'Søk etter krav eller behandling'}
           value={value}
           onInputChange={event => {
             setSearch(event.currentTarget.value)
@@ -263,9 +263,9 @@ const MainSearch = () => {
             DropdownListItem: {
               style: {
                 paddingTop: 0,
-                paddingRight: "5px",
+                paddingRight: '5px',
                 paddingBottom: 0,
-                paddingLeft: "5px"
+                paddingLeft: '5px'
               }
             }
           }

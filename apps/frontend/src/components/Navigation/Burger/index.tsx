@@ -1,22 +1,22 @@
 import * as React from 'react'
 import {Menu} from 'baseui/icon'
 import Button from '../../common/Button'
-import {ANCHOR, Drawer} from "baseui/drawer";
-import {theme} from '../../../util';
-import {Block, BlockProps} from 'baseui/block';
-import {StyledLink} from 'baseui/link';
-import {H6, Paragraph2, Paragraph4} from 'baseui/typography';
-import RouteLink from '../../common/RouteLink';
+import {ANCHOR, Drawer} from 'baseui/drawer'
+import {theme} from '../../../util'
+import {Block, BlockProps} from 'baseui/block'
+import {StyledLink} from 'baseui/link'
+import {H6, Paragraph2, Paragraph4} from 'baseui/typography'
+import RouteLink, {ExternalLink} from '../../common/RouteLink'
 import NavLogo from '../../../resources/navlogo.svg'
-import {useLocation} from 'react-router-dom';
-import SlackLogo from "../../../resources/Slack_Monochrome_White.svg";
-import {env} from '../../../util/env';
-import {useStyletron} from 'styletron-react';
-import {user} from '../../../services/User';
-import {useAwait} from '../../../util/hooks';
-import {intl} from '../../../util/intl/intl';
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faChevronDown, faChevronRight} from '@fortawesome/free-solid-svg-icons';
+import {useLocation} from 'react-router-dom'
+import SlackLogo from '../../../resources/Slack_Monochrome_White.svg'
+import {env} from '../../../util/env'
+import {useStyletron} from 'styletron-react'
+import {user} from '../../../services/User'
+import {useAwait} from '../../../util/hooks'
+import {intl} from '../../../util/intl/intl'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faChevronDown, faChevronRight} from '@fortawesome/free-solid-svg-icons'
 import {datajegerSlackLink, documentationLink} from '../../../util/config'
 
 const drawerFooterProps: BlockProps = {
@@ -29,16 +29,16 @@ const drawerFooterProps: BlockProps = {
 }
 
 const Brand = () =>
-  <StyledLink style={{ textDecoration: 'none' }} href="/">
+  <StyledLink style={{textDecoration: 'none'}} href="/">
     <H6 color="white" marginBottom="2rem">Etterlevelse</H6>
   </StyledLink>
 
-const NavItem = (props: { to: string, text: string }) =>
-  <RouteLink href={props.to} style={{ textDecoration: 'none' }}>
+const NavItem = (props: {to: string, text: string}) =>
+  <RouteLink href={props.to} style={{textDecoration: 'none'}}>
     <Block display="flex" alignItems="center">
       <Block marginRight={theme.sizing.scale500}>
         <FontAwesomeIcon
-          icon={useLocation().pathname.split("/")[1].includes(props.to.split("/")[1]) ? faChevronDown : faChevronRight}
+          icon={useLocation().pathname.split('/')[1].includes(props.to.split('/')[1]) ? faChevronDown : faChevronRight}
           color="white"
           size="lg"
         />
@@ -49,9 +49,9 @@ const NavItem = (props: { to: string, text: string }) =>
     </Block>
   </RouteLink>
 
-const LoginButton = (props: { location: string }) => {
-  const [useCss] = useStyletron();
-  const linkCss = useCss({ textDecoration: 'none', color: 'white' });
+const LoginButton = (props: {location: string}) => {
+  const [useCss] = useStyletron()
+  const linkCss = useCss({textDecoration: 'none', color: 'white'})
   return (
     <StyledLink href={`${env.backendBaseUrl}/login?redirect_uri=${props.location}`} className={linkCss}>
       <Button kind="secondary">
@@ -61,9 +61,9 @@ const LoginButton = (props: { location: string }) => {
   )
 }
 
-const SignOutButton = (props: { location: string }) => {
-  const [useCss] = useStyletron();
-  const linkCss = useCss({ textDecoration: 'none', color: 'white' });
+const SignOutButton = (props: {location: string}) => {
+  const [useCss] = useStyletron()
+  const linkCss = useCss({textDecoration: 'none', color: 'white'})
   return (
     <StyledLink href={`${env.backendBaseUrl}/logout?redirect_uri=${props.location}`} className={linkCss}>
       <Button kind="secondary">
@@ -88,7 +88,7 @@ const BurgerMenu = () => {
 
   return (
     <React.Fragment>
-      {!showMenu && <Button kind="minimal" onClick={() => setShowMenu(true)}><Menu size={36} /></Button>}
+      {!showMenu && <Button kind="minimal" onClick={() => setShowMenu(true)}><Menu size={36}/></Button>}
 
       {showMenu && (
         <Drawer
@@ -102,33 +102,33 @@ const BurgerMenu = () => {
                 return {
                   backgroundColor: theme.colors.primaryA,
                   height: 'auto'
-                };
+                }
               }
             },
             Close: {
-              style: ({ $theme }) => {
+              style: ({$theme}) => {
                 return {
                   backgroundColor: 'white'
-                };
+                }
               }
             }
           }}
         >
           <Block display="flex" flexDirection="column" alignItems="center" height="100%">
-            <Brand />
+            <Brand/>
             <Block>
 
               {user.isAdmin() && (
                 <>
-                  <NavItem to="/admin/audit" text={intl.audit} />
-                  <NavItem to="/admin/settings" text={intl.settings} />
+                  <NavItem to="/admin/audit" text={intl.audit}/>
+                  <NavItem to="/admin/settings" text={intl.settings}/>
                 </>
               )}
             </Block>
 
             <Block display="flex" justifyContent="center" marginTop={theme.sizing.scale1000}>
               {!user.isLoggedIn() && (
-                <LoginButton location={url} />
+                <LoginButton location={url}/>
               )}
 
               {user.isLoggedIn() && (
@@ -138,7 +138,7 @@ const BurgerMenu = () => {
                       <Paragraph2 color="white"><b>{user.getIdent()}</b> - {user.getName()}</Paragraph2>
                     </Block>
                     <Block>
-                      <SignOutButton location={url} />
+                      <SignOutButton location={url}/>
                     </Block>
                   </Block>
                 </>
@@ -147,24 +147,24 @@ const BurgerMenu = () => {
             </Block>
 
             <Block {...drawerFooterProps}>
-              <Block width={"100%"}>
-                <a href={datajegerSlackLink} style={{ textDecoration: 'none' }}>
+              <Block width={'100%'}>
+                <ExternalLink href={datajegerSlackLink} hideUnderline>
                   <Block display="flex" justifyContent="center" paddingBottom={theme.sizing.scale400} alignItems="center">
-                    <img src={SlackLogo} width="60px" alt="slack logo" />
+                    <img src={SlackLogo} width="60px" alt="slack logo"/>
                     <Paragraph4 color={theme.colors.white}>#datajegerne </Paragraph4>
                   </Block>
-                </a>
+                </ExternalLink>
               </Block>
-              <Block width={"100%"}>
-                <a href={documentationLink} style={{ textDecoration: 'none' }} target="_blank">
+              <Block width={'100%'}>
+                <ExternalLink href={documentationLink} hideUnderline>
                   <Block display="flex" justifyContent="center" paddingBottom={theme.sizing.scale400} alignItems="center">
                     <Paragraph4 color={theme.colors.white}>Dokumentasjon </Paragraph4>
                   </Block>
-                </a>
+                </ExternalLink>
               </Block>
             </Block>
-            <Block paddingBottom={theme.sizing.scale600} display={"flex"} justifyContent={"center"}>
-              <img src={NavLogo} alt='NAV logo' width="50%" />
+            <Block paddingBottom={theme.sizing.scale600} display={'flex'} justifyContent={'center'}>
+              <img src={NavLogo} alt='NAV logo' width="50%"/>
             </Block>
           </Block>
         </Drawer>

@@ -1,4 +1,4 @@
-import {intl} from "./intl/intl";
+import {intl} from './intl/intl'
 
 const start = (prefix: string) => (text: string) => {
   const startIndex = text.indexOf(prefix.toLowerCase())

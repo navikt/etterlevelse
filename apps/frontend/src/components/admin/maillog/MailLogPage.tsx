@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react"
+import React, {useEffect, useState} from 'react'
 import {H4, H6} from 'baseui/typography'
 import {intl} from '../../../util/intl/intl'
 import axios from 'axios'
@@ -6,7 +6,7 @@ import {env} from '../../../util/env'
 import {PageResponse} from '../../../constants'
 import {Block} from 'baseui/block'
 import {Card} from 'baseui/card'
-import ReactMarkdown from "react-markdown/with-html"
+import ReactMarkdown from 'react-markdown/with-html'
 import moment from 'moment'
 import {theme} from '../../../util'
 import {PLACEMENT, StatefulPopover} from 'baseui/popover'

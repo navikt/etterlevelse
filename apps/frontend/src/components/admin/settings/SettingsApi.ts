@@ -1,5 +1,5 @@
-import axios from "axios"
-import { env } from '../../../util/env'
+import axios from 'axios'
+import {env} from '../../../util/env'
 
 export const getSettings = async () => {
   return (await axios.get<Settings>(`${env.backendBaseUrl}/settings`)).data

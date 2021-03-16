@@ -1,28 +1,28 @@
-import {createTheme, lightThemePrimitives} from "baseui";
-import {colors} from "baseui/tokens";
-import {Theme, ThemePrimitives} from "baseui/theme";
-import {RecursivePartial} from "../constants";
-import "@fontsource/source-sans-pro/400.css"
-import "@fontsource/source-sans-pro/600.css"
-import "@fontsource/source-sans-pro/700.css"
-import "@fontsource/source-sans-pro/900.css"
+import {createTheme, lightThemePrimitives} from 'baseui'
+import {colors} from 'baseui/tokens'
+import {Theme, ThemePrimitives} from 'baseui/theme'
+import {RecursivePartial} from '../constants'
+import '@fontsource/source-sans-pro/400.css'
+import '@fontsource/source-sans-pro/600.css'
+import '@fontsource/source-sans-pro/700.css'
+import '@fontsource/source-sans-pro/900.css'
 
 export const primitives: ThemePrimitives & {primary150: string, primary350: string} = {
   ...lightThemePrimitives,
-  primaryA: "#3e3832",
-  primary: "#19548a",
-  primary50: "#F2F8FD",
-  primary100: "#eaf4fc",
-  primary150: "#C1DBF2",
-  primary200: "#99c2e8",
-  primary300: "#396FA1",
-  primary350: "#0067c5",
-  primary400: "#19548a",
+  primaryA: '#3e3832',
+  primary: '#19548a',
+  primary50: '#F2F8FD',
+  primary100: '#eaf4fc',
+  primary150: '#C1DBF2',
+  primary200: '#99c2e8',
+  primary300: '#396FA1',
+  primary350: '#0067c5',
+  primary400: '#19548a',
   primary500: colors.blue500,
   primary600: colors.blue600,
   primary700: colors.blue700,
   primaryFontFamily: 'Source Sans Pro',
-};
+}
 
 export const searchResultColor = {
   kravBackground: '#FFE9CC',
@@ -41,8 +41,8 @@ const overrides: RecursivePartial<Theme> = {
     tabBarFill: colors.white,
   },
   borders: {
-    buttonBorderRadius: "4px",
-    inputBorderRadius: "8px",
+    buttonBorderRadius: '4px',
+    inputBorderRadius: '8px',
   },
   typography: {
     // Increase weight 500->600 on bold texts
@@ -61,24 +61,24 @@ const overrides: RecursivePartial<Theme> = {
     font1350: {fontWeight: 600},
     font1450: {fontWeight: 600},
   },
-};
+}
 
-export const theme = createTheme(primitives, overrides);
+export const theme = createTheme(primitives, overrides)
 
 const breakpoints: any = {
   small: 550,
   medium: 800,
   large: 1200,
-};
+}
 
 const ResponsiveTheme = Object.keys(breakpoints).reduce(
   (acc: any, key: any) => {
-    acc.mediaQuery[key] = `@media screen and (min-width: ${breakpoints[key]}px)`;
-    return acc;
+    acc.mediaQuery[key] = `@media screen and (min-width: ${breakpoints[key]}px)`
+    return acc
   },
   {
     breakpoints,
     mediaQuery: {},
   }
-);
-export const customTheme = {...theme, ...ResponsiveTheme};
+)
+export const customTheme = {...theme, ...ResponsiveTheme}

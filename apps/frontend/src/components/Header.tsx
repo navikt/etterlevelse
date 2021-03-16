@@ -47,7 +47,7 @@ const LoggedInHeader = (props: {location: string}) => {
             <RouteLink href={`/resource/${user.getIdent()}`}>Min side</RouteLink>
           </Block>}
           <Block {...blockStyle}>
-            <RouteLink href={`/user/notifications`}>Mine varsler</RouteLink>
+            <RouteLink href={'/user/notifications'}>Mine varsler</RouteLink>
           </Block>
           <Block {...blockStyle}>
             <StyledLink href={`/logout?redirect_uri=${props.location}`}>
@@ -110,7 +110,7 @@ const Header = () => {
   return (
     <Block width='100%'>
       <HeaderNavigation overrides={{Root: {style: {paddingBottom: 0, borderBottomStyle: 'none'}}}}>
-        <Block display={["block", "block", "none", "none"]}>
+        <Block display={['block', 'block', 'none', 'none']}>
           <BurgerMenu/>
         </Block>
 
@@ -128,7 +128,7 @@ const Header = () => {
 
         <NavigationList $align={ALIGN.center}/>
 
-        <Block display={["none", "none", "flex", "flex"]}>
+        <Block display={['none', 'none', 'flex', 'flex']}>
           <NavigationList $align={ALIGN.right}>
             {user.isAdmin() && (
               <NavigationItem $style={{paddingLeft: 0}}>

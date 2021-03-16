@@ -154,14 +154,14 @@ export interface TilbakemeldingMelding {
 }
 
 export enum TilbakemeldingRolle {
-  KRAVEIER = "KRAVEIER",
-  MELDER = "MELDER"
+  KRAVEIER = 'KRAVEIER',
+  MELDER = 'MELDER'
 }
 
 export enum TilbakemeldingType {
-  GOD = "GOD",
-  UKLAR = "UKLAR",
-  ANNET = "ANNET"
+  GOD = 'GOD',
+  UKLAR = 'UKLAR',
+  ANNET = 'ANNET'
 }
 
 export enum EtterlevelseStatus {

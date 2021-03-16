@@ -18,13 +18,13 @@ const rowBlockProps: BlockProps = {
   width: '100%',
   marginTop: '1rem',
   alignItems: 'center',
-};
+}
 
 export const LovCodeDataForm = () => {
   return (
     <Block {...rowBlockProps} flexDirection='column'>
       <Block {...rowBlockProps}>
-        <Label2 marginRight={"1rem"} width="25%">
+        <Label2 marginRight={'1rem'} width="25%">
           Lovkode data
         </Label2>
       </Block>
@@ -45,7 +45,7 @@ export const LovCodeDataForm = () => {
         return (
           <>
             <Block {...rowBlockProps}>
-              <Label2 marginRight={"1rem"} width="25%">
+              <Label2 marginRight={'1rem'} width="25%">
                 Lov ID:
               </Label2>
               <Input
@@ -57,12 +57,12 @@ export const LovCodeDataForm = () => {
             </Block>
 
             <Block {...rowBlockProps}>
-              <Label2 marginRight={"1rem"} width="25%"> Underavdeling: </Label2>
+              <Label2 marginRight={'1rem'} width="25%"> Underavdeling: </Label2>
               <OptionList listName={ListName.UNDERAVDELING} value={codelist.getCode(ListName.UNDERAVDELING, data.underavdeling)} onChange={val => set({underavdeling: val.code})}/>
             </Block>
 
             <Block {...rowBlockProps}>
-              <Label2 marginRight={"1rem"} width="25%">Tema: </Label2>
+              <Label2 marginRight={'1rem'} width="25%">Tema: </Label2>
               <OptionList listName={ListName.TEMA} value={codelist.getCode(ListName.TEMA, data.tema) as Code | undefined} onChange={val => set({tema: val.code})}/>
             </Block>
           </>
@@ -84,7 +84,7 @@ export const TemaCodeDataForm = () => {
   return (
     <Block {...rowBlockProps} flexDirection='column'>
       <Block {...rowBlockProps}>
-        <Label2 marginRight={"1rem"} width="25%">
+        <Label2 marginRight={'1rem'} width="25%">
           Lovkode data
         </Label2>
       </Block>
@@ -99,7 +99,7 @@ export const TemaCodeDataForm = () => {
         return (
           <>
             <Block {...rowBlockProps}>
-              <Label2 marginRight={"1rem"} width="25%">
+              <Label2 marginRight={'1rem'} width="25%">
                 Bilde:
                 <StatefulTooltip content={<PreviewImages set={image => set({image})}/>}>
                   <Block display='inline' marginLeft={theme.sizing.scale600}><FontAwesomeIcon color={theme.colors.primary400} icon={faQuestionCircle}/></Block>

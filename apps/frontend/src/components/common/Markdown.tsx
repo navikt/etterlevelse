@@ -20,7 +20,7 @@ export const Markdown = (props: {source?: string, sources?: string[], escapeHtml
     },
     link: (linkProps: any) => {
       const {children, href, node} = linkProps
-      const content = props.shortenLinks && node.children[0]?.value.indexOf("http") === 0 ? 'Lenke' : children
+      const content = props.shortenLinks && node.children[0]?.value.indexOf('http') === 0 ? 'Lenke' : children
       return <StatefulTooltip content={href}>
         <span>
         <ExternalLink href={href}>

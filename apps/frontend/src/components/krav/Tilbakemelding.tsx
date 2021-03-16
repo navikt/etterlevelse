@@ -205,7 +205,7 @@ const meldingCardOverrides = (isUser: boolean): CardOverrides => ({
 const MessageList = ({tilbakemelding, setTilbakemelding}: {tilbakemelding: Tilbakemelding, setTilbakemelding: (t: Tilbakemelding) => void}) => {
   const [showResponse, setShowResponse] = useState(false)
   const userRole = tilbakemelding.melderIdent === user.getIdent() ? TilbakemeldingRolle.MELDER : TilbakemeldingRolle.KRAVEIER
-  const melder = userRole === TilbakemeldingRolle.MELDER;
+  const melder = userRole === TilbakemeldingRolle.MELDER
   const melderOrKraveier = melder || user.isKraveier()
 
 

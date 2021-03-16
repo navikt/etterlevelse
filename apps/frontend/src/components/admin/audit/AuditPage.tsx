@@ -1,9 +1,9 @@
-import {Block} from "baseui/block"
-import React, {useEffect, useState} from "react"
-import {useHistory, useParams} from "react-router-dom"
-import {Input} from "baseui/input"
-import _ from "lodash"
-import {H4, Paragraph2} from "baseui/typography"
+import {Block} from 'baseui/block'
+import React, {useEffect, useState} from 'react'
+import {useHistory, useParams} from 'react-router-dom'
+import {Input} from 'baseui/input'
+import _ from 'lodash'
+import {H4, Paragraph2} from 'baseui/typography'
 import {AuditLog} from './AuditTypes'
 import {getAuditLog} from './AuditApi'
 import {AuditView} from './AuditView'
@@ -12,7 +12,7 @@ import {AuditLabel} from './AuditComponents'
 import {useDebouncedState} from '../../../util/hooks'
 import {intl} from '../../../util/intl/intl'
 
-const format = (id: string) => _.trim(id, "\"")
+const format = (id: string) => _.trim(id, '"')
 
 export const AuditPage = () => {
   const params = useParams<{id?: string, auditId?: string}>()

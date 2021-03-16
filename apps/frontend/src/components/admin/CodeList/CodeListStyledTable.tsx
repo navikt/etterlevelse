@@ -78,7 +78,7 @@ const CodeListTable = ({tableData, refresh}: TableCodelistProps) => {
              }
              render={table => table.data.map((row, index) =>
                <Row key={index}>
-                 <Cell small $style={{wordBreak: "break-word"}}>{row.code}</Cell>
+                 <Cell small $style={{wordBreak: 'break-word'}}>{row.code}</Cell>
                  <Cell small>{row.shortName}</Cell>
                  <Cell $style={{width: '55%'}}>
                    <Block display='flex' flexDirection='column' width='100%'>

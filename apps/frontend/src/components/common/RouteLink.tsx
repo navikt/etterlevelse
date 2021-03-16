@@ -1,6 +1,6 @@
-import {useHistory} from "react-router-dom";
-import {StyledLink} from "baseui/link"
-import React from "react"
+import {useHistory} from 'react-router-dom'
+import {StyledLink} from 'baseui/link'
+import React from 'react'
 import {AuditItem, NavigableItem, ObjectType} from '../admin/audit/AuditTypes'
 import {Block} from 'baseui/block'
 import {AuditButton} from '../admin/audit/AuditButton'
@@ -45,7 +45,7 @@ type ObjectLinkProps = {
 export const urlForObject = (type: NavigableItem, id: string, audit?: AuditItem) => {
   switch (type) {
     case ObjectType.Settings:
-      return `/admin/settings`
+      return '/admin/settings'
     case ObjectType.Krav:
       return `/krav/${id}`
     case ObjectType.Etterlevelse:
