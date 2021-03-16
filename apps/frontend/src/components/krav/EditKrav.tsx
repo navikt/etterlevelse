@@ -46,9 +46,9 @@ export const EditKrav = ({krav, close, formRef}: EditKravProps) => {
           <TextAreaField label='Utfyllende beskrivelse' name='utdypendeBeskrivelse' markdown shortenLinks onImageUpload={onImageUpload(krav.id)}/>
           <TextAreaField label='Endringer fra forrige versjon' name='versjonEndringer'/>
 
-          <MultiInputField label='Dokumentasjon' name='dokumentasjon'/>
+          <MultiInputField label='Dokumentasjon' name='dokumentasjon' link/>
           <KravRegelverkEdit/>
-          <MultiInputField label='Rettskilder' name='rettskilder'/>
+          <MultiInputField label='Rettskilder' name='rettskilder' link/>
 
           <MultiInputField label='Tagger' name='tagger'/>
           <MultiOptionField label='Kravet er relevant for' name='relevansFor' listName={ListName.RELEVANS}/>

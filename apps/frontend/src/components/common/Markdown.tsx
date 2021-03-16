@@ -10,6 +10,7 @@ import MdEditor from 'react-markdown-editor-lite'
 import 'react-markdown-editor-lite/lib/index.css'
 import {Block} from 'baseui/block'
 import {theme} from '../../util'
+import {ExternalLink} from './RouteLink'
 
 export const Markdown = (props: {source?: string, sources?: string[], escapeHtml?: boolean, noMargin?: boolean, shortenLinks?: boolean, vertical?: boolean}) => {
   const renderers = {
@@ -19,10 +20,11 @@ export const Markdown = (props: {source?: string, sources?: string[], escapeHtml
     },
     link: (linkProps: any) => {
       const {children, href, node} = linkProps
-      const content = props.shortenLinks && node.children[0]?.value.indexOf("http") === 0
-        ? <span>Lenke <FontAwesomeIcon size='sm' icon={faExternalLinkAlt}/></span> : children
+      const content = props.shortenLinks && node.children[0]?.value.indexOf("http") === 0 ? 'Lenke' : children
       return <StatefulTooltip content={href}>
-        <a href={href} target='_blank' rel='noopener noreferrer'>{content}</a>
+        <ExternalLink href={href}>
+          <span>{content} <FontAwesomeIcon size='sm' icon={faExternalLinkAlt}/></span>
+        </ExternalLink>
       </StatefulTooltip>
     }
   }

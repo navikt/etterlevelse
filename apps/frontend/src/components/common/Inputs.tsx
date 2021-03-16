@@ -108,12 +108,27 @@ export const DateField = (props: {label: string, name: string}) => (
   </FieldWrapper>
 )
 
-export const MultiInputField = (props: {label: string, name: string}) => {
+const linkReg = /\[(.+)\]\((.+)\)/i
+const linkNameFor = (t: string) => {
+  const groups = t.match(linkReg)
+  if (groups) return groups[1]
+  return t
+}
+
+export const MultiInputField = (props: {label: string, name: string, link?: boolean}) => {
   const [val, setVal] = useState('')
+  const [linkName, setLinkName] = useState('')
   const inputRef = React.useRef<HTMLInputElement>(null)
 
   let onClick = (p: FieldArrayRenderProps, i: number) => {
-    setVal(p.form.values[props.name][i])
+    const oldVal = p.form.values[props.name][i]
+    const groups = oldVal.match(linkReg)
+    if (groups) {
+      setVal(groups[2])
+      setLinkName(groups[1])
+    } else {
+      setVal(oldVal)
+    }
     p.remove(i)
     inputRef?.current?.focus()
   }
@@ -123,8 +138,12 @@ export const MultiInputField = (props: {label: string, name: string}) => {
       <FieldArray name={props.name}>{(p: FieldArrayRenderProps) => {
         const add = () => {
           if (!val) return
-          p.push(val)
+          if (linkName) {
+            p.push(`[${linkName}](${val})`)
+          } else
+            p.push(val)
           setVal('')
+          setLinkName('')
         }
         const onKey = (e: React.KeyboardEvent) => (e.key === 'Enter') && add()
 
@@ -134,13 +153,20 @@ export const MultiInputField = (props: {label: string, name: string}) => {
               <Block display='flex'>
                 <Input onKeyDown={onKey} value={val} inputRef={inputRef}
                        onChange={e => setVal((e.target as HTMLInputElement).value)}
-                       onBlur={add}
+                       onBlur={!props.link ? add : undefined}
+                       placeholder={props.link ? 'Lenke eller tekst' : 'Tekst'}
                 />
+                {props.link &&
+                <Input onKeyDown={onKey} value={linkName}
+                       onChange={e => setLinkName((e.target as HTMLInputElement).value)}
+                       placeholder={'Lenkenavn'}
+                />
+                }
                 <Button type='button' onClick={add} marginLeft><FontAwesomeIcon icon={faPlus}/> </Button>
               </Block>
               <RenderTagList
                 wide
-                list={p.form.values[props.name] as string[]}
+                list={(p.form.values[props.name] as string[]).map(linkNameFor)}
                 onRemove={p.remove}
                 onClick={(i) => onClick(p, i)}/>
             </Block>
