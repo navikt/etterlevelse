@@ -71,7 +71,7 @@
   "devDependencies": {
     "@testing-library/jest-dom": "^5.11.5",
     "@testing-library/react": "^11.2.3",
-    "@testing-library/user-event": "^12.2.2",
+    "@testing-library/user-event": "^13.0.0",
     "@types/amplitude-js": "^7.0.0",
     "@types/jest": "^26.0.15",
     "@types/lodash": "^4.14.165",
