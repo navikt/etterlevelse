@@ -32,7 +32,7 @@ export const KravRegelverkEdit = () => {
             controlRef.current?.focus()
           }
           return (
-            <FormControl label='Regelverk'>
+            <FormControl label='Regelverk' caption={'Velg relevant regelverk fra nedtrekksmenyen, og angi hvilke(n) bestemmelse(r) kravet har sin opprinnelse fra.'}>
               <Block>
                 <Block>
                   <Block display='flex'>
