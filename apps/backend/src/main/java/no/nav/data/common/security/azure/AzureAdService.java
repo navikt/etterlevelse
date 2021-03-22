@@ -1,10 +1,12 @@
 package no.nav.data.common.security.azure;
 
-import com.microsoft.graph.models.extensions.IGraphServiceClient;
+import com.microsoft.graph.models.UserSendMailParameterSet;
+import com.microsoft.graph.requests.GraphServiceClient;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.mail.EmailProvider;
 import no.nav.data.common.mail.MailTask;
 import no.nav.data.common.storage.StorageService;
+import okhttp3.Request;
 import org.springframework.stereotype.Service;
 
 import static no.nav.data.common.security.azure.support.MailMessage.compose;
@@ -25,14 +27,17 @@ public class AzureAdService implements EmailProvider {
     public void sendMail(MailTask mailTask) {
         log.info("Sending mail {} to {}", mailTask.getSubject(), mailTask.getTo());
         getMailGraphClient().me()
-                .sendMail(compose(mailTask.getTo(), mailTask.getSubject(), mailTask.getBody()), false)
+                .sendMail(UserSendMailParameterSet.newBuilder()
+                        .withMessage(compose(mailTask.getTo(), mailTask.getSubject(), mailTask.getBody()))
+                        .withSaveToSentItems(false)
+                        .build())
                 .buildRequest()
                 .post();
 
         storage.save(mailTask.toMailLog());
     }
 
-    private IGraphServiceClient getMailGraphClient() {
+    private GraphServiceClient<Request> getMailGraphClient() {
         return azureTokenProvider.getGraphClient(azureTokenProvider.getMailAccessToken());
     }
 
