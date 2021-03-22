@@ -1,9 +1,9 @@
-import React, {FormEvent, useEffect, useState} from "react"
-import {Block} from "baseui/block"
-import {StyledSpinnerNext} from "baseui/spinner"
-import {H4, Label2} from "baseui/typography"
-import {StatefulTextarea} from "baseui/textarea"
-import ReactMarkdown from "react-markdown/with-html"
+import React, {FormEvent, useEffect, useState} from 'react'
+import {Block} from 'baseui/block'
+import {StyledSpinnerNext} from 'baseui/spinner'
+import {H4, Label2} from 'baseui/typography'
+import {StatefulTextarea} from 'baseui/textarea'
+import ReactMarkdown from 'react-markdown/with-html'
 import {getSettings, Settings, writeSettings} from './SettingsApi'
 import {intl} from '../../../util/intl/intl'
 import {theme} from '../../../util'

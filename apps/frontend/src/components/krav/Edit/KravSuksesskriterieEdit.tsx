@@ -50,7 +50,7 @@ const KriterieList = ({p}: {p: FieldArrayRenderProps}) => {
 
   const onKey = (e: React.KeyboardEvent) => (e.key === 'Enter') && add()
   return (
-    <FormControl label={'Suksesskriterier'}>
+    <FormControl label={'Suksesskriterier'} caption={'Definer hvilke kriterier som skal til for at kravet er oppnådd. Formålet er å identifisere en terskel for kravoppnåelse og en enhetlig besvarelse på tvers.'}>
       <Block>
         <Block display='flex'>
           <Input onKeyDown={onKey} value={navn} inputRef={inputRef}

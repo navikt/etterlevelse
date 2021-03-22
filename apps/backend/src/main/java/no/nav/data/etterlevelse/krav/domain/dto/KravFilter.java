@@ -20,11 +20,14 @@ import static no.nav.data.common.utils.StringUtils.formatList;
 @FieldNameConstants
 public class KravFilter {
 
+    // any of
     private List<String> relevans;
     private Integer nummer;
     private String behandlingId;
     private String underavdeling;
     private String lov;
+    // any of
+    private List<String> lover;
     private boolean gjeldendeKrav;
     private Integer sistRedigert;
 
@@ -32,9 +35,14 @@ public class KravFilter {
         return formatList(relevans);
     }
 
+    public List<String> getLover() {
+        return formatList(lover);
+    }
+
     public boolean isEmpty() {
         validate();
         return getRelevans().isEmpty()
+                && getLover().isEmpty()
                 && nummer == null
                 && behandlingId == null
                 && underavdeling == null

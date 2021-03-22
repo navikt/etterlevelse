@@ -1,6 +1,6 @@
-import * as React from 'react';
-import {Route, Switch} from 'react-router-dom';
-import {MainPage} from './pages/MainPage';
+import * as React from 'react'
+import {Route, Switch} from 'react-router-dom'
+import {MainPage} from './pages/MainPage'
 import NotFound from './pages/NotFound'
 import CodeListPage from './components/admin/CodeList/CodelistPage'
 import {AuditPage} from './components/admin/audit/AuditPage'
@@ -14,6 +14,7 @@ import {BehandlingPage} from './pages/BehandlingPage'
 import {MyBehandlingerPage} from './pages/MyBehandlingerPage'
 import {RelevansPage} from './pages/RelevansPage'
 import {UnderavdelingPage} from './pages/UnderavdelingPage'
+import {TemaPage} from './pages/TemaPage'
 import {LovPage} from './pages/LovPage'
 
 const Routes = (): JSX.Element => (
@@ -33,6 +34,7 @@ const Routes = (): JSX.Element => (
     <Route exact path="/relevans/:relevans?" component={RelevansPage}/>
     <Route exact path="/underavdeling/:underavdeling?" component={UnderavdelingPage}/>
     <Route exact path="/lov/:lov?" component={LovPage}/>
+    <Route exact path="/tema/:tema?" component={TemaPage}/>
 
     <Route exact path="/admin/codelist/:listname?" component={CodeListPage}/>
     <Route exact path="/admin/audit/:id?/:auditId?" component={AuditPage}/>

@@ -2,7 +2,7 @@ import {Or} from '../../constants'
 import {Field, FieldArray, FieldArrayRenderProps, FieldProps} from 'formik'
 import {FormControl} from 'baseui/form-control'
 import {Input} from 'baseui/input'
-import React, {useState} from 'react'
+import React, {ReactNode, useState} from 'react'
 import {Block} from 'baseui/block'
 import Button from './Button'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
@@ -27,11 +27,11 @@ export const FieldWrapper = ({children}: {children: React.ReactNode}) => {
   )
 }
 
-export const InputField = (props: {label: string, name: string}) => (
+export const InputField = (props: {label: string, name: string, caption?: ReactNode}) => (
   <FieldWrapper>
     <Field name={props.name}>
       {(p: FieldProps) =>
-        <FormControl label={props.label} error={p.meta.touched && p.meta.error}>
+        <FormControl label={props.label} error={p.meta.touched && p.meta.error} caption={props.caption}>
           <Input {...p.field}/>
         </FormControl>
       }
@@ -39,17 +39,20 @@ export const InputField = (props: {label: string, name: string}) => (
   </FieldWrapper>
 )
 
-export const TextAreaField = (props: {label: string, name: string, markdown?: boolean, shortenLinks?: boolean, onImageUpload?: (file: File) => Promise<string>}) => {
+export const TextAreaField = (props: {label: string, name: string, markdown?: boolean, shortenLinks?: boolean, onImageUpload?: (file: File) => Promise<string>, caption?: ReactNode}) => {
   return (
     <FieldWrapper>
       <Field name={props.name}>
         {(p: FieldProps) =>
           <FormControl label={props.label} error={p.meta.touched && p.meta.error}
                        caption={props.markdown ?
-                         <Block>Feltet bruker <ExternalLink href='https://guides.github.com/features/mastering-markdown/'>Markdown</ExternalLink>, se her for mer
-                           informasjon om formatet
+                         <Block display='flex' flexDirection={'column'}>
+                           {props.caption}
+                           <Block>Feltet bruker <ExternalLink href='https://guides.github.com/features/mastering-markdown/'>Markdown</ExternalLink>, se her for mer
+                             informasjon om formatet
+                           </Block>
                          </Block>
-                         : undefined}>
+                         : props.caption}>
             <>
               {props.markdown && <MarkdownEditor initialValue={p.field.value} setValue={v => p.form.setFieldValue(props.name, v)}
                                                  onImageUpload={props.onImageUpload} shortenLinks={props.shortenLinks}/>}
@@ -88,11 +91,11 @@ export const BoolField = (props: {label: string, name: string, nullable?: boolea
   </FieldWrapper>
 )
 
-export const DateField = (props: {label: string, name: string}) => (
+export const DateField = (props: {label: string, name: string, caption?: ReactNode}) => (
   <FieldWrapper>
     <Field name={props.name}>
       {(p: FieldProps) =>
-        <FormControl label={props.label} error={p.meta.touched && p.meta.error}>
+        <FormControl label={props.label} error={p.meta.touched && p.meta.error} caption={props.caption}>
           <Datepicker
             clearable
             formatString={'dd-MM-yyyy'}
@@ -108,12 +111,27 @@ export const DateField = (props: {label: string, name: string}) => (
   </FieldWrapper>
 )
 
-export const MultiInputField = (props: {label: string, name: string}) => {
+const linkReg = /\[(.+)\]\((.+)\)/i
+const linkNameFor = (t: string) => {
+  const groups = t.match(linkReg)
+  if (groups) return groups[1]
+  return t
+}
+
+export const MultiInputField = (props: {label: string, name: string, link?: boolean, caption?: ReactNode}) => {
   const [val, setVal] = useState('')
+  const [linkName, setLinkName] = useState('')
   const inputRef = React.useRef<HTMLInputElement>(null)
 
   let onClick = (p: FieldArrayRenderProps, i: number) => {
-    setVal(p.form.values[props.name][i])
+    const oldVal = p.form.values[props.name][i]
+    const groups = oldVal.match(linkReg)
+    if (groups) {
+      setVal(groups[2])
+      setLinkName(groups[1])
+    } else {
+      setVal(oldVal)
+    }
     p.remove(i)
     inputRef?.current?.focus()
   }
@@ -123,24 +141,35 @@ export const MultiInputField = (props: {label: string, name: string}) => {
       <FieldArray name={props.name}>{(p: FieldArrayRenderProps) => {
         const add = () => {
           if (!val) return
-          p.push(val)
+          if (linkName) {
+            p.push(`[${linkName}](${val})`)
+          } else
+            p.push(val)
           setVal('')
+          setLinkName('')
         }
         const onKey = (e: React.KeyboardEvent) => (e.key === 'Enter') && add()
 
         return (
-          <FormControl label={props.label} error={p.form.touched[props.name] && p.form.errors[props.name]}>
+          <FormControl label={props.label} error={p.form.touched[props.name] && p.form.errors[props.name]} caption={props.caption}>
             <Block>
               <Block display='flex'>
                 <Input onKeyDown={onKey} value={val} inputRef={inputRef}
                        onChange={e => setVal((e.target as HTMLInputElement).value)}
-                       onBlur={add}
+                       onBlur={!props.link ? add : undefined}
+                       placeholder={props.link ? 'Lenke eller tekst' : 'Tekst'}
                 />
+                {props.link &&
+                <Input onKeyDown={onKey} value={linkName}
+                       onChange={e => setLinkName((e.target as HTMLInputElement).value)}
+                       placeholder={'Lenkenavn'}
+                />
+                }
                 <Button type='button' onClick={add} marginLeft><FontAwesomeIcon icon={faPlus}/> </Button>
               </Block>
               <RenderTagList
                 wide
-                list={p.form.values[props.name] as string[]}
+                list={(p.form.values[props.name] as string[]).map(linkNameFor)}
                 onRemove={p.remove}
                 onClick={(i) => onClick(p, i)}/>
             </Block>
@@ -152,12 +181,12 @@ export const MultiInputField = (props: {label: string, name: string}) => {
   )
 }
 
-export const OptionField = (props: {label: string, name: string, clearable?: boolean} & Or<{options: Value}, {listName: ListName}>) => {
+export const OptionField = (props: {label: string, name: string, clearable?: boolean, caption?: ReactNode} & Or<{options: Value}, {listName: ListName}>) => {
   return (
     <FieldWrapper>
       <Field name={props.name}>
         {(p: FieldProps<string | Code>) =>
-          <FormControl label={props.label} error={p.meta.touched && p.meta.error}>
+          <FormControl label={props.label} error={p.meta.touched && p.meta.error} caption={props.caption}>
             <OptionList {...props} onChange={(val => p.form.setFieldValue(props.name, val))} value={p.field.value}/>
           </FormControl>
         }
@@ -179,14 +208,14 @@ export const OptionList = (props: {clearable?: boolean, value?: Code | string, o
     />)
 }
 
-export const MultiOptionField = (props: {label: string, name: string} & Or<{options: Value}, {listName: ListName}>) => {
+export const MultiOptionField = (props: {label: string, name: string, caption?: ReactNode} & Or<{options: Value}, {listName: ListName}>) => {
   const options: Value = props.options || codelist.getParsedOptions(props.listName)
   return (
     <FieldWrapper>
       <FieldArray name={props.name}>
         {(p: FieldArrayRenderProps) => {
           const selectedIds = (p.form.values[props.name] as any[]).map(v => props.listName ? (v as Code).code : v)
-          return <FormControl label={props.label} error={p.form.touched[props.name] && p.form.errors[props.name]}>
+          return <FormControl label={props.label} error={p.form.touched[props.name] && p.form.errors[props.name]} caption={props.caption}>
             <Block>
               <Block display='flex'>
                 <Select

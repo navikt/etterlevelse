@@ -7,7 +7,7 @@ import {theme} from '../../util'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faExclamationCircle} from '@fortawesome/free-solid-svg-icons'
 import {paddingZero} from './Style'
-import CustomizedStatefulTooltip from "./CustomizedStatefulTooltip";
+import CustomizedStatefulTooltip from './CustomizedStatefulTooltip'
 
 export const Error = (props: { fieldName: string, fullWidth?: boolean }) => (
     <ErrorMessage name={props.fieldName}>

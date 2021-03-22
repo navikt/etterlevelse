@@ -1,5 +1,5 @@
-import axios from "axios"
-import {env} from "../util/env"
+import axios from 'axios'
+import {env} from '../util/env'
 import {AllCodelists, CategoryUsage, Code, CodeUsage, ListName} from '../services/Codelist'
 
 // refresh will force backend to re-read codelists from db, due to caching and multibackend

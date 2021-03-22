@@ -1,13 +1,12 @@
 import {Block, BlockProps} from 'baseui/block'
 import React, {useState} from 'react'
 import {Card, CardOverrides} from 'baseui/card'
-import RouteLink, {urlForObject} from '../components/common/RouteLink'
+import RouteLink from '../components/common/RouteLink'
 import {borderColor, marginAll} from '../components/common/Style'
 import {theme} from '../util'
-import {LabelMedium, ParagraphSmall} from 'baseui/typography'
+import {ParagraphXSmall} from 'baseui/typography'
 import {primitives} from '../util/theme'
-import {Code, codelist, ListName} from '../services/Codelist'
-import {barChart, illustration, lawBook, LovBilde, pencilFill} from '../components/Images'
+import {barChart, illustration, lawBook, pencilFill, stepper} from '../components/Images'
 
 
 const sectionProps: BlockProps = {
@@ -29,7 +28,10 @@ export const MainPage = () => {
           text={'Kraveier kan jobbe med nye krav eller forbedre eksisterende krav'}/>
         <SectionCard
           icon={barChart} url={'/status'} title={'Se status på etterlevelse i etaten'}
-          text={'Se dashboard over status på etterlevelse i NAV, i våre produktområder og avdelinger'}/>
+          text={'Se dashboard for status på etterlevelse i NAV, i våre produktområder og avdelinger'}/>
+        <SectionCard
+          icon={stepper} url={'/tema'} title={'Lær mer om etterlevelse'}
+          text={'Utforsk temaer for krav i etaten'}/>
       </Block>
 
       <Block {...sectionProps}>
@@ -37,60 +39,35 @@ export const MainPage = () => {
           <img style={{marginTop: '-215px', width: '100%'}} src={illustration} alt='illustrasjon'/>
         </Block>
       </Block>
-
-      <Block {...sectionProps}>
-        {codelist.getCodes(ListName.LOV).map(lov =>
-          <LawCard key={lov.code} lov={lov}/>
-        )}
-      </Block>
     </Block>
   )
 }
 
-const LawCard = (props: {lov: Code}) => {
-  return (
-    <FrontCard url={urlForObject(ListName.LOV, props.lov.code)}>
-      <Block display='flex' width='100%'>
-        <Block height='126px'>
-          <LovBilde code={props.lov} height={'126px'} width={'160px'}/>
-        </Block>
-        <Block marginLeft={theme.sizing.scale600}>
-          <LabelMedium marginBottom={0} $style={{
-            wordWrap: 'break-word',
-            hyphens: 'auto'
-          }}>
-            {props.lov.shortName}
-          </LabelMedium>
-        </Block>
-      </Block>
-    </FrontCard>
-  )
-}
-
 const SectionCard = (props: {icon: string, url: string, title: string, text: string}) => (
-  <FrontCard url={props.url} title={
+  <FrontCard url={props.url} width='240px' title={
     <Block display='flex' flexDirection='column' alignItems='center'>
-      <Block><img src={props.icon} alt='ikon for kort' height={'42px'}/></Block>
+      <Block><img src={props.icon} alt='ikon for kort' height={'40px'}/></Block>
       <Block>{props.title}</Block>
     </Block>
   }>
     <Block  {...({
       display: 'flex',
       width: '100%',
+      height: '60px',
       justifyContent: 'center',
       marginTop: theme.sizing.scale500,
     })}>
-      <ParagraphSmall width={'90%'} $style={{textAlign: 'justify', ...marginAll('0')}}>{props.text}</ParagraphSmall>
+      <ParagraphXSmall width={'90%'} $style={{textAlign: 'justify', ...marginAll('0')}}>{props.text}</ParagraphXSmall>
     </Block>
   </FrontCard>
 )
 
-const FrontCard = (props: {url: string, title?: React.ReactNode, children: React.ReactElement}) => {
+export const FrontCard = (props: {width:string, url: string, title?: React.ReactNode, children: React.ReactElement}) => {
   const [hover, setHover] = useState(false)
   return (
     <div onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
       <RouteLink href={props.url} hideUnderline>
-        <Card overrides={cardOverrides(hover)} title={props.title}>
+        <Card overrides={cardOverrides(hover, props.width)} title={props.title}>
           {props.children}
         </Card>
       </RouteLink>
@@ -98,13 +75,13 @@ const FrontCard = (props: {url: string, title?: React.ReactNode, children: React
   )
 }
 
-const cardOverrides = (hover: boolean): CardOverrides => {
+const cardOverrides = (hover: boolean, width: string): CardOverrides => {
   return {
     Root: {
       style: () => {
         const base = {
           backgroundColor: 'white',
-          width: '310px',
+          width,
           marginBottom: theme.sizing.scale800
         }
         return hover ? {
@@ -122,7 +99,7 @@ const cardOverrides = (hover: boolean): CardOverrides => {
     },
     Title: {
       style: () => ({
-        fontSize: theme.typography.HeadingXSmall.fontSize
+        fontSize: theme.typography.ParagraphMedium.fontSize
       })
     },
     Contents: {

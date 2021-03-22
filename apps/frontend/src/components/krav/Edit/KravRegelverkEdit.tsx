@@ -16,7 +16,7 @@ import {Regelverk} from '../../../constants'
 export const KravRegelverkEdit = () => {
   const [lov, setLov] = useState<Value>([])
   const [text, setText] = useState('')
-  const controlRef = React.useRef<HTMLInputElement | HTMLDivElement>(null);
+  const controlRef = React.useRef<HTMLInputElement | HTMLDivElement>(null)
 
   const regelverkObject = () => ({lov: codelist.getCode(ListName.LOV, lov[0].id as string)!, spesifisering: text})
 
@@ -32,7 +32,7 @@ export const KravRegelverkEdit = () => {
             controlRef.current?.focus()
           }
           return (
-            <FormControl label='Regelverk'>
+            <FormControl label='Regelverk' caption={'Velg relevant regelverk fra nedtrekksmenyen, og angi hvilke(n) bestemmelse(r) kravet har sin opprinnelse fra.'}>
               <Block>
                 <Block>
                   <Block display='flex'>

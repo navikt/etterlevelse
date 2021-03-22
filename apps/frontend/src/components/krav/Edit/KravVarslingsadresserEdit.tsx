@@ -34,7 +34,7 @@ export const KravVarslingsadresserEdit = () => {
               p.push(v)
           }
           return <>
-            <FormControl label='Varslingsadresser'>
+            <FormControl label='Varslingsadresser' caption={'Angi varslingskanal (slack og/eller epost) for spørsmål eller tilbakemeldinger til kravet.'}>
               <Block>
                 <Block marginBottom={theme.sizing.scale400}>
                   <Button kind='secondary' size='compact' type='button' onClick={() => setAddSlackChannel(true)}>

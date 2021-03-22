@@ -16,19 +16,20 @@ export interface AuditLog {
 }
 
 export enum AuditAction {
-  CREATE = "CREATE",
-  UPDATE = "UPDATE",
-  DELETE = "DELETE"
+  CREATE = 'CREATE',
+  UPDATE = 'UPDATE',
+  DELETE = 'DELETE'
 }
 
 export enum ObjectType {
-  Settings = "Settings",
-  Krav = "Krav",
-  Etterlevelse = "Etterlevelse",
-  Behandling = "Behandling"
+  Settings = 'Settings',
+  Krav = 'Krav',
+  Etterlevelse = 'Etterlevelse',
+  Behandling = 'Behandling'
 }
 
 export type NavigableItem = ObjectType |
   ListName.RELEVANS |
   ListName.UNDERAVDELING |
+  ListName.TEMA |
   ListName.LOV

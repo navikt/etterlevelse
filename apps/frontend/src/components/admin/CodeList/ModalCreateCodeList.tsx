@@ -1,27 +1,27 @@
-import * as React from "react";
-import {Modal, ModalBody, ModalButton, ModalFooter, ModalHeader, ROLE, SIZE} from "baseui/modal";
-import {Block, BlockProps} from "baseui/block";
-import {Label2} from "baseui/typography";
-import {Field, FieldProps, Form, Formik} from "formik";
-import {Input, SIZE as InputSIZE} from "baseui/input";
-import {Textarea} from "baseui/textarea";
-import {Button, KIND} from "baseui/button";
+import * as React from 'react'
+import {Modal, ModalBody, ModalButton, ModalFooter, ModalHeader, ROLE, SIZE} from 'baseui/modal'
+import {Block, BlockProps} from 'baseui/block'
+import {Label2} from 'baseui/typography'
+import {Field, FieldProps, Form, Formik} from 'formik'
+import {Input, SIZE as InputSIZE} from 'baseui/input'
+import {Textarea} from 'baseui/textarea'
+import {Button, KIND} from 'baseui/button'
 import {CodeListFormValues, codeListSchema, ListName} from '../../../services/Codelist'
 import {Error} from '../../common/ModalSchema'
-import {LovCodeDataForm} from './LovCode'
+import {LovCodeDataForm, TemaCodeDataForm} from './LovCode'
 
 const modalBlockProps: BlockProps = {
   width: '700px',
   paddingRight: '2rem',
   paddingLeft: '2rem'
-};
+}
 
 const rowBlockProps: BlockProps = {
   display: 'flex',
   width: '100%',
   marginTop: '1rem',
   alignItems: 'center',
-};
+}
 
 type ModalCreateProps = {
   title: string,
@@ -30,7 +30,7 @@ type ModalCreateProps = {
   errorOnCreate: any | undefined,
   submit: (code: CodeListFormValues) => Promise<void>,
   onClose: () => void,
-};
+}
 
 const CreateCodeListModal = ({isOpen, title, list, errorOnCreate, onClose, submit}: ModalCreateProps) => {
   return (
@@ -47,15 +47,15 @@ const CreateCodeListModal = ({isOpen, title, list, errorOnCreate, onClose, submi
       <Block {...modalBlockProps}>
         <Formik
           onSubmit={(values) => {
-            submit(values);
-            onClose();
+            submit(values)
+            onClose()
           }}
           initialValues={
             {
               list: list,
-              code: "",
-              shortName: "",
-              description: "",
+              code: '',
+              shortName: '',
+              description: '',
               data: {}
             } as CodeListFormValues
           }
@@ -65,7 +65,7 @@ const CreateCodeListModal = ({isOpen, title, list, errorOnCreate, onClose, submi
               <ModalHeader>{title}</ModalHeader>
               <ModalBody>
                 <Block {...rowBlockProps}>
-                  <Label2 marginRight={"1rem"} width="25%">
+                  <Label2 marginRight={'1rem'} width="25%">
                     Code:
                   </Label2>
                   <Field
@@ -82,7 +82,7 @@ const CreateCodeListModal = ({isOpen, title, list, errorOnCreate, onClose, submi
                 <Error fieldName="code"/>
 
                 <Block {...rowBlockProps}>
-                  <Label2 marginRight={"1rem"} width="25%">
+                  <Label2 marginRight={'1rem'} width="25%">
                     Short name:
                   </Label2>
                   <Field
@@ -99,7 +99,7 @@ const CreateCodeListModal = ({isOpen, title, list, errorOnCreate, onClose, submi
                 <Error fieldName="shortName"/>
 
                 <Block {...rowBlockProps}>
-                  <Label2 marginRight={"1rem"} width="25%">
+                  <Label2 marginRight={'1rem'} width="25%">
                     Description:
                   </Label2>
                   <Field
@@ -115,6 +115,7 @@ const CreateCodeListModal = ({isOpen, title, list, errorOnCreate, onClose, submi
                 <Error fieldName="description"/>
 
                 {list === ListName.LOV && <LovCodeDataForm/>}
+                {list === ListName.TEMA && <TemaCodeDataForm/>}
 
               </ModalBody>
               <ModalFooter>
@@ -137,7 +138,7 @@ const CreateCodeListModal = ({isOpen, title, list, errorOnCreate, onClose, submi
         />
       </Block>
     </Modal>
-  );
-};
+  )
+}
 
-export default CreateCodeListModal;
+export default CreateCodeListModal

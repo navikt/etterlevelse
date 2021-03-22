@@ -1,16 +1,16 @@
-import moment from "moment"
-import {Block} from "baseui/block"
-import ReactJson from "react-json-view"
-import React, {useEffect, useState} from "react"
-import {Label1} from "baseui/typography"
-import {AuditActionIcon, AuditLabel as Label} from "./AuditComponents"
-import {Card} from "baseui/card"
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
-import {faBinoculars, faExchangeAlt, faTimes} from "@fortawesome/free-solid-svg-icons"
-import {PLACEMENT, StatefulTooltip} from "baseui/tooltip"
-import {StatefulPopover} from "baseui/popover"
-import DiffViewer from "react-diff-viewer"
-import {StyledSpinnerNext} from "baseui/spinner"
+import moment from 'moment'
+import {Block} from 'baseui/block'
+import ReactJson from 'react-json-view'
+import React, {useEffect, useState} from 'react'
+import {Label1} from 'baseui/typography'
+import {AuditActionIcon, AuditLabel as Label} from './AuditComponents'
+import {Card} from 'baseui/card'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faBinoculars, faExchangeAlt, faTimes} from '@fortawesome/free-solid-svg-icons'
+import {PLACEMENT, StatefulTooltip} from 'baseui/tooltip'
+import {StatefulPopover} from 'baseui/popover'
+import DiffViewer from 'react-diff-viewer'
+import {StyledSpinnerNext} from 'baseui/spinner'
 import {useRefs} from '../../../util/hooks'
 import {theme} from '../../../util'
 import {intl} from '../../../util/intl/intl'
@@ -27,7 +27,7 @@ type AuditViewProps = {
 
 
 function initialOpen(auditLog?: AuditLog, auditId?: string) {
-  return auditLog?.audits.map((o, i) => i === 0 || o.id === auditId) || [];
+  return auditLog?.audits.map((o, i) => i === 0 || o.id === auditId) || []
 }
 
 export const AuditView = (props: AuditViewProps) => {
@@ -37,7 +37,7 @@ export const AuditView = (props: AuditViewProps) => {
 
   useEffect(() => {
     if (auditId && auditLog && refs[auditId] && auditId !== auditLog.audits[0].id) {
-      refs[auditId].current!.scrollIntoView({block: "start"})
+      refs[auditId].current!.scrollIntoView({block: 'start'})
     }
     setOpen(initialOpen(auditLog, auditId))
   }, [auditId, auditLog])
@@ -100,9 +100,9 @@ export const AuditView = (props: AuditViewProps) => {
                 )} overrides={{
                   Body: {
                     style: () => ({
-                      width: "80%",
-                      maxHeight: "80%",
-                      overflowY: "scroll"
+                      width: '80%',
+                      maxHeight: '80%',
+                      overflowY: 'scroll'
                     })
                   }
                 }}>
@@ -114,7 +114,7 @@ export const AuditView = (props: AuditViewProps) => {
                        name={null}
                        shouldCollapse={p => p.name === null && !open[index]}
                        onSelect={sel => {
-                         (sel.name === 'id' || sel.name?.endsWith("Id")) && viewId(sel.value as string)
+                         (sel.name === 'id' || sel.name?.endsWith('Id')) && viewId(sel.value as string)
                        }}/>
           </Block>
         )

@@ -17,7 +17,7 @@ const items: BlockProps = {
 }
 
 const Brand = () => (
-  <Block display="flex" flexDirection={"column"} padding="1rem" marginTop="1rem">
+  <Block display="flex" flexDirection={'column'} padding="1rem" marginTop="1rem">
     <StyledLink style={{textDecoration: 'none', textAlign: 'center'}} href="/">
       <H6 color="white" marginTop="1rem" marginLeft="5px" marginBottom="2rem">Etterlevelse</H6>
     </StyledLink>

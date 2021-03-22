@@ -70,21 +70,21 @@ export function useQueryParam<T extends string>(queryParam: string) {
 }
 
 export const useSearch = <T>(searchFunction: (term: string) => Promise<T[]>) => {
-  const [search, setSearch] = useDebouncedState<string>("", 200);
-  const [searchResult, setSearchResult] = useState<T[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [search, setSearch] = useDebouncedState<string>('', 200)
+  const [searchResult, setSearchResult] = useState<T[]>([])
+  const [loading, setLoading] = useState<boolean>(false)
 
   useEffect(() => {
     (async () => {
       if (search && search.length > 2) {
-        setLoading(true);
-        setSearchResult(await searchFunction(search));
-        setLoading(false);
+        setLoading(true)
+        setSearchResult(await searchFunction(search))
+        setLoading(false)
       } else {
         setSearchResult([])
       }
     })()
-  }, [search]);
+  }, [search])
 
   return [searchResult, setSearch, loading, search] as [T[], React.Dispatch<React.SetStateAction<string>>, boolean, string]
-};
+}

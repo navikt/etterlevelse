@@ -10,7 +10,7 @@
     "@fortawesome/free-regular-svg-icons": "^5.15.2",
     "@fortawesome/free-solid-svg-icons": "^5.15.2",
     "@fortawesome/react-fontawesome": "^0.1.14",
-    "amplitude-js": "^7.4.2",
+    "amplitude-js": "^8.0.0",
     "axios": "^0.21.1",
     "baseui": "^9.110.0",
     "core-js": "^3.8.3",
@@ -38,7 +38,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix ."
   },
   "eslintConfig": {
     "extends": "react-app",
@@ -69,7 +71,7 @@
   "devDependencies": {
     "@testing-library/jest-dom": "^5.11.5",
     "@testing-library/react": "^11.2.3",
-    "@testing-library/user-event": "^12.2.2",
+    "@testing-library/user-event": "^13.0.0",
     "@types/amplitude-js": "^7.0.0",
     "@types/jest": "^26.0.15",
     "@types/lodash": "^4.14.165",

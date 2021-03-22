@@ -140,7 +140,7 @@ const Etterlevelser = ({loading, etterlevelser}: {loading: boolean, etterlevelse
               <Cell><ObjectLink type={ObjectType.Etterlevelse} id={etterlevelse.id}>
                 {etterlevelseStatus(etterlevelse.status)}
               </ObjectLink></Cell>
-              <Cell>{etterlevelse.behandling.systemer.map(s => s.shortName).join(", ")}</Cell>
+              <Cell>{etterlevelse.behandling.systemer.map(s => s.shortName).join(', ')}</Cell>
               <Cell><Teams teams={etterlevelse.behandling.teams} link/></Cell>
               <Cell>{etterlevelse.behandling.avdeling?.shortName}</Cell>
             </Row>

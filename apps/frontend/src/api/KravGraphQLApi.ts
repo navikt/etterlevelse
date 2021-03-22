@@ -4,7 +4,7 @@ import {DocumentNode} from 'graphql'
 
 const kravtableQuery = gql`query getKravByFilter (
   $relevans: [String!], $nummer: Int, $behandlingId: String, $underavdeling: String,
-  $lov: String, $sistRedigert: NonNegativeInt,
+  $lov: String, $lover: [String!], $sistRedigert: NonNegativeInt,
   $gjeldendeKrav: Boolean,
   $pageSize: NonNegativeInt, $pageNumber: NonNegativeInt) {
   krav(filter: {
@@ -13,6 +13,7 @@ const kravtableQuery = gql`query getKravByFilter (
     behandlingId: $behandlingId,
     underavdeling: $underavdeling,
     lov: $lov,
+    lover: $lover,
     sistRedigert: $sistRedigert,
     gjeldendeKrav: $gjeldendeKrav
   }, pageSize: $pageSize, pageNumber: $pageNumber) {
@@ -55,6 +56,7 @@ export type KravFilters = {
   behandlingId?: string,
   underavdeling?: string,
   lov?: string,
+  lover?: string[],
   gjeldendeKrav?: boolean
   sistRedigert?: number
   pageNumber?: number

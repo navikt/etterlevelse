@@ -1,21 +1,22 @@
 import {AxiosResponse} from 'axios'
 import {getAllCodelists} from '../api/CodelistApi'
-import * as yup from 'yup';
+import * as yup from 'yup'
 import {Replace} from '../constants'
 
 export enum ListName {
   AVDELING = 'AVDELING',
   UNDERAVDELING = 'UNDERAVDELING',
   RELEVANS = 'RELEVANS',
-  LOV = 'LOV'
+  LOV = 'LOV',
+  TEMA = 'TEMA',
 }
 
 const LOVDATA_FORSKRIFT_PREFIX = 'FORSKRIFT_'
 
 class CodelistService {
-  lists?: AllCodelists;
-  error?: string;
-  promise: Promise<any>;
+  lists?: AllCodelists
+  error?: string
+  promise: Promise<any>
 
   constructor() {
     this.promise = this.fetchData()
@@ -34,7 +35,7 @@ class CodelistService {
     } else {
       this.error = response.data
     }
-  };
+  }
 
   refreshCodeLists() {
     this.promise = this.fetchData(true)
@@ -49,16 +50,26 @@ class CodelistService {
     return this.lists || this.error
   }
 
+  // overloads
+  getCodes(list: ListName.LOV): LovCode[]
+  getCodes(list: ListName.TEMA): TemaCode[]
+  getCodes(list: ListName): Code[]
+
   getCodes(list: ListName): Code[] {
     return this.lists && this.lists.codelist[list] ? this.lists.codelist[list].sort((c1, c2) => c1.shortName.localeCompare(c2.shortName)) : []
   }
 
   // overloads
   getCode(list: ListName.LOV, codeName?: string): LovCode | undefined
+  getCode(list: ListName.TEMA, codeName?: string): TemaCode | undefined
   getCode(list: ListName, codeName?: string): Code | undefined
 
   getCode(list: ListName, codeName?: string): Code | undefined {
     return this.getCodes(list).find(c => c.code === codeName)
+  }
+
+  getCodesForTema(codeName?: string): LovCode[] {
+    return this.getCodes(ListName.LOV).filter(c => c.data?.tema === codeName)
   }
 
   valid(list: ListName, codeName?: string): boolean {
@@ -70,7 +81,7 @@ class CodelistService {
   }
 
   getShortnameForCodes(codes: Code[]) {
-    return codes.map(c => this.getShortname(c.list, c.code)).join(", ")
+    return codes.map(c => this.getShortname(c.list, c.code)).join(', ')
   }
 
   getShortname(list: ListName, codeName: string) {
@@ -117,53 +128,58 @@ class CodelistService {
 export const codelist = new CodelistService()
 
 export interface AllCodelists {
-  codelist: List;
+  codelist: List
 }
 
 export interface List {
-  [name: string]: Code[];
+  [name: string]: Code[]
 }
 
 export type LovCode = Replace<Code, {data?: LovCodeData}>
+export type TemaCode = Replace<Code, {data?: TemaCodeData}>
 
 export interface Code {
-  list: ListName;
-  code: string;
-  shortName: string;
-  description: string;
-  data: any;
-  invalidCode?: boolean;
+  list: ListName
+  code: string
+  shortName: string
+  description: string
+  data: any
+  invalidCode?: boolean
 }
 
 export interface CodeListFormValues {
-  list: string;
-  code: string;
-  shortName?: string;
-  description?: string;
-  data?: any;
+  list: string
+  code: string
+  shortName?: string
+  description?: string
+  data?: any
 }
 
 export interface CodeUsage {
-  listName: ListName;
-  code: string;
-  inUse: boolean;
-  krav: [Use];
+  listName: ListName
+  code: string
+  inUse: boolean
+  krav: [Use]
 }
 
 export interface Use {
-  id: string;
-  name: string;
+  id: string
+  name: string
 }
 
 export interface CategoryUsage {
-  listName: string;
-  codesInUse: CodeUsage[];
+  listName: string
+  codesInUse: CodeUsage[]
 }
 
 export interface LovCodeData {
-  lovId?: string,
-  underavdeling?: string,
-  image?: string,
+  lovId?: string
+  underavdeling?: string
+  tema?: string
+}
+
+export interface TemaCodeData {
+  image?: string
 }
 
 const required = 'Påkrevd'
@@ -174,7 +190,7 @@ export const codeListSchema: () => yup.SchemaOf<CodeListFormValues> = () =>
     shortName: yup.string().required(required),
     description: yup.string().required(required),
     data: yup.mixed(),
-  });
+  })
 
 export const codelistCompareField = (field: string) => {
   return (a: any, b: any) => codelistCompare(a[field] as Code || undefined, b[field] as Code || undefined)

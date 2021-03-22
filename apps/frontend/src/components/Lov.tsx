@@ -5,8 +5,8 @@ import {env} from '../util/env'
 import {Regelverk} from '../constants'
 import {Block} from 'baseui/block'
 
-const reactProcessString = require("react-process-string")
-export const processString = reactProcessString as (converters: {regex: RegExp, fn: (key: string, result: string[]) => JSX.Element | string}[]) => ((input?: string) => JSX.Element[])
+const reactProcessString = require('react-process-string')
+const processString = reactProcessString as (converters: {regex: RegExp, fn: (key: string, result: string[]) => JSX.Element | string}[]) => ((input?: string) => JSX.Element[])
 
 
 export const LovViewList = (props: {regelverk: Regelverk[]}) => {

@@ -1,5 +1,5 @@
-import {SORT_DIRECTION} from "baseui/table"
-import {useEffect, useState} from "react"
+import {SORT_DIRECTION} from 'baseui/table'
+import {useEffect, useState} from 'react'
 import {Option, Value} from 'baseui/select'
 
 export type TableConfig<T, K extends keyof T> = {
@@ -121,7 +121,7 @@ export const useTable = <T, K extends keyof T>(initialData: Array<T>, config?: T
 
           return ordered
         } catch (e) {
-          console.error("Error during sort of ", initialData, sortFunct, e)
+          console.error('Error during sort of ', initialData, sortFunct, e)
         }
       }
     }

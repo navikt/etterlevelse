@@ -10,7 +10,7 @@ const init = (onErr: (e: any) => void) => {
     return res
   }, err => {
     if (err?.response?.status !== 404) {
-      console.log("axios error", err)
+      console.log('axios error', err)
       onErr(err)
     }
     return Promise.reject(err)

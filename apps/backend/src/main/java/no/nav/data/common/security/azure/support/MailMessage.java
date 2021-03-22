@@ -1,10 +1,10 @@
 package no.nav.data.common.security.azure.support;
 
-import com.microsoft.graph.models.extensions.EmailAddress;
-import com.microsoft.graph.models.extensions.ItemBody;
-import com.microsoft.graph.models.extensions.Message;
-import com.microsoft.graph.models.extensions.Recipient;
-import com.microsoft.graph.models.generated.BodyType;
+import com.microsoft.graph.models.BodyType;
+import com.microsoft.graph.models.EmailAddress;
+import com.microsoft.graph.models.ItemBody;
+import com.microsoft.graph.models.Message;
+import com.microsoft.graph.models.Recipient;
 import lombok.experimental.UtilityClass;
 
 import java.util.List;

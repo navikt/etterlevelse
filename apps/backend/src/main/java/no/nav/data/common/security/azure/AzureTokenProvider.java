@@ -11,10 +11,7 @@ import com.microsoft.aad.msal4j.PublicClientApplication;
 import com.microsoft.aad.msal4j.RefreshTokenParameters;
 import com.microsoft.aad.msal4j.ResponseMode;
 import com.microsoft.aad.msal4j.UserNamePasswordParameters;
-import com.microsoft.graph.concurrency.DefaultExecutors;
-import com.microsoft.graph.logger.DefaultLogger;
-import com.microsoft.graph.models.extensions.IGraphServiceClient;
-import com.microsoft.graph.requests.extensions.GraphServiceClient;
+import com.microsoft.graph.requests.GraphServiceClient;
 import com.nimbusds.oauth2.sdk.pkce.CodeChallengeMethod;
 import io.prometheus.client.Summary;
 import lombok.extern.slf4j.Slf4j;
@@ -29,22 +26,21 @@ import no.nav.data.common.security.domain.Auth;
 import no.nav.data.common.security.dto.Credential;
 import no.nav.data.common.security.dto.OAuthState;
 import no.nav.data.common.utils.MetricUtils;
+import okhttp3.Request;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.ReflectionUtils;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URL;
 import java.time.Duration;
 import java.util.Set;
-import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.CompletableFuture;
 
 import static java.util.Objects.requireNonNull;
 import static no.nav.data.common.security.SecurityConstants.SESS_ID_LEN;
@@ -60,7 +56,6 @@ public class AzureTokenProvider implements TokenProvider {
     private final IConfidentialClientApplication msalClient;
     private final PublicClientApplication msalPublicClient;
     private final AuthService authService;
-    private final MdcMsalExecutor msalExecutor;
 
     private final AADAuthenticationProperties aadAuthProps;
     private final Encryptor encryptor;
@@ -69,12 +64,11 @@ public class AzureTokenProvider implements TokenProvider {
 
     public AzureTokenProvider(AADAuthenticationProperties aadAuthProps,
             IConfidentialClientApplication msalClient, PublicClientApplication msalPublicClient,
-            AuthService authService, ThreadPoolExecutor msalThreadPool, Encryptor encryptor) {
+            AuthService authService, Encryptor encryptor) {
         this.aadAuthProps = aadAuthProps;
         this.msalClient = msalClient;
         this.msalPublicClient = msalPublicClient;
         this.authService = authService;
-        this.msalExecutor = new MdcMsalExecutor(msalThreadPool);
         this.encryptor = encryptor;
         this.tokenMetrics = MetricUtils.summary()
                 .labels("accessToken")
@@ -92,10 +86,11 @@ public class AzureTokenProvider implements TokenProvider {
         MetricUtils.register("accessTokenCache", accessTokenCache);
     }
 
-    IGraphServiceClient getGraphClient(String accessToken) {
+    // buildClient has omitted it's generic type...
+    @SuppressWarnings("unchecked")
+    GraphServiceClient<Request> getGraphClient(String accessToken) {
         return GraphServiceClient.builder()
-                .authenticationProvider(request -> request.addHeader(HttpHeaders.AUTHORIZATION, TOKEN_TYPE + accessToken))
-                .executors(msalExecutor)
+                .authenticationProvider(url -> CompletableFuture.completedFuture(accessToken))
                 .logger(new GraphLogger())
                 .buildClient();
     }
@@ -220,26 +215,6 @@ public class AzureTokenProvider implements TokenProvider {
             return msalClient.acquireToken(ClientCredentialParameters.builder(Set.of(resource)).build()).get();
         } catch (Exception e) {
             throw new TechnicalException("Failed to get access token for credential", e);
-        }
-    }
-
-    private static class MdcMsalExecutor extends DefaultExecutors {
-
-        static Field backgroundExecutor;
-
-        static {
-            backgroundExecutor = ReflectionUtils.findField(DefaultExecutors.class, "backgroundExecutor", ThreadPoolExecutor.class);
-            Assert.notNull(backgroundExecutor, "couldn't find executor field");
-            backgroundExecutor.setAccessible(true);
-        }
-
-        public MdcMsalExecutor(ThreadPoolExecutor threadPoolExecutor) {
-            super(new DefaultLogger());
-            try {
-                backgroundExecutor.set(this, threadPoolExecutor);
-            } catch (Exception e) {
-                throw new TechnicalException("reflection error", e);
-            }
         }
     }
 

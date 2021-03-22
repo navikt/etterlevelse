@@ -3,7 +3,7 @@ import {createNewTilbakemelding, CreateTilbakemeldingRequest, tilbakemeldingNewM
 import React, {useEffect, useState} from 'react'
 import {Block} from 'baseui/block'
 import {theme} from '../../util'
-import {HeadingSmall, LabelSmall, ParagraphMedium, ParagraphXSmall} from 'baseui/typography'
+import {HeadingSmall, LabelSmall, ParagraphMedium, ParagraphSmall, ParagraphXSmall} from 'baseui/typography'
 import Button from '../common/Button'
 import {faChevronDown, faChevronRight, faEnvelope, faPlus, faPlusCircle, faSync, faUser} from '@fortawesome/free-solid-svg-icons'
 import {borderRadius, hideBorder, marginAll} from '../common/Style'
@@ -52,6 +52,7 @@ export const Tilbakemeldinger = ({krav}: {krav: Krav}) => {
           <Button kind='tertiary' size='compact' icon={faPlus} onClick={() => setAddTilbakemelding(true)}>Ny tilbakemelding</Button>
         </Block>
       </Block>
+      <ParagraphSmall>Gi tilbakemelding til kraveier dersom det er uklarheter vedrørende hvordan kravet skal forstås.</ParagraphSmall>
       <Block $style={{...marginAll('-' + theme.sizing.scale600)}}>
         {loading && <Spinner size={theme.sizing.scale800}/>}
         {!loading &&
@@ -205,7 +206,7 @@ const meldingCardOverrides = (isUser: boolean): CardOverrides => ({
 const MessageList = ({tilbakemelding, setTilbakemelding}: {tilbakemelding: Tilbakemelding, setTilbakemelding: (t: Tilbakemelding) => void}) => {
   const [showResponse, setShowResponse] = useState(false)
   const userRole = tilbakemelding.melderIdent === user.getIdent() ? TilbakemeldingRolle.MELDER : TilbakemeldingRolle.KRAVEIER
-  const melder = userRole === TilbakemeldingRolle.MELDER;
+  const melder = userRole === TilbakemeldingRolle.MELDER
   const melderOrKraveier = melder || user.isKraveier()
 
 

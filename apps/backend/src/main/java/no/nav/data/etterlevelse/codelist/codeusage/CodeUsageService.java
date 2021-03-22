@@ -66,6 +66,9 @@ public class CodeUsageService {
         return convert(CodelistService.getCodelist(list), c -> findCodeUsage(c.getList(), c.getCode()));
     }
 
+    /**
+     * TODO usage of code on code data? lov -> tema $ underavdeling
+     */
     public CodeUsage findCodeUsage(ListName listName, String code) {
         return summary.labels(listName.name()).time(() -> {
             CodeUsage codeUsage = new CodeUsage(listName, code);
@@ -104,13 +107,14 @@ public class CodeUsageService {
             case AVDELING -> kravRepo.findByAvdeling(code);
             case UNDERAVDELING -> kravRepo.findByUnderavdeling(code);
             case LOV -> kravRepo.findByLov(code);
+            case TEMA -> List.of();
         };
     }
 
     private List<GenericStorage> findBehandlinger(ListName listName, String code) {
         return switch (listName) {
             case RELEVANS -> behandlingRepo.findByRelevans(code);
-            default -> List.of();
+            case AVDELING, UNDERAVDELING, LOV, TEMA -> List.of();
         };
     }
 

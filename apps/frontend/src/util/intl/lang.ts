@@ -29,7 +29,7 @@ export const no: IStrings = {
   version: 'Versjon',
   view: 'Vis',
   settings: 'Instillinger'
-};
+}
 
 // Markdown norsk locale
 MdEditor.addLocale('nb', {
@@ -92,4 +92,4 @@ export const en: IStrings = {
   version: 'Version',
   view: 'View',
   settings: 'Settings'
-};
+}

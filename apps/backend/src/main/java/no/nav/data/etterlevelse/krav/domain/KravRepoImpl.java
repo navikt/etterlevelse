@@ -46,10 +46,6 @@ public class KravRepoImpl implements KravRepoCustom {
         var par = new MapSqlParameterSource();
 
         List<String> kravIdSafeList = new ArrayList<>();
-        if (!filter.getRelevans().isEmpty()) {
-            query += " and data -> 'relevansFor' ??| array[ :relevans ] ";
-            par.addValue("relevans", filter.getRelevans());
-        }
         if (filter.getNummer() != null) {
             query += " and data -> 'kravNummer' = to_jsonb(:kravNummer) ";
             par.addValue("kravNummer", filter.getNummer());
@@ -77,6 +73,18 @@ public class KravRepoImpl implements KravRepoCustom {
         if (filter.getUnderavdeling() != null) {
             query += " and data ->> 'underavdeling' = :underavdeling ";
             par.addValue("underavdeling", filter.getUnderavdeling());
+        }
+        if (!filter.getRelevans().isEmpty()) {
+            query += " and data -> 'relevansFor' ??| array[ :relevans ] ";
+            par.addValue("relevans", filter.getRelevans());
+        }
+        if (!filter.getLover().isEmpty()) {
+            var loverQuery = new ArrayList<String>();
+            for (int i = 0, loverSize = filter.getLover().size(); i < loverSize; i++) {
+                loverQuery.add(" data #> '{regelverk}' @> :lov_%d::jsonb ".formatted(i));
+                par.addValue("lov_" + i, String.format("[{\"lov\": \"%s\"}]", filter.getLover().get(i)));
+            }
+            query += " and ( " + String.join(" or ", loverQuery) + " ) ";
         }
         if (filter.getLov() != null) {
             query += " and data #> '{regelverk}' @> :lov::jsonb ";

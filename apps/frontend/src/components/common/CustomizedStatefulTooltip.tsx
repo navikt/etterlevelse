@@ -1,5 +1,5 @@
-import React from "react";
-import {PLACEMENT, StatefulTooltip, StatefulTooltipProps} from "baseui/tooltip";
+import React from 'react'
+import {PLACEMENT, StatefulTooltip, StatefulTooltipProps} from 'baseui/tooltip'
 
 const CustomizedStatefulTooltip = (props: StatefulTooltipProps) => {
   return (
