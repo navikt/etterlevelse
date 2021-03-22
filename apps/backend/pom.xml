@@ -290,6 +290,11 @@
                         <groupId>com.sun.jersey</groupId>
                         <artifactId>jersey-server</artifactId>
                     </exclusion>
+                    <!-- dependency used for intellij plugins... includes old unsecure transitive dependencies -->
+                    <exclusion>
+                        <groupId>org.linguafranca.pwdb</groupId>
+                        <artifactId>KeePassJava2</artifactId>
+                    </exclusion>
                 </exclusions>
             </dependency>
             <dependency>
