@@ -14,6 +14,7 @@ import bookImage from '../resources/img/book.png'
 import pencilFill from '../resources/icons/pencil-fill.svg'
 import lawBook from '../resources/icons/law-book-shield.svg'
 import barChart from '../resources/icons/bar-chart.svg'
+import stepper from '../resources/icons/stepper.svg'
 import illustration from '../resources/giammarco-boscaro-zeH-ljawHtg-unsplash.jpg'
 import {codelist, ListName, LovCode, TemaCode} from '../services/Codelist'
 import React from 'react'
@@ -24,7 +25,8 @@ export {
   lawBook,
   barChart,
   illustration,
-  navImage
+  navImage,
+  stepper,
 }
 
 export const temaBilder: {[id: string]: string} = {
