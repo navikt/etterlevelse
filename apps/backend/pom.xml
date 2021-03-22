@@ -26,7 +26,7 @@
         <graphql-spring-boot-starter.version>11.0.0</graphql-spring-boot-starter.version>
         <graphql.version>15.0.0</graphql.version>
 
-        <microsoft-graph.version>2.10.0</microsoft-graph.version>
+        <microsoft-graph.version>3.0.0</microsoft-graph.version>
         <msal4j.version>1.9.1</msal4j.version>
 
         <!-- transitive versions -->
@@ -35,6 +35,8 @@
         <guava.version>30.1.1-jre</guava.version>
         <json-smart.version>2.3</json-smart.version>
         <jna.version>5.7.0</jna.version>
+        <jetbrains.annotation.version>15.0</jetbrains.annotation.version>
+        <stax2-api.version>4.2.1</stax2-api.version>
 
         <!-- Test -->
         <testcontainers.version>1.15.2</testcontainers.version>
@@ -300,6 +302,21 @@
                         <artifactId>oauth2-oidc-sdk</artifactId>
                     </exclusion>
                 </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>net.java.dev.jna</groupId>
+                <artifactId>jna-platform</artifactId>
+                <version>${jna.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jetbrains</groupId>
+                <artifactId>annotations</artifactId>
+                <version>${jetbrains.annotation.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.codehaus.woodstox</groupId>
+                <artifactId>stax2-api</artifactId>
+                <version>${stax2-api.version}</version>
             </dependency>
 
             <dependency>
