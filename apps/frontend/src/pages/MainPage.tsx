@@ -38,11 +38,11 @@ export const MainPage = () => {
         </Block>
       </Block>
 
-      <Block {...sectionProps}>
+      {/* <Block {...sectionProps}>
         {codelist.getCodes(ListName.TEMA).map(tema =>
           <TemaCard key={tema.code} tema={tema}/>
         )}
-      </Block>
+      </Block> */}
     </Block>
   )
 }
