@@ -58,12 +58,12 @@ export const LovCodeDataForm = () => {
 
             <Block {...rowBlockProps}>
               <Label2 marginRight={'1rem'} width="25%"> Underavdeling: </Label2>
-              <OptionList listName={ListName.UNDERAVDELING} value={codelist.getCode(ListName.UNDERAVDELING, data.underavdeling)} onChange={val => set({underavdeling: val.code})}/>
+              <OptionList listName={ListName.UNDERAVDELING} value={codelist.getCode(ListName.UNDERAVDELING, data.underavdeling)} onChange={val => set({underavdeling: val.code})} label={'Underavdeling'}/>
             </Block>
 
             <Block {...rowBlockProps}>
               <Label2 marginRight={'1rem'} width="25%">Tema: </Label2>
-              <OptionList listName={ListName.TEMA} value={codelist.getCode(ListName.TEMA, data.tema) as Code | undefined} onChange={val => set({tema: val.code})}/>
+              <OptionList listName={ListName.TEMA} value={codelist.getCode(ListName.TEMA, data.tema) as Code | undefined} onChange={val => set({tema: val.code})} label={'Tema'}/>
             </Block>
           </>
         )

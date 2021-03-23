@@ -11,6 +11,7 @@ spec:
   azure:
     application:
       enabled: true
+      tenant: nav.no
       claims:
         extra:
           - NAVident
@@ -18,6 +19,8 @@ spec:
           - id: "2ee0ef50-718c-43d3-8c05-c839f2dc2490"
           - id: "bf05a29f-6f80-4da1-b419-22c802fd41e7"
           - id: "d99d875c-c028-46a4-94bc-a87a633b3eee"
+          # email user <srvetterlevelse@nav.no>
+          - id: "5c229c07-be8b-40c3-a94a-ca383d7dc05a"
       replyURLs:
       {{#each replies as |url|}}
          - {{url}}

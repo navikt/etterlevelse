@@ -38,6 +38,7 @@ jobs:
             - name: Build
               run: CI=false yarn run build
             - name: Docker
+              if: github.ref == 'refs/heads/prod' || github.ref == 'refs/heads/master'
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               run: |

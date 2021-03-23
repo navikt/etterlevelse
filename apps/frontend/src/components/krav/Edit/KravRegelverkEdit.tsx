@@ -40,6 +40,7 @@ export const KravRegelverkEdit = () => {
                       <Select
                         controlRef={controlRef}
                         placeholder={'Velg regelverk'}
+                        aria-label={'Velg regelverk'}
                         maxDropdownHeight='400px'
 
                         value={lov}
@@ -52,6 +53,7 @@ export const KravRegelverkEdit = () => {
                     <Block width='100%'>
                       <Input value={text}
                              onChange={e => setText((e.target as HTMLInputElement).value)}
+                             placeholder={'Beskrivelse, paragraf eller kapittel i regelverk'}
                       />
                     </Block>
                   </Block>

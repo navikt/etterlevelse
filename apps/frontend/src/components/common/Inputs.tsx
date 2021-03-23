@@ -32,7 +32,7 @@ export const InputField = (props: {label: string, name: string, caption?: ReactN
     <Field name={props.name}>
       {(p: FieldProps) =>
         <FormControl label={props.label} error={p.meta.touched && p.meta.error} caption={props.caption}>
-          <Input {...p.field}/>
+          <Input {...p.field} placeholder={props.label}/>
         </FormControl>
       }
     </Field>
@@ -56,7 +56,7 @@ export const TextAreaField = (props: {label: string, name: string, markdown?: bo
             <>
               {props.markdown && <MarkdownEditor initialValue={p.field.value} setValue={v => p.form.setFieldValue(props.name, v)}
                                                  onImageUpload={props.onImageUpload} shortenLinks={props.shortenLinks}/>}
-              {!props.markdown && <Textarea rows={8} {...p.field}/>}
+              {!props.markdown && <Textarea rows={8} {...p.field} placeholder={props.label}/>}
             </>
           </FormControl>
         }
@@ -165,7 +165,7 @@ export const MultiInputField = (props: {label: string, name: string, link?: bool
                        placeholder={'Lenkenavn'}
                 />
                 }
-                <Button type='button' onClick={add} marginLeft><FontAwesomeIcon icon={faPlus}/> </Button>
+                <Button type='button' onClick={add} marginLeft label={'Legg til'}><FontAwesomeIcon icon={faPlus}/> </Button>
               </Block>
               <RenderTagList
                 wide
@@ -195,7 +195,7 @@ export const OptionField = (props: {label: string, name: string, clearable?: boo
   )
 }
 
-export const OptionList = (props: {clearable?: boolean, value?: Code | string, onChange: (val?: any) => void} & Or<{options: Value}, {listName: ListName}>) => {
+export const OptionList = (props: {label: string, clearable?: boolean, value?: Code | string, onChange: (val?: any) => void} & Or<{options: Value}, {listName: ListName}>) => {
   const options: Value = props.options || codelist.getParsedOptions(props.listName)
   return (
     <Select options={options} clearable={props.clearable}
@@ -205,6 +205,8 @@ export const OptionList = (props: {clearable?: boolean, value?: Code | string, o
               const toSet = props.listName && val ? codelist.getCode(props.listName, val as string) : val
               return props.onChange(toSet)
             }}
+            placeholder={props.label}
+            aria-label={props.label}
     />)
 }
 
@@ -220,6 +222,7 @@ export const MultiOptionField = (props: {label: string, name: string, caption?: 
               <Block display='flex'>
                 <Select
                   placeholder={'Velg ' + _.lowerFirst(props.label)}
+                  aria-label={'Velg ' + _.lowerFirst(props.label)}
                   maxDropdownHeight='400px'
 
                   options={options.filter(o => selectedIds.indexOf(o.id) < 0)}

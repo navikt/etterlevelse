@@ -1,13 +1,13 @@
 import * as React from 'react'
-import { ReactNode } from 'react'
-import { Button as BaseUIButton, KIND, SHAPE, SIZE } from 'baseui/button'
-import { PLACEMENT, StatefulTooltip } from 'baseui/tooltip'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
-import { theme } from '../../util'
-import { Override } from 'baseui/overrides'
-import { StyleObject } from 'styletron-react'
-import { Block } from 'baseui/block'
+import {ReactNode} from 'react'
+import {Button as BaseUIButton, KIND, SHAPE, SIZE} from 'baseui/button'
+import {PLACEMENT, StatefulTooltip} from 'baseui/tooltip'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {IconDefinition} from '@fortawesome/fontawesome-svg-core'
+import {theme} from '../../util'
+import {Override} from 'baseui/overrides'
+import {StyleObject} from 'styletron-react'
+import {Block} from 'baseui/block'
 
 
 interface ButtonProps {
@@ -26,6 +26,7 @@ interface ButtonProps {
   $style?: StyleObject
   marginRight?: boolean
   marginLeft?: boolean
+  label?: string
 }
 
 interface TooltipProps {
@@ -71,6 +72,7 @@ const Button = (props: ButtonProps) => {
       <Tooltip tooltip={props.tooltip}>
         <BaseUIButton kind={baseuiKind} size={props.size} shape={props.shape} onClick={() => props.onClick?.()} overrides={{BaseButton: overrides}}
                       startEnhancer={props.startEnhancer} disabled={props.disabled} type={props.type}
+                      aria-label={props.label}
         >
           {props.icon && <FontAwesomeIcon icon={props.icon} style={{marginRight: props.children ? '.5rem' : undefined}}/>}
           {props.children}
