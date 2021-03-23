@@ -34,7 +34,7 @@
         <commons-io.version>2.8.0</commons-io.version>
         <guava.version>30.1.1-jre</guava.version>
         <json-smart.version>2.3</json-smart.version>
-        <jna.version>5.7.0</jna.version>
+        <jna.version>5.8.0</jna.version>
         <jetbrains.annotation.version>15.0</jetbrains.annotation.version>
         <stax2-api.version>4.2.1</stax2-api.version>
 
