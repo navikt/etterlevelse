@@ -229,6 +229,7 @@ const MainSearch = () => {
           type={TYPE.search}
           options={searchResult}
           placeholder={'Søk etter krav eller behandling'}
+          aria-label={'Søk etter krav eller behandling'}
           value={value}
           onInputChange={event => {
             setSearch(event.currentTarget.value)
@@ -272,7 +273,8 @@ const MainSearch = () => {
           }
         />
         <Button onClick={() => setFilter(!filter)} icon={faFilter} size='compact' kind={filter ? 'primary' : 'tertiary'} marginLeft
-                $style={{height: theme.sizing.scale1000, width: theme.sizing.scale1000}}/>
+                $style={{height: theme.sizing.scale1000, width: theme.sizing.scale1000}}
+        label='Filter søkeresultat'/>
       </Block>
       {filter && <SelectType type={type} setType={setType}/>}
     </Block>

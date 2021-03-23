@@ -55,9 +55,9 @@ const KriterieList = ({p}: {p: FieldArrayRenderProps}) => {
         <Block display='flex'>
           <Input onKeyDown={onKey} value={navn} inputRef={inputRef}
                  onChange={e => setNavn((e.target as HTMLInputElement).value)}
-                 onBlur={add}
+                 onBlur={add} placeholder={'Suksesskriterie'}
           />
-          <Button type='button' onClick={add} marginLeft><FontAwesomeIcon icon={faPlus}/> </Button>
+          <Button type='button' onClick={add} marginLeft label={'Legg til'}><FontAwesomeIcon icon={faPlus}/> </Button>
         </Block>
         <RenderTagList
           wide
