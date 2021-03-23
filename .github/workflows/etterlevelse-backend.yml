@@ -34,6 +34,7 @@ jobs:
       - name: Test and Package
         run: mvn package
       - name: docker
+        if: github.ref == 'refs/heads/prod' || github.ref == 'refs/heads/master'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
