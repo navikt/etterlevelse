@@ -10,7 +10,7 @@ import {Textarea} from 'baseui/textarea'
 import {Input, SIZE as InputSIZE} from 'baseui/input'
 import {CodeListFormValues, codeListSchema, ListName} from '../../../services/Codelist'
 import {Error} from '../../common/ModalSchema'
-import {LovCodeDataForm} from './LovCode'
+import {LovCodeDataForm, TemaCodeDataForm} from './LovCode'
 
 const modalBlockProps: BlockProps = {
   width: '700px',
@@ -97,6 +97,7 @@ const UpdateCodeListModal = ({title, initialValues, errorOnUpdate, isOpen, onClo
               <Error fieldName="description"/>
 
               {initialValues.list === ListName.LOV && <LovCodeDataForm/>}
+              {initialValues.list === ListName.TEMA && <TemaCodeDataForm/>}
 
             </ModalBody>
             <ModalFooter>
