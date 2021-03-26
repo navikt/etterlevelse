@@ -76,7 +76,7 @@ const CodeListPage = () => {
             initialState={{value: listname ? [{id: listname, label: listname}] : []}}
           />
         </Block>
-        <Block>
+        {listname && <Block>
           <Button
             tooltip='Legg til ny'
             icon={faPlus}
@@ -86,7 +86,7 @@ const CodeListPage = () => {
           >
             Opprett ny kode
           </Button>
-        </Block>
+        </Block>}
       </Block>
     )}
 
