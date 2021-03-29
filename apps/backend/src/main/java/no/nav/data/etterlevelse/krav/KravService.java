@@ -143,11 +143,11 @@ public class KravService extends DomainService<Krav> {
     }
 
     private void validateBegreper(Validator<KravRequest> validator) {
-        var existingBegreper = Optional.ofNullable(validator.getDomainItem(Krav.class)).map(Krav::getBegreper).orElse(List.of());
-        validator.getItem().getBegreper().stream()
+        var existingBegreper = Optional.ofNullable(validator.getDomainItem(Krav.class)).map(Krav::getBegrepIder).orElse(List.of());
+        validator.getItem().getBegrepIder().stream()
                 .filter(b -> !existingBegreper.contains(b))
                 .filter(b -> begrepService.getBegrep(b).isEmpty())
-                .forEach(b -> validator.addError(Fields.begreper, "BEGREP_NOT_FOUND", "Begrep %s ble ikke funnet i begrepskatalogen.".formatted(b)));
+                .forEach(b -> validator.addError(Fields.begrepIder, "BEGREP_NOT_FOUND", "Begrep %s ble ikke funnet i begrepskatalogen.".formatted(b)));
     }
 
     @SchedulerLock(name = "clean_krav_images", lockAtLeastFor = "PT5M")

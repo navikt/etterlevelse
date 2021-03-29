@@ -13,6 +13,8 @@ import no.nav.data.etterlevelse.krav.domain.dto.KravFilter;
 import no.nav.data.etterlevelse.krav.domain.dto.KravFilter.Fields;
 import no.nav.data.etterlevelse.krav.dto.KravResponse;
 import no.nav.data.etterlevelse.krav.dto.TilbakemeldingResponse;
+import no.nav.data.integration.begrep.BegrepService;
+import no.nav.data.integration.begrep.dto.BegrepResponse;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -27,6 +29,7 @@ public class KravFieldResolver implements GraphQLResolver<KravResponse> {
 
     private final EtterlevelseService etterlevelseService;
     private final TilbakemeldingService tilbakemeldingService;
+    private final BegrepService begrepService;
 
     public List<EtterlevelseResponse> etterlevelser(KravResponse krav, boolean onlyForBehandling, DataFetchingEnvironment env) {
         Integer nummer = krav.getKravNummer();
@@ -48,4 +51,7 @@ public class KravFieldResolver implements GraphQLResolver<KravResponse> {
         return convert(tilbakemeldinger, Tilbakemelding::toResponse);
     }
 
+    public List<BegrepResponse> begreper(KravResponse krav) {
+        return convert(krav.getBegrepIder(), begrep -> begrepService.getBegrep(begrep).orElse(null));
+    }
 }

@@ -98,7 +98,7 @@ export const mapToFormVal = (krav: Partial<Krav>): Krav => ({
   versjonEndringer: krav.versjonEndringer || '',
   dokumentasjon: krav.dokumentasjon || [],
   implementasjoner: krav.implementasjoner || [],
-  begreper: krav.begreper || [],
+  begrepIder: krav.begrepIder || [],
   varslingsadresser: krav.varslingsadresser || [],
   rettskilder: krav.rettskilder || [],
   tagger: krav.tagger || [],
@@ -128,7 +128,12 @@ export const kravFullQuery = gql`
 
       dokumentasjon
       implementasjoner
-      begreper
+      begrepIder
+      begreper {
+        id
+        navn
+        beskrivelse
+      }
       varslingsadresser {
         adresse
         type

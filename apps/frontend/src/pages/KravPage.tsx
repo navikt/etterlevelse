@@ -166,7 +166,12 @@ const query = gql`
 
       dokumentasjon
       implementasjoner
-      begreper
+      begrepIder
+      begreper {
+        id
+        navn
+        beskrivelse
+      }
       varslingsadresser {
         adresse
         type

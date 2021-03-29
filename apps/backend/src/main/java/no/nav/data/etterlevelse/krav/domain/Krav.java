@@ -44,7 +44,7 @@ public class Krav implements DomainObject, KravIdStatus {
 
     private List<String> dokumentasjon;
     private List<String> implementasjoner;
-    private List<String> begreper;
+    private List<String> begrepIder;
     private List<Varslingsadresse> varslingsadresser;
     private List<String> rettskilder;
     private List<String> tagger;
@@ -72,7 +72,7 @@ public class Krav implements DomainObject, KravIdStatus {
 
         dokumentasjon = copyOf(request.getDokumentasjon());
         implementasjoner = copyOf(request.getImplementasjoner());
-        begreper = copyOf(request.getBegreper());
+        begrepIder = copyOf(request.getBegrepIder());
         varslingsadresser = copyOf(request.getVarslingsadresser());
         rettskilder = copyOf(request.getRettskilder());
         tagger = copyOf(request.getTagger());
@@ -103,7 +103,7 @@ public class Krav implements DomainObject, KravIdStatus {
                 .versjonEndringer(versjonEndringer)
                 .dokumentasjon(copyOf(dokumentasjon))
                 .implementasjoner(copyOf(implementasjoner))
-                .begreper(copyOf(begreper))
+                .begrepIder(copyOf(begrepIder))
                 .varslingsadresser(copyOf(varslingsadresser))
                 .rettskilder(copyOf(rettskilder))
                 .tagger(copyOf(tagger))

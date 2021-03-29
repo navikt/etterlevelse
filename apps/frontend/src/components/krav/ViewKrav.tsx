@@ -56,7 +56,7 @@ const AllInfo = ({krav}: {krav: KravQL}) => (
     <Label title='Tagger'>{krav.tagger.join(', ')}</Label>
     <Label title='Kravet er relevant for'><DotTags list={ListName.RELEVANS} codes={krav.relevansFor} linkCodelist/></Label>
     <Label title='Relevante implementasjoner' markdown={krav.implementasjoner}/>
-    <Label title='Begreper'>{krav.begreper.join(', ')}</Label>
+    <Label title='Begreper'>{krav.begrepIder.join(', ')}</Label>
 
     {krav.periode?.start && <Label title='Gyldig fom'>{formatDate(krav.periode?.start)}</Label>}
     {krav.periode?.slutt && <Label title='Gyldig tom'>{formatDate(krav.periode?.slutt)}</Label>}

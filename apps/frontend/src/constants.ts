@@ -53,7 +53,7 @@ export interface Krav extends DomainObject {
   versjonEndringer: string
   dokumentasjon: string[]
   implementasjoner: string[]
-  begreper: string[]
+  begrepIder: string[]
   varslingsadresser: Varslingsadresse[]
   rettskilder: string[]
   tagger: string[]
@@ -210,10 +210,17 @@ export interface ExternalCode {
   description: string;
 }
 
+export interface Begrep {
+  id: string;
+  navn: string;
+  beskrivelse: string;
+}
+
 // export type KravQL = Omit<Krav, 'varslingsadresser'> & {
 export type KravQL = Replace<Krav, {
   etterlevelser: EtterlevelseQL[]
   varslingsadresser: VarslingsadresseQL[]
+  begreper: Begrep[]
 }>
 
 export type EtterlevelseQL = Etterlevelse & {

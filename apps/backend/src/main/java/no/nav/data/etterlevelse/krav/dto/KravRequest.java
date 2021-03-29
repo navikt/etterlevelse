@@ -40,7 +40,7 @@ public class KravRequest implements RequestElement {
     private String versjonEndringer;
     private List<String> dokumentasjon;
     private List<String> implementasjoner;
-    private List<String> begreper;
+    private List<String> begrepIder;
     private List<Varslingsadresse> varslingsadresser;
     private List<String> rettskilder;
     private List<String> tagger;
@@ -75,7 +75,7 @@ public class KravRequest implements RequestElement {
 
         setDokumentasjon(formatList(dokumentasjon));
         setImplementasjoner(formatList(implementasjoner));
-        setBegreper(formatList(begreper));
+        setBegrepIder(formatList(begrepIder));
         setVarslingsadresser(copyOf(varslingsadresser));
         setRettskilder(formatList(rettskilder));
         setTagger(formatList(tagger));

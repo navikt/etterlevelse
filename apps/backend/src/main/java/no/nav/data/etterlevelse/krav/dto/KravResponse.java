@@ -13,6 +13,7 @@ import no.nav.data.etterlevelse.common.domain.Periode;
 import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseResponse;
 import no.nav.data.etterlevelse.krav.domain.KravStatus;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
+import no.nav.data.integration.begrep.dto.BegrepResponse;
 
 import java.util.List;
 import java.util.UUID;
@@ -37,7 +38,7 @@ public class KravResponse implements KravId {
     private String versjonEndringer;
     private List<String> dokumentasjon;
     private List<String> implementasjoner;
-    private List<String> begreper;
+    private List<String> begrepIder;
     private List<Varslingsadresse> varslingsadresser;
     private List<String> rettskilder;
     private List<String> tagger;
@@ -57,5 +58,7 @@ public class KravResponse implements KravId {
     private List<EtterlevelseResponse> etterlevelser;
     @JsonIgnore
     private List<TilbakemeldingResponse> tilbakemeldinger;
+    @JsonIgnore
+    private List<BegrepResponse> begreper;
 
 }

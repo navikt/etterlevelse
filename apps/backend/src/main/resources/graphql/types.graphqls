@@ -12,7 +12,7 @@ type Krav {
     versjonEndringer: String
     dokumentasjon: [String!]!
     implementasjoner: [String!]!
-    begreper: [String!]!
+    begrepIder: [String!]!
     rettskilder: [String!]!
     tagger: [String!]!
     regelverk: [Regelverk!]!
@@ -27,6 +27,13 @@ type Krav {
 
     etterlevelser(onlyForBehandling: Boolean): [Etterlevelse!]!
     tilbakemeldinger: [Tilbakemelding!]!
+    begreper: [Begrep!]!
+}
+
+type Begrep {
+    id: ID!
+    navn: String!
+    beskrivelse:String!
 }
 
 type Tilbakemelding {
