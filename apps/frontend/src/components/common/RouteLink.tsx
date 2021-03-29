@@ -82,12 +82,12 @@ export const ObjectLink = (props: ObjectLinkProps) => {
     link
 }
 
-export const ExternalLink = ({href, children, hideUnderline}: {
-  href: string, hideUnderline?: boolean
+export const ExternalLink = ({href, children, hideUnderline, label}: {
+  href: string, hideUnderline?: boolean, label?: string
   children: React.ReactNode
 }) => {
   return (
-    <StyledLink href={href} target="_blank" rel="noopener noreferrer" style={{textDecoration: hideUnderline ? 'none' : undefined}}>
+    <StyledLink href={href} target="_blank" rel="noopener noreferrer" style={{textDecoration: hideUnderline ? 'none' : undefined}} aria-label={label}>
       {children}
     </StyledLink>
   )

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import {emptyPage, Krav, KravStatus, Or, PageResponse} from '../constants'
+import {emptyPage, Krav, KravQL, KravStatus, Or, PageResponse} from '../constants'
 import {env} from '../util/env'
 import {useEffect, useState} from 'react'
 import {useSearch} from '../util/hooks'
@@ -25,26 +25,28 @@ export const getKravByKravNummer = async (kravNummer: number | string, kravVersj
   return (await axios.get<Krav>(`${env.backendBaseUrl}/krav/kravnummer/${kravNummer}/${kravVersjon}`)).data
 }
 
-export const createKrav = async (krav: Krav) => {
+export const createKrav = async (krav: KravQL) => {
   const dto = kravToKravDto(krav)
   return (await axios.post<Krav>(`${env.backendBaseUrl}/krav`, dto)).data
 }
 
-export const updateKrav = async (krav: Krav) => {
+export const updateKrav = async (krav: KravQL) => {
   const dto = kravToKravDto(krav)
   return (await axios.put<Krav>(`${env.backendBaseUrl}/krav/${krav.id}`, dto)).data
 }
 
-function kravToKravDto(krav: Krav) {
+function kravToKravDto(krav: KravQL): Krav {
   const dto = {
     ...krav,
     avdeling: krav.avdeling?.code,
     underavdeling: krav.underavdeling?.code,
     relevansFor: krav.relevansFor.map(c => c.code),
-    regelverk: krav.regelverk.map(r => ({...r, lov: r.lov.code}))
+    regelverk: krav.regelverk.map(r => ({...r, lov: r.lov.code})),
+    begrepIder: krav.begreper.map(b => b.id)
   } as any
   delete dto.changeStamp
   delete dto.version
+  delete dto.begreper
   return dto
 }
 
@@ -86,7 +88,7 @@ export const useKrav = (params: KravId | KravIdParams, onlyLoadOnce?: boolean) =
 
 export const useSearchKrav = () => useSearch(searchKrav)
 
-export const mapToFormVal = (krav: Partial<Krav>): Krav => ({
+export const mapToFormVal = (krav: Partial<KravQL>): KravQL => ({
   id: krav.id || '',
   navn: krav.navn || '',
   kravNummer: krav.kravNummer || 0,
@@ -98,7 +100,7 @@ export const mapToFormVal = (krav: Partial<Krav>): Krav => ({
   versjonEndringer: krav.versjonEndringer || '',
   dokumentasjon: krav.dokumentasjon || [],
   implementasjoner: krav.implementasjoner || [],
-  begrepIder: krav.begrepIder || [],
+  begreper: krav.begreper || [],
   varslingsadresser: krav.varslingsadresser || [],
   rettskilder: krav.rettskilder || [],
   tagger: krav.tagger || [],
@@ -110,7 +112,11 @@ export const mapToFormVal = (krav: Partial<Krav>): Krav => ({
   relevansFor: krav.relevansFor || [],
   status: krav.status || KravStatus.UTKAST,
   suksesskriterier: krav.suksesskriterier || [],
-  nyKravVersjon: krav.nyKravVersjon || false
+  nyKravVersjon: krav.nyKravVersjon || false,
+
+  // not used
+  begrepIder: [],
+  etterlevelser: []
 })
 
 export const kravFullQuery = gql`

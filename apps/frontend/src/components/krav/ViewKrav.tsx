@@ -1,18 +1,20 @@
-import {AdresseType, KravQL} from '../../constants'
+import {AdresseType, Begrep, KravQL} from '../../constants'
 import {Block} from 'baseui/block'
 import React, {useState} from 'react'
 import {kravStatus} from '../../pages/KravPage'
 import {theme} from '../../util'
 import moment from 'moment'
 import Button from '../common/Button'
-import {DotTags} from '../common/DotTag'
+import {DotTag, DotTags} from '../common/DotTag'
 import {ListName} from '../../services/Codelist'
 import {Label} from '../common/PropertyLabel'
-import {ObjectLink} from '../common/RouteLink'
+import {ExternalLink, ObjectLink} from '../common/RouteLink'
 import {StyledLink} from 'baseui/link'
-import {slackLink, slackUserLink} from '../../util/config'
+import {slackLink, slackUserLink, termUrl} from '../../util/config'
 import {user} from '../../services/User'
 import {LovViewList} from '../Lov'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faExternalLinkAlt} from '@fortawesome/free-solid-svg-icons'
 
 const formatDate = (date?: string) => date && moment(date).format('ll')
 
@@ -56,7 +58,7 @@ const AllInfo = ({krav}: {krav: KravQL}) => (
     <Label title='Tagger'>{krav.tagger.join(', ')}</Label>
     <Label title='Kravet er relevant for'><DotTags list={ListName.RELEVANS} codes={krav.relevansFor} linkCodelist/></Label>
     <Label title='Relevante implementasjoner' markdown={krav.implementasjoner}/>
-    <Label title='Begreper'>{krav.begrepIder.join(', ')}</Label>
+    <Label title='Begreper'>{krav.begreper.map((b, i) => <BegrepView key={i} begrep={b}/>)}</Label>
 
     {krav.periode?.start && <Label title='Gyldig fom'>{formatDate(krav.periode?.start)}</Label>}
     {krav.periode?.slutt && <Label title='Gyldig tom'>{formatDate(krav.periode?.slutt)}</Label>}
@@ -73,4 +75,12 @@ const AllInfo = ({krav}: {krav: KravQL}) => (
     <Label title='Avdeling'>{krav.avdeling?.shortName}</Label>
     <Label title='Underavdeling'><ObjectLink id={krav.underavdeling?.code} type={ListName.UNDERAVDELING}>{krav.underavdeling?.shortName}</ObjectLink></Label>
   </>
+)
+
+const BegrepView = ({begrep}: {begrep: Begrep}) => (
+  <DotTag>
+    {begrep.navn} - {begrep.beskrivelse} <ExternalLink href={termUrl(begrep.id)} label={'Link begrepskatalogen'}>
+    <FontAwesomeIcon icon={faExternalLinkAlt}/>
+    </ExternalLink>
+  </DotTag>
 )

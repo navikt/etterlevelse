@@ -1,4 +1,4 @@
-import {Krav, KravStatus} from '../../constants'
+import {Krav, KravQL, KravStatus} from '../../constants'
 import {Form, Formik} from 'formik'
 import {createKrav, mapToFormVal, updateKrav} from '../../api/KravApi'
 import {Block} from 'baseui/block'
@@ -13,15 +13,16 @@ import {env} from '../../util/env'
 import {KravVarslingsadresserEdit} from './Edit/KravVarslingsadresserEdit'
 import {KravRegelverkEdit} from './Edit/KravRegelverkEdit'
 import {KravSuksesskriterierEdit} from './Edit/KravSuksesskriterieEdit'
+import {EditBegreper} from './Edit/KravBegreperEdit'
 
 type EditKravProps = {
-  krav: Krav,
+  krav: KravQL,
   close: (k?: Krav) => void,
   formRef: React.Ref<any>
 }
 
 export const EditKrav = ({krav, close, formRef}: EditKravProps) => {
-  const submit = async (krav: Krav) => {
+  const submit = async (krav: KravQL) => {
     if (krav.id) {
       close(await updateKrav(krav))
     } else {
@@ -57,7 +58,7 @@ export const EditKrav = ({krav, close, formRef}: EditKravProps) => {
           <MultiOptionField label='Kravet er relevant for' name='relevansFor' listName={ListName.RELEVANS}
                             caption={'Velg kategori(er) kravet er relevant for i nedtrekksmenyen. \n'}/>
           <MultiInputField label='Relevante implementasjoner' name='implementasjoner' caption={'Vis til gode eksisterende implementasjoner som ivaretar kravet.'}/>
-          {/*<EditBegreper/>*/}
+          <EditBegreper/>
 
           <DateField label='Gyldig from' name='periode.start' caption={'Legg til gyldighetsperiode for kravet der det er aktuelt. Hvis ikke skal feltene være blanke.'}/>
           <DateField label='Gyldig tom' name='periode.slutt'/>

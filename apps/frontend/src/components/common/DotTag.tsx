@@ -10,7 +10,7 @@ import {NavigableItem} from '../admin/audit/AuditTypes'
 
 export const DotTag = (props: {children: ReactNode}) =>
   <Block marginLeft={theme.sizing.scale100} marginRight={theme.sizing.scale100} display='flex' alignItems='center'>
-    <FontAwesomeIcon icon={faCircle} color={theme.colors.positive400} style={{fontSize: '.45rem'}}/>
+    <FontAwesomeIcon icon={faCircle} color={theme.colors.positive400} style={{fontSize: '.45rem'}} aria-hidden={true}/>
     <Block display='inline' marginRight={theme.sizing.scale100}/>
     <Block $style={{whiteSpace: 'nowrap'}}>
       {props.children}
