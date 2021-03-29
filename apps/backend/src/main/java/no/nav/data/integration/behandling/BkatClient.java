@@ -7,27 +7,35 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.common.utils.MetricUtils;
 import no.nav.data.common.web.TraceHeaderFilter;
+import no.nav.data.integration.begrep.BegrepService;
+import no.nav.data.integration.begrep.dto.BegrepResponse;
+import no.nav.data.integration.begrep.dto.PollyTerm;
 import no.nav.data.integration.behandling.dto.BkatProcess;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException.NotFound;
 
 import java.time.Duration;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static no.nav.data.common.utils.StreamUtils.toMap;
 
 @Slf4j
 @Service
-public class BkatClient {
+public class BkatClient implements BegrepService {
 
     private final WebClient client;
     private final LoadingCache<String, List<BkatProcess>> processSearchCache;
     private final LoadingCache<String, BkatProcess> processCache;
     private final Cache<String, ProcessPage> processPageCache;
     private final LoadingCache<String, List<BkatProcess>> processTeamCache;
+
+    private final Cache<String, BegrepResponse> termCache;
+    private final Cache<String, List<BegrepResponse>> termSearchCache;
 
     public BkatClient(WebClient.Builder webClientBuilder, BkatProperties properties) {
         this.client = webClientBuilder
@@ -51,6 +59,15 @@ public class BkatClient {
                 Caffeine.newBuilder().recordStats()
                         .expireAfterAccess(Duration.ofMinutes(10))
                         .maximumSize(100).build(this::findProcessesForTeam));
+
+        this.termCache = MetricUtils.register("bkatTermCache",
+                Caffeine.newBuilder().recordStats()
+                        .expireAfterAccess(Duration.ofMinutes(10))
+                        .maximumSize(100).build());
+        this.termSearchCache = MetricUtils.register("bkatTermSearchCache",
+                Caffeine.newBuilder().recordStats()
+                        .expireAfterAccess(Duration.ofMinutes(10))
+                        .maximumSize(100).build());
     }
 
     public BkatProcess getProcess(String id) {
@@ -122,4 +139,28 @@ public class BkatClient {
 
     }
 
+    // Temporary termcat via polly until datacat is published to gcp
+
+    @Override
+    public Optional<BegrepResponse> getBegrep(String id) {
+        return Optional.ofNullable(termCache.get(id, key -> {
+            try {
+                return get("/term/{id}", PollyTerm.class, id).toResponse();
+            } catch (NotFound e) {
+                log.trace("fant ikke begrep " + id, e);
+                return null;
+            }
+        }));
+    }
+
+    @Override
+    public List<BegrepResponse> searchBegreper(String searchString) {
+        return termSearchCache.get(searchString, key ->
+                get("/term/search/{search}", TermPage.class, searchString).convert(PollyTerm::toResponse).getContent()
+        );
+    }
+
+    public static final class TermPage extends RestResponsePage<PollyTerm> {
+
+    }
 }

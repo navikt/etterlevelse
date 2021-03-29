@@ -55,7 +55,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 "/etterlevelse/**",
                 "/behandling/**",
 
-                "/team/**"
+                "/team/**",
+                "/begrep/**"
         );
 
         adminOnly(http,

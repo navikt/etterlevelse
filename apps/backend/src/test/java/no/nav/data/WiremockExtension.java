@@ -3,6 +3,7 @@ package no.nav.data;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
+import no.nav.data.integration.begrep.BegrepMocks;
 import no.nav.data.integration.behandling.BkatMocks;
 import no.nav.data.integration.slack.SlackMocks;
 import no.nav.data.integration.team.TeamcatMocks;
@@ -39,6 +40,7 @@ public class WiremockExtension implements Extension, BeforeAllCallback, BeforeEa
         TeamcatMocks.mock();
         BkatMocks.mock();
         SlackMocks.mock();
+        BegrepMocks.mock();
     }
 
     static WireMockServer getWiremock() {

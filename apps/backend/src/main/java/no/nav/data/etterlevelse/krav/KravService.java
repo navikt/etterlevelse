@@ -75,6 +75,7 @@ public class KravService extends DomainService<Krav> {
                 .addValidations(this::validateName)
                 .addValidations(this::validateStatus)
                 .addValidations(this::validateKravNummerVersjon)
+                .addValidations(this::validateBegreper)
                 .ifErrorsThrowValidationException();
 
         var krav = request.isUpdate() ? storage.get(request.getIdAsUUID(), Krav.class) : new Krav();
@@ -139,6 +140,14 @@ public class KravService extends DomainService<Krav> {
                 validator.addError(Fields.status, "INVALID_STATUS", "Krav already contains %d etterlevelser, cannot change status to UTKAST".formatted(etterlevelser.size()));
             }
         }
+    }
+
+    private void validateBegreper(Validator<KravRequest> validator) {
+        var existingBegreper = Optional.ofNullable(validator.getDomainItem(Krav.class)).map(Krav::getBegreper).orElse(List.of());
+        validator.getItem().getBegreper().stream()
+                .filter(b -> !existingBegreper.contains(b))
+                .filter(b -> begrepService.getBegrep(b).isEmpty())
+                .forEach(b -> validator.addError(Fields.begreper, "BEGREP_NOT_FOUND", "Begrep %s ble ikke funnet i begrepskatalogen.".formatted(b)));
     }
 
     @SchedulerLock(name = "clean_krav_images", lockAtLeastFor = "PT5M")

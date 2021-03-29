@@ -10,6 +10,7 @@ import no.nav.data.etterlevelse.etterlevelse.domain.EtterlevelseRepo;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravRepo;
 import no.nav.data.etterlevelse.krav.dto.KravRequest.Fields;
+import no.nav.data.integration.begrep.BegrepService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,6 +27,8 @@ public class DomainService<T extends DomainObject> {
     protected KravRepo kravRepo;
     @Autowired
     protected EtterlevelseRepo etterlevelseRepo;
+    @Autowired
+    protected BegrepService begrepService;
     protected final Class<T> type;
 
     public T get(UUID uuid) {
