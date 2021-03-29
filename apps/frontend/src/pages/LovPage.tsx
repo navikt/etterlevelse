@@ -10,6 +10,7 @@ import {LovBilde} from '../components/Images'
 import {lovdataBase} from '../components/Lov'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faExternalLinkAlt} from '@fortawesome/free-solid-svg-icons'
+import {Markdown} from '../components/common/Markdown'
 
 export const LovPage = () => {
   const {lov} = useParams<{lov: string}>()
@@ -38,7 +39,7 @@ export const LovPage = () => {
       <Block display='flex' justifyContent='space-between'>
         <Block>
           <HeadingMedium marginTop={0}>Lov: {code.shortName}</HeadingMedium>
-          <ParagraphMedium>{code.description}</ParagraphMedium>
+          <Markdown source={code.description}/>
         </Block>
         <Block>
           <Block marginLeft={theme.sizing.scale400}>

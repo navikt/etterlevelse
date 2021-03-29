@@ -8,6 +8,7 @@ import {theme} from '../util'
 import {KravFilterTable} from '../components/common/KravFilterTable'
 import {TemaBilde} from '../components/Images'
 import {FrontCard} from './MainPage'
+import {Markdown} from '../components/common/Markdown'
 
 const sectionProps: BlockProps = {
   display: 'flex',
@@ -46,7 +47,7 @@ export const TemaPage = () => {
       <Block display='flex' justifyContent='space-between'>
         <Block>
           <HeadingMedium marginTop={0}>{code.shortName}</HeadingMedium>
-          <ParagraphMedium>{code.description}</ParagraphMedium>
+          <Markdown source={code.description}/>
         </Block>
         <Block>
           <Block marginLeft={theme.sizing.scale400}>
