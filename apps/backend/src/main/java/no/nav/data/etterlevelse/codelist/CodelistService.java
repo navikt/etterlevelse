@@ -1,5 +1,7 @@
 package no.nav.data.etterlevelse.codelist;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.validator.Validated;
@@ -30,6 +32,7 @@ import static no.nav.data.common.utils.StreamUtils.convert;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class CodelistService {
 
     private static final String FIELD_NAME_LIST = "list";
@@ -37,11 +40,6 @@ public class CodelistService {
     private static final String REFERENCE = "Validate Codelist";
     private final CodelistRepository codelistRepository;
     private final CodeUsageService codeUsageService;
-
-    public CodelistService(CodelistRepository codelistRepository, CodeUsageService codeUsageService) {
-        this.codelistRepository = codelistRepository;
-        this.codeUsageService = codeUsageService;
-    }
 
     public static Codelist getCodelist(ListName listName, String code) {
         return CodelistCache.getCodelist(listName, code);
@@ -98,6 +96,16 @@ public class CodelistService {
         List<Codelist> saved = codelistRepository.saveAll(codelists);
         saved.forEach(CodelistCache::set);
         return saved;
+    }
+
+    public void replaceDataField(Codelist codelist, String fieldName, String oldVal, String newVal) {
+        var fresh = codelistRepository.findByListAndCode(codelist.getList(), codelist.getCode()).orElseThrow();
+        var field = fresh.getData().get(fieldName);
+        if (field == null || !oldVal.equals(field.asText())) {
+            return;
+        }
+        ((ObjectNode) fresh.getData()).put(fieldName, newVal);
+        codelistRepository.save(fresh);
     }
 
     private Codelist updateDescriptionInRepository(CodelistRequest request) {

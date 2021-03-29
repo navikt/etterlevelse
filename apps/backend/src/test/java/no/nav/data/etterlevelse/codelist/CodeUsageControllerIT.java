@@ -19,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import static no.nav.data.etterlevelse.codelist.CodelistUtils.createCodelistRequest;
@@ -46,7 +47,8 @@ public class CodeUsageControllerIT extends IntegrationTestBase {
                 "RELEVANS,2",
                 "AVDELING,1",
                 "UNDERAVDELING,1",
-                "LOV,1"
+                "LOV,1",
+                "TEMA,1"
         })
         void shouldFindCodeUsage(String list, int expectedCodesInUse) {
             ResponseEntity<CodelistUsageResponse> response = restTemplate
@@ -91,12 +93,13 @@ public class CodeUsageControllerIT extends IntegrationTestBase {
 
         @ParameterizedTest
         @CsvSource({
-                "RELEVANS,REL1,1",
-                "AVDELING,AVD1,1",
-                "UNDERAVDELING,UNDAVD1,1",
-                "LOV,ARKIV,1"
+                "RELEVANS,REL1,1,0",
+                "AVDELING,AVD1,1,0",
+                "UNDERAVDELING,UNDAVD1,1,1",
+                "LOV,ARKIV,1,0",
+                "TEMA,ARKIV_TEMA,0,1"
         })
-        void replaceCodelistUsage(String list, String code, int krav) {
+        void replaceCodelistUsage(String list, String code, int krav, int codelist) {
             String newCode = "REPLACECODE";
             codelistService.save(List.of(createCodelistRequest(list, newCode)));
 
@@ -106,6 +109,7 @@ public class CodeUsageControllerIT extends IntegrationTestBase {
             var replace = replaceCode(list, code, newCode);
             assertThat(replace.isInUse()).isTrue();
             assertThat(replace.getKrav()).hasSize(krav);
+            assertThat(replace.getCodelist()).hasSize(codelist);
 
             var replaceSecondRun = replaceCode(list, code, newCode);
             assertThat(replaceSecondRun.isInUse()).isFalse();
@@ -133,7 +137,9 @@ public class CodeUsageControllerIT extends IntegrationTestBase {
                 createCodelistRequest(ListName.RELEVANS.name(), "REL3"),
                 createCodelistRequest(ListName.AVDELING.name(), "AVD1"),
                 createCodelistRequest(ListName.UNDERAVDELING.name(), "UNDAVD1"),
-                createCodelistRequest(ListName.LOV.name(), "ARKIV")
+                createCodelistRequest(ListName.TEMA.name(), "ARKIV_TEMA"),
+                createCodelistRequest(ListName.LOV.name(), "ARKIV"),
+                createCodelistRequest(ListName.LOV.name(), "PERSON", Map.of("tema", "ARKIV_TEMA", "underavdeling", "UNDAVD1"))
         );
         codelistService.save(requests);
     }

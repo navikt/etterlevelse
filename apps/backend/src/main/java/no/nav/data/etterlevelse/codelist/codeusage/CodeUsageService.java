@@ -1,5 +1,6 @@
 package no.nav.data.etterlevelse.codelist.codeusage;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import io.prometheus.client.Summary;
 import no.nav.data.common.storage.domain.GenericStorage;
 import no.nav.data.common.utils.MetricUtils;
@@ -11,21 +12,26 @@ import no.nav.data.etterlevelse.codelist.CodelistService;
 import no.nav.data.etterlevelse.codelist.CodelistService.ListReq;
 import no.nav.data.etterlevelse.codelist.codeusage.dto.CodeUsage;
 import no.nav.data.etterlevelse.codelist.codeusage.dto.CodeUsageRequest;
+import no.nav.data.etterlevelse.codelist.domain.Codelist;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravRepo;
 import no.nav.data.etterlevelse.krav.domain.Regelverk;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import static java.util.Collections.replaceAll;
 import static java.util.stream.Collectors.toList;
 import static no.nav.data.common.utils.StreamUtils.convert;
+import static no.nav.data.common.utils.StreamUtils.filter;
 import static no.nav.data.common.utils.StreamUtils.safeStream;
+import static no.nav.data.etterlevelse.codelist.CodelistService.getCodelist;
 
 @Service
 @Transactional
@@ -34,10 +40,12 @@ public class CodeUsageService {
     private final KravRepo kravRepo;
     private final BehandlingRepo behandlingRepo;
     private final Summary summary;
+    private final CodelistService codelistService;
 
-    public CodeUsageService(KravRepo kravRepo, BehandlingRepo behandlingRepo) {
+    public CodeUsageService(KravRepo kravRepo, BehandlingRepo behandlingRepo, @Lazy CodelistService codelistService) {
         this.kravRepo = kravRepo;
         this.behandlingRepo = behandlingRepo;
+        this.codelistService = codelistService;
         List<String[]> listnames = Stream.of(ListName.values()).map(e -> new String[]{e.name()}).collect(toList());
         this.summary = MetricUtils.summary()
                 .labels(listnames)
@@ -66,14 +74,12 @@ public class CodeUsageService {
         return convert(CodelistService.getCodelist(list), c -> findCodeUsage(c.getList(), c.getCode()));
     }
 
-    /**
-     * TODO usage of code on code data? lov -> tema $ underavdeling
-     */
     public CodeUsage findCodeUsage(ListName listName, String code) {
         return summary.labels(listName.name()).time(() -> {
             CodeUsage codeUsage = new CodeUsage(listName, code);
             codeUsage.setKrav(findKrav(listName, code));
             codeUsage.setBehandlinger(findBehandlinger(listName, code));
+            codeUsage.setCodelist(findCodelists(listName, code));
             return codeUsage;
         });
     }
@@ -88,9 +94,16 @@ public class CodeUsageService {
                     usage.getBehandlinger().forEach(gs -> gs.asType(bd -> replaceAll(bd.getRelevansFor(), oldCode, newCode), BehandlingData.class));
                 }
                 case AVDELING -> usage.getKrav().forEach(gs -> gs.asType(k -> k.setAvdeling(newCode), Krav.class));
-                case UNDERAVDELING -> usage.getKrav().forEach(gs -> gs.asType(k -> k.setUnderavdeling(newCode), Krav.class));
+                case UNDERAVDELING -> {
+                    usage.getKrav().forEach(gs -> gs.asType(k -> k.setUnderavdeling(newCode), Krav.class));
+                    usage.getCodelist().forEach(c -> codelistService.replaceDataField(c, "underavdeling", oldCode, newCode));
+                }
                 case LOV -> usage.getKrav().forEach(gs -> gs.asType(k -> replaceLov(oldCode, newCode, k.getRegelverk()), Krav.class));
+                case TEMA -> usage.getCodelist().forEach(c -> codelistService.replaceDataField(c, "tema", oldCode, newCode));
             }
+        }
+        if (!usage.getCodelist().isEmpty()) {
+            codelistService.refreshCache();
         }
         return usage;
     }
@@ -116,6 +129,21 @@ public class CodeUsageService {
             case RELEVANS -> behandlingRepo.findByRelevans(code);
             case AVDELING, UNDERAVDELING, LOV, TEMA -> List.of();
         };
+    }
+
+    private List<Codelist> findCodelists(ListName listName, String code) {
+        return switch (listName) {
+            case TEMA -> filter(getCodelist(ListName.LOV), c -> code.equals(getField(c, "tema")));
+            case UNDERAVDELING -> filter(getCodelist(ListName.LOV), c -> code.equals(getField(c, "underavdeling")));
+            case AVDELING, LOV, RELEVANS -> List.of();
+        };
+    }
+
+    private String getField(Codelist c, String fieldName) {
+        return Optional.ofNullable(c.getData())
+                .map(cl -> cl.get(fieldName))
+                .map(JsonNode::asText)
+                .orElse(null);
     }
 
 }
