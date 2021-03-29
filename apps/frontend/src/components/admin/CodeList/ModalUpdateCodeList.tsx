@@ -11,6 +11,7 @@ import {Input, SIZE as InputSIZE} from 'baseui/input'
 import {CodeListFormValues, codeListSchema, ListName} from '../../../services/Codelist'
 import {Error} from '../../common/ModalSchema'
 import {LovCodeDataForm, TemaCodeDataForm} from './LovCode'
+import {MarkdownInfo} from '../../common/Markdown'
 
 const modalBlockProps: BlockProps = {
   width: '700px',
@@ -90,11 +91,13 @@ const UpdateCodeListModal = ({title, initialValues, errorOnUpdate, isOpen, onClo
                     value={formik.values.description}
                     onChange={formik.handleChange}
                     type="input"
+                    rows={10}
                   />
                 )}
                 </Field>
               </Block>
               <Error fieldName="description"/>
+              {(initialValues.list === ListName.LOV || initialValues.list === ListName.TEMA) && <MarkdownInfo/>}
 
               {initialValues.list === ListName.LOV && <LovCodeDataForm/>}
               {initialValues.list === ListName.TEMA && <TemaCodeDataForm/>}

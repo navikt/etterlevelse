@@ -11,6 +11,7 @@ import 'react-markdown-editor-lite/lib/index.css'
 import {Block} from 'baseui/block'
 import {theme} from '../../util'
 import {ExternalLink} from './RouteLink'
+import {markdownLink} from '../../util/config'
 
 export const Markdown = (props: {source?: string, sources?: string[], escapeHtml?: boolean, noMargin?: boolean, shortenLinks?: boolean, vertical?: boolean}) => {
   const renderers = {
@@ -34,7 +35,9 @@ export const Markdown = (props: {source?: string, sources?: string[], escapeHtml
   const sources: string[] = props.sources || (props.source ? [props.source] : [''])
   return <Block $style={{
     // Fix font color in lists etc
-    color: theme.colors.contentPrimary
+    color: theme.colors.contentPrimary,
+    fontFamily: theme.typography.font400.fontFamily,
+    fontWeight: theme.typography.font400.fontWeight
   }}>
     <ReactMarkdown source={sources.join(props.vertical ? '\n\n' : ', ')}
                    escapeHtml={props.escapeHtml}
@@ -63,3 +66,9 @@ export const MarkdownEditor = (props: MarkdownEditorProps) => {
     onImageUpload={props.onImageUpload}
   />
 }
+
+export const MarkdownInfo = () => (
+  <Block>Feltet bruker <ExternalLink href={markdownLink}>Markdown</ExternalLink>, se her for mer
+    informasjon om formatet
+  </Block>
+)
