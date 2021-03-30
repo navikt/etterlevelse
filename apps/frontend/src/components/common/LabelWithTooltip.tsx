@@ -1,8 +1,8 @@
+import * as React from 'react'
 import CustomizedStatefulTooltip from './CustomizedStatefulTooltip'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons'
 import {Block} from 'baseui/block'
-import { React } from '@ungap/global-this'
 
 const LabelWithToolTip = (props: {label: string, tooltip?: React.ReactNode}) => {
   if (props.tooltip) {
