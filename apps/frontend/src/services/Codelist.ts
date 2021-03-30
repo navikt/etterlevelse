@@ -160,6 +160,8 @@ export interface CodeUsage {
   code: string
   inUse: boolean
   krav: [Use]
+  behandlinger: [Use]
+  codelist: [Code]
 }
 
 export interface Use {

@@ -13,23 +13,38 @@ import {ObjectLink} from '../../common/RouteLink'
 import {ObjectType} from '../audit/AuditTypes'
 import {replaceCodelistUsage} from '../../../api/CodelistApi'
 
-const UsageTable = (props: {usage: CodeUsage, rows: number}) => {
-  const {usage, rows} = props
+const UsageTable = (props: {usage: CodeUsage}) => {
+  const {usage} = props
   const krav = !!usage.krav.length
+  const behandlinger = !!usage.behandlinger.length
+  const codelist = !!usage.codelist.length
+
+  const rows = usage ? Math.max(usage.krav.length, usage.behandlinger.length, usage.codelist.length) : -1
+
   return (
     <Table
       emptyText={'i bruk'}
       hoverColor={theme.colors.primary100}
       data={usage.inUse ? [0] : []}
       headers={[
-        {title: 'Krav'}
-      ]}
+        {title: 'Krav', hide: !krav},
+        {title: 'Behandling', hide: !behandlinger},
+        {title: 'Codelist', hide: !codelist}
+      ].filter(v => !!v)}
       render={table => Array.from(Array(rows).keys()).map(index => {
         const kr = usage.krav[index]
+        const be = usage.behandlinger[index]
+        const co = usage.codelist[index]
         return (
           <Row key={index} $style={{borderBottomStyle: 'none'}}>
             {krav && <Cell>
               {kr && <ObjectLink id={kr.id} type={ObjectType.Krav} withHistory={true}>{kr.name}</ObjectLink>}
+            </Cell>}
+            {behandlinger && <Cell>
+              {be && <ObjectLink id={be.id} type={ObjectType.Behandling} withHistory={true}>{be.name}</ObjectLink>}
+            </Cell>}
+            {codelist && <Cell>
+              {co && <ObjectLink id={co.list} type={'codelist'} withHistory={true}>{co.list} - {co.code}</ObjectLink>}
             </Cell>}
           </Row>
         )
@@ -43,8 +58,6 @@ export const Usage = (props: {usage?: CodeUsage, refresh: () => void}) => {
   const ref = useRef<HTMLElement>()
 
   const {usage, refresh} = props
-  const maxRows = usage ? Math.max(usage.krav.length) : -1
-  const noUsage = maxRows === 0
 
   useEffect(() => {
     setShowReplace(false)
@@ -60,7 +73,7 @@ export const Usage = (props: {usage?: CodeUsage, refresh: () => void}) => {
     <Block marginTop="2rem" ref={ref}>
       <Block display="flex" justifyContent="space-between" marginBottom=".5rem">
         <Label2 font="font450">Bruk</Label2>
-        {!noUsage && <Button type="button" kind="secondary" size="compact" onClick={() => setShowReplace(true)}>Erstatt all bruk</Button>}
+        {!!usage?.inUse && <Button type="button" kind="secondary" size="compact" onClick={() => setShowReplace(true)}>Erstatt all bruk</Button>}
       </Block>
 
       {showReplace && usage && usage.listName && (
@@ -72,7 +85,7 @@ export const Usage = (props: {usage?: CodeUsage, refresh: () => void}) => {
         </Block>
       )}
 
-      {usage && <UsageTable usage={usage} rows={maxRows}/>}
+      {usage && <UsageTable usage={usage}/>}
       {!usage && <StyledSpinnerNext/>}
     </Block>
   )

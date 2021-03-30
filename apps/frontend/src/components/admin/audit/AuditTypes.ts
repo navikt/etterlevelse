@@ -29,6 +29,7 @@ export enum ObjectType {
 }
 
 export type NavigableItem = ObjectType |
+  'codelist' |
   ListName.RELEVANS |
   ListName.UNDERAVDELING |
   ListName.TEMA |

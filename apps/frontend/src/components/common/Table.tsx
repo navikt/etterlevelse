@@ -40,7 +40,8 @@ type HeadProps<T, K extends keyof T> = {
   title?: string,
   column?: K,
   $style?: StyleObject
-  small?: boolean
+  small?: boolean,
+  hide?: boolean
 }
 
 type RowProps = {
@@ -93,7 +94,7 @@ export const Table = <T, K extends keyof T>(props: TableProps<T, K>) => {
 
   const StyleTable = withStyle(StyledTable, {...tableStyle, backgroundColor: props.backgroundColor, width: props.width || tableStyle.width})
 
-  const show = (col?: K) => !!col && !((props.config?.exclude || [])?.indexOf(col) >= 0)
+  const show = (col?: K) => !col || !props.config?.exclude || !((props.config?.exclude || [])?.indexOf(col) >= 0)
   const columnState = props.headers.map(h => show(h.column))
   const colFilter = (o: any, i: number) => columnState[i]
 
@@ -101,7 +102,7 @@ export const Table = <T, K extends keyof T>(props: TableProps<T, K>) => {
     <TableContext.Provider value={{...props, tableState: table}}>
       <StyleTable>
         <StyledHeader>
-          {props.headers.filter(colFilter).map((h: any, i) => <HeadCell key={i} {...h} />)}
+          {props.headers.filter(h => !h.hide).filter(colFilter).map((h: any, i) => <HeadCell key={i} {...h} />)}
         </StyledHeader>
         <StyledBody>
           {props.render && props.render(table)}

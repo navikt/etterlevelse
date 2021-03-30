@@ -60,6 +60,8 @@ export const urlForObject = (type: NavigableItem, id: string, audit?: AuditItem)
       return `/lov/${id}`
     case ListName.TEMA:
       return `/tema/${id}`
+    case 'codelist':
+      return `/admin/codelist/${id}`
   }
   console.warn('couldn\'t find object type ' + type)
   return ''
