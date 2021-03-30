@@ -12,6 +12,7 @@ import {LabelSmall} from 'baseui/typography'
 import {LovView} from '../../Lov'
 import {RenderTagList} from '../../common/TagList'
 import {Regelverk} from '../../../constants'
+import LabelWithTooltip from '../../common/LabelWithTooltip'
 
 export const KravRegelverkEdit = () => {
   const [lov, setLov] = useState<Value>([])
@@ -32,7 +33,7 @@ export const KravRegelverkEdit = () => {
             controlRef.current?.focus()
           }
           return (
-            <FormControl label='Regelverk' caption={'Velg relevant regelverk fra nedtrekksmenyen, og angi hvilke(n) bestemmelse(r) kravet har sin opprinnelse fra.'}>
+            <FormControl label={<LabelWithTooltip label={'Regelverk'} tooltip={'Velg relevant regelverk fra nedtrekksmenyen, og angi hvilke(n) bestemmelse(r) kravet har sin opprinnelse fra.'}/>} >
               <Block>
                 <Block>
                   <Block display='flex'>
