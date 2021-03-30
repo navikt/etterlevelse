@@ -18,6 +18,7 @@ import {FormControl} from 'baseui/form-control'
 import {faSlackHash} from '@fortawesome/free-brands-svg-icons'
 import {Modal, ModalBody, ModalFooter, ModalHeader} from 'baseui/modal'
 import {RenderTagList} from '../../common/TagList'
+import LabelWithTooltip from '../../common/LabelWithTooltip'
 
 export const KravVarslingsadresserEdit = () => {
   const [addSlackChannel, setAddSlackChannel] = useState<boolean>(false)
@@ -34,7 +35,7 @@ export const KravVarslingsadresserEdit = () => {
               p.push(v)
           }
           return <>
-            <FormControl label='Varslingsadresser' caption={'Angi varslingskanal (slack og/eller epost) for spørsmål eller tilbakemeldinger til kravet.'}>
+            <FormControl label={<LabelWithTooltip label={'Varslingsadresser'} tooltip={'Angi varslingskanal (slack og/eller epost) for spørsmål eller tilbakemeldinger til kravet.'}/>} >
               <Block>
                 <Block marginBottom={theme.sizing.scale400}>
                   <Button kind='secondary' size='compact' type='button' onClick={() => setAddSlackChannel(true)}>

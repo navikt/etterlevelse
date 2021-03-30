@@ -11,6 +11,7 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faPlus} from '@fortawesome/free-solid-svg-icons'
 import {RenderTagList} from '../../common/TagList'
 import * as _ from 'lodash'
+import LabelWithTooltip from '../../common/LabelWithTooltip'
 
 export const KravSuksesskriterierEdit = () => {
   return (
@@ -50,7 +51,7 @@ const KriterieList = ({p}: {p: FieldArrayRenderProps}) => {
 
   const onKey = (e: React.KeyboardEvent) => (e.key === 'Enter') && add()
   return (
-    <FormControl label={'Suksesskriterier'} caption={'Definer hvilke kriterier som skal til for at kravet er oppnådd. Formålet er å identifisere en terskel for kravoppnåelse og en enhetlig besvarelse på tvers.'}>
+    <FormControl label={<LabelWithTooltip label={'Suksesskriterier'} tooltip={'Definer hvilke kriterier som skal til for at kravet er oppnådd. Formålet er å identifisere en terskel for kravoppnåelse og en enhetlig besvarelse på tvers.'}/>} >
       <Block>
         <Block display='flex'>
           <Input onKeyDown={onKey} value={navn} inputRef={inputRef}

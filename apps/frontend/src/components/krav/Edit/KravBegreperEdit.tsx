@@ -9,6 +9,7 @@ import {Error} from '../../common/ModalSchema'
 import {RenderTagList} from '../../common/TagList'
 import {Begrep} from '../../../constants'
 import {Block} from 'baseui/block'
+import LabelWithTooltip from '../../common/LabelWithTooltip'
 
 export const EditBegreper = () => {
   const [result, setSearch, loading] = useBegrepSearch()
@@ -18,7 +19,7 @@ export const EditBegreper = () => {
       <FieldArray name='begreper'>
         {p => {
           return (
-            <FormControl label='Begreper' caption={'Legg ved lenke til relevante begrep(er) i Begrepskatalogen.'}>
+            <FormControl label={<LabelWithTooltip label={'Begreper'} tooltip={'Legg ved lenke til relevante begrep(er) i Begrepskatalogen.'}/>} >
               <Block>
                 <Select
                   labelKey={'navn'}
