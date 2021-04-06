@@ -2,7 +2,7 @@
 
 #### Requirements
 
- * JDK 15
+ * JDK 16
  * Docker
  * Maven
   
