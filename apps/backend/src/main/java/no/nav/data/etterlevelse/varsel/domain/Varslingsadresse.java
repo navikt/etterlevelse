@@ -1,5 +1,6 @@
 package no.nav.data.etterlevelse.varsel.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,6 +13,7 @@ import static org.apache.commons.lang3.StringUtils.trimToNull;
 @Data
 @Builder
 @NoArgsConstructor
+@AllArgsConstructor
 @FieldNameConstants
 public class Varslingsadresse implements Validated {
 
