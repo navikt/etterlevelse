@@ -9,7 +9,7 @@ import { StyledLink } from 'baseui/link'
 import { useAwait, useQueryParam } from '../util/hooks'
 import { paddingAll } from './common/Style'
 import { theme } from '../util'
-import { HeadingMedium, Label2 } from 'baseui/typography'
+import { H1, Label2 } from 'baseui/typography'
 import { intl } from '../util/intl/intl'
 import { StatefulMenu } from 'baseui/menu'
 import { TriangleDown } from 'baseui/icon'
@@ -19,6 +19,8 @@ import { ampli } from '../services/Amplitude'
 import { user } from '../services/User'
 import { writeLog } from '../api/LogApi'
 import MainSearch from './search/MainSearch'
+import { logo } from './Images'
+
 
 
 const LoginButton = (props: { location: string }) => {
@@ -91,7 +93,7 @@ const AdminOptions = () => {
 
 let sourceReported = false
 
-const Header = () => {
+const Header = (props: { noSearchBar?: boolean, noLoginButton?: boolean }) => {
   const [url, setUrl] = useState(window.location.href)
   const location = useLocation()
   const source = useQueryParam('source')
@@ -108,7 +110,7 @@ const Header = () => {
   useEffect(() => setUrl(window.location.href), [location.pathname])
 
   return (
-    <Block width='100%' overrides={{ Block: { props: { role: 'banner', 'aria-label': 'Header meny' } } }}>
+    <Block height='76px' width='100%' overrides={{ Block: { props: { role: 'banner', 'aria-label': 'Header meny' } } }}>
       <HeaderNavigation overrides={{ Root: { style: { paddingBottom: 0, borderBottomStyle: 'none' } } }}>
         <Block display={['block', 'block', 'none', 'none']}>
           <BurgerMenu />
@@ -118,19 +120,23 @@ const Header = () => {
         <NavigationList $align={ALIGN.left} $style={{ paddingLeft: 0 }}>
           <NavigationItem $style={{ paddingLeft: 0 }}>
             <RouteLink href={'/'} hideUnderline>
-              <HeadingMedium marginBottom={0} marginTop={0}>Etterlevelse Beta</HeadingMedium>
+              <Block alignContent='center' backgroundColor='yellow'>
+                <H1 marginBottom={0} marginTop={0}>
+                  <img src={logo} alt='Nav etterlevelse' height='44px' />
+                </H1>
+              </Block>
             </RouteLink>
           </NavigationItem>
-          <NavigationItem>
-            <Block overrides={{Block:{props:{role: 'search'}}}}>
+          {!props.noSearchBar && (<NavigationItem>
+            <Block overrides={{ Block: { props: { role: 'search' } } }}>
               <MainSearch />
             </Block>
-          </NavigationItem>
+          </NavigationItem>)}
         </NavigationList>
 
         <NavigationList $align={ALIGN.center} />
 
-        <Block display={['none', 'none', 'flex', 'flex']}>
+        {!props.noLoginButton && (<Block display={['none', 'none', 'flex', 'flex']}>
           <NavigationList $align={ALIGN.right}>
             {user.isAdmin() && (
               <NavigationItem $style={{ paddingLeft: 0 }}>
@@ -149,7 +155,7 @@ const Header = () => {
               </NavigationItem>
             )}
           </NavigationList>
-        </Block>
+        </Block>)}
 
       </HeaderNavigation>
     </Block>
