@@ -2,7 +2,7 @@ import * as React from 'react'
 import { useEffect, useState } from 'react'
 import { ALIGN, HeaderNavigation, StyledNavigationItem as NavigationItem, StyledNavigationList as NavigationList, } from 'baseui/header-navigation'
 import { Block, BlockProps } from 'baseui/block'
-import { Button } from 'baseui/button'
+import { Button, KIND, SIZE } from 'baseui/button'
 import { StatefulPopover } from 'baseui/popover'
 import { useHistory, useLocation } from 'react-router-dom'
 import { StyledLink } from 'baseui/link'
@@ -25,8 +25,8 @@ import { logo } from './Images'
 
 const LoginButton = (props: { location: string }) => {
   return (
-    <StyledLink href={`/login?redirect_uri=${props.location}`}>
-      <Button $style={{ borderTopLeftRadius: 0, borderTopRightRadius: 0, borderBottomLeftRadius: 0, borderBottomRightRadius: 0 }}>
+    <StyledLink style={{ textDecoration: 'none' }} href={`/login?redirect_uri=${props.location}`} >
+      <Button size={SIZE.compact} kind={KIND.tertiary} $style={{ border:'2px solid #102723', borderRadius: '4px' }}>
         Logg inn
       </Button>
     </StyledLink>
@@ -120,11 +120,11 @@ const Header = (props: { noSearchBar?: boolean, noLoginButton?: boolean }) => {
         <NavigationList $align={ALIGN.left} $style={{ paddingLeft: 0 }}>
           <NavigationItem $style={{ paddingLeft: 0 }}>
             <RouteLink href={'/'} hideUnderline>
-              <Block alignContent='center' backgroundColor='yellow'>
-                <H1 marginBottom={0} marginTop={0}>
+              <H1 marginBottom={0} marginTop={0}>
+                <Block display='flex' alignItems='center'>
                   <img src={logo} alt='Nav etterlevelse' height='44px' />
-                </H1>
-              </Block>
+                </Block>
+              </H1>
             </RouteLink>
           </NavigationItem>
           {!props.noSearchBar && (<NavigationItem>
