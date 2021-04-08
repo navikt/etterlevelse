@@ -105,9 +105,12 @@ export const KravPage = () => {
             </Block>
 
             <Block display='flex' width='100%'>
-              <RouteLink href={'/krav'} hideUnderline>
-                <Button startEnhancer={<img alt={'Chevron left'} src={chevronLeft} />} size='compact' kind='tertiary' $style={{ color: '#F8F8F8' }}> Tilbake</Button>
-              </RouteLink>
+              <Block position={[ 'static' , 'absolute']}>
+                <RouteLink href={'/krav'} hideUnderline>
+                  <Button startEnhancer={<img alt={'Chevron left'} src={chevronLeft} />} size='compact' kind='tertiary' $style={{ color: '#F8F8F8' }}> Tilbake</Button>
+                </RouteLink>
+              </Block>
+
               <Block width='100%' display='flex' justifyContent='center' >
                 <Block width='600px' marginTop='7px'>
                   <CustomizedTag>{krav && krav?.kravNummer !== 0 ? kravName(krav) : 'Ny'}</CustomizedTag>

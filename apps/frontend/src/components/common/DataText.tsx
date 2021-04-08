@@ -1,7 +1,7 @@
-import {default as React, ReactNode} from 'react'
-import {Block} from 'baseui/block'
-import {theme} from '../../util'
-import {Label2} from 'baseui/typography'
+import { default as React, ReactNode } from 'react'
+import { Block } from 'baseui/block'
+import { theme } from '../../util'
+import { Label2 } from 'baseui/typography'
 
 type DataTextProps = {
   label?: string
@@ -16,9 +16,9 @@ const DataText = (props: DataTextProps) => {
   const labelWidth = '12rem'
   return (
     <Block display='flex' marginBottom={props.compact ? '.5rem' : '2rem'} width='100%'>
-      <Block minWidth={labelWidth} maxWidth={labelWidth} paddingRight={theme.sizing.scale400}>
-        <Label2 $style={{lineHeight: theme.sizing.scale800}}>{props.label}</Label2>
-      </Block>
+      {props.label && (<Block minWidth={labelWidth} maxWidth={labelWidth} paddingRight={theme.sizing.scale400}>
+        <Label2 $style={{ lineHeight: theme.sizing.scale800 }}>{props.label}</Label2>
+      </Block>)}
       <Block font='ParagraphMedium'>
         {props.children}
       </Block>
