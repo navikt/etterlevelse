@@ -16,6 +16,7 @@ import lawBook from '../resources/icons/law-book-shield.svg'
 import barChart from '../resources/icons/bar-chart.svg'
 import stepper from '../resources/icons/stepper.svg'
 import logo from '../resources/icons/logo.svg'
+import chevronLeft from '../resources/icons/chevron-left.svg'
 import illustration from '../resources/giammarco-boscaro-zeH-ljawHtg-unsplash.jpg'
 import {codelist, ListName, LovCode, TemaCode} from '../services/Codelist'
 import React from 'react'
@@ -28,7 +29,8 @@ export {
   illustration,
   navImage,
   stepper,
-  logo
+  logo,
+  chevronLeft
 }
 
 export const temaBilder: {[id: string]: string} = {
