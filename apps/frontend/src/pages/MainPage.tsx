@@ -18,8 +18,9 @@ const sectionProps: BlockProps = {
 
 export const MainPage = () => {
   return (
-      <Block display='flex' flexDirection='column' width={'1000px'} overrides={{Block:{props:{role: 'main'}}}}>
-        <Block {...sectionProps} overrides={{Block:{props:{role: 'navigation', 'aria-label': 'Hoved meny'}}}}>
+    <Block width='100%' display='flex' justifyContent='center' marginTop='50px'>
+      <Block display='flex' flexDirection='column' width={'1000px'} overrides={{ Block: { props: { role: 'main' } } }}>
+        <Block {...sectionProps} overrides={{ Block: { props: { role: 'navigation', 'aria-label': 'Hoved meny' } } }}>
           <SectionCard
             icon={pencilFill} url={'/behandling'} title={'Dokumenter etterlevelse'}
             text={'Fyll ut hvordan du etterlever lover og regler i behandlinger du har ansvar for'} />
@@ -40,6 +41,7 @@ export const MainPage = () => {
           </Block>
         </Block>
       </Block>
+    </Block>
   )
 }
 
