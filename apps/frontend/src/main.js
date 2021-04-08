@@ -25,9 +25,6 @@ const containerProps = {
   flexDirection: 'column',
   backgroundColor: '#F8F8F8',
   alignItems: 'center',
-  paddingLeft: '40px',
-  paddingRight: '40px',
-  width: 'calc(100% - 80px)',
 }
 
 ampli.logEvent('visit_count_etterlevelse')

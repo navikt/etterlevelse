@@ -18,7 +18,7 @@ const sectionProps: BlockProps = {
 
 export const MainPage = () => {
   return (
-    <Block width='100%' display='flex' justifyContent='center' marginTop='50px'>
+    <Block paddingLeft='40px' paddingRight='40px' width='calc(100%-80px)' display='flex' justifyContent='center' marginTop='50px'>
       <Block display='flex' flexDirection='column' width={'1000px'} overrides={{ Block: { props: { role: 'main' } } }}>
         <Block {...sectionProps} overrides={{ Block: { props: { role: 'navigation', 'aria-label': 'Hoved meny' } } }}>
           <SectionCard

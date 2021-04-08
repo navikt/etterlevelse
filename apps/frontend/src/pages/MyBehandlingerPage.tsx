@@ -25,8 +25,8 @@ export const MyBehandlingerPage = () => {
   const loading = myBehandlingerLoadin || teamsLoading
 
   return (
-    <>
-      <Block display='flex' flexWrap flexDirection='row' justifyContent='space-between' width='100%'>
+    <Block paddingLeft='40px' paddingRight='40px' width='calc(100%-80px)' display='flex' justifyContent='center'>
+      <Block display='flex' flexWrap flexDirection='row' justifyContent='space-between'>
 
         {loggedIn && <Block marginLeft={theme.sizing.scale800} maxWidth='600px'>
           <HeadingMedium>Mine behandlinger</HeadingMedium>
@@ -57,7 +57,7 @@ export const MyBehandlingerPage = () => {
         }
       </Block>
 
-    </>
+    </Block>
   )
 }
 

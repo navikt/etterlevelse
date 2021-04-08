@@ -22,7 +22,8 @@ export const TemaPage = () => {
   const {tema} = useParams<{tema: string}>()
 
   if (!tema) {
-    return <Block width='100%'>
+    return (<Block paddingLeft='40px' paddingRight='40px' width='calc(100%-80px)' display='flex' justifyContent='center'>
+    <Block >
       <HeadingLarge>Tema</HeadingLarge>
 
       <ParagraphMedium marginBottom={theme.sizing.scale2400}>
@@ -35,6 +36,7 @@ export const TemaPage = () => {
         )}
       </Block>
     </Block>
+    </Block>)
   }
 
   const code = codelist.getCode(ListName.TEMA, tema)

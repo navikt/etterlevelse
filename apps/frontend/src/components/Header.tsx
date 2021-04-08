@@ -110,7 +110,7 @@ const Header = (props: { noSearchBar?: boolean, noLoginButton?: boolean }) => {
   useEffect(() => setUrl(window.location.href), [location.pathname])
 
   return (
-    <Block height='76px' width='100%' overrides={{ Block: { props: { role: 'banner', 'aria-label': 'Header meny' } } }}>
+    <Block paddingLeft='40px' paddingRight='40px' width='calc(100%-80px)' height='76px' overrides={{ Block: { props: { role: 'banner', 'aria-label': 'Header meny' } } }}>
       <HeaderNavigation overrides={{ Root: { style: { paddingBottom: 0, borderBottomStyle: 'none' } } }}>
         <Block display={['block', 'block', 'none', 'none']}>
           <BurgerMenu />

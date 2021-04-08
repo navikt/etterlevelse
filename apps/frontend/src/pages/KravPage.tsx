@@ -85,7 +85,7 @@ export const KravPage = () => {
       {kravLoading && <LoadingSkeleton header='Krav' />}
       {!kravLoading &&
         <Block>
-          <Block height='296px' display='flex' backgroundColor='#112724' alignItems='center'>
+          <Block paddingLeft='40px' paddingRight='40px' height='296px' display='flex' backgroundColor='#112724' alignItems='center'>
             <Block display='flex' width='100%'>
               <RouteLink href={'/krav'} hideUnderline>
                 <Button startEnhancer={<img alt={'Chevron left'} src={chevronLeft} />} size='compact' kind='tertiary' $style={{ color: '#F8F8F8' }}> Tilbake</Button>
