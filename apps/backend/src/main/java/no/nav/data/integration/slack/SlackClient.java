@@ -214,12 +214,12 @@ public class SlackClient {
     }
 
     private void doSendMessageToChannel(String channel, List<Block> blockKit) {
-        var request = new PostMessageRequest(channel, blockKit);
         try {
             log.info("Sending slack message to {}", channel);
             if (securityProperties.isDev()) {
                 blockKit.add(0, Block.header("[DEV]"));
             }
+            var request = new PostMessageRequest(channel, blockKit);
             var response = restTemplate.postForEntity(POST_MESSAGE, request, PostMessageResponse.class);
             checkResponse(response);
         } catch (Exception e) {
