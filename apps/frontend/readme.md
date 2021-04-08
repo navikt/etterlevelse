@@ -5,7 +5,7 @@
 ### Install deps
 `yarn install`
 
-### Run local, with port forward to dev
-`kubectl port-forward deployment/team-catalog-backend`
+### Run local, with port forward to dev-gcp
+`kubectl port-forward deployment/etterlevelse-backend`
 
 `yarn run start`
