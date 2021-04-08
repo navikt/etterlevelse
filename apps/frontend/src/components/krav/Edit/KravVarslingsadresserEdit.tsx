@@ -35,7 +35,8 @@ export const KravVarslingsadresserEdit = () => {
               p.push(v)
           }
           return <>
-            <FormControl label={<LabelWithTooltip label={'Varslingsadresser'} tooltip={'Angi varslingskanal (slack og/eller epost) for spørsmål eller tilbakemeldinger til kravet.'}/>} >
+            <FormControl
+              label={<LabelWithTooltip label={'Varslingsadresser'} tooltip={'Angi varslingskanal (slack og/eller epost) for spørsmål eller tilbakemeldinger til kravet.'}/>}>
               <Block>
                 <Block marginBottom={theme.sizing.scale400}>
                   <Button kind='secondary' size='compact' type='button' onClick={() => setAddSlackChannel(true)}>
@@ -217,9 +218,10 @@ export const SlackUserSearch = ({add, close}: AddVarslingsadresseProps) => {
           options={slackSearch}
           onChange={({value}) => {
             const resource = value[0] as TeamResource
-            if (resource)
+            if (resource) {
               setLoadingSlackId(true)
-            addEmail(resource.email)
+              addEmail(resource.email)
+            }
           }}
           onInputChange={event => setSlackSearch(event.currentTarget.value)}
           isLoading={loading}
