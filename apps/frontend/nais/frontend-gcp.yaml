@@ -4,7 +4,7 @@ metadata:
   name: etterlevelse-frontend
   namespace: teamdatajegerne
   labels:
-    team: teamdatajegerne 
+    team: teamdatajegerne
 spec:
   image: {{image}}
   port: 80
@@ -13,7 +13,7 @@ spec:
     - {{url}}
   {{/each}}
   replicas:
-    min: 2
+    min: 1
     max: 2
     cpuThresholdPercentage: 50
   resources:
