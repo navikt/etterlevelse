@@ -87,35 +87,36 @@ export const KravPage = () => {
         <Block>
           <Block paddingLeft='40px' paddingRight='40px' height='296px' display='flex' flexDirection='column' backgroundColor='#112724' justifyContent='center'>
 
-            <Block display='flex' justifyContent='flex-end' marginBottom={theme.sizing.scale600}>
-              {krav?.id && user.isKraveier() && !edit && <Button startEnhancer={<img alt='add' src={plusIcon} />} onClick={newVersion} marginLeft size='compact' kind='tertiary' $style={{ color: '#F8F8F8' }}>Ny versjon</Button>}
-              {krav?.id && user.isKraveier() && !edit && <DeleteItem fun={() => deleteKrav(krav.id)} redirect={'/krav'} />}
-              {(edit || (krav?.id && user.isKraveier())) &&
-                <Button
-                  startEnhancer={edit ? null : <img src={editIcon} alt='edit' />}
-                  size='compact'
-                  $style={{ color: edit ? '#4677A8' : '#F8F8F8' }}
-                  kind={edit ? 'secondary' : 'tertiary'}
-                  onClick={() => setEdit(!edit)} marginLeft
-                >
-                  {edit ? 'Avbryt' : 'Rediger'}
-                </Button>
-              }
-              {edit && <Button size='compact' onClick={() => !formRef.current?.isSubmitting && formRef.current?.submitForm()} marginLeft>Lagre</Button>}
-            </Block>
-
-            <Block display='flex' width='100%'>
-              <Block position={[ 'static' , 'absolute']}>
+            <Block display='flex' width='100%' justifyContent='center'>
+              <Block flex='1' display='flex' justifyContent='flex-start'>
                 <RouteLink href={'/krav'} hideUnderline>
                   <Button startEnhancer={<img alt={'Chevron left'} src={chevronLeft} />} size='compact' kind='tertiary' $style={{ color: '#F8F8F8' }}> Tilbake</Button>
                 </RouteLink>
               </Block>
 
-              <Block width='100%' display='flex' justifyContent='center' >
-                <Block width='600px' marginTop='7px'>
-                  <CustomizedTag>{krav && krav?.kravNummer !== 0 ? kravName(krav) : 'Ny'}</CustomizedTag>
-                  <HeadingLarge $style={{ color: '#F8F8F8' }}>{krav && krav?.navn ? krav.navn : 'Ny'} </HeadingLarge>
-                </Block>
+              <Block flex='1' display='flex' justifyContent='flex-end'>
+                {krav?.id && user.isKraveier() && !edit && <Button startEnhancer={<img alt='add' src={plusIcon} />} onClick={newVersion} marginLeft size='compact' kind='tertiary' $style={{ color: '#F8F8F8' }}>Ny versjon</Button>}
+                {krav?.id && user.isKraveier() && !edit && <DeleteItem fun={() => deleteKrav(krav.id)} redirect={'/krav'} />}
+                {(edit || (krav?.id && user.isKraveier())) &&
+                  <Button
+                    startEnhancer={edit ? null : <img src={editIcon} alt='edit' />}
+                    size='compact'
+                    $style={{ color: edit ? '#4677A8' : '#F8F8F8' }}
+                    kind={edit ? 'secondary' : 'tertiary'}
+                    onClick={() => setEdit(!edit)} marginLeft
+                  >
+                    {edit ? 'Avbryt' : 'Rediger'}
+                  </Button>
+                }
+                {edit && <Button size='compact' onClick={() => !formRef.current?.isSubmitting && formRef.current?.submitForm()} marginLeft>Lagre</Button>}
+              </Block>
+            </Block>
+
+
+            <Block width='100%' display='flex' justifyContent='center' >
+              <Block width='600px' marginTop='7px'>
+                <CustomizedTag>{krav && krav?.kravNummer !== 0 ? kravName(krav) : 'Ny'}</CustomizedTag>
+                <HeadingLarge $style={{ color: '#F8F8F8' }}>{krav && krav?.navn ? krav.navn : 'Ny'} </HeadingLarge>
               </Block>
             </Block>
           </Block>
