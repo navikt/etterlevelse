@@ -1,5 +1,5 @@
 import { Block } from 'baseui/block'
-import { HeadingLarge, HeadingSmall } from 'baseui/typography'
+import { HeadingLarge, HeadingSmall, LabelLarge } from 'baseui/typography'
 import { useHistory, useParams } from 'react-router-dom'
 import { deleteKrav, KravIdParams, mapToFormVal } from '../api/KravApi'
 import React, { useEffect, useRef, useState } from 'react'
@@ -24,6 +24,8 @@ import { gql, useQuery } from '@apollo/client'
 import { Tilbakemeldinger } from '../components/krav/Tilbakemelding'
 import CustomizedTag from '../components/common/CustomizedTag'
 import { chevronLeft, plusIcon, editIcon } from '../components/Images'
+import { Label } from '../components/common/PropertyLabel'
+import { CustomizedTab, CustomizedTabs } from '../components/common/CustomizedTabs'
 
 export const kravNumView = (it: { kravVersjon: number, kravNummer: number }) => `K${it.kravNummer}.${it.kravVersjon}`
 export const kravName = (krav: Krav) => `${kravNumView(krav)}`
@@ -125,9 +127,29 @@ export const KravPage = () => {
 
       {!edit && krav && !kravLoading &&
         <Block>
-          <ViewKrav krav={krav} />
-          <Etterlevelser loading={etterlevelserLoading} etterlevelser={krav.etterlevelser} />
-          <Tilbakemeldinger krav={krav} />
+          <Block paddingLeft='40px' paddingRight='40px' backgroundColor='#CCD9D7' justifyContent='center' display='flex'>
+            <Block marginBottom='80px' marginTop='80px' width='600px'>
+              <Label title='' markdown={krav.hensikt} />
+            </Block>
+          </Block>
+
+          <Block display='flex' justifyContent='center' width='100%'>
+            <Block backgroundColor='#CCD9D7' flex={1} height='58px' minWidth='40px' />
+            <Block width='600px'>
+              <CustomizedTabs>
+                <CustomizedTab title={<LabelLarge>Om kravet</LabelLarge>}>
+                  <ViewKrav krav={krav} />
+                </CustomizedTab>
+                <CustomizedTab title={<LabelLarge>Spørsmål og svar</LabelLarge>}>
+                  <Tilbakemeldinger krav={krav} />
+                </CustomizedTab>
+                <CustomizedTab title={<LabelLarge>Eksempler på etterlevelse</LabelLarge>}>
+                  <Etterlevelser loading={etterlevelserLoading} etterlevelser={krav.etterlevelser} />
+                </CustomizedTab>
+              </CustomizedTabs>
+            </Block>
+            <Block backgroundColor='#CCD9D7' flex={1} height='58px' minWidth='40px' />
+          </Block>
         </Block>}
 
       {edit && krav && <EditKrav krav={krav} formRef={formRef} close={k => {

@@ -27,33 +27,15 @@ export const ViewKrav = ({ krav }: { krav: KravQL }) => {
 
   return (
     <Block width='100%'>
-      <Block paddingLeft='40px' paddingRight='40px' backgroundColor='#CCD9D7' justifyContent='center' display='flex'>
-        <Block marginBottom='80px' marginTop='80px' width='600px'>
-          <Label title='' markdown={krav.hensikt} />
-        </Block>
-      </Block>
+      <LabelAboveContent title='Suksesskriterier' markdown={krav.suksesskriterier.map(s => `${s.id}: ${s.navn}`)} vertical />
+      <LabelAboveContent title='Beskrivelse' markdown={krav.beskrivelse} />
 
-      <Block display='flex' justifyContent='center' width='100%'>
-        <Block backgroundColor='#CCD9D7' flex={1} height='58px' minWidth='40px' />
-        <Block width='600px'>
-          <CustomizedTabs>
-            <CustomizedTab title={<LabelLarge>Om kravet</LabelLarge>}>
-              <LabelAboveContent title='Suksesskriterier' markdown={krav.suksesskriterier.map(s => `${s.id}: ${s.navn}`)} vertical />
-              <LabelAboveContent title='Beskrivelse' markdown={krav.beskrivelse} />
+      <Block height={theme.sizing.scale800} />
 
-              <Block height={theme.sizing.scale800} />
-
-              {expand && <AllInfo krav={krav} />}
-              {!expand && <MediumInfo krav={krav} />}
-              <Block marginTop="20px"display='flex' justifyContent='flex-end'>
-                <Button onClick={() => setExpand(!expand)}>{`${expand ? 'Skjul' : 'Vis'} detaljer`}</Button>
-              </Block>
-            </CustomizedTab>
-            <CustomizedTab title={<LabelLarge>Spørsmål og svar</LabelLarge>}> test 2</CustomizedTab>
-            <CustomizedTab title={<LabelLarge>Eksempler på etterlevelse</LabelLarge>}> test 3</CustomizedTab>
-          </CustomizedTabs>
-        </Block>
-        <Block backgroundColor='#CCD9D7' flex={1} height='58px' minWidth='40px' />
+      {expand && <AllInfo krav={krav} />}
+      {!expand && <MediumInfo krav={krav} />}
+      <Block marginTop="20px" display='flex' justifyContent='flex-end'>
+        <Button onClick={() => setExpand(!expand)}>{`${expand ? 'Skjul' : 'Vis'} detaljer`}</Button>
       </Block>
     </Block>
   )
@@ -79,7 +61,7 @@ const AllInfo = ({ krav }: { krav: KravQL }) => (
     <LabelAboveContent title='Begreper'>{krav.begreper.map((b, i) => <BegrepView key={i} begrep={b} />)}</LabelAboveContent>
 
 
-     
+
 
     <LabelAboveContent title='Varslingsadresser' hide={!user.isKraveier()}>
       <DotTags items={krav.varslingsadresser.map((va, i) => {
