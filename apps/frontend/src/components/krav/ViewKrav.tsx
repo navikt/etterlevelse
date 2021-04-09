@@ -34,7 +34,7 @@ export const ViewKrav = ({ krav }: { krav: KravQL }) => {
       </Block>
 
       <Block display='flex' justifyContent='center' width='100%'>
-        <Block backgroundColor='#CCD9D7' flex={1} height='58px'/>
+        <Block backgroundColor='#CCD9D7' flex={1} height='58px' minWidth='40px'/>
         <Block width='600px'>
           <CustomizedTabs>
             <CustomizedTab title={<LabelLarge>Om kravet</LabelLarge>}>
@@ -53,7 +53,7 @@ export const ViewKrav = ({ krav }: { krav: KravQL }) => {
             <CustomizedTab title={<LabelLarge>Eksempler på etterlevelse</LabelLarge>}> test 3</CustomizedTab>
           </CustomizedTabs>
         </Block>
-        <Block backgroundColor='#CCD9D7' flex={1} height='58px'/>
+        <Block backgroundColor='#CCD9D7' flex={1} height='58px' minWidth='40px'/>
       </Block>
     </Block>
   )
