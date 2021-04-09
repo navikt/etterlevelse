@@ -45,7 +45,7 @@ export const TemaPage = () => {
   const lover = codelist.getCodesForTema(tema)
 
   return (
-    <Block width='100%'>
+    <Block paddingLeft='40px' paddingRight='40px' width='calc(100%-80px)'>
       <Block display='flex' justifyContent='space-between'>
         <Block>
           <HeadingMedium marginTop={0}>{code.shortName}</HeadingMedium>
