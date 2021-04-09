@@ -23,12 +23,8 @@ const containerProps = {
   minHeight: '100vh',
   display: 'flex',
   flexDirection: 'column',
-  justifyContent: 'space-between',
-
+  backgroundColor: '#F8F8F8',
   alignItems: 'center',
-  paddingLeft: '40px',
-  paddingRight: '40px',
-  width: 'calc(100% - 80px)',
 }
 
 ampli.logEvent('visit_count_etterlevelse')
@@ -51,9 +47,8 @@ const Main = (props) => {
               </Helmet>
 
               <Block {...containerProps}>
-                <Block marginBottom='100px'>
+                <Block marginBottom='100px' width='100%'>
                   <Header/>
-                  <Block marginBottom='50px'/>
                   <Routes/>
                 </Block>
                 <Footer/>

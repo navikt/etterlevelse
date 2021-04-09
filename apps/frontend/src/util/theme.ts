@@ -33,6 +33,7 @@ export const searchResultColor = {
 const overrides: RecursivePartial<Theme> = {
   colors: {
     buttonTertiaryText: '#112724',
+    buttonTertiaryHover: 'transparent',
     linkVisited: primitives.primary400,
     inputFill: primitives.primary50,
     inputFillActive: primitives.primary150,

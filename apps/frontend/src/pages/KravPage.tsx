@@ -1,30 +1,34 @@
-import {Block} from 'baseui/block'
-import {HeadingLarge, HeadingSmall} from 'baseui/typography'
-import {useHistory, useParams} from 'react-router-dom'
-import {deleteKrav, KravIdParams, mapToFormVal} from '../api/KravApi'
-import React, {useEffect, useRef, useState} from 'react'
-import {EtterlevelseQL, Krav, KravQL, KravStatus} from '../constants'
+import { Block } from 'baseui/block'
+import { HeadingLarge, HeadingSmall, LabelLarge } from 'baseui/typography'
+import { useHistory, useParams } from 'react-router-dom'
+import { deleteKrav, KravIdParams, mapToFormVal } from '../api/KravApi'
+import React, { useEffect, useRef, useState } from 'react'
+import { EtterlevelseQL, Krav, KravQL, KravStatus } from '../constants'
 import Button from '../components/common/Button'
-import {ViewKrav} from '../components/krav/ViewKrav'
-import {EditKrav} from '../components/krav/EditKrav'
-import RouteLink, {ObjectLink} from '../components/common/RouteLink'
-import {LoadingSkeleton} from '../components/common/LoadingSkeleton'
-import {user} from '../services/User'
-import {theme} from '../util'
-import {FormikProps} from 'formik'
-import {DeleteItem} from '../components/DeleteItem'
-import {Cell, Row, Table} from '../components/common/Table'
-import {Spinner} from '../components/common/Spinner'
-import {Teams} from '../components/common/TeamName'
-import {marginAll} from '../components/common/Style'
-import {ObjectType} from '../components/admin/audit/AuditTypes'
-import {behandlingName} from '../api/BehandlingApi'
-import {etterlevelseStatus} from './EtterlevelsePage'
-import {gql, useQuery} from '@apollo/client'
-import {Tilbakemeldinger} from '../components/krav/Tilbakemelding'
+import { ViewKrav } from '../components/krav/ViewKrav'
+import { EditKrav } from '../components/krav/EditKrav'
+import RouteLink, { ObjectLink } from '../components/common/RouteLink'
+import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
+import { user } from '../services/User'
+import { theme } from '../util'
+import { FormikProps } from 'formik'
+import { DeleteItem } from '../components/DeleteItem'
+import { Cell, Row, Table } from '../components/common/Table'
+import { Spinner } from '../components/common/Spinner'
+import { Teams } from '../components/common/TeamName'
+import { marginAll } from '../components/common/Style'
+import { ObjectType } from '../components/admin/audit/AuditTypes'
+import { behandlingName } from '../api/BehandlingApi'
+import { etterlevelseStatus } from './EtterlevelsePage'
+import { gql, useQuery } from '@apollo/client'
+import { Tilbakemeldinger } from '../components/krav/Tilbakemelding'
+import CustomizedTag from '../components/common/CustomizedTag'
+import { chevronLeft, plusIcon, editIcon } from '../components/Images'
+import { Label } from '../components/common/PropertyLabel'
+import { CustomizedTab, CustomizedTabs } from '../components/common/CustomizedTabs'
 
-export const kravNumView = (it: {kravVersjon: number, kravNummer: number}) => `K${it.kravNummer}.${it.kravVersjon}`
-export const kravName = (krav: Krav) => `${kravNumView(krav)} - ${krav.navn}`
+export const kravNumView = (it: { kravVersjon: number, kravNummer: number }) => `K${it.kravNummer}.${it.kravVersjon}`
+export const kravName = (krav: Krav) => `${kravNumView(krav)}`
 
 export const kravStatus = (status: KravStatus) => {
   if (!status) return ''
@@ -45,7 +49,7 @@ export const kravStatus = (status: KravStatus) => {
 export const KravPage = () => {
   const params = useParams<KravIdParams>()
   const [krav, setKrav] = useState<KravQL | undefined>()
-  const {loading: kravLoading, data: kravQuery, refetch: reloadKrav} = useQuery<{kravById: KravQL}, KravIdParams>(query, {
+  const { loading: kravLoading, data: kravQuery, refetch: reloadKrav } = useQuery<{ kravById: KravQL }, KravIdParams>(query, {
     variables: params,
     skip: (!params.id || params.id === 'ny') && !params.kravNummer
   })
@@ -69,7 +73,7 @@ export const KravPage = () => {
 
   const newVersion = () => {
     if (!krav) return
-    setKrav({...krav, id: '', kravVersjon: krav.kravVersjon + 1, nyKravVersjon: true})
+    setKrav({ ...krav, id: '', kravVersjon: krav.kravVersjon + 1, nyKravVersjon: true })
     setEdit(true)
   }
 
@@ -79,30 +83,74 @@ export const KravPage = () => {
   }, [edit])
 
   return (
-    <Block width='100%'>
-      {kravLoading && <LoadingSkeleton header='Krav'/>}
-      {!kravLoading && <>
+    <Block width='100%' overrides={{ Block: { props: { role: 'main' } } }}>
+      {kravLoading && <LoadingSkeleton header='Krav' />}
+      {!kravLoading &&
         <Block>
-          <HeadingLarge>Krav: {krav && krav?.kravNummer !== 0 ? kravName(krav) : 'Ny'}</HeadingLarge>
-          <Block display='flex' justifyContent='flex-end' marginBottom={theme.sizing.scale600}>
-            <RouteLink href={'/krav'}>
-              <Button size='compact' kind='tertiary'>Tilbake</Button>
-            </RouteLink>
-            {krav?.id && user.isKraveier() && !edit && <Button size='compact' kind='secondary' onClick={newVersion} marginLeft>Ny versjon av krav</Button>}
-            {krav?.id && user.isKraveier() && !edit && <DeleteItem fun={() => deleteKrav(krav.id)} redirect={'/krav'}/>}
-            {(edit || (krav?.id && user.isKraveier())) &&
-            <Button size='compact' kind={edit ? 'secondary' : 'primary'} onClick={() => setEdit(!edit)} marginLeft>{edit ? 'Avbryt' : 'Rediger'}</Button>}
-            {edit && <Button size='compact' onClick={() => !formRef.current?.isSubmitting && formRef.current?.submitForm()} marginLeft>Lagre</Button>}
+          <Block paddingLeft='40px' paddingRight='40px' height='296px' display='flex' flexDirection='column' backgroundColor='#112724' justifyContent='center'>
+
+            <Block display='flex' width='100%' justifyContent='center'>
+              <Block flex='1' display='flex' justifyContent='flex-start'>
+                <RouteLink href={'/krav'} hideUnderline>
+                  <Button startEnhancer={<img alt={'Chevron left'} src={chevronLeft} />} size='compact' kind='tertiary' $style={{ color: '#F8F8F8' }}> Tilbake</Button>
+                </RouteLink>
+              </Block>
+
+              <Block flex='1' display='flex' justifyContent='flex-end'>
+                {krav?.id && user.isKraveier() && !edit && <Button startEnhancer={<img alt='add' src={plusIcon} />} onClick={newVersion} marginLeft size='compact' kind='tertiary' $style={{ color: '#F8F8F8' }}>Ny versjon</Button>}
+                {krav?.id && user.isKraveier() && !edit && <DeleteItem fun={() => deleteKrav(krav.id)} redirect={'/krav'} />}
+                {(edit || (krav?.id && user.isKraveier())) &&
+                  <Button
+                    startEnhancer={edit ? null : <img src={editIcon} alt='edit' />}
+                    size='compact'
+                    $style={{ color: edit ? '#4677A8' : '#F8F8F8' }}
+                    kind={edit ? 'secondary' : 'tertiary'}
+                    onClick={() => setEdit(!edit)} marginLeft
+                  >
+                    {edit ? 'Avbryt' : 'Rediger'}
+                  </Button>
+                }
+                {edit && <Button size='compact' onClick={() => !formRef.current?.isSubmitting && formRef.current?.submitForm()} marginLeft>Lagre</Button>}
+              </Block>
+            </Block>
+
+
+            <Block width='100%' display='flex' justifyContent='center' >
+              <Block width='600px' marginTop='7px'>
+                <CustomizedTag>{krav && krav?.kravNummer !== 0 ? kravName(krav) : 'Ny'}</CustomizedTag>
+                <HeadingLarge $style={{ color: '#F8F8F8' }}>{krav && krav?.navn ? krav.navn : 'Ny'} </HeadingLarge>
+              </Block>
+            </Block>
           </Block>
         </Block>
-      </>}
+      }
 
       {!edit && krav && !kravLoading &&
-      <Block>
-        <ViewKrav krav={krav}/>
-        <Etterlevelser loading={etterlevelserLoading} etterlevelser={krav.etterlevelser}/>
-        <Tilbakemeldinger krav={krav}/>
-      </Block>}
+        <Block>
+          <Block paddingLeft='40px' paddingRight='40px' backgroundColor='#CCD9D7' justifyContent='center' display='flex'>
+            <Block marginBottom='80px' marginTop='80px' width='600px'>
+              <Label title='' markdown={krav.hensikt} />
+            </Block>
+          </Block>
+
+          <Block display='flex' justifyContent='center' width='100%'>
+            <Block backgroundColor='#CCD9D7' flex={1} height='58px' minWidth='40px' />
+            <Block width='600px'>
+              <CustomizedTabs fontColor='#112624'>
+                <CustomizedTab title={<LabelLarge>Om kravet</LabelLarge>}>
+                  <ViewKrav krav={krav} />
+                </CustomizedTab>
+                <CustomizedTab title={<LabelLarge>Spørsmål og svar</LabelLarge>}>
+                  <Tilbakemeldinger krav={krav} />
+                </CustomizedTab>
+                <CustomizedTab title={<LabelLarge>Eksempler på etterlevelse</LabelLarge>}>
+                  <Etterlevelser loading={etterlevelserLoading} etterlevelser={krav.etterlevelser} />
+                </CustomizedTab>
+              </CustomizedTabs>
+            </Block>
+            <Block backgroundColor='#CCD9D7' flex={1} height='58px' minWidth='40px' />
+          </Block>
+        </Block>}
 
       {edit && krav && <EditKrav krav={krav} formRef={formRef} close={k => {
         if (k) {
@@ -113,39 +161,39 @@ export const KravPage = () => {
           }
         }
         setEdit(false)
-      }}/>}
+      }} />}
 
     </Block>
   )
 }
 
-const Etterlevelser = ({loading, etterlevelser}: {loading: boolean, etterlevelser?: EtterlevelseQL[]}) => {
+const Etterlevelser = ({ loading, etterlevelser }: { loading: boolean, etterlevelser?: EtterlevelseQL[] }) => {
 
   return (
     <Block>
       <HeadingSmall>Kravet etterleves av</HeadingSmall>
-      <Block $style={{...marginAll('-' + theme.sizing.scale600)}}>
-        {loading && <Spinner size={theme.sizing.scale800}/>}
+      <Block $style={{ ...marginAll('-' + theme.sizing.scale600) }}>
+        {loading && <Spinner size={theme.sizing.scale800} />}
         {!loading &&
-        <Table data={etterlevelser || []} emptyText='etterlevelser' headers={[
-          {title: 'Behandling'},
-          {title: 'Status'},
-          {title: 'System'},
-          {title: 'Team'},
-          {title: 'Avdeling'}
-        ]} render={state =>
-          state.data.map(etterlevelse =>
-            <Row key={etterlevelse.id}>
-              <Cell><ObjectLink type={ObjectType.Behandling} id={etterlevelse.behandling.id}>{behandlingName(etterlevelse.behandling)}</ObjectLink></Cell>
-              <Cell><ObjectLink type={ObjectType.Etterlevelse} id={etterlevelse.id}>
-                {etterlevelseStatus(etterlevelse.status)}
-              </ObjectLink></Cell>
-              <Cell>{etterlevelse.behandling.systemer.map(s => s.shortName).join(', ')}</Cell>
-              <Cell><Teams teams={etterlevelse.behandling.teams} link/></Cell>
-              <Cell>{etterlevelse.behandling.avdeling?.shortName}</Cell>
-            </Row>
-          )
-        }/>}
+          <Table data={etterlevelser || []} emptyText='etterlevelser' headers={[
+            { title: 'Behandling' },
+            { title: 'Status' },
+            { title: 'System' },
+            { title: 'Team' },
+            { title: 'Avdeling' }
+          ]} render={state =>
+            state.data.map(etterlevelse =>
+              <Row key={etterlevelse.id}>
+                <Cell><ObjectLink type={ObjectType.Behandling} id={etterlevelse.behandling.id}>{behandlingName(etterlevelse.behandling)}</ObjectLink></Cell>
+                <Cell><ObjectLink type={ObjectType.Etterlevelse} id={etterlevelse.id}>
+                  {etterlevelseStatus(etterlevelse.status)}
+                </ObjectLink></Cell>
+                <Cell>{etterlevelse.behandling.systemer.map(s => s.shortName).join(', ')}</Cell>
+                <Cell><Teams teams={etterlevelse.behandling.teams} link /></Cell>
+                <Cell>{etterlevelse.behandling.avdeling?.shortName}</Cell>
+              </Row>
+            )
+          } />}
       </Block>
     </Block>
   )

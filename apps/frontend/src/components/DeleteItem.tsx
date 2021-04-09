@@ -2,6 +2,7 @@ import Button from './common/Button'
 import React, {useState} from 'react'
 import {Modal, ModalBody, ModalFooter, ModalHeader} from 'baseui/modal'
 import {useHistory} from 'react-router-dom'
+import {deleteIcon} from './Images'
 
 
 export const DeleteItem = (props: {fun: () => Promise<any>, redirect: string}) => {
@@ -10,7 +11,7 @@ export const DeleteItem = (props: {fun: () => Promise<any>, redirect: string}) =
 
   return (
     <>
-      <Button size='compact' onClick={() => setOpen(true)} marginLeft>Slett</Button>
+      <Button startEnhancer={<img src={deleteIcon} alt='delete'/>} $style={{ color: '#F8F8F8' }} kind='tertiary' size='compact' onClick={() => setOpen(true)} marginLeft>Slett</Button>
       <Modal isOpen={open} onClose={() => setOpen(false)} unstable_ModalBackdropScroll>
 
         <ModalHeader>Bekreft slett</ModalHeader>

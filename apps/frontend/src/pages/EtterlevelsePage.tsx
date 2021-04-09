@@ -39,7 +39,8 @@ export const EtterlevelsePage = () => {
   const loading = !edit && !etterlevelse
 
   return (
-    <Block width='100%'>
+    <Block paddingLeft='40px' paddingRight='40px' width='calc(100%-80px)' display='flex' justifyContent='center'>
+    <Block minWidth='600px'>
       {loading && <LoadingSkeleton header='Etterlevelse'/>}
       {!loading && <>
         <Block>
@@ -65,6 +66,7 @@ export const EtterlevelsePage = () => {
         }
         setEdit(false)
       }}/>}
+    </Block>
     </Block>
   )
 }

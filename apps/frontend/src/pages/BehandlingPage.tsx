@@ -25,7 +25,7 @@ export const BehandlingPage = () => {
   if (!behandling) return <LoadingSkeleton header='Behandling'/>
 
   return (
-    <Block width='100%'>
+    <Block paddingLeft='40px' paddingRight='40px' width='calc(100%-80px)'>
       <Block>
         <HeadingLarge display='flex'>
           <Block marginRight={theme.sizing.scale400}>Behandling: {behandlingName(behandling)}</Block>

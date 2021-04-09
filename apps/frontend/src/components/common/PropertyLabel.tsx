@@ -24,3 +24,16 @@ export const Label = (props: LabelProps) => {
     </DataText>
   )
 }
+
+export const LabelAboveContent = (props: LabelProps) => {
+  if (props.hide || (empty(props.children) && empty(props.markdown))) return null
+  return (
+    <DataText notFlexed label={props.title} compact={props.compact}>
+      {props.markdown ?
+        <Block marginTop={'-1rem'} marginBottom={'-1rem'}>
+          <Markdown sources={Array.isArray(props.markdown) ? props.markdown : [props.markdown]} vertical={props.vertical} shortenLinks/>
+        </Block>
+        : props.children}
+    </DataText>
+  )
+}
