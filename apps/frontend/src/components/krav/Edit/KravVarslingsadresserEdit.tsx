@@ -236,7 +236,7 @@ export const SlackUserSearch = ({add, close}: AddVarslingsadresseProps) => {
   )
 }
 
-const emailValidator = yup.string().email()
+const emailValidator = yup.string().email().matches(/.+@nav.no/i)
 
 export const AddEmail = ({added, add: doAdd, close}: AddVarslingsadresseProps) => {
   const [val, setVal] = useState('')
@@ -246,7 +246,7 @@ export const AddEmail = ({added, add: doAdd, close}: AddVarslingsadresseProps) =
     if (!toAdd) return
     if (!added || !added.find(va => va.adresse === toAdd)) {
       if (!emailValidator.isValidSync(toAdd)) {
-        setError('Ugyldig epostadress')
+        setError('Ikke gyldig @nav.no epost adresse')
         return
       }
       doAdd({type: AdresseType.EPOST, adresse: toAdd})
