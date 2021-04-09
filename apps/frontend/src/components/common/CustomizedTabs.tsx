@@ -14,7 +14,7 @@ export const CustomizedTabs = (props: TabsProps) => {
     <Tabs
       {...props}
       overrides={{
-        Tab: { style: { padding: '0px', margin: '0px', marginRight: '0px' } },
+        Tab: { style: { padding: '0px', margin: '0px', marginRight: '0px', height: '58px' } },
         TabBar: { style: { backgroundColor: '#CBD9D7', padding: '0px', justifyContent: 'space-between' } },
         TabContent: { style: { marginTop: '56px', padding: '0px', backgroundColor: '#F8F8F8' } }
       }}
