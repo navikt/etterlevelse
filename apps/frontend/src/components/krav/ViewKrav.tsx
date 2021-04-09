@@ -34,7 +34,7 @@ export const ViewKrav = ({ krav }: { krav: KravQL }) => {
       </Block>
 
       <Block display='flex' justifyContent='center' width='100%'>
-        <Block backgroundColor='#CCD9D7' flex={1} height='58px' minWidth='40px'/>
+        <Block backgroundColor='#CCD9D7' flex={1} height='58px' minWidth='40px' />
         <Block width='600px'>
           <CustomizedTabs>
             <CustomizedTab title={<LabelLarge>Om kravet</LabelLarge>}>
@@ -45,7 +45,7 @@ export const ViewKrav = ({ krav }: { krav: KravQL }) => {
 
               {expand && <AllInfo krav={krav} />}
               {!expand && <MediumInfo krav={krav} />}
-              <Block display='flex' justifyContent='flex-end'>
+              <Block marginTop="20px"display='flex' justifyContent='flex-end'>
                 <Button onClick={() => setExpand(!expand)}>{`${expand ? 'Skjul' : 'Vis'} detaljer`}</Button>
               </Block>
             </CustomizedTab>
@@ -53,7 +53,7 @@ export const ViewKrav = ({ krav }: { krav: KravQL }) => {
             <CustomizedTab title={<LabelLarge>Eksempler på etterlevelse</LabelLarge>}> test 3</CustomizedTab>
           </CustomizedTabs>
         </Block>
-        <Block backgroundColor='#CCD9D7' flex={1} height='58px' minWidth='40px'/>
+        <Block backgroundColor='#CCD9D7' flex={1} height='58px' minWidth='40px' />
       </Block>
     </Block>
   )
@@ -71,20 +71,16 @@ const AllInfo = ({ krav }: { krav: KravQL }) => (
     <LabelAboveContent title='Utfyllende beskrivelse' markdown={krav.utdypendeBeskrivelse} />
     <LabelAboveContent title='Endringer fra forrige versjon' markdown={krav.versjonEndringer} />
     <LabelAboveContent title='Dokumentasjon' markdown={krav.dokumentasjon} />
-    <LabelAboveContent title='Regelverk' hide={!krav.regelverk.length}>
-      <LovViewList regelverk={krav.regelverk} />
-    </LabelAboveContent>
+
     <LabelAboveContent title='Rettskilder' markdown={krav.rettskilder} />
 
     <LabelAboveContent title='Tagger'>{krav.tagger.join(', ')}</LabelAboveContent>
-    <LabelAboveContent title='Kravet er relevant for'><DotTags list={ListName.RELEVANS} codes={krav.relevansFor} linkCodelist /></LabelAboveContent>
     <LabelAboveContent title='Relevante implementasjoner' markdown={krav.implementasjoner} />
     <LabelAboveContent title='Begreper'>{krav.begreper.map((b, i) => <BegrepView key={i} begrep={b} />)}</LabelAboveContent>
 
-    {krav.periode?.start && <LabelAboveContent title='Gyldig fom'>{formatDate(krav.periode?.start)}</LabelAboveContent>}
-    {krav.periode?.slutt && <LabelAboveContent title='Gyldig tom'>{formatDate(krav.periode?.slutt)}</LabelAboveContent>}
 
-    <LabelAboveContent title='Status'>{kravStatus(krav.status)}</LabelAboveContent>
+     
+
     <LabelAboveContent title='Varslingsadresser' hide={!user.isKraveier()}>
       <DotTags items={krav.varslingsadresser.map((va, i) => {
         if (va.type === AdresseType.SLACK) return <Block>Slack: <StyledLink href={slackLink(va.adresse)}>#{va.slackChannel?.name || va.adresse}</StyledLink></Block>
@@ -95,6 +91,15 @@ const AllInfo = ({ krav }: { krav: KravQL }) => (
     </LabelAboveContent>
     <LabelAboveContent title='Avdeling'>{krav.avdeling?.shortName}</LabelAboveContent>
     <LabelAboveContent title='Underavdeling'><ObjectLink id={krav.underavdeling?.code} type={ListName.UNDERAVDELING}>{krav.underavdeling?.shortName}</ObjectLink></LabelAboveContent>
+    <Block backgroundColor='#F6E8E6' padding='40px'>
+      <Label title='Kravet er relevant for'><DotTags list={ListName.RELEVANS} codes={krav.relevansFor} linkCodelist /></Label>
+      <Label title='Regelverk' hide={!krav.regelverk.length}>
+        <LovViewList regelverk={krav.regelverk} />
+      </Label>
+      <Label title='Status'>{kravStatus(krav.status)}</Label>
+      {krav.periode?.start && <Label title='Gyldig fom'>{formatDate(krav.periode?.start)}</Label>}
+      {krav.periode?.slutt && <Label title='Gyldig tom'>{formatDate(krav.periode?.slutt)}</Label>}
+    </Block>
   </>
 )
 
