@@ -23,19 +23,19 @@ export const TemaPage = () => {
 
   if (!tema) {
     return (<Block paddingLeft='40px' paddingRight='40px' width='calc(100%-80px)' display='flex' justifyContent='center'>
-    <Block >
-      <HeadingLarge>Tema</HeadingLarge>
+      <Block>
+        <HeadingLarge>Tema</HeadingLarge>
 
-      <ParagraphMedium marginBottom={theme.sizing.scale2400}>
-        Et tema omhandler en samling av krav innenfor et avgrenset område, gitt av en samling lover og forskrifter eller interne bestemmelser
-      </ParagraphMedium>
+        <ParagraphMedium marginBottom={theme.sizing.scale2400}>
+          Et tema omhandler en samling av krav innenfor et avgrenset område, gitt av en samling lover og forskrifter eller interne bestemmelser
+        </ParagraphMedium>
 
-      <Block {...sectionProps}>
-        {codelist.getCodes(ListName.TEMA).map(tema =>
-          <TemaCard key={tema.code} tema={tema}/>
-        )}
+        <Block {...sectionProps}>
+          {codelist.getCodes(ListName.TEMA).map(tema =>
+            <TemaCard key={tema.code} tema={tema}/>
+          )}
+        </Block>
       </Block>
-    </Block>
     </Block>)
   }
 
@@ -71,7 +71,8 @@ export const TemaPage = () => {
       <Block marginTop={theme.sizing.scale1200}>
         <Block>
           <HeadingSmall marginBottom={theme.sizing.scale200}>Krav</HeadingSmall>
-          <KravFilterTable filter={{lover: lover.map(c => c.code)}} exclude={['avdeling', 'underavdeling', 'regelverk']}/>
+          {lover.length && <KravFilterTable filter={{lover: lover.map(c => c.code)}} exclude={['avdeling', 'underavdeling', 'regelverk']}/>}
+          {!lover.length && <ParagraphMedium>Ingen lover angitt for tema {code.shortName}</ParagraphMedium>}
         </Block>
       </Block>
     </Block>
