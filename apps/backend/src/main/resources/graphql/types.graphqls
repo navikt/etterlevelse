@@ -162,20 +162,6 @@ type LovStats {
     ikkeFyltKrav: [Krav!]!
 }
 
-type Resource {
-    navIdent: String!
-    givenName: String
-    familyName: String
-    fullName: String
-    email: String
-    resourceType: ResourceType
-}
-
-enum ResourceType {
-    INTERNAL
-    EXTERNAL
-}
-
 type Team {
     id: String!
     name: String
@@ -186,8 +172,6 @@ type Team {
     members: [Member!]
 }
 
-# Todo cleanup member vs resource
-# Todo cleanup TeamRESPONSE but not ResourceRESPONSE
 type Member {
     navIdent: String!
     name: String
