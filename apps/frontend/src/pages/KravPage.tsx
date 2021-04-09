@@ -136,7 +136,7 @@ export const KravPage = () => {
           <Block display='flex' justifyContent='center' width='100%'>
             <Block backgroundColor='#CCD9D7' flex={1} height='58px' minWidth='40px' />
             <Block width='600px'>
-              <CustomizedTabs>
+              <CustomizedTabs fontColor='#112624'>
                 <CustomizedTab title={<LabelLarge>Om kravet</LabelLarge>}>
                   <ViewKrav krav={krav} />
                 </CustomizedTab>
