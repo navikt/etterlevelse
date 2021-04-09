@@ -15,19 +15,37 @@ import { user } from '../../services/User'
 import { LovViewList } from '../Lov'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons'
+import { Tabs, Tab } from "baseui/tabs";
+
+
 
 const formatDate = (date?: string) => date && moment(date).format('ll')
 
 export const ViewKrav = ({ krav }: { krav: KravQL }) => {
   const [expand, setExpand] = useState(false)
+  const [activeKey, setActiveKey] = useState('0')
 
   return (
     <Block width='100%'>
-      <Block backgroundColor='#CCD9D7' justifyContent='center' display='flex'>
-        <Block width='600px'>
+      <Block paddingLeft='40px' paddingRight='40px' backgroundColor='#CCD9D7' justifyContent='center' display='flex'>
+        <Block marginBottom='80px' marginTop='80px' width='600px'>
           <Label title='' markdown={krav.hensikt} />
         </Block>
       </Block>
+
+      <Block display='flex' justifyContent='center'>
+          <Tabs
+            onChange={({ activeKey}) => {
+              setActiveKey(activeKey.toString())
+            }}
+            activeKey={activeKey}
+          >
+            <Tab title="Tab Link 1">Content 1</Tab>
+            <Tab title="Tab Link 2">Content 2</Tab>
+            <Tab title="Tab Link 3">Content 3</Tab>
+          </Tabs>
+        </Block>
+
       <Label title='Suksesskriterier' markdown={krav.suksesskriterier.map(s => `${s.id}: ${s.navn}`)} vertical />
       <Label title='Beskrivelse' markdown={krav.beskrivelse} />
 
