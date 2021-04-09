@@ -66,6 +66,7 @@ const overrides: RecursivePartial<Theme> = {
 }
 
 export const theme = createTheme(primitives, overrides)
+export const pageWidth = '750px'
 
 const breakpoints: any = {
   small: 550,

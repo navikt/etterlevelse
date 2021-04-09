@@ -1,13 +1,14 @@
-import { Block } from 'baseui/block'
-import { H2, LabelSmall } from 'baseui/typography'
+import {Block} from 'baseui/block'
+import {H2, LabelSmall} from 'baseui/typography'
 import React from 'react'
-import { useEtterlevelsePage } from '../api/EtterlevelseApi'
+import {useEtterlevelsePage} from '../api/EtterlevelseApi'
 import Button from '../components/common/Button'
-import { theme } from '../util'
+import {theme} from '../util'
 import RouteLink from '../components/common/RouteLink'
-import { etterlevelseName } from './EtterlevelsePage'
-import { Spinner } from '../components/common/Spinner'
-import { user } from '../services/User'
+import {etterlevelseName} from './EtterlevelsePage'
+import {Spinner} from '../components/common/Spinner'
+import {user} from '../services/User'
+import {pageWidth} from '../util/theme'
 
 
 export const EtterlevelseListPage = () => {
@@ -15,7 +16,7 @@ export const EtterlevelseListPage = () => {
 
   return (
     <Block paddingLeft='40px' paddingRight='40px' width='calc(100%-80px)' display='flex' justifyContent='center'>
-      <Block minWidth='600px'>
+      <Block minWidth={pageWidth}>
         <Block display='flex' justifyContent='space-between' alignItems='center'>
           <H2>Etterlevelse</H2>
 

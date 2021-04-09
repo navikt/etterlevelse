@@ -1,21 +1,22 @@
-import { Block } from 'baseui/block'
-import { theme } from '../../util'
-import { datajegerSlackLink, documentationLink, githubRepo } from '../../util/config'
+import {Block} from 'baseui/block'
+import {theme} from '../../util'
+import {datajegerSlackLink, documentationLink, githubRepo} from '../../util/config'
 import SlackLogo from '../../resources/Slack_Monochrome_White.svg'
-import { LabelMedium } from 'baseui/typography'
-import { StatefulTooltip } from 'baseui/tooltip'
-import { env } from '../../util/env'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCodeBranch } from '@fortawesome/free-solid-svg-icons'
+import {LabelMedium} from 'baseui/typography'
+import {StatefulTooltip} from 'baseui/tooltip'
+import {env} from '../../util/env'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faCodeBranch} from '@fortawesome/free-solid-svg-icons'
 import * as React from 'react'
-import { ExternalLink } from '../common/RouteLink'
-import { navImage } from '../Images'
+import {ExternalLink} from '../common/RouteLink'
+import {navImage} from '../Images'
+import {pageWidth} from '../../util/theme'
 
 
 export const Footer = () => {
   return (
     <Block display='flex'
-      width='100%' maxWidth='600px' marginBottom='100px'
+      width='100%' maxWidth={pageWidth} marginBottom='100px'
       alignItems='center' overrides={{ Block: { props: { role: 'contentinfo' } } }}>
 
       <img src={navImage} alt='NAV logo' width="85px" />

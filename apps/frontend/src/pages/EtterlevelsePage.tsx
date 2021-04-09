@@ -14,6 +14,7 @@ import {theme} from '../util'
 import {FormikProps} from 'formik'
 import {DeleteItem} from '../components/DeleteItem'
 import {kravNumView} from './KravPage'
+import {pageWidth} from '../util/theme'
 
 export const etterlevelseName = (etterlevelse: Etterlevelse) => `${kravNumView(etterlevelse)}`
 
@@ -40,7 +41,7 @@ export const EtterlevelsePage = () => {
 
   return (
     <Block paddingLeft='40px' paddingRight='40px' width='calc(100%-80px)' display='flex' justifyContent='center'>
-    <Block minWidth='600px'>
+    <Block minWidth={pageWidth}>
       {loading && <LoadingSkeleton header='Etterlevelse'/>}
       {!loading && <>
         <Block>

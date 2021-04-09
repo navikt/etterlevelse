@@ -15,6 +15,7 @@ import {Spinner} from '../components/common/Spinner'
 import {Behandling, emptyPage, PageResponse} from '../constants'
 import {StatefulInput} from 'baseui/input'
 import {gql, useQuery} from '@apollo/client'
+import {pageWidth} from '../util/theme'
 
 
 export const MyBehandlingerPage = () => {
@@ -28,7 +29,7 @@ export const MyBehandlingerPage = () => {
     <Block paddingLeft='40px' paddingRight='40px' width='calc(100%-80px)' display='flex' justifyContent='center'>
       <Block display='flex' flexWrap flexDirection='row' justifyContent='space-between'>
 
-        {loggedIn && <Block marginLeft={theme.sizing.scale800} maxWidth='600px'>
+        {loggedIn && <Block marginLeft={theme.sizing.scale800} maxWidth={pageWidth}>
           <HeadingMedium>Mine behandlinger</HeadingMedium>
           <HeadingSmall>Team</HeadingSmall>
           {loading && <Spinner size={theme.sizing.scale800}/>}
@@ -72,7 +73,7 @@ const Alle = () => {
   const next = () => setPage(Math.min(allBehandlinger?.pages ? allBehandlinger.pages - 1 : 0, pageNumber + 1))
 
   return (
-    <Block maxWidth='600px'>
+    <Block maxWidth={pageWidth}>
       <HeadingMedium>Alle behandlinger</HeadingMedium>
 
       <Block maxWidth='500px' marginBottom={theme.sizing.scale1000}>
