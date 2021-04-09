@@ -7,14 +7,14 @@ export const CustomizedTab = (props: TabProps) => {
   )
 }
 
-export const CustomizedTabs = (props: TabsProps) => {
+export const CustomizedTabs = (props: TabsProps ) => {
   const [activeKey, setActiveKey] = React.useState('0')
 
   return (
     <Tabs
       {...props}
       overrides={{
-        Tab: { style: { padding: '0px', margin: '0px', marginRight: '0px', height: '58px' } },
+        Tab: { style: { padding: '0px', margin: '0px', marginRight: '0px', height: '58px', color: '#112624', borderColor: '#112624' } },
         TabBar: { style: { backgroundColor: '#CBD9D7', padding: '0px', justifyContent: 'space-between' } },
         TabContent: { style: { marginTop: '56px', padding: '0px', backgroundColor: '#F8F8F8' } }
       }}
