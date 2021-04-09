@@ -125,7 +125,7 @@ public class KravIT extends IntegrationTestBase {
                 .begrepIder(List.of("TERM-1"))
                 .dokumentasjon(List.of("dok"))
                 .implementasjoner(List.of("impl"))
-                .varslingsadresser(List.of(new Varslingsadresse("epost@epost.no", AdresseType.EPOST)))
+                .varslingsadresser(List.of(new Varslingsadresse("epost@nav.no", AdresseType.EPOST)))
                 .rettskilder(List.of("kilde"))
                 .tagger(List.of("tag"))
                 .regelverk(List.of(RegelverkRequest.builder().lov("ARKIV").spesifisering("§1").build()))
@@ -151,7 +151,7 @@ public class KravIT extends IntegrationTestBase {
         assertThat(krav.getBegrepIder()).containsOnly("TERM-1");
         assertThat(krav.getDokumentasjon()).containsOnly("dok");
         assertThat(krav.getImplementasjoner()).containsOnly("impl");
-        assertThat(krav.getVarslingsadresser()).containsOnly(new Varslingsadresse("epost@epost.no", AdresseType.EPOST));
+        assertThat(krav.getVarslingsadresser()).containsOnly(new Varslingsadresse("epost@nav.no", AdresseType.EPOST));
         assertThat(krav.getRettskilder()).containsOnly("kilde");
         assertThat(krav.getTagger()).containsOnly("tag");
         assertThat(krav.getRegelverk()).containsOnly(RegelverkResponse.builder().lov(CodelistService.getCodelistResponse(ListName.LOV, "ARKIV")).spesifisering("§1").build());
