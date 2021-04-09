@@ -15,9 +15,6 @@ import { user } from '../../services/User'
 import { LovViewList } from '../Lov'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons'
-import { CustomizedTabs, CustomizedTab } from '../common/CustomizedTabs'
-import { LabelLarge } from 'baseui/typography'
-
 
 
 const formatDate = (date?: string) => date && moment(date).format('ll')
