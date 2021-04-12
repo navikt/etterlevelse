@@ -20,7 +20,6 @@ import {customTheme} from './util/theme'
 const engine = new Styletron()
 
 const containerProps = {
-  minHeight: '100vh',
   display: 'flex',
   flexDirection: 'column',
   backgroundColor: '#F8F8F8',
@@ -47,7 +46,7 @@ const Main = (props) => {
               </Helmet>
 
               <Block {...containerProps}>
-                <Block marginBottom='100px' width='100%'>
+                <Block marginBottom='100px' width='100%' minHeight='85vh'>
                   <Header/>
                   <Routes/>
                 </Block>
