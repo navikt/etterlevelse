@@ -26,7 +26,7 @@ import { logo } from './Images'
 const LoginButton = (props: { location: string }) => {
   return (
     <StyledLink style={{ textDecoration: 'none' }} href={`/login?redirect_uri=${props.location}`} >
-      <Button size={SIZE.compact} kind={KIND.tertiary} $style={{ border:'2px solid #102723', borderRadius: '4px' }}>
+      <Button size={SIZE.compact} kind={KIND.tertiary} $style={{ border: '2px solid #102723', borderRadius: '4px' }}>
         Logg inn
       </Button>
     </StyledLink>
@@ -127,14 +127,15 @@ const Header = (props: { noSearchBar?: boolean, noLoginButton?: boolean }) => {
               </H1>
             </RouteLink>
           </NavigationItem>
+        </NavigationList>
+
+        <NavigationList $align={ALIGN.center}>
           {!props.noSearchBar && (<NavigationItem>
             <Block overrides={{ Block: { props: { role: 'search' } } }}>
               <MainSearch />
             </Block>
           </NavigationItem>)}
         </NavigationList>
-
-        <NavigationList $align={ALIGN.center} />
 
         {!props.noLoginButton && (<Block display={['none', 'none', 'flex', 'flex']}>
           <NavigationList $align={ALIGN.right}>
