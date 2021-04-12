@@ -13,6 +13,18 @@ import ToTopCircle from '../../resources/ToTopCircle.svg'
 
 
 export const Footer = () => {
+  const [showButtonToTop, setShowButtonToTop] = React.useState(false)
+
+  const checkScrollTop = () => {
+    if (!showButtonToTop && window.pageYOffset > 100) {
+      setShowButtonToTop(true)
+    } else if (showButtonToTop && window.pageYOffset <= 100) {
+      setShowButtonToTop(false)
+    }
+  }
+
+  window.addEventListener('scroll', checkScrollTop)
+
   return (
     <Block display='flex' width='calc(100% - 80px)' height='100px' backgroundColor='#112724' paddingRight='40px' paddingLeft='40px'>
       <Block display='flex'
@@ -38,10 +50,10 @@ export const Footer = () => {
         </Block>
       </Block>
 
-      <Block position='relative' display='flex' justifyContent='flex-end' $style={{ cursor: 'pointer', top: '-50px' }} onClick={() => window.scrollTo(0, 0)}>
+      {showButtonToTop && (<Block position='relative' display='flex' justifyContent='flex-end' $style={{ cursor: 'pointer', top: '-50px' }} onClick={() => window.scrollTo(0, 0)}>
         <img src={ToTopCircle} alt='Til toppen av siden' />
-      </Block>
-      
+      </Block>)}
+
     </Block>
   )
 }
