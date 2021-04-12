@@ -26,7 +26,7 @@ export const Footer = () => {
   window.addEventListener('scroll', checkScrollTop)
 
   return (
-    <Block display='flex' width='calc(100% - 80px)' height='100px' backgroundColor='#112724' paddingRight='40px' paddingLeft='40px'>
+    <Block display='flex' width='calc(100% - 80px)' height='100px' backgroundColor='#112724' paddingRight='40px' paddingLeft='40px' position='relative' $style={{left:0, right: 0, bottom: 0}}>
       <Block display='flex'
         width='100%' minHeight='100px'
         justifyContent='center'
