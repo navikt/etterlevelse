@@ -20,6 +20,7 @@ import { user } from '../services/User'
 import { writeLog } from '../api/LogApi'
 import MainSearch from './search/MainSearch'
 import { logo } from './Images'
+import { pageWidth } from '../util/theme'
 
 
 
@@ -40,27 +41,37 @@ const LoggedInHeader = (props: { location: string }) => {
     ...paddingAll(theme.sizing.scale100)
   }
   return (
-    <StatefulPopover
-      content={
-        <Block padding={theme.sizing.scale400}>
-          <Label2 {...blockStyle}>Navn: {user.getName()}</Label2>
-          {/* <Label2 {...blockStyle}>Grupper: {user.getGroupsHumanReadable().join(', ')}</Label2> */}
-          {user.getIdent() && <Block {...blockStyle}>
-            <RouteLink href={`/resource/${user.getIdent()}`}>Min side</RouteLink>
-          </Block>}
-          <Block {...blockStyle}>
-            <RouteLink href={'/user/notifications'}>Mine varsler</RouteLink>
-          </Block>
-          <Block {...blockStyle}>
-            <StyledLink href={`/logout?redirect_uri=${props.location}`}>
-              Logg ut
-            </StyledLink>
-          </Block>
-        </Block>
-      }
-    >
-      <Button kind="tertiary">{user.getIdent()}</Button>
-    </StatefulPopover>
+    <Block display='flex' justifyContent='center' alignItems='center'>
+      <Block marginRight='14px'>
+        {user.getIdent()}
+      </Block>
+      <Block {...blockStyle}>
+        <StyledLink style={{ textDecoration: 'none' }} href={`/logout?redirect_uri=${props.location}`} >
+          <Button size={SIZE.compact} kind={KIND.tertiary} $style={{ border: '2px solid #102723', borderRadius: '4px' }}>
+            Logg ut
+          </Button>
+        </StyledLink>
+      </Block>
+    </Block>
+
+
+
+    // <StatefulPopover
+    //   content={
+    //     <Block padding={theme.sizing.scale400}>
+    //       <Label2 {...blockStyle}>Navn: {user.getName()}</Label2>
+    //       {/* <Label2 {...blockStyle}>Grupper: {user.getGroupsHumanReadable().join(', ')}</Label2> */}
+    //       {user.getIdent() && <Block {...blockStyle}>
+    //         <RouteLink href={`/resource/${user.getIdent()}`}>Min side</RouteLink>
+    //       </Block>}
+    //       <Block {...blockStyle}>
+    //         <RouteLink href={'/user/notifications'}>Mine varsler</RouteLink>
+    //       </Block>
+    //     </Block>
+    //   }
+    // >
+    //   <Button kind="tertiary">{user.getIdent()}</Button>
+    // </StatefulPopover>
   )
 }
 
@@ -130,7 +141,7 @@ const Header = (props: { noSearchBar?: boolean, noLoginButton?: boolean }) => {
         </NavigationList>
 
         <NavigationList $align={ALIGN.center}>
-          {!props.noSearchBar && (<NavigationItem>
+          {!props.noSearchBar && (<NavigationItem $style={{ width: pageWidth }}>
             <Block overrides={{ Block: { props: { role: 'search' } } }}>
               <MainSearch />
             </Block>
