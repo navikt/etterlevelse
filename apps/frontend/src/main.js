@@ -46,7 +46,7 @@ const Main = (props) => {
               </Helmet>
 
               <Block {...containerProps}>
-                <Block marginBottom='100px' width='100%' minHeight='85vh'>
+                <Block marginBottom='100px' width='100%' minHeight='50vh'>
                   <Header/>
                   <Routes/>
                 </Block>
