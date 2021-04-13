@@ -20,7 +20,6 @@ import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons'
 const formatDate = (date?: string) => date && moment(date).format('ll')
 
 export const ViewKrav = ({ krav }: { krav: KravQL }) => {
-  const [expand, setExpand] = useState(false)
 
   return (
     <Block width='100%'>
@@ -29,11 +28,7 @@ export const ViewKrav = ({ krav }: { krav: KravQL }) => {
 
       <Block height={theme.sizing.scale800} />
 
-      {expand && <AllInfo krav={krav} />}
-      {!expand && <MediumInfo krav={krav} />}
-      <Block marginTop="20px" display='flex' justifyContent='flex-end'>
-        <Button onClick={() => setExpand(!expand)}>{`${expand ? 'Skjul' : 'Vis'} detaljer`}</Button>
-      </Block>
+      {<AllInfo krav={krav} />}
     </Block>
   )
 }
