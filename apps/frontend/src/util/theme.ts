@@ -44,7 +44,7 @@ const overrides: RecursivePartial<Theme> = {
   },
   borders: {
     buttonBorderRadius: '4px',
-    inputBorderRadius: '8px',
+    inputBorderRadius: '4px',
   },
   typography: {
     // Increase weight 500->600 on bold texts

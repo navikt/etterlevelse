@@ -10,7 +10,7 @@ import {urlForObject} from '../common/RouteLink'
 import Button from '../common/Button'
 import {faFilter} from '@fortawesome/free-solid-svg-icons'
 import {Radio, RadioGroup} from 'baseui/radio'
-import {paddingZero} from '../common/Style'
+import {borderColor, paddingZero} from '../common/Style'
 import SearchLabel from './components/SearchLabel'
 import {NavigableItem, ObjectType} from '../admin/audit/AuditTypes'
 import {Behandling, Krav} from '../../constants'
@@ -20,6 +20,7 @@ import {kravName} from '../../pages/KravPage'
 import {searchKrav} from '../../api/KravApi'
 import {behandlingName, searchBehandling} from '../../api/BehandlingApi'
 import {codelist, ListName} from '../../services/Codelist'
+import { Root } from 'baseui/toast'
 
 shortid.characters('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@')
 
@@ -74,11 +75,11 @@ const SelectType = (props: {type: SearchType, setType: (type: SearchType) => voi
     font='ParagraphSmall'
     position='absolute'
     marginTop='-4px'
-    backgroundColor={theme.colors.primary50}
+    backgroundColor='#FFFFFF'
     width={responsiveWidth}
     $style={{
-      borderBottomLeftRadius: '8px',
-      borderBottomRightRadius: '8px'
+      borderBottomLeftRadius: '4px',
+      borderBottomRightRadius: '4px'
     }}>
     <Block
       marginLeft='3px'
@@ -248,17 +249,28 @@ const MainSearch = () => {
           filterOptions={options => options}
           overrides={{
             SearchIcon: {
+              props:{
+                overrides:{
+                  Svg: {
+                    style: {
+                     color: '#3E504C',
+                    }
+                  }
+                }
+              },
               style: {
                 width: theme.sizing.scale900,
                 height: theme.sizing.scale900,
                 left: theme.sizing.scale400,
-                top: theme.sizing.scale400
+                top: theme.sizing.scale400,
               }
             },
             ControlContainer: {
               style: {
                 ...(filter ? {borderBottomLeftRadius: 0} : {}),
-                ...(filter ? {borderBottomRightRadius: 0} : {})
+                ...(filter ? {borderBottomRightRadius: 0} : {}),
+                backgroundColor: '#FFFFFF',
+                borderColor:'#6B6B6B'
               }
             },
             DropdownListItem: {
@@ -268,7 +280,7 @@ const MainSearch = () => {
                 paddingBottom: 0,
                 paddingLeft: '5px'
               }
-            }
+            },
           }
           }
         />
