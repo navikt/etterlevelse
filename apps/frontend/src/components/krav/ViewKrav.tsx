@@ -55,22 +55,24 @@ const AllInfo = ({ krav }: { krav: KravQL }) => (
 
 
 
-    <LabelAboveContent title='Varslingsadresser' hide={!user.isKraveier()}>
+
+    {/* <LabelAboveContent title='Avdeling'>{krav.avdeling?.shortName}</LabelAboveContent> */}
+
+    <LabelAboveContent title='Kravet er relevant for'><DotTags list={ListName.RELEVANS} codes={krav.relevansFor} linkCodelist /></LabelAboveContent>
+   
+    <Block backgroundColor='#F6E8E6' padding='40px'>
+    <Label title='Ansvarlig'><ObjectLink id={krav.underavdeling?.code} type={ListName.UNDERAVDELING}>{krav.underavdeling?.shortName}</ObjectLink></Label>
+      <Label title='Regelverk' hide={!krav.regelverk.length}>
+        <LovViewList regelverk={krav.regelverk} />
+      </Label>
+      <Label title='Varslingsadresser' hide={!user.isKraveier()}>
       <DotTags items={krav.varslingsadresser.map((va, i) => {
         if (va.type === AdresseType.SLACK) return <Block>Slack: <StyledLink href={slackLink(va.adresse)}>#{va.slackChannel?.name || va.adresse}</StyledLink></Block>
         if (va.type === AdresseType.SLACK_USER) return <Block>Slack: <StyledLink href={slackUserLink(va.adresse)}>{va.slackUser?.name || va.adresse}</StyledLink></Block>
         return <Block>Epost: <StyledLink href={`mailto:${va.adresse}`}>{va.adresse}</StyledLink></Block>
       }
       )} />
-    </LabelAboveContent>
-    {/* <LabelAboveContent title='Avdeling'>{krav.avdeling?.shortName}</LabelAboveContent> */}
-    <LabelAboveContent title='Ansvarlig'><ObjectLink id={krav.underavdeling?.code} type={ListName.UNDERAVDELING}>{krav.underavdeling?.shortName}</ObjectLink></LabelAboveContent>
-    <LabelAboveContent title='Kravet er relevant for'><DotTags list={ListName.RELEVANS} codes={krav.relevansFor} linkCodelist /></LabelAboveContent>
-   
-    <Block backgroundColor='#F6E8E6' padding='40px'>
-      <Label title='Regelverk' hide={!krav.regelverk.length}>
-        <LovViewList regelverk={krav.regelverk} />
-      </Label>
+    </Label>
       <Label title='Status'>{kravStatus(krav.status)}</Label>
       {krav.periode?.start && <Label title='Gyldig fom'>{formatDate(krav.periode?.start)}</Label>}
       {krav.periode?.slutt && <Label title='Gyldig tom'>{formatDate(krav.periode?.slutt)}</Label>}
