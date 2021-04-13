@@ -68,7 +68,7 @@ export const EditKrav = ({ krav, close, formRef }: EditKravProps) => {
               tooltip={'Velg status for kravet. Utkast er kun synlig for kraveier selv. Aktiv/utgått er synlig for alle.'} />
             <KravVarslingsadresserEdit />
             {/* <OptionField label='Avdeling' name='avdeling' listName={ListName.AVDELING} tooltip={'Angi hvilken avdeling som har det overordnede ansvaret for kravet.'} /> */}
-            <OptionField label='Underavdeling' name='underavdeling' listName={ListName.UNDERAVDELING} tooltip={'Angi hvilken seksjon/underavdeling som har ansvaret for kravet.'} />
+            <OptionField label='Ansvarlig' name='Ansvarlig' listName={ListName.UNDERAVDELING} tooltip={'Angi hvilken seksjon/underavdeling som har ansvaret for kravet.'} />
 
           </Block>
 
