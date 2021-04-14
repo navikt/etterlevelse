@@ -165,7 +165,6 @@ export const MultiInputField = (props: { label: string, name: string, link?: boo
                 <Button type='button' onClick={add} marginLeft label={'Legg til'}><FontAwesomeIcon icon={faPlus} /> </Button>
               </Block>
               <RenderTagList
-                wide
                 list={(p.form.values[props.name] as string[]).map(linkNameFor)}
                 onRemove={p.remove}
                 onClick={(i) => onClick(p, i)} />

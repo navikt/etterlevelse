@@ -61,7 +61,6 @@ const KriterieList = ({p}: {p: FieldArrayRenderProps}) => {
           <Button type='button' onClick={add} marginLeft label={'Legg til'}><FontAwesomeIcon icon={faPlus}/> </Button>
         </Block>
         <RenderTagList
-          wide
           list={form.values.suksesskriterier.map(s => `${s.id}: ${s.navn}`)}
           onRemove={p.remove}
           onClick={(i) => onClick(p, i)}/>
