@@ -20,6 +20,7 @@ import {kravName} from '../../pages/KravPage'
 import {searchKrav} from '../../api/KravApi'
 import {behandlingName, searchBehandling} from '../../api/BehandlingApi'
 import {codelist, ListName} from '../../services/Codelist'
+import {searchIcon} from '../Images'
 import { Root } from 'baseui/toast'
 
 shortid.characters('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@')
@@ -228,7 +229,8 @@ const MainSearch = () => {
           maxDropdownHeight="400px"
           searchable={true}
           type={TYPE.search}
-          options={searchResult}
+          options={searchResult} 
+
           placeholder={'Søk etter krav eller behandling'}
           aria-label={'Søk etter krav eller behandling'}
           value={value}
@@ -249,15 +251,17 @@ const MainSearch = () => {
           filterOptions={options => options}
           overrides={{
             SearchIcon: {
+              component: () => <img src={searchIcon} alt='search icon'/>,
               props:{
                 overrides:{
                   Svg: {
-                    style: {
-                     color: '#3E504C',
+                    style:{
+                      ':hover':'#102723'
                     }
                   }
-                }
+                },
               },
+
               style: {
                 width: theme.sizing.scale900,
                 height: theme.sizing.scale900,
