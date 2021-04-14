@@ -1,5 +1,5 @@
 import { Block } from 'baseui/block'
-import { H2, H4, HeadingSmall, LabelLarge } from 'baseui/typography'
+import { H2, H4, H5, HeadingSmall, LabelLarge } from 'baseui/typography'
 import { useHistory, useParams } from 'react-router-dom'
 import { deleteKrav, KravIdParams, mapToFormVal } from '../api/KravApi'
 import React, { useEffect, useRef, useState } from 'react'
@@ -90,7 +90,6 @@ export const KravPage = () => {
       {!kravLoading &&
         <Block>
           <Block paddingLeft='40px' paddingRight='40px' height='296px' display='flex' flexDirection='column' backgroundColor='#112724' justifyContent='center'>
-
             <Block display='flex' width='100%' justifyContent='center'>
               <Block flex='1' display='flex' justifyContent='flex-start'>
                 <RouteLink href={'/krav'} hideUnderline>
@@ -137,7 +136,7 @@ export const KravPage = () => {
           <Block display='flex' justifyContent='center' width='100%'>
             <Block backgroundColor='#CCD9D7' flex={1} height='58px' minWidth='40px' />
             <Block width={pageWidth}>
-              <CustomizedTabs fontColor='#112624'>
+              <CustomizedTabs fontColor='#112624' tabBackground='#CBD9D7'>
                 <CustomizedTab title={<LabelLarge>Om kravet</LabelLarge>}>
                   <ViewKrav krav={krav} />
                 </CustomizedTab>
@@ -157,8 +156,20 @@ export const KravPage = () => {
       {krav && (<Modal
         onClose={() => setEdit(false)}
         isOpen={edit}
-        size={modalSize.auto}
+        size={modalSize.full}
         overrides={{
+          Dialog: {
+            style: {
+              backgroundColor: '#F8F8F8',
+            }
+          },
+          DialogContainer: {
+            style: {
+              paddingLeft: '100px',
+              paddingRight: '100px',
+              width: 'calc(100% - 200px)'
+            }
+          },
           Close: {
             style: {
               display: 'none'
@@ -166,12 +177,12 @@ export const KravPage = () => {
           },
         }}
       >
-        <Block minWidth={pageWidth}>
-          <Block backgroundColor='#112724' padding='20px' position='sticky'>
+        <Block>
+          <Block backgroundColor='#112724' paddingTop='20px' paddingBottom='20px' paddingLeft='212px' paddingRight='32px' id='modalHeaderKravSide'>
             <Block display='flex' width='100%' justifyContent='flex-end'>
               <Button
                 size='compact'
-                $style={{ color: '#112724', backgroundColor: '#F8F8F8', ':hover': '#F8F8F8' }}
+                $style={{ color: '#112724', backgroundColor: '#F8F8F8', ':hover': { backgroundColor: '#F8F8F8' } }}
                 onClick={() => !formRef.current?.isSubmitting && formRef.current?.submitForm()}
                 marginLeft>
                 Lagre
@@ -186,7 +197,8 @@ export const KravPage = () => {
             </Button>
             </Block>
             <Block>
-              <H4 $style={{ color: '#F8F8F8' }}>{`${kravName(krav)} ${krav.navn}`} </H4>
+              <H4 $style={{ color: '#F8F8F8' }}>Rediger kravside: </H4>
+              <H5 $style={{ color: '#F8F8F8' }}>{`${kravName(krav)} ${krav.navn}`} </H5>
             </Block>
           </Block>
 
