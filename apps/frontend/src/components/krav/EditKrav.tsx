@@ -31,7 +31,7 @@ export const EditKrav = ({ krav, close, formRef }: EditKravProps) => {
   }
 
   return (
-    <Block width='calc(100%-80px)' paddingLeft='40px' paddingRight='40px'>
+    <Block width='calc(100%-40px)' padding='20px'>
       <Formik
         onSubmit={submit}
         initialValues={mapToFormVal(krav)}
