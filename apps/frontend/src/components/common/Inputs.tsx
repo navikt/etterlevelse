@@ -17,11 +17,11 @@ import { Datepicker } from 'baseui/datepicker'
 import moment from 'moment'
 import { Radio, RadioGroup } from 'baseui/radio'
 import { MarkdownEditor, MarkdownInfo } from './Markdown'
-import LabelWithTooltip  from '../common/LabelWithTooltip'
+import LabelWithTooltip from '../common/LabelWithTooltip'
 
-export const FieldWrapper = ({ children }: { children: React.ReactNode }) => {
+export const FieldWrapper = ({ children, marginBottom }: { children: React.ReactNode, marginBottom?: string }) => {
   return (
-    <Block marginBottom='1.5rem'>
+    <Block marginBottom={marginBottom ? marginBottom : '1.5rem'}>
       {children}
     </Block>
   )
@@ -31,7 +31,7 @@ export const InputField = (props: { label: string, name: string, caption?: React
   <FieldWrapper>
     <Field name={props.name}>
       {(p: FieldProps) =>
-        <FormControl label={<LabelWithTooltip label={props.label} tooltip={props.tooltip}/>} error={p.meta.touched && p.meta.error} caption={props.caption}>
+        <FormControl overrides={{ Label: { style: { marginTop: '0px', marginBottom: '0px', paddingTop: '8px', paddingBottom: '8px' } } }} label={<LabelWithTooltip label={props.label} tooltip={props.tooltip} />} error={p.meta.touched && p.meta.error} caption={props.caption}>
           <Input {...p.field} placeholder={props.label} />
         </FormControl>
       }
@@ -39,12 +39,12 @@ export const InputField = (props: { label: string, name: string, caption?: React
   </FieldWrapper>
 )
 
-export const TextAreaField = (props: { label: string, name: string, markdown?: boolean, shortenLinks?: boolean, onImageUpload?: (file: File) => Promise<string>, caption?: ReactNode, tooltip?: string }) => {
+export const TextAreaField = (props: { marginBottom?: string, label: string, name: string, markdown?: boolean, shortenLinks?: boolean, onImageUpload?: (file: File) => Promise<string>, caption?: ReactNode, tooltip?: string }) => {
   return (
-    <FieldWrapper>
+    <FieldWrapper marginBottom={props.marginBottom}>
       <Field name={props.name}>
         {(p: FieldProps) =>
-          <FormControl label={<LabelWithTooltip label={props.label} tooltip={props.tooltip}/>} error={p.meta.touched && p.meta.error}
+          <FormControl overrides={{ ControlContainer: { style: { marginBottom: '0px' } }, Caption: { style: { marginBottom: '0px' } } }} label={<LabelWithTooltip label={props.label} tooltip={props.tooltip} />} error={p.meta.touched && p.meta.error}
             caption={props.markdown ?
               <Block display='flex' flexDirection={'column'}>
                 {props.caption} <MarkdownInfo />
@@ -92,7 +92,7 @@ export const DateField = (props: { label: string, name: string, caption?: ReactN
   <FieldWrapper>
     <Field name={props.name}>
       {(p: FieldProps) =>
-        <FormControl label={<LabelWithTooltip label={props.label} tooltip={props.tooltip}/>} error={p.meta.touched && p.meta.error} caption={props.caption}>
+        <FormControl label={<LabelWithTooltip label={props.label} tooltip={props.tooltip} />} error={p.meta.touched && p.meta.error} caption={props.caption}>
           <Datepicker
             clearable
             formatString={'dd-MM-yyyy'}
@@ -148,7 +148,7 @@ export const MultiInputField = (props: { label: string, name: string, link?: boo
         const onKey = (e: React.KeyboardEvent) => (e.key === 'Enter') && add()
 
         return (
-          <FormControl label={<LabelWithTooltip label={props.label} tooltip={props.tooltip}/>} error={p.form.touched[props.name] && p.form.errors[props.name]} caption={props.caption}>
+          <FormControl label={<LabelWithTooltip label={props.label} tooltip={props.tooltip} />} error={p.form.touched[props.name] && p.form.errors[props.name]} caption={props.caption}>
             <Block>
               <Block display='flex'>
                 <Input onKeyDown={onKey} value={val} inputRef={inputRef}
@@ -183,7 +183,7 @@ export const OptionField = (props: { label: string, name: string, clearable?: bo
     <FieldWrapper>
       <Field name={props.name}>
         {(p: FieldProps<string | Code>) =>
-          <FormControl label={<LabelWithTooltip label={props.label} tooltip={props.tooltip}/>} error={p.meta.touched && p.meta.error} caption={props.caption}>
+          <FormControl label={<LabelWithTooltip label={props.label} tooltip={props.tooltip} />} error={p.meta.touched && p.meta.error} caption={props.caption}>
             <OptionList {...props} onChange={(val => p.form.setFieldValue(props.name, val))} value={p.field.value} />
           </FormControl>
         }
@@ -214,7 +214,7 @@ export const MultiOptionField = (props: { label: string, name: string, caption?:
       <FieldArray name={props.name}>
         {(p: FieldArrayRenderProps) => {
           const selectedIds = (p.form.values[props.name] as any[]).map(v => props.listName ? (v as Code).code : v)
-          return <FormControl label={<LabelWithTooltip label={props.label} tooltip={props.tooltip}/>} error={p.form.touched[props.name] && p.form.errors[props.name]} caption={props.caption}>
+          return <FormControl label={<LabelWithTooltip label={props.label} tooltip={props.tooltip} />} error={p.form.touched[props.name] && p.form.errors[props.name]} caption={props.caption}>
             <Block>
               <Block display='flex'>
                 <Select
