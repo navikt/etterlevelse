@@ -27,7 +27,6 @@ import { chevronLeft, editIcon, plusIcon } from '../components/Images'
 import { Label } from '../components/common/PropertyLabel'
 import { CustomizedTab, CustomizedTabs } from '../components/common/CustomizedTabs'
 import { pageWidth } from '../util/theme'
-import { Modal, ModalBody, ModalButton, ModalFooter, ModalHeader, SIZE as modalSize } from 'baseui/modal'
 
 export const kravNumView = (it: { kravVersjon: number, kravNummer: number }) => `K${it.kravNummer}.${it.kravVersjon}`
 export const kravName = (krav: Krav) => `${kravNumView(krav)}`
@@ -152,69 +151,17 @@ export const KravPage = () => {
           </Block>
         </Block>}
 
-
-      {krav && (<Modal
-        onClose={() => setEdit(false)}
-        isOpen={edit}
-        size={modalSize.full}
-        overrides={{
-          Dialog: {
-            style: {
-              backgroundColor: '#F8F8F8',
-            }
-          },
-          DialogContainer: {
-            style: {
-              paddingLeft: '100px',
-              paddingRight: '100px',
-              width: 'calc(100% - 200px)'
-            }
-          },
-          Close: {
-            style: {
-              display: 'none'
-            }
-          },
-        }}
-      >
-        <Block>
-          <Block backgroundColor='#112724' paddingTop='20px' paddingBottom='20px' paddingLeft='212px' paddingRight='32px' id='modalHeaderKravSide'>
-            <Block display='flex' width='100%' justifyContent='flex-end'>
-              <Button
-                size='compact'
-                $style={{ color: '#112724', backgroundColor: '#F8F8F8', ':hover': { backgroundColor: '#F8F8F8' } }}
-                onClick={() => !formRef.current?.isSubmitting && formRef.current?.submitForm()}
-                marginLeft>
-                Lagre
-            </Button>
-              <Button
-                size='compact'
-                $style={{ color: '#F8F8F8' }}
-                kind={'tertiary'}
-                onClick={() => setEdit(false)}
-                marginLeft>
-                Avbryt
-            </Button>
-            </Block>
-            <Block>
-              <H4 $style={{ color: '#F8F8F8' }}>Rediger kravside: </H4>
-              <H5 $style={{ color: '#F8F8F8' }}>{`${kravName(krav)} ${krav.navn}`} </H5>
-            </Block>
-          </Block>
-
-          {krav && <EditKrav krav={krav} formRef={formRef} close={k => {
-            if (k) {
-              if (k.id !== krav.id) {
-                history.push(`/krav/${k.kravNummer}/${k.kravVersjon}`)
-              } else {
-                reloadKrav()
-              }
-            }
-            setEdit(false)
-          }} />}
-        </Block>
-      </Modal>)
-      }
+      {krav && <EditKrav isOpen={edit} setIsOpen={setEdit} krav={krav} formRef={formRef} close={k => {
+        if (k) {
+          if (k.id !== krav.id) {
+            history.push(`/krav/${k.kravNummer}/${k.kravVersjon}`)
+          } else {
+            reloadKrav()
+          }
+        }
+        setEdit(false)
+      }} />}
+      
     </Block>
   )
 }
