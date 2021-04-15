@@ -15,8 +15,8 @@ import { KravSuksesskriterierEdit } from './Edit/KravSuksesskriterieEdit'
 import { EditBegreper } from './Edit/KravBegreperEdit'
 import { CustomizedTab, CustomizedTabs } from '../common/CustomizedTabs'
 import { LabelLarge, H4, H5 } from 'baseui/typography'
-import { Modal, SIZE as modalSize } from 'baseui/modal'
-import  Button  from '../common/Button'
+import CustomizedModal from '../common/CustomizedModal'
+import Button from '../common/Button'
 
 type EditKravProps = {
   krav: KravQL,
@@ -37,29 +37,9 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
 
   return (
     <Block>
-      <Modal
+      <CustomizedModal
         onClose={() => setIsOpen(false)}
         isOpen={isOpen}
-        size={modalSize.full}
-        overrides={{
-          Dialog: {
-            style: {
-              backgroundColor: '#F8F8F8',
-            }
-          },
-          DialogContainer: {
-            style: {
-              paddingLeft: '100px',
-              paddingRight: '100px',
-              width: 'calc(100% - 200px)'
-            }
-          },
-          Close: {
-            style: {
-              display: 'none'
-            }
-          },
-        }}
       >
         <Formik
           onSubmit={submit}
@@ -77,7 +57,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
                   disabled={isSubmitting}
                   marginLeft>
                   Lagre
-            </Button>
+                </Button>
                 <Button
                   size='compact'
                   $style={{ color: '#F8F8F8' }}
@@ -87,7 +67,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
                   }
                   marginLeft>
                   Avbryt
-            </Button>
+                </Button>
               </Block>
               <Block>
                 <H4 $style={{ color: '#F8F8F8' }}>Rediger kravside: </H4>
@@ -146,7 +126,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
           </Form>
         )}
         </Formik>
-      </Modal>
+      </CustomizedModal>
     </Block >
   )
 }
