@@ -38,7 +38,7 @@ export const Footer = () => {
         justifyContent='center'
         alignItems='center' overrides={{ Block: { props: { role: 'contentinfo' } } }}
       >
-        <Block width='100%' display="flex" justifyContent='space-around' alignItems='center' overrides={{ Block: { props: { role: 'navigation', 'aria-label': 'Ekstern lenker' } } }}>
+        <Block width='100%'  display={['block','block','flex','flex']} justifyContent={['space-around']} alignItems='center' overrides={{ Block: { props: { role: 'navigation', 'aria-label': 'Ekstern lenker' } } }}>
           <ExternalLink href={datajegerSlackLink} hideUnderline>
             <Block display="flex" alignItems="center">
               <img src={SlackLogo} width="60px" alt="slack logo" />

@@ -88,8 +88,8 @@ export const KravPage = () => {
       {kravLoading && <LoadingSkeleton header='Krav' />}
       {!kravLoading &&
         <Block>
-          <Block paddingLeft='40px' paddingRight='40px' height='296px' display='flex' flexDirection='column' backgroundColor='#112724' justifyContent='center'>
-            <Block display='flex' width='100%' justifyContent='center'>
+          <Block paddingLeft='40px' paddingRight='40px' display='flex' flexDirection='column' backgroundColor='#112724' justifyContent='center'>
+            <Block display='flex' width='100%' justifyContent='center' marginTop='25px'>
               <Block flex='1' display='flex' justifyContent='flex-start'>
                 <RouteLink href={'/krav'} hideUnderline>
                   <Button startEnhancer={<img alt={'Chevron left'} src={chevronLeft} />} size='compact' kind='tertiary' $style={{ color: '#F8F8F8' }}> Tilbake</Button>
@@ -114,7 +114,7 @@ export const KravPage = () => {
             </Block>
 
 
-            <Block width='100%' display='flex' justifyContent='center' >
+            <Block width='100%' display='flex' justifyContent='center' marginBottom='32px' >
               <Block width={pageWidth} marginTop='7px'>
                 <CustomizedTag>{krav && krav?.kravNummer !== 0 ? kravName(krav) : 'Ny'}</CustomizedTag>
                 <H2 $style={{ color: '#F8F8F8' }}>{krav && krav?.navn ? krav.navn : 'Ny'} </H2>
