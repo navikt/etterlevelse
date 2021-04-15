@@ -35,8 +35,10 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
     }
   }
 
+  document.querySelector('modal')?.addEventListener('scroll', () => console.log('scrolling'))
+
   return (
-    <Block>
+    <Block id='test'>
       <CustomizedModal
         onClose={() => setIsOpen(false)}
         isOpen={isOpen}
@@ -48,7 +50,16 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
           innerRef={formRef}
         >{({ isSubmitting, submitForm }) => (
           <Form>
-            <Block backgroundColor='#112724' paddingTop='20px' paddingBottom='20px' paddingLeft='212px' paddingRight='32px' id='modalHeaderKravSide'>
+            <Block
+              backgroundColor='#112724'
+              paddingTop='20px'
+              paddingBottom='20px'
+              paddingLeft='212px'
+              paddingRight='32px'
+              position='sticky'
+              top={0}
+              $style={{zIndex: 1}}
+            >
               <Block display='flex' width='100%' justifyContent='flex-end'>
                 <Button
                   size='compact'
