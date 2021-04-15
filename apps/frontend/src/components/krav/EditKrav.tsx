@@ -35,10 +35,8 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
     }
   }
 
-  document.querySelector('modal')?.addEventListener('scroll', () => console.log('scrolling'))
-
   return (
-    <Block id='test'>
+    <Block>
       <CustomizedModal
         onClose={() => setIsOpen(false)}
         isOpen={isOpen}
