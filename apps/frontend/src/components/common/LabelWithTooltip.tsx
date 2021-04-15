@@ -1,19 +1,21 @@
 import * as React from 'react'
 import CustomizedStatefulTooltip from './CustomizedStatefulTooltip'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons'
-import {Block} from 'baseui/block'
+import { questionmarkIcon } from '../Images'
+import { Block } from 'baseui/block'
+import { LabelLarge } from 'baseui/typography'
 
-const LabelWithToolTip = (props: {label: string, tooltip?: React.ReactNode}) => {
+const LabelWithToolTip = (props: { label: string, tooltip?: React.ReactNode, fontColor?: string}) => {
   if (props.tooltip) {
     return (
-      <Block display="flex">
+      <Block display="flex" alignItems="center">
         <Block marginRight="scale200">
-          {props.label}
+          <LabelLarge $style={{color: props.fontColor ? props.fontColor : 'black'}}>
+            {props.label}
+          </LabelLarge>
         </Block>
         <CustomizedStatefulTooltip content={() => (<Block>{props.tooltip}</Block>)}>
           <Block $style={{ cursor: 'pointer' }}>
-            <FontAwesomeIcon title={`Hjelpetekst for ${props.label}`} icon={faQuestionCircle} color="#112D60" />
+            <img src={questionmarkIcon} alt={`Hjelpetekst for ${props.label}`} />
           </Block>
         </CustomizedStatefulTooltip>
       </Block>

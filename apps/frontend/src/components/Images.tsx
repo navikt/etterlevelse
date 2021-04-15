@@ -21,6 +21,7 @@ import plusIcon from '../resources/icons/plus.svg'
 import deleteIcon from '../resources/icons/delete.svg'
 import editIcon from '../resources/icons/edit.svg'
 import searchIcon from '../resources/icons/search-icon.svg'
+import questionmarkIcon from '../resources/icons/questionmark.svg'
 import illustration from '../resources/giammarco-boscaro-zeH-ljawHtg-unsplash.jpg'
 import {codelist, ListName, LovCode, TemaCode} from '../services/Codelist'
 import React from 'react'
@@ -38,7 +39,8 @@ export {
   plusIcon,
   deleteIcon,
   editIcon,
-  searchIcon
+  searchIcon,
+  questionmarkIcon
 }
 
 export const temaBilder: {[id: string]: string} = {
