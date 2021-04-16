@@ -1,7 +1,6 @@
 import React from 'react'
-import ReactMarkdown from 'react-markdown/with-html'
+import ReactMarkdown from 'react-markdown'
 import {Paragraph2} from 'baseui/typography'
-import remarkGfm from 'remark-gfm'
 import {StatefulTooltip} from 'baseui/tooltip'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faExternalLinkAlt} from '@fortawesome/free-solid-svg-icons'
@@ -12,16 +11,26 @@ import {Block} from 'baseui/block'
 import {theme} from '../../util'
 import {ExternalLink} from './RouteLink'
 import {markdownLink} from '../../util/config'
+import remarkGfm from 'remark-gfm'
+import rehypeRaw from 'rehype-raw'
+import rehypeSanitize from 'rehype-sanitize'
 
-export const Markdown = (props: {source?: string, sources?: string[], escapeHtml?: boolean, noMargin?: boolean, shortenLinks?: boolean, vertical?: boolean}) => {
+export const Markdown = ({
+                           vertical,
+                           escapeHtml = true,
+                           shortenLinks,
+                           noMargin,
+                           source,
+                           sources: sourcesOrig
+                         }: {source?: string, sources?: string[], escapeHtml?: boolean, noMargin?: boolean, shortenLinks?: boolean, vertical?: boolean}) => {
   const renderers = {
-    paragraph: (parProps: any) => {
+    p: (parProps: any) => {
       const {children} = parProps
-      return <Paragraph2 marginTop={props.noMargin ? 0 : undefined} marginBottom={props.noMargin ? 0 : undefined}>{children}</Paragraph2>
+      return <Paragraph2 marginTop={noMargin ? 0 : undefined} marginBottom={noMargin ? 0 : undefined}>{children}</Paragraph2>
     },
-    link: (linkProps: any) => {
+    href: (linkProps: any) => {
       const {children, href, node} = linkProps
-      const content = props.shortenLinks && node.children[0]?.value.indexOf('http') === 0 ? 'Lenke' : children
+      const content = shortenLinks && node.children[0]?.value.indexOf('http') === 0 ? 'Lenke' : children
       return <StatefulTooltip content={href}>
         <span>
         <ExternalLink href={href}>
@@ -32,17 +41,18 @@ export const Markdown = (props: {source?: string, sources?: string[], escapeHtml
     }
   }
 
-  const sources: string[] = props.sources || (props.source ? [props.source] : [''])
+  const sources: string[] = sourcesOrig || (source ? [source] : [''])
+  const htmlPlugins = escapeHtml ? [] : [rehypeSanitize, rehypeRaw]
   return <Block $style={{
     // Fix font color in lists etc
     color: theme.colors.contentPrimary,
     fontFamily: theme.typography.font400.fontFamily,
     fontWeight: theme.typography.font400.fontWeight
   }}>
-    <ReactMarkdown source={sources.join(props.vertical ? '\n\n' : ', ')}
-                   escapeHtml={props.escapeHtml}
-                   renderers={renderers}
-                   plugins={[remarkGfm]}
+    <ReactMarkdown children={sources.join(vertical ? '\n\n' : ', ')}
+                   components={renderers}
+                   remarkPlugins={[remarkGfm]}
+                   rehypePlugins={htmlPlugins}
     />
   </Block>
 }
