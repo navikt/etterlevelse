@@ -56,8 +56,11 @@ export const MailLogPage = () => {
     <H4>{intl.mailLog}</H4>
     {log?.content.map((l, i) => {
       let html = l.body
-      html = html.substring(l.body.indexOf('<body>') + 6)
-      html = html.substring(0, html.lastIndexOf('</body>'))
+      const bodyIdx = l.body.indexOf('<body>')
+      if (bodyIdx >= 0) {
+        html = html.substring(l.body.indexOf('<body>') + 6)
+        html = html.substring(0, html.lastIndexOf('</body>'))
+      }
       // some odd bug in html parser didnt like newlines inside <ul>
       html = html.replace(/\n/g, '')
       const rowNum = log.pageNumber * log.pageSize + i + 1
