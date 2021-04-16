@@ -3,11 +3,11 @@ import {Block} from 'baseui/block'
 import {StyledSpinnerNext} from 'baseui/spinner'
 import {H4, Label2} from 'baseui/typography'
 import {StatefulTextarea} from 'baseui/textarea'
-import ReactMarkdown from 'react-markdown/with-html'
 import {getSettings, Settings, writeSettings} from './SettingsApi'
 import {intl} from '../../../util/intl/intl'
 import {theme} from '../../../util'
 import Button from '../../common/Button'
+import {Markdown} from '../../common/Markdown'
 
 export const SettingsPage = () => {
   const [loading, setLoading] = React.useState<boolean>(true)
@@ -66,7 +66,7 @@ const FrontpageMessage = (props: {message?: string, setMessage: (message: string
             />
           </Block>
           <Block width="50%">
-            <ReactMarkdown source={props.message || ''} escapeHtml={false}/>
+            <Markdown source={props.message || ''} escapeHtml={false}/>
           </Block>
         </Block>
       </Block>
