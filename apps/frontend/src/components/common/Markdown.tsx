@@ -13,7 +13,6 @@ import {ExternalLink} from './RouteLink'
 import {markdownLink} from '../../util/config'
 import remarkGfm from 'remark-gfm'
 import rehypeRaw from 'rehype-raw'
-import rehypeSanitize from 'rehype-sanitize'
 
 export const Markdown = ({
                            vertical,
@@ -42,7 +41,7 @@ export const Markdown = ({
   }
 
   const sources: string[] = sourcesOrig || (source ? [source] : [''])
-  const htmlPlugins = escapeHtml ? [] : [rehypeSanitize, rehypeRaw]
+  const htmlPlugins = escapeHtml ? [] : [rehypeRaw]
   return <Block $style={{
     // Fix font color in lists etc
     color: theme.colors.contentPrimary,
