@@ -2,16 +2,16 @@ import * as React from 'react'
 import CustomizedStatefulTooltip from './CustomizedStatefulTooltip'
 import { questionmarkIcon } from '../Images'
 import { Block } from 'baseui/block'
-import { LabelLarge } from 'baseui/typography'
+import { LabelMedium } from 'baseui/typography'
 
 const LabelWithToolTip = (props: { label: string, tooltip?: React.ReactNode, fontColor?: string}) => {
   if (props.tooltip) {
     return (
       <Block display="flex" alignItems="center">
         <Block marginRight="scale200">
-          <LabelLarge $style={{color: props.fontColor ? props.fontColor : 'black'}}>
+          <LabelMedium $style={{color: props.fontColor ? props.fontColor : 'black'}}>
             {props.label}
-          </LabelLarge>
+          </LabelMedium>
         </Block>
         <CustomizedStatefulTooltip content={() => (<Block>{props.tooltip}</Block>)}>
           <Block $style={{ cursor: 'pointer' }}>

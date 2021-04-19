@@ -139,7 +139,9 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
                       <TextAreaField label='Utfyllende beskrivelse' name='utdypendeBeskrivelse' markdown shortenLinks onImageUpload={onImageUpload(krav.id)}
                         tooltip={'Legg til en utfyllende beskrivelse av kravet. Benyttes kun der det er behov for det.'} />
                       <TextAreaField label='Endringer fra forrige versjon' name='versjonEndringer' tooltip={'Gi informasjon om hva som er endret siden forrige versjon av kravet.'} />
-
+                      <Block marginBottom='49px'>
+                      <LabelLarge><b>Dokumentasjon og relevanse</b></LabelLarge>
+                      </Block>
                       <MultiInputField label='Dokumentasjon' name='dokumentasjon' link
                         tooltip={'Legg inn referanse til utdypende dokumentasjon (lenke). Eksempelvis til navet, eksterne nettsider eller Websak.'} />
                       <KravRegelverkEdit />
