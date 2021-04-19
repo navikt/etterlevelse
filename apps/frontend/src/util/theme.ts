@@ -69,9 +69,12 @@ export const theme = createTheme(primitives, overrides)
 export const pageWidth = '750px'
 
 const breakpoints: any = {
-  small: 550,
-  medium: 800,
-  large: 1200,
+  xsmall: 375,
+  small: 480,
+  medium: 648,
+  large: 768,
+  xlarge: 960,
+  xxlarge: 1276
 }
 
 const ResponsiveTheme = Object.keys(breakpoints).reduce(
