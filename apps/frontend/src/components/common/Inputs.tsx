@@ -5,8 +5,6 @@ import { Input } from 'baseui/input'
 import React, { ReactNode, useState } from 'react'
 import { Block } from 'baseui/block'
 import Button from './Button'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import { RenderTagList } from './TagList'
 import { Select, Value } from 'baseui/select'
 import { Code, codelist, ListName } from '../../services/Codelist'
@@ -150,7 +148,7 @@ export const MultiInputField = (props: { label: string, name: string, link?: boo
         return (
           <FormControl label={<LabelWithTooltip label={props.label} tooltip={props.tooltip} />} error={p.form.touched[props.name] && p.form.errors[props.name]} caption={props.caption}>
             <Block>
-              <Block display='flex'>
+              <Block display='flex' height='40px'>
                 <Input onKeyDown={onKey} value={val} inputRef={inputRef}
                   onChange={e => setVal((e.target as HTMLInputElement).value)}
                   onBlur={!props.link ? add : undefined}
@@ -162,7 +160,18 @@ export const MultiInputField = (props: { label: string, name: string, link?: boo
                     placeholder={'Lenkenavn'}
                   />
                 }
-                <Button type='button' onClick={add} marginLeft label={'Legg til'}><FontAwesomeIcon icon={faPlus} /> </Button>
+                <Block minWidth='107px'>
+                  <Button
+                    type='button'
+                    onClick={add} marginLeft
+                    label={'Legg til'}
+                    $style={{ border: '2px solid #102723', borderRadius: '4px' }}
+                    kind='tertiary'
+                    size='compact'
+                  >
+                    Legg til
+                  </Button>
+                </Block>
               </Block>
               <RenderTagList
                 list={(p.form.values[props.name] as string[]).map(linkNameFor)}
