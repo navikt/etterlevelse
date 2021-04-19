@@ -14,7 +14,7 @@ import { KravRegelverkEdit } from './Edit/KravRegelverkEdit'
 import { KravSuksesskriterierEdit } from './Edit/KravSuksesskriterieEdit'
 import { EditBegreper } from './Edit/KravBegreperEdit'
 import { CustomizedTab, CustomizedTabs } from '../common/CustomizedTabs'
-import { LabelLarge, H4, H5 } from 'baseui/typography'
+import { LabelLarge, H1, H2 } from 'baseui/typography'
 import CustomizedModal from '../common/CustomizedModal'
 import Button from '../common/Button'
 
@@ -27,6 +27,10 @@ type EditKravProps = {
 }
 
 export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravProps) => {
+
+  const [modalIsOpen, setmodalIsOpen] = React.useState(false)
+  const [stickyHeader, setStickyHeader] = React.useState(false)
+
   const submit = async (krav: KravQL) => {
     if (krav.id) {
       close(await updateKrav(krav))
@@ -35,11 +39,42 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
     }
   }
 
+  const handleModalScrollEvent = () => {
+    if (window.pageYOffset >= 0) {
+      setStickyHeader(true)
+    } else {
+      setStickyHeader(false)
+    }
+  }
+
+  React.useEffect(() => {
+    if(!modalIsOpen) {
+      setStickyHeader(false)
+    }
+
+    document.querySelector('.modal')?.addEventListener('scroll', () => handleModalScrollEvent())
+
+  }, [modalIsOpen])
+
   return (
     <Block>
       <CustomizedModal
         onClose={() => setIsOpen(false)}
         isOpen={isOpen}
+        overrides={{
+          Root: {
+            props: (props: any) => {
+              if (props.$isVisible) {
+                setmodalIsOpen(props.$isOpen)
+              }
+
+              return {
+                ...props,
+                className: 'modal'
+              }
+            }
+          }
+        }}
       >
         <Formik
           onSubmit={submit}
@@ -56,9 +91,15 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
               paddingRight='32px'
               position='sticky'
               top={0}
-              $style={{zIndex: 1}}
+              display={!stickyHeader ? 'block' : 'flex'}
+              $style={{ zIndex: 1 }}
             >
-              <Block display='flex' width='100%' justifyContent='flex-end'>
+              {stickyHeader && (
+                <Block display='flex' width='100%' justifyContent='flex-start'>
+                  <LabelLarge $style={{ color: '#F8F8F8' }}>{`K${krav.kravNummer}.${krav.kravVersjon} ${krav.navn}`}</LabelLarge>
+                </Block>
+              )}
+              <Block display='flex' justifyContent='flex-end'>
                 <Button
                   size='compact'
                   $style={{ color: '#112724', backgroundColor: '#F8F8F8', ':hover': { backgroundColor: '#F8F8F8' } }}
@@ -78,10 +119,15 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
                   Avbryt
                 </Button>
               </Block>
-              <Block>
-                <H4 $style={{ color: '#F8F8F8' }}>Rediger kravside: </H4>
-                <H5 $style={{ color: '#F8F8F8' }}>{`K${krav.kravNummer}.${krav.kravVersjon} ${krav.navn}`} </H5>
-              </Block>
+              {
+
+              }
+              {!stickyHeader && (
+                <Block>
+                  <H1 $style={{ color: '#F8F8F8' }}>Rediger kravside: </H1>
+                  <H2 $style={{ color: '#F8F8F8' }}>{`K${krav.kravNummer}.${krav.kravVersjon} ${krav.navn}`} </H2>
+                </Block>
+              )}
             </Block>
             <Block>
               <Block backgroundColor='#F1F1F1' paddingLeft='212px' paddingRight='212px'>
