@@ -39,20 +39,12 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
     }
   }
 
-  const handleModalScrollEvent = () => {
-    if (window.pageYOffset >= 0) {
-      setStickyHeader(true)
-    } else {
-      setStickyHeader(false)
-    }
-  }
-
   React.useEffect(() => {
     if(!modalIsOpen) {
       setStickyHeader(false)
     }
 
-    document.querySelector('.modal')?.addEventListener('scroll', () => handleModalScrollEvent())
+    document.querySelector('.modal')?.addEventListener('scroll', () => setStickyHeader(true))
 
   }, [modalIsOpen])
 
