@@ -158,7 +158,7 @@ export const MultiInputField = (props: { label: string, name: string, link?: boo
                       />
                     </Block>
                   }
-                  <Block marginLeft='12px' flex={1}>
+                  <Block marginLeft={ props.link ? '12px' : '0px'} flex={1}>
                     <LabelWithTooltip label={props.label} tooltip={props.tooltip} />
                     <Input onKeyDown={onKey} value={val} inputRef={inputRef}
                       onChange={e => setVal((e.target as HTMLInputElement).value)}
