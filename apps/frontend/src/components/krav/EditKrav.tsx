@@ -135,17 +135,17 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
                     <CustomizedTab title={<LabelLarge>Om kravet</LabelLarge>}>
                       <KravSuksesskriterierEdit />
                       <TextAreaField label='Beskrivelse' name='beskrivelse' markdown shortenLinks onImageUpload={onImageUpload(krav.id)} tooltip={'Beskriv selve innholdet i kravet.'} />
-
+{/* 
                       <TextAreaField label='Utfyllende beskrivelse' name='utdypendeBeskrivelse' markdown shortenLinks onImageUpload={onImageUpload(krav.id)}
-                        tooltip={'Legg til en utfyllende beskrivelse av kravet. Benyttes kun der det er behov for det.'} />
+                        tooltip={'Legg til en utfyllende beskrivelse av kravet. Benyttes kun der det er behov for det.'} /> */}
                       <TextAreaField label='Endringer fra forrige versjon' name='versjonEndringer' tooltip={'Gi informasjon om hva som er endret siden forrige versjon av kravet.'} />
                       <Block marginBottom='49px'>
                       <LabelLarge><b>Dokumentasjon og relevanse</b></LabelLarge>
                       </Block>
-                      <MultiInputField label='Dokumentasjon' name='dokumentasjon' link
-                        tooltip={'Legg inn referanse til utdypende dokumentasjon (lenke). Eksempelvis til navet, eksterne nettsider eller Websak.'} />
+                      <MultiInputField linkLabel='Navn på dokumentasjon' name='dokumentasjon' link label='Lenke eller websaknr' tooltip='Lenke til dokumentasjon'
+                        linkTooltip={'Legg inn referanse til utdypende dokumentasjon (lenke). Eksempelvis til navet, eksterne nettsider eller Websak.'} />
                       <KravRegelverkEdit />
-                      <MultiInputField label='Rettskilder' name='rettskilder' link />
+                      {/* <MultiInputField label='Rettskilder' name='rettskilder' link /> */}
 
                       <MultiInputField label='Tagger' name='tagger' tooltip={'Tag kravet med et eller flere nøkkelord. Hensikten er å skape relasjon(er) til andre krav.'} />
                       <MultiOptionField label='Kravet er relevant for' name='relevansFor' listName={ListName.RELEVANS}
