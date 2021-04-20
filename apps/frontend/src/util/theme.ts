@@ -35,10 +35,10 @@ const overrides: RecursivePartial<Theme> = {
     buttonTertiaryText: '#112724',
     buttonTertiaryHover: 'transparent',
     linkVisited: primitives.primary400,
-    inputFill: primitives.primary50,
-    inputFillActive: primitives.primary150,
+    inputFill: '#FFFFFF',
+    inputFillActive: '#FFFFFF',
     inputEnhancerFill: primitives.primary100,
-    borderFocus: primitives.primary150, // same as inputFillActive to hide
+    borderFocus: '#112825', // same as inputFillActive to hide
 
     tabBarFill: colors.white,
   },
