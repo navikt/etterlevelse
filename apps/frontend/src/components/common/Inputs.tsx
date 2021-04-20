@@ -113,7 +113,7 @@ const linkNameFor = (t: string) => {
   return t
 }
 
-export const MultiInputField = (props: { label: string, name: string, link?: boolean, caption?: ReactNode, tooltip?: string }) => {
+export const MultiInputField = (props: { label: string, name: string, link?: boolean, linkLabel?: string, linkTooltip?: string, caption?: ReactNode, tooltip?: string }) => {
   const [val, setVal] = useState('')
   const [linkName, setLinkName] = useState('')
   const inputRef = React.useRef<HTMLInputElement>(null)
@@ -146,22 +146,27 @@ export const MultiInputField = (props: { label: string, name: string, link?: boo
         const onKey = (e: React.KeyboardEvent) => (e.key === 'Enter') && add()
 
         return (
-          <FormControl label={<LabelWithTooltip label={props.label} tooltip={props.tooltip} />} error={p.form.touched[props.name] && p.form.errors[props.name]} caption={props.caption}>
+          <FormControl error={p.form.touched[props.name] && p.form.errors[props.name]} caption={props.caption}>
             <Block>
-              <Block display='flex' height='40px'>
+              <Block display='flex'>
+                {props.link &&
+                  <Block flex={1}>
+                    <LabelWithTooltip label={props.linkLabel} tooltip={props.linkTooltip} />
+                    <Input onKeyDown={onKey} value={linkName}
+                      onChange={e => setLinkName((e.target as HTMLInputElement).value)}
+                    />
+                  </Block>
+                }
+                <Block marginLeft='12px' flex={1}>
+                <LabelWithTooltip label={props.label} tooltip={props.tooltip} />
                 <Input onKeyDown={onKey} value={val} inputRef={inputRef}
                   onChange={e => setVal((e.target as HTMLInputElement).value)}
                   onBlur={!props.link ? add : undefined}
-                  placeholder={props.link ? 'Lenke eller tekst' : 'Tekst'}
                 />
-                {props.link &&
-                  <Input onKeyDown={onKey} value={linkName}
-                    onChange={e => setLinkName((e.target as HTMLInputElement).value)}
-                    placeholder={'Lenkenavn'}
-                  />
-                }
+                </Block>
                 <Block minWidth='107px'>
-                  <Button
+                  <Block alignItems='baseline'>
+                  <Button 
                     type='button'
                     onClick={add} marginLeft
                     label={'Legg til'}
@@ -171,6 +176,7 @@ export const MultiInputField = (props: { label: string, name: string, link?: boo
                   >
                     Legg til
                   </Button>
+                  </Block>
                 </Block>
               </Block>
               <RenderTagList
