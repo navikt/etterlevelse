@@ -53,7 +53,7 @@ const KriterieList = ({ p }: { p: FieldArrayRenderProps }) => {
   return (
     <FormControl label={<LabelWithTooltip label={'Suksesskriterier'} tooltip={'Definer hvilke kriterier som skal til for at kravet er oppnådd. Formålet er å identifisere en terskel for kravoppnåelse og en enhetlig besvarelse på tvers.'} />} >
       <Block>
-        <Block display='flex' height='40px'>
+        <Block display='flex'>
           <Input onKeyDown={onKey} value={navn} inputRef={inputRef}
             onChange={e => setNavn((e.target as HTMLInputElement).value)}
             onBlur={add} placeholder={'Suksesskriterie'}
