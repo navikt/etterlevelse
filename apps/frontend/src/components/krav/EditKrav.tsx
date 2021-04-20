@@ -40,7 +40,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
   }
 
   React.useEffect(() => {
-    if(!modalIsOpen) {
+    if (!modalIsOpen) {
       setStickyHeader(false)
     }
 
@@ -135,30 +135,45 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
                     <CustomizedTab title={<LabelLarge>Om kravet</LabelLarge>}>
                       <KravSuksesskriterierEdit />
                       <TextAreaField label='Beskrivelse' name='beskrivelse' markdown shortenLinks onImageUpload={onImageUpload(krav.id)} tooltip={'Beskriv selve innholdet i kravet.'} />
-{/* 
+                      {/* 
                       <TextAreaField label='Utfyllende beskrivelse' name='utdypendeBeskrivelse' markdown shortenLinks onImageUpload={onImageUpload(krav.id)}
                         tooltip={'Legg til en utfyllende beskrivelse av kravet. Benyttes kun der det er behov for det.'} /> */}
                       <TextAreaField label='Endringer fra forrige versjon' name='versjonEndringer' tooltip={'Gi informasjon om hva som er endret siden forrige versjon av kravet.'} />
+
                       <Block marginBottom='49px'>
-                      <LabelLarge><b>Dokumentasjon og relevanse</b></LabelLarge>
+                        <LabelLarge><b>Dokumentasjon og relevanse</b></LabelLarge>
                       </Block>
+
                       <MultiInputField linkLabel='Navn på dokumentasjon' name='dokumentasjon' link label='Lenke eller websaknr' tooltip='Lenke til dokumentasjon'
                         linkTooltip={'Legg inn referanse til utdypende dokumentasjon (lenke). Eksempelvis til navet, eksterne nettsider eller Websak.'} />
                       <KravRegelverkEdit />
+                      <MultiInputField label='Relevante implementasjoner' name='implementasjoner' tooltip={'Vis til gode eksisterende implementasjoner som ivaretar kravet.'} />
                       {/* <MultiInputField label='Rettskilder' name='rettskilder' link /> */}
 
-                      <MultiInputField label='Tagger' name='tagger' tooltip={'Tag kravet med et eller flere nøkkelord. Hensikten er å skape relasjon(er) til andre krav.'} />
-                      <MultiOptionField label='Kravet er relevant for' name='relevansFor' listName={ListName.RELEVANS}
+                      <Block marginBottom='49px'>
+                        <LabelLarge><b>Gruppering og etiketter</b></LabelLarge>
+                      </Block>
+
+                      <MultiOptionField label='Relevant for' name='relevansFor' listName={ListName.RELEVANS}
                         tooltip={'Velg kategori(er) kravet er relevant for i nedtrekksmenyen. \n'} />
-                      <MultiInputField label='Relevante implementasjoner' name='implementasjoner' tooltip={'Vis til gode eksisterende implementasjoner som ivaretar kravet.'} />
+
                       <EditBegreper />
+
+                      <Block marginBottom='49px'>
+                        <LabelLarge><b>Egenskaper</b></LabelLarge>
+                      </Block>
+
+                      <KravVarslingsadresserEdit />
+
+                      <OptionField label='Status' name='status' options={Object.values(KravStatus).map(id => ({ id, label: kravStatus(id) }))}
+                        tooltip={'Velg status for kravet. Utkast er kun synlig for kraveier selv. Aktiv/utgått er synlig for alle.'} />
+
+                      <MultiInputField label='Tagger' name='tagger' tooltip={'Tag kravet med et eller flere nøkkelord. Hensikten er å skape relasjon(er) til andre krav.'} />
+
 
                       <DateField label='Gyldig from' name='periode.start' tooltip={'Legg til gyldighetsperiode for kravet der det er aktuelt. Hvis ikke skal feltene være blanke.'} />
                       <DateField label='Gyldig tom' name='periode.slutt' tooltip={'Legg til gyldighetsperiode for kravet der det er aktuelt. Hvis ikke skal feltene være blanke.'} />
 
-                      <OptionField label='Status' name='status' options={Object.values(KravStatus).map(id => ({ id, label: kravStatus(id) }))}
-                        tooltip={'Velg status for kravet. Utkast er kun synlig for kraveier selv. Aktiv/utgått er synlig for alle.'} />
-                      <KravVarslingsadresserEdit />
                       {/* <OptionField label='Avdeling' name='avdeling' listName={ListName.AVDELING} tooltip={'Angi hvilken avdeling som har det overordnede ansvaret for kravet.'} /> */}
                       <OptionField label='Ansvarlig' name='Ansvarlig' listName={ListName.UNDERAVDELING} tooltip={'Angi hvilken seksjon/underavdeling som har ansvaret for kravet.'} />
 
