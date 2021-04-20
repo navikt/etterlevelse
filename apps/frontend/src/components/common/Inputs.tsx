@@ -149,24 +149,25 @@ export const MultiInputField = (props: { label: string, name: string, link?: boo
           <FormControl error={p.form.touched[props.name] && p.form.errors[props.name]} caption={props.caption}>
             <Block>
               <Block display='flex'>
-                {props.link &&
-                  <Block flex={1}>
-                    <LabelWithTooltip label={props.linkLabel} tooltip={props.linkTooltip} />
-                    <Input onKeyDown={onKey} value={linkName}
-                      onChange={e => setLinkName((e.target as HTMLInputElement).value)}
+                <Block display='flex' width='100%'>
+                  {props.link &&
+                    <Block flex={1}>
+                      <LabelWithTooltip label={props.linkLabel} tooltip={props.linkTooltip} />
+                      <Input onKeyDown={onKey} value={linkName}
+                        onChange={e => setLinkName((e.target as HTMLInputElement).value)}
+                      />
+                    </Block>
+                  }
+                  <Block marginLeft='12px' flex={1}>
+                    <LabelWithTooltip label={props.label} tooltip={props.tooltip} />
+                    <Input onKeyDown={onKey} value={val} inputRef={inputRef}
+                      onChange={e => setVal((e.target as HTMLInputElement).value)}
+                      onBlur={!props.link ? add : undefined}
                     />
                   </Block>
-                }
-                <Block marginLeft='12px' flex={1}>
-                <LabelWithTooltip label={props.label} tooltip={props.tooltip} />
-                <Input onKeyDown={onKey} value={val} inputRef={inputRef}
-                  onChange={e => setVal((e.target as HTMLInputElement).value)}
-                  onBlur={!props.link ? add : undefined}
-                />
                 </Block>
-                <Block minWidth='107px'>
-                  <Block alignItems='baseline'>
-                  <Button 
+                <Block minWidth='107px' $style={{bottom: '-36px', position: 'relative'}}>
+                  <Button
                     type='button'
                     onClick={add} marginLeft
                     label={'Legg til'}
@@ -176,7 +177,6 @@ export const MultiInputField = (props: { label: string, name: string, link?: boo
                   >
                     Legg til
                   </Button>
-                  </Block>
                 </Block>
               </Block>
               <RenderTagList
