@@ -166,7 +166,7 @@ export const MultiInputField = (props: { label: string, name: string, link?: boo
                     />
                   </Block>
                 </Block>
-                <Block minWidth='107px' $style={{bottom: '-36px', position: 'relative'}}>
+                <Block minWidth='107px' $style={{bottom: '-33px', position: 'relative'}}>
                   <Button
                     type='button'
                     onClick={add} marginLeft

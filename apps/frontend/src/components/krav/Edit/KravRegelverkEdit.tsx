@@ -60,7 +60,7 @@ export const KravRegelverkEdit = () => {
                       />
                     </Block>
 
-                    <Block minWidth='107px' $style={{ bottom: '-36px', position: 'relative' }}>
+                    <Block minWidth='107px' $style={{ bottom: '-33px', position: 'relative' }}>
                       <Button
                         type='button'
                         size='compact'
