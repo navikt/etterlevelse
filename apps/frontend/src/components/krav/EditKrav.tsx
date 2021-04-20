@@ -140,7 +140,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
                         tooltip={'Legg til en utfyllende beskrivelse av kravet. Benyttes kun der det er behov for det.'} /> */}
 
                       <Block marginBottom='49px'>
-                        <LabelLarge><b>Dokumentasjon og relevanse</b></LabelLarge>
+                        <LabelLarge><b>Dokumentasjon</b></LabelLarge>
                       </Block>
 
                       <MultiInputField linkLabel='Navn på dokumentasjon' name='dokumentasjon' link label='Lenke eller websaknr' tooltip='Lenke til dokumentasjon'
@@ -162,10 +162,10 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
                         <LabelLarge><b>Egenskaper</b></LabelLarge>
                       </Block>
 
-                      <KravVarslingsadresserEdit />
-
                       <OptionField label='Status' name='status' options={Object.values(KravStatus).map(id => ({ id, label: kravStatus(id) }))}
                         tooltip={'Velg status for kravet. Utkast er kun synlig for kraveier selv. Aktiv/utgått er synlig for alle.'} />
+                        
+                      <KravVarslingsadresserEdit />
 
                       <MultiInputField label='Tagger' name='tagger' tooltip={'Tag kravet med et eller flere nøkkelord. Hensikten er å skape relasjon(er) til andre krav.'} />
 
