@@ -4,12 +4,12 @@ import { questionmarkIcon } from '../Images'
 import { Block } from 'baseui/block'
 import { LabelMedium } from 'baseui/typography'
 
-const LabelWithToolTip = (props: { label: string, tooltip?: React.ReactNode, fontColor?: string}) => {
+const LabelWithToolTip = (props: { label?: string, tooltip?: React.ReactNode, fontColor?: string }) => {
   if (props.tooltip) {
     return (
       <Block display="flex" alignItems="center">
         <Block marginRight="scale200">
-          <LabelMedium $style={{color: props.fontColor ? props.fontColor : 'black'}}>
+          <LabelMedium $style={{ color: props.fontColor ? props.fontColor : 'black' }}>
             {props.label}
           </LabelMedium>
         </Block>
@@ -24,7 +24,9 @@ const LabelWithToolTip = (props: { label: string, tooltip?: React.ReactNode, fon
 
   return (
     <Block>
-      {props.label}
+      <LabelMedium>
+        {props.label}
+      </LabelMedium>
     </Block>
   )
 }
