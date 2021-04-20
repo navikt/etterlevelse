@@ -14,16 +14,22 @@ import ToTopCircle from '../../resources/ToTopCircle.svg'
 
 export const Footer = () => {
   const [showButtonToTop, setShowButtonToTop] = React.useState(false)
+  const [pageScroll, setPageScroll] = React.useState(window.pageYOffset)
 
-  const checkScrollTop = () => {
-    if (!showButtonToTop && window.pageYOffset > 100) {
-      setShowButtonToTop(true)
-    } else if (showButtonToTop && window.pageYOffset <= 100) {
-      setShowButtonToTop(false)
+  React.useEffect(() => {
+    const checkScrollTop = () => {
+      setPageScroll(window.pageYOffset)
+      if (!showButtonToTop && window.pageYOffset > 100) {
+        setShowButtonToTop(true)
+      } else if (showButtonToTop && window.pageYOffset <= 100) {
+        setShowButtonToTop(false)
+      }
     }
-  }
+  
+    window.addEventListener('scroll', checkScrollTop)
 
-  window.addEventListener('scroll', checkScrollTop)
+    return () =>  window.removeEventListener('scroll', checkScrollTop)
+  }, [pageScroll])
 
   return (
     <Block display='flex' width='calc(100% - 80px)' height='100px' backgroundColor='#112724' paddingRight='40px' paddingLeft='40px' position='relative' $style={{left:0, right: 0, bottom: 0}}>
@@ -32,7 +38,7 @@ export const Footer = () => {
         justifyContent='center'
         alignItems='center' overrides={{ Block: { props: { role: 'contentinfo' } } }}
       >
-        <Block width='100%' display="flex" justifyContent='space-around' alignItems='center' overrides={{ Block: { props: { role: 'navigation', 'aria-label': 'Ekstern lenker' } } }}>
+        <Block width='100%'  display={['block','block','flex','flex']} justifyContent={['space-around']} alignItems='center' overrides={{ Block: { props: { role: 'navigation', 'aria-label': 'Ekstern lenker' } } }}>
           <ExternalLink href={datajegerSlackLink} hideUnderline>
             <Block display="flex" alignItems="center">
               <img src={SlackLogo} width="60px" alt="slack logo" />

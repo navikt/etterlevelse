@@ -1,32 +1,32 @@
-import {Block} from 'baseui/block'
-import {HeadingLarge, HeadingSmall, LabelLarge} from 'baseui/typography'
-import {useHistory, useParams} from 'react-router-dom'
-import {deleteKrav, KravIdParams, mapToFormVal} from '../api/KravApi'
-import React, {useEffect, useRef, useState} from 'react'
-import {EtterlevelseQL, Krav, KravQL, KravStatus} from '../constants'
+import { Block } from 'baseui/block'
+import { H2, H4, H5, HeadingSmall, LabelLarge } from 'baseui/typography'
+import { useHistory, useParams } from 'react-router-dom'
+import { deleteKrav, KravIdParams, mapToFormVal } from '../api/KravApi'
+import React, { useEffect, useRef, useState } from 'react'
+import { EtterlevelseQL, Krav, KravQL, KravStatus } from '../constants'
 import Button from '../components/common/Button'
-import {ViewKrav} from '../components/krav/ViewKrav'
-import {EditKrav} from '../components/krav/EditKrav'
-import RouteLink, {ObjectLink} from '../components/common/RouteLink'
-import {LoadingSkeleton} from '../components/common/LoadingSkeleton'
-import {user} from '../services/User'
-import {theme} from '../util'
-import {FormikProps} from 'formik'
-import {DeleteItem} from '../components/DeleteItem'
-import {Cell, Row, Table} from '../components/common/Table'
-import {Spinner} from '../components/common/Spinner'
-import {Teams} from '../components/common/TeamName'
-import {marginAll} from '../components/common/Style'
-import {ObjectType} from '../components/admin/audit/AuditTypes'
-import {behandlingName} from '../api/BehandlingApi'
-import {etterlevelseStatus} from './EtterlevelsePage'
-import {gql, useQuery} from '@apollo/client'
-import {Tilbakemeldinger} from '../components/krav/Tilbakemelding'
+import { ViewKrav } from '../components/krav/ViewKrav'
+import { EditKrav } from '../components/krav/EditKrav'
+import RouteLink, { ObjectLink } from '../components/common/RouteLink'
+import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
+import { user } from '../services/User'
+import { theme } from '../util'
+import { FormikProps } from 'formik'
+import { DeleteItem } from '../components/DeleteItem'
+import { Cell, Row, Table } from '../components/common/Table'
+import { Spinner } from '../components/common/Spinner'
+import { Teams } from '../components/common/TeamName'
+import { marginAll } from '../components/common/Style'
+import { ObjectType } from '../components/admin/audit/AuditTypes'
+import { behandlingName } from '../api/BehandlingApi'
+import { etterlevelseStatus } from './EtterlevelsePage'
+import { gql, useQuery } from '@apollo/client'
+import { Tilbakemeldinger } from '../components/krav/Tilbakemelding'
 import CustomizedTag from '../components/common/CustomizedTag'
-import {chevronLeft, editIcon, plusIcon} from '../components/Images'
-import {Label} from '../components/common/PropertyLabel'
-import {CustomizedTab, CustomizedTabs} from '../components/common/CustomizedTabs'
-import {pageWidth} from '../util/theme'
+import { chevronLeft, editIcon, plusIcon } from '../components/Images'
+import { Label } from '../components/common/PropertyLabel'
+import { CustomizedTab, CustomizedTabs } from '../components/common/CustomizedTabs'
+import { pageWidth } from '../util/theme'
 
 export const kravNumView = (it: { kravVersjon: number, kravNummer: number }) => `K${it.kravNummer}.${it.kravVersjon}`
 export const kravName = (krav: Krav) => `${kravNumView(krav)}`
@@ -88,9 +88,8 @@ export const KravPage = () => {
       {kravLoading && <LoadingSkeleton header='Krav' />}
       {!kravLoading &&
         <Block>
-          <Block paddingLeft='40px' paddingRight='40px' height='296px' display='flex' flexDirection='column' backgroundColor='#112724' justifyContent='center'>
-
-            <Block display='flex' width='100%' justifyContent='center'>
+          <Block paddingLeft='40px' paddingRight='40px' display='flex' flexDirection='column' backgroundColor='#112724' justifyContent='center'>
+            <Block display='flex' width='100%' justifyContent='center' marginTop='25px'>
               <Block flex='1' display='flex' justifyContent='flex-start'>
                 <RouteLink href={'/krav'} hideUnderline>
                   <Button startEnhancer={<img alt={'Chevron left'} src={chevronLeft} />} size='compact' kind='tertiary' $style={{ color: '#F8F8F8' }}> Tilbake</Button>
@@ -98,35 +97,34 @@ export const KravPage = () => {
               </Block>
 
               <Block flex='1' display='flex' justifyContent='flex-end'>
-                {krav?.id && user.isKraveier() && !edit && <Button startEnhancer={<img alt='add' src={plusIcon} />} onClick={newVersion} marginLeft size='compact' kind='tertiary' $style={{ color: '#F8F8F8' }}>Ny versjon</Button>}
-                {krav?.id && user.isKraveier() && !edit && <DeleteItem fun={() => deleteKrav(krav.id)} redirect={'/krav'} />}
-                {(edit || (krav?.id && user.isKraveier())) &&
+                {krav?.id && user.isKraveier() && <Button startEnhancer={<img alt='add' src={plusIcon} />} onClick={newVersion} marginLeft size='compact' kind='tertiary' $style={{ color: '#F8F8F8' }}>Ny versjon</Button>}
+                {krav?.id && user.isKraveier() && <DeleteItem fun={() => deleteKrav(krav.id)} redirect={'/krav'} />}
+                {((krav?.id && user.isKraveier())) &&
                   <Button
-                    startEnhancer={edit ? null : <img src={editIcon} alt='edit' />}
+                    startEnhancer={<img src={editIcon} alt='edit' />}
                     size='compact'
-                    $style={{ color: edit ? '#4677A8' : '#F8F8F8' }}
-                    kind={edit ? 'secondary' : 'tertiary'}
+                    $style={{ color: '#F8F8F8' }}
+                    kind={'tertiary'}
                     onClick={() => setEdit(!edit)} marginLeft
                   >
-                    {edit ? 'Avbryt' : 'Rediger'}
+                    Rediger
                   </Button>
                 }
-                {edit && <Button size='compact' onClick={() => !formRef.current?.isSubmitting && formRef.current?.submitForm()} marginLeft>Lagre</Button>}
               </Block>
             </Block>
 
 
-            <Block width='100%' display='flex' justifyContent='center' >
+            <Block width='100%' display='flex' justifyContent='center' marginBottom='32px' >
               <Block width={pageWidth} marginTop='7px'>
                 <CustomizedTag>{krav && krav?.kravNummer !== 0 ? kravName(krav) : 'Ny'}</CustomizedTag>
-                <HeadingLarge $style={{ color: '#F8F8F8' }}>{krav && krav?.navn ? krav.navn : 'Ny'} </HeadingLarge>
+                <H2 $style={{ color: '#F8F8F8' }}>{krav && krav?.navn ? krav.navn : 'Ny'} </H2>
               </Block>
             </Block>
           </Block>
         </Block>
       }
 
-      {!edit && krav && !kravLoading &&
+      {krav && !kravLoading &&
         <Block>
           <Block paddingLeft='40px' paddingRight='40px' backgroundColor='#CCD9D7' justifyContent='center' display='flex'>
             <Block marginBottom='80px' marginTop='80px' width={pageWidth}>
@@ -137,7 +135,7 @@ export const KravPage = () => {
           <Block display='flex' justifyContent='center' width='100%'>
             <Block backgroundColor='#CCD9D7' flex={1} height='58px' minWidth='40px' />
             <Block width={pageWidth}>
-              <CustomizedTabs fontColor='#112624'>
+              <CustomizedTabs fontColor='#112624' tabBackground='#CBD9D7'>
                 <CustomizedTab title={<LabelLarge>Om kravet</LabelLarge>}>
                   <ViewKrav krav={krav} />
                 </CustomizedTab>
@@ -153,7 +151,7 @@ export const KravPage = () => {
           </Block>
         </Block>}
 
-      {edit && krav && <EditKrav krav={krav} formRef={formRef} close={k => {
+      {krav && <EditKrav isOpen={edit} setIsOpen={setEdit} krav={krav} formRef={formRef} close={k => {
         if (k) {
           if (k.id !== krav.id) {
             history.push(`/krav/${k.kravNummer}/${k.kravVersjon}`)
@@ -163,7 +161,7 @@ export const KravPage = () => {
         }
         setEdit(false)
       }} />}
-
+      
     </Block>
   )
 }

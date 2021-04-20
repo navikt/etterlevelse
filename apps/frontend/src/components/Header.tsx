@@ -123,7 +123,7 @@ const Header = (props: { noSearchBar?: boolean, noLoginButton?: boolean }) => {
   return (
     <Block paddingLeft='40px' paddingRight='40px' width='calc(100%-80px)' height='76px' overrides={{ Block: { props: { role: 'banner', 'aria-label': 'Header meny' } } }}>
       <HeaderNavigation overrides={{ Root: { style: { paddingBottom: 0, borderBottomStyle: 'none' } } }}>
-        <Block display={['block', 'block', 'none', 'none']}>
+        <Block display={['block', 'block', 'block', 'block', 'block', 'none']}>
           <BurgerMenu />
         </Block>
 
@@ -140,15 +140,15 @@ const Header = (props: { noSearchBar?: boolean, noLoginButton?: boolean }) => {
           </NavigationItem>
         </NavigationList>
 
-        <NavigationList $align={ALIGN.center}>
-          {!props.noSearchBar && (<NavigationItem $style={{ width: pageWidth }}>
-            <Block overrides={{ Block: { props: { role: 'search' } } }}>
+        <NavigationList $style={{justifyContent: 'center'}}>
+          {!props.noSearchBar && (<NavigationItem>
+            <Block flex='1' display={['none', 'none','none', 'none', 'flex', 'flex']} overrides={{ Block: { props: { role: 'search' } } }}>
               <MainSearch />
             </Block>
           </NavigationItem>)}
         </NavigationList>
 
-        {!props.noLoginButton && (<Block display={['none', 'none', 'flex', 'flex']}>
+        {!props.noLoginButton && (<Block display={['none', 'none','none', 'none', 'none', 'flex']}>
           <NavigationList $align={ALIGN.right}>
             {user.isAdmin() && (
               <NavigationItem $style={{ paddingLeft: 0 }}>

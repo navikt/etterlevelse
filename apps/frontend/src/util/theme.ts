@@ -35,10 +35,10 @@ const overrides: RecursivePartial<Theme> = {
     buttonTertiaryText: '#112724',
     buttonTertiaryHover: 'transparent',
     linkVisited: primitives.primary400,
-    inputFill: primitives.primary50,
-    inputFillActive: primitives.primary150,
+    inputFill: '#FFFFFF',
+    inputFillActive: '#FFFFFF',
     inputEnhancerFill: primitives.primary100,
-    borderFocus: primitives.primary150, // same as inputFillActive to hide
+    borderFocus: '#112825', // same as inputFillActive to hide
 
     tabBarFill: colors.white,
   },
@@ -69,9 +69,12 @@ export const theme = createTheme(primitives, overrides)
 export const pageWidth = '750px'
 
 const breakpoints: any = {
-  small: 550,
-  medium: 800,
-  large: 1200,
+  xsmall: 375,
+  small: 480,
+  medium: 648,
+  large: 768,
+  xlarge: 960,
+  xxlarge: 1276
 }
 
 const ResponsiveTheme = Object.keys(breakpoints).reduce(

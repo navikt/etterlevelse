@@ -5,8 +5,6 @@ import { Input } from 'baseui/input'
 import React, { ReactNode, useState } from 'react'
 import { Block } from 'baseui/block'
 import Button from './Button'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import { RenderTagList } from './TagList'
 import { Select, Value } from 'baseui/select'
 import { Code, codelist, ListName } from '../../services/Codelist'
@@ -17,11 +15,11 @@ import { Datepicker } from 'baseui/datepicker'
 import moment from 'moment'
 import { Radio, RadioGroup } from 'baseui/radio'
 import { MarkdownEditor, MarkdownInfo } from './Markdown'
-import LabelWithTooltip  from '../common/LabelWithTooltip'
+import LabelWithTooltip from '../common/LabelWithTooltip'
 
-export const FieldWrapper = ({ children }: { children: React.ReactNode }) => {
+export const FieldWrapper = ({ children, marginBottom }: { children: React.ReactNode, marginBottom?: string }) => {
   return (
-    <Block marginBottom='1.5rem'>
+    <Block marginBottom={marginBottom ? marginBottom : '1.5rem'}>
       {children}
     </Block>
   )
@@ -31,7 +29,7 @@ export const InputField = (props: { label: string, name: string, caption?: React
   <FieldWrapper>
     <Field name={props.name}>
       {(p: FieldProps) =>
-        <FormControl label={<LabelWithTooltip label={props.label} tooltip={props.tooltip}/>} error={p.meta.touched && p.meta.error} caption={props.caption}>
+        <FormControl overrides={{ Label: { style: { marginTop: '0px', marginBottom: '0px', paddingTop: '8px', paddingBottom: '8px' } } }} label={<LabelWithTooltip label={props.label} tooltip={props.tooltip} />} error={p.meta.touched && p.meta.error} caption={props.caption}>
           <Input {...p.field} placeholder={props.label} />
         </FormControl>
       }
@@ -39,12 +37,12 @@ export const InputField = (props: { label: string, name: string, caption?: React
   </FieldWrapper>
 )
 
-export const TextAreaField = (props: { label: string, name: string, markdown?: boolean, shortenLinks?: boolean, onImageUpload?: (file: File) => Promise<string>, caption?: ReactNode, tooltip?: string }) => {
+export const TextAreaField = (props: { marginBottom?: string, label: string, name: string, markdown?: boolean, shortenLinks?: boolean, onImageUpload?: (file: File) => Promise<string>, caption?: ReactNode, tooltip?: string }) => {
   return (
-    <FieldWrapper>
+    <FieldWrapper marginBottom={props.marginBottom}>
       <Field name={props.name}>
         {(p: FieldProps) =>
-          <FormControl label={<LabelWithTooltip label={props.label} tooltip={props.tooltip}/>} error={p.meta.touched && p.meta.error}
+          <FormControl overrides={{ ControlContainer: { style: { marginBottom: '0px' } }, Caption: { style: { marginBottom: '0px' } } }} label={<LabelWithTooltip label={props.label} tooltip={props.tooltip} />} error={p.meta.touched && p.meta.error}
             caption={props.markdown ?
               <Block display='flex' flexDirection={'column'}>
                 {props.caption} <MarkdownInfo />
@@ -92,7 +90,7 @@ export const DateField = (props: { label: string, name: string, caption?: ReactN
   <FieldWrapper>
     <Field name={props.name}>
       {(p: FieldProps) =>
-        <FormControl label={<LabelWithTooltip label={props.label} tooltip={props.tooltip}/>} error={p.meta.touched && p.meta.error} caption={props.caption}>
+        <FormControl label={<LabelWithTooltip label={props.label} tooltip={props.tooltip} />} error={p.meta.touched && p.meta.error} caption={props.caption}>
           <Datepicker
             clearable
             formatString={'dd-MM-yyyy'}
@@ -115,7 +113,7 @@ const linkNameFor = (t: string) => {
   return t
 }
 
-export const MultiInputField = (props: { label: string, name: string, link?: boolean, caption?: ReactNode, tooltip?: string }) => {
+export const MultiInputField = (props: { label: string, name: string, link?: boolean, linkLabel?: string, linkTooltip?: string, caption?: ReactNode, tooltip?: string }) => {
   const [val, setVal] = useState('')
   const [linkName, setLinkName] = useState('')
   const inputRef = React.useRef<HTMLInputElement>(null)
@@ -148,24 +146,40 @@ export const MultiInputField = (props: { label: string, name: string, link?: boo
         const onKey = (e: React.KeyboardEvent) => (e.key === 'Enter') && add()
 
         return (
-          <FormControl label={<LabelWithTooltip label={props.label} tooltip={props.tooltip}/>} error={p.form.touched[props.name] && p.form.errors[props.name]} caption={props.caption}>
+          <FormControl error={p.form.touched[props.name] && p.form.errors[props.name]} caption={props.caption}>
             <Block>
               <Block display='flex'>
-                <Input onKeyDown={onKey} value={val} inputRef={inputRef}
-                  onChange={e => setVal((e.target as HTMLInputElement).value)}
-                  onBlur={!props.link ? add : undefined}
-                  placeholder={props.link ? 'Lenke eller tekst' : 'Tekst'}
-                />
-                {props.link &&
-                  <Input onKeyDown={onKey} value={linkName}
-                    onChange={e => setLinkName((e.target as HTMLInputElement).value)}
-                    placeholder={'Lenkenavn'}
-                  />
-                }
-                <Button type='button' onClick={add} marginLeft label={'Legg til'}><FontAwesomeIcon icon={faPlus} /> </Button>
+                <Block display='flex' width='100%'>
+                  {props.link &&
+                    <Block flex={1}>
+                      <LabelWithTooltip label={props.linkLabel} tooltip={props.linkTooltip} />
+                      <Input onKeyDown={onKey} value={linkName}
+                        onChange={e => setLinkName((e.target as HTMLInputElement).value)}
+                      />
+                    </Block>
+                  }
+                  <Block marginLeft={ props.link ? '12px' : '0px'} flex={1}>
+                    <LabelWithTooltip label={props.label} tooltip={props.tooltip} />
+                    <Input onKeyDown={onKey} value={val} inputRef={inputRef}
+                      onChange={e => setVal((e.target as HTMLInputElement).value)}
+                      onBlur={!props.link ? add : undefined}
+                    />
+                  </Block>
+                </Block>
+                <Block minWidth='107px' $style={{bottom: '-33px', position: 'relative'}}>
+                  <Button
+                    type='button'
+                    onClick={add} marginLeft
+                    label={'Legg til'}
+                    $style={{ border: '2px solid #102723', borderRadius: '4px' }}
+                    kind='tertiary'
+                    size='compact'
+                  >
+                    Legg til
+                  </Button>
+                </Block>
               </Block>
               <RenderTagList
-                wide
                 list={(p.form.values[props.name] as string[]).map(linkNameFor)}
                 onRemove={p.remove}
                 onClick={(i) => onClick(p, i)} />
@@ -183,7 +197,7 @@ export const OptionField = (props: { label: string, name: string, clearable?: bo
     <FieldWrapper>
       <Field name={props.name}>
         {(p: FieldProps<string | Code>) =>
-          <FormControl label={<LabelWithTooltip label={props.label} tooltip={props.tooltip}/>} error={p.meta.touched && p.meta.error} caption={props.caption}>
+          <FormControl label={<LabelWithTooltip label={props.label} tooltip={props.tooltip} />} error={p.meta.touched && p.meta.error} caption={props.caption}>
             <OptionList {...props} onChange={(val => p.form.setFieldValue(props.name, val))} value={p.field.value} />
           </FormControl>
         }
@@ -214,7 +228,7 @@ export const MultiOptionField = (props: { label: string, name: string, caption?:
       <FieldArray name={props.name}>
         {(p: FieldArrayRenderProps) => {
           const selectedIds = (p.form.values[props.name] as any[]).map(v => props.listName ? (v as Code).code : v)
-          return <FormControl label={<LabelWithTooltip label={props.label} tooltip={props.tooltip}/>} error={p.form.touched[props.name] && p.form.errors[props.name]} caption={props.caption}>
+          return <FormControl label={<LabelWithTooltip label={props.label} tooltip={props.tooltip} />} error={p.form.touched[props.name] && p.form.errors[props.name]} caption={props.caption}>
             <Block>
               <Block display='flex'>
                 <Select

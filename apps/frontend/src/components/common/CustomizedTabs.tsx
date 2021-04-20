@@ -8,7 +8,8 @@ export const CustomizedTab = (props: TabProps) => {
 }
 
 interface CustomizedTabsProps {
-  fontColor?: string
+  fontColor?: string,
+  tabBackground?: string
 }
 
 type CustomProps = TabsProps & CustomizedTabsProps
@@ -21,7 +22,7 @@ export const CustomizedTabs = (props: CustomProps ) => {
       {...props}
       overrides={{
         Tab: { style: { padding: '0px', margin: '0px', marginRight: '0px', height: '58px', color: props.fontColor? props.fontColor : 'black', borderColor: props.fontColor? props.fontColor : 'black' } },
-        TabBar: { style: { backgroundColor: '#CBD9D7', padding: '0px', justifyContent: 'space-between' } },
+        TabBar: { style: { backgroundColor: props.tabBackground, padding: '0px', justifyContent: 'space-between' } },
         TabContent: { style: { marginTop: '56px', padding: '0px', backgroundColor: '#F8F8F8' } }
       }}
       onChange={({ activeKey }) => {

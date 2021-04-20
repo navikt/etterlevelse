@@ -10,6 +10,7 @@ import {RenderTagList} from '../../common/TagList'
 import {Begrep} from '../../../constants'
 import {Block} from 'baseui/block'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
+import {searchIcon} from '../../Images'
 
 export const EditBegreper = () => {
   const [result, setSearch, loading] = useBegrepSearch()
@@ -22,6 +23,10 @@ export const EditBegreper = () => {
             <FormControl label={<LabelWithTooltip label={'Begreper'} tooltip={'Legg ved lenke til relevante begrep(er) i Begrepskatalogen.'}/>} >
               <Block>
                 <Select
+                overrides={{
+                  SearchIcon: {
+                    component: () => <img src={searchIcon} alt='search icon' />
+                  }}}
                   labelKey={'navn'}
                   noResultsMsg={intl.emptyTable}
                   maxDropdownHeight="350px"
