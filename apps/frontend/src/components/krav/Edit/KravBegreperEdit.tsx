@@ -3,7 +3,7 @@ import {useBegrepSearch} from '../../../api/BegrepApi'
 import React from 'react'
 import {FieldArray} from 'formik'
 import {intl} from '../../../util/intl/intl'
-import {Select, TYPE} from 'baseui/select'
+import {Select, TYPE, SIZE as selectSize} from 'baseui/select'
 import {FormControl} from 'baseui/form-control'
 import {Error} from '../../common/ModalSchema'
 import {RenderTagList} from '../../common/TagList'
@@ -11,6 +11,7 @@ import {Begrep} from '../../../constants'
 import {Block} from 'baseui/block'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
 import {searchIcon} from '../../Images'
+import { SIZE } from 'baseui/button'
 
 export const EditBegreper = () => {
   const [result, setSearch, loading] = useBegrepSearch()
@@ -27,6 +28,7 @@ export const EditBegreper = () => {
                   SearchIcon: {
                     component: () => <img src={searchIcon} alt='search icon' />
                   }}}
+                  size={selectSize.compact}
                   labelKey={'navn'}
                   noResultsMsg={intl.emptyTable}
                   maxDropdownHeight="350px"

@@ -1,18 +1,19 @@
 import React, { useState } from 'react'
-import { Select, Value } from 'baseui/select'
+import { Select, Value, SIZE as selectSize } from 'baseui/select'
 import { codelist, ListName } from '../../../services/Codelist'
 import { FieldWrapper } from '../../common/Inputs'
 import { FieldArray } from 'formik'
 import { FormControl } from 'baseui/form-control'
 import { Block } from 'baseui/block'
 import { theme } from '../../../util'
-import { Input } from 'baseui/input'
+import { Input, SIZE } from 'baseui/input'
 import Button from '../../common/Button'
 import { LabelSmall } from 'baseui/typography'
 import { LovView } from '../../Lov'
 import { RenderTagList } from '../../common/TagList'
 import { Regelverk } from '../../../constants'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
+
 
 export const KravRegelverkEdit = () => {
   const [lov, setLov] = useState<Value>([])
@@ -40,6 +41,7 @@ export const KravRegelverkEdit = () => {
                     <Block flex={1} width='400px' marginRight={theme.sizing.scale400}>
                       <LabelWithTooltip label={'Regelverk'} tooltip={'Velg relevant regelverk fra nedtrekksmenyen, og angi hvilke(n) bestemmelse(r) kravet har sin opprinnelse fra.'} />
                       <Select
+                        size={SIZE.compact}
                         controlRef={controlRef}
                         placeholder={'Velg regelverk'}
                         aria-label={'Velg regelverk'}
@@ -52,15 +54,15 @@ export const KravRegelverkEdit = () => {
                         }}
                       />
                     </Block>
-                    <Block flex={1} width='100%'>
+                    <Block flex={2} width='100%'>
                       <LabelWithTooltip label={'Paragraf eller kapittel i regelverk'} tooltip={'Beskrivelse'} />
-                      <Input value={text}
+                      <Input size={SIZE.compact} value={text}
                         onChange={e => setText((e.target as HTMLInputElement).value)}
                         placeholder={'Beskrivelse, paragraf eller kapittel i regelverk'}
                       />
                     </Block>
 
-                    <Block minWidth='107px' $style={{ bottom: '-33px', position: 'relative' }}>
+                    <Block minWidth='107px' $style={{ bottom: '-28px', position: 'relative' }}>
                       <Button
                         type='button'
                         size='compact'

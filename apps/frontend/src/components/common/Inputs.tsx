@@ -1,12 +1,12 @@
 import { Or } from '../../constants'
 import { Field, FieldArray, FieldArrayRenderProps, FieldProps } from 'formik'
 import { FormControl } from 'baseui/form-control'
-import { Input } from 'baseui/input'
+import { Input, SIZE } from 'baseui/input'
 import React, { ReactNode, useState } from 'react'
 import { Block } from 'baseui/block'
 import Button from './Button'
 import { RenderTagList } from './TagList'
-import { Select, Value } from 'baseui/select'
+import { Select, Value, SIZE as selectSize} from 'baseui/select'
 import { Code, codelist, ListName } from '../../services/Codelist'
 import { SearchType } from '../../api/TeamApi'
 import * as _ from 'lodash'
@@ -30,7 +30,7 @@ export const InputField = (props: { label: string, name: string, caption?: React
     <Field name={props.name}>
       {(p: FieldProps) =>
         <FormControl overrides={{ Label: { style: { marginTop: '0px', marginBottom: '0px', paddingTop: '8px', paddingBottom: '8px' } } }} label={<LabelWithTooltip label={props.label} tooltip={props.tooltip} />} error={p.meta.touched && p.meta.error} caption={props.caption}>
-          <Input {...p.field} placeholder={props.label} />
+          <Input size={SIZE.compact} {...p.field} placeholder={props.label} />
         </FormControl>
       }
     </Field>
@@ -92,6 +92,7 @@ export const DateField = (props: { label: string, name: string, caption?: ReactN
       {(p: FieldProps) =>
         <FormControl label={<LabelWithTooltip label={props.label} tooltip={props.tooltip} />} error={p.meta.touched && p.meta.error} caption={props.caption}>
           <Datepicker
+            size={SIZE.compact}
             clearable
             formatString={'dd-MM-yyyy'}
             value={p.field.value ? moment(p.field.value).toDate() : undefined}
@@ -153,20 +154,20 @@ export const MultiInputField = (props: { label: string, name: string, link?: boo
                   {props.link &&
                     <Block flex={1}>
                       <LabelWithTooltip label={props.linkLabel} tooltip={props.linkTooltip} />
-                      <Input onKeyDown={onKey} value={linkName}
+                      <Input size={SIZE.compact} onKeyDown={onKey} value={linkName}
                         onChange={e => setLinkName((e.target as HTMLInputElement).value)}
                       />
                     </Block>
                   }
-                  <Block marginLeft={ props.link ? '12px' : '0px'} flex={1}>
+                  <Block marginLeft={ props.link ? '12px' : '0px'} flex={2}>
                     <LabelWithTooltip label={props.label} tooltip={props.tooltip} />
-                    <Input onKeyDown={onKey} value={val} inputRef={inputRef}
+                    <Input size={SIZE.compact} onKeyDown={onKey} value={val} inputRef={inputRef}
                       onChange={e => setVal((e.target as HTMLInputElement).value)}
                       onBlur={!props.link ? add : undefined}
                     />
                   </Block>
                 </Block>
-                <Block minWidth='107px' $style={{bottom: '-33px', position: 'relative'}}>
+                <Block minWidth='107px' $style={{bottom: '-28px', position: 'relative'}}>
                   <Button
                     type='button'
                     onClick={add} marginLeft
@@ -209,7 +210,7 @@ export const OptionField = (props: { label: string, name: string, clearable?: bo
 export const OptionList = (props: { label: string, clearable?: boolean, value?: Code | string, onChange: (val?: any) => void } & Or<{ options: Value }, { listName: ListName }>) => {
   const options: Value = props.options || codelist.getParsedOptions(props.listName)
   return (
-    <Select options={options} clearable={props.clearable}
+    <Select size={selectSize.compact} options={options} clearable={props.clearable}
       value={options.filter(o => o.id === (props.listName ? (props.value as Code | undefined)?.code : props.value))}
       onChange={s => {
         const val = s.option?.id
@@ -232,6 +233,7 @@ export const MultiOptionField = (props: { label: string, name: string, caption?:
             <Block>
               <Block display='flex'>
                 <Select
+                  size={SIZE.compact}
                   placeholder={'Velg ' + _.lowerFirst(props.label)}
                   aria-label={'Velg ' + _.lowerFirst(props.label)}
                   maxDropdownHeight='400px'

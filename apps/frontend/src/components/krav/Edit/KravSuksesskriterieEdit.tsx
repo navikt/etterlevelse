@@ -5,11 +5,12 @@ import { Krav, Suksesskriterie } from '../../../constants'
 import { FormControl } from 'baseui/form-control'
 import { FormikProps } from 'formik/dist/types'
 import { Block } from 'baseui/block'
-import { Input } from 'baseui/input'
+import { Input, SIZE } from 'baseui/input'
 import Button from '../../common/Button'
 import { RenderTagList } from '../../common/TagList'
 import * as _ from 'lodash'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
+
 
 
 
@@ -54,7 +55,9 @@ const KriterieList = ({ p }: { p: FieldArrayRenderProps }) => {
     <FormControl label={<LabelWithTooltip label={'Suksesskriterier'} tooltip={'Definer hvilke kriterier som skal til for at kravet er oppnådd. Formålet er å identifisere en terskel for kravoppnåelse og en enhetlig besvarelse på tvers.'} />} >
       <Block>
         <Block display='flex'>
-          <Input onKeyDown={onKey} value={navn} inputRef={inputRef}
+          <Input 
+          size={SIZE.compact}
+          onKeyDown={onKey} value={navn} inputRef={inputRef}
             onChange={e => setNavn((e.target as HTMLInputElement).value)}
             onBlur={add} placeholder={'Suksesskriterie'}
           />
