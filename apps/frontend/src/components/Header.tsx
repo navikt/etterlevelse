@@ -20,7 +20,7 @@ import { user } from '../services/User'
 import { writeLog } from '../api/LogApi'
 import MainSearch from './search/MainSearch'
 import { logo } from './Images'
-import { pageWidth } from '../util/theme'
+import { maxPageWidth } from '../util/theme'
 
 
 
@@ -121,55 +121,59 @@ const Header = (props: { noSearchBar?: boolean, noLoginButton?: boolean }) => {
   useEffect(() => setUrl(window.location.href), [location.pathname])
 
   return (
-    <Block paddingLeft='40px' paddingRight='40px' width='calc(100%-80px)' height='76px' overrides={{ Block: { props: { role: 'banner', 'aria-label': 'Header meny' } } }}>
-      <HeaderNavigation overrides={{ Root: { style: { paddingBottom: 0, borderBottomStyle: 'none' } } }}>
-        <Block display={['block', 'block', 'block', 'block', 'block', 'none']}>
-          <BurgerMenu />
-        </Block>
-
-
-        <NavigationList $align={ALIGN.left} $style={{ paddingLeft: 0 }}>
-          <NavigationItem $style={{ paddingLeft: 0 }}>
-            <RouteLink href={'/'} hideUnderline>
-              <H1 marginBottom={0} marginTop={0}>
-                <Block display='flex' alignItems='center'>
-                  <img src={logo} alt='Nav etterlevelse' height='44px' />
-                </Block>
-              </H1>
-            </RouteLink>
-          </NavigationItem>
-        </NavigationList>
-
-        <NavigationList $style={{justifyContent: 'center'}}>
-          {!props.noSearchBar && (<NavigationItem>
-            <Block flex='1' display={['none', 'none','none', 'none', 'flex', 'flex']} overrides={{ Block: { props: { role: 'search' } } }}>
-              <MainSearch />
+    <Block width='100%' display='flex' justifyContent='center'>
+      <Block width='100%' maxWidth={maxPageWidth}>
+        <Block paddingLeft='40px' paddingRight='40px' width='calc(100%-80px)' height='76px' overrides={{ Block: { props: { role: 'banner', 'aria-label': 'Header meny' } } }}>
+          <HeaderNavigation overrides={{ Root: { style: { paddingBottom: 0, borderBottomStyle: 'none' } } }}>
+            <Block display={['block', 'block', 'block', 'block', 'block', 'none']}>
+              <BurgerMenu />
             </Block>
-          </NavigationItem>)}
-        </NavigationList>
 
-        {!props.noLoginButton && (<Block display={['none', 'none','none', 'none', 'none', 'flex']}>
-          <NavigationList $align={ALIGN.right}>
-            {user.isAdmin() && (
-              <NavigationItem $style={{ paddingLeft: 0 }}>
-                <AdminOptions />
-              </NavigationItem>
-            )}
 
-            {!user.isLoggedIn() && (
+            <NavigationList $align={ALIGN.left} $style={{ paddingLeft: 0 }}>
               <NavigationItem $style={{ paddingLeft: 0 }}>
-                <LoginButton location={url} />
+                <RouteLink href={'/'} hideUnderline>
+                  <H1 marginBottom={0} marginTop={0}>
+                    <Block display='flex' alignItems='center'>
+                      <img src={logo} alt='Nav etterlevelse' height='44px' />
+                    </Block>
+                  </H1>
+                </RouteLink>
               </NavigationItem>
-            )}
-            {user.isLoggedIn() && (
-              <NavigationItem $style={{ paddingLeft: 0 }}>
-                <LoggedInHeader location={url} />
-              </NavigationItem>
-            )}
-          </NavigationList>
-        </Block>)}
+            </NavigationList>
 
-      </HeaderNavigation>
+            <NavigationList $style={{ justifyContent: 'center' }}>
+              {!props.noSearchBar && (<NavigationItem>
+                <Block flex='1' display={['none', 'none', 'none', 'none', 'flex', 'flex']} overrides={{ Block: { props: { role: 'search' } } }}>
+                  <MainSearch />
+                </Block>
+              </NavigationItem>)}
+            </NavigationList>
+
+            {!props.noLoginButton && (<Block display={['none', 'none', 'none', 'none', 'none', 'flex']}>
+              <NavigationList $align={ALIGN.right}>
+                {user.isAdmin() && (
+                  <NavigationItem $style={{ paddingLeft: 0 }}>
+                    <AdminOptions />
+                  </NavigationItem>
+                )}
+
+                {!user.isLoggedIn() && (
+                  <NavigationItem $style={{ paddingLeft: 0 }}>
+                    <LoginButton location={url} />
+                  </NavigationItem>
+                )}
+                {user.isLoggedIn() && (
+                  <NavigationItem $style={{ paddingLeft: 0 }}>
+                    <LoggedInHeader location={url} />
+                  </NavigationItem>
+                )}
+              </NavigationList>
+            </Block>)}
+
+          </HeaderNavigation>
+        </Block>
+      </Block>
     </Block>
   )
 }

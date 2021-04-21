@@ -26,7 +26,7 @@ import CustomizedTag from '../components/common/CustomizedTag'
 import { chevronLeft, editIcon, plusIcon } from '../components/Images'
 import { Label } from '../components/common/PropertyLabel'
 import { CustomizedTab, CustomizedTabs } from '../components/common/CustomizedTabs'
-import { pageWidth } from '../util/theme'
+import { maxPageWidth, pageWidth } from '../util/theme'
 
 export const kravNumView = (it: { kravVersjon: number, kravNummer: number }) => `K${it.kravNummer}.${it.kravVersjon}`
 export const kravName = (krav: Krav) => `${kravNumView(krav)}`
@@ -87,34 +87,36 @@ export const KravPage = () => {
     <Block width='100%' overrides={{ Block: { props: { role: 'main' } } }}>
       {kravLoading && <LoadingSkeleton header='Krav' />}
       {!kravLoading &&
-        <Block>
-          <Block paddingLeft='40px' paddingRight='40px' display='flex' flexDirection='column' backgroundColor='#112724' justifyContent='center'>
-            <Block display='flex' width='100%' justifyContent='center' marginTop='25px'>
-              <Block flex='1' display='flex' justifyContent='flex-start'>
-                <RouteLink href={'/krav'} hideUnderline>
-                  <Button startEnhancer={<img alt={'Chevron left'} src={chevronLeft} />} size='compact' kind='tertiary' $style={{ color: '#F8F8F8' }}> Tilbake</Button>
-                </RouteLink>
-              </Block>
+        <Block backgroundColor='#112724' display='flex' width='100%' justifyContent='center' paddingBottom='32px'>
+          <Block maxWidth={maxPageWidth} width='100%'>
+            <Block paddingLeft='40px' paddingRight='40px' display='flex' flexDirection='column' justifyContent='center'>
+              <Block display='flex' width='100%' justifyContent='center' marginTop='25px'>
+                <Block flex='1' display='flex' justifyContent='flex-start'>
+                  <RouteLink href={'/krav'} hideUnderline>
+                    <Button startEnhancer={<img alt={'Chevron left'} src={chevronLeft} />} size='compact' kind='tertiary' $style={{ color: '#F8F8F8' }}> Tilbake</Button>
+                  </RouteLink>
+                </Block>
 
-              <Block flex='1' display='flex' justifyContent='flex-end'>
-                {krav?.id && user.isKraveier() && <Button startEnhancer={<img alt='add' src={plusIcon} />} onClick={newVersion} marginLeft size='compact' kind='tertiary' $style={{ color: '#F8F8F8' }}>Ny versjon</Button>}
-                {krav?.id && user.isKraveier() && <DeleteItem fun={() => deleteKrav(krav.id)} redirect={'/krav'} />}
-                {((krav?.id && user.isKraveier())) &&
-                  <Button
-                    startEnhancer={<img src={editIcon} alt='edit' />}
-                    size='compact'
-                    $style={{ color: '#F8F8F8' }}
-                    kind={'tertiary'}
-                    onClick={() => setEdit(!edit)} marginLeft
-                  >
-                    Rediger
+                <Block flex='1' display='flex' justifyContent='flex-end'>
+                  {krav?.id && user.isKraveier() && <Button startEnhancer={<img alt='add' src={plusIcon} />} onClick={newVersion} marginLeft size='compact' kind='tertiary' $style={{ color: '#F8F8F8' }}>Ny versjon</Button>}
+                  {krav?.id && user.isKraveier() && <DeleteItem fun={() => deleteKrav(krav.id)} redirect={'/krav'} />}
+                  {((krav?.id && user.isKraveier())) &&
+                    <Button
+                      startEnhancer={<img src={editIcon} alt='edit' />}
+                      size='compact'
+                      $style={{ color: '#F8F8F8' }}
+                      kind={'tertiary'}
+                      onClick={() => setEdit(!edit)} marginLeft
+                    >
+                      Rediger
                   </Button>
-                }
+                  }
+                </Block>
               </Block>
             </Block>
 
 
-            <Block width='100%' display='flex' justifyContent='center' marginBottom='32px' >
+            <Block width='100%' display='flex' justifyContent='center'>
               <Block width={pageWidth} marginTop='7px'>
                 <CustomizedTag>{krav && krav?.kravNummer !== 0 ? kravName(krav) : 'Ny'}</CustomizedTag>
                 <H2 $style={{ color: '#F8F8F8' }}>{krav && krav?.navn ? krav.navn : 'Ny'} </H2>
@@ -125,10 +127,14 @@ export const KravPage = () => {
       }
 
       {krav && !kravLoading &&
-        <Block>
-          <Block paddingLeft='40px' paddingRight='40px' backgroundColor='#CCD9D7' justifyContent='center' display='flex'>
-            <Block marginBottom='80px' marginTop='80px' width={pageWidth}>
-              <Label title='' markdown={krav.hensikt} />
+        <Block width='100%'>
+          <Block backgroundColor='#CCD9D7' display='flex' width='100%' justifyContent='center'>
+            <Block maxWidth={maxPageWidth}>
+              <Block paddingLeft='40px' paddingRight='40px' justifyContent='center' display='flex'>
+                <Block marginBottom='80px' marginTop='80px' width={pageWidth}>
+                  <Label title='' markdown={krav.hensikt} />
+                </Block>
+              </Block>
             </Block>
           </Block>
 
@@ -161,7 +167,7 @@ export const KravPage = () => {
         }
         setEdit(false)
       }} />}
-      
+
     </Block>
   )
 }
