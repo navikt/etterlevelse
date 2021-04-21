@@ -48,7 +48,7 @@ const AllInfo = ({ krav }: { krav: KravQL }) => (
 
     <LabelAboveContent title='Rettskilder' markdown={krav.rettskilder} />
 
-    <LabelAboveContent title='Tagger'>{krav.tagger.join(', ')}</LabelAboveContent>
+    <LabelAboveContent title='Etiketter'>{krav.tagger.join(', ')}</LabelAboveContent>
     <LabelAboveContent title='Relevante implementasjoner' markdown={krav.implementasjoner} />
     <LabelAboveContent title='Begreper'>{krav.begreper.map((b, i) => <BegrepView key={i} begrep={b} />)}</LabelAboveContent>
 
