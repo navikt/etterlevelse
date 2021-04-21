@@ -1,21 +1,21 @@
-import {HeadingMedium, HeadingSmall, LabelLarge, LabelSmall, LabelXSmall} from 'baseui/typography'
-import {Block} from 'baseui/block'
-import React, {useState} from 'react'
-import {user} from '../services/User'
-import {useMyBehandlinger, useSearchBehandling} from '../api/BehandlingApi'
-import {ListItem, ListItemLabel} from 'baseui/list'
-import {TeamName} from '../components/common/TeamName'
-import {useMyTeams} from '../api/TeamApi'
+import { HeadingMedium, HeadingSmall, LabelLarge, LabelSmall, LabelXSmall } from 'baseui/typography'
+import { Block } from 'baseui/block'
+import React, { useState } from 'react'
+import { user } from '../services/User'
+import { useMyBehandlinger, useSearchBehandling } from '../api/BehandlingApi'
+import { ListItem, ListItemLabel } from 'baseui/list'
+import { TeamName } from '../components/common/TeamName'
+import { useMyTeams } from '../api/TeamApi'
 import RouteLink from '../components/common/RouteLink'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faTimesCircle, faUsers} from '@fortawesome/free-solid-svg-icons'
-import {theme} from '../util'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTimesCircle, faUsers } from '@fortawesome/free-solid-svg-icons'
+import { theme } from '../util'
 import Button from '../components/common/Button'
-import {Spinner} from '../components/common/Spinner'
-import {Behandling, emptyPage, PageResponse} from '../constants'
-import {StatefulInput} from 'baseui/input'
-import {gql, useQuery} from '@apollo/client'
-import {pageWidth} from '../util/theme'
+import { Spinner } from '../components/common/Spinner'
+import { Behandling, emptyPage, PageResponse } from '../constants'
+import { StatefulInput } from 'baseui/input'
+import { gql, useQuery } from '@apollo/client'
+import { maxPageWidth, pageWidth } from '../util/theme'
 
 
 export const MyBehandlingerPage = () => {
@@ -26,38 +26,40 @@ export const MyBehandlingerPage = () => {
   const loading = myBehandlingerLoadin || teamsLoading
 
   return (
-    <Block paddingLeft='40px' paddingRight='40px' width='calc(100%-80px)' display='flex' justifyContent='center'>
-      <Block display='flex' flexWrap flexDirection='row' justifyContent='space-between'>
+    <Block maxWidth={maxPageWidth} width='100%'>
+      <Block paddingLeft='40px' paddingRight='40px' width='calc(100%-80px)' display='flex' justifyContent='center'>
+        <Block display='flex' flexWrap flexDirection='row' justifyContent='space-between'>
 
-        {loggedIn && <Block marginLeft={theme.sizing.scale800} maxWidth={pageWidth}>
-          <HeadingMedium>Mine behandlinger</HeadingMedium>
-          <HeadingSmall>Team</HeadingSmall>
-          {loading && <Spinner size={theme.sizing.scale800}/>}
-          {!loading && !teams.length && <LabelLarge>Du er ikke medlem av noen team</LabelLarge>}
-          <ul>
-            {teams.map(t =>
-              <Block key={t.id} marginBottom={theme.sizing.scale800}>
-                <ListItem key={t.id} artwork={() => <FontAwesomeIcon icon={faUsers} color={theme.colors.positive300}/>}
-                          overrides={{Root: {style: {backgroundColor: 'inherit'}}}}>
-                  <ListItemLabel><TeamName id={t.id} link/></ListItemLabel>
-                </ListItem>
-                <Block paddingLeft={theme.sizing.scale700}>
-                  {myBehandlinger.filter(b => b.teams.indexOf(t.id) >= 0).map(b =>
-                    <BehandlingListItem key={b.id} behandling={b}/>
-                  )}
+          {loggedIn && <Block marginLeft={theme.sizing.scale800} maxWidth={pageWidth}>
+            <HeadingMedium>Mine behandlinger</HeadingMedium>
+            <HeadingSmall>Team</HeadingSmall>
+            {loading && <Spinner size={theme.sizing.scale800} />}
+            {!loading && !teams.length && <LabelLarge>Du er ikke medlem av noen team</LabelLarge>}
+            <ul>
+              {teams.map(t =>
+                <Block key={t.id} marginBottom={theme.sizing.scale800}>
+                  <ListItem key={t.id} artwork={() => <FontAwesomeIcon icon={faUsers} color={theme.colors.positive300} />}
+                    overrides={{ Root: { style: { backgroundColor: 'inherit' } } }}>
+                    <ListItemLabel><TeamName id={t.id} link /></ListItemLabel>
+                  </ListItem>
+                  <Block paddingLeft={theme.sizing.scale700}>
+                    {myBehandlinger.filter(b => b.teams.indexOf(t.id) >= 0).map(b =>
+                      <BehandlingListItem key={b.id} behandling={b} />
+                    )}
+                  </Block>
                 </Block>
-              </Block>
-            )}
-          </ul>
-        </Block>}
+              )}
+            </ul>
+          </Block>}
 
-        {!loggedIn && <Block display='flex' flexDirection='column'>
-          <LabelLarge>Du må logge inn for å se dine behandlinger</LabelLarge>
-          <Alle/>
+          {!loggedIn && <Block display='flex' flexDirection='column'>
+            <LabelLarge>Du må logge inn for å se dine behandlinger</LabelLarge>
+            <Alle />
+          </Block>
+          }
         </Block>
-        }
-      </Block>
 
+      </Block>
     </Block>
   )
 }
@@ -65,7 +67,7 @@ export const MyBehandlingerPage = () => {
 const Alle = () => {
   const pageSize = 20
   const [pageNumber, setPage] = useState(0)
-  const {data, loading: loadingAll} = useQuery<{behandlinger: PageResponse<Behandling>}>(query, {variables: {pageNumber, pageSize}})
+  const { data, loading: loadingAll } = useQuery<{ behandlinger: PageResponse<Behandling> }>(query, { variables: { pageNumber, pageSize } })
   const allBehandlinger = data?.behandlinger || emptyPage
   const [search, setSearch, searchLoading, searchTerm] = useSearchBehandling()
 
@@ -78,20 +80,20 @@ const Alle = () => {
 
       <Block maxWidth='500px' marginBottom={theme.sizing.scale1000}>
         <StatefulInput size='compact' placeholder='Søk' onChange={e => setSearch((e.target as HTMLInputElement).value)}
-                       endEnhancer={
-                         <Button onClick={() => setSearch('')} size='compact' kind='tertiary'><FontAwesomeIcon icon={faTimesCircle}/></Button>
-                       }/>
-        {searchLoading && <Block marginTop={theme.sizing.scale400}><Spinner size={theme.sizing.scale600}/></Block>}
+          endEnhancer={
+            <Button onClick={() => setSearch('')} size='compact' kind='tertiary'><FontAwesomeIcon icon={faTimesCircle} /></Button>
+          } />
+        {searchLoading && <Block marginTop={theme.sizing.scale400}><Spinner size={theme.sizing.scale600} /></Block>}
       </Block>
       {!!searchTerm && <Block>
         <LabelSmall>Søkeresultat</LabelSmall>
-        {search.map(b => <BehandlingListItem key={b.id} behandling={b}/>)}
+        {search.map(b => <BehandlingListItem key={b.id} behandling={b} />)}
         {!search.length && <LabelXSmall>Ingen treff</LabelXSmall>}
       </Block>}
 
       {!searchTerm && <Block>
-        {allBehandlinger.content.map(b => <BehandlingListItem key={b.id} behandling={b}/>)}
-        {loadingAll && !allBehandlinger && <Spinner size={theme.sizing.scale800}/>}
+        {allBehandlinger.content.map(b => <BehandlingListItem key={b.id} behandling={b} />)}
+        {loadingAll && !allBehandlinger && <Spinner size={theme.sizing.scale800} />}
 
         <Block display='flex' alignItems='center' marginTop={theme.sizing.scale1000}>
           <LabelSmall marginRight={theme.sizing.scale400}>Side {allBehandlinger.pageNumber + 1}/{allBehandlinger.pages}</LabelSmall>
@@ -104,8 +106,8 @@ const Alle = () => {
   )
 }
 
-const BehandlingListItem = (props: {behandling: Behandling}) =>
-  <ListItem sublist overrides={{Root: {style: {backgroundColor: 'inherit'}}}}>
+const BehandlingListItem = (props: { behandling: Behandling }) =>
+  <ListItem sublist overrides={{ Root: { style: { backgroundColor: 'inherit' } } }}>
     <ListItemLabel sublist>
       <RouteLink href={`/behandling/${props.behandling.id}`}>
         {props.behandling.nummer}: {props.behandling.overordnetFormaal.shortName} - {props.behandling.navn}

@@ -5,7 +5,7 @@ import RouteLink from '../components/common/RouteLink'
 import { borderColor, marginAll } from '../components/common/Style'
 import { theme } from '../util'
 import { ParagraphXSmall } from 'baseui/typography'
-import { primitives } from '../util/theme'
+import { maxPageWidth, primitives } from '../util/theme'
 import { barChart, illustration, lawBook, pencilFill, stepper } from '../components/Images'
 
 
@@ -18,30 +18,32 @@ const sectionProps: BlockProps = {
 
 export const MainPage = () => {
   return (
-    <Block paddingLeft='40px' paddingRight='40px' width='calc(100%-80px)' display='flex' justifyContent='center' marginTop='50px'>
-      <Block display='flex' flexDirection='column' width={'1000px'} overrides={{ Block: { props: { role: 'main' } } }}>
-        <Block {...sectionProps} overrides={{ Block: { props: { role: 'navigation', 'aria-label': 'Hoved meny' } } }}>
-          <SectionCard
-            icon={pencilFill} url={'/behandling'} title={'Dokumenter etterlevelse'}
-            text={'Fyll ut hvordan du etterlever lover og regler i behandlinger du har ansvar for'} />
-          <SectionCard
-            icon={lawBook} url={'/krav'} title={'Opprett og vedlikehold krav'}
-            text={'Kraveier kan jobbe med nye krav eller forbedre eksisterende krav'} />
-          <SectionCard
-            icon={barChart} url={'/status'} title={'Se status på etterlevelse i etaten'}
-            text={'Se dashboard for status på etterlevelse i NAV, i våre produktområder og avdelinger'} />
-          <SectionCard
-            icon={stepper} url={'/tema'} title={'Lær mer om etterlevelse'}
-            text={'Utforsk temaer for krav i etaten'} />
-        </Block>
+      <Block maxWidth={maxPageWidth}>
+        <Block paddingLeft='40px' paddingRight='40px' width='calc(100%-80px)' display='flex' justifyContent='center' marginTop='50px'>
+          <Block display='flex' flexDirection='column' width={'1000px'} overrides={{ Block: { props: { role: 'main' } } }}>
+            <Block {...sectionProps} overrides={{ Block: { props: { role: 'navigation', 'aria-label': 'Hoved meny' } } }}>
+              <SectionCard
+                icon={pencilFill} url={'/behandling'} title={'Dokumenter etterlevelse'}
+                text={'Fyll ut hvordan du etterlever lover og regler i behandlinger du har ansvar for'} />
+              <SectionCard
+                icon={lawBook} url={'/krav'} title={'Opprett og vedlikehold krav'}
+                text={'Kraveier kan jobbe med nye krav eller forbedre eksisterende krav'} />
+              <SectionCard
+                icon={barChart} url={'/status'} title={'Se status på etterlevelse i etaten'}
+                text={'Se dashboard for status på etterlevelse i NAV, i våre produktområder og avdelinger'} />
+              <SectionCard
+                icon={stepper} url={'/tema'} title={'Lær mer om etterlevelse'}
+                text={'Utforsk temaer for krav i etaten'} />
+            </Block>
 
-        <Block {...sectionProps}>
-          <Block height='320px' overflow={'hidden'} marginBottom={theme.sizing.scale800}>
-            <img style={{ marginTop: '-215px', width: '100%' }} src={illustration} alt='illustrasjon' />
+            <Block {...sectionProps}>
+              <Block height='320px' overflow={'hidden'} marginBottom={theme.sizing.scale800}>
+                <img style={{ marginTop: '-215px', width: '100%' }} src={illustration} alt='illustrasjon' />
+              </Block>
+            </Block>
           </Block>
         </Block>
       </Block>
-    </Block>
   )
 }
 

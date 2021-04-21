@@ -25,6 +25,7 @@ const containerProps = {
   backgroundColor: '#F8F8F8',
   alignItems: 'center',
   justifyContent: 'center',
+  width: '100%'
 }
 
 ampli.logEvent('visit_count_etterlevelse')
@@ -47,11 +48,11 @@ const Main = (props) => {
               </Helmet>
 
               <Block {...containerProps}>
-                <Block marginBottom='100px'justifyContent='center' width='100%' minHeight='50vh'>
+                <Block {...containerProps} marginBottom='100px' minHeight='50vh'>
                   <Header />
                   <Routes />
-                  <Footer />
                 </Block>
+                <Footer />
               </Block>
 
             </Router>

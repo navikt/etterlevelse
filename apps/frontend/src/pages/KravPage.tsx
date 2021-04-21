@@ -116,7 +116,7 @@ export const KravPage = () => {
             </Block>
 
 
-            <Block width='100%' display='flex' justifyContent='center'>
+            <Block paddingLeft='40px' paddingRight='40px' width='100%' display='flex' justifyContent='center'>
               <Block width={pageWidth} marginTop='7px'>
                 <CustomizedTag>{krav && krav?.kravNummer !== 0 ? kravName(krav) : 'Ny'}</CustomizedTag>
                 <H2 $style={{ color: '#F8F8F8' }}>{krav && krav?.navn ? krav.navn : 'Ny'} </H2>
@@ -129,7 +129,7 @@ export const KravPage = () => {
       {krav && !kravLoading &&
         <Block width='100%'>
           <Block backgroundColor='#CCD9D7' display='flex' width='100%' justifyContent='center'>
-            <Block maxWidth={maxPageWidth}>
+            <Block maxWidth={maxPageWidth} width='100%'>
               <Block paddingLeft='40px' paddingRight='40px' justifyContent='center' display='flex'>
                 <Block marginBottom='80px' marginTop='80px' width={pageWidth}>
                   <Label title='' markdown={krav.hensikt} />
@@ -140,7 +140,7 @@ export const KravPage = () => {
 
           <Block display='flex' justifyContent='center' width='100%'>
             <Block backgroundColor='#CCD9D7' flex={1} height='58px' minWidth='40px' />
-            <Block width={pageWidth}>
+            <Block maxWidth={pageWidth}>
               <CustomizedTabs fontColor='#112624' tabBackground='#CBD9D7'>
                 <CustomizedTab title={<LabelLarge>Om kravet</LabelLarge>}>
                   <ViewKrav krav={krav} />

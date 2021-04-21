@@ -1,20 +1,20 @@
-import {Block} from 'baseui/block'
-import {HeadingLarge} from 'baseui/typography'
-import {useHistory, useParams} from 'react-router-dom'
-import {deleteEtterlevelse, useEtterlevelse} from '../api/EtterlevelseApi'
-import React, {useRef, useState} from 'react'
-import {Etterlevelse, EtterlevelseStatus} from '../constants'
+import { Block } from 'baseui/block'
+import { HeadingLarge } from 'baseui/typography'
+import { useHistory, useParams } from 'react-router-dom'
+import { deleteEtterlevelse, useEtterlevelse } from '../api/EtterlevelseApi'
+import React, { useRef, useState } from 'react'
+import { Etterlevelse, EtterlevelseStatus } from '../constants'
 import Button from '../components/common/Button'
-import {ViewEtterlevelse} from '../components/etterlevelse/ViewEtterlevelse'
-import {EditEtterlevelse} from '../components/etterlevelse/EditEtterlevelse'
+import { ViewEtterlevelse } from '../components/etterlevelse/ViewEtterlevelse'
+import { EditEtterlevelse } from '../components/etterlevelse/EditEtterlevelse'
 import RouteLink from '../components/common/RouteLink'
-import {LoadingSkeleton} from '../components/common/LoadingSkeleton'
-import {user} from '../services/User'
-import {theme} from '../util'
-import {FormikProps} from 'formik'
-import {DeleteItem} from '../components/DeleteItem'
-import {kravNumView} from './KravPage'
-import {pageWidth} from '../util/theme'
+import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
+import { user } from '../services/User'
+import { theme } from '../util'
+import { FormikProps } from 'formik'
+import { DeleteItem } from '../components/DeleteItem'
+import { kravNumView } from './KravPage'
+import { maxPageWidth, pageWidth } from '../util/theme'
 
 export const etterlevelseName = (etterlevelse: Etterlevelse) => `${kravNumView(etterlevelse)}`
 
@@ -31,7 +31,7 @@ export const etterlevelseStatus = (status?: EtterlevelseStatus) => {
 }
 
 export const EtterlevelsePage = () => {
-  const params = useParams<{id?: string}>()
+  const params = useParams<{ id?: string }>()
   const [etterlevelse, setEtterlevelse] = useEtterlevelse(params.id)
   const [edit, setEdit] = useState(etterlevelse && !etterlevelse.id)
   const formRef = useRef<FormikProps<any>>()
@@ -40,34 +40,36 @@ export const EtterlevelsePage = () => {
   const loading = !edit && !etterlevelse
 
   return (
-    <Block paddingLeft='40px' paddingRight='40px' width='calc(100%-80px)' display='flex' justifyContent='center'>
-    <Block minWidth={pageWidth}>
-      {loading && <LoadingSkeleton header='Etterlevelse'/>}
-      {!loading && <>
-        <Block>
-          <HeadingLarge>Etterlevelse: {etterlevelse && etterlevelse?.kravNummer !== 0 ? etterlevelseName(etterlevelse) : 'Ny'}</HeadingLarge>
-          <Block display='flex' justifyContent='flex-end' marginBottom={theme.sizing.scale600}>
-            <RouteLink href={'/etterlevelse'}>
-              <Button size='compact' kind='tertiary'>Tilbake</Button>
-            </RouteLink>
-            {etterlevelse?.id && user.canWrite() && <Button size='compact' kind={edit ? 'secondary' : 'primary'} onClick={() => setEdit(!edit)} marginLeft>{edit ? 'Avbryt' : 'Rediger'}</Button>}
-            {etterlevelse?.id && user.canWrite() && !edit && <DeleteItem fun={() => deleteEtterlevelse(etterlevelse.id)} redirect={'/etterlevelse'}/>}
-            {edit && <Button size='compact' onClick={() => !formRef.current?.isSubmitting && formRef.current?.submitForm()} marginLeft>Lagre</Button>}
-          </Block>
-        </Block>
-      </>}
+    <Block maxWidth={maxPageWidth} width='100%'>
+      <Block paddingLeft='40px' paddingRight='40px' width='calc(100%-80px)' display='flex' justifyContent='center'>
+        <Block minWidth={pageWidth}>
+          {loading && <LoadingSkeleton header='Etterlevelse' />}
+          {!loading && <>
+            <Block>
+              <HeadingLarge>Etterlevelse: {etterlevelse && etterlevelse?.kravNummer !== 0 ? etterlevelseName(etterlevelse) : 'Ny'}</HeadingLarge>
+              <Block display='flex' justifyContent='flex-end' marginBottom={theme.sizing.scale600}>
+                <RouteLink href={'/etterlevelse'}>
+                  <Button size='compact' kind='tertiary'>Tilbake</Button>
+                </RouteLink>
+                {etterlevelse?.id && user.canWrite() && <Button size='compact' kind={edit ? 'secondary' : 'primary'} onClick={() => setEdit(!edit)} marginLeft>{edit ? 'Avbryt' : 'Rediger'}</Button>}
+                {etterlevelse?.id && user.canWrite() && !edit && <DeleteItem fun={() => deleteEtterlevelse(etterlevelse.id)} redirect={'/etterlevelse'} />}
+                {edit && <Button size='compact' onClick={() => !formRef.current?.isSubmitting && formRef.current?.submitForm()} marginLeft>Lagre</Button>}
+              </Block>
+            </Block>
+          </>}
 
-      {!edit && etterlevelse && !loading && <ViewEtterlevelse etterlevelse={etterlevelse}/>}
-      {edit && etterlevelse && <EditEtterlevelse etterlevelse={etterlevelse} formRef={formRef} close={k => {
-        if (k) {
-          setEtterlevelse(k)
-          if (k.id !== etterlevelse.id) {
-            history.push(`/etterlevelse/${k.id}`)
-          }
-        }
-        setEdit(false)
-      }}/>}
-    </Block>
+          {!edit && etterlevelse && !loading && <ViewEtterlevelse etterlevelse={etterlevelse} />}
+          {edit && etterlevelse && <EditEtterlevelse etterlevelse={etterlevelse} formRef={formRef} close={k => {
+            if (k) {
+              setEtterlevelse(k)
+              if (k.id !== etterlevelse.id) {
+                history.push(`/etterlevelse/${k.id}`)
+              }
+            }
+            setEdit(false)
+          }} />}
+        </Block>
+      </Block>
     </Block>
   )
 }

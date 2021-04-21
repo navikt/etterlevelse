@@ -11,21 +11,24 @@ import { lovdataBase } from '../components/Lov'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons'
 import { Markdown } from '../components/common/Markdown'
+import { maxPageWidth } from '../util/theme'
 
 export const LovPage = () => {
   const { lov } = useParams<{ lov: string }>()
 
   if (!lov) {
     return (
-      <Block paddingLeft='40px' paddingRight='40px' width='calc(100%-80px)' display='flex' justifyContent='center'>
-        <Block>
-          <HeadingMedium>Velg lov</HeadingMedium>
+      <Block maxWidth={maxPageWidth} width='100%'>
+        <Block paddingLeft='40px' paddingRight='40px' width='calc(100%-80px)' display='flex' justifyContent='center'>
           <Block>
-            {codelist.getCodes(ListName.LOV).map((code) =>
-              <Block key={code.code} marginBottom={theme.sizing.scale400}>
-                <ObjectLink id={code.code} type={ListName.LOV}>{code.shortName}</ObjectLink>
-              </Block>
-            )}
+            <HeadingMedium>Velg lov</HeadingMedium>
+            <Block>
+              {codelist.getCodes(ListName.LOV).map((code) =>
+                <Block key={code.code} marginBottom={theme.sizing.scale400}>
+                  <ObjectLink id={code.code} type={ListName.LOV}>{code.shortName}</ObjectLink>
+                </Block>
+              )}
+            </Block>
           </Block>
         </Block>
       </Block>
@@ -39,35 +42,37 @@ export const LovPage = () => {
   const underavdeling = codelist.getCode(ListName.UNDERAVDELING, data.underavdeling)
 
   return (
-    <Block paddingLeft='40px' paddingRight='40px' width='calc(100%-80px)' display='flex' justifyContent='center' marginTop='50px'>
-      <Block>
-        <Block display='flex' justifyContent='space-between'>
-          <Block>
-            <HeadingMedium marginTop={0}>Lov: {code.shortName}</HeadingMedium>
-            <Markdown source={code.description} />
-          </Block>
-          <Block>
-            <Block marginLeft={theme.sizing.scale400}>
-              <LovBilde code={code} ellipse height={'220px'} />
+    <Block maxWidth={maxPageWidth} width='100%'>
+      <Block paddingLeft='40px' paddingRight='40px' width='calc(100%-80px)' display='flex' justifyContent='center' marginTop='50px'>
+        <Block>
+          <Block display='flex' justifyContent='space-between'>
+            <Block>
+              <HeadingMedium marginTop={0}>Lov: {code.shortName}</HeadingMedium>
+              <Markdown source={code.description} />
             </Block>
+            <Block>
+              <Block marginLeft={theme.sizing.scale400}>
+                <LovBilde code={code} ellipse height={'220px'} />
+              </Block>
 
-            {underavdeling && <>
-              <HeadingXSmall marginTop={theme.sizing.scale400} marginBottom={theme.sizing.scale200}>Ansvarlig for lovtolkning i NAV</HeadingXSmall>
+              {underavdeling && <>
+                <HeadingXSmall marginTop={theme.sizing.scale400} marginBottom={theme.sizing.scale200}>Ansvarlig for lovtolkning i NAV</HeadingXSmall>
+                <ParagraphMedium>
+                  <ObjectLink type={ListName.UNDERAVDELING} id={underavdeling.code}>{underavdeling?.shortName}</ObjectLink>
+                </ParagraphMedium>
+              </>}
+
+              <HeadingXSmall marginTop={theme.sizing.scale400} marginBottom={theme.sizing.scale200}>Loven i sin helhet</HeadingXSmall>
               <ParagraphMedium>
-                <ObjectLink type={ListName.UNDERAVDELING} id={underavdeling.code}>{underavdeling?.shortName}</ObjectLink>
+                <ExternalLink href={lovdataBase(code.code)}>{code.shortName} i lovdata <FontAwesomeIcon size={'sm'} icon={faExternalLinkAlt} /></ExternalLink>
               </ParagraphMedium>
-            </>}
-
-            <HeadingXSmall marginTop={theme.sizing.scale400} marginBottom={theme.sizing.scale200}>Loven i sin helhet</HeadingXSmall>
-            <ParagraphMedium>
-              <ExternalLink href={lovdataBase(code.code)}>{code.shortName} i lovdata <FontAwesomeIcon size={'sm'} icon={faExternalLinkAlt} /></ExternalLink>
-            </ParagraphMedium>
+            </Block>
           </Block>
-        </Block>
-        <Block marginTop={theme.sizing.scale1200}>
-          <Block>
-            <HeadingSmall marginBottom={theme.sizing.scale200}>Krav</HeadingSmall>
-            <KravFilterTable filter={{ lov }} exclude={['avdeling', 'underavdeling', 'regelverk']} />
+          <Block marginTop={theme.sizing.scale1200}>
+            <Block>
+              <HeadingSmall marginBottom={theme.sizing.scale200}>Krav</HeadingSmall>
+              <KravFilterTable filter={{ lov }} exclude={['avdeling', 'underavdeling', 'regelverk']} />
+            </Block>
           </Block>
         </Block>
       </Block>
