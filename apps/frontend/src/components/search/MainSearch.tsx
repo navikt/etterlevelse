@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { ReactElement, useEffect, useState } from 'react'
-import { Select, TYPE, Value } from 'baseui/select'
+import { Select, TYPE, Value, SIZE} from 'baseui/select'
 import { theme } from '../../util'
 import { useDebouncedState, useQueryParam } from '../../util/hooks'
 import { prefixBiasedSort } from '../../util/sort'
@@ -21,7 +21,6 @@ import { searchKrav } from '../../api/KravApi'
 import { behandlingName, searchBehandling } from '../../api/BehandlingApi'
 import { codelist, ListName } from '../../services/Codelist'
 import { searchIcon } from '../Images'
-import { Root } from 'baseui/toast'
 
 shortid.characters('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@')
 
@@ -221,6 +220,7 @@ const MainSearch = () => {
         width={responsiveWidth}
       >
         <Select
+          size={SIZE.compact}
           backspaceRemoves
           startOpen={!!searchParam}
           noResultsMsg={'Ingen'}
@@ -252,12 +252,6 @@ const MainSearch = () => {
           overrides={{
             SearchIcon: {
               component: () => <img src={searchIcon} alt='search icon' />,
-              style: {
-                width: theme.sizing.scale900,
-                height: theme.sizing.scale900,
-                left: theme.sizing.scale400,
-                top: theme.sizing.scale400,
-              }
             },
             ControlContainer: {
               style: {
