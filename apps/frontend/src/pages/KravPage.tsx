@@ -27,6 +27,7 @@ import { chevronLeft, editIcon, plusIcon } from '../components/Images'
 import { Label } from '../components/common/PropertyLabel'
 import { CustomizedTab, CustomizedTabs } from '../components/common/CustomizedTabs'
 import { maxPageWidth, pageWidth } from '../util/theme'
+import { faCalculator } from '@fortawesome/free-solid-svg-icons'
 
 export const kravNumView = (it: { kravVersjon: number, kravNummer: number }) => `K${it.kravNummer}.${it.kravVersjon}`
 export const kravName = (krav: Krav) => `${kravNumView(krav)}`
@@ -116,8 +117,8 @@ export const KravPage = () => {
             </Block>
 
 
-            <Block paddingLeft='40px' paddingRight='40px' width='100%' display='flex' justifyContent='center'>
-              <Block width={pageWidth} marginTop='7px'>
+            <Block paddingLeft='40px' paddingRight='40px' width='calc(100% - 80px)' display='flex' justifyContent='center'>
+              <Block maxWidth={pageWidth} marginTop='7px'>
                 <CustomizedTag>{krav && krav?.kravNummer !== 0 ? kravName(krav) : 'Ny'}</CustomizedTag>
                 <H2 $style={{ color: '#F8F8F8' }}>{krav && krav?.navn ? krav.navn : 'Ny'} </H2>
               </Block>
