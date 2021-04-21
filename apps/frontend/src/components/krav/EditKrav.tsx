@@ -17,6 +17,7 @@ import { CustomizedTab, CustomizedTabs } from '../common/CustomizedTabs'
 import { LabelLarge, H1, H2 } from 'baseui/typography'
 import CustomizedModal from '../common/CustomizedModal'
 import Button from '../common/Button'
+import { maxPageWidth } from '../../util/theme'
 
 type EditKravProps = {
   krav: KravQL,
@@ -49,7 +50,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
   }, [modalIsOpen])
 
   return (
-    <Block>
+    <Block maxWidth={maxPageWidth}>
       <CustomizedModal
         onClose={() => setIsOpen(false)}
         isOpen={isOpen}
