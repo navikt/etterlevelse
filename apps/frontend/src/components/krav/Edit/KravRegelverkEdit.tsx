@@ -37,7 +37,7 @@ export const KravRegelverkEdit = () => {
               <Block>
                 <Block>
                   <Block display='flex'>
-                    <Block width='400px' marginRight={theme.sizing.scale400}>
+                    <Block flex={1} width='400px' marginRight={theme.sizing.scale400}>
                       <LabelWithTooltip label={'Regelverk'} tooltip={'Velg relevant regelverk fra nedtrekksmenyen, og angi hvilke(n) bestemmelse(r) kravet har sin opprinnelse fra.'} />
                       <Select
                         controlRef={controlRef}
@@ -52,7 +52,7 @@ export const KravRegelverkEdit = () => {
                         }}
                       />
                     </Block>
-                    <Block width='100%'>
+                    <Block flex={1} width='100%'>
                       <LabelWithTooltip label={'Paragraf eller kapittel i regelverk'} tooltip={'Beskrivelse'} />
                       <Input value={text}
                         onChange={e => setText((e.target as HTMLInputElement).value)}
