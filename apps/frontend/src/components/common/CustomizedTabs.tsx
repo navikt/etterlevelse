@@ -11,7 +11,7 @@ interface CustomizedTabsProps {
   fontColor?: string,
   tabBackground?: string
 }
-
+ 
 type CustomProps = TabsProps & CustomizedTabsProps
 
 export const CustomizedTabs = (props: CustomProps ) => {

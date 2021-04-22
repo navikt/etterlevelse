@@ -1,7 +1,8 @@
 import React from 'react'
-import {PLACEMENT, StatefulTooltip, StatefulTooltipProps} from 'baseui/tooltip'
+import { PLACEMENT, StatefulTooltip, StatefulTooltipProps } from 'baseui/tooltip'
 
 const CustomizedStatefulTooltip = (props: StatefulTooltipProps) => {
+
   return (
     <StatefulTooltip
       {...props}
@@ -14,7 +15,8 @@ const CustomizedStatefulTooltip = (props: StatefulTooltipProps) => {
             maxWidth: '25%',
             wordBreak: 'break-word'
           }
-        }
+        },
+        ...props.overrides
       }}
     >
       {props.children}
