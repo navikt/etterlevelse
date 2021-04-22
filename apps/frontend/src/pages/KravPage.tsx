@@ -1,5 +1,5 @@
 import { Block } from 'baseui/block'
-import { H2, H4, H5, HeadingSmall, LabelLarge } from 'baseui/typography'
+import {H1, H2, H4, H5, HeadingSmall, LabelLarge } from 'baseui/typography'
 import { useHistory, useParams } from 'react-router-dom'
 import { deleteKrav, KravIdParams, mapToFormVal } from '../api/KravApi'
 import React, { useEffect, useRef, useState } from 'react'
@@ -120,7 +120,7 @@ export const KravPage = () => {
             <Block paddingLeft='40px' paddingRight='40px' width='calc(100% - 80px)' display='flex' justifyContent='center'>
               <Block maxWidth={pageWidth} marginTop='7px'>
                 <CustomizedTag>{krav && krav?.kravNummer !== 0 ? kravName(krav) : 'Ny'}</CustomizedTag>
-                <H2 $style={{ color: '#F8F8F8' }}>{krav && krav?.navn ? krav.navn : 'Ny'} </H2>
+                <H1 $style={{ color: '#F8F8F8' }}>{krav && krav?.navn ? krav.navn : 'Ny'} </H1>
               </Block>
             </Block>
           </Block>
@@ -141,7 +141,7 @@ export const KravPage = () => {
 
           <Block display='flex' justifyContent='center' width='100%'>
             <Block backgroundColor='#CCD9D7' flex={1} height='58px' minWidth='40px' />
-            <Block maxWidth={pageWidth}>
+            <Block maxWidth={pageWidth} width='100%'>
               <CustomizedTabs fontColor='#112624' tabBackground='#CBD9D7'>
                 <CustomizedTab title={<LabelLarge>Om kravet</LabelLarge>}>
                   <ViewKrav krav={krav} />

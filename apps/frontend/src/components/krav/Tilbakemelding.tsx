@@ -45,7 +45,7 @@ export const Tilbakemeldinger = ({krav}: {krav: Krav}) => {
   }
 
   return (
-    <Block marginTop={theme.sizing.scale2400}>
+    <Block marginTop={theme.sizing.scale2400} width='100%'>
       <Block display='flex' justifyContent='space-between' alignItems='center' width='100%'>
         <HeadingSmall>Tilbakemeldinger</HeadingSmall>
         <Block>

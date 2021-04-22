@@ -9,13 +9,14 @@ const empty = (arg: any) => !arg || (Array.isArray(arg) && !arg.length)
 type LabelProps = {
   title: string,
   hide?: boolean,
-  compact?: boolean
+  compact?: boolean,
+  header?: boolean,
 } & Or<{children: React.ReactNode}, {markdown: string | string[], vertical?: boolean}>
 
 export const Label = (props: LabelProps) => {
   if (props.hide || (empty(props.children) && empty(props.markdown))) return null
   return (
-    <DataText label={props.title} compact={props.compact}>
+    <DataText label={props.title} compact={props.compact} header={props.header}>
       {props.markdown ?
         <Block marginTop={'-1rem'} marginBottom={'-1rem'}>
           <Markdown sources={Array.isArray(props.markdown) ? props.markdown : [props.markdown]} vertical={props.vertical} shortenLinks/>
@@ -28,7 +29,7 @@ export const Label = (props: LabelProps) => {
 export const LabelAboveContent = (props: LabelProps) => {
   if (props.hide || (empty(props.children) && empty(props.markdown))) return null
   return (
-    <DataText notFlexed label={props.title} compact={props.compact}>
+    <DataText notFlexed label={props.title} compact={props.compact} header={props.header}>
       {props.markdown ?
         <Block marginTop={'-1rem'} marginBottom={'-1rem'}>
           <Markdown sources={Array.isArray(props.markdown) ? props.markdown : [props.markdown]} vertical={props.vertical} shortenLinks/>

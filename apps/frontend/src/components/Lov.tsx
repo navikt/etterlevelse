@@ -11,7 +11,7 @@ const processString = reactProcessString as (converters: {regex: RegExp, fn: (ke
 
 export const LovViewList = (props: {regelverk: Regelverk[]}) => {
   return (
-    <Block display='flex' flexDirection='column'>
+    <Block display='flex' flexDirection='column' $style={{wordBreak: 'break-all'}}>
       {props.regelverk.map((r, i) => <Block key={i}><LovView regelverk={r}/></Block>)}
     </Block>
   )

@@ -23,8 +23,8 @@ export const ViewKrav = ({ krav }: { krav: KravQL }) => {
 
   return (
     <Block width='100%'>
-      <LabelAboveContent title='Suksesskriterier' markdown={krav.suksesskriterier.map(s => `${s.id}: ${s.navn}`)} vertical />
-      <LabelAboveContent title='Beskrivelse' markdown={krav.beskrivelse} />
+      <LabelAboveContent header title='Suksesskriterier' markdown={krav.suksesskriterier.map(s => `${s.id}: ${s.navn}`)} vertical />
+      <LabelAboveContent header title='Beskrivelse' markdown={krav.beskrivelse} />
 
       <Block height={theme.sizing.scale800} />
 
@@ -42,15 +42,15 @@ const MediumInfo = ({ krav }: { krav: KravQL }) => (
 
 const AllInfo = ({ krav }: { krav: KravQL }) => (
   <>
-    <LabelAboveContent title='Utfyllende beskrivelse' markdown={krav.utdypendeBeskrivelse} />
-    <LabelAboveContent title='Endringer fra forrige versjon' markdown={krav.versjonEndringer} />
-    <LabelAboveContent title='Dokumentasjon' markdown={krav.dokumentasjon} />
+    <LabelAboveContent header title='Utfyllende beskrivelse' markdown={krav.utdypendeBeskrivelse} />
+    <LabelAboveContent header title='Endringer fra forrige versjon' markdown={krav.versjonEndringer} />
+    <LabelAboveContent header title='Dokumentasjon' markdown={krav.dokumentasjon} />
 
-    <LabelAboveContent title='Rettskilder' markdown={krav.rettskilder} />
+    <LabelAboveContent header title='Rettskilder' markdown={krav.rettskilder} />
 
-    <LabelAboveContent title='Etiketter'>{krav.tagger.join(', ')}</LabelAboveContent>
-    <LabelAboveContent title='Relevante implementasjoner' markdown={krav.implementasjoner} />
-    <LabelAboveContent title='Begreper'>{krav.begreper.map((b, i) => <BegrepView key={i} begrep={b} />)}</LabelAboveContent>
+    <LabelAboveContent header title='Etiketter'>{krav.tagger.join(', ')}</LabelAboveContent>
+    <LabelAboveContent header title='Relevante implementasjoner' markdown={krav.implementasjoner} />
+    <LabelAboveContent header title='Begreper'>{krav.begreper.map((b, i) => <BegrepView key={i} begrep={b} />)}</LabelAboveContent>
 
 
 
@@ -58,21 +58,21 @@ const AllInfo = ({ krav }: { krav: KravQL }) => (
 
     {/* <LabelAboveContent title='Avdeling'>{krav.avdeling?.shortName}</LabelAboveContent> */}
 
-    <LabelAboveContent title='Kravet er relevant for'><DotTags list={ListName.RELEVANS} codes={krav.relevansFor} linkCodelist /></LabelAboveContent>
-   
+    <LabelAboveContent header title='Kravet er relevant for'><DotTags list={ListName.RELEVANS} codes={krav.relevansFor} linkCodelist /></LabelAboveContent>
+
     <Block backgroundColor='#F6E8E6' padding='40px'>
-    <Label title='Ansvarlig'><ObjectLink id={krav.underavdeling?.code} type={ListName.UNDERAVDELING}>{krav.underavdeling?.shortName}</ObjectLink></Label>
+      <Label title='Ansvarlig'><ObjectLink id={krav.underavdeling?.code} type={ListName.UNDERAVDELING}>{krav.underavdeling?.shortName}</ObjectLink></Label>
       <Label title='Regelverk' hide={!krav.regelverk.length}>
         <LovViewList regelverk={krav.regelverk} />
       </Label>
       <Label title='Varslingsadresser' hide={!user.isKraveier()}>
-      <DotTags items={krav.varslingsadresser.map((va, i) => {
-        if (va.type === AdresseType.SLACK) return <Block>Slack: <StyledLink href={slackLink(va.adresse)}>#{va.slackChannel?.name || va.adresse}</StyledLink></Block>
-        if (va.type === AdresseType.SLACK_USER) return <Block>Slack: <StyledLink href={slackUserLink(va.adresse)}>{va.slackUser?.name || va.adresse}</StyledLink></Block>
-        return <Block>Epost: <StyledLink href={`mailto:${va.adresse}`}>{va.adresse}</StyledLink></Block>
-      }
-      )} />
-    </Label>
+        <DotTags items={krav.varslingsadresser.map((va, i) => {
+          if (va.type === AdresseType.SLACK) return <Block>Slack: <StyledLink href={slackLink(va.adresse)}>#{va.slackChannel?.name || va.adresse}</StyledLink></Block>
+          if (va.type === AdresseType.SLACK_USER) return <Block>Slack: <StyledLink href={slackUserLink(va.adresse)}>{va.slackUser?.name || va.adresse}</StyledLink></Block>
+          return <Block>Epost: <StyledLink href={`mailto:${va.adresse}`}>{va.adresse}</StyledLink></Block>
+        }
+        )} />
+      </Label>
       <Label title='Status'>{kravStatus(krav.status)}</Label>
       {krav.periode?.start && <Label title='Gyldig fom'>{formatDate(krav.periode?.start)}</Label>}
       {krav.periode?.slutt && <Label title='Gyldig tom'>{formatDate(krav.periode?.slutt)}</Label>}
