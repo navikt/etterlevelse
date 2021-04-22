@@ -20,7 +20,7 @@ export const MainPage = () => {
   return (
       <Block maxWidth={maxPageWidth}>
         <Block paddingLeft='40px' paddingRight='40px' width='calc(100%-80px)' display='flex' justifyContent='center' marginTop='50px'>
-          <Block display='flex' flexDirection='column' width={'1000px'} overrides={{ Block: { props: { role: 'main' } } }}>
+          <Block display='flex' flexDirection='column' maxWidth={'1000px'} overrides={{ Block: { props: { role: 'main' } } }}>
             <Block {...sectionProps} overrides={{ Block: { props: { role: 'navigation', 'aria-label': 'Hoved meny' } } }}>
               <SectionCard
                 icon={pencilFill} url={'/behandling'} title={'Dokumenter etterlevelse'}
@@ -37,7 +37,7 @@ export const MainPage = () => {
             </Block>
 
             <Block {...sectionProps}>
-              <Block height='320px' overflow={'hidden'} marginBottom={theme.sizing.scale800}>
+              <Block display={['none', 'none', 'none', 'none', 'none', 'block']} height='320px' overflow={'hidden'} marginBottom={theme.sizing.scale800}>
                 <img style={{ marginTop: '-215px', width: '100%' }} src={illustration} alt='illustrasjon' />
               </Block>
             </Block>
