@@ -22,6 +22,8 @@ import deleteIcon from '../resources/icons/delete.svg'
 import editIcon from '../resources/icons/edit.svg'
 import searchIcon from '../resources/icons/search-icon.svg'
 import questionmarkIcon from '../resources/icons/questionmark.svg'
+import questionmarkHoverIcon from '../resources/icons/questionmark-hover.svg'
+import questionmarkFocusIcon from '../resources/icons/questionmark-focus.svg'
 import illustration from '../resources/giammarco-boscaro-zeH-ljawHtg-unsplash.jpg'
 import {codelist, ListName, LovCode, TemaCode} from '../services/Codelist'
 import React from 'react'
@@ -40,7 +42,9 @@ export {
   deleteIcon,
   editIcon,
   searchIcon,
-  questionmarkIcon
+  questionmarkIcon,
+  questionmarkHoverIcon,
+  questionmarkFocusIcon,
 }
 
 export const temaBilder: {[id: string]: string} = {
