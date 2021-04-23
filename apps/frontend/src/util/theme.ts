@@ -50,10 +50,10 @@ const overrides: RecursivePartial<Theme> = {
     // Increase weight 500->600 on bold texts
     font150: {fontWeight: 600},
     font250: {fontWeight: 600},
-
-    font300: { fontWeight: 400, fontSize: '18px', lineHeight: '24px'}, //P2
-
     font350: {fontWeight: 600},
+
+    font300: { fontWeight: 400, fontSize: '18px', lineHeight: '24px'}, //P1
+
     font450: {fontWeight: 600},
     font550: {fontWeight: 600},
     font650: {fontWeight: 600},
