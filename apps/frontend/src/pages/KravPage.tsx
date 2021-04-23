@@ -1,36 +1,35 @@
-import { Block } from 'baseui/block'
-import {H1, H2, H4, H5, HeadingSmall, LabelLarge } from 'baseui/typography'
-import { useHistory, useParams } from 'react-router-dom'
-import { deleteKrav, KravIdParams, mapToFormVal } from '../api/KravApi'
-import React, { useEffect, useRef, useState } from 'react'
-import { EtterlevelseQL, Krav, KravQL, KravStatus } from '../constants'
+import {Block} from 'baseui/block'
+import {H1, HeadingSmall, LabelLarge} from 'baseui/typography'
+import {useHistory, useParams} from 'react-router-dom'
+import {deleteKrav, KravIdParams, mapToFormVal} from '../api/KravApi'
+import React, {useEffect, useRef, useState} from 'react'
+import {EtterlevelseQL, Krav, KravQL, KravStatus} from '../constants'
 import Button from '../components/common/Button'
-import { ViewKrav } from '../components/krav/ViewKrav'
-import { EditKrav } from '../components/krav/EditKrav'
-import RouteLink, { ObjectLink } from '../components/common/RouteLink'
-import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
-import { user } from '../services/User'
-import { theme } from '../util'
-import { FormikProps } from 'formik'
-import { DeleteItem } from '../components/DeleteItem'
-import { Cell, Row, Table } from '../components/common/Table'
-import { Spinner } from '../components/common/Spinner'
-import { Teams } from '../components/common/TeamName'
-import { marginAll } from '../components/common/Style'
-import { ObjectType } from '../components/admin/audit/AuditTypes'
-import { behandlingName } from '../api/BehandlingApi'
-import { etterlevelseStatus } from './EtterlevelsePage'
-import { gql, useQuery } from '@apollo/client'
-import { Tilbakemeldinger } from '../components/krav/Tilbakemelding'
+import {ViewKrav} from '../components/krav/ViewKrav'
+import {EditKrav} from '../components/krav/EditKrav'
+import RouteLink, {ObjectLink} from '../components/common/RouteLink'
+import {LoadingSkeleton} from '../components/common/LoadingSkeleton'
+import {user} from '../services/User'
+import {theme} from '../util'
+import {FormikProps} from 'formik'
+import {DeleteItem} from '../components/DeleteItem'
+import {Cell, Row, Table} from '../components/common/Table'
+import {Spinner} from '../components/common/Spinner'
+import {Teams} from '../components/common/TeamName'
+import {marginAll} from '../components/common/Style'
+import {ObjectType} from '../components/admin/audit/AuditTypes'
+import {behandlingName} from '../api/BehandlingApi'
+import {etterlevelseStatus} from './EtterlevelsePage'
+import {gql, useQuery} from '@apollo/client'
+import {Tilbakemeldinger} from '../components/krav/Tilbakemelding'
 import CustomizedTag from '../components/common/CustomizedTag'
-import { chevronLeft, editIcon, plusIcon } from '../components/Images'
-import { Label } from '../components/common/PropertyLabel'
-import { CustomizedTab, CustomizedTabs } from '../components/common/CustomizedTabs'
-import { maxPageWidth, pageWidth } from '../util/theme'
-import { faCalculator } from '@fortawesome/free-solid-svg-icons'
+import {chevronLeft, editIcon, plusIcon} from '../components/Images'
+import {Label} from '../components/common/PropertyLabel'
+import {CustomizedTab, CustomizedTabs} from '../components/common/CustomizedTabs'
+import {maxPageWidth, pageWidth} from '../util/theme'
 
 export const kravNumView = (it: { kravVersjon: number, kravNummer: number }) => `K${it.kravNummer}.${it.kravVersjon}`
-export const kravName = (krav: Krav) => `${kravNumView(krav)}`
+export const kravName = (krav: Krav) => `${kravNumView(krav)} - ${krav.navn}`
 
 export const kravStatus = (status: KravStatus) => {
   if (!status) return ''
@@ -119,7 +118,7 @@ export const KravPage = () => {
 
             <Block paddingLeft='40px' paddingRight='40px' width='calc(100% - 80px)' display='flex' justifyContent='center'>
               <Block maxWidth={pageWidth} marginTop='7px'>
-                <CustomizedTag>{krav && krav?.kravNummer !== 0 ? kravName(krav) : 'Ny'}</CustomizedTag>
+                <CustomizedTag>{krav && krav?.kravNummer !== 0 ? kravNumView(krav) : 'Ny'}</CustomizedTag>
                 <H1 $style={{ color: '#F8F8F8' }}>{krav && krav?.navn ? krav.navn : 'Ny'} </H1>
               </Block>
             </Block>

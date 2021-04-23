@@ -252,7 +252,7 @@ const KravView = (props: {kravId: KravId}) => {
   return (
     <Block>
       <Block display='flex' justifyContent='space-between' alignItems='center'>
-        {krav && <HeadingSmall>Krav: {kravName(krav)}</HeadingSmall>}
+        {krav && <HeadingSmall>Krav: {kravNumView(krav)}</HeadingSmall>}
         <Block>
           <Button type='button' size='compact' onClick={() => setView(!view)}>{`${(view ? 'Skjul' : 'Vis')} detaljer`}</Button>
         </Block>
