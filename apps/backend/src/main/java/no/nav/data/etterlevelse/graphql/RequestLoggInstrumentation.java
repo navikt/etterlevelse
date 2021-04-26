@@ -32,10 +32,10 @@ public class RequestLoggInstrumentation extends SimpleInstrumentation {
                 if (executionResult.getErrors().isEmpty()) {
                     log.info("Completed successfully in: {}", duration);
                 } else {
-                    log.info("Completed with errors in: {} - {}", duration, JsonUtils.toJson(convert(executionResult.getErrors(), GraphQLError::toSpecification)));
+                    log.warn("Completed with errors in: {} - {}", duration, JsonUtils.toJson(convert(executionResult.getErrors(), GraphQLError::toSpecification)));
                 }
             } else {
-                log.warn("Failed in: {}", duration, throwable);
+                log.error("Failed in: {}", duration, throwable);
             }
         });
     }
