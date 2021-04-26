@@ -1,32 +1,32 @@
-import {Block} from 'baseui/block'
-import {H1, HeadingSmall, LabelLarge} from 'baseui/typography'
-import {useHistory, useParams} from 'react-router-dom'
-import {deleteKrav, KravIdParams, mapToFormVal} from '../api/KravApi'
-import React, {useEffect, useRef, useState} from 'react'
-import {EtterlevelseQL, Krav, KravQL, KravStatus} from '../constants'
+import { Block } from 'baseui/block'
+import { H1, HeadingSmall, LabelLarge, Paragraph1 } from 'baseui/typography'
+import { useHistory, useParams } from 'react-router-dom'
+import { deleteKrav, KravIdParams, mapToFormVal } from '../api/KravApi'
+import React, { useEffect, useRef, useState } from 'react'
+import { EtterlevelseQL, Krav, KravQL, KravStatus } from '../constants'
 import Button from '../components/common/Button'
-import {ViewKrav} from '../components/krav/ViewKrav'
-import {EditKrav} from '../components/krav/EditKrav'
-import RouteLink, {ObjectLink} from '../components/common/RouteLink'
-import {LoadingSkeleton} from '../components/common/LoadingSkeleton'
-import {user} from '../services/User'
-import {theme} from '../util'
-import {FormikProps} from 'formik'
-import {DeleteItem} from '../components/DeleteItem'
-import {Cell, Row, Table} from '../components/common/Table'
-import {Spinner} from '../components/common/Spinner'
-import {Teams} from '../components/common/TeamName'
-import {marginAll} from '../components/common/Style'
-import {ObjectType} from '../components/admin/audit/AuditTypes'
-import {behandlingName} from '../api/BehandlingApi'
-import {etterlevelseStatus} from './EtterlevelsePage'
-import {gql, useQuery} from '@apollo/client'
-import {Tilbakemeldinger} from '../components/krav/Tilbakemelding'
+import { ViewKrav } from '../components/krav/ViewKrav'
+import { EditKrav } from '../components/krav/EditKrav'
+import RouteLink, { ObjectLink } from '../components/common/RouteLink'
+import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
+import { user } from '../services/User'
+import { theme } from '../util'
+import { FormikProps } from 'formik'
+import { DeleteItem } from '../components/DeleteItem'
+import { Cell, Row, Table } from '../components/common/Table'
+import { Spinner } from '../components/common/Spinner'
+import { Teams } from '../components/common/TeamName'
+import { marginAll } from '../components/common/Style'
+import { ObjectType } from '../components/admin/audit/AuditTypes'
+import { behandlingName } from '../api/BehandlingApi'
+import { etterlevelseStatus } from './EtterlevelsePage'
+import { gql, useQuery } from '@apollo/client'
+import { Tilbakemeldinger } from '../components/krav/Tilbakemelding'
 import CustomizedTag from '../components/common/CustomizedTag'
-import {chevronLeft, editIcon, plusIcon} from '../components/Images'
-import {Label} from '../components/common/PropertyLabel'
-import {CustomizedTab, CustomizedTabs} from '../components/common/CustomizedTabs'
-import {maxPageWidth, pageWidth} from '../util/theme'
+import { chevronLeft, editIcon, plusIcon } from '../components/Images'
+import { Label } from '../components/common/PropertyLabel'
+import { CustomizedTab, CustomizedTabs } from '../components/common/CustomizedTabs'
+import { maxPageWidth, pageWidth } from '../util/theme'
 
 export const kravNumView = (it: { kravVersjon: number, kravNummer: number }) => `K${it.kravNummer}.${it.kravVersjon}`
 export const kravName = (krav: Krav) => `${kravNumView(krav)} - ${krav.navn}`
@@ -83,7 +83,17 @@ export const KravPage = () => {
     if (!edit && !krav?.id && krav?.nyKravVersjon) reloadKrav()
   }, [edit])
 
-  return (
+  const getLastModifiedBy = (krav: KravQL) => {
+    const monthList = ['januar','februar','mars','april','mai','juni','juli','august','september','oktober','november','desember']
+    const date = new Date(krav.changeStamp.lastModifiedDate)
+    const year = date.getFullYear()
+    const month = monthList[date.getMonth()]
+    const dt = date.getDate() <10 ? '0'+ date.getDate().toString() : date.getDate().toString()
+
+    return `Sist endret: ${dt}. ${month} ${year} av ${krav.changeStamp.lastModifiedBy.split(' ')[0]}`
+  }
+
+   return (
     <Block width='100%' overrides={{ Block: { props: { role: 'main' } } }}>
       {kravLoading && <LoadingSkeleton header='Krav' />}
       {!kravLoading &&
@@ -96,7 +106,6 @@ export const KravPage = () => {
                     <Button startEnhancer={<img alt={'Chevron left'} src={chevronLeft} />} size='compact' kind='tertiary' $style={{ color: '#F8F8F8' }}> Tilbake</Button>
                   </RouteLink>
                 </Block>
-
                 <Block flex='1' display='flex' justifyContent='flex-end'>
                   {krav?.id && user.isKraveier() && <Button startEnhancer={<img alt='add' src={plusIcon} />} onClick={newVersion} marginLeft size='compact' kind='tertiary' $style={{ color: '#F8F8F8' }}>Ny versjon</Button>}
                   {krav?.id && user.isKraveier() && <DeleteItem fun={() => deleteKrav(krav.id)} redirect={'/krav'} />}
@@ -117,7 +126,7 @@ export const KravPage = () => {
 
 
             <Block paddingLeft='40px' paddingRight='40px' width='calc(100% - 80px)' display='flex' justifyContent='center'>
-              <Block maxWidth={pageWidth} marginTop='7px'>
+              <Block maxWidth={pageWidth} width='100%' marginTop='7px'>
                 <CustomizedTag>{krav && krav?.kravNummer !== 0 ? kravNumView(krav) : 'Ny'}</CustomizedTag>
                 <H1 $style={{ color: '#F8F8F8' }}>{krav && krav?.navn ? krav.navn : 'Ny'} </H1>
               </Block>
@@ -155,6 +164,11 @@ export const KravPage = () => {
             </Block>
             <Block backgroundColor='#CCD9D7' flex={1} height='58px' minWidth='40px' />
           </Block>
+          <Block display='flex' justifyContent='center' width='calc(100% - 80px)' paddingLeft='40px' paddingRight='40px'>
+            <Block maxWidth={pageWidth} width='100%'>
+              <Paragraph1>{getLastModifiedBy(krav)}</Paragraph1>
+            </Block>
+          </Block>
         </Block>}
 
       {krav && <EditKrav isOpen={edit} setIsOpen={setEdit} krav={krav} formRef={formRef} close={k => {
@@ -171,7 +185,6 @@ export const KravPage = () => {
     </Block>
   )
 }
-
 const Etterlevelser = ({ loading, etterlevelser }: { loading: boolean, etterlevelser?: EtterlevelseQL[] }) => {
 
   return (
@@ -210,6 +223,10 @@ const query = gql`
       id
       kravNummer
       kravVersjon
+      changeStamp {
+        lastModifiedBy
+        lastModifiedDate
+      }
 
       navn
       beskrivelse
