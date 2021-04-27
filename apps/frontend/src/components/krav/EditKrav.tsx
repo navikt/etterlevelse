@@ -1,23 +1,23 @@
-import { Krav, KravQL, KravStatus } from '../../constants'
-import { Form, Formik } from 'formik'
-import { createKrav, mapToFormVal, updateKrav } from '../../api/KravApi'
-import { Block } from 'baseui/block'
+import {Krav, KravQL, KravStatus} from '../../constants'
+import {Form, Formik} from 'formik'
+import {createKrav, mapToFormVal, updateKrav} from '../../api/KravApi'
+import {Block} from 'baseui/block'
 import React from 'react'
 import * as yup from 'yup'
-import { ListName } from '../../services/Codelist'
-import { kravStatus } from '../../pages/KravPage'
-import { DateField, InputField, MultiInputField, MultiOptionField, OptionField, TextAreaField } from '../common/Inputs'
+import {ListName} from '../../services/Codelist'
+import {kravStatus} from '../../pages/KravPage'
+import {DateField, InputField, MultiInputField, MultiOptionField, OptionField, TextAreaField} from '../common/Inputs'
 import axios from 'axios'
-import { env } from '../../util/env'
-import { KravVarslingsadresserEdit } from './Edit/KravVarslingsadresserEdit'
-import { KravRegelverkEdit } from './Edit/KravRegelverkEdit'
-import { KravSuksesskriterierEdit } from './Edit/KravSuksesskriterieEdit'
-import { EditBegreper } from './Edit/KravBegreperEdit'
-import { CustomizedTab, CustomizedTabs } from '../common/CustomizedTabs'
-import { LabelLarge, H1, H2 } from 'baseui/typography'
+import {env} from '../../util/env'
+import {KravVarslingsadresserEdit} from './Edit/KravVarslingsadresserEdit'
+import {KravRegelverkEdit} from './Edit/KravRegelverkEdit'
+import {KravSuksesskriterierEdit} from './Edit/KravSuksesskriterieEdit'
+import {EditBegreper} from './Edit/KravBegreperEdit'
+import {CustomizedTab, CustomizedTabs} from '../common/CustomizedTabs'
+import {H1, H2, LabelLarge} from 'baseui/typography'
 import CustomizedModal from '../common/CustomizedModal'
 import Button from '../common/Button'
-import { maxPageWidth } from '../../util/theme'
+import {maxPageWidth} from '../../util/theme'
 
 type EditKravProps = {
   krav: KravQL,
@@ -27,7 +27,7 @@ type EditKravProps = {
   setIsOpen: Function
 }
 
-export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravProps) => {
+export const EditKrav = ({krav, close, formRef, isOpen, setIsOpen}: EditKravProps) => {
 
   const [modalIsOpen, setmodalIsOpen] = React.useState(false)
   const [stickyHeader, setStickyHeader] = React.useState(false)
@@ -74,7 +74,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
           initialValues={mapToFormVal(krav)}
           validationSchema={kravSchema()}
           innerRef={formRef}
-        >{({ isSubmitting, submitForm }) => (
+        >{({isSubmitting, submitForm}) => (
           <Form>
             <Block
               backgroundColor='#112724'
@@ -85,17 +85,17 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
               position='sticky'
               top={0}
               display={!stickyHeader ? 'block' : 'flex'}
-              $style={{ zIndex: 1 }}
+              $style={{zIndex: 1}}
             >
               {stickyHeader && (
                 <Block display='flex' width='100%' justifyContent='flex-start'>
-                  <LabelLarge $style={{ color: '#F8F8F8' }}>{`K${krav.kravNummer}.${krav.kravVersjon} ${krav.navn}`}</LabelLarge>
+                  <LabelLarge $style={{color: '#F8F8F8'}}>{`K${krav.kravNummer}.${krav.kravVersjon} ${krav.navn}`}</LabelLarge>
                 </Block>
               )}
               <Block display='flex' justifyContent='flex-end'>
                 <Button
                   size='compact'
-                  $style={{ color: '#112724', backgroundColor: '#F8F8F8', ':hover': { backgroundColor: '#F8F8F8' } }}
+                  $style={{color: '#112724', backgroundColor: '#F8F8F8', ':hover': {backgroundColor: '#F8F8F8'}}}
                   onClick={() => submitForm}
                   disabled={isSubmitting}
                   marginLeft>
@@ -103,7 +103,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
                 </Button>
                 <Button
                   size='compact'
-                  $style={{ color: '#F8F8F8' }}
+                  $style={{color: '#F8F8F8'}}
                   kind={'tertiary'}
                   onClick={
                     close
@@ -117,26 +117,27 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
               }
               {!stickyHeader && (
                 <Block>
-                  <H1 $style={{ color: '#F8F8F8' }}>Rediger kravside: </H1>
-                  <H2 $style={{ color: '#F8F8F8' }}>{`K${krav.kravNummer}.${krav.kravVersjon} ${krav.navn}`} </H2>
+                  <H1 $style={{color: '#F8F8F8'}}>Rediger kravside: </H1>
+                  <H2 $style={{color: '#F8F8F8'}}>{`K${krav.kravNummer}.${krav.kravVersjon} ${krav.navn}`} </H2>
                 </Block>
               )}
             </Block>
             <Block>
               <Block backgroundColor='#F1F1F1' paddingLeft='212px' paddingRight='212px'>
-                <InputField label='Krav-tittel' name='navn' tooltip={'Gi kravet en kort tittel. Kravet formuleres som en aktivitet eller målsetting.'} />
+                <InputField label='Krav-tittel' name='navn' tooltip={'Gi kravet en kort tittel. Kravet formuleres som en aktivitet eller målsetting.'}/>
                 <TextAreaField marginBottom='0px' label='Hensikt' name='hensikt' markdown shortenLinks onImageUpload={onImageUpload(krav.id)}
-                  tooltip={'Bruk noen setninger på å forklare hensikten med kravet. Formålet er at leseren skal forstå hvorfor vi har dette kravet.'} />
+                               tooltip={'Bruk noen setninger på å forklare hensikten med kravet. Formålet er at leseren skal forstå hvorfor vi har dette kravet.'}/>
               </Block>
 
               <Block display='flex' width='100%' justifyContent='center'>
-                <Block backgroundColor='#F1F1F1' height='58px' width='212px' />
+                <Block backgroundColor='#F1F1F1' height='58px' width='212px'/>
                 <Block width='calc(100% - 424px)'>
-                  <CustomizedTabs fontColor='#112624' tabBackground='#F1F1F1'>
-                    <CustomizedTab title={<LabelLarge>Om kravet</LabelLarge>}>
-                      <KravSuksesskriterierEdit />
-                      <TextAreaField label='Beskrivelse' name='beskrivelse' markdown shortenLinks onImageUpload={onImageUpload(krav.id)} tooltip={'Beskriv selve innholdet i kravet.'} />
-                      {/* 
+                  <CustomizedTabs fontColor='#0B483F' activeColor='#102723' tabBackground='#F1F1F1'>
+                    <CustomizedTab title={'Om kravet'}>
+                      <KravSuksesskriterierEdit/>
+                      <TextAreaField label='Beskrivelse' name='beskrivelse' markdown shortenLinks onImageUpload={onImageUpload(krav.id)}
+                                     tooltip={'Beskriv selve innholdet i kravet.'}/>
+                      {/*
                       <TextAreaField label='Utfyllende beskrivelse' name='utdypendeBeskrivelse' markdown shortenLinks onImageUpload={onImageUpload(krav.id)}
                         tooltip={'Legg til en utfyllende beskrivelse av kravet. Benyttes kun der det er behov for det.'} /> */}
 
@@ -145,9 +146,9 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
                       </Block>
 
                       <MultiInputField linkLabel='Navn på dokumentasjon' name='dokumentasjon' link label='Lenke eller websaknr' tooltip='Lenke til dokumentasjon'
-                        linkTooltip={'Legg inn referanse til utdypende dokumentasjon (lenke). Eksempelvis til navet, eksterne nettsider eller Websak.'} />
-                      <KravRegelverkEdit />
-                      <MultiInputField label='Relevante implementasjoner' name='implementasjoner' tooltip={'Vis til gode eksisterende implementasjoner som ivaretar kravet.'} />
+                                       linkTooltip={'Legg inn referanse til utdypende dokumentasjon (lenke). Eksempelvis til navet, eksterne nettsider eller Websak.'}/>
+                      <KravRegelverkEdit/>
+                      <MultiInputField label='Relevante implementasjoner' name='implementasjoner' tooltip={'Vis til gode eksisterende implementasjoner som ivaretar kravet.'}/>
                       {/* <MultiInputField label='Rettskilder' name='rettskilder' link /> */}
 
                       <Block marginBottom='49px'>
@@ -155,50 +156,50 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
                       </Block>
 
                       <MultiOptionField label='Relevant for' name='relevansFor' listName={ListName.RELEVANS}
-                        tooltip={'Velg kategori(er) kravet er relevant for i nedtrekksmenyen. \n'} />
+                                        tooltip={'Velg kategori(er) kravet er relevant for i nedtrekksmenyen. \n'}/>
 
-                      <MultiInputField label='Etiketter' name='tagger' tooltip={'Tag kravet med et eller flere nøkkelord. Hensikten er å skape relasjon(er) til andre krav.'} />
+                      <MultiInputField label='Etiketter' name='tagger' tooltip={'Tag kravet med et eller flere nøkkelord. Hensikten er å skape relasjon(er) til andre krav.'}/>
 
-                      <EditBegreper />
+                      <EditBegreper/>
 
                       <Block marginBottom='49px'>
                         <LabelLarge><b>Egenskaper</b></LabelLarge>
                       </Block>
 
-                      <OptionField label='Status' name='status' options={Object.values(KravStatus).map(id => ({ id, label: kravStatus(id) }))}
-                        tooltip={'Velg status for kravet. Utkast er kun synlig for kraveier selv. Aktiv/utgått er synlig for alle.'} />
+                      <OptionField label='Status' name='status' options={Object.values(KravStatus).map(id => ({id, label: kravStatus(id)}))}
+                                   tooltip={'Velg status for kravet. Utkast er kun synlig for kraveier selv. Aktiv/utgått er synlig for alle.'}/>
 
-                      <KravVarslingsadresserEdit />
+                      <KravVarslingsadresserEdit/>
 
-                      <DateField label='Gyldig fra' name='periode.start' tooltip={'Legg til gyldighetsperiode for kravet der det er aktuelt. Hvis ikke skal feltene være blanke.'} />
-                      <DateField label='Gyldig til' name='periode.slutt' tooltip={'Legg til gyldighetsperiode for kravet der det er aktuelt. Hvis ikke skal feltene være blanke.'} />
+                      <DateField label='Gyldig fra' name='periode.start' tooltip={'Legg til gyldighetsperiode for kravet der det er aktuelt. Hvis ikke skal feltene være blanke.'}/>
+                      <DateField label='Gyldig til' name='periode.slutt' tooltip={'Legg til gyldighetsperiode for kravet der det er aktuelt. Hvis ikke skal feltene være blanke.'}/>
 
                       {/* <OptionField label='Avdeling' name='avdeling' listName={ListName.AVDELING} tooltip={'Angi hvilken avdeling som har det overordnede ansvaret for kravet.'} /> */}
-                      <OptionField label='Ansvarlig' name='Ansvarlig' listName={ListName.UNDERAVDELING} tooltip={'Angi hvilken seksjon/underavdeling som har ansvaret for kravet.'} />
+                      <OptionField label='Ansvarlig' name='Ansvarlig' listName={ListName.UNDERAVDELING}
+                                   tooltip={'Angi hvilken seksjon/underavdeling som har ansvaret for kravet.'}/>
 
-                      <TextAreaField label='Endringer fra forrige versjon' name='versjonEndringer' tooltip={'Gi informasjon om hva som er endret siden forrige versjon av kravet.'} />
+                      <TextAreaField label='Endringer fra forrige versjon' name='versjonEndringer'
+                                     tooltip={'Gi informasjon om hva som er endret siden forrige versjon av kravet.'}/>
 
 
                     </CustomizedTab>
-                    <CustomizedTab title={<LabelLarge>Spørsmål og svar</LabelLarge>}>
-                    </CustomizedTab>
-                    <CustomizedTab title={<LabelLarge>Eksempler på etterlevelse</LabelLarge>}>
+                    <CustomizedTab title={'Spørsmål og svar'}>
                     </CustomizedTab>
                   </CustomizedTabs>
                 </Block>
-                <Block backgroundColor='#F1F1F1' height='58px' width='212px' />
+                <Block backgroundColor='#F1F1F1' height='58px' width='212px'/>
               </Block>
             </Block>
           </Form>
         )}
         </Formik>
       </CustomizedModal>
-    </Block >
+    </Block>
   )
 }
 
 const onImageUpload = (kravId: string) => async (file: File) => {
-  const config = { headers: { 'content-type': 'multipart/form-data' } }
+  const config = {headers: {'content-type': 'multipart/form-data'}}
   const formData = new FormData()
   formData.append('file', file)
   const id = (await axios.post<string[]>(`${env.backendBaseUrl}/krav/${kravId}/files`, formData, config)).data[0]
