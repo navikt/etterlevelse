@@ -7,7 +7,7 @@ import {StatefulPopover} from 'baseui/popover'
 import {useHistory, useLocation} from 'react-router-dom'
 import {StyledLink} from 'baseui/link'
 import {useAwait, useQueryParam} from '../util/hooks'
-import {borderRadius, borderStyle, borderWidth, paddingAll} from './common/Style'
+import {paddingAll} from './common/Style'
 import {theme} from '../util'
 import {H1} from 'baseui/typography'
 import {intl} from '../util/intl/intl'
@@ -21,19 +21,12 @@ import {writeLog} from '../api/LogApi'
 import MainSearch from './search/MainSearch'
 import {logo} from './Images'
 import {maxPageWidth} from '../util/theme'
-import {StyleObject} from 'styletron-react'
-
-const buttonStyle: StyleObject = {
-  borderColor: '#102723',
-  ...borderStyle('solid'),
-  ...borderWidth('2px'),
-  ...borderRadius('4px')
-}
+import {buttonBorderStyle} from './common/Button'
 
 const LoginButton = (props: {location: string}) => {
   return (
     <StyledLink style={{textDecoration: 'none'}} href={`/login?redirect_uri=${props.location}`}>
-      <Button size={SIZE.compact} kind={KIND.tertiary} $style={buttonStyle}>
+      <Button size={SIZE.compact} kind={KIND.tertiary} $style={buttonBorderStyle}>
         Logg inn
       </Button>
     </StyledLink>
@@ -53,7 +46,7 @@ const LoggedInHeader = (props: {location: string}) => {
       </Block>
       <Block {...blockStyle}>
         <StyledLink style={{textDecoration: 'none'}} href={`/logout?redirect_uri=${props.location}`}>
-          <Button size={SIZE.compact} kind={KIND.tertiary} $style={buttonStyle}>
+          <Button size={SIZE.compact} kind={KIND.tertiary} $style={buttonBorderStyle}>
             Logg ut
           </Button>
         </StyledLink>

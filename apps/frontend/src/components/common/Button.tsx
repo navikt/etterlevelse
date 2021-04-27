@@ -8,6 +8,7 @@ import {theme} from '../../util'
 import {Override} from 'baseui/overrides'
 import {StyleObject} from 'styletron-react'
 import {Block} from 'baseui/block'
+import {borderRadius, borderStyle, borderWidth} from './Style'
 
 
 interface ButtonProps {
@@ -85,3 +86,11 @@ const Button = (props: ButtonProps) => {
 }
 
 export default Button
+
+// Må gjøres properly, laget denne for å unngå tusenvis av react warnings
+export const buttonBorderStyle: StyleObject = {
+  borderColor: '#102723',
+  ...borderStyle('solid'),
+  ...borderWidth('2px'),
+  ...borderRadius('4px')
+}

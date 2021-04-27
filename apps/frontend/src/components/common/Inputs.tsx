@@ -4,7 +4,7 @@ import {FormControl} from 'baseui/form-control'
 import {Input, SIZE} from 'baseui/input'
 import React, {ReactNode, useState} from 'react'
 import {Block} from 'baseui/block'
-import Button from './Button'
+import Button, {buttonBorderStyle} from './Button'
 import {RenderTagList} from './TagList'
 import {Select, SIZE as selectSize, Value} from 'baseui/select'
 import {Code, codelist, ListName} from '../../services/Codelist'
@@ -174,7 +174,7 @@ export const MultiInputField = (props: {label: string, name: string, link?: bool
                     type='button'
                     onClick={add} marginLeft
                     label={'Legg til'}
-                    $style={{border: '2px solid #102723', borderRadius: '4px'}}
+                    $style={buttonBorderStyle}
                     kind='tertiary'
                     size='compact'
                   >
