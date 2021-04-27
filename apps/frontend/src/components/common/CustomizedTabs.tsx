@@ -22,10 +22,9 @@ export const CustomizedTabs = (props: CustomProps) => {
   const fontColor = props.fontColor || 'black'
   const activeColor = props.activeColor || fontColor
 
-  const hoverFocusStyle: StyleObject = {
+  const hoverAndFocusStyle: StyleObject = {
     color: activeColor,
     borderBottomColor: fontColor,
-    borderBottomStyle: 'solid',
     borderBottomWidth: '4px',
   }
 
@@ -35,26 +34,27 @@ export const CustomizedTabs = (props: CustomProps) => {
       overrides={{
         Tab: {
           style: (tabProps) => ({
-            paddingTop: '20px',
-            paddingLeft: '10px',
-            paddingRight: '10px',
             ...marginZero,
-            marginRight: '0px',
             height: '58px',
             fontSize: '20px',
             fontWeight: tabProps.$active ? 700 : 600,
             color: tabProps.$active ? activeColor : fontColor,
 
+            paddingTop: '20px',
+            paddingLeft: '10px',
+            paddingRight: '10px',
+
+            ...borderWidth('4px'),
             ...borderColor(props.tabBackground),
             borderBottomColor: fontColor,
-            // ...borderStyle('solid'),
+            // Avoid cut horizontal line on bottom border
             ...borderStyle('hidden'),
             borderBottomStyle: 'solid',
-            ...borderWidth('4px'),
-            ':hover': hoverFocusStyle,
+            ':hover': hoverAndFocusStyle,
             ':focus-visible': {
-              ...hoverFocusStyle,
+              ...hoverAndFocusStyle,
 
+              // from non-focus style minus borderWidth to account for border
               paddingTop: '16px',
               paddingLeft: '6px',
               paddingRight: '6px',
