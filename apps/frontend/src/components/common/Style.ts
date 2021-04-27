@@ -9,6 +9,8 @@ export const borderColor = (color: string) => ({
 })
 export const hideBorder = borderColor('transparent')
 export const borderRadius = (r: string) => ({borderBottomLeftRadius: r, borderBottomRightRadius: r, borderTopLeftRadius: r, borderTopRightRadius: r})
+export const borderStyle = (r: any) => ({borderBottomStyle: r, borderTopStyle: r, borderRightStyle: r, borderLeftStyle: r})
+export const borderWidth = (r: string) => ({borderBottomWidth: r, borderTopWidth: r, borderRightWidth: r, borderLeftWidth: r})
 
 export const cardShadow = {
   Root: {

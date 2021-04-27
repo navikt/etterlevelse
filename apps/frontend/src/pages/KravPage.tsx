@@ -1,32 +1,32 @@
-import { Block } from 'baseui/block'
-import { H1, HeadingSmall, LabelLarge, Paragraph1 } from 'baseui/typography'
-import { useHistory, useParams } from 'react-router-dom'
-import { deleteKrav, KravIdParams, mapToFormVal } from '../api/KravApi'
-import React, { useEffect, useRef, useState } from 'react'
-import { EtterlevelseQL, Krav, KravQL, KravStatus } from '../constants'
+import {Block} from 'baseui/block'
+import {H1, HeadingSmall, Paragraph1} from 'baseui/typography'
+import {useHistory, useParams} from 'react-router-dom'
+import {deleteKrav, KravIdParams, mapToFormVal} from '../api/KravApi'
+import React, {useEffect, useRef, useState} from 'react'
+import {EtterlevelseQL, Krav, KravQL, KravStatus} from '../constants'
 import Button from '../components/common/Button'
-import { ViewKrav } from '../components/krav/ViewKrav'
-import { EditKrav } from '../components/krav/EditKrav'
-import RouteLink, { ObjectLink } from '../components/common/RouteLink'
-import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
-import { user } from '../services/User'
-import { theme } from '../util'
-import { FormikProps } from 'formik'
-import { DeleteItem } from '../components/DeleteItem'
-import { Cell, Row, Table } from '../components/common/Table'
-import { Spinner } from '../components/common/Spinner'
-import { Teams } from '../components/common/TeamName'
-import { marginAll } from '../components/common/Style'
-import { ObjectType } from '../components/admin/audit/AuditTypes'
-import { behandlingName } from '../api/BehandlingApi'
-import { etterlevelseStatus } from './EtterlevelsePage'
-import { gql, useQuery } from '@apollo/client'
-import { Tilbakemeldinger } from '../components/krav/Tilbakemelding'
+import {ViewKrav} from '../components/krav/ViewKrav'
+import {EditKrav} from '../components/krav/EditKrav'
+import RouteLink, {ObjectLink} from '../components/common/RouteLink'
+import {LoadingSkeleton} from '../components/common/LoadingSkeleton'
+import {user} from '../services/User'
+import {theme} from '../util'
+import {FormikProps} from 'formik'
+import {DeleteItem} from '../components/DeleteItem'
+import {Cell, Row, Table} from '../components/common/Table'
+import {Spinner} from '../components/common/Spinner'
+import {Teams} from '../components/common/TeamName'
+import {marginAll} from '../components/common/Style'
+import {ObjectType} from '../components/admin/audit/AuditTypes'
+import {behandlingName} from '../api/BehandlingApi'
+import {etterlevelseStatus} from './EtterlevelsePage'
+import {gql, useQuery} from '@apollo/client'
+import {Tilbakemeldinger} from '../components/krav/Tilbakemelding'
 import CustomizedTag from '../components/common/CustomizedTag'
-import { chevronLeft, editIcon, plusIcon } from '../components/Images'
-import { Label } from '../components/common/PropertyLabel'
-import { CustomizedTab, CustomizedTabs } from '../components/common/CustomizedTabs'
-import { maxPageWidth, pageWidth } from '../util/theme'
+import {chevronLeft, editIcon, plusIcon} from '../components/Images'
+import {Label} from '../components/common/PropertyLabel'
+import {CustomizedTab, CustomizedTabs} from '../components/common/CustomizedTabs'
+import {maxPageWidth, pageWidth} from '../util/theme'
 
 export const kravNumView = (it: { kravVersjon: number, kravNummer: number }) => `K${it.kravNummer}.${it.kravVersjon}`
 export const kravName = (krav: Krav) => `${kravNumView(krav)} - ${krav.navn}`
@@ -150,14 +150,14 @@ export const KravPage = () => {
           <Block display='flex' justifyContent='center' width='100%'>
             <Block backgroundColor='#CCD9D7' flex={1} height='58px' minWidth='40px' />
             <Block maxWidth={pageWidth} width='100%'>
-              <CustomizedTabs fontColor='#112624' tabBackground='#CBD9D7'>
-                <CustomizedTab title={<LabelLarge>Om kravet</LabelLarge>}>
+              <CustomizedTabs fontColor='#0B483F' activeColor='#102723' tabBackground='#CBD9D7'>
+                <CustomizedTab title={'Om kravet'}>
                   <ViewKrav krav={krav} />
                 </CustomizedTab>
-                <CustomizedTab title={<LabelLarge>Spørsmål og svar</LabelLarge>}>
+                <CustomizedTab title={'Spørsmål og svar'}>
                   <Tilbakemeldinger krav={krav} />
                 </CustomizedTab>
-                <CustomizedTab title={<LabelLarge>Eksempler på etterlevelse</LabelLarge>}>
+                <CustomizedTab title={'Eksempler på etterlevelse'}>
                   <Etterlevelser loading={etterlevelserLoading} etterlevelser={krav.etterlevelser} />
                 </CustomizedTab>
               </CustomizedTabs>

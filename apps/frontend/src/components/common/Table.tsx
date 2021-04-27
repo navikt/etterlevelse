@@ -9,7 +9,7 @@ import {Block} from 'baseui/block'
 import {Label2} from 'baseui/typography'
 import {TableConfig, TableState, useTable} from '../../util/hooks'
 import {theme} from '../../util'
-import {paddingAll} from './Style'
+import {borderRadius, paddingAll} from './Style'
 import {intl} from '../../util/intl/intl'
 import {StatefulSelect} from 'baseui/select'
 import {Modal, ModalBody, ModalHeader} from 'baseui/modal'
@@ -76,10 +76,7 @@ const tableStyle = {
   borderRightWidth: '0',
   borderTopWidth: '0',
   borderBottomWidth: '0',
-  borderTopLeftRadius: '0',
-  borderTopRightRadius: '0',
-  borderBottomLeftRadius: '0',
-  borderBottomRightRadius: '0',
+  ...borderRadius('0'),
   width: 'auto',
   ...paddingAll(theme.sizing.scale600)
 }

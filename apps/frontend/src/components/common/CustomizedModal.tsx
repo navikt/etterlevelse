@@ -1,4 +1,4 @@
-import { Modal, ModalProps, SIZE } from 'baseui/modal'
+import {Modal, ModalProps, SIZE} from 'baseui/modal'
 
 const CuztomizedModal = (props: ModalProps) => {
 
@@ -25,6 +25,7 @@ const CuztomizedModal = (props: ModalProps) => {
   return (
     <Modal
       {...props}
+      unstable_ModalBackdropScroll
       size={SIZE.full}
       overrides={{ ...customOverrides, ...props.overrides }}
     >
