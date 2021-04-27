@@ -62,6 +62,9 @@ export const CustomizedTabs = (props: CustomProps) => {
               ...borderStyle('solid'),
               ...borderColor(fontColor),
               outlineOffset: '0px',
+            },
+            ':active': {
+              color: activeColor
             }
           })
         },
