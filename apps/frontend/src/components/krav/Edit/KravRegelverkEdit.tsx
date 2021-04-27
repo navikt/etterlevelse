@@ -1,17 +1,17 @@
-import React, { useState } from 'react'
-import { Select, Value, SIZE as selectSize } from 'baseui/select'
-import { codelist, ListName } from '../../../services/Codelist'
-import { FieldWrapper } from '../../common/Inputs'
-import { FieldArray } from 'formik'
-import { FormControl } from 'baseui/form-control'
-import { Block } from 'baseui/block'
-import { theme } from '../../../util'
-import { Input, SIZE } from 'baseui/input'
+import React, {useState} from 'react'
+import {Select, Value} from 'baseui/select'
+import {codelist, ListName} from '../../../services/Codelist'
+import {FieldWrapper} from '../../common/Inputs'
+import {FieldArray} from 'formik'
+import {FormControl} from 'baseui/form-control'
+import {Block} from 'baseui/block'
+import {theme} from '../../../util'
+import {Input, SIZE} from 'baseui/input'
 import Button from '../../common/Button'
-import { LabelSmall } from 'baseui/typography'
-import { LovView } from '../../Lov'
-import { RenderTagList } from '../../common/TagList'
-import { Regelverk } from '../../../constants'
+import {LabelSmall} from 'baseui/typography'
+import {LovView} from '../../Lov'
+import {RenderTagList} from '../../common/TagList'
+import {Regelverk} from '../../../constants'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
 
 
@@ -20,7 +20,7 @@ export const KravRegelverkEdit = () => {
   const [text, setText] = useState('')
   const controlRef = React.useRef<HTMLInputElement | HTMLDivElement>(null)
 
-  const regelverkObject = () => ({ lov: codelist.getCode(ListName.LOV, lov[0].id as string)!, spesifisering: text })
+  const regelverkObject = () => ({lov: codelist.getCode(ListName.LOV, lov[0].id as string)!, spesifisering: text})
 
   return (
     <FieldWrapper>
@@ -34,12 +34,13 @@ export const KravRegelverkEdit = () => {
             controlRef.current?.focus()
           }
           return (
-            <FormControl >
+            <FormControl>
               <Block>
                 <Block>
-                  <Block display='flex'>
+                  <Block display='flex' alignItems={'flex-end'}>
                     <Block flex={1} width='400px' marginRight={theme.sizing.scale400}>
-                      <LabelWithTooltip label={'Regelverk'} tooltip={'Velg relevant regelverk fra nedtrekksmenyen, og angi hvilke(n) bestemmelse(r) kravet har sin opprinnelse fra.'} />
+                      <LabelWithTooltip label={'Regelverk'}
+                                        tooltip={'Velg relevant regelverk fra nedtrekksmenyen, og angi hvilke(n) bestemmelse(r) kravet har sin opprinnelse fra.'}/>
                       <Select
                         size={SIZE.compact}
                         controlRef={controlRef}
@@ -49,39 +50,39 @@ export const KravRegelverkEdit = () => {
 
                         value={lov}
                         options={codelist.getParsedOptions(ListName.LOV)}
-                        onChange={({ value }) => {
+                        onChange={({value}) => {
                           setLov(value)
                         }}
                       />
                     </Block>
                     <Block flex={2} width='100%'>
-                      <LabelWithTooltip label={'Paragraf eller kapittel i regelverk'} tooltip={'Beskrivelse'} />
+                      <LabelWithTooltip label={'Paragraf eller kapittel i regelverk'} tooltip={'Beskrivelse'}/>
                       <Input size={SIZE.compact} value={text}
-                        onChange={e => setText((e.target as HTMLInputElement).value)}
-                        placeholder={'Beskrivelse, paragraf eller kapittel i regelverk'}
+                             onChange={e => setText((e.target as HTMLInputElement).value)}
+                             placeholder={'Beskrivelse, paragraf eller kapittel i regelverk'}
                       />
                     </Block>
 
-                    <Block minWidth='107px' $style={{ bottom: '-28px', position: 'relative' }}>
+                    <Block minWidth='107px'>
                       <Button
                         type='button'
                         size='compact'
                         onClick={add}
                         marginLeft
-                        $style={{ border: '2px solid #102723', borderRadius: '4px' }}
+                        $style={{border: '2px solid #102723', borderRadius: '4px'}}
                         kind='tertiary'
                       >
                         Legg til
-                        </Button>
+                      </Button>
                     </Block>
 
                   </Block>
                   {!!lov.length && text && <Block display='flex' alignItems='center' marginTop={theme.sizing.scale400}>
                     <LabelSmall marginRight={theme.sizing.scale800}>Forhåndsvisning: </LabelSmall>
-                    <LovView regelverk={regelverkObject()} />
+                    <LovView regelverk={regelverkObject()}/>
                   </Block>}
                 </Block>
-                <RenderTagList wide list={p.form.values.regelverk.map((r: Regelverk) => <LovView regelverk={r} />)} onRemove={p.remove} />
+                <RenderTagList wide list={p.form.values.regelverk.map((r: Regelverk) => <LovView regelverk={r}/>)} onRemove={p.remove}/>
               </Block>
             </FormControl>
           )
