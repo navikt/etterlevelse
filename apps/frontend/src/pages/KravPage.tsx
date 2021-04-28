@@ -149,8 +149,11 @@ export const KravPage = () => {
           </Block>
         </Block>
 
-        <Block display='flex' justifyContent='center' width='100%'>
-          <Block backgroundColor='#CCD9D7' flex={1} height='50px' minWidth='40px'/>
+        <Block display={'flex'} justifyContent='center' width='100%'
+               $style={{
+                 backgroundColor: '#CCD9D7',
+                 background: 'linear-gradient(top, #CCD9D7 50px, #F8F8F8 0%)'
+               }}>
           <Block maxWidth={pageWidth} width='100%'>
             <CustomizedTabs fontColor='#0B483F' activeColor='#102723' tabBackground='#CBD9D7'>
               <CustomizedTab title={'Om kravet'}>
@@ -164,8 +167,8 @@ export const KravPage = () => {
               </CustomizedTab>
             </CustomizedTabs>
           </Block>
-          <Block backgroundColor='#CCD9D7' flex={1} height='50px' minWidth='40px'/>
         </Block>
+
         <Block display='flex' justifyContent='center' width='calc(100% - 80px)' paddingLeft='40px' paddingRight='40px'>
           <Block maxWidth={pageWidth} width='100%'>
             <Paragraph1>{getLastModifiedBy(krav)}</Paragraph1>
@@ -187,7 +190,15 @@ export const KravPage = () => {
     </Block>
   )
 }
-const Etterlevelser = ({loading, etterlevelser}: {loading: boolean, etterlevelser?: EtterlevelseQL[]}) => {
+const Etterlevelser = (
+  {
+    loading, etterlevelser
+  }
+    :
+    {
+      loading: boolean, etterlevelser?: EtterlevelseQL[]
+    }
+) => {
 
   return (
     <Block>
@@ -220,12 +231,22 @@ const Etterlevelser = ({loading, etterlevelser}: {loading: boolean, etterlevelse
 }
 
 const query = gql`
-  query getKravWithEtterlevelse($id: ID, $kravNummer: Int, $kravVersjon: Int) {
-    kravById(id: $id, nummer: $kravNummer, versjon: $kravVersjon) {
+  query getKravWithEtterlevelse($id: ID, $kravNummer: Int, $kravVersjon: Int)
+  {
+    kravById(id
+    :
+    $id, nummer
+    :
+    $kravNummer, versjon
+    :
+    $kravVersjon
+    )
+    {
       id
       kravNummer
       kravVersjon
-      changeStamp {
+      changeStamp
+      {
         lastModifiedBy
         lastModifiedDate
       }
@@ -239,71 +260,87 @@ const query = gql`
       dokumentasjon
       implementasjoner
       begrepIder
-      begreper {
+      begreper
+      {
         id
         navn
         beskrivelse
       }
-      varslingsadresser {
+      varslingsadresser
+      {
         adresse
         type
-        slackChannel {
+        slackChannel
+        {
           id
           name
           numMembers
         }
-        slackUser {
+        slackUser
+        {
           id
           name
         }
       }
       rettskilder
-      regelverk {
-        lov {
+      regelverk
+      {
+        lov
+        {
           code
           shortName
         }
         spesifisering
       }
       tagger
-      periode {
+      periode
+      {
         start
         slutt
       }
 
-      avdeling {
+      avdeling
+      {
         code
         shortName
       }
-      underavdeling {
+      underavdeling
+      {
         code
         shortName
       }
-      relevansFor {
+      relevansFor
+      {
         code
         shortName
       }
       status
 
-      suksesskriterier {
+      suksesskriterier
+      {
         id
         navn
       }
 
-      etterlevelser {
+      etterlevelser
+      {
         id
-        behandling {
+        behandling
+        {
           id
           nummer
           navn
-          overordnetFormaal {
+          overordnetFormaal
+          {
             shortName
           }
-          systemer {
+          systemer
+          {
             code
             shortName
           }
-          avdeling {
+          avdeling
+          {
             code
             shortName
           }
@@ -312,5 +349,6 @@ const query = gql`
         status
       }
     }
-  }`
+  }
+`
 

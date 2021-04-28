@@ -73,7 +73,6 @@ export const CustomizedTabs = (props: CustomProps) => {
           style: {
             backgroundColor: props.tabBackground,
             justifyContent: 'space-between',
-            zIndex: 10,
             ...paddingZero,
             marginLeft: '-2px',
             marginRight: '-2px'
