@@ -28,7 +28,7 @@ import {Label} from '../components/common/PropertyLabel'
 import {CustomizedTab, CustomizedTabs} from '../components/common/CustomizedTabs'
 import {maxPageWidth, pageWidth} from '../util/theme'
 
-export const kravNumView = (it: { kravVersjon: number, kravNummer: number }) => `K${it.kravNummer}.${it.kravVersjon}`
+export const kravNumView = (it: {kravVersjon: number, kravNummer: number}) => `K${it.kravNummer}.${it.kravVersjon}`
 export const kravName = (krav: Krav) => `${kravNumView(krav)} - ${krav.navn}`
 
 export const kravStatus = (status: KravStatus) => {
@@ -50,7 +50,7 @@ export const kravStatus = (status: KravStatus) => {
 export const KravPage = () => {
   const params = useParams<KravIdParams>()
   const [krav, setKrav] = useState<KravQL | undefined>()
-  const { loading: kravLoading, data: kravQuery, refetch: reloadKrav } = useQuery<{ kravById: KravQL }, KravIdParams>(query, {
+  const {loading: kravLoading, data: kravQuery, refetch: reloadKrav} = useQuery<{kravById: KravQL}, KravIdParams>(query, {
     variables: params,
     skip: (!params.id || params.id === 'ny') && !params.kravNummer
   })
@@ -74,7 +74,7 @@ export const KravPage = () => {
 
   const newVersion = () => {
     if (!krav) return
-    setKrav({ ...krav, id: '', kravVersjon: krav.kravVersjon + 1, nyKravVersjon: true })
+    setKrav({...krav, id: '', kravVersjon: krav.kravVersjon + 1, nyKravVersjon: true})
     setEdit(true)
   }
 
@@ -84,92 +84,94 @@ export const KravPage = () => {
   }, [edit])
 
   const getLastModifiedBy = (krav: KravQL) => {
-    const monthList = ['januar','februar','mars','april','mai','juni','juli','august','september','oktober','november','desember']
+    const monthList = ['januar', 'februar', 'mars', 'april', 'mai', 'juni', 'juli', 'august', 'september', 'oktober', 'november', 'desember']
     const date = new Date(krav.changeStamp.lastModifiedDate)
     const year = date.getFullYear()
     const month = monthList[date.getMonth()]
-    const dt = date.getDate() <10 ? '0'+ date.getDate().toString() : date.getDate().toString()
+    const dt = date.getDate() < 10 ? '0' + date.getDate().toString() : date.getDate().toString()
 
     return `Sist endret: ${dt}. ${month} ${year} av ${krav.changeStamp.lastModifiedBy.split(' ')[0]}`
   }
 
-   return (
-    <Block width='100%' overrides={{ Block: { props: { role: 'main' } } }}>
-      {kravLoading && <LoadingSkeleton header='Krav' />}
+  return (
+    <Block width='100%' overrides={{Block: {props: {role: 'main'}}}}>
+      {kravLoading && <LoadingSkeleton header='Krav'/>}
       {!kravLoading &&
-        <Block backgroundColor='#112724' display='flex' width='100%' justifyContent='center' paddingBottom='32px'>
-          <Block maxWidth={maxPageWidth} width='100%'>
-            <Block paddingLeft='40px' paddingRight='40px' display='flex' flexDirection='column' justifyContent='center'>
-              <Block display='flex' width='100%' justifyContent='center' marginTop='25px'>
-                <Block flex='1' display='flex' justifyContent='flex-start'>
-                  <RouteLink href={'/krav'} hideUnderline>
-                    <Button startEnhancer={<img alt={'Chevron left'} src={chevronLeft} />} size='compact' kind='tertiary' $style={{ color: '#F8F8F8' }}> Tilbake</Button>
-                  </RouteLink>
-                </Block>
-                <Block flex='1' display='flex' justifyContent='flex-end'>
-                  {krav?.id && user.isKraveier() && <Button startEnhancer={<img alt='add' src={plusIcon} />} onClick={newVersion} marginLeft size='compact' kind='tertiary' $style={{ color: '#F8F8F8' }}>Ny versjon</Button>}
-                  {krav?.id && user.isKraveier() && <DeleteItem fun={() => deleteKrav(krav.id)} redirect={'/krav'} />}
-                  {((krav?.id && user.isKraveier())) &&
-                    <Button
-                      startEnhancer={<img src={editIcon} alt='edit' />}
-                      size='compact'
-                      $style={{ color: '#F8F8F8' }}
-                      kind={'tertiary'}
-                      onClick={() => setEdit(!edit)} marginLeft
-                    >
-                      Rediger
-                  </Button>
-                  }
-                </Block>
+      <Block backgroundColor='#112724' display='flex' width='100%' justifyContent='center' paddingBottom='32px'>
+        <Block maxWidth={maxPageWidth} width='100%'>
+          <Block paddingLeft='40px' paddingRight='40px' display='flex' flexDirection='column' justifyContent='center'>
+            <Block display='flex' width='100%' justifyContent='center' marginTop='25px'>
+              <Block flex='1' display='flex' justifyContent='flex-start'>
+                <RouteLink href={'/krav'} hideUnderline>
+                  <Button startEnhancer={<img alt={'Chevron left'} src={chevronLeft}/>} size='compact' kind='tertiary' $style={{color: '#F8F8F8'}}> Tilbake</Button>
+                </RouteLink>
+              </Block>
+              <Block flex='1' display='flex' justifyContent='flex-end'>
+                {krav?.id && user.isKraveier() &&
+                <Button startEnhancer={<img alt='add' src={plusIcon}/>} onClick={newVersion} marginLeft size='compact' kind='tertiary' $style={{color: '#F8F8F8'}}>Ny
+                  versjon</Button>}
+                {krav?.id && user.isKraveier() && <DeleteItem fun={() => deleteKrav(krav.id)} redirect={'/krav'}/>}
+                {((krav?.id && user.isKraveier())) &&
+                <Button
+                  startEnhancer={<img src={editIcon} alt='edit'/>}
+                  size='compact'
+                  $style={{color: '#F8F8F8'}}
+                  kind={'tertiary'}
+                  onClick={() => setEdit(!edit)} marginLeft
+                >
+                  Rediger
+                </Button>
+                }
               </Block>
             </Block>
+          </Block>
 
 
-            <Block paddingLeft='40px' paddingRight='40px' width='calc(100% - 80px)' display='flex' justifyContent='center'>
-              <Block maxWidth={pageWidth} width='100%' marginTop='7px'>
-                <CustomizedTag>{krav && krav?.kravNummer !== 0 ? kravNumView(krav) : 'Ny'}</CustomizedTag>
-                <H1 $style={{ color: '#F8F8F8' }}>{krav && krav?.navn ? krav.navn : 'Ny'} </H1>
+          <Block paddingLeft='40px' paddingRight='40px' width='calc(100% - 80px)' display='flex' justifyContent='center'>
+            <Block maxWidth={pageWidth} width='100%' marginTop='7px'>
+              <CustomizedTag>{krav && krav?.kravNummer !== 0 ? kravNumView(krav) : 'Ny'}</CustomizedTag>
+              <H1 $style={{color: '#F8F8F8'}}>{krav && krav?.navn ? krav.navn : 'Ny'} </H1>
+            </Block>
+          </Block>
+        </Block>
+      </Block>
+      }
+
+      {krav && !kravLoading &&
+      <Block width='100%'>
+        <Block backgroundColor='#CCD9D7' display='flex' width='100%' justifyContent='center'>
+          <Block maxWidth={maxPageWidth} width='100%'>
+            <Block paddingLeft='40px' paddingRight='40px' justifyContent='center' display='flex'>
+              <Block marginBottom='80px' marginTop='80px' width={pageWidth}>
+                <Label title='' markdown={krav.hensikt}/>
               </Block>
             </Block>
           </Block>
         </Block>
-      }
 
-      {krav && !kravLoading &&
-        <Block width='100%'>
-          <Block backgroundColor='#CCD9D7' display='flex' width='100%' justifyContent='center'>
-            <Block maxWidth={maxPageWidth} width='100%'>
-              <Block paddingLeft='40px' paddingRight='40px' justifyContent='center' display='flex'>
-                <Block marginBottom='80px' marginTop='80px' width={pageWidth}>
-                  <Label title='' markdown={krav.hensikt} />
-                </Block>
-              </Block>
-            </Block>
+        <Block display='flex' justifyContent='center' width='100%'>
+          <Block backgroundColor='#CCD9D7' flex={1} height='50px' minWidth='40px'/>
+          <Block maxWidth={pageWidth} width='100%'>
+            <CustomizedTabs fontColor='#0B483F' activeColor='#102723' tabBackground='#CBD9D7'>
+              <CustomizedTab title={'Om kravet'}>
+                <ViewKrav krav={krav}/>
+              </CustomizedTab>
+              <CustomizedTab title={'Spørsmål og svar'}>
+                <Tilbakemeldinger krav={krav}/>
+              </CustomizedTab>
+              <CustomizedTab title={'Eksempler på etterlevelse'}>
+                <Etterlevelser loading={etterlevelserLoading} etterlevelser={krav.etterlevelser}/>
+              </CustomizedTab>
+            </CustomizedTabs>
           </Block>
-
-          <Block display='flex' justifyContent='center' width='100%'>
-            <Block backgroundColor='#CCD9D7' flex={1} height='58px' minWidth='40px' />
-            <Block maxWidth={pageWidth} width='100%'>
-              <CustomizedTabs fontColor='#0B483F' activeColor='#102723' tabBackground='#CBD9D7'>
-                <CustomizedTab title={'Om kravet'}>
-                  <ViewKrav krav={krav} />
-                </CustomizedTab>
-                <CustomizedTab title={'Spørsmål og svar'}>
-                  <Tilbakemeldinger krav={krav} />
-                </CustomizedTab>
-                <CustomizedTab title={'Eksempler på etterlevelse'}>
-                  <Etterlevelser loading={etterlevelserLoading} etterlevelser={krav.etterlevelser} />
-                </CustomizedTab>
-              </CustomizedTabs>
-            </Block>
-            <Block backgroundColor='#CCD9D7' flex={1} height='58px' minWidth='40px' />
+          <Block backgroundColor='#CCD9D7' flex={1} height='50px' minWidth='40px'/>
+        </Block>
+        <Block display='flex' justifyContent='center' width='calc(100% - 80px)' paddingLeft='40px' paddingRight='40px'>
+          <Block maxWidth={pageWidth} width='100%'>
+            <Paragraph1>{getLastModifiedBy(krav)}</Paragraph1>
           </Block>
-          <Block display='flex' justifyContent='center' width='calc(100% - 80px)' paddingLeft='40px' paddingRight='40px'>
-            <Block maxWidth={pageWidth} width='100%'>
-              <Paragraph1>{getLastModifiedBy(krav)}</Paragraph1>
-            </Block>
-          </Block>
-        </Block>}
+        </Block>
+      </Block>}
 
       {krav && <EditKrav isOpen={edit} setIsOpen={setEdit} krav={krav} formRef={formRef} close={k => {
         if (k) {
@@ -180,38 +182,38 @@ export const KravPage = () => {
           }
         }
         setEdit(false)
-      }} />}
+      }}/>}
 
     </Block>
   )
 }
-const Etterlevelser = ({ loading, etterlevelser }: { loading: boolean, etterlevelser?: EtterlevelseQL[] }) => {
+const Etterlevelser = ({loading, etterlevelser}: {loading: boolean, etterlevelser?: EtterlevelseQL[]}) => {
 
   return (
     <Block>
       <HeadingSmall>Kravet etterleves av</HeadingSmall>
-      <Block $style={{ ...marginAll('-' + theme.sizing.scale600) }}>
-        {loading && <Spinner size={theme.sizing.scale800} />}
+      <Block $style={{...marginAll('-' + theme.sizing.scale600)}}>
+        {loading && <Spinner size={theme.sizing.scale800}/>}
         {!loading &&
-          <Table data={etterlevelser || []} emptyText='etterlevelser' headers={[
-            { title: 'Behandling' },
-            { title: 'Status' },
-            { title: 'System' },
-            { title: 'Team' },
-            { title: 'Avdeling' }
-          ]} render={state =>
-            state.data.map(etterlevelse =>
-              <Row key={etterlevelse.id}>
-                <Cell><ObjectLink type={ObjectType.Behandling} id={etterlevelse.behandling.id}>{behandlingName(etterlevelse.behandling)}</ObjectLink></Cell>
-                <Cell><ObjectLink type={ObjectType.Etterlevelse} id={etterlevelse.id}>
-                  {etterlevelseStatus(etterlevelse.status)}
-                </ObjectLink></Cell>
-                <Cell>{etterlevelse.behandling.systemer.map(s => s.shortName).join(', ')}</Cell>
-                <Cell><Teams teams={etterlevelse.behandling.teams} link /></Cell>
-                <Cell>{etterlevelse.behandling.avdeling?.shortName}</Cell>
-              </Row>
-            )
-          } />}
+        <Table data={etterlevelser || []} emptyText='etterlevelser' headers={[
+          {title: 'Behandling'},
+          {title: 'Status'},
+          {title: 'System'},
+          {title: 'Team'},
+          {title: 'Avdeling'}
+        ]} render={state =>
+          state.data.map(etterlevelse =>
+            <Row key={etterlevelse.id}>
+              <Cell><ObjectLink type={ObjectType.Behandling} id={etterlevelse.behandling.id}>{behandlingName(etterlevelse.behandling)}</ObjectLink></Cell>
+              <Cell><ObjectLink type={ObjectType.Etterlevelse} id={etterlevelse.id}>
+                {etterlevelseStatus(etterlevelse.status)}
+              </ObjectLink></Cell>
+              <Cell>{etterlevelse.behandling.systemer.map(s => s.shortName).join(', ')}</Cell>
+              <Cell><Teams teams={etterlevelse.behandling.teams} link/></Cell>
+              <Cell>{etterlevelse.behandling.avdeling?.shortName}</Cell>
+            </Row>
+          )
+        }/>}
       </Block>
     </Block>
   )

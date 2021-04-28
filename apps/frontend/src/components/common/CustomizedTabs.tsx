@@ -1,7 +1,7 @@
 import * as React from 'react'
 import {Tab, TabProps, Tabs, TabsProps} from 'baseui/tabs'
 import {StyleObject} from 'styletron-standard'
-import {borderColor, borderStyle, borderWidth, marginZero, padding, paddingZero} from './Style'
+import {borderColor, borderStyle, borderWidth, marginZero, paddingZero} from './Style'
 
 export const CustomizedTab = (props: TabProps) => {
   return (
@@ -35,14 +35,15 @@ export const CustomizedTabs = (props: CustomProps) => {
         Tab: {
           style: (tabProps) => ({
             ...marginZero,
-            height: '58px',
+            height: '50px',
             fontSize: '20px',
             fontWeight: tabProps.$active ? 700 : 600,
             color: tabProps.$active ? activeColor : fontColor,
 
+            paddingBottom: '6px',
             paddingTop: '20px',
-            paddingLeft: '10px',
-            paddingRight: '10px',
+            paddingLeft: '4px',
+            paddingRight: '4px',
 
             ...borderWidth('4px'),
             ...borderColor(props.tabBackground),
@@ -56,8 +57,8 @@ export const CustomizedTabs = (props: CustomProps) => {
 
               // from non-focus style minus borderWidth to account for border
               paddingTop: '16px',
-              paddingLeft: '6px',
-              paddingRight: '6px',
+              paddingLeft: '0',
+              paddingRight: '0',
 
               ...borderStyle('solid'),
               ...borderColor(fontColor),
@@ -72,7 +73,8 @@ export const CustomizedTabs = (props: CustomProps) => {
           style: {
             backgroundColor: props.tabBackground,
             justifyContent: 'space-between',
-            ...padding('0', '4px'),
+            zIndex: 10,
+            ...paddingZero,
           }
         },
         TabContent: {
