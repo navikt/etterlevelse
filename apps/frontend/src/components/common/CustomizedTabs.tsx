@@ -75,6 +75,8 @@ export const CustomizedTabs = (props: CustomProps) => {
             justifyContent: 'space-between',
             zIndex: 10,
             ...paddingZero,
+            marginLeft: '-2px',
+            marginRight: '-2px'
           }
         },
         TabContent: {
