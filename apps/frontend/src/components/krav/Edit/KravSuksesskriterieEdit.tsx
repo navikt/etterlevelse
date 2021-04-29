@@ -70,7 +70,7 @@ const Kriterie = ({s, update}: {s: Suksesskriterie, update: (s: Suksesskriterie)
       overrides={{
         Root: {
           style: {
-            backgroundColor: '#F4F4F4',
+            backgroundColor: '#F8F8F8',
             marginBottom: theme.sizing.scale600
           }
         }

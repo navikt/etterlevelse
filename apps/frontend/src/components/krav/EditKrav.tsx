@@ -27,6 +27,8 @@ type EditKravProps = {
   setIsOpen: Function
 }
 
+const padding = '212px'
+
 export const EditKrav = ({krav, close, formRef, isOpen, setIsOpen}: EditKravProps) => {
 
   const [modalIsOpen, setmodalIsOpen] = React.useState(false)
@@ -112,9 +114,6 @@ export const EditKrav = ({krav, close, formRef, isOpen, setIsOpen}: EditKravProp
                   Avbryt
                 </Button>
               </Block>
-              {
-
-              }
               {!stickyHeader && (
                 <Block>
                   <H1 $style={{color: '#F8F8F8'}}>Rediger kravside: </H1>
@@ -123,15 +122,17 @@ export const EditKrav = ({krav, close, formRef, isOpen, setIsOpen}: EditKravProp
               )}
             </Block>
             <Block>
-              <Block backgroundColor='#F1F1F1' paddingLeft='212px' paddingRight='212px'>
+              <Block backgroundColor='#F1F1F1' paddingLeft={padding} paddingRight={padding}>
                 <InputField label='Krav-tittel' name='navn' tooltip={'Gi kravet en kort tittel. Kravet formuleres som en aktivitet eller målsetting.'}/>
                 <TextAreaField marginBottom='0px' label='Hensikt' name='hensikt' markdown shortenLinks onImageUpload={onImageUpload(krav.id)}
                                tooltip={'Bruk noen setninger på å forklare hensikten med kravet. Formålet er at leseren skal forstå hvorfor vi har dette kravet.'}/>
               </Block>
 
-              <Block display='flex' width='100%' justifyContent='center'>
-                <Block backgroundColor='#F1F1F1' height='58px' width='212px'/>
-                <Block width='calc(100% - 424px)'>
+              <Block display='flex' width='100%' justifyContent='center'
+                     $style={{
+                       background: 'linear-gradient(top, #F1F1F1 50px, #F8F8F8 0%)'
+                     }}>
+                <Block paddingLeft={padding} paddingRight={padding}>
                   <CustomizedTabs fontColor='#0B483F' activeColor='#102723' tabBackground='#F1F1F1'>
                     <CustomizedTab title={'Om kravet'}>
                       <KravSuksesskriterierEdit/>
@@ -187,7 +188,6 @@ export const EditKrav = ({krav, close, formRef, isOpen, setIsOpen}: EditKravProp
                     </CustomizedTab>
                   </CustomizedTabs>
                 </Block>
-                <Block backgroundColor='#F1F1F1' height='58px' width='212px'/>
               </Block>
             </Block>
           </Form>

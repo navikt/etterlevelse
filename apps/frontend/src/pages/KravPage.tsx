@@ -151,7 +151,6 @@ export const KravPage = () => {
 
         <Block display={'flex'} justifyContent='center' width='100%'
                $style={{
-                 backgroundColor: '#CCD9D7',
                  background: 'linear-gradient(top, #CCD9D7 50px, #F8F8F8 0%)'
                }}>
           <Block maxWidth={pageWidth} width='100%'>
@@ -193,11 +192,9 @@ export const KravPage = () => {
 const Etterlevelser = (
   {
     loading, etterlevelser
+  }: {
+    loading: boolean, etterlevelser?: EtterlevelseQL[]
   }
-    :
-    {
-      loading: boolean, etterlevelser?: EtterlevelseQL[]
-    }
 ) => {
 
   return (
