@@ -20,10 +20,12 @@ public class SuksesskriterieRequest implements Validated {
 
     private int id;
     private String navn;
+    private String beskrivelse;
 
     @Override
     public void format() {
         setNavn(trimToNull(navn));
+        setBeskrivelse(trimToNull(beskrivelse));
     }
 
     @Override

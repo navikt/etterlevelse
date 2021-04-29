@@ -11,10 +11,11 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonPropertyOrder({"id", "navn"})
+@JsonPropertyOrder({"id", "navn", "beskrivelse"})
 public class SuksesskriterieResponse {
 
     private int id;
     private String navn;
+    private String beskrivelse;
 
 }

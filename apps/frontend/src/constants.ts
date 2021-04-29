@@ -71,6 +71,7 @@ export interface Krav extends DomainObject {
 export interface Suksesskriterie {
   id: number
   navn: string
+  beskrivelse?: string
 }
 
 export interface Regelverk {
