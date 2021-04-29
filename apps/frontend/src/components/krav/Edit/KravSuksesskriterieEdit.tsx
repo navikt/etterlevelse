@@ -13,8 +13,9 @@ import {MarkdownEditor} from '../../common/Markdown'
 import {Card} from 'baseui/card'
 import {theme} from '../../../util'
 import {useDebouncedState} from '../../../util/hooks'
-import {DragDropContext, Draggable, DraggableProvidedDragHandleProps, Droppable} from 'react-beautiful-dnd'
+import {DragDropContext, Draggable, DraggableProvidedDragHandleProps, DraggingStyle, Droppable} from 'react-beautiful-dnd'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {kravModal} from '../EditKrav'
 
 
 export const KravSuksesskriterierEdit = () => {
@@ -50,14 +51,24 @@ const KriterieList = ({p}: {p: FieldArrayRenderProps}) => {
             }}>
               {suksesskriterier.map((s, i) =>
                 <Draggable key={s.id} draggableId={`${s.id}`} index={i}>
-                  {(dprov, dsnap) =>
-                    <div {...dprov.draggableProps} ref={dprov.innerRef}>
+                  {(dprov, dsnap) => {
+                    if (dsnap.isDragging) {
+                      // Adjust location due to modal displacements
+                      const style = dprov.draggableProps.style as DraggingStyle
+                      const offset = {x: 115, y: 15 - (kravModal()?.scrollTop || 0)}
+                      const x = style.left - offset.x;
+                      const y = style.top - offset.y;
+                      style.left = x;
+                      style.top = y;
+                    }
+                    return <div {...dprov.draggableProps} ref={dprov.innerRef}>
                       <Kriterie s={s} nummer={i + 1} update={updated => p.replace(i, updated)} remove={() => {
                         console.log('remove' + i)
                         p.remove(i)
                       }}
                                 dragHandleProps={dprov.dragHandleProps} isDragging={dsnap.isDragging}/>
                     </div>
+                  }
                   }
                 </Draggable>
               )}

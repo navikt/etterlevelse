@@ -31,6 +31,8 @@ const padding = 212
 const paddingPx = padding + 'px'
 const width = `calc(100% - ${padding * 2}px)`
 
+export const kravModal = () => document.querySelector('#krav-modal')
+
 export const EditKrav = ({krav, close, formRef, isOpen, setIsOpen}: EditKravProps) => {
   const [stickyHeader, setStickyHeader] = React.useState(false)
 
@@ -48,8 +50,8 @@ export const EditKrav = ({krav, close, formRef, isOpen, setIsOpen}: EditKravProp
       return
     }
     const listener = () => setStickyHeader(true)
-    setTimeout(() => document.querySelector('.modal')?.addEventListener('scroll', listener), 200)
-    return () => document.querySelector('.modal')?.removeEventListener('scroll', listener)
+    setTimeout(() => kravModal()?.addEventListener('scroll', listener), 200)
+    return () => kravModal()?.removeEventListener('scroll', listener)
   }, [isOpen])
 
   return (
@@ -60,7 +62,7 @@ export const EditKrav = ({krav, close, formRef, isOpen, setIsOpen}: EditKravProp
         overrides={{
           Root: {
             props: {
-              className: 'modal'
+              id: 'krav-modal'
             }
           }
         }}
