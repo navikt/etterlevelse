@@ -27,7 +27,9 @@ type EditKravProps = {
   setIsOpen: Function
 }
 
-const padding = '212px'
+const padding = 212
+const paddingPx = padding + 'px'
+const width = `calc(100% - ${padding * 2}px)`
 
 export const EditKrav = ({krav, close, formRef, isOpen, setIsOpen}: EditKravProps) => {
 
@@ -82,7 +84,7 @@ export const EditKrav = ({krav, close, formRef, isOpen, setIsOpen}: EditKravProp
               backgroundColor='#112724'
               paddingTop='20px'
               paddingBottom='20px'
-              paddingLeft='212px'
+              paddingLeft={paddingPx}
               paddingRight='32px'
               position='sticky'
               top={0}
@@ -122,7 +124,7 @@ export const EditKrav = ({krav, close, formRef, isOpen, setIsOpen}: EditKravProp
               )}
             </Block>
             <Block>
-              <Block backgroundColor='#F1F1F1' paddingLeft={padding} paddingRight={padding}>
+              <Block backgroundColor='#F1F1F1' paddingLeft={paddingPx} paddingRight={paddingPx}>
                 <InputField label='Krav-tittel' name='navn' tooltip={'Gi kravet en kort tittel. Kravet formuleres som en aktivitet eller målsetting.'}/>
                 <TextAreaField marginBottom='0px' label='Hensikt' name='hensikt' markdown shortenLinks onImageUpload={onImageUpload(krav.id)}
                                tooltip={'Bruk noen setninger på å forklare hensikten med kravet. Formålet er at leseren skal forstå hvorfor vi har dette kravet.'}/>
@@ -132,7 +134,7 @@ export const EditKrav = ({krav, close, formRef, isOpen, setIsOpen}: EditKravProp
                      $style={{
                        background: 'linear-gradient(top, #F1F1F1 50px, #F8F8F8 0%)'
                      }}>
-                <Block paddingLeft={padding} paddingRight={padding}>
+                <Block width={width}>
                   <CustomizedTabs fontColor='#0B483F' activeColor='#102723' tabBackground='#F1F1F1'>
                     <CustomizedTab title={'Om kravet'}>
                       <KravSuksesskriterierEdit/>
