@@ -24,7 +24,7 @@ export const ViewKrav = ({krav}: {krav: KravQL}) => {
   return (
     <Block width='100%'>
 
-      {krav.suksesskriterier.map(s => <SuksesskriterieCard key={s.id} suksesskriterie={s} totalt={krav.suksesskriterier.length}/>)}
+      {krav.suksesskriterier.map((s,i) => <SuksesskriterieCard key={s.id} suksesskriterie={s} num={i+1} totalt={krav.suksesskriterier.length}/>)}
       <Block height={theme.sizing.scale1000}/>
 
       <LabelAboveContent header title='Beskrivelse' markdown={krav.beskrivelse}/>

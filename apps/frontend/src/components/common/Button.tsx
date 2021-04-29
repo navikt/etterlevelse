@@ -43,26 +43,24 @@ const Tooltip = (props: TooltipProps) => (
 
 const outlineWidth = '2px'
 const outlineStyle = 'solid'
-const outlineOverride: Override<any> = {
-  style: {
-    borderColor: theme.colors.buttonPrimaryFill,
-    backgroundColor: 'inherit',
-    borderLeftWidth: outlineWidth,
-    borderRightWidth: outlineWidth,
-    borderTopWidth: outlineWidth,
-    borderBottomWidth: outlineWidth,
-    borderLeftStyle: outlineStyle,
-    borderRightStyle: outlineStyle,
-    borderTopStyle: outlineStyle,
-    borderBottomStyle: outlineStyle
-  }
+const outlineOverride: StyleObject = {
+  borderColor: theme.colors.buttonPrimaryFill,
+  backgroundColor: 'inherit',
+  borderLeftWidth: outlineWidth,
+  borderRightWidth: outlineWidth,
+  borderTopWidth: outlineWidth,
+  borderBottomWidth: outlineWidth,
+  borderLeftStyle: outlineStyle,
+  borderRightStyle: outlineStyle,
+  borderTopStyle: outlineStyle,
+  borderBottomStyle: outlineStyle
 }
 
 const Button = (props: ButtonProps) => {
   const baseuiKind = props.kind === 'outline' ? KIND.secondary : props.kind
   const overrides: Override<any> = {
     style: {
-      ...(props.kind === 'outline' ? outlineOverride.style : {}),
+      ...(props.kind === 'outline' ? outlineOverride : {}),
       ...(props.inline ? {paddingTop: theme.sizing.scale100, paddingBottom: theme.sizing.scale100} : {}),
       ...(props.$style || {})
     }

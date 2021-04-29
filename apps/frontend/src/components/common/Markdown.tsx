@@ -60,16 +60,17 @@ type MarkdownEditorProps = {
   initialValue: string,
   setValue: (v: string) => void,
   shortenLinks?: boolean
-  onImageUpload?: (file: File) => Promise<string>
+  onImageUpload?: (file: File) => Promise<string>,
+  height?: string
 }
 
 export const MarkdownEditor = (props: MarkdownEditorProps) => {
   // Reduce UI lag by only updating field at set interval
-  const [val, setVal] = useDebouncedState(props.initialValue, 300, props.setValue)
+  const [val, setVal] = useDebouncedState(props.initialValue, 500, props.setValue)
 
   return <MdEditor
-    style={{height: '500px'}}
-    defaultValue={val}
+    style={{height: props.height || '500px'}}
+    defaultValue={props.initialValue}
     renderHTML={txt => <Markdown source={txt} shortenLinks={props.shortenLinks}/>}
     onChange={data => setVal(data.text)}
     onImageUpload={props.onImageUpload}

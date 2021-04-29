@@ -7,8 +7,8 @@ import {Markdown} from '../common/Markdown'
 import {borderRadius} from '../common/Style'
 
 
-export const SuksesskriterieCard = (props: {suksesskriterie: Suksesskriterie, totalt: number}) => {
-  const {suksesskriterie, totalt} = props
+export const SuksesskriterieCard = (props: {suksesskriterie: Suksesskriterie, num: number, totalt: number}) => {
+  const {suksesskriterie, num, totalt} = props
 
   return (
     <Block marginBottom={theme.sizing.scale800}>
@@ -19,7 +19,7 @@ export const SuksesskriterieCard = (props: {suksesskriterie: Suksesskriterie, to
           }
         }
       }}>
-        <ParagraphMedium>SUKSESSKRITERIE {suksesskriterie.id} AV {totalt}</ParagraphMedium>
+        <ParagraphMedium>SUKSESSKRITERIE {num} AV {totalt}</ParagraphMedium>
         <HeadingXLarge>{suksesskriterie.navn}</HeadingXLarge>
         <Markdown source={suksesskriterie.beskrivelse}/>
       </Card>

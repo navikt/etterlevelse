@@ -182,6 +182,7 @@ export const kravFullQuery = gql`
       suksesskriterier {
         id
         navn
+        beskrivelse
       }
       status
     }

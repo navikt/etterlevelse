@@ -231,22 +231,12 @@ const Etterlevelser = (
 }
 
 const query = gql`
-  query getKravWithEtterlevelse($id: ID, $kravNummer: Int, $kravVersjon: Int)
-  {
-    kravById(id
-    :
-    $id, nummer
-    :
-    $kravNummer, versjon
-    :
-    $kravVersjon
-    )
-    {
+  query getKravWithEtterlevelse($id: ID, $kravNummer: Int, $kravVersjon: Int) {
+    kravById(id: $id, nummer: $kravNummer, versjon: $kravVersjon) {
       id
       kravNummer
       kravVersjon
-      changeStamp
-      {
+      changeStamp {
         lastModifiedBy
         lastModifiedDate
       }
@@ -260,87 +250,72 @@ const query = gql`
       dokumentasjon
       implementasjoner
       begrepIder
-      begreper
-      {
+      begreper {
         id
         navn
         beskrivelse
       }
-      varslingsadresser
-      {
+      varslingsadresser {
         adresse
         type
-        slackChannel
-        {
+        slackChannel {
           id
           name
           numMembers
         }
-        slackUser
-        {
+        slackUser {
           id
           name
         }
       }
       rettskilder
-      regelverk
-      {
-        lov
-        {
+      regelverk {
+        lov {
           code
           shortName
         }
         spesifisering
       }
       tagger
-      periode
-      {
+      periode {
         start
         slutt
       }
 
-      avdeling
-      {
+      avdeling {
         code
         shortName
       }
-      underavdeling
-      {
+      underavdeling {
         code
         shortName
       }
-      relevansFor
-      {
+      relevansFor {
         code
         shortName
       }
       status
 
-      suksesskriterier
-      {
+      suksesskriterier {
         id
         navn
+        beskrivelse
       }
 
-      etterlevelser
-      {
+      etterlevelser {
         id
-        behandling
-        {
+        behandling {
           id
           nummer
           navn
-          overordnetFormaal
-          {
+          overordnetFormaal {
             shortName
           }
-          systemer
-          {
+          systemer {
             code
             shortName
           }
-          avdeling
-          {
+          avdeling {
             code
             shortName
           }
