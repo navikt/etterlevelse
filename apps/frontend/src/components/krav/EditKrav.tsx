@@ -96,8 +96,9 @@ export const EditKrav = ({krav, close, formRef, isOpen, setIsOpen}: EditKravProp
                 <Button
                   size='compact'
                   $style={{color: '#112724', backgroundColor: '#F8F8F8', ':hover': {backgroundColor: '#F8F8F8'}}}
-                  onClick={() => submitForm}
+                  onClick={submitForm}
                   disabled={isSubmitting}
+                  type={'button'}
                   marginLeft>
                   Lagre
                 </Button>
@@ -105,9 +106,8 @@ export const EditKrav = ({krav, close, formRef, isOpen, setIsOpen}: EditKravProp
                   size='compact'
                   $style={{color: '#F8F8F8'}}
                   kind={'tertiary'}
-                  onClick={
-                    close
-                  }
+                  type={'button'}
+                  onClick={close}
                   marginLeft>
                   Avbryt
                 </Button>
