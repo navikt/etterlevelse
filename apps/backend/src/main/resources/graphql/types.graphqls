@@ -71,7 +71,8 @@ enum Rolle {
 
 type Suksesskriterie {
     id: NonNegativeInt!
-    navn: String
+    navn: String!
+    beskrivelse: String
 }
 
 type Regelverk {
