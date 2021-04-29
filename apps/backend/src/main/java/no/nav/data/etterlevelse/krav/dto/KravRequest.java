@@ -15,7 +15,6 @@ import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 
 import java.util.List;
 
-import static java.util.Comparator.comparing;
 import static no.nav.data.common.utils.StreamUtils.copyOf;
 import static no.nav.data.common.utils.StreamUtils.duplicates;
 import static no.nav.data.common.utils.StringUtils.formatList;
@@ -80,7 +79,6 @@ public class KravRequest implements RequestElement {
         setRettskilder(formatList(rettskilder));
         setTagger(formatList(tagger));
         setSuksesskriterier(copyOf(suksesskriterier));
-        suksesskriterier.sort(comparing(SuksesskriterieRequest::getId));
 
         if (status == null) {
             status = KravStatus.UTKAST;

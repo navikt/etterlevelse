@@ -2,7 +2,7 @@ import {Krav, KravQL, KravStatus} from '../../constants'
 import {Form, Formik} from 'formik'
 import {createKrav, mapToFormVal, updateKrav} from '../../api/KravApi'
 import {Block} from 'baseui/block'
-import React from 'react'
+import React, {useEffect} from 'react'
 import * as yup from 'yup'
 import {ListName} from '../../services/Codelist'
 import {kravStatus} from '../../pages/KravPage'
@@ -32,8 +32,6 @@ const paddingPx = padding + 'px'
 const width = `calc(100% - ${padding * 2}px)`
 
 export const EditKrav = ({krav, close, formRef, isOpen, setIsOpen}: EditKravProps) => {
-
-  const [modalIsOpen, setmodalIsOpen] = React.useState(false)
   const [stickyHeader, setStickyHeader] = React.useState(false)
 
   const submit = async (krav: KravQL) => {
@@ -44,14 +42,15 @@ export const EditKrav = ({krav, close, formRef, isOpen, setIsOpen}: EditKravProp
     }
   }
 
-  React.useEffect(() => {
-    if (!modalIsOpen) {
+  useEffect(() => {
+    if (!isOpen) {
       setStickyHeader(false)
+      return
     }
-
-    document.querySelector('.modal')?.addEventListener('scroll', () => setStickyHeader(true))
-
-  }, [modalIsOpen])
+    const listener = () => setStickyHeader(true)
+    setTimeout(() => document.querySelector('.modal')?.addEventListener('scroll', listener), 200)
+    return () => document.querySelector('.modal')?.removeEventListener('scroll', listener)
+  }, [isOpen])
 
   return (
     <Block maxWidth={maxPageWidth}>
@@ -60,15 +59,8 @@ export const EditKrav = ({krav, close, formRef, isOpen, setIsOpen}: EditKravProp
         isOpen={isOpen}
         overrides={{
           Root: {
-            props: (props: any) => {
-              if (props.$isVisible) {
-                setmodalIsOpen(props.$isOpen)
-              }
-
-              return {
-                ...props,
-                className: 'modal'
-              }
+            props: {
+              className: 'modal'
             }
           }
         }}

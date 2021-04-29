@@ -8,11 +8,13 @@ import {Input, SIZE} from 'baseui/input'
 import Button, {buttonBorderStyle} from '../../common/Button'
 import * as _ from 'lodash'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
-import {faPlus} from '@fortawesome/free-solid-svg-icons'
+import {faGripVertical, faPlus, faTrash} from '@fortawesome/free-solid-svg-icons'
 import {MarkdownEditor} from '../../common/Markdown'
 import {Card} from 'baseui/card'
 import {theme} from '../../../util'
 import {useDebouncedState} from '../../../util/hooks'
+import {DragDropContext, Draggable, DraggableProvidedDragHandleProps, Droppable} from 'react-beautiful-dnd'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 
 
 export const KravSuksesskriterierEdit = () => {
@@ -34,10 +36,36 @@ const KriterieList = ({p}: {p: FieldArrayRenderProps}) => {
   const suksesskriterier = p.form.values.suksesskriterier as Suksesskriterie[]
   return (
     <Block display={'flex'} flexDirection={'column'}>
-      {suksesskriterier.map((s, i) => <Kriterie s={s} update={updated => {
-        p.replace(i, updated)
-      }
-      }/>)}
+      <DragDropContext onDragEnd={(result, provided) => {
+        if (!result.destination) {
+          return;
+        }
+        const moved = p.remove(result.source.index)
+        p.insert(result.destination.index, moved)
+      }}>
+        <Droppable droppableId={'list'}>
+          {(provided, snapshot) => (
+            <div {...provided.droppableProps} ref={provided.innerRef} style={{
+              backgroundColor: snapshot.isDraggingOver ? '#C5C5C5' : undefined
+            }}>
+              {suksesskriterier.map((s, i) =>
+                <Draggable key={s.id} draggableId={`${s.id}`} index={i}>
+                  {(dprov, dsnap) =>
+                    <div {...dprov.draggableProps} ref={dprov.innerRef}>
+                      <Kriterie s={s} nummer={i + 1} update={updated => p.replace(i, updated)} remove={() => {
+                        console.log('remove' + i)
+                        p.remove(i)
+                      }}
+                                dragHandleProps={dprov.dragHandleProps} isDragging={dsnap.isDragging}/>
+                    </div>
+                  }
+                </Draggable>
+              )}
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
+      </DragDropContext>
       <Block alignSelf={'flex-end'} marginTop={theme.sizing.scale200}>
         <Button
           type='button'
@@ -56,7 +84,15 @@ const KriterieList = ({p}: {p: FieldArrayRenderProps}) => {
   )
 }
 
-const Kriterie = ({s, update}: {s: Suksesskriterie, update: (s: Suksesskriterie) => void}) => {
+const Kriterie = ({
+                    s, nummer,
+                    update, remove,
+                    dragHandleProps, isDragging
+                  }: {
+  s: Suksesskriterie, nummer: number,
+  update: (s: Suksesskriterie) => void, remove: () => void,
+  dragHandleProps?: DraggableProvidedDragHandleProps, isDragging: boolean
+}) => {
   const debounceDelay = 500
   const [navn, setNavn, navnInput] = useDebouncedState(s.navn, debounceDelay)
   const [beskrivelse, setBeskrivelse] = useDebouncedState(s.beskrivelse || '', debounceDelay)
@@ -70,26 +106,37 @@ const Kriterie = ({s, update}: {s: Suksesskriterie, update: (s: Suksesskriterie)
       overrides={{
         Root: {
           style: {
-            backgroundColor: '#F8F8F8',
+            backgroundColor: isDragging ? '#F6E8E6' : '#F8F8F8',
             marginBottom: theme.sizing.scale600
           }
         }
       }}>
-      <FormControl label={
-        <LabelWithTooltip label={'Suksesskriterie'}
-                          tooltip={'Definer hvilke kriterier som skal til for at kravet er oppnådd. Formålet er å identifisere en terskel for kravoppnåelse og en enhetlig besvarelse på tvers.'}/>}>
-        <Input
-          size={SIZE.compact}
-          value={navnInput}
-          onChange={e => setNavn((e.target as HTMLInputElement).value)}
-          placeholder={'Navn'}
-        />
-      </FormControl>
-      <FormControl label={
-        <LabelWithTooltip label={'Beskrivelse av suksesskriteriet'} tooltip={'Nærmere detaljer rundt oppnåelse av suksesskriteriet.'}/>}>
-        <MarkdownEditor initialValue={beskrivelse} setValue={setBeskrivelse} height={'250px'}/>
-      </FormControl>
+      <Block position={'relative'} paddingTop={theme.sizing.scale100}>
 
+        <Block display={'flex'} alignItems={'flex-start'} position={'absolute'} right={0} top={0}>
+          <Button type={'button'} size={'compact'} kind={'tertiary'} $style={buttonBorderStyle} icon={faTrash} onClick={remove} tooltip={'Fjern suksesskriterie'}/>
+          <Block width={theme.sizing.scale1000}/>
+          <Block {...dragHandleProps}><FontAwesomeIcon icon={faGripVertical} aria-label={'Dra og slipp håndtak'}/></Block>
+        </Block>
+
+        <FormControl label={
+          <Block display={'flex'} width={'100%'} justifyContent={'space-between'}>
+            <LabelWithTooltip label={`Suksesskriterie ${nummer}`}
+                              tooltip={'Definer hvilke kriterier som skal til for at kravet er oppnådd. Formålet er å identifisere en terskel for kravoppnåelse og en enhetlig besvarelse på tvers.'}/>
+          </Block>
+        }>
+          <Input
+            size={SIZE.compact}
+            value={navnInput}
+            onChange={e => setNavn((e.target as HTMLInputElement).value)}
+            placeholder={'Navn'}
+          />
+        </FormControl>
+        <FormControl label={
+          <LabelWithTooltip label={'Beskrivelse av suksesskriteriet'} tooltip={'Nærmere detaljer rundt oppnåelse av suksesskriteriet.'}/>}>
+          <MarkdownEditor initialValue={beskrivelse} setValue={setBeskrivelse} height={'250px'}/>
+        </FormControl>
+      </Block>
     </Card>
   )
 }
