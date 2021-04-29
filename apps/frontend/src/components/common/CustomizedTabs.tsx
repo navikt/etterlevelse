@@ -2,6 +2,7 @@ import * as React from 'react'
 import {Tab, TabProps, Tabs, TabsProps} from 'baseui/tabs'
 import {StyleObject} from 'styletron-standard'
 import {borderColor, borderStyle, borderWidth, marginZero, paddingZero} from './Style'
+import {theme} from '../../util'
 
 export const CustomizedTab = (props: TabProps) => {
   return (
@@ -80,7 +81,7 @@ export const CustomizedTabs = (props: CustomProps) => {
         },
         TabContent: {
           style: {
-            marginTop: '56px',
+            marginTop: theme.sizing.scale1600,
             backgroundColor: '#F8F8F8',
             ...paddingZero
           }
