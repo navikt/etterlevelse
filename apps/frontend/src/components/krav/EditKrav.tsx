@@ -29,6 +29,7 @@ type EditKravProps = {
 const padding = 212
 const paddingPx = padding + 'px'
 const width = `calc(100% - ${padding * 2}px)`
+const maxInputWidth = '400px'
 
 export const kravModal = () => document.querySelector('#krav-modal')
 
@@ -137,7 +138,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
                     <LabelLarge><b>Dokumentasjon</b></LabelLarge>
                   </Block>
 
-                  <MultiInputField linkLabel='Navn på dokumentasjon' name='dokumentasjon' link label='Lenke eller websaknr' tooltip='Lenke til dokumentasjon'
+                  <MultiInputField maxInputWidth={maxInputWidth} linkLabel='Navn på dokumentasjon' name='dokumentasjon' link label='Lenke eller websaknr' tooltip='Lenke til dokumentasjon'
                     linkTooltip={'Legg inn referanse til utdypende dokumentasjon (lenke). Eksempelvis til navet, eksterne nettsider eller Websak.'} />
                   <KravRegelverkEdit />
                   <MultiInputField label='Relevante implementasjoner' name='implementasjoner' tooltip={'Vis til gode eksisterende implementasjoner som ivaretar kravet.'} />
@@ -147,19 +148,25 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
                     <LabelLarge><b>Gruppering og etiketter</b></LabelLarge>
                   </Block>
 
-                  <MultiOptionField label='Relevant for' name='relevansFor' listName={ListName.RELEVANS}
-                    tooltip={'Velg kategori(er) kravet er relevant for i nedtrekksmenyen. \n'} />
+                  <Block width='100%' maxWidth={maxInputWidth}>
+                    <MultiOptionField label='Relevant for' name='relevansFor' listName={ListName.RELEVANS}
+                      tooltip={'Velg kategori(er) kravet er relevant for i nedtrekksmenyen. \n'} />
+                  </Block>
 
-                  <MultiInputField label='Etiketter' name='tagger' tooltip={'Tag kravet med et eller flere nøkkelord. Hensikten er å skape relasjon(er) til andre krav.'} />
+                  <MultiInputField maxInputWidth={maxInputWidth} label='Etiketter' name='tagger' tooltip={'Tag kravet med et eller flere nøkkelord. Hensikten er å skape relasjon(er) til andre krav.'} />
 
-                  <EditBegreper />
+                  <Block width='100%' maxWidth={maxInputWidth}>
+                    <EditBegreper />
+                  </Block>
 
                   <Block marginBottom='49px'>
                     <LabelLarge><b>Egenskaper</b></LabelLarge>
                   </Block>
 
-                  <OptionField label='Status' name='status' options={Object.values(KravStatus).map(id => ({ id, label: kravStatus(id) }))}
-                    tooltip={'Velg status for kravet. Utkast er kun synlig for kraveier selv. Aktiv/utgått er synlig for alle.'} />
+                  <Block width='100%' maxWidth={maxInputWidth}>
+                    <OptionField label='Status' name='status' options={Object.values(KravStatus).map(id => ({ id, label: kravStatus(id) }))}
+                      tooltip={'Velg status for kravet. Utkast er kun synlig for kraveier selv. Aktiv/utgått er synlig for alle.'} />
+                  </Block>
 
                   <KravVarslingsadresserEdit />
                   {/* 
