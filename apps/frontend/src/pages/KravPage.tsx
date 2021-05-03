@@ -101,31 +101,32 @@ export const KravPage = () => {
           <Block maxWidth={maxPageWidth} width='100%'>
             <Block paddingLeft='40px' paddingRight='40px' display='flex' flexDirection='column' justifyContent='center'>
               <Block display='flex' width='100%' justifyContent='center' marginTop='24px'>
-                <Block flex='1' display='flex' justifyContent='flex-start'>
-                  <RouteLink href={'/krav'} hideUnderline>
-                    <Button startEnhancer={<img alt={'Chevron left'} src={chevronLeft} />} size='compact' kind='tertiary' $style={{ color: '#F8F8F8' }}> Tilbake</Button>
-                  </RouteLink>
-                </Block>
-                <Block flex='1' display={['none', 'none', 'none', 'none', 'flex', 'flex']} justifyContent='flex-end'>
-                  {krav?.id && user.isKraveier() &&
-                    <Button startEnhancer={<img alt='add' src={plusIcon} />} onClick={newVersion} marginLeft size='compact' kind='tertiary' $style={{ color: '#F8F8F8' }}>Ny
-                  versjon</Button>}
-                  {krav?.id && user.isKraveier() && <DeleteItem fun={() => deleteKrav(krav.id)} redirect={'/krav'} />}
-                  {((krav?.id && user.isKraveier())) &&
-                    <Button
-                      startEnhancer={<img src={editIcon} alt='edit' />}
-                      size='compact'
-                      $style={{ color: '#F8F8F8' }}
-                      kind={'tertiary'}
-                      onClick={() => setEdit(!edit)} marginLeft
-                    >
-                      Rediger
-                </Button>
+                <Block display='flex' alignItems='center' width='100%'>
+                  <Block flex='1' display='flex' justifyContent='flex-start'>
+                    <RouteLink href={'/krav'} hideUnderline>
+                      <Button startEnhancer={<img alt={'Chevron left'} src={chevronLeft} />} size='compact' kind='tertiary' $style={{ color: '#F8F8F8' }}> Tilbake</Button>
+                    </RouteLink>
+                  </Block>
+                  <Block flex='1' display={['none', 'none', 'none', 'none', 'flex', 'flex']} justifyContent='flex-end'>
+                    {krav?.id && user.isKraveier() &&
+                      <Button startEnhancer={<img alt='add' src={plusIcon} />} onClick={newVersion} marginLeft size='compact' kind='tertiary' $style={{ color: '#F8F8F8' }}>Ny
+                    versjon</Button>}
+                    {krav?.id && user.isKraveier() && <DeleteItem fun={() => deleteKrav(krav.id)} redirect={'/krav'} />}
+                    {((krav?.id && user.isKraveier())) &&
+                      <Button
+                        startEnhancer={<img src={editIcon} alt='edit' />}
+                        size='compact'
+                        $style={{ color: '#F8F8F8' }}
+                        kind={'tertiary'}
+                        onClick={() => setEdit(!edit)} marginLeft
+                      >
+                        Rediger
+                    </Button>
                   }
+                   </Block>
                 </Block>
               </Block>
             </Block>
-
 
             <Block paddingLeft='40px' marginTop='31px' paddingRight='40px' width='calc(100% - 80px)' display='flex' justifyContent='center'>
               <Block maxWidth={pageWidth} width='100%' marginTop='7px'>
