@@ -23,7 +23,7 @@ export const KravRegelverkEdit = () => {
   const regelverkObject = () => ({lov: codelist.getCode(ListName.LOV, lov[0].id as string)!, spesifisering: text})
 
   return (
-    <FieldWrapper>
+    <FieldWrapper marginBottom='32px'>
       <FieldArray name='regelverk'>
         {p => {
           const add = () => {
@@ -38,7 +38,7 @@ export const KravRegelverkEdit = () => {
               <Block>
                 <Block>
                   <Block display='flex' alignItems={'flex-end'}>
-                    <Block flex={1} width='400px' marginRight={theme.sizing.scale400}>
+                    <Block width='100%' maxWidth='400px' marginRight={theme.sizing.scale400}>
                       <LabelWithTooltip label={'Regelverk'}
                                         tooltip={'Velg relevant regelverk fra nedtrekksmenyen, og angi hvilke(n) bestemmelse(r) kravet har sin opprinnelse fra.'}/>
                       <Select
@@ -55,7 +55,7 @@ export const KravRegelverkEdit = () => {
                         }}
                       />
                     </Block>
-                    <Block flex={2} width='100%'>
+                    <Block width='100%'>
                       <LabelWithTooltip label={'Paragraf eller kapittel i regelverk'} tooltip={'Beskrivelse'}/>
                       <Input size={SIZE.compact} value={text}
                              onChange={e => setText((e.target as HTMLInputElement).value)}

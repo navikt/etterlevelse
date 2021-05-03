@@ -1,23 +1,23 @@
-import {Or} from '../../constants'
-import {Field, FieldArray, FieldArrayRenderProps, FieldProps} from 'formik'
-import {FormControl} from 'baseui/form-control'
-import {Input, SIZE} from 'baseui/input'
-import React, {ReactNode, useState} from 'react'
-import {Block} from 'baseui/block'
-import Button, {buttonBorderStyle} from './Button'
-import {RenderTagList} from './TagList'
-import {Select, SIZE as selectSize, Value} from 'baseui/select'
-import {Code, codelist, ListName} from '../../services/Codelist'
-import {SearchType} from '../../api/TeamApi'
+import { Or } from '../../constants'
+import { Field, FieldArray, FieldArrayRenderProps, FieldProps } from 'formik'
+import { FormControl } from 'baseui/form-control'
+import { Input, SIZE } from 'baseui/input'
+import React, { ReactNode, useState } from 'react'
+import { Block } from 'baseui/block'
+import Button, { buttonBorderStyle } from './Button'
+import { RenderTagList } from './TagList'
+import { Select, SIZE as selectSize, Value } from 'baseui/select'
+import { Code, codelist, ListName } from '../../services/Codelist'
+import { SearchType } from '../../api/TeamApi'
 import * as _ from 'lodash'
-import {Textarea} from 'baseui/textarea'
-import {Datepicker} from 'baseui/datepicker'
+import { Textarea } from 'baseui/textarea'
+import { Datepicker } from 'baseui/datepicker'
 import moment from 'moment'
-import {Radio, RadioGroup} from 'baseui/radio'
-import {MarkdownEditor, MarkdownInfo} from './Markdown'
+import { Radio, RadioGroup } from 'baseui/radio'
+import { MarkdownEditor, MarkdownInfo } from './Markdown'
 import LabelWithTooltip from '../common/LabelWithTooltip'
 
-export const FieldWrapper = ({children, marginBottom}: {children: React.ReactNode, marginBottom?: string}) => {
+export const FieldWrapper = ({ children, marginBottom }: { children: React.ReactNode, marginBottom?: string }) => {
   return (
     <Block marginBottom={marginBottom ? marginBottom : '1.5rem'}>
       {children}
@@ -25,35 +25,35 @@ export const FieldWrapper = ({children, marginBottom}: {children: React.ReactNod
   )
 }
 
-export const InputField = (props: {label: string, name: string, caption?: ReactNode, tooltip?: string}) => (
-  <FieldWrapper>
+export const InputField = (props: { label: string, name: string, caption?: ReactNode, tooltip?: string, marginBottom?: string }) => (
+  <FieldWrapper marginBottom={props.marginBottom}>
     <Field name={props.name}>
       {(p: FieldProps) =>
-        <FormControl overrides={{Label: {style: {marginTop: '0px', marginBottom: '0px', paddingTop: '8px', paddingBottom: '8px'}}}}
-                     label={<LabelWithTooltip label={props.label} tooltip={props.tooltip}/>} error={p.meta.touched && p.meta.error} caption={props.caption}>
-          <Input size={SIZE.compact} {...p.field} placeholder={props.label}/>
+        <FormControl overrides={{ Label: { style: { marginTop: '0px', marginBottom: '0px', paddingTop: '8px', paddingBottom: '8px' } } }}
+          label={<LabelWithTooltip label={props.label} tooltip={props.tooltip} />} error={p.meta.touched && p.meta.error} caption={props.caption}>
+          <Input size={SIZE.compact} {...p.field} placeholder={props.label} />
         </FormControl>
       }
     </Field>
   </FieldWrapper>
 )
 
-export const TextAreaField = (props: {marginBottom?: string, label: string, name: string, markdown?: boolean, shortenLinks?: boolean, onImageUpload?: (file: File) => Promise<string>, caption?: ReactNode, tooltip?: string}) => {
+export const TextAreaField = (props: { marginBottom?: string, label: string, name: string, markdown?: boolean, shortenLinks?: boolean, onImageUpload?: (file: File) => Promise<string>, caption?: ReactNode, tooltip?: string }) => {
   return (
     <FieldWrapper marginBottom={props.marginBottom}>
       <Field name={props.name}>
         {(p: FieldProps) =>
-          <FormControl overrides={{ControlContainer: {style: {marginBottom: '0px'}}, Caption: {style: {marginBottom: '0px'}}}}
-                       label={<LabelWithTooltip label={props.label} tooltip={props.tooltip}/>} error={p.meta.touched && p.meta.error}
-                       caption={props.markdown ?
-                         <Block display='flex' flexDirection={'column'}>
-                           {props.caption} <MarkdownInfo/>
-                         </Block>
-                         : props.caption}>
+          <FormControl overrides={{ ControlContainer: { style: { marginBottom: '0px' } }, Caption: { style: { marginBottom: '0px' } } }}
+            label={<LabelWithTooltip label={props.label} tooltip={props.tooltip} />} error={p.meta.touched && p.meta.error}
+            caption={props.markdown ?
+              <Block display='flex' flexDirection={'column'}>
+                {props.caption} <MarkdownInfo />
+              </Block>
+              : props.caption}>
             <>
               {props.markdown && <MarkdownEditor initialValue={p.field.value} setValue={v => p.form.setFieldValue(props.name, v)}
-                                                 onImageUpload={props.onImageUpload} shortenLinks={props.shortenLinks}/>}
-              {!props.markdown && <Textarea rows={8} {...p.field} placeholder={props.label}/>}
+                onImageUpload={props.onImageUpload} shortenLinks={props.shortenLinks} />}
+              {!props.markdown && <Textarea rows={8} {...p.field} placeholder={props.label} />}
             </>
           </FormControl>
         }
@@ -65,22 +65,22 @@ export const TextAreaField = (props: {marginBottom?: string, label: string, name
 const YES = 'YES', NO = 'NO', UNCLARIFIED = 'UNCLARIFIED'
 const boolToRadio = (bool?: boolean) => bool === undefined ? UNCLARIFIED : bool ? YES : NO
 const radioToBool = (radio: string) => radio === UNCLARIFIED ? undefined : radio === YES
-export const BoolField = (props: {label: string, name: string, nullable?: boolean}) => (
+export const BoolField = (props: { label: string, name: string, nullable?: boolean }) => (
   <FieldWrapper>
     <Field name={props.name}>
       {(p: FieldProps) =>
         <FormControl label={props.label} error={p.meta.touched && p.meta.error}>
           <RadioGroup value={boolToRadio(p.field.value)} align='horizontal'
-                      overrides={{RadioGroupRoot: {style: {width: '100%', justifyContent: 'stretch'}}}}
-                      onChange={
-                        (e) => {
-                          p.form.setFieldValue(props.name, radioToBool((e.target as HTMLInputElement).value))
-                        }
-                      }
+            overrides={{ RadioGroupRoot: { style: { width: '100%', justifyContent: 'stretch' } } }}
+            onChange={
+              (e) => {
+                p.form.setFieldValue(props.name, radioToBool((e.target as HTMLInputElement).value))
+              }
+            }
           >
-            <Radio overrides={{Label: {style: {marginRight: '2rem'}}}} value={YES}>Ja</Radio>
-            <Radio overrides={{Label: {style: {marginRight: '2rem'}}}} value={NO}>Nei</Radio>
-            {props.nullable && <Radio overrides={{Label: {style: {marginRight: '2rem'}}}} value={UNCLARIFIED}>Uavklart</Radio>}
+            <Radio overrides={{ Label: { style: { marginRight: '2rem' } } }} value={YES}>Ja</Radio>
+            <Radio overrides={{ Label: { style: { marginRight: '2rem' } } }} value={NO}>Nei</Radio>
+            {props.nullable && <Radio overrides={{ Label: { style: { marginRight: '2rem' } } }} value={UNCLARIFIED}>Uavklart</Radio>}
           </RadioGroup>
         </FormControl>
       }
@@ -88,21 +88,21 @@ export const BoolField = (props: {label: string, name: string, nullable?: boolea
   </FieldWrapper>
 )
 
-export const DateField = (props: {label: string, name: string, caption?: ReactNode, tooltip?: string}) => (
+export const DateField = (props: { label: string, name: string, caption?: ReactNode, tooltip?: string }) => (
   <FieldWrapper>
     <Field name={props.name}>
       {(p: FieldProps) =>
-        <FormControl label={<LabelWithTooltip label={props.label} tooltip={props.tooltip}/>} error={p.meta.touched && p.meta.error} caption={props.caption}>
+        <FormControl label={<LabelWithTooltip label={props.label} tooltip={props.tooltip} />} error={p.meta.touched && p.meta.error} caption={props.caption}>
           <Datepicker
             size={SIZE.compact}
             clearable
             formatString={'dd-MM-yyyy'}
             value={p.field.value ? moment(p.field.value).toDate() : undefined}
-            onChange={({date}) => {
+            onChange={({ date }) => {
               const dateSingle = Array.isArray(date) ? date[0] : date
               if (dateSingle) p.form.setFieldValue(props.name, dateSingle.toISOString().split('T')[0])
               else p.form.setFieldValue(props.name, undefined)
-            }}/>
+            }} />
         </FormControl>
       }
     </Field>
@@ -116,7 +116,11 @@ const linkNameFor = (t: string) => {
   return t
 }
 
-export const MultiInputField = (props: {label: string, name: string, link?: boolean, linkLabel?: string, linkTooltip?: string, caption?: ReactNode, tooltip?: string}) => {
+export const MultiInputField = (props: {
+  label: string, name: string, link?: boolean, linkLabel?: string,
+  linkTooltip?: string, caption?: ReactNode, tooltip?: string, maxInputWidth?: string,
+  marginBottom?: string
+}) => {
   const [val, setVal] = useState('')
   const [linkName, setLinkName] = useState('')
   const inputRef = React.useRef<HTMLInputElement>(null)
@@ -135,7 +139,7 @@ export const MultiInputField = (props: {label: string, name: string, link?: bool
   }
 
   return (
-    <FieldWrapper>
+    <FieldWrapper marginBottom={props.marginBottom}>
       <FieldArray name={props.name}>{(p: FieldArrayRenderProps) => {
         const add = () => {
           if (!val) return
@@ -151,24 +155,23 @@ export const MultiInputField = (props: {label: string, name: string, link?: bool
         return (
           <FormControl error={p.form.touched[props.name] && p.form.errors[props.name]} caption={props.caption}>
             <Block>
-              <Block display='flex' alignItems={'flex-end'}>
-                <Block display='flex' width='100%' alignItems={'flex-end'}>
-                  {props.link &&
-                  <Block flex={1}>
-                    <LabelWithTooltip label={props.linkLabel} tooltip={props.linkTooltip}/>
+              <Block display='flex' width='100%' alignItems={'flex-end'}>
+                {props.link &&
+                  <Block width='100%' maxWidth={props.maxInputWidth}>
+                    <LabelWithTooltip label={props.linkLabel} tooltip={props.linkTooltip} />
                     <Input size={SIZE.compact} onKeyDown={onKey} value={linkName}
-                           onChange={e => setLinkName((e.target as HTMLInputElement).value)}
+                      onChange={e => setLinkName((e.target as HTMLInputElement).value)}
                     />
                   </Block>
-                  }
-                  <Block marginLeft={props.link ? '12px' : '0px'} flex={2}>
-                    <LabelWithTooltip label={props.label} tooltip={props.tooltip}/>
-                    <Input size={SIZE.compact} onKeyDown={onKey} value={val} inputRef={inputRef}
-                           onChange={e => setVal((e.target as HTMLInputElement).value)}
-                           onBlur={!props.link ? add : undefined}
-                    />
-                  </Block>
+                }
+                <Block marginLeft={props.link ? '12px' : '0px'} width='100%' maxWidth={!props.link ? props.maxInputWidth : undefined}>
+                  <LabelWithTooltip label={props.label} tooltip={props.tooltip} />
+                  <Input size={SIZE.compact} onKeyDown={onKey} value={val} inputRef={inputRef}
+                    onChange={e => setVal((e.target as HTMLInputElement).value)}
+                    onBlur={!props.link ? add : undefined}
+                  />
                 </Block>
+
                 <Block minWidth='107px'>
                   <Button
                     type='button'
@@ -185,7 +188,7 @@ export const MultiInputField = (props: {label: string, name: string, link?: bool
               <RenderTagList
                 list={(p.form.values[props.name] as string[]).map(linkNameFor)}
                 onRemove={p.remove}
-                onClick={(i) => onClick(p, i)}/>
+                onClick={(i) => onClick(p, i)} />
             </Block>
           </FormControl>
         )
@@ -195,13 +198,13 @@ export const MultiInputField = (props: {label: string, name: string, link?: bool
   )
 }
 
-export const OptionField = (props: {label: string, name: string, clearable?: boolean, caption?: ReactNode, tooltip?: string} & Or<{options: Value}, {listName: ListName}>) => {
+export const OptionField = (props: { label: string, name: string, clearable?: boolean, caption?: ReactNode, tooltip?: string } & Or<{ options: Value }, { listName: ListName }>) => {
   return (
     <FieldWrapper>
       <Field name={props.name}>
         {(p: FieldProps<string | Code>) =>
-          <FormControl label={<LabelWithTooltip label={props.label} tooltip={props.tooltip}/>} error={p.meta.touched && p.meta.error} caption={props.caption}>
-            <OptionList {...props} onChange={(val => p.form.setFieldValue(props.name, val))} value={p.field.value}/>
+          <FormControl label={<LabelWithTooltip label={props.label} tooltip={props.tooltip} />} error={p.meta.touched && p.meta.error} caption={props.caption}>
+            <OptionList {...props} onChange={(val => p.form.setFieldValue(props.name, val))} value={p.field.value} />
           </FormControl>
         }
       </Field>
@@ -209,30 +212,30 @@ export const OptionField = (props: {label: string, name: string, clearable?: boo
   )
 }
 
-export const OptionList = (props: {label: string, clearable?: boolean, value?: Code | string, onChange: (val?: any) => void} & Or<{options: Value}, {listName: ListName}>) => {
+export const OptionList = (props: { label: string, clearable?: boolean, value?: Code | string, onChange: (val?: any) => void } & Or<{ options: Value }, { listName: ListName }>) => {
   const options: Value = props.options || codelist.getParsedOptions(props.listName)
   return (
     <Select size={selectSize.compact} options={options} clearable={props.clearable}
-            value={options.filter(o => o.id === (props.listName ? (props.value as Code | undefined)?.code : props.value))}
-            onChange={s => {
-              const val = s.option?.id
-              const toSet = props.listName && val ? codelist.getCode(props.listName, val as string) : val
-              return props.onChange(toSet)
-            }}
-            placeholder={props.label}
-            aria-label={props.label}
+      value={options.filter(o => o.id === (props.listName ? (props.value as Code | undefined)?.code : props.value))}
+      onChange={s => {
+        const val = s.option?.id
+        const toSet = props.listName && val ? codelist.getCode(props.listName, val as string) : val
+        return props.onChange(toSet)
+      }}
+      placeholder={props.label}
+      aria-label={props.label}
     />)
 }
 
-export const MultiOptionField = (props: {label: string, name: string, caption?: ReactNode, tooltip?: string} & Or<{options: Value}, {listName: ListName}>) => {
+export const MultiOptionField = (props: { label: string, name: string, caption?: ReactNode, tooltip?: string, marginBottom?: string } & Or<{ options: Value }, { listName: ListName }>) => {
   const options: Value = props.options || codelist.getParsedOptions(props.listName)
   return (
-    <FieldWrapper>
+    <FieldWrapper marginBottom={props.marginBottom}>
       <FieldArray name={props.name}>
         {(p: FieldArrayRenderProps) => {
           const selectedIds = (p.form.values[props.name] as any[]).map(v => props.listName ? (v as Code).code : v)
-          return <FormControl label={<LabelWithTooltip label={props.label} tooltip={props.tooltip}/>} error={p.form.touched[props.name] && p.form.errors[props.name]}
-                              caption={props.caption}>
+          return <FormControl label={<LabelWithTooltip label={props.label} tooltip={props.tooltip} />} error={p.form.touched[props.name] && p.form.errors[props.name]}
+            caption={props.caption}>
             <Block>
               <Block display='flex'>
                 <Select
@@ -242,12 +245,12 @@ export const MultiOptionField = (props: {label: string, name: string, caption?: 
                   maxDropdownHeight='400px'
 
                   options={options.filter(o => selectedIds.indexOf(o.id) < 0)}
-                  onChange={({value}) => {
+                  onChange={({ value }) => {
                     value.length && p.push(props.listName ? codelist.getCode(props.listName, value[0].id as string) : value[0].id)
                   }}
                 />
               </Block>
-              <RenderTagList list={selectedIds.map(v => options.find(o => o.id === v)?.label)} onRemove={p.remove} wide/>
+              <RenderTagList list={selectedIds.map(v => options.find(o => o.id === v)?.label)} onRemove={p.remove} wide />
             </Block>
           </FormControl>
         }
@@ -258,7 +261,7 @@ export const MultiOptionField = (props: {label: string, name: string, caption?: 
 }
 
 
-export const MultiSearchField = (props: {label: string, name: string, search: SearchType, itemLabel?: (id: string) => React.ReactNode}) => {
+export const MultiSearchField = (props: { label: string, name: string, search: SearchType, itemLabel?: (id: string) => React.ReactNode }) => {
   const [results, setSearch, loading] = props.search
 
   return (
@@ -276,7 +279,7 @@ export const MultiSearchField = (props: {label: string, name: string, search: Se
                   noResultsMsg='Ingen resultat'
 
                   options={results.filter(o => (p.form.values[props.name] as any[]).indexOf(o.id) < 0)}
-                  onChange={({value}) => {
+                  onChange={({ value }) => {
                     value.length && p.push(value[0].id)
                   }}
                   onInputChange={event => setSearch(event.currentTarget.value)}
@@ -284,7 +287,7 @@ export const MultiSearchField = (props: {label: string, name: string, search: Se
                 />
               </Block>
               <RenderTagList list={(p.form.values[props.name] as string[])
-              .map(v => props.itemLabel ? props.itemLabel(v) : v)} onRemove={p.remove} wide/>
+                .map(v => props.itemLabel ? props.itemLabel(v) : v)} onRemove={p.remove} wide />
             </Block>
           </FormControl>
         }
@@ -294,7 +297,7 @@ export const MultiSearchField = (props: {label: string, name: string, search: Se
 }
 
 
-export const SearchField = (props: {label: string, name: string, search: SearchType, itemLabel?: (id: string) => string}) => {
+export const SearchField = (props: { label: string, name: string, search: SearchType, itemLabel?: (id: string) => string }) => {
   const [results, setSearch, loading] = props.search
 
   return (
@@ -310,8 +313,8 @@ export const SearchField = (props: {label: string, name: string, search: SearchT
               noResultsMsg='Ingen resultat'
 
               options={results}
-              value={[{id: p.field.value, label: props.itemLabel ? props.itemLabel(p.field.value) : p.field.value}]}
-              onChange={({value}) => {
+              value={[{ id: p.field.value, label: props.itemLabel ? props.itemLabel(p.field.value) : p.field.value }]}
+              onChange={({ value }) => {
                 p.form.setFieldValue(props.name, value.length ? value[0].id as string : '')
               }}
               onInputChange={event => setSearch(event.currentTarget.value)}

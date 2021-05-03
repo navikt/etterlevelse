@@ -100,17 +100,17 @@ export const KravPage = () => {
         <Block backgroundColor='#112724' display='flex' width='100%' justifyContent='center' paddingBottom='32px'>
           <Block maxWidth={maxPageWidth} width='100%'>
             <Block paddingLeft='40px' paddingRight='40px' display='flex' flexDirection='column' justifyContent='center'>
-              <Block display='flex' width='100%' justifyContent='center' marginTop='25px'>
+              <Block display='flex' width='100%' justifyContent='center' marginTop='24px'>
                 <Block display='flex' alignItems='center' width='100%'>
                   <Block flex='1' display='flex' justifyContent='flex-start'>
                     <RouteLink href={'/krav'} hideUnderline>
                       <Button startEnhancer={<img alt={'Chevron left'} src={chevronLeft} />} size='compact' kind='tertiary' $style={{ color: '#F8F8F8' }}> Tilbake</Button>
                     </RouteLink>
                   </Block>
-                  <Block flex='1' display='flex' justifyContent='flex-end'>
+                  <Block flex='1' display={['none', 'none', 'none', 'none', 'flex', 'flex']} justifyContent='flex-end'>
                     {krav?.id && user.isKraveier() &&
                       <Button startEnhancer={<img alt='add' src={plusIcon} />} onClick={newVersion} marginLeft size='compact' kind='tertiary' $style={{ color: '#F8F8F8' }}>Ny
-                  versjon</Button>}
+                    versjon</Button>}
                     {krav?.id && user.isKraveier() && <DeleteItem fun={() => deleteKrav(krav.id)} redirect={'/krav'} />}
                     {((krav?.id && user.isKraveier())) &&
                       <Button
@@ -121,17 +121,18 @@ export const KravPage = () => {
                         onClick={() => setEdit(!edit)} marginLeft
                       >
                         Rediger
-                      </Button>
+                    </Button>
                     }
                   </Block>
                 </Block>
               </Block>
             </Block>
 
-
-            <Block paddingLeft='40px' paddingRight='40px' width='calc(100% - 80px)' display='flex' justifyContent='center'>
+            <Block paddingLeft='40px' marginTop='31px' paddingRight='40px' width='calc(100% - 80px)' display='flex' justifyContent='center'>
               <Block maxWidth={pageWidth} width='100%' marginTop='7px'>
-                <CustomizedTag>{krav && krav?.kravNummer !== 0 ? kravNumView(krav) : 'Ny'}</CustomizedTag>
+                <Block $style={{ color: '#F8F8F8', fontWeight: 700, fontSize: '18px', fontFamily: 'Source Sans Pro' }}>
+                  {krav && krav?.kravNummer !== 0 ? kravNumView(krav) : 'Ny'}
+                </Block>
                 <H1 $style={{ color: '#F8F8F8' }}>{krav && krav?.navn ? krav.navn : 'Ny'} </H1>
               </Block>
             </Block>
@@ -144,7 +145,7 @@ export const KravPage = () => {
           <Block backgroundColor='#CCD9D7' display='flex' width='100%' justifyContent='center'>
             <Block maxWidth={maxPageWidth} width='100%'>
               <Block paddingLeft='40px' paddingRight='40px' justifyContent='center' display='flex'>
-                <Block marginBottom='80px' marginTop='80px' width={pageWidth}>
+                <Block marginBottom='80px' marginTop='64px' width={pageWidth}>
                   <Label title='' markdown={krav.hensikt} />
                 </Block>
               </Block>
