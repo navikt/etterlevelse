@@ -23,7 +23,7 @@ export const KravRegelverkEdit = () => {
   const regelverkObject = () => ({lov: codelist.getCode(ListName.LOV, lov[0].id as string)!, spesifisering: text})
 
   return (
-    <FieldWrapper>
+    <FieldWrapper marginBottom='32px'>
       <FieldArray name='regelverk'>
         {p => {
           const add = () => {

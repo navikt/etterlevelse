@@ -30,6 +30,7 @@ const padding = 212
 const paddingPx = padding + 'px'
 const width = `calc(100% - ${padding * 2}px)`
 const maxInputWidth = '400px'
+const inputMarginBottom = '32px'
 
 export const kravModal = () => document.querySelector('#krav-modal')
 
@@ -76,8 +77,8 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
           <Form>
             <Block
               backgroundColor='#112724'
-              paddingTop='20px'
-              paddingBottom='20px'
+              paddingTop='23px'
+              paddingBottom={!stickyHeader ? '48px' : '20px'}
               paddingLeft={paddingPx}
               paddingRight='32px'
               position='sticky'
@@ -118,8 +119,8 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
               )}
             </Block>
             <Block>
-              <Block backgroundColor='#F1F1F1' paddingLeft={paddingPx} paddingRight={paddingPx}>
-                <InputField label='Krav-tittel' name='navn' tooltip={'Gi kravet en kort tittel. Kravet formuleres som en aktivitet eller målsetting.'} />
+              <Block backgroundColor='#F1F1F1' paddingTop='48px' paddingLeft={paddingPx} paddingRight={paddingPx} paddingBottom='64px'>
+                <InputField marginBottom={inputMarginBottom} label='Krav-tittel' name='navn' tooltip={'Gi kravet en kort tittel. Kravet formuleres som en aktivitet eller målsetting.'} />
                 <TextAreaField marginBottom='0px' label='Hensikt' name='hensikt' markdown shortenLinks onImageUpload={onImageUpload(krav.id)}
                   tooltip={'Bruk noen setninger på å forklare hensikten med kravet. Formålet er at leseren skal forstå hvorfor vi har dette kravet.'} />
               </Block>
@@ -128,42 +129,42 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
                 <Block width={width}>
                   <H2>Om Kravet</H2>
                   <KravSuksesskriterierEdit />
-                  <TextAreaField label='Beskrivelse' name='beskrivelse' markdown shortenLinks onImageUpload={onImageUpload(krav.id)}
+                  <TextAreaField marginBottom='80px' label='Beskrivelse' name='beskrivelse' markdown shortenLinks onImageUpload={onImageUpload(krav.id)}
                     tooltip={'Beskriv selve innholdet i kravet.'} />
                   {/*
                       <TextAreaField label='Utfyllende beskrivelse' name='utdypendeBeskrivelse' markdown shortenLinks onImageUpload={onImageUpload(krav.id)}
                         tooltip={'Legg til en utfyllende beskrivelse av kravet. Benyttes kun der det er behov for det.'} /> */}
 
-                  <Block marginBottom='49px'>
+                  <Block marginBottom={inputMarginBottom}>
                     <LabelLarge><b>Dokumentasjon</b></LabelLarge>
                   </Block>
 
-                  <MultiInputField maxInputWidth={maxInputWidth} linkLabel='Navn på dokumentasjon' name='dokumentasjon' link label='Lenke eller websaknr' tooltip='Lenke til dokumentasjon'
+                  <MultiInputField marginBottom={inputMarginBottom} maxInputWidth={maxInputWidth} linkLabel='Navn på dokumentasjon' name='dokumentasjon' link label='Lenke eller websaknr' tooltip='Lenke til dokumentasjon'
                     linkTooltip={'Legg inn referanse til utdypende dokumentasjon (lenke). Eksempelvis til navet, eksterne nettsider eller Websak.'} />
                   <KravRegelverkEdit />
                   <MultiInputField label='Relevante implementasjoner' name='implementasjoner' tooltip={'Vis til gode eksisterende implementasjoner som ivaretar kravet.'} />
                   {/* <MultiInputField label='Rettskilder' name='rettskilder' link /> */}
 
-                  <Block marginBottom='49px'>
+                  <Block marginTop='80px' marginBottom={inputMarginBottom}>
                     <LabelLarge><b>Gruppering og etiketter</b></LabelLarge>
                   </Block>
 
                   <Block width='100%' maxWidth={maxInputWidth}>
-                    <MultiOptionField label='Relevant for' name='relevansFor' listName={ListName.RELEVANS}
+                    <MultiOptionField  marginBottom={inputMarginBottom} label='Relevant for' name='relevansFor' listName={ListName.RELEVANS}
                       tooltip={'Velg kategori(er) kravet er relevant for i nedtrekksmenyen. \n'} />
                   </Block>
 
-                  <MultiInputField maxInputWidth={maxInputWidth} label='Etiketter' name='tagger' tooltip={'Tag kravet med et eller flere nøkkelord. Hensikten er å skape relasjon(er) til andre krav.'} />
+                  <MultiInputField marginBottom={inputMarginBottom} maxInputWidth={maxInputWidth} label='Etiketter' name='tagger' tooltip={'Tag kravet med et eller flere nøkkelord. Hensikten er å skape relasjon(er) til andre krav.'} />
 
-                  <Block width='100%' maxWidth={maxInputWidth}>
+                  <Block width='100%' maxWidth={maxInputWidth} marginBottom='80px'>
                     <EditBegreper />
                   </Block>
 
-                  <Block marginBottom='49px'>
+                  <Block marginBottom={inputMarginBottom}>
                     <LabelLarge><b>Egenskaper</b></LabelLarge>
                   </Block>
 
-                  <Block width='100%' maxWidth={maxInputWidth}>
+                  <Block width='100%' maxWidth={maxInputWidth} marginBottom={inputMarginBottom}>
                     <OptionField label='Status' name='status' options={Object.values(KravStatus).map(id => ({ id, label: kravStatus(id) }))}
                       tooltip={'Velg status for kravet. Utkast er kun synlig for kraveier selv. Aktiv/utgått er synlig for alle.'} />
                   </Block>

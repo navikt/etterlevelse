@@ -25,8 +25,8 @@ export const FieldWrapper = ({ children, marginBottom }: { children: React.React
   )
 }
 
-export const InputField = (props: { label: string, name: string, caption?: ReactNode, tooltip?: string }) => (
-  <FieldWrapper>
+export const InputField = (props: { label: string, name: string, caption?: ReactNode, tooltip?: string, marginBottom?: string }) => (
+  <FieldWrapper marginBottom={props.marginBottom}>
     <Field name={props.name}>
       {(p: FieldProps) =>
         <FormControl overrides={{ Label: { style: { marginTop: '0px', marginBottom: '0px', paddingTop: '8px', paddingBottom: '8px' } } }}
@@ -116,7 +116,11 @@ const linkNameFor = (t: string) => {
   return t
 }
 
-export const MultiInputField = (props: { label: string, name: string, link?: boolean, linkLabel?: string, linkTooltip?: string, caption?: ReactNode, tooltip?: string, maxInputWidth?: string }) => {
+export const MultiInputField = (props: {
+  label: string, name: string, link?: boolean, linkLabel?: string,
+  linkTooltip?: string, caption?: ReactNode, tooltip?: string, maxInputWidth?: string,
+  marginBottom?: string
+}) => {
   const [val, setVal] = useState('')
   const [linkName, setLinkName] = useState('')
   const inputRef = React.useRef<HTMLInputElement>(null)
@@ -135,7 +139,7 @@ export const MultiInputField = (props: { label: string, name: string, link?: boo
   }
 
   return (
-    <FieldWrapper>
+    <FieldWrapper marginBottom={props.marginBottom}>
       <FieldArray name={props.name}>{(p: FieldArrayRenderProps) => {
         const add = () => {
           if (!val) return
@@ -223,10 +227,10 @@ export const OptionList = (props: { label: string, clearable?: boolean, value?: 
     />)
 }
 
-export const MultiOptionField = (props: { label: string, name: string, caption?: ReactNode, tooltip?: string } & Or<{ options: Value }, { listName: ListName }>) => {
+export const MultiOptionField = (props: { label: string, name: string, caption?: ReactNode, tooltip?: string, marginBottom?: string } & Or<{ options: Value }, { listName: ListName }>) => {
   const options: Value = props.options || codelist.getParsedOptions(props.listName)
   return (
-    <FieldWrapper>
+    <FieldWrapper marginBottom={props.marginBottom}>
       <FieldArray name={props.name}>
         {(p: FieldArrayRenderProps) => {
           const selectedIds = (p.form.values[props.name] as any[]).map(v => props.listName ? (v as Code).code : v)
