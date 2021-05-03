@@ -106,7 +106,7 @@ export const KravPage = () => {
                   <Button startEnhancer={<img alt={'Chevron left'} src={chevronLeft}/>} size='compact' kind='tertiary' $style={{color: '#F8F8F8'}}> Tilbake</Button>
                 </RouteLink>
               </Block>
-              <Block flex='1' display='flex' justifyContent='flex-end'>
+              <Block flex='1' display={['none', 'none', 'none', 'none', 'flex', 'flex']} justifyContent='flex-end'>
                 {krav?.id && user.isKraveier() &&
                 <Button startEnhancer={<img alt='add' src={plusIcon}/>} onClick={newVersion} marginLeft size='compact' kind='tertiary' $style={{color: '#F8F8F8'}}>Ny
                   versjon</Button>}
