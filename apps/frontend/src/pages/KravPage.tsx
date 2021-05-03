@@ -122,15 +122,15 @@ export const KravPage = () => {
                       >
                         Rediger
                     </Button>
-                  }
-                   </Block>
+                    }
+                  </Block>
                 </Block>
               </Block>
             </Block>
 
             <Block paddingLeft='40px' marginTop='31px' paddingRight='40px' width='calc(100% - 80px)' display='flex' justifyContent='center'>
               <Block maxWidth={pageWidth} width='100%' marginTop='7px'>
-                <Block $style={{color: '#F8F8F8', fontWeight: 700, fontSize: '18px', fontFamily: 'Source Sans Pro' }}>
+                <Block $style={{ color: '#F8F8F8', fontWeight: 700, fontSize: '18px', fontFamily: 'Source Sans Pro' }}>
                   {krav && krav?.kravNummer !== 0 ? kravNumView(krav) : 'Ny'}
                 </Block>
                 <H1 $style={{ color: '#F8F8F8' }}>{krav && krav?.navn ? krav.navn : 'Ny'} </H1>
