@@ -1,8 +1,9 @@
 import * as React from 'react'
 import CustomizedStatefulTooltip from './CustomizedStatefulTooltip'
-import { questionmarkIcon, questionmarkHoverIcon } from '../Images'
-import { Block } from 'baseui/block'
-import { LabelMedium } from 'baseui/typography'
+import {questionmarkHoverIcon, questionmarkIcon} from '../Images'
+import {Block} from 'baseui/block'
+import {LabelMedium} from 'baseui/typography'
+import {ettlevColors} from '../../util/theme'
 
 const LabelWithToolTip = (props: { label?: string, tooltip?: React.ReactNode, fontColor?: string }) => {
   if (props.tooltip) {
@@ -25,13 +26,13 @@ const LabelWithToolTip = (props: { label?: string, tooltip?: React.ReactNode, fo
             },
             Inner: {
               style: {
-                backgroundColor: '#CCD9D7',
+                backgroundColor: ettlevColors.green100,
                 color: '#112724'
               }
             },
             Arrow: {
               style: {
-                backgroundColor: '#CCD9D7',
+                backgroundColor: ettlevColors.green100,
                 border: 'solid #112724 1px',
               }
             }
