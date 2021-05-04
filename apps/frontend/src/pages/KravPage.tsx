@@ -272,15 +272,15 @@ const PageIcon = (props: {hover: boolean}) => (
   <Block $style={{
     ...borderRadius('100%'),
     backgroundColor: props.hover ? ettlevColors.green100 : ettlevColors.green50,
-    minWidth: '37px',
-    maxWidth: '37px',
-    height: '37px',
+    minWidth: '38px',
+    maxWidth: '38px',
+    height: '38px',
     display: 'flex',
     alignSelf: 'center',
     alignItems: 'center',
     justifyContent: 'center',
   }}>
-    <img src={page} alt={'Page icon'} width={'20px'} height={'27px'}/>
+    <img src={page} alt={'Page icon'} width={'22px'} height={'30px'}/>
   </Block>
 )
 
