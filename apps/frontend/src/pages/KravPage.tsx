@@ -103,19 +103,19 @@ export const KravPage = () => {
               <Block display='flex' alignItems='center' width='100%'>
                 <Block flex='1' display='flex' justifyContent='flex-start'>
                   <RouteLink href={'/krav'} hideUnderline>
-                    <Button startEnhancer={<img alt={'Chevron left'} src={chevronLeft}/>} size='compact' kind='tertiary' $style={{color: '#F8F8F8'}}> Tilbake</Button>
+                    <Button startEnhancer={<img alt={'Chevron left'} src={chevronLeft}/>} size='compact' kind='tertiary' $style={{color: '#F8F8F8', ':hover':{backgroundColor:'transparent'}}}> Tilbake</Button>
                   </RouteLink>
                 </Block>
                 <Block flex='1' display={['none', 'none', 'none', 'none', 'flex', 'flex']} justifyContent='flex-end'>
                   {krav?.id && user.isKraveier() &&
-                  <Button startEnhancer={<img alt='add' src={plusIcon}/>} onClick={newVersion} marginLeft size='compact' kind='tertiary' $style={{color: '#F8F8F8'}}>Ny
+                  <Button startEnhancer={<img alt='add' src={plusIcon}/>} onClick={newVersion} marginLeft size='compact' kind='tertiary' $style={{color: '#F8F8F8', ':hover':{backgroundColor:'transparent'}}}>Ny
                     versjon</Button>}
                   {krav?.id && user.isKraveier() && <DeleteItem fun={() => deleteKrav(krav.id)} redirect={'/krav'}/>}
                   {((krav?.id && user.isKraveier())) &&
                   <Button
                     startEnhancer={<img src={editIcon} alt='edit'/>}
                     size='compact'
-                    $style={{color: '#F8F8F8'}}
+                    $style={{color: '#F8F8F8', ':hover':{backgroundColor:'transparent'}}}
                     kind={'tertiary'}
                     onClick={() => setEdit(!edit)} marginLeft
                   >
@@ -153,7 +153,7 @@ export const KravPage = () => {
 
         <Block display={'flex'} justifyContent='center' width='100%'
                $style={{
-                 background: `linear-gradient(top, ${ettlevColors.green100} 50px, ${ettlevColors.navLysGra2} 0%)`
+                 background: `linear-gradient(top, ${ettlevColors.green100} 50px, ${ettlevColors.gray25} 0%)`
                }}>
           <Block maxWidth={pageWidth} width='100%'>
             <CustomizedTabs fontColor={ettlevColors.green600} activeColor={ettlevColors.green800} tabBackground={ettlevColors.green100}>
@@ -230,7 +230,7 @@ const Etterlevelser = (
                     backgroundColor: ettlevColors.white,
 
                     borderWidth: '1px',
-                    borderColor: ettlevColors.navLysGra,
+                    borderColor: ettlevColors.grey50,
                     borderStyle: 'solid',
 
                     ':hover': {

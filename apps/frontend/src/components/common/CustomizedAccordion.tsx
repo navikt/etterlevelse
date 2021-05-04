@@ -24,7 +24,7 @@ export const CustomizedPanel = (props: PanelProps) => {
       },
       Header: {
         style: {
-          backgroundColor: ettlevColors.navLysGra,
+          backgroundColor: ettlevColors.grey50,
           borderBottomStyle: 'hidden',
           ':hover': {
             textDecoration: 'underline'
@@ -33,7 +33,7 @@ export const CustomizedPanel = (props: PanelProps) => {
       },
       Content: {
         style: {
-          backgroundColor: ettlevColors.navLysGra,
+          backgroundColor: ettlevColors.grey50,
           paddingLeft: theme.sizing.scale100,
           paddingRight: theme.sizing.scale100,
           paddingTop: 0,

@@ -7,15 +7,28 @@ import '@fontsource/source-sans-pro/600.css'
 import '@fontsource/source-sans-pro/700.css'
 import '@fontsource/source-sans-pro/900.css'
 
-// TODO fix up theme colors ?
-export const ettlevColors = {
-  green50: '#EAF0EF',
-  green100: '#CCD9D7',
-  green600: '#0B483F',
+ // etterlevelse colors
+ export const ettlevColors = {
   green800: '#102723',
-  navLysGra: '#F1F1F1',
-  navLysGra2: '#F8F8F8',
-  white: '#FFFFFF'
+  green600: '#14483F',
+  green400: '#057967',
+  green100: '#CCD9D7',
+  green50: '#EAF0EF',
+  red600: '#842D08',
+  red400: '#AE5235',
+  red200: '#EAA98D',
+  red50: '#F6EAE6',
+  gray200: '#A0A0A0',
+  grey100: '#DFDFDF',
+  grey50: '#F1F1F1',
+  gray25: '#F8F8F8',
+  white: '#FFFFFF',
+  success400: '#057967',
+  success50: '#EAF0EF',
+  warning400: '#FFA631',
+  warning50: '#FFF5E7',
+  error400: '#AE5235',
+  error50: '#F6EAE6',
 }
 
 export const primitives: ThemePrimitives & {primary150: string, primary350: string} = {
@@ -42,9 +55,24 @@ export const searchResultColor = {
 }
 
 const overrides: RecursivePartial<Theme> = {
+
   colors: {
-    buttonTertiaryText: '#112724',
-    buttonTertiaryHover: 'transparent',
+    //primary button color overrides:
+    buttonPrimaryFill: ettlevColors.green400,
+    buttonPrimaryText: ettlevColors.green50,
+    buttonPrimaryHover: ettlevColors.green600,
+    buttonPrimaryActive: ettlevColors.green800,
+    //secondary button color overrides:
+    buttonSecondaryFill: ettlevColors.white,
+    buttonSecondaryText: ettlevColors.green600,
+    buttonSecondaryHover: ettlevColors.green50,
+    buttonSecondaryActive: ettlevColors.gray200,
+    //tertiary button color overrides:
+    buttonTertiaryFill: 'transparent',
+    buttonTertiaryText: ettlevColors.green600,
+    buttonTertiaryHover: ettlevColors.green50,
+    buttonTertiaryActive: ettlevColors.green100,
+
     linkVisited: primitives.primary400,
     inputFill: '#FFFFFF',
     inputFillActive: '#FFFFFF',
@@ -105,3 +133,5 @@ const ResponsiveTheme = Object.keys(breakpoints).reduce(
   }
 )
 export const customTheme = {...theme, ...ResponsiveTheme}
+
+
