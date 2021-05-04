@@ -230,7 +230,7 @@ const Etterlevelser = (
                     backgroundColor: ettlevColors.white,
 
                     borderWidth: '1px',
-                    borderColor: ettlevColors.navLysGra,
+                    borderColor: ettlevColors.grey50,
                     borderStyle: 'solid',
 
                     ':hover': {
