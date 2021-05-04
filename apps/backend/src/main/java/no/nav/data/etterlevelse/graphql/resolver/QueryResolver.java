@@ -56,7 +56,7 @@ public class QueryResolver implements GraphQLQueryResolver {
         }
 
         List<Krav> filtered = new ArrayList<>(kravService.getByFilter(filter));
-        if (filter.getSistRedigert() != null) {
+        if (filter.getSistRedigert() == null) {
             filtered.sort(comparing(Krav::getKravNummer).thenComparing(Krav::getKravVersjon));
         }
         var all = pageSize == 0;

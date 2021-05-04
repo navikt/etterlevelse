@@ -53,7 +53,7 @@ public class KravRepoImpl implements KravRepoCustom {
         if (filter.getBehandlingId() != null) {
             kravIdSafeList.addAll(convert(behandlingRepo.findKravIdsForBehandling(filter.getBehandlingId()), KravId::kravId));
             query += """
-                    and ( 
+                    and (
                      exists(select 1
                                from generic_storage ettlev
                                where ettlev.data ->> 'kravNummer' = krav.data ->> 'kravNummer'

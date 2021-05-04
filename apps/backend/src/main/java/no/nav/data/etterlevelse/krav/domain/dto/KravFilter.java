@@ -42,11 +42,11 @@ public class KravFilter {
     public boolean isEmpty() {
         validate();
         return getRelevans().isEmpty()
-                && getLover().isEmpty()
                 && nummer == null
                 && behandlingId == null
                 && underavdeling == null
                 && lov == null
+                && getLover().isEmpty()
                 && !gjeldendeKrav
                 && sistRedigert == null
                 ;
