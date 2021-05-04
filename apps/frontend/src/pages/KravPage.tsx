@@ -226,17 +226,17 @@ const Etterlevelser = (
                   style: {
                     width: '100%',
                     ...paddingAll(theme.sizing.scale600),
+                    paddingLeft: theme.sizing.scale300,
                     display: 'flex',
                     justifyContent: 'space-between',
                     backgroundColor: ettlevColors.white,
 
                     borderWidth: '1px',
-                    borderColor: 'transparent',
+                    borderColor: ettlevColors.navLysGra,
                     borderStyle: 'solid',
 
                     ':hover': {
                       position: 'relative',
-                      borderColor: ettlevColors.green100,
                       boxSizing: 'border-box',
                       boxShadow: '0px 3px 4px rgba(0, 0, 0, 0.12)'
                     }
@@ -245,18 +245,20 @@ const Etterlevelser = (
               }} onMouseEnter={() => setHover(e.id)} onMouseLeave={() => setHover('')}>
                 <PageIcon hover={hover === e.id}/>
 
-                <Block marginLeft={theme.sizing.scale600} marginRight={theme.sizing.scale600} $style={{flexGrow: 1}}>
-                  <LabelLarge>{e.behandling.navn}</LabelLarge>
-                  <ParagraphSmall marginBottom={0} marginTop={theme.sizing.scale200}>{e.behandling.overordnetFormaal.shortName}</ParagraphSmall>
+                <Block marginLeft={theme.sizing.scale300} marginRight={theme.sizing.scale600} $style={{flexGrow: 1}}
+                       display={'flex'} flexDirection={'column'} justifyContent={'center'}
+                >
+                  <LabelLarge $style={{lineHeight: '20px'}}>{e.behandling.navn}</LabelLarge>
+                  <ParagraphSmall marginBottom={0} marginTop={theme.sizing.scale100}>{e.behandling.overordnetFormaal.shortName}</ParagraphSmall>
                 </Block>
 
                 <Block minWidth={'120px'} maxWidth={'120px'}>
                   <LabelSmall>{!!e.behandling.teamsData.length ? e.behandling.teamsData.map(t => t.name).join(', ') : 'Ingen team'}</LabelSmall>
-                  <ParagraphSmall marginBottom={0} marginTop={theme.sizing.scale200}>Utfylt: {moment(e.changeStamp.lastModifiedDate).format('ll')}</ParagraphSmall>
+                  <ParagraphSmall marginBottom={0} marginTop={theme.sizing.scale100}>Utfylt: {moment(e.changeStamp.lastModifiedDate).format('ll')}</ParagraphSmall>
                 </Block>
 
                 <Block marginLeft={hover === e.id ? `calc(${theme.sizing.scale600} + 4px)` : theme.sizing.scale600} alignSelf={'center'} marginRight={hover === e.id ? '-4px' : 0}>
-                  <FontAwesomeIcon icon={faChevronRight} size={'lg'}/>
+                  <FontAwesomeIcon icon={faChevronRight} size={'lg'} color={ettlevColors.green800}/>
                 </Block>
 
               </Block>
@@ -280,7 +282,7 @@ const PageIcon = (props: {hover: boolean}) => (
     alignItems: 'center',
     justifyContent: 'center',
   }}>
-    <img src={page} alt={'Page icon'} width={'15px'} height={'20px'}/>
+    <img src={page} alt={'Page icon'} width={'20px'} height={'27px'}/>
   </Block>
 )
 

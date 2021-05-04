@@ -26,15 +26,18 @@ export const CustomizedPanel = (props: PanelProps) => {
         style: {
           backgroundColor: ettlevColors.navLysGra,
           borderBottomStyle: 'hidden',
+          ':hover': {
+            textDecoration: 'underline'
+          }
         }
       },
       Content: {
         style: {
           backgroundColor: ettlevColors.navLysGra,
-          paddingLeft: theme.sizing.scale200,
-          paddingRight: theme.sizing.scale200,
+          paddingLeft: theme.sizing.scale100,
+          paddingRight: theme.sizing.scale100,
           paddingTop: 0,
-          paddingBottom: expanded ? theme.sizing.scale200 : 0,
+          paddingBottom: expanded ? theme.sizing.scale100 : 0,
           borderStyle: 'hidden',
           marginBottom: theme.sizing.scale100
         }
