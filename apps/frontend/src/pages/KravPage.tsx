@@ -3,7 +3,7 @@ import {H1, HeadingXLarge, LabelLarge, LabelSmall, Paragraph1, ParagraphSmall} f
 import {useHistory, useParams} from 'react-router-dom'
 import {deleteKrav, KravIdParams, mapToFormVal} from '../api/KravApi'
 import React, {useEffect, useRef, useState} from 'react'
-import {EtterlevelseQL, ExternalCode, Krav, KravQL, KravStatus} from '../constants'
+import {EtterlevelseQL, EtterlevelseStatus, ExternalCode, Krav, KravQL, KravStatus} from '../constants'
 import Button from '../components/common/Button'
 import {ViewKrav} from '../components/krav/ViewKrav'
 import {EditKrav} from '../components/krav/EditKrav'
@@ -193,11 +193,15 @@ export const KravPage = () => {
 }
 const Etterlevelser = (
   {
-    loading, etterlevelser
+    loading, etterlevelser: allEtterlevelser
   }: {
     loading: boolean, etterlevelser?: EtterlevelseQL[]
   }
 ) => {
+  const etterlevelser = (allEtterlevelser || [])
+  .filter(e => e.status === EtterlevelseStatus.FERDIG)
+  .sort((a, b) => a.behandling.navn.localeCompare(b.behandling.navn))
+
   const avdelinger = _.sortedUniqBy((etterlevelser?.map(e => e.behandling.avdeling)
     .sort((a, b) => (a?.shortName || '').localeCompare(b?.shortName || ''))
     .filter(avdeling => !!avdeling) || []) as ExternalCode[],
