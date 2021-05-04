@@ -203,17 +203,15 @@ const Etterlevelser = (
     .filter(avdeling => !!avdeling) || []) as ExternalCode[],
     a => a.code
   )
-  // const [open, setOpen] = useState()
   const [hover, setHover] = useState('')
 
   return (
     <Block>
-      <HeadingXLarge>Her kan du se hvordan andre team har dokumentert etterlevelse</HeadingXLarge>
+      <HeadingXLarge maxWidth={'500px'}>Her kan du se hvordan andre team har dokumentert etterlevelse</HeadingXLarge>
       {loading && <Spinner size={theme.sizing.scale800}/>}
 
       <CustomizedAccordion>
         {avdelinger.map(a => <CustomizedPanel
-          // expanded={open === a.code}
           key={a.code}
           title={a.shortName}>
 
