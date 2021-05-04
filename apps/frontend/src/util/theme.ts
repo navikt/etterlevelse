@@ -7,15 +7,28 @@ import '@fontsource/source-sans-pro/600.css'
 import '@fontsource/source-sans-pro/700.css'
 import '@fontsource/source-sans-pro/900.css'
 
-// TODO fix up theme colors ?
-export const ettlevColors = {
-  green50: '#EAF0EF',
-  green100: '#CCD9D7',
-  green600: '#0B483F',
+ // etterlevelse colors
+ export const ettlevColors = {
   green800: '#102723',
-  navLysGra: '#F1F1F1',
-  navLysGra2: '#F8F8F8',
-  white: '#FFFFFF'
+  green600: '#14483F',
+  green400: '#057967',
+  green100: '#CCD9D7',
+  green50: '#EAF0EF',
+  red600: '#842D08',
+  red400: '#AE5235',
+  red200: '#EAA98D',
+  red50: '#F6EAE6',
+  gray200: '#A0A0A0',
+  grey100: '#DFDFDF',
+  grey50: '#F1F1F1',
+  gray25: '#F8F8F8',
+  white: '#FFFFFF',
+  success400: '#057967',
+  success50: '#EAF0EF',
+  warning400: '#FFA631',
+  warning50: '#FFF5E7',
+  error400: '#AE5235',
+  error50: '#F6EAE6',
 }
 
 export const primitives: ThemePrimitives & {primary150: string, primary350: string} = {
@@ -41,30 +54,6 @@ export const searchResultColor = {
   underavdelingBackground: '#99C2E8',
 }
 
- // etterlevelse colors
- export const ettlevColors = {
-  green800: '#102723',
-  green600: '#14483F',
-  green400: '#057967',
-  green100: '#CCD9D7',
-  green50: '#EAF0EF',
-  red600: '#842D08',
-  red400: '#AE5235',
-  red200: '#EAA98D',
-  red50: '#F6EAE6',
-  gray200: '#A0A0A0',
-  grey100: '#DFDFDF',
-  grey50: '#F1F1F1',
-  gray25: '#F8F8F8',
-  white: '#FFFFFF',
-  success400: '#057967',
-  success50: '#EAF0EF',
-  warning400: '#FFA631',
-  warning50: '#FFF5E7',
-  error400: '#AE5235',
-  error50: '#F6EAE6',
-
-}
 const overrides: RecursivePartial<Theme> = {
 
   colors: {
