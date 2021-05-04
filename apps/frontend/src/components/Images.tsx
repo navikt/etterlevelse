@@ -24,6 +24,7 @@ import searchIcon from '../resources/icons/search-icon.svg'
 import questionmarkIcon from '../resources/icons/questionmark.svg'
 import questionmarkHoverIcon from '../resources/icons/questionmark-hover.svg'
 import questionmarkFocusIcon from '../resources/icons/questionmark-focus.svg'
+import page from '../resources/icons/page.svg'
 import illustration from '../resources/giammarco-boscaro-zeH-ljawHtg-unsplash.jpg'
 import {codelist, ListName, LovCode, TemaCode} from '../services/Codelist'
 import React from 'react'
@@ -45,6 +46,7 @@ export {
   questionmarkIcon,
   questionmarkHoverIcon,
   questionmarkFocusIcon,
+  page
 }
 
 export const temaBilder: {[id: string]: string} = {

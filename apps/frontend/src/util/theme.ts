@@ -7,9 +7,20 @@ import '@fontsource/source-sans-pro/600.css'
 import '@fontsource/source-sans-pro/700.css'
 import '@fontsource/source-sans-pro/900.css'
 
+// TODO fix up theme colors ?
+export const ettlevColors = {
+  green50: '#EAF0EF',
+  green100: '#CCD9D7',
+  green600: '#0B483F',
+  green800: '#102723',
+  navLysGra: '#F1F1F1',
+  navLysGra2: '#F8F8F8',
+  white: '#FFFFFF'
+}
+
 export const primitives: ThemePrimitives & {primary150: string, primary350: string} = {
   ...lightThemePrimitives,
-  primaryA: '#3e3832',
+  primaryA: ettlevColors.green800,
   primary: '#19548a',
   primary50: '#F2F8FD',
   primary100: '#eaf4fc',
@@ -94,12 +105,3 @@ const ResponsiveTheme = Object.keys(breakpoints).reduce(
   }
 )
 export const customTheme = {...theme, ...ResponsiveTheme}
-
- // TODO fix up theme colors ?
-export const ettlevColors = {
-  green100: '#CCD9D7',
-  green600: '#0B483F',
-  green800: '#102723',
-  navLysGra: '#F1F1F1',
-  navLysGra2: '#F8F8F8'
-}

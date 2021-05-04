@@ -1,31 +1,31 @@
 import {Block} from 'baseui/block'
-import {H1, HeadingSmall, Paragraph1} from 'baseui/typography'
+import {H1, HeadingXLarge, LabelLarge, LabelSmall, Paragraph1, ParagraphSmall} from 'baseui/typography'
 import {useHistory, useParams} from 'react-router-dom'
 import {deleteKrav, KravIdParams, mapToFormVal} from '../api/KravApi'
 import React, {useEffect, useRef, useState} from 'react'
-import {EtterlevelseQL, Krav, KravQL, KravStatus} from '../constants'
+import {EtterlevelseQL, ExternalCode, Krav, KravQL, KravStatus} from '../constants'
 import Button from '../components/common/Button'
 import {ViewKrav} from '../components/krav/ViewKrav'
 import {EditKrav} from '../components/krav/EditKrav'
-import RouteLink, {ObjectLink} from '../components/common/RouteLink'
+import RouteLink from '../components/common/RouteLink'
 import {LoadingSkeleton} from '../components/common/LoadingSkeleton'
 import {user} from '../services/User'
 import {theme} from '../util'
 import {FormikProps} from 'formik'
 import {DeleteItem} from '../components/DeleteItem'
-import {Cell, Row, Table} from '../components/common/Table'
 import {Spinner} from '../components/common/Spinner'
-import {Teams} from '../components/common/TeamName'
-import {marginAll} from '../components/common/Style'
-import {ObjectType} from '../components/admin/audit/AuditTypes'
-import {behandlingName} from '../api/BehandlingApi'
-import {etterlevelseStatus} from './EtterlevelsePage'
+import {borderRadius, paddingAll} from '../components/common/Style'
 import {gql, useQuery} from '@apollo/client'
 import {Tilbakemeldinger} from '../components/krav/Tilbakemelding'
-import {chevronLeft, editIcon, plusIcon} from '../components/Images'
+import {chevronLeft, editIcon, page, plusIcon} from '../components/Images'
 import {Label} from '../components/common/PropertyLabel'
 import {CustomizedTab, CustomizedTabs} from '../components/common/CustomizedTabs'
 import {ettlevColors, maxPageWidth, pageWidth} from '../util/theme'
+import {CustomizedAccordion, CustomizedPanel} from '../components/common/CustomizedAccordion'
+import * as _ from 'lodash'
+import moment from 'moment'
+import {faChevronRight} from '@fortawesome/free-solid-svg-icons'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 
 export const kravNumView = (it: {kravVersjon: number, kravNummer: number}) => `K${it.kravNummer}.${it.kravVersjon}`
 export const kravName = (krav: Krav) => `${kravNumView(krav)} - ${krav.navn}`
@@ -198,36 +198,91 @@ const Etterlevelser = (
     loading: boolean, etterlevelser?: EtterlevelseQL[]
   }
 ) => {
+  const avdelinger = _.sortedUniqBy((etterlevelser?.map(e => e.behandling.avdeling)
+    .sort((a, b) => (a?.shortName || '').localeCompare(b?.shortName || ''))
+    .filter(avdeling => !!avdeling) || []) as ExternalCode[],
+    a => a.code
+  )
+  // const [open, setOpen] = useState()
+  const [hover, setHover] = useState('')
 
   return (
     <Block>
-      <HeadingSmall>Kravet etterleves av</HeadingSmall>
-      <Block $style={{...marginAll('-' + theme.sizing.scale600)}}>
-        {loading && <Spinner size={theme.sizing.scale800}/>}
-        {!loading &&
-        <Table data={etterlevelser || []} emptyText='etterlevelser' headers={[
-          {title: 'Behandling'},
-          {title: 'Status'},
-          {title: 'System'},
-          {title: 'Team'},
-          {title: 'Avdeling'}
-        ]} render={state =>
-          state.data.map(etterlevelse =>
-            <Row key={etterlevelse.id}>
-              <Cell><ObjectLink type={ObjectType.Behandling} id={etterlevelse.behandling.id}>{behandlingName(etterlevelse.behandling)}</ObjectLink></Cell>
-              <Cell><ObjectLink type={ObjectType.Etterlevelse} id={etterlevelse.id}>
-                {etterlevelseStatus(etterlevelse.status)}
-              </ObjectLink></Cell>
-              <Cell>{etterlevelse.behandling.systemer.map(s => s.shortName).join(', ')}</Cell>
-              <Cell><Teams teams={etterlevelse.behandling.teams} link/></Cell>
-              <Cell>{etterlevelse.behandling.avdeling?.shortName}</Cell>
-            </Row>
-          )
-        }/>}
-      </Block>
+      <HeadingXLarge>Her kan du se hvordan andre team har dokumentert etterlevelse</HeadingXLarge>
+      {loading && <Spinner size={theme.sizing.scale800}/>}
+
+      <CustomizedAccordion>
+        {avdelinger.map(a => <CustomizedPanel
+          // expanded={open === a.code}
+          key={a.code}
+          title={a.shortName}>
+
+          {etterlevelser?.filter(e => e.behandling.avdeling?.code === a.code).map(e => (
+            <RouteLink key={e.id} href={`/etterlevelse/${e.id}`} hideUnderline $style={{
+              display: 'flex'
+            }}>
+              <Block overrides={{
+                Block: {
+                  style: {
+                    width: '100%',
+                    ...paddingAll(theme.sizing.scale600),
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    backgroundColor: ettlevColors.white,
+
+                    borderWidth: '1px',
+                    borderColor: 'transparent',
+                    borderStyle: 'solid',
+
+                    ':hover': {
+                      position: 'relative',
+                      borderColor: ettlevColors.green100,
+                      boxSizing: 'border-box',
+                      boxShadow: '0px 3px 4px rgba(0, 0, 0, 0.12)'
+                    }
+                  }
+                }
+              }} onMouseEnter={() => setHover(e.id)} onMouseLeave={() => setHover('')}>
+                <PageIcon/>
+
+                <Block marginLeft={theme.sizing.scale600} marginRight={theme.sizing.scale600} $style={{flexGrow: 1}}>
+                  <LabelLarge>{e.behandling.navn}</LabelLarge>
+                  <ParagraphSmall marginBottom={0} marginTop={theme.sizing.scale200}>{e.behandling.overordnetFormaal.shortName}</ParagraphSmall>
+                </Block>
+
+                <Block minWidth={'120px'} maxWidth={'120px'}>
+                  <LabelSmall>{!!e.behandling.teamsData.length ? e.behandling.teamsData.map(t => t.name).join(', ') : 'Ingen team'}</LabelSmall>
+                  <ParagraphSmall marginBottom={0} marginTop={theme.sizing.scale200}>Utfylt: {moment(e.changeStamp.lastModifiedDate).format('ll')}</ParagraphSmall>
+                </Block>
+
+                <Block marginLeft={hover === e.id ? `calc(${theme.sizing.scale600} + 4px)` : theme.sizing.scale600} alignSelf={'center'} marginRight={hover === e.id ? '-4px' : 0}>
+                  <FontAwesomeIcon icon={faChevronRight} size={'lg'}/>
+                </Block>
+
+              </Block>
+            </RouteLink>))}
+
+        </CustomizedPanel>)}
+      </CustomizedAccordion>
     </Block>
   )
 }
+
+const PageIcon = () => (
+  <Block $style={{
+    ...borderRadius('100%'),
+    backgroundColor: ettlevColors.green50,
+    minWidth: '37px',
+    maxWidth: '37px',
+    height: '37px',
+    display: 'flex',
+    alignSelf: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
+  }}>
+    <img src={page} alt={'Page icon'} width={'15px'} height={'20px'}/>
+  </Block>
+)
 
 const query = gql`
   query getKravWithEtterlevelse($id: ID, $kravNummer: Int, $kravVersjon: Int) {
@@ -318,7 +373,13 @@ const query = gql`
             code
             shortName
           }
-          teams
+          teamsData {
+            id
+            name
+          }
+        }
+        changeStamp {
+          lastModifiedDate
         }
         status
       }

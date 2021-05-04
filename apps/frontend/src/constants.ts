@@ -225,7 +225,11 @@ export type KravQL = Replace<Krav, {
 }>
 
 export type EtterlevelseQL = Etterlevelse & {
-  behandling: Behandling
+  behandling: BehandlingQL
+}
+
+export type BehandlingQL = Behandling & {
+  teamsData: Team[]
 }
 
 export type VarslingsadresseQL = Varslingsadresse & {
