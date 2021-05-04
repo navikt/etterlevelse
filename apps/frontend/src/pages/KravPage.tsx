@@ -243,7 +243,7 @@ const Etterlevelser = (
                   }
                 }
               }} onMouseEnter={() => setHover(e.id)} onMouseLeave={() => setHover('')}>
-                <PageIcon/>
+                <PageIcon hover={hover === e.id}/>
 
                 <Block marginLeft={theme.sizing.scale600} marginRight={theme.sizing.scale600} $style={{flexGrow: 1}}>
                   <LabelLarge>{e.behandling.navn}</LabelLarge>
@@ -268,10 +268,10 @@ const Etterlevelser = (
   )
 }
 
-const PageIcon = () => (
+const PageIcon = (props: {hover: boolean}) => (
   <Block $style={{
     ...borderRadius('100%'),
-    backgroundColor: ettlevColors.green50,
+    backgroundColor: props.hover ? ettlevColors.green100 : ettlevColors.green50,
     minWidth: '37px',
     maxWidth: '37px',
     height: '37px',
