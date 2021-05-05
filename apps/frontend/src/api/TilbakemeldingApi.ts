@@ -2,6 +2,7 @@ import axios from 'axios'
 import {PageResponse, Tilbakemelding, TilbakemeldingRolle, TilbakemeldingType, Varslingsadresse} from '../constants'
 import {env} from '../util/env'
 import {useEffect, useState} from 'react'
+import moment from 'moment'
 
 export const getTilbakemeldingForKrav = async (kravNummer: number, kravVersjon: number) => {
   return (await axios.get<PageResponse<Tilbakemelding>>(`${env.backendBaseUrl}/krav/tilbakemelding/${kravNummer}/${kravVersjon}`)).data
@@ -24,7 +25,7 @@ export const useTilbakemeldinger = (kravNummer: number, kravVersjon: number) => 
       setLoading(true)
       getTilbakemeldingForKrav(kravNummer, kravVersjon)
       .then(r => {
-        setData(r.content)
+        setData(r.content.sort((a, b) => moment(b.meldinger[b.meldinger.length - 1].tid).valueOf() - moment(a.meldinger[a.meldinger.length - 1].tid).valueOf()))
         setLoading(false)
       }).catch(e => {
         setData([])

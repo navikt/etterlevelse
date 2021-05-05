@@ -1,4 +1,5 @@
 import * as React from 'react'
+import {useState} from 'react'
 import {Tab, TabProps, Tabs, TabsProps} from 'baseui/tabs'
 import {StyleObject} from 'styletron-standard'
 import {borderColor, borderStyle, borderWidth, marginZero, paddingZero} from './Style'
@@ -6,7 +7,7 @@ import {theme} from '../../util'
 
 export const CustomizedTab = (props: TabProps) => {
   return (
-    <Tab {...props} >{props.children}</Tab>
+    <Tab {...props}/>
   )
 }
 
@@ -19,9 +20,10 @@ interface CustomizedTabsProps {
 type CustomProps = TabsProps & CustomizedTabsProps
 
 export const CustomizedTabs = (props: CustomProps) => {
-  const [activeKey, setActiveKey] = React.useState('0')
-  const fontColor = props.fontColor || 'black'
-  const activeColor = props.activeColor || fontColor
+  const [activeKeyInternal, setActiveKeyInternal] = useState<React.Key>(0)
+  let {fontColor, activeColor, tabBackground, ...restProps} = props
+  fontColor = fontColor || 'black'
+  activeColor = activeColor || fontColor
 
   const hoverAndFocusStyle: StyleObject = {
     color: activeColor,
@@ -31,7 +33,7 @@ export const CustomizedTabs = (props: CustomProps) => {
 
   return (
     <Tabs
-      {...props}
+      {...restProps}
       overrides={{
         Tab: {
           style: (tabProps) => ({
@@ -47,7 +49,7 @@ export const CustomizedTabs = (props: CustomProps) => {
             paddingRight: '4px',
 
             ...borderWidth('4px'),
-            ...borderColor(props.tabBackground),
+            ...borderColor(tabBackground),
             borderBottomColor: fontColor,
             // Avoid cut horizontal line on bottom border
             ...borderStyle('hidden'),
@@ -72,7 +74,7 @@ export const CustomizedTabs = (props: CustomProps) => {
         },
         TabBar: {
           style: {
-            backgroundColor: props.tabBackground,
+            backgroundColor: tabBackground,
             justifyContent: 'space-between',
             ...paddingZero,
             marginLeft: '-2px',
@@ -88,12 +90,11 @@ export const CustomizedTabs = (props: CustomProps) => {
         }
       }}
       onChange={({activeKey}) => {
-        setActiveKey(activeKey.toString())
+        if (props.onChange) props.onChange({activeKey})
+        else setActiveKeyInternal(activeKey)
       }}
-      activeKey={activeKey}
-    >
-      {props.children}
-    </Tabs>
+      activeKey={props.activeKey || activeKeyInternal}
+    />
   )
 }
 export default CustomizedTabs

@@ -1,20 +1,16 @@
-import {AdresseType, Krav, Tilbakemelding, TilbakemeldingRolle, TilbakemeldingType, Varslingsadresse} from '../../constants'
+import {AdresseType, Krav, Tilbakemelding, TilbakemeldingMelding, TilbakemeldingRolle, TilbakemeldingType, Varslingsadresse} from '../../constants'
 import {createNewTilbakemelding, CreateTilbakemeldingRequest, tilbakemeldingNewMelding, TilbakemeldingNewMeldingRequest, useTilbakemeldinger} from '../../api/TilbakemeldingApi'
 import React, {useEffect, useState} from 'react'
 import {Block} from 'baseui/block'
 import {theme} from '../../util'
-import {HeadingSmall, LabelSmall, ParagraphMedium, ParagraphSmall, ParagraphXSmall} from 'baseui/typography'
+import {HeadingXLarge, LabelSmall, ParagraphLarge, ParagraphSmall} from 'baseui/typography'
 import Button from '../common/Button'
-import {faChevronDown, faChevronRight, faEnvelope, faPlus, faPlusCircle, faSync, faUser} from '@fortawesome/free-solid-svg-icons'
-import {borderRadius, hideBorder, marginAll} from '../common/Style'
+import {faChevronRight, faChevronUp, faEnvelope, faPlus, faSync, faUser} from '@fortawesome/free-solid-svg-icons'
+import {borderColor, borderRadius, borderWidth, marginAll} from '../common/Style'
 import {Spinner} from '../common/Spinner'
-import {Cell, Row, Table} from '../common/Table'
-import {PersonName} from '../common/PersonName'
 import moment from 'moment'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {Card, CardOverrides} from 'baseui/card'
+import {Card} from 'baseui/card'
 import {user} from '../../services/User'
-import {colors} from 'baseui/tokens'
 import {Modal, ModalBody, ModalFooter, ModalHeader} from 'baseui/modal'
 import {Field, FieldProps, Form, Formik} from 'formik'
 import {InputField, OptionField, TextAreaField} from '../common/Inputs'
@@ -25,13 +21,19 @@ import {FormControl} from 'baseui/form-control'
 import {AddEmail, SlackChannelSearch, SlackUserSearch, VarslingsadresserTagList} from './Edit/KravVarslingsadresserEdit'
 import {useHistory} from 'react-router-dom'
 import {useQueryParam, useRefs} from '../../util/hooks'
-import {personIdentSort} from '../../api/TeamApi'
 import {Textarea} from 'baseui/textarea'
+import {ettlevColors} from '../../util/theme'
+import {ResourceName} from '../common/Resource'
+import {teamKatPersonImageLink} from '../../util/config'
+import {mailboxPoppingIcon, questionmarkIcon} from '../Images'
+import {InfoBlock} from '../common/InfoBlock'
 
 export const Tilbakemeldinger = ({krav}: {krav: Krav}) => {
   const [tilbakemeldinger, loading, add, replace] = useTilbakemeldinger(krav.kravNummer, krav.kravVersjon)
   const [focusNr, setFocusNr] = useState<string | undefined>(useQueryParam('tilbakemeldingId'))
   const [addTilbakemelding, setAddTilbakemelding] = useState(false)
+  const [tilbakemelding, setTilbakemelding] = useState()
+  const [count, setCount] = useState(5)
   const history = useHistory()
 
   const refs = useRefs<HTMLDivElement>(tilbakemeldinger.map(t => t.id))
@@ -45,68 +47,152 @@ export const Tilbakemeldinger = ({krav}: {krav: Krav}) => {
   }
 
   return (
-    <Block marginTop={theme.sizing.scale2400} width='100%'>
-      <Block display='flex' justifyContent='space-between' alignItems='center' width='100%'>
-        <HeadingSmall>Tilbakemeldinger</HeadingSmall>
+    <Block width='100%'>
+
+      <HeadingXLarge marginTop={0}>Tilbakemeldinger</HeadingXLarge>
+
+      {loading && <Spinner size={theme.sizing.scale800}/>}
+      {!loading && !!tilbakemeldinger.length &&
+      <Block display={'flex'} flexDirection={'column'}>
         <Block>
-          <Button kind='tertiary' size='compact' icon={faPlus} onClick={() => setAddTilbakemelding(true)}>Ny tilbakemelding</Button>
-        </Block>
-      </Block>
-      <ParagraphSmall>Gi tilbakemelding til kraveier dersom det er uklarheter vedrørende hvordan kravet skal forstås.</ParagraphSmall>
-      <Block $style={{...marginAll('-' + theme.sizing.scale600)}}>
-        {loading && <Spinner size={theme.sizing.scale800}/>}
-        {!loading &&
-        <Table data={tilbakemeldinger} emptyText='tilbakemeldinger'
-               config={{
-                 useDefaultStringCompare: true,
-                 initialSortColumn: 'id',
-                 sorting: {
-                   meldinger: (a, b) => b.meldinger.length - a.meldinger.length,
-                   id: (a, b) => moment(b.meldinger[b.meldinger.length - 1].tid).valueOf() - moment(a.meldinger[a.meldinger.length - 1].tid).valueOf(),
-                   melderIdent: (a, b) => personIdentSort(a.melderIdent, b.melderIdent)
-                 }
-               }}
-               headers={[
-                 {title: 'Tittel', column: 'tittel'},
-                 {title: 'Melder', column: 'melderIdent'},
-                 {title: 'Type', column: 'type'},
-                 {title: 'Sist svar', column: 'id'},
-                 {title: 'Meldinger', column: 'meldinger'},
-               ]} render={state =>
-          state.data.map(tilbakemelding => {
-              const focused = tilbakemelding.id === focusNr
-              return (
-                <React.Fragment key={tilbakemelding.id}>
-                  <div onClick={() => focused ? setFocusNr(undefined) : setFocus(tilbakemelding.id)} ref={refs[tilbakemelding.id]}>
-                    <Row $style={{cursor: 'pointer'}}>
-                      <Cell>{tilbakemelding.tittel}</Cell>
-                      <Cell><PersonName ident={tilbakemelding.melderIdent}/></Cell>
-                      <Cell>{typeText(tilbakemelding.type)}</Cell>
-                      <Cell>{moment(tilbakemelding.meldinger[tilbakemelding.meldinger.length - 1].tid).format('lll')}</Cell>
-                      <Cell>
-                        <Block display='flex' justifyContent='space-between' width='100%' alignItems='center'>
-                          <Block>
-                            {tilbakemelding.meldinger.length}
-                          </Block>
-                          <Block>
-                            <FontAwesomeIcon icon={focused ? faChevronDown : faChevronRight}/>
-                          </Block>
+          {tilbakemeldinger.slice(0, count).map((t, i) => {
+            const focused = focusNr === t.id
+            const {ubesvart, ubesvartOgKraveier, sistMelding} = tilbakeMeldingStatus(t)
+            return (
+              <Card key={t.id} overrides={{
+                Root: {
+                  style: {
+                    marginBottom: theme.sizing.scale300,
+                    ...borderColor(ettlevColors.grey100),
+                    ...borderWidth('1px')
+                  }
+                }
+              }}>
+                <Block display={'flex'}>
+                  <Portrait ident={t.melderIdent}/>
+                  <Block display={'flex'} flexDirection={'column'} marginLeft={theme.sizing.scale400} width={'100%'}>
+                    <Block display={'flex'} justifyContent={'space-between'}>
+
+                      <Block>
+                        <LabelSmall><ResourceName id={t.melderIdent}/></LabelSmall>
+                        <ParagraphSmall marginTop={0} marginBottom={0}>{moment(t.meldinger[0].tid).format('ll')}</ParagraphSmall>
+                      </Block>
+
+                      <Block display={'flex'} flexDirection={'column'} alignItems={'flex-end'}>
+                        <ParagraphSmall marginTop={0} marginBottom={0}>{t.meldinger.length} melding{t.meldinger.length > 1 ? 'er' : ''}</ParagraphSmall>
+                        <ParagraphSmall marginTop={0} marginBottom={0}>
+                          {ubesvart ? 'Ubesvart' : `Sist besvart ${moment(sistMelding.tid).format('ll')}`}
+                        </ParagraphSmall>
+
+                      </Block>
+                    </Block>
+                    <Block>
+                      <ParagraphLarge>{t.meldinger[0].innhold}</ParagraphLarge>
+                    </Block>
+
+                    <Block>
+                      {focused && <Block display={'flex'} flexDirection={'column'}>
+                        {t.meldinger.slice(1).map((m, mid) => (
+                          <ResponseMelding key={m.meldingNr} m={m}/>
+                        ))}
+                      </Block>}
+                      <Block display={'flex'} justifyContent={'space-between'} width={'100%'}>
+                        <Block>
+                          <Button kind={'tertiary'} onClick={() => setFocus(focused ? '' : t.id)}
+                                  icon={focused ? faChevronUp : faChevronRight}>Vis {focused ? 'mindre' : 'mer'}</Button>
                         </Block>
-                      </Cell>
-                    </Row>
-                  </div>
-                  {focused && <MessageList tilbakemelding={tilbakemelding} setTilbakemelding={replace}/>}
-                </React.Fragment>
-              )
-            }
-          )
-        }/>}
+                        {focused &&
+                        <Block><Button kind={ubesvartOgKraveier ? 'secondary' : 'outline'} size={'compact'}>
+                          {ubesvartOgKraveier ? 'Besvar' : 'Ny melding'}
+                        </Button></Block>}
+                      </Block>
+                    </Block>
+
+                  </Block>
+                </Block>
+              </Card>
+            )
+          })}
+        </Block>
+
+        <Block $style={{alignSelf: 'flex-end'}} marginTop={theme.sizing.scale400}>
+          <Button kind='tertiary' size='compact' icon={faPlus} onClick={() => setCount(count + 5)}
+                  disabled={tilbakemeldinger.length <= count}>Last flere</Button>
+        </Block>
+      </Block>}
+
+      {!loading && !tilbakemeldinger.length &&
+      <InfoBlock icon={mailboxPoppingIcon} alt={'Åpen mailboks icon'} text={'Det har ikke kommet inn noen tilbakemeldinger'} color={ettlevColors.red50}/>}
+
+
+      <Block marginTop={theme.sizing.scale1000}>
+        <HeadingXLarge>Gi en tilbakemelding</HeadingXLarge>
+        <ParagraphSmall>Gi tilbakemelding til kraveier dersom det er uklarheter vedrørende hvordan kravet skal forstås.</ParagraphSmall>
+
+        <Button kind={'primary'} size='compact' onClick={() => setAddTilbakemelding(true)}>Ny tilbakemelding</Button>
       </Block>
+
       <AddTilbakemeldingModal krav={krav} open={addTilbakemelding} close={t => {
         t && add(t)
         setAddTilbakemelding(false)
       }}/>
-      <Block height='100px'/>
+      <MeldingResponseModal tilbakemelding={tilbakemelding} close={t => {
+        t && add(t)
+        setTilbakemelding(undefined)
+      }}/>
+
+      <Block height='300px'/>
+    </Block>
+  )
+}
+
+const ResponseMelding = (props: {m: TilbakemeldingMelding}) => {
+  const {m} = props
+  const melder = m.rolle === TilbakemeldingRolle.MELDER
+  return (
+    <Block display={'flex'} flexDirection={'column'}
+           marginBottom={theme.sizing.scale600}
+           backgroundColor={melder ? 'inherit' : ettlevColors.grey50}
+           padding={theme.sizing.scale600}
+    >
+      <Block alignSelf={melder ? 'flex-start' : 'flex-end'}
+             display={'flex'} flexDirection={melder ? 'row' : 'row-reverse'}>
+        <Portrait ident={m.fraIdent}/>
+        <Block marginLeft={theme.sizing.scale200} marginRight={theme.sizing.scale200}
+               display={'flex'} flexDirection={'column'} alignItems={melder ? 'flex-start' : 'flex-end'}>
+          <LabelSmall><ResourceName id={m.fraIdent}/>{!melder && ' (kraveier)'}</LabelSmall>
+          <ParagraphSmall marginTop={0} marginBottom={0}>{moment(m.tid).format('ll')}</ParagraphSmall>
+        </Block>
+      </Block>
+
+      <Block alignSelf={melder ? 'flex-start' : 'flex-end'}>
+        <ParagraphLarge marginBottom={0} marginTop={theme.sizing.scale400}>{m.innhold}</ParagraphLarge>
+      </Block>
+    </Block>
+  )
+}
+
+const Portrait = (props: {ident: string}) => {
+  const [loading, setLoading] = useState(true)
+  const [image, setImage] = React.useState(teamKatPersonImageLink(props.ident))
+  const size = '30px'
+  return (
+    <Block>
+      {loading && <Block width={size} height={size}><Spinner size='100%'/></Block>}
+      <img
+        onLoad={() => setLoading(false)}
+        onError={() => {
+          setImage(questionmarkIcon)
+          setLoading(false)
+        }}
+        src={image}
+        alt={`Profilbilde ${props.ident}`}
+        style={{
+          width: loading ? 0 : size,
+          height: loading ? 0 : size,
+          borderRadius: '100%'
+        }}
+      />
     </Block>
   )
 }
@@ -189,55 +275,30 @@ const AddTilbakemeldingModal = ({open, close, krav}: {open?: boolean, close: (ad
 }
 
 
-const meldingCardOverrides = (isUser: boolean): CardOverrides => ({
-  Root: {
-    style: {
-      marginTop: theme.sizing.scale400,
-      width: 'fit-content',
-      maxWidth: '80%',
-      alignSelf: isUser ? 'flex-end' : 'flex-start',
-      backgroundColor: isUser ? theme.colors.inputFillActive : theme.colors.mono100,
-      ...borderRadius('10px'),
-      ...hideBorder
-    }
-  }
-})
+const getUserRole = (tilbakemelding?: Tilbakemelding) => tilbakemelding?.melderIdent === user.getIdent() ? TilbakemeldingRolle.MELDER : TilbakemeldingRolle.KRAVEIER
 
-const MessageList = ({tilbakemelding, setTilbakemelding}: {tilbakemelding: Tilbakemelding, setTilbakemelding: (t: Tilbakemelding) => void}) => {
-  const [showResponse, setShowResponse] = useState(false)
-  const userRole = tilbakemelding.melderIdent === user.getIdent() ? TilbakemeldingRolle.MELDER : TilbakemeldingRolle.KRAVEIER
-  const melder = userRole === TilbakemeldingRolle.MELDER
+const tilbakeMeldingStatus = (tilbakemelding: Tilbakemelding) => {
+  const sistMelding = tilbakemelding.meldinger[tilbakemelding.meldinger.length - 1]
+  const ubesvart = sistMelding.rolle === TilbakemeldingRolle.MELDER
+  const melder = user.getIdent() === tilbakemelding.melderIdent
+  const rolle = getUserRole(tilbakemelding)
   const melderOrKraveier = melder || user.isKraveier()
+  const ubesvartOgKraveier = ubesvart && user.isKraveier()
+  return {ubesvart: melder, ubesvartOgKraveier, rolle, melderOrKraveier, sistMelding}
+}
 
+const MeldingResponseModal = ({tilbakemelding, close}: {tilbakemelding?: Tilbakemelding, close: (t: Tilbakemelding) => void}) => {
+  if (!tilbakemelding) return null
+  const melderInfo = tilbakeMeldingStatus(tilbakemelding)
 
   return (
-    <Block width='100%' display='flex' justifyContent='flex-end'>
-      <Block padding={theme.sizing.scale600} width='100%' maxWidth='700px' display='flex' flexDirection='column' backgroundColor={colors.gray50}>
-        {tilbakemelding.meldinger.map(melding => {
-          return (
-            <Card key={melding.meldingNr} overrides={meldingCardOverrides(melding.rolle === userRole)}>
-              <Block display='flex' flexDirection='column'>
-                <ParagraphMedium marginTop={0} marginBottom={0}>{melding.innhold}</ParagraphMedium>
-                <ParagraphXSmall alignSelf={melding.rolle === userRole ? 'flex-end' : 'flex-start'} marginBottom={0}>
-                  <PersonName ident={melding.fraIdent}/> {moment(melding.tid).format('lll')}
-                </ParagraphXSmall>
-              </Block>
-            </Card>
-          )
-        })}
-
-        {!showResponse && melderOrKraveier &&
-        <Block alignSelf='flex-end' marginTop={theme.sizing.scale800}>
-          <Button icon={faPlusCircle} size='compact' onClick={() => setShowResponse(true)}>Ny melding</Button>
-        </Block>}
-        {showResponse && <MeldingResponse
-          userRole={userRole} tilbakemeldingId={tilbakemelding.id}
-          close={t => {
-            setTilbakemelding(t)
-            setShowResponse(false)
-          }}/>}
-      </Block>
-    </Block>
+    <Modal>
+      <MeldingResponse
+        userRole={melderInfo.rolle} tilbakemeldingId={tilbakemelding.id}
+        close={t => {
+          close(t)
+        }}/>
+    </Modal>
   )
 }
 

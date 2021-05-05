@@ -15,9 +15,9 @@ import {FormikProps} from 'formik'
 import {DeleteItem} from '../components/DeleteItem'
 import {Spinner} from '../components/common/Spinner'
 import {borderRadius, paddingAll} from '../components/common/Style'
-import {gql, useQuery} from '@apollo/client'
+import {useQuery} from '@apollo/client'
 import {Tilbakemeldinger} from '../components/krav/Tilbakemelding'
-import {chevronLeft, editIcon, page, plusIcon} from '../components/Images'
+import {chevronLeft, editIcon, pageIcon, plusIcon, sadFolderIcon} from '../components/Images'
 import {Label} from '../components/common/PropertyLabel'
 import {CustomizedTab, CustomizedTabs} from '../components/common/CustomizedTabs'
 import {ettlevColors, maxPageWidth, pageWidth} from '../util/theme'
@@ -26,6 +26,8 @@ import * as _ from 'lodash'
 import moment from 'moment'
 import {faChevronRight} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {useQueryParam} from '../util/hooks'
+import {InfoBlock} from '../components/common/InfoBlock'
 
 export const kravNumView = (it: {kravVersjon: number, kravNummer: number}) => `K${it.kravNummer}.${it.kravVersjon}`
 export const kravName = (krav: Krav) => `${kravNumView(krav)} - ${krav.navn}`
@@ -53,6 +55,10 @@ export const KravPage = () => {
     variables: params,
     skip: (!params.id || params.id === 'ny') && !params.kravNummer
   })
+  const tilbakemeldingId = useQueryParam('tilbakemeldingId')
+  const [tab, setTab] = useState<React.Key>(!!tilbakemeldingId ? 'tilbakemeldinger' : 'krav')
+
+
   useEffect(() => {
     if (kravQuery?.kravById) setKrav(kravQuery.kravById)
   }, [kravQuery])
@@ -156,15 +162,16 @@ export const KravPage = () => {
                  background: `linear-gradient(top, ${ettlevColors.green100} 50px, ${ettlevColors.gray25} 0%)`
                }}>
           <Block maxWidth={pageWidth} width='100%'>
-            <CustomizedTabs fontColor={ettlevColors.green600} activeColor={ettlevColors.green800} tabBackground={ettlevColors.green100}>
-              <CustomizedTab title={'Om kravet'}>
+            <CustomizedTabs fontColor={ettlevColors.green600} activeColor={ettlevColors.green800} tabBackground={ettlevColors.green100}
+                            activeKey={tab} onChange={k => setTab(k.activeKey)}>
+              <CustomizedTab title={'Om kravet'} key={'krav'}>
                 <ViewKrav krav={krav}/>
               </CustomizedTab>
-              <CustomizedTab title={'Spørsmål og svar'}>
-                <Tilbakemeldinger krav={krav}/>
-              </CustomizedTab>
-              <CustomizedTab title={'Eksempler på etterlevelse'}>
+              <CustomizedTab title={'Eksempler på etterlevelse'} key={'etterlevelser'}>
                 <Etterlevelser loading={etterlevelserLoading} etterlevelser={krav.etterlevelser}/>
+              </CustomizedTab>
+              <CustomizedTab title={'Tilbakemeldinger'} key={'tilbakemeldinger'}>
+                <Tilbakemeldinger krav={krav}/>
               </CustomizedTab>
             </CustomizedTabs>
           </Block>
@@ -191,13 +198,7 @@ export const KravPage = () => {
     </Block>
   )
 }
-const Etterlevelser = (
-  {
-    loading, etterlevelser: allEtterlevelser
-  }: {
-    loading: boolean, etterlevelser?: EtterlevelseQL[]
-  }
-) => {
+const Etterlevelser = ({loading, etterlevelser: allEtterlevelser}: {loading: boolean, etterlevelser?: EtterlevelseQL[]}) => {
   const etterlevelser = (allEtterlevelser || [])
   .filter(e => e.status === EtterlevelseStatus.FERDIG)
   .sort((a, b) => a.behandling.navn.localeCompare(b.behandling.navn))
@@ -213,6 +214,8 @@ const Etterlevelser = (
     <Block>
       <HeadingXLarge maxWidth={'500px'}>Her kan du se hvordan andre team har dokumentert etterlevelse</HeadingXLarge>
       {loading && <Spinner size={theme.sizing.scale800}/>}
+      {!loading && !etterlevelser.length &&
+      <InfoBlock icon={sadFolderIcon} alt={'Trist mappe ikon'} text={'Det er ikke dokumentert etterlevelse på dette kravet'} color={ettlevColors.green800}/>}
 
       <CustomizedAccordion>
         {avdelinger.map(a => <CustomizedPanel
@@ -284,7 +287,7 @@ const PageIcon = (props: {hover: boolean}) => (
     alignItems: 'center',
     justifyContent: 'center',
   }}>
-    <img src={page} alt={'Page icon'} width={'22px'} height={'30px'}/>
+    <img src={pageIcon} alt={'Page icon'} width={'22px'} height={'30px'}/>
   </Block>
 )
 

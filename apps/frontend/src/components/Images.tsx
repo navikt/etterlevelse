@@ -24,7 +24,9 @@ import searchIcon from '../resources/icons/search-icon.svg'
 import questionmarkIcon from '../resources/icons/questionmark.svg'
 import questionmarkHoverIcon from '../resources/icons/questionmark-hover.svg'
 import questionmarkFocusIcon from '../resources/icons/questionmark-focus.svg'
-import page from '../resources/icons/page.svg'
+import pageIcon from '../resources/icons/page.svg'
+import mailboxPoppingIcon from '../resources/icons/mailbox-popping.svg'
+import sadFolderIcon from '../resources/icons/sad-folder.svg'
 import illustration from '../resources/giammarco-boscaro-zeH-ljawHtg-unsplash.jpg'
 import {codelist, ListName, LovCode, TemaCode} from '../services/Codelist'
 import React from 'react'
@@ -46,7 +48,9 @@ export {
   questionmarkIcon,
   questionmarkHoverIcon,
   questionmarkFocusIcon,
-  page
+  mailboxPoppingIcon,
+  sadFolderIcon,
+  pageIcon
 }
 
 export const temaBilder: {[id: string]: string} = {
