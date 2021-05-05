@@ -83,7 +83,7 @@ const KriterieList = ({p}: {p: FieldArrayRenderProps}) => {
           icon={faPlus}
           marginLeft label={'Suksesskriterie'}
           $style={buttonBorderStyle}
-          kind='tertiary'
+          kind='secondary'
           size='compact'
           disabled={suksesskriterier.length >= 5}
           onClick={() => p.push({id: nextId(suksesskriterier), navn: '', beskrivelse: ''})}

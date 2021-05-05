@@ -69,7 +69,7 @@ export const KravRegelverkEdit = () => {
                         onClick={add}
                         marginLeft
                         $style={buttonBorderStyle}
-                        kind='tertiary'
+                        kind='secondary'
                       >
                         Legg til
                       </Button>

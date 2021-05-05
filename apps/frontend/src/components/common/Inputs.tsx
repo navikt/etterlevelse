@@ -177,7 +177,7 @@ export const MultiInputField = (props: {
                     onClick={add} marginLeft
                     label={'Legg til'}
                     $style={buttonBorderStyle}
-                    kind='tertiary'
+                    kind='secondary'
                     size='compact'
                   >
                     Legg til
