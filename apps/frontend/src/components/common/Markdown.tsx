@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactMarkdown from 'react-markdown'
-import {Paragraph1} from 'baseui/typography'
+import {Paragraph1, Paragraph2} from 'baseui/typography'
 import {StatefulTooltip} from 'baseui/tooltip'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faExternalLinkAlt} from '@fortawesome/free-solid-svg-icons'
@@ -20,12 +20,16 @@ export const Markdown = ({
                            shortenLinks,
                            noMargin,
                            source,
-                           sources: sourcesOrig
-                         }: {source?: string, sources?: string[], escapeHtml?: boolean, noMargin?: boolean, shortenLinks?: boolean, vertical?: boolean}) => {
+                           sources: sourcesOrig,
+                           p1
+                         }: {source?: string, sources?: string[], escapeHtml?: boolean, noMargin?: boolean, shortenLinks?: boolean, vertical?: boolean, p1?: boolean}) => {
   const renderers = {
     p: (parProps: any) => {
       const {children} = parProps
-      return <Paragraph1 marginTop={noMargin ? 0 : undefined} marginBottom={noMargin ? 0 : undefined}>{children}</Paragraph1>
+      if (p1) {
+        return <Paragraph1 marginTop={noMargin ? 0 : undefined} marginBottom={noMargin ? 0 : undefined}>{children}</Paragraph1>
+      }
+      return <Paragraph2 marginTop={noMargin ? 0 : undefined} marginBottom={noMargin ? 0 : undefined}>{children}</Paragraph2>
     },
     href: (linkProps: any) => {
       const {children, href, node} = linkProps

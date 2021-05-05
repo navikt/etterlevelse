@@ -145,7 +145,7 @@ export const KravPage = () => {
           <Block maxWidth={maxPageWidth} width='100%'>
             <Block paddingLeft='40px' paddingRight='40px' justifyContent='center' display='flex'>
               <Block marginBottom='80px' marginTop='64px' width={pageWidth}>
-                <Label title='' markdown={krav.hensikt}/>
+                <Label title='' p1 markdown={krav.hensikt}/>
               </Block>
             </Block>
           </Block>
