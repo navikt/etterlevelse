@@ -1,15 +1,15 @@
 import * as React from 'react'
-import {ReactNode} from 'react'
-import {Button as BaseUIButton, KIND, SHAPE, SIZE} from 'baseui/button'
-import {PLACEMENT, StatefulTooltip} from 'baseui/tooltip'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {IconDefinition} from '@fortawesome/fontawesome-svg-core'
-import {theme} from '../../util'
-import {Override} from 'baseui/overrides'
-import {StyleObject} from 'styletron-react'
-import {Block} from 'baseui/block'
-import {borderRadius, borderStyle, borderWidth} from './Style'
-import {ettlevColors} from '../../util/theme'
+import { ReactNode } from 'react'
+import { Button as BaseUIButton, KIND, SHAPE, SIZE } from 'baseui/button'
+import { PLACEMENT, StatefulTooltip } from 'baseui/tooltip'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
+import { theme } from '../../util'
+import { Override } from 'baseui/overrides'
+import { StyleObject } from 'styletron-react'
+import { Block } from 'baseui/block'
+import { borderRadius, borderStyle, borderWidth } from './Style'
+import { ettlevColors } from '../../util/theme'
 
 
 interface ButtonProps {
@@ -59,27 +59,38 @@ const outlineOverride: StyleObject = {
 
 const Button = (props: ButtonProps) => {
   const baseuiKind = props.kind === 'outline' ? KIND.secondary : props.kind
+
+  const boxShadow = !props.kind || props.kind === 'primary' || props.kind === 'secondary' ? {
+    style: {
+      boxShadow: '0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 2px 0 rgba(0, 0, 0, .12)',
+      ':hover': {boxShadow: '0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 3px 0 rgba(0, 0, 0, .12)'},
+      ':active': {boxShadow: '0 2px 1px -2px rgba(0, 0, 0, .2), 0 1px 1px 0 rgba(0, 0, 0, .14), 0 1px 1px 0 rgba(0, 0, 0, .12)'},
+      ':focus': {boxShadow: '0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 3px 0 rgba(0, 0, 0, .12)'}
+    }
+  } : {}
+
   const overrides: Override<any> = {
     style: {
       ...(props.kind === 'outline' ? outlineOverride : {}),
-      ...(props.inline ? {paddingTop: theme.sizing.scale100, paddingBottom: theme.sizing.scale100} : {}),
-      ...(props.$style || {})
+      ...(props.inline ? { paddingTop: theme.sizing.scale100, paddingBottom: theme.sizing.scale100 } : {}),
+      ...(props.$style || {}),
+      ...(boxShadow.style)
     }
   }
   return (
     <>
-      <Block display='inline' marginLeft={props.marginLeft ? theme.sizing.scale400 : 0}/>
+      <Block display='inline' marginLeft={props.marginLeft ? theme.sizing.scale400 : 0} />
       <Tooltip tooltip={props.tooltip}>
-        <BaseUIButton kind={baseuiKind} size={props.size} shape={props.shape} onClick={() => props.onClick?.()} overrides={{BaseButton: overrides}}
-                      startEnhancer={props.startEnhancer} disabled={props.disabled} type={props.type}
-                      aria-label={props.label}
+        <BaseUIButton kind={baseuiKind} size={props.size} shape={props.shape} onClick={() => props.onClick?.()} overrides={{ BaseButton: overrides }}
+          startEnhancer={props.startEnhancer} disabled={props.disabled} type={props.type}
+          aria-label={props.label}
         >
-          {props.icon && <FontAwesomeIcon icon={props.icon} style={{marginRight: props.children ? '.5rem' : undefined}}/>}
+          {props.icon && <FontAwesomeIcon icon={props.icon} style={{ marginRight: props.children ? '.5rem' : undefined }} />}
           <b>{props.children}</b>
-          {props.iconEnd && <FontAwesomeIcon icon={props.iconEnd} style={{marginLeft: props.children ? '.5rem' : undefined}}/>}
+          {props.iconEnd && <FontAwesomeIcon icon={props.iconEnd} style={{ marginLeft: props.children ? '.5rem' : undefined }} />}
         </BaseUIButton>
       </Tooltip>
-      <Block display='inline' marginRight={props.marginRight ? theme.sizing.scale400 : 0}/>
+      <Block display='inline' marginRight={props.marginRight ? theme.sizing.scale400 : 0} />
     </>
   )
 }
