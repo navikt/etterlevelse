@@ -4,7 +4,7 @@ import { Card, CardOverrides } from 'baseui/card'
 import RouteLink from '../components/common/RouteLink'
 import { borderColor, marginAll } from '../components/common/Style'
 import { theme } from '../util'
-import { ParagraphXSmall } from 'baseui/typography'
+import { LabelLarge,LabelMedium, ParagraphXSmall } from 'baseui/typography'
 import { maxPageWidth, primitives } from '../util/theme'
 import { barChart, illustration, lawBook, pencilFill, stepper } from '../components/Images'
 
@@ -103,7 +103,7 @@ const cardOverrides = (hover: boolean, width: string): CardOverrides => {
     },
     Title: {
       style: () => ({
-        fontSize: theme.typography.ParagraphMedium.fontSize
+        fontSize: theme.typography.font350.fontSize
       })
     },
     Contents: {
