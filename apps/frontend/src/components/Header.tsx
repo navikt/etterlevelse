@@ -1,39 +1,40 @@
 import * as React from 'react'
-import {useEffect, useState} from 'react'
-import {ALIGN, HeaderNavigation, StyledNavigationItem as NavigationItem, StyledNavigationList as NavigationList,} from 'baseui/header-navigation'
-import {Block, BlockProps} from 'baseui/block'
-import {Button, KIND, SIZE} from 'baseui/button'
-import {StatefulPopover} from 'baseui/popover'
-import {useHistory, useLocation} from 'react-router-dom'
-import {StyledLink} from 'baseui/link'
-import {useAwait, useQueryParam} from '../util/hooks'
-import {paddingAll} from './common/Style'
-import {theme} from '../util'
-import {H1} from 'baseui/typography'
-import {intl} from '../util/intl/intl'
-import {StatefulMenu} from 'baseui/menu'
-import {TriangleDown} from 'baseui/icon'
+import { useEffect, useState } from 'react'
+import { ALIGN, HeaderNavigation, StyledNavigationItem as NavigationItem, StyledNavigationList as NavigationList, } from 'baseui/header-navigation'
+import { Block, BlockProps } from 'baseui/block'
+import { Button as BaseButton, KIND, SIZE } from 'baseui/button'
+import Button from '../components/common/Button'
+import { StatefulPopover } from 'baseui/popover'
+import { useHistory, useLocation } from 'react-router-dom'
+import { StyledLink } from 'baseui/link'
+import { useAwait, useQueryParam } from '../util/hooks'
+import { paddingAll } from './common/Style'
+import { theme } from '../util'
+import { H1 } from 'baseui/typography'
+import { intl } from '../util/intl/intl'
+import { StatefulMenu } from 'baseui/menu'
+import { TriangleDown } from 'baseui/icon'
 import BurgerMenu from './Navigation/Burger'
 import RouteLink from './common/RouteLink'
-import {ampli} from '../services/Amplitude'
-import {user} from '../services/User'
-import {writeLog} from '../api/LogApi'
+import { ampli } from '../services/Amplitude'
+import { user } from '../services/User'
+import { writeLog } from '../api/LogApi'
 import MainSearch from './search/MainSearch'
-import {logo} from './Images'
-import {maxPageWidth} from '../util/theme'
-import {buttonBorderStyle} from './common/Button'
+import { logo } from './Images'
+import { maxPageWidth } from '../util/theme'
+import { buttonBorderStyle } from './common/Button'
 
-const LoginButton = (props: {location: string}) => {
+const LoginButton = (props: { location: string }) => {
   return (
-    <StyledLink style={{textDecoration: 'none'}} href={`/login?redirect_uri=${props.location}`}>
-      <Button size={SIZE.compact} kind={KIND.tertiary} $style={buttonBorderStyle}>
+    <StyledLink style={{ textDecoration: 'none' }} href={`/login?redirect_uri=${props.location}`}>
+      <Button size={SIZE.compact} kind={KIND.secondary} $style={buttonBorderStyle}>
         <b>Logg inn</b>
       </Button>
     </StyledLink>
   )
 }
 
-const LoggedInHeader = (props: {location: string}) => {
+const LoggedInHeader = (props: { location: string }) => {
   const blockStyle: BlockProps = {
     display: 'flex',
     width: '100%',
@@ -45,8 +46,8 @@ const LoggedInHeader = (props: {location: string}) => {
         {user.getIdent()}
       </Block>
       <Block {...blockStyle}>
-        <StyledLink style={{textDecoration: 'none'}} href={`/logout?redirect_uri=${props.location}`}>
-          <Button size={SIZE.compact} kind={KIND.tertiary} $style={buttonBorderStyle}>
+        <StyledLink style={{ textDecoration: 'none' }} href={`/logout?redirect_uri=${props.location}`}>
+          <Button size={SIZE.compact} kind={KIND.secondary} $style={buttonBorderStyle}>
             <b>Logg ut</b>
           </Button>
         </StyledLink>
@@ -77,14 +78,14 @@ const LoggedInHeader = (props: {location: string}) => {
 const AdminOptions = () => {
   const history = useHistory()
   const pages = [
-    {label: intl.audit, href: '/admin/audit'},
-    {label: 'Kodeverk', href: '/admin/codelist'},
-    {label: intl.mailLog, href: '/admin/maillog'},
-    {label: intl.settings, href: '/admin/settings'}
+    { label: intl.audit, href: '/admin/audit' },
+    { label: 'Kodeverk', href: '/admin/codelist' },
+    { label: intl.mailLog, href: '/admin/maillog' },
+    { label: intl.settings, href: '/admin/settings' }
   ]
   return (
     <StatefulPopover
-      content={({close}) =>
+      content={({ close }) =>
         <StatefulMenu
           items={pages}
           onItemSelect={select => {
@@ -94,16 +95,16 @@ const AdminOptions = () => {
           }}
         />
       }>
-      <Button endEnhancer={() => <TriangleDown size={24}/>} kind="tertiary">
+      <BaseButton endEnhancer={() => <TriangleDown size={24} />} kind="tertiary">
         <b>{intl.administrate}</b>
-      </Button>
+      </BaseButton>
     </StatefulPopover>
   )
 }
 
 let sourceReported = false
 
-const Header = (props: {noSearchBar?: boolean, noLoginButton?: boolean}) => {
+const Header = (props: { noSearchBar?: boolean, noLoginButton?: boolean }) => {
   const [url, setUrl] = useState(window.location.href)
   const location = useLocation()
   const source = useQueryParam('source')
@@ -111,7 +112,7 @@ const Header = (props: {noSearchBar?: boolean, noLoginButton?: boolean}) => {
     sourceReported = true
     writeLog('info', 'pageload', `pageload from ${source}`)
     if (source) {
-      ampli.logEvent('etterlevelse_source', {source})
+      ampli.logEvent('etterlevelse_source', { source })
     }
   }
 
@@ -121,25 +122,25 @@ const Header = (props: {noSearchBar?: boolean, noLoginButton?: boolean}) => {
 
   return (
     <Block width='100%' maxWidth={maxPageWidth}>
-      <Block paddingLeft='40px' paddingRight='40px' width='calc(100%-80px)' height='76px' overrides={{Block: {props: {role: 'banner', 'aria-label': 'Header meny'}}}}>
-        <HeaderNavigation overrides={{Root: {style: {paddingBottom: 0, borderBottomStyle: 'none'}}}}>
+      <Block paddingLeft='40px' paddingRight='40px' width='calc(100%-80px)' height='76px' overrides={{ Block: { props: { role: 'banner', 'aria-label': 'Header meny' } } }}>
+        <HeaderNavigation overrides={{ Root: { style: { paddingBottom: 0, borderBottomStyle: 'none' } } }}>
 
-          <NavigationList $align={ALIGN.left} $style={{paddingLeft: 0}}>
-            <NavigationItem $style={{paddingLeft: 0}}>
+          <NavigationList $align={ALIGN.left} $style={{ paddingLeft: 0 }}>
+            <NavigationItem $style={{ paddingLeft: 0 }}>
               <RouteLink href={'/'} hideUnderline>
                 <H1 marginBottom={0} marginTop={0}>
                   <Block display='flex' alignItems='center'>
-                    <img src={logo} alt='Nav etterlevelse' height='44px'/>
+                    <img src={logo} alt='Nav etterlevelse' height='44px' />
                   </Block>
                 </H1>
               </RouteLink>
             </NavigationItem>
           </NavigationList>
 
-          <NavigationList $style={{justifyContent: 'center'}}>
+          <NavigationList $style={{ justifyContent: 'center' }}>
             {!props.noSearchBar && (<NavigationItem>
-              <Block flex='1' display={['none', 'none', 'none', 'none', 'flex', 'flex']} overrides={{Block: {props: {role: 'search'}}}}>
-                <MainSearch/>
+              <Block flex='1' display={['none', 'none', 'none', 'none', 'flex', 'flex']} overrides={{ Block: { props: { role: 'search' } } }}>
+                <MainSearch />
               </Block>
             </NavigationItem>)}
           </NavigationList>
@@ -147,25 +148,25 @@ const Header = (props: {noSearchBar?: boolean, noLoginButton?: boolean}) => {
           {!props.noLoginButton && (<Block display={['none', 'none', 'none', 'none', 'none', 'flex']}>
             <NavigationList $align={ALIGN.right}>
               {user.isAdmin() && (
-                <NavigationItem $style={{paddingLeft: 0}}>
-                  <AdminOptions/>
+                <NavigationItem $style={{ paddingLeft: 0 }}>
+                  <AdminOptions />
                 </NavigationItem>
               )}
 
               {!user.isLoggedIn() && (
-                <NavigationItem $style={{paddingLeft: 0}}>
-                  <LoginButton location={url}/>
+                <NavigationItem $style={{ paddingLeft: 0 }}>
+                  <LoginButton location={url} />
                 </NavigationItem>
               )}
               {user.isLoggedIn() && (
-                <NavigationItem $style={{paddingLeft: 0}}>
-                  <LoggedInHeader location={url}/>
+                <NavigationItem $style={{ paddingLeft: 0 }}>
+                  <LoggedInHeader location={url} />
                 </NavigationItem>
               )}
             </NavigationList>
           </Block>)}
           <Block display={['block', 'block', 'block', 'block', 'block', 'none']}>
-            <BurgerMenu/>
+            <BurgerMenu />
           </Block>
         </HeaderNavigation>
       </Block>
