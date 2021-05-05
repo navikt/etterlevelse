@@ -94,7 +94,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
               <Block display='flex' justifyContent='flex-end'>
                 <Button
                   size='compact'
-                  $style={{ color: '#112724', backgroundColor: '#F8F8F8', ':hover': { backgroundColor: '#F8F8F8' } }}
+                  kind='secondary'
                   onClick={submitForm}
                   disabled={isSubmitting}
                   type={'button'}
@@ -103,7 +103,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
                 </Button>
                 <Button
                   size='compact'
-                  $style={{ color: '#F8F8F8' }}
+                  $style={{ color: '#F8F8F8', ':hover':{backgroundColor:'transparent', textDecoration:'underline 3px'}}}
                   kind={'tertiary'}
                   type={'button'}
                   onClick={close}

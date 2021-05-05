@@ -11,7 +11,7 @@ export const DeleteItem = (props: {fun: () => Promise<any>, redirect: string}) =
 
   return (
     <>
-      <Button startEnhancer={<img src={deleteIcon} alt='delete'/>} $style={{ color: '#F8F8F8', ':hover':{backgroundColor:'transparent'}}} kind='tertiary' size='compact' onClick={() => setOpen(true)} marginLeft>Slett</Button>
+      <Button startEnhancer={<img src={deleteIcon} alt='delete'/>} $style={{ color: '#F8F8F8', ':hover':{backgroundColor:'transparent', textDecoration:'underline 3px'}}} kind='tertiary' size='compact' onClick={() => setOpen(true)} marginLeft>Slett</Button>
       <Modal isOpen={open} onClose={() => setOpen(false)} unstable_ModalBackdropScroll>
 
         <ModalHeader>Bekreft slett</ModalHeader>
