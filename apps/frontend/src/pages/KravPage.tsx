@@ -28,6 +28,7 @@ import {faChevronRight} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {useQueryParam} from '../util/hooks'
 import {InfoBlock} from '../components/common/InfoBlock'
+import {gql} from '@apollo/client/core'
 
 export const kravNumView = (it: {kravVersjon: number, kravNummer: number}) => `K${it.kravNummer}.${it.kravVersjon}`
 export const kravName = (krav: Krav) => `${kravNumView(krav)} - ${krav.navn}`
