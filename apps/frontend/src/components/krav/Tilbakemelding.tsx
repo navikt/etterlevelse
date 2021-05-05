@@ -28,12 +28,14 @@ import {teamKatPersonImageLink} from '../../util/config'
 import {mailboxPoppingIcon, questionmarkIcon} from '../Images'
 import {InfoBlock} from '../common/InfoBlock'
 
+const DEFAULT_COUNT_SIZE = 5
+
 export const Tilbakemeldinger = ({krav}: {krav: Krav}) => {
-  const [tilbakemeldinger, loading, add, replace] = useTilbakemeldinger(krav.kravNummer, krav.kravVersjon)
+  const [tilbakemeldinger, loading, add] = useTilbakemeldinger(krav.kravNummer, krav.kravVersjon)
   const [focusNr, setFocusNr] = useState<string | undefined>(useQueryParam('tilbakemeldingId'))
   const [addTilbakemelding, setAddTilbakemelding] = useState(false)
   const [tilbakemelding, setTilbakemelding] = useState()
-  const [count, setCount] = useState(5)
+  const [count, setCount] = useState(DEFAULT_COUNT_SIZE)
   const history = useHistory()
 
   const refs = useRefs<HTMLDivElement>(tilbakemeldinger.map(t => t.id))
@@ -55,9 +57,9 @@ export const Tilbakemeldinger = ({krav}: {krav: Krav}) => {
       {!loading && !!tilbakemeldinger.length &&
       <Block display={'flex'} flexDirection={'column'}>
         <Block>
-          {tilbakemeldinger.slice(0, count).map((t, i) => {
+          {tilbakemeldinger.slice(0, count).map(t => {
             const focused = focusNr === t.id
-            const {ubesvart, ubesvartOgKraveier, sistMelding} = tilbakeMeldingStatus(t)
+            const {ubesvart, ubesvartOgKraveier, melderOrKraveier, sistMelding} = tilbakeMeldingStatus(t)
             return (
               <Card key={t.id} overrides={{
                 Root: {
@@ -92,16 +94,14 @@ export const Tilbakemeldinger = ({krav}: {krav: Krav}) => {
 
                     <Block>
                       {focused && <Block display={'flex'} flexDirection={'column'}>
-                        {t.meldinger.slice(1).map((m, mid) => (
-                          <ResponseMelding key={m.meldingNr} m={m}/>
-                        ))}
+                        {t.meldinger.slice(1).map(m => <ResponseMelding key={m.meldingNr} m={m}/>)}
                       </Block>}
                       <Block display={'flex'} justifyContent={'space-between'} width={'100%'}>
-                        <Block>
+                        {t.meldinger.length > 1 && <Block>
                           <Button kind={'tertiary'} onClick={() => setFocus(focused ? '' : t.id)}
                                   icon={focused ? faChevronUp : faChevronRight}>Vis {focused ? 'mindre' : 'mer'}</Button>
-                        </Block>
-                        {focused &&
+                        </Block>}
+                        {melderOrKraveier &&
                         <Block><Button kind={ubesvartOgKraveier ? 'secondary' : 'outline'} size={'compact'}>
                           {ubesvartOgKraveier ? 'Besvar' : 'Ny melding'}
                         </Button></Block>}
@@ -115,10 +115,11 @@ export const Tilbakemeldinger = ({krav}: {krav: Krav}) => {
           })}
         </Block>
 
+        {tilbakemeldinger.length > DEFAULT_COUNT_SIZE &&
         <Block $style={{alignSelf: 'flex-end'}} marginTop={theme.sizing.scale400}>
-          <Button kind='tertiary' size='compact' icon={faPlus} onClick={() => setCount(count + 5)}
+          <Button kind='tertiary' size='compact' icon={faPlus} onClick={() => setCount(count + DEFAULT_COUNT_SIZE)}
                   disabled={tilbakemeldinger.length <= count}>Last flere</Button>
-        </Block>
+        </Block>}
       </Block>}
 
       {!loading && !tilbakemeldinger.length &&
@@ -208,7 +209,7 @@ const AddTilbakemeldingModal = ({open, close, krav}: {open?: boolean, close: (ad
   }
 
   return (
-    <Modal unstable_ModalBackdropScroll isOpen={!!open} onClose={() => close()}>
+    <Modal unstable_ModalBackdropScroll isOpen={open} onClose={() => close()}>
       <Formik
         onSubmit={submit}
         initialValues={newTilbakemelding(krav) as CreateTilbakemeldingRequest}

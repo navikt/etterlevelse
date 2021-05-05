@@ -151,7 +151,7 @@ const BurgerMenu = () => {
                 <ExternalLink href={datajegerSlackLink} hideUnderline>
                   <Block display="flex" justifyContent="center" paddingBottom={theme.sizing.scale400} alignItems="center">
                     <img src={SlackLogo} width="60px" alt="slack logo"/>
-                    <Paragraph4 color={theme.colors.white}>#datajegerne </Paragraph4>
+                    <Paragraph4 color={theme.colors.white}>#etterlevelse </Paragraph4>
                   </Block>
                 </ExternalLink>
               </Block>

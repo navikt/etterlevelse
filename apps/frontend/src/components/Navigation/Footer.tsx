@@ -1,16 +1,16 @@
-import { Block } from 'baseui/block'
-import { theme } from '../../util'
-import { datajegerSlackLink, documentationLink, githubRepo } from '../../util/config'
+import {Block} from 'baseui/block'
+import {theme} from '../../util'
+import {datajegerSlackLink, documentationLink, githubRepo} from '../../util/config'
 import SlackLogo from '../../resources/Slack_Monochrome_White.svg'
-import { LabelMedium } from 'baseui/typography'
-import { StatefulTooltip } from 'baseui/tooltip'
-import { env } from '../../util/env'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCodeBranch } from '@fortawesome/free-solid-svg-icons'
+import {LabelMedium} from 'baseui/typography'
+import {StatefulTooltip} from 'baseui/tooltip'
+import {env} from '../../util/env'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faCodeBranch} from '@fortawesome/free-solid-svg-icons'
 import * as React from 'react'
-import { ExternalLink } from '../common/RouteLink'
+import {ExternalLink} from '../common/RouteLink'
 import ToTopCircle from '../../resources/ToTopCircle.svg'
-import { maxPageWidth } from '../../util/theme'
+import {maxPageWidth} from '../../util/theme'
 
 
 export const Footer = () => {
@@ -47,7 +47,7 @@ export const Footer = () => {
                   <Block position='relative' display='flex' top={'1px'}>
                   <img src={SlackLogo} width="60px" alt="slack logo" />
                   </Block>
-                  <LabelMedium color='#F8F8F8'>#datajegerne </LabelMedium>
+                  <LabelMedium color='#F8F8F8'>#etterlevelse </LabelMedium>
                 </Block>
               </ExternalLink>
 

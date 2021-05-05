@@ -54,7 +54,7 @@ public class Validator<T extends Validated> {
     private static final String ERROR_MESSAGE_CODELIST = "%s: %s code not found in codelist %s";
     private static final String ERROR_MESSAGE_CODELIST_CODE = "%s: %s code has invalid format (alphanumeric and underscore)";
     private static final String ERROR_TYPE_IMMUTABLE_CODELIST = "codelistIsOfImmutableType";
-    private static final String ERROR_MESSAGE_IMMUTABLE_CODELIST = "%s is an immutable type of codelist. For amendments, please contact team #datajegerne";
+    private static final String ERROR_MESSAGE_IMMUTABLE_CODELIST = "%s is an immutable type of codelist. For amendments, please contact #etterlevelse";
     private static final Pattern CODE_PATTERN = Pattern.compile("^[A-Z0-9_]+$");
 
     private static final EmailValidator emailValidator = new EmailValidator();
