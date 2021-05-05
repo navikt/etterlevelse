@@ -23,6 +23,7 @@ import '@fontsource/source-sans-pro/900.css'
   grey50: '#F1F1F1',
   gray25: '#F8F8F8',
   white: '#FFFFFF',
+  black: '#000000',
   success400: '#057967',
   success50: '#EAF0EF',
   warning400: '#FFA631',
@@ -72,6 +73,9 @@ const overrides: RecursivePartial<Theme> = {
     buttonTertiaryText: ettlevColors.green600,
     buttonTertiaryHover: ettlevColors.green50,
     buttonTertiaryActive: ettlevColors.green100,
+    //tag colors
+    tagPrimaryOutlinedBackground: ettlevColors.green800,
+    tagPrimaryOutlinedFont: ettlevColors.black,
 
     linkVisited: primitives.primary400,
     inputFill: '#FFFFFF',
@@ -88,7 +92,7 @@ const overrides: RecursivePartial<Theme> = {
   typography: {
     // Increase weight 500->600 on bold texts
     font150: {fontWeight: 600},
-    font250: {fontWeight: 700, fontSize: '18px', lineHeight: '24px'}, //button, label3
+    font250: {fontWeight: 700, fontSize: '18px', lineHeight: '24px'}, //compact button, label3
     font300: {fontWeight: 400, fontSize: '18px', lineHeight: '24px'}, //P2
     font350: {fontWeight: 600},
 
