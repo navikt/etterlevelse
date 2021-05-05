@@ -88,10 +88,11 @@ const overrides: RecursivePartial<Theme> = {
   typography: {
     // Increase weight 500->600 on bold texts
     font150: {fontWeight: 600},
-    font250: {fontWeight: 600},
+    font250: {fontWeight: 700, fontSize: '18px', lineHeight: '24px'}, //button, label3
+    font300: {fontWeight: 400, fontSize: '18px', lineHeight: '24px'}, //P2
     font350: {fontWeight: 600},
 
-    font400: {fontWeight: 400, fontSize: '18px', lineHeight: '24px'}, //P1
+    font400: {fontWeight: 400, fontSize: '22px', lineHeight: '32px'}, //P1
 
     font450: {fontWeight: 600},
     font550: {fontWeight: 600},
