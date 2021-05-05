@@ -137,7 +137,6 @@ const Kriterie = ({
           </Block>
         }>
           <Input
-            size={SIZE.compact}
             value={navnInput}
             onChange={e => setNavn((e.target as HTMLInputElement).value)}
             placeholder={'Navn'}

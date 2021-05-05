@@ -49,7 +49,6 @@ export const EditBegreper = () => {
                       }
                     },
                   }}
-                  size={selectSize.compact}
                   labelKey={'navn'}
                   noResultsMsg={intl.emptyTable}
                   maxDropdownHeight="350px"

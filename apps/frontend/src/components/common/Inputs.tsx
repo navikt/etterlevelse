@@ -31,7 +31,7 @@ export const InputField = (props: { label: string, name: string, caption?: React
       {(p: FieldProps) =>
         <FormControl overrides={{ Label: { style: { marginTop: '0px', marginBottom: '0px', paddingTop: '8px', paddingBottom: '8px' } } }}
           label={<LabelWithTooltip label={props.label} tooltip={props.tooltip} />} error={p.meta.touched && p.meta.error} caption={props.caption}>
-          <Input size={SIZE.compact} {...p.field} placeholder={props.label} />
+          <Input {...p.field} placeholder={props.label} />
         </FormControl>
       }
     </Field>
@@ -94,7 +94,6 @@ export const DateField = (props: { label: string, name: string, caption?: ReactN
       {(p: FieldProps) =>
         <FormControl label={<LabelWithTooltip label={props.label} tooltip={props.tooltip} />} error={p.meta.touched && p.meta.error} caption={props.caption}>
           <Datepicker
-            size={SIZE.compact}
             clearable
             formatString={'dd-MM-yyyy'}
             value={p.field.value ? moment(p.field.value).toDate() : undefined}
@@ -159,14 +158,14 @@ export const MultiInputField = (props: {
                 {props.link &&
                   <Block width='100%' maxWidth={props.maxInputWidth}>
                     <LabelWithTooltip label={props.linkLabel} tooltip={props.linkTooltip} />
-                    <Input size={SIZE.compact} onKeyDown={onKey} value={linkName}
+                    <Input onKeyDown={onKey} value={linkName}
                       onChange={e => setLinkName((e.target as HTMLInputElement).value)}
                     />
                   </Block>
                 }
                 <Block marginLeft={props.link ? '12px' : '0px'} width='100%' maxWidth={!props.link ? props.maxInputWidth : undefined}>
                   <LabelWithTooltip label={props.label} tooltip={props.tooltip} />
-                  <Input size={SIZE.compact} onKeyDown={onKey} value={val} inputRef={inputRef}
+                  <Input onKeyDown={onKey} value={val} inputRef={inputRef}
                     onChange={e => setVal((e.target as HTMLInputElement).value)}
                     onBlur={!props.link ? add : undefined}
                   />
@@ -215,7 +214,7 @@ export const OptionField = (props: { label: string, name: string, clearable?: bo
 export const OptionList = (props: { label: string, clearable?: boolean, value?: Code | string, onChange: (val?: any) => void } & Or<{ options: Value }, { listName: ListName }>) => {
   const options: Value = props.options || codelist.getParsedOptions(props.listName)
   return (
-    <Select size={selectSize.compact} options={options} clearable={props.clearable}
+    <Select options={options} clearable={props.clearable}
       value={options.filter(o => o.id === (props.listName ? (props.value as Code | undefined)?.code : props.value))}
       onChange={s => {
         const val = s.option?.id
@@ -239,7 +238,6 @@ export const MultiOptionField = (props: { label: string, name: string, caption?:
             <Block>
               <Block display='flex'>
                 <Select
-                  size={SIZE.compact}
                   placeholder={'Velg ' + _.lowerFirst(props.label)}
                   aria-label={'Velg ' + _.lowerFirst(props.label)}
                   maxDropdownHeight='400px'

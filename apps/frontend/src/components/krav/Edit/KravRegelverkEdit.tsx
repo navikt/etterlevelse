@@ -42,7 +42,6 @@ export const KravRegelverkEdit = () => {
                       <LabelWithTooltip label={'Regelverk'}
                                         tooltip={'Velg relevant regelverk fra nedtrekksmenyen, og angi hvilke(n) bestemmelse(r) kravet har sin opprinnelse fra.'}/>
                       <Select
-                        size={SIZE.compact}
                         controlRef={controlRef}
                         placeholder={'Velg regelverk'}
                         aria-label={'Velg regelverk'}
@@ -57,7 +56,7 @@ export const KravRegelverkEdit = () => {
                     </Block>
                     <Block width='100%'>
                       <LabelWithTooltip label={'Paragraf eller kapittel i regelverk'} tooltip={'Beskrivelse'}/>
-                      <Input size={SIZE.compact} value={text}
+                      <Input value={text}
                              onChange={e => setText((e.target as HTMLInputElement).value)}
                              placeholder={'Beskrivelse, paragraf eller kapittel i regelverk'}
                       />
