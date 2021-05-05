@@ -96,7 +96,7 @@ export const MailLogPage = () => {
         )}
         placement={PLACEMENT.bottom}
       >
-        <Button kind={KIND.tertiary} endEnhancer={TriangleDown}>{`${limit} ${intl.rows}`}</Button>
+        <Button kind={KIND.tertiary} endEnhancer={TriangleDown}><b>{`${limit} ${intl.rows}`}</b></Button>
       </StatefulPopover>
       <Pagination
         currentPage={page}

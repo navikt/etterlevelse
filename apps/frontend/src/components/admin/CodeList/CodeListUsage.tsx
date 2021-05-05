@@ -73,7 +73,7 @@ export const Usage = (props: {usage?: CodeUsage, refresh: () => void}) => {
     <Block marginTop="2rem" ref={ref}>
       <Block display="flex" justifyContent="space-between" marginBottom=".5rem">
         <Label2 font="font450">Bruk</Label2>
-        {!!usage?.inUse && <Button type="button" kind="secondary" size="compact" onClick={() => setShowReplace(true)}>Erstatt all bruk</Button>}
+        {!!usage?.inUse && <Button type="button" kind="secondary" size="compact" onClick={() => setShowReplace(true)}><b>Erstatt all bruk</b></Button>}
       </Block>
 
       {showReplace && usage && usage.listName && (
@@ -81,7 +81,7 @@ export const Usage = (props: {usage?: CodeUsage, refresh: () => void}) => {
           <Select size="compact"
                   maxDropdownHeight="300px" searchable={true} placeholder={'Ny verdi'}
                   options={codelist.getParsedOptions(usage.listName)} value={newValue} onChange={params => setNewValue(params.value)}/>
-          <Button type="button" size="compact" onClick={replace} disabled={!newValue.length}>Erstatt</Button>
+          <Button type="button" size="compact" onClick={replace} disabled={!newValue.length}><b>Erstatt</b></Button>
         </Block>
       )}
 

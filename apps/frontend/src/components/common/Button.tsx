@@ -75,7 +75,7 @@ const Button = (props: ButtonProps) => {
                       aria-label={props.label}
         >
           {props.icon && <FontAwesomeIcon icon={props.icon} style={{marginRight: props.children ? '.5rem' : undefined}}/>}
-          {props.children}
+          <b>{props.children}</b>
           {props.iconEnd && <FontAwesomeIcon icon={props.iconEnd} style={{marginLeft: props.children ? '.5rem' : undefined}}/>}
         </BaseUIButton>
       </Tooltip>

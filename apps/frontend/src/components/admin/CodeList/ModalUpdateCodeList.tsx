@@ -1,17 +1,17 @@
 import * as React from 'react'
-import {Modal, ModalBody, ModalButton, ModalFooter, ModalHeader, ROLE, SIZE} from 'baseui/modal'
+import { Modal, ModalBody, ModalButton, ModalFooter, ModalHeader, ROLE, SIZE } from 'baseui/modal'
 
-import {Field, FieldProps, Form, Formik, FormikProps,} from 'formik'
+import { Field, FieldProps, Form, Formik, FormikProps, } from 'formik'
 
-import {Button, KIND} from 'baseui/button'
-import {Block, BlockProps} from 'baseui/block'
-import {Label2} from 'baseui/typography'
-import {Textarea} from 'baseui/textarea'
-import {Input, SIZE as InputSIZE} from 'baseui/input'
-import {CodeListFormValues, codeListSchema, ListName} from '../../../services/Codelist'
-import {Error} from '../../common/ModalSchema'
-import {LovCodeDataForm, TemaCodeDataForm} from './LovCode'
-import {MarkdownInfo} from '../../common/Markdown'
+import { Button, KIND } from 'baseui/button'
+import { Block, BlockProps } from 'baseui/block'
+import { Label2 } from 'baseui/typography'
+import { Textarea } from 'baseui/textarea'
+import { Input, SIZE as InputSIZE } from 'baseui/input'
+import { CodeListFormValues, codeListSchema, ListName } from '../../../services/Codelist'
+import { Error } from '../../common/ModalSchema'
+import { LovCodeDataForm, TemaCodeDataForm } from './LovCode'
+import { MarkdownInfo } from '../../common/Markdown'
 
 const modalBlockProps: BlockProps = {
   width: '700px',
@@ -35,7 +35,7 @@ type ModalUpdateProps = {
   submit: (process: CodeListFormValues) => Promise<void>,
 }
 
-const UpdateCodeListModal = ({title, initialValues, errorOnUpdate, isOpen, onClose, submit}: ModalUpdateProps) => {
+const UpdateCodeListModal = ({ title, initialValues, errorOnUpdate, isOpen, onClose, submit }: ModalUpdateProps) => {
   return (
     <Modal
       onClose={onClose}
@@ -53,7 +53,7 @@ const UpdateCodeListModal = ({title, initialValues, errorOnUpdate, isOpen, onClo
             submit(values)
             onClose()
           }}
-          initialValues={{...initialValues}}
+          initialValues={{ ...initialValues }}
           validationSchema={codeListSchema()}
         >{(formik: FormikProps<CodeListFormValues>) => (
           <Form>
@@ -66,7 +66,7 @@ const UpdateCodeListModal = ({title, initialValues, errorOnUpdate, isOpen, onClo
                 </Label2>
                 <Field
                   name="shortName"
-                >{({field}: FieldProps<CodeListFormValues>) => (
+                >{({ field }: FieldProps<CodeListFormValues>) => (
                   <Input
                     name="shortName"
                     value={formik.values.shortName}
@@ -77,7 +77,7 @@ const UpdateCodeListModal = ({title, initialValues, errorOnUpdate, isOpen, onClo
                 )}
                 </Field>
               </Block>
-              <Error fieldName="shortName"/>
+              <Error fieldName="shortName" />
 
               <Block {...rowBlockProps}>
                 <Label2 marginRight={'1rem'} width="25%">
@@ -85,7 +85,7 @@ const UpdateCodeListModal = ({title, initialValues, errorOnUpdate, isOpen, onClo
                 </Label2>
                 <Field
                   name="description"
-                >{({field}: FieldProps<CodeListFormValues>) => (
+                >{({ field }: FieldProps<CodeListFormValues>) => (
                   <Textarea
                     name="description"
                     value={formik.values.description}
@@ -96,11 +96,11 @@ const UpdateCodeListModal = ({title, initialValues, errorOnUpdate, isOpen, onClo
                 )}
                 </Field>
               </Block>
-              <Error fieldName="description"/>
-              {(initialValues.list === ListName.LOV || initialValues.list === ListName.TEMA) && <MarkdownInfo/>}
+              <Error fieldName="description" />
+              {(initialValues.list === ListName.LOV || initialValues.list === ListName.TEMA) && <MarkdownInfo />}
 
-              {initialValues.list === ListName.LOV && <LovCodeDataForm/>}
-              {initialValues.list === ListName.TEMA && <TemaCodeDataForm/>}
+              {initialValues.list === ListName.LOV && <LovCodeDataForm />}
+              {initialValues.list === ListName.TEMA && <TemaCodeDataForm />}
 
             </ModalBody>
             <ModalFooter>
@@ -111,10 +111,12 @@ const UpdateCodeListModal = ({title, initialValues, errorOnUpdate, isOpen, onClo
                   kind={KIND.secondary}
                   onClick={() => onClose()}
                 >
-                  Avbryt
+                  <b>
+                    Avbryt
+                  </b>
                 </Button>
                 <ModalButton type="button" onClick={formik.submitForm}>
-                  Lagre
+                  <b>Lagre</b>
                 </ModalButton>
               </Block>
             </ModalFooter>

@@ -27,7 +27,7 @@ const LoginButton = (props: {location: string}) => {
   return (
     <StyledLink style={{textDecoration: 'none'}} href={`/login?redirect_uri=${props.location}`}>
       <Button size={SIZE.compact} kind={KIND.tertiary} $style={buttonBorderStyle}>
-        Logg inn
+        <b>Logg inn</b>
       </Button>
     </StyledLink>
   )
@@ -47,7 +47,7 @@ const LoggedInHeader = (props: {location: string}) => {
       <Block {...blockStyle}>
         <StyledLink style={{textDecoration: 'none'}} href={`/logout?redirect_uri=${props.location}`}>
           <Button size={SIZE.compact} kind={KIND.tertiary} $style={buttonBorderStyle}>
-            Logg ut
+            <b>Logg ut</b>
           </Button>
         </StyledLink>
       </Block>
@@ -95,7 +95,7 @@ const AdminOptions = () => {
         />
       }>
       <Button endEnhancer={() => <TriangleDown size={24}/>} kind="tertiary">
-        {intl.administrate}
+        <b>{intl.administrate}</b>
       </Button>
     </StatefulPopover>
   )

@@ -34,7 +34,7 @@ export const useNetworkStatus = () => {
         {error?.toString()}
       </ModalBody>
       <ModalFooter>
-        <ModalButton onClick={clear}>Lukk</ModalButton>
+        <ModalButton onClick={clear}><b>Lukk</b></ModalButton>
       </ModalFooter>
     </Modal>
   )

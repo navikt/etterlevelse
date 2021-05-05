@@ -54,9 +54,9 @@ export const KravListPage = () => {
               setPageNumber(0)
               setMode(i)
             }}>
-              <BButton disabled={!user.isLoggedIn()}>Sist redigerte</BButton>
-              <BButton>Gjeldende</BButton>
-              <BButton>Alle</BButton>
+              <BButton disabled={!user.isLoggedIn()}><b>Sist redigerte</b></BButton>
+              <BButton><b>Gjeldende</b></BButton>
+              <BButton><b>Alle</b></BButton>
             </ButtonGroup>
           </Block>
 

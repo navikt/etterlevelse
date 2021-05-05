@@ -1,15 +1,15 @@
 import * as React from 'react'
-import {Modal, ModalBody, ModalButton, ModalFooter, ModalHeader, ROLE, SIZE} from 'baseui/modal'
-import {Block, BlockProps} from 'baseui/block'
-import {Label2} from 'baseui/typography'
-import {Field, FieldProps, Form, Formik} from 'formik'
-import {Input, SIZE as InputSIZE} from 'baseui/input'
-import {Textarea} from 'baseui/textarea'
-import {Button, KIND} from 'baseui/button'
-import {CodeListFormValues, codeListSchema, ListName} from '../../../services/Codelist'
-import {Error} from '../../common/ModalSchema'
-import {LovCodeDataForm, TemaCodeDataForm} from './LovCode'
-import {MarkdownInfo} from '../../common/Markdown'
+import { Modal, ModalBody, ModalButton, ModalFooter, ModalHeader, ROLE, SIZE } from 'baseui/modal'
+import { Block, BlockProps } from 'baseui/block'
+import { Label2 } from 'baseui/typography'
+import { Field, FieldProps, Form, Formik } from 'formik'
+import { Input, SIZE as InputSIZE } from 'baseui/input'
+import { Textarea } from 'baseui/textarea'
+import { Button, KIND } from 'baseui/button'
+import { CodeListFormValues, codeListSchema, ListName } from '../../../services/Codelist'
+import { Error } from '../../common/ModalSchema'
+import { LovCodeDataForm, TemaCodeDataForm } from './LovCode'
+import { MarkdownInfo } from '../../common/Markdown'
 
 const modalBlockProps: BlockProps = {
   width: '700px',
@@ -33,7 +33,7 @@ type ModalCreateProps = {
   onClose: () => void,
 }
 
-const CreateCodeListModal = ({isOpen, title, list, errorOnCreate, onClose, submit}: ModalCreateProps) => {
+const CreateCodeListModal = ({ isOpen, title, list, errorOnCreate, onClose, submit }: ModalCreateProps) => {
   return (
     <Modal
       closeable
@@ -61,7 +61,7 @@ const CreateCodeListModal = ({isOpen, title, list, errorOnCreate, onClose, submi
             } as CodeListFormValues
           }
           validationSchema={codeListSchema()}
-          render={({submitForm}) => (
+          render={({ submitForm }) => (
             <Form>
               <ModalHeader>{title}</ModalHeader>
               <ModalBody>
@@ -71,7 +71,7 @@ const CreateCodeListModal = ({isOpen, title, list, errorOnCreate, onClose, submi
                   </Label2>
                   <Field
                     name="code"
-                    render={({field}: FieldProps) => (
+                    render={({ field }: FieldProps) => (
                       <Input
                         {...field}
                         type="input"
@@ -80,7 +80,7 @@ const CreateCodeListModal = ({isOpen, title, list, errorOnCreate, onClose, submi
                     )}
                   />
                 </Block>
-                <Error fieldName="code"/>
+                <Error fieldName="code" />
 
                 <Block {...rowBlockProps}>
                   <Label2 marginRight={'1rem'} width="25%">
@@ -88,7 +88,7 @@ const CreateCodeListModal = ({isOpen, title, list, errorOnCreate, onClose, submi
                   </Label2>
                   <Field
                     name="shortName"
-                    render={({field}: FieldProps) => (
+                    render={({ field }: FieldProps) => (
                       <Input
                         {...field}
                         type="input"
@@ -97,7 +97,7 @@ const CreateCodeListModal = ({isOpen, title, list, errorOnCreate, onClose, submi
                     )}
                   />
                 </Block>
-                <Error fieldName="shortName"/>
+                <Error fieldName="shortName" />
 
                 <Block {...rowBlockProps}>
                   <Label2 marginRight={'1rem'} width="25%">
@@ -105,7 +105,7 @@ const CreateCodeListModal = ({isOpen, title, list, errorOnCreate, onClose, submi
                   </Label2>
                   <Field
                     name="description"
-                    render={({field}: FieldProps) => (
+                    render={({ field }: FieldProps) => (
                       <Textarea
                         {...field}
                         type="input"
@@ -114,11 +114,11 @@ const CreateCodeListModal = ({isOpen, title, list, errorOnCreate, onClose, submi
                     )}
                   />
                 </Block>
-                <Error fieldName="description"/>
-                {(list === ListName.LOV || list === ListName.TEMA) && <MarkdownInfo/>}
+                <Error fieldName="description" />
+                {(list === ListName.LOV || list === ListName.TEMA) && <MarkdownInfo />}
 
-                {list === ListName.LOV && <LovCodeDataForm/>}
-                {list === ListName.TEMA && <TemaCodeDataForm/>}
+                {list === ListName.LOV && <LovCodeDataForm />}
+                {list === ListName.TEMA && <TemaCodeDataForm />}
 
               </ModalBody>
               <ModalFooter>
@@ -129,10 +129,12 @@ const CreateCodeListModal = ({isOpen, title, list, errorOnCreate, onClose, submi
                     kind={KIND.secondary}
                     onClick={() => onClose()}
                   >
-                    Avbryt
+                    <b>
+                      Avbryt
+                    </b>
                   </Button>
                   <ModalButton type="button" onClick={submitForm}>
-                    Lagre
+                    <b>Lagre</b>
                   </ModalButton>
                 </Block>
               </ModalFooter>
