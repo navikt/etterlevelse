@@ -152,6 +152,9 @@ export interface TilbakemeldingMelding {
   rolle: TilbakemeldingRolle
   tid: string
   innhold: string
+
+  endretTid?: string
+  endretAvIdent?: string
 }
 
 export enum TilbakemeldingRolle {
