@@ -36,7 +36,7 @@ export const useTilbakemeldinger = (kravNummer: number, kravVersjon: number) => 
   }, [kravNummer, kravVersjon])
 
   const add = (r: Tilbakemelding) => {
-    setData([...data, r])
+    setData([r, ...data])
   }
   const replace = (r: Tilbakemelding) => {
     setData(data.map(t => t.id === r.id ? r : t))
