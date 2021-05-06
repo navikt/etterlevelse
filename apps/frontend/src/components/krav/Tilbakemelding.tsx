@@ -24,9 +24,9 @@ import {useQueryParam, useRefs} from '../../util/hooks'
 import {Textarea} from 'baseui/textarea'
 import {ettlevColors} from '../../util/theme'
 import {ResourceName} from '../common/Resource'
-import {teamKatPersonImageLink} from '../../util/config'
-import {mailboxPoppingIcon, questionmarkIcon} from '../Images'
+import {mailboxPoppingIcon} from '../Images'
 import {InfoBlock} from '../common/InfoBlock'
+import {Portrait} from '../common/Portrait'
 
 const DEFAULT_COUNT_SIZE = 5
 
@@ -77,7 +77,7 @@ export const Tilbakemeldinger = ({krav}: {krav: Krav}) => {
 
                       <Block>
                         <LabelSmall><ResourceName id={t.melderIdent}/></LabelSmall>
-                        <ParagraphSmall marginTop={0} marginBottom={0}>{moment(t.meldinger[0].tid).format('ll')}</ParagraphSmall>
+                        <ParagraphSmall marginTop={0} marginBottom={0}>{moment(t.meldinger[0].tid).format('ll')}: {typeText(t.type)}</ParagraphSmall>
                       </Block>
 
                       <Block display={'flex'} flexDirection={'column'} alignItems={'flex-end'}>
@@ -176,31 +176,6 @@ const ResponseMelding = (props: {m: TilbakemeldingMelding}) => {
   )
 }
 
-const Portrait = (props: {ident: string}) => {
-  const [loading, setLoading] = useState(true)
-  const [image, setImage] = React.useState(teamKatPersonImageLink(props.ident))
-  const size = '30px'
-  return (
-    <Block>
-      {loading && <Block width={size} height={size}><Spinner size='100%'/></Block>}
-      <img
-        onLoad={() => setLoading(false)}
-        onError={() => {
-          setImage(questionmarkIcon)
-          setLoading(false)
-        }}
-        src={image}
-        alt={`Profilbilde ${props.ident}`}
-        style={{
-          width: loading ? 0 : size,
-          height: loading ? 0 : size,
-          borderRadius: '100%'
-        }}
-      />
-    </Block>
-  )
-}
-
 const AddTilbakemeldingModal = ({open, close, krav}: {open?: boolean, close: (add?: Tilbakemelding) => void, krav: Krav}) => {
   const [error, setError] = useState()
   const [adresseType, setAdresseType] = useState<AdresseType>()
@@ -279,16 +254,14 @@ const AddTilbakemeldingModal = ({open, close, krav}: {open?: boolean, close: (ad
 }
 
 
-const getUserRole = (tilbakemelding?: Tilbakemelding) => tilbakemelding?.melderIdent === user.getIdent() ? TilbakemeldingRolle.MELDER : TilbakemeldingRolle.KRAVEIER
-
 const tilbakeMeldingStatus = (tilbakemelding: Tilbakemelding) => {
   const sistMelding = tilbakemelding.meldinger[tilbakemelding.meldinger.length - 1]
   const ubesvart = sistMelding.rolle === TilbakemeldingRolle.MELDER
   const melder = user.getIdent() === tilbakemelding.melderIdent
-  const rolle = getUserRole(tilbakemelding)
+  const rolle = tilbakemelding?.melderIdent === user.getIdent() ? TilbakemeldingRolle.MELDER : TilbakemeldingRolle.KRAVEIER
   const melderOrKraveier = melder || user.isKraveier()
   const ubesvartOgKraveier = ubesvart && user.isKraveier()
-  return {ubesvart: melder, ubesvartOgKraveier, rolle, melderOrKraveier, sistMelding}
+  return {ubesvart, ubesvartOgKraveier, rolle, melderOrKraveier, sistMelding}
 }
 
 const MeldingResponseModal = ({tilbakemelding, close}: {tilbakemelding?: Tilbakemelding, close: (t: Tilbakemelding) => void}) => {
