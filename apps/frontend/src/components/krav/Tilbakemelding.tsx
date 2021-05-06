@@ -6,7 +6,7 @@ import {theme} from '../../util'
 import {HeadingXLarge, LabelSmall, ParagraphLarge, ParagraphMedium, ParagraphSmall} from 'baseui/typography'
 import Button from '../common/Button'
 import {faChevronRight, faChevronUp, faEnvelope, faPlus, faSync, faUser} from '@fortawesome/free-solid-svg-icons'
-import {borderColor, borderRadius, borderWidth, marginAll} from '../common/Style'
+import {borderColor, borderWidth} from '../common/Style'
 import {Spinner} from '../common/Spinner'
 import moment from 'moment'
 import {Card} from 'baseui/card'
@@ -31,10 +31,10 @@ import {Portrait} from '../common/Portrait'
 const DEFAULT_COUNT_SIZE = 5
 
 export const Tilbakemeldinger = ({krav}: {krav: Krav}) => {
-  const [tilbakemeldinger, loading, add] = useTilbakemeldinger(krav.kravNummer, krav.kravVersjon)
+  const [tilbakemeldinger, loading, add, replace] = useTilbakemeldinger(krav.kravNummer, krav.kravVersjon)
   const [focusNr, setFocusNr] = useState<string | undefined>(useQueryParam('tilbakemeldingId'))
   const [addTilbakemelding, setAddTilbakemelding] = useState(false)
-  const [tilbakemelding, setTilbakemelding] = useState()
+  const [tilbakemelding, setTilbakemelding] = useState<Tilbakemelding>()
   const [count, setCount] = useState(DEFAULT_COUNT_SIZE)
   const history = useHistory()
 
@@ -106,7 +106,10 @@ export const Tilbakemeldinger = ({krav}: {krav: Krav}) => {
                                   icon={focused ? faChevronUp : faChevronRight}>Vis {focused ? 'mindre' : 'mer'}</Button>}
                         </Block>
                         {melderOrKraveier &&
-                        <Block><Button kind={ubesvartOgKraveier ? 'primary' : 'outline'} size={'compact'}>
+                        <Block><Button kind={ubesvartOgKraveier ? 'primary' : 'outline'} size={'compact'} onClick={() => {
+                          setFocusNr(t.id)
+                          setTilbakemelding(t)
+                        }}>
                           {ubesvartOgKraveier ? 'Besvar' : 'Ny melding'}
                         </Button></Block>}
                       </Block>
@@ -137,12 +140,12 @@ export const Tilbakemeldinger = ({krav}: {krav: Krav}) => {
         <Button kind={'primary'} size='compact' onClick={() => setAddTilbakemelding(true)}>Ny tilbakemelding</Button>
       </Block>
 
-      <AddTilbakemeldingModal krav={krav} open={addTilbakemelding} close={t => {
+      <NyTilbakemeldingModal krav={krav} open={addTilbakemelding} close={t => {
         t && add(t)
         setAddTilbakemelding(false)
       }}/>
-      <MeldingResponseModal tilbakemelding={tilbakemelding} close={t => {
-        t && add(t)
+      <TilbakemeldingSvarModal tilbakemelding={tilbakemelding} close={t => {
+        t && replace(t)
         setTilbakemelding(undefined)
       }}/>
 
@@ -176,7 +179,7 @@ const ResponseMelding = (props: {m: TilbakemeldingMelding}) => {
   )
 }
 
-const AddTilbakemeldingModal = ({open, close, krav}: {open?: boolean, close: (add?: Tilbakemelding) => void, krav: Krav}) => {
+const NyTilbakemeldingModal = ({open, close, krav}: {open?: boolean, close: (add?: Tilbakemelding) => void, krav: Krav}) => {
   const [error, setError] = useState()
   const [adresseType, setAdresseType] = useState<AdresseType>()
 
@@ -253,7 +256,6 @@ const AddTilbakemeldingModal = ({open, close, krav}: {open?: boolean, close: (ad
   )
 }
 
-
 const tilbakeMeldingStatus = (tilbakemelding: Tilbakemelding) => {
   const sistMelding = tilbakemelding.meldinger[tilbakemelding.meldinger.length - 1]
   const ubesvart = sistMelding.rolle === TilbakemeldingRolle.MELDER
@@ -261,104 +263,75 @@ const tilbakeMeldingStatus = (tilbakemelding: Tilbakemelding) => {
   const rolle = tilbakemelding?.melderIdent === user.getIdent() ? TilbakemeldingRolle.MELDER : TilbakemeldingRolle.KRAVEIER
   const melderOrKraveier = melder || user.isKraveier()
   const ubesvartOgKraveier = ubesvart && user.isKraveier()
-  return {ubesvart, ubesvartOgKraveier, rolle, melderOrKraveier, sistMelding}
+  return {ubesvart, ubesvartOgKraveier, rolle, melder, melderOrKraveier, sistMelding}
 }
 
-const MeldingResponseModal = ({tilbakemelding, close}: {tilbakemelding?: Tilbakemelding, close: (t: Tilbakemelding) => void}) => {
+const TilbakemeldingSvarModal = ({tilbakemelding, close}: {tilbakemelding?: Tilbakemelding, close: (t?: Tilbakemelding) => void}) => {
   if (!tilbakemelding) return null
-  const melderInfo = tilbakeMeldingStatus(tilbakemelding)
 
   return (
-    <Modal>
-      <MeldingResponse
-        userRole={melderInfo.rolle} tilbakemeldingId={tilbakemelding.id}
-        close={t => {
-          close(t)
-        }}/>
+    <Modal unstable_ModalBackdropScroll isOpen={!!tilbakemelding} onClose={() => close()}>
+      <ModalHeader>Svar på tilbakemelding</ModalHeader>
+      <ModalBody>
+        <TilbakemeldingSvar tilbakemelding={tilbakemelding} close={close}/>
+      </ModalBody>
     </Modal>
   )
 }
 
-const MeldingResponse = ({userRole, close, tilbakemeldingId}: {userRole: TilbakemeldingRolle, close: (t: Tilbakemelding) => void, tilbakemeldingId: string}) => {
+const TilbakemeldingSvar = ({tilbakemelding, close}: {tilbakemelding: Tilbakemelding, close: (t: Tilbakemelding) => void}) => {
+  const melderInfo = tilbakeMeldingStatus(tilbakemelding)
   const [response, setResponse] = useState('')
-  const [replyRole, setReplyRole] = useState(userRole)
+  const [replyRole, setReplyRole] = useState(melderInfo.rolle)
   const [error, setError] = useState()
   const [loading, setLoading] = useState(false)
 
-  const isMelder = userRole === TilbakemeldingRolle.MELDER
-
   const submit = () => {
     const req: TilbakemeldingNewMeldingRequest = {
-      tilbakemeldingId: tilbakemeldingId,
+      tilbakemeldingId: tilbakemelding.id,
       rolle: replyRole,
       melding: response
     }
     setLoading(true)
-    tilbakemeldingNewMelding(req)
-    .then(r => {
-      close(r)
-    })
-    .catch(e => {
+    tilbakemeldingNewMelding(req).then(close).catch(e => {
       setError(e.error)
       setLoading(false)
     })
   }
 
   return (
-    <Card overrides={{
-      Root: {
-        style: {
-          alignSelf: 'flex-end',
-          marginTop: theme.sizing.scale800,
-          width: '90%',
-          backgroundColor: theme.colors.inputFillActive,
-          ...borderRadius('10px')
-        }
-      },
-      Contents: {
-        style: {
-          ...marginAll(theme.sizing.scale200)
-        }
-      },
-      Body: {
-        style: {
-          marginBottom: 0
-        }
-      }
-    }}>
-      <Block display='flex' alignItems='flex-end'>
-        <Textarea overrides={{
-          InputContainer: {
-            style: {
-              backgroundColor: theme.colors.inputFillActive
-            }
-          },
-          Input: {
-            style: {
-              backgroundColor: theme.colors.inputFillActive
-            }
+    <Block display='flex' alignItems='flex-end'>
+      <Textarea overrides={{
+        InputContainer: {
+          style: {
+            backgroundColor: theme.colors.inputFillActive
           }
-        }} onChange={e => setResponse((e.target as HTMLInputElement).value)} value={response}/>
+        },
+        Input: {
+          style: {
+            backgroundColor: theme.colors.inputFillActive
+          }
+        }
+      }} onChange={e => setResponse((e.target as HTMLInputElement).value)} value={response}/>
 
-        <Block display='flex' justifyContent='space-between' flexDirection='column'
-               marginLeft={theme.sizing.scale400}>
+      <Block display='flex' justifyContent='space-between' flexDirection='column'
+             marginLeft={theme.sizing.scale400}>
 
-          {user.isKraveier() && !loading && isMelder &&
-          <Block marginBottom={theme.sizing.scale400} display='flex' flexDirection='column'>
-            <LabelSmall alignSelf='center'>Jeg er</LabelSmall>
-            <Button size='compact' icon={faSync}
-                    onClick={() => setReplyRole(replyRole === TilbakemeldingRolle.MELDER ? TilbakemeldingRolle.KRAVEIER : TilbakemeldingRolle.MELDER)}>
-              {rolleText(replyRole)}
-            </Button>
-          </Block>}
-          {loading && <Block alignSelf='center' marginBottom={theme.sizing.scale400}><Spinner size={theme.sizing.scale800}/></Block>}
+        {user.isKraveier() && !loading && melderInfo.melder &&
+        <Block marginBottom={theme.sizing.scale400} display='flex' flexDirection='column'>
+          <LabelSmall alignSelf='center'>Jeg er</LabelSmall>
+          <Button size='compact' icon={faSync} kind={'secondary'}
+                  onClick={() => setReplyRole(replyRole === TilbakemeldingRolle.MELDER ? TilbakemeldingRolle.KRAVEIER : TilbakemeldingRolle.MELDER)}>
+            {rolleText(replyRole)}
+          </Button>
+        </Block>}
+        {loading && <Block alignSelf='center' marginBottom={theme.sizing.scale400}><Spinner size={theme.sizing.scale800}/></Block>}
 
-          <Button size='compact' disabled={!response || loading} onClick={submit}>Send</Button>
-        </Block>
-        {error && <Notification kind='negative' overrides={{Body: {style: {marginBottom: '-25px'}}}}>{error}</Notification>}
-
+        <Button size='compact' disabled={!response || loading} onClick={submit}>Send</Button>
       </Block>
-    </Card>
+      {error && <Notification kind='negative' overrides={{Body: {style: {marginBottom: '-25px'}}}}>{error}</Notification>}
+
+    </Block>
   )
 }
 
