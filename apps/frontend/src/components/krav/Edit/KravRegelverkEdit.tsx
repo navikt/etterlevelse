@@ -7,7 +7,7 @@ import {FormControl} from 'baseui/form-control'
 import {Block} from 'baseui/block'
 import {theme} from '../../../util'
 import {Input, SIZE} from 'baseui/input'
-import Button, {buttonBorderStyle} from '../../common/Button'
+import Button from '../../common/Button'
 import {LabelSmall} from 'baseui/typography'
 import {LovView} from '../../Lov'
 import {RenderTagList} from '../../common/TagList'
@@ -68,7 +68,6 @@ export const KravRegelverkEdit = () => {
                         size='compact'
                         onClick={add}
                         marginLeft
-                        $style={buttonBorderStyle}
                         kind='secondary'
                       >
                         Legg til

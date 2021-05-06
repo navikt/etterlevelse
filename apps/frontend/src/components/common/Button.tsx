@@ -45,7 +45,7 @@ const Tooltip = (props: TooltipProps) => (
 const outlineWidth = '2px'
 const outlineStyle = 'solid'
 const outlineOverride: StyleObject = {
-  borderColor: theme.colors.buttonPrimaryFill,
+  borderColor: ettlevColors.green600,
   backgroundColor: 'inherit',
   borderLeftWidth: outlineWidth,
   borderRightWidth: outlineWidth,
@@ -72,6 +72,7 @@ const Button = (props: ButtonProps) => {
   const overrides: Override<any> = {
     style: {
       ...(props.kind === 'outline' ? outlineOverride : {}),
+      ...(props.kind === 'secondary' ? buttonBorderStyle: {}),
       ...(props.inline ? { paddingTop: theme.sizing.scale100, paddingBottom: theme.sizing.scale100 } : {}),
       ...(props.$style || {}),
       ...(boxShadow.style)
@@ -99,7 +100,7 @@ export default Button
 
 // Må gjøres properly, laget denne for å unngå tusenvis av react warnings
 export const buttonBorderStyle: StyleObject = {
-  borderColor: ettlevColors.green800,
+  borderColor: ettlevColors.green600,
   ...borderStyle('solid'),
   ...borderWidth('2px'),
   ...borderRadius('4px')
