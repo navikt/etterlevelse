@@ -76,8 +76,13 @@ const overrides: RecursivePartial<Theme> = {
     //tag colors
     tagPrimaryOutlinedBackground: ettlevColors.green800,
     tagPrimaryOutlinedFont: ettlevColors.black,
+    // Link colors
+    linkText: ettlevColors.green600,
+    // linkVisited is same as active
+    linkVisited: ettlevColors.green800,
+    linkHover: ettlevColors.green400,
+    linkActive: ettlevColors.green800,
 
-    linkVisited: primitives.primary400,
     inputFill: '#FFFFFF',
     inputFillActive: '#FFFFFF',
     inputEnhancerFill: primitives.primary100,
