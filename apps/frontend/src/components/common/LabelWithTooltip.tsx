@@ -38,12 +38,12 @@ const LabelWithToolTip = (props: { label?: string, tooltip?: React.ReactNode, fo
             }
           }}
         >
-          <Block $style={{ cursor: 'pointer' }}>
+          <button type='button' style={{border: 'none', background: 'none'}}>
             <img src={questionmarkIcon} alt={`Hjelpetekst for ${props.label}`}
               onMouseOver={(e) => e.currentTarget.src = questionmarkHoverIcon}
               onMouseOut={(e) => e.currentTarget.src = questionmarkIcon}
             />
-          </Block>
+          </button>
         </CustomizedStatefulTooltip>
       </Block>
     )

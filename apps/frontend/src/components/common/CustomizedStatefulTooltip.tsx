@@ -1,5 +1,5 @@
 import React from 'react'
-import { PLACEMENT, StatefulTooltip, StatefulTooltipProps, TRIGGER_TYPE } from 'baseui/tooltip'
+import { ACCESSIBILITY_TYPE, PLACEMENT, StatefulTooltip, StatefulTooltipProps, TRIGGER_TYPE } from 'baseui/tooltip'
 
 const CustomizedStatefulTooltip = (props: StatefulTooltipProps) => {
 
@@ -7,9 +7,10 @@ const CustomizedStatefulTooltip = (props: StatefulTooltipProps) => {
     <StatefulTooltip
       {...props}
       placement={PLACEMENT.top}
-      focusLock={false}
       triggerType={TRIGGER_TYPE.click}
+      accessibilityType={ACCESSIBILITY_TYPE.tooltip}
       ignoreBoundary={props.ignoreBoundary === false ? props.ignoreBoundary : true}
+      dismissOnEsc
       overrides={{
         Body: {
           style: {
