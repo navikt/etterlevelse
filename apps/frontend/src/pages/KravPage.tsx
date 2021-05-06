@@ -1,5 +1,5 @@
 import {Block} from 'baseui/block'
-import {H1, HeadingXLarge, LabelLarge, LabelSmall, Paragraph1, ParagraphSmall} from 'baseui/typography'
+import {H1, HeadingXLarge, LabelLarge, LabelSmall, Paragraph2, ParagraphSmall} from 'baseui/typography'
 import {useHistory, useParams} from 'react-router-dom'
 import {deleteKrav, KravIdParams, mapToFormVal} from '../api/KravApi'
 import React, {useEffect, useRef, useState} from 'react'
@@ -180,7 +180,7 @@ export const KravPage = () => {
 
         <Block display='flex' justifyContent='center' width='calc(100% - 80px)' paddingLeft='40px' paddingRight='40px'>
           <Block maxWidth={pageWidth} width='100%'>
-            <Paragraph1>{getLastModifiedBy(krav)}</Paragraph1>
+            <Paragraph2>{getLastModifiedBy(krav)}</Paragraph2>
           </Block>
         </Block>
       </Block>}
