@@ -3,7 +3,7 @@ import {createNewTilbakemelding, CreateTilbakemeldingRequest, tilbakemeldingNewM
 import React, {useEffect, useState} from 'react'
 import {Block} from 'baseui/block'
 import {theme} from '../../util'
-import {HeadingXLarge, LabelSmall, ParagraphLarge, ParagraphMedium, ParagraphSmall} from 'baseui/typography'
+import {HeadingXLarge, LabelSmall, ParagraphMedium, ParagraphSmall} from 'baseui/typography'
 import Button from '../common/Button'
 import {faChevronRight, faChevronUp, faEnvelope, faPlus, faSync, faUser} from '@fortawesome/free-solid-svg-icons'
 import {borderColor, borderWidth} from '../common/Style'
@@ -89,7 +89,7 @@ export const Tilbakemeldinger = ({krav}: {krav: Krav}) => {
                       </Block>
                     </Block>
                     <Block>
-                      <ParagraphLarge>{t.meldinger[0].innhold}</ParagraphLarge>
+                      <ParagraphMedium>{t.meldinger[0].innhold}</ParagraphMedium>
                     </Block>
 
                     <Block>
@@ -173,7 +173,7 @@ const ResponseMelding = (props: {m: TilbakemeldingMelding}) => {
       </Block>
 
       <Block>
-        <ParagraphLarge marginBottom={0} marginTop={theme.sizing.scale400}>{m.innhold}</ParagraphLarge>
+        <ParagraphMedium marginBottom={0} marginTop={theme.sizing.scale400}>{m.innhold}</ParagraphMedium>
       </Block>
     </Block>
   )

@@ -4,10 +4,10 @@ import {Block} from 'baseui/block'
 import {Spinner} from './Spinner'
 import {questionmarkIcon} from '../Images'
 
-export const Portrait = (props: {ident: string}) => {
+export const Portrait = (props: {ident: string, size?: string}) => {
   const [loading, setLoading] = useState(true)
   const [image, setImage] = React.useState(teamKatPersonImageLink(props.ident))
-  const size = '30px'
+  const size = props.size || '42px'
   return (
     <Block>
       {loading && <Block width={size} height={size}><Spinner size='100%'/></Block>}
