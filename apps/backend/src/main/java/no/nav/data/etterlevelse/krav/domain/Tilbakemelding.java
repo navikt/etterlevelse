@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import no.nav.data.common.exceptions.ValidationException;
+import no.nav.data.common.security.SecurityUtils;
 import no.nav.data.common.storage.domain.ChangeStamp;
 import no.nav.data.common.storage.domain.DomainObject;
 import no.nav.data.etterlevelse.common.domain.KravId;
@@ -19,6 +21,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static no.nav.data.common.utils.StreamUtils.convert;
+import static no.nav.data.common.utils.StreamUtils.tryFind;
 
 @Data
 @Builder
@@ -61,6 +64,14 @@ public class Tilbakemelding implements DomainObject, KravId {
         private LocalDateTime tid;
         private String innhold;
 
+        private LocalDateTime endretTid;
+        private String endretAvIdent;
+
+        public void endre(String newInnhold) {
+            innhold = newInnhold;
+            endretTid = LocalDateTime.now();
+            endretAvIdent = SecurityUtils.getCurrentIdent();
+        }
     }
 
     public enum TilbakemeldingsType {
@@ -118,6 +129,14 @@ public class Tilbakemelding implements DomainObject, KravId {
         return melding;
     }
 
+    public Melding finnMelding(int meldingNr) {
+        return tryFind(getMeldinger(), m -> m.getMeldingNr() == meldingNr).orElseThrow(() -> new ValidationException("Melding finnes ikke"));
+    }
+
+    public void fjernMelding(Melding melding) {
+        getMeldinger().remove(melding);
+    }
+
     public TilbakemeldingResponse toResponse() {
         return TilbakemeldingResponse.builder()
                 .id(id)
@@ -136,6 +155,8 @@ public class Tilbakemelding implements DomainObject, KravId {
                         .rolle(melding.rolle)
                         .tid(melding.tid)
                         .innhold(melding.innhold)
+                        .endretTid(melding.endretTid)
+                        .endretAvIdent(melding.endretAvIdent)
                         .build()))
                 .build();
     }

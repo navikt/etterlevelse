@@ -3,6 +3,7 @@ package no.nav.data.etterlevelse.krav;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.mail.EmailService;
 import no.nav.data.common.mail.MailTask;
+import no.nav.data.common.security.SecurityUtils;
 import no.nav.data.common.validator.Validator;
 import no.nav.data.etterlevelse.common.domain.DomainService;
 import no.nav.data.etterlevelse.krav.domain.Tilbakemelding;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 
 import static no.nav.data.common.storage.domain.GenericStorage.to;
 import static no.nav.data.etterlevelse.varsel.domain.Varsel.Paragraph.VarselUrl.url;
@@ -70,12 +72,32 @@ public class TilbakemeldingService extends DomainService<Tilbakemelding> {
     public Tilbakemelding newMelding(TilbakemeldingNewMeldingRequest request) {
         request.validate();
 
-        var tilbakemelding = storage.get(request.getTilbakemeldingId(), Tilbakemelding.class);
+        var tilbakemelding = get(request.getTilbakemeldingId());
         var melding = tilbakemelding.newMelding(request);
         varsle(tilbakemelding, melding);
 
         log.info("New melding nr {} på tilbakemelding {} på {} fra {}",
                 melding.getMeldingNr(), tilbakemelding.getId(), tilbakemelding.kravId(), tilbakemelding.getMelder().getIdent());
+        return storage.save(tilbakemelding);
+    }
+
+    @Transactional
+    public Tilbakemelding deleteMelding(UUID tilbakemeldingId, int meldingNr) {
+        var tilbakemelding = get(tilbakemeldingId);
+        var melding = tilbakemelding.finnMelding(meldingNr);
+
+        SecurityUtils.assertIsUserOrAdmin(melding.getFraIdent(), "Ikke din melding");
+        tilbakemelding.fjernMelding(melding);
+        return storage.save(tilbakemelding);
+    }
+
+    @Transactional
+    public Tilbakemelding editMelding(UUID tilbakemeldingId, int meldingNr, String body) {
+        var tilbakemelding = get(tilbakemeldingId);
+        var melding = tilbakemelding.finnMelding(meldingNr);
+
+        SecurityUtils.assertIsUserOrAdmin(melding.getFraIdent(), "Ikke din melding");
+        melding.endre(body);
         return storage.save(tilbakemelding);
     }
 
@@ -109,5 +131,4 @@ public class TilbakemeldingService extends DomainService<Tilbakemelding> {
             }
         }
     }
-
 }

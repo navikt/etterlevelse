@@ -192,11 +192,29 @@ public class KravController {
     }
 
     @Operation(summary = "New Melding on Tilbakemelding")
-    @ApiResponse(description = "Melding added Tilbakemelding")
+    @ApiResponse(description = "Melding added")
     @PostMapping("/tilbakemelding/melding")
     public ResponseEntity<TilbakemeldingResponse> tilbakemeldingNewMelding(@RequestBody TilbakemeldingNewMeldingRequest request) {
         log.info("New Melding on Tilbakemelding");
         var tilbakemelding = tilbakemeldingService.newMelding(request);
+        return ResponseEntity.ok(tilbakemelding.toResponse());
+    }
+
+    @Operation(summary = "Delete Melding on Tilbakemelding")
+    @ApiResponse(description = "Melding deleted")
+    @DeleteMapping("/tilbakemelding/{tilbakemeldingId}/{meldingNr}")
+    public ResponseEntity<TilbakemeldingResponse> tilbakemeldingDeleteMelding(@PathVariable UUID tilbakemeldingId, @PathVariable int meldingNr) {
+        log.info("Slett Melding on Tilbakemelding");
+        var tilbakemelding = tilbakemeldingService.deleteMelding(tilbakemeldingId, meldingNr);
+        return ResponseEntity.ok(tilbakemelding.toResponse());
+    }
+
+    @Operation(summary = "Edit Melding on Tilbakemelding")
+    @ApiResponse(description = "Melding edited")
+    @PostMapping("/tilbakemelding/{tilbakemeldingId}/{meldingNr}")
+    public ResponseEntity<TilbakemeldingResponse> tilbakemeldingEditMelding(@PathVariable UUID tilbakemeldingId, @PathVariable int meldingNr, @RequestBody String body) {
+        log.info("Edit Melding on Tilbakemelding");
+        var tilbakemelding = tilbakemeldingService.editMelding(tilbakemeldingId, meldingNr, body);
         return ResponseEntity.ok(tilbakemelding.toResponse());
     }
 

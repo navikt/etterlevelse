@@ -45,5 +45,8 @@ public class TilbakemeldingResponse {
         private LocalDateTime tid;
         private String innhold;
 
+        private LocalDateTime endretTid;
+        private String endretAvIdent;
+
     }
 }
