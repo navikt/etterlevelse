@@ -13,6 +13,7 @@ export const InfoBlock = (props: {icon: string, alt: string, text: string, color
     alignItems: 'center',
     borderStyle: 'solid',
     borderColor: ettlevColors.grey100,
+    borderRadius: '4px'
   }}>
     <Block display={'flex'} flexDirection={'column'} alignItems={'center'} padding={theme.sizing.scale700}>
       <IconInCircle icon={props.icon} alt={props.alt} backgroundColor={props.color} size={'64px'}/>

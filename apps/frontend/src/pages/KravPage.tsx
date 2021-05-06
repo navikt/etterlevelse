@@ -160,7 +160,7 @@ export const KravPage = () => {
 
         <Block display={'flex'} justifyContent='center' width='100%'
                $style={{
-                 background: `linear-gradient(top, ${ettlevColors.green100} 50px, ${ettlevColors.gray25} 0%)`
+                 background: `linear-gradient(top, ${ettlevColors.green100} 50px, ${ettlevColors.grey25} 0%)`
                }}>
           <Block maxWidth={pageWidth} width='100%'>
             <CustomizedTabs fontColor={ettlevColors.green600} activeColor={ettlevColors.green800} tabBackground={ettlevColors.green100}

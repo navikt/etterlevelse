@@ -4,6 +4,7 @@ import {Tab, TabProps, Tabs, TabsProps} from 'baseui/tabs'
 import {StyleObject} from 'styletron-standard'
 import {borderColor, borderStyle, borderWidth, marginZero, paddingZero} from './Style'
 import {theme} from '../../util'
+import {ettlevColors} from '../../util/theme'
 
 export const CustomizedTab = (props: TabProps) => {
   return (
@@ -28,7 +29,6 @@ export const CustomizedTabs = (props: CustomProps) => {
   const hoverAndFocusStyle: StyleObject = {
     color: activeColor,
     borderBottomColor: fontColor,
-    borderBottomWidth: '4px',
   }
 
   return (
@@ -48,28 +48,15 @@ export const CustomizedTabs = (props: CustomProps) => {
             paddingLeft: '4px',
             paddingRight: '4px',
 
-            ...borderWidth('4px'),
+            ...borderWidth('4px !important'),
             ...borderColor(tabBackground),
-            borderBottomColor: fontColor,
+            borderBottomColor: tabProps.$active ? activeColor : undefined,
             // Avoid cut horizontal line on bottom border
             ...borderStyle('hidden'),
             borderBottomStyle: 'solid',
             ':hover': hoverAndFocusStyle,
-            ':focus-visible': {
-              ...hoverAndFocusStyle,
-
-              // from non-focus style minus borderWidth to account for border
-              paddingTop: '16px',
-              paddingLeft: '0',
-              paddingRight: '0',
-
-              ...borderStyle('solid'),
-              ...borderColor(fontColor),
-              outlineOffset: '0px',
-            },
-            ':active': {
-              color: activeColor
-            }
+            ':focus-visible': hoverAndFocusStyle,
+            ':active': hoverAndFocusStyle
           })
         },
         TabBar: {
@@ -84,7 +71,7 @@ export const CustomizedTabs = (props: CustomProps) => {
         TabContent: {
           style: {
             marginTop: theme.sizing.scale1600,
-            backgroundColor: '#F8F8F8',
+            backgroundColor: ettlevColors.grey25,
             ...paddingZero
           }
         }
@@ -97,4 +84,5 @@ export const CustomizedTabs = (props: CustomProps) => {
     />
   )
 }
+
 export default CustomizedTabs

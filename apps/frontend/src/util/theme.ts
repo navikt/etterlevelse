@@ -7,7 +7,7 @@ import '@fontsource/source-sans-pro/600.css'
 import '@fontsource/source-sans-pro/700.css'
 import '@fontsource/source-sans-pro/900.css'
 
- // etterlevelse colors
+// etterlevelse colors
  export const ettlevColors = {
   green800: '#102723',
   green600: '#14483F',
@@ -21,7 +21,7 @@ import '@fontsource/source-sans-pro/900.css'
   gray200: '#A0A0A0',
   grey100: '#DFDFDF',
   grey50: '#F1F1F1',
-  gray25: '#F8F8F8',
+  grey25: '#F8F8F8',
   white: '#FFFFFF',
   black: '#000000',
   success400: '#057967',

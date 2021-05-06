@@ -3,7 +3,7 @@ import {createNewTilbakemelding, CreateTilbakemeldingRequest, tilbakemeldingNewM
 import React, {useEffect, useState} from 'react'
 import {Block} from 'baseui/block'
 import {theme} from '../../util'
-import {HeadingXLarge, LabelSmall, ParagraphLarge, ParagraphSmall} from 'baseui/typography'
+import {HeadingXLarge, LabelSmall, ParagraphLarge, ParagraphMedium, ParagraphSmall} from 'baseui/typography'
 import Button from '../common/Button'
 import {faChevronRight, faChevronUp, faEnvelope, faPlus, faSync, faUser} from '@fortawesome/free-solid-svg-icons'
 import {borderColor, borderRadius, borderWidth, marginAll} from '../common/Style'
@@ -93,16 +93,20 @@ export const Tilbakemeldinger = ({krav}: {krav: Krav}) => {
                     </Block>
 
                     <Block>
+                      {/* meldingsliste */}
                       {focused && <Block display={'flex'} flexDirection={'column'}>
                         {t.meldinger.slice(1).map(m => <ResponseMelding key={m.meldingNr} m={m}/>)}
                       </Block>}
+
+                      {/* knapprad bunn */}
                       <Block display={'flex'} justifyContent={'space-between'} width={'100%'}>
-                        {t.meldinger.length > 1 && <Block>
+                        <Block>
+                          {t.meldinger.length > 1 &&
                           <Button kind={'tertiary'} onClick={() => setFocus(focused ? '' : t.id)}
-                                  icon={focused ? faChevronUp : faChevronRight}>Vis {focused ? 'mindre' : 'mer'}</Button>
-                        </Block>}
+                                  icon={focused ? faChevronUp : faChevronRight}>Vis {focused ? 'mindre' : 'mer'}</Button>}
+                        </Block>
                         {melderOrKraveier &&
-                        <Block><Button kind={ubesvartOgKraveier ? 'secondary' : 'outline'} size={'compact'}>
+                        <Block><Button kind={ubesvartOgKraveier ? 'primary' : 'outline'} size={'compact'}>
                           {ubesvartOgKraveier ? 'Besvar' : 'Ny melding'}
                         </Button></Block>}
                       </Block>
@@ -128,7 +132,7 @@ export const Tilbakemeldinger = ({krav}: {krav: Krav}) => {
 
       <Block marginTop={theme.sizing.scale1000}>
         <HeadingXLarge>Gi en tilbakemelding</HeadingXLarge>
-        <ParagraphSmall>Gi tilbakemelding til kraveier dersom det er uklarheter vedrørende hvordan kravet skal forstås.</ParagraphSmall>
+        <ParagraphMedium maxWidth={'600px'}>Gi tilbakemelding til kraveier dersom det er uklarheter vedrørende hvordan kravet skal forstås.</ParagraphMedium>
 
         <Button kind={'primary'} size='compact' onClick={() => setAddTilbakemelding(true)}>Ny tilbakemelding</Button>
       </Block>
@@ -156,17 +160,16 @@ const ResponseMelding = (props: {m: TilbakemeldingMelding}) => {
            backgroundColor={melder ? 'inherit' : ettlevColors.grey50}
            padding={theme.sizing.scale600}
     >
-      <Block alignSelf={melder ? 'flex-start' : 'flex-end'}
-             display={'flex'} flexDirection={melder ? 'row' : 'row-reverse'}>
+      <Block display={'flex'}>
         <Portrait ident={m.fraIdent}/>
         <Block marginLeft={theme.sizing.scale200} marginRight={theme.sizing.scale200}
-               display={'flex'} flexDirection={'column'} alignItems={melder ? 'flex-start' : 'flex-end'}>
+               display={'flex'} flexDirection={'column'}>
           <LabelSmall><ResourceName id={m.fraIdent}/>{!melder && ' (kraveier)'}</LabelSmall>
           <ParagraphSmall marginTop={0} marginBottom={0}>{moment(m.tid).format('ll')}</ParagraphSmall>
         </Block>
       </Block>
 
-      <Block alignSelf={melder ? 'flex-start' : 'flex-end'}>
+      <Block>
         <ParagraphLarge marginBottom={0} marginTop={theme.sizing.scale400}>{m.innhold}</ParagraphLarge>
       </Block>
     </Block>
