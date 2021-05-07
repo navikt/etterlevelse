@@ -30,7 +30,7 @@ const padding = 212
 const paddingPx = padding + 'px'
 const width = `calc(100% - ${padding * 2}px)`
 const maxInputWidth = '400px'
-const inputMarginBottom = theme.sizing.scale900 
+const inputMarginBottom = theme.sizing.scale900
 
 export const kravModal = () => document.querySelector('#krav-modal')
 
@@ -103,7 +103,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
                 </Button>
                 <Button
                   size='compact'
-                  $style={{ color: '#F8F8F8', ':hover':{backgroundColor:'transparent', textDecoration:'underline 3px'}}}
+                  $style={{ color: '#F8F8F8', ':hover': { backgroundColor: 'transparent', textDecoration: 'underline 3px' } }}
                   kind={'tertiary'}
                   type={'button'}
                   onClick={close}
@@ -150,7 +150,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
                   </Block>
 
                   <Block width='100%' maxWidth={maxInputWidth}>
-                    <MultiOptionField  marginBottom={inputMarginBottom} label='Relevant for' name='relevansFor' listName={ListName.RELEVANS}
+                    <MultiOptionField marginBottom={inputMarginBottom} label='Relevant for' name='relevansFor' listName={ListName.RELEVANS}
                       tooltip={'Velg kategori(er) kravet er relevant for i nedtrekksmenyen. \n'} />
                   </Block>
 
@@ -170,13 +170,15 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
                   </Block>
 
                   <KravVarslingsadresserEdit />
+
+                  <OptionField label='Ansvarlig' name='Ansvarlig' listName={ListName.UNDERAVDELING}
+                    tooltip={'Angi hvilken seksjon/underavdeling som har ansvaret for kravet.'} />
+
                   {/* 
                       <DateField label='Gyldig fra' name='periode.start' tooltip={'Legg til gyldighetsperiode for kravet der det er aktuelt. Hvis ikke skal feltene være blanke.'}/>
                       <DateField label='Gyldig til' name='periode.slutt' tooltip={'Legg til gyldighetsperiode for kravet der det er aktuelt. Hvis ikke skal feltene være blanke.'}/>
 
                       <OptionField label='Avdeling' name='avdeling' listName={ListName.AVDELING} tooltip={'Angi hvilken avdeling som har det overordnede ansvaret for kravet.'} />
-                      <OptionField label='Ansvarlig' name='Ansvarlig' listName={ListName.UNDERAVDELING}
-                                   tooltip={'Angi hvilken seksjon/underavdeling som har ansvaret for kravet.'}/>
 
                       <TextAreaField label='Endringer fra forrige versjon' name='versjonEndringer'
                                      tooltip={'Gi informasjon om hva som er endret siden forrige versjon av kravet.'}/> 

@@ -51,21 +51,21 @@ const MediumInfo = ({ krav }: { krav: KravQL }) => (
 
 const AllInfo = ({ krav }: { krav: KravQL }) => (
   <>
-    <LabelWrapper>
+    {/* <LabelWrapper>
       <LabelAboveContent header title='Utfyllende beskrivelse' markdown={krav.utdypendeBeskrivelse} />
-    </LabelWrapper>
+    </LabelWrapper> */}
 
-    <LabelWrapper>
+    {/* <LabelWrapper>
       <LabelAboveContent header title='Endringer fra forrige versjon' markdown={krav.versjonEndringer} />
-    </LabelWrapper>
+    </LabelWrapper> */}
 
     <LabelWrapper>
       <LabelAboveContent header title='Dokumentasjon' markdown={krav.dokumentasjon} />
     </LabelWrapper>
 
-    <LabelWrapper>
+    {/* <LabelWrapper>
       <LabelAboveContent header title='Rettskilder' markdown={krav.rettskilder} />
-    </LabelWrapper>
+    </LabelWrapper> */}
 
     <LabelWrapper>
       <LabelAboveContent header title='Etiketter'>{krav.tagger.join(', ')}</LabelAboveContent>
@@ -99,8 +99,8 @@ const AllInfo = ({ krav }: { krav: KravQL }) => (
         )} />
       </Label>
       <Label title='Status'>{kravStatus(krav.status)}</Label>
-      {krav.periode?.start && <Label title='Gyldig fom'>{formatDate(krav.periode?.start)}</Label>}
-      {krav.periode?.slutt && <Label title='Gyldig tom'>{formatDate(krav.periode?.slutt)}</Label>}
+      {/* {krav.periode?.start && <Label title='Gyldig fom'>{formatDate(krav.periode?.start)}</Label>}
+      {krav.periode?.slutt && <Label title='Gyldig tom'>{formatDate(krav.periode?.slutt)}</Label>} */}
     </Block>
   </>
 )
