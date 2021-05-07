@@ -74,7 +74,7 @@ const overrides: RecursivePartial<Theme> = {
     buttonTertiaryHover: ettlevColors.green50,
     buttonTertiaryActive: ettlevColors.green100,
     //tag colors
-    tagPrimaryOutlinedBackground: ettlevColors.green800,
+    tagPrimaryOutlinedBackground: ettlevColors.success400,
     tagPrimaryOutlinedFont: ettlevColors.black,
     // Link colors
     linkText: ettlevColors.green600,
