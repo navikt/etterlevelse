@@ -77,7 +77,7 @@ const KriterieList = ({p}: {p: FieldArrayRenderProps}) => {
           )}
         </Droppable>
       </DragDropContext>
-      <Block alignSelf={'flex-end'} marginTop={theme.sizing.scale200}>
+      <Block alignSelf={'flex-end'} marginTop={theme.sizing.scale600} marginBottom={theme.sizing.scale600}>
         <Button
           type='button'
           icon={faPlus}
