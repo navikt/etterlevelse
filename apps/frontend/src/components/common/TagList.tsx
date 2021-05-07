@@ -26,7 +26,10 @@ export const RenderTagList = ({list, onRemove, onClick, wide}: {list: React.Reac
                   },
                   Root: {
                     style: {
-                      borderWidth: '1px',
+                      borderLeftWidth: '1px',
+                      borderRightWidth: '1px',
+                      borderBottomWidth: '1px',
+                      borderTopWidth: '1px',
                       ':hover': {
                         backgroundColor: ettlevColors.green50,
                         borderColor: '#0B483F'
