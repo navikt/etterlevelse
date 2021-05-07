@@ -16,7 +16,7 @@ import { EditBegreper } from './Edit/KravBegreperEdit'
 import { H1, H2, LabelLarge } from 'baseui/typography'
 import CustomizedModal from '../common/CustomizedModal'
 import Button from '../common/Button'
-import { maxPageWidth } from '../../util/theme'
+import { maxPageWidth, theme } from '../../util/theme'
 
 type EditKravProps = {
   krav: KravQL,
@@ -30,7 +30,7 @@ const padding = 212
 const paddingPx = padding + 'px'
 const width = `calc(100% - ${padding * 2}px)`
 const maxInputWidth = '400px'
-const inputMarginBottom = '32px'
+const inputMarginBottom = theme.sizing.scale900 
 
 export const kravModal = () => document.querySelector('#krav-modal')
 
@@ -127,7 +127,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
 
               <Block display='flex' width='100%' justifyContent='center'>
                 <Block width={width}>
-                  <H2>Om Kravet</H2>
+                  <H2 marginBottom={inputMarginBottom}>Om Kravet</H2>
                   <KravSuksesskriterierEdit />
                   <TextAreaField marginBottom='80px' label='Beskrivelse' name='beskrivelse' markdown shortenLinks onImageUpload={onImageUpload(krav.id)}
                     tooltip={'Beskriv selve innholdet i kravet.'} />
@@ -136,7 +136,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
                         tooltip={'Legg til en utfyllende beskrivelse av kravet. Benyttes kun der det er behov for det.'} /> */}
 
                   <Block marginBottom={inputMarginBottom}>
-                    <LabelLarge><b>Dokumentasjon</b></LabelLarge>
+                    <H2>Dokumentasjon</H2>
                   </Block>
 
                   <MultiInputField marginBottom={inputMarginBottom} maxInputWidth={maxInputWidth} linkLabel='Navn på dokumentasjon' name='dokumentasjon' link label='Lenke eller websaknr' tooltip='Lenke til dokumentasjon'
@@ -146,7 +146,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
                   {/* <MultiInputField label='Rettskilder' name='rettskilder' link /> */}
 
                   <Block marginTop='80px' marginBottom={inputMarginBottom}>
-                    <LabelLarge><b>Gruppering og etiketter</b></LabelLarge>
+                    <H2>Gruppering og etiketter</H2>
                   </Block>
 
                   <Block width='100%' maxWidth={maxInputWidth}>
@@ -161,7 +161,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
                   </Block>
 
                   <Block marginBottom={inputMarginBottom}>
-                    <LabelLarge><b>Egenskaper</b></LabelLarge>
+                    <H2>Egenskaper</H2>
                   </Block>
 
                   <Block width='100%' maxWidth={maxInputWidth} marginBottom={inputMarginBottom}>
