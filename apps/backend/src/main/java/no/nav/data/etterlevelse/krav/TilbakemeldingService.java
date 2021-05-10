@@ -87,6 +87,9 @@ public class TilbakemeldingService extends DomainService<Tilbakemelding> {
         var melding = tilbakemelding.finnMelding(meldingNr);
 
         SecurityUtils.assertIsUserOrAdmin(melding.getFraIdent(), "Ikke din melding");
+        if (meldingNr == 1) {
+            return storage.delete(tilbakemelding);
+        }
         tilbakemelding.fjernMelding(melding);
         return storage.save(tilbakemelding);
     }
