@@ -5,7 +5,8 @@ import {Block} from 'baseui/block'
 import {theme} from '../../util'
 import {HeadingXLarge, LabelSmall, ParagraphMedium, ParagraphSmall} from 'baseui/typography'
 import Button from '../common/Button'
-import {faChevronRight, faChevronUp, faEnvelope, faPlus, faSync, faUser} from '@fortawesome/free-solid-svg-icons'
+import {faChevronRight, faChevronUp, faEnvelope, faPencilAlt, faPlus, faSync, faUser} from '@fortawesome/free-solid-svg-icons'
+import {faTrashAlt} from '@fortawesome/free-regular-svg-icons'
 import {borderColor, borderWidth} from '../common/Style'
 import {Spinner} from '../common/Spinner'
 import moment from 'moment'
@@ -23,10 +24,10 @@ import {useHistory} from 'react-router-dom'
 import {useQueryParam, useRefs} from '../../util/hooks'
 import {Textarea} from 'baseui/textarea'
 import {ettlevColors} from '../../util/theme'
-import {ResourceName} from '../common/Resource'
 import {mailboxPoppingIcon} from '../Images'
 import {InfoBlock} from '../common/InfoBlock'
 import {Portrait} from '../common/Portrait'
+import {PersonName} from '../common/PersonName'
 
 const DEFAULT_COUNT_SIZE = 5
 
@@ -76,7 +77,7 @@ export const Tilbakemeldinger = ({krav}: {krav: Krav}) => {
                     <Block display={'flex'} justifyContent={'space-between'}>
 
                       <Block>
-                        <LabelSmall><ResourceName id={t.melderIdent}/></LabelSmall>
+                        <LabelSmall><PersonName ident={t.melderIdent}/></LabelSmall>
                         <ParagraphSmall marginTop={0} marginBottom={0}>{moment(t.meldinger[0].tid).format('ll')}: {typeText(t.type)}</ParagraphSmall>
                       </Block>
 
@@ -89,13 +90,17 @@ export const Tilbakemeldinger = ({krav}: {krav: Krav}) => {
                       </Block>
                     </Block>
                     <Block>
-                      <ParagraphMedium>{t.meldinger[0].innhold}</ParagraphMedium>
+                      <ParagraphMedium marginBottom={0}>{t.meldinger[0].innhold}</ParagraphMedium>
+                    </Block>
+
+                    <Block marginBottom={theme.sizing.scale400}>
+                      {focused && <MeldingKnapper melding={t.meldinger[0]} tilbakemeldingId={t.id}/>}
                     </Block>
 
                     <Block>
                       {/* meldingsliste */}
                       {focused && <Block display={'flex'} flexDirection={'column'}>
-                        {t.meldinger.slice(1).map(m => <ResponseMelding key={m.meldingNr} m={m}/>)}
+                        {t.meldinger.slice(1).map(m => <ResponseMelding key={m.meldingNr} m={m} tilbakemeldingId={t.id}/>)}
                       </Block>}
 
                       {/* knapprad bunn */}
@@ -154,7 +159,7 @@ export const Tilbakemeldinger = ({krav}: {krav: Krav}) => {
   )
 }
 
-const ResponseMelding = (props: {m: TilbakemeldingMelding}) => {
+const ResponseMelding = (props: {m: TilbakemeldingMelding, tilbakemeldingId: string}) => {
   const {m} = props
   const melder = m.rolle === TilbakemeldingRolle.MELDER
   return (
@@ -167,7 +172,7 @@ const ResponseMelding = (props: {m: TilbakemeldingMelding}) => {
         <Portrait ident={m.fraIdent}/>
         <Block marginLeft={theme.sizing.scale200} marginRight={theme.sizing.scale200}
                display={'flex'} flexDirection={'column'}>
-          <LabelSmall><ResourceName id={m.fraIdent}/>{!melder && ' (kraveier)'}</LabelSmall>
+          <LabelSmall><PersonName ident={m.fraIdent}/>{!melder && ' (kraveier)'}</LabelSmall>
           <ParagraphSmall marginTop={0} marginBottom={0}>{moment(m.tid).format('ll')}</ParagraphSmall>
         </Block>
       </Block>
@@ -175,6 +180,7 @@ const ResponseMelding = (props: {m: TilbakemeldingMelding}) => {
       <Block>
         <ParagraphMedium marginBottom={0} marginTop={theme.sizing.scale400}>{m.innhold}</ParagraphMedium>
       </Block>
+      <MeldingKnapper melding={m} tilbakemeldingId={props.tilbakemeldingId}/>
     </Block>
   )
 }
@@ -279,6 +285,35 @@ const TilbakemeldingSvarModal = ({tilbakemelding, close}: {tilbakemelding?: Tilb
   )
 }
 
+const MeldingKnapper = (props: {melding: TilbakemeldingMelding, tilbakemeldingId: string}) => {
+  const {melding, tilbakemeldingId} = props
+  const [deleteModal, setDeleteModal] = useState(false)
+  if (!user.isAdmin() && melding.fraIdent !== user.getIdent()) return null
+
+  return (
+    <>
+      <Block display={'flex'} marginTop={theme.sizing.scale400}>
+        <Button kind={'tertiary'} size={'mini'} icon={faPencilAlt}>Rediger</Button>
+        <Button kind={'tertiary'} size={'mini'} icon={faTrashAlt} marginLeft onClick={() => setDeleteModal(true)}>Slett</Button>
+      </Block>
+
+      {deleteModal && <Modal isOpen onClose={() => setDeleteModal(false)} unstable_ModalBackdropScroll>
+        <ModalHeader>Er du sikker på at du vil slette meldingen?</ModalHeader>
+        <ModalBody>
+          {melding.meldingNr === 1 && <ParagraphMedium>Hele meldingstråden vil bli slettet.</ParagraphMedium>}
+          <ParagraphSmall>{moment(melding.tid).format('ll')} <PersonName ident={melding.fraIdent}/></ParagraphSmall>
+          <ParagraphMedium>{melding.innhold}</ParagraphMedium>
+        </ModalBody>
+        <ModalFooter>
+          <Button kind={'secondary'} size={'compact'} onClick={() => setDeleteModal(false)}>Avbryt</Button>
+          <Button kind={'primary'} size={'compact'} marginLeft>Slett</Button>
+        </ModalFooter>
+      </Modal>}
+
+    </>
+  )
+}
+
 const TilbakemeldingSvar = ({tilbakemelding, close}: {tilbakemelding: Tilbakemelding, close: (t: Tilbakemelding) => void}) => {
   const melderInfo = tilbakeMeldingStatus(tilbakemelding)
   const [response, setResponse] = useState('')
@@ -301,21 +336,9 @@ const TilbakemeldingSvar = ({tilbakemelding, close}: {tilbakemelding: Tilbakemel
 
   return (
     <Block display='flex' alignItems='flex-end'>
-      <Textarea overrides={{
-        InputContainer: {
-          style: {
-            backgroundColor: theme.colors.inputFillActive
-          }
-        },
-        Input: {
-          style: {
-            backgroundColor: theme.colors.inputFillActive
-          }
-        }
-      }} onChange={e => setResponse((e.target as HTMLInputElement).value)} value={response}/>
+      <Textarea onChange={e => setResponse((e.target as HTMLInputElement).value)} value={response}/>
 
-      <Block display='flex' justifyContent='space-between' flexDirection='column'
-             marginLeft={theme.sizing.scale400}>
+      <Block display='flex' justifyContent='space-between' flexDirection='column' marginLeft={theme.sizing.scale400}>
 
         {user.isKraveier() && !loading && melderInfo.melder &&
         <Block marginBottom={theme.sizing.scale400} display='flex' flexDirection='column'>
