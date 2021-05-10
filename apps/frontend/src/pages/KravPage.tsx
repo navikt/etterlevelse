@@ -220,7 +220,7 @@ const Etterlevelser = ({loading, etterlevelser: allEtterlevelser}: {loading: boo
       <HeadingXLarge maxWidth={'500px'}>Her kan du se hvordan andre team har dokumentert etterlevelse</HeadingXLarge>
       {loading && <Spinner size={theme.sizing.scale800}/>}
       {!loading && !etterlevelser.length &&
-      <InfoBlock icon={sadFolderIcon} alt={'Trist mappe ikon'} text={'Det er ikke dokumentert etterlevelse på dette kravet'} color={ettlevColors.green800}/>}
+      <InfoBlock icon={sadFolderIcon} alt={'Trist mappe ikon'} text={'Det er ikke dokumentert etterlevelse på dette kravet'} color={ettlevColors.red50}/>}
 
       <CustomizedAccordion>
         {avdelinger.map(a => <CustomizedPanel

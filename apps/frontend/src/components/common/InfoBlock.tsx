@@ -1,7 +1,7 @@
 import {ettlevColors, theme} from '../../util/theme'
 import {Block} from 'baseui/block'
 import {IconInCircle} from './Icon'
-import {ParagraphXSmall} from 'baseui/typography'
+import {ParagraphSmall} from 'baseui/typography'
 import React from 'react'
 
 
@@ -17,7 +17,7 @@ export const InfoBlock = (props: {icon: string, alt: string, text: string, color
   }}>
     <Block display={'flex'} flexDirection={'column'} alignItems={'center'} padding={theme.sizing.scale700}>
       <IconInCircle icon={props.icon} alt={props.alt} backgroundColor={props.color} size={'64px'}/>
-      <ParagraphXSmall marginBottom={0}>{props.text}</ParagraphXSmall>
+      <ParagraphSmall marginBottom={0}>{props.text}</ParagraphSmall>
     </Block>
   </Block>
 )
