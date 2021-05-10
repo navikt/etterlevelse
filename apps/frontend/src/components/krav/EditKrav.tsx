@@ -171,10 +171,12 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
 
                   <KravVarslingsadresserEdit />
 
-                  <OptionField label='Ansvarlig' name='Ansvarlig' listName={ListName.UNDERAVDELING}
-                    tooltip={'Angi hvilken seksjon/underavdeling som har ansvaret for kravet.'} />
 
                   {/* 
+
+                                    <OptionField label='Ansvarlig' name='Ansvarlig' listName={ListName.UNDERAVDELING}
+                    tooltip={'Angi hvilken seksjon/underavdeling som har ansvaret for kravet.'} />
+
                       <DateField label='Gyldig fra' name='periode.start' tooltip={'Legg til gyldighetsperiode for kravet der det er aktuelt. Hvis ikke skal feltene være blanke.'}/>
                       <DateField label='Gyldig til' name='periode.slutt' tooltip={'Legg til gyldighetsperiode for kravet der det er aktuelt. Hvis ikke skal feltene være blanke.'}/>
 
