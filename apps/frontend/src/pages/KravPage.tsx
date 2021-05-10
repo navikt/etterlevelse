@@ -61,12 +61,12 @@ export const KravPage = () => {
     skip: (!params.id || params.id === 'ny') && !params.kravNummer
   })
 
-  const locState = useLocationState<LocationState>()
+  const {state, history, changeState} = useLocationState<LocationState>()
   const tilbakemeldingId = useQueryParam('tilbakemeldingId')
-  const [tab, setTab] = useState<Section>(!!tilbakemeldingId ? 'tilbakemeldinger' : locState.state?.tab || 'krav')
+  const [tab, setTab] = useState<Section>(!!tilbakemeldingId ? 'tilbakemeldinger' : state?.tab || 'krav')
 
   useEffect(() => {
-    if (tab !== locState.state?.tab) locState.changeState({tab})
+    if (tab !== state?.tab) changeState({tab})
   }, [tab])
 
   useEffect(() => {
@@ -180,7 +180,7 @@ export const KravPage = () => {
                 <ViewKrav krav={krav}/>
               </CustomizedTab>
               <CustomizedTab title={'Eksempler på etterlevelse'} key={'etterlevelser'}>
-                <Etterlevelser loading={etterlevelserLoading} etterlevelser={krav.etterlevelser} avdelingOpen={locState.state?.avdelingOpen}/>
+                <Etterlevelser loading={etterlevelserLoading} etterlevelser={krav.etterlevelser}/>
               </CustomizedTab>
               <CustomizedTab title={'Tilbakemeldinger'} key={'tilbakemeldinger'}>
                 <Tilbakemeldinger krav={krav}/>
@@ -199,7 +199,7 @@ export const KravPage = () => {
       {krav && <EditKrav isOpen={edit} setIsOpen={setEdit} krav={krav} formRef={formRef} close={k => {
         if (k) {
           if (k.id !== krav.id) {
-            locState.history.push(`/krav/${k.kravNummer}/${k.kravVersjon}`)
+            history.push(`/krav/${k.kravNummer}/${k.kravVersjon}`)
           } else {
             reloadKrav()
           }
@@ -213,7 +213,7 @@ export const KravPage = () => {
   )
 }
 
-const Etterlevelser = ({loading, etterlevelser: allEtterlevelser, avdelingOpen}: {loading: boolean, etterlevelser?: EtterlevelseQL[], avdelingOpen?: string}) => {
+const Etterlevelser = ({loading, etterlevelser: allEtterlevelser}: {loading: boolean, etterlevelser?: EtterlevelseQL[]}) => {
   const etterlevelser = (allEtterlevelser || [])
   .filter(e => e.status === EtterlevelseStatus.FERDIG)
   .sort((a, b) => a.behandling.navn.localeCompare(b.behandling.navn))
@@ -224,7 +224,7 @@ const Etterlevelser = ({loading, etterlevelser: allEtterlevelser, avdelingOpen}:
     a => a.code
   )
   const [hover, setHover] = useState('')
-  const state = useLocationState<LocationState>()
+  const {state, changeState} = useLocationState<LocationState>()
 
   return (
     <Block>
@@ -233,8 +233,8 @@ const Etterlevelser = ({loading, etterlevelser: allEtterlevelser, avdelingOpen}:
       {!loading && !etterlevelser.length &&
       <InfoBlock icon={sadFolderIcon} alt={'Trist mappe ikon'} text={'Det er ikke dokumentert etterlevelse på dette kravet'} color={ettlevColors.red50}/>}
 
-      <CustomizedAccordion initialState={{expanded: avdelingOpen ? [avdelingOpen] : []}}
-                           onChange={(k) => state.changeState({avdelingOpen: k.expanded.length ? k.expanded[0] as string : undefined})}>
+      <CustomizedAccordion initialState={{expanded: state?.avdelingOpen ? [state?.avdelingOpen] : []}}
+                           onChange={(k) => changeState({avdelingOpen: k.expanded.length ? k.expanded[0] as string : undefined})}>
         {avdelinger.map(a => <CustomizedPanel
           key={a.code}
           title={a.shortName}>
