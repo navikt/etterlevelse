@@ -3,7 +3,7 @@ import {H1, HeadingXLarge, LabelLarge, LabelSmall, Paragraph2, ParagraphSmall} f
 import {useHistory, useParams} from 'react-router-dom'
 import {deleteKrav, KravIdParams, mapToFormVal} from '../api/KravApi'
 import React, {useEffect, useRef, useState} from 'react'
-import {EtterlevelseQL, EtterlevelseStatus, ExternalCode, Krav, KravQL, KravStatus} from '../constants'
+import {EtterlevelseQL, EtterlevelseStatus, ExternalCode, Krav, KravId, KravQL, KravStatus} from '../constants'
 import Button from '../components/common/Button'
 import {ViewKrav} from '../components/krav/ViewKrav'
 import {EditKrav} from '../components/krav/EditKrav'
@@ -52,6 +52,7 @@ export const kravStatus = (status: KravStatus) => {
 export const KravPage = () => {
   const params = useParams<KravIdParams>()
   const [krav, setKrav] = useState<KravQL | undefined>()
+  const [kravId, setKravId] = useState<KravId>()
   const {loading: kravLoading, data: kravQuery, refetch: reloadKrav} = useQuery<{kravById: KravQL}, KravIdParams>(query, {
     variables: params,
     skip: (!params.id || params.id === 'ny') && !params.kravNummer
@@ -80,6 +81,7 @@ export const KravPage = () => {
 
   const newVersion = () => {
     if (!krav) return
+    setKravId({id: krav.id, kravVersjon: krav.kravVersjon})
     setKrav({...krav, id: '', kravVersjon: krav.kravVersjon + 1, nyKravVersjon: true})
     setEdit(true)
   }
@@ -192,6 +194,8 @@ export const KravPage = () => {
           } else {
             reloadKrav()
           }
+        } else if(krav.nyKravVersjon){
+          setKrav({...krav, id: kravId!.id, kravVersjon: kravId!.kravVersjon})
         }
         setEdit(false)
       }}/>}
