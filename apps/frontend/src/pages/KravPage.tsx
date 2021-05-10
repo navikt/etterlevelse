@@ -1,6 +1,6 @@
 import {Block} from 'baseui/block'
 import {H1, HeadingXLarge, LabelLarge, LabelSmall, Paragraph2, ParagraphSmall} from 'baseui/typography'
-import {useHistory, useParams} from 'react-router-dom'
+import {useParams} from 'react-router-dom'
 import {deleteKrav, KravIdParams, mapToFormVal} from '../api/KravApi'
 import React, {useEffect, useRef, useState} from 'react'
 import {EtterlevelseQL, EtterlevelseStatus, ExternalCode, Krav, KravId, KravQL, KravStatus} from '../constants'
@@ -26,7 +26,7 @@ import * as _ from 'lodash'
 import moment from 'moment'
 import {faChevronRight} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {useQueryParam} from '../util/hooks'
+import {useLocationState, useQueryParam} from '../util/hooks'
 import {InfoBlock} from '../components/common/InfoBlock'
 import {gql} from '@apollo/client/core'
 
@@ -49,6 +49,9 @@ export const kravStatus = (status: KravStatus) => {
   }
 }
 
+type Section = 'krav' | 'etterlevelser' | 'tilbakemeldinger'
+type LocationState = {tab: Section, avdelingOpen?: string}
+
 export const KravPage = () => {
   const params = useParams<KravIdParams>()
   const [krav, setKrav] = useState<KravQL | undefined>()
@@ -57,9 +60,14 @@ export const KravPage = () => {
     variables: params,
     skip: (!params.id || params.id === 'ny') && !params.kravNummer
   })
-  const tilbakemeldingId = useQueryParam('tilbakemeldingId')
-  const [tab, setTab] = useState<React.Key>(!!tilbakemeldingId ? 'tilbakemeldinger' : 'krav')
 
+  const locState = useLocationState<LocationState>()
+  const tilbakemeldingId = useQueryParam('tilbakemeldingId')
+  const [tab, setTab] = useState<Section>(!!tilbakemeldingId ? 'tilbakemeldinger' : locState.state?.tab || 'krav')
+
+  useEffect(() => {
+    if (tab !== locState.state?.tab) locState.changeState({tab})
+  }, [tab])
 
   useEffect(() => {
     if (kravQuery?.kravById) setKrav(kravQuery.kravById)
@@ -76,7 +84,6 @@ export const KravPage = () => {
   const etterlevelserLoading = kravLoading
 
   const [edit, setEdit] = useState(krav && !krav.id)
-  const history = useHistory()
   const formRef = useRef<FormikProps<any>>()
 
   const newVersion = () => {
@@ -112,19 +119,21 @@ export const KravPage = () => {
               <Block display='flex' alignItems='center' width='100%'>
                 <Block flex='1' display='flex' justifyContent='flex-start'>
                   <RouteLink href={'/krav'} hideUnderline>
-                    <Button startEnhancer={<img alt={'Chevron left'} src={chevronLeft}/>} size='compact' kind='tertiary' $style={{color: '#F8F8F8', ':hover':{backgroundColor:'transparent', textDecoration:'underline 3px'}}}> Tilbake</Button>
+                    <Button startEnhancer={<img alt={'Chevron left'} src={chevronLeft}/>} size='compact' kind='tertiary'
+                            $style={{color: '#F8F8F8', ':hover': {backgroundColor: 'transparent', textDecoration: 'underline 3px'}}}> Tilbake</Button>
                   </RouteLink>
                 </Block>
                 <Block flex='1' display={['none', 'none', 'none', 'none', 'flex', 'flex']} justifyContent='flex-end'>
                   {krav?.id && user.isKraveier() &&
-                  <Button startEnhancer={<img alt='add' src={plusIcon}/>} onClick={newVersion} marginLeft size='compact' kind='tertiary' $style={{color: '#F8F8F8', ':hover':{backgroundColor:'transparent', textDecoration:'underline 3px'}}}>Ny
+                  <Button startEnhancer={<img alt='add' src={plusIcon}/>} onClick={newVersion} marginLeft size='compact' kind='tertiary'
+                          $style={{color: '#F8F8F8', ':hover': {backgroundColor: 'transparent', textDecoration: 'underline 3px'}}}>Ny
                     versjon</Button>}
                   {krav?.id && user.isKraveier() && <DeleteItem fun={() => deleteKrav(krav.id)} redirect={'/krav'}/>}
                   {((krav?.id && user.isKraveier())) &&
                   <Button
                     startEnhancer={<img src={editIcon} alt='edit'/>}
                     size='compact'
-                    $style={{color: '#F8F8F8', ':hover':{backgroundColor:'transparent', textDecoration:'underline 3px'}}}
+                    $style={{color: '#F8F8F8', ':hover': {backgroundColor: 'transparent', textDecoration: 'underline 3px'}}}
                     kind={'tertiary'}
                     onClick={() => setEdit(!edit)} marginLeft
                   >
@@ -166,12 +175,12 @@ export const KravPage = () => {
                }}>
           <Block maxWidth={pageWidth} width='100%'>
             <CustomizedTabs fontColor={ettlevColors.green600} activeColor={ettlevColors.green800} tabBackground={ettlevColors.green100}
-                            activeKey={tab} onChange={k => setTab(k.activeKey)}>
+                            activeKey={tab} onChange={k => setTab(k.activeKey as Section)}>
               <CustomizedTab title={'Om kravet'} key={'krav'}>
                 <ViewKrav krav={krav}/>
               </CustomizedTab>
               <CustomizedTab title={'Eksempler på etterlevelse'} key={'etterlevelser'}>
-                <Etterlevelser loading={etterlevelserLoading} etterlevelser={krav.etterlevelser}/>
+                <Etterlevelser loading={etterlevelserLoading} etterlevelser={krav.etterlevelser} avdelingOpen={locState.state?.avdelingOpen}/>
               </CustomizedTab>
               <CustomizedTab title={'Tilbakemeldinger'} key={'tilbakemeldinger'}>
                 <Tilbakemeldinger krav={krav}/>
@@ -190,11 +199,11 @@ export const KravPage = () => {
       {krav && <EditKrav isOpen={edit} setIsOpen={setEdit} krav={krav} formRef={formRef} close={k => {
         if (k) {
           if (k.id !== krav.id) {
-            history.push(`/krav/${k.kravNummer}/${k.kravVersjon}`)
+            locState.history.push(`/krav/${k.kravNummer}/${k.kravVersjon}`)
           } else {
             reloadKrav()
           }
-        } else if(krav.nyKravVersjon){
+        } else if (krav.nyKravVersjon) {
           setKrav({...krav, id: kravId!.id, kravVersjon: kravId!.kravVersjon})
         }
         setEdit(false)
@@ -203,7 +212,8 @@ export const KravPage = () => {
     </Block>
   )
 }
-const Etterlevelser = ({loading, etterlevelser: allEtterlevelser}: {loading: boolean, etterlevelser?: EtterlevelseQL[]}) => {
+
+const Etterlevelser = ({loading, etterlevelser: allEtterlevelser, avdelingOpen}: {loading: boolean, etterlevelser?: EtterlevelseQL[], avdelingOpen?: string}) => {
   const etterlevelser = (allEtterlevelser || [])
   .filter(e => e.status === EtterlevelseStatus.FERDIG)
   .sort((a, b) => a.behandling.navn.localeCompare(b.behandling.navn))
@@ -214,6 +224,7 @@ const Etterlevelser = ({loading, etterlevelser: allEtterlevelser}: {loading: boo
     a => a.code
   )
   const [hover, setHover] = useState('')
+  const state = useLocationState<LocationState>()
 
   return (
     <Block>
@@ -222,7 +233,8 @@ const Etterlevelser = ({loading, etterlevelser: allEtterlevelser}: {loading: boo
       {!loading && !etterlevelser.length &&
       <InfoBlock icon={sadFolderIcon} alt={'Trist mappe ikon'} text={'Det er ikke dokumentert etterlevelse på dette kravet'} color={ettlevColors.red50}/>}
 
-      <CustomizedAccordion>
+      <CustomizedAccordion initialState={{expanded: avdelingOpen ? [avdelingOpen] : []}}
+                           onChange={(k) => state.changeState({avdelingOpen: k.expanded.length ? k.expanded[0] as string : undefined})}>
         {avdelinger.map(a => <CustomizedPanel
           key={a.code}
           title={a.shortName}>
