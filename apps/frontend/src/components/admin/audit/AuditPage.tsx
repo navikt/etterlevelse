@@ -51,7 +51,7 @@ export const AuditPage = () => {
   useEffect(() => lookupVersion(idSearch), [idSearch])
 
   return (
-    <Block  width='100%'>
+    <Block  width='calc(100% - 80px)' paddingLeft='40px' paddingRight='40px'>
       <H4>{intl.audit}</H4>
       <Block marginBottom="1rem">
         <AuditLabel label={intl.searchId}>

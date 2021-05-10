@@ -52,7 +52,7 @@ export const MailLogPage = () => {
     }
   }, [limit, log.totalElements])
 
-  return <Block width='100%'>
+  return <Block width='calc(100% - 80px)' paddingLeft='40px' paddingRight='40px'>
     <H4>{intl.mailLog}</H4>
     {log?.content.map((l, i) => {
       let html = l.body

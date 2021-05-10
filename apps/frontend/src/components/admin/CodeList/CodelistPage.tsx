@@ -63,7 +63,7 @@ const CodeListPage = () => {
     return <StyledSpinnerNext size={theme.sizing.scale2400}/>
   }
 
-  return <Block width='100%'>
+  return <Block width='calc(100% - 80px)' paddingLeft='40px' paddingRight='40px'>
     <H4>Administrering av kodeverk</H4>
     {loading ? <StyledSpinnerNext/> : (
       <Block display='flex' justifyContent='space-between' width='100%'>

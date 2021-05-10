@@ -38,7 +38,7 @@ export const SettingsPage = () => {
   }, [])
 
   return (
-    <Block>
+    <Block width='calc(100% - 80px)' paddingLeft='40px' paddingRight='40px'>
       <H4>{intl.settings}</H4>
       {loading ? <StyledSpinnerNext size={40}/> :
         error || !settings ? {error} :
