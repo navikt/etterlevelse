@@ -67,9 +67,11 @@ const AllInfo = ({ krav }: { krav: KravQL }) => (
       <LabelAboveContent header title='Rettskilder' markdown={krav.rettskilder} />
     </LabelWrapper> */}
 
-    <LabelWrapper>
-      <LabelAboveContent header title='Etiketter'>{krav.tagger.join(', ')}</LabelAboveContent>
-    </LabelWrapper>
+    {user.isKraveier() && (
+      <LabelWrapper>
+        <LabelAboveContent header title='Etiketter'>{krav.tagger.join(', ')}</LabelAboveContent>
+      </LabelWrapper>
+    )}
 
     <LabelWrapper>
       <LabelAboveContent header title='Relevante implementasjoner' markdown={krav.implementasjoner} />
