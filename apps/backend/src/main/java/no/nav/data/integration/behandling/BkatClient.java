@@ -45,28 +45,28 @@ public class BkatClient implements BegrepService {
 
         this.processSearchCache = MetricUtils.register("bkatProcessSearchCache",
                 Caffeine.newBuilder().recordStats()
-                        .expireAfterAccess(Duration.ofMinutes(2))
+                        .expireAfterWrite(Duration.ofMinutes(2))
                         .maximumSize(100).build(this::search));
         this.processCache = MetricUtils.register("bkatProcessCache",
                 Caffeine.newBuilder().recordStats()
-                        .expireAfterAccess(Duration.ofMinutes(2))
+                        .expireAfterWrite(Duration.ofMinutes(2))
                         .maximumSize(300).build(this::getProcess0));
         this.processPageCache = MetricUtils.register("bkatProcessPageCache",
                 Caffeine.newBuilder().recordStats()
-                        .expireAfterAccess(Duration.ofMinutes(2))
+                        .expireAfterWrite(Duration.ofMinutes(2))
                         .maximumSize(20).build());
         this.processTeamCache = MetricUtils.register("bkatProcessTeamCache",
                 Caffeine.newBuilder().recordStats()
-                        .expireAfterAccess(Duration.ofMinutes(2))
+                        .expireAfterWrite(Duration.ofMinutes(2))
                         .maximumSize(100).build(this::findProcessesForTeam));
 
         this.termCache = MetricUtils.register("bkatTermCache",
                 Caffeine.newBuilder().recordStats()
-                        .expireAfterAccess(Duration.ofMinutes(10))
+                        .expireAfterWrite(Duration.ofMinutes(10))
                         .maximumSize(100).build());
         this.termSearchCache = MetricUtils.register("bkatTermSearchCache",
                 Caffeine.newBuilder().recordStats()
-                        .expireAfterAccess(Duration.ofMinutes(10))
+                        .expireAfterWrite(Duration.ofMinutes(10))
                         .maximumSize(100).build());
     }
 

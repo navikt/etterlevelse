@@ -82,15 +82,15 @@ public class SlackClient {
 
         this.userCache = MetricUtils.register("slackUserCache",
                 Caffeine.newBuilder().recordStats()
-                        .expireAfterAccess(Duration.ofMinutes(60))
+                        .expireAfterWrite(Duration.ofMinutes(60))
                         .maximumSize(1000).build());
         this.conversationCache = MetricUtils.register("slackConversationCache",
                 Caffeine.newBuilder().recordStats()
-                        .expireAfterAccess(Duration.ofMinutes(60))
+                        .expireAfterWrite(Duration.ofMinutes(60))
                         .maximumSize(1000).build(this::doOpenConversation));
         this.channelCache = MetricUtils.register("slackChannelCache",
                 Caffeine.newBuilder().recordStats()
-                        .expireAfterAccess(Duration.ofMinutes(30))
+                        .expireAfterWrite(Duration.ofMinutes(30))
                         .maximumSize(1).build(k -> toMap(getChannels(), Channel::getId)));
     }
 
