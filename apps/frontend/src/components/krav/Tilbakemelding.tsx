@@ -21,7 +21,7 @@ import {Card} from 'baseui/card'
 import {user} from '../../services/User'
 import {Modal, ModalBody, ModalFooter, ModalHeader} from 'baseui/modal'
 import {Field, FieldProps, Form, Formik} from 'formik'
-import {InputField, OptionField, TextAreaField} from '../common/Inputs'
+import {OptionField, TextAreaField} from '../common/Inputs'
 import * as yup from 'yup'
 import {Notification} from 'baseui/notification'
 import {faSlackHash} from '@fortawesome/free-brands-svg-icons'
@@ -35,6 +35,7 @@ import {InfoBlock} from '../common/InfoBlock'
 import {Portrait} from '../common/Portrait'
 import {PersonName} from '../common/PersonName'
 import CustomizedTextarea from '../common/CustomizedTextarea'
+import * as _ from 'lodash'
 
 const DEFAULT_COUNT_SIZE = 5
 
@@ -97,12 +98,14 @@ export const Tilbakemeldinger = ({krav}: {krav: Krav}) => {
                       </Block>
                     </Block>
 
-                    <Block display={'flex'} justifyContent={'space-between'} marginBottom={theme.sizing.scale400}>
-                      <ParagraphMedium marginBottom={0}>{t.meldinger[0].innhold}</ParagraphMedium>
-                      <MeldingKnapper melding={t.meldinger[0]} tilbakemeldingId={t.id} oppdater={replace}/>
-                    </Block>
+                    <ParagraphMedium marginBottom={0} marginRight={theme.sizing.scale600} >
+                      {focused ? t.meldinger[0].innhold : _.truncate(t.meldinger[0].innhold, {length: 180, separator: /[.,] +/})}
+                    </ParagraphMedium>
 
-                    <Block>
+                    {focused && t.meldinger.length === 1 &&
+                    <MeldingKnapper melding={t.meldinger[0]} tilbakemeldingId={t.id} oppdater={replace}/>}
+
+                    <Block marginTop={theme.sizing.scale800}>
                       {/* meldingsliste */}
                       {focused && <Block display={'flex'} flexDirection={'column'}>
                         {t.meldinger.slice(1).map(m => <ResponseMelding key={m.meldingNr} m={m} tilbakemeldingId={t.id} oppdater={replace}/>)}
@@ -111,17 +114,19 @@ export const Tilbakemeldinger = ({krav}: {krav: Krav}) => {
                       {/* knapprad bunn */}
                       <Block display={'flex'} justifyContent={'space-between'} width={'100%'}>
                         <Block>
-                          {t.meldinger.length > 1 &&
                           <Button kind={'tertiary'} onClick={() => setFocus(focused ? '' : t.id)}
-                                  icon={focused ? faChevronUp : faChevronRight}>Vis {focused ? 'mindre' : 'mer'}</Button>}
+                                  icon={focused ? faChevronUp : faChevronRight}>Vis {focused ? 'mindre' : 'mer'}</Button>
                         </Block>
-                        {melderOrKraveier && user.canWrite() &&
-                        <Block><Button kind={ubesvartOgKraveier ? 'primary' : 'outline'} size={'compact'} onClick={() => {
-                          setFocusNr(t.id)
-                          setTilbakemelding(t)
-                        }}>
-                          {ubesvartOgKraveier ? 'Besvar' : 'Ny melding'}
-                        </Button></Block>}
+
+                        {melderOrKraveier && user.canWrite() && focused &&
+                        <Block>
+                          <Button kind={ubesvartOgKraveier ? 'primary' : 'outline'} size={'compact'} onClick={() => {
+                            setFocusNr(t.id)
+                            setTilbakemelding(t)
+                          }}>
+                            {ubesvartOgKraveier ? 'Besvar' : 'Ny melding'}
+                          </Button>
+                        </Block>}
                       </Block>
                     </Block>
 
@@ -184,10 +189,8 @@ const ResponseMelding = (props: {m: TilbakemeldingMelding, tilbakemeldingId: str
         </Block>
       </Block>
 
-      <Block display={'flex'} width={'100%'} justifyContent={'space-between'}>
-        <ParagraphMedium marginBottom={0} marginTop={theme.sizing.scale400}>{m.innhold}</ParagraphMedium>
-        <MeldingKnapper melding={m} tilbakemeldingId={tilbakemeldingId} oppdater={oppdater}/>
-      </Block>
+      <ParagraphMedium marginBottom={0} marginTop={theme.sizing.scale400} marginRight={theme.sizing.scale600}>{m.innhold}</ParagraphMedium>
+      <MeldingKnapper melding={m} tilbakemeldingId={tilbakemeldingId} oppdater={oppdater}/>
     </Block>
   )
 }
@@ -220,7 +223,6 @@ const NyTilbakemeldingModal = ({open, close, krav}: {open?: boolean, close: (add
             </ModalHeader>
             <ModalBody>
               <Block>
-                <InputField label='Tittel' name='tittel'/>
                 <TextAreaField label='Melding' name='foersteMelding'/>
                 <OptionField label='Type' name='type' clearable={false} options={Object.values(TilbakemeldingType).map(o => ({id: o, label: typeText(o)}))}/>
                 <Field name='varslingsadresse.adresse'>
@@ -300,13 +302,9 @@ const MeldingKnapper = (props: {melding: TilbakemeldingMelding, tilbakemeldingId
 
   return (
     <>
-      <Block alignSelf={'flex-end'} display={'flex'} flexDirection={'column'} marginTop={theme.sizing.scale400}>
-        <Block>
-          <Button kind={'tertiary'} size={'mini'} icon={faTrashAlt} marginLeft onClick={() => setDeleteModal(true)}>Slett</Button>
-        </Block>
-        <Block>
-          <Button kind={'tertiary'} size={'mini'} icon={faPencilAlt}>Rediger</Button>
-        </Block>
+      <Block marginTop={theme.sizing.scale400}>
+        <Button kind={'tertiary'} size={'mini'} icon={faPencilAlt}>Rediger</Button>
+        <Button kind={'tertiary'} size={'mini'} icon={faTrashAlt} marginLeft onClick={() => setDeleteModal(true)}>Slett</Button>
       </Block>
 
       {deleteModal && <Modal isOpen onClose={() => setDeleteModal(false)} unstable_ModalBackdropScroll>
@@ -391,7 +389,6 @@ const typeText = (type: TilbakemeldingType) => {
 const newTilbakemelding = (krav: Krav): Partial<CreateTilbakemeldingRequest> => ({
   kravNummer: krav.kravNummer,
   kravVersjon: krav.kravVersjon,
-  tittel: '',
   foersteMelding: '',
   type: TilbakemeldingType.UKLAR,
   varslingsadresse: undefined
@@ -407,7 +404,6 @@ const varslingsadresse: yup.SchemaOf<Varslingsadresse> = yup.object({
 const createTilbakemeldingSchema: yup.SchemaOf<CreateTilbakemeldingRequest> = yup.object({
   kravNummer: yup.number().required(required),
   kravVersjon: yup.number().required(required),
-  tittel: yup.string().required(required),
   foersteMelding: yup.string().required(required),
   type: yup.mixed().oneOf(Object.values(TilbakemeldingType)).required(required),
   varslingsadresse: varslingsadresse.required(required)

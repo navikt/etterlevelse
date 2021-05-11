@@ -146,7 +146,6 @@ export interface Tilbakemelding {
   id: string
   kravNummer: number
   kravVersjon: number
-  tittel: string
   type: TilbakemeldingType
   melderIdent: string
   meldinger: TilbakemeldingMelding[]

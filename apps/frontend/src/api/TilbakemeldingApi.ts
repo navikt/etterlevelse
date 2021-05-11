@@ -56,7 +56,6 @@ export const useTilbakemeldinger = (kravNummer: number, kravVersjon: number) => 
 export interface CreateTilbakemeldingRequest {
   kravNummer: number
   kravVersjon: number
-  tittel: string
   type: TilbakemeldingType
   varslingsadresse: Varslingsadresse
   foersteMelding: string
