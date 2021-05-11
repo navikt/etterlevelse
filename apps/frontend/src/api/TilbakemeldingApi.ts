@@ -16,6 +16,14 @@ export const tilbakemeldingNewMelding = async (request: TilbakemeldingNewMelding
   return (await axios.post<Tilbakemelding>(`${env.backendBaseUrl}/krav/tilbakemelding/melding`, request)).data
 }
 
+export const tilbakemeldingEditMelding = async (request: {tilbakemeldingId: string, meldingNr: number, text: string}) => {
+  return (await axios.post<Tilbakemelding>(`${env.backendBaseUrl}/krav/tilbakemelding/${request.tilbakemeldingId}/${request.meldingNr}`, request.text)).data
+}
+
+export const tilbakemeldingslettMelding = async (request: {tilbakemeldingId: string, meldingNr: number}) => {
+  return (await axios.delete<Tilbakemelding>(`${env.backendBaseUrl}/krav/tilbakemelding/${request.tilbakemeldingId}/${request.meldingNr}`)).data
+}
+
 export const useTilbakemeldinger = (kravNummer: number, kravVersjon: number) => {
   const [data, setData] = useState<Tilbakemelding[]>([])
   const [loading, setLoading] = useState<boolean>(false)

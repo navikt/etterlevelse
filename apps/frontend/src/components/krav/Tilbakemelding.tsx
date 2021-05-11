@@ -1,5 +1,12 @@
 import {AdresseType, Krav, Tilbakemelding, TilbakemeldingMelding, TilbakemeldingRolle, TilbakemeldingType, Varslingsadresse} from '../../constants'
-import {createNewTilbakemelding, CreateTilbakemeldingRequest, tilbakemeldingNewMelding, TilbakemeldingNewMeldingRequest, useTilbakemeldinger} from '../../api/TilbakemeldingApi'
+import {
+  createNewTilbakemelding,
+  CreateTilbakemeldingRequest,
+  tilbakemeldingNewMelding,
+  TilbakemeldingNewMeldingRequest,
+  tilbakemeldingslettMelding,
+  useTilbakemeldinger
+} from '../../api/TilbakemeldingApi'
 import React, {useEffect, useState} from 'react'
 import {Block} from 'baseui/block'
 import {theme} from '../../util'
@@ -89,18 +96,16 @@ export const Tilbakemeldinger = ({krav}: {krav: Krav}) => {
 
                       </Block>
                     </Block>
-                    <Block>
-                      <ParagraphMedium marginBottom={0}>{t.meldinger[0].innhold}</ParagraphMedium>
-                    </Block>
 
-                    <Block marginBottom={theme.sizing.scale400}>
-                      {focused && <MeldingKnapper melding={t.meldinger[0]} tilbakemeldingId={t.id}/>}
+                    <Block display={'flex'} justifyContent={'space-between'} marginBottom={theme.sizing.scale400}>
+                      <ParagraphMedium marginBottom={0}>{t.meldinger[0].innhold}</ParagraphMedium>
+                      <MeldingKnapper melding={t.meldinger[0]} tilbakemeldingId={t.id} oppdater={replace}/>
                     </Block>
 
                     <Block>
                       {/* meldingsliste */}
                       {focused && <Block display={'flex'} flexDirection={'column'}>
-                        {t.meldinger.slice(1).map(m => <ResponseMelding key={m.meldingNr} m={m} tilbakemeldingId={t.id}/>)}
+                        {t.meldinger.slice(1).map(m => <ResponseMelding key={m.meldingNr} m={m} tilbakemeldingId={t.id} oppdater={replace}/>)}
                       </Block>}
 
                       {/* knapprad bunn */}
@@ -110,7 +115,7 @@ export const Tilbakemeldinger = ({krav}: {krav: Krav}) => {
                           <Button kind={'tertiary'} onClick={() => setFocus(focused ? '' : t.id)}
                                   icon={focused ? faChevronUp : faChevronRight}>Vis {focused ? 'mindre' : 'mer'}</Button>}
                         </Block>
-                        {melderOrKraveier &&
+                        {melderOrKraveier && user.canWrite() &&
                         <Block><Button kind={ubesvartOgKraveier ? 'primary' : 'outline'} size={'compact'} onClick={() => {
                           setFocusNr(t.id)
                           setTilbakemelding(t)
@@ -142,7 +147,9 @@ export const Tilbakemeldinger = ({krav}: {krav: Krav}) => {
         <HeadingXLarge>Gi en tilbakemelding</HeadingXLarge>
         <ParagraphMedium maxWidth={'600px'}>Gi tilbakemelding til kraveier dersom det er uklarheter vedrørende hvordan kravet skal forstås.</ParagraphMedium>
 
-        <Button kind={'primary'} size='compact' onClick={() => setAddTilbakemelding(true)}>Ny tilbakemelding</Button>
+        {user.canWrite() &&
+        <Button kind={'primary'} size='compact' onClick={() => setAddTilbakemelding(true)}>Ny tilbakemelding</Button>}
+        {!user.canWrite() && <ParagraphSmall>Logg inn på toppen for å legge inn tilbakemelding</ParagraphSmall>}
       </Block>
 
       <NyTilbakemeldingModal krav={krav} open={addTilbakemelding} close={t => {
@@ -159,8 +166,8 @@ export const Tilbakemeldinger = ({krav}: {krav: Krav}) => {
   )
 }
 
-const ResponseMelding = (props: {m: TilbakemeldingMelding, tilbakemeldingId: string}) => {
-  const {m} = props
+const ResponseMelding = (props: {m: TilbakemeldingMelding, tilbakemeldingId: string, oppdater: (t: Tilbakemelding) => void}) => {
+  const {m, tilbakemeldingId, oppdater} = props
   const melder = m.rolle === TilbakemeldingRolle.MELDER
   return (
     <Block display={'flex'} flexDirection={'column'}
@@ -177,10 +184,10 @@ const ResponseMelding = (props: {m: TilbakemeldingMelding, tilbakemeldingId: str
         </Block>
       </Block>
 
-      <Block>
+      <Block display={'flex'} width={'100%'} justifyContent={'space-between'}>
         <ParagraphMedium marginBottom={0} marginTop={theme.sizing.scale400}>{m.innhold}</ParagraphMedium>
+        <MeldingKnapper melding={m} tilbakemeldingId={tilbakemeldingId} oppdater={oppdater}/>
       </Block>
-      <MeldingKnapper melding={m} tilbakemeldingId={props.tilbakemeldingId}/>
     </Block>
   )
 }
@@ -285,31 +292,35 @@ const TilbakemeldingSvarModal = ({tilbakemelding, close}: {tilbakemelding?: Tilb
   )
 }
 
-const MeldingKnapper = (props: {melding: TilbakemeldingMelding, tilbakemeldingId: string}) => {
-  const {melding, tilbakemeldingId} = props
+const MeldingKnapper = (props: {melding: TilbakemeldingMelding, tilbakemeldingId: string, oppdater: (t: Tilbakemelding) => void}) => {
+  const {melding, tilbakemeldingId, oppdater} = props
+  const meldingNr = melding.meldingNr
   const [deleteModal, setDeleteModal] = useState(false)
-  if (!user.isAdmin() && melding.fraIdent !== user.getIdent()) return null
+  if ((!user.isAdmin() && melding.fraIdent !== user.getIdent()) || !user.canWrite()) return null
 
   return (
     <>
-      <Block display={'flex'} marginTop={theme.sizing.scale400}>
-        <Button kind={'tertiary'} size={'mini'} icon={faPencilAlt}>Rediger</Button>
-        <Button kind={'tertiary'} size={'mini'} icon={faTrashAlt} marginLeft onClick={() => setDeleteModal(true)}>Slett</Button>
+      <Block alignSelf={'flex-end'} display={'flex'} flexDirection={'column'} marginTop={theme.sizing.scale400}>
+        <Block>
+          <Button kind={'tertiary'} size={'mini'} icon={faTrashAlt} marginLeft onClick={() => setDeleteModal(true)}>Slett</Button>
+        </Block>
+        <Block>
+          <Button kind={'tertiary'} size={'mini'} icon={faPencilAlt}>Rediger</Button>
+        </Block>
       </Block>
 
       {deleteModal && <Modal isOpen onClose={() => setDeleteModal(false)} unstable_ModalBackdropScroll>
         <ModalHeader>Er du sikker på at du vil slette meldingen?</ModalHeader>
         <ModalBody>
-          {melding.meldingNr === 1 && <ParagraphMedium>Hele meldingstråden vil bli slettet.</ParagraphMedium>}
+          {meldingNr === 1 && <ParagraphMedium>Hele meldingstråden vil bli slettet.</ParagraphMedium>}
           <ParagraphSmall>{moment(melding.tid).format('ll')} <PersonName ident={melding.fraIdent}/></ParagraphSmall>
           <ParagraphMedium>{melding.innhold}</ParagraphMedium>
         </ModalBody>
         <ModalFooter>
           <Button kind={'secondary'} size={'compact'} onClick={() => setDeleteModal(false)}>Avbryt</Button>
-          <Button kind={'primary'} size={'compact'} marginLeft>Slett</Button>
+          <Button kind={'primary'} size={'compact'} marginLeft onClick={() => tilbakemeldingslettMelding({tilbakemeldingId, meldingNr}).then(oppdater)}>Slett</Button>
         </ModalFooter>
       </Modal>}
-
     </>
   )
 }
