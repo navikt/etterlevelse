@@ -1,19 +1,19 @@
 import * as React from 'react'
-import { ReactNode } from 'react'
-import { Button as BaseUIButton, KIND, SHAPE, SIZE } from 'baseui/button'
-import { PLACEMENT, StatefulTooltip } from 'baseui/tooltip'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
-import { theme } from '../../util'
-import { Override } from 'baseui/overrides'
-import { StyleObject } from 'styletron-react'
-import { Block } from 'baseui/block'
-import { borderRadius, borderStyle, borderWidth } from './Style'
-import { ettlevColors } from '../../util/theme'
+import {ReactNode} from 'react'
+import {Button as BaseUIButton, KIND, SHAPE, SIZE} from 'baseui/button'
+import {PLACEMENT, StatefulTooltip} from 'baseui/tooltip'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {IconDefinition} from '@fortawesome/fontawesome-svg-core'
+import {theme} from '../../util'
+import {Override} from 'baseui/overrides'
+import {StyleObject} from 'styletron-react'
+import {Block} from 'baseui/block'
+import {borderRadius, borderStyle, borderWidth} from './Style'
+import {ettlevColors} from '../../util/theme'
 
 
 interface ButtonProps {
-  kind?: KIND[keyof KIND] | 'outline'
+  kind?: KIND[keyof KIND] | 'outline' | 'underline-hover'
   type?: 'submit' | 'reset' | 'button'
   size?: SIZE[keyof SIZE]
   shape?: SHAPE[keyof SHAPE]
@@ -42,6 +42,7 @@ const Tooltip = (props: TooltipProps) => (
     : props.children
 )
 
+// outline button is a secondary button, but with a border
 const outlineWidth = '2px'
 const outlineStyle = 'solid'
 const outlineOverride: StyleObject = {
@@ -57,8 +58,18 @@ const outlineOverride: StyleObject = {
   borderBottomStyle: outlineStyle
 }
 
+// underline-hover button is a tertiary with underline as hover effect
+const underlineOverride: StyleObject = {
+  ':hover': {
+    textDecoration: 'underline'
+  },
+  ':focus': {
+    textDecoration: 'underline'
+  }
+}
+
 const Button = (props: ButtonProps) => {
-  const baseuiKind = props.kind === 'outline' ? KIND.secondary : props.kind
+  const baseuiKind = props.kind === 'outline' ? KIND.secondary : props.kind === 'underline-hover' ? KIND.tertiary : props.kind
 
   const boxShadow = !props.kind || props.kind === 'primary' || props.kind === 'secondary' ? {
     style: {
@@ -72,6 +83,7 @@ const Button = (props: ButtonProps) => {
   const overrides: Override<any> = {
     style: {
       ...(props.kind === 'outline' ? outlineOverride : {}),
+      ...(props.kind === 'underline-hover' ? underlineOverride : {}),
       ...(props.kind === 'secondary' ? buttonBorderStyle: {}),
       ...(props.inline ? { paddingTop: theme.sizing.scale100, paddingBottom: theme.sizing.scale100 } : {}),
       ...(props.$style || {}),

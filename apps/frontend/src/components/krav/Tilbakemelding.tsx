@@ -303,8 +303,8 @@ const MeldingKnapper = (props: {melding: TilbakemeldingMelding, tilbakemeldingId
   return (
     <>
       <Block marginTop={theme.sizing.scale400}>
-        <Button kind={'tertiary'} size={'mini'} icon={faPencilAlt}>Rediger</Button>
-        <Button kind={'tertiary'} size={'mini'} icon={faTrashAlt} marginLeft onClick={() => setDeleteModal(true)}>Slett</Button>
+        <Button kind={'underline-hover'} size={'mini'} icon={faPencilAlt}>Rediger</Button>
+        <Button kind={'underline-hover'} size={'mini'} icon={faTrashAlt} marginLeft onClick={() => setDeleteModal(true)}>Slett</Button>
       </Block>
 
       {deleteModal && <Modal isOpen onClose={() => setDeleteModal(false)} unstable_ModalBackdropScroll>
