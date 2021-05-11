@@ -105,7 +105,7 @@ export const Tilbakemeldinger = ({krav}: {krav: Krav}) => {
                     {focused && t.meldinger.length === 1 &&
                     <MeldingKnapper melding={t.meldinger[0]} tilbakemeldingId={t.id} oppdater={replace}/>}
 
-                    <Block marginTop={theme.sizing.scale500}>
+                    <Block marginTop={theme.sizing.scale600}>
                       {/* meldingsliste */}
                       {focused && <Block display={'flex'} flexDirection={'column'} marginTop={theme.sizing.scale400}>
                         {t.meldinger.slice(1).map(m => <ResponseMelding key={m.meldingNr} m={m} tilbakemelding={t} oppdater={replace}/>)}
