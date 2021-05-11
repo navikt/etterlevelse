@@ -46,7 +46,6 @@ public class CreateTilbakemeldingRequest implements Validated, KravId {
         validator.checkNull(Fields.kravNummer, kravNummer);
         validator.checkNull(Fields.kravVersjon, kravVersjon);
 
-        validator.checkBlank(Fields.tittel, tittel);
         validator.checkNull(Fields.type, type);
         validator.checkNull(Fields.varslingsadresse, varslingsadresse);
         if (varslingsadresse != null) {
