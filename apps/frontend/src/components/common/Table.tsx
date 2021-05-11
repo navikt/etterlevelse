@@ -11,7 +11,6 @@ import { TableConfig, TableState, useTable } from '../../util/hooks'
 import { theme } from '../../util'
 import { borderRadius, paddingAll } from './Style'
 import { intl } from '../../util/intl/intl'
-import { StatefulSelect } from 'baseui/select'
 import { Modal, ModalBody, ModalHeader } from 'baseui/modal'
 import * as _ from 'lodash'
 import { PLACEMENT, StatefulPopover } from 'baseui/popover'
@@ -20,6 +19,7 @@ import Button from './Button'
 import { KIND } from 'baseui/button'
 import { Pagination } from 'baseui/pagination'
 import CustomizedInput from '../common/CustomizedInput'
+import { CustomizedStatefulSelect } from './CustomizedSelect'
 
 // Use this for entire app, or recreate maybe, added here as I needed it for audit
 
@@ -222,7 +222,7 @@ const HeadCell = <T, K extends keyof T>(props: HeadProps<T, K>) => {
     if (filterConf.type === 'select') {
       const options = (filterConf.options && filterConf.options(data)) ||
         _.uniqBy(data.map(filterConf.mapping).flatMap(o => Array.isArray(o) ? o : [o]).filter(o => !!o.id), o => o.id)
-      return <StatefulSelect onChange={params => setFilter(column, params.option?.id as string)}
+      return <CustomizedStatefulSelect onChange={params => setFilter(column, params.option?.id as string)}
         initialState={{ value: !inputFilter ? [] : [{ id: inputFilter, label: inputFilter }] }}
         options={options} startOpen={true} maxDropdownHeight='400px' />
     }

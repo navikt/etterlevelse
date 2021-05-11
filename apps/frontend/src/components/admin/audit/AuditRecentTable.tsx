@@ -12,7 +12,6 @@ import { AuditButton } from './AuditButton'
 import { faBinoculars, faCode } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { AuditActionIcon } from './AuditComponents'
-import { StatefulSelect } from 'baseui/select'
 import { emptyPage, PageResponse } from '../../../constants'
 import { AuditItem, ObjectType } from './AuditTypes'
 import { intl } from '../../../util/intl/intl'
@@ -23,6 +22,7 @@ import randomColor from 'randomcolor'
 import { theme } from '../../../util'
 import ReactJson from 'react-json-view'
 import { ObjectLink } from '../../common/RouteLink'
+import { CustomizedStatefulSelect } from '../../common/CustomizedSelect'
 
 export const AuditRecentTable = (props: { show: boolean }) => {
   const [audits, setAudits] = useState<PageResponse<AuditItem>>(emptyPage)
@@ -69,7 +69,7 @@ export const AuditRecentTable = (props: { show: boolean }) => {
         <Label1>{intl.lastChanges}</Label1>
         <Block width="300px" display="flex" justifyContent="space-between">
           <Label3 alignSelf="center" marginRight=".5rem">{intl.table}: </Label3>
-          <StatefulSelect size="compact" options={Object.keys(ObjectType).map(ot => ({ id: ot, label: ot }))} onChange={p => setTable(p?.value[0]?.id as ObjectType)} />
+          <CustomizedStatefulSelect size="compact" options={Object.keys(ObjectType).map(ot => ({ id: ot, label: ot }))} onChange={p => setTable(p?.value[0]?.id as ObjectType)} />
         </Block>
       </Block>
 

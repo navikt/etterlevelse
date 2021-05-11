@@ -1,6 +1,5 @@
 import { AdresseType, Krav, SlackChannel, SlackUser, TeamResource, Varslingsadresse, VarslingsadresseQL } from '../../../constants'
 import { getSlackChannelById, getSlackUserByEmail, getSlackUserById, usePersonSearch, useSlackChannelSearch } from '../../../api/TeamApi'
-import { StatefulSelect } from 'baseui/select'
 import React, { ReactNode, useEffect, useState } from 'react'
 import { Block } from 'baseui/block'
 import { Spinner } from '../../common/Spinner'
@@ -19,6 +18,7 @@ import { Modal, ModalBody, ModalFooter, ModalHeader } from 'baseui/modal'
 import { RenderTagList } from '../../common/TagList'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
 import CustomizedInput from '../../common/CustomizedInput'
+import { CustomizedStatefulSelect } from '../../common/CustomizedSelect'
 
 export const KravVarslingsadresserEdit = () => {
   const [addSlackChannel, setAddSlackChannel] = useState<boolean>(false)
@@ -163,7 +163,7 @@ export const SlackChannelSearch = ({ added, add, close }: AddVarslingsadressePro
   const [slackSearch, setSlackSearch, loading] = useSlackChannelSearch()
 
   return (
-    <StatefulSelect
+    <CustomizedStatefulSelect
       placeholder={'Søk slack kanaler'}
       maxDropdownHeight='400px'
       filterOptions={o => o}
@@ -205,7 +205,7 @@ export const SlackUserSearch = ({ add, close }: AddVarslingsadresseProps) => {
   return (
     <Block display='flex' flexDirection='column'>
       <Block display='flex'>
-        <StatefulSelect
+        <CustomizedStatefulSelect
           placeholder={'Søk slack brukere'}
           maxDropdownHeight='400px'
           filterOptions={o => o}
