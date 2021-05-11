@@ -1,7 +1,7 @@
 import { Or } from '../../constants'
 import { Field, FieldArray, FieldArrayRenderProps, FieldProps } from 'formik'
 import { FormControl } from 'baseui/form-control'
-import { Input, SIZE } from 'baseui/input'
+import { Input} from 'baseui/input'
 import React, { ReactNode, useState } from 'react'
 import { Block } from 'baseui/block'
 import Button from './Button'
