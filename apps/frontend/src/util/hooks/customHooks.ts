@@ -1,5 +1,6 @@
 import React, {Dispatch, RefObject, SetStateAction, useEffect, useState} from 'react'
 import {useHistory, useLocation} from 'react-router-dom'
+import {user} from '../../services/User'
 
 export function useDebouncedState<T>(
   initialValue: T,
@@ -35,6 +36,13 @@ export function useUpdateOnChange(value: any) {
     update()
   }, [value])
 
+}
+
+export let updateUser: () => void
+
+export function useAwaitUser() {
+  useAwait(user.wait())
+  updateUser = useForceUpdate()
 }
 
 export function useAwait<T>(p: Promise<T>, setLoading?: Dispatch<SetStateAction<boolean>>) {

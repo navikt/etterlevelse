@@ -1,4 +1,5 @@
 import {Code, LovCode} from './services/Codelist'
+import {Group} from './services/User'
 
 export type RecursivePartial<T> = {
   [P in keyof T]?: T[P] extends (infer U)[] ? RecursivePartial<U>[] : T[P] extends object ? RecursivePartial<T[P]> : T[P];
@@ -9,7 +10,7 @@ export type Or<T, U> = (T & Not<U>) | (U & Not<T>)
 
 export interface UserInfo {
   loggedIn: boolean;
-  groups: string[];
+  groups: Group[];
   ident?: string;
   name?: string;
   givenName?: string;

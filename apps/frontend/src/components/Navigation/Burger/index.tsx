@@ -13,7 +13,6 @@ import SlackLogo from '../../../resources/Slack_Monochrome_White.svg'
 import {env} from '../../../util/env'
 import {useStyletron} from 'styletron-react'
 import {user} from '../../../services/User'
-import {useAwait} from '../../../util/hooks'
 import {intl} from '../../../util/intl/intl'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faChevronDown, faChevronRight} from '@fortawesome/free-solid-svg-icons'
@@ -77,8 +76,6 @@ const BurgerMenu = () => {
   const location = useLocation()
   const [showMenu, setShowMenu] = React.useState<boolean>(false)
   const [url, setUrl] = React.useState(window.location.href)
-
-  useAwait(user.wait())
 
   React.useEffect(() => {
     if (showMenu) setShowMenu(false)

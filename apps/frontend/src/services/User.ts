@@ -1,19 +1,21 @@
 import {AxiosResponse} from 'axios'
 import {UserInfo} from '../constants'
 import {getUserInfo} from '../api/userApi'
+import {updateUser} from '../util/hooks'
 
 export enum Group {
   READ = 'READ',
   WRITE = 'WRITE',
-  ADMIN = 'ADMIN',
-  KRAVEIER = 'KRAVEIER'
+  KRAVEIER = 'KRAVEIER',
+  ADMIN = 'ADMIN'
 }
 
 class UserService {
-  loaded = false;
-  userInfo: UserInfo = {loggedIn: false, groups: []};
-  error?: string;
-  promise: Promise<any>;
+  private loaded = false
+  private userInfo: UserInfo = {loggedIn: false, groups: []}
+  private currentGroups = [Group.READ]
+  private error?: string
+  private readonly promise: Promise<any>
 
   constructor() {
     this.promise = this.fetchData()
@@ -26,16 +28,18 @@ class UserService {
       this.error = err.message
       this.loaded = true
     })
-  };
+  }
 
   handleGetResponse = (response: AxiosResponse<UserInfo>) => {
     if (typeof response.data === 'object' && response.data !== null) {
-      this.userInfo = response.data
+      const groups = response.data.groups.indexOf(Group.ADMIN) >= 0 ? Object.keys(Group) as Group[] : response.data.groups
+      this.userInfo = {...response.data, groups}
+      this.currentGroups = this.userInfo.groups
     } else {
       this.error = response.data
     }
     this.loaded = true
-  };
+  }
 
   isLoggedIn(): boolean {
     return this.userInfo.loggedIn
@@ -61,20 +65,28 @@ class UserService {
     return this.userInfo.familyName ?? ''
   }
 
-  public getGroups(): string[] {
+  public getAvailableGroups(): {name: string, group: Group}[] {
     return this.userInfo.groups
+    .filter(g => g !== Group.READ)
+    .map(group => ({name: nameFor(group), group}))
   }
 
-  // public getGroupsHumanReadable(): string[] {
-  //   return this.userInfo.groups.map(group => (intl as any)[group] || group)
-  // }
+  public toggleGroup(group: Group, active: boolean) {
+    if (active && !this.hasGroup(group) && this.userInfo.groups.indexOf(group) >= 0) {
+      this.currentGroups = [...this.currentGroups, group]
+      updateUser()
+    } else {
+      this.currentGroups = this.currentGroups.filter(g => g !== group)
+      updateUser()
+    }
+  }
+
+  public getGroups(): string[] {
+    return this.currentGroups
+  }
 
   public hasGroup(group: string): boolean {
     return this.getGroups().indexOf(group) >= 0
-  }
-
-  public canRead(): boolean {
-    return this.hasGroup(Group.READ)
   }
 
   public canWrite(): boolean {
@@ -86,7 +98,7 @@ class UserService {
   }
 
   public isKraveier(): boolean {
-    return this.hasGroup(Group.KRAVEIER) || this.isAdmin()
+    return this.hasGroup(Group.KRAVEIER)
   }
 
   async wait() {
@@ -99,3 +111,16 @@ class UserService {
 }
 
 export const user = new UserService()
+
+const nameFor = (group: Group) => {
+  switch (group) {
+    case Group.READ:
+      return 'Les'
+    case Group.WRITE:
+      return 'Skriv'
+    case Group.ADMIN:
+      return 'Admin'
+    case Group.KRAVEIER:
+      return 'Kraveier'
+  }
+}
