@@ -12,6 +12,7 @@ import { CodeListFormValues, codeListSchema, ListName } from '../../../services/
 import { Error } from '../../common/ModalSchema'
 import { LovCodeDataForm, TemaCodeDataForm } from './LovCode'
 import { MarkdownInfo } from '../../common/Markdown'
+import CustomizedInput from '../../common/CustomizedInput'
 
 const modalBlockProps: BlockProps = {
   width: '700px',
@@ -67,7 +68,7 @@ const UpdateCodeListModal = ({ title, initialValues, errorOnUpdate, isOpen, onCl
                 <Field
                   name="shortName"
                 >{({ field }: FieldProps<CodeListFormValues>) => (
-                  <Input
+                  <CustomizedInput
                     name="shortName"
                     value={formik.values.shortName}
                     onChange={formik.handleChange}

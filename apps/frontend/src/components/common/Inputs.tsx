@@ -1,12 +1,11 @@
 import { Or } from '../../constants'
 import { Field, FieldArray, FieldArrayRenderProps, FieldProps } from 'formik'
 import { FormControl } from 'baseui/form-control'
-import { Input} from 'baseui/input'
 import React, { ReactNode, useState } from 'react'
 import { Block } from 'baseui/block'
 import Button from './Button'
 import { RenderTagList } from './TagList'
-import { Select, SIZE as selectSize, Value } from 'baseui/select'
+import { Select, Value } from 'baseui/select'
 import { Code, codelist, ListName } from '../../services/Codelist'
 import { SearchType } from '../../api/TeamApi'
 import * as _ from 'lodash'
@@ -16,6 +15,7 @@ import moment from 'moment'
 import { Radio, RadioGroup } from 'baseui/radio'
 import { MarkdownEditor, MarkdownInfo } from './Markdown'
 import LabelWithTooltip from '../common/LabelWithTooltip'
+import CustomInput from '../common/CustomizedInput'
 
 export const FieldWrapper = ({ children, marginBottom }: { children: React.ReactNode, marginBottom?: string }) => {
   return (
@@ -31,7 +31,7 @@ export const InputField = (props: { label: string, name: string, caption?: React
       {(p: FieldProps) =>
         <FormControl overrides={{ Label: { style: { marginTop: '0px', marginBottom: '0px', paddingTop: '8px', paddingBottom: '8px' } } }}
           label={<LabelWithTooltip label={props.label} tooltip={props.tooltip} />} error={p.meta.touched && p.meta.error} caption={props.caption}>
-          <Input {...p.field} placeholder={props.label} />
+          <CustomInput {...p.field} placeholder={props.label} />
         </FormControl>
       }
     </Field>
@@ -158,14 +158,14 @@ export const MultiInputField = (props: {
                 {props.link &&
                   <Block width='100%' maxWidth={props.maxInputWidth}>
                     <LabelWithTooltip label={props.linkLabel} tooltip={props.linkTooltip} />
-                    <Input onKeyDown={onKey} value={linkName}
+                    <CustomInput onKeyDown={onKey} value={linkName}
                       onChange={e => setLinkName((e.target as HTMLInputElement).value)}
                     />
                   </Block>
                 }
                 <Block marginLeft={props.link ? '12px' : '0px'} width='100%' maxWidth={!props.link ? props.maxInputWidth : undefined}>
                   <LabelWithTooltip label={props.label} tooltip={props.tooltip} />
-                  <Input onKeyDown={onKey} value={val} inputRef={inputRef}
+                  <CustomInput onKeyDown={onKey} value={val} inputRef={inputRef}
                     onChange={e => setVal((e.target as HTMLInputElement).value)}
                     onBlur={!props.link ? add : undefined}
                   />
