@@ -82,7 +82,7 @@ const overrides: RecursivePartial<Theme> = {
     linkVisited: ettlevColors.green800,
     linkHover: ettlevColors.green400,
     linkActive: ettlevColors.green800,
-    // input fields
+    // input fields & text area
     inputFill: ettlevColors.white,
     inputFillActive: ettlevColors.white,
     borderFocus: ettlevColors.green400, // same as inputFillActive to hide
@@ -90,6 +90,7 @@ const overrides: RecursivePartial<Theme> = {
     inputFillError: ettlevColors.error400,
     
     inputEnhancerFill: primitives.primary100,
+
 
 
 
