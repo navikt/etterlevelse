@@ -1,26 +1,27 @@
 import * as React from 'react'
-import {ReactElement, useEffect, useState} from 'react'
-import {Select, SIZE, TYPE, Value} from 'baseui/select'
-import {theme} from '../../util'
-import {useDebouncedState, useQueryParam} from '../../util/hooks'
-import {prefixBiasedSort} from '../../util/sort'
-import {Block} from 'baseui/block'
-import {useHistory, useLocation} from 'react-router-dom'
-import {urlForObject} from '../common/RouteLink'
+import { ReactElement, useEffect, useState } from 'react'
+import { SIZE, TYPE, Value } from 'baseui/select'
+import { theme } from '../../util'
+import { useDebouncedState, useQueryParam } from '../../util/hooks'
+import { prefixBiasedSort } from '../../util/sort'
+import { Block } from 'baseui/block'
+import { useHistory, useLocation } from 'react-router-dom'
+import { urlForObject } from '../common/RouteLink'
 import Button from '../common/Button'
-import {faFilter} from '@fortawesome/free-solid-svg-icons'
-import {Radio, RadioGroup} from 'baseui/radio'
-import {borderColor, paddingZero} from '../common/Style'
+import { faFilter } from '@fortawesome/free-solid-svg-icons'
+import { Radio, RadioGroup } from 'baseui/radio'
+import { borderColor, paddingZero } from '../common/Style'
 import SearchLabel from './components/SearchLabel'
-import {NavigableItem, ObjectType} from '../admin/audit/AuditTypes'
-import {Behandling, Krav} from '../../constants'
+import { NavigableItem, ObjectType } from '../admin/audit/AuditTypes'
+import { Behandling, Krav } from '../../constants'
 import shortid from 'shortid'
-import {searchResultColor} from '../../util/theme'
-import {kravName} from '../../pages/KravPage'
-import {searchKrav} from '../../api/KravApi'
-import {behandlingName, searchBehandling} from '../../api/BehandlingApi'
-import {codelist, ListName} from '../../services/Codelist'
-import {searchIcon} from '../Images'
+import { searchResultColor } from '../../util/theme'
+import { kravName } from '../../pages/KravPage'
+import { searchKrav } from '../../api/KravApi'
+import { behandlingName, searchBehandling } from '../../api/BehandlingApi'
+import { codelist, ListName } from '../../services/Codelist'
+import { searchIcon } from '../Images'
+import CustomizedSelect from '../common/CustomizedSelect'
 
 shortid.characters('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@')
 
@@ -219,7 +220,7 @@ const MainSearch = () => {
         alignItems='center'
         width={responsiveWidth}
       >
-        <Select
+        <CustomizedSelect
           size={SIZE.compact}
           backspaceRemoves
           startOpen={!!searchParam}

@@ -129,8 +129,10 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
                 <Block width={width}>
                   <H2 marginBottom={inputMarginBottom}>Om Kravet</H2>
                   <KravSuksesskriterierEdit />
+                  {/* 
                   <TextAreaField marginBottom='80px' label='Beskrivelse' name='beskrivelse' markdown shortenLinks onImageUpload={onImageUpload(krav.id)}
-                    tooltip={'Beskriv selve innholdet i kravet.'} />
+                    tooltip={'Beskriv selve innholdet i kravet.'} /> 
+                    */}
                   {/*
                       <TextAreaField label='Utfyllende beskrivelse' name='utdypendeBeskrivelse' markdown shortenLinks onImageUpload={onImageUpload(krav.id)}
                         tooltip={'Legg til en utfyllende beskrivelse av kravet. Benyttes kun der det er behov for det.'} /> */}

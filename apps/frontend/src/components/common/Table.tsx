@@ -1,25 +1,25 @@
-import {SORT_DIRECTION, SortableHeadCell, StyledBody, StyledCell, StyledHead, StyledHeadCell, StyledRow, StyledTable} from 'baseui/table'
+import { SORT_DIRECTION, SortableHeadCell, StyledBody, StyledCell, StyledHead, StyledHeadCell, StyledRow, StyledTable } from 'baseui/table'
 import * as React from 'react'
-import {ReactNode, useContext, useState} from 'react'
-import {withStyle} from 'baseui'
-import {StyleObject} from 'styletron-standard'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faChevronDown, faFilter, faSort, faSortDown, faSortUp} from '@fortawesome/free-solid-svg-icons'
-import {Block} from 'baseui/block'
-import {Label2} from 'baseui/typography'
-import {TableConfig, TableState, useTable} from '../../util/hooks'
-import {theme} from '../../util'
-import {borderRadius, paddingAll} from './Style'
-import {intl} from '../../util/intl/intl'
-import {StatefulSelect} from 'baseui/select'
-import {Modal, ModalBody, ModalHeader} from 'baseui/modal'
-import {Input} from 'baseui/input'
+import { ReactNode, useContext, useState } from 'react'
+import { withStyle } from 'baseui'
+import { StyleObject } from 'styletron-standard'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faChevronDown, faFilter, faSort, faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons'
+import { Block } from 'baseui/block'
+import { Label2 } from 'baseui/typography'
+import { TableConfig, TableState, useTable } from '../../util/hooks'
+import { theme } from '../../util'
+import { borderRadius, paddingAll } from './Style'
+import { intl } from '../../util/intl/intl'
+import { Modal, ModalBody, ModalHeader } from 'baseui/modal'
 import * as _ from 'lodash'
-import {PLACEMENT, StatefulPopover} from 'baseui/popover'
-import {StatefulMenu} from 'baseui/menu'
+import { PLACEMENT, StatefulPopover } from 'baseui/popover'
+import { StatefulMenu } from 'baseui/menu'
 import Button from './Button'
-import {KIND} from 'baseui/button'
-import {Pagination} from 'baseui/pagination'
+import { KIND } from 'baseui/button'
+import { Pagination } from 'baseui/pagination'
+import CustomizedInput from '../common/CustomizedInput'
+import { CustomizedStatefulSelect } from './CustomizedSelect'
 
 // Use this for entire app, or recreate maybe, added here as I needed it for audit
 
@@ -83,7 +83,7 @@ const tableStyle = {
   ...paddingAll(theme.sizing.scale600)
 }
 
-type TableContextType<T, K extends keyof T> = TableProps<T, K> & {tableState: TableState<T, K>}
+type TableContextType<T, K extends keyof T> = TableProps<T, K> & { tableState: TableState<T, K> }
 const createTableContext = _.once(<T, K extends keyof T>() => React.createContext<TableContextType<T, K>>({} as TableContextType<T, K>))
 const useTableContext = <T, K extends keyof T>() => useContext(createTableContext<T, K>())
 
@@ -91,14 +91,14 @@ export const Table = <T, K extends keyof T>(props: TableProps<T, K>) => {
   const table = useTable<T, K>(props.data, props.config)
   const TableContext = createTableContext<T, K>()
 
-  const StyleTable = withStyle(StyledTable, {...tableStyle, backgroundColor: props.backgroundColor, width: props.width || tableStyle.width})
+  const StyleTable = withStyle(StyledTable, { ...tableStyle, backgroundColor: props.backgroundColor, width: props.width || tableStyle.width })
 
   const show = (col?: K) => !col || !props.config?.exclude || !((props.config?.exclude || [])?.indexOf(col) >= 0)
   const columnState = props.headers.map(h => show(h.column))
   const colFilter = (o: any, i: number) => columnState[i]
 
   return (
-    <TableContext.Provider value={{...props, tableState: table}}>
+    <TableContext.Provider value={{ ...props, tableState: table }}>
       <StyleTable>
         <StyledHeader>
           {props.headers.filter(h => !h.hide).filter(colFilter).map((h: any, i) => <HeadCell key={i} {...h} />)}
@@ -115,36 +115,36 @@ export const Table = <T, K extends keyof T>(props: TableProps<T, K>) => {
       </StyleTable>
 
       {!!props.config?.pageSizes &&
-      <Block display="flex" justifyContent="space-between" marginTop="1rem" alignItems='center'>
-        <StatefulPopover
-          content={({close}) => (
-            <StatefulMenu
-              items={props.config!.pageSizes!.map(i => ({label: i,}))}
-              onItemSelect={({item}) => {
-                table.setLimit(item.label)
-                close()
-              }}
-              overrides={{
-                List: {
-                  style: {height: '150px', width: '100px'},
-                },
-              }}
-            />
-          )}
-          placement={PLACEMENT.bottom}
-        >
-          <Block>
-            <Button kind={KIND.tertiary} iconEnd={faChevronDown}>{`${table.limit} ${intl.rows}`}</Button>
-          </Block>
-        </StatefulPopover>
-        <Block><Label2>Rader: {table.data.length}</Label2></Block>
-        <Pagination
-          currentPage={table.page}
-          numPages={table.numPages}
-          onPageChange={({nextPage}) => table.setPage(nextPage)}
-          labels={{nextButton: intl.nextButton, preposition: 'av', prevButton: intl.prevButton}}
-        />
-      </Block>}
+        <Block display="flex" justifyContent="space-between" marginTop="1rem" alignItems='center'>
+          <StatefulPopover
+            content={({ close }) => (
+              <StatefulMenu
+                items={props.config!.pageSizes!.map(i => ({ label: i, }))}
+                onItemSelect={({ item }) => {
+                  table.setLimit(item.label)
+                  close()
+                }}
+                overrides={{
+                  List: {
+                    style: { height: '150px', width: '100px' },
+                  },
+                }}
+              />
+            )}
+            placement={PLACEMENT.bottom}
+          >
+            <Block>
+              <Button kind={KIND.tertiary} iconEnd={faChevronDown}>{`${table.limit} ${intl.rows}`}</Button>
+            </Block>
+          </StatefulPopover>
+          <Block><Label2>Rader: {table.data.length}</Label2></Block>
+          <Pagination
+            currentPage={table.page}
+            numPages={table.numPages}
+            onPageChange={({ nextPage }) => table.setPage(nextPage)}
+            labels={{ nextButton: intl.nextButton, preposition: 'av', prevButton: intl.prevButton }}
+          />
+        </Block>}
 
     </TableContext.Provider>
   )
@@ -170,30 +170,30 @@ export const Row = (props: RowProps) => {
   return <StyleRow>{props.children}</StyleRow>
 }
 
-const SortDirectionIcon = (props: {direction: SORT_DIRECTION | null}) => {
+const SortDirectionIcon = (props: { direction: SORT_DIRECTION | null }) => {
   switch (props?.direction) {
     case SORT_DIRECTION.ASC:
-      return <FontAwesomeIcon icon={faSortDown}/>
+      return <FontAwesomeIcon icon={faSortDown} />
     case SORT_DIRECTION.DESC:
-      return <FontAwesomeIcon icon={faSortUp}/>
+      return <FontAwesomeIcon icon={faSortUp} />
     default:
-      return <FontAwesomeIcon icon={faSort}/>
+      return <FontAwesomeIcon icon={faSort} />
   }
 }
 
 const PlainHeadCell = withStyle(StyledHeadCell, headerCellOverride.HeadCell.style)
 
 const HeadCell = <T, K extends keyof T>(props: HeadProps<T, K>) => {
-  const {title, column, small} = props
+  const { title, column, small } = props
   const tableProps = useTableContext<T, K>()
-  const {direction, sort, data} = tableProps.tableState || {}
+  const { direction, sort, data } = tableProps.tableState || {}
 
-  const {filterValues, setFilter} = tableProps.tableState
+  const { filterValues, setFilter } = tableProps.tableState
   const [showFilter, setShowFilter] = useState(false)
   const [inputFilter, setInputFilter] = useState((filterValues as any)[column] || '')
 
-  const widthStyle = small ? {maxWidth: '15%'} : {}
-  const styleOverride = {...widthStyle, ...props.$style}
+  const widthStyle = small ? { maxWidth: '15%' } : {}
+  const styleOverride = { ...widthStyle, ...props.$style }
 
   if (!direction || !sort || !column || !data) {
     return (
@@ -206,25 +206,25 @@ const HeadCell = <T, K extends keyof T>(props: HeadProps<T, K>) => {
   const filterButton = filterConf && <span onClick={e => {
     setShowFilter(true)
     e.stopPropagation()
-  }} style={{marginLeft: 'auto', justifySelf: 'flex-end'}}>
-    <FontAwesomeIcon size='sm' icon={faFilter} color={!!inputFilter ? theme.colors.negative400 : theme.colors.primary200}/>
+  }} style={{ marginLeft: 'auto', justifySelf: 'flex-end' }}>
+    <FontAwesomeIcon size='sm' icon={faFilter} color={!!inputFilter ? theme.colors.negative400 : theme.colors.primary200} />
   </span>
 
   const filterBody = () => {
     if (!filterConf) return null
     if (filterConf.type === 'search' || filterConf.type === 'searchMapped') {
-      return <Input value={inputFilter} onChange={e => setInputFilter(e.currentTarget.value)} onKeyDown={e => {
+      return <CustomizedInput value={inputFilter} onChange={e => setInputFilter(e.currentTarget.value)} onKeyDown={e => {
         if (e.key === 'Enter') {
           setFilter(column, inputFilter)
         }
-      }}/>
+      }} />
     }
     if (filterConf.type === 'select') {
       const options = (filterConf.options && filterConf.options(data)) ||
         _.uniqBy(data.map(filterConf.mapping).flatMap(o => Array.isArray(o) ? o : [o]).filter(o => !!o.id), o => o.id)
-      return <StatefulSelect onChange={params => setFilter(column, params.option?.id as string)}
-                             initialState={{value: !inputFilter ? [] : [{id: inputFilter, label: inputFilter}]}}
-                             options={options} startOpen={true} maxDropdownHeight='400px'/>
+      return <CustomizedStatefulSelect onChange={params => setFilter(column, params.option?.id as string)}
+        initialState={{ value: !inputFilter ? [] : [{ id: inputFilter, label: inputFilter }] }}
+        options={options} startOpen={true} maxDropdownHeight='400px' />
     }
   }
 
@@ -234,13 +234,13 @@ const HeadCell = <T, K extends keyof T>(props: HeadProps<T, K>) => {
         overrides={{
           SortableLabel: {
             component: () => <Block width='100%' display='flex'>
-              <SortDirectionIcon direction={direction[column]}/>
-              <Block marginRight={theme.sizing.scale200} display='inline'/>
+              <SortDirectionIcon direction={direction[column]} />
+              <Block marginRight={theme.sizing.scale200} display='inline' />
               {title}
               {filterButton}
             </Block>
           },
-          HeadCell: {style: {...headerCellOverride.HeadCell.style, ...styleOverride}}
+          HeadCell: { style: { ...headerCellOverride.HeadCell.style, ...styleOverride } }
         }}
         title={title || ''}
         direction={direction[column]}
@@ -262,10 +262,10 @@ export const Cell = (props: {
   $style?: StyleObject,
   children?: ReactNode
 }) => {
-  const widthStyle = props.small ? {maxWidth: '15%'} : {}
+  const widthStyle = props.small ? { maxWidth: '15%' } : {}
   return (
     <StyledCell style={
-      {...props.$style, ...widthStyle}
+      { ...props.$style, ...widthStyle }
     }>
       {props.children}
     </StyledCell>

@@ -9,10 +9,10 @@ import {etterlevelseStatus} from '../../pages/EtterlevelsePage'
 import {BoolField, DateField, MultiInputField, OptionField, TextAreaField} from '../common/Inputs'
 import {theme} from '../../util'
 import {FormControl} from 'baseui/form-control'
-import {Select} from 'baseui/select'
 import {useKrav, useSearchKrav} from '../../api/KravApi'
 import {kravName} from '../../pages/KravPage'
 import {behandlingName, useBehandling, useSearchBehandling} from '../../api/BehandlingApi'
+import CustomizedSelect from '../common/CustomizedSelect'
 
 type EditEttlevProps = {
   etterlevelse: Etterlevelse
@@ -84,7 +84,7 @@ export const SearchKrav = (props: {kravNummer: number, kravVersjon: number}) => 
     <Field name={'kravNummer'}>
       {(p: FieldProps<string>) => {
         return <FormControl label={'Krav'} error={p.meta.error}>
-          <Select
+          <CustomizedSelect
             placeholder={'Søk krav'}
             maxDropdownHeight='400px'
             filterOptions={o => o}
@@ -117,7 +117,7 @@ export const SearchBehandling = (props: {id: string}) => {
     <Field name={'behandlingId'}>
       {(p: FieldProps<string>) => {
         return <FormControl label={'Behandling'} error={p.meta.error}>
-          <Select
+          <CustomizedSelect
             placeholder={'Søk behandling'}
             maxDropdownHeight='400px'
             filterOptions={o => o}

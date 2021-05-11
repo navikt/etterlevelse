@@ -1,18 +1,19 @@
-import React, {useState} from 'react'
-import {Select, Value} from 'baseui/select'
-import {codelist, ListName} from '../../../services/Codelist'
-import {FieldWrapper} from '../../common/Inputs'
-import {FieldArray} from 'formik'
-import {FormControl} from 'baseui/form-control'
-import {Block} from 'baseui/block'
-import {theme} from '../../../util'
-import {Input, SIZE} from 'baseui/input'
+import React, { useState } from 'react'
+import { Value } from 'baseui/select'
+import { codelist, ListName } from '../../../services/Codelist'
+import { FieldWrapper } from '../../common/Inputs'
+import { FieldArray } from 'formik'
+import { FormControl } from 'baseui/form-control'
+import { Block } from 'baseui/block'
+import { theme } from '../../../util'
 import Button from '../../common/Button'
-import {LabelSmall} from 'baseui/typography'
-import {LovView} from '../../Lov'
-import {RenderTagList} from '../../common/TagList'
-import {Regelverk} from '../../../constants'
+import { LabelSmall } from 'baseui/typography'
+import { LovView } from '../../Lov'
+import { RenderTagList } from '../../common/TagList'
+import { Regelverk } from '../../../constants'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
+import CustomizedInput from '../../common/CustomizedInput'
+import CustomizedSelect from '../../common/CustomizedSelect'
 
 
 export const KravRegelverkEdit = () => {
@@ -20,7 +21,7 @@ export const KravRegelverkEdit = () => {
   const [text, setText] = useState('')
   const controlRef = React.useRef<HTMLInputElement | HTMLDivElement>(null)
 
-  const regelverkObject = () => ({lov: codelist.getCode(ListName.LOV, lov[0].id as string)!, spesifisering: text})
+  const regelverkObject = () => ({ lov: codelist.getCode(ListName.LOV, lov[0].id as string)!, spesifisering: text })
 
   return (
     <FieldWrapper marginBottom='32px'>
@@ -40,8 +41,8 @@ export const KravRegelverkEdit = () => {
                   <Block display='flex' alignItems={'flex-end'}>
                     <Block width='100%' maxWidth='400px' marginRight={theme.sizing.scale400}>
                       <LabelWithTooltip label={'Regelverk'}
-                                        tooltip={'Velg relevant regelverk fra nedtrekksmenyen, og angi hvilke(n) bestemmelse(r) kravet har sin opprinnelse fra.'}/>
-                      <Select
+                        tooltip={'Velg relevant regelverk fra nedtrekksmenyen, og angi hvilke(n) bestemmelse(r) kravet har sin opprinnelse fra.'} />
+                      <CustomizedSelect
                         controlRef={controlRef}
                         placeholder={'Velg regelverk'}
                         aria-label={'Velg regelverk'}
@@ -49,16 +50,16 @@ export const KravRegelverkEdit = () => {
 
                         value={lov}
                         options={codelist.getParsedOptions(ListName.LOV)}
-                        onChange={({value}) => {
+                        onChange={({ value }) => {
                           setLov(value)
                         }}
                       />
                     </Block>
                     <Block width='100%'>
-                      <LabelWithTooltip label={'Paragraf eller kapittel i regelverk'} tooltip={'Beskrivelse'}/>
-                      <Input value={text}
-                             onChange={e => setText((e.target as HTMLInputElement).value)}
-                             placeholder={'Beskrivelse, paragraf eller kapittel i regelverk'}
+                      <LabelWithTooltip label={'Paragraf eller kapittel i regelverk'} tooltip={'Beskrivelse'} />
+                      <CustomizedInput value={text}
+                        onChange={e => setText((e.target as HTMLInputElement).value)}
+                        placeholder={'Beskrivelse, paragraf eller kapittel i regelverk'}
                       />
                     </Block>
 
@@ -77,10 +78,10 @@ export const KravRegelverkEdit = () => {
                   </Block>
                   {!!lov.length && text && <Block display='flex' alignItems='center' marginTop={theme.sizing.scale400}>
                     <LabelSmall marginRight={theme.sizing.scale800}>Forhåndsvisning: </LabelSmall>
-                    <LovView regelverk={regelverkObject()}/>
+                    <LovView regelverk={regelverkObject()} />
                   </Block>}
                 </Block>
-                <RenderTagList wide list={p.form.values.regelverk.map((r: Regelverk) => <LovView regelverk={r}/>)} onRemove={p.remove}/>
+                <RenderTagList wide list={p.form.values.regelverk.map((r: Regelverk) => <LovView regelverk={r} />)} onRemove={p.remove} />
               </Block>
             </FormControl>
           )

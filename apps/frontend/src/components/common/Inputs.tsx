@@ -1,12 +1,11 @@
 import { Or } from '../../constants'
 import { Field, FieldArray, FieldArrayRenderProps, FieldProps } from 'formik'
 import { FormControl } from 'baseui/form-control'
-import { Input, SIZE } from 'baseui/input'
 import React, { ReactNode, useState } from 'react'
 import { Block } from 'baseui/block'
 import Button from './Button'
 import { RenderTagList } from './TagList'
-import { Select, SIZE as selectSize, Value } from 'baseui/select'
+import { Value } from 'baseui/select'
 import { Code, codelist, ListName } from '../../services/Codelist'
 import { SearchType } from '../../api/TeamApi'
 import * as _ from 'lodash'
@@ -16,6 +15,8 @@ import moment from 'moment'
 import { Radio, RadioGroup } from 'baseui/radio'
 import { MarkdownEditor, MarkdownInfo } from './Markdown'
 import LabelWithTooltip from '../common/LabelWithTooltip'
+import CustomInput from '../common/CustomizedInput'
+import CustomizedSelect from '../common/CustomizedSelect'
 
 export const FieldWrapper = ({ children, marginBottom }: { children: React.ReactNode, marginBottom?: string }) => {
   return (
@@ -31,7 +32,7 @@ export const InputField = (props: { label: string, name: string, caption?: React
       {(p: FieldProps) =>
         <FormControl overrides={{ Label: { style: { marginTop: '0px', marginBottom: '0px', paddingTop: '8px', paddingBottom: '8px' } } }}
           label={<LabelWithTooltip label={props.label} tooltip={props.tooltip} />} error={p.meta.touched && p.meta.error} caption={props.caption}>
-          <Input {...p.field} placeholder={props.label} />
+          <CustomInput {...p.field} placeholder={props.label} />
         </FormControl>
       }
     </Field>
@@ -158,14 +159,14 @@ export const MultiInputField = (props: {
                 {props.link &&
                   <Block width='100%' maxWidth={props.maxInputWidth}>
                     <LabelWithTooltip label={props.linkLabel} tooltip={props.linkTooltip} />
-                    <Input onKeyDown={onKey} value={linkName}
+                    <CustomInput onKeyDown={onKey} value={linkName}
                       onChange={e => setLinkName((e.target as HTMLInputElement).value)}
                     />
                   </Block>
                 }
                 <Block marginLeft={props.link ? '12px' : '0px'} width='100%' maxWidth={!props.link ? props.maxInputWidth : undefined}>
                   <LabelWithTooltip label={props.label} tooltip={props.tooltip} />
-                  <Input onKeyDown={onKey} value={val} inputRef={inputRef}
+                  <CustomInput onKeyDown={onKey} value={val} inputRef={inputRef}
                     onChange={e => setVal((e.target as HTMLInputElement).value)}
                     onBlur={!props.link ? add : undefined}
                   />
@@ -213,7 +214,7 @@ export const OptionField = (props: { label: string, name: string, clearable?: bo
 export const OptionList = (props: { label: string, clearable?: boolean, value?: Code | string, onChange: (val?: any) => void } & Or<{ options: Value }, { listName: ListName }>) => {
   const options: Value = props.options || codelist.getParsedOptions(props.listName)
   return (
-    <Select options={options} clearable={props.clearable}
+    <CustomizedSelect options={options} clearable={props.clearable}
       value={options.filter(o => o.id === (props.listName ? (props.value as Code | undefined)?.code : props.value))}
       onChange={s => {
         const val = s.option?.id
@@ -236,7 +237,7 @@ export const MultiOptionField = (props: { label: string, name: string, caption?:
             caption={props.caption}>
             <Block>
               <Block display='flex'>
-                <Select
+                <CustomizedSelect
                   placeholder={'Velg ' + _.lowerFirst(props.label)}
                   aria-label={'Velg ' + _.lowerFirst(props.label)}
                   maxDropdownHeight='400px'
@@ -268,7 +269,7 @@ export const MultiSearchField = (props: { label: string, name: string, search: S
           <FormControl label={props.label} error={p.form.touched[props.name] && p.form.errors[props.name]}>
             <Block>
               <Block display='flex'>
-                <Select
+                <CustomizedSelect
                   placeholder={'Søk ' + _.lowerFirst(props.label)}
                   maxDropdownHeight='400px'
                   filterOptions={o => o}
@@ -302,7 +303,7 @@ export const SearchField = (props: { label: string, name: string, search: Search
       <Field name={props.name}>
         {(p: FieldProps<string>) =>
           <FormControl label={props.label} error={p.meta.touched && p.meta.error}>
-            <Select
+            <CustomizedSelect
               placeholder={'Søk ' + _.lowerFirst(props.label)}
               maxDropdownHeight='400px'
               filterOptions={o => o}
