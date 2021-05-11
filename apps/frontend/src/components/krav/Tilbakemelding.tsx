@@ -115,6 +115,7 @@ export const Tilbakemeldinger = ({krav}: {krav: Krav}) => {
                       <Block display={'flex'} justifyContent={'space-between'} width={'100%'}>
                         <Block>
                           <Button kind={'tertiary'} onClick={() => setFocus(focused ? '' : t.id)}
+                                  hidePadding
                                   icon={focused ? faChevronUp : faChevronRight}>Vis {focused ? 'mindre' : 'mer'}</Button>
                         </Block>
 
