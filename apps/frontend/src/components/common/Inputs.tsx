@@ -9,7 +9,6 @@ import { Value } from 'baseui/select'
 import { Code, codelist, ListName } from '../../services/Codelist'
 import { SearchType } from '../../api/TeamApi'
 import * as _ from 'lodash'
-import { Textarea } from 'baseui/textarea'
 import { Datepicker } from 'baseui/datepicker'
 import moment from 'moment'
 import { Radio, RadioGroup } from 'baseui/radio'
@@ -17,6 +16,7 @@ import { MarkdownEditor, MarkdownInfo } from './Markdown'
 import LabelWithTooltip from '../common/LabelWithTooltip'
 import CustomInput from '../common/CustomizedInput'
 import CustomizedSelect from '../common/CustomizedSelect'
+import CustomizedTextarea from './CustomizedTextarea'
 
 export const FieldWrapper = ({ children, marginBottom }: { children: React.ReactNode, marginBottom?: string }) => {
   return (
@@ -54,7 +54,7 @@ export const TextAreaField = (props: { marginBottom?: string, label: string, nam
             <>
               {props.markdown && <MarkdownEditor initialValue={p.field.value} setValue={v => p.form.setFieldValue(props.name, v)}
                 onImageUpload={props.onImageUpload} shortenLinks={props.shortenLinks} />}
-              {!props.markdown && <Textarea rows={8} {...p.field} placeholder={props.label} />}
+              {!props.markdown && <CustomizedTextarea rows={8} {...p.field} placeholder={props.label} />}
             </>
           </FormControl>
         }

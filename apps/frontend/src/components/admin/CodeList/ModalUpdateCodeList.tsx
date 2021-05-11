@@ -6,13 +6,13 @@ import { Field, FieldProps, Form, Formik, FormikProps, } from 'formik'
 import { Button, KIND } from 'baseui/button'
 import { Block, BlockProps } from 'baseui/block'
 import { Label2 } from 'baseui/typography'
-import { Textarea } from 'baseui/textarea'
-import { Input, SIZE as InputSIZE } from 'baseui/input'
+import { SIZE as InputSIZE } from 'baseui/input'
 import { CodeListFormValues, codeListSchema, ListName } from '../../../services/Codelist'
 import { Error } from '../../common/ModalSchema'
 import { LovCodeDataForm, TemaCodeDataForm } from './LovCode'
 import { MarkdownInfo } from '../../common/Markdown'
 import CustomizedInput from '../../common/CustomizedInput'
+import CustomizedTextarea from '../../common/CustomizedTextarea'
 
 const modalBlockProps: BlockProps = {
   width: '700px',
@@ -87,7 +87,7 @@ const UpdateCodeListModal = ({ title, initialValues, errorOnUpdate, isOpen, onCl
                 <Field
                   name="description"
                 >{({ field }: FieldProps<CodeListFormValues>) => (
-                  <Textarea
+                  <CustomizedTextarea
                     name="description"
                     value={formik.values.description}
                     onChange={formik.handleChange}

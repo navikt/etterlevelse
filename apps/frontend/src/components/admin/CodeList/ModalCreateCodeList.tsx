@@ -4,13 +4,13 @@ import { Block, BlockProps } from 'baseui/block'
 import { Label2 } from 'baseui/typography'
 import { Field, FieldProps, Form, Formik } from 'formik'
 import { SIZE as InputSIZE } from 'baseui/input'
-import { Textarea } from 'baseui/textarea'
 import { Button, KIND } from 'baseui/button'
 import { CodeListFormValues, codeListSchema, ListName } from '../../../services/Codelist'
 import { Error } from '../../common/ModalSchema'
 import { LovCodeDataForm, TemaCodeDataForm } from './LovCode'
 import { MarkdownInfo } from '../../common/Markdown'
 import CustomizedInput from '../../common/CustomizedInput'
+import CustomizedTextarea from '../../common/CustomizedTextarea'
 
 const modalBlockProps: BlockProps = {
   width: '700px',
@@ -107,7 +107,7 @@ const CreateCodeListModal = ({ isOpen, title, list, errorOnCreate, onClose, subm
                   <Field
                     name="description"
                     render={({ field }: FieldProps) => (
-                      <Textarea
+                      <CustomizedTextarea
                         {...field}
                         type="input"
                         rows={10}

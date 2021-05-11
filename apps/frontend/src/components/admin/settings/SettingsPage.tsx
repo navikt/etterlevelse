@@ -2,12 +2,12 @@ import React, {FormEvent, useEffect, useState} from 'react'
 import {Block} from 'baseui/block'
 import {StyledSpinnerNext} from 'baseui/spinner'
 import {H4, Label2} from 'baseui/typography'
-import {StatefulTextarea} from 'baseui/textarea'
 import {getSettings, Settings, writeSettings} from './SettingsApi'
 import {intl} from '../../../util/intl/intl'
 import {theme} from '../../../util'
 import Button from '../../common/Button'
 import {Markdown} from '../../common/Markdown'
+import {CustomizedStatefulTextarea} from '../../common/CustomizedTextarea'
 
 export const SettingsPage = () => {
   const [loading, setLoading] = React.useState<boolean>(true)
@@ -61,7 +61,7 @@ const FrontpageMessage = (props: {message?: string, setMessage: (message: string
         <Label2 marginRight="1rem">Forsidemelding</Label2>
         <Block width="100%" display="flex">
           <Block width="50%" marginRight="1rem">
-            <StatefulTextarea initialState={{value: props.message}} rows={20}
+            <CustomizedStatefulTextarea initialState={{value: props.message}} rows={20}
                               onChange={(event: any) => props.setMessage((event as FormEvent<HTMLInputElement>).currentTarget.value)}
             />
           </Block>

@@ -29,12 +29,12 @@ import {FormControl} from 'baseui/form-control'
 import {AddEmail, SlackChannelSearch, SlackUserSearch, VarslingsadresserTagList} from './Edit/KravVarslingsadresserEdit'
 import {useHistory} from 'react-router-dom'
 import {useQueryParam, useRefs} from '../../util/hooks'
-import {Textarea} from 'baseui/textarea'
 import {ettlevColors} from '../../util/theme'
 import {mailboxPoppingIcon} from '../Images'
 import {InfoBlock} from '../common/InfoBlock'
 import {Portrait} from '../common/Portrait'
 import {PersonName} from '../common/PersonName'
+import CustomizedTextarea from '../common/CustomizedTextarea'
 
 const DEFAULT_COUNT_SIZE = 5
 
@@ -347,7 +347,7 @@ const TilbakemeldingSvar = ({tilbakemelding, close}: {tilbakemelding: Tilbakemel
 
   return (
     <Block display='flex' alignItems='flex-end'>
-      <Textarea onChange={e => setResponse((e.target as HTMLInputElement).value)} value={response}/>
+      <CustomizedTextarea onChange={e => setResponse((e.target as HTMLInputElement).value)} value={response}/>
 
       <Block display='flex' justifyContent='space-between' flexDirection='column' marginLeft={theme.sizing.scale400}>
 
