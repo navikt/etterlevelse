@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Select, Value } from 'baseui/select'
+import { Value } from 'baseui/select'
 import { codelist, ListName } from '../../../services/Codelist'
 import { FieldWrapper } from '../../common/Inputs'
 import { FieldArray } from 'formik'
@@ -13,6 +13,7 @@ import { RenderTagList } from '../../common/TagList'
 import { Regelverk } from '../../../constants'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
 import CustomizedInput from '../../common/CustomizedInput'
+import CustomizedSelect from '../../common/CustomizedSelect'
 
 
 export const KravRegelverkEdit = () => {
@@ -41,7 +42,7 @@ export const KravRegelverkEdit = () => {
                     <Block width='100%' maxWidth='400px' marginRight={theme.sizing.scale400}>
                       <LabelWithTooltip label={'Regelverk'}
                         tooltip={'Velg relevant regelverk fra nedtrekksmenyen, og angi hvilke(n) bestemmelse(r) kravet har sin opprinnelse fra.'} />
-                      <Select
+                      <CustomizedSelect
                         controlRef={controlRef}
                         placeholder={'Velg regelverk'}
                         aria-label={'Velg regelverk'}

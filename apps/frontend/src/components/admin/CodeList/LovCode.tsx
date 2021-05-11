@@ -5,7 +5,6 @@ import { Code, codelist, CodeListFormValues, ListName, LovCodeData, TemaCodeData
 import * as React from 'react'
 import { SIZE as InputSIZE } from 'baseui/input'
 import { OptionList } from '../../common/Inputs'
-import { Select } from 'baseui/select'
 import { temaBilder } from '../../Images'
 import { StatefulTooltip } from 'baseui/tooltip'
 import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons'
@@ -13,6 +12,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { theme } from '../../../util'
 import Button from '../../common/Button'
 import CustomizedInput from '../../common/CustomizedInput'
+import CustomizedSelect from '../../common/CustomizedSelect'
 
 const rowBlockProps: BlockProps = {
   display: 'flex',
@@ -106,7 +106,7 @@ export const TemaCodeDataForm = () => {
                   <Block display='inline' marginLeft={theme.sizing.scale600}><FontAwesomeIcon color={theme.colors.primary400} icon={faQuestionCircle} /></Block>
                 </StatefulTooltip>
               </Label2>
-              <Select options={temaBildeOptions} clearable={false}
+              <CustomizedSelect options={temaBildeOptions} clearable={false}
                 value={temaBildeOptions.filter(o => o.id === data.image)}
                 onChange={s => {
                   const image = s.option?.id as string
