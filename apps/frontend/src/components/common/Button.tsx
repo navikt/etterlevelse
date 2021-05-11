@@ -8,7 +8,7 @@ import {theme} from '../../util'
 import {Override} from 'baseui/overrides'
 import {StyleObject} from 'styletron-react'
 import {Block} from 'baseui/block'
-import {borderRadius, borderStyle, borderWidth, marginAll} from './Style'
+import {borderRadius, borderStyle, borderWidth, paddingAll} from './Style'
 import {ettlevColors} from '../../util/theme'
 
 
@@ -88,7 +88,7 @@ const Button = (props: ButtonProps) => {
       ...(props.kind === 'outline' ? outlineOverride : {}),
       ...(props.kind === 'underline-hover' ? underlineOverride : {}),
       ...(props.kind === 'secondary' ? buttonBorderStyle: {}),
-      ...(props.hidePadding ? marginAll('0') : {}),
+      ...(props.hidePadding ? paddingAll('0') : {}),
       ...(props.inline ? { paddingTop: theme.sizing.scale100, paddingBottom: theme.sizing.scale100 } : {}),
       ...(props.$style || {}),
       ...(boxShadow.style)
