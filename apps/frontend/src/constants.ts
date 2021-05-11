@@ -13,8 +13,6 @@ export interface UserInfo {
   groups: Group[];
   ident?: string;
   name?: string;
-  givenName?: string;
-  familyName?: string;
   email?: string;
 }
 
@@ -25,11 +23,6 @@ export interface PageResponse<T> {
   numberOfElements: number;
   totalElements: number;
   content: T[];
-}
-
-export interface GraphQLResponse<T> {
-  errors?: {message: string}[]
-  data: T
 }
 
 export interface ChangeStamp {

@@ -24,6 +24,7 @@ import {logo} from './Images'
 import {maxPageWidth} from '../util/theme'
 import {buttonBorderStyle} from './common/Button'
 import {Checkbox} from 'baseui/checkbox'
+import {Portrait} from './common/Portrait'
 
 const LoginButton = (props: {location: string}) => {
   return (
@@ -61,7 +62,10 @@ const LoggedInHeader = (props: {location: string}) => {
           }
         >
           <BaseButton kind="tertiary">
-            <b>{user.getIdent()}</b>
+            <Portrait ident={user.getIdent()} size={theme.sizing.scale850}/>
+            <Block marginLeft={theme.sizing.scale200}>
+              <b>{user.getIdent()}</b>
+            </Block>
           </BaseButton>
         </StatefulPopover>
       </Block>

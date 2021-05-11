@@ -98,7 +98,7 @@ export const Tilbakemeldinger = ({krav}: {krav: Krav}) => {
                       </Block>
                     </Block>
 
-                    <ParagraphMedium marginBottom={0} marginRight={theme.sizing.scale600} >
+                    <ParagraphMedium marginBottom={0} marginRight={theme.sizing.scale600}>
                       {focused ? t.meldinger[0].innhold : _.truncate(t.meldinger[0].innhold, {length: 180, separator: /[.,] +/})}
                     </ParagraphMedium>
 
@@ -108,7 +108,7 @@ export const Tilbakemeldinger = ({krav}: {krav: Krav}) => {
                     <Block marginTop={theme.sizing.scale800}>
                       {/* meldingsliste */}
                       {focused && <Block display={'flex'} flexDirection={'column'}>
-                        {t.meldinger.slice(1).map(m => <ResponseMelding key={m.meldingNr} m={m} tilbakemeldingId={t.id} oppdater={replace}/>)}
+                        {t.meldinger.slice(1).map(m => <ResponseMelding key={m.meldingNr} m={m} tilbakemelding={t} oppdater={replace}/>)}
                       </Block>}
 
                       {/* knapprad bunn */}
@@ -171,9 +171,11 @@ export const Tilbakemeldinger = ({krav}: {krav: Krav}) => {
   )
 }
 
-const ResponseMelding = (props: {m: TilbakemeldingMelding, tilbakemeldingId: string, oppdater: (t: Tilbakemelding) => void}) => {
-  const {m, tilbakemeldingId, oppdater} = props
+const ResponseMelding = (props: {m: TilbakemeldingMelding, tilbakemelding: Tilbakemelding, oppdater: (t: Tilbakemelding) => void}) => {
+  const {m, tilbakemelding, oppdater} = props
   const melder = m.rolle === TilbakemeldingRolle.MELDER
+  const sisteMelding = m.meldingNr === tilbakemelding.meldinger[tilbakemelding.meldinger.length - 1].meldingNr
+
   return (
     <Block display={'flex'} flexDirection={'column'}
            marginBottom={theme.sizing.scale600}
@@ -190,7 +192,7 @@ const ResponseMelding = (props: {m: TilbakemeldingMelding, tilbakemeldingId: str
       </Block>
 
       <ParagraphMedium marginBottom={0} marginTop={theme.sizing.scale400} marginRight={theme.sizing.scale600}>{m.innhold}</ParagraphMedium>
-      <MeldingKnapper melding={m} tilbakemeldingId={tilbakemeldingId} oppdater={oppdater}/>
+      {sisteMelding && <MeldingKnapper melding={m} tilbakemeldingId={tilbakemelding.id} oppdater={oppdater}/>}
     </Block>
   )
 }

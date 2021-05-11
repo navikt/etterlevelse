@@ -57,14 +57,6 @@ class UserService {
     return this.userInfo.name ?? ''
   }
 
-  public getGivenName(): string {
-    return this.userInfo.givenName ?? ''
-  }
-
-  public getFamilyName(): string {
-    return this.userInfo.familyName ?? ''
-  }
-
   public getAvailableGroups(): {name: string, group: Group}[] {
     return this.userInfo.groups
     .filter(g => g !== Group.READ)
