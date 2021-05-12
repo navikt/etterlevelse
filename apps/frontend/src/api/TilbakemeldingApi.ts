@@ -17,7 +17,7 @@ export const tilbakemeldingNewMelding = async (request: TilbakemeldingNewMelding
 }
 
 export const tilbakemeldingEditMelding = async (request: {tilbakemeldingId: string, meldingNr: number, text: string}) => {
-  return (await axios.post<Tilbakemelding>(`${env.backendBaseUrl}/krav/tilbakemelding/${request.tilbakemeldingId}/${request.meldingNr}`, request.text)).data
+  return (await axios.post<Tilbakemelding>(`${env.backendBaseUrl}/krav/tilbakemelding/${request.tilbakemeldingId}/${request.meldingNr}`, {innhold: request.text})).data
 }
 
 export const tilbakemeldingslettMelding = async (request: {tilbakemeldingId: string, meldingNr: number}) => {
