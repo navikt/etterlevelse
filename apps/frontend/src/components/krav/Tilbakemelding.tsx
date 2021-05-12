@@ -2,6 +2,7 @@ import {AdresseType, Krav, Tilbakemelding, TilbakemeldingMelding, Tilbakemelding
 import {
   createNewTilbakemelding,
   CreateTilbakemeldingRequest,
+  tilbakemeldingEditMelding,
   tilbakemeldingNewMelding,
   TilbakemeldingNewMeldingRequest,
   tilbakemeldingslettMelding,
@@ -29,7 +30,7 @@ import {FormControl} from 'baseui/form-control'
 import {AddEmail, SlackChannelSearch, SlackUserSearch, VarslingsadresserTagList} from './Edit/KravVarslingsadresserEdit'
 import {useHistory} from 'react-router-dom'
 import {useQueryParam, useRefs} from '../../util/hooks'
-import {ettlevColors} from '../../util/theme'
+import {ettlevColors, pageWidth} from '../../util/theme'
 import {mailboxPoppingIcon} from '../Images'
 import {InfoBlock} from '../common/InfoBlock'
 import {Portrait} from '../common/Portrait'
@@ -288,7 +289,13 @@ const TilbakemeldingSvarModal = ({tilbakemelding, close}: {tilbakemelding?: Tilb
   if (!tilbakemelding) return null
 
   return (
-    <Modal unstable_ModalBackdropScroll isOpen={!!tilbakemelding} onClose={() => close()}>
+    <Modal unstable_ModalBackdropScroll isOpen={!!tilbakemelding} onClose={() => close()} overrides={{
+      Dialog: {
+        style: {
+          width: '60%', maxWidth: pageWidth
+        }
+      }
+    }}>
       <ModalHeader>Svar på tilbakemelding</ModalHeader>
       <ModalBody>
         <TilbakemeldingSvar tilbakemelding={tilbakemelding} close={close}/>
@@ -301,12 +308,13 @@ const MeldingKnapper = (props: {melding: TilbakemeldingMelding, tilbakemeldingId
   const {melding, tilbakemeldingId, oppdater} = props
   const meldingNr = melding.meldingNr
   const [deleteModal, setDeleteModal] = useState(false)
+  const [editModal, setEditModal] = useState(false)
   if ((!user.isAdmin() && melding.fraIdent !== user.getIdent()) || !user.canWrite()) return null
 
   return (
     <>
       <Block marginTop={theme.sizing.scale400}>
-        <Button kind={'underline-hover'} size={'mini'} icon={faPencilAlt}>Rediger</Button>
+        <Button kind={'underline-hover'} size={'mini'} icon={faPencilAlt} onClick={() => setEditModal(true)}>Rediger</Button>
         <Button kind={'underline-hover'} size={'mini'} icon={faTrashAlt} marginLeft onClick={() => setDeleteModal(true)}>Slett</Button>
       </Block>
 
@@ -321,6 +329,20 @@ const MeldingKnapper = (props: {melding: TilbakemeldingMelding, tilbakemeldingId
           <Button kind={'secondary'} size={'compact'} onClick={() => setDeleteModal(false)}>Avbryt</Button>
           <Button kind={'primary'} size={'compact'} marginLeft onClick={() => tilbakemeldingslettMelding({tilbakemeldingId, meldingNr}).then(oppdater)}>Slett</Button>
         </ModalFooter>
+      </Modal>}
+
+      {editModal && <Modal isOpen onClose={() => setEditModal(false)} unstable_ModalBackdropScroll overrides={{
+        Dialog: {
+          style: {
+            width: '60%', maxWidth: pageWidth
+          }
+        }
+      }}>
+        <ModalHeader>Rediger melding</ModalHeader>
+        <ModalBody>
+          <ParagraphSmall>{moment(melding.tid).format('ll')} <PersonName ident={melding.fraIdent}/></ParagraphSmall>
+          <TilbakemeldingEdit tilbakemeldingId={tilbakemeldingId} melding={melding} close={oppdater}/>
+        </ModalBody>
       </Modal>}
     </>
   )
@@ -348,7 +370,7 @@ const TilbakemeldingSvar = ({tilbakemelding, close}: {tilbakemelding: Tilbakemel
 
   return (
     <Block display='flex' alignItems='flex-end'>
-      <CustomizedTextarea onChange={e => setResponse((e.target as HTMLInputElement).value)} value={response}/>
+      <CustomizedTextarea rows={15} onChange={e => setResponse((e.target as HTMLInputElement).value)} value={response}/>
 
       <Block display='flex' justifyContent='space-between' flexDirection='column' marginLeft={theme.sizing.scale400}>
 
@@ -366,6 +388,29 @@ const TilbakemeldingSvar = ({tilbakemelding, close}: {tilbakemelding: Tilbakemel
       </Block>
       {error && <Notification kind='negative' overrides={{Body: {style: {marginBottom: '-25px'}}}}>{error}</Notification>}
 
+    </Block>
+  )
+}
+
+const TilbakemeldingEdit = ({tilbakemeldingId, melding, close}: {tilbakemeldingId: string, melding: TilbakemeldingMelding, close: (t: Tilbakemelding) => void}) => {
+  const [response, setResponse] = useState(melding.innhold)
+  const [error, setError] = useState()
+  const [loading, setLoading] = useState(false)
+
+  const submit = () => {
+
+    setLoading(true)
+    tilbakemeldingEditMelding({tilbakemeldingId, meldingNr: melding.meldingNr, text: response}).then(close).catch(e => {
+      setError(e.error)
+      setLoading(false)
+    })
+  }
+
+  return (
+    <Block display='flex' alignItems='flex-end'>
+      <CustomizedTextarea rows={15} onChange={e => setResponse((e.target as HTMLInputElement).value)} value={response}/>
+      <Button size='compact' marginLeft disabled={!response || loading} onClick={submit}>Send</Button>
+      {error && <Notification kind='negative' overrides={{Body: {style: {marginBottom: '-25px'}}}}>{error}</Notification>}
     </Block>
   )
 }

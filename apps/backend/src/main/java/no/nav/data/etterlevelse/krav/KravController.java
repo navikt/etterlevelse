@@ -14,6 +14,7 @@ import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravImage;
 import no.nav.data.etterlevelse.krav.domain.Tilbakemelding;
 import no.nav.data.etterlevelse.krav.dto.CreateTilbakemeldingRequest;
+import no.nav.data.etterlevelse.krav.dto.EditTilbakemeldingRequest;
 import no.nav.data.etterlevelse.krav.dto.KravRequest;
 import no.nav.data.etterlevelse.krav.dto.KravResponse;
 import no.nav.data.etterlevelse.krav.dto.TilbakemeldingNewMeldingRequest;
@@ -212,9 +213,9 @@ public class KravController {
     @Operation(summary = "Edit Melding on Tilbakemelding")
     @ApiResponse(description = "Melding edited")
     @PostMapping("/tilbakemelding/{tilbakemeldingId}/{meldingNr}")
-    public ResponseEntity<TilbakemeldingResponse> tilbakemeldingEditMelding(@PathVariable UUID tilbakemeldingId, @PathVariable int meldingNr, @RequestBody String body) {
+    public ResponseEntity<TilbakemeldingResponse> tilbakemeldingEditMelding(@PathVariable UUID tilbakemeldingId, @PathVariable int meldingNr, @RequestBody EditTilbakemeldingRequest req) {
         log.info("Edit Melding on Tilbakemelding");
-        var tilbakemelding = tilbakemeldingService.editMelding(tilbakemeldingId, meldingNr, body);
+        var tilbakemelding = tilbakemeldingService.editMelding(tilbakemeldingId, meldingNr, req.getInnhold());
         return ResponseEntity.ok(tilbakemelding.toResponse());
     }
 
