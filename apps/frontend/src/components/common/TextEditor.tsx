@@ -25,6 +25,7 @@ const TextEditor = (props: TextEditorProps) => {
         onEditorStateChange={data => setVal(data)}
         toolbar={{
           options: ['inline', 'blockType', 'list', 'textAlign', 'link', 'image', 'history'],
+          blockType: {options: ['Normal', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'Blockquote']},
           inline: {options: ['bold', 'italic', 'underline', 'strikethrough', 'monospace']},
           list: {options: ['unordered', 'ordered']},
           link: { options: ['link']},
