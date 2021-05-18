@@ -1,7 +1,7 @@
 import React from 'react'
 import { convertToRaw, EditorState } from 'draft-js'
 import { Editor } from 'react-draft-wysiwyg'
-import draftToMarkdown from 'draftjs-to-markdown'
+import { draftToMarkdown } from 'markdown-draft-js'
 import '../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
 import { Block } from 'baseui/block'
 import { ettlevColors } from '../../util/theme'
@@ -21,10 +21,10 @@ const TextEditor = () => {
           setEditorState(value)
         }}
       />
-      {/* <textarea
+      <textarea
         disabled
         value={editorState && draftToMarkdown(convertToRaw(editorState.getCurrentContent()))}
-      /> */}
+      />
     </Block>
   )
 }
