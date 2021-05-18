@@ -20,7 +20,7 @@ const TextEditor = (props: TextEditorProps) => {
   return (
     <Block backgroundColor={ettlevColors.white} $style={{border: `1px solid ${ettlevColors.textAreaBorder}`}}>
       <Editor
-        editorStyle={{padding: '10px'}}
+        editorStyle={{padding: '10px', height: props.height || '500px'}}
         toolbarStyle={{backgroundColor: ettlevColors.grey50, borderBottom: `1px solid ${ettlevColors.textAreaBorder}` }}
         onEditorStateChange={data => setVal(data)}
         toolbar={{
@@ -32,10 +32,10 @@ const TextEditor = (props: TextEditorProps) => {
           image: {uploadCallback: props.onImageUpload},
         }}
       />
-      <textarea
+      {/* <textarea
         disabled
         value={val && draftToMarkdown(convertToRaw(val.getCurrentContent()))}
-      />
+      /> */}
     </Block>
   )
 }
