@@ -17,6 +17,7 @@ import LabelWithTooltip from '../common/LabelWithTooltip'
 import CustomInput from '../common/CustomizedInput'
 import CustomizedSelect from '../common/CustomizedSelect'
 import CustomizedTextarea from './CustomizedTextarea'
+import TextEditor from '../common/TextEditor'
 
 export const FieldWrapper = ({ children, marginBottom }: { children: React.ReactNode, marginBottom?: string }) => {
   return (
@@ -52,8 +53,11 @@ export const TextAreaField = (props: { marginBottom?: string, label: string, nam
               </Block>
               : props.caption}>
             <>
-              {props.markdown && <MarkdownEditor initialValue={p.field.value} setValue={v => p.form.setFieldValue(props.name, v)}
-                onImageUpload={props.onImageUpload} shortenLinks={props.shortenLinks} />}
+              {props.markdown && (<Block>
+                <TextEditor/>
+                <MarkdownEditor initialValue={p.field.value} setValue={v => p.form.setFieldValue(props.name, v)}
+                onImageUpload={props.onImageUpload} shortenLinks={props.shortenLinks} />
+                </Block>)}
               {!props.markdown && <CustomizedTextarea rows={8} {...p.field} placeholder={props.label} />}
             </>
           </FormControl>
