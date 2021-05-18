@@ -7,36 +7,33 @@ import { Block } from 'baseui/block'
 import { ettlevColors } from '../../util/theme'
 
 type TextEditorProps = {
+  initialValue: string,
+  setValue: (v: string) => void,
+  shortenLinks?: boolean
   onImageUpload?: (file: File) => Promise<string>,
+  height?: string
 }
 
 const TextEditor = (props: TextEditorProps) => {
-  const [editorState, setEditorState] = React.useState(EditorState.createEmpty())
-
+  const [val, setVal] = React.useState(EditorState.createEmpty())
 
   return (
     <Block backgroundColor={ettlevColors.white} $style={{border: `1px solid ${ettlevColors.grey200}`}}>
       <Editor
         editorStyle={{padding: '10px'}}
         toolbarStyle={{backgroundColor: ettlevColors.grey50, borderBottom: `1px solid ${ettlevColors.grey200}` }}
-        onEditorStateChange={(value: any) => {
-          setEditorState(value)
-        }}
+        onEditorStateChange={data => setVal(data)}
         toolbar={{
           options: ['inline', 'blockType', 'list', 'textAlign', 'link', 'image', 'history'],
           inline: {options: ['bold', 'italic', 'underline', 'strikethrough', 'monospace']},
           list: {options: ['unordered', 'ordered']},
           link: { options: ['link']},
-          image: {
-            uploadEnabled: true,
-            uploadCallback: props.onImageUpload
-          },
-          
+          image: {uploadCallback: props.onImageUpload},
         }}
       />
       <textarea
         disabled
-        value={editorState && draftToMarkdown(convertToRaw(editorState.getCurrentContent()))}
+        value={val && draftToMarkdown(convertToRaw(val.getCurrentContent()))}
       />
     </Block>
   )

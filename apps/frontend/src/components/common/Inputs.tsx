@@ -54,7 +54,7 @@ export const TextAreaField = (props: { marginBottom?: string, label: string, nam
               : props.caption}>
             <>
               {props.markdown && (<Block>
-                <TextEditor onImageUpload={props.onImageUpload}/>
+                <TextEditor initialValue={p.field.value} setValue={v => p.form.setFieldValue(props.name, v)} onImageUpload={props.onImageUpload}/>
                 <MarkdownEditor initialValue={p.field.value} setValue={v => p.form.setFieldValue(props.name, v)}
                 onImageUpload={props.onImageUpload} shortenLinks={props.shortenLinks} />
                 </Block>)}
