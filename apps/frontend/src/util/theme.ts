@@ -30,6 +30,7 @@ import '@fontsource/source-sans-pro/900.css'
   warning50: '#FFF5E7',
   error400: '#AE5235',
   error50: '#F6EAE6',
+  textAreaBorder: '#E0E0E0',
 }
 
 export const primitives: ThemePrimitives & {primary150: string, primary350: string} = {

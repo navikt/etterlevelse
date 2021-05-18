@@ -18,10 +18,10 @@ const TextEditor = (props: TextEditorProps) => {
   const [val, setVal] = React.useState(EditorState.createEmpty())
 
   return (
-    <Block backgroundColor={ettlevColors.white} $style={{border: `1px solid ${ettlevColors.grey200}`}}>
+    <Block backgroundColor={ettlevColors.white} $style={{border: `1px solid ${ettlevColors.textAreaBorder}`}}>
       <Editor
         editorStyle={{padding: '10px'}}
-        toolbarStyle={{backgroundColor: ettlevColors.grey50, borderBottom: `1px solid ${ettlevColors.grey200}` }}
+        toolbarStyle={{backgroundColor: ettlevColors.grey50, borderBottom: `1px solid ${ettlevColors.textAreaBorder}` }}
         onEditorStateChange={data => setVal(data)}
         toolbar={{
           options: ['inline', 'blockType', 'list', 'textAlign', 'link', 'image', 'history'],
