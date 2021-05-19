@@ -1,5 +1,5 @@
 import React from 'react'
-import { convertToRaw, convertFromRaw, EditorState } from 'draft-js'
+import { convertToRaw, RawDraftContentState } from 'draft-js'
 import { Editor } from 'react-draft-wysiwyg'
 import { draftToMarkdown, markdownToDraft } from 'markdown-draft-js'
 import '../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
@@ -18,12 +18,29 @@ type TextEditorProps = {
 const TextEditor = (props: TextEditorProps) => {
   const [val, setVal] = useDebouncedState(props.initialValue, 500, props.setValue)
 
+  const CustomDraftToMarkdown = (data: RawDraftContentState) => {
+    return draftToMarkdown( data, {
+      styleItems:{
+        code: {
+          open: () => {
+            return '```\n'
+          },
+          close: () => {
+            return '\n```'
+          },
+        }
+      }
+    })
+  }
+
   return (
     <Block backgroundColor={ettlevColors.white} $style={{ border: `1px solid ${ettlevColors.textAreaBorder}` }}>
       <Editor
         editorStyle={{ padding: '10px', height: props.height || '500px' }}
         toolbarStyle={{ backgroundColor: ettlevColors.grey50, borderBottom: `1px solid ${ettlevColors.textAreaBorder}` }}
-        onEditorStateChange={data => setVal(draftToMarkdown(convertToRaw(data.getCurrentContent())))}
+        onEditorStateChange={data => {
+          setVal(CustomDraftToMarkdown(convertToRaw(data.getCurrentContent())))
+        }}
         initialContentState={markdownToDraft(val)}
         toolbar={{
           options: ['inline', 'blockType', 'list', 'link', 'image', 'history'],
