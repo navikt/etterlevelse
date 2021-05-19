@@ -1,5 +1,5 @@
 import {Block} from 'baseui/block'
-import {H1, HeadingXLarge, LabelLarge, LabelSmall, Paragraph2, ParagraphSmall} from 'baseui/typography'
+import {H1, HeadingXLarge, LabelLarge, LabelSmall, ParagraphSmall} from 'baseui/typography'
 import {useParams} from 'react-router-dom'
 import {deleteKrav, KravIdParams, mapToFormVal} from '../api/KravApi'
 import React, {useEffect, useRef, useState} from 'react'
@@ -98,16 +98,6 @@ export const KravPage = () => {
     if (!edit && !krav?.id && krav?.nyKravVersjon) reloadKrav()
   }, [edit])
 
-  const getLastModifiedBy = (krav: KravQL) => {
-    const monthList = ['januar', 'februar', 'mars', 'april', 'mai', 'juni', 'juli', 'august', 'september', 'oktober', 'november', 'desember']
-    const date = new Date(krav.changeStamp.lastModifiedDate)
-    const year = date.getFullYear()
-    const month = monthList[date.getMonth()]
-    const dt = date.getDate() < 10 ? '0' + date.getDate().toString() : date.getDate().toString()
-
-    return `Sist endret: ${dt}. ${month} ${year} av ${krav.changeStamp.lastModifiedBy.split(' ')[0]}`
-  }
-
   return (
     <Block width='100%' overrides={{Block: {props: {role: 'main'}}}}>
       {kravLoading && <LoadingSkeleton header='Krav'/>}
@@ -189,11 +179,6 @@ export const KravPage = () => {
           </Block>
         </Block>
 
-        <Block display='flex' justifyContent='center' width='calc(100% - 80px)' paddingLeft='40px' paddingRight='40px'>
-          <Block maxWidth={pageWidth} width='100%'>
-            <Paragraph2>{getLastModifiedBy(krav)}</Paragraph2>
-          </Block>
-        </Block>
       </Block>}
 
       {krav && <EditKrav isOpen={edit} setIsOpen={setEdit} krav={krav} formRef={formRef} close={k => {
