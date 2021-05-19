@@ -19,8 +19,18 @@ const TextEditor = (props: TextEditorProps) => {
   const [val, setVal] = useDebouncedState(props.initialValue, 500, props.setValue)
 
   const CustomDraftToMarkdown = (data: RawDraftContentState) => {
-    return draftToMarkdown( data, {
-      styleItems:{
+    return draftToMarkdown(data, {
+      entityItems: {
+        IMAGE: {
+          open: () => {
+            return ''
+          },
+          close: (entity: any) => {
+            return `![${entity.data.alt}](${entity.data.src})`
+          },
+        }
+      },
+      styleItems: {
         code: {
           open: () => {
             return '```\n'
@@ -28,6 +38,23 @@ const TextEditor = (props: TextEditorProps) => {
           close: () => {
             return '\n```'
           },
+        }
+      }
+    })
+  }
+
+  const CustomMarkdownToDraft = (data: string) => {
+    return markdownToDraft(data, {
+      blockEntities: {
+        image: (item: any) => {
+          return {
+            type: 'IMAGE',
+            mutability: 'MUTABLE',
+            data: {
+              src: item.src,
+              alt: item.alt
+            },
+          }
         }
       }
     })
@@ -41,16 +68,16 @@ const TextEditor = (props: TextEditorProps) => {
         onEditorStateChange={data => {
           setVal(CustomDraftToMarkdown(convertToRaw(data.getCurrentContent())))
         }}
-        initialContentState={markdownToDraft(val)}
+        initialContentState={CustomMarkdownToDraft(val)}
         toolbar={{
           options: ['inline', 'blockType', 'list', 'link', 'image', 'history'],
           inline: { options: ['bold', 'italic', 'underline', 'strikethrough', 'monospace'] },
           list: { options: ['unordered', 'ordered'] },
           link: { options: ['link'] },
-          //image: { uploadCallback: props.onImageUpload },
+          image: { alt: { present: true, mandatory: true }, },
         }}
       />
-      <textarea value={val}/>
+      <textarea readOnly value={val} />
     </Block>
   )
 }
