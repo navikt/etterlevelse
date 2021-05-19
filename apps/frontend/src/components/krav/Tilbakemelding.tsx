@@ -102,6 +102,7 @@ export const Tilbakemeldinger = ({krav}: {krav: Krav}) => {
                     <ParagraphMedium marginBottom={0} marginRight={theme.sizing.scale600}>
                       {focused ? t.meldinger[0].innhold : _.truncate(t.meldinger[0].innhold, {length: 180, separator: /[.,] +/})}
                     </ParagraphMedium>
+                    {focused && <EndretInfo melding={t.meldinger[0]}/>}
 
                     {focused && t.meldinger.length === 1 &&
                     <MeldingKnapper melding={t.meldinger[0]} tilbakemeldingId={t.id} oppdater={replace}/>}
@@ -194,7 +195,19 @@ const ResponseMelding = (props: {m: TilbakemeldingMelding, tilbakemelding: Tilba
       </Block>
 
       <ParagraphMedium marginBottom={0} marginTop={theme.sizing.scale400} marginRight={theme.sizing.scale600}>{m.innhold}</ParagraphMedium>
+      <EndretInfo melding={m}/>
       {sisteMelding && <MeldingKnapper melding={m} tilbakemeldingId={tilbakemelding.id} oppdater={oppdater}/>}
+    </Block>
+  )
+}
+
+const EndretInfo = (props: {melding: TilbakemeldingMelding}) => {
+  if (!props.melding.endretAvIdent) return null
+  return (
+    <Block alignSelf={'flex-end'}>
+      <ParagraphSmall marginBottom={0}>
+        Sist endret av <PersonName ident={props.melding.endretAvIdent}/> - {moment(props.melding.endretTid).format('lll')}
+      </ParagraphSmall>
     </Block>
   )
 }
@@ -341,7 +354,10 @@ const MeldingKnapper = (props: {melding: TilbakemeldingMelding, tilbakemeldingId
         <ModalHeader>Rediger melding</ModalHeader>
         <ModalBody>
           <ParagraphSmall>{moment(melding.tid).format('ll')} <PersonName ident={melding.fraIdent}/></ParagraphSmall>
-          <TilbakemeldingEdit tilbakemeldingId={tilbakemeldingId} melding={melding} close={oppdater}/>
+          <TilbakemeldingEdit tilbakemeldingId={tilbakemeldingId} melding={melding} close={t => {
+            setEditModal(false)
+            oppdater(t)
+          }}/>
         </ModalBody>
       </Modal>}
     </>
@@ -370,7 +386,7 @@ const TilbakemeldingSvar = ({tilbakemelding, close}: {tilbakemelding: Tilbakemel
 
   return (
     <Block display='flex' alignItems='flex-end'>
-      <CustomizedTextarea rows={15} onChange={e => setResponse((e.target as HTMLInputElement).value)} value={response}/>
+      <CustomizedTextarea rows={15} onChange={e => setResponse((e.target as HTMLInputElement).value)} value={response} disabled={loading}/>
 
       <Block display='flex' justifyContent='space-between' flexDirection='column' marginLeft={theme.sizing.scale400}>
 
@@ -408,7 +424,7 @@ const TilbakemeldingEdit = ({tilbakemeldingId, melding, close}: {tilbakemeldingI
 
   return (
     <Block display='flex' alignItems='flex-end'>
-      <CustomizedTextarea rows={15} onChange={e => setResponse((e.target as HTMLInputElement).value)} value={response}/>
+      <CustomizedTextarea rows={15} onChange={e => setResponse((e.target as HTMLInputElement).value)} value={response} disabled={loading}/>
       <Button size='compact' marginLeft disabled={!response || loading} onClick={submit}>Send</Button>
       {error && <Notification kind='negative' overrides={{Body: {style: {marginBottom: '-25px'}}}}>{error}</Notification>}
     </Block>
