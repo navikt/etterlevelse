@@ -77,7 +77,6 @@ const TextEditor = (props: TextEditorProps) => {
           //image: { alt: { present: true, mandatory: true }, },
         }}
       />
-      <textarea readOnly value={val} />
     </Block>
   )
 }

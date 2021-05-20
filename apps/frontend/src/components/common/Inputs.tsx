@@ -49,14 +49,15 @@ export const TextAreaField = (props: { marginBottom?: string, label: string, nam
             label={<LabelWithTooltip label={props.label} tooltip={props.tooltip} />} error={p.meta.touched && p.meta.error}
             caption={props.markdown ?
               <Block display='flex' flexDirection={'column'}>
-                {props.caption} <MarkdownInfo />
+                {props.caption} 
+                {/* <MarkdownInfo /> */}
               </Block>
               : props.caption}>
             <>
               {props.markdown && (<Block>
-                <TextEditor initialValue={p.field.value} setValue={v => p.form.setFieldValue(props.name, v)} onImageUpload={props.onImageUpload}/>
-                <MarkdownEditor initialValue={p.field.value} setValue={v => p.form.setFieldValue(props.name, v)}
-                onImageUpload={props.onImageUpload} shortenLinks={props.shortenLinks} />
+                <TextEditor initialValue={p.field.value} setValue={v => p.form.setFieldValue(props.name, v)} onImageUpload={props.onImageUpload} shortenLinks={props.shortenLinks}/>
+                {/* <MarkdownEditor initialValue={p.field.value} setValue={v => p.form.setFieldValue(props.name, v)}
+                onImageUpload={props.onImageUpload} shortenLinks={props.shortenLinks} /> */}
                 </Block>)}
               {!props.markdown && <CustomizedTextarea rows={8} {...p.field} placeholder={props.label} />}
             </>
