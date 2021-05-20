@@ -70,11 +70,11 @@ const TextEditor = (props: TextEditorProps) => {
         }}
         initialContentState={CustomMarkdownToDraft(val)}
         toolbar={{
-          options: ['inline', 'blockType', 'list', 'link', 'image', 'history'],
+          options: ['inline', 'blockType', 'list', 'link', 'history'],
           inline: { options: ['bold', 'italic', 'underline', 'strikethrough', 'monospace'] },
           list: { options: ['unordered', 'ordered'] },
           link: { options: ['link'] },
-          image: { alt: { present: true, mandatory: true }, },
+          //image: { alt: { present: true, mandatory: true }, },
         }}
       />
       <textarea readOnly value={val} />
