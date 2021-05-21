@@ -10,7 +10,7 @@
     <logger name="org.springframework.test.context.support.DefaultTestContextBootstrapper" level="WARN"/>
     <logger name="org.springframework.boot.test.context.SpringBootTestContextBootstrapper" level="WARN"/>
     <logger name="org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTestContextBootstrapper" level="WARN"/>
-    <!--    <logger name="org.hibernate.SQL" level="DEBUG"/>-->
+    <logger name="org.springframework.test.context.support.AbstractContextLoader" level="WARN"/>    <!--    <logger name="org.hibernate.SQL" level="DEBUG"/>-->
 <!--    <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="TRACE"/>-->
 
     <root level="INFO">
