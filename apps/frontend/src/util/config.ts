@@ -11,7 +11,7 @@ export const documentationLink = 'https://dataplattform.gitbook.io/nada/kataloge
 export const markdownLink = 'https://guides.github.com/features/mastering-markdown/'
 
 export const teamKatPersonLink = (navIdent: string) => `${env.teamKatBaseUrl}resource/${navIdent}`
-export const personImageLink = (navIdent: string) => `/api/resource/${navIdent}/photo`
+export const personImageLink = (navIdent: string) => `/api/team/resource/${navIdent}/photo`
 export const teamKatTeamLink = (id: string) => `${env.teamKatBaseUrl}team/${id}`
 export const behandlingLink = (id: string) => `${env.pollyBaseUrl}process/${id}`
 export const termUrl = (termId: string) => `https://data.adeo.no/begrep/${termId}`

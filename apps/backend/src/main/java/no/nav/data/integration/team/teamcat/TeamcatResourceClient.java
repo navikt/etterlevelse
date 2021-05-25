@@ -49,6 +49,7 @@ public class TeamcatResourceClient {
                 .maximumSize(1000).build(this::fetchResourcePhoto);
         MetricUtils.register("teamcatResourcesSearchCache", searchCache);
         MetricUtils.register("teamcatResourcesCache", cache);
+        MetricUtils.register("teamcatResourcePhotoCache", photoCache);
     }
 
     public Optional<Resource> getResource(String ident) {
