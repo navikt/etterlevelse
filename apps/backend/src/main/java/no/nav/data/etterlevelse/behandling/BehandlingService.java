@@ -85,7 +85,7 @@ public class BehandlingService {
             }
             return List.of();
         }
-        List<GenericStorage> datas = repo.findByRelevans(filter.getRelevans());
+        List<GenericStorage> datas = repo.findBy(filter);
         List<String> behandlingIds = convert(GenericStorage.to(datas, BehandlingData.class), BehandlingData::getBehandlingId);
         Collection<BkatProcess> processes = bkatClient.getProcessesById(behandlingIds).values();
         return convert(processes, p -> convertBeh(p, datas));

@@ -1,6 +1,5 @@
 package no.nav.data.etterlevelse.krav;
 
-import com.graphql.spring.boot.test.GraphQLResponse;
 import lombok.SneakyThrows;
 import no.nav.data.TestConfig.MockFilter;
 import no.nav.data.etterlevelse.behandling.dto.Behandling;
@@ -23,7 +22,7 @@ import java.util.Map;
 import static no.nav.data.graphql.GraphQLAssert.assertThat;
 
 
-class KravGraphQLIT extends GraphQLTestBase {
+class KravGraphQlIT extends GraphQLTestBase {
 
     private final Behandling behandling = BkatMocks.processMockResponse().convertToBehandling();
 
@@ -306,47 +305,4 @@ class KravGraphQLIT extends GraphQLTestBase {
                 .hasField("content[2].navn", "Krav 5");
     }
 
-    @Nested
-    class BehandlingQuery {
-
-        @Test
-        @SneakyThrows
-        void behandlingPage() {
-            var var = Map.of("pageNumber", "0", "pageSize", "20");
-            var response = graphQLTestTemplate.perform("graphqltest/behandling_filter.graphql", vars(var));
-
-            assertThat(response, "behandling")
-                    .hasNoErrors()
-                    .hasField("totalElements", "1")
-                    .hasField("numberOfElements", "1")
-                    .hasField("content[0].id", behandling.getId());
-        }
-
-        @Test
-        @SneakyThrows
-        void behandlingRelevans() {
-            behandlingService.save(BehandlingRequest.builder()
-                    .id(behandling.getId())
-                    .update(true)
-                    .relevansFor(List.of("SAK"))
-                    .build());
-
-            var var = Map.of("relevans", "SAK");
-            var response = graphQLTestTemplate.perform("graphqltest/behandling_filter.graphql", vars(var));
-
-            assertThat(response, "behandling")
-                    .hasNoErrors()
-                    .hasField("totalElements", "1")
-                    .hasField("numberOfElements", "1")
-                    .hasField("content[0].id", behandling.getId());
-
-            var innsynVar = Map.of("relevans", "INNSYN");
-            GraphQLResponse pageTwo = graphQLTestTemplate.perform("graphqltest/behandling_filter.graphql", vars(innsynVar));
-            assertThat(pageTwo, "behandling")
-                    .hasNoErrors()
-                    .hasField("totalElements", "0")
-                    .hasField("numberOfElements", "0");
-
-        }
-    }
 }

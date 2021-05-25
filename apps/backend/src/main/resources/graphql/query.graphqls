@@ -30,4 +30,6 @@ input KravFilter {
 input BehandlingFilter {
     id: ID
     relevans: [String!]
+    """min 1, max 20"""
+    sistRedigert: NonNegativeInt
 }

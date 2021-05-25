@@ -1,8 +1,10 @@
 package no.nav.data.etterlevelse.behandling.domain;
 
 import lombok.RequiredArgsConstructor;
+import no.nav.data.common.security.SecurityUtils;
 import no.nav.data.common.storage.domain.GenericStorage;
 import no.nav.data.common.storage.domain.GenericStorageRepository;
+import no.nav.data.etterlevelse.behandling.dto.BehandlingFilter;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -21,16 +23,44 @@ public class BehandlingRepoImpl implements BehandlingRepoCustom {
 
     @Override
     public List<GenericStorage> findByRelevans(String code) {
-        var resp = jdbcTemplate.queryForList("select id from generic_storage where data #> '{relevansFor}' ?? :code and type = 'BehandlingData'",
-                new MapSqlParameterSource().addValue("code", code));
-        return fetch(resp);
+        return findBy(BehandlingFilter.builder().relevans(List.of(code)).build());
+
     }
 
     @Override
     public List<GenericStorage> findByRelevans(List<String> codes) {
-        var resp = jdbcTemplate.queryForList("select id from generic_storage where data -> 'relevansFor' ??| array[ :relevans ] and type = 'BehandlingData'",
-                new MapSqlParameterSource().addValue("relevans", codes));
-        return fetch(resp);
+        return findBy(BehandlingFilter.builder().relevans(codes).build());
+    }
+
+    @Override
+    public List<GenericStorage> findBy(BehandlingFilter filter) {
+        var query = "select id from generic_storage krav where type = 'BehandlingData' ";
+        var par = new MapSqlParameterSource();
+        if (!filter.getRelevans().isEmpty()) {
+            query += " and data -> 'relevansFor' ??| array[ :relevans ] ";
+            par.addValue("relevans", filter.getRelevans());
+        }
+        if (filter.getSistRedigert() != null) {
+            query += """
+                     and data ->> 'behandlingId' in (
+                       select behandlingId
+                         from (
+                                  select distinct on (data #>> '{data,behandlingId}') data #>> '{data,behandlingId}' behandlingId, time
+                                   from audit_version
+                                   where table_name = 'Etterlevelse'
+                                     and user_id like :user_id
+                                     and data #>> '{data,behandlingId}' is not null -- old data that lacks this field, probably only dev
+                                     and exists(select 1 from generic_storage where id = cast(table_id as uuid))
+                                   order by data #>> '{data,behandlingId}', time desc
+                              ) sub
+                         order by time desc
+                         limit :limit
+                    )
+                    """;
+            par.addValue("limit", filter.getSistRedigert())
+                    .addValue("user_id", SecurityUtils.getCurrentIdent() + "%");
+        }
+        return fetch(jdbcTemplate.queryForList(query, par));
     }
 
     private List<GenericStorage> fetch(List<Map<String, Object>> resp) {

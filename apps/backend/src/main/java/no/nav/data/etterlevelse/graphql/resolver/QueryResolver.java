@@ -75,7 +75,9 @@ public class QueryResolver implements GraphQLQueryResolver {
         }
 
         List<Behandling> filtered = new ArrayList<>(behandlingService.getByFilter(filter));
-        filtered.sort(comparing(Behandling::getNummer));
+        if (filter.getSistRedigert() == null) {
+            filtered.sort(comparing(Behandling::getNummer));
+        }
         var all = pageSize == 0;
         if (all) {
             return new RestResponsePage<>(filtered);

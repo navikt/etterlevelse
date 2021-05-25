@@ -11,6 +11,7 @@ import no.nav.data.common.security.azure.AADStatelessAuthenticationFilter;
 import no.nav.data.common.security.azure.AzureConstants;
 import no.nav.data.common.security.azure.AzureUserInfo;
 import no.nav.data.common.security.dto.AppRole;
+import no.nav.data.common.utils.MdcUtils;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.context.annotation.Bean;
@@ -73,10 +74,12 @@ public class TestConfig {
         }
 
         public static void setUser(AzureUserInfo user) {
+            MdcUtils.setUser(user.getUserId());
             MockFilter.user = user;
         }
 
         public static void setUser(String ident) {
+            MdcUtils.setUser(ident);
             MockFilter.user = new AzureUserInfo(new Builder()
                     .claim(StandardClaimNames.NAME, "Name Nameson")
                     .claim(AzureConstants.IDENT_CLAIM, ident)
@@ -84,6 +87,7 @@ public class TestConfig {
         }
 
         public static void clearUser() {
+            MdcUtils.clearUser();
             MockFilter.user = null;
         }
 

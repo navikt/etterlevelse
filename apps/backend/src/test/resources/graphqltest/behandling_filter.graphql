@@ -1,5 +1,5 @@
-query getBehandling($relevans: [String!], $pageNumber: NonNegativeInt, $pageSize: NonNegativeInt) {
-    behandling(filter: {relevans: $relevans}, pageNumber: $pageNumber, pageSize: $pageSize) {
+query getBehandling($relevans: [String!], $sistRedigert: NonNegativeInt, $pageNumber: NonNegativeInt, $pageSize: NonNegativeInt) {
+    behandling(filter: {relevans: $relevans, sistRedigert: $sistRedigert}, pageNumber: $pageNumber, pageSize: $pageSize) {
         totalElements
         numberOfElements
         content {
