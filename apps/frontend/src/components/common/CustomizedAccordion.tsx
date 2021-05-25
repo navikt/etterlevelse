@@ -5,7 +5,7 @@ import {HeadingLarge} from 'baseui/typography'
 import {faChevronDown, faChevronUp} from '@fortawesome/free-solid-svg-icons'
 import React from 'react'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {borderColor, borderStyle, borderWidth} from './Style'
+import {borderColor, borderRadius, borderStyle, borderWidth} from './Style'
 
 
 export const CustomizedAccordion = (props: AccordionProps) => {
@@ -29,6 +29,7 @@ export const CustomizedPanel = (props: PanelProps) => {
           ...borderStyle('solid'),
           ...borderWidth('1px'),
           ...borderColor(ettlevColors.grey100),
+          ...borderRadius('4px'),
           ':hover': {
             textDecoration: 'underline'
           }
@@ -42,7 +43,7 @@ export const CustomizedPanel = (props: PanelProps) => {
           paddingTop: 0,
           paddingBottom: expanded ? theme.sizing.scale100 : 0,
           borderStyle: 'hidden',
-          marginBottom: theme.sizing.scale100
+          marginBottom: theme.sizing.scale200
         }
       }
     }} title={<Block>
