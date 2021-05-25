@@ -13,7 +13,7 @@ import {Block} from 'baseui/block'
 import {theme} from '../../util'
 import {HeadingXLarge, LabelSmall, ParagraphMedium, ParagraphSmall} from 'baseui/typography'
 import Button from '../common/Button'
-import {faChevronRight, faChevronUp, faEnvelope, faPencilAlt, faPlus, faSync, faUser} from '@fortawesome/free-solid-svg-icons'
+import {faChevronDown, faChevronUp, faEnvelope, faPencilAlt, faPlus, faSync, faUser} from '@fortawesome/free-solid-svg-icons'
 import {faTrashAlt} from '@fortawesome/free-regular-svg-icons'
 import {borderColor, borderWidth} from '../common/Style'
 import {Spinner} from '../common/Spinner'
@@ -107,9 +107,10 @@ export const Tilbakemeldinger = ({krav}: {krav: Krav}) => {
                     {focused && t.meldinger.length === 1 &&
                     <MeldingKnapper melding={t.meldinger[0]} tilbakemeldingId={t.id} oppdater={replace}/>}
 
-                    <Block marginTop={theme.sizing.scale600}>
+                    <Block marginTop={theme.sizing.scale600}
+                           $style={{borderTop: focused && t.meldinger.length === 1 ? `1px solid ${ettlevColors.green50}` : undefined}}>
                       {/* meldingsliste */}
-                      {focused && <Block display={'flex'} flexDirection={'column'} marginTop={theme.sizing.scale400}>
+                      {focused && <Block display={'flex'} flexDirection={'column'} marginTop={theme.sizing.scale600}>
                         {t.meldinger.slice(1).map(m => <ResponseMelding key={m.meldingNr} m={m} tilbakemelding={t} oppdater={replace}/>)}
                       </Block>}
 
@@ -118,7 +119,7 @@ export const Tilbakemeldinger = ({krav}: {krav: Krav}) => {
                         <Block>
                           <Button kind={'underline-hover'} onClick={() => setFocus(focused ? '' : t.id)}
                                   hidePadding
-                                  icon={focused ? faChevronUp : faChevronRight}>Vis {focused ? 'mindre' : 'mer'}</Button>
+                                  icon={focused ? faChevronUp : faChevronDown}>Vis {focused ? 'mindre' : 'mer'}</Button>
                         </Block>
 
                         {melderOrKraveier && user.canWrite() && focused &&

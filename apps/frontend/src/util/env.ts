@@ -3,7 +3,6 @@ export const env = {
   amplitudeEndpoint: process.env.REACT_APP_AMPLITUDE_ENDPOINT,
   amplitudeApiKey: process.env.REACT_APP_AMPLITUDE_API_KEY,
   teamKatBaseUrl: process.env.REACT_APP_TEAMKAT_BASE_URL,
-  teamKatProdBaseUrl: process.env.REACT_APP_TEAMKAT_PROD_BASE_URL,
   pollyBaseUrl: process.env.REACT_APP_POLLY_BASE_URL,
   githubVersion: process.env.REACT_APP_GIT_VERSION || 'local',
   lovdataLovBaseUrl: process.env.REACT_APP_LOVDATA_LOV_BASE_URL,

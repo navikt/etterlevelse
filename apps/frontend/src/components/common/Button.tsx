@@ -61,6 +61,7 @@ const outlineOverride: StyleObject = {
 
 // underline-hover button is a tertiary with underline as hover effect
 const underlineOverride: StyleObject = {
+  ...paddingAll("0"),
   ':hover': {
     textDecoration: 'underline',
     backgroundColor: 'inherit'
