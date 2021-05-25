@@ -2,7 +2,7 @@ import {Accordion, AccordionProps, Panel, PanelProps} from 'baseui/accordion'
 import {ettlevColors, theme} from '../../util/theme'
 import {Block} from 'baseui/block'
 import {HeadingLarge} from 'baseui/typography'
-import {faChevronDown, faChevronRight} from '@fortawesome/free-solid-svg-icons'
+import {faChevronDown, faChevronUp} from '@fortawesome/free-solid-svg-icons'
 import React from 'react'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {borderColor, borderStyle, borderWidth} from './Style'
@@ -21,14 +21,14 @@ export const CustomizedPanel = (props: PanelProps) => {
   return (
     <Panel {...props} overrides={{
       ToggleIcon: {
-        component: () => null
+        component: () => expanded ? <FontAwesomeIcon icon={faChevronUp}/> : <FontAwesomeIcon icon={faChevronDown}/>
       },
       Header: {
         style: {
           backgroundColor: expanded ? ettlevColors.grey50 : ettlevColors.white,
           ...borderStyle('solid'),
           ...borderWidth('1px'),
-          ...borderColor(ettlevColors.grey50),
+          ...borderColor(ettlevColors.grey100),
           ':hover': {
             textDecoration: 'underline'
           }
@@ -47,8 +47,6 @@ export const CustomizedPanel = (props: PanelProps) => {
       }
     }} title={<Block>
       <HeadingLarge marginTop={theme.sizing.scale100} marginBottom={theme.sizing.scale100} color={ettlevColors.green600}>
-        {expanded ? <FontAwesomeIcon icon={faChevronDown}/> : <FontAwesomeIcon icon={faChevronRight}/>}
-        <span> </span>
         {props.title}
       </HeadingLarge>
     </Block>}/>
