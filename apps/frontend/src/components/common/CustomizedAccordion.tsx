@@ -43,10 +43,15 @@ export const CustomizedPanel = (props: PanelProps) => {
           paddingTop: 0,
           paddingBottom: expanded ? theme.sizing.scale100 : 0,
           borderStyle: 'hidden',
+        }
+      },
+      PanelContainer: {
+        style: {
           marginBottom: theme.sizing.scale200
         }
       }
-    }} title={<Block>
+    }
+    } title={<Block>
       <HeadingLarge marginTop={theme.sizing.scale100} marginBottom={theme.sizing.scale100} color={ettlevColors.green600}>
         {props.title}
       </HeadingLarge>
