@@ -12,8 +12,6 @@ env:
     value: https://etterlevelse.dev.intern.nav.no,https://etterlevelse-api.dev.intern.nav.no,http://localhost:3000
   - name: CLIENT_TEAMCAT_URL
     value: https://teamkatalog-api.dev-fss-pub.nais.io
-  - name: CLIENT_TEAMCAT_PROD_URL
-    value: https://teamkatalog-api.prod-fss-pub.nais.io
   - name: CLIENT_POLLY_URL
     value: https://polly.dev-fss-pub.nais.io
   - name: AZURE_CLIENT_GROUPS

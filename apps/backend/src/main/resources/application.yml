@@ -106,12 +106,10 @@ client:
     product-areas-url: ${client.teamcat.url}/productarea
     resource-search-url: ${client.teamcat.url}/resource/search/{searchTerm}
     resource-url: ${client.teamcat.url}/resource/{ident}
-    resource-photo-url: ${client.teamcat.prod.url}/resource/{ident}/photo
+    resource-photo-url: ${client.teamcat.url}/resource/{ident}/photo
     resources-url: ${client.teamcat.url}/resource/multi
     teams-url: ${client.teamcat.url}/team
     url: https://teamcat/api
-    prod:
-      url: ${client.teamcat.url} # overriden for dev only
   slack:
     base-url: https://slack.com/api
     token: ${SLACK_TOKEN:token}
