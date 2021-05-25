@@ -41,13 +41,13 @@ export const CustomizedPanel = (props: PanelProps) => {
           paddingLeft: theme.sizing.scale100,
           paddingRight: theme.sizing.scale100,
           paddingTop: 0,
-          paddingBottom: expanded ? theme.sizing.scale100 : 0,
-          borderStyle: 'hidden',
+          paddingBottom: expanded ? theme.sizing.scale100 : 0
         }
       },
       PanelContainer: {
         style: {
-          marginBottom: theme.sizing.scale200
+          marginBottom: theme.sizing.scale200,
+          borderStyle: 'hidden'
         }
       }
     }
