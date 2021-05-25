@@ -1,12 +1,12 @@
 import React, {useState} from 'react'
-import {teamKatPersonImageLink} from '../../util/config'
+import {personImageLink} from '../../util/config'
 import {Block} from 'baseui/block'
 import {Spinner} from './Spinner'
 import {questionmarkIcon} from '../Images'
 
 export const Portrait = (props: {ident: string, size?: string}) => {
   const [loading, setLoading] = useState(true)
-  const [image, setImage] = React.useState(teamKatPersonImageLink(props.ident))
+  const [image, setImage] = React.useState(personImageLink(props.ident))
   const size = props.size || '42px'
   return (
     <Block>

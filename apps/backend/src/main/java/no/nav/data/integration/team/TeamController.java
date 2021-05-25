@@ -139,13 +139,25 @@ public class TeamController {
     @Operation(summary = "Get Resource")
     @ApiResponse(description = "ok")
     @GetMapping("/resource/{id}")
-    public ResponseEntity<Resource> getById(@PathVariable String id) {
+    public ResponseEntity<Resource> getResourceById(@PathVariable String id) {
         log.info("Resource get id={}", id);
         Optional<Resource> resource = resourceService.getResource(id);
         if (resource.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(resource.get());
+    }
+
+    @Operation(summary = "Get Resource Photo")
+    @ApiResponse(description = "ok")
+    @GetMapping("/resource/{id}/photo")
+    public ResponseEntity<byte[]> getResourcePhotoById(@PathVariable String id) {
+        log.info("Resource Photo get id={}", id);
+        Optional<byte[]> photo = resourceService.getResourcePhoto(id);
+        if (photo.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(photo.get());
     }
 
     // Slack

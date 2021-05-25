@@ -31,6 +31,7 @@ public class TeamcatResourceClient {
 
     private final LoadingCache<String, RestResponsePage<Resource>> searchCache;
     private final LoadingCache<String, Resource> cache;
+    private final LoadingCache<String, byte[]> photoCache;
 
     public TeamcatResourceClient(RestTemplate restTemplate,
             TeamcatProperties properties) {
@@ -43,6 +44,9 @@ public class TeamcatResourceClient {
         this.cache = Caffeine.newBuilder().recordStats()
                 .expireAfterWrite(Duration.ofMinutes(10))
                 .maximumSize(1000).build(this::fetchResource);
+        this.photoCache = Caffeine.newBuilder().recordStats()
+                .expireAfterWrite(Duration.ofMinutes(10))
+                .maximumSize(1000).build(this::fetchResourcePhoto);
         MetricUtils.register("teamcatResourcesSearchCache", searchCache);
         MetricUtils.register("teamcatResourcesCache", cache);
     }
@@ -55,6 +59,10 @@ public class TeamcatResourceClient {
         return cache.getAll(idents, this::getResources0);
     }
 
+    public Optional<byte[]> getResourcePhoto(String id) {
+        return Optional.ofNullable(photoCache.get(id));
+    }
+
     public RestResponsePage<Resource> search(String name) {
         return searchCache.get(name);
     }
@@ -62,6 +70,19 @@ public class TeamcatResourceClient {
     private Resource fetchResource(String ident) {
         try {
             var response = restTemplate.getForEntity(properties.getResourceUrl(), Resource.class, ident);
+            Assert.isTrue(response.getStatusCode().is2xxSuccessful() && response.hasBody(), "Call to teamcat failed " + response.getStatusCode());
+            return response.getBody();
+        } catch (HttpClientErrorException e) {
+            if (e.getStatusCode() == HttpStatus.NOT_FOUND) {
+                return null;
+            }
+            throw e;
+        }
+    }
+
+    private byte[] fetchResourcePhoto(String ident) {
+        try {
+            var response = restTemplate.getForEntity(properties.getResourcePhotoUrl(), byte[].class, ident);
             Assert.isTrue(response.getStatusCode().is2xxSuccessful() && response.hasBody(), "Call to teamcat failed " + response.getStatusCode());
             return response.getBody();
         } catch (HttpClientErrorException e) {

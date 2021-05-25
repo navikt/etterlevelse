@@ -13,6 +13,7 @@ public class TeamcatProperties {
     private String teamsUrl;
     private String productAreasUrl;
     private String resourceUrl;
+    private String resourcePhotoUrl;
     private String resourcesUrl;
     private String resourceSearchUrl;
 
