@@ -9,6 +9,7 @@ import * as _ from 'lodash'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
 import { faGripVertical, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { MarkdownEditor } from '../../common/Markdown'
+import TextEditor from '../../common/TextEditor'
 import { Card } from 'baseui/card'
 import { theme } from '../../../util'
 import { useDebouncedState } from '../../../util/hooks'
@@ -144,7 +145,8 @@ const Kriterie = ({
         </FormControl>
         <FormControl label={
           <LabelWithTooltip label={'Beskrivelse av suksesskriteriet'} tooltip={'Nærmere detaljer rundt oppnåelse av suksesskriteriet.'} />}>
-          <MarkdownEditor initialValue={beskrivelse} setValue={setBeskrivelse} height={'250px'} />
+          {/* <MarkdownEditor initialValue={beskrivelse} setValue={setBeskrivelse} height={'250px'} /> */}
+          <TextEditor initialValue={beskrivelse} setValue={setBeskrivelse} height={'250px'} />
         </FormControl>
       </Block>
     </Card>

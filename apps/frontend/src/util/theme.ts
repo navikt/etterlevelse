@@ -18,7 +18,7 @@ import '@fontsource/source-sans-pro/900.css'
   red400: '#AE5235',
   red200: '#EAA98D',
   red50: '#F6EAE6',
-  gray200: '#A0A0A0',
+  grey200: '#A0A0A0',
   grey100: '#DFDFDF',
   grey50: '#F1F1F1',
   grey25: '#F8F8F8',
@@ -30,6 +30,7 @@ import '@fontsource/source-sans-pro/900.css'
   warning50: '#FFF5E7',
   error400: '#AE5235',
   error50: '#F6EAE6',
+  textAreaBorder: '#E0E0E0',
 }
 
 export const primitives: ThemePrimitives & {primary150: string, primary350: string} = {
@@ -67,7 +68,7 @@ const overrides: RecursivePartial<Theme> = {
     buttonSecondaryFill: ettlevColors.white,
     buttonSecondaryText: ettlevColors.green600,
     buttonSecondaryHover: ettlevColors.green50,
-    buttonSecondaryActive: ettlevColors.gray200,
+    buttonSecondaryActive: ettlevColors.grey200,
     //tertiary button color overrides:
     buttonTertiaryFill: 'transparent',
     buttonTertiaryText: ettlevColors.green600,
