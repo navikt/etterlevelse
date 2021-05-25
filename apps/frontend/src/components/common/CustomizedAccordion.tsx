@@ -5,6 +5,7 @@ import {HeadingLarge} from 'baseui/typography'
 import {faChevronDown, faChevronRight} from '@fortawesome/free-solid-svg-icons'
 import React from 'react'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {borderColor, borderStyle, borderWidth} from './Style'
 
 
 export const CustomizedAccordion = (props: AccordionProps) => {
@@ -24,8 +25,10 @@ export const CustomizedPanel = (props: PanelProps) => {
       },
       Header: {
         style: {
-          backgroundColor: ettlevColors.grey50,
-          borderBottomStyle: 'hidden',
+          backgroundColor: expanded ? ettlevColors.grey50 : ettlevColors.white,
+          ...borderStyle('solid'),
+          ...borderWidth('1px'),
+          ...borderColor(ettlevColors.grey50),
           ':hover': {
             textDecoration: 'underline'
           }
