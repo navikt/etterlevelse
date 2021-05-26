@@ -20,6 +20,8 @@ import static graphql.scalars.util.Kit.typeName;
  */
 public class LocalDateTimeCoercing implements Coercing<LocalDateTime, String> {
 
+    public static final DateTimeFormatter ISO_LOCAL_DATE_TIME = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+
     @Override
     public String serialize(Object input) throws CoercingSerializeException {
         LocalDateTime localDateTime;
@@ -31,7 +33,7 @@ public class LocalDateTimeCoercing implements Coercing<LocalDateTime, String> {
             throw new CoercingSerializeException("Expected something we can convert to 'java.time.LocalDateTime' but was '" + typeName(input) + "'.");
         }
         try {
-            return DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(localDateTime);
+            return ISO_LOCAL_DATE_TIME.format(localDateTime);
         } catch (DateTimeException e) {
             throw new CoercingSerializeException("Unable to turn TemporalAccessor into LocalDateTime becauseof : '" + e.getMessage() + "'.");
         }
@@ -60,7 +62,7 @@ public class LocalDateTimeCoercing implements Coercing<LocalDateTime, String> {
 
     private LocalDateTime parseLocalDateTime(String s, Function<String, RuntimeException> exceptionMaker) {
         try {
-            return LocalDateTime.parse(s, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+            return LocalDateTime.parse(s, ISO_LOCAL_DATE_TIME);
         } catch (DateTimeParseException e) {
             throw exceptionMaker.apply("Invalid ISO-8601 value : '" + s + "'. because of : '" + e.getMessage() + "'");
         }

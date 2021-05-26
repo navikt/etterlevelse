@@ -7,6 +7,7 @@ import org.assertj.core.api.AbstractAssert;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 @Slf4j
 public class GraphQLAssert extends AbstractAssert<GraphQLAssert, GraphQLResponse> {
@@ -39,6 +40,18 @@ public class GraphQLAssert extends AbstractAssert<GraphQLAssert, GraphQLResponse
     }
 
     public GraphQLAssert hasField(String field, String value) {
+        String actualValue = getValue(field);
+        objects.assertEqual(info, actualValue, value);
+        return this;
+    }
+
+    public GraphQLAssert hasField(String field, Consumer<String> consumer) {
+        String actualValue = getValue(field);
+        consumer.accept(actualValue);
+        return this;
+    }
+
+    private String getValue(String field) {
         isNotNull();
         String path = "$.data.%s.%s".formatted(queryName, field);
         String actualValue = null;
@@ -47,8 +60,7 @@ public class GraphQLAssert extends AbstractAssert<GraphQLAssert, GraphQLResponse
         } catch (Exception e) {
             fail(e);
         }
-        objects.assertEqual(info, actualValue, value);
-        return this;
+        return actualValue;
     }
 
     public GraphQLAssert hasSize(int i) {

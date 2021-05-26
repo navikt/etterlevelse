@@ -6,17 +6,19 @@ import no.nav.data.TestConfig.MockFilter;
 import no.nav.data.etterlevelse.behandling.dto.Behandling;
 import no.nav.data.etterlevelse.behandling.dto.BehandlingRequest;
 import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseRequest;
-import no.nav.data.etterlevelse.graphql.support.LocalDateTimeCoercing;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravStatus;
 import no.nav.data.graphql.GraphQLTestBase;
 import no.nav.data.integration.behandling.BkatMocks;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Map;
 
 import static no.nav.data.graphql.GraphQLAssert.assertThat;
+import static org.assertj.core.api.Assertions.within;
 
 public class BehandlingGraphQlIT extends GraphQLTestBase {
 
@@ -100,13 +102,14 @@ public class BehandlingGraphQlIT extends GraphQLTestBase {
         var var = Map.of("sistRedigert", "2");
         var response = graphQLTestTemplate.perform("graphqltest/behandling_filter.graphql", vars(var));
 
-        String sistEndret = new LocalDateTimeCoercing().serialize(etterlevelse.getChangeStamp().getLastModifiedDate());
         assertThat(response, "behandling")
                 .hasNoErrors()
                 .hasField("totalElements", "1")
                 .hasField("numberOfElements", "1")
                 .hasField("content[0].id", behandling.getId())
-                .hasField("content[0].sistEndretEtterlevelse", sistEndret);
+                .hasField("content[0].sistEndretEtterlevelse", sistEndret -> {
+                    Assertions.assertThat(etterlevelse.getChangeStamp().getLastModifiedDate()).isCloseTo(sistEndret, within(1, ChronoUnit.SECONDS));
+                });
     }
 
 }
