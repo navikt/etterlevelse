@@ -3,7 +3,7 @@ package no.nav.data.etterlevelse.graphql;
 import graphql.scalars.ExtendedScalars;
 import graphql.schema.GraphQLScalarType;
 import no.nav.data.common.utils.MdcExecutor;
-import no.nav.data.etterlevelse.graphql.support.LocalDateTimeScalar;
+import no.nav.data.etterlevelse.graphql.support.LocalDateTimeCoercing;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -19,7 +19,7 @@ public class GraphQlConfig {
 
     @Bean
     public GraphQLScalarType dateTime() {
-        return new LocalDateTimeScalar();
+        return LocalDateTimeCoercing.createScalar();
     }
 
     @Bean

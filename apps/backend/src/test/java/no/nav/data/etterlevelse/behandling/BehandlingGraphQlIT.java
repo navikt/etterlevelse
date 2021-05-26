@@ -6,13 +6,13 @@ import no.nav.data.TestConfig.MockFilter;
 import no.nav.data.etterlevelse.behandling.dto.Behandling;
 import no.nav.data.etterlevelse.behandling.dto.BehandlingRequest;
 import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseRequest;
+import no.nav.data.etterlevelse.graphql.support.LocalDateTimeCoercing;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravStatus;
 import no.nav.data.graphql.GraphQLTestBase;
 import no.nav.data.integration.behandling.BkatMocks;
 import org.junit.jupiter.api.Test;
 
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
@@ -100,7 +100,7 @@ public class BehandlingGraphQlIT extends GraphQLTestBase {
         var var = Map.of("sistRedigert", "2");
         var response = graphQLTestTemplate.perform("graphqltest/behandling_filter.graphql", vars(var));
 
-        String sistEndret = DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(etterlevelse.getChangeStamp().getLastModifiedDate());
+        String sistEndret = new LocalDateTimeCoercing().serialize(etterlevelse.getChangeStamp().getLastModifiedDate());
         assertThat(response, "behandling")
                 .hasNoErrors()
                 .hasField("totalElements", "1")
