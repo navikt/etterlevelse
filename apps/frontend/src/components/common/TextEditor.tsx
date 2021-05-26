@@ -69,6 +69,10 @@ const TextEditor = (props: TextEditorProps) => {
           setVal(CustomDraftToMarkdown(convertToRaw(data.getCurrentContent())))
         }}
         initialContentState={CustomMarkdownToDraft(val)}
+        localization={{
+          translations: translations
+        }}
+        tabIndex={0}
         toolbar={{
           options: ['inline', 'blockType', 'list', 'link', 'history'],
           inline: { options: ['bold', 'italic', 'underline', 'strikethrough', 'monospace'] },
@@ -82,3 +86,50 @@ const TextEditor = (props: TextEditorProps) => {
 }
 
 export default TextEditor
+
+const translations = {
+  // Generic
+  'generic.add': 'Legg Til',
+  'generic.cancel': 'Avbryt',
+
+  // BlockType
+  'components.controls.blocktype.h1': 'H1',
+  'components.controls.blocktype.h2': 'H2',
+  'components.controls.blocktype.h3': 'H3',
+  'components.controls.blocktype.h4': 'H4',
+  'components.controls.blocktype.h5': 'H5',
+  'components.controls.blocktype.h6': 'H6',
+  'components.controls.blocktype.blockquote': 'Blockquote',
+  'components.controls.blocktype.code': 'Code',
+  'components.controls.blocktype.blocktype': 'Block Type',
+  'components.controls.blocktype.normal': 'Normal',
+
+  // History
+  'components.controls.history.history': 'History',
+  'components.controls.history.undo': 'Undo',
+  'components.controls.history.redo': 'Redo',
+
+  // Inline
+  'components.controls.inline.bold': 'Bold',
+  'components.controls.inline.italic': 'Italic',
+  'components.controls.inline.underline': 'Underline',
+  'components.controls.inline.strikethrough': 'Strikethrough',
+  'components.controls.inline.monospace': 'Monospace',
+
+  // Link
+  'components.controls.link.linkTitle': 'Link Tittel',
+  'components.controls.link.linkTarget': 'Link Url',
+  'components.controls.link.linkTargetOption': 'Åpen link i nytt vindu',
+  'components.controls.link.link': 'Link',
+  'components.controls.link.unlink': 'Unlink',
+
+  // List
+  'components.controls.list.list': 'List',
+  'components.controls.list.unordered': 'Unordered',
+  'components.controls.list.ordered': 'Ordered',
+  'components.controls.list.indent': 'Indent',
+  'components.controls.list.outdent': 'Outdent',
+
+  // Remove
+  'components.controls.remove.remove': 'Fjerne',
+}
