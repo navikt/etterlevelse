@@ -16,7 +16,7 @@ import {gql, useQuery} from '@apollo/client'
 import {ettlevColors, maxPageWidth, pageWidth} from '../util/theme'
 import CustomizedTabs, {CustomizedTab} from '../components/common/CustomizedTabs'
 import {PanelLink} from '../components/common/PanelLink'
-import {bamseIcon, dokEtterlevelse} from '../components/Images'
+import {bamseIcon, dokEtterlevelse, navChevronRightIcon} from '../components/Images'
 import {env} from '../util/env'
 import {InfoBlock2} from '../components/common/InfoBlock'
 
@@ -25,9 +25,6 @@ type Section = 'mine' | 'siste' | 'alle'
 export const MyBehandlingerPage = () => {
   const [myBehandlinger, myBehandlingerLoading] = useMyBehandlinger()
   const [teams, teamsLoading] = useMyTeams()
-
-  // const loggedIn = user.isLoggedIn()
-  // const loading = myBehandlingerLoading || teamsLoading
 
   const [tab, setTab] = useState<Section>('mine')
 
@@ -40,9 +37,14 @@ export const MyBehandlingerPage = () => {
     <Block width='100%' backgroundColor={ettlevColors.grey50} display={'flex'} justifyContent={'center'}>
       <Block maxWidth={maxPageWidth} width='100%'>
         {/*todo padding/pagestructure?*/}
-        <Block paddingLeft={'100px'} paddingRight={'100px'}>
+        <Block paddingLeft={'100px'} paddingRight={'100px'} paddingTop={theme.sizing.scale800}>
 
-          <HeadingXXLarge marginTop={theme.sizing.scale900}>Dokumentere etterlevelse</HeadingXXLarge>
+          <RouteLink href={'/'} hideUnderline>
+            <Button startEnhancer={<img alt={'Chevron venstre ikon'} src={navChevronRightIcon} style={{transform: 'rotate(180deg)'}}/>} size='compact' kind='tertiary' hidePadding
+                    $style={{':hover': {textDecoration: 'underline 3px'}}}> Tilbake</Button>
+          </RouteLink>
+
+          <HeadingXXLarge marginTop={theme.sizing.scale600}>Dokumentere etterlevelse</HeadingXXLarge>
 
           <CustomizedTabs fontColor={ettlevColors.green800} small backgroundColor={ettlevColors.grey50}
                           activeKey={tab} onChange={args => setTab(args.activeKey as Section)}>
@@ -78,7 +80,7 @@ const MineBehandlinger = ({behandlinger, teams}: {behandlinger: Behandling[], te
             <Block display={'flex'} justifyContent={'space-between'}>
 
               <Block>
-                <HeadingXLarge marginBottom={0} color={ettlevColors.green600}>{t.name}</HeadingXLarge>
+                <HeadingXLarge marginBottom={theme.sizing.scale100} color={ettlevColors.green600}>{t.name}</HeadingXLarge>
                 <ParagraphSmall marginTop={0}>Teamet skal etterleve krav i <span style={{fontWeight: 700}}>{teamBehandlinger.length} behandlinger</span></ParagraphSmall>
               </Block>
               <Block alignSelf={'flex-end'} marginBottom={theme.sizing.scale400}>
