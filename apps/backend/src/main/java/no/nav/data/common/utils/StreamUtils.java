@@ -78,6 +78,10 @@ public final class StreamUtils {
         return safeStream(from).collect(Collectors.toMap(keyExtractor, Function.identity()));
     }
 
+    public static <K, V> Map<K, List<V>> groupBy(Iterable<V> from, Function<? super V, K> keyExtractor) {
+        return safeStream(from).collect(Collectors.groupingBy(keyExtractor));
+    }
+
     public static <T> List<T> distinctByKey(Iterable<T> from, Function<? super T, ?> keyExtractor) {
         return filter(from, distinctByKey(keyExtractor));
     }

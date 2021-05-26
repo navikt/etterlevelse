@@ -12,8 +12,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+
+import static no.nav.data.common.utils.StreamUtils.groupBy;
+
 
 @Service
 public class EtterlevelseService extends DomainService<Etterlevelse> {
@@ -42,6 +48,10 @@ public class EtterlevelseService extends DomainService<Etterlevelse> {
 
     public List<Etterlevelse> getByBehandling(String behandlingId) {
         return GenericStorage.to(repo.findByBehandling(behandlingId), Etterlevelse.class);
+    }
+
+    public Map<String, List<Etterlevelse>> getByBehandlinger(Collection<String> behandlingIds) {
+        return groupBy(GenericStorage.to(repo.findByBehandlinger(new ArrayList<>(behandlingIds)), Etterlevelse.class), Etterlevelse::getBehandlingId);
     }
 
     public Etterlevelse save(EtterlevelseRequest request) {

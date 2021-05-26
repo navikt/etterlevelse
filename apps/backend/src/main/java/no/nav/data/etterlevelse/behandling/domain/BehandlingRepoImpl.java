@@ -24,7 +24,6 @@ public class BehandlingRepoImpl implements BehandlingRepoCustom {
     @Override
     public List<GenericStorage> findByRelevans(String code) {
         return findBy(BehandlingFilter.builder().relevans(List.of(code)).build());
-
     }
 
     @Override

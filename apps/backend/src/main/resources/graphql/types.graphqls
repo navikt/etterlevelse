@@ -149,6 +149,9 @@ type Behandling {
 
     relevansFor: [Code!]!
     stats: BehandlingStats!
+
+    etterlevelser: [Etterlevelse!]!
+    sistEndretEtterlevelse: DateTime
 }
 
 type BehandlingStats {

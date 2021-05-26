@@ -90,7 +90,7 @@ public class BehandlingGraphQlIT extends GraphQLTestBase {
                 .build());
 
         MockFilter.setUser("A123456");
-        etterlevelseService.save(EtterlevelseRequest.builder()
+        var etterlevelse = etterlevelseService.save(EtterlevelseRequest.builder()
                 .update(false)
                 .behandlingId(behandling.getId())
                 .kravNummer(krav.getKravNummer()).kravVersjon(krav.getKravVersjon())
@@ -103,7 +103,8 @@ public class BehandlingGraphQlIT extends GraphQLTestBase {
                 .hasNoErrors()
                 .hasField("totalElements", "1")
                 .hasField("numberOfElements", "1")
-                .hasField("content[0].id", behandling.getId());
+                .hasField("content[0].id", behandling.getId())
+                .hasField("content[0].sistEndretEtterlevelse", etterlevelse.getChangeStamp().getLastModifiedDate().toString());
     }
 
 }

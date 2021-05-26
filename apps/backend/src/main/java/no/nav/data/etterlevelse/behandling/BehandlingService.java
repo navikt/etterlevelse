@@ -1,5 +1,6 @@
 package no.nav.data.etterlevelse.behandling;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.common.storage.StorageService;
@@ -13,9 +14,12 @@ import no.nav.data.etterlevelse.behandling.dto.BehandlingFilter;
 import no.nav.data.etterlevelse.behandling.dto.BehandlingRequest;
 import no.nav.data.integration.behandling.BkatClient;
 import no.nav.data.integration.behandling.dto.BkatProcess;
+import no.nav.data.integration.team.domain.Team;
+import no.nav.data.integration.team.teamcat.TeamcatTeamClient;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.Collection;
 import java.util.List;
@@ -27,17 +31,13 @@ import static no.nav.data.common.utils.StreamUtils.convert;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class BehandlingService {
 
     private final BkatClient bkatClient;
+    private final TeamcatTeamClient teamcatTeamClient;
     private final StorageService storage;
     private final BehandlingRepo repo;
-
-    public BehandlingService(StorageService storage, BkatClient bkatClient, BehandlingRepo repo) {
-        this.bkatClient = bkatClient;
-        this.storage = storage;
-        this.repo = repo;
-    }
 
     public Behandling save(BehandlingRequest request) {
         Validator.validate(request)
@@ -84,6 +84,11 @@ public class BehandlingService {
                 return List.of(convertBehandling(process));
             }
             return List.of();
+        } else if (Boolean.TRUE.equals(filter.getMineBehandlinger())) {
+            filter.setTeams(convert(teamcatTeamClient.getMyTeams(), Team::getId));
+        }
+        if (!CollectionUtils.isEmpty(filter.getTeams())) {
+            return filter.getTeams().parallelStream().map(this::getBehandlingerForTeam).flatMap(Collection::stream).toList();
         }
         List<GenericStorage> datas = repo.findBy(filter);
         List<String> behandlingIds = convert(GenericStorage.to(datas, BehandlingData.class), BehandlingData::getBehandlingId);

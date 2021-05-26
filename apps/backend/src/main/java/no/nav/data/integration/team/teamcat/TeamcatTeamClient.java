@@ -3,6 +3,7 @@ package no.nav.data.integration.team.teamcat;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
 import no.nav.data.common.rest.RestResponsePage;
+import no.nav.data.common.security.SecurityUtils;
 import no.nav.data.common.utils.MetricUtils;
 import no.nav.data.integration.team.domain.ProductArea;
 import no.nav.data.integration.team.domain.Team;
@@ -55,6 +56,13 @@ public class TeamcatTeamClient {
 
     public Optional<Team> getTeam(String teamId) {
         return Optional.ofNullable(getTeams().get(teamId));
+    }
+
+    public List<Team> getMyTeams() {
+        String currentIdent = SecurityUtils.getCurrentIdent();
+        return getAllTeams().stream()
+                .filter(team -> team.getMembers().stream().anyMatch(m -> m.getNavIdent().equals(currentIdent)))
+                .toList();
     }
 
     public List<ProductArea> getAllProductAreas() {

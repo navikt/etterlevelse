@@ -1,6 +1,5 @@
 package no.nav.data.etterlevelse.krav.domain.dto;
 
-import graphql.execution.ExecutionStepInfo;
 import graphql.schema.DataFetchingEnvironment;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import static no.nav.data.common.utils.StringUtils.formatList;
+import static no.nav.data.etterlevelse.graphql.support.GraphQlResolverUtil.getFilter;
 
 @Data
 @Builder
@@ -65,14 +65,6 @@ public class KravFilter {
     public static <T> T get(DataFetchingEnvironment env, String field) {
         Map<String, T> vars = getFilter(env.getExecutionStepInfo());
         return vars.get(field);
-    }
-
-    private static <T> T getFilter(ExecutionStepInfo executionStepInfo) {
-        var step = executionStepInfo;
-        while (step.hasParent() && step.getArgument("filter") == null) {
-            step = step.getParent();
-        }
-        return step.getArgument("filter");
     }
 
 }

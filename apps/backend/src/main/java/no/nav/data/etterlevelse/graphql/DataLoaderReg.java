@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.etterlevelse.behandling.BehandlingService;
 import no.nav.data.etterlevelse.behandling.dto.Behandling;
+import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
+import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.integration.team.domain.Team;
 import no.nav.data.integration.team.dto.Resource;
 import no.nav.data.integration.team.dto.TeamResponse;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
@@ -30,17 +33,20 @@ import static no.nav.data.common.utils.StreamUtils.toMap;
 @RequiredArgsConstructor
 public class DataLoaderReg {
 
+    public static final String ETTERLEVELSER_FOR_BEHANDLING_LOADER = "ETTERLEVELSER_FOR_BEHANDLING_LOADER";
     public static final String BEHANDLING = "BEHANDLING_LOADER";
     public static final String RESOURCES = "RESOURCES_LOADER";
     public static final String TEAM = "TEAM_LOADER";
 
     private final Executor graphQLExecutor;
     private final BehandlingService behandlingService;
+    private final EtterlevelseService etterlevelseService;
     private final TeamcatResourceClient resourceClient;
     private final TeamcatTeamClient teamClient;
 
     public DataLoaderRegistry create() {
         return new DataLoaderRegistry()
+                .register(ETTERLEVELSER_FOR_BEHANDLING_LOADER, etterLevelserForBehandlingLoader())
                 .register(BEHANDLING, behandlingLoader())
                 .register(RESOURCES, resourcesLoader())
                 .register(TEAM, teamLoader())
@@ -49,6 +55,10 @@ public class DataLoaderReg {
 
     private DataLoader<String, Behandling> behandlingLoader() {
         return loader(behandlingService::findAllByIdMapped);
+    }
+
+    private DataLoader<String, List<Etterlevelse>> etterLevelserForBehandlingLoader() {
+        return loader(etterlevelseService::getByBehandlinger);
     }
 
     private DataLoader<String, Resource> resourcesLoader() {

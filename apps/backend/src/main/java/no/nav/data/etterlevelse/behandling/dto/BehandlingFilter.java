@@ -19,16 +19,24 @@ public class BehandlingFilter {
     private String id;
     private List<String> relevans;
     private Integer sistRedigert;
+    private Boolean mineBehandlinger;
+    private List<String> teams;
 
     public List<String> getRelevans() {
         return formatList(relevans);
+    }
+
+    public List<String> getTeams() {
+        return formatList(teams);
     }
 
     public boolean isEmpty() {
         validate();
         return StringUtils.isBlank(id)
                 && getRelevans().isEmpty()
+                && getTeams().isEmpty()
                 && sistRedigert == null
+                && mineBehandlinger == null
                 ;
     }
 
@@ -41,6 +49,5 @@ public class BehandlingFilter {
             }
         }
     }
-
 
 }

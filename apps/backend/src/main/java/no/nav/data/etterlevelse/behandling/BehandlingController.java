@@ -9,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.NotFoundException;
 import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.RestResponsePage;
-import no.nav.data.common.security.SecurityUtils;
 import no.nav.data.common.utils.StreamUtils;
 import no.nav.data.etterlevelse.behandling.dto.Behandling;
 import no.nav.data.etterlevelse.behandling.dto.BehandlingRequest;
@@ -51,9 +50,7 @@ public class BehandlingController {
     ) {
         List<Behandling> behandlinger;
         if (teamId == null || Boolean.TRUE.equals(myBehandlinger)) {
-            String currentIdent = SecurityUtils.getCurrentIdent();
-            behandlinger = teamClient.getAllTeams().stream()
-                    .filter(team -> team.getMembers().stream().anyMatch(m -> m.getNavIdent().equals(currentIdent)))
+            behandlinger = teamClient.getMyTeams().stream()
                     .map(Team::getId)
                     .map(service::getBehandlingerForTeam)
                     .flatMap(Collection::stream)

@@ -32,4 +32,6 @@ input BehandlingFilter {
     relevans: [String!]
     """min 1, max 20"""
     sistRedigert: NonNegativeInt
+    teams: [String!]
+    mineBehandlinger: Boolean
 }
