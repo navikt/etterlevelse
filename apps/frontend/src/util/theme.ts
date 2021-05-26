@@ -20,6 +20,7 @@ import '@fontsource/source-sans-pro/900.css'
   red50: '#F6EAE6',
   grey200: '#A0A0A0',
   grey100: '#DFDFDF',
+  grey75: '#E5E5E5',
   grey50: '#F1F1F1',
   grey25: '#F8F8F8',
   white: '#FFFFFF',
@@ -89,7 +90,7 @@ const overrides: RecursivePartial<Theme> = {
     borderFocus: ettlevColors.green400, // same as inputFillActive to hide
     menuFill: ettlevColors.white,
     inputFillError: ettlevColors.error400,
-    
+
     inputEnhancerFill: primitives.primary100,
 
 

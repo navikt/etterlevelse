@@ -13,9 +13,11 @@ export const CustomizedTab = (props: TabProps) => {
 }
 
 interface CustomizedTabsProps {
-  fontColor?: string,
-  activeColor?: string,
+  fontColor?: string
+  activeColor?: string
   tabBackground?: string
+  backgroundColor?: string
+  small?: boolean
 }
 
 type CustomProps = TabsProps & CustomizedTabsProps
@@ -56,23 +58,28 @@ export const CustomizedTabs = (props: CustomProps) => {
             borderBottomStyle: 'solid',
             ':hover': hoverAndFocusStyle,
             ':focus-visible': hoverAndFocusStyle,
-            ':active': hoverAndFocusStyle
+            ':active': hoverAndFocusStyle,
+
+            ...(props.small ? {
+              marginRight: theme.sizing.scale1000,
+              fontSize: '18px'
+            } : {}),
           })
         },
         TabBar: {
           style: {
             backgroundColor: tabBackground,
-            justifyContent: 'space-between',
+            justifyContent: props.small ? 'flex-start' : 'space-between',
             ...paddingZero,
             marginLeft: '-2px',
-            marginRight: '-2px'
+            marginRight: '-2px',
           }
         },
         TabContent: {
           style: {
             marginTop: theme.sizing.scale1600,
-            backgroundColor: ettlevColors.grey25,
-            ...paddingZero
+            backgroundColor: props.backgroundColor || ettlevColors.grey25,
+            ...paddingZero,
           }
         }
       }}

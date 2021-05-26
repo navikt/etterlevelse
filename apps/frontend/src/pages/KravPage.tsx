@@ -1,5 +1,5 @@
 import {Block} from 'baseui/block'
-import {H1, HeadingXLarge, LabelLarge, LabelSmall, ParagraphSmall} from 'baseui/typography'
+import {H1, HeadingXLarge} from 'baseui/typography'
 import {useParams} from 'react-router-dom'
 import {deleteKrav, KravIdParams, mapToFormVal} from '../api/KravApi'
 import React, {useEffect, useRef, useState} from 'react'
@@ -14,7 +14,7 @@ import {theme} from '../util'
 import {FormikProps} from 'formik'
 import {DeleteItem} from '../components/DeleteItem'
 import {Spinner} from '../components/common/Spinner'
-import {borderRadius, paddingAll} from '../components/common/Style'
+import {borderRadius} from '../components/common/Style'
 import {useQuery} from '@apollo/client'
 import {Tilbakemeldinger} from '../components/krav/Tilbakemelding'
 import {chevronLeft, editIcon, pageIcon, plusIcon, sadFolderIcon} from '../components/Images'
@@ -24,11 +24,10 @@ import {ettlevColors, maxPageWidth, pageWidth} from '../util/theme'
 import {CustomizedAccordion, CustomizedPanel} from '../components/common/CustomizedAccordion'
 import * as _ from 'lodash'
 import moment from 'moment'
-import {faChevronRight} from '@fortawesome/free-solid-svg-icons'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {useLocationState, useQueryParam} from '../util/hooks'
 import {InfoBlock} from '../components/common/InfoBlock'
 import {gql} from '@apollo/client/core'
+import {PanelLink} from '../components/common/PanelLink'
 
 export const kravNumView = (it: {kravVersjon: number, kravNummer: number}) => `K${it.kravNummer}.${it.kravVersjon}`
 export const kravName = (krav: Krav) => `${kravNumView(krav)} - ${krav.navn}`
@@ -208,7 +207,6 @@ const Etterlevelser = ({loading, etterlevelser: allEtterlevelser}: {loading: boo
     .filter(avdeling => !!avdeling) || []) as ExternalCode[],
     a => a.code
   )
-  const [hover, setHover] = useState('')
   const {state, changeState} = useLocationState<LocationState>()
 
   return (
@@ -225,51 +223,13 @@ const Etterlevelser = ({loading, etterlevelser: allEtterlevelser}: {loading: boo
           title={a.shortName}>
 
           {etterlevelser?.filter(e => e.behandling.avdeling?.code === a.code).map(e => (
-            <RouteLink key={e.id} href={`/etterlevelse/${e.id}`} hideUnderline $style={{
-              display: 'flex'
-            }}>
-              <Block overrides={{
-                Block: {
-                  style: {
-                    width: '100%',
-                    ...paddingAll(theme.sizing.scale600),
-                    paddingLeft: theme.sizing.scale300,
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    backgroundColor: ettlevColors.white,
-
-                    borderWidth: '1px',
-                    borderColor: ettlevColors.grey50,
-                    borderStyle: 'solid',
-
-                    ':hover': {
-                      position: 'relative',
-                      boxSizing: 'border-box',
-                      boxShadow: '0px 3px 4px rgba(0, 0, 0, 0.12)'
-                    }
-                  }
-                }
-              }} onMouseEnter={() => setHover(e.id)} onMouseLeave={() => setHover('')}>
-                <PageIcon hover={hover === e.id}/>
-
-                <Block marginLeft={theme.sizing.scale300} marginRight={theme.sizing.scale600} $style={{flexGrow: 1}}
-                       display={'flex'} flexDirection={'column'} justifyContent={'center'}
-                >
-                  <LabelLarge $style={{lineHeight: '20px'}}>{e.behandling.navn}</LabelLarge>
-                  <ParagraphSmall marginBottom={0} marginTop={theme.sizing.scale100}>{e.behandling.overordnetFormaal.shortName}</ParagraphSmall>
-                </Block>
-
-                <Block minWidth={'120px'} maxWidth={'120px'}>
-                  <LabelSmall>{!!e.behandling.teamsData.length ? e.behandling.teamsData.map(t => t.name).join(', ') : 'Ingen team'}</LabelSmall>
-                  <ParagraphSmall marginBottom={0} marginTop={theme.sizing.scale100}>Utfylt: {moment(e.changeStamp.lastModifiedDate).format('ll')}</ParagraphSmall>
-                </Block>
-
-                <Block marginLeft={hover === e.id ? `calc(${theme.sizing.scale600} + 4px)` : theme.sizing.scale600} alignSelf={'center'} marginRight={hover === e.id ? '-4px' : 0}>
-                  <FontAwesomeIcon icon={faChevronRight} size={'lg'} color={ettlevColors.green800}/>
-                </Block>
-
-              </Block>
-            </RouteLink>))}
+            <PanelLink key={e.id} href={`/etterlevelse/${e.id}`}
+                       title={e.behandling.navn} beskrivelse={e.behandling.overordnetFormaal.shortName}
+                       rightTitle={!!e.behandling.teamsData.length ? e.behandling.teamsData.map(t => t.name).join(', ') : 'Ingen team'}
+                       rightBeskrivelse={`Utfylt: ${moment(e.changeStamp.lastModifiedDate).format('ll')}`}
+                       panelIcon={hover => <PageIcon hover={hover}/>}
+            />
+          ))}
 
         </CustomizedPanel>)}
       </CustomizedAccordion>
