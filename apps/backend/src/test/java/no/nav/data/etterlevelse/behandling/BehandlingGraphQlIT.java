@@ -12,6 +12,7 @@ import no.nav.data.graphql.GraphQLTestBase;
 import no.nav.data.integration.behandling.BkatMocks;
 import org.junit.jupiter.api.Test;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
@@ -99,12 +100,13 @@ public class BehandlingGraphQlIT extends GraphQLTestBase {
         var var = Map.of("sistRedigert", "2");
         var response = graphQLTestTemplate.perform("graphqltest/behandling_filter.graphql", vars(var));
 
+        String sistEndret = DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(etterlevelse.getChangeStamp().getLastModifiedDate());
         assertThat(response, "behandling")
                 .hasNoErrors()
                 .hasField("totalElements", "1")
                 .hasField("numberOfElements", "1")
                 .hasField("content[0].id", behandling.getId())
-                .hasField("content[0].sistEndretEtterlevelse", etterlevelse.getChangeStamp().getLastModifiedDate().toString());
+                .hasField("content[0].sistEndretEtterlevelse", sistEndret);
     }
 
 }
