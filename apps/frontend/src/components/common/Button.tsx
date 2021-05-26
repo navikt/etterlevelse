@@ -10,6 +10,8 @@ import {StyleObject} from 'styletron-react'
 import {Block} from 'baseui/block'
 import {borderRadius, borderStyle, borderWidth, paddingAll} from './Style'
 import {ettlevColors} from '../../util/theme'
+import {faExternalLinkAlt} from '@fortawesome/free-solid-svg-icons'
+import {ExternalLink} from './RouteLink'
 
 
 interface ButtonProps {
@@ -88,27 +90,27 @@ const Button = (props: ButtonProps) => {
     style: {
       ...(props.kind === 'outline' ? outlineOverride : {}),
       ...(props.kind === 'underline-hover' ? underlineOverride : {}),
-      ...(props.kind === 'secondary' ? buttonBorderStyle: {}),
+      ...(props.kind === 'secondary' ? buttonBorderStyle : {}),
       ...(props.hidePadding ? paddingAll('0') : {}),
-      ...(props.inline ? { paddingTop: theme.sizing.scale100, paddingBottom: theme.sizing.scale100 } : {}),
+      ...(props.inline ? {paddingTop: theme.sizing.scale100, paddingBottom: theme.sizing.scale100} : {}),
       ...(props.$style || {}),
       ...(boxShadow.style)
     }
   }
   return (
     <>
-      <Block display='inline' marginLeft={props.marginLeft ? theme.sizing.scale400 : 0} />
+      <Block display='inline' marginLeft={props.marginLeft ? theme.sizing.scale400 : 0}/>
       <Tooltip tooltip={props.tooltip}>
-        <BaseUIButton kind={baseuiKind} size={props.size} shape={props.shape} onClick={() => props.onClick?.()} overrides={{ BaseButton: overrides }}
-          startEnhancer={props.startEnhancer} disabled={props.disabled} type={props.type}
-          aria-label={props.label}
+        <BaseUIButton kind={baseuiKind} size={props.size} shape={props.shape} onClick={() => props.onClick?.()} overrides={{BaseButton: overrides}}
+                      startEnhancer={props.startEnhancer} disabled={props.disabled} type={props.type}
+                      aria-label={props.label}
         >
-          {props.icon && <FontAwesomeIcon icon={props.icon} style={{ marginRight: props.children ? '.5rem' : undefined }} />}
+          {props.icon && <FontAwesomeIcon icon={props.icon} style={{marginRight: props.children ? '.5rem' : undefined}}/>}
           <b>{props.children}</b>
-          {props.iconEnd && <FontAwesomeIcon icon={props.iconEnd} style={{ marginLeft: props.children ? '.5rem' : undefined }} />}
+          {props.iconEnd && <FontAwesomeIcon icon={props.iconEnd} style={{marginLeft: props.children ? '.5rem' : undefined}}/>}
         </BaseUIButton>
       </Tooltip>
-      <Block display='inline' marginRight={props.marginRight ? theme.sizing.scale400 : 0} />
+      <Block display='inline' marginRight={props.marginRight ? theme.sizing.scale400 : 0}/>
     </>
   )
 }
@@ -121,4 +123,17 @@ export const buttonBorderStyle: StyleObject = {
   ...borderStyle('solid'),
   ...borderWidth('2px'),
   ...borderRadius('4px')
+}
+
+export const ExternalButton = (
+  {href, children, underlineHover, size}:
+    {href: string, children: React.ReactNode, underlineHover?: boolean, size?: SIZE[keyof SIZE]}
+) => {
+  const kind = underlineHover ? 'underline-hover' : 'outline'
+  const actualSize = size || 'compact'
+  return (
+    <ExternalLink href={href} hideUnderline>
+      <Button kind={kind} size={actualSize}>{children} <FontAwesomeIcon icon={faExternalLinkAlt}/></Button>
+    </ExternalLink>
+  )
 }

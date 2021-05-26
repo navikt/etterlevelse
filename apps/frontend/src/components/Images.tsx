@@ -28,6 +28,7 @@ import pageIcon from '../resources/icons/page.svg'
 import mailboxPoppingIcon from '../resources/icons/mailbox-popping.svg'
 import sadFolderIcon from '../resources/icons/sad-folder.svg'
 import bamseIcon from '../resources/icons/Bamse.svg'
+import navChevronRightIcon from '../resources/icons/nav-chevron-right.svg'
 import dokEtterlevelse from '../resources/icons/dok-etterlevelse-ikon.svg'
 import illustration from '../resources/giammarco-boscaro-zeH-ljawHtg-unsplash.jpg'
 import {codelist, ListName, LovCode, TemaCode} from '../services/Codelist'
@@ -55,6 +56,7 @@ export {
   pageIcon,
   bamseIcon,
   dokEtterlevelse,
+  navChevronRightIcon,
 }
 
 export const temaBilder: {[id: string]: string} = {

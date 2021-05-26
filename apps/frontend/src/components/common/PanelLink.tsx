@@ -5,8 +5,7 @@ import {borderRadius, paddingAll} from './Style'
 import {theme} from '../../util'
 import {ettlevColors} from '../../util/theme'
 import {LabelLarge, LabelSmall, ParagraphSmall} from 'baseui/typography'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faChevronRight} from '@fortawesome/free-solid-svg-icons'
+import {navChevronRightIcon} from '../Images'
 
 
 export const PanelLink = ({href, title, rightTitle, beskrivelse, rightBeskrivelse, panelIcon}:
@@ -57,7 +56,7 @@ export const PanelLink = ({href, title, rightTitle, beskrivelse, rightBeskrivels
         </Block>
 
         <Block marginLeft={hover ? `calc(${theme.sizing.scale600} + 4px)` : theme.sizing.scale600} alignSelf={'center'} marginRight={hover ? '-4px' : 0}>
-          <FontAwesomeIcon icon={faChevronRight} size={'lg'} color={ettlevColors.green800}/>
+          <img src={navChevronRightIcon} aria-hidden alt={'Chevron høyre ikon'} width={'24px'} height={'24px'}/>
         </Block>
 
       </Block>

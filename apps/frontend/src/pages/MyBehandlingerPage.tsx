@@ -1,14 +1,14 @@
-import {HeadingLarge, HeadingMedium, HeadingXXLarge, LabelSmall, LabelXSmall, ParagraphSmall} from 'baseui/typography'
+import {HeadingMedium, HeadingXLarge, HeadingXXLarge, LabelSmall, LabelXSmall, ParagraphSmall} from 'baseui/typography'
 import {Block} from 'baseui/block'
 import React, {useEffect, useState} from 'react'
 import {useMyBehandlinger, useSearchBehandling} from '../api/BehandlingApi'
 import {ListItem, ListItemLabel} from 'baseui/list'
 import {useMyTeams} from '../api/TeamApi'
-import RouteLink, {ExternalLink} from '../components/common/RouteLink'
+import RouteLink from '../components/common/RouteLink'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faExternalLinkAlt, faTimesCircle} from '@fortawesome/free-solid-svg-icons'
+import {faTimesCircle} from '@fortawesome/free-solid-svg-icons'
 import {theme} from '../util'
-import Button from '../components/common/Button'
+import Button, {ExternalButton} from '../components/common/Button'
 import {Spinner} from '../components/common/Spinner'
 import {Behandling, emptyPage, PageResponse, Team} from '../constants'
 import {StatefulInput} from 'baseui/input'
@@ -78,13 +78,13 @@ const MineBehandlinger = ({behandlinger, teams}: {behandlinger: Behandling[], te
             <Block display={'flex'} justifyContent={'space-between'}>
 
               <Block>
-                <HeadingLarge marginBottom={0} color={ettlevColors.green600}>{t.name}</HeadingLarge>
+                <HeadingXLarge marginBottom={0} color={ettlevColors.green600}>{t.name}</HeadingXLarge>
                 <ParagraphSmall marginTop={0}>Teamet skal etterleve krav i <span style={{fontWeight: 700}}>{teamBehandlinger.length} behandlinger</span></ParagraphSmall>
               </Block>
-              <Block alignSelf={'flex-end'}>
-                <ExternalLink href={`${env.pollyBaseUrl}team/${t.id}`} hideUnderline>
-                  <ParagraphSmall>Legg til behandling <FontAwesomeIcon icon={faExternalLinkAlt}/></ParagraphSmall>
-                </ExternalLink>
+              <Block alignSelf={'flex-end'} marginBottom={theme.sizing.scale400}>
+                <ExternalButton href={`${env.pollyBaseUrl}team/${t.id}`} underlineHover size={'mini'}>
+                  Legg til behandling
+                </ExternalButton>
               </Block>
             </Block>
 
@@ -111,9 +111,7 @@ const MineBehandlinger = ({behandlinger, teams}: {behandlinger: Behandling[], te
 
         >
           <Block marginTop={theme.sizing.scale600}>
-            <ExternalLink href={`${env.teamKatBaseUrl}`} hideUnderline>
-              <Button kind={'outline'} size={'compact'}>Teamkatalogen <FontAwesomeIcon icon={faExternalLinkAlt}/></Button>
-            </ExternalLink>
+            <ExternalButton href={`${env.teamKatBaseUrl}`}>Teamkatalogen</ExternalButton>
           </Block>
         </InfoBlock2>
       </Block>
