@@ -16,8 +16,9 @@ import {gql, useQuery} from '@apollo/client'
 import {ettlevColors, maxPageWidth, pageWidth} from '../util/theme'
 import CustomizedTabs, {CustomizedTab} from '../components/common/CustomizedTabs'
 import {PanelLink} from '../components/common/PanelLink'
-import {dokEtterlevelse} from '../components/Images'
+import {bamseIcon, dokEtterlevelse} from '../components/Images'
 import {env} from '../util/env'
+import {InfoBlock2} from '../components/common/InfoBlock'
 
 type Section = 'mine' | 'siste' | 'alle'
 
@@ -45,12 +46,15 @@ export const MyBehandlingerPage = () => {
 
           <CustomizedTabs fontColor={ettlevColors.green800} small backgroundColor={ettlevColors.grey50}
                           activeKey={tab} onChange={args => setTab(args.activeKey as Section)}>
+
             <CustomizedTab key={'mine'} title={'Mine behandlinger'}>
               <MineBehandlinger teams={teams} behandlinger={myBehandlinger}/>
             </CustomizedTab>
+
             <CustomizedTab key={'siste'} title={'Mine sist dokumenterte'}>
 
             </CustomizedTab>
+
             <CustomizedTab key={'alle'} title={'Alle'}>
               <Alle/>
             </CustomizedTab>
@@ -101,6 +105,21 @@ const MineBehandlinger = ({behandlinger, teams}: {behandlinger: Behandling[], te
         }
       )}
 
+      <Block maxWidth={'800px'}>
+        <InfoBlock2 icon={bamseIcon} alt={'Bamseikon'} title={'Savner du teamet ditt?'}
+                    beskrivelse={'Legg til teamet i teamkatalogen, så henter vi behandlinger som skal etterleve krav'}
+
+        >
+          <Block marginTop={theme.sizing.scale600}>
+            <ExternalLink href={`${env.teamKatBaseUrl}`} hideUnderline>
+              <Button kind={'outline'} size={'compact'}>Teamkatalogen <FontAwesomeIcon icon={faExternalLinkAlt}/></Button>
+            </ExternalLink>
+          </Block>
+        </InfoBlock2>
+      </Block>
+
+      <Block height={'200px'}/>
+
     </Block>
   )
 }
@@ -147,7 +166,7 @@ const Alle = () => {
   )
 }
 
-const BehandlingListItem = (props: { behandling: Behandling }) =>
+const BehandlingListItem = (props: {behandling: Behandling}) =>
   <ListItem sublist overrides={{Root: {style: {backgroundColor: 'inherit'}}}}>
     <ListItemLabel sublist>
       <RouteLink href={`/behandling/${props.behandling.id}`}>
