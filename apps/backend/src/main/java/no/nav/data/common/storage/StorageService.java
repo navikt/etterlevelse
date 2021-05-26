@@ -59,7 +59,7 @@ public class StorageService {
         // flush to update changestamp and versions
         repository.flush();
         //noinspection unchecked
-        return (T) saved.getDomainObjectData(object.getClass(), true);
+        return (T) saved.getDomainObjectData(object.getClass());
     }
 
     public <T extends DomainObject> void deleteAll(List<T> objects) {
