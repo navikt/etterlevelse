@@ -50,4 +50,7 @@ public class BehandlingFilter {
         }
     }
 
+    public boolean isGetMineBehandlinger() {
+        return Boolean.TRUE.equals(getMineBehandlinger());
+    }
 }

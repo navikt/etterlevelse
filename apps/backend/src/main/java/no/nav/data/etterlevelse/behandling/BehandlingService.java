@@ -19,7 +19,6 @@ import no.nav.data.integration.team.teamcat.TeamcatTeamClient;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import java.util.Collection;
 import java.util.List;
@@ -84,10 +83,10 @@ public class BehandlingService {
                 return List.of(convertBehandling(process));
             }
             return List.of();
-        } else if (Boolean.TRUE.equals(filter.getMineBehandlinger())) {
+        } else if (filter.isGetMineBehandlinger()) {
             filter.setTeams(convert(teamcatTeamClient.getMyTeams(), Team::getId));
         }
-        if (!CollectionUtils.isEmpty(filter.getTeams())) {
+        if (!filter.getTeams().isEmpty() || filter.isGetMineBehandlinger()) {
             return filter.getTeams().parallelStream().map(this::getBehandlingerForTeam).flatMap(Collection::stream).toList();
         }
         List<GenericStorage> datas = repo.findBy(filter);
