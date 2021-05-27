@@ -10,10 +10,10 @@ import { NavigableItem } from '../admin/audit/AuditTypes'
 import { ettlevColors } from '../../util/theme'
 
 export const DotTag = (props: { children: ReactNode }) =>
-  <Block marginLeft={theme.sizing.scale100} marginRight={theme.sizing.scale100} display='flex' alignItems='center'>
-    <FontAwesomeIcon icon={faCircle} color={ettlevColors.black} style={{ fontSize: '.45rem' }} aria-hidden={true} />
+  <Block marginLeft={theme.sizing.scale100} marginRight={theme.sizing.scale100} display='flex' alignItems='flex-start'>
+    <FontAwesomeIcon icon={faCircle} color={ettlevColors.black} style={{ fontSize: '.45rem', marginTop:'9px' }} aria-hidden={true}  />
     <Block display='inline' marginRight={theme.sizing.scale100} />
-    <Block $style={{ whiteSpace: 'nowrap' }}>
+    <Block>
       {props.children}
     </Block>
   </Block>
