@@ -8,7 +8,7 @@ import '@fontsource/source-sans-pro/700.css'
 import '@fontsource/source-sans-pro/900.css'
 
 // etterlevelse colors
- export const ettlevColors = {
+export const ettlevColors = {
   green800: '#102723',
   green600: '#14483F',
   green400: '#057967',
@@ -95,8 +95,6 @@ const overrides: RecursivePartial<Theme> = {
     inputEnhancerFill: primitives.primary100,
 
 
-
-
     tabBarFill: colors.white,
   },
   borders: {
@@ -105,7 +103,8 @@ const overrides: RecursivePartial<Theme> = {
   },
   typography: {
     // Increase weight 500->600 on bold texts
-    font150: {fontWeight: 600},
+    font100: {fontWeight: 400, fontSize: '14px', lineHeight: '20px'},
+    font150: {fontWeight: 500, fontSize: '14px', lineHeight: '20px'}, // mini button
     font250: {fontWeight: 700, fontSize: '18px', lineHeight: '24px'}, //compact button, label3
     font300: {fontWeight: 400, fontSize: '18px', lineHeight: '24px'}, //P2
     font350: {fontWeight: 600},

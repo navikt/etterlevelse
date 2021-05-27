@@ -81,11 +81,11 @@ const BehandlingTabs = () => {
     <CustomizedTabs fontColor={ettlevColors.green800} small backgroundColor={ettlevColors.grey50}
                     activeKey={tab} onChange={args => setTab(args.activeKey as Section)}>
 
-      <CustomizedTab key={'mine'} title={'Mine behandlinger'} >
+      <CustomizedTab key={'mine'} title={'Mine behandlinger'}>
         <MineBehandlinger teams={teams} behandlinger={behandlinger.content} loading={loading}/>
       </CustomizedTab>
 
-      <CustomizedTab key={'siste'} title={'Mine sist dokumenterte'} >
+      <CustomizedTab key={'siste'} title={'Mine sist dokumenterte'}>
         <BehandlingerPanels behandlinger={behandlinger.content} loading={loading}/>
       </CustomizedTab>
 
