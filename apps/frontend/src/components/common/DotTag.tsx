@@ -7,10 +7,11 @@ import RouteLink, {urlForObject} from './RouteLink'
 import {Markdown} from './Markdown'
 import {Code, codelist, ListName} from '../../services/Codelist'
 import {NavigableItem} from '../admin/audit/AuditTypes'
+import { ettlevColors } from '../../util/theme'
 
 export const DotTag = (props: {children: ReactNode}) =>
   <Block marginLeft={theme.sizing.scale100} marginRight={theme.sizing.scale100} display='flex' alignItems='center'>
-    <FontAwesomeIcon icon={faCircle} color={theme.colors.positive400} style={{fontSize: '.45rem'}} aria-hidden={true}/>
+    <FontAwesomeIcon icon={faCircle} color={ettlevColors.black} style={{fontSize: '.45rem'}} aria-hidden={true}/>
     <Block display='inline' marginRight={theme.sizing.scale100}/>
     <Block $style={{whiteSpace: 'nowrap'}}>
       {props.children}
@@ -63,7 +64,6 @@ export const DotTags = (props: DotTagsParams) => {
     <Block display='flex' flexWrap>
       {items.map((item, i) => (
         <Block key={i} marginRight={i < items.length && !commaSeparator ? theme.sizing.scale200 : 0}>
-
           <DotTag> <Content {...props} item={item}/> </DotTag>
         </Block>
       ))}
