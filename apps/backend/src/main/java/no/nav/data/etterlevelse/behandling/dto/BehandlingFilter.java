@@ -55,4 +55,8 @@ public class BehandlingFilter {
     public boolean isSok() {
         return !StringUtils.isBlank(sok);
     }
+
+    public boolean requiresLogin() {
+        return isGetMineBehandlinger() || sistRedigert != null;
+    }
 }

@@ -48,7 +48,7 @@ const BehandlingTabs = () => {
   const [variables, setVariables] = useState<Variables>({})
   const {data, loading: behandlingerLoading} = useQuery<{behandlinger: PageResponse<BehandlingQL>}, Variables>(query, {
     variables,
-    skip: !variables.mineBehandlinger && !variables.sistRedigert || (variables.mineBehandlinger && !user.isLoggedIn())
+    skip: !variables.mineBehandlinger && !variables.sistRedigert
   })
   const [teams, teamsLoading] = useMyTeams()
   const behandlinger = data?.behandlinger || emptyPage
@@ -81,11 +81,11 @@ const BehandlingTabs = () => {
     <CustomizedTabs fontColor={ettlevColors.green800} small backgroundColor={ettlevColors.grey50}
                     activeKey={tab} onChange={args => setTab(args.activeKey as Section)}>
 
-      <CustomizedTab key={'mine'} title={'Mine behandlinger'} disabled={!user.isLoggedIn()}>
+      <CustomizedTab key={'mine'} title={'Mine behandlinger'} >
         <MineBehandlinger teams={teams} behandlinger={behandlinger.content} loading={loading}/>
       </CustomizedTab>
 
-      <CustomizedTab key={'siste'} title={'Mine sist dokumenterte'} disabled={!user.isLoggedIn()}>
+      <CustomizedTab key={'siste'} title={'Mine sist dokumenterte'} >
         <BehandlingerPanels behandlinger={behandlinger.content} loading={loading}/>
       </CustomizedTab>
 

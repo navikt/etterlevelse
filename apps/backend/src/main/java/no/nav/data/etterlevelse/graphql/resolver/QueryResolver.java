@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.NotFoundException;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
+import no.nav.data.common.security.SecurityUtils;
 import no.nav.data.etterlevelse.behandling.BehandlingService;
 import no.nav.data.etterlevelse.behandling.dto.Behandling;
 import no.nav.data.etterlevelse.behandling.dto.BehandlingFilter;
@@ -72,6 +73,9 @@ public class QueryResolver implements GraphQLQueryResolver {
 
         if (filter == null || filter.isEmpty()) {
             return behandlingService.getAll(pageInput.createPage());
+        }
+        if (SecurityUtils.getCurrentUser().isEmpty() && filter.requiresLogin()) {
+            return new RestResponsePage<>();
         }
 
         List<Behandling> filtered = new ArrayList<>(behandlingService.getByFilter(filter));
