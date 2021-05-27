@@ -1,25 +1,25 @@
-import React, {ReactNode} from 'react'
-import {faCircle} from '@fortawesome/free-solid-svg-icons'
-import {Block} from 'baseui/block'
-import {theme} from '../../util'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import RouteLink, {urlForObject} from './RouteLink'
-import {Markdown} from './Markdown'
-import {Code, codelist, ListName} from '../../services/Codelist'
-import {NavigableItem} from '../admin/audit/AuditTypes'
+import React, { ReactNode } from 'react'
+import { faCircle } from '@fortawesome/free-solid-svg-icons'
+import { Block } from 'baseui/block'
+import { theme } from '../../util'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import RouteLink, { urlForObject } from './RouteLink'
+import { Markdown } from './Markdown'
+import { Code, codelist, ListName } from '../../services/Codelist'
+import { NavigableItem } from '../admin/audit/AuditTypes'
 import { ettlevColors } from '../../util/theme'
 
-export const DotTag = (props: {children: ReactNode}) =>
+export const DotTag = (props: { children: ReactNode }) =>
   <Block marginLeft={theme.sizing.scale100} marginRight={theme.sizing.scale100} display='flex' alignItems='center'>
-    <FontAwesomeIcon icon={faCircle} color={ettlevColors.black} style={{fontSize: '.45rem'}} aria-hidden={true}/>
-    <Block display='inline' marginRight={theme.sizing.scale100}/>
-    <Block $style={{whiteSpace: 'nowrap'}}>
+    <FontAwesomeIcon icon={faCircle} color={ettlevColors.black} style={{ fontSize: '.45rem' }} aria-hidden={true} />
+    <Block display='inline' marginRight={theme.sizing.scale100} />
+    <Block $style={{ whiteSpace: 'nowrap' }}>
       {props.children}
     </Block>
   </Block>
 
-const Content = (props: {item: ReactNode | string, list?: ListName, linkCodelist?: boolean, markdown?: boolean}) => {
-  const {item, list, linkCodelist, markdown} = props
+const Content = (props: { item: ReactNode | string, list?: ListName, linkCodelist?: boolean, markdown?: boolean }) => {
+  const { item, list, linkCodelist, markdown } = props
   if (list) {
     const itemString = item as string
     if (linkCodelist) return (
@@ -29,7 +29,7 @@ const Content = (props: {item: ReactNode | string, list?: ListName, linkCodelist
     )
     return <>{codelist.getShortname(list, itemString)}</>
   }
-  if (markdown) return <Markdown source={item as string} noMargin/>
+  if (markdown) return <Markdown source={item as string} noMargin />
   return <>{item}</>
 }
 
@@ -40,10 +40,11 @@ type DotTagsParams = {
   linkCodelist?: boolean
   markdown?: boolean
   list?: ListName
+  inColumn?: boolean
 }
 
 export const DotTags = (props: DotTagsParams) => {
-  const {commaSeparator} = props
+  const { commaSeparator } = props
   const items = props.items || props.codes?.map(c => c.code) || []
 
   if (!items.length) return <>{'Ikke angitt'}</>
@@ -53,7 +54,7 @@ export const DotTags = (props: DotTagsParams) => {
       <Block display='inline'>
         {items.map((item, i) => (
           <React.Fragment key={i}>
-            <Content {...props} item={item}/>
+            <Content {...props} item={item} />
             <span>{i < items.length - 1 ? ', ' : ''}</span>
           </React.Fragment>
         ))}
@@ -61,10 +62,10 @@ export const DotTags = (props: DotTagsParams) => {
     )
 
   return (
-    <Block display='flex' flexWrap>
+    <Block display={props.inColumn ? 'block' : 'flex'} flexWrap>
       {items.map((item, i) => (
-        <Block key={i} marginRight={i < items.length && !commaSeparator ? theme.sizing.scale200 : 0}>
-          <DotTag> <Content {...props} item={item}/> </DotTag>
+        <Block marginBottom={props.inColumn ? theme.sizing.scale200 : 'none'} key={i} marginRight={i < items.length && !commaSeparator ? theme.sizing.scale200 : 0}>
+          <DotTag> <Content {...props} item={item} /> </DotTag>
         </Block>
       ))}
     </Block>

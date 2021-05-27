@@ -85,7 +85,7 @@ const AllInfo = ({ krav }: { krav: KravQL }) => (
     {/* <LabelAboveContent title='Avdeling'>{krav.avdeling?.shortName}</LabelAboveContent> */}
 
     <LabelWrapper>
-      <LabelAboveContent header title='Kravet er relevant for'><DotTags list={ListName.RELEVANS} codes={krav.relevansFor} linkCodelist /></LabelAboveContent>
+      <LabelAboveContent header title='Kravet er relevant for'><DotTags list={ListName.RELEVANS} codes={krav.relevansFor} linkCodelist inColumn/></LabelAboveContent>
     </LabelWrapper>
 
     <Block backgroundColor='#F1F1F1' padding='32px'>
