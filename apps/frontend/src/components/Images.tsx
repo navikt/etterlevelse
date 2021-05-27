@@ -17,6 +17,7 @@ import barChart from '../resources/icons/bar-chart.svg'
 import stepper from '../resources/icons/stepper.svg'
 import logo from '../resources/icons/logo.svg'
 import chevronLeft from '../resources/icons/chevron-left.svg'
+import navChevronDownIcon from '../resources/icons/nav-chevron-down.svg'
 import plusIcon from '../resources/icons/plus.svg'
 import deleteIcon from '../resources/icons/delete.svg'
 import editIcon from '../resources/icons/edit.svg'
@@ -57,6 +58,7 @@ export {
   bamseIcon,
   dokEtterlevelse,
   navChevronRightIcon,
+  navChevronDownIcon,
 }
 
 export const temaBilder: {[id: string]: string} = {
