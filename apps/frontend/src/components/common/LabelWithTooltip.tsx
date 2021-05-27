@@ -2,7 +2,7 @@ import * as React from 'react'
 import CustomizedStatefulTooltip from './CustomizedStatefulTooltip'
 import {questionmarkHoverIcon, questionmarkIcon} from '../Images'
 import {Block} from 'baseui/block'
-import {LabelMedium} from 'baseui/typography'
+import {LabelLarge} from 'baseui/typography'
 import {ettlevColors, theme} from '../../util/theme'
 
 const LabelWithToolTip = (props: { label?: string, tooltip?: React.ReactNode, fontColor?: string }) => {
@@ -11,9 +11,9 @@ const LabelWithToolTip = (props: { label?: string, tooltip?: React.ReactNode, fo
     return (
       <Block display="flex" alignItems="center" marginBottom={theme.sizing.scale200}>
         <Block marginRight="scale200">
-          <LabelMedium $style={{ color: props.fontColor ? props.fontColor : 'black' }}>
+          <LabelLarge $style={{ color: props.fontColor ? props.fontColor : 'black' }}>
             {props.label}
-          </LabelMedium>
+          </LabelLarge>
         </Block>
         <CustomizedStatefulTooltip
           content={() => (<Block>{props.tooltip}</Block>)}
@@ -51,9 +51,9 @@ const LabelWithToolTip = (props: { label?: string, tooltip?: React.ReactNode, fo
 
   return (
     <Block>
-      <LabelMedium>
+      <LabelLarge>
         {props.label}
-      </LabelMedium>
+      </LabelLarge>
     </Block>
   )
 }
