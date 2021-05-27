@@ -30,7 +30,8 @@ import mailboxPoppingIcon from '../resources/icons/mailbox-popping.svg'
 import sadFolderIcon from '../resources/icons/sad-folder.svg'
 import bamseIcon from '../resources/icons/Bamse.svg'
 import navChevronRightIcon from '../resources/icons/nav-chevron-right.svg'
-import dokEtterlevelse from '../resources/icons/dok-etterlevelse-ikon.svg'
+import dokEtterlevelseIcon from '../resources/icons/dok-etterlevelse-ikon.svg'
+import sokButtonIcon from '../resources/icons/icon_button_search.svg'
 import illustration from '../resources/giammarco-boscaro-zeH-ljawHtg-unsplash.jpg'
 import {codelist, ListName, LovCode, TemaCode} from '../services/Codelist'
 import React from 'react'
@@ -56,7 +57,8 @@ export {
   sadFolderIcon,
   pageIcon,
   bamseIcon,
-  dokEtterlevelse,
+  sokButtonIcon,
+  dokEtterlevelseIcon,
   navChevronRightIcon,
   navChevronDownIcon,
 }
