@@ -1,46 +1,63 @@
 import React from 'react'
 import ReactMarkdown from 'react-markdown'
-import {Paragraph1, Paragraph2} from 'baseui/typography'
-import {StatefulTooltip} from 'baseui/tooltip'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faExternalLinkAlt} from '@fortawesome/free-solid-svg-icons'
-import {useDebouncedState} from '../../util/hooks'
+import { Paragraph1, Paragraph2 } from 'baseui/typography'
+import { StatefulTooltip } from 'baseui/tooltip'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons'
+import { useDebouncedState } from '../../util/hooks'
 import MdEditor from 'react-markdown-editor-lite'
 import 'react-markdown-editor-lite/lib/index.css'
-import {Block} from 'baseui/block'
-import {theme} from '../../util'
-import {ExternalLink} from './RouteLink'
-import {markdownLink} from '../../util/config'
+import { Block } from 'baseui/block'
+import { theme } from '../../util'
+import { ExternalLink } from './RouteLink'
+import { markdownLink } from '../../util/config'
 import remarkGfm from 'remark-gfm'
 import rehypeRaw from 'rehype-raw'
+import { ettlevColors } from '../../util/theme'
+import { StyledLink } from 'baseui/link'
 
 export const Markdown = ({
-                           vertical,
-                           escapeHtml = true,
-                           shortenLinks,
-                           noMargin,
-                           source,
-                           sources: sourcesOrig,
-                           p1
-                         }: {source?: string, sources?: string[], escapeHtml?: boolean, noMargin?: boolean, shortenLinks?: boolean, vertical?: boolean, p1?: boolean}) => {
+  vertical,
+  escapeHtml = true,
+  shortenLinks,
+  noMargin,
+  source,
+  sources: sourcesOrig,
+  p1
+}: { source?: string, sources?: string[], escapeHtml?: boolean, noMargin?: boolean, shortenLinks?: boolean, vertical?: boolean, p1?: boolean }) => {
   const renderers = {
     p: (parProps: any) => {
-      const {children} = parProps
+      const { children } = parProps
       if (p1) {
         return <Paragraph1 marginTop={noMargin ? 0 : undefined} marginBottom={noMargin ? 0 : undefined}>{children}</Paragraph1>
       }
       return <Paragraph2 marginTop={noMargin ? 0 : undefined} marginBottom={noMargin ? 0 : undefined}>{children}</Paragraph2>
     },
     href: (linkProps: any) => {
-      const {children, href, node} = linkProps
+      const { children, href, node } = linkProps
       const content = shortenLinks && node.children[0]?.value.indexOf('http') === 0 ? 'Lenke' : children
       return <StatefulTooltip content={href}>
         <span>
-        <ExternalLink href={href}>
-          {content} <FontAwesomeIcon size='sm' icon={faExternalLinkAlt}/>
-        </ExternalLink>
+          <ExternalLink href={href}>
+            {content} <FontAwesomeIcon size='sm' icon={faExternalLinkAlt} />
+          </ExternalLink>
         </span>
       </StatefulTooltip>
+    },
+    a: (linkProps: any) => {
+      const { children, href, node } = linkProps
+      const content = shortenLinks && node.children[0]?.value.indexOf('http') === 0 ? 'Lenke' : children
+
+      return (
+        <StyledLink
+          href={href}
+          style={{
+            fontWeight: 'normal'
+          }}
+        >
+          {content}
+        </StyledLink>
+      )
     }
   }
 
@@ -53,9 +70,9 @@ export const Markdown = ({
     fontWeight: theme.typography.font400.fontWeight
   }}>
     <ReactMarkdown children={sources.join(vertical ? '\n\n' : ', ')}
-                   components={renderers}
-                   remarkPlugins={[remarkGfm]}
-                   rehypePlugins={htmlPlugins}
+      components={renderers}
+      remarkPlugins={[remarkGfm]}
+      rehypePlugins={htmlPlugins}
     />
   </Block>
 }
@@ -73,9 +90,9 @@ export const MarkdownEditor = (props: MarkdownEditorProps) => {
   const [val, setVal] = useDebouncedState(props.initialValue, 500, props.setValue)
 
   return <MdEditor
-    style={{height: props.height || '500px'}}
+    style={{ height: props.height || '500px' }}
     defaultValue={props.initialValue}
-    renderHTML={txt => <Markdown source={txt} shortenLinks={props.shortenLinks}/>}
+    renderHTML={txt => <Markdown source={txt} shortenLinks={props.shortenLinks} />}
     onChange={data => setVal(data.text)}
     onImageUpload={props.onImageUpload}
   />
