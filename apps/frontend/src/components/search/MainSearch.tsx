@@ -34,7 +34,7 @@ type RadioProps = {
   $checked: boolean
 }
 
-const responsiveWidth = ['300px', '400px']
+const responsiveWidth = ['300px', '300px', '300px', '300px', '300px', '600px']
 
 const SmallRadio = (value: SearchType, label: string) => {
   return (
