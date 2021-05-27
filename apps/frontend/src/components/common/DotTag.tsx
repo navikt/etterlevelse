@@ -13,7 +13,7 @@ export const DotTag = (props: { children: ReactNode }) =>
   <Block marginLeft={theme.sizing.scale100} marginRight={theme.sizing.scale100} display='flex' alignItems='flex-start'>
     <FontAwesomeIcon icon={faCircle} color={ettlevColors.black} style={{ fontSize: '.45rem', marginTop:'9px' }} aria-hidden={true}  />
     <Block display='inline' marginRight={theme.sizing.scale100} />
-    <Block>
+    <Block $style={{wordBreak: 'break-word'}}>
       {props.children}
     </Block>
   </Block>
