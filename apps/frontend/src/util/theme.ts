@@ -85,6 +85,7 @@ const overrides: RecursivePartial<Theme> = {
     linkHover: ettlevColors.green400,
     linkActive: ettlevColors.green800,
     // input fields & text area
+    inputBorder: ettlevColors.grey200,
     inputFill: ettlevColors.white,
     inputFillActive: ettlevColors.white,
     borderFocus: ettlevColors.green400, // same as inputFillActive to hide
