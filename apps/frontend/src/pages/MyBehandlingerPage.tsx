@@ -12,64 +12,99 @@ import {gql, useQuery} from '@apollo/client'
 import {ettlevColors, maxPageWidth} from '../util/theme'
 import CustomizedTabs, {CustomizedTab} from '../components/common/CustomizedTabs'
 import {PanelLink} from '../components/common/PanelLink'
-import {bamseIcon, dokEtterlevelseIcon, navChevronRightIcon, sokButtonIcon} from '../components/Images'
+import {bamseIcon, dokEtterlevelseIcon, navChevronRightIcon, searchIcon} from '../components/Images'
 import {env} from '../util/env'
 import {InfoBlock2} from '../components/common/InfoBlock'
 import moment from 'moment'
 import {useDebouncedState} from '../util/hooks'
+import {SkeletonPanel} from '../components/common/LoadingSkeleton'
+import {user} from '../services/User'
+import {useHistory, useParams} from 'react-router-dom'
 
 type Section = 'mine' | 'siste' | 'alle'
 
-export const MyBehandlingerPage = () => {
-  const {data: myBehandlinger, loading: myBehandlingerLoading} = useQuery<{behandlinger: PageResponse<BehandlingQL>}, Variables>(query, {variables: {mineBehandlinger: true}})
-  const [teams, teamsLoading] = useMyTeams()
+export const MyBehandlingerPage = () => (
+  <Block width='100%' backgroundColor={ettlevColors.grey50} display={'flex'} justifyContent={'center'} paddingBottom={'200px'}>
+    <Block maxWidth={maxPageWidth} width='100%'>
+      <Block paddingLeft={'100px'} paddingRight={'100px'} paddingTop={theme.sizing.scale800}>
 
-  const [tab, setTab] = useState<Section>('mine')
+        <RouteLink href={'/'} hideUnderline>
+          <Button startEnhancer={<img alt={'Chevron venstre ikon'} src={navChevronRightIcon} style={{transform: 'rotate(180deg)'}}/>} size='compact' kind='tertiary' hidePadding
+                  $style={{':hover': {textDecoration: 'underline 3px'}}}> Tilbake</Button>
+        </RouteLink>
 
-  useEffect(() => {
-    if (myBehandlingerLoading) return
-    if (!myBehandlinger?.behandlinger?.content.length) setTab('siste')
-  }, [myBehandlinger, myBehandlingerLoading])
-
-  return (
-    <Block width='100%' backgroundColor={ettlevColors.grey50} display={'flex'} justifyContent={'center'} paddingBottom={'200px'}>
-      <Block maxWidth={maxPageWidth} width='100%'>
-        {/*todo padding/pagestructure?*/}
-        <Block paddingLeft={'100px'} paddingRight={'100px'} paddingTop={theme.sizing.scale800}>
-
-          <RouteLink href={'/'} hideUnderline>
-            <Button startEnhancer={<img alt={'Chevron venstre ikon'} src={navChevronRightIcon} style={{transform: 'rotate(180deg)'}}/>} size='compact' kind='tertiary' hidePadding
-                    $style={{':hover': {textDecoration: 'underline 3px'}}}> Tilbake</Button>
-          </RouteLink>
-
-          <HeadingXXLarge marginTop={theme.sizing.scale600}>Dokumentere etterlevelse</HeadingXXLarge>
-
-          <CustomizedTabs fontColor={ettlevColors.green800} small backgroundColor={ettlevColors.grey50}
-                          activeKey={tab} onChange={args => setTab(args.activeKey as Section)}>
-
-            <CustomizedTab key={'mine'} title={'Mine behandlinger'}>
-              <MineBehandlinger teams={teams} behandlinger={myBehandlinger?.behandlinger?.content || []}/>
-            </CustomizedTab>
-
-            <CustomizedTab key={'siste'} title={'Mine sist dokumenterte'}>
-              <SistRedigerteBehandlinger/>
-            </CustomizedTab>
-
-            <CustomizedTab key={'alle'} title={'Alle'}>
-              <Alle/>
-            </CustomizedTab>
-
-          </CustomizedTabs>
-
-
-        </Block>
+        <HeadingXXLarge marginTop={theme.sizing.scale600}>Dokumentere etterlevelse</HeadingXXLarge>
+        <BehandlingTabs/>
 
       </Block>
     </Block>
+  </Block>
+)
+
+const BehandlingTabs = () => {
+  const params = useParams<{tab?: Section}>()
+  const history = useHistory()
+  const [tab, setTab] = useState<Section>(params.tab || 'mine')
+  const [variables, setVariables] = useState<Variables>({})
+  const {data, loading: behandlingerLoading} = useQuery<{behandlinger: PageResponse<BehandlingQL>}, Variables>(query, {
+    variables,
+    skip: !variables.mineBehandlinger && !variables.sistRedigert || (variables.mineBehandlinger && !user.isLoggedIn())
+  })
+  const [teams, teamsLoading] = useMyTeams()
+  const behandlinger = data?.behandlinger || emptyPage
+  const loading = teamsLoading || behandlingerLoading
+
+  useEffect(() => {
+    if (!data || behandlingerLoading) return
+    if (tab === 'mine' && !behandlinger.totalElements) setTab('siste')
+    if (tab === 'siste' && !behandlinger.totalElements) setTab('alle')
+  }, [behandlinger, behandlingerLoading])
+
+  useEffect(() => {
+    switch (tab) {
+      case 'mine':
+        setVariables({mineBehandlinger: true})
+        break;
+      case 'siste':
+        setVariables({sistRedigert: 20})
+        break;
+    }
+    if (tab !== params.tab) history.replace(`/behandlinger/${tab}`)
+  }, [tab])
+
+  useEffect(() => {
+    // Move away from non-functional pages if user isn't logged in
+    if (tab !== 'alle' && user.isLoaded() && !user.isLoggedIn()) setTab('alle')
+  }, [user.isLoaded()])
+
+  return (
+    <CustomizedTabs fontColor={ettlevColors.green800} small backgroundColor={ettlevColors.grey50}
+                    activeKey={tab} onChange={args => setTab(args.activeKey as Section)}>
+
+      <CustomizedTab key={'mine'} title={'Mine behandlinger'} disabled={!user.isLoggedIn()}>
+        <MineBehandlinger teams={teams} behandlinger={behandlinger.content} loading={loading}/>
+      </CustomizedTab>
+
+      <CustomizedTab key={'siste'} title={'Mine sist dokumenterte'} disabled={!user.isLoggedIn()}>
+        <BehandlingerPanels behandlinger={behandlinger.content} loading={loading}/>
+      </CustomizedTab>
+
+      <CustomizedTab key={'alle'} title={'Alle'}>
+        <Alle/>
+      </CustomizedTab>
+
+    </CustomizedTabs>
   )
 }
 
-const MineBehandlinger = ({behandlinger, teams}: {behandlinger: BehandlingQL[], teams: Team[]}) => {
+const MineBehandlinger = ({behandlinger, teams, loading}: {behandlinger: BehandlingQL[], teams: Team[], loading: boolean}) => {
+  if (loading) return (
+    <>
+      <BehandlingerPanels behandlinger={[]} loading/>
+      <Block height={'60px'}/>
+      <BehandlingerPanels behandlinger={[]} loading/>
+    </>
+  )
   return (
     <Block>
       {teams.map(t => {
@@ -97,7 +132,6 @@ const MineBehandlinger = ({behandlinger, teams}: {behandlinger: BehandlingQL[], 
       <Block maxWidth={'800px'}>
         <InfoBlock2 icon={bamseIcon} alt={'Bamseikon'} title={'Savner du teamet ditt?'}
                     beskrivelse={'Legg til teamet i teamkatalogen, så henter vi behandlinger som skal etterleve krav'}
-
         >
           <Block marginTop={theme.sizing.scale600}>
             <ExternalButton href={`${env.teamKatBaseUrl}`}>Teamkatalogen</ExternalButton>
@@ -109,34 +143,15 @@ const MineBehandlinger = ({behandlinger, teams}: {behandlinger: BehandlingQL[], 
   )
 }
 
-const SistRedigerteBehandlinger = () => {
-  const {data, loading} = useQuery<{behandlinger: PageResponse<BehandlingQL>}, Variables>(query, {variables: {sistRedigert: 20}})
-  if (loading) return <Spinner size={theme.sizing.scale1000}/>
-  return <BehandlingerPanels behandlinger={data!.behandlinger.content}/>
-}
-
-const BehandlingerPanels = ({behandlinger}: {behandlinger: BehandlingQL[]}) => (
-  <Block>
-    {behandlinger.map(b => {
-      return (
-        <Block key={b.id} marginBottom={'8px'}>
-          <PanelLink
-            panelIcon={<img src={dokEtterlevelseIcon} aria-hidden alt={'Dokumenter behandling ikon'}/>}
-            href={`/behandling/${b.id}`} title={b.navn} beskrivelse={b.overordnetFormaal.shortName}
-            rightBeskrivelse={!!b.sistEndretEtterlevelse ? `Sist endret: ${moment(b.sistEndretEtterlevelse).format('ll')}` : ''}
-
-          />
-        </Block>
-      )
-    })}
-  </Block>
-)
-
 const Alle = () => {
   const pageSize = 20
   const [pageNumber, setPage] = useState(0)
   const [sok, setSok] = useDebouncedState('', 300)
-  const {data, loading} = useQuery<{behandlinger: PageResponse<BehandlingQL>}, Variables>(query, {variables: {pageNumber, pageSize, sok}})
+  const tooShort = !!sok.length && sok.trim().length < 3
+  const {data, loading} = useQuery<{behandlinger: PageResponse<BehandlingQL>}, Variables>(query, {
+    variables: {pageNumber, pageSize, sok},
+    skip: tooShort
+  })
   const behandlinger = data?.behandlinger || emptyPage
 
   const prev = () => setPage(Math.max(0, pageNumber - 1))
@@ -148,37 +163,60 @@ const Alle = () => {
 
   return (
     <Block>
-      <LabelLarge>Søk i alle behandlinger</LabelLarge>
+      <LabelLarge marginBottom={theme.sizing.scale200}>Søk i alle behandlinger</LabelLarge>
 
-      <Block maxWidth='600px' marginBottom={theme.sizing.scale1000}>
+      <Block maxWidth='600px' marginBottom={theme.sizing.scale1000} display={'flex'} flexDirection={'column'}>
         <StatefulInput size='compact' placeholder='Søk' aria-label={'Søk'}
                        onChange={e => setSok((e.target as HTMLInputElement).value)}
                        clearable
                        overrides={{
-                         EndEnhancer: {style: {marginLeft: theme.sizing.scale400, paddingLeft: 0, paddingRight: 0, backgroundColor: ettlevColors.black}},
-                         Root: {style: {paddingRight: 0}}
+                         Root: {style: {paddingLeft: 0, paddingRight: 0}},
+                         // EndEnhancer: {style: {marginLeft: theme.sizing.scale400, paddingLeft: 0, paddingRight: 0, backgroundColor: ettlevColors.black}}
                        }}
-                       endEnhancer={<img aria-hidden alt={'Søk ikon'} src={sokButtonIcon}/>}
+                       startEnhancer={<img src={searchIcon} alt='Søk ikon'/>}
+          // endEnhancer={<img aria-hidden alt={'Søk ikon'} src={sokButtonIcon}/>}
         />
+        {tooShort && <LabelSmall color={ettlevColors.error400} alignSelf={'flex-end'} marginTop={theme.sizing.scale200}>Minimum 3 tegn</LabelSmall>}
       </Block>
 
-      {loading && <Block marginLeft={theme.sizing.scale400} marginTop={theme.sizing.scale400}><Spinner size={theme.sizing.scale1000}/></Block>}
+      {!tooShort && <>
+        {loading && <Block>
+          <Block marginLeft={theme.sizing.scale400} marginTop={theme.sizing.scale400}>
+            <Spinner size={theme.sizing.scale1000}/>
+          </Block>
+        </Block>}
 
-      {!loading && !!sok && <Block>
-        <HeadingLarge color={ettlevColors.green600}>{behandlinger.totalElements} treff: “{sok}”</HeadingLarge>
-        <BehandlingerPanels behandlinger={behandlinger.content}/>
-        {!behandlinger.totalElements && <LabelXSmall>Ingen treff</LabelXSmall>}
-      </Block>}
+        {!loading && !!sok && <Block>
+          <HeadingLarge color={ettlevColors.green600}>{behandlinger.totalElements} treff: “{sok}”</HeadingLarge>
+          {!behandlinger.totalElements && <LabelXSmall>Ingen treff</LabelXSmall>}
+        </Block>}
 
-      {!loading && !sok && <Block>
-        <BehandlingerPanels behandlinger={behandlinger.content}/>
-      </Block>}
+        <BehandlingerPanels behandlinger={behandlinger.content} loading={loading}/>
 
-      <Block display='flex' alignItems='center' marginTop={theme.sizing.scale1000}>
-        <LabelSmall marginRight={theme.sizing.scale400}>Side {behandlinger.pageNumber + 1}/{behandlinger.pages}</LabelSmall>
-        <Button onClick={prev} size='compact' disabled={behandlinger.pageNumber === 0}>Forrige</Button>
-        <Button onClick={next} size='compact' disabled={behandlinger.pageNumber >= behandlinger.pages - 1}>Neste</Button>
-      </Block>
+        {!loading && <Block display='flex' alignItems='center' marginTop={theme.sizing.scale1000}>
+          <LabelSmall marginRight={theme.sizing.scale400}>Side {behandlinger.pageNumber + 1}/{behandlinger.pages}</LabelSmall>
+          <Button onClick={prev} size='compact' disabled={behandlinger.pageNumber === 0}>Forrige</Button>
+          <Button onClick={next} size='compact' disabled={behandlinger.pageNumber >= behandlinger.pages - 1}>Neste</Button>
+        </Block>}
+      </>}
+    </Block>
+  )
+}
+
+const BehandlingerPanels = ({behandlinger, loading}: {behandlinger: BehandlingQL[], loading?: boolean}) => {
+  if (loading) return <SkeletonPanel count={5}/>
+  return (
+    <Block>
+      {behandlinger.map(b => (
+        <Block key={b.id} marginBottom={'8px'}>
+          <PanelLink
+            panelIcon={<img src={dokEtterlevelseIcon} aria-hidden alt={'Dokumenter behandling ikon'}/>}
+            href={`/behandling/${b.id}`} title={b.navn} beskrivelse={b.overordnetFormaal.shortName}
+            rightBeskrivelse={!!b.sistEndretEtterlevelse ? `Sist endret: ${moment(b.sistEndretEtterlevelse).format('ll')}` : ''}
+
+          />
+        </Block>
+      ))}
     </Block>
   )
 }

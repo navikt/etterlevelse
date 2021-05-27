@@ -30,7 +30,7 @@ const SideBar = () => {
       <Brand/>
       <Block {...items}>
         <NavItem to="/krav" text="Krav"/>
-        <NavItem to="/behandling" text="Behandling"/>
+        <NavItem to="/behandlinger" text="Behandling"/>
 
         <Block height={theme.sizing.scale600}/>
 

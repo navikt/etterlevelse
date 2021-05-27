@@ -1,21 +1,21 @@
-import React, { useRef, useState } from 'react'
-import { Block } from 'baseui/block'
-import { useParams } from 'react-router-dom'
-import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
-import { behandlingName, useBehandling } from '../api/BehandlingApi'
-import { StyledLink } from 'baseui/link'
-import { behandlingLink } from '../util/config'
-import { HeadingLarge } from 'baseui/typography'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons'
+import React, {useRef, useState} from 'react'
+import {Block} from 'baseui/block'
+import {useParams} from 'react-router-dom'
+import {LoadingSkeleton} from '../components/common/LoadingSkeleton'
+import {behandlingName, useBehandling} from '../api/BehandlingApi'
+import {StyledLink} from 'baseui/link'
+import {behandlingLink} from '../util/config'
+import {HeadingLarge} from 'baseui/typography'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faExternalLinkAlt} from '@fortawesome/free-solid-svg-icons'
 import RouteLink from '../components/common/RouteLink'
 import Button from '../components/common/Button'
-import { ViewBehandling } from '../components/behandling/ViewBehandling'
-import { EditBehandling } from '../components/behandling/EditBehandling'
-import { theme } from '../util'
-import { user } from '../services/User'
-import { FormikProps } from 'formik'
-import { maxPageWidth } from '../util/theme'
+import {ViewBehandling} from '../components/behandling/ViewBehandling'
+import {EditBehandling} from '../components/behandling/EditBehandling'
+import {theme} from '../util'
+import {user} from '../services/User'
+import {FormikProps} from 'formik'
+import {maxPageWidth} from '../util/theme'
 
 export const BehandlingPage = () => {
   const params = useParams<{ id?: string }>()
@@ -36,7 +36,7 @@ export const BehandlingPage = () => {
             </StyledLink>
           </HeadingLarge>
           <Block display='flex' justifyContent='flex-end' marginBottom={theme.sizing.scale600}>
-            <RouteLink href={'/behandling'}>
+            <RouteLink href={'/behandlinger'}>
               <Button size='compact' kind='tertiary'>Tilbake</Button>
             </RouteLink>
             {user.canWrite() &&

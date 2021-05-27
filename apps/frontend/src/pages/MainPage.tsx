@@ -1,12 +1,12 @@
-import { Block, BlockProps } from 'baseui/block'
-import React, { useState } from 'react'
-import { Card, CardOverrides } from 'baseui/card'
+import {Block, BlockProps} from 'baseui/block'
+import React, {useState} from 'react'
+import {Card, CardOverrides} from 'baseui/card'
 import RouteLink from '../components/common/RouteLink'
-import { borderColor, marginAll } from '../components/common/Style'
-import { theme } from '../util'
-import { LabelLarge,LabelMedium, ParagraphXSmall } from 'baseui/typography'
-import { maxPageWidth, primitives } from '../util/theme'
-import { barChart, illustration, lawBook, pencilFill, stepper } from '../components/Images'
+import {borderColor, marginAll} from '../components/common/Style'
+import {theme} from '../util'
+import {ParagraphXSmall} from 'baseui/typography'
+import {maxPageWidth, primitives} from '../util/theme'
+import {barChart, illustration, lawBook, pencilFill, stepper} from '../components/Images'
 
 
 const sectionProps: BlockProps = {
@@ -23,7 +23,7 @@ export const MainPage = () => {
           <Block display='flex' flexDirection='column' maxWidth={'1000px'} overrides={{ Block: { props: { role: 'main' } } }}>
             <Block {...sectionProps} overrides={{ Block: { props: { role: 'navigation', 'aria-label': 'Hoved meny' } } }}>
               <SectionCard
-                icon={pencilFill} url={'/behandling'} title={'Dokumenter etterlevelse'}
+                icon={pencilFill} url={'/behandlinger'} title={'Dokumenter etterlevelse'}
                 text={'Fyll ut hvordan du etterlever lover og regler i behandlinger du har ansvar for'} />
               <SectionCard
                 icon={lawBook} url={'/krav'} title={'Opprett og vedlikehold krav'}
