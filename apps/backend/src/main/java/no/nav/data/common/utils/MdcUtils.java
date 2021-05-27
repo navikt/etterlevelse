@@ -26,7 +26,11 @@ public final class MdcUtils {
     }
 
     public static String getOrGenerateCorrelationId() {
-        return Optional.ofNullable(MDC.get(CORRELATION_ID)).orElse(createUUID());
+        return Optional.ofNullable(getCorrelationId()).orElse(createUUID());
+    }
+
+    public static String getCorrelationId() {
+        return MDC.get(CORRELATION_ID);
     }
 
     public static void createCorrelationId() {

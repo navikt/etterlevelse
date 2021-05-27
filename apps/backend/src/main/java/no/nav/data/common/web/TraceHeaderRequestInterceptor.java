@@ -28,6 +28,7 @@ public class TraceHeaderRequestInterceptor implements ClientHttpRequestIntercept
 
     @Override
     public ClientHttpResponse intercept(HttpRequest req, byte[] body, ClientHttpRequestExecution execution) throws IOException {
+        var correlationIdPrev = MdcUtils.getCorrelationId();
         String correlationId = MdcUtils.getOrGenerateCorrelationId();
         req.getHeaders().set(Constants.HEADER_CORRELATION_ID, correlationId);
 
@@ -36,6 +37,12 @@ public class TraceHeaderRequestInterceptor implements ClientHttpRequestIntercept
             req.getHeaders().set(Constants.HEADER_CALL_ID, callId);
             req.getHeaders().set(Constants.HEADER_CONSUMER_ID, no.nav.data.Constants.APP_ID);
         }
-        return execution.execute(req, body);
+        try {
+            return execution.execute(req, body);
+        } finally {
+            if (correlationIdPrev == null) {
+                MdcUtils.clearCorrelationId();
+            }
+        }
     }
 }
