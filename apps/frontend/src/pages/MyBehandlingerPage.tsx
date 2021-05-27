@@ -12,9 +12,9 @@ import {gql, useQuery} from '@apollo/client'
 import {ettlevColors, maxPageWidth} from '../util/theme'
 import CustomizedTabs, {CustomizedTab} from '../components/common/CustomizedTabs'
 import {PanelLink} from '../components/common/PanelLink'
-import {bamseIcon, dokEtterlevelseIcon, navChevronRightIcon, searchIcon} from '../components/Images'
+import {bamseIcon, dokEtterlevelseIcon, navChevronRightIcon, sadFolderIcon, searchIcon} from '../components/Images'
 import {env} from '../util/env'
-import {InfoBlock2} from '../components/common/InfoBlock'
+import {InfoBlock, InfoBlock2} from '../components/common/InfoBlock'
 import moment from 'moment'
 import {useDebouncedState} from '../util/hooks'
 import {SkeletonPanel} from '../components/common/LoadingSkeleton'
@@ -56,6 +56,7 @@ const BehandlingTabs = () => {
   const loading = teamsLoading || behandlingerLoading
 
   useEffect(() => {
+    if (!doneLoading && tab === 'alle') setDoneLoading(true)
     if (!data || behandlingerLoading || doneLoading) return
     else if (tab === 'mine' && !behandlinger.totalElements) setTab('siste')
     else if (tab === 'siste' && !behandlinger.totalElements) setTab('alle')
@@ -88,7 +89,7 @@ const BehandlingTabs = () => {
       </CustomizedTab>
 
       <CustomizedTab key={'siste'} title={'Mine sist dokumenterte'}>
-        <BehandlingerPanels behandlinger={behandlinger.content} loading={loading}/>
+        <SisteBehandlinger behandlinger={behandlinger.content} loading={loading}/>
       </CustomizedTab>
 
       <CustomizedTab key={'alle'} title={'Alle'}>
@@ -143,6 +144,14 @@ const MineBehandlinger = ({behandlinger, teams, loading}: {behandlinger: Behandl
 
     </Block>
   )
+}
+
+const SisteBehandlinger = ({behandlinger, loading}: {behandlinger: BehandlingQL[], loading: boolean}) => {
+
+  if (!behandlinger.length && !loading)
+    return <InfoBlock icon={sadFolderIcon} alt={'Trist mappe ikon'} text={'Vi finner ingen etterlevelser redigert av deg'} color={ettlevColors.red50}/>
+
+  return <BehandlingerPanels behandlinger={behandlinger} loading={loading}/>
 }
 
 const Alle = () => {

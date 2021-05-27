@@ -114,6 +114,7 @@ export const useMyTeams = () => {
       setLoading(false)
       console.log('couldn\'t find teams', e)
     })
+    !ident && setLoading(false)
   }, [ident])
 
   return [data, loading] as [Team[], boolean]
