@@ -35,10 +35,11 @@ public class CorrelationFilter extends OncePerRequestFilter {
         try {
             filterChain.doFilter(request, response);
         } finally {
-            MdcUtils.clearCorrelationId();
             MdcUtils.clearCallId();
-            MdcUtils.clearConsumer();
+            MdcUtils.clearConsumerId();
             MdcUtils.clearRequestPath();
+            MdcUtils.clearRequestMethod();
+            MdcUtils.clearCorrelationId();
         }
     }
 }

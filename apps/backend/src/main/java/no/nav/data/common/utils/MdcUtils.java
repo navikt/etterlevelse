@@ -69,7 +69,7 @@ public final class MdcUtils {
         MDC.put(CONSUMER_ID, consumer);
     }
 
-    public static void clearConsumer() {
+    public static void clearConsumerId() {
         MDC.remove(CONSUMER_ID);
     }
 
@@ -109,10 +109,10 @@ public final class MdcUtils {
     }
 
     private static void clearMdc() {
-        createCorrelationId();
+        clearCorrelationId();
         clearCallId();
         clearUser();
-        clearConsumer();
+        clearConsumerId();
         clearRequestPath();
         clearRequestMethod();
     }
