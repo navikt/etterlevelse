@@ -8,7 +8,6 @@ import {DotTag, DotTags} from '../common/DotTag'
 import {ListName} from '../../services/Codelist'
 import {Label, LabelAboveContent} from '../common/PropertyLabel'
 import {ExternalLink, ObjectLink} from '../common/RouteLink'
-import {StyledLink} from 'baseui/link'
 import {slackLink, slackUserLink, termUrl} from '../../util/config'
 import {user} from '../../services/User'
 import {LovViewList} from '../Lov'
@@ -16,6 +15,7 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faExternalLinkAlt} from '@fortawesome/free-solid-svg-icons'
 import {SuksesskriterieCard} from './Suksesskriterie'
 import {Paragraph2} from 'baseui/typography'
+import CustomizedLink from "../common/CustomizedLink";
 
 
 const formatDate = (date?: string) => date && moment(date).format('ll')
@@ -95,9 +95,9 @@ const AllInfo = ({krav}: {krav: KravQL}) => (
       </Label>
       <Label title='Varslingsadresser' hide={!user.isKraveier()}>
         <DotTags items={krav.varslingsadresser.map((va, i) => {
-            if (va.type === AdresseType.SLACK) return <Block>Slack: <StyledLink href={slackLink(va.adresse)}>#{va.slackChannel?.name || va.adresse}</StyledLink></Block>
-            if (va.type === AdresseType.SLACK_USER) return <Block>Slack: <StyledLink href={slackUserLink(va.adresse)}>{va.slackUser?.name || va.adresse}</StyledLink></Block>
-            return <Block>Epost: <StyledLink href={`mailto:${va.adresse}`}>{va.adresse}</StyledLink></Block>
+            if (va.type === AdresseType.SLACK) return <Block>Slack: <CustomizedLink href={slackLink(va.adresse)}>#{va.slackChannel?.name || va.adresse}</CustomizedLink></Block>
+            if (va.type === AdresseType.SLACK_USER) return <Block>Slack: <CustomizedLink href={slackUserLink(va.adresse)}>{va.slackUser?.name || va.adresse}</CustomizedLink></Block>
+            return <Block>Epost: <CustomizedLink href={`mailto:${va.adresse}`}>{va.adresse}</CustomizedLink></Block>
           }
         )}/>
       </Label>

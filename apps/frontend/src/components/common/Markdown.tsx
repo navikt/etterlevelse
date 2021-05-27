@@ -1,20 +1,19 @@
 import React from 'react'
 import ReactMarkdown from 'react-markdown'
-import { Paragraph1, Paragraph2 } from 'baseui/typography'
-import { StatefulTooltip } from 'baseui/tooltip'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons'
-import { useDebouncedState } from '../../util/hooks'
+import {Paragraph1, Paragraph2} from 'baseui/typography'
+import {StatefulTooltip} from 'baseui/tooltip'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faExternalLinkAlt} from '@fortawesome/free-solid-svg-icons'
+import {useDebouncedState} from '../../util/hooks'
 import MdEditor from 'react-markdown-editor-lite'
 import 'react-markdown-editor-lite/lib/index.css'
-import { Block } from 'baseui/block'
-import { theme } from '../../util'
-import { ExternalLink } from './RouteLink'
-import { markdownLink } from '../../util/config'
+import {Block} from 'baseui/block'
+import {theme} from '../../util'
+import {ExternalLink} from './RouteLink'
+import {markdownLink} from '../../util/config'
 import remarkGfm from 'remark-gfm'
 import rehypeRaw from 'rehype-raw'
-import { ettlevColors } from '../../util/theme'
-import { StyledLink } from 'baseui/link'
+import CustomizedLink from "./CustomizedLink";
 
 export const Markdown = ({
   vertical,
@@ -49,14 +48,9 @@ export const Markdown = ({
       const content = shortenLinks && node.children[0]?.value.indexOf('http') === 0 ? 'Lenke' : children
 
       return (
-        <StyledLink
-          href={href}
-          style={{
-            fontWeight: 'normal'
-          }}
-        >
+        <CustomizedLink href={href}>
           {content}
-        </StyledLink>
+        </CustomizedLink>
       )
     }
   }

@@ -1,11 +1,11 @@
 import {useHistory} from 'react-router-dom'
-import {StyledLink} from 'baseui/link'
 import React from 'react'
 import {AuditItem, NavigableItem, ObjectType} from '../admin/audit/AuditTypes'
 import {Block} from 'baseui/block'
 import {AuditButton} from '../admin/audit/AuditButton'
 import {KIND} from 'baseui/button'
 import {ListName} from '../../services/Codelist'
+import CustomizedLink from "./CustomizedLink";
 
 type RouteLinkProps = {
   href: string,
@@ -23,9 +23,10 @@ const RouteLink = (props: RouteLinkProps) => {
   }
 
   return (
-    <StyledLink style={{
+    <CustomizedLink style={{
       textDecoration: hideUnderline ? 'none' : undefined,
-      color: plain ? 'inherit !important' : undefined
+      color: plain ? 'inherit !important' : undefined,
+      fontWeight: "normal"
     }} {...restprops} onClick={onClick}/>
   )
 }
@@ -89,8 +90,8 @@ export const ExternalLink = ({href, children, hideUnderline, label, fontColor}: 
   children: React.ReactNode, fontColor?: string
 }) => {
   return (
-    <StyledLink href={href} target="_blank" rel="noopener noreferrer" style={{color: fontColor ? fontColor : undefined ,textDecoration: hideUnderline ? 'none' : undefined}} aria-label={label}>
+    <CustomizedLink href={href} target="_blank" rel="noopener noreferrer" style={{color: fontColor ? fontColor : undefined ,textDecoration: hideUnderline ? 'none' : undefined}} aria-label={label}>
       {children}
-    </StyledLink>
+    </CustomizedLink>
   )
 }

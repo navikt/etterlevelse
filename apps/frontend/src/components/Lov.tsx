@@ -1,9 +1,9 @@
 import React from 'react'
-import {StyledLink} from 'baseui/link'
 import {codelist, ListName} from '../services/Codelist'
 import {env} from '../util/env'
 import {Regelverk} from '../constants'
 import {Block} from 'baseui/block'
+import CustomizedLink from "./common/CustomizedLink";
 
 const reactProcessString = require('react-process-string')
 const processString = reactProcessString as (converters: {regex: RegExp, fn: (key: string, result: string[]) => JSX.Element | string}[]) => ((input?: string) => JSX.Element[])
@@ -58,19 +58,19 @@ const legalBasisLinkProcessor = (law: string, text?: string) => {
       regex: /§§\s*(\d+(-\d+)?)\s*og\s*(\d+(-\d+)?)/gi,
       fn: (key: string, result: string[]) => `§§ ${result[1]} og §§§ ${result[3]}`
     }, {
-      // tripe '§§§' is hidden, used as a trick in combination with rule 1 above
+      // triple '§§§' is hidden, used as a trick in combination with rule 1 above
       regex: /§(§§)?(§)?\s*(\d+(-\d+)?)/g,
       fn: (key: string, result: string[]) =>
-        <StyledLink key={key} href={`${lovdataBase(law)}/§${result[3]}`} target="_blank" rel="noopener noreferrer">
+        <CustomizedLink key={key} href={`${lovdataBase(law)}/§${result[3]}`} target="_blank" rel="noopener noreferrer">
           {(!result[1] && !result[2]) && '§'} {result[2] && '§§'} {result[3]}
-        </StyledLink>
+        </CustomizedLink>
     }, {
       regex: /kap(ittel)?\s*(\d+)/gi,
       fn: (key: string, result: string[]) =>
-        <StyledLink key={key} href={`${lovdataBase(law)}/KAPITTEL_${result[2]}`} target="_blank"
+        <CustomizedLink key={key} href={`${lovdataBase(law)}/KAPITTEL_${result[2]}`} target="_blank"
                     rel="noopener noreferrer">
           Kapittel {result[2]}
-        </StyledLink>
+        </CustomizedLink>
     }
   ])(text)
 }
