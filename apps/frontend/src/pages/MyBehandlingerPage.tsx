@@ -45,6 +45,7 @@ const BehandlingTabs = () => {
   const params = useParams<{tab?: Section}>()
   const history = useHistory()
   const [tab, setTab] = useState<Section>(params.tab || 'mine')
+  const [doneLoading, setDoneLoading] = useState(false)
   const [variables, setVariables] = useState<Variables>({})
   const {data, loading: behandlingerLoading} = useQuery<{behandlinger: PageResponse<BehandlingQL>}, Variables>(query, {
     variables,
@@ -55,9 +56,10 @@ const BehandlingTabs = () => {
   const loading = teamsLoading || behandlingerLoading
 
   useEffect(() => {
-    if (!data || behandlingerLoading) return
-    if (tab === 'mine' && !behandlinger.totalElements) setTab('siste')
-    if (tab === 'siste' && !behandlinger.totalElements) setTab('alle')
+    if (!data || behandlingerLoading || doneLoading) return
+    else if (tab === 'mine' && !behandlinger.totalElements) setTab('siste')
+    else if (tab === 'siste' && !behandlinger.totalElements) setTab('alle')
+    else setDoneLoading(true)
   }, [behandlinger, behandlingerLoading])
 
   useEffect(() => {
