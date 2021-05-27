@@ -89,6 +89,9 @@ public class BehandlingService {
         if (!filter.getTeams().isEmpty() || filter.isGetMineBehandlinger()) {
             return filter.getTeams().parallelStream().map(this::getBehandlingerForTeam).flatMap(Collection::stream).toList();
         }
+        if (filter.isSok()) {
+            return findBehandlinger(filter.getSok());
+        }
         List<GenericStorage> datas = repo.findBy(filter);
         List<String> behandlingIds = convert(GenericStorage.to(datas, BehandlingData.class), BehandlingData::getBehandlingId);
         Collection<BkatProcess> processes = bkatClient.getProcessesById(behandlingIds).values();
