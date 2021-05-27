@@ -50,10 +50,11 @@ export const PanelLink = ({href, title, rightTitle, beskrivelse, rightBeskrivels
           <ParagraphSmall marginBottom={0} marginTop={theme.sizing.scale100}>{beskrivelse}</ParagraphSmall>
         </Block>
 
-        <Block minWidth={'120px'} maxWidth={'120px'} display={'flex'} flexDirection={'column'} justifyContent={'center'}>
+        {(rightTitle || rightBeskrivelse) &&
+        <Block minWidth={'150px'} maxWidth={'150px'} display={'flex'} flexDirection={'column'} justifyContent={'center'}>
           {rightTitle && <LabelSmall>{rightTitle}</LabelSmall>}
           {rightBeskrivelse && <ParagraphSmall marginBottom={0} marginTop={rightTitle ? theme.sizing.scale100 : 0}>{rightBeskrivelse}</ParagraphSmall>}
-        </Block>
+        </Block>}
 
         <Block marginLeft={hover ? `calc(${theme.sizing.scale600} + 4px)` : theme.sizing.scale600} alignSelf={'center'} marginRight={hover ? '-4px' : 0}>
           <img src={navChevronRightIcon} aria-hidden alt={'Chevron høyre ikon'} width={'24px'} height={'24px'}/>

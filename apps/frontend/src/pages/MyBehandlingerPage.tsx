@@ -1,7 +1,7 @@
-import {HeadingMedium, HeadingXLarge, HeadingXXLarge, LabelSmall, LabelXSmall, ParagraphSmall} from 'baseui/typography'
+import {HeadingLarge, HeadingXLarge, HeadingXXLarge, LabelLarge, LabelSmall, LabelXSmall, ParagraphSmall} from 'baseui/typography'
 import {Block} from 'baseui/block'
 import React, {useEffect, useState} from 'react'
-import {useMyBehandlinger, useSearchBehandling} from '../api/BehandlingApi'
+import {useSearchBehandling} from '../api/BehandlingApi'
 import {ListItem, ListItemLabel} from 'baseui/list'
 import {useMyTeams} from '../api/TeamApi'
 import RouteLink from '../components/common/RouteLink'
@@ -10,7 +10,7 @@ import {faTimesCircle} from '@fortawesome/free-solid-svg-icons'
 import {theme} from '../util'
 import Button, {ExternalButton} from '../components/common/Button'
 import {Spinner} from '../components/common/Spinner'
-import {Behandling, emptyPage, PageResponse, Team} from '../constants'
+import {Behandling, BehandlingQL, emptyPage, PageResponse, Team} from '../constants'
 import {StatefulInput} from 'baseui/input'
 import {gql, useQuery} from '@apollo/client'
 import {ettlevColors, maxPageWidth, pageWidth} from '../util/theme'
@@ -19,18 +19,19 @@ import {PanelLink} from '../components/common/PanelLink'
 import {bamseIcon, dokEtterlevelse, navChevronRightIcon} from '../components/Images'
 import {env} from '../util/env'
 import {InfoBlock2} from '../components/common/InfoBlock'
+import moment from 'moment'
 
 type Section = 'mine' | 'siste' | 'alle'
 
 export const MyBehandlingerPage = () => {
-  const [myBehandlinger, myBehandlingerLoading] = useMyBehandlinger()
+  const {data: myBehandlinger, loading: myBehandlingerLoading} = useQuery<{behandlinger: PageResponse<BehandlingQL>}, Variables>(query, {variables: {mineBehandlinger: true}})
   const [teams, teamsLoading] = useMyTeams()
 
   const [tab, setTab] = useState<Section>('mine')
 
   useEffect(() => {
     if (myBehandlingerLoading) return
-    if (!myBehandlinger.length) setTab('siste')
+    if (!myBehandlinger?.behandlinger?.content.length) setTab('siste')
   }, [myBehandlinger, myBehandlingerLoading])
 
   return (
@@ -50,11 +51,11 @@ export const MyBehandlingerPage = () => {
                           activeKey={tab} onChange={args => setTab(args.activeKey as Section)}>
 
             <CustomizedTab key={'mine'} title={'Mine behandlinger'}>
-              <MineBehandlinger teams={teams} behandlinger={myBehandlinger}/>
+              <MineBehandlinger teams={teams} behandlinger={myBehandlinger?.behandlinger?.content || []}/>
             </CustomizedTab>
 
             <CustomizedTab key={'siste'} title={'Mine sist dokumenterte'}>
-
+              <SistRedigerteBehandlinger/>
             </CustomizedTab>
 
             <CustomizedTab key={'alle'} title={'Alle'}>
@@ -71,11 +72,11 @@ export const MyBehandlingerPage = () => {
   )
 }
 
-const MineBehandlinger = ({behandlinger, teams}: {behandlinger: Behandling[], teams: Team[]}) => {
+const MineBehandlinger = ({behandlinger, teams}: {behandlinger: BehandlingQL[], teams: Team[]}) => {
   return (
     <Block>
       {teams.map(t => {
-          const teamBehandlinger = behandlinger.filter(b => b.teams.indexOf(t.id) >= 0)
+          const teamBehandlinger = behandlinger.filter(b => b.teamsData.find(t2 => t2.id === t.id))
           return <Block key={t.id} marginBottom={theme.sizing.scale1000}>
             <Block display={'flex'} justifyContent={'space-between'}>
 
@@ -90,18 +91,7 @@ const MineBehandlinger = ({behandlinger, teams}: {behandlinger: Behandling[], te
               </Block>
             </Block>
 
-            {teamBehandlinger.map(b => {
-              return (
-                <Block key={b.id} marginBottom={'8px'}>
-                  <PanelLink
-                    panelIcon={<img src={dokEtterlevelse} aria-hidden alt={'Dokumenter behandling ikon'}/>}
-                    href={`/behandling/${b.id}`} title={b.navn} beskrivelse={b.overordnetFormaal.shortName}
-                    rightBeskrivelse={'Sist endret: n/a'}
-
-                  />
-                </Block>
-              )
-            })}
+            <BehandlingerPanels behandlinger={teamBehandlinger}/>
 
           </Block>
         }
@@ -124,10 +114,33 @@ const MineBehandlinger = ({behandlinger, teams}: {behandlinger: Behandling[], te
   )
 }
 
+const SistRedigerteBehandlinger = () => {
+  const {data, loading} = useQuery<{behandlinger: PageResponse<BehandlingQL>}, Variables>(query, {variables: {sistRedigert: 20}})
+  if (loading) return <Spinner size={theme.sizing.scale1000}/>
+  return <BehandlingerPanels behandlinger={data!.behandlinger.content}/>
+}
+
+const BehandlingerPanels = ({behandlinger}: {behandlinger: BehandlingQL[]}) => (
+  <Block>
+    {behandlinger.map(b => {
+      return (
+        <Block key={b.id} marginBottom={'8px'}>
+          <PanelLink
+            panelIcon={<img src={dokEtterlevelse} aria-hidden alt={'Dokumenter behandling ikon'}/>}
+            href={`/behandling/${b.id}`} title={b.navn} beskrivelse={b.overordnetFormaal.shortName}
+            rightBeskrivelse={!!b.sistEndretEtterlevelse ? `Sist endret: ${moment(b.sistEndretEtterlevelse).format('ll')}` : ''}
+
+          />
+        </Block>
+      )
+    })}
+  </Block>
+)
+
 const Alle = () => {
   const pageSize = 20
   const [pageNumber, setPage] = useState(0)
-  const {data, loading: loadingAll} = useQuery<{behandlinger: PageResponse<Behandling>}>(query, {variables: {pageNumber, pageSize}})
+  const {data, loading: loadingAll} = useQuery<{behandlinger: PageResponse<Behandling>}, Variables>(query, {variables: {pageNumber, pageSize}})
   const allBehandlinger = data?.behandlinger || emptyPage
   const [search, setSearch, searchLoading, searchTerm] = useSearchBehandling()
 
@@ -136,7 +149,7 @@ const Alle = () => {
 
   return (
     <Block maxWidth={pageWidth}>
-      <HeadingMedium>Alle behandlinger</HeadingMedium>
+      <LabelLarge>Søk i alle behandlinger</LabelLarge>
 
       <Block maxWidth='500px' marginBottom={theme.sizing.scale1000}>
         <StatefulInput size='compact' placeholder='Søk' onChange={e => setSearch((e.target as HTMLInputElement).value)}
@@ -146,7 +159,8 @@ const Alle = () => {
         {searchLoading && <Block marginTop={theme.sizing.scale400}><Spinner size={theme.sizing.scale600}/></Block>}
       </Block>
       {!!searchTerm && <Block>
-        <LabelSmall>Søkeresultat</LabelSmall>
+        <HeadingLarge color={ettlevColors.green600}>{search.length} treff: “{searchTerm}”</HeadingLarge>
+        {/*<BehandlingerPanels behandlinger={search}/>*/}
         {search.map(b => <BehandlingListItem key={b.id} behandling={b}/>)}
         {!search.length && <LabelXSmall>Ingen treff</LabelXSmall>}
       </Block>}
@@ -175,21 +189,26 @@ const BehandlingListItem = (props: {behandling: Behandling}) =>
     </ListItemLabel>
   </ListItem>
 
+type Variables = {pageNumber?: number, pageSize?: number, sistRedigert?: number, mineBehandlinger?: boolean}
+
 const query = gql`
-  query getBehandling($relevans: [String!], $pageNumber: NonNegativeInt, $pageSize: NonNegativeInt){
-    behandlinger: behandling(filter: {relevans: $relevans}, pageNumber: $pageNumber, pageSize: $pageSize) {
+  query getMineBehandlinger($pageNumber: NonNegativeInt, $pageSize: NonNegativeInt, $mineBehandlinger: Boolean, $sistRedigert: NonNegativeInt) {
+    behandlinger: behandling(filter: { mineBehandlinger: $mineBehandlinger, sistRedigert: $sistRedigert },pageNumber: $pageNumber, pageSize: $pageSize) {
       pageNumber
       pageSize
       pages
       content {
         id
         navn
-        nummer
+        sistEndretEtterlevelse
         overordnetFormaal {
           shortName
         }
+        teamsData {
+          id
+          name
+        }
       }
-
     }
   }
 `

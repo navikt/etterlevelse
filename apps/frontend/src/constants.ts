@@ -231,6 +231,7 @@ export type EtterlevelseQL = Etterlevelse & {
 
 export type BehandlingQL = Behandling & {
   teamsData: Team[]
+  sistEndretEtterlevelse?: string
 }
 
 export type VarslingsadresseQL = Varslingsadresse & {

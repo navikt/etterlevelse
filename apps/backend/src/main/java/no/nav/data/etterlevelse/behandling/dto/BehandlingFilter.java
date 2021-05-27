@@ -9,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.List;
 
 import static no.nav.data.common.utils.StringUtils.formatList;
+import static org.apache.commons.lang3.StringUtils.trimToNull;
 
 @Data
 @Builder
@@ -21,18 +22,12 @@ public class BehandlingFilter {
     private Integer sistRedigert;
     private Boolean mineBehandlinger;
     private List<String> teams;
-
-    public List<String> getRelevans() {
-        return formatList(relevans);
-    }
-
-    public List<String> getTeams() {
-        return formatList(teams);
-    }
+    private String sok;
 
     public boolean isEmpty() {
         validate();
         return StringUtils.isBlank(id)
+                && !isSok()
                 && getRelevans().isEmpty()
                 && getTeams().isEmpty()
                 && sistRedigert == null
@@ -48,9 +43,16 @@ public class BehandlingFilter {
                 sistRedigert = 20;
             }
         }
+        setRelevans(formatList(relevans));
+        setTeams(formatList(teams));
+        setSok(trimToNull(sok));
     }
 
     public boolean isGetMineBehandlinger() {
         return Boolean.TRUE.equals(getMineBehandlinger());
+    }
+
+    public boolean isSok() {
+        return !StringUtils.isBlank(sok);
     }
 }
