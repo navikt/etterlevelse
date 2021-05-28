@@ -22,14 +22,15 @@ export enum AuditAction {
 }
 
 export enum ObjectType {
+  Codelist = 'CODELIST',
   Settings = 'Settings',
   Krav = 'Krav',
   Etterlevelse = 'Etterlevelse',
-  Behandling = 'Behandling'
+  Behandling = 'Behandling',
+  BehandlingData = 'BehandlingData'
 }
 
 export type NavigableItem = ObjectType |
-  'codelist' |
   ListName.RELEVANS |
   ListName.UNDERAVDELING |
   ListName.TEMA |

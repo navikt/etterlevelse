@@ -1,17 +1,17 @@
 import * as React from 'react'
-import { useEffect, useRef, useState } from 'react'
-import { Block } from 'baseui/block'
-import { Label2 } from 'baseui/typography'
-import { Value } from 'baseui/select'
-import { Button } from 'baseui/button'
+import {useEffect, useRef, useState} from 'react'
+import {Block} from 'baseui/block'
+import {Label2} from 'baseui/typography'
+import {Value} from 'baseui/select'
+import {Button} from 'baseui/button'
 
-import { StyledSpinnerNext } from 'baseui/spinner'
-import { Cell, Row, Table } from '../../common/Table'
-import { theme } from '../../../util'
-import { codelist, CodeUsage } from '../../../services/Codelist'
-import { ObjectLink } from '../../common/RouteLink'
-import { ObjectType } from '../audit/AuditTypes'
-import { replaceCodelistUsage } from '../../../api/CodelistApi'
+import {StyledSpinnerNext} from 'baseui/spinner'
+import {Cell, Row, Table} from '../../common/Table'
+import {theme} from '../../../util'
+import {codelist, CodeUsage} from '../../../services/Codelist'
+import {ObjectLink} from '../../common/RouteLink'
+import {ObjectType} from '../audit/AuditTypes'
+import {replaceCodelistUsage} from '../../../api/CodelistApi'
 import CustomizedSelect from '../../common/CustomizedSelect'
 
 const UsageTable = (props: { usage: CodeUsage }) => {
@@ -45,7 +45,7 @@ const UsageTable = (props: { usage: CodeUsage }) => {
               {be && <ObjectLink id={be.id} type={ObjectType.Behandling} withHistory={true}>{be.name}</ObjectLink>}
             </Cell>}
             {codelist && <Cell>
-              {co && <ObjectLink id={co.list} type={'codelist'} withHistory={true}>{co.list} - {co.code}</ObjectLink>}
+              {co && <ObjectLink id={co.list} type={ObjectType.Codelist} withHistory={true}>{co.list} - {co.code}</ObjectLink>}
             </Cell>}
           </Row>
         )
