@@ -106,6 +106,7 @@ export interface Etterlevelse extends DomainObject {
   behandlingId: string
   kravNummer: number
   kravVersjon: number
+  kravNavn: string
   etterleves: boolean
   begrunnelse: string
   dokumentasjon: string[]
