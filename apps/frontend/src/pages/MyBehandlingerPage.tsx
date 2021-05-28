@@ -120,7 +120,7 @@ const MineBehandlinger = ({behandlinger, teams, loading}: {behandlinger: Behandl
                 <ParagraphSmall marginTop={0}>Teamet skal etterleve krav i <span style={{fontWeight: 700}}>{teamBehandlinger.length} behandlinger</span></ParagraphSmall>
               </Block>
               <Block alignSelf={'flex-end'} marginBottom={theme.sizing.scale400}>
-                <ExternalButton href={`${env.pollyBaseUrl}team/${t.id}`} underlineHover size={'mini'}>
+                <ExternalButton href={`${env.pollyBaseUrl}process/team/${t.id}`} underlineHover size={'mini'}>
                   Legg til behandling
                 </ExternalButton>
               </Block>
