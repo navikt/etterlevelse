@@ -33,11 +33,10 @@ export const TemaPage = () => {
   const code = codelist.getCode(ListName.TEMA, tema)
   if (!code) return <>'invalid code'</>
 
-  return <TemaSideNew tema={code}/>
-  // return <TemaSide tema={code}/>
+  return <TemaSide tema={code}/>
 }
 
-const TemaSideNew = ({tema}: {tema: TemaCode}) => {
+const TemaSide = ({tema}: {tema: TemaCode}) => {
   const lover = codelist.getCodesForTema(tema.code)
   const {data, loading} = useKravFilter({lover: lover.map(c => c.code)})
   const [expand, setExpand] = useState(false)
@@ -50,7 +49,7 @@ const TemaSideNew = ({tema}: {tema: TemaCode}) => {
         <Block maxWidth={maxPageWidth} width='100%'>
 
           <Block paddingLeft={'100px'} paddingRight={'100px'} paddingTop={theme.sizing.scale800}>
-            <RouteLink href={'/'} hideUnderline>
+            <RouteLink href={'/tema'} hideUnderline>
               <Button startEnhancer={<img alt={'Chevron venstre ikon'} src={navChevronRightIcon} style={{transform: 'rotate(180deg)'}}/>} size='compact' kind='underline-hover'
               > Tilbake</Button>
             </RouteLink>
