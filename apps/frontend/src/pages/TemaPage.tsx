@@ -30,7 +30,7 @@ export const TemaPage = () => {
 
 const TemaSide = ({tema}: {tema: TemaCode}) => {
   const lover = codelist.getCodesForTema(tema.code)
-  const {data, loading} = useKravFilter({lover: lover.map(c => c.code)})
+  const {data, loading} = useKravFilter({lover: lover.map(c => c.code)}, {skip: !lover.length})
   const [expand, setExpand] = useState(false)
 
   return (
@@ -74,9 +74,9 @@ const TemaSide = ({tema}: {tema: TemaCode}) => {
             </>
           }>
       <Block>
-        <HeadingLarge>{data?.krav.numberOfElements || '?'} krav</HeadingLarge>
+        <HeadingLarge>{loading ? '?' : data?.krav.numberOfElements || 0} krav</HeadingLarge>
         {loading && <SkeletonPanel count={10}/>}
-        {!loading && data!.krav.content.map(k =>
+        {!loading && data?.krav.content.map(k =>
           <Block key={k.id} marginBottom={'8px'}>
             <PanelLink href={`/krav/${k.kravNummer}/${k.kravVersjon}`}
                        panelIcon={<img src={gavelIcon} aria-hidden alt={'Hammer ikon'}/>}

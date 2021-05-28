@@ -1,6 +1,6 @@
 import {KravQL, PageResponse} from '../constants'
 import {gql, useQuery} from '@apollo/client'
-import {DocumentNode} from 'graphql'
+import {QueryHookOptions} from '@apollo/client/react/types/types'
 
 const kravtableQuery = gql`query getKravByFilter (
   $relevans: [String!], $nummer: Int, $behandlingId: String, $underavdeling: String,
@@ -63,8 +63,9 @@ export type KravFilters = {
   pageSize?: number
 }
 
-export const useKravFilter = (variables: KravFilters, query?: DocumentNode) => {
-  return useQuery<{krav: PageResponse<KravQL>}, KravFilters>(query || kravtableQuery, {
+export const useKravFilter = (variables: KravFilters, options?: QueryHookOptions<any, KravFilters>) => {
+  return useQuery<{krav: PageResponse<KravQL>}, KravFilters>(kravtableQuery, {
+    ...(options || {}),
     variables
   })
 }
