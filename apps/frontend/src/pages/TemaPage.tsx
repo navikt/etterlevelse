@@ -101,6 +101,7 @@ const TemaListe = () => (
     backUrl={'/'}
     headerBackgroundColor={ettlevColors.green100}
     backgroundColor={ettlevColors.grey50}
+    wideMain
     header={
       <>
         <HeadingLarge>Tema</HeadingLarge>
@@ -120,9 +121,9 @@ const TemaListe = () => (
 
 const TemaCard = (props: {tema: TemaCode}) => {
   return (
-    <FrontCard url={urlForObject(ListName.TEMA, props.tema.code)} width={'260px'}>
+    <FrontCard url={urlForObject(ListName.TEMA, props.tema.code)} width={'255px'}>
       <Block display='flex' width='100%'>
-        <TemaBilde code={props.tema} height={'90px'} width={'120px'}/>
+        <TemaBilde code={props.tema} height={'95px'} width={'120px'}/>
         <Block marginLeft={theme.sizing.scale600}>
           <LabelMedium marginBottom={0} $style={{
             wordWrap: 'break-word',

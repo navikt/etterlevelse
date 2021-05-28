@@ -5,12 +5,14 @@ import Button from '../common/Button'
 import {navChevronRightIcon} from '../Images'
 import React from 'react'
 
+const padding = '100px'
 
-export const Page = ({backUrl, headerOverlap, headerBackgroundColor, backgroundColor, children, header}: {
+export const Page = ({backUrl, headerOverlap, headerBackgroundColor, backgroundColor, wideMain, children, header}: {
   backUrl: string,
   headerOverlap?: string,
   headerBackgroundColor: string
   backgroundColor: string
+  wideMain?: boolean
   header: React.ReactNode, children: React.ReactNode
 }) => {
   return (
@@ -21,7 +23,7 @@ export const Page = ({backUrl, headerOverlap, headerBackgroundColor, backgroundC
       >
         <Block maxWidth={maxPageWidth} width='100%'>
 
-          <Block paddingLeft={'100px'} paddingRight={'100px'} paddingTop={theme.sizing.scale800}>
+          <Block paddingLeft={padding} paddingRight={padding} paddingTop={theme.sizing.scale800}>
             <RouteLink href={backUrl} hideUnderline>
               <Button startEnhancer={<img alt={'Chevron venstre ikon'} src={navChevronRightIcon} style={{transform: 'rotate(180deg)'}}/>} size='compact' kind='underline-hover'
               > Tilbake</Button>
@@ -36,10 +38,13 @@ export const Page = ({backUrl, headerOverlap, headerBackgroundColor, backgroundC
         </Block>
       </Block>
 
-      <Block display='flex' width='100%' justifyContent='center'>
-        <Block maxWidth={pageWidth} width={'100%'} marginTop={headerOverlap ? 0 : theme.sizing.scale800}>
+      <Block display='flex' width='100%' justifyContent='center' marginTop={headerOverlap ? 0 : theme.sizing.scale800}>
+        {!wideMain && <Block maxWidth={pageWidth} width={'100%'}>
           {children}
-        </Block>
+        </Block>}
+        {wideMain && <Block maxWidth={maxPageWidth} width={'100%'} paddingRight={padding} paddingLeft={padding}>
+          {children}
+        </Block>}
       </Block>
 
     </Block>
