@@ -132,9 +132,10 @@ const MineBehandlinger = ({behandlinger, teams, loading}: {behandlinger: Behandl
         }
       )}
 
-      <Block maxWidth={'800px'}>
+      <Block maxWidth={'800px'} marginTop={'200px'}>
         <InfoBlock2 icon={bamseIcon} alt={'Bamseikon'} title={'Savner du teamet ditt?'}
                     beskrivelse={'Legg til teamet i teamkatalogen, så henter vi behandlinger som skal etterleve krav'}
+                    backgroundColor={ettlevColors.grey50}
         >
           <Block marginTop={theme.sizing.scale600}>
             <ExternalButton href={`${env.teamKatBaseUrl}`}>Teamkatalogen</ExternalButton>
@@ -159,14 +160,33 @@ const Alle = () => {
   const [pageNumber, setPage] = useState(0)
   const [sok, setSok] = useDebouncedState('', 300)
   const tooShort = !!sok.length && sok.trim().length < 3
-  const {data, loading} = useQuery<{behandlinger: PageResponse<BehandlingQL>}, Variables>(query, {
+  const {data, loading: gqlLoading, fetchMore} = useQuery<{behandlinger: PageResponse<BehandlingQL>}, Variables>(query, {
     variables: {pageNumber, pageSize, sok},
     skip: tooShort
   })
   const behandlinger = data?.behandlinger || emptyPage
+  const loading = !data && gqlLoading
 
-  const prev = () => setPage(Math.max(0, pageNumber - 1))
-  const next = () => setPage(Math.min(behandlinger?.pages ? behandlinger.pages - 1 : 0, pageNumber + 1))
+  const lastMer = () => {
+    fetchMore({
+      variables: {
+        pageNumber: data!.behandlinger.pageNumber + 1,
+        pageSize
+      },
+      updateQuery: (p, o) => {
+        const oldData = p.behandlinger
+        const newData = o.fetchMoreResult!.behandlinger
+        return ({
+          behandlinger: {
+            ...oldData,
+            pageNumber: newData.pageNumber,
+            numberOfElements: oldData.numberOfElements + newData.numberOfElements,
+            content: [...oldData.content, ...newData.content]
+          }
+        })
+      }
+    }).catch(e => console.error(e))
+  }
 
   useEffect(() => {
     if (sok && pageNumber != 0) setPage(0)
@@ -205,9 +225,9 @@ const Alle = () => {
         <BehandlingerPanels behandlinger={behandlinger.content} loading={loading}/>
 
         {!loading && <Block display='flex' alignItems='center' marginTop={theme.sizing.scale1000}>
-          <LabelSmall marginRight={theme.sizing.scale400}>Side {behandlinger.pageNumber + 1}/{behandlinger.pages}</LabelSmall>
-          <Button onClick={prev} size='compact' disabled={behandlinger.pageNumber === 0}>Forrige</Button>
-          <Button onClick={next} size='compact' disabled={behandlinger.pageNumber >= behandlinger.pages - 1}>Neste</Button>
+          <LabelSmall marginRight={theme.sizing.scale400}>Viser {behandlinger.numberOfElements}/{behandlinger.totalElements}</LabelSmall>
+          <Button onClick={lastMer} size='compact' disabled={gqlLoading || (behandlinger.numberOfElements >= behandlinger.totalElements)}>Last mer</Button>
+          {gqlLoading && <Spinner size={'40px'}/>}
         </Block>}
       </>}
     </Block>
@@ -222,9 +242,8 @@ const BehandlingerPanels = ({behandlinger, loading}: {behandlinger: BehandlingQL
         <Block key={b.id} marginBottom={'8px'}>
           <PanelLink
             panelIcon={<img src={dokEtterlevelseIcon} aria-hidden alt={'Dokumenter behandling ikon'}/>}
-            href={`/behandling/${b.id}`} title={b.navn} beskrivelse={b.overordnetFormaal.shortName}
+            href={`/behandling/${b.id}`} title={`${b.nummer}: ${b.navn}`} beskrivelse={b.overordnetFormaal.shortName}
             rightBeskrivelse={!!b.sistEndretEtterlevelse ? `Sist endret: ${moment(b.sistEndretEtterlevelse).format('ll')}` : ''}
-
           />
         </Block>
       ))}
@@ -240,10 +259,12 @@ const query = gql`
       pageNumber
       pageSize
       pages
+      numberOfElements
       totalElements
       content {
         id
         navn
+        nummer
         sistEndretEtterlevelse
         overordnetFormaal {
           shortName

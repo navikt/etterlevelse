@@ -22,15 +22,15 @@ export const InfoBlock = (props: {icon: string, alt: string, text: string, color
   </Block>
 )
 
-export const InfoBlock2 = (props: {icon: string, alt: string, title: string, beskrivelse?: string, children?: React.ReactNode}) => (
+export const InfoBlock2 = (props: {icon: string, alt: string, title: string, beskrivelse?: string, backgroundColor?: string, children?: React.ReactNode}) => (
   <Block $style={{
     width: '100%',
     display: 'flex',
-    borderWidth: '1px',
+    borderWidth: '2px',
     borderStyle: 'solid',
     borderColor: ettlevColors.grey100,
     borderRadius: '4px',
-    backgroundColor: ettlevColors.white
+    backgroundColor: props.backgroundColor || ettlevColors.white
   }}>
 
     <Block alignSelf={'center'} marginLeft={theme.sizing.scale800} marginRight={theme.sizing.scale800}>
