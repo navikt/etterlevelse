@@ -12,14 +12,15 @@ import {gql, useQuery} from '@apollo/client'
 import {ettlevColors, maxPageWidth} from '../util/theme'
 import CustomizedTabs, {CustomizedTab} from '../components/common/CustomizedTabs'
 import {PanelLink} from '../components/common/PanelLink'
-import {bamseIcon, dokEtterlevelseIcon, navChevronRightIcon, sadFolderIcon, searchIcon} from '../components/Images'
+import {bamseIcon, dokEtterlevelseIcon, navChevronRightIcon, searchIcon} from '../components/Images'
 import {env} from '../util/env'
-import {InfoBlock, InfoBlock2} from '../components/common/InfoBlock'
+import {InfoBlock2} from '../components/common/InfoBlock'
 import moment from 'moment'
 import {useDebouncedState} from '../util/hooks'
 import {SkeletonPanel} from '../components/common/LoadingSkeleton'
 import {user} from '../services/User'
 import {useHistory, useParams} from 'react-router-dom'
+import {faPlus} from '@fortawesome/free-solid-svg-icons'
 
 type Section = 'mine' | 'siste' | 'alle'
 
@@ -148,9 +149,8 @@ const MineBehandlinger = ({behandlinger, teams, loading}: {behandlinger: Behandl
 }
 
 const SisteBehandlinger = ({behandlinger, loading}: {behandlinger: BehandlingQL[], loading: boolean}) => {
-
   if (!behandlinger.length && !loading)
-    return <InfoBlock icon={sadFolderIcon} alt={'Trist mappe ikon'} text={'Vi finner ingen etterlevelser redigert av deg'} color={ettlevColors.red50}/>
+    return <ParagraphSmall>Du har ikke dokumentert etterlevelse på krav</ParagraphSmall>
 
   return <BehandlingerPanels behandlinger={behandlinger} loading={loading}/>
 }
@@ -224,10 +224,17 @@ const Alle = () => {
 
         <BehandlingerPanels behandlinger={behandlinger.content} loading={loading}/>
 
-        {!loading && <Block display='flex' alignItems='center' marginTop={theme.sizing.scale1000}>
+        {!loading &&
+        <Block display={'flex'} justifyContent={'space-between'} marginTop={theme.sizing.scale1000}>
+          <Block display='flex' alignItems='center'>
+            <Button onClick={lastMer} icon={faPlus} kind={'secondary'} size='compact'
+                    disabled={gqlLoading || (behandlinger.numberOfElements >= behandlinger.totalElements)}>
+              Last mer
+            </Button>
+
+            {gqlLoading && <Block marginLeft={theme.sizing.scale400}><Spinner size={theme.sizing.scale800}/></Block>}
+          </Block>
           <LabelSmall marginRight={theme.sizing.scale400}>Viser {behandlinger.numberOfElements}/{behandlinger.totalElements}</LabelSmall>
-          <Button onClick={lastMer} size='compact' disabled={gqlLoading || (behandlinger.numberOfElements >= behandlinger.totalElements)}>Last mer</Button>
-          {gqlLoading && <Spinner size={'40px'}/>}
         </Block>}
       </>}
     </Block>
