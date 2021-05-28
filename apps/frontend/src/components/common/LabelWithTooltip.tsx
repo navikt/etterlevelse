@@ -21,19 +21,19 @@ const LabelWithToolTip = (props: { label?: string, tooltip?: React.ReactNode, fo
           overrides={{
             Body: {
               style: {
-                border: 'solid #112724 1px',
+                border: `solid ${ettlevColors.green800} 1px`,
               }
             },
             Inner: {
               style: {
                 backgroundColor: ettlevColors.green100,
-                color: '#112724'
+                color: ettlevColors.green800
               }
             },
             Arrow: {
               style: {
                 backgroundColor: ettlevColors.green100,
-                border: 'solid #112724 1px',
+                border: `solid ${ettlevColors.green800} 1px`,
               }
             }
           }}

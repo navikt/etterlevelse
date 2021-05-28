@@ -10,7 +10,7 @@ import {faCodeBranch} from '@fortawesome/free-solid-svg-icons'
 import * as React from 'react'
 import {ExternalLink} from '../common/RouteLink'
 import ToTopCircle from '../../resources/ToTopCircle.svg'
-import {maxPageWidth} from '../../util/theme'
+import {ettlevColors, maxPageWidth} from '../../util/theme'
 
 
 export const Footer = () => {
@@ -33,7 +33,7 @@ export const Footer = () => {
   }, [pageScroll])
 
   return (
-    <Block backgroundColor='#112724' width='100%' justifyContent='center' display='flex'>
+    <Block backgroundColor={ettlevColors.green800} width='100%' justifyContent='center' display='flex'>
       <Block maxWidth={maxPageWidth} width='100%'>
         <Block display='flex' width='calc(100% - 80px)' height='100px' paddingRight='40px' paddingLeft='40px' position='relative' $style={{ left: 0, right: 0, bottom: 0 }}>
           <Block display='flex'

@@ -101,7 +101,7 @@ export const KravPage = () => {
     <Block width='100%' overrides={{Block: {props: {role: 'main'}}}}>
       {kravLoading && <LoadingSkeleton header='Krav'/>}
       {!kravLoading &&
-      <Block backgroundColor='#112724' display='flex' width='100%' justifyContent='center' paddingBottom='32px'>
+      <Block backgroundColor={ettlevColors.green800} display='flex' width='100%' justifyContent='center' paddingBottom='32px'>
         <Block maxWidth={maxPageWidth} width='100%'>
           <Block paddingLeft='40px' paddingRight='40px' display='flex' flexDirection='column' justifyContent='center'>
             <Block display='flex' width='100%' justifyContent='center' marginTop='24px'>

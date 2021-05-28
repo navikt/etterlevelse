@@ -16,7 +16,7 @@ import { EditBegreper } from './Edit/KravBegreperEdit'
 import { H1, H2, LabelLarge } from 'baseui/typography'
 import CustomizedModal from '../common/CustomizedModal'
 import Button from '../common/Button'
-import { maxPageWidth, theme } from '../../util/theme'
+import { ettlevColors, maxPageWidth, theme } from '../../util/theme'
 
 type EditKravProps = {
   krav: KravQL,
@@ -76,7 +76,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
         >{({ isSubmitting, submitForm }) => (
           <Form>
             <Block
-              backgroundColor='#112724'
+              backgroundColor={ettlevColors.green800}
               paddingTop='23px'
               paddingBottom={!stickyHeader ? '48px' : '20px'}
               paddingLeft={paddingPx}

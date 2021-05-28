@@ -1,6 +1,7 @@
 import * as React from 'react'
 import {Tag, TagProps, VARIANT} from 'baseui/tag'
 import {marginZero} from './Style'
+import { ettlevColors } from '../../util/theme'
 
 const CustomizedTag = (props: TagProps) => {
   return (
@@ -11,13 +12,13 @@ const CustomizedTag = (props: TagProps) => {
       overrides={{
         Root: {
           style: {
-            backgroundColor: '#F8F8F8',
+            backgroundColor: ettlevColors.grey25,
             ...marginZero
           }
         },
         Text: {
           style: {
-            color: '#112724'
+            color: ettlevColors.green800
           }
         }
       }}
