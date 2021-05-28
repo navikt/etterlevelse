@@ -1,20 +1,21 @@
-import {useHistory} from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import React from 'react'
-import {AuditItem, NavigableItem, ObjectType} from '../admin/audit/AuditTypes'
-import {Block} from 'baseui/block'
-import {AuditButton} from '../admin/audit/AuditButton'
-import {KIND} from 'baseui/button'
-import {ListName} from '../../services/Codelist'
+import { AuditItem, NavigableItem, ObjectType } from '../admin/audit/AuditTypes'
+import { Block } from 'baseui/block'
+import { AuditButton } from '../admin/audit/AuditButton'
+import { KIND } from 'baseui/button'
+import { ListName } from '../../services/Codelist'
 import CustomizedLink from "./CustomizedLink";
+import _ from 'lodash'
 
 type RouteLinkProps = {
   href: string,
   hideUnderline?: boolean
-  plain?: boolean
+  plain?: boolean,
 } & any
 
 const RouteLink = (props: RouteLinkProps) => {
-  const {hideUnderline, plain, ...restprops} = props
+  const { hideUnderline, plain, ...restprops } = props
   const history = useHistory()
 
   const onClick = (e: Event) => {
@@ -22,12 +23,16 @@ const RouteLink = (props: RouteLinkProps) => {
     history.push(props.href)
   }
 
+  const customStyle = {
+    textDecoration: hideUnderline ? 'none' : undefined,
+    color: plain ? 'inherit !important' : undefined,
+    fontWeight: "normal"
+  }
+
+  const style = _.merge(customStyle, props.style)
+
   return (
-    <CustomizedLink style={{
-      textDecoration: hideUnderline ? 'none' : undefined,
-      color: plain ? 'inherit !important' : undefined,
-      fontWeight: "normal"
-    }} {...restprops} onClick={onClick}/>
+    <CustomizedLink style={style} {...restprops} onClick={onClick} />
   )
 }
 
@@ -73,24 +78,24 @@ export const ObjectLink = (props: ObjectLinkProps) => {
   const link =
     props.disable ? props.children :
       <RouteLink href={urlForObject(props.type, props.id, props.audit)}
-                 hideUnderline={props.hideUnderline}>
+        hideUnderline={props.hideUnderline}>
         {props.children}
       </RouteLink>
 
   return props.withHistory ?
     <Block display="flex" justifyContent="space-between" width="100%" alignItems="center">
       {link}
-      <AuditButton id={props.id} kind={KIND.tertiary}/>
+      <AuditButton id={props.id} kind={KIND.tertiary} />
     </Block> :
     link
 }
 
-export const ExternalLink = ({href, children, hideUnderline, label, fontColor}: {
+export const ExternalLink = ({ href, children, hideUnderline, label, fontColor }: {
   href: string, hideUnderline?: boolean, label?: string
   children: React.ReactNode, fontColor?: string
 }) => {
   return (
-    <CustomizedLink href={href} target="_blank" rel="noopener noreferrer" style={{color: fontColor ? fontColor : undefined ,textDecoration: hideUnderline ? 'none' : undefined}} aria-label={label}>
+    <CustomizedLink href={href} target="_blank" rel="noopener noreferrer" style={{ color: fontColor ? fontColor : undefined, textDecoration: hideUnderline ? 'none' : undefined }} aria-label={label}>
       {children}
     </CustomizedLink>
   )
