@@ -30,8 +30,7 @@ export const MyBehandlingerPage = () => (
       <Block paddingLeft={'100px'} paddingRight={'100px'} paddingTop={theme.sizing.scale800}>
 
         <RouteLink href={'/'} hideUnderline>
-          <Button startEnhancer={<img alt={'Chevron venstre ikon'} src={navChevronRightIcon} style={{transform: 'rotate(180deg)'}}/>} size='compact' kind='tertiary' hidePadding
-                  $style={{':hover': {textDecoration: 'underline 3px'}}}> Tilbake</Button>
+          <Button startEnhancer={<img alt={'Chevron venstre ikon'} src={navChevronRightIcon} style={{transform: 'rotate(180deg)'}}/>} size='compact' kind='tertiary'> Tilbake</Button>
         </RouteLink>
 
         <HeadingXXLarge marginTop={theme.sizing.scale600}>Dokumentere etterlevelse</HeadingXXLarge>

@@ -8,9 +8,10 @@ import {LabelLarge, LabelSmall, ParagraphSmall} from 'baseui/typography'
 import {navChevronRightIcon} from '../Images'
 
 
-export const PanelLink = ({href, title, rightTitle, beskrivelse, rightBeskrivelse, panelIcon}:
+export const PanelLink = ({href, title, rightTitle, beskrivelse, rightBeskrivelse, panelIcon, flip}:
                             {
                               href: string, title: string, rightTitle?: string, beskrivelse?: string, rightBeskrivelse?: string,
+                              flip?: boolean
                               panelIcon?: React.ReactNode | ((hover: boolean) => React.ReactNode)
                             }) => {
   const [hover, setHover] = useState(false)
@@ -45,13 +46,13 @@ export const PanelLink = ({href, title, rightTitle, beskrivelse, rightBeskrivels
         {typeof panelIcon === 'function' ? panelIcon(hover) : panelIcon}
 
         <Block marginLeft={theme.sizing.scale800} marginRight={theme.sizing.scale600} $style={{flexGrow: 1}}
-               display={'flex'} flexDirection={'column'} justifyContent={'center'}>
+               display={'flex'} flexDirection={flip ? 'column-reverse' : 'column'} justifyContent={'center'}>
           <LabelLarge $style={{lineHeight: '20px'}}>{title}</LabelLarge>
           <ParagraphSmall marginBottom={0} marginTop={theme.sizing.scale100}>{beskrivelse}</ParagraphSmall>
         </Block>
 
         {(rightTitle || rightBeskrivelse) &&
-        <Block minWidth={'150px'} maxWidth={'150px'} display={'flex'} flexDirection={'column'} justifyContent={'center'}>
+        <Block minWidth={'150px'} maxWidth={'150px'} display={'flex'} flexDirection={flip ? 'column-reverse' : 'column'} justifyContent={'center'}>
           {rightTitle && <LabelSmall>{rightTitle}</LabelSmall>}
           {rightBeskrivelse && <ParagraphSmall marginBottom={0} marginTop={rightTitle ? theme.sizing.scale100 : 0}>{rightBeskrivelse}</ParagraphSmall>}
         </Block>}

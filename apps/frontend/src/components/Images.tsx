@@ -32,6 +32,7 @@ import bamseIcon from '../resources/icons/Bamse.svg'
 import navChevronRightIcon from '../resources/icons/nav-chevron-right.svg'
 import dokEtterlevelseIcon from '../resources/icons/dok-etterlevelse-ikon.svg'
 import sokButtonIcon from '../resources/icons/icon_button_search.svg'
+import gavelIcon from '../resources/icons/gavel-icon.svg'
 import illustration from '../resources/giammarco-boscaro-zeH-ljawHtg-unsplash.jpg'
 import {codelist, ListName, LovCode, TemaCode} from '../services/Codelist'
 import React from 'react'
@@ -59,6 +60,7 @@ export {
   bamseIcon,
   sokButtonIcon,
   dokEtterlevelseIcon,
+  gavelIcon,
   navChevronRightIcon,
   navChevronDownIcon,
 }

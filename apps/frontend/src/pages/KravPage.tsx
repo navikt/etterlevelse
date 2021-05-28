@@ -108,8 +108,8 @@ export const KravPage = () => {
               <Block display='flex' alignItems='center' width='100%'>
                 <Block flex='1' display='flex' justifyContent='flex-start'>
                   <RouteLink href={'/krav'} hideUnderline>
-                    <Button startEnhancer={<img alt={'Chevron left'} src={chevronLeft}/>} size='compact' kind='tertiary'
-                            $style={{color: '#F8F8F8', ':hover': {backgroundColor: 'transparent', textDecoration: 'underline 3px'}}}> Tilbake</Button>
+                    <Button startEnhancer={<img alt={'Chevron left'} src={chevronLeft}/>} size='compact' kind='underline-hover'
+                            $style={{color: '#F8F8F8'}}> Tilbake</Button>
                   </RouteLink>
                 </Block>
                 <Block flex='1' display={['none', 'none', 'none', 'none', 'flex', 'flex']} justifyContent='flex-end'>
