@@ -42,8 +42,10 @@ export const Page = ({backUrl, headerOverlap, headerBackgroundColor, backgroundC
         {!wideMain && <Block maxWidth={pageWidth} width={'100%'}>
           {children}
         </Block>}
-        {wideMain && <Block maxWidth={maxPageWidth} width={'100%'} paddingLeft={padding} paddingRight={padding}>
-          {children}
+        {wideMain && <Block maxWidth={maxPageWidth} width={'100%'}>
+          <Block paddingLeft={padding} paddingRight={padding}>
+            {children}
+          </Block>
         </Block>}
       </Block>
 
