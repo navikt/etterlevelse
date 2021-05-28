@@ -98,7 +98,6 @@ export const SearchKrav = (props: {kravNummer: number, kravVersjon: number}) => 
               setKrav(kravSelect)
               p.form.setFieldValue('kravNummer', kravSelect?.kravNummer)
               p.form.setFieldValue('kravVersjon', kravSelect?.kravVersjon)
-              p.form.setFieldValue('kravNavn', kravSelect?.navn)
             }}
             onInputChange={event => setSearch(event.currentTarget.value)}
             isLoading={loading}

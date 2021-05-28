@@ -9,6 +9,7 @@ import {behandlingName, useBehandling} from '../../api/BehandlingApi'
 import {Spinner} from '../common/Spinner'
 import {Label} from '../common/PropertyLabel'
 import {kravNumView} from '../../pages/KravPage'
+import { H2 } from 'baseui/typography'
 
 const formatDate = (date?: string) => date && moment(date).format('ll')
 
@@ -16,7 +17,10 @@ export const ViewEtterlevelse = ({etterlevelse}: {etterlevelse: Etterlevelse}) =
   const [behandling] = useBehandling(etterlevelse.behandlingId)
 
   return (
-    <Block width='100%'>
+    <Block width='100%' marginTop='48px'>
+      <H2>
+        Kravet etterlevels av
+      </H2>
       <Label title='Behandling'>
         {behandling ?
           <RouteLink href={`/behandling/${behandling.id}`}>

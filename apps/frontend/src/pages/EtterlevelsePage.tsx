@@ -104,7 +104,7 @@ export const EtterlevelsePage = () => {
                     }}
                     href={kravLink(etterlevelseName(etterlevelse))}
                   >
-                    {etterlevelseName(etterlevelse) + ' ' + etterlevelse.kravNavn}
+                    {etterlevelseName(etterlevelse) + ' '}
                   </CustomizedLink>
                 )}
               </Block>
@@ -113,18 +113,26 @@ export const EtterlevelsePage = () => {
         </Block>
       }
 
-      {!edit && etterlevelse && !loading && <ViewEtterlevelse etterlevelse={etterlevelse} />}
-      {
-        edit && etterlevelse && <EditEtterlevelse etterlevelse={etterlevelse} formRef={formRef} close={k => {
-          if (k) {
-            setEtterlevelse(k)
-            if (k.id !== etterlevelse.id) {
-              history.push(`/etterlevelse/${k.id}`)
-            }
+      <Block display='flex' width='calc(100% - 80px)' justifyContent='center' paddingLeft='40px' paddingRight='40px'>
+        <Block maxWidth={pageWidth} width='100%'>
+          {!edit && etterlevelse && !loading &&
+            <ViewEtterlevelse etterlevelse={etterlevelse} />}
+          {
+            edit && etterlevelse &&
+
+            <EditEtterlevelse etterlevelse={etterlevelse} formRef={formRef} close={k => {
+              if (k) {
+                setEtterlevelse(k)
+                if (k.id !== etterlevelse.id) {
+                  history.push(`/etterlevelse/${k.id}`)
+                }
+              }
+              setEdit(false)
+            }} />
+
           }
-          setEdit(false)
-        }} />
-      }
+        </Block>
+      </Block>
     </Block >
   )
 }
