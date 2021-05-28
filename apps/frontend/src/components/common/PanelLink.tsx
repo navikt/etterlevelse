@@ -44,7 +44,7 @@ export const PanelLink = ({href, title, rightTitle, beskrivelse, rightBeskrivels
       }} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
         {typeof panelIcon === 'function' ? panelIcon(hover) : panelIcon}
 
-        <Block marginLeft={theme.sizing.scale300} marginRight={theme.sizing.scale600} $style={{flexGrow: 1}}
+        <Block marginLeft={theme.sizing.scale800} marginRight={theme.sizing.scale600} $style={{flexGrow: 1}}
                display={'flex'} flexDirection={'column'} justifyContent={'center'}>
           <LabelLarge $style={{lineHeight: '20px'}}>{title}</LabelLarge>
           <ParagraphSmall marginBottom={0} marginTop={theme.sizing.scale100}>{beskrivelse}</ParagraphSmall>
