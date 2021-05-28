@@ -18,13 +18,6 @@ import * as _ from 'lodash'
 import {faChevronDown, faChevronUp} from '@fortawesome/free-solid-svg-icons'
 import {Page} from '../components/scaffold/Page'
 
-const sectionProps: BlockProps = {
-  display: 'flex',
-  width: '100%',
-  justifyContent: 'space-between',
-  flexWrap: true
-}
-
 export const TemaPage = () => {
   const {tema} = useParams<{tema: string}>()
 
@@ -32,7 +25,6 @@ export const TemaPage = () => {
 
   const code = codelist.getCode(ListName.TEMA, tema)
   if (!code) return <>'invalid code'</>
-
   return <TemaSide tema={code}/>
 }
 
@@ -80,24 +72,28 @@ const TemaSide = ({tema}: {tema: TemaCode}) => {
                 </Button>
               </Block>
             </>
-          }
-    >
-      <>
+          }>
+      <Block>
+        <HeadingLarge>{data?.krav.numberOfElements || '?'} krav</HeadingLarge>
         {loading && <SkeletonPanel count={10}/>}
-        {!loading && <Block>
-          <HeadingLarge>{data!.krav.numberOfElements} krav</HeadingLarge>
-          {data!.krav.content.map(k =>
-            <Block key={k.id} marginBottom={'8px'}>
-              <PanelLink href={`/krav/${k.kravNummer}/${k.kravVersjon}`}
-                         panelIcon={<img src={gavelIcon} aria-hidden alt={'Hammer ikon'}/>}
-                         beskrivelse={kravNumView(k)} title={k.navn} flip
-              />
-            </Block>
-          )}
-        </Block>}
-      </>
+        {!loading && data!.krav.content.map(k =>
+          <Block key={k.id} marginBottom={'8px'}>
+            <PanelLink href={`/krav/${k.kravNummer}/${k.kravVersjon}`}
+                       panelIcon={<img src={gavelIcon} aria-hidden alt={'Hammer ikon'}/>}
+                       beskrivelse={kravNumView(k)} title={k.navn} flip
+            />
+          </Block>
+        )}
+      </Block>
     </Page>
   )
+}
+
+const sectionProps: BlockProps = {
+  display: 'flex',
+  width: '100%',
+  justifyContent: 'space-between',
+  flexWrap: true
 }
 
 const TemaListe = () => (
