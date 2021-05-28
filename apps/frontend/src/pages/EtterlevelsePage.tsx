@@ -38,7 +38,7 @@ export const etterlevelseStatus = (status?: EtterlevelseStatus) => {
 
 export const EtterlevelsePage = () => {
   const params = useParams<{ id?: string }>()
-  const [etterlevelse, setEtterlevelse] = useEtterlevelse(params.id)
+  const [etterlevelse, setEtterlevelse, kravNavn] = useEtterlevelse(params.id)
   const [edit, setEdit] = useState(etterlevelse && !etterlevelse.id)
   const formRef = useRef<FormikProps<any>>()
   const history = useHistory()
@@ -104,7 +104,7 @@ export const EtterlevelsePage = () => {
                     }}
                     href={kravLink(etterlevelseName(etterlevelse))}
                   >
-                    {etterlevelseName(etterlevelse) + ' '}
+                    {etterlevelseName(etterlevelse) + ' ' + kravNavn}
                   </CustomizedLink>
                 )}
               </Block>

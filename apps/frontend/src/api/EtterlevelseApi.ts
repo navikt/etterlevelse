@@ -3,7 +3,7 @@ import {emptyPage, Etterlevelse, EtterlevelseStatus, PageResponse} from '../cons
 import {env} from '../util/env'
 import {useEffect, useState} from 'react'
 import * as queryString from 'querystring'
-import {KravId} from './KravApi'
+import { getKravByKravNummer, KravId} from './KravApi'
 
 export const getEtterlevelsePage = async (pageNumber: number, pageSize: number) => {
   return (await axios.get<PageResponse<Etterlevelse>>(`${env.backendBaseUrl}/etterlevelse?pageNumber=${pageNumber}&pageSize=${pageSize}`)).data
@@ -67,11 +67,17 @@ export const useEtterlevelse = (id?: string, behandlingId?: string, kravId?: Kra
     kravNummer: kravId?.kravNummer
   }) : undefined)
 
+  const [kravNavn, setKravNavn] = useState('')
+
   useEffect(() => {
     id && !isCreateNew && getEtterlevelse(id).then(setData)
   }, [id])
+  
+  useEffect(() => {
+    data && getKravByKravNummer(data?.kravNummer, data?.kravVersjon).then((res) => setKravNavn(res.navn))
+  }, [data])
 
-  return [data, setData] as [Etterlevelse | undefined, (k: Etterlevelse) => void]
+  return [data, setData, kravNavn] as [Etterlevelse | undefined, (k: Etterlevelse) => void, String]
 }
 
 export const useEtterlevelseForBehandling = (behandlingId?: string) => {
