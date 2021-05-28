@@ -30,6 +30,7 @@ public class Etterlevelse implements DomainObject, KravId {
     private String behandlingId;
     private Integer kravNummer;
     private Integer kravVersjon;
+    private String kravNavn;
 
     private boolean etterleves;
     private String begrunnelse;
@@ -41,6 +42,7 @@ public class Etterlevelse implements DomainObject, KravId {
         behandlingId = request.getBehandlingId();
         kravNummer = request.getKravNummer();
         kravVersjon = request.getKravVersjon();
+        kravNavn = request.getKravNavn();
 
         etterleves = request.isEtterleves();
         begrunnelse = request.getBegrunnelse();
@@ -60,6 +62,7 @@ public class Etterlevelse implements DomainObject, KravId {
                 .behandlingId(behandlingId)
                 .kravNummer(kravNummer)
                 .kravVersjon(kravVersjon)
+                .kravNavn(kravNavn)
 
                 .etterleves(etterleves)
                 .begrunnelse(begrunnelse)

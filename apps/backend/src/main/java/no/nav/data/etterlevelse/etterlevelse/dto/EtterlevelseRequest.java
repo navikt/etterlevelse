@@ -28,6 +28,7 @@ public class EtterlevelseRequest implements RequestElement, KravId {
     private String behandlingId;
     private Integer kravNummer;
     private Integer kravVersjon;
+    private String kravNavn;
 
     private boolean etterleves;
     private String begrunnelse;
