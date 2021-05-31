@@ -1,17 +1,17 @@
-import {Etterlevelse, EtterlevelseStatus} from '../../constants'
-import {Field, FieldProps, Form, Formik, FormikProps} from 'formik'
-import {createEtterlevelse, mapToFormVal, updateEtterlevelse} from '../../api/EtterlevelseApi'
-import {Block} from 'baseui/block'
+import { Etterlevelse, EtterlevelseStatus } from '../../constants'
+import { Field, FieldProps, Form, Formik, FormikProps } from 'formik'
+import { createEtterlevelse, mapToFormVal, updateEtterlevelse } from '../../api/EtterlevelseApi'
+import { Block } from 'baseui/block'
 import Button from '../common/Button'
 import React from 'react'
 import * as yup from 'yup'
-import {etterlevelseStatus} from '../../pages/EtterlevelsePage'
-import {BoolField, DateField, MultiInputField, OptionField, TextAreaField} from '../common/Inputs'
-import {theme} from '../../util'
-import {FormControl} from 'baseui/form-control'
-import {useKrav, useSearchKrav} from '../../api/KravApi'
-import {kravName} from '../../pages/KravPage'
-import {behandlingName, useBehandling, useSearchBehandling} from '../../api/BehandlingApi'
+import { etterlevelseStatus } from '../../pages/EtterlevelsePage'
+import { BoolField, DateField, MultiInputField, OptionField, TextAreaField } from '../common/Inputs'
+import { theme } from '../../util'
+import { FormControl } from 'baseui/form-control'
+import { useKrav, useSearchKrav } from '../../api/KravApi'
+import { kravName } from '../../pages/KravPage'
+import { behandlingName, useBehandling, useSearchBehandling } from '../../api/BehandlingApi'
 import CustomizedSelect from '../common/CustomizedSelect'
 
 type EditEttlevProps = {
@@ -21,7 +21,7 @@ type EditEttlevProps = {
   lockBehandlingAndKrav?: boolean
 }
 
-export const EditEtterlevelse = ({etterlevelse, close, formRef, lockBehandlingAndKrav}: EditEttlevProps) => {
+export const EditEtterlevelse = ({ etterlevelse, close, formRef, lockBehandlingAndKrav }: EditEttlevProps) => {
 
   const submit = async (etterlevelse: Etterlevelse) => {
     if (etterlevelse.id) {
@@ -37,28 +37,31 @@ export const EditEtterlevelse = ({etterlevelse, close, formRef, lockBehandlingAn
       initialValues={mapToFormVal(etterlevelse)}
       validationSchema={etterlevelseSchema()}
       innerRef={formRef}
-    >{({values, isSubmitting, submitForm}: FormikProps<Etterlevelse>) => (
+    >{({ values, isSubmitting, submitForm }: FormikProps<Etterlevelse>) => (
       <Form>
         <Block>
 
           {!lockBehandlingAndKrav && <>
-            <SearchBehandling id={values.behandlingId}/>
-            <SearchKrav kravNummer={values.kravNummer} kravVersjon={values.kravVersjon}/>
+            <SearchBehandling id={values.behandlingId} />
+            <SearchKrav kravNummer={values.kravNummer} kravVersjon={values.kravVersjon} />
           </>}
 
-          <Block height={theme.sizing.scale600}/>
+          <Block height={theme.sizing.scale600} />
 
-          <BoolField label='Etterleves' name='etterleves'/>
-          <TextAreaField label='Begrunnelse' name='begrunnelse'/>
+          <BoolField label='Etterleves' name='etterleves' />
+          <TextAreaField label='Begrunnelse' name='begrunnelse' markdown />
+
+          {/* 
           <MultiInputField label='Dokumentasjon' name='dokumentasjon'/>
 
           <Block height={theme.sizing.scale600}/>
 
           <DateField label='Frist for ferdigstillelse' name='fristForFerdigstillelse'/>
 
-          <Block height={theme.sizing.scale600}/>
+          <Block height={theme.sizing.scale600}/> 
+          */}
 
-          <OptionField label='Status' name='status' options={Object.values(EtterlevelseStatus).map(id => ({id, label: etterlevelseStatus(id)}))}/>
+          <OptionField label='Status' name='status' options={Object.values(EtterlevelseStatus).map(id => ({ id, label: etterlevelseStatus(id) }))} />
 
         </Block>
 
@@ -76,7 +79,7 @@ const etterlevelseSchema = () => {
   return yup.object({})
 }
 
-export const SearchKrav = (props: {kravNummer: number, kravVersjon: number}) => {
+export const SearchKrav = (props: { kravNummer: number, kravVersjon: number }) => {
   const [results, setSearch, loading] = useSearchKrav()
   const [krav, setKrav] = useKrav(props, true)
 
@@ -91,9 +94,9 @@ export const SearchKrav = (props: {kravNummer: number, kravVersjon: number}) => 
             searchable
             noResultsMsg='Ingen resultat'
 
-            options={results.map(k => ({id: k.id, label: kravName(k)}))}
-            value={krav ? [{id: krav.id, label: kravName(krav)}] : []}
-            onChange={({value}) => {
+            options={results.map(k => ({ id: k.id, label: kravName(k) }))}
+            value={krav ? [{ id: krav.id, label: kravName(krav) }] : []}
+            onChange={({ value }) => {
               const kravSelect = value.length ? results.find(k => k.id === value[0].id)! : undefined
               setKrav(kravSelect)
               p.form.setFieldValue('kravNummer', kravSelect?.kravNummer)
@@ -109,7 +112,7 @@ export const SearchKrav = (props: {kravNummer: number, kravVersjon: number}) => 
   )
 }
 
-export const SearchBehandling = (props: {id: string}) => {
+export const SearchBehandling = (props: { id: string }) => {
   const [results, setSearch, loading] = useSearchBehandling()
   const [behandling, setBehandling] = useBehandling(props.id)
 
@@ -124,9 +127,9 @@ export const SearchBehandling = (props: {id: string}) => {
             searchable
             noResultsMsg='Ingen resultat'
 
-            options={results.map(k => ({id: k.id, label: behandlingName(k)}))}
-            value={behandling ? [{id: behandling.id, label: behandlingName(behandling)}] : []}
-            onChange={({value}) => {
+            options={results.map(k => ({ id: k.id, label: behandlingName(k) }))}
+            value={behandling ? [{ id: behandling.id, label: behandlingName(behandling) }] : []}
+            onChange={({ value }) => {
               const select = value.length ? results.find(k => k.id === value[0].id)! : undefined
               setBehandling(select)
               p.form.setFieldValue('behandlingId', select?.id)
