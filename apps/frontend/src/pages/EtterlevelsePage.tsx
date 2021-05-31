@@ -2,21 +2,21 @@ import { Block } from 'baseui/block'
 import { H1, HeadingLarge, Label3 } from 'baseui/typography'
 import { useHistory, useParams } from 'react-router-dom'
 import { deleteEtterlevelse, useEtterlevelse } from '../api/EtterlevelseApi'
-import React, { useRef, useState } from 'react'
-import { Etterlevelse, EtterlevelseStatus } from '../constants'
+import React, { useEffect, useRef, useState } from 'react'
+import { Etterlevelse, EtterlevelseStatus, Krav } from '../constants'
 import Button from '../components/common/Button'
 import { ViewEtterlevelse } from '../components/etterlevelse/ViewEtterlevelse'
 import { EditEtterlevelse } from '../components/etterlevelse/EditEtterlevelse'
 import RouteLink from '../components/common/RouteLink'
 import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
 import { user } from '../services/User'
-import { theme } from '../util'
 import { FormikProps } from 'formik'
 import { DeleteItem } from '../components/DeleteItem'
-import { kravNumView, kravName } from './KravPage'
+import { kravNumView } from './KravPage'
 import { ettlevColors, maxPageWidth, pageWidth } from '../util/theme'
 import { chevronLeft, editIcon } from '../components/Images'
 import CustomizedLink from '../components/common/CustomizedLink'
+import { getKravByKravNummer } from '../api/KravApi'
 
 export const etterlevelseName = (etterlevelse: Etterlevelse) => `${kravNumView(etterlevelse)}`
 
@@ -38,12 +38,17 @@ export const etterlevelseStatus = (status?: EtterlevelseStatus) => {
 
 export const EtterlevelsePage = () => {
   const params = useParams<{ id?: string }>()
-  const [etterlevelse, setEtterlevelse, kravNavn] = useEtterlevelse(params.id)
+  const [etterlevelse, setEtterlevelse] = useEtterlevelse(params.id)
   const [edit, setEdit] = useState(etterlevelse && !etterlevelse.id)
+  const [krav, setKrav] = useState<Krav>()
   const formRef = useRef<FormikProps<any>>()
   const history = useHistory()
 
   const loading = !edit && !etterlevelse
+
+  useEffect(() => {
+    etterlevelse &&  getKravByKravNummer(etterlevelse?.kravNummer, etterlevelse?.kravVersjon).then(setKrav)
+  },[etterlevelse])
 
   return (
     <Block width='100%' overrides={{ Block: { props: { role: 'main' } } }}>
@@ -94,7 +99,7 @@ export const EtterlevelsePage = () => {
             <Block paddingLeft='40px' marginTop='31px' paddingRight='40px' width='calc(100% - 80px)' display='flex' justifyContent='center'>
               <Block maxWidth={pageWidth} width='100%' marginTop='7px'>
                 <H1 $style={{ color: ettlevColors.grey25 }}>Etterlevelse</H1>
-                {etterlevelse && etterlevelse?.kravNummer !== 0 && (
+                {etterlevelse && etterlevelse?.kravNummer !== 0 && krav && (
                   <CustomizedLink
                     style={{
                       color: ettlevColors.grey25,
@@ -104,7 +109,7 @@ export const EtterlevelsePage = () => {
                     }}
                     href={kravLink(etterlevelseName(etterlevelse))}
                   >
-                    {etterlevelseName(etterlevelse) + ' ' + kravNavn}
+                    {etterlevelseName(etterlevelse) + ' ' + krav?.navn}
                   </CustomizedLink>
                 )}
               </Block>

@@ -67,17 +67,12 @@ export const useEtterlevelse = (id?: string, behandlingId?: string, kravId?: Kra
     kravNummer: kravId?.kravNummer
   }) : undefined)
 
-  const [kravNavn, setKravNavn] = useState('')
 
   useEffect(() => {
     id && !isCreateNew && getEtterlevelse(id).then(setData)
   }, [id])
-  
-  useEffect(() => {
-    data && getKravByKravNummer(data?.kravNummer, data?.kravVersjon).then((res) => setKravNavn(res.navn))
-  }, [data])
 
-  return [data, setData, kravNavn] as [Etterlevelse | undefined, (k: Etterlevelse) => void, String]
+  return [data, setData] as [Etterlevelse | undefined, (k: Etterlevelse) => void]
 }
 
 export const useEtterlevelseForBehandling = (behandlingId?: string) => {
