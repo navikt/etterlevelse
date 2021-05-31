@@ -30,7 +30,7 @@ export const TemaPage = () => {
 
 const TemaSide = ({tema}: {tema: TemaCode}) => {
   const lover = codelist.getCodesForTema(tema.code)
-  const {data, loading} = useKravFilter({lover: lover.map(c => c.code)}, {skip: !lover.length})
+  const {data, loading} = useKravFilter({lover: lover.map(c => c.code), gjeldendeKrav: true}, {skip: !lover.length})
   const [expand, setExpand] = useState(false)
 
   return (
