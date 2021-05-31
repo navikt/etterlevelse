@@ -30,7 +30,8 @@ export const MyBehandlingerPage = () => (
       <Block paddingLeft={'100px'} paddingRight={'100px'} paddingTop={theme.sizing.scale800}>
 
         <RouteLink href={'/'} hideUnderline>
-          <Button startEnhancer={<img alt={'Chevron venstre ikon'} src={navChevronRightIcon} style={{transform: 'rotate(180deg)'}}/>} size='compact' kind='tertiary'> Tilbake</Button>
+          <Button startEnhancer={<img alt={'Chevron venstre ikon'} src={navChevronRightIcon} style={{transform: 'rotate(180deg)'}}/>} size='compact'
+                  kind='tertiary'> Tilbake</Button>
         </RouteLink>
 
         <HeadingXXLarge marginTop={theme.sizing.scale600}>Dokumentere etterlevelse</HeadingXXLarge>
@@ -150,8 +151,8 @@ const MineBehandlinger = ({behandlinger, teams, loading}: {behandlinger: Behandl
 const SisteBehandlinger = ({behandlinger, loading}: {behandlinger: BehandlingQL[], loading: boolean}) => {
   if (!behandlinger.length && !loading)
     return <ParagraphSmall>Du har ikke dokumentert etterlevelse på krav</ParagraphSmall>
-
-  return <BehandlingerPanels behandlinger={behandlinger} loading={loading}/>
+  const sorted = [...behandlinger].sort((a, b) => moment(b.sistEndretEtterlevelse).valueOf() - moment(a.sistEndretEtterlevelse).valueOf())
+  return <BehandlingerPanels behandlinger={sorted} loading={loading}/>
 }
 
 const Alle = () => {
