@@ -1,10 +1,10 @@
-import { useHistory } from 'react-router-dom'
+import {useHistory} from 'react-router-dom'
 import React from 'react'
-import { AuditItem, NavigableItem, ObjectType } from '../admin/audit/AuditTypes'
-import { Block } from 'baseui/block'
-import { AuditButton } from '../admin/audit/AuditButton'
-import { KIND } from 'baseui/button'
-import { ListName } from '../../services/Codelist'
+import {AuditItem, NavigableItem, ObjectType} from '../admin/audit/AuditTypes'
+import {Block} from 'baseui/block'
+import {AuditButton} from '../admin/audit/AuditButton'
+import {KIND} from 'baseui/button'
+import {ListName} from '../../services/Codelist'
 import CustomizedLink from "./CustomizedLink";
 import _ from 'lodash'
 
@@ -56,6 +56,7 @@ export const urlForObject = (type: NavigableItem, id: string, audit?: AuditItem)
       return `/krav/${id}`
     case ObjectType.Etterlevelse:
       return `/etterlevelse/${id}`
+    case ObjectType.BehandlingData:
     case ObjectType.Behandling:
       return `/behandling/${id}`
     case ListName.RELEVANS:
@@ -66,7 +67,7 @@ export const urlForObject = (type: NavigableItem, id: string, audit?: AuditItem)
       return `/lov/${id}`
     case ListName.TEMA:
       return `/tema/${id}`
-    case 'codelist':
+    case ObjectType.Codelist:
       return `/admin/codelist/${id}`
   }
   console.warn('couldn\'t find object type ' + type)

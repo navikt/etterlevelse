@@ -244,6 +244,7 @@ const BehandlingerPanels = ({behandlinger, loading}: {behandlinger: BehandlingQL
   if (loading) return <SkeletonPanel count={5}/>
   return (
     <Block>
+      {!behandlinger.length && <ParagraphSmall>Du er ikke medlem av team med registrerte behandlinger </ParagraphSmall>}
       {behandlinger.map(b => (
         <Block key={b.id} marginBottom={'8px'}>
           <PanelLink
