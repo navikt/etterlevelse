@@ -60,9 +60,25 @@ export const ViewEtterlevelse = ({ etterlevelse }: { etterlevelse: Etterlevelse 
         </Block>
       </Block>
 
+      <Block marginTop={theme.sizing.scale1400}>
+        <H2>
+          Dokumetasjon
+          </H2>
+        <Card>
+          <Block display='flex' width='100%'>
+            <Block>
+              <Label title='' markdown={etterlevelse.begrunnelse} />
+            </Block>
+            <Block display='flex' flex='1' justifyContent='flex-end'>
+ 
+            </Block>
+          </Block>
+        </Card>
+      </Block>
+
       <Block height={theme.sizing.scale600} />
 
-      <Label title='Begrunnelse' markdown={etterlevelse.begrunnelse} />
+
       <Label title='Dokumentasjon' markdown={etterlevelse.dokumentasjon} />
 
       <Block height={theme.sizing.scale600} />
