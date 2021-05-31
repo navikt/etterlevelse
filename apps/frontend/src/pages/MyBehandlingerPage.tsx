@@ -111,6 +111,8 @@ const MineBehandlinger = ({behandlinger, teams, loading}: {behandlinger: Behandl
   )
   return (
     <Block>
+      {!behandlinger.length && <ParagraphSmall>Du er ikke medlem av team med registrerte behandlinger </ParagraphSmall>}
+
       {teams.map(t => {
           const teamBehandlinger = behandlinger.filter(b => b.teamsData.find(t2 => t2.id === t.id))
           return <Block key={t.id} marginBottom={theme.sizing.scale1000}>
@@ -245,7 +247,6 @@ const BehandlingerPanels = ({behandlinger, loading}: {behandlinger: BehandlingQL
   if (loading) return <SkeletonPanel count={5}/>
   return (
     <Block>
-      {!behandlinger.length && <ParagraphSmall>Du er ikke medlem av team med registrerte behandlinger </ParagraphSmall>}
       {behandlinger.map(b => (
         <Block key={b.id} marginBottom={'8px'}>
           <PanelLink
