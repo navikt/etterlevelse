@@ -31,6 +31,7 @@ import sadFolderIcon from '../resources/icons/sad-folder.svg'
 import bamseIcon from '../resources/icons/Bamse.svg'
 import navChevronRightIcon from '../resources/icons/nav-chevron-right.svg'
 import dokEtterlevelseIcon from '../resources/icons/dok-etterlevelse-ikon.svg'
+import bokEtterlevelseIcon from '../resources/icons/bok-etterlevelse-ikon.svg'
 import sokButtonIcon from '../resources/icons/icon_button_search.svg'
 import gavelIcon from '../resources/icons/gavel-icon.svg'
 import illustration from '../resources/giammarco-boscaro-zeH-ljawHtg-unsplash.jpg'
@@ -60,6 +61,7 @@ export {
   bamseIcon,
   sokButtonIcon,
   dokEtterlevelseIcon,
+  bokEtterlevelseIcon,
   gavelIcon,
   navChevronRightIcon,
   navChevronDownIcon,

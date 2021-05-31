@@ -13,6 +13,7 @@ import { Teams } from '../common/TeamName'
 import { Card } from 'baseui/card'
 import { ettlevColors } from '../../util/theme'
 import { ThemeProvider } from 'baseui'
+import { bokEtterlevelseIcon } from '../Images'
 
 const formatDate = (date?: string) => date && moment(date).format('ll')
 
@@ -60,23 +61,27 @@ export const ViewEtterlevelse = ({ etterlevelse }: { etterlevelse: Etterlevelse 
         </Block>
       </Block>
 
-      <Block marginTop={theme.sizing.scale1400}>
-        <H2>
-          Dokumetasjon
+      {etterlevelse.begrunnelse &&
+        <Block marginTop={theme.sizing.scale1400}>
+          <H2>
+            Dokumetasjon
           </H2>
-        <Card>
-          <Block display='flex' width='100%'>
-            <Block>
-              <Label title='' markdown={etterlevelse.begrunnelse} />
+          <Card>
+            <Block display='flex' width='100%'>
+              <Block>
+                <Label title='' markdown={etterlevelse.begrunnelse} />
+              </Block>
+              <Block display='flex' flex='1' justifyContent='flex-end'>
+                <Block marginLeft={theme.sizing.scale1600}>
+                  <img src={bokEtterlevelseIcon} alt='dokumentasjons ikon' />
+                </Block>
+              </Block>
             </Block>
-            <Block display='flex' flex='1' justifyContent='flex-end'>
- 
-            </Block>
-          </Block>
-        </Card>
-      </Block>
+          </Card>
+        </Block>
+      }
 
-      <Block height={theme.sizing.scale600} />
+      {/* <Block height={theme.sizing.scale600} />
 
 
       <Label title='Dokumentasjon' markdown={etterlevelse.dokumentasjon} />
@@ -85,7 +90,7 @@ export const ViewEtterlevelse = ({ etterlevelse }: { etterlevelse: Etterlevelse 
 
       <Label title='Frist for ferdigstillelse'>{formatDate(etterlevelse.fristForFerdigstillelse)}</Label>
 
-      <Block height={theme.sizing.scale600} />
+      <Block height={theme.sizing.scale600} /> */}
 
 
     </Block>
