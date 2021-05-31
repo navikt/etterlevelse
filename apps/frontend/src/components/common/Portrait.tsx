@@ -18,7 +18,7 @@ export const Portrait = (props: {ident: string, size?: string}) => {
           setLoading(false)
         }}
         src={image}
-        alt={`Profilbilde ${props.ident}`}
+        alt=''
         style={{
           width: loading ? 0 : size,
           height: loading ? 0 : size,
