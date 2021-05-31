@@ -9,6 +9,10 @@ import { behandlingName, useBehandling } from '../../api/BehandlingApi'
 import { Spinner } from '../common/Spinner'
 import { Label } from '../common/PropertyLabel'
 import { H2, Paragraph2 } from 'baseui/typography'
+import { Teams } from '../common/TeamName'
+import { Card } from 'baseui/card'
+import { ettlevColors } from '../../util/theme'
+import { ThemeProvider } from 'baseui'
 
 const formatDate = (date?: string) => date && moment(date).format('ll')
 
@@ -17,27 +21,44 @@ export const ViewEtterlevelse = ({ etterlevelse }: { etterlevelse: Etterlevelse 
 
   return (
     <Block width='100%' marginTop='48px'>
-      <H2>
-        Kravet etterlevels av
-      </H2>
-      {behandling ?
+      <Block display='flex' width='100%'>
         <Block>
-          <RouteLink
-            href={`/behandling/${behandling.id}`}
-            style={{
-              fontSize: '21px',
-              fontWeight: 700,
-              lineHeight: '40px'
-            }}
-          >
-            {behandlingName(behandling)}
-          </RouteLink>
-          <Paragraph2 marginTop='2px'>
-            Overordnet behandlingsaktivitet
+          <H2>
+            Kravet etterlevels av
+      </H2>
+          {behandling ?
+            <Block>
+              <RouteLink
+                href={`/behandling/${behandling.id}`}
+                style={{
+                  fontSize: '21px',
+                  fontWeight: 700,
+                  lineHeight: '40px'
+                }}
+              >
+                {behandlingName(behandling)}
+              </RouteLink>
+              <Paragraph2 marginTop='2px'>
+                Overordnet behandlingsaktivitet
             </Paragraph2>
+              <Block marginTop={theme.sizing.scale850}>
+                <Teams teams={behandling.teams} link list />
+              </Block>
+            </Block>
+            : etterlevelse.behandlingId && <Block> <Spinner size={theme.sizing.scale600} />{etterlevelse.behandlingId}</Block>
+          }
         </Block>
-        : etterlevelse.behandlingId && <Block> <Spinner size={theme.sizing.scale600} />{etterlevelse.behandlingId}</Block>
-      }
+
+        <Block display='flex' flex='1' justifyContent='flex-end' marginTop={theme.sizing.scale950}>
+          <Block>
+            <Card>
+              <Paragraph2 $style={{ fontWeight: 900, lineHeight: '22px', color: ettlevColors.green600 }}>
+                Status: {etterlevelseStatus(etterlevelse.status)}
+              </Paragraph2>
+            </Card>
+          </Block>
+        </Block>
+      </Block>
 
       <Block height={theme.sizing.scale600} />
 
@@ -50,7 +71,7 @@ export const ViewEtterlevelse = ({ etterlevelse }: { etterlevelse: Etterlevelse 
 
       <Block height={theme.sizing.scale600} />
 
-      <Label title='Status'>{etterlevelseStatus(etterlevelse.status)}</Label>
+
     </Block>
   )
 }
