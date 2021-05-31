@@ -14,10 +14,10 @@ export const TeamName = (props: {id: string, link?: boolean}) => {
     <>{name}</>
 }
 
-export const Teams = (props: {teams: string[], link?: boolean}) =>
-  <Block display='flex' flexWrap>
+export const Teams = (props: {teams: string[], link?: boolean, list?: boolean}) =>
+  <Block display={props.list? 'block': 'flex'} flexWrap>
     {props.teams.map(t =>
-      <Block key={t} marginRight={theme.sizing.scale600}>
+      <Block key={t} marginRight={props.list? 'none':theme.sizing.scale600} marginBottom={props.list? theme.sizing.scale600: 'none'}>
         <TeamName id={t} link={props.link}/>
       </Block>
     )}
