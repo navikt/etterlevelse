@@ -19,6 +19,7 @@ export const Portrait = (props: {ident: string, size?: string}) => {
         }}
         src={image}
         alt=''
+        aria-hidden
         style={{
           width: loading ? 0 : '100%',
           height: loading ? 0 : '100%',
