@@ -33,6 +33,7 @@ export const ettlevColors = {
   error50: '#F6EAE6',
   textAreaBorder: '#E0E0E0',
   navMorkGra: '#262626',
+  focusOutline: '#276ef1',
 }
 
 export const primitives: ThemePrimitives & {primary150: string, primary350: string} = {
