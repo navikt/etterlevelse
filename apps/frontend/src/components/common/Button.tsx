@@ -86,16 +86,16 @@ const Button = (props: ButtonProps) => {
       boxShadow: '0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 2px 0 rgba(0, 0, 0, .12)',
       ':hover': { boxShadow: '0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 3px 0 rgba(0, 0, 0, .12)' },
       ':active': { boxShadow: '0 2px 1px -2px rgba(0, 0, 0, .2), 0 1px 1px 0 rgba(0, 0, 0, .14), 0 1px 1px 0 rgba(0, 0, 0, .12)' },
-      ':focus': { boxShadow: '0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 3px 0 rgba(0, 0, 0, .12)' }
+      ':focus': { boxShadow: '0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 3px 0 rgba(0, 0, 0, .12)', outline: '3px solid #276ef1' }
     }
   } : {}
 
   let overrides: Override<any> = boxShadow
-  overrides.style = _.merge(props.kind === 'outline' ? outlineOverride : {})
-  overrides.style = _.merge(props.kind === 'underline-hover' ? underlineOverride : {})
-  overrides.style = _.merge(props.kind === 'secondary' ? buttonBorderStyle : {})
-  overrides.style = _.merge(props.hidePadding ? paddingAll('0') : {})
-  overrides.style = _.merge(props.inline ? { paddingTop: theme.sizing.scale100, paddingBottom: theme.sizing.scale100 } : {})
+  overrides.style = _.merge(overrides.style, props.kind === 'outline' ? outlineOverride : {})
+  overrides.style = _.merge(overrides.style, props.kind === 'underline-hover' ? underlineOverride : {})
+  overrides.style = _.merge(overrides.style, props.kind === 'secondary' ? buttonBorderStyle : {})
+  overrides.style = _.merge(overrides.style, props.hidePadding ? paddingAll('0') : {})
+  overrides.style = _.merge(overrides.style, props.inline ? { paddingTop: theme.sizing.scale100, paddingBottom: theme.sizing.scale100 } : {})
   overrides.style = _.merge(overrides.style, props.$style || {})
 
 
