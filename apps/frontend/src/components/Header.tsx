@@ -150,13 +150,16 @@ const Menu = (props: {pages: MenuItem[][], title: React.ReactNode, icon?: IconDe
           {allPages.map((p, i) => {
               const item = !!p.href && !p.disabled ?
                 <RouteLink href={p.href} onClick={() => setOpen(false)}>
-                  <Block display={'flex'}>
-                    {p.icon && <Block marginRight={theme.sizing.scale400}><img src={p.icon} alt={'link ikon'} aria-hidden/></Block>}
+                  <Block display={'flex'} alignItems={'center'}>
+                    {p.icon && <Block marginRight={theme.sizing.scale400}>
+                      <img src={p.icon} alt={'link ikon'} aria-hidden/>
+                    </Block>}
                     <Block>{p.label}</Block>
                   </Block>
                 </RouteLink> :
-                <Block alignSelf={'center'} $style={{opacity: p.disabled ? .6 : 1}}>{p.label}</Block>
-              return <Block key={i} marginTop={theme.sizing.scale100} marginBottom={theme.sizing.scale100}>
+                <Block $style={{opacity: p.disabled ? .6 : 1}}>{p.label}</Block>
+              return <Block key={i}
+                            marginTop={theme.sizing.scale100} marginBottom={theme.sizing.scale100}>
                 {item}
               </Block>
             }
