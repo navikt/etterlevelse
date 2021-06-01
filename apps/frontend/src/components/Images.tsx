@@ -35,6 +35,10 @@ import dokEtterlevelseIcon from '../resources/icons/dok-etterlevelse-ikon.svg'
 import bokEtterlevelseIcon from '../resources/icons/bok-etterlevelse-ikon.svg'
 import sokButtonIcon from '../resources/icons/icon_button_search.svg'
 import gavelIcon from '../resources/icons/gavel-icon.svg'
+import akrPennIcon from '../resources/icons/ark-penn-ikon.svg'
+import grafIcon from '../resources/icons/graf-ikon.svg'
+import husIcon from '../resources/icons/hus-ikon.svg'
+import paragrafIcon from '../resources/icons/paragraf-ikon.svg'
 import illustration from '../resources/giammarco-boscaro-zeH-ljawHtg-unsplash.jpg'
 import {codelist, ListName, LovCode, TemaCode} from '../services/Codelist'
 import React from 'react'
@@ -67,6 +71,10 @@ export {
   gavelIcon,
   navChevronRightIcon,
   navChevronDownIcon,
+  akrPennIcon,
+  grafIcon,
+  husIcon,
+  paragrafIcon,
 }
 
 export const temaBilder: {[id: string]: string} = {

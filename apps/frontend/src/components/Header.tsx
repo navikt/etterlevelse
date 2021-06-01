@@ -1,34 +1,36 @@
 import * as React from 'react'
-import {useEffect, useState} from 'react'
+import {useState} from 'react'
 import {ALIGN, HeaderNavigation, StyledNavigationItem as NavigationItem, StyledNavigationList as NavigationList,} from 'baseui/header-navigation'
-import {Block, BlockProps} from 'baseui/block'
-import {Button as BaseButton, KIND, SIZE} from 'baseui/button'
-import Button from '../components/common/Button'
-import {StatefulPopover} from 'baseui/popover'
+import {Block} from 'baseui/block'
+import {KIND, SIZE} from 'baseui/button'
+import Button, {ButtonKind} from '../components/common/Button'
+import {Popover} from 'baseui/popover'
 import {useHistory, useLocation} from 'react-router-dom'
 import {StyledLink} from 'baseui/link'
 import {useQueryParam} from '../util/hooks'
-import {paddingAll} from './common/Style'
 import {theme} from '../util'
-import {H1, LabelMedium, ParagraphMedium} from 'baseui/typography'
+import {H1, HeadingXLarge} from 'baseui/typography'
 import {intl} from '../util/intl/intl'
-import {StatefulMenu} from 'baseui/menu'
-import {TriangleDown} from 'baseui/icon'
 import BurgerMenu from './Navigation/Burger'
 import RouteLink from './common/RouteLink'
 import {ampli} from '../services/Amplitude'
 import {user} from '../services/User'
 import {writeLog} from '../api/LogApi'
 import MainSearch from './search/MainSearch'
-import {logo} from './Images'
-import {maxPageWidth} from '../util/theme'
+import {akrPennIcon, grafIcon, husIcon, logo, paragrafIcon} from './Images'
+import {ettlevColors, maxPageWidth} from '../util/theme'
 import {buttonBorderStyle} from './common/Button'
 import {Checkbox} from 'baseui/checkbox'
 import {Portrait} from './common/Portrait'
+import {IconDefinition} from '@fortawesome/fontawesome-svg-core'
+import {faBars, faChevronDown, faChevronUp, faTimes} from '@fortawesome/free-solid-svg-icons'
+import {faUser} from '@fortawesome/free-regular-svg-icons'
 
-const LoginButton = (props: {location: string}) => {
+const LoginButton = () => {
+  // updates window.location on navigation
+  useLocation()
   return (
-    <StyledLink style={{textDecoration: 'none'}} href={`/login?redirect_uri=${props.location}`}>
+    <StyledLink style={{textDecoration: 'none'}} href={`/login?redirect_uri=${window.location.href}`}>
       <Button size={SIZE.compact} kind={KIND.secondary} $style={buttonBorderStyle}>
         <b>Logg inn</b>
       </Button>
@@ -36,84 +38,144 @@ const LoginButton = (props: {location: string}) => {
   )
 }
 
-const LoggedInHeader = (props: {location: string}) => {
-  const blockStyle: BlockProps = {
-    display: 'flex',
-    width: '100%',
-    ...paddingAll(theme.sizing.scale100)
-  }
+const LoggedInHeader = () => {
+  const [viewRoller, setViewRoller] = useState(false)
+
+  const roller = (
+    <Block>
+      <Block display={'flex'}>
+        <Button size={'mini'} kind={'underline-hover'} onClick={() => setViewRoller(!viewRoller)} icon={viewRoller ? faChevronUp : faChevronDown}>
+          Endre aktive roller
+        </Button>
+      </Block>
+      <Block display={viewRoller ? 'block' : 'none'}>
+        {user.getAvailableGroups().map(g =>
+          <Checkbox key={g.group} checked={user.hasGroup(g.group)} checkmarkType={'toggle_round'}
+                    onChange={e => user.toggleGroup(g.group, (e.target as HTMLInputElement).checked)}
+                    labelPlacement={'right'}>{g.name}</Checkbox>
+        )}
+      </Block>
+    </Block>
+  )
+
+  const kravPages = user.isKraveier() ? [
+    // TODO proper urls
+    {label: 'Mine krav', href: '/krav', disabled: true},
+    {label: 'Mine sist redigerte krav', href: '/krav'},
+  ] : []
+  const adminPages = user.isAdmin() ? [
+    {label: intl.audit, href: '/admin/audit'},
+    {label: 'Kodeverk', href: '/admin/codelist'},
+    {label: intl.mailLog, href: '/admin/maillog'},
+    {label: intl.settings, href: '/admin/settings', disabled: true}
+  ] : []
+  const otherPages = [
+    {label: 'Mine instillinger', href: '/instillinger', disabled: true},
+    {label: 'Hjelp', href: '/hjelp', disabled: true}
+  ]
 
   return (
     <Block display='flex' justifyContent='center' alignItems='center'>
 
-      <Block marginRight='14px'>
-        <StatefulPopover
-          content={
-            <Block padding={theme.sizing.scale400}>
-              <LabelMedium>Navn: {user.getName()}</LabelMedium>
+      <Menu pages={[
+        [{label: <UserInfo/>}],
+        kravPages, adminPages, otherPages,
+        [{label: roller}]
+      ]} title={user.getIdent()} icon={faUser} kind={'tertiary'}/>
 
-              <ParagraphMedium>Endre aktive roller</ParagraphMedium>
-              {user.getAvailableGroups().map(g =>
-                <Checkbox key={g.group} checked={user.hasGroup(g.group)} checkmarkType={'toggle_round'}
-                          onChange={e => user.toggleGroup(g.group, (e.target as HTMLInputElement).checked)}
-                          labelPlacement={'right'}>{g.name}</Checkbox>
-              )}
-            </Block>
-          }
-        >
-          <BaseButton kind="tertiary">
-            <Portrait ident={user.getIdent()} size={theme.sizing.scale850}/>
-            <Block marginLeft={theme.sizing.scale200}>
-              <b>{user.getIdent()}</b>
-            </Block>
-          </BaseButton>
-        </StatefulPopover>
-      </Block>
+      <Block width={theme.sizing.scale400}/>
 
-      <Block {...blockStyle}>
-        <StyledLink style={{textDecoration: 'none'}} href={`/logout?redirect_uri=${props.location}`}>
-          <Button size={SIZE.compact} kind={KIND.secondary} $style={buttonBorderStyle}>
-            <b>Logg ut</b>
-          </Button>
-        </StyledLink>
-      </Block>
+      <Menu icon={faBars} pages={[
+        [
+          {label: <HeadingXLarge marginTop={0} marginBottom={theme.sizing.scale400}>Støtte til etterlevelse</HeadingXLarge>},
+          {label: 'Forsiden', href: '/', icon: husIcon},
+          {label: 'Dokumentere etterlevelse', href: '/behandlinger', icon: akrPennIcon},
+          {label: 'Status i organisasjonen', href: '/status', icon: grafIcon},
+          {label: 'Les kravene', href: '/tema', icon: paragrafIcon}
+        ]
+      ]} title={'Meny'}/>
 
     </Block>
   )
 }
 
-const AdminOptions = () => {
+const divider =
+  <Block minHeight={'26px'} display={'flex'} flexDirection={'column'} justifyContent={'center'}>
+    <Block $style={{borderBottom: '1px solid ' + ettlevColors.green100}} width={'100%'}/>
+  </Block>
+
+const UserInfo = () => {
   const history = useHistory()
-  const pages = [
-    {label: intl.audit, href: '/admin/audit'},
-    {label: 'Kodeverk', href: '/admin/codelist'},
-    {label: intl.mailLog, href: '/admin/maillog'},
-    {label: intl.settings, href: '/admin/settings'}
-  ]
+  const frontpage = window.location.href.substr(0, window.location.href.length - history.location.pathname.length)
   return (
-    <StatefulPopover
-      content={({close}) =>
-        <StatefulMenu
-          items={pages}
-          onItemSelect={select => {
-            select.event?.preventDefault()
-            close()
-            history.push(select.item.href)
-          }}
-        />
+
+    <Block display={'flex'} marginBottom={theme.sizing.scale600}>
+      <Portrait ident={user.getIdent()} size={'48px'}/>
+      <Block display={'flex'} flexDirection={'column'} marginLeft={theme.sizing.scale800}>
+        <Block $style={{
+          fontWeight: 900,
+          fontSize: '24px',
+          lineHeight: '32px'
+        }}>{user.getName()}</Block>
+        <Block>{user.isAdmin() ? 'Admin' : user.isKraveier() ? 'Kraveier' : 'Etterlever'}</Block>
+      </Block>
+      <Block alignSelf={'flex-end'} marginLeft={theme.sizing.scale800}>
+        <StyledLink href={`/logout?redirect_uri=${frontpage}`}>Logg ut</StyledLink>
+      </Block>
+    </Block>
+  )
+}
+
+type MenuItem = {label: React.ReactNode, href?: string, disabled?: boolean, icon?: string}
+
+const Menu = (props: {pages: MenuItem[][], title: React.ReactNode, icon?: IconDefinition, kind?: ButtonKind}) => {
+  const [open, setOpen] = useState(false)
+
+  const allPages = props.pages.length ? props.pages.filter(p => p.length).reduce((previousValue, currentValue) =>
+    [...(previousValue as MenuItem[] || []),
+      {label: divider},
+      ...currentValue as MenuItem[]]) : []
+
+  return (
+    <Popover
+      autoFocus
+      isOpen={open}
+      showArrow
+      onClickOutside={() => setOpen(false)}
+      overrides={{
+        Arrow: {style: {backgroundColor: ettlevColors.white}}
+      }}
+      content={
+        <Block padding={theme.sizing.scale900} backgroundColor={ettlevColors.white} display={'flex'} flexDirection={'column'}>
+          {allPages.map((p, i) => {
+              const item = !!p.href && !p.disabled ?
+                <RouteLink href={p.href} onClick={() => setOpen(false)}>
+                  <Block display={'flex'}>
+                    {p.icon && <Block marginRight={theme.sizing.scale400}><img src={p.icon} alt={'link ikon'} aria-hidden/></Block>}
+                    <Block>{p.label}</Block>
+                  </Block>
+                </RouteLink> :
+                <Block alignSelf={'center'} $style={{opacity: p.disabled ? .6 : 1}}>{p.label}</Block>
+              return <Block key={i} marginTop={theme.sizing.scale100} marginBottom={theme.sizing.scale100}>
+                {item}
+              </Block>
+            }
+          )}
+        </Block>
+
       }>
-      <BaseButton endEnhancer={() => <TriangleDown size={24}/>} kind="tertiary">
-        <b>{intl.administrate}</b>
-      </BaseButton>
-    </StatefulPopover>
+      <Block>
+        <Button size={SIZE.compact} kind={props.kind || 'secondary'} icon={open ? faTimes : props.icon} onClick={() => setOpen(!open)}>
+          {props.title}
+        </Button>
+      </Block>
+    </Popover>
   )
 }
 
 let sourceReported = false
 
 const Header = (props: {noSearchBar?: boolean, noLoginButton?: boolean}) => {
-  const [url, setUrl] = useState(window.location.href)
-  const location = useLocation()
   const source = useQueryParam('source')
   if (!sourceReported) {
     sourceReported = true
@@ -122,8 +184,6 @@ const Header = (props: {noSearchBar?: boolean, noLoginButton?: boolean}) => {
       ampli.logEvent('etterlevelse_source', {source})
     }
   }
-
-  useEffect(() => setUrl(window.location.href), [location.pathname])
 
   return (
     <Block width='100%' maxWidth={maxPageWidth}>
@@ -152,20 +212,14 @@ const Header = (props: {noSearchBar?: boolean, noLoginButton?: boolean}) => {
 
           {!props.noLoginButton && (<Block display={['none', 'none', 'none', 'none', 'none', 'flex']}>
             <NavigationList $align={ALIGN.right}>
-              {user.isAdmin() && (
-                <NavigationItem $style={{paddingLeft: 0}}>
-                  <AdminOptions/>
-                </NavigationItem>
-              )}
-
               {!user.isLoggedIn() && (
                 <NavigationItem $style={{paddingLeft: 0}}>
-                  <LoginButton location={url}/>
+                  <LoginButton/>
                 </NavigationItem>
               )}
               {user.isLoggedIn() && (
                 <NavigationItem $style={{paddingLeft: 0}}>
-                  <LoggedInHeader location={url}/>
+                  <LoggedInHeader/>
                 </NavigationItem>
               )}
             </NavigationList>

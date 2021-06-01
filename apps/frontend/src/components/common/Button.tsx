@@ -15,8 +15,10 @@ import { ExternalLink } from './RouteLink'
 import _ from 'lodash'
 
 
+export type ButtonKind = KIND[keyof KIND] | 'outline' | 'underline-hover'
+
 interface ButtonProps {
-  kind?: KIND[keyof KIND] | 'outline' | 'underline-hover'
+  kind?: ButtonKind
   type?: 'submit' | 'reset' | 'button'
   size?: SIZE[keyof SIZE]
   shape?: SHAPE[keyof SHAPE]
@@ -105,9 +107,9 @@ const Button = (props: ButtonProps) => {
           startEnhancer={props.startEnhancer} disabled={props.disabled} type={props.type}
           aria-label={props.label}
         >
-          {props.icon && <FontAwesomeIcon icon={props.icon} style={{ marginRight: props.children ? '.5rem' : undefined }} />}
+          {props.icon && <FontAwesomeIcon icon={props.icon} style={{marginRight: props.children ? '.5rem' : undefined}} fixedWidth/>}
           <b>{props.children}</b>
-          {props.iconEnd && <FontAwesomeIcon icon={props.iconEnd} style={{ marginLeft: props.children ? '.5rem' : undefined }} />}
+          {props.iconEnd && <FontAwesomeIcon icon={props.iconEnd} style={{marginLeft: props.children ? '.5rem' : undefined}} fixedWidth/>}
         </BaseUIButton>
       </Tooltip>
       <Block display='inline' marginRight={props.marginRight ? theme.sizing.scale400 : 0} />

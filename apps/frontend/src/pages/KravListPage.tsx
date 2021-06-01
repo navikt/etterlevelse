@@ -1,19 +1,19 @@
-import { Block } from 'baseui/block'
-import { H2, LabelSmall } from 'baseui/typography'
-import React, { useState } from 'react'
+import {Block} from 'baseui/block'
+import {H2, LabelSmall} from 'baseui/typography'
+import React, {useState} from 'react'
 import Button from '../components/common/Button'
-import { theme } from '../util'
+import {theme} from '../util'
 import RouteLink from '../components/common/RouteLink'
-import { user } from '../services/User'
-import { KravTable } from '../components/common/KravFilterTable'
-import { useKravFilter } from '../api/KravGraphQLApi'
-import { Button as BButton, KIND } from 'baseui/button'
-import { ButtonGroup } from 'baseui/button-group'
-import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
-import { PLACEMENT } from 'baseui/tooltip'
-import { StatefulMenu } from 'baseui/menu'
-import { StatefulPopover } from 'baseui/popover'
-import { maxPageWidth } from '../util/theme'
+import {user} from '../services/User'
+import {KravTable} from '../components/common/KravFilterTable'
+import {useKravFilter} from '../api/KravGraphQLApi'
+import {Button as BButton, KIND} from 'baseui/button'
+import {ButtonGroup} from 'baseui/button-group'
+import {faChevronDown} from '@fortawesome/free-solid-svg-icons'
+import {PLACEMENT} from 'baseui/tooltip'
+import {StatefulMenu} from 'baseui/menu'
+import {StatefulPopover} from 'baseui/popover'
+import {maxPageWidth} from '../util/theme'
 
 enum Mode {
   siste,
@@ -43,9 +43,9 @@ export const KravListPage = () => {
 
           <Block>
             {user.isKraveier() &&
-              <RouteLink hideUnderline href={'/krav/ny'} >
-                <Button size='compact'>Legg til nytt krav</Button>
-              </RouteLink>}
+            <RouteLink hideUnderline href={'/krav/ny'}>
+              <Button size='compact'>Legg til nytt krav</Button>
+            </RouteLink>}
           </Block>
         </Block>
         <Block display='flex' justifyContent='space-between' marginTop={theme.sizing.scale400} marginBottom={theme.sizing.scale800}>
@@ -62,16 +62,16 @@ export const KravListPage = () => {
 
           <Block display='flex'>
             <StatefulPopover
-              content={({ close }) => (
+              content={({close}) => (
                 <StatefulMenu
-                  items={[5, 10, 20, 50, 100].map(i => ({ label: i, }))}
-                  onItemSelect={({ item }) => {
+                  items={[5, 10, 20, 50, 100].map(i => ({label: i,}))}
+                  onItemSelect={({item}) => {
                     setPageSize(item.label)
                     close()
                   }}
                   overrides={{
                     List: {
-                      style: { height: '150px', width: '100px' },
+                      style: {height: '150px', width: '100px'},
                     },
                   }}
                 />
@@ -90,7 +90,7 @@ export const KravListPage = () => {
           </Block>
         </Block>
 
-        <KravTable queryResult={res} />
+        <KravTable queryResult={res}/>
       </Block>
     </Block>
   )
