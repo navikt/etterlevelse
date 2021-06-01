@@ -8,7 +8,7 @@ import RouteLink from '../common/RouteLink'
 import { behandlingName, useBehandling } from '../../api/BehandlingApi'
 import { Spinner } from '../common/Spinner'
 import { Label } from '../common/PropertyLabel'
-import { H2, Paragraph2 } from 'baseui/typography'
+import { H2, Paragraph2, Paragraph4 } from 'baseui/typography'
 import { Teams } from '../common/TeamName'
 import { Card } from 'baseui/card'
 import { ettlevColors } from '../../util/theme'
@@ -19,6 +19,7 @@ import { FormikProps } from 'formik'
 import { EditEtterlevelse } from './EditEtterlevelse'
 import { useHistory } from 'react-router-dom'
 import { KIND, SIZE } from 'baseui/button'
+import { borderRadius } from '../common/Style'
 
 
 const formatDate = (date?: string) => date && moment(date).format('ll')
@@ -63,10 +64,50 @@ export const ViewEtterlevelse = ({ etterlevelse, setEtterlevelse, loading, viewM
 
         <Block display='flex' flex='1' justifyContent='flex-end' marginTop={theme.sizing.scale950}>
           <Block>
-            <Card>
-              <Paragraph2 $style={{ fontWeight: 900, lineHeight: '22px', color: ettlevColors.green600 }}>
-                Status: {etterlevelseStatus(etterlevelse.status)}
-              </Paragraph2>
+            <Card overrides={{
+              Contents: {
+                style: {
+                  marginRight: '8px',
+                  marginLeft: '8px',
+                  marginTop: '8px',
+                  marginBottom: '8px',
+                }
+              },
+              Body: {
+                style: {
+                  marginRight: '8px',
+                  marginLeft: '8px',
+                  marginTop: '8px',
+                  marginBottom: '8px',
+                }
+              },
+              Root: {
+                style: {
+                  // Did not use border, margin and border radius to remove warnings.
+                  backgroundColor: ettlevColors.success50,
+                  borderRightColor: ettlevColors.success400,
+                  borderLeftColor: ettlevColors.success400,
+                  borderTopColor: ettlevColors.success400,
+                  borderBottomColor: ettlevColors.success400,
+                  borderLeftWidth: '1px',
+                  borderRightWidth: '1px',
+                  borderTopWidth: '1px',
+                  borderBottomWidth: '1px',
+                  borderLeftStyle: 'solid',
+                  borderRightStyle: 'solid',
+                  borderTopStyle: 'solid',
+                  borderBottomStyle: 'solid',
+                  borderBottomLeftRadius: '4px',
+                  borderBottomRightRadius: '4px',
+                  borderTopLeftRadius: '4px',
+                  borderTopRightRadius: '4px',
+                }
+              }
+            }}
+            >
+              <Paragraph4 $style={{ color: ettlevColors.navMorkGra, margin: '0px' }}>
+                Kravet er: {etterlevelseStatus(etterlevelse.status)}
+              </Paragraph4>
             </Card>
           </Block>
         </Block>
