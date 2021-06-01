@@ -6,11 +6,12 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faExternalLinkAlt} from '@fortawesome/free-solid-svg-icons'
 import {Block} from 'baseui/block'
 import {theme} from '../../util'
+import { ettlevColors } from '../../util/theme'
 
 export const TeamName = (props: {id: string, link?: boolean}) => {
   const [name] = useTeam()(props.id)
   return props.link ?
-    <StyledLink target="_blank" rel="noopener noreferrer" href={teamKatTeamLink(props.id)}>{name} <FontAwesomeIcon size='xs' icon={faExternalLinkAlt}/></StyledLink> :
+    <StyledLink target="_blank" rel="noopener noreferrer" href={teamKatTeamLink(props.id)} $style={{color: ettlevColors.green600}}>{name} <FontAwesomeIcon size='xs' icon={faExternalLinkAlt}/></StyledLink> :
     <>{name}</>
 }
 

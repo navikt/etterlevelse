@@ -44,7 +44,8 @@ export const ViewEtterlevelse = ({ etterlevelse, setEtterlevelse, loading, viewM
                 style={{
                   fontSize: '21px',
                   fontWeight: 700,
-                  lineHeight: '40px'
+                  lineHeight: '40px',
+                  color: ettlevColors.green600
                 }}
               >
                 {behandlingName(behandling)}
