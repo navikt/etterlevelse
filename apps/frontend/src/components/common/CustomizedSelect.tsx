@@ -6,7 +6,11 @@ import { navChevronDownIcon } from '../Images'
 const customOverrides: SelectOverrides = {
   ControlContainer: {
     style: {
-      borderColor: ettlevColors.grey200,
+      borderRightColor: ettlevColors.grey200,
+      borderLeftColor: ettlevColors.grey200,
+      borderTopColor: ettlevColors.grey200,
+      borderBottomColor: ettlevColors.grey200,
+      
       boxShadow: '0 2px 2px 0 rgba(0, 0, 0, .12), 0 2px 1px -1px rgba(0, 0, 0, .2)',
       ':hover': {
         backgroundColor: ettlevColors.green50,
