@@ -1,16 +1,18 @@
-import {Block} from 'baseui/block'
-import {theme} from '../../util'
-import {datajegerSlackLink, documentationLink, githubRepo} from '../../util/config'
+import { Block } from 'baseui/block'
+import { theme } from '../../util'
+import { datajegerSlackLink, documentationLink, githubRepo } from '../../util/config'
 import SlackLogo from '../../resources/Slack_Monochrome_White.svg'
-import {LabelMedium} from 'baseui/typography'
-import {StatefulTooltip} from 'baseui/tooltip'
-import {env} from '../../util/env'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faCodeBranch} from '@fortawesome/free-solid-svg-icons'
+import { LabelMedium } from 'baseui/typography'
+import { StatefulTooltip } from 'baseui/tooltip'
+import { env } from '../../util/env'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCodeBranch } from '@fortawesome/free-solid-svg-icons'
 import * as React from 'react'
-import {ExternalLink} from '../common/RouteLink'
+import { ExternalLink } from '../common/RouteLink'
 import ToTopCircle from '../../resources/ToTopCircle.svg'
-import {ettlevColors, maxPageWidth} from '../../util/theme'
+import { ettlevColors, maxPageWidth } from '../../util/theme'
+import Button from '../common/Button'
+import { KIND } from 'baseui/button'
 
 
 export const Footer = () => {
@@ -43,9 +45,9 @@ export const Footer = () => {
           >
             <Block width='100%' display={['block', 'block', 'flex', 'flex']} justifyContent={['space-around']} alignItems='center' overrides={{ Block: { props: { role: 'navigation', 'aria-label': 'Ekstern lenker' } } }}>
               <ExternalLink href={datajegerSlackLink} hideUnderline>
-                <Block display="flex"  alignItems='center'>
+                <Block display="flex" alignItems='center'>
                   <Block position='relative' display='flex' top={'1px'}>
-                  <img src={SlackLogo} width="60px" alt="slack logo" />
+                    <img src={SlackLogo} width="60px" alt="slack logo" />
                   </Block>
                   <LabelMedium color='#F8F8F8'>#etterlevelse </LabelMedium>
                 </Block>
@@ -62,7 +64,9 @@ export const Footer = () => {
           </Block>
 
           {showButtonToTop && (<Block position='relative' display='flex' justifyContent='flex-end' $style={{ cursor: 'pointer', top: '-50px' }} onClick={() => window.scrollTo(0, 0)}>
-            <img src={ToTopCircle} alt='Til toppen av siden' />
+            <Button kind={KIND.tertiary} $style={{':hover': {backgroundColor: 'transparent'}}}>
+              <img src={ToTopCircle} alt='Til toppen av siden' />
+            </Button>
           </Block>)}
 
         </Block>
