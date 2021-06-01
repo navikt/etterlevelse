@@ -113,7 +113,7 @@ const UserInfo = () => {
           fontSize: '24px',
           lineHeight: '32px'
         }}>{user.getName()}</Block>
-        <Block>{user.isAdmin() ? 'Admin' : user.isKraveier() ? 'Kraveier' : 'Etterlever'}</Block>
+        <Block>{user.isAdmin() ? 'Admin' : user.isKraveier() ? 'Kraveier' : user.canWrite() ? 'Etterlever' : 'Gjest'}</Block>
       </Block>
       <Block alignSelf={'flex-end'} marginLeft={theme.sizing.scale800}>
         <StyledLink href={`/logout?redirect_uri=${frontpage}`}>Logg ut</StyledLink>

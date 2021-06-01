@@ -59,7 +59,7 @@ public class KravController {
     @GetMapping
     public ResponseEntity<RestResponsePage<KravResponse>> getAll(PageParameters pageParameters) {
         log.info("Get all Krav");
-        Page<Krav> page = service.getAll(pageParameters);
+        Page<Krav> page = service.getAll(pageParameters.createPage());
         return ResponseEntity.ok(new RestResponsePage<>(page).convert(Krav::toResponse));
     }
 

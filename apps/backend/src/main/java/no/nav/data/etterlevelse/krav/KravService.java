@@ -2,7 +2,6 @@ package no.nav.data.etterlevelse.krav;
 
 import lombok.extern.slf4j.Slf4j;
 import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
-import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.storage.domain.GenericStorage;
 import no.nav.data.common.validator.Validator;
 import no.nav.data.etterlevelse.common.domain.DomainService;
@@ -35,8 +34,8 @@ public class KravService extends DomainService<Krav> {
         super(Krav.class);
     }
 
-    public Page<Krav> getAll(PageParameters pageParameters) {
-        Pageable page = pageParameters.createPage();
+    @Override
+    public Page<Krav> getAll(Pageable page) {
         Page<GenericStorage> all;
         if (isKravEier()) {
             all = kravRepo.findAll(page);
