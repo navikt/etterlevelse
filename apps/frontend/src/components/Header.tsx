@@ -139,11 +139,15 @@ const Menu = (props: {pages: MenuItem[][], title: React.ReactNode, icon?: IconDe
   return (
     <Popover
       autoFocus
+      returnFocus
+      focusLock
       isOpen={open}
       showArrow
+      onEsc={() => setOpen(false)}
       onClickOutside={() => setOpen(false)}
       overrides={{
-        Arrow: {style: {backgroundColor: ettlevColors.white}}
+        Arrow: {style: {backgroundColor: ettlevColors.white}},
+        Body: {style: {margin: theme.sizing.scale900}}
       }}
       content={
         <Block padding={theme.sizing.scale900} backgroundColor={ettlevColors.white} display={'flex'} flexDirection={'column'}>
