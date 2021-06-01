@@ -9,8 +9,8 @@ export const Portrait = (props: {ident: string, size?: string}) => {
   const [image, setImage] = React.useState(personImageLink(props.ident))
   const size = props.size || '42px'
   return (
-    <Block>
-      {loading && <Block width={size} height={size}><Spinner size='100%'/></Block>}
+    <Block width={size} height={size}>
+      {loading && <Spinner size='100%'/>}
       <img
         onLoad={() => setLoading(false)}
         onError={() => {
@@ -20,8 +20,8 @@ export const Portrait = (props: {ident: string, size?: string}) => {
         src={image}
         alt=''
         style={{
-          width: loading ? 0 : size,
-          height: loading ? 0 : size,
+          width: loading ? 0 : '100%',
+          height: loading ? 0 : '100%',
           borderRadius: '100%'
         }}
       />
