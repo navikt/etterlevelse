@@ -208,7 +208,7 @@ const KravTable = (props: {behandling: Behandling}) => {
 }
 
 const EtterlevelseModal = (props: {id?: string}) => {
-  const [etterlevelse] = useEtterlevelse(props.id)
+  const [etterlevelse, setEtterlevelse] = useEtterlevelse(props.id)
   if (!etterlevelse) return <Spinner size={theme.sizing.scale800}/>
   return <>
     <ModalHeader>
@@ -217,7 +217,7 @@ const EtterlevelseModal = (props: {id?: string}) => {
       </ObjectLink>
     </ModalHeader>
     <ModalBody>
-      <ViewEtterlevelse etterlevelse={etterlevelse}/>
+      <ViewEtterlevelse etterlevelse={etterlevelse} setEtterlevelse={setEtterlevelse} viewMode/>
     </ModalBody>
   </>
 }

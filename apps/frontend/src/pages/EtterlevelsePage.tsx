@@ -47,8 +47,8 @@ export const EtterlevelsePage = () => {
   const loading = !edit && !etterlevelse
 
   useEffect(() => {
-    etterlevelse &&  getKravByKravNummer(etterlevelse?.kravNummer, etterlevelse?.kravVersjon).then(setKrav)
-  },[etterlevelse])
+    etterlevelse && getKravByKravNummer(etterlevelse?.kravNummer, etterlevelse?.kravVersjon).then(setKrav)
+  }, [etterlevelse])
 
   return (
     <Block width='100%' overrides={{ Block: { props: { role: 'main' } } }}>
@@ -66,6 +66,7 @@ export const EtterlevelsePage = () => {
                     </RouteLink>
                   </Block>
 
+                  {/* 
                   <Block flex='1' display={['none', 'none', 'none', 'none', 'flex', 'flex']} justifyContent='flex-end'>
                     {etterlevelse?.id && user.canWrite() && <DeleteItem fun={() => deleteEtterlevelse(etterlevelse.id)} redirect={'/etterlevelse'} />}
                     {((etterlevelse?.id && user.canWrite())) &&
@@ -91,7 +92,8 @@ export const EtterlevelsePage = () => {
                         Lagre
                       </Button>
                     }
-                  </Block>
+                  </Block> 
+                  */}
                 </Block>
               </Block>
             </Block>
@@ -120,9 +122,9 @@ export const EtterlevelsePage = () => {
 
       <Block display='flex' width='calc(100% - 80px)' justifyContent='center' paddingLeft='40px' paddingRight='40px'>
         <Block maxWidth={pageWidth} width='100%'>
-          {!edit && etterlevelse && !loading &&
-            <ViewEtterlevelse etterlevelse={etterlevelse} />}
-          {
+          { etterlevelse && !loading &&
+            <ViewEtterlevelse etterlevelse={etterlevelse} setEtterlevelse={setEtterlevelse} loading={loading}/>}
+          {/* {
             edit && etterlevelse &&
 
             <EditEtterlevelse etterlevelse={etterlevelse} formRef={formRef} close={k => {
@@ -135,7 +137,7 @@ export const EtterlevelsePage = () => {
               setEdit(false)
             }} />
 
-          }
+          } */}
         </Block>
       </Block>
     </Block >

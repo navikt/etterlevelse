@@ -1,6 +1,6 @@
 import { Etterlevelse } from '../../constants'
 import { Block } from 'baseui/block'
-import React from 'react'
+import React, { useRef, useState } from 'react'
 import { etterlevelseStatus } from '../../pages/EtterlevelsePage'
 import { theme } from '../../util'
 import moment from 'moment'
@@ -12,13 +12,23 @@ import { H2, Paragraph2 } from 'baseui/typography'
 import { Teams } from '../common/TeamName'
 import { Card } from 'baseui/card'
 import { ettlevColors } from '../../util/theme'
-import { ThemeProvider } from 'baseui'
-import { bokEtterlevelseIcon } from '../Images'
+import { bokEtterlevelseIcon, editSecondaryIcon } from '../Images'
+import { user } from '../../services/User'
+import Button from '../common/Button'
+import { FormikProps } from 'formik'
+import { EditEtterlevelse } from './EditEtterlevelse'
+import { useHistory } from 'react-router-dom'
+import { KIND, SIZE } from 'baseui/button'
+
 
 const formatDate = (date?: string) => date && moment(date).format('ll')
 
-export const ViewEtterlevelse = ({ etterlevelse }: { etterlevelse: Etterlevelse }) => {
+export const ViewEtterlevelse = ({ etterlevelse, setEtterlevelse, loading, viewMode }: { etterlevelse: Etterlevelse, setEtterlevelse: Function, loading?: boolean, viewMode?: boolean }) => {
   const [behandling] = useBehandling(etterlevelse.behandlingId)
+  const formRef = useRef<FormikProps<any>>()
+  const [edit, setEdit] = useState(etterlevelse && !etterlevelse.id)
+  const history = useHistory()
+
 
   return (
     <Block width='100%' marginTop='48px'>
@@ -61,25 +71,70 @@ export const ViewEtterlevelse = ({ etterlevelse }: { etterlevelse: Etterlevelse 
         </Block>
       </Block>
 
-      {etterlevelse.begrunnelse &&
-        <Block marginTop={theme.sizing.scale1400}>
+      <Block marginTop={theme.sizing.scale1400}>
+        <Block display='flex'>
           <H2>
             Dokumetasjon
-          </H2>
-          <Card>
-            <Block display='flex' width='100%'>
-              <Block>
-                <Label title='' markdown={etterlevelse.begrunnelse} />
-              </Block>
-              <Block display='flex' flex='1' justifyContent='flex-end'>
-                <Block marginLeft={theme.sizing.scale1600}>
-                  <img src={bokEtterlevelseIcon} alt='dokumentasjons ikon' />
-                </Block>
+           </H2>
+          {!viewMode &&
+            <Block display='flex' flex='1' justifyContent='flex-end'>
+              <Block flex='1' display={['none', 'none', 'none', 'none', 'flex', 'flex']} justifyContent='flex-end' alignItems='center'>
+                {((etterlevelse?.id && user.canWrite())) &&
+                  <Block>
+                    <Button
+                      startEnhancer={!edit ? <img src={editSecondaryIcon} alt='edit' /> : undefined}
+                      size={SIZE.compact}
+                      kind={KIND.secondary}
+                      onClick={() => setEdit(!edit)}
+                      marginLeft
+                    >
+                      {edit ? 'Avbryt' : 'Rediger dokumentasjon'}
+                    </Button>
+                  </Block>
+                }
+                {edit &&
+                  <Block>
+                    <Button
+                      size={SIZE.compact}
+                      kind={KIND.secondary}
+                      onClick={() => !formRef.current?.isSubmitting && formRef.current?.submitForm()}
+                      marginLeft
+                    >
+                      Lagre
+                </Button>
+                  </Block>
+                }
               </Block>
             </Block>
-          </Card>
+          }
         </Block>
-      }
+        {!edit && etterlevelse && !loading && <Card>
+          <Block display='flex' width='100%'>
+            <Block>
+              <Label title='' markdown={etterlevelse.begrunnelse} />
+            </Block>
+            <Block display='flex' flex='1' justifyContent='flex-end'>
+              <Block marginLeft={theme.sizing.scale1600}>
+                <img src={bokEtterlevelseIcon} alt='dokumentasjons ikon' />
+              </Block>
+            </Block>
+          </Block>
+        </Card>}
+        {
+          edit && etterlevelse &&
+
+          <EditEtterlevelse documentEdit lockBehandlingAndKrav etterlevelse={etterlevelse} formRef={formRef} close={k => {
+            if (k) {
+              setEtterlevelse(k)
+              if (k.id !== etterlevelse.id) {
+                history.push(`/etterlevelse/${k.id}`)
+              }
+            }
+            setEdit(false)
+          }} />
+
+        }
+      </Block>
 
       {/* <Block height={theme.sizing.scale600} />
 
@@ -93,6 +148,6 @@ export const ViewEtterlevelse = ({ etterlevelse }: { etterlevelse: Etterlevelse 
       <Block height={theme.sizing.scale600} /> */}
 
 
-    </Block>
+    </Block >
   )
 }

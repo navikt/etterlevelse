@@ -19,9 +19,10 @@ type EditEttlevProps = {
   close: (k?: Etterlevelse) => void
   formRef?: React.Ref<any>
   lockBehandlingAndKrav?: boolean
+  documentEdit?: boolean
 }
 
-export const EditEtterlevelse = ({ etterlevelse, close, formRef, lockBehandlingAndKrav }: EditEttlevProps) => {
+export const EditEtterlevelse = ({ etterlevelse, close, formRef, lockBehandlingAndKrav, documentEdit }: EditEttlevProps) => {
 
   const submit = async (etterlevelse: Etterlevelse) => {
     if (etterlevelse.id) {
@@ -39,6 +40,7 @@ export const EditEtterlevelse = ({ etterlevelse, close, formRef, lockBehandlingA
       innerRef={formRef}
     >{({ values, isSubmitting, submitForm }: FormikProps<Etterlevelse>) => (
       <Form>
+
         <Block>
 
           {!lockBehandlingAndKrav && <>
@@ -46,12 +48,17 @@ export const EditEtterlevelse = ({ etterlevelse, close, formRef, lockBehandlingA
             <SearchKrav kravNummer={values.kravNummer} kravVersjon={values.kravVersjon} />
           </>}
 
-          <Block height={theme.sizing.scale600} />
+          {!documentEdit &&
+            <>
+              <Block height={theme.sizing.scale600} />
 
-          <BoolField label='Etterleves' name='etterleves' />
-          <TextAreaField label='Begrunnelse' name='begrunnelse' markdown />
+              <BoolField label='Etterleves' name='etterleves' />
+            </>
+          }
 
-          {/* 
+          <TextAreaField label='Dokumentasjon' name='begrunnelse' markdown />
+
+          {/*           
           <MultiInputField label='Dokumentasjon' name='dokumentasjon'/>
 
           <Block height={theme.sizing.scale600}/>
@@ -59,19 +66,20 @@ export const EditEtterlevelse = ({ etterlevelse, close, formRef, lockBehandlingA
           <DateField label='Frist for ferdigstillelse' name='fristForFerdigstillelse'/>
 
           <Block height={theme.sizing.scale600}/> 
-          */}
+         */}
 
-          <OptionField label='Status' name='status' options={Object.values(EtterlevelseStatus).map(id => ({ id, label: etterlevelseStatus(id) }))} />
+          {!documentEdit && <OptionField label='Status' name='status' options={Object.values(EtterlevelseStatus).map(id => ({ id, label: etterlevelseStatus(id) }))} />}
 
         </Block>
 
-        <Block display='flex' justifyContent='flex-end'>
+        {!documentEdit && <Block display='flex' justifyContent='flex-end'>
           <Button type='button' kind='secondary' marginRight onClick={close}>Avbryt</Button>
           <Button type='button' disabled={isSubmitting} onClick={submitForm}>Lagre</Button>
-        </Block>
+        </Block>}
       </Form>
-    )}
-    </Formik>
+    )
+      }
+    </Formik >
   )
 }
 
