@@ -43,12 +43,10 @@ const LoggedInHeader = () => {
 
   const roller = (
     <Block>
-      <Block display={'flex'}>
-        <Button size={'mini'} kind={'underline-hover'} onClick={() => setViewRoller(!viewRoller)} icon={viewRoller ? faChevronUp : faChevronDown}>
-          Endre aktive roller
-        </Button>
-      </Block>
-      <Block display={viewRoller ? 'block' : 'none'}>
+      <Button size={'mini'} kind={'underline-hover'} onClick={() => setViewRoller(!viewRoller)} icon={viewRoller ? faChevronUp : faChevronDown}>
+        Endre aktive roller
+      </Button>
+      <Block display={viewRoller ? 'block' : 'none'} marginTop={theme.sizing.scale200}>
         {user.getAvailableGroups().map(g =>
           <Checkbox key={g.group} checked={user.hasGroup(g.group)} checkmarkType={'toggle_round'}
                     onChange={e => user.toggleGroup(g.group, (e.target as HTMLInputElement).checked)}
@@ -86,22 +84,20 @@ const LoggedInHeader = () => {
       <Block width={theme.sizing.scale400}/>
 
       <Menu icon={faBars} pages={[
-        [
-          {label: <HeadingXLarge marginTop={0} marginBottom={theme.sizing.scale400}>Støtte til etterlevelse</HeadingXLarge>},
-          {label: 'Forsiden', href: '/', icon: husIcon},
-          {label: 'Dokumentere etterlevelse', href: '/behandlinger', icon: akrPennIcon},
-          {label: 'Status i organisasjonen', href: '/status', icon: grafIcon},
-          {label: 'Les kravene', href: '/tema', icon: paragrafIcon}
-        ]
-      ]} title={'Meny'}/>
+        [{label: <HeadingXLarge marginTop={0} marginBottom={theme.sizing.scale400}>Støtte til etterlevelse</HeadingXLarge>}],
+        [{label: 'Forsiden', href: '/', icon: husIcon}],
+        [{label: 'Dokumentere etterlevelse', href: '/behandlinger', icon: akrPennIcon}],
+        [{label: 'Status i organisasjonen', href: '/status', icon: grafIcon}],
+        [{label: 'Les kravene', href: '/tema', icon: paragrafIcon}]
+      ]} compact title={'Meny'}/>
 
     </Block>
   )
 }
 
-const divider =
-  <Block minHeight={'26px'} display={'flex'} flexDirection={'column'} justifyContent={'center'}>
-    <Block $style={{borderBottom: '1px solid ' + ettlevColors.green100}} width={'100%'}/>
+const Divider = (props: {compact?: boolean}) =>
+  <Block minHeight={props.compact ? '5px' : '20px'} display={'flex'} flexDirection={'column'} justifyContent={'center'}>
+    <Block $style={{borderBottom: '1px solid ' + ettlevColors.green50}} width={'100%'}/>
   </Block>
 
 const UserInfo = () => {
@@ -128,12 +124,12 @@ const UserInfo = () => {
 
 type MenuItem = {label: React.ReactNode, href?: string, disabled?: boolean, icon?: string}
 
-const Menu = (props: {pages: MenuItem[][], title: React.ReactNode, icon?: IconDefinition, kind?: ButtonKind}) => {
+const Menu = (props: {pages: MenuItem[][], title: React.ReactNode, icon?: IconDefinition, kind?: ButtonKind, compact?: boolean}) => {
   const [open, setOpen] = useState(false)
 
   const allPages = props.pages.length ? props.pages.filter(p => p.length).reduce((previousValue, currentValue) =>
     [...(previousValue as MenuItem[] || []),
-      {label: divider},
+      {label: <Divider compact={props.compact}/>},
       ...currentValue as MenuItem[]]) : []
 
   return (
@@ -154,13 +150,16 @@ const Menu = (props: {pages: MenuItem[][], title: React.ReactNode, icon?: IconDe
           {allPages.map((p, i) => {
               const item = !!p.href && !p.disabled ?
                 <RouteLink href={p.href} onClick={() => setOpen(false)}>
-                  <Block display={'flex'}>
-                    {p.icon && <Block marginRight={theme.sizing.scale400}><img src={p.icon} alt={'link ikon'} aria-hidden/></Block>}
+                  <Block display={'flex'} alignItems={'center'}>
+                    {p.icon && <Block marginRight={theme.sizing.scale400}>
+                      <img src={p.icon} alt={'link ikon'} aria-hidden/>
+                    </Block>}
                     <Block>{p.label}</Block>
                   </Block>
                 </RouteLink> :
-                <Block alignSelf={'center'} $style={{opacity: p.disabled ? .6 : 1}}>{p.label}</Block>
-              return <Block key={i} marginTop={theme.sizing.scale100} marginBottom={theme.sizing.scale100}>
+                <Block $style={{opacity: p.disabled ? .6 : 1}}>{p.label}</Block>
+              return <Block key={i}
+                            marginTop={theme.sizing.scale100} marginBottom={theme.sizing.scale100}>
                 {item}
               </Block>
             }
