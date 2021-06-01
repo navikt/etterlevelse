@@ -32,6 +32,7 @@ export const ettlevColors = {
   error400: '#AE5235',
   error50: '#F6EAE6',
   textAreaBorder: '#E0E0E0',
+  navMorkGra: '#262626',
 }
 
 export const primitives: ThemePrimitives & {primary150: string, primary350: string} = {
@@ -103,7 +104,7 @@ const overrides: RecursivePartial<Theme> = {
   },
   typography: {
     // Increase weight 500->600 on bold texts
-    font100: {fontWeight: 400, fontSize: '14px', lineHeight: '20px'},
+    font100: {fontWeight: 400, fontSize: '14px', lineHeight: '20px'}, //P4
     font150: {fontWeight: 500, fontSize: '14px', lineHeight: '20px'}, // mini button
     font250: {fontWeight: 700, fontSize: '18px', lineHeight: '24px'}, //compact button, label3
     font300: {fontWeight: 400, fontSize: '18px', lineHeight: '24px'}, //P2
