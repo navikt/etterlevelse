@@ -12,6 +12,7 @@ import {borderRadius, borderStyle, borderWidth, paddingAll} from './Style'
 import {ettlevColors} from '../../util/theme'
 import {faExternalLinkAlt} from '@fortawesome/free-solid-svg-icons'
 import {ExternalLink} from './RouteLink'
+import _ from 'lodash'
 
 
 interface ButtonProps {
@@ -87,7 +88,8 @@ const Button = (props: ButtonProps) => {
     }
   } : {}
 
-  const overrides: Override<any> = {
+
+  const customOverrides: Override<any> = {
     style: {
       ...(props.kind === 'outline' ? outlineOverride : {}),
       ...(props.kind === 'underline-hover' ? underlineOverride : {}),
@@ -95,9 +97,11 @@ const Button = (props: ButtonProps) => {
       ...(props.hidePadding ? paddingAll('0') : {}),
       ...(props.inline ? {paddingTop: theme.sizing.scale100, paddingBottom: theme.sizing.scale100} : {}),
       ...(props.$style || {}),
-      ...(boxShadow.style)
     }
   }
+
+  const overrides = _.merge(customOverrides, boxShadow)
+
   return (
     <>
       <Block display='inline' marginLeft={props.marginLeft ? theme.sizing.scale400 : 0}/>
