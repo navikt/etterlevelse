@@ -35,7 +35,7 @@ export const ViewEtterlevelse = ({ etterlevelse, setEtterlevelse, loading, viewM
       <Block display='flex' width='100%'>
         <Block>
           <H2>
-            Kravet etterlevels av
+            Kravet etterleves av
       </H2>
           {behandling ?
             <Block>
