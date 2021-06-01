@@ -21,6 +21,7 @@ import navChevronDownIcon from '../resources/icons/nav-chevron-down.svg'
 import plusIcon from '../resources/icons/plus.svg'
 import deleteIcon from '../resources/icons/delete.svg'
 import editIcon from '../resources/icons/edit.svg'
+import editSecondaryIcon from '../resources/icons/edit-secondary.svg'
 import searchIcon from '../resources/icons/search-icon.svg'
 import questionmarkIcon from '../resources/icons/questionmark.svg'
 import questionmarkHoverIcon from '../resources/icons/questionmark-hover.svg'
@@ -51,6 +52,7 @@ export {
   plusIcon,
   deleteIcon,
   editIcon,
+  editSecondaryIcon,
   searchIcon,
   questionmarkIcon,
   questionmarkHoverIcon,
