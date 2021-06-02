@@ -1,25 +1,24 @@
-import { Etterlevelse } from '../../constants'
-import { Block } from 'baseui/block'
-import React, { useRef, useState } from 'react'
-import { etterlevelseStatus } from '../../pages/EtterlevelsePage'
-import { theme } from '../../util'
+import {Etterlevelse} from '../../constants'
+import {Block} from 'baseui/block'
+import React, {useRef, useState} from 'react'
+import {etterlevelseStatus} from '../../pages/EtterlevelsePage'
+import {theme} from '../../util'
 import moment from 'moment'
 import RouteLink from '../common/RouteLink'
-import { behandlingName, useBehandling } from '../../api/BehandlingApi'
-import { Spinner } from '../common/Spinner'
-import { Label } from '../common/PropertyLabel'
-import { H2, Paragraph2, Paragraph4 } from 'baseui/typography'
-import { Teams } from '../common/TeamName'
-import { Card } from 'baseui/card'
-import { ettlevColors } from '../../util/theme'
-import { bokEtterlevelseIcon, editSecondaryIcon } from '../Images'
-import { user } from '../../services/User'
+import {behandlingName, useBehandling} from '../../api/BehandlingApi'
+import {Spinner} from '../common/Spinner'
+import {Label} from '../common/PropertyLabel'
+import {H2, Paragraph2, Paragraph4} from 'baseui/typography'
+import {Teams} from '../common/TeamName'
+import {Card} from 'baseui/card'
+import {ettlevColors} from '../../util/theme'
+import {bokEtterlevelseIcon, editSecondaryIcon} from '../Images'
+import {user} from '../../services/User'
 import Button from '../common/Button'
-import { FormikProps } from 'formik'
-import { EditEtterlevelse } from './EditEtterlevelse'
-import { useHistory } from 'react-router-dom'
-import { KIND, SIZE } from 'baseui/button'
-import { borderRadius } from '../common/Style'
+import {FormikProps} from 'formik'
+import {EditEtterlevelse} from './EditEtterlevelse'
+import {useHistory} from 'react-router-dom'
+import {KIND, SIZE} from 'baseui/button'
 
 
 const formatDate = (date?: string) => date && moment(date).format('ll')
@@ -52,7 +51,7 @@ export const ViewEtterlevelse = ({ etterlevelse, setEtterlevelse, loading, viewM
                 {behandlingName(behandling)}
               </RouteLink>
               <Paragraph2 marginTop='2px'>
-                Overordnet behandlingsaktivitet
+                {behandling.overordnetFormaal.shortName}
             </Paragraph2>
               <Block marginTop={theme.sizing.scale850}>
                 <Teams teams={behandling.teams} link list />
