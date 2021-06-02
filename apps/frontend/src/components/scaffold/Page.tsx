@@ -7,13 +7,15 @@ import React from 'react'
 
 const padding = '100px'
 
-export const Page = ({backUrl, headerOverlap, headerBackgroundColor, backgroundColor, wideMain, children, header}: {
-  backUrl: string,
+export const Page = ({backUrl, headerOverlap, headerBackgroundColor, backgroundColor, wideMain, rawMain, children, header}: {
+  backUrl?: string,
   headerOverlap?: string,
   headerBackgroundColor: string
   backgroundColor: string
   wideMain?: boolean
-  header: React.ReactNode, children: React.ReactNode
+  rawMain?: boolean
+  header: React.ReactNode,
+  children: React.ReactNode,
 }) => {
   return (
     <Block width='100%' overrides={{Block: {props: {role: 'main'}}}} backgroundColor={backgroundColor} paddingBottom={'200px'}>
@@ -24,10 +26,10 @@ export const Page = ({backUrl, headerOverlap, headerBackgroundColor, backgroundC
         <Block maxWidth={maxPageWidth} width='100%'>
 
           <Block paddingLeft={padding} paddingRight={padding} paddingTop={theme.sizing.scale800}>
-            <RouteLink href={backUrl} hideUnderline>
+            {backUrl && <RouteLink href={backUrl} hideUnderline>
               <Button startEnhancer={<img alt={'Chevron venstre ikon'} src={navChevronRightIcon} style={{transform: 'rotate(180deg)'}}/>} size='compact' kind='underline-hover'
               > Tilbake</Button>
-            </RouteLink>
+            </RouteLink>}
 
             <Block width={'100%'} display={'flex'} justifyContent='center'>
               <Block maxWidth={pageWidth} width={'100%'} display={'flex'} flexDirection={'column'} marginBottom={theme.sizing.scale600}>
@@ -39,16 +41,25 @@ export const Page = ({backUrl, headerOverlap, headerBackgroundColor, backgroundC
       </Block>
 
       <Block display='flex' width='100%' justifyContent='center' marginTop={headerOverlap ? 0 : theme.sizing.scale800}>
-        {!wideMain && <Block maxWidth={pageWidth} width={'100%'}>
-          {children}
-        </Block>}
-        {wideMain && <Block maxWidth={maxPageWidth} width={'100%'}>
-          <Block paddingLeft={padding} paddingRight={padding}>
-            {children}
-          </Block>
-        </Block>}
+        {!wideMain && !rawMain && <Narrow>{children}</Narrow>}
+        {wideMain && !rawMain && <Wide>{children}</Wide>}
+        {rawMain && children}
       </Block>
 
     </Block>
   )
 }
+
+export const Wide = (props: {children: React.ReactNode}) => (
+  <Block maxWidth={maxPageWidth} width={'100%'}>
+    <Block paddingLeft={padding} paddingRight={padding}>
+      {props.children}
+    </Block>
+  </Block>
+)
+
+export const Narrow = (props: {children: React.ReactNode}) => (
+  <Block maxWidth={pageWidth} width={'100%'}>
+    {props.children}
+  </Block>
+)

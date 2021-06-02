@@ -31,11 +31,14 @@ import mailboxPoppingIcon from '../resources/icons/mailbox-popping.svg'
 import sadFolderIcon from '../resources/icons/sad-folder.svg'
 import bamseIcon from '../resources/icons/Bamse.svg'
 import navChevronRightIcon from '../resources/icons/nav-chevron-right.svg'
-import dokEtterlevelseIcon from '../resources/icons/dok-etterlevelse-ikon.svg'
 import bokEtterlevelseIcon from '../resources/icons/bok-etterlevelse-ikon.svg'
 import sokButtonIcon from '../resources/icons/icon_button_search.svg'
-import gavelIcon from '../resources/icons/gavel-icon.svg'
-import akrPennIcon from '../resources/icons/ark-penn-ikon.svg'
+import arrowRightIcon from '../resources/icons/arrow-right.svg'
+import paperPenIconBg from '../resources/icons/with_bg/arkPennBg.svg'
+import gavelIconBg from '../resources/icons/with_bg/gavelBg.svg'
+import grafIconBg from '../resources/icons/with_bg/grafBg.svg'
+import paragrafIconBg from '../resources/icons/with_bg/paragrafBg.svg'
+import arkPennIcon from '../resources/icons/ark-penn-ikon.svg'
 import grafIcon from '../resources/icons/graf-ikon.svg'
 import husIcon from '../resources/icons/hus-ikon.svg'
 import paragrafIcon from '../resources/icons/paragraf-ikon.svg'
@@ -66,15 +69,19 @@ export {
   pageIcon,
   bamseIcon,
   sokButtonIcon,
-  dokEtterlevelseIcon,
   bokEtterlevelseIcon,
-  gavelIcon,
   navChevronRightIcon,
   navChevronDownIcon,
-  akrPennIcon,
+  arkPennIcon,
   grafIcon,
   husIcon,
   paragrafIcon,
+  arrowRightIcon,
+
+  grafIconBg,
+  paperPenIconBg,
+  gavelIconBg,
+  paragrafIconBg,
 }
 
 export const temaBilder: {[id: string]: string} = {

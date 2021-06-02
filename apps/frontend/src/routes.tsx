@@ -16,10 +16,12 @@ import {RelevansPage} from './pages/RelevansPage'
 import {UnderavdelingPage} from './pages/UnderavdelingPage'
 import {TemaPage} from './pages/TemaPage'
 import {LovPage} from './pages/LovPage'
+import {MainPageV2} from './pages/MainPageV2'
 
 const Routes = (): JSX.Element => (
   <Switch>
-    <Route exact path="/" component={MainPage}/>
+    <Route exact path="/old" component={MainPage}/>
+    <Route exact path="/" component={MainPageV2}/>
 
     <Route exact path="/krav" component={KravListPage}/>
     <Route exact path="/krav/:id" component={KravPage}/>

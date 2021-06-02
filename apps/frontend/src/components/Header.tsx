@@ -5,7 +5,7 @@ import {Block} from 'baseui/block'
 import {KIND, SIZE} from 'baseui/button'
 import Button, {ButtonKind} from '../components/common/Button'
 import {Popover} from 'baseui/popover'
-import {useHistory, useLocation} from 'react-router-dom'
+import {useHistory} from 'react-router-dom'
 import {StyledLink} from 'baseui/link'
 import {useQueryParam} from '../util/hooks'
 import {theme} from '../util'
@@ -17,7 +17,7 @@ import {ampli} from '../services/Amplitude'
 import {user} from '../services/User'
 import {writeLog} from '../api/LogApi'
 import MainSearch from './search/MainSearch'
-import {akrPennIcon, grafIcon, husIcon, logo, paragrafIcon} from './Images'
+import {arkPennIcon, grafIcon, husIcon, logo, paragrafIcon} from './Images'
 import {ettlevColors, maxPageWidth} from '../util/theme'
 import {buttonBorderStyle} from './common/Button'
 import {Checkbox} from 'baseui/checkbox'
@@ -25,12 +25,19 @@ import {Portrait} from './common/Portrait'
 import {IconDefinition} from '@fortawesome/fontawesome-svg-core'
 import {faBars, faChevronDown, faChevronUp, faTimes} from '@fortawesome/free-solid-svg-icons'
 import {faUser} from '@fortawesome/free-regular-svg-icons'
+import {History} from 'history'
+
+export const loginUrl = (history: History, path?: string) => {
+  const frontpage = window.location.href.substr(0, window.location.href.length - history.location.pathname.length)
+
+  return `/login?redirect_uri=${frontpage}${path || ''}`
+}
 
 const LoginButton = () => {
   // updates window.location on navigation
-  useLocation()
+  const history = useHistory()
   return (
-    <StyledLink style={{textDecoration: 'none'}} href={`/login?redirect_uri=${window.location.href}`}>
+    <StyledLink style={{textDecoration: 'none'}} href={loginUrl(history)}>
       <Button size={SIZE.compact} kind={KIND.secondary} $style={buttonBorderStyle}>
         <b>Logg inn</b>
       </Button>
@@ -86,7 +93,7 @@ const LoggedInHeader = () => {
       <Menu icon={faBars} pages={[
         [{label: <HeadingXLarge marginTop={0} marginBottom={theme.sizing.scale400}>Støtte til etterlevelse</HeadingXLarge>}],
         [{label: 'Forsiden', href: '/', icon: husIcon}],
-        [{label: 'Dokumentere etterlevelse', href: '/behandlinger', icon: akrPennIcon}],
+        [{label: 'Dokumentere etterlevelse', href: '/behandlinger', icon: arkPennIcon}],
         [{label: 'Status i organisasjonen', href: '/status', icon: grafIcon}],
         [{label: 'Les kravene', href: '/tema', icon: paragrafIcon}]
       ]} compact title={'Meny'}/>

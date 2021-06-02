@@ -7,18 +7,22 @@ import {KIND} from 'baseui/button'
 import {ListName} from '../../services/Codelist'
 import CustomizedLink from "./CustomizedLink";
 import _ from 'lodash'
+import {user} from '../../services/User'
+import {loginUrl} from '../Header'
 
 type RouteLinkProps = {
   href: string,
   hideUnderline?: boolean
   plain?: boolean,
+  requireLogin?: boolean,
 } & any
 
 const RouteLink = (props: RouteLinkProps) => {
-  const {hideUnderline, plain, ...restprops} = props
+  const {hideUnderline, plain, requireLogin, ...restprops} = props
   const history = useHistory()
 
   const onClick = (e: Event) => {
+    if (requireLogin && !user.isLoggedIn()) return
     e.preventDefault()
     history.push(props.href)
     restprops.onClick && restprops.onClick()
@@ -32,8 +36,10 @@ const RouteLink = (props: RouteLinkProps) => {
 
   const style = _.merge(customStyle, props.style)
 
+  const href = !requireLogin || user.isLoggedIn() ? restprops.href : loginUrl(history, restprops.href)
+
   return (
-    <CustomizedLink style={style} {...restprops} onClick={onClick}/>
+    <CustomizedLink style={style} {...restprops} href={href} onClick={onClick}/>
   )
 }
 

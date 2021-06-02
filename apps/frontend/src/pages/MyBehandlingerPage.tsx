@@ -12,7 +12,7 @@ import {gql, useQuery} from '@apollo/client'
 import {ettlevColors, maxPageWidth} from '../util/theme'
 import CustomizedTabs, {CustomizedTab} from '../components/common/CustomizedTabs'
 import {PanelLink} from '../components/common/PanelLink'
-import {bamseIcon, dokEtterlevelseIcon, navChevronRightIcon, searchIcon} from '../components/Images'
+import {bamseIcon, navChevronRightIcon, paperPenIconBg, searchIcon} from '../components/Images'
 import {env} from '../util/env'
 import {InfoBlock2} from '../components/common/InfoBlock'
 import moment from 'moment'
@@ -250,7 +250,7 @@ const BehandlingerPanels = ({behandlinger, loading}: {behandlinger: BehandlingQL
       {behandlinger.map(b => (
         <Block key={b.id} marginBottom={'8px'}>
           <PanelLink
-            panelIcon={<img src={dokEtterlevelseIcon} aria-hidden alt={'Dokumenter behandling ikon'}/>}
+            panelIcon={<img src={paperPenIconBg} aria-hidden alt={'Dokumenter behandling ikon'}/>}
             href={`/behandling/${b.id}`} title={`${b.nummer}: ${b.navn}`} beskrivelse={b.overordnetFormaal.shortName}
             rightBeskrivelse={!!b.sistEndretEtterlevelse ? `Sist endret: ${moment(b.sistEndretEtterlevelse).format('ll')}` : ''}
           />

@@ -5,7 +5,7 @@ import {HeadingLarge, HeadingXXLarge, LabelMedium, ParagraphMedium} from 'baseui
 import {codelist, ListName, TemaCode} from '../services/Codelist'
 import {ObjectLink, urlForObject} from '../components/common/RouteLink'
 import {theme} from '../util'
-import {gavelIcon, TemaBilde} from '../components/Images'
+import {gavelIconBg, TemaBilde} from '../components/Images'
 import {FrontCard} from './MainPage'
 import {Markdown} from '../components/common/Markdown'
 import {ettlevColors} from '../util/theme'
@@ -79,7 +79,7 @@ const TemaSide = ({tema}: {tema: TemaCode}) => {
         {!loading && data?.krav.content.map(k =>
           <Block key={k.id} marginBottom={'8px'}>
             <PanelLink href={`/krav/${k.kravNummer}/${k.kravVersjon}`}
-                       panelIcon={<img src={gavelIcon} aria-hidden alt={'Hammer ikon'}/>}
+                       panelIcon={<img src={gavelIconBg} aria-hidden alt={'Hammer ikon'}/>}
                        beskrivelse={kravNumView(k)} title={k.navn} flip
             />
           </Block>
