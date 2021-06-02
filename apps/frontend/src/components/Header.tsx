@@ -64,9 +64,7 @@ const LoggedInHeader = () => {
   )
 
   const kravPages = user.isKraveier() ? [
-    // TODO proper urls
-    {label: 'Mine krav', href: '/krav', disabled: true},
-    {label: 'Mine sist redigerte krav', href: '/krav'},
+    {label: 'Forvalte og opprette krav', href: '/krav'},
   ] : []
   const adminPages = user.isAdmin() ? [
     {label: intl.audit, href: '/admin/audit'},
