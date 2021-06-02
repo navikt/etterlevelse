@@ -116,7 +116,7 @@ export const ViewEtterlevelse = ({ etterlevelse, setEtterlevelse, loading, viewM
       <Block marginTop={theme.sizing.scale1400}>
         <Block display='flex'>
           <H2>
-            Dokumetasjon
+            Dokumentasjon
            </H2>
           {!viewMode &&
             <Block display='flex' flex='1' justifyContent='flex-end'>
