@@ -144,7 +144,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
                   <MultiInputField marginBottom={inputMarginBottom} maxInputWidth={maxInputWidth} linkLabel='Navn på dokumentasjon' name='dokumentasjon' link label='Lenke eller websaknr' tooltip='Lenke til dokumentasjon'
                     linkTooltip={'Legg inn referanse til utdypende dokumentasjon (lenke). Eksempelvis til navet, eksterne nettsider eller Websak.'} />
                   <KravRegelverkEdit />
-                  <MultiInputField label='Relevante implementasjoner' name='implementasjoner' tooltip={'Vis til gode eksisterende implementasjoner som ivaretar kravet.'} />
+                  <TextAreaField label='Relevante implementasjoner' name='implementasjoner' markdown tooltip={'Vis til gode eksisterende implementasjoner som ivaretar kravet.'} />
                   {/* <MultiInputField label='Rettskilder' name='rettskilder' link /> */}
 
                   <Block marginTop='80px' marginBottom={inputMarginBottom}>
