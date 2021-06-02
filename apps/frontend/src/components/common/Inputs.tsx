@@ -17,7 +17,7 @@ import LabelWithTooltip from '../common/LabelWithTooltip'
 import CustomInput from '../common/CustomizedInput'
 import CustomizedSelect from '../common/CustomizedSelect'
 import CustomizedTextarea from './CustomizedTextarea'
-import TextEditor from '../common/TextEditor'
+import TextEditor from './TextEditor/TextEditor'
 
 export const FieldWrapper = ({ children, marginBottom }: { children: React.ReactNode, marginBottom?: string }) => {
   return (

@@ -1,0 +1,22 @@
+.rdw-option-wrapper:hover {
+  box-shadow: 1px 1px 0px #14483F;
+  background-color: #EAF0EF;
+}
+.rdw-option-wrapper:active {
+  box-shadow: 1px 1px 0px #14483F inset;
+  background-color: #EAF0EF;
+}
+.rdw-option-active {
+  box-shadow: 1px 1px 0px #14483F inset;
+  background-color: #EAF0EF;
+}
+.rdw-dropdown-wrapper:hover {
+  box-shadow: 1px 1px 0px #14483F;
+  background-color: #EAF0EF;
+}
+.rdw-dropdownoption-highlighted {
+  background: #EAF0EF;
+}
+.rdw-dropdownoption-active {
+  background: #EAF0EF;
+}
