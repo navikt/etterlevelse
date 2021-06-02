@@ -43,7 +43,7 @@ export const MainPageV2 = () => {
                            beskrivelse={'Følg med på status i dashbord, lag egne oversikter, og se hvor godt NAV sine produktområder  dokumenterer på kravene'}/>
 
             <PanelLinkCard height={cardHeight} width={'32%'} maxWidth={cardWidth}
-                           href={'/tema'} tittel={'Alle krav'} icon={paragrafIconBg}
+                           href={'/tema'} tittel={'Les kravene'} icon={paragrafIconBg}
                            beskrivelse={'Få oversikt over kravene, og bli trygg på at du kjenner til alle relevante krav for det du lager'}/>
 
           </Block>
