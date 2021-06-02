@@ -37,7 +37,7 @@ public class KravResponse implements KravId {
     private String utdypendeBeskrivelse;
     private String versjonEndringer;
     private List<String> dokumentasjon;
-    private List<String> implementasjoner;
+    private String implementasjoner;
     private List<String> begrepIder;
     private List<Varslingsadresse> varslingsadresser;
     private List<String> rettskilder;

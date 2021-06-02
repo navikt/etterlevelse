@@ -11,7 +11,7 @@ type Krav {
     utdypendeBeskrivelse: String
     versjonEndringer: String
     dokumentasjon: [String!]!
-    implementasjoner: [String!]!
+    implementasjoner: String
     begrepIder: [String!]!
     rettskilder: [String!]!
     tagger: [String!]!
