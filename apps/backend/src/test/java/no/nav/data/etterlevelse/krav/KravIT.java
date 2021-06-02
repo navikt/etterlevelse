@@ -124,7 +124,7 @@ public class KravIT extends IntegrationTestBase {
                 .avdeling("AVDELING").underavdeling("UNDERAVDELING")
                 .begrepIder(List.of("TERM-1"))
                 .dokumentasjon(List.of("dok"))
-                .implementasjoner(List.of("impl"))
+                .implementasjoner("impl")
                 .varslingsadresser(List.of(new Varslingsadresse("epost@nav.no", AdresseType.EPOST)))
                 .rettskilder(List.of("kilde"))
                 .tagger(List.of("tag"))
@@ -150,7 +150,7 @@ public class KravIT extends IntegrationTestBase {
         assertThat(krav.getUnderavdeling().getCode()).isEqualTo("UNDERAVDELING");
         assertThat(krav.getBegrepIder()).containsOnly("TERM-1");
         assertThat(krav.getDokumentasjon()).containsOnly("dok");
-        assertThat(krav.getImplementasjoner()).containsOnly("impl");
+        assertThat(krav.getImplementasjoner()).isEqualTo("impl");
         assertThat(krav.getVarslingsadresser()).containsOnly(new Varslingsadresse("epost@nav.no", AdresseType.EPOST));
         assertThat(krav.getRettskilder()).containsOnly("kilde");
         assertThat(krav.getTagger()).containsOnly("tag");
