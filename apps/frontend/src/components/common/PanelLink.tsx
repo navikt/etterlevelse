@@ -57,7 +57,7 @@ export const PanelLink = ({href, title, rightTitle, beskrivelse, rightBeskrivels
           {rightBeskrivelse && <ParagraphSmall marginBottom={0} marginTop={rightTitle ? theme.sizing.scale100 : 0}>{rightBeskrivelse}</ParagraphSmall>}
         </Block>}
 
-        <Chevron hover={hover} icon={navChevronRightIcon}/>
+        <Chevron hover={hover} icon={navChevronRightIcon} distance={'4px'}/>
 
       </Block>
     </RouteLink>
@@ -96,7 +96,7 @@ export const PanelLinkCard = (
               ...borderRadius('4px'),
 
               ':hover': {
-                boxShadow: '0px 3px 4px rgba(0, 0, 0, 0.12)'
+                boxShadow: '0px 6px 8px rgba(0, 0, 0, 0.24)'
               }
             }
           }
@@ -108,13 +108,13 @@ export const PanelLinkCard = (
             </Block>
 
             <Block marginTop={theme.sizing.scale900}>
-              <LabelLarge $style={{lineHeight: '20px'}}>{tittel}</LabelLarge>
+              <LabelLarge $style={{lineHeight: '20px', textDecoration: hover ? '3px underline ' : undefined}}>{tittel}</LabelLarge>
               <ParagraphSmall>{beskrivelse}</ParagraphSmall>
             </Block>
           </Block>
 
           <Block placeSelf={'flex-end'}>
-            <Chevron hover={hover} icon={arrowRightIcon}/>
+            <Chevron hover={hover} icon={arrowRightIcon} distance={'8px'}/>
           </Block>
         </Block>
       </RouteLink>
@@ -122,8 +122,9 @@ export const PanelLinkCard = (
   )
 }
 
-const Chevron = ({hover, icon}: {hover: boolean, icon: string}) => (
-  <Block marginLeft={hover ? `calc(${theme.sizing.scale600} + 4px)` : theme.sizing.scale600} alignSelf={'center'} marginRight={hover ? '-4px' : 0}>
+const Chevron = ({hover, icon, distance}: {hover: boolean, icon: string, distance: string}) => (
+  <Block marginLeft={hover ? `calc(${theme.sizing.scale600} + ${distance})` : theme.sizing.scale600} alignSelf={'center'}
+         marginRight={hover ? '-' + distance : 0}>
     <img src={icon} aria-hidden alt={'Chevron høyre ikon'} width={'24px'} height={'24px'}/>
   </Block>
 )
