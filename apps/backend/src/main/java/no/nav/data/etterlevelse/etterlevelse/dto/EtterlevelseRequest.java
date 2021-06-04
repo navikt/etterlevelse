@@ -9,7 +9,6 @@ import no.nav.data.common.validator.RequestElement;
 import no.nav.data.common.validator.Validator;
 import no.nav.data.etterlevelse.common.domain.KravId;
 import no.nav.data.etterlevelse.etterlevelse.domain.EtterlevelseStatus;
-import no.nav.data.etterlevelse.etterlevelse.domain.SuksesskriterieBegrunnelse;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -36,7 +35,7 @@ public class EtterlevelseRequest implements RequestElement, KravId {
     private List<String> dokumentasjon;
     private LocalDate fristForFerdigstillelse;
     private EtterlevelseStatus status;
-    private List<SuksesskriterieBegrunnelse> suksesskriterieBegrunnelses;
+    private List<SuksesskriterieBegrunnelseRequest> suksesskriterieBegrunnelser;
 
     private Boolean update;
 
@@ -47,7 +46,7 @@ public class EtterlevelseRequest implements RequestElement, KravId {
 
         setBegrunnelse(trimToNull(begrunnelse));
         setDokumentasjon(formatList(dokumentasjon));
-        setSuksesskriterieBegrunnelses(copyOf(suksesskriterieBegrunnelses));
+        setSuksesskriterieBegrunnelser(copyOf(suksesskriterieBegrunnelser));
 
         if (status == null) {
             status = EtterlevelseStatus.UNDER_REDIGERING;
