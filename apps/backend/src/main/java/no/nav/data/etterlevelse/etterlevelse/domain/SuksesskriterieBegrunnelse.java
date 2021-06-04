@@ -12,20 +12,20 @@ import no.nav.data.etterlevelse.etterlevelse.dto.SuksesskriterieBegrunnelseRespo
 @NoArgsConstructor
 @AllArgsConstructor
 public class SuksesskriterieBegrunnelse {
-    private int id;
+    private int suksesskriterieId;
     private String begrunnelse;
 
 
     public static SuksesskriterieBegrunnelse convert(SuksesskriterieBegrunnelseRequest request) {
         return SuksesskriterieBegrunnelse.builder()
-                .id(request.getId())
+                .suksesskriterieId(request.getSuksesskriterieId())
                 .begrunnelse(request.getBegrunnelse())
                 .build();
     }
 
     public SuksesskriterieBegrunnelseResponse toResponse() {
         return SuksesskriterieBegrunnelseResponse.builder()
-                .id(id)
+                .suksesskriterieId(suksesskriterieId)
                 .begrunnelse(begrunnelse)
                 .build();
     }

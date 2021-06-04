@@ -17,7 +17,7 @@ import static org.apache.commons.lang3.StringUtils.trimToNull;
 @AllArgsConstructor
 public class SuksesskriterieBegrunnelseRequest implements Validated {
 
-    private int id;
+    private int suksesskriterieId;
     private String begrunnelse;
 
     @Override
@@ -28,8 +28,8 @@ public class SuksesskriterieBegrunnelseRequest implements Validated {
     @Override
     public void validateFieldValues(Validator<?> validator) {
         validator.checkBlank(Fields.begrunnelse, begrunnelse);
-        if (id < 0) {
-            validator.addError(Fields.id, "NEGATIVE_ID", "Id cannot be negative");
+        if (suksesskriterieId < 0) {
+            validator.addError(Fields.suksesskriterieId, "NEGATIVE_ID", "Id cannot be negative");
         }
     }
 }

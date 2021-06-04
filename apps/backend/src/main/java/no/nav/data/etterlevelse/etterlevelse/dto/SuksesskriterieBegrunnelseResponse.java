@@ -12,6 +12,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @JsonPropertyOrder({"id", "begrunnelse"})
 public class SuksesskriterieBegrunnelseResponse {
-    private int id;
+    private int suksesskriterieId;
     private String begrunnelse;
 }
