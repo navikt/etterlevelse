@@ -161,7 +161,7 @@ export const ViewEtterlevelse = ({ etterlevelse, setEtterlevelse, loading, viewM
             </Block>
           </Block>
         </Card>}
-        {
+        {/* {
           edit && etterlevelse &&
 
           <EditEtterlevelse documentEdit lockBehandlingAndKrav etterlevelse={etterlevelse} formRef={formRef} close={k => {
@@ -174,7 +174,7 @@ export const ViewEtterlevelse = ({ etterlevelse, setEtterlevelse, loading, viewM
             setEdit(false)
           }} />
 
-        }
+        } */}
       </Block>
 
       {/* <Block height={theme.sizing.scale600} />
