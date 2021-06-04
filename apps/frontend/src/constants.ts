@@ -115,7 +115,7 @@ export interface Etterlevelse extends DomainObject {
 }
 
 export interface SuksesskriterieBegrunnelse {
-  id: number
+  suksesskriterieId: number
   begrunnelse?: string
 }
 
