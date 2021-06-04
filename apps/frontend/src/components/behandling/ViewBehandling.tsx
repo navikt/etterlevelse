@@ -20,7 +20,6 @@ import { Modal, ModalBody, ModalHeader } from 'baseui/modal'
 import { EditEtterlevelse } from '../etterlevelse/EditEtterlevelse'
 import { useEtterlevelse } from '../../api/EtterlevelseApi'
 import { kravFullQuery, KravId } from '../../api/KravApi'
-import { ViewKrav } from '../krav/ViewKrav'
 import { kravName, kravNumView } from '../../pages/KravPage'
 import { ViewEtterlevelse } from '../etterlevelse/ViewEtterlevelse'
 import { ObjectType } from '../admin/audit/AuditTypes'
@@ -307,18 +306,7 @@ const KravView = (props: { kravId: KravId }) => {
              for mer informasjon om kravet, eksempler på dokumentert etterlevelse og tilbakemeldinger til kraveier
           </Paragraph2>
         </Block>
-
       </Block>
-      <Block display='flex' justifyContent='space-between' alignItems='center'>
-        <Block>
-          <Button type='button' size='compact' onClick={() => setView(!view)}>{`${(view ? 'Skjul' : 'Vis')} detaljer`}</Button>
-        </Block>
-      </Block>
-      {krav && view &&
-        <Block>
-          <ViewKrav krav={krav} />
-        </Block>
-      }
     </Block>
   )
 }
