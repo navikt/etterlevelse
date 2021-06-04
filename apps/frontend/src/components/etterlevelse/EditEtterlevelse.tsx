@@ -1,4 +1,4 @@
-import { Etterlevelse, EtterlevelseStatus } from '../../constants'
+import { Etterlevelse, EtterlevelseStatus, Krav } from '../../constants'
 import { Field, FieldProps, Form, Formik, FormikProps } from 'formik'
 import { createEtterlevelse, mapToFormVal, updateEtterlevelse } from '../../api/EtterlevelseApi'
 import { Block } from 'baseui/block'
@@ -16,13 +16,14 @@ import CustomizedSelect from '../common/CustomizedSelect'
 
 type EditEttlevProps = {
   etterlevelse: Etterlevelse
+  krav: Krav
   close: (k?: Etterlevelse) => void
   formRef?: React.Ref<any>
   lockBehandlingAndKrav?: boolean
   documentEdit?: boolean
 }
 
-export const EditEtterlevelse = ({ etterlevelse, close, formRef, lockBehandlingAndKrav, documentEdit }: EditEttlevProps) => {
+export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, lockBehandlingAndKrav, documentEdit }: EditEttlevProps) => {
 
   const submit = async (etterlevelse: Etterlevelse) => {
     if (etterlevelse.id) {
