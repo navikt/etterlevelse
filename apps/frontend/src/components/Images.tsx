@@ -42,6 +42,8 @@ import arkPennIcon from '../resources/icons/ark-penn-ikon.svg'
 import grafIcon from '../resources/icons/graf-ikon.svg'
 import husIcon from '../resources/icons/hus-ikon.svg'
 import paragrafIcon from '../resources/icons/paragraf-ikon.svg'
+import crossIcon from '../resources/icons/cross.svg'
+import circlePencilIcon from '../resources/icons/circle-pencil-icon.svg'
 import illustration from '../resources/giammarco-boscaro-zeH-ljawHtg-unsplash.jpg'
 import {codelist, ListName, LovCode, TemaCode} from '../services/Codelist'
 import React from 'react'
@@ -77,11 +79,12 @@ export {
   husIcon,
   paragrafIcon,
   arrowRightIcon,
-
+  crossIcon,
   grafIconBg,
   paperPenIconBg,
   gavelIconBg,
   paragrafIconBg,
+  circlePencilIcon,
 }
 
 export const temaBilder: {[id: string]: string} = {
