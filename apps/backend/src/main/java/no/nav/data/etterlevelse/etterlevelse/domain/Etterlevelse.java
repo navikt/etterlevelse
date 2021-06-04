@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import no.nav.data.common.storage.domain.ChangeStamp;
 import no.nav.data.common.storage.domain.DomainObject;
+import no.nav.data.common.utils.StreamUtils;
 import no.nav.data.etterlevelse.codelist.codeusage.dto.InstanceId;
 import no.nav.data.etterlevelse.common.domain.KravId;
 import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseRequest;
@@ -36,6 +37,7 @@ public class Etterlevelse implements DomainObject, KravId {
     private List<String> dokumentasjon;
     private LocalDate fristForFerdigstillelse;
     private EtterlevelseStatus status;
+    private List<SuksesskriterieBegrunnelse> suksesskriterieBegrunnelser;
 
     public Etterlevelse convert(EtterlevelseRequest request) {
         behandlingId = request.getBehandlingId();
@@ -47,7 +49,7 @@ public class Etterlevelse implements DomainObject, KravId {
         dokumentasjon = copyOf(request.getDokumentasjon());
         fristForFerdigstillelse = request.getFristForFerdigstillelse();
         status = request.getStatus();
-
+        suksesskriterieBegrunnelser = StreamUtils.convert(request.getSuksesskriterieBegrunnelser(), SuksesskriterieBegrunnelse::convert);
         return this;
     }
 
@@ -66,6 +68,8 @@ public class Etterlevelse implements DomainObject, KravId {
                 .dokumentasjon(copyOf(dokumentasjon))
                 .fristForFerdigstillelse(fristForFerdigstillelse)
                 .status(status)
+                .suksesskriterieBegrunnelser(StreamUtils.convert(suksesskriterieBegrunnelser,
+                        SuksesskriterieBegrunnelse::toResponse))
                 .build();
     }
 

@@ -18,7 +18,7 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonPropertyOrder({"id", "behandlingId", "kravNummer", "kravVersjon", "etterleves", "begrunnelse", "dokumentasjon", "fristForFerdigstillelse", "status", "behandling"})
+@JsonPropertyOrder({"id", "behandlingId", "kravNummer", "kravVersjon", "etterleves", "begrunnelse", "dokumentasjon", "fristForFerdigstillelse", "status", "behandling", "suksesskriterieBegrunnelser"})
 public class EtterlevelseResponse {
 
     private UUID id;
@@ -34,6 +34,7 @@ public class EtterlevelseResponse {
     private List<String> dokumentasjon;
     private LocalDate fristForFerdigstillelse;
     private EtterlevelseStatus status;
+    private List<SuksesskriterieBegrunnelseResponse> suksesskriterieBegrunnelser;
 
     // GraphQL only
     @JsonIgnore

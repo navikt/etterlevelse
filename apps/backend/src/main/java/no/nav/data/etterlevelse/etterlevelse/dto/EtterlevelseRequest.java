@@ -13,6 +13,7 @@ import no.nav.data.etterlevelse.etterlevelse.domain.EtterlevelseStatus;
 import java.time.LocalDate;
 import java.util.List;
 
+import static no.nav.data.common.utils.StreamUtils.copyOf;
 import static no.nav.data.common.utils.StringUtils.formatList;
 import static org.apache.commons.lang3.StringUtils.trimToNull;
 
@@ -34,6 +35,7 @@ public class EtterlevelseRequest implements RequestElement, KravId {
     private List<String> dokumentasjon;
     private LocalDate fristForFerdigstillelse;
     private EtterlevelseStatus status;
+    private List<SuksesskriterieBegrunnelseRequest> suksesskriterieBegrunnelser;
 
     private Boolean update;
 
@@ -44,6 +46,7 @@ public class EtterlevelseRequest implements RequestElement, KravId {
 
         setBegrunnelse(trimToNull(begrunnelse));
         setDokumentasjon(formatList(dokumentasjon));
+        setSuksesskriterieBegrunnelser(copyOf(suksesskriterieBegrunnelser));
 
         if (status == null) {
             status = EtterlevelseStatus.UNDER_REDIGERING;

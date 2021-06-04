@@ -111,6 +111,12 @@ export interface Etterlevelse extends DomainObject {
   dokumentasjon: string[]
   fristForFerdigstillelse: string
   status: EtterlevelseStatus
+  suksesskriterieBegrunnelser: SuksesskriterieBegrunnelse[]
+}
+
+export interface SuksesskriterieBegrunnelse {
+  suksesskriterieId: number
+  begrunnelse?: string
 }
 
 export interface Behandling extends BehandlingEtterlevData {
