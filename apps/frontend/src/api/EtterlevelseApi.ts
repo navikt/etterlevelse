@@ -3,7 +3,7 @@ import {emptyPage, Etterlevelse, EtterlevelseStatus, PageResponse} from '../cons
 import {env} from '../util/env'
 import {useEffect, useState} from 'react'
 import * as queryString from 'querystring'
-import { getKravByKravNummer, KravId} from './KravApi'
+import { KravId} from './KravApi'
 
 export const getEtterlevelsePage = async (pageNumber: number, pageSize: number) => {
   return (await axios.get<PageResponse<Etterlevelse>>(`${env.backendBaseUrl}/etterlevelse?pageNumber=${pageNumber}&pageSize=${pageSize}`)).data
@@ -91,6 +91,7 @@ export const mapToFormVal = (etterlevelse: Partial<Etterlevelse>): Etterlevelse 
   kravNummer: etterlevelse.kravNummer || 0,
   kravVersjon: etterlevelse.kravVersjon || 0,
   changeStamp: etterlevelse.changeStamp || {lastModifiedDate: '', lastModifiedBy: ''},
+  suksesskriterieBegrunnelser: etterlevelse.suksesskriterieBegrunnelser || [],
   version: -1,
   etterleves: etterlevelse.etterleves || false,
   begrunnelse: etterlevelse.begrunnelse || '',
