@@ -259,54 +259,56 @@ const EditModal = (props: { etterlevelseId: string, behandlingId: string, kravId
       <Block paddingLeft={modalPaddingLeft} paddingRight={modalPaddingRight}>
         <Block marginTop='99px'>
           <Card>
-            {etterlevelse && <KravView kravId={toKravId(etterlevelse)} />}
-
+            {etterlevelse && <KravView kravId={toKravId(etterlevelse)} etterlevelse={etterlevelse} close={props.close} />}
           </Card>
         </Block>
       </Block>
-
-
-      <EditEtterlevelse
-        etterlevelse={etterlevelse}
-        lockBehandlingAndKrav
-        close={e => {
-          props.close(e)
-        }} />
     </Block>
   )
 }
 
-const KravView = (props: { kravId: KravId }) => {
+const KravView = (props: { kravId: KravId, etterlevelse: Etterlevelse, close: Function }) => {
   const { data } = useQuery<{ kravById: KravQL }, KravId>(kravFullQuery, {
     variables: props.kravId,
     skip: !props.kravId.id && !props.kravId.kravNummer
   })
-  const [view, setView] = useState(false)
   const krav = data?.kravById
 
   return (
     <Block>
-      <Block display='flex'>
-        <Block display='flex' marginRight={theme.sizing.scale800}>
-          <img src={circlePencilIcon} alt='pencil-icon' />
-        </Block>
+      { krav &&
         <Block>
-          <Paragraph2 $style={{ marginTop: '0px', marginBottom: '0px' }}>
-            {krav && kravNumView(krav)}
-          </Paragraph2>
-          <H2 $style={{ marginTop: '0px', marginBottom: '0px' }}>
-            {krav?.navn}
-          </H2>
-
-          <Paragraph2>
-            Gå til
+          <Block display='flex'>
+            <Block display='flex' marginRight={theme.sizing.scale800}>
+              <img src={circlePencilIcon} alt='pencil-icon' />
+            </Block>
+            <Block>
+              <Paragraph2 $style={{ marginTop: '0px', marginBottom: '0px' }}>
+                {kravNumView(krav)}
+              </Paragraph2>
+              <H2 $style={{ marginTop: '0px', marginBottom: '0px', color: ettlevColors.navMorkGra }}>
+                {krav.navn}
+              </H2>
+            </Block>
+          </Block>
+          <Block marginLeft='70px'>
+            <Paragraph2>
+              Gå til
             <ExternalLink href={'/krav/' + krav?.kravNummer + '/' + krav?.kravNummer}>
-              detaljert kravbeskrivelse
+                detaljert kravbeskrivelse
             </ExternalLink>
              for mer informasjon om kravet, eksempler på dokumentert etterlevelse og tilbakemeldinger til kraveier
           </Paragraph2>
+          </Block>
+          <EditEtterlevelse
+            krav={krav}
+            etterlevelse={props.etterlevelse}
+            lockBehandlingAndKrav
+            close={e => {
+              props.close(e)
+            }} />
         </Block>
-      </Block>
+      }
     </Block>
   )
 }
