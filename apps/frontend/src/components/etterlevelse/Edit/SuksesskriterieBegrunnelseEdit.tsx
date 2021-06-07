@@ -9,6 +9,8 @@ import { CustomizedAccordion, CustomizedPanel } from "../../common/CustomizedAcc
 import { FieldWrapper, TextAreaField } from "../../common/Inputs"
 import { Markdown } from "../../common/Markdown"
 
+const paddingLeft = '30px'
+
 export const SuksesskriterierBegrunnelseEdit = ({ suksesskriterie }: { suksesskriterie: Suksesskriterie[] }) => {
   return (
     <FieldWrapper>
@@ -48,7 +50,7 @@ const KriterieBegrunnelse = ({ s, index }: { s: Suksesskriterie, index: number }
       </Checkbox>
 
       {checked &&
-        <Block paddingLeft='30px'>
+        <Block paddingLeft={paddingLeft} marginTop={theme.sizing.scale1000}>
           <TextAreaField label='Dokumentasjon' name='begrunnelse' markdown />
         </Block>
       }
@@ -62,14 +64,14 @@ const KriterieBegrunnelse = ({ s, index }: { s: Suksesskriterie, index: number }
                 backgroundColor: 'transparent',
                 border: 'none',
                 width: '250px',
-                paddingLeft: '30px'
+                paddingLeft: paddingLeft
               }
             },
             Content: {
               style: {
                 backgroundColor: 'transparent',
                 borderBottom: 'none',
-                paddingLeft: '30px'
+                paddingLeft: paddingLeft
               }
             },
           }}
