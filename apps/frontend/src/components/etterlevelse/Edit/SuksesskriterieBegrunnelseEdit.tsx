@@ -5,7 +5,9 @@ import { FieldArray, FieldArrayRenderProps } from "formik"
 import React from "react"
 import { Suksesskriterie, SuksesskriterieBegrunnelse } from "../../../constants"
 import { ettlevColors, theme } from "../../../util/theme"
+import { CustomizedAccordion, CustomizedPanel } from "../../common/CustomizedAccordion"
 import { FieldWrapper, TextAreaField } from "../../common/Inputs"
+import { Markdown } from "../../common/Markdown"
 
 export const SuksesskriterierBegrunnelseEdit = ({ suksesskriterie }: { suksesskriterie: Suksesskriterie[] }) => {
   return (
@@ -33,6 +35,7 @@ const KriterieBegrunnelseList = ({ p, suksesskriterie }: { p: FieldArrayRenderPr
 
 const KriterieBegrunnelse = ({ s, index }: { s: Suksesskriterie, index: number }) => {
   const [checked, setChecked] = React.useState(false)
+
   return (
     <Block key={s.navn + '_' + index} backgroundColor={ettlevColors.white} padding={theme.sizing.scale750} marginBottom={theme.sizing.scale600}>
       <Checkbox
@@ -44,7 +47,36 @@ const KriterieBegrunnelse = ({ s, index }: { s: Suksesskriterie, index: number }
         </Paragraph2>
       </Checkbox>
 
-      {checked && <TextAreaField label='Dokumentasjon' name='begrunnelse' markdown />}
+      {checked &&
+        <Block paddingLeft='30px'>
+          <TextAreaField label='Dokumentasjon' name='begrunnelse' markdown />
+        </Block>
+      }
+
+      <CustomizedAccordion>
+        <CustomizedPanel
+          title="Utfyllende om kriteriet"
+          overrides={{
+            Header: {
+              style: {
+                backgroundColor: 'transparent',
+                border: 'none',
+                width: '250px',
+                paddingLeft: '30px'
+              }
+            },
+            Content: {
+              style: {
+                backgroundColor: 'transparent',
+                borderBottom: 'none',
+                paddingLeft: '30px'
+              }
+            },
+          }}
+        >
+          <Markdown source={s.beskrivelse} />
+        </CustomizedPanel>
+      </CustomizedAccordion>
 
     </Block>
   )
