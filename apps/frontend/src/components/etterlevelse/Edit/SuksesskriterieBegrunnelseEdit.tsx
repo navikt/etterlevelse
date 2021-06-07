@@ -15,37 +15,37 @@ export const SuksesskriterierBegrunnelseEdit = ({ suksesskriterie }: { suksesskr
   return (
     <FieldWrapper>
       <FieldArray name={'suksesskriterieBegrunnelser'}>
-        {p => <KriterieBegrunnelseList p={p} suksesskriterie={suksesskriterie} />}
+        {p => <KriterieBegrunnelseList props={p} suksesskriterie={suksesskriterie} />}
       </FieldArray>
     </FieldWrapper>
   )
 }
 
-const KriterieBegrunnelseList = ({ p, suksesskriterie }: { p: FieldArrayRenderProps, suksesskriterie: Suksesskriterie[] }) => {
-  const suksesskriterieBegrunnelser = p.form.values.suksesskriterieBegrunnelser as SuksesskriterieBegrunnelse[]
+const KriterieBegrunnelseList = ({ props, suksesskriterie }: { props: FieldArrayRenderProps, suksesskriterie: Suksesskriterie[] }) => {
+  const suksesskriterieBegrunnelser = props.form.values.suksesskriterieBegrunnelser as SuksesskriterieBegrunnelse[]
 
   return (
     <Block>
       {suksesskriterie.map((s, i) => {
         return (
-          <KriterieBegrunnelse s={s} index={i} />
+          <KriterieBegrunnelse suksesskriterie={s} index={i} />
         )
       })}
     </Block>
   )
 }
 
-const KriterieBegrunnelse = ({ s, index }: { s: Suksesskriterie, index: number }) => {
+const KriterieBegrunnelse = ({ suksesskriterie, index }: { suksesskriterie: Suksesskriterie, index: number }) => {
   const [checked, setChecked] = React.useState(false)
 
   return (
-    <Block key={s.navn + '_' + index} backgroundColor={ettlevColors.white} padding={theme.sizing.scale750} marginBottom={theme.sizing.scale600}>
+    <Block key={suksesskriterie.navn + '_' + index} backgroundColor={ettlevColors.white} padding={theme.sizing.scale750} marginBottom={theme.sizing.scale600}>
       <Checkbox
         checked={checked}
         onChange={() => setChecked(!checked)}
       >
         <Paragraph2 margin='0px'>
-          {s.navn}
+          {suksesskriterie.navn}
         </Paragraph2>
       </Checkbox>
 
@@ -76,7 +76,7 @@ const KriterieBegrunnelse = ({ s, index }: { s: Suksesskriterie, index: number }
             },
           }}
         >
-          <Markdown source={s.beskrivelse} />
+          <Markdown source={suksesskriterie.beskrivelse} />
         </CustomizedPanel>
       </CustomizedAccordion>
 
