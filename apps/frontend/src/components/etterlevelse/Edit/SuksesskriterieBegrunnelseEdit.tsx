@@ -1,4 +1,5 @@
 import { Block } from "baseui/block"
+import { Checkbox } from "baseui/checkbox"
 import { Paragraph2 } from "baseui/typography"
 import { FieldArray, FieldArrayRenderProps } from "formik"
 import React from "react"
@@ -23,16 +24,28 @@ const KriterieBegrunnelseList = ({ p, suksesskriterie }: { p: FieldArrayRenderPr
     <Block>
       {suksesskriterie.map((s, i) => {
         return (
-          <Block key={s.navn + '_' + i} backgroundColor={ettlevColors.white} padding={theme.sizing.scale750} marginBottom={theme.sizing.scale600}>
-            <Paragraph2>
-              {s.navn}
-            </Paragraph2>
-
-            <TextAreaField label='' name='begrunnelse' markdown />
-
-          </Block>
+          <KriterieBegrunnelse s={s} index={i} />
         )
       })}
+    </Block>
+  )
+}
+
+const KriterieBegrunnelse = ({ s, index }: { s: Suksesskriterie, index: number }) => {
+  const [checked, setChecked] = React.useState(false)
+  return (
+    <Block key={s.navn + '_' + index} backgroundColor={ettlevColors.white} padding={theme.sizing.scale750} marginBottom={theme.sizing.scale600}>
+      <Checkbox
+        checked={checked}
+        onChange={() => setChecked(!checked)}
+      >
+        <Paragraph2 margin='0px'>
+          {s.navn}
+        </Paragraph2>
+      </Checkbox>
+
+      {checked && <TextAreaField label='Dokumentasjon' name='begrunnelse' markdown />}
+
     </Block>
   )
 }
