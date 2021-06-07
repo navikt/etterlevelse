@@ -18,6 +18,7 @@ import { ExternalLink } from '../common/RouteLink'
 import { circlePencilIcon } from '../Images'
 import { ettlevColors } from '../../util/theme'
 import { Card } from 'baseui/card'
+import { SuksesskriterierBegrunnelseEdit } from './Edit/SuksesskriterieBegrunnelseEdit'
 
 type EditEttlevProps = {
   etterlevelse: Etterlevelse
@@ -64,11 +65,11 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, lockBehan
           </Block>
           <Block marginLeft={padding}>
             <Paragraph2>
-              Gå til
-            <ExternalLink href={'/krav/' + krav?.kravNummer + '/' + krav?.kravNummer}>
+              Gå til {' '}
+            <ExternalLink href={'/krav/' + krav?.kravNummer + '/' + krav?.kravVersjon}>
                 detaljert kravbeskrivelse
             </ExternalLink>
-             for mer informasjon om kravet, eksempler på dokumentert etterlevelse og tilbakemeldinger til kraveier
+             {' '} for mer informasjon om kravet, eksempler på dokumentert etterlevelse og tilbakemeldinger til kraveier
           </Paragraph2>
           </Block>
 
@@ -83,21 +84,7 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, lockBehan
                 <SearchKrav kravNummer={values.kravNummer} kravVersjon={values.kravVersjon} />
               </>}
 
-              {
-                krav.suksesskriterier.map((s, i) => {
-
-                  return (
-                    <Block key={s.navn + '_' + i} backgroundColor={ettlevColors.white} padding={theme.sizing.scale750} marginBottom={theme.sizing.scale600}>
-                      <Paragraph2>
-                        {s.navn}
-                      </Paragraph2>
-
-                      <TextAreaField label='' name='begrunnelse' markdown />
-
-                    </Block>
-                  )
-                })
-              }
+              <SuksesskriterierBegrunnelseEdit suksesskriterie={krav.suksesskriterier}/>
 
               {/* 
               {!documentEdit &&
