@@ -8,12 +8,17 @@ import { Suksesskriterie, SuksesskriterieBegrunnelse } from "../../../constants"
 import { useDebouncedState } from "../../../util/hooks"
 import { ettlevColors, theme } from "../../../util/theme"
 import { CustomizedAccordion, CustomizedPanel } from "../../common/CustomizedAccordion"
-import { FieldWrapper, TextAreaField } from "../../common/Inputs"
-import LabelWithTooltip from "../../common/LabelWithTooltip"
+import { FieldWrapper } from "../../common/Inputs"
 import { Markdown } from "../../common/Markdown"
 import TextEditor from "../../common/TextEditor/TextEditor"
 
 const paddingLeft = '30px'
+
+const getSuksesskriterieBegrunnelse = (suksesskriterieBegrunnelser: SuksesskriterieBegrunnelse[], suksessKriterie: Suksesskriterie) => {
+  const sb = suksesskriterieBegrunnelser.find((item) => { return item.suksesskriterieId === suksessKriterie.id })
+  if (!sb) { return { suksesskriterieId: suksessKriterie.id, begrunnelse: '' } }
+  else { return sb }
+}
 
 export const SuksesskriterierBegrunnelseEdit = ({ suksesskriterie }: { suksesskriterie: Suksesskriterie[] }) => {
   return (
@@ -23,12 +28,6 @@ export const SuksesskriterierBegrunnelseEdit = ({ suksesskriterie }: { suksesskr
       </FieldArray>
     </FieldWrapper>
   )
-}
-
-const getSuksesskriterieBegrunnelse = (suksesskriterieBegrunnelser: SuksesskriterieBegrunnelse[], suksessKriterie: Suksesskriterie) => {
-  const sb = suksesskriterieBegrunnelser.find((item) => { return item.suksesskriterieId === suksessKriterie.id })
-  if (!sb) { return { suksesskriterieId: suksessKriterie.id, begrunnelse: '' } }
-  else { return sb }
 }
 
 const KriterieBegrunnelseList = ({ props, suksesskriterie }: { props: FieldArrayRenderProps, suksesskriterie: Suksesskriterie[] }) => {
