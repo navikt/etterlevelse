@@ -258,9 +258,7 @@ const EditModal = (props: { etterlevelseId: string, behandlingId: string, kravId
     <Block>
       <Block paddingLeft={modalPaddingLeft} paddingRight={modalPaddingRight}>
         <Block marginTop='99px'>
-          <Card>
-            {etterlevelse && <KravView kravId={toKravId(etterlevelse)} etterlevelse={etterlevelse} close={props.close} />}
-          </Card>
+          {etterlevelse && <KravView kravId={toKravId(etterlevelse)} etterlevelse={etterlevelse} close={props.close} />}
         </Block>
       </Block>
     </Block>
@@ -278,28 +276,6 @@ const KravView = (props: { kravId: KravId, etterlevelse: Etterlevelse, close: Fu
     <Block>
       { krav &&
         <Block>
-          <Block display='flex'>
-            <Block display='flex' marginRight={theme.sizing.scale800}>
-              <img src={circlePencilIcon} alt='pencil-icon' />
-            </Block>
-            <Block>
-              <Paragraph2 $style={{ marginTop: '0px', marginBottom: '0px' }}>
-                {kravNumView(krav)}
-              </Paragraph2>
-              <H2 $style={{ marginTop: '0px', marginBottom: '0px', color: ettlevColors.navMorkGra }}>
-                {krav.navn}
-              </H2>
-            </Block>
-          </Block>
-          <Block marginLeft='70px'>
-            <Paragraph2>
-              Gå til
-            <ExternalLink href={'/krav/' + krav?.kravNummer + '/' + krav?.kravNummer}>
-                detaljert kravbeskrivelse
-            </ExternalLink>
-             for mer informasjon om kravet, eksempler på dokumentert etterlevelse og tilbakemeldinger til kraveier
-          </Paragraph2>
-          </Block>
           <EditEtterlevelse
             krav={krav}
             etterlevelse={props.etterlevelse}
