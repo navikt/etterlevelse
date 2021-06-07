@@ -10,9 +10,14 @@ import { BoolField, DateField, MultiInputField, OptionField, TextAreaField } fro
 import { theme } from '../../util'
 import { FormControl } from 'baseui/form-control'
 import { useKrav, useSearchKrav } from '../../api/KravApi'
-import { kravName } from '../../pages/KravPage'
+import { kravName, kravNumView } from '../../pages/KravPage'
 import { behandlingName, useBehandling, useSearchBehandling } from '../../api/BehandlingApi'
 import CustomizedSelect from '../common/CustomizedSelect'
+import { H2, Label3, Paragraph2 } from 'baseui/typography'
+import { ExternalLink } from '../common/RouteLink'
+import { circlePencilIcon } from '../Images'
+import { ettlevColors } from '../../util/theme'
+import { Card } from 'baseui/card'
 
 type EditEttlevProps = {
   etterlevelse: Etterlevelse
@@ -22,6 +27,8 @@ type EditEttlevProps = {
   lockBehandlingAndKrav?: boolean
   documentEdit?: boolean
 }
+
+const padding = '70px'
 
 export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, lockBehandlingAndKrav, documentEdit }: EditEttlevProps) => {
 
@@ -41,25 +48,70 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, lockBehan
       innerRef={formRef}
     >{({ values, isSubmitting, submitForm }: FormikProps<Etterlevelse>) => (
       <Form>
+        <Card>
+          <Block display='flex'>
+            <Block display='flex' marginRight={theme.sizing.scale800}>
+              <img src={circlePencilIcon} alt='pencil-icon' />
+            </Block>
+            <Block>
+              <Paragraph2 $style={{ marginTop: '0px', marginBottom: '0px' }}>
+                {kravNumView(krav)}
+              </Paragraph2>
+              <H2 $style={{ marginTop: '0px', marginBottom: '0px', color: ettlevColors.navMorkGra }}>
+                {krav.navn}
+              </H2>
+            </Block>
+          </Block>
+          <Block marginLeft={padding}>
+            <Paragraph2>
+              Gå til
+            <ExternalLink href={'/krav/' + krav?.kravNummer + '/' + krav?.kravNummer}>
+                detaljert kravbeskrivelse
+            </ExternalLink>
+             for mer informasjon om kravet, eksempler på dokumentert etterlevelse og tilbakemeldinger til kraveier
+          </Paragraph2>
+          </Block>
 
-        <Block>
+          <Block backgroundColor={ettlevColors.green50}>
+            <Block paddingLeft={padding} paddingRight={padding} paddingTop={theme.sizing.scale1000} paddingBottom={theme.sizing.scale1600}>
+              <Label3 $style={{ lineHeight: '32px' }}>
+                Velg suksesskriterier for dokumentasjon
+              </Label3>
 
-          {!lockBehandlingAndKrav && <>
-            <SearchBehandling id={values.behandlingId} />
-            <SearchKrav kravNummer={values.kravNummer} kravVersjon={values.kravVersjon} />
-          </>}
+              {!lockBehandlingAndKrav && <>
+                <SearchBehandling id={values.behandlingId} />
+                <SearchKrav kravNummer={values.kravNummer} kravVersjon={values.kravVersjon} />
+              </>}
 
-          {!documentEdit &&
-            <>
-              <Block height={theme.sizing.scale600} />
+              {
+                krav.suksesskriterier.map((s, i) => {
 
-              <BoolField label='Etterleves' name='etterleves' />
-            </>
-          }
+                  return (
+                    <Block key={s.navn + '_' + i} backgroundColor={ettlevColors.white} padding={theme.sizing.scale750} marginBottom={theme.sizing.scale600}>
+                      <Paragraph2>
+                        {s.navn}
+                      </Paragraph2>
 
-          <TextAreaField label='Dokumentasjon' name='begrunnelse' markdown />
+                      <TextAreaField label='' name='begrunnelse' markdown />
 
-          {/*           
+                    </Block>
+                  )
+                })
+              }
+
+              {/* 
+              {!documentEdit &&
+                <>
+                  <Block height={theme.sizing.scale600} />
+
+                  <BoolField label='Etterleves' name='etterleves' />
+                </>
+              }
+
+              <TextAreaField label='Dokumentasjon' name='begrunnelse' markdown /> 
+              */}
+
+              {/*           
           <MultiInputField label='Dokumentasjon' name='dokumentasjon'/>
 
           <Block height={theme.sizing.scale600}/>
@@ -69,14 +121,17 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, lockBehan
           <Block height={theme.sizing.scale600}/> 
          */}
 
-          {!documentEdit && <OptionField label='Status' name='status' options={Object.values(EtterlevelseStatus).map(id => ({ id, label: etterlevelseStatus(id) }))} />}
+              {!documentEdit && <OptionField label='Status' name='status' options={Object.values(EtterlevelseStatus).map(id => ({ id, label: etterlevelseStatus(id) }))} />}
 
-        </Block>
+            </Block>
+          </Block>
+        </Card>
 
-        {!documentEdit && <Block display='flex' justifyContent='flex-end'>
-          <Button type='button' kind='secondary' marginRight onClick={close}>Avbryt</Button>
-          <Button type='button' disabled={isSubmitting} onClick={submitForm}>Lagre</Button>
-        </Block>}
+        {!documentEdit &&
+          <Block display='flex' justifyContent='flex-end' marginTop={theme.sizing.scale850} marginBottom={theme.sizing.scale3200}>
+            <Button type='button' kind='secondary' marginRight onClick={close}>Avbryt</Button>
+            <Button type='button' disabled={isSubmitting} onClick={submitForm}>Lagre</Button>
+          </Block>}
       </Form>
     )
       }
