@@ -19,7 +19,7 @@ import {FormikProps} from 'formik'
 import {useHistory} from 'react-router-dom'
 import {KIND, SIZE} from 'baseui/button'
 import {Markdown} from '../common/Markdown'
-import EditBegrunnelse from "./Edit/EditBegrunnelse";
+import EditBegrunnelse from './Edit/EditBegrunnelse'
 
 
 const formatDate = (date?: string) => date && moment(date).format('ll')
