@@ -17,6 +17,7 @@ import { DragDropContext, Draggable, DraggableProvidedDragHandleProps, DraggingS
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { kravModal } from '../EditKrav'
 import CustomizedInput from '../../common/CustomizedInput'
+import { ettlevColors } from '../../../util/theme'
 
 
 export const KravSuksesskriterierEdit = () => {
@@ -118,7 +119,7 @@ const Kriterie = ({
       overrides={{
         Root: {
           style: {
-            backgroundColor: isDragging ? '#F6E8E6' : '#F8F8F8',
+            backgroundColor: isDragging ? '#F6E8E6' : ettlevColors.grey25,
             marginBottom: theme.sizing.scale600
           }
         }
