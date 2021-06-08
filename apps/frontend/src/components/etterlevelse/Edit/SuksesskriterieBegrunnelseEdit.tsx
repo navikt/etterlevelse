@@ -1,17 +1,17 @@
-import { Block } from "baseui/block"
-import { Checkbox } from "baseui/checkbox"
-import { FormControl } from "baseui/form-control"
-import { Paragraph2 } from "baseui/typography"
-import { FieldArray, FieldArrayRenderProps } from "formik"
-import React from "react"
-import { Suksesskriterie, SuksesskriterieBegrunnelse } from "../../../constants"
-import { useDebouncedState } from "../../../util/hooks"
-import { ettlevColors, theme } from "../../../util/theme"
-import { CustomizedAccordion, CustomizedPanel } from "../../common/CustomizedAccordion"
-import { FieldWrapper } from "../../common/Inputs"
-import { Markdown } from "../../common/Markdown"
-import TextEditor from "../../common/TextEditor/TextEditor"
-import { Error } from "../../common/ModalSchema";
+import { Block } from 'baseui/block'
+import { Checkbox } from 'baseui/checkbox'
+import { FormControl } from 'baseui/form-control'
+import { Paragraph2 } from 'baseui/typography'
+import { FieldArray, FieldArrayRenderProps } from 'formik'
+import React from 'react'
+import { Suksesskriterie, SuksesskriterieBegrunnelse } from '../../../constants'
+import { useDebouncedState } from '../../../util/hooks'
+import { ettlevColors, theme } from '../../../util/theme'
+import { CustomizedAccordion, CustomizedPanel } from '../../common/CustomizedAccordion'
+import { FieldWrapper } from '../../common/Inputs'
+import { Markdown } from '../../common/Markdown'
+import TextEditor from '../../common/TextEditor/TextEditor'
+import { Error } from '../../common/ModalSchema'
 
 const paddingLeft = '30px'
 
@@ -100,7 +100,7 @@ const KriterieBegrunnelse = ({
 
       <CustomizedAccordion>
         <CustomizedPanel
-          title="Utfyllende om kriteriet"
+          title='Utfyllende om kriteriet'
           overrides={{
             Header: {
               style: {
