@@ -50,7 +50,6 @@ const KriterieBegrunnelseList = ({ props, suksesskriterie }: { props: FieldArray
               suksesskriterieBegrunnelser={suksesskriterieBegrunnelser}
               update={updated => props.replace(i, updated)}
             />
-            <Error fieldName={`suksesskriterieBegrunnelser[${i}].begrunnelse`} fullWidth={true} />
           </Block>
         )
       })}
@@ -95,6 +94,7 @@ const KriterieBegrunnelse = ({
           <FormControl label='Dokumentasjon'>
             <TextEditor initialValue={begrunnelse} setValue={setBegrunnelse} height={'188px'} />
           </FormControl>
+          <Error fieldName={`suksesskriterieBegrunnelser[${index}].begrunnelse`} fullWidth={true} />
         </Block>
       }
 
