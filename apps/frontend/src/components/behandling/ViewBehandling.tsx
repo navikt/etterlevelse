@@ -7,7 +7,7 @@ import { Code, ListName } from '../../services/Codelist'
 import { H1, H2, HeadingSmall, Paragraph2 } from 'baseui/typography'
 import RouteLink, { ExternalLink, ObjectLink } from '../common/RouteLink'
 import { etterlevelseName, etterlevelseStatus } from '../../pages/EtterlevelsePage'
-import { Behandling, Etterlevelse, EtterlevelseStatus, KravQL, PageResponse } from '../../constants'
+import { Behandling, Etterlevelse, EtterlevelseStatus, Krav, KravQL, PageResponse } from '../../constants'
 import { Label } from '../common/PropertyLabel'
 import { KravFilters } from '../../api/KravGraphQLApi'
 import { Spinner } from '../common/Spinner'
@@ -19,7 +19,7 @@ import { faEdit, faEye, faPlus } from '@fortawesome/free-solid-svg-icons'
 import { Modal, ModalBody, ModalHeader } from 'baseui/modal'
 import { EditEtterlevelse } from '../etterlevelse/EditEtterlevelse'
 import { useEtterlevelse } from '../../api/EtterlevelseApi'
-import { kravFullQuery, KravId } from '../../api/KravApi'
+import { getKravByKravNummer, kravFullQuery, KravId } from '../../api/KravApi'
 import { kravName, kravNumView } from '../../pages/KravPage'
 import { ViewEtterlevelse } from '../etterlevelse/ViewEtterlevelse'
 import { ObjectType } from '../admin/audit/AuditTypes'
@@ -235,6 +235,12 @@ const KravTable = (props: { behandling: Behandling }) => {
 
 const EtterlevelseModal = (props: { id?: string }) => {
   const [etterlevelse, setEtterlevelse] = useEtterlevelse(props.id)
+  const [krav, setKrav] = useState<Krav>()
+
+  useEffect(() => {
+    etterlevelse && getKravByKravNummer(etterlevelse?.kravNummer, etterlevelse?.kravVersjon).then(setKrav)
+  }, [etterlevelse])
+
   if (!etterlevelse) return <Spinner size={theme.sizing.scale800} />
   return <>
     <ModalHeader>
@@ -243,7 +249,7 @@ const EtterlevelseModal = (props: { id?: string }) => {
       </ObjectLink>
     </ModalHeader>
     <ModalBody>
-      <ViewEtterlevelse etterlevelse={etterlevelse} setEtterlevelse={setEtterlevelse} viewMode />
+      {krav && <ViewEtterlevelse etterlevelse={etterlevelse} setEtterlevelse={setEtterlevelse} viewMode krav={krav}/>}
     </ModalBody>
   </>
 }

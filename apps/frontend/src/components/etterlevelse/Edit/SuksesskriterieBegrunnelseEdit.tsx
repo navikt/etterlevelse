@@ -14,7 +14,7 @@ import TextEditor from "../../common/TextEditor/TextEditor"
 
 const paddingLeft = '30px'
 
-const getSuksesskriterieBegrunnelse = (suksesskriterieBegrunnelser: SuksesskriterieBegrunnelse[], suksessKriterie: Suksesskriterie) => {
+export const getSuksesskriterieBegrunnelse = (suksesskriterieBegrunnelser: SuksesskriterieBegrunnelse[], suksessKriterie: Suksesskriterie) => {
   const sb = suksesskriterieBegrunnelser.find((item) => { return item.suksesskriterieId === suksessKriterie.id })
   if (!sb) { return { suksesskriterieId: suksessKriterie.id, begrunnelse: '' } }
   else { return sb }

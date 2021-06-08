@@ -1,29 +1,32 @@
-import {Etterlevelse} from '../../constants'
-import {Block} from 'baseui/block'
-import React, {useRef, useState} from 'react'
-import {etterlevelseStatus} from '../../pages/EtterlevelsePage'
-import {theme} from '../../util'
+import { Etterlevelse, Krav } from '../../constants'
+import { Block } from 'baseui/block'
+import React, { useRef, useState } from 'react'
+import { etterlevelseStatus } from '../../pages/EtterlevelsePage'
+import { theme } from '../../util'
 import moment from 'moment'
 import RouteLink from '../common/RouteLink'
-import {behandlingName, useBehandling} from '../../api/BehandlingApi'
-import {Spinner} from '../common/Spinner'
-import {Label} from '../common/PropertyLabel'
-import {H2, Paragraph2, Paragraph4} from 'baseui/typography'
-import {Teams} from '../common/TeamName'
-import {Card} from 'baseui/card'
-import {ettlevColors} from '../../util/theme'
-import {bokEtterlevelseIcon, editSecondaryIcon} from '../Images'
-import {user} from '../../services/User'
+import { behandlingName, useBehandling } from '../../api/BehandlingApi'
+import { Spinner } from '../common/Spinner'
+import { Label } from '../common/PropertyLabel'
+import { H2, Label3, Paragraph2, Paragraph4 } from 'baseui/typography'
+import { Teams } from '../common/TeamName'
+import { Card } from 'baseui/card'
+import { ettlevColors } from '../../util/theme'
+import { bokEtterlevelseIcon, editSecondaryIcon } from '../Images'
+import { user } from '../../services/User'
 import Button from '../common/Button'
-import {FormikProps} from 'formik'
-import {EditEtterlevelse} from './EditEtterlevelse'
-import {useHistory} from 'react-router-dom'
-import {KIND, SIZE} from 'baseui/button'
+import {getSuksesskriterieBegrunnelse} from './Edit/SuksesskriterieBegrunnelseEdit'
+import { FormikProps } from 'formik'
+import { EditEtterlevelse } from './EditEtterlevelse'
+import { useHistory } from 'react-router-dom'
+import { KIND, SIZE } from 'baseui/button'
+import { Markdown } from '../common/Markdown'
+
 
 
 const formatDate = (date?: string) => date && moment(date).format('ll')
 
-export const ViewEtterlevelse = ({ etterlevelse, setEtterlevelse, loading, viewMode }: { etterlevelse: Etterlevelse, setEtterlevelse: Function, loading?: boolean, viewMode?: boolean }) => {
+export const ViewEtterlevelse = ({ etterlevelse, setEtterlevelse, loading, viewMode, krav }: { etterlevelse: Etterlevelse, setEtterlevelse: Function, loading?: boolean, viewMode?: boolean, krav: Krav }) => {
   const [behandling] = useBehandling(etterlevelse.behandlingId)
   const formRef = useRef<FormikProps<any>>()
   const [edit, setEdit] = useState(etterlevelse && !etterlevelse.id)
@@ -52,7 +55,7 @@ export const ViewEtterlevelse = ({ etterlevelse, setEtterlevelse, loading, viewM
               </RouteLink>
               <Paragraph2 marginTop='2px'>
                 {behandling.overordnetFormaal.shortName}
-            </Paragraph2>
+              </Paragraph2>
               <Block marginTop={theme.sizing.scale850}>
                 <Teams teams={behandling.teams} link list />
               </Block>
@@ -125,7 +128,7 @@ export const ViewEtterlevelse = ({ etterlevelse, setEtterlevelse, loading, viewM
                     <Button
                       startEnhancer={!edit ? <img src={editSecondaryIcon} alt='edit' /> : undefined}
                       size={SIZE.compact}
-                      kind={KIND.secondary}
+                      kind={edit? KIND.secondary : KIND.tertiary}
                       onClick={() => setEdit(!edit)}
                       marginLeft
                     >
@@ -137,7 +140,7 @@ export const ViewEtterlevelse = ({ etterlevelse, setEtterlevelse, loading, viewM
                   <Block>
                     <Button
                       size={SIZE.compact}
-                      kind={KIND.secondary}
+                      kind={KIND.primary}
                       onClick={() => !formRef.current?.isSubmitting && formRef.current?.submitForm()}
                       marginLeft
                     >
@@ -149,18 +152,27 @@ export const ViewEtterlevelse = ({ etterlevelse, setEtterlevelse, loading, viewM
             </Block>
           }
         </Block>
-        {!edit && etterlevelse && !loading && <Card>
-          <Block display='flex' width='100%'>
-            <Block>
-              <Label title='' markdown={etterlevelse.begrunnelse} />
-            </Block>
-            <Block display='flex' flex='1' justifyContent='flex-end'>
-              <Block marginLeft={theme.sizing.scale1600}>
-                <img src={bokEtterlevelseIcon} alt='dokumentasjons ikon' />
+        {!edit && etterlevelse && !loading &&
+          krav.suksesskriterier.map((s, i) => {
+            const suksessbeskrivelseBegrunnelse = getSuksesskriterieBegrunnelse(etterlevelse.suksesskriterieBegrunnelser, s)
+            return (
+              <Block marginBottom={theme.sizing.scale700}>
+                <Card>
+                  <Label3 $style={{ color: ettlevColors.green600 }}>
+                    SUKSESSKRITERIE {i + 1} AV {krav.suksesskriterier.length}
+                  </Label3>
+                  <Label3 $style={{ fontSize: '21px', lineHeight: '30px' }}>
+                    {s.navn}
+                  </Label3>
+                  <Label3 $style={{ lineHeight: '22px' }} marginTop='16px'>
+                    Hvordan er kriteriet oppfylt?
+                </Label3>
+                <Markdown source={suksessbeskrivelseBegrunnelse.begrunnelse}/>
+                </Card>
               </Block>
-            </Block>
-          </Block>
-        </Card>}
+            )
+          })
+        }
         {/* {
           edit && etterlevelse &&
 

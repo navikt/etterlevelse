@@ -122,8 +122,8 @@ export const EtterlevelsePage = () => {
 
       <Block display='flex' width='calc(100% - 80px)' justifyContent='center' paddingLeft='40px' paddingRight='40px'>
         <Block maxWidth={pageWidth} width='100%'>
-          { etterlevelse && !loading &&
-            <ViewEtterlevelse etterlevelse={etterlevelse} setEtterlevelse={setEtterlevelse} loading={loading}/>}
+          { etterlevelse && !loading && krav &&
+            <ViewEtterlevelse etterlevelse={etterlevelse} setEtterlevelse={setEtterlevelse} loading={loading} krav={krav}/>}
           {/* {
             edit && etterlevelse &&
 
