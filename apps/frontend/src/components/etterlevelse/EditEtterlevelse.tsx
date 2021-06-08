@@ -1,24 +1,24 @@
-import { Etterlevelse, EtterlevelseStatus, Krav } from '../../constants'
-import { Field, FieldProps, Form, Formik, FormikProps } from 'formik'
-import { createEtterlevelse, mapToFormVal, updateEtterlevelse } from '../../api/EtterlevelseApi'
-import { Block } from 'baseui/block'
+import {Etterlevelse, EtterlevelseStatus, Krav} from '../../constants'
+import {Field, FieldProps, Form, Formik, FormikProps} from 'formik'
+import {createEtterlevelse, mapEtterlevelseToFormValue, updateEtterlevelse} from '../../api/EtterlevelseApi'
+import {Block} from 'baseui/block'
 import Button from '../common/Button'
 import React from 'react'
 import * as yup from 'yup'
-import { etterlevelseStatus } from '../../pages/EtterlevelsePage'
-import { BoolField, DateField, MultiInputField, OptionField, TextAreaField } from '../common/Inputs'
-import { theme } from '../../util'
-import { FormControl } from 'baseui/form-control'
-import { useKrav, useSearchKrav } from '../../api/KravApi'
-import { kravName, kravNumView } from '../../pages/KravPage'
-import { behandlingName, useBehandling, useSearchBehandling } from '../../api/BehandlingApi'
+import {etterlevelseStatus} from '../../pages/EtterlevelsePage'
+import {OptionField} from '../common/Inputs'
+import {theme} from '../../util'
+import {FormControl} from 'baseui/form-control'
+import {useKrav, useSearchKrav} from '../../api/KravApi'
+import {kravName, kravNumView} from '../../pages/KravPage'
+import {behandlingName, useBehandling, useSearchBehandling} from '../../api/BehandlingApi'
 import CustomizedSelect from '../common/CustomizedSelect'
-import { H2, Label3, Paragraph2 } from 'baseui/typography'
-import { ExternalLink } from '../common/RouteLink'
-import { circlePencilIcon } from '../Images'
-import { ettlevColors } from '../../util/theme'
-import { Card } from 'baseui/card'
-import { SuksesskriterierBegrunnelseEdit } from './Edit/SuksesskriterieBegrunnelseEdit'
+import {H2, Label3, Paragraph2} from 'baseui/typography'
+import {ExternalLink} from '../common/RouteLink'
+import {circlePencilIcon} from '../Images'
+import {ettlevColors} from '../../util/theme'
+import {Card} from 'baseui/card'
+import {SuksesskriterierBegrunnelseEdit} from './Edit/SuksesskriterieBegrunnelseEdit'
 
 type EditEttlevProps = {
   etterlevelse: Etterlevelse
@@ -44,7 +44,7 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, lockBehan
   return (
     <Formik
       onSubmit={submit}
-      initialValues={mapToFormVal(etterlevelse)}
+      initialValues={mapEtterlevelseToFormValue(etterlevelse)}
       validationSchema={etterlevelseSchema()}
       innerRef={formRef}
     >{({ values, isSubmitting, submitForm }: FormikProps<Etterlevelse>) => (
@@ -86,7 +86,7 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, lockBehan
 
               <SuksesskriterierBegrunnelseEdit suksesskriterie={krav.suksesskriterier}/>
 
-              {/* 
+              {/*
               {!documentEdit &&
                 <>
                   <Block height={theme.sizing.scale600} />
@@ -95,17 +95,17 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, lockBehan
                 </>
               }
 
-              <TextAreaField label='Dokumentasjon' name='begrunnelse' markdown /> 
+              <TextAreaField label='Dokumentasjon' name='begrunnelse' markdown />
               */}
 
-              {/*           
+              {/*
           <MultiInputField label='Dokumentasjon' name='dokumentasjon'/>
 
           <Block height={theme.sizing.scale600}/>
 
           <DateField label='Frist for ferdigstillelse' name='fristForFerdigstillelse'/>
 
-          <Block height={theme.sizing.scale600}/> 
+          <Block height={theme.sizing.scale600}/>
          */}
 
               {!documentEdit && <OptionField label='Status' name='status' options={Object.values(EtterlevelseStatus).map(id => ({ id, label: etterlevelseStatus(id) }))} />}
