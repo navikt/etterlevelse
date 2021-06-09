@@ -43,7 +43,7 @@ const TemaSide = ({tema}: {tema: TemaCode}) => {
             <>
               <HeadingXXLarge>{tema.shortName}</HeadingXXLarge>
 
-              <Block maxHeight={expand ? undefined : '125px'} overflow={'hidden'}
+              <Block minHeight={'125px'} maxHeight={expand ? undefined : '125px'} overflow={'hidden'}
                      $style={{
                        maskImage: expand ? undefined : `linear-gradient(${ettlevColors.black} 40%, transparent)`,
                      }}>
