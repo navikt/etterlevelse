@@ -96,11 +96,11 @@ const Begrunnelse = ({
 }) => {
   const suksesskriterieBegrunnelse = getSuksesskriterieBegrunnelse(suksesskriterieBegrunnelser, suksesskriterie)
   const begrunnelseIndex = suksesskriterieBegrunnelser.findIndex((item) => { return item.suksesskriterieId === suksesskriterie.id })
-  const debounceDelay = 500
+  const debounceDelay = 400
   const [begrunnelse, setBegrunnelse] = useDebouncedState(suksesskriterieBegrunnelse.begrunnelse || '', debounceDelay)
 
   React.useEffect(() => {
-    if (!suksesskriterieBegrunnelse.begrunnelse) {
+    if (!suksesskriterieBegrunnelse.oppfylt) {
       remove(begrunnelseIndex)
     } else {
       update(begrunnelseIndex, { suksesskriterieId: suksesskriterie.id, begrunnelse: begrunnelse, oppfylt: suksesskriterieBegrunnelse.oppfylt })
