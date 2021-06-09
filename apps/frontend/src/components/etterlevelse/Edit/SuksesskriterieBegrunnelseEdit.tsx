@@ -20,7 +20,7 @@ export const getSuksesskriterieBegrunnelse = (suksesskriterieBegrunnelser: Sukse
     return item.suksesskriterieId === suksessKriterie.id
   })
   if (!sb) {
-    return { suksesskriterieId: suksessKriterie.id, begrunnelse: '' }
+    return { suksesskriterieId: suksessKriterie.id, begrunnelse: '', oppfylt: false }
   } else {
     return sb
   }
