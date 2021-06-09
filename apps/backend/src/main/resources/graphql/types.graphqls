@@ -126,11 +126,20 @@ type Etterlevelse {
     dokumentasjon: [String!]!
     fristForFerdigstillelse: Date
     status: EtterlevelseStatus
+    suksesskriterieBegrunnelser: [SuksesskriterieBegrunnelse]
+}
+
+type SuksesskriterieBegrunnelse {
+    suksesskriterieId: Int!
+    begrunnelse: String
+    oppfylt: Boolean
 }
 
 enum EtterlevelseStatus {
     UNDER_REDIGERING,
-    FERDIG
+    FERDIG,
+    OPPFYLLES_SENERE,
+    IKKE_RELEVANT,
 }
 
 type Behandling {
