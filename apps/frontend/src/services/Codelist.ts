@@ -123,6 +123,10 @@ class CodelistService {
     return Object.keys(ListName).map(key => ({id: key, label: key}))
   }
 
+  gjelderForLov(tema: TemaCode, lov: LovCode) {
+    return !!this.getCodesForTema(tema.code).filter(l => l.code === lov.code).length
+  }
+
 }
 
 export const codelist = new CodelistService()

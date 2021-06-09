@@ -11,8 +11,7 @@ import {borderRadius} from '../components/common/Style'
 
 
 export const MainPageV2 = () => {
-  const cardHeight = '340px'
-  const cardWidth = '270px'
+  const cardHeight = '140px'
 
   return (
     <Page headerBackgroundColor={ettlevColors.green800} backgroundColor={ettlevColors.grey50}
@@ -33,16 +32,16 @@ export const MainPageV2 = () => {
         <Wide>
           <Block display={'flex'} justifyContent={'space-evenly'}>
 
-            <PanelLinkCard height={cardHeight} width={'32%'} maxWidth={cardWidth}
+            <PanelLinkCard height={cardHeight} width={'30%'}
                            requireLogin
                            href={'/behandlinger'} tittel={'Dokumentere etterlevelse'} icon={paperPenIconBg}
                            beskrivelse={'Få oversikt over hvilke krav som gjelder din løsning og dokumenter hvor godt løsningen etterlever kravene.'}/>
 
-            <PanelLinkCard height={cardHeight} width={'32%'} maxWidth={cardWidth}
+            <PanelLinkCard height={cardHeight} width={'30%'}
                            href={'/status'} tittel={'Status i organisasjonen'} icon={grafIconBg}
                            beskrivelse={'Følg med på status i dashbord, lag egne oversikter, og se hvor godt NAV sine produktområder  dokumenterer på kravene'}/>
 
-            <PanelLinkCard height={cardHeight} width={'32%'} maxWidth={cardWidth}
+            <PanelLinkCard height={cardHeight} width={'30%'}
                            href={'/tema'} tittel={'Les kravene'} icon={paragrafIconBg}
                            beskrivelse={'Få oversikt over kravene, og bli trygg på at du kjenner til alle relevante krav for det du lager'}/>
 

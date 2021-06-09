@@ -34,10 +34,13 @@ import navChevronRightIcon from '../resources/icons/nav-chevron-right.svg'
 import bokEtterlevelseIcon from '../resources/icons/bok-etterlevelse-ikon.svg'
 import sokButtonIcon from '../resources/icons/icon_button_search.svg'
 import arrowRightIcon from '../resources/icons/arrow-right.svg'
+
 import paperPenIconBg from '../resources/icons/with_bg/arkPennBg.svg'
 import gavelIconBg from '../resources/icons/with_bg/gavelBg.svg'
 import grafIconBg from '../resources/icons/with_bg/grafBg.svg'
 import paragrafIconBg from '../resources/icons/with_bg/paragrafBg.svg'
+
+import checkmarkIcon from '../resources/icons/check.svg'
 import arkPennIcon from '../resources/icons/ark-penn-ikon.svg'
 import grafIcon from '../resources/icons/graf-ikon.svg'
 import husIcon from '../resources/icons/hus-ikon.svg'
@@ -80,6 +83,8 @@ export {
   paragrafIcon,
   arrowRightIcon,
   crossIcon,
+  checkmarkIcon,
+
   grafIconBg,
   paperPenIconBg,
   gavelIconBg,

@@ -14,7 +14,7 @@ export const Page = ({backUrl, headerOverlap, headerBackgroundColor, backgroundC
   backgroundColor: string
   wideMain?: boolean
   rawMain?: boolean
-  header: React.ReactNode,
+  header?: React.ReactNode,
   children: React.ReactNode,
 }) => {
   return (
@@ -31,11 +31,11 @@ export const Page = ({backUrl, headerOverlap, headerBackgroundColor, backgroundC
               > Tilbake</Button>
             </RouteLink>}
 
-            <Block width={'100%'} display={'flex'} justifyContent='center'>
+            {header && <Block width={'100%'} display={'flex'} justifyContent='center'>
               <Block maxWidth={pageWidth} width={'100%'} display={'flex'} flexDirection={'column'} marginBottom={theme.sizing.scale600}>
                 {header}
               </Block>
-            </Block>
+            </Block>}
           </Block>
         </Block>
       </Block>

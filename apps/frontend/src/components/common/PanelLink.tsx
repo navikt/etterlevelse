@@ -1,12 +1,12 @@
 import React, {useState} from 'react'
 import RouteLink from './RouteLink'
-import {Block} from 'baseui/block'
+import {Block, BlockOverrides} from 'baseui/block'
 import {borderRadius, paddingAll} from './Style'
 import {theme} from '../../util'
 import {ettlevColors} from '../../util/theme'
-import {LabelLarge, LabelSmall, ParagraphSmall} from 'baseui/typography'
+import {HeadingXLarge, LabelLarge, LabelSmall, ParagraphSmall} from 'baseui/typography'
 import {arrowRightIcon, navChevronRightIcon} from '../Images'
-
+import * as _ from 'lodash'
 
 export const PanelLink = ({href, title, rightTitle, beskrivelse, rightBeskrivelse, panelIcon, flip}:
                             {
@@ -65,57 +65,91 @@ export const PanelLink = ({href, title, rightTitle, beskrivelse, rightBeskrivels
 }
 
 
+export type PanelLinkCardOverrides = {Root?: BlockOverrides, Header?: BlockOverrides, Content?: BlockOverrides}
+
 export const PanelLinkCard = (
   {
-    href, tittel, beskrivelse, icon, requireLogin,
-    height, width, maxWidth
+    href, tittel, beskrivelse,
+    children,
+    icon, requireLogin,
+    height, width, maxWidth, overrides
   }: {
-    href: string, tittel: string, beskrivelse: string, icon: string, requireLogin?: boolean
-    height?: string, width?: string, maxWidth?: string
+    href?: string, tittel: string, beskrivelse?: string,
+    children?: React.ReactElement,
+    icon?: string, requireLogin?: boolean
+    height?: string, width?: string, maxWidth?: string,
+    overrides?: PanelLinkCardOverrides
   }) => {
   const [hover, setHover] = useState(false)
 
+  const customOverrides: BlockOverrides = {
+    Block: {
+      style: {
+
+        backgroundColor: ettlevColors.white,
+
+        borderWidth: '1px',
+        borderColor: ettlevColors.grey100,
+        borderStyle: 'solid',
+        ...borderRadius('4px'),
+
+        ':hover': {
+          boxShadow: '0px 6px 8px rgba(0, 0, 0, 0.24)'
+        }
+      }
+    }
+  }
+  const rootOverrides = _.merge(customOverrides, overrides?.Root)
+
+  const padding = theme.sizing.scale600
+  const headerOverrides = _.merge({
+    Block: {
+      style: {
+        ...paddingAll(padding),
+        paddingBottom: 0
+      }
+    }
+  }, overrides?.Header)
+
+  const contentOverrides = _.merge({
+    Block: {
+      style: {
+        ...paddingAll(padding),
+        paddingTop: 0,
+        height: height,
+      }
+    }
+  }, overrides?.Content)
+
   return (
-    <Block width={width} maxWidth={maxWidth}>
+    <Block width={width} maxWidth={maxWidth} overrides={rootOverrides}>
       <RouteLink href={href} hideUnderline requireLogin={requireLogin}>
-        <Block overrides={{
-          Block: {
-            style: {
-              height: height,
+        <Block onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}
+               $style={{
+                 display: 'flex',
+                 flexDirection: 'column',
+                 justifyContent: 'space-between',
+               }}>
 
-              ...paddingAll(theme.sizing.scale600),
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'space-between',
-
-              backgroundColor: ettlevColors.white,
-
-              borderWidth: '1px',
-              borderColor: ettlevColors.grey100,
-              borderStyle: 'solid',
-              ...borderRadius('4px'),
-
-              ':hover': {
-                boxShadow: '0px 6px 8px rgba(0, 0, 0, 0.24)'
-              }
-            }
-          }
-        }} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
-
-          <Block marginTop={theme.sizing.scale900}>
-            <Block display={'flex'} justifyContent={'center'} width={'100%'}>
+          <Block overrides={headerOverrides}>
+            {icon && <Block display={'flex'} justifyContent={'center'} width={'100%'} marginTop={theme.sizing.scale600}>
               <img src={icon} alt={'ikon'} aria-hidden width={'30%'}/>
-            </Block>
-
-            <Block marginTop={theme.sizing.scale900}>
-              <LabelLarge $style={{lineHeight: '20px', textDecoration: hover ? '3px underline ' : undefined}}>{tittel}</LabelLarge>
-              <ParagraphSmall>{beskrivelse}</ParagraphSmall>
-            </Block>
+            </Block>}
+            <HeadingXLarge $style={{textDecoration: href && hover ? '3px underline ' : undefined}}>{tittel}</HeadingXLarge>
           </Block>
 
-          <Block placeSelf={'flex-end'}>
+          <Block overrides={contentOverrides}>
+            {beskrivelse && <Block>
+              <ParagraphSmall marginTop={0}>{beskrivelse}</ParagraphSmall>
+            </Block>}
+
+            {children}
+          </Block>
+
+          <Block placeSelf={'flex-end'} padding={padding}>
             <Chevron hover={hover} icon={arrowRightIcon} distance={'8px'}/>
           </Block>
+
         </Block>
       </RouteLink>
     </Block>

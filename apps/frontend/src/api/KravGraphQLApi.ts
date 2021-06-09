@@ -43,6 +43,12 @@ const kravtableQuery = gql`query getKravByFilter (
         code
         shortName
       }
+      regelverk {
+        lov {
+          code
+          shortName
+        }
+      }
       etterlevelser {
         id
       }
