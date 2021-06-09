@@ -58,6 +58,7 @@ const EditBegrunnelse = ({ krav, etterlevelse, close, formRef }: EditBegrunnelse
 
 const BegrunnelseList = ({ props, suksesskriterier }: { props: FieldArrayRenderProps, suksesskriterier: Suksesskriterie[] }) => {
   const suksesskriterieBegrunnelser = props.form.values.suksesskriterieBegrunnelser as SuksesskriterieBegrunnelse[]
+
   return (
     <Block>
       {suksesskriterier.map((s, i) => {
@@ -68,7 +69,8 @@ const BegrunnelseList = ({ props, suksesskriterier }: { props: FieldArrayRenderP
               index={i}
               kriterieLength={suksesskriterier.length}
               suksesskriterieBegrunnelser={suksesskriterieBegrunnelser}
-              update={updated => props.replace(i, updated)}
+              update={(index, updated) => props.replace(index, updated)}
+              remove={(index) => props.remove(index)}
             />
           </Block>
         )
@@ -82,20 +84,27 @@ const Begrunnelse = ({
   index,
   suksesskriterieBegrunnelser,
   kriterieLength,
-  update
+  update,
+  remove
 }: {
   suksesskriterie: Suksesskriterie,
   index: number,
   kriterieLength: number,
   suksesskriterieBegrunnelser: SuksesskriterieBegrunnelse[],
-  update: (s: SuksesskriterieBegrunnelse) => void
+  update: (index: number, s: SuksesskriterieBegrunnelse) => void,
+  remove: (index: number) => void
 }) => {
   const suksesskriterieBegrunnelse = getSuksesskriterieBegrunnelse(suksesskriterieBegrunnelser, suksesskriterie)
+  const begrunnelseIndex = suksesskriterieBegrunnelser.findIndex((item) => { return item.suksesskriterieId === suksesskriterie.id })
   const debounceDelay = 500
   const [begrunnelse, setBegrunnelse] = useDebouncedState(suksesskriterieBegrunnelse.begrunnelse || '', debounceDelay)
 
   React.useEffect(() => {
-    update({ suksesskriterieId: suksesskriterie.id, begrunnelse: begrunnelse })
+    if (!suksesskriterieBegrunnelse.begrunnelse) {
+      remove(begrunnelseIndex)
+    } else {
+      update(begrunnelseIndex, { suksesskriterieId: suksesskriterie.id, begrunnelse: begrunnelse, oppfylt: suksesskriterieBegrunnelse.oppfylt })
+    }
   }, [begrunnelse])
 
   return (
@@ -111,13 +120,15 @@ const Begrunnelse = ({
           Hvordan er kriteriet oppfylt?
         </Label3>
 
-        <Block>
-          <FormControl>
-            <TextEditor initialValue={begrunnelse} setValue={setBegrunnelse} height={'188px'} />
-          </FormControl>
-        </Block>
-        
-        <Error fieldName={`suksesskriterieBegrunnelser[${index}].begrunnelse`} fullWidth={true} />
+        {suksesskriterieBegrunnelse.oppfylt &&
+          <Block>
+            <FormControl>
+              <TextEditor initialValue={begrunnelse} setValue={setBegrunnelse} height={'188px'} />
+            </FormControl>
+          </Block>
+        }
+
+        <Error fieldName={`suksesskriterieBegrunnelser[${begrunnelseIndex}].begrunnelse`} fullWidth={true} />
       </Card>
     </Block>
   )
