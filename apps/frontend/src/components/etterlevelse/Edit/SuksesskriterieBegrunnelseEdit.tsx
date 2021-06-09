@@ -74,7 +74,7 @@ const KriterieBegrunnelse = ({
   const [begrunnelse, setBegrunnelse] = useDebouncedState(suksesskriterieBegrunnelse.begrunnelse || '', debounceDelay)
 
   React.useEffect(() => {
-    update({ suksesskriterieId: suksesskriterie.id, begrunnelse: begrunnelse })
+    update({ suksesskriterieId: suksesskriterie.id, begrunnelse: begrunnelse, oppfylt: checked })
   }, [begrunnelse])
 
   return (
