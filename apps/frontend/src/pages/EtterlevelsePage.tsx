@@ -28,9 +28,13 @@ export const etterlevelseStatus = (status?: EtterlevelseStatus) => {
   if (!status) return ''
   switch (status) {
     case EtterlevelseStatus.UNDER_REDIGERING:
-      return 'Under redigering'
+      return 'Under arbeid'
     case EtterlevelseStatus.FERDIG:
-      return 'Ferdig'
+      return 'Oppfylt'
+    case EtterlevelseStatus.OPPFYLLES_SENERE:
+      return 'Oppfylles senere'
+    case EtterlevelseStatus.IKKE_RELEVANT:
+      return 'Ikke relevant'
     default:
       return status
   }
