@@ -175,7 +175,9 @@ export enum TilbakemeldingType {
 
 export enum EtterlevelseStatus {
   UNDER_REDIGERING = 'UNDER_REDIGERING',
-  FERDIG = 'FERDIG'
+  FERDIG = 'FERDIG',
+  OPPFYLLES_SENERE = 'OPPFYLLES_SENERE',
+  IKKE_RELEVANT = 'IKKE_RELEVANT',
 }
 
 export enum KravStatus {
