@@ -10,8 +10,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonPropertyOrder({"id", "begrunnelse"})
+@JsonPropertyOrder({"id", "begrunnelse", "oppfylt"})
 public class SuksesskriterieBegrunnelseResponse {
     private int suksesskriterieId;
     private String begrunnelse;
+    private Boolean oppfylt;
 }
