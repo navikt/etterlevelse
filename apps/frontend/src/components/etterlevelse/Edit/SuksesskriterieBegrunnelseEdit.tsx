@@ -75,7 +75,7 @@ const KriterieBegrunnelse = ({
 
   React.useEffect(() => {
     update({ suksesskriterieId: suksesskriterie.id, begrunnelse: begrunnelse, oppfylt: checked })
-  }, [begrunnelse])
+  }, [begrunnelse, checked])
 
   return (
     <Block backgroundColor={ettlevColors.white} padding={theme.sizing.scale750} marginBottom={theme.sizing.scale600}>
