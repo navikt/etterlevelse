@@ -3,7 +3,7 @@ import {emptyPage, Etterlevelse, EtterlevelseStatus, PageResponse} from '../cons
 import {env} from '../util/env'
 import {useEffect, useState} from 'react'
 import * as queryString from 'querystring'
-import { KravId} from './KravApi'
+import {KravId} from './KravApi'
 
 export const getEtterlevelsePage = async (pageNumber: number, pageSize: number) => {
   return (await axios.get<PageResponse<Etterlevelse>>(`${env.backendBaseUrl}/etterlevelse?pageNumber=${pageNumber}&pageSize=${pageSize}`)).data
@@ -61,7 +61,7 @@ export const useEtterlevelsePage = (pageSize: number) => {
 
 export const useEtterlevelse = (id?: string, behandlingId?: string, kravId?: KravId) => {
   const isCreateNew = id === 'ny'
-  const [data, setData] = useState<Etterlevelse | undefined>(isCreateNew ? mapToFormVal({
+  const [data, setData] = useState<Etterlevelse | undefined>(isCreateNew ? mapEtterlevelseToFormValue({
     behandlingId,
     kravVersjon: kravId?.kravVersjon,
     kravNummer: kravId?.kravNummer
@@ -85,7 +85,7 @@ export const useEtterlevelseForBehandling = (behandlingId?: string) => {
   return data
 }
 
-export const mapToFormVal = (etterlevelse: Partial<Etterlevelse>): Etterlevelse => ({
+export const mapEtterlevelseToFormValue = (etterlevelse: Partial<Etterlevelse>): Etterlevelse => ({
   id: etterlevelse.id || '',
   behandlingId: etterlevelse.behandlingId || '',
   kravNummer: etterlevelse.kravNummer || 0,

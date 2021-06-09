@@ -1,0 +1,137 @@
+import React from 'react'
+import { Etterlevelse, Krav, Suksesskriterie, SuksesskriterieBegrunnelse } from '../../../constants'
+import { mapEtterlevelseToFormValue, updateEtterlevelse } from '../../../api/EtterlevelseApi'
+import { FieldArray, FieldArrayRenderProps, Form, Formik, FormikProps } from 'formik'
+import { Card } from 'baseui/card'
+import { Block } from 'baseui/block'
+import { theme } from '../../../util'
+import { ettlevColors } from '../../../util/theme'
+import { getSuksesskriterieBegrunnelse } from './SuksesskriterieBegrunnelseEdit'
+import * as yup from 'yup'
+import { FieldWrapper } from '../../common/Inputs'
+import { useDebouncedState } from '../../../util/hooks'
+import { Label3 } from 'baseui/typography'
+import { FormControl } from 'baseui/form-control'
+import TextEditor from '../../common/TextEditor/TextEditor'
+import { Error } from '../../common/ModalSchema'
+
+type EditBegrunnelseProps = {
+  etterlevelse: Etterlevelse
+  krav: Krav
+  close: (k?: Etterlevelse) => void
+  formRef?: React.Ref<any>
+}
+
+const etterlevelseSchema = () => yup.object({
+  suksesskriterieBegrunnelser: yup.array().of(yup.object({
+    suksesskriterieId: yup.number().required('Begrunnelse må være knyttet til et suksesskriterie'),
+    begrunnelse: yup.string().required('Suksesskriterie må ha en begrunnelse')
+  })),
+})
+
+
+const EditBegrunnelse = ({ krav, etterlevelse, close, formRef }: EditBegrunnelseProps) => {
+
+  const submit = async (etterlevelse: Etterlevelse) => {
+    close(await updateEtterlevelse(etterlevelse))
+  }
+
+  return (
+    <Formik
+      onSubmit={submit}
+      initialValues={mapEtterlevelseToFormValue(etterlevelse)}
+      validationSchema={etterlevelseSchema()}
+      innerRef={formRef}
+    >{({ values, isSubmitting, submitForm }: FormikProps<Etterlevelse>) => (
+      <Form>
+        <FieldWrapper>
+          <FieldArray name={'suksesskriterieBegrunnelser'}>
+            {p => <BegrunnelseList props={p} suksesskriterier={krav.suksesskriterier} />}
+          </FieldArray>
+        </FieldWrapper>
+      </Form>
+    )
+      }
+    </Formik >
+  )
+}
+
+const BegrunnelseList = ({ props, suksesskriterier }: { props: FieldArrayRenderProps, suksesskriterier: Suksesskriterie[] }) => {
+  const suksesskriterieBegrunnelser = props.form.values.suksesskriterieBegrunnelser as SuksesskriterieBegrunnelse[]
+
+  return (
+    <Block>
+      {suksesskriterier.map((s, i) => {
+        return (
+          <Block key={s.navn + '_' + i}>
+            <Begrunnelse
+              suksesskriterie={s}
+              index={i}
+              kriterieLength={suksesskriterier.length}
+              suksesskriterieBegrunnelser={suksesskriterieBegrunnelser}
+              update={(index, updated) => props.replace(index, updated)}
+              remove={(index) => props.remove(index)}
+            />
+          </Block>
+        )
+      })}
+    </Block>
+  )
+}
+
+const Begrunnelse = ({
+  suksesskriterie,
+  index,
+  suksesskriterieBegrunnelser,
+  kriterieLength,
+  update,
+  remove
+}: {
+  suksesskriterie: Suksesskriterie,
+  index: number,
+  kriterieLength: number,
+  suksesskriterieBegrunnelser: SuksesskriterieBegrunnelse[],
+  update: (index: number, s: SuksesskriterieBegrunnelse) => void,
+  remove: (index: number) => void
+}) => {
+  const suksesskriterieBegrunnelse = getSuksesskriterieBegrunnelse(suksesskriterieBegrunnelser, suksesskriterie)
+  const begrunnelseIndex = suksesskriterieBegrunnelser.findIndex((item) => { return item.suksesskriterieId === suksesskriterie.id })
+  const debounceDelay = 400
+  const [begrunnelse, setBegrunnelse] = useDebouncedState(suksesskriterieBegrunnelse.begrunnelse || '', debounceDelay)
+
+  React.useEffect(() => {
+    if (!suksesskriterieBegrunnelse.oppfylt) {
+      remove(begrunnelseIndex)
+    } else {
+      update(begrunnelseIndex, { suksesskriterieId: suksesskriterie.id, begrunnelse: begrunnelse, oppfylt: suksesskriterieBegrunnelse.oppfylt })
+    }
+  }, [begrunnelse])
+
+  return (
+    <Block marginBottom={theme.sizing.scale700}>
+      <Card>
+        <Label3 $style={{ color: ettlevColors.green600 }}>
+          SUKSESSKRITERIE {index + 1} AV {kriterieLength}
+        </Label3>
+        <Label3 $style={{ fontSize: '21px', lineHeight: '30px' }}>
+          {suksesskriterie.navn}
+        </Label3>
+        <Label3 $style={{ lineHeight: '22px' }} marginTop='16px'>
+          Hvordan er kriteriet oppfylt?
+        </Label3>
+
+        {suksesskriterieBegrunnelse.oppfylt &&
+          <Block>
+            <FormControl>
+              <TextEditor initialValue={begrunnelse} setValue={setBegrunnelse} height={'188px'} />
+            </FormControl>
+          </Block>
+        }
+
+        <Error fieldName={`suksesskriterieBegrunnelser[${begrunnelseIndex}].begrunnelse`} fullWidth={true} />
+      </Card>
+    </Block>
+  )
+}
+
+export default EditBegrunnelse
