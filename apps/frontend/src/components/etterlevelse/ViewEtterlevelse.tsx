@@ -171,7 +171,7 @@ export const ViewEtterlevelse = ({
                 <Label3 $style={{lineHeight: '22px'}} marginTop='16px'>
                   Hvordan er kriteriet oppfylt?
                 </Label3>
-                <Markdown source={suksessbeskrivelseBegrunnelse.begrunnelse}/>
+               {suksessbeskrivelseBegrunnelse.oppfylt && <Markdown source={suksessbeskrivelseBegrunnelse.begrunnelse}/>}
               </Card>
             </Block>
           )
