@@ -176,8 +176,8 @@ const headerBgOverlap = '29px'
 
 const TemaInfo = (props: {kravAntall: number, temaAntall: number}) => (
   <Block $style={{
-    marginTop: theme.sizing.scale600,
-    marginBottom: theme.sizing.scale600,
+    marginTop: theme.sizing.scale400,
+    marginBottom: theme.sizing.scale400,
     ...borderRadius('4px'),
     backgroundColor: ettlevColors.grey100
   }} width={cardWidth}>
