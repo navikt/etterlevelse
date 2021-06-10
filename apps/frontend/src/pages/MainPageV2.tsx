@@ -10,9 +10,9 @@ import {faPlay} from '@fortawesome/free-solid-svg-icons'
 import {borderRadius, margin} from '../components/common/Style'
 
 const cardWidth = ['98%', '98%', '98%', '98%', '32%', '32%']
+const cardHeight = ['auto', 'auto', 'auto', 'auto', '140px', '140px']
 
 export const MainPageV2 = () => {
-  const cardHeight = '140px'
 
   return (
     <Page headerBackgroundColor={ettlevColors.green800} backgroundColor={ettlevColors.grey50}

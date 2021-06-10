@@ -171,13 +171,15 @@ const RelevansFilter = ({onClickFilter, relevans, kravAntall}: {onClickFilter: (
 )
 
 const cardWidth = ['98%', '98%', '98%', '98%','48%', '32%']
-const cardHeight = '250px'
+const cardHeight = ['auto', 'auto', 'auto', 'auto', '250px', '250px']
+const cardMaxheight = '250px'
+
 const headerBgOverlap = '29px'
 
 const TemaInfo = (props: {kravAntall: number, temaAntall: number}) => (
   <Block $style={{
-    marginTop: theme.sizing.scale600,
-    marginBottom: theme.sizing.scale600,
+    marginTop: theme.sizing.scale400,
+    marginBottom: theme.sizing.scale400,
     ...borderRadius('4px'),
     backgroundColor: ettlevColors.grey100
   }} width={cardWidth}>
@@ -226,7 +228,7 @@ const TemaCard = ({tema, relevans, setNum}: {tema: TemaCode, relevans: string[],
     }
   }
 
-  return <PanelLinkCard width={cardWidth} height={cardHeight} overrides={overrides}
+  return <PanelLinkCard width={cardWidth} height={cardHeight} maxHeight={cardMaxheight} overrides={overrides}
                         verticalMargin={theme.sizing.scale400}
                         href={loading ? undefined : urlForObject(ListName.TEMA, tema.code)}
                         tittel={tema.shortName + (loading ? ' - Laster...' : '')}>
