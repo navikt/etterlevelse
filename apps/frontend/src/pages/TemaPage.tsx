@@ -1,6 +1,6 @@
 import {useParams} from 'react-router-dom'
 import {Block, BlockProps} from 'baseui/block'
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {HeadingLarge, HeadingXXLarge, LabelLarge, ParagraphMedium, ParagraphSmall} from 'baseui/typography'
 import {codelist, ListName, TemaCode} from '../services/Codelist'
 import {ObjectLink, urlForObject} from '../components/common/RouteLink'
@@ -9,7 +9,7 @@ import {gavelIconBg} from '../components/Images'
 import {Markdown} from '../components/common/Markdown'
 import {ettlevColors} from '../util/theme'
 import Button from '../components/common/Button'
-import {useKravFilter} from '../api/KravGraphQLApi'
+import {KravFilters} from '../api/KravGraphQLApi'
 import {SkeletonPanel} from '../components/common/LoadingSkeleton'
 import {PanelLink, PanelLinkCard, PanelLinkCardOverrides} from '../components/common/PanelLink'
 import {kravNumView} from './KravPage'
@@ -17,7 +17,11 @@ import * as _ from 'lodash'
 import {faChevronDown, faChevronUp} from '@fortawesome/free-solid-svg-icons'
 import {Page} from '../components/scaffold/Page'
 import {SimpleTag} from '../components/common/SimpleTag'
-import {KravQL} from '../constants'
+import {KravQL, PageResponse} from '../constants'
+import {useQuery} from '@apollo/client'
+import {QueryHookOptions} from '@apollo/client/react/types/types'
+import {gql} from '@apollo/client/core'
+import {useForceUpdate} from '../util/hooks'
 
 export const TemaPage = () => {
   const {tema} = useParams<{tema: string}>()
@@ -31,7 +35,7 @@ export const TemaPage = () => {
 
 const TemaSide = ({tema}: {tema: TemaCode}) => {
   const lover = codelist.getCodesForTema(tema.code)
-  const {data, loading} = useKravFilter({lover: lover.map(c => c.code), gjeldendeKrav: true}, {skip: !lover.length})
+  const {data, loading} = useKravCounter({lover: lover.map(c => c.code)}, {skip: !lover.length})
   const [expand, setExpand] = useState(false)
 
   return (
@@ -99,7 +103,8 @@ const sectionProps: BlockProps = {
 
 const TemaListe = () => {
   const [relevans, setRelevans] = useState<string[]>([])
-  const {data, loading} = useKravFilter({gjeldendeKrav: true, relevans: relevans})
+  const [num, setNum] = useState<{[t: string]: number}>({})
+  const update = useForceUpdate()
 
   const onClickFilter = (nyVerdi: string) => {
     if (relevans.indexOf(nyVerdi) >= 0) {
@@ -107,6 +112,11 @@ const TemaListe = () => {
       _.remove(nyList, it => it === nyVerdi)
       setRelevans(nyList)
     } else setRelevans([...relevans, nyVerdi])
+  }
+
+  const updateNum = (tema: string, temaNum: number) => {
+    num[tema] = temaNum
+    update()
   }
 
   return (
@@ -136,37 +146,26 @@ const TemaListe = () => {
 
         <Block>
           <ParagraphSmall marginTop={0} marginBottom={0} $style={{flexShrink: 0}}>
-            Totalt: <span style={{fontWeight: 700}}> {data?.krav.numberOfElements}</span> krav
+            Totalt: <span style={{fontWeight: 700}}> {Object.values(num).reduce((p, c) => p + c, 0)}</span> krav
           </ParagraphSmall>
         </Block>
 
       </Block>
 
       <Block {...sectionProps} marginTop={theme.sizing.scale600}>
-
-        {loading && _.range(0, 3).map(i => <TemaCard key={i} krav={[]} tema={{
-          list: ListName.TEMA,
-          code: 'LOADING',
-          shortName: 'Laster',
-          description: '.......... ... .. ....... .... ... ......... ..... .... .. .......... ... .. ....... .... ... ......... .. ... .\n\n' +
-            '... ..... ...... .. ... .... ....... ..... ...... .. ... .... ....'
-        }}/>)}
-
-        {!loading && codelist.getCodes(ListName.TEMA).map(tema => {
-            const krav = data?.krav.content.filter(k => k.regelverk.find(r => codelist.gjelderForLov(tema, r.lov))) || []
-            if (relevans.length && !krav.length) return null
-            return <TemaCard key={tema.code} tema={tema} krav={krav}/>
-          }
-        )}
+        {codelist.getCodes(ListName.TEMA).map(tema => <TemaCard key={tema.code} tema={tema} relevans={relevans} setNum={updateNum}/>)}
       </Block>
 
     </Page>
   )
 }
 
+const TemaCard = ({tema, relevans, setNum}: {tema: TemaCode, relevans: string[], setNum: (tema: string, num: number) => void}) => {
+  const lover = codelist.getCodesForTema(tema.code).map(c => c.code)
+  const {data, loading} = useKravCounter({lover: lover}, {skip: !lover.length})
+  const krav = data?.krav.content.filter(k => !relevans.length || k.relevansFor.map(r => r.code).some(r => relevans.includes(r))) || []
+  useEffect(() => setNum(tema.code, krav.length), [krav.length])
 
-const TemaCard = ({tema, krav}: {tema: TemaCode, krav: KravQL[]}) => {
-  const loading = tema.code === 'LOADING'
   const headerBgOverlap = '29px'
   const overrides: PanelLinkCardOverrides = {
     Root: {
@@ -197,9 +196,10 @@ const TemaCard = ({tema, krav}: {tema: TemaCode, krav: KravQL[]}) => {
       }
     }
   }
+
   return <PanelLinkCard width={'32%'} height={'250px'} overrides={overrides}
                         href={loading ? undefined : urlForObject(ListName.TEMA, tema.code)}
-                        tittel={tema.shortName}>
+                        tittel={tema.shortName + (loading ? ' - Laster...' : '')}>
     <Block display={'flex'} flexDirection={'column'}>
       <SimpleTag>
         <Block display={'flex'} alignItems={'center'}>
@@ -214,3 +214,26 @@ const TemaCard = ({tema, krav}: {tema: TemaCode, krav: KravQL[]}) => {
     </Block>
   </PanelLinkCard>
 }
+
+const useKravCounter = (variables: {lover: string[]}, options?: QueryHookOptions<any, {lover: string[]}>) => {
+  return useQuery<{krav: PageResponse<KravQL>}, KravFilters>(query, {
+    ...(options || {}),
+    variables
+  })
+}
+
+const query = gql`
+  query countKrav($lover: [String!]) {
+    krav(filter: {lover: $lover, gjeldendeKrav: true}) {
+      numberOfElements
+      content {
+        kravNummer
+        kravVersjon
+        navn
+        relevansFor {
+          code
+        }
+      }
+    }
+  }
+`
