@@ -25,7 +25,17 @@ type EditBegrunnelseProps = {
 const etterlevelseSchema = () => yup.object({
   suksesskriterieBegrunnelser: yup.array().of(yup.object({
     suksesskriterieId: yup.number().required('Begrunnelse må være knyttet til et suksesskriterie'),
-    begrunnelse: yup.string().required('Suksesskriterie må ha en begrunnelse')
+    begrunnelse: yup.string().test({
+      name: 'begrunnelseCheck',
+      message: 'Suksesskriterie må ha en begrunnelse',
+      test: function (begrunnelse) {
+        const { parent } = this
+        if (!parent.oppfylt || (parent.oppfylt && !!begrunnelse)) {
+          return true
+        }
+        return false
+      }
+    })
   })),
 })
 
@@ -33,6 +43,7 @@ const etterlevelseSchema = () => yup.object({
 const EditBegrunnelse = ({ krav, etterlevelse, close, formRef }: EditBegrunnelseProps) => {
 
   const submit = async (etterlevelse: Etterlevelse) => {
+    console.log(etterlevelse)
     close(await updateEtterlevelse(etterlevelse))
   }
 
@@ -69,8 +80,7 @@ const BegrunnelseList = ({ props, suksesskriterier }: { props: FieldArrayRenderP
               index={i}
               kriterieLength={suksesskriterier.length}
               suksesskriterieBegrunnelser={suksesskriterieBegrunnelser}
-              update={(index, updated) => props.replace(index, updated)}
-              remove={(index) => props.remove(index)}
+              update={updated => props.replace(i, updated)}
             />
           </Block>
         )
@@ -85,14 +95,12 @@ const Begrunnelse = ({
   suksesskriterieBegrunnelser,
   kriterieLength,
   update,
-  remove
 }: {
   suksesskriterie: Suksesskriterie,
   index: number,
   kriterieLength: number,
   suksesskriterieBegrunnelser: SuksesskriterieBegrunnelse[],
-  update: (index: number, s: SuksesskriterieBegrunnelse) => void,
-  remove: (index: number) => void
+  update: (s: SuksesskriterieBegrunnelse) => void
 }) => {
   const suksesskriterieBegrunnelse = getSuksesskriterieBegrunnelse(suksesskriterieBegrunnelser, suksesskriterie)
   const begrunnelseIndex = suksesskriterieBegrunnelser.findIndex((item) => { return item.suksesskriterieId === suksesskriterie.id })
@@ -100,11 +108,7 @@ const Begrunnelse = ({
   const [begrunnelse, setBegrunnelse] = useDebouncedState(suksesskriterieBegrunnelse.begrunnelse || '', debounceDelay)
 
   React.useEffect(() => {
-    if (!suksesskriterieBegrunnelse.oppfylt) {
-      remove(begrunnelseIndex)
-    } else {
-      update(begrunnelseIndex, { suksesskriterieId: suksesskriterie.id, begrunnelse: begrunnelse, oppfylt: suksesskriterieBegrunnelse.oppfylt })
-    }
+    update({ suksesskriterieId: suksesskriterie.id, begrunnelse: begrunnelse, oppfylt: suksesskriterieBegrunnelse.oppfylt })
   }, [begrunnelse])
 
   return (
