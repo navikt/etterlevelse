@@ -78,7 +78,7 @@ const KriterieBegrunnelse = ({
   }, [begrunnelse, checked])
 
   return (
-    <Block backgroundColor={ettlevColors.white} padding={theme.sizing.scale750} marginBottom={theme.sizing.scale600}>
+    <Block $style={{border: '1px solid #C9C9C9'}} backgroundColor={ettlevColors.white} padding={theme.sizing.scale750} marginBottom={theme.sizing.scale600}>
       <Checkbox
         checked={checked}
         onChange={() => setChecked(!checked)}

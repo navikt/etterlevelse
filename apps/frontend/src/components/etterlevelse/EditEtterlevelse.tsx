@@ -114,7 +114,7 @@ export const EditEtterlevelse = ({krav, etterlevelse, close, formRef, documentEd
             </Paragraph2>
           </Block>
 
-          <Block backgroundColor={ettlevColors.green50}>
+          <Block>
             <Block paddingLeft={padding} paddingRight={padding} paddingTop={theme.sizing.scale1000} paddingBottom={theme.sizing.scale1600}>
               <Label3 $style={{lineHeight: '32px'}}>
                 Velg suksesskriterier for dokumentasjon
@@ -190,7 +190,8 @@ export const EditEtterlevelse = ({krav, etterlevelse, close, formRef, documentEd
 }
 
 export const SearchKrav = (props: { kravNummer: number, kravVersjon: number }) => {
-  const [results, setSearch, loading] = useSearchKrav()
+  const
+   [results, setSearch, loading] = useSearchKrav()
   const [krav, setKrav] = useKrav(props, true)
 
   return (
