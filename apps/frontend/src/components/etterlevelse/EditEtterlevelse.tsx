@@ -5,8 +5,8 @@ import {Block} from 'baseui/block'
 import Button from '../common/Button'
 import React from 'react'
 import * as yup from 'yup'
-import {etterlevelseStatus} from '../../pages/EtterlevelsePage'
-import {OptionField} from '../common/Inputs'
+import {getEtterlevelseStatus} from '../../pages/EtterlevelsePage'
+import {FieldWrapper} from '../common/Inputs'
 import {theme} from '../../util'
 import {FormControl} from 'baseui/form-control'
 import {useKrav, useSearchKrav} from '../../api/KravApi'
@@ -19,6 +19,9 @@ import {circlePencilIcon} from '../Images'
 import {ettlevColors} from '../../util/theme'
 import {Card} from 'baseui/card'
 import {SuksesskriterierBegrunnelseEdit} from './Edit/SuksesskriterieBegrunnelseEdit'
+import {Radio, RadioGroup} from "baseui/radio";
+import {Code} from "../../services/Codelist";
+import {Error} from "../common/ModalSchema";
 
 type EditEttlevProps = {
   etterlevelse: Etterlevelse
@@ -44,11 +47,23 @@ const etterlevelseSchema = () => {
       }),
       suksesskriterieId: yup.number().required('Begrunnelse må være knyttet til et suksesskriterie'),
     })),
+    status: yup.string().test({
+      name: 'etterlevelseStatus',
+      message: 'Du må dokumentere på alle suksesskriterier før du er ferdig',
+      test: function (status) {
+        const {parent} = this;
+        if (status === EtterlevelseStatus.FERDIG) {
+          return parent.suksesskriterieBegrunnelser.every((skb: any) => skb.oppfylt && !!skb.begrunnelse)
+        }
+        return true
+      }
+    })
   })
 }
 
 export const EditEtterlevelse = ({krav, etterlevelse, close, formRef, documentEdit}: EditEttlevProps) => {
 
+  const [etterlevelseStatus, setEtterlevelseStatus] = React.useState<string>(etterlevelse.status || EtterlevelseStatus.UNDER_REDIGERING);
   const submit = async (etterlevelse: Etterlevelse) => {
     const mutatedEtterlevelse = {
       ...etterlevelse, suksesskriterieBegrunnelser: etterlevelse.suksesskriterieBegrunnelser.map(skb => {
@@ -129,8 +144,35 @@ export const EditEtterlevelse = ({krav, etterlevelse, close, formRef, documentEd
           <Block height={theme.sizing.scale600}/>
          */}
 
-              {!documentEdit && <OptionField label='Status' name='status' options={Object.values(EtterlevelseStatus).map(id => ({id, label: etterlevelseStatus(id)}))}/>}
-
+              <FieldWrapper>
+                <Field name={'status'}>
+                  {(p: FieldProps<string | Code>) =>
+                    <FormControl
+                      label="Er kravet oppfylt?"
+                      overrides={{
+                        Label: {
+                          style: {
+                            color: ettlevColors.navMorkGra,
+                            fontWeight: 700,
+                            lineHeight: '48px',
+                            fontSize: '18px'
+                          }
+                        }
+                      }}
+                    >
+                      <RadioGroup
+                        value={etterlevelseStatus}
+                        onChange={event => {
+                          p.form.setFieldValue('status', event.currentTarget.value)
+                          setEtterlevelseStatus(event.currentTarget.value)
+                        }}
+                      >
+                        {Object.values(EtterlevelseStatus).map(id => <Radio value={id} key={id}>{getEtterlevelseStatus(id)}</Radio>)}
+                      </RadioGroup>
+                    </FormControl>}
+                </Field>
+              </FieldWrapper>
+              <Error fieldName={'status'} fullWidth={true}/>
             </Block>
           </Block>
         </Card>

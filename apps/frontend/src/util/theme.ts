@@ -95,6 +95,11 @@ const overrides: RecursivePartial<Theme> = {
     borderFocus: ettlevColors.green400, // same as inputFillActive to hide
     menuFill: ettlevColors.white,
     inputFillError: ettlevColors.error400,
+    // Radio buttons
+    tickFillSelected: ettlevColors.green800,
+    tickFillHover: ettlevColors.green50,
+    tickFill: ettlevColors.white,
+    tickFillError: ettlevColors.red50,
 
     inputEnhancerFill: primitives.primary100,
 

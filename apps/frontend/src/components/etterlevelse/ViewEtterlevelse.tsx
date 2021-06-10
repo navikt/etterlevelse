@@ -1,7 +1,7 @@
 import {Etterlevelse, Krav} from '../../constants'
 import {Block} from 'baseui/block'
 import React, {useRef, useState} from 'react'
-import {etterlevelseStatus} from '../../pages/EtterlevelsePage'
+import {getEtterlevelseStatus} from '../../pages/EtterlevelsePage'
 import {theme} from '../../util'
 import moment from 'moment'
 import RouteLink from '../common/RouteLink'
@@ -112,7 +112,7 @@ export const ViewEtterlevelse = ({
             }}
             >
               <Paragraph4 $style={{color: ettlevColors.navMorkGra, margin: '0px'}}>
-                Kravet er: {etterlevelseStatus(etterlevelse.status)}
+                Kravet er: {getEtterlevelseStatus(etterlevelse.status)}
               </Paragraph4>
             </Card>
           </Block>

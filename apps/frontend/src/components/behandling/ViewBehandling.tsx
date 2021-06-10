@@ -6,7 +6,7 @@ import {DotTags} from '../common/DotTag'
 import {Code, ListName} from '../../services/Codelist'
 import {H1, HeadingSmall, Paragraph2} from 'baseui/typography'
 import RouteLink, {ObjectLink} from '../common/RouteLink'
-import {etterlevelseName, etterlevelseStatus} from '../../pages/EtterlevelsePage'
+import {etterlevelseName, getEtterlevelseStatus} from '../../pages/EtterlevelsePage'
 import {Behandling, Etterlevelse, EtterlevelseStatus, Krav, KravQL, PageResponse} from '../../constants'
 import {Label} from '../common/PropertyLabel'
 import {KravFilters} from '../../api/KravGraphQLApi'
@@ -166,7 +166,7 @@ const KravTable = (props: { behandling: Behandling }) => {
                     {krav.etterleves ? 'Ja' : 'Nei'}
                   </Cell>
                   <Cell>{krav.frist && moment(krav.frist).format('ll')}</Cell>
-                  <Cell>{etterlevelseStatus(krav.etterlevelseStatus)}</Cell>
+                  <Cell>{getEtterlevelseStatus(krav.etterlevelseStatus)}</Cell>
                   <Cell small $style={{ justifyContent: 'flex-end' }}>
                     {krav.etterlevelseId &&
                       <Button tooltip='Vis etterlevelse' size='compact' kind='tertiary' onClick={() => setViewEtterlevelse(krav.etterlevelseId)}><FontAwesomeIcon
