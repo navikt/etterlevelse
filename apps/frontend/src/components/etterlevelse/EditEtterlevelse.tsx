@@ -25,19 +25,45 @@ type EditEttlevProps = {
   krav: Krav
   close: (k?: Etterlevelse) => void
   formRef?: React.Ref<any>
-  lockBehandlingAndKrav?: boolean
   documentEdit?: boolean
 }
 
 const padding = '70px'
 
-export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, lockBehandlingAndKrav, documentEdit }: EditEttlevProps) => {
+const etterlevelseSchema = () => {
+  return yup.object({
+    suksesskriterieBegrunnelser: yup.array().of(yup.object({
+      oppfylt: yup.boolean(),
+      begrunnelse: yup.string().test({
+        name: 'begrunnelseText',
+        message: 'Du må fylle ut dokumentasjonen',
+        test: function (begrunnelse) {
+          const {parent} = this;
+          return (parent.oppfylt && !!begrunnelse === true) || !parent.oppfylt
+        }
+      }),
+      suksesskriterieId: yup.number().required('Begrunnelse må være knyttet til et suksesskriterie'),
+    })),
+  })
+}
+
+export const EditEtterlevelse = ({krav, etterlevelse, close, formRef, documentEdit}: EditEttlevProps) => {
 
   const submit = async (etterlevelse: Etterlevelse) => {
+    const mutatedEtterlevelse = {
+      ...etterlevelse, suksesskriterieBegrunnelser: etterlevelse.suksesskriterieBegrunnelser.map(skb => {
+          return {
+            suksesskriterieId: skb.suksesskriterieId,
+            begrunnelse: skb.begrunnelse,
+            oppfylt: skb.oppfylt,
+          }
+        }
+      )
+    }
     if (etterlevelse.id) {
-      close(await updateEtterlevelse(etterlevelse))
+      close(await updateEtterlevelse(mutatedEtterlevelse))
     } else {
-      close(await createEtterlevelse(etterlevelse))
+      close(await createEtterlevelse(mutatedEtterlevelse))
     }
   }
 
@@ -47,18 +73,18 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, lockBehan
       initialValues={mapEtterlevelseToFormValue(etterlevelse)}
       validationSchema={etterlevelseSchema()}
       innerRef={formRef}
-    >{({ values, isSubmitting, submitForm }: FormikProps<Etterlevelse>) => (
+    >{({values, isSubmitting, submitForm}: FormikProps<Etterlevelse>) => (
       <Form>
         <Card>
           <Block display='flex'>
             <Block display='flex' marginRight={theme.sizing.scale800}>
-              <img src={circlePencilIcon} alt='pencil-icon' />
+              <img src={circlePencilIcon} alt='pencil-icon'/>
             </Block>
             <Block>
-              <Paragraph2 $style={{ marginTop: '0px', marginBottom: '0px' }}>
+              <Paragraph2 $style={{marginTop: '0px', marginBottom: '0px'}}>
                 {kravNumView(krav)}
               </Paragraph2>
-              <H2 $style={{ marginTop: '0px', marginBottom: '0px', color: ettlevColors.navMorkGra }}>
+              <H2 $style={{marginTop: '0px', marginBottom: '0px', color: ettlevColors.navMorkGra}}>
                 {krav.navn}
               </H2>
             </Block>
@@ -66,23 +92,18 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, lockBehan
           <Block marginLeft={padding}>
             <Paragraph2>
               Gå til {' '}
-            <ExternalLink href={'/krav/' + krav?.kravNummer + '/' + krav?.kravVersjon}>
+              <ExternalLink href={'/krav/' + krav?.kravNummer + '/' + krav?.kravVersjon}>
                 detaljert kravbeskrivelse
-            </ExternalLink>
-             {' '} for mer informasjon om kravet, eksempler på dokumentert etterlevelse og tilbakemeldinger til kraveier
-          </Paragraph2>
+              </ExternalLink>
+              {' '} for mer informasjon om kravet, eksempler på dokumentert etterlevelse og tilbakemeldinger til kraveier
+            </Paragraph2>
           </Block>
 
           <Block backgroundColor={ettlevColors.green50}>
             <Block paddingLeft={padding} paddingRight={padding} paddingTop={theme.sizing.scale1000} paddingBottom={theme.sizing.scale1600}>
-              <Label3 $style={{ lineHeight: '32px' }}>
+              <Label3 $style={{lineHeight: '32px'}}>
                 Velg suksesskriterier for dokumentasjon
               </Label3>
-
-              {!lockBehandlingAndKrav && <>
-                <SearchBehandling id={values.behandlingId} />
-                <SearchKrav kravNummer={values.kravNummer} kravVersjon={values.kravVersjon} />
-              </>}
 
               <SuksesskriterierBegrunnelseEdit suksesskriterie={krav.suksesskriterier}/>
 
@@ -108,26 +129,22 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, lockBehan
           <Block height={theme.sizing.scale600}/>
          */}
 
-              {!documentEdit && <OptionField label='Status' name='status' options={Object.values(EtterlevelseStatus).map(id => ({ id, label: etterlevelseStatus(id) }))} />}
+              {!documentEdit && <OptionField label='Status' name='status' options={Object.values(EtterlevelseStatus).map(id => ({id, label: etterlevelseStatus(id)}))}/>}
 
             </Block>
           </Block>
         </Card>
 
         {!documentEdit &&
-          <Block display='flex' justifyContent='flex-end' marginTop={theme.sizing.scale850} marginBottom={theme.sizing.scale3200}>
-            <Button type='button' kind='secondary' marginRight onClick={close}>Avbryt</Button>
-            <Button type='button' disabled={isSubmitting} onClick={submitForm}>Lagre</Button>
-          </Block>}
+        <Block display='flex' justifyContent='flex-end' marginTop={theme.sizing.scale850} marginBottom={theme.sizing.scale3200}>
+          <Button type='button' kind='secondary' marginRight onClick={close}>Avbryt</Button>
+          <Button type='button' disabled={isSubmitting} onClick={submitForm}>Lagre</Button>
+        </Block>}
       </Form>
     )
-      }
-    </Formik >
+    }
+    </Formik>
   )
-}
-
-const etterlevelseSchema = () => {
-  return yup.object({})
 }
 
 export const SearchKrav = (props: { kravNummer: number, kravVersjon: number }) => {
@@ -145,9 +162,9 @@ export const SearchKrav = (props: { kravNummer: number, kravVersjon: number }) =
             searchable
             noResultsMsg='Ingen resultat'
 
-            options={results.map(k => ({ id: k.id, label: kravName(k) }))}
-            value={krav ? [{ id: krav.id, label: kravName(krav) }] : []}
-            onChange={({ value }) => {
+            options={results.map(k => ({id: k.id, label: kravName(k)}))}
+            value={krav ? [{id: krav.id, label: kravName(krav)}] : []}
+            onChange={({value}) => {
               const kravSelect = value.length ? results.find(k => k.id === value[0].id)! : undefined
               setKrav(kravSelect)
               p.form.setFieldValue('kravNummer', kravSelect?.kravNummer)
@@ -178,9 +195,9 @@ export const SearchBehandling = (props: { id: string }) => {
             searchable
             noResultsMsg='Ingen resultat'
 
-            options={results.map(k => ({ id: k.id, label: behandlingName(k) }))}
-            value={behandling ? [{ id: behandling.id, label: behandlingName(behandling) }] : []}
-            onChange={({ value }) => {
+            options={results.map(k => ({id: k.id, label: behandlingName(k)}))}
+            value={behandling ? [{id: behandling.id, label: behandlingName(behandling)}] : []}
+            onChange={({value}) => {
               const select = value.length ? results.find(k => k.id === value[0].id)! : undefined
               setBehandling(select)
               p.form.setFieldValue('behandlingId', select?.id)
