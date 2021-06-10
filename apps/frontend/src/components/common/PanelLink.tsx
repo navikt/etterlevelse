@@ -75,7 +75,7 @@ export const PanelLinkCard = (
     height, width, maxWidth, overrides
   }: {
     href?: string, tittel: string, beskrivelse?: string,
-    children?: React.ReactElement,
+    children?: React.ReactNode,
     icon?: string, requireLogin?: boolean
     height?: string, width?: string, maxWidth?: string,
     overrides?: PanelLinkCardOverrides
