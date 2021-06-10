@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import RouteLink from './RouteLink'
-import {Block, BlockOverrides} from 'baseui/block'
+import {Block, BlockOverrides, Responsive, Scale} from 'baseui/block'
 import {borderRadius, paddingAll} from './Style'
 import {theme} from '../../util'
 import {ettlevColors} from '../../util/theme'
@@ -72,19 +72,21 @@ export const PanelLinkCard = (
     href, tittel, beskrivelse,
     children,
     icon, requireLogin,
-    height, width, maxWidth, overrides
+    height, width, maxWidth, verticalMargin, overrides
   }: {
     href?: string, tittel: string, beskrivelse?: string,
     children?: React.ReactNode,
     icon?: string, requireLogin?: boolean
-    height?: string, width?: string, maxWidth?: string,
+    height?: string, width?: Responsive<Scale>, maxWidth?: string, verticalMargin?: string
     overrides?: PanelLinkCardOverrides
   }) => {
   const [hover, setHover] = useState(false)
 
-  const customOverrides: BlockOverrides = {
+  const rootBaseOverrides: BlockOverrides = {
     Block: {
       style: {
+        marginTop: verticalMargin,
+        marginBottom: verticalMargin,
 
         backgroundColor: ettlevColors.white,
 
@@ -99,7 +101,7 @@ export const PanelLinkCard = (
       }
     }
   }
-  const rootOverrides = _.merge(customOverrides, overrides?.Root)
+  const rootOverrides = _.merge(rootBaseOverrides, overrides?.Root)
 
   const padding = theme.sizing.scale600
   const headerOverrides = _.merge({

@@ -7,8 +7,9 @@ import {grafIconBg, paperPenIconBg, paragrafIconBg} from '../components/Images'
 import {Card} from 'baseui/card'
 import Button from '../components/common/Button'
 import {faPlay} from '@fortawesome/free-solid-svg-icons'
-import {borderRadius} from '../components/common/Style'
+import {borderRadius, margin} from '../components/common/Style'
 
+const cardWidth = ['98%', '98%', '98%', '98%', '32%', '32%']
 
 export const MainPageV2 = () => {
   const cardHeight = '140px'
@@ -30,18 +31,18 @@ export const MainPageV2 = () => {
       <Block display={'flex'} flexDirection={'column'} alignItems={'center'} width={'100%'}>
 
         <Wide>
-          <Block display={'flex'} justifyContent={'space-evenly'}>
+          <Block display={'flex'} justifyContent={'space-evenly'} flexWrap>
 
-            <PanelLinkCard height={cardHeight} width={'30%'}
+            <PanelLinkCard height={cardHeight} width={cardWidth} verticalMargin={theme.sizing.scale300}
                            requireLogin
                            href={'/behandlinger'} tittel={'Dokumentere etterlevelse'} icon={paperPenIconBg}
                            beskrivelse={'Få oversikt over hvilke krav som gjelder din løsning og dokumenter hvor godt løsningen etterlever kravene.'}/>
 
-            <PanelLinkCard height={cardHeight} width={'30%'}
+            <PanelLinkCard height={cardHeight} width={cardWidth} verticalMargin={theme.sizing.scale300}
                            href={'/status'} tittel={'Status i organisasjonen'} icon={grafIconBg}
                            beskrivelse={'Følg med på status i dashbord, lag egne oversikter, og se hvor godt NAV sine produktområder  dokumenterer på kravene'}/>
 
-            <PanelLinkCard height={cardHeight} width={'30%'}
+            <PanelLinkCard height={cardHeight} width={cardWidth} verticalMargin={theme.sizing.scale300}
                            href={'/tema'} tittel={'Les kravene'} icon={paragrafIconBg}
                            beskrivelse={'Få oversikt over kravene, og bli trygg på at du kjenner til alle relevante krav for det du lager'}/>
 
@@ -49,28 +50,29 @@ export const MainPageV2 = () => {
         </Wide>
 
         <Narrow>
-          <Block marginTop={theme.sizing.scale1600}>
-            <Card overrides={{
-              Root: {
-                style: {
-                  ...borderRadius('4px')
-                }
+          <Card overrides={{
+            Root: {
+              style: {
+                ...borderRadius('4px'),
+                ...margin(theme.sizing.scale1600, theme.sizing.scale600)
               }
-            }}>
-              <Block
-                $style={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  paddingTop: theme.sizing.scale4800,
-                  paddingBottom: theme.sizing.scale4800,
-                  backgroundColor: ettlevColors.grey100,
-                }}>
-                <Button icon={faPlay} kind={'secondary'}>Se video</Button>
-              </Block>
-            </Card>
-          </Block>
+            }
+          }}>
+            <Block
+              $style={{
+                display: 'flex',
+                justifyContent: 'center',
+                paddingTop: theme.sizing.scale4800,
+                paddingBottom: theme.sizing.scale4800,
+                backgroundColor: ettlevColors.grey100,
+              }}>
+              <Button icon={faPlay} kind={'secondary'}>Se video</Button>
+            </Block>
+          </Card>
 
-          <Block marginTop={theme.sizing.scale1600}>
+          <Block $style={{
+            ...margin(theme.sizing.scale1600, theme.sizing.scale600)
+          }}>
             <HeadingXLarge display={'flex'} flexDirection={'column'} color={ettlevColors.green800}>
               <span style={{fontWeight: 400}}>Her kan det stå</span>
               <span>litt tekst som beskriver animasjonsfilmen</span>

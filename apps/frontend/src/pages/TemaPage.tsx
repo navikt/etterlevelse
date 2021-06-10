@@ -170,7 +170,7 @@ const RelevansFilter = ({onClickFilter, relevans, kravAntall}: {onClickFilter: (
   </Block>
 )
 
-const cardWidth = '32%'
+const cardWidth = ['98%', '98%', '98%', '98%','48%', '32%']
 const cardHeight = '250px'
 const headerBgOverlap = '29px'
 
@@ -178,10 +178,9 @@ const TemaInfo = (props: {kravAntall: number, temaAntall: number}) => (
   <Block $style={{
     marginTop: theme.sizing.scale600,
     marginBottom: theme.sizing.scale600,
-    width: cardWidth,
     ...borderRadius('4px'),
     backgroundColor: ettlevColors.grey100
-  }}>
+  }} width={cardWidth}>
     <Block padding={theme.sizing.scale600}>
       <HeadingXLarge>Vi har totalt {props.kravAntall} krav gruppert i {props.temaAntall} kategorier</HeadingXLarge>
 
@@ -203,8 +202,6 @@ const TemaCard = ({tema, relevans, setNum}: {tema: TemaCode, relevans: string[],
     Root: {
       Block: {
         style: {
-          marginTop: theme.sizing.scale600,
-          marginBottom: theme.sizing.scale600,
           maskImage: loading ? `linear-gradient(${ettlevColors.black} 0%, transparent 70% 100%)` : undefined,
         }
       }
@@ -230,6 +227,7 @@ const TemaCard = ({tema, relevans, setNum}: {tema: TemaCode, relevans: string[],
   }
 
   return <PanelLinkCard width={cardWidth} height={cardHeight} overrides={overrides}
+                        verticalMargin={theme.sizing.scale400}
                         href={loading ? undefined : urlForObject(ListName.TEMA, tema.code)}
                         tittel={tema.shortName + (loading ? ' - Laster...' : '')}>
     <Block display={'flex'} flexDirection={'column'}>
