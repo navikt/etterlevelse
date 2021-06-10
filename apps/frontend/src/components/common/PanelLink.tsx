@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import RouteLink from './RouteLink'
 import {Block, BlockOverrides, Responsive, Scale} from 'baseui/block'
-import {borderRadius, paddingAll} from './Style'
+import {borderRadius, padding, paddingAll} from './Style'
 import {theme} from '../../util'
 import {ettlevColors} from '../../util/theme'
 import {HeadingXLarge, LabelLarge, LabelSmall, ParagraphSmall} from 'baseui/typography'
@@ -72,12 +72,16 @@ export const PanelLinkCard = (
     href, tittel, beskrivelse,
     children,
     icon, requireLogin,
-    height, width, maxWidth, verticalMargin, overrides
+    height, maxHeight,
+    width, maxWidth,
+    verticalMargin, overrides
   }: {
     href?: string, tittel: string, beskrivelse?: string,
     children?: React.ReactNode,
     icon?: string, requireLogin?: boolean
-    height?: string, width?: Responsive<Scale>, maxWidth?: string, verticalMargin?: string
+    height?: Responsive<Scale>, maxHeight?: string,
+    width?: Responsive<Scale>, maxWidth?: string,
+    verticalMargin?: string
     overrides?: PanelLinkCardOverrides
   }) => {
   const [hover, setHover] = useState(false)
@@ -103,11 +107,11 @@ export const PanelLinkCard = (
   }
   const rootOverrides = _.merge(rootBaseOverrides, overrides?.Root)
 
-  const padding = theme.sizing.scale600
+  const paddingSize = theme.sizing.scale600
   const headerOverrides = _.merge({
     Block: {
       style: {
-        ...paddingAll(padding),
+        ...paddingAll(paddingSize),
         paddingBottom: 0
       }
     }
@@ -116,9 +120,7 @@ export const PanelLinkCard = (
   const contentOverrides = _.merge({
     Block: {
       style: {
-        ...paddingAll(padding),
-        paddingTop: 0,
-        height: height,
+        ...padding('0', paddingSize),
       }
     }
   }, overrides?.Content)
@@ -137,10 +139,11 @@ export const PanelLinkCard = (
             {icon && <Block display={'flex'} justifyContent={'center'} width={'100%'} marginTop={theme.sizing.scale600}>
               <img src={icon} alt={'ikon'} aria-hidden width={'30%'}/>
             </Block>}
-            <HeadingXLarge $style={{textDecoration: href && hover ? '3px underline ' : undefined}}>{tittel}</HeadingXLarge>
+            <HeadingXLarge font={['font250', 'font250', 'font250', 'font250', 'font950', 'font950',]}
+                           $style={{textDecoration: href && hover ? '3px underline ' : undefined}}>{tittel}</HeadingXLarge>
           </Block>
 
-          <Block overrides={contentOverrides}>
+          <Block height={height} maxHeight={maxHeight} overrides={contentOverrides}>
             {beskrivelse && <Block>
               <ParagraphSmall marginTop={0}>{beskrivelse}</ParagraphSmall>
             </Block>}
@@ -148,7 +151,7 @@ export const PanelLinkCard = (
             {children}
           </Block>
 
-          <Block placeSelf={'flex-end'} padding={padding}>
+          <Block placeSelf={'flex-end'} padding={paddingSize}>
             <Chevron hover={hover} icon={arrowRightIcon} distance={'8px'}/>
           </Block>
 
