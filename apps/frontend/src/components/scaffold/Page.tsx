@@ -5,7 +5,7 @@ import Button from '../common/Button'
 import {navChevronRightIcon} from '../Images'
 import React from 'react'
 
-const padding = '100px'
+const padding = ['16px', '16px', '16px', '20px', '40px', '80px']
 
 export const Page = ({backUrl, headerOverlap, headerBackgroundColor, backgroundColor, wideMain, rawMain, children, header}: {
   backUrl?: string,
