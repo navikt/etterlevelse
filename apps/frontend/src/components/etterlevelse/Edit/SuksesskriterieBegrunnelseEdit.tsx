@@ -70,7 +70,7 @@ const KriterieBegrunnelse = ({
 }) => {
   const suksesskriterieBegrunnelse = getSuksesskriterieBegrunnelse(suksesskriterieBegrunnelser, suksesskriterie)
   const debounceDelay = 500
-  const [checked, setChecked] = React.useState(!!suksesskriterieBegrunnelse.begrunnelse)
+  const [checked, setChecked] = React.useState(!!suksesskriterieBegrunnelse.oppfylt)
   const [begrunnelse, setBegrunnelse] = useDebouncedState(suksesskriterieBegrunnelse.begrunnelse || '', debounceDelay)
 
   React.useEffect(() => {
@@ -88,14 +88,14 @@ const KriterieBegrunnelse = ({
         </Paragraph2>
       </Checkbox>
 
-      {checked &&
+      
         <Block paddingLeft={paddingLeft} marginTop={theme.sizing.scale1000}>
           <FormControl label='Dokumentasjon'>
             <TextEditor initialValue={begrunnelse} setValue={setBegrunnelse} height={'188px'} />
           </FormControl>
           <Error fieldName={`suksesskriterieBegrunnelser[${index}].begrunnelse`} fullWidth={true} />
         </Block>
-      }
+      
 
       <CustomizedAccordion>
         <CustomizedPanel
