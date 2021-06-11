@@ -24,6 +24,11 @@ management:
   info:
     git:
       mode: simple
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
 server:
   error:
     include-message: always
