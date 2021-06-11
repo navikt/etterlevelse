@@ -1,33 +1,33 @@
-import {Block} from 'baseui/block'
-import React, {useEffect, useState} from 'react'
-import {theme} from '../../util'
-import {Teams} from '../common/TeamName'
-import {DotTags} from '../common/DotTag'
-import {Code, ListName} from '../../services/Codelist'
-import {H1, HeadingSmall, Paragraph2} from 'baseui/typography'
-import RouteLink, {ObjectLink} from '../common/RouteLink'
-import {etterlevelseName, getEtterlevelseStatus} from '../../pages/EtterlevelsePage'
-import {Behandling, Etterlevelse, EtterlevelseStatus, Krav, KravQL, PageResponse} from '../../constants'
-import {Label} from '../common/PropertyLabel'
-import {KravFilters} from '../../api/KravGraphQLApi'
-import {Spinner} from '../common/Spinner'
-import {Cell, Row, Table} from '../common/Table'
+import { Block } from 'baseui/block'
+import React, { useEffect, useState } from 'react'
+import { theme } from '../../util'
+import { Teams } from '../common/TeamName'
+import { DotTags } from '../common/DotTag'
+import { Code, codelist, ListName } from '../../services/Codelist'
+import { H1, HeadingSmall, Paragraph2 } from 'baseui/typography'
+import RouteLink, { ObjectLink } from '../common/RouteLink'
+import { etterlevelseName, getEtterlevelseStatus } from '../../pages/EtterlevelsePage'
+import { Behandling, Etterlevelse, EtterlevelseStatus, Krav, KravQL, PageResponse } from '../../constants'
+import { Label } from '../common/PropertyLabel'
+import { KravFilters } from '../../api/KravGraphQLApi'
+import { Spinner } from '../common/Spinner'
+import { Cell, Row, Table } from '../common/Table'
 import moment from 'moment'
 import Button from '../common/Button'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faEdit, faEye, faPlus} from '@fortawesome/free-solid-svg-icons'
-import {Modal, ModalBody, ModalHeader} from 'baseui/modal'
-import {EditEtterlevelse} from '../etterlevelse/EditEtterlevelse'
-import {useEtterlevelse} from '../../api/EtterlevelseApi'
-import {getKravByKravNummer, kravFullQuery, KravId} from '../../api/KravApi'
-import {kravName, kravNumView} from '../../pages/KravPage'
-import {ViewEtterlevelse} from '../etterlevelse/ViewEtterlevelse'
-import {ObjectType} from '../admin/audit/AuditTypes'
-import {gql, useQuery} from '@apollo/client'
-import {Chart} from '../Chart'
-import {ettlevColors, maxPageWidth} from '../../util/theme'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faEdit, faEye, faPlus } from '@fortawesome/free-solid-svg-icons'
+import { Modal, ModalBody, ModalHeader } from 'baseui/modal'
+import { EditEtterlevelse } from '../etterlevelse/EditEtterlevelse'
+import { useEtterlevelse } from '../../api/EtterlevelseApi'
+import { getKravByKravNummer, kravFullQuery, KravId } from '../../api/KravApi'
+import { kravName, kravNumView } from '../../pages/KravPage'
+import { ViewEtterlevelse } from '../etterlevelse/ViewEtterlevelse'
+import { ObjectType } from '../admin/audit/AuditTypes'
+import { gql, useQuery } from '@apollo/client'
+import { Chart } from '../Chart'
+import { ettlevColors, maxPageWidth } from '../../util/theme'
 import CustomizedModal from '../common/CustomizedModal'
-import {crossIcon} from '../Images'
+import { crossIcon } from '../Images'
 
 const filterForBehandling = (behandling: Behandling): KravFilters => ({ behandlingId: behandling.id })
 
@@ -209,18 +209,9 @@ const KravTable = (props: { behandling: Behandling }) => {
                     </Button>
                   </Block>
                 </Block>
-
-                <Block paddingLeft={modalPaddingLeft} paddingRight={modalPaddingRight} paddingBottom='32px'>
-                  <H1 $style={{ color: ettlevColors.grey50 }}>
-                    Fyll ut dokumentasjon: { }
-                  </H1>
-                  <Paragraph2 $style={{ lineHeight: '12px', color: ettlevColors.green50 }}>
-                    {props.behandling.navn}
-                  </Paragraph2>
-                </Block>
               </Block>
 
-              <EditModal etterlevelseId={edit} behandlingId={props.behandling.id} kravId={kravId} close={e => {
+              <EditModal behandlingNavn={props.behandling.navn} etterlevelseId={edit} behandlingId={props.behandling.id} kravId={kravId} close={e => {
                 setEdit(undefined)
                 e && update(e)
               }} />
@@ -248,45 +239,79 @@ const EtterlevelseModal = (props: { id?: string }) => {
       </ObjectLink>
     </ModalHeader>
     <ModalBody>
-      {krav && <ViewEtterlevelse etterlevelse={etterlevelse} setEtterlevelse={setEtterlevelse} viewMode krav={krav}/>}
+      {krav && <ViewEtterlevelse etterlevelse={etterlevelse} setEtterlevelse={setEtterlevelse} viewMode krav={krav} />}
     </ModalBody>
   </>
 }
 
 const toKravId = (it: { kravVersjon: number, kravNummer: number }) => ({ kravNummer: it.kravNummer, kravVersjon: it.kravVersjon })
 
-const EditModal = (props: { etterlevelseId: string, behandlingId: string, kravId?: KravId, close: (e?: Etterlevelse) => void }) => {
+const EditModal = (props: { etterlevelseId: string, behandlingId: string, kravId?: KravId, close: (e?: Etterlevelse) => void, behandlingNavn: string }) => {
   const [etterlevelse] = useEtterlevelse(props.etterlevelseId, props.behandlingId, props.kravId)
   if (!etterlevelse) return <Spinner size={theme.sizing.scale800} />
 
   return (
     <Block>
-      <Block paddingLeft={modalPaddingLeft} paddingRight={modalPaddingRight}>
-        <Block marginTop='99px'>
-          {etterlevelse && <KravView kravId={toKravId(etterlevelse)} etterlevelse={etterlevelse} close={props.close} />}
-        </Block>
-      </Block>
-    </Block>
+      {etterlevelse && <KravView behandlingNavn={props.behandlingNavn} kravId={toKravId(etterlevelse)} etterlevelse={etterlevelse} close={props.close} />}
+    </Block >
   )
 }
 
-const KravView = (props: { kravId: KravId, etterlevelse: Etterlevelse, close: Function }) => {
+const KravView = (props: { kravId: KravId, etterlevelse: Etterlevelse, close: Function, behandlingNavn: string }) => {
   const { data } = useQuery<{ kravById: KravQL }, KravId>(kravFullQuery, {
     variables: props.kravId,
     skip: !props.kravId.id && !props.kravId.kravNummer
   })
+  const lover = codelist.getCodes(ListName.LOV)
+
+
   const krav = data?.kravById
+
+  const getTema = () => {
+    const temaCodes: string[] = []
+    let temas = ''
+
+    krav?.regelverk.map((r) => {
+      const lov = lover.find(lov => lov.code === r.lov.code)
+      temaCodes.push(lov?.data?.tema || '')
+    })
+
+    temaCodes.forEach(temaCode => {
+      const shortName = codelist.getShortname(ListName.TEMA, temaCode)
+    
+      temas = temas + shortName + ', '
+    })
+
+
+    temas = temas.substring(0, temas.length - 2)
+    temas = temas.replace(/,([^,]*)$/, ' og$1')
+    return temas
+  }
 
   return (
     <Block>
-      { krav &&
+      {krav &&
         <Block>
-          <EditEtterlevelse
-            krav={krav}
-            etterlevelse={props.etterlevelse}
-            close={e => {
-              props.close(e)
-            }} />
+          <Block flex='1' backgroundColor={ettlevColors.green800}>
+            <Block paddingLeft={modalPaddingLeft} paddingRight={modalPaddingRight} paddingBottom='32px'>
+              <H1 $style={{ color: ettlevColors.grey50, marginTop: '0px' }}>
+                Fyll ut dokumentasjon: {getTema()}
+              </H1>
+              <Paragraph2 $style={{ lineHeight: '12px', color: ettlevColors.green50 }}>
+                {props.behandlingNavn}
+              </Paragraph2>
+            </Block>
+          </Block>
+          <Block paddingLeft={modalPaddingLeft} paddingRight={modalPaddingRight}>
+            <Block marginTop='99px'>
+              <EditEtterlevelse
+                krav={krav}
+                etterlevelse={props.etterlevelse}
+                close={e => {
+                  props.close(e)
+                }} />
+            </Block>
+          </Block >
         </Block>
       }
     </Block>
@@ -294,46 +319,46 @@ const KravView = (props: { kravId: KravId, etterlevelse: Etterlevelse, close: Fu
 }
 
 const statsQuery = gql`
-  query getBehandlingStats($behandlingId: ID!) {
-    behandling(filter: { id: $behandlingId }) {
-      content {
+      query getBehandlingStats($behandlingId: ID!) {
+        behandling(filter: {id: $behandlingId }) {
+        content {
         stats {
-          fyltKrav {
-            kravNummer
+        fyltKrav {
+        kravNummer
             kravVersjon
-            regelverk {
-              lov {
-                code
+      regelverk {
+        lov {
+        code
                 shortName
               }
             }
           }
-          ikkeFyltKrav {
-            kravNummer
+      ikkeFyltKrav {
+        kravNummer
             kravVersjon
-            regelverk {
-              lov {
-                code
+      regelverk {
+        lov {
+        code
                 shortName
               }
             }
           }
-          lovStats {
-            lovCode {
-              code
+      lovStats {
+        lovCode {
+        code
               shortName
             }
-            fyltKrav {
-              id
+      fyltKrav {
+        id
               kravNummer
-              kravVersjon
-              navn
+      kravVersjon
+      navn
             }
-            ikkeFyltKrav {
-              id
+      ikkeFyltKrav {
+        id
               kravNummer
-              kravVersjon
-              navn
+      kravVersjon
+      navn
             }
           }
         }
