@@ -1,27 +1,27 @@
-import {Etterlevelse, EtterlevelseStatus, Krav} from '../../constants'
-import {Field, FieldProps, Form, Formik, FormikProps} from 'formik'
-import {createEtterlevelse, mapEtterlevelseToFormValue, updateEtterlevelse} from '../../api/EtterlevelseApi'
-import {Block} from 'baseui/block'
+import { Etterlevelse, EtterlevelseStatus, Krav } from '../../constants'
+import { Field, FieldProps, Form, Formik, FormikProps } from 'formik'
+import { createEtterlevelse, mapEtterlevelseToFormValue, updateEtterlevelse } from '../../api/EtterlevelseApi'
+import { Block } from 'baseui/block'
 import Button from '../common/Button'
 import React from 'react'
 import * as yup from 'yup'
-import {getEtterlevelseStatus} from '../../pages/EtterlevelsePage'
-import {FieldWrapper} from '../common/Inputs'
-import {theme} from '../../util'
-import {FormControl} from 'baseui/form-control'
-import {useKrav, useSearchKrav} from '../../api/KravApi'
-import {kravName, kravNumView} from '../../pages/KravPage'
-import {behandlingName, useBehandling, useSearchBehandling} from '../../api/BehandlingApi'
+import { getEtterlevelseStatus } from '../../pages/EtterlevelsePage'
+import { DateField, FieldWrapper } from '../common/Inputs'
+import { theme } from '../../util'
+import { FormControl } from 'baseui/form-control'
+import { useKrav, useSearchKrav } from '../../api/KravApi'
+import { kravName, kravNumView } from '../../pages/KravPage'
+import { behandlingName, useBehandling, useSearchBehandling } from '../../api/BehandlingApi'
 import CustomizedSelect from '../common/CustomizedSelect'
-import {H2, Label3, Paragraph2} from 'baseui/typography'
-import {ExternalLink} from '../common/RouteLink'
-import {circlePencilIcon} from '../Images'
-import {ettlevColors} from '../../util/theme'
-import {Card} from 'baseui/card'
-import {SuksesskriterierBegrunnelseEdit} from './Edit/SuksesskriterieBegrunnelseEdit'
-import {Radio, RadioGroup} from "baseui/radio";
-import {Code} from "../../services/Codelist";
-import {Error} from "../common/ModalSchema";
+import { H2, Label3, Paragraph2 } from 'baseui/typography'
+import { ExternalLink } from '../common/RouteLink'
+import { circlePencilIcon } from '../Images'
+import { ettlevColors } from '../../util/theme'
+import { Card } from 'baseui/card'
+import { SuksesskriterierBegrunnelseEdit } from './Edit/SuksesskriterieBegrunnelseEdit'
+import { ALIGN, Radio, RadioGroup, StyledRadioMarkInner } from "baseui/radio";
+import { Code } from "../../services/Codelist";
+import { Error } from "../common/ModalSchema";
 
 type EditEttlevProps = {
   etterlevelse: Etterlevelse
@@ -41,7 +41,7 @@ const etterlevelseSchema = () => {
         name: 'begrunnelseText',
         message: 'Du må fylle ut dokumentasjonen',
         test: function (begrunnelse) {
-          const {parent} = this;
+          const { parent } = this;
           return (parent.oppfylt && !!begrunnelse === true) || !parent.oppfylt
         }
       }),
@@ -51,7 +51,7 @@ const etterlevelseSchema = () => {
       name: 'etterlevelseStatus',
       message: 'Du må dokumentere på alle suksesskriterier før du er ferdig',
       test: function (status) {
-        const {parent} = this;
+        const { parent } = this;
         if (status === EtterlevelseStatus.FERDIG) {
           return parent.suksesskriterieBegrunnelser.every((skb: any) => skb.oppfylt && !!skb.begrunnelse)
         }
@@ -61,20 +61,14 @@ const etterlevelseSchema = () => {
   })
 }
 
-export const EditEtterlevelse = ({krav, etterlevelse, close, formRef, documentEdit}: EditEttlevProps) => {
+export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentEdit }: EditEttlevProps) => {
 
   const [etterlevelseStatus, setEtterlevelseStatus] = React.useState<string>(etterlevelse.status || EtterlevelseStatus.UNDER_REDIGERING);
   const submit = async (etterlevelse: Etterlevelse) => {
     const mutatedEtterlevelse = {
-      ...etterlevelse, suksesskriterieBegrunnelser: etterlevelse.suksesskriterieBegrunnelser.map(skb => {
-          return {
-            suksesskriterieId: skb.suksesskriterieId,
-            begrunnelse: skb.begrunnelse,
-            oppfylt: skb.oppfylt,
-          }
-        }
-      )
+      ...etterlevelse, fristForFerdigstillelse: etterlevelse.status !== EtterlevelseStatus.OPPFYLLES_SENERE? '' : etterlevelse.fristForFerdigstillelse
     }
+
     if (etterlevelse.id) {
       close(await updateEtterlevelse(mutatedEtterlevelse))
     } else {
@@ -88,18 +82,18 @@ export const EditEtterlevelse = ({krav, etterlevelse, close, formRef, documentEd
       initialValues={mapEtterlevelseToFormValue(etterlevelse)}
       validationSchema={etterlevelseSchema()}
       innerRef={formRef}
-    >{({values, isSubmitting, submitForm}: FormikProps<Etterlevelse>) => (
+    >{({ values, isSubmitting, submitForm }: FormikProps<Etterlevelse>) => (
       <Form>
         <Card>
           <Block display='flex'>
             <Block display='flex' marginRight={theme.sizing.scale800}>
-              <img src={circlePencilIcon} alt='pencil-icon'/>
+              <img src={circlePencilIcon} alt='pencil-icon' />
             </Block>
             <Block>
-              <Paragraph2 $style={{marginTop: '0px', marginBottom: '0px'}}>
+              <Paragraph2 $style={{ marginTop: '0px', marginBottom: '0px' }}>
                 {kravNumView(krav)}
               </Paragraph2>
-              <H2 $style={{marginTop: '0px', marginBottom: '0px', color: ettlevColors.navMorkGra}}>
+              <H2 $style={{ marginTop: '0px', marginBottom: '0px', color: ettlevColors.navMorkGra }}>
                 {krav.navn}
               </H2>
             </Block>
@@ -116,11 +110,11 @@ export const EditEtterlevelse = ({krav, etterlevelse, close, formRef, documentEd
 
           <Block>
             <Block paddingLeft={padding} paddingRight={padding} paddingTop={theme.sizing.scale1000} paddingBottom={theme.sizing.scale1600}>
-              <Label3 $style={{lineHeight: '32px'}}>
+              <Label3 $style={{ lineHeight: '32px' }}>
                 Velg suksesskriterier for dokumentasjon
               </Label3>
 
-              <SuksesskriterierBegrunnelseEdit suksesskriterie={krav.suksesskriterier}/>
+              <SuksesskriterierBegrunnelseEdit suksesskriterie={krav.suksesskriterier} />
 
               {/*
               {!documentEdit &&
@@ -160,38 +154,66 @@ export const EditEtterlevelse = ({krav, etterlevelse, close, formRef, documentEd
                         }
                       }}
                     >
-                      <RadioGroup
+                      <RadioGroup overrides={{
+                        Root: {
+                          style: {
+                            alignItems: 'flex-start'
+                          },
+                        },
+                        Label: {
+                          style: {
+                            fontSize: '18px',
+                            fontWeight: 400,
+                            lineHeight: '22px',
+                          }
+                        }
+                      }}
                         value={etterlevelseStatus}
                         onChange={event => {
                           p.form.setFieldValue('status', event.currentTarget.value)
                           setEtterlevelseStatus(event.currentTarget.value)
                         }}
                       >
-                        {Object.values(EtterlevelseStatus).map(id => <Radio value={id} key={id}>{getEtterlevelseStatus(id)}</Radio>)}
+                        {Object.values(EtterlevelseStatus).map(id => {
+                          if (id === EtterlevelseStatus.OPPFYLLES_SENERE) {
+                            return (
+                              <Radio
+                                value={id}
+                                key={id}
+                              >
+                                {getEtterlevelseStatus(id)}
+
+                                {etterlevelseStatus === EtterlevelseStatus.OPPFYLLES_SENERE && <DateField label='Frist (valgfritt)' name='fristForFerdigstillelse' />}
+                              </Radio>
+                            )
+                          }
+                          return (<Radio value={id} key={id}>{getEtterlevelseStatus(id)}</Radio>)
+                        }
+                        )}
                       </RadioGroup>
                     </FormControl>}
                 </Field>
               </FieldWrapper>
-              <Error fieldName={'status'} fullWidth={true}/>
+              <Error fieldName={'status'} fullWidth={true} />
             </Block>
           </Block>
         </Card>
 
         {!documentEdit &&
-        <Block display='flex' justifyContent='flex-end' marginTop={theme.sizing.scale850} marginBottom={theme.sizing.scale3200}>
-          <Button type='button' kind='secondary' marginRight onClick={close}>Avbryt</Button>
-          <Button type='button' disabled={isSubmitting} onClick={submitForm}>Lagre</Button>
-        </Block>}
+          <Block display='flex' justifyContent='flex-end' marginTop={theme.sizing.scale850} marginBottom={theme.sizing.scale3200}>
+            <Button type='button' kind='secondary' marginRight onClick={close}>Avbryt</Button>
+            <Button type='button' disabled={isSubmitting} onClick={submitForm}>Lagre</Button>
+          </Block>}
       </Form>
     )
-    }
+      }
     </Formik>
   )
 }
 
 export const SearchKrav = (props: { kravNummer: number, kravVersjon: number }) => {
   const
-   [results, setSearch, loading] = useSearchKrav()
+    [results, setSearch, loading] = useSearchKrav()
   const [krav, setKrav] = useKrav(props, true)
 
   return (
@@ -205,9 +227,9 @@ export const SearchKrav = (props: { kravNummer: number, kravVersjon: number }) =
             searchable
             noResultsMsg='Ingen resultat'
 
-            options={results.map(k => ({id: k.id, label: kravName(k)}))}
-            value={krav ? [{id: krav.id, label: kravName(krav)}] : []}
-            onChange={({value}) => {
+            options={results.map(k => ({ id: k.id, label: kravName(k) }))}
+            value={krav ? [{ id: krav.id, label: kravName(krav) }] : []}
+            onChange={({ value }) => {
               const kravSelect = value.length ? results.find(k => k.id === value[0].id)! : undefined
               setKrav(kravSelect)
               p.form.setFieldValue('kravNummer', kravSelect?.kravNummer)
@@ -238,9 +260,9 @@ export const SearchBehandling = (props: { id: string }) => {
             searchable
             noResultsMsg='Ingen resultat'
 
-            options={results.map(k => ({id: k.id, label: behandlingName(k)}))}
-            value={behandling ? [{id: behandling.id, label: behandlingName(behandling)}] : []}
-            onChange={({value}) => {
+            options={results.map(k => ({ id: k.id, label: behandlingName(k) }))}
+            value={behandling ? [{ id: behandling.id, label: behandlingName(behandling) }] : []}
+            onChange={({ value }) => {
               const select = value.length ? results.find(k => k.id === value[0].id)! : undefined
               setBehandling(select)
               p.form.setFieldValue('behandlingId', select?.id)
