@@ -3,10 +3,11 @@ import { ettlevColors, theme } from '../../util/theme'
 import { Block } from 'baseui/block'
 import { HeadingLarge } from 'baseui/typography'
 import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons'
-import React from 'react'
+import * as React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { borderColor, borderRadius, borderStyle, borderWidth } from './Style'
 import _ from 'lodash'
+import { resetCaches } from '@apollo/client'
 
 
 export const CustomizedAccordion = (props: AccordionProps) => {
@@ -55,11 +56,21 @@ export const CustomizedPanel = (props: PanelProps) => {
 
   const overrides = _.merge(customOverrides, props.overrides)
 
-  return (
-    <Panel {...props} overrides={overrides} title={<Block>
+const getTitle = () => {
+  if (typeof(props.title) !== 'string') {
+    return (props.title)
+  } else {
+    return (
+      <Block>
       <HeadingLarge marginTop={theme.sizing.scale100} marginBottom={theme.sizing.scale100} color={ettlevColors.green600}>
         {props.title}
       </HeadingLarge>
-    </Block>} />
+    </Block>
+    )
+  }
+}
+
+  return (
+    <Panel {...props} overrides={overrides} title={getTitle()}/>
   )
 }

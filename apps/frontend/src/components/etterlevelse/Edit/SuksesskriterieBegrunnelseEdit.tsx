@@ -1,7 +1,7 @@
 import { Block } from 'baseui/block'
 import { Checkbox } from 'baseui/checkbox'
 import { FormControl } from 'baseui/form-control'
-import { Paragraph2 } from 'baseui/typography'
+import { Label3, Paragraph2 } from 'baseui/typography'
 import { FieldArray, FieldArrayRenderProps } from 'formik'
 import React from 'react'
 import { Suksesskriterie, SuksesskriterieBegrunnelse } from '../../../constants'
@@ -12,6 +12,7 @@ import { FieldWrapper } from '../../common/Inputs'
 import { Markdown } from '../../common/Markdown'
 import TextEditor from '../../common/TextEditor/TextEditor'
 import { Error } from '../../common/ModalSchema'
+import LabelWithToolTip from '../../common/LabelWithTooltip'
 
 const paddingLeft = '30px'
 
@@ -90,7 +91,7 @@ const KriterieBegrunnelse = ({
 
       
         <Block paddingLeft={paddingLeft} marginTop={theme.sizing.scale1000}>
-          <FormControl label='Dokumentasjon'>
+          <FormControl label={<LabelWithToolTip label='Dokumentasjon' />}>
             <TextEditor initialValue={begrunnelse} setValue={setBegrunnelse} height={'188px'} />
           </FormControl>
           <Error fieldName={`suksesskriterieBegrunnelser[${index}].begrunnelse`} fullWidth={true} />
@@ -99,7 +100,7 @@ const KriterieBegrunnelse = ({
 
       <CustomizedAccordion>
         <CustomizedPanel
-          title='Utfyllende om kriteriet'
+          title={<Label3 $style={{color: ettlevColors.green600}}>Utfyllende om kriteriet</Label3>}
           overrides={{
             Header: {
               style: {
@@ -112,7 +113,7 @@ const KriterieBegrunnelse = ({
                 borderTopColor: 'none',
                 borderBottomStyle: 'none',
                 borderBottomColor: 'none',
-                width: '250px',
+                maxWidth: '210px',
                 paddingLeft: paddingLeft
               }
             },

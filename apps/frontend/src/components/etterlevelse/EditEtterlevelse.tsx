@@ -102,7 +102,7 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
             <Paragraph2>
               Gå til {' '}
               <ExternalLink href={'/krav/' + krav?.kravNummer + '/' + krav?.kravVersjon}>
-                detaljert kravbeskrivelse
+                detaljert kravbeskrivelse (ny fane)
               </ExternalLink>
               {' '} for mer informasjon om kravet, eksempler på dokumentert etterlevelse og tilbakemeldinger til kraveier
             </Paragraph2>
