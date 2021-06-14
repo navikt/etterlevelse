@@ -1,15 +1,16 @@
 import {LinkProps, StyledLink} from "baseui/link";
 import _ from 'lodash'
 
-const CustomizedLink = (props:LinkProps)=>{
+const CustomizedLink = (props: LinkProps) => {
+  const {style, ...restProps} = props
   const customStyle = {
     fontWeight: 'normal',
   }
 
-  const style = _.merge(customStyle,props.style)
+  const mergedStyle = _.merge(customStyle, style)
 
-  return(
-    <StyledLink {...props} style={style}>
+  return (
+    <StyledLink {...restProps} style={mergedStyle}>
       {props.children}
     </StyledLink>
   )
