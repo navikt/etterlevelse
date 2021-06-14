@@ -101,6 +101,11 @@ export const PanelLinkCard = (
 
         ':hover': {
           boxShadow: '0px 6px 8px rgba(0, 0, 0, 0.24)'
+        },
+
+        ':focus-within': {
+          outline: `3px solid ${ettlevColors.focusOutline}`,
+          outlineOffset: '1px'
         }
       }
     }
