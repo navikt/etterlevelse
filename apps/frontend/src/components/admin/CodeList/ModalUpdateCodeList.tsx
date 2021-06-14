@@ -1,16 +1,28 @@
 import * as React from 'react'
-import { Modal, ModalBody, ModalButton, ModalFooter, ModalHeader, ROLE, SIZE } from 'baseui/modal'
+import {
+  Modal,
+  ModalBody,
+  ModalButton,
+  ModalFooter,
+  ModalHeader,
+  ROLE,
+  SIZE,
+} from 'baseui/modal'
 
-import { Field, FieldProps, Form, Formik, FormikProps } from 'formik'
+import {Field, FieldProps, Form, Formik, FormikProps} from 'formik'
 
-import { Button, KIND } from 'baseui/button'
-import { Block, BlockProps } from 'baseui/block'
-import { Label2 } from 'baseui/typography'
-import { SIZE as InputSIZE } from 'baseui/input'
-import { CodeListFormValues, codeListSchema, ListName } from '../../../services/Codelist'
-import { Error } from '../../common/ModalSchema'
-import { LovCodeDataForm, TemaCodeDataForm } from './LovCode'
-import { MarkdownInfo } from '../../common/Markdown'
+import {Button, KIND} from 'baseui/button'
+import {Block, BlockProps} from 'baseui/block'
+import {Label2} from 'baseui/typography'
+import {SIZE as InputSIZE} from 'baseui/input'
+import {
+  CodeListFormValues,
+  codeListSchema,
+  ListName,
+} from '../../../services/Codelist'
+import {Error} from '../../common/ModalSchema'
+import {LovCodeDataForm, TemaCodeDataForm} from './LovCode'
+import {MarkdownInfo} from '../../common/Markdown'
 import CustomizedInput from '../../common/CustomizedInput'
 import CustomizedTextarea from '../../common/CustomizedTextarea'
 
@@ -36,16 +48,32 @@ type ModalUpdateProps = {
   submit: (process: CodeListFormValues) => Promise<void>
 }
 
-const UpdateCodeListModal = ({ title, initialValues, errorOnUpdate, isOpen, onClose, submit }: ModalUpdateProps) => {
+const UpdateCodeListModal = ({
+  title,
+  initialValues,
+  errorOnUpdate,
+  isOpen,
+  onClose,
+  submit,
+}: ModalUpdateProps) => {
   return (
-    <Modal onClose={onClose} closeable isOpen={isOpen} animate autoFocus unstable_ModalBackdropScroll size={SIZE.auto} role={ROLE.dialog}>
+    <Modal
+      onClose={onClose}
+      closeable
+      isOpen={isOpen}
+      animate
+      autoFocus
+      unstable_ModalBackdropScroll
+      size={SIZE.auto}
+      role={ROLE.dialog}
+    >
       <Block {...modalBlockProps}>
         <Formik
-          onSubmit={(values) => {
+          onSubmit={values => {
             submit(values)
             onClose()
           }}
-          initialValues={{ ...initialValues }}
+          initialValues={{...initialValues}}
           validationSchema={codeListSchema()}
         >
           {(formik: FormikProps<CodeListFormValues>) => (
@@ -57,8 +85,14 @@ const UpdateCodeListModal = ({ title, initialValues, errorOnUpdate, isOpen, onCl
                     Short name:
                   </Label2>
                   <Field name="shortName">
-                    {({ field }: FieldProps<CodeListFormValues>) => (
-                      <CustomizedInput name="shortName" value={formik.values.shortName} onChange={formik.handleChange} type="input" size={InputSIZE.default} />
+                    {({field}: FieldProps<CodeListFormValues>) => (
+                      <CustomizedInput
+                        name="shortName"
+                        value={formik.values.shortName}
+                        onChange={formik.handleChange}
+                        type="input"
+                        size={InputSIZE.default}
+                      />
                     )}
                   </Field>
                 </Block>
@@ -69,21 +103,34 @@ const UpdateCodeListModal = ({ title, initialValues, errorOnUpdate, isOpen, onCl
                     Description:
                   </Label2>
                   <Field name="description">
-                    {({ field }: FieldProps<CodeListFormValues>) => (
-                      <CustomizedTextarea name="description" value={formik.values.description} onChange={formik.handleChange} type="input" rows={10} />
+                    {({field}: FieldProps<CodeListFormValues>) => (
+                      <CustomizedTextarea
+                        name="description"
+                        value={formik.values.description}
+                        onChange={formik.handleChange}
+                        type="input"
+                        rows={10}
+                      />
                     )}
                   </Field>
                 </Block>
                 <Error fieldName="description" />
-                {(initialValues.list === ListName.LOV || initialValues.list === ListName.TEMA) && <MarkdownInfo />}
+                {(initialValues.list === ListName.LOV ||
+                  initialValues.list === ListName.TEMA) && <MarkdownInfo />}
 
                 {initialValues.list === ListName.LOV && <LovCodeDataForm />}
                 {initialValues.list === ListName.TEMA && <TemaCodeDataForm />}
               </ModalBody>
               <ModalFooter>
                 <Block display="flex" justifyContent="flex-end">
-                  <Block marginRight="auto">{errorOnUpdate && <p>{errorOnUpdate}</p>}</Block>
-                  <Button type="button" kind={KIND.secondary} onClick={() => onClose()}>
+                  <Block marginRight="auto">
+                    {errorOnUpdate && <p>{errorOnUpdate}</p>}
+                  </Block>
+                  <Button
+                    type="button"
+                    kind={KIND.secondary}
+                    onClick={() => onClose()}
+                  >
                     <b>Avbryt</b>
                   </Button>
                   <ModalButton type="button" onClick={formik.submitForm}>

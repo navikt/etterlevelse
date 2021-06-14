@@ -1,11 +1,15 @@
-import { Code, LovCode } from './services/Codelist'
-import { Group } from './services/User'
+import {Code, LovCode} from './services/Codelist'
+import {Group} from './services/User'
 
 export type RecursivePartial<T> = {
-  [P in keyof T]?: T[P] extends (infer U)[] ? RecursivePartial<U>[] : T[P] extends object ? RecursivePartial<T[P]> : T[P]
+  [P in keyof T]?: T[P] extends (infer U)[]
+    ? RecursivePartial<U>[]
+    : T[P] extends object
+    ? RecursivePartial<T[P]>
+    : T[P]
 }
 
-type Not<T> = { [key in keyof T]?: never }
+type Not<T> = {[key in keyof T]?: never}
 export type Or<T, U> = (T & Not<U>) | (U & Not<T>)
 
 export interface UserInfo {
@@ -187,7 +191,14 @@ export enum KravStatus {
   UTGAATT = 'UTGAATT',
 }
 
-export const emptyPage = { content: [], numberOfElements: 0, pageNumber: 0, pages: 0, pageSize: 1, totalElements: 0 }
+export const emptyPage = {
+  content: [],
+  numberOfElements: 0,
+  pageNumber: 0,
+  pages: 0,
+  pageSize: 1,
+  totalElements: 0,
+}
 
 export interface TeamResource {
   navIdent: string

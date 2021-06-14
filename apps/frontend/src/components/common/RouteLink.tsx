@@ -1,14 +1,14 @@
-import { useHistory } from 'react-router-dom'
+import {useHistory} from 'react-router-dom'
 import React from 'react'
-import { AuditItem, NavigableItem, ObjectType } from '../admin/audit/AuditTypes'
-import { Block } from 'baseui/block'
-import { AuditButton } from '../admin/audit/AuditButton'
-import { KIND } from 'baseui/button'
-import { ListName } from '../../services/Codelist'
+import {AuditItem, NavigableItem, ObjectType} from '../admin/audit/AuditTypes'
+import {Block} from 'baseui/block'
+import {AuditButton} from '../admin/audit/AuditButton'
+import {KIND} from 'baseui/button'
+import {ListName} from '../../services/Codelist'
 import CustomizedLink from './CustomizedLink'
 import _ from 'lodash'
-import { user } from '../../services/User'
-import { loginUrl } from '../Header'
+import {user} from '../../services/User'
+import {loginUrl} from '../Header'
 
 type RouteLinkProps = {
   href: string
@@ -18,7 +18,7 @@ type RouteLinkProps = {
 } & any
 
 const RouteLink = (props: RouteLinkProps) => {
-  const { hideUnderline, plain, requireLogin, style, ...restprops } = props
+  const {hideUnderline, plain, requireLogin, style, ...restprops} = props
   const history = useHistory()
 
   const onClick = (e: Event) => {
@@ -36,9 +36,19 @@ const RouteLink = (props: RouteLinkProps) => {
 
   const mergedStyle = _.merge(customStyle, props.style)
 
-  const href = !requireLogin || user.isLoggedIn() ? restprops.href : loginUrl(history, restprops.href)
+  const href =
+    !requireLogin || user.isLoggedIn()
+      ? restprops.href
+      : loginUrl(history, restprops.href)
 
-  return <CustomizedLink style={mergedStyle} {...restprops} href={href} onClick={onClick} />
+  return (
+    <CustomizedLink
+      style={mergedStyle}
+      {...restprops}
+      href={href}
+      onClick={onClick}
+    />
+  )
 }
 
 export default RouteLink
@@ -53,7 +63,11 @@ type ObjectLinkProps = {
   hideUnderline?: boolean
 }
 
-export const urlForObject = (type: NavigableItem, id: string, audit?: AuditItem) => {
+export const urlForObject = (
+  type: NavigableItem,
+  id: string,
+  audit?: AuditItem,
+) => {
   switch (type) {
     case ObjectType.Settings:
       return '/admin/settings'
@@ -84,13 +98,21 @@ export const ObjectLink = (props: ObjectLinkProps) => {
   const link = props.disable ? (
     props.children
   ) : (
-    <RouteLink href={urlForObject(props.type, props.id, props.audit)} hideUnderline={props.hideUnderline}>
+    <RouteLink
+      href={urlForObject(props.type, props.id, props.audit)}
+      hideUnderline={props.hideUnderline}
+    >
       {props.children}
     </RouteLink>
   )
 
   return props.withHistory ? (
-    <Block display="flex" justifyContent="space-between" width="100%" alignItems="center">
+    <Block
+      display="flex"
+      justifyContent="space-between"
+      width="100%"
+      alignItems="center"
+    >
       {link}
       <AuditButton id={props.id} kind={KIND.tertiary} />
     </Block>
@@ -117,7 +139,10 @@ export const ExternalLink = ({
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      style={{ color: fontColor ? fontColor : undefined, textDecoration: hideUnderline ? 'none' : undefined }}
+      style={{
+        color: fontColor ? fontColor : undefined,
+        textDecoration: hideUnderline ? 'none' : undefined,
+      }}
       aria-label={label}
     >
       {children}

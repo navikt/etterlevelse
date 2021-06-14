@@ -1,10 +1,15 @@
-import { ettlevColors, theme } from '../../util/theme'
-import { Block } from 'baseui/block'
-import { IconInCircle } from './Icon'
-import { HeadingSmall, ParagraphSmall } from 'baseui/typography'
+import {ettlevColors, theme} from '../../util/theme'
+import {Block} from 'baseui/block'
+import {IconInCircle} from './Icon'
+import {HeadingSmall, ParagraphSmall} from 'baseui/typography'
 import React from 'react'
 
-export const InfoBlock = (props: { icon: string; alt: string; text: string; color: string }) => (
+export const InfoBlock = (props: {
+  icon: string
+  alt: string
+  text: string
+  color: string
+}) => (
   <Block
     $style={{
       width: '100%',
@@ -16,14 +21,31 @@ export const InfoBlock = (props: { icon: string; alt: string; text: string; colo
       borderRadius: '4px',
     }}
   >
-    <Block display={'flex'} flexDirection={'column'} alignItems={'center'} padding={theme.sizing.scale700}>
-      <IconInCircle icon={props.icon} alt={props.alt} backgroundColor={props.color} size={'64px'} />
+    <Block
+      display={'flex'}
+      flexDirection={'column'}
+      alignItems={'center'}
+      padding={theme.sizing.scale700}
+    >
+      <IconInCircle
+        icon={props.icon}
+        alt={props.alt}
+        backgroundColor={props.color}
+        size={'64px'}
+      />
       <ParagraphSmall marginBottom={0}>{props.text}</ParagraphSmall>
     </Block>
   </Block>
 )
 
-export const InfoBlock2 = (props: { icon: string; alt: string; title: string; beskrivelse?: string; backgroundColor?: string; children?: React.ReactNode }) => (
+export const InfoBlock2 = (props: {
+  icon: string
+  alt: string
+  title: string
+  beskrivelse?: string
+  backgroundColor?: string
+  children?: React.ReactNode
+}) => (
   <Block
     $style={{
       width: '100%',
@@ -35,11 +57,19 @@ export const InfoBlock2 = (props: { icon: string; alt: string; title: string; be
       backgroundColor: props.backgroundColor || ettlevColors.white,
     }}
   >
-    <Block alignSelf={'center'} marginLeft={theme.sizing.scale800} marginRight={theme.sizing.scale800}>
+    <Block
+      alignSelf={'center'}
+      marginLeft={theme.sizing.scale800}
+      marginRight={theme.sizing.scale800}
+    >
       <img src={props.icon} alt={props.alt} width={'80px'} height={'80px'} />
     </Block>
 
-    <Block display={'flex'} flexDirection={'column'} padding={theme.sizing.scale700}>
+    <Block
+      display={'flex'}
+      flexDirection={'column'}
+      padding={theme.sizing.scale700}
+    >
       <HeadingSmall marginTop={0} marginBottom={0}>
         {props.title}
       </HeadingSmall>

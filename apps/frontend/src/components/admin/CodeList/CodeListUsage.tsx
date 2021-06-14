@@ -1,26 +1,32 @@
 import * as React from 'react'
-import { useEffect, useRef, useState } from 'react'
-import { Block } from 'baseui/block'
-import { Label2 } from 'baseui/typography'
-import { Value } from 'baseui/select'
-import { Button } from 'baseui/button'
+import {useEffect, useRef, useState} from 'react'
+import {Block} from 'baseui/block'
+import {Label2} from 'baseui/typography'
+import {Value} from 'baseui/select'
+import {Button} from 'baseui/button'
 
-import { StyledSpinnerNext } from 'baseui/spinner'
-import { Cell, Row, Table } from '../../common/Table'
-import { theme } from '../../../util'
-import { codelist, CodeUsage } from '../../../services/Codelist'
-import { ObjectLink } from '../../common/RouteLink'
-import { ObjectType } from '../audit/AuditTypes'
-import { replaceCodelistUsage } from '../../../api/CodelistApi'
+import {StyledSpinnerNext} from 'baseui/spinner'
+import {Cell, Row, Table} from '../../common/Table'
+import {theme} from '../../../util'
+import {codelist, CodeUsage} from '../../../services/Codelist'
+import {ObjectLink} from '../../common/RouteLink'
+import {ObjectType} from '../audit/AuditTypes'
+import {replaceCodelistUsage} from '../../../api/CodelistApi'
 import CustomizedSelect from '../../common/CustomizedSelect'
 
-const UsageTable = (props: { usage: CodeUsage }) => {
-  const { usage } = props
+const UsageTable = (props: {usage: CodeUsage}) => {
+  const {usage} = props
   const krav = !!usage.krav.length
   const behandlinger = !!usage.behandlinger.length
   const codelist = !!usage.codelist.length
 
-  const rows = usage ? Math.max(usage.krav.length, usage.behandlinger.length, usage.codelist.length) : -1
+  const rows = usage
+    ? Math.max(
+        usage.krav.length,
+        usage.behandlinger.length,
+        usage.codelist.length,
+      )
+    : -1
 
   return (
     <Table
@@ -28,21 +34,25 @@ const UsageTable = (props: { usage: CodeUsage }) => {
       hoverColor={theme.colors.primary100}
       data={usage.inUse ? [0] : []}
       headers={[
-        { title: 'Krav', hide: !krav },
-        { title: 'Behandling', hide: !behandlinger },
-        { title: 'Codelist', hide: !codelist },
-      ].filter((v) => !!v)}
-      render={(table) =>
-        Array.from(Array(rows).keys()).map((index) => {
+        {title: 'Krav', hide: !krav},
+        {title: 'Behandling', hide: !behandlinger},
+        {title: 'Codelist', hide: !codelist},
+      ].filter(v => !!v)}
+      render={table =>
+        Array.from(Array(rows).keys()).map(index => {
           const kr = usage.krav[index]
           const be = usage.behandlinger[index]
           const co = usage.codelist[index]
           return (
-            <Row key={index} $style={{ borderBottomStyle: 'none' }}>
+            <Row key={index} $style={{borderBottomStyle: 'none'}}>
               {krav && (
                 <Cell>
                   {kr && (
-                    <ObjectLink id={kr.id} type={ObjectType.Krav} withHistory={true}>
+                    <ObjectLink
+                      id={kr.id}
+                      type={ObjectType.Krav}
+                      withHistory={true}
+                    >
                       {kr.name}
                     </ObjectLink>
                   )}
@@ -51,7 +61,11 @@ const UsageTable = (props: { usage: CodeUsage }) => {
               {behandlinger && (
                 <Cell>
                   {be && (
-                    <ObjectLink id={be.id} type={ObjectType.Behandling} withHistory={true}>
+                    <ObjectLink
+                      id={be.id}
+                      type={ObjectType.Behandling}
+                      withHistory={true}
+                    >
                       {be.name}
                     </ObjectLink>
                   )}
@@ -60,7 +74,11 @@ const UsageTable = (props: { usage: CodeUsage }) => {
               {codelist && (
                 <Cell>
                   {co && (
-                    <ObjectLink id={co.list} type={ObjectType.Codelist} withHistory={true}>
+                    <ObjectLink
+                      id={co.list}
+                      type={ObjectType.Codelist}
+                      withHistory={true}
+                    >
                       {co.list} - {co.code}
                     </ObjectLink>
                   )}
@@ -74,20 +92,27 @@ const UsageTable = (props: { usage: CodeUsage }) => {
   )
 }
 
-export const Usage = (props: { usage?: CodeUsage; refresh: () => void }) => {
+export const Usage = (props: {usage?: CodeUsage; refresh: () => void}) => {
   const [showReplace, setShowReplace] = useState(false)
   const [newValue, setNewValue] = useState<Value>([])
   const ref = useRef<HTMLElement>()
 
-  const { usage, refresh } = props
+  const {usage, refresh} = props
 
   useEffect(() => {
     setShowReplace(false)
-    setTimeout(() => ref.current && window.scrollTo({ top: ref.current.offsetTop }), 200)
+    setTimeout(
+      () => ref.current && window.scrollTo({top: ref.current.offsetTop}),
+      200,
+    )
   }, [usage])
 
   const replace = async () => {
-    await replaceCodelistUsage(usage!.listName, usage!.code, newValue[0].id as string)
+    await replaceCodelistUsage(
+      usage!.listName,
+      usage!.code,
+      newValue[0].id as string,
+    )
     refresh()
   }
 
@@ -96,7 +121,12 @@ export const Usage = (props: { usage?: CodeUsage; refresh: () => void }) => {
       <Block display="flex" justifyContent="space-between" marginBottom=".5rem">
         <Label2 font="font450">Bruk</Label2>
         {!!usage?.inUse && (
-          <Button type="button" kind="secondary" size="compact" onClick={() => setShowReplace(true)}>
+          <Button
+            type="button"
+            kind="secondary"
+            size="compact"
+            onClick={() => setShowReplace(true)}
+          >
             <b>Erstatt all bruk</b>
           </Button>
         )}
@@ -111,9 +141,14 @@ export const Usage = (props: { usage?: CodeUsage; refresh: () => void }) => {
             placeholder={'Ny verdi'}
             options={codelist.getParsedOptions(usage.listName)}
             value={newValue}
-            onChange={(params) => setNewValue(params.value)}
+            onChange={params => setNewValue(params.value)}
           />
-          <Button type="button" size="compact" onClick={replace} disabled={!newValue.length}>
+          <Button
+            type="button"
+            size="compact"
+            onClick={replace}
+            disabled={!newValue.length}
+          >
             <b>Erstatt</b>
           </Button>
         </Block>

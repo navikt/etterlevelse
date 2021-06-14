@@ -1,16 +1,22 @@
 import axios from 'axios'
-import React, { useState } from 'react'
-import { Modal, ModalBody, ModalButton, ModalFooter, ModalHeader } from 'baseui/modal'
+import React, {useState} from 'react'
+import {
+  Modal,
+  ModalBody,
+  ModalButton,
+  ModalFooter,
+  ModalHeader,
+} from 'baseui/modal'
 
 let done = false
 
 const init = (onErr: (e: any) => void) => {
   done = true
   axios.interceptors.response.use(
-    (res) => {
+    res => {
       return res
     },
-    (err) => {
+    err => {
       if (err?.response?.status !== 404) {
         console.log('axios error', err)
         onErr(err)

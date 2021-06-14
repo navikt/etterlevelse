@@ -1,8 +1,8 @@
-import { LinkProps, StyledLink } from 'baseui/link'
+import {LinkProps, StyledLink} from 'baseui/link'
 import _ from 'lodash'
 
 const CustomizedLink = (props: LinkProps) => {
-  const { style, ...restProps } = props
+  const {style, ...restProps} = props
   const customStyle = {
     fontWeight: 'normal',
   }

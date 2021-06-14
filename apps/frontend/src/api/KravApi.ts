@@ -1,12 +1,23 @@
 import axios from 'axios'
-import { emptyPage, Krav, KravQL, KravStatus, Or, PageResponse } from '../constants'
-import { env } from '../util/env'
-import { useEffect, useState } from 'react'
-import { useSearch } from '../util/hooks'
-import { gql } from '@apollo/client'
+import {
+  emptyPage,
+  Krav,
+  KravQL,
+  KravStatus,
+  Or,
+  PageResponse,
+} from '../constants'
+import {env} from '../util/env'
+import {useEffect, useState} from 'react'
+import {useSearch} from '../util/hooks'
+import {gql} from '@apollo/client'
 
 export const getKravPage = async (pageNumber: number, pageSize: number) => {
-  return (await axios.get<PageResponse<Krav>>(`${env.backendBaseUrl}/krav?pageNumber=${pageNumber}&pageSize=${pageSize}`)).data
+  return (
+    await axios.get<PageResponse<Krav>>(
+      `${env.backendBaseUrl}/krav?pageNumber=${pageNumber}&pageSize=${pageSize}`,
+    )
+  ).data
 }
 
 export const getKrav = async (id: string) => {
@@ -18,11 +29,22 @@ export const deleteKrav = async (id: string) => {
 }
 
 export const searchKrav = async (name: string) => {
-  return (await axios.get<PageResponse<Krav>>(`${env.backendBaseUrl}/krav/search/${name}`)).data.content
+  return (
+    await axios.get<PageResponse<Krav>>(
+      `${env.backendBaseUrl}/krav/search/${name}`,
+    )
+  ).data.content
 }
 
-export const getKravByKravNummer = async (kravNummer: number | string, kravVersjon: number | string) => {
-  return (await axios.get<Krav>(`${env.backendBaseUrl}/krav/kravnummer/${kravNummer}/${kravVersjon}`)).data
+export const getKravByKravNummer = async (
+  kravNummer: number | string,
+  kravVersjon: number | string,
+) => {
+  return (
+    await axios.get<Krav>(
+      `${env.backendBaseUrl}/krav/kravnummer/${kravNummer}/${kravVersjon}`,
+    )
+  ).data
 }
 
 export const createKrav = async (krav: KravQL) => {
@@ -32,7 +54,8 @@ export const createKrav = async (krav: KravQL) => {
 
 export const updateKrav = async (krav: KravQL) => {
   const dto = kravToKravDto(krav)
-  return (await axios.put<Krav>(`${env.backendBaseUrl}/krav/${krav.id}`, dto)).data
+  return (await axios.put<Krav>(`${env.backendBaseUrl}/krav/${krav.id}`, dto))
+    .data
 }
 
 function kravToKravDto(krav: KravQL): Krav {
@@ -40,9 +63,9 @@ function kravToKravDto(krav: KravQL): Krav {
     ...krav,
     avdeling: krav.avdeling?.code,
     underavdeling: krav.underavdeling?.code,
-    relevansFor: krav.relevansFor.map((c) => c.code),
-    regelverk: krav.regelverk.map((r) => ({ ...r, lov: r.lov.code })),
-    begrepIder: krav.begreper.map((b) => b.id),
+    relevansFor: krav.relevansFor.map(c => c.code),
+    regelverk: krav.regelverk.map(r => ({...r, lov: r.lov.code})),
+    begrepIder: krav.begreper.map(b => b.id),
   } as any
   delete dto.changeStamp
   delete dto.version
@@ -57,33 +80,55 @@ export const useKravPage = (pageSize: number) => {
 
   useEffect(() => {
     setLoading(true)
-    getKravPage(page, pageSize).then((r) => {
+    getKravPage(page, pageSize).then(r => {
       setData(r)
       setLoading(false)
     })
   }, [page, pageSize])
 
   const prevPage = () => setPage(Math.max(0, page - 1))
-  const nextPage = () => setPage(Math.min(data?.pages ? data.pages - 1 : 0, page + 1))
+  const nextPage = () =>
+    setPage(Math.min(data?.pages ? data.pages - 1 : 0, page + 1))
 
-  return [data, prevPage, nextPage, loading] as [PageResponse<Krav>, () => void, () => void, boolean]
+  return [data, prevPage, nextPage, loading] as [
+    PageResponse<Krav>,
+    () => void,
+    () => void,
+    boolean,
+  ]
 }
 
-export type KravIdParams = Or<{ id?: string }, { kravNummer: string; kravVersjon: string }>
-export type KravId = Or<{ id?: string }, { kravNummer: number; kravVersjon: number }>
+export type KravIdParams = Or<
+  {id?: string},
+  {kravNummer: string; kravVersjon: string}
+>
+export type KravId = Or<
+  {id?: string},
+  {kravNummer: number; kravVersjon: number}
+>
 
-export const useKrav = (params: KravId | KravIdParams, onlyLoadOnce?: boolean) => {
+export const useKrav = (
+  params: KravId | KravIdParams,
+  onlyLoadOnce?: boolean,
+) => {
   const isCreateNew = params.id === 'ny'
-  const [data, setData] = useState<Krav | undefined>(isCreateNew ? mapToFormVal({}) : undefined)
+  const [data, setData] = useState<Krav | undefined>(
+    isCreateNew ? mapToFormVal({}) : undefined,
+  )
 
   let load = () => {
     if (data && onlyLoadOnce) return
     params?.id && !isCreateNew && getKrav(params.id).then(setData)
-    params?.kravNummer && getKravByKravNummer(params.kravNummer, params.kravVersjon).then(setData)
+    params?.kravNummer &&
+      getKravByKravNummer(params.kravNummer, params.kravVersjon).then(setData)
   }
   useEffect(load, [params])
 
-  return [data, setData, load] as [Krav | undefined, (k?: Krav) => void, () => void]
+  return [data, setData, load] as [
+    Krav | undefined,
+    (k?: Krav) => void,
+    () => void,
+  ]
 }
 
 export const useSearchKrav = () => useSearch(searchKrav)
@@ -93,7 +138,7 @@ export const mapToFormVal = (krav: Partial<KravQL>): KravQL => ({
   navn: krav.navn || '',
   kravNummer: krav.kravNummer || 0,
   kravVersjon: krav.kravVersjon || 0,
-  changeStamp: krav.changeStamp || { lastModifiedDate: '', lastModifiedBy: '' },
+  changeStamp: krav.changeStamp || {lastModifiedDate: '', lastModifiedBy: ''},
   version: -1,
   beskrivelse: krav.beskrivelse || '',
   utdypendeBeskrivelse: krav.utdypendeBeskrivelse || '',
@@ -108,7 +153,7 @@ export const mapToFormVal = (krav: Partial<KravQL>): KravQL => ({
   hensikt: krav.hensikt || '',
   avdeling: krav.avdeling,
   underavdeling: krav.underavdeling,
-  periode: krav.periode || { start: undefined, slutt: undefined },
+  periode: krav.periode || {start: undefined, slutt: undefined},
   relevansFor: krav.relevansFor || [],
   status: krav.status || KravStatus.UTKAST,
   suksesskriterier: krav.suksesskriterier || [],

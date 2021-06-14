@@ -1,12 +1,12 @@
 import React from 'react'
-import { convertToRaw, RawDraftContentState } from 'draft-js'
-import { Editor } from 'react-draft-wysiwyg'
-import { draftToMarkdown, markdownToDraft } from 'markdown-draft-js'
+import {convertToRaw, RawDraftContentState} from 'draft-js'
+import {Editor} from 'react-draft-wysiwyg'
+import {draftToMarkdown, markdownToDraft} from 'markdown-draft-js'
 import '../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
 import './customStyle.css'
-import { Block } from 'baseui/block'
-import { ettlevColors } from '../../../util/theme'
-import { useDebouncedState } from '../../../util/hooks'
+import {Block} from 'baseui/block'
+import {ettlevColors} from '../../../util/theme'
+import {useDebouncedState} from '../../../util/hooks'
 
 type TextEditorProps = {
   initialValue: string
@@ -17,7 +17,11 @@ type TextEditorProps = {
 }
 
 const TextEditor = (props: TextEditorProps) => {
-  const [val, setVal] = useDebouncedState(props.initialValue, 500, props.setValue)
+  const [val, setVal] = useDebouncedState(
+    props.initialValue,
+    500,
+    props.setValue,
+  )
 
   const CustomDraftToMarkdown = (data: RawDraftContentState) => {
     return draftToMarkdown(data, {
@@ -62,11 +66,17 @@ const TextEditor = (props: TextEditorProps) => {
   }
 
   return (
-    <Block backgroundColor={ettlevColors.white} $style={{ border: `1px solid ${ettlevColors.textAreaBorder}` }}>
+    <Block
+      backgroundColor={ettlevColors.white}
+      $style={{border: `1px solid ${ettlevColors.textAreaBorder}`}}
+    >
       <Editor
-        editorStyle={{ padding: '10px', height: props.height || '500px' }}
-        toolbarStyle={{ backgroundColor: ettlevColors.grey50, borderBottom: `1px solid ${ettlevColors.textAreaBorder}` }}
-        onEditorStateChange={(data) => {
+        editorStyle={{padding: '10px', height: props.height || '500px'}}
+        toolbarStyle={{
+          backgroundColor: ettlevColors.grey50,
+          borderBottom: `1px solid ${ettlevColors.textAreaBorder}`,
+        }}
+        onEditorStateChange={data => {
           setVal(CustomDraftToMarkdown(convertToRaw(data.getCurrentContent())))
         }}
         initialContentState={CustomMarkdownToDraft(val)}
@@ -77,9 +87,17 @@ const TextEditor = (props: TextEditorProps) => {
         toolbar={{
           options: ['inline', 'blockType', 'list', 'link', 'history'],
           blockType: {},
-          inline: { options: ['bold', 'italic', 'underline', 'strikethrough', 'monospace'] },
-          list: { options: ['unordered', 'ordered'] },
-          link: { options: ['link'] },
+          inline: {
+            options: [
+              'bold',
+              'italic',
+              'underline',
+              'strikethrough',
+              'monospace',
+            ],
+          },
+          list: {options: ['unordered', 'ordered']},
+          link: {options: ['link']},
           //image: { alt: { present: true, mandatory: true }, },
         }}
       />

@@ -1,7 +1,7 @@
-import { AxiosResponse } from 'axios'
-import { UserInfo } from '../constants'
-import { getUserInfo } from '../api/userApi'
-import { updateUser } from '../util/hooks'
+import {AxiosResponse} from 'axios'
+import {UserInfo} from '../constants'
+import {getUserInfo} from '../api/userApi'
+import {updateUser} from '../util/hooks'
 
 export enum Group {
   READ = 'READ',
@@ -12,7 +12,7 @@ export enum Group {
 
 class UserService {
   private loaded = false
-  private userInfo: UserInfo = { loggedIn: false, groups: [] }
+  private userInfo: UserInfo = {loggedIn: false, groups: []}
   private currentGroups = [Group.READ]
   private error?: string
   private readonly promise: Promise<any>
@@ -24,7 +24,7 @@ class UserService {
   private fetchData = async () => {
     return getUserInfo()
       .then(this.handleGetResponse)
-      .catch((err) => {
+      .catch(err => {
         this.error = err.message
         this.loaded = true
       })
@@ -32,8 +32,11 @@ class UserService {
 
   handleGetResponse = (response: AxiosResponse<UserInfo>) => {
     if (typeof response.data === 'object' && response.data !== null) {
-      const groups = response.data.groups.indexOf(Group.ADMIN) >= 0 ? (Object.keys(Group) as Group[]) : response.data.groups
-      this.userInfo = { ...response.data, groups }
+      const groups =
+        response.data.groups.indexOf(Group.ADMIN) >= 0
+          ? (Object.keys(Group) as Group[])
+          : response.data.groups
+      this.userInfo = {...response.data, groups}
       this.currentGroups = this.userInfo.groups
     } else {
       this.error = response.data
@@ -57,16 +60,22 @@ class UserService {
     return this.userInfo.name ?? ''
   }
 
-  public getAvailableGroups(): { name: string; group: Group }[] {
-    return this.userInfo.groups.filter((g) => g !== Group.READ).map((group) => ({ name: nameFor(group), group }))
+  public getAvailableGroups(): {name: string; group: Group}[] {
+    return this.userInfo.groups
+      .filter(g => g !== Group.READ)
+      .map(group => ({name: nameFor(group), group}))
   }
 
   public toggleGroup(group: Group, active: boolean) {
-    if (active && !this.hasGroup(group) && this.userInfo.groups.indexOf(group) >= 0) {
+    if (
+      active &&
+      !this.hasGroup(group) &&
+      this.userInfo.groups.indexOf(group) >= 0
+    ) {
       this.currentGroups = [...this.currentGroups, group]
       updateUser()
     } else {
-      this.currentGroups = this.currentGroups.filter((g) => g !== group)
+      this.currentGroups = this.currentGroups.filter(g => g !== group)
       updateUser()
     }
   }

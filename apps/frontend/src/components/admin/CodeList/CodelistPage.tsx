@@ -1,24 +1,24 @@
 import * as React from 'react'
-import { useEffect } from 'react'
-import { StatefulSelect } from 'baseui/select'
-import { Block } from 'baseui/block'
-import { KIND, SIZE as ButtonSize } from 'baseui/button'
-import { useHistory, useParams } from 'react-router-dom'
+import {useEffect} from 'react'
+import {StatefulSelect} from 'baseui/select'
+import {Block} from 'baseui/block'
+import {KIND, SIZE as ButtonSize} from 'baseui/button'
+import {useHistory, useParams} from 'react-router-dom'
 
-import { H4 } from 'baseui/typography'
-import { StyledSpinnerNext } from 'baseui/spinner'
+import {H4} from 'baseui/typography'
+import {StyledSpinnerNext} from 'baseui/spinner'
 import Button from '../../common/Button'
-import { faPlus } from '@fortawesome/free-solid-svg-icons'
-import { useAwait, useForceUpdate } from '../../../util/hooks'
-import { Code, codelist, CodeListFormValues } from '../../../services/Codelist'
-import { createCodelist } from '../../../api/CodelistApi'
-import { theme } from '../../../util'
-import { user } from '../../../services/User'
+import {faPlus} from '@fortawesome/free-solid-svg-icons'
+import {useAwait, useForceUpdate} from '../../../util/hooks'
+import {Code, codelist, CodeListFormValues} from '../../../services/Codelist'
+import {createCodelist} from '../../../api/CodelistApi'
+import {theme} from '../../../util'
+import {user} from '../../../services/User'
 import CreateCodeListModal from './ModalCreateCodeList'
 import CodeListTable from './CodeListStyledTable'
 
 const CodeListPage = () => {
-  const params = useParams<{ listname?: string }>()
+  const params = useParams<{listname?: string}>()
   const history = useHistory()
   const [loading, setLoading] = React.useState(true)
   const [listname, setListname] = React.useState(params.listname)
@@ -33,7 +33,7 @@ const CodeListPage = () => {
   const handleCreateCodelist = async (values: CodeListFormValues) => {
     setLoading(true)
     try {
-      await createCodelist({ ...values } as Code)
+      await createCodelist({...values} as Code)
       await codelist.refreshCodeLists()
       setCreateCodeListModal(false)
     } catch (error) {
@@ -72,15 +72,23 @@ const CodeListPage = () => {
           <Block width="600px">
             <StatefulSelect
               options={codelist.makeIdLabelForAllCodeLists()}
-              onChange={({ value }) => setListname(value[0].id as string)}
+              onChange={({value}) => setListname(value[0].id as string)}
               clearable={false}
               placeholder="Velg kodeverk"
-              initialState={{ value: listname ? [{ id: listname, label: listname }] : [] }}
+              initialState={{
+                value: listname ? [{id: listname, label: listname}] : [],
+              }}
             />
           </Block>
           {listname && (
             <Block>
-              <Button tooltip="Legg til ny" icon={faPlus} size={ButtonSize.compact} kind={KIND.minimal} onClick={() => setCreateCodeListModal(!createCodeListModal)}>
+              <Button
+                tooltip="Legg til ny"
+                icon={faPlus}
+                size={ButtonSize.compact}
+                kind={KIND.minimal}
+                onClick={() => setCreateCodeListModal(!createCodeListModal)}
+              >
                 Opprett ny kode
               </Button>
             </Block>

@@ -1,21 +1,25 @@
 import moment from 'moment'
-import { Block } from 'baseui/block'
+import {Block} from 'baseui/block'
 import ReactJson from 'react-json-view'
-import React, { useEffect, useState } from 'react'
-import { Label1 } from 'baseui/typography'
-import { AuditActionIcon, AuditLabel as Label } from './AuditComponents'
-import { Card } from 'baseui/card'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBinoculars, faExchangeAlt, faTimes } from '@fortawesome/free-solid-svg-icons'
-import { PLACEMENT, StatefulTooltip } from 'baseui/tooltip'
-import { StatefulPopover } from 'baseui/popover'
+import React, {useEffect, useState} from 'react'
+import {Label1} from 'baseui/typography'
+import {AuditActionIcon, AuditLabel as Label} from './AuditComponents'
+import {Card} from 'baseui/card'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {
+  faBinoculars,
+  faExchangeAlt,
+  faTimes,
+} from '@fortawesome/free-solid-svg-icons'
+import {PLACEMENT, StatefulTooltip} from 'baseui/tooltip'
+import {StatefulPopover} from 'baseui/popover'
 import DiffViewer from 'react-diff-viewer'
-import { StyledSpinnerNext } from 'baseui/spinner'
-import { useRefs } from '../../../util/hooks'
-import { theme } from '../../../util'
-import { intl } from '../../../util/intl/intl'
-import { AuditAction, AuditLog } from './AuditTypes'
-import { ObjectLink } from '../../common/RouteLink'
+import {StyledSpinnerNext} from 'baseui/spinner'
+import {useRefs} from '../../../util/hooks'
+import {theme} from '../../../util'
+import {intl} from '../../../util/intl/intl'
+import {AuditAction, AuditLog} from './AuditTypes'
+import {ObjectLink} from '../../common/RouteLink'
 import Button from '../../common/Button'
 
 type AuditViewProps = {
@@ -30,13 +34,18 @@ function initialOpen(auditLog?: AuditLog, auditId?: string) {
 }
 
 export const AuditView = (props: AuditViewProps) => {
-  const { auditLog, auditId, loading, viewId } = props
-  const refs = useRefs<HTMLElement>(auditLog?.audits.map((al) => al.id) || [])
+  const {auditLog, auditId, loading, viewId} = props
+  const refs = useRefs<HTMLElement>(auditLog?.audits.map(al => al.id) || [])
   const [open, setOpen] = useState(initialOpen(auditLog, auditId))
 
   useEffect(() => {
-    if (auditId && auditLog && refs[auditId] && auditId !== auditLog.audits[0].id) {
-      refs[auditId].current!.scrollIntoView({ block: 'start' })
+    if (
+      auditId &&
+      auditLog &&
+      refs[auditId] &&
+      auditId !== auditLog.audits[0].id
+    ) {
+      refs[auditId].current!.scrollIntoView({block: 'start'})
     }
     setOpen(initialOpen(auditLog, auditId))
   }, [auditId, auditLog])
@@ -47,7 +56,9 @@ export const AuditView = (props: AuditViewProps) => {
   return (
     <Card>
       {loading && <StyledSpinnerNext size={theme.sizing.scale2400} />}
-      {!loading && auditLog && !logFound && <Label1>{intl.auditNotFound}</Label1>}
+      {!loading && auditLog && !logFound && (
+        <Label1>{intl.auditNotFound}</Label1>
+      )}
 
       {logFound && (
         <>
@@ -58,13 +69,25 @@ export const AuditView = (props: AuditViewProps) => {
               <Label label={intl.audits}>{auditLog?.audits.length}</Label>
             </Block>
             <Block display="flex">
-              <Button size="compact" kind="tertiary" marginRight onClick={() => setOpen(auditLog!.audits.map(() => true))}>
+              <Button
+                size="compact"
+                kind="tertiary"
+                marginRight
+                onClick={() => setOpen(auditLog!.audits.map(() => true))}
+              >
                 Åpne alle
               </Button>
               {newestAudit?.action !== AuditAction.DELETE && (
-                <StatefulTooltip content={() => intl.view} placement={PLACEMENT.top}>
+                <StatefulTooltip
+                  content={() => intl.view}
+                  placement={PLACEMENT.top}
+                >
                   <Block>
-                    <ObjectLink id={newestAudit!.tableId} type={newestAudit!.table} audit={newestAudit}>
+                    <ObjectLink
+                      id={newestAudit!.tableId}
+                      type={newestAudit!.table}
+                      audit={newestAudit}
+                    >
                       <Button size="compact" shape="round" kind="tertiary">
                         <FontAwesomeIcon icon={faBinoculars} />
                       </Button>
@@ -72,9 +95,17 @@ export const AuditView = (props: AuditViewProps) => {
                   </Block>
                 </StatefulTooltip>
               )}
-              <StatefulTooltip content={() => intl.close} placement={PLACEMENT.top}>
+              <StatefulTooltip
+                content={() => intl.close}
+                placement={PLACEMENT.top}
+              >
                 <Block>
-                  <Button size="compact" shape="round" kind="tertiary" onClick={() => viewId('')}>
+                  <Button
+                    size="compact"
+                    shape="round"
+                    kind="tertiary"
+                    onClick={() => viewId('')}
+                  >
                     <FontAwesomeIcon icon={faTimes} />
                   </Button>
                 </Block>
@@ -86,12 +117,27 @@ export const AuditView = (props: AuditViewProps) => {
             auditLog.audits.map((audit, index) => {
               const time = moment(audit.time)
               return (
-                <Block key={audit.id} ref={refs[audit.id]} marginBottom="1rem" marginTop=".5rem" backgroundColor={audit.id === props.auditId ? theme.colors.mono200 : undefined}>
+                <Block
+                  key={audit.id}
+                  ref={refs[audit.id]}
+                  marginBottom="1rem"
+                  marginTop=".5rem"
+                  backgroundColor={
+                    audit.id === props.auditId
+                      ? theme.colors.mono200
+                      : undefined
+                  }
+                >
                   <Block display="flex" justifyContent="space-between">
                     <Block width="90%">
-                      <Label label={intl.auditNr}>{auditLog.audits.length - index}</Label>
+                      <Label label={intl.auditNr}>
+                        {auditLog.audits.length - index}
+                      </Label>
                       <Label label={intl.action}>
-                        <AuditActionIcon action={audit.action} withText={true} />
+                        <AuditActionIcon
+                          action={audit.action}
+                          withText={true}
+                        />
                       </Label>
                       <Label label={intl.time}>
                         {time.format('LL')} {time.format('HH:mm:ss.SSS Z')}
@@ -106,7 +152,11 @@ export const AuditView = (props: AuditViewProps) => {
                             <DiffViewer
                               leftTitle="Previous"
                               rightTitle="Current"
-                              oldValue={JSON.stringify(auditLog?.audits[index + 1]?.data, null, 2)}
+                              oldValue={JSON.stringify(
+                                auditLog?.audits[index + 1]?.data,
+                                null,
+                                2,
+                              )}
                               newValue={JSON.stringify(audit.data, null, 2)}
                             />
                           </Card>
@@ -132,9 +182,10 @@ export const AuditView = (props: AuditViewProps) => {
                   <ReactJson
                     src={audit.data}
                     name={null}
-                    shouldCollapse={(p) => p.name === null && !open[index]}
-                    onSelect={(sel) => {
-                      ;(sel.name === 'id' || sel.name?.endsWith('Id')) && viewId(sel.value as string)
+                    shouldCollapse={p => p.name === null && !open[index]}
+                    onSelect={sel => {
+                      ;(sel.name === 'id' || sel.name?.endsWith('Id')) &&
+                        viewId(sel.value as string)
                     }}
                   />
                 </Block>

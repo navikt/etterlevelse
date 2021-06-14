@@ -1,16 +1,16 @@
-import { FieldWrapper } from '../../common/Inputs'
-import { useBegrepSearch } from '../../../api/BegrepApi'
+import {FieldWrapper} from '../../common/Inputs'
+import {useBegrepSearch} from '../../../api/BegrepApi'
 import React from 'react'
-import { FieldArray } from 'formik'
-import { intl } from '../../../util/intl/intl'
-import { TYPE } from 'baseui/select'
-import { FormControl } from 'baseui/form-control'
-import { Error } from '../../common/ModalSchema'
-import { RenderTagList } from '../../common/TagList'
-import { Begrep } from '../../../constants'
-import { Block } from 'baseui/block'
+import {FieldArray} from 'formik'
+import {intl} from '../../../util/intl/intl'
+import {TYPE} from 'baseui/select'
+import {FormControl} from 'baseui/form-control'
+import {Error} from '../../common/ModalSchema'
+import {RenderTagList} from '../../common/TagList'
+import {Begrep} from '../../../constants'
+import {Block} from 'baseui/block'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
-import { searchIcon } from '../../Images'
+import {searchIcon} from '../../Images'
 import CustomizedSelect from '../../common/CustomizedSelect'
 
 export const EditBegreper = () => {
@@ -19,14 +19,25 @@ export const EditBegreper = () => {
   return (
     <FieldWrapper>
       <FieldArray name="begreper">
-        {(p) => {
+        {p => {
           return (
-            <FormControl label={<LabelWithTooltip label={'Begreper'} tooltip={'Legg ved lenke til relevante begrep(er) i Begrepskatalogen.'} />}>
+            <FormControl
+              label={
+                <LabelWithTooltip
+                  label={'Begreper'}
+                  tooltip={
+                    'Legg ved lenke til relevante begrep(er) i Begrepskatalogen.'
+                  }
+                />
+              }
+            >
               <Block>
                 <CustomizedSelect
                   overrides={{
                     SearchIcon: {
-                      component: () => <img src={searchIcon} alt="search icon" />,
+                      component: () => (
+                        <img src={searchIcon} alt="search icon" />
+                      ),
                       style: {
                         display: 'flex',
                         justifyContent: 'flex-end',
@@ -57,15 +68,19 @@ export const EditBegreper = () => {
                   type={TYPE.search}
                   options={result}
                   placeholder={'Begreper'}
-                  onInputChange={(event) => setSearch(event.currentTarget.value)}
-                  onChange={(params) => {
+                  onInputChange={event => setSearch(event.currentTarget.value)}
+                  onChange={params => {
                     let term = params.value.length ? params.value[0] : undefined
                     term && p.push(term)
                   }}
                   error={!!p.form.errors.begreper && !!p.form.submitCount}
                   isLoading={loading}
                 />
-                <RenderTagList wide list={p.form.values.begreper.map((b: Begrep) => b.navn)} onRemove={p.remove} />
+                <RenderTagList
+                  wide
+                  list={p.form.values.begreper.map((b: Begrep) => b.navn)}
+                  onRemove={p.remove}
+                />
               </Block>
             </FormControl>
           )

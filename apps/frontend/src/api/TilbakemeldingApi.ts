@@ -1,30 +1,76 @@
 import axios from 'axios'
-import { PageResponse, Tilbakemelding, TilbakemeldingRolle, TilbakemeldingType, Varslingsadresse } from '../constants'
-import { env } from '../util/env'
-import { useEffect, useState } from 'react'
+import {
+  PageResponse,
+  Tilbakemelding,
+  TilbakemeldingRolle,
+  TilbakemeldingType,
+  Varslingsadresse,
+} from '../constants'
+import {env} from '../util/env'
+import {useEffect, useState} from 'react'
 import moment from 'moment'
 
-export const getTilbakemeldingForKrav = async (kravNummer: number, kravVersjon: number) => {
-  return (await axios.get<PageResponse<Tilbakemelding>>(`${env.backendBaseUrl}/krav/tilbakemelding/${kravNummer}/${kravVersjon}`)).data
+export const getTilbakemeldingForKrav = async (
+  kravNummer: number,
+  kravVersjon: number,
+) => {
+  return (
+    await axios.get<PageResponse<Tilbakemelding>>(
+      `${env.backendBaseUrl}/krav/tilbakemelding/${kravNummer}/${kravVersjon}`,
+    )
+  ).data
 }
 
-export const createNewTilbakemelding = async (request: CreateTilbakemeldingRequest) => {
-  return (await axios.post<Tilbakemelding>(`${env.backendBaseUrl}/krav/tilbakemelding`, request)).data
+export const createNewTilbakemelding = async (
+  request: CreateTilbakemeldingRequest,
+) => {
+  return (
+    await axios.post<Tilbakemelding>(
+      `${env.backendBaseUrl}/krav/tilbakemelding`,
+      request,
+    )
+  ).data
 }
 
-export const tilbakemeldingNewMelding = async (request: TilbakemeldingNewMeldingRequest) => {
-  return (await axios.post<Tilbakemelding>(`${env.backendBaseUrl}/krav/tilbakemelding/melding`, request)).data
+export const tilbakemeldingNewMelding = async (
+  request: TilbakemeldingNewMeldingRequest,
+) => {
+  return (
+    await axios.post<Tilbakemelding>(
+      `${env.backendBaseUrl}/krav/tilbakemelding/melding`,
+      request,
+    )
+  ).data
 }
 
-export const tilbakemeldingEditMelding = async (request: { tilbakemeldingId: string; meldingNr: number; text: string }) => {
-  return (await axios.post<Tilbakemelding>(`${env.backendBaseUrl}/krav/tilbakemelding/${request.tilbakemeldingId}/${request.meldingNr}`, { innhold: request.text })).data
+export const tilbakemeldingEditMelding = async (request: {
+  tilbakemeldingId: string
+  meldingNr: number
+  text: string
+}) => {
+  return (
+    await axios.post<Tilbakemelding>(
+      `${env.backendBaseUrl}/krav/tilbakemelding/${request.tilbakemeldingId}/${request.meldingNr}`,
+      {innhold: request.text},
+    )
+  ).data
 }
 
-export const tilbakemeldingslettMelding = async (request: { tilbakemeldingId: string; meldingNr: number }) => {
-  return (await axios.delete<Tilbakemelding>(`${env.backendBaseUrl}/krav/tilbakemelding/${request.tilbakemeldingId}/${request.meldingNr}`)).data
+export const tilbakemeldingslettMelding = async (request: {
+  tilbakemeldingId: string
+  meldingNr: number
+}) => {
+  return (
+    await axios.delete<Tilbakemelding>(
+      `${env.backendBaseUrl}/krav/tilbakemelding/${request.tilbakemeldingId}/${request.meldingNr}`,
+    )
+  ).data
 }
 
-export const useTilbakemeldinger = (kravNummer: number, kravVersjon: number) => {
+export const useTilbakemeldinger = (
+  kravNummer: number,
+  kravVersjon: number,
+) => {
   const [data, setData] = useState<Tilbakemelding[]>([])
   const [loading, setLoading] = useState<boolean>(false)
 
@@ -32,11 +78,17 @@ export const useTilbakemeldinger = (kravNummer: number, kravVersjon: number) => 
     if (kravNummer && kravVersjon) {
       setLoading(true)
       getTilbakemeldingForKrav(kravNummer, kravVersjon)
-        .then((r) => {
-          setData(r.content.sort((a, b) => moment(b.meldinger[b.meldinger.length - 1].tid).valueOf() - moment(a.meldinger[a.meldinger.length - 1].tid).valueOf()))
+        .then(r => {
+          setData(
+            r.content.sort(
+              (a, b) =>
+                moment(b.meldinger[b.meldinger.length - 1].tid).valueOf() -
+                moment(a.meldinger[a.meldinger.length - 1].tid).valueOf(),
+            ),
+          )
           setLoading(false)
         })
-        .catch((e) => {
+        .catch(e => {
           setData([])
           setLoading(false)
           console.error("couldn't find krav", e)
@@ -48,10 +100,15 @@ export const useTilbakemeldinger = (kravNummer: number, kravVersjon: number) => 
     setData([r, ...data])
   }
   const replace = (r: Tilbakemelding) => {
-    setData(data.map((t) => (t.id === r.id ? r : t)))
+    setData(data.map(t => (t.id === r.id ? r : t)))
   }
 
-  return [data, loading, add, replace] as [Tilbakemelding[], boolean, (t: Tilbakemelding) => void, (t: Tilbakemelding) => void]
+  return [data, loading, add, replace] as [
+    Tilbakemelding[],
+    boolean,
+    (t: Tilbakemelding) => void,
+    (t: Tilbakemelding) => void,
+  ]
 }
 
 export interface CreateTilbakemeldingRequest {

@@ -1,8 +1,8 @@
-import { Block } from 'baseui/block'
-import { maxPageWidth, pageWidth, theme } from '../../util/theme'
+import {Block} from 'baseui/block'
+import {maxPageWidth, pageWidth, theme} from '../../util/theme'
 import RouteLink from '../common/RouteLink'
 import Button from '../common/Button'
-import { navChevronRightIcon } from '../Images'
+import {navChevronRightIcon} from '../Images'
 import React from 'react'
 
 const padding = ['16px', '16px', '16px', '20px', '40px', '80px']
@@ -27,7 +27,12 @@ export const Page = ({
   children: React.ReactNode
 }) => {
   return (
-    <Block width="100%" overrides={{ Block: { props: { role: 'main' } } }} backgroundColor={backgroundColor} paddingBottom={'200px'}>
+    <Block
+      width="100%"
+      overrides={{Block: {props: {role: 'main'}}}}
+      backgroundColor={backgroundColor}
+      paddingBottom={'200px'}
+    >
       <Block
         backgroundColor={headerBackgroundColor}
         display="flex"
@@ -37,11 +42,21 @@ export const Page = ({
         marginBottom={headerOverlap ? '-' + headerOverlap : undefined}
       >
         <Block maxWidth={maxPageWidth} width="100%">
-          <Block paddingLeft={padding} paddingRight={padding} paddingTop={theme.sizing.scale800}>
+          <Block
+            paddingLeft={padding}
+            paddingRight={padding}
+            paddingTop={theme.sizing.scale800}
+          >
             {backUrl && (
               <RouteLink href={backUrl} hideUnderline>
                 <Button
-                  startEnhancer={<img alt={'Chevron venstre ikon'} src={navChevronRightIcon} style={{ transform: 'rotate(180deg)' }} />}
+                  startEnhancer={
+                    <img
+                      alt={'Chevron venstre ikon'}
+                      src={navChevronRightIcon}
+                      style={{transform: 'rotate(180deg)'}}
+                    />
+                  }
                   size="compact"
                   kind="underline-hover"
                 >
@@ -53,7 +68,13 @@ export const Page = ({
 
             {header && (
               <Block width={'100%'} display={'flex'} justifyContent="center">
-                <Block maxWidth={pageWidth} width={'100%'} display={'flex'} flexDirection={'column'} marginBottom={theme.sizing.scale600}>
+                <Block
+                  maxWidth={pageWidth}
+                  width={'100%'}
+                  display={'flex'}
+                  flexDirection={'column'}
+                  marginBottom={theme.sizing.scale600}
+                >
                   {header}
                 </Block>
               </Block>
@@ -62,7 +83,12 @@ export const Page = ({
         </Block>
       </Block>
 
-      <Block display="flex" width="100%" justifyContent="center" marginTop={headerOverlap ? 0 : theme.sizing.scale800}>
+      <Block
+        display="flex"
+        width="100%"
+        justifyContent="center"
+        marginTop={headerOverlap ? 0 : theme.sizing.scale800}
+      >
         {!wideMain && !rawMain && <Narrow>{children}</Narrow>}
         {wideMain && !rawMain && <Wide>{children}</Wide>}
         {rawMain && children}
@@ -71,7 +97,7 @@ export const Page = ({
   )
 }
 
-export const Wide = (props: { children: React.ReactNode }) => (
+export const Wide = (props: {children: React.ReactNode}) => (
   <Block maxWidth={maxPageWidth} width={'100%'}>
     <Block paddingLeft={padding} paddingRight={padding}>
       {props.children}
@@ -79,7 +105,7 @@ export const Wide = (props: { children: React.ReactNode }) => (
   </Block>
 )
 
-export const Narrow = (props: { children: React.ReactNode }) => (
+export const Narrow = (props: {children: React.ReactNode}) => (
   <Block maxWidth={pageWidth} width={'100%'}>
     {props.children}
   </Block>

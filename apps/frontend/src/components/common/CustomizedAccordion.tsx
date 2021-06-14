@@ -1,24 +1,29 @@
-import { Accordion, AccordionProps, Panel, PanelProps } from 'baseui/accordion'
-import { ettlevColors, theme } from '../../util/theme'
-import { Block } from 'baseui/block'
-import { HeadingLarge } from 'baseui/typography'
-import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons'
+import {Accordion, AccordionProps, Panel, PanelProps} from 'baseui/accordion'
+import {ettlevColors, theme} from '../../util/theme'
+import {Block} from 'baseui/block'
+import {HeadingLarge} from 'baseui/typography'
+import {faChevronDown, faChevronUp} from '@fortawesome/free-solid-svg-icons'
 import * as React from 'react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { borderColor, borderRadius, borderStyle, borderWidth } from './Style'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {borderColor, borderRadius, borderStyle, borderWidth} from './Style'
 import _ from 'lodash'
-import { resetCaches } from '@apollo/client'
+import {resetCaches} from '@apollo/client'
 
 export const CustomizedAccordion = (props: AccordionProps) => {
   return <Accordion {...props} overrides={{}} />
 }
 
 export const CustomizedPanel = (props: PanelProps) => {
-  const { expanded } = props
+  const {expanded} = props
 
   const customOverrides = {
     ToggleIcon: {
-      component: () => (expanded ? <FontAwesomeIcon icon={faChevronUp} /> : <FontAwesomeIcon icon={faChevronDown} />),
+      component: () =>
+        expanded ? (
+          <FontAwesomeIcon icon={faChevronUp} />
+        ) : (
+          <FontAwesomeIcon icon={faChevronDown} />
+        ),
     },
     Header: {
       style: {
@@ -57,7 +62,11 @@ export const CustomizedPanel = (props: PanelProps) => {
     } else {
       return (
         <Block>
-          <HeadingLarge marginTop={theme.sizing.scale100} marginBottom={theme.sizing.scale100} color={ettlevColors.green600}>
+          <HeadingLarge
+            marginTop={theme.sizing.scale100}
+            marginBottom={theme.sizing.scale100}
+            color={ettlevColors.green600}
+          >
             {props.title}
           </HeadingLarge>
         </Block>

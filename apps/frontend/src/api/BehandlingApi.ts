@@ -1,25 +1,42 @@
 import axios from 'axios'
-import { Behandling, BehandlingEtterlevData, PageResponse } from '../constants'
-import { env } from '../util/env'
-import { useSearch } from '../util/hooks'
-import { useEffect, useState } from 'react'
-import { user } from '../services/User'
+import {Behandling, BehandlingEtterlevData, PageResponse} from '../constants'
+import {env} from '../util/env'
+import {useSearch} from '../util/hooks'
+import {useEffect, useState} from 'react'
+import {user} from '../services/User'
 
 export const getBehandling = async (id: string) => {
-  return (await axios.get<Behandling>(`${env.backendBaseUrl}/behandling/${id}`)).data
+  return (await axios.get<Behandling>(`${env.backendBaseUrl}/behandling/${id}`))
+    .data
 }
 
 export const getBehandlinger = async () => {
-  return (await axios.get<PageResponse<Behandling>>(`${env.backendBaseUrl}/behandling?myBehandlinger=true`)).data.content
+  return (
+    await axios.get<PageResponse<Behandling>>(
+      `${env.backendBaseUrl}/behandling?myBehandlinger=true`,
+    )
+  ).data.content
 }
 
 export const searchBehandling = async (name: string) => {
-  return (await axios.get<PageResponse<Behandling>>(`${env.backendBaseUrl}/behandling/search/${name}`)).data.content
+  return (
+    await axios.get<PageResponse<Behandling>>(
+      `${env.backendBaseUrl}/behandling/search/${name}`,
+    )
+  ).data.content
 }
 
 export const updateBehandling = async (behandling: BehandlingEtterlevData) => {
-  const dto = { id: behandling.id, relevansFor: behandling.relevansFor.map((c) => c.code) }
-  return (await axios.put<Behandling>(`${env.backendBaseUrl}/behandling/${behandling.id}`, dto)).data
+  const dto = {
+    id: behandling.id,
+    relevansFor: behandling.relevansFor.map(c => c.code),
+  }
+  return (
+    await axios.put<Behandling>(
+      `${env.backendBaseUrl}/behandling/${behandling.id}`,
+      dto,
+    )
+  ).data
 }
 
 export const useBehandling = (id?: string) => {
@@ -29,16 +46,20 @@ export const useBehandling = (id?: string) => {
     id &&
       getBehandling(id)
         .then(setData)
-        .catch((e) => {
+        .catch(e => {
           setData(undefined)
           console.log("couldn't find behandling", e)
         })
   }, [id])
 
-  return [data, setData] as [Behandling | undefined, (k: Behandling | undefined) => void]
+  return [data, setData] as [
+    Behandling | undefined,
+    (k: Behandling | undefined) => void,
+  ]
 }
 
-export const behandlingName = (k?: Behandling) => (k ? k.overordnetFormaal.shortName + ' - ' + k.navn : '')
+export const behandlingName = (k?: Behandling) =>
+  k ? k.overordnetFormaal.shortName + ' - ' + k.navn : ''
 export const useSearchBehandling = () => useSearch(searchBehandling)
 
 export const useMyBehandlinger = () => {
@@ -49,11 +70,11 @@ export const useMyBehandlinger = () => {
   useEffect(() => {
     ident &&
       getBehandlinger()
-        .then((r) => {
+        .then(r => {
           setData(r)
           setLoading(false)
         })
-        .catch((e) => {
+        .catch(e => {
           setData([])
           setLoading(false)
           console.log("couldn't find behandlinger", e)
@@ -63,7 +84,9 @@ export const useMyBehandlinger = () => {
   return [data, loading] as [Behandling[], boolean]
 }
 
-export const mapToFormVal = (behandling: Partial<Behandling> & { id: string }): BehandlingEtterlevData => {
+export const mapToFormVal = (
+  behandling: Partial<Behandling> & {id: string},
+): BehandlingEtterlevData => {
   return {
     id: behandling.id,
     relevansFor: behandling.relevansFor || [],

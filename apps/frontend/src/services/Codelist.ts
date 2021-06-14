@@ -1,7 +1,7 @@
-import { AxiosResponse } from 'axios'
-import { getAllCodelists } from '../api/CodelistApi'
+import {AxiosResponse} from 'axios'
+import {getAllCodelists} from '../api/CodelistApi'
 import * as yup from 'yup'
-import { Replace } from '../constants'
+import {Replace} from '../constants'
 
 export enum ListName {
   AVDELING = 'AVDELING',
@@ -25,7 +25,7 @@ class CodelistService {
   private fetchData = async (refresh?: boolean) => {
     const codeListPromise = getAllCodelists(refresh)
       .then(this.handleGetCodelistResponse)
-      .catch((err) => (this.error = err.message))
+      .catch(err => (this.error = err.message))
     return Promise.all([codeListPromise])
   }
 
@@ -56,7 +56,11 @@ class CodelistService {
   getCodes(list: ListName): Code[]
 
   getCodes(list: ListName): Code[] {
-    return this.lists && this.lists.codelist[list] ? this.lists.codelist[list].sort((c1, c2) => c1.shortName.localeCompare(c2.shortName)) : []
+    return this.lists && this.lists.codelist[list]
+      ? this.lists.codelist[list].sort((c1, c2) =>
+          c1.shortName.localeCompare(c2.shortName),
+        )
+      : []
   }
 
   // overloads
@@ -65,11 +69,11 @@ class CodelistService {
   getCode(list: ListName, codeName?: string): Code | undefined
 
   getCode(list: ListName, codeName?: string): Code | undefined {
-    return this.getCodes(list).find((c) => c.code === codeName)
+    return this.getCodes(list).find(c => c.code === codeName)
   }
 
   getCodesForTema(codeName?: string): LovCode[] {
-    return this.getCodes(ListName.LOV).filter((c) => c.data?.tema === codeName)
+    return this.getCodes(ListName.LOV).filter(c => c.data?.tema === codeName)
   }
 
   valid(list: ListName, codeName?: string): boolean {
@@ -81,7 +85,7 @@ class CodelistService {
   }
 
   getShortnameForCodes(codes: Code[]) {
-    return codes.map((c) => this.getShortname(c.list, c.code)).join(', ')
+    return codes.map(c => this.getShortname(c.list, c.code)).join(', ')
   }
 
   getShortname(list: ListName, codeName: string) {
@@ -90,7 +94,7 @@ class CodelistService {
   }
 
   getShortnames(list: ListName, codeNames: string[]) {
-    return codeNames.map((codeName) => this.getShortname(list, codeName))
+    return codeNames.map(codeName => this.getShortname(list, codeName))
   }
 
   getDescription(list: ListName, codeName: string) {
@@ -98,31 +102,47 @@ class CodelistService {
     return code ? code.description : codeName
   }
 
-  getParsedOptions(listName: ListName): { id: string; label: string }[] {
+  getParsedOptions(listName: ListName): {id: string; label: string}[] {
     return this.getCodes(listName).map((code: Code) => {
-      return { id: code.code, label: code.shortName }
+      return {id: code.code, label: code.shortName}
     })
   }
 
-  getParsedOptionsForList(listName: ListName, selected: string[]): { id: string; label: string }[] {
-    return selected.map((code) => ({ id: code, label: this.getShortname(listName, code) }))
+  getParsedOptionsForList(
+    listName: ListName,
+    selected: string[],
+  ): {id: string; label: string}[] {
+    return selected.map(code => ({
+      id: code,
+      label: this.getShortname(listName, code),
+    }))
   }
 
-  getParsedOptionsFilterOutSelected(listName: ListName, currentSelected: string[]): { id: string; label: string }[] {
+  getParsedOptionsFilterOutSelected(
+    listName: ListName,
+    currentSelected: string[],
+  ): {id: string; label: string}[] {
     let parsedOptions = this.getParsedOptions(listName)
-    return !currentSelected ? parsedOptions : parsedOptions.filter((option) => (currentSelected.includes(option.id) ? null : option.id))
+    return !currentSelected
+      ? parsedOptions
+      : parsedOptions.filter(option =>
+          currentSelected.includes(option.id) ? null : option.id,
+        )
   }
 
   isForskrift(nationalLawCode?: string) {
-    return nationalLawCode && nationalLawCode.startsWith(LOVDATA_FORSKRIFT_PREFIX)
+    return (
+      nationalLawCode && nationalLawCode.startsWith(LOVDATA_FORSKRIFT_PREFIX)
+    )
   }
 
   makeIdLabelForAllCodeLists() {
-    return Object.keys(ListName).map((key) => ({ id: key, label: key }))
+    return Object.keys(ListName).map(key => ({id: key, label: key}))
   }
 
   gjelderForLov(tema: TemaCode, lov: LovCode) {
-    return !!this.getCodesForTema(tema.code).filter((l) => l.code === lov.code).length
+    return !!this.getCodesForTema(tema.code).filter(l => l.code === lov.code)
+      .length
   }
 }
 
@@ -136,8 +156,8 @@ export interface List {
   [name: string]: Code[]
 }
 
-export type LovCode = Replace<Code, { data?: LovCodeData }>
-export type TemaCode = Replace<Code, { data?: TemaCodeData }>
+export type LovCode = Replace<Code, {data?: LovCodeData}>
+export type TemaCode = Replace<Code, {data?: TemaCodeData}>
 
 export interface Code {
   list: ListName
@@ -196,12 +216,19 @@ export const codeListSchema: () => yup.SchemaOf<CodeListFormValues> = () =>
   })
 
 export const codelistCompareField = (field: string) => {
-  return (a: any, b: any) => codelistCompare((a[field] as Code) || undefined, (b[field] as Code) || undefined)
+  return (a: any, b: any) =>
+    codelistCompare(
+      (a[field] as Code) || undefined,
+      (b[field] as Code) || undefined,
+    )
 }
 
-export const codelistsCompareField = <T>(ext: (o: T) => Code[], exclude?: string) => {
+export const codelistsCompareField = <T>(
+  ext: (o: T) => Code[],
+  exclude?: string,
+) => {
   const getCode = (obj: any) => {
-    return (ext(obj) || []).filter((c) => c.code !== exclude)[0] || undefined
+    return (ext(obj) || []).filter(c => c.code !== exclude)[0] || undefined
   }
   return (a: any, b: any) => codelistCompare(getCode(a), getCode(b))
 }

@@ -47,9 +47,9 @@ import paragrafIcon from '../resources/icons/paragraf-ikon.svg'
 import crossIcon from '../resources/icons/cross.svg'
 import circlePencilIcon from '../resources/icons/circle-pencil-icon.svg'
 import illustration from '../resources/giammarco-boscaro-zeH-ljawHtg-unsplash.jpg'
-import { codelist, ListName, LovCode, TemaCode } from '../services/Codelist'
+import {codelist, ListName, LovCode, TemaCode} from '../services/Codelist'
 import React from 'react'
-import { theme } from '../util'
+import {theme} from '../util'
 
 export {
   pencilFill,
@@ -90,7 +90,7 @@ export {
   circlePencilIcon,
 }
 
-export const temaBilder: { [id: string]: string } = {
+export const temaBilder: {[id: string]: string} = {
   ARCHIVE: archiveImage,
   ARCHIVE2: archive2Image,
   KEYBOARD: keyboardImage,
@@ -112,9 +112,21 @@ const bildeForTema = (code?: string) => {
   return imageCode ? temaBilder[imageCode] || bookImage : bookImage
 }
 
-export const LovBilde = (props: { code: LovCode } & BildeProps) => <Bilde {...props} src={bildeForLov(props.code)} alt={`Lov illustrasjon: ${props.code.shortName}`} />
+export const LovBilde = (props: {code: LovCode} & BildeProps) => (
+  <Bilde
+    {...props}
+    src={bildeForLov(props.code)}
+    alt={`Lov illustrasjon: ${props.code.shortName}`}
+  />
+)
 
-export const TemaBilde = (props: { code: TemaCode } & BildeProps) => <Bilde {...props} src={bildeForTema(props.code.code)} alt={`Tema illustrasjon: ${props.code.shortName}`} />
+export const TemaBilde = (props: {code: TemaCode} & BildeProps) => (
+  <Bilde
+    {...props}
+    src={bildeForTema(props.code.code)}
+    alt={`Tema illustrasjon: ${props.code.shortName}`}
+  />
+)
 
 type BildeProps = {
   width?: string
@@ -122,7 +134,7 @@ type BildeProps = {
   ellipse?: boolean
 }
 
-const Bilde = (props: { src: string; alt: string } & BildeProps) => (
+const Bilde = (props: {src: string; alt: string} & BildeProps) => (
   <img
     src={props.src}
     width={props.width}

@@ -1,38 +1,50 @@
-import { FieldWrapper } from '../../common/Inputs'
-import { FieldArray, FieldArrayRenderProps } from 'formik'
-import React, { useEffect } from 'react'
-import { Suksesskriterie } from '../../../constants'
-import { FormControl } from 'baseui/form-control'
-import { Block } from 'baseui/block'
-import Button, { buttonBorderStyle } from '../../common/Button'
+import {FieldWrapper} from '../../common/Inputs'
+import {FieldArray, FieldArrayRenderProps} from 'formik'
+import React, {useEffect} from 'react'
+import {Suksesskriterie} from '../../../constants'
+import {FormControl} from 'baseui/form-control'
+import {Block} from 'baseui/block'
+import Button, {buttonBorderStyle} from '../../common/Button'
 import * as _ from 'lodash'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
-import { faGripVertical, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons'
-import { MarkdownEditor } from '../../common/Markdown'
+import {
+  faGripVertical,
+  faPlus,
+  faTrash,
+} from '@fortawesome/free-solid-svg-icons'
+import {MarkdownEditor} from '../../common/Markdown'
 import TextEditor from '../../common/TextEditor/TextEditor'
-import { Card } from 'baseui/card'
-import { theme } from '../../../util'
-import { useDebouncedState } from '../../../util/hooks'
-import { DragDropContext, Draggable, DraggableProvidedDragHandleProps, DraggingStyle, Droppable } from 'react-beautiful-dnd'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { kravModal } from '../EditKrav'
+import {Card} from 'baseui/card'
+import {theme} from '../../../util'
+import {useDebouncedState} from '../../../util/hooks'
+import {
+  DragDropContext,
+  Draggable,
+  DraggableProvidedDragHandleProps,
+  DraggingStyle,
+  Droppable,
+} from 'react-beautiful-dnd'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {kravModal} from '../EditKrav'
 import CustomizedInput from '../../common/CustomizedInput'
-import { ettlevColors } from '../../../util/theme'
+import {ettlevColors} from '../../../util/theme'
 
 export const KravSuksesskriterierEdit = () => {
   return (
     <FieldWrapper>
-      <FieldArray name={'suksesskriterier'}>{(p) => <KriterieList p={p} />}</FieldArray>
+      <FieldArray name={'suksesskriterier'}>
+        {p => <KriterieList p={p} />}
+      </FieldArray>
     </FieldWrapper>
   )
 }
 
 const nextId = (suksesskriterier: Suksesskriterie[]) => {
-  const max = _.max(suksesskriterier.map((s) => s.id)) || 0
+  const max = _.max(suksesskriterier.map(s => s.id)) || 0
   return max + 1
 }
 
-const KriterieList = ({ p }: { p: FieldArrayRenderProps }) => {
+const KriterieList = ({p}: {p: FieldArrayRenderProps}) => {
   const suksesskriterier = p.form.values.suksesskriterier as Suksesskriterie[]
   return (
     <Block display={'flex'} flexDirection={'column'}>
@@ -51,7 +63,9 @@ const KriterieList = ({ p }: { p: FieldArrayRenderProps }) => {
               {...provided.droppableProps}
               ref={provided.innerRef}
               style={{
-                backgroundColor: snapshot.isDraggingOver ? '#C5C5C5' : undefined,
+                backgroundColor: snapshot.isDraggingOver
+                  ? '#C5C5C5'
+                  : undefined,
               }}
             >
               {suksesskriterier.map((s, i) => (
@@ -60,7 +74,10 @@ const KriterieList = ({ p }: { p: FieldArrayRenderProps }) => {
                     if (dsnap.isDragging) {
                       // Adjust location due to modal displacements
                       const style = dprov.draggableProps.style as DraggingStyle
-                      const offset = { x: 115, y: 15 - (kravModal()?.scrollTop || 0) }
+                      const offset = {
+                        x: 115,
+                        y: 15 - (kravModal()?.scrollTop || 0),
+                      }
                       const x = style.left - offset.x
                       const y = style.top - offset.y
                       style.left = x
@@ -71,7 +88,7 @@ const KriterieList = ({ p }: { p: FieldArrayRenderProps }) => {
                         <Kriterie
                           s={s}
                           nummer={i + 1}
-                          update={(updated) => p.replace(i, updated)}
+                          update={updated => p.replace(i, updated)}
                           remove={() => {
                             console.log('remove' + i)
                             p.remove(i)
@@ -89,7 +106,11 @@ const KriterieList = ({ p }: { p: FieldArrayRenderProps }) => {
           )}
         </Droppable>
       </DragDropContext>
-      <Block alignSelf={'flex-end'} marginTop={theme.sizing.scale600} marginBottom={theme.sizing.scale600}>
+      <Block
+        alignSelf={'flex-end'}
+        marginTop={theme.sizing.scale600}
+        marginBottom={theme.sizing.scale600}
+      >
         <Button
           type="button"
           icon={faPlus}
@@ -99,7 +120,9 @@ const KriterieList = ({ p }: { p: FieldArrayRenderProps }) => {
           kind="secondary"
           size="compact"
           disabled={suksesskriterier.length >= 5}
-          onClick={() => p.push({ id: nextId(suksesskriterier), navn: '', beskrivelse: '' })}
+          onClick={() =>
+            p.push({id: nextId(suksesskriterier), navn: '', beskrivelse: ''})
+          }
         >
           Suksesskriterie
         </Button>
@@ -125,10 +148,13 @@ const Kriterie = ({
 }) => {
   const debounceDelay = 500
   const [navn, setNavn, navnInput] = useDebouncedState(s.navn, debounceDelay)
-  const [beskrivelse, setBeskrivelse] = useDebouncedState(s.beskrivelse || '', debounceDelay)
+  const [beskrivelse, setBeskrivelse] = useDebouncedState(
+    s.beskrivelse || '',
+    debounceDelay,
+  )
 
   useEffect(() => {
-    update({ id: s.id, navn, beskrivelse })
+    update({id: s.id, navn, beskrivelse})
   }, [navn, beskrivelse])
 
   return (
@@ -143,17 +169,38 @@ const Kriterie = ({
       }}
     >
       <Block position={'relative'} paddingTop={theme.sizing.scale100}>
-        <Block display={'flex'} alignItems={'flex-start'} position={'absolute'} right={0} top={0}>
-          <Button type={'button'} size={'compact'} kind={'tertiary'} $style={buttonBorderStyle} icon={faTrash} onClick={remove} tooltip={'Fjern suksesskriterie'} />
+        <Block
+          display={'flex'}
+          alignItems={'flex-start'}
+          position={'absolute'}
+          right={0}
+          top={0}
+        >
+          <Button
+            type={'button'}
+            size={'compact'}
+            kind={'tertiary'}
+            $style={buttonBorderStyle}
+            icon={faTrash}
+            onClick={remove}
+            tooltip={'Fjern suksesskriterie'}
+          />
           <Block width={theme.sizing.scale1000} />
           <Block {...dragHandleProps}>
-            <FontAwesomeIcon icon={faGripVertical} aria-label={'Dra og slipp håndtak'} />
+            <FontAwesomeIcon
+              icon={faGripVertical}
+              aria-label={'Dra og slipp håndtak'}
+            />
           </Block>
         </Block>
 
         <FormControl
           label={
-            <Block display={'flex'} width={'100%'} justifyContent={'space-between'}>
+            <Block
+              display={'flex'}
+              width={'100%'}
+              justifyContent={'space-between'}
+            >
               <LabelWithTooltip
                 label={`Suksesskriterie ${nummer}`}
                 tooltip={
@@ -163,11 +210,26 @@ const Kriterie = ({
             </Block>
           }
         >
-          <CustomizedInput value={navnInput} onChange={(e) => setNavn((e.target as HTMLInputElement).value)} placeholder={'Navn'} />
+          <CustomizedInput
+            value={navnInput}
+            onChange={e => setNavn((e.target as HTMLInputElement).value)}
+            placeholder={'Navn'}
+          />
         </FormControl>
-        <FormControl label={<LabelWithTooltip label={'Beskrivelse av suksesskriteriet'} tooltip={'Nærmere detaljer rundt oppnåelse av suksesskriteriet.'} />}>
+        <FormControl
+          label={
+            <LabelWithTooltip
+              label={'Beskrivelse av suksesskriteriet'}
+              tooltip={'Nærmere detaljer rundt oppnåelse av suksesskriteriet.'}
+            />
+          }
+        >
           {/* <MarkdownEditor initialValue={beskrivelse} setValue={setBeskrivelse} height={'250px'} /> */}
-          <TextEditor initialValue={beskrivelse} setValue={setBeskrivelse} height={'250px'} />
+          <TextEditor
+            initialValue={beskrivelse}
+            setValue={setBeskrivelse}
+            height={'250px'}
+          />
         </FormControl>
       </Block>
     </Card>

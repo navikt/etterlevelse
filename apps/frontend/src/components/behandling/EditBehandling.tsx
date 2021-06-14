@@ -1,11 +1,11 @@
 import React from 'react'
-import { Block } from 'baseui/block'
-import { Behandling, BehandlingEtterlevData } from '../../constants'
-import { mapToFormVal, updateBehandling } from '../../api/BehandlingApi'
-import { Label } from '../common/PropertyLabel'
-import { MultiOptionField } from '../common/Inputs'
-import { ListName } from '../../services/Codelist'
-import { Form, Formik } from 'formik'
+import {Block} from 'baseui/block'
+import {Behandling, BehandlingEtterlevData} from '../../constants'
+import {mapToFormVal, updateBehandling} from '../../api/BehandlingApi'
+import {Label} from '../common/PropertyLabel'
+import {MultiOptionField} from '../common/Inputs'
+import {ListName} from '../../services/Codelist'
+import {Form, Formik} from 'formik'
 import * as yup from 'yup'
 import Button from '../common/Button'
 
@@ -15,20 +15,28 @@ type EditBehProps = {
   formRef: React.Ref<any>
 }
 
-export const EditBehandling = ({ behandling, close, formRef }: EditBehProps) => {
+export const EditBehandling = ({behandling, close, formRef}: EditBehProps) => {
   return (
     <Formik
-      onSubmit={async (b: BehandlingEtterlevData) => close(await updateBehandling(b))}
+      onSubmit={async (b: BehandlingEtterlevData) =>
+        close(await updateBehandling(b))
+      }
       initialValues={mapToFormVal(behandling)}
       validationSchema={behandlingSchema()}
       innerRef={formRef}
     >
-      {({ isSubmitting, isValid, errors, submitForm }) => (
+      {({isSubmitting, isValid, errors, submitForm}) => (
         <Form>
           <Block>
-            <Label title="Endrer egenskaper for">behandling {behandling.nummer}</Label>
+            <Label title="Endrer egenskaper for">
+              behandling {behandling.nummer}
+            </Label>
 
-            <MultiOptionField label="Relevans for" name="relevansFor" listName={ListName.RELEVANS} />
+            <MultiOptionField
+              label="Relevans for"
+              name="relevansFor"
+              listName={ListName.RELEVANS}
+            />
           </Block>
 
           <Block display="flex" justifyContent="flex-end">

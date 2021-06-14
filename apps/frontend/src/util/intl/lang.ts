@@ -1,4 +1,4 @@
-import { IStrings } from './langdef'
+import {IStrings} from './langdef'
 import MdEditor from 'react-markdown-editor-lite'
 
 export const no: IStrings = {

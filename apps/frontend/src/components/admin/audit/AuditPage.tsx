@@ -1,26 +1,29 @@
-import { Block } from 'baseui/block'
-import React, { useEffect, useState } from 'react'
-import { useHistory, useParams } from 'react-router-dom'
+import {Block} from 'baseui/block'
+import React, {useEffect, useState} from 'react'
+import {useHistory, useParams} from 'react-router-dom'
 import _ from 'lodash'
-import { H4, Paragraph2 } from 'baseui/typography'
-import { AuditLog } from './AuditTypes'
-import { getAuditLog } from './AuditApi'
-import { AuditView } from './AuditView'
-import { AuditRecentTable } from './AuditRecentTable'
-import { AuditLabel } from './AuditComponents'
-import { useDebouncedState } from '../../../util/hooks'
-import { intl } from '../../../util/intl/intl'
+import {H4, Paragraph2} from 'baseui/typography'
+import {AuditLog} from './AuditTypes'
+import {getAuditLog} from './AuditApi'
+import {AuditView} from './AuditView'
+import {AuditRecentTable} from './AuditRecentTable'
+import {AuditLabel} from './AuditComponents'
+import {useDebouncedState} from '../../../util/hooks'
+import {intl} from '../../../util/intl/intl'
 import CustomInput from '../../common/CustomizedInput'
 
 const format = (id: string) => _.trim(id, '"')
 
 export const AuditPage = () => {
-  const params = useParams<{ id?: string; auditId?: string }>()
+  const params = useParams<{id?: string; auditId?: string}>()
   const history = useHistory()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState()
   const [auditLog, setAuditLog] = useState<AuditLog>()
-  const [idSearch, setIdInput, idInput] = useDebouncedState(params.id || '', 400)
+  const [idSearch, setIdInput, idInput] = useDebouncedState(
+    params.id || '',
+    400,
+  )
 
   const lookupVersion = (id?: string) => {
     ;(async () => {
@@ -58,15 +61,24 @@ export const AuditPage = () => {
           <CustomInput
             size="compact"
             value={idInput}
-            overrides={{ Input: { style: { width: '300px' } } }}
+            overrides={{Input: {style: {width: '300px'}}}}
             placeholder={intl.id}
-            onChange={(e) => setIdInput(format((e.target as HTMLInputElement).value))}
+            onChange={e =>
+              setIdInput(format((e.target as HTMLInputElement).value))
+            }
           />
         </AuditLabel>
       </Block>
 
       {error && <Paragraph2>{_.escape(error)}</Paragraph2>}
-      {idInput && <AuditView auditLog={auditLog} auditId={params.auditId} loading={loading} viewId={lookupVersion} />}
+      {idInput && (
+        <AuditView
+          auditLog={auditLog}
+          auditId={params.auditId}
+          loading={loading}
+          viewId={lookupVersion}
+        />
+      )}
       <AuditRecentTable show={!idInput} />
     </Block>
   )

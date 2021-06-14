@@ -1,24 +1,24 @@
-import { Etterlevelse, Krav } from '../../constants'
-import { Block } from 'baseui/block'
-import React, { useRef, useState } from 'react'
-import { getEtterlevelseStatus } from '../../pages/EtterlevelsePage'
-import { theme } from '../../util'
+import {Etterlevelse, Krav} from '../../constants'
+import {Block} from 'baseui/block'
+import React, {useRef, useState} from 'react'
+import {getEtterlevelseStatus} from '../../pages/EtterlevelsePage'
+import {theme} from '../../util'
 import moment from 'moment'
 import RouteLink from '../common/RouteLink'
-import { behandlingName, useBehandling } from '../../api/BehandlingApi'
-import { Spinner } from '../common/Spinner'
-import { H2, Label3, Paragraph2, Paragraph4 } from 'baseui/typography'
-import { Teams } from '../common/TeamName'
-import { Card } from 'baseui/card'
-import { ettlevColors } from '../../util/theme'
-import { editSecondaryIcon } from '../Images'
-import { user } from '../../services/User'
+import {behandlingName, useBehandling} from '../../api/BehandlingApi'
+import {Spinner} from '../common/Spinner'
+import {H2, Label3, Paragraph2, Paragraph4} from 'baseui/typography'
+import {Teams} from '../common/TeamName'
+import {Card} from 'baseui/card'
+import {ettlevColors} from '../../util/theme'
+import {editSecondaryIcon} from '../Images'
+import {user} from '../../services/User'
 import Button from '../common/Button'
-import { getSuksesskriterieBegrunnelse } from './Edit/SuksesskriterieBegrunnelseEdit'
-import { FormikProps } from 'formik'
-import { useHistory } from 'react-router-dom'
-import { KIND, SIZE } from 'baseui/button'
-import { Markdown } from '../common/Markdown'
+import {getSuksesskriterieBegrunnelse} from './Edit/SuksesskriterieBegrunnelseEdit'
+import {FormikProps} from 'formik'
+import {useHistory} from 'react-router-dom'
+import {KIND, SIZE} from 'baseui/button'
+import {Markdown} from '../common/Markdown'
 import EditBegrunnelse from './Edit/EditBegrunnelse'
 
 const formatDate = (date?: string) => date && moment(date).format('ll')
@@ -59,7 +59,9 @@ export const ViewEtterlevelse = ({
               >
                 {behandlingName(behandling)}
               </RouteLink>
-              <Paragraph2 marginTop="2px">{behandling.overordnetFormaal.shortName}</Paragraph2>
+              <Paragraph2 marginTop="2px">
+                {behandling.overordnetFormaal.shortName}
+              </Paragraph2>
               <Block marginTop={theme.sizing.scale850}>
                 <Teams teams={behandling.teams} link list />
               </Block>
@@ -75,7 +77,12 @@ export const ViewEtterlevelse = ({
           )}
         </Block>
 
-        <Block display="flex" flex="1" justifyContent="flex-end" marginTop={theme.sizing.scale950}>
+        <Block
+          display="flex"
+          flex="1"
+          justifyContent="flex-end"
+          marginTop={theme.sizing.scale950}
+        >
           <Block>
             <Card
               overrides={{
@@ -119,7 +126,11 @@ export const ViewEtterlevelse = ({
                 },
               }}
             >
-              <Paragraph4 $style={{ color: ettlevColors.navMorkGra, margin: '0px' }}>Kravet er: {getEtterlevelseStatus(etterlevelse.status)}</Paragraph4>
+              <Paragraph4
+                $style={{color: ettlevColors.navMorkGra, margin: '0px'}}
+              >
+                Kravet er: {getEtterlevelseStatus(etterlevelse.status)}
+              </Paragraph4>
             </Card>
           </Block>
         </Block>
@@ -130,11 +141,20 @@ export const ViewEtterlevelse = ({
           <H2>Dokumentasjon</H2>
           {!viewMode && (
             <Block display="flex" flex="1" justifyContent="flex-end">
-              <Block flex="1" display={['none', 'none', 'none', 'none', 'flex', 'flex']} justifyContent="flex-end" alignItems="center">
+              <Block
+                flex="1"
+                display={['none', 'none', 'none', 'none', 'flex', 'flex']}
+                justifyContent="flex-end"
+                alignItems="center"
+              >
                 {etterlevelse?.id && user.canWrite() && (
                   <Block>
                     <Button
-                      startEnhancer={!edit ? <img src={editSecondaryIcon} alt="edit" /> : undefined}
+                      startEnhancer={
+                        !edit ? (
+                          <img src={editSecondaryIcon} alt="edit" />
+                        ) : undefined
+                      }
                       size={SIZE.compact}
                       kind={edit ? KIND.secondary : KIND.tertiary}
                       onClick={() => setEdit(!edit)}
@@ -146,7 +166,15 @@ export const ViewEtterlevelse = ({
                 )}
                 {edit && (
                   <Block>
-                    <Button size={SIZE.compact} kind={KIND.primary} onClick={() => !formRef.current?.isSubmitting && formRef.current?.submitForm()} marginLeft>
+                    <Button
+                      size={SIZE.compact}
+                      kind={KIND.primary}
+                      onClick={() =>
+                        !formRef.current?.isSubmitting &&
+                        formRef.current?.submitForm()
+                      }
+                      marginLeft
+                    >
                       Lagre
                     </Button>
                   </Block>
@@ -159,18 +187,27 @@ export const ViewEtterlevelse = ({
           etterlevelse &&
           !loading &&
           krav.suksesskriterier.map((s, i) => {
-            const suksessbeskrivelseBegrunnelse = getSuksesskriterieBegrunnelse(etterlevelse.suksesskriterieBegrunnelser, s)
+            const suksessbeskrivelseBegrunnelse = getSuksesskriterieBegrunnelse(
+              etterlevelse.suksesskriterieBegrunnelser,
+              s,
+            )
             return (
               <Block marginBottom={theme.sizing.scale700} key={s.id}>
                 <Card>
-                  <Label3 $style={{ color: ettlevColors.green600 }}>
+                  <Label3 $style={{color: ettlevColors.green600}}>
                     SUKSESSKRITERIE {i + 1} AV {krav.suksesskriterier.length}
                   </Label3>
-                  <Label3 $style={{ fontSize: '21px', lineHeight: '30px' }}>{s.navn}</Label3>
-                  <Label3 $style={{ lineHeight: '22px' }} marginTop="16px">
+                  <Label3 $style={{fontSize: '21px', lineHeight: '30px'}}>
+                    {s.navn}
+                  </Label3>
+                  <Label3 $style={{lineHeight: '22px'}} marginTop="16px">
                     Hvordan er kriteriet oppfylt?
                   </Label3>
-                  {suksessbeskrivelseBegrunnelse.oppfylt && <Markdown source={suksessbeskrivelseBegrunnelse.begrunnelse} />}
+                  {suksessbeskrivelseBegrunnelse.oppfylt && (
+                    <Markdown
+                      source={suksessbeskrivelseBegrunnelse.begrunnelse}
+                    />
+                  )}
                 </Card>
               </Block>
             )
@@ -180,7 +217,7 @@ export const ViewEtterlevelse = ({
             etterlevelse={etterlevelse}
             formRef={formRef}
             krav={krav}
-            close={(k) => {
+            close={k => {
               if (k) {
                 setEtterlevelse(k)
                 if (k.id !== etterlevelse.id) {

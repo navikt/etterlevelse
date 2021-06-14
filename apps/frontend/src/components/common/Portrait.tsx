@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
-import { personImageLink } from '../../util/config'
-import { Block } from 'baseui/block'
-import { Spinner } from './Spinner'
-import { questionmarkIcon } from '../Images'
+import React, {useState} from 'react'
+import {personImageLink} from '../../util/config'
+import {Block} from 'baseui/block'
+import {Spinner} from './Spinner'
+import {questionmarkIcon} from '../Images'
 
-export const Portrait = (props: { ident: string; size?: string }) => {
+export const Portrait = (props: {ident: string; size?: string}) => {
   const [loading, setLoading] = useState(true)
   const [image, setImage] = React.useState(personImageLink(props.ident))
   const size = props.size || '42px'

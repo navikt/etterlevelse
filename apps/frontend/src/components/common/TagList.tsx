@@ -1,9 +1,19 @@
 import * as React from 'react'
-import { Tag, VARIANT } from 'baseui/tag'
-import { theme } from '../../util'
-import { ettlevColors, pageWidth } from '../../util/theme'
+import {Tag, VARIANT} from 'baseui/tag'
+import {theme} from '../../util'
+import {ettlevColors, pageWidth} from '../../util/theme'
 
-export const RenderTagList = ({ list, onRemove, onClick, wide }: { list: React.ReactNode[]; onRemove: (i: number) => void; onClick?: (i: number) => void; wide?: boolean }) => {
+export const RenderTagList = ({
+  list,
+  onRemove,
+  onClick,
+  wide,
+}: {
+  list: React.ReactNode[]
+  onRemove: (i: number) => void
+  onClick?: (i: number) => void
+  wide?: boolean
+}) => {
   return (
     <React.Fragment>
       {list && list.length > 0

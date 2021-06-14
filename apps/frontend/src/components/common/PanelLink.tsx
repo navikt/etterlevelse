@@ -1,11 +1,17 @@
-import React, { useState } from 'react'
+import React, {useState} from 'react'
 import RouteLink from './RouteLink'
-import { Block, BlockOverrides, Responsive, Scale } from 'baseui/block'
-import { borderRadius, padding, paddingAll } from './Style'
-import { theme } from '../../util'
-import { ettlevColors } from '../../util/theme'
-import { HeadingXLarge, LabelLarge, LabelSmall, ParagraphMedium, ParagraphSmall } from 'baseui/typography'
-import { arrowRightIcon, navChevronRightIcon } from '../Images'
+import {Block, BlockOverrides, Responsive, Scale} from 'baseui/block'
+import {borderRadius, padding, paddingAll} from './Style'
+import {theme} from '../../util'
+import {ettlevColors} from '../../util/theme'
+import {
+  HeadingXLarge,
+  LabelLarge,
+  LabelSmall,
+  ParagraphMedium,
+  ParagraphSmall,
+} from 'baseui/typography'
+import {arrowRightIcon, navChevronRightIcon} from '../Images'
 import * as _ from 'lodash'
 
 export const PanelLink = ({
@@ -67,22 +73,31 @@ export const PanelLink = ({
         <Block
           marginLeft={theme.sizing.scale800}
           marginRight={theme.sizing.scale600}
-          $style={{ flexGrow: 1 }}
+          $style={{flexGrow: 1}}
           display={'flex'}
           flexDirection={flip ? 'column-reverse' : 'column'}
           justifyContent={'center'}
         >
-          <LabelLarge $style={{ lineHeight: '20px' }}>{title}</LabelLarge>
+          <LabelLarge $style={{lineHeight: '20px'}}>{title}</LabelLarge>
           <ParagraphSmall marginBottom={0} marginTop={theme.sizing.scale100}>
             {beskrivelse}
           </ParagraphSmall>
         </Block>
 
         {(rightTitle || rightBeskrivelse) && (
-          <Block minWidth={'150px'} maxWidth={'150px'} display={'flex'} flexDirection={flip ? 'column-reverse' : 'column'} justifyContent={'center'}>
+          <Block
+            minWidth={'150px'}
+            maxWidth={'150px'}
+            display={'flex'}
+            flexDirection={flip ? 'column-reverse' : 'column'}
+            justifyContent={'center'}
+          >
             {rightTitle && <LabelSmall>{rightTitle}</LabelSmall>}
             {rightBeskrivelse && (
-              <ParagraphSmall marginBottom={0} marginTop={rightTitle ? theme.sizing.scale100 : 0}>
+              <ParagraphSmall
+                marginBottom={0}
+                marginTop={rightTitle ? theme.sizing.scale100 : 0}
+              >
                 {rightBeskrivelse}
               </ParagraphSmall>
             )}
@@ -95,7 +110,11 @@ export const PanelLink = ({
   )
 }
 
-export type PanelLinkCardOverrides = { Root?: BlockOverrides; Header?: BlockOverrides; Content?: BlockOverrides }
+export type PanelLinkCardOverrides = {
+  Root?: BlockOverrides
+  Header?: BlockOverrides
+  Content?: BlockOverrides
+}
 
 export const PanelLinkCard = ({
   href,
@@ -190,14 +209,29 @@ export const PanelLinkCard = ({
         >
           <Block overrides={headerOverrides}>
             {icon && (
-              <Block display={'flex'} justifyContent={'center'} width={'100%'} marginTop={theme.sizing.scale600}>
+              <Block
+                display={'flex'}
+                justifyContent={'center'}
+                width={'100%'}
+                marginTop={theme.sizing.scale600}
+              >
                 <img src={icon} alt={'ikon'} aria-hidden width={'30%'} />
               </Block>
             )}
-            <HeadingXLarge $style={{ textDecoration: href && hover ? '3px underline ' : undefined }}>{tittel}</HeadingXLarge>
+            <HeadingXLarge
+              $style={{
+                textDecoration: href && hover ? '3px underline ' : undefined,
+              }}
+            >
+              {tittel}
+            </HeadingXLarge>
           </Block>
 
-          <Block height={height} maxHeight={maxHeight} overrides={contentOverrides}>
+          <Block
+            height={height}
+            maxHeight={maxHeight}
+            overrides={contentOverrides}
+          >
             {beskrivelse && (
               <Block>
                 <ParagraphMedium marginTop={0}>{beskrivelse}</ParagraphMedium>
@@ -216,8 +250,30 @@ export const PanelLinkCard = ({
   )
 }
 
-const Chevron = ({ hover, icon, distance }: { hover: boolean; icon: string; distance: string }) => (
-  <Block marginLeft={hover ? `calc(${theme.sizing.scale600} + ${distance})` : theme.sizing.scale600} alignSelf={'center'} marginRight={hover ? '-' + distance : 0}>
-    <img src={icon} aria-hidden alt={'Chevron høyre ikon'} width={'24px'} height={'24px'} />
+const Chevron = ({
+  hover,
+  icon,
+  distance,
+}: {
+  hover: boolean
+  icon: string
+  distance: string
+}) => (
+  <Block
+    marginLeft={
+      hover
+        ? `calc(${theme.sizing.scale600} + ${distance})`
+        : theme.sizing.scale600
+    }
+    alignSelf={'center'}
+    marginRight={hover ? '-' + distance : 0}
+  >
+    <img
+      src={icon}
+      aria-hidden
+      alt={'Chevron høyre ikon'}
+      width={'24px'}
+      height={'24px'}
+    />
   </Block>
 )

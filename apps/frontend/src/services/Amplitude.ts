@@ -1,5 +1,5 @@
 import amplitude from 'amplitude-js'
-import { env } from '../util/env'
+import {env} from '../util/env'
 
 const AmplitudeConfig = {
   apiEndpoint: env.amplitudeEndpoint,

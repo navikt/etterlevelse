@@ -1,8 +1,18 @@
-import React, { Dispatch, RefObject, SetStateAction, useEffect, useState } from 'react'
-import { useHistory, useLocation } from 'react-router-dom'
-import { user } from '../../services/User'
+import React, {
+  Dispatch,
+  RefObject,
+  SetStateAction,
+  useEffect,
+  useState,
+} from 'react'
+import {useHistory, useLocation} from 'react-router-dom'
+import {user} from '../../services/User'
 
-export function useDebouncedState<T>(initialValue: T, delay: number, passThrough?: (val: T) => void): [T, Dispatch<SetStateAction<T>>, T] {
+export function useDebouncedState<T>(
+  initialValue: T,
+  delay: number,
+  passThrough?: (val: T) => void,
+): [T, Dispatch<SetStateAction<T>>, T] {
   const [value, setValue] = useState<T>(initialValue)
   const [debouncedValue, setDebouncedValue] = useState<T>(value)
 
@@ -40,7 +50,10 @@ export function useAwaitUser() {
   updateUser = useForceUpdate()
 }
 
-export function useAwait<T>(p: Promise<T>, setLoading?: Dispatch<SetStateAction<boolean>>) {
+export function useAwait<T>(
+  p: Promise<T>,
+  setLoading?: Dispatch<SetStateAction<boolean>>,
+) {
   const update = useForceUpdate()
 
   useEffect(() => {
@@ -53,7 +66,7 @@ export function useAwait<T>(p: Promise<T>, setLoading?: Dispatch<SetStateAction<
   }, [])
 }
 
-type Refs<T> = { [id: string]: RefObject<T> }
+type Refs<T> = {[id: string]: RefObject<T>}
 
 export function useRefs<T>(ids: string[]) {
   const refs: Refs<T> =
@@ -78,13 +91,15 @@ export function useLocationState<T>() {
   const location = useLocation<T | undefined>()
 
   const changeState = (newState: Partial<T>) => {
-    history.replace({ ...location, state: { ...location.state, ...newState } })
+    history.replace({...location, state: {...location.state, ...newState}})
   }
 
-  return { location, history, state: location.state, changeState }
+  return {location, history, state: location.state, changeState}
 }
 
-export const useSearch = <T>(searchFunction: (term: string) => Promise<T[]>) => {
+export const useSearch = <T>(
+  searchFunction: (term: string) => Promise<T[]>,
+) => {
   const [search, setSearch] = useDebouncedState<string>('', 200)
   const [searchResult, setSearchResult] = useState<T[]>([])
   const [loading, setLoading] = useState<boolean>(false)
@@ -101,5 +116,10 @@ export const useSearch = <T>(searchFunction: (term: string) => Promise<T[]>) => 
     })()
   }, [search])
 
-  return [searchResult, setSearch, loading, search] as [T[], React.Dispatch<React.SetStateAction<string>>, boolean, string]
+  return [searchResult, setSearch, loading, search] as [
+    T[],
+    React.Dispatch<React.SetStateAction<string>>,
+    boolean,
+    string,
+  ]
 }

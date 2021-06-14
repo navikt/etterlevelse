@@ -1,10 +1,16 @@
 import * as React from 'react'
-import { useState } from 'react'
-import { Tab, TabProps, Tabs, TabsProps } from 'baseui/tabs'
-import { StyleObject } from 'styletron-standard'
-import { borderColor, borderStyle, borderWidth, marginZero, paddingZero } from './Style'
-import { theme } from '../../util'
-import { ettlevColors } from '../../util/theme'
+import {useState} from 'react'
+import {Tab, TabProps, Tabs, TabsProps} from 'baseui/tabs'
+import {StyleObject} from 'styletron-standard'
+import {
+  borderColor,
+  borderStyle,
+  borderWidth,
+  marginZero,
+  paddingZero,
+} from './Style'
+import {theme} from '../../util'
+import {ettlevColors} from '../../util/theme'
 
 export const CustomizedTab = (props: TabProps) => {
   return <Tab {...props} />
@@ -22,7 +28,7 @@ type CustomProps = TabsProps & CustomizedTabsProps
 
 export const CustomizedTabs = (props: CustomProps) => {
   const [activeKeyInternal, setActiveKeyInternal] = useState<React.Key>(0)
-  let { fontColor, activeColor, tabBackground, ...restProps } = props
+  let {fontColor, activeColor, tabBackground, ...restProps} = props
   fontColor = fontColor || 'black'
   activeColor = activeColor || fontColor
 
@@ -36,7 +42,7 @@ export const CustomizedTabs = (props: CustomProps) => {
       {...restProps}
       overrides={{
         Tab: {
-          style: (tabProps) => ({
+          style: tabProps => ({
             ...marginZero,
             height: '50px',
             fontSize: '20px',
@@ -83,8 +89,8 @@ export const CustomizedTabs = (props: CustomProps) => {
           },
         },
       }}
-      onChange={({ activeKey }) => {
-        if (props.onChange) props.onChange({ activeKey })
+      onChange={({activeKey}) => {
+        if (props.onChange) props.onChange({activeKey})
         else setActiveKeyInternal(activeKey)
       }}
       activeKey={props.activeKey || activeKeyInternal}
