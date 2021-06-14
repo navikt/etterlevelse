@@ -90,12 +90,12 @@ const KriterieBegrunnelse = ({
       </Checkbox>
 
       
-        <Block paddingLeft={paddingLeft} marginTop={theme.sizing.scale1000}>
+        {checked && <Block paddingLeft={paddingLeft} marginTop={theme.sizing.scale1000}>
           <FormControl label={<LabelWithToolTip label='Dokumentasjon' />}>
             <TextEditor initialValue={begrunnelse} setValue={setBegrunnelse} height={'188px'} />
           </FormControl>
           <Error fieldName={`suksesskriterieBegrunnelser[${index}].begrunnelse`} fullWidth={true} />
-        </Block>
+        </Block>}
       
 
       <CustomizedAccordion>
