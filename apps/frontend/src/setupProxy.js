@@ -1,21 +1,21 @@
 const { createProxyMiddleware } = require('http-proxy-middleware')
 
 // Used in local development server only
-module.exports = function(app) {
+module.exports = function (app) {
   const target = 'http://localhost:8080'
   const headers = {
-    'Nav-Consumer-Id': 'etterlevelse-local'
+    'Nav-Consumer-Id': 'etterlevelse-local',
   }
 
   app.use(
     '/api',
     createProxyMiddleware({
       pathRewrite: {
-        '^/api': ''
+        '^/api': '',
       },
       target,
-      headers
-    })
+      headers,
+    }),
   )
 
   app.use('/login', createProxyMiddleware({ target, headers }))

@@ -18,36 +18,36 @@ export const EditBegreper = () => {
 
   return (
     <FieldWrapper>
-      <FieldArray name='begreper'>
-        {p => {
+      <FieldArray name="begreper">
+        {(p) => {
           return (
-            <FormControl label={<LabelWithTooltip label={'Begreper'} tooltip={'Legg ved lenke til relevante begrep(er) i Begrepskatalogen.'} />} >
+            <FormControl label={<LabelWithTooltip label={'Begreper'} tooltip={'Legg ved lenke til relevante begrep(er) i Begrepskatalogen.'} />}>
               <Block>
                 <CustomizedSelect
                   overrides={{
                     SearchIcon: {
-                      component: () => <img src={searchIcon} alt='search icon' />,
+                      component: () => <img src={searchIcon} alt="search icon" />,
                       style: {
                         display: 'flex',
-                        justifyContent: 'flex-end'
-                      }
+                        justifyContent: 'flex-end',
+                      },
                     },
                     SearchIconContainer: {
                       style: {
                         width: 'calc(100% - 20px)',
                         display: 'flex',
-                        justifyContent: 'flex-end'
-                      }
+                        justifyContent: 'flex-end',
+                      },
                     },
                     IconsContainer: {
                       style: {
-                        marginRight: '20px'
-                      }
+                        marginRight: '20px',
+                      },
                     },
                     ValueContainer: {
                       style: {
-                        paddingLeft: '10px'
-                      }
+                        paddingLeft: '10px',
+                      },
                     },
                   }}
                   labelKey={'navn'}
@@ -57,7 +57,7 @@ export const EditBegreper = () => {
                   type={TYPE.search}
                   options={result}
                   placeholder={'Begreper'}
-                  onInputChange={event => setSearch(event.currentTarget.value)}
+                  onInputChange={(event) => setSearch(event.currentTarget.value)}
                   onChange={(params) => {
                     let term = params.value.length ? params.value[0] : undefined
                     term && p.push(term)

@@ -1,9 +1,9 @@
 import axios from 'axios'
-import {emptyPage, Krav, KravQL, KravStatus, Or, PageResponse} from '../constants'
-import {env} from '../util/env'
-import {useEffect, useState} from 'react'
-import {useSearch} from '../util/hooks'
-import {gql} from '@apollo/client'
+import { emptyPage, Krav, KravQL, KravStatus, Or, PageResponse } from '../constants'
+import { env } from '../util/env'
+import { useEffect, useState } from 'react'
+import { useSearch } from '../util/hooks'
+import { gql } from '@apollo/client'
 
 export const getKravPage = async (pageNumber: number, pageSize: number) => {
   return (await axios.get<PageResponse<Krav>>(`${env.backendBaseUrl}/krav?pageNumber=${pageNumber}&pageSize=${pageSize}`)).data
@@ -40,9 +40,9 @@ function kravToKravDto(krav: KravQL): Krav {
     ...krav,
     avdeling: krav.avdeling?.code,
     underavdeling: krav.underavdeling?.code,
-    relevansFor: krav.relevansFor.map(c => c.code),
-    regelverk: krav.regelverk.map(r => ({...r, lov: r.lov.code})),
-    begrepIder: krav.begreper.map(b => b.id)
+    relevansFor: krav.relevansFor.map((c) => c.code),
+    regelverk: krav.regelverk.map((r) => ({ ...r, lov: r.lov.code })),
+    begrepIder: krav.begreper.map((b) => b.id),
   } as any
   delete dto.changeStamp
   delete dto.version
@@ -57,7 +57,7 @@ export const useKravPage = (pageSize: number) => {
 
   useEffect(() => {
     setLoading(true)
-    getKravPage(page, pageSize).then(r => {
+    getKravPage(page, pageSize).then((r) => {
       setData(r)
       setLoading(false)
     })
@@ -69,8 +69,8 @@ export const useKravPage = (pageSize: number) => {
   return [data, prevPage, nextPage, loading] as [PageResponse<Krav>, () => void, () => void, boolean]
 }
 
-export type KravIdParams = Or<{id?: string}, {kravNummer: string, kravVersjon: string}>
-export type KravId = Or<{id?: string}, {kravNummer: number, kravVersjon: number}>
+export type KravIdParams = Or<{ id?: string }, { kravNummer: string; kravVersjon: string }>
+export type KravId = Or<{ id?: string }, { kravNummer: number; kravVersjon: number }>
 
 export const useKrav = (params: KravId | KravIdParams, onlyLoadOnce?: boolean) => {
   const isCreateNew = params.id === 'ny'
@@ -93,7 +93,7 @@ export const mapToFormVal = (krav: Partial<KravQL>): KravQL => ({
   navn: krav.navn || '',
   kravNummer: krav.kravNummer || 0,
   kravVersjon: krav.kravVersjon || 0,
-  changeStamp: krav.changeStamp || {lastModifiedDate: '', lastModifiedBy: ''},
+  changeStamp: krav.changeStamp || { lastModifiedDate: '', lastModifiedBy: '' },
   version: -1,
   beskrivelse: krav.beskrivelse || '',
   utdypendeBeskrivelse: krav.utdypendeBeskrivelse || '',
@@ -108,7 +108,7 @@ export const mapToFormVal = (krav: Partial<KravQL>): KravQL => ({
   hensikt: krav.hensikt || '',
   avdeling: krav.avdeling,
   underavdeling: krav.underavdeling,
-  periode: krav.periode || {start: undefined, slutt: undefined},
+  periode: krav.periode || { start: undefined, slutt: undefined },
   relevansFor: krav.relevansFor || [],
   status: krav.status || KravStatus.UTKAST,
   suksesskriterier: krav.suksesskriterier || [],
@@ -116,7 +116,7 @@ export const mapToFormVal = (krav: Partial<KravQL>): KravQL => ({
 
   // not used
   begrepIder: [],
-  etterlevelser: []
+  etterlevelser: [],
 })
 
 export const kravFullQuery = gql`
@@ -186,4 +186,5 @@ export const kravFullQuery = gql`
       }
       status
     }
-  }`
+  }
+`

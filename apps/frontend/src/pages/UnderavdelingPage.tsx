@@ -13,16 +13,16 @@ export const UnderavdelingPage = () => {
 
   if (!underavdeling) {
     return (
-      <Block maxWidth={maxPageWidth} width='100%'>
-        <Block paddingLeft='40px' paddingRight='40px' width='calc(100%-80px)' display='flex' justifyContent='center'>
+      <Block maxWidth={maxPageWidth} width="100%">
+        <Block paddingLeft="40px" paddingRight="40px" width="calc(100%-80px)" display="flex" justifyContent="center">
           <Block>
             <HeadingMedium>Velg underavdeling</HeadingMedium>
             <Block>
-              {codelist.getCodes(ListName.UNDERAVDELING).map((code) =>
+              {codelist.getCodes(ListName.UNDERAVDELING).map((code) => (
                 <Block key={code.code} marginBottom={theme.sizing.scale400}>
                   <RouteLink href={`/underavdeling/${code.code}`}>{code.shortName}</RouteLink>
                 </Block>
-              )}
+              ))}
             </Block>
           </Block>
         </Block>
@@ -32,8 +32,8 @@ export const UnderavdelingPage = () => {
 
   const code = codelist.getCode(ListName.UNDERAVDELING, underavdeling)
   return (
-    <Block maxWidth={maxPageWidth} width='100%'>
-      <Block paddingLeft='40px' paddingRight='40px' width='calc(100%-80px)' display='flex' justifyContent='center'>
+    <Block maxWidth={maxPageWidth} width="100%">
+      <Block paddingLeft="40px" paddingRight="40px" width="calc(100%-80px)" display="flex" justifyContent="center">
         <Block>
           <HeadingMedium>Underavdeling: {code?.shortName}</HeadingMedium>
           <ParagraphMedium>{code?.description}</ParagraphMedium>

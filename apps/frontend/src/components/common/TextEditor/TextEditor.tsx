@@ -9,10 +9,10 @@ import { ettlevColors } from '../../../util/theme'
 import { useDebouncedState } from '../../../util/hooks'
 
 type TextEditorProps = {
-  initialValue: string,
-  setValue: (v: string) => void,
+  initialValue: string
+  setValue: (v: string) => void
   shortenLinks?: boolean
-  onImageUpload?: (file: File) => Promise<string>,
+  onImageUpload?: (file: File) => Promise<string>
   height?: string
 }
 
@@ -29,7 +29,7 @@ const TextEditor = (props: TextEditorProps) => {
           close: (entity: any) => {
             return `![${entity.data.alt}](${entity.data.src})`
           },
-        }
+        },
       },
       styleItems: {
         code: {
@@ -39,8 +39,8 @@ const TextEditor = (props: TextEditorProps) => {
           close: () => {
             return '\n```'
           },
-        }
-      }
+        },
+      },
     })
   }
 
@@ -53,11 +53,11 @@ const TextEditor = (props: TextEditorProps) => {
             mutability: 'MUTABLE',
             data: {
               src: item.src,
-              alt: item.alt
+              alt: item.alt,
             },
           }
-        }
-      }
+        },
+      },
     })
   }
 
@@ -66,17 +66,17 @@ const TextEditor = (props: TextEditorProps) => {
       <Editor
         editorStyle={{ padding: '10px', height: props.height || '500px' }}
         toolbarStyle={{ backgroundColor: ettlevColors.grey50, borderBottom: `1px solid ${ettlevColors.textAreaBorder}` }}
-        onEditorStateChange={data => {
+        onEditorStateChange={(data) => {
           setVal(CustomDraftToMarkdown(convertToRaw(data.getCurrentContent())))
         }}
         initialContentState={CustomMarkdownToDraft(val)}
         localization={{
-          translations: translations
+          translations: translations,
         }}
         tabIndex={0}
         toolbar={{
           options: ['inline', 'blockType', 'list', 'link', 'history'],
-          blockType: { },
+          blockType: {},
           inline: { options: ['bold', 'italic', 'underline', 'strikethrough', 'monospace'] },
           list: { options: ['unordered', 'ordered'] },
           link: { options: ['link'] },

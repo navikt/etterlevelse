@@ -22,52 +22,46 @@ type EditBegrunnelseProps = {
   formRef?: React.Ref<any>
 }
 
-const etterlevelseSchema = () => yup.object({
-  suksesskriterieBegrunnelser: yup.array().of(yup.object({
-    suksesskriterieId: yup.number().required('Begrunnelse må være knyttet til et suksesskriterie'),
-    begrunnelse: yup.string().test({
-      name: 'begrunnelseCheck',
-      message: 'Suksesskriterie må ha en begrunnelse',
-      test: function (begrunnelse) {
-        const { parent } = this
-        if (!parent.oppfylt || (parent.oppfylt && !!begrunnelse)) {
-          return true
-        }
-        return false
-      }
-    })
-  })),
-})
-
+const etterlevelseSchema = () =>
+  yup.object({
+    suksesskriterieBegrunnelser: yup.array().of(
+      yup.object({
+        suksesskriterieId: yup.number().required('Begrunnelse må være knyttet til et suksesskriterie'),
+        begrunnelse: yup.string().test({
+          name: 'begrunnelseCheck',
+          message: 'Suksesskriterie må ha en begrunnelse',
+          test: function (begrunnelse) {
+            const { parent } = this
+            if (!parent.oppfylt || (parent.oppfylt && !!begrunnelse)) {
+              return true
+            }
+            return false
+          },
+        }),
+      }),
+    ),
+  })
 
 const EditBegrunnelse = ({ krav, etterlevelse, close, formRef }: EditBegrunnelseProps) => {
-
   const submit = async (etterlevelse: Etterlevelse) => {
     console.log(etterlevelse)
     close(await updateEtterlevelse(etterlevelse))
   }
 
   return (
-    <Formik
-      onSubmit={submit}
-      initialValues={mapEtterlevelseToFormValue(etterlevelse)}
-      validationSchema={etterlevelseSchema()}
-      innerRef={formRef}
-    >{({ values, isSubmitting, submitForm }: FormikProps<Etterlevelse>) => (
-      <Form>
-        <FieldWrapper>
-          <FieldArray name={'suksesskriterieBegrunnelser'}>
-            {p => <BegrunnelseList props={p} suksesskriterier={krav.suksesskriterier} />}
-          </FieldArray>
-        </FieldWrapper>
-      </Form>
-    )
-      }
-    </Formik >
+    <Formik onSubmit={submit} initialValues={mapEtterlevelseToFormValue(etterlevelse)} validationSchema={etterlevelseSchema()} innerRef={formRef}>
+      {({ values, isSubmitting, submitForm }: FormikProps<Etterlevelse>) => (
+        <Form>
+          <FieldWrapper>
+            <FieldArray name={'suksesskriterieBegrunnelser'}>{(p) => <BegrunnelseList props={p} suksesskriterier={krav.suksesskriterier} />}</FieldArray>
+          </FieldWrapper>
+        </Form>
+      )}
+    </Formik>
   )
 }
 
-const BegrunnelseList = ({ props, suksesskriterier }: { props: FieldArrayRenderProps, suksesskriterier: Suksesskriterie[] }) => {
+const BegrunnelseList = ({ props, suksesskriterier }: { props: FieldArrayRenderProps; suksesskriterier: Suksesskriterie[] }) => {
   const suksesskriterieBegrunnelser = props.form.values.suksesskriterieBegrunnelser as SuksesskriterieBegrunnelse[]
 
   return (
@@ -80,7 +74,7 @@ const BegrunnelseList = ({ props, suksesskriterier }: { props: FieldArrayRenderP
               index={i}
               kriterieLength={suksesskriterier.length}
               suksesskriterieBegrunnelser={suksesskriterieBegrunnelser}
-              update={updated => props.replace(i, updated)}
+              update={(updated) => props.replace(i, updated)}
             />
           </Block>
         )
@@ -96,14 +90,16 @@ const Begrunnelse = ({
   kriterieLength,
   update,
 }: {
-  suksesskriterie: Suksesskriterie,
-  index: number,
-  kriterieLength: number,
-  suksesskriterieBegrunnelser: SuksesskriterieBegrunnelse[],
+  suksesskriterie: Suksesskriterie
+  index: number
+  kriterieLength: number
+  suksesskriterieBegrunnelser: SuksesskriterieBegrunnelse[]
   update: (s: SuksesskriterieBegrunnelse) => void
 }) => {
   const suksesskriterieBegrunnelse = getSuksesskriterieBegrunnelse(suksesskriterieBegrunnelser, suksesskriterie)
-  const begrunnelseIndex = suksesskriterieBegrunnelser.findIndex((item) => { return item.suksesskriterieId === suksesskriterie.id })
+  const begrunnelseIndex = suksesskriterieBegrunnelser.findIndex((item) => {
+    return item.suksesskriterieId === suksesskriterie.id
+  })
   const debounceDelay = 400
   const [begrunnelse, setBegrunnelse] = useDebouncedState(suksesskriterieBegrunnelse.begrunnelse || '', debounceDelay)
 
@@ -117,20 +113,18 @@ const Begrunnelse = ({
         <Label3 $style={{ color: ettlevColors.green600 }}>
           SUKSESSKRITERIE {index + 1} AV {kriterieLength}
         </Label3>
-        <Label3 $style={{ fontSize: '21px', lineHeight: '30px' }}>
-          {suksesskriterie.navn}
-        </Label3>
-        <Label3 $style={{ lineHeight: '22px' }} marginTop='16px'>
+        <Label3 $style={{ fontSize: '21px', lineHeight: '30px' }}>{suksesskriterie.navn}</Label3>
+        <Label3 $style={{ lineHeight: '22px' }} marginTop="16px">
           Hvordan er kriteriet oppfylt?
         </Label3>
 
-        {suksesskriterieBegrunnelse.oppfylt &&
+        {suksesskriterieBegrunnelse.oppfylt && (
           <Block>
             <FormControl>
               <TextEditor initialValue={begrunnelse} setValue={setBegrunnelse} height={'188px'} />
             </FormControl>
           </Block>
-        }
+        )}
 
         <Error fieldName={`suksesskriterieBegrunnelser[${begrunnelseIndex}].begrunnelse`} fullWidth={true} />
       </Card>

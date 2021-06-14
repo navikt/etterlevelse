@@ -1,12 +1,8 @@
-import React, {Dispatch, RefObject, SetStateAction, useEffect, useState} from 'react'
-import {useHistory, useLocation} from 'react-router-dom'
-import {user} from '../../services/User'
+import React, { Dispatch, RefObject, SetStateAction, useEffect, useState } from 'react'
+import { useHistory, useLocation } from 'react-router-dom'
+import { user } from '../../services/User'
 
-export function useDebouncedState<T>(
-  initialValue: T,
-  delay: number,
-  passThrough?: (val: T) => void
-): [T, Dispatch<SetStateAction<T>>, T] {
+export function useDebouncedState<T>(initialValue: T, delay: number, passThrough?: (val: T) => void): [T, Dispatch<SetStateAction<T>>, T] {
   const [value, setValue] = useState<T>(initialValue)
   const [debouncedValue, setDebouncedValue] = useState<T>(value)
 
@@ -35,7 +31,6 @@ export function useUpdateOnChange(value: any) {
   useEffect(() => {
     update()
   }, [value])
-
 }
 
 export let updateUser: () => void
@@ -49,7 +44,7 @@ export function useAwait<T>(p: Promise<T>, setLoading?: Dispatch<SetStateAction<
   const update = useForceUpdate()
 
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       setLoading && setLoading(true)
       await p
       update()
@@ -58,13 +53,14 @@ export function useAwait<T>(p: Promise<T>, setLoading?: Dispatch<SetStateAction<
   }, [])
 }
 
-type Refs<T> = {[id: string]: RefObject<T>}
+type Refs<T> = { [id: string]: RefObject<T> }
 
 export function useRefs<T>(ids: string[]) {
-  const refs: Refs<T> = ids.reduce((acc, value) => {
-    acc[value] = React.createRef()
-    return acc
-  }, {} as Refs<T>) || {}
+  const refs: Refs<T> =
+    ids.reduce((acc, value) => {
+      acc[value] = React.createRef()
+      return acc
+    }, {} as Refs<T>) || {}
 
   return refs
 }
@@ -74,7 +70,7 @@ export function useQuery() {
 }
 
 export function useQueryParam<T extends string>(queryParam: string) {
-  return useQuery().get(queryParam) as T || undefined
+  return (useQuery().get(queryParam) as T) || undefined
 }
 
 export function useLocationState<T>() {
@@ -82,12 +78,11 @@ export function useLocationState<T>() {
   const location = useLocation<T | undefined>()
 
   const changeState = (newState: Partial<T>) => {
-    history.replace({...location, state: {...location.state, ...newState}})
+    history.replace({ ...location, state: { ...location.state, ...newState } })
   }
 
-  return {location, history, state: location.state, changeState}
+  return { location, history, state: location.state, changeState }
 }
-
 
 export const useSearch = <T>(searchFunction: (term: string) => Promise<T[]>) => {
   const [search, setSearch] = useDebouncedState<string>('', 200)
@@ -95,7 +90,7 @@ export const useSearch = <T>(searchFunction: (term: string) => Promise<T[]>) => 
   const [loading, setLoading] = useState<boolean>(false)
 
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       if (search && search.length > 2) {
         setLoading(true)
         setSearchResult(await searchFunction(search))

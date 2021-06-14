@@ -1,17 +1,17 @@
 import * as React from 'react'
-import {useEffect, useRef, useState} from 'react'
-import {Block} from 'baseui/block'
-import {Label2} from 'baseui/typography'
-import {Value} from 'baseui/select'
-import {Button} from 'baseui/button'
+import { useEffect, useRef, useState } from 'react'
+import { Block } from 'baseui/block'
+import { Label2 } from 'baseui/typography'
+import { Value } from 'baseui/select'
+import { Button } from 'baseui/button'
 
-import {StyledSpinnerNext} from 'baseui/spinner'
-import {Cell, Row, Table} from '../../common/Table'
-import {theme} from '../../../util'
-import {codelist, CodeUsage} from '../../../services/Codelist'
-import {ObjectLink} from '../../common/RouteLink'
-import {ObjectType} from '../audit/AuditTypes'
-import {replaceCodelistUsage} from '../../../api/CodelistApi'
+import { StyledSpinnerNext } from 'baseui/spinner'
+import { Cell, Row, Table } from '../../common/Table'
+import { theme } from '../../../util'
+import { codelist, CodeUsage } from '../../../services/Codelist'
+import { ObjectLink } from '../../common/RouteLink'
+import { ObjectType } from '../audit/AuditTypes'
+import { replaceCodelistUsage } from '../../../api/CodelistApi'
 import CustomizedSelect from '../../common/CustomizedSelect'
 
 const UsageTable = (props: { usage: CodeUsage }) => {
@@ -30,30 +30,51 @@ const UsageTable = (props: { usage: CodeUsage }) => {
       headers={[
         { title: 'Krav', hide: !krav },
         { title: 'Behandling', hide: !behandlinger },
-        { title: 'Codelist', hide: !codelist }
-      ].filter(v => !!v)}
-      render={table => Array.from(Array(rows).keys()).map(index => {
-        const kr = usage.krav[index]
-        const be = usage.behandlinger[index]
-        const co = usage.codelist[index]
-        return (
-          <Row key={index} $style={{ borderBottomStyle: 'none' }}>
-            {krav && <Cell>
-              {kr && <ObjectLink id={kr.id} type={ObjectType.Krav} withHistory={true}>{kr.name}</ObjectLink>}
-            </Cell>}
-            {behandlinger && <Cell>
-              {be && <ObjectLink id={be.id} type={ObjectType.Behandling} withHistory={true}>{be.name}</ObjectLink>}
-            </Cell>}
-            {codelist && <Cell>
-              {co && <ObjectLink id={co.list} type={ObjectType.Codelist} withHistory={true}>{co.list} - {co.code}</ObjectLink>}
-            </Cell>}
-          </Row>
-        )
-      })} />
+        { title: 'Codelist', hide: !codelist },
+      ].filter((v) => !!v)}
+      render={(table) =>
+        Array.from(Array(rows).keys()).map((index) => {
+          const kr = usage.krav[index]
+          const be = usage.behandlinger[index]
+          const co = usage.codelist[index]
+          return (
+            <Row key={index} $style={{ borderBottomStyle: 'none' }}>
+              {krav && (
+                <Cell>
+                  {kr && (
+                    <ObjectLink id={kr.id} type={ObjectType.Krav} withHistory={true}>
+                      {kr.name}
+                    </ObjectLink>
+                  )}
+                </Cell>
+              )}
+              {behandlinger && (
+                <Cell>
+                  {be && (
+                    <ObjectLink id={be.id} type={ObjectType.Behandling} withHistory={true}>
+                      {be.name}
+                    </ObjectLink>
+                  )}
+                </Cell>
+              )}
+              {codelist && (
+                <Cell>
+                  {co && (
+                    <ObjectLink id={co.list} type={ObjectType.Codelist} withHistory={true}>
+                      {co.list} - {co.code}
+                    </ObjectLink>
+                  )}
+                </Cell>
+              )}
+            </Row>
+          )
+        })
+      }
+    />
   )
 }
 
-export const Usage = (props: { usage?: CodeUsage, refresh: () => void }) => {
+export const Usage = (props: { usage?: CodeUsage; refresh: () => void }) => {
   const [showReplace, setShowReplace] = useState(false)
   const [newValue, setNewValue] = useState<Value>([])
   const ref = useRef<HTMLElement>()
@@ -74,15 +95,27 @@ export const Usage = (props: { usage?: CodeUsage, refresh: () => void }) => {
     <Block marginTop="2rem" ref={ref}>
       <Block display="flex" justifyContent="space-between" marginBottom=".5rem">
         <Label2 font="font450">Bruk</Label2>
-        {!!usage?.inUse && <Button type="button" kind="secondary" size="compact" onClick={() => setShowReplace(true)}><b>Erstatt all bruk</b></Button>}
+        {!!usage?.inUse && (
+          <Button type="button" kind="secondary" size="compact" onClick={() => setShowReplace(true)}>
+            <b>Erstatt all bruk</b>
+          </Button>
+        )}
       </Block>
 
       {showReplace && usage && usage.listName && (
         <Block display="flex" margin="1rem" justifyContent="space-between">
-          <CustomizedSelect size="compact"
-            maxDropdownHeight="300px" searchable={true} placeholder={'Ny verdi'}
-            options={codelist.getParsedOptions(usage.listName)} value={newValue} onChange={params => setNewValue(params.value)} />
-          <Button type="button" size="compact" onClick={replace} disabled={!newValue.length}><b>Erstatt</b></Button>
+          <CustomizedSelect
+            size="compact"
+            maxDropdownHeight="300px"
+            searchable={true}
+            placeholder={'Ny verdi'}
+            options={codelist.getParsedOptions(usage.listName)}
+            value={newValue}
+            onChange={(params) => setNewValue(params.value)}
+          />
+          <Button type="button" size="compact" onClick={replace} disabled={!newValue.length}>
+            <b>Erstatt</b>
+          </Button>
         </Block>
       )}
 

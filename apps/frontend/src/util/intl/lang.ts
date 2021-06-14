@@ -1,4 +1,4 @@
-import {IStrings} from './langdef'
+import { IStrings } from './langdef'
 import MdEditor from 'react-markdown-editor-lite'
 
 export const no: IStrings = {
@@ -28,7 +28,7 @@ export const no: IStrings = {
   user: 'Bruker',
   version: 'Versjon',
   view: 'Vis',
-  settings: 'Instillinger'
+  settings: 'Instillinger',
 }
 
 // Markdown norsk locale
@@ -82,7 +82,7 @@ export const en: IStrings = {
   mailLog: 'Mail log',
   nextButton: 'Next',
   prevButton: 'Prev',
-  pageNotFound: 'Oops 404! couldn\'t find page',
+  pageNotFound: "Oops 404! couldn't find page",
   rows: 'Rows',
   save: 'Save',
   searchId: 'Search for id',
@@ -91,5 +91,5 @@ export const en: IStrings = {
   user: 'User',
   version: 'Version',
   view: 'View',
-  settings: 'Settings'
+  settings: 'Settings',
 }

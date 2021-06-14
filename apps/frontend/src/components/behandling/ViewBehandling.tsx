@@ -35,41 +35,41 @@ const modalPaddingRight = '104px'
 const modalPaddingLeft = '112px'
 
 export const ViewBehandling = ({ behandling }: { behandling: Behandling }) => {
-
   return (
     <Block>
       <Block>
-        <Label title='Navn'>{behandling.navn}</Label>
-        <Label title='Nummer'>{behandling.nummer}</Label>
-        <Label title='Overordnet formål'>{behandling.overordnetFormaal.shortName}</Label>
-        <Label title=''>{behandling.overordnetFormaal.description}</Label>
-        <Label title='Formål'>{behandling.formaal}</Label>
+        <Label title="Navn">{behandling.navn}</Label>
+        <Label title="Nummer">{behandling.nummer}</Label>
+        <Label title="Overordnet formål">{behandling.overordnetFormaal.shortName}</Label>
+        <Label title="">{behandling.overordnetFormaal.description}</Label>
+        <Label title="Formål">{behandling.formaal}</Label>
 
-        <Label title='Avdeling'>{behandling.avdeling?.shortName}</Label>
-        <Label title='Linjer'>{behandling.linjer.map(l => l.shortName).join(', ')}</Label>
-        <Label title='Systemer'>{behandling.systemer.map(l => l.shortName).join(', ')}</Label>
-        <Label title='Team'>
+        <Label title="Avdeling">{behandling.avdeling?.shortName}</Label>
+        <Label title="Linjer">{behandling.linjer.map((l) => l.shortName).join(', ')}</Label>
+        <Label title="Systemer">{behandling.systemer.map((l) => l.shortName).join(', ')}</Label>
+        <Label title="Team">
           <Teams teams={behandling.teams} link />
         </Label>
-        <Label title={'Relevans'}><DotTags list={ListName.RELEVANS} codes={behandling.relevansFor} linkCodelist /></Label>
+        <Label title={'Relevans'}>
+          <DotTags list={ListName.RELEVANS} codes={behandling.relevansFor} linkCodelist />
+        </Label>
       </Block>
 
       <BehandlingStatsView behandling={behandling} />
       <KravTable behandling={behandling} />
-
     </Block>
   )
 }
 
 const behandlingKravQuery = gql`
-  query getKravByFilter ($behandlingId: String!) {
-    krav(filter: {behandlingId: $behandlingId}) {
-      content{
+  query getKravByFilter($behandlingId: String!) {
+    krav(filter: { behandlingId: $behandlingId }) {
+      content {
         id
         navn
         kravNummer
         kravVersjon
-        etterlevelser (onlyForBehandling: true) {
+        etterlevelser(onlyForBehandling: true) {
           id
           etterleves
           fristForFerdigstillelse
@@ -77,7 +77,8 @@ const behandlingKravQuery = gql`
         }
       }
     }
-  }`
+  }
+`
 
 type KravTableData = {
   kravNummer: number
@@ -93,19 +94,19 @@ const KravTable = (props: { behandling: Behandling }) => {
   const variables = filterForBehandling(props.behandling)
   const { data: rawData, loading } = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
     variables,
-    skip: !variables?.behandlingId
+    skip: !variables?.behandlingId,
   })
   const [data, setData] = useState<KravTableData[]>([])
 
   useEffect(() => {
-    const mapped = (rawData?.krav.content || []).map(krav => {
+    const mapped = (rawData?.krav.content || []).map((krav) => {
       const etterlevelse = krav.etterlevelser.length ? krav.etterlevelser[0] : undefined
-      return ({
+      return {
         kravNummer: krav.kravNummer,
         kravVersjon: krav.kravVersjon,
         navn: krav.navn,
-        ...mapEtterlevelseData(etterlevelse)
-      })
+        ...mapEtterlevelseData(etterlevelse),
+      }
     })
     setData(mapped)
   }, [rawData])
@@ -118,108 +119,113 @@ const KravTable = (props: { behandling: Behandling }) => {
     etterlevelseId: etterlevelse?.id,
     etterleves: !!etterlevelse?.etterleves,
     frist: etterlevelse?.fristForFerdigstillelse,
-    etterlevelseStatus: etterlevelse?.status
+    etterlevelseStatus: etterlevelse?.status,
   })
   const update = (etterlevelse: Etterlevelse) => {
-    setData(data.map(e => e.kravVersjon === etterlevelse.kravVersjon && e.kravNummer === etterlevelse.kravNummer ? { ...e, ...mapEtterlevelseData(etterlevelse) } : e))
+    setData(data.map((e) => (e.kravVersjon === etterlevelse.kravVersjon && e.kravNummer === etterlevelse.kravNummer ? { ...e, ...mapEtterlevelseData(etterlevelse) } : e)))
   }
 
   const head = <HeadingSmall marginBottom={theme.sizing.scale400}>Krav for behandling</HeadingSmall>
 
-
-  return (
-    loading ?
-      <Block marginTop={theme.sizing.scale2400}>
-        {head}
-        <Spinner size={theme.sizing.scale2400} />
-      </Block> :
-      <Block marginTop={theme.sizing.scale2400}>
-        {head}
-        <Table
-          data={data}
-          emptyText={'data på behandling som spesifiserer aktuelle krav'}
-          headers={[
-            { title: 'Nummer', column: 'kravNummer', small: true },
-            { title: 'Navn', column: 'navn' },
-            { title: 'Etterleves', column: 'etterleves' },
-            { title: 'Frist', column: 'frist' },
-            { title: 'Status', column: 'etterlevelseStatus' },
-            { title: '', small: true },
-          ]}
-          config={{
-            initialSortColumn: 'kravNummer',
-            useDefaultStringCompare: true,
-            sorting: {
-              kravNummer: (a, b) => a.kravNummer === b.kravNummer ? a.kravVersjon - b.kravVersjon : a.kravNummer - b.kravNummer,
-              etterleves: (a, b) => a.etterleves ? b.etterleves ? 0 : -1 : 1
-            }
-          }}
-          render={state => {
-            return state.data.map((krav, i) => {
-              return (
-                <Row key={i}>
-                  <Cell small>{kravNumView(krav)}</Cell>
-                  <Cell>
-                    <RouteLink href={`/krav/${krav.kravNummer}/${krav.kravVersjon}`}>{krav.navn}</RouteLink>
-                  </Cell>
-                  <Cell>
-                    {krav.etterleves ? 'Ja' : 'Nei'}
-                  </Cell>
-                  <Cell>{krav.frist && moment(krav.frist).format('ll')}</Cell>
-                  <Cell>{getEtterlevelseStatus(krav.etterlevelseStatus)}</Cell>
-                  <Cell small $style={{ justifyContent: 'flex-end' }}>
-                    {krav.etterlevelseId &&
-                      <Button tooltip='Vis etterlevelse' size='compact' kind='tertiary' onClick={() => setViewEtterlevelse(krav.etterlevelseId)}><FontAwesomeIcon
-                        icon={faEye} /></Button>}
-
-                    {krav.etterlevelseId &&
-                      <Button tooltip='Rediger' size='compact' kind='tertiary' onClick={() => setEdit(krav.etterlevelseId)}><FontAwesomeIcon icon={faEdit} /></Button>}
-                    {!krav.etterlevelseId && <Button tooltip='Opprett' size='compact' kind='tertiary' onClick={() => {
-                      setKravId(toKravId(krav))
-                      setEdit('ny')
-                    }}><FontAwesomeIcon icon={faPlus} /></Button>}
-                  </Cell>
-                </Row>
-              )
-            })
-          }}
-        />
-        <Modal isOpen={!!viewEtterlevelse} onClose={() => setViewEtterlevelse(undefined)} unstable_ModalBackdropScroll>
-          <EtterlevelseModal id={viewEtterlevelse} />
-        </Modal>
-        {edit &&
-          (<Block maxWidth={maxPageWidth}>
-            <CustomizedModal
-              isOpen={!!edit}
-              onClose={() => setEdit(undefined)}
-            >
-              <Block flex='1' backgroundColor={ettlevColors.green800}>
-                <Block
-                  paddingTop={theme.sizing.scale1200}
-                  paddingRight={theme.sizing.scale1000}
-                  paddingLeft={theme.sizing.scale1000}
-                >
-                  <Block display='flex' flex='1' justifyContent='flex-end'>
-                    <Button
-                      kind='tertiary'
-                      onClick={() => setEdit(undefined)}
-                      $style={{ ':hover': { backgroundColor: 'transparent' } }}
-                    >
-                      <img src={crossIcon} alt='close' />
+  return loading ? (
+    <Block marginTop={theme.sizing.scale2400}>
+      {head}
+      <Spinner size={theme.sizing.scale2400} />
+    </Block>
+  ) : (
+    <Block marginTop={theme.sizing.scale2400}>
+      {head}
+      <Table
+        data={data}
+        emptyText={'data på behandling som spesifiserer aktuelle krav'}
+        headers={[
+          { title: 'Nummer', column: 'kravNummer', small: true },
+          { title: 'Navn', column: 'navn' },
+          { title: 'Etterleves', column: 'etterleves' },
+          { title: 'Frist', column: 'frist' },
+          { title: 'Status', column: 'etterlevelseStatus' },
+          { title: '', small: true },
+        ]}
+        config={{
+          initialSortColumn: 'kravNummer',
+          useDefaultStringCompare: true,
+          sorting: {
+            kravNummer: (a, b) => (a.kravNummer === b.kravNummer ? a.kravVersjon - b.kravVersjon : a.kravNummer - b.kravNummer),
+            etterleves: (a, b) => (a.etterleves ? (b.etterleves ? 0 : -1) : 1),
+          },
+        }}
+        render={(state) => {
+          return state.data.map((krav, i) => {
+            return (
+              <Row key={i}>
+                <Cell small>{kravNumView(krav)}</Cell>
+                <Cell>
+                  <RouteLink href={`/krav/${krav.kravNummer}/${krav.kravVersjon}`}>{krav.navn}</RouteLink>
+                </Cell>
+                <Cell>{krav.etterleves ? 'Ja' : 'Nei'}</Cell>
+                <Cell>{krav.frist && moment(krav.frist).format('ll')}</Cell>
+                <Cell>{getEtterlevelseStatus(krav.etterlevelseStatus)}</Cell>
+                <Cell small $style={{ justifyContent: 'flex-end' }}>
+                  {krav.etterlevelseId && (
+                    <Button tooltip="Vis etterlevelse" size="compact" kind="tertiary" onClick={() => setViewEtterlevelse(krav.etterlevelseId)}>
+                      <FontAwesomeIcon icon={faEye} />
                     </Button>
-                  </Block>
+                  )}
+
+                  {krav.etterlevelseId && (
+                    <Button tooltip="Rediger" size="compact" kind="tertiary" onClick={() => setEdit(krav.etterlevelseId)}>
+                      <FontAwesomeIcon icon={faEdit} />
+                    </Button>
+                  )}
+                  {!krav.etterlevelseId && (
+                    <Button
+                      tooltip="Opprett"
+                      size="compact"
+                      kind="tertiary"
+                      onClick={() => {
+                        setKravId(toKravId(krav))
+                        setEdit('ny')
+                      }}
+                    >
+                      <FontAwesomeIcon icon={faPlus} />
+                    </Button>
+                  )}
+                </Cell>
+              </Row>
+            )
+          })
+        }}
+      />
+      <Modal isOpen={!!viewEtterlevelse} onClose={() => setViewEtterlevelse(undefined)} unstable_ModalBackdropScroll>
+        <EtterlevelseModal id={viewEtterlevelse} />
+      </Modal>
+      {edit && (
+        <Block maxWidth={maxPageWidth}>
+          <CustomizedModal isOpen={!!edit} onClose={() => setEdit(undefined)}>
+            <Block flex="1" backgroundColor={ettlevColors.green800}>
+              <Block paddingTop={theme.sizing.scale1200} paddingRight={theme.sizing.scale1000} paddingLeft={theme.sizing.scale1000}>
+                <Block display="flex" flex="1" justifyContent="flex-end">
+                  <Button kind="tertiary" onClick={() => setEdit(undefined)} $style={{ ':hover': { backgroundColor: 'transparent' } }}>
+                    <img src={crossIcon} alt="close" />
+                  </Button>
                 </Block>
               </Block>
+            </Block>
 
-              <EditModal behandlingNavn={props.behandling.navn} etterlevelseId={edit} behandlingId={props.behandling.id} kravId={kravId} close={e => {
+            <EditModal
+              behandlingNavn={props.behandling.navn}
+              etterlevelseId={edit}
+              behandlingId={props.behandling.id}
+              kravId={kravId}
+              close={(e) => {
                 setEdit(undefined)
                 e && update(e)
-              }} />
-            </CustomizedModal>
-          </Block>
-          )
-        }
-      </Block >
+              }}
+            />
+          </CustomizedModal>
+        </Block>
+      )}
+    </Block>
   )
 }
 
@@ -232,38 +238,33 @@ const EtterlevelseModal = (props: { id?: string }) => {
   }, [etterlevelse])
 
   if (!etterlevelse) return <Spinner size={theme.sizing.scale800} />
-  return <>
-    <ModalHeader>
-      <ObjectLink type={ObjectType.Etterlevelse} id={props.id}>
-        <Block marginRight={theme.sizing.scale400}>Etterlevelse av {etterlevelseName(etterlevelse)}</Block>
-      </ObjectLink>
-    </ModalHeader>
-    <ModalBody>
-      {krav && <ViewEtterlevelse etterlevelse={etterlevelse} setEtterlevelse={setEtterlevelse} viewMode krav={krav} />}
-    </ModalBody>
-  </>
-}
-
-const toKravId = (it: { kravVersjon: number, kravNummer: number }) => ({ kravNummer: it.kravNummer, kravVersjon: it.kravVersjon })
-
-const EditModal = (props: { etterlevelseId: string, behandlingId: string, kravId?: KravId, close: (e?: Etterlevelse) => void, behandlingNavn: string }) => {
-  const [etterlevelse] = useEtterlevelse(props.etterlevelseId, props.behandlingId, props.kravId)
-  if (!etterlevelse) return <Spinner size={theme.sizing.scale800} />
-
   return (
-    <Block>
-      {etterlevelse && <KravView behandlingNavn={props.behandlingNavn} kravId={toKravId(etterlevelse)} etterlevelse={etterlevelse} close={props.close} />}
-    </Block >
+    <>
+      <ModalHeader>
+        <ObjectLink type={ObjectType.Etterlevelse} id={props.id}>
+          <Block marginRight={theme.sizing.scale400}>Etterlevelse av {etterlevelseName(etterlevelse)}</Block>
+        </ObjectLink>
+      </ModalHeader>
+      <ModalBody>{krav && <ViewEtterlevelse etterlevelse={etterlevelse} setEtterlevelse={setEtterlevelse} viewMode krav={krav} />}</ModalBody>
+    </>
   )
 }
 
-const KravView = (props: { kravId: KravId, etterlevelse: Etterlevelse, close: Function, behandlingNavn: string }) => {
+const toKravId = (it: { kravVersjon: number; kravNummer: number }) => ({ kravNummer: it.kravNummer, kravVersjon: it.kravVersjon })
+
+const EditModal = (props: { etterlevelseId: string; behandlingId: string; kravId?: KravId; close: (e?: Etterlevelse) => void; behandlingNavn: string }) => {
+  const [etterlevelse] = useEtterlevelse(props.etterlevelseId, props.behandlingId, props.kravId)
+  if (!etterlevelse) return <Spinner size={theme.sizing.scale800} />
+
+  return <Block>{etterlevelse && <KravView behandlingNavn={props.behandlingNavn} kravId={toKravId(etterlevelse)} etterlevelse={etterlevelse} close={props.close} />}</Block>
+}
+
+const KravView = (props: { kravId: KravId; etterlevelse: Etterlevelse; close: Function; behandlingNavn: string }) => {
   const { data } = useQuery<{ kravById: KravQL }, KravId>(kravFullQuery, {
     variables: props.kravId,
-    skip: !props.kravId.id && !props.kravId.kravNummer
+    skip: !props.kravId.id && !props.kravId.kravNummer,
   })
   const lover = codelist.getCodes(ListName.LOV)
-
 
   const krav = data?.kravById
 
@@ -272,16 +273,15 @@ const KravView = (props: { kravId: KravId, etterlevelse: Etterlevelse, close: Fu
     let temas = ''
 
     krav?.regelverk.map((r) => {
-      const lov = lover.find(lov => lov.code === r.lov.code)
+      const lov = lover.find((lov) => lov.code === r.lov.code)
       temaCodes.push(lov?.data?.tema || '')
     })
 
-    temaCodes.forEach(temaCode => {
+    temaCodes.forEach((temaCode) => {
       const shortName = codelist.getShortname(ListName.TEMA, temaCode)
-    
+
       temas = temas + shortName + ', '
     })
-
 
     temas = temas.substring(0, temas.length - 2)
     temas = temas.replace(/,([^,]*)$/, ' og$1')
@@ -290,143 +290,159 @@ const KravView = (props: { kravId: KravId, etterlevelse: Etterlevelse, close: Fu
 
   return (
     <Block>
-      {krav &&
+      {krav && (
         <Block>
-          <Block flex='1' backgroundColor={ettlevColors.green800}>
-            <Block paddingLeft={modalPaddingLeft} paddingRight={modalPaddingRight} paddingBottom='32px'>
-              <H1 $style={{ color: ettlevColors.grey50, marginTop: '0px' }}>
-                Fyll ut dokumentasjon: {getTema()}
-              </H1>
-              <Paragraph2 $style={{ lineHeight: '12px', color: ettlevColors.green50 }}>
-                {props.behandlingNavn}
-              </Paragraph2>
+          <Block flex="1" backgroundColor={ettlevColors.green800}>
+            <Block paddingLeft={modalPaddingLeft} paddingRight={modalPaddingRight} paddingBottom="32px">
+              <H1 $style={{ color: ettlevColors.grey50, marginTop: '0px' }}>Fyll ut dokumentasjon: {getTema()}</H1>
+              <Paragraph2 $style={{ lineHeight: '12px', color: ettlevColors.green50 }}>{props.behandlingNavn}</Paragraph2>
             </Block>
           </Block>
           <Block paddingLeft={modalPaddingLeft} paddingRight={modalPaddingRight}>
-            <Block marginTop='99px'>
+            <Block marginTop="99px">
               <EditEtterlevelse
                 krav={krav}
                 etterlevelse={props.etterlevelse}
-                close={e => {
+                close={(e) => {
                   props.close(e)
-                }} />
+                }}
+              />
             </Block>
-          </Block >
+          </Block>
         </Block>
-      }
+      )}
     </Block>
   )
 }
 
 const statsQuery = gql`
-      query getBehandlingStats($behandlingId: ID!) {
-        behandling(filter: {id: $behandlingId }) {
-        content {
+  query getBehandlingStats($behandlingId: ID!) {
+    behandling(filter: { id: $behandlingId }) {
+      content {
         stats {
-        fyltKrav {
-        kravNummer
+          fyltKrav {
+            kravNummer
             kravVersjon
-      regelverk {
-        lov {
-        code
+            regelverk {
+              lov {
+                code
                 shortName
               }
             }
           }
-      ikkeFyltKrav {
-        kravNummer
+          ikkeFyltKrav {
+            kravNummer
             kravVersjon
-      regelverk {
-        lov {
-        code
+            regelverk {
+              lov {
+                code
                 shortName
               }
             }
           }
-      lovStats {
-        lovCode {
-        code
+          lovStats {
+            lovCode {
+              code
               shortName
             }
-      fyltKrav {
-        id
+            fyltKrav {
+              id
               kravNummer
-      kravVersjon
-      navn
+              kravVersjon
+              navn
             }
-      ikkeFyltKrav {
-        id
+            ikkeFyltKrav {
+              id
               kravNummer
-      kravVersjon
-      navn
+              kravVersjon
+              navn
             }
           }
         }
       }
     }
-  }`
-
+  }
+`
 
 const BehandlingStatsView = ({ behandling }: { behandling: Behandling }) => {
   const { data } = useQuery<{ behandling: PageResponse<{ stats: BehandlingStats }> }>(statsQuery, {
-    variables: { behandlingId: behandling.id }
+    variables: { behandlingId: behandling.id },
   })
   const stats = data?.behandling.content[0].stats
   const [expand, setExpand] = useState<string | undefined>()
 
   const head = <HeadingSmall marginBottom={theme.sizing.scale800}>Stats</HeadingSmall>
-  if (!stats) return <Block marginTop={theme.sizing.scale2400}>
-    {head}
-    <Spinner size={theme.sizing.scale800} />
-  </Block>
+  if (!stats)
+    return (
+      <Block marginTop={theme.sizing.scale2400}>
+        {head}
+        <Spinner size={theme.sizing.scale800} />
+      </Block>
+    )
 
   return (
     <Block marginTop={theme.sizing.scale2400}>
       {head}
-      <Block display='flex' width='100%' marginTop={theme.sizing.scale800} alignItems='center'>
-
-        <Chart title='Krav totalt' data={[
-          { label: 'Utfylt', size: stats.fyltKrav.length },
-          { label: 'Ikke utfylt', size: stats.ikkeFyltKrav.length },
-        ]} size={75} />
+      <Block display="flex" width="100%" marginTop={theme.sizing.scale800} alignItems="center">
+        <Chart
+          title="Krav totalt"
+          data={[
+            { label: 'Utfylt', size: stats.fyltKrav.length },
+            { label: 'Ikke utfylt', size: stats.ikkeFyltKrav.length },
+          ]}
+          size={75}
+        />
 
         <Block $style={{ flexGrow: 1 }} marginLeft={theme.sizing.scale400}>
-          <Table data={stats.lovStats.map(lov => ({
-            label: lov.lovCode.shortName,
-            fylt: lov.fyltKrav,
-            ikkeFylt: lov.ikkeFyltKrav,
-            empty: !lov.fyltKrav.length && !lov.ikkeFyltKrav.length,
-            code: lov.lovCode.code
-          }))} emptyText={'krav'} headers={[
-            { title: 'Lov', },
-            { title: 'Utfylt', },
-            { title: 'Ikke utfylt', },
-          ]} render={state => state.data
-            .filter(lov => !lov.empty)
-            .map((lov, i) => {
-              const expanded = expand === lov.code
-              return (
-                <div key={i} onClick={() => expanded ? setExpand(undefined) : setExpand(lov.code)} style={{ cursor: 'pointer' }}>
-                  <Row>
-                    <Cell>{lov.label}</Cell>
-                    <Cell>{lov.fylt.length}</Cell>
-                    <Cell>{lov.ikkeFylt.length}</Cell>
-                  </Row>
-                  {expanded && lov.fylt.map(k => (
-                    <Row key={k.id} $style={{ backgroundColor: theme.colors.positive50 }}>
-                      <Cell small>Utfylt</Cell>
-                      <Cell $style={{ justifyContent: 'flex-end' }}><ObjectLink type={ObjectType.Krav} id={k.id}>{kravName(k)}</ObjectLink></Cell>
-                    </Row>
-                  ))}
-                  {expanded && lov.ikkeFylt.map(k => (
-                    <Row key={k.id} $style={{ backgroundColor: theme.colors.warning50 }}>
-                      <Cell small>Ikke utfylt</Cell>
-                      <Cell $style={{ justifyContent: 'flex-end' }}><ObjectLink type={ObjectType.Krav} id={k.id}>{kravName(k)}</ObjectLink></Cell>
-                    </Row>
-                  ))}
-                </div>
-              )
-            })} />
+          <Table
+            data={stats.lovStats.map((lov) => ({
+              label: lov.lovCode.shortName,
+              fylt: lov.fyltKrav,
+              ikkeFylt: lov.ikkeFyltKrav,
+              empty: !lov.fyltKrav.length && !lov.ikkeFyltKrav.length,
+              code: lov.lovCode.code,
+            }))}
+            emptyText={'krav'}
+            headers={[{ title: 'Lov' }, { title: 'Utfylt' }, { title: 'Ikke utfylt' }]}
+            render={(state) =>
+              state.data
+                .filter((lov) => !lov.empty)
+                .map((lov, i) => {
+                  const expanded = expand === lov.code
+                  return (
+                    <div key={i} onClick={() => (expanded ? setExpand(undefined) : setExpand(lov.code))} style={{ cursor: 'pointer' }}>
+                      <Row>
+                        <Cell>{lov.label}</Cell>
+                        <Cell>{lov.fylt.length}</Cell>
+                        <Cell>{lov.ikkeFylt.length}</Cell>
+                      </Row>
+                      {expanded &&
+                        lov.fylt.map((k) => (
+                          <Row key={k.id} $style={{ backgroundColor: theme.colors.positive50 }}>
+                            <Cell small>Utfylt</Cell>
+                            <Cell $style={{ justifyContent: 'flex-end' }}>
+                              <ObjectLink type={ObjectType.Krav} id={k.id}>
+                                {kravName(k)}
+                              </ObjectLink>
+                            </Cell>
+                          </Row>
+                        ))}
+                      {expanded &&
+                        lov.ikkeFylt.map((k) => (
+                          <Row key={k.id} $style={{ backgroundColor: theme.colors.warning50 }}>
+                            <Cell small>Ikke utfylt</Cell>
+                            <Cell $style={{ justifyContent: 'flex-end' }}>
+                              <ObjectLink type={ObjectType.Krav} id={k.id}>
+                                {kravName(k)}
+                              </ObjectLink>
+                            </Cell>
+                          </Row>
+                        ))}
+                    </div>
+                  )
+                })
+            }
+          />
         </Block>
       </Block>
     </Block>
