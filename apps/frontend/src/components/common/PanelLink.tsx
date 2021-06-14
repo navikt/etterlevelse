@@ -4,7 +4,7 @@ import {Block, BlockOverrides, Responsive, Scale} from 'baseui/block'
 import {borderRadius, padding, paddingAll} from './Style'
 import {theme} from '../../util'
 import {ettlevColors} from '../../util/theme'
-import {HeadingXLarge, LabelLarge, LabelSmall, ParagraphSmall} from 'baseui/typography'
+import {HeadingXLarge, LabelLarge, LabelSmall, ParagraphMedium, ParagraphSmall} from 'baseui/typography'
 import {arrowRightIcon, navChevronRightIcon} from '../Images'
 import * as _ from 'lodash'
 
@@ -139,13 +139,12 @@ export const PanelLinkCard = (
             {icon && <Block display={'flex'} justifyContent={'center'} width={'100%'} marginTop={theme.sizing.scale600}>
               <img src={icon} alt={'ikon'} aria-hidden width={'30%'}/>
             </Block>}
-            <HeadingXLarge font={['font250', 'font250', 'font250', 'font250', 'font950', 'font950',]}
-                           $style={{textDecoration: href && hover ? '3px underline ' : undefined}}>{tittel}</HeadingXLarge>
+            <HeadingXLarge $style={{textDecoration: href && hover ? '3px underline ' : undefined}}>{tittel}</HeadingXLarge>
           </Block>
 
           <Block height={height} maxHeight={maxHeight} overrides={contentOverrides}>
             {beskrivelse && <Block>
-              <ParagraphSmall marginTop={0}>{beskrivelse}</ParagraphSmall>
+              <ParagraphMedium marginTop={0}>{beskrivelse}</ParagraphMedium>
             </Block>}
 
             {children}
