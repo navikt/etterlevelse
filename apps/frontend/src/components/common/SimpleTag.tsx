@@ -6,6 +6,7 @@ import {borderColor, borderWidth, padding} from './Style'
 import {Block} from 'baseui/block'
 import {checkmarkIcon} from '../Images'
 
+
 const noop = () => {}
 
 export const SimpleTag = (props: {
@@ -19,7 +20,10 @@ export const SimpleTag = (props: {
     : ettlevColors.white
   return (
     <Tag
-      onClick={props.onClick || noop}
+      onClick={props.onClick || 
+              
+              
+              }
       closeable={false}
       size={'small'}
       overrides={{
