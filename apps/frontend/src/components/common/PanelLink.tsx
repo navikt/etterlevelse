@@ -1,17 +1,17 @@
 import React, {useState} from 'react'
 import RouteLink from './RouteLink'
 import {Block, BlockOverrides, Responsive, Scale} from 'baseui/block'
-import {borderRadius, padding, paddingAll} from './Style'
+import {borderRadius, borderStyle, padding, paddingAll} from './Style'
 import {theme} from '../../util'
 import {ettlevColors} from '../../util/theme'
 import {HeadingXLarge, LabelLarge, LabelSmall, ParagraphMedium, ParagraphSmall} from 'baseui/typography'
 import {arrowRightIcon, navChevronRightIcon} from '../Images'
 import * as _ from 'lodash'
 
-export const PanelLink = ({href, title, rightTitle, beskrivelse, rightBeskrivelse, panelIcon, flip, square}:
+export const PanelLink = ({href, title, rightTitle, beskrivelse, rightBeskrivelse, panelIcon, flip, square, hideBorderBottom}:
                             {
                               href: string, title: string, rightTitle?: string, beskrivelse?: string, rightBeskrivelse?: string,
-                              flip?: boolean, square?: boolean,
+                              flip?: boolean, square?: boolean, hideBorderBottom?: boolean,
                               panelIcon?: React.ReactNode | ((hover: boolean) => React.ReactNode)
                             }) => {
   const [hover, setHover] = useState(false)
@@ -33,6 +33,8 @@ export const PanelLink = ({href, title, rightTitle, beskrivelse, rightBeskrivels
             borderWidth: '1px',
             borderColor: ettlevColors.grey100,
             borderStyle: 'solid',
+            ...borderStyle('solid'),
+            borderBottomStyle: hideBorderBottom ? 'hidden' : 'solid',
             ...(square ? {} : borderRadius('4px')),
 
             ':hover': {
