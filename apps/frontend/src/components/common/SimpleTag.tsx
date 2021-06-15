@@ -24,7 +24,7 @@ export const SimpleTag = (props: {onClick?: () => void, active?: boolean, active
                backgroundColor,
                height: 'initial',
                ...borderWidth('1px'),
-               ...borderColor(ettlevColors.grey200),
+               ...borderColor(ettlevColors.green100),
                ...padding(theme.sizing.scale200, theme.sizing.scale500),
                width: 'fit-content',
                ':hover': props.onClick ? {} : {boxShadow: 'none'}
