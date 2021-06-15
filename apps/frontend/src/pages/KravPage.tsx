@@ -223,7 +223,7 @@ const Etterlevelser = ({loading, etterlevelser: allEtterlevelser}: {loading: boo
           title={a.shortName}>
 
           {etterlevelser?.filter(e => e.behandling.avdeling?.code === a.code).map(e => (
-            <PanelLink key={e.id} href={`/etterlevelse/${e.id}`}
+            <PanelLink key={e.id} href={`/etterlevelse/${e.id}`} square
                        title={e.behandling.navn} beskrivelse={e.behandling.overordnetFormaal.shortName}
                        rightTitle={!!e.behandling.teamsData.length ? e.behandling.teamsData.map(t => t.name).join(', ') : 'Ingen team'}
                        rightBeskrivelse={`Utfylt: ${moment(e.changeStamp.lastModifiedDate).format('ll')}`}

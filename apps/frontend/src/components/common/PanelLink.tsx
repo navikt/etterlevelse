@@ -8,10 +8,10 @@ import {HeadingXLarge, LabelLarge, LabelSmall, ParagraphMedium, ParagraphSmall} 
 import {arrowRightIcon, navChevronRightIcon} from '../Images'
 import * as _ from 'lodash'
 
-export const PanelLink = ({href, title, rightTitle, beskrivelse, rightBeskrivelse, panelIcon, flip}:
+export const PanelLink = ({href, title, rightTitle, beskrivelse, rightBeskrivelse, panelIcon, flip, square}:
                             {
                               href: string, title: string, rightTitle?: string, beskrivelse?: string, rightBeskrivelse?: string,
-                              flip?: boolean
+                              flip?: boolean, square?: boolean,
                               panelIcon?: React.ReactNode | ((hover: boolean) => React.ReactNode)
                             }) => {
   const [hover, setHover] = useState(false)
@@ -33,7 +33,7 @@ export const PanelLink = ({href, title, rightTitle, beskrivelse, rightBeskrivels
             borderWidth: '1px',
             borderColor: ettlevColors.grey100,
             borderStyle: 'solid',
-            ...borderRadius('4px'),
+            ...(square ? {} : borderRadius('4px')),
 
             ':hover': {
               position: 'relative',
