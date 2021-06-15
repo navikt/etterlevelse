@@ -14,7 +14,6 @@ import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons'
 import { ExternalLink } from './RouteLink'
 import _ from 'lodash'
 
-
 export type ButtonKind = KIND[keyof KIND] | 'outline' | 'underline-hover'
 
 interface ButtonProps {
@@ -33,7 +32,7 @@ interface ButtonProps {
   $style?: StyleObject
   marginRight?: boolean
   marginLeft?: boolean
-  label?: string,
+  label?: string
   hidePadding?: boolean
 }
 
@@ -42,11 +41,14 @@ interface TooltipProps {
   children: React.ReactElement
 }
 
-const Tooltip = (props: TooltipProps) => (
-  props.tooltip ?
-    <StatefulTooltip content={props.tooltip} placement={PLACEMENT.top} focusLock={false}>{props.children}</StatefulTooltip>
-    : props.children
-)
+const Tooltip = (props: TooltipProps) =>
+  props.tooltip ? (
+    <StatefulTooltip content={props.tooltip} placement={PLACEMENT.top} focusLock={false}>
+      {props.children}
+    </StatefulTooltip>
+  ) : (
+    props.children
+  )
 
 // outline button is a secondary button, but with a border
 const outlineWidth = '2px'
@@ -61,12 +63,12 @@ const outlineOverride: StyleObject = {
   borderLeftStyle: outlineStyle,
   borderRightStyle: outlineStyle,
   borderTopStyle: outlineStyle,
-  borderBottomStyle: outlineStyle
+  borderBottomStyle: outlineStyle,
 }
 
 // underline-hover button is a tertiary with underline as hover effect
 const underlineOverride: StyleObject = {
-  ...paddingAll("0"),
+  ...paddingAll('0'),
   textDecorationThickness: '3px',
   ':hover': {
     textDecorationLine: 'underline',
@@ -74,21 +76,27 @@ const underlineOverride: StyleObject = {
   },
   ':focus': {
     textDecorationLine: 'underline',
-    backgroundColor: 'inherit'
-  }
+    backgroundColor: 'inherit',
+  },
 }
 
 const Button = (props: ButtonProps) => {
   const baseuiKind = props.kind === 'outline' ? KIND.secondary : props.kind === 'underline-hover' ? KIND.tertiary : props.kind
 
-  const boxShadow = !props.kind || props.kind === 'primary' || props.kind === 'secondary' ? {
-    style: {
-      boxShadow: '0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 2px 0 rgba(0, 0, 0, .12)',
-      ':hover': { boxShadow: '0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 3px 0 rgba(0, 0, 0, .12)' },
-      ':active': { boxShadow: '0 2px 1px -2px rgba(0, 0, 0, .2), 0 1px 1px 0 rgba(0, 0, 0, .14), 0 1px 1px 0 rgba(0, 0, 0, .12)' },
-      ':focus': { boxShadow: '0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 3px 0 rgba(0, 0, 0, .12)', outline: `3px solid ${ettlevColors.focusOutline}` }
-    }
-  } : {}
+  const boxShadow =
+    !props.kind || props.kind === 'primary' || props.kind === 'secondary'
+      ? {
+          style: {
+            boxShadow: '0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 2px 0 rgba(0, 0, 0, .12)',
+            ':hover': { boxShadow: '0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 3px 0 rgba(0, 0, 0, .12)' },
+            ':active': { boxShadow: '0 2px 1px -2px rgba(0, 0, 0, .2), 0 1px 1px 0 rgba(0, 0, 0, .14), 0 1px 1px 0 rgba(0, 0, 0, .12)' },
+            ':focus': {
+              boxShadow: '0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 3px 0 rgba(0, 0, 0, .12)',
+              outline: `3px solid ${ettlevColors.focusOutline}`,
+            },
+          },
+        }
+      : {}
 
   let overrides: Override<any> = boxShadow
   overrides.style = _.merge(overrides.style, props.kind === 'outline' ? outlineOverride : {})
@@ -98,21 +106,27 @@ const Button = (props: ButtonProps) => {
   overrides.style = _.merge(overrides.style, props.inline ? { paddingTop: theme.sizing.scale100, paddingBottom: theme.sizing.scale100 } : {})
   overrides.style = _.merge(overrides.style, props.$style || {})
 
-
   return (
     <>
-      <Block display='inline' marginLeft={props.marginLeft ? theme.sizing.scale400 : 0} />
+      <Block display="inline" marginLeft={props.marginLeft ? theme.sizing.scale400 : 0} />
       <Tooltip tooltip={props.tooltip}>
-        <BaseUIButton kind={baseuiKind} size={props.size} shape={props.shape} onClick={() => props.onClick?.()} overrides={{ BaseButton: overrides }}
-          startEnhancer={props.startEnhancer} disabled={props.disabled} type={props.type}
+        <BaseUIButton
+          kind={baseuiKind}
+          size={props.size}
+          shape={props.shape}
+          onClick={() => props.onClick?.()}
+          overrides={{ BaseButton: overrides }}
+          startEnhancer={props.startEnhancer}
+          disabled={props.disabled}
+          type={props.type}
           aria-label={props.label}
         >
-          {props.icon && <FontAwesomeIcon icon={props.icon} style={{marginRight: props.children ? '.5rem' : undefined}} fixedWidth/>}
+          {props.icon && <FontAwesomeIcon icon={props.icon} style={{ marginRight: props.children ? '.5rem' : undefined }} fixedWidth />}
           <b>{props.children}</b>
-          {props.iconEnd && <FontAwesomeIcon icon={props.iconEnd} style={{marginLeft: props.children ? '.5rem' : undefined}} fixedWidth/>}
+          {props.iconEnd && <FontAwesomeIcon icon={props.iconEnd} style={{ marginLeft: props.children ? '.5rem' : undefined }} fixedWidth />}
         </BaseUIButton>
       </Tooltip>
-      <Block display='inline' marginRight={props.marginRight ? theme.sizing.scale400 : 0} />
+      <Block display="inline" marginRight={props.marginRight ? theme.sizing.scale400 : 0} />
     </>
   )
 }
@@ -124,18 +138,17 @@ export const buttonBorderStyle: StyleObject = {
   borderColor: ettlevColors.green600,
   ...borderStyle('solid'),
   ...borderWidth('2px'),
-  ...borderRadius('4px')
+  ...borderRadius('4px'),
 }
 
-export const ExternalButton = (
-  { href, children, underlineHover, size }:
-    { href: string, children: React.ReactNode, underlineHover?: boolean, size?: SIZE[keyof SIZE] }
-) => {
+export const ExternalButton = ({ href, children, underlineHover, size }: { href: string; children: React.ReactNode; underlineHover?: boolean; size?: SIZE[keyof SIZE] }) => {
   const kind = underlineHover ? 'underline-hover' : 'outline'
   const actualSize = size || 'compact'
   return (
     <ExternalLink href={href} hideUnderline>
-      <Button kind={kind} size={actualSize}>{children} <FontAwesomeIcon icon={faExternalLinkAlt} /></Button>
+      <Button kind={kind} size={actualSize}>
+        {children} <FontAwesomeIcon icon={faExternalLinkAlt} />
+      </Button>
     </ExternalLink>
   )
 }

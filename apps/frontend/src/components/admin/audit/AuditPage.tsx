@@ -15,7 +15,7 @@ import CustomInput from '../../common/CustomizedInput'
 const format = (id: string) => _.trim(id, '"')
 
 export const AuditPage = () => {
-  const params = useParams<{ id?: string, auditId?: string }>()
+  const params = useParams<{ id?: string; auditId?: string }>()
   const history = useHistory()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState()
@@ -23,7 +23,7 @@ export const AuditPage = () => {
   const [idSearch, setIdInput, idInput] = useDebouncedState(params.id || '', 400)
 
   const lookupVersion = (id?: string) => {
-    (async () => {
+    ;(async () => {
       if (id === auditLog?.id) {
         return
       }
@@ -51,14 +51,16 @@ export const AuditPage = () => {
   useEffect(() => lookupVersion(idSearch), [idSearch])
 
   return (
-    <Block width='calc(100% - 80px)' paddingLeft='40px' paddingRight='40px'>
+    <Block width="calc(100% - 80px)" paddingLeft="40px" paddingRight="40px">
       <H4>{intl.audit}</H4>
       <Block marginBottom="1rem">
         <AuditLabel label={intl.searchId}>
-          <CustomInput size="compact" value={idInput}
+          <CustomInput
+            size="compact"
+            value={idInput}
             overrides={{ Input: { style: { width: '300px' } } }}
             placeholder={intl.id}
-            onChange={e => setIdInput(format((e.target as HTMLInputElement).value))}
+            onChange={(e) => setIdInput(format((e.target as HTMLInputElement).value))}
           />
         </AuditLabel>
       </Block>

@@ -15,23 +15,22 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons'
 import { SuksesskriterieCard } from './Suksesskriterie'
 import { Paragraph2 } from 'baseui/typography'
-import CustomizedLink from "../common/CustomizedLink";
-
+import CustomizedLink from '../common/CustomizedLink'
 
 const formatDate = (date?: string) => date && moment(date).format('ll')
 
 const LabelWrapper = ({ children }: { children: React.ReactNode }) => (
-  <Block marginTop='48px' marginBottom='48px'>
+  <Block marginTop="48px" marginBottom="48px">
     {children}
   </Block>
 )
 
 export const ViewKrav = ({ krav }: { krav: KravQL }) => {
-
   return (
-    <Block width='100%'>
-
-      {krav.suksesskriterier.map((s, i) => <SuksesskriterieCard key={s.id} suksesskriterie={s} num={i + 1} totalt={krav.suksesskriterier.length} />)}
+    <Block width="100%">
+      {krav.suksesskriterier.map((s, i) => (
+        <SuksesskriterieCard key={s.id} suksesskriterie={s} num={i + 1} totalt={krav.suksesskriterier.length} />
+      ))}
       <Block height={theme.sizing.scale1000} />
 
       {/* <LabelAboveContent header title='Beskrivelse' markdown={krav.beskrivelse} /> */}
@@ -45,8 +44,12 @@ export const ViewKrav = ({ krav }: { krav: KravQL }) => {
 
 const MediumInfo = ({ krav }: { krav: KravQL }) => (
   <>
-    <Label title='Status'>{kravStatus(krav.status)}</Label>
-    <Label title='Underavdeling'><ObjectLink id={krav.underavdeling?.code} type={ListName.UNDERAVDELING}>{krav.underavdeling?.shortName}</ObjectLink></Label>
+    <Label title="Status">{kravStatus(krav.status)}</Label>
+    <Label title="Underavdeling">
+      <ObjectLink id={krav.underavdeling?.code} type={ListName.UNDERAVDELING}>
+        {krav.underavdeling?.shortName}
+      </ObjectLink>
+    </Label>
   </>
 )
 
@@ -61,7 +64,7 @@ const AllInfo = ({ krav }: { krav: KravQL }) => (
     </LabelWrapper> */}
 
     <LabelWrapper>
-      <LabelAboveContent header title='Dokumentasjon' markdown={krav.dokumentasjon} />
+      <LabelAboveContent header title="Dokumentasjon" markdown={krav.dokumentasjon} />
     </LabelWrapper>
 
     {/* <LabelWrapper>
@@ -70,44 +73,73 @@ const AllInfo = ({ krav }: { krav: KravQL }) => (
 
     {user.isKraveier() && (
       <LabelWrapper>
-        <LabelAboveContent header title='Etiketter'>{krav.tagger.join(', ')}</LabelAboveContent>
+        <LabelAboveContent header title="Etiketter">
+          {krav.tagger.join(', ')}
+        </LabelAboveContent>
       </LabelWrapper>
     )}
 
     <LabelWrapper>
-      <LabelAboveContent header title='Relevante implementasjoner' markdown={krav.implementasjoner} />
+      <LabelAboveContent header title="Relevante implementasjoner" markdown={krav.implementasjoner} />
     </LabelWrapper>
 
     <LabelWrapper>
-      <LabelAboveContent header title='Begreper'>{krav.begreper.map((b, i) => <BegrepView key={i} begrep={b} />)}</LabelAboveContent>
+      <LabelAboveContent header title="Begreper">
+        {krav.begreper.map((b, i) => (
+          <BegrepView key={i} begrep={b} />
+        ))}
+      </LabelAboveContent>
     </LabelWrapper>
 
     {/* <LabelAboveContent title='Avdeling'>{krav.avdeling?.shortName}</LabelAboveContent> */}
 
     <LabelWrapper>
-      <LabelAboveContent header title='Kravet er relevant for'><DotTags list={ListName.RELEVANS} codes={krav.relevansFor} linkCodelist inColumn/></LabelAboveContent>
+      <LabelAboveContent header title="Kravet er relevant for">
+        <DotTags list={ListName.RELEVANS} codes={krav.relevansFor} linkCodelist inColumn />
+      </LabelAboveContent>
     </LabelWrapper>
 
-    <Block backgroundColor='#F1F1F1' padding='32px'>
-      <Label title='Ansvarlig'><ObjectLink id={krav.underavdeling?.code} type={ListName.UNDERAVDELING}>{krav.underavdeling?.shortName}</ObjectLink></Label>
-      <Label title='Regelverk' hide={!krav.regelverk.length}>
+    <Block backgroundColor="#F1F1F1" padding="32px">
+      <Label title="Ansvarlig">
+        <ObjectLink id={krav.underavdeling?.code} type={ListName.UNDERAVDELING}>
+          {krav.underavdeling?.shortName}
+        </ObjectLink>
+      </Label>
+      <Label title="Regelverk" hide={!krav.regelverk.length}>
         <LovViewList regelverk={krav.regelverk} />
       </Label>
-      <Label title='Varslingsadresser' hide={!user.isKraveier()}>
-        <DotTags items={krav.varslingsadresser.map((va, i) => {
-          if (va.type === AdresseType.SLACK) return <Block>Slack: <CustomizedLink href={slackLink(va.adresse)}>#{va.slackChannel?.name || va.adresse}</CustomizedLink></Block>
-          if (va.type === AdresseType.SLACK_USER) return <Block>Slack: <CustomizedLink href={slackUserLink(va.adresse)}>{va.slackUser?.name || va.adresse}</CustomizedLink></Block>
-          return <Block>Epost: <CustomizedLink href={`mailto:${va.adresse}`}>{va.adresse}</CustomizedLink></Block>
-        }
-        )} />
+      <Label title="Varslingsadresser" hide={!user.isKraveier()}>
+        <DotTags
+          items={krav.varslingsadresser.map((va, i) => {
+            if (va.type === AdresseType.SLACK)
+              return (
+                <Block>
+                  Slack: <CustomizedLink href={slackLink(va.adresse)}>#{va.slackChannel?.name || va.adresse}</CustomizedLink>
+                </Block>
+              )
+            if (va.type === AdresseType.SLACK_USER)
+              return (
+                <Block>
+                  Slack: <CustomizedLink href={slackUserLink(va.adresse)}>{va.slackUser?.name || va.adresse}</CustomizedLink>
+                </Block>
+              )
+            return (
+              <Block>
+                Epost: <CustomizedLink href={`mailto:${va.adresse}`}>{va.adresse}</CustomizedLink>
+              </Block>
+            )
+          })}
+        />
       </Label>
-      <Label title='Status'>{kravStatus(krav.status)}</Label>
+      <Label title="Status">{kravStatus(krav.status)}</Label>
       {/* {krav.periode?.start && <Label title='Gyldig fom'>{formatDate(krav.periode?.start)}</Label>}
       {krav.periode?.slutt && <Label title='Gyldig tom'>{formatDate(krav.periode?.slutt)}</Label>} */}
     </Block>
 
     <Block>
-      <Paragraph2>Sist endret: {moment(krav.changeStamp.lastModifiedDate).format('ll')} av {krav.changeStamp.lastModifiedBy.split(' - ')[1]}</Paragraph2>
+      <Paragraph2>
+        Sist endret: {moment(krav.changeStamp.lastModifiedDate).format('ll')} av {krav.changeStamp.lastModifiedBy.split(' - ')[1]}
+      </Paragraph2>
     </Block>
   </>
 )
@@ -116,6 +148,7 @@ const BegrepView = ({ begrep }: { begrep: Begrep }) => (
   <DotTag>
     <ExternalLink href={termUrl(begrep.id)} label={'Link begrepskatalogen'}>
       {begrep.navn}
-    </ExternalLink> - {begrep.beskrivelse} 
+    </ExternalLink>{' '}
+    - {begrep.beskrivelse}
   </DotTag>
 )

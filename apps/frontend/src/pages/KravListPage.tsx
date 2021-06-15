@@ -1,24 +1,24 @@
-import {Block} from 'baseui/block'
-import {H2, LabelSmall} from 'baseui/typography'
-import React, {useState} from 'react'
+import { Block } from 'baseui/block'
+import { H2, LabelSmall } from 'baseui/typography'
+import React, { useState } from 'react'
 import Button from '../components/common/Button'
-import {theme} from '../util'
+import { theme } from '../util'
 import RouteLink from '../components/common/RouteLink'
-import {user} from '../services/User'
-import {KravTable} from '../components/common/KravFilterTable'
-import {useKravFilter} from '../api/KravGraphQLApi'
-import {Button as BButton, KIND} from 'baseui/button'
-import {ButtonGroup} from 'baseui/button-group'
-import {faChevronDown} from '@fortawesome/free-solid-svg-icons'
-import {PLACEMENT} from 'baseui/tooltip'
-import {StatefulMenu} from 'baseui/menu'
-import {StatefulPopover} from 'baseui/popover'
-import {maxPageWidth} from '../util/theme'
+import { user } from '../services/User'
+import { KravTable } from '../components/common/KravFilterTable'
+import { useKravFilter } from '../api/KravGraphQLApi'
+import { Button as BButton, KIND } from 'baseui/button'
+import { ButtonGroup } from 'baseui/button-group'
+import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
+import { PLACEMENT } from 'baseui/tooltip'
+import { StatefulMenu } from 'baseui/menu'
+import { StatefulPopover } from 'baseui/popover'
+import { maxPageWidth } from '../util/theme'
 
 enum Mode {
   siste,
   gjeldende,
-  alle
+  alle,
 }
 
 export const KravListPage = () => {
@@ -28,7 +28,8 @@ export const KravListPage = () => {
   const res = useKravFilter({
     sistRedigert: mode === Mode.siste ? pageSize : undefined,
     gjeldendeKrav: mode === Mode.gjeldende,
-    pageNumber, pageSize
+    pageNumber,
+    pageSize,
   })
 
   const pages = res.data?.krav.pages || 1
@@ -36,42 +37,54 @@ export const KravListPage = () => {
   const next = () => setPageNumber(Math.min(pages - 1, pageNumber + 1))
 
   return (
-    <Block maxWidth={maxPageWidth} width='100%'>
-      <Block paddingLeft='40px' paddingRight='40px' width='calc(100%-80px)'>
-        <Block display='flex' justifyContent='space-between' alignItems='center'>
+    <Block maxWidth={maxPageWidth} width="100%">
+      <Block paddingLeft="40px" paddingRight="40px" width="calc(100%-80px)">
+        <Block display="flex" justifyContent="space-between" alignItems="center">
           <H2>Krav</H2>
 
           <Block>
-            {user.isKraveier() &&
-            <RouteLink hideUnderline href={'/krav/ny'}>
-              <Button size='compact'>Legg til nytt krav</Button>
-            </RouteLink>}
+            {user.isKraveier() && (
+              <RouteLink hideUnderline href={'/krav/ny'}>
+                <Button size="compact">Legg til nytt krav</Button>
+              </RouteLink>
+            )}
           </Block>
         </Block>
-        <Block display='flex' justifyContent='space-between' marginTop={theme.sizing.scale400} marginBottom={theme.sizing.scale800}>
+        <Block display="flex" justifyContent="space-between" marginTop={theme.sizing.scale400} marginBottom={theme.sizing.scale800}>
           <Block>
-            <ButtonGroup selected={mode} mode='radio' size={'compact'} onClick={(e, i) => {
-              setPageNumber(0)
-              setMode(i)
-            }}>
-              <BButton disabled={!user.isLoggedIn()}><b>Sist redigerte</b></BButton>
-              <BButton><b>Gjeldende</b></BButton>
-              <BButton><b>Alle</b></BButton>
+            <ButtonGroup
+              selected={mode}
+              mode="radio"
+              size={'compact'}
+              onClick={(e, i) => {
+                setPageNumber(0)
+                setMode(i)
+              }}
+            >
+              <BButton disabled={!user.isLoggedIn()}>
+                <b>Sist redigerte</b>
+              </BButton>
+              <BButton>
+                <b>Gjeldende</b>
+              </BButton>
+              <BButton>
+                <b>Alle</b>
+              </BButton>
             </ButtonGroup>
           </Block>
 
-          <Block display='flex'>
+          <Block display="flex">
             <StatefulPopover
-              content={({close}) => (
+              content={({ close }) => (
                 <StatefulMenu
-                  items={[5, 10, 20, 50, 100].map(i => ({label: i,}))}
-                  onItemSelect={({item}) => {
+                  items={[5, 10, 20, 50, 100].map((i) => ({ label: i }))}
+                  onItemSelect={({ item }) => {
                     setPageSize(item.label)
                     close()
                   }}
                   overrides={{
                     List: {
-                      style: {height: '150px', width: '100px'},
+                      style: { height: '150px', width: '100px' },
                     },
                   }}
                 />
@@ -82,15 +95,21 @@ export const KravListPage = () => {
                 <Button kind={KIND.tertiary} iconEnd={faChevronDown}>{`${pageSize} rader`}</Button>
               </Block>
             </StatefulPopover>
-            <Block display='flex' alignItems='center'>
-              <LabelSmall marginRight={theme.sizing.scale400}>Side {pageNumber + 1}/{pages}</LabelSmall>
-              <Button onClick={prev} size='compact' disabled={pageNumber === 0}>Forrige</Button>
-              <Button onClick={next} size='compact' disabled={pageNumber >= pages - 1}>Neste</Button>
+            <Block display="flex" alignItems="center">
+              <LabelSmall marginRight={theme.sizing.scale400}>
+                Side {pageNumber + 1}/{pages}
+              </LabelSmall>
+              <Button onClick={prev} size="compact" disabled={pageNumber === 0}>
+                Forrige
+              </Button>
+              <Button onClick={next} size="compact" disabled={pageNumber >= pages - 1}>
+                Neste
+              </Button>
             </Block>
           </Block>
         </Block>
 
-        <KravTable queryResult={res}/>
+        <KravTable queryResult={res} />
       </Block>
     </Block>
   )

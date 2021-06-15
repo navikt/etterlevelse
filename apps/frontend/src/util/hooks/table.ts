@@ -1,22 +1,22 @@
-import {SORT_DIRECTION} from 'baseui/table'
-import {useEffect, useState} from 'react'
-import {Option, Value} from 'baseui/select'
+import { SORT_DIRECTION } from 'baseui/table'
+import { useEffect, useState } from 'react'
+import { Option, Value } from 'baseui/select'
 
 export type TableConfig<T, K extends keyof T> = {
-  sorting?: ColumnCompares<T>,
-  useDefaultStringCompare?: boolean,
-  initialSortColumn?: K,
+  sorting?: ColumnCompares<T>
+  useDefaultStringCompare?: boolean
+  initialSortColumn?: K
   showLast?: (p: T) => boolean
-  filter?: Filters<T>,
-  pageSizes?: number[],
-  defaultPageSize?: number,
+  filter?: Filters<T>
+  pageSizes?: number[]
+  defaultPageSize?: number
   exclude?: (keyof T)[]
 }
 export type Filters<T> = {
   [P in keyof T]?:
-  { type: 'search' } |
-  { type: 'select', mapping: (v: T) => Option | Value, options?: (items: T[]) => Value } |
-  { type: 'searchMapped', searchMapping: (v: T) => string }
+    | { type: 'search' }
+    | { type: 'select'; mapping: (v: T) => Option | Value; options?: (items: T[]) => Value }
+    | { type: 'searchMapped'; searchMapping: (v: T) => string }
 }
 
 export type TableState<T, K extends keyof T> = {
@@ -26,13 +26,14 @@ export type TableState<T, K extends keyof T> = {
   data: Array<T>
   sort: (column: K) => void
   filterValues: Record<K, string | undefined>
-  setFilter: (column: K, value?: string) => void,
-  limit: number,
+  setFilter: (column: K, value?: string) => void
+  limit: number
   setLimit: (n: number) => void
-  page: number,
+  page: number
   setPage: (n: number) => void
-  numPages: number,
-  pageStart: number, pageEnd: number
+  numPages: number
+  pageStart: number
+  pageEnd: number
 }
 
 type Compare<T> = (a: T, b: T) => number
@@ -47,13 +48,13 @@ export type ColumnDirection<T> = {
 
 const newSort = <T, K extends keyof T>(newColumn?: K, columnPrevious?: K, directionPrevious?: SORT_DIRECTION) => {
   const newDirection = columnPrevious && newColumn === columnPrevious && directionPrevious === SORT_DIRECTION.ASC ? SORT_DIRECTION.DESC : SORT_DIRECTION.ASC
-  return {newDirection, newColumn}
+  return { newDirection, newColumn }
 }
 
 const getSortFunction = <T, K extends keyof T>(sortColumn: K, useDefaultStringCompare: boolean, sorting?: ColumnCompares<T>): Compare<T> | undefined => {
   if (!sorting || !sorting[sortColumn]) {
     if (useDefaultStringCompare) {
-      return (a, b) => (a[sortColumn] as any as string || '').localeCompare(b[sortColumn] as any as string || '')
+      return (a, b) => ((a[sortColumn] as any as string) || '').localeCompare((b[sortColumn] as any as string) || '')
     } else {
       return undefined
     }
@@ -68,7 +69,7 @@ const toDirection = <T, K extends keyof T>(direction: SORT_DIRECTION, column?: K
 }
 
 export const useTable = <T, K extends keyof T>(initialData: Array<T>, config?: TableConfig<T, K>) => {
-  const {sorting, useDefaultStringCompare, showLast} = config || {}
+  const { sorting, useDefaultStringCompare, showLast } = config || {}
   const initialSort = newSort<T, K>(config?.initialSortColumn)
 
   const [data, setData] = useState<T[]>(initialData)
@@ -89,14 +90,14 @@ export const useTable = <T, K extends keyof T>(initialData: Array<T>, config?: T
       if (!filter) return ordered
       switch (filter.type) {
         case 'search':
-          return ordered.filter(v => (((v[key] as any as string) || '').toLowerCase().indexOf(filterValues[key]!.toLowerCase()) >= 0))
+          return ordered.filter((v) => ((v[key] as any as string) || '').toLowerCase().indexOf(filterValues[key]!.toLowerCase()) >= 0)
         case 'searchMapped':
-          return ordered.filter(v => ((filter.searchMapping(v).toLowerCase() || '').indexOf(filterValues[key]!.toLowerCase()) >= 0))
+          return ordered.filter((v) => (filter.searchMapping(v).toLowerCase() || '').indexOf(filterValues[key]!.toLowerCase()) >= 0)
         case 'select':
-          ordered = ordered.filter(v => {
+          ordered = ordered.filter((v) => {
             const mapped = filter.mapping(v)
             const match = Array.isArray(mapped) ? mapped : [mapped]
-            return !!match.filter(m => m.id === filterValues[key] as any).length
+            return !!match.filter((m) => m.id === (filterValues[key] as any)).length
           })
       }
       return ordered
@@ -111,7 +112,7 @@ export const useTable = <T, K extends keyof T>(initialData: Array<T>, config?: T
           const sorted = initialData.slice(0).sort(sortFunct)
           let ordered = sortDirection === SORT_DIRECTION.ASC ? sorted : sorted.reverse()
           if (showLast && isInitialSort) {
-            ordered = [...ordered.filter(p => !showLast(p)), ...ordered.filter(showLast)]
+            ordered = [...ordered.filter((p) => !showLast(p)), ...ordered.filter(showLast)]
           }
           for (let key in filterValues) {
             if (filterValues.hasOwnProperty(key) && !!filterValues[key]) {
@@ -129,7 +130,7 @@ export const useTable = <T, K extends keyof T>(initialData: Array<T>, config?: T
   }
 
   const sort = (sortColumnName: K) => {
-    const {newDirection, newColumn} = newSort<T, K>(sortColumnName, sortColumn, sortDirection)
+    const { newDirection, newColumn } = newSort<T, K>(sortColumnName, sortColumn, sortDirection)
     setSortColumn(newColumn)
     setSortDirection(newDirection)
     setDirection(toDirection(newDirection, newColumn))
@@ -137,7 +138,7 @@ export const useTable = <T, K extends keyof T>(initialData: Array<T>, config?: T
   }
 
   const setFilter = (column: K, value?: string) => {
-    const f2 = {...filterValues}
+    const f2 = { ...filterValues }
     f2[column] = value
     setFilterValues(f2)
   }
@@ -160,9 +161,20 @@ export const useTable = <T, K extends keyof T>(initialData: Array<T>, config?: T
   }
 
   const state: TableState<T, K> = {
-    data, direction, sortColumn, sortDirection, sort,
-    filterValues, setFilter,
-    limit, setLimit, page, setPage: handlePageChange, numPages, pageStart: (page - 1) * limit, pageEnd: page * limit
+    data,
+    direction,
+    sortColumn,
+    sortDirection,
+    sort,
+    filterValues,
+    setFilter,
+    limit,
+    setLimit,
+    page,
+    setPage: handlePageChange,
+    numPages,
+    pageStart: (page - 1) * limit,
+    pageEnd: page * limit,
   }
   return state
 }

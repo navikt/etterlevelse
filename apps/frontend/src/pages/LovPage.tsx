@@ -18,16 +18,18 @@ export const LovPage = () => {
 
   if (!lov) {
     return (
-      <Block maxWidth={maxPageWidth} width='100%'>
-        <Block paddingLeft='40px' paddingRight='40px' width='calc(100%-80px)' display='flex' justifyContent='center'>
+      <Block maxWidth={maxPageWidth} width="100%">
+        <Block paddingLeft="40px" paddingRight="40px" width="calc(100%-80px)" display="flex" justifyContent="center">
           <Block>
             <HeadingMedium>Velg lov</HeadingMedium>
             <Block>
-              {codelist.getCodes(ListName.LOV).map((code) =>
+              {codelist.getCodes(ListName.LOV).map((code) => (
                 <Block key={code.code} marginBottom={theme.sizing.scale400}>
-                  <ObjectLink id={code.code} type={ListName.LOV}>{code.shortName}</ObjectLink>
+                  <ObjectLink id={code.code} type={ListName.LOV}>
+                    {code.shortName}
+                  </ObjectLink>
                 </Block>
-              )}
+              ))}
             </Block>
           </Block>
         </Block>
@@ -42,10 +44,10 @@ export const LovPage = () => {
   const underavdeling = codelist.getCode(ListName.UNDERAVDELING, data.underavdeling)
 
   return (
-    <Block maxWidth={maxPageWidth} width='100%'>
-      <Block paddingLeft='40px' paddingRight='40px' width='calc(100%-80px)' display='flex' justifyContent='center' marginTop='50px'>
+    <Block maxWidth={maxPageWidth} width="100%">
+      <Block paddingLeft="40px" paddingRight="40px" width="calc(100%-80px)" display="flex" justifyContent="center" marginTop="50px">
         <Block>
-          <Block display='flex' justifyContent='space-between'>
+          <Block display="flex" justifyContent="space-between">
             <Block>
               <HeadingMedium marginTop={0}>Lov: {code.shortName}</HeadingMedium>
               <Markdown source={code.description} />
@@ -55,16 +57,26 @@ export const LovPage = () => {
                 <LovBilde code={code} ellipse height={'220px'} />
               </Block>
 
-              {underavdeling && <>
-                <HeadingXSmall marginTop={theme.sizing.scale400} marginBottom={theme.sizing.scale200}>Ansvarlig for lovtolkning i NAV</HeadingXSmall>
-                <ParagraphMedium>
-                  <ObjectLink type={ListName.UNDERAVDELING} id={underavdeling.code}>{underavdeling?.shortName}</ObjectLink>
-                </ParagraphMedium>
-              </>}
+              {underavdeling && (
+                <>
+                  <HeadingXSmall marginTop={theme.sizing.scale400} marginBottom={theme.sizing.scale200}>
+                    Ansvarlig for lovtolkning i NAV
+                  </HeadingXSmall>
+                  <ParagraphMedium>
+                    <ObjectLink type={ListName.UNDERAVDELING} id={underavdeling.code}>
+                      {underavdeling?.shortName}
+                    </ObjectLink>
+                  </ParagraphMedium>
+                </>
+              )}
 
-              <HeadingXSmall marginTop={theme.sizing.scale400} marginBottom={theme.sizing.scale200}>Loven i sin helhet</HeadingXSmall>
+              <HeadingXSmall marginTop={theme.sizing.scale400} marginBottom={theme.sizing.scale200}>
+                Loven i sin helhet
+              </HeadingXSmall>
               <ParagraphMedium>
-                <ExternalLink href={lovdataBase(code.code)}>{code.shortName} i lovdata <FontAwesomeIcon size={'sm'} icon={faExternalLinkAlt} /></ExternalLink>
+                <ExternalLink href={lovdataBase(code.code)}>
+                  {code.shortName} i lovdata <FontAwesomeIcon size={'sm'} icon={faExternalLinkAlt} />
+                </ExternalLink>
               </ParagraphMedium>
             </Block>
           </Block>

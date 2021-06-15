@@ -1,15 +1,15 @@
 import axios from 'axios'
-import {emptyPage, Etterlevelse, EtterlevelseStatus, PageResponse} from '../constants'
-import {env} from '../util/env'
-import {useEffect, useState} from 'react'
+import { emptyPage, Etterlevelse, EtterlevelseStatus, PageResponse } from '../constants'
+import { env } from '../util/env'
+import { useEffect, useState } from 'react'
 import * as queryString from 'querystring'
-import {KravId} from './KravApi'
+import { KravId } from './KravApi'
 
 export const getEtterlevelsePage = async (pageNumber: number, pageSize: number) => {
   return (await axios.get<PageResponse<Etterlevelse>>(`${env.backendBaseUrl}/etterlevelse?pageNumber=${pageNumber}&pageSize=${pageSize}`)).data
 }
 
-export const getEtterlevelseFor = async (query: {behandling: string}) => {
+export const getEtterlevelseFor = async (query: { behandling: string }) => {
   return (await axios.get<PageResponse<Etterlevelse>>(`${env.backendBaseUrl}/etterlevelse?${queryString.stringify(query)}`)).data.content
 }
 
@@ -47,7 +47,7 @@ export const useEtterlevelsePage = (pageSize: number) => {
 
   useEffect(() => {
     setLoading(true)
-    getEtterlevelsePage(page, pageSize).then(r => {
+    getEtterlevelsePage(page, pageSize).then((r) => {
       setData(r)
       setLoading(false)
     })
@@ -61,12 +61,15 @@ export const useEtterlevelsePage = (pageSize: number) => {
 
 export const useEtterlevelse = (id?: string, behandlingId?: string, kravId?: KravId) => {
   const isCreateNew = id === 'ny'
-  const [data, setData] = useState<Etterlevelse | undefined>(isCreateNew ? mapEtterlevelseToFormValue({
-    behandlingId,
-    kravVersjon: kravId?.kravVersjon,
-    kravNummer: kravId?.kravNummer
-  }) : undefined)
-
+  const [data, setData] = useState<Etterlevelse | undefined>(
+    isCreateNew
+      ? mapEtterlevelseToFormValue({
+          behandlingId,
+          kravVersjon: kravId?.kravVersjon,
+          kravNummer: kravId?.kravNummer,
+        })
+      : undefined,
+  )
 
   useEffect(() => {
     id && !isCreateNew && getEtterlevelse(id).then(setData)
@@ -79,7 +82,7 @@ export const useEtterlevelseForBehandling = (behandlingId?: string) => {
   const [data, setData] = useState<Etterlevelse[]>([])
 
   useEffect(() => {
-    behandlingId && getEtterlevelseFor({behandling: behandlingId}).then(setData)
+    behandlingId && getEtterlevelseFor({ behandling: behandlingId }).then(setData)
   }, [behandlingId])
 
   return data
@@ -90,7 +93,7 @@ export const mapEtterlevelseToFormValue = (etterlevelse: Partial<Etterlevelse>):
   behandlingId: etterlevelse.behandlingId || '',
   kravNummer: etterlevelse.kravNummer || 0,
   kravVersjon: etterlevelse.kravVersjon || 0,
-  changeStamp: etterlevelse.changeStamp || {lastModifiedDate: '', lastModifiedBy: ''},
+  changeStamp: etterlevelse.changeStamp || { lastModifiedDate: '', lastModifiedBy: '' },
   suksesskriterieBegrunnelser: etterlevelse.suksesskriterieBegrunnelser || [],
   version: -1,
   etterleves: etterlevelse.etterleves || false,

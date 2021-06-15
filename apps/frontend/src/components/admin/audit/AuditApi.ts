@@ -1,8 +1,8 @@
 import axios from 'axios'
 import moment from 'moment'
-import {env} from '../../../util/env'
-import {AuditAction, AuditItem, AuditLog, ObjectType} from './AuditTypes'
-import {PageResponse} from '../../../constants'
+import { env } from '../../../util/env'
+import { AuditAction, AuditItem, AuditLog, ObjectType } from './AuditTypes'
+import { PageResponse } from '../../../constants'
 
 export const getAuditLog = async (id: string) => {
   const auditLog = (await axios.get<AuditLog>(`${env.backendBaseUrl}/audit/log/${id}`)).data
@@ -15,8 +15,9 @@ export const getAudits = async (page: number, count: number, table?: ObjectType)
 }
 
 export const getEvents = async (page: number, count: number, table: ObjectType, tableId?: string, action?: AuditAction) => {
-  return (await axios.get<PageResponse<Event>>(`${env.backendBaseUrl}/event/?pageNumber=${page}&pageSize=${count}&table=${table}`
-      + (tableId ? `&tableId=${tableId}` : '')
-      + (action ? `&action=${action}` : ''))
+  return (
+    await axios.get<PageResponse<Event>>(
+      `${env.backendBaseUrl}/event/?pageNumber=${page}&pageSize=${count}&table=${table}` + (tableId ? `&tableId=${tableId}` : '') + (action ? `&action=${action}` : ''),
+    )
   ).data
 }

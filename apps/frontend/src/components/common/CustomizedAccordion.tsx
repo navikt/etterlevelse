@@ -9,13 +9,8 @@ import { borderColor, borderRadius, borderStyle, borderWidth } from './Style'
 import _ from 'lodash'
 import { resetCaches } from '@apollo/client'
 
-
 export const CustomizedAccordion = (props: AccordionProps) => {
-
-  return (
-    <Accordion {...props}
-      overrides={{}} />
-  )
+  return <Accordion {...props} overrides={{}} />
 }
 
 export const CustomizedPanel = (props: PanelProps) => {
@@ -23,7 +18,7 @@ export const CustomizedPanel = (props: PanelProps) => {
 
   const customOverrides = {
     ToggleIcon: {
-      component: () => expanded ? <FontAwesomeIcon icon={faChevronUp} /> : <FontAwesomeIcon icon={faChevronDown} />
+      component: () => (expanded ? <FontAwesomeIcon icon={faChevronUp} /> : <FontAwesomeIcon icon={faChevronDown} />),
     },
     Header: {
       style: {
@@ -33,9 +28,9 @@ export const CustomizedPanel = (props: PanelProps) => {
         ...borderColor(ettlevColors.grey100),
         ...borderRadius('4px'),
         ':hover': {
-          textDecoration: 'underline'
-        }
-      }
+          textDecoration: 'underline',
+        },
+      },
     },
     Content: {
       style: {
@@ -43,34 +38,32 @@ export const CustomizedPanel = (props: PanelProps) => {
         paddingLeft: theme.sizing.scale100,
         paddingRight: theme.sizing.scale100,
         paddingTop: 0,
-        paddingBottom: expanded ? theme.sizing.scale100 : 0
-      }
+        paddingBottom: expanded ? theme.sizing.scale100 : 0,
+      },
     },
     PanelContainer: {
       style: {
         marginBottom: theme.sizing.scale200,
-        borderStyle: 'hidden'
-      }
-    }
+        borderStyle: 'hidden',
+      },
+    },
   }
 
   const overrides = _.merge(customOverrides, props.overrides)
 
-const getTitle = () => {
-  if (typeof(props.title) !== 'string') {
-    return (props.title)
-  } else {
-    return (
-      <Block>
-      <HeadingLarge marginTop={theme.sizing.scale100} marginBottom={theme.sizing.scale100} color={ettlevColors.green600}>
-        {props.title}
-      </HeadingLarge>
-    </Block>
-    )
+  const getTitle = () => {
+    if (typeof props.title !== 'string') {
+      return props.title
+    } else {
+      return (
+        <Block>
+          <HeadingLarge marginTop={theme.sizing.scale100} marginBottom={theme.sizing.scale100} color={ettlevColors.green600}>
+            {props.title}
+          </HeadingLarge>
+        </Block>
+      )
+    }
   }
-}
 
-  return (
-    <Panel {...props} overrides={overrides} title={getTitle()}/>
-  )
+  return <Panel {...props} overrides={overrides} title={getTitle()} />
 }

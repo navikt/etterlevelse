@@ -1,22 +1,22 @@
 .rdw-option-wrapper:hover {
-  box-shadow: 1px 1px 0px #14483F;
-  background-color: #EAF0EF;
+  box-shadow: 1px 1px 0px #14483f;
+  background-color: #eaf0ef;
 }
 .rdw-option-wrapper:active {
-  box-shadow: 1px 1px 0px #14483F inset;
-  background-color: #EAF0EF;
+  box-shadow: 1px 1px 0px #14483f inset;
+  background-color: #eaf0ef;
 }
 .rdw-option-active {
-  box-shadow: 1px 1px 0px #14483F inset;
-  background-color: #EAF0EF;
+  box-shadow: 1px 1px 0px #14483f inset;
+  background-color: #eaf0ef;
 }
 .rdw-dropdown-wrapper:hover {
-  box-shadow: 1px 1px 0px #14483F;
-  background-color: #EAF0EF;
+  box-shadow: 1px 1px 0px #14483f;
+  background-color: #eaf0ef;
 }
 .rdw-dropdownoption-highlighted {
-  background: #EAF0EF;
+  background: #eaf0ef;
 }
 .rdw-dropdownoption-active {
-  background: #EAF0EF;
+  background: #eaf0ef;
 }

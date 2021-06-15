@@ -8,8 +8,8 @@ const AmplitudeConfig = {
   includeReferrer: true,
   trackingOptions: {
     city: false,
-    ip_address: false
-  }
+    ip_address: false,
+  },
 }
 
 export const instance = amplitude.getInstance()
