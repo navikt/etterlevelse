@@ -318,7 +318,7 @@ const KravView = (props: { kravId: KravId, etterlevelse: Etterlevelse, close: Fu
   )
 }
 
-const statsQuery = gql`
+export const statsQuery = gql`
       query getBehandlingStats($behandlingId: ID!) {
         behandling(filter: {id: $behandlingId }) {
         content {
@@ -433,13 +433,13 @@ const BehandlingStatsView = ({ behandling }: { behandling: Behandling }) => {
   )
 }
 
-interface BehandlingStats {
+export interface BehandlingStats {
   fyltKrav: KravQL[]
   ikkeFyltKrav: KravQL[]
   lovStats: LovStats[]
 }
 
-interface LovStats {
+export interface LovStats {
   lovCode: Code
   fyltKrav: KravQL[]
   ikkeFyltKrav: KravQL[]

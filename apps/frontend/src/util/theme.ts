@@ -35,6 +35,7 @@ export const ettlevColors = {
   error50: '#F6EAE6',
   textAreaBorder: '#E0E0E0',
   navMorkGra: '#262626',
+  navOransje: '#A86400',
   focusOutline: '#276ef1',
 }
 

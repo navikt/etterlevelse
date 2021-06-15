@@ -1,13 +1,13 @@
-import {Block} from 'baseui/block'
-import {maxPageWidth, pageWidth, theme} from '../../util/theme'
+import { Block } from 'baseui/block'
+import { ettlevColors, maxPageWidth, pageWidth, theme } from '../../util/theme'
 import RouteLink from '../common/RouteLink'
 import Button from '../common/Button'
-import {navChevronRightIcon} from '../Images'
+import { chevronLeft, navChevronRightIcon } from '../Images'
 import React from 'react'
 
 const padding = ['16px', '16px', '16px', '20px', '40px', '80px']
 
-export const Page = ({backUrl, headerOverlap, headerBackgroundColor, backgroundColor, wideMain, rawMain, children, header}: {
+export const Page = ({ backUrl, headerOverlap, headerBackgroundColor, backgroundColor, wideMain, rawMain, children, header }: {
   backUrl?: string,
   headerOverlap?: string,
   headerBackgroundColor: string
@@ -18,16 +18,16 @@ export const Page = ({backUrl, headerOverlap, headerBackgroundColor, backgroundC
   children: React.ReactNode,
 }) => {
   return (
-    <Block width='100%' overrides={{Block: {props: {role: 'main'}}}} backgroundColor={backgroundColor} paddingBottom={'200px'}>
+    <Block width='100%' overrides={{ Block: { props: { role: 'main' } } }} backgroundColor={backgroundColor} paddingBottom={'200px'}>
 
       <Block backgroundColor={headerBackgroundColor} display='flex' width='100%' justifyContent='center'
-             paddingBottom={headerOverlap} marginBottom={headerOverlap ? '-' + headerOverlap : undefined}
+        paddingBottom={headerOverlap} marginBottom={headerOverlap ? '-' + headerOverlap : undefined}
       >
         <Block maxWidth={maxPageWidth} width='100%'>
 
           <Block paddingLeft={padding} paddingRight={padding} paddingTop={theme.sizing.scale800}>
             {backUrl && <RouteLink href={backUrl} hideUnderline>
-              <Button startEnhancer={<img alt={'Chevron venstre ikon'} src={navChevronRightIcon} style={{transform: 'rotate(180deg)'}}/>} size='compact' kind='underline-hover'
+              <Button startEnhancer={<img alt={'Chevron venstre ikon'} src={navChevronRightIcon} style={{ transform: 'rotate(180deg)' }} />} size='compact' kind='underline-hover'
               > Tilbake</Button>
             </RouteLink>}
 
@@ -50,7 +50,7 @@ export const Page = ({backUrl, headerOverlap, headerBackgroundColor, backgroundC
   )
 }
 
-export const Wide = (props: {children: React.ReactNode}) => (
+export const Wide = (props: { children: React.ReactNode }) => (
   <Block maxWidth={maxPageWidth} width={'100%'}>
     <Block paddingLeft={padding} paddingRight={padding}>
       {props.children}
@@ -58,8 +58,69 @@ export const Wide = (props: {children: React.ReactNode}) => (
   </Block>
 )
 
-export const Narrow = (props: {children: React.ReactNode}) => (
+export const Narrow = (props: { children: React.ReactNode }) => (
   <Block maxWidth={pageWidth} width={'100%'}>
     {props.children}
+  </Block>
+)
+
+
+export const Layout2 = (props: {
+  backBtnColor?: string,
+  headerBackgroundColor: string,
+  mainHeader: React.ReactNode,
+  secondaryHeaderBackgroundColor: string,
+  secondaryHeader: React.ReactNode,
+  childrenBackgroundColor: string,
+  children: React.ReactNode
+}) => (
+  <Block width='100%' overrides={{ Block: { props: { role: 'main' } } }}>
+    <Block backgroundColor={props.headerBackgroundColor} display='flex' width='100%' justifyContent='center'>
+      <Block maxWidth={maxPageWidth} width='100%'>
+        <Block paddingLeft='40px' paddingRight='40px' display='flex' flexDirection='column' justifyContent='center'>
+          <Block width='100%' justifyContent='center' marginTop='24px'>
+            <Block flex='1' display='flex' justifyContent='flex-start'>
+              <RouteLink href={'/etterlevelse'} hideUnderline>
+                <Button startEnhancer={<img alt={'Chevron left'} src={chevronLeft} />} size='compact' kind='tertiary'
+                  $style={{
+                    color: !props.backBtnColor ? ettlevColors.black : props.backBtnColor,
+                    ':hover': { backgroundColor: 'transparent', textDecoration: 'underline 3px' }
+                  }}
+                >
+                  Tilbake
+                </Button>
+              </RouteLink>
+            </Block>
+            {props.mainHeader}
+          </Block>
+        </Block>
+      </Block>
+    </Block>
+
+    <Block
+      backgroundColor={props.secondaryHeaderBackgroundColor}
+      display='flex'
+      width='100%'
+      justifyContent='center'
+    >
+      <Block maxWidth={maxPageWidth} width='100%'>
+        <Block paddingLeft='40px' paddingRight='40px'>
+          {props.secondaryHeader}
+        </Block>
+      </Block>
+    </Block>
+
+    <Block
+      backgroundColor={props.childrenBackgroundColor}
+      display='flex'
+      width='100%'
+      justifyContent='center'
+    >
+      <Block maxWidth={maxPageWidth} width='100%'>
+        <Block paddingLeft='40px' paddingRight='40px'>
+          {props.children}
+        </Block>
+      </Block>
+    </Block>
   </Block>
 )
