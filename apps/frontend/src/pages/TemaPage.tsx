@@ -106,7 +106,7 @@ const TemaListe = () => {
   const [relevans, setRelevans] = useState<string[]>([])
   const [num] = useState<{[t: string]: number}>({})
   const update = useForceUpdate()
-  const visFilter = true // feature toggled
+  const visFilter = false // feature toggled
 
   const onClickFilter = (nyVerdi: string) => {
     if (relevans.indexOf(nyVerdi) >= 0) {
