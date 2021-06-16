@@ -26,13 +26,13 @@ export const BehandlingPage = () => {
     variables: { behandlingId: behandling?.id }
   })
   const stats = data?.behandling.content[0].stats
-  
+
   const temaListe = codelist.getCodes(ListName.TEMA).sort((a, b) => a.shortName.localeCompare(b.shortName, 'nb'))
   console.log(behandling, 'behandling')
   console.log(stats, "STATS")
 
-  const getTotalKrav = stats && stats.fyltKrav.length + stats.ikkeFyltKrav.length 
-  const getPercentageUtfylt = stats && getTotalKrav && stats.fyltKrav.length / getTotalKrav * 100 
+  const getTotalKrav = stats && stats.fyltKrav.length + stats.ikkeFyltKrav.length
+  const getPercentageUtfylt = stats && getTotalKrav && stats.fyltKrav.length / getTotalKrav * 100
 
   const getMainHeader = (behandling: Behandling) => (
     <Block display="flex" justifyContent="space-between" marginBottom='70px'>
@@ -90,8 +90,6 @@ export const BehandlingPage = () => {
     </Block>
   )
 
-  
-
   if (!behandling) return <LoadingSkeleton header='Behandling' />
 
   return (
@@ -103,17 +101,24 @@ export const BehandlingPage = () => {
       childrenBackgroundColor={ettlevColors.grey50}
     >
       <Block display="flex" width="100%" justifyContent="space-between" flexWrap marginTop={theme.sizing.scale1200}>
-          {temaListe.map(tema => <TemaCardBehandling tema={tema} relevans={behandling.relevansFor.map(r => r.code)} />)}
+        {temaListe.map(tema => <TemaCardBehandling tema={tema} relevans={behandling.relevansFor.map(r => r.code)} />)}
       </Block>
-      
+
     </Layout2>
   )
 }
 
-const TemaCardBehandling = ({tema, relevans}: {tema: TemaCode, relevans: string[]}) => {
+const HeaderContent = () => (
+  <Block display={'flex'} flexDirection={'column'}>
+    Til utfylling: test
+  </Block>
+)
+
+const TemaCardBehandling = ({ tema, relevans }: { tema: TemaCode, relevans: string[] }) => {
   const lover = codelist.getCodesForTema(tema.code).map(c => c.code)
-  const {data, loading} = useKravCounter({lover: lover}, {skip: !lover.length})
+  const { data, loading } = useKravCounter({ lover: lover }, { skip: !lover.length })
   const krav = data?.krav.content.filter(k => !relevans.length || k.relevansFor.map(r => r.code).some(r => relevans.includes(r))) || []
+
 
   const overrides: PanelLinkCardOverrides = {
     Root: {
@@ -127,7 +132,7 @@ const TemaCardBehandling = ({tema, relevans}: {tema: TemaCode, relevans: string[
       Block: {
         style: {
           backgroundColor: ettlevColors.green100,
-          minHeight: '110px',
+          height: '180px',
           paddingBottom: theme.sizing.scale600
         }
       }
@@ -135,22 +140,19 @@ const TemaCardBehandling = ({tema, relevans}: {tema: TemaCode, relevans: string[
     Content: {
       Block: {
         style: {
-          marginTop: `30px`,
           maskImage: `linear-gradient(${ettlevColors.black} 90%, transparent)`,
           overflow: 'hidden',
-          maxHeight: '100px'
         }
       }
     }
   }
 
-  return <PanelLinkCard width={cardWidth} height={cardHeight} maxHeight={'180px'} overrides={overrides}
-                        verticalMargin={theme.sizing.scale400}
-                        href={loading ? undefined : urlForObject(ListName.TEMA, tema.code)}
-                        tittel={tema.shortName + (loading ? ' - Laster...' : '')}>
-    <Block display={'flex'} flexDirection={'column'}>
-      Til utfylling: test
-
-    </Block>
-  </PanelLinkCard>
+  return <PanelLinkCard
+            width={cardWidth}
+            overrides={overrides}
+            verticalMargin={theme.sizing.scale400}
+            href={loading ? undefined : urlForObject(ListName.TEMA, tema.code)}
+            tittel={tema.shortName + (loading ? ' - Laster...' : '')}
+            headerContent={<HeaderContent />}
+        />
 }

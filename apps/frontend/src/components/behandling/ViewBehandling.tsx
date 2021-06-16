@@ -330,6 +330,7 @@ export const statsQuery = gql`
         lov {
         code
                 shortName
+                data
               }
             }
           }
@@ -340,6 +341,7 @@ export const statsQuery = gql`
         lov {
         code
                 shortName
+                data
               }
             }
           }

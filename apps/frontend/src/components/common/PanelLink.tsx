@@ -70,13 +70,15 @@ export type PanelLinkCardOverrides = {Root?: BlockOverrides, Header?: BlockOverr
 export const PanelLinkCard = (
   {
     href, tittel, beskrivelse,
-    children,
+    headerContent, footerContent, children,
     icon, requireLogin,
     height, maxHeight,
     width, maxWidth,
     verticalMargin, overrides
   }: {
     href?: string, tittel: string, beskrivelse?: string,
+    headerContent?: React.ReactNode, 
+    footerContent?: React.ReactNode,
     children?: React.ReactNode,
     icon?: string, requireLogin?: boolean
     height?: Responsive<Scale>, maxHeight?: string,
@@ -139,7 +141,11 @@ export const PanelLinkCard = (
             {icon && <Block display={'flex'} justifyContent={'center'} width={'100%'} marginTop={theme.sizing.scale600}>
               <img src={icon} alt={'ikon'} aria-hidden width={'30%'}/>
             </Block>}
-            <HeadingXLarge $style={{textDecoration: href && hover ? '3px underline ' : undefined}}>{tittel}</HeadingXLarge>
+
+            <Block display="flex" alignItems="flex-end" height={headerContent ? '60%' : ''}>
+              <HeadingXLarge $style={{textDecoration: href && hover ? '3px underline ' : undefined}}>{tittel}</HeadingXLarge>
+            </Block>
+            {headerContent && headerContent}
           </Block>
 
           <Block height={height} maxHeight={maxHeight} overrides={contentOverrides}>
@@ -150,7 +156,7 @@ export const PanelLinkCard = (
             {children}
           </Block>
 
-          <Block placeSelf={'flex-end'} padding={paddingSize}>
+          <Block placeSelf={'flex-end'} padding={paddingSize} justifyContent="space-between">
             <Chevron hover={hover} icon={arrowRightIcon} distance={'8px'}/>
           </Block>
 
