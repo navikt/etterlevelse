@@ -29,7 +29,7 @@ import { ettlevColors, maxPageWidth } from '../../util/theme'
 import CustomizedModal from '../common/CustomizedModal'
 import { crossIcon } from '../Images'
 
-const filterForBehandling = (behandling: Behandling): KravFilters => ({ behandlingId: behandling.id })
+export const filterForBehandling = (behandling: Behandling): KravFilters => ({ behandlingId: behandling.id })
 
 const modalPaddingRight = '104px'
 const modalPaddingLeft = '112px'
@@ -61,14 +61,23 @@ export const ViewBehandling = ({ behandling }: { behandling: Behandling }) => {
   )
 }
 
-const behandlingKravQuery = gql`
-  query getKravByFilter ($behandlingId: String!) {
-    krav(filter: {behandlingId: $behandlingId}) {
+export const behandlingKravQuery = gql`
+  query getKravByFilter ($behandlingId: String!, $lover: [String!]) {
+    krav(filter: {behandlingId: $behandlingId, lover: $lover, gjeldendeKrav: true}) {
       content{
         id
         navn
         kravNummer
         kravVersjon
+        relevansFor {
+          code
+        }
+        regelverk {
+          lov {
+            code
+            shortName
+          }
+        }
         etterlevelser (onlyForBehandling: true) {
           id
           etterleves
@@ -330,7 +339,6 @@ export const statsQuery = gql`
         lov {
         code
                 shortName
-                data
               }
             }
           }
@@ -341,7 +349,6 @@ export const statsQuery = gql`
         lov {
         code
                 shortName
-                data
               }
             }
           }

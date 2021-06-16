@@ -9,14 +9,15 @@ import { ettlevColors, maxPageWidth, theme } from '../util/theme'
 import { Layout2, Page } from '../components/scaffold/Page'
 import { Teams } from '../components/common/TeamName'
 import { arkPennIcon, gavelIconBg } from '../components/Images'
-import { Behandling, PageResponse } from '../constants'
+import { Behandling, KravQL, KravStatus, PageResponse } from '../constants'
 import { gql, useQuery } from '@apollo/client'
-import { BehandlingStats, statsQuery } from '../components/behandling/ViewBehandling'
+import { behandlingKravQuery, BehandlingStats, statsQuery } from '../components/behandling/ViewBehandling'
 import { codelist, ListName, TemaCode } from '../services/Codelist'
 import { PanelLinkCard, PanelLinkCardOverrides } from '../components/common/PanelLink'
 import { cardHeight, cardMaxheight, cardWidth, useKravCounter } from './TemaPage'
 import { urlForObject } from '../components/common/RouteLink'
 import { SimpleTag } from '../components/common/SimpleTag'
+import { KravFilters } from '../api/KravGraphQLApi'
 
 export const BehandlingPage = () => {
   const params = useParams<{ id?: string }>()
@@ -101,9 +102,8 @@ export const BehandlingPage = () => {
       childrenBackgroundColor={ettlevColors.grey50}
     >
       <Block display="flex" width="100%" justifyContent="space-between" flexWrap marginTop={theme.sizing.scale1200}>
-        {temaListe.map(tema => <TemaCardBehandling tema={tema} relevans={behandling.relevansFor.map(r => r.code)} />)}
+        {temaListe.map(tema => <TemaCardBehandling tema={tema} relevans={behandling.relevansFor.map(r => r.code)} behandling={behandling} />)}
       </Block>
-
     </Layout2>
   )
 }
@@ -114,10 +114,26 @@ const HeaderContent = () => (
   </Block>
 )
 
-const TemaCardBehandling = ({ tema, relevans }: { tema: TemaCode, relevans: string[] }) => {
+const filterForBehandling = (behandling: Behandling, lover: string[]): KravFilters => ({ behandlingId: behandling.id, lover: lover })
+
+const TemaCardBehandling = ({ tema, relevans, behandling }: { tema: TemaCode, relevans: string[], behandling: Behandling }) => {
   const lover = codelist.getCodesForTema(tema.code).map(c => c.code)
-  const { data, loading } = useKravCounter({ lover: lover }, { skip: !lover.length })
-  const krav = data?.krav.content.filter(k => !relevans.length || k.relevansFor.map(r => r.code).some(r => relevans.includes(r))) || []
+  //console.log(lover, "LOVER ", tema.shortName)
+  //const { data, loading } = useKravCounter({ lover: lover }, { skip: !lover.length })
+
+  const variables = filterForBehandling(behandling, lover)
+  const { data: rawData, loading } = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
+    variables,
+    skip: !variables?.behandlingId || !lover.length
+  })
+  const krav = rawData?.krav.content.filter(k => !relevans.length || k.relevansFor.map(r => r.code).some(r => relevans.includes(r))) || []
+
+  //const krav = rawData?.krav.content.filter(k => k.status === KravStatus.UTGAATT)
+  //console.log(rawData?.krav.content, "RAW ", tema.shortName)
+
+  console.log(rawData?.krav.content.length, "KRAVLENGTH ", tema.shortName)
+  
+
 
 
   const overrides: PanelLinkCardOverrides = {
@@ -146,6 +162,7 @@ const TemaCardBehandling = ({ tema, relevans }: { tema: TemaCode, relevans: stri
       }
     }
   }
+
 
   return <PanelLinkCard
             width={cardWidth}
