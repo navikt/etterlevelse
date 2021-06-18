@@ -287,7 +287,7 @@ const KravView = (props: { kravId: KravId, etterlevelse: Etterlevelse, close: Fu
 
     temaCodes.forEach(temaCode => {
       const shortName = codelist.getShortname(ListName.TEMA, temaCode)
-    
+
       temas = temas + shortName + ', '
     })
 
@@ -335,6 +335,10 @@ export const statsQuery = gql`
         fyltKrav {
         kravNummer
             kravVersjon
+            etterlevelser (onlyForBehandling: true) {
+              behandlingId
+              status
+            }
       regelverk {
         lov {
         code
@@ -345,6 +349,10 @@ export const statsQuery = gql`
       ikkeFyltKrav {
         kravNummer
             kravVersjon
+            etterlevelser (onlyForBehandling: true) {
+              behandlingId
+              status
+            }
       regelverk {
         lov {
         code
