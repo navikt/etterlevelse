@@ -27,8 +27,12 @@ export const BehandlingPage = () => {
     variables: { behandlingId: behandling?.id }
   })
   const stats = data?.behandling.content[0].stats
-
+  console.log(data)
   const temaListe = codelist.getCodes(ListName.TEMA).sort((a, b) => a.shortName.localeCompare(b.shortName, 'nb'))
+  const sjekk = [...stats?.fyltKrav || [], ...stats?.ikkeFyltKrav || []]
+
+  console.log(sjekk,)
+
   console.log(behandling, 'behandling')
   console.log(stats, "STATS")
 
@@ -118,20 +122,17 @@ const filterForBehandling = (behandling: Behandling, lover: string[]): KravFilte
 
 const TemaCardBehandling = ({ tema, relevans, behandling }: { tema: TemaCode, relevans: string[], behandling: Behandling }) => {
   const lover = codelist.getCodesForTema(tema.code).map(c => c.code)
-  //console.log(lover, "LOVER ", tema.shortName)
-  //const { data, loading } = useKravCounter({ lover: lover }, { skip: !lover.length })
 
   const variables = filterForBehandling(behandling, lover)
   const { data: rawData, loading } = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
     variables,
-    skip: !variables?.behandlingId || !lover.length
+    skip: !lover.length
   })
   const krav = rawData?.krav.content.filter(k => !relevans.length || k.relevansFor.map(r => r.code).some(r => relevans.includes(r))) || []
 
-  //const krav = rawData?.krav.content.filter(k => k.status === KravStatus.UTGAATT)
-  //console.log(rawData?.krav.content, "RAW ", tema.shortName)
-
-  console.log(rawData?.krav.content.length, "KRAVLENGTH ", tema.shortName)
+  if (krav.length) {
+    console.log(krav, tema.shortName)
+  }
   
 
 
