@@ -228,6 +228,7 @@ const TemaCardBehandling = ({ tema, stats }: { tema: TemaCode, stats: any[] }) =
     href={urlForObject(ListName.TEMA, tema.code)}
     tittel={tema.shortName}
     headerContent={<HeaderContent tilUtfylling={tilUtfylling} underArbeid={underArbeid} />}
+    flexContent
   >
     <Block marginTop={theme.sizing.scale650}>
       <Block display='flex' flex={1} >

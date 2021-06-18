@@ -1,19 +1,19 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import RouteLink from './RouteLink'
-import {Block, BlockOverrides, Responsive, Scale} from 'baseui/block'
-import {borderRadius, padding, paddingAll} from './Style'
-import {theme} from '../../util'
-import {ettlevColors} from '../../util/theme'
-import {HeadingXLarge, LabelLarge, LabelSmall, ParagraphMedium, ParagraphSmall} from 'baseui/typography'
-import {arrowRightIcon, navChevronRightIcon} from '../Images'
+import { Block, BlockOverrides, Responsive, Scale } from 'baseui/block'
+import { borderRadius, padding, paddingAll } from './Style'
+import { theme } from '../../util'
+import { ettlevColors } from '../../util/theme'
+import { HeadingXLarge, LabelLarge, LabelSmall, ParagraphMedium, ParagraphSmall } from 'baseui/typography'
+import { arrowRightIcon, navChevronRightIcon } from '../Images'
 import * as _ from 'lodash'
 
-export const PanelLink = ({href, title, rightTitle, beskrivelse, rightBeskrivelse, panelIcon, flip}:
-                            {
-                              href: string, title: string, rightTitle?: string, beskrivelse?: string, rightBeskrivelse?: string,
-                              flip?: boolean
-                              panelIcon?: React.ReactNode | ((hover: boolean) => React.ReactNode)
-                            }) => {
+export const PanelLink = ({ href, title, rightTitle, beskrivelse, rightBeskrivelse, panelIcon, flip }:
+  {
+    href: string, title: string, rightTitle?: string, beskrivelse?: string, rightBeskrivelse?: string,
+    flip?: boolean
+    panelIcon?: React.ReactNode | ((hover: boolean) => React.ReactNode)
+  }) => {
   const [hover, setHover] = useState(false)
 
   return (
@@ -45,19 +45,19 @@ export const PanelLink = ({href, title, rightTitle, beskrivelse, rightBeskrivels
       }} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
         {typeof panelIcon === 'function' ? panelIcon(hover) : panelIcon}
 
-        <Block marginLeft={theme.sizing.scale800} marginRight={theme.sizing.scale600} $style={{flexGrow: 1}}
-               display={'flex'} flexDirection={flip ? 'column-reverse' : 'column'} justifyContent={'center'}>
-          <LabelLarge $style={{lineHeight: '20px'}}>{title}</LabelLarge>
+        <Block marginLeft={theme.sizing.scale800} marginRight={theme.sizing.scale600} $style={{ flexGrow: 1 }}
+          display={'flex'} flexDirection={flip ? 'column-reverse' : 'column'} justifyContent={'center'}>
+          <LabelLarge $style={{ lineHeight: '20px' }}>{title}</LabelLarge>
           <ParagraphSmall marginBottom={0} marginTop={theme.sizing.scale100}>{beskrivelse}</ParagraphSmall>
         </Block>
 
         {(rightTitle || rightBeskrivelse) &&
-        <Block minWidth={'150px'} maxWidth={'150px'} display={'flex'} flexDirection={flip ? 'column-reverse' : 'column'} justifyContent={'center'}>
-          {rightTitle && <LabelSmall>{rightTitle}</LabelSmall>}
-          {rightBeskrivelse && <ParagraphSmall marginBottom={0} marginTop={rightTitle ? theme.sizing.scale100 : 0}>{rightBeskrivelse}</ParagraphSmall>}
-        </Block>}
+          <Block minWidth={'150px'} maxWidth={'150px'} display={'flex'} flexDirection={flip ? 'column-reverse' : 'column'} justifyContent={'center'}>
+            {rightTitle && <LabelSmall>{rightTitle}</LabelSmall>}
+            {rightBeskrivelse && <ParagraphSmall marginBottom={0} marginTop={rightTitle ? theme.sizing.scale100 : 0}>{rightBeskrivelse}</ParagraphSmall>}
+          </Block>}
 
-        <Chevron hover={hover} icon={navChevronRightIcon} distance={'4px'}/>
+        <Chevron hover={hover} icon={navChevronRightIcon} distance={'4px'} />
 
       </Block>
     </RouteLink>
@@ -65,7 +65,7 @@ export const PanelLink = ({href, title, rightTitle, beskrivelse, rightBeskrivels
 }
 
 
-export type PanelLinkCardOverrides = {Root?: BlockOverrides, Header?: BlockOverrides, Content?: BlockOverrides}
+export type PanelLinkCardOverrides = { Root?: BlockOverrides, Header?: BlockOverrides, Content?: BlockOverrides }
 
 export const PanelLinkCard = (
   {
@@ -74,10 +74,11 @@ export const PanelLinkCard = (
     icon, requireLogin,
     height, maxHeight,
     width, maxWidth,
-    verticalMargin, overrides
+    verticalMargin, overrides,
+    flexContent
   }: {
     href?: string, tittel: string, beskrivelse?: string,
-    headerContent?: React.ReactNode, 
+    headerContent?: React.ReactNode,
     footerContent?: React.ReactNode,
     children?: React.ReactNode,
     icon?: string, requireLogin?: boolean
@@ -85,6 +86,7 @@ export const PanelLinkCard = (
     width?: Responsive<Scale>, maxWidth?: string,
     verticalMargin?: string
     overrides?: PanelLinkCardOverrides
+    flexContent?: boolean
   }) => {
   const [hover, setHover] = useState(false)
 
@@ -131,44 +133,50 @@ export const PanelLinkCard = (
     <Block width={width} maxWidth={maxWidth} overrides={rootOverrides}>
       <RouteLink href={href} hideUnderline requireLogin={requireLogin}>
         <Block onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}
-               $style={{
-                 display: 'flex',
-                 flexDirection: 'column',
-                 justifyContent: 'space-between',
-               }}>
+          $style={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+          }}>
 
           <Block overrides={headerOverrides}>
             {icon && <Block display={'flex'} justifyContent={'center'} width={'100%'} marginTop={theme.sizing.scale600}>
-              <img src={icon} alt={'ikon'} aria-hidden width={'30%'}/>
+              <img src={icon} alt={'ikon'} aria-hidden width={'30%'} />
             </Block>}
 
             <Block display="flex" alignItems="flex-end" height={headerContent ? '60%' : ''}>
-              <HeadingXLarge $style={{textDecoration: href && hover ? '3px underline ' : undefined}}>{tittel}</HeadingXLarge>
+              <HeadingXLarge $style={{ textDecoration: href && hover ? '3px underline ' : undefined }}>{tittel}</HeadingXLarge>
             </Block>
             {headerContent && headerContent}
           </Block>
 
-          <Block height={height} maxHeight={maxHeight} overrides={contentOverrides}>
-            {beskrivelse && <Block>
-              <ParagraphMedium marginTop={0}>{beskrivelse}</ParagraphMedium>
-            </Block>}
+          <Block
+            $style={{
+              display: 'flex',
+              flexDirection: flexContent ? 'row' : 'column',
+            }}
+          >
+            <Block height={height} maxHeight={maxHeight} overrides={contentOverrides} width={flexContent ? '100%' : undefined}>
+              {beskrivelse && <Block>
+                <ParagraphMedium marginTop={0}>{beskrivelse}</ParagraphMedium>
+              </Block>}
 
-            {children}
+              {children}
+            </Block>
+
+            <Block placeSelf={'flex-end'} padding={paddingSize} paddingLeft={flexContent ? '0px' : undefined}>
+              <Chevron hover={hover} icon={arrowRightIcon} distance={'8px'} />
+            </Block>
           </Block>
-
-          <Block placeSelf={'flex-end'} padding={paddingSize} justifyContent="space-between">
-            <Chevron hover={hover} icon={arrowRightIcon} distance={'8px'}/>
-          </Block>
-
         </Block>
       </RouteLink>
     </Block>
   )
 }
 
-const Chevron = ({hover, icon, distance}: {hover: boolean, icon: string, distance: string}) => (
+const Chevron = ({ hover, icon, distance }: { hover: boolean, icon: string, distance: string }) => (
   <Block marginLeft={hover ? `calc(${theme.sizing.scale600} + ${distance})` : theme.sizing.scale600} alignSelf={'center'}
-         marginRight={hover ? '-' + distance : 0}>
-    <img src={icon} aria-hidden alt={'Chevron høyre ikon'} width={'24px'} height={'24px'}/>
+    marginRight={hover ? '-' + distance : 0}>
+    <img src={icon} aria-hidden alt={'Chevron høyre ikon'} width={'24px'} height={'24px'} />
   </Block>
 )
