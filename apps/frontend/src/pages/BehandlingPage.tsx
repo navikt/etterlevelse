@@ -18,6 +18,7 @@ import { cardHeight, cardMaxheight, cardWidth, useKravCounter } from './TemaPage
 import { urlForObject } from '../components/common/RouteLink'
 import { SimpleTag } from '../components/common/SimpleTag'
 import { KravFilters } from '../api/KravGraphQLApi'
+import { stat } from 'node:fs'
 
 export const BehandlingPage = () => {
   const params = useParams<{ id?: string }>()
@@ -26,18 +27,50 @@ export const BehandlingPage = () => {
   const { data } = useQuery<{ behandling: PageResponse<{ stats: BehandlingStats }> }>(statsQuery, {
     variables: { behandlingId: behandling?.id }
   })
-  const stats = data?.behandling.content[0].stats
-  console.log(data)
+
+  const filterData = (data: {
+    behandling: PageResponse<{
+      stats: BehandlingStats;
+    }>;
+  } | undefined) => {
+    const StatusListe: any[] = []
+    data?.behandling.content[0].stats.fyltKrav.forEach((k) => {
+      if (k.regelverk.length) {
+        StatusListe.push({ ...k, fyltt: true })
+      }
+    })
+    data?.behandling.content[0].stats.ikkeFyltKrav.forEach((k) => {
+      if (k.regelverk.length) {
+        StatusListe.push(k)
+      }
+    })
+    StatusListe.sort((a, b) => {
+      if (a.kravNummer === b.kravNummer) {
+        return a.kravVersjon - b.kravVersjon
+      }
+
+      return a.kravNummer - b.kravNummer
+    })
+
+    for (let index = StatusListe.length - 1; index > 0; index--) {
+      if (StatusListe[index].kravNummer === StatusListe[index - 1].kravNummer) {
+        StatusListe.splice(index - 1, 1)
+      }
+    }
+
+    return StatusListe
+  }
+
+  const stats = filterData(data)
+  console.log(stats)
   const temaListe = codelist.getCodes(ListName.TEMA).sort((a, b) => a.shortName.localeCompare(b.shortName, 'nb'))
-  const sjekk = [...stats?.fyltKrav || [], ...stats?.ikkeFyltKrav || []]
-
-  console.log(sjekk,)
-
-  console.log(behandling, 'behandling')
-  console.log(stats, "STATS")
-
-  const getTotalKrav = stats && stats.fyltKrav.length + stats.ikkeFyltKrav.length
-  const getPercentageUtfylt = stats && getTotalKrav && stats.fyltKrav.length / getTotalKrav * 100
+  let antallFylttKrav = 0
+  stats.forEach((k) => {
+    if (k.fyltt) {
+      antallFylttKrav += 1
+    }
+  })
+  const getPercentageUtfylt = stats && stats.length && antallFylttKrav / stats.length * 100
 
   const getMainHeader = (behandling: Behandling) => (
     <Block display="flex" justifyContent="space-between" marginBottom='70px'>
@@ -80,7 +113,7 @@ export const BehandlingPage = () => {
 
       <Block display="flex" alignItems="center">
         <Block display="flex" alignItems="baseline" marginRight="30px">
-          <H1 color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>{getTotalKrav}</H1>
+          <H1 color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>{stats.length}</H1>
           <Paragraph2>krav</Paragraph2>
         </Block>
 
@@ -130,12 +163,15 @@ const TemaCardBehandling = ({ tema, relevans, behandling }: { tema: TemaCode, re
   })
   const krav = rawData?.krav.content.filter(k => !relevans.length || k.relevansFor.map(r => r.code).some(r => relevans.includes(r))) || []
 
+
   if (krav.length) {
+    for (let index = krav.length - 1; index > 0; index--) {
+      if (krav[index].kravNummer === krav[index - 1].kravNummer) {
+        krav.splice(index - 1, 1)
+      }
+    }
     console.log(krav, tema.shortName)
   }
-  
-
-
 
   const overrides: PanelLinkCardOverrides = {
     Root: {
@@ -166,11 +202,11 @@ const TemaCardBehandling = ({ tema, relevans, behandling }: { tema: TemaCode, re
 
 
   return <PanelLinkCard
-            width={cardWidth}
-            overrides={overrides}
-            verticalMargin={theme.sizing.scale400}
-            href={loading ? undefined : urlForObject(ListName.TEMA, tema.code)}
-            tittel={tema.shortName + (loading ? ' - Laster...' : '')}
-            headerContent={<HeaderContent />}
-        />
+    width={cardWidth}
+    overrides={overrides}
+    verticalMargin={theme.sizing.scale400}
+    href={loading ? undefined : urlForObject(ListName.TEMA, tema.code)}
+    tittel={tema.shortName + (loading ? ' - Laster...' : '')}
+    headerContent={<HeaderContent />}
+  />
 }
