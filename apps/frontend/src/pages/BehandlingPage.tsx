@@ -1,24 +1,24 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, {  useRef, useState } from 'react'
 import { Block } from 'baseui/block'
 import { useParams } from 'react-router-dom'
 import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
-import { behandlingName, useBehandling } from '../api/BehandlingApi'
-import { HeadingLarge, Label3, Paragraph2, H1, Paragraph4, H2 } from 'baseui/typography'
+import { useBehandling } from '../api/BehandlingApi'
+import { HeadingLarge, Label3, Paragraph2, H1, H2 } from 'baseui/typography'
 import { FormikProps } from 'formik'
-import { ettlevColors, maxPageWidth, theme } from '../util/theme'
-import { Layout2, Page } from '../components/scaffold/Page'
+import { ettlevColors, theme } from '../util/theme'
+import { Layout2 } from '../components/scaffold/Page'
 import { Teams } from '../components/common/TeamName'
-import { arkPennIcon, gavelIconBg } from '../components/Images'
-import { Behandling, KravQL, KravStatus, PageResponse } from '../constants'
+import { arkPennIcon } from '../components/Images'
+import { Behandling, EtterlevelseStatus, PageResponse } from '../constants'
 import { gql, useQuery } from '@apollo/client'
-import { behandlingKravQuery, BehandlingStats, statsQuery } from '../components/behandling/ViewBehandling'
+import { BehandlingStats, statsQuery } from '../components/behandling/ViewBehandling'
 import { codelist, ListName, TemaCode } from '../services/Codelist'
 import { PanelLinkCard, PanelLinkCardOverrides } from '../components/common/PanelLink'
-import { cardHeight, cardMaxheight, cardWidth, useKravCounter } from './TemaPage'
+import { cardWidth } from './TemaPage'
 import { urlForObject } from '../components/common/RouteLink'
-import { SimpleTag } from '../components/common/SimpleTag'
 import { KravFilters } from '../api/KravGraphQLApi'
-import { stat } from 'node:fs'
+import { ProgressBar, SIZE } from "baseui/progress-bar";
+
 
 export const BehandlingPage = () => {
   const params = useParams<{ id?: string }>()
@@ -28,6 +28,8 @@ export const BehandlingPage = () => {
     variables: { behandlingId: behandling?.id }
   })
 
+  const [stats, setStats] = useState<any[]>([])
+
   const filterData = (data: {
     behandling: PageResponse<{
       stats: BehandlingStats;
@@ -36,12 +38,12 @@ export const BehandlingPage = () => {
     const StatusListe: any[] = []
     data?.behandling.content[0].stats.fyltKrav.forEach((k) => {
       if (k.regelverk.length) {
-        StatusListe.push({ ...k, fyltt: true })
+        StatusListe.push({ ...k, etterlevelser: k.etterlevelser.filter(e => e.behandlingId === behandling?.id) })
       }
     })
     data?.behandling.content[0].stats.ikkeFyltKrav.forEach((k) => {
       if (k.regelverk.length) {
-        StatusListe.push(k)
+        StatusListe.push({ ...k, etterlevelser: k.etterlevelser.filter(e => e.behandlingId === behandling?.id) })
       }
     })
     StatusListe.sort((a, b) => {
@@ -61,12 +63,14 @@ export const BehandlingPage = () => {
     return StatusListe
   }
 
-  const stats = filterData(data)
-  console.log(stats)
+  React.useEffect(() => {
+    setStats(filterData(data))
+  }, [data])
+
   const temaListe = codelist.getCodes(ListName.TEMA).sort((a, b) => a.shortName.localeCompare(b.shortName, 'nb'))
   let antallFylttKrav = 0
   stats.forEach((k) => {
-    if (k.fyltt) {
+    if (k.etterlevelser.length && k.etterlevelser[0].status === EtterlevelseStatus.FERDIG) {
       antallFylttKrav += 1
     }
   })
@@ -139,48 +143,64 @@ export const BehandlingPage = () => {
       childrenBackgroundColor={ettlevColors.grey50}
     >
       <Block display="flex" width="100%" justifyContent="space-between" flexWrap marginTop={theme.sizing.scale1200}>
-        {temaListe.map(tema => <TemaCardBehandling tema={tema} relevans={behandling.relevansFor.map(r => r.code)} behandling={behandling} />)}
+        {temaListe.map(tema => <TemaCardBehandling tema={tema} stats={stats} />)}
       </Block>
     </Layout2>
   )
 }
 
-const HeaderContent = () => (
-  <Block display={'flex'} flexDirection={'column'}>
-    Til utfylling: test
+const HeaderContent = (props: { tilUtfylling: number, underArbeid: number }) => (
+  <Block marginBottom='33px'>
+    <Paragraph2 marginTop='0px' marginBottom='0px'>
+      Til utfylling: {props.tilUtfylling} krav
+    </Paragraph2>
+    <Paragraph2 marginTop='0px' marginBottom='0px'>
+      Under arbeid: {props.underArbeid} krav
+    </Paragraph2>
   </Block>
 )
 
 const filterForBehandling = (behandling: Behandling, lover: string[]): KravFilters => ({ behandlingId: behandling.id, lover: lover })
 
-const TemaCardBehandling = ({ tema, relevans, behandling }: { tema: TemaCode, relevans: string[], behandling: Behandling }) => {
+const TemaCardBehandling = ({ tema, stats }: { tema: TemaCode, stats: any[] }) => {
   const lover = codelist.getCodesForTema(tema.code).map(c => c.code)
 
-  const variables = filterForBehandling(behandling, lover)
-  const { data: rawData, loading } = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
-    variables,
-    skip: !lover.length
-  })
-  const krav = rawData?.krav.content.filter(k => !relevans.length || k.relevansFor.map(r => r.code).some(r => relevans.includes(r))) || []
+  const krav = stats.filter(k => k.regelverk.map((r: any) => r.lov.code).some((r: any) => lover.includes(r)))
 
+  let utfylt = 0
+  let underArbeid = 0
+  let tilUtfylling = 0
 
-  if (krav.length) {
-    for (let index = krav.length - 1; index > 0; index--) {
-      if (krav[index].kravNummer === krav[index - 1].kravNummer) {
-        krav.splice(index - 1, 1)
-      }
+  console.log(krav, tema.shortName)
+
+  krav.forEach(k => {
+    if (k.etterlevelser.length && k.etterlevelser[0].status === EtterlevelseStatus.FERDIG) {
+      utfylt += 1
+    } else if (k.etterlevelser.length && (k.etterlevelser[0].status === EtterlevelseStatus.OPPFYLLES_SENERE || k.etterlevelser[0].status === EtterlevelseStatus.UNDER_REDIGERING)) {
+      underArbeid += 1
+    } else {
+      tilUtfylling += 1
     }
-    console.log(krav, tema.shortName)
-  }
+  })
+
+  // const variables = filterForBehandling(behandling, lover)
+  // const { data: rawData, loading } = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
+  //   variables,
+  //   skip: !lover.length
+  // })
+  // const krav = rawData?.krav.content.filter(k => !relevans.length || k.relevansFor.map(r => r.code).some(r => relevans.includes(r))) || []
+
+
+  // if (krav.length) {
+  //   for (let index = krav.length - 1; index > 0; index--) {
+  //     if (krav[index].kravNummer === krav[index - 1].kravNummer) {
+  //       krav.splice(index - 1, 1)
+  //     }
+  //   }
+  //   console.log(krav, tema.shortName)
+  // }
 
   const overrides: PanelLinkCardOverrides = {
-    Root: {
-      Block: {
-        style: {
-          maskImage: loading ? `linear-gradient(${ettlevColors.black} 0%, transparent 70% 100%)` : undefined,
-        }
-      }
-    },
     Header: {
       Block: {
         style: {
@@ -205,8 +225,41 @@ const TemaCardBehandling = ({ tema, relevans, behandling }: { tema: TemaCode, re
     width={cardWidth}
     overrides={overrides}
     verticalMargin={theme.sizing.scale400}
-    href={loading ? undefined : urlForObject(ListName.TEMA, tema.code)}
-    tittel={tema.shortName + (loading ? ' - Laster...' : '')}
-    headerContent={<HeaderContent />}
-  />
+    href={urlForObject(ListName.TEMA, tema.code)}
+    tittel={tema.shortName}
+    headerContent={<HeaderContent tilUtfylling={tilUtfylling} underArbeid={underArbeid} />}
+  >
+    <Block marginTop={theme.sizing.scale650}>
+      <Block display='flex' flex={1} >
+        <Paragraph2 marginTop='0px' marginBottom='2px'>
+          Utfylt:
+        </Paragraph2>
+        <Block display='flex' justifyContent='flex-end' flex={1}>
+          <Paragraph2 marginTop='0px' marginBottom='2px'>
+            {krav.length ? (utfylt / krav.length * 100).toFixed(0) : 100}%
+          </Paragraph2>
+        </Block>
+      </Block>
+      <Block>
+        <ProgressBar
+          value={utfylt}
+          successValue={krav.length}
+          size={SIZE.large}
+          overrides={{
+            BarProgress: {
+              style: {
+                backgroundColor: ettlevColors.green800
+              }
+            },
+            BarContainer: {
+              style: {
+                marginLeft: '0px',
+                marginRight: '0px'
+              }
+            }
+          }}
+        />
+      </Block>
+    </Block>
+  </PanelLinkCard>
 }
