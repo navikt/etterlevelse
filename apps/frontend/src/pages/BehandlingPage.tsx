@@ -172,8 +172,6 @@ const TemaCardBehandling = ({ tema, stats, behandling }: { tema: TemaCode, stats
   let underArbeid = 0
   let tilUtfylling = 0
 
-  console.log(krav, tema.shortName)
-
   krav.forEach(k => {
     if (k.etterlevelser.length && k.etterlevelser[0].status === EtterlevelseStatus.FERDIG) {
       utfylt += 1
