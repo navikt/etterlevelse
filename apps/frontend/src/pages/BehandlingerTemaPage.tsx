@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import {Block} from 'baseui/block'
 import {useParams} from 'react-router-dom'
-import {H1, H2, Label3, Paragraph4} from 'baseui/typography'
+import {H1, H2, Label3, Paragraph2, Paragraph4} from 'baseui/typography'
 import {ettlevColors, theme} from '../util/theme'
 import {codelist, ListName, TemaCode} from "../services/Codelist";
 import RouteLink, {urlForObject} from "../components/common/RouteLink";
@@ -59,8 +59,17 @@ export const BehandlingerTemaPage = () => {
     setKravData(mapped)
   }, [rawData])
 
-  console.log('kravData', kravData)
-  console.log('rawData', rawData)
+  const getPercentageUtfylt = () => {
+    let antallUtfylt = 0
+
+    kravData.forEach((k) => {
+      if(k.etterlevelseStatus === EtterlevelseStatus.FERDIG) {
+        antallUtfylt += 1
+      }
+    })
+
+    return antallUtfylt/kravData.length * 100
+  }
 
   const getMainHeader = () => (
     <Block display="flex" justifyContent="space-between" marginBottom="60px">
@@ -96,23 +105,21 @@ export const BehandlingerTemaPage = () => {
         <H2>Kravene behandlingen skal etterleve</H2>
       </Block>
 
-      {/*<Block display="flex" alignItems="center">*/}
-      {/*  <Block display="flex" alignItems="baseline" marginRight="30px">*/}
-      {/*    <H1 color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>*/}
-      {/*      {stats.length}*/}
-      {/*    </H1>*/}
-      {/*    <Paragraph2>krav</Paragraph2>*/}
-      {/*  </Block>*/}
-
-      {/*  <Block $style={{ border: '1px solid ' + ettlevColors.green50, background: '#102723' }} height="40px" />*/}
-
-      {/*  <Block display="flex" alignItems="baseline" marginLeft="30px">*/}
-      {/*    <H1 color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>*/}
-      {/*      {getPercentageUtfylt?.toFixed(2)}*/}
-      {/*    </H1>*/}
-      {/*    <Paragraph2>% ferdig utfylt</Paragraph2>*/}
-      {/*  </Block>*/}
-      {/*</Block>*/}
+       <Block display="flex" alignItems="center">
+        <Block display="flex" alignItems="baseline" marginRight="30px">
+          <H1 color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
+            {kravData.length}
+          </H1>
+          <Paragraph2>krav</Paragraph2>
+        </Block>
+        <Block $style={{ border: '1px solid ' + ettlevColors.green50, background: '#102723' }} height="40px" />
+        <Block display="flex" alignItems="baseline" marginLeft="30px">
+          <H1 color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
+            {getPercentageUtfylt().toFixed(2)}
+          </H1>
+          <Paragraph2>% ferdig utfylt</Paragraph2>
+        </Block>
+      </Block> 
     </Block>
   )
 
