@@ -1,95 +1,141 @@
 import React, { useState } from 'react'
 import RouteLink from './RouteLink'
-import {Block, BlockOverrides, Responsive, Scale} from 'baseui/block'
-import {borderRadius, borderStyle, padding, paddingAll} from './Style'
-import {theme} from '../../util'
-import {ettlevColors} from '../../util/theme'
-import {HeadingXLarge, LabelLarge, LabelSmall, ParagraphMedium, ParagraphSmall} from 'baseui/typography'
-import {arrowRightIcon, navChevronRightIcon} from '../Images'
+import { Block, BlockOverrides, Responsive, Scale } from 'baseui/block'
+import { borderRadius, borderStyle, padding, paddingAll } from './Style'
+import { theme } from '../../util'
+import { ettlevColors } from '../../util/theme'
+import { HeadingXLarge, LabelLarge, LabelSmall, ParagraphMedium, ParagraphSmall } from 'baseui/typography'
+import { arrowRightIcon, navChevronRightIcon } from '../Images'
 import * as _ from 'lodash'
 
-export const PanelLink = ({href, title, rightTitle, beskrivelse, rightBeskrivelse, panelIcon, flip, square, hideBorderBottom}:
-                            {
-                              href: string, title: string, rightTitle?: string, beskrivelse?: string, rightBeskrivelse?: string,
-                              flip?: boolean, square?: boolean, hideBorderBottom?: boolean,
-                              panelIcon?: React.ReactNode | ((hover: boolean) => React.ReactNode)
-                            }) => {
+export const PanelLink = ({
+  href,
+  title,
+  rightTitle,
+  beskrivelse,
+  rightBeskrivelse,
+  panelIcon,
+  flip,
+  square,
+  hideBorderBottom,
+}: {
+  href: string
+  title: string
+  rightTitle?: string
+  beskrivelse?: string
+  rightBeskrivelse?: string
+  flip?: boolean
+  square?: boolean
+  hideBorderBottom?: boolean
+  panelIcon?: React.ReactNode | ((hover: boolean) => React.ReactNode)
+}) => {
   const [hover, setHover] = useState(false)
 
   return (
-    <RouteLink href={href} hideUnderline $style={{
-      display: 'flex'
-    }}>
-      <Block overrides={{
-        Block: {
-          style: {
-            width: '100%',
-            ...paddingAll(theme.sizing.scale600),
-            paddingLeft: theme.sizing.scale300,
-            display: 'flex',
-            justifyContent: 'space-between',
-            backgroundColor: ettlevColors.white,
+    <RouteLink
+      href={href}
+      hideUnderline
+      $style={{
+        display: 'flex',
+      }}
+    >
+      <Block
+        overrides={{
+          Block: {
+            style: {
+              width: '100%',
+              ...paddingAll(theme.sizing.scale600),
+              paddingLeft: theme.sizing.scale300,
+              display: 'flex',
+              justifyContent: 'space-between',
+              backgroundColor: ettlevColors.white,
 
-            borderWidth: '1px',
-            borderColor: ettlevColors.grey100,
-            borderStyle: 'solid',
-            ...borderStyle('solid'),
-            borderBottomStyle: hideBorderBottom ? 'hidden' : 'solid',
-            ...(square ? {} : borderRadius('4px')),
+              borderWidth: '1px',
+              borderColor: ettlevColors.grey100,
+              borderStyle: 'solid',
+              ...borderStyle('solid'),
+              borderBottomStyle: hideBorderBottom ? 'hidden' : 'solid',
+              ...(square ? {} : borderRadius('4px')),
 
-            ':hover': {
-              position: 'relative',
-              boxSizing: 'border-box',
-              boxShadow: '0px 3px 4px rgba(0, 0, 0, 0.12)'
-            }
-          }
-        }
-      }} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
+              ':hover': {
+                position: 'relative',
+                boxSizing: 'border-box',
+                boxShadow: '0px 3px 4px rgba(0, 0, 0, 0.12)',
+              },
+            },
+          },
+        }}
+        onMouseEnter={() => setHover(true)}
+        onMouseLeave={() => setHover(false)}
+      >
         {typeof panelIcon === 'function' ? panelIcon(hover) : panelIcon}
 
-        <Block marginLeft={theme.sizing.scale800} marginRight={theme.sizing.scale600} $style={{ flexGrow: 1 }}
-          display={'flex'} flexDirection={flip ? 'column-reverse' : 'column'} justifyContent={'center'}>
+        <Block
+          marginLeft={theme.sizing.scale800}
+          marginRight={theme.sizing.scale600}
+          $style={{ flexGrow: 1 }}
+          display={'flex'}
+          flexDirection={flip ? 'column-reverse' : 'column'}
+          justifyContent={'center'}
+        >
           <LabelLarge $style={{ lineHeight: '20px' }}>{title}</LabelLarge>
-          <ParagraphSmall marginBottom={0} marginTop={theme.sizing.scale100}>{beskrivelse}</ParagraphSmall>
+          <ParagraphSmall marginBottom={0} marginTop={theme.sizing.scale100}>
+            {beskrivelse}
+          </ParagraphSmall>
         </Block>
 
-        {(rightTitle || rightBeskrivelse) &&
+        {(rightTitle || rightBeskrivelse) && (
           <Block minWidth={'150px'} maxWidth={'150px'} display={'flex'} flexDirection={flip ? 'column-reverse' : 'column'} justifyContent={'center'}>
             {rightTitle && <LabelSmall>{rightTitle}</LabelSmall>}
-            {rightBeskrivelse && <ParagraphSmall marginBottom={0} marginTop={rightTitle ? theme.sizing.scale100 : 0}>{rightBeskrivelse}</ParagraphSmall>}
-          </Block>}
+            {rightBeskrivelse && (
+              <ParagraphSmall marginBottom={0} marginTop={rightTitle ? theme.sizing.scale100 : 0}>
+                {rightBeskrivelse}
+              </ParagraphSmall>
+            )}
+          </Block>
+        )}
 
         <Chevron hover={hover} icon={navChevronRightIcon} distance={'4px'} />
-
       </Block>
     </RouteLink>
   )
 }
 
+export type PanelLinkCardOverrides = { Root?: BlockOverrides; Header?: BlockOverrides; Content?: BlockOverrides }
 
-export type PanelLinkCardOverrides = { Root?: BlockOverrides, Header?: BlockOverrides, Content?: BlockOverrides }
-
-export const PanelLinkCard = (
-  {
-    href, tittel, beskrivelse,
-    headerContent, footerContent, children,
-    icon, requireLogin,
-    height, maxHeight,
-    width, maxWidth,
-    verticalMargin, overrides,
-    flexContent
-  }: {
-    href?: string, tittel: string, beskrivelse?: string,
-    headerContent?: React.ReactNode,
-    footerContent?: React.ReactNode,
-    children?: React.ReactNode,
-    icon?: string, requireLogin?: boolean
-    height?: Responsive<Scale>, maxHeight?: string,
-    width?: Responsive<Scale>, maxWidth?: string,
-    verticalMargin?: string
-    overrides?: PanelLinkCardOverrides
-    flexContent?: boolean
-  }) => {
+export const PanelLinkCard = ({
+  href,
+  tittel,
+  beskrivelse,
+  headerContent,
+  footerContent,
+  children,
+  icon,
+  requireLogin,
+  height,
+  maxHeight,
+  width,
+  maxWidth,
+  verticalMargin,
+  overrides,
+  flexContent,
+}: {
+  href?: string
+  tittel: string
+  beskrivelse?: string
+  headerContent?: React.ReactNode
+  footerContent?: React.ReactNode
+  children?: React.ReactNode
+  icon?: string
+  requireLogin?: boolean
+  height?: Responsive<Scale>
+  maxHeight?: string
+  width?: Responsive<Scale>
+  maxWidth?: string
+  verticalMargin?: string
+  overrides?: PanelLinkCardOverrides
+  flexContent?: boolean
+}) => {
   const [hover, setHover] = useState(false)
 
   const rootBaseOverrides: BlockOverrides = {
@@ -106,50 +152,60 @@ export const PanelLinkCard = (
         ...borderRadius('4px'),
 
         ':hover': {
-          boxShadow: '0px 6px 8px rgba(0, 0, 0, 0.24)'
+          boxShadow: '0px 6px 8px rgba(0, 0, 0, 0.24)',
         },
 
         ':focus-within': {
           outline: `3px solid ${ettlevColors.focusOutline}`,
-          outlineOffset: '1px'
-        }
-      }
-    }
+          outlineOffset: '1px',
+        },
+      },
+    },
   }
   const rootOverrides = _.merge(rootBaseOverrides, overrides?.Root)
 
   const paddingSize = theme.sizing.scale600
-  const headerOverrides = _.merge({
-    Block: {
-      style: {
-        ...paddingAll(paddingSize),
-        paddingBottom: 0
-      }
-    }
-  }, overrides?.Header)
+  const headerOverrides = _.merge(
+    {
+      Block: {
+        style: {
+          ...paddingAll(paddingSize),
+          paddingBottom: 0,
+        },
+      },
+    },
+    overrides?.Header,
+  )
 
-  const contentOverrides = _.merge({
-    Block: {
-      style: {
-        ...padding('0', paddingSize),
-      }
-    }
-  }, overrides?.Content)
+  const contentOverrides = _.merge(
+    {
+      Block: {
+        style: {
+          ...padding('0', paddingSize),
+        },
+      },
+    },
+    overrides?.Content,
+  )
 
   return (
     <Block width={width} maxWidth={maxWidth} overrides={rootOverrides}>
       <RouteLink href={href} hideUnderline requireLogin={requireLogin}>
-        <Block onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}
+        <Block
+          onMouseEnter={() => setHover(true)}
+          onMouseLeave={() => setHover(false)}
           $style={{
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between',
-          }}>
-
+          }}
+        >
           <Block overrides={headerOverrides}>
-            {icon && <Block display={'flex'} justifyContent={'center'} width={'100%'} marginTop={theme.sizing.scale600}>
-              <img src={icon} alt={'ikon'} aria-hidden width={'30%'} />
-            </Block>}
+            {icon && (
+              <Block display={'flex'} justifyContent={'center'} width={'100%'} marginTop={theme.sizing.scale600}>
+                <img src={icon} alt={'ikon'} aria-hidden width={'30%'} />
+              </Block>
+            )}
 
             <Block display="flex" alignItems="flex-end" height={headerContent ? '60%' : ''}>
               <HeadingXLarge $style={{ textDecoration: href && hover ? '3px underline ' : undefined }}>{tittel}</HeadingXLarge>
@@ -164,9 +220,11 @@ export const PanelLinkCard = (
             }}
           >
             <Block height={height} maxHeight={maxHeight} overrides={contentOverrides} width={flexContent ? '100%' : undefined}>
-              {beskrivelse && <Block>
-                <ParagraphMedium marginTop={0}>{beskrivelse}</ParagraphMedium>
-              </Block>}
+              {beskrivelse && (
+                <Block>
+                  <ParagraphMedium marginTop={0}>{beskrivelse}</ParagraphMedium>
+                </Block>
+              )}
 
               {children}
             </Block>
@@ -181,9 +239,8 @@ export const PanelLinkCard = (
   )
 }
 
-const Chevron = ({ hover, icon, distance }: { hover: boolean, icon: string, distance: string }) => (
-  <Block marginLeft={hover ? `calc(${theme.sizing.scale600} + ${distance})` : theme.sizing.scale600} alignSelf={'center'}
-    marginRight={hover ? '-' + distance : 0}>
+const Chevron = ({ hover, icon, distance }: { hover: boolean; icon: string; distance: string }) => (
+  <Block marginLeft={hover ? `calc(${theme.sizing.scale600} + ${distance})` : theme.sizing.scale600} alignSelf={'center'} marginRight={hover ? '-' + distance : 0}>
     <img src={icon} aria-hidden alt={'Chevron høyre ikon'} width={'24px'} height={'24px'} />
   </Block>
 )

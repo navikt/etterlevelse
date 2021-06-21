@@ -40,25 +40,23 @@ const Main = (props) => {
       <BaseProvider theme={customTheme}>
         <ApolloProvider client={apolloClient}>
           <Router history={history}>
-
             <Helmet>
-              <meta charSet="utf-8"/>
+              <meta charSet="utf-8" />
               <title>Etterlevelse Beta</title>
             </Helmet>
 
             <Block {...containerProps}>
               <Block {...containerProps} minHeight="50vh">
-                <Header/>
-                <Routes/>
+                <Header />
+                <Routes />
               </Block>
               <Block backgroundColor={ettlevColors.green50} height={'150px'}>
                 <HeadingLarge>Hvordan opplever du løsningen?</HeadingLarge>
               </Block>
-              <Footer/>
+              <Footer />
             </Block>
-
           </Router>
-          <ErrorModal/>
+          <ErrorModal />
         </ApolloProvider>
       </BaseProvider>
     </StyletronProvider>

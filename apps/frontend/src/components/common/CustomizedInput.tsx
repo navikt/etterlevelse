@@ -9,17 +9,15 @@ export const CustomizedInput = (props: InputProps) => {
         boxShadow: '0 2px 2px 0 rgba(0, 0, 0, .12), 0 2px 1px -1px rgba(0, 0, 0, .2)',
         ':hover': {
           backgroundColor: ettlevColors.green50,
-          boxShadow: '0px 1px 1px rgba(0, 0, 0, 0.12), 0px 1px 1px -1px rgba(0, 0, 0, 0.2)'
-        }
-      }
-    }
+          boxShadow: '0px 1px 1px rgba(0, 0, 0, 0.12), 0px 1px 1px -1px rgba(0, 0, 0, 0.2)',
+        },
+      },
+    },
   }
 
   const overrides = _.merge(customOverrides, props.overrides)
 
-  return (
-    <Input {...props} overrides={overrides} />
-  )
+  return <Input {...props} overrides={overrides} />
 }
 
 export default CustomizedInput

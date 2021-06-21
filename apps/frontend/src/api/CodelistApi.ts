@@ -1,6 +1,6 @@
 import axios from 'axios'
-import {env} from '../util/env'
-import {AllCodelists, CategoryUsage, Code, CodeUsage, ListName} from '../services/Codelist'
+import { env } from '../util/env'
+import { AllCodelists, CategoryUsage, Code, CodeUsage, ListName } from '../services/Codelist'
 
 // refresh will force backend to re-read codelists from db, due to caching and multibackend
 export const getAllCodelists = async (refresh?: boolean) => await axios.get<AllCodelists>(`${env.backendBaseUrl}/codelist?refresh=${refresh ? 'true' : 'false'}`)
@@ -14,7 +14,7 @@ export const getCodelistUsage = async (listname: ListName, code: string) => {
 }
 
 export const replaceCodelistUsage = async (listname: ListName, oldCode: string, newCode: string) => {
-  return (await axios.post<CodeUsage>(`${env.backendBaseUrl}/codelist/usage/replace`, {list: listname, oldCode, newCode})).data
+  return (await axios.post<CodeUsage>(`${env.backendBaseUrl}/codelist/usage/replace`, { list: listname, oldCode, newCode })).data
 }
 
 export const createCodelist = async (code: Code) => {
@@ -28,4 +28,3 @@ export const updateCodelist = async (code: Code) => {
 export const deleteCodelist = async (list: string, code: string) => {
   return axios.delete(`${env.backendBaseUrl}/codelist/${list}/${code}`)
 }
-

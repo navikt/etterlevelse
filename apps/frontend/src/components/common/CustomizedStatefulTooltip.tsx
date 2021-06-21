@@ -2,7 +2,6 @@ import React from 'react'
 import { ACCESSIBILITY_TYPE, PLACEMENT, StatefulTooltip, StatefulTooltipProps, TRIGGER_TYPE } from 'baseui/tooltip'
 
 const CustomizedStatefulTooltip = (props: StatefulTooltipProps) => {
-
   return (
     <StatefulTooltip
       {...props}
@@ -15,10 +14,10 @@ const CustomizedStatefulTooltip = (props: StatefulTooltipProps) => {
         Body: {
           style: {
             maxWidth: '25%',
-            wordBreak: 'break-word'
-          }
+            wordBreak: 'break-word',
+          },
         },
-        ...props.overrides
+        ...props.overrides,
       }}
     >
       {props.children}

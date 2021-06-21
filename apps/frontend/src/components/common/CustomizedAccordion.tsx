@@ -1,28 +1,23 @@
-import {Accordion, AccordionProps, Panel, PanelOverrides, PanelProps} from 'baseui/accordion'
-import {ettlevColors, theme} from '../../util/theme'
-import {Block} from 'baseui/block'
-import {HeadingLarge} from 'baseui/typography'
-import {faChevronDown, faChevronUp} from '@fortawesome/free-solid-svg-icons'
+import { Accordion, AccordionProps, Panel, PanelOverrides, PanelProps } from 'baseui/accordion'
+import { ettlevColors, theme } from '../../util/theme'
+import { Block } from 'baseui/block'
+import { HeadingLarge } from 'baseui/typography'
+import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons'
 import * as React from 'react'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {borderColor, borderStyle, borderWidth, paddingAll} from './Style'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { borderColor, borderStyle, borderWidth, paddingAll } from './Style'
 import _ from 'lodash'
 
-
 export const CustomizedAccordion = (props: AccordionProps) => {
-
-  return (
-    <Accordion {...props}
-               overrides={{}}/>
-  )
+  return <Accordion {...props} overrides={{}} />
 }
 
 export const CustomizedPanel = (props: PanelProps) => {
-  const {expanded} = props
+  const { expanded } = props
 
   const customOverrides: PanelOverrides<any> = {
     ToggleIcon: {
-      component: () => expanded ? <FontAwesomeIcon icon={faChevronUp}/> : <FontAwesomeIcon icon={faChevronDown}/>
+      component: () => (expanded ? <FontAwesomeIcon icon={faChevronUp} /> : <FontAwesomeIcon icon={faChevronDown} />),
     },
     Header: {
       style: {
@@ -32,40 +27,42 @@ export const CustomizedPanel = (props: PanelProps) => {
         ...borderColor(ettlevColors.grey100),
         borderTopLeftRadius: '4px',
         borderTopRightRadius: '4px',
-        ...(expanded ? {} : {
-          borderBottomLeftRadius: '4px',
-          borderBottomRightRadius: '4px',
-        }),
+        ...(expanded
+          ? {}
+          : {
+              borderBottomLeftRadius: '4px',
+              borderBottomRightRadius: '4px',
+            }),
         ':hover': {
-          textDecoration: 'underline'
-        }
-      }
+          textDecoration: 'underline',
+        },
+      },
     },
     ContentAnimationContainer: {
       style: {
-        overflow: 'visible' // fix box shadows of content
-      }
+        overflow: 'visible', // fix box shadows of content
+      },
     },
     Content: {
       style: {
         backgroundColor: ettlevColors.grey50,
         ...paddingAll('0'),
         overflow: 'visible', // fix box shadows of content
-      }
+      },
     },
     PanelContainer: {
       style: {
         marginBottom: theme.sizing.scale200,
         borderStyle: 'hidden',
-      }
-    }
+      },
+    },
   }
 
   const overrides = _.merge(customOverrides, props.overrides)
 
   const getTitle = () => {
-    if (typeof (props.title) !== 'string') {
-      return (props.title)
+    if (typeof props.title !== 'string') {
+      return props.title
     } else {
       return (
         <Block>
@@ -77,7 +74,5 @@ export const CustomizedPanel = (props: PanelProps) => {
     }
   }
 
-  return (
-    <Panel {...props} overrides={overrides} title={getTitle()}/>
-  )
+  return <Panel {...props} overrides={overrides} title={getTitle()} />
 }

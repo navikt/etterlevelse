@@ -9,7 +9,7 @@ type DataTextProps = {
   children?: ReactNode
   hideComponent?: boolean
   compact?: boolean
-  notFlexed?: boolean,
+  notFlexed?: boolean
   header?: boolean
 }
 
@@ -21,9 +21,7 @@ const DataText = (props: DataTextProps) => {
     if (props.header) {
       return (
         <Block>
-          <H2>
-            {props.label}
-          </H2>
+          <H2>{props.label}</H2>
         </Block>
       )
     } else {
@@ -36,11 +34,9 @@ const DataText = (props: DataTextProps) => {
   }
 
   return (
-    <Block display={props.notFlexed ? 'block' : 'flex'} marginBottom={props.compact ? '.5rem' : '2rem'} width='100%'>
+    <Block display={props.notFlexed ? 'block' : 'flex'} marginBottom={props.compact ? '.5rem' : '2rem'} width="100%">
       {props.label && getLabel()}
-      <Block font='ParagraphMedium'>
-        {props.children}
-      </Block>
+      <Block font="ParagraphMedium">{props.children}</Block>
     </Block>
   )
 }

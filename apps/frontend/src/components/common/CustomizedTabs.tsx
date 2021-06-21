@@ -1,15 +1,13 @@
 import * as React from 'react'
-import {useState} from 'react'
-import {Tab, TabProps, Tabs, TabsProps} from 'baseui/tabs'
-import {StyleObject} from 'styletron-standard'
-import {borderColor, borderStyle, borderWidth, marginZero, paddingZero} from './Style'
-import {theme} from '../../util'
-import {ettlevColors} from '../../util/theme'
+import { useState } from 'react'
+import { Tab, TabProps, Tabs, TabsProps } from 'baseui/tabs'
+import { StyleObject } from 'styletron-standard'
+import { borderColor, borderStyle, borderWidth, marginZero, paddingZero } from './Style'
+import { theme } from '../../util'
+import { ettlevColors } from '../../util/theme'
 
 export const CustomizedTab = (props: TabProps) => {
-  return (
-    <Tab {...props}/>
-  )
+  return <Tab {...props} />
 }
 
 interface CustomizedTabsProps {
@@ -24,7 +22,7 @@ type CustomProps = TabsProps & CustomizedTabsProps
 
 export const CustomizedTabs = (props: CustomProps) => {
   const [activeKeyInternal, setActiveKeyInternal] = useState<React.Key>(0)
-  let {fontColor, activeColor, tabBackground, ...restProps} = props
+  let { fontColor, activeColor, tabBackground, ...restProps } = props
   fontColor = fontColor || 'black'
   activeColor = activeColor || fontColor
 
@@ -60,11 +58,13 @@ export const CustomizedTabs = (props: CustomProps) => {
             ':focus-visible': hoverAndFocusStyle,
             ':active': hoverAndFocusStyle,
 
-            ...(props.small ? {
-              marginRight: theme.sizing.scale1000,
-              fontSize: '18px'
-            } : {}),
-          })
+            ...(props.small
+              ? {
+                  marginRight: theme.sizing.scale1000,
+                  fontSize: '18px',
+                }
+              : {}),
+          }),
         },
         TabBar: {
           style: {
@@ -73,18 +73,18 @@ export const CustomizedTabs = (props: CustomProps) => {
             ...paddingZero,
             marginLeft: '-2px',
             marginRight: '-2px',
-          }
+          },
         },
         TabContent: {
           style: {
             marginTop: theme.sizing.scale1600,
             backgroundColor: props.backgroundColor || ettlevColors.grey25,
             ...paddingZero,
-          }
-        }
+          },
+        },
       }}
-      onChange={({activeKey}) => {
-        if (props.onChange) props.onChange({activeKey})
+      onChange={({ activeKey }) => {
+        if (props.onChange) props.onChange({ activeKey })
         else setActiveKeyInternal(activeKey)
       }}
       activeKey={props.activeKey || activeKeyInternal}

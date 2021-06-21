@@ -1,20 +1,23 @@
 import axios from 'axios'
-import React, {useState} from 'react'
-import {Modal, ModalBody, ModalButton, ModalFooter, ModalHeader} from 'baseui/modal'
+import React, { useState } from 'react'
+import { Modal, ModalBody, ModalButton, ModalFooter, ModalHeader } from 'baseui/modal'
 
 let done = false
 
 const init = (onErr: (e: any) => void) => {
   done = true
-  axios.interceptors.response.use(res => {
-    return res
-  }, err => {
-    if (err?.response?.status !== 404) {
-      console.log('axios error', err)
-      onErr(err)
-    }
-    return Promise.reject(err)
-  })
+  axios.interceptors.response.use(
+    (res) => {
+      return res
+    },
+    (err) => {
+      if (err?.response?.status !== 404) {
+        console.log('axios error', err)
+        onErr(err)
+      }
+      return Promise.reject(err)
+    },
+  )
 }
 
 export const useNetworkStatus = () => {
@@ -27,14 +30,12 @@ export const useNetworkStatus = () => {
 
   return (
     <Modal isOpen={error} onClose={clear} unstable_ModalBackdropScroll>
-      <ModalHeader>
-        Nettverksfeil
-      </ModalHeader>
-      <ModalBody>
-        {error?.toString()}
-      </ModalBody>
+      <ModalHeader>Nettverksfeil</ModalHeader>
+      <ModalBody>{error?.toString()}</ModalBody>
       <ModalFooter>
-        <ModalButton onClick={clear}><b>Lukk</b></ModalButton>
+        <ModalButton onClick={clear}>
+          <b>Lukk</b>
+        </ModalButton>
       </ModalFooter>
     </Modal>
   )

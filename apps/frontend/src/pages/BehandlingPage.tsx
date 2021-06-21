@@ -1,4 +1,4 @@
-import React, {  useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { Block } from 'baseui/block'
 import { useParams } from 'react-router-dom'
 import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
@@ -17,34 +17,37 @@ import { PanelLinkCard, PanelLinkCardOverrides } from '../components/common/Pane
 import { cardWidth } from './TemaPage'
 import { urlForObject } from '../components/common/RouteLink'
 import { KravFilters } from '../api/KravGraphQLApi'
-import { ProgressBar, SIZE } from "baseui/progress-bar";
+import { ProgressBar, SIZE } from 'baseui/progress-bar'
 import { ObjectType } from '../components/admin/audit/AuditTypes'
-
 
 export const BehandlingPage = () => {
   const params = useParams<{ id?: string }>()
   const [behandling, setBehandling] = useBehandling(params.id)
   const formRef = useRef<FormikProps<any>>()
   const { data } = useQuery<{ behandling: PageResponse<{ stats: BehandlingStats }> }>(statsQuery, {
-    variables: { behandlingId: behandling?.id }
+    variables: { behandlingId: behandling?.id },
   })
 
   const [stats, setStats] = useState<any[]>([])
 
-  const filterData = (data: {
-    behandling: PageResponse<{
-      stats: BehandlingStats;
-    }>;
-  } | undefined) => {
+  const filterData = (
+    data:
+      | {
+          behandling: PageResponse<{
+            stats: BehandlingStats
+          }>
+        }
+      | undefined,
+  ) => {
     const StatusListe: any[] = []
     data?.behandling.content[0].stats.fyltKrav.forEach((k) => {
       if (k.regelverk.length) {
-        StatusListe.push({ ...k, etterlevelser: k.etterlevelser.filter(e => e.behandlingId === behandling?.id) })
+        StatusListe.push({ ...k, etterlevelser: k.etterlevelser.filter((e) => e.behandlingId === behandling?.id) })
       }
     })
     data?.behandling.content[0].stats.ikkeFyltKrav.forEach((k) => {
       if (k.regelverk.length) {
-        StatusListe.push({ ...k, etterlevelser: k.etterlevelser.filter(e => e.behandlingId === behandling?.id) })
+        StatusListe.push({ ...k, etterlevelser: k.etterlevelser.filter((e) => e.behandlingId === behandling?.id) })
       }
     })
     StatusListe.sort((a, b) => {
@@ -75,23 +78,20 @@ export const BehandlingPage = () => {
       antallFylttKrav += 1
     }
   })
-  const getPercentageUtfylt = stats && stats.length && antallFylttKrav / stats.length * 100
+  const getPercentageUtfylt = stats && stats.length && (antallFylttKrav / stats.length) * 100
 
   const getMainHeader = (behandling: Behandling) => (
-    <Block display="flex" justifyContent="space-between" marginBottom='70px'>
+    <Block display="flex" justifyContent="space-between" marginBottom="70px">
       <Block marginTop={theme.sizing.scale1200}>
         <Label3 color={ettlevColors.green600}>DOKUMENTERE ETTERLEVELSE</Label3>
-        <H1 marginTop='0' color={ettlevColors.green800}>{behandling.navn}</H1>
+        <H1 marginTop="0" color={ettlevColors.green800}>
+          {behandling.navn}
+        </H1>
         <Paragraph2>{behandling.overordnetFormaal.shortName}</Paragraph2>
         <Teams teams={behandling.teams} link list />
       </Block>
 
-      <Block
-        width="400px"
-        height='260px'
-        backgroundColor={ettlevColors.white}
-        marginTop={theme.sizing.scale400}
-      >
+      <Block width="400px" height="260px" backgroundColor={ettlevColors.white} marginTop={theme.sizing.scale400}>
         <Block padding="5px">
           <HeadingLarge>Hva er egenskapene til behandlingen?</HeadingLarge>
           <Block $style={{ fontWeight: 400, fontSize: '18px', fontFamily: 'Source Sans Pro' }}>
@@ -103,37 +103,35 @@ export const BehandlingPage = () => {
   )
 
   const getSecondaryHeader = (behandling: Behandling) => (
-    <Block
-      width='100%'
-      height='100px'
-      maxHeight='100px'
-      display="flex"
-      alignItems="center"
-      justifyContent="space-between"
-    >
+    <Block width="100%" height="100px" maxHeight="100px" display="flex" alignItems="center" justifyContent="space-between">
       <Block display="flex" alignItems="center">
-        <Block marginRight="30px"><img src={arkPennIcon} alt='test' height='50px' width='40px' /></Block>
+        <Block marginRight="30px">
+          <img src={arkPennIcon} alt="test" height="50px" width="40px" />
+        </Block>
         <H2>Tema for dokumentasjon</H2>
       </Block>
 
       <Block display="flex" alignItems="center">
         <Block display="flex" alignItems="baseline" marginRight="30px">
-          <H1 color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>{stats.length}</H1>
+          <H1 color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
+            {stats.length}
+          </H1>
           <Paragraph2>krav</Paragraph2>
         </Block>
 
-        <Block $style={{ border: '1px solid ' + ettlevColors.green50, background: '#102723' }} height='40px' />
+        <Block $style={{ border: '1px solid ' + ettlevColors.green50, background: '#102723' }} height="40px" />
 
         <Block display="flex" alignItems="baseline" marginLeft="30px">
-          <H1 color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>{getPercentageUtfylt?.toFixed(2)}</H1>
+          <H1 color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
+            {getPercentageUtfylt?.toFixed(2)}
+          </H1>
           <Paragraph2>% ferdig utfylt</Paragraph2>
         </Block>
       </Block>
-
     </Block>
   )
 
-  if (!behandling) return <LoadingSkeleton header='Behandling' />
+  if (!behandling) return <LoadingSkeleton header="Behandling" />
 
   return (
     <Layout2
@@ -145,18 +143,20 @@ export const BehandlingPage = () => {
       backBtnUrl={'/behandlinger'}
     >
       <Block display="flex" width="100%" justifyContent="space-between" flexWrap marginTop={theme.sizing.scale1200}>
-        {temaListe.map(tema => <TemaCardBehandling tema={tema} stats={stats} behandling={behandling}/>)}
+        {temaListe.map((tema) => (
+          <TemaCardBehandling tema={tema} stats={stats} behandling={behandling} />
+        ))}
       </Block>
     </Layout2>
   )
 }
 
-const HeaderContent = (props: { tilUtfylling: number, underArbeid: number }) => (
-  <Block marginBottom='33px'>
-    <Paragraph2 marginTop='0px' marginBottom='0px'>
+const HeaderContent = (props: { tilUtfylling: number; underArbeid: number }) => (
+  <Block marginBottom="33px">
+    <Paragraph2 marginTop="0px" marginBottom="0px">
       Til utfylling: {props.tilUtfylling} krav
     </Paragraph2>
-    <Paragraph2 marginTop='0px' marginBottom='0px'>
+    <Paragraph2 marginTop="0px" marginBottom="0px">
       Under arbeid: {props.underArbeid} krav
     </Paragraph2>
   </Block>
@@ -164,16 +164,16 @@ const HeaderContent = (props: { tilUtfylling: number, underArbeid: number }) => 
 
 const filterForBehandling = (behandling: Behandling, lover: string[]): KravFilters => ({ behandlingId: behandling.id, lover: lover })
 
-const TemaCardBehandling = ({ tema, stats, behandling }: { tema: TemaCode, stats: any[], behandling: Behandling }) => {
-  const lover = codelist.getCodesForTema(tema.code).map(c => c.code)
+const TemaCardBehandling = ({ tema, stats, behandling }: { tema: TemaCode; stats: any[]; behandling: Behandling }) => {
+  const lover = codelist.getCodesForTema(tema.code).map((c) => c.code)
 
-  const krav = stats.filter(k => k.regelverk.map((r: any) => r.lov.code).some((r: any) => lover.includes(r)))
+  const krav = stats.filter((k) => k.regelverk.map((r: any) => r.lov.code).some((r: any) => lover.includes(r)))
 
   let utfylt = 0
   let underArbeid = 0
   let tilUtfylling = 0
 
-  krav.forEach(k => {
+  krav.forEach((k) => {
     if (k.etterlevelser.length && k.etterlevelser[0].status === EtterlevelseStatus.FERDIG) {
       utfylt += 1
     } else if (k.etterlevelser.length && (k.etterlevelser[0].status === EtterlevelseStatus.OPPFYLLES_SENERE || k.etterlevelser[0].status === EtterlevelseStatus.UNDER_REDIGERING)) {
@@ -190,7 +190,6 @@ const TemaCardBehandling = ({ tema, stats, behandling }: { tema: TemaCode, stats
   // })
   // const krav = rawData?.krav.content.filter(k => !relevans.length || k.relevansFor.map(r => r.code).some(r => relevans.includes(r))) || []
 
-
   // if (krav.length) {
   //   for (let index = krav.length - 1; index > 0; index--) {
   //     if (krav[index].kravNummer === krav[index - 1].kravNummer) {
@@ -206,61 +205,62 @@ const TemaCardBehandling = ({ tema, stats, behandling }: { tema: TemaCode, stats
         style: {
           backgroundColor: ettlevColors.green100,
           height: '180px',
-          paddingBottom: theme.sizing.scale600
-        }
-      }
+          paddingBottom: theme.sizing.scale600,
+        },
+      },
     },
     Content: {
       Block: {
         style: {
           maskImage: `linear-gradient(${ettlevColors.black} 90%, transparent)`,
           overflow: 'hidden',
-        }
-      }
-    }
+        },
+      },
+    },
   }
 
-
-  return <PanelLinkCard
-    width={cardWidth}
-    overrides={overrides}
-    verticalMargin={theme.sizing.scale400}
-    href={urlForObject(ObjectType.BehandlingDoc, behandling.id, undefined, tema.code)}
-    tittel={tema.shortName}
-    headerContent={<HeaderContent tilUtfylling={tilUtfylling} underArbeid={underArbeid} />}
-    flexContent
-  >
-    <Block marginTop={theme.sizing.scale650}>
-      <Block display='flex' flex={1} >
-        <Paragraph2 marginTop='0px' marginBottom='2px'>
-          Utfylt:
-        </Paragraph2>
-        <Block display='flex' justifyContent='flex-end' flex={1}>
-          <Paragraph2 marginTop='0px' marginBottom='2px'>
-            {krav.length ? (utfylt / krav.length * 100).toFixed(0) : 100}%
+  return (
+    <PanelLinkCard
+      width={cardWidth}
+      overrides={overrides}
+      verticalMargin={theme.sizing.scale400}
+      href={urlForObject(ObjectType.BehandlingDoc, behandling.id, undefined, tema.code)}
+      tittel={tema.shortName}
+      headerContent={<HeaderContent tilUtfylling={tilUtfylling} underArbeid={underArbeid} />}
+      flexContent
+    >
+      <Block marginTop={theme.sizing.scale650}>
+        <Block display="flex" flex={1}>
+          <Paragraph2 marginTop="0px" marginBottom="2px">
+            Utfylt:
           </Paragraph2>
+          <Block display="flex" justifyContent="flex-end" flex={1}>
+            <Paragraph2 marginTop="0px" marginBottom="2px">
+              {krav.length ? ((utfylt / krav.length) * 100).toFixed(0) : 100}%
+            </Paragraph2>
+          </Block>
+        </Block>
+        <Block>
+          <ProgressBar
+            value={utfylt}
+            successValue={krav.length}
+            size={SIZE.large}
+            overrides={{
+              BarProgress: {
+                style: {
+                  backgroundColor: ettlevColors.green800,
+                },
+              },
+              BarContainer: {
+                style: {
+                  marginLeft: '0px',
+                  marginRight: '0px',
+                },
+              },
+            }}
+          />
         </Block>
       </Block>
-      <Block>
-        <ProgressBar
-          value={utfylt}
-          successValue={krav.length}
-          size={SIZE.large}
-          overrides={{
-            BarProgress: {
-              style: {
-                backgroundColor: ettlevColors.green800
-              }
-            },
-            BarContainer: {
-              style: {
-                marginLeft: '0px',
-                marginRight: '0px'
-              }
-            }
-          }}
-        />
-      </Block>
-    </Block>
-  </PanelLinkCard>
+    </PanelLinkCard>
+  )
 }

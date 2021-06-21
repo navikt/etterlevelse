@@ -30,14 +30,12 @@ export const getSuksesskriterieBegrunnelse = (suksesskriterieBegrunnelser: Sukse
 export const SuksesskriterierBegrunnelseEdit = ({ suksesskriterie }: { suksesskriterie: Suksesskriterie[] }) => {
   return (
     <FieldWrapper>
-      <FieldArray name={'suksesskriterieBegrunnelser'}>
-        {p => <KriterieBegrunnelseList props={p} suksesskriterie={suksesskriterie} />}
-      </FieldArray>
+      <FieldArray name={'suksesskriterieBegrunnelser'}>{(p) => <KriterieBegrunnelseList props={p} suksesskriterie={suksesskriterie} />}</FieldArray>
     </FieldWrapper>
   )
 }
 
-const KriterieBegrunnelseList = ({ props, suksesskriterie }: { props: FieldArrayRenderProps, suksesskriterie: Suksesskriterie[] }) => {
+const KriterieBegrunnelseList = ({ props, suksesskriterie }: { props: FieldArrayRenderProps; suksesskriterie: Suksesskriterie[] }) => {
   const suksesskriterieBegrunnelser = props.form.values.suksesskriterieBegrunnelser as SuksesskriterieBegrunnelse[]
 
   return (
@@ -45,12 +43,7 @@ const KriterieBegrunnelseList = ({ props, suksesskriterie }: { props: FieldArray
       {suksesskriterie.map((s, i) => {
         return (
           <Block key={s.navn + '_' + i}>
-            <KriterieBegrunnelse
-              suksesskriterie={s}
-              index={i}
-              suksesskriterieBegrunnelser={suksesskriterieBegrunnelser}
-              update={updated => props.replace(i, updated)}
-            />
+            <KriterieBegrunnelse suksesskriterie={s} index={i} suksesskriterieBegrunnelser={suksesskriterieBegrunnelser} update={(updated) => props.replace(i, updated)} />
           </Block>
         )
       })}
@@ -62,11 +55,11 @@ const KriterieBegrunnelse = ({
   suksesskriterie,
   index,
   suksesskriterieBegrunnelser,
-  update
+  update,
 }: {
-  suksesskriterie: Suksesskriterie,
-  index: number,
-  suksesskriterieBegrunnelser: SuksesskriterieBegrunnelse[],
+  suksesskriterie: Suksesskriterie
+  index: number
+  suksesskriterieBegrunnelser: SuksesskriterieBegrunnelse[]
   update: (s: SuksesskriterieBegrunnelse) => void
 }) => {
   const suksesskriterieBegrunnelse = getSuksesskriterieBegrunnelse(suksesskriterieBegrunnelser, suksesskriterie)
@@ -79,28 +72,23 @@ const KriterieBegrunnelse = ({
   }, [begrunnelse, checked])
 
   return (
-    <Block $style={{border: '1px solid #C9C9C9'}} backgroundColor={ettlevColors.white} padding={theme.sizing.scale750} marginBottom={theme.sizing.scale600}>
-      <Checkbox
-        checked={checked}
-        onChange={() => setChecked(!checked)}
-      >
-        <Paragraph2 margin='0px'>
-          {suksesskriterie.navn}
-        </Paragraph2>
+    <Block $style={{ border: '1px solid #C9C9C9' }} backgroundColor={ettlevColors.white} padding={theme.sizing.scale750} marginBottom={theme.sizing.scale600}>
+      <Checkbox checked={checked} onChange={() => setChecked(!checked)}>
+        <Paragraph2 margin="0px">{suksesskriterie.navn}</Paragraph2>
       </Checkbox>
 
-      
-        {checked && <Block paddingLeft={paddingLeft} marginTop={theme.sizing.scale1000}>
-          <FormControl label={<LabelWithToolTip label='Dokumentasjon' />}>
+      {checked && (
+        <Block paddingLeft={paddingLeft} marginTop={theme.sizing.scale1000}>
+          <FormControl label={<LabelWithToolTip label="Dokumentasjon" />}>
             <TextEditor initialValue={begrunnelse} setValue={setBegrunnelse} height={'188px'} />
           </FormControl>
           <Error fieldName={`suksesskriterieBegrunnelser[${index}].begrunnelse`} fullWidth={true} />
-        </Block>}
-      
+        </Block>
+      )}
 
       <CustomizedAccordion>
         <CustomizedPanel
-          title={<Label3 $style={{color: ettlevColors.green600}}>Utfyllende om kriteriet</Label3>}
+          title={<Label3 $style={{ color: ettlevColors.green600 }}>Utfyllende om kriteriet</Label3>}
           overrides={{
             Header: {
               style: {
@@ -114,8 +102,8 @@ const KriterieBegrunnelse = ({
                 borderBottomStyle: 'none',
                 borderBottomColor: 'none',
                 maxWidth: '210px',
-                paddingLeft: paddingLeft
-              }
+                paddingLeft: paddingLeft,
+              },
             },
             Content: {
               style: {
@@ -123,8 +111,8 @@ const KriterieBegrunnelse = ({
                 borderBottomWidth: 'none',
                 borderBottomStyle: 'none',
                 borderBottomColor: 'none',
-                paddingLeft: paddingLeft
-              }
+                paddingLeft: paddingLeft,
+              },
             },
           }}
         >

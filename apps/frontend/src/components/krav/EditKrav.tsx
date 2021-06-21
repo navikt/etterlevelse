@@ -19,10 +19,10 @@ import Button from '../common/Button'
 import { ettlevColors, maxPageWidth, theme } from '../../util/theme'
 
 type EditKravProps = {
-  krav: KravQL,
-  close: (k?: Krav) => void,
-  formRef: React.Ref<any>,
-  isOpen: boolean | undefined,
+  krav: KravQL
+  close: (k?: Krav) => void
+  formRef: React.Ref<any>
+  isOpen: boolean | undefined
   setIsOpen: Function
 }
 
@@ -63,118 +63,148 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
         overrides={{
           Root: {
             props: {
-              id: 'krav-modal'
-            }
-          }
+              id: 'krav-modal',
+            },
+          },
         }}
       >
-        <Formik
-          onSubmit={submit}
-          initialValues={mapToFormVal(krav)}
-          validationSchema={kravSchema()}
-          innerRef={formRef}
-        >{({ isSubmitting, submitForm }) => (
-          <Form>
-            <Block
-              backgroundColor={ettlevColors.green800}
-              paddingTop='23px'
-              paddingBottom={!stickyHeader ? '48px' : '20px'}
-              paddingLeft={paddingPx}
-              paddingRight='32px'
-              position='sticky'
-              top={0}
-              display={!stickyHeader ? 'block' : 'flex'}
-              $style={{ zIndex: 1 }}
-            >
-              {stickyHeader && (
-                <Block display='flex' width='100%' justifyContent='flex-start'>
-                  <LabelLarge $style={{ color: '#F8F8F8' }}>{`K${krav.kravNummer}.${krav.kravVersjon} ${krav.navn}`}</LabelLarge>
+        <Formik onSubmit={submit} initialValues={mapToFormVal(krav)} validationSchema={kravSchema()} innerRef={formRef}>
+          {({ isSubmitting, submitForm }) => (
+            <Form>
+              <Block
+                backgroundColor={ettlevColors.green800}
+                paddingTop="23px"
+                paddingBottom={!stickyHeader ? '48px' : '20px'}
+                paddingLeft={paddingPx}
+                paddingRight="32px"
+                position="sticky"
+                top={0}
+                display={!stickyHeader ? 'block' : 'flex'}
+                $style={{ zIndex: 1 }}
+              >
+                {stickyHeader && (
+                  <Block display="flex" width="100%" justifyContent="flex-start">
+                    <LabelLarge $style={{ color: '#F8F8F8' }}>{`K${krav.kravNummer}.${krav.kravVersjon} ${krav.navn}`}</LabelLarge>
+                  </Block>
+                )}
+                <Block display="flex" justifyContent="flex-end">
+                  <Button size="compact" kind="secondary" onClick={submitForm} disabled={isSubmitting} type={'button'} marginLeft>
+                    Lagre
+                  </Button>
+                  <Button
+                    size="compact"
+                    $style={{ color: '#F8F8F8', ':hover': { backgroundColor: 'transparent', textDecoration: 'underline 3px' } }}
+                    kind={'tertiary'}
+                    type={'button'}
+                    onClick={close}
+                    marginLeft
+                  >
+                    Avbryt
+                  </Button>
                 </Block>
-              )}
-              <Block display='flex' justifyContent='flex-end'>
-                <Button
-                  size='compact'
-                  kind='secondary'
-                  onClick={submitForm}
-                  disabled={isSubmitting}
-                  type={'button'}
-                  marginLeft>
-                  Lagre
-                </Button>
-                <Button
-                  size='compact'
-                  $style={{ color: '#F8F8F8', ':hover': { backgroundColor: 'transparent', textDecoration: 'underline 3px' } }}
-                  kind={'tertiary'}
-                  type={'button'}
-                  onClick={close}
-                  marginLeft>
-                  Avbryt
-                </Button>
+                {!stickyHeader && (
+                  <Block>
+                    <H1 $style={{ color: '#F8F8F8' }}>Rediger kravside: </H1>
+                    <H2 $style={{ color: '#F8F8F8' }}>{`K${krav.kravNummer}.${krav.kravVersjon} ${krav.navn}`} </H2>
+                  </Block>
+                )}
               </Block>
-              {!stickyHeader && (
-                <Block>
-                  <H1 $style={{ color: '#F8F8F8' }}>Rediger kravside: </H1>
-                  <H2 $style={{ color: '#F8F8F8' }}>{`K${krav.kravNummer}.${krav.kravVersjon} ${krav.navn}`} </H2>
+              <Block>
+                <Block backgroundColor="#F1F1F1" paddingTop="48px" paddingLeft={paddingPx} paddingRight={paddingPx} paddingBottom="64px">
+                  <InputField
+                    marginBottom={inputMarginBottom}
+                    label="Krav-tittel"
+                    name="navn"
+                    tooltip={'Gi kravet en kort tittel. Kravet formuleres som en aktivitet eller målsetting.'}
+                  />
+                  <TextAreaField
+                    marginBottom="0px"
+                    label="Hensikt"
+                    name="hensikt"
+                    markdown
+                    shortenLinks
+                    onImageUpload={onImageUpload(krav.id)}
+                    tooltip={'Bruk noen setninger på å forklare hensikten med kravet. Formålet er at leseren skal forstå hvorfor vi har dette kravet.'}
+                  />
                 </Block>
-              )}
-            </Block>
-            <Block>
-              <Block backgroundColor='#F1F1F1' paddingTop='48px' paddingLeft={paddingPx} paddingRight={paddingPx} paddingBottom='64px'>
-                <InputField marginBottom={inputMarginBottom} label='Krav-tittel' name='navn' tooltip={'Gi kravet en kort tittel. Kravet formuleres som en aktivitet eller målsetting.'} />
-                <TextAreaField marginBottom='0px' label='Hensikt' name='hensikt' markdown shortenLinks onImageUpload={onImageUpload(krav.id)}
-                  tooltip={'Bruk noen setninger på å forklare hensikten med kravet. Formålet er at leseren skal forstå hvorfor vi har dette kravet.'} />
-              </Block>
 
-              <Block display='flex' width='100%' justifyContent='center'>
-                <Block width={width}>
-                  <H2 marginBottom={inputMarginBottom}>Om Kravet</H2>
-                  <KravSuksesskriterierEdit />
-                  {/* 
+                <Block display="flex" width="100%" justifyContent="center">
+                  <Block width={width}>
+                    <H2 marginBottom={inputMarginBottom}>Om Kravet</H2>
+                    <KravSuksesskriterierEdit />
+                    {/* 
                   <TextAreaField marginBottom='80px' label='Beskrivelse' name='beskrivelse' markdown shortenLinks onImageUpload={onImageUpload(krav.id)}
                     tooltip={'Beskriv selve innholdet i kravet.'} /> 
                     */}
-                  {/*
+                    {/*
                       <TextAreaField label='Utfyllende beskrivelse' name='utdypendeBeskrivelse' markdown shortenLinks onImageUpload={onImageUpload(krav.id)}
                         tooltip={'Legg til en utfyllende beskrivelse av kravet. Benyttes kun der det er behov for det.'} /> */}
 
-                  <Block marginBottom={inputMarginBottom}>
-                    <H2>Dokumentasjon</H2>
-                  </Block>
+                    <Block marginBottom={inputMarginBottom}>
+                      <H2>Dokumentasjon</H2>
+                    </Block>
 
-                  <MultiInputField marginBottom={inputMarginBottom} maxInputWidth={maxInputWidth} linkLabel='Navn på dokumentasjon' name='dokumentasjon' link label='Lenke eller websaknr' tooltip='Lenke til dokumentasjon'
-                    linkTooltip={'Legg inn referanse til utdypende dokumentasjon (lenke). Eksempelvis til navet, eksterne nettsider eller Websak.'} />
-                  <KravRegelverkEdit />
-                  <TextAreaField label='Relevante implementasjoner' name='implementasjoner' markdown tooltip={'Vis til gode eksisterende implementasjoner som ivaretar kravet.'} />
-                  {/* <MultiInputField label='Rettskilder' name='rettskilder' link /> */}
+                    <MultiInputField
+                      marginBottom={inputMarginBottom}
+                      maxInputWidth={maxInputWidth}
+                      linkLabel="Navn på dokumentasjon"
+                      name="dokumentasjon"
+                      link
+                      label="Lenke eller websaknr"
+                      tooltip="Lenke til dokumentasjon"
+                      linkTooltip={'Legg inn referanse til utdypende dokumentasjon (lenke). Eksempelvis til navet, eksterne nettsider eller Websak.'}
+                    />
+                    <KravRegelverkEdit />
+                    <TextAreaField
+                      label="Relevante implementasjoner"
+                      name="implementasjoner"
+                      markdown
+                      tooltip={'Vis til gode eksisterende implementasjoner som ivaretar kravet.'}
+                    />
+                    {/* <MultiInputField label='Rettskilder' name='rettskilder' link /> */}
 
-                  <Block marginTop='80px' marginBottom={inputMarginBottom}>
-                    <H2>Gruppering og etiketter</H2>
-                  </Block>
+                    <Block marginTop="80px" marginBottom={inputMarginBottom}>
+                      <H2>Gruppering og etiketter</H2>
+                    </Block>
 
-                  <Block width='100%' maxWidth={maxInputWidth}>
-                    <MultiOptionField marginBottom={inputMarginBottom} label='Relevant for' name='relevansFor' listName={ListName.RELEVANS}
-                      tooltip={'Velg kategori(er) kravet er relevant for i nedtrekksmenyen. \n'} />
-                  </Block>
+                    <Block width="100%" maxWidth={maxInputWidth}>
+                      <MultiOptionField
+                        marginBottom={inputMarginBottom}
+                        label="Relevant for"
+                        name="relevansFor"
+                        listName={ListName.RELEVANS}
+                        tooltip={'Velg kategori(er) kravet er relevant for i nedtrekksmenyen. \n'}
+                      />
+                    </Block>
 
-                  <MultiInputField marginBottom={inputMarginBottom} maxInputWidth={maxInputWidth} label='Etiketter' name='tagger' tooltip={'Tag kravet med et eller flere nøkkelord. Hensikten er å skape relasjon(er) til andre krav.'} />
+                    <MultiInputField
+                      marginBottom={inputMarginBottom}
+                      maxInputWidth={maxInputWidth}
+                      label="Etiketter"
+                      name="tagger"
+                      tooltip={'Tag kravet med et eller flere nøkkelord. Hensikten er å skape relasjon(er) til andre krav.'}
+                    />
 
-                  <Block width='100%' maxWidth={maxInputWidth} marginBottom='80px'>
-                    <EditBegreper />
-                  </Block>
+                    <Block width="100%" maxWidth={maxInputWidth} marginBottom="80px">
+                      <EditBegreper />
+                    </Block>
 
-                  <Block marginBottom={inputMarginBottom}>
-                    <H2>Egenskaper</H2>
-                  </Block>
+                    <Block marginBottom={inputMarginBottom}>
+                      <H2>Egenskaper</H2>
+                    </Block>
 
-                  <Block width='100%' maxWidth={maxInputWidth} marginBottom={inputMarginBottom}>
-                    <OptionField label='Status' name='status' options={Object.values(KravStatus).map(id => ({ id, label: kravStatus(id) }))}
-                      tooltip={'Velg status for kravet. Utkast er kun synlig for kraveier selv. Aktiv/utgått er synlig for alle.'} />
-                  </Block>
+                    <Block width="100%" maxWidth={maxInputWidth} marginBottom={inputMarginBottom}>
+                      <OptionField
+                        label="Status"
+                        name="status"
+                        options={Object.values(KravStatus).map((id) => ({ id, label: kravStatus(id) }))}
+                        tooltip={'Velg status for kravet. Utkast er kun synlig for kraveier selv. Aktiv/utgått er synlig for alle.'}
+                      />
+                    </Block>
 
-                  <KravVarslingsadresserEdit />
+                    <KravVarslingsadresserEdit />
 
-
-                  {/* 
+                    {/* 
 
                                     <OptionField label='Ansvarlig' name='Ansvarlig' listName={ListName.UNDERAVDELING}
                     tooltip={'Angi hvilken seksjon/underavdeling som har ansvaret for kravet.'} />
@@ -187,11 +217,11 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
                       <TextAreaField label='Endringer fra forrige versjon' name='versjonEndringer'
                                      tooltip={'Gi informasjon om hva som er endret siden forrige versjon av kravet.'}/> 
                                      */}
+                  </Block>
                 </Block>
               </Block>
-            </Block>
-          </Form>
-        )}
+            </Form>
+          )}
         </Formik>
       </CustomizedModal>
     </Block>

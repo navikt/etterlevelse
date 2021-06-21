@@ -1,24 +1,24 @@
-import {useHistory} from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import React from 'react'
-import {AuditItem, NavigableItem, ObjectType} from '../admin/audit/AuditTypes'
-import {Block} from 'baseui/block'
-import {AuditButton} from '../admin/audit/AuditButton'
-import {KIND} from 'baseui/button'
-import {ListName} from '../../services/Codelist'
-import CustomizedLink from "./CustomizedLink";
+import { AuditItem, NavigableItem, ObjectType } from '../admin/audit/AuditTypes'
+import { Block } from 'baseui/block'
+import { AuditButton } from '../admin/audit/AuditButton'
+import { KIND } from 'baseui/button'
+import { ListName } from '../../services/Codelist'
+import CustomizedLink from './CustomizedLink'
 import _ from 'lodash'
-import {user} from '../../services/User'
-import {loginUrl} from '../Header'
+import { user } from '../../services/User'
+import { loginUrl } from '../Header'
 
 type RouteLinkProps = {
-  href: string,
+  href: string
   hideUnderline?: boolean
-  plain?: boolean,
-  requireLogin?: boolean,
+  plain?: boolean
+  requireLogin?: boolean
 } & any
 
 const RouteLink = (props: RouteLinkProps) => {
-  const {hideUnderline, plain, requireLogin, style, ...restprops} = props
+  const { hideUnderline, plain, requireLogin, style, ...restprops } = props
   const history = useHistory()
 
   const onClick = (e: Event) => {
@@ -31,16 +31,14 @@ const RouteLink = (props: RouteLinkProps) => {
   const customStyle = {
     textDecoration: hideUnderline ? 'none' : undefined,
     color: plain ? 'inherit !important' : undefined,
-    fontWeight: "normal"
+    fontWeight: 'normal',
   }
 
   const mergedStyle = _.merge(customStyle, props.style)
 
   const href = !requireLogin || user.isLoggedIn() ? restprops.href : loginUrl(history, restprops.href)
 
-  return (
-    <CustomizedLink style={mergedStyle} {...restprops} href={href} onClick={onClick}/>
-  )
+  return <CustomizedLink style={mergedStyle} {...restprops} href={href} onClick={onClick} />
 }
 
 export default RouteLink
@@ -79,34 +77,51 @@ export const urlForObject = (type: NavigableItem, id: string, audit?: AuditItem,
     case ObjectType.Codelist:
       return `/admin/codelist/${id}`
   }
-  console.warn('couldn\'t find object type ' + type)
+  console.warn("couldn't find object type " + type)
   return ''
 }
 
 export const ObjectLink = (props: ObjectLinkProps) => {
   if (!props.id) return null
-  const link =
-    props.disable ? props.children :
-      <RouteLink href={urlForObject(props.type, props.id, props.audit)}
-                 hideUnderline={props.hideUnderline}>
-        {props.children}
-      </RouteLink>
+  const link = props.disable ? (
+    props.children
+  ) : (
+    <RouteLink href={urlForObject(props.type, props.id, props.audit)} hideUnderline={props.hideUnderline}>
+      {props.children}
+    </RouteLink>
+  )
 
-  return props.withHistory ?
+  return props.withHistory ? (
     <Block display="flex" justifyContent="space-between" width="100%" alignItems="center">
       {link}
-      <AuditButton id={props.id} kind={KIND.tertiary}/>
-    </Block> :
+      <AuditButton id={props.id} kind={KIND.tertiary} />
+    </Block>
+  ) : (
     link
+  )
 }
 
-export const ExternalLink = ({href, children, hideUnderline, label, fontColor}: {
-  href: string, hideUnderline?: boolean, label?: string
-  children: React.ReactNode, fontColor?: string
+export const ExternalLink = ({
+  href,
+  children,
+  hideUnderline,
+  label,
+  fontColor,
+}: {
+  href: string
+  hideUnderline?: boolean
+  label?: string
+  children: React.ReactNode
+  fontColor?: string
 }) => {
   return (
-    <CustomizedLink href={href} target="_blank" rel="noopener noreferrer" style={{color: fontColor ? fontColor : undefined, textDecoration: hideUnderline ? 'none' : undefined}}
-                    aria-label={label}>
+    <CustomizedLink
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      style={{ color: fontColor ? fontColor : undefined, textDecoration: hideUnderline ? 'none' : undefined }}
+      aria-label={label}
+    >
       {children}
     </CustomizedLink>
   )

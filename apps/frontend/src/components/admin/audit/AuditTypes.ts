@@ -1,24 +1,24 @@
-import {ListName} from '../../../services/Codelist'
+import { ListName } from '../../../services/Codelist'
 
 export interface AuditItem {
-  action: AuditAction;
-  id: string;
-  table: ObjectType;
-  tableId: string;
-  time: string;
-  user: string;
-  data: object;
+  action: AuditAction
+  id: string
+  table: ObjectType
+  tableId: string
+  time: string
+  user: string
+  data: object
 }
 
 export interface AuditLog {
-  id: string;
-  audits: AuditItem[];
+  id: string
+  audits: AuditItem[]
 }
 
 export enum AuditAction {
   CREATE = 'CREATE',
   UPDATE = 'UPDATE',
-  DELETE = 'DELETE'
+  DELETE = 'DELETE',
 }
 
 export enum ObjectType {
@@ -28,11 +28,7 @@ export enum ObjectType {
   Etterlevelse = 'Etterlevelse',
   Behandling = 'Behandling',
   BehandlingData = 'BehandlingData',
-  BehandlingDoc = 'BehandlingDoc'
+  BehandlingDoc = 'BehandlingDoc',
 }
 
-export type NavigableItem = ObjectType |
-  ListName.RELEVANS |
-  ListName.UNDERAVDELING |
-  ListName.TEMA |
-  ListName.LOV
+export type NavigableItem = ObjectType | ListName.RELEVANS | ListName.UNDERAVDELING | ListName.TEMA | ListName.LOV

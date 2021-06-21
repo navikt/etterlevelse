@@ -14,16 +14,16 @@ export const RelevansPage = () => {
 
   if (!relevans) {
     return (
-      <Block maxWidth={maxPageWidth} width='100%'>
-        <Block paddingLeft='40px' paddingRight='40px' width='calc(100%-80px)' display='flex' justifyContent='center'>
+      <Block maxWidth={maxPageWidth} width="100%">
+        <Block paddingLeft="40px" paddingRight="40px" width="calc(100%-80px)" display="flex" justifyContent="center">
           <Block>
             <HeadingMedium>Velg relevans</HeadingMedium>
             <Block>
-              {codelist.getCodes(ListName.RELEVANS).map((code) =>
+              {codelist.getCodes(ListName.RELEVANS).map((code) => (
                 <Block key={code.code} marginBottom={theme.sizing.scale400}>
                   <RouteLink href={`/relevans/${code.code}`}>{code.shortName}</RouteLink>
                 </Block>
-              )}
+              ))}
             </Block>
           </Block>
         </Block>
@@ -33,8 +33,8 @@ export const RelevansPage = () => {
 
   const code = codelist.getCode(ListName.RELEVANS, relevans)
   return (
-    <Block maxWidth={maxPageWidth} width='100%'>
-      <Block paddingLeft='40px' paddingRight='40px' width='calc(100%-80px)' display='flex' justifyContent='center'>
+    <Block maxWidth={maxPageWidth} width="100%">
+      <Block paddingLeft="40px" paddingRight="40px" width="calc(100%-80px)" display="flex" justifyContent="center">
         <Block>
           <HeadingMedium>Relevans: {code?.shortName}</HeadingMedium>
           <ParagraphMedium>{code?.description}</ParagraphMedium>
@@ -48,7 +48,6 @@ export const RelevansPage = () => {
             <HeadingSmall marginBottom={theme.sizing.scale200}>Behandlinger</HeadingSmall>
             <BehandlingFilterTable filter={{ relevans: [relevans] }} />
           </Block>
-
         </Block>
       </Block>
     </Block>

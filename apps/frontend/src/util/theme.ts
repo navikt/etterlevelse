@@ -1,7 +1,7 @@
-import {createTheme, lightThemePrimitives} from 'baseui'
-import {colors} from 'baseui/tokens'
-import {Theme, ThemePrimitives} from 'baseui/theme'
-import {RecursivePartial} from '../constants'
+import { createTheme, lightThemePrimitives } from 'baseui'
+import { colors } from 'baseui/tokens'
+import { Theme, ThemePrimitives } from 'baseui/theme'
+import { RecursivePartial } from '../constants'
 import '@fontsource/source-sans-pro/200.css'
 import '@fontsource/source-sans-pro/300.css'
 import '@fontsource/source-sans-pro/400.css'
@@ -39,7 +39,7 @@ export const ettlevColors = {
   focusOutline: '#276ef1',
 }
 
-export const primitives: ThemePrimitives & {primary150: string, primary350: string} = {
+export const primitives: ThemePrimitives & { primary150: string; primary350: string } = {
   ...lightThemePrimitives,
   primaryA: ettlevColors.green800,
   primary: '#19548a',
@@ -63,7 +63,6 @@ export const searchResultColor = {
 }
 
 const overrides: RecursivePartial<Theme> = {
-
   colors: {
     //primary button color overrides:
     buttonPrimaryFill: ettlevColors.green400,
@@ -104,7 +103,6 @@ const overrides: RecursivePartial<Theme> = {
 
     inputEnhancerFill: primitives.primary100,
 
-
     tabBarFill: colors.white,
   },
   borders: {
@@ -113,28 +111,28 @@ const overrides: RecursivePartial<Theme> = {
   },
   typography: {
     // Increase weight 500->600 on bold texts
-    font100: {fontWeight: 400, fontSize: '14px', lineHeight: '20px'}, //P4
-    font150: {fontWeight: 500, fontSize: '14px', lineHeight: '20px'}, // mini button
-    font200: {fontWeight: 400, fontSize: '16px', lineHeight: '20px'},
-    font250: {fontWeight: 700, fontSize: '18px', lineHeight: '24px'}, //compact button, label3
-    font300: {fontWeight: 400, fontSize: '18px', lineHeight: '24px'}, //P2
-    font350: {fontWeight: 600},
+    font100: { fontWeight: 400, fontSize: '14px', lineHeight: '20px' }, //P4
+    font150: { fontWeight: 500, fontSize: '14px', lineHeight: '20px' }, // mini button
+    font200: { fontWeight: 400, fontSize: '16px', lineHeight: '20px' },
+    font250: { fontWeight: 700, fontSize: '18px', lineHeight: '24px' }, //compact button, label3
+    font300: { fontWeight: 400, fontSize: '18px', lineHeight: '24px' }, //P2
+    font350: { fontWeight: 600 },
 
-    font400: {fontWeight: 400, fontSize: '22px', lineHeight: '32px'}, //P1
+    font400: { fontWeight: 400, fontSize: '22px', lineHeight: '32px' }, //P1
 
-    font450: {fontWeight: 600},
-    font550: {fontWeight: 600},
-    font650: {fontWeight: 600},
+    font450: { fontWeight: 600 },
+    font550: { fontWeight: 600 },
+    font650: { fontWeight: 600 },
 
-    font750: {fontWeight: 700, fontSize: '18px', lineHeight: '24px'}, //H4
-    font850: {fontWeight: 700, fontSize: '22px', lineHeight: '28px'}, //H3
-    font950: {fontWeight: 900, fontSize: '24px', lineHeight: '32px'}, //H2
-    font1050: {fontWeight: 900, fontSize: '32px', lineHeight: '40px'}, //H1
+    font750: { fontWeight: 700, fontSize: '18px', lineHeight: '24px' }, //H4
+    font850: { fontWeight: 700, fontSize: '22px', lineHeight: '28px' }, //H3
+    font950: { fontWeight: 900, fontSize: '24px', lineHeight: '32px' }, //H2
+    font1050: { fontWeight: 900, fontSize: '32px', lineHeight: '40px' }, //H1
 
-    font1150: {fontWeight: 600},
-    font1250: {fontWeight: 600},
-    font1350: {fontWeight: 600},
-    font1450: {fontWeight: 600},
+    font1150: { fontWeight: 600 },
+    font1250: { fontWeight: 600 },
+    font1350: { fontWeight: 600 },
+    font1450: { fontWeight: 600 },
   },
 }
 
@@ -148,7 +146,7 @@ const breakpoints: any = {
   medium: 648,
   large: 768,
   xlarge: 960,
-  xxlarge: 1276
+  xxlarge: 1276,
 }
 
 const ResponsiveTheme = Object.keys(breakpoints).reduce(
@@ -159,8 +157,6 @@ const ResponsiveTheme = Object.keys(breakpoints).reduce(
   {
     breakpoints,
     mediaQuery: {},
-  }
+  },
 )
-export const customTheme = {...theme, ...ResponsiveTheme}
-
-
+export const customTheme = { ...theme, ...ResponsiveTheme }

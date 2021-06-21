@@ -1,33 +1,33 @@
-import {Code, LovCode} from './services/Codelist'
-import {Group} from './services/User'
+import { Code, LovCode } from './services/Codelist'
+import { Group } from './services/User'
 
 export type RecursivePartial<T> = {
-  [P in keyof T]?: T[P] extends (infer U)[] ? RecursivePartial<U>[] : T[P] extends object ? RecursivePartial<T[P]> : T[P];
+  [P in keyof T]?: T[P] extends (infer U)[] ? RecursivePartial<U>[] : T[P] extends object ? RecursivePartial<T[P]> : T[P]
 }
 
 type Not<T> = { [key in keyof T]?: never }
 export type Or<T, U> = (T & Not<U>) | (U & Not<T>)
 
 export interface UserInfo {
-  loggedIn: boolean;
-  groups: Group[];
-  ident?: string;
-  name?: string;
-  email?: string;
+  loggedIn: boolean
+  groups: Group[]
+  ident?: string
+  name?: string
+  email?: string
 }
 
 export interface PageResponse<T> {
-  pageNumber: number;
-  pageSize: number;
-  pages: number;
-  numberOfElements: number;
-  totalElements: number;
-  content: T[];
+  pageNumber: number
+  pageSize: number
+  pages: number
+  numberOfElements: number
+  totalElements: number
+  content: T[]
 }
 
 export interface ChangeStamp {
-  lastModifiedBy: string;
-  lastModifiedDate: string;
+  lastModifiedBy: string
+  lastModifiedDate: string
 }
 
 export interface DomainObject {
@@ -97,7 +97,7 @@ export interface SlackUser {
 export enum AdresseType {
   EPOST = 'EPOST',
   SLACK = 'SLACK',
-  SLACK_USER = 'SLACK_USER'
+  SLACK_USER = 'SLACK_USER',
 }
 
 export interface Etterlevelse extends DomainObject {
@@ -164,13 +164,13 @@ export interface TilbakemeldingMelding {
 
 export enum TilbakemeldingRolle {
   KRAVEIER = 'KRAVEIER',
-  MELDER = 'MELDER'
+  MELDER = 'MELDER',
 }
 
 export enum TilbakemeldingType {
   GOD = 'GOD',
   UKLAR = 'UKLAR',
-  ANNET = 'ANNET'
+  ANNET = 'ANNET',
 }
 
 export enum EtterlevelseStatus {
@@ -184,55 +184,57 @@ export enum KravStatus {
   UTKAST = 'UTKAST',
   UNDER_ARBEID = 'UNDER_ARBEID',
   AKTIV = 'AKTIV',
-  UTGAATT = 'UTGAATT'
+  UTGAATT = 'UTGAATT',
 }
 
-export const emptyPage = {content: [], numberOfElements: 0, pageNumber: 0, pages: 0, pageSize: 1, totalElements: 0}
-
+export const emptyPage = { content: [], numberOfElements: 0, pageNumber: 0, pages: 0, pageSize: 1, totalElements: 0 }
 
 export interface TeamResource {
-  navIdent: string;
-  givenName: string;
-  familyName: string;
-  fullName: string;
-  email: string;
-  resourceType: string;
+  navIdent: string
+  givenName: string
+  familyName: string
+  fullName: string
+  email: string
+  resourceType: string
 }
 
 export interface Team {
-  id: string;
-  name: string;
-  description: string;
-  productAreaId?: string;
-  slackChannel?: string;
-  tags: string[];
-  members: Member[];
+  id: string
+  name: string
+  description: string
+  productAreaId?: string
+  slackChannel?: string
+  tags: string[]
+  members: Member[]
 }
 
 export interface Member {
-  name?: string;
-  email?: string;
+  name?: string
+  email?: string
 }
 
 export interface ExternalCode {
-  list: string;
-  code: string;
-  shortName: string;
-  description: string;
+  list: string
+  code: string
+  shortName: string
+  description: string
 }
 
 export interface Begrep {
-  id: string;
-  navn: string;
-  beskrivelse: string;
+  id: string
+  navn: string
+  beskrivelse: string
 }
 
 // export type KravQL = Omit<Krav, 'varslingsadresser'> & {
-export type KravQL = Replace<Krav, {
-  etterlevelser: EtterlevelseQL[]
-  varslingsadresser: VarslingsadresseQL[]
-  begreper: Begrep[]
-}>
+export type KravQL = Replace<
+  Krav,
+  {
+    etterlevelser: EtterlevelseQL[]
+    varslingsadresser: VarslingsadresseQL[]
+    begreper: Begrep[]
+  }
+>
 
 export type EtterlevelseQL = Etterlevelse & {
   behandling: BehandlingQL
