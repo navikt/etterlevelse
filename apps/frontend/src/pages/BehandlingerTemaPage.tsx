@@ -2,19 +2,24 @@ import React, { useEffect, useState } from 'react'
 import { Block } from 'baseui/block'
 import { useParams } from 'react-router-dom'
 import { H1, H2, HeadingLarge, Label3, Paragraph2, Paragraph4 } from 'baseui/typography'
-import { ettlevColors, theme } from '../util/theme'
+import { ettlevColors, maxPageWidth, theme } from '../util/theme'
 import { codelist, ListName, TemaCode } from "../services/Codelist";
 import RouteLink, { urlForObject } from "../components/common/RouteLink";
 import { useBehandling } from "../api/BehandlingApi";
 import { ObjectType } from "../components/admin/audit/AuditTypes";
 import { Layout2 } from "../components/scaffold/Page";
-import { Behandling, Etterlevelse, EtterlevelseStatus, KravQL, PageResponse, Suksesskriterie } from "../constants";
-import { KravFilters } from "../api/KravGraphQLApi";
-import { arkPennIcon, circlePencilIcon } from "../components/Images";
+import { Etterlevelse, EtterlevelseStatus, KravQL, PageResponse, Suksesskriterie } from "../constants";
+import { arkPennIcon, circlePencilIcon, crossIcon } from "../components/Images";
 import { behandlingKravQuery } from "../components/behandling/ViewBehandling";
 import { useQuery } from "@apollo/client";
 import { CustomizedAccordion, CustomizedPanel } from '../components/common/CustomizedAccordion'
 import { Card } from 'baseui/card'
+import { Button, KIND } from 'baseui/button'
+import CustomizedModal from '../components/common/CustomizedModal'
+import { Spinner } from 'baseui/icon'
+import { useEtterlevelse } from '../api/EtterlevelseApi'
+import { EditEtterlevelse } from '../components/etterlevelse/EditEtterlevelse'
+import { kravFullQuery, KravId } from '../api/KravApi'
 
 type KravEtterlevelseData = {
   kravNummer: number
@@ -26,6 +31,9 @@ type KravEtterlevelseData = {
   etterlevelseStatus?: EtterlevelseStatus
   suksesskriterier: Suksesskriterie[]
 }
+
+const modalPaddingRight = '104px'
+const modalPaddingLeft = '112px'
 
 const mapEtterlevelseData = (etterlevelse?: Etterlevelse) => ({
   etterlevelseId: etterlevelse?.id,
@@ -39,7 +47,6 @@ export const BehandlingerTemaPage = () => {
   const temaData: TemaCode | undefined = codelist.getCode(ListName.TEMA, params.tema)
   const [behandling, setBehandling] = useBehandling(params.id)
   const lover = codelist.getCodesForTema(temaData?.code).map((c) => c.code)
-  const filterForBehandling = (behandling: Behandling, lover: string[]): KravFilters => ({ behandlingId: behandling.id, lover: lover })
   const variables = { behandlingId: params.id, lover: lover }
   const { data: rawData, loading } = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
     variables,
@@ -50,6 +57,9 @@ export const BehandlingerTemaPage = () => {
   const [utfyltKrav, setUtfyltKrav] = useState<KravEtterlevelseData[]>([])
   const [underArbeidKrav, setUnderArbeidKrav] = useState<KravEtterlevelseData[]>([])
   const [skalUtfyllesKrav, setSkalUtfyllesKrav] = useState<KravEtterlevelseData[]>([])
+
+  const [edit, setEdit] = useState<string | undefined>()
+  const [kravId, setKravId] = useState<KravId | undefined>()
 
   useEffect(() => {
     const mapped = (rawData?.krav.content || []).map((krav) => {
@@ -65,8 +75,12 @@ export const BehandlingerTemaPage = () => {
     setKravData(mapped)
   }, [rawData])
 
+  const update = (etterlevelse: Etterlevelse) => {
+    setKravData(kravData.map((e) => (e.kravVersjon === etterlevelse.kravVersjon && e.kravNummer === etterlevelse.kravNummer ? { ...e, ...mapEtterlevelseData(etterlevelse) } : e)))
+  }
+
   useEffect(() => {
-    setUtfyltKrav(kravData.filter((k) => k.etterlevelseStatus === EtterlevelseStatus.FERDIG))
+    setUtfyltKrav(kravData.filter((k) => k.etterlevelseStatus === EtterlevelseStatus.FERDIG || k.etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT))
     setUnderArbeidKrav(kravData.filter((k) => k.etterlevelseStatus === EtterlevelseStatus.OPPFYLLES_SENERE || k.etterlevelseStatus === EtterlevelseStatus.UNDER_REDIGERING))
     setSkalUtfyllesKrav(kravData.filter((k) => k.etterlevelseStatus === undefined || null))
   }, [kravData])
@@ -75,7 +89,7 @@ export const BehandlingerTemaPage = () => {
     let antallUtfylt = 0
 
     kravData.forEach((k) => {
-      if (k.etterlevelseStatus === EtterlevelseStatus.FERDIG) {
+      if (k.etterlevelseStatus === EtterlevelseStatus.FERDIG || k.etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT) {
         antallUtfylt += 1
       }
     })
@@ -135,8 +149,6 @@ export const BehandlingerTemaPage = () => {
     </Block>
   )
 
-  console.log(kravData.filter((k) => k.etterlevelseStatus === undefined || null))
-
   return (
     <Layout2
       headerBackgroundColor={ettlevColors.green100}
@@ -144,26 +156,52 @@ export const BehandlingerTemaPage = () => {
       secondaryHeaderBackgroundColor={ettlevColors.white}
       secondaryHeader={getSecondaryHeader()}
       childrenBackgroundColor={ettlevColors.grey50}
-      backBtnUrl={'/behandlinger'}
+      backBtnUrl={`/behandling/${params.id}`}
     >
       <Block display="flex" width="100%" justifyContent="space-between" flexWrap marginTop='87px' marginBottom='87px'>
         <CustomizedAccordion>
           <CustomizedPanel title={<PanelHeader title={'Skal fylles ut'} kravData={skalUtfyllesKrav} />}>
             {skalUtfyllesKrav.map((k) => {
-              return <KravCard krav={k} />
+              return <KravCard krav={k} setEdit={setEdit} setKravId={setKravId} />
             })}
           </CustomizedPanel>
           <CustomizedPanel title={<PanelHeader title={'Under utfylling'} kravData={underArbeidKrav} />}>
             {underArbeidKrav.map((k) => {
-              return <KravCard krav={k} />
+              return <KravCard krav={k} setEdit={setEdit} setKravId={setKravId} />
             })}
           </CustomizedPanel>
-          <CustomizedPanel title={<PanelHeader title={'Ferdig utfylt'} kravData={kravData.filter((k) => k.etterlevelseStatus === EtterlevelseStatus.FERDIG)} />}>
+          <CustomizedPanel title={<PanelHeader title={'Ferdig utfylt'} kravData={utfyltKrav} />}>
             {utfyltKrav.map((k) => {
-              return <KravCard krav={k} />
+              return <KravCard krav={k} setEdit={setEdit} setKravId={setKravId} />
             })}
           </CustomizedPanel>
         </CustomizedAccordion>
+        {edit && behandling && (
+          <Block maxWidth={maxPageWidth}>
+            <CustomizedModal isOpen={!!edit} onClose={() => setEdit(undefined)}>
+              <Block flex="1" backgroundColor={ettlevColors.green800}>
+                <Block paddingTop={theme.sizing.scale1200} paddingRight={theme.sizing.scale1000} paddingLeft={theme.sizing.scale1000}>
+                  <Block display="flex" flex="1" justifyContent="flex-end">
+                    <Button kind="tertiary" onClick={() => setEdit(undefined)} $style={{ ':hover': { backgroundColor: 'transparent' } }}>
+                      <img src={crossIcon} alt="close" />
+                    </Button>
+                  </Block>
+                </Block>
+              </Block>
+
+              <EditModal
+                behandlingNavn={behandling.navn}
+                etterlevelseId={edit}
+                behandlingId={behandling.id}
+                kravId={kravId}
+                close={(e) => {
+                  setEdit(undefined)
+                  e && update(e)
+                }}
+              />
+            </CustomizedModal>
+          </Block>
+        )}
       </Block>
     </Layout2>
   )
@@ -196,20 +234,101 @@ const PanelHeader = (props: { title: string, kravData: KravEtterlevelseData[] })
   )
 }
 
-const KravCard = (props: { krav: KravEtterlevelseData }) => {
+const toKravId = (it: { kravVersjon: number; kravNummer: number }) => ({ kravNummer: it.kravNummer, kravVersjon: it.kravVersjon })
+
+const EditModal = (props: { etterlevelseId: string; behandlingId: string; kravId?: KravId; close: (e?: Etterlevelse) => void; behandlingNavn: string }) => {
+  const [etterlevelse] = useEtterlevelse(props.etterlevelseId, props.behandlingId, props.kravId)
+  if (!etterlevelse) return <Spinner size={theme.sizing.scale800} />
+
+  return <Block>{etterlevelse && <KravView behandlingNavn={props.behandlingNavn} kravId={toKravId(etterlevelse)} etterlevelse={etterlevelse} close={props.close} />}</Block>
+}
+
+const KravCard = (props: { krav: KravEtterlevelseData, setEdit: Function, setKravId: Function }) => {
   return (
-    <Card>
-      <Block display='flex' width='100%'>
-        <img src={circlePencilIcon} alt='pencil icon' />
-        <Block marginLeft='24px'>
-          <Paragraph4 $style={{ fontSize: '16px', lineHeight: '24px', marginBottom: '0px', marginTop: '0px' }}>
-            K{props.krav.kravNummer}.{props.krav.kravVersjon}
-          </Paragraph4>
-          <Label3 $style={{ fontSize: '22px', lineHeight: '28px' }}>
-            {props.krav.navn}
-          </Label3>
-        </Block>
+    <Button
+      kind={KIND.tertiary}
+      $style={{ width: '100%', paddingTop: '0px', paddingBottom: '0px', paddingRight: '0px', paddingLeft: '0px' }}
+      onClick={() => {
+        if (!props.krav.etterlevelseId) {
+          props.setKravId(toKravId(props.krav))
+          props.setEdit('ny')
+        } else {
+          props.setEdit(props.krav.etterlevelseId)
+        }
+      }}
+    >
+      <Block width='100%'>
+        <Card>
+          <Block display='flex' width='100%'>
+            <img src={circlePencilIcon} alt='pencil icon' />
+            <Block marginLeft='24px'>
+              <Paragraph4 $style={{ fontSize: '16px', lineHeight: '24px', marginBottom: '0px', marginTop: '0px', width: 'fit-content' }}>
+                K{props.krav.kravNummer}.{props.krav.kravVersjon}
+              </Paragraph4>
+              <Label3 $style={{ fontSize: '22px', lineHeight: '28px' }}>
+                {props.krav.navn}
+              </Label3>
+            </Block>
+          </Block>
+        </Card>
       </Block>
-    </Card>
+    </Button >
+  )
+}
+
+const KravView = (props: { kravId: KravId; etterlevelse: Etterlevelse; close: Function; behandlingNavn: string }) => {
+  console.log(props.etterlevelse)
+  const { data } = useQuery<{ kravById: KravQL }, KravId>(kravFullQuery, {
+    variables: props.kravId,
+    skip: !props.kravId.id && !props.kravId.kravNummer,
+  })
+  const lover = codelist.getCodes(ListName.LOV)
+
+  const krav = data?.kravById
+
+  const getTema = () => {
+    const temaCodes: string[] = []
+    let temas = ''
+
+    krav?.regelverk.map((r) => {
+      const lov = lover.find((lov) => lov.code === r.lov.code)
+      temaCodes.push(lov?.data?.tema || '')
+    })
+
+    temaCodes.forEach((temaCode) => {
+      const shortName = codelist.getShortname(ListName.TEMA, temaCode)
+
+      temas = temas + shortName + ', '
+    })
+
+    temas = temas.substring(0, temas.length - 2)
+    temas = temas.replace(/,([^,]*)$/, ' og$1')
+    return temas
+  }
+
+  return (
+    <Block>
+      {krav && (
+        <Block>
+          <Block flex="1" backgroundColor={ettlevColors.green800}>
+            <Block paddingLeft={modalPaddingLeft} paddingRight={modalPaddingRight} paddingBottom="32px">
+              <H1 $style={{ color: ettlevColors.grey50, marginTop: '0px' }}>Fyll ut dokumentasjon: {getTema()}</H1>
+              <Paragraph2 $style={{ lineHeight: '12px', color: ettlevColors.green50 }}>{props.behandlingNavn}</Paragraph2>
+            </Block>
+          </Block>
+          <Block paddingLeft={modalPaddingLeft} paddingRight={modalPaddingRight}>
+            <Block marginTop="99px">
+              <EditEtterlevelse
+                krav={krav}
+                etterlevelse={props.etterlevelse}
+                close={(e) => {
+                  props.close(e)
+                }}
+              />
+            </Block>
+          </Block>
+        </Block>
+      )}
+    </Block>
   )
 }
