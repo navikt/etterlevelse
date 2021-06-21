@@ -27,7 +27,8 @@ export enum ObjectType {
   Krav = 'Krav',
   Etterlevelse = 'Etterlevelse',
   Behandling = 'Behandling',
-  BehandlingData = 'BehandlingData'
+  BehandlingData = 'BehandlingData',
+  BehandlingDoc = 'BehandlingDoc'
 }
 
 export type NavigableItem = ObjectType |

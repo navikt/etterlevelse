@@ -170,9 +170,9 @@ const RelevansFilter = ({onClickFilter, relevans, kravAntall}: {onClickFilter: (
   </Block>
 )
 
-const cardWidth = ['98%', '98%', '98%', '98%','48%', '32%']
-const cardHeight = ['auto', 'auto', 'auto', 'auto', '250px', '250px']
-const cardMaxheight = '250px'
+export const cardWidth = ['98%', '98%', '98%', '98%','48%', '32%']
+export const cardHeight = ['auto', 'auto', 'auto', 'auto', '250px', '250px']
+export const cardMaxheight = '250px'
 
 const headerBgOverlap = '29px'
 
@@ -194,7 +194,7 @@ const TemaInfo = (props: {kravAntall: number, temaAntall: number}) => (
   </Block>
 )
 
-const TemaCard = ({tema, relevans, setNum}: {tema: TemaCode, relevans: string[], setNum: (tema: string, num: number) => void}) => {
+export const TemaCard = ({tema, relevans, setNum}: {tema: TemaCode, relevans: string[], setNum: (tema: string, num: number) => void}) => {
   const lover = codelist.getCodesForTema(tema.code).map(c => c.code)
   const {data, loading} = useKravCounter({lover: lover}, {skip: !lover.length})
   const krav = data?.krav.content.filter(k => !relevans.length || k.relevansFor.map(r => r.code).some(r => relevans.includes(r))) || []
@@ -247,7 +247,7 @@ const TemaCard = ({tema, relevans, setNum}: {tema: TemaCode, relevans: string[],
   </PanelLinkCard>
 }
 
-const useKravCounter = (variables: {lover: string[]}, options?: QueryHookOptions<any, {lover: string[]}>) => {
+export const useKravCounter = (variables: {lover: string[]}, options?: QueryHookOptions<any, {lover: string[]}>) => {
   return useQuery<{krav: PageResponse<KravQL>}, KravFilters>(query, {
     ...(options || {}),
     variables

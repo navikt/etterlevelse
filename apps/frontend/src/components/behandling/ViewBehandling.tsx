@@ -29,7 +29,7 @@ import { ettlevColors, maxPageWidth } from '../../util/theme'
 import CustomizedModal from '../common/CustomizedModal'
 import { crossIcon } from '../Images'
 
-const filterForBehandling = (behandling: Behandling): KravFilters => ({ behandlingId: behandling.id })
+export const filterForBehandling = (behandling: Behandling): KravFilters => ({ behandlingId: behandling.id })
 
 const modalPaddingRight = '104px'
 const modalPaddingLeft = '112px'
@@ -61,14 +61,23 @@ export const ViewBehandling = ({ behandling }: { behandling: Behandling }) => {
   )
 }
 
-const behandlingKravQuery = gql`
-  query getKravByFilter ($behandlingId: String!) {
-    krav(filter: {behandlingId: $behandlingId}) {
+export const behandlingKravQuery = gql`
+  query getKravByFilter ($behandlingId: String!, $lover: [String!]) {
+    krav(filter: {behandlingId: $behandlingId, lover: $lover, gjeldendeKrav: true}) {
       content{
         id
         navn
         kravNummer
         kravVersjon
+        relevansFor {
+          code
+        }
+        regelverk {
+          lov {
+            code
+            shortName
+          }
+        }
         etterlevelser (onlyForBehandling: true) {
           id
           etterleves
@@ -278,7 +287,7 @@ const KravView = (props: { kravId: KravId, etterlevelse: Etterlevelse, close: Fu
 
     temaCodes.forEach(temaCode => {
       const shortName = codelist.getShortname(ListName.TEMA, temaCode)
-    
+
       temas = temas + shortName + ', '
     })
 
@@ -318,7 +327,7 @@ const KravView = (props: { kravId: KravId, etterlevelse: Etterlevelse, close: Fu
   )
 }
 
-const statsQuery = gql`
+export const statsQuery = gql`
       query getBehandlingStats($behandlingId: ID!) {
         behandling(filter: {id: $behandlingId }) {
         content {
@@ -326,6 +335,10 @@ const statsQuery = gql`
         fyltKrav {
         kravNummer
             kravVersjon
+            etterlevelser (onlyForBehandling: true) {
+              behandlingId
+              status
+            }
       regelverk {
         lov {
         code
@@ -336,6 +349,10 @@ const statsQuery = gql`
       ikkeFyltKrav {
         kravNummer
             kravVersjon
+            etterlevelser (onlyForBehandling: true) {
+              behandlingId
+              status
+            }
       regelverk {
         lov {
         code
@@ -433,13 +450,13 @@ const BehandlingStatsView = ({ behandling }: { behandling: Behandling }) => {
   )
 }
 
-interface BehandlingStats {
+export interface BehandlingStats {
   fyltKrav: KravQL[]
   ikkeFyltKrav: KravQL[]
   lovStats: LovStats[]
 }
 
-interface LovStats {
+export interface LovStats {
   lovCode: Code
   fyltKrav: KravQL[]
   ikkeFyltKrav: KravQL[]

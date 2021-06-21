@@ -34,7 +34,7 @@ export const MyBehandlingerPage = () => (
                   kind='tertiary'> Tilbake</Button>
         </RouteLink>
 
-        <HeadingXXLarge marginTop={theme.sizing.scale600}>Dokumentere etterlevelse</HeadingXXLarge>
+        <HeadingXXLarge marginTop={theme.sizing.scale600}>Dokumentere etterlevelseenenene</HeadingXXLarge>
         <BehandlingTabs/>
 
       </Block>
