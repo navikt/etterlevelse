@@ -73,12 +73,13 @@ const ChevronLeft = (props: { fill?: string }) => (
 
 export const Layout2 = (props: {
   backBtnColor?: string,
+  backBtnUrl: string,
   headerBackgroundColor: string,
   mainHeader: React.ReactNode,
   secondaryHeaderBackgroundColor: string,
   secondaryHeader: React.ReactNode,
   childrenBackgroundColor: string,
-  children: React.ReactNode
+  children: React.ReactNode,
 }) => (
   <Block width='100%' overrides={{ Block: { props: { role: 'main' } } }}>
     <Block backgroundColor={props.headerBackgroundColor} display='flex' width='100%' justifyContent='center'>
@@ -86,7 +87,7 @@ export const Layout2 = (props: {
         <Block paddingLeft='40px' paddingRight='40px' display='flex' flexDirection='column' justifyContent='center'>
           <Block width='100%' justifyContent='center' marginTop='24px'>
             <Block flex='1' display='flex' justifyContent='flex-start'>
-              <RouteLink href={'/etterlevelse'} hideUnderline>
+              <RouteLink href={props.backBtnUrl} hideUnderline>
                 <Button startEnhancer={<ChevronLeft fill={props.backBtnColor}/>} size='compact' kind='tertiary'
                   $style={{
                     color: !props.backBtnColor ? ettlevColors.black : props.backBtnColor,

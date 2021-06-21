@@ -142,6 +142,7 @@ export const BehandlingPage = () => {
       secondaryHeaderBackgroundColor={ettlevColors.white}
       secondaryHeader={getSecondaryHeader(behandling)}
       childrenBackgroundColor={ettlevColors.grey50}
+      backBtnUrl={'/behandlinger'}
     >
       <Block display="flex" width="100%" justifyContent="space-between" flexWrap marginTop={theme.sizing.scale1200}>
         {temaListe.map(tema => <TemaCardBehandling tema={tema} stats={stats} behandling={behandling}/>)}
