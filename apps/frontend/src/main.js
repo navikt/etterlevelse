@@ -50,7 +50,7 @@ const Main = (props) => {
                 <Header />
                 <Routes />
               </Block>
-              <Block backgroundColor={ettlevColors.green50} height={'150px'}>
+              <Block backgroundColor={ettlevColors.green50} height={'150px'} width={'100%'}>
                 <HeadingLarge>Hvordan opplever du løsningen?</HeadingLarge>
               </Block>
               <Footer />
