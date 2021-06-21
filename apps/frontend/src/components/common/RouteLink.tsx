@@ -18,7 +18,7 @@ type RouteLinkProps = {
 } & any
 
 const RouteLink = (props: RouteLinkProps) => {
-  const {hideUnderline, plain, requireLogin, ...restprops} = props
+  const {hideUnderline, plain, requireLogin, style, ...restprops} = props
   const history = useHistory()
 
   const onClick = (e: Event) => {
@@ -34,12 +34,12 @@ const RouteLink = (props: RouteLinkProps) => {
     fontWeight: "normal"
   }
 
-  const style = _.merge(customStyle, props.style)
+  const mergedStyle = _.merge(customStyle, props.style)
 
   const href = !requireLogin || user.isLoggedIn() ? restprops.href : loginUrl(history, restprops.href)
 
   return (
-    <CustomizedLink style={style} {...restprops} href={href} onClick={onClick}/>
+    <CustomizedLink style={mergedStyle} {...restprops} href={href} onClick={onClick}/>
   )
 }
 

@@ -218,20 +218,22 @@ const Etterlevelser = ({loading, etterlevelser: allEtterlevelser}: {loading: boo
 
       <CustomizedAccordion initialState={{expanded: state?.avdelingOpen ? [state?.avdelingOpen] : []}}
                            onChange={(k) => changeState({avdelingOpen: k.expanded.length ? k.expanded[0] as string : undefined})}>
-        {avdelinger.map(a => <CustomizedPanel
-          key={a.code}
-          title={a.shortName}>
+        {avdelinger.map(a => {
+          const avdelingEtterlevelser = etterlevelser?.filter(e => e.behandling.avdeling?.code === a.code)
+          const antall = avdelingEtterlevelser.length
+          return <CustomizedPanel key={a.code} title={a.shortName}>
 
-          {etterlevelser?.filter(e => e.behandling.avdeling?.code === a.code).map(e => (
-            <PanelLink key={e.id} href={`/etterlevelse/${e.id}`}
-                       title={e.behandling.navn} beskrivelse={e.behandling.overordnetFormaal.shortName}
-                       rightTitle={!!e.behandling.teamsData.length ? e.behandling.teamsData.map(t => t.name).join(', ') : 'Ingen team'}
-                       rightBeskrivelse={`Utfylt: ${moment(e.changeStamp.lastModifiedDate).format('ll')}`}
-                       panelIcon={hover => <PageIcon hover={hover}/>}
-            />
-          ))}
+            {avdelingEtterlevelser.map((e, i) => (
+              <PanelLink key={e.id} href={`/etterlevelse/${e.id}`} square hideBorderBottom={i !== antall - 1}
+                         title={e.behandling.navn} beskrivelse={e.behandling.overordnetFormaal.shortName}
+                         rightTitle={!!e.behandling.teamsData.length ? e.behandling.teamsData.map(t => t.name).join(', ') : 'Ingen team'}
+                         rightBeskrivelse={`Utfylt: ${moment(e.changeStamp.lastModifiedDate).format('ll')}`}
+                         panelIcon={hover => <PageIcon hover={hover}/>}
+              />
+            ))}
 
-        </CustomizedPanel>)}
+          </CustomizedPanel>
+        })}
       </CustomizedAccordion>
     </Block>
   )

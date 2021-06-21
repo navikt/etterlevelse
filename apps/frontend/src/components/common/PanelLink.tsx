@@ -1,19 +1,19 @@
 import React, { useState } from 'react'
 import RouteLink from './RouteLink'
-import { Block, BlockOverrides, Responsive, Scale } from 'baseui/block'
-import { borderRadius, padding, paddingAll } from './Style'
-import { theme } from '../../util'
-import { ettlevColors } from '../../util/theme'
-import { HeadingXLarge, LabelLarge, LabelSmall, ParagraphMedium, ParagraphSmall } from 'baseui/typography'
-import { arrowRightIcon, navChevronRightIcon } from '../Images'
+import {Block, BlockOverrides, Responsive, Scale} from 'baseui/block'
+import {borderRadius, borderStyle, padding, paddingAll} from './Style'
+import {theme} from '../../util'
+import {ettlevColors} from '../../util/theme'
+import {HeadingXLarge, LabelLarge, LabelSmall, ParagraphMedium, ParagraphSmall} from 'baseui/typography'
+import {arrowRightIcon, navChevronRightIcon} from '../Images'
 import * as _ from 'lodash'
 
-export const PanelLink = ({ href, title, rightTitle, beskrivelse, rightBeskrivelse, panelIcon, flip }:
-  {
-    href: string, title: string, rightTitle?: string, beskrivelse?: string, rightBeskrivelse?: string,
-    flip?: boolean
-    panelIcon?: React.ReactNode | ((hover: boolean) => React.ReactNode)
-  }) => {
+export const PanelLink = ({href, title, rightTitle, beskrivelse, rightBeskrivelse, panelIcon, flip, square, hideBorderBottom}:
+                            {
+                              href: string, title: string, rightTitle?: string, beskrivelse?: string, rightBeskrivelse?: string,
+                              flip?: boolean, square?: boolean, hideBorderBottom?: boolean,
+                              panelIcon?: React.ReactNode | ((hover: boolean) => React.ReactNode)
+                            }) => {
   const [hover, setHover] = useState(false)
 
   return (
@@ -33,7 +33,9 @@ export const PanelLink = ({ href, title, rightTitle, beskrivelse, rightBeskrivel
             borderWidth: '1px',
             borderColor: ettlevColors.grey100,
             borderStyle: 'solid',
-            ...borderRadius('4px'),
+            ...borderStyle('solid'),
+            borderBottomStyle: hideBorderBottom ? 'hidden' : 'solid',
+            ...(square ? {} : borderRadius('4px')),
 
             ':hover': {
               position: 'relative',
@@ -105,6 +107,11 @@ export const PanelLinkCard = (
 
         ':hover': {
           boxShadow: '0px 6px 8px rgba(0, 0, 0, 0.24)'
+        },
+
+        ':focus-within': {
+          outline: `3px solid ${ettlevColors.focusOutline}`,
+          outlineOffset: '1px'
         }
       }
     }

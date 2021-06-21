@@ -259,6 +259,7 @@ const query = gql`
     krav(filter: {lover: $lover, gjeldendeKrav: true}) {
       numberOfElements
       content {
+        id
         kravNummer
         kravVersjon
         navn
