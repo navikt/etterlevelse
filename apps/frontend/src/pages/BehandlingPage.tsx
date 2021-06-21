@@ -1,24 +1,23 @@
-import React, { useRef, useState } from 'react'
-import { Block } from 'baseui/block'
-import { useParams } from 'react-router-dom'
-import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
-import { useBehandling } from '../api/BehandlingApi'
-import { HeadingLarge, Label3, Paragraph2, H1, H2 } from 'baseui/typography'
-import { FormikProps } from 'formik'
-import { ettlevColors, theme } from '../util/theme'
-import { Layout2 } from '../components/scaffold/Page'
-import { Teams } from '../components/common/TeamName'
-import { arkPennIcon } from '../components/Images'
-import { Behandling, EtterlevelseStatus, PageResponse } from '../constants'
-import { gql, useQuery } from '@apollo/client'
-import { BehandlingStats, statsQuery } from '../components/behandling/ViewBehandling'
-import { codelist, ListName, TemaCode } from '../services/Codelist'
-import { PanelLinkCard, PanelLinkCardOverrides } from '../components/common/PanelLink'
-import { cardWidth } from './TemaPage'
-import { urlForObject } from '../components/common/RouteLink'
-import { KravFilters } from '../api/KravGraphQLApi'
-import { ProgressBar, SIZE } from 'baseui/progress-bar'
-import { ObjectType } from '../components/admin/audit/AuditTypes'
+import React, {useRef, useState} from 'react'
+import {Block} from 'baseui/block'
+import {useParams} from 'react-router-dom'
+import {LoadingSkeleton} from '../components/common/LoadingSkeleton'
+import {useBehandling} from '../api/BehandlingApi'
+import {H1, H2, HeadingLarge, Label3, Paragraph2} from 'baseui/typography'
+import {FormikProps} from 'formik'
+import {ettlevColors, theme} from '../util/theme'
+import {Layout2} from '../components/scaffold/Page'
+import {Teams} from '../components/common/TeamName'
+import {arkPennIcon} from '../components/Images'
+import {Behandling, EtterlevelseStatus, PageResponse} from '../constants'
+import {useQuery} from '@apollo/client'
+import {BehandlingStats, statsQuery} from '../components/behandling/ViewBehandling'
+import {codelist, ListName, TemaCode} from '../services/Codelist'
+import {PanelLinkCard, PanelLinkCardOverrides} from '../components/common/PanelLink'
+import {cardWidth} from './TemaPage'
+import {urlForObject} from '../components/common/RouteLink'
+import {ProgressBar, SIZE} from 'baseui/progress-bar'
+import {ObjectType} from '../components/admin/audit/AuditTypes'
 
 export const BehandlingPage = () => {
   const params = useParams<{ id?: string }>()
@@ -162,8 +161,6 @@ const HeaderContent = (props: { tilUtfylling: number; underArbeid: number }) => 
   </Block>
 )
 
-const filterForBehandling = (behandling: Behandling, lover: string[]): KravFilters => ({ behandlingId: behandling.id, lover: lover })
-
 const TemaCardBehandling = ({ tema, stats, behandling }: { tema: TemaCode; stats: any[]; behandling: Behandling }) => {
   const lover = codelist.getCodesForTema(tema.code).map((c) => c.code)
 
@@ -183,6 +180,9 @@ const TemaCardBehandling = ({ tema, stats, behandling }: { tema: TemaCode; stats
     }
   })
 
+  if(tema.shortName=== 'Personvern'){
+    console.log('KRAV!!!', tema.shortName,krav)
+  }
   // const variables = filterForBehandling(behandling, lover)
   // const { data: rawData, loading } = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
   //   variables,
