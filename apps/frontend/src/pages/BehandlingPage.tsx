@@ -18,6 +18,7 @@ import { cardWidth } from './TemaPage'
 import { urlForObject } from '../components/common/RouteLink'
 import { KravFilters } from '../api/KravGraphQLApi'
 import { ProgressBar, SIZE } from "baseui/progress-bar";
+import { ObjectType } from '../components/admin/audit/AuditTypes'
 
 
 export const BehandlingPage = () => {
@@ -143,7 +144,7 @@ export const BehandlingPage = () => {
       childrenBackgroundColor={ettlevColors.grey50}
     >
       <Block display="flex" width="100%" justifyContent="space-between" flexWrap marginTop={theme.sizing.scale1200}>
-        {temaListe.map(tema => <TemaCardBehandling tema={tema} stats={stats} />)}
+        {temaListe.map(tema => <TemaCardBehandling tema={tema} stats={stats} behandling={behandling}/>)}
       </Block>
     </Layout2>
   )
@@ -162,7 +163,7 @@ const HeaderContent = (props: { tilUtfylling: number, underArbeid: number }) => 
 
 const filterForBehandling = (behandling: Behandling, lover: string[]): KravFilters => ({ behandlingId: behandling.id, lover: lover })
 
-const TemaCardBehandling = ({ tema, stats }: { tema: TemaCode, stats: any[] }) => {
+const TemaCardBehandling = ({ tema, stats, behandling }: { tema: TemaCode, stats: any[], behandling: Behandling }) => {
   const lover = codelist.getCodesForTema(tema.code).map(c => c.code)
 
   const krav = stats.filter(k => k.regelverk.map((r: any) => r.lov.code).some((r: any) => lover.includes(r)))
@@ -225,7 +226,7 @@ const TemaCardBehandling = ({ tema, stats }: { tema: TemaCode, stats: any[] }) =
     width={cardWidth}
     overrides={overrides}
     verticalMargin={theme.sizing.scale400}
-    href={urlForObject(ListName.TEMA, tema.code)}
+    href={urlForObject(ObjectType.BehandlingDoc, behandling.id, undefined, tema.code)}
     tittel={tema.shortName}
     headerContent={<HeaderContent tilUtfylling={tilUtfylling} underArbeid={underArbeid} />}
     flexContent
