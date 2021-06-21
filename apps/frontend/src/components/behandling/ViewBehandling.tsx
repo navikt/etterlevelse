@@ -69,6 +69,11 @@ export const behandlingKravQuery = gql`
         navn
         kravNummer
         kravVersjon
+        suksesskriterier {
+          id
+          navn
+          beskrivelse
+        }
         relevansFor {
           code
         }
