@@ -72,6 +72,13 @@ export const BehandlingerTemaPage = () => {
         ...mapEtterlevelseData(etterlevelse),
       }
     })
+
+    for (let index = mapped.length - 1; index > 0; index--) {
+      if (mapped[index].kravNummer === mapped[index - 1].kravNummer) {
+        mapped.splice(index - 1, 1)
+      }
+    }
+
     setKravData(mapped)
   }, [rawData])
 
@@ -258,7 +265,7 @@ const KravCard = (props: { krav: KravEtterlevelseData, setEdit: Function, setKra
       }}
     >
       <Block width='100%'>
-        <Card>
+        <Card overrides={{Root: {style: {borderTopWidth: '1px', borderBottomWidth: '1px', borderLeftWidth: '1px', borderRightWidth: '1px'}}}}>
           <Block display='flex' width='100%'>
             <img src={circlePencilIcon} alt='pencil icon' />
             <Block marginLeft='24px'>
