@@ -51,7 +51,7 @@ const Main = (props) => {
                 <Routes />
               </Block>
               <Block backgroundColor={ettlevColors.green50} height={'150px'} width={'100%'}>
-                <HeadingLarge>Hvordan opplever du løsningen?</HeadingLarge>
+                {/* <HeadingLarge>Hvordan opplever du løsningen?</HeadingLarge> */}
               </Block>
               <Footer />
             </Block>
