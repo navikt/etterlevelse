@@ -213,7 +213,7 @@ const TemaCardBehandling = ({ tema, stats, behandling }: { tema: TemaCode; stats
         width={cardWidth}
         overrides={overrides}
         verticalMargin={theme.sizing.scale400}
-        href={urlForObject(ObjectType.BehandlingDoc, behandling.id, undefined, tema.code)}
+        href={`/behandling/${behandling.id}/${tema.code}`}
         tittel={tema.shortName}
         headerContent={<HeaderContent tilUtfylling={tilUtfylling} underArbeid={underArbeid} />}
         flexContent

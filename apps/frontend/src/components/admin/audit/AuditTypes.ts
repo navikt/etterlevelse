@@ -28,7 +28,6 @@ export enum ObjectType {
   Etterlevelse = 'Etterlevelse',
   Behandling = 'Behandling',
   BehandlingData = 'BehandlingData',
-  BehandlingDoc = 'BehandlingDoc',
 }
 
 export type NavigableItem = ObjectType | ListName.RELEVANS | ListName.UNDERAVDELING | ListName.TEMA | ListName.LOV

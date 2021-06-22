@@ -53,7 +53,7 @@ type ObjectLinkProps = {
   hideUnderline?: boolean
 }
 
-export const urlForObject = (type: NavigableItem, id: string, audit?: AuditItem, secondaryId?: string) => {
+export const urlForObject = (type: NavigableItem, id: string, audit?: AuditItem) => {
   switch (type) {
     case ObjectType.Settings:
       return '/admin/settings'
@@ -64,8 +64,6 @@ export const urlForObject = (type: NavigableItem, id: string, audit?: AuditItem,
     case ObjectType.BehandlingData:
     case ObjectType.Behandling:
       return `/behandling/${id}`
-    case ObjectType.BehandlingDoc:
-      return `/behandling/${id}/${secondaryId}`
     case ListName.RELEVANS:
       return `/relevans/${id}`
     case ListName.UNDERAVDELING:
