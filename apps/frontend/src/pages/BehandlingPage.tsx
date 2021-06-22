@@ -217,50 +217,57 @@ const TemaCardBehandling = ({ tema, stats, behandling }: { tema: TemaCode; stats
         },
       },
     },
+    Root: {
+      Block: {
+        style: {
+          display: !krav.length ? 'none' : 'block'
+        }
+      }
+    }
   }
 
   return (
-    <PanelLinkCard
-      width={cardWidth}
-      overrides={overrides}
-      verticalMargin={theme.sizing.scale400}
-      href={urlForObject(ObjectType.BehandlingDoc, behandling.id, undefined, tema.code)}
-      tittel={tema.shortName}
-      headerContent={<HeaderContent tilUtfylling={tilUtfylling} underArbeid={underArbeid} />}
-      flexContent
-    >
-      <Block marginTop={theme.sizing.scale650}>
-        <Block display="flex" flex={1}>
-          <Paragraph4 marginTop="0px" marginBottom="2px">
-            Ferdig utfylt:
-          </Paragraph4>
-          <Block display='flex' flex={1} justifyContent='flex-end'>
-            <Paragraph4  marginTop="0px" marginBottom="2px">
-              {utfylt} krav
+      <PanelLinkCard
+        width={cardWidth}
+        overrides={overrides}
+        verticalMargin={theme.sizing.scale400}
+        href={urlForObject(ObjectType.BehandlingDoc, behandling.id, undefined, tema.code)}
+        tittel={tema.shortName}
+        headerContent={<HeaderContent tilUtfylling={tilUtfylling} underArbeid={underArbeid} />}
+        flexContent
+      >
+        <Block marginTop={theme.sizing.scale650}>
+          <Block display="flex" flex={1}>
+            <Paragraph4 marginTop="0px" marginBottom="2px">
+              Ferdig utfylt:
             </Paragraph4>
+            <Block display='flex' flex={1} justifyContent='flex-end'>
+              <Paragraph4 marginTop="0px" marginBottom="2px">
+                {utfylt} krav
+              </Paragraph4>
+            </Block>
+          </Block>
+          <Block>
+            <ProgressBar
+              value={utfylt}
+              successValue={krav.length}
+              size={SIZE.medium}
+              overrides={{
+                BarProgress: {
+                  style: {
+                    backgroundColor: ettlevColors.green800,
+                  },
+                },
+                BarContainer: {
+                  style: {
+                    marginLeft: '0px',
+                    marginRight: '0px',
+                  },
+                },
+              }}
+            />
           </Block>
         </Block>
-        <Block>
-          <ProgressBar
-            value={utfylt}
-            successValue={krav.length}
-            size={SIZE.medium}
-            overrides={{
-              BarProgress: {
-                style: {
-                  backgroundColor: ettlevColors.green800,
-                },
-              },
-              BarContainer: {
-                style: {
-                  marginLeft: '0px',
-                  marginRight: '0px',
-                },
-              },
-            }}
-          />
-        </Block>
-      </Block>
-    </PanelLinkCard>
+      </PanelLinkCard>
   )
 }
