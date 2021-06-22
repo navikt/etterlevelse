@@ -33,6 +33,7 @@ import navChevronRightIcon from '../resources/icons/nav-chevron-right.svg'
 import bokEtterlevelseIcon from '../resources/icons/bok-etterlevelse-ikon.svg'
 import sokButtonIcon from '../resources/icons/icon_button_search.svg'
 import arrowRightIcon from '../resources/icons/arrow-right.svg'
+import gavelIcon from '../resources/icons/gavel.svg'
 
 import paperPenIconBg from '../resources/icons/with_bg/arkPennBg.svg'
 import gavelIconBg from '../resources/icons/with_bg/gavelBg.svg'
@@ -47,9 +48,9 @@ import paragrafIcon from '../resources/icons/paragraf-ikon.svg'
 import crossIcon from '../resources/icons/cross.svg'
 import circlePencilIcon from '../resources/icons/circle-pencil-icon.svg'
 import illustration from '../resources/giammarco-boscaro-zeH-ljawHtg-unsplash.jpg'
-import { codelist, ListName, LovCode, TemaCode } from '../services/Codelist'
+import {codelist, ListName, LovCode, TemaCode} from '../services/Codelist'
 import React from 'react'
-import { theme } from '../util'
+import {theme} from '../util'
 
 export {
   pencilFill,
@@ -88,6 +89,7 @@ export {
   gavelIconBg,
   paragrafIconBg,
   circlePencilIcon,
+  gavelIcon,
 }
 
 export const temaBilder: { [id: string]: string } = {
