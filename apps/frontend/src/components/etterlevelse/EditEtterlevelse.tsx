@@ -71,7 +71,7 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
       fristForFerdigstillelse: etterlevelse.status !== EtterlevelseStatus.OPPFYLLES_SENERE ? '' : etterlevelse.fristForFerdigstillelse,
     }
 
-    if (etterlevelse.id) {
+    if (etterlevelse.id) { 
       close(await updateEtterlevelse(mutatedEtterlevelse))
     } else {
       close(await createEtterlevelse(mutatedEtterlevelse))
@@ -193,10 +193,13 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
           {!documentEdit && (
             <Block display="flex" justifyContent="flex-end" marginTop={theme.sizing.scale850} marginBottom={theme.sizing.scale3200}>
               <Button type="button" kind="secondary" marginRight onClick={close}>
-                Avbryt
+                Avbryt og forkast endringene
+              </Button>
+              <Button type="button" kind='secondary' marginRight disabled={isSubmitting} onClick={submitForm}>
+                Lagre og fortsett senere
               </Button>
               <Button type="button" disabled={isSubmitting} onClick={submitForm}>
-                Lagre
+                Jeg har dokumentert ferdig
               </Button>
             </Block>
           )}

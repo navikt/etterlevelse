@@ -1,23 +1,23 @@
-import React, {useRef, useState} from 'react'
-import {Block} from 'baseui/block'
-import {useParams} from 'react-router-dom'
-import {LoadingSkeleton} from '../components/common/LoadingSkeleton'
-import {useBehandling} from '../api/BehandlingApi'
-import {H1, H2, HeadingLarge, Label3, Paragraph2} from 'baseui/typography'
-import {FormikProps} from 'formik'
-import {ettlevColors, theme} from '../util/theme'
-import {Layout2} from '../components/scaffold/Page'
-import {Teams} from '../components/common/TeamName'
-import {arkPennIcon} from '../components/Images'
-import {Behandling, EtterlevelseStatus, PageResponse} from '../constants'
-import {useQuery} from '@apollo/client'
-import {BehandlingStats, statsQuery} from '../components/behandling/ViewBehandling'
-import {codelist, ListName, TemaCode} from '../services/Codelist'
-import {PanelLinkCard, PanelLinkCardOverrides} from '../components/common/PanelLink'
-import {cardWidth} from './TemaPage'
-import {urlForObject} from '../components/common/RouteLink'
-import {ProgressBar, SIZE} from 'baseui/progress-bar'
-import {ObjectType} from '../components/admin/audit/AuditTypes'
+import React, { useRef, useState } from 'react'
+import { Block } from 'baseui/block'
+import { useParams } from 'react-router-dom'
+import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
+import { useBehandling } from '../api/BehandlingApi'
+import { H1, H2, HeadingLarge, Label3, Paragraph2, Paragraph4 } from 'baseui/typography'
+import { FormikProps } from 'formik'
+import { ettlevColors, theme } from '../util/theme'
+import { Layout2 } from '../components/scaffold/Page'
+import { Teams } from '../components/common/TeamName'
+import { arkPennIcon } from '../components/Images'
+import { Behandling, EtterlevelseStatus, PageResponse } from '../constants'
+import { useQuery } from '@apollo/client'
+import { BehandlingStats, statsQuery } from '../components/behandling/ViewBehandling'
+import { codelist, ListName, TemaCode } from '../services/Codelist'
+import { PanelLinkCard, PanelLinkCardOverrides } from '../components/common/PanelLink'
+import { cardWidth } from './TemaPage'
+import { urlForObject } from '../components/common/RouteLink'
+import { ProgressBar, SIZE } from 'baseui/progress-bar'
+import { ObjectType } from '../components/admin/audit/AuditTypes'
 
 export const BehandlingPage = () => {
   const params = useParams<{ id?: string }>()
@@ -32,10 +32,10 @@ export const BehandlingPage = () => {
   const filterData = (
     data:
       | {
-          behandling: PageResponse<{
-            stats: BehandlingStats
-          }>
-        }
+        behandling: PageResponse<{
+          stats: BehandlingStats
+        }>
+      }
       | undefined,
   ) => {
     const StatusListe: any[] = []
@@ -122,9 +122,9 @@ export const BehandlingPage = () => {
 
         <Block display="flex" alignItems="baseline" marginLeft="30px">
           <H1 color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
-            {getPercentageUtfylt?.toFixed(2)}
+            {antallFylttKrav}
           </H1>
-          <Paragraph2>% ferdig utfylt</Paragraph2>
+          <Paragraph2>ferdig utfylt</Paragraph2>
         </Block>
       </Block>
     </Block>
@@ -138,7 +138,7 @@ export const BehandlingPage = () => {
       mainHeader={getMainHeader(behandling)}
       secondaryHeaderBackgroundColor={ettlevColors.white}
       secondaryHeader={getSecondaryHeader(behandling)}
-      childrenBackgroundColor={ettlevColors.grey50}
+      childrenBackgroundColor={ettlevColors.grey25}
       backBtnUrl={'/behandlinger'}
     >
       <Block display="flex" width="100%" justifyContent="space-between" flexWrap marginTop={theme.sizing.scale1200}>
@@ -152,12 +152,12 @@ export const BehandlingPage = () => {
 
 const HeaderContent = (props: { tilUtfylling: number; underArbeid: number }) => (
   <Block marginBottom="33px">
-    <Paragraph2 marginTop="0px" marginBottom="0px">
+    <Paragraph4 marginTop="0px" marginBottom="0px">
       Til utfylling: {props.tilUtfylling} krav
-    </Paragraph2>
-    <Paragraph2 marginTop="0px" marginBottom="0px">
+    </Paragraph4>
+    <Paragraph4 marginTop="0px" marginBottom="0px">
       Under arbeid: {props.underArbeid} krav
-    </Paragraph2>
+    </Paragraph4>
   </Block>
 )
 
@@ -180,8 +180,8 @@ const TemaCardBehandling = ({ tema, stats, behandling }: { tema: TemaCode; stats
     }
   })
 
-  if(tema.shortName=== 'Personvern'){
-    console.log('KRAV!!!', tema.shortName,krav)
+  if (tema.shortName === 'Personvern') {
+    console.log('KRAV!!!', tema.shortName, krav)
   }
   // const variables = filterForBehandling(behandling, lover)
   // const { data: rawData, loading } = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
@@ -231,20 +231,20 @@ const TemaCardBehandling = ({ tema, stats, behandling }: { tema: TemaCode; stats
     >
       <Block marginTop={theme.sizing.scale650}>
         <Block display="flex" flex={1}>
-          <Paragraph2 marginTop="0px" marginBottom="2px">
-            Utfylt:
-          </Paragraph2>
-          <Block display="flex" justifyContent="flex-end" flex={1}>
-            <Paragraph2 marginTop="0px" marginBottom="2px">
-              {krav.length ? ((utfylt / krav.length) * 100).toFixed(0) : 100}%
-            </Paragraph2>
+          <Paragraph4 marginTop="0px" marginBottom="2px">
+            Ferdig utfylt:
+          </Paragraph4>
+          <Block display='flex' flex={1} justifyContent='flex-end'>
+            <Paragraph4  marginTop="0px" marginBottom="2px">
+              {utfylt} krav
+            </Paragraph4>
           </Block>
         </Block>
         <Block>
           <ProgressBar
             value={utfylt}
             successValue={krav.length}
-            size={SIZE.large}
+            size={SIZE.medium}
             overrides={{
               BarProgress: {
                 style: {

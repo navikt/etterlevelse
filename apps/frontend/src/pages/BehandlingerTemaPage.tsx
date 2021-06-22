@@ -94,7 +94,7 @@ export const BehandlingerTemaPage = () => {
       }
     })
 
-    return antallUtfylt / kravData.length * 100
+    return antallUtfylt
   }
 
   const getMainHeader = () => (
@@ -141,9 +141,9 @@ export const BehandlingerTemaPage = () => {
         <Block $style={{ border: '1px solid ' + ettlevColors.green50, background: '#102723' }} height="40px" />
         <Block display="flex" alignItems="baseline" marginLeft="30px">
           <H1 color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
-            {getPercentageUtfylt().toFixed(2)}
+            {getPercentageUtfylt()}
           </H1>
-          <Paragraph2>% ferdig utfylt</Paragraph2>
+          <Paragraph2> ferdig utfylt</Paragraph2>
         </Block>
       </Block>
     </Block>
@@ -155,7 +155,7 @@ export const BehandlingerTemaPage = () => {
       mainHeader={getMainHeader()}
       secondaryHeaderBackgroundColor={ettlevColors.white}
       secondaryHeader={getSecondaryHeader()}
-      childrenBackgroundColor={ettlevColors.grey50}
+      childrenBackgroundColor={ettlevColors.grey25}
       backBtnUrl={`/behandling/${params.id}`}
     >
       <Block display="flex" width="100%" justifyContent="space-between" flexWrap marginTop='87px' marginBottom='87px'>
@@ -265,7 +265,7 @@ const KravCard = (props: { krav: KravEtterlevelseData, setEdit: Function, setKra
               <Paragraph4 $style={{ fontSize: '16px', lineHeight: '24px', marginBottom: '0px', marginTop: '0px', width: 'fit-content' }}>
                 K{props.krav.kravNummer}.{props.krav.kravVersjon}
               </Paragraph4>
-              <Label3 $style={{ fontSize: '22px', lineHeight: '28px' }}>
+              <Label3 $style={{ fontSize: '22px', lineHeight: '28px', alignContent: 'flex-start'}}>
                 {props.krav.navn}
               </Label3>
             </Block>
