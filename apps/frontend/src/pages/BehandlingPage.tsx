@@ -180,9 +180,6 @@ const TemaCardBehandling = ({ tema, stats, behandling }: { tema: TemaCode; stats
     }
   })
 
-  if (tema.shortName === 'Personvern') {
-    console.log('KRAV!!!', tema.shortName, krav)
-  }
   // const variables = filterForBehandling(behandling, lover)
   // const { data: rawData, loading } = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
   //   variables,
