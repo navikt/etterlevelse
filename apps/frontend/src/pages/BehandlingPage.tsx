@@ -25,6 +25,7 @@ export const BehandlingPage = () => {
   const formRef = useRef<FormikProps<any>>()
   const { data } = useQuery<{ behandling: PageResponse<{ stats: BehandlingStats }> }>(statsQuery, {
     variables: { behandlingId: behandling?.id },
+    skip: !behandling?.id
   })
 
   const [stats, setStats] = useState<any[]>([])
