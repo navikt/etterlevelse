@@ -167,17 +167,17 @@ export const BehandlingerTemaPage = () => {
     >
       <Block display="flex" width="100%" justifyContent="space-between" flexWrap marginTop='87px' marginBottom='87px'>
         <CustomizedAccordion>
-          <CustomizedPanel title={<PanelHeader title={'Skal fylles ut'} kravData={skalUtfyllesKrav} />}>
+          <CustomizedPanel HeaderActiveBackgroundColor={ettlevColors.green50} title={<PanelHeader title={'Skal fylles ut'} kravData={skalUtfyllesKrav} />}>
             {skalUtfyllesKrav.map((k) => {
               return <KravCard krav={k} setEdit={setEdit} setKravId={setKravId} />
             })}
           </CustomizedPanel>
-          <CustomizedPanel title={<PanelHeader title={'Under utfylling'} kravData={underArbeidKrav} />}>
+          <CustomizedPanel HeaderActiveBackgroundColor={ettlevColors.green50}  title={<PanelHeader title={'Under utfylling'} kravData={underArbeidKrav} />}>
             {underArbeidKrav.map((k) => {
               return <KravCard krav={k} setEdit={setEdit} setKravId={setKravId} />
             })}
           </CustomizedPanel>
-          <CustomizedPanel title={<PanelHeader title={'Ferdig utfylt'} kravData={utfyltKrav} />}>
+          <CustomizedPanel HeaderActiveBackgroundColor={ettlevColors.green50}  title={<PanelHeader title={'Ferdig utfylt'} kravData={utfyltKrav} />}>
             {utfyltKrav.map((k) => {
               return <KravCard krav={k} setEdit={setEdit} setKravId={setKravId} />
             })}
@@ -265,14 +265,14 @@ const KravCard = (props: { krav: KravEtterlevelseData, setEdit: Function, setKra
       }}
     >
       <Block width='100%'>
-        <Card overrides={{Root: {style: {borderTopWidth: '1px', borderBottomWidth: '1px', borderLeftWidth: '1px', borderRightWidth: '1px'}}}}>
+        <Card overrides={{ Root: { style: { borderTopWidth: '1px', borderBottomWidth: '1px', borderLeftWidth: '1px', borderRightWidth: '1px' } } }}>
           <Block display='flex' width='100%'>
             <img src={circlePencilIcon} alt='pencil icon' />
             <Block marginLeft='24px'>
               <Paragraph4 $style={{ fontSize: '16px', lineHeight: '24px', marginBottom: '0px', marginTop: '0px', width: 'fit-content' }}>
                 K{props.krav.kravNummer}.{props.krav.kravVersjon}
               </Paragraph4>
-              <Label3 $style={{ fontSize: '22px', lineHeight: '28px', alignContent: 'flex-start'}}>
+              <Label3 $style={{ fontSize: '22px', lineHeight: '28px', alignContent: 'flex-start' }}>
                 {props.krav.navn}
               </Label3>
             </Block>
