@@ -180,22 +180,6 @@ const TemaCardBehandling = ({ tema, stats, behandling }: { tema: TemaCode; stats
     }
   })
 
-  // const variables = filterForBehandling(behandling, lover)
-  // const { data: rawData, loading } = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
-  //   variables,
-  //   skip: !lover.length
-  // })
-  // const krav = rawData?.krav.content.filter(k => !relevans.length || k.relevansFor.map(r => r.code).some(r => relevans.includes(r))) || []
-
-  // if (krav.length) {
-  //   for (let index = krav.length - 1; index > 0; index--) {
-  //     if (krav[index].kravNummer === krav[index - 1].kravNummer) {
-  //       krav.splice(index - 1, 1)
-  //     }
-  //   }
-  //   console.log(krav, tema.shortName)
-  // }
-
   const overrides: PanelLinkCardOverrides = {
     Header: {
       Block: {
