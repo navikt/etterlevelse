@@ -91,14 +91,14 @@ export const BehandlingPage = () => {
         <Teams teams={behandling.teams} link list />
       </Block>
 
-      <Block width="400px" height="260px" backgroundColor={ettlevColors.white} marginTop={theme.sizing.scale400}>
+      {/* <Block width="400px" height="260px" backgroundColor={ettlevColors.white} marginTop={theme.sizing.scale400}>
         <Block padding="5px">
           <HeadingLarge>Hva er egenskapene til behandlingen?</HeadingLarge>
           <Block $style={{ fontWeight: 400, fontSize: '18px', fontFamily: 'Source Sans Pro' }}>
             Hvis du tilpasser egenskapene skjuler vi kravene som ikke er relevante for din løsning.
           </Block>
         </Block>
-      </Block>
+      </Block> */}
     </Block>
   )
 
