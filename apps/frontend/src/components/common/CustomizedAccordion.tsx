@@ -12,8 +12,18 @@ export const CustomizedAccordion = (props: AccordionProps) => {
   return <Accordion {...props} overrides={{}} />
 }
 
-export const CustomizedPanel = (props: PanelProps) => {
+interface CustomizedPanelProps {
+  HeaderBackgroundColor?: string
+  HeaderActiveBackgroundColor?: string
+}
+
+type CustomProps = CustomizedPanelProps & PanelProps
+
+export const CustomizedPanel = (props: CustomProps) => {
   const { expanded } = props
+
+  const headerBackgroundColor = props.HeaderBackgroundColor ? props.HeaderBackgroundColor : ettlevColors.white
+  const headerActiveBackgroundColor = props.HeaderActiveBackgroundColor ? props.HeaderActiveBackgroundColor : ettlevColors.grey50
 
   const customOverrides: PanelOverrides<any> = {
     ToggleIcon: {
@@ -21,7 +31,7 @@ export const CustomizedPanel = (props: PanelProps) => {
     },
     Header: {
       style: {
-        backgroundColor: expanded ? ettlevColors.grey50 : ettlevColors.white,
+        backgroundColor: expanded ? headerActiveBackgroundColor : headerBackgroundColor,
         ...borderStyle('solid'),
         ...borderWidth('1px'),
         ...borderColor(ettlevColors.grey100),
