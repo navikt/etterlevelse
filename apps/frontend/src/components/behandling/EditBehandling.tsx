@@ -39,9 +39,7 @@ export const EditBehandling = ({ behandling, close, formRef, setBehandling }: Ed
             <Button type="button" kind="secondary" marginRight onClick={close}>
               Avbryt
             </Button>
-            <Button type="button" disabled={isSubmitting}
-              onClick={submitForm}
-            >
+            <Button type="button" disabled={isSubmitting} onClick={submitForm}>
               Lagre
             </Button>
           </Block>

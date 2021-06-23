@@ -71,7 +71,7 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
       fristForFerdigstillelse: etterlevelse.status !== EtterlevelseStatus.OPPFYLLES_SENERE ? '' : etterlevelse.fristForFerdigstillelse,
     }
 
-    if (etterlevelse.id) { 
+    if (etterlevelse.id) {
       close(await updateEtterlevelse(mutatedEtterlevelse))
     } else {
       close(await createEtterlevelse(mutatedEtterlevelse))
@@ -195,7 +195,7 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
               <Button type="button" kind="secondary" marginRight onClick={close}>
                 Avbryt og forkast endringene
               </Button>
-              <Button type="button" kind='secondary' marginRight disabled={isSubmitting} onClick={submitForm}>
+              <Button type="button" kind="secondary" marginRight disabled={isSubmitting} onClick={submitForm}>
                 Lagre og fortsett senere
               </Button>
               <Button type="button" disabled={isSubmitting} onClick={submitForm}>

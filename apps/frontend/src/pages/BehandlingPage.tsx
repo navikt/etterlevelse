@@ -26,7 +26,7 @@ export const BehandlingPage = () => {
 
   const { data, refetch } = useQuery<{ behandling: PageResponse<{ stats: BehandlingStats }> }>(statsQuery, {
     variables: { behandlingId: behandling?.id },
-    skip: !behandling?.id
+    skip: !behandling?.id,
   })
   const [edit, setEdit] = useState(false)
 
@@ -35,10 +35,10 @@ export const BehandlingPage = () => {
   const filterData = (
     data:
       | {
-        behandling: PageResponse<{
-          stats: BehandlingStats
-        }>
-      }
+          behandling: PageResponse<{
+            stats: BehandlingStats
+          }>
+        }
       | undefined,
   ) => {
     const StatusListe: any[] = []
@@ -75,8 +75,7 @@ export const BehandlingPage = () => {
 
   React.useEffect(() => {
     setTimeout(() => refetch(), 200)
-  },
-    [behandling])
+  }, [behandling])
 
   const temaListe = codelist.getCodes(ListName.TEMA).sort((a, b) => a.shortName.localeCompare(b.shortName, 'nb'))
   let antallFylttKrav = 0
@@ -100,18 +99,14 @@ export const BehandlingPage = () => {
 
       <Block width="400px" height="260px" backgroundColor={ettlevColors.white} marginTop={theme.sizing.scale400}>
         <Block padding="22px">
-          <Block marginBottom='27px'>
+          <Block marginBottom="27px">
             <HeadingLarge>Hva er egenskapene til behandlingen?</HeadingLarge>
             <Block $style={{ fontWeight: 400, fontSize: '18px', fontFamily: 'Source Sans Pro' }}>
               Hvis du tilpasser egenskapene skjuler vi kravene som ikke er relevante for din løsning.
             </Block>
           </Block>
 
-          <Button
-            onClick={() => setEdit(!edit)}
-          >
-            Tilpass egenskapene
-          </Button>
+          <Button onClick={() => setEdit(!edit)}>Tilpass egenskapene</Button>
         </Block>
       </Block>
     </Block>
@@ -149,34 +144,34 @@ export const BehandlingPage = () => {
   if (!behandling) return <LoadingSkeleton header="Behandling" />
 
   return (
-    <Block width='100%'>
-      {!edit && <Layout2
-        headerBackgroundColor={ettlevColors.grey50}
-        mainHeader={getMainHeader(behandling)}
-        secondaryHeaderBackgroundColor={ettlevColors.white}
-        secondaryHeader={getSecondaryHeader(behandling)}
-        childrenBackgroundColor={ettlevColors.grey25}
-        backBtnUrl={'/behandlinger'}
-      >
-        <Block display="flex" width="100%" justifyContent="space-between" flexWrap marginTop={theme.sizing.scale1200}>
-          {temaListe.map((tema) => (
-            <TemaCardBehandling
-              tema={tema}
-              stats={stats}
-              behandling={behandling}
-              key={`${tema.shortName}_panel`}
-            />
-          ))}
-        </Block>
-      </Layout2>}
-      {edit && <EditBehandling behandling={behandling} formRef={formRef} setBehandling={setBehandling}
-        close={
-          (e?: BehandlingEtterlevData) => {
+    <Block width="100%">
+      {!edit && (
+        <Layout2
+          headerBackgroundColor={ettlevColors.grey50}
+          mainHeader={getMainHeader(behandling)}
+          secondaryHeaderBackgroundColor={ettlevColors.white}
+          secondaryHeader={getSecondaryHeader(behandling)}
+          childrenBackgroundColor={ettlevColors.grey25}
+          backBtnUrl={'/behandlinger'}
+        >
+          <Block display="flex" width="100%" justifyContent="space-between" flexWrap marginTop={theme.sizing.scale1200}>
+            {temaListe.map((tema) => (
+              <TemaCardBehandling tema={tema} stats={stats} behandling={behandling} key={`${tema.shortName}_panel`} />
+            ))}
+          </Block>
+        </Layout2>
+      )}
+      {edit && (
+        <EditBehandling
+          behandling={behandling}
+          formRef={formRef}
+          setBehandling={setBehandling}
+          close={(e?: BehandlingEtterlevData) => {
             setEdit(false)
             e && setBehandling({ ...behandling, ...e })
-          }
-        }
-      />}
+          }}
+        />
+      )}
     </Block>
   )
 }
@@ -232,10 +227,10 @@ const TemaCardBehandling = ({ tema, stats, behandling }: { tema: TemaCode; stats
     Root: {
       Block: {
         style: {
-          display: !krav.length ? 'none' : 'block'
-        }
-      }
-    }
+          display: !krav.length ? 'none' : 'block',
+        },
+      },
+    },
   }
 
   return (
@@ -253,7 +248,7 @@ const TemaCardBehandling = ({ tema, stats, behandling }: { tema: TemaCode; stats
           <Paragraph4 marginTop="0px" marginBottom="2px">
             Ferdig utfylt:
           </Paragraph4>
-          <Block display='flex' flex={1} justifyContent='flex-end'>
+          <Block display="flex" flex={1} justifyContent="flex-end">
             <Paragraph4 marginTop="0px" marginBottom="2px">
               {utfylt} av {krav.length} krav
             </Paragraph4>

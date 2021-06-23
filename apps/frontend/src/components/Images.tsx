@@ -48,9 +48,9 @@ import paragrafIcon from '../resources/icons/paragraf-ikon.svg'
 import crossIcon from '../resources/icons/cross.svg'
 import circlePencilIcon from '../resources/icons/circle-pencil-icon.svg'
 import illustration from '../resources/giammarco-boscaro-zeH-ljawHtg-unsplash.jpg'
-import {codelist, ListName, LovCode, TemaCode} from '../services/Codelist'
+import { codelist, ListName, LovCode, TemaCode } from '../services/Codelist'
 import React from 'react'
-import {theme} from '../util'
+import { theme } from '../util'
 
 export {
   pencilFill,
