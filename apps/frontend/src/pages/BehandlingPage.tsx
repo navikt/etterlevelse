@@ -9,7 +9,7 @@ import { ettlevColors, theme } from '../util/theme'
 import { Layout2 } from '../components/scaffold/Page'
 import { Teams } from '../components/common/TeamName'
 import { arkPennIcon } from '../components/Images'
-import { Behandling, EtterlevelseStatus, PageResponse } from '../constants'
+import { Behandling, BehandlingEtterlevData, EtterlevelseStatus, PageResponse } from '../constants'
 import { useQuery } from '@apollo/client'
 import { BehandlingStats, statsQuery } from '../components/behandling/ViewBehandling'
 import { codelist, ListName, TemaCode } from '../services/Codelist'
@@ -23,13 +23,12 @@ export const BehandlingPage = () => {
   const params = useParams<{ id?: string }>()
   const [behandling, setBehandling] = useBehandling(params.id)
   const formRef = useRef<FormikProps<any>>()
-  const { data } = useQuery<{ behandling: PageResponse<{ stats: BehandlingStats }> }>(statsQuery, {
+  
+  const { data, refetch } = useQuery<{ behandling: PageResponse<{ stats: BehandlingStats }> }>(statsQuery, {
     variables: { behandlingId: behandling?.id },
     skip: !behandling?.id
   })
   const [edit, setEdit] = useState(false)
-
-  console.log(data)
 
   const [stats, setStats] = useState<any[]>([])
 
@@ -73,6 +72,11 @@ export const BehandlingPage = () => {
   React.useEffect(() => {
     setStats(filterData(data))
   }, [data])
+
+  React.useEffect(() => {
+    setTimeout(()=> refetch(), 200)
+  }, 
+  [behandling])
 
   const temaListe = codelist.getCodes(ListName.TEMA).sort((a, b) => a.shortName.localeCompare(b.shortName, 'nb'))
   let antallFylttKrav = 0
@@ -165,8 +169,9 @@ export const BehandlingPage = () => {
       </Layout2>}
       {edit && <EditBehandling behandling={behandling} formRef={formRef} setBehandling={setBehandling}
         close={
-          () =>
+          (e?: BehandlingEtterlevData) =>{
             setEdit(false)
+            e && setBehandling({...behandling, ...e})}
         }
       />}
     </Block>

@@ -20,7 +20,6 @@ export const EditBehandling = ({ behandling, close, formRef, setBehandling }: Ed
   return (
     <Formik
       onSubmit={async (b: BehandlingEtterlevData) => {
-        setBehandling({...behandling, ...b})
         close(await updateBehandling(b))
       }}
       initialValues={mapToFormVal(behandling)}
@@ -41,9 +40,7 @@ export const EditBehandling = ({ behandling, close, formRef, setBehandling }: Ed
               Avbryt
             </Button>
             <Button type="button" disabled={isSubmitting}
-              onClick={() => {
-                submitForm()
-              }}
+              onClick={submitForm}
             >
               Lagre
             </Button>
