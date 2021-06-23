@@ -46,9 +46,13 @@ public class BehandlingFieldResolver implements GraphQLResolver<Behandling> {
 
     public BehandlingStats stats(Behandling behandling) {
         var relevans = behandling.getRelevansFor();
-        if (relevans.isEmpty()) {
+
+        // Temporarily disabled
+        /*
+       if (relevans.isEmpty()) {
             return BehandlingStats.empty();
         }
+        */
 
         var etterlevelser = etterlevelseService.getByBehandling(behandling.getId());
         var krav = convert(kravService.findForBehandling(behandling.getId()), Krav::toResponse);
