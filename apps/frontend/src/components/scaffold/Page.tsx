@@ -87,7 +87,7 @@ export const Narrow = (props: { children: React.ReactNode }) => (
 
 const ChevronLeft = (props: { fill?: string }) => (
   <svg width="10" height="18" viewBox="0 0 10 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path fill-rule="evenodd" clip-rule="evenodd" d="M0 9L8.57143 0L10 1.5L2.85714 9L10 16.5L8.57143 18L0 9Z" fill={props.fill ? props.fill : ettlevColors.black} />
+    <path fillRule="evenodd" clipRule="evenodd" d="M0 9L8.57143 0L10 1.5L2.85714 9L10 16.5L8.57143 18L0 9Z" fill={props.fill ? props.fill : ettlevColors.black} />
   </svg>
 )
 

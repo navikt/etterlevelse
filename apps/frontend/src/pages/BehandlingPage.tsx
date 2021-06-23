@@ -15,9 +15,7 @@ import { BehandlingStats, statsQuery } from '../components/behandling/ViewBehand
 import { codelist, ListName, TemaCode } from '../services/Codelist'
 import { PanelLinkCard, PanelLinkCardOverrides } from '../components/common/PanelLink'
 import { cardWidth } from './TemaPage'
-import { urlForObject } from '../components/common/RouteLink'
 import { ProgressBar, SIZE } from 'baseui/progress-bar'
-import { ObjectType } from '../components/admin/audit/AuditTypes'
 
 export const BehandlingPage = () => {
   const params = useParams<{ id?: string }>()
@@ -27,6 +25,8 @@ export const BehandlingPage = () => {
     variables: { behandlingId: behandling?.id },
     skip: !behandling?.id
   })
+
+  console.log(data)
 
   const [stats, setStats] = useState<any[]>([])
 
@@ -144,7 +144,12 @@ export const BehandlingPage = () => {
     >
       <Block display="flex" width="100%" justifyContent="space-between" flexWrap marginTop={theme.sizing.scale1200}>
         {temaListe.map((tema) => (
-          <TemaCardBehandling tema={tema} stats={stats} behandling={behandling} />
+          <TemaCardBehandling
+            tema={tema}
+            stats={stats}
+            behandling={behandling}
+            key={`${tema.shortName}_panel`}
+          />
         ))}
       </Block>
     </Layout2>
@@ -209,47 +214,47 @@ const TemaCardBehandling = ({ tema, stats, behandling }: { tema: TemaCode; stats
   }
 
   return (
-      <PanelLinkCard
-        width={cardWidth}
-        overrides={overrides}
-        verticalMargin={theme.sizing.scale400}
-        href={`/behandling/${behandling.id}/${tema.code}`}
-        tittel={tema.shortName}
-        headerContent={<HeaderContent tilUtfylling={tilUtfylling} underArbeid={underArbeid} />}
-        flexContent
-      >
-        <Block marginTop={theme.sizing.scale650}>
-          <Block display="flex" flex={1}>
+    <PanelLinkCard
+      width={cardWidth}
+      overrides={overrides}
+      verticalMargin={theme.sizing.scale400}
+      href={`/behandling/${behandling.id}/${tema.code}`}
+      tittel={tema.shortName}
+      headerContent={<HeaderContent tilUtfylling={tilUtfylling} underArbeid={underArbeid} />}
+      flexContent
+    >
+      <Block marginTop={theme.sizing.scale650}>
+        <Block display="flex" flex={1}>
+          <Paragraph4 marginTop="0px" marginBottom="2px">
+            Ferdig utfylt:
+          </Paragraph4>
+          <Block display='flex' flex={1} justifyContent='flex-end'>
             <Paragraph4 marginTop="0px" marginBottom="2px">
-              Ferdig utfylt:
+              {utfylt} av {krav.length} krav
             </Paragraph4>
-            <Block display='flex' flex={1} justifyContent='flex-end'>
-              <Paragraph4 marginTop="0px" marginBottom="2px">
-                {utfylt} av {krav.length} krav
-              </Paragraph4>
-            </Block>
-          </Block>
-          <Block>
-            <ProgressBar
-              value={utfylt}
-              successValue={krav.length}
-              size={SIZE.medium}
-              overrides={{
-                BarProgress: {
-                  style: {
-                    backgroundColor: ettlevColors.green800,
-                  },
-                },
-                BarContainer: {
-                  style: {
-                    marginLeft: '0px',
-                    marginRight: '0px',
-                  },
-                },
-              }}
-            />
           </Block>
         </Block>
-      </PanelLinkCard>
+        <Block>
+          <ProgressBar
+            value={utfylt}
+            successValue={krav.length}
+            size={SIZE.medium}
+            overrides={{
+              BarProgress: {
+                style: {
+                  backgroundColor: ettlevColors.green800,
+                },
+              },
+              BarContainer: {
+                style: {
+                  marginLeft: '0px',
+                  marginRight: '0px',
+                },
+              },
+            }}
+          />
+        </Block>
+      </Block>
+    </PanelLinkCard>
   )
 }
