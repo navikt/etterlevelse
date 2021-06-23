@@ -65,7 +65,8 @@ public class KravRepoImpl implements KravRepoCustom {
                      select jsonb_array_elements_text(data -> 'relevansFor')
                       from generic_storage
                       where data ->> 'behandlingId' = :behandlingId
-                        and type = 'BehandlingData') 
+                        and type = 'BehandlingData')
+                    or jsonb_array_length(data -> 'relevansFor') = 0
                     ) 
                     """;
             par.addValue("behandlingId", filter.getBehandlingId());
