@@ -23,7 +23,7 @@ export const BehandlingPage = () => {
   const params = useParams<{ id?: string }>()
   const [behandling, setBehandling] = useBehandling(params.id)
   const formRef = useRef<FormikProps<any>>()
-  
+
   const { data, refetch } = useQuery<{ behandling: PageResponse<{ stats: BehandlingStats }> }>(statsQuery, {
     variables: { behandlingId: behandling?.id },
     skip: !behandling?.id
@@ -74,9 +74,9 @@ export const BehandlingPage = () => {
   }, [data])
 
   React.useEffect(() => {
-    setTimeout(()=> refetch(), 200)
-  }, 
-  [behandling])
+    setTimeout(() => refetch(), 200)
+  },
+    [behandling])
 
   const temaListe = codelist.getCodes(ListName.TEMA).sort((a, b) => a.shortName.localeCompare(b.shortName, 'nb'))
   let antallFylttKrav = 0
@@ -99,18 +99,20 @@ export const BehandlingPage = () => {
       </Block>
 
       <Block width="400px" height="260px" backgroundColor={ettlevColors.white} marginTop={theme.sizing.scale400}>
-        <Block padding="5px">
-          <HeadingLarge>Hva er egenskapene til behandlingen?</HeadingLarge>
-          <Block $style={{ fontWeight: 400, fontSize: '18px', fontFamily: 'Source Sans Pro' }}>
-            Hvis du tilpasser egenskapene skjuler vi kravene som ikke er relevante for din løsning.
+        <Block padding="22px">
+          <Block marginBottom='27px'>
+            <HeadingLarge>Hva er egenskapene til behandlingen?</HeadingLarge>
+            <Block $style={{ fontWeight: 400, fontSize: '18px', fontFamily: 'Source Sans Pro' }}>
+              Hvis du tilpasser egenskapene skjuler vi kravene som ikke er relevante for din løsning.
+            </Block>
           </Block>
-        </Block>
 
-        <Button
-          onClick={() => setEdit(!edit)}
-        >
-          Tilpass egenskapene
-        </Button>
+          <Button
+            onClick={() => setEdit(!edit)}
+          >
+            Tilpass egenskapene
+          </Button>
+        </Block>
       </Block>
     </Block>
   )
@@ -148,7 +150,7 @@ export const BehandlingPage = () => {
 
   return (
     <Block width='100%'>
-     {!edit && <Layout2
+      {!edit && <Layout2
         headerBackgroundColor={ettlevColors.grey50}
         mainHeader={getMainHeader(behandling)}
         secondaryHeaderBackgroundColor={ettlevColors.white}
@@ -169,9 +171,10 @@ export const BehandlingPage = () => {
       </Layout2>}
       {edit && <EditBehandling behandling={behandling} formRef={formRef} setBehandling={setBehandling}
         close={
-          (e?: BehandlingEtterlevData) =>{
+          (e?: BehandlingEtterlevData) => {
             setEdit(false)
-            e && setBehandling({...behandling, ...e})}
+            e && setBehandling({ ...behandling, ...e })
+          }
         }
       />}
     </Block>
