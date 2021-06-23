@@ -178,6 +178,7 @@ export enum EtterlevelseStatus {
   FERDIG = 'FERDIG',
   OPPFYLLES_SENERE = 'OPPFYLLES_SENERE',
   IKKE_RELEVANT = 'IKKE_RELEVANT',
+  FERDIG_DOKUMENTERT = 'FERDIG_DOKUMENTERT'
 }
 
 export enum KravStatus {

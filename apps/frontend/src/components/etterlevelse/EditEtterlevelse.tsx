@@ -19,7 +19,7 @@ import { circlePencilIcon } from '../Images'
 import { ettlevColors } from '../../util/theme'
 import { Card } from 'baseui/card'
 import { SuksesskriterierBegrunnelseEdit } from './Edit/SuksesskriterieBegrunnelseEdit'
-import { ALIGN, Radio, RadioGroup, StyledRadioMarkInner } from 'baseui/radio'
+import { Radio, RadioGroup } from 'baseui/radio'
 import { Code } from '../../services/Codelist'
 import { Error } from '../common/ModalSchema'
 
@@ -54,7 +54,7 @@ const etterlevelseSchema = () => {
       message: 'Du må dokumentere på alle suksesskriterier før du er ferdig',
       test: function (status) {
         const { parent } = this
-        if (status === EtterlevelseStatus.FERDIG) {
+        if (status === EtterlevelseStatus.FERDIG || status === EtterlevelseStatus.FERDIG_DOKUMENTERT) {
           return parent.suksesskriterieBegrunnelser.every((skb: any) => skb.oppfylt && !!skb.begrunnelse)
         }
         return true
@@ -70,6 +70,8 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
       ...etterlevelse,
       fristForFerdigstillelse: etterlevelse.status !== EtterlevelseStatus.OPPFYLLES_SENERE ? '' : etterlevelse.fristForFerdigstillelse,
     }
+
+    console.log(mutatedEtterlevelse)
 
     if (etterlevelse.id) {
       close(await updateEtterlevelse(mutatedEtterlevelse))
@@ -158,7 +160,7 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
                               },
                             },
                           }}
-                          value={etterlevelseStatus}
+                          value={etterlevelseStatus === EtterlevelseStatus.FERDIG_DOKUMENTERT ? EtterlevelseStatus.FERDIG : etterlevelseStatus}
                           onChange={(event) => {
                             p.form.setFieldValue('status', event.currentTarget.value)
                             setEtterlevelseStatus(event.currentTarget.value)
@@ -173,6 +175,9 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
                                   {etterlevelseStatus === EtterlevelseStatus.OPPFYLLES_SENERE && <DateField label="Frist (valgfritt)" name="fristForFerdigstillelse" />}
                                 </Radio>
                               )
+                            }
+                            if (id === EtterlevelseStatus.FERDIG_DOKUMENTERT) {
+                              return null
                             }
                             return (
                               <Radio value={id} key={id}>
@@ -198,7 +203,10 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
               <Button type="button" kind="secondary" marginRight disabled={isSubmitting} onClick={submitForm}>
                 Lagre og fortsett senere
               </Button>
-              <Button type="button" disabled={isSubmitting} onClick={submitForm}>
+              <Button type="button" onClick={() => {
+                values.status = EtterlevelseStatus.FERDIG_DOKUMENTERT
+                submitForm()
+              }}>
                 Jeg har dokumentert ferdig
               </Button>
             </Block>
