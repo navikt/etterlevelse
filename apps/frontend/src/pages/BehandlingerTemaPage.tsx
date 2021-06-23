@@ -283,7 +283,6 @@ const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function; setKra
 }
 
 const KravView = (props: { kravId: KravId; etterlevelse: Etterlevelse; close: Function; behandlingNavn: string }) => {
-  console.log(props.etterlevelse)
   const { data } = useQuery<{ kravById: KravQL }, KravId>(kravFullQuery, {
     variables: props.kravId,
     skip: !props.kravId.id && !props.kravId.kravNummer,
