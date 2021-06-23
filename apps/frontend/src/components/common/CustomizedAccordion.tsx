@@ -63,7 +63,7 @@ export const CustomizedPanel = (props: CustomProps) => {
     PanelContainer: {
       style: {
         marginBottom: theme.sizing.scale200,
-        borderStyle: 'hidden',
+        ...borderStyle('hidden')
       },
     },
   }
