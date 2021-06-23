@@ -225,7 +225,7 @@ const TemaCardBehandling = ({ tema, stats, behandling }: { tema: TemaCode; stats
             </Paragraph4>
             <Block display='flex' flex={1} justifyContent='flex-end'>
               <Paragraph4 marginTop="0px" marginBottom="2px">
-                {utfylt} krav
+                {utfylt} av {krav.length} krav
               </Paragraph4>
             </Block>
           </Block>
