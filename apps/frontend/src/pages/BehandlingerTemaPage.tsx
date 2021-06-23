@@ -61,6 +61,10 @@ export const BehandlingerTemaPage = () => {
   const [edit, setEdit] = useState<string | undefined>()
   const [kravId, setKravId] = useState<KravId | undefined>()
 
+  const [isPanelOneExpandend, setIsPanelOneExpanded] = useState(false)
+  const [isPanelTwoExpandend, setIsPanelTwoExpanded] = useState(false)
+  const [isPanelThreeExpandend, setIsPanelThreeExpanded] = useState(false)
+
   useEffect(() => {
     const mapped = (rawData?.krav.content || []).map((krav) => {
       const etterlevelse = krav.etterlevelser.length ? krav.etterlevelser[0] : undefined
@@ -164,20 +168,20 @@ export const BehandlingerTemaPage = () => {
       backBtnUrl={`/behandling/${params.id}`}
     >
       <Block display="flex" width="100%" justifyContent="space-between" flexWrap marginTop="87px" marginBottom="87px">
-        <CustomizedAccordion>
+        <CustomizedAccordion accordion={false}>
           <CustomizedPanel HeaderActiveBackgroundColor={ettlevColors.green50} title={<PanelHeader title={'Skal fylles ut'} kravData={skalUtfyllesKrav} />}>
             {skalUtfyllesKrav.map((k) => {
-              return <KravCard krav={k} setEdit={setEdit} setKravId={setKravId} />
+              return <KravCard key={`${k.navn}_${k.kravNummer}`} krav={k} setEdit={setEdit} setKravId={setKravId} />
             })}
           </CustomizedPanel>
           <CustomizedPanel HeaderActiveBackgroundColor={ettlevColors.green50} title={<PanelHeader title={'Under utfylling'} kravData={underArbeidKrav} />}>
             {underArbeidKrav.map((k) => {
-              return <KravCard krav={k} setEdit={setEdit} setKravId={setKravId} />
+              return <KravCard key={`${k.navn}_${k.kravNummer}`} krav={k} setEdit={setEdit} setKravId={setKravId} />
             })}
           </CustomizedPanel>
           <CustomizedPanel HeaderActiveBackgroundColor={ettlevColors.green50} title={<PanelHeader title={'Ferdig utfylt'} kravData={utfyltKrav} />}>
             {utfyltKrav.map((k) => {
-              return <KravCard krav={k} setEdit={setEdit} setKravId={setKravId} />
+              return <KravCard key={`${k.navn}_${k.kravNummer}`} krav={k} setEdit={setEdit} setKravId={setKravId} />
             })}
           </CustomizedPanel>
         </CustomizedAccordion>
