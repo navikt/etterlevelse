@@ -13,12 +13,16 @@ type EditBehProps = {
   behandling: Behandling
   close: (behandling?: BehandlingEtterlevData) => void
   formRef: React.Ref<any>
+  setBehandling: Function
 }
 
-export const EditBehandling = ({ behandling, close, formRef }: EditBehProps) => {
+export const EditBehandling = ({ behandling, close, formRef, setBehandling }: EditBehProps) => {
   return (
     <Formik
-      onSubmit={async (b: BehandlingEtterlevData) => close(await updateBehandling(b))}
+      onSubmit={async (b: BehandlingEtterlevData) => {
+        setBehandling({...behandling, ...b})
+        close(await updateBehandling(b))
+      }}
       initialValues={mapToFormVal(behandling)}
       validationSchema={behandlingSchema()}
       innerRef={formRef}
@@ -36,7 +40,11 @@ export const EditBehandling = ({ behandling, close, formRef }: EditBehProps) => 
             <Button type="button" kind="secondary" marginRight onClick={close}>
               Avbryt
             </Button>
-            <Button type="button" disabled={isSubmitting} onClick={submitForm}>
+            <Button type="button" disabled={isSubmitting}
+              onClick={() => {
+                submitForm()
+              }}
+            >
               Lagre
             </Button>
           </Block>

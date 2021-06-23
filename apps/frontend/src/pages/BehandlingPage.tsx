@@ -16,6 +16,8 @@ import { codelist, ListName, TemaCode } from '../services/Codelist'
 import { PanelLinkCard, PanelLinkCardOverrides } from '../components/common/PanelLink'
 import { cardWidth } from './TemaPage'
 import { ProgressBar, SIZE } from 'baseui/progress-bar'
+import { Button } from 'baseui/button'
+import { EditBehandling } from '../components/behandling/EditBehandling'
 
 export const BehandlingPage = () => {
   const params = useParams<{ id?: string }>()
@@ -25,6 +27,7 @@ export const BehandlingPage = () => {
     variables: { behandlingId: behandling?.id },
     skip: !behandling?.id
   })
+  const [edit, setEdit] = useState(false)
 
   console.log(data)
 
@@ -91,14 +94,20 @@ export const BehandlingPage = () => {
         <Teams teams={behandling.teams} link list />
       </Block>
 
-      {/* <Block width="400px" height="260px" backgroundColor={ettlevColors.white} marginTop={theme.sizing.scale400}>
+      <Block width="400px" height="260px" backgroundColor={ettlevColors.white} marginTop={theme.sizing.scale400}>
         <Block padding="5px">
           <HeadingLarge>Hva er egenskapene til behandlingen?</HeadingLarge>
           <Block $style={{ fontWeight: 400, fontSize: '18px', fontFamily: 'Source Sans Pro' }}>
             Hvis du tilpasser egenskapene skjuler vi kravene som ikke er relevante for din løsning.
           </Block>
         </Block>
-      </Block> */}
+
+        <Button
+          onClick={() => setEdit(!edit)}
+        >
+          Tilpass egenskapene
+        </Button>
+      </Block>
     </Block>
   )
 
@@ -134,25 +143,33 @@ export const BehandlingPage = () => {
   if (!behandling) return <LoadingSkeleton header="Behandling" />
 
   return (
-    <Layout2
-      headerBackgroundColor={ettlevColors.grey50}
-      mainHeader={getMainHeader(behandling)}
-      secondaryHeaderBackgroundColor={ettlevColors.white}
-      secondaryHeader={getSecondaryHeader(behandling)}
-      childrenBackgroundColor={ettlevColors.grey25}
-      backBtnUrl={'/behandlinger'}
-    >
-      <Block display="flex" width="100%" justifyContent="space-between" flexWrap marginTop={theme.sizing.scale1200}>
-        {temaListe.map((tema) => (
-          <TemaCardBehandling
-            tema={tema}
-            stats={stats}
-            behandling={behandling}
-            key={`${tema.shortName}_panel`}
-          />
-        ))}
-      </Block>
-    </Layout2>
+    <Block width='100%'>
+     {!edit && <Layout2
+        headerBackgroundColor={ettlevColors.grey50}
+        mainHeader={getMainHeader(behandling)}
+        secondaryHeaderBackgroundColor={ettlevColors.white}
+        secondaryHeader={getSecondaryHeader(behandling)}
+        childrenBackgroundColor={ettlevColors.grey25}
+        backBtnUrl={'/behandlinger'}
+      >
+        <Block display="flex" width="100%" justifyContent="space-between" flexWrap marginTop={theme.sizing.scale1200}>
+          {temaListe.map((tema) => (
+            <TemaCardBehandling
+              tema={tema}
+              stats={stats}
+              behandling={behandling}
+              key={`${tema.shortName}_panel`}
+            />
+          ))}
+        </Block>
+      </Layout2>}
+      {edit && <EditBehandling behandling={behandling} formRef={formRef} setBehandling={setBehandling}
+        close={
+          () =>
+            setEdit(false)
+        }
+      />}
+    </Block>
   )
 }
 
