@@ -61,10 +61,6 @@ export const BehandlingerTemaPage = () => {
   const [edit, setEdit] = useState<string | undefined>()
   const [kravId, setKravId] = useState<KravId | undefined>()
 
-  const [isPanelOneExpandend, setIsPanelOneExpanded] = useState(false)
-  const [isPanelTwoExpandend, setIsPanelTwoExpanded] = useState(false)
-  const [isPanelThreeExpandend, setIsPanelThreeExpanded] = useState(false)
-
   useEffect(() => {
     const mapped = (rawData?.krav.content || []).map((krav) => {
       const etterlevelse = krav.etterlevelser.length ? krav.etterlevelser[0] : undefined
