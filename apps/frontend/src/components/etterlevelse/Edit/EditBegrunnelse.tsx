@@ -44,7 +44,6 @@ const etterlevelseSchema = () =>
 
 const EditBegrunnelse = ({ krav, etterlevelse, close, formRef }: EditBegrunnelseProps) => {
   const submit = async (etterlevelse: Etterlevelse) => {
-    console.log(etterlevelse)
     close(await updateEtterlevelse(etterlevelse))
   }
 

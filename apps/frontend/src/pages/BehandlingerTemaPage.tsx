@@ -1,25 +1,25 @@
-import React, {useEffect, useState} from 'react'
-import {Block} from 'baseui/block'
-import {useParams} from 'react-router-dom'
-import {H1, H2, HeadingLarge, Label3, Paragraph2, Paragraph4} from 'baseui/typography'
-import {ettlevColors, maxPageWidth, theme} from '../util/theme'
-import {codelist, ListName, TemaCode} from '../services/Codelist'
-import RouteLink, {urlForObject} from '../components/common/RouteLink'
-import {useBehandling} from '../api/BehandlingApi'
-import {ObjectType} from '../components/admin/audit/AuditTypes'
-import {Layout2} from '../components/scaffold/Page'
-import {Etterlevelse, EtterlevelseStatus, KravQL, PageResponse, Suksesskriterie} from '../constants'
-import {arkPennIcon, circlePencilIcon, crossIcon} from '../components/Images'
-import {behandlingKravQuery} from '../components/behandling/ViewBehandling'
-import {useQuery} from '@apollo/client'
-import {CustomizedAccordion, CustomizedPanel} from '../components/common/CustomizedAccordion'
-import {Card} from 'baseui/card'
-import {Button, KIND} from 'baseui/button'
+import React, { useEffect, useState } from 'react'
+import { Block } from 'baseui/block'
+import { useParams } from 'react-router-dom'
+import { H1, H2, HeadingLarge, Label3, Paragraph2, Paragraph4 } from 'baseui/typography'
+import { ettlevColors, maxPageWidth, theme } from '../util/theme'
+import { codelist, ListName, TemaCode } from '../services/Codelist'
+import RouteLink, { urlForObject } from '../components/common/RouteLink'
+import { useBehandling } from '../api/BehandlingApi'
+import { ObjectType } from '../components/admin/audit/AuditTypes'
+import { Layout2 } from '../components/scaffold/Page'
+import { Etterlevelse, EtterlevelseStatus, KravQL, PageResponse, Suksesskriterie } from '../constants'
+import { arkPennIcon, circlePencilIcon, crossIcon } from '../components/Images'
+import { behandlingKravQuery } from '../components/behandling/ViewBehandling'
+import { gql, useQuery } from '@apollo/client'
+import { CustomizedAccordion, CustomizedPanel } from '../components/common/CustomizedAccordion'
+import { Card } from 'baseui/card'
+import { Button, KIND } from 'baseui/button'
 import CustomizedModal from '../components/common/CustomizedModal'
-import {Spinner} from 'baseui/icon'
-import {useEtterlevelse} from '../api/EtterlevelseApi'
-import {EditEtterlevelse} from '../components/etterlevelse/EditEtterlevelse'
-import {kravFullQuery, KravId} from '../api/KravApi'
+import { Spinner } from 'baseui/icon'
+import { useEtterlevelse } from '../api/EtterlevelseApi'
+import { EditEtterlevelse } from '../components/etterlevelse/EditEtterlevelse'
+import { kravFullQuery, KravId } from '../api/KravApi'
 
 type KravEtterlevelseData = {
   kravNummer: number
@@ -47,11 +47,12 @@ export const BehandlingerTemaPage = () => {
   const temaData: TemaCode | undefined = codelist.getCode(ListName.TEMA, params.tema)
   const [behandling, setBehandling] = useBehandling(params.id)
   const lover = codelist.getCodesForTema(temaData?.code).map((c) => c.code)
-  const variables = { behandlingId: params.id, lover: lover }
-  const { data: rawData, loading } = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
+  const variables = behandling?.relevansFor.length ? { behandlingId: params.id, lover: lover } : { lover: lover }
+  const { data: rawData, loading } = useQuery<{ krav: PageResponse<KravQL> }>(behandling?.relevansFor.length ? behandlingKravQuery : behandlingKravQueryLovFilterd, {
     variables,
     skip: !params.id || !lover.length,
   })
+
   const [kravData, setKravData] = useState<KravEtterlevelseData[]>([])
 
   const [utfyltKrav, setUtfyltKrav] = useState<KravEtterlevelseData[]>([])
@@ -88,15 +89,7 @@ export const BehandlingerTemaPage = () => {
 
   useEffect(() => {
     setUtfyltKrav(kravData.filter((k) => k.etterlevelseStatus === EtterlevelseStatus.FERDIG_DOKUMENTERT))
-    setUnderArbeidKrav(
-      kravData.filter(
-        (k) =>
-          k.etterlevelseStatus === EtterlevelseStatus.OPPFYLLES_SENERE ||
-          k.etterlevelseStatus === EtterlevelseStatus.UNDER_REDIGERING ||
-          k.etterlevelseStatus === EtterlevelseStatus.FERDIG ||
-          k.etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT,
-      ),
-    )
+    setUnderArbeidKrav(kravData.filter((k) => k.etterlevelseStatus === EtterlevelseStatus.OPPFYLLES_SENERE || k.etterlevelseStatus === EtterlevelseStatus.UNDER_REDIGERING || k.etterlevelseStatus === EtterlevelseStatus.FERDIG || k.etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT))
     setSkalUtfyllesKrav(kravData.filter((k) => k.etterlevelseStatus === undefined || null))
   }, [kravData])
 
@@ -172,20 +165,20 @@ export const BehandlingerTemaPage = () => {
       backBtnUrl={`/behandling/${params.id}`}
     >
       <Block display="flex" width="100%" justifyContent="space-between" flexWrap marginTop="87px" marginBottom="87px">
-        <CustomizedAccordion>
+        <CustomizedAccordion accordion={false}>
           <CustomizedPanel HeaderActiveBackgroundColor={ettlevColors.green50} title={<PanelHeader title={'Skal fylles ut'} kravData={skalUtfyllesKrav} />}>
             {skalUtfyllesKrav.map((k) => {
-              return <KravCard krav={k} setEdit={setEdit} setKravId={setKravId} />
+              return <KravCard key={`${k.navn}_${k.kravNummer}`} krav={k} setEdit={setEdit} setKravId={setKravId} />
             })}
           </CustomizedPanel>
           <CustomizedPanel HeaderActiveBackgroundColor={ettlevColors.green50} title={<PanelHeader title={'Under utfylling'} kravData={underArbeidKrav} />}>
             {underArbeidKrav.map((k) => {
-              return <KravCard krav={k} setEdit={setEdit} setKravId={setKravId} />
+              return <KravCard key={`${k.navn}_${k.kravNummer}`} krav={k} setEdit={setEdit} setKravId={setKravId} />
             })}
           </CustomizedPanel>
           <CustomizedPanel HeaderActiveBackgroundColor={ettlevColors.green50} title={<PanelHeader title={'Ferdig utfylt'} kravData={utfyltKrav} />}>
             {utfyltKrav.map((k) => {
-              return <KravCard krav={k} setEdit={setEdit} setKravId={setKravId} />
+              return <KravCard key={`${k.navn}_${k.kravNummer}`} krav={k} setEdit={setEdit} setKravId={setKravId} />
             })}
           </CustomizedPanel>
         </CustomizedAccordion>
@@ -287,7 +280,6 @@ const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function; setKra
 }
 
 const KravView = (props: { kravId: KravId; etterlevelse: Etterlevelse; close: Function; behandlingNavn: string }) => {
-  console.log(props.etterlevelse)
   const { data } = useQuery<{ kravById: KravQL }, KravId>(kravFullQuery, {
     variables: props.kravId,
     skip: !props.kravId.id && !props.kravId.kravNummer,
@@ -342,3 +334,36 @@ const KravView = (props: { kravId: KravId; etterlevelse: Etterlevelse; close: Fu
     </Block>
   )
 }
+
+export const behandlingKravQueryLovFilterd = gql`
+  query getKravByFilter($lover: [String!]) {
+    krav(filter: {lover: $lover, gjeldendeKrav: true }) {
+      content {
+        id
+        navn
+        kravNummer
+        kravVersjon
+        suksesskriterier {
+          id
+          navn
+          beskrivelse
+        }
+        relevansFor {
+          code
+        }
+        regelverk {
+          lov {
+            code
+            shortName
+          }
+        }
+        etterlevelser(onlyForBehandling: true) {
+          id
+          etterleves
+          fristForFerdigstillelse
+          status
+        }
+      }
+    }
+  }
+`

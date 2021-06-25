@@ -1,31 +1,31 @@
-import React, {useRef, useState} from 'react'
-import {Block} from 'baseui/block'
-import {useParams} from 'react-router-dom'
-import {LoadingSkeleton} from '../components/common/LoadingSkeleton'
-import {useBehandling} from '../api/BehandlingApi'
-import {H1, H2, HeadingLarge, Label3, Paragraph2, Paragraph4} from 'baseui/typography'
-import {FormikProps} from 'formik'
-import {ettlevColors, theme} from '../util/theme'
-import {Layout2} from '../components/scaffold/Page'
-import {Teams} from '../components/common/TeamName'
-import {arkPennIcon} from '../components/Images'
-import {Behandling, BehandlingEtterlevData, EtterlevelseStatus, PageResponse} from '../constants'
-import {useQuery} from '@apollo/client'
-import {BehandlingStats, statsQuery} from '../components/behandling/ViewBehandling'
-import {codelist, ListName, TemaCode} from '../services/Codelist'
-import {PanelLinkCard, PanelLinkCardOverrides} from '../components/common/PanelLink'
-import {cardWidth} from './TemaPage'
-import {ProgressBar, SIZE} from 'baseui/progress-bar'
-import {Button} from 'baseui/button'
-import {EditBehandling} from '../components/behandling/EditBehandling'
+import React, { useRef, useState } from 'react'
+import { Block } from 'baseui/block'
+import { useParams } from 'react-router-dom'
+import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
+import { useBehandling } from '../api/BehandlingApi'
+import { H1, H2, HeadingLarge, Label3, Paragraph2, Paragraph4 } from 'baseui/typography'
+import { FormikProps } from 'formik'
+import { ettlevColors, theme } from '../util/theme'
+import { Layout2 } from '../components/scaffold/Page'
+import { Teams } from '../components/common/TeamName'
+import { arkPennIcon } from '../components/Images'
+import { Behandling, BehandlingEtterlevData, EtterlevelseStatus, PageResponse } from '../constants'
+import { gql, useQuery } from '@apollo/client'
+import { BehandlingStats, statsQuery } from '../components/behandling/ViewBehandling'
+import { codelist, ListName, TemaCode } from '../services/Codelist'
+import { PanelLinkCard, PanelLinkCardOverrides } from '../components/common/PanelLink'
+import { cardWidth } from './TemaPage'
+import { ProgressBar, SIZE } from 'baseui/progress-bar'
+import { Button } from 'baseui/button'
+import { EditBehandling } from '../components/behandling/EditBehandling'
 
 export const BehandlingPage = () => {
   const params = useParams<{ id?: string }>()
   const [behandling, setBehandling] = useBehandling(params.id)
   const formRef = useRef<FormikProps<any>>()
-
-  const { data, refetch } = useQuery<{ behandling: PageResponse<{ stats: BehandlingStats }> }>(statsQuery, {
-    variables: { behandlingId: behandling?.id },
+  const relevans = codelist.getCodes(ListName.RELEVANS).map((r) => { return r.code })
+  const { data, refetch } = useQuery<{ behandling: PageResponse<{ stats: BehandlingStats }> }>(behandling?.relevansFor.length ? statsQuery : statsQueryRelevansFiltered, {
+    variables: behandling?.relevansFor.length ? { behandlingId: behandling?.id } : { relevans: relevans },
     skip: !behandling?.id,
   })
   const [edit, setEdit] = useState(false)
@@ -35,22 +35,24 @@ export const BehandlingPage = () => {
   const filterData = (
     data:
       | {
-          behandling: PageResponse<{
-            stats: BehandlingStats
-          }>
-        }
+        behandling: PageResponse<{
+          stats: BehandlingStats
+        }>
+      }
       | undefined,
   ) => {
     const StatusListe: any[] = []
-    data?.behandling.content[0].stats.fyltKrav.forEach((k) => {
-      if (k.regelverk.length) {
-        StatusListe.push({ ...k, etterlevelser: k.etterlevelser.filter((e) => e.behandlingId === behandling?.id) })
-      }
-    })
-    data?.behandling.content[0].stats.ikkeFyltKrav.forEach((k) => {
-      if (k.regelverk.length) {
-        StatusListe.push({ ...k, etterlevelser: k.etterlevelser.filter((e) => e.behandlingId === behandling?.id) })
-      }
+    data?.behandling.content.forEach(({stats}) => {
+      stats.fyltKrav.forEach((k) => {
+        if (k.regelverk.length) {
+          StatusListe.push({ ...k, etterlevelser: k.etterlevelser.filter((e) => e.behandlingId === behandling?.id) })
+        }
+      })
+      stats.ikkeFyltKrav.forEach((k) => {
+        if (k.regelverk.length) {
+          StatusListe.push({ ...k, etterlevelser: k.etterlevelser.filter((e) => e.behandlingId === behandling?.id) })
+        }
+      })
     })
     StatusListe.sort((a, b) => {
       if (a.kravNummer === b.kravNummer) {
@@ -191,7 +193,6 @@ const TemaCardBehandling = ({ tema, stats, behandling }: { tema: TemaCode; stats
   const lover = codelist.getCodesForTema(tema.code).map((c) => c.code)
 
   const krav = stats.filter((k) => k.regelverk.map((r: any) => r.lov.code).some((r: any) => lover.includes(r)))
-
   let utfylt = 0
   let underArbeid = 0
   let tilUtfylling = 0
@@ -199,12 +200,7 @@ const TemaCardBehandling = ({ tema, stats, behandling }: { tema: TemaCode; stats
   krav.forEach((k) => {
     if (k.etterlevelser.length && k.etterlevelser[0].status === EtterlevelseStatus.FERDIG_DOKUMENTERT) {
       utfylt += 1
-    } else if (
-      k.etterlevelser.length &&
-      (k.etterlevelser[0].status === EtterlevelseStatus.OPPFYLLES_SENERE ||
-        k.etterlevelser[0].status === EtterlevelseStatus.UNDER_REDIGERING ||
-        k.etterlevelser[0].status === EtterlevelseStatus.FERDIG)
-    ) {
+    } else if (k.etterlevelser.length && (k.etterlevelser[0].status === EtterlevelseStatus.OPPFYLLES_SENERE || k.etterlevelser[0].status === EtterlevelseStatus.UNDER_REDIGERING || k.etterlevelser[0].status === EtterlevelseStatus.FERDIG)) {
       underArbeid += 1
     } else {
       tilUtfylling += 1
@@ -283,3 +279,61 @@ const TemaCardBehandling = ({ tema, stats, behandling }: { tema: TemaCode; stats
     </PanelLinkCard>
   )
 }
+
+
+export const statsQueryRelevansFiltered = gql`
+  query getBehandlingStats($relevans: [String!]) {
+    behandling(filter: { relevans: $relevans }) {
+      content {
+        stats {
+          fyltKrav {
+            kravNummer
+            kravVersjon
+            etterlevelser(onlyForBehandling: true) {
+              behandlingId
+              status
+            }
+            regelverk {
+              lov {
+                code
+                shortName
+              }
+            }
+          }
+          ikkeFyltKrav {
+            kravNummer
+            kravVersjon
+            etterlevelser(onlyForBehandling: true) {
+              behandlingId
+              status
+            }
+            regelverk {
+              lov {
+                code
+                shortName
+              }
+            }
+          }
+          lovStats {
+            lovCode {
+              code
+              shortName
+            }
+            fyltKrav {
+              id
+              kravNummer
+              kravVersjon
+              navn
+            }
+            ikkeFyltKrav {
+              id
+              kravNummer
+              kravVersjon
+              navn
+            }
+          }
+        }
+      }
+    }
+  }
+`

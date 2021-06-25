@@ -71,8 +71,6 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
       fristForFerdigstillelse: etterlevelse.status !== EtterlevelseStatus.OPPFYLLES_SENERE ? '' : etterlevelse.fristForFerdigstillelse,
     }
 
-    console.log(mutatedEtterlevelse)
-
     if (etterlevelse.id) {
       close(await updateEtterlevelse(mutatedEtterlevelse))
     } else {
