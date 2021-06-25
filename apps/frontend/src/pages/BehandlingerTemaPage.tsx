@@ -11,7 +11,7 @@ import { Layout2 } from '../components/scaffold/Page'
 import { Etterlevelse, EtterlevelseStatus, KravQL, PageResponse, Suksesskriterie } from '../constants'
 import { arkPennIcon, circlePencilIcon, crossIcon } from '../components/Images'
 import { behandlingKravQuery } from '../components/behandling/ViewBehandling'
-import { useQuery } from '@apollo/client'
+import { gql, useQuery } from '@apollo/client'
 import { CustomizedAccordion, CustomizedPanel } from '../components/common/CustomizedAccordion'
 import { Card } from 'baseui/card'
 import { Button, KIND } from 'baseui/button'
@@ -47,11 +47,12 @@ export const BehandlingerTemaPage = () => {
   const temaData: TemaCode | undefined = codelist.getCode(ListName.TEMA, params.tema)
   const [behandling, setBehandling] = useBehandling(params.id)
   const lover = codelist.getCodesForTema(temaData?.code).map((c) => c.code)
-  const variables = { behandlingId: params.id, lover: lover }
-  const { data: rawData, loading } = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
+  const variables = behandling?.relevansFor.length ? { behandlingId: params.id, lover: lover } : { lover: lover }
+  const { data: rawData, loading } = useQuery<{ krav: PageResponse<KravQL> }>(behandling?.relevansFor.length ? behandlingKravQuery : behandlingKravQueryLovFilterd, {
     variables,
     skip: !params.id || !lover.length,
   })
+
   const [kravData, setKravData] = useState<KravEtterlevelseData[]>([])
 
   const [utfyltKrav, setUtfyltKrav] = useState<KravEtterlevelseData[]>([])
@@ -333,3 +334,36 @@ const KravView = (props: { kravId: KravId; etterlevelse: Etterlevelse; close: Fu
     </Block>
   )
 }
+
+export const behandlingKravQueryLovFilterd = gql`
+  query getKravByFilter($lover: [String!]) {
+    krav(filter: {lover: $lover, gjeldendeKrav: true }) {
+      content {
+        id
+        navn
+        kravNummer
+        kravVersjon
+        suksesskriterier {
+          id
+          navn
+          beskrivelse
+        }
+        relevansFor {
+          code
+        }
+        regelverk {
+          lov {
+            code
+            shortName
+          }
+        }
+        etterlevelser(onlyForBehandling: true) {
+          id
+          etterleves
+          fristForFerdigstillelse
+          status
+        }
+      }
+    }
+  }
+`
