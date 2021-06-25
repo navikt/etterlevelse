@@ -1,7 +1,7 @@
 import axios from 'axios'
-import { PageResponse, Tilbakemelding, TilbakemeldingRolle, TilbakemeldingType, Varslingsadresse } from '../constants'
-import { env } from '../util/env'
-import { useEffect, useState } from 'react'
+import {PageResponse, Tilbakemelding, TilbakemeldingRolle, TilbakemeldingType, Varslingsadresse} from '../constants'
+import {env} from '../util/env'
+import {useEffect, useState} from 'react'
 import moment from 'moment'
 
 export const getTilbakemeldingForKrav = async (kravNummer: number, kravVersjon: number) => {
@@ -50,8 +50,11 @@ export const useTilbakemeldinger = (kravNummer: number, kravVersjon: number) => 
   const replace = (r: Tilbakemelding) => {
     setData(data.map((t) => (t.id === r.id ? r : t)))
   }
+  const remove = (r: Tilbakemelding) => {
+    setData(data.filter((t) => t.id !== r.id))
+  }
 
-  return [data, loading, add, replace] as [Tilbakemelding[], boolean, (t: Tilbakemelding) => void, (t: Tilbakemelding) => void]
+  return [data, loading, add, replace, remove] as [Tilbakemelding[], boolean, (t: Tilbakemelding) => void, (t: Tilbakemelding) => void, (t: Tilbakemelding) => void]
 }
 
 export interface CreateTilbakemeldingRequest {

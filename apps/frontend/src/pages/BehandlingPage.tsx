@@ -1,23 +1,23 @@
-import React, { useRef, useState } from 'react'
-import { Block } from 'baseui/block'
-import { useParams } from 'react-router-dom'
-import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
-import { useBehandling } from '../api/BehandlingApi'
-import { H1, H2, HeadingLarge, Label3, Paragraph2, Paragraph4 } from 'baseui/typography'
-import { FormikProps } from 'formik'
-import { ettlevColors, theme } from '../util/theme'
-import { Layout2 } from '../components/scaffold/Page'
-import { Teams } from '../components/common/TeamName'
-import { arkPennIcon } from '../components/Images'
-import { Behandling, BehandlingEtterlevData, EtterlevelseStatus, PageResponse } from '../constants'
-import { useQuery } from '@apollo/client'
-import { BehandlingStats, statsQuery } from '../components/behandling/ViewBehandling'
-import { codelist, ListName, TemaCode } from '../services/Codelist'
-import { PanelLinkCard, PanelLinkCardOverrides } from '../components/common/PanelLink'
-import { cardWidth } from './TemaPage'
-import { ProgressBar, SIZE } from 'baseui/progress-bar'
-import { Button } from 'baseui/button'
-import { EditBehandling } from '../components/behandling/EditBehandling'
+import React, {useRef, useState} from 'react'
+import {Block} from 'baseui/block'
+import {useParams} from 'react-router-dom'
+import {LoadingSkeleton} from '../components/common/LoadingSkeleton'
+import {useBehandling} from '../api/BehandlingApi'
+import {H1, H2, HeadingLarge, Label3, Paragraph2, Paragraph4} from 'baseui/typography'
+import {FormikProps} from 'formik'
+import {ettlevColors, theme} from '../util/theme'
+import {Layout2} from '../components/scaffold/Page'
+import {Teams} from '../components/common/TeamName'
+import {arkPennIcon} from '../components/Images'
+import {Behandling, BehandlingEtterlevData, EtterlevelseStatus, PageResponse} from '../constants'
+import {useQuery} from '@apollo/client'
+import {BehandlingStats, statsQuery} from '../components/behandling/ViewBehandling'
+import {codelist, ListName, TemaCode} from '../services/Codelist'
+import {PanelLinkCard, PanelLinkCardOverrides} from '../components/common/PanelLink'
+import {cardWidth} from './TemaPage'
+import {ProgressBar, SIZE} from 'baseui/progress-bar'
+import {Button} from 'baseui/button'
+import {EditBehandling} from '../components/behandling/EditBehandling'
 
 export const BehandlingPage = () => {
   const params = useParams<{ id?: string }>()
@@ -199,7 +199,12 @@ const TemaCardBehandling = ({ tema, stats, behandling }: { tema: TemaCode; stats
   krav.forEach((k) => {
     if (k.etterlevelser.length && k.etterlevelser[0].status === EtterlevelseStatus.FERDIG_DOKUMENTERT) {
       utfylt += 1
-    } else if (k.etterlevelser.length && (k.etterlevelser[0].status === EtterlevelseStatus.OPPFYLLES_SENERE || k.etterlevelser[0].status === EtterlevelseStatus.UNDER_REDIGERING || k.etterlevelser[0].status === EtterlevelseStatus.FERDIG)) {
+    } else if (
+      k.etterlevelser.length &&
+      (k.etterlevelser[0].status === EtterlevelseStatus.OPPFYLLES_SENERE ||
+        k.etterlevelser[0].status === EtterlevelseStatus.UNDER_REDIGERING ||
+        k.etterlevelser[0].status === EtterlevelseStatus.FERDIG)
+    ) {
       underArbeid += 1
     } else {
       tilUtfylling += 1
