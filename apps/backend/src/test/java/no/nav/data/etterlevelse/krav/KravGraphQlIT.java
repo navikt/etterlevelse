@@ -90,7 +90,7 @@ class KravGraphQlIT extends GraphQLTestBase {
             behandlingService.save(BehandlingRequest.builder()
                     .id(behandling.getId())
                     .update(true)
-                    .relevansFor(behandlingRelevans)
+                    .irrelevansFor(List.of("INNSYN"))
                     .build());
 
             storageService.save(Krav.builder()

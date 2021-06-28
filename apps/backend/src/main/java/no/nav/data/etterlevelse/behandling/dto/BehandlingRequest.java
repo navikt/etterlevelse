@@ -9,7 +9,6 @@ import lombok.experimental.FieldNameConstants;
 import no.nav.data.common.validator.RequestElement;
 import no.nav.data.common.validator.Validator;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
-import no.nav.data.etterlevelse.krav.dto.KravRequest;
 
 import java.util.List;
 
@@ -26,17 +25,17 @@ public class BehandlingRequest implements RequestElement {
     private Boolean update;
 
     @Schema(description = "Codelist RELEVANS")
-    private List<String> relevansFor;
+    private List<String> irrelevansFor;
 
     @Override
     public void format() {
-        setRelevansFor(formatListToUppercase(relevansFor));
+        setIrrelevansFor(formatListToUppercase(irrelevansFor));
     }
 
     @Override
     public void validateFieldValues(Validator<?> validator) {
-        validator.checkUUID(KravRequest.Fields.id, id);
+        validator.checkUUID(Fields.id, id);
         validator.checkId(this);
-        validator.checkCodelists(KravRequest.Fields.relevansFor, relevansFor, ListName.RELEVANS);
+        validator.checkCodelists(Fields.irrelevansFor, irrelevansFor, ListName.RELEVANS);
     }
 }
