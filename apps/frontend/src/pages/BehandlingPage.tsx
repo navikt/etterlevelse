@@ -23,7 +23,9 @@ export const BehandlingPage = () => {
   const params = useParams<{ id?: string }>()
   const [behandling, setBehandling] = useBehandling(params.id)
   const formRef = useRef<FormikProps<any>>()
-  const relevans = codelist.getCodes(ListName.RELEVANS).map((r) => { return r.code })
+  const relevans = codelist.getCodes(ListName.RELEVANS).map((r) => {
+    return r.code
+  })
   const { data, refetch } = useQuery<{ behandling: PageResponse<{ stats: BehandlingStats }> }>(statsQuery, {
     variables: behandling?.relevansFor.length ? { behandlingId: behandling?.id } : { relevans: relevans },
     skip: !behandling?.id,
@@ -35,14 +37,14 @@ export const BehandlingPage = () => {
   const filterData = (
     data:
       | {
-        behandling: PageResponse<{
-          stats: BehandlingStats
-        }>
-      }
+          behandling: PageResponse<{
+            stats: BehandlingStats
+          }>
+        }
       | undefined,
   ) => {
     const StatusListe: any[] = []
-    data?.behandling.content.forEach(({stats}) => {
+    data?.behandling.content.forEach(({ stats }) => {
       stats.fyltKrav.forEach((k) => {
         if (k.regelverk.length) {
           StatusListe.push({ ...k, etterlevelser: k.etterlevelser.filter((e) => e.behandlingId === behandling?.id) })
@@ -200,7 +202,12 @@ const TemaCardBehandling = ({ tema, stats, behandling }: { tema: TemaCode; stats
   krav.forEach((k) => {
     if (k.etterlevelser.length && k.etterlevelser[0].status === EtterlevelseStatus.FERDIG_DOKUMENTERT) {
       utfylt += 1
-    } else if (k.etterlevelser.length && (k.etterlevelser[0].status === EtterlevelseStatus.OPPFYLLES_SENERE || k.etterlevelser[0].status === EtterlevelseStatus.UNDER_REDIGERING || k.etterlevelser[0].status === EtterlevelseStatus.FERDIG)) {
+    } else if (
+      k.etterlevelser.length &&
+      (k.etterlevelser[0].status === EtterlevelseStatus.OPPFYLLES_SENERE ||
+        k.etterlevelser[0].status === EtterlevelseStatus.UNDER_REDIGERING ||
+        k.etterlevelser[0].status === EtterlevelseStatus.FERDIG)
+    ) {
       underArbeid += 1
     } else {
       tilUtfylling += 1

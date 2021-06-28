@@ -89,7 +89,15 @@ export const BehandlingerTemaPage = () => {
 
   useEffect(() => {
     setUtfyltKrav(kravData.filter((k) => k.etterlevelseStatus === EtterlevelseStatus.FERDIG_DOKUMENTERT))
-    setUnderArbeidKrav(kravData.filter((k) => k.etterlevelseStatus === EtterlevelseStatus.OPPFYLLES_SENERE || k.etterlevelseStatus === EtterlevelseStatus.UNDER_REDIGERING || k.etterlevelseStatus === EtterlevelseStatus.FERDIG || k.etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT))
+    setUnderArbeidKrav(
+      kravData.filter(
+        (k) =>
+          k.etterlevelseStatus === EtterlevelseStatus.OPPFYLLES_SENERE ||
+          k.etterlevelseStatus === EtterlevelseStatus.UNDER_REDIGERING ||
+          k.etterlevelseStatus === EtterlevelseStatus.FERDIG ||
+          k.etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT,
+      ),
+    )
     setSkalUtfyllesKrav(kravData.filter((k) => k.etterlevelseStatus === undefined || null))
   }, [kravData])
 
