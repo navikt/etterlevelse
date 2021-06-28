@@ -48,7 +48,7 @@ export const BehandlingerTemaPage = () => {
   const [behandling, setBehandling] = useBehandling(params.id)
   const lover = codelist.getCodesForTema(temaData?.code).map((c) => c.code)
   const variables = behandling?.relevansFor.length ? { behandlingId: params.id, lover: lover } : { lover: lover }
-  const { data: rawData, loading } = useQuery<{ krav: PageResponse<KravQL> }>(behandling?.relevansFor.length ? behandlingKravQuery : behandlingKravQueryLovFilterd, {
+  const { data: rawData, loading } = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
     variables,
     skip: !params.id || !lover.length,
   })
@@ -334,36 +334,3 @@ const KravView = (props: { kravId: KravId; etterlevelse: Etterlevelse; close: Fu
     </Block>
   )
 }
-
-export const behandlingKravQueryLovFilterd = gql`
-  query getKravByFilter($lover: [String!]) {
-    krav(filter: {lover: $lover, gjeldendeKrav: true }) {
-      content {
-        id
-        navn
-        kravNummer
-        kravVersjon
-        suksesskriterier {
-          id
-          navn
-          beskrivelse
-        }
-        relevansFor {
-          code
-        }
-        regelverk {
-          lov {
-            code
-            shortName
-          }
-        }
-        etterlevelser(onlyForBehandling: true) {
-          id
-          etterleves
-          fristForFerdigstillelse
-          status
-        }
-      }
-    }
-  }
-`

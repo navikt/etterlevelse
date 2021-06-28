@@ -24,7 +24,7 @@ export const BehandlingPage = () => {
   const [behandling, setBehandling] = useBehandling(params.id)
   const formRef = useRef<FormikProps<any>>()
   const relevans = codelist.getCodes(ListName.RELEVANS).map((r) => { return r.code })
-  const { data, refetch } = useQuery<{ behandling: PageResponse<{ stats: BehandlingStats }> }>(behandling?.relevansFor.length ? statsQuery : statsQueryRelevansFiltered, {
+  const { data, refetch } = useQuery<{ behandling: PageResponse<{ stats: BehandlingStats }> }>(statsQuery, {
     variables: behandling?.relevansFor.length ? { behandlingId: behandling?.id } : { relevans: relevans },
     skip: !behandling?.id,
   })
@@ -279,61 +279,3 @@ const TemaCardBehandling = ({ tema, stats, behandling }: { tema: TemaCode; stats
     </PanelLinkCard>
   )
 }
-
-
-export const statsQueryRelevansFiltered = gql`
-  query getBehandlingStats($relevans: [String!]) {
-    behandling(filter: { relevans: $relevans }) {
-      content {
-        stats {
-          fyltKrav {
-            kravNummer
-            kravVersjon
-            etterlevelser(onlyForBehandling: true) {
-              behandlingId
-              status
-            }
-            regelverk {
-              lov {
-                code
-                shortName
-              }
-            }
-          }
-          ikkeFyltKrav {
-            kravNummer
-            kravVersjon
-            etterlevelser(onlyForBehandling: true) {
-              behandlingId
-              status
-            }
-            regelverk {
-              lov {
-                code
-                shortName
-              }
-            }
-          }
-          lovStats {
-            lovCode {
-              code
-              shortName
-            }
-            fyltKrav {
-              id
-              kravNummer
-              kravVersjon
-              navn
-            }
-            ikkeFyltKrav {
-              id
-              kravNummer
-              kravVersjon
-              navn
-            }
-          }
-        }
-      }
-    }
-  }
-`
