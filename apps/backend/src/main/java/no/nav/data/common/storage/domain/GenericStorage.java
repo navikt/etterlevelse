@@ -53,7 +53,7 @@ public class GenericStorage extends Auditable {
 
     @Transient
     @JsonIgnore
-    private DomainObject domainObjectCache;
+    private transient DomainObject domainObjectCache;
 
     public GenericStorage generateId() {
         Assert.isTrue(id == null, "id already set");

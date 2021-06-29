@@ -63,7 +63,7 @@ public class AuditVersion {
     private String data;
 
     @Transient
-    private DomainObject domainObjectCache;
+    private transient DomainObject domainObjectCache;
 
     @SuppressWarnings("unchecked")
     public <T extends DomainObject> T getDomainObjectData(Class<T> type) {
