@@ -142,12 +142,12 @@ class KravGraphQlIT extends GraphQLTestBase {
 
         @Test
         @SneakyThrows
-        void kravForBehandlingNoRelevans() {
+        void kravForBehandlingNoIrrelevans() {
             var krav = storageService.save(Krav.builder()
                     .navn("Krav 1").kravNummer(50).kravVersjon(1)
                     .relevansFor(List.of("SAK"))
                     .build());
-            storageService.save(Krav.builder()
+            var krav2 = storageService.save(Krav.builder()
                     .navn("Krav 2").kravNummer(51).kravVersjon(1)
                     .relevansFor(List.of("INNSYN"))
                     .build());
@@ -161,8 +161,10 @@ class KravGraphQlIT extends GraphQLTestBase {
 
             assertThat(response, "krav")
                     .hasNoErrors()
-                    .hasSize("content", 1)
-                    .hasField("content[0].id", krav.getId().toString());
+                    .hasSize("content", 2)
+                    .hasField("content[0].id", krav.getId().toString())
+                    .hasField("content[1].id", krav2.getId().toString());
+
         }
 
         @Test
