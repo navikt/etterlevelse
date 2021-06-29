@@ -61,12 +61,11 @@ public class KravRepoImpl implements KravRepoCustom {
                                  and type = 'Etterlevelse'
                                  and data ->> 'behandlingId' = :behandlingId
                             ) 
-                    or NOT data -> 'relevansFor' ??& array(
-                     select jsonb_array_elements_text(data -> 'irrelevansFor')
-                      from generic_storage
-                      where data ->> 'behandlingId' = :behandlingId
-                        and type = 'BehandlingData')
-                    ) 
+                    or jsonb_array_length(data -> 'relevansFor') = 0
+                    or jsonb_array_length((data -> 'relevansFor') - array(select jsonb_array_elements_text(data -> 'irrelevansFor') 
+                        from generic_storage where data ->> 'behandlingId' = :behandlingId
+                        and type = 'BehandlingData')) > 0
+                    )
                     """;
             par.addValue("behandlingId", filter.getBehandlingId());
         }
