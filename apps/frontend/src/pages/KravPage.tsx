@@ -28,7 +28,7 @@ import { useLocationState, useQueryParam } from '../util/hooks'
 import { InfoBlock } from '../components/common/InfoBlock'
 import { gql } from '@apollo/client/core'
 import { PanelLink } from '../components/common/PanelLink'
-import { Code, codelist, ListName } from '../services/Codelist'
+import { codelist, ListName } from '../services/Codelist'
 
 export const kravNumView = (it: { kravVersjon: number; kravNummer: number }) => `K${it.kravNummer}.${it.kravVersjon}`
 export const kravName = (krav: Krav) => `${kravNumView(krav)} - ${krav.navn}`
