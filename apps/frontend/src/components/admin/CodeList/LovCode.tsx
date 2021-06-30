@@ -14,6 +14,7 @@ import Button from '../../common/Button'
 import CustomizedInput from '../../common/CustomizedInput'
 import CustomizedSelect from '../../common/CustomizedSelect'
 import CustomizedTextarea from "../../common/CustomizedTextarea";
+import {Error} from "../../common/ModalSchema";
 
 const rowBlockProps: BlockProps = {
   display: 'flex',
@@ -132,6 +133,7 @@ export const TemaCodeDataForm = () => {
                 </Label2>
                 <CustomizedTextarea type="input" size={InputSIZE.default} value={data.shortDesciption} onChange={(str) => set({ shortDesciption: (str.target as HTMLInputElement).value })} />
               </Block>
+              <Error fieldName="data.shortDesciption" />
             </>
           )
         }}
