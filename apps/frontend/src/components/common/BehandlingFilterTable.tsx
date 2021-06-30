@@ -16,7 +16,7 @@ const query = gql`
         id
         navn
         nummer
-        relevansFor {
+        irrelevansFor {
           code
           shortName
         }
@@ -41,7 +41,7 @@ export const BehandlingFilterTable = (props: { filter: BehandlingFilters; emptyT
         { title: 'Nummer', column: 'nummer', small: true },
         { title: 'Navn', column: 'navn' },
         { title: 'Overordnet formål', column: 'overordnetFormaal' },
-        { title: 'Relevans for', column: 'relevansFor' },
+        { title: 'Relevans for', column: 'irrelevansFor' },
       ]}
       config={{
         initialSortColumn: 'nummer',
@@ -49,7 +49,7 @@ export const BehandlingFilterTable = (props: { filter: BehandlingFilters; emptyT
         sorting: {
           nummer: (a, b) => a.nummer - b.nummer,
           overordnetFormaal: (a, b) => a.overordnetFormaal.shortName.localeCompare(b.overordnetFormaal.shortName),
-          relevansFor: (a, b) => a.relevansFor.length - b.relevansFor.length,
+          irrelevansFor: (a, b) => a.irrelevansFor.length - b.irrelevansFor.length,
         },
       }}
       render={(state) => {
@@ -62,7 +62,7 @@ export const BehandlingFilterTable = (props: { filter: BehandlingFilters; emptyT
               </Cell>
               <Cell>{behnandling.overordnetFormaal?.shortName}</Cell>
               <Cell>
-                <DotTags list={ListName.RELEVANS} codes={behnandling.relevansFor} linkCodelist />
+                <DotTags list={ListName.RELEVANS} codes={behnandling.irrelevansFor} linkCodelist />
               </Cell>
             </Row>
           )

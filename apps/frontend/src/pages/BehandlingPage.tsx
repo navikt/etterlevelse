@@ -27,7 +27,7 @@ export const BehandlingPage = () => {
     return r.code
   })
   const { data, refetch } = useQuery<{ behandling: PageResponse<{ stats: BehandlingStats }> }>(statsQuery, {
-    variables: behandling?.relevansFor.length ? { behandlingId: behandling?.id } : { relevans: relevans },
+    variables: behandling?.irrelevansFor.length ? { behandlingId: behandling?.id } : { relevans: relevans },
     skip: !behandling?.id,
   })
   const [edit, setEdit] = useState(false)

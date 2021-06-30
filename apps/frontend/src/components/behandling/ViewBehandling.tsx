@@ -51,7 +51,7 @@ export const ViewBehandling = ({ behandling }: { behandling: Behandling }) => {
           <Teams teams={behandling.teams} link />
         </Label>
         <Label title={'Relevans'}>
-          <DotTags list={ListName.RELEVANS} codes={behandling.relevansFor} linkCodelist />
+          <DotTags list={ListName.RELEVANS} codes={behandling.irrelevansFor} linkCodelist />
         </Label>
       </Block>
 
