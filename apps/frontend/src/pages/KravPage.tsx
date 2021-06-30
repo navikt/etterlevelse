@@ -103,8 +103,6 @@ export const KravPage = () => {
     if (!edit && !krav?.id && krav?.nyKravVersjon) reloadKrav()
   }, [edit])
 
-
-
   return (
     <Block width="100%" overrides={{ Block: { props: { role: 'main' } } }}>
       {kravLoading && <LoadingSkeleton header="Krav" />}

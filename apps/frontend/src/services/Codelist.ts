@@ -1,7 +1,7 @@
-import {AxiosResponse} from 'axios'
-import {getAllCodelists} from '../api/CodelistApi'
+import { AxiosResponse } from 'axios'
+import { getAllCodelists } from '../api/CodelistApi'
 import * as yup from 'yup'
-import {Replace} from '../constants'
+import { Replace } from '../constants'
 
 export enum ListName {
   AVDELING = 'AVDELING',
@@ -182,7 +182,7 @@ export interface LovCodeData {
 }
 
 export interface TemaCodeData {
-  image?: string,
+  image?: string
   shortDesciption?: string
 }
 
