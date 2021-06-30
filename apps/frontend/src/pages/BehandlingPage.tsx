@@ -23,11 +23,8 @@ export const BehandlingPage = () => {
   const params = useParams<{ id?: string }>()
   const [behandling, setBehandling] = useBehandling(params.id)
   const formRef = useRef<FormikProps<any>>()
-  const relevans = codelist.getCodes(ListName.RELEVANS).map((r) => {
-    return r.code
-  })
   const { data, refetch } = useQuery<{ behandling: PageResponse<{ stats: BehandlingStats }> }>(statsQuery, {
-    variables: behandling?.relevansFor.length ? { behandlingId: behandling?.id } : { relevans: relevans },
+    variables: { behandlingId: behandling?.id },
     skip: !behandling?.id,
   })
   const [edit, setEdit] = useState(false)
@@ -35,7 +32,7 @@ export const BehandlingPage = () => {
   const [stats, setStats] = useState<any[]>([])
 
   const filterData = (
-    data:
+    unfilteredData:
       | {
           behandling: PageResponse<{
             stats: BehandlingStats
@@ -44,7 +41,7 @@ export const BehandlingPage = () => {
       | undefined,
   ) => {
     const StatusListe: any[] = []
-    data?.behandling.content.forEach(({ stats }) => {
+    unfilteredData?.behandling.content.forEach(({ stats }) => {
       stats.fyltKrav.forEach((k) => {
         if (k.regelverk.length) {
           StatusListe.push({ ...k, etterlevelser: k.etterlevelser.filter((e) => e.behandlingId === behandling?.id) })

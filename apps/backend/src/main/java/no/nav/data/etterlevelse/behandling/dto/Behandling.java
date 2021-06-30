@@ -35,7 +35,7 @@ public class Behandling {
     private List<String> teams;
 
     @Singular("relevansForSingle")
-    private List<CodelistResponse> relevansFor;
+    private List<CodelistResponse> irrelevansFor;
 
     @JsonIgnore
     private BehandlingData behandlingData;
@@ -46,6 +46,6 @@ public class Behandling {
 
     public void includeData(BehandlingData bd) {
         behandlingData = bd;
-        setRelevansFor(behandlingData.relevansForAsCodes());
+        setIrrelevansFor(behandlingData.irrelevantForAsCodes());
     }
 }

@@ -28,17 +28,17 @@ public class BehandlingData implements DomainObject {
 
     private String behandlingId;
     // Codelist RELEVANS
-    private List<String> relevansFor;
+    private List<String> irrelevansFor;
 
-    public List<CodelistResponse> relevansForAsCodes() {
-        return CodelistService.getCodelistResponseList(ListName.RELEVANS, relevansFor);
+    public List<CodelistResponse> irrelevantForAsCodes() {
+        return CodelistService.getCodelistResponseList(ListName.RELEVANS, irrelevansFor);
     }
 
     public void convert(BehandlingRequest request) {
         if (behandlingId == null) {
             behandlingId = request.getId();
         }
-        relevansFor = copyOf(request.getRelevansFor());
+        irrelevansFor = copyOf(request.getIrrelevansFor());
     }
 
     public InstanceId convertToInstanceId() {

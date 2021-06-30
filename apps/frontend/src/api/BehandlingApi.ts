@@ -18,7 +18,7 @@ export const searchBehandling = async (name: string) => {
 }
 
 export const updateBehandling = async (behandling: BehandlingEtterlevData) => {
-  const dto = { id: behandling.id, relevansFor: behandling.relevansFor.map((c) => c.code) }
+  const dto = { id: behandling.id, irrelevansFor: behandling.irrelevansFor.map((c) => c.code) }
   return (await axios.put<Behandling>(`${env.backendBaseUrl}/behandling/${behandling.id}`, dto)).data
 }
 
@@ -66,7 +66,7 @@ export const useMyBehandlinger = () => {
 export const mapToFormVal = (behandling: Partial<Behandling> & { id: string }): BehandlingEtterlevData => {
   return {
     id: behandling.id,
-    relevansFor: behandling.relevansFor || [],
+    irrelevansFor: behandling.irrelevansFor || [],
   }
 }
 

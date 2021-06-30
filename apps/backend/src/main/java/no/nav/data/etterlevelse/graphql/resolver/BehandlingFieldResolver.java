@@ -45,7 +45,7 @@ public class BehandlingFieldResolver implements GraphQLResolver<Behandling> {
     }
 
     public BehandlingStats stats(Behandling behandling) {
-        var relevans = behandling.getRelevansFor();
+        var relevans = behandling.getIrrelevansFor();
 
         // Temporarily disabled
         /*
