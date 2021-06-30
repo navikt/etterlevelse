@@ -130,7 +130,7 @@ public class AzureTokenProvider implements TokenProvider {
         URL url = msalClient.getAuthorizationRequestUrl(AuthorizationRequestUrlParameters
                 .builder(redirectUri, MICROSOFT_GRAPH_SCOPES)
                 .state(new OAuthState(auth.getId().toString(), postLoginRedirectUri, postLoginErrorUri).toJson(encryptor))
-                .responseMode(ResponseMode.FORM_POST)
+                .responseMode(ResponseMode.QUERY)
                 .codeChallengeMethod(CodeChallengeMethod.S256.getValue())
                 .codeChallenge(codeChallenge)
                 .build());

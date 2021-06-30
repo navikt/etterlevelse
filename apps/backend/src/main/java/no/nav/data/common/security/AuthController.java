@@ -20,7 +20,6 @@ import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -78,7 +77,7 @@ public class AuthController {
             @ApiResponse(responseCode = "302", description = "token accepted")
     })
     @CrossOrigin
-    @PostMapping(OAUTH_2_CALLBACK_URL)
+    @GetMapping(OAUTH_2_CALLBACK_URL)
     public void oidc(HttpServletRequest request, HttpServletResponse response,
             @RequestParam(value = CODE, required = false) String code,
             @RequestParam(value = ERROR, required = false) String error,
