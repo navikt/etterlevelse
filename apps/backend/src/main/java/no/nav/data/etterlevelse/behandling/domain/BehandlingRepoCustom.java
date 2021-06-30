@@ -13,4 +13,6 @@ public interface BehandlingRepoCustom {
 
     List<GenericStorage> findBy(BehandlingFilter filter);
 
+    List<GenericStorage> findByIrrelevans(List<String> codes);
+
 }

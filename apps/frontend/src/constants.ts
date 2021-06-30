@@ -134,7 +134,7 @@ export interface Behandling extends BehandlingEtterlevData {
 
 export interface BehandlingEtterlevData {
   id: string
-  relevansFor: Code[]
+  irrelevansFor: Code[]
 }
 
 export interface Periode {

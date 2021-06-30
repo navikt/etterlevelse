@@ -43,10 +43,10 @@ public class BehandlingGraphQlIT extends GraphQLTestBase {
         behandlingService.save(BehandlingRequest.builder()
                 .id(behandling.getId())
                 .update(true)
-                .relevansFor(List.of("SAK"))
+                .irrelevansFor(List.of("SAK"))
                 .build());
 
-        var var = Map.of("relevans", "SAK");
+        var var = Map.of("relevans", "INNSYN");
         var response = graphQLTestTemplate.perform("graphqltest/behandling_filter.graphql", vars(var));
 
         assertThat(response, "behandling")
@@ -55,7 +55,7 @@ public class BehandlingGraphQlIT extends GraphQLTestBase {
                 .hasField("numberOfElements", "1")
                 .hasField("content[0].id", behandling.getId());
 
-        var innsynVar = Map.of("relevans", "INNSYN");
+        var innsynVar = Map.of("relevans", "SAK");
         GraphQLResponse pageTwo = graphQLTestTemplate.perform("graphqltest/behandling_filter.graphql", vars(innsynVar));
         assertThat(pageTwo, "behandling")
                 .hasNoErrors()
@@ -71,14 +71,14 @@ public class BehandlingGraphQlIT extends GraphQLTestBase {
         BehandlingRequest otherBehandlingRequest = BehandlingRequest.builder()
                 .id("28661fb6-29a1-42cd-87a7-661189c01920")
                 .update(true)
-                .relevansFor(List.of("SAK"))
+                .irrelevansFor(List.of("SAK"))
                 .build();
         BkatMocks.stubProcess(otherBehandlingRequest.getId(), 102);
         behandlingService.save(otherBehandlingRequest);
         behandlingService.save(BehandlingRequest.builder()
                 .id(behandling.getId())
                 .update(true)
-                .relevansFor(List.of("SAK"))
+                .irrelevansFor(List.of("SAK"))
                 .build());
 
         var krav = storageService.save(Krav.builder()

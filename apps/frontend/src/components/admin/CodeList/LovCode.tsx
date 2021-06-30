@@ -1,15 +1,15 @@
-import {Block, BlockProps} from 'baseui/block'
-import {Label2} from 'baseui/typography'
-import {Field, FieldProps} from 'formik'
-import {Code, codelist, CodeListFormValues, ListName, LovCodeData, TemaCodeData} from '../../../services/Codelist'
+import { Block, BlockProps } from 'baseui/block'
+import { Label2 } from 'baseui/typography'
+import { Field, FieldProps } from 'formik'
+import { Code, codelist, CodeListFormValues, ListName, LovCodeData, TemaCodeData } from '../../../services/Codelist'
 import * as React from 'react'
-import {SIZE as InputSIZE} from 'baseui/input'
-import {OptionList} from '../../common/Inputs'
-import {temaBilder} from '../../Images'
-import {StatefulTooltip} from 'baseui/tooltip'
-import {faQuestionCircle} from '@fortawesome/free-solid-svg-icons'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {theme} from '../../../util'
+import { SIZE as InputSIZE } from 'baseui/input'
+import { OptionList } from '../../common/Inputs'
+import { temaBilder } from '../../Images'
+import { StatefulTooltip } from 'baseui/tooltip'
+import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { theme } from '../../../util'
 import Button from '../../common/Button'
 import CustomizedInput from '../../common/CustomizedInput'
 import CustomizedSelect from '../../common/CustomizedSelect'
@@ -131,7 +131,12 @@ export const TemaCodeDataForm = () => {
                 <Label2 marginRight={'1rem'} width="25%">
                   Short Desciption:
                 </Label2>
-                <CustomizedTextarea type="input" size={InputSIZE.default} value={data.shortDesciption} onChange={(str) => set({ shortDesciption: (str.target as HTMLInputElement).value })} />
+                <CustomizedTextarea
+                  type="input"
+                  size={InputSIZE.default}
+                  value={data.shortDesciption}
+                  onChange={(str) => set({ shortDesciption: (str.target as HTMLInputElement).value })}
+                />
               </Block>
               <Error fieldName="data.shortDesciption" />
             </>

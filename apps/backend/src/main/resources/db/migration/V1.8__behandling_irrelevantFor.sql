@@ -1,0 +1,2 @@
+UPDATE GENERIC_STORAGE
+SET DATA = DATA - 'relevansFor' WHERE TYPE = 'BehandlingData'

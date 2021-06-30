@@ -51,7 +51,7 @@ export const ViewBehandling = ({ behandling }: { behandling: Behandling }) => {
           <Teams teams={behandling.teams} link />
         </Label>
         <Label title={'Relevans'}>
-          <DotTags list={ListName.RELEVANS} codes={behandling.relevansFor} linkCodelist />
+          <DotTags list={ListName.RELEVANS} codes={behandling.irrelevansFor} linkCodelist />
         </Label>
       </Block>
 
@@ -330,8 +330,8 @@ const KravView = (props: { kravId: KravId; etterlevelse: Etterlevelse; close: Fu
 }
 
 export const statsQuery = gql`
-  query getBehandlingStats($behandlingId: ID, $relevans: [String!]) {
-    behandling(filter: { id: $behandlingId, relevans: $relevans }) {
+  query getBehandlingStats($behandlingId: ID) {
+    behandling(filter: { id: $behandlingId }) {
       content {
         stats {
           fyltKrav {

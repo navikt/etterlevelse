@@ -50,7 +50,7 @@ public class CodelistController {
     @ApiResponse(description = "Entire Codelist fetched")
     @GetMapping
     public AllCodelistResponse findAll(@RequestParam(value = "refresh", required = false, defaultValue = "false") boolean refresh) {
-        log.info("Received a request for and returned the entire Codelist");
+        log.info("Received a request for and returned the entire Codelist {}", refresh ? "refreshed" : "");
         if (refresh) {
             service.refreshCache();
         }

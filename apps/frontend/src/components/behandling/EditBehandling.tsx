@@ -31,7 +31,7 @@ export const EditBehandling = ({ behandling, close, formRef, setBehandling }: Ed
           <Block>
             <Label title="Endrer egenskaper for">behandling {behandling.nummer}</Label>
 
-            <MultiOptionField label="Relevans for" name="relevansFor" listName={ListName.RELEVANS} />
+            <MultiOptionField label="Irrelevant for" name="irrelevansFor" listName={ListName.RELEVANS} />
           </Block>
 
           <Block display="flex" justifyContent="flex-end">

@@ -91,7 +91,7 @@ public class CodeUsageService {
             switch (listName) {
                 case RELEVANS -> {
                     usage.getKrav().forEach(gs -> gs.asType(k -> replaceAll(k.getRelevansFor(), oldCode, newCode), Krav.class));
-                    usage.getBehandlinger().forEach(gs -> gs.asType(bd -> replaceAll(bd.getRelevansFor(), oldCode, newCode), BehandlingData.class));
+                    usage.getBehandlinger().forEach(gs -> gs.asType(bd -> replaceAll(bd.getIrrelevansFor(), oldCode, newCode), BehandlingData.class));
                 }
                 case AVDELING -> usage.getKrav().forEach(gs -> gs.asType(k -> k.setAvdeling(newCode), Krav.class));
                 case UNDERAVDELING -> {
@@ -126,7 +126,7 @@ public class CodeUsageService {
 
     private List<GenericStorage> findBehandlinger(ListName listName, String code) {
         return switch (listName) {
-            case RELEVANS -> behandlingRepo.findByRelevans(code);
+            case RELEVANS -> behandlingRepo.findByIrrelevans(List.of(code));
             case AVDELING, UNDERAVDELING, LOV, TEMA -> List.of();
         };
     }

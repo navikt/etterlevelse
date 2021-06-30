@@ -40,11 +40,11 @@ public class Auth {
     private LocalDateTime lastActive;
 
     @Transient
-    private Encryptor encryptor;
+    private transient Encryptor encryptor;
     @Transient
-    private String sessionKey;
+    private transient String sessionKey;
     @Transient
-    private String accessToken;
+    private transient String accessToken;
 
     public Auth addSecret(Encryptor encryptor, String sessionKey) {
         this.encryptor = encryptor;

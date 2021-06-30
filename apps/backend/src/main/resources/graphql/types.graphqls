@@ -157,7 +157,7 @@ type Behandling {
     teams: [String!]!
     teamsData: [Team!]!
 
-    relevansFor: [Code!]!
+    irrelevansFor: [Code!]!
     stats: BehandlingStats!
 
     etterlevelser: [Etterlevelse!]!
