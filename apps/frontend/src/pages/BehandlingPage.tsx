@@ -168,8 +168,13 @@ export const BehandlingPage = () => {
       {edit && (
         <EditBehandlingModal 
           showModal={edit}
-          handleClose={() => setEdit(false)}
           behandling={behandling}
+          formRef={formRef}
+          setBehandling={setBehandling}
+          close={(e?: BehandlingEtterlevData) => {
+            setEdit(false)
+            e && setBehandling({ ...behandling, ...e })
+          }}
         />
       )}
 
