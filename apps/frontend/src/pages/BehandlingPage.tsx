@@ -169,6 +169,7 @@ export const BehandlingPage = () => {
         <EditBehandlingModal 
           showModal={edit}
           handleClose={() => setEdit(false)}
+          behandling={behandling}
         />
       )}
 
