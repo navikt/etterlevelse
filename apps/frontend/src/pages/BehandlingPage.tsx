@@ -18,6 +18,8 @@ import { cardWidth } from './TemaPage'
 import { ProgressBar, SIZE } from 'baseui/progress-bar'
 import { Button } from 'baseui/button'
 import { EditBehandling } from '../components/behandling/EditBehandling'
+import CustomizedModal from '../components/common/CustomizedModal'
+import EditBehandlingModal from '../components/behandling/EditBehandlingModal'
 
 export const BehandlingPage = () => {
   const params = useParams<{ id?: string }>()
@@ -161,7 +163,16 @@ export const BehandlingPage = () => {
           </Block>
         </Layout2>
       )}
+
       {edit && (
+        <EditBehandlingModal 
+          showModal={edit}
+          handleClose={() => setEdit(false)}
+        />
+      )}
+
+
+      {/* {edit && (
         <EditBehandling
           behandling={behandling}
           formRef={formRef}
@@ -171,7 +182,7 @@ export const BehandlingPage = () => {
             e && setBehandling({ ...behandling, ...e })
           }}
         />
-      )}
+      )} */}
     </Block>
   )
 }
