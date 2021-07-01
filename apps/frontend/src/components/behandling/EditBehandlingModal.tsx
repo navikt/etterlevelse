@@ -87,11 +87,12 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
                                                     selected={selected}
                                                     onClick={(_event, index) => {
                                                         if (!selected.includes(index)) {
-                                                            setSelected([...selected, index]);
-                                                            p.push( codelist.getCode(ListName.RELEVANS, options[index].id as string))
+                                                            setSelected([...selected, index])
+                                                            p.push(codelist.getCode(ListName.RELEVANS, options[index].id as string))
                                                         } else {
-                                                            setSelected(selected.filter(value => value !== index));
-                                                            console.log(p, "P")                                                  }
+                                                            setSelected(selected.filter(value => value !== index))
+                                                            p.remove(p.form.values.irrelevansFor.findIndex((ir: Code) => ir.code === options[index].id))
+                                                        }
                                                     }}
                                                 >
                                                     {options.map(r =>
