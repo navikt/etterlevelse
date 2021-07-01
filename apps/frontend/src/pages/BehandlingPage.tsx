@@ -25,7 +25,6 @@ export const BehandlingPage = () => {
   const params = useParams<{ id?: string }>()
   const [behandling, setBehandling] = useBehandling(params.id)
   const formRef = useRef<FormikProps<any>>()
-
   const { data, refetch } = useQuery<{ behandling: PageResponse<{ stats: BehandlingStats }> }>(statsQuery, {
     variables: { behandlingId: behandling?.id },
     skip: !behandling?.id,
@@ -35,7 +34,7 @@ export const BehandlingPage = () => {
   const [stats, setStats] = useState<any[]>([])
 
   const filterData = (
-    data:
+    unfilteredData:
       | {
           behandling: PageResponse<{
             stats: BehandlingStats
@@ -44,15 +43,17 @@ export const BehandlingPage = () => {
       | undefined,
   ) => {
     const StatusListe: any[] = []
-    data?.behandling.content[0].stats.fyltKrav.forEach((k) => {
-      if (k.regelverk.length) {
-        StatusListe.push({ ...k, etterlevelser: k.etterlevelser.filter((e) => e.behandlingId === behandling?.id) })
-      }
-    })
-    data?.behandling.content[0].stats.ikkeFyltKrav.forEach((k) => {
-      if (k.regelverk.length) {
-        StatusListe.push({ ...k, etterlevelser: k.etterlevelser.filter((e) => e.behandlingId === behandling?.id) })
-      }
+    unfilteredData?.behandling.content.forEach(({ stats }) => {
+      stats.fyltKrav.forEach((k) => {
+        if (k.regelverk.length) {
+          StatusListe.push({ ...k, etterlevelser: k.etterlevelser.filter((e) => e.behandlingId === behandling?.id) })
+        }
+      })
+      stats.ikkeFyltKrav.forEach((k) => {
+        if (k.regelverk.length) {
+          StatusListe.push({ ...k, etterlevelser: k.etterlevelser.filter((e) => e.behandlingId === behandling?.id) })
+        }
+      })
     })
     StatusListe.sort((a, b) => {
       if (a.kravNummer === b.kravNummer) {
@@ -202,7 +203,6 @@ const TemaCardBehandling = ({ tema, stats, behandling }: { tema: TemaCode; stats
   const lover = codelist.getCodesForTema(tema.code).map((c) => c.code)
 
   const krav = stats.filter((k) => k.regelverk.map((r: any) => r.lov.code).some((r: any) => lover.includes(r)))
-
   let utfylt = 0
   let underArbeid = 0
   let tilUtfylling = 0
@@ -210,7 +210,12 @@ const TemaCardBehandling = ({ tema, stats, behandling }: { tema: TemaCode; stats
   krav.forEach((k) => {
     if (k.etterlevelser.length && k.etterlevelser[0].status === EtterlevelseStatus.FERDIG_DOKUMENTERT) {
       utfylt += 1
-    } else if (k.etterlevelser.length && (k.etterlevelser[0].status === EtterlevelseStatus.OPPFYLLES_SENERE || k.etterlevelser[0].status === EtterlevelseStatus.UNDER_REDIGERING || k.etterlevelser[0].status === EtterlevelseStatus.FERDIG)) {
+    } else if (
+      k.etterlevelser.length &&
+      (k.etterlevelser[0].status === EtterlevelseStatus.OPPFYLLES_SENERE ||
+        k.etterlevelser[0].status === EtterlevelseStatus.UNDER_REDIGERING ||
+        k.etterlevelser[0].status === EtterlevelseStatus.FERDIG)
+    ) {
       underArbeid += 1
     } else {
       tilUtfylling += 1

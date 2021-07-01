@@ -41,7 +41,7 @@ import * as _ from 'lodash'
 const DEFAULT_COUNT_SIZE = 5
 
 export const Tilbakemeldinger = ({ krav }: { krav: Krav }) => {
-  const [tilbakemeldinger, loading, add, replace] = useTilbakemeldinger(krav.kravNummer, krav.kravVersjon)
+  const [tilbakemeldinger, loading, add, replace, remove] = useTilbakemeldinger(krav.kravNummer, krav.kravVersjon)
   const [focusNr, setFocusNr] = useState<string | undefined>(useQueryParam('tilbakemeldingId'))
   const [addTilbakemelding, setAddTilbakemelding] = useState(false)
   const [tilbakemelding, setTilbakemelding] = useState<Tilbakemelding>()
@@ -110,14 +110,14 @@ export const Tilbakemeldinger = ({ krav }: { krav: Krav }) => {
                       </ParagraphMedium>
                       {focused && <EndretInfo melding={t.meldinger[0]} />}
 
-                      {focused && t.meldinger.length === 1 && <MeldingKnapper melding={t.meldinger[0]} tilbakemeldingId={t.id} oppdater={replace} />}
+                      {focused && t.meldinger.length === 1 && <MeldingKnapper melding={t.meldinger[0]} tilbakemeldingId={t.id} oppdater={replace} remove={remove} />}
 
                       <Block marginTop={theme.sizing.scale600} $style={{ borderTop: focused && t.meldinger.length === 1 ? `1px solid ${ettlevColors.green50}` : undefined }}>
                         {/* meldingsliste */}
                         {focused && (
                           <Block display={'flex'} flexDirection={'column'} marginTop={theme.sizing.scale600}>
                             {t.meldinger.slice(1).map((m) => (
-                              <ResponseMelding key={m.meldingNr} m={m} tilbakemelding={t} oppdater={replace} />
+                              <ResponseMelding key={m.meldingNr} m={m} tilbakemelding={t} oppdater={replace} remove={remove} />
                             ))}
                           </Block>
                         )}
@@ -200,8 +200,8 @@ export const Tilbakemeldinger = ({ krav }: { krav: Krav }) => {
   )
 }
 
-const ResponseMelding = (props: { m: TilbakemeldingMelding; tilbakemelding: Tilbakemelding; oppdater: (t: Tilbakemelding) => void }) => {
-  const { m, tilbakemelding, oppdater } = props
+const ResponseMelding = (props: { m: TilbakemeldingMelding; tilbakemelding: Tilbakemelding; oppdater: (t: Tilbakemelding) => void; remove: (t: Tilbakemelding) => void }) => {
+  const { m, tilbakemelding, oppdater, remove } = props
   const melder = m.rolle === TilbakemeldingRolle.MELDER
   const sisteMelding = m.meldingNr === tilbakemelding.meldinger[tilbakemelding.meldinger.length - 1].meldingNr
 
@@ -230,7 +230,7 @@ const ResponseMelding = (props: { m: TilbakemeldingMelding; tilbakemelding: Tilb
         {m.innhold}
       </ParagraphMedium>
       <EndretInfo melding={m} />
-      {sisteMelding && <MeldingKnapper melding={m} tilbakemeldingId={tilbakemelding.id} oppdater={oppdater} />}
+      {sisteMelding && <MeldingKnapper melding={m} tilbakemeldingId={tilbakemelding.id} oppdater={oppdater} remove={remove} />}
     </Block>
   )
 }
@@ -365,8 +365,8 @@ const TilbakemeldingSvarModal = ({ tilbakemelding, close }: { tilbakemelding?: T
   )
 }
 
-const MeldingKnapper = (props: { melding: TilbakemeldingMelding; tilbakemeldingId: string; oppdater: (t: Tilbakemelding) => void }) => {
-  const { melding, tilbakemeldingId, oppdater } = props
+const MeldingKnapper = (props: { melding: TilbakemeldingMelding; tilbakemeldingId: string; oppdater: (t: Tilbakemelding) => void; remove: (t: Tilbakemelding) => void }) => {
+  const { melding, tilbakemeldingId, oppdater, remove } = props
   const meldingNr = melding.meldingNr
   const [deleteModal, setDeleteModal] = useState(false)
   const [editModal, setEditModal] = useState(false)
@@ -397,7 +397,17 @@ const MeldingKnapper = (props: { melding: TilbakemeldingMelding; tilbakemeldingI
             <Button kind={'secondary'} size={'compact'} onClick={() => setDeleteModal(false)}>
               Avbryt
             </Button>
-            <Button kind={'primary'} size={'compact'} marginLeft onClick={() => tilbakemeldingslettMelding({ tilbakemeldingId, meldingNr }).then(oppdater)}>
+            <Button
+              kind={'primary'}
+              size={'compact'}
+              marginLeft
+              onClick={() =>
+                tilbakemeldingslettMelding({ tilbakemeldingId, meldingNr }).then((t) => {
+                  remove(t)
+                  setDeleteModal(false)
+                })
+              }
+            >
               Slett
             </Button>
           </ModalFooter>

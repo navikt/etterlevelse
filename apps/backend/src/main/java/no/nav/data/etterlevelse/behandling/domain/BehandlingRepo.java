@@ -21,5 +21,4 @@ public interface BehandlingRepo extends JpaRepository<GenericStorage, UUID>, Beh
              and data ->> 'behandlingId' = :behandlingId
             """, nativeQuery = true)
     List<KravId> findKravIdsForBehandling(String behandlingId);
-
 }

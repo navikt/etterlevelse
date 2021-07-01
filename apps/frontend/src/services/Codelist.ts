@@ -100,12 +100,12 @@ class CodelistService {
 
   getParsedOptions(listName: ListName): { id: string; label: string }[] {
     return this.getCodes(listName).map((code: Code) => {
-      return { id: code.code, label: code.shortName }
+      return {id: code.code, label: code.shortName}
     })
   }
 
   getParsedOptionsForList(listName: ListName, selected: string[]): { id: string; label: string }[] {
-    return selected.map((code) => ({ id: code, label: this.getShortname(listName, code) }))
+    return selected.map((code) => ({id: code, label: this.getShortname(listName, code)}))
   }
 
   getParsedOptionsFilterOutSelected(listName: ListName, currentSelected: string[]): { id: string; label: string }[] {
@@ -118,7 +118,7 @@ class CodelistService {
   }
 
   makeIdLabelForAllCodeLists() {
-    return Object.keys(ListName).map((key) => ({ id: key, label: key }))
+    return Object.keys(ListName).map((key) => ({id: key, label: key}))
   }
 
   gjelderForLov(tema: TemaCode, lov: LovCode) {
@@ -183,6 +183,7 @@ export interface LovCodeData {
 
 export interface TemaCodeData {
   image?: string
+  shortDesciption?: string
 }
 
 const required = 'Påkrevd'
@@ -192,7 +193,9 @@ export const codeListSchema: () => yup.SchemaOf<CodeListFormValues> = () =>
     code: yup.string().required(required),
     shortName: yup.string().required(required),
     description: yup.string().required(required),
-    data: yup.mixed(),
+    data: yup.object().shape({
+      shortDesciption: yup.string().max(200,"Kort beskrivelse må være mindre enn 200 tegn")
+    }),
   })
 
 export const codelistCompareField = (field: string) => {

@@ -201,10 +201,13 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
               <Button type="button" kind="secondary" marginRight disabled={isSubmitting} onClick={submitForm}>
                 Lagre og fortsett senere
               </Button>
-              <Button type="button" onClick={() => {
-                values.status = EtterlevelseStatus.FERDIG_DOKUMENTERT
-                submitForm()
-              }}>
+              <Button
+                type="button"
+                onClick={() => {
+                  values.status = EtterlevelseStatus.FERDIG_DOKUMENTERT
+                  submitForm()
+                }}
+              >
                 Jeg har dokumentert ferdig
               </Button>
             </Block>

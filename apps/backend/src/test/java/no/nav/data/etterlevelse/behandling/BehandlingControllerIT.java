@@ -45,7 +45,7 @@ class BehandlingControllerIT extends IntegrationTestBase {
     void updateBehandlingData() {
         BehandlingRequest req = BehandlingRequest.builder()
                 .id("74288ec1-c45d-4b9f-b799-33539981a690")
-                .relevansFor(List.of("SAK"))
+                .irrelevansFor(List.of("SAK"))
                 .build();
 
         var resp = restTemplate
@@ -54,8 +54,8 @@ class BehandlingControllerIT extends IntegrationTestBase {
         assertThat(behandling).isNotNull();
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
 
-        assertThat(behandling.getRelevansFor()).hasSize(1);
-        assertThat(behandling.getRelevansFor().get(0).getCode()).isEqualTo("SAK");
+        assertThat(behandling.getIrrelevansFor()).hasSize(1);
+        assertThat(behandling.getIrrelevansFor().get(0).getCode()).isEqualTo("SAK");
     }
 
     private void assertResponse(Behandling behandling) {
@@ -69,7 +69,7 @@ class BehandlingControllerIT extends IntegrationTestBase {
                 .linje(ExternalCode.builder().list("LINJE").code("LIN").shortName("Lin").description("desc").external(true).build())
                 .system(ExternalCode.builder().list("SYSTEM").code("SYS").shortName("Sys").description("desc").external(true).build())
                 .team("team")
-                .relevansFor(List.of())
+                .irrelevansFor(List.of())
                 .build());
     }
 }

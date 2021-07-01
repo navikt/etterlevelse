@@ -256,7 +256,7 @@ export const TemaCard = ({ tema, relevans, setNum }: { tema: TemaCode; relevans:
           </Block>
         </SimpleTag>
 
-        <Markdown source={tema.description} />
+        <Markdown source={tema.data?.shortDesciption} />
       </Block>
     </PanelLinkCard>
   )

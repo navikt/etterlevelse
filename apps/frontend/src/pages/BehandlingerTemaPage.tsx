@@ -52,6 +52,7 @@ export const BehandlingerTemaPage = () => {
     variables,
     skip: !params.id || !lover.length,
   })
+
   const [kravData, setKravData] = useState<KravEtterlevelseData[]>([])
 
   const [utfyltKrav, setUtfyltKrav] = useState<KravEtterlevelseData[]>([])
@@ -60,10 +61,6 @@ export const BehandlingerTemaPage = () => {
 
   const [edit, setEdit] = useState<string | undefined>()
   const [kravId, setKravId] = useState<KravId | undefined>()
-
-  const [isPanelOneExpandend, setIsPanelOneExpanded] = useState(false)
-  const [isPanelTwoExpandend, setIsPanelTwoExpanded] = useState(false)
-  const [isPanelThreeExpandend, setIsPanelThreeExpanded] = useState(false)
 
   useEffect(() => {
     const mapped = (rawData?.krav.content || []).map((krav) => {
@@ -92,7 +89,15 @@ export const BehandlingerTemaPage = () => {
 
   useEffect(() => {
     setUtfyltKrav(kravData.filter((k) => k.etterlevelseStatus === EtterlevelseStatus.FERDIG_DOKUMENTERT))
-    setUnderArbeidKrav(kravData.filter((k) => k.etterlevelseStatus === EtterlevelseStatus.OPPFYLLES_SENERE || k.etterlevelseStatus === EtterlevelseStatus.UNDER_REDIGERING || k.etterlevelseStatus === EtterlevelseStatus.FERDIG || k.etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT))
+    setUnderArbeidKrav(
+      kravData.filter(
+        (k) =>
+          k.etterlevelseStatus === EtterlevelseStatus.OPPFYLLES_SENERE ||
+          k.etterlevelseStatus === EtterlevelseStatus.UNDER_REDIGERING ||
+          k.etterlevelseStatus === EtterlevelseStatus.FERDIG ||
+          k.etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT,
+      ),
+    )
     setSkalUtfyllesKrav(kravData.filter((k) => k.etterlevelseStatus === undefined || null))
   }, [kravData])
 

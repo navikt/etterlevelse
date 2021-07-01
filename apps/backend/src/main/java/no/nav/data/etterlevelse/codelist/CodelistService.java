@@ -15,6 +15,7 @@ import no.nav.data.etterlevelse.codelist.dto.CodelistNotErasableException;
 import no.nav.data.etterlevelse.codelist.dto.CodelistNotFoundException;
 import no.nav.data.etterlevelse.codelist.dto.CodelistRequest;
 import no.nav.data.etterlevelse.codelist.dto.CodelistResponse;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -25,7 +26,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-import javax.annotation.PostConstruct;
 import javax.validation.ValidationException;
 
 import static no.nav.data.common.utils.StreamUtils.convert;
@@ -33,11 +33,9 @@ import static no.nav.data.common.utils.StreamUtils.convert;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class CodelistService {
+public class CodelistService implements InitializingBean {
 
     private static final String FIELD_NAME_LIST = "list";
-    private static final String FIELD_NAME_CODE = "code";
-    private static final String REFERENCE = "Validate Codelist";
     private final CodelistRepository codelistRepository;
     private final CodeUsageService codeUsageService;
 
@@ -73,8 +71,8 @@ public class CodelistService {
     }
 
     @Scheduled(initialDelayString = "PT1M", fixedRateString = "PT1M")
-    @PostConstruct
     public void refreshCache() {
+        log.info("Refreshing codelist cache");
         List<Codelist> allCodelists = codelistRepository.findAll();
         CodelistCache.init(cache -> allCodelists.forEach(cache::setCode));
     }
@@ -159,6 +157,12 @@ public class CodelistService {
                 throw new ValidationException("Code already exists " + r.getId());
             }
         });
+    }
+
+    @Override
+    public void afterPropertiesSet() {
+        log.info("Init codelist cache");
+        refreshCache();
     }
 
     @Value

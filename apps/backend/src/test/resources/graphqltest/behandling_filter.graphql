@@ -5,7 +5,7 @@ query getBehandling($relevans: [String!], $sistRedigert: NonNegativeInt, $pageNu
         content {
             id
             nummer
-            relevansFor {
+            irrelevansFor {
                 code
             }
             sistEndretEtterlevelse

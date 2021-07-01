@@ -134,7 +134,7 @@ export interface Behandling extends BehandlingEtterlevData {
 
 export interface BehandlingEtterlevData {
   id: string
-  relevansFor: Code[]
+  irrelevansFor: Code[]
 }
 
 export interface Periode {
@@ -178,7 +178,7 @@ export enum EtterlevelseStatus {
   FERDIG = 'FERDIG',
   OPPFYLLES_SENERE = 'OPPFYLLES_SENERE',
   IKKE_RELEVANT = 'IKKE_RELEVANT',
-  FERDIG_DOKUMENTERT = 'FERDIG_DOKUMENTERT'
+  FERDIG_DOKUMENTERT = 'FERDIG_DOKUMENTERT',
 }
 
 export enum KravStatus {
