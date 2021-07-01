@@ -6,7 +6,7 @@ import { theme } from '../../util'
 import { crossIcon } from '../Images'
 import { ettlevColors } from '../../util/theme'
 import { H1 } from 'baseui/typography'
-import { Behandling, BehandlingEtterlevData } from '../../constants'
+import { Behandling, BehandlingEtterlevData, PageResponse } from '../../constants'
 import { H2, Paragraph4, Paragraph2 } from 'baseui/typography'
 import { ButtonGroup, SHAPE } from 'baseui/button-group'
 import { Button as BaseUIButton, KIND, SIZE } from 'baseui/button'
@@ -16,6 +16,8 @@ import { FieldArray, FieldArrayRenderProps, Form, Formik } from 'formik'
 import { mapToFormVal, updateBehandling } from '../../api/BehandlingApi'
 import * as yup from 'yup'
 import { FormControl } from 'baseui/form-control'
+import { gql, useQuery } from '@apollo/client'
+import { BehandlingStats } from './ViewBehandling'
 
 type EditBehandlingModalProps = {
     showModal: boolean,
@@ -29,8 +31,71 @@ const paddingRight = theme.sizing.scale3200
 const paddingLeft = theme.sizing.scale3200
 
 const EditBehandlingModal = (props: EditBehandlingModalProps) => {
-    const [selected, setSelected] = React.useState<number[]>([]);
+    const [selected, setSelected] = React.useState<number[]>([])
     const options = codelist.getParsedOptions(ListName.RELEVANS)
+
+    const { data, refetch } = useQuery<{ behandling: PageResponse<{ stats: BehandlingStats }> }>(statsQuery, {
+        variables: { relevans: [] },
+        skip: !props.behandling?.id,
+    })
+
+    const [stats, setStats] = React.useState<any[]>([])
+
+    const filterData = (
+        unfilteredData:
+            | {
+                behandling: PageResponse<{
+                    stats: BehandlingStats
+                }>
+            }
+            | undefined,
+    ) => {
+        const StatusListe: any[] = []
+        unfilteredData?.behandling.content.forEach(({ stats }) => {
+            stats.fyltKrav.forEach((k) => {
+                if (k.regelverk.length) {
+                    const relevans = k.relevansFor.map(r => r.code)
+                    if (!relevans.length || !relevans.every(r => selected.map(i => options[i].id).includes(r))) {
+                        StatusListe.push(k)
+                    } else if (k.etterlevelser.filter((e) => e.behandlingId === props.behandling?.id)) {
+                        StatusListe.push(k)
+                    }
+                }
+            })
+            stats.ikkeFyltKrav.forEach((k) => {
+                if (k.regelverk.length) {
+                    const relevans = k.relevansFor.map(r => r.code)
+                    if (!relevans.length || !relevans.every(r => selected.map(i => options[i].id).includes(r))) {
+                        StatusListe.push(k)
+                    } else if (k.etterlevelser.filter((e) => e.behandlingId === props.behandling?.id).length) {
+                        StatusListe.push(k)
+                    }
+                }
+            })
+        })
+        StatusListe.sort((a, b) => {
+            if (a.kravNummer === b.kravNummer) {
+                return a.kravVersjon - b.kravVersjon
+            }
+
+            return a.kravNummer - b.kravNummer
+        })
+
+        for (let index = StatusListe.length - 1; index > 0; index--) {
+            if (StatusListe[index].kravNummer === StatusListe[index - 1].kravNummer) {
+                StatusListe.splice(index - 1, 1)
+            }
+        }
+
+        return StatusListe
+    }
+
+    React.useEffect(() => {
+        refetch()
+        setStats(filterData(data))
+        console.log(stats)
+    }, [selected])
+
 
     React.useEffect(() => {
         setSelected(props.behandling.irrelevansFor.map((ir: Code) => options.findIndex((o) => o.id === ir.code)))
@@ -129,7 +194,7 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
                             <Block display="flex" justifyContent="space-between">
                                 <Block display="flex" alignItems="baseline" marginRight="30px">
                                     <H1 color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
-                                        39
+                                        {stats.length}
                                     </H1>
                                     <Paragraph2>krav</Paragraph2>
                                 </Block>
@@ -157,5 +222,50 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
 const behandlingSchema = () => {
     return yup.object({})
 }
+
+const statsQuery = gql`
+  query getBehandlingStats($relevans: [String!]) {
+    behandling(filter: { relevans: $relevans }) {
+      content {
+        stats {
+          fyltKrav {
+            kravNummer
+            kravVersjon
+            relevansFor {
+                code
+            }
+            etterlevelser(onlyForBehandling: true) {
+                behandlingId
+                status
+              }
+            regelverk {
+              lov {
+                code
+                shortName
+              }
+            }
+          }
+          ikkeFyltKrav {
+            kravNummer
+            kravVersjon
+            relevansFor {
+                code
+            }
+            etterlevelser(onlyForBehandling: true) {
+                behandlingId
+                status
+              }
+            regelverk {
+              lov {
+                code
+                shortName
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`
 
 export default EditBehandlingModal
