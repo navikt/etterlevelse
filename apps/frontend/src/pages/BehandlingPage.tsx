@@ -1,23 +1,23 @@
-import React, { useRef, useState } from 'react'
-import { Block } from 'baseui/block'
-import { useParams } from 'react-router-dom'
-import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
-import { useBehandling } from '../api/BehandlingApi'
-import { H1, H2, HeadingLarge, Label3, Paragraph2, Paragraph4 } from 'baseui/typography'
-import { FormikProps } from 'formik'
-import { ettlevColors, theme } from '../util/theme'
-import { Layout2 } from '../components/scaffold/Page'
-import { Teams } from '../components/common/TeamName'
-import { arkPennIcon } from '../components/Images'
-import { Behandling, BehandlingEtterlevData, EtterlevelseStatus, PageResponse } from '../constants'
-import { useQuery } from '@apollo/client'
-import { BehandlingStats, statsQuery } from '../components/behandling/ViewBehandling'
-import { codelist, ListName, TemaCode } from '../services/Codelist'
-import { PanelLinkCard, PanelLinkCardOverrides } from '../components/common/PanelLink'
-import { cardWidth } from './TemaPage'
-import { ProgressBar, SIZE } from 'baseui/progress-bar'
-import { Button } from 'baseui/button'
-import { EditBehandling } from '../components/behandling/EditBehandling'
+import React, {useRef, useState} from 'react'
+import {Block} from 'baseui/block'
+import {useParams} from 'react-router-dom'
+import {LoadingSkeleton} from '../components/common/LoadingSkeleton'
+import {useBehandling} from '../api/BehandlingApi'
+import {H1, H2, HeadingLarge, Label3, Paragraph2, Paragraph4} from 'baseui/typography'
+import {FormikProps} from 'formik'
+import {ettlevColors, theme} from '../util/theme'
+import {Layout2} from '../components/scaffold/Page'
+import {Teams} from '../components/common/TeamName'
+import {arkPennIcon} from '../components/Images'
+import {Behandling, BehandlingEtterlevData, EtterlevelseStatus, PageResponse} from '../constants'
+import {useQuery} from '@apollo/client'
+import {BehandlingStats, statsQuery} from '../components/behandling/ViewBehandling'
+import {codelist, ListName, TemaCode} from '../services/Codelist'
+import {PanelLinkCard, PanelLinkCardOverrides} from '../components/common/PanelLink'
+import {cardWidth} from './TemaPage'
+import {ProgressBar, SIZE} from 'baseui/progress-bar'
+import {Button} from 'baseui/button'
+import EditBehandlingModal from '../components/behandling/EditBehandlingModal'
 
 export const BehandlingPage = () => {
   const params = useParams<{ id?: string }>()
@@ -146,24 +146,24 @@ export const BehandlingPage = () => {
 
   return (
     <Block width="100%">
-      {!edit && (
-        <Layout2
-          headerBackgroundColor={ettlevColors.grey50}
-          mainHeader={getMainHeader(behandling)}
-          secondaryHeaderBackgroundColor={ettlevColors.white}
-          secondaryHeader={getSecondaryHeader(behandling)}
-          childrenBackgroundColor={ettlevColors.grey25}
-          backBtnUrl={'/behandlinger'}
-        >
-          <Block display="flex" width="100%" justifyContent="space-between" flexWrap marginTop={theme.sizing.scale1200}>
-            {temaListe.map((tema) => (
-              <TemaCardBehandling tema={tema} stats={stats} behandling={behandling} key={`${tema.shortName}_panel`} />
-            ))}
-          </Block>
-        </Layout2>
-      )}
+      <Layout2
+        headerBackgroundColor={ettlevColors.grey50}
+        mainHeader={getMainHeader(behandling)}
+        secondaryHeaderBackgroundColor={ettlevColors.white}
+        secondaryHeader={getSecondaryHeader(behandling)}
+        childrenBackgroundColor={ettlevColors.grey25}
+        backBtnUrl={'/behandlinger'}
+      >
+        <Block display="flex" width="100%" justifyContent="space-between" flexWrap marginTop={theme.sizing.scale1200}>
+          {temaListe.map((tema) => (
+            <TemaCardBehandling tema={tema} stats={stats} behandling={behandling} key={`${tema.shortName}_panel`} />
+          ))}
+        </Block>
+      </Layout2>
+
       {edit && (
-        <EditBehandling
+        <EditBehandlingModal
+          showModal={edit}
           behandling={behandling}
           formRef={formRef}
           setBehandling={setBehandling}
@@ -173,6 +173,18 @@ export const BehandlingPage = () => {
           }}
         />
       )}
+
+      {/* {edit && (
+        <EditBehandling
+          behandling={behandling}
+          formRef={formRef}
+          setBehandling={setBehandling}
+          close={(e?: BehandlingEtterlevData) => {
+            setEdit(false)
+            e && setBehandling({ ...behandling, ...e })
+          }}
+        />
+      )} */}
     </Block>
   )
 }
