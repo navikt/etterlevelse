@@ -1,4 +1,5 @@
 import { Modal, ModalProps, SIZE } from 'baseui/modal'
+import _ from "lodash";
 
 const CuztomizedModal = (props: ModalProps) => {
   const { overrides, ...otherProps } = props
@@ -23,6 +24,8 @@ const CuztomizedModal = (props: ModalProps) => {
     },
   }
 
-  return <Modal {...otherProps} unstable_ModalBackdropScroll size={SIZE.full} overrides={{ ...customOverrides, ...props.overrides }} />
+  const mergedOverrides = _.merge(customOverrides, props.overrides)
+
+  return <Modal {...otherProps} unstable_ModalBackdropScroll size={SIZE.full} overrides={mergedOverrides} />
 }
 export default CuztomizedModal
