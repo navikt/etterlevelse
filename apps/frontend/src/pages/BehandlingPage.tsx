@@ -148,7 +148,6 @@ export const BehandlingPage = () => {
 
   return (
     <Block width="100%">
-      {!edit && (
         <Layout2
           headerBackgroundColor={ettlevColors.grey50}
           mainHeader={getMainHeader(behandling)}
@@ -163,10 +162,9 @@ export const BehandlingPage = () => {
             ))}
           </Block>
         </Layout2>
-      )}
 
       {edit && (
-        <EditBehandlingModal 
+        <EditBehandlingModal
           showModal={edit}
           behandling={behandling}
           formRef={formRef}
@@ -177,7 +175,6 @@ export const BehandlingPage = () => {
           }}
         />
       )}
-
 
       {/* {edit && (
         <EditBehandling
