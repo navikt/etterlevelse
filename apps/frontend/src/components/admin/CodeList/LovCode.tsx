@@ -13,8 +13,8 @@ import { theme } from '../../../util'
 import Button from '../../common/Button'
 import CustomizedInput from '../../common/CustomizedInput'
 import CustomizedSelect from '../../common/CustomizedSelect'
-import CustomizedTextarea from "../../common/CustomizedTextarea";
-import {Error} from "../../common/ModalSchema";
+import CustomizedTextarea from '../../common/CustomizedTextarea'
+import { Error } from '../../common/ModalSchema'
 
 const rowBlockProps: BlockProps = {
   display: 'flex',
