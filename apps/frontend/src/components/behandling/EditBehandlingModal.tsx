@@ -1,24 +1,23 @@
 import * as React from 'react'
 import CustomizedModal from '../common/CustomizedModal'
 import Button from '../common/Button'
-import { Block } from 'baseui/block'
-import { theme } from '../../util'
-import { crossIcon } from '../Images'
-import { ettlevColors } from '../../util/theme'
-import { H1 } from 'baseui/typography'
-import { Behandling, BehandlingEtterlevData, PageResponse } from '../../constants'
-import { H2, Paragraph4, Paragraph2 } from 'baseui/typography'
-import { ButtonGroup, SHAPE } from 'baseui/button-group'
-import { Button as BaseUIButton, KIND, SIZE } from 'baseui/button'
-import { Code, codelist, ListName } from '../../services/Codelist'
-import { borderRadius, borderStyle, borderWidth } from '../common/Style'
-import { FieldArray, FieldArrayRenderProps, Form, Formik } from 'formik'
-import { mapToFormVal, updateBehandling } from '../../api/BehandlingApi'
+import {Block} from 'baseui/block'
+import {theme} from '../../util'
+import {crossIcon} from '../Images'
+import {ettlevColors} from '../../util/theme'
+import {H1, H2, Paragraph2, Paragraph4} from 'baseui/typography'
+import {Behandling, BehandlingEtterlevData, PageResponse} from '../../constants'
+import {ButtonGroup, SHAPE} from 'baseui/button-group'
+import {Button as BaseUIButton, KIND} from 'baseui/button'
+import {Code, codelist, ListName} from '../../services/Codelist'
+import {borderStyle, borderWidth} from '../common/Style'
+import {FieldArray, FieldArrayRenderProps, Form, Formik} from 'formik'
+import {mapToFormVal, updateBehandling} from '../../api/BehandlingApi'
 import * as yup from 'yup'
-import { FormControl } from 'baseui/form-control'
-import { gql, useQuery } from '@apollo/client'
-import { BehandlingStats } from './ViewBehandling'
-import {ModalOverrides} from "baseui/modal"
+import {FormControl} from 'baseui/form-control'
+import {gql, useQuery} from '@apollo/client'
+import {BehandlingStats} from './ViewBehandling'
+import {ModalOverrides} from 'baseui/modal'
 
 type EditBehandlingModalProps = {
   showModal: boolean
@@ -110,14 +109,14 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
   const customOverrides: ModalOverrides = {
     DialogContainer: {
       style: {
-        paddingTop: '100px'
-      }
+        paddingTop: '100px',
+      },
     },
     Dialog: {
       style: {
-        height: '100%'
-      }
-    }
+        height: '100%',
+      },
+    },
   }
 
   return (
@@ -210,8 +209,7 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
                 }}
               </FieldArray>
 
-              <Block                         marginBottom='50px'
-              >
+              <Block marginBottom="50px">
                 <Paragraph2 $style={{ lineHeight: '20px' }} marginTop={theme.sizing.scale900} marginBottom={theme.sizing.scale900}>
                   Basert på dine opplysninger, skal behandlingen etterleve
                 </Paragraph2>
