@@ -1,34 +1,34 @@
-import { Block } from 'baseui/block'
-import { H1, HeadingXLarge } from 'baseui/typography'
-import { useParams } from 'react-router-dom'
-import { deleteKrav, KravIdParams, mapToFormVal } from '../api/KravApi'
-import React, { useEffect, useRef, useState } from 'react'
-import { EtterlevelseQL, EtterlevelseStatus, ExternalCode, Krav, KravId, KravQL, KravStatus } from '../constants'
+import {Block} from 'baseui/block'
+import {H1, HeadingXLarge} from 'baseui/typography'
+import {useParams} from 'react-router-dom'
+import {deleteKrav, KravIdParams, mapToFormVal} from '../api/KravApi'
+import React, {useEffect, useRef, useState} from 'react'
+import {EtterlevelseQL, EtterlevelseStatus, ExternalCode, Krav, KravId, KravQL, KravStatus} from '../constants'
 import Button from '../components/common/Button'
-import { ViewKrav } from '../components/krav/ViewKrav'
-import { EditKrav } from '../components/krav/EditKrav'
+import {ViewKrav} from '../components/krav/ViewKrav'
+import {EditKrav} from '../components/krav/EditKrav'
 import RouteLink from '../components/common/RouteLink'
-import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
-import { user } from '../services/User'
-import { theme } from '../util'
-import { FormikProps } from 'formik'
-import { DeleteItem } from '../components/DeleteItem'
-import { Spinner } from '../components/common/Spinner'
-import { borderRadius } from '../components/common/Style'
-import { useQuery } from '@apollo/client'
-import { Tilbakemeldinger } from '../components/krav/Tilbakemelding'
-import { chevronLeft, editIcon, pageIcon, plusIcon, sadFolderIcon } from '../components/Images'
-import { Label } from '../components/common/PropertyLabel'
-import { CustomizedTab, CustomizedTabs } from '../components/common/CustomizedTabs'
-import { ettlevColors, maxPageWidth, pageWidth } from '../util/theme'
-import { CustomizedAccordion, CustomizedPanel } from '../components/common/CustomizedAccordion'
+import {LoadingSkeleton} from '../components/common/LoadingSkeleton'
+import {user} from '../services/User'
+import {theme} from '../util'
+import {FormikProps} from 'formik'
+import {DeleteItem} from '../components/DeleteItem'
+import {Spinner} from '../components/common/Spinner'
+import {borderRadius} from '../components/common/Style'
+import {useQuery} from '@apollo/client'
+import {Tilbakemeldinger} from '../components/krav/Tilbakemelding'
+import {chevronLeft, editIcon, pageIcon, plusIcon, sadFolderIcon} from '../components/Images'
+import {Label} from '../components/common/PropertyLabel'
+import {CustomizedTab, CustomizedTabs} from '../components/common/CustomizedTabs'
+import {ettlevColors, maxPageWidth, pageWidth} from '../util/theme'
+import {CustomizedAccordion, CustomizedPanel} from '../components/common/CustomizedAccordion'
 import * as _ from 'lodash'
 import moment from 'moment'
-import { useLocationState, useQueryParam } from '../util/hooks'
-import { InfoBlock } from '../components/common/InfoBlock'
-import { gql } from '@apollo/client/core'
-import { PanelLink } from '../components/common/PanelLink'
-import { codelist, ListName } from '../services/Codelist'
+import {useLocationState, useQueryParam} from '../util/hooks'
+import {InfoBlock} from '../components/common/InfoBlock'
+import {gql} from '@apollo/client/core'
+import {PanelLink} from '../components/common/PanelLink'
+import {codelist, ListName} from '../services/Codelist'
 
 export const kravNumView = (it: { kravVersjon: number; kravNummer: number }) => `K${it.kravNummer}.${it.kravVersjon}`
 export const kravName = (krav: Krav) => `${kravNumView(krav)} - ${krav.navn}`
@@ -68,7 +68,7 @@ export const KravPage = () => {
   const { state, history, changeState } = useLocationState<LocationState>()
   const tilbakemeldingId = useQueryParam('tilbakemeldingId')
   const [tab, setTab] = useState<Section>(!!tilbakemeldingId ? 'tilbakemeldinger' : state?.tab || 'krav')
-  const temaCode = codelist.getCode(ListName.LOV, krav?.regelverk[0].lov.code)?.data?.tema
+  const temaCode = codelist.getCode(ListName.LOV, krav?.regelverk[0]?.lov?.code)?.data?.tema
 
   useEffect(() => {
     if (tab !== state?.tab) changeState({ tab })
@@ -113,7 +113,7 @@ export const KravPage = () => {
               <Block display="flex" width="100%" justifyContent="center" marginTop="24px">
                 <Block display="flex" alignItems="center" width="100%">
                   <Block flex="1" display="flex" justifyContent="flex-start">
-                    <RouteLink href={`/tema/${temaCode}`} hideUnderline>
+                    <RouteLink href={temaCode ? `/tema/${temaCode}` : '/tema'} hideUnderline>
                       <Button startEnhancer={<img alt={'Chevron left'} src={chevronLeft} />} size="compact" kind="underline-hover" $style={{ color: '#F8F8F8' }}>
                         {' '}
                         Tilbake
