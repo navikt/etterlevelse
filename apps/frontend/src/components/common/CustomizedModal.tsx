@@ -1,4 +1,4 @@
-import {Modal, ModalProps, SIZE} from 'baseui/modal'
+import { Modal, ModalProps, SIZE } from 'baseui/modal'
 import _ from 'lodash'
 
 const CuztomizedModal = (props: ModalProps) => {

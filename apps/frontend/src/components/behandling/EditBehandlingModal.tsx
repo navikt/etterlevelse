@@ -1,23 +1,23 @@
 import * as React from 'react'
 import CustomizedModal from '../common/CustomizedModal'
 import Button from '../common/Button'
-import {Block} from 'baseui/block'
-import {theme} from '../../util'
-import {checkmarkIcon, crossIcon} from '../Images'
-import {ettlevColors} from '../../util/theme'
-import {H1, H2, Paragraph2, Paragraph4} from 'baseui/typography'
-import {Behandling, BehandlingEtterlevData, PageResponse} from '../../constants'
-import {ButtonGroup, SHAPE} from 'baseui/button-group'
-import {Button as BaseUIButton, KIND} from 'baseui/button'
-import {Code, codelist, ListName} from '../../services/Codelist'
-import {borderStyle, borderWidth} from '../common/Style'
-import {FieldArray, FieldArrayRenderProps, Form, Formik} from 'formik'
-import {mapToFormVal, updateBehandling} from '../../api/BehandlingApi'
+import { Block } from 'baseui/block'
+import { theme } from '../../util'
+import { checkmarkIcon, crossIcon } from '../Images'
+import { ettlevColors } from '../../util/theme'
+import { H1, H2, Paragraph2, Paragraph4 } from 'baseui/typography'
+import { Behandling, BehandlingEtterlevData, PageResponse } from '../../constants'
+import { ButtonGroup, SHAPE } from 'baseui/button-group'
+import { Button as BaseUIButton, KIND } from 'baseui/button'
+import { Code, codelist, ListName } from '../../services/Codelist'
+import { borderStyle, borderWidth } from '../common/Style'
+import { FieldArray, FieldArrayRenderProps, Form, Formik } from 'formik'
+import { mapToFormVal, updateBehandling } from '../../api/BehandlingApi'
 import * as yup from 'yup'
-import {FormControl} from 'baseui/form-control'
-import {gql, useQuery} from '@apollo/client'
-import {BehandlingStats} from './ViewBehandling'
-import {ModalOverrides} from 'baseui/modal'
+import { FormControl } from 'baseui/form-control'
+import { gql, useQuery } from '@apollo/client'
+import { BehandlingStats } from './ViewBehandling'
+import { ModalOverrides } from 'baseui/modal'
 
 type EditBehandlingModalProps = {
   showModal: boolean
@@ -103,11 +103,21 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
   }, [data])
 
   React.useEffect(() => {
-    if(props.behandling.irrelevansFor.length) {
+    if (props.behandling.irrelevansFor.length) {
       const irrelevans = props.behandling.irrelevansFor.map((ir: Code) => options.findIndex((o) => o.id === ir.code))
-      setSelected(options.map((r,i) => {return i}).filter(n => !irrelevans.includes(n)))
+      setSelected(
+        options
+          .map((r, i) => {
+            return i
+          })
+          .filter((n) => !irrelevans.includes(n)),
+      )
     } else {
-      setSelected(options.map((r,i) => {return i}))
+      setSelected(
+        options.map((r, i) => {
+          return i
+        }),
+      )
     }
   }, [props.behandling])
 
@@ -184,7 +194,7 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
                           {options.map((r, i) => (
                             <BaseUIButton
                               key={r.id}
-                              startEnhancer={selected.includes(i) ? <img src={checkmarkIcon }/> : undefined}
+                              startEnhancer={selected.includes(i) ? <img src={checkmarkIcon} /> : undefined}
                               overrides={{
                                 BaseButton: {
                                   style: {
@@ -193,7 +203,7 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
                                     marginRight: theme.sizing.scale600,
                                     boxShadow: '0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 2px 0 rgba(0, 0, 0, .12)',
                                     ':hover': { boxShadow: '0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 3px 0 rgba(0, 0, 0, .12)' },
-                                    ':active': { boxShadow: '0 2px 1px -2px rgba(0, 0, 0, .2), 0 1px 1px 0 rgba(0, 0, 0, .14), 0 1px 1px 0 rgba(0, 0, 0, .12)'},
+                                    ':active': { boxShadow: '0 2px 1px -2px rgba(0, 0, 0, .2), 0 1px 1px 0 rgba(0, 0, 0, .14), 0 1px 1px 0 rgba(0, 0, 0, .12)' },
                                     ':focus': {
                                       boxShadow: '0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 3px 0 rgba(0, 0, 0, .12)',
                                       outline: `3px solid ${ettlevColors.focusOutline}`,
@@ -204,7 +214,8 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
                                 },
                               }}
                             >
-                              {}{r.label}
+                              {}
+                              {r.label}
                             </BaseUIButton>
                           ))}
                         </ButtonGroup>

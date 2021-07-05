@@ -119,6 +119,7 @@ export const PanelLinkCard = ({
   verticalMargin,
   overrides,
   flexContent,
+  hideArrow,
 }: {
   href?: string
   tittel: string
@@ -135,6 +136,7 @@ export const PanelLinkCard = ({
   verticalMargin?: string
   overrides?: PanelLinkCardOverrides
   flexContent?: boolean
+  hideArrow?: boolean
 }) => {
   const [hover, setHover] = useState(false)
 
@@ -229,9 +231,11 @@ export const PanelLinkCard = ({
               {children}
             </Block>
 
-            <Block placeSelf={'flex-end'} padding={paddingSize} paddingLeft={flexContent ? '0px' : undefined}>
-              <Chevron hover={hover} icon={arrowRightIcon} distance={'8px'} />
-            </Block>
+            {!hideArrow && (
+              <Block placeSelf={'flex-end'} padding={paddingSize} paddingLeft={flexContent ? '0px' : undefined}>
+                <Chevron hover={hover} icon={arrowRightIcon} distance={'8px'} />
+              </Block>
+            )}
           </Block>
         </Block>
       </RouteLink>

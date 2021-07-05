@@ -1,21 +1,21 @@
 import React from 'react'
-import {codelist, ListName} from '../services/Codelist'
-import {env} from '../util/env'
-import {Regelverk} from '../constants'
-import {Block} from 'baseui/block'
+import { codelist, ListName } from '../services/Codelist'
+import { env } from '../util/env'
+import { Regelverk } from '../constants'
+import { Block } from 'baseui/block'
 import CustomizedLink from './common/CustomizedLink'
-import {faExternalLinkAlt} from "@fortawesome/free-solid-svg-icons";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const reactProcessString = require('react-process-string')
 const processString = reactProcessString as (converters: { regex: RegExp; fn: (key: string, result: string[]) => JSX.Element | string }[]) => (input?: string) => JSX.Element[]
 
 export const LovViewList = (props: { regelverk: Regelverk[] }) => {
   return (
-    <Block display="flex" flexDirection="column" $style={{wordBreak: 'break-all'}}>
+    <Block display="flex" flexDirection="column" $style={{ wordBreak: 'break-all' }}>
       {props.regelverk.map((r, i) => (
         <Block key={i}>
-          <LovView regelverk={r}/>
+          <LovView regelverk={r} />
         </Block>
       ))}
     </Block>
@@ -24,18 +24,14 @@ export const LovViewList = (props: { regelverk: Regelverk[] }) => {
 
 export const LovView = (props: { regelverk?: Regelverk }) => {
   if (!props.regelverk) return null
-  const {spesifisering, lov} = props.regelverk
+  const { spesifisering, lov } = props.regelverk
   const lovCode = lov?.code
 
   let lovDisplay = lov && codelist.getShortname(ListName.LOV, lovCode)
 
   let descriptionText = codelist.valid(ListName.LOV, lovCode) ? legalBasisLinkProcessor(lovCode, lovDisplay + ' ' + spesifisering) : spesifisering
 
-  return (
-    <span>
-      {descriptionText}
-    </span>
-  )
+  return <span>{descriptionText}</span>
 }
 
 const findLovId = (nationalLaw: string) => {
@@ -53,7 +49,6 @@ export const lovdataBase = (nationalLaw: string) => {
 }
 
 const legalBasisLinkProcessor = (law: string, text?: string) => {
-
   if (!findLovId(law).match(/^\d+.*/)) {
     return text
   }
@@ -79,7 +74,6 @@ const legalBasisLinkProcessor = (law: string, text?: string) => {
         <CustomizedLink key={key} href={`${lovdataBase(law)}/KAPITTEL_${result[2]}`} target="_blank" rel="noopener noreferrer">
           {result[1]} Kapittel {result[3]} <FontAwesomeIcon size="xs" icon={faExternalLinkAlt} />
         </CustomizedLink>
-
       ),
     },
   ])(text)
