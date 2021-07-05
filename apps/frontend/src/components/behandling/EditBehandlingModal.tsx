@@ -104,8 +104,8 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
 
   React.useEffect(() => {
     if(props.behandling.irrelevansFor.length) {
-      const test = props.behandling.irrelevansFor.map((ir: Code) => options.findIndex((o) => o.id === ir.code))
-      setSelected(options.map((r,i) => {return i}).filter(n => !test.includes(n)))
+      const irrelevans = props.behandling.irrelevansFor.map((ir: Code) => options.findIndex((o) => o.id === ir.code))
+      setSelected(options.map((r,i) => {return i}).filter(n => !irrelevans.includes(n)))
     } else {
       setSelected(options.map((r,i) => {return i}))
     }
