@@ -35,10 +35,10 @@ export const BehandlingPage = () => {
   const filterData = (
     unfilteredData:
       | {
-          behandling: PageResponse<{
-            stats: BehandlingStats
-          }>
-        }
+        behandling: PageResponse<{
+          stats: BehandlingStats
+        }>
+      }
       | undefined,
   ) => {
     const StatusListe: any[] = []
@@ -131,18 +131,29 @@ export const BehandlingPage = () => {
   )
 
   const getRelevans = (irrelevans?: Code[]) => {
-    if (!irrelevans) {
+    if (irrelevans) {
+      const relevans = options.map((r, i) => { return i }).filter(n => !irrelevans.map((ir: Code) => options.findIndex((o) => o.id === ir.code)).includes(n))
       return (
         <Block display="flex">
-          {options.map((o, index) => (
-            <Block key={o.id} display="flex">
-              <Block marginRight="18px">{o.label}</Block>
-              <Block marginRight="18px">{index < options.length - 1 ? <img alt="dot" src={ellipse80} /> : undefined}</Block>
+          {relevans.map((optionIndex, index) => (
+            <Block key={options[optionIndex].id} display="flex">
+              <Block marginRight="18px">{options[optionIndex].label}</Block>
+              <Block marginRight="18px">{index < relevans.length - 1 ? <img alt="dot" src={ellipse80} /> : undefined}</Block>
             </Block>
           ))}
         </Block>
       )
     }
+    return (
+      <Block display="flex">
+        {options.map((o, index) => (
+          <Block key={o.id} display="flex">
+            <Block marginRight="18px">{o.label}</Block>
+            <Block marginRight="18px">{index < options.length - 1 ? <img alt="dot" src={ellipse80} /> : undefined}</Block>
+          </Block>
+        ))}
+      </Block>
+    )
   }
 
   if (!behandling) return <LoadingSkeleton header="Behandling" />
