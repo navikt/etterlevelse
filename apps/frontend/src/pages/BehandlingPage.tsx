@@ -1,26 +1,27 @@
-import React, {useRef, useState} from 'react'
-import {Block} from 'baseui/block'
-import {useParams} from 'react-router-dom'
-import {LoadingSkeleton} from '../components/common/LoadingSkeleton'
-import {useBehandling} from '../api/BehandlingApi'
-import {H1, H2, HeadingLarge, Label3, Paragraph2, Paragraph4} from 'baseui/typography'
-import {FormikProps} from 'formik'
-import {ettlevColors, theme} from '../util/theme'
-import {Layout2} from '../components/scaffold/Page'
-import {Teams} from '../components/common/TeamName'
-import {arkPennIcon} from '../components/Images'
-import {Behandling, BehandlingEtterlevData, EtterlevelseStatus, PageResponse} from '../constants'
-import {useQuery} from '@apollo/client'
-import {BehandlingStats, statsQuery} from '../components/behandling/ViewBehandling'
-import {codelist, ListName, TemaCode} from '../services/Codelist'
-import {PanelLinkCard, PanelLinkCardOverrides} from '../components/common/PanelLink'
-import {cardWidth} from './TemaPage'
-import {ProgressBar, SIZE} from 'baseui/progress-bar'
-import {Button} from 'baseui/button'
+import React, { useRef, useState } from 'react'
+import { Block } from 'baseui/block'
+import { useParams } from 'react-router-dom'
+import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
+import { useBehandling } from '../api/BehandlingApi'
+import { H1, H2, HeadingLarge, Label3, Paragraph2, Paragraph4 } from 'baseui/typography'
+import { FormikProps } from 'formik'
+import { ettlevColors, theme } from '../util/theme'
+import { Layout2 } from '../components/scaffold/Page'
+import { Teams } from '../components/common/TeamName'
+import { arkPennIcon, ellipse80 } from '../components/Images'
+import { Behandling, BehandlingEtterlevData, EtterlevelseStatus, PageResponse } from '../constants'
+import { useQuery } from '@apollo/client'
+import { BehandlingStats, statsQuery } from '../components/behandling/ViewBehandling'
+import { Code, codelist, ListName, TemaCode } from '../services/Codelist'
+import { PanelLinkCard, PanelLinkCardOverrides } from '../components/common/PanelLink'
+import { cardWidth } from './TemaPage'
+import { ProgressBar, SIZE } from 'baseui/progress-bar'
+import { Button } from 'baseui/button'
 import EditBehandlingModal from '../components/behandling/EditBehandlingModal'
 
 export const BehandlingPage = () => {
   const params = useParams<{ id?: string }>()
+  const options = codelist.getParsedOptions(ListName.RELEVANS)
   const [behandling, setBehandling] = useBehandling(params.id)
   const formRef = useRef<FormikProps<any>>()
   const { data, refetch } = useQuery<{ behandling: PageResponse<{ stats: BehandlingStats }> }>(statsQuery, {
@@ -97,19 +98,6 @@ export const BehandlingPage = () => {
         <Paragraph2>{behandling.overordnetFormaal.shortName}</Paragraph2>
         <Teams teams={behandling.teams} link list />
       </Block>
-
-      <Block width="400px" height="260px" backgroundColor={ettlevColors.white} marginTop={theme.sizing.scale400}>
-        <Block padding="22px">
-          <Block marginBottom="27px">
-            <HeadingLarge>Hva er egenskapene til behandlingen?</HeadingLarge>
-            <Block $style={{ fontWeight: 400, fontSize: '18px', fontFamily: 'Source Sans Pro' }}>
-              Hvis du tilpasser egenskapene skjuler vi kravene som ikke er relevante for din løsning.
-            </Block>
-          </Block>
-
-          <Button onClick={() => setEdit(!edit)}>Tilpass egenskapene</Button>
-        </Block>
-      </Block>
     </Block>
   )
 
@@ -117,7 +105,7 @@ export const BehandlingPage = () => {
     <Block width="100%" height="100px" maxHeight="100px" display="flex" alignItems="center" justifyContent="space-between">
       <Block display="flex" alignItems="center">
         <Block marginRight="30px">
-          <img src={arkPennIcon} alt="test" height="50px" width="40px" />
+          <img src={arkPennIcon} alt="penn ikon" height="50px" width="40px" />
         </Block>
         <H2>Tema for dokumentasjon</H2>
       </Block>
@@ -142,6 +130,21 @@ export const BehandlingPage = () => {
     </Block>
   )
 
+  const getRelevans = (irrelevans?: Code[]) => {
+    if (!irrelevans) {
+      return (
+        <Block display="flex">
+          {options.map((o, index) => (
+            <Block key={o.id} display="flex">
+              <Block marginRight="18px">{o.label}</Block>
+              <Block marginRight="18px">{index < options.length - 1 ? <img alt="dot" src={ellipse80} /> : undefined}</Block>
+            </Block>
+          ))}
+        </Block>
+      )
+    }
+  }
+
   if (!behandling) return <LoadingSkeleton header="Behandling" />
 
   return (
@@ -154,7 +157,38 @@ export const BehandlingPage = () => {
         childrenBackgroundColor={ettlevColors.grey25}
         backBtnUrl={'/behandlinger'}
       >
-        <Block display="flex" width="100%" justifyContent="space-between" flexWrap marginTop={theme.sizing.scale1200}>
+        <Block backgroundColor={ettlevColors.grey75} marginTop={theme.sizing.scale400}>
+          <Block padding="22px">
+            <Block display="flex">
+              <Block>
+                <HeadingLarge>Egenskaper til behandlingen</HeadingLarge>
+                <Paragraph4
+                  $style={{
+                    lineHeight: '24px',
+                  }}
+                >
+                  {!behandling.irrelevansFor.length ? getRelevans() : getRelevans(behandling.irrelevansFor)}
+                </Paragraph4>
+              </Block>
+              <Block flex="1" display="flex" alignItems="flex-end" flexDirection="column">
+                <Block>
+                  <Block flex="1" display="flex" justifyContent="flex-end">
+                    <Paragraph4
+                      $style={{
+                        lineHeight: '24px',
+                      }}
+                    >
+                      Antall egenskaper: {options.length - behandling.irrelevansFor.length}
+                    </Paragraph4>
+                  </Block>
+
+                  <Button onClick={() => setEdit(!edit)}>Tilpass egenskapene</Button>
+                </Block>
+              </Block>
+            </Block>
+          </Block>
+        </Block>
+        <Block display="flex" width="100%" justifyContent="space-between" flexWrap marginTop={theme.sizing.scale850}>
           {temaListe.map((tema) => (
             <TemaCardBehandling tema={tema} stats={stats} behandling={behandling} key={`${tema.shortName}_panel`} />
           ))}
@@ -173,18 +207,6 @@ export const BehandlingPage = () => {
           }}
         />
       )}
-
-      {/* {edit && (
-        <EditBehandling
-          behandling={behandling}
-          formRef={formRef}
-          setBehandling={setBehandling}
-          close={(e?: BehandlingEtterlevData) => {
-            setEdit(false)
-            e && setBehandling({ ...behandling, ...e })
-          }}
-        />
-      )} */}
     </Block>
   )
 }
