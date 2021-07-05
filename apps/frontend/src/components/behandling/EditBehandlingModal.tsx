@@ -3,7 +3,7 @@ import CustomizedModal from '../common/CustomizedModal'
 import Button from '../common/Button'
 import {Block} from 'baseui/block'
 import {theme} from '../../util'
-import {crossIcon} from '../Images'
+import {checkmarkIcon, crossIcon} from '../Images'
 import {ettlevColors} from '../../util/theme'
 import {H1, H2, Paragraph2, Paragraph4} from 'baseui/typography'
 import {Behandling, BehandlingEtterlevData, PageResponse} from '../../constants'
@@ -153,7 +153,7 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
             </Block>
 
             <Block paddingLeft={paddingLeft} paddingRight={paddingRight} marginTop={theme.sizing.scale1400}>
-              <H2>Velg irrelevante egenskaper til behandlingen</H2>
+              <H2>Egenskaper til behandling</H2>
               <FieldArray name="irrelevansFor">
                 {(p: FieldArrayRenderProps) => {
                   return (
@@ -181,16 +181,19 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
                             }
                           }}
                         >
-                          {options.map((r) => (
+                          {options.map((r, i) => (
                             <BaseUIButton
                               key={r.id}
+                              startEnhancer={selected.includes(i) ? <img src={checkmarkIcon }/> : undefined}
                               overrides={{
                                 BaseButton: {
                                   style: {
+                                    color: selected.includes(i) ? ettlevColors.green800 : ettlevColors.navGra80,
+                                    backgroundColor: selected.includes(i) ? ettlevColors.green50 : ettlevColors.white,
                                     marginRight: theme.sizing.scale600,
                                     boxShadow: '0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 2px 0 rgba(0, 0, 0, .12)',
                                     ':hover': { boxShadow: '0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 3px 0 rgba(0, 0, 0, .12)' },
-                                    ':active': { boxShadow: '0 2px 1px -2px rgba(0, 0, 0, .2), 0 1px 1px 0 rgba(0, 0, 0, .14), 0 1px 1px 0 rgba(0, 0, 0, .12)' },
+                                    ':active': { boxShadow: '0 2px 1px -2px rgba(0, 0, 0, .2), 0 1px 1px 0 rgba(0, 0, 0, .14), 0 1px 1px 0 rgba(0, 0, 0, .12)'},
                                     ':focus': {
                                       boxShadow: '0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 3px 0 rgba(0, 0, 0, .12)',
                                       outline: `3px solid ${ettlevColors.focusOutline}`,
@@ -201,7 +204,7 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
                                 },
                               }}
                             >
-                              {r.label}
+                              {}{r.label}
                             </BaseUIButton>
                           ))}
                         </ButtonGroup>
