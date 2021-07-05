@@ -39,6 +39,7 @@ import paperPenIconBg from '../resources/icons/with_bg/arkPennBg.svg'
 import gavelIconBg from '../resources/icons/with_bg/gavelBg.svg'
 import grafIconBg from '../resources/icons/with_bg/grafBg.svg'
 import paragrafIconBg from '../resources/icons/with_bg/paragrafBg.svg'
+import ellipse80 from '../resources/icons/ellipse80.svg'
 
 import checkmarkIcon from '../resources/icons/check.svg'
 import arkPennIcon from '../resources/icons/ark-penn-ikon.svg'
@@ -65,6 +66,7 @@ export {
   deleteIcon,
   editIcon,
   editSecondaryIcon,
+  ellipse80,
   searchIcon,
   questionmarkIcon,
   questionmarkHoverIcon,
