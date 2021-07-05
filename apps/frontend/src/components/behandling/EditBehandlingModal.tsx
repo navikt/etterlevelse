@@ -31,8 +31,8 @@ const paddingRight = theme.sizing.scale3200
 const paddingLeft = theme.sizing.scale3200
 
 const EditBehandlingModal = (props: EditBehandlingModalProps) => {
-  const [selected, setSelected] = React.useState<number[]>([])
   const options = codelist.getParsedOptions(ListName.RELEVANS)
+  const [selected, setSelected] = React.useState<number[]>([])
 
   const { data, refetch } = useQuery<{ behandling: PageResponse<{ stats: BehandlingStats }> }>(statsQuery, {
     variables: { relevans: [] },
@@ -57,7 +57,7 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
       stats.fyltKrav.forEach((k) => {
         if (k.regelverk.length) {
           const relevans = k.relevansFor.map((r) => r.code)
-          if (!relevans.length || !relevans.every((r) => selected.map((i) => options[i].id).includes(r))) {
+          if (!relevans.length || !relevans.every((r) => !selected.map((i) => options[i].id).includes(r))) {
             StatusListe.push(k)
           } else if (k.etterlevelser.filter((e) => e.behandlingId === props.behandling?.id)) {
             StatusListe.push(k)
@@ -67,7 +67,7 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
       stats.ikkeFyltKrav.forEach((k) => {
         if (k.regelverk.length) {
           const relevans = k.relevansFor.map((r) => r.code)
-          if (!relevans.length || !relevans.every((r) => selected.map((i) => options[i].id).includes(r))) {
+          if (!relevans.length || !relevans.every((r) => !selected.map((i) => options[i].id).includes(r))) {
             StatusListe.push(k)
           } else if (k.etterlevelser.filter((e) => e.behandlingId === props.behandling?.id).length) {
             StatusListe.push(k)
@@ -103,7 +103,12 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
   }, [data])
 
   React.useEffect(() => {
-    setSelected(props.behandling.irrelevansFor.map((ir: Code) => options.findIndex((o) => o.id === ir.code)))
+    if(props.behandling.irrelevansFor.length) {
+      const test = props.behandling.irrelevansFor.map((ir: Code) => options.findIndex((o) => o.id === ir.code))
+      setSelected(options.map((r,i) => {return i}).filter(n => !test.includes(n)))
+    } else {
+      setSelected(options.map((r,i) => {return i}))
+    }
   }, [props.behandling])
 
   const customOverrides: ModalOverrides = {
@@ -169,10 +174,10 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
                           onClick={(_event, index) => {
                             if (!selected.includes(index)) {
                               setSelected([...selected, index])
-                              p.push(codelist.getCode(ListName.RELEVANS, options[index].id as string))
+                              p.remove(p.form.values.irrelevansFor.findIndex((ir: Code) => ir.code === options[index].id))
                             } else {
                               setSelected(selected.filter((value) => value !== index))
-                              p.remove(p.form.values.irrelevansFor.findIndex((ir: Code) => ir.code === options[index].id))
+                              p.push(codelist.getCode(ListName.RELEVANS, options[index].id as string))
                             }
                           }}
                         >
