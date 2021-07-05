@@ -35,6 +35,7 @@ export const ettlevColors = {
   error50: '#F6EAE6',
   textAreaBorder: '#E0E0E0',
   navMorkGra: '#262626',
+  navGra80: '#4f4f4f',
   navOransje: '#A86400',
   focusOutline: '#276ef1',
 }
@@ -69,6 +70,7 @@ const overrides: RecursivePartial<Theme> = {
     buttonPrimaryText: ettlevColors.green50,
     buttonPrimaryHover: ettlevColors.green600,
     buttonPrimaryActive: ettlevColors.green800,
+    buttonPrimarySelectedFill: ettlevColors.green50,
     //secondary button color overrides:
     buttonSecondaryFill: ettlevColors.white,
     buttonSecondaryText: ettlevColors.green600,
