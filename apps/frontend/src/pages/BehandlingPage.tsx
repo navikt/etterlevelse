@@ -18,6 +18,7 @@ import { cardWidth } from './TemaPage'
 import { ProgressBar, SIZE } from 'baseui/progress-bar'
 import { Button } from 'baseui/button'
 import EditBehandlingModal from '../components/behandling/EditBehandlingModal'
+import { Tag } from 'baseui/tag'
 
 export const BehandlingPage = () => {
   const params = useParams<{ id?: string }>()
@@ -35,10 +36,10 @@ export const BehandlingPage = () => {
   const filterData = (
     unfilteredData:
       | {
-        behandling: PageResponse<{
-          stats: BehandlingStats
-        }>
-      }
+          behandling: PageResponse<{
+            stats: BehandlingStats
+          }>
+        }
       | undefined,
   ) => {
     const StatusListe: any[] = []
@@ -132,7 +133,11 @@ export const BehandlingPage = () => {
 
   const getRelevans = (irrelevans?: Code[]) => {
     if (irrelevans) {
-      const relevans = options.map((r, i) => { return i }).filter(n => !irrelevans.map((ir: Code) => options.findIndex((o) => o.id === ir.code)).includes(n))
+      const relevans = options
+        .map((r, i) => {
+          return i
+        })
+        .filter((n) => !irrelevans.map((ir: Code) => options.findIndex((o) => o.id === ir.code)).includes(n))
       return (
         <Block display="flex">
           {relevans.map((optionIndex, index) => (
@@ -222,14 +227,29 @@ export const BehandlingPage = () => {
   )
 }
 
-const HeaderContent = (props: { tilUtfylling: number; underArbeid: number }) => (
+const HeaderContent = (props: { kravLength: number }) => (
   <Block marginBottom="33px">
-    <Paragraph4 marginTop="0px" marginBottom="0px">
-      Til utfylling: {props.tilUtfylling} krav
-    </Paragraph4>
-    <Paragraph4 marginTop="0px" marginBottom="0px">
-      Under arbeid: {props.underArbeid} krav
-    </Paragraph4>
+    <Tag
+      closeable={false}
+      overrides={{
+        Root: {
+          style: {
+            backgroundColor: ettlevColors.white,
+            borderBottomColor: ettlevColors.white,
+            borderTopColor: ettlevColors.white,
+            borderLeftColor: ettlevColors.white,
+            borderRightColor: ettlevColors.white,
+          },
+        },
+      }}
+    >
+      <Block display="flex" alignItems="baseline">
+        <Label3 color={ettlevColors.navOransje} $style={{ fontSize: '20px', lineHeight: '18px' }} marginRight="4px">
+          {props.kravLength}
+        </Label3>
+        <Paragraph4 $style={{ lineHeight: '18px', marginTop: '0px', marginBottom: '0px' }}>krav</Paragraph4>
+      </Block>
+    </Tag>
   </Block>
 )
 
@@ -290,8 +310,9 @@ const TemaCardBehandling = ({ tema, stats, behandling }: { tema: TemaCode; stats
       verticalMargin={theme.sizing.scale400}
       href={`/behandling/${behandling.id}/${tema.code}`}
       tittel={tema.shortName}
-      headerContent={<HeaderContent tilUtfylling={tilUtfylling} underArbeid={underArbeid} />}
+      headerContent={<HeaderContent kravLength={krav.length} />}
       flexContent
+      hideArrow
     >
       <Block marginTop={theme.sizing.scale650}>
         <Block display="flex" flex={1}>
