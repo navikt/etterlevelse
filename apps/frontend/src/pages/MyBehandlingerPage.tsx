@@ -21,8 +21,15 @@ import { SkeletonPanel } from '../components/common/LoadingSkeleton'
 import { user } from '../services/User'
 import { useHistory, useParams } from 'react-router-dom'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
+import { Teams } from '../components/common/TeamName'
 
 type Section = 'mine' | 'siste' | 'alle'
+
+interface BehandlingCount {
+  behandlingCount?: number
+}
+
+type CustomTeamObject = BehandlingCount & Team
 
 export const MyBehandlingerPage = () => (
   <Block width="100%" backgroundColor={ettlevColors.grey50} display={'flex'} justifyContent={'center'} paddingBottom={'200px'}>
@@ -55,6 +62,7 @@ const BehandlingTabs = () => {
   const [teams, teamsLoading] = useMyTeams()
   const behandlinger = data?.behandlinger || emptyPage
   const loading = teamsLoading || behandlingerLoading
+  const [sortedTeams, setSortedTeams] = useState<CustomTeamObject[]>()
 
   useEffect(() => {
     if (!doneLoading && tab === 'alle') setDoneLoading(true)
@@ -81,12 +89,23 @@ const BehandlingTabs = () => {
     if (tab !== 'alle' && user.isLoaded() && !user.isLoggedIn()) setTab('alle')
   }, [user.isLoaded()])
 
+  useEffect(() => {
+    const newSortedTeams = teams.map((t) => {
+      const teamBehandlinger = behandlinger.content.filter((b) => b.teamsData.find((t2) => t2.id === t.id))
+
+      return {
+        ...t,
+        behandlingCount: teamBehandlinger.length
+      }
+    }).sort((a, b) => a.behandlingCount < b.behandlingCount ? 1 : -1)
+    setSortedTeams(newSortedTeams)
+  }, [teams, behandlinger])
+
   return (
     <CustomizedTabs fontColor={ettlevColors.green800} small backgroundColor={ettlevColors.grey50} activeKey={tab} onChange={(args) => setTab(args.activeKey as Section)}>
       <CustomizedTab key={'mine'} title={'Mine behandlinger'}>
-        <MineBehandlinger teams={teams} behandlinger={behandlinger.content} loading={loading} />
+        {sortedTeams && <MineBehandlinger teams={sortedTeams} behandlinger={behandlinger.content} loading={loading} />}
       </CustomizedTab>
-
       <CustomizedTab key={'siste'} title={'Mine sist dokumenterte'}>
         <SisteBehandlinger behandlinger={behandlinger.content} loading={loading} />
       </CustomizedTab>
@@ -98,7 +117,7 @@ const BehandlingTabs = () => {
   )
 }
 
-const MineBehandlinger = ({ behandlinger, teams, loading }: { behandlinger: BehandlingQL[]; teams: Team[]; loading: boolean }) => {
+const MineBehandlinger = ({ behandlinger, teams, loading }: { behandlinger: BehandlingQL[]; teams: CustomTeamObject[]; loading: boolean }) => {
   if (loading)
     return (
       <>
@@ -216,7 +235,7 @@ const Alle = () => {
             // EndEnhancer: {style: {marginLeft: theme.sizing.scale400, paddingLeft: 0, paddingRight: 0, backgroundColor: ettlevColors.black}}
           }}
           startEnhancer={<img src={searchIcon} alt="Søk ikon" />}
-          // endEnhancer={<img aria-hidden alt={'Søk ikon'} src={sokButtonIcon}/>}
+        // endEnhancer={<img aria-hidden alt={'Søk ikon'} src={sokButtonIcon}/>}
         />
         {tooShort && (
           <LabelSmall color={ettlevColors.error400} alignSelf={'flex-end'} marginTop={theme.sizing.scale200}>
