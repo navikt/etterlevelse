@@ -32,8 +32,6 @@ type KravEtterlevelseData = {
   suksesskriterier: Suksesskriterie[]
 }
 
-const modalPaddingRight = '104px'
-const modalPaddingLeft = '112px'
 
 const mapEtterlevelseData = (etterlevelse?: Etterlevelse) => ({
   etterlevelseId: etterlevelse?.id,
@@ -142,7 +140,10 @@ export const BehandlingerTemaPage = () => {
         <Block marginRight="30px">
           <img src={arkPennIcon} alt="test" height="50px" width="40px" />
         </Block>
-        <H2>Kravene behandlingen skal etterleve</H2>
+        <Block>
+          <Paragraph2 marginBottom="0px" marginTop="0px">Steg 2 av 3</Paragraph2>
+          <H2 marginTop="0px" marginBottom="0px">Krav til utfylling</H2>
+        </Block>
       </Block>
 
       <Block display="flex" alignItems="center">
@@ -319,25 +320,13 @@ const KravView = (props: { kravId: KravId; etterlevelse: Etterlevelse; close: Fu
   return (
     <Block>
       {krav && (
-        <Block>
-          <Block flex="1" backgroundColor={ettlevColors.green800}>
-            <Block paddingLeft={modalPaddingLeft} paddingRight={modalPaddingRight} paddingBottom="32px">
-              <H1 $style={{ color: ettlevColors.grey50, marginTop: '0px' }}>Fyll ut dokumentasjon: {getTema()}</H1>
-              <Paragraph2 $style={{ lineHeight: '12px', color: ettlevColors.green50 }}>{props.behandlingNavn}</Paragraph2>
-            </Block>
-          </Block>
-          <Block paddingLeft={modalPaddingLeft} paddingRight={modalPaddingRight}>
-            <Block marginTop="99px">
-              <EditEtterlevelse
-                krav={krav}
-                etterlevelse={props.etterlevelse}
-                close={(e) => {
-                  props.close(e)
-                }}
-              />
-            </Block>
-          </Block>
-        </Block>
+        <EditEtterlevelse
+          krav={krav}
+          etterlevelse={props.etterlevelse}
+          close={(e) => {
+            props.close(e)
+          }}
+        />
       )}
     </Block>
   )
