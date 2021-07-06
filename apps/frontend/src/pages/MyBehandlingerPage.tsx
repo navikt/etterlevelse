@@ -97,9 +97,18 @@ const BehandlingTabs = () => {
         ...t,
         behandlingCount: teamBehandlinger.length
       }
-    }).sort((a, b) => a.behandlingCount < b.behandlingCount ? 1 : -1)
+    }).sort((a,b) => {
+      if(a.behandlingCount === 0) {
+        return 1
+      } else if (b.behandlingCount === 0) {
+        return -1
+      } else {
+        return a.name > b.name ? 1 : -1
+      }
+    })
     setSortedTeams(newSortedTeams)
   }, [teams, behandlinger])
+
 
   return (
     <CustomizedTabs fontColor={ettlevColors.green800} small backgroundColor={ettlevColors.grey50} activeKey={tab} onChange={(args) => setTab(args.activeKey as Section)}>
