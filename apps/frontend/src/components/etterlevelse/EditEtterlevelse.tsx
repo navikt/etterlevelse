@@ -13,11 +13,10 @@ import { useKrav, useSearchKrav } from '../../api/KravApi'
 import { kravName, kravNumView } from '../../pages/KravPage'
 import { behandlingName, useBehandling, useSearchBehandling } from '../../api/BehandlingApi'
 import CustomizedSelect from '../common/CustomizedSelect'
-import { H2, Label3, Paragraph2 } from 'baseui/typography'
+import { H1, H2, Label3, Paragraph2 } from 'baseui/typography'
 import { ExternalLink } from '../common/RouteLink'
-import { circlePencilIcon } from '../Images'
+import { arkPennIcon,  } from '../Images'
 import { ettlevColors } from '../../util/theme'
-import { Card } from 'baseui/card'
 import { SuksesskriterierBegrunnelseEdit } from './Edit/SuksesskriterieBegrunnelseEdit'
 import { Radio, RadioGroup } from 'baseui/radio'
 import { Code } from '../../services/Codelist'
@@ -32,6 +31,10 @@ type EditEttlevProps = {
 }
 
 const padding = '70px'
+
+const modalPaddingRight = '104px'
+const modalPaddingLeft = '112px'
+const maxTextArea = '750px'
 
 const etterlevelseSchema = () => {
   return yup.object({
@@ -79,33 +82,39 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
   }
 
   return (
-    <Formik onSubmit={submit} initialValues={mapEtterlevelseToFormValue(etterlevelse)} validationSchema={etterlevelseSchema()} innerRef={formRef}>
-      {({ values, isSubmitting, submitForm }: FormikProps<Etterlevelse>) => (
-        <Form>
-          <Card>
-            <Block display="flex">
-              <Block display="flex" marginRight={theme.sizing.scale800}>
-                <img src={circlePencilIcon} alt="pencil-icon" />
-              </Block>
-              <Block>
-                <Paragraph2 $style={{ marginTop: '0px', marginBottom: '0px' }}>{kravNumView(krav)}</Paragraph2>
-                <H2 $style={{ marginTop: '0px', marginBottom: '0px', color: ettlevColors.navMorkGra }}>{krav.navn}</H2>
-              </Block>
-            </Block>
-            <Block marginLeft={padding}>
-              <Paragraph2>
-                Gå til <ExternalLink href={'/krav/' + krav?.kravNummer + '/' + krav?.kravVersjon}>detaljert kravbeskrivelse (ny fane)</ExternalLink> for mer informasjon om kravet,
-                eksempler på dokumentert etterlevelse og tilbakemeldinger til kraveier
-              </Paragraph2>
-            </Block>
+    <Block>
+      <Block flex="1" backgroundColor={ettlevColors.green800}>
+        <Block paddingLeft={modalPaddingLeft} paddingRight={modalPaddingRight} paddingBottom="32px">
+          <Paragraph2 $style={{ marginTop: '0px', marginBottom: '0px', color: ettlevColors.white }}>{kravNumView(krav)}</Paragraph2>
+          <H1 $style={{ marginTop: '0px', marginBottom: '0px', color: ettlevColors.white }}>{krav.navn}</H1>
+          <Paragraph2 color={ettlevColors.white}>
+            <ExternalLink fontColor={ettlevColors.white} href={'/krav/' + krav?.kravNummer + '/' + krav?.kravVersjon}>detaljert kravbeskrivelse (ny fane)</ExternalLink>
+          </Paragraph2>
+        </Block>
+      </Block>
+      <Block flex="1" backgroundColor={ettlevColors.white}>
+        <Block paddingLeft={modalPaddingLeft} paddingRight={modalPaddingRight} paddingBottom="32px" display="flex" paddingTop="32px">
+          <Block marginRight="20px">
+            <img src={arkPennIcon} alt="test" height="56px" width="40px" />
+          </Block>
+          <Block>
+            <Paragraph2 marginBottom="0px" marginTop="0px">Steg 3 av 3</Paragraph2>
+            <H2 marginTop="0px" marginBottom="0px">Dokumentasjon</H2>
+          </Block>
+        </Block>
+      </Block>
+      <Block paddingLeft={modalPaddingLeft} paddingRight={modalPaddingRight}>
+        <Block marginTop="51px">
+          <Formik onSubmit={submit} initialValues={mapEtterlevelseToFormValue(etterlevelse)} validationSchema={etterlevelseSchema()} innerRef={formRef}>
+            {({ values, isSubmitting, submitForm }: FormikProps<Etterlevelse>) => (
+              <Form>
+                <Block>
+                  <Block paddingTop={theme.sizing.scale1000} paddingBottom={theme.sizing.scale1600}>
+                    <Label3 $style={{ lineHeight: '32px' }}>Hvilke suksesskriterier er oppfylt?</Label3>
 
-            <Block>
-              <Block paddingLeft={padding} paddingRight={padding} paddingTop={theme.sizing.scale1000} paddingBottom={theme.sizing.scale1600}>
-                <Label3 $style={{ lineHeight: '32px' }}>Velg suksesskriterier for dokumentasjon</Label3>
+                    <SuksesskriterierBegrunnelseEdit suksesskriterie={krav.suksesskriterier} />
 
-                <SuksesskriterierBegrunnelseEdit suksesskriterie={krav.suksesskriterier} />
-
-                {/*
+                    {/*
               {!documentEdit &&
                 <>
                   <Block height={theme.sizing.scale600} />
@@ -117,7 +126,7 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
               <TextAreaField label='Dokumentasjon' name='begrunnelse' markdown />
               */}
 
-                {/*
+                    {/*
           <MultiInputField label='Dokumentasjon' name='dokumentasjon'/>
 
           <Block height={theme.sizing.scale600}/>
@@ -127,94 +136,96 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
           <Block height={theme.sizing.scale600}/>
          */}
 
-                <FieldWrapper>
-                  <Field name={'status'}>
-                    {(p: FieldProps<string | Code>) => (
-                      <FormControl
-                        label="Er kravet oppfylt?"
-                        overrides={{
-                          Label: {
-                            style: {
-                              color: ettlevColors.navMorkGra,
-                              fontWeight: 700,
-                              lineHeight: '48px',
-                              fontSize: '18px',
-                            },
-                          },
-                        }}
-                      >
-                        <RadioGroup
-                          overrides={{
-                            Root: {
-                              style: {
-                                alignItems: 'flex-start',
+                    <FieldWrapper>
+                      <Field name={'status'}>
+                        {(p: FieldProps<string | Code>) => (
+                          <FormControl
+                            label="Er kravet oppfylt?"
+                            overrides={{
+                              Label: {
+                                style: {
+                                  color: ettlevColors.navMorkGra,
+                                  fontWeight: 700,
+                                  lineHeight: '48px',
+                                  fontSize: '18px',
+                                },
                               },
-                            },
-                            Label: {
-                              style: {
-                                fontSize: '18px',
-                                fontWeight: 400,
-                                lineHeight: '22px',
-                              },
-                            },
-                          }}
-                          value={etterlevelseStatus === EtterlevelseStatus.FERDIG_DOKUMENTERT ? EtterlevelseStatus.FERDIG : etterlevelseStatus}
-                          onChange={(event) => {
-                            p.form.setFieldValue('status', event.currentTarget.value)
-                            setEtterlevelseStatus(event.currentTarget.value)
-                          }}
-                        >
-                          {Object.values(EtterlevelseStatus).map((id) => {
-                            if (id === EtterlevelseStatus.OPPFYLLES_SENERE) {
-                              return (
-                                <Radio value={id} key={id}>
-                                  {getEtterlevelseStatus(id)}
+                            }}
+                          >
+                            <RadioGroup
+                              overrides={{
+                                Root: {
+                                  style: {
+                                    alignItems: 'flex-start',
+                                  },
+                                },
+                                Label: {
+                                  style: {
+                                    fontSize: '18px',
+                                    fontWeight: 400,
+                                    lineHeight: '22px',
+                                  },
+                                },
+                              }}
+                              value={etterlevelseStatus === EtterlevelseStatus.FERDIG_DOKUMENTERT ? EtterlevelseStatus.FERDIG : etterlevelseStatus}
+                              onChange={(event) => {
+                                p.form.setFieldValue('status', event.currentTarget.value)
+                                setEtterlevelseStatus(event.currentTarget.value)
+                              }}
+                            >
+                              {Object.values(EtterlevelseStatus).map((id) => {
+                                if (id === EtterlevelseStatus.OPPFYLLES_SENERE) {
+                                  return (
+                                    <Radio value={id} key={id}>
+                                      {getEtterlevelseStatus(id)}
 
-                                  {etterlevelseStatus === EtterlevelseStatus.OPPFYLLES_SENERE && <DateField label="Frist (valgfritt)" name="fristForFerdigstillelse" />}
-                                </Radio>
-                              )
-                            }
-                            if (id === EtterlevelseStatus.FERDIG_DOKUMENTERT) {
-                              return null
-                            }
-                            return (
-                              <Radio value={id} key={id}>
-                                {getEtterlevelseStatus(id)}
-                              </Radio>
-                            )
-                          })}
-                        </RadioGroup>
-                      </FormControl>
-                    )}
-                  </Field>
-                </FieldWrapper>
-                <Error fieldName={'status'} fullWidth={true} />
-              </Block>
-            </Block>
-          </Card>
+                                      {etterlevelseStatus === EtterlevelseStatus.OPPFYLLES_SENERE && <DateField label="Frist (valgfritt)" name="fristForFerdigstillelse" />}
+                                    </Radio>
+                                  )
+                                }
+                                if (id === EtterlevelseStatus.FERDIG_DOKUMENTERT) {
+                                  return null
+                                }
+                                return (
+                                  <Radio value={id} key={id}>
+                                    {getEtterlevelseStatus(id)}
+                                  </Radio>
+                                )
+                              })}
+                            </RadioGroup>
+                          </FormControl>
+                        )}
+                      </Field>
+                    </FieldWrapper>
+                    <Error fieldName={'status'} fullWidth={true} />
+                  </Block>
+                </Block>
 
-          {!documentEdit && (
-            <Block display="flex" justifyContent="flex-end" marginTop={theme.sizing.scale850} marginBottom={theme.sizing.scale3200}>
-              <Button type="button" kind="secondary" marginRight onClick={close}>
-                Avbryt og forkast endringene
-              </Button>
-              <Button type="button" kind="secondary" marginRight disabled={isSubmitting} onClick={submitForm}>
-                Lagre og fortsett senere
-              </Button>
-              <Button
-                type="button"
-                onClick={() => {
-                  values.status = EtterlevelseStatus.FERDIG_DOKUMENTERT
-                  submitForm()
-                }}
-              >
-                Jeg har dokumentert ferdig
-              </Button>
-            </Block>
-          )}
-        </Form>
-      )}
-    </Formik>
+                {!documentEdit && (
+                  <Block display="flex" justifyContent="space-evenly" marginTop={theme.sizing.scale850} marginBottom={theme.sizing.scale3200}>
+                    <Button type="button" kind="secondary" marginRight onClick={close}>
+                      Avbryt og forkast endringene
+                    </Button>
+                    <Button type="button" kind="secondary" marginRight disabled={isSubmitting} onClick={submitForm}>
+                      Lagre og fortsett senere
+                    </Button>
+                    <Button
+                      type="button"
+                      onClick={() => {
+                        values.status = EtterlevelseStatus.FERDIG_DOKUMENTERT
+                        submitForm()
+                      }}
+                    >
+                      Jeg har dokumentert ferdig
+                    </Button>
+                  </Block>
+                )}
+              </Form>
+            )}
+          </Formik>
+        </Block>
+      </Block>
+    </Block>
   )
 }
 
