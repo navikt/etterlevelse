@@ -20,6 +20,7 @@ import { useHistory } from 'react-router-dom'
 import { KIND, SIZE } from 'baseui/button'
 import { Markdown } from '../common/Markdown'
 import EditBegrunnelse from './Edit/EditBegrunnelse'
+import { borderColor, borderRadius, borderStyle, borderWidth } from '../common/Style'
 
 const formatDate = (date?: string) => date && moment(date).format('ll')
 
@@ -99,22 +100,10 @@ export const ViewEtterlevelse = ({
                   style: {
                     // Did not use border, margin and border radius to remove warnings.
                     backgroundColor: ettlevColors.success50,
-                    borderRightColor: ettlevColors.success400,
-                    borderLeftColor: ettlevColors.success400,
-                    borderTopColor: ettlevColors.success400,
-                    borderBottomColor: ettlevColors.success400,
-                    borderLeftWidth: '1px',
-                    borderRightWidth: '1px',
-                    borderTopWidth: '1px',
-                    borderBottomWidth: '1px',
-                    borderLeftStyle: 'solid',
-                    borderRightStyle: 'solid',
-                    borderTopStyle: 'solid',
-                    borderBottomStyle: 'solid',
-                    borderBottomLeftRadius: '4px',
-                    borderBottomRightRadius: '4px',
-                    borderTopLeftRadius: '4px',
-                    borderTopRightRadius: '4px',
+                    ...borderColor(ettlevColors.success400),
+                    ...borderWidth('1px'),
+                    ...borderStyle('solid'),
+                    ...borderRadius('4px'),
                   },
                 },
               }}

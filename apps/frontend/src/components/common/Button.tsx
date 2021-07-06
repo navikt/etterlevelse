@@ -56,14 +56,8 @@ const outlineStyle = 'solid'
 const outlineOverride: StyleObject = {
   borderColor: ettlevColors.green600,
   backgroundColor: 'inherit',
-  borderLeftWidth: outlineWidth,
-  borderRightWidth: outlineWidth,
-  borderTopWidth: outlineWidth,
-  borderBottomWidth: outlineWidth,
-  borderLeftStyle: outlineStyle,
-  borderRightStyle: outlineStyle,
-  borderTopStyle: outlineStyle,
-  borderBottomStyle: outlineStyle,
+  ...borderWidth(outlineWidth),
+  ...borderStyle(outlineStyle),
 }
 
 // underline-hover button is a tertiary with underline as hover effect

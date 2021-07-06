@@ -2,6 +2,7 @@ import * as React from 'react'
 import { Tag, VARIANT } from 'baseui/tag'
 import { theme } from '../../util'
 import { ettlevColors, pageWidth } from '../../util/theme'
+import { borderWidth } from './Style'
 
 export const RenderTagList = ({ list, onRemove, onClick, wide }: { list: React.ReactNode[]; onRemove: (i: number) => void; onClick?: (i: number) => void; wide?: boolean }) => {
   return (
@@ -26,10 +27,7 @@ export const RenderTagList = ({ list, onRemove, onClick, wide }: { list: React.R
                     },
                     Root: {
                       style: {
-                        borderLeftWidth: '1px',
-                        borderRightWidth: '1px',
-                        borderBottomWidth: '1px',
-                        borderTopWidth: '1px',
+                        ...borderWidth('1px'),
                         ':hover': {
                           backgroundColor: ettlevColors.green50,
                           borderColor: '#0B483F',

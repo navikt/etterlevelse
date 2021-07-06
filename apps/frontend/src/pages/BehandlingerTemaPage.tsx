@@ -20,6 +20,7 @@ import { Spinner } from 'baseui/icon'
 import { useEtterlevelse } from '../api/EtterlevelseApi'
 import { EditEtterlevelse } from '../components/etterlevelse/EditEtterlevelse'
 import { kravFullQuery, KravId } from '../api/KravApi'
+import { borderWidth } from '../components/common/Style'
 
 type KravEtterlevelseData = {
   kravNummer: number
@@ -272,7 +273,7 @@ const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function; setKra
       }}
     >
       <Block width="100%">
-        <Card overrides={{ Root: { style: { borderTopWidth: '1px', borderBottomWidth: '1px', borderLeftWidth: '1px', borderRightWidth: '1px' } } }}>
+        <Card overrides={{ Root: { style: { ...borderWidth('1px') } } }}>
           <Block display="flex" width="100%">
             <img src={circlePencilIcon} alt="pencil icon" />
             <Block marginLeft="24px">

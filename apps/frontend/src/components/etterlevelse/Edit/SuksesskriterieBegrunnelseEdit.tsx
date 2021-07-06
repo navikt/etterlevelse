@@ -13,6 +13,7 @@ import { Markdown } from '../../common/Markdown'
 import TextEditor from '../../common/TextEditor/TextEditor'
 import { Error } from '../../common/ModalSchema'
 import LabelWithToolTip from '../../common/LabelWithTooltip'
+import { borderColor, borderStyle } from '../../common/Style'
 
 const paddingLeft = '30px'
 
@@ -93,14 +94,8 @@ const KriterieBegrunnelse = ({
             Header: {
               style: {
                 backgroundColor: 'transparent',
-                borderLeftStyle: 'none',
-                borderLeftColor: 'none',
-                borderRightStyle: 'none',
-                borderRightColor: 'none',
-                borderTopStyle: 'none',
-                borderTopColor: 'none',
-                borderBottomStyle: 'none',
-                borderBottomColor: 'none',
+                ...borderStyle('none'),
+                ...borderColor('none'),
                 maxWidth: '210px',
                 paddingLeft: paddingLeft,
               },

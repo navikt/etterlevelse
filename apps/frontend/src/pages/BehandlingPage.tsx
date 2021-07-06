@@ -19,6 +19,7 @@ import { ProgressBar, SIZE } from 'baseui/progress-bar'
 import { Button } from 'baseui/button'
 import EditBehandlingModal from '../components/behandling/EditBehandlingModal'
 import { Tag } from 'baseui/tag'
+import { borderColor } from '../components/common/Style'
 
 export const BehandlingPage = () => {
   const params = useParams<{ id?: string }>()
@@ -238,10 +239,7 @@ const HeaderContent = (props: { kravLength: number }) => (
         Root: {
           style: {
             backgroundColor: ettlevColors.white,
-            borderBottomColor: ettlevColors.white,
-            borderTopColor: ettlevColors.white,
-            borderLeftColor: ettlevColors.white,
-            borderRightColor: ettlevColors.white,
+            ...borderColor(ettlevColors.white),
           },
         },
       }}
