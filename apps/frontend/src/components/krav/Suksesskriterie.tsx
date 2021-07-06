@@ -4,7 +4,7 @@ import { Card } from 'baseui/card'
 import { theme } from '../../util'
 import { HeadingXLarge, ParagraphMedium } from 'baseui/typography'
 import { Markdown } from '../common/Markdown'
-import { borderRadius, marginAll } from '../common/Style'
+import { borderRadius, borderWidth, marginAll } from '../common/Style'
 
 export const SuksesskriterieCard = (props: { suksesskriterie: Suksesskriterie; num: number; totalt: number }) => {
   const { suksesskriterie, num, totalt } = props
@@ -16,6 +16,7 @@ export const SuksesskriterieCard = (props: { suksesskriterie: Suksesskriterie; n
           Root: {
             style: {
               ...borderRadius('4px'),
+              ...borderWidth('1px'),
             },
           },
           Contents: {
