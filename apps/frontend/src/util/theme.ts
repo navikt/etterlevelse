@@ -99,7 +99,7 @@ const overrides: RecursivePartial<Theme> = {
     inputFillError: ettlevColors.error400,
     // Radio buttons
     tickFillSelected: ettlevColors.green800,
-    tickFillHover: ettlevColors.green50,
+    tickFillHover: ettlevColors.green100,
     tickFill: ettlevColors.white,
     tickFillError: ettlevColors.red50,
 
