@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { PageResponse, SlackChannel, SlackUser, Team, TeamResource } from '../constants'
+import { PageResponse, ProductArea, SlackChannel, SlackUser, Team, TeamResource } from '../constants'
 import { env } from '../util/env'
 import { useForceUpdate, useSearch } from '../util/hooks'
 import { Option } from 'baseui/select'
@@ -19,9 +19,16 @@ export const getTeam = async (teamId: string) => {
   data.members = data.members.sort((a, b) => (a.name || '').localeCompare(b.name || ''))
   return data
 }
+export const getAllTeams = async () => {
+  return (await axios.get<PageResponse<Team>>(`${env.backendBaseUrl}/team`)).data.content
+}
 
 export const myTeams = async () => {
   return (await axios.get<PageResponse<Team>>(`${env.backendBaseUrl}/team?myTeams=true`)).data.content
+}
+
+export const myProductArea = async () => {
+  return (await axios.get<PageResponse<ProductArea>>(`${env.backendBaseUrl}/team/productarea?myProductAreas=true`)).data.content
 }
 
 export const searchTeam = async (teamSearch: string) => {
@@ -123,6 +130,29 @@ export const useMyTeams = () => {
   }, [ident])
 
   return [data, loading] as [Team[], boolean]
+}
+
+export const useMyProductAreas = () => {
+  const [data, setData] = useState<ProductArea[]>([])
+  const [loading, setLoading] = useState(true)
+  const ident = user.getIdent()
+
+  useEffect(() => {
+    ident &&
+      myProductArea()
+        .then((r) => {
+          setData(r)
+          setLoading(false)
+        })
+        .catch((e) => {
+          setData([])
+          setLoading(false)
+          console.log("couldn't find product area", e)
+        })
+    !ident && setLoading(false)
+  }, [ident])
+
+  return [data, loading] as [ProductArea[], boolean]
 }
 
 export type SearchType = [Option[], Dispatch<SetStateAction<string>>, boolean]
