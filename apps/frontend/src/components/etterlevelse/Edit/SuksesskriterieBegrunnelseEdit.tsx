@@ -83,16 +83,12 @@ const KriterieBegrunnelse = ({
         overrides={{
           Checkmark: {
             style: {
-              ...borderWidth('1px')
-            }
-          }
+              ...borderWidth('1px'),
+            },
+          },
         }}
       >
-        <Paragraph2
-          color={textHover ? ettlevColors.green600 : undefined}
-          margin="0px"
-          $style={{ textDecoration: textHover ? 'underline' : 'none' }}
-        >
+        <Paragraph2 color={textHover ? ettlevColors.green600 : undefined} margin="0px" $style={{ textDecoration: textHover ? 'underline' : 'none' }}>
           {suksesskriterie.navn}
         </Paragraph2>
       </Checkbox>

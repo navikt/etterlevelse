@@ -37,10 +37,10 @@ export const BehandlingPage = () => {
   const filterData = (
     unfilteredData:
       | {
-        behandling: PageResponse<{
-          stats: BehandlingStats
-        }>
-      }
+          behandling: PageResponse<{
+            stats: BehandlingStats
+          }>
+        }
       | undefined,
   ) => {
     const StatusListe: any[] = []
@@ -110,8 +110,12 @@ export const BehandlingPage = () => {
           <img src={arkPennIcon} alt="penn ikon" height="50px" width="40px" />
         </Block>
         <Block>
-          <Paragraph2 marginBottom="0px" marginTop="0px">Steg 1 av 3</Paragraph2>
-          <H2 marginTop="0px" marginBottom="0px">Tema for dokumentasjon</H2>
+          <Paragraph2 marginBottom="0px" marginTop="0px">
+            Steg 1 av 3
+          </Paragraph2>
+          <H2 marginTop="0px" marginBottom="0px">
+            Tema for dokumentasjon
+          </H2>
         </Block>
       </Block>
 

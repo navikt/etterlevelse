@@ -33,7 +33,6 @@ type KravEtterlevelseData = {
   suksesskriterier: Suksesskriterie[]
 }
 
-
 const mapEtterlevelseData = (etterlevelse?: Etterlevelse) => ({
   etterlevelseId: etterlevelse?.id,
   etterleves: !!etterlevelse?.etterleves,
@@ -142,8 +141,12 @@ export const BehandlingerTemaPage = () => {
           <img src={arkPennIcon} alt="test" height="50px" width="40px" />
         </Block>
         <Block>
-          <Paragraph2 marginBottom="0px" marginTop="0px">Steg 2 av 3</Paragraph2>
-          <H2 marginTop="0px" marginBottom="0px">Krav til utfylling</H2>
+          <Paragraph2 marginBottom="0px" marginTop="0px">
+            Steg 2 av 3
+          </Paragraph2>
+          <H2 marginTop="0px" marginBottom="0px">
+            Krav til utfylling
+          </H2>
         </Block>
       </Block>
 

@@ -11,11 +11,7 @@ const ScrollToTop = ({ history, children }) => {
     }
   }, [])
 
-  return (
-    <React.Fragment>
-    {children}
-    </React.Fragment>
-  )
+  return <React.Fragment>{children}</React.Fragment>
 }
 
 export default withRouter(ScrollToTop)
