@@ -13,7 +13,7 @@ import { Markdown } from '../../common/Markdown'
 import TextEditor from '../../common/TextEditor/TextEditor'
 import { Error } from '../../common/ModalSchema'
 import LabelWithToolTip from '../../common/LabelWithTooltip'
-import { borderColor, borderStyle } from '../../common/Style'
+import { borderColor, borderStyle, borderWidth } from '../../common/Style'
 
 const paddingLeft = '30px'
 
@@ -75,8 +75,19 @@ const KriterieBegrunnelse = ({
 
   return (
     <Block $style={{ border: '1px solid #C9C9C9' }} backgroundColor={ettlevColors.white} padding={theme.sizing.scale750} marginBottom={theme.sizing.scale600}>
-      <Checkbox checked={checked} onChange={() => setChecked(!checked)} onMouseEnter={() => setTextHover(true)}
-        onMouseLeave={() => setTextHover(false)}>
+      <Checkbox
+        checked={checked}
+        onChange={() => setChecked(!checked)}
+        onMouseEnter={() => setTextHover(true)}
+        onMouseLeave={() => setTextHover(false)}
+        overrides={{
+          Checkmark: {
+            style: {
+              ...borderWidth('1px')
+            }
+          }
+        }}
+      >
         <Paragraph2
           color={textHover ? ettlevColors.green600 : undefined}
           margin="0px"
