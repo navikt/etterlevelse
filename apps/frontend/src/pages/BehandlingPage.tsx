@@ -177,7 +177,7 @@ export const BehandlingPage = () => {
         childrenBackgroundColor={ettlevColors.grey25}
         backBtnUrl={'/behandlinger'}
       >
-        <Block backgroundColor={ettlevColors.grey75} marginTop={theme.sizing.scale400}>
+        <Block backgroundColor={ettlevColors.grey50} marginTop={theme.sizing.scale800}>
           <Block padding="22px">
             <Block display="flex">
               <Block>
@@ -208,7 +208,7 @@ export const BehandlingPage = () => {
             </Block>
           </Block>
         </Block>
-        <Block display="flex" width="100%" justifyContent="space-between" flexWrap marginTop={theme.sizing.scale850}>
+        <Block display="flex" width="100%" justifyContent="space-between" flexWrap marginTop={theme.sizing.scale550}>
           {temaListe.map((tema) => (
             <TemaCardBehandling tema={tema} stats={stats} behandling={behandling} key={`${tema.shortName}_panel`} />
           ))}
