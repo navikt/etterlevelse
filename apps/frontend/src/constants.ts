@@ -209,6 +209,14 @@ export interface Team {
   members: Member[]
 }
 
+export interface ProductArea {
+  id: string
+  name: string
+  description: string
+  tags: string[]
+  members: Member[]
+}
+
 export interface Member {
   name?: string
   email?: string
