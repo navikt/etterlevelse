@@ -1,7 +1,7 @@
 import { HeadingLarge, HeadingXLarge, HeadingXXLarge, LabelLarge, LabelSmall, LabelXSmall, ParagraphSmall } from 'baseui/typography'
 import { Block } from 'baseui/block'
 import React, { useEffect, useState } from 'react'
-import { useMyTeams } from '../api/TeamApi'
+import { getAllTeams, useMyProductAreas, useMyTeams } from '../api/TeamApi'
 import RouteLink from '../components/common/RouteLink'
 import { theme } from '../util'
 import Button, { ExternalButton } from '../components/common/Button'
@@ -21,7 +21,6 @@ import { SkeletonPanel } from '../components/common/LoadingSkeleton'
 import { user } from '../services/User'
 import { useHistory, useParams } from 'react-router-dom'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
-import { Teams } from '../components/common/TeamName'
 
 type Section = 'mine' | 'siste' | 'alle'
 
@@ -63,6 +62,7 @@ const BehandlingTabs = () => {
   const behandlinger = data?.behandlinger || emptyPage
   const loading = teamsLoading || behandlingerLoading
   const [sortedTeams, setSortedTeams] = useState<CustomTeamObject[]>()
+  const [productAreas, productAreasLoading] = useMyProductAreas()
 
   useEffect(() => {
     if (!doneLoading && tab === 'alle') setDoneLoading(true)
@@ -89,26 +89,46 @@ const BehandlingTabs = () => {
     if (tab !== 'alle' && user.isLoaded() && !user.isLoggedIn()) setTab('alle')
   }, [user.isLoaded()])
 
+  const sortTeams = (unSortedTeams: Team[]) => {
+    return unSortedTeams
+      .map((t) => {
+        const teamBehandlinger = behandlinger.content.filter((b) => b.teamsData.find((t2) => t2.id === t.id))
+
+        return {
+          ...t,
+          behandlingCount: teamBehandlinger.length,
+        }
+      })
+      .sort((a, b) => {
+        if (a.behandlingCount === 0) {
+          return 1
+        } else if (b.behandlingCount === 0) {
+          return -1
+        } else {
+          return a.name > b.name ? 1 : -1
+        }
+      })
+  }
+
   useEffect(() => {
-    const newSortedTeams = teams.map((t) => {
-      const teamBehandlinger = behandlinger.content.filter((b) => b.teamsData.find((t2) => t2.id === t.id))
+    const getNewTeams = async () => {
+      const newTeamList = await getAllTeams()
+      const teamList = productAreas.map((pa) => newTeamList.filter((t) => pa.id === t.productAreaId)).flat()
+      const uniqueValuesSet = new Set()
 
-      return {
-        ...t,
-        behandlingCount: teamBehandlinger.length
-      }
-    }).sort((a,b) => {
-      if(a.behandlingCount === 0) {
-        return 1
-      } else if (b.behandlingCount === 0) {
-        return -1
-      } else {
-        return a.name > b.name ? 1 : -1
-      }
-    })
-    setSortedTeams(newSortedTeams)
+      const uniqueFilteredTeamList = teamList.filter((t) => {
+        const isPresentInSet = uniqueValuesSet.has(t.name)
+        uniqueValuesSet.add(t.name)
+        return !isPresentInSet
+      })
+      setSortedTeams(sortTeams(uniqueFilteredTeamList))
+    }
+    if (teams.length) {
+      setSortedTeams(sortTeams(teams))
+    } else {
+      getNewTeams()
+    }
   }, [teams, behandlinger])
-
 
   return (
     <CustomizedTabs fontColor={ettlevColors.green800} small backgroundColor={ettlevColors.grey50} activeKey={tab} onChange={(args) => setTab(args.activeKey as Section)}>
@@ -244,7 +264,7 @@ const Alle = () => {
             // EndEnhancer: {style: {marginLeft: theme.sizing.scale400, paddingLeft: 0, paddingRight: 0, backgroundColor: ettlevColors.black}}
           }}
           startEnhancer={<img src={searchIcon} alt="Søk ikon" />}
-        // endEnhancer={<img aria-hidden alt={'Søk ikon'} src={sokButtonIcon}/>}
+          // endEnhancer={<img aria-hidden alt={'Søk ikon'} src={sokButtonIcon}/>}
         />
         {tooShort && (
           <LabelSmall color={ettlevColors.error400} alignSelf={'flex-end'} marginTop={theme.sizing.scale200}>
