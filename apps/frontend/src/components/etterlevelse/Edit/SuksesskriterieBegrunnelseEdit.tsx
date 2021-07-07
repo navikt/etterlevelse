@@ -66,6 +66,7 @@ const KriterieBegrunnelse = ({
   const suksesskriterieBegrunnelse = getSuksesskriterieBegrunnelse(suksesskriterieBegrunnelser, suksesskriterie)
   const debounceDelay = 500
   const [checked, setChecked] = React.useState(!!suksesskriterieBegrunnelse.oppfylt)
+  const [textHover, setTextHover] = React.useState(false)
   const [begrunnelse, setBegrunnelse] = useDebouncedState(suksesskriterieBegrunnelse.begrunnelse || '', debounceDelay)
 
   React.useEffect(() => {
@@ -74,8 +75,15 @@ const KriterieBegrunnelse = ({
 
   return (
     <Block $style={{ border: '1px solid #C9C9C9' }} backgroundColor={ettlevColors.white} padding={theme.sizing.scale750} marginBottom={theme.sizing.scale600}>
-      <Checkbox checked={checked} onChange={() => setChecked(!checked)}>
-        <Paragraph2 margin="0px">{suksesskriterie.navn}</Paragraph2>
+      <Checkbox checked={checked} onChange={() => setChecked(!checked)} onMouseEnter={() => setTextHover(true)}
+        onMouseLeave={() => setTextHover(false)}>
+        <Paragraph2
+          color={textHover ? ettlevColors.green600 : undefined}
+          margin="0px"
+          $style={{ textDecoration: textHover ? 'underline' : 'none' }}
+        >
+          {suksesskriterie.navn}
+        </Paragraph2>
       </Checkbox>
 
       {checked && (
