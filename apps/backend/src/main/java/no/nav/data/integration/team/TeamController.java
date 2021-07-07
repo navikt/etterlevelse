@@ -94,9 +94,14 @@ public class TeamController {
     @Operation(summary = "Get all product areas")
     @ApiResponse(description = "Product areas fetched")
     @GetMapping("/productarea")
-    public RestResponsePage<ProductAreaResponse> findAllProductAreas() {
+    public RestResponsePage<ProductAreaResponse> findAllProductAreas(@RequestParam(required = false) Boolean myProductAreas) {
         log.info("Received a request for all product areas");
-        return new RestResponsePage<>(convert(teamsService.getAllProductAreas(), ProductArea::toResponse));
+        List<ProductArea> productAreas = teamsService.getAllProductAreas();
+        if (Boolean.TRUE.equals(myProductAreas)) {
+            var ident = SecurityUtils.getCurrentIdent();
+            productAreas = filter(productAreas, pa -> pa.getMembers().stream().anyMatch(m -> m.getNavIdent().equals(ident)));
+        }
+        return new RestResponsePage<>(convert(productAreas, ProductArea::toResponse));
     }
 
     @Operation(summary = "Get product area")
