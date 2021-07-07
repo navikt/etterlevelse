@@ -15,7 +15,7 @@ import { behandlingName, useBehandling, useSearchBehandling } from '../../api/Be
 import CustomizedSelect from '../common/CustomizedSelect'
 import { H1, H2, Label3, Paragraph2 } from 'baseui/typography'
 import { ExternalLink } from '../common/RouteLink'
-import { arkPennIcon,  } from '../Images'
+import { arkPennIcon, } from '../Images'
 import { ettlevColors } from '../../util/theme'
 import { SuksesskriterierBegrunnelseEdit } from './Edit/SuksesskriterieBegrunnelseEdit'
 import { Radio, RadioGroup } from 'baseui/radio'
@@ -157,6 +157,7 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
                                 Root: {
                                   style: {
                                     alignItems: 'flex-start',
+                                    ':hover': {textDecoration: 'underline'}
                                   },
                                 },
                                 Label: {
@@ -166,6 +167,12 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
                                     lineHeight: '22px',
                                   },
                                 },
+                                RadioMarkOuter: {
+                                  style: {
+                                    height: theme.sizing.scale600,
+                                    width: theme.sizing.scale600
+                                  }
+                                }
                               }}
                               value={etterlevelseStatus === EtterlevelseStatus.FERDIG_DOKUMENTERT ? EtterlevelseStatus.FERDIG : etterlevelseStatus}
                               onChange={(event) => {
@@ -177,7 +184,9 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
                                 if (id === EtterlevelseStatus.OPPFYLLES_SENERE) {
                                   return (
                                     <Radio value={id} key={id}>
-                                      {getEtterlevelseStatus(id)}
+                                      <Paragraph2 $style={{ lineHeight: '22px' }} marginTop='0px' marginBottom='0px'>
+                                        {getEtterlevelseStatus(id)}
+                                      </Paragraph2>
 
                                       {etterlevelseStatus === EtterlevelseStatus.OPPFYLLES_SENERE && <DateField label="Frist (valgfritt)" name="fristForFerdigstillelse" />}
                                     </Radio>
@@ -188,7 +197,9 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
                                 }
                                 return (
                                   <Radio value={id} key={id}>
-                                    {getEtterlevelseStatus(id)}
+                                    <Paragraph2 $style={{ lineHeight: '22px' }} marginTop='0px' marginBottom='0px'>
+                                      {getEtterlevelseStatus(id)}
+                                    </Paragraph2>
                                   </Radio>
                                 )
                               })}
