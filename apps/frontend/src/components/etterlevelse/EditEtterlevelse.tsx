@@ -219,7 +219,7 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
                 </Block>
 
                 {!documentEdit && (
-                  <Block display="flex" justifyContent="space-evenly" marginTop={theme.sizing.scale850} marginBottom={theme.sizing.scale3200}>
+                  <Block display="flex" marginTop={theme.sizing.scale850} marginBottom={theme.sizing.scale3200}>
                     <Button type="button" kind="secondary" marginRight onClick={close}>
                       Avbryt og forkast endringene
                     </Button>

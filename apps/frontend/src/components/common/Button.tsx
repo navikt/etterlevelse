@@ -120,7 +120,7 @@ const Button = (props: ButtonProps) => {
           {props.iconEnd && <FontAwesomeIcon icon={props.iconEnd} style={{ marginLeft: props.children ? '.5rem' : undefined }} fixedWidth />}
         </BaseUIButton>
       </Tooltip>
-      <Block display="inline" marginRight={props.marginRight ? theme.sizing.scale400 : 0} />
+      <Block display="inline" marginRight={props.marginRight ? theme.sizing.scale600 : 0} />
     </>
   )
 }
