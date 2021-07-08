@@ -243,8 +243,7 @@ const HeaderContent = (props: { kravLength: number }) => (
         Root: {
           style: {
             backgroundColor: ettlevColors.green50,
-            border: ettlevColors.green50,
-            ...borderColor(ettlevColors.white),
+            ...borderColor(ettlevColors.green50),
           },
         },
       }}
