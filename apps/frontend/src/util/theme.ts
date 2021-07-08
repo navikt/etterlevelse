@@ -104,6 +104,7 @@ const overrides: RecursivePartial<Theme> = {
     tickFill: ettlevColors.white,
     tickFillError: ettlevColors.red50,
     tickBorder: ettlevColors.green800,
+    tickFillSelectedHoverActive: ettlevColors.white,
 
     inputEnhancerFill: primitives.primary100,
 
