@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom'
 import { Block, BlockProps } from 'baseui/block'
 import React, { useEffect, useState } from 'react'
-import { HeadingLarge, HeadingXLarge, HeadingXXLarge, LabelLarge, ParagraphMedium, ParagraphSmall } from 'baseui/typography'
+import { HeadingLarge, HeadingXLarge, HeadingXXLarge, Label3, LabelLarge, Paragraph4, ParagraphMedium, ParagraphSmall } from 'baseui/typography'
 import { codelist, ListName, TemaCode } from '../services/Codelist'
 import { ObjectLink, urlForObject } from '../components/common/RouteLink'
 import { theme } from '../util'
@@ -249,11 +249,14 @@ export const TemaCard = ({ tema, relevans, setNum }: { tema: TemaCode; relevans:
       tittel={tema.shortName + (loading ? ' - Laster...' : '')}
     >
       <Block display={'flex'} flexDirection={'column'}>
-        <SimpleTag>
-          <Block display={'flex'} alignItems={'center'}>
-            <img src={gavelIcon} width={'35px'} height={'35px'} aria-hidden alt={'Hammer ikon'} />
-            <Block marginLeft={theme.sizing.scale400}>{krav?.length || 0} krav</Block>
-          </Block>
+        <SimpleTag active>
+          <Block display={'flex'} alignItems={'center'} justifyContent={'center'} height={'35px'} width={'60px'}>
+            {/* <img src={gavelIcon} width={'35px'} height={'35px'} aria-hidden alt={'Hammer ikon'} /> */}
+            <Label3 color={ettlevColors.navOransje} $style={{ fontSize: '20px', lineHeight: '18px' }} marginRight="4px">
+          {krav?.length || 0}
+        </Label3>
+        <Paragraph4 $style={{ lineHeight: '18px', marginTop: '0px', marginBottom: '0px' }}>krav</Paragraph4>
+              </Block>
         </SimpleTag>
 
         <Markdown source={tema.data?.shortDesciption} />
