@@ -68,10 +68,12 @@ export const PanelLink = ({
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
       >
-        {typeof panelIcon === 'function' ? panelIcon(hover) : panelIcon}
+        <Block display='flex' marginLeft='27px' alignItems='center'>
+          {typeof panelIcon === 'function' ? panelIcon(hover) : panelIcon}
+        </Block>
 
         <Block
-          marginLeft={theme.sizing.scale800}
+          marginLeft={theme.sizing.scale600}
           marginRight={theme.sizing.scale600}
           $style={{ flexGrow: 1 }}
           display={'flex'}
