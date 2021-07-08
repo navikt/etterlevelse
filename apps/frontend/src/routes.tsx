@@ -21,35 +21,36 @@ import { BehandlingerTemaPage } from './pages/BehandlingerTemaPage'
 import ScrollToTop from './util/ScrollToTop'
 
 const Routes = (): JSX.Element => (
-  <ScrollToTop>
-    <Switch>
-      <Route exact path="/old" component={MainPage} />
-      <Route exact path="/" component={MainPageV2} />
+  <Switch>
+    <Route exact path="/old" component={MainPage} />
+    <Route exact path="/" component={MainPageV2} />
 
-      <Route exact path="/krav" component={KravListPage} />
-      <Route exact path="/krav/:id" component={KravPage} />
-      <Route exact path="/krav/:kravNummer/:kravVersjon" component={KravPage} />
+    <Route exact path="/krav" component={KravListPage} />
+    <Route exact path="/krav/:id" component={KravPage} />
+    <Route exact path="/krav/:kravNummer/:kravVersjon" component={KravPage} />
 
-      <Route exact path="/etterlevelse" component={EtterlevelseListPage} />
-      <Route exact path="/etterlevelse/:id" component={EtterlevelsePage} />
+    <Route exact path="/etterlevelse" component={EtterlevelseListPage} />
+    <Route exact path="/etterlevelse/:id" component={EtterlevelsePage} />
 
-      <Route exact path="/behandlinger/:tab?" component={MyBehandlingerPage} />
-      <Route exact path="/behandling/:id" component={BehandlingPage} />
-      <Route exact path="/behandling/:id/:tema" component={BehandlingerTemaPage} />
+    <Route exact path="/behandling/:id/:tema" component={BehandlingerTemaPage} />
+    <Route exact path="/behandlinger/:tab?" component={MyBehandlingerPage} />
 
-      <Route exact path="/relevans/:relevans?" component={RelevansPage} />
-      <Route exact path="/underavdeling/:underavdeling?" component={UnderavdelingPage} />
-      <Route exact path="/lov/:lov?" component={LovPage} />
+    <ScrollToTop>
       <Route exact path="/tema/:tema?" component={TemaPage} />
+      <Route exact path="/behandling/:id" component={BehandlingPage} />
+    </ScrollToTop>
 
-      <Route exact path="/admin/codelist/:listname?" component={CodeListPage} />
-      <Route exact path="/admin/audit/:id?/:auditId?" component={AuditPage} />
-      <Route exact path="/admin/settings" component={SettingsPage} />
-      <Route exact path="/admin/maillog" component={MailLogPage} />
+    <Route exact path="/relevans/:relevans?" component={RelevansPage} />
+    <Route exact path="/underavdeling/:underavdeling?" component={UnderavdelingPage} />
+    <Route exact path="/lov/:lov?" component={LovPage} />
 
-      <Route component={NotFound} />
-    </Switch>
-  </ScrollToTop>
+    <Route exact path="/admin/codelist/:listname?" component={CodeListPage} />
+    <Route exact path="/admin/audit/:id?/:auditId?" component={AuditPage} />
+    <Route exact path="/admin/settings" component={SettingsPage} />
+    <Route exact path="/admin/maillog" component={MailLogPage} />
+
+    <Route component={NotFound} />
+  </Switch>
 )
 
 export default Routes
