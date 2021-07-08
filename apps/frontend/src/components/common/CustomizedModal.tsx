@@ -1,5 +1,6 @@
 import { Modal, ModalProps, SIZE } from 'baseui/modal'
 import _ from 'lodash'
+import { maxPageWidth } from '../../util/theme'
 
 const CuztomizedModal = (props: ModalProps) => {
   const { overrides, ...otherProps } = props
@@ -8,6 +9,8 @@ const CuztomizedModal = (props: ModalProps) => {
     Dialog: {
       style: {
         backgroundColor: '#F8F8F8',
+        maxWidth: maxPageWidth,
+        width: 'calc(100% - 80px)'
       },
     },
     DialogContainer: {
