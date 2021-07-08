@@ -15,7 +15,7 @@ import { PanelLink, PanelLinkCard, PanelLinkCardOverrides } from '../components/
 import { kravNumView } from './KravPage'
 import * as _ from 'lodash'
 import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons'
-import { Page } from '../components/scaffold/Page'
+import { Layout2, Page } from '../components/scaffold/Page'
 import { SimpleTag } from '../components/common/SimpleTag'
 import { KravQL, PageResponse } from '../constants'
 import { useQuery } from '@apollo/client'
@@ -132,8 +132,9 @@ const TemaListe = () => {
   const temaListe = codelist.getCodes(ListName.TEMA).sort((a, b) => a.shortName.localeCompare(b.shortName, 'nb'))
 
   return (
-    <Page backUrl={'/'} headerBackgroundColor={ettlevColors.grey50} backgroundColor={ettlevColors.grey50} wideMain>
-      <HeadingXXLarge>Alle krav</HeadingXXLarge>
+    <Layout2 backBtnUrl={'/'}
+      mainHeader={<HeadingXXLarge>Alle krav</HeadingXXLarge>}
+      headerBackgroundColor={ettlevColors.grey50} childrenBackgroundColor={ettlevColors.white}>
 
       {visFilter && <RelevansFilter relevans={relevans} onClickFilter={onClickFilter} kravAntall={kravAntall} />}
 
@@ -143,7 +144,7 @@ const TemaListe = () => {
           <TemaCard key={tema.code} tema={tema} relevans={relevans} setNum={updateNum} />
         ))}
       </Block>
-    </Page>
+    </Layout2>
   )
 }
 
@@ -253,10 +254,10 @@ export const TemaCard = ({ tema, relevans, setNum }: { tema: TemaCode; relevans:
           <Block display={'flex'} alignItems={'center'} justifyContent={'center'} height={'35px'} width={'60px'}>
             {/* <img src={gavelIcon} width={'35px'} height={'35px'} aria-hidden alt={'Hammer ikon'} /> */}
             <Label3 color={ettlevColors.navOransje} $style={{ fontSize: '20px', lineHeight: '18px' }} marginRight="4px">
-          {krav?.length || 0}
-        </Label3>
-        <Paragraph4 $style={{ lineHeight: '18px', marginTop: '0px', marginBottom: '0px' }}>krav</Paragraph4>
-              </Block>
+              {krav?.length || 0}
+            </Label3>
+            <Paragraph4 $style={{ lineHeight: '18px', marginTop: '0px', marginBottom: '0px' }}>krav</Paragraph4>
+          </Block>
         </SimpleTag>
 
         <Markdown source={tema.data?.shortDesciption} />

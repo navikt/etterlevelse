@@ -94,11 +94,11 @@ const ChevronLeft = (props: { fill?: string }) => (
 export const Layout2 = (props: {
   backBtnColor?: string
   backBtnUrl: string
-  headerBackgroundColor: string
-  mainHeader: React.ReactNode
-  secondaryHeaderBackgroundColor: string
-  secondaryHeader: React.ReactNode
-  childrenBackgroundColor: string
+  headerBackgroundColor?: string
+  mainHeader?: React.ReactNode
+  secondaryHeaderBackgroundColor?: string
+  secondaryHeader?: React.ReactNode
+  childrenBackgroundColor?: string
   children: React.ReactNode
 }) => (
   <Block width="100%" overrides={{ Block: { props: { role: 'main' } } }}>
