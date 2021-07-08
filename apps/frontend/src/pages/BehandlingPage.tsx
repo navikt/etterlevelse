@@ -242,7 +242,8 @@ const HeaderContent = (props: { kravLength: number }) => (
       overrides={{
         Root: {
           style: {
-            backgroundColor: ettlevColors.white,
+            backgroundColor: ettlevColors.green50,
+            border: ettlevColors.green50,
             ...borderColor(ettlevColors.white),
           },
         },
