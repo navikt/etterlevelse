@@ -152,7 +152,7 @@ export const PanelLinkCard = ({
 
         borderWidth: '1px',
         borderColor: ettlevColors.grey100,
-        borderStyle: 'solid',
+        ...borderStyle('solid'),
         ...borderRadius('4px'),
 
         ':hover': {

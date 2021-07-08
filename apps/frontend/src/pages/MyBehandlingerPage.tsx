@@ -30,19 +30,37 @@ interface BehandlingCount {
 
 type CustomTeamObject = BehandlingCount & Team
 
-export const MyBehandlingerPage = () => (
-  <Block width="100%" backgroundColor={ettlevColors.grey50} display={'flex'} justifyContent={'center'} paddingBottom={'200px'}>
-    <Block maxWidth={maxPageWidth} width="100%">
-      <Block paddingLeft={'100px'} paddingRight={'100px'} paddingTop={theme.sizing.scale800}>
-        <RouteLink href={'/'} hideUnderline>
-          <Button startEnhancer={<img alt={'Chevron venstre ikon'} src={navChevronRightIcon} style={{ transform: 'rotate(180deg)' }} />} size="compact" kind="tertiary">
-            {' '}
-            Tilbake
-          </Button>
-        </RouteLink>
+const tabMarginBottom = '100px'
 
-        <HeadingXXLarge marginTop={theme.sizing.scale600}>Dokumentere etterlevelse</HeadingXXLarge>
-        <BehandlingTabs />
+export const MyBehandlingerPage = () => (
+  <Block width='100%' paddingBottom={'200px'}>
+    <Block width="100%" backgroundColor={ettlevColors.grey50} display={'flex'} justifyContent={'center'}>
+      <Block maxWidth={maxPageWidth} width="100%">
+        <Block paddingLeft={'100px'} paddingRight={'100px'} paddingTop={theme.sizing.scale800}>
+          <RouteLink href={'/'} hideUnderline>
+            <Button startEnhancer={<img alt={'Chevron venstre ikon'} src={navChevronRightIcon} style={{ transform: 'rotate(180deg)' }} />} size="compact" kind="tertiary">
+              {' '}
+              Tilbake
+            </Button>
+          </RouteLink>
+
+          <HeadingXXLarge marginTop={theme.sizing.scale600}>Dokumentere etterlevelse</HeadingXXLarge>
+        </Block>
+      </Block>
+    </Block>
+
+    <Block
+      display={'flex'}
+      justifyContent="center"
+      width="100%"
+      $style={{
+        background: `linear-gradient(top, ${ettlevColors.grey50} 80px, ${ettlevColors.white} 0%)`,
+      }}
+    >
+      <Block maxWidth={maxPageWidth} width="100%">
+        <Block paddingLeft={'100px'} paddingRight={'100px'} paddingTop={theme.sizing.scale800}>
+          <BehandlingTabs />
+        </Block>
       </Block>
     </Block>
   </Block>
@@ -131,7 +149,7 @@ const BehandlingTabs = () => {
   }, [teams, behandlinger])
 
   return (
-    <CustomizedTabs fontColor={ettlevColors.green800} small backgroundColor={ettlevColors.grey50} activeKey={tab} onChange={(args) => setTab(args.activeKey as Section)}>
+    <CustomizedTabs fontColor={ettlevColors.green800} small backgroundColor={ettlevColors.white} activeKey={tab} onChange={(args) => setTab(args.activeKey as Section)}>
       <CustomizedTab key={'mine'} title={'Mine behandlinger'}>
         {sortedTeams && <MineBehandlinger teams={sortedTeams} behandlinger={behandlinger.content} loading={loading} />}
       </CustomizedTab>
@@ -156,13 +174,13 @@ const MineBehandlinger = ({ behandlinger, teams, loading }: { behandlinger: Beha
       </>
     )
   return (
-    <Block>
+    <Block marginBottom={tabMarginBottom}>
       {!behandlinger.length && <ParagraphSmall>Du er ikke medlem av team med registrerte behandlinger </ParagraphSmall>}
 
       {teams.map((t) => {
         const teamBehandlinger = behandlinger.filter((b) => b.teamsData.find((t2) => t2.id === t.id))
         return (
-          <Block key={t.id} marginBottom={theme.sizing.scale1000}>
+          <Block key={t.id} marginBottom={theme.sizing.scale900}>
             <Block display={'flex'} justifyContent={'space-between'}>
               <Block>
                 <HeadingXLarge marginBottom={theme.sizing.scale100} color={ettlevColors.green600}>
@@ -249,7 +267,7 @@ const Alle = () => {
   }, [sok])
 
   return (
-    <Block>
+    <Block marginBottom={tabMarginBottom}>
       <LabelLarge marginBottom={theme.sizing.scale200}>Søk i alle behandlinger</LabelLarge>
 
       <Block maxWidth="600px" marginBottom={theme.sizing.scale1000} display={'flex'} flexDirection={'column'}>
@@ -264,7 +282,7 @@ const Alle = () => {
             // EndEnhancer: {style: {marginLeft: theme.sizing.scale400, paddingLeft: 0, paddingRight: 0, backgroundColor: ettlevColors.black}}
           }}
           startEnhancer={<img src={searchIcon} alt="Søk ikon" />}
-          // endEnhancer={<img aria-hidden alt={'Søk ikon'} src={sokButtonIcon}/>}
+        // endEnhancer={<img aria-hidden alt={'Søk ikon'} src={sokButtonIcon}/>}
         />
         {tooShort && (
           <LabelSmall color={ettlevColors.error400} alignSelf={'flex-end'} marginTop={theme.sizing.scale200}>
@@ -321,7 +339,7 @@ const Alle = () => {
 const BehandlingerPanels = ({ behandlinger, loading }: { behandlinger: BehandlingQL[]; loading?: boolean }) => {
   if (loading) return <SkeletonPanel count={5} />
   return (
-    <Block>
+    <Block marginBottom={tabMarginBottom}>
       {behandlinger.map((b) => (
         <Block key={b.id} marginBottom={'8px'}>
           <PanelLink
@@ -340,26 +358,26 @@ const BehandlingerPanels = ({ behandlinger, loading }: { behandlinger: Behandlin
 type Variables = { pageNumber?: number; pageSize?: number; sistRedigert?: number; mineBehandlinger?: boolean; sok?: string }
 
 const query = gql`
-  query getMineBehandlinger($pageNumber: NonNegativeInt, $pageSize: NonNegativeInt, $mineBehandlinger: Boolean, $sistRedigert: NonNegativeInt, $sok: String) {
-    behandlinger: behandling(filter: { mineBehandlinger: $mineBehandlinger, sistRedigert: $sistRedigert, sok: $sok }, pageNumber: $pageNumber, pageSize: $pageSize) {
-      pageNumber
+                query getMineBehandlinger($pageNumber: NonNegativeInt, $pageSize: NonNegativeInt, $mineBehandlinger: Boolean, $sistRedigert: NonNegativeInt, $sok: String) {
+                  behandlinger: behandling(filter: {mineBehandlinger: $mineBehandlinger, sistRedigert: $sistRedigert, sok: $sok }, pageNumber: $pageNumber, pageSize: $pageSize) {
+                  pageNumber
       pageSize
-      pages
-      numberOfElements
-      totalElements
-      content {
-        id
+                pages
+                numberOfElements
+                totalElements
+                content {
+                  id
         navn
-        nummer
-        sistEndretEtterlevelse
-        overordnetFormaal {
-          shortName
-        }
-        teamsData {
-          id
+                nummer
+                sistEndretEtterlevelse
+                overordnetFormaal {
+                  shortName
+                }
+                teamsData {
+                  id
           name
         }
       }
     }
   }
-`
+                `
