@@ -279,7 +279,7 @@ const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function; setKra
       <Block width="100%">
         <Card overrides={{ Root: { style: { ...borderWidth('1px') } } }}>
           <Block display="flex" width="100%">
-            <img src={circlePencilIcon} alt="pencil icon" />
+            {/* <img src={circlePencilIcon} alt="pencil icon" /> */}
             <Block marginLeft="24px">
               <Paragraph4 $style={{ fontSize: '16px', lineHeight: '24px', marginBottom: '0px', marginTop: '0px', width: 'fit-content' }}>
                 K{props.krav.kravNummer}.{props.krav.kravVersjon}
