@@ -9,8 +9,8 @@ const CuztomizedModal = (props: ModalProps) => {
     Dialog: {
       style: {
         backgroundColor: '#F8F8F8',
-        maxWidth: maxPageWidth,
-        width: 'calc(100% - 80px)'
+        maxWidth: `calc(${maxPageWidth} - 80px)`,
+        width: '100%'
       },
     },
     DialogContainer: {
