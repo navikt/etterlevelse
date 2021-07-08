@@ -88,7 +88,7 @@ const KriterieBegrunnelse = ({
           },
         }}
       >
-        <Paragraph2 color={textHover ? ettlevColors.green600 : undefined} margin="0px" $style={{ textDecoration: textHover ? 'underline' : 'none' }}>
+        <Paragraph2 margin="0px" $style={{ textDecoration: textHover ? 'underline' : 'none' }}>
           {suksesskriterie.navn}
         </Paragraph2>
       </Checkbox>
