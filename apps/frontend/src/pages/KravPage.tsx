@@ -68,7 +68,7 @@ export const KravPage = () => {
   const { state, history, changeState } = useLocationState<LocationState>()
   const tilbakemeldingId = useQueryParam('tilbakemeldingId')
   const [tab, setTab] = useState<Section>(!!tilbakemeldingId ? 'tilbakemeldinger' : state?.tab || 'krav')
-  const temaCode = codelist.getCode(ListName.LOV, krav?.regelverk[0].lov.code)?.data?.tema
+  const temaCode = codelist.getCode(ListName.LOV, krav?.regelverk[0]?.lov?.code)?.data?.tema
 
   useEffect(() => {
     if (tab !== state?.tab) changeState({ tab })
@@ -113,7 +113,7 @@ export const KravPage = () => {
               <Block display="flex" width="100%" justifyContent="center" marginTop="24px">
                 <Block display="flex" alignItems="center" width="100%">
                   <Block flex="1" display="flex" justifyContent="flex-start">
-                    <RouteLink href={`/tema/${temaCode}`} hideUnderline>
+                    <RouteLink href={temaCode ? `/tema/${temaCode}` : '/tema'} hideUnderline>
                       <Button startEnhancer={<img alt={'Chevron left'} src={chevronLeft} />} size="compact" kind="underline-hover" $style={{ color: '#F8F8F8' }}>
                         {' '}
                         Tilbake
