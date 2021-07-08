@@ -4,7 +4,7 @@ import { createKrav, mapToFormVal, updateKrav } from '../../api/KravApi'
 import { Block } from 'baseui/block'
 import React, { useEffect } from 'react'
 import * as yup from 'yup'
-import { ListName } from '../../services/Codelist'
+import { codelist, ListName } from '../../services/Codelist'
 import { kravStatus } from '../../pages/KravPage'
 import { InputField, MultiInputField, MultiOptionField, OptionField, TextAreaField } from '../common/Inputs'
 import axios from 'axios'
@@ -38,10 +38,16 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
   const [stickyHeader, setStickyHeader] = React.useState(false)
 
   const submit = async (krav: KravQL) => {
+    const regelverk = codelist.getCode(ListName.LOV, krav.regelverk[0]?.lov.code)
+    const underavdeling = codelist.getCode(ListName.UNDERAVDELING, regelverk?.data?.underavdeling)
+    const mutatedKrav = { 
+      ...krav,
+      underavdeling: underavdeling
+     }
     if (krav.id) {
-      close(await updateKrav(krav))
+      close(await updateKrav(mutatedKrav))
     } else {
-      close(await createKrav(krav))
+      close(await createKrav(mutatedKrav))
     }
   }
 
