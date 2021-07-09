@@ -54,7 +54,7 @@ export const MyBehandlingerPage = () => (
       justifyContent="center"
       width="100%"
       $style={{
-        background: `linear-gradient(top, ${ettlevColors.grey50} 80px, ${ettlevColors.white} 0%)`,
+        background: `linear-gradient(top, ${ettlevColors.grey50} 80px, ${ettlevColors.grey25} 0%)`,
       }}
     >
       <Block maxWidth={maxPageWidth} width="100%">
@@ -149,7 +149,7 @@ const BehandlingTabs = () => {
   }, [teams, behandlinger])
 
   return (
-    <CustomizedTabs fontColor={ettlevColors.green800} small backgroundColor={ettlevColors.white} activeKey={tab} onChange={(args) => setTab(args.activeKey as Section)}>
+    <CustomizedTabs fontColor={ettlevColors.green800} small backgroundColor={ettlevColors.grey25} activeKey={tab} onChange={(args) => setTab(args.activeKey as Section)}>
       <CustomizedTab key={'mine'} title={'Mine behandlinger'}>
         {sortedTeams && <MineBehandlinger teams={sortedTeams} behandlinger={behandlinger.content} loading={loading} />}
       </CustomizedTab>
@@ -208,7 +208,7 @@ const MineBehandlinger = ({ behandlinger, teams, loading }: { behandlinger: Beha
           alt={'Bamseikon'}
           title={'Savner du teamet ditt?'}
           beskrivelse={'Legg til teamet i teamkatalogen, så henter vi behandlinger som skal etterleve krav'}
-          backgroundColor={ettlevColors.grey50}
+          backgroundColor={ettlevColors.grey25}
         >
           <Block marginTop={theme.sizing.scale600}>
             <ExternalButton href={`${env.teamKatBaseUrl}`}>Teamkatalogen</ExternalButton>
