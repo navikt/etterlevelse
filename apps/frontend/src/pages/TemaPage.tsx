@@ -5,7 +5,6 @@ import { HeadingLarge, HeadingXLarge, HeadingXXLarge, Label3, LabelLarge, Paragr
 import { codelist, ListName, TemaCode } from '../services/Codelist'
 import { ObjectLink, urlForObject } from '../components/common/RouteLink'
 import { theme } from '../util'
-import { gavelIcon } from '../components/Images'
 import { Markdown } from '../components/common/Markdown'
 import { ettlevColors } from '../util/theme'
 import Button from '../components/common/Button'
@@ -43,7 +42,7 @@ const TemaSide = ({ tema }: { tema: TemaCode }) => {
     <Page
       backUrl={'/tema'}
       headerBackgroundColor={ettlevColors.green100}
-      backgroundColor={ettlevColors.grey50}
+      backgroundColor={ettlevColors.grey25}
       headerOverlap={'125px'}
       header={
         <>
@@ -134,7 +133,7 @@ const TemaListe = () => {
   return (
     <Layout2 backBtnUrl={'/'}
       mainHeader={<HeadingXXLarge>Alle krav</HeadingXXLarge>}
-      headerBackgroundColor={ettlevColors.grey50} childrenBackgroundColor={ettlevColors.white}>
+      headerBackgroundColor={ettlevColors.grey50} childrenBackgroundColor={ettlevColors.grey25}>
 
       {visFilter && <RelevansFilter relevans={relevans} onClickFilter={onClickFilter} kravAntall={kravAntall} />}
 
