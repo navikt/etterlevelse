@@ -5,9 +5,8 @@ import { HeadingXLarge, HeadingXXLarge, ParagraphMedium } from 'baseui/typograph
 import { PanelLinkCard } from '../components/common/PanelLink'
 import { grafIconBg, paperPenIconBg, paragrafIconBg } from '../components/Images'
 import { Card } from 'baseui/card'
-import Button from '../components/common/Button'
-import { faPlay } from '@fortawesome/free-solid-svg-icons'
 import { borderRadius, margin } from '../components/common/Style'
+import ReactPlayer from 'react-player'
 
 const cardWidth = ['98%', '98%', '98%', '98%', '32%', '32%']
 const cardHeight = ['auto', 'auto', 'auto', 'auto', '140px', '140px']
@@ -68,7 +67,7 @@ export const MainPageV2 = () => {
               Root: {
                 style: {
                   ...borderRadius('4px'),
-                  ...margin(theme.sizing.scale1600, theme.sizing.scale600),
+                  ...margin(theme.sizing.scale1600, theme.sizing.scale800),
                 },
               },
             }}
@@ -77,14 +76,9 @@ export const MainPageV2 = () => {
               $style={{
                 display: 'flex',
                 justifyContent: 'center',
-                paddingTop: theme.sizing.scale4800,
-                paddingBottom: theme.sizing.scale4800,
-                backgroundColor: ettlevColors.grey100,
               }}
             >
-              <Button icon={faPlay} kind={'secondary'}>
-                Se video
-              </Button>
+              <ReactPlayer width="100%" height="100%" controls url="videos/EtterlevelseskravMedTeksting.mp4" />
             </Block>
           </Card>
 
