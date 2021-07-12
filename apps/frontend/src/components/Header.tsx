@@ -217,7 +217,7 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
   }
 
   return (
-    <Block width="100%" maxWidth={maxPageWidth}>
+    <Block width="100%" maxWidth={maxPageWidth} backgroundColor={ettlevColors.white}>
       <Block paddingLeft="40px" paddingRight="40px" width="calc(100%-80px)" height="76px" overrides={{ Block: { props: { role: 'banner', 'aria-label': 'Header meny' } } }}>
         <HeaderNavigation overrides={{ Root: { style: { paddingBottom: 0, borderBottomStyle: 'none' } } }}>
           <NavigationList $align={ALIGN.left} $style={{ paddingLeft: 0 }}>
