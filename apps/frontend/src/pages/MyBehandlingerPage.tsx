@@ -141,10 +141,10 @@ const BehandlingTabs = () => {
       })
       setSortedTeams(sortTeams(uniqueFilteredTeamList))
     }
-    if (teams.length) {
-      setSortedTeams(sortTeams(teams))
-    } else {
+    if (!teams.length && !teamsLoading) {
       getNewTeams()
+    } else {
+      setSortedTeams(sortTeams(teams))
     }
   }, [teams, behandlinger])
 
