@@ -207,7 +207,7 @@ export const PanelLinkCard = ({
           <Block overrides={headerOverrides}>
             {icon && (
               <Block display={'flex'} justifyContent={'center'} width={'100%'} marginTop={theme.sizing.scale600}>
-                <img src={icon} alt={'ikon'} aria-hidden width={'30%'} />
+                <img src={icon} alt={'ikon'} aria-hidden/>
               </Block>
             )}
 
