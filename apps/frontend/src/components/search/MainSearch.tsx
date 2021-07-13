@@ -34,8 +34,6 @@ type RadioProps = {
   $checked: boolean
 }
 
-const responsiveWidth = ['300px', '300px', '300px', '300px', '300px', '450px']
-
 const SmallRadio = (value: SearchType, label: string) => {
   return (
     <Radio
@@ -78,7 +76,7 @@ const SelectType = (props: { type: SearchType; setType: (type: SearchType) => vo
     position="absolute"
     marginTop="-4px"
     backgroundColor="#FFFFFF"
-    width={responsiveWidth}
+    width={'100%'}
     $style={{
       borderBottomLeftRadius: '4px',
       borderBottomRightRadius: '4px',
@@ -204,8 +202,8 @@ const MainSearch = () => {
   const location = useLocation()
 
   return (
-    <Block>
-      <Block display="flex" position="relative" alignItems="center" width={responsiveWidth}>
+    <Block width='100%'>
+      <Block display="flex" position="relative" alignItems="center" width={'100%'}>
         <CustomizedSelect
           size={SIZE.compact}
           backspaceRemoves

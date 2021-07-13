@@ -235,7 +235,7 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
 
             <NavigationList $style={{ justifyContent: 'center' }}>
               {!props.noSearchBar && (
-                <NavigationItem>
+                <NavigationItem $style={{ width: '100%', maxWidth: '600px' }}>
                   <Block flex="1" display={['none', 'none', 'none', 'none', 'flex', 'flex']} overrides={{ Block: { props: { role: 'search' } } }}>
                     <MainSearch />
                   </Block>
