@@ -37,7 +37,7 @@ export const MyBehandlingerPage = () => (
     <Block width="100%" backgroundColor={ettlevColors.grey50} display={'flex'} justifyContent={'center'}>
       <Block maxWidth={maxPageWidth} width="100%">
         <Block paddingLeft={'100px'} paddingRight={'100px'} paddingTop={theme.sizing.scale800}>
-          <RouteLink href={'/'} hideUnderline>
+          <RouteLink hideUnderline>
             <Button startEnhancer={<img alt={'Chevron venstre ikon'} src={navChevronRightIcon} style={{ transform: 'rotate(180deg)' }} />} size="compact" kind="tertiary">
               {' '}
               Tilbake

@@ -175,7 +175,6 @@ export const BehandlingerTemaPage = () => {
       secondaryHeaderBackgroundColor={ettlevColors.white}
       secondaryHeader={getSecondaryHeader()}
       childrenBackgroundColor={ettlevColors.grey25}
-      backBtnUrl={`/behandling/${params.id}`}
     >
       <Block display="flex" width="100%" justifyContent="space-between" flexWrap marginTop="87px" marginBottom="87px">
         <CustomizedAccordion accordion={false}>

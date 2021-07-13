@@ -8,6 +8,7 @@ import React from 'react'
 const padding = ['16px', '16px', '16px', '20px', '40px', '80px']
 
 export const Page = ({
+  hideBackBtn,
   backUrl,
   headerOverlap,
   headerBackgroundColor,
@@ -25,6 +26,7 @@ export const Page = ({
   rawMain?: boolean
   header?: React.ReactNode
   children: React.ReactNode
+  hideBackBtn?: boolean
 }) => {
   return (
     <Block width="100%" overrides={{ Block: { props: { role: 'main' } } }} backgroundColor={backgroundColor} paddingBottom={'200px'}>
@@ -38,7 +40,7 @@ export const Page = ({
       >
         <Block maxWidth={maxPageWidth} width="100%">
           <Block paddingLeft={padding} paddingRight={padding} paddingTop={theme.sizing.scale800}>
-            {backUrl && (
+            {!hideBackBtn && (
               <RouteLink href={backUrl} hideUnderline>
                 <Button
                   startEnhancer={<img alt={'Chevron venstre ikon'} src={navChevronRightIcon} style={{ transform: 'rotate(180deg)' }} />}
@@ -93,7 +95,7 @@ const ChevronLeft = (props: { fill?: string }) => (
 
 export const Layout2 = (props: {
   backBtnColor?: string
-  backBtnUrl: string
+  backBtnUrl?: string
   headerBackgroundColor?: string
   mainHeader?: React.ReactNode
   secondaryHeaderBackgroundColor?: string

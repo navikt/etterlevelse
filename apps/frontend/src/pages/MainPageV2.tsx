@@ -15,6 +15,7 @@ const cardMarginRight = ['none', 'none', 'none', 'none', theme.sizing.scale800, 
 export const MainPageV2 = () => {
   return (
     <Page
+      hideBackBtn
       headerBackgroundColor={ettlevColors.green800}
       backgroundColor={ettlevColors.grey50}
       headerOverlap={'100px'}

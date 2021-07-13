@@ -61,7 +61,7 @@ export const EtterlevelsePage = () => {
               <Block display="flex" width="100%" justifyContent="center" marginTop="24px">
                 <Block display="flex" alignItems="center" width="100%">
                   <Block flex="1" display="flex" justifyContent="flex-start">
-                    <RouteLink href={'/etterlevelse'} hideUnderline>
+                    <RouteLink hideUnderline>
                       <Button
                         startEnhancer={<img alt={'Chevron left'} src={chevronLeft} />}
                         size="compact"

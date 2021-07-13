@@ -179,7 +179,6 @@ export const BehandlingPage = () => {
         secondaryHeaderBackgroundColor={ettlevColors.white}
         secondaryHeader={getSecondaryHeader(behandling)}
         childrenBackgroundColor={ettlevColors.grey25}
-        backBtnUrl={'/behandlinger'}
       >
         <Block backgroundColor={ettlevColors.grey50} marginTop={theme.sizing.scale800}>
           <Block padding="22px">

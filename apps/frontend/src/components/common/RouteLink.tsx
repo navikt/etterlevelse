@@ -11,7 +11,7 @@ import { user } from '../../services/User'
 import { loginUrl } from '../Header'
 
 type RouteLinkProps = {
-  href: string
+  href?: string
   hideUnderline?: boolean
   plain?: boolean
   requireLogin?: boolean
@@ -24,6 +24,10 @@ const RouteLink = (props: RouteLinkProps) => {
   const onClick = (e: Event) => {
     if (requireLogin && !user.isLoggedIn()) return
     e.preventDefault()
+    if (!href) {
+      history.goBack()
+      restprops.onClick && restprops.onClick()
+    }
     history.push(props.href)
     restprops.onClick && restprops.onClick()
   }

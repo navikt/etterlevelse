@@ -40,7 +40,6 @@ const TemaSide = ({ tema }: { tema: TemaCode }) => {
 
   return (
     <Page
-      backUrl={'/tema'}
       headerBackgroundColor={ettlevColors.green100}
       backgroundColor={ettlevColors.grey25}
       headerOverlap={'125px'}
@@ -131,7 +130,7 @@ const TemaListe = () => {
   const temaListe = codelist.getCodes(ListName.TEMA).sort((a, b) => a.shortName.localeCompare(b.shortName, 'nb'))
 
   return (
-    <Layout2 backBtnUrl={'/'}
+    <Layout2
       mainHeader={<HeadingXXLarge>Alle krav</HeadingXXLarge>}
       headerBackgroundColor={ettlevColors.grey50} childrenBackgroundColor={ettlevColors.grey25}>
 

@@ -28,7 +28,6 @@ import { useLocationState, useQueryParam } from '../util/hooks'
 import { InfoBlock } from '../components/common/InfoBlock'
 import { gql } from '@apollo/client/core'
 import { PanelLink } from '../components/common/PanelLink'
-import { codelist, ListName } from '../services/Codelist'
 
 export const kravNumView = (it: { kravVersjon: number; kravNummer: number }) => `K${it.kravNummer}.${it.kravVersjon}`
 export const kravName = (krav: Krav) => `${kravNumView(krav)} - ${krav.navn}`
@@ -68,7 +67,6 @@ export const KravPage = () => {
   const { state, history, changeState } = useLocationState<LocationState>()
   const tilbakemeldingId = useQueryParam('tilbakemeldingId')
   const [tab, setTab] = useState<Section>(!!tilbakemeldingId ? 'tilbakemeldinger' : state?.tab || 'krav')
-  const temaCode = codelist.getCode(ListName.LOV, krav?.regelverk[0]?.lov?.code)?.data?.tema
 
   useEffect(() => {
     if (tab !== state?.tab) changeState({ tab })
@@ -113,7 +111,7 @@ export const KravPage = () => {
               <Block display="flex" width="100%" justifyContent="center" marginTop="24px">
                 <Block display="flex" alignItems="center" width="100%">
                   <Block flex="1" display="flex" justifyContent="flex-start">
-                    <RouteLink href={temaCode ? `/tema/${temaCode}` : '/tema'} hideUnderline>
+                    <RouteLink hideUnderline>
                       <Button startEnhancer={<img alt={'Chevron left'} src={chevronLeft} />} size="compact" kind="underline-hover" $style={{ color: '#F8F8F8' }}>
                         {' '}
                         Tilbake
