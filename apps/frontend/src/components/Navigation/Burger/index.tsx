@@ -17,6 +17,7 @@ import { intl } from '../../../util/intl/intl'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronDown, faChevronRight } from '@fortawesome/free-solid-svg-icons'
 import { datajegerSlackLink, documentationLink } from '../../../util/config'
+import { ettlevColors } from '../../../util/theme'
 
 const drawerFooterProps: BlockProps = {
   display: 'flex',
@@ -81,7 +82,7 @@ const BurgerMenu = () => {
     <React.Fragment>
       {!showMenu && (
         <Button kind="minimal" onClick={() => setShowMenu(true)}>
-          <Menu size={36} />
+          <Menu size={36} color={ettlevColors.green800}/>
         </Button>
       )}
 
