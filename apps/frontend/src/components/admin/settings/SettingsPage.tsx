@@ -8,6 +8,7 @@ import { theme } from '../../../util'
 import Button from '../../common/Button'
 import { Markdown } from '../../common/Markdown'
 import { CustomizedStatefulTextarea } from '../../common/CustomizedTextarea'
+import { ettlevColors } from '../../../util/theme'
 
 export const SettingsPage = () => {
   const [loading, setLoading] = React.useState<boolean>(true)
@@ -40,7 +41,7 @@ export const SettingsPage = () => {
     <Block width="calc(100% - 80px)" paddingLeft="40px" paddingRight="40px">
       <H4>{intl.settings}</H4>
       {loading ? (
-        <StyledSpinnerNext size={40} />
+        <StyledSpinnerNext color={ettlevColors.green400} size={40} />
       ) : error || !settings ? (
         { error }
       ) : (

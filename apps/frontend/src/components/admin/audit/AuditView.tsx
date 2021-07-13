@@ -17,6 +17,7 @@ import { intl } from '../../../util/intl/intl'
 import { AuditAction, AuditLog } from './AuditTypes'
 import { ObjectLink } from '../../common/RouteLink'
 import Button from '../../common/Button'
+import { ettlevColors } from '../../../util/theme'
 
 type AuditViewProps = {
   auditLog?: AuditLog
@@ -46,7 +47,7 @@ export const AuditView = (props: AuditViewProps) => {
 
   return (
     <Card>
-      {loading && <StyledSpinnerNext size={theme.sizing.scale2400} />}
+      {loading && <StyledSpinnerNext color={ettlevColors.green400} size={theme.sizing.scale2400} />}
       {!loading && auditLog && !logFound && <Label1>{intl.auditNotFound}</Label1>}
 
       {logFound && (

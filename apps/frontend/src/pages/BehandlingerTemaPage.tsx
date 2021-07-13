@@ -16,7 +16,7 @@ import { CustomizedAccordion, CustomizedPanel } from '../components/common/Custo
 import { Card } from 'baseui/card'
 import { Button, KIND } from 'baseui/button'
 import CustomizedModal from '../components/common/CustomizedModal'
-import { Spinner } from 'baseui/icon'
+import { Spinner } from '../components/common/Spinner'
 import { useEtterlevelse } from '../api/EtterlevelseApi'
 import { EditEtterlevelse } from '../components/etterlevelse/EditEtterlevelse'
 import { kravFullQuery, KravId } from '../api/KravApi'

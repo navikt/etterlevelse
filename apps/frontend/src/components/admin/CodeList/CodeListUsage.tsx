@@ -13,6 +13,7 @@ import { ObjectLink } from '../../common/RouteLink'
 import { ObjectType } from '../audit/AuditTypes'
 import { replaceCodelistUsage } from '../../../api/CodelistApi'
 import CustomizedSelect from '../../common/CustomizedSelect'
+import { ettlevColors } from '../../../util/theme'
 
 const UsageTable = (props: { usage: CodeUsage }) => {
   const { usage } = props
@@ -120,7 +121,7 @@ export const Usage = (props: { usage?: CodeUsage; refresh: () => void }) => {
       )}
 
       {usage && <UsageTable usage={usage} />}
-      {!usage && <StyledSpinnerNext />}
+      {!usage && <StyledSpinnerNext color={ettlevColors.green400}/>}
     </Block>
   )
 }

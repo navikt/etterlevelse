@@ -16,6 +16,7 @@ import { theme } from '../../../util'
 import { user } from '../../../services/User'
 import CreateCodeListModal from './ModalCreateCodeList'
 import CodeListTable from './CodeListStyledTable'
+import { ettlevColors } from '../../../util/theme'
 
 const CodeListPage = () => {
   const params = useParams<{ listname?: string }>()
@@ -59,14 +60,14 @@ const CodeListPage = () => {
   }, [listname, lists])
 
   if (!user.isAdmin() || !lists) {
-    return <StyledSpinnerNext size={theme.sizing.scale2400} />
+    return <StyledSpinnerNext color={ettlevColors.green400} size={theme.sizing.scale2400} />
   }
 
   return (
     <Block width="calc(100% - 80px)" paddingLeft="40px" paddingRight="40px">
       <H4>Administrering av kodeverk</H4>
       {loading ? (
-        <StyledSpinnerNext />
+        <StyledSpinnerNext color={ettlevColors.green400}/>
       ) : (
         <Block display="flex" justifyContent="space-between" width="100%">
           <Block width="600px">
