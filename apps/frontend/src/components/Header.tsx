@@ -72,11 +72,11 @@ const LoggedInHeader = () => {
   const kravPages = user.isKraveier() ? [{ label: 'Forvalte og opprette krav', href: '/krav' }] : []
   const adminPages = user.isAdmin()
     ? [
-        { label: intl.audit, href: '/admin/audit' },
-        { label: 'Kodeverk', href: '/admin/codelist' },
-        { label: intl.mailLog, href: '/admin/maillog' },
-        { label: intl.settings, href: '/admin/settings', disabled: true },
-      ]
+      { label: intl.audit, href: '/admin/audit' },
+      { label: 'Kodeverk', href: '/admin/codelist' },
+      { label: intl.mailLog, href: '/admin/maillog' },
+      { label: intl.settings, href: '/admin/settings', disabled: true },
+    ]
     : []
   const otherPages = [
     { label: 'Mine instillinger', href: '/instillinger', disabled: true },
@@ -151,8 +151,8 @@ const Menu = (props: { pages: MenuItem[][]; title: React.ReactNode; icon?: IconD
 
   const allPages = props.pages.length
     ? props.pages
-        .filter((p) => p.length)
-        .reduce((previousValue, currentValue) => [...((previousValue as MenuItem[]) || []), { label: <Divider compact={props.compact} /> }, ...(currentValue as MenuItem[])])
+      .filter((p) => p.length)
+      .reduce((previousValue, currentValue) => [...((previousValue as MenuItem[]) || []), { label: <Divider compact={props.compact} /> }, ...(currentValue as MenuItem[])])
     : []
 
   return (
@@ -217,51 +217,53 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
   }
 
   return (
-    <Block width="100%" maxWidth={maxPageWidth} backgroundColor={ettlevColors.white}>
-      <Block paddingLeft="40px" paddingRight="40px" width="calc(100%-80px)" height="76px" overrides={{ Block: { props: { role: 'banner', 'aria-label': 'Header meny' } } }}>
-        <HeaderNavigation overrides={{ Root: { style: { paddingBottom: 0, borderBottomStyle: 'none' } } }}>
-          <NavigationList $align={ALIGN.left} $style={{ paddingLeft: 0 }}>
-            <NavigationItem $style={{ paddingLeft: 0 }}>
-              <RouteLink href={'/'} hideUnderline>
-                <H1 marginBottom={0} marginTop={0}>
-                  <Block display="flex" alignItems="center">
-                    <img src={logo} alt="Nav etterlevelse" height="44px" />
-                  </Block>
-                </H1>
-              </RouteLink>
-            </NavigationItem>
-          </NavigationList>
-
-          <NavigationList $style={{ justifyContent: 'center' }}>
-            {!props.noSearchBar && (
-              <NavigationItem>
-                <Block flex="1" display={['none', 'none', 'none', 'none', 'flex', 'flex']} overrides={{ Block: { props: { role: 'search' } } }}>
-                  <MainSearch />
-                </Block>
+    <Block width='100%' display='flex' backgroundColor={ettlevColors.white} justifyContent='center'>
+      <Block width="100%" maxWidth={maxPageWidth} >
+        <Block paddingLeft="40px" paddingRight="40px" width="calc(100%-80px)" height="76px" overrides={{ Block: { props: { role: 'banner', 'aria-label': 'Header meny' } } }}>
+          <HeaderNavigation overrides={{ Root: { style: { paddingBottom: 0, borderBottomStyle: 'none' } } }}>
+            <NavigationList $align={ALIGN.left} $style={{ paddingLeft: 0 }}>
+              <NavigationItem $style={{ paddingLeft: 0 }}>
+                <RouteLink href={'/'} hideUnderline>
+                  <H1 marginBottom={0} marginTop={0}>
+                    <Block display="flex" alignItems="center">
+                      <img src={logo} alt="Nav etterlevelse" height="44px" />
+                    </Block>
+                  </H1>
+                </RouteLink>
               </NavigationItem>
-            )}
-          </NavigationList>
+            </NavigationList>
 
-          {!props.noLoginButton && (
-            <Block display={['none', 'none', 'none', 'none', 'none', 'flex']}>
-              <NavigationList $align={ALIGN.right}>
-                {!user.isLoggedIn() && (
-                  <NavigationItem $style={{ paddingLeft: 0 }}>
-                    <LoginButton />
-                  </NavigationItem>
-                )}
-                {user.isLoggedIn() && (
-                  <NavigationItem $style={{ paddingLeft: 0 }}>
-                    <LoggedInHeader />
-                  </NavigationItem>
-                )}
-              </NavigationList>
+            <NavigationList $style={{ justifyContent: 'center' }}>
+              {!props.noSearchBar && (
+                <NavigationItem>
+                  <Block flex="1" display={['none', 'none', 'none', 'none', 'flex', 'flex']} overrides={{ Block: { props: { role: 'search' } } }}>
+                    <MainSearch />
+                  </Block>
+                </NavigationItem>
+              )}
+            </NavigationList>
+
+            {!props.noLoginButton && (
+              <Block display={['none', 'none', 'none', 'none', 'none', 'flex']}>
+                <NavigationList $align={ALIGN.right}>
+                  {!user.isLoggedIn() && (
+                    <NavigationItem $style={{ paddingLeft: 0 }}>
+                      <LoginButton />
+                    </NavigationItem>
+                  )}
+                  {user.isLoggedIn() && (
+                    <NavigationItem $style={{ paddingLeft: 0 }}>
+                      <LoggedInHeader />
+                    </NavigationItem>
+                  )}
+                </NavigationList>
+              </Block>
+            )}
+            <Block display={['block', 'block', 'block', 'block', 'block', 'none']}>
+              <BurgerMenu />
             </Block>
-          )}
-          <Block display={['block', 'block', 'block', 'block', 'block', 'none']}>
-            <BurgerMenu />
-          </Block>
-        </HeaderNavigation>
+          </HeaderNavigation>
+        </Block>
       </Block>
     </Block>
   )
