@@ -8,8 +8,9 @@ import { Card } from 'baseui/card'
 import { borderRadius, margin } from '../components/common/Style'
 import ReactPlayer from 'react-player'
 
-const cardWidth = ['98%', '98%', '98%', '98%', '32%', '32%']
+const cardWidth = ['95%', '95%', '95%', '95%', '31%', '31%']
 const cardHeight = ['auto', 'auto', 'auto', 'auto', '140px', '140px']
+const cardMarginRight = ['none', 'none', 'none', 'none', theme.sizing.scale800, theme.sizing.scale800]
 
 export const MainPageV2 = () => {
   return (
@@ -27,8 +28,9 @@ export const MainPageV2 = () => {
     >
       <Block display={'flex'} flexDirection={'column'} alignItems={'center'} width={'100%'}>
         <Wide>
-          <Block display={'flex'} justifyContent={'space-evenly'} flexWrap>
+          <Block display={'flex'} justifyContent={'center'} flexWrap>
             <PanelLinkCard
+              marginRight={cardMarginRight}
               height={cardHeight}
               width={cardWidth}
               verticalMargin={theme.sizing.scale300}
@@ -40,6 +42,7 @@ export const MainPageV2 = () => {
             />
 
             <PanelLinkCard
+              marginRight={cardMarginRight}
               height={cardHeight}
               width={cardWidth}
               verticalMargin={theme.sizing.scale300}

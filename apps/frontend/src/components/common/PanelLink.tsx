@@ -122,6 +122,7 @@ export const PanelLinkCard = ({
   overrides,
   flexContent,
   hideArrow,
+  marginRight,
 }: {
   href?: string
   tittel: string
@@ -139,6 +140,7 @@ export const PanelLinkCard = ({
   overrides?: PanelLinkCardOverrides
   flexContent?: boolean
   hideArrow?: boolean
+  marginRight?: Responsive<Scale>
 }) => {
   const [hover, setHover] = useState(false)
 
@@ -193,7 +195,7 @@ export const PanelLinkCard = ({
   )
 
   return (
-    <Block width={width} maxWidth={maxWidth} overrides={rootOverrides}>
+    <Block width={width} maxWidth={maxWidth} overrides={rootOverrides} marginRight={marginRight}>
       <RouteLink href={href} hideUnderline requireLogin={requireLogin}>
         <Block
           onMouseEnter={() => setHover(true)}
