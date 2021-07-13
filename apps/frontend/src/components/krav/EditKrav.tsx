@@ -124,9 +124,10 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
                     tooltip={'Gi kravet en kort tittel. Kravet formuleres som en aktivitet eller målsetting.'}
                   />
                   <TextAreaField
-                    marginBottom="0px"
                     label="Hensikt"
                     name="hensikt"
+                    height="250px"
+                    marginBottom="0px"
                     markdown
                     shortenLinks
                     onImageUpload={onImageUpload(krav.id)}
@@ -164,6 +165,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
                     <TextAreaField
                       label="Relevante implementasjoner"
                       name="implementasjoner"
+                      height="250px"
                       markdown
                       tooltip={'Vis til gode eksisterende implementasjoner som ivaretar kravet.'}
                     />

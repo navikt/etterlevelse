@@ -41,6 +41,7 @@ export const InputField = (props: { label: string; name: string; caption?: React
 )
 
 export const TextAreaField = (props: {
+  height?: string
   marginBottom?: string
   label: string
   name: string
@@ -73,6 +74,7 @@ export const TextAreaField = (props: {
               {props.markdown && (
                 <Block>
                   <TextEditor
+                    height={props.height}
                     initialValue={p.field.value}
                     setValue={(v) => p.form.setFieldValue(props.name, v)}
                     onImageUpload={props.onImageUpload}
