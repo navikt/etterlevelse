@@ -206,15 +206,15 @@ export const PanelLinkCard = ({
             justifyContent: 'space-between',
           }}
         >
-          <Block overrides={headerOverrides}>
+          <Block overrides={headerOverrides} display={['flex', 'flex', 'flex', 'flex', 'block', 'block']} marginBottom={theme.sizing.scale400}>
             {icon && (
-              <Block display={'flex'} justifyContent={'center'} width={'100%'} marginTop={theme.sizing.scale600}>
-                <img src={icon} alt={'ikon'} aria-hidden/>
+              <Block display={'flex'} justifyContent={'center'} marginTop={theme.sizing.scale600} marginRight={theme.sizing.scale800}>
+                <img src={icon} alt={'ikon'} aria-hidden />
               </Block>
             )}
 
             <Block display="flex" alignItems="flex-end" height={headerContent ? '60%' : ''}>
-              <HeadingXLarge $style={{ textDecoration: href && hover ? '3px underline ' : undefined }}>{tittel}</HeadingXLarge>
+              <HeadingXLarge marginBottom={['0px', '0px', '0px', '0px', theme.sizing.scale700, theme.sizing.scale700]} $style={{ textDecoration: href && hover ? '3px underline ' : undefined }}>{tittel}</HeadingXLarge>
             </Block>
             {headerContent && headerContent}
           </Block>
