@@ -67,6 +67,10 @@ export const Markdown = ({
 
       return <CustomizedLink href={href}>{content}</CustomizedLink>
     },
+    code: (codeProps: any) => {
+      const {node, inline, className, children, ...props} = codeProps
+      return <code className={className} {...props} style={{whiteSpace: 'normal'}}>{children}</code>
+    }
   }
 
   const sources: string[] = sourcesOrig || (source ? [source] : [''])
