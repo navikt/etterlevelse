@@ -37,6 +37,7 @@ public class KravRequest implements RequestElement {
     private String hensikt;
     private String utdypendeBeskrivelse;
     private String versjonEndringer;
+    private String notat;
     private List<String> dokumentasjon;
     private String implementasjoner;
     private List<String> begrepIder;
@@ -71,6 +72,7 @@ public class KravRequest implements RequestElement {
         setRelevansFor(formatListToUppercase(relevansFor));
         setAvdeling(toUpperCaseAndTrim(avdeling));
         setUnderavdeling(toUpperCaseAndTrim(underavdeling));
+        setNotat(trimToNull(notat));
 
         setDokumentasjon(formatList(dokumentasjon));
         setImplementasjoner(trimToNull(implementasjoner));

@@ -77,7 +77,9 @@ const TextEditor = (props: TextEditorProps) => {
         toolbar={{
           options: ['inline', 'blockType', 'list', 'link', 'history'],
           blockType: {},
-          inline: { options: ['bold', 'italic', 'underline', 'strikethrough', 'monospace'] },
+          inline: { options: ['bold'] },
+          // old toolbar
+          // inline: { options: ['bold', 'italic', 'underline', 'strikethrough', 'monospace'] },
           list: { options: ['unordered', 'ordered'] },
           link: { options: ['link'] },
           //image: { alt: { present: true, mandatory: true }, },

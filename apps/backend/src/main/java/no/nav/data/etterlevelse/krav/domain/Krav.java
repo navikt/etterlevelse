@@ -41,6 +41,7 @@ public class Krav implements DomainObject, KravIdStatus {
     private String hensikt;
     private String utdypendeBeskrivelse;
     private String versjonEndringer;
+    private String notat;
 
     private List<String> dokumentasjon;
     private String implementasjoner;
@@ -83,6 +84,7 @@ public class Krav implements DomainObject, KravIdStatus {
         relevansFor = copyOf(request.getRelevansFor());
         status = request.getStatus();
         periode = request.getPeriode();
+        notat = request.getNotat();
 
         suksesskriterier = StreamUtils.convert(request.getSuksesskriterier(), Suksesskriterie::convert);
 
@@ -108,6 +110,7 @@ public class Krav implements DomainObject, KravIdStatus {
                 .rettskilder(copyOf(rettskilder))
                 .tagger(copyOf(tagger))
                 .regelverk(StreamUtils.convert(regelverk, Regelverk::toResponse))
+                .notat(notat)
                 .suksesskriterier(StreamUtils.convert(suksesskriterier, Suksesskriterie::toResponse))
                 .periode(periode)
                 .avdeling(CodelistService.getCodelistResponse(ListName.AVDELING, avdeling))
