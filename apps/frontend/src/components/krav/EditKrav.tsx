@@ -230,7 +230,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
                   </Block>
                 </Block>
                 <Block backgroundColor={ettlevColors.grey50} paddingTop="48px" paddingLeft={paddingPx} paddingRight={paddingPx} paddingBottom="64px">
-                  <TextAreaField label="Notater" name="notat" height="250px" markdown tooltip={'Notater for kraveier'} />
+                  <TextAreaField label="Notater" name="notat" height="250px" markdown tooltip={'Kraveiers notater'} />
                 </Block>
               </Block>
             </Form>
