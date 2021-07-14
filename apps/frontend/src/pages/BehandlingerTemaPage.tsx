@@ -168,6 +168,26 @@ export const BehandlingerTemaPage = () => {
     </Block>
   )
 
+  const getKravList = (kravList: KravEtterlevelseData[], emptyMessage: string) => {
+    if (kravList.length) {
+      return kravList.map((k) => {
+        return <KravCard key={`${k.navn}_${k.kravNummer}`} krav={k} setEdit={setEdit} setKravId={setKravId} />
+      })
+    } else {
+      return (
+        <Block width="100%">
+          <Card overrides={{ Root: { style: { ...borderWidth('1px') } } }}>
+            <Block display="flex" width="100%">
+              <Block marginLeft="24px">
+                <Paragraph4> {emptyMessage}</Paragraph4>
+              </Block>
+            </Block>
+          </Card>
+        </Block>
+      )
+    }
+  }
+
   return (
     <Layout2
       headerBackgroundColor={ettlevColors.green100}
@@ -179,19 +199,13 @@ export const BehandlingerTemaPage = () => {
       <Block display="flex" width="100%" justifyContent="space-between" flexWrap marginTop="87px" marginBottom="87px">
         <CustomizedAccordion accordion={false}>
           <CustomizedPanel HeaderActiveBackgroundColor={ettlevColors.green50} title={<PanelHeader title={'Skal fylles ut'} kravData={skalUtfyllesKrav} />}>
-            {skalUtfyllesKrav.map((k) => {
-              return <KravCard key={`${k.navn}_${k.kravNummer}`} krav={k} setEdit={setEdit} setKravId={setKravId} />
-            })}
+            {getKravList(skalUtfyllesKrav, 'Ingen krav som skal fylles ut')}
           </CustomizedPanel>
           <CustomizedPanel HeaderActiveBackgroundColor={ettlevColors.green50} title={<PanelHeader title={'Under utfylling'} kravData={underArbeidKrav} />}>
-            {underArbeidKrav.map((k) => {
-              return <KravCard key={`${k.navn}_${k.kravNummer}`} krav={k} setEdit={setEdit} setKravId={setKravId} />
-            })}
+            {getKravList(underArbeidKrav, 'Ingen krav under utfylling')}
           </CustomizedPanel>
           <CustomizedPanel HeaderActiveBackgroundColor={ettlevColors.green50} title={<PanelHeader title={'Ferdig utfylt'} kravData={utfyltKrav} />}>
-            {utfyltKrav.map((k) => {
-              return <KravCard key={`${k.navn}_${k.kravNummer}`} krav={k} setEdit={setEdit} setKravId={setKravId} />
-            })}
+            {getKravList(utfyltKrav, 'Ingen krav er ferdig utfylt')}
           </CustomizedPanel>
         </CustomizedAccordion>
         {edit && behandling && (
@@ -240,7 +254,7 @@ const PanelHeader = (props: { title: string; kravData: KravEtterlevelseData[] })
       <Block display="flex" justifyContent="flex-end" flex="1" marginRight="26px">
         <Block>
           <Block display="flex" justifyContent="flex-end" alignItems='baseline' flex="1">
-            <Label3 marginRight='4px' $style={{ color: ettlevColors.navOransje, fontSize: '20px',lineHeight: '21px', marginTop: '0px', marginBottom: '0px' }}>{props.kravData.length}</Label3>
+            <Label3 marginRight='4px' $style={{ color: ettlevColors.navOransje, fontSize: '20px', lineHeight: '21px', marginTop: '0px', marginBottom: '0px' }}>{props.kravData.length}</Label3>
             <Paragraph4 $style={{ lineHeight: '21px', marginTop: '0px', marginBottom: '0px' }}>krav</Paragraph4>
           </Block>
           <Block display="flex" justifyContent="flex-end" flex="1">
@@ -283,7 +297,7 @@ const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function; setKra
               <Paragraph4 $style={{ fontSize: '16px', lineHeight: '24px', marginBottom: '0px', marginTop: '0px', width: 'fit-content' }}>
                 K{props.krav.kravNummer}.{props.krav.kravVersjon}
               </Paragraph4>
-              <Label3 $style={{ fontSize: '22px', lineHeight: '28px', alignContent: 'flex-start' }}>{props.krav.navn}</Label3>
+              <Label3 $style={{ fontSize: '18px', lineHeight: '24px', alignContent: 'flex-start' }}>{props.krav.navn}</Label3>
             </Block>
           </Block>
         </Card>
