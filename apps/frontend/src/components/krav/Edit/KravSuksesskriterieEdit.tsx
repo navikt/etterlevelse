@@ -34,6 +34,11 @@ const nextId = (suksesskriterier: Suksesskriterie[]) => {
 
 const KriterieList = ({ p }: { p: FieldArrayRenderProps }) => {
   const suksesskriterier = p.form.values.suksesskriterier as Suksesskriterie[]
+
+  if (!suksesskriterier.length) {
+    p.push({ id: nextId(suksesskriterier), navn: '', beskrivelse: '' })
+}
+
   return (
     <Block display={'flex'} flexDirection={'column'}>
       <DragDropContext
