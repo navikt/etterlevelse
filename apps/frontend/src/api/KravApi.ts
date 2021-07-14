@@ -106,6 +106,7 @@ export const mapToFormVal = (krav: Partial<KravQL>): KravQL => ({
   tagger: krav.tagger || [],
   regelverk: krav.regelverk || [],
   hensikt: krav.hensikt || '',
+  notat: krav.notat || '',
   avdeling: krav.avdeling,
   underavdeling: krav.underavdeling,
   periode: krav.periode || { start: undefined, slutt: undefined },

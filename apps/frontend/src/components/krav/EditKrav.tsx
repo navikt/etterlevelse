@@ -117,7 +117,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
                 )}
               </Block>
               <Block>
-                <Block backgroundColor="#F1F1F1" paddingTop="48px" paddingLeft={paddingPx} paddingRight={paddingPx} paddingBottom="64px">
+                <Block backgroundColor={ettlevColors.grey50} paddingTop="48px" paddingLeft={paddingPx} paddingRight={paddingPx} paddingBottom="64px">
                   <InputField
                     marginBottom={inputMarginBottom}
                     label="Krav-tittel"
@@ -226,8 +226,11 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
                       <TextAreaField label='Endringer fra forrige versjon' name='versjonEndringer'
                                      tooltip={'Gi informasjon om hva som er endret siden forrige versjon av kravet.'}/> 
                                      */}
-                    <TextAreaField label="Notater" name="notat" height="250px" markdown tooltip={'Notater for kraveier'} />
+
                   </Block>
+                </Block>
+                <Block backgroundColor={ettlevColors.grey50} paddingTop="48px" paddingLeft={paddingPx} paddingRight={paddingPx} paddingBottom="64px">
+                  <TextAreaField label="Notater" name="notat" height="250px" markdown tooltip={'Notater for kraveier'} />
                 </Block>
               </Block>
             </Form>
