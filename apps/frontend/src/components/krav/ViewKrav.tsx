@@ -91,7 +91,7 @@ const AllInfo = ({ krav }: { krav: KravQL }) => (
 
     <LabelWrapper>
       <LabelAboveContent header title="Kravet er relevant for">
-        <DotTags list={ListName.RELEVANS} codes={krav.relevansFor} linkCodelist inColumn />
+        <DotTags list={ListName.RELEVANS} codes={krav.relevansFor} inColumn />
       </LabelAboveContent>
     </LabelWrapper>
 
