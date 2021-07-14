@@ -310,6 +310,7 @@ const query = gql`
       navn
       beskrivelse
       hensikt
+      notat
       utdypendeBeskrivelse
       versjonEndringer
 

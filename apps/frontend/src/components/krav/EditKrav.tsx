@@ -17,6 +17,7 @@ import { H1, H2, LabelLarge } from 'baseui/typography'
 import CustomizedModal from '../common/CustomizedModal'
 import Button from '../common/Button'
 import { ettlevColors, maxPageWidth, theme } from '../../util/theme'
+import { user } from '../../services/User'
 
 type EditKravProps = {
   krav: KravQL
@@ -40,10 +41,10 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
   const submit = async (krav: KravQL) => {
     const regelverk = codelist.getCode(ListName.LOV, krav.regelverk[0]?.lov.code)
     const underavdeling = codelist.getCode(ListName.UNDERAVDELING, regelverk?.data?.underavdeling)
-    const mutatedKrav = { 
+    const mutatedKrav = {
       ...krav,
-      underavdeling: underavdeling
-     }
+      underavdeling: underavdeling,
+    }
     if (krav.id) {
       close(await updateKrav(mutatedKrav))
     } else {
@@ -225,6 +226,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
                       <TextAreaField label='Endringer fra forrige versjon' name='versjonEndringer'
                                      tooltip={'Gi informasjon om hva som er endret siden forrige versjon av kravet.'}/> 
                                      */}
+                    <TextAreaField label="Notater" name="notat" height="250px" markdown tooltip={'Notater for kraveier'} />
                   </Block>
                 </Block>
               </Block>
