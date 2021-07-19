@@ -20,3 +20,12 @@
 .rdw-dropdownoption-active {
   background: #eaf0ef;
 }
+.rdw-link-modal-target-option {
+  display: none;
+}
+.rdw-link-modal-target-option > span {
+  display: none;
+}
+.rdw-link-modal {
+  height: 150px;
+}

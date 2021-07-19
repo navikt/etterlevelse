@@ -65,7 +65,7 @@ export const Markdown = ({
       const { children, href, node } = linkProps
       const content = shortenLinks && node.children[0]?.value.indexOf('http') === 0 ? 'Lenke' : children
 
-      return <CustomizedLink href={href}>{content}</CustomizedLink>
+      return <ExternalLink href={href}>{content}</ExternalLink>
     },
     code: (codeProps: any) => {
       const {node, inline, className, children, ...props} = codeProps
