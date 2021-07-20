@@ -16,6 +16,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.LinkedHashSet;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -60,9 +61,26 @@ public class TeamcatTeamClient {
 
     public List<Team> getMyTeams() {
         String currentIdent = SecurityUtils.getCurrentIdent();
-        return getAllTeams().stream()
+        var teams = getAllTeams().stream()
                 .filter(team -> team.getMembers().stream().anyMatch(m -> m.getNavIdent().equals(currentIdent)))
                 .toList();
+
+        if (teams.isEmpty()) {
+            var newTeams = new ArrayList<Team>();
+
+            var productAreas = getAllProductAreas().stream()
+                    .filter(po -> po.getMembers().stream().anyMatch(m -> m.getNavIdent().equals(currentIdent)))
+                    .toList();
+
+            for (ProductArea po: productAreas) {
+                var poTeams = getAllTeams().stream().filter(team -> team.getProductAreaId().equals(po.getId())).toList();
+                newTeams.addAll(poTeams);
+            }
+
+            teams = new ArrayList<>(new LinkedHashSet<>(newTeams));
+        }
+
+        return teams;
     }
 
     public List<ProductArea> getAllProductAreas() {
