@@ -33,7 +33,7 @@ type CustomTeamObject = BehandlingCount & Team
 const tabMarginBottom = '100px'
 
 export const MyBehandlingerPage = () => (
-  <Block width='100%' paddingBottom={'200px'}>
+  <Block width="100%" paddingBottom={'200px'}>
     <Block width="100%" backgroundColor={ettlevColors.grey50} display={'flex'} justifyContent={'center'}>
       <Block maxWidth={maxPageWidth} width="100%">
         <Block paddingLeft={'100px'} paddingRight={'100px'} paddingTop={theme.sizing.scale800}>
@@ -72,15 +72,30 @@ const BehandlingTabs = () => {
   const [tab, setTab] = useState<Section>(params.tab || 'mine')
   const [doneLoading, setDoneLoading] = useState(false)
   const [variables, setVariables] = useState<Variables>({})
-  const { data, loading: behandlingerLoading } = useQuery<{ behandlinger: PageResponse<BehandlingQL> }, Variables>(query, {
+  const { data, loading: behandlingerLoading, refetch } = useQuery<{ behandlinger: PageResponse<BehandlingQL> }, Variables>(query, {
     variables,
-    skip: !variables.mineBehandlinger && !variables.sistRedigert,
   })
   const [teams, teamsLoading] = useMyTeams()
   const behandlinger = data?.behandlinger || emptyPage
   const loading = teamsLoading || behandlingerLoading
   const [sortedTeams, setSortedTeams] = useState<CustomTeamObject[]>()
   const [productAreas, productAreasLoading] = useMyProductAreas()
+
+  const getNewTeams = async () => {
+    const newTeamList = await getAllTeams()
+    const teamList = productAreas.map((pa) => newTeamList.filter((t) => pa.id === t.productAreaId)).flat()
+    const uniqueValuesSet = new Set()
+
+    const uniqueFilteredTeamList = teamList.filter((t) => {
+      const isPresentInSet = uniqueValuesSet.has(t.name)
+      uniqueValuesSet.add(t.name)
+      return !isPresentInSet
+    })
+    const newTeams = sortTeams(uniqueFilteredTeamList)
+    setSortedTeams(newTeams)
+    setVariables({ mineBehandlinger: false, teams: newTeams.map(t => t.id) })
+    refetch()
+  }
 
   useEffect(() => {
     if (!doneLoading && tab === 'alle') setDoneLoading(true)
@@ -129,24 +144,14 @@ const BehandlingTabs = () => {
   }
 
   useEffect(() => {
-    const getNewTeams = async () => {
-      const newTeamList = await getAllTeams()
-      const teamList = productAreas.map((pa) => newTeamList.filter((t) => pa.id === t.productAreaId)).flat()
-      const uniqueValuesSet = new Set()
-
-      const uniqueFilteredTeamList = teamList.filter((t) => {
-        const isPresentInSet = uniqueValuesSet.has(t.name)
-        uniqueValuesSet.add(t.name)
-        return !isPresentInSet
-      })
-      setSortedTeams(sortTeams(uniqueFilteredTeamList))
-    }
-    if (!teams.length && !teamsLoading) {
+    if (teams.length) {
       getNewTeams()
     } else {
+      setVariables({ mineBehandlinger: true })
+      refetch()
       setSortedTeams(sortTeams(teams))
     }
-  }, [teams, behandlinger])
+  }, [teams, behandlinger, productAreas])
 
   return (
     <CustomizedTabs fontColor={ettlevColors.green800} small backgroundColor={ettlevColors.grey25} activeKey={tab} onChange={(args) => setTab(args.activeKey as Section)}>
@@ -282,7 +287,7 @@ const Alle = () => {
             // EndEnhancer: {style: {marginLeft: theme.sizing.scale400, paddingLeft: 0, paddingRight: 0, backgroundColor: ettlevColors.black}}
           }}
           startEnhancer={<img src={searchIcon} alt="Søk ikon" />}
-        // endEnhancer={<img aria-hidden alt={'Søk ikon'} src={sokButtonIcon}/>}
+          // endEnhancer={<img aria-hidden alt={'Søk ikon'} src={sokButtonIcon}/>}
         />
         {tooShort && (
           <LabelSmall color={ettlevColors.error400} alignSelf={'flex-end'} marginTop={theme.sizing.scale200}>
@@ -343,7 +348,7 @@ const BehandlingerPanels = ({ behandlinger, loading }: { behandlinger: Behandlin
       {behandlinger.map((b) => (
         <Block key={b.id} marginBottom={'8px'}>
           <PanelLink
-            panelIcon={<img src={arkPennIcon} width='33px' height='33px' aria-hidden alt={'Dokumenter behandling ikon'} />}
+            panelIcon={<img src={arkPennIcon} width="33px" height="33px" aria-hidden alt={'Dokumenter behandling ikon'} />}
             href={`/behandling/${b.id}`}
             title={`${b.nummer}: ${b.navn}`}
             beskrivelse={b.overordnetFormaal.shortName}
@@ -355,29 +360,29 @@ const BehandlingerPanels = ({ behandlinger, loading }: { behandlinger: Behandlin
   )
 }
 
-type Variables = { pageNumber?: number; pageSize?: number; sistRedigert?: number; mineBehandlinger?: boolean; sok?: string }
+type Variables = { pageNumber?: number; pageSize?: number; sistRedigert?: number; mineBehandlinger?: boolean; sok?: string; teams?: string[] }
 
 const query = gql`
-                query getMineBehandlinger($pageNumber: NonNegativeInt, $pageSize: NonNegativeInt, $mineBehandlinger: Boolean, $sistRedigert: NonNegativeInt, $sok: String) {
-                  behandlinger: behandling(filter: {mineBehandlinger: $mineBehandlinger, sistRedigert: $sistRedigert, sok: $sok }, pageNumber: $pageNumber, pageSize: $pageSize) {
-                  pageNumber
+  query getMineBehandlinger($pageNumber: NonNegativeInt, $pageSize: NonNegativeInt, $mineBehandlinger: Boolean, $sistRedigert: NonNegativeInt, $sok: String, $teams: [String!]) {
+    behandlinger: behandling(filter: { mineBehandlinger: $mineBehandlinger, sistRedigert: $sistRedigert, sok: $sok, teams: $teams }, pageNumber: $pageNumber, pageSize: $pageSize) {
+      pageNumber
       pageSize
-                pages
-                numberOfElements
-                totalElements
-                content {
-                  id
+      pages
+      numberOfElements
+      totalElements
+      content {
+        id
         navn
-                nummer
-                sistEndretEtterlevelse
-                overordnetFormaal {
-                  shortName
-                }
-                teamsData {
-                  id
+        nummer
+        sistEndretEtterlevelse
+        overordnetFormaal {
+          shortName
+        }
+        teamsData {
+          id
           name
         }
       }
     }
   }
-                `
+`
