@@ -155,7 +155,6 @@ const BehandlingTabs = () => {
   return (
     <CustomizedTabs fontColor={ettlevColors.green800} small backgroundColor={ettlevColors.grey25} activeKey={tab} onChange={(args) => setTab(args.activeKey as Section)}>
       <CustomizedTab key={'mine'} title={'Mine behandlinger'}>
-        {console.log(sortedTeams, 'TRIGGER NEW')}
         {sortedTeams && <MineBehandlinger teams={sortedTeams} behandlinger={behandlinger.content} loading={loading} />}
       </CustomizedTab>
       <CustomizedTab key={'siste'} title={'Mine sist dokumenterte'}>

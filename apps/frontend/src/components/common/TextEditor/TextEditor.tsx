@@ -67,7 +67,6 @@ const TextEditor = (props: TextEditorProps) => {
         editorStyle={{ padding: '10px', height: props.height || '500px' }}
         toolbarStyle={{ backgroundColor: ettlevColors.grey50, borderBottom: `1px solid ${ettlevColors.textAreaBorder}` }}
         onEditorStateChange={(data) => {
-          console.log(CustomDraftToMarkdown(convertToRaw(data.getCurrentContent())))
           setVal(CustomDraftToMarkdown(convertToRaw(data.getCurrentContent())))
         }}
         initialContentState={CustomMarkdownToDraft(val)}
