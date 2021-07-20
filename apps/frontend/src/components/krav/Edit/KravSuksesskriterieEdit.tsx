@@ -37,7 +37,7 @@ const KriterieList = ({ p }: { p: FieldArrayRenderProps }) => {
 
   if (!suksesskriterier.length) {
     p.push({ id: nextId(suksesskriterier), navn: '', beskrivelse: '' })
-}
+  }
 
   return (
     <Block display={'flex'} flexDirection={'column'}>

@@ -68,7 +68,7 @@ export const PanelLink = ({
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
       >
-        <Block display='flex' marginLeft='27px' alignItems='center'>
+        <Block display="flex" marginLeft="27px" alignItems="center">
           {typeof panelIcon === 'function' ? panelIcon(hover) : panelIcon}
         </Block>
 
@@ -214,7 +214,12 @@ export const PanelLinkCard = ({
             )}
 
             <Block display="flex" alignItems="flex-end" height={headerContent ? '60%' : ''}>
-              <HeadingXLarge marginBottom={['0px', '0px', '0px', '0px', theme.sizing.scale700, theme.sizing.scale700]} $style={{ textDecoration: href && hover ? '3px underline ' : undefined }}>{tittel}</HeadingXLarge>
+              <HeadingXLarge
+                marginBottom={['0px', '0px', '0px', '0px', theme.sizing.scale700, theme.sizing.scale700]}
+                $style={{ textDecoration: href && hover ? '3px underline ' : undefined }}
+              >
+                {tittel}
+              </HeadingXLarge>
             </Block>
             {headerContent && headerContent}
           </Block>

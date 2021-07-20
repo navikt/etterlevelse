@@ -253,8 +253,10 @@ const PanelHeader = (props: { title: string; kravData: KravEtterlevelseData[] })
       </HeadingLarge>
       <Block display="flex" justifyContent="flex-end" flex="1" marginRight="26px">
         <Block>
-          <Block display="flex" justifyContent="flex-end" alignItems='baseline' flex="1">
-            <Label3 marginRight='4px' $style={{ color: ettlevColors.navOransje, fontSize: '20px', lineHeight: '21px', marginTop: '0px', marginBottom: '0px' }}>{props.kravData.length}</Label3>
+          <Block display="flex" justifyContent="flex-end" alignItems="baseline" flex="1">
+            <Label3 marginRight="4px" $style={{ color: ettlevColors.navOransje, fontSize: '20px', lineHeight: '21px', marginTop: '0px', marginBottom: '0px' }}>
+              {props.kravData.length}
+            </Label3>
             <Paragraph4 $style={{ lineHeight: '21px', marginTop: '0px', marginBottom: '0px' }}>krav</Paragraph4>
           </Block>
           <Block display="flex" justifyContent="flex-end" flex="1">

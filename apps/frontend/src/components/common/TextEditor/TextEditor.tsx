@@ -81,9 +81,9 @@ const TextEditor = (props: TextEditorProps) => {
           // old toolbar
           // inline: { options: ['bold', 'italic', 'underline', 'strikethrough', 'monospace'] },
           list: { options: ['unordered', 'ordered'] },
-          link: { 
+          link: {
             defaultTargetOption: '_blank',
-            options: ['link'] 
+            options: ['link'],
           },
           //image: { alt: { present: true, mandatory: true }, },
         }}

@@ -68,9 +68,13 @@ export const Markdown = ({
       return <ExternalLink href={href}>{content}</ExternalLink>
     },
     code: (codeProps: any) => {
-      const {node, inline, className, children, ...props} = codeProps
-      return <code className={className} {...props} style={{whiteSpace: 'normal'}}>{children}</code>
-    }
+      const { node, inline, className, children, ...props } = codeProps
+      return (
+        <code className={className} {...props} style={{ whiteSpace: 'normal' }}>
+          {children}
+        </code>
+      )
+    },
   }
 
   const sources: string[] = sourcesOrig || (source ? [source] : [''])

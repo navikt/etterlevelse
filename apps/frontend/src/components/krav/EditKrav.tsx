@@ -226,7 +226,6 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
                       <TextAreaField label='Endringer fra forrige versjon' name='versjonEndringer'
                                      tooltip={'Gi informasjon om hva som er endret siden forrige versjon av kravet.'}/> 
                                      */}
-
                   </Block>
                 </Block>
                 <Block backgroundColor={ettlevColors.grey50} paddingTop="48px" paddingLeft={paddingPx} paddingRight={paddingPx} paddingBottom="64px">

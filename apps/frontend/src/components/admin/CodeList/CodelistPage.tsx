@@ -67,7 +67,7 @@ const CodeListPage = () => {
     <Block width="calc(100% - 80px)" paddingLeft="40px" paddingRight="40px">
       <H4>Administrering av kodeverk</H4>
       {loading ? (
-        <StyledSpinnerNext color={ettlevColors.green400}/>
+        <StyledSpinnerNext color={ettlevColors.green400} />
       ) : (
         <Block display="flex" justifyContent="space-between" width="100%">
           <Block width="600px">

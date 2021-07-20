@@ -22,9 +22,7 @@ import ScrollToTop from './util/ScrollToTop'
 
 const Routes = (): JSX.Element => (
   <ScrollToTop>
-
     <Switch>
-
       <Route exact path="/old" component={MainPage} />
       <Route exact path="/" component={MainPageV2} />
 
@@ -53,7 +51,6 @@ const Routes = (): JSX.Element => (
       <Route component={NotFound} />
     </Switch>
   </ScrollToTop>
-
 )
 
 export default Routes

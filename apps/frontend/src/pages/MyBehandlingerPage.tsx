@@ -74,7 +74,7 @@ const BehandlingTabs = () => {
   const [variables, setVariables] = useState<Variables>({})
   const { data, loading: behandlingerLoading } = useQuery<{ behandlinger: PageResponse<BehandlingQL> }, Variables>(query, {
     variables,
-    skip: !variables.mineBehandlinger && !variables.sistRedigert
+    skip: !variables.mineBehandlinger && !variables.sistRedigert,
   })
   const [teams, teamsLoading] = useMyTeams()
   const [productAreas, productAreasLoading] = useMyProductAreas()
@@ -104,19 +104,17 @@ const BehandlingTabs = () => {
   }
 
   const getNewTeams = () => {
-    getAllTeams()
-      .then((response) => {
-        const teamList = productAreas.map((pa) => response.filter((t) => pa.id === t.productAreaId)).flat()
-        const uniqueValuesSet = new Set()
+    getAllTeams().then((response) => {
+      const teamList = productAreas.map((pa) => response.filter((t) => pa.id === t.productAreaId)).flat()
+      const uniqueValuesSet = new Set()
 
-        const uniqueFilteredTeamList = teamList.filter((t) => {
-          const isPresentInSet = uniqueValuesSet.has(t.name)
-          uniqueValuesSet.add(t.name)
-          return !isPresentInSet
-        })
-        setSortedTeams(sortTeams(uniqueFilteredTeamList))
-      }
-      )
+      const uniqueFilteredTeamList = teamList.filter((t) => {
+        const isPresentInSet = uniqueValuesSet.has(t.name)
+        uniqueValuesSet.add(t.name)
+        return !isPresentInSet
+      })
+      setSortedTeams(sortTeams(uniqueFilteredTeamList))
+    })
   }
 
   useEffect(() => {
@@ -286,7 +284,7 @@ const Alle = () => {
             // EndEnhancer: {style: {marginLeft: theme.sizing.scale400, paddingLeft: 0, paddingRight: 0, backgroundColor: ettlevColors.black}}
           }}
           startEnhancer={<img src={searchIcon} alt="Søk ikon" />}
-        // endEnhancer={<img aria-hidden alt={'Søk ikon'} src={sokButtonIcon}/>}
+          // endEnhancer={<img aria-hidden alt={'Søk ikon'} src={sokButtonIcon}/>}
         />
         {tooShort && (
           <LabelSmall color={ettlevColors.error400} alignSelf={'flex-end'} marginTop={theme.sizing.scale200}>

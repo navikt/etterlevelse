@@ -82,7 +82,7 @@ const BurgerMenu = () => {
     <React.Fragment>
       {!showMenu && (
         <Button kind="minimal" onClick={() => setShowMenu(true)}>
-          <Menu size={36} color={ettlevColors.green800}/>
+          <Menu size={36} color={ettlevColors.green800} />
         </Button>
       )}
 

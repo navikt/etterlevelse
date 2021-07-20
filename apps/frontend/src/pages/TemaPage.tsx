@@ -130,10 +130,7 @@ const TemaListe = () => {
   const temaListe = codelist.getCodes(ListName.TEMA).sort((a, b) => a.shortName.localeCompare(b.shortName, 'nb'))
 
   return (
-    <Layout2
-      mainHeader={<HeadingXXLarge>Alle krav</HeadingXXLarge>}
-      headerBackgroundColor={ettlevColors.grey50} childrenBackgroundColor={ettlevColors.grey25}>
-
+    <Layout2 mainHeader={<HeadingXXLarge>Alle krav</HeadingXXLarge>} headerBackgroundColor={ettlevColors.grey50} childrenBackgroundColor={ettlevColors.grey25}>
       {visFilter && <RelevansFilter relevans={relevans} onClickFilter={onClickFilter} kravAntall={kravAntall} />}
 
       <Block {...sectionProps} marginTop={theme.sizing.scale600}>

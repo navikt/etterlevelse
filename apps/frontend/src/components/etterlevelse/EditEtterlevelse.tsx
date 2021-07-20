@@ -170,7 +170,7 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
                                   style: {
                                     fontSize: '18px',
                                     fontWeight: 400,
-                                    lineHeight: '22px'
+                                    lineHeight: '22px',
                                   },
                                 },
                                 RadioMarkOuter: {

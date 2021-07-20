@@ -121,7 +121,7 @@ export const Usage = (props: { usage?: CodeUsage; refresh: () => void }) => {
       )}
 
       {usage && <UsageTable usage={usage} />}
-      {!usage && <StyledSpinnerNext color={ettlevColors.green400}/>}
+      {!usage && <StyledSpinnerNext color={ettlevColors.green400} />}
     </Block>
   )
 }
