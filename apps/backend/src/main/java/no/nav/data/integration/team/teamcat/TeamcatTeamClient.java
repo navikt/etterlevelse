@@ -74,7 +74,7 @@ public class TeamcatTeamClient {
 
             for (ProductArea po: productAreas) {
                 var poTeams = getAllTeams().stream()
-                        .filter(team -> !team.getProductAreaId().isBlank() && team.getProductAreaId().equals(po.getId()))
+                        .filter(team -> team.getProductAreaId() != null && team.getProductAreaId().equals(po.getId()))
                         .toList();
                 newTeams.addAll(poTeams);
             }
