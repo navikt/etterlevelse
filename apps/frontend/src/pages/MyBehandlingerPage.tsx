@@ -144,7 +144,7 @@ const BehandlingTabs = () => {
   }
 
   useEffect(() => {
-    if (teams.length) {
+    if (!teams.length) {
       getNewTeams()
     } else {
       setVariables({ mineBehandlinger: true })
