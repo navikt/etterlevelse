@@ -72,14 +72,15 @@ const BehandlingTabs = () => {
   const [tab, setTab] = useState<Section>(params.tab || 'mine')
   const [doneLoading, setDoneLoading] = useState(false)
   const [variables, setVariables] = useState<Variables>({})
-  const { data, loading: behandlingerLoading, refetch } = useQuery<{ behandlinger: PageResponse<BehandlingQL> }, Variables>(query, {
+  const { data, loading: behandlingerLoading } = useQuery<{ behandlinger: PageResponse<BehandlingQL> }, Variables>(query, {
     variables,
+    skip: !variables.mineBehandlinger && !variables.sistRedigert
   })
   const [teams, teamsLoading] = useMyTeams()
-  const behandlinger = data?.behandlinger || emptyPage
-  const loading = teamsLoading || behandlingerLoading
-  const [sortedTeams, setSortedTeams] = useState<CustomTeamObject[]>()
   const [productAreas, productAreasLoading] = useMyProductAreas()
+  const behandlinger = data?.behandlinger || emptyPage
+  const loading = teamsLoading || productAreasLoading || behandlingerLoading
+  const [sortedTeams, setSortedTeams] = useState<CustomTeamObject[]>()
 
   const getNewTeams = async () => {
     const newTeamList = await getAllTeams()
@@ -91,10 +92,7 @@ const BehandlingTabs = () => {
       uniqueValuesSet.add(t.name)
       return !isPresentInSet
     })
-    const newTeams = sortTeams(uniqueFilteredTeamList)
-    setSortedTeams(newTeams)
-    setVariables({ mineBehandlinger: false, teams: newTeams.map(t => t.id) })
-    refetch()
+    setSortedTeams(sortTeams(uniqueFilteredTeamList))
   }
 
   useEffect(() => {
@@ -144,11 +142,10 @@ const BehandlingTabs = () => {
   }
 
   useEffect(() => {
-    if (!teams.length) {
+    console.log(behandlinger)
+    if (!teams.length && !teamsLoading) {
       getNewTeams()
     } else {
-      setVariables({ mineBehandlinger: true })
-      refetch()
       setSortedTeams(sortTeams(teams))
     }
   }, [teams, behandlinger, productAreas])
@@ -363,8 +360,8 @@ const BehandlingerPanels = ({ behandlinger, loading }: { behandlinger: Behandlin
 type Variables = { pageNumber?: number; pageSize?: number; sistRedigert?: number; mineBehandlinger?: boolean; sok?: string; teams?: string[] }
 
 const query = gql`
-  query getMineBehandlinger($pageNumber: NonNegativeInt, $pageSize: NonNegativeInt, $mineBehandlinger: Boolean, $sistRedigert: NonNegativeInt, $sok: String, $teams: [String!]) {
-    behandlinger: behandling(filter: { mineBehandlinger: $mineBehandlinger, sistRedigert: $sistRedigert, sok: $sok, teams: $teams }, pageNumber: $pageNumber, pageSize: $pageSize) {
+  query getMineBehandlinger($pageNumber: NonNegativeInt, $pageSize: NonNegativeInt, $mineBehandlinger: Boolean, $sistRedigert: NonNegativeInt, $sok: String) {
+    behandlinger: behandling(filter: { mineBehandlinger: $mineBehandlinger, sistRedigert: $sistRedigert, sok: $sok }, pageNumber: $pageNumber, pageSize: $pageSize) {
       pageNumber
       pageSize
       pages
