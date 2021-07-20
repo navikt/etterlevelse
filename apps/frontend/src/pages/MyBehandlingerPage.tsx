@@ -312,7 +312,7 @@ const Alle = () => {
 
           <BehandlingerPanels behandlinger={behandlinger.content} loading={loading} />
 
-          {!loading && (
+          {!loading && behandlinger.totalElements !== 0 && (
             <Block display={'flex'} justifyContent={'space-between'} marginTop={theme.sizing.scale1000}>
               <Block display="flex" alignItems="center">
                 <Button onClick={lastMer} icon={faPlus} kind={'secondary'} size="compact" disabled={gqlLoading || behandlinger.numberOfElements >= behandlinger.totalElements}>
