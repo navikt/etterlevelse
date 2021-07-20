@@ -142,7 +142,6 @@ const BehandlingTabs = () => {
   }
 
   useEffect(() => {
-    console.log(behandlinger)
     if (!teams.length && !teamsLoading) {
       getNewTeams()
     } else {
