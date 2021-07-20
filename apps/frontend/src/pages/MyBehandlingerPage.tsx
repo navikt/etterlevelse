@@ -82,17 +82,41 @@ const BehandlingTabs = () => {
   const loading = teamsLoading || productAreasLoading || behandlingerLoading
   const [sortedTeams, setSortedTeams] = useState<CustomTeamObject[]>()
 
-  const getNewTeams = async () => {
-    const newTeamList = await getAllTeams()
-    const teamList = productAreas.map((pa) => newTeamList.filter((t) => pa.id === t.productAreaId)).flat()
-    const uniqueValuesSet = new Set()
+  const sortTeams = (unSortedTeams: Team[]) => {
+    return unSortedTeams
+      .map((t) => {
+        const teamBehandlinger = behandlinger.content.filter((b) => b.teamsData.find((t2) => t2.id === t.id))
 
-    const uniqueFilteredTeamList = teamList.filter((t) => {
-      const isPresentInSet = uniqueValuesSet.has(t.name)
-      uniqueValuesSet.add(t.name)
-      return !isPresentInSet
-    })
-    setSortedTeams(sortTeams(uniqueFilteredTeamList))
+        return {
+          ...t,
+          behandlingCount: teamBehandlinger.length,
+        }
+      })
+      .sort((a, b) => {
+        if (a.behandlingCount === 0) {
+          return 1
+        } else if (b.behandlingCount === 0) {
+          return -1
+        } else {
+          return a.name > b.name ? 1 : -1
+        }
+      })
+  }
+
+  const getNewTeams = () => {
+    getAllTeams()
+      .then((response) => {
+        const teamList = productAreas.map((pa) => response.filter((t) => pa.id === t.productAreaId)).flat()
+        const uniqueValuesSet = new Set()
+
+        const uniqueFilteredTeamList = teamList.filter((t) => {
+          const isPresentInSet = uniqueValuesSet.has(t.name)
+          uniqueValuesSet.add(t.name)
+          return !isPresentInSet
+        })
+        setSortedTeams(sortTeams(uniqueFilteredTeamList))
+      }
+      )
   }
 
   useEffect(() => {
@@ -120,38 +144,18 @@ const BehandlingTabs = () => {
     if (tab !== 'alle' && user.isLoaded() && !user.isLoggedIn()) setTab('alle')
   }, [user.isLoaded()])
 
-  const sortTeams = (unSortedTeams: Team[]) => {
-    return unSortedTeams
-      .map((t) => {
-        const teamBehandlinger = behandlinger.content.filter((b) => b.teamsData.find((t2) => t2.id === t.id))
-
-        return {
-          ...t,
-          behandlingCount: teamBehandlinger.length,
-        }
-      })
-      .sort((a, b) => {
-        if (a.behandlingCount === 0) {
-          return 1
-        } else if (b.behandlingCount === 0) {
-          return -1
-        } else {
-          return a.name > b.name ? 1 : -1
-        }
-      })
-  }
-
   useEffect(() => {
     if (!teams.length && !teamsLoading) {
       getNewTeams()
     } else {
       setSortedTeams(sortTeams(teams))
     }
-  }, [teams, behandlinger, productAreas])
+  }, [teams])
 
   return (
     <CustomizedTabs fontColor={ettlevColors.green800} small backgroundColor={ettlevColors.grey25} activeKey={tab} onChange={(args) => setTab(args.activeKey as Section)}>
       <CustomizedTab key={'mine'} title={'Mine behandlinger'}>
+        {console.log(sortedTeams, 'TRIGGER NEW')}
         {sortedTeams && <MineBehandlinger teams={sortedTeams} behandlinger={behandlinger.content} loading={loading} />}
       </CustomizedTab>
       <CustomizedTab key={'siste'} title={'Mine sist dokumenterte'}>
@@ -283,7 +287,7 @@ const Alle = () => {
             // EndEnhancer: {style: {marginLeft: theme.sizing.scale400, paddingLeft: 0, paddingRight: 0, backgroundColor: ettlevColors.black}}
           }}
           startEnhancer={<img src={searchIcon} alt="Søk ikon" />}
-          // endEnhancer={<img aria-hidden alt={'Søk ikon'} src={sokButtonIcon}/>}
+        // endEnhancer={<img aria-hidden alt={'Søk ikon'} src={sokButtonIcon}/>}
         />
         {tooShort && (
           <LabelSmall color={ettlevColors.error400} alignSelf={'flex-end'} marginTop={theme.sizing.scale200}>
