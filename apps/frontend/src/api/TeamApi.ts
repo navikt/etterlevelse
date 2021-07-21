@@ -110,6 +110,7 @@ export const useTeam = () => {
 }
 
 export const useMyTeams = () => {
+  const [productAreas, productAreasLoading] = useMyProductAreas()
   const [data, setData] = useState<Team[]>([])
   const [loading, setLoading] = useState(true)
   const ident = user.getIdent()
@@ -118,7 +119,22 @@ export const useMyTeams = () => {
     ident &&
       myTeams()
         .then((r) => {
-          setData(r)
+          if (r.length === 0) {
+            getAllTeams().then((response) => {
+              const teamList = productAreas.map((pa) => response.filter((t) => pa.id === t.productAreaId)).flat()
+              const uniqueValuesSet = new Set()
+
+              const uniqueFilteredTeamList = teamList.filter((t) => {
+                const isPresentInSet = uniqueValuesSet.has(t.name)
+                uniqueValuesSet.add(t.name)
+                return !isPresentInSet
+              })
+              setData(uniqueFilteredTeamList)
+            })
+
+          } else {
+            setData(r)
+          }
           setLoading(false)
         })
         .catch((e) => {
@@ -127,7 +143,7 @@ export const useMyTeams = () => {
           console.log("couldn't find teams", e)
         })
     !ident && setLoading(false)
-  }, [ident])
+  }, [ident, productAreas])
 
   return [data, loading] as [Team[], boolean]
 }

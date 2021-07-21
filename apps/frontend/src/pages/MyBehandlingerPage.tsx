@@ -1,7 +1,7 @@
 import { HeadingLarge, HeadingXLarge, HeadingXXLarge, LabelLarge, LabelSmall, LabelXSmall, ParagraphSmall } from 'baseui/typography'
 import { Block } from 'baseui/block'
 import React, { useEffect, useState } from 'react'
-import { getAllTeams, useMyProductAreas, useMyTeams } from '../api/TeamApi'
+import { useMyTeams } from '../api/TeamApi'
 import RouteLink from '../components/common/RouteLink'
 import { theme } from '../util'
 import Button, { ExternalButton } from '../components/common/Button'
@@ -77,10 +77,9 @@ const BehandlingTabs = () => {
     skip: !variables.mineBehandlinger && !variables.sistRedigert,
   })
   const [teams, teamsLoading] = useMyTeams()
-  const [productAreas, productAreasLoading] = useMyProductAreas()
+
   const behandlinger = data?.behandlinger || emptyPage
-  const loading = teamsLoading || productAreasLoading || behandlingerLoading
-  const [sortedTeams, setSortedTeams] = useState<CustomTeamObject[]>()
+  const loading = teamsLoading || behandlingerLoading
 
   const sortTeams = (unSortedTeams: Team[]) => {
     return unSortedTeams
@@ -101,20 +100,6 @@ const BehandlingTabs = () => {
           return a.name > b.name ? 1 : -1
         }
       })
-  }
-
-  const getNewTeams = () => {
-    getAllTeams().then((response) => {
-      const teamList = productAreas.map((pa) => response.filter((t) => pa.id === t.productAreaId)).flat()
-      const uniqueValuesSet = new Set()
-
-      const uniqueFilteredTeamList = teamList.filter((t) => {
-        const isPresentInSet = uniqueValuesSet.has(t.name)
-        uniqueValuesSet.add(t.name)
-        return !isPresentInSet
-      })
-      setSortedTeams(sortTeams(uniqueFilteredTeamList))
-    })
   }
 
   useEffect(() => {
@@ -143,17 +128,13 @@ const BehandlingTabs = () => {
   }, [user.isLoaded()])
 
   useEffect(() => {
-    if (!teams.length && !teamsLoading) {
-      getNewTeams()
-    } else {
-      setSortedTeams(sortTeams(teams))
-    }
+    sortTeams(teams)
   }, [teams])
 
   return (
     <CustomizedTabs fontColor={ettlevColors.green800} small backgroundColor={ettlevColors.grey25} activeKey={tab} onChange={(args) => setTab(args.activeKey as Section)}>
       <CustomizedTab key={'mine'} title={'Mine behandlinger'}>
-        {sortedTeams && <MineBehandlinger teams={sortedTeams} behandlinger={behandlinger.content} loading={loading} />}
+        <MineBehandlinger teams={teams} behandlinger={behandlinger.content} loading={loading} />
       </CustomizedTab>
       <CustomizedTab key={'siste'} title={'Mine sist dokumenterte'}>
         <SisteBehandlinger behandlinger={behandlinger.content} loading={loading} />
@@ -284,7 +265,7 @@ const Alle = () => {
             // EndEnhancer: {style: {marginLeft: theme.sizing.scale400, paddingLeft: 0, paddingRight: 0, backgroundColor: ettlevColors.black}}
           }}
           startEnhancer={<img src={searchIcon} alt="Søk ikon" />}
-          // endEnhancer={<img aria-hidden alt={'Søk ikon'} src={sokButtonIcon}/>}
+        // endEnhancer={<img aria-hidden alt={'Søk ikon'} src={sokButtonIcon}/>}
         />
         {tooShort && (
           <LabelSmall color={ettlevColors.error400} alignSelf={'flex-end'} marginTop={theme.sizing.scale200}>
