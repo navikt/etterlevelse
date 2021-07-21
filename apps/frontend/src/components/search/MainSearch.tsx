@@ -29,6 +29,8 @@ type SearchItem = { id: string; sortKey: string; label: ReactElement; type: Navi
 
 type SearchType = 'all' | ObjectType.Krav | ObjectType.Behandling | ListName.UNDERAVDELING
 
+type GroupedResult = { Krav?: SearchItem[], Behandling?: SearchItem[], Underavdeling?: SearchItem[], all?: SearchItem[], __ungrouped: [] }
+
 type RadioProps = {
   $isHovered: boolean
   $checked: boolean
@@ -113,12 +115,12 @@ const getCodelist = (search: string, list: ListName, typeName: string) => {
     .filter((c) => c.shortName.toLowerCase().indexOf(search.toLowerCase()) >= 0)
     .map(
       (c) =>
-        ({
-          id: c.code,
-          sortKey: c.shortName,
-          label: <SearchLabel name={c.shortName} type={typeName} />,
-          type: list,
-        } as SearchItem),
+      ({
+        id: c.code,
+        sortKey: c.shortName,
+        label: <SearchLabel name={c.shortName} type={typeName} />,
+        type: list,
+      } as SearchItem),
     )
 }
 
@@ -156,7 +158,7 @@ const useMainSearch = (searchParam?: string) => {
       setSearchResult(getCodelist(search, ListName.UNDERAVDELING, 'Underavdeling'))
     } else {
       if (search && search.replace(/ /g, '').length > 2) {
-        ;(async () => {
+        ; (async () => {
           let results: SearchItem[] = []
           let searches: Promise<any>[] = []
           const compareFn = (a: SearchItem, b: SearchItem) => prefixBiasedSort(search, a.sortKey, b.sortKey)
@@ -170,6 +172,7 @@ const useMainSearch = (searchParam?: string) => {
                 return same || typeOrder !== 0 ? typeOrder : compareFn(a, b)
               })
             setSearchResult(results)
+            console.log(results)
           }
           setLoading(true)
 
@@ -200,6 +203,31 @@ const MainSearch = () => {
   const [value, setValue] = useState<Value>(searchParam ? [{ id: searchParam, label: searchParam }] : [])
   const history = useHistory()
   const location = useLocation()
+  const [groupedSeachResult, setGroupSearchResult] = useState<GroupedResult>({__ungrouped: []})
+
+  useEffect(() => {
+    const groupedResults: GroupedResult = {
+      __ungrouped: [],
+      Krav: [],
+      all: [],
+      Behandling: [],
+      Underavdeling: []
+    }
+
+    searchResult.map((r: SearchItem) => {
+      if (r.type === 'Krav') {
+        groupedResults.Krav?.push(r)
+      } else if (r.type === 'Behandling') {
+        groupedResults.Behandling?.push(r)
+      } else if (r.type === 'UNDERAVDELING') {
+        groupedResults.Underavdeling?.push(r)
+      } else {
+        groupedResults.all?.push(r)
+      }
+    })
+
+    setGroupSearchResult(groupedResults)
+  }, [searchResult])
 
   return (
     <Block width="100%">
@@ -214,7 +242,7 @@ const MainSearch = () => {
           maxDropdownHeight="400px"
           searchable
           type={TYPE.search}
-          options={searchResult}
+          options={groupedSeachResult}
           placeholder={'Søk etter krav eller behandling'}
           aria-label={'Søk etter krav eller behandling'}
           value={value}
@@ -224,13 +252,13 @@ const MainSearch = () => {
           }}
           onChange={(params) => {
             const item = params.value[0] as SearchItem
-            ;(async () => {
-              if (item) {
-                history.push(urlForObject(item.type, item.id))
-              } else {
-                setValue([])
-              }
-            })()
+              ; (async () => {
+                if (item) {
+                  history.push(urlForObject(item.type, item.id))
+                } else {
+                  setValue([])
+                }
+              })()
           }}
           filterOptions={(options) => options}
           overrides={{
