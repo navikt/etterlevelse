@@ -96,11 +96,7 @@ const AllInfo = ({ krav }: { krav: KravQL }) => (
     </LabelWrapper>
 
     <Block backgroundColor="#F1F1F1" padding="32px">
-      <Label title="Ansvarlig">
-        <ObjectLink id={krav.underavdeling?.code} type={ListName.UNDERAVDELING}>
-          {krav.underavdeling?.shortName}
-        </ObjectLink>
-      </Label>
+      <Label title="Ansvarlig">{krav.underavdeling?.shortName}</Label>
       <Label title="Regelverk" hide={!krav.regelverk.length}>
         <LovViewList regelverk={krav.regelverk} />
       </Label>
