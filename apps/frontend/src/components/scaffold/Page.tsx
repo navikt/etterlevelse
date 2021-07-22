@@ -17,7 +17,9 @@ export const Page = ({
   rawMain,
   children,
   header,
+  backBtnColor,
 }: {
+  backBtnColor?: string
   backUrl?: string
   headerOverlap?: string
   headerBackgroundColor: string
@@ -43,9 +45,13 @@ export const Page = ({
             {!hideBackBtn && (
               <RouteLink href={backUrl} hideUnderline>
                 <Button
-                  startEnhancer={<img alt={'Chevron venstre ikon'} src={navChevronRightIcon} style={{ transform: 'rotate(180deg)' }} />}
+                  startEnhancer={<ChevronLeft fill={backBtnColor} />}
                   size="compact"
-                  kind="underline-hover"
+                  kind="tertiary"
+                  $style={{
+                    color: !backBtnColor ? ettlevColors.black : backBtnColor,
+                    ':hover': { backgroundColor: 'transparent', textDecoration: 'underline 3px' },
+                  }}
                 >
                   {' '}
                   Tilbake

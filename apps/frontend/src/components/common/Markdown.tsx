@@ -14,6 +14,7 @@ import { markdownLink } from '../../util/config'
 import remarkGfm from 'remark-gfm'
 import rehypeRaw from 'rehype-raw'
 import CustomizedLink from './CustomizedLink'
+import { ettlevColors } from '../../util/theme'
 
 export const Markdown = ({
   vertical,
@@ -23,6 +24,7 @@ export const Markdown = ({
   source,
   sources: sourcesOrig,
   p1,
+  fontColor,
 }: {
   source?: string
   sources?: string[]
@@ -31,19 +33,20 @@ export const Markdown = ({
   shortenLinks?: boolean
   vertical?: boolean
   p1?: boolean
+  fontColor?: string
 }) => {
   const renderers = {
     p: (parProps: any) => {
       const { children } = parProps
       if (p1) {
         return (
-          <Paragraph1 marginTop={noMargin ? 0 : undefined} marginBottom={noMargin ? 0 : undefined}>
+          <Paragraph1 color={fontColor ? fontColor : ettlevColors.green800} marginTop={noMargin ? 0 : undefined} marginBottom={noMargin ? 0 : undefined}>
             {children}
           </Paragraph1>
         )
       }
       return (
-        <Paragraph2 marginTop={noMargin ? 0 : undefined} marginBottom={noMargin ? 0 : undefined}>
+        <Paragraph2 color={fontColor ? fontColor : ettlevColors.green800} marginTop={noMargin ? 0 : undefined} marginBottom={noMargin ? 0 : undefined}>
           {children}
         </Paragraph2>
       )
@@ -54,7 +57,7 @@ export const Markdown = ({
       return (
         <StatefulTooltip content={href}>
           <span>
-            <ExternalLink href={href}>
+            <ExternalLink fontColor={fontColor} href={href}>
               {content} <FontAwesomeIcon size="sm" icon={faExternalLinkAlt} />
             </ExternalLink>
           </span>
@@ -65,12 +68,16 @@ export const Markdown = ({
       const { children, href, node } = linkProps
       const content = shortenLinks && node.children[0]?.value.indexOf('http') === 0 ? 'Lenke' : children
 
-      return <ExternalLink href={href}>{content}</ExternalLink>
+      return (
+        <ExternalLink fontColor={fontColor} href={href}>
+          {content}
+        </ExternalLink>
+      )
     },
     code: (codeProps: any) => {
       const { node, inline, className, children, ...props } = codeProps
       return (
-        <code className={className} {...props} style={{ whiteSpace: 'normal' }}>
+        <code className={className} {...props} style={{ whiteSpace: 'normal', color: fontColor ? fontColor : ettlevColors.green800}}>
           {children}
         </code>
       )

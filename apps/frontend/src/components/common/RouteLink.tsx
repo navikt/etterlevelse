@@ -9,6 +9,7 @@ import CustomizedLink from './CustomizedLink'
 import _ from 'lodash'
 import { user } from '../../services/User'
 import { loginUrl } from '../Header'
+import { ettlevColors } from '../../util/theme'
 
 type RouteLinkProps = {
   href?: string
@@ -55,6 +56,7 @@ type ObjectLinkProps = {
   children?: any
   disable?: boolean
   hideUnderline?: boolean
+  fontColor?: string
 }
 
 export const urlForObject = (type: NavigableItem, id: string, audit?: AuditItem) => {
@@ -88,15 +90,15 @@ export const ObjectLink = (props: ObjectLinkProps) => {
   const link = props.disable ? (
     props.children
   ) : (
-    <RouteLink href={urlForObject(props.type, props.id, props.audit)} hideUnderline={props.hideUnderline}>
+    <RouteLink fontColor={props.fontColor}  href={urlForObject(props.type, props.id, props.audit)} hideUnderline={props.hideUnderline}>
       {props.children}
     </RouteLink>
   )
 
   return props.withHistory ? (
-    <Block display="flex" justifyContent="space-between" width="100%" alignItems="center">
+    <Block color={props.fontColor ? props.fontColor : ettlevColors.green800} display="flex" justifyContent="space-between" width="100%" alignItems="center">
       {link}
-      <AuditButton id={props.id} kind={KIND.tertiary} />
+      <AuditButton fontColor={props.fontColor} id={props.id} kind={KIND.tertiary} />
     </Block>
   ) : (
     link

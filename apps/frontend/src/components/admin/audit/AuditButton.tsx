@@ -7,9 +7,9 @@ import RouteLink from '../../common/RouteLink'
 import Button from '../../common/Button'
 import { intl } from '../../../util/intl/intl'
 
-export const AuditButton = (props: { id: string; auditId?: string; kind?: KIND[keyof KIND]; marginLeft?: boolean; marginRight?: boolean; children?: any }) => {
+export const AuditButton = (props: { id: string; fontColor?: string; auditId?: string; kind?: KIND[keyof KIND]; marginLeft?: boolean; marginRight?: boolean; children?: any }) => {
   return user.isAdmin() ? (
-    <RouteLink href={`/admin/audit/${props.id}` + (props.auditId ? `/${props.auditId}` : '')}>
+    <RouteLink fontColor={props.fontColor} href={`/admin/audit/${props.id}` + (props.auditId ? `/${props.auditId}` : '')}>
       {props.children ? (
         props.children
       ) : (
