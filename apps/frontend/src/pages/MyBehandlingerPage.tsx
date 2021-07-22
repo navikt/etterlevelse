@@ -81,6 +81,8 @@ const BehandlingTabs = () => {
   const behandlinger = data?.behandlinger || emptyPage
   const loading = teamsLoading || behandlingerLoading
 
+  const [sortedTeams, setSortedTeams] = React.useState<CustomTeamObject[]>([])
+
   const sortTeams = (unSortedTeams: Team[]) => {
     return unSortedTeams
       .map((t) => {
@@ -128,13 +130,13 @@ const BehandlingTabs = () => {
   }, [user.isLoaded()])
 
   useEffect(() => {
-    sortTeams(teams)
+    setSortedTeams(sortTeams(teams))
   }, [teams])
 
   return (
     <CustomizedTabs fontColor={ettlevColors.green800} small backgroundColor={ettlevColors.grey25} activeKey={tab} onChange={(args) => setTab(args.activeKey as Section)}>
       <CustomizedTab key={'mine'} title={'Mine behandlinger'}>
-        <MineBehandlinger teams={teams} behandlinger={behandlinger.content} loading={loading} />
+        <MineBehandlinger teams={sortedTeams} behandlinger={behandlinger.content} loading={loading} />
       </CustomizedTab>
       <CustomizedTab key={'siste'} title={'Mine sist dokumenterte'}>
         <SisteBehandlinger behandlinger={behandlinger.content} loading={loading} />
