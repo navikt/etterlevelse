@@ -18,6 +18,8 @@ import { useKravCounter } from './TemaPage'
 import { PanelLink } from '../components/common/PanelLink'
 import { kravNumView } from './KravPage'
 
+const fontColor = ettlevColors.white
+
 export const LovPage = () => {
   const { lov } = useParams<{ lov: string }>()
 
@@ -55,24 +57,24 @@ const LovSide = ({ lov }: { lov: LovCode }) => {
 
   return (
     <Page
-      backBtnColor={ettlevColors.white}
+      backBtnColor={fontColor}
       headerBackgroundColor={ettlevColors.green800}
       backgroundColor={ettlevColors.grey25}
       headerOverlap={'125px'}
       header={
         <>
-          <H1 color={ettlevColors.white}>{lov.shortName}</H1>
+          <H1 color={fontColor}>{lov.shortName}</H1>
 
           <Block
             minHeight={'125px'}
             maxHeight={expand ? undefined : '125px'}
             overflow={'hidden'}
             $style={{
-            
+
               maskImage: expand ? undefined : `linear-gradient(${ettlevColors.black} 40%, transparent)`,
             }}
           >
-            <Markdown fontColor={ettlevColors.white} source={lov.description} />
+            <Markdown fontColor={fontColor} source={lov.description} />
           </Block>
 
           {expand && (
@@ -82,18 +84,18 @@ const LovSide = ({ lov }: { lov: LovCode }) => {
               </Block> */}
               {underavdeling && (
                 <Block>
-                  <H2 color={ettlevColors.white} marginBottom={theme.sizing.scale200}>Ansvarlig for lovtolkning i NAV</H2>
-                  <Paragraph2 color={ettlevColors.white}>
-                    <ObjectLink fontColor={ettlevColors.white} type={ListName.UNDERAVDELING} id={underavdeling.code}>
+                  <H2 color={fontColor} marginBottom={theme.sizing.scale200}>Ansvarlig for lovtolkning i NAV</H2>
+                  <Paragraph2 color={fontColor}>
+                    <ObjectLink fontColor={fontColor} type={ListName.UNDERAVDELING} id={underavdeling.code}>
                       {underavdeling?.shortName}
                     </ObjectLink>
                   </Paragraph2>
                 </Block>
               )}
 
-              <H2 marginBottom={theme.sizing.scale200}>Loven i sin helhet</H2>
-              <Paragraph2>
-                <ExternalLink href={lovdataBase(lov.code)}>
+              <H2 color={fontColor} marginBottom={theme.sizing.scale200}>Loven i sin helhet</H2>
+              <Paragraph2 color={fontColor}>
+                <ExternalLink fontColor={fontColor} href={lovdataBase(lov.code)}>
                   {lov.shortName} i lovdata <FontAwesomeIcon size={'sm'} icon={faExternalLinkAlt} />
                 </ExternalLink>
               </Paragraph2>
@@ -101,7 +103,7 @@ const LovSide = ({ lov }: { lov: LovCode }) => {
           )}
 
           <Block alignSelf={'flex-end'} marginTop={theme.sizing.scale600}>
-            <Button onClick={() => setExpand(!expand)} icon={expand ? faChevronUp : faChevronDown} kind={'underline-hover'}>
+            <Button $style={{ color: fontColor }} onClick={() => setExpand(!expand)} icon={expand ? faChevronUp : faChevronDown} kind={'underline-hover'}>
               {expand ? 'Mindre' : 'Mer'} om loven
             </Button>
           </Block>

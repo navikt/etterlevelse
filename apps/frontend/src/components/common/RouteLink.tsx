@@ -16,10 +16,11 @@ type RouteLinkProps = {
   hideUnderline?: boolean
   plain?: boolean
   requireLogin?: boolean
+  fontColor?: string
 } & any
 
 const RouteLink = (props: RouteLinkProps) => {
-  const { hideUnderline, plain, requireLogin, style, ...restprops } = props
+  const { hideUnderline, plain, requireLogin, style, fontColor, ...restprops } = props
   const history = useHistory()
 
   const onClick = (e: Event) => {
@@ -35,7 +36,7 @@ const RouteLink = (props: RouteLinkProps) => {
 
   const customStyle = {
     textDecoration: hideUnderline ? 'none' : undefined,
-    color: plain ? 'inherit !important' : undefined,
+    color: fontColor ? fontColor : plain ? 'inherit !important' : undefined,
     fontWeight: 'normal',
   }
 
@@ -90,7 +91,7 @@ export const ObjectLink = (props: ObjectLinkProps) => {
   const link = props.disable ? (
     props.children
   ) : (
-    <RouteLink fontColor={props.fontColor}  href={urlForObject(props.type, props.id, props.audit)} hideUnderline={props.hideUnderline}>
+    <RouteLink fontColor={props.fontColor} href={urlForObject(props.type, props.id, props.audit)} hideUnderline={props.hideUnderline}>
       {props.children}
     </RouteLink>
   )
