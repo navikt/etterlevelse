@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom'
 import { Block, BlockProps } from 'baseui/block'
 import React, { useEffect, useState } from 'react'
-import { HeadingLarge, HeadingXLarge, HeadingXXLarge, Label3, LabelLarge, Paragraph4, ParagraphMedium, ParagraphSmall } from 'baseui/typography'
+import { H3, H2, H1, Label3, LabelLarge, Paragraph4, Paragraph2, ParagraphSmall } from 'baseui/typography'
 import { codelist, ListName, TemaCode } from '../services/Codelist'
 import { ObjectLink, urlForObject } from '../components/common/RouteLink'
 import { theme } from '../util'
@@ -45,7 +45,7 @@ const TemaSide = ({ tema }: { tema: TemaCode }) => {
       headerOverlap={'125px'}
       header={
         <>
-          <HeadingXXLarge>{tema.shortName}</HeadingXXLarge>
+          <H1>{tema.shortName}</H1>
 
           <Block
             minHeight={'125px'}
@@ -60,14 +60,14 @@ const TemaSide = ({ tema }: { tema: TemaCode }) => {
 
           {expand && (
             <Block marginBottom={theme.sizing.scale900}>
-              <HeadingLarge marginBottom={theme.sizing.scale200}>Ansvarlig for lovtolkning</HeadingLarge>
+              <H3 marginBottom={theme.sizing.scale200}>Ansvarlig for lovtolkning</H3>
               {_.uniq(lover.map((l) => l.data?.underavdeling)).map((code) => (
-                <ParagraphMedium key={code} marginTop={0} marginBottom={theme.sizing.scale200}>
+                <Paragraph2 key={code} marginTop={0} marginBottom={theme.sizing.scale200}>
                   {codelist.getCode(ListName.UNDERAVDELING, code)?.shortName}
-                </ParagraphMedium>
+                </Paragraph2>
               ))}
 
-              <HeadingLarge marginBottom={theme.sizing.scale200}>Lovdata</HeadingLarge>
+              <H3 marginBottom={theme.sizing.scale200}>Lovdata</H3>
               {lover.map((l) => (
                 <Block key={l.code} marginBottom={theme.sizing.scale200}>
                   <ObjectLink type={ListName.LOV} id={l.code}>
@@ -87,7 +87,7 @@ const TemaSide = ({ tema }: { tema: TemaCode }) => {
       }
     >
       <Block>
-        <HeadingLarge>{loading ? '?' : data?.krav.numberOfElements || 0} krav</HeadingLarge>
+        <H3>{loading ? '?' : data?.krav.numberOfElements || 0} krav</H3>
         {loading && <SkeletonPanel count={10} />}
         {!loading &&
           data?.krav.content.map((k) => (
@@ -130,7 +130,7 @@ const TemaListe = () => {
   const temaListe = codelist.getCodes(ListName.TEMA).sort((a, b) => a.shortName.localeCompare(b.shortName, 'nb'))
 
   return (
-    <Layout2 mainHeader={<HeadingXXLarge>Alle krav</HeadingXXLarge>} headerBackgroundColor={ettlevColors.grey50} childrenBackgroundColor={ettlevColors.grey25}>
+    <Layout2 mainHeader={<H1>Alle krav</H1>} headerBackgroundColor={ettlevColors.grey50} childrenBackgroundColor={ettlevColors.grey25}>
       {visFilter && <RelevansFilter relevans={relevans} onClickFilter={onClickFilter} kravAntall={kravAntall} />}
 
       <Block {...sectionProps} marginTop={theme.sizing.scale600}>
@@ -188,14 +188,14 @@ const TemaInfo = (props: { kravAntall: number; temaAntall: number }) => (
     width={cardWidth}
   >
     <Block padding={theme.sizing.scale600}>
-      <HeadingXLarge>
+      <H2>
         Vi har totalt {props.kravAntall} krav gruppert i {props.temaAntall} kategorier
-      </HeadingXLarge>
+      </H2>
 
-      <ParagraphMedium>
+      <Paragraph2>
         Alle vi som utvikler digitale produkter i NAV må forholde seg til en del forskjellige lover og regler. Disse skal bidra til å sikre at den generelle rettsikkerheten til
         brukerne våre ivaretas.
-      </ParagraphMedium>
+      </Paragraph2>
     </Block>
   </Block>
 )
