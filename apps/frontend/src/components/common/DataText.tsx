@@ -1,5 +1,5 @@
 import { default as React, ReactNode } from 'react'
-import { Block } from 'baseui/block'
+import { Block, Display, Responsive } from 'baseui/block'
 import { theme } from '../../util'
 import { Label1, H2 } from 'baseui/typography'
 
@@ -11,6 +11,7 @@ type DataTextProps = {
   compact?: boolean
   notFlexed?: boolean
   header?: boolean
+  display?: Responsive<Display>
 }
 
 const DataText = (props: DataTextProps) => {
@@ -34,7 +35,7 @@ const DataText = (props: DataTextProps) => {
   }
 
   return (
-    <Block display={props.notFlexed ? 'block' : 'flex'} marginBottom={props.compact ? '.5rem' : '2rem'} width="100%">
+    <Block display={props.display ? props.display : props.notFlexed ? 'block' : 'flex'} marginBottom={props.compact ? '.5rem' : '2rem'} width="100%">
       {props.label && getLabel()}
       <Block font="ParagraphMedium">{props.children}</Block>
     </Block>

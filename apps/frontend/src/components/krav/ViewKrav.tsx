@@ -1,5 +1,5 @@
 import { AdresseType, Begrep, KravQL } from '../../constants'
-import { Block } from 'baseui/block'
+import { Block, Display, Responsive } from 'baseui/block'
 import React from 'react'
 import { kravStatus } from '../../pages/KravPage'
 import { theme } from '../../util'
@@ -20,6 +20,8 @@ const LabelWrapper = ({ children }: { children: React.ReactNode }) => (
     {children}
   </Block>
 )
+
+const responsiveView: Responsive<Display> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
 
 export const ViewKrav = ({ krav }: { krav: KravQL }) => {
   return (
@@ -96,11 +98,13 @@ const AllInfo = ({ krav }: { krav: KravQL }) => (
     </LabelWrapper>
 
     <Block backgroundColor="#F1F1F1" padding="32px">
-      <Label title="Ansvarlig">{krav.underavdeling?.shortName}</Label>
-      <Label title="Regelverk" hide={!krav.regelverk.length}>
+      <Label display={responsiveView} title="Ansvarlig">{krav.underavdeling?.shortName}</Label>
+
+      <Label display={responsiveView} title="Regelverk" hide={!krav.regelverk.length}>
         <LovViewList regelverk={krav.regelverk} />
       </Label>
-      <Label title="Varslingsadresser" hide={!user.isKraveier()}>
+
+      <Label display={responsiveView} title="Varslingsadresser" hide={!user.isKraveier()}>
         <DotTags
           items={krav.varslingsadresser.map((va, i) => {
             if (va.type === AdresseType.SLACK)
@@ -123,7 +127,8 @@ const AllInfo = ({ krav }: { krav: KravQL }) => (
           })}
         />
       </Label>
-      <Label title="Status">{kravStatus(krav.status)}</Label>
+
+      <Label title="Status" display={responsiveView}>{kravStatus(krav.status)}</Label>
       {/* {krav.periode?.start && <Label title='Gyldig fom'>{formatDate(krav.periode?.start)}</Label>}
       {krav.periode?.slutt && <Label title='Gyldig tom'>{formatDate(krav.periode?.slutt)}</Label>} */}
     </Block>
