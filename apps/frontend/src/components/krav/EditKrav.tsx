@@ -41,6 +41,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
   const submit = async (krav: KravQL) => {
     const regelverk = codelist.getCode(ListName.LOV, krav.regelverk[0]?.lov.code)
     const underavdeling = codelist.getCode(ListName.UNDERAVDELING, regelverk?.data?.underavdeling)
+
     const mutatedKrav = {
       ...krav,
       underavdeling: underavdeling,
