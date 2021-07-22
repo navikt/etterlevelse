@@ -70,7 +70,6 @@ const LovSide = ({ lov }: { lov: LovCode }) => {
             maxHeight={expand ? undefined : '125px'}
             overflow={'hidden'}
             $style={{
-
               maskImage: expand ? undefined : `linear-gradient(${ettlevColors.black} 40%, transparent)`,
             }}
           >
@@ -84,7 +83,9 @@ const LovSide = ({ lov }: { lov: LovCode }) => {
               </Block> */}
               {underavdeling && (
                 <Block>
-                  <H2 color={fontColor} marginBottom={theme.sizing.scale200}>Ansvarlig for lovtolkning i NAV</H2>
+                  <H2 color={fontColor} marginBottom={theme.sizing.scale200}>
+                    Ansvarlig for lovtolkning i NAV
+                  </H2>
                   <Paragraph2 color={fontColor}>
                     <ObjectLink fontColor={fontColor} type={ListName.UNDERAVDELING} id={underavdeling.code}>
                       {underavdeling?.shortName}
@@ -93,7 +94,9 @@ const LovSide = ({ lov }: { lov: LovCode }) => {
                 </Block>
               )}
 
-              <H2 color={fontColor} marginBottom={theme.sizing.scale200}>Loven i sin helhet</H2>
+              <H2 color={fontColor} marginBottom={theme.sizing.scale200}>
+                Loven i sin helhet
+              </H2>
               <Paragraph2 color={fontColor}>
                 <ExternalLink fontColor={fontColor} href={lovdataBase(lov.code)}>
                   {lov.shortName} i lovdata <FontAwesomeIcon size={'sm'} icon={faExternalLinkAlt} />

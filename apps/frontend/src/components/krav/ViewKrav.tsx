@@ -63,8 +63,10 @@ const AllInfo = ({ krav }: { krav: KravQL }) => {
   React.useEffect(() => {
     getKravByKravNummer(krav.kravNummer).then((resp) => {
       if (resp.content.length) {
-        const tidligereVersjoner = resp.content.slice(0, -1).map((k) => { return { kravVersjon: k.kravVersjon, kravNummer: k.kravNummer } })
-        if (!tidligereVersjoner.find(k => k.kravVersjon === krav.kravVersjon)) {
+        const tidligereVersjoner = resp.content.slice(0, -1).map((k) => {
+          return { kravVersjon: k.kravVersjon, kravNummer: k.kravNummer }
+        })
+        if (!tidligereVersjoner.find((k) => k.kravVersjon === krav.kravVersjon)) {
           setTidligereKravVersjoner(tidligereVersjoner)
         } else {
           setTidligereKravVersjoner([])
@@ -119,20 +121,24 @@ const AllInfo = ({ krav }: { krav: KravQL }) => {
         </LabelAboveContent>
       </LabelWrapper>
 
-      {tidligereKravVersjoner.length !== 0 && <LabelWrapper>
-        <LabelAboveContent title="Tidligere versjoner">
-          {tidligereKravVersjoner.map((k) => (
-            <DotTag>
-              <RouteLink href={'/krav/' + k.kravNummer + '/' + k.kravVersjon}>
-                K{k.kravNummer}.{k.kravVersjon}
-              </RouteLink>
-            </DotTag>
-          ))}
-        </LabelAboveContent>
-      </LabelWrapper>}
+      {tidligereKravVersjoner.length !== 0 && (
+        <LabelWrapper>
+          <LabelAboveContent title="Tidligere versjoner">
+            {tidligereKravVersjoner.map((k) => (
+              <DotTag>
+                <RouteLink href={'/krav/' + k.kravNummer + '/' + k.kravVersjon}>
+                  K{k.kravNummer}.{k.kravVersjon}
+                </RouteLink>
+              </DotTag>
+            ))}
+          </LabelAboveContent>
+        </LabelWrapper>
+      )}
 
       <Block backgroundColor="#F1F1F1" padding="32px">
-        <Label display={responsiveView} title="Ansvarlig">{krav.underavdeling?.shortName}</Label>
+        <Label display={responsiveView} title="Ansvarlig">
+          {krav.underavdeling?.shortName}
+        </Label>
 
         <Label display={responsiveView} title="Regelverk" hide={!krav.regelverk.length}>
           <LovViewList regelverk={krav.regelverk} />
@@ -162,7 +168,9 @@ const AllInfo = ({ krav }: { krav: KravQL }) => {
           />
         </Label>
 
-        <Label title="Status" display={responsiveView}>{kravStatus(krav.status)}</Label>
+        <Label title="Status" display={responsiveView}>
+          {kravStatus(krav.status)}
+        </Label>
         {/* {krav.periode?.start && <Label title='Gyldig fom'>{formatDate(krav.periode?.start)}</Label>}
       {krav.periode?.slutt && <Label title='Gyldig tom'>{formatDate(krav.periode?.slutt)}</Label>} */}
       </Block>

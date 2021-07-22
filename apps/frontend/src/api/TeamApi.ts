@@ -131,7 +131,6 @@ export const useMyTeams = () => {
               })
               setData(uniqueFilteredTeamList)
             })
-
           } else {
             setData(r)
           }
