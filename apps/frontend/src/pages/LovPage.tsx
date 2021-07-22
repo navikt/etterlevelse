@@ -1,17 +1,22 @@
 import { useParams } from 'react-router-dom'
 import { Block } from 'baseui/block'
 import React from 'react'
-import { HeadingMedium, HeadingSmall, HeadingXSmall, ParagraphMedium } from 'baseui/typography'
-import { codelist, ListName } from '../services/Codelist'
+import { H1, H2, Paragraph2 } from 'baseui/typography'
+import { codelist, ListName, LovCode } from '../services/Codelist'
 import { ExternalLink, ObjectLink } from '../components/common/RouteLink'
 import { theme } from '../util'
-import { KravFilterTable } from '../components/common/KravFilterTable'
 import { LovBilde } from '../components/Images'
 import { lovdataBase } from '../components/Lov'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons'
+import { faChevronDown, faChevronUp, faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons'
 import { Markdown } from '../components/common/Markdown'
-import { maxPageWidth } from '../util/theme'
+import { ettlevColors, maxPageWidth } from '../util/theme'
+import Button from '../components/common/Button'
+import { Page } from '../components/scaffold/Page'
+import { SkeletonPanel } from '../components/common/LoadingSkeleton'
+import { useKravCounter } from './TemaPage'
+import { PanelLink } from '../components/common/PanelLink'
+import { kravNumView } from './KravPage'
 
 export const LovPage = () => {
   const { lov } = useParams<{ lov: string }>()
@@ -21,7 +26,7 @@ export const LovPage = () => {
       <Block maxWidth={maxPageWidth} width="100%">
         <Block paddingLeft="40px" paddingRight="40px" width="calc(100%-80px)" display="flex" justifyContent="center">
           <Block>
-            <HeadingMedium>Velg lov</HeadingMedium>
+            <H1>Velg lov</H1>
             <Block>
               {codelist.getCodes(ListName.LOV).map((code) => (
                 <Block key={code.code} marginBottom={theme.sizing.scale400}>
@@ -39,55 +44,80 @@ export const LovPage = () => {
 
   const code = codelist.getCode(ListName.LOV, lov)
   if (!code) return <>'invalid code'</>
+  return <LovSide lov={code} />
+}
 
-  const data = code.data || {}
-  const underavdeling = codelist.getCode(ListName.UNDERAVDELING, data.underavdeling)
+const LovSide = ({ lov }: { lov: LovCode }) => {
+  const [expand, setExpand] = React.useState(false)
+  const { data, loading } = useKravCounter({ lover: [lov.code] })
+
+  const underavdeling = codelist.getCode(ListName.UNDERAVDELING, lov.data?.underavdeling)
 
   return (
-    <Block maxWidth={maxPageWidth} width="100%">
-      <Block paddingLeft="40px" paddingRight="40px" width="calc(100%-80px)" display="flex" justifyContent="center" marginTop="50px">
-        <Block>
-          <Block display="flex" justifyContent="space-between">
-            <Block>
-              <HeadingMedium marginTop={0}>Lov: {code.shortName}</HeadingMedium>
-              <Markdown source={code.description} />
-            </Block>
-            <Block>
-              <Block marginLeft={theme.sizing.scale400}>
-                <LovBilde code={code} ellipse height={'220px'} />
-              </Block>
+    <Page
+      backBtnColor={ettlevColors.white}
+      headerBackgroundColor={ettlevColors.green800}
+      backgroundColor={ettlevColors.grey25}
+      headerOverlap={'125px'}
+      header={
+        <>
+          <H1 color={ettlevColors.white}>{lov.shortName}</H1>
 
+          <Block
+            minHeight={'125px'}
+            maxHeight={expand ? undefined : '125px'}
+            overflow={'hidden'}
+            $style={{
+            
+              maskImage: expand ? undefined : `linear-gradient(${ettlevColors.black} 40%, transparent)`,
+            }}
+          >
+            <Markdown fontColor={ettlevColors.white} source={lov.description} />
+          </Block>
+
+          {expand && (
+            <Block marginBottom={theme.sizing.scale900}>
+              {/* <Block marginLeft={theme.sizing.scale400}>
+                <LovBilde code={lov} ellipse height={'220px'} />
+              </Block> */}
               {underavdeling && (
-                <>
-                  <HeadingXSmall marginTop={theme.sizing.scale400} marginBottom={theme.sizing.scale200}>
-                    Ansvarlig for lovtolkning i NAV
-                  </HeadingXSmall>
-                  <ParagraphMedium>
-                    <ObjectLink type={ListName.UNDERAVDELING} id={underavdeling.code}>
+                <Block>
+                  <H2 color={ettlevColors.white} marginBottom={theme.sizing.scale200}>Ansvarlig for lovtolkning i NAV</H2>
+                  <Paragraph2 color={ettlevColors.white}>
+                    <ObjectLink fontColor={ettlevColors.white} type={ListName.UNDERAVDELING} id={underavdeling.code}>
                       {underavdeling?.shortName}
                     </ObjectLink>
-                  </ParagraphMedium>
-                </>
+                  </Paragraph2>
+                </Block>
               )}
 
-              <HeadingXSmall marginTop={theme.sizing.scale400} marginBottom={theme.sizing.scale200}>
-                Loven i sin helhet
-              </HeadingXSmall>
-              <ParagraphMedium>
-                <ExternalLink href={lovdataBase(code.code)}>
-                  {code.shortName} i lovdata <FontAwesomeIcon size={'sm'} icon={faExternalLinkAlt} />
+              <H2 marginBottom={theme.sizing.scale200}>Loven i sin helhet</H2>
+              <Paragraph2>
+                <ExternalLink href={lovdataBase(lov.code)}>
+                  {lov.shortName} i lovdata <FontAwesomeIcon size={'sm'} icon={faExternalLinkAlt} />
                 </ExternalLink>
-              </ParagraphMedium>
+              </Paragraph2>
             </Block>
+          )}
+
+          <Block alignSelf={'flex-end'} marginTop={theme.sizing.scale600}>
+            <Button onClick={() => setExpand(!expand)} icon={expand ? faChevronUp : faChevronDown} kind={'underline-hover'}>
+              {expand ? 'Mindre' : 'Mer'} om loven
+            </Button>
           </Block>
-          <Block marginTop={theme.sizing.scale1200}>
-            <Block>
-              <HeadingSmall marginBottom={theme.sizing.scale200}>Krav</HeadingSmall>
-              <KravFilterTable filter={{ lov }} exclude={['avdeling', 'underavdeling', 'regelverk']} />
+        </>
+      }
+    >
+      <Block>
+        <H2>{loading ? '?' : data?.krav.numberOfElements || 0} krav</H2>
+        {loading && <SkeletonPanel count={10} />}
+        {!loading &&
+          data?.krav.content.map((k) => (
+            <Block key={k.id} marginBottom={'8px'}>
+              <PanelLink href={`/krav/${k.kravNummer}/${k.kravVersjon}`} beskrivelse={kravNumView(k)} title={k.navn} flip />
             </Block>
-          </Block>
-        </Block>
+          ))}
       </Block>
-    </Block>
+    </Page>
   )
 }
