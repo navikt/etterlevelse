@@ -19,7 +19,7 @@ import { faEdit, faEye, faPlus } from '@fortawesome/free-solid-svg-icons'
 import { Modal, ModalBody, ModalHeader } from 'baseui/modal'
 import { EditEtterlevelse } from '../etterlevelse/EditEtterlevelse'
 import { useEtterlevelse } from '../../api/EtterlevelseApi'
-import { getKravByKravNummer, kravFullQuery, KravId } from '../../api/KravApi'
+import { getKravByKravNumberAndVersion, kravFullQuery, KravId } from '../../api/KravApi'
 import { kravName, kravNumView } from '../../pages/KravPage'
 import { ViewEtterlevelse } from '../etterlevelse/ViewEtterlevelse'
 import { ObjectType } from '../admin/audit/AuditTypes'
@@ -248,7 +248,7 @@ const EtterlevelseModal = (props: { id?: string }) => {
   const [krav, setKrav] = useState<Krav>()
 
   useEffect(() => {
-    etterlevelse && getKravByKravNummer(etterlevelse?.kravNummer, etterlevelse?.kravVersjon).then(setKrav)
+    etterlevelse && getKravByKravNumberAndVersion(etterlevelse?.kravNummer, etterlevelse?.kravVersjon).then(setKrav)
   }, [etterlevelse])
 
   if (!etterlevelse) return <Spinner size={theme.sizing.scale800} />

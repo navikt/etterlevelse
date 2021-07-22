@@ -21,8 +21,12 @@ export const searchKrav = async (name: string) => {
   return (await axios.get<PageResponse<Krav>>(`${env.backendBaseUrl}/krav/search/${name}`)).data.content
 }
 
-export const getKravByKravNummer = async (kravNummer: number | string, kravVersjon: number | string) => {
+export const getKravByKravNumberAndVersion = async (kravNummer: number | string, kravVersjon: number | string) => {
   return (await axios.get<Krav>(`${env.backendBaseUrl}/krav/kravnummer/${kravNummer}/${kravVersjon}`)).data
+}
+
+export const getKravByKravNummer = async (kravNummer: number | string) => {
+  return (await axios.get<PageResponse<Krav>>(`${env.backendBaseUrl}/krav/kravnummer/${kravNummer}`)).data
 }
 
 export const createKrav = async (krav: KravQL) => {
@@ -79,7 +83,7 @@ export const useKrav = (params: KravId | KravIdParams, onlyLoadOnce?: boolean) =
   let load = () => {
     if (data && onlyLoadOnce) return
     params?.id && !isCreateNew && getKrav(params.id).then(setData)
-    params?.kravNummer && getKravByKravNummer(params.kravNummer, params.kravVersjon).then(setData)
+    params?.kravNummer && getKravByKravNumberAndVersion(params.kravNummer, params.kravVersjon).then(setData)
   }
   useEffect(load, [params])
 

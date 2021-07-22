@@ -13,7 +13,7 @@ import { kravNumView } from './KravPage'
 import { ettlevColors, maxPageWidth, pageWidth } from '../util/theme'
 import { chevronLeft } from '../components/Images'
 import CustomizedLink from '../components/common/CustomizedLink'
-import { getKravByKravNummer } from '../api/KravApi'
+import { getKravByKravNumberAndVersion } from '../api/KravApi'
 
 export const etterlevelseName = (etterlevelse: Etterlevelse) => `${kravNumView(etterlevelse)}`
 
@@ -48,7 +48,7 @@ export const EtterlevelsePage = () => {
   const loading = !edit && !etterlevelse
 
   useEffect(() => {
-    etterlevelse && getKravByKravNummer(etterlevelse?.kravNummer, etterlevelse?.kravVersjon).then(setKrav)
+    etterlevelse && getKravByKravNumberAndVersion(etterlevelse?.kravNummer, etterlevelse?.kravVersjon).then(setKrav)
   }, [etterlevelse])
 
   return (
