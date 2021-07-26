@@ -99,6 +99,10 @@ const AllInfo = ({ krav, tidligereKravVersjoner }: { krav: KravQL, tidligereKrav
         </LabelAboveContent>
       </LabelWrapper>
 
+      <LabelWrapper>
+        <LabelAboveContent header title="Dette er nytt fra forrige versjon" markdown={krav.versjonEndringer} />
+      </LabelWrapper>
+
       {tidligereKravVersjoner.length !== 0 && krav.kravVersjon > 1 && (
         <LabelWrapper>
           <LabelAboveContent title="Tidligere versjoner">

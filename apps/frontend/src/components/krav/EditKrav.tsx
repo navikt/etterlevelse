@@ -171,6 +171,17 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
                       markdown
                       tooltip={'Vis til gode eksisterende implementasjoner som ivaretar kravet.'}
                     />
+
+                    <TextAreaField
+                      label="Endringer siden siste versjon"
+                      name="versjonEndringer"
+                      height="250px"
+                      marginBottom="0px"
+                      markdown
+                      shortenLinks
+                      tooltip={'Beskrivelse av hva som er nytt siden siste versjon.'}
+                    />
+                    
                     {/* <MultiInputField label='Rettskilder' name='rettskilder' link /> */}
 
                     <Block marginTop="80px" marginBottom={inputMarginBottom}>
