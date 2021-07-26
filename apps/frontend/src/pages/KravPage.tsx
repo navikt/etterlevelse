@@ -68,7 +68,7 @@ export const KravPage = () => {
   const tilbakemeldingId = useQueryParam('tilbakemeldingId')
   const [tab, setTab] = useState<Section>(!!tilbakemeldingId ? 'tilbakemeldinger' : state?.tab || 'krav')
 
-  const [tidligereKravVersjoner, setTidligereKravVersjoner] = React.useState<KravVersjon[]>([])
+  const [tidligereKravVersjoner, setTidligereKravVersjoner] = React.useState<KravVersjon[]>([{kravNummer: 0, kravVersjon: 0}])
 
   React.useEffect(() => {
     if (krav) {
@@ -133,8 +133,8 @@ export const KravPage = () => {
                       </Button>
                     </RouteLink>
                   </Block>
-                  <Block flex="1" display={['none', 'none', 'none', 'none', 'flex', 'flex']} justifyContent="flex-end">
-                    {krav?.id && user.isKraveier() && (
+                  {krav?.id && ((user.isKraveier() && krav.kravVersjon >= tidligereKravVersjoner[0].kravVersjon) || user.isAdmin()) &&
+                    (<Block flex="1" display={['none', 'none', 'none', 'none', 'flex', 'flex']} justifyContent="flex-end">
                       <Button
                         startEnhancer={<img alt="add" src={plusIcon} />}
                         onClick={newVersion}
@@ -145,9 +145,7 @@ export const KravPage = () => {
                       >
                         Ny versjon
                       </Button>
-                    )}
-                    {krav?.id && user.isKraveier() && <DeleteItem fun={() => deleteKrav(krav.id)} redirect={'/krav'} />}
-                    {krav?.id && user.isKraveier() && (
+                      <DeleteItem fun={() => deleteKrav(krav.id)} redirect={'/krav'} />
                       <Button
                         startEnhancer={<img src={editIcon} alt="edit" />}
                         size="compact"
@@ -158,8 +156,7 @@ export const KravPage = () => {
                       >
                         Rediger
                       </Button>
-                    )}
-                  </Block>
+                    </Block>)}
                 </Block>
               </Block>
             </Block>
