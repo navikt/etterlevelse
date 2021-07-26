@@ -76,12 +76,21 @@ const SelectType = (props: { type: SearchType; setType: (type: SearchType) => vo
   <Block
     font="ParagraphSmall"
     position="absolute"
-    marginTop="-4px"
+    marginTop="64px"
     backgroundColor="#FFFFFF"
-    width={'100%'}
+    display='flex'
     $style={{
       borderBottomLeftRadius: '4px',
       borderBottomRightRadius: '4px',
+      borderBottomStyle: 'solid',
+      borderLeftStyle: 'solid',
+      borderRightStyle: 'solid',
+      borderLeftWidth: '2px',
+      borderRightWidth: '2px',
+      borderBottomWidth: '2px',
+      borderLeftColor: '#6B6B6B',
+      borderRightColor: '#6B6B6B',
+      borderBottomColor: '#6B6B6B',
     }}
   >
     <Block marginLeft="3px" marginRight="3px" marginBottom="3px">
@@ -292,8 +301,9 @@ const MainSearch = () => {
           $style={{ height: theme.sizing.scale1000, width: theme.sizing.scale1000 }}
           label="Filter søkeresultat"
         />
+        {filter && <SelectType type={type} setType={setType} />}
       </Block>
-      {filter && <SelectType type={type} setType={setType} />}
+      
     </Block>
   )
 }
