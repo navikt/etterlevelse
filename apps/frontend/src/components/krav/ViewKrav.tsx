@@ -63,14 +63,10 @@ const AllInfo = ({ krav }: { krav: KravQL }) => {
   React.useEffect(() => {
     getKravByKravNummer(krav.kravNummer).then((resp) => {
       if (resp.content.length) {
-        const tidligereVersjoner = resp.content.slice(0, -1).map((k) => {
+        const tidligereVersjoner = resp.content.map((k) => {
           return { kravVersjon: k.kravVersjon, kravNummer: k.kravNummer }
-        })
-        if (!tidligereVersjoner.find((k) => k.kravVersjon === krav.kravVersjon)) {
-          setTidligereKravVersjoner(tidligereVersjoner)
-        } else {
-          setTidligereKravVersjoner([])
-        }
+        }).sort((a, b) => (a.kravVersjon > b.kravVersjon) ? -1 : 1 )
+        setTidligereKravVersjoner(tidligereVersjoner)
       }
     })
   }, [krav])
@@ -121,16 +117,20 @@ const AllInfo = ({ krav }: { krav: KravQL }) => {
         </LabelAboveContent>
       </LabelWrapper>
 
-      {tidligereKravVersjoner.length !== 0 && (
+      {tidligereKravVersjoner.length !== 0 && krav.kravVersjon > 1 &&(
         <LabelWrapper>
           <LabelAboveContent title="Tidligere versjoner">
-            {tidligereKravVersjoner.map((k) => (
-              <DotTag>
-                <RouteLink href={'/krav/' + k.kravNummer + '/' + k.kravVersjon}>
-                  K{k.kravNummer}.{k.kravVersjon}
-                </RouteLink>
-              </DotTag>
-            ))}
+            {tidligereKravVersjoner.map((k) => {
+              if (k.kravVersjon && k.kravVersjon < krav.kravVersjon) {
+                return (
+                  <DotTag>
+                    <RouteLink href={'/krav/' + k.kravNummer + '/' + k.kravVersjon}>
+                      K{k.kravNummer}.{k.kravVersjon}
+                    </RouteLink>
+                  </DotTag>
+                )
+              }
+                })}
           </LabelAboveContent>
         </LabelWrapper>
       )}
