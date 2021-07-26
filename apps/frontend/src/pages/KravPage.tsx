@@ -1,9 +1,9 @@
 import { Block } from 'baseui/block'
 import { H1, HeadingXLarge } from 'baseui/typography'
 import { useParams } from 'react-router-dom'
-import { deleteKrav, KravIdParams, mapToFormVal } from '../api/KravApi'
+import { deleteKrav, KravIdParams, mapToFormVal, getKravByKravNummer } from '../api/KravApi'
 import React, { useEffect, useRef, useState } from 'react'
-import { EtterlevelseQL, EtterlevelseStatus, ExternalCode, Krav, KravId, KravQL, KravStatus } from '../constants'
+import { EtterlevelseQL, EtterlevelseStatus, ExternalCode, Krav, KravId, KravQL, KravStatus, KravVersjon } from '../constants'
 import Button from '../components/common/Button'
 import { ViewKrav } from '../components/krav/ViewKrav'
 import { EditKrav } from '../components/krav/EditKrav'
@@ -67,6 +67,21 @@ export const KravPage = () => {
   const { state, history, changeState } = useLocationState<LocationState>()
   const tilbakemeldingId = useQueryParam('tilbakemeldingId')
   const [tab, setTab] = useState<Section>(!!tilbakemeldingId ? 'tilbakemeldinger' : state?.tab || 'krav')
+
+  const [tidligereKravVersjoner, setTidligereKravVersjoner] = React.useState<KravVersjon[]>([])
+
+  React.useEffect(() => {
+    if (krav) {
+      getKravByKravNummer(krav.kravNummer).then((resp) => {
+        if (resp.content.length) {
+          const tidligereVersjoner = resp.content.map((k) => {
+            return { kravVersjon: k.kravVersjon, kravNummer: k.kravNummer }
+          }).sort((a, b) => (a.kravVersjon > b.kravVersjon) ? -1 : 1)
+          setTidligereKravVersjoner(tidligereVersjoner)
+        }
+      })
+    }
+  }, [krav])
 
   useEffect(() => {
     if (tab !== state?.tab) changeState({ tab })
@@ -192,7 +207,7 @@ export const KravPage = () => {
                 onChange={(k) => setTab(k.activeKey as Section)}
               >
                 <CustomizedTab title={'Om kravet'} key={'krav'}>
-                  <ViewKrav krav={krav} />
+                  <ViewKrav krav={krav} tidligereKravVersjoner={tidligereKravVersjoner} />
                 </CustomizedTab>
                 <CustomizedTab title={'Eksempler på etterlevelse'} key={'etterlevelser'}>
                   <Etterlevelser loading={etterlevelserLoading} etterlevelser={krav.etterlevelser} />
@@ -269,7 +284,7 @@ const Etterlevelser = ({ loading, etterlevelser: allEtterlevelser }: { loading: 
                   beskrivelse={e.behandling.overordnetFormaal.shortName}
                   rightTitle={!!e.behandling.teamsData.length ? e.behandling.teamsData.map((t) => t.name).join(', ') : 'Ingen team'}
                   rightBeskrivelse={`Utfylt: ${moment(e.changeStamp.lastModifiedDate).format('ll')}`}
-                  // panelIcon={(hover) => <PageIcon hover={hover} />}
+                // panelIcon={(hover) => <PageIcon hover={hover} />}
                 />
               ))}
             </CustomizedPanel>

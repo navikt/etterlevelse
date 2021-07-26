@@ -1,4 +1,4 @@
-import { AdresseType, Begrep, KravQL } from '../../constants'
+import { AdresseType, Begrep, KravQL, KravVersjon } from '../../constants'
 import { Block, Display, Responsive } from 'baseui/block'
 import React from 'react'
 import { kravStatus } from '../../pages/KravPage'
@@ -14,7 +14,6 @@ import { LovViewList } from '../Lov'
 import { SuksesskriterieCard } from './Suksesskriterie'
 import { Paragraph2 } from 'baseui/typography'
 import CustomizedLink from '../common/CustomizedLink'
-import { getKravByKravNummer } from '../../api/KravApi'
 
 const LabelWrapper = ({ children }: { children: React.ReactNode }) => (
   <Block marginTop="48px" marginBottom="48px">
@@ -24,7 +23,7 @@ const LabelWrapper = ({ children }: { children: React.ReactNode }) => (
 
 const responsiveView: Responsive<Display> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
 
-export const ViewKrav = ({ krav }: { krav: KravQL }) => {
+export const ViewKrav = ({ krav, tidligereKravVersjoner }: { krav: KravQL, tidligereKravVersjoner: KravVersjon[] }) => {
   return (
     <Block width="100%">
       {krav.suksesskriterier.map((s, i) => (
@@ -36,7 +35,7 @@ export const ViewKrav = ({ krav }: { krav: KravQL }) => {
 
       <Block height={theme.sizing.scale800} />
 
-      {<AllInfo krav={krav} />}
+      {<AllInfo krav={krav} tidligereKravVersjoner={tidligereKravVersjoner}/>}
     </Block>
   )
 }
@@ -52,24 +51,7 @@ const MediumInfo = ({ krav }: { krav: KravQL }) => (
   </>
 )
 
-type KravVersjon = {
-  kravNummer?: string | number
-  kravVersjon?: string | number
-}
-
-const AllInfo = ({ krav }: { krav: KravQL }) => {
-  const [tidligereKravVersjoner, setTidligereKravVersjoner] = React.useState<KravVersjon[]>([])
-
-  React.useEffect(() => {
-    getKravByKravNummer(krav.kravNummer).then((resp) => {
-      if (resp.content.length) {
-        const tidligereVersjoner = resp.content.map((k) => {
-          return { kravVersjon: k.kravVersjon, kravNummer: k.kravNummer }
-        }).sort((a, b) => (a.kravVersjon > b.kravVersjon) ? -1 : 1 )
-        setTidligereKravVersjoner(tidligereVersjoner)
-      }
-    })
-  }, [krav])
+const AllInfo = ({ krav, tidligereKravVersjoner }: { krav: KravQL, tidligereKravVersjoner: KravVersjon[] }) => {
 
   return (
     <>
@@ -117,7 +99,7 @@ const AllInfo = ({ krav }: { krav: KravQL }) => {
         </LabelAboveContent>
       </LabelWrapper>
 
-      {tidligereKravVersjoner.length !== 0 && krav.kravVersjon > 1 &&(
+      {tidligereKravVersjoner.length !== 0 && krav.kravVersjon > 1 && (
         <LabelWrapper>
           <LabelAboveContent title="Tidligere versjoner">
             {tidligereKravVersjoner.map((k) => {
@@ -130,7 +112,7 @@ const AllInfo = ({ krav }: { krav: KravQL }) => {
                   </DotTag>
                 )
               }
-                })}
+            })}
           </LabelAboveContent>
         </LabelWrapper>
       )}

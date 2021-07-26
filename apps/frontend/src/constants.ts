@@ -40,6 +40,11 @@ export interface KravId {
   kravVersjon: number
 }
 
+export interface KravVersjon {
+  kravNummer?: string | number
+  kravVersjon?: string | number
+}
+
 export interface Krav extends DomainObject {
   id: string
 
