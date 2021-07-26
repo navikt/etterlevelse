@@ -139,7 +139,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
 
                 <Block display="flex" width="100%" justifyContent="center">
                   <Block width={width}>
-                    <H2 marginBottom={inputMarginBottom}>Om Kravet</H2>
+                    <H2 marginBottom={inputMarginBottom}>Suksesskriterier</H2>
                     <KravSuksesskriterierEdit />
                     {/* 
                   <TextAreaField marginBottom='80px' label='Beskrivelse' name='beskrivelse' markdown shortenLinks onImageUpload={onImageUpload(krav.id)}
