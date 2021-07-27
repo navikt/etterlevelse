@@ -1,35 +1,35 @@
 import * as React from 'react'
-import { ReactElement, useEffect, useState } from 'react'
-import { SIZE, TYPE, Value } from 'baseui/select'
-import { theme } from '../../util'
-import { useDebouncedState, useQueryParam } from '../../util/hooks'
-import { prefixBiasedSort } from '../../util/sort'
-import { Block } from 'baseui/block'
-import { useHistory, useLocation } from 'react-router-dom'
-import { urlForObject } from '../common/RouteLink'
+import {ReactElement, useEffect, useState} from 'react'
+import {SIZE, TYPE, Value} from 'baseui/select'
+import {theme} from '../../util'
+import {useDebouncedState, useQueryParam} from '../../util/hooks'
+import {prefixBiasedSort} from '../../util/sort'
+import {Block} from 'baseui/block'
+import {useHistory, useLocation} from 'react-router-dom'
+import {urlForObject} from '../common/RouteLink'
 import Button from '../common/Button'
-import { faFilter } from '@fortawesome/free-solid-svg-icons'
-import { Radio, RadioGroup } from 'baseui/radio'
-import { borderColor, paddingZero } from '../common/Style'
+import {faFilter} from '@fortawesome/free-solid-svg-icons'
+import {Radio, RadioGroup} from 'baseui/radio'
+import {borderColor, paddingZero} from '../common/Style'
 import SearchLabel from './components/SearchLabel'
-import { NavigableItem, ObjectType } from '../admin/audit/AuditTypes'
-import { Behandling, Krav } from '../../constants'
+import {NavigableItem, ObjectType} from '../admin/audit/AuditTypes'
+import {Behandling, Krav} from '../../constants'
 import shortid from 'shortid'
-import { searchResultColor } from '../../util/theme'
-import { kravName } from '../../pages/KravPage'
-import { searchKrav } from '../../api/KravApi'
-import { behandlingName, searchBehandling } from '../../api/BehandlingApi'
-import { codelist, ListName } from '../../services/Codelist'
-import { searchIcon } from '../Images'
+import {searchResultColor} from '../../util/theme'
+import {kravName} from '../../pages/KravPage'
+import {searchKrav} from '../../api/KravApi'
+import {behandlingName, searchBehandling} from '../../api/BehandlingApi'
+import {codelist, ListName} from '../../services/Codelist'
+import {searchIcon} from '../Images'
 import CustomizedSelect from '../common/CustomizedSelect'
 
 shortid.characters('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@')
 
-type SearchItem = { id: string; sortKey: string; label: ReactElement; type: NavigableItem }
+type SearchItem = { id: string; sortKey: string; label: ReactElement; type: NavigableItem | string }
 
 type SearchType = 'all' | ObjectType.Krav | ObjectType.Behandling | ListName.UNDERAVDELING
 
-type GroupedResult = { Krav?: SearchItem[]; Behandling?: SearchItem[]; Underavdeling?: SearchItem[]; all?: SearchItem[]; __ungrouped: [] }
+type GroupedResult = { Krav?: SearchItem[]; Behandling?: SearchItem[]; Underavdeling?: SearchItem[]; all?: SearchItem[]; __ungrouped: SearchItem[] }
 
 type RadioProps = {
   $isHovered: boolean
@@ -49,14 +49,14 @@ const SmallRadio = (value: SearchType, label: string) => {
         Label: {
           style: (a: RadioProps) => ({
             ...paddingZero,
-            ...(a.$isHovered ? { color: theme.colors.positive400 } : {}),
+            ...(a.$isHovered ? {color: theme.colors.positive400} : {}),
           }),
         },
         RadioMarkOuter: {
           style: (a: RadioProps) => ({
             width: theme.sizing.scale500,
             height: theme.sizing.scale500,
-            ...(a.$isHovered ? { backgroundColor: theme.colors.positive400 } : {}),
+            ...(a.$isHovered ? {backgroundColor: theme.colors.positive400} : {}),
           }),
         },
         RadioMarkInner: {
@@ -76,7 +76,7 @@ const SelectType = (props: { type: SearchType; setType: (type: SearchType) => vo
   <Block
     font="ParagraphSmall"
     position="absolute"
-    marginTop="64px"
+    // marginTop="64px"
     backgroundColor="#FFFFFF"
     display='flex'
     $style={{
@@ -107,14 +107,14 @@ const SelectType = (props: { type: SearchType; setType: (type: SearchType) => vo
 const kravMap = (t: Krav) => ({
   id: t.id,
   sortKey: t.navn,
-  label: <SearchLabel name={kravName(t)} type={'Krav'} backgroundColor={searchResultColor.kravBackground} />,
+  label: <SearchLabel name={kravName(t)} type={'Krav'} backgroundColor={searchResultColor.kravBackground}/>,
   type: ObjectType.Krav,
 })
 
 const behandlingMap = (t: Behandling) => ({
   id: t.id,
   sortKey: t.navn,
-  label: <SearchLabel name={behandlingName(t)} type={'Behandling'} backgroundColor={searchResultColor.behandlingBackground} />,
+  label: <SearchLabel name={behandlingName(t)} type={'Behandling'} backgroundColor={searchResultColor.behandlingBackground}/>,
   type: ObjectType.Behandling,
 })
 
@@ -127,7 +127,7 @@ const getCodelist = (search: string, list: ListName, typeName: string) => {
         ({
           id: c.code,
           sortKey: c.shortName,
-          label: <SearchLabel name={c.shortName} type={typeName} />,
+          label: <SearchLabel name={c.shortName} type={typeName}/>,
           type: list,
         } as SearchItem),
     )
@@ -140,11 +140,11 @@ const searchCodelist = (search: string, list: ListName & NavigableItem, typeName
     .map((c) => ({
       id: c.code,
       sortKey: c.shortName,
-      label: <SearchLabel name={c.shortName} type={typeName} backgroundColor={backgroundColor} />,
+      label: <SearchLabel name={c.shortName} type={typeName} backgroundColor={backgroundColor}/>,
       type: list,
     }))
 
-const order = (type: NavigableItem) => {
+const order = (type: NavigableItem | string) => {
   switch (type) {
     case ObjectType.Krav:
       return 0
@@ -159,12 +159,18 @@ const useMainSearch = (searchParam?: string) => {
   const [searchResult, setSearchResult] = React.useState<SearchItem[]>([])
   const [loading, setLoading] = React.useState<boolean>(false)
   const [type, setType] = useState<SearchType>('all')
+  const filterOption = {
+    id: "filter",
+    label: <SelectType type={type} setType={setType}/>,
+    sortKey: "filter",
+    type: '__ungrouped'
+  }
 
   useEffect(() => {
-    setSearchResult([])
+    setSearchResult([filterOption])
 
     if (type === ListName.UNDERAVDELING) {
-      setSearchResult(getCodelist(search, ListName.UNDERAVDELING, 'Underavdeling'))
+      setSearchResult([filterOption, ...getCodelist(search, ListName.UNDERAVDELING, 'Underavdeling')])
     } else {
       if (search && search.replace(/ /g, '').length > 2) {
         ;(async () => {
@@ -180,7 +186,7 @@ const useMainSearch = (searchParam?: string) => {
                 const typeOrder = order(a.type) - order(b.type)
                 return same || typeOrder !== 0 ? typeOrder : compareFn(a, b)
               })
-            setSearchResult(results)
+            setSearchResult([filterOption, ...results])
             console.log(results)
           }
           setLoading(true)
@@ -209,10 +215,10 @@ const MainSearch = () => {
   const searchParam = useQueryParam('search')
   const [setSearch, searchResult, loading, type, setType] = useMainSearch(searchParam)
   const [filter, setFilter] = useState(false)
-  const [value, setValue] = useState<Value>(searchParam ? [{ id: searchParam, label: searchParam }] : [])
+  const [value, setValue] = useState<Value>(searchParam ? [{id: searchParam, label: searchParam}] : [])
   const history = useHistory()
   const location = useLocation()
-  const [groupedSeachResult, setGroupSearchResult] = useState<GroupedResult>({ __ungrouped: [] })
+  const [groupedSeachResult, setGroupSearchResult] = useState<GroupedResult>({__ungrouped: []})
 
   useEffect(() => {
     const groupedResults: GroupedResult = {
@@ -230,6 +236,8 @@ const MainSearch = () => {
         groupedResults.Behandling?.push(r)
       } else if (r.type === 'UNDERAVDELING') {
         groupedResults.Underavdeling?.push(r)
+      } else if (r.type === '__ungrouped') {
+        groupedResults.__ungrouped?.push(r)
       } else {
         groupedResults.all?.push(r)
       }
@@ -257,11 +265,11 @@ const MainSearch = () => {
           value={value}
           onInputChange={(event) => {
             setSearch(event.currentTarget.value)
-            setValue([{ id: event.currentTarget.value, label: event.currentTarget.value }])
+            setValue([{id: event.currentTarget.value, label: event.currentTarget.value}])
           }}
           onChange={(params) => {
             const item = params.value[0] as SearchItem
-            ;(async () => {
+            if (item.type !== '__ungrouped') (async () => {
               if (item) {
                 history.push(urlForObject(item.type, item.id))
               } else {
@@ -272,12 +280,12 @@ const MainSearch = () => {
           filterOptions={(options) => options}
           overrides={{
             SearchIcon: {
-              component: () => <img src={searchIcon} alt="Søk ikon" />,
+              component: () => <img src={searchIcon} alt="Søk ikon"/>,
             },
             ControlContainer: {
               style: {
-                ...(filter ? { borderBottomLeftRadius: 0 } : {}),
-                ...(filter ? { borderBottomRightRadius: 0 } : {}),
+                ...(filter ? {borderBottomLeftRadius: 0} : {}),
+                ...(filter ? {borderBottomRightRadius: 0} : {}),
                 backgroundColor: '#FFFFFF',
                 ...borderColor('#6B6B6B'),
               },
@@ -298,12 +306,12 @@ const MainSearch = () => {
           size="compact"
           kind={filter ? 'primary' : 'tertiary'}
           marginLeft
-          $style={{ height: theme.sizing.scale1000, width: theme.sizing.scale1000 }}
+          $style={{height: theme.sizing.scale1000, width: theme.sizing.scale1000}}
           label="Filter søkeresultat"
         />
-        {filter && <SelectType type={type} setType={setType} />}
+        {filter && <SelectType type={type} setType={setType}/>}
       </Block>
-      
+
     </Block>
   )
 }

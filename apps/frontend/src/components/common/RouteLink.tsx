@@ -1,15 +1,15 @@
-import { useHistory } from 'react-router-dom'
+import {useHistory} from 'react-router-dom'
 import React from 'react'
-import { AuditItem, NavigableItem, ObjectType } from '../admin/audit/AuditTypes'
-import { Block } from 'baseui/block'
-import { AuditButton } from '../admin/audit/AuditButton'
-import { KIND } from 'baseui/button'
-import { ListName } from '../../services/Codelist'
+import {AuditItem, NavigableItem, ObjectType} from '../admin/audit/AuditTypes'
+import {Block} from 'baseui/block'
+import {AuditButton} from '../admin/audit/AuditButton'
+import {KIND} from 'baseui/button'
+import {ListName} from '../../services/Codelist'
 import CustomizedLink from './CustomizedLink'
 import _ from 'lodash'
-import { user } from '../../services/User'
-import { loginUrl } from '../Header'
-import { ettlevColors } from '../../util/theme'
+import {user} from '../../services/User'
+import {loginUrl} from '../Header'
+import {ettlevColors} from '../../util/theme'
 
 type RouteLinkProps = {
   href?: string
@@ -60,7 +60,7 @@ type ObjectLinkProps = {
   fontColor?: string
 }
 
-export const urlForObject = (type: NavigableItem, id: string, audit?: AuditItem) => {
+export const urlForObject = (type: NavigableItem | string, id: string, audit?: AuditItem) => {
   switch (type) {
     case ObjectType.Settings:
       return '/admin/settings'
