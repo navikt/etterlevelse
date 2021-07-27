@@ -182,7 +182,6 @@ const useMainSearch = (searchParam?: string) => {
                 return same || typeOrder !== 0 ? typeOrder : compareFn(a, b)
               })
             setSearchResult(results)
-            console.log(results)
           }
           setLoading(true)
 
@@ -210,7 +209,7 @@ const MainSearch = () => {
   const searchParam = useQueryParam('search')
   const [setSearch, searchResult, loading, type, setType] = useMainSearch(searchParam)
   const [filter, setFilter] = useState(false)
-  const [filterClicked, setFilterClicked] = useState(false)
+  const [filterClicked, setFilterClicked] = useState<boolean>(false)
   const [value, setValue] = useState<Value>(searchParam ? [{ id: searchParam, label: searchParam }] : [])
   const history = useHistory()
   const location = useLocation()
