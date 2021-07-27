@@ -124,12 +124,12 @@ const getCodelist = (search: string, list: ListName, typeName: string) => {
     .filter((c) => c.shortName.toLowerCase().indexOf(search.toLowerCase()) >= 0)
     .map(
       (c) =>
-        ({
-          id: c.code,
-          sortKey: c.shortName,
-          label: <SearchLabel name={c.shortName} type={typeName} />,
-          type: list,
-        } as SearchItem),
+      ({
+        id: c.code,
+        sortKey: c.shortName,
+        label: <SearchLabel name={c.shortName} type={typeName} />,
+        type: list,
+      } as SearchItem),
     )
 }
 
@@ -168,7 +168,7 @@ const useMainSearch = (searchParam?: string) => {
       setSearchResult(getCodelist(search, ListName.UNDERAVDELING, 'Underavdeling'))
     } else {
       if (search && search.replace(/ /g, '').length > 2) {
-        ;(async () => {
+        ; (async () => {
           let results: SearchItem[] = []
           let searches: Promise<any>[] = []
           const compareFn = (a: SearchItem, b: SearchItem) => prefixBiasedSort(search, a.sortKey, b.sortKey)
@@ -210,6 +210,7 @@ const MainSearch = () => {
   const searchParam = useQueryParam('search')
   const [setSearch, searchResult, loading, type, setType] = useMainSearch(searchParam)
   const [filter, setFilter] = useState(false)
+  const [filterClicked, setFilterClicked] = useState(false)
   const [value, setValue] = useState<Value>(searchParam ? [{ id: searchParam, label: searchParam }] : [])
   const history = useHistory()
   const location = useLocation()
@@ -219,7 +220,7 @@ const MainSearch = () => {
     sortKey: 'filter',
     type: '__ungrouped',
   }
-  const [groupedSeachResult, setGroupSearchResult] = useState<GroupedResult>({ __ungrouped: [filterOption] })
+  const [groupedSeachResult, setGroupedSearchResult] = useState<GroupedResult>({ __ungrouped: [filterOption] })
 
   useEffect(() => {
     const groupedResults: GroupedResult = {
@@ -242,14 +243,15 @@ const MainSearch = () => {
       }
     })
 
-    setGroupSearchResult(groupedResults)
+    setGroupedSearchResult(groupedResults)
   }, [searchResult])
 
   return (
     <Block width="100%">
       <Block display="flex" position="relative" alignItems="center" width={'100%'}>
         <CustomizedSelect
-          closeOnSelect={value ? (value[0] as SearchItem).id === 'filter' ? false : true : true} 
+          clearable
+          closeOnSelect={!filterClicked}
           size={SIZE.compact}
           backspaceRemoves
           startOpen={!!searchParam}
@@ -264,20 +266,21 @@ const MainSearch = () => {
           aria-label={'Søk etter krav eller behandling'}
           value={value}
           onInputChange={(event) => {
-            // if(event.currentTarget.value.type !== ) {}
             setSearch(event.currentTarget.value)
-            console.log(event.currentTarget.value[0], 'value')
             setValue([{ id: event.currentTarget.value, label: event.currentTarget.value }])
           }}
           onChange={(params) => {
             const item = params.value[0] as SearchItem
             if (item && item.type !== '__ungrouped') {
+              setFilterClicked(false);
               (async () => {
                 history.push(urlForObject(item.type, item.id))
               })()
+            } else if (item && item.type === '__ungrouped') {
+              setFilterClicked(true)
             } else {
-              // setValue([])
-            }console.log(params.value[0])
+              setValue([])
+            }
           }}
           filterOptions={(options) => options}
           overrides={{
