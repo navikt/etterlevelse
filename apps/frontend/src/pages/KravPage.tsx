@@ -252,7 +252,7 @@ const Etterlevelser = ({ loading, etterlevelser: allEtterlevelser }: { loading: 
       .filter((avdeling) => !!avdeling) || []) as ExternalCode[],
     (a) => a.code,
   )
-  const { state, changeState } = useLocationState<LocationState>()
+
 
   return (
     <Block>
@@ -262,15 +262,12 @@ const Etterlevelser = ({ loading, etterlevelser: allEtterlevelser }: { loading: 
         <InfoBlock icon={sadFolderIcon} alt={'Trist mappe ikon'} text={'Det er ikke dokumentert etterlevelse på dette kravet'} color={ettlevColors.red50} />
       )}
 
-      <CustomizedAccordion
-        initialState={{ expanded: state?.avdelingOpen ? [state?.avdelingOpen] : [] }}
-        onChange={(k) => changeState({ avdelingOpen: k.expanded.length ? (k.expanded[0] as string) : undefined })}
-      >
+      <CustomizedAccordion accordion={false}>
         {avdelinger.map((a) => {
           const avdelingEtterlevelser = etterlevelser?.filter((e) => e.behandling.avdeling?.code === a.code)
           const antall = avdelingEtterlevelser.length
           return (
-            <CustomizedPanel key={a.code} title={a.shortName}>
+            <CustomizedPanel key={a.code} title={a.shortName} HeaderActiveBackgroundColor={ettlevColors.green50}>
               {avdelingEtterlevelser.map((e, i) => (
                 <PanelLink
                   key={e.id}
