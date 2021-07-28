@@ -31,6 +31,7 @@ type KravEtterlevelseData = {
   frist?: string
   etterlevelseStatus?: EtterlevelseStatus
   suksesskriterier: Suksesskriterie[]
+  gammelVersjon?: boolean
 }
 
 const mapEtterlevelseData = (etterlevelse?: Etterlevelse) => ({
@@ -38,6 +39,7 @@ const mapEtterlevelseData = (etterlevelse?: Etterlevelse) => ({
   etterleves: !!etterlevelse?.etterleves,
   frist: etterlevelse?.fristForFerdigstillelse,
   etterlevelseStatus: etterlevelse?.status,
+  gammelVersjon: false
 })
 
 export const BehandlingerTemaPage = () => {
@@ -73,10 +75,14 @@ export const BehandlingerTemaPage = () => {
     })
 
     for (let index = mapped.length - 1; index > 0; index--) {
-      if (mapped[index].kravNummer === mapped[index - 1].kravNummer && mapped[index -1].etterlevelseStatus !== EtterlevelseStatus.FERDIG_DOKUMENTERT) {
+      if (mapped[index].kravNummer === mapped[index - 1].kravNummer && mapped[index - 1].etterlevelseStatus !== EtterlevelseStatus.FERDIG_DOKUMENTERT) {
         mapped.splice(index - 1, 1)
       }
+      if (mapped[index].kravNummer === mapped[index - 1].kravNummer && mapped[index - 1].etterlevelseStatus === EtterlevelseStatus.FERDIG_DOKUMENTERT) {
+        mapped[index - 1].gammelVersjon = true
+      }
     }
+    console.log(mapped)
 
     setKravData(mapped)
   }, [rawData])
@@ -103,7 +109,7 @@ export const BehandlingerTemaPage = () => {
     let antallUtfylt = 0
 
     kravData.forEach((k) => {
-      if (k.etterlevelseStatus === EtterlevelseStatus.FERDIG_DOKUMENTERT) {
+      if (k.etterlevelseStatus === EtterlevelseStatus.FERDIG_DOKUMENTERT && k.gammelVersjon !== true) {
         antallUtfylt += 1
       }
     })
@@ -153,7 +159,7 @@ export const BehandlingerTemaPage = () => {
       <Block display="flex" alignItems="center">
         <Block display="flex" alignItems="baseline" marginRight="30px">
           <H1 color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
-            {kravData.length}
+            {kravData.filter(k => k.gammelVersjon === false).length}
           </H1>
           <Paragraph2>krav</Paragraph2>
         </Block>
