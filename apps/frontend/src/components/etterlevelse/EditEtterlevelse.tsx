@@ -3,13 +3,13 @@ import { Field, FieldProps, Form, Formik, FormikProps } from 'formik'
 import { createEtterlevelse, mapEtterlevelseToFormValue, updateEtterlevelse } from '../../api/EtterlevelseApi'
 import { Block } from 'baseui/block'
 import Button from '../common/Button'
-import React from 'react'
+import React, { useEffect } from 'react'
 import * as yup from 'yup'
 import { getEtterlevelseStatus } from '../../pages/EtterlevelsePage'
 import { DateField, FieldWrapper } from '../common/Inputs'
 import { theme } from '../../util'
 import { FormControl } from 'baseui/form-control'
-import { useKrav, useSearchKrav } from '../../api/KravApi'
+import { getKravByKravNumberAndVersion, useKrav, useSearchKrav } from '../../api/KravApi'
 import { kravName, kravNumView } from '../../pages/KravPage'
 import { behandlingName, useBehandling, useSearchBehandling } from '../../api/BehandlingApi'
 import CustomizedSelect from '../common/CustomizedSelect'
@@ -21,6 +21,7 @@ import { SuksesskriterierBegrunnelseEdit } from './Edit/SuksesskriterieBegrunnel
 import { Radio, RadioGroup } from 'baseui/radio'
 import { Code } from '../../services/Codelist'
 import { Error } from '../common/ModalSchema'
+import { user } from '../../services/User'
 
 type EditEttlevProps = {
   etterlevelse: Etterlevelse
@@ -68,6 +69,8 @@ const etterlevelseSchema = () => {
 
 export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentEdit }: EditEttlevProps) => {
   const [etterlevelseStatus, setEtterlevelseStatus] = React.useState<string>(etterlevelse.status || EtterlevelseStatus.UNDER_REDIGERING)
+  const [nyereKrav, setNyereKrav] = React.useState<Krav>()
+  const [disableEdit, setDisableEdit] = React.useState<boolean>(false)
   const submit = async (etterlevelse: Etterlevelse) => {
     const mutatedEtterlevelse = {
       ...etterlevelse,
@@ -80,6 +83,16 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
       close(await createEtterlevelse(mutatedEtterlevelse))
     }
   }
+
+  useEffect(() => {
+    getKravByKravNumberAndVersion(krav.kravNummer, krav.kravVersjon + 1).then(setNyereKrav)
+  }, [krav])
+
+  useEffect(() => {
+    if (nyereKrav && !user.isAdmin()) {
+      setDisableEdit(true)
+    }
+  }, [nyereKrav])
 
   return (
     <Block>
@@ -118,7 +131,7 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
                   <Block paddingTop={theme.sizing.scale1000} paddingBottom={theme.sizing.scale1600}>
                     <Label3 $style={{ lineHeight: '32px' }}>Hvilke suksesskriterier er oppfylt?</Label3>
 
-                    <SuksesskriterierBegrunnelseEdit suksesskriterie={krav.suksesskriterier} />
+                    <SuksesskriterierBegrunnelseEdit disableEdit={disableEdit} suksesskriterie={krav.suksesskriterier} />
 
                     {/*
               {!documentEdit &&
@@ -159,6 +172,7 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
                             }}
                           >
                             <RadioGroup
+                              disabled={disableEdit}
                               overrides={{
                                 Root: {
                                   style: {
@@ -220,13 +234,14 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
 
                 {!documentEdit && (
                   <Block display="flex" marginTop={theme.sizing.scale850} marginBottom={theme.sizing.scale3200}>
-                    <Button type="button" kind="secondary" marginRight onClick={close}>
+                    <Button disabled={disableEdit} type="button" kind="secondary" marginRight onClick={close}>
                       Avbryt og forkast endringene
                     </Button>
-                    <Button type="button" kind="secondary" marginRight disabled={isSubmitting} onClick={submitForm}>
+                    <Button type="button" kind="secondary" marginRight disabled={isSubmitting || disableEdit} onClick={submitForm}>
                       Lagre og fortsett senere
                     </Button>
                     <Button
+                      disabled={disableEdit}
                       type="button"
                       onClick={() => {
                         values.status = EtterlevelseStatus.FERDIG_DOKUMENTERT

@@ -14,6 +14,7 @@ import TextEditor from '../../common/TextEditor/TextEditor'
 import { Error } from '../../common/ModalSchema'
 import LabelWithToolTip from '../../common/LabelWithTooltip'
 import { borderColor, borderStyle, borderWidth } from '../../common/Style'
+import { LabelAboveContent } from '../../common/PropertyLabel'
 
 const paddingLeft = '30px'
 
@@ -28,15 +29,15 @@ export const getSuksesskriterieBegrunnelse = (suksesskriterieBegrunnelser: Sukse
   }
 }
 
-export const SuksesskriterierBegrunnelseEdit = ({ suksesskriterie }: { suksesskriterie: Suksesskriterie[] }) => {
+export const SuksesskriterierBegrunnelseEdit = ({ suksesskriterie, disableEdit }: { suksesskriterie: Suksesskriterie[], disableEdit: boolean }) => {
   return (
     <FieldWrapper>
-      <FieldArray name={'suksesskriterieBegrunnelser'}>{(p) => <KriterieBegrunnelseList props={p} suksesskriterie={suksesskriterie} />}</FieldArray>
+      <FieldArray name={'suksesskriterieBegrunnelser'}>{(p) => <KriterieBegrunnelseList props={p} disableEdit={disableEdit} suksesskriterie={suksesskriterie} />}</FieldArray>
     </FieldWrapper>
   )
 }
 
-const KriterieBegrunnelseList = ({ props, suksesskriterie }: { props: FieldArrayRenderProps; suksesskriterie: Suksesskriterie[] }) => {
+const KriterieBegrunnelseList = ({ props, suksesskriterie, disableEdit }: { props: FieldArrayRenderProps; suksesskriterie: Suksesskriterie[], disableEdit: boolean }) => {
   const suksesskriterieBegrunnelser = props.form.values.suksesskriterieBegrunnelser as SuksesskriterieBegrunnelse[]
 
   return (
@@ -44,7 +45,7 @@ const KriterieBegrunnelseList = ({ props, suksesskriterie }: { props: FieldArray
       {suksesskriterie.map((s, i) => {
         return (
           <Block key={s.navn + '_' + i}>
-            <KriterieBegrunnelse suksesskriterie={s} index={i} suksesskriterieBegrunnelser={suksesskriterieBegrunnelser} update={(updated) => props.replace(i, updated)} />
+            <KriterieBegrunnelse disableEdit={disableEdit} suksesskriterie={s} index={i} suksesskriterieBegrunnelser={suksesskriterieBegrunnelser} update={(updated) => props.replace(i, updated)} />
           </Block>
         )
       })}
@@ -56,11 +57,13 @@ const KriterieBegrunnelse = ({
   suksesskriterie,
   index,
   suksesskriterieBegrunnelser,
+  disableEdit,
   update,
 }: {
   suksesskriterie: Suksesskriterie
   index: number
   suksesskriterieBegrunnelser: SuksesskriterieBegrunnelse[]
+  disableEdit: boolean
   update: (s: SuksesskriterieBegrunnelse) => void
 }) => {
   const suksesskriterieBegrunnelse = getSuksesskriterieBegrunnelse(suksesskriterieBegrunnelser, suksesskriterie)
@@ -77,6 +80,7 @@ const KriterieBegrunnelse = ({
     <Block $style={{ border: '1px solid #C9C9C9' }} backgroundColor={ettlevColors.white} padding={theme.sizing.scale750} marginBottom={theme.sizing.scale600}>
       <Checkbox
         checked={checked}
+        disabled={disableEdit}
         onChange={() => setChecked(!checked)}
         onMouseEnter={() => setTextHover(true)}
         onMouseLeave={() => setTextHover(false)}
@@ -93,12 +97,18 @@ const KriterieBegrunnelse = ({
         </Paragraph2>
       </Checkbox>
 
-      {checked && (
+      {checked && !disableEdit && (
         <Block paddingLeft={paddingLeft} marginTop={theme.sizing.scale1000}>
           <FormControl label={<LabelWithToolTip label="Dokumentasjon" />}>
             <TextEditor initialValue={begrunnelse} setValue={setBegrunnelse} height={'188px'} />
           </FormControl>
           <Error fieldName={`suksesskriterieBegrunnelser[${index}].begrunnelse`} fullWidth={true} />
+        </Block>
+      )}
+
+      {checked && disableEdit && (
+        <Block paddingLeft={paddingLeft} marginTop={theme.sizing.scale1000}>
+          <LabelAboveContent title="Dokumentasjon" markdown={begrunnelse} />
         </Block>
       )}
 
