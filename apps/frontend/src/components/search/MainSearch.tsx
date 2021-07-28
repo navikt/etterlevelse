@@ -264,6 +264,7 @@ const MainSearch = () => {
           placeholder={'Søk etter krav eller behandling'}
           aria-label={'Søk etter krav eller behandling'}
           value={value}
+          onOpen={() => setFilterClicked(true)}
           onInputChange={(event) => {
             setSearch(event.currentTarget.value)
             setValue([{ id: event.currentTarget.value, label: event.currentTarget.value }])
