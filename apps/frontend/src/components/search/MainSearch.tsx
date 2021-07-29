@@ -5,8 +5,7 @@ import { theme } from '../../util'
 import { useDebouncedState, useQueryParam } from '../../util/hooks'
 import { prefixBiasedSort } from '../../util/sort'
 import { Block } from 'baseui/block'
-import { useHistory, useLocation } from 'react-router-dom'
-import { urlForObject } from '../common/RouteLink'
+import { useLocation } from 'react-router-dom'
 import Button from '../common/Button'
 import { faFilter } from '@fortawesome/free-solid-svg-icons'
 import { Radio, RadioGroup } from 'baseui/radio'
@@ -22,6 +21,7 @@ import { behandlingName, searchBehandling } from '../../api/BehandlingApi'
 import { codelist, ListName } from '../../services/Codelist'
 import { searchIcon } from '../Images'
 import CustomizedSelect from '../common/CustomizedSelect'
+import CustomizedLink from '../common/CustomizedLink'
 
 shortid.characters('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@')
 
@@ -107,14 +107,14 @@ const SelectType = (props: { type: SearchType; setType: (type: SearchType) => vo
 const kravMap = (t: Krav) => ({
   id: t.id,
   sortKey: t.navn,
-  label: <SearchLabel name={kravName(t)} type={'Krav'} backgroundColor={searchResultColor.kravBackground} />,
+  label: <CustomizedLink href={`/${ObjectType.Krav}/${t.id}`} style={{textDecoration: 'none'}}><SearchLabel name={kravName(t)} type={'Krav'} backgroundColor={searchResultColor.kravBackground} /></CustomizedLink>,
   type: ObjectType.Krav,
 })
 
 const behandlingMap = (t: Behandling) => ({
   id: t.id,
   sortKey: t.navn,
-  label: <SearchLabel name={behandlingName(t)} type={'Behandling'} backgroundColor={searchResultColor.behandlingBackground} />,
+  label: <CustomizedLink href={`/${ObjectType.Behandling}/${t.id}`} style={{textDecoration: 'none'}}><SearchLabel name={behandlingName(t)} type={'Behandling'} backgroundColor={searchResultColor.behandlingBackground} /></CustomizedLink>,
   type: ObjectType.Behandling,
 })
 
@@ -127,7 +127,7 @@ const getCodelist = (search: string, list: ListName, typeName: string) => {
       ({
         id: c.code,
         sortKey: c.shortName,
-        label: <SearchLabel name={c.shortName} type={typeName} />,
+        label: <CustomizedLink href={`/${list}/${c.code}`} style={{textDecoration: 'none'}}><SearchLabel name={c.shortName} type={typeName} /></CustomizedLink>,
         type: list,
       } as SearchItem),
     )
@@ -140,7 +140,7 @@ const searchCodelist = (search: string, list: ListName & NavigableItem, typeName
     .map((c) => ({
       id: c.code,
       sortKey: c.shortName,
-      label: <SearchLabel name={c.shortName} type={typeName} backgroundColor={backgroundColor} />,
+      label: <CustomizedLink href={`/${list}/${c.code}`} style={{textDecoration: 'none'}}><SearchLabel name={c.shortName} type={typeName} backgroundColor={backgroundColor} /></CustomizedLink>,
       type: list,
     }))
 
@@ -211,7 +211,6 @@ const MainSearch = () => {
   const [filter, setFilter] = useState(false)
   const [filterClicked, setFilterClicked] = useState<boolean>(false)
   const [value, setValue] = useState<Value>(searchParam ? [{ id: searchParam, label: searchParam }] : [])
-  const history = useHistory()
   const location = useLocation()
   const filterOption = {
     id: 'filter',
@@ -272,10 +271,7 @@ const MainSearch = () => {
           onChange={(params) => {
             const item = params.value[0] as SearchItem
             if (item && item.type !== '__ungrouped') {
-              setFilterClicked(false);
-              (async () => {
-                history.push(urlForObject(item.type, item.id))
-              })()
+              setFilterClicked(false)
             } else if (item && item.type === '__ungrouped') {
               setFilterClicked(true)
             } else {
