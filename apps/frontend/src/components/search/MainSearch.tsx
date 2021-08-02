@@ -19,7 +19,7 @@ import { kravName } from '../../pages/KravPage'
 import { searchKrav } from '../../api/KravApi'
 import { behandlingName, searchBehandling } from '../../api/BehandlingApi'
 import { codelist, ListName } from '../../services/Codelist'
-import { searchIcon } from '../Images'
+import { filterIcon, searchIcon } from '../Images'
 import CustomizedSelect from '../common/CustomizedSelect'
 import CustomizedLink from '../common/CustomizedLink'
 
@@ -75,22 +75,22 @@ const SmallRadio = (value: SearchType, label: string) => {
 const SelectType = (props: { type: SearchType; setType: (type: SearchType) => void }) => {
   const [filter, setFilter] = useState(false)
   return (
-    <Block>
+    <Block width='100%'>
+      <Block width='100%' display='flex' flex='1' justifyContent='flex-end'>
       <Button
         onClick={() => setFilter(!filter)}
-        icon={faFilter}
-        size="compact"
-        kind={filter ? 'primary' : 'tertiary'}
-        marginLeft
+        startEnhancer={<img alt='' src={filterIcon}/>}
+          kind="tertiary"
+          marginRight
         $style={{ height: theme.sizing.scale1000, width: theme.sizing.scale1000 }}
         label="Filter søkeresultat"
-      />
-
+      >
+        {filter ? "Skjul filter" : "Filtrer søkeresultat" }
+        </Button>
+        </Block>
       {filter && (
         <Block
           font="ParagraphSmall"
-          // position="absolute"
-          // marginTop="64px"
           backgroundColor="#FFFFFF"
           display="flex"
           $style={{
