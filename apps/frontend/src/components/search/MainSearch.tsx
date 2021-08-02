@@ -72,49 +72,74 @@ const SmallRadio = (value: SearchType, label: string) => {
   )
 }
 
-const SelectType = (props: { type: SearchType; setType: (type: SearchType) => void }) => (
-  <Block
-    font="ParagraphSmall"
-    // position="absolute"
-    // marginTop="64px"
-    backgroundColor="#FFFFFF"
-    display="flex"
-    $style={{
-      borderBottomLeftRadius: '4px',
-      borderBottomRightRadius: '4px',
-      borderBottomStyle: 'solid',
-      borderLeftStyle: 'solid',
-      borderRightStyle: 'solid',
-      borderLeftWidth: '2px',
-      borderRightWidth: '2px',
-      borderBottomWidth: '2px',
-      borderLeftColor: '#6B6B6B',
-      borderRightColor: '#6B6B6B',
-      borderBottomColor: '#6B6B6B',
-    }}
-  >
-    <Block marginLeft="3px" marginRight="3px" marginBottom="3px">
-      <RadioGroup onChange={(e) => props.setType(e.target.value as SearchType)} align="horizontal" value={props.type}>
-        {SmallRadio('all', 'Alle')}
-        {SmallRadio(ObjectType.Krav, 'Krav')}
-        {SmallRadio(ObjectType.Behandling, 'Behandling')}
-        {SmallRadio(ListName.UNDERAVDELING, 'Underavdeling')}
-      </RadioGroup>
+const SelectType = (props: { type: SearchType; setType: (type: SearchType) => void }) => {
+  const [filter, setFilter] = useState(false)
+  return (
+    <Block>
+      <Button
+        onClick={() => setFilter(!filter)}
+        icon={faFilter}
+        size="compact"
+        kind={filter ? 'primary' : 'tertiary'}
+        marginLeft
+        $style={{ height: theme.sizing.scale1000, width: theme.sizing.scale1000 }}
+        label="Filter søkeresultat"
+      />
+
+      {filter && (
+        <Block
+          font="ParagraphSmall"
+          // position="absolute"
+          // marginTop="64px"
+          backgroundColor="#FFFFFF"
+          display="flex"
+          $style={{
+            borderBottomLeftRadius: '4px',
+            borderBottomRightRadius: '4px',
+            borderBottomStyle: 'solid',
+            borderLeftStyle: 'solid',
+            borderRightStyle: 'solid',
+            borderLeftWidth: '2px',
+            borderRightWidth: '2px',
+            borderBottomWidth: '2px',
+            borderLeftColor: '#6B6B6B',
+            borderRightColor: '#6B6B6B',
+            borderBottomColor: '#6B6B6B',
+          }}
+        >
+          <Block marginLeft="3px" marginRight="3px" marginBottom="3px">
+            <RadioGroup onChange={(e) => props.setType(e.target.value as SearchType)} align="horizontal" value={props.type}>
+              {SmallRadio('all', 'Alle')}
+              {SmallRadio(ObjectType.Krav, 'Krav')}
+              {SmallRadio(ObjectType.Behandling, 'Behandling')}
+              {SmallRadio(ListName.UNDERAVDELING, 'Underavdeling')}
+            </RadioGroup>
+          </Block>
+        </Block>
+      )}
     </Block>
-  </Block>
-)
+  )
+}
 
 const kravMap = (t: Krav) => ({
   id: t.id,
   sortKey: t.navn,
-  label: <CustomizedLink href={`/${ObjectType.Krav}/${t.id}`} style={{textDecoration: 'none'}}><SearchLabel name={kravName(t)} type={'Krav'} backgroundColor={searchResultColor.kravBackground} /></CustomizedLink>,
+  label: (
+    <CustomizedLink href={`/${ObjectType.Krav}/${t.id}`} style={{ textDecoration: 'none' }}>
+      <SearchLabel name={kravName(t)} type={'Krav'} backgroundColor={searchResultColor.kravBackground} />
+    </CustomizedLink>
+  ),
   type: ObjectType.Krav,
 })
 
 const behandlingMap = (t: Behandling) => ({
   id: t.id,
   sortKey: t.navn,
-  label: <CustomizedLink href={`/${ObjectType.Behandling}/${t.id}`} style={{textDecoration: 'none'}}><SearchLabel name={behandlingName(t)} type={'Behandling'} backgroundColor={searchResultColor.behandlingBackground} /></CustomizedLink>,
+  label: (
+    <CustomizedLink href={`/${ObjectType.Behandling}/${t.id}`} style={{ textDecoration: 'none' }}>
+      <SearchLabel name={behandlingName(t)} type={'Behandling'} backgroundColor={searchResultColor.behandlingBackground} />
+    </CustomizedLink>
+  ),
   type: ObjectType.Behandling,
 })
 
@@ -124,12 +149,16 @@ const getCodelist = (search: string, list: ListName, typeName: string) => {
     .filter((c) => c.shortName.toLowerCase().indexOf(search.toLowerCase()) >= 0)
     .map(
       (c) =>
-      ({
-        id: c.code,
-        sortKey: c.shortName,
-        label: <CustomizedLink href={`/${list}/${c.code}`} style={{textDecoration: 'none'}}><SearchLabel name={c.shortName} type={typeName} /></CustomizedLink>,
-        type: list,
-      } as SearchItem),
+        ({
+          id: c.code,
+          sortKey: c.shortName,
+          label: (
+            <CustomizedLink href={`/${list}/${c.code}`} style={{ textDecoration: 'none' }}>
+              <SearchLabel name={c.shortName} type={typeName} />
+            </CustomizedLink>
+          ),
+          type: list,
+        } as SearchItem),
     )
 }
 
@@ -140,7 +169,11 @@ const searchCodelist = (search: string, list: ListName & NavigableItem, typeName
     .map((c) => ({
       id: c.code,
       sortKey: c.shortName,
-      label: <CustomizedLink href={`/${list}/${c.code}`} style={{textDecoration: 'none'}}><SearchLabel name={c.shortName} type={typeName} backgroundColor={backgroundColor} /></CustomizedLink>,
+      label: (
+        <CustomizedLink href={`/${list}/${c.code}`} style={{ textDecoration: 'none' }}>
+          <SearchLabel name={c.shortName} type={typeName} backgroundColor={backgroundColor} />
+        </CustomizedLink>
+      ),
       type: list,
     }))
 
@@ -160,7 +193,6 @@ const useMainSearch = (searchParam?: string) => {
   const [loading, setLoading] = React.useState<boolean>(false)
   const [type, setType] = useState<SearchType>('all')
 
-
   useEffect(() => {
     setSearchResult([])
 
@@ -168,7 +200,7 @@ const useMainSearch = (searchParam?: string) => {
       setSearchResult(getCodelist(search, ListName.UNDERAVDELING, 'Underavdeling'))
     } else {
       if (search && search.replace(/ /g, '').length > 2) {
-        ; (async () => {
+        ;(async () => {
           let results: SearchItem[] = []
           let searches: Promise<any>[] = []
           const compareFn = (a: SearchItem, b: SearchItem) => prefixBiasedSort(search, a.sortKey, b.sortKey)
@@ -208,7 +240,6 @@ const useMainSearch = (searchParam?: string) => {
 const MainSearch = () => {
   const searchParam = useQueryParam('search')
   const [setSearch, searchResult, loading, type, setType] = useMainSearch(searchParam)
-  const [filter, setFilter] = useState(false)
   const [filterClicked, setFilterClicked] = useState<boolean>(false)
   const [value, setValue] = useState<Value>(searchParam ? [{ id: searchParam, label: searchParam }] : [])
   const location = useLocation()
@@ -285,8 +316,6 @@ const MainSearch = () => {
             },
             ControlContainer: {
               style: {
-                ...(filter ? { borderBottomLeftRadius: 0 } : {}),
-                ...(filter ? { borderBottomRightRadius: 0 } : {}),
                 backgroundColor: '#FFFFFF',
                 ...borderColor('#6B6B6B'),
               },
@@ -301,16 +330,6 @@ const MainSearch = () => {
             },
           }}
         />
-        <Button
-          onClick={() => setFilter(!filter)}
-          icon={faFilter}
-          size="compact"
-          kind={filter ? 'primary' : 'tertiary'}
-          marginLeft
-          $style={{ height: theme.sizing.scale1000, width: theme.sizing.scale1000 }}
-          label="Filter søkeresultat"
-        />
-        {filter && <SelectType type={type} setType={setType} />}
       </Block>
     </Block>
   )
