@@ -50,6 +50,8 @@ import crossIcon from '../resources/icons/cross.svg'
 import circlePencilIcon from '../resources/icons/circle-pencil-icon.svg'
 import illustration from '../resources/giammarco-boscaro-zeH-ljawHtg-unsplash.jpg'
 import { codelist, ListName, LovCode, TemaCode } from '../services/Codelist'
+import filterIcon from '../resources/icons/filterIcon.svg'
+
 import React from 'react'
 import { theme } from '../util'
 
@@ -92,6 +94,7 @@ export {
   paragrafIconBg,
   circlePencilIcon,
   gavelIcon,
+  filterIcon
 }
 
 export const temaBilder: { [id: string]: string } = {
