@@ -75,19 +75,18 @@ const SmallRadio = (value: SearchType, label: string) => {
 const SelectType = (props: { type: SearchType; setType: (type: SearchType) => void }) => {
   const [filter, setFilter] = useState(false)
   return (
-    <Block width='100%'>
-      <Block width='100%' display='flex' flex='1' justifyContent='flex-end'>
-      <Button
-        onClick={() => setFilter(!filter)}
-        startEnhancer={<img alt='' src={filterIcon}/>}
+    <Block width="100%">
+      <Block width="100%" display="flex" flex="1" justifyContent="flex-end">
+        <Button
+          onClick={() => setFilter(!filter)}
+          startEnhancer={<img alt="" src={filterIcon} />}
           kind="tertiary"
           marginRight
-        $style={{ height: theme.sizing.scale1000, width: theme.sizing.scale1000 }}
-        label="Filter søkeresultat"
-      >
-        {filter ? "Skjul filter" : "Filtrer søkeresultat" }
+          label="Filter søkeresultat"
+        >
+          {filter ? 'Skjul filter' : 'Filtrer søkeresultat'}
         </Button>
-        </Block>
+      </Block>
       {filter && (
         <Block
           font="ParagraphSmall"
