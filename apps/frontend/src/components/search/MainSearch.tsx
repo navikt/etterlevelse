@@ -7,14 +7,13 @@ import { prefixBiasedSort } from '../../util/sort'
 import { Block } from 'baseui/block'
 import { useLocation } from 'react-router-dom'
 import Button from '../common/Button'
-import { faFilter } from '@fortawesome/free-solid-svg-icons'
 import { Radio, RadioGroup } from 'baseui/radio'
-import { borderColor, paddingZero } from '../common/Style'
+import { borderColor, borderRadius, borderWidth, padding, paddingZero } from '../common/Style'
 import SearchLabel from './components/SearchLabel'
 import { NavigableItem, ObjectType } from '../admin/audit/AuditTypes'
 import { Behandling, Krav } from '../../constants'
 import shortid from 'shortid'
-import { searchResultColor } from '../../util/theme'
+import { ettlevColors, searchResultColor } from '../../util/theme'
 import { kravName } from '../../pages/KravPage'
 import { searchKrav } from '../../api/KravApi'
 import { behandlingName, searchBehandling } from '../../api/BehandlingApi'
@@ -22,6 +21,7 @@ import { codelist, ListName } from '../../services/Codelist'
 import { filterIcon, searchIcon } from '../Images'
 import CustomizedSelect from '../common/CustomizedSelect'
 import CustomizedLink from '../common/CustomizedLink'
+import { Paragraph2 } from 'baseui/typography'
 
 shortid.characters('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@')
 
@@ -54,20 +54,26 @@ const SmallRadio = (value: SearchType, label: string) => {
         },
         RadioMarkOuter: {
           style: (a: RadioProps) => ({
-            width: theme.sizing.scale500,
-            height: theme.sizing.scale500,
             ...(a.$isHovered ? { backgroundColor: theme.colors.positive400 } : {}),
           }),
         },
         RadioMarkInner: {
           style: (a: RadioProps) => ({
-            width: a.$checked ? theme.sizing.scale100 : theme.sizing.scale300,
-            height: a.$checked ? theme.sizing.scale100 : theme.sizing.scale300,
+            width: a.$checked ? theme.sizing.scale100 : theme.sizing.scale650,
+            height: a.$checked ? theme.sizing.scale100 : theme.sizing.scale650,
           }),
         },
       }}
     >
-      <Block font="ParagraphXSmall">{label}</Block>
+      <Paragraph2
+        $style={{
+          marginLeft: theme.sizing.scale300,
+          marginTop: theme.sizing.scale500,
+          marginBottom: theme.sizing.scale500,
+        }}
+      >
+        {label}
+      </Paragraph2>
     </Radio>
   )
 }
@@ -75,39 +81,38 @@ const SmallRadio = (value: SearchType, label: string) => {
 const SelectType = (props: { type: SearchType; setType: (type: SearchType) => void }) => {
   const [filter, setFilter] = useState(false)
   return (
-    <Block width="100%">
+    <Block width="100%" backgroundColor={ettlevColors.white}>
       <Block width="100%" display="flex" flex="1" justifyContent="flex-end">
-        <Button
-          onClick={() => setFilter(!filter)}
-          startEnhancer={<img alt="" src={filterIcon} />}
-          kind="tertiary"
-          marginRight
-          label="Filter søkeresultat"
-        >
-          {filter ? 'Skjul filter' : 'Filtrer søkeresultat'}
+        <Button onClick={() => setFilter(!filter)} startEnhancer={<img alt="" src={filterIcon} />} kind="tertiary" marginRight label="Filter søkeresultat" notBold>
+          <Paragraph2
+            $style={{
+              fontSize: theme.sizing.scale600,
+              marginTop: 0,
+              marginBottom: 0,
+            }}
+          >
+            {filter ? 'Skjul filter' : 'Filtrer søkeresultat'}
+          </Paragraph2>
         </Button>
       </Block>
       {filter && (
-        <Block
-          font="ParagraphSmall"
-          backgroundColor="#FFFFFF"
-          display="flex"
-          $style={{
-            borderBottomLeftRadius: '4px',
-            borderBottomRightRadius: '4px',
-            borderBottomStyle: 'solid',
-            borderLeftStyle: 'solid',
-            borderRightStyle: 'solid',
-            borderLeftWidth: '2px',
-            borderRightWidth: '2px',
-            borderBottomWidth: '2px',
-            borderLeftColor: '#6B6B6B',
-            borderRightColor: '#6B6B6B',
-            borderBottomColor: '#6B6B6B',
-          }}
-        >
-          <Block marginLeft="3px" marginRight="3px" marginBottom="3px">
-            <RadioGroup onChange={(e) => props.setType(e.target.value as SearchType)} align="horizontal" value={props.type}>
+        <Block backgroundColor="#FFFFFF" display="flex" $style={{}}>
+          <Block marginLeft="3px" marginRight="3px" marginBottom="scale1200" backgroundColor={ettlevColors.grey50} display="flex" flex="1" justifyContent="center">
+            <RadioGroup
+              onChange={(e) => props.setType(e.target.value as SearchType)}
+              align="horizontal"
+              value={props.type}
+              overrides={{
+                RadioGroupRoot: {
+                  style: {
+                    justifyContent: 'space-between',
+                    width: '100%',
+                    paddingLeft: theme.sizing.scale550,
+                    paddingRight: theme.sizing.scale550,
+                  },
+                },
+              }}
+            >
               {SmallRadio('all', 'Alle')}
               {SmallRadio(ObjectType.Krav, 'Krav')}
               {SmallRadio(ObjectType.Behandling, 'Behandling')}
