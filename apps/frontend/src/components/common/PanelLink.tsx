@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import RouteLink from './RouteLink'
 import { Block, BlockOverrides, Responsive, Scale } from 'baseui/block'
-import { borderRadius, borderStyle, padding, paddingAll } from './Style'
+import { borderColor, borderRadius, borderStyle, borderWidth, padding, paddingAll } from './Style'
 import { theme } from '../../util'
 import { ettlevColors } from '../../util/theme'
 import { HeadingXLarge, LabelLarge, LabelSmall, ParagraphMedium, ParagraphSmall } from 'baseui/typography'
@@ -49,10 +49,8 @@ export const PanelLink = ({
               display: 'flex',
               justifyContent: 'space-between',
               backgroundColor: ettlevColors.white,
-
-              borderWidth: '1px',
-              borderColor: ettlevColors.grey100,
-              borderStyle: 'solid',
+              ...borderWidth('1px'),
+              ...borderColor(ettlevColors.grey100),
               ...borderStyle('solid'),
               borderBottomStyle: hideBorderBottom ? 'hidden' : 'solid',
               ...(square ? {} : borderRadius('4px')),
