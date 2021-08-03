@@ -34,6 +34,7 @@ interface ButtonProps {
   marginLeft?: boolean
   label?: string
   hidePadding?: boolean
+  notBold?: boolean
 }
 
 interface TooltipProps {
@@ -116,7 +117,7 @@ const Button = (props: ButtonProps) => {
           aria-label={props.label}
         >
           {props.icon && <FontAwesomeIcon icon={props.icon} style={{ marginRight: props.children ? '.5rem' : undefined }} fixedWidth />}
-          <b>{props.children}</b>
+          {props.notBold ? props.children : <b>{props.children}</b>}
           {props.iconEnd && <FontAwesomeIcon icon={props.iconEnd} style={{ marginLeft: props.children ? '.5rem' : undefined }} fixedWidth />}
         </BaseUIButton>
       </Tooltip>

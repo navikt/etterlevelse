@@ -60,7 +60,7 @@ type ObjectLinkProps = {
   fontColor?: string
 }
 
-export const urlForObject = (type: NavigableItem, id: string, audit?: AuditItem) => {
+export const urlForObject = (type: NavigableItem | string, id: string, audit?: AuditItem) => {
   switch (type) {
     case ObjectType.Settings:
       return '/admin/settings'
@@ -82,7 +82,7 @@ export const urlForObject = (type: NavigableItem, id: string, audit?: AuditItem)
     case ObjectType.Codelist:
       return `/admin/codelist/${id}`
   }
-  console.warn("couldn't find object type " + type)
+  console.warn("couldn't find object type" + type)
   return ''
 }
 

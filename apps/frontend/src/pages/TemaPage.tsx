@@ -261,7 +261,7 @@ export const TemaCard = ({ tema, relevans, setNum }: { tema: TemaCode; relevans:
   )
 }
 
-export const useKravCounter = (variables: { lover: string[] }, options?: QueryHookOptions<any, { lover: string[] }>) => {
+export const useKravCounter = (variables: { lover: string[] }, options?: QueryHookOptions<any, { lover?: string[] }>) => {
   return useQuery<{ krav: PageResponse<KravQL> }, KravFilters>(query, {
     ...(options || {}),
     variables,

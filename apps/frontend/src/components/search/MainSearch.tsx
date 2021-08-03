@@ -5,31 +5,31 @@ import { theme } from '../../util'
 import { useDebouncedState, useQueryParam } from '../../util/hooks'
 import { prefixBiasedSort } from '../../util/sort'
 import { Block } from 'baseui/block'
-import { useHistory, useLocation } from 'react-router-dom'
-import { urlForObject } from '../common/RouteLink'
+import { useLocation } from 'react-router-dom'
 import Button from '../common/Button'
-import { faFilter } from '@fortawesome/free-solid-svg-icons'
 import { Radio, RadioGroup } from 'baseui/radio'
-import { borderColor, paddingZero } from '../common/Style'
+import { borderColor, borderRadius, borderWidth, padding, paddingZero } from '../common/Style'
 import SearchLabel from './components/SearchLabel'
 import { NavigableItem, ObjectType } from '../admin/audit/AuditTypes'
 import { Behandling, Krav } from '../../constants'
 import shortid from 'shortid'
-import { searchResultColor } from '../../util/theme'
+import { ettlevColors, searchResultColor } from '../../util/theme'
 import { kravName } from '../../pages/KravPage'
 import { searchKrav } from '../../api/KravApi'
 import { behandlingName, searchBehandling } from '../../api/BehandlingApi'
 import { codelist, ListName } from '../../services/Codelist'
-import { searchIcon } from '../Images'
+import { filterIcon, searchIcon } from '../Images'
 import CustomizedSelect from '../common/CustomizedSelect'
+import CustomizedLink from '../common/CustomizedLink'
+import { Paragraph2 } from 'baseui/typography'
 
 shortid.characters('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@')
 
-type SearchItem = { id: string; sortKey: string; label: ReactElement; type: NavigableItem }
+type SearchItem = { id: string; sortKey: string; label: ReactElement; type: NavigableItem | string }
 
 type SearchType = 'all' | ObjectType.Krav | ObjectType.Behandling | ListName.UNDERAVDELING
 
-type GroupedResult = { Krav?: SearchItem[]; Behandling?: SearchItem[]; Underavdeling?: SearchItem[]; all?: SearchItem[]; __ungrouped: [] }
+type GroupedResult = { Krav?: SearchItem[]; Behandling?: SearchItem[]; Underavdeling?: SearchItem[]; all?: SearchItem[]; __ungrouped: SearchItem[] }
 
 type RadioProps = {
   $isHovered: boolean
@@ -54,67 +54,96 @@ const SmallRadio = (value: SearchType, label: string) => {
         },
         RadioMarkOuter: {
           style: (a: RadioProps) => ({
-            width: theme.sizing.scale500,
-            height: theme.sizing.scale500,
             ...(a.$isHovered ? { backgroundColor: theme.colors.positive400 } : {}),
           }),
         },
         RadioMarkInner: {
           style: (a: RadioProps) => ({
-            width: a.$checked ? theme.sizing.scale100 : theme.sizing.scale300,
-            height: a.$checked ? theme.sizing.scale100 : theme.sizing.scale300,
+            width: a.$checked ? theme.sizing.scale100 : theme.sizing.scale650,
+            height: a.$checked ? theme.sizing.scale100 : theme.sizing.scale650,
           }),
         },
       }}
     >
-      <Block font="ParagraphXSmall">{label}</Block>
+      <Paragraph2
+        $style={{
+          marginLeft: theme.sizing.scale300,
+          marginTop: theme.sizing.scale500,
+          marginBottom: theme.sizing.scale500,
+        }}
+      >
+        {label}
+      </Paragraph2>
     </Radio>
   )
 }
 
-const SelectType = (props: { type: SearchType; setType: (type: SearchType) => void }) => (
-  <Block
-    font="ParagraphSmall"
-    position="absolute"
-    marginTop="64px"
-    backgroundColor="#FFFFFF"
-    display='flex'
-    $style={{
-      borderBottomLeftRadius: '4px',
-      borderBottomRightRadius: '4px',
-      borderBottomStyle: 'solid',
-      borderLeftStyle: 'solid',
-      borderRightStyle: 'solid',
-      borderLeftWidth: '2px',
-      borderRightWidth: '2px',
-      borderBottomWidth: '2px',
-      borderLeftColor: '#6B6B6B',
-      borderRightColor: '#6B6B6B',
-      borderBottomColor: '#6B6B6B',
-    }}
-  >
-    <Block marginLeft="3px" marginRight="3px" marginBottom="3px">
-      <RadioGroup onChange={(e) => props.setType(e.target.value as SearchType)} align="horizontal" value={props.type}>
-        {SmallRadio('all', 'Alle')}
-        {SmallRadio(ObjectType.Krav, 'Krav')}
-        {SmallRadio(ObjectType.Behandling, 'Behandling')}
-        {SmallRadio(ListName.UNDERAVDELING, 'Underavdeling')}
-      </RadioGroup>
+const SelectType = (props: { type: SearchType; setType: (type: SearchType) => void }) => {
+  const [filter, setFilter] = useState(false)
+  return (
+    <Block width="100%" backgroundColor={ettlevColors.white}>
+      <Block width="100%" display="flex" flex="1" justifyContent="flex-end">
+        <Button onClick={() => setFilter(!filter)} startEnhancer={<img alt="" src={filterIcon} />} kind="tertiary" marginRight label="Filter søkeresultat" notBold>
+          <Paragraph2
+            $style={{
+              fontSize: theme.sizing.scale600,
+              marginTop: 0,
+              marginBottom: 0,
+            }}
+          >
+            {filter ? 'Skjul filter' : 'Filtrer søkeresultat'}
+          </Paragraph2>
+        </Button>
+      </Block>
+      {filter && (
+        <Block backgroundColor="#FFFFFF" display="flex" $style={{}}>
+          <Block marginLeft="3px" marginRight="3px" marginBottom="scale1200" backgroundColor={ettlevColors.grey50} display="flex" flex="1" justifyContent="center">
+            <RadioGroup
+              onChange={(e) => props.setType(e.target.value as SearchType)}
+              align="horizontal"
+              value={props.type}
+              overrides={{
+                RadioGroupRoot: {
+                  style: {
+                    justifyContent: 'space-between',
+                    width: '100%',
+                    paddingLeft: theme.sizing.scale550,
+                    paddingRight: theme.sizing.scale550,
+                  },
+                },
+              }}
+            >
+              {SmallRadio('all', 'Alle')}
+              {SmallRadio(ObjectType.Krav, 'Krav')}
+              {SmallRadio(ObjectType.Behandling, 'Behandling')}
+              {SmallRadio(ListName.UNDERAVDELING, 'Underavdeling')}
+            </RadioGroup>
+          </Block>
+        </Block>
+      )}
     </Block>
-  </Block>
-)
+  )
+}
 
 const kravMap = (t: Krav) => ({
   id: t.id,
   sortKey: t.navn,
-  label: <SearchLabel name={kravName(t)} type={'Krav'} backgroundColor={searchResultColor.kravBackground} />,
+  label: (
+    <CustomizedLink href={`/${ObjectType.Krav}/${t.id}`} style={{ textDecoration: 'none' }}>
+      <SearchLabel name={kravName(t)} type={'Krav'} backgroundColor={searchResultColor.kravBackground} />
+    </CustomizedLink>
+  ),
   type: ObjectType.Krav,
 })
 
 const behandlingMap = (t: Behandling) => ({
   id: t.id,
   sortKey: t.navn,
-  label: <SearchLabel name={behandlingName(t)} type={'Behandling'} backgroundColor={searchResultColor.behandlingBackground} />,
+  label: (
+    <CustomizedLink href={`/${ObjectType.Behandling}/${t.id}`} style={{ textDecoration: 'none' }}>
+      <SearchLabel name={behandlingName(t)} type={'Behandling'} backgroundColor={searchResultColor.behandlingBackground} />
+    </CustomizedLink>
+  ),
   type: ObjectType.Behandling,
 })
 
@@ -127,7 +156,11 @@ const getCodelist = (search: string, list: ListName, typeName: string) => {
         ({
           id: c.code,
           sortKey: c.shortName,
-          label: <SearchLabel name={c.shortName} type={typeName} />,
+          label: (
+            <CustomizedLink href={`/${list}/${c.code}`} style={{ textDecoration: 'none' }}>
+              <SearchLabel name={c.shortName} type={typeName} />
+            </CustomizedLink>
+          ),
           type: list,
         } as SearchItem),
     )
@@ -140,11 +173,15 @@ const searchCodelist = (search: string, list: ListName & NavigableItem, typeName
     .map((c) => ({
       id: c.code,
       sortKey: c.shortName,
-      label: <SearchLabel name={c.shortName} type={typeName} backgroundColor={backgroundColor} />,
+      label: (
+        <CustomizedLink href={`/${list}/${c.code}`} style={{ textDecoration: 'none' }}>
+          <SearchLabel name={c.shortName} type={typeName} backgroundColor={backgroundColor} />
+        </CustomizedLink>
+      ),
       type: list,
     }))
 
-const order = (type: NavigableItem) => {
+const order = (type: NavigableItem | string) => {
   switch (type) {
     case ObjectType.Krav:
       return 0
@@ -181,7 +218,6 @@ const useMainSearch = (searchParam?: string) => {
                 return same || typeOrder !== 0 ? typeOrder : compareFn(a, b)
               })
             setSearchResult(results)
-            console.log(results)
           }
           setLoading(true)
 
@@ -208,22 +244,27 @@ const useMainSearch = (searchParam?: string) => {
 const MainSearch = () => {
   const searchParam = useQueryParam('search')
   const [setSearch, searchResult, loading, type, setType] = useMainSearch(searchParam)
-  const [filter, setFilter] = useState(false)
+  const [filterClicked, setFilterClicked] = useState<boolean>(false)
   const [value, setValue] = useState<Value>(searchParam ? [{ id: searchParam, label: searchParam }] : [])
-  const history = useHistory()
   const location = useLocation()
-  const [groupedSeachResult, setGroupSearchResult] = useState<GroupedResult>({ __ungrouped: [] })
+  const filterOption = {
+    id: 'filter',
+    label: <SelectType type={type} setType={setType} />,
+    sortKey: 'filter',
+    type: '__ungrouped',
+  }
+  const [groupedSeachResult, setGroupedSearchResult] = useState<GroupedResult>({ __ungrouped: [filterOption] })
 
   useEffect(() => {
     const groupedResults: GroupedResult = {
-      __ungrouped: [],
+      __ungrouped: [filterOption],
       Krav: [],
       all: [],
       Behandling: [],
       Underavdeling: [],
     }
 
-    searchResult.map((r: SearchItem) => {
+    searchResult.forEach((r: SearchItem) => {
       if (r.type === 'Krav') {
         groupedResults.Krav?.push(r)
       } else if (r.type === 'Behandling') {
@@ -235,13 +276,15 @@ const MainSearch = () => {
       }
     })
 
-    setGroupSearchResult(groupedResults)
+    setGroupedSearchResult(groupedResults)
   }, [searchResult])
 
   return (
     <Block width="100%">
       <Block display="flex" position="relative" alignItems="center" width={'100%'}>
         <CustomizedSelect
+          clearable
+          closeOnSelect={!filterClicked}
           size={SIZE.compact}
           backspaceRemoves
           startOpen={!!searchParam}
@@ -255,19 +298,20 @@ const MainSearch = () => {
           placeholder={'Søk etter krav eller behandling'}
           aria-label={'Søk etter krav eller behandling'}
           value={value}
+          onOpen={() => setFilterClicked(true)}
           onInputChange={(event) => {
             setSearch(event.currentTarget.value)
             setValue([{ id: event.currentTarget.value, label: event.currentTarget.value }])
           }}
           onChange={(params) => {
             const item = params.value[0] as SearchItem
-            ;(async () => {
-              if (item) {
-                history.push(urlForObject(item.type, item.id))
-              } else {
-                setValue([])
-              }
-            })()
+            if (item && item.type !== '__ungrouped') {
+              setFilterClicked(false)
+            } else if (item && item.type === '__ungrouped') {
+              setFilterClicked(true)
+            } else {
+              setValue([])
+            }
           }}
           filterOptions={(options) => options}
           overrides={{
@@ -276,8 +320,6 @@ const MainSearch = () => {
             },
             ControlContainer: {
               style: {
-                ...(filter ? { borderBottomLeftRadius: 0 } : {}),
-                ...(filter ? { borderBottomRightRadius: 0 } : {}),
                 backgroundColor: '#FFFFFF',
                 ...borderColor('#6B6B6B'),
               },
@@ -292,18 +334,7 @@ const MainSearch = () => {
             },
           }}
         />
-        <Button
-          onClick={() => setFilter(!filter)}
-          icon={faFilter}
-          size="compact"
-          kind={filter ? 'primary' : 'tertiary'}
-          marginLeft
-          $style={{ height: theme.sizing.scale1000, width: theme.sizing.scale1000 }}
-          label="Filter søkeresultat"
-        />
-        {filter && <SelectType type={type} setType={setType} />}
       </Block>
-      
     </Block>
   )
 }
