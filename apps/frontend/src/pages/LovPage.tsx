@@ -114,7 +114,7 @@ const LovSide = ({ lov }: { lov: LovCode }) => {
       }
     >
       <Block>
-        <H2>{loading ? '?' : data?.krav.numberOfElements || 0} krav</H2>
+        <H2 color={ettlevColors.white}>{loading ? '?' : data?.krav.numberOfElements || 0} krav</H2>
         {loading && <SkeletonPanel count={10} />}
         {!loading &&
           data?.krav.content.map((k) => (
