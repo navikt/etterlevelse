@@ -94,7 +94,7 @@ export {
   paragrafIconBg,
   circlePencilIcon,
   gavelIcon,
-  filterIcon
+  filterIcon,
 }
 
 export const temaBilder: { [id: string]: string } = {

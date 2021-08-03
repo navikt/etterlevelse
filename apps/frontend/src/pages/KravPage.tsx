@@ -68,15 +68,17 @@ export const KravPage = () => {
   const tilbakemeldingId = useQueryParam('tilbakemeldingId')
   const [tab, setTab] = useState<Section>(!!tilbakemeldingId ? 'tilbakemeldinger' : state?.tab || 'krav')
 
-  const [tidligereKravVersjoner, setTidligereKravVersjoner] = React.useState<KravVersjon[]>([{kravNummer: 0, kravVersjon: 0}])
+  const [tidligereKravVersjoner, setTidligereKravVersjoner] = React.useState<KravVersjon[]>([{ kravNummer: 0, kravVersjon: 0 }])
 
   React.useEffect(() => {
     if (krav) {
       getKravByKravNummer(krav.kravNummer).then((resp) => {
         if (resp.content.length) {
-          const tidligereVersjoner = resp.content.map((k) => {
-            return { kravVersjon: k.kravVersjon, kravNummer: k.kravNummer }
-          }).sort((a, b) => (a.kravVersjon > b.kravVersjon) ? -1 : 1)
+          const tidligereVersjoner = resp.content
+            .map((k) => {
+              return { kravVersjon: k.kravVersjon, kravNummer: k.kravNummer }
+            })
+            .sort((a, b) => (a.kravVersjon > b.kravVersjon ? -1 : 1))
           setTidligereKravVersjoner(tidligereVersjoner)
         }
       })
@@ -133,8 +135,8 @@ export const KravPage = () => {
                       </Button>
                     </RouteLink>
                   </Block>
-                  {krav?.id && ((user.isKraveier() && krav.kravVersjon >= tidligereKravVersjoner[0].kravVersjon) || user.isAdmin()) &&
-                    (<Block flex="1" display={['none', 'none', 'none', 'none', 'flex', 'flex']} justifyContent="flex-end">
+                  {krav?.id && ((user.isKraveier() && krav.kravVersjon >= tidligereKravVersjoner[0].kravVersjon) || user.isAdmin()) && (
+                    <Block flex="1" display={['none', 'none', 'none', 'none', 'flex', 'flex']} justifyContent="flex-end">
                       <Button
                         startEnhancer={<img alt="add" src={plusIcon} />}
                         onClick={newVersion}
@@ -156,7 +158,8 @@ export const KravPage = () => {
                       >
                         Rediger
                       </Button>
-                    </Block>)}
+                    </Block>
+                  )}
                 </Block>
               </Block>
             </Block>
@@ -253,7 +256,6 @@ const Etterlevelser = ({ loading, etterlevelser: allEtterlevelser }: { loading: 
     (a) => a.code,
   )
 
-
   return (
     <Block>
       <HeadingXLarge maxWidth={'500px'}>Her kan du se hvordan andre team har dokumentert etterlevelse</HeadingXLarge>
@@ -278,7 +280,7 @@ const Etterlevelser = ({ loading, etterlevelser: allEtterlevelser }: { loading: 
                   beskrivelse={e.behandling.overordnetFormaal.shortName}
                   rightTitle={!!e.behandling.teamsData.length ? e.behandling.teamsData.map((t) => t.name).join(', ') : 'Ingen team'}
                   rightBeskrivelse={`Utfylt: ${moment(e.changeStamp.lastModifiedDate).format('ll')}`}
-                // panelIcon={(hover) => <PageIcon hover={hover} />}
+                  // panelIcon={(hover) => <PageIcon hover={hover} />}
                 />
               ))}
             </CustomizedPanel>

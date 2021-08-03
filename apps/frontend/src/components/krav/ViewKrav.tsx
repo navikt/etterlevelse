@@ -23,7 +23,7 @@ const LabelWrapper = ({ children }: { children: React.ReactNode }) => (
 
 const responsiveView: Responsive<Display> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
 
-export const ViewKrav = ({ krav, tidligereKravVersjoner }: { krav: KravQL, tidligereKravVersjoner: KravVersjon[] }) => {
+export const ViewKrav = ({ krav, tidligereKravVersjoner }: { krav: KravQL; tidligereKravVersjoner: KravVersjon[] }) => {
   return (
     <Block width="100%">
       {krav.suksesskriterier.map((s, i) => (
@@ -35,7 +35,7 @@ export const ViewKrav = ({ krav, tidligereKravVersjoner }: { krav: KravQL, tidli
 
       <Block height={theme.sizing.scale800} />
 
-      {<AllInfo krav={krav} tidligereKravVersjoner={tidligereKravVersjoner}/>}
+      {<AllInfo krav={krav} tidligereKravVersjoner={tidligereKravVersjoner} />}
     </Block>
   )
 }
@@ -51,8 +51,7 @@ const MediumInfo = ({ krav }: { krav: KravQL }) => (
   </>
 )
 
-const AllInfo = ({ krav, tidligereKravVersjoner }: { krav: KravQL, tidligereKravVersjoner: KravVersjon[] }) => {
-
+const AllInfo = ({ krav, tidligereKravVersjoner }: { krav: KravQL; tidligereKravVersjoner: KravVersjon[] }) => {
   return (
     <>
       {/* <LabelWrapper>

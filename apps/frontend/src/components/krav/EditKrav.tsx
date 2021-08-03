@@ -181,7 +181,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
                       shortenLinks
                       tooltip={'Beskrivelse av hva som er nytt siden siste versjon.'}
                     />
-                    
+
                     {/* <MultiInputField label='Rettskilder' name='rettskilder' link /> */}
 
                     <Block marginTop="80px" marginBottom={inputMarginBottom}>
