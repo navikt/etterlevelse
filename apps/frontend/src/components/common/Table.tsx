@@ -66,8 +66,8 @@ const headerCellOverride = {
 const StyledHeader = withStyle(StyledHead, {
   backgroundColor: 'transparent',
   boxShadow: 'none',
-  borderBottomWidth: `2px`,
-  borderBottomStyle: `solid`,
+  borderBottomWidth: '2px',
+  borderBottomStyle: 'solid',
   borderBottomColor: theme.colors.mono600,
   marginBottom: '.5rem',
 })
