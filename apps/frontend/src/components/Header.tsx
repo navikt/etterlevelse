@@ -174,8 +174,12 @@ const Menu = (props: { pages: MenuItem[][]; title: React.ReactNode; icon?: IconD
           {allPages.map((p, i) => {
             const item =
               !!p.href && !p.disabled ? (
-                <Block display={'flex'} alignItems={'center'}>
-                  <RouteLink href={p.href} onClick={() => setOpen(false)}>
+                <Block display={'flex'} alignItems={'center'} $style={{
+                  ':hover': {
+                    textDecoration: '2px underline',
+                  }
+                }}>
+                  <RouteLink href={p.href} onClick={() => setOpen(false)} hideUnderline>
                     <Block>
                       <Block display={'flex'} alignItems={'center'}>
                         {p.icon && (
