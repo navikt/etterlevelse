@@ -101,6 +101,7 @@ const SelectType = (props: { type: SearchType; setType: (type: SearchType) => vo
             <RadioGroup
               onChange={(e) => props.setType(e.target.value as SearchType)}
               align="horizontal"
+              autoFocus
               value={props.type}
               overrides={{
                 RadioGroupRoot: {
@@ -257,11 +258,15 @@ const MainSearch = () => {
 
   useEffect(() => {
     const groupedResults: GroupedResult = {
-      __ungrouped: [filterOption],
+      __ungrouped: [],
       Krav: [],
       all: [],
       Behandling: [],
       Underavdeling: [],
+    }
+
+    if(value[0]?.id && value[0].id.toString().length >= 3){
+      groupedResults.__ungrouped.push(filterOption)
     }
 
     searchResult.forEach((r: SearchItem) => {
