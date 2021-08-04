@@ -26,6 +26,7 @@ import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
 import { faBars, faChevronDown, faChevronUp, faTimes } from '@fortawesome/free-solid-svg-icons'
 import { faUser } from '@fortawesome/free-regular-svg-icons'
 import { History } from 'history'
+import { borderColor, borderStyle, borderWidth } from './common/Style'
 
 export const loginUrl = (history: History, path?: string) => {
   const frontpage = window.location.href.substr(0, window.location.href.length - history.location.pathname.length)
@@ -72,11 +73,11 @@ const LoggedInHeader = () => {
   const kravPages = user.isKraveier() ? [{ label: 'Forvalte og opprette krav', href: '/krav' }] : []
   const adminPages = user.isAdmin()
     ? [
-        { label: intl.audit, href: '/admin/audit' },
-        { label: 'Kodeverk', href: '/admin/codelist' },
-        { label: intl.mailLog, href: '/admin/maillog' },
-        { label: intl.settings, href: '/admin/settings', disabled: true },
-      ]
+      { label: intl.audit, href: '/admin/audit' },
+      { label: 'Kodeverk', href: '/admin/codelist' },
+      { label: intl.mailLog, href: '/admin/maillog' },
+      { label: intl.settings, href: '/admin/settings', disabled: true },
+    ]
     : []
   const otherPages = [
     { label: 'Mine instillinger', href: '/instillinger', disabled: true },
@@ -151,8 +152,8 @@ const Menu = (props: { pages: MenuItem[][]; title: React.ReactNode; icon?: IconD
 
   const allPages = props.pages.length
     ? props.pages
-        .filter((p) => p.length)
-        .reduce((previousValue, currentValue) => [...((previousValue as MenuItem[]) || []), { label: <Divider compact={props.compact} /> }, ...(currentValue as MenuItem[])])
+      .filter((p) => p.length)
+      .reduce((previousValue, currentValue) => [...((previousValue as MenuItem[]) || []), { label: <Divider compact={props.compact} /> }, ...(currentValue as MenuItem[])])
     : []
 
   return (
@@ -223,13 +224,13 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
           <HeaderNavigation overrides={{ Root: { style: { paddingBottom: 0, borderBottomStyle: 'none' } } }}>
             <NavigationList $align={ALIGN.left} $style={{ paddingLeft: 0 }}>
               <NavigationItem $style={{ paddingLeft: 0 }}>
-                <RouteLink href={'/'} hideUnderline>
-                  <H1 marginBottom={0} marginTop={0}>
-                    <Block display="flex" alignItems="center">
-                      <img src={logo} alt="Nav etterlevelse" height="44px" />
-                    </Block>
-                  </H1>
-                </RouteLink>
+                <Block display="flex" alignItems="center" $style={{
+                }}>
+                  <RouteLink href={'/'} hideUnderline $style={{
+                  }}>
+                    <img src={logo} alt="Nav etterlevelse" height="44px" />
+                  </RouteLink>
+                </Block>
               </NavigationItem>
             </NavigationList>
 
@@ -265,7 +266,7 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
           </HeaderNavigation>
         </Block>
       </Block>
-    </Block>
+    </Block >
   )
 }
 

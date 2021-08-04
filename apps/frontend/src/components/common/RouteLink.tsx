@@ -22,8 +22,6 @@ type RouteLinkProps = {
 const RouteLink = (props: RouteLinkProps) => {
   const { hideUnderline, plain, requireLogin, style, fontColor, ...restprops } = props
   const history = useHistory()
-  const [hover, setHover] = useState(hideUnderline)
-  const [focus, setFocus] = useState(false)
 
   const onClick = (e: Event) => {
     if (requireLogin && !user.isLoggedIn()) return
@@ -37,7 +35,7 @@ const RouteLink = (props: RouteLinkProps) => {
   }
 
   const customStyle = {
-    textDecoration: hover ? 'none' : undefined,
+    textDecoration: hideUnderline ? 'none' : undefined,
     color: fontColor ? fontColor : plain ? 'inherit !important' : undefined,
     fontWeight: 'normal',
   }
@@ -46,7 +44,7 @@ const RouteLink = (props: RouteLinkProps) => {
 
   const href = !requireLogin || user.isLoggedIn() ? restprops.href : loginUrl(history, restprops.href)
 
-  return <CustomizedLink style={mergedStyle} {...restprops} href={href} onClick={onClick} onMouseEnter={() => setHover(hideUnderline ? false : true)} onMouseLeave={() => setHover(hideUnderline ? true : false)} />
+  return <CustomizedLink style={mergedStyle} {...restprops} href={href} onClick={onClick}/>
 }
 
 export default RouteLink
