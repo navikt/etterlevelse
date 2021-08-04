@@ -341,7 +341,7 @@ const MainSearch = () => {
               props: {
                 overrides: {
                   Svg: {
-                    component: () => <Button notBold size="compact" kind="tertiary" onClick={() => setValue([])}><img src={clearSearchIcon} alt="Clear search icon"/></Button>
+                    component: () => <Button notBold size="compact" kind="tertiary" onClick={() => setValue([])}><img src={clearSearchIcon} alt="tøm"/></Button>
                   }
                 }
               }
