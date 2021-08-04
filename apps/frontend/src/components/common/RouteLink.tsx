@@ -1,5 +1,5 @@
 import { useHistory } from 'react-router-dom'
-import React from 'react'
+import React, { useState } from 'react'
 import { AuditItem, NavigableItem, ObjectType } from '../admin/audit/AuditTypes'
 import { Block } from 'baseui/block'
 import { AuditButton } from '../admin/audit/AuditButton'
@@ -22,6 +22,7 @@ type RouteLinkProps = {
 const RouteLink = (props: RouteLinkProps) => {
   const { hideUnderline, plain, requireLogin, style, fontColor, ...restprops } = props
   const history = useHistory()
+  const [hover, setHover] = useState(hideUnderline)
 
   const onClick = (e: Event) => {
     if (requireLogin && !user.isLoggedIn()) return
@@ -35,7 +36,7 @@ const RouteLink = (props: RouteLinkProps) => {
   }
 
   const customStyle = {
-    textDecoration: hideUnderline ? 'none' : undefined,
+    textDecoration: hover ? 'none' : undefined,
     color: fontColor ? fontColor : plain ? 'inherit !important' : undefined,
     fontWeight: 'normal',
   }
@@ -44,7 +45,7 @@ const RouteLink = (props: RouteLinkProps) => {
 
   const href = !requireLogin || user.isLoggedIn() ? restprops.href : loginUrl(history, restprops.href)
 
-  return <CustomizedLink style={mergedStyle} {...restprops} href={href} onClick={onClick} />
+  return <CustomizedLink style={mergedStyle} {...restprops} href={href} onClick={onClick} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} />
 }
 
 export default RouteLink
