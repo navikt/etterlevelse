@@ -174,16 +174,20 @@ const Menu = (props: { pages: MenuItem[][]; title: React.ReactNode; icon?: IconD
           {allPages.map((p, i) => {
             const item =
               !!p.href && !p.disabled ? (
-                <RouteLink href={p.href} onClick={() => setOpen(false)}>
-                  <Block display={'flex'} alignItems={'center'}>
-                    {p.icon && (
-                      <Block marginRight={theme.sizing.scale400}>
-                        <img src={p.icon} alt={'link ikon'} aria-hidden />
+                <Block display={'flex'} alignItems={'center'}>
+                  <RouteLink href={p.href} onClick={() => setOpen(false)}>
+                    <Block>
+                      <Block display={'flex'} alignItems={'center'}>
+                        {p.icon && (
+                          <Block marginRight={theme.sizing.scale400}>
+                            <img src={p.icon} alt={'link ikon'} aria-hidden />
+                          </Block>
+                        )}
+                        <Block>{p.label}</Block>
                       </Block>
-                    )}
-                    <Block>{p.label}</Block>
-                  </Block>
-                </RouteLink>
+                    </Block>
+                  </RouteLink>
+                </Block>
               ) : (
                 <Block $style={{ opacity: p.disabled ? 0.6 : 1 }}>{p.label}</Block>
               )
