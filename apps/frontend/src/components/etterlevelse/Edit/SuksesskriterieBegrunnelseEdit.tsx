@@ -29,7 +29,7 @@ export const getSuksesskriterieBegrunnelse = (suksesskriterieBegrunnelser: Sukse
   }
 }
 
-export const SuksesskriterierBegrunnelseEdit = ({ suksesskriterie, disableEdit }: { suksesskriterie: Suksesskriterie[], disableEdit: boolean }) => {
+export const SuksesskriterierBegrunnelseEdit = ({ suksesskriterie, disableEdit }: { suksesskriterie: Suksesskriterie[]; disableEdit: boolean }) => {
   return (
     <FieldWrapper>
       <FieldArray name={'suksesskriterieBegrunnelser'}>{(p) => <KriterieBegrunnelseList props={p} disableEdit={disableEdit} suksesskriterie={suksesskriterie} />}</FieldArray>
@@ -37,7 +37,7 @@ export const SuksesskriterierBegrunnelseEdit = ({ suksesskriterie, disableEdit }
   )
 }
 
-const KriterieBegrunnelseList = ({ props, suksesskriterie, disableEdit }: { props: FieldArrayRenderProps; suksesskriterie: Suksesskriterie[], disableEdit: boolean }) => {
+const KriterieBegrunnelseList = ({ props, suksesskriterie, disableEdit }: { props: FieldArrayRenderProps; suksesskriterie: Suksesskriterie[]; disableEdit: boolean }) => {
   const suksesskriterieBegrunnelser = props.form.values.suksesskriterieBegrunnelser as SuksesskriterieBegrunnelse[]
 
   return (
@@ -45,7 +45,13 @@ const KriterieBegrunnelseList = ({ props, suksesskriterie, disableEdit }: { prop
       {suksesskriterie.map((s, i) => {
         return (
           <Block key={s.navn + '_' + i}>
-            <KriterieBegrunnelse disableEdit={disableEdit} suksesskriterie={s} index={i} suksesskriterieBegrunnelser={suksesskriterieBegrunnelser} update={(updated) => props.replace(i, updated)} />
+            <KriterieBegrunnelse
+              disableEdit={disableEdit}
+              suksesskriterie={s}
+              index={i}
+              suksesskriterieBegrunnelser={suksesskriterieBegrunnelser}
+              update={(updated) => props.replace(i, updated)}
+            />
           </Block>
         )
       })}

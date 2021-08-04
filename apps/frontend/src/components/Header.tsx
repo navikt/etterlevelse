@@ -73,11 +73,11 @@ const LoggedInHeader = () => {
   const kravPages = user.isKraveier() ? [{ label: 'Forvalte og opprette krav', href: '/krav' }] : []
   const adminPages = user.isAdmin()
     ? [
-      { label: intl.audit, href: '/admin/audit' },
-      { label: 'Kodeverk', href: '/admin/codelist' },
-      { label: intl.mailLog, href: '/admin/maillog' },
-      { label: intl.settings, href: '/admin/settings', disabled: true },
-    ]
+        { label: intl.audit, href: '/admin/audit' },
+        { label: 'Kodeverk', href: '/admin/codelist' },
+        { label: intl.mailLog, href: '/admin/maillog' },
+        { label: intl.settings, href: '/admin/settings', disabled: true },
+      ]
     : []
   const otherPages = [
     { label: 'Mine instillinger', href: '/instillinger', disabled: true },
@@ -152,8 +152,8 @@ const Menu = (props: { pages: MenuItem[][]; title: React.ReactNode; icon?: IconD
 
   const allPages = props.pages.length
     ? props.pages
-      .filter((p) => p.length)
-      .reduce((previousValue, currentValue) => [...((previousValue as MenuItem[]) || []), { label: <Divider compact={props.compact} /> }, ...(currentValue as MenuItem[])])
+        .filter((p) => p.length)
+        .reduce((previousValue, currentValue) => [...((previousValue as MenuItem[]) || []), { label: <Divider compact={props.compact} /> }, ...(currentValue as MenuItem[])])
     : []
 
   return (
@@ -174,11 +174,15 @@ const Menu = (props: { pages: MenuItem[][]; title: React.ReactNode; icon?: IconD
           {allPages.map((p, i) => {
             const item =
               !!p.href && !p.disabled ? (
-                <Block display={'flex'} alignItems={'center'} $style={{
-                  ':hover': {
-                    textDecoration: '2px underline',
-                  }
-                }}>
+                <Block
+                  display={'flex'}
+                  alignItems={'center'}
+                  $style={{
+                    ':hover': {
+                      textDecoration: '2px underline',
+                    },
+                  }}
+                >
                   <RouteLink href={p.href} onClick={() => setOpen(false)} hideUnderline>
                     <Block>
                       <Block display={'flex'} alignItems={'center'}>
@@ -232,10 +236,8 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
           <HeaderNavigation overrides={{ Root: { style: { paddingBottom: 0, borderBottomStyle: 'none' } } }}>
             <NavigationList $align={ALIGN.left} $style={{ paddingLeft: 0 }}>
               <NavigationItem $style={{ paddingLeft: 0 }}>
-                <Block display="flex" alignItems="center" $style={{
-                }}>
-                  <RouteLink href={'/'} hideUnderline $style={{
-                  }}>
+                <Block display="flex" alignItems="center" $style={{}}>
+                  <RouteLink href={'/'} hideUnderline $style={{}}>
                     <img src={logo} alt="Nav etterlevelse" height="44px" />
                   </RouteLink>
                 </Block>
@@ -274,7 +276,7 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
           </HeaderNavigation>
         </Block>
       </Block>
-    </Block >
+    </Block>
   )
 }
 

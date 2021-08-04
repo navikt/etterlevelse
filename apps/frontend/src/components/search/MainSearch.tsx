@@ -154,16 +154,16 @@ const getCodelist = (search: string, list: ListName, typeName: string) => {
     .filter((c) => c.shortName.toLowerCase().indexOf(search.toLowerCase()) >= 0)
     .map(
       (c) =>
-      ({
-        id: c.code,
-        sortKey: c.shortName,
-        label: (
-          <CustomizedLink href={`/${list}/${c.code}`} style={{ textDecoration: 'none' }}>
-            <SearchLabel name={c.shortName} type={typeName} />
-          </CustomizedLink>
-        ),
-        type: list,
-      } as SearchItem),
+        ({
+          id: c.code,
+          sortKey: c.shortName,
+          label: (
+            <CustomizedLink href={`/${list}/${c.code}`} style={{ textDecoration: 'none' }}>
+              <SearchLabel name={c.shortName} type={typeName} />
+            </CustomizedLink>
+          ),
+          type: list,
+        } as SearchItem),
     )
 }
 
@@ -205,7 +205,7 @@ const useMainSearch = (searchParam?: string) => {
       setSearchResult(getCodelist(search, ListName.UNDERAVDELING, 'Underavdeling'))
     } else {
       if (search && search.replace(/ /g, '').length > 2) {
-        ; (async () => {
+        ;(async () => {
           let results: SearchItem[] = []
           let searches: Promise<any>[] = []
           const compareFn = (a: SearchItem, b: SearchItem) => prefixBiasedSort(search, a.sortKey, b.sortKey)
@@ -341,11 +341,15 @@ const MainSearch = () => {
               props: {
                 overrides: {
                   Svg: {
-                    component: () => <Button notBold size="compact" kind="tertiary" onClick={() => setValue([])}><img src={clearSearchIcon} alt="tøm"/></Button>
-                  }
-                }
-              }
-            }
+                    component: () => (
+                      <Button notBold size="compact" kind="tertiary" onClick={() => setValue([])}>
+                        <img src={clearSearchIcon} alt="tøm" />
+                      </Button>
+                    ),
+                  },
+                },
+              },
+            },
           }}
         />
       </Block>

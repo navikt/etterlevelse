@@ -61,15 +61,15 @@ const TemaSide = ({ tema }: { tema: TemaCode }) => {
           {expand && (
             <Block marginBottom={theme.sizing.scale900}>
               <H3 marginBottom={theme.sizing.scale200}>Ansvarlig for lovtolkning</H3>
-              {_.uniq(lover.map((l) => l.data?.underavdeling)).map((code,index) => (
-                <Paragraph2 key={code+'_'+index} marginTop={0} marginBottom={theme.sizing.scale200}>
+              {_.uniq(lover.map((l) => l.data?.underavdeling)).map((code, index) => (
+                <Paragraph2 key={code + '_' + index} marginTop={0} marginBottom={theme.sizing.scale200}>
                   {codelist.getCode(ListName.UNDERAVDELING, code)?.shortName}
                 </Paragraph2>
               ))}
 
               <H3 marginBottom={theme.sizing.scale200}>Lovdata</H3>
               {lover.map((l, index) => (
-                <Block key={l.code+'_'+index} marginBottom={theme.sizing.scale200}>
+                <Block key={l.code + '_' + index} marginBottom={theme.sizing.scale200}>
                   <ObjectLink type={ListName.LOV} id={l.code}>
                     {l.shortName}
                   </ObjectLink>
@@ -91,7 +91,7 @@ const TemaSide = ({ tema }: { tema: TemaCode }) => {
         {loading && <SkeletonPanel count={10} />}
         {!loading &&
           data?.krav.content.map((k, index) => (
-            <Block key={k.id+'_'+index} marginBottom={'8px'}>
+            <Block key={k.id + '_' + index} marginBottom={'8px'}>
               <PanelLink href={`/krav/${k.kravNummer}/${k.kravVersjon}`} beskrivelse={kravNumView(k)} title={k.navn} flip />
             </Block>
           ))}

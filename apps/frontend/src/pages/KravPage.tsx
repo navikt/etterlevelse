@@ -246,7 +246,9 @@ export const KravPage = () => {
 }
 
 const Etterlevelser = ({ loading, etterlevelser: allEtterlevelser }: { loading: boolean; etterlevelser?: EtterlevelseQL[] }) => {
-  const etterlevelser = (allEtterlevelser || []).filter((e) => e.status === EtterlevelseStatus.FERDIG_DOKUMENTERT).sort((a, b) => a.behandling.navn.localeCompare(b.behandling.navn))
+  const etterlevelser = (allEtterlevelser || [])
+    .filter((e) => e.status === EtterlevelseStatus.FERDIG_DOKUMENTERT)
+    .sort((a, b) => a.behandling.navn.localeCompare(b.behandling.navn))
 
   const avdelinger = _.sortedUniqBy(
     (etterlevelser

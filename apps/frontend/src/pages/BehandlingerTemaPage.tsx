@@ -39,7 +39,7 @@ const mapEtterlevelseData = (etterlevelse?: Etterlevelse) => ({
   etterleves: !!etterlevelse?.etterleves,
   frist: etterlevelse?.fristForFerdigstillelse,
   etterlevelseStatus: etterlevelse?.status,
-  gammelVersjon: false
+  gammelVersjon: false,
 })
 
 export const BehandlingerTemaPage = () => {
@@ -159,7 +159,7 @@ export const BehandlingerTemaPage = () => {
       <Block display="flex" alignItems="center">
         <Block display="flex" alignItems="baseline" marginRight="30px">
           <H1 color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
-            {kravData.filter(k => k.gammelVersjon === false).length}
+            {kravData.filter((k) => k.gammelVersjon === false).length}
           </H1>
           <Paragraph2>krav</Paragraph2>
         </Block>

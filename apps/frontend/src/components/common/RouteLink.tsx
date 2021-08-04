@@ -44,7 +44,7 @@ const RouteLink = (props: RouteLinkProps) => {
 
   const href = !requireLogin || user.isLoggedIn() ? restprops.href : loginUrl(history, restprops.href)
 
-  return <CustomizedLink style={mergedStyle} {...restprops} href={href} onClick={onClick}/>
+  return <CustomizedLink style={mergedStyle} {...restprops} href={href} onClick={onClick} />
 }
 
 export default RouteLink
