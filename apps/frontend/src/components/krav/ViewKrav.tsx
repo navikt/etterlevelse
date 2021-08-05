@@ -12,8 +12,12 @@ import { slackLink, slackUserLink, termUrl } from '../../util/config'
 import { user } from '../../services/User'
 import { LovViewList } from '../Lov'
 import { SuksesskriterieCard } from './Suksesskriterie'
-import { Paragraph2 } from 'baseui/typography'
+import { Label3, Paragraph2 } from 'baseui/typography'
 import CustomizedLink from '../common/CustomizedLink'
+import { CustomizedAccordion, CustomizedPanel } from '../common/CustomizedAccordion'
+import { ettlevColors } from '../../util/theme'
+import { borderStyle, borderColor } from '../common/Style'
+import { Markdown } from '../common/Markdown'
 
 const LabelWrapper = ({ children }: { children: React.ReactNode }) => (
   <Block marginTop="48px" marginBottom="48px">
@@ -98,10 +102,6 @@ const AllInfo = ({ krav, tidligereKravVersjoner }: { krav: KravQL; tidligereKrav
         </LabelAboveContent>
       </LabelWrapper>
 
-      <LabelWrapper>
-        <LabelAboveContent header title="Dette er nytt fra forrige versjon" markdown={krav.versjonEndringer} />
-      </LabelWrapper>
-
       {tidligereKravVersjoner.length !== 0 && krav.kravVersjon > 1 && (
         <LabelWrapper>
           <LabelAboveContent title="Tidligere versjoner">
@@ -120,6 +120,35 @@ const AllInfo = ({ krav, tidligereKravVersjoner }: { krav: KravQL; tidligereKrav
         </LabelWrapper>
       )}
 
+      <Block marginBottom="48px">
+      <CustomizedAccordion>
+        <CustomizedPanel
+          title={<Label3 $style={{ color: ettlevColors.green600 }}>Dette er nytt fra forrige versjon</Label3>}
+          overrides={{
+            Header: {
+              style: {
+                backgroundColor: 'transparent',
+                ...borderStyle('none'),
+                ...borderColor('none'),
+                maxWidth: '270px',
+                paddingLeft: '0px',
+              },
+            },
+            Content: {
+              style: {
+                backgroundColor: 'transparent',
+                borderBottomWidth: 'none',
+                borderBottomStyle: 'none',
+                borderBottomColor: 'none',
+              },
+            },
+          }}
+        >
+          <Markdown source={krav.versjonEndringer} />
+        </CustomizedPanel>
+      </CustomizedAccordion>
+      </Block>
+      
       <Block backgroundColor="#F1F1F1" padding="32px">
         <Label display={responsiveView} title="Ansvarlig">
           {krav.underavdeling?.shortName}
