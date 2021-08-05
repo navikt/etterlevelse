@@ -12,7 +12,7 @@ import { gql, useQuery } from '@apollo/client'
 import { ettlevColors, maxPageWidth } from '../util/theme'
 import CustomizedTabs, { CustomizedTab } from '../components/common/CustomizedTabs'
 import { PanelLink } from '../components/common/PanelLink'
-import { arkPennIcon, bamseIcon, navChevronRightIcon, paperPenIconBg, searchIcon } from '../components/Images'
+import { arkPennIcon, bamseIcon, clearSearchIcon, navChevronRightIcon, paperPenIconBg, searchIcon } from '../components/Images'
 import { env } from '../util/env'
 import { InfoBlock2 } from '../components/common/InfoBlock'
 import moment from 'moment'
@@ -211,6 +211,7 @@ const SisteBehandlinger = ({ behandlinger, loading }: { behandlinger: Behandling
 }
 
 const Alle = () => {
+  const [hover, setHover] = useState(false)
   const pageSize = 20
   const [pageNumber, setPage] = useState(0)
   const [sok, setSok] = useDebouncedState('', 300)
@@ -255,7 +256,9 @@ const Alle = () => {
     <Block marginBottom={tabMarginBottom}>
       <LabelLarge marginBottom={theme.sizing.scale200}>Søk i alle behandlinger</LabelLarge>
 
-      <Block maxWidth="600px" marginBottom={theme.sizing.scale1000} display={'flex'} flexDirection={'column'}>
+      <Block maxWidth="600px" marginBottom={theme.sizing.scale1000} display={'flex'} flexDirection={'column'}
+        onMouseEnter={() => setHover(true)}
+        onMouseLeave={() => setHover(false)}>
         <StatefulInput
           size="compact"
           placeholder="Søk"
@@ -264,10 +267,38 @@ const Alle = () => {
           clearable
           overrides={{
             Root: { style: { paddingLeft: 0, paddingRight: 0 } },
+            Input: {
+              style: {
+                backgroundColor: hover ? ettlevColors.green50 : undefined,
+              }
+            },
+            StartEnhancer: {
+              style: {
+                backgroundColor: hover ? ettlevColors.green50 : undefined,
+              }
+            },
+            ClearIconContainer: {
+              style: {
+                backgroundColor: hover ? ettlevColors.green50 : undefined,
+              }
+            },
+            ClearIcon: {
+              props: {
+                overrides: {
+                  Svg: {
+                    component: (props: any) => (
+                      <Button notBold size="compact" kind="tertiary" onClick={() => props.onClick()}>
+                        <img src={clearSearchIcon} alt="tøm" />
+                      </Button>
+                    ),
+                  },
+                },
+              },
+            },
             // EndEnhancer: {style: {marginLeft: theme.sizing.scale400, paddingLeft: 0, paddingRight: 0, backgroundColor: ettlevColors.black}}
           }}
           startEnhancer={<img src={searchIcon} alt="Søk ikon" />}
-          // endEnhancer={<img aria-hidden alt={'Søk ikon'} src={sokButtonIcon}/>}
+        // endEnhancer={<img aria-hidden alt={'Søk ikon'} src={sokButtonIcon} />}
         />
         {tooShort && (
           <LabelSmall color={ettlevColors.error400} alignSelf={'flex-end'} marginTop={theme.sizing.scale200}>
