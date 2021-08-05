@@ -287,7 +287,7 @@ const MainSearch = () => {
           size={SIZE.compact}
           backspaceRemoves
           startOpen={!!searchParam}
-          noResultsMsg={'Ingen'}
+          noResultsMsg={<Block color={ettlevColors.green800}>Skriv minst tre bokstaver i søkefeltet.</Block>}
           autoFocus={location.pathname === '/'}
           isLoading={loading}
           maxDropdownHeight="400px"
