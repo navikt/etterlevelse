@@ -91,7 +91,7 @@ export const MainPageV2 = () => {
               ...margin(theme.sizing.scale1600, theme.sizing.scale600),
             }}
           >
-            <HeadingXLarge display={'flex'} flexDirection={'column'} color={ettlevColors.green800}>
+            {/* <HeadingXLarge display={'flex'} flexDirection={'column'} color={ettlevColors.green800}>
               <span style={{ fontWeight: 400 }}>Her kan det stå</span>
               <span>litt tekst som beskriver animasjonsfilmen</span>
             </HeadingXLarge>
@@ -103,7 +103,7 @@ export const MainPageV2 = () => {
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Gravida venenatis, a mattis ut tempor, proin aliquam aenean. Nec amet tincidunt ut odio habitant vel
                 blandit et id. At in sed enim cursus nisi. A fermentum pellentesque nulla lacus viverra a, ultrices.
               </ParagraphMedium>
-            </Block>
+            </Block> */}
           </Block>
         </Narrow>
       </Block>
