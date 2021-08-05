@@ -2,11 +2,12 @@ import { Select, SelectOverrides, SelectProps, StatefulSelect, StatefulSelectPro
 import _ from 'lodash'
 import { ettlevColors } from '../../util/theme'
 import { navChevronDownIcon } from '../Images'
-import { borderColor } from './Style'
+import { borderWidth } from './Style'
 
 const customOverrides: SelectOverrides = {
   ControlContainer: {
     style: {
+      ...borderWidth('1px'),
       ':hover': {
         backgroundColor: ettlevColors.green50,
       },

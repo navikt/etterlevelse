@@ -21,6 +21,7 @@ import { SkeletonPanel } from '../components/common/LoadingSkeleton'
 import { user } from '../services/User'
 import { useHistory, useParams } from 'react-router-dom'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
+import { borderWidth } from '../components/common/Style'
 
 type Section = 'mine' | 'siste' | 'alle'
 
@@ -256,9 +257,14 @@ const Alle = () => {
     <Block marginBottom={tabMarginBottom}>
       <LabelLarge marginBottom={theme.sizing.scale200}>Søk i alle behandlinger</LabelLarge>
 
-      <Block maxWidth="600px" marginBottom={theme.sizing.scale1000} display={'flex'} flexDirection={'column'}
+      <Block
+        maxWidth="600px"
+        marginBottom={theme.sizing.scale1000}
+        display={'flex'}
+        flexDirection={'column'}
         onMouseEnter={() => setHover(true)}
-        onMouseLeave={() => setHover(false)}>
+        onMouseLeave={() => setHover(false)}
+      >
         <StatefulInput
           size="compact"
           placeholder="Søk"
@@ -266,21 +272,21 @@ const Alle = () => {
           onChange={(e) => setSok((e.target as HTMLInputElement).value)}
           clearable
           overrides={{
-            Root: { style: { paddingLeft: 0, paddingRight: 0 } },
+            Root: { style: { paddingLeft: 0, paddingRight: 0, ...borderWidth('1px') } },
             Input: {
               style: {
                 backgroundColor: hover ? ettlevColors.green50 : undefined,
-              }
+              },
             },
             StartEnhancer: {
               style: {
                 backgroundColor: hover ? ettlevColors.green50 : undefined,
-              }
+              },
             },
             ClearIconContainer: {
               style: {
                 backgroundColor: hover ? ettlevColors.green50 : undefined,
-              }
+              },
             },
             ClearIcon: {
               props: {
@@ -298,7 +304,7 @@ const Alle = () => {
             // EndEnhancer: {style: {marginLeft: theme.sizing.scale400, paddingLeft: 0, paddingRight: 0, backgroundColor: ettlevColors.black}}
           }}
           startEnhancer={<img src={searchIcon} alt="Søk ikon" />}
-        // endEnhancer={<img aria-hidden alt={'Søk ikon'} src={sokButtonIcon} />}
+          // endEnhancer={<img aria-hidden alt={'Søk ikon'} src={sokButtonIcon} />}
         />
         {tooShort && (
           <LabelSmall color={ettlevColors.error400} alignSelf={'flex-end'} marginTop={theme.sizing.scale200}>
