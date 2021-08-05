@@ -83,7 +83,7 @@ const SelectType = (props: { type: SearchType; setType: (type: SearchType) => vo
   const [filter, setFilter] = useState(false)
   return (
     <Block width="100%" backgroundColor={ettlevColors.white}>
-      <Block width="100%" display="flex" flex="1" justifyContent="flex-end">
+      { !filter && <Block width="100%" display="flex" flex="1" justifyContent="flex-end">
         <Button onClick={() => setFilter(!filter)} startEnhancer={<img alt="" src={filterIcon} />} kind="tertiary" marginRight label="Filter søkeresultat" notBold>
           <Paragraph2
             $style={{
@@ -95,7 +95,7 @@ const SelectType = (props: { type: SearchType; setType: (type: SearchType) => vo
             {filter ? 'Skjul filter' : 'Filtrer søkeresultat'}
           </Paragraph2>
         </Button>
-      </Block>
+      </Block>}
       {filter && (
         <Block backgroundColor="#FFFFFF" display="flex" $style={{}}>
           <Block marginLeft="3px" marginRight="3px" marginBottom="scale1200" backgroundColor={ettlevColors.grey50} display="flex" flex="1" justifyContent="center">
