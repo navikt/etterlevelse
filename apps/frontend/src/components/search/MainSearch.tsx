@@ -321,12 +321,6 @@ const MainSearch = () => {
             SearchIcon: {
               component: () => <img src={searchIcon} alt="Søk ikon" />,
             },
-            ControlContainer: {
-              style: {
-                backgroundColor: '#FFFFFF',
-                ...borderColor('#6B6B6B'),
-              },
-            },
             DropdownListItem: {
               style: {
                 paddingTop: 0,
