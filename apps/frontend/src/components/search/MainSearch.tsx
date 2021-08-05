@@ -92,7 +92,7 @@ const SelectType = (props: { type: SearchType; setType: (type: SearchType) => vo
               marginBottom: 0,
             }}
           >
-            {filter ? 'Skjul filter' : 'Filtrer søkeresultat'}
+            {filter ? 'Skjul filter' : 'Vis filter'}
           </Paragraph2>
         </Button>
       </Block>}
