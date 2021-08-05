@@ -22,6 +22,7 @@ import { clearSearchIcon, filterIcon, searchIcon } from '../Images'
 import CustomizedSelect from '../common/CustomizedSelect'
 import { Paragraph2 } from 'baseui/typography'
 import { urlForObject } from '../common/RouteLink'
+import { truncate } from 'fs/promises'
 
 shortid.characters('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@')
 
@@ -308,6 +309,8 @@ const MainSearch = () => {
                   setValue([item])
                   history.push(urlForObject(item.type, item.id))
                   window.location.reload()
+                } else if (item && item.type === '__ungrouped') {
+                  setFilterClicked(true)
                 } else {
                   setValue([])
                 }
