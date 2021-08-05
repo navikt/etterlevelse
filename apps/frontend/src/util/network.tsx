@@ -29,7 +29,7 @@ export const useNetworkStatus = () => {
   }
 
   return (
-    <Modal isOpen={error} onClose={clear} unstable_ModalBackdropScroll>
+    <Modal closeable={false} isOpen={error} onClose={clear} unstable_ModalBackdropScroll>
       <ModalHeader>Nettverksfeil</ModalHeader>
       <ModalBody>{error?.toString()}</ModalBody>
       <ModalFooter>

@@ -210,7 +210,7 @@ const KravTable = (props: { behandling: Behandling }) => {
           })
         }}
       />
-      <Modal isOpen={!!viewEtterlevelse} onClose={() => setViewEtterlevelse(undefined)} unstable_ModalBackdropScroll>
+      <Modal closeable={false} isOpen={!!viewEtterlevelse} onClose={() => setViewEtterlevelse(undefined)} unstable_ModalBackdropScroll>
         <EtterlevelseModal id={viewEtterlevelse} />
       </Modal>
       {edit && (

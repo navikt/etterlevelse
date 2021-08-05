@@ -257,7 +257,7 @@ const NyTilbakemeldingModal = ({ open, close, krav }: { open?: boolean; close: (
   }
 
   return (
-    <Modal unstable_ModalBackdropScroll isOpen={open} onClose={() => close()}>
+    <Modal closeable={false} unstable_ModalBackdropScroll isOpen={open} onClose={() => close()}>
       <Formik onSubmit={submit} initialValues={newTilbakemelding(krav) as CreateTilbakemeldingRequest} validationSchema={createTilbakemeldingSchema}>
         {({ isSubmitting, setFieldValue, values, submitForm }) => {
           const setVarslingsadresse = (v?: Varslingsadresse) => {
@@ -345,6 +345,7 @@ const TilbakemeldingSvarModal = ({ tilbakemelding, close }: { tilbakemelding?: T
 
   return (
     <Modal
+      closeable={false}
       unstable_ModalBackdropScroll
       isOpen={!!tilbakemelding}
       onClose={() => close()}
@@ -384,7 +385,7 @@ const MeldingKnapper = (props: { melding: TilbakemeldingMelding; tilbakemeldingI
       </Block>
 
       {deleteModal && (
-        <Modal isOpen onClose={() => setDeleteModal(false)} unstable_ModalBackdropScroll>
+        <Modal closeable={false} isOpen onClose={() => setDeleteModal(false)} unstable_ModalBackdropScroll>
           <ModalHeader>Er du sikker på at du vil slette meldingen?</ModalHeader>
           <ModalBody>
             {meldingNr === 1 && <ParagraphMedium>Hele meldingstråden vil bli slettet.</ParagraphMedium>}
@@ -416,6 +417,7 @@ const MeldingKnapper = (props: { melding: TilbakemeldingMelding; tilbakemeldingI
 
       {editModal && (
         <Modal
+          closeable={false}
           isOpen
           onClose={() => setEditModal(false)}
           unstable_ModalBackdropScroll

@@ -36,7 +36,7 @@ type ModalCreateProps = {
 
 const CreateCodeListModal = ({ isOpen, title, list, errorOnCreate, onClose, submit }: ModalCreateProps) => {
   return (
-    <Modal closeable animate autoFocus size={SIZE.auto} role={ROLE.dialog} isOpen={isOpen} unstable_ModalBackdropScroll onClose={() => onClose()}>
+    <Modal closeable={false} animate autoFocus size={SIZE.auto} role={ROLE.dialog} isOpen={isOpen} unstable_ModalBackdropScroll onClose={() => onClose()}>
       <Block {...modalBlockProps}>
         <Formik
           onSubmit={(values) => {

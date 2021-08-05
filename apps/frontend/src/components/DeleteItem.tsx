@@ -20,7 +20,7 @@ export const DeleteItem = (props: { fun: () => Promise<any>; redirect: string })
       >
         Slett
       </Button>
-      <Modal isOpen={open} onClose={() => setOpen(false)} unstable_ModalBackdropScroll>
+      <Modal closeable={false} isOpen={open} onClose={() => setOpen(false)} unstable_ModalBackdropScroll>
         <ModalHeader>Bekreft slett</ModalHeader>
         <ModalBody>Er du sikker på at du vil slette?</ModalBody>
         <ModalFooter>

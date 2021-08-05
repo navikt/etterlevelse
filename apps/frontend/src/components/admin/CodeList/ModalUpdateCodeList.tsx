@@ -38,7 +38,7 @@ type ModalUpdateProps = {
 
 const UpdateCodeListModal = ({ title, initialValues, errorOnUpdate, isOpen, onClose, submit }: ModalUpdateProps) => {
   return (
-    <Modal onClose={onClose} closeable isOpen={isOpen} animate autoFocus unstable_ModalBackdropScroll size={SIZE.auto} role={ROLE.dialog}>
+    <Modal onClose={onClose} closeable={false} isOpen={isOpen} animate autoFocus unstable_ModalBackdropScroll size={SIZE.auto} role={ROLE.dialog}>
       <Block {...modalBlockProps}>
         <Formik
           onSubmit={(values) => {

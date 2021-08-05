@@ -16,7 +16,7 @@ type ModalDeleteProps = {
 
 const DeleteCodeListModal = ({ title, initialValues, isOpen, errorOnDelete, submit, onClose }: ModalDeleteProps) => {
   return (
-    <Modal onClose={onClose} isOpen={isOpen} autoFocus animate unstable_ModalBackdropScroll={true} size="default">
+    <Modal closeable={false} onClose={onClose} isOpen={isOpen} autoFocus animate unstable_ModalBackdropScroll={true} size="default">
       <ModalHeader>{title}</ModalHeader>
       <ModalBody>
         <Paragraph2>

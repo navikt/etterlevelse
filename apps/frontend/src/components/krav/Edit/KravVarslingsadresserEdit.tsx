@@ -80,7 +80,7 @@ export const KravVarslingsadresserEdit = () => {
 }
 
 const AddModal = ({ isOpen, close, title, children }: { isOpen: boolean; close: () => void; title: string; children: ReactNode }) => (
-  <Modal unstable_ModalBackdropScroll isOpen={isOpen} onClose={close}>
+  <Modal closeable={false} unstable_ModalBackdropScroll isOpen={isOpen} onClose={close}>
     <ModalHeader>{title}</ModalHeader>
     <ModalBody>{children}</ModalBody>
     <ModalFooter>
