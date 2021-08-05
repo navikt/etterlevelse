@@ -5,7 +5,7 @@ import { theme } from '../../util'
 import { useDebouncedState, useQueryParam } from '../../util/hooks'
 import { prefixBiasedSort } from '../../util/sort'
 import { Block } from 'baseui/block'
-import { useLocation } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 import Button from '../common/Button'
 import { Radio, RadioGroup } from 'baseui/radio'
 import { borderColor, borderRadius, borderWidth, padding, paddingZero } from '../common/Style'
@@ -20,8 +20,8 @@ import { behandlingName, searchBehandling } from '../../api/BehandlingApi'
 import { codelist, ListName } from '../../services/Codelist'
 import { clearSearchIcon, filterIcon, searchIcon } from '../Images'
 import CustomizedSelect from '../common/CustomizedSelect'
-import CustomizedLink from '../common/CustomizedLink'
 import { Paragraph2 } from 'baseui/typography'
+import { urlForObject } from '../common/RouteLink'
 
 shortid.characters('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@')
 
@@ -130,9 +130,7 @@ const kravMap = (t: Krav) => ({
   id: t.id,
   sortKey: t.navn,
   label: (
-    <CustomizedLink href={`/${ObjectType.Krav}/${t.id}`} style={{ textDecoration: 'none' }}>
-      <SearchLabel name={kravName(t)} type={'Krav'} backgroundColor={searchResultColor.kravBackground} />
-    </CustomizedLink>
+    <SearchLabel name={kravName(t)} type={'Krav'} backgroundColor={searchResultColor.kravBackground} />
   ),
   type: ObjectType.Krav,
 })
@@ -141,9 +139,7 @@ const behandlingMap = (t: Behandling) => ({
   id: t.id,
   sortKey: t.navn,
   label: (
-    <CustomizedLink href={`/${ObjectType.Behandling}/${t.id}`} style={{ textDecoration: 'none' }}>
-      <SearchLabel name={behandlingName(t)} type={'Behandling'} backgroundColor={searchResultColor.behandlingBackground} />
-    </CustomizedLink>
+    <SearchLabel name={behandlingName(t)} type={'Behandling'} backgroundColor={searchResultColor.behandlingBackground} />
   ),
   type: ObjectType.Behandling,
 })
@@ -154,16 +150,14 @@ const getCodelist = (search: string, list: ListName, typeName: string) => {
     .filter((c) => c.shortName.toLowerCase().indexOf(search.toLowerCase()) >= 0)
     .map(
       (c) =>
-        ({
-          id: c.code,
-          sortKey: c.shortName,
-          label: (
-            <CustomizedLink href={`/${list}/${c.code}`} style={{ textDecoration: 'none' }}>
-              <SearchLabel name={c.shortName} type={typeName} />
-            </CustomizedLink>
-          ),
-          type: list,
-        } as SearchItem),
+      ({
+        id: c.code,
+        sortKey: c.shortName,
+        label: (
+          <SearchLabel name={c.shortName} type={typeName} />
+        ),
+        type: list,
+      } as SearchItem),
     )
 }
 
@@ -175,9 +169,7 @@ const searchCodelist = (search: string, list: ListName & NavigableItem, typeName
       id: c.code,
       sortKey: c.shortName,
       label: (
-        <CustomizedLink href={`/${list}/${c.code}`} style={{ textDecoration: 'none' }}>
-          <SearchLabel name={c.shortName} type={typeName} backgroundColor={backgroundColor} />
-        </CustomizedLink>
+        <SearchLabel name={c.shortName} type={typeName} backgroundColor={backgroundColor} />
       ),
       type: list,
     }))
@@ -205,7 +197,7 @@ const useMainSearch = (searchParam?: string) => {
       setSearchResult(getCodelist(search, ListName.UNDERAVDELING, 'Underavdeling'))
     } else {
       if (search && search.replace(/ /g, '').length > 2) {
-        ;(async () => {
+        ; (async () => {
           let results: SearchItem[] = []
           let searches: Promise<any>[] = []
           const compareFn = (a: SearchItem, b: SearchItem) => prefixBiasedSort(search, a.sortKey, b.sortKey)
@@ -248,6 +240,7 @@ const MainSearch = () => {
   const [filterClicked, setFilterClicked] = useState<boolean>(false)
   const [value, setValue] = useState<Value>(searchParam ? [{ id: searchParam, label: searchParam }] : [])
   const location = useLocation()
+  const history = useHistory()
   const filterOption = {
     id: 'filter',
     label: <SelectType type={type} setType={setType} />,
@@ -310,13 +303,15 @@ const MainSearch = () => {
           }}
           onChange={(params) => {
             const item = params.value[0] as SearchItem
-            if (item && item.type !== '__ungrouped') {
-              setFilterClicked(false)
-            } else if (item && item.type === '__ungrouped') {
-              setFilterClicked(true)
-            } else {
-              setValue([])
-            }
+              ; (async () => {
+                if (item && item.type !== '__ungrouped') {
+                  setValue([item])
+                  history.push(urlForObject(item.type, item.id))
+                  window.location.reload()
+                } else {
+                  setValue([])
+                }
+              })()
           }}
           filterOptions={(options) => options}
           overrides={{
