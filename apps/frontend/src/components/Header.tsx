@@ -27,6 +27,7 @@ import { faBars, faChevronDown, faChevronUp, faTimes } from '@fortawesome/free-s
 import { faUser } from '@fortawesome/free-regular-svg-icons'
 import { History } from 'history'
 import { borderColor, borderStyle, borderWidth } from './common/Style'
+import SkipToContent from './common/SkipToContent/SkipToContent'
 
 export const loginUrl = (history: History, path?: string) => {
   const frontpage = window.location.href.substr(0, window.location.href.length - history.location.pathname.length)
@@ -230,8 +231,12 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
   }
 
   return (
-    <Block width="100%" display="flex" backgroundColor={ettlevColors.white} justifyContent="center">
+      <Block width="100%" display="flex" backgroundColor={ettlevColors.white} justifyContent="center">
+      <SkipToContent />
       <Block width="100%" maxWidth={maxPageWidth}>
+      <StyledLink href="#main">
+
+    </StyledLink>
         <Block paddingLeft="40px" paddingRight="40px" width="calc(100%-80px)" height="76px" overrides={{ Block: { props: { role: 'banner', 'aria-label': 'Header meny' } } }}>
           <HeaderNavigation overrides={{ Root: { style: { paddingBottom: 0, borderBottomStyle: 'none' } } }}>
             <NavigationList $align={ALIGN.left} $style={{ paddingLeft: 0 }}>
@@ -276,7 +281,7 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
           </HeaderNavigation>
         </Block>
       </Block>
-    </Block>
+      </Block>
   )
 }
 

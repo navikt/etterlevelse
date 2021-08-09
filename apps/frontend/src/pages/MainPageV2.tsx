@@ -29,7 +29,7 @@ export const MainPageV2 = () => {
     >
       <Block display={'flex'} flexDirection={'column'} alignItems={'center'} width={'100%'}>
         <Wide>
-          <Block display={'flex'} justifyContent={'center'} flexWrap>
+          <Block id="content" display={'flex'} justifyContent={'center'} flexWrap>
             <PanelLinkCard
               marginRight={cardMarginRight}
               height={cardHeight}

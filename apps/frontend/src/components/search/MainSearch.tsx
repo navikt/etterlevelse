@@ -280,7 +280,7 @@ const MainSearch = () => {
 
   return (
     <Block width="100%">
-      <Block display="flex" position="relative" alignItems="center" width={'100%'}>
+      <Block id="search" display="flex" position="relative" alignItems="center" width={'100%'}>
         <CustomizedSelect
           clearable
           closeOnSelect={!filterClicked}
