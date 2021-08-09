@@ -12,7 +12,7 @@ import { slackLink, slackUserLink, termUrl } from '../../util/config'
 import { user } from '../../services/User'
 import { LovViewList } from '../Lov'
 import { SuksesskriterieCard } from './Suksesskriterie'
-import { Label3, Paragraph2 } from 'baseui/typography'
+import { H3, Paragraph2 } from 'baseui/typography'
 import CustomizedLink from '../common/CustomizedLink'
 import { CustomizedAccordion, CustomizedPanel } from '../common/CustomizedAccordion'
 import { ettlevColors } from '../../util/theme'
@@ -123,14 +123,14 @@ const AllInfo = ({ krav, tidligereKravVersjoner }: { krav: KravQL; tidligereKrav
       <Block marginBottom="48px">
       <CustomizedAccordion>
         <CustomizedPanel
-          title={<Label3 $style={{ color: ettlevColors.green600 }}>Dette er nytt fra forrige versjon</Label3>}
+          title={<H3 $style={{ color: ettlevColors.green600 }}>Dette er nytt fra forrige versjon</H3>}
           overrides={{
             Header: {
               style: {
                 backgroundColor: 'transparent',
                 ...borderStyle('none'),
                 ...borderColor('none'),
-                maxWidth: '270px',
+                maxWidth: '320px',
                 paddingLeft: '0px',
               },
             },
