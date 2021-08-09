@@ -14,7 +14,7 @@ export const RelevansPage = () => {
 
   if (!relevans) {
     return (
-      <Block maxWidth={maxPageWidth} width="100%">
+      <Block id="content" overrides={{ Block: { props: { role: 'main' } } }} maxWidth={maxPageWidth} width="100%">
         <Block paddingLeft="40px" paddingRight="40px" width="calc(100%-80px)" display="flex" justifyContent="center">
           <Block>
             <HeadingMedium>Velg relevans</HeadingMedium>
@@ -33,7 +33,7 @@ export const RelevansPage = () => {
 
   const code = codelist.getCode(ListName.RELEVANS, relevans)
   return (
-    <Block maxWidth={maxPageWidth} width="100%">
+    <Block id="content" overrides={{ Block: { props: { role: 'main' } } }} maxWidth={maxPageWidth} width="100%">
       <Block paddingLeft="40px" paddingRight="40px" width="calc(100%-80px)" display="flex" justifyContent="center">
         <Block>
           <HeadingMedium>Relevans: {code?.shortName}</HeadingMedium>

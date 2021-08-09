@@ -25,7 +25,7 @@ export const LovPage = () => {
 
   if (!lov) {
     return (
-      <Block maxWidth={maxPageWidth} width="100%">
+      <Block id="content" overrides={{ Block: { props: { role: 'main' } } }} maxWidth={maxPageWidth} width="100%">
         <Block paddingLeft="40px" paddingRight="40px" width="calc(100%-80px)" display="flex" justifyContent="center">
           <Block>
             <H1>Velg lov</H1>

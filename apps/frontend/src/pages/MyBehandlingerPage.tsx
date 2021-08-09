@@ -34,7 +34,7 @@ type CustomTeamObject = BehandlingCount & Team
 const tabMarginBottom = '100px'
 
 export const MyBehandlingerPage = () => (
-  <Block width="100%" paddingBottom={'200px'}>
+  <Block width="100%" paddingBottom={'200px'} id="content" overrides={{ Block: { props: { role: 'main' } } }}>
     <Block width="100%" backgroundColor={ettlevColors.grey50} display={'flex'} justifyContent={'center'}>
       <Block maxWidth={maxPageWidth} width="100%">
         <Block paddingLeft={'100px'} paddingRight={'100px'} paddingTop={theme.sizing.scale800}>

@@ -19,7 +19,7 @@ export const MainPage = () => {
   return (
     <Block maxWidth={maxPageWidth}>
       <Block paddingLeft="40px" paddingRight="40px" width="calc(100%-80px)" display="flex" justifyContent="center" marginTop="50px">
-        <Block display="flex" flexDirection="column" maxWidth={'1000px'} overrides={{ Block: { props: { role: 'main' } } }}>
+        <Block id="content" display="flex" flexDirection="column" maxWidth={'1000px'} overrides={{ Block: { props: { role: 'main' } } }}>
           <Block {...sectionProps} overrides={{ Block: { props: { role: 'navigation', 'aria-label': 'Hoved meny' } } }}>
             <SectionCard
               icon={pencilFill}

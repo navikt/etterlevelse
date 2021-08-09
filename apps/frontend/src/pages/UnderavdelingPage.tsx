@@ -32,7 +32,7 @@ export const UnderavdelingPage = () => {
 
   const code = codelist.getCode(ListName.UNDERAVDELING, underavdeling)
   return (
-    <Block maxWidth={maxPageWidth} width="100%">
+    <Block id="content" overrides={{ Block: { props: { role: 'main' } } }} maxWidth={maxPageWidth} width="100%">
       <Block paddingLeft="40px" paddingRight="40px" width="calc(100%-80px)" display="flex" justifyContent="center">
         <Block>
           <HeadingMedium>Underavdeling: {code?.shortName}</HeadingMedium>

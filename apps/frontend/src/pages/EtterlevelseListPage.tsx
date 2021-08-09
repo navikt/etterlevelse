@@ -14,7 +14,7 @@ export const EtterlevelseListPage = () => {
   const [etterlevelse, prev, next, loading] = useEtterlevelsePage(20)
 
   return (
-    <Block maxWidth={maxPageWidth} width="100%">
+    <Block id="content" overrides={{ Block: { props: { role: 'main' } } }} maxWidth={maxPageWidth} width="100%">
       <Block paddingLeft="40px" paddingRight="40px" width="calc(100%-80px)" display="flex" justifyContent="center">
         <Block minWidth={pageWidth}>
           <Block display="flex" justifyContent="space-between" alignItems="center">

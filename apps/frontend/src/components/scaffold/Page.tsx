@@ -31,7 +31,7 @@ export const Page = ({
   hideBackBtn?: boolean
 }) => {
   return (
-    <Block width="100%" overrides={{ Block: { props: { role: 'main' } } }} backgroundColor={backgroundColor} paddingBottom={'200px'}>
+    <Block id="content" width="100%" overrides={{ Block: { props: { role: 'main' } } }} backgroundColor={backgroundColor} paddingBottom={'200px'}>
       <Block
         backgroundColor={headerBackgroundColor}
         display="flex"
@@ -109,7 +109,7 @@ export const Layout2 = (props: {
   childrenBackgroundColor?: string
   children: React.ReactNode
 }) => (
-  <Block width="100%" overrides={{ Block: { props: { role: 'main' } } }}>
+  <Block width="100%" id="content" overrides={{ Block: { props: { role: 'main' } } }}>
     <Block backgroundColor={props.headerBackgroundColor} display="flex" width="100%" justifyContent="center">
       <Block maxWidth={maxPageWidth} width="100%">
         <Block paddingLeft="40px" paddingRight="40px" display="flex" flexDirection="column" justifyContent="center">

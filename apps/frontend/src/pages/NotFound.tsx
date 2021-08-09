@@ -10,7 +10,7 @@ import { maxPageWidth } from '../util/theme'
 const NotFound = () => {
   const location = useLocation()
   return (
-    <Block maxWidth={maxPageWidth} width="100%">
+    <Block id="content" overrides={{ Block: { props: { role: 'main' } } }} maxWidth={maxPageWidth} width="100%">
       <Block paddingLeft="40px" paddingRight="40px" width="calc(100%-80px)" display="flex" justifyContent="center" alignContent="center" marginTop={theme.sizing.scale2400}>
         <Paragraph1>
           {intl.pageNotFound} - {location.pathname}

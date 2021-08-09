@@ -37,7 +37,7 @@ export const KravListPage = () => {
   const next = () => setPageNumber(Math.min(pages - 1, pageNumber + 1))
 
   return (
-    <Block maxWidth={maxPageWidth} width="100%">
+    <Block id="content" overrides={{ Block: { props: { role: 'main' } } }} maxWidth={maxPageWidth} width="100%">
       <Block paddingLeft="40px" paddingRight="40px" width="calc(100%-80px)">
         <Block display="flex" justifyContent="space-between" alignItems="center">
           <H2>Krav</H2>

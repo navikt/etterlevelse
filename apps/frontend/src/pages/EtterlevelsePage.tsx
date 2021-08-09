@@ -52,7 +52,7 @@ export const EtterlevelsePage = () => {
   }, [etterlevelse])
 
   return (
-    <Block width="100%" overrides={{ Block: { props: { role: 'main' } } }}>
+    <Block width="100%" id="content" overrides={{ Block: { props: { role: 'main' } } }}>
       {loading && <LoadingSkeleton header="Etterlevelse" />}
       {!loading && (
         <Block backgroundColor={ettlevColors.green800} display="flex" width="100%" justifyContent="center" paddingBottom="32px">
