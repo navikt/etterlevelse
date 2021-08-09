@@ -15,14 +15,13 @@ import { Behandling, Krav } from '../../constants'
 import shortid from 'shortid'
 import { ettlevColors, searchResultColor } from '../../util/theme'
 import { kravName } from '../../pages/KravPage'
-import { searchKrav } from '../../api/KravApi'
+import { getKravByKravNumberAndVersion, getKravByKravNummer, searchKrav } from '../../api/KravApi'
 import { behandlingName, searchBehandling } from '../../api/BehandlingApi'
 import { codelist, ListName } from '../../services/Codelist'
 import { clearSearchIcon, filterIcon, searchIcon } from '../Images'
 import CustomizedSelect from '../common/CustomizedSelect'
 import { Paragraph2 } from 'baseui/typography'
 import { urlForObject } from '../common/RouteLink'
-import { truncate } from 'fs/promises'
 
 shortid.characters('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@')
 
@@ -83,7 +82,7 @@ const SelectType = (props: { type: SearchType; setType: (type: SearchType) => vo
   const [filter, setFilter] = useState(false)
   return (
     <Block width="100%" backgroundColor={ettlevColors.white}>
-      { !filter && <Block width="100%" display="flex" flex="1" justifyContent="flex-end">
+      {!filter && <Block width="100%" display="flex" flex="1" justifyContent="flex-end">
         <Button onClick={() => setFilter(!filter)} startEnhancer={<img alt="" src={filterIcon} />} kind="tertiary" marginRight label="Filter søkeresultat" notBold>
           <Paragraph2
             $style={{
@@ -221,7 +220,23 @@ const useMainSearch = (searchParam?: string) => {
 
           if (type === 'all' || type === ObjectType.Krav) {
             searches.push((async () => add((await searchKrav(search)).map(kravMap)))())
+
+            let kravNumber = search
+            if (kravNumber[0].toLowerCase() === 'k') {
+              kravNumber = kravNumber.substring(1)
+            }
+
+            if (Number.parseFloat(kravNumber) && Number.parseFloat(kravNumber) % 1 === 0) {
+              searches.push((async () => add((await (await getKravByKravNummer(Number.parseFloat(kravNumber))).content).map(kravMap)))())
+            }
+
+            if (Number.parseFloat(kravNumber) && Number.parseFloat(kravNumber) % 1 !== 0) {
+              const kravNummerMedVersjon = kravNumber.split('.')
+              searches.push((async () => add([(await (await getKravByKravNumberAndVersion(kravNummerMedVersjon[0], kravNummerMedVersjon[1])))].map(kravMap)))())
+            }
+
           }
+
           if (type === 'all' || type === ObjectType.Behandling) {
             searches.push((async () => add((await searchBehandling(search)).map(behandlingMap)))())
           }
