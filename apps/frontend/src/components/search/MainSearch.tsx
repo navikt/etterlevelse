@@ -335,10 +335,8 @@ const MainSearch = () => {
           value={value}
           onOpen={() => setFilterClicked(true)}
           onInputChange={(event) => {
-            if (event.currentTarget.value !== 'filter') {
-              setSearch(event.currentTarget.value)
-              setValue([{ id: event.currentTarget.value, label: event.currentTarget.value }])
-            }
+            setSearch(event.currentTarget.value)
+            setValue([{ id: event.currentTarget.value, label: event.currentTarget.value }])
           }}
           onChange={(params) => {
             const item = params.value[0] as SearchItem
