@@ -257,10 +257,10 @@ const MainSearch = () => {
   const location = useLocation()
   const history = useHistory()
 
-  const getNoResultMessage = () => {
+  const getNoResultMessage = (): string => {
     if (!value.length || !value[0].id || (value[0].id && value[0].id.toString().length < 3)) {
       return 'Skriv minst tre bokstaver i søkefeltet.'
-    } if (!searchResult.length) {
+    } else if (!loading && !searchResult.length) {
       return `Ingen treff: ${value[0].id}`
     } else {
       return ''
@@ -269,16 +269,16 @@ const MainSearch = () => {
 
   const filterOption = {
     id: 'filter',
-    label: <Block>
-      <SelectType type={type} setType={setType} />
-
-      <Block display='flex' justifyContent='center' color={ettlevColors.green800} backgroundColor={ettlevColors.white} $style={{
-        ...padding('24px', '24px'),
-        paddingTop: '0px'
-      }}>
-        {getNoResultMessage()}
-      </Block>
-    </Block>,
+    label:
+      <Block>
+        <SelectType type={type} setType={setType} />
+        <Block display='flex' justifyContent='center' color={ettlevColors.green800} backgroundColor={ettlevColors.white} $style={{
+          ...padding('24px', '24px'),
+          paddingTop: '0px'
+        }}>
+          {getNoResultMessage()}
+        </Block>
+      </Block>,
     sortKey: 'filter',
     type: '__ungrouped',
   }
@@ -321,9 +321,7 @@ const MainSearch = () => {
           size={SIZE.compact}
           backspaceRemoves
           startOpen={!!searchParam}
-          noResultsMsg={<Block color={ettlevColors.green800}>
-            'Skriv minst tre bokstaver i søkefeltet.'
-          </Block>}
+          noResultsMsg={<Block color={ettlevColors.green800}>Skriv minst tre bokstaver i søkefeltet.</Block>}
           autoFocus={location.pathname === '/'}
           isLoading={loading}
           maxDropdownHeight="400px"
