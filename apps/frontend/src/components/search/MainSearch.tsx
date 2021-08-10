@@ -258,7 +258,7 @@ const MainSearch = () => {
   const history = useHistory()
 
   const getNoResultMessage = () => {
-    if (!value.length || (value[0].id && value[0].id.toString().length < 3)) {
+    if (!value.length || !value[0].id || (value[0].id && value[0].id.toString().length < 3)) {
       return 'Skriv minst tre bokstaver i søkefeltet.'
     } if (!searchResult.length) {
       return `Ingen treff: ${value[0].id}`
