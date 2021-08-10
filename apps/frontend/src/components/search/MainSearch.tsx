@@ -193,7 +193,7 @@ const useMainSearch = (searchParam?: string) => {
   useEffect(() => {
     setSearchResult([])
 
-    if (type === ListName.UNDERAVDELING) {
+    if (type === ListName.UNDERAVDELING && (search.length > 2)) {
       setSearchResult(getCodelist(search, ListName.UNDERAVDELING, 'Underavdeling'))
     } else {
       if (search && search.replace(/ /g, '').length > 2) {
@@ -259,7 +259,17 @@ const MainSearch = () => {
   const history = useHistory()
   const filterOption = {
     id: 'filter',
-    label: <SelectType type={type} setType={setType} />,
+    label: <Block>
+      <SelectType type={type} setType={setType} />
+
+      <Block display='flex' justifyContent='center' color={ettlevColors.green800} backgroundColor={ettlevColors.white} $style={{
+        ...padding('24px', '24px'),
+        paddingTop: '0px'
+      }}>
+        {!value.length || (value[0].id && value[0].id.toString().length < 3) ? 'Skriv minst tre bokstaver i søkefeltet.' : !searchResult.length && !loading ?
+          'Ingen resultat.' : ''}
+      </Block>
+    </Block>,
     sortKey: 'filter',
     type: '__ungrouped',
   }
@@ -274,7 +284,7 @@ const MainSearch = () => {
       Underavdeling: [],
     }
 
-    if (value[0]?.id && value[0].id.toString().length >= 3) {
+    if (value.length) {
       groupedResults.__ungrouped.push(filterOption)
     }
 
@@ -302,7 +312,9 @@ const MainSearch = () => {
           size={SIZE.compact}
           backspaceRemoves
           startOpen={!!searchParam}
-          noResultsMsg={<Block color={ettlevColors.green800}>Skriv minst tre bokstaver i søkefeltet.</Block>}
+          noResultsMsg={<Block color={ettlevColors.green800}>
+            'Skriv minst tre bokstaver i søkefeltet.'
+          </Block>}
           autoFocus={location.pathname === '/'}
           isLoading={loading}
           maxDropdownHeight="400px"
@@ -314,8 +326,10 @@ const MainSearch = () => {
           value={value}
           onOpen={() => setFilterClicked(true)}
           onInputChange={(event) => {
-            setSearch(event.currentTarget.value)
-            setValue([{ id: event.currentTarget.value, label: event.currentTarget.value }])
+            if (event.currentTarget.value !== 'filter') {
+              setSearch(event.currentTarget.value)
+              setValue([{ id: event.currentTarget.value, label: event.currentTarget.value }])
+            }
           }}
           onChange={(params) => {
             const item = params.value[0] as SearchItem
@@ -326,8 +340,6 @@ const MainSearch = () => {
                   window.location.reload()
                 } else if (item && item.type === '__ungrouped') {
                   setFilterClicked(true)
-                } else {
-                  setValue([])
                 }
               })()
           }}
