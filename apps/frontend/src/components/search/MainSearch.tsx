@@ -240,7 +240,6 @@ const useMainSearch = (searchParam?: string) => {
           if (type === 'all' || type === ObjectType.Behandling) {
             searches.push((async () => add((await searchBehandling(search)).map(behandlingMap)))())
           }
-
           await Promise.all(searches)
           setLoading(false)
         })()
@@ -257,6 +256,17 @@ const MainSearch = () => {
   const [value, setValue] = useState<Value>(searchParam ? [{ id: searchParam, label: searchParam }] : [])
   const location = useLocation()
   const history = useHistory()
+
+  const getNoResultMessage = () => {
+    if (!value.length || (value[0].id && value[0].id.toString().length < 3)) {
+      return 'Skriv minst tre bokstaver i søkefeltet.'
+    } if (!searchResult.length) {
+      return `Ingen treff: ${value[0].id}`
+    } else {
+      return ''
+    }
+  }
+
   const filterOption = {
     id: 'filter',
     label: <Block>
@@ -266,8 +276,7 @@ const MainSearch = () => {
         ...padding('24px', '24px'),
         paddingTop: '0px'
       }}>
-        {!value.length || (value[0].id && value[0].id.toString().length < 3) ? 'Skriv minst tre bokstaver i søkefeltet.' : !searchResult.length && !loading ?
-          `Ingen treff: ${value[0].id}` : ''}
+        {getNoResultMessage()}
       </Block>
     </Block>,
     sortKey: 'filter',
