@@ -267,7 +267,7 @@ const MainSearch = () => {
         paddingTop: '0px'
       }}>
         {!value.length || (value[0].id && value[0].id.toString().length < 3) ? 'Skriv minst tre bokstaver i søkefeltet.' : !searchResult.length && !loading ?
-          'Ingen resultat.' : ''}
+          `Ingen treff: ${value[0].id}` : ''}
       </Block>
     </Block>,
     sortKey: 'filter',
