@@ -309,7 +309,7 @@ const MainSearch = () => {
     type: '__ungrouped',
   }
 
-  const [groupedSeachResult, setGroupedSearchResult] = useState<GroupedResult>({ __ungrouped: [filterOption] })
+  const [groupedSeachResult, setGroupedSearchResult] = useState<GroupedResult>({ __ungrouped: [] })
 
   useEffect(() => {
     const groupedResults: GroupedResult = {
@@ -320,7 +320,7 @@ const MainSearch = () => {
       Underavdeling: [],
     }
 
-    if (value.length) {
+    if (value.length && value[0].id && value[0].id.toString().length > 2) {
       groupedResults.__ungrouped.push(filterOption)
     }
 
