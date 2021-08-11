@@ -82,8 +82,6 @@ export const BehandlingerTemaPage = () => {
         mapped[index - 1].gammelVersjon = true
       }
     }
-    console.log(mapped)
-
     setKravData(mapped)
   }, [rawData])
 
