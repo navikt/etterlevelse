@@ -12,7 +12,7 @@ import { slackLink, slackUserLink, termUrl } from '../../util/config'
 import { user } from '../../services/User'
 import { LovViewList } from '../Lov'
 import { SuksesskriterieCard } from './Suksesskriterie'
-import { H3, Paragraph2 } from 'baseui/typography'
+import { H2, Paragraph2 } from 'baseui/typography'
 import CustomizedLink from '../common/CustomizedLink'
 import { CustomizedAccordion, CustomizedPanel } from '../common/CustomizedAccordion'
 import { ettlevColors } from '../../util/theme'
@@ -120,18 +120,19 @@ const AllInfo = ({ krav, tidligereKravVersjoner }: { krav: KravQL; tidligereKrav
         </LabelWrapper>
       )}
 
-      <Block marginBottom="48px">
+      {krav.versjonEndringer && <Block marginBottom="48px">
       <CustomizedAccordion>
         <CustomizedPanel
-          title={<H3 $style={{ color: ettlevColors.green600 }}>Dette er nytt fra forrige versjon</H3>}
+          title={<H2 $style={{ color: ettlevColors.green600, marginBottom: '2px'}}>Dette er nytt fra forrige versjon</H2>}
           overrides={{
             Header: {
               style: {
                 backgroundColor: 'transparent',
                 ...borderStyle('none'),
                 ...borderColor('none'),
-                maxWidth: '320px',
+                maxWidth: '360px',
                 paddingLeft: '0px',
+                paddingBottom: '0px'
               },
             },
             Content: {
@@ -147,7 +148,7 @@ const AllInfo = ({ krav, tidligereKravVersjoner }: { krav: KravQL; tidligereKrav
           <Markdown source={krav.versjonEndringer} />
         </CustomizedPanel>
       </CustomizedAccordion>
-      </Block>
+      </Block>}
       
       <Block backgroundColor="#F1F1F1" padding="32px">
         <Label display={responsiveView} title="Ansvarlig">
