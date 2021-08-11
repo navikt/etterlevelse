@@ -69,6 +69,17 @@ public class KravService extends DomainService<Krav> {
         return convert(byNameContaining, GenericStorage::toKrav);
     }
 
+    public List<Krav> searchByNumber(String number) {
+        List<GenericStorage> byNumberContaining = new ArrayList<>(kravRepo.findByNumberContaining(number));
+        if (StringUtils.isNumeric(number)) {
+            byNumberContaining.addAll(kravRepo.findByKravNummer(Integer.parseInt(number)));
+        }
+        if (!isKravEier()) {
+            byNumberContaining.removeIf(gs -> gs.toKrav().getStatus().erUtkast());
+        }
+        return convert(byNumberContaining, GenericStorage::toKrav);
+    }
+
     public Krav save(KravRequest request) {
         Validator.validate(request, storage)
                 .addValidations(this::validateName)

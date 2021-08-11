@@ -104,6 +104,20 @@ public class KravController {
         return new ResponseEntity<>(new RestResponsePage<>(convert(krav, Krav::toResponse)), HttpStatus.OK);
     }
 
+    @Operation(summary = "Search krav by krav number")
+    @ApiResponse(description = "Krav fetched")
+    @GetMapping("/search/number/{number}")
+    public ResponseEntity<RestResponsePage<KravResponse>> searchKravByNumber(@PathVariable String number) {
+        log.info("Received request for Krav with the name like {}", number);
+        if (number.length() < 1) {
+            throw new ValidationException("Search krav number must be at least 1 characters");
+        }
+        var krav = service.searchByNumber(number);
+        log.info("Returned {} krav", krav.size());
+        return new ResponseEntity<>(new RestResponsePage<>(convert(krav, Krav::toResponse)), HttpStatus.OK);
+    }
+
+
     @Operation(summary = "Create Krav")
     @ApiResponse(responseCode = "201", description = "Krav created")
     @PostMapping
