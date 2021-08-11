@@ -123,7 +123,7 @@ const AllInfo = ({ krav, tidligereKravVersjoner }: { krav: KravQL; tidligereKrav
       {krav.versjonEndringer && <Block marginBottom="48px">
       <CustomizedAccordion>
         <CustomizedPanel
-          title={<H2 $style={{ color: ettlevColors.green600, marginBottom: '2px'}}>Dette er nytt fra forrige versjon</H2>}
+          title={<H2 $style={{ color: ettlevColors.green800}}>Dette er nytt fra forrige versjon</H2>}
           overrides={{
             Header: {
               style: {
@@ -145,7 +145,7 @@ const AllInfo = ({ krav, tidligereKravVersjoner }: { krav: KravQL; tidligereKrav
             },
           }}
         >
-          <Markdown source={krav.versjonEndringer} />
+          <Markdown source={krav.versjonEndringer} noMargin />
         </CustomizedPanel>
       </CustomizedAccordion>
       </Block>}
