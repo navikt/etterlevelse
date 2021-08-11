@@ -104,7 +104,7 @@ const AllInfo = ({ krav, tidligereKravVersjoner }: { krav: KravQL; tidligereKrav
 
       {tidligereKravVersjoner.length !== 0 && krav.kravVersjon > 1 && (
         <LabelWrapper>
-          <LabelAboveContent title="Tidligere versjoner">
+          <LabelAboveContent title={'Tidligere versjoner'} header>
             {tidligereKravVersjoner.map((k) => {
               if (k.kravVersjon && k.kravVersjon < krav.kravVersjon) {
                 return (
