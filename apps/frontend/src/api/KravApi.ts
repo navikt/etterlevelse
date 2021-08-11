@@ -21,8 +21,13 @@ export const searchKrav = async (name: string) => {
   return (await axios.get<PageResponse<Krav>>(`${env.backendBaseUrl}/krav/search/${name}`)).data.content
 }
 
+export const searchKravByNumber = async (number: string) => {
+  return (await axios.get<PageResponse<Krav>>(`${env.backendBaseUrl}/krav/search/number/${number}`)).data.content
+}
+
 export const getKravByKravNumberAndVersion = async (kravNummer: number | string, kravVersjon: number | string) => {
-  return (await axios.get<Krav>(`${env.backendBaseUrl}/krav/kravnummer/${kravNummer}/${kravVersjon}`)).data
+  return await axios.get<Krav>(`${env.backendBaseUrl}/krav/kravnummer/${kravNummer}/${kravVersjon}`)
+  .then((resp) => {return resp.data}).catch(() => {return undefined})
 }
 
 export const getKravByKravNummer = async (kravNummer: number | string) => {

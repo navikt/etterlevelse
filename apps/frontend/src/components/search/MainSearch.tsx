@@ -15,7 +15,7 @@ import { Behandling, Krav } from '../../constants'
 import shortid from 'shortid'
 import { ettlevColors, searchResultColor } from '../../util/theme'
 import { kravName } from '../../pages/KravPage'
-import { getKravByKravNumberAndVersion, getKravByKravNummer, searchKrav } from '../../api/KravApi'
+import { getKravByKravNumberAndVersion, getKravByKravNummer, searchKrav, searchKravByNumber } from '../../api/KravApi'
 import { behandlingName, searchBehandling } from '../../api/BehandlingApi'
 import { codelist, ListName } from '../../services/Codelist'
 import { clearSearchIcon, filterIcon, searchIcon } from '../Images'
@@ -227,12 +227,27 @@ const useMainSearch = (searchParam?: string) => {
             }
 
             if (Number.parseFloat(kravNumber) && Number.parseFloat(kravNumber) % 1 === 0) {
-              searches.push((async () => add((await (await getKravByKravNummer(Number.parseFloat(kravNumber))).content).map(kravMap)))())
+              searches.push((async () => add((await searchKravByNumber(Number.parseFloat(kravNumber).toString())).map(kravMap)))())
             }
 
             if (Number.parseFloat(kravNumber) && Number.parseFloat(kravNumber) % 1 !== 0) {
               const kravNummerMedVersjon = kravNumber.split('.')
-              searches.push((async () => add([(await (await getKravByKravNumberAndVersion(kravNummerMedVersjon[0], kravNummerMedVersjon[1])))].map(kravMap)))())
+              const searchResult = [(await getKravByKravNumberAndVersion(kravNummerMedVersjon[0], kravNummerMedVersjon[1]))]
+              if (typeof searchResult[0] !== 'undefined') {
+                
+                const mappedResult = [
+                  {
+                    id: searchResult[0].id,
+                    sortKey: searchResult[0].navn,
+                    label: (
+                      <SearchLabel name={kravName(searchResult[0])} type={'Krav'} backgroundColor={searchResultColor.kravBackground} />
+                    ),
+                    type: ObjectType.Krav,
+                  }
+                ]
+
+                searches.push((async () => add(mappedResult))())
+              }
             }
 
           }
@@ -263,29 +278,26 @@ const MainSearch = () => {
     if (!value.length || !value[0].id || (value[0].id && value[0].id.toString().length < 3)) {
       msg = 'Skriv minst tre bokstaver i søkefeltet.'
     } else if (!loading && !searchResult.length) {
-      console.log('INGEN TREFF')
       msg = `Ingen treff: ${value[0].id}`
     }
-
-    console.log(msg)
 
     return msg
   }
 
   const filterOption = {
-      id: 'filter',
-      label:
-        <Block>
-          <SelectType type={type} setType={setType} />
-          <Block display='flex' justifyContent='center' color={ettlevColors.green800} backgroundColor={ettlevColors.white} $style={{
-            ...padding('24px', '24px'),
-            paddingTop: '0px'
-          }}>
-            {getNoResultMessage()}
-          </Block>
-        </Block>,
-      sortKey: 'filter',
-      type: '__ungrouped',
+    id: 'filter',
+    label:
+      <Block>
+        <SelectType type={type} setType={setType} />
+        <Block display='flex' justifyContent='center' color={ettlevColors.green800} backgroundColor={ettlevColors.white} $style={{
+          ...padding('24px', '24px'),
+          paddingTop: '0px'
+        }}>
+          {getNoResultMessage()}
+        </Block>
+      </Block>,
+    sortKey: 'filter',
+    type: '__ungrouped',
   }
 
   const [groupedSeachResult, setGroupedSearchResult] = useState<GroupedResult>({ __ungrouped: [filterOption] })
