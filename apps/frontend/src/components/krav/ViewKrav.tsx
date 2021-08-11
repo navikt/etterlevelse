@@ -18,6 +18,7 @@ import { CustomizedAccordion, CustomizedPanel } from '../common/CustomizedAccord
 import { ettlevColors } from '../../util/theme'
 import { borderStyle, borderColor } from '../common/Style'
 import { Markdown } from '../common/Markdown'
+import ExpiredAlert from './ExpiredAlert'
 
 const LabelWrapper = ({ children }: { children: React.ReactNode }) => (
   <Block marginTop="48px" marginBottom="48px">
@@ -27,7 +28,7 @@ const LabelWrapper = ({ children }: { children: React.ReactNode }) => (
 
 const responsiveView: Responsive<Display> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
 
-export const ViewKrav = ({ krav, tidligereKravVersjoner }: { krav: KravQL; tidligereKravVersjoner: KravVersjon[] }) => {
+export const ViewKrav = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVersjoner: KravVersjon[] }) => {
   return (
     <Block width="100%">
       {krav.suksesskriterier.map((s, i) => (
@@ -39,7 +40,7 @@ export const ViewKrav = ({ krav, tidligereKravVersjoner }: { krav: KravQL; tidli
 
       <Block height={theme.sizing.scale800} />
 
-      {<AllInfo krav={krav} tidligereKravVersjoner={tidligereKravVersjoner} />}
+      {<AllInfo krav={krav} alleKravVersjoner={alleKravVersjoner} />}
     </Block>
   )
 }
@@ -55,7 +56,12 @@ const MediumInfo = ({ krav }: { krav: KravQL }) => (
   </>
 )
 
-const AllInfo = ({ krav, tidligereKravVersjoner }: { krav: KravQL; tidligereKravVersjoner: KravVersjon[] }) => {
+const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVersjoner: KravVersjon[] }) => {
+
+  const hasKravExpired = () => {
+    return krav && krav.kravVersjon < alleKravVersjoner[0].kravVersjon
+  }
+
   return (
     <>
       {/* <LabelWrapper>
@@ -102,10 +108,10 @@ const AllInfo = ({ krav, tidligereKravVersjoner }: { krav: KravQL; tidligereKrav
         </LabelAboveContent>
       </LabelWrapper>
 
-      {tidligereKravVersjoner.length !== 0 && krav.kravVersjon > 1 && (
+      {alleKravVersjoner.length !== 0 && krav.kravVersjon > 1 && (
         <LabelWrapper>
           <LabelAboveContent title={'Tidligere versjoner'} header>
-            {tidligereKravVersjoner.map((k) => {
+            {alleKravVersjoner.map((k) => {
               if (k.kravVersjon && k.kravVersjon < krav.kravVersjon) {
                 return (
                   <DotTag>
@@ -149,6 +155,11 @@ const AllInfo = ({ krav, tidligereKravVersjoner }: { krav: KravQL; tidligereKrav
         </CustomizedPanel>
       </CustomizedAccordion>
       </Block>}
+
+      {hasKravExpired() && <Block $style={{ marginTop: theme.sizing.scale900, marginBottom: theme.sizing.scale1200 }}>
+          <ExpiredAlert alleKravVersjoner={alleKravVersjoner} />
+        </Block>}
+
       
       <Block backgroundColor="#F1F1F1" padding="32px">
         <Label display={responsiveView} title="Ansvarlig">

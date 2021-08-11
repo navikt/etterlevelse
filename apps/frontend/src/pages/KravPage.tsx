@@ -1,5 +1,5 @@
 import { Block } from 'baseui/block'
-import { H1, HeadingXLarge } from 'baseui/typography'
+import { H1, HeadingXLarge, Paragraph2 } from 'baseui/typography'
 import { useParams } from 'react-router-dom'
 import { deleteKrav, KravIdParams, mapToFormVal, getKravByKravNummer } from '../api/KravApi'
 import React, { useEffect, useRef, useState } from 'react'
@@ -14,10 +14,10 @@ import { theme } from '../util'
 import { FormikProps } from 'formik'
 import { DeleteItem } from '../components/DeleteItem'
 import { Spinner } from '../components/common/Spinner'
-import { borderRadius } from '../components/common/Style'
+import { borderColor, borderRadius, borderStyle, borderWidth, padding } from '../components/common/Style'
 import { useQuery } from '@apollo/client'
 import { Tilbakemeldinger } from '../components/krav/Tilbakemelding'
-import { chevronLeft, editIcon, pageIcon, plusIcon, sadFolderIcon } from '../components/Images'
+import { chevronLeft, editIcon, pageIcon, plusIcon, sadFolderIcon, warningAlert } from '../components/Images'
 import { Label } from '../components/common/PropertyLabel'
 import { CustomizedTab, CustomizedTabs } from '../components/common/CustomizedTabs'
 import { ettlevColors, maxPageWidth, pageWidth } from '../util/theme'
@@ -28,6 +28,8 @@ import { useLocationState, useQueryParam } from '../util/hooks'
 import { InfoBlock } from '../components/common/InfoBlock'
 import { gql } from '@apollo/client/core'
 import { PanelLink } from '../components/common/PanelLink'
+import CustomizedLink from '../components/common/CustomizedLink'
+import ExpiredAlert from '../components/krav/ExpiredAlert'
 
 export const kravNumView = (it: { kravVersjon: number; kravNummer: number }) => `K${it.kravNummer}.${it.kravVersjon}`
 export const kravName = (krav: Krav) => `${kravNumView(krav)} - ${krav.navn}`
@@ -68,18 +70,18 @@ export const KravPage = () => {
   const tilbakemeldingId = useQueryParam('tilbakemeldingId')
   const [tab, setTab] = useState<Section>(!!tilbakemeldingId ? 'tilbakemeldinger' : state?.tab || 'krav')
 
-  const [tidligereKravVersjoner, setTidligereKravVersjoner] = React.useState<KravVersjon[]>([{ kravNummer: 0, kravVersjon: 0 }])
+  const [alleKravVersjoner, setAlleKravVersjoner] = React.useState<KravVersjon[]>([{ kravNummer: 0, kravVersjon: 0 }])
 
   React.useEffect(() => {
     if (krav) {
       getKravByKravNummer(krav.kravNummer).then((resp) => {
         if (resp.content.length) {
-          const tidligereVersjoner = resp.content
+          const alleVersjoner = resp.content
             .map((k) => {
               return { kravVersjon: k.kravVersjon, kravNummer: k.kravNummer }
             })
             .sort((a, b) => (a.kravVersjon > b.kravVersjon ? -1 : 1))
-          setTidligereKravVersjoner(tidligereVersjoner)
+          setAlleKravVersjoner(alleVersjoner)
         }
       })
     }
@@ -99,6 +101,10 @@ export const KravPage = () => {
       setEdit(true)
     }
   }, [params.id])
+
+  const hasKravExpired = () => {
+    return krav && krav.kravVersjon < alleKravVersjoner[0].kravVersjon
+  }
 
   // todo split loading krav and subelements?
   const etterlevelserLoading = kravLoading
@@ -135,7 +141,7 @@ export const KravPage = () => {
                       </Button>
                     </RouteLink>
                   </Block>
-                  {krav?.id && ((user.isKraveier() && krav.kravVersjon >= tidligereKravVersjoner[0].kravVersjon) || user.isAdmin()) && (
+                  {krav?.id && ((user.isKraveier() && krav.kravVersjon >= alleKravVersjoner[0].kravVersjon) || user.isAdmin()) && (
                     <Block flex="1" display={['none', 'none', 'none', 'none', 'flex', 'flex']} justifyContent="flex-end">
                       <Button
                         startEnhancer={<img alt="add" src={plusIcon} />}
@@ -170,6 +176,9 @@ export const KravPage = () => {
                   {krav && krav?.kravNummer !== 0 ? kravNumView(krav) : 'Ny'}
                 </Block>
                 <H1 $style={{ color: '#F8F8F8' }}>{krav && krav?.navn ? krav.navn : 'Ny'} </H1>
+                
+                {hasKravExpired() && <ExpiredAlert alleKravVersjoner={alleKravVersjoner} />}
+
               </Block>
             </Block>
           </Block>
@@ -207,7 +216,7 @@ export const KravPage = () => {
                 onChange={(k) => setTab(k.activeKey as Section)}
               >
                 <CustomizedTab title={'Om kravet'} key={'krav'}>
-                  <ViewKrav krav={krav} tidligereKravVersjoner={tidligereKravVersjoner} />
+                  <ViewKrav krav={krav} alleKravVersjoner={alleKravVersjoner} />
                 </CustomizedTab>
                 <CustomizedTab title={'Eksempler på etterlevelse'} key={'etterlevelser'}>
                   <Etterlevelser loading={etterlevelserLoading} etterlevelser={krav.etterlevelser} />

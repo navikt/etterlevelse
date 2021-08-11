@@ -51,6 +51,7 @@ import circlePencilIcon from '../resources/icons/circle-pencil-icon.svg'
 import filterIcon from '../resources/icons/filterIcon.svg'
 import clearSearchIcon from '../resources/icons/clearSearchIcon.svg'
 import illustration from '../resources/giammarco-boscaro-zeH-ljawHtg-unsplash.jpg'
+import warningAlert from '../resources/icons/warning-alert.svg'
 import { codelist, ListName, LovCode, TemaCode } from '../services/Codelist'
 
 import React from 'react'
@@ -97,6 +98,7 @@ export {
   gavelIcon,
   filterIcon,
   clearSearchIcon,
+  warningAlert
 }
 
 export const temaBilder: { [id: string]: string } = {
