@@ -257,31 +257,37 @@ const MainSearch = () => {
   const location = useLocation()
   const history = useHistory()
 
-  const getNoResultMessage = (): string => {
+  const getNoResultMessage = () => {
+    let msg = ''
+
     if (!value.length || !value[0].id || (value[0].id && value[0].id.toString().length < 3)) {
-      return 'Skriv minst tre bokstaver i søkefeltet.'
-    } else if (!searchResult.length) {
-      return `Ingen treff: ${value[0].id}`
-    } else {
-      return ''
+      msg = 'Skriv minst tre bokstaver i søkefeltet.'
+    } else if (!loading && !searchResult.length) {
+      console.log('INGEN TREFF')
+      msg = `Ingen treff: ${value[0].id}`
     }
+
+    console.log(msg)
+
+    return msg
   }
 
   const filterOption = {
-    id: 'filter',
-    label:
-      <Block>
-        <SelectType type={type} setType={setType} />
-        <Block display='flex' justifyContent='center' color={ettlevColors.green800} backgroundColor={ettlevColors.white} $style={{
-          ...padding('24px', '24px'),
-          paddingTop: '0px'
-        }}>
-          {getNoResultMessage()}
-        </Block>
-      </Block>,
-    sortKey: 'filter',
-    type: '__ungrouped',
+      id: 'filter',
+      label:
+        <Block>
+          <SelectType type={type} setType={setType} />
+          <Block display='flex' justifyContent='center' color={ettlevColors.green800} backgroundColor={ettlevColors.white} $style={{
+            ...padding('24px', '24px'),
+            paddingTop: '0px'
+          }}>
+            {getNoResultMessage()}
+          </Block>
+        </Block>,
+      sortKey: 'filter',
+      type: '__ungrouped',
   }
+
   const [groupedSeachResult, setGroupedSearchResult] = useState<GroupedResult>({ __ungrouped: [filterOption] })
 
   useEffect(() => {
@@ -310,7 +316,7 @@ const MainSearch = () => {
     })
 
     setGroupedSearchResult(groupedResults)
-  }, [searchResult])
+  }, [searchResult, loading])
 
   return (
     <Block width="100%">
