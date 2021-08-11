@@ -227,7 +227,16 @@ const useMainSearch = (searchParam?: string) => {
             }
 
             if (Number.parseFloat(kravNumber) && Number.parseFloat(kravNumber) % 1 === 0) {
-              searches.push((async () => add((await searchKravByNumber(Number.parseFloat(kravNumber).toString())).map(kravMap)))())
+              searches.push((async () => add(
+                (await searchKravByNumber(Number.parseFloat(kravNumber).toString()))
+                .sort((a,b) => {
+                  if(a.kravNummer === b.kravNummer) {
+                    return b.kravVersjon - a.kravVersjon 
+                  } else {
+                    return  b.kravNummer - a.kravNummer
+                  }
+                })
+                .map(kravMap)))())
             }
 
             if (Number.parseFloat(kravNumber) && Number.parseFloat(kravNumber) % 1 !== 0) {
