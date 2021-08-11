@@ -71,9 +71,6 @@ public class KravService extends DomainService<Krav> {
 
     public List<Krav> searchByNumber(String number) {
         List<GenericStorage> byNumberContaining = new ArrayList<>(kravRepo.findByNumberContaining(number));
-        if (StringUtils.isNumeric(number)) {
-            byNumberContaining.addAll(kravRepo.findByKravNummer(Integer.parseInt(number)));
-        }
         if (!isKravEier()) {
             byNumberContaining.removeIf(gs -> gs.toKrav().getStatus().erUtkast());
         }
