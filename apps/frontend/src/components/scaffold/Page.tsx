@@ -1,24 +1,24 @@
-import { Block } from 'baseui/block'
-import { ettlevColors, maxPageWidth, pageWidth, theme } from '../../util/theme'
+import {Block} from 'baseui/block'
+import {ettlevColors, maxPageWidth, pageWidth, theme} from '../../util/theme'
 import RouteLink from '../common/RouteLink'
 import Button from '../common/Button'
-import { chevronLeft, navChevronRightIcon } from '../Images'
 import React from 'react'
+import CustomizedBreadcrumbs from "./CustomizedBreadcrumbs";
 
 const padding = ['16px', '16px', '16px', '20px', '40px', '80px']
 
 export const Page = ({
-  hideBackBtn,
-  backUrl,
-  headerOverlap,
-  headerBackgroundColor,
-  backgroundColor,
-  wideMain,
-  rawMain,
-  children,
-  header,
-  backBtnColor,
-}: {
+                       hideBackBtn,
+                       backUrl,
+                       headerOverlap,
+                       headerBackgroundColor,
+                       backgroundColor,
+                       wideMain,
+                       rawMain,
+                       children,
+                       header,
+                       backBtnColor,
+                     }: {
   backBtnColor?: string
   backUrl?: string
   headerOverlap?: string
@@ -31,7 +31,7 @@ export const Page = ({
   hideBackBtn?: boolean
 }) => {
   return (
-    <Block id="content" width="100%" overrides={{ Block: { props: { role: 'main' } } }} backgroundColor={backgroundColor} paddingBottom={'200px'}>
+    <Block id="content" width="100%" overrides={{Block: {props: {role: 'main'}}}} backgroundColor={backgroundColor} paddingBottom={'200px'}>
       <Block
         backgroundColor={headerBackgroundColor}
         display="flex"
@@ -45,12 +45,12 @@ export const Page = ({
             {!hideBackBtn && (
               <RouteLink href={backUrl} hideUnderline>
                 <Button
-                  startEnhancer={<ChevronLeft fill={backBtnColor} />}
+                  startEnhancer={<ChevronLeft fill={backBtnColor}/>}
                   size="compact"
                   kind="tertiary"
                   $style={{
                     color: !backBtnColor ? ettlevColors.black : backBtnColor,
-                    ':hover': { backgroundColor: 'transparent', textDecoration: 'underline 3px' },
+                    ':hover': {backgroundColor: 'transparent', textDecoration: 'underline 3px'},
                   }}
                 >
                   {' '}
@@ -95,7 +95,7 @@ export const Narrow = (props: { children: React.ReactNode }) => (
 
 const ChevronLeft = (props: { fill?: string }) => (
   <svg width="10" height="18" viewBox="0 0 10 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path fillRule="evenodd" clipRule="evenodd" d="M0 9L8.57143 0L10 1.5L2.85714 9L10 16.5L8.57143 18L0 9Z" fill={props.fill ? props.fill : ettlevColors.black} />
+    <path fillRule="evenodd" clipRule="evenodd" d="M0 9L8.57143 0L10 1.5L2.85714 9L10 16.5L8.57143 18L0 9Z" fill={props.fill ? props.fill : ettlevColors.black}/>
   </svg>
 )
 
@@ -108,47 +108,53 @@ export const Layout2 = (props: {
   secondaryHeader?: React.ReactNode
   childrenBackgroundColor?: string
   children: React.ReactNode
-}) => (
-  <Block width="100%" id="content" overrides={{ Block: { props: { role: 'main' } } }}>
-    <Block backgroundColor={props.headerBackgroundColor} display="flex" width="100%" justifyContent="center">
-      <Block maxWidth={maxPageWidth} width="100%">
-        <Block paddingLeft="40px" paddingRight="40px" display="flex" flexDirection="column" justifyContent="center">
-          <Block width="100%" justifyContent="center" marginTop="24px">
-            <Block flex="1" display="flex" justifyContent="flex-start">
-              <RouteLink href={props.backBtnUrl} hideUnderline>
-                <Button
-                  startEnhancer={<ChevronLeft fill={props.backBtnColor} />}
-                  size="compact"
-                  kind="tertiary"
-                  $style={{
-                    color: !props.backBtnColor ? ettlevColors.black : props.backBtnColor,
-                    ':hover': { backgroundColor: 'transparent', textDecoration: 'underline 3px' },
-                  }}
-                >
-                  Tilbake
-                </Button>
-              </RouteLink>
+}) => {
+  // const history = useHistory()
+  // const location = useLocation()
+  // console.log(history.location.pathname)
+  return (
+    <Block width="100%" id="content" overrides={{Block: {props: {role: 'main'}}}}>
+      <Block backgroundColor={props.headerBackgroundColor} display="flex" width="100%" justifyContent="center">
+        <Block maxWidth={maxPageWidth} width="100%">
+          <Block paddingLeft="40px" paddingRight="40px" display="flex" flexDirection="column" justifyContent="center">
+            <CustomizedBreadcrumbs/>
+            <Block width="100%" justifyContent="center" marginTop="24px">
+              <Block flex="1" display="flex" justifyContent="flex-start">
+                <RouteLink href={props.backBtnUrl} hideUnderline>
+                  <Button
+                    startEnhancer={<ChevronLeft fill={props.backBtnColor}/>}
+                    size="compact"
+                    kind="tertiary"
+                    $style={{
+                      color: !props.backBtnColor ? ettlevColors.black : props.backBtnColor,
+                      ':hover': {backgroundColor: 'transparent', textDecoration: 'underline 3px'},
+                    }}
+                  >
+                    Tilbake
+                  </Button>
+                </RouteLink>
+              </Block>
+              {props.mainHeader}
             </Block>
-            {props.mainHeader}
+          </Block>
+        </Block>
+      </Block>
+
+      <Block backgroundColor={props.secondaryHeaderBackgroundColor} display="flex" width="100%" justifyContent="center">
+        <Block maxWidth={maxPageWidth} width="100%">
+          <Block paddingLeft="40px" paddingRight="40px">
+            {props.secondaryHeader}
+          </Block>
+        </Block>
+      </Block>
+
+      <Block backgroundColor={props.childrenBackgroundColor} display="flex" width="100%" justifyContent="center">
+        <Block maxWidth={maxPageWidth} width="100%">
+          <Block paddingLeft="40px" paddingRight="40px">
+            {props.children}
           </Block>
         </Block>
       </Block>
     </Block>
-
-    <Block backgroundColor={props.secondaryHeaderBackgroundColor} display="flex" width="100%" justifyContent="center">
-      <Block maxWidth={maxPageWidth} width="100%">
-        <Block paddingLeft="40px" paddingRight="40px">
-          {props.secondaryHeader}
-        </Block>
-      </Block>
-    </Block>
-
-    <Block backgroundColor={props.childrenBackgroundColor} display="flex" width="100%" justifyContent="center">
-      <Block maxWidth={maxPageWidth} width="100%">
-        <Block paddingLeft="40px" paddingRight="40px">
-          {props.children}
-        </Block>
-      </Block>
-    </Block>
-  </Block>
-)
+  )
+}
