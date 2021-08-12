@@ -57,7 +57,6 @@ const MediumInfo = ({ krav }: { krav: KravQL }) => (
 )
 
 const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVersjoner: KravVersjon[] }) => {
-
   const hasKravExpired = () => {
     return krav && krav.kravVersjon < alleKravVersjoner[0].kravVersjon
   }
@@ -122,45 +121,47 @@ const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVersjoner:
                 )
               }
             })}
+            {krav.versjonEndringer && (
+              <Block marginTop={theme.sizing.scale900} marginBottom={theme.sizing.scale1600}>
+                <CustomizedAccordion>
+                  <CustomizedPanel
+                    title={<Label3 $style={{ color: ettlevColors.green800, marginRight: '7px' }}>Dette er nytt fra forrige versjon</Label3>}
+                    overrides={{
+                      Header: {
+                        style: {
+                          backgroundColor: 'transparent',
+                          ...borderStyle('none'),
+                          ...borderColor('none'),
+                          width: 'fit-content',
+                          paddingLeft: '0px',
+                          paddingBottom: '0px',
+                        },
+                      },
+                      Content: {
+                        style: {
+                          backgroundColor: 'transparent',
+                          borderBottomWidth: 'none',
+                          borderBottomStyle: 'none',
+                          borderBottomColor: 'none',
+                        },
+                      },
+                    }}
+                  >
+                    <Markdown source={krav.versjonEndringer} noMargin />
+                  </CustomizedPanel>
+                </CustomizedAccordion>
+              </Block>
+            )}
           </LabelAboveContent>
         </LabelWrapper>
       )}
 
-      {krav.versjonEndringer && <Block marginBottom="48px">
-      <CustomizedAccordion>
-        <CustomizedPanel
-          title={<Label3 $style={{ color: ettlevColors.green800}}>Dette er nytt fra forrige versjon</Label3>}
-          overrides={{
-            Header: {
-              style: {
-                backgroundColor: 'transparent',
-                ...borderStyle('none'),
-                ...borderColor('none'),
-                maxWidth: '360px',
-                paddingLeft: '0px',
-                paddingBottom: '0px'
-              },
-            },
-            Content: {
-              style: {
-                backgroundColor: 'transparent',
-                borderBottomWidth: 'none',
-                borderBottomStyle: 'none',
-                borderBottomColor: 'none',
-              },
-            },
-          }}
-        >
-          <Markdown source={krav.versjonEndringer} noMargin />
-        </CustomizedPanel>
-      </CustomizedAccordion>
-      </Block>}
-
-      {hasKravExpired() && <Block $style={{ marginTop: theme.sizing.scale900, marginBottom: theme.sizing.scale1200 }}>
+      {hasKravExpired() && (
+        <Block $style={{ marginTop: theme.sizing.scale900, marginBottom: theme.sizing.scale1200 }}>
           <ExpiredAlert alleKravVersjoner={alleKravVersjoner} />
-        </Block>}
+        </Block>
+      )}
 
-      
       <Block backgroundColor="#F1F1F1" padding="32px">
         <Label display={responsiveView} title="Ansvarlig">
           {krav.underavdeling?.shortName}
