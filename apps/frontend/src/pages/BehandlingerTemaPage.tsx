@@ -130,8 +130,11 @@ export const BehandlingerTemaPage = () => {
 
           <Block marginTop={theme.sizing.scale1200}>
             <Block padding="5px">
-              <RouteLink href={urlForObject(ObjectType.Behandling, behandling.id)}>{behandling.navn}</RouteLink>
-              <Paragraph4 $style={{ lineHeight: '24px' }}>{behandling.overordnetFormaal.shortName}</Paragraph4>
+              <Block display='flex' justifyContent='flex-end'>
+                <Label3 $style={{ fontSize: '14px' }}>Du dokumenterer for:</Label3>
+              </Block>
+              <Paragraph2 $style={{marginTop: '0px'}}>{behandling.navn}</Paragraph2>
+              {/* <Paragraph4 $style={{ lineHeight: '24px' }}>{behandling.overordnetFormaal.shortName}</Paragraph4> */}
             </Block>
           </Block>
         </>
@@ -197,7 +200,7 @@ export const BehandlingerTemaPage = () => {
     {
       pathName: 'Dokumenter etterlevelse',
       href: '/behandlinger'
-    }, 
+    },
     {
       pathName: `${behandling?.navn}`,
       href: '/behandling/' + behandling?.id
