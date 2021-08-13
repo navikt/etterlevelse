@@ -133,7 +133,7 @@ export const BehandlingerTemaPage = () => {
               <Block display='flex' justifyContent='flex-end'>
                 <Label3 $style={{ fontSize: '14px' }}>Du dokumenterer for:</Label3>
               </Block>
-              <Paragraph2 $style={{marginTop: '0px'}}>{behandling.navn}</Paragraph2>
+              <Paragraph2 $style={{ marginTop: '0px' }}>{behandling.navn}</Paragraph2>
               {/* <Paragraph4 $style={{ lineHeight: '24px' }}>{behandling.overordnetFormaal.shortName}</Paragraph4> */}
             </Block>
           </Block>
@@ -362,6 +362,7 @@ const KravView = (props: { kravId: KravId; etterlevelse: Etterlevelse; close: Fu
     <Block>
       {krav && (
         <EditEtterlevelse
+          behandlingNavn={props.behandlingNavn}
           krav={krav}
           etterlevelse={props.etterlevelse}
           close={(e) => {
