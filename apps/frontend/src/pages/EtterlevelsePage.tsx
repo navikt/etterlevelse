@@ -1,5 +1,5 @@
 import { Block } from 'baseui/block'
-import { H1 } from 'baseui/typography'
+import { H1, Label3 } from 'baseui/typography'
 import { useHistory, useParams } from 'react-router-dom'
 import { useEtterlevelse } from '../api/EtterlevelseApi'
 import React, { useEffect, useRef, useState } from 'react'
@@ -12,8 +12,8 @@ import { FormikProps } from 'formik'
 import { kravNumView } from './KravPage'
 import { ettlevColors, maxPageWidth, pageWidth } from '../util/theme'
 import { chevronLeft } from '../components/Images'
-import CustomizedLink from '../components/common/CustomizedLink'
 import { getKravByKravNumberAndVersion } from '../api/KravApi'
+import CustomizedBreadcrumbs, { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 
 export const etterlevelseName = (etterlevelse: Etterlevelse) => `${kravNumView(etterlevelse)}`
 
@@ -51,6 +51,17 @@ export const EtterlevelsePage = () => {
     etterlevelse && getKravByKravNumberAndVersion(etterlevelse?.kravNummer, etterlevelse?.kravVersjon).then(setKrav)
   }, [etterlevelse])
 
+  const breadcrumbPaths: breadcrumbPaths[] = [
+    {
+      pathName: 'Les kravene',
+      href: '/tema'
+    },
+    {
+      pathName: `K${krav?.kravNummer}.${krav?.kravVersjon}`,
+      href:'/krav/' + krav?.kravNummer + '/' + krav?.kravVersjon
+    }
+  ]
+
   return (
     <Block width="100%" id="content" overrides={{ Block: { props: { role: 'main' } } }}>
       {loading && <LoadingSkeleton header="Etterlevelse" />}
@@ -61,7 +72,7 @@ export const EtterlevelsePage = () => {
               <Block display="flex" width="100%" justifyContent="center" marginTop="24px">
                 <Block display="flex" alignItems="center" width="100%">
                   <Block flex="1" display="flex" justifyContent="flex-start">
-                    <RouteLink hideUnderline>
+                    {/* <RouteLink hideUnderline>
                       <Button
                         startEnhancer={<img alt={'Chevron left'} src={chevronLeft} />}
                         size="compact"
@@ -71,7 +82,8 @@ export const EtterlevelsePage = () => {
                         {' '}
                         Tilbake
                       </Button>
-                    </RouteLink>
+                    </RouteLink> */}
+                    <CustomizedBreadcrumbs fontColor={ettlevColors.grey25} currentPage="Etterlevelse" paths={breadcrumbPaths} />
                   </Block>
 
                   {/*
@@ -110,17 +122,14 @@ export const EtterlevelsePage = () => {
               <Block maxWidth={pageWidth} width="100%" marginTop="7px">
                 <H1 $style={{ color: ettlevColors.grey25 }}>Etterlevelse</H1>
                 {etterlevelse && etterlevelse?.kravNummer !== 0 && krav && (
-                  <CustomizedLink
-                    style={{
+                  <Label3
+                    $style={{
                       color: ettlevColors.grey25,
-                      fontSize: '18px',
-                      fontWeight: 700,
                       lineHeight: '23px',
                     }}
-                    href={kravLink(etterlevelseName(etterlevelse))}
                   >
                     {etterlevelseName(etterlevelse) + ' ' + krav?.navn}
-                  </CustomizedLink>
+                  </Label3>
                 )}
               </Block>
             </Block>
