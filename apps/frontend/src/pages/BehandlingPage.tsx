@@ -20,6 +20,7 @@ import { Button } from 'baseui/button'
 import EditBehandlingModal from '../components/behandling/EditBehandlingModal'
 import { Tag } from 'baseui/tag'
 import { borderColor } from '../components/common/Style'
+import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 
 export const BehandlingPage = () => {
   const params = useParams<{ id?: string }>()
@@ -37,10 +38,10 @@ export const BehandlingPage = () => {
   const filterData = (
     unfilteredData:
       | {
-          behandling: PageResponse<{
-            stats: BehandlingStats
-          }>
-        }
+        behandling: PageResponse<{
+          stats: BehandlingStats
+        }>
+      }
       | undefined,
   ) => {
     const StatusListe: any[] = []
@@ -171,6 +172,13 @@ export const BehandlingPage = () => {
 
   if (!behandling) return <LoadingSkeleton header="Behandling" />
 
+  const breadcrumbPaths: breadcrumbPaths[] = [
+    {
+      pathName: 'behandlinger',
+      href: '/behandlinger'
+    }
+  ]
+
   return (
     <Block width="100%">
       <Layout2
@@ -179,6 +187,8 @@ export const BehandlingPage = () => {
         secondaryHeaderBackgroundColor={ettlevColors.white}
         secondaryHeader={getSecondaryHeader(behandling)}
         childrenBackgroundColor={ettlevColors.grey25}
+        currentPage={behandling.navn}
+        breadcrumbPaths={breadcrumbPaths}
       >
         <Block backgroundColor={ettlevColors.grey50} marginTop={theme.sizing.scale800}>
           <Block padding="22px">

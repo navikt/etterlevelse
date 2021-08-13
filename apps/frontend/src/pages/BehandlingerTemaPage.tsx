@@ -21,6 +21,7 @@ import { useEtterlevelse } from '../api/EtterlevelseApi'
 import { EditEtterlevelse } from '../components/etterlevelse/EditEtterlevelse'
 import { kravFullQuery, KravId } from '../api/KravApi'
 import { borderWidth } from '../components/common/Style'
+import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 
 type KravEtterlevelseData = {
   kravNummer: number
@@ -192,6 +193,17 @@ export const BehandlingerTemaPage = () => {
     }
   }
 
+  const breadcrumbPaths: breadcrumbPaths[] = [
+    {
+      pathName: 'behandlinger',
+      href: '/behandlinger'
+    }, 
+    {
+      pathName: `${behandling?.navn}`,
+      href: '/behandling/' + behandling?.id
+    }
+  ]
+
   return (
     <Layout2
       headerBackgroundColor={ettlevColors.green100}
@@ -199,6 +211,8 @@ export const BehandlingerTemaPage = () => {
       secondaryHeaderBackgroundColor={ettlevColors.white}
       secondaryHeader={getSecondaryHeader()}
       childrenBackgroundColor={ettlevColors.grey25}
+      currentPage={temaData?.shortName}
+      breadcrumbPaths={breadcrumbPaths}
     >
       <Block display="flex" width="100%" justifyContent="space-between" flexWrap marginTop="87px" marginBottom="87px">
         <CustomizedAccordion accordion={false}>
