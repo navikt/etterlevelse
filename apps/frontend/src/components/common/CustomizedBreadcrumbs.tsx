@@ -34,11 +34,13 @@ const CustomizedBreadcrumbs = (props: CustomizedProps) => {
 
   const overrides = _.merge(customOverrides, props.overrides)
 
+  const getName = (pathName: string) => pathName.length > 25 ? pathName.substring(0, 25) + '...' : pathName
+
   const getBreadcrumbs = () => {
     if (props.paths && props.paths.length) {
       return props.paths.map((path) => {
         return (
-          <RouteLink fontColor={props.fontColor} href={path.href}>{path.pathName}</RouteLink>
+          <RouteLink fontColor={props.fontColor} href={path.href}>{getName(path.pathName)}</RouteLink>
         )
       })
     }
@@ -48,7 +50,7 @@ const CustomizedBreadcrumbs = (props: CustomizedProps) => {
     <Breadcrumbs overrides={overrides}>
       <RouteLink fontColor={props.fontColor} href="/">Forsiden</RouteLink>
       {getBreadcrumbs()}
-      {props.currentPage && <span>{props.currentPage}</span>}
+      {props.currentPage && <span>{getName(props.currentPage)}</span>}
     </Breadcrumbs>
   )
 }
