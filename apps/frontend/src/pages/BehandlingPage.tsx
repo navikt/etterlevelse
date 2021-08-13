@@ -174,7 +174,7 @@ export const BehandlingPage = () => {
 
   const breadcrumbPaths: breadcrumbPaths[] = [
     {
-      pathName: 'behandlinger',
+      pathName: 'Dokumenter etterlevelse',
       href: '/behandlinger'
     }
   ]

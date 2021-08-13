@@ -195,7 +195,7 @@ export const BehandlingerTemaPage = () => {
 
   const breadcrumbPaths: breadcrumbPaths[] = [
     {
-      pathName: 'behandlinger',
+      pathName: 'Dokumenter etterlevelse',
       href: '/behandlinger'
     }, 
     {
