@@ -22,6 +22,7 @@ import { user } from '../services/User'
 import { useHistory, useParams } from 'react-router-dom'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import { borderWidth } from '../components/common/Style'
+import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
 
 type Section = 'mine' | 'siste' | 'alle'
 
@@ -38,13 +39,13 @@ export const MyBehandlingerPage = () => (
     <Block width="100%" backgroundColor={ettlevColors.grey50} display={'flex'} justifyContent={'center'}>
       <Block maxWidth={maxPageWidth} width="100%">
         <Block paddingLeft={'100px'} paddingRight={'100px'} paddingTop={theme.sizing.scale800}>
-          <RouteLink hideUnderline>
+          {/* <RouteLink hideUnderline>
             <Button startEnhancer={<img alt={'Chevron venstre ikon'} src={navChevronRightIcon} style={{ transform: 'rotate(180deg)' }} />} size="compact" kind="tertiary">
               {' '}
               Tilbake
             </Button>
-          </RouteLink>
-
+          </RouteLink> */}
+          <CustomizedBreadcrumbs currentPage="Dokumentere etterlevelse" />
           <HeadingXXLarge marginTop={theme.sizing.scale600}>Dokumentere etterlevelse</HeadingXXLarge>
         </Block>
       </Block>
