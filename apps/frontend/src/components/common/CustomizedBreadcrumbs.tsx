@@ -1,6 +1,5 @@
 import React from "react";
 import { Breadcrumbs, BreadcrumbsOverrides, BreadcrumbsProps } from "baseui/breadcrumbs";
-import CustomizedLink from "./CustomizedLink";
 import _ from "lodash";
 import RouteLink from "./RouteLink";
 
