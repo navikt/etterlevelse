@@ -39,7 +39,7 @@ const LoginButton = () => {
   // updates window.location on navigation
   const history = useHistory()
   return (
-    <StyledLink style={{ textDecoration: 'none' }} href={loginUrl(history)}>
+    <StyledLink style={{ textDecoration: 'none' }} href={loginUrl(history, history.location.pathname)}>
       <Button size={SIZE.compact} kind={KIND.secondary} $style={buttonBorderStyle}>
         <b>Logg inn</b>
       </Button>
