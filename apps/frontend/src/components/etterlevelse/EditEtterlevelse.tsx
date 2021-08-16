@@ -111,11 +111,10 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
           </Block>
           <Block display='flex' justifyContent='flex-end' paddingRight={theme.sizing.scale2400} paddingBottom={theme.sizing.scale900}>
             <Block>
-              <Block height='50%' />
               <Block display='flex' justifyContent='flex-end'>
                 <Label3 $style={{ fontSize: '14px', color: ettlevColors.white }}>Du dokumenterer for:</Label3>
               </Block>
-              <Paragraph2 $style={{ marginTop: '0px', color: ettlevColors.white}}>{behandlingNavn}</Paragraph2>
+              <Paragraph2 $style={{ marginTop: '0px', color: ettlevColors.white, maxWidth: '316px'}}>{behandlingNavn}</Paragraph2>
             </Block>
           </Block>
         </Block>
