@@ -22,6 +22,7 @@ import { QueryHookOptions } from '@apollo/client/react/types/types'
 import { gql } from '@apollo/client/core'
 import { useForceUpdate } from '../util/hooks'
 import { borderRadius } from '../components/common/Style'
+import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 
 export const TemaPage = () => {
   const { tema } = useParams<{ tema: string }>()
@@ -33,13 +34,25 @@ export const TemaPage = () => {
   return <TemaSide tema={code} />
 }
 
+
+
 const TemaSide = ({ tema }: { tema: TemaCode }) => {
+
   const lover = codelist.getCodesForTema(tema.code)
   const { data, loading } = useKravCounter({ lover: lover.map((c) => c.code) }, { skip: !lover.length })
   const [expand, setExpand] = useState(false)
 
+  const breadcrumbPaths: breadcrumbPaths[] = [
+    {
+      pathName: 'Les kravene',
+      href: '/tema'
+    }
+  ]
+
   return (
     <Page
+      breadcrumbPaths={breadcrumbPaths}
+      currentPage={tema.shortName}
       headerBackgroundColor={ettlevColors.green100}
       backgroundColor={ettlevColors.grey25}
       headerOverlap={'125px'}
@@ -130,7 +143,7 @@ const TemaListe = () => {
   const temaListe = codelist.getCodes(ListName.TEMA).sort((a, b) => a.shortName.localeCompare(b.shortName, 'nb'))
 
   return (
-    <Layout2 mainHeader={<H1>Alle krav</H1>} headerBackgroundColor={ettlevColors.grey50} childrenBackgroundColor={ettlevColors.grey25}>
+    <Layout2 mainHeader={<H1>Alle krav</H1>} headerBackgroundColor={ettlevColors.grey50} childrenBackgroundColor={ettlevColors.grey25} currentPage={'Les kravene'}>
       {visFilter && <RelevansFilter relevans={relevans} onClickFilter={onClickFilter} kravAntall={kravAntall} />}
 
       <Block {...sectionProps} marginTop={theme.sizing.scale600}>

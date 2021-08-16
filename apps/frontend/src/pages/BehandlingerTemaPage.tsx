@@ -21,6 +21,7 @@ import { useEtterlevelse } from '../api/EtterlevelseApi'
 import { EditEtterlevelse } from '../components/etterlevelse/EditEtterlevelse'
 import { kravFullQuery, KravId } from '../api/KravApi'
 import { borderWidth } from '../components/common/Style'
+import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 
 type KravEtterlevelseData = {
   kravNummer: number
@@ -129,8 +130,11 @@ export const BehandlingerTemaPage = () => {
 
           <Block marginTop={theme.sizing.scale1200}>
             <Block padding="5px">
-              <RouteLink href={urlForObject(ObjectType.Behandling, behandling.id)}>{behandling.navn}</RouteLink>
-              <Paragraph4 $style={{ lineHeight: '24px' }}>{behandling.overordnetFormaal.shortName}</Paragraph4>
+              <Block display='flex' justifyContent='flex-end'>
+                <Label3 $style={{ fontSize: '14px' }}>Du dokumenterer for:</Label3>
+              </Block>
+              <Paragraph2 $style={{ marginTop: '0px', maxWidth: '316px' }}>{behandling.navn}</Paragraph2>
+              {/* <Paragraph4 $style={{ lineHeight: '24px' }}>{behandling.overordnetFormaal.shortName}</Paragraph4> */}
             </Block>
           </Block>
         </>
@@ -192,6 +196,17 @@ export const BehandlingerTemaPage = () => {
     }
   }
 
+  const breadcrumbPaths: breadcrumbPaths[] = [
+    {
+      pathName: 'Dokumenter etterlevelse',
+      href: '/behandlinger'
+    },
+    {
+      pathName: `${behandling?.navn}`,
+      href: '/behandling/' + behandling?.id
+    }
+  ]
+
   return (
     <Layout2
       headerBackgroundColor={ettlevColors.green100}
@@ -199,6 +214,8 @@ export const BehandlingerTemaPage = () => {
       secondaryHeaderBackgroundColor={ettlevColors.white}
       secondaryHeader={getSecondaryHeader()}
       childrenBackgroundColor={ettlevColors.grey25}
+      currentPage={temaData?.shortName}
+      breadcrumbPaths={breadcrumbPaths}
     >
       <Block display="flex" width="100%" justifyContent="space-between" flexWrap marginTop="87px" marginBottom="87px">
         <CustomizedAccordion accordion={false}>
@@ -345,6 +362,7 @@ const KravView = (props: { kravId: KravId; etterlevelse: Etterlevelse; close: Fu
     <Block>
       {krav && (
         <EditEtterlevelse
+          behandlingNavn={props.behandlingNavn}
           krav={krav}
           etterlevelse={props.etterlevelse}
           close={(e) => {

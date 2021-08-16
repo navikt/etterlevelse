@@ -17,6 +17,7 @@ import { SkeletonPanel } from '../components/common/LoadingSkeleton'
 import { useKravCounter } from './TemaPage'
 import { PanelLink } from '../components/common/PanelLink'
 import { kravNumView } from './KravPage'
+import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 
 const fontColor = ettlevColors.white
 
@@ -53,10 +54,27 @@ const LovSide = ({ lov }: { lov: LovCode }) => {
   const [expand, setExpand] = React.useState(false)
   const { data, loading } = useKravCounter({ lover: [lov.code] })
 
+  console.log(lov, "LOV")
+
   const underavdeling = codelist.getCode(ListName.UNDERAVDELING, lov.data?.underavdeling)
+  
+  const tema = codelist.getCode(ListName.TEMA, lov.data?.tema)
+
+  const breadcrumbPaths: breadcrumbPaths[] = [
+    {
+      pathName: 'Les kravene',
+      href: '/tema'
+    },
+    {
+      pathName: `${tema?.shortName}`,
+      href: '/tema/' + tema?.code
+    },
+  ]
 
   return (
     <Page
+      currentPage={lov.shortName}
+      breadcrumbPaths={breadcrumbPaths}
       backBtnColor={fontColor}
       headerBackgroundColor={ettlevColors.green800}
       backgroundColor={ettlevColors.grey25}

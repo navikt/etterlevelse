@@ -29,6 +29,7 @@ type EditEttlevProps = {
   close: (k?: Etterlevelse) => void
   formRef?: React.Ref<any>
   documentEdit?: boolean
+  behandlingNavn?: string
 }
 
 const padding = '70px'
@@ -67,10 +68,11 @@ const etterlevelseSchema = () => {
   })
 }
 
-export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentEdit }: EditEttlevProps) => {
+export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentEdit, behandlingNavn }: EditEttlevProps) => {
   const [etterlevelseStatus, setEtterlevelseStatus] = React.useState<string>(etterlevelse.status || EtterlevelseStatus.UNDER_REDIGERING)
   const [nyereKrav, setNyereKrav] = React.useState<Krav>()
   const [disableEdit, setDisableEdit] = React.useState<boolean>(false)
+  console.log(etterlevelse)
   const submit = async (etterlevelse: Etterlevelse) => {
     const mutatedEtterlevelse = {
       ...etterlevelse,
@@ -97,14 +99,24 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
   return (
     <Block>
       <Block flex="1" backgroundColor={ettlevColors.green800}>
-        <Block paddingLeft={modalPaddingLeft} paddingRight={modalPaddingRight} paddingBottom="32px">
-          <Paragraph2 $style={{ marginTop: '0px', marginBottom: '0px', color: ettlevColors.white }}>{kravNumView(krav)}</Paragraph2>
-          <H1 $style={{ marginTop: '0px', marginBottom: '0px', color: ettlevColors.white }}>{krav.navn}</H1>
-          <Paragraph2 color={ettlevColors.white}>
-            <ExternalLink fontColor={ettlevColors.white} href={'/krav/' + krav?.kravNummer + '/' + krav?.kravVersjon}>
-              detaljert kravbeskrivelse (ny fane)
-            </ExternalLink>
-          </Paragraph2>
+        <Block display='flex'>
+          <Block flex='1' paddingLeft={modalPaddingLeft} paddingRight={modalPaddingRight} paddingBottom="32px">
+            <Paragraph2 $style={{ marginTop: '0px', marginBottom: '0px', color: ettlevColors.white }}>{kravNumView(krav)}</Paragraph2>
+            <H1 $style={{ marginTop: '0px', marginBottom: '0px', color: ettlevColors.white }}>{krav.navn}</H1>
+            <Paragraph2 color={ettlevColors.white}>
+              <ExternalLink fontColor={ettlevColors.white} href={'/krav/' + krav?.kravNummer + '/' + krav?.kravVersjon}>
+                detaljert kravbeskrivelse (ny fane)
+              </ExternalLink>
+            </Paragraph2>
+          </Block>
+          <Block display='flex' justifyContent='flex-end' paddingRight={theme.sizing.scale2400} paddingBottom={theme.sizing.scale900}>
+            <Block>
+              <Block display='flex' justifyContent='flex-end'>
+                <Label3 $style={{ fontSize: '14px', color: ettlevColors.white }}>Du dokumenterer for:</Label3>
+              </Block>
+              <Paragraph2 $style={{ marginTop: '0px', color: ettlevColors.white, maxWidth: '316px'}}>{behandlingNavn}</Paragraph2>
+            </Block>
+          </Block>
         </Block>
       </Block>
       <Block flex="1" backgroundColor={ettlevColors.white}>
@@ -257,7 +269,7 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
           </Formik>
         </Block>
       </Block>
-    </Block>
+    </Block >
   )
 }
 

@@ -30,6 +30,7 @@ import { gql } from '@apollo/client/core'
 import { PanelLink } from '../components/common/PanelLink'
 import CustomizedLink from '../components/common/CustomizedLink'
 import ExpiredAlert from '../components/krav/ExpiredAlert'
+import CustomizedBreadcrumbs, { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 
 export const kravNumView = (it: { kravVersjon: number; kravNummer: number }) => `K${it.kravNummer}.${it.kravVersjon}`
 export const kravName = (krav: Krav) => `${kravNumView(krav)} - ${krav.navn}`
@@ -119,6 +120,13 @@ export const KravPage = () => {
     setEdit(true)
   }
 
+  const breadcrumbPaths: breadcrumbPaths[] = [
+    {
+      pathName: 'Les kravene',
+      href: '/tema'
+    },
+  ]
+
   useEffect(() => {
     // hent krav på ny ved avbryt ny versjon
     if (!edit && !krav?.id && krav?.nyKravVersjon) reloadKrav()
@@ -134,12 +142,19 @@ export const KravPage = () => {
               <Block display="flex" width="100%" justifyContent="center" marginTop="24px">
                 <Block display="flex" alignItems="center" width="100%">
                   <Block flex="1" display="flex" justifyContent="flex-start">
-                    <RouteLink hideUnderline>
+                    {/* <RouteLink hideUnderline>
                       <Button startEnhancer={<img alt={'Chevron left'} src={chevronLeft} />} size="compact" kind="underline-hover" $style={{ color: '#F8F8F8' }}>
                         {' '}
                         Tilbake
                       </Button>
-                    </RouteLink>
+                    </RouteLink> */}
+                    {krav?.id && 
+                      <CustomizedBreadcrumbs 
+                          fontColor={ettlevColors.grey25} 
+                          currentPage={kravNumView({kravNummer: krav?.kravNummer, kravVersjon: krav?.kravVersjon})} 
+                          paths={breadcrumbPaths} 
+                      />
+                    }
                   </Block>
                   {krav?.id && ((user.isKraveier() && krav.kravVersjon >= alleKravVersjoner[0].kravVersjon) || user.isAdmin()) && (
                     <Block flex="1" display={['none', 'none', 'none', 'none', 'flex', 'flex']} justifyContent="flex-end">
