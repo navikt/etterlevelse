@@ -124,6 +124,7 @@ const Divider = (props: { compact?: boolean }) => (
 const UserInfo = () => {
   const history = useHistory()
   const frontpage = window.location.href.substr(0, window.location.href.length - history.location.pathname.length)
+  const path = history.location.pathname
   return (
     <Block display={'flex'} marginBottom={theme.sizing.scale600}>
       <Portrait ident={user.getIdent()} size={'48px'} />
@@ -140,7 +141,7 @@ const UserInfo = () => {
         <Block>{user.isAdmin() ? 'Admin' : user.isKraveier() ? 'Kraveier' : user.canWrite() ? 'Etterlever' : 'Gjest'}</Block>
       </Block>
       <Block alignSelf={'flex-end'} marginLeft={theme.sizing.scale800}>
-        <StyledLink href={`/logout?redirect_uri=${frontpage}`}>Logg ut</StyledLink>
+        <StyledLink href={`/logout?redirect_uri=${frontpage}${path}`}>Logg ut</StyledLink>
       </Block>
     </Block>
   )
