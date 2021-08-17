@@ -38,10 +38,10 @@ export const BehandlingPage = () => {
   const filterData = (
     unfilteredData:
       | {
-        behandling: PageResponse<{
-          stats: BehandlingStats
-        }>
-      }
+          behandling: PageResponse<{
+            stats: BehandlingStats
+          }>
+        }
       | undefined,
   ) => {
     const StatusListe: any[] = []
@@ -175,8 +175,8 @@ export const BehandlingPage = () => {
   const breadcrumbPaths: breadcrumbPaths[] = [
     {
       pathName: 'Dokumenter etterlevelse',
-      href: '/behandlinger'
-    }
+      href: '/behandlinger',
+    },
   ]
 
   return (

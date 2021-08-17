@@ -98,7 +98,7 @@ export {
   gavelIcon,
   filterIcon,
   clearSearchIcon,
-  warningAlert
+  warningAlert,
 }
 
 export const temaBilder: { [id: string]: string } = {

@@ -26,8 +26,14 @@ export const searchKravByNumber = async (number: string) => {
 }
 
 export const getKravByKravNumberAndVersion = async (kravNummer: number | string, kravVersjon: number | string) => {
-  return await axios.get<Krav>(`${env.backendBaseUrl}/krav/kravnummer/${kravNummer}/${kravVersjon}`)
-  .then((resp) => {return resp.data}).catch(() => {return undefined})
+  return await axios
+    .get<Krav>(`${env.backendBaseUrl}/krav/kravnummer/${kravNummer}/${kravVersjon}`)
+    .then((resp) => {
+      return resp.data
+    })
+    .catch(() => {
+      return undefined
+    })
 }
 
 export const getKravByKravNummer = async (kravNummer: number | string) => {

@@ -13,11 +13,15 @@ const SkipToContent = () => {
 
   return (
     <>
-      <Block $style={style} height='100%' id="skip">
-        <CustomizedLink href="#content"><Label3>Hovedinnhold</Label3></CustomizedLink>
+      <Block $style={style} height="100%" id="skip">
+        <CustomizedLink href="#content">
+          <Label3>Hovedinnhold</Label3>
+        </CustomizedLink>
       </Block>
       <Block $style={style} id="skip">
-        <CustomizedLink href="#search"><Label3>Søk</Label3></CustomizedLink>
+        <CustomizedLink href="#search">
+          <Label3>Søk</Label3>
+        </CustomizedLink>
       </Block>
     </>
   )

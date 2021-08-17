@@ -123,7 +123,7 @@ export const KravPage = () => {
   const breadcrumbPaths: breadcrumbPaths[] = [
     {
       pathName: 'Les kravene',
-      href: '/tema'
+      href: '/tema',
     },
   ]
 
@@ -148,13 +148,13 @@ export const KravPage = () => {
                         Tilbake
                       </Button>
                     </RouteLink> */}
-                    {krav?.id && 
-                      <CustomizedBreadcrumbs 
-                          fontColor={ettlevColors.grey25} 
-                          currentPage={kravNumView({kravNummer: krav?.kravNummer, kravVersjon: krav?.kravVersjon})} 
-                          paths={breadcrumbPaths} 
+                    {krav?.id && (
+                      <CustomizedBreadcrumbs
+                        fontColor={ettlevColors.grey25}
+                        currentPage={kravNumView({ kravNummer: krav?.kravNummer, kravVersjon: krav?.kravVersjon })}
+                        paths={breadcrumbPaths}
                       />
-                    }
+                    )}
                   </Block>
                   {krav?.id && ((user.isKraveier() && krav.kravVersjon >= alleKravVersjoner[0].kravVersjon) || user.isAdmin()) && (
                     <Block flex="1" display={['none', 'none', 'none', 'none', 'flex', 'flex']} justifyContent="flex-end">
@@ -191,9 +191,8 @@ export const KravPage = () => {
                   {krav && krav?.kravNummer !== 0 ? kravNumView(krav) : 'Ny'}
                 </Block>
                 <H1 $style={{ color: '#F8F8F8' }}>{krav && krav?.navn ? krav.navn : 'Ny'} </H1>
-                
-                {hasKravExpired() && <ExpiredAlert alleKravVersjoner={alleKravVersjoner} />}
 
+                {hasKravExpired() && <ExpiredAlert alleKravVersjoner={alleKravVersjoner} />}
               </Block>
             </Block>
           </Block>

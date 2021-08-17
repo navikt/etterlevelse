@@ -34,10 +34,7 @@ export const TemaPage = () => {
   return <TemaSide tema={code} />
 }
 
-
-
 const TemaSide = ({ tema }: { tema: TemaCode }) => {
-
   const lover = codelist.getCodesForTema(tema.code)
   const { data, loading } = useKravCounter({ lover: lover.map((c) => c.code) }, { skip: !lover.length })
   const [expand, setExpand] = useState(false)
@@ -45,8 +42,8 @@ const TemaSide = ({ tema }: { tema: TemaCode }) => {
   const breadcrumbPaths: breadcrumbPaths[] = [
     {
       pathName: 'Les kravene',
-      href: '/tema'
-    }
+      href: '/tema',
+    },
   ]
 
   return (

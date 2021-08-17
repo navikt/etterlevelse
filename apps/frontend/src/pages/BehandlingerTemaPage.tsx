@@ -14,14 +14,14 @@ import { behandlingKravQuery } from '../components/behandling/ViewBehandling'
 import { useQuery } from '@apollo/client'
 import { CustomizedAccordion, CustomizedPanel } from '../components/common/CustomizedAccordion'
 import { Card } from 'baseui/card'
-import { Button, KIND } from 'baseui/button'
 import CustomizedModal from '../components/common/CustomizedModal'
 import { Spinner } from '../components/common/Spinner'
 import { useEtterlevelse } from '../api/EtterlevelseApi'
 import { EditEtterlevelse } from '../components/etterlevelse/EditEtterlevelse'
 import { kravFullQuery, KravId } from '../api/KravApi'
-import { borderWidth } from '../components/common/Style'
+import { borderStyle, borderWidth } from '../components/common/Style'
 import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
+import Button from '../components/common/Button'
 
 type KravEtterlevelseData = {
   kravNummer: number
@@ -117,7 +117,7 @@ export const BehandlingerTemaPage = () => {
   }
 
   const getMainHeader = () => (
-    <Block  justifyContent="space-between" marginBottom="60px">
+    <Block justifyContent="space-between" marginBottom="60px">
       {temaData && behandling && (
         <>
           <Block marginTop={theme.sizing.scale1200}>
@@ -127,17 +127,15 @@ export const BehandlingerTemaPage = () => {
             </H1>
             <RouteLink href={urlForObject(ListName.TEMA, temaData?.code)}>Les om tema</RouteLink>
           </Block>
-          <Block marginTop={theme.sizing.scale1200} flex='1'width='100%' display='flex'>
+          <Block marginTop={theme.sizing.scale1200} flex="1" width="100%" display="flex">
             <Block padding="5px">
-              <Block display='flex'>
+              <Block display="flex">
                 <Label3 $style={{ fontSize: '18px' }}>Du dokumenterer for:</Label3>
               </Block>
-                <Paragraph2 $style={{ marginTop: '0px', maxWidth: '700px' }}>{behandling.navn}</Paragraph2>
-                {/* <Paragraph4 $style={{ lineHeight: '24px' }}>{behandling.overordnetFormaal.shortName}</Paragraph4> */}
+              <Paragraph2 $style={{ marginTop: '0px', maxWidth: '700px' }}>{behandling.navn}</Paragraph2>
+              {/* <Paragraph4 $style={{ lineHeight: '24px' }}>{behandling.overordnetFormaal.shortName}</Paragraph4> */}
             </Block>
           </Block>
-
-          
         </>
       )}
     </Block>
@@ -200,12 +198,12 @@ export const BehandlingerTemaPage = () => {
   const breadcrumbPaths: breadcrumbPaths[] = [
     {
       pathName: 'Dokumenter etterlevelse',
-      href: '/behandlinger'
+      href: '/behandlinger',
     },
     {
       pathName: `${behandling?.navn}`,
-      href: '/behandling/' + behandling?.id
-    }
+      href: '/behandling/' + behandling?.id,
+    },
   ]
 
   return (
@@ -302,8 +300,21 @@ const EditModal = (props: { etterlevelseId: string; behandlingId: string; kravId
 const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function; setKravId: Function }) => {
   return (
     <Button
-      kind={KIND.tertiary}
-      $style={{ width: '100%', paddingTop: '0px', paddingBottom: '0px', paddingRight: '0px', paddingLeft: '0px' }}
+      kind="underline-hover"
+      $style={{
+        width: '100%',
+        paddingTop: '17px',
+        paddingBottom: '17px',
+        paddingRight: '0px',
+        paddingLeft: '0px',
+        display: 'flex',
+        justifyContent: 'flex-start',
+        borderTopWidth: '1px ',
+        borderTopStyle: 'solid',
+        borderTopColor: ettlevColors.grey100,
+        backgroundColor: ettlevColors.white,
+        ':hover': { backgroundColor: ettlevColors.green50 },
+      }}
       onClick={() => {
         if (!props.krav.etterlevelseId) {
           props.setKravId(toKravId(props.krav))
@@ -313,18 +324,13 @@ const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function; setKra
         }
       }}
     >
-      <Block width="100%">
-        <Card overrides={{ Root: { style: { ...borderWidth('1px') } } }}>
-          <Block display="flex" width="100%">
-            {/* <img src={circlePencilIcon} alt="pencil icon" /> */}
-            <Block marginLeft="24px">
-              <Paragraph4 $style={{ fontSize: '16px', lineHeight: '24px', marginBottom: '0px', marginTop: '0px', width: 'fit-content' }}>
-                K{props.krav.kravNummer}.{props.krav.kravVersjon}
-              </Paragraph4>
-              <Label3 $style={{ fontSize: '18px', lineHeight: '24px', alignContent: 'flex-start' }}>{props.krav.navn}</Label3>
-            </Block>
-          </Block>
-        </Card>
+      <Block display="flex" width="100%">
+        <Block marginLeft="24px">
+          <Paragraph4 $style={{ fontSize: '16px', lineHeight: '24px', marginBottom: '0px', marginTop: '0px', width: 'fit-content' }}>
+            K{props.krav.kravNummer}.{props.krav.kravVersjon}
+          </Paragraph4>
+          <Label3 $style={{ fontSize: '18px', lineHeight: '24px', alignContent: 'flex-start' }}>{props.krav.navn}</Label3>
+        </Block>
       </Block>
     </Button>
   )

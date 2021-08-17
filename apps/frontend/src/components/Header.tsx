@@ -232,12 +232,10 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
   }
 
   return (
-      <Block width="100%" display="flex" backgroundColor={ettlevColors.white} justifyContent="center">
+    <Block width="100%" display="flex" backgroundColor={ettlevColors.white} justifyContent="center">
       <SkipToContent />
       <Block width="100%" maxWidth={maxPageWidth}>
-      <StyledLink href="#main">
-
-    </StyledLink>
+        <StyledLink href="#main"></StyledLink>
         <Block paddingLeft="40px" paddingRight="40px" width="calc(100%-80px)" height="76px" overrides={{ Block: { props: { role: 'banner', 'aria-label': 'Header meny' } } }}>
           <HeaderNavigation overrides={{ Root: { style: { paddingBottom: 0, borderBottomStyle: 'none' } } }}>
             <NavigationList $align={ALIGN.left} $style={{ paddingLeft: 0 }}>
@@ -282,7 +280,7 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
           </HeaderNavigation>
         </Block>
       </Block>
-      </Block>
+    </Block>
   )
 }
 

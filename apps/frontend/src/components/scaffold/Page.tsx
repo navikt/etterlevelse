@@ -3,7 +3,7 @@ import { ettlevColors, maxPageWidth, pageWidth, theme } from '../../util/theme'
 import RouteLink from '../common/RouteLink'
 import Button from '../common/Button'
 import React from 'react'
-import CustomizedBreadcrumbs, { breadcrumbPaths } from "../common/CustomizedBreadcrumbs";
+import CustomizedBreadcrumbs, { breadcrumbPaths } from '../common/CustomizedBreadcrumbs'
 
 const padding = ['16px', '16px', '16px', '20px', '40px', '80px']
 
@@ -19,7 +19,7 @@ export const Page = ({
   header,
   backBtnColor,
   currentPage,
-  breadcrumbPaths
+  breadcrumbPaths,
 }: {
   backBtnColor?: string
   backUrl?: string
@@ -31,7 +31,7 @@ export const Page = ({
   header?: React.ReactNode
   children: React.ReactNode
   hideBackBtn?: boolean
-  currentPage?: string,
+  currentPage?: string
   breadcrumbPaths?: breadcrumbPaths[]
 }) => {
   return (
@@ -62,7 +62,9 @@ export const Page = ({
                 </Button>
               </RouteLink>
             )} */}
-            {(currentPage || breadcrumbPaths)&& <CustomizedBreadcrumbs fontColor={!backBtnColor ? ettlevColors.black : backBtnColor} currentPage={currentPage} paths={breadcrumbPaths} />}
+            {(currentPage || breadcrumbPaths) && (
+              <CustomizedBreadcrumbs fontColor={!backBtnColor ? ettlevColors.black : backBtnColor} currentPage={currentPage} paths={breadcrumbPaths} />
+            )}
             {header && (
               <Block width={'100%'} display={'flex'} justifyContent="center">
                 <Block maxWidth={pageWidth} width={'100%'} display={'flex'} flexDirection={'column'} marginBottom={theme.sizing.scale600}>
@@ -111,8 +113,8 @@ export const Layout2 = (props: {
   secondaryHeaderBackgroundColor?: string
   secondaryHeader?: React.ReactNode
   childrenBackgroundColor?: string
-  children: React.ReactNode,
-  currentPage?: string,
+  children: React.ReactNode
+  currentPage?: string
   breadcrumbPaths?: breadcrumbPaths[]
 }) => {
   // const history = useHistory()
@@ -138,7 +140,9 @@ export const Layout2 = (props: {
                     Tilbake
                   </Button>
                 </RouteLink> */}
-                {(props.currentPage || props.breadcrumbPaths) && <CustomizedBreadcrumbs fontColor={!props.backBtnColor ? ettlevColors.black : props.backBtnColor} currentPage={props.currentPage} paths={props.breadcrumbPaths} />}
+                {(props.currentPage || props.breadcrumbPaths) && (
+                  <CustomizedBreadcrumbs fontColor={!props.backBtnColor ? ettlevColors.black : props.backBtnColor} currentPage={props.currentPage} paths={props.breadcrumbPaths} />
+                )}
               </Block>
               {props.mainHeader}
             </Block>

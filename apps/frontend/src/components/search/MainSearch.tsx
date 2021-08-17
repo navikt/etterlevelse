@@ -82,19 +82,21 @@ const SelectType = (props: { type: SearchType; setType: (type: SearchType) => vo
   const [filter, setFilter] = useState(false)
   return (
     <Block width="100%" backgroundColor={ettlevColors.white}>
-      {!filter && <Block width="100%" display="flex" flex="1" justifyContent="flex-end">
-        <Button onClick={() => setFilter(!filter)} startEnhancer={<img alt="" src={filterIcon} />} kind="tertiary" marginRight label="Filter søkeresultat" notBold>
-          <Paragraph2
-            $style={{
-              fontSize: theme.sizing.scale600,
-              marginTop: 0,
-              marginBottom: 0,
-            }}
-          >
-            {filter ? 'Skjul filter' : 'Vis filter'}
-          </Paragraph2>
-        </Button>
-      </Block>}
+      {!filter && (
+        <Block width="100%" display="flex" flex="1" justifyContent="flex-end">
+          <Button onClick={() => setFilter(!filter)} startEnhancer={<img alt="" src={filterIcon} />} kind="tertiary" marginRight label="Filter søkeresultat" notBold>
+            <Paragraph2
+              $style={{
+                fontSize: theme.sizing.scale600,
+                marginTop: 0,
+                marginBottom: 0,
+              }}
+            >
+              {filter ? 'Skjul filter' : 'Vis filter'}
+            </Paragraph2>
+          </Button>
+        </Block>
+      )}
       {filter && (
         <Block backgroundColor="#FFFFFF" display="flex" $style={{}}>
           <Block marginLeft="3px" marginRight="3px" marginBottom="scale1200" backgroundColor={ettlevColors.grey50} display="flex" flex="1" justifyContent="center">
@@ -129,18 +131,14 @@ const SelectType = (props: { type: SearchType; setType: (type: SearchType) => vo
 const kravMap = (t: Krav) => ({
   id: t.id,
   sortKey: t.navn,
-  label: (
-    <SearchLabel name={kravName(t)} type={'Krav'} backgroundColor={searchResultColor.kravBackground} />
-  ),
+  label: <SearchLabel name={kravName(t)} type={'Krav'} backgroundColor={searchResultColor.kravBackground} />,
   type: ObjectType.Krav,
 })
 
 const behandlingMap = (t: Behandling) => ({
   id: t.id,
   sortKey: t.navn,
-  label: (
-    <SearchLabel name={behandlingName(t)} type={'Behandling'} backgroundColor={searchResultColor.behandlingBackground} />
-  ),
+  label: <SearchLabel name={behandlingName(t)} type={'Behandling'} backgroundColor={searchResultColor.behandlingBackground} />,
   type: ObjectType.Behandling,
 })
 
@@ -150,14 +148,12 @@ const getCodelist = (search: string, list: ListName, typeName: string) => {
     .filter((c) => c.shortName.toLowerCase().indexOf(search.toLowerCase()) >= 0)
     .map(
       (c) =>
-      ({
-        id: c.code,
-        sortKey: c.shortName,
-        label: (
-          <SearchLabel name={c.shortName} type={typeName} />
-        ),
-        type: list,
-      } as SearchItem),
+        ({
+          id: c.code,
+          sortKey: c.shortName,
+          label: <SearchLabel name={c.shortName} type={typeName} />,
+          type: list,
+        } as SearchItem),
     )
 }
 
@@ -168,9 +164,7 @@ const searchCodelist = (search: string, list: ListName & NavigableItem, typeName
     .map((c) => ({
       id: c.code,
       sortKey: c.shortName,
-      label: (
-        <SearchLabel name={c.shortName} type={typeName} backgroundColor={backgroundColor} />
-      ),
+      label: <SearchLabel name={c.shortName} type={typeName} backgroundColor={backgroundColor} />,
       type: list,
     }))
 
@@ -193,11 +187,11 @@ const useMainSearch = (searchParam?: string) => {
   useEffect(() => {
     setSearchResult([])
 
-    if (type === ListName.UNDERAVDELING && (search.length > 2)) {
+    if (type === ListName.UNDERAVDELING && search.length > 2) {
       setSearchResult(getCodelist(search, ListName.UNDERAVDELING, 'Underavdeling'))
     } else {
       if (search && search.replace(/ /g, '').length > 2) {
-        ; (async () => {
+        ;(async () => {
           let results: SearchItem[] = []
           let searches: Promise<any>[] = []
           const compareFn = (a: SearchItem, b: SearchItem) => prefixBiasedSort(search, a.sortKey, b.sortKey)
@@ -227,38 +221,38 @@ const useMainSearch = (searchParam?: string) => {
             }
 
             if (Number.parseFloat(kravNumber) && Number.parseFloat(kravNumber) % 1 === 0) {
-              searches.push((async () => add(
-                (await searchKravByNumber(Number.parseFloat(kravNumber).toString()))
-                .sort((a,b) => {
-                  if(a.kravNummer === b.kravNummer) {
-                    return b.kravVersjon - a.kravVersjon 
-                  } else {
-                    return  b.kravNummer - a.kravNummer
-                  }
-                })
-                .map(kravMap)))())
+              searches.push(
+                (async () =>
+                  add(
+                    (await searchKravByNumber(Number.parseFloat(kravNumber).toString()))
+                      .sort((a, b) => {
+                        if (a.kravNummer === b.kravNummer) {
+                          return b.kravVersjon - a.kravVersjon
+                        } else {
+                          return b.kravNummer - a.kravNummer
+                        }
+                      })
+                      .map(kravMap),
+                  ))(),
+              )
             }
 
             if (Number.parseFloat(kravNumber) && Number.parseFloat(kravNumber) % 1 !== 0) {
               const kravNummerMedVersjon = kravNumber.split('.')
-              const searchResult = [(await getKravByKravNumberAndVersion(kravNummerMedVersjon[0], kravNummerMedVersjon[1]))]
+              const searchResult = [await getKravByKravNumberAndVersion(kravNummerMedVersjon[0], kravNummerMedVersjon[1])]
               if (typeof searchResult[0] !== 'undefined') {
-                
                 const mappedResult = [
                   {
                     id: searchResult[0].id,
                     sortKey: searchResult[0].navn,
-                    label: (
-                      <SearchLabel name={kravName(searchResult[0])} type={'Krav'} backgroundColor={searchResultColor.kravBackground} />
-                    ),
+                    label: <SearchLabel name={kravName(searchResult[0])} type={'Krav'} backgroundColor={searchResultColor.kravBackground} />,
                     type: ObjectType.Krav,
-                  }
+                  },
                 ]
 
                 searches.push((async () => add(mappedResult))())
               }
             }
-
           }
 
           if (type === 'all' || type === ObjectType.Behandling) {
@@ -295,16 +289,23 @@ const MainSearch = () => {
 
   const filterOption = {
     id: 'filter',
-    label:
+    label: (
       <Block>
         <SelectType type={type} setType={setType} />
-        <Block display='flex' justifyContent='center' color={ettlevColors.green800} backgroundColor={ettlevColors.white} $style={{
-          ...padding('24px', '24px'),
-          paddingTop: '0px'
-        }}>
+        <Block
+          display="flex"
+          justifyContent="center"
+          color={ettlevColors.green800}
+          backgroundColor={ettlevColors.white}
+          $style={{
+            ...padding('24px', '24px'),
+            paddingTop: '0px',
+          }}
+        >
           {getNoResultMessage()}
         </Block>
-      </Block>,
+      </Block>
+    ),
     sortKey: 'filter',
     type: '__ungrouped',
   }
@@ -365,15 +366,15 @@ const MainSearch = () => {
           }}
           onChange={(params) => {
             const item = params.value[0] as SearchItem
-              ; (async () => {
-                if (item && item.type !== '__ungrouped') {
-                  setValue([item])
-                  history.push(urlForObject(item.type, item.id))
-                  window.location.reload()
-                } else if (item && item.type === '__ungrouped') {
-                  setFilterClicked(true)
-                }
-              })()
+            ;(async () => {
+              if (item && item.type !== '__ungrouped') {
+                setValue([item])
+                history.push(urlForObject(item.type, item.id))
+                window.location.reload()
+              } else if (item && item.type === '__ungrouped') {
+                setFilterClicked(true)
+              }
+            })()
           }}
           filterOptions={(options) => options}
           overrides={{
