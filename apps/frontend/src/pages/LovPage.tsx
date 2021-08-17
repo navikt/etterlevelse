@@ -62,8 +62,8 @@ const LovSide = ({ lov }: { lov: LovCode }) => {
 
   const breadcrumbPaths: breadcrumbPaths[] = [
     {
-      pathName: 'Les kravene',
-      href: '/tema',
+      pathName: 'Alle krav',
+      href: '/tema'
     },
     {
       pathName: `${tema?.shortName}`,

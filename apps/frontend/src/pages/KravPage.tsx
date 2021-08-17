@@ -122,8 +122,8 @@ export const KravPage = () => {
 
   const breadcrumbPaths: breadcrumbPaths[] = [
     {
-      pathName: 'Les kravene',
-      href: '/tema',
+      pathName: 'Alle krav',
+      href: '/tema'
     },
   ]
 
