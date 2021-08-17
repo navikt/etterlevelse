@@ -117,7 +117,7 @@ export const BehandlingerTemaPage = () => {
   }
 
   const getMainHeader = () => (
-    <Block display="flex" justifyContent="space-between" marginBottom="60px">
+    <Block  justifyContent="space-between" marginBottom="60px">
       {temaData && behandling && (
         <>
           <Block marginTop={theme.sizing.scale1200}>
@@ -127,16 +127,17 @@ export const BehandlingerTemaPage = () => {
             </H1>
             <RouteLink href={urlForObject(ListName.TEMA, temaData?.code)}>Les om tema</RouteLink>
           </Block>
-
-          <Block marginTop={theme.sizing.scale1200}>
+          <Block marginTop={theme.sizing.scale1200} flex='1'width='100%' display='flex'>
             <Block padding="5px">
-              <Block display='flex' justifyContent='flex-end'>
-                <Label3 $style={{ fontSize: '14px' }}>Du dokumenterer for:</Label3>
+              <Block display='flex'>
+                <Label3 $style={{ fontSize: '18px' }}>Du dokumenterer for:</Label3>
               </Block>
-              <Paragraph2 $style={{ marginTop: '0px', maxWidth: '316px' }}>{behandling.navn}</Paragraph2>
-              {/* <Paragraph4 $style={{ lineHeight: '24px' }}>{behandling.overordnetFormaal.shortName}</Paragraph4> */}
+                <Paragraph2 $style={{ marginTop: '0px', maxWidth: '700px' }}>{behandling.navn}</Paragraph2>
+                {/* <Paragraph4 $style={{ lineHeight: '24px' }}>{behandling.overordnetFormaal.shortName}</Paragraph4> */}
             </Block>
           </Block>
+
+          
         </>
       )}
     </Block>

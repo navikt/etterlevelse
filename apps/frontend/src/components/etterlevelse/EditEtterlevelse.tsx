@@ -99,7 +99,7 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
   return (
     <Block>
       <Block flex="1" backgroundColor={ettlevColors.green800}>
-        <Block display='flex'>
+        <Block>
           <Block flex='1' paddingLeft={modalPaddingLeft} paddingRight={modalPaddingRight} paddingBottom="32px">
             <Paragraph2 $style={{ marginTop: '0px', marginBottom: '0px', color: ettlevColors.white }}>{kravNumView(krav)}</Paragraph2>
             <H1 $style={{ marginTop: '0px', marginBottom: '0px', color: ettlevColors.white }}>{krav.navn}</H1>
@@ -109,12 +109,12 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
               </ExternalLink>
             </Paragraph2>
           </Block>
-          <Block display='flex' justifyContent='flex-end' paddingRight={theme.sizing.scale2400} paddingBottom={theme.sizing.scale900}>
+          <Block display='flex' paddingLeft={modalPaddingLeft} paddingBottom={theme.sizing.scale900}>
             <Block>
-              <Block display='flex' justifyContent='flex-end'>
-                <Label3 $style={{ fontSize: '14px', color: ettlevColors.white }}>Du dokumenterer for:</Label3>
+              <Block display='flex'>
+                <Label3 $style={{ fontSize: '18px', color: ettlevColors.white }}>Du dokumenterer for:</Label3>
               </Block>
-              <Paragraph2 $style={{ marginTop: '0px', color: ettlevColors.white, maxWidth: '316px'}}>{behandlingNavn}</Paragraph2>
+              <Paragraph2 $style={{ marginTop: '0px', color: ettlevColors.white, maxWidth: '700px'}}>{behandlingNavn}</Paragraph2>
             </Block>
           </Block>
         </Block>
