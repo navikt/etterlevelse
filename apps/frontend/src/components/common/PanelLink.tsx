@@ -18,6 +18,7 @@ export const PanelLink = ({
   flip,
   square,
   hideBorderBottom,
+  useUnderline
 }: {
   href: string
   title: string
@@ -27,6 +28,7 @@ export const PanelLink = ({
   flip?: boolean
   square?: boolean
   hideBorderBottom?: boolean
+  useUnderline?: boolean
   panelIcon?: React.ReactNode | ((hover: boolean) => React.ReactNode)
 }) => {
   const [hover, setHover] = useState(false)
@@ -59,6 +61,8 @@ export const PanelLink = ({
                 position: 'relative',
                 boxSizing: 'border-box',
                 boxShadow: '0px 3px 4px rgba(0, 0, 0, 0.12)',
+                backgroundColor: ettlevColors.green50,
+                textDecoration: useUnderline ? 'underline' : 'none'
               },
             },
           },
