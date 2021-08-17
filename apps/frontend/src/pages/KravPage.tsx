@@ -301,6 +301,7 @@ const Etterlevelser = ({ loading, etterlevelser: allEtterlevelser }: { loading: 
                   href={`/etterlevelse/${e.id}`}
                   square
                   hideBorderBottom={i !== antall - 1}
+                  useUnderline
                   title={e.behandling.navn}
                   beskrivelse={e.behandling.overordnetFormaal.shortName}
                   rightTitle={!!e.behandling.teamsData.length ? e.behandling.teamsData.map((t) => t.name).join(', ') : 'Ingen team'}
