@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Block } from 'baseui/block'
+import { Block, Display, JustifyContent } from 'baseui/block'
 import { useParams } from 'react-router-dom'
 import { H1, H2, HeadingLarge, Label3, Paragraph2, Paragraph4 } from 'baseui/typography'
 import { ettlevColors, maxPageWidth, theme } from '../util/theme'
@@ -22,6 +22,9 @@ import { kravFullQuery, KravId } from '../api/KravApi'
 import { borderStyle, borderWidth } from '../components/common/Style'
 import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 import Button from '../components/common/Button'
+import { Responsive } from 'baseui/theme'
+
+const responsiveBreakPoints: Responsive<Display> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
 
 type KravEtterlevelseData = {
   kravNummer: number
@@ -142,15 +145,17 @@ export const BehandlingerTemaPage = () => {
   )
 
   const getSecondaryHeader = () => (
-    <Block width="100%" height="100px" maxHeight="100px" display="flex" alignItems="center" justifyContent="space-between">
+    <Block width="100%" paddingTop={theme.sizing.scale900} display={responsiveBreakPoints} alignItems="center" justifyContent="space-between">
       <Block display="flex" alignItems="center">
         <Block marginRight="30px">
           <img src={arkPennIcon} alt="test" height="50px" width="40px" />
         </Block>
         <Block>
+          <Block>
           <Paragraph2 marginBottom="0px" marginTop="0px">
             Steg 2 av 3
-          </Paragraph2>
+            </Paragraph2>
+            </Block>
           <H2 marginTop="0px" marginBottom="0px">
             Krav til utfylling
           </H2>
@@ -266,20 +271,22 @@ const PanelHeader = (props: { title: string; kravData: KravEtterlevelseData[] })
     antallSuksesskriterier += k.suksesskriterier.length
   })
 
+  const responsiveAlignment: Responsive<JustifyContent>  = ['flex-start', 'flex-start', 'flex-start', 'flex-end', 'flex-end', 'flex-end']
+
   return (
-    <Block display="flex" width="100%">
+    <Block display={responsiveBreakPoints} width="100%">
       <HeadingLarge marginTop={theme.sizing.scale100} marginBottom={theme.sizing.scale100} color={ettlevColors.green600}>
         {props.title}
       </HeadingLarge>
-      <Block display="flex" justifyContent="flex-end" flex="1" marginRight="26px">
+      <Block display="flex" justifyContent={responsiveAlignment} flex="1" marginRight="26px">
         <Block>
-          <Block display="flex" justifyContent="flex-end" alignItems="baseline" flex="1">
+          <Block display="flex" justifyContent={responsiveAlignment} alignItems="baseline" flex="1">
             <Label3 marginRight="4px" $style={{ color: ettlevColors.navOransje, fontSize: '20px', lineHeight: '21px', marginTop: '0px', marginBottom: '0px' }}>
               {props.kravData.length}
             </Label3>
             <Paragraph4 $style={{ lineHeight: '21px', marginTop: '0px', marginBottom: '0px' }}>krav</Paragraph4>
           </Block>
-          <Block display="flex" justifyContent="flex-end" flex="1">
+          <Block display="flex" justifyContent={responsiveAlignment} flex="1">
             <Paragraph4 $style={{ lineHeight: '21px', marginTop: '0px', marginBottom: '0px' }}>{antallSuksesskriterier} suksesskriterier</Paragraph4>
           </Block>
         </Block>
