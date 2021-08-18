@@ -62,7 +62,7 @@ const LovSide = ({ lov }: { lov: LovCode }) => {
 
   const breadcrumbPaths: breadcrumbPaths[] = [
     {
-      pathName: 'Alle krav',
+      pathName: 'Forstå kravene',
       href: '/tema'
     },
     {

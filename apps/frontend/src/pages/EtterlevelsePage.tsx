@@ -53,7 +53,7 @@ export const EtterlevelsePage = () => {
 
   const breadcrumbPaths: breadcrumbPaths[] = [
     {
-      pathName: 'Alle krav',
+      pathName: 'Forstå kravene',
       href: '/tema'
     },
     {

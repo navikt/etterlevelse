@@ -106,7 +106,7 @@ const LoggedInHeader = () => {
           [{ label: 'Forsiden', href: '/', icon: husIcon }],
           [{ label: 'Dokumentere etterlevelse', href: '/behandlinger', icon: arkPennIcon }],
           [{ label: 'Status i organisasjonen', href: '/status', icon: grafIcon }],
-          [{ label: 'Les kravene', href: '/tema', icon: paragrafIcon }],
+          [{ label: 'Forstå kravene', href: '/tema', icon: paragrafIcon }],
         ]}
         compact
         title={'Meny'}

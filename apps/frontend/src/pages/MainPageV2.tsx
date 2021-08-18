@@ -58,7 +58,7 @@ export const MainPageV2 = () => {
               width={cardWidth}
               verticalMargin={theme.sizing.scale300}
               href={'/tema'}
-              tittel={'Les kravene'}
+              tittel={'Forstå kravene'}
               icon={paragrafIconBg}
               beskrivelse={'Få oversikt over kravene, og bli trygg på at du kjenner til alle relevante krav for det du lager'}
             />

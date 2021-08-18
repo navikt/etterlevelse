@@ -41,7 +41,7 @@ const TemaSide = ({ tema }: { tema: TemaCode }) => {
 
   const breadcrumbPaths: breadcrumbPaths[] = [
     {
-      pathName: 'Alle krav',
+      pathName: 'Forstå kravene',
       href: '/tema'
     }
   ]
@@ -140,7 +140,7 @@ const TemaListe = () => {
   const temaListe = codelist.getCodes(ListName.TEMA).sort((a, b) => a.shortName.localeCompare(b.shortName, 'nb'))
 
   return (
-    <Layout2 mainHeader={<H1>Alle krav</H1>} headerBackgroundColor={ettlevColors.grey50} childrenBackgroundColor={ettlevColors.grey25} currentPage={'Alle krav'}>
+    <Layout2 mainHeader={<H1>Forstå kravene</H1>} headerBackgroundColor={ettlevColors.grey50} childrenBackgroundColor={ettlevColors.grey25} currentPage={'Forstå kravene'}>
       {visFilter && <RelevansFilter relevans={relevans} onClickFilter={onClickFilter} kravAntall={kravAntall} />}
       <Block {...sectionProps} marginTop={theme.sizing.scale600}>
         {!visFilter && <TemaInfo kravAntall={kravAntall} temaAntall={temaListe.length} />}
