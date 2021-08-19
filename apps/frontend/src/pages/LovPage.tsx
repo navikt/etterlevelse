@@ -135,7 +135,7 @@ const LovSide = ({ lov }: { lov: LovCode }) => {
         {!loading &&
           data?.krav.content.map((k) => (
             <Block key={k.id} marginBottom={'8px'}>
-              <PanelLink href={`/krav/${k.kravNummer}/${k.kravVersjon}`} beskrivelse={kravNumView(k)} title={k.navn} flip />
+              <PanelLink useUnderline href={`/krav/${k.kravNummer}/${k.kravVersjon}`} beskrivelse={kravNumView(k)} title={k.navn} flip />
             </Block>
           ))}
       </Block>

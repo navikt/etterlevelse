@@ -5,7 +5,7 @@ import { HeadingLarge } from 'baseui/typography'
 import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons'
 import * as React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { borderColor, borderStyle, borderWidth, paddingAll } from './Style'
+import { borderColor, borderRadius, borderStyle, borderWidth, paddingAll } from './Style'
 import _ from 'lodash'
 
 export const CustomizedAccordion = (props: AccordionProps) => {
@@ -31,18 +31,8 @@ export const CustomizedPanel = (props: CustomProps) => {
     },
     Header: {
       style: {
-        backgroundColor: expanded ? headerActiveBackgroundColor : headerBackgroundColor,
-        ...borderStyle('solid'),
-        ...borderWidth('1px'),
-        ...borderColor(ettlevColors.grey100),
-        borderTopLeftRadius: '4px',
-        borderTopRightRadius: '4px',
-        ...(expanded
-          ? {}
-          : {
-              borderBottomLeftRadius: '4px',
-              borderBottomRightRadius: '4px',
-            }),
+        backgroundColor: ettlevColors.white,
+        ...borderRadius('4px'),
         ':hover': {
           textDecoration: 'underline',
           color: ettlevColors.green800,
@@ -57,6 +47,7 @@ export const CustomizedPanel = (props: CustomProps) => {
     },
     Content: {
       style: {
+        ...borderRadius('4px'),
         backgroundColor: ettlevColors.grey50,
         ...paddingAll('0'),
         overflow: 'visible', // fix box shadows of content
@@ -64,8 +55,11 @@ export const CustomizedPanel = (props: CustomProps) => {
     },
     PanelContainer: {
       style: {
+        ...borderStyle('solid'),
+        ...borderWidth('1px'),
+        ...borderColor(ettlevColors.grey200),
+        ...borderRadius('4px'),
         marginBottom: theme.sizing.scale200,
-        ...borderStyle('hidden'),
       },
     },
   }

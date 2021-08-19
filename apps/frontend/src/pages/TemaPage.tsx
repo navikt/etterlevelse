@@ -102,7 +102,7 @@ const TemaSide = ({ tema }: { tema: TemaCode }) => {
         {!loading &&
           data?.krav.content.map((k, index) => (
             <Block key={k.id + '_' + index} marginBottom={'8px'}>
-              <PanelLink href={`/krav/${k.kravNummer}/${k.kravVersjon}`} beskrivelse={kravNumView(k)} title={k.navn} flip />
+              <PanelLink useUnderline href={`/krav/${k.kravNummer}/${k.kravVersjon}`} beskrivelse={kravNumView(k)} title={k.navn} flip />
             </Block>
           ))}
       </Block>

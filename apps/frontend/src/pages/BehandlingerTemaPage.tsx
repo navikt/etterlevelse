@@ -19,7 +19,7 @@ import { Spinner } from '../components/common/Spinner'
 import { useEtterlevelse } from '../api/EtterlevelseApi'
 import { EditEtterlevelse } from '../components/etterlevelse/EditEtterlevelse'
 import { kravFullQuery, KravId } from '../api/KravApi'
-import { borderStyle, borderWidth } from '../components/common/Style'
+import { borderColor, borderRadius, borderStyle, borderWidth } from '../components/common/Style'
 import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 import Button from '../components/common/Button'
 import { Responsive } from 'baseui/theme'
@@ -183,19 +183,21 @@ export const BehandlingerTemaPage = () => {
   const getKravList = (kravList: KravEtterlevelseData[], emptyMessage: string) => {
     if (kravList.length) {
       return kravList.map((k) => {
-        return <KravCard key={`${k.navn}_${k.kravNummer}`} krav={k} setEdit={setEdit} setKravId={setKravId} />
+        return (
+          <Block backgroundColor={ettlevColors.white} $style={{ ...borderRadius('4px')}}>
+            <Block width="calc(100% - 48px)" backgroundColor={ettlevColors.grey100} height="1px" marginLeft={theme.sizing.scale800} marginRight={theme.sizing.scale800}/>
+            <KravCard key={`${k.navn}_${k.kravNummer}`} krav={k} setEdit={setEdit} setKravId={setKravId} />
+          </Block>
+        )
       })
     } else {
       return (
-        <Block width="100%">
-          <Card overrides={{ Root: { style: { ...borderWidth('1px') } } }}>
-            <Block display="flex" width="100%">
-              <Block marginLeft="24px">
+        <Block backgroundColor={ettlevColors.white} $style={{ ...borderRadius('4px')}}>
+          <Block width="calc(100% - 48px)" backgroundColor={ettlevColors.grey100} height="1px" marginLeft={theme.sizing.scale800} marginRight={theme.sizing.scale800}/>
+              <Block display="flex" width="100%" marginLeft="24px">
                 <Paragraph4> {emptyMessage}</Paragraph4>
               </Block>
-            </Block>
-          </Card>
-        </Block>
+          </Block>
       )
     }
   }
@@ -316,10 +318,8 @@ const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function; setKra
         paddingLeft: '0px',
         display: 'flex',
         justifyContent: 'flex-start',
-        borderTopWidth: '1px ',
-        borderTopStyle: 'solid',
-        borderTopColor: ettlevColors.grey100,
         backgroundColor: ettlevColors.white,
+        ...borderStyle('hidden'),
         ':hover': { backgroundColor: 'none' },
       }}
       onClick={() => {
