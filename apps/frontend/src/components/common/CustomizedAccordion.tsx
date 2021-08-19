@@ -82,3 +82,10 @@ export const CustomizedPanel = (props: CustomProps) => {
 
   return <Panel {...props} overrides={overrides} title={getTitle()} />
 }
+
+export const CustomPanelDivider = (props: { children: React.ReactNode}) => (
+  <Block backgroundColor={ettlevColors.white} $style={{ ...borderRadius('4px')}}>
+    <Block width="calc(100% - 48px)" backgroundColor={ettlevColors.grey100} height="1px" marginLeft={theme.sizing.scale800} marginRight={theme.sizing.scale800}/>
+    {props.children}
+  </Block>
+)

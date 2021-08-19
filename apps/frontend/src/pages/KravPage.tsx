@@ -21,7 +21,7 @@ import { chevronLeft, editIcon, pageIcon, plusIcon, sadFolderIcon, warningAlert 
 import { Label } from '../components/common/PropertyLabel'
 import { CustomizedTab, CustomizedTabs } from '../components/common/CustomizedTabs'
 import { ettlevColors, maxPageWidth, pageWidth } from '../util/theme'
-import { CustomizedAccordion, CustomizedPanel } from '../components/common/CustomizedAccordion'
+import { CustomizedAccordion, CustomizedPanel, CustomPanelDivider } from '../components/common/CustomizedAccordion'
 import * as _ from 'lodash'
 import moment from 'moment'
 import { useLocationState, useQueryParam } from '../util/hooks'
@@ -296,6 +296,7 @@ const Etterlevelser = ({ loading, etterlevelser: allEtterlevelser }: { loading: 
           return (
             <CustomizedPanel key={a.code} title={a.shortName} HeaderActiveBackgroundColor={ettlevColors.green50}>
               {avdelingEtterlevelser.map((e, i) => (
+                <CustomPanelDivider >
                 <PanelLink
                   key={e.id}
                   href={`/etterlevelse/${e.id}`}
@@ -306,8 +307,16 @@ const Etterlevelser = ({ loading, etterlevelser: allEtterlevelser }: { loading: 
                   beskrivelse={e.behandling.overordnetFormaal.shortName}
                   rightTitle={!!e.behandling.teamsData.length ? e.behandling.teamsData.map((t) => t.name).join(', ') : 'Ingen team'}
                   rightBeskrivelse={`Utfylt: ${moment(e.changeStamp.lastModifiedDate).format('ll')}`}
+                  overrides={{
+                    Block: {
+                      style: {
+                        ...borderStyle('hidden')
+                      }
+                    }
+                  }}
                   // panelIcon={(hover) => <PageIcon hover={hover} />}
                 />
+                </CustomPanelDivider>
               ))}
             </CustomizedPanel>
           )

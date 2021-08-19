@@ -12,7 +12,7 @@ import { Etterlevelse, EtterlevelseStatus, KravQL, PageResponse, Suksesskriterie
 import { arkPennIcon, circlePencilIcon, crossIcon } from '../components/Images'
 import { behandlingKravQuery } from '../components/behandling/ViewBehandling'
 import { useQuery } from '@apollo/client'
-import { CustomizedAccordion, CustomizedPanel } from '../components/common/CustomizedAccordion'
+import { CustomizedAccordion, CustomizedPanel, CustomPanelDivider } from '../components/common/CustomizedAccordion'
 import { Card } from 'baseui/card'
 import CustomizedModal from '../components/common/CustomizedModal'
 import { Spinner } from '../components/common/Spinner'
@@ -184,20 +184,18 @@ export const BehandlingerTemaPage = () => {
     if (kravList.length) {
       return kravList.map((k) => {
         return (
-          <Block backgroundColor={ettlevColors.white} $style={{ ...borderRadius('4px')}}>
-            <Block width="calc(100% - 48px)" backgroundColor={ettlevColors.grey100} height="1px" marginLeft={theme.sizing.scale800} marginRight={theme.sizing.scale800}/>
+          <CustomPanelDivider>
             <KravCard key={`${k.navn}_${k.kravNummer}`} krav={k} setEdit={setEdit} setKravId={setKravId} />
-          </Block>
+          </CustomPanelDivider>
         )
       })
     } else {
       return (
-        <Block backgroundColor={ettlevColors.white} $style={{ ...borderRadius('4px')}}>
-          <Block width="calc(100% - 48px)" backgroundColor={ettlevColors.grey100} height="1px" marginLeft={theme.sizing.scale800} marginRight={theme.sizing.scale800}/>
-              <Block display="flex" width="100%" marginLeft="24px">
-                <Paragraph4> {emptyMessage}</Paragraph4>
-              </Block>
-          </Block>
+              <CustomPanelDivider>
+                <Block display="flex" width="100%" marginLeft="24px">
+                  <Paragraph4> {emptyMessage}</Paragraph4>
+                </Block>    
+              </CustomPanelDivider>
       )
     }
   }

@@ -18,7 +18,8 @@ export const PanelLink = ({
   flip,
   square,
   hideBorderBottom,
-  useUnderline
+  useUnderline,
+  overrides
 }: {
   href: string
   title: string
@@ -30,8 +31,37 @@ export const PanelLink = ({
   hideBorderBottom?: boolean
   useUnderline?: boolean
   panelIcon?: React.ReactNode | ((hover: boolean) => React.ReactNode)
+  overrides?: BlockOverrides 
 }) => {
   const [hover, setHover] = useState(false)
+
+  const customOverrides: BlockOverrides = {
+    Block: {
+      style: {
+        width: '100%',
+        ...paddingAll(theme.sizing.scale600),
+        paddingLeft: theme.sizing.scale300,
+        display: 'flex',
+        justifyContent: 'space-between',
+        backgroundColor: ettlevColors.white,
+        ...borderWidth('1px'),
+        ...borderColor(ettlevColors.grey100),
+        ...borderStyle('solid'),
+        borderBottomStyle: hideBorderBottom ? 'hidden' : 'solid',
+        ...(square ? {} : borderRadius('4px')),
+        ...borderRadius('4px'),
+
+        ':hover': {
+          position: 'relative',
+          boxSizing: 'border-box',
+          boxShadow: '0px 3px 4px rgba(0, 0, 0, 0.12)',
+          textDecoration: useUnderline ? 'underline' : 'none'
+        },
+      },
+    },
+  }
+
+  const mergedOverrides = _.merge(customOverrides, overrides)
 
   return (
     <RouteLink
@@ -42,30 +72,7 @@ export const PanelLink = ({
       }}
     >
       <Block
-        overrides={{
-          Block: {
-            style: {
-              width: '100%',
-              ...paddingAll(theme.sizing.scale600),
-              paddingLeft: theme.sizing.scale300,
-              display: 'flex',
-              justifyContent: 'space-between',
-              backgroundColor: ettlevColors.white,
-              ...borderWidth('1px'),
-              ...borderColor(ettlevColors.grey100),
-              ...borderStyle('solid'),
-              borderBottomStyle: hideBorderBottom ? 'hidden' : 'solid',
-              ...(square ? {} : borderRadius('4px')),
-
-              ':hover': {
-                position: 'relative',
-                boxSizing: 'border-box',
-                boxShadow: '0px 3px 4px rgba(0, 0, 0, 0.12)',
-                textDecoration: useUnderline ? 'underline' : 'none'
-              },
-            },
-          },
-        }}
+        overrides={mergedOverrides}
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
       >
