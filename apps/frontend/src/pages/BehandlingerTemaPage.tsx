@@ -320,7 +320,7 @@ const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function; setKra
         borderTopStyle: 'solid',
         borderTopColor: ettlevColors.grey100,
         backgroundColor: ettlevColors.white,
-        ':hover': { backgroundColor: ettlevColors.green50 },
+        ':hover': { backgroundColor: 'none' },
       }}
       onClick={() => {
         if (!props.krav.etterlevelseId) {

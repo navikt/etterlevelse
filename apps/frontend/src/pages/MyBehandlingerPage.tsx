@@ -366,6 +366,7 @@ const BehandlingerPanels = ({ behandlinger, loading }: { behandlinger: Behandlin
       {behandlinger.map((b) => (
         <Block key={b.id} marginBottom={'8px'}>
           <PanelLink
+            useUnderline
             panelIcon={<img src={arkPennIcon} width="33px" height="33px" aria-hidden alt={'Dokumenter behandling ikon'} />}
             href={`/behandling/${b.id}`}
             title={`${b.nummer}: ${b.navn}`}

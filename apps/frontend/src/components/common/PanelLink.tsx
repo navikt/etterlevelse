@@ -61,7 +61,6 @@ export const PanelLink = ({
                 position: 'relative',
                 boxSizing: 'border-box',
                 boxShadow: '0px 3px 4px rgba(0, 0, 0, 0.12)',
-                backgroundColor: ettlevColors.green50,
                 textDecoration: useUnderline ? 'underline' : 'none'
               },
             },

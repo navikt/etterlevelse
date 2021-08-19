@@ -46,6 +46,7 @@ export const CustomizedPanel = (props: CustomProps) => {
         ':hover': {
           textDecoration: 'underline',
           color: ettlevColors.green800,
+          boxShadow: '0px 3px 4px rgba(0, 0, 0, 0.12)',
         },
       },
     },
