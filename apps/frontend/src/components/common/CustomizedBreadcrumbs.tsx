@@ -3,6 +3,7 @@ import { Breadcrumbs, BreadcrumbsOverrides, BreadcrumbsProps } from 'baseui/brea
 import _ from 'lodash'
 import RouteLink from './RouteLink'
 import { theme } from '../../util/theme'
+import { Block } from 'baseui/block'
 
 export interface breadcrumbPaths {
   href: string
@@ -54,7 +55,7 @@ const CustomizedBreadcrumbs = (props: CustomizedProps) => {
         Forsiden
       </RouteLink>
       {getBreadcrumbs()}
-      {props.currentPage && <span>{getName(props.currentPage)}</span>}
+      {props.currentPage && <span><Block display={['none', 'none', 'none', 'block', 'block', 'block']}>{getName(props.currentPage)}</Block></span>}
     </Breadcrumbs>
   )
 }
