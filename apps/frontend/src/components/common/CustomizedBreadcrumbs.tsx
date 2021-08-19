@@ -2,6 +2,7 @@ import React from 'react'
 import { Breadcrumbs, BreadcrumbsOverrides, BreadcrumbsProps } from 'baseui/breadcrumbs'
 import _ from 'lodash'
 import RouteLink from './RouteLink'
+import { theme } from '../../util/theme'
 
 export interface breadcrumbPaths {
   href: string
@@ -26,6 +27,7 @@ const CustomizedBreadcrumbs = (props: CustomizedProps) => {
     Root: {
       style: {
         color: props.fontColor ? props.fontColor : undefined,
+        marginBottom: theme.sizing.scale1000
       },
     },
   }

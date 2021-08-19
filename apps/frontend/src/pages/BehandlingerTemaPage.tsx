@@ -123,7 +123,7 @@ export const BehandlingerTemaPage = () => {
     <Block justifyContent="space-between" marginBottom="60px">
       {temaData && behandling && (
         <>
-          <Block marginTop={theme.sizing.scale1200}>
+          <Block>
             <Label3 color={ettlevColors.green600}>DOKUMENTERE ETTERLEVELSE</Label3>
             <H1 marginTop="0" color={ettlevColors.green800}>
               {temaData?.shortName}

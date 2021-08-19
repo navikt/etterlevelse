@@ -54,8 +54,6 @@ const LovSide = ({ lov }: { lov: LovCode }) => {
   const [expand, setExpand] = React.useState(false)
   const { data, loading } = useKravCounter({ lover: [lov.code] })
 
-  console.log(lov, 'LOV')
-
   const underavdeling = codelist.getCode(ListName.UNDERAVDELING, lov.data?.underavdeling)
 
   const tema = codelist.getCode(ListName.TEMA, lov.data?.tema)
@@ -81,7 +79,7 @@ const LovSide = ({ lov }: { lov: LovCode }) => {
       headerOverlap={'125px'}
       header={
         <>
-          <H1 color={fontColor}>{lov.shortName}</H1>
+          <H1 marginTop='0px' color={fontColor}>{lov.shortName}</H1>
 
           <Block
             minHeight={'125px'}

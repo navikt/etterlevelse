@@ -46,7 +46,7 @@ export const MyBehandlingerPage = () => (
             </Button>
           </RouteLink> */}
           <CustomizedBreadcrumbs currentPage="Dokumentere etterlevelse" />
-          <HeadingXXLarge marginTop={theme.sizing.scale600}>Dokumentere etterlevelse</HeadingXXLarge>
+          <HeadingXXLarge marginTop='0' >Dokumentere etterlevelse</HeadingXXLarge>
         </Block>
       </Block>
     </Block>

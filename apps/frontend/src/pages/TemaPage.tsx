@@ -55,7 +55,7 @@ const TemaSide = ({ tema }: { tema: TemaCode }) => {
       headerOverlap={'125px'}
       header={
         <>
-          <H1>{tema.shortName}</H1>
+          <H1 marginTop='0px'>{tema.shortName}</H1>
 
           <Block
             minHeight={'125px'}
@@ -140,7 +140,7 @@ const TemaListe = () => {
   const temaListe = codelist.getCodes(ListName.TEMA).sort((a, b) => a.shortName.localeCompare(b.shortName, 'nb'))
 
   return (
-    <Layout2 mainHeader={<H1>Forstå kravene</H1>} headerBackgroundColor={ettlevColors.grey50} childrenBackgroundColor={ettlevColors.grey25} currentPage={'Forstå kravene'}>
+    <Layout2 mainHeader={<H1 marginTop='0px'>Forstå kravene</H1>} headerBackgroundColor={ettlevColors.grey50} childrenBackgroundColor={ettlevColors.grey25} currentPage={'Forstå kravene'}>
       {visFilter && <RelevansFilter relevans={relevans} onClickFilter={onClickFilter} kravAntall={kravAntall} />}
       <Block {...sectionProps} marginTop={theme.sizing.scale600}>
         {!visFilter && <TemaInfo kravAntall={kravAntall} temaAntall={temaListe.length} />}

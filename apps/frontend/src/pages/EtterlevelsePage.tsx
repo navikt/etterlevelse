@@ -118,9 +118,9 @@ export const EtterlevelsePage = () => {
               </Block>
             </Block>
 
-            <Block paddingLeft="40px" marginTop="31px" paddingRight="40px" width="calc(100% - 80px)" display="flex" justifyContent="center">
-              <Block maxWidth={pageWidth} width="100%" marginTop="7px">
-                <H1 $style={{ color: ettlevColors.grey25 }}>Etterlevelse</H1>
+            <Block paddingLeft="40px" paddingRight="40px" width="calc(100% - 80px)" display="flex" justifyContent="center">
+              <Block maxWidth={pageWidth} width="100%">
+                <H1 marginTop='0px' $style={{ color: ettlevColors.grey25 }}>Etterlevelse</H1>
                 {etterlevelse && etterlevelse?.kravNummer !== 0 && krav && (
                   <Label3
                     $style={{

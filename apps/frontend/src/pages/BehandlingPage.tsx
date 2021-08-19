@@ -93,7 +93,7 @@ export const BehandlingPage = () => {
 
   const getMainHeader = (behandling: Behandling) => (
     <Block display="flex" justifyContent="space-between" marginBottom="70px">
-      <Block marginTop={theme.sizing.scale1200}>
+      <Block>
         <Label3 color={ettlevColors.green600}>DOKUMENTERE ETTERLEVELSE</Label3>
         <H1 marginTop="0" color={ettlevColors.green800}>
           {behandling.navn}

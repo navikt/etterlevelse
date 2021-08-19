@@ -185,8 +185,8 @@ export const KravPage = () => {
               </Block>
             </Block>
 
-            <Block paddingLeft="40px" marginTop="31px" paddingRight="40px" width="calc(100% - 80px)" display="flex" justifyContent="center">
-              <Block maxWidth={pageWidth} width="100%" marginTop="7px">
+            <Block paddingLeft="40px" paddingRight="40px" width="calc(100% - 80px)" display="flex" justifyContent="center">
+              <Block maxWidth={pageWidth} width="100%">
                 <Block $style={{ color: '#F8F8F8', fontWeight: 700, fontSize: '18px', fontFamily: 'Source Sans Pro' }}>
                   {krav && krav?.kravNummer !== 0 ? kravNumView(krav) : 'Ny'}
                 </Block>
