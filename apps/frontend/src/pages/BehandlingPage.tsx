@@ -1,26 +1,28 @@
-import React, { useRef, useState } from 'react'
-import { Block } from 'baseui/block'
-import { useParams } from 'react-router-dom'
-import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
-import { useBehandling } from '../api/BehandlingApi'
-import { H1, H2, HeadingLarge, Label3, Paragraph2, Paragraph4 } from 'baseui/typography'
-import { FormikProps } from 'formik'
-import { ettlevColors, theme } from '../util/theme'
-import { Layout2 } from '../components/scaffold/Page'
-import { Teams } from '../components/common/TeamName'
-import { arkPennIcon, ellipse80 } from '../components/Images'
-import { Behandling, BehandlingEtterlevData, EtterlevelseStatus, PageResponse } from '../constants'
-import { useQuery } from '@apollo/client'
-import { BehandlingStats, statsQuery } from '../components/behandling/ViewBehandling'
-import { Code, codelist, ListName, TemaCode } from '../services/Codelist'
-import { PanelLinkCard, PanelLinkCardOverrides } from '../components/common/PanelLink'
-import { cardWidth } from './TemaPage'
-import { ProgressBar, SIZE } from 'baseui/progress-bar'
-import { Button } from 'baseui/button'
+import React, {useRef, useState} from 'react'
+import {Block, Display, Responsive} from 'baseui/block'
+import {useParams} from 'react-router-dom'
+import {LoadingSkeleton} from '../components/common/LoadingSkeleton'
+import {useBehandling} from '../api/BehandlingApi'
+import {H1, H2, HeadingLarge, Label3, Paragraph2, Paragraph4} from 'baseui/typography'
+import {FormikProps} from 'formik'
+import {ettlevColors, theme} from '../util/theme'
+import {Layout2} from '../components/scaffold/Page'
+import {Teams} from '../components/common/TeamName'
+import {arkPennIcon, ellipse80} from '../components/Images'
+import {Behandling, BehandlingEtterlevData, EtterlevelseStatus, PageResponse} from '../constants'
+import {useQuery} from '@apollo/client'
+import {BehandlingStats, statsQuery} from '../components/behandling/ViewBehandling'
+import {Code, codelist, ListName, TemaCode} from '../services/Codelist'
+import {PanelLinkCard, PanelLinkCardOverrides} from '../components/common/PanelLink'
+import {cardWidth} from './TemaPage'
+import {ProgressBar, SIZE} from 'baseui/progress-bar'
+import {Button} from 'baseui/button'
 import EditBehandlingModal from '../components/behandling/EditBehandlingModal'
-import { Tag } from 'baseui/tag'
-import { borderColor } from '../components/common/Style'
-import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
+import {Tag} from 'baseui/tag'
+import {borderColor} from '../components/common/Style'
+import {breadcrumbPaths} from '../components/common/CustomizedBreadcrumbs'
+
+const responsiveDisplay:Responsive<Display> = ['block','block','block','block','flex','flex']
 
 export const BehandlingPage = () => {
   const params = useParams<{ id?: string }>()
@@ -105,7 +107,8 @@ export const BehandlingPage = () => {
   )
 
   const getSecondaryHeader = (behandling: Behandling) => (
-    <Block width="100%" height="100px" maxHeight="100px" display="flex" alignItems="center" justifyContent="space-between">
+    <Block width="100%" display={responsiveDisplay} alignItems="center" justifyContent="space-between">
+
       <Block display="flex" alignItems="center">
         <Block marginRight="30px">
           <img src={arkPennIcon} alt="penn ikon" height="50px" width="40px" />
@@ -137,6 +140,7 @@ export const BehandlingPage = () => {
           <Paragraph2>ferdig utfylt</Paragraph2>
         </Block>
       </Block>
+
     </Block>
   )
 
@@ -148,22 +152,22 @@ export const BehandlingPage = () => {
         })
         .filter((n) => !irrelevans.map((ir: Code) => options.findIndex((o) => o.id === ir.code)).includes(n))
       return (
-        <Block display="flex">
+        <Block display={responsiveDisplay}>
           {relevans.map((optionIndex, index) => (
             <Block key={options[optionIndex].id} display="flex">
               <Block marginRight="18px">{options[optionIndex].label}</Block>
-              <Block marginRight="18px">{index < relevans.length - 1 ? <img alt="dot" src={ellipse80} /> : undefined}</Block>
+              <Block marginRight="18px" display={["none","none","none","none","block","block"]}>{index < relevans.length - 1 ? <img alt="dot" src={ellipse80}/> : undefined}</Block>
             </Block>
           ))}
         </Block>
       )
     }
     return (
-      <Block display="flex">
+      <Block display={responsiveDisplay}>
         {options.map((o, index) => (
           <Block key={o.id} display="flex">
             <Block marginRight="18px">{o.label}</Block>
-            <Block marginRight="18px">{index < options.length - 1 ? <img alt="dot" src={ellipse80} /> : undefined}</Block>
+            <Block marginRight="18px" display={["none","none","none","none","block","block"]}>{index < options.length - 1 ? <img alt="dot" src={ellipse80} /> : undefined}</Block>
           </Block>
         ))}
       </Block>
@@ -192,7 +196,7 @@ export const BehandlingPage = () => {
       >
         <Block backgroundColor={ettlevColors.grey50} marginTop={theme.sizing.scale800}>
           <Block padding="22px">
-            <Block display="flex">
+            <Block  display={responsiveDisplay}>
               <Block>
                 <HeadingLarge>Egenskaper til behandlingen</HeadingLarge>
                 <Paragraph4
@@ -203,6 +207,7 @@ export const BehandlingPage = () => {
                   {!behandling.irrelevansFor.length ? getRelevans() : getRelevans(behandling.irrelevansFor)}
                 </Paragraph4>
               </Block>
+
               <Block flex="1" display="flex" alignItems="flex-end" flexDirection="column">
                 <Block>
                   <Block flex="1" display="flex" justifyContent="flex-end">
@@ -218,6 +223,7 @@ export const BehandlingPage = () => {
                   <Button onClick={() => setEdit(!edit)}>Tilpass egenskapene</Button>
                 </Block>
               </Block>
+
             </Block>
           </Block>
         </Block>
@@ -328,7 +334,7 @@ const TemaCardBehandling = ({ tema, stats, behandling }: { tema: TemaCode; stats
       flexContent
       hideArrow
     >
-      <Block marginTop={theme.sizing.scale650}>
+      <Block marginTop={theme.sizing.scale650} width={"100%"}>
         <Block display="flex" flex={1}>
           <Paragraph4 marginTop="0px" marginBottom="2px">
             Ferdig utfylt:

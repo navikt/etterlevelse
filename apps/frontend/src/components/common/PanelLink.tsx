@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
+import React, {useState} from 'react'
 import RouteLink from './RouteLink'
-import { Block, BlockOverrides, Responsive, Scale } from 'baseui/block'
-import { borderColor, borderRadius, borderStyle, borderWidth, padding, paddingAll } from './Style'
-import { theme } from '../../util'
-import { ettlevColors } from '../../util/theme'
-import { HeadingXLarge, LabelLarge, LabelSmall, ParagraphMedium, ParagraphSmall } from 'baseui/typography'
-import { arrowRightIcon, navChevronRightIcon } from '../Images'
+import {Block, BlockOverrides, Responsive, Scale} from 'baseui/block'
+import {borderColor, borderRadius, borderStyle, borderWidth, padding, paddingAll} from './Style'
+import {theme} from '../../util'
+import {ettlevColors} from '../../util/theme'
+import {HeadingXLarge, LabelLarge, LabelSmall, ParagraphMedium, ParagraphSmall} from 'baseui/typography'
+import {arrowRightIcon, navChevronRightIcon} from '../Images'
 import * as _ from 'lodash'
 
 export const PanelLink = ({
@@ -31,7 +31,7 @@ export const PanelLink = ({
   hideBorderBottom?: boolean
   useUnderline?: boolean
   panelIcon?: React.ReactNode | ((hover: boolean) => React.ReactNode)
-  overrides?: BlockOverrides 
+  overrides?: BlockOverrides
 }) => {
   const [hover, setHover] = useState(false)
 
@@ -221,7 +221,7 @@ export const PanelLinkCard = ({
               </Block>
             )}
 
-            <Block display="flex" alignItems="flex-end" height={headerContent ? '60%' : ''}>
+            <Block display="flex" alignItems="flex-end" height={headerContent ? '60%' : ''} marginRight={"auto"}>
               <HeadingXLarge
                 marginBottom={['0px', '0px', '0px', '0px', theme.sizing.scale700, theme.sizing.scale700]}
                 $style={{ textDecoration: href && hover ? '3px underline ' : undefined }}
