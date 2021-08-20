@@ -36,7 +36,11 @@ export const CustomizedPanel = (props: CustomProps) => {
         ':hover': {
           textDecoration: 'underline',
           color: ettlevColors.green800,
-          boxShadow: '0px 3px 4px rgba(0, 0, 0, 0.12)',
+          ...(expanded ? {
+            boxShadow: 'none',
+          } : {
+            boxShadow: '0px 3px 4px rgba(0, 0, 0, 0.12)',
+          })
         },
       },
     },
@@ -55,11 +59,16 @@ export const CustomizedPanel = (props: CustomProps) => {
     },
     PanelContainer: {
       style: {
+        ...(expanded ? {
+          ...borderColor(ettlevColors.grey200),
+        } : {
+          ...borderColor(ettlevColors.grey100),
+        }),
         ...borderStyle('solid'),
         ...borderWidth('1px'),
-        ...borderColor(ettlevColors.grey200),
         ...borderRadius('4px'),
         marginBottom: theme.sizing.scale200,
+        backgroundColor: ettlevColors.white
       },
     },
   }
