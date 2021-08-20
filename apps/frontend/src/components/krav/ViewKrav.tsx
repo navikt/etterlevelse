@@ -130,8 +130,6 @@ const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVersjoner:
                       Header: {
                         style: {
                           backgroundColor: 'transparent',
-                          ...borderStyle('none'),
-                          ...borderColor('none'),
                           width: 'fit-content',
                           paddingLeft: '0px',
                           paddingBottom: '0px',
@@ -145,6 +143,11 @@ const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVersjoner:
                           borderBottomColor: 'none',
                         },
                       },
+                      PanelContainer: {
+                        style: {
+                          ...borderStyle('hidden'),
+                        }
+                      }
                     }}
                   >
                     <Markdown source={krav.versjonEndringer} noMargin />

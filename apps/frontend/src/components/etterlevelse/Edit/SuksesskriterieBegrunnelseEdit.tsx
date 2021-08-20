@@ -125,8 +125,6 @@ const KriterieBegrunnelse = ({
             Header: {
               style: {
                 backgroundColor: 'transparent',
-                ...borderStyle('none'),
-                ...borderColor('none'),
                 maxWidth: '210px',
                 paddingLeft: paddingLeft,
               },
@@ -140,6 +138,11 @@ const KriterieBegrunnelse = ({
                 paddingLeft: paddingLeft,
               },
             },
+            PanelContainer: {
+              style: {
+                ...borderStyle('hidden')
+              }
+            }
           }}
         >
           <Markdown source={suksesskriterie.beskrivelse} />
