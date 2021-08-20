@@ -127,6 +127,9 @@ const KriterieBegrunnelse = ({
                 backgroundColor: 'transparent',
                 maxWidth: '210px',
                 paddingLeft: paddingLeft,
+                ':hover': {
+                  boxShadow: 'none'
+               }
               },
             },
             Content: {

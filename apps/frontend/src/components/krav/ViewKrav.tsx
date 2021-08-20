@@ -133,6 +133,9 @@ const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVersjoner:
                           width: 'fit-content',
                           paddingLeft: '0px',
                           paddingBottom: '0px',
+                          ':hover': {
+                             boxShadow: 'none'
+                          }
                         },
                       },
                       Content: {
