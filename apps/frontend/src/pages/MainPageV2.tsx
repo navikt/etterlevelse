@@ -1,15 +1,15 @@
-import {Narrow, Page, Wide} from '../components/scaffold/Page'
-import {ettlevColors, theme} from '../util/theme'
-import {Block} from 'baseui/block'
-import {HeadingXXLarge} from 'baseui/typography'
-import {PanelLinkCard} from '../components/common/PanelLink'
-import {grafIconBg, paperPenIconBg, paragrafIconBg} from '../components/Images'
-import {Card} from 'baseui/card'
-import {borderRadius, margin} from '../components/common/Style'
+import { Narrow, Page, Wide } from '../components/scaffold/Page'
+import { ettlevColors, theme } from '../util/theme'
+import { Block } from 'baseui/block'
+import { H2, HeadingXXLarge } from 'baseui/typography'
+import { PanelLinkCard } from '../components/common/PanelLink'
+import { grafIconBg, paperPenIconBg, paragrafIconBg } from '../components/Images'
+import { Card } from 'baseui/card'
+import { borderRadius, margin } from '../components/common/Style'
 import ReactPlayer from 'react-player'
-import {Button} from "baseui/button";
-import {faPlay} from "@fortawesome/free-solid-svg-icons";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import { Button } from "baseui/button";
+import { faPlay } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 
 const cardWidth = ['95%', '95%', '95%', '95%', '31%', '31%']
@@ -26,7 +26,7 @@ export const MainPageV2 = () => {
       rawMain
       header={
         <HeadingXXLarge display={'flex'} flexDirection={'column'} color={ettlevColors.white} marginTop={theme.sizing.scale1400} marginBottom={theme.sizing.scale1400}>
-          <span style={{fontWeight: 400}}>Støtte til etterlevelse av krav</span>
+          <span style={{ fontWeight: 400 }}>Støtte til etterlevelse av krav</span>
           <span>som sikrer rettssikkerheten til brukerne våre</span>
         </HeadingXXLarge>
       }
@@ -70,12 +70,22 @@ export const MainPageV2 = () => {
         </Wide>
 
         <Narrow>
+          <Block marginTop={theme.sizing.scale1600} marginBottom={theme.sizing.scale900} width='100%'>
+            <H2 $style={{fontWeight: 300, fontSize: '32px', lineHeight: '42px'}} marginTop='0px' marginBottom='0px'>
+              Se introduksjonsfilm
+            </H2>
+            <H2 $style={{fontSize: '32px', lineHeight: '42px'}} marginTop='0px' marginBottom='0px'>
+              om etterlevelseskravene
+            </H2>
+          </Block>
+
           <Card
             overrides={{
               Root: {
                 style: {
                   ...borderRadius('4px'),
                   ...margin(theme.sizing.scale1600, theme.sizing.scale800),
+                  marginTop: '0px'
                 },
               },
             }}
@@ -89,11 +99,11 @@ export const MainPageV2 = () => {
               <ReactPlayer
                 controls={true}
                 playing={true}
-                playIcon={<Button kind="secondary" startEnhancer={<FontAwesomeIcon icon={faPlay}/>}> Se video </Button>}
+                playIcon={<Button kind="secondary" startEnhancer={<FontAwesomeIcon icon={faPlay} />}> Se video </Button>}
                 width="100%"
                 height="414px"
                 url="videos/EtterlevelseskravMedTeksting.mp4"
-                light={"img/EtterlevelseVideo.png"}/>
+                light={"img/EtterlevelseVideo.png"} />
             </Block>
           </Card>
 
