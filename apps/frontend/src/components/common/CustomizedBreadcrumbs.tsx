@@ -68,21 +68,19 @@ const CustomizedBreadcrumbs = (props: CustomizedProps) => {
       </Breadcrumbs>
       {props.currentPage &&
         <Block
-          marginTop='4px'
-          width='auto'
-          marginBottom='4px'
-          height='20px'
           $style={{
             color: props.fontColor ? props.fontColor : undefined,
-            fontFamily: 'sans-serif',
+            fontFamily: 'Source Sans Pro',
             fontWeight: 500
           }}
           display={['none', 'none', 'none', 'flex', 'flex', 'flex']}
         >
-          <Block marginLeft='8px' marginRight='8px'>
+          <Block marginLeft='8px' marginRight='8px' marginTop='4px' marginBottom='4px'>
             <ChevronRight />
           </Block>
-          {getName(props.currentPage)}
+          <Block>
+            {getName(props.currentPage)}
+          </Block>
         </Block>}
     </Block>
   )
