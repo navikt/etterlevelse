@@ -70,7 +70,7 @@ export const MainPageV2 = () => {
         </Wide>
 
         <Narrow>
-          <Block marginTop={theme.sizing.scale1600} marginBottom={theme.sizing.scale900} width='100%'>
+          <Block marginTop={theme.sizing.scale1600} marginBottom={theme.sizing.scale900} marginLeft={theme.sizing.scale800} marginRight={theme.sizing.scale800} width='100%'>
             <H2 $style={{fontWeight: 300, fontSize: '32px', lineHeight: '42px'}} marginTop='0px' marginBottom='0px'>
               Se introduksjonsfilm
             </H2>
