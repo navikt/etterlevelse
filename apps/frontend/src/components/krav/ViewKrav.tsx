@@ -149,6 +149,7 @@ const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVersjoner:
                       PanelContainer: {
                         style: {
                           ...borderStyle('hidden'),
+                          backgroundColor: 'transparent'
                         }
                       }
                     }}
