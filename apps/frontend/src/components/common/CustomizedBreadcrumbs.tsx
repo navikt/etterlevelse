@@ -4,6 +4,7 @@ import _ from 'lodash'
 import RouteLink from './RouteLink'
 import { theme } from '../../util/theme'
 import { Block } from 'baseui/block'
+import { ChevronRight } from 'baseui/icon'
 
 export interface breadcrumbPaths {
   href: string
@@ -23,6 +24,7 @@ const CustomizedBreadcrumbs = (props: CustomizedProps) => {
     Separator: {
       style: {
         color: props.fontColor ? props.fontColor : undefined,
+        marginBottom: '4px'
       },
     },
     Root: {
@@ -31,6 +33,13 @@ const CustomizedBreadcrumbs = (props: CustomizedProps) => {
         marginBottom: theme.sizing.scale1000
       },
     },
+    ListItem: {
+      style: {
+        ':hover': {
+          textDecoration: 'underline'
+        }
+      }
+    }
   }
 
   const overrides = _.merge(customOverrides, props.overrides)
@@ -41,7 +50,7 @@ const CustomizedBreadcrumbs = (props: CustomizedProps) => {
     if (props.paths && props.paths.length) {
       return props.paths.map((path) => {
         return (
-          <RouteLink fontColor={props.fontColor} href={path.href}>
+          <RouteLink hideUnderline fontColor={props.fontColor} href={path.href}>
             {getName(path.pathName)}
           </RouteLink>
         )
@@ -50,13 +59,32 @@ const CustomizedBreadcrumbs = (props: CustomizedProps) => {
   }
 
   return (
-    <Breadcrumbs overrides={overrides}>
-      <RouteLink fontColor={props.fontColor} href="/">
-        Forsiden
-      </RouteLink>
-      {getBreadcrumbs()}
-      {props.currentPage && <span><Block display={['none', 'none', 'none', 'block', 'block', 'block']}>{getName(props.currentPage)}</Block></span>}
-    </Breadcrumbs>
+    <Block display='flex'>
+      <Breadcrumbs overrides={overrides}>
+        <RouteLink hideUnderline fontColor={props.fontColor} href="/">
+          Forsiden
+        </RouteLink>
+        {getBreadcrumbs()}
+      </Breadcrumbs>
+      {props.currentPage &&
+        <Block
+          marginTop='4px'
+          width='auto'
+          marginBottom='4px'
+          height='20px'
+          $style={{
+            color: props.fontColor ? props.fontColor : undefined,
+            fontFamily: 'sans-serif',
+            fontWeight: 500
+          }}
+          display={['none', 'none', 'none', 'flex', 'flex', 'flex']}
+        >
+          <Block marginLeft='8px' marginRight='8px'>
+            <ChevronRight />
+          </Block>
+          {getName(props.currentPage)}
+        </Block>}
+    </Block>
   )
 }
 
