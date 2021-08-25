@@ -34,7 +34,7 @@ export const Footer = () => {
   }, [pageScroll])
 
   return (
-    <Block backgroundColor={ettlevColors.green800} width="100%" justifyContent="center" display="flex">
+    <Block backgroundColor={ettlevColors.green800} width="100%" justifyContent="center" display="flex" position='absolute' bottom='0'>
       <Block maxWidth={maxPageWidth} width="100%">
         <Block display="flex" width="calc(100% - 80px)" height="100px" paddingRight="40px" paddingLeft="40px" position="relative" $style={{ left: 0, right: 0, bottom: 0 }}>
           <Block display="flex" width="100%" minHeight="100px" justifyContent="center" alignItems="center" overrides={{ Block: { props: { role: 'contentinfo' } } }}>

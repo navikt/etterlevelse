@@ -20,8 +20,6 @@ import { customTheme, ettlevColors } from './util/theme'
 const engine = new Styletron()
 
 const containerProps = {
-  display: 'flex',
-  flexDirection: 'column',
   backgroundColor: '#F8F8F8',
   alignItems: 'center',
   justifyContent: 'center',
@@ -45,8 +43,9 @@ const Main = (props) => {
               <title>Etterlevelse Beta</title>
             </Helmet>
 
-            <Block {...containerProps}>
-              <Block {...containerProps} minHeight="50vh">
+            <Block {...containerProps} minHeight="100vh" position='relative'>
+              <Block {...containerProps} display='flex'
+                flexDirection='column'>
                 <Header />
                 <Routes />
               </Block>
