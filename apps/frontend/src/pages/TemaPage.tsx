@@ -1,28 +1,28 @@
-import { useParams } from 'react-router-dom'
-import { Block, BlockProps } from 'baseui/block'
-import React, { useEffect, useState } from 'react'
-import { H3, H2, H1, Label3, LabelLarge, Paragraph4, Paragraph2, ParagraphSmall } from 'baseui/typography'
-import { codelist, ListName, TemaCode } from '../services/Codelist'
-import { ObjectLink, urlForObject } from '../components/common/RouteLink'
-import { theme } from '../util'
-import { Markdown } from '../components/common/Markdown'
-import { ettlevColors } from '../util/theme'
+import {useParams} from 'react-router-dom'
+import {Block, BlockProps} from 'baseui/block'
+import React, {useEffect, useState} from 'react'
+import {H1, H2, H3, Label3, LabelLarge, Paragraph2, Paragraph4, ParagraphSmall} from 'baseui/typography'
+import {codelist, ListName, TemaCode} from '../services/Codelist'
+import {ObjectLink, urlForObject} from '../components/common/RouteLink'
+import {theme} from '../util'
+import {Markdown} from '../components/common/Markdown'
+import {ettlevColors} from '../util/theme'
 import Button from '../components/common/Button'
-import { KravFilters } from '../api/KravGraphQLApi'
-import { SkeletonPanel } from '../components/common/LoadingSkeleton'
-import { PanelLink, PanelLinkCard, PanelLinkCardOverrides } from '../components/common/PanelLink'
-import { kravNumView } from './KravPage'
+import {KravFilters} from '../api/KravGraphQLApi'
+import {SkeletonPanel} from '../components/common/LoadingSkeleton'
+import {PanelLink, PanelLinkCard, PanelLinkCardOverrides} from '../components/common/PanelLink'
+import {kravNumView} from './KravPage'
 import * as _ from 'lodash'
-import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons'
-import { Layout2, Page } from '../components/scaffold/Page'
-import { SimpleTag } from '../components/common/SimpleTag'
-import { KravQL, PageResponse } from '../constants'
-import { useQuery } from '@apollo/client'
-import { QueryHookOptions } from '@apollo/client/react/types/types'
-import { gql } from '@apollo/client/core'
-import { useForceUpdate } from '../util/hooks'
-import { borderRadius } from '../components/common/Style'
-import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
+import {faChevronDown, faChevronUp} from '@fortawesome/free-solid-svg-icons'
+import {Layout2, Page} from '../components/scaffold/Page'
+import {SimpleTag} from '../components/common/SimpleTag'
+import {KravQL, PageResponse} from '../constants'
+import {useQuery} from '@apollo/client'
+import {QueryHookOptions} from '@apollo/client/react/types/types'
+import {gql} from '@apollo/client/core'
+import {useForceUpdate} from '../util/hooks'
+import {borderRadius} from '../components/common/Style'
+import {breadcrumbPaths} from '../components/common/CustomizedBreadcrumbs'
 
 export const TemaPage = () => {
   const { tema } = useParams<{ tema: string }>()
@@ -60,6 +60,7 @@ const TemaSide = ({ tema }: { tema: TemaCode }) => {
           <Block
             minHeight={'125px'}
             maxHeight={expand ? undefined : '125px'}
+            maxWidth={'750px'}
             overflow={'hidden'}
             $style={{
               maskImage: expand ? undefined : `linear-gradient(${ettlevColors.black} 40%, transparent)`,
