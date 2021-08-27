@@ -125,18 +125,18 @@ export const BehandlingPage = () => {
 
       <Block display="flex" alignItems="center">
         <Block display="flex" alignItems="baseline" marginRight="30px">
-          <H1 color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
+          <Paragraph2 $style={{fontWeight: 900, fontSize: '32px', lineHeight: '40px'}} color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
             {stats.length}
-          </H1>
+          </Paragraph2>
           <Paragraph2>krav</Paragraph2>
         </Block>
 
         <Block $style={{ border: '1px solid ' + ettlevColors.green50, background: '#102723' }} height="40px" />
 
         <Block display="flex" alignItems="baseline" marginLeft="30px">
-          <H1 color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
+          <Paragraph2 $style={{fontWeight: 900, fontSize: '32px', lineHeight: '40px'}} color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
             {antallFylttKrav}
-          </H1>
+          </Paragraph2>
           <Paragraph2>ferdig utfylt</Paragraph2>
         </Block>
       </Block>
