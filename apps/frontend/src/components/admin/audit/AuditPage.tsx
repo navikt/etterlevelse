@@ -40,7 +40,7 @@ export const AuditPage = () => {
         if (log.audits.length && id !== params.id) {
           history.push(`/admin/audit/${id}`)
         }
-      } catch (e) {
+      } catch (e: any) {
         setError(e)
       }
       setLoading(false)
@@ -58,7 +58,7 @@ export const AuditPage = () => {
           <CustomInput
             size="compact"
             value={idInput}
-            overrides={{ Input: { style: { width: '300px' } } }}
+            overrides={{Input: {style: {width: '300px'}}}}
             placeholder={intl.id}
             onChange={(e) => setIdInput(format((e.target as HTMLInputElement).value))}
           />
@@ -66,8 +66,8 @@ export const AuditPage = () => {
       </Block>
 
       {error && <Paragraph2>{_.escape(error)}</Paragraph2>}
-      {idInput && <AuditView auditLog={auditLog} auditId={params.auditId} loading={loading} viewId={lookupVersion} />}
-      <AuditRecentTable show={!idInput} />
+      {idInput && <AuditView auditLog={auditLog} auditId={params.auditId} loading={loading} viewId={lookupVersion}/>}
+      <AuditRecentTable show={!idInput}/>
     </Block>
   )
 }
