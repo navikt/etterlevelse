@@ -1,15 +1,15 @@
-import { Block } from 'baseui/block'
-import React, { useEffect, useState } from 'react'
-import { useHistory, useParams } from 'react-router-dom'
+import {Block} from 'baseui/block'
+import React, {useEffect, useState} from 'react'
+import {useHistory, useParams} from 'react-router-dom'
 import _ from 'lodash'
-import { H4, Paragraph2 } from 'baseui/typography'
-import { AuditLog } from './AuditTypes'
-import { getAuditLog } from './AuditApi'
-import { AuditView } from './AuditView'
-import { AuditRecentTable } from './AuditRecentTable'
-import { AuditLabel } from './AuditComponents'
-import { useDebouncedState } from '../../../util/hooks'
-import { intl } from '../../../util/intl/intl'
+import {H4, Paragraph2} from 'baseui/typography'
+import {AuditLog} from './AuditTypes'
+import {getAuditLog} from './AuditApi'
+import {AuditView} from './AuditView'
+import {AuditRecentTable} from './AuditRecentTable'
+import {AuditLabel} from './AuditComponents'
+import {useDebouncedState} from '../../../util/hooks'
+import {intl} from '../../../util/intl/intl'
 import CustomInput from '../../common/CustomizedInput'
 
 const format = (id: string) => _.trim(id, '"')
@@ -42,6 +42,7 @@ export const AuditPage = () => {
         }
       } catch (e) {
         setError(e)
+        console.log(e)
       }
       setLoading(false)
     })()
