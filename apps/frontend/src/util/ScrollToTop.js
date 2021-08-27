@@ -4,7 +4,9 @@ import { withRouter } from 'react-router-dom'
 const ScrollToTop = ({ history, children }) => {
   React.useEffect(() => {
     const unlisten = history.listen(() => {
-      window.scrollTo(0, 0)
+      if (!history.location.pathname.includes('/krav')) {
+        window.scrollTo(0, 0)
+      }
     })
     return () => {
       unlisten()
