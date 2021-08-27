@@ -217,7 +217,7 @@ export const PanelLinkCard = ({
           <Block overrides={headerOverrides} display={['flex', 'flex', 'flex', 'flex', 'block', 'block']} marginBottom={theme.sizing.scale400}>
             {icon && (
               <Block display={'flex'} justifyContent={'center'} marginTop={theme.sizing.scale600} marginRight={theme.sizing.scale800}>
-                <img src={icon} alt={'ikon'} aria-hidden />
+                <img src={icon} alt={''} aria-hidden />
               </Block>
             )}
 
