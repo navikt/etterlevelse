@@ -7,9 +7,10 @@ import { grafIconBg, paperPenIconBg, paragrafIconBg } from '../components/Images
 import { Card } from 'baseui/card'
 import { borderRadius, margin } from '../components/common/Style'
 import ReactPlayer from 'react-player'
-import { Button } from "baseui/button";
+import { Button, SIZE } from "baseui/button";
 import { faPlay } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { buttonBorderStyle } from '../components/common/Button'
 import React from "react";
 
 const cardWidth = ['95%', '95%', '95%', '95%', '31%', '31%']
@@ -99,7 +100,7 @@ export const MainPageV2 = () => {
               <ReactPlayer
                 controls={true}
                 playing={true}
-                playIcon={<Button kind="secondary" startEnhancer={<FontAwesomeIcon icon={faPlay} />}> Se video </Button>}
+                playIcon={<Button kind="secondary" size={SIZE.compact} $style={buttonBorderStyle} startEnhancer={<FontAwesomeIcon icon={faPlay} />}> Se video </Button>}
                 width="100%"
                 height="414px"
                 url="videos/EtterlevelseskravMedTeksting.mp4"
