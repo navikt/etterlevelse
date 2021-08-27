@@ -1,7 +1,7 @@
 import {useParams} from 'react-router-dom'
 import {Block, BlockProps} from 'baseui/block'
 import React, {useEffect, useState} from 'react'
-import {H1, H2, H3, Label3, LabelLarge, Paragraph2, Paragraph4, ParagraphSmall} from 'baseui/typography'
+import {H1, H2, Label3, LabelLarge, Paragraph2, Paragraph4, ParagraphSmall} from 'baseui/typography'
 import {codelist, ListName, TemaCode} from '../services/Codelist'
 import {ObjectLink, urlForObject} from '../components/common/RouteLink'
 import {theme} from '../util'
@@ -71,14 +71,14 @@ const TemaSide = ({ tema }: { tema: TemaCode }) => {
 
           {expand && (
             <Block marginBottom={theme.sizing.scale900}>
-              <H3 marginBottom={theme.sizing.scale200}>Ansvarlig for lovtolkning</H3>
+              <H2 marginBottom={theme.sizing.scale200}>Ansvarlig for lovtolkning</H2>
               {_.uniq(lover.map((l) => l.data?.underavdeling)).map((code, index) => (
                 <Paragraph2 key={code + '_' + index} marginTop={0} marginBottom={theme.sizing.scale200}>
                   {codelist.getCode(ListName.UNDERAVDELING, code)?.shortName}
                 </Paragraph2>
               ))}
 
-              <H3 marginBottom={theme.sizing.scale200}>Lovdata</H3>
+              <H2 marginBottom={theme.sizing.scale200}>Lovdata</H2>
               {lover.map((l, index) => (
                 <Block key={l.code + '_' + index} marginBottom={theme.sizing.scale200}>
                   <ObjectLink type={ListName.LOV} id={l.code}>
@@ -98,7 +98,7 @@ const TemaSide = ({ tema }: { tema: TemaCode }) => {
       }
     >
       <Block>
-        <H3>{loading ? '?' : data?.krav.numberOfElements || 0} krav</H3>
+        <H2>{loading ? '?' : data?.krav.numberOfElements || 0} krav</H2>
         {loading && <SkeletonPanel count={10} />}
         {!loading &&
           data?.krav.content.map((k, index) => (

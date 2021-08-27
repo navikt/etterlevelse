@@ -1,7 +1,7 @@
 import { ettlevColors, theme } from '../../util/theme'
 import { Block } from 'baseui/block'
 import { IconInCircle } from './Icon'
-import { HeadingSmall, ParagraphSmall } from 'baseui/typography'
+import { H2, ParagraphSmall } from 'baseui/typography'
 import React from 'react'
 
 export const InfoBlock = (props: { icon: string; alt: string; text: string; color: string }) => (
@@ -40,9 +40,9 @@ export const InfoBlock2 = (props: { icon: string; alt: string; title: string; be
     </Block>
 
     <Block display={'flex'} flexDirection={'column'} padding={theme.sizing.scale700}>
-      <HeadingSmall marginTop={0} marginBottom={0}>
+      <H2 marginTop={0} marginBottom={0}>
         {props.title}
-      </HeadingSmall>
+      </H2>
       <ParagraphSmall maxWidth={'400px'} marginTop={0}>
         {props.beskrivelse}
       </ParagraphSmall>
