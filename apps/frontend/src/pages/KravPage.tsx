@@ -85,7 +85,7 @@ export const KravPage = () => {
           setAlleKravVersjoner(alleVersjoner)
         }
       })
-      const lovData = codelist.getCode(ListName.LOV, krav.regelverk[0].lov.code)
+      const lovData = codelist.getCode(ListName.LOV, krav.regelverk[0]?.lov?.code)
       if (lovData?.data) {
         setKravTema(codelist.getCode(ListName.TEMA, lovData.data.tema))
       }
