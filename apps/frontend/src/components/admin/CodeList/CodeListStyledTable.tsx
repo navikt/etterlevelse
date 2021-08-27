@@ -1,18 +1,18 @@
 import * as React from 'react'
-import { useEffect, useState } from 'react'
-import { Block } from 'baseui/block'
-import { KIND, SIZE as ButtonSize } from 'baseui/button'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEdit, faGhost, faTrash } from '@fortawesome/free-solid-svg-icons'
+import {useEffect, useState} from 'react'
+import {Block} from 'baseui/block'
+import {KIND, SIZE as ButtonSize} from 'baseui/button'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faEdit, faGhost, faTrash} from '@fortawesome/free-solid-svg-icons'
 import UpdateCodeListModal from './ModalUpdateCodeList'
 import DeleteCodeListModal from './ModalDeleteCodeList'
-import { Usage } from './CodeListUsage'
-import { AuditButton } from '../audit/AuditButton'
-import { Code, CodeListFormValues, CodeUsage } from '../../../services/Codelist'
-import { deleteCodelist, getCodelistUsage, updateCodelist } from '../../../api/CodelistApi'
-import { Cell, Row, Table } from '../../common/Table'
+import {Usage} from './CodeListUsage'
+import {AuditButton} from '../audit/AuditButton'
+import {Code, CodeListFormValues, CodeUsage} from '../../../services/Codelist'
+import {deleteCodelist, getCodelistUsage, updateCodelist} from '../../../api/CodelistApi'
+import {Cell, Row, Table} from '../../common/Table'
 import Button from '../../common/Button'
-import { theme } from '../../../util'
+import {theme} from '../../../util'
 
 type TableCodelistProps = {
   tableData: Code[]
@@ -43,7 +43,7 @@ const CodeListTable = ({ tableData, refresh }: TableCodelistProps) => {
       await updateCodelist({ ...values } as Code)
       refresh()
       setShowEditModal(false)
-    } catch (error) {
+    } catch (error:any) {
       setShowEditModal(true)
       setErrorOnResponse(error.message)
     }
@@ -54,7 +54,7 @@ const CodeListTable = ({ tableData, refresh }: TableCodelistProps) => {
       await deleteCodelist(values.list, values.code)
       refresh()
       setShowDeleteModal(false)
-    } catch (error) {
+    } catch (error:any) {
       setShowDeleteModal(true)
       setErrorOnResponse(error.message)
     }

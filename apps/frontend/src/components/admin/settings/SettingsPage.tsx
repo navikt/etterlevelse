@@ -1,14 +1,14 @@
-import React, { FormEvent, useEffect, useState } from 'react'
-import { Block } from 'baseui/block'
-import { StyledSpinnerNext } from 'baseui/spinner'
-import { H4, Label2 } from 'baseui/typography'
-import { getSettings, Settings, writeSettings } from './SettingsApi'
-import { intl } from '../../../util/intl/intl'
-import { theme } from '../../../util'
+import React, {FormEvent, useEffect, useState} from 'react'
+import {Block} from 'baseui/block'
+import {StyledSpinnerNext} from 'baseui/spinner'
+import {H4, Label2} from 'baseui/typography'
+import {getSettings, Settings, writeSettings} from './SettingsApi'
+import {intl} from '../../../util/intl/intl'
+import {theme} from '../../../util'
 import Button from '../../common/Button'
-import { Markdown } from '../../common/Markdown'
-import { CustomizedStatefulTextarea } from '../../common/CustomizedTextarea'
-import { ettlevColors } from '../../../util/theme'
+import {Markdown} from '../../common/Markdown'
+import {CustomizedStatefulTextarea} from '../../common/CustomizedTextarea'
+import {ettlevColors} from '../../../util/theme'
 
 export const SettingsPage = () => {
   const [loading, setLoading] = React.useState<boolean>(true)
@@ -26,7 +26,7 @@ export const SettingsPage = () => {
       setLoading(true)
       try {
         setSettings(await writeSettings(settings))
-      } catch (e) {
+      } catch (e:any) {
         setError(e)
       }
       setLoading(false)
