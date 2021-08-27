@@ -104,7 +104,7 @@ export const MainPageV2 = () => {
                 width="100%"
                 height="414px"
                 url="videos/EtterlevelseskravMedTeksting.mp4"
-                light={"img/EtterlevelseVideo.png"} />
+                light={"img/EtterlevelseVideoDark.png"} />
             </Block>
           </Card>
 
