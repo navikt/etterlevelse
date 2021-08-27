@@ -1,34 +1,35 @@
-import {Block} from 'baseui/block'
-import {H1, HeadingXLarge} from 'baseui/typography'
-import {useParams} from 'react-router-dom'
-import {deleteKrav, getKravByKravNummer, KravIdParams, mapToFormVal} from '../api/KravApi'
-import React, {useEffect, useRef, useState} from 'react'
-import {EtterlevelseQL, EtterlevelseStatus, ExternalCode, Krav, KravId, KravQL, KravStatus, KravVersjon} from '../constants'
+import { Block } from 'baseui/block'
+import { H1, HeadingXLarge } from 'baseui/typography'
+import { useParams } from 'react-router-dom'
+import { deleteKrav, getKravByKravNummer, KravIdParams, mapToFormVal } from '../api/KravApi'
+import React, { useEffect, useRef, useState } from 'react'
+import { EtterlevelseQL, EtterlevelseStatus, ExternalCode, Krav, KravId, KravQL, KravStatus, KravVersjon } from '../constants'
 import Button from '../components/common/Button'
-import {ViewKrav} from '../components/krav/ViewKrav'
-import {EditKrav} from '../components/krav/EditKrav'
-import {LoadingSkeleton} from '../components/common/LoadingSkeleton'
-import {user} from '../services/User'
-import {theme} from '../util'
-import {FormikProps} from 'formik'
-import {DeleteItem} from '../components/DeleteItem'
-import {Spinner} from '../components/common/Spinner'
-import {borderRadius, borderStyle} from '../components/common/Style'
-import {useQuery} from '@apollo/client'
-import {Tilbakemeldinger} from '../components/krav/Tilbakemelding'
-import {editIcon, pageIcon, plusIcon, sadFolderIcon} from '../components/Images'
-import {Label} from '../components/common/PropertyLabel'
-import {CustomizedTab, CustomizedTabs} from '../components/common/CustomizedTabs'
-import {ettlevColors, maxPageWidth, pageWidth} from '../util/theme'
-import {CustomizedAccordion, CustomizedPanel, CustomPanelDivider} from '../components/common/CustomizedAccordion'
+import { ViewKrav } from '../components/krav/ViewKrav'
+import { EditKrav } from '../components/krav/EditKrav'
+import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
+import { user } from '../services/User'
+import { theme } from '../util'
+import { FormikProps } from 'formik'
+import { DeleteItem } from '../components/DeleteItem'
+import { Spinner } from '../components/common/Spinner'
+import { borderRadius, borderStyle } from '../components/common/Style'
+import { useQuery } from '@apollo/client'
+import { Tilbakemeldinger } from '../components/krav/Tilbakemelding'
+import { editIcon, pageIcon, plusIcon, sadFolderIcon } from '../components/Images'
+import { Label } from '../components/common/PropertyLabel'
+import { CustomizedTab, CustomizedTabs } from '../components/common/CustomizedTabs'
+import { ettlevColors, maxPageWidth, pageWidth } from '../util/theme'
+import { CustomizedAccordion, CustomizedPanel, CustomPanelDivider } from '../components/common/CustomizedAccordion'
 import * as _ from 'lodash'
 import moment from 'moment'
-import {useLocationState, useQueryParam} from '../util/hooks'
-import {InfoBlock} from '../components/common/InfoBlock'
-import {gql} from '@apollo/client/core'
-import {PanelLink} from '../components/common/PanelLink'
+import { useLocationState, useQueryParam } from '../util/hooks'
+import { InfoBlock } from '../components/common/InfoBlock'
+import { gql } from '@apollo/client/core'
+import { PanelLink } from '../components/common/PanelLink'
 import ExpiredAlert from '../components/krav/ExpiredAlert'
-import CustomizedBreadcrumbs, {breadcrumbPaths} from '../components/common/CustomizedBreadcrumbs'
+import CustomizedBreadcrumbs, { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
+import { codelist, ListName, TemaCode } from '../services/Codelist'
 
 export const kravNumView = (it: { kravVersjon: number; kravNummer: number }) => `K${it.kravNummer}.${it.kravVersjon}`
 export const kravName = (krav: Krav) => `${kravNumView(krav)} - ${krav.navn}`
@@ -70,6 +71,7 @@ export const KravPage = () => {
   const [tab, setTab] = useState<Section>(!!tilbakemeldingId ? 'tilbakemeldinger' : state?.tab || 'krav')
 
   const [alleKravVersjoner, setAlleKravVersjoner] = React.useState<KravVersjon[]>([{ kravNummer: 0, kravVersjon: 0 }])
+  const [kravTema, setKravTema] = useState<TemaCode>()
 
   React.useEffect(() => {
     if (krav) {
@@ -83,6 +85,10 @@ export const KravPage = () => {
           setAlleKravVersjoner(alleVersjoner)
         }
       })
+      const lovData = codelist.getCode(ListName.LOV, krav.regelverk[0].lov.code)
+      if (lovData?.data) {
+        setKravTema(codelist.getCode(ListName.TEMA, lovData.data.tema))
+      }
     }
   }, [krav])
 
@@ -118,12 +124,24 @@ export const KravPage = () => {
     setEdit(true)
   }
 
-  const breadcrumbPaths: breadcrumbPaths[] = [
-    {
-      pathName: 'Forstå kravene',
-      href: '/tema'
-    },
-  ]
+  const getBreadcrumPaths = () => {
+    const breadcrumbPaths: breadcrumbPaths[] = [
+      {
+        pathName: 'Forstå kravene',
+        href: '/tema'
+      },
+    ]
+
+    if (kravTema?.shortName) {
+      console.log('TRIGGER')
+      breadcrumbPaths.push({
+        pathName: kravTema.shortName.toString(),
+        href: '/tema/' + kravTema.code
+      })
+    }
+    return breadcrumbPaths
+  }
+
 
   useEffect(() => {
     // hent krav på ny ved avbryt ny versjon
@@ -144,7 +162,7 @@ export const KravPage = () => {
                       <CustomizedBreadcrumbs
                         fontColor={ettlevColors.grey25}
                         currentPage={kravNumView({ kravNummer: krav?.kravNummer, kravVersjon: krav?.kravVersjon })}
-                        paths={breadcrumbPaths}
+                        paths={getBreadcrumPaths()}
                       />
                     )}
                   </Block>
@@ -289,25 +307,25 @@ const Etterlevelser = ({ loading, etterlevelser: allEtterlevelser }: { loading: 
             <CustomizedPanel key={a.code} title={a.shortName} HeaderActiveBackgroundColor={ettlevColors.green50}>
               {avdelingEtterlevelser.map((e, i) => (
                 <CustomPanelDivider >
-                <PanelLink
-                  key={e.id}
-                  href={`/etterlevelse/${e.id}`}
-                  square
-                  hideBorderBottom={i !== antall - 1}
-                  useUnderline
-                  title={e.behandling.navn}
-                  beskrivelse={e.behandling.overordnetFormaal.shortName}
-                  rightTitle={!!e.behandling.teamsData.length ? e.behandling.teamsData.map((t) => t.name).join(', ') : 'Ingen team'}
-                  rightBeskrivelse={`Utfylt: ${moment(e.changeStamp.lastModifiedDate).format('ll')}`}
-                  overrides={{
-                    Block: {
-                      style: {
-                        ...borderStyle('hidden')
+                  <PanelLink
+                    key={e.id}
+                    href={`/etterlevelse/${e.id}`}
+                    square
+                    hideBorderBottom={i !== antall - 1}
+                    useUnderline
+                    title={e.behandling.navn}
+                    beskrivelse={e.behandling.overordnetFormaal.shortName}
+                    rightTitle={!!e.behandling.teamsData.length ? e.behandling.teamsData.map((t) => t.name).join(', ') : 'Ingen team'}
+                    rightBeskrivelse={`Utfylt: ${moment(e.changeStamp.lastModifiedDate).format('ll')}`}
+                    overrides={{
+                      Block: {
+                        style: {
+                          ...borderStyle('hidden')
+                        }
                       }
-                    }
-                  }}
+                    }}
                   // panelIcon={(hover) => <PageIcon hover={hover} />}
-                />
+                  />
                 </CustomPanelDivider>
               ))}
             </CustomizedPanel>
