@@ -1,63 +1,23 @@
 import * as React from 'react'
 import { useState } from 'react'
-import { Tab, TabProps, Tabs, TabsProps } from 'baseui/tabs-motion'
+import { FILL, ORIENTATION, Tab, TabProps, Tabs, TabsOverrides, TabsProps } from 'baseui/tabs-motion'
 import { StyleObject } from 'styletron-standard'
 import { borderColor, borderStyle, borderWidth, marginZero, paddingZero } from './Style'
 import { theme } from '../../util'
 import { ettlevColors } from '../../util/theme'
+import { ReactNode } from 'react-markdown/lib/react-markdown'
 
-interface AdditionalTabProps {
-  fontColor?: string
-  activeColor?: string
-  tabBackground?: string
-  backgroundColor?: string
-  small?: boolean
-}
+export const CustomizedTab = (props: TabProps) => {
 
-type customTabProps = AdditionalTabProps & TabProps
-
-export const CustomizedTab = (props: customTabProps) => {
-
-  let { fontColor, activeColor, tabBackground } = props
-  fontColor = fontColor || 'black'
-  activeColor = activeColor || fontColor
-
-  const hoverAndFocusStyle: StyleObject = {
-    color: activeColor,
-    borderBottomColor: fontColor,
-  }
-
-  return <Tab
-    overrides={{
-      Tab: {
-        style: (tabProps) => ({
-          ...marginZero,
-          fontSize: '20px',
-          fontWeight: tabProps.$isActive ? 700 : 600,
-          fontColor: tabProps.$isActive ? activeColor : fontColor,
-          backgroundColor: 'red',
-          paddingBottom: '6px',
-          paddingTop: '20px',
-          paddingLeft: '4px',
-          paddingRight: '4px',
-          ...(props.small
-            ? {
-              marginRight: theme.sizing.scale1000,
-              fontSize: '18px',
-            }
-            : {}),
-        }),
-      },
-      TabPanel: {
-        style: {
-          marginTop: theme.sizing.scale1600,
-          backgroundColor: props.backgroundColor || ettlevColors.grey25,
-          ...paddingZero,
-        },
-      },
-    }}>
+  return <Tab {...props}>
     {props.children}
   </Tab>
+}
+
+interface TabsContent {
+  title?: string
+  key?: string
+  content?: ReactNode
 }
 
 interface CustomizedTabsProps {
@@ -66,15 +26,32 @@ interface CustomizedTabsProps {
   tabBackground?: string
   backgroundColor?: string
   small?: boolean
+  tabs?: TabsContent[]
+
+
+  children?: React.ReactNode;
+  activeKey?: React.Key;
+  disabled?: boolean;
+  fill?: FILL[keyof FILL];
+  orientation?: ORIENTATION[keyof ORIENTATION];
+  activateOnFocus?: boolean;
+  renderAll?: boolean;
+  onChange?: (params: { activeKey: React.Key }) => void;
+  overrides?: TabsOverrides;
+  uid?: string;
 }
 
-type CustomProps = TabsProps & CustomizedTabsProps
-
-export const CustomizedTabs = (props: CustomProps) => {
+export const CustomizedTabs = (props: CustomizedTabsProps) => {
   const [activeKeyInternal, setActiveKeyInternal] = useState<React.Key>(0)
-  let { fontColor, activeColor, tabBackground, ...restProps } = props
+  let { fontColor, activeColor, tabBackground, tabs, ...restProps } = props
   fontColor = fontColor || 'black'
   activeColor = activeColor || fontColor
+
+  const hoverAndFocusStyle: StyleObject = {
+    color: activeColor,
+    borderBottomColor: fontColor,
+    background: 'transparent'
+  }
 
   return (
     <Tabs
@@ -93,15 +70,12 @@ export const CustomizedTabs = (props: CustomProps) => {
         },
         TabBorder: {
           style: {
-            backgroundColor: tabBackground
+            backgroundColor: 'transparent'
           }
         },
         TabHighlight: {
           style: {
-            backgroundColor: tabBackground,
-            ':hover': {
-              backgroundColor: activeColor
-            }
+            backgroundColor: 'transparent'
           }
         }
       }}
@@ -111,7 +85,57 @@ export const CustomizedTabs = (props: CustomProps) => {
       }}
       activeKey={props.activeKey || activeKeyInternal}
     >
-      {props.children}
+      {tabs?.map((tab: TabsContent, index: number) => {
+        return (
+          <CustomizedTab
+            title={tab.title}
+            key={tab.key}
+            overrides={{
+              Tab: {
+                style: (tabProps) => ({
+                  ...marginZero,
+                  fontSize: '20px',
+                  fontWeight: tabProps.$isActive ? 700 : 600,
+                  color: tabProps.$isActive ? ettlevColors.green800 : ettlevColors.green600,
+                  background: tabBackground,
+                  paddingBottom: '6px',
+                  paddingTop: '20px',
+                  paddingLeft: '4px',
+                  paddingRight: '4px',
+
+                  ...borderWidth('4px !important'),
+                  ...borderColor(tabBackground),
+                  borderBottomColor: tabProps.$isActive ? activeColor : 'transparent',
+
+                  // Avoid cut horizontal line on bottom border
+                  ...borderStyle('hidden'),
+                  
+                  borderBottomStyle: 'solid',
+                  ':hover': hoverAndFocusStyle,
+                  ':focus-visible': hoverAndFocusStyle,
+                  ':active': hoverAndFocusStyle,
+
+                  ...(props.small
+                    ? {
+                      marginRight: theme.sizing.scale1000,
+                      fontSize: '18px',
+                    }
+                    : { marginRight: (tabs && tabs.length - 1 !== index) ? theme.sizing.scale1000 : 0, }),
+                }),
+              },
+              TabPanel: {
+                style: {
+                  marginTop: theme.sizing.scale1600,
+                  backgroundColor: props.backgroundColor || ettlevColors.grey25,
+                  ...paddingZero,
+                },
+              },
+            }}
+          >
+            {tab.content}
+          </CustomizedTab>
+        )
+      })}
     </Tabs>
   )
 }
