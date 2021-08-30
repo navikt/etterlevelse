@@ -93,7 +93,6 @@ export const CustomizedTabs = (props: CustomizedTabsProps) => {
               Tab: {
                 style: (tabProps) => ({
                   ...marginZero,
-                  fontSize: '20px',
                   fontWeight: tabProps.$isActive ? 700 : 600,
                   color: tabProps.$isActive ? ettlevColors.green800 : ettlevColors.green600,
                   background: tabBackground,
@@ -119,7 +118,10 @@ export const CustomizedTabs = (props: CustomizedTabsProps) => {
                       marginRight: theme.sizing.scale1000,
                       fontSize: '18px',
                     }
-                    : { marginLeft: index === 0 ? 0 : theme.sizing.scale1000, }),
+                    : {
+                      marginLeft: index === 0 ? 0 : theme.sizing.scale1000,
+                      fontSize: '20px',
+                    }),
                 }),
               },
               TabPanel: {
