@@ -18,7 +18,7 @@ import { useQuery } from '@apollo/client'
 import { Tilbakemeldinger } from '../components/krav/Tilbakemelding'
 import { editIcon, pageIcon, plusIcon, sadFolderIcon } from '../components/Images'
 import { Label } from '../components/common/PropertyLabel'
-import { CustomizedTab, CustomizedTabs } from '../components/common/CustomizedTabs'
+import { CustomizedTabs } from '../components/common/CustomizedTabs'
 import { ettlevColors, maxPageWidth, pageWidth } from '../util/theme'
 import { CustomizedAccordion, CustomizedPanel, CustomPanelDivider } from '../components/common/CustomizedAccordion'
 import * as _ from 'lodash'
@@ -238,30 +238,24 @@ export const KravPage = () => {
                 tabBackground={ettlevColors.green100}
                 activeKey={tab}
                 onChange={(k) => setTab(k.activeKey as Section)}
-              >
-                <CustomizedTab
-                  fontColor={ettlevColors.green600}
-                  activeColor={ettlevColors.green800}
-                  tabBackground={ettlevColors.green100}
-                  title={'Om kravet'} key={'krav'}>
-                  <ViewKrav krav={krav} alleKravVersjoner={alleKravVersjoner} />
-                </CustomizedTab>
-                <CustomizedTab
-                  fontColor={ettlevColors.green600}
-                  activeColor={ettlevColors.green800}
-                  tabBackground={ettlevColors.green100}
-                  title={'Eksempler på etterlevelse'} key={'etterlevelser'}>
-                  <Etterlevelser loading={etterlevelserLoading} etterlevelser={krav.etterlevelser} />
-                </CustomizedTab>
-                <CustomizedTab
-                  fontColor={ettlevColors.green600}
-                  activeColor={ettlevColors.green800}
-                  tabBackground={ettlevColors.green100}
-                  title={'Tilbakemeldinger'} 
-                  key={'tilbakemeldinger'}>
-                  <Tilbakemeldinger krav={krav} />
-                </CustomizedTab>
-              </CustomizedTabs>
+                tabs={[
+                  {
+                    title: 'Om kravet',
+                    key: 'krav',
+                    content: <ViewKrav krav={krav} alleKravVersjoner={alleKravVersjoner} />
+                  },
+                  {
+                    title: 'Eksempler på etterlevelse',
+                    key: 'etterlevelser',
+                    content: <Etterlevelser loading={etterlevelserLoading} etterlevelser={krav.etterlevelser} />
+                  },
+                  {
+                    title: 'Tilbakemeldinger',
+                    key: 'tilbakemeldinger',
+                    content: <Tilbakemeldinger krav={krav} />
+                  }
+                ]}
+              />
             </Block>
           </Block>
         </Block>
