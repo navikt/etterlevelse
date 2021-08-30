@@ -28,7 +28,6 @@ interface CustomizedTabsProps {
   small?: boolean
   tabs?: TabsContent[]
 
-
   children?: React.ReactNode;
   activeKey?: React.Key;
   disabled?: boolean;
@@ -109,7 +108,7 @@ export const CustomizedTabs = (props: CustomizedTabsProps) => {
 
                   // Avoid cut horizontal line on bottom border
                   ...borderStyle('hidden'),
-                  
+
                   borderBottomStyle: 'solid',
                   ':hover': hoverAndFocusStyle,
                   ':focus-visible': hoverAndFocusStyle,
@@ -120,7 +119,7 @@ export const CustomizedTabs = (props: CustomizedTabsProps) => {
                       marginRight: theme.sizing.scale1000,
                       fontSize: '18px',
                     }
-                    : { marginRight: (tabs && tabs.length - 1 !== index) ? theme.sizing.scale1000 : 0, }),
+                    : { marginLeft: index === 0 ? 0 : theme.sizing.scale1000, }),
                 }),
               },
               TabPanel: {
