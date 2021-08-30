@@ -239,13 +239,26 @@ export const KravPage = () => {
                 activeKey={tab}
                 onChange={(k) => setTab(k.activeKey as Section)}
               >
-                <CustomizedTab title={'Om kravet'} key={'krav'}>
+                <CustomizedTab
+                  fontColor={ettlevColors.green600}
+                  activeColor={ettlevColors.green800}
+                  tabBackground={ettlevColors.green100}
+                  title={'Om kravet'} key={'krav'}>
                   <ViewKrav krav={krav} alleKravVersjoner={alleKravVersjoner} />
                 </CustomizedTab>
-                <CustomizedTab title={'Eksempler på etterlevelse'} key={'etterlevelser'}>
+                <CustomizedTab
+                  fontColor={ettlevColors.green600}
+                  activeColor={ettlevColors.green800}
+                  tabBackground={ettlevColors.green100}
+                  title={'Eksempler på etterlevelse'} key={'etterlevelser'}>
                   <Etterlevelser loading={etterlevelserLoading} etterlevelser={krav.etterlevelser} />
                 </CustomizedTab>
-                <CustomizedTab title={'Tilbakemeldinger'} key={'tilbakemeldinger'}>
+                <CustomizedTab
+                  fontColor={ettlevColors.green600}
+                  activeColor={ettlevColors.green800}
+                  tabBackground={ettlevColors.green100}
+                  title={'Tilbakemeldinger'} 
+                  key={'tilbakemeldinger'}>
                   <Tilbakemeldinger krav={krav} />
                 </CustomizedTab>
               </CustomizedTabs>
