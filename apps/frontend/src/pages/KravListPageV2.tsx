@@ -1,5 +1,5 @@
 import { Block } from 'baseui/block'
-import { H2, HeadingXXLarge } from 'baseui/typography'
+import { H2, HeadingXXLarge, Paragraph4 } from 'baseui/typography'
 import { useState } from 'react'
 import Button from '../components/common/Button'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
@@ -16,26 +16,14 @@ import { Spinner } from '../components/common/Spinner'
 import { Notification } from 'baseui/notification'
 import { KravQL, KravStatus } from '../constants'
 import { SkeletonPanel } from '../components/common/LoadingSkeleton'
+import { kravStatus } from '../pages/KravPage'
+import { codelist, ListName } from '../services/Codelist'
+import { Card } from 'baseui/card'
+import { borderColor, borderRadius, borderStyle, borderWidth } from '../components/common/Style'
 
 type Section = 'siste' | 'alle'
 
 const tabMarginBottom = '10px'
-
-export const getKravStatus = (status?: KravStatus) => {
-  if (!status) return ''
-  switch (status) {
-    case KravStatus.AKTIV:
-      return 'Aktiv'
-    case KravStatus.UNDER_ARBEID:
-      return 'Under arbeid'
-    case KravStatus.UTGAATT:
-      return 'Utgått'
-    case KravStatus.UTKAST:
-      return 'Utkast'
-    default:
-      return status
-  }
-}
 
 export const KravListPage = () => (
   <Block width="100%" paddingBottom={'200px'} id="content" overrides={{ Block: { props: { role: 'main' } } }}>
@@ -72,21 +60,77 @@ export const KravListPage = () => (
   </Block>
 )
 
+const KravStatusView = ({ status }: { status: KravStatus }) => {
+  const getStatusDisplay = (background: string, border: string) => (
+    <Block width='fit-content'>
+      <Card
+        overrides={{
+          Contents: {
+            style: {
+              marginRight: '8px',
+              marginLeft: '8px',
+              marginTop: '8px',
+              marginBottom: '8px',
+            },
+          },
+          Body: {
+            style: {
+              marginRight: '8px',
+              marginLeft: '8px',
+              marginTop: '8px',
+              marginBottom: '8px',
+            },
+          },
+          Root: {
+            style: {
+              // Did not use border, margin and border radius to remove warnings.
+              backgroundColor: background,
+              ...borderColor(border),
+              ...borderWidth('1px'),
+              ...borderStyle('solid'),
+              ...borderRadius('4px'),
+            },
+          },
+        }}
+      >
+        <Paragraph4 $style={{ color: ettlevColors.navMorkGra, margin: '0px' }}>{kravStatus(status)}</Paragraph4>
+      </Card>
+    </Block>
+  )
+
+  if (status === KravStatus.UTKAST) {
+    return getStatusDisplay('#FFECCC', '#D47B00')
+  } else if (status === KravStatus.AKTIV) {
+    return getStatusDisplay(ettlevColors.green50, ettlevColors.green400)
+  } else if (status === KravStatus.UTGAATT) {
+    return getStatusDisplay(ettlevColors.grey50, ettlevColors.grey200)
+  } else {
+    return getStatusDisplay('#FFECCC', '#D47B00')
+  }
+}
+
 const KravPanels = ({ kravene, loading }: { kravene: KravQL[]; loading?: boolean }) => {
   if (loading) return <SkeletonPanel count={5} />
   return (
     <Block marginBottom={tabMarginBottom}>
-      {kravene.map((k) => (
-        <Block key={k.id} marginBottom={'0px'}>
-          <PanelLink
-            useUnderline
-            href={`/krav/${k.kravNummer}/${k.kravVersjon}`}
-            title={`K${k.kravNummer}.${k.kravVersjon}`}
-            beskrivelse={`${k.navn}`}
-            rightBeskrivelse={!!k.changeStamp.lastModifiedDate ? `Sist endret: ${moment(k.changeStamp.lastModifiedDate).format('ll')}` : ''}
-          />
-        </Block>
-      ))}
+      {kravene.map((k) => {
+        const lov = codelist.getCode(ListName.LOV, k.regelverk[0]?.lov?.code)
+        const tema = codelist.getCode(ListName.TEMA, lov?.data?.tema)
+
+        return (
+          <Block key={k.id} marginBottom={'0px'}>
+            <PanelLink
+              useUnderline
+              href={`/krav/${k.kravNummer}/${k.kravVersjon}`}
+              title={`K${k.kravNummer}.${k.kravVersjon}`}
+              beskrivelse={`${k.navn}`}
+              rightBeskrivelse={!!k.changeStamp.lastModifiedDate ? `Sist endret: ${moment(k.changeStamp.lastModifiedDate).format('ll')}` : ''}
+              rightTitle={tema && tema.shortName ? tema.shortName : ''}
+            />
+            <KravStatusView status={k.status} />
+          </Block>
+        )
+      })}
     </Block>
   )
 }
@@ -136,7 +180,7 @@ const SistRedigertKrav = () => {
       <Block>
         <H2>{data?.krav.content && data?.krav.content.length ? data?.krav.content.length : 0} Krav</H2>
       </Block>
-      <KravPanels kravene={data?.krav?.content || []} loading={loading}/>
+      <KravPanels kravene={data?.krav?.content || []} loading={loading} />
     </Block>
   )
 }
