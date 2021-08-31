@@ -133,7 +133,6 @@ export const KravPage = () => {
     ]
 
     if (kravTema?.shortName) {
-      console.log('TRIGGER')
       breadcrumbPaths.push({
         pathName: kravTema.shortName.toString(),
         href: '/tema/' + kravTema.code
