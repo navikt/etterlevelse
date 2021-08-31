@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import RouteLink from './RouteLink'
-import {Block, BlockOverrides, Responsive, Scale} from 'baseui/block'
+import {Block, BlockOverrides, Display, Responsive, Scale} from 'baseui/block'
 import {borderColor, borderRadius, borderStyle, borderWidth, padding, paddingAll} from './Style'
 import {theme} from '../../util'
 import {ettlevColors} from '../../util/theme'
@@ -34,6 +34,7 @@ export const PanelLink = ({
   overrides?: BlockOverrides
 }) => {
   const [hover, setHover] = useState(false)
+  const responsiveDisplay: Responsive<Display> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
 
   const customOverrides: BlockOverrides = {
     Block: {
@@ -72,6 +73,7 @@ export const PanelLink = ({
       }}
     >
       <Block
+        display={responsiveDisplay}
         overrides={mergedOverrides}
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
@@ -95,7 +97,15 @@ export const PanelLink = ({
         </Block>
 
         {(rightTitle || rightBeskrivelse) && (
-          <Block minWidth={'150px'} maxWidth={'150px'} display={'flex'} flexDirection={flip ? 'column-reverse' : 'column'} justifyContent={'center'}>
+          <Block
+            minWidth={'150px'}
+            maxWidth={'150px'}
+            display={'flex'}
+            flexDirection={flip ? 'column-reverse' : 'column'}
+            justifyContent={'center'}
+            marginLeft={[theme.sizing.scale600, theme.sizing.scale600, theme.sizing.scale600, '0px', '0px', '0px']}
+            marginTop={[theme.sizing.scale600, theme.sizing.scale600, theme.sizing.scale600, '0px', '0px', '0px']}
+          >
             {rightTitle && <LabelSmall>{rightTitle}</LabelSmall>}
             {rightBeskrivelse && (
               <ParagraphSmall marginBottom={0} marginTop={rightTitle ? theme.sizing.scale100 : 0}>
@@ -104,9 +114,10 @@ export const PanelLink = ({
             )}
           </Block>
         )}
-
+        <Block display={['none', 'none', 'none', 'block', 'block', 'block']}>
         <Chevron hover={hover} icon={navChevronRightIcon} distance={'4px'} />
-      </Block>
+        </Block>
+        </Block>
     </RouteLink>
   )
 }
