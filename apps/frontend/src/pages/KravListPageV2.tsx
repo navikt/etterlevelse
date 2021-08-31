@@ -14,12 +14,28 @@ import { useKravFilter } from '../api/KravGraphQLApi'
 import { PanelLink } from '../components/common/PanelLink'
 import { Spinner } from '../components/common/Spinner'
 import { Notification } from 'baseui/notification'
-import { KravQL } from '../constants'
+import { KravQL, KravStatus } from '../constants'
 import { SkeletonPanel } from '../components/common/LoadingSkeleton'
 
 type Section = 'siste' | 'alle'
 
 const tabMarginBottom = '10px'
+
+export const getKravStatus = (status?: KravStatus) => {
+  if (!status) return ''
+  switch (status) {
+    case KravStatus.AKTIV:
+      return 'Aktiv'
+    case KravStatus.UNDER_ARBEID:
+      return 'Under arbeid'
+    case KravStatus.UTGAATT:
+      return 'Utgått'
+    case KravStatus.UTKAST:
+      return 'Utkast'
+    default:
+      return status
+  }
+}
 
 export const KravListPage = () => (
   <Block width="100%" paddingBottom={'200px'} id="content" overrides={{ Block: { props: { role: 'main' } } }}>
