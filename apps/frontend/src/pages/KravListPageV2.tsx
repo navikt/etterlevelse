@@ -25,6 +25,16 @@ type Section = 'siste' | 'alle'
 
 const tabMarginBottom = '10px'
 
+export const sortKrav = (kravene: KravQL[]) => {
+  return [...kravene].sort((a, b) => {
+    if (a.kravNummer === b.kravNummer) {
+      return b.kravVersjon - a.kravVersjon
+    } else {
+      return a.kravNummer - b.kravNummer 
+    }
+  })
+}
+
 export const KravListPage = () => (
   <Block width="100%" paddingBottom={'200px'} id="content" overrides={{ Block: { props: { role: 'main' } } }}>
     <Block width="100%" backgroundColor={ettlevColors.grey50} display={'flex'} justifyContent={'center'}>
@@ -171,6 +181,8 @@ const SistRedigertKrav = () => {
 
   const { variables, data, loading, error } = res
 
+  const sortedData = sortKrav(data?.krav.content || [])
+  
   return loading && !data?.krav?.numberOfElements ? (
     <Spinner size={theme.sizing.scale2400} />
   ) : error ? (
@@ -178,9 +190,9 @@ const SistRedigertKrav = () => {
   ) : (
     <Block>
       <Block>
-        <H2>{data?.krav.content && data?.krav.content.length ? data?.krav.content.length : 0} Krav</H2>
+        <H2>{sortedData.length ? sortedData.length : 0} Krav</H2>
       </Block>
-      <KravPanels kravene={data?.krav?.content || []} loading={loading} />
+      <KravPanels kravene={sortedData} loading={loading} />
     </Block>
   )
 }
