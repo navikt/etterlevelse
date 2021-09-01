@@ -43,14 +43,19 @@ export const KravListPage = () => (
       <Block maxWidth={maxPageWidth} width="100%">
         <Block paddingLeft={responsivePadding} paddingRight={responsivePadding} paddingTop={theme.sizing.scale800}>
           <CustomizedBreadcrumbs currentPage="Forvalte og opprette krav" />
-          <HeadingXXLarge marginTop='0' >Forvalte og opprette krav</HeadingXXLarge>
-        </Block>
-        <Block paddingLeft={responsivePadding} paddingRight={responsivePadding} display="flex" justifyContent="flex-end">
-          {user.isKraveier() && (
-            <RouteLink hideUnderline href={'/krav/ny'}>
-              <Button startEnhancer={<img src={plusIcon} alt="" />} size="compact">Nytt krav</Button>
-            </RouteLink>
-          )}
+          <Block display="flex" >
+            <Block flex="1">
+              <HeadingXXLarge marginTop='0' >Forvalte og opprette krav</HeadingXXLarge>
+            </Block>
+
+            <Block display="flex" justifyContent="flex-end">
+              {user.isKraveier() && (
+                <RouteLink hideUnderline href={'/krav/ny'}>
+                  <Button startEnhancer={<img src={plusIcon} alt="" />} size="compact">Nytt krav</Button>
+                </RouteLink>
+              )}
+            </Block>
+          </Block>
         </Block>
       </Block>
     </Block>
