@@ -1,11 +1,11 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import RouteLink from './RouteLink'
-import {Block, BlockOverrides, Display, Responsive, Scale} from 'baseui/block'
-import {borderColor, borderRadius, borderStyle, borderWidth, padding, paddingAll} from './Style'
-import {theme} from '../../util'
-import {ettlevColors} from '../../util/theme'
-import {HeadingXLarge, LabelLarge, LabelSmall, ParagraphMedium, ParagraphSmall} from 'baseui/typography'
-import {arrowRightIcon, navChevronRightIcon} from '../Images'
+import { Block, BlockOverrides, Display, Responsive, Scale } from 'baseui/block'
+import { borderColor, borderRadius, borderStyle, borderWidth, padding, paddingAll } from './Style'
+import { theme } from '../../util'
+import { ettlevColors } from '../../util/theme'
+import { HeadingXLarge, LabelLarge, LabelSmall, ParagraphMedium, ParagraphSmall } from 'baseui/typography'
+import { arrowRightIcon, navChevronRightIcon } from '../Images'
 import * as _ from 'lodash'
 
 export const PanelLink = ({
@@ -19,17 +19,19 @@ export const PanelLink = ({
   square,
   hideBorderBottom,
   useUnderline,
+  statusText,
   overrides
 }: {
   href: string
-  title: string
+  title: string | React.ReactNode
   rightTitle?: string
-  beskrivelse?: string
+  beskrivelse?: string | React.ReactNode
   rightBeskrivelse?: string
   flip?: boolean
   square?: boolean
   hideBorderBottom?: boolean
   useUnderline?: boolean
+  statusText?: string | React.ReactNode
   panelIcon?: React.ReactNode | ((hover: boolean) => React.ReactNode)
   overrides?: BlockOverrides
 }) => {
@@ -90,34 +92,51 @@ export const PanelLink = ({
           flexDirection={flip ? 'column-reverse' : 'column'}
           justifyContent={'center'}
         >
-          <LabelLarge $style={{ lineHeight: '20px' }}>{title}</LabelLarge>
-          <ParagraphSmall marginBottom={0} marginTop={theme.sizing.scale100}>
-            {beskrivelse}
-          </ParagraphSmall>
+          {title instanceof String ? <LabelLarge $style={{ lineHeight: '20px' }}>{title}</LabelLarge> : title}
+          {beskrivelse instanceof String ?
+            <ParagraphSmall marginBottom={0} marginTop={theme.sizing.scale100}>
+              {beskrivelse}
+            </ParagraphSmall> :
+            beskrivelse
+          }
         </Block>
 
-        {(rightTitle || rightBeskrivelse) && (
-          <Block
-            minWidth={'150px'}
-            maxWidth={'150px'}
-            display={'flex'}
-            flexDirection={flip ? 'column-reverse' : 'column'}
-            justifyContent={'center'}
-            marginLeft={[theme.sizing.scale600, theme.sizing.scale600, theme.sizing.scale600, '0px', '0px', '0px']}
-            marginTop={[theme.sizing.scale600, theme.sizing.scale600, theme.sizing.scale600, '0px', '0px', '0px']}
-          >
-            {rightTitle && <LabelSmall>{rightTitle}</LabelSmall>}
-            {rightBeskrivelse && (
-              <ParagraphSmall marginBottom={0} marginTop={rightTitle ? theme.sizing.scale100 : 0}>
-                {rightBeskrivelse}
-              </ParagraphSmall>
-            )}
-          </Block>
-        )}
-        <Block display={['none', 'none', 'none', 'block', 'block', 'block']}>
-        <Chevron hover={hover} icon={navChevronRightIcon} distance={'4px'} />
+        <Block
+          display="flex"
+        >
+          {(rightTitle || rightBeskrivelse || statusText) && (
+            <Block display="flex">
+              <Block
+                minWidth={'150px'}
+                display={'flex'}
+                flexDirection={flip ? 'column-reverse' : 'column'}
+                justifyContent="center"
+                left="0"
+                marginLeft={[theme.sizing.scale600, theme.sizing.scale600, theme.sizing.scale600, '0px', '0px', '0px']}
+                marginTop={[theme.sizing.scale600, theme.sizing.scale600, theme.sizing.scale600, '0px', '0px', '0px']}
+              >
+                {statusText instanceof String ? <LabelSmall>{statusText}</LabelSmall> : statusText}
+              </Block>
+              <Block
+                minWidth={'150px'}
+                display={'flex'}
+                flexDirection={flip ? 'column-reverse' : 'column'}
+                justifyContent={'center'}
+                marginLeft={[theme.sizing.scale600, theme.sizing.scale600, theme.sizing.scale600, '0px', '0px', '0px']}
+                marginTop={[theme.sizing.scale600, theme.sizing.scale600, theme.sizing.scale600, '0px', '0px', '0px']}
+              >
+                {rightTitle && <LabelSmall>{rightTitle}</LabelSmall>}
+                {rightBeskrivelse && (
+                  <ParagraphSmall marginBottom={0} marginTop={rightTitle ? theme.sizing.scale100 : 0}>
+                    {rightBeskrivelse}
+                  </ParagraphSmall>
+                )}
+              </Block>
+            </Block>
+          )}
+          <Chevron hover={hover} icon={navChevronRightIcon} distance={'4px'} />
         </Block>
-        </Block>
+      </Block>
     </RouteLink>
   )
 }
