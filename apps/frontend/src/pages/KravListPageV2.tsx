@@ -1,4 +1,4 @@
-import { Block } from 'baseui/block'
+import { Block, Responsive, Scale } from 'baseui/block'
 import { H2, HeadingXXLarge, Label3, Paragraph2, Paragraph4 } from 'baseui/typography'
 import { useState } from 'react'
 import Button from '../components/common/Button'
@@ -35,15 +35,17 @@ export const sortKrav = (kravene: KravQL[]) => {
   })
 }
 
+const responsivePadding: Responsive<Scale> = ['16px', '16px', '16px', '100px', '100px', '100px']
+
 export const KravListPage = () => (
   <Block width="100%" paddingBottom={'200px'} id="content" overrides={{ Block: { props: { role: 'main' } } }}>
     <Block width="100%" backgroundColor={ettlevColors.grey50} display={'flex'} justifyContent={'center'}>
       <Block maxWidth={maxPageWidth} width="100%">
-        <Block paddingLeft={'100px'} paddingRight={'100px'} paddingTop={theme.sizing.scale800}>
+        <Block paddingLeft={responsivePadding} paddingRight={responsivePadding} paddingTop={theme.sizing.scale800}>
           <CustomizedBreadcrumbs currentPage="Forvalte og opprette krav" />
           <HeadingXXLarge marginTop='0' >Forvalte og opprette krav</HeadingXXLarge>
         </Block>
-        <Block paddingLeft={'100px'} paddingRight={'100px'} display="flex" justifyContent="flex-end">
+        <Block paddingLeft={responsivePadding} paddingRight={responsivePadding} display="flex" justifyContent="flex-end">
           {user.isKraveier() && (
             <RouteLink hideUnderline href={'/krav/ny'}>
               <Button startEnhancer={<img src={plusIcon} alt="" />} size="compact">Nytt krav</Button>
@@ -62,7 +64,7 @@ export const KravListPage = () => (
       }}
     >
       <Block maxWidth={maxPageWidth} width="100%">
-        <Block paddingLeft={'100px'} paddingRight={'100px'} paddingTop={theme.sizing.scale800}>
+        <Block paddingLeft={responsivePadding} paddingRight={responsivePadding} paddingTop={theme.sizing.scale800}>
           <KravTabs />
         </Block>
       </Block>
