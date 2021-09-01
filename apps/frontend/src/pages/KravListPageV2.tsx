@@ -19,7 +19,7 @@ import { SkeletonPanel } from '../components/common/LoadingSkeleton'
 import { kravStatus } from '../pages/KravPage'
 import { codelist, ListName } from '../services/Codelist'
 import { Card } from 'baseui/card'
-import { borderColor, borderRadius, borderStyle, borderWidth } from '../components/common/Style'
+import { borderColor, borderRadius, borderStyle, borderWidth, marginAll } from '../components/common/Style'
 
 type Section = 'siste' | 'alle'
 
@@ -77,18 +77,12 @@ const KravStatusView = ({ status }: { status: KravStatus }) => {
         overrides={{
           Contents: {
             style: {
-              marginRight: '8px',
-              marginLeft: '8px',
-              marginTop: '8px',
-              marginBottom: '8px',
+              ...marginAll('8px')
             },
           },
           Body: {
             style: {
-              marginRight: '8px',
-              marginLeft: '8px',
-              marginTop: '8px',
-              marginBottom: '8px',
+              ...marginAll('8px')
             },
           },
           Root: {
