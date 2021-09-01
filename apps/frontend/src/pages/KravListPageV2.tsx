@@ -1,5 +1,5 @@
 import { Block } from 'baseui/block'
-import { H2, HeadingXXLarge, Paragraph4 } from 'baseui/typography'
+import { H2, HeadingXXLarge, Label3, Paragraph2, Paragraph4 } from 'baseui/typography'
 import { useState } from 'react'
 import Button from '../components/common/Button'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
@@ -19,7 +19,7 @@ import { SkeletonPanel } from '../components/common/LoadingSkeleton'
 import { kravStatus } from '../pages/KravPage'
 import { codelist, ListName } from '../services/Codelist'
 import { Card } from 'baseui/card'
-import { borderColor, borderRadius, borderStyle, borderWidth, marginAll } from '../components/common/Style'
+import { borderColor, borderRadius, borderStyle, borderWidth, margin, marginAll } from '../components/common/Style'
 
 type Section = 'siste' | 'alle'
 
@@ -30,7 +30,7 @@ export const sortKrav = (kravene: KravQL[]) => {
     if (a.kravNummer === b.kravNummer) {
       return b.kravVersjon - a.kravVersjon
     } else {
-      return a.kravNummer - b.kravNummer 
+      return a.kravNummer - b.kravNummer
     }
   })
 }
@@ -77,12 +77,12 @@ const KravStatusView = ({ status }: { status: KravStatus }) => {
         overrides={{
           Contents: {
             style: {
-              ...marginAll('8px')
+              ...marginAll('0px')
             },
           },
           Body: {
             style: {
-              ...marginAll('8px')
+              ...margin('2px', '8px')
             },
           },
           Root: {
@@ -97,7 +97,7 @@ const KravStatusView = ({ status }: { status: KravStatus }) => {
           },
         }}
       >
-        <Paragraph4 $style={{ color: ettlevColors.navMorkGra, margin: '0px' }}>{kravStatus(status)}</Paragraph4>
+        <Paragraph4 $style={{ color: ettlevColors.navMorkGra, ...marginAll('0px') }}>{kravStatus(status)}</Paragraph4>
       </Card>
     </Block>
   )
@@ -126,12 +126,12 @@ const KravPanels = ({ kravene, loading }: { kravene: KravQL[]; loading?: boolean
             <PanelLink
               useUnderline
               href={`/krav/${k.kravNummer}/${k.kravVersjon}`}
-              title={`K${k.kravNummer}.${k.kravVersjon}`}
-              beskrivelse={`${k.navn}`}
+              title={<Paragraph2 $style={{ fontSize: '16px', marginBottom: '0px', marginTop: '0px' }}>K{k.kravNummer}.{k.kravVersjon}</Paragraph2>}
+              beskrivelse={<Label3 $style={{ fontSize: '22px', lineHeight: '28px' }}>{k.navn}</Label3>}
               rightBeskrivelse={!!k.changeStamp.lastModifiedDate ? `Sist endret: ${moment(k.changeStamp.lastModifiedDate).format('ll')}` : ''}
               rightTitle={tema && tema.shortName ? tema.shortName : ''}
+              statusText={<KravStatusView status={k.status} />}
             />
-            <KravStatusView status={k.status} />
           </Block>
         )
       })}
@@ -176,7 +176,7 @@ const SistRedigertKrav = () => {
   const { variables, data, loading, error } = res
 
   const sortedData = sortKrav(data?.krav.content || [])
-  
+
   return loading && !data?.krav?.numberOfElements ? (
     <Spinner size={theme.sizing.scale2400} />
   ) : error ? (
