@@ -17,7 +17,7 @@ import { Notification } from 'baseui/notification'
 import { emptyPage, KravListFilter, KravQL, KravStatus } from '../constants'
 import { SkeletonPanel } from '../components/common/LoadingSkeleton'
 import { kravStatus } from '../pages/KravPage'
-import { codelist, ListName } from '../services/Codelist'
+import { Code, codelist, ListName, LovCode } from '../services/Codelist'
 import { Card } from 'baseui/card'
 import { borderColor, borderRadius, borderStyle, borderWidth, margin, marginAll } from '../components/common/Style'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
@@ -252,6 +252,7 @@ const KravFilterSelect = (props: SelectProps) => {
     DropdownListItem: {
       style: {
         fontSize: '18px',
+        wordBreak: 'break-all'
       },
     },
   }} />
@@ -262,18 +263,21 @@ const AllKrav = () => {
   const [pageNumber, setPage] = useState(0)
 
   const [filter, setFilter] = useState<KravFilter>({ status: [], relevans: [], tema: [], lover: [] })
+  const [temaFilter, setTemaFilter] = useState<string[]>([])
   const relevans = codelist.getCodes(ListName.RELEVANS)
   const temaer = codelist.getCodes(ListName.TEMA)
   const lover = codelist.getCodes(ListName.LOV)
+  const [loverFilter, setLoverFilter] = useState(lover)
+
   const { data, loading: gqlLoading, fetchMore, error, refetch } = useKravFilter({
     relevans: filter.relevans.length && filter.relevans[0].id ? [filter.relevans[0].id?.toString()] : undefined,
+    lover: filter.lover.length && filter.lover[0].id ? [filter.lover[0].id.toString()] : temaFilter.length ? temaFilter : undefined,
     pageNumber: 0,
     pageSize,
   })
   const [sortedKravList, setSortedKravList] = useState<CustomKravQL[]>([])
 
   const loading = !data && gqlLoading
-
   const lastMer = () => {
     fetchMore({
       variables: {
@@ -295,10 +299,9 @@ const AllKrav = () => {
     }).catch((e) => console.error(e))
   }
 
-  useEffect(() => {
-    const sortedData = sortKrav(data?.krav.content || [])
+  const sortKravByTema = (kravList: KravQL[]) => {
     const sortedDataWithTema: CustomKravQL[] = []
-    sortedData.forEach((k) => {
+    kravList.forEach((k) => {
       const lov = codelist.getCode(ListName.LOV, k.regelverk[0]?.lov?.code)
       const tema = codelist.getCode(ListName.TEMA, lov?.data?.tema)
       sortedDataWithTema.push({ ...k, tema: tema?.shortName ? tema?.shortName : '' })
@@ -310,14 +313,32 @@ const AllKrav = () => {
       if (a.tema === b.tema) return 0
       return a.tema < b.tema ? -1 : 1
     })
-    setSortedKravList(sortedDataWithTema)
+    return sortedDataWithTema
+  }
+
+  useEffect(() => {
+    const sortedData = sortKrav(kravene.content || [])
+    setSortedKravList(sortKravByTema(sortedData))
   }, [data])
 
   useEffect(() => {
-    if (filter.relevans.length && filter.relevans[0].id) {
-      refetch()
+    if (filter.tema.length && filter.tema[0].id) {
+      const temaLover: string[] = []
+      const gyldiglover: LovCode[] = []
+      lover.forEach((l) => {
+        if (l.data?.tema === filter.tema[0].id) {
+          temaLover.push(l.code)
+          gyldiglover.push(l)
+        }
+      })
+      setTemaFilter(temaLover)
+      setLoverFilter(gyldiglover)
+    } else {
+      setTemaFilter([])
+      setLoverFilter(lover)
     }
-  }, [filter, data])
+    refetch()
+  }, [filter])
 
   const updateFilter = (value: any, type: KravListFilter) => {
     const newFilterValue = { ...filter }
@@ -352,7 +373,7 @@ const AllKrav = () => {
         </Block>
         <Block display="flex" alignItems="center">
           <Label3>Filter:</Label3>
-          <Block marginLeft="12px" width="100%" minWidth="160px">
+          <Block marginLeft="12px" width="100%" minWidth="170px">
             <KravFilterSelect
               size="compact"
               placeholder="relevans"
@@ -362,6 +383,32 @@ const AllKrav = () => {
               value={filter.relevans}
               onChange={(params) =>
                 updateFilter(params.value, KravListFilter.RELEVANS)
+              }
+            />
+          </Block>
+          <Block marginLeft="12px" width="100%" minWidth="200px">
+            <KravFilterSelect
+              size="compact"
+              placeholder="tema"
+              options={temaer?.map((t) => {
+                return { label: t.shortName, id: t.code }
+              })}
+              value={filter.tema}
+              onChange={(params) =>
+                updateFilter(params.value, KravListFilter.TEMAER)
+              }
+            />
+          </Block>
+          <Block marginLeft="12px" width="100%" minWidth="200px">
+            <KravFilterSelect
+              size="compact"
+              placeholder="lover"
+              options={loverFilter?.map((t) => {
+                return { label: t.shortName, id: t.code }
+              })}
+              value={filter.lover}
+              onChange={(params) =>
+                updateFilter(params.value, KravListFilter.LOVER)
               }
             />
           </Block>
