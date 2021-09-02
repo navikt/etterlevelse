@@ -1,6 +1,6 @@
 import { Block, Responsive, Scale } from 'baseui/block'
 import { H2, HeadingXXLarge, Label3, LabelSmall, Paragraph2, Paragraph4 } from 'baseui/typography'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Button from '../components/common/Button'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
 import CustomizedTabs from '../components/common/CustomizedTabs'
@@ -9,18 +9,21 @@ import { user } from '../services/User'
 import { theme } from '../util'
 import moment from 'moment'
 import { ettlevColors, maxPageWidth } from '../util/theme'
-import { plusIcon } from '../components/Images'
+import { navChevronDownIcon, plusIcon } from '../components/Images'
 import { useKravFilter } from '../api/KravGraphQLApi'
 import { PanelLink } from '../components/common/PanelLink'
 import { Spinner } from '../components/common/Spinner'
 import { Notification } from 'baseui/notification'
-import { emptyPage, KravQL, KravStatus } from '../constants'
+import { emptyPage, KravListFilter, KravQL, KravStatus } from '../constants'
 import { SkeletonPanel } from '../components/common/LoadingSkeleton'
 import { kravStatus } from '../pages/KravPage'
 import { codelist, ListName } from '../services/Codelist'
 import { Card } from 'baseui/card'
 import { borderColor, borderRadius, borderStyle, borderWidth, margin, marginAll } from '../components/common/Style'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
+import CustomizedSelect from '../components/common/CustomizedSelect'
+import { Option, Select, SelectProps } from 'baseui/select'
+import { update } from 'lodash'
 
 type Section = 'siste' | 'alle'
 
@@ -226,13 +229,48 @@ const SistRedigertKrav = () => {
   )
 }
 
+type KravFilter = {
+  status: Option[]
+  relevans: Option[]
+  tema: Option[]
+  lover: Option[]
+}
+
+const KravFilterSelect = (props: SelectProps) => {
+  return <Select {...props} overrides={{
+    ControlContainer: {
+      style: {
+        ...borderWidth('1px'),
+        ':hover': {
+          backgroundColor: ettlevColors.green50,
+        },
+      },
+    },
+    SelectArrow: {
+      component: () => <img src={navChevronDownIcon} alt="Chevron ned" />,
+    },
+    DropdownListItem: {
+      style: {
+        fontSize: '18px',
+      },
+    },
+  }} />
+}
+
 const AllKrav = () => {
   const pageSize = 20
   const [pageNumber, setPage] = useState(0)
-  const { data, loading: gqlLoading, fetchMore, error } = useKravFilter({
+
+  const [filter, setFilter] = useState<KravFilter>({ status: [], relevans: [], tema: [], lover: [] })
+  const relevans = codelist.getCodes(ListName.RELEVANS)
+  const temaer = codelist.getCodes(ListName.TEMA)
+  const lover = codelist.getCodes(ListName.LOV)
+  const { data, loading: gqlLoading, fetchMore, error, refetch } = useKravFilter({
+    relevans: filter.relevans.length && filter.relevans[0].id ? [filter.relevans[0].id?.toString()] : undefined,
     pageNumber: 0,
     pageSize,
   })
+  const [sortedKravList, setSortedKravList] = useState<CustomKravQL[]>([])
 
   const loading = !data && gqlLoading
 
@@ -257,20 +295,48 @@ const AllKrav = () => {
     }).catch((e) => console.error(e))
   }
 
-  const sortedData = sortKrav(data?.krav.content || [])
-  const sortedDataWithTema: CustomKravQL[] = []
-  sortedData.forEach((k) => {
-    const lov = codelist.getCode(ListName.LOV, k.regelverk[0]?.lov?.code)
-    const tema = codelist.getCode(ListName.TEMA, lov?.data?.tema)
-    sortedDataWithTema.push({ ...k, tema: tema?.shortName ? tema?.shortName : '' })
-  })
+  useEffect(() => {
+    const sortedData = sortKrav(data?.krav.content || [])
+    const sortedDataWithTema: CustomKravQL[] = []
+    sortedData.forEach((k) => {
+      const lov = codelist.getCode(ListName.LOV, k.regelverk[0]?.lov?.code)
+      const tema = codelist.getCode(ListName.TEMA, lov?.data?.tema)
+      sortedDataWithTema.push({ ...k, tema: tema?.shortName ? tema?.shortName : '' })
+    })
 
-  sortedDataWithTema.sort((a, b) => {
-    if(a.tema === '' || a.tema === null) return 1
-    if(b.tema === '' || b.tema === null) return -1
-    if(a.tema === b.tema) return 0
-    return a.tema < b.tema ? -1 : 1
-  })
+    sortedDataWithTema.sort((a, b) => {
+      if (a.tema === '' || a.tema === null) return 1
+      if (b.tema === '' || b.tema === null) return -1
+      if (a.tema === b.tema) return 0
+      return a.tema < b.tema ? -1 : 1
+    })
+    setSortedKravList(sortedDataWithTema)
+  }, [data])
+
+  useEffect(() => {
+    if (filter.relevans.length && filter.relevans[0].id) {
+      refetch()
+    }
+  }, [filter, data])
+
+  const updateFilter = (value: any, type: KravListFilter) => {
+    const newFilterValue = { ...filter }
+    if (type === KravListFilter.RELEVANS) {
+      newFilterValue.relevans = value
+    }
+    if (type === KravListFilter.LOVER) {
+      newFilterValue.lover = value
+    }
+    if (type === KravListFilter.STATUS) {
+      newFilterValue.status = value
+    }
+    if (type === KravListFilter.TEMAER) {
+      newFilterValue.tema = value
+    }
+    setFilter(newFilterValue)
+  }
+
+
 
   const kravene = data?.krav || emptyPage
 
@@ -280,10 +346,28 @@ const AllKrav = () => {
     <Notification kind={'negative'}>{JSON.stringify(error, null, 2)}</Notification>
   ) : (
     <Block>
-      <Block>
-        <H2>{sortedData.length ? sortedData.length : 0} Krav</H2>
+      <Block display="flex" width="100%" justifyContent="center" marginTop="20px" marginBottom="20px">
+        <Block flex="1">
+          <H2 marginTop="0px" marginBottom="0px">{sortedKravList.length ? sortedKravList.length : 0} Krav</H2>
+        </Block>
+        <Block display="flex" alignItems="center">
+          <Label3>Filter:</Label3>
+          <Block marginLeft="12px" width="100%" minWidth="160px">
+            <KravFilterSelect
+              size="compact"
+              placeholder="relevans"
+              options={relevans?.map((r) => {
+                return { label: r.shortName, id: r.code }
+              })}
+              value={filter.relevans}
+              onChange={(params) =>
+                updateFilter(params.value, KravListFilter.RELEVANS)
+              }
+            />
+          </Block>
+        </Block>
       </Block>
-      <KravPanels kravene={sortedDataWithTema} loading={loading} />
+      <KravPanels kravene={sortedKravList} loading={loading} />
 
       {!loading && kravene.totalElements !== 0 && (
         <Block display={'flex'} justifyContent={'space-between'} marginTop={theme.sizing.scale1000}>
