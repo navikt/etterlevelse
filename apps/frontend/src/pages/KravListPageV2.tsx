@@ -1,4 +1,4 @@
-import { Block, Responsive, Scale } from 'baseui/block'
+import { Block, Display, Responsive, Scale } from 'baseui/block'
 import { H2, HeadingXXLarge, Label3, LabelSmall, Paragraph2, Paragraph4 } from 'baseui/typography'
 import { useEffect, useState } from 'react'
 import Button from '../components/common/Button'
@@ -26,6 +26,7 @@ import { Option, Select, SelectProps } from 'baseui/select'
 type Section = 'siste' | 'alle'
 
 const tabMarginBottom = '10px'
+const responsiveDisplay: Responsive<Display> = ['block', 'block', 'block', 'flex','flex', 'flex']
 
 export const sortKrav = (kravene: KravQL[]) => {
   return [...kravene].sort((a, b) => {
@@ -356,7 +357,8 @@ const AllKrav = () => {
     setFilter(newFilterValue)
   }
 
-
+  const selectorMarginLeft: Responsive<Scale> = ['0px', '0px', '0px', '12px', '12px', '12px']
+  const selectorMarginTop: Responsive<Scale> = ['10px', '10px', '10px', '0px', '0px', '0px']
 
   const kravene = data?.krav || emptyPage
 
@@ -366,13 +368,13 @@ const AllKrav = () => {
     <Notification kind={'negative'}>{JSON.stringify(error, null, 2)}</Notification>
   ) : (
     <Block>
-      <Block display="flex" width="100%" justifyContent="center" marginTop="20px" marginBottom="20px">
+      <Block display={responsiveDisplay} width="100%" justifyContent="center" marginTop="20px" marginBottom="20px">
         <Block flex="1">
           <H2 marginTop="0px" marginBottom="0px">{sortedKravList.length ? sortedKravList.length : 0} Krav</H2>
         </Block>
-        <Block display="flex" alignItems="center">
+        <Block display={responsiveDisplay} alignItems="center">
           <Label3>Filter:</Label3>
-          <Block marginLeft="12px" width="100%" minWidth="170px">
+          <Block marginLeft={selectorMarginLeft} marginTop={selectorMarginTop} width="100%" minWidth="170px">
             <KravFilterSelect
               size="compact"
               placeholder="relevans"
@@ -385,7 +387,7 @@ const AllKrav = () => {
               }
             />
           </Block>
-          <Block marginLeft="12px" width="100%" minWidth="200px">
+          <Block marginLeft={selectorMarginLeft} marginTop={selectorMarginTop} width="100%" minWidth="200px">
             <KravFilterSelect
               size="compact"
               placeholder="tema"
@@ -398,7 +400,7 @@ const AllKrav = () => {
               }
             />
           </Block>
-          <Block marginLeft="12px" width="100%" minWidth="200px">
+          <Block marginLeft={selectorMarginLeft} marginTop={selectorMarginTop} width="100%" minWidth="200px">
             <KravFilterSelect
               size="compact"
               placeholder="lover"
@@ -411,7 +413,7 @@ const AllKrav = () => {
               }
             />
           </Block>
-          <Block marginLeft="12px" width="100%" minWidth="150px">
+          <Block marginLeft={selectorMarginLeft} marginTop={selectorMarginTop} width="100%" minWidth="150px">
             <KravFilterSelect
               size="compact"
               placeholder="Status"
