@@ -17,13 +17,11 @@ import { Notification } from 'baseui/notification'
 import { emptyPage, KravListFilter, KravQL, KravStatus } from '../constants'
 import { SkeletonPanel } from '../components/common/LoadingSkeleton'
 import { kravStatus } from '../pages/KravPage'
-import { Code, codelist, ListName, LovCode } from '../services/Codelist'
+import { codelist, ListName, LovCode } from '../services/Codelist'
 import { Card } from 'baseui/card'
 import { borderColor, borderRadius, borderStyle, borderWidth, margin, marginAll } from '../components/common/Style'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
-import CustomizedSelect from '../components/common/CustomizedSelect'
 import { Option, Select, SelectProps } from 'baseui/select'
-import { update } from 'lodash'
 
 type Section = 'siste' | 'alle'
 
@@ -272,6 +270,7 @@ const AllKrav = () => {
   const { data, loading: gqlLoading, fetchMore, error, refetch } = useKravFilter({
     relevans: filter.relevans.length && filter.relevans[0].id ? [filter.relevans[0].id?.toString()] : undefined,
     lover: filter.lover.length && filter.lover[0].id ? [filter.lover[0].id.toString()] : temaFilter.length ? temaFilter : undefined,
+    status: filter.status.length && filter.status[0].id ? filter.status[0].id.toString() : undefined,
     pageNumber: 0,
     pageSize,
   })
@@ -409,6 +408,17 @@ const AllKrav = () => {
               value={filter.lover}
               onChange={(params) =>
                 updateFilter(params.value, KravListFilter.LOVER)
+              }
+            />
+          </Block>
+          <Block marginLeft="12px" width="100%" minWidth="150px">
+            <KravFilterSelect
+              size="compact"
+              placeholder="Status"
+              options={[{id: KravStatus.AKTIV, label: 'Aktiv'},{id: KravStatus.UNDER_ARBEID, label: 'Under Arbeid'},{id: KravStatus.UTGAATT, label: 'Utgått'},{id: KravStatus.UTKAST, label: 'Utkast'},]}
+              value={filter.status}
+              onChange={(params) =>
+                updateFilter(params.value, KravListFilter.STATUS)
               }
             />
           </Block>
