@@ -1,5 +1,5 @@
 import { Block, Responsive, Scale } from 'baseui/block'
-import { H2, HeadingXXLarge, Label3, Paragraph2, Paragraph4 } from 'baseui/typography'
+import { H2, HeadingXXLarge, Label3, LabelSmall, Paragraph2, Paragraph4 } from 'baseui/typography'
 import { useState } from 'react'
 import Button from '../components/common/Button'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
@@ -20,6 +20,7 @@ import { kravStatus } from '../pages/KravPage'
 import { codelist, ListName } from '../services/Codelist'
 import { Card } from 'baseui/card'
 import { borderColor, borderRadius, borderStyle, borderWidth, margin, marginAll } from '../components/common/Style'
+import { faPlus } from '@fortawesome/free-solid-svg-icons'
 
 type Section = 'siste' | 'alle'
 
@@ -104,7 +105,7 @@ const KravStatusView = ({ status }: { status: KravStatus }) => {
           },
         }}
       >
-        <Paragraph4 $style={{ color: ettlevColors.navMorkGra, ...marginAll('0px')}}>{kravStatus(status)}</Paragraph4>
+        <Paragraph4 $style={{ color: ettlevColors.navMorkGra, ...marginAll('0px') }}>{kravStatus(status)}</Paragraph4>
       </Card>
     </Block>
   )
@@ -146,11 +147,15 @@ const KravPanels = ({ kravene, loading }: { kravene: KravQL[]; loading?: boolean
               rightBeskrivelse={!!k.changeStamp.lastModifiedDate ? `Sist endret: ${moment(k.changeStamp.lastModifiedDate).format('ll')}` : ''}
               rightTitle={tema && tema.shortName ? tema.shortName : ''}
               statusText={<KravStatusView status={k.status} />}
-              overrides={{ Block: { style: { 
-                ':hover': { boxShadow: 'none' },
-                ...borderStyle('hidden'),
-                borderBottomStyle: 'solid' 
-              } } }}
+              overrides={{
+                Block: {
+                  style: {
+                    ':hover': { boxShadow: 'none' },
+                    ...borderStyle('hidden'),
+                    borderBottomStyle: 'solid'
+                  }
+                }
+              }}
             />
           </Block>
         )
@@ -178,7 +183,7 @@ const KravTabs = () => {
         {
           key: 'alle',
           title: 'Seksjonens krav',
-          content: 'Seksjonens krav',
+          content: <AllKrav />,
         }
       ]}
     />
@@ -209,4 +214,71 @@ const SistRedigertKrav = () => {
       <KravPanels kravene={sortedData} loading={loading} />
     </Block>
   )
+}
+
+const AllKrav = () => {
+  const pageSize = 20
+  const [pageNumber, setPage] = useState(0)
+  const { data, loading: gqlLoading, fetchMore, error } = useKravFilter({
+    pageNumber: 0,
+    pageSize,
+  })
+
+  const loading = !data && gqlLoading
+
+  const lastMer = () => {
+    fetchMore({
+      variables: {
+        pageNumber: data!.krav.pageNumber + 1,
+        pageSize,
+      },
+      updateQuery: (p, o) => {
+        const oldData = p.krav
+        const newData = o.fetchMoreResult!.krav
+        return {
+          krav: {
+            ...oldData,
+            pageNumber: newData.pageNumber,
+            numberOfElements: oldData.numberOfElements + newData.numberOfElements,
+            content: [...oldData.content, ...newData.content],
+          },
+        }
+      },
+    }).catch((e) => console.error(e))
+  }
+
+  const sortedData = sortKrav(data?.krav.content || [])
+
+  return loading && !data?.krav?.numberOfElements ? (
+    <Spinner size={theme.sizing.scale2400} />
+  ) : error ? (
+    <Notification kind={'negative'}>{JSON.stringify(error, null, 2)}</Notification>
+  ) : (
+    <Block>
+      <Block>
+        <H2>{sortedData.length ? sortedData.length : 0} Krav</H2>
+      </Block>
+      <KravPanels kravene={sortedData} loading={loading} />
+
+      {!loading && data?.krav && data?.krav.totalElements !== 0 && (
+        <Block display={'flex'} justifyContent={'space-between'} marginTop={theme.sizing.scale1000}>
+          <Block display="flex" alignItems="center">
+            <Button onClick={lastMer} icon={faPlus} kind={'secondary'} size="compact" disabled={gqlLoading || data?.krav.numberOfElements >= data?.krav.totalElements}>
+              Last mer
+            </Button>
+
+            {gqlLoading && (
+              <Block marginLeft={theme.sizing.scale400}>
+                <Spinner size={theme.sizing.scale800} />
+              </Block>
+            )}
+          </Block>
+          <LabelSmall marginRight={theme.sizing.scale400}>
+            Viser {data.krav.numberOfElements}/{data.krav.totalElements}
+          </LabelSmall>
+        </Block>
+      )}
+    </Block>
+  )
+
 }
