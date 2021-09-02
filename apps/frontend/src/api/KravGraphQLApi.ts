@@ -55,12 +55,6 @@ const kravtableQuery = gql`
           code
           shortName
         }
-        regelverk {
-          lov {
-            code
-            shortName
-          }
-        }
         etterlevelser {
           id
         }
