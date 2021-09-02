@@ -121,7 +121,13 @@ const KravStatusView = ({ status }: { status: KravStatus }) => {
   }
 }
 
-const KravPanels = ({ kravene, loading }: { kravene: KravQL[]; loading?: boolean }) => {
+interface KravTema {
+  tema: string
+}
+
+type CustomKravQL = KravQL & KravTema
+
+const KravPanels = ({ kravene, loading }: { kravene: CustomKravQL[]; loading?: boolean }) => {
   if (loading) return <SkeletonPanel count={5} />
   return (
     <Block
@@ -134,9 +140,6 @@ const KravPanels = ({ kravene, loading }: { kravene: KravQL[]; loading?: boolean
         backgroundColor: 'white'
       }}>
       {kravene.map((k) => {
-        const lov = codelist.getCode(ListName.LOV, k.regelverk[0]?.lov?.code)
-        const tema = codelist.getCode(ListName.TEMA, lov?.data?.tema)
-
         return (
           <Block key={k.id} marginBottom={'0px'}>
             <PanelLink
@@ -145,7 +148,7 @@ const KravPanels = ({ kravene, loading }: { kravene: KravQL[]; loading?: boolean
               title={<Paragraph2 $style={{ fontSize: '16px', marginBottom: '0px', marginTop: '0px' }}>K{k.kravNummer}.{k.kravVersjon}</Paragraph2>}
               beskrivelse={<Label3 $style={{ fontSize: '22px', lineHeight: '28px' }}>{k.navn}</Label3>}
               rightBeskrivelse={!!k.changeStamp.lastModifiedDate ? `Sist endret: ${moment(k.changeStamp.lastModifiedDate).format('ll')}` : ''}
-              rightTitle={tema && tema.shortName ? tema.shortName : ''}
+              rightTitle={k.tema ? k.tema : ''}
               statusText={<KravStatusView status={k.status} />}
               overrides={{
                 Block: {
@@ -202,6 +205,13 @@ const SistRedigertKrav = () => {
 
   const sortedData = sortKrav(data?.krav.content || [])
 
+  const sortedDataWithTema: CustomKravQL[] = []
+  sortedData.forEach((k) => {
+    const lov = codelist.getCode(ListName.LOV, k.regelverk[0]?.lov?.code)
+    const tema = codelist.getCode(ListName.TEMA, lov?.data?.tema)
+    sortedDataWithTema.push({ ...k, tema: tema?.shortName ? tema?.shortName : '' })
+  })
+
   return loading && !data?.krav?.numberOfElements ? (
     <Spinner size={theme.sizing.scale2400} />
   ) : error ? (
@@ -211,7 +221,7 @@ const SistRedigertKrav = () => {
       <Block>
         <H2>{sortedData.length ? sortedData.length : 0} Krav</H2>
       </Block>
-      <KravPanels kravene={sortedData} loading={loading} />
+      <KravPanels kravene={sortedDataWithTema} loading={loading} />
     </Block>
   )
 }
@@ -248,6 +258,19 @@ const AllKrav = () => {
   }
 
   const sortedData = sortKrav(data?.krav.content || [])
+  const sortedDataWithTema: CustomKravQL[] = []
+  sortedData.forEach((k) => {
+    const lov = codelist.getCode(ListName.LOV, k.regelverk[0]?.lov?.code)
+    const tema = codelist.getCode(ListName.TEMA, lov?.data?.tema)
+    sortedDataWithTema.push({ ...k, tema: tema?.shortName ? tema?.shortName : '' })
+  })
+
+  sortedDataWithTema.sort((a, b) => {
+    if(a.tema === '' || a.tema === null) return 1
+    if(b.tema === '' || b.tema === null) return -1
+    if(a.tema === b.tema) return 0
+    return a.tema < b.tema ? -1 : 1
+  })
 
   return loading && !data?.krav?.numberOfElements ? (
     <Spinner size={theme.sizing.scale2400} />
@@ -258,7 +281,7 @@ const AllKrav = () => {
       <Block>
         <H2>{sortedData.length ? sortedData.length : 0} Krav</H2>
       </Block>
-      <KravPanels kravene={sortedData} loading={loading} />
+      <KravPanels kravene={sortedDataWithTema} loading={loading} />
 
       {!loading && data?.krav && data?.krav.totalElements !== 0 && (
         <Block display={'flex'} justifyContent={'space-between'} marginTop={theme.sizing.scale1000}>
