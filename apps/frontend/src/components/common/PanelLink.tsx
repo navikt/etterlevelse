@@ -1,11 +1,11 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import RouteLink from './RouteLink'
-import {Block, BlockOverrides, Display, Responsive, Scale} from 'baseui/block'
-import {borderColor, borderRadius, borderStyle, borderWidth, padding, paddingAll} from './Style'
-import {theme} from '../../util'
-import {ettlevColors} from '../../util/theme'
-import {HeadingXLarge, LabelLarge, LabelSmall, ParagraphMedium, ParagraphSmall} from 'baseui/typography'
-import {arrowRightIcon, navChevronRightIcon} from '../Images'
+import { Block, BlockOverrides, Display, Responsive, Scale } from 'baseui/block'
+import { borderColor, borderRadius, borderStyle, borderWidth, padding, paddingAll } from './Style'
+import { theme } from '../../util'
+import { ettlevColors } from '../../util/theme'
+import { HeadingXLarge, Label3, LabelLarge, LabelSmall, Paragraph4, ParagraphMedium, ParagraphSmall } from 'baseui/typography'
+import { arrowRightIcon, navChevronRightIcon } from '../Images'
 import * as _ from 'lodash'
 
 export const PanelLink = ({
@@ -19,17 +19,19 @@ export const PanelLink = ({
   square,
   hideBorderBottom,
   useUnderline,
+  statusText,
   overrides
 }: {
   href: string
-  title: string
+  title: string | React.ReactNode
   rightTitle?: string
-  beskrivelse?: string
+  beskrivelse?: string | React.ReactNode
   rightBeskrivelse?: string
   flip?: boolean
   square?: boolean
   hideBorderBottom?: boolean
   useUnderline?: boolean
+  statusText?: string | React.ReactNode
   panelIcon?: React.ReactNode | ((hover: boolean) => React.ReactNode)
   overrides?: BlockOverrides
 }) => {
@@ -90,34 +92,58 @@ export const PanelLink = ({
           flexDirection={flip ? 'column-reverse' : 'column'}
           justifyContent={'center'}
         >
-          <LabelLarge $style={{ lineHeight: '20px' }}>{title}</LabelLarge>
-          <ParagraphSmall marginBottom={0} marginTop={theme.sizing.scale100}>
-            {beskrivelse}
-          </ParagraphSmall>
+          {title instanceof String ? <LabelLarge $style={{ lineHeight: '20px' }}>{title}</LabelLarge> : title}
+          {beskrivelse instanceof String ?
+            <ParagraphSmall marginBottom={0} marginTop={theme.sizing.scale100}>
+              {beskrivelse}
+            </ParagraphSmall> :
+            beskrivelse
+          }
         </Block>
 
-        {(rightTitle || rightBeskrivelse) && (
-          <Block
-            minWidth={'150px'}
-            maxWidth={'150px'}
-            display={'flex'}
-            flexDirection={flip ? 'column-reverse' : 'column'}
-            justifyContent={'center'}
-            marginLeft={[theme.sizing.scale600, theme.sizing.scale600, theme.sizing.scale600, '0px', '0px', '0px']}
-            marginTop={[theme.sizing.scale600, theme.sizing.scale600, theme.sizing.scale600, '0px', '0px', '0px']}
-          >
-            {rightTitle && <LabelSmall>{rightTitle}</LabelSmall>}
-            {rightBeskrivelse && (
-              <ParagraphSmall marginBottom={0} marginTop={rightTitle ? theme.sizing.scale100 : 0}>
-                {rightBeskrivelse}
-              </ParagraphSmall>
+        <Block
+          display="flex"
+        >
+          {
+            statusText && (
+              <Block
+                minWidth="100px"
+                display="flex"
+                flexDirection={['row', 'row', 'row', 'row-reverse', 'row-reverse', 'row-reverse']}
+                marginRight="20px"
+                alignItems="center"
+                marginLeft={[theme.sizing.scale600, theme.sizing.scale600, theme.sizing.scale600, '0px', '0px', '0px']}
+                marginTop={[theme.sizing.scale600, theme.sizing.scale600, theme.sizing.scale600, '0px', '0px', '0px']}
+              >
+                {statusText instanceof String ? <LabelSmall>{statusText}</LabelSmall> : statusText}
+              </Block>
+            )
+          }
+          <Block display="flex" width="100%">
+            {(rightTitle || rightBeskrivelse) && (
+              <Block display="flex">
+                <Block
+                  minWidth="150px"
+                  maxWidth="150px"
+                  display="flex"
+                  flexDirection={flip ? 'column-reverse' : 'column'}
+                  justifyContent="center"
+                  marginLeft={[theme.sizing.scale600, theme.sizing.scale600, theme.sizing.scale600, '0px', '0px', '0px']}
+                  marginTop={[theme.sizing.scale600, theme.sizing.scale600, theme.sizing.scale600, '0px', '0px', '0px']}
+                >
+                  {rightTitle && <Label3 $style={{ fontSize: '14px' }}>{rightTitle}</Label3>}
+                  {rightBeskrivelse && (
+                    <Paragraph4 marginBottom="0px" marginTop={rightTitle ? theme.sizing.scale100 : '0px'} $style={{ lineHeight: '24px' }}>
+                      {rightBeskrivelse}
+                    </Paragraph4>
+                  )}
+                </Block>
+              </Block>
             )}
+            <Chevron hover={hover} icon={navChevronRightIcon} distance={'4px'} />
           </Block>
-        )}
-        <Block display={['none', 'none', 'none', 'block', 'block', 'block']}>
-        <Chevron hover={hover} icon={navChevronRightIcon} distance={'4px'} />
         </Block>
-        </Block>
+      </Block>
     </RouteLink>
   )
 }
@@ -225,14 +251,17 @@ export const PanelLinkCard = ({
             justifyContent: 'space-between',
           }}
         >
-          <Block overrides={headerOverrides} display={['flex', 'flex', 'flex', 'flex', 'block', 'block']} marginBottom={theme.sizing.scale400}>
+          <Block overrides={headerOverrides} display={['flex', 'flex', 'flex', 'flex', 'block', 'block']}
+            marginBottom={theme.sizing.scale400}>
             {icon && (
-              <Block display={'flex'} justifyContent={'center'} marginTop={theme.sizing.scale600} marginRight={theme.sizing.scale800}>
+              <Block display={'flex'} justifyContent={'center'} marginTop={theme.sizing.scale600}
+                marginRight={theme.sizing.scale800}>
                 <img src={icon} alt={''} aria-hidden />
               </Block>
             )}
 
-            <Block display="flex" alignItems="flex-end" height={headerContent ? '60%' : ''} marginRight={"auto"}>
+            <Block display="flex" alignItems="flex-end" height={headerContent ? '60%' : ''}
+              marginRight={"auto"}>
               <HeadingXLarge
                 marginBottom={['0px', '0px', '0px', '0px', theme.sizing.scale700, theme.sizing.scale700]}
                 $style={{ textDecoration: href && hover ? '3px underline ' : undefined }}
@@ -249,7 +278,8 @@ export const PanelLinkCard = ({
               flexDirection: flexContent ? 'row' : 'column',
             }}
           >
-            <Block height={height} maxHeight={maxHeight} overrides={contentOverrides} width={flexContent ? '100%' : undefined}>
+            <Block height={height} maxHeight={maxHeight} overrides={contentOverrides}
+              width={flexContent ? '100%' : undefined}>
               {beskrivelse && (
                 <Block>
                   <ParagraphMedium marginTop={0}>{beskrivelse}</ParagraphMedium>
@@ -260,7 +290,8 @@ export const PanelLinkCard = ({
             </Block>
 
             {!hideArrow && (
-              <Block placeSelf={'flex-end'} padding={paddingSize} paddingLeft={flexContent ? '0px' : undefined}>
+              <Block placeSelf={'flex-end'} padding={paddingSize}
+                paddingLeft={flexContent ? '0px' : undefined}>
                 <Chevron hover={hover} icon={arrowRightIcon} distance={'8px'} />
               </Block>
             )}
@@ -272,7 +303,8 @@ export const PanelLinkCard = ({
 }
 
 const Chevron = ({ hover, icon, distance }: { hover: boolean; icon: string; distance: string }) => (
-  <Block marginLeft={hover ? `calc(${theme.sizing.scale600} + ${distance})` : theme.sizing.scale600} alignSelf={'center'} marginRight={hover ? '-' + distance : 0}>
+  <Block marginLeft={hover ? `calc(${theme.sizing.scale600} + ${distance})` : theme.sizing.scale600}
+    alignSelf={'center'} marginRight={hover ? '-' + distance : 0}>
     <img src={icon} aria-hidden alt={'Chevron høyre ikon'} width={'24px'} height={'24px'} />
   </Block>
 )

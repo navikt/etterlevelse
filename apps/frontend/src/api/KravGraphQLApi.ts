@@ -64,6 +64,9 @@ const kravtableQuery = gql`
         etterlevelser {
           id
         }
+        changeStamp {
+          lastModifiedDate
+        }
       }
     }
   }
