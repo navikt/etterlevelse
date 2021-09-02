@@ -18,6 +18,7 @@ input KravFilter {
     behandlingId: String
     underavdeling: String
     lov: String
+    status: String
     """ en av """
     lover: [String!]
     """ en av """

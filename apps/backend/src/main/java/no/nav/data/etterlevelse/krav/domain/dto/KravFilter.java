@@ -26,6 +26,7 @@ public class KravFilter {
     private String behandlingId;
     private String underavdeling;
     private String lov;
+    private String status;
     // any of
     private List<String> lover;
     private boolean gjeldendeKrav;
@@ -46,6 +47,7 @@ public class KravFilter {
                 && behandlingId == null
                 && underavdeling == null
                 && lov == null
+                && status == null
                 && getLover().isEmpty()
                 && !gjeldendeKrav
                 && sistRedigert == null
