@@ -104,7 +104,7 @@ const KravStatusView = ({ status }: { status: KravStatus }) => {
           },
         }}
       >
-        <Paragraph4 $style={{ color: ettlevColors.navMorkGra, ...marginAll('0px') }}>{kravStatus(status)}</Paragraph4>
+        <Paragraph4 $style={{ color: ettlevColors.navMorkGra, ...marginAll('0px')}}>{kravStatus(status)}</Paragraph4>
       </Card>
     </Block>
   )
@@ -123,7 +123,15 @@ const KravStatusView = ({ status }: { status: KravStatus }) => {
 const KravPanels = ({ kravene, loading }: { kravene: KravQL[]; loading?: boolean }) => {
   if (loading) return <SkeletonPanel count={5} />
   return (
-    <Block marginBottom={tabMarginBottom}>
+    <Block
+      marginBottom={tabMarginBottom}
+      $style={{
+        ...borderWidth('1px'),
+        ...borderColor(ettlevColors.grey100),
+        ...borderStyle('solid'),
+        ...borderRadius('4px'),
+        backgroundColor: 'white'
+      }}>
       {kravene.map((k) => {
         const lov = codelist.getCode(ListName.LOV, k.regelverk[0]?.lov?.code)
         const tema = codelist.getCode(ListName.TEMA, lov?.data?.tema)
@@ -138,6 +146,11 @@ const KravPanels = ({ kravene, loading }: { kravene: KravQL[]; loading?: boolean
               rightBeskrivelse={!!k.changeStamp.lastModifiedDate ? `Sist endret: ${moment(k.changeStamp.lastModifiedDate).format('ll')}` : ''}
               rightTitle={tema && tema.shortName ? tema.shortName : ''}
               statusText={<KravStatusView status={k.status} />}
+              overrides={{ Block: { style: { 
+                ':hover': { boxShadow: 'none' },
+                ...borderStyle('hidden'),
+                borderBottomStyle: 'solid' 
+              } } }}
             />
           </Block>
         )
