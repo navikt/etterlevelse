@@ -14,7 +14,7 @@ import { useKravFilter } from '../api/KravGraphQLApi'
 import { PanelLink } from '../components/common/PanelLink'
 import { Spinner } from '../components/common/Spinner'
 import { Notification } from 'baseui/notification'
-import { KravQL, KravStatus } from '../constants'
+import { emptyPage, KravQL, KravStatus } from '../constants'
 import { SkeletonPanel } from '../components/common/LoadingSkeleton'
 import { kravStatus } from '../pages/KravPage'
 import { codelist, ListName } from '../services/Codelist'
@@ -272,7 +272,9 @@ const AllKrav = () => {
     return a.tema < b.tema ? -1 : 1
   })
 
-  return loading && !data?.krav?.numberOfElements ? (
+  const kravene = data?.krav || emptyPage
+
+  return loading && !kravene.numberOfElements ? (
     <Spinner size={theme.sizing.scale2400} />
   ) : error ? (
     <Notification kind={'negative'}>{JSON.stringify(error, null, 2)}</Notification>
@@ -283,10 +285,10 @@ const AllKrav = () => {
       </Block>
       <KravPanels kravene={sortedDataWithTema} loading={loading} />
 
-      {!loading && data?.krav && data?.krav.totalElements !== 0 && (
+      {!loading && kravene.totalElements !== 0 && (
         <Block display={'flex'} justifyContent={'space-between'} marginTop={theme.sizing.scale1000}>
           <Block display="flex" alignItems="center">
-            <Button onClick={lastMer} icon={faPlus} kind={'secondary'} size="compact" disabled={gqlLoading || data?.krav.numberOfElements >= data?.krav.totalElements}>
+            <Button onClick={lastMer} icon={faPlus} kind={'secondary'} size="compact" disabled={gqlLoading || kravene.numberOfElements >= kravene.totalElements}>
               Last mer
             </Button>
 
@@ -297,7 +299,7 @@ const AllKrav = () => {
             )}
           </Block>
           <LabelSmall marginRight={theme.sizing.scale400}>
-            Viser {data.krav.numberOfElements}/{data.krav.totalElements}
+            Viser {kravene.numberOfElements}/{kravene.totalElements}
           </LabelSmall>
         </Block>
       )}
