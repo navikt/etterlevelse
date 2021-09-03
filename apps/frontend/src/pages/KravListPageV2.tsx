@@ -19,14 +19,15 @@ import { SkeletonPanel } from '../components/common/LoadingSkeleton'
 import { kravStatus } from '../pages/KravPage'
 import { codelist, ListName, LovCode } from '../services/Codelist'
 import { Card } from 'baseui/card'
-import { borderColor, borderRadius, borderStyle, borderWidth, margin, marginAll } from '../components/common/Style'
+import { borderColor, borderRadius, borderStyle, borderWidth, margin, marginAll, padding } from '../components/common/Style'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import { Option, Select, SelectProps } from 'baseui/select'
+import CustomizedSelect from '../components/common/CustomizedSelect'
 
 type Section = 'siste' | 'alle'
 
 const tabMarginBottom = '10px'
-const responsiveDisplay: Responsive<Display> = ['block', 'block', 'block', 'flex','flex', 'flex']
+const responsiveDisplay: Responsive<Display> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
 
 export const sortKrav = (kravene: KravQL[]) => {
   return [...kravene].sort((a, b) => {
@@ -235,28 +236,6 @@ type KravFilter = {
   lover: Option[]
 }
 
-const KravFilterSelect = (props: SelectProps) => {
-  return <Select {...props} overrides={{
-    ControlContainer: {
-      style: {
-        ...borderWidth('1px'),
-        ':hover': {
-          backgroundColor: ettlevColors.green50,
-        },
-      },
-    },
-    SelectArrow: {
-      component: () => <img src={navChevronDownIcon} alt="Chevron ned" />,
-    },
-    DropdownListItem: {
-      style: {
-        fontSize: '18px',
-        wordBreak: 'break-all'
-      },
-    },
-  }} />
-}
-
 const AllKrav = () => {
   const pageSize = 20
   const [pageNumber, setPage] = useState(0)
@@ -368,63 +347,84 @@ const AllKrav = () => {
     <Notification kind={'negative'}>{JSON.stringify(error, null, 2)}</Notification>
   ) : (
     <Block>
-      <Block display={responsiveDisplay} width="100%" justifyContent="center" marginTop="20px" marginBottom="20px">
-        <Block flex="1">
-          <H2 marginTop="0px" marginBottom="0px">{sortedKravList.length ? sortedKravList.length : 0} Krav</H2>
+      <Block width="100%" justifyContent="center" marginTop="20px" marginBottom="20px">
+        <Block
+          display={responsiveDisplay}
+          alignItems="center"
+          marginBottom="20px"
+          width="calc(100% - 62px)"
+          $style={
+            {
+              ...borderColor(ettlevColors.grey100),
+              ...borderStyle('solid'),
+              ...borderWidth('1px'),
+              backgroundColor: ettlevColors.white,
+              ...padding('23px', '31px')
+            }
+          }
+        >
+          <Block display={responsiveDisplay} alignItems="center" justifyContent='flex-start' width="100%">
+            <Label3>Filter:</Label3>
+            <Block marginLeft={selectorMarginLeft} marginTop={selectorMarginTop} width="100%" minWidth="170px">
+              <CustomizedSelect
+                clearable={false}
+                size="compact"
+                placeholder="relevans"
+                options={relevans?.map((r) => {
+                  return { label: r.shortName, id: r.code }
+                })}
+                value={filter.relevans}
+                onChange={(params) =>
+                  updateFilter(params.value, KravListFilter.RELEVANS)
+                }
+              />
+            </Block>
+            <Block marginLeft={selectorMarginLeft} marginTop={selectorMarginTop} width="100%" minWidth="200px">
+              <CustomizedSelect
+                clearable={false}
+                size="compact"
+                placeholder="tema"
+                options={temaer?.map((t) => {
+                  return { label: t.shortName, id: t.code }
+                })}
+                value={filter.tema}
+                onChange={(params) =>
+                  updateFilter(params.value, KravListFilter.TEMAER)
+                }
+              />
+            </Block>
+            <Block marginLeft={selectorMarginLeft} marginTop={selectorMarginTop} width="100%" minWidth="200px">
+              <CustomizedSelect
+                clearable={false}
+                size="compact"
+                placeholder="lover"
+                options={loverFilter?.map((t) => {
+                  return { label: t.shortName, id: t.code }
+                })}
+                value={filter.lover}
+                onChange={(params) =>
+                  updateFilter(params.value, KravListFilter.LOVER)
+                }
+              />
+            </Block>
+            <Block marginLeft={selectorMarginLeft} marginTop={selectorMarginTop} width="100%" minWidth="150px">
+              <CustomizedSelect
+                clearable={false}
+                size="compact"
+                placeholder="Status"
+                options={[{ id: KravStatus.AKTIV, label: 'Aktiv' }, { id: KravStatus.UNDER_ARBEID, label: 'Under Arbeid' }, { id: KravStatus.UTGAATT, label: 'Utgått' }, { id: KravStatus.UTKAST, label: 'Utkast' },]}
+                value={filter.status}
+                onChange={(params) =>
+                  updateFilter(params.value, KravListFilter.STATUS)
+                }
+              />
+            </Block>
+          </Block>
+          <Block display='flex' justifyContent='flex-end' width='100%'>
+            <Button kind='tertiary' onClick={() => setFilter({ status: [], relevans: [], tema: [], lover: [] })}>Nullstill filter</Button>
+          </Block>
         </Block>
-        <Block display={responsiveDisplay} alignItems="center">
-          <Label3>Filter:</Label3>
-          <Block marginLeft={selectorMarginLeft} marginTop={selectorMarginTop} width="100%" minWidth="170px">
-            <KravFilterSelect
-              size="compact"
-              placeholder="relevans"
-              options={relevans?.map((r) => {
-                return { label: r.shortName, id: r.code }
-              })}
-              value={filter.relevans}
-              onChange={(params) =>
-                updateFilter(params.value, KravListFilter.RELEVANS)
-              }
-            />
-          </Block>
-          <Block marginLeft={selectorMarginLeft} marginTop={selectorMarginTop} width="100%" minWidth="200px">
-            <KravFilterSelect
-              size="compact"
-              placeholder="tema"
-              options={temaer?.map((t) => {
-                return { label: t.shortName, id: t.code }
-              })}
-              value={filter.tema}
-              onChange={(params) =>
-                updateFilter(params.value, KravListFilter.TEMAER)
-              }
-            />
-          </Block>
-          <Block marginLeft={selectorMarginLeft} marginTop={selectorMarginTop} width="100%" minWidth="200px">
-            <KravFilterSelect
-              size="compact"
-              placeholder="lover"
-              options={loverFilter?.map((t) => {
-                return { label: t.shortName, id: t.code }
-              })}
-              value={filter.lover}
-              onChange={(params) =>
-                updateFilter(params.value, KravListFilter.LOVER)
-              }
-            />
-          </Block>
-          <Block marginLeft={selectorMarginLeft} marginTop={selectorMarginTop} width="100%" minWidth="150px">
-            <KravFilterSelect
-              size="compact"
-              placeholder="Status"
-              options={[{id: KravStatus.AKTIV, label: 'Aktiv'},{id: KravStatus.UNDER_ARBEID, label: 'Under Arbeid'},{id: KravStatus.UTGAATT, label: 'Utgått'},{id: KravStatus.UTKAST, label: 'Utkast'},]}
-              value={filter.status}
-              onChange={(params) =>
-                updateFilter(params.value, KravListFilter.STATUS)
-              }
-            />
-          </Block>
-        </Block>
+        <H2 marginTop="0px" marginBottom="0px">{sortedKravList.length ? sortedKravList.length : 0} Krav</H2>
       </Block>
       <KravPanels kravene={sortedKravList} loading={loading} />
 
