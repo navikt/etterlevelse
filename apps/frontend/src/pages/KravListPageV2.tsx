@@ -440,6 +440,19 @@ const AllKrav = () => {
                       wordBreak: 'break-all'
                     },
                   },
+                  Tag: {
+                    props: {
+                      variant: 'outlined',
+                      overrides:{
+                        Root: {
+                          style: {
+                            maxWidth: '100px',
+                            width: 'fit-content'
+                          }
+                        }
+                      }
+                    }
+                  }
                 }}
                 onChange={(params) =>
                   updateFilter(params.value, KravListFilter.RELEVANS)
@@ -477,6 +490,18 @@ const AllKrav = () => {
                       wordBreak: 'break-all'
                     },
                   },
+                  Tag: {
+                    props: {
+                      overrides:{
+                        Root: {
+                          style: {
+                            maxWidth: '150px',
+                            width: 'fit-content'
+                          }
+                        }
+                      }
+                    }
+                  }
                 }}
                 options={
                   lover.map((l) => {
@@ -508,6 +533,18 @@ const AllKrav = () => {
                       wordBreak: 'break-all'
                     },
                   },
+                  Tag: {
+                    props: {
+                      overrides:{
+                        Root: {
+                          style: {
+                            maxWidth: '100px',
+                            width: 'fit-content'
+                          }
+                        }
+                      }
+                    }
+                  }
                 }}
                 onChange={(params) =>
                   updateFilter(params.value, KravListFilter.STATUS)
