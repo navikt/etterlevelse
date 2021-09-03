@@ -194,6 +194,8 @@ const KravTabs = () => {
 }
 
 const SistRedigertKrav = () => {
+  const [sorting, setSorting] = useState('sist')
+  const [sortedKravList, setSortedKravList] = useState<KravQL[]>([])
   const res = useKravFilter({
     sistRedigert: 10,
     gjeldendeKrav: false,
@@ -203,7 +205,31 @@ const SistRedigertKrav = () => {
 
   const { variables, data, loading, error } = res
 
-  const sortedData = sortKrav(data?.krav.content || [])
+  const kravene = data?.krav || emptyPage
+
+  useEffect(() => {
+    let sortedData = [...kravene.content]
+    if (sorting === 'sist') {
+      sortedData.sort((a, b) =>
+        a.changeStamp.lastModifiedDate > b.changeStamp.lastModifiedDate ? -1 : 0
+      )
+    } else {
+      sortedData = sortKrav(sortedData)
+    }
+    setSortedKravList(sortedData)
+  }, [data])
+
+  useEffect(() => {
+    let sortedData = [...kravene.content]
+    if (sorting === 'sist') {
+      sortedData.sort((a, b) =>
+        a.changeStamp.lastModifiedDate > b.changeStamp.lastModifiedDate ? -1 : 0
+      )
+    } else {
+      sortedData = sortKrav(sortedData)
+    }
+    setSortedKravList(sortedData)
+  }, [sorting])
 
   return loading && !data?.krav?.numberOfElements ? (
     <Spinner size={theme.sizing.scale2400} />
@@ -211,10 +237,39 @@ const SistRedigertKrav = () => {
     <Notification kind={'negative'}>{JSON.stringify(error, null, 2)}</Notification>
   ) : (
     <Block>
-      <Block>
-        <H2>{sortedData.length ? sortedData.length : 0} Krav</H2>
+      <Block
+        display={responsiveDisplay}
+        justifyContent='center'
+        alignContent='center'
+        width="100%"
+        marginTop="20px"
+        marginBottom="20px"
+      >
+        <Block display="flex" justifyContent="flex-start" width="100%">
+          <H2 marginTop="0px" marginBottom="0px">{sortedKravList.length ? sortedKravList.length : 0} Krav</H2>
+        </Block>
+        <Block display="flex" justifyContent="flex-end" width="100%" alignItems="center">
+          <Block >
+            <Label3>Sorter:</Label3>
+          </Block>
+          <Block marginLeft="17px">
+            <RadioGroup
+              align={ALIGN.horizontal}
+              value={sorting}
+              onChange={e => setSorting(e.currentTarget.value)}
+              name="sorting"
+            >
+              <Radio value='sist'>
+                Sist endret
+              </Radio>
+              <Radio value='kravnummer'>
+                Krav-nummer
+              </Radio>
+            </RadioGroup>
+          </Block>
+        </Block>
       </Block>
-      <KravPanels kravene={sortedData} loading={loading} />
+      <KravPanels kravene={sortedKravList} loading={loading} />
     </Block>
   )
 }
@@ -269,17 +324,15 @@ const AllKrav = () => {
   }
 
   useEffect(() => {
-    if (!loading) {
-      let sortedData = [...kravene.content]
-      if (sorting === 'sist') {
-        sortedData.sort((a, b) =>
-          a.changeStamp.lastModifiedDate > b.changeStamp.lastModifiedDate ? -1 : 0
-        )
-      } else {
-        sortedData = sortKrav(sortedData)
-      }
-      setSortedKravList(sortedData)
+    let sortedData = [...kravene.content]
+    if (sorting === 'sist') {
+      sortedData.sort((a, b) =>
+        a.changeStamp.lastModifiedDate > b.changeStamp.lastModifiedDate ? -1 : 0
+      )
+    } else {
+      sortedData = sortKrav(sortedData)
     }
+    setSortedKravList(sortedData)
   }, [data])
 
   useEffect(() => {
