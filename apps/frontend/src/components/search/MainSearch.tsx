@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { ReactElement, useEffect, useState } from 'react'
-import { SIZE, TYPE, Value } from 'baseui/select'
+import { Select, SelectOverrides, SelectProps, SIZE, TYPE, Value } from 'baseui/select'
 import { theme } from '../../util'
 import { useDebouncedState, useQueryParam } from '../../util/hooks'
 import { prefixBiasedSort } from '../../util/sort'
@@ -18,7 +18,7 @@ import { kravName } from '../../pages/KravPage'
 import { getKravByKravNumberAndVersion, getKravByKravNummer, searchKrav, searchKravByNumber } from '../../api/KravApi'
 import { behandlingName, searchBehandling } from '../../api/BehandlingApi'
 import { codelist, ListName } from '../../services/Codelist'
-import { clearSearchIcon, filterIcon, searchIcon } from '../Images'
+import { clearSearchIcon, filterIcon, navChevronDownIcon, searchIcon } from '../Images'
 import CustomizedSelect from '../common/CustomizedSelect'
 import { Paragraph2 } from 'baseui/typography'
 import { urlForObject } from '../common/RouteLink'
@@ -148,12 +148,12 @@ const getCodelist = (search: string, list: ListName, typeName: string) => {
     .filter((c) => c.shortName.toLowerCase().indexOf(search.toLowerCase()) >= 0)
     .map(
       (c) =>
-        ({
-          id: c.code,
-          sortKey: c.shortName,
-          label: <SearchLabel name={c.shortName} type={typeName} />,
-          type: list,
-        } as SearchItem),
+      ({
+        id: c.code,
+        sortKey: c.shortName,
+        label: <SearchLabel name={c.shortName} type={typeName} />,
+        type: list,
+      } as SearchItem),
     )
 }
 
@@ -191,7 +191,7 @@ const useMainSearch = (searchParam?: string) => {
       setSearchResult(getCodelist(search, ListName.UNDERAVDELING, 'Underavdeling'))
     } else {
       if (search && search.replace(/ /g, '').length > 2) {
-        ;(async () => {
+        ; (async () => {
           let results: SearchItem[] = []
           let searches: Promise<any>[] = []
           const compareFn = (a: SearchItem, b: SearchItem) => prefixBiasedSort(search, a.sortKey, b.sortKey)
@@ -265,6 +265,54 @@ const useMainSearch = (searchParam?: string) => {
     }
   }, [search, type])
   return [setSearch, searchResult, loading, type, setType] as [(text: string) => void, SearchItem[], boolean, SearchType, (type: SearchType) => void]
+}
+
+interface customSelectProp {
+  setValue: Function
+}
+
+type SelectPropWithSetValue = SelectProps & customSelectProp
+
+const MainSearchSelector = (props: SelectPropWithSetValue) => {
+  const overrides: SelectOverrides = {
+    SearchIcon: {
+      component: () => <img src={searchIcon} alt="Søk ikon" />,
+    },
+    DropdownListItem: {
+      style: {
+        paddingTop: 0,
+        paddingRight: '5px',
+        paddingBottom: 0,
+        paddingLeft: '5px',
+        fontSize: '18px',
+      },
+    },
+    ClearIcon: {
+      props: {
+        overrides: {
+          Svg: {
+            component: () => (
+              <Button notBold size="compact" kind="tertiary" onClick={() => props.setValue([])}>
+                <img src={clearSearchIcon} alt="tøm" />
+              </Button>
+            ),
+          },
+        },
+      },
+    },
+    ControlContainer: {
+      style: {
+        ...borderWidth('1px'),
+        ':hover': {
+          backgroundColor: ettlevColors.green50,
+        },
+      },
+    },
+    SelectArrow: {
+      component: () => <img src={navChevronDownIcon} alt="Chevron ned" />,
+    },
+  }
+  return <Select {...props} overrides={overrides} />
 }
 
 const MainSearch = () => {
@@ -343,7 +391,7 @@ const MainSearch = () => {
   return (
     <Block width="100%">
       <Block id="search" display="flex" position="relative" alignItems="center" width={'100%'}>
-        <CustomizedSelect
+        <MainSearchSelector
           clearable
           closeOnSelect={!filterClicked}
           size={SIZE.compact}
@@ -366,43 +414,18 @@ const MainSearch = () => {
           }}
           onChange={(params) => {
             const item = params.value[0] as SearchItem
-            ;(async () => {
-              if (item && item.type !== '__ungrouped') {
-                setValue([item])
-                history.push(urlForObject(item.type, item.id))
-                window.location.reload()
-              } else if (item && item.type === '__ungrouped') {
-                setFilterClicked(true)
-              }
-            })()
+              ; (async () => {
+                if (item && item.type !== '__ungrouped') {
+                  setValue([item])
+                  history.push(urlForObject(item.type, item.id))
+                  window.location.reload()
+                } else if (item && item.type === '__ungrouped') {
+                  setFilterClicked(true)
+                }
+              })()
           }}
           filterOptions={(options) => options}
-          overrides={{
-            SearchIcon: {
-              component: () => <img src={searchIcon} alt="Søk ikon" />,
-            },
-            DropdownListItem: {
-              style: {
-                paddingTop: 0,
-                paddingRight: '5px',
-                paddingBottom: 0,
-                paddingLeft: '5px',
-              },
-            },
-            ClearIcon: {
-              props: {
-                overrides: {
-                  Svg: {
-                    component: () => (
-                      <Button notBold size="compact" kind="tertiary" onClick={() => setValue([])}>
-                        <img src={clearSearchIcon} alt="tøm" />
-                      </Button>
-                    ),
-                  },
-                },
-              },
-            },
-          }}
+          setValue={setValue}
         />
       </Block>
     </Block>
