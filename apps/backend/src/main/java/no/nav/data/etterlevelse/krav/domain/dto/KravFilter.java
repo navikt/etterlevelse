@@ -26,7 +26,7 @@ public class KravFilter {
     private String behandlingId;
     private String underavdeling;
     private String lov;
-    private String status;
+    private List<String> status;
     // any of
     private List<String> lover;
     private boolean gjeldendeKrav;
@@ -40,6 +40,8 @@ public class KravFilter {
         return formatList(lover);
     }
 
+    public List<String> getStatus() {return formatList(status);}
+
     public boolean isEmpty() {
         validate();
         return getRelevans().isEmpty()
@@ -47,7 +49,7 @@ public class KravFilter {
                 && behandlingId == null
                 && underavdeling == null
                 && lov == null
-                && status == null
+                && getStatus().isEmpty()
                 && getLover().isEmpty()
                 && !gjeldendeKrav
                 && sistRedigert == null

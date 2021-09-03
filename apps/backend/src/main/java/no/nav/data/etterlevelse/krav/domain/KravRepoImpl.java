@@ -73,8 +73,8 @@ public class KravRepoImpl implements KravRepoCustom {
             query += " and data ->> 'underavdeling' = :underavdeling ";
             par.addValue("underavdeling", filter.getUnderavdeling());
         }
-        if(filter.getStatus() != null) {
-           query += "and data ->> 'status' = :status" ;
+        if(!filter.getStatus().isEmpty()) {
+           query += "and data ->> 'status' in (:status)" ;
             par.addValue("status", filter.getStatus());
         }
         if (!filter.getRelevans().isEmpty()) {
