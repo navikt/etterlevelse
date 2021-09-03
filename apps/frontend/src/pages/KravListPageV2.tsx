@@ -146,7 +146,7 @@ const KravPanels = ({ kravene, loading }: { kravene: KravQL[]; loading?: boolean
               useUnderline
               href={`/krav/${k.kravNummer}/${k.kravVersjon}`}
               title={<Paragraph2 $style={{ fontSize: '16px', marginBottom: '0px', marginTop: '0px' }}>K{k.kravNummer}.{k.kravVersjon}</Paragraph2>}
-              beskrivelse={<Label3 $style={{ fontSize: '22px', lineHeight: '28px' }}>{k.navn}</Label3>}
+              beskrivelse={<Label3 $style={{ fontSize: '18px', lineHeight: '28px' }}>{k.navn}</Label3>}
               rightBeskrivelse={!!k.changeStamp.lastModifiedDate ? `Sist endret: ${moment(k.changeStamp.lastModifiedDate).format('ll')}` : ''}
               rightTitle={tema && tema.shortName ? tema.shortName : ''}
               statusText={<KravStatusView status={k.status} />}
