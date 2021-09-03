@@ -9,7 +9,7 @@ import { user } from '../services/User'
 import { theme } from '../util'
 import moment from 'moment'
 import { ettlevColors, maxPageWidth } from '../util/theme'
-import { navChevronDownIcon, plusIcon } from '../components/Images'
+import { plusIcon } from '../components/Images'
 import { useKravFilter } from '../api/KravGraphQLApi'
 import { PanelLink } from '../components/common/PanelLink'
 import { Spinner } from '../components/common/Spinner'
@@ -21,7 +21,7 @@ import { codelist, ListName, LovCode } from '../services/Codelist'
 import { Card } from 'baseui/card'
 import { borderColor, borderRadius, borderStyle, borderWidth, margin, marginAll, padding } from '../components/common/Style'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
-import { Option, Select, SelectProps } from 'baseui/select'
+import { Option } from 'baseui/select'
 import CustomizedSelect from '../components/common/CustomizedSelect'
 import { ALIGN, Radio, RadioGroup } from 'baseui/radio'
 
@@ -137,11 +137,18 @@ const KravPanels = ({ kravene, loading }: { kravene: KravQL[]; loading?: boolean
         ...borderRadius('4px'),
         backgroundColor: 'white'
       }}>
-      {kravene.map((k) => {
+      {kravene.map((k, index) => {
         const lov = codelist.getCode(ListName.LOV, k.regelverk[0]?.lov?.code)
         const tema = codelist.getCode(ListName.TEMA, lov?.data?.tema)
         return (
           <Block key={k.id} marginBottom={'0px'}>
+            {
+              index !== 0 && (
+                <Block width="100%" display="flex" justifyContent="center">
+                  <Block display="flex" width="98%" height="1px" backgroundColor={ettlevColors.grey100} />
+                </Block>
+              )
+            }
             <PanelLink
               useUnderline
               href={`/krav/${k.kravNummer}/${k.kravVersjon}`}
@@ -155,7 +162,6 @@ const KravPanels = ({ kravene, loading }: { kravene: KravQL[]; loading?: boolean
                   style: {
                     ':hover': { boxShadow: 'none' },
                     ...borderStyle('hidden'),
-                    borderBottomStyle: 'solid'
                   }
                 }
               }}
@@ -286,16 +292,20 @@ const AllKrav = () => {
   const [pageNumber, setPage] = useState(0)
   const [sorting, setSorting] = useState('sist')
   const [filter, setFilter] = useState<KravFilter>({ status: [], relevans: [], tema: [], lover: [] })
-  const [temaFilter, setTemaFilter] = useState<string[]>([])
+  // USIKKERT OM VI SKAL FILTRERER BASERT PÅ TEMA
+  // const [temaFilter, setTemaFilter] = useState<string[]>([])
+  // const temaer = codelist.getCodes(ListName.TEMA)
+
   const relevans = codelist.getCodes(ListName.RELEVANS)
-  const temaer = codelist.getCodes(ListName.TEMA)
   const lover = codelist.getCodes(ListName.LOV)
-  const [loverFilter, setLoverFilter] = useState(lover)
+
+  // BRUKER KUN NÅR VI SKAL FILTRERE PÅ TEMA
+  // const [loverFilter, setLoverFilter] = useState(lover)
 
   const { data, loading: gqlLoading, fetchMore, error, refetch } = useKravFilter({
-    relevans: filter.relevans.length && filter.relevans[0].id ? [filter.relevans[0].id?.toString()] : undefined,
-    lover: filter.lover.length && filter.lover[0].id ? [filter.lover[0].id.toString()] : temaFilter.length ? temaFilter : undefined,
-    status: filter.status.length && filter.status[0].id ? filter.status[0].id.toString() : undefined,
+    relevans: filter.relevans.length ? filter.relevans.map((r) => r.id ? r.id.toString() : '') : undefined,
+    lover: filter.lover.length ? filter.lover.map((l) => l.id ? l.id.toString() : '') : undefined,
+    status: filter.status.length ? filter.status.map((s) => s.id ? s.id?.toString() : '') : undefined,
     pageNumber: 0,
     pageSize,
   })
@@ -348,21 +358,23 @@ const AllKrav = () => {
   }, [sorting])
 
   useEffect(() => {
-    if (filter.tema.length && filter.tema[0].id) {
-      const temaLover: string[] = []
-      const gyldiglover: LovCode[] = []
-      lover.forEach((l) => {
-        if (l.data?.tema === filter.tema[0].id) {
-          temaLover.push(l.code)
-          gyldiglover.push(l)
-        }
-      })
-      setTemaFilter(temaLover)
-      setLoverFilter(gyldiglover)
-    } else {
-      setTemaFilter([])
-      setLoverFilter(lover)
-    }
+    // USIKKERT OM VI SKAL FILTRERER BASERT PÅ TEMA
+    //
+    // if (filter.tema.length && filter.tema[0].id) {
+    //   const temaLover: string[] = []
+    //   const gyldiglover: LovCode[] = []
+    //   lover.forEach((l) => {
+    //     if (l.data?.tema === filter.tema[0].id) {
+    //       temaLover.push(l.code)
+    //       gyldiglover.push(l)
+    //     }
+    //   })
+    //   setTemaFilter(temaLover)
+    //   setLoverFilter(gyldiglover)
+    // } else {
+    //   setTemaFilter([])
+    //   setLoverFilter(lover)
+    // }
     refetch()
   }, [filter])
 
@@ -414,6 +426,7 @@ const AllKrav = () => {
             <Label3>Filter:</Label3>
             <Block marginLeft={selectorMarginLeft} marginTop={selectorMarginTop} width="100%" minWidth="170px">
               <CustomizedSelect
+                multi
                 clearable={false}
                 size="compact"
                 placeholder="relevans"
@@ -421,11 +434,23 @@ const AllKrav = () => {
                   return { label: r.shortName, id: r.code }
                 })}
                 value={filter.relevans}
+                overrides={{
+                  DropdownListItem: {
+                    style: {
+                      wordBreak: 'break-all'
+                    },
+                  },
+                }}
                 onChange={(params) =>
                   updateFilter(params.value, KravListFilter.RELEVANS)
                 }
               />
             </Block>
+
+            {/* 
+            USIKKERT OM VI SKAL FILTERER BASERT PÅ TEMA
+
+
             <Block marginLeft={selectorMarginLeft} marginTop={selectorMarginTop} width="100%" minWidth="200px">
               <CustomizedSelect
                 clearable={false}
@@ -439,15 +464,30 @@ const AllKrav = () => {
                   updateFilter(params.value, KravListFilter.TEMAER)
                 }
               />
-            </Block>
+            </Block> */}
             <Block marginLeft={selectorMarginLeft} marginTop={selectorMarginTop} width="100%" minWidth="200px">
               <CustomizedSelect
+                multi
                 clearable={false}
                 size="compact"
                 placeholder="lover"
-                options={loverFilter?.map((t) => {
-                  return { label: t.shortName, id: t.code }
-                })}
+                overrides={{
+                  DropdownListItem: {
+                    style: {
+                      wordBreak: 'break-all'
+                    },
+                  },
+                }}
+                options={
+                  lover.map((l) => {
+                    return { label: l.shortName, id: l.code }
+                  })
+                  // BRUKER KUN NÅR VI SKAL FILTRERE PÅ TEMA
+                  // loverFilter?.map((t) => {
+                  //   return { label: t.shortName, id: t.code }
+                  // })
+
+                }
                 value={filter.lover}
                 onChange={(params) =>
                   updateFilter(params.value, KravListFilter.LOVER)
@@ -456,11 +496,19 @@ const AllKrav = () => {
             </Block>
             <Block marginLeft={selectorMarginLeft} marginTop={selectorMarginTop} width="100%" minWidth="150px">
               <CustomizedSelect
+                multi
                 clearable={false}
                 size="compact"
                 placeholder="Status"
                 options={[{ id: KravStatus.AKTIV, label: 'Aktiv' }, { id: KravStatus.UNDER_ARBEID, label: 'Under Arbeid' }, { id: KravStatus.UTGAATT, label: 'Utgått' }, { id: KravStatus.UTKAST, label: 'Utkast' },]}
                 value={filter.status}
+                overrides={{
+                  DropdownListItem: {
+                    style: {
+                      wordBreak: 'break-all'
+                    },
+                  },
+                }}
                 onChange={(params) =>
                   updateFilter(params.value, KravListFilter.STATUS)
                 }
