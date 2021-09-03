@@ -32,11 +32,12 @@ const responsiveDisplay: Responsive<Display> = ['block', 'block', 'block', 'flex
 
 export const sortKrav = (kravene: KravQL[]) => {
   return [...kravene].sort((a, b) => {
-    if (a.kravNummer === b.kravNummer) {
+    if (a.navn.toLocaleLowerCase() === b.navn.toLocaleLowerCase()) {
       return b.kravVersjon - a.kravVersjon
-    } else {
-      return a.kravNummer - b.kravNummer
     }
+    if (a.navn.toLocaleLowerCase() < b.navn.toLocaleLowerCase()) return -1
+    if (a.navn.toLocaleLowerCase() > b.navn.toLocaleLowerCase()) return 1
+    return 0
   })
 }
 
@@ -268,8 +269,8 @@ const SistRedigertKrav = () => {
               <Radio value='sist'>
                 Sist endret
               </Radio>
-              <Radio value='kravnummer'>
-                Krav-nummer
+              <Radio value='alfabetisk'>
+                Alfabetisk
               </Radio>
             </RadioGroup>
           </Block>
@@ -443,7 +444,7 @@ const AllKrav = () => {
                   Tag: {
                     props: {
                       variant: 'outlined',
-                      overrides:{
+                      overrides: {
                         Root: {
                           style: {
                             maxWidth: '100px',
@@ -492,7 +493,7 @@ const AllKrav = () => {
                   },
                   Tag: {
                     props: {
-                      overrides:{
+                      overrides: {
                         Root: {
                           style: {
                             maxWidth: '150px',
@@ -535,7 +536,7 @@ const AllKrav = () => {
                   },
                   Tag: {
                     props: {
-                      overrides:{
+                      overrides: {
                         Root: {
                           style: {
                             maxWidth: '100px',
@@ -575,8 +576,8 @@ const AllKrav = () => {
                 <Radio value='sist'>
                   Sist endret
                 </Radio>
-                <Radio value='kravnummer'>
-                  Krav-nummer
+                <Radio value='alfabetisk'>
+                  Alfabetisk
                 </Radio>
               </RadioGroup>
             </Block>
