@@ -9,7 +9,7 @@ const kravtableQuery = gql`
     $behandlingId: String
     $underavdeling: String
     $lov: String
-    $status: String
+    $status: [String!]
     $lover: [String!]
     $sistRedigert: NonNegativeInt
     $gjeldendeKrav: Boolean
@@ -74,7 +74,7 @@ export type KravFilters = {
   behandlingId?: string
   underavdeling?: string
   lov?: string
-  status?: string
+  status?: string[]
   lover?: string[]
   gjeldendeKrav?: boolean
   sistRedigert?: number
