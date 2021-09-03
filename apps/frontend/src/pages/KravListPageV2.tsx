@@ -23,6 +23,7 @@ import { borderColor, borderRadius, borderStyle, borderWidth, margin, marginAll,
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import { Option, Select, SelectProps } from 'baseui/select'
 import CustomizedSelect from '../components/common/CustomizedSelect'
+import { ALIGN, Radio, RadioGroup } from 'baseui/radio'
 
 type Section = 'siste' | 'alle'
 
@@ -124,13 +125,7 @@ const KravStatusView = ({ status }: { status: KravStatus }) => {
   }
 }
 
-interface KravTema {
-  tema: string
-}
-
-type CustomKravQL = KravQL & KravTema
-
-const KravPanels = ({ kravene, loading }: { kravene: CustomKravQL[]; loading?: boolean }) => {
+const KravPanels = ({ kravene, loading }: { kravene: KravQL[]; loading?: boolean }) => {
   if (loading) return <SkeletonPanel count={5} />
   return (
     <Block
@@ -143,6 +138,8 @@ const KravPanels = ({ kravene, loading }: { kravene: CustomKravQL[]; loading?: b
         backgroundColor: 'white'
       }}>
       {kravene.map((k) => {
+        const lov = codelist.getCode(ListName.LOV, k.regelverk[0]?.lov?.code)
+        const tema = codelist.getCode(ListName.TEMA, lov?.data?.tema)
         return (
           <Block key={k.id} marginBottom={'0px'}>
             <PanelLink
@@ -151,7 +148,7 @@ const KravPanels = ({ kravene, loading }: { kravene: CustomKravQL[]; loading?: b
               title={<Paragraph2 $style={{ fontSize: '16px', marginBottom: '0px', marginTop: '0px' }}>K{k.kravNummer}.{k.kravVersjon}</Paragraph2>}
               beskrivelse={<Label3 $style={{ fontSize: '22px', lineHeight: '28px' }}>{k.navn}</Label3>}
               rightBeskrivelse={!!k.changeStamp.lastModifiedDate ? `Sist endret: ${moment(k.changeStamp.lastModifiedDate).format('ll')}` : ''}
-              rightTitle={k.tema ? k.tema : ''}
+              rightTitle={tema && tema.shortName ? tema.shortName : ''}
               statusText={<KravStatusView status={k.status} />}
               overrides={{
                 Block: {
@@ -208,13 +205,6 @@ const SistRedigertKrav = () => {
 
   const sortedData = sortKrav(data?.krav.content || [])
 
-  const sortedDataWithTema: CustomKravQL[] = []
-  sortedData.forEach((k) => {
-    const lov = codelist.getCode(ListName.LOV, k.regelverk[0]?.lov?.code)
-    const tema = codelist.getCode(ListName.TEMA, lov?.data?.tema)
-    sortedDataWithTema.push({ ...k, tema: tema?.shortName ? tema?.shortName : '' })
-  })
-
   return loading && !data?.krav?.numberOfElements ? (
     <Spinner size={theme.sizing.scale2400} />
   ) : error ? (
@@ -224,7 +214,7 @@ const SistRedigertKrav = () => {
       <Block>
         <H2>{sortedData.length ? sortedData.length : 0} Krav</H2>
       </Block>
-      <KravPanels kravene={sortedDataWithTema} loading={loading} />
+      <KravPanels kravene={sortedData} loading={loading} />
     </Block>
   )
 }
@@ -239,7 +229,7 @@ type KravFilter = {
 const AllKrav = () => {
   const pageSize = 20
   const [pageNumber, setPage] = useState(0)
-
+  const [sorting, setSorting] = useState('sist')
   const [filter, setFilter] = useState<KravFilter>({ status: [], relevans: [], tema: [], lover: [] })
   const [temaFilter, setTemaFilter] = useState<string[]>([])
   const relevans = codelist.getCodes(ListName.RELEVANS)
@@ -254,7 +244,7 @@ const AllKrav = () => {
     pageNumber: 0,
     pageSize,
   })
-  const [sortedKravList, setSortedKravList] = useState<CustomKravQL[]>([])
+  const [sortedKravList, setSortedKravList] = useState<KravQL[]>([])
 
   const loading = !data && gqlLoading
   const lastMer = () => {
@@ -278,27 +268,31 @@ const AllKrav = () => {
     }).catch((e) => console.error(e))
   }
 
-  const sortKravByTema = (kravList: KravQL[]) => {
-    const sortedDataWithTema: CustomKravQL[] = []
-    kravList.forEach((k) => {
-      const lov = codelist.getCode(ListName.LOV, k.regelverk[0]?.lov?.code)
-      const tema = codelist.getCode(ListName.TEMA, lov?.data?.tema)
-      sortedDataWithTema.push({ ...k, tema: tema?.shortName ? tema?.shortName : '' })
-    })
-
-    sortedDataWithTema.sort((a, b) => {
-      if (a.tema === '' || a.tema === null) return 1
-      if (b.tema === '' || b.tema === null) return -1
-      if (a.tema === b.tema) return 0
-      return a.tema < b.tema ? -1 : 1
-    })
-    return sortedDataWithTema
-  }
+  useEffect(() => {
+    if (!loading) {
+      let sortedData = [...kravene.content]
+      if (sorting === 'sist') {
+        sortedData.sort((a, b) =>
+          a.changeStamp.lastModifiedDate > b.changeStamp.lastModifiedDate ? -1 : 0
+        )
+      } else {
+        sortedData = sortKrav(sortedData)
+      }
+      setSortedKravList(sortedData)
+    }
+  }, [data])
 
   useEffect(() => {
-    const sortedData = sortKrav(kravene.content || [])
-    setSortedKravList(sortKravByTema(sortedData))
-  }, [data])
+    let sortedData = [...kravene.content]
+    if (sorting === 'sist') {
+      sortedData.sort((a, b) =>
+        a.changeStamp.lastModifiedDate > b.changeStamp.lastModifiedDate ? -1 : 0
+      )
+    } else {
+      sortedData = sortKrav(sortedData)
+    }
+    setSortedKravList(sortedData)
+  }, [sorting])
 
   useEffect(() => {
     if (filter.tema.length && filter.tema[0].id) {
@@ -424,7 +418,32 @@ const AllKrav = () => {
             <Button kind='tertiary' onClick={() => setFilter({ status: [], relevans: [], tema: [], lover: [] })}>Nullstill filter</Button>
           </Block>
         </Block>
-        <H2 marginTop="0px" marginBottom="0px">{sortedKravList.length ? sortedKravList.length : 0} Krav</H2>
+
+        <Block display={responsiveDisplay} justifyContent='center' alignContent='center' width="100%">
+          <Block display="flex" justifyContent="flex-start" width="100%">
+            <H2 marginTop="0px" marginBottom="0px">{sortedKravList.length ? sortedKravList.length : 0} Krav</H2>
+          </Block>
+          <Block display="flex" justifyContent="flex-end" width="100%" alignItems="center">
+            <Block >
+              <Label3>Sorter:</Label3>
+            </Block>
+            <Block marginLeft="17px">
+              <RadioGroup
+                align={ALIGN.horizontal}
+                value={sorting}
+                onChange={e => setSorting(e.currentTarget.value)}
+                name="sorting"
+              >
+                <Radio value='sist'>
+                  Sist endret
+                </Radio>
+                <Radio value='kravnummer'>
+                  Krav-nummer
+                </Radio>
+              </RadioGroup>
+            </Block>
+          </Block>
+        </Block>
       </Block>
       <KravPanels kravene={sortedKravList} loading={loading} />
 
