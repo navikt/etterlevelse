@@ -20,7 +20,9 @@ export const PanelLink = ({
   hideBorderBottom,
   useUnderline,
   statusText,
-  overrides
+  overrides,
+  useTitleUnderLine,
+  useDescriptionUnderline
 }: {
   href: string
   title: string | React.ReactNode
@@ -34,6 +36,8 @@ export const PanelLink = ({
   statusText?: string | React.ReactNode
   panelIcon?: React.ReactNode | ((hover: boolean) => React.ReactNode)
   overrides?: BlockOverrides
+  useTitleUnderLine?: boolean
+  useDescriptionUnderline?: boolean
 }) => {
   const [hover, setHover] = useState(false)
   const responsiveDisplay: Responsive<Display> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
@@ -92,13 +96,22 @@ export const PanelLink = ({
           flexDirection={flip ? 'column-reverse' : 'column'}
           justifyContent={'center'}
         >
-          {title instanceof String ? <LabelLarge $style={{ lineHeight: '20px' }}>{title}</LabelLarge> : title}
-          {beskrivelse instanceof String ?
-            <ParagraphSmall marginBottom={0} marginTop={theme.sizing.scale100}>
-              {beskrivelse}
-            </ParagraphSmall> :
-            beskrivelse
-          }
+          <Block $style={{
+            textDecoration: useTitleUnderLine && hover ? 'underline' : 'none'
+
+          }}>
+            {title instanceof String ? <LabelLarge $style={{ lineHeight: '20px' }}>{title}</LabelLarge> : title}
+          </Block>
+          <Block $style={{
+            textDecoration: useDescriptionUnderline && hover ? 'underline' : 'none'
+          }}>
+            {beskrivelse instanceof String ?
+              <ParagraphSmall marginBottom={0} marginTop={theme.sizing.scale100}>
+                {beskrivelse}
+              </ParagraphSmall> :
+              beskrivelse
+            }
+          </Block>
         </Block>
 
         <Block
