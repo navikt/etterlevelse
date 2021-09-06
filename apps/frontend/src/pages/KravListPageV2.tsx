@@ -277,6 +277,13 @@ const SistRedigertKrav = () => {
         </Block> */}
       </Block>
       <KravPanels kravene={sortedKravList} loading={loading} />
+      {sortedKravList.length === 0 &&
+        <Block width="100%" display="flex" justifyContent="center" >
+          <Paragraph2>
+            Fant ingen krav
+          </Paragraph2>
+        </Block>
+      }
     </Block>
   )
 }
@@ -582,6 +589,14 @@ const AllKrav = () => {
         </Block>
       </Block>
       <KravPanels kravene={sortedKravList} loading={loading} />
+      {sortedKravList.length === 0 &&
+        <Block width="100%" display="flex" justifyContent="center" >
+          <Paragraph2>
+            Fant ingen krav
+          </Paragraph2>
+        </Block>
+      }
+
 
       {!loading && kravene.totalElements !== 0 && (
         <Block display={'flex'} justifyContent={'space-between'} marginTop={theme.sizing.scale1000}>
