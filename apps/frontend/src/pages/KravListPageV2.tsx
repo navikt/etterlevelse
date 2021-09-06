@@ -17,7 +17,7 @@ import { Notification } from 'baseui/notification'
 import { emptyPage, KravListFilter, KravQL, KravStatus } from '../constants'
 import { SkeletonPanel } from '../components/common/LoadingSkeleton'
 import { kravStatus } from '../pages/KravPage'
-import { codelist, ListName, LovCode } from '../services/Codelist'
+import { codelist, ListName } from '../services/Codelist'
 import { Card } from 'baseui/card'
 import { borderColor, borderRadius, borderStyle, borderWidth, margin, marginAll, padding } from '../components/common/Style'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
@@ -427,7 +427,6 @@ const AllKrav = () => {
             <Label3>Filter:</Label3>
             <Block marginLeft={selectorMarginLeft} marginTop={selectorMarginTop} width="100%" minWidth="170px">
               <CustomizedSelect
-                multi
                 clearable={false}
                 size="compact"
                 placeholder="relevans"
@@ -481,7 +480,6 @@ const AllKrav = () => {
             </Block> */}
             <Block marginLeft={selectorMarginLeft} marginTop={selectorMarginTop} width="100%" minWidth="200px">
               <CustomizedSelect
-                multi
                 clearable={false}
                 size="compact"
                 placeholder="lover"
@@ -522,7 +520,6 @@ const AllKrav = () => {
             </Block>
             <Block marginLeft={selectorMarginLeft} marginTop={selectorMarginTop} width="100%" minWidth="150px">
               <CustomizedSelect
-                multi
                 clearable={false}
                 size="compact"
                 placeholder="Status"
