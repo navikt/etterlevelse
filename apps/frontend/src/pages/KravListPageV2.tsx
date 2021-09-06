@@ -255,7 +255,7 @@ const SistRedigertKrav = () => {
         <Block display="flex" justifyContent="flex-start" width="100%">
           <H2 marginTop="0px" marginBottom="0px">{sortedKravList.length ? sortedKravList.length : 0} Krav</H2>
         </Block>
-        <Block display="flex" justifyContent="flex-end" width="100%" alignItems="center">
+        {/* <Block display="flex" justifyContent="flex-end" width="100%" alignItems="center">
           <Block >
             <Label3>Sorter:</Label3>
           </Block>
@@ -274,7 +274,7 @@ const SistRedigertKrav = () => {
               </Radio>
             </RadioGroup>
           </Block>
-        </Block>
+        </Block> */}
       </Block>
       <KravPanels kravene={sortedKravList} loading={loading} />
     </Block>
@@ -557,13 +557,13 @@ const AllKrav = () => {
 
         <Block display={responsiveDisplay} justifyContent='center' alignContent='center' width="100%">
           <Block display="flex" justifyContent="flex-start" width="100%">
-            <H2 marginTop="0px" marginBottom="0px">{sortedKravList.length ? sortedKravList.length : 0} Krav</H2>
+            <H2 marginTop="0px" marginBottom="0px">{kravene.totalElements ? kravene.totalElements : 0} Krav</H2>
           </Block>
-          <Block display="flex" justifyContent="flex-end" width="100%" alignItems="center">
+          {/* <Block display="flex" justifyContent="flex-end" width="100%" alignItems="center">
             <Block >
               <Label3>Sorter:</Label3>
             </Block>
-            <Block marginLeft="17px">
+             <Block marginLeft="17px">
               <RadioGroup
                 align={ALIGN.horizontal}
                 value={sorting}
@@ -577,8 +577,8 @@ const AllKrav = () => {
                   Alfabetisk
                 </Radio>
               </RadioGroup>
-            </Block>
-          </Block>
+            </Block> 
+          </Block> */}
         </Block>
       </Block>
       <KravPanels kravene={sortedKravList} loading={loading} />
