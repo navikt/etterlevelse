@@ -1,4 +1,4 @@
-import { Block } from 'baseui/block'
+import { Block, Responsive, Scale } from 'baseui/block'
 import { H1, HeadingXLarge } from 'baseui/typography'
 import { useParams } from 'react-router-dom'
 import { deleteKrav, getKravByKravNummer, KravIdParams, mapToFormVal } from '../api/KravApi'
@@ -147,13 +147,16 @@ export const KravPage = () => {
     if (!edit && !krav?.id && krav?.nyKravVersjon) reloadKrav()
   }, [edit])
 
+  const responsivePadding: Responsive<Scale> = ['16px', '16px', '16px', '40px', '40px', '40px']
+  const responsiveWidthPadding: Responsive<Scale> = ['calc(100% - 32px)', 'calc(100% - 32px)', 'calc(100% - 32px)', 'calc(100% - 80px)', 'calc(100% - 80px)', 'calc(100% - 80px)']
+
   return (
     <Block width="100%" id="content" overrides={{ Block: { props: { role: 'main' } } }}>
       {kravLoading && <LoadingSkeleton header="Krav" />}
       {!kravLoading && (
         <Block backgroundColor={ettlevColors.green800} display="flex" width="100%" justifyContent="center" paddingBottom="32px">
           <Block maxWidth={maxPageWidth} width="100%">
-            <Block paddingLeft="40px" paddingRight="40px" display="flex" flexDirection="column" justifyContent="center">
+            <Block paddingLeft={responsivePadding} paddingRight={responsivePadding} display="flex" flexDirection="column" justifyContent="center">
               <Block display="flex" width="100%" justifyContent="center" marginTop="24px">
                 <Block display="flex" alignItems="center" width="100%">
                   <Block flex="1" display="flex" justifyContent="flex-start">
@@ -194,7 +197,7 @@ export const KravPage = () => {
               </Block>
             </Block>
 
-            <Block paddingLeft="40px" paddingRight="40px" width="calc(100% - 80px)" display="flex" justifyContent="center">
+            <Block paddingLeft={responsivePadding} paddingRight={responsivePadding} width={responsiveWidthPadding} display="flex" justifyContent="center">
               <Block maxWidth={pageWidth} width="100%">
                 <Block $style={{ color: '#F8F8F8', fontWeight: 700, fontSize: '18px', fontFamily: 'Source Sans Pro' }}>
                   {krav && krav?.kravNummer !== 0 ? kravNumView(krav) : 'Ny'}
@@ -212,7 +215,7 @@ export const KravPage = () => {
         <Block width="100%">
           <Block backgroundColor={ettlevColors.green100} display="flex" width="100%" justifyContent="center">
             <Block maxWidth={maxPageWidth} width="100%">
-              <Block width="calc(100% - 80px)" paddingLeft="40px" paddingRight="40px" justifyContent="center" display="flex">
+              <Block width={responsiveWidthPadding} paddingLeft={responsivePadding} paddingRight={responsivePadding} justifyContent="center" display="flex">
                 <Block marginBottom="80px" marginTop="64px" width={pageWidth}>
                   <Label title="" p1 markdown={krav.hensikt} />
                 </Block>
@@ -223,9 +226,9 @@ export const KravPage = () => {
           <Block
             display={'flex'}
             justifyContent="center"
-            width="calc(100% - 80px)"
-            paddingLeft="40px"
-            paddingRight="40px"
+            width={responsiveWidthPadding}
+            paddingLeft={responsivePadding}
+            paddingRight={responsivePadding}
             $style={{
               background: `linear-gradient(top, ${ettlevColors.green100} 50px, ${ettlevColors.grey25} 0%)`,
             }}
