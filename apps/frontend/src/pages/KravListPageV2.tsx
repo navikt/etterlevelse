@@ -305,6 +305,7 @@ const AllKrav = () => {
     tema: [],
     lover: [{ label: 'Alle lover', id: 'alle' }] 
   })
+
   // USIKKERT OM VI SKAL FILTRERER BASERT PÅ TEMA
   // const [temaFilter, setTemaFilter] = useState<string[]>([])
   // const temaer = codelist.getCodes(ListName.TEMA)
@@ -316,9 +317,9 @@ const AllKrav = () => {
   // const [loverFilter, setLoverFilter] = useState(lover)
 
   const { data, loading: gqlLoading, fetchMore, error, refetch } = useKravFilter({
-    relevans: filter.relevans[0]?.id === 'alle' ? undefined : filter.relevans.length ? filter.relevans.map((r) => r.id ? r.id.toString() : '') : undefined,
-    lover: filter.lover[0]?.id === 'alle' ? undefined : filter.lover.length ? filter.lover.map((l) => l.id ? l.id.toString() : '') : undefined,
-    status: filter.status[0]?.id === 'alle' ? undefined : filter.status.length ? filter.status.map((s) => s.id ? s.id?.toString() : '') : undefined,
+    relevans: filter.relevans[0]?.id === 'alle' ? undefined :  filter.relevans.map((r) => r.id ? r.id.toString() : '') ,
+    lover: filter.lover[0]?.id === 'alle' ? undefined : filter.lover.map((l) => l.id ? l.id.toString() : '') ,
+    status: filter.status[0]?.id === 'alle' ? undefined : filter.status.map((s) => s.id ? s.id?.toString() : '') ,
     pageNumber: 0,
     pageSize,
   })
