@@ -16,7 +16,7 @@ import {theme} from '../../../util'
 import {user} from '../../../services/User'
 import CreateCodeListModal from './ModalCreateCodeList'
 import CodeListTable from './CodeListStyledTable'
-import {ettlevColors} from '../../../util/theme'
+import {ettlevColors, responsivePaddingSmall, responsiveWidthSmall} from '../../../util/theme'
 
 const CodeListPage = () => {
   const params = useParams<{ listname?: string }>()
@@ -64,7 +64,7 @@ const CodeListPage = () => {
   }
 
   return (
-    <Block width="calc(100% - 80px)" paddingLeft="40px" paddingRight="40px">
+    <Block width={responsiveWidthSmall} paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall}>
       <H4>Administrering av kodeverk</H4>
       {loading ? (
         <StyledSpinnerNext color={ettlevColors.green400} />
