@@ -8,6 +8,7 @@ import '@fontsource/source-sans-pro/400.css'
 import '@fontsource/source-sans-pro/600.css'
 import '@fontsource/source-sans-pro/700.css'
 import '@fontsource/source-sans-pro/900.css'
+import { Responsive, Scale } from 'baseui/block'
 
 // etterlevelse colors
 export const ettlevColors = {
@@ -145,6 +146,11 @@ const overrides: RecursivePartial<Theme> = {
 export const theme = createTheme(primitives, overrides)
 export const pageWidth = '820px'
 export const maxPageWidth = '1276px'
+
+export const responsivePaddingSmall: Responsive<Scale> = ['16px', '16px', '16px', '40px', '40px', '40px']
+export const responsivePaddingLarge: Responsive<Scale> = ['16px', '16px', '16px', '100px', '100px', '100px']
+export const responsiveWidthSmall: Responsive<Scale> = ['calc(100% - 32px)', 'calc(100% - 32px)', 'calc(100% - 32px)', 'calc(100% - 80px)', 'calc(100% - 80px)', 'calc(100% - 80px)']
+export const responsiveWidthLarge: Responsive<Scale> = ['calc(100% - 32px)', 'calc(100% - 32px)', 'calc(100% - 32px)', 'calc(100% - 200px)', 'calc(100% - 200px)', 'calc(100% - 200px)']
 
 const breakpoints: any = {
   xsmall: 375,
