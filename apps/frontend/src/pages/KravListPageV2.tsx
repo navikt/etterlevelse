@@ -8,7 +8,7 @@ import RouteLink from '../components/common/RouteLink'
 import { user } from '../services/User'
 import { theme } from '../util'
 import moment from 'moment'
-import { ettlevColors, maxPageWidth } from '../util/theme'
+import { ettlevColors, maxPageWidth, responsivePaddingLarge } from '../util/theme'
 import { plusIcon } from '../components/Images'
 import { useKravFilter } from '../api/KravGraphQLApi'
 import { PanelLink } from '../components/common/PanelLink'
@@ -41,13 +41,11 @@ export const sortKrav = (kravene: KravQL[]) => {
   })
 }
 
-const responsivePadding: Responsive<Scale> = ['16px', '16px', '16px', '100px', '100px', '100px']
-
 export const KravListPage = () => (
   <Block width="100%" paddingBottom={'200px'} id="content" overrides={{ Block: { props: { role: 'main' } } }}>
     <Block width="100%" backgroundColor={ettlevColors.grey50} display={'flex'} justifyContent={'center'}>
       <Block maxWidth={maxPageWidth} width="100%">
-        <Block paddingLeft={responsivePadding} paddingRight={responsivePadding} paddingTop={theme.sizing.scale800}>
+        <Block paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge} paddingTop={theme.sizing.scale800}>
           <CustomizedBreadcrumbs currentPage="Forvalte og opprette krav" />
           <Block display="flex" >
             <Block flex="1">
@@ -75,7 +73,7 @@ export const KravListPage = () => (
       }}
     >
       <Block maxWidth={maxPageWidth} width="100%">
-        <Block paddingLeft={responsivePadding} paddingRight={responsivePadding} paddingTop={theme.sizing.scale800}>
+        <Block paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge} paddingTop={theme.sizing.scale800}>
           <KravTabs />
         </Block>
       </Block>
