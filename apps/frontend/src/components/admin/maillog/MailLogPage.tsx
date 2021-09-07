@@ -1,19 +1,20 @@
-import React, { useEffect, useState } from 'react'
-import { H4, H6 } from 'baseui/typography'
-import { intl } from '../../../util/intl/intl'
+import React, {useEffect, useState} from 'react'
+import {H4, H6} from 'baseui/typography'
+import {intl} from '../../../util/intl/intl'
 import axios from 'axios'
-import { env } from '../../../util/env'
-import { PageResponse } from '../../../constants'
-import { Block } from 'baseui/block'
-import { Card } from 'baseui/card'
+import {env} from '../../../util/env'
+import {PageResponse} from '../../../constants'
+import {Block} from 'baseui/block'
+import {Card} from 'baseui/card'
 import moment from 'moment'
-import { theme } from '../../../util'
-import { PLACEMENT, StatefulPopover } from 'baseui/popover'
-import { StatefulMenu } from 'baseui/menu'
-import { Button, KIND } from 'baseui/button'
-import { TriangleDown } from 'baseui/icon'
-import { Pagination } from 'baseui/pagination'
-import { Markdown } from '../../common/Markdown'
+import {theme} from '../../../util'
+import {PLACEMENT, StatefulPopover} from 'baseui/popover'
+import {StatefulMenu} from 'baseui/menu'
+import {Button, KIND} from 'baseui/button'
+import {TriangleDown} from 'baseui/icon'
+import {Pagination} from 'baseui/pagination'
+import {Markdown} from '../../common/Markdown'
+import {responsivePaddingSmall, responsiveWidthSmall} from "../../../util/theme";
 
 interface MailLog {
   time: string
@@ -53,7 +54,7 @@ export const MailLogPage = () => {
   }, [limit, log.totalElements])
 
   return (
-    <Block width="calc(100% - 80px)" paddingLeft="40px" paddingRight="40px">
+    <Block width={responsiveWidthSmall} paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall}>
       <H4>{intl.mailLog}</H4>
       {log?.content.map((l, i) => {
         let html = l.body
