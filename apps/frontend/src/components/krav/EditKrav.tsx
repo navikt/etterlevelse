@@ -16,7 +16,7 @@ import { EditBegreper } from './Edit/KravBegreperEdit'
 import { H1, H2, LabelLarge } from 'baseui/typography'
 import CustomizedModal from '../common/CustomizedModal'
 import Button from '../common/Button'
-import { ettlevColors, maxPageWidth, theme } from '../../util/theme'
+import { ettlevColors, maxPageWidth, responsivePaddingLarge, responsiveWidthLarge, theme } from '../../util/theme'
 import { user } from '../../services/User'
 
 type EditKravProps = {
@@ -83,8 +83,8 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
                 backgroundColor={ettlevColors.green800}
                 paddingTop="23px"
                 paddingBottom={!stickyHeader ? '48px' : '20px'}
-                paddingLeft={paddingPx}
-                paddingRight="32px"
+                paddingLeft={responsivePaddingLarge}
+                paddingRight={responsivePaddingLarge}
                 position="sticky"
                 top={0}
                 display={!stickyHeader ? 'block' : 'flex'}
@@ -118,7 +118,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
                 )}
               </Block>
               <Block>
-                <Block backgroundColor={ettlevColors.grey50} paddingTop="48px" paddingLeft={paddingPx} paddingRight={paddingPx} paddingBottom="64px">
+                <Block backgroundColor={ettlevColors.grey50} paddingTop="48px" paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge} paddingBottom="64px">
                   <InputField
                     marginBottom={inputMarginBottom}
                     label="Krav-tittel"
@@ -138,7 +138,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
                 </Block>
 
                 <Block display="flex" width="100%" justifyContent="center">
-                  <Block width={width}>
+                  <Block width={responsiveWidthLarge}>
                     <H2 marginBottom={inputMarginBottom}>Suksesskriterier</H2>
                     <KravSuksesskriterierEdit />
                     {/* 
@@ -240,8 +240,8 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
                                      */}
                   </Block>
                 </Block>
-                <Block backgroundColor={ettlevColors.grey50} paddingTop="48px" paddingLeft={paddingPx} paddingRight={paddingPx} paddingBottom="64px">
-                  <TextAreaField label="Notater" name="notat" height="250px" markdown tooltip={'Kraveiers notater'} />
+                <Block backgroundColor={ettlevColors.grey50} paddingTop="48px" paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge} paddingBottom="64px">
+                  <TextAreaField label="Notater (Kun synlig for kraveier)" name="notat" height="250px" markdown tooltip={'Kraveiers notater'} />
                 </Block>
               </Block>
             </Form>
