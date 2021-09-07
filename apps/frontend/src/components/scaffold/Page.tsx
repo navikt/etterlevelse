@@ -1,5 +1,5 @@
 import { Block } from 'baseui/block'
-import { ettlevColors, maxPageWidth, pageWidth, theme } from '../../util/theme'
+import { ettlevColors, maxPageWidth, pageWidth, responsivePaddingSmall, theme } from '../../util/theme'
 import RouteLink from '../common/RouteLink'
 import Button from '../common/Button'
 import React from 'react'
@@ -124,7 +124,7 @@ export const Layout2 = (props: {
     <Block width="100%" id="content" overrides={{ Block: { props: { role: 'main' } } }}>
       <Block backgroundColor={props.headerBackgroundColor} display="flex" width="100%" justifyContent="center">
         <Block maxWidth={maxPageWidth} width="100%">
-          <Block paddingLeft="40px" paddingRight="40px" display="flex" flexDirection="column" justifyContent="center">
+          <Block paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall} display="flex" flexDirection="column" justifyContent="center">
             <Block width="100%" justifyContent="center" marginTop="24px">
               <Block flex="1" display="flex" justifyContent="flex-start">
                 {/* <RouteLink href={props.backBtnUrl} hideUnderline>
@@ -152,7 +152,7 @@ export const Layout2 = (props: {
 
       <Block backgroundColor={props.secondaryHeaderBackgroundColor} display="flex" width="100%" justifyContent="center">
         <Block maxWidth={maxPageWidth} width="100%">
-          <Block paddingLeft="40px" paddingRight="40px">
+          <Block paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall}>
             {props.secondaryHeader}
           </Block>
         </Block>
@@ -160,7 +160,7 @@ export const Layout2 = (props: {
 
       <Block backgroundColor={props.childrenBackgroundColor} display="flex" width="100%" justifyContent="center">
         <Block maxWidth={maxPageWidth} width="100%">
-          <Block paddingLeft="40px" paddingRight="40px">
+          <Block paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall}>
             {props.children}
           </Block>
         </Block>
