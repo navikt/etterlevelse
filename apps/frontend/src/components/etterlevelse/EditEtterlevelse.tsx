@@ -16,7 +16,7 @@ import CustomizedSelect from '../common/CustomizedSelect'
 import { H1, H2, Label3, Paragraph2 } from 'baseui/typography'
 import { ExternalLink } from '../common/RouteLink'
 import { arkPennIcon } from '../Images'
-import { ettlevColors } from '../../util/theme'
+import { ettlevColors, responsivePaddingLarge } from '../../util/theme'
 import { SuksesskriterierBegrunnelseEdit } from './Edit/SuksesskriterieBegrunnelseEdit'
 import { Radio, RadioGroup } from 'baseui/radio'
 import { Code } from '../../services/Codelist'
@@ -100,7 +100,7 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
     <Block>
       <Block flex="1" backgroundColor={ettlevColors.green800}>
         <Block>
-          <Block flex="1" paddingLeft={modalPaddingLeft} paddingRight={modalPaddingRight} paddingBottom="32px">
+          <Block flex="1" paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge} paddingBottom="32px">
             <Paragraph2 $style={{ marginTop: '0px', marginBottom: '0px', color: ettlevColors.white }}>{kravNumView(krav)}</Paragraph2>
             <H1 $style={{ marginTop: '0px', marginBottom: '0px', color: ettlevColors.white }}>{krav.navn}</H1>
             <Paragraph2 color={ettlevColors.white}>
@@ -109,7 +109,7 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
               </ExternalLink>
             </Paragraph2>
           </Block>
-          <Block display="flex" paddingLeft={modalPaddingLeft} paddingBottom={theme.sizing.scale900}>
+          <Block display="flex" paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge} paddingBottom={theme.sizing.scale900}>
             <Block>
               <Block display="flex">
                 <Label3 $style={{ fontSize: '18px', color: ettlevColors.white }}>Du dokumenterer for:</Label3>
@@ -120,7 +120,7 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
         </Block>
       </Block>
       <Block flex="1" backgroundColor={ettlevColors.white}>
-        <Block paddingLeft={modalPaddingLeft} paddingRight={modalPaddingRight} paddingBottom="32px" display="flex" paddingTop="32px">
+        <Block paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge} paddingBottom="32px" display="flex" paddingTop="32px">
           <Block marginRight="20px">
             <img src={arkPennIcon} alt="test" height="56px" width="40px" />
           </Block>
@@ -134,7 +134,7 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
           </Block>
         </Block>
       </Block>
-      <Block paddingLeft={modalPaddingLeft} paddingRight={modalPaddingRight}>
+      <Block paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge}>
         <Block marginTop="51px">
           <Formik onSubmit={submit} initialValues={mapEtterlevelseToFormValue(etterlevelse)} validationSchema={etterlevelseSchema()} innerRef={formRef}>
             {({ values, isSubmitting, submitForm }: FormikProps<Etterlevelse>) => (
