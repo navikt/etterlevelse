@@ -10,7 +10,7 @@ import { faCodeBranch } from '@fortawesome/free-solid-svg-icons'
 import * as React from 'react'
 import { ExternalLink } from '../common/RouteLink'
 import ToTopCircle from '../../resources/ToTopCircle.svg'
-import { ettlevColors, maxPageWidth } from '../../util/theme'
+import { ettlevColors, maxPageWidth, responsivePaddingSmall, responsiveWidthSmall } from '../../util/theme'
 import Button from '../common/Button'
 import { KIND } from 'baseui/button'
 
@@ -36,7 +36,7 @@ export const Footer = () => {
   return (
     <Block backgroundColor={ettlevColors.green800} width="100%" justifyContent="center" display="flex" position='absolute' bottom='0'>
       <Block maxWidth={maxPageWidth} width="100%">
-        <Block display="flex" width="calc(100% - 80px)" height="100px" paddingRight="40px" paddingLeft="40px" position="relative" $style={{ left: 0, right: 0, bottom: 0 }}>
+        <Block display="flex" width={responsiveWidthSmall} height="100px" paddingRight={responsivePaddingSmall} paddingLeft={responsivePaddingSmall} position="relative" $style={{ left: 0, right: 0, bottom: 0 }}>
           <Block display="flex" width="100%" minHeight="100px" justifyContent="center" alignItems="center" overrides={{ Block: { props: { role: 'contentinfo' } } }}>
             <Block
               width="100%"

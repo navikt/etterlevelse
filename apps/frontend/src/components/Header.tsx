@@ -18,7 +18,7 @@ import { user } from '../services/User'
 import { writeLog } from '../api/LogApi'
 import MainSearch from './search/MainSearch'
 import { arkPennIcon, grafIcon, husIcon, logo, paragrafIcon } from './Images'
-import { ettlevColors, maxPageWidth } from '../util/theme'
+import { ettlevColors, maxPageWidth, responsivePaddingSmall, responsiveWidthSmall } from '../util/theme'
 import { buttonBorderStyle } from './common/Button'
 import { Checkbox } from 'baseui/checkbox'
 import { Portrait } from './common/Portrait'
@@ -236,7 +236,7 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
       <SkipToContent />
       <Block width="100%" maxWidth={maxPageWidth}>
         <StyledLink href="#main"></StyledLink>
-        <Block paddingLeft="40px" paddingRight="40px" width="calc(100%-80px)" height="76px" overrides={{ Block: { props: { role: 'banner', 'aria-label': 'Header meny' } } }}>
+        <Block paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall} width={responsiveWidthSmall} height="76px" overrides={{ Block: { props: { role: 'banner', 'aria-label': 'Header meny' } } }}>
           <HeaderNavigation overrides={{ Root: { style: { paddingBottom: 0, borderBottomStyle: 'none' } } }}>
             <NavigationList $align={ALIGN.left} $style={{ paddingLeft: 0 }}>
               <NavigationItem $style={{ paddingLeft: 0 }}>
