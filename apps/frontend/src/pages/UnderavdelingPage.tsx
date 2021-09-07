@@ -6,7 +6,7 @@ import { codelist, ListName } from '../services/Codelist'
 import RouteLink from '../components/common/RouteLink'
 import { theme } from '../util'
 import { KravFilterTable } from '../components/common/KravFilterTable'
-import { maxPageWidth } from '../util/theme'
+import { maxPageWidth, responsivePaddingSmall, responsiveWidthSmall } from '../util/theme'
 
 export const UnderavdelingPage = () => {
   const { underavdeling } = useParams<{ underavdeling: string }>()
@@ -14,7 +14,7 @@ export const UnderavdelingPage = () => {
   if (!underavdeling) {
     return (
       <Block maxWidth={maxPageWidth} width="100%">
-        <Block paddingLeft="40px" paddingRight="40px" width="calc(100%-80px)" display="flex" justifyContent="center">
+        <Block paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall} width={responsiveWidthSmall} display="flex" justifyContent="center">
           <Block>
             <HeadingMedium>Velg underavdeling</HeadingMedium>
             <Block>
@@ -33,7 +33,7 @@ export const UnderavdelingPage = () => {
   const code = codelist.getCode(ListName.UNDERAVDELING, underavdeling)
   return (
     <Block id="content" overrides={{ Block: { props: { role: 'main' } } }} maxWidth={maxPageWidth} width="100%">
-      <Block paddingLeft="40px" paddingRight="40px" width="calc(100%-80px)" display="flex" justifyContent="center">
+      <Block paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall} width={responsiveWidthSmall} display="flex" justifyContent="center">
         <Block>
           <HeadingMedium>Underavdeling: {code?.shortName}</HeadingMedium>
           <ParagraphMedium>{code?.description}</ParagraphMedium>
