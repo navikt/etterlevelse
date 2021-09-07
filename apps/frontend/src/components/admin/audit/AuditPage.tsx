@@ -11,6 +11,7 @@ import {AuditLabel} from './AuditComponents'
 import {useDebouncedState} from '../../../util/hooks'
 import {intl} from '../../../util/intl/intl'
 import CustomInput from '../../common/CustomizedInput'
+import {responsivePaddingSmall, responsiveWidthSmall} from "../../../util/theme";
 
 const format = (id: string) => _.trim(id, '"')
 
@@ -51,7 +52,7 @@ export const AuditPage = () => {
   useEffect(() => lookupVersion(idSearch), [idSearch])
 
   return (
-    <Block width="calc(100% - 80px)" paddingLeft="40px" paddingRight="40px">
+    <Block width={responsiveWidthSmall} paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall}>
       <H4>{intl.audit}</H4>
       <Block marginBottom="1rem">
         <AuditLabel label={intl.searchId}>
