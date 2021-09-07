@@ -32,6 +32,8 @@ export const getEtterlevelseStatus = (status?: EtterlevelseStatus) => {
       return 'Oppfylles senere'
     case EtterlevelseStatus.IKKE_RELEVANT:
       return 'Ikke relevant'
+    case EtterlevelseStatus.FERDIG_DOKUMENTERT:
+      return 'Ferdig dokumentert'
     default:
       return status
   }
