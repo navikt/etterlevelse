@@ -8,14 +8,14 @@ import RouteLink from '../components/common/RouteLink'
 import { etterlevelseName } from './EtterlevelsePage'
 import { Spinner } from '../components/common/Spinner'
 import { user } from '../services/User'
-import { maxPageWidth, pageWidth } from '../util/theme'
+import { maxPageWidth, pageWidth, responsivePaddingSmall, responsiveWidthSmall } from '../util/theme'
 
 export const EtterlevelseListPage = () => {
   const [etterlevelse, prev, next, loading] = useEtterlevelsePage(20)
 
   return (
     <Block id="content" overrides={{ Block: { props: { role: 'main' } } }} maxWidth={maxPageWidth} width="100%">
-      <Block paddingLeft="40px" paddingRight="40px" width="calc(100%-80px)" display="flex" justifyContent="center">
+      <Block paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall} width={responsiveWidthSmall} display="flex" justifyContent="center">
         <Block minWidth={pageWidth}>
           <Block display="flex" justifyContent="space-between" alignItems="center">
             <H2>Etterlevelse</H2>
