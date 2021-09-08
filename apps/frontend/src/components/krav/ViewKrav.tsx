@@ -72,7 +72,7 @@ const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVersjoner:
     </LabelWrapper> */}
 
       <LabelWrapper>
-        <LabelAboveContent header title="Dokumentasjon" markdown={krav.dokumentasjon} />
+        <LabelAboveContent header title="Kilder" markdown={krav.dokumentasjon} />
       </LabelWrapper>
 
       {/* <LabelWrapper>

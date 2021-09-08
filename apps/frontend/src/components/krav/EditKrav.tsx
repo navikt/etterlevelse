@@ -156,7 +156,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
                     <MultiInputField
                       marginBottom={inputMarginBottom}
                       maxInputWidth={maxInputWidth}
-                      linkLabel="Navn på dokumentasjon"
+                      linkLabel="Navn på kilde"
                       name="dokumentasjon"
                       link
                       label="Lenke eller websaknr"
