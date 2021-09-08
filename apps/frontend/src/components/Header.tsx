@@ -35,7 +35,7 @@ export const loginUrl = (history: History, path?: string) => {
   return `/login?redirect_uri=${frontpage}${path || ''}`
 }
 
-const LoginButton = () => {
+export const LoginButton = () => {
   // updates window.location on navigation
   const history = useHistory()
   return (

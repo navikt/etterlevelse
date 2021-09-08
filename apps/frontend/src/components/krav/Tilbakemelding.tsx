@@ -37,6 +37,7 @@ import { Portrait } from '../common/Portrait'
 import { PersonName } from '../common/PersonName'
 import CustomizedTextarea from '../common/CustomizedTextarea'
 import * as _ from 'lodash'
+import { LoginButton } from '../Header'
 
 const DEFAULT_COUNT_SIZE = 5
 
@@ -176,7 +177,7 @@ export const Tilbakemeldinger = ({ krav }: { krav: Krav }) => {
             Ny tilbakemelding
           </Button>
         )}
-        {!user.canWrite() && <ParagraphSmall>Logg inn på toppen for å legge inn tilbakemelding</ParagraphSmall>}
+        {!user.isLoggedIn() && <LoginButton />}
       </Block>
 
       <NyTilbakemeldingModal
