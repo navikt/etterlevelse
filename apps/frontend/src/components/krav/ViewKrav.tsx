@@ -19,6 +19,7 @@ import {ettlevColors} from '../../util/theme'
 import {borderStyle} from '../common/Style'
 import {Markdown} from '../common/Markdown'
 import ExpiredAlert from './ExpiredAlert'
+import {StyledLink} from "baseui/link";
 
 const LabelWrapper = ({children}: { children: React.ReactNode }) => (
   <Block marginTop="48px" marginBottom="48px">
@@ -77,9 +78,9 @@ const AllInfo = ({krav, alleKravVersjoner}: { krav: KravQL; alleKravVersjoner: K
             krav.dokumentasjon.map(k => {
                 const match = k.match(/\[(.*)\]\((.*)\)/m)
                 return <DotTag>
-                  <RouteLink href={match && match[2]}>
+                  <StyledLink href={match ? match[2] : ""}>
                     {match && match[1]}
-                  </RouteLink>
+                  </StyledLink>
                 </DotTag>
               }
             )
