@@ -41,7 +41,7 @@ import { LoginButton } from '../Header'
 
 const DEFAULT_COUNT_SIZE = 5
 
-export const Tilbakemeldinger = ({ krav }: { krav: Krav }) => {
+export const Tilbakemeldinger = ({ krav }: { krav: Krav; }) => {
   const [tilbakemeldinger, loading, add, replace, remove] = useTilbakemeldinger(krav.kravNummer, krav.kravVersjon)
   const [focusNr, setFocusNr] = useState<string | undefined>(useQueryParam('tilbakemeldingId'))
   const [addTilbakemelding, setAddTilbakemelding] = useState(false)
