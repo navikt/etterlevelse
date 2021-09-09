@@ -71,17 +71,7 @@ const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVersjoner:
 
       <LabelWrapper>
         <LabelAboveContent header title="Kilder">
-          {
-            krav.dokumentasjon.map(k => {
-                const match = k.match(/\[(.*)\]\((.*)\)/m)
-                return <DotTag>
-                  <StyledLink href={match ? match[2] : ""}>
-                    {match && match[1]}
-                  </StyledLink>
-                </DotTag>
-              }
-            )
-          }
+          <DotTags items={krav.dokumentasjon} markdown inColumn/>
         </LabelAboveContent>
       </LabelWrapper>
 
