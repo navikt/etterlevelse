@@ -38,7 +38,7 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
     variables: { relevans: [] },
     skip: !props.behandling?.id,
   })
-
+  
   const [stats, setStats] = React.useState<any[]>([])
 
   // TODO IMPLEMENT ENDPOINT FOR FETCHING ALL KRAV BASE ON RELEVANS
@@ -151,7 +151,7 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
                     Tilpass egenskaper
                   </H1>
                   <Paragraph4 $style={{ lineHeight: '20px', color: ettlevColors.grey50 }} marginTop={theme.sizing.scale0}>
-                    Behandling, overordnet behandlingsaktivitet
+                    {`${props.behandling.navn}, ${props.behandling.overordnetFormaal.shortName}`}
                   </Paragraph4>
                 </Block>
                 <Block display="flex" justifyContent="flex-end" paddingLeft={theme.sizing.scale1000}>
