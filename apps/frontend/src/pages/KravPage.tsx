@@ -108,7 +108,7 @@ export const KravPage = () => {
   }, [params.id])
 
   const hasKravExpired = () => {
-    return krav && krav.kravVersjon < alleKravVersjoner[0].kravVersjon
+    return krav ? krav.kravVersjon < alleKravVersjoner[0].kravVersjon : false
   }
 
   // todo split loading krav and subelements?
@@ -251,7 +251,7 @@ export const KravPage = () => {
                   {
                     title: 'Tilbakemeldinger',
                     key: 'tilbakemeldinger',
-                    content: <Tilbakemeldinger krav={krav} />
+                    content: <Tilbakemeldinger krav={krav} hasKravExpired={hasKravExpired()} />
                   }
                 ]}
               />

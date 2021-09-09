@@ -41,7 +41,7 @@ import { LoginButton } from '../Header'
 
 const DEFAULT_COUNT_SIZE = 5
 
-export const Tilbakemeldinger = ({ krav }: { krav: Krav; }) => {
+export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKravExpired: boolean; }) => {
   const [tilbakemeldinger, loading, add, replace, remove] = useTilbakemeldinger(krav.kravNummer, krav.kravVersjon)
   const [focusNr, setFocusNr] = useState<string | undefined>(useQueryParam('tilbakemeldingId'))
   const [addTilbakemelding, setAddTilbakemelding] = useState(false)
@@ -168,33 +168,37 @@ export const Tilbakemeldinger = ({ krav }: { krav: Krav; }) => {
         <InfoBlock icon={mailboxPoppingIcon} alt={'Åpen mailboks icon'} text={'Det har ikke kommet inn noen tilbakemeldinger'} color={ettlevColors.red50} />
       )}
 
-      <Block marginTop={theme.sizing.scale1000}>
-        <HeadingXLarge>Gi en tilbakemelding</HeadingXLarge>
-        <ParagraphMedium maxWidth={'600px'}>Gi tilbakemelding til kraveier dersom det er uklarheter vedrørende hvordan kravet skal forstås.</ParagraphMedium>
+      {!hasKravExpired && (
+        <>
+          <Block marginTop={theme.sizing.scale1000}>
+            <HeadingXLarge>Gi en tilbakemelding</HeadingXLarge>
+            <ParagraphMedium maxWidth={'600px'}>Gi tilbakemelding til kraveier dersom det er uklarheter vedrørende hvordan kravet skal forstås.</ParagraphMedium>
 
-        {user.canWrite() && (
-          <Button kind={'primary'} size="compact" onClick={() => setAddTilbakemelding(true)}>
-            Ny tilbakemelding
-          </Button>
-        )}
-        {!user.isLoggedIn() && <LoginButton />}
-      </Block>
+            {user.canWrite() && (
+              <Button kind={'primary'} size="compact" onClick={() => setAddTilbakemelding(true)}>
+                Ny tilbakemelding
+              </Button>
+            )}
+            {!user.isLoggedIn() && <LoginButton />}
+          </Block>
 
-      <NyTilbakemeldingModal
-        krav={krav}
-        open={addTilbakemelding}
-        close={(t) => {
-          t && add(t)
-          setAddTilbakemelding(false)
-        }}
-      />
-      <TilbakemeldingSvarModal
-        tilbakemelding={tilbakemelding}
-        close={(t) => {
-          t && replace(t)
-          setTilbakemelding(undefined)
-        }}
-      />
+          <NyTilbakemeldingModal
+            krav={krav}
+            open={addTilbakemelding}
+            close={(t) => {
+              t && add(t)
+              setAddTilbakemelding(false)
+            }}
+          />
+          <TilbakemeldingSvarModal
+            tilbakemelding={tilbakemelding}
+            close={(t) => {
+              t && replace(t)
+              setTilbakemelding(undefined)
+            }}
+          />
+        </>
+      )}
 
       <Block height="300px" />
     </Block>
