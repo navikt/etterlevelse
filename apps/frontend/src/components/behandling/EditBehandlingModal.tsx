@@ -3,14 +3,14 @@ import CustomizedModal from '../common/CustomizedModal'
 import Button from '../common/Button'
 import { Block } from 'baseui/block'
 import { theme } from '../../util'
-import { checkmarkIcon, crossIcon } from '../Images'
+import { crossIcon } from '../Images'
 import { ettlevColors } from '../../util/theme'
 import { H1, H2, Paragraph2, Paragraph4 } from 'baseui/typography'
 import { Behandling, BehandlingEtterlevData, PageResponse } from '../../constants'
 import { ButtonGroup, SHAPE } from 'baseui/button-group'
 import { Button as BaseUIButton, KIND } from 'baseui/button'
 import { Code, codelist, ListName } from '../../services/Codelist'
-import { borderStyle, borderWidth } from '../common/Style'
+import { borderColor, borderRadius, borderStyle, borderWidth, paddingAll } from '../common/Style'
 import { FieldArray, FieldArrayRenderProps, Form, Formik } from 'formik'
 import { mapToFormVal, updateBehandling } from '../../api/BehandlingApi'
 import * as yup from 'yup'
@@ -18,6 +18,7 @@ import { FormControl } from 'baseui/form-control'
 import { gql, useQuery } from '@apollo/client'
 import { BehandlingStats } from './ViewBehandling'
 import { ModalOverrides } from 'baseui/modal'
+import { Checkbox, LABEL_PLACEMENT } from 'baseui/checkbox'
 
 type EditBehandlingModalProps = {
   showModal: boolean
@@ -38,7 +39,7 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
     variables: { relevans: [] },
     skip: !props.behandling?.id,
   })
-  
+
   const [stats, setStats] = React.useState<any[]>([])
 
   // TODO IMPLEMENT ENDPOINT FOR FETCHING ALL KRAV BASE ON RELEVANS
@@ -46,10 +47,10 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
   const filterData = (
     unfilteredData:
       | {
-          behandling: PageResponse<{
-            stats: BehandlingStats
-          }>
-        }
+        behandling: PageResponse<{
+          stats: BehandlingStats
+        }>
+      }
       | undefined,
   ) => {
     const StatusListe: any[] = []
@@ -164,8 +165,9 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
 
             <Block paddingLeft={paddingLeft} paddingRight={paddingRight} marginTop={theme.sizing.scale1400}>
               <H2>Egenskaper til behandling</H2>
+              <Paragraph2 $style={{ lineHeight: '20px', maxWidth: '650px' }}>Ved å oppgi egenskaper til behandlingen, vises kun relevante krav</Paragraph2>
               <FieldArray name="irrelevansFor">
-                {(p: FieldArrayRenderProps) => {
+                {(p: FieldArrayRenderProps) => {    
                   return (
                     <FormControl>
                       <Block
@@ -178,47 +180,54 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
                       >
                         <ButtonGroup
                           mode="checkbox"
-                          shape={SHAPE.pill}
                           kind={KIND.secondary}
-                          selected={selected}
-                          onClick={(_event, index) => {
-                            if (!selected.includes(index)) {
-                              setSelected([...selected, index])
-                              p.remove(p.form.values.irrelevansFor.findIndex((ir: Code) => ir.code === options[index].id))
-                            } else {
-                              setSelected(selected.filter((value) => value !== index))
-                              p.push(codelist.getCode(ListName.RELEVANS, options[index].id as string))
-                            }
-                          }}
                         >
                           {options.map((r, i) => (
-                            <BaseUIButton
-                              key={r.id}
-                              startEnhancer={selected.includes(i) ? <img src={checkmarkIcon} /> : undefined}
+                            <Checkbox
+                              checked={selected.includes(i)}
+                              labelPlacement={LABEL_PLACEMENT.right}
+                              onChange={e => {
+                                if (!selected.includes(i)) {
+                                  setSelected([...selected, i])
+                                  p.remove(p.form.values.irrelevansFor.findIndex((ir: Code) => ir.code === options[i].id))
+                                } else {
+                                  setSelected(selected.filter((value) => value !== i))
+                                  p.push(codelist.getCode(ListName.RELEVANS, options[i].id as string))
+                                }
+                              }}
                               overrides={{
-                                BaseButton: {
+                                Root: {
                                   style: {
-                                    color: selected.includes(i) ? ettlevColors.green800 : ettlevColors.navGra80,
                                     backgroundColor: selected.includes(i) ? ettlevColors.green50 : ettlevColors.white,
-                                    marginRight: theme.sizing.scale600,
-                                    boxShadow: '0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 2px 0 rgba(0, 0, 0, .12)',
-                                    ':hover': { boxShadow: '0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 3px 0 rgba(0, 0, 0, .12)' },
-                                    ':active': { boxShadow: '0 2px 1px -2px rgba(0, 0, 0, .2), 0 1px 1px 0 rgba(0, 0, 0, .14), 0 1px 1px 0 rgba(0, 0, 0, .12)' },
+                                    border: '1px solid #6A6A6A',
+                                    paddingLeft: '8px',
+                                    paddingRight: '16px',
+                                    paddingTop:'8px',
+                                    paddingBottom: '10px',
+                                    marginRight: '16px',
+                                    borderRadius: '4px',
+                                    ':hover': { boxShadow: '0px 2px 0px rgba(0, 0, 0, 0.25), inset 0px -1px 0px rgba(0, 0, 0, 0.25);' },
                                     ':focus': {
                                       boxShadow: '0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 3px 0 rgba(0, 0, 0, .12)',
                                       outline: `3px solid ${ettlevColors.focusOutline}`,
                                     },
-                                    ...borderStyle('solid'),
-                                    ...borderWidth('1px'),
                                   },
                                 },
+                                Checkmark: {
+                                  style: {
+                                    ...borderStyle('solid'),
+                                    ...borderColor('#6A6A6A'),
+                                    ...borderWidth('1px'),
+                                  }
+                                },
+
                               }}
                             >
-                              {}
-                              {r.label}
-                            </BaseUIButton>
+                              <Paragraph2 margin='0px' $style={{ lineHeight: '22px'}}>{r.label}</Paragraph2>
+                            </Checkbox>
                           ))}
                         </ButtonGroup>
+
                         <Paragraph4 $style={{ lineHeight: '20px', fontWeight: 700 }} paddingBottom={theme.sizing.scale500}>
                           Egenskaper: {selected.length}
                         </Paragraph4>
