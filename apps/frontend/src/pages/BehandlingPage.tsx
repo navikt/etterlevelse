@@ -1,28 +1,28 @@
-import React, {useRef, useState} from 'react'
-import {Block, Display, Responsive} from 'baseui/block'
-import {useParams} from 'react-router-dom'
-import {LoadingSkeleton} from '../components/common/LoadingSkeleton'
-import {useBehandling} from '../api/BehandlingApi'
-import {H1, H2, HeadingLarge, Label3, Paragraph2, Paragraph4} from 'baseui/typography'
-import {FormikProps} from 'formik'
-import {ettlevColors, theme} from '../util/theme'
-import {Layout2} from '../components/scaffold/Page'
-import {Teams} from '../components/common/TeamName'
-import {arkPennIcon, ellipse80} from '../components/Images'
-import {Behandling, BehandlingEtterlevData, EtterlevelseStatus, PageResponse} from '../constants'
-import {useQuery} from '@apollo/client'
-import {BehandlingStats, statsQuery} from '../components/behandling/ViewBehandling'
-import {Code, codelist, ListName, TemaCode} from '../services/Codelist'
-import {PanelLinkCard, PanelLinkCardOverrides} from '../components/common/PanelLink'
-import {cardWidth} from './TemaPage'
-import {ProgressBar, SIZE} from 'baseui/progress-bar'
-import {Button} from 'baseui/button'
+import React, { useRef, useState } from 'react'
+import { Block, Display, Responsive } from 'baseui/block'
+import { useParams } from 'react-router-dom'
+import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
+import { useBehandling } from '../api/BehandlingApi'
+import { H1, H2, HeadingLarge, Label3, Paragraph2, Paragraph4 } from 'baseui/typography'
+import { FormikProps } from 'formik'
+import { ettlevColors, theme } from '../util/theme'
+import { Layout2 } from '../components/scaffold/Page'
+import { Teams } from '../components/common/TeamName'
+import { arkPennIcon, ellipse80 } from '../components/Images'
+import { Behandling, BehandlingEtterlevData, EtterlevelseStatus, PageResponse } from '../constants'
+import { useQuery } from '@apollo/client'
+import { BehandlingStats, statsQuery } from '../components/behandling/ViewBehandling'
+import { Code, codelist, ListName, TemaCode } from '../services/Codelist'
+import { PanelLinkCard, PanelLinkCardOverrides } from '../components/common/PanelLink'
+import { cardWidth } from './TemaPage'
+import { ProgressBar, SIZE } from 'baseui/progress-bar'
+import { Button } from 'baseui/button'
 import EditBehandlingModal from '../components/behandling/EditBehandlingModal'
-import {Tag} from 'baseui/tag'
-import {borderColor} from '../components/common/Style'
-import {breadcrumbPaths} from '../components/common/CustomizedBreadcrumbs'
+import { Tag } from 'baseui/tag'
+import { borderColor, borderStyle, borderWidth, margin, marginZero, padding, paddingAll } from '../components/common/Style'
+import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 
-const responsiveDisplay:Responsive<Display> = ['block','block','block','block','flex','flex']
+const responsiveDisplay: Responsive<Display> = ['block', 'block', 'block', 'block', 'flex', 'flex']
 
 export const BehandlingPage = () => {
   const params = useParams<{ id?: string }>()
@@ -40,10 +40,10 @@ export const BehandlingPage = () => {
   const filterData = (
     unfilteredData:
       | {
-          behandling: PageResponse<{
-            stats: BehandlingStats
-          }>
-        }
+        behandling: PageResponse<{
+          stats: BehandlingStats
+        }>
+      }
       | undefined,
   ) => {
     const StatusListe: any[] = []
@@ -94,7 +94,7 @@ export const BehandlingPage = () => {
   const getPercentageUtfylt = stats && stats.length && (antallFylttKrav / stats.length) * 100
 
   const getMainHeader = (behandling: Behandling) => (
-    <Block display="flex" justifyContent="space-between" marginBottom="70px">
+    <Block display={responsiveDisplay} justifyContent="space-between" marginBottom="70px">
       <Block>
         <Label3 color={ettlevColors.green600}>DOKUMENTERE ETTERLEVELSE</Label3>
         <H1 marginTop="0" color={ettlevColors.green800}>
@@ -103,6 +103,29 @@ export const BehandlingPage = () => {
         <Paragraph2>{behandling.overordnetFormaal.shortName}</Paragraph2>
         <Teams teams={behandling.teams} link list />
       </Block>
+
+      <Block
+        maxWidth='400px'
+        width="calc(100% - 48px)"
+        $style={{
+          ...borderWidth('2px'),
+          ...borderStyle('solid'),
+          ...borderColor(ettlevColors.green100),
+          ...paddingAll('24px')
+        }}
+      >
+        <Block flexDirection="column">
+          <H2 margin="0px" marginBottom='14px'>Nå vises krav for:</H2>
+
+          {!behandling.irrelevansFor.length ? getRelevans() : getRelevans(behandling.irrelevansFor)}
+
+          <Block marginTop={theme.sizing.scale650}>
+            <Button onClick={() => setEdit(!edit)}>Fjern eller legg til</Button>
+          </Block>
+        </Block>
+
+      </Block>
+
     </Block>
   )
 
@@ -125,7 +148,7 @@ export const BehandlingPage = () => {
 
       <Block display="flex" alignItems="center">
         <Block display="flex" alignItems="baseline" marginRight="30px">
-          <Paragraph2 $style={{fontWeight: 900, fontSize: '32px', lineHeight: '40px'}} color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
+          <Paragraph2 $style={{ fontWeight: 900, fontSize: '32px', lineHeight: '40px' }} color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
             {stats.length}
           </Paragraph2>
           <Paragraph2>krav</Paragraph2>
@@ -134,7 +157,7 @@ export const BehandlingPage = () => {
         <Block $style={{ border: '1px solid ' + ettlevColors.green50, background: '#102723' }} height="40px" />
 
         <Block display="flex" alignItems="baseline" marginLeft="30px">
-          <Paragraph2 $style={{fontWeight: 900, fontSize: '32px', lineHeight: '40px'}} color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
+          <Paragraph2 $style={{ fontWeight: 900, fontSize: '32px', lineHeight: '40px' }} color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
             {antallFylttKrav}
           </Paragraph2>
           <Paragraph2>ferdig utfylt</Paragraph2>
@@ -145,6 +168,8 @@ export const BehandlingPage = () => {
   )
 
   const getRelevans = (irrelevans?: Code[]) => {
+    // if (irrelevans?.length === options.length) return <Paragraph4></Paragraph4>
+
     if (irrelevans) {
       const relevans = options
         .map((r, i) => {
@@ -152,22 +177,24 @@ export const BehandlingPage = () => {
         })
         .filter((n) => !irrelevans.map((ir: Code) => options.findIndex((o) => o.id === ir.code)).includes(n))
       return (
-        <Block display={responsiveDisplay}>
+        <Block display={responsiveDisplay} flexWrap>
           {relevans.map((optionIndex, index) => (
             <Block key={options[optionIndex].id} display="flex">
-              <Block marginRight="18px">{options[optionIndex].label}</Block>
-              <Block marginRight="18px" display={["none","none","none","none","block","block"]}>{index < relevans.length - 1 ? <img alt="dot" src={ellipse80}/> : undefined}</Block>
+              <Paragraph4 $style={{...marginZero, marginRight: '18px', lineHeight: '24px'}}>{options[optionIndex].label}</Paragraph4>
+              <Block marginRight="18px" display={["none", "none", "none", "none", "block", "block"]}>{index < relevans.length - 1 ? <img alt="dot" src={ellipse80} /> : undefined}</Block>
             </Block>
           ))}
         </Block>
       )
     }
     return (
-      <Block display={responsiveDisplay}>
+      <Block display={responsiveDisplay} flexWrap>
         {options.map((o, index) => (
           <Block key={o.id} display="flex">
-            <Block marginRight="18px">{o.label}</Block>
-            <Block marginRight="18px" display={["none","none","none","none","block","block"]}>{index < options.length - 1 ? <img alt="dot" src={ellipse80} /> : undefined}</Block>
+            <Paragraph4 $style={{...marginZero, marginRight: '18px', lineHeight: '24px'}}>{o.label}</Paragraph4>
+            <Block marginRight="18px" display={["none", "none", "none", "none", "block", "block"]}>
+              {index < options.length - 1 ? <img alt="dot" src={ellipse80} /> : undefined}
+            </Block>
           </Block>
         ))}
       </Block>
@@ -196,18 +223,7 @@ export const BehandlingPage = () => {
       >
         <Block backgroundColor={ettlevColors.grey50} marginTop={theme.sizing.scale800}>
           <Block padding="22px">
-            <Block  display={responsiveDisplay}>
-              <Block>
-                <HeadingLarge>Egenskaper til behandlingen</HeadingLarge>
-                <Paragraph4
-                  $style={{
-                    lineHeight: '24px',
-                  }}
-                >
-                  {!behandling.irrelevansFor.length ? getRelevans() : getRelevans(behandling.irrelevansFor)}
-                </Paragraph4>
-              </Block>
-
+            <Block display={responsiveDisplay}>
               <Block flex="1" display="flex" alignItems="flex-end" flexDirection="column">
                 <Block>
                   <Block flex="1" display="flex" justifyContent="flex-end">
