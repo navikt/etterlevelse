@@ -120,12 +120,10 @@ export const BehandlingPage = () => {
           {!behandling.irrelevansFor.length ? getRelevans() : getRelevans(behandling.irrelevansFor)}
 
           <Block marginTop={theme.sizing.scale650}>
-            <Button onClick={() => setEdit(!edit)}>Fjern eller legg til</Button>
+            <Button onClick={() => setEdit(!edit)}>Tilpass egenskaper</Button>
           </Block>
         </Block>
-
       </Block>
-
     </Block>
   )
 
