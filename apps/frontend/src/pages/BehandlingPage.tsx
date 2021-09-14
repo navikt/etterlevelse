@@ -222,26 +222,6 @@ export const BehandlingPage = () => {
         breadcrumbPaths={breadcrumbPaths}
       >
         <Block backgroundColor={ettlevColors.grey50} marginTop={theme.sizing.scale800}>
-          <Block padding="22px">
-            <Block display={responsiveDisplay}>
-              <Block flex="1" display="flex" alignItems="flex-end" flexDirection="column">
-                <Block>
-                  <Block flex="1" display="flex" justifyContent="flex-end">
-                    <Paragraph4
-                      $style={{
-                        lineHeight: '24px',
-                      }}
-                    >
-                      Antall egenskaper: {options.length - behandling.irrelevansFor.length}
-                    </Paragraph4>
-                  </Block>
-
-                  <Button onClick={() => setEdit(!edit)}>Tilpass egenskapene</Button>
-                </Block>
-              </Block>
-
-            </Block>
-          </Block>
         </Block>
         <Block display="flex" width="100%" justifyContent="space-between" flexWrap marginTop={theme.sizing.scale550}>
           {temaListe.map((tema) => (
