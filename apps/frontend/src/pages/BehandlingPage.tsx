@@ -105,7 +105,7 @@ export const BehandlingPage = () => {
       </Block>
 
       <Block
-        maxWidth='400px'
+        maxWidth='335px'
         width="calc(100% - 48px)"
         $style={{
           ...borderWidth('2px'),
@@ -180,8 +180,8 @@ export const BehandlingPage = () => {
         <Block display={responsiveDisplay} flexWrap>
           {relevans.map((optionIndex, index) => (
             <Block key={options[optionIndex].id} display="flex">
-              <Paragraph4 $style={{...marginZero, marginRight: '18px', lineHeight: '24px'}}>{options[optionIndex].label}</Paragraph4>
-              <Block marginRight="18px" display={["none", "none", "none", "none", "block", "block"]}>{index < relevans.length - 1 ? <img alt="dot" src={ellipse80} /> : undefined}</Block>
+              <Paragraph4 $style={{...marginZero, marginRight: '8px', lineHeight: '24px'}}>{options[optionIndex].label}</Paragraph4>
+              <Block marginRight="8px" display={["none", "none", "none", "none", "block", "block"]}>{index < relevans.length - 1 ? <img alt="dot" src={ellipse80} /> : undefined}</Block>
             </Block>
           ))}
         </Block>
@@ -191,8 +191,8 @@ export const BehandlingPage = () => {
       <Block display={responsiveDisplay} flexWrap>
         {options.map((o, index) => (
           <Block key={o.id} display="flex">
-            <Paragraph4 $style={{...marginZero, marginRight: '18px', lineHeight: '24px'}}>{o.label}</Paragraph4>
-            <Block marginRight="18px" display={["none", "none", "none", "none", "block", "block"]}>
+            <Paragraph4 $style={{...marginZero, marginRight: '8px', lineHeight: '24px'}}>{o.label}</Paragraph4>
+            <Block marginRight="8px" display={["none", "none", "none", "none", "block", "block"]}>
               {index < options.length - 1 ? <img alt="dot" src={ellipse80} /> : undefined}
             </Block>
           </Block>
