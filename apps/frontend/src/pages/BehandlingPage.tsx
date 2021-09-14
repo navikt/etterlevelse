@@ -8,7 +8,7 @@ import { FormikProps } from 'formik'
 import { ettlevColors, theme } from '../util/theme'
 import { Layout2 } from '../components/scaffold/Page'
 import { Teams } from '../components/common/TeamName'
-import { arkPennIcon, ellipse80 } from '../components/Images'
+import { arkPennIcon, ellipse80, warningAlert } from '../components/Images'
 import { Behandling, BehandlingEtterlevData, EtterlevelseStatus, PageResponse } from '../constants'
 import { useQuery } from '@apollo/client'
 import { BehandlingStats, statsQuery } from '../components/behandling/ViewBehandling'
@@ -93,17 +93,10 @@ export const BehandlingPage = () => {
   })
   const getPercentageUtfylt = stats && stats.length && (antallFylttKrav / stats.length) * 100
 
-  const getMainHeader = (behandling: Behandling) => (
-    <Block display={responsiveDisplay} justifyContent="space-between" marginBottom="70px">
-      <Block>
-        <Label3 color={ettlevColors.green600}>DOKUMENTERE ETTERLEVELSE</Label3>
-        <H1 marginTop="0" color={ettlevColors.green800}>
-          {behandling.navn}
-        </H1>
-        <Paragraph2>{behandling.overordnetFormaal.shortName}</Paragraph2>
-        <Teams teams={behandling.teams} link list />
-      </Block>
-
+  const getRelevansContent = (behandling: Behandling) => {
+    const emptyRelevans = behandling.irrelevansFor.length === options.length ? true : false
+    
+    return (
       <Block
         maxWidth='335px'
         width="calc(100% - 48px)"
@@ -115,7 +108,11 @@ export const BehandlingPage = () => {
         }}
       >
         <Block flexDirection="column">
-          <H2 margin="0px" marginBottom='14px'>Nå vises krav for:</H2>
+          {emptyRelevans ? <Block display="flex" >
+            
+            <H2 margin="0px" marginBottom='14px'><img style={{marginRight:theme.sizing.scale400}} src={warningAlert} alt=''/>Ingen egenskaper er oppgitt</H2>
+          </Block> : <H2 margin="0px" marginBottom='14px'>Nå vises krav for:</H2>}
+          
 
           {!behandling.irrelevansFor.length ? getRelevans() : getRelevans(behandling.irrelevansFor)}
 
@@ -124,6 +121,20 @@ export const BehandlingPage = () => {
           </Block>
         </Block>
       </Block>
+    )
+  }
+
+  const getMainHeader = (behandling: Behandling) => (
+    <Block display={responsiveDisplay} justifyContent="space-between" marginBottom="70px">
+      <Block>
+        <Label3 color={ettlevColors.green600}>DOKUMENTERE ETTERLEVELSE</Label3>
+        <H1 marginTop="0" color={ettlevColors.green800}>
+          {behandling.navn}
+        </H1>
+        <Paragraph2>{behandling.overordnetFormaal.shortName}</Paragraph2>
+        <Teams teams={behandling.teams} link list />
+      </Block>
+      {getRelevansContent(behandling)}
     </Block>
   )
 
