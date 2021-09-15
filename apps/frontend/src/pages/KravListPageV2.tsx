@@ -315,7 +315,7 @@ const AllKrav = () => {
     refetch,
   } = useKravFilter({
     relevans: filter.relevans[0]?.id === 'alle' ? undefined : filter.relevans.map((r) => (r.id ? r.id.toString() : '')),
-    lover: filter.lover[0]?.id === 'alle' || filter.tema[0].id === 'alle' ? undefined : temaFilter.length ? temaFilter : filter.lover.map((l) => (l.id ? l.id.toString() : '')),
+    lover: filter.lover[0].id === 'alle' && filter.tema[0].id === 'alle' ? undefined : filter.lover[0].id !== 'alle' ? filter.lover.map((l) => (l.id ? l.id.toString() : '')) : temaFilter,
     status: filter.status[0]?.id === 'alle' ? undefined : filter.status.map((s) => (s.id ? s.id?.toString() : '')),
     pageNumber: 0,
     pageSize,
@@ -367,7 +367,7 @@ const AllKrav = () => {
   useEffect(() => {
     // USIKKERT OM VI SKAL FILTRERER BASERT PÅ TEMA
 
-    if (filter.tema.length && filter.tema[0].id !== 'alle') {
+    if (filter.tema[0].id !== 'alle') {
       const temaLover: string[] = []
       const gyldiglover: LovCode[] = []
       lover.forEach((l) => {
@@ -410,7 +410,7 @@ const AllKrav = () => {
   const getOptions = (label: string, options: any[]) => [{ label: label, id: 'alle' }, ...options]
 
   const getLovOptions = () => {
-    if (filter.tema[0].id !== 'alle') {
+    if (filter.tema[0].id === 'alle') {
       return getOptions(
         'Alle lover',
         lover.map((l) => {
