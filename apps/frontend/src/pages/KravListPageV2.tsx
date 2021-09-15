@@ -323,9 +323,15 @@ const AllKrav = () => {
   const [sortedKravList, setSortedKravList] = useState<KravQL[]>([])
 
   const customSelectOverrides: SelectOverrides = {
+    Root: {
+      style: {
+        width: '150px',
+      }
+    },
     DropdownContainer: {
       style: {
-        width: 'fit-content'
+        width: 'fit-content',
+        maxWidth: '300px'
       }
     }
   }
@@ -529,16 +535,16 @@ const AllKrav = () => {
           </Block>
         </Block> */}
 
-        <Block display={responsiveDisplay} justifyContent="center" alignContent="center" width="100%">
+        <Block display={['block','block','block','block','block','flex',]} justifyContent="center" alignContent="center" width="100%">
           <Block display="flex" justifyContent="flex-start" width="100%">
             <H2 marginTop="0px" marginBottom="0px">
               {kravene.totalElements ? kravene.totalElements : 0} Krav
             </H2>
           </Block>
           <Block display="flex" justifyContent="flex-end" width="100%" alignItems="center">
-            <Block display={responsiveDisplay} alignItems="center" justifyContent="flex-start" width="100%">
+            <Block display={['block','block','block','block','flex','flex',]} alignItems="center" justifyContent="flex-start" width="100%">
               <Label3>Filter</Label3>
-              <Block marginLeft={selectorMarginLeft} marginTop={selectorMarginTop} width="100%" minWidth="200px">
+              <Block marginLeft={selectorMarginLeft} marginTop={selectorMarginTop}>
                 <CustomizedSelect
                   clearable={false}
                   size="compact"
@@ -554,7 +560,7 @@ const AllKrav = () => {
                   onChange={(params) => updateFilter(params.value, KravListFilter.TEMAER)}
                 />
               </Block>
-              <Block marginLeft={selectorMarginLeft} marginTop={selectorMarginTop} width="100%" minWidth="200px">
+              <Block marginLeft={selectorMarginLeft} marginTop={selectorMarginTop}>
                 <CustomizedSelect
                   clearable={false}
                   size="compact"
@@ -571,7 +577,7 @@ const AllKrav = () => {
                 />
               </Block>
 
-              <Block marginLeft={selectorMarginLeft} marginTop={selectorMarginTop} width="100%" minWidth="200px">
+              <Block marginLeft={selectorMarginLeft} marginTop={selectorMarginTop}>
                 <CustomizedSelect
                   clearable={false}
                   size="compact"
@@ -582,7 +588,7 @@ const AllKrav = () => {
                   onChange={(params) => updateFilter(params.value, KravListFilter.LOVER)}
                 />
               </Block>
-              <Block marginLeft={selectorMarginLeft} marginTop={selectorMarginTop} width="100%" minWidth="200px">
+              <Block marginLeft={selectorMarginLeft} marginTop={selectorMarginTop}>
                 <CustomizedSelect
                   clearable={false}
                   size="compact"
