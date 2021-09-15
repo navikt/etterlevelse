@@ -1,27 +1,27 @@
-import {Block, Display, Responsive, Scale} from 'baseui/block'
-import {H2, HeadingXXLarge, Label3, LabelSmall, Paragraph2, Paragraph4} from 'baseui/typography'
-import {useEffect, useState} from 'react'
+import { Block, Display, Responsive, Scale } from 'baseui/block'
+import { H2, HeadingXXLarge, Label3, LabelSmall, Paragraph2, Paragraph4 } from 'baseui/typography'
+import { useEffect, useState } from 'react'
 import Button from '../components/common/Button'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
 import CustomizedTabs from '../components/common/CustomizedTabs'
 import RouteLink from '../components/common/RouteLink'
-import {user} from '../services/User'
-import {theme} from '../util'
+import { user } from '../services/User'
+import { theme } from '../util'
 import moment from 'moment'
-import {ettlevColors, maxPageWidth, responsivePaddingLarge} from '../util/theme'
-import {plusIcon} from '../components/Images'
-import {useKravFilter} from '../api/KravGraphQLApi'
-import {PanelLink} from '../components/common/PanelLink'
-import {Spinner} from '../components/common/Spinner'
-import {Notification} from 'baseui/notification'
-import {emptyPage, KravListFilter, KravQL, KravStatus} from '../constants'
-import {SkeletonPanel} from '../components/common/LoadingSkeleton'
-import {kravStatus} from '../pages/KravPage'
-import {codelist, ListName, LovCode} from '../services/Codelist'
-import {Card} from 'baseui/card'
-import {borderColor, borderRadius, borderStyle, borderWidth, margin, marginAll} from '../components/common/Style'
-import {faPlus} from '@fortawesome/free-solid-svg-icons'
-import {Option} from 'baseui/select'
+import { ettlevColors, maxPageWidth, responsivePaddingLarge } from '../util/theme'
+import { plusIcon } from '../components/Images'
+import { useKravFilter } from '../api/KravGraphQLApi'
+import { PanelLink } from '../components/common/PanelLink'
+import { Spinner } from '../components/common/Spinner'
+import { Notification } from 'baseui/notification'
+import { emptyPage, KravListFilter, KravQL, KravStatus } from '../constants'
+import { SkeletonPanel } from '../components/common/LoadingSkeleton'
+import { kravStatus } from '../pages/KravPage'
+import { codelist, ListName, LovCode } from '../services/Codelist'
+import { Card } from 'baseui/card'
+import { borderColor, borderRadius, borderStyle, borderWidth, margin, marginAll } from '../components/common/Style'
+import { faPlus } from '@fortawesome/free-solid-svg-icons'
+import { Option } from 'baseui/select'
 import CustomizedSelect from '../components/common/CustomizedSelect'
 
 type Section = 'siste' | 'alle'
@@ -41,20 +41,22 @@ export const sortKrav = (kravene: KravQL[]) => {
 }
 
 export const KravListPage = () => (
-  <Block width="100%" paddingBottom={'200px'} id="content" overrides={{Block: {props: {role: 'main'}}}}>
+  <Block width="100%" paddingBottom={'200px'} id="content" overrides={{ Block: { props: { role: 'main' } } }}>
     <Block width="100%" backgroundColor={ettlevColors.grey50} display={'flex'} justifyContent={'center'}>
       <Block maxWidth={maxPageWidth} width="100%">
         <Block paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge} paddingTop={theme.sizing.scale800}>
-          <CustomizedBreadcrumbs currentPage="Forvalte og opprette krav"/>
+          <CustomizedBreadcrumbs currentPage="Forvalte og opprette krav" />
           <Block display="flex">
             <Block flex="1">
-              <HeadingXXLarge marginTop='0'>Forvalte og opprette krav</HeadingXXLarge>
+              <HeadingXXLarge marginTop="0">Forvalte og opprette krav</HeadingXXLarge>
             </Block>
 
             <Block display="flex" justifyContent="flex-end">
               {user.isKraveier() && (
                 <RouteLink hideUnderline href={'/krav/ny'}>
-                  <Button startEnhancer={<img src={plusIcon} alt=""/>} size="compact">Nytt krav</Button>
+                  <Button startEnhancer={<img src={plusIcon} alt="" />} size="compact">
+                    Nytt krav
+                  </Button>
                 </RouteLink>
               )}
             </Block>
@@ -73,26 +75,26 @@ export const KravListPage = () => (
     >
       <Block maxWidth={maxPageWidth} width="100%">
         <Block paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge} paddingTop={theme.sizing.scale800}>
-          <KravTabs/>
+          <KravTabs />
         </Block>
       </Block>
     </Block>
   </Block>
 )
 
-const KravStatusView = ({status}: { status: KravStatus }) => {
+const KravStatusView = ({ status }: { status: KravStatus }) => {
   const getStatusDisplay = (background: string, border: string) => (
-    <Block width='fit-content'>
+    <Block width="fit-content">
       <Card
         overrides={{
           Contents: {
             style: {
-              ...marginAll('0px')
+              ...marginAll('0px'),
             },
           },
           Body: {
             style: {
-              ...margin('2px', '8px')
+              ...margin('2px', '8px'),
             },
           },
           Root: {
@@ -107,7 +109,7 @@ const KravStatusView = ({status}: { status: KravStatus }) => {
           },
         }}
       >
-        <Paragraph4 $style={{color: ettlevColors.navMorkGra, ...marginAll('0px')}}>{kravStatus(status)}</Paragraph4>
+        <Paragraph4 $style={{ color: ettlevColors.navMorkGra, ...marginAll('0px') }}>{kravStatus(status)}</Paragraph4>
       </Card>
     </Block>
   )
@@ -123,8 +125,8 @@ const KravStatusView = ({status}: { status: KravStatus }) => {
   }
 }
 
-const KravPanels = ({kravene, loading}: { kravene: KravQL[]; loading?: boolean }) => {
-  if (loading) return <SkeletonPanel count={5}/>
+const KravPanels = ({ kravene, loading }: { kravene: KravQL[]; loading?: boolean }) => {
+  if (loading) return <SkeletonPanel count={5} />
   return (
     <Block
       marginBottom={tabMarginBottom}
@@ -133,35 +135,38 @@ const KravPanels = ({kravene, loading}: { kravene: KravQL[]; loading?: boolean }
         ...borderColor(ettlevColors.grey100),
         ...borderStyle('solid'),
         ...borderRadius('4px'),
-        backgroundColor: 'white'
-      }}>
+        backgroundColor: 'white',
+      }}
+    >
       {kravene.map((k, index) => {
         const lov = codelist.getCode(ListName.LOV, k.regelverk[0]?.lov?.code)
         const tema = codelist.getCode(ListName.TEMA, lov?.data?.tema)
         return (
           <Block key={k.id} marginBottom={'0px'}>
-            {
-              index !== 0 && (
-                <Block width="100%" display="flex" justifyContent="center">
-                  <Block display="flex" width="98%" height="1px" backgroundColor={ettlevColors.grey100}/>
-                </Block>
-              )
-            }
+            {index !== 0 && (
+              <Block width="100%" display="flex" justifyContent="center">
+                <Block display="flex" width="98%" height="1px" backgroundColor={ettlevColors.grey100} />
+              </Block>
+            )}
             <PanelLink
               useDescriptionUnderline
               href={`/krav/${k.kravNummer}/${k.kravVersjon}`}
-              title={<Paragraph2 $style={{fontSize: '16px', marginBottom: '0px', marginTop: '0px'}}>K{k.kravNummer}.{k.kravVersjon}</Paragraph2>}
-              beskrivelse={<Label3 $style={{fontSize: '18px', lineHeight: '28px'}}>{k.navn}</Label3>}
+              title={
+                <Paragraph2 $style={{ fontSize: '16px', marginBottom: '0px', marginTop: '0px' }}>
+                  K{k.kravNummer}.{k.kravVersjon}
+                </Paragraph2>
+              }
+              beskrivelse={<Label3 $style={{ fontSize: '18px', lineHeight: '28px' }}>{k.navn}</Label3>}
               rightBeskrivelse={!!k.changeStamp.lastModifiedDate ? `Sist endret: ${moment(k.changeStamp.lastModifiedDate).format('ll')}` : ''}
               rightTitle={tema && tema.shortName ? tema.shortName : ''}
-              statusText={<KravStatusView status={k.status}/>}
+              statusText={<KravStatusView status={k.status} />}
               overrides={{
                 Block: {
                   style: {
-                    ':hover': {boxShadow: 'none'},
+                    ':hover': { boxShadow: 'none' },
                     ...borderStyle('hidden'),
-                  }
-                }
+                  },
+                },
               }}
             />
           </Block>
@@ -185,13 +190,13 @@ const KravTabs = () => {
         {
           key: 'siste',
           title: 'Sist endret av meg',
-          content: <SistRedigertKrav/>,
+          content: <SistRedigertKrav />,
         },
         {
           key: 'alle',
           title: 'Alle krav',
-          content: <AllKrav/>,
-        }
+          content: <AllKrav />,
+        },
       ]}
     />
   )
@@ -207,16 +212,14 @@ const SistRedigertKrav = () => {
     pageSize: 10,
   })
 
-  const {variables, data, loading, error} = res
+  const { variables, data, loading, error } = res
 
   const kravene = data?.krav || emptyPage
 
   useEffect(() => {
     let sortedData = [...kravene.content]
     if (sorting === 'sist') {
-      sortedData.sort((a, b) =>
-        a.changeStamp.lastModifiedDate > b.changeStamp.lastModifiedDate ? -1 : 0
-      )
+      sortedData.sort((a, b) => (a.changeStamp.lastModifiedDate > b.changeStamp.lastModifiedDate ? -1 : 0))
     } else {
       sortedData = sortKrav(sortedData)
     }
@@ -226,9 +229,7 @@ const SistRedigertKrav = () => {
   useEffect(() => {
     let sortedData = [...kravene.content]
     if (sorting === 'sist') {
-      sortedData.sort((a, b) =>
-        a.changeStamp.lastModifiedDate > b.changeStamp.lastModifiedDate ? -1 : 0
-      )
+      sortedData.sort((a, b) => (a.changeStamp.lastModifiedDate > b.changeStamp.lastModifiedDate ? -1 : 0))
     } else {
       sortedData = sortKrav(sortedData)
     }
@@ -236,21 +237,16 @@ const SistRedigertKrav = () => {
   }, [sorting])
 
   return loading && !data?.krav?.numberOfElements ? (
-    <Spinner size={theme.sizing.scale2400}/>
+    <Spinner size={theme.sizing.scale2400} />
   ) : error ? (
     <Notification kind={'negative'}>{JSON.stringify(error, null, 2)}</Notification>
   ) : (
     <Block>
-      <Block
-        display={responsiveDisplay}
-        justifyContent='center'
-        alignContent='center'
-        width="100%"
-        marginTop="20px"
-        marginBottom="20px"
-      >
+      <Block display={responsiveDisplay} justifyContent="center" alignContent="center" width="100%" marginTop="20px" marginBottom="20px">
         <Block display="flex" justifyContent="flex-start" width="100%">
-          <H2 marginTop="0px" marginBottom="0px">{sortedKravList.length ? sortedKravList.length : 0} Krav</H2>
+          <H2 marginTop="0px" marginBottom="0px">
+            {sortedKravList.length ? sortedKravList.length : 0} Krav
+          </H2>
         </Block>
         {/* <Block display="flex" justifyContent="flex-end" width="100%" alignItems="center">
           <Block >
@@ -273,14 +269,12 @@ const SistRedigertKrav = () => {
           </Block>
         </Block> */}
       </Block>
-      <KravPanels kravene={sortedKravList} loading={loading}/>
-      {sortedKravList.length === 0 &&
-      <Block width="100%" display="flex" justifyContent="center">
-        <Paragraph2>
-          Fant ingen krav
-        </Paragraph2>
-      </Block>
-      }
+      <KravPanels kravene={sortedKravList} loading={loading} />
+      {sortedKravList.length === 0 && (
+        <Block width="100%" display="flex" justifyContent="center">
+          <Paragraph2>Fant ingen krav</Paragraph2>
+        </Block>
+      )}
     </Block>
   )
 }
@@ -297,10 +291,10 @@ const AllKrav = () => {
   const [pageNumber, setPage] = useState(0)
   const [sorting, setSorting] = useState('sist')
   const [filter, setFilter] = useState<KravFilter>({
-    status: [{label: 'Alle statuser', id: 'alle'}],
-    relevans: [{label: 'Alle relevans', id: 'alle'}],
-    tema: [{label: 'Alle tema', id: 'alle'}],
-    lover: [{label: 'Alle lover', id: 'alle'}]
+    status: [{ label: 'Alle statuser', id: 'alle' }],
+    relevans: [{ label: 'Alle relevans', id: 'alle' }],
+    tema: [{ label: 'Alle tema', id: 'alle' }],
+    lover: [{ label: 'Alle lover', id: 'alle' }],
   })
 
   // USIKKERT OM VI SKAL FILTRERER BASERT PÅ TEMA
@@ -313,10 +307,16 @@ const AllKrav = () => {
   // BRUKER KUN NÅR VI SKAL FILTRERE PÅ TEMA
   const [loverFilter, setLoverFilter] = useState(lover)
 
-  const {data, loading: gqlLoading, fetchMore, error, refetch} = useKravFilter({
-    relevans: filter.relevans[0]?.id === 'alle' ? undefined : filter.relevans.map((r) => r.id ? r.id.toString() : ''),
-    lover: filter.lover[0]?.id === 'alle' || filter.tema[0].id === 'alle' ? undefined : temaFilter.length ? temaFilter : filter.lover.map((l) => l.id ? l.id.toString() : ''),
-    status: filter.status[0]?.id === 'alle' ? undefined : filter.status.map((s) => s.id ? s.id?.toString() : ''),
+  const {
+    data,
+    loading: gqlLoading,
+    fetchMore,
+    error,
+    refetch,
+  } = useKravFilter({
+    relevans: filter.relevans[0]?.id === 'alle' ? undefined : filter.relevans.map((r) => (r.id ? r.id.toString() : '')),
+    lover: filter.lover[0]?.id === 'alle' || filter.tema[0].id === 'alle' ? undefined : temaFilter.length ? temaFilter : filter.lover.map((l) => (l.id ? l.id.toString() : '')),
+    status: filter.status[0]?.id === 'alle' ? undefined : filter.status.map((s) => (s.id ? s.id?.toString() : '')),
     pageNumber: 0,
     pageSize,
   })
@@ -347,9 +347,7 @@ const AllKrav = () => {
   useEffect(() => {
     let sortedData = [...kravene.content]
     if (sorting === 'sist') {
-      sortedData.sort((a, b) =>
-        a.changeStamp.lastModifiedDate > b.changeStamp.lastModifiedDate ? -1 : 0
-      )
+      sortedData.sort((a, b) => (a.changeStamp.lastModifiedDate > b.changeStamp.lastModifiedDate ? -1 : 0))
     } else {
       sortedData = sortKrav(sortedData)
     }
@@ -359,9 +357,7 @@ const AllKrav = () => {
   useEffect(() => {
     let sortedData = [...kravene.content]
     if (sorting === 'sist') {
-      sortedData.sort((a, b) =>
-        a.changeStamp.lastModifiedDate > b.changeStamp.lastModifiedDate ? -1 : 0
-      )
+      sortedData.sort((a, b) => (a.changeStamp.lastModifiedDate > b.changeStamp.lastModifiedDate ? -1 : 0))
     } else {
       sortedData = sortKrav(sortedData)
     }
@@ -390,7 +386,7 @@ const AllKrav = () => {
   }, [filter])
 
   const updateFilter = (value: any, type: KravListFilter) => {
-    const newFilterValue = {...filter}
+    const newFilterValue = { ...filter }
     if (type === KravListFilter.RELEVANS) {
       newFilterValue.relevans = value
     }
@@ -411,23 +407,26 @@ const AllKrav = () => {
 
   const kravene = data?.krav || emptyPage
 
-  const getOptions = (label: string, options: any[]) => [{label: label, id: 'alle'}, ...options]
+  const getOptions = (label: string, options: any[]) => [{ label: label, id: 'alle' }, ...options]
 
   const getLovOptions = () => {
     if (filter.tema[0].id !== 'alle') {
-      return getOptions('Alle lover', lover.map((l) => {
-        return {label: l.shortName, id: l.code}
-      }))
+      return getOptions(
+        'Alle lover',
+        lover.map((l) => {
+          return { label: l.shortName, id: l.code }
+        }),
+      )
     } else {
       // BRUKER KUN NÅR VI SKAL FILTRERE PÅ TEMA
       return loverFilter?.map((t) => {
-        return {label: t.shortName, id: t.code}
+        return { label: t.shortName, id: t.code }
       })
     }
   }
 
   return loading && !kravene.numberOfElements ? (
-    <Spinner size={theme.sizing.scale2400}/>
+    <Spinner size={theme.sizing.scale2400} />
   ) : error ? (
     <Notification kind={'negative'}>{JSON.stringify(error, null, 2)}</Notification>
   ) : (
@@ -580,26 +579,28 @@ const AllKrav = () => {
           </Block>
         </Block> */}
 
-        <Block display={responsiveDisplay} justifyContent='center' alignContent='center' width="100%">
+        <Block display={responsiveDisplay} justifyContent="center" alignContent="center" width="100%">
           <Block display="flex" justifyContent="flex-start" width="100%">
-            <H2 marginTop="0px" marginBottom="0px">{kravene.totalElements ? kravene.totalElements : 0} Krav</H2>
+            <H2 marginTop="0px" marginBottom="0px">
+              {kravene.totalElements ? kravene.totalElements : 0} Krav
+            </H2>
           </Block>
           <Block display="flex" justifyContent="flex-end" width="100%" alignItems="center">
-
-            <Block display={responsiveDisplay} alignItems="center" justifyContent='flex-start' width="100%">
+            <Block display={responsiveDisplay} alignItems="center" justifyContent="flex-start" width="100%">
               <Label3>Filter</Label3>
               <Block marginLeft={selectorMarginLeft} marginTop={selectorMarginTop} width="100%" minWidth="200px">
                 <CustomizedSelect
                   clearable={false}
                   size="compact"
                   placeholder="tema"
-                  options={getOptions('Alle tema', temaer?.map((t) => {
-                    return ({label: t.shortName, id: t.code})
-                  }))}
+                  options={getOptions(
+                    'Alle tema',
+                    temaer?.map((t) => {
+                      return { label: t.shortName, id: t.code }
+                    }),
+                  )}
                   value={filter.tema}
-                  onChange={(params) =>
-                    updateFilter(params.value, KravListFilter.TEMAER)
-                  }
+                  onChange={(params) => updateFilter(params.value, KravListFilter.TEMAER)}
                 />
               </Block>
               <Block marginLeft={selectorMarginLeft} marginTop={selectorMarginTop} width="100%" minWidth="200px">
@@ -607,14 +608,17 @@ const AllKrav = () => {
                   clearable={false}
                   size="compact"
                   placeholder="relevans"
-                  options={getOptions('Alle relevans', relevans?.map((r) => {
-                    return ({label: r.shortName, id: r.code})
-                  }))}
+                  options={getOptions(
+                    'Alle relevans',
+                    relevans?.map((r) => {
+                      return { label: r.shortName, id: r.code }
+                    }),
+                  )}
                   value={filter.relevans}
                   overrides={{
                     DropdownListItem: {
                       style: {
-                        wordBreak: 'break-all'
+                        wordBreak: 'break-all',
                       },
                     },
                     Tag: {
@@ -624,16 +628,14 @@ const AllKrav = () => {
                           Root: {
                             style: {
                               maxWidth: '150px',
-                              width: 'fit-content'
-                            }
-                          }
-                        }
-                      }
-                    }
+                              width: 'fit-content',
+                            },
+                          },
+                        },
+                      },
+                    },
                   }}
-                  onChange={(params) =>
-                    updateFilter(params.value, KravListFilter.RELEVANS)
-                  }
+                  onChange={(params) => updateFilter(params.value, KravListFilter.RELEVANS)}
                 />
               </Block>
 
@@ -645,7 +647,7 @@ const AllKrav = () => {
                   overrides={{
                     DropdownListItem: {
                       style: {
-                        wordBreak: 'break-all'
+                        wordBreak: 'break-all',
                       },
                     },
                     Tag: {
@@ -654,20 +656,16 @@ const AllKrav = () => {
                           Root: {
                             style: {
                               maxWidth: '150px',
-                              width: 'fit-content'
-                            }
-                          }
-                        }
-                      }
-                    }
+                              width: 'fit-content',
+                            },
+                          },
+                        },
+                      },
+                    },
                   }}
-                  options={
-                    getLovOptions()
-                  }
+                  options={getLovOptions()}
                   value={filter.lover}
-                  onChange={(params) =>
-                    updateFilter(params.value, KravListFilter.LOVER)
-                  }
+                  onChange={(params) => updateFilter(params.value, KravListFilter.LOVER)}
                 />
               </Block>
               <Block marginLeft={selectorMarginLeft} marginTop={selectorMarginTop} width="100%" minWidth="200px">
@@ -675,15 +673,20 @@ const AllKrav = () => {
                   clearable={false}
                   size="compact"
                   placeholder="Status"
-                  options={getOptions('Alle statuser', [{id: KravStatus.AKTIV, label: 'Aktiv'}, {id: KravStatus.UNDER_ARBEID, label: 'Under Arbeid'}, {
-                    id: KravStatus.UTGAATT,
-                    label: 'Utgått'
-                  }, {id: KravStatus.UTKAST, label: 'Utkast'},])}
+                  options={getOptions('Alle statuser', [
+                    { id: KravStatus.AKTIV, label: 'Aktiv' },
+                    { id: KravStatus.UNDER_ARBEID, label: 'Under Arbeid' },
+                    {
+                      id: KravStatus.UTGAATT,
+                      label: 'Utgått',
+                    },
+                    { id: KravStatus.UTKAST, label: 'Utkast' },
+                  ])}
                   value={filter.status}
                   overrides={{
                     DropdownListItem: {
                       style: {
-                        wordBreak: 'break-all'
+                        wordBreak: 'break-all',
                       },
                     },
                     Tag: {
@@ -692,16 +695,14 @@ const AllKrav = () => {
                           Root: {
                             style: {
                               maxWidth: '100px',
-                              width: 'fit-content'
-                            }
-                          }
-                        }
-                      }
-                    }
+                              width: 'fit-content',
+                            },
+                          },
+                        },
+                      },
+                    },
                   }}
-                  onChange={(params) =>
-                    updateFilter(params.value, KravListFilter.STATUS)
-                  }
+                  onChange={(params) => updateFilter(params.value, KravListFilter.STATUS)}
                 />
               </Block>
             </Block>
@@ -729,15 +730,12 @@ const AllKrav = () => {
           </Block>
         </Block>
       </Block>
-      <KravPanels kravene={sortedKravList} loading={loading}/>
-      {sortedKravList.length === 0 &&
-      <Block width="100%" display="flex" justifyContent="center">
-        <Paragraph2>
-          Fant ingen krav
-        </Paragraph2>
-      </Block>
-      }
-
+      <KravPanels kravene={sortedKravList} loading={loading} />
+      {sortedKravList.length === 0 && (
+        <Block width="100%" display="flex" justifyContent="center">
+          <Paragraph2>Fant ingen krav</Paragraph2>
+        </Block>
+      )}
 
       {!loading && kravene.totalElements !== 0 && (
         <Block display={'flex'} justifyContent={'space-between'} marginTop={theme.sizing.scale1000}>
@@ -748,7 +746,7 @@ const AllKrav = () => {
 
             {gqlLoading && (
               <Block marginLeft={theme.sizing.scale400}>
-                <Spinner size={theme.sizing.scale800}/>
+                <Spinner size={theme.sizing.scale800} />
               </Block>
             )}
           </Block>
@@ -759,5 +757,4 @@ const AllKrav = () => {
       )}
     </Block>
   )
-
 }

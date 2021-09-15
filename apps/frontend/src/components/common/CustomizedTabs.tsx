@@ -8,10 +8,7 @@ import { ettlevColors } from '../../util/theme'
 import { ReactNode } from 'react-markdown/lib/react-markdown'
 
 export const CustomizedTab = (props: TabProps) => {
-
-  return <Tab {...props}>
-    {props.children}
-  </Tab>
+  return <Tab {...props}>{props.children}</Tab>
 }
 
 interface TabsContent {
@@ -28,16 +25,16 @@ interface CustomizedTabsProps {
   small?: boolean
   tabs?: TabsContent[]
 
-  children?: React.ReactNode;
-  activeKey?: React.Key;
-  disabled?: boolean;
-  fill?: FILL[keyof FILL];
-  orientation?: ORIENTATION[keyof ORIENTATION];
-  activateOnFocus?: boolean;
-  renderAll?: boolean;
-  onChange?: (params: { activeKey: React.Key }) => void;
-  overrides?: TabsOverrides;
-  uid?: string;
+  children?: React.ReactNode
+  activeKey?: React.Key
+  disabled?: boolean
+  fill?: FILL[keyof FILL]
+  orientation?: ORIENTATION[keyof ORIENTATION]
+  activateOnFocus?: boolean
+  renderAll?: boolean
+  onChange?: (params: { activeKey: React.Key }) => void
+  overrides?: TabsOverrides
+  uid?: string
 }
 
 export const CustomizedTabs = (props: CustomizedTabsProps) => {
@@ -49,7 +46,7 @@ export const CustomizedTabs = (props: CustomizedTabsProps) => {
   const hoverAndFocusStyle: StyleObject = {
     color: activeColor,
     borderBottomColor: fontColor,
-    background: 'transparent'
+    background: 'transparent',
   }
 
   return (
@@ -64,19 +61,19 @@ export const CustomizedTabs = (props: CustomizedTabsProps) => {
             marginLeft: '-2px',
             marginRight: '-2px',
             height: '50px',
-            whiteSpace: 'nowrap'
+            whiteSpace: 'nowrap',
           },
         },
         TabBorder: {
           style: {
-            backgroundColor: 'transparent'
-          }
+            backgroundColor: 'transparent',
+          },
         },
         TabHighlight: {
           style: {
-            backgroundColor: 'transparent'
-          }
-        }
+            backgroundColor: 'transparent',
+          },
+        },
       }}
       onChange={({ activeKey }) => {
         if (props.onChange) props.onChange({ activeKey })
@@ -115,13 +112,13 @@ export const CustomizedTabs = (props: CustomizedTabsProps) => {
 
                   ...(props.small
                     ? {
-                      marginRight: theme.sizing.scale1000,
-                      fontSize: '18px',
-                    }
+                        marginRight: theme.sizing.scale1000,
+                        fontSize: '18px',
+                      }
                     : {
-                      marginLeft: index === 0 ? 0 : theme.sizing.scale1000,
-                      fontSize: '20px',
-                    }),
+                        marginLeft: index === 0 ? 0 : theme.sizing.scale1000,
+                        fontSize: '20px',
+                      }),
                 }),
               },
               TabPanel: {

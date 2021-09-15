@@ -104,14 +104,14 @@ export const BehandlingPage = () => {
           ...borderWidth('2px'),
           ...borderStyle('solid'),
           ...borderColor(emptyRelevans ? ettlevColors.navOransje : ettlevColors.green100),
-          ...padding('15px','24px'),
+          ...padding('15px', '24px'),
         }}
       >
         <Block flexDirection="column">
           {emptyRelevans ? (
             <Block display="flex">
               <img style={{ marginTop: '-12px', marginRight: theme.sizing.scale400 }} src={warningAlert} alt="" />
-              <H2 $style={{color: ettlevColors.green600,fontSize: '22px'}} margin="0px" marginBottom="14px">
+              <H2 $style={{ color: ettlevColors.green600, fontSize: '22px' }} margin="0px" marginBottom="14px">
                 Ingen egenskaper er oppgitt
               </H2>
             </Block>

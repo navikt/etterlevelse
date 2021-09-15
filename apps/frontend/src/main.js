@@ -43,9 +43,8 @@ const Main = (props) => {
               <title>Etterlevelse Beta</title>
             </Helmet>
 
-            <Block {...containerProps} minHeight="100vh" position='relative'>
-              <Block {...containerProps} display='flex'
-                flexDirection='column'>
+            <Block {...containerProps} minHeight="100vh" position="relative">
+              <Block {...containerProps} display="flex" flexDirection="column">
                 <Header />
                 <Routes />
               </Block>

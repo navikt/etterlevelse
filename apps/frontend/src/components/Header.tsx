@@ -236,7 +236,13 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
       <SkipToContent />
       <Block width="100%" maxWidth={maxPageWidth}>
         <StyledLink href="#main"></StyledLink>
-        <Block paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall} width={responsiveWidthSmall} height="76px" overrides={{ Block: { props: { role: 'banner', 'aria-label': 'Header meny' } } }}>
+        <Block
+          paddingLeft={responsivePaddingSmall}
+          paddingRight={responsivePaddingSmall}
+          width={responsiveWidthSmall}
+          height="76px"
+          overrides={{ Block: { props: { role: 'banner', 'aria-label': 'Header meny' } } }}
+        >
           <HeaderNavigation overrides={{ Root: { style: { paddingBottom: 0, borderBottomStyle: 'none' } } }}>
             <NavigationList $align={ALIGN.left} $style={{ paddingLeft: 0 }}>
               <NavigationItem $style={{ paddingLeft: 0 }}>

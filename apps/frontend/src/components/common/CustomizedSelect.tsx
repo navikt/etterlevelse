@@ -14,7 +14,8 @@ const customOverrides: SelectOverrides = {
     },
   },
   SelectArrow: {
-    component: ({ $isOpen }: { $isOpen: boolean }) => $isOpen ? <img src={navChevronDownIcon} alt="Chevron opp" style={{ transform: 'rotate(180deg)' }} /> : <img src={navChevronDownIcon} alt="Chevron ned" />
+    component: ({ $isOpen }: { $isOpen: boolean }) =>
+      $isOpen ? <img src={navChevronDownIcon} alt="Chevron opp" style={{ transform: 'rotate(180deg)' }} /> : <img src={navChevronDownIcon} alt="Chevron ned" />,
   },
   DropdownListItem: {
     style: {

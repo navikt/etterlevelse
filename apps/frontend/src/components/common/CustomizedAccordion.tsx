@@ -36,11 +36,13 @@ export const CustomizedPanel = (props: CustomProps) => {
         ':hover': {
           textDecoration: 'underline',
           color: ettlevColors.green800,
-          ...(expanded ? {
-            boxShadow: 'none',
-          } : {
-            boxShadow: '0px 3px 4px rgba(0, 0, 0, 0.12)',
-          })
+          ...(expanded
+            ? {
+                boxShadow: 'none',
+              }
+            : {
+                boxShadow: '0px 3px 4px rgba(0, 0, 0, 0.12)',
+              }),
         },
       },
     },
@@ -59,16 +61,18 @@ export const CustomizedPanel = (props: CustomProps) => {
     },
     PanelContainer: {
       style: {
-        ...(expanded ? {
-          ...borderColor(ettlevColors.grey200),
-        } : {
-          ...borderColor(ettlevColors.grey100),
-        }),
+        ...(expanded
+          ? {
+              ...borderColor(ettlevColors.grey200),
+            }
+          : {
+              ...borderColor(ettlevColors.grey100),
+            }),
         ...borderStyle('solid'),
         ...borderWidth('1px'),
         ...borderRadius('4px'),
         marginBottom: theme.sizing.scale200,
-        backgroundColor: ettlevColors.white
+        backgroundColor: ettlevColors.white,
       },
     },
   }
@@ -92,9 +96,9 @@ export const CustomizedPanel = (props: CustomProps) => {
   return <Panel {...props} overrides={overrides} title={getTitle()} />
 }
 
-export const CustomPanelDivider = (props: { children: React.ReactNode}) => (
-  <Block backgroundColor={ettlevColors.white} $style={{ ...borderRadius('4px')}}>
-    <Block width="calc(100% - 48px)" backgroundColor={ettlevColors.grey100} height="1px" marginLeft={theme.sizing.scale800} marginRight={theme.sizing.scale800}/>
+export const CustomPanelDivider = (props: { children: React.ReactNode }) => (
+  <Block backgroundColor={ettlevColors.white} $style={{ ...borderRadius('4px') }}>
+    <Block width="calc(100% - 48px)" backgroundColor={ettlevColors.grey100} height="1px" marginLeft={theme.sizing.scale800} marginRight={theme.sizing.scale800} />
     {props.children}
   </Block>
 )

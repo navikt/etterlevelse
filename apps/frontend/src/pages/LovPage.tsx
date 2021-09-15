@@ -61,7 +61,7 @@ const LovSide = ({ lov }: { lov: LovCode }) => {
   const breadcrumbPaths: breadcrumbPaths[] = [
     {
       pathName: 'Forstå kravene',
-      href: '/tema'
+      href: '/tema',
     },
     {
       pathName: `${tema?.shortName}`,
@@ -79,7 +79,9 @@ const LovSide = ({ lov }: { lov: LovCode }) => {
       headerOverlap={'125px'}
       header={
         <>
-          <H1 marginTop='0px' color={fontColor}>{lov.shortName}</H1>
+          <H1 marginTop="0px" color={fontColor}>
+            {lov.shortName}
+          </H1>
 
           <Block
             minHeight={'125px'}

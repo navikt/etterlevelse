@@ -1,19 +1,19 @@
 import React from 'react'
 import ReactMarkdown from 'react-markdown'
-import {Paragraph1, Paragraph2} from 'baseui/typography'
-import {StatefulTooltip} from 'baseui/tooltip'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faExternalLinkAlt} from '@fortawesome/free-solid-svg-icons'
-import {useDebouncedState} from '../../util/hooks'
+import { Paragraph1, Paragraph2 } from 'baseui/typography'
+import { StatefulTooltip } from 'baseui/tooltip'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons'
+import { useDebouncedState } from '../../util/hooks'
 import MdEditor from 'react-markdown-editor-lite'
 import 'react-markdown-editor-lite/lib/index.css'
-import {Block} from 'baseui/block'
-import {theme} from '../../util'
-import {ExternalLink} from './RouteLink'
-import {markdownLink} from '../../util/config'
+import { Block } from 'baseui/block'
+import { theme } from '../../util'
+import { ExternalLink } from './RouteLink'
+import { markdownLink } from '../../util/config'
 import remarkGfm from 'remark-gfm'
 import rehypeRaw from 'rehype-raw'
-import {ettlevColors} from '../../util/theme'
+import { ettlevColors } from '../../util/theme'
 
 export const Markdown = ({
   vertical,
@@ -24,7 +24,7 @@ export const Markdown = ({
   sources: sourcesOrig,
   p1,
   fontColor,
-  maxWidth
+  maxWidth,
 }: {
   source?: string
   sources?: string[]
@@ -94,7 +94,7 @@ export const Markdown = ({
         color: theme.colors.contentPrimary,
         fontFamily: theme.typography.font400.fontFamily,
         fontWeight: theme.typography.font400.fontWeight,
-        maxWidth: maxWidth?maxWidth:undefined
+        maxWidth: maxWidth ? maxWidth : undefined,
       }}
     >
       <ReactMarkdown children={sources.join(vertical ? '\n\n' : ', ')} components={renderers} remarkPlugins={[remarkGfm]} rehypePlugins={htmlPlugins} />

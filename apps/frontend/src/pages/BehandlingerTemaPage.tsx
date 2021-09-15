@@ -152,10 +152,10 @@ export const BehandlingerTemaPage = () => {
         </Block>
         <Block>
           <Block>
-          <Paragraph2 marginBottom="0px" marginTop="0px">
-            Steg 2 av 3
+            <Paragraph2 marginBottom="0px" marginTop="0px">
+              Steg 2 av 3
             </Paragraph2>
-            </Block>
+          </Block>
           <H2 marginTop="0px" marginBottom="0px">
             Krav til utfylling
           </H2>
@@ -164,14 +164,14 @@ export const BehandlingerTemaPage = () => {
 
       <Block display="flex" alignItems="center">
         <Block display="flex" alignItems="baseline" marginRight="30px">
-          <Paragraph2 $style={{fontWeight: 900, fontSize: '32px', lineHeight: '40px'}} color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
+          <Paragraph2 $style={{ fontWeight: 900, fontSize: '32px', lineHeight: '40px' }} color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
             {kravData.filter((k) => k.gammelVersjon === false).length}
           </Paragraph2>
           <Paragraph2>krav</Paragraph2>
         </Block>
         <Block $style={{ border: '1px solid ' + ettlevColors.green50, background: '#102723' }} height="40px" />
         <Block display="flex" alignItems="baseline" marginLeft="30px">
-          <Paragraph2 $style={{fontWeight: 900, fontSize: '32px', lineHeight: '40px'}} color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
+          <Paragraph2 $style={{ fontWeight: 900, fontSize: '32px', lineHeight: '40px' }} color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
             {getPercentageUtfylt()}
           </Paragraph2>
           <Paragraph2> ferdig utfylt</Paragraph2>
@@ -191,11 +191,11 @@ export const BehandlingerTemaPage = () => {
       })
     } else {
       return (
-              <CustomPanelDivider>
-                <Block display="flex" width="100%" marginLeft="24px">
-                  <Paragraph4> {emptyMessage}</Paragraph4>
-                </Block>    
-              </CustomPanelDivider>
+        <CustomPanelDivider>
+          <Block display="flex" width="100%" marginLeft="24px">
+            <Paragraph4> {emptyMessage}</Paragraph4>
+          </Block>
+        </CustomPanelDivider>
       )
     }
   }
@@ -271,7 +271,7 @@ const PanelHeader = (props: { title: string; kravData: KravEtterlevelseData[] })
     antallSuksesskriterier += k.suksesskriterier.length
   })
 
-  const responsiveAlignment: Responsive<JustifyContent>  = ['flex-start', 'flex-start', 'flex-start', 'flex-end', 'flex-end', 'flex-end']
+  const responsiveAlignment: Responsive<JustifyContent> = ['flex-start', 'flex-start', 'flex-start', 'flex-end', 'flex-end', 'flex-end']
 
   return (
     <Block display={responsiveBreakPoints} width="100%">

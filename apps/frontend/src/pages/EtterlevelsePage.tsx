@@ -56,7 +56,7 @@ export const EtterlevelsePage = () => {
   const breadcrumbPaths: breadcrumbPaths[] = [
     {
       pathName: 'Forstå kravene',
-      href: '/tema'
+      href: '/tema',
     },
     {
       pathName: `K${krav?.kravNummer}.${krav?.kravVersjon}`,
@@ -70,7 +70,7 @@ export const EtterlevelsePage = () => {
       {!loading && (
         <Block backgroundColor={ettlevColors.green800} display="flex" width="100%" justifyContent="center" paddingBottom="32px">
           <Block maxWidth={maxPageWidth} width="100%">
-            <Block paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall}  display="flex" flexDirection="column" justifyContent="center">
+            <Block paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall} display="flex" flexDirection="column" justifyContent="center">
               <Block display="flex" width="100%" justifyContent="center" marginTop="24px">
                 <Block display="flex" alignItems="center" width="100%">
                   <Block flex="1" display="flex" justifyContent="flex-start">
@@ -120,9 +120,11 @@ export const EtterlevelsePage = () => {
               </Block>
             </Block>
 
-            <Block paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall}  width={responsiveWidthSmall} display="flex" justifyContent="center">
+            <Block paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall} width={responsiveWidthSmall} display="flex" justifyContent="center">
               <Block maxWidth={pageWidth} width="100%">
-                <H1 marginTop='0px' $style={{ color: ettlevColors.grey25 }}>Etterlevelse</H1>
+                <H1 marginTop="0px" $style={{ color: ettlevColors.grey25 }}>
+                  Etterlevelse
+                </H1>
                 {etterlevelse && etterlevelse?.kravNummer !== 0 && krav && (
                   <Label3
                     $style={{
@@ -139,7 +141,7 @@ export const EtterlevelsePage = () => {
         </Block>
       )}
 
-      <Block display="flex" width={responsiveWidthSmall} justifyContent="center" paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall} >
+      <Block display="flex" width={responsiveWidthSmall} justifyContent="center" paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall}>
         <Block maxWidth={pageWidth} width="100%">
           {etterlevelse && !loading && krav && <ViewEtterlevelse etterlevelse={etterlevelse} setEtterlevelse={setEtterlevelse} loading={loading} krav={krav} />}
           {/* {

@@ -46,7 +46,7 @@ export const MyBehandlingerPage = () => (
             </Button>
           </RouteLink> */}
           <CustomizedBreadcrumbs currentPage="Dokumentere etterlevelse" />
-          <HeadingXXLarge marginTop='0' >Dokumentere etterlevelse</HeadingXXLarge>
+          <HeadingXXLarge marginTop="0">Dokumentere etterlevelse</HeadingXXLarge>
         </Block>
       </Block>
     </Block>
@@ -157,7 +157,7 @@ const BehandlingTabs = () => {
           key: 'alle',
           title: 'Alle',
           content: <Alle />,
-        }
+        },
       ]}
     />
   )
@@ -317,7 +317,7 @@ const Alle = () => {
             // EndEnhancer: {style: {marginLeft: theme.sizing.scale400, paddingLeft: 0, paddingRight: 0, backgroundColor: ettlevColors.black}}
           }}
           startEnhancer={<img src={searchIcon} alt="Søk ikon" />}
-        // endEnhancer={<img aria-hidden alt={'Søk ikon'} src={sokButtonIcon} />}
+          // endEnhancer={<img aria-hidden alt={'Søk ikon'} src={sokButtonIcon} />}
         />
         {tooShort && (
           <LabelSmall color={ettlevColors.error400} alignSelf={'flex-end'} marginTop={theme.sizing.scale200}>

@@ -1,22 +1,22 @@
 import * as React from 'react'
-import {useEffect} from 'react'
-import {StatefulSelect} from 'baseui/select'
-import {Block} from 'baseui/block'
-import {KIND, SIZE as ButtonSize} from 'baseui/button'
-import {useHistory, useParams} from 'react-router-dom'
+import { useEffect } from 'react'
+import { StatefulSelect } from 'baseui/select'
+import { Block } from 'baseui/block'
+import { KIND, SIZE as ButtonSize } from 'baseui/button'
+import { useHistory, useParams } from 'react-router-dom'
 
-import {H4} from 'baseui/typography'
-import {StyledSpinnerNext} from 'baseui/spinner'
+import { H4 } from 'baseui/typography'
+import { StyledSpinnerNext } from 'baseui/spinner'
 import Button from '../../common/Button'
-import {faPlus} from '@fortawesome/free-solid-svg-icons'
-import {useAwait, useForceUpdate} from '../../../util/hooks'
-import {Code, codelist, CodeListFormValues} from '../../../services/Codelist'
-import {createCodelist} from '../../../api/CodelistApi'
-import {theme} from '../../../util'
-import {user} from '../../../services/User'
+import { faPlus } from '@fortawesome/free-solid-svg-icons'
+import { useAwait, useForceUpdate } from '../../../util/hooks'
+import { Code, codelist, CodeListFormValues } from '../../../services/Codelist'
+import { createCodelist } from '../../../api/CodelistApi'
+import { theme } from '../../../util'
+import { user } from '../../../services/User'
 import CreateCodeListModal from './ModalCreateCodeList'
 import CodeListTable from './CodeListStyledTable'
-import {ettlevColors, responsivePaddingSmall, responsiveWidthSmall} from '../../../util/theme'
+import { ettlevColors, responsivePaddingSmall, responsiveWidthSmall } from '../../../util/theme'
 
 const CodeListPage = () => {
   const params = useParams<{ listname?: string }>()
@@ -37,7 +37,7 @@ const CodeListPage = () => {
       await createCodelist({ ...values } as Code)
       await codelist.refreshCodeLists()
       setCreateCodeListModal(false)
-    } catch (error:any) {
+    } catch (error: any) {
       setCreateCodeListModal(true)
       setErrorOnResponse(error.message)
     }

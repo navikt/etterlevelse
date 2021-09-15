@@ -24,22 +24,22 @@ const CustomizedBreadcrumbs = (props: CustomizedProps) => {
     Separator: {
       style: {
         color: props.fontColor ? props.fontColor : undefined,
-        marginBottom: '4px'
+        marginBottom: '4px',
       },
     },
     Root: {
       style: {
         color: props.fontColor ? props.fontColor : undefined,
-        marginBottom: theme.sizing.scale1000
+        marginBottom: theme.sizing.scale1000,
       },
     },
     ListItem: {
       style: {
         ':hover': {
-          textDecoration: 'underline'
-        }
-      }
-    }
+          textDecoration: 'underline',
+        },
+      },
+    },
   }
 
   const overrides = _.merge(customOverrides, props.overrides)
@@ -59,29 +59,28 @@ const CustomizedBreadcrumbs = (props: CustomizedProps) => {
   }
 
   return (
-    <Block display='flex'>
+    <Block display="flex">
       <Breadcrumbs overrides={overrides}>
         <RouteLink hideUnderline fontColor={props.fontColor} href="/">
           Forsiden
         </RouteLink>
         {getBreadcrumbs()}
       </Breadcrumbs>
-      {props.currentPage &&
+      {props.currentPage && (
         <Block
           $style={{
             color: props.fontColor ? props.fontColor : undefined,
             fontFamily: 'Source Sans Pro',
-            fontWeight: 500
+            fontWeight: 500,
           }}
           display={['none', 'none', 'none', 'flex', 'flex', 'flex']}
         >
-          <Block marginLeft='8px' marginRight='8px' marginTop='4px' marginBottom='4px'>
+          <Block marginLeft="8px" marginRight="8px" marginTop="4px" marginBottom="4px">
             <ChevronRight />
           </Block>
-          <Block>
-            {getName(props.currentPage)}
-          </Block>
-        </Block>}
+          <Block>{getName(props.currentPage)}</Block>
+        </Block>
+      )}
     </Block>
   )
 }

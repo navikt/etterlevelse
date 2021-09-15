@@ -22,7 +22,7 @@ export const PanelLink = ({
   statusText,
   overrides,
   useTitleUnderLine,
-  useDescriptionUnderline
+  useDescriptionUnderline,
 }: {
   href: string
   title: string | React.ReactNode
@@ -62,7 +62,7 @@ export const PanelLink = ({
           position: 'relative',
           boxSizing: 'border-box',
           boxShadow: '0px 3px 4px rgba(0, 0, 0, 0.12)',
-          textDecoration: useUnderline ? 'underline' : 'none'
+          textDecoration: useUnderline ? 'underline' : 'none',
         },
       },
     },
@@ -78,12 +78,7 @@ export const PanelLink = ({
         display: 'flex',
       }}
     >
-      <Block
-        display={responsiveDisplay}
-        overrides={mergedOverrides}
-        onMouseEnter={() => setHover(true)}
-        onMouseLeave={() => setHover(false)}
-      >
+      <Block display={responsiveDisplay} overrides={mergedOverrides} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
         <Block display="flex" marginLeft="27px" alignItems="center">
           {typeof panelIcon === 'function' ? panelIcon(hover) : panelIcon}
         </Block>
@@ -96,42 +91,42 @@ export const PanelLink = ({
           flexDirection={flip ? 'column-reverse' : 'column'}
           justifyContent={'center'}
         >
-          <Block $style={{
-            textDecoration: useTitleUnderLine && hover ? 'underline' : 'none'
-
-          }}>
+          <Block
+            $style={{
+              textDecoration: useTitleUnderLine && hover ? 'underline' : 'none',
+            }}
+          >
             {title instanceof String ? <LabelLarge $style={{ lineHeight: '20px' }}>{title}</LabelLarge> : title}
           </Block>
-          <Block $style={{
-            textDecoration: useDescriptionUnderline && hover ? 'underline' : 'none'
-          }}>
-            {beskrivelse instanceof String ?
+          <Block
+            $style={{
+              textDecoration: useDescriptionUnderline && hover ? 'underline' : 'none',
+            }}
+          >
+            {beskrivelse instanceof String ? (
               <ParagraphSmall marginBottom={0} marginTop={theme.sizing.scale100}>
                 {beskrivelse}
-              </ParagraphSmall> :
+              </ParagraphSmall>
+            ) : (
               beskrivelse
-            }
+            )}
           </Block>
         </Block>
 
-        <Block
-          display="flex"
-        >
-          {
-            statusText && (
-              <Block
-                minWidth="100px"
-                display="flex"
-                flexDirection={['row', 'row', 'row', 'row-reverse', 'row-reverse', 'row-reverse']}
-                marginRight="20px"
-                alignItems="center"
-                marginLeft={[theme.sizing.scale600, theme.sizing.scale600, theme.sizing.scale600, '0px', '0px', '0px']}
-                marginTop={[theme.sizing.scale600, theme.sizing.scale600, theme.sizing.scale600, '0px', '0px', '0px']}
-              >
-                {statusText instanceof String ? <LabelSmall>{statusText}</LabelSmall> : statusText}
-              </Block>
-            )
-          }
+        <Block display="flex">
+          {statusText && (
+            <Block
+              minWidth="100px"
+              display="flex"
+              flexDirection={['row', 'row', 'row', 'row-reverse', 'row-reverse', 'row-reverse']}
+              marginRight="20px"
+              alignItems="center"
+              marginLeft={[theme.sizing.scale600, theme.sizing.scale600, theme.sizing.scale600, '0px', '0px', '0px']}
+              marginTop={[theme.sizing.scale600, theme.sizing.scale600, theme.sizing.scale600, '0px', '0px', '0px']}
+            >
+              {statusText instanceof String ? <LabelSmall>{statusText}</LabelSmall> : statusText}
+            </Block>
+          )}
           <Block display="flex" width="100%">
             {(rightTitle || rightBeskrivelse) && (
               <Block display="flex">
@@ -264,17 +259,14 @@ export const PanelLinkCard = ({
             justifyContent: 'space-between',
           }}
         >
-          <Block overrides={headerOverrides} display={['flex', 'flex', 'flex', 'flex', 'block', 'block']}
-            marginBottom={theme.sizing.scale400}>
+          <Block overrides={headerOverrides} display={['flex', 'flex', 'flex', 'flex', 'block', 'block']} marginBottom={theme.sizing.scale400}>
             {icon && (
-              <Block display={'flex'} justifyContent={'center'} marginTop={theme.sizing.scale600}
-                marginRight={theme.sizing.scale800}>
+              <Block display={'flex'} justifyContent={'center'} marginTop={theme.sizing.scale600} marginRight={theme.sizing.scale800}>
                 <img src={icon} alt={''} aria-hidden />
               </Block>
             )}
 
-            <Block display="flex" alignItems="flex-end" height={headerContent ? '60%' : ''}
-              marginRight={"auto"}>
+            <Block display="flex" alignItems="flex-end" height={headerContent ? '60%' : ''} marginRight={'auto'}>
               <HeadingXLarge
                 marginBottom={['0px', '0px', '0px', '0px', theme.sizing.scale700, theme.sizing.scale700]}
                 $style={{ textDecoration: href && hover ? '3px underline ' : undefined }}
@@ -291,8 +283,7 @@ export const PanelLinkCard = ({
               flexDirection: flexContent ? 'row' : 'column',
             }}
           >
-            <Block height={height} maxHeight={maxHeight} overrides={contentOverrides}
-              width={flexContent ? '100%' : undefined}>
+            <Block height={height} maxHeight={maxHeight} overrides={contentOverrides} width={flexContent ? '100%' : undefined}>
               {beskrivelse && (
                 <Block>
                   <ParagraphMedium marginTop={0}>{beskrivelse}</ParagraphMedium>
@@ -303,8 +294,7 @@ export const PanelLinkCard = ({
             </Block>
 
             {!hideArrow && (
-              <Block placeSelf={'flex-end'} padding={paddingSize}
-                paddingLeft={flexContent ? '0px' : undefined}>
+              <Block placeSelf={'flex-end'} padding={paddingSize} paddingLeft={flexContent ? '0px' : undefined}>
                 <Chevron hover={hover} icon={arrowRightIcon} distance={'8px'} />
               </Block>
             )}
@@ -316,8 +306,7 @@ export const PanelLinkCard = ({
 }
 
 const Chevron = ({ hover, icon, distance }: { hover: boolean; icon: string; distance: string }) => (
-  <Block marginLeft={hover ? `calc(${theme.sizing.scale600} + ${distance})` : theme.sizing.scale600}
-    alignSelf={'center'} marginRight={hover ? '-' + distance : 0}>
+  <Block marginLeft={hover ? `calc(${theme.sizing.scale600} + ${distance})` : theme.sizing.scale600} alignSelf={'center'} marginRight={hover ? '-' + distance : 0}>
     <img src={icon} aria-hidden alt={'Chevron høyre ikon'} width={'24px'} height={'24px'} />
   </Block>
 )

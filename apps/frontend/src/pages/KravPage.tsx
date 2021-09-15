@@ -128,19 +128,18 @@ export const KravPage = () => {
     const breadcrumbPaths: breadcrumbPaths[] = [
       {
         pathName: 'Forstå kravene',
-        href: '/tema'
+        href: '/tema',
       },
     ]
 
     if (kravTema?.shortName) {
       breadcrumbPaths.push({
         pathName: kravTema.shortName.toString(),
-        href: '/tema/' + kravTema.code
+        href: '/tema/' + kravTema.code,
       })
     }
     return breadcrumbPaths
   }
-
 
   useEffect(() => {
     // hent krav på ny ved avbryt ny versjon
@@ -241,18 +240,18 @@ export const KravPage = () => {
                   {
                     title: 'Om kravet',
                     key: 'krav',
-                    content: <ViewKrav krav={krav} alleKravVersjoner={alleKravVersjoner} />
+                    content: <ViewKrav krav={krav} alleKravVersjoner={alleKravVersjoner} />,
                   },
                   {
                     title: 'Eksempler på etterlevelse',
                     key: 'etterlevelser',
-                    content: <Etterlevelser loading={etterlevelserLoading} etterlevelser={krav.etterlevelser} />
+                    content: <Etterlevelser loading={etterlevelserLoading} etterlevelser={krav.etterlevelser} />,
                   },
                   {
                     title: 'Tilbakemeldinger',
                     key: 'tilbakemeldinger',
-                    content: <Tilbakemeldinger krav={krav} hasKravExpired={hasKravExpired()} />
-                  }
+                    content: <Tilbakemeldinger krav={krav} hasKravExpired={hasKravExpired()} />,
+                  },
                 ]}
               />
             </Block>
@@ -312,7 +311,7 @@ const Etterlevelser = ({ loading, etterlevelser: allEtterlevelser }: { loading: 
           return (
             <CustomizedPanel key={a.code} title={a.shortName} HeaderActiveBackgroundColor={ettlevColors.green50}>
               {avdelingEtterlevelser.map((e, i) => (
-                <CustomPanelDivider >
+                <CustomPanelDivider>
                   <PanelLink
                     key={e.id}
                     href={`/etterlevelse/${e.id}`}
@@ -326,11 +325,11 @@ const Etterlevelser = ({ loading, etterlevelser: allEtterlevelser }: { loading: 
                     overrides={{
                       Block: {
                         style: {
-                          ...borderStyle('hidden')
-                        }
-                      }
+                          ...borderStyle('hidden'),
+                        },
+                      },
                     }}
-                  // panelIcon={(hover) => <PageIcon hover={hover} />}
+                    // panelIcon={(hover) => <PageIcon hover={hover} />}
                   />
                 </CustomPanelDivider>
               ))}

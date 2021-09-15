@@ -47,10 +47,10 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
   const filterData = (
     unfilteredData:
       | {
-        behandling: PageResponse<{
-          stats: BehandlingStats
-        }>
-      }
+          behandling: PageResponse<{
+            stats: BehandlingStats
+          }>
+        }
       | undefined,
   ) => {
     const StatusListe: any[] = []
@@ -131,7 +131,7 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
     Dialog: {
       style: {
         height: '100%',
-        borderRadius: '8px'
+        borderRadius: '8px',
       },
     },
   }
@@ -146,7 +146,7 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
       {({ isSubmitting, isValid, errors, submitForm }) => (
         <Form>
           <CustomizedModal isOpen={!!props.showModal} overrides={customOverrides}>
-            <Block $style={{borderTopLeftRadius:'8px', borderTopRightRadius:'8px' }} backgroundColor={ettlevColors.green800} height="100px" width="100%">
+            <Block $style={{ borderTopLeftRadius: '8px', borderTopRightRadius: '8px' }} backgroundColor={ettlevColors.green800} height="100px" width="100%">
               <Block display="flex" justifyContent="space-between" paddingLeft={paddingLeft} paddingRight={theme.sizing.scale900}>
                 <Block>
                   <H1 color={ettlevColors.grey50} marginBottom="0px">
@@ -168,7 +168,7 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
               <H2>Egenskaper til behandling</H2>
               <Paragraph2 $style={{ lineHeight: '20px', maxWidth: '650px' }}>Ved å oppgi egenskaper til behandlingen, vises kun relevante krav</Paragraph2>
               <FieldArray name="irrelevansFor">
-                {(p: FieldArrayRenderProps) => {    
+                {(p: FieldArrayRenderProps) => {
                   return (
                     <FormControl>
                       <Block
@@ -179,15 +179,12 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
                         paddingLeft={theme.sizing.scale700}
                         paddingTop={theme.sizing.scale750}
                       >
-                        <ButtonGroup
-                          mode="checkbox"
-                          kind={KIND.secondary}
-                        >
+                        <ButtonGroup mode="checkbox" kind={KIND.secondary}>
                           {options.map((r, i) => (
                             <Checkbox
                               checked={selected.includes(i)}
                               labelPlacement={LABEL_PLACEMENT.right}
-                              onChange={e => {
+                              onChange={(e) => {
                                 if (!selected.includes(i)) {
                                   setSelected([...selected, i])
                                   p.remove(p.form.values.irrelevansFor.findIndex((ir: Code) => ir.code === options[i].id))
@@ -203,7 +200,7 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
                                     border: '1px solid #6A6A6A',
                                     paddingLeft: '8px',
                                     paddingRight: '16px',
-                                    paddingTop:'8px',
+                                    paddingTop: '8px',
                                     paddingBottom: '10px',
                                     marginRight: '16px',
                                     borderRadius: '4px',
@@ -219,12 +216,13 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
                                     ...borderStyle('solid'),
                                     ...borderColor('#6A6A6A'),
                                     ...borderWidth('1px'),
-                                  }
+                                  },
                                 },
-
                               }}
                             >
-                              <Paragraph2 margin='0px' $style={{ lineHeight: '22px'}}>{r.label}</Paragraph2>
+                              <Paragraph2 margin="0px" $style={{ lineHeight: '22px' }}>
+                                {r.label}
+                              </Paragraph2>
                             </Checkbox>
                           ))}
                         </ButtonGroup>
@@ -244,10 +242,14 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
                 </Paragraph2>
                 <Block display="flex" justifyContent="space-between">
                   <Block display="flex" alignItems="baseline" marginRight="30px">
-                    <Paragraph2 $style={{...marginZero,fontWeight: 900, fontSize: '32px', lineHeight: '40px'}} color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
+                    <Paragraph2
+                      $style={{ ...marginZero, fontWeight: 900, fontSize: '32px', lineHeight: '40px' }}
+                      color={ettlevColors.navOransje}
+                      marginRight={theme.sizing.scale300}
+                    >
                       {stats.length}
                     </Paragraph2>
-                    <Paragraph2 $style={{...marginZero}}>krav</Paragraph2>
+                    <Paragraph2 $style={{ ...marginZero }}>krav</Paragraph2>
                   </Block>
 
                   <Block>

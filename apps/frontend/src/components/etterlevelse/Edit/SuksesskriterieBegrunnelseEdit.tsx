@@ -128,8 +128,8 @@ const KriterieBegrunnelse = ({
                 maxWidth: '210px',
                 paddingLeft: paddingLeft,
                 ':hover': {
-                  boxShadow: 'none'
-               }
+                  boxShadow: 'none',
+                },
               },
             },
             Content: {
@@ -143,9 +143,9 @@ const KriterieBegrunnelse = ({
             },
             PanelContainer: {
               style: {
-                ...borderStyle('hidden')
-              }
-            }
+                ...borderStyle('hidden'),
+              },
+            },
           }}
         >
           <Markdown source={suksesskriterie.beskrivelse} />
