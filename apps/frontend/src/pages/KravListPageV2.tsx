@@ -21,7 +21,7 @@ import { codelist, ListName, LovCode } from '../services/Codelist'
 import { Card } from 'baseui/card'
 import { borderColor, borderRadius, borderStyle, borderWidth, margin, marginAll } from '../components/common/Style'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
-import { Option } from 'baseui/select'
+import { Option, SelectOverrides } from 'baseui/select'
 import CustomizedSelect from '../components/common/CustomizedSelect'
 
 type Section = 'siste' | 'alle'
@@ -322,6 +322,14 @@ const AllKrav = () => {
   })
   const [sortedKravList, setSortedKravList] = useState<KravQL[]>([])
 
+  const customSelectOverrides: SelectOverrides = {
+    DropdownContainer: {
+      style: {
+        width: 'fit-content'
+      }
+    }
+  }
+
   const loading = !data && gqlLoading
   const lastMer = () => {
     fetchMore({
@@ -458,26 +466,6 @@ const AllKrav = () => {
                   return { label: r.shortName, id: r.code }
                 })}
                 value={filter.relevans}
-                overrides={{
-                  DropdownListItem: {
-                    style: {
-                      wordBreak: 'break-all'
-                    },
-                  },
-                  Tag: {
-                    props: {
-                      variant: 'outlined',
-                      overrides: {
-                        Root: {
-                          style: {
-                            maxWidth: '100px',
-                            width: 'fit-content'
-                          }
-                        }
-                      }
-                    }
-                  }
-                }}
                 onChange={(params) =>
                   updateFilter(params.value, KravListFilter.RELEVANS)
                 }
@@ -507,25 +495,6 @@ const AllKrav = () => {
                 clearable={false}
                 size="compact"
                 placeholder="lover"
-                overrides={{
-                  DropdownListItem: {
-                    style: {
-                      wordBreak: 'break-all'
-                    },
-                  },
-                  Tag: {
-                    props: {
-                      overrides: {
-                        Root: {
-                          style: {
-                            maxWidth: '150px',
-                            width: 'fit-content'
-                          }
-                        }
-                      }
-                    }
-                  }
-                }}
                 options={
                   lover.map((l) => {
                     return { label: l.shortName, id: l.code }
@@ -549,25 +518,6 @@ const AllKrav = () => {
                 placeholder="Status"
                 options={[{ id: KravStatus.AKTIV, label: 'Aktiv' }, { id: KravStatus.UNDER_ARBEID, label: 'Under Arbeid' }, { id: KravStatus.UTGAATT, label: 'Utgått' }, { id: KravStatus.UTKAST, label: 'Utkast' },]}
                 value={filter.status}
-                overrides={{
-                  DropdownListItem: {
-                    style: {
-                      wordBreak: 'break-all'
-                    },
-                  },
-                  Tag: {
-                    props: {
-                      overrides: {
-                        Root: {
-                          style: {
-                            maxWidth: '100px',
-                            width: 'fit-content'
-                          }
-                        }
-                      }
-                    }
-                  }
-                }}
                 onChange={(params) =>
                   updateFilter(params.value, KravListFilter.STATUS)
                 }
@@ -599,6 +549,7 @@ const AllKrav = () => {
                       return { label: t.shortName, id: t.code }
                     }),
                   )}
+                  overrides={customSelectOverrides}
                   value={filter.tema}
                   onChange={(params) => updateFilter(params.value, KravListFilter.TEMAER)}
                 />
@@ -614,27 +565,8 @@ const AllKrav = () => {
                       return { label: r.shortName, id: r.code }
                     }),
                   )}
+                  overrides={customSelectOverrides}
                   value={filter.relevans}
-                  overrides={{
-                    DropdownListItem: {
-                      style: {
-                        wordBreak: 'break-all',
-                      },
-                    },
-                    Tag: {
-                      props: {
-                        variant: 'outlined',
-                        overrides: {
-                          Root: {
-                            style: {
-                              maxWidth: '150px',
-                              width: 'fit-content',
-                            },
-                          },
-                        },
-                      },
-                    },
-                  }}
                   onChange={(params) => updateFilter(params.value, KravListFilter.RELEVANS)}
                 />
               </Block>
@@ -644,27 +576,9 @@ const AllKrav = () => {
                   clearable={false}
                   size="compact"
                   placeholder="lover"
-                  overrides={{
-                    DropdownListItem: {
-                      style: {
-                        wordBreak: 'break-all',
-                      },
-                    },
-                    Tag: {
-                      props: {
-                        overrides: {
-                          Root: {
-                            style: {
-                              maxWidth: '150px',
-                              width: 'fit-content',
-                            },
-                          },
-                        },
-                      },
-                    },
-                  }}
                   options={getLovOptions()}
                   value={filter.lover}
+                  overrides={customSelectOverrides}
                   onChange={(params) => updateFilter(params.value, KravListFilter.LOVER)}
                 />
               </Block>
@@ -683,25 +597,7 @@ const AllKrav = () => {
                     { id: KravStatus.UTKAST, label: 'Utkast' },
                   ])}
                   value={filter.status}
-                  overrides={{
-                    DropdownListItem: {
-                      style: {
-                        wordBreak: 'break-all',
-                      },
-                    },
-                    Tag: {
-                      props: {
-                        overrides: {
-                          Root: {
-                            style: {
-                              maxWidth: '100px',
-                              width: 'fit-content',
-                            },
-                          },
-                        },
-                      },
-                    },
-                  }}
+                  overrides={customSelectOverrides}
                   onChange={(params) => updateFilter(params.value, KravListFilter.STATUS)}
                 />
               </Block>
