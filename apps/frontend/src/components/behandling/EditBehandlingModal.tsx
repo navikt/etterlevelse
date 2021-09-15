@@ -10,7 +10,7 @@ import { Behandling, BehandlingEtterlevData, PageResponse } from '../../constant
 import { ButtonGroup, SHAPE } from 'baseui/button-group'
 import { Button as BaseUIButton, KIND } from 'baseui/button'
 import { Code, codelist, ListName } from '../../services/Codelist'
-import { borderColor, borderRadius, borderStyle, borderWidth, paddingAll } from '../common/Style'
+import { borderColor, borderRadius, borderStyle, borderWidth, marginZero, paddingAll } from '../common/Style'
 import { FieldArray, FieldArrayRenderProps, Form, Formik } from 'formik'
 import { mapToFormVal, updateBehandling } from '../../api/BehandlingApi'
 import * as yup from 'yup'
@@ -131,6 +131,7 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
     Dialog: {
       style: {
         height: '100%',
+        borderRadius: '8px'
       },
     },
   }
@@ -145,7 +146,7 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
       {({ isSubmitting, isValid, errors, submitForm }) => (
         <Form>
           <CustomizedModal isOpen={!!props.showModal} overrides={customOverrides}>
-            <Block backgroundColor={ettlevColors.green800} height="100px" width="100%">
+            <Block $style={{borderTopLeftRadius:'8px', borderTopRightRadius:'8px' }} backgroundColor={ettlevColors.green800} height="100px" width="100%">
               <Block display="flex" justifyContent="space-between" paddingLeft={paddingLeft} paddingRight={theme.sizing.scale900}>
                 <Block>
                   <H1 color={ettlevColors.grey50} marginBottom="0px">
@@ -238,15 +239,15 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
               </FieldArray>
 
               <Block marginBottom="50px">
-                <Paragraph2 $style={{ lineHeight: '20px' }} marginTop={theme.sizing.scale900} marginBottom={theme.sizing.scale900}>
+                <Paragraph2 $style={{ lineHeight: '20px' }} marginTop={theme.sizing.scale900} marginBottom={theme.sizing.scale600}>
                   Basert på dine opplysninger, skal behandlingen etterleve
                 </Paragraph2>
                 <Block display="flex" justifyContent="space-between">
                   <Block display="flex" alignItems="baseline" marginRight="30px">
-                    <H1 color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
+                    <Paragraph2 $style={{...marginZero,fontWeight: 900, fontSize: '32px', lineHeight: '40px'}} color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
                       {stats.length}
-                    </H1>
-                    <Paragraph2>krav</Paragraph2>
+                    </Paragraph2>
+                    <Paragraph2 $style={{...marginZero}}>krav</Paragraph2>
                   </Block>
 
                   <Block>
