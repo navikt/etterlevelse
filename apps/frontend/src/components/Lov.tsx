@@ -63,7 +63,7 @@ const legalBasisLinkProcessor = (law: string, text?: string) => {
       // triple '§§§' is hidden, used as a trick in combination with rule 1 above
       regex: /(.*) §(§§)?(§)?\s*(\d+(-\d+)?)/g,
       fn: (key: string, result: string[]) => (
-        <CustomizedLink key={key} href={`${lovdataBase(law)}/§${result[3]}`} target="_blank" rel="noopener noreferrer">
+        <CustomizedLink key={key} href={`${lovdataBase(law)}/§${result[4]}`} target="_blank" rel="noopener noreferrer">
           {result[1]} {!result[2] && !result[3] && '§'} {result[3] && '§§'} {result[4]} <FontAwesomeIcon size="xs" icon={faExternalLinkAlt} />
         </CustomizedLink>
       ),
@@ -71,7 +71,7 @@ const legalBasisLinkProcessor = (law: string, text?: string) => {
     {
       regex: /(.*) kap(ittel)?\s*(\d+)/gi,
       fn: (key: string, result: string[]) => (
-        <CustomizedLink key={key} href={`${lovdataBase(law)}/KAPITTEL_${result[2]}`} target="_blank" rel="noopener noreferrer">
+        <CustomizedLink key={key} href={`${lovdataBase(law)}/KAPITTEL_${result[3]}`} target="_blank" rel="noopener noreferrer">
           {result[1]} Kapittel {result[3]} <FontAwesomeIcon size="xs" icon={faExternalLinkAlt} />
         </CustomizedLink>
       ),
