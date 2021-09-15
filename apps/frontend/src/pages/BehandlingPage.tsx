@@ -3,7 +3,7 @@ import { Block, Display, Responsive } from 'baseui/block'
 import { useParams } from 'react-router-dom'
 import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
 import { useBehandling } from '../api/BehandlingApi'
-import { H1, H2, HeadingLarge, Label3, Paragraph2, Paragraph4 } from 'baseui/typography'
+import { H1, H2, H3, HeadingLarge, Label3, Paragraph2, Paragraph4 } from 'baseui/typography'
 import { FormikProps } from 'formik'
 import { ettlevColors, theme } from '../util/theme'
 import { Layout2 } from '../components/scaffold/Page'
@@ -40,10 +40,10 @@ export const BehandlingPage = () => {
   const filterData = (
     unfilteredData:
       | {
-        behandling: PageResponse<{
-          stats: BehandlingStats
-        }>
-      }
+          behandling: PageResponse<{
+            stats: BehandlingStats
+          }>
+        }
       | undefined,
   ) => {
     const StatusListe: any[] = []
@@ -95,24 +95,31 @@ export const BehandlingPage = () => {
 
   const getRelevansContent = (behandling: Behandling) => {
     const emptyRelevans = behandling.irrelevansFor.length === options.length ? true : false
-    
+
     return (
       <Block
-        maxWidth='335px'
+        maxWidth="335px"
         width="calc(100% - 48px)"
         $style={{
           ...borderWidth('2px'),
           ...borderStyle('solid'),
-          ...borderColor(ettlevColors.green100),
-          ...paddingAll('24px')
+          ...borderColor(emptyRelevans ? ettlevColors.navOransje : ettlevColors.green100),
+          ...padding('15px','24px'),
         }}
       >
         <Block flexDirection="column">
-          {emptyRelevans ? <Block display="flex" >
-            
-            <H2 margin="0px" marginBottom='14px'><img style={{marginRight:theme.sizing.scale400}} src={warningAlert} alt=''/>Ingen egenskaper er oppgitt</H2>
-          </Block> : <H2 margin="0px" marginBottom='14px'>Nå vises krav for:</H2>}
-          
+          {emptyRelevans ? (
+            <Block display="flex">
+              <img style={{ marginTop: '-12px', marginRight: theme.sizing.scale400 }} src={warningAlert} alt="" />
+              <H2 $style={{color: ettlevColors.green600,fontSize: '22px'}} margin="0px" marginBottom="14px">
+                Ingen egenskaper er oppgitt
+              </H2>
+            </Block>
+          ) : (
+            <H2 margin="0px" marginBottom="14px">
+              Nå vises krav for:
+            </H2>
+          )}
 
           {!behandling.irrelevansFor.length ? getRelevans() : getRelevans(behandling.irrelevansFor)}
 
@@ -140,7 +147,6 @@ export const BehandlingPage = () => {
 
   const getSecondaryHeader = (behandling: Behandling) => (
     <Block width="100%" display={responsiveDisplay} alignItems="center" justifyContent="space-between">
-
       <Block display="flex" alignItems="center">
         <Block marginRight="30px">
           <img src={arkPennIcon} alt="penn ikon" height="50px" width="40px" />
@@ -172,12 +178,13 @@ export const BehandlingPage = () => {
           <Paragraph2>ferdig utfylt</Paragraph2>
         </Block>
       </Block>
-
     </Block>
   )
 
   const getRelevans = (irrelevans?: Code[]) => {
-    // if (irrelevans?.length === options.length) return <Paragraph4></Paragraph4>
+    if (irrelevans?.length === options.length) {
+      return <Paragraph4>For å filtrere bort krav som ikke er relevante, må dere oppgi egenskaper ved behandlingen.</Paragraph4>
+    }
 
     if (irrelevans) {
       const relevans = options
@@ -189,8 +196,10 @@ export const BehandlingPage = () => {
         <Block display={responsiveDisplay} flexWrap>
           {relevans.map((optionIndex, index) => (
             <Block key={options[optionIndex].id} display="flex">
-              <Paragraph4 $style={{...marginZero, marginRight: '8px', lineHeight: '24px'}}>{options[optionIndex].label}</Paragraph4>
-              <Block marginRight="8px" display={["none", "none", "none", "none", "block", "block"]}>{index < relevans.length - 1 ? <img alt="dot" src={ellipse80} /> : undefined}</Block>
+              <Paragraph4 $style={{ ...marginZero, marginRight: '8px', lineHeight: '24px' }}>{options[optionIndex].label}</Paragraph4>
+              <Block marginRight="8px" display={['none', 'none', 'none', 'none', 'block', 'block']}>
+                {index < relevans.length - 1 ? <img alt="dot" src={ellipse80} /> : undefined}
+              </Block>
             </Block>
           ))}
         </Block>
@@ -200,8 +209,8 @@ export const BehandlingPage = () => {
       <Block display={responsiveDisplay} flexWrap>
         {options.map((o, index) => (
           <Block key={o.id} display="flex">
-            <Paragraph4 $style={{...marginZero, marginRight: '8px', lineHeight: '24px'}}>{o.label}</Paragraph4>
-            <Block marginRight="8px" display={["none", "none", "none", "none", "block", "block"]}>
+            <Paragraph4 $style={{ ...marginZero, marginRight: '8px', lineHeight: '24px' }}>{o.label}</Paragraph4>
+            <Block marginRight="8px" display={['none', 'none', 'none', 'none', 'block', 'block']}>
               {index < options.length - 1 ? <img alt="dot" src={ellipse80} /> : undefined}
             </Block>
           </Block>
@@ -230,8 +239,7 @@ export const BehandlingPage = () => {
         currentPage={behandling.navn}
         breadcrumbPaths={breadcrumbPaths}
       >
-        <Block backgroundColor={ettlevColors.grey50} marginTop={theme.sizing.scale800}>
-        </Block>
+        <Block backgroundColor={ettlevColors.grey50} marginTop={theme.sizing.scale800}></Block>
         <Block display="flex" width="100%" justifyContent="space-between" flexWrap marginTop={theme.sizing.scale550}>
           {temaListe.map((tema) => (
             <TemaCardBehandling tema={tema} stats={stats} behandling={behandling} key={`${tema.shortName}_panel`} />
@@ -339,7 +347,7 @@ const TemaCardBehandling = ({ tema, stats, behandling }: { tema: TemaCode; stats
       flexContent
       hideArrow
     >
-      <Block marginTop={theme.sizing.scale650} width={"100%"}>
+      <Block marginTop={theme.sizing.scale650} width={'100%'}>
         <Block display="flex" flex={1}>
           <Paragraph4 marginTop="0px" marginBottom="2px">
             Ferdig utfylt:
