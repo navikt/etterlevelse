@@ -1,29 +1,28 @@
-import { Block, Display, Responsive, Scale } from 'baseui/block'
-import { H2, HeadingXXLarge, Label3, LabelSmall, Paragraph2, Paragraph4 } from 'baseui/typography'
-import { useEffect, useState } from 'react'
+import {Block, Display, Responsive, Scale} from 'baseui/block'
+import {H2, HeadingXXLarge, Label3, LabelSmall, Paragraph2, Paragraph4} from 'baseui/typography'
+import {useEffect, useState} from 'react'
 import Button from '../components/common/Button'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
 import CustomizedTabs from '../components/common/CustomizedTabs'
 import RouteLink from '../components/common/RouteLink'
-import { user } from '../services/User'
-import { theme } from '../util'
+import {user} from '../services/User'
+import {theme} from '../util'
 import moment from 'moment'
-import { ettlevColors, maxPageWidth, responsivePaddingLarge } from '../util/theme'
-import { plusIcon } from '../components/Images'
-import { useKravFilter } from '../api/KravGraphQLApi'
-import { PanelLink } from '../components/common/PanelLink'
-import { Spinner } from '../components/common/Spinner'
-import { Notification } from 'baseui/notification'
-import { emptyPage, KravListFilter, KravQL, KravStatus } from '../constants'
-import { SkeletonPanel } from '../components/common/LoadingSkeleton'
-import { kravStatus } from '../pages/KravPage'
-import { codelist, ListName } from '../services/Codelist'
-import { Card } from 'baseui/card'
-import { borderColor, borderRadius, borderStyle, borderWidth, margin, marginAll, padding } from '../components/common/Style'
-import { faPlus } from '@fortawesome/free-solid-svg-icons'
-import { Option } from 'baseui/select'
+import {ettlevColors, maxPageWidth, responsivePaddingLarge} from '../util/theme'
+import {plusIcon} from '../components/Images'
+import {useKravFilter} from '../api/KravGraphQLApi'
+import {PanelLink} from '../components/common/PanelLink'
+import {Spinner} from '../components/common/Spinner'
+import {Notification} from 'baseui/notification'
+import {emptyPage, KravListFilter, KravQL, KravStatus} from '../constants'
+import {SkeletonPanel} from '../components/common/LoadingSkeleton'
+import {kravStatus} from '../pages/KravPage'
+import {codelist, ListName} from '../services/Codelist'
+import {Card} from 'baseui/card'
+import {borderColor, borderRadius, borderStyle, borderWidth, margin, marginAll} from '../components/common/Style'
+import {faPlus} from '@fortawesome/free-solid-svg-icons'
+import {Option} from 'baseui/select'
 import CustomizedSelect from '../components/common/CustomizedSelect'
-import { ALIGN, Radio, RadioGroup } from 'baseui/radio'
 
 type Section = 'siste' | 'alle'
 
@@ -190,7 +189,7 @@ const KravTabs = () => {
         },
         {
           key: 'alle',
-          title: 'Seksjonens krav',
+          title: 'Alle krav',
           content: <AllKrav />,
         }
       ]}
@@ -297,11 +296,11 @@ const AllKrav = () => {
   const pageSize = 20
   const [pageNumber, setPage] = useState(0)
   const [sorting, setSorting] = useState('sist')
-  const [filter, setFilter] = useState<KravFilter>({ 
+  const [filter, setFilter] = useState<KravFilter>({
     status: [{ label: 'Alle statuser', id: 'alle' }],
     relevans: [{ label: 'Alle relevans', id: 'alle' }],
     tema: [],
-    lover: [{ label: 'Alle lover', id: 'alle' }] 
+    lover: [{ label: 'Alle lover', id: 'alle' }]
   })
 
   // USIKKERT OM VI SKAL FILTRERER BASERT PÅ TEMA
@@ -473,7 +472,7 @@ const AllKrav = () => {
               />
             </Block>
 
-            
+
             USIKKERT OM VI SKAL FILTERER BASERT PÅ TEMA
 
 
@@ -490,7 +489,7 @@ const AllKrav = () => {
                   updateFilter(params.value, KravListFilter.TEMAER)
                 }
               />
-            </Block> 
+            </Block>
             <Block marginLeft={selectorMarginLeft} marginTop={selectorMarginTop} width="100%" minWidth="200px">
               <CustomizedSelect
                 clearable={false}
