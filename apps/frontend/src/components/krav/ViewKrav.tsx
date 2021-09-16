@@ -220,7 +220,7 @@ const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVersjoner:
 
 const BegrepView = ({ begrep }: { begrep: Begrep }) => (
   <DotTag>
-    <ExternalLink href={termUrl(begrep.id)} label={'Link begrepskatalogen'}>
+    <ExternalLink href={termUrl(begrep.id)} label={'Link begrepskatalogen'} openOnSamePage>
       {begrep.navn}
     </ExternalLink>{' '}
     - {begrep.beskrivelse}

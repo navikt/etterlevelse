@@ -136,11 +136,12 @@ export const buttonBorderStyle: StyleObject = {
   ...borderRadius('4px'),
 }
 
-export const ExternalButton = ({ href, children, underlineHover, size }: { href: string; children: React.ReactNode; underlineHover?: boolean; size?: SIZE[keyof SIZE] }) => {
+export const ExternalButton = ({ href, children, underlineHover, size, openOnSamePage }:
+                               { href: string; children: React.ReactNode; underlineHover?: boolean; size?: SIZE[keyof SIZE], openOnSamePage?: boolean }) => {
   const kind = underlineHover ? 'underline-hover' : 'outline'
   const actualSize = size || 'compact'
   return (
-    <ExternalLink href={href} hideUnderline>
+    <ExternalLink href={href} hideUnderline openOnSamePage={openOnSamePage}>
       <Button kind={kind} size={actualSize}>
         {children} <FontAwesomeIcon icon={faExternalLinkAlt} />
       </Button>

@@ -116,7 +116,7 @@ const LovSide = ({ lov }: { lov: LovCode }) => {
                 Loven i sin helhet
               </H2>
               <Paragraph2 color={fontColor}>
-                <ExternalLink fontColor={fontColor} href={lovdataBase(lov.code)}>
+                <ExternalLink fontColor={fontColor} href={lovdataBase(lov.code)} openOnSamePage>
                   {lov.shortName} i lovdata <FontAwesomeIcon size={'sm'} icon={faExternalLinkAlt} />
                 </ExternalLink>
               </Paragraph2>
