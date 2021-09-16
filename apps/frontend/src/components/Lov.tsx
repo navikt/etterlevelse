@@ -10,26 +10,26 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 const reactProcessString = require('react-process-string')
 const processString = reactProcessString as (converters: { regex: RegExp; fn: (key: string, result: string[]) => JSX.Element | string }[]) => (input?: string) => JSX.Element[]
 
-export const LovViewList = (props: { regelverk: Regelverk[] }) => {
+export const LovViewList = (props: { regelverk: Regelverk[], openOnSamePage?: boolean }) => {
   return (
     <Block display="flex" flexDirection="column" $style={{ wordBreak: 'break-all' }}>
       {props.regelverk.map((r, i) => (
         <Block key={i}>
-          <LovView regelverk={r} />
+          <LovView regelverk={r} openOnSamePage={props.openOnSamePage}/>
         </Block>
       ))}
     </Block>
   )
 }
 
-export const LovView = (props: { regelverk?: Regelverk }) => {
+export const LovView = (props: { regelverk?: Regelverk, openOnSamePage?: boolean }) => {
   if (!props.regelverk) return null
   const { spesifisering, lov } = props.regelverk
   const lovCode = lov?.code
 
   let lovDisplay = lov && codelist.getShortname(ListName.LOV, lovCode)
 
-  let descriptionText = codelist.valid(ListName.LOV, lovCode) ? legalBasisLinkProcessor(lovCode, lovDisplay + ' ' + spesifisering) : spesifisering
+  let descriptionText = codelist.valid(ListName.LOV, lovCode) ? legalBasisLinkProcessor(lovCode, lovDisplay + ' ' + spesifisering, props.openOnSamePage) : spesifisering
 
   return <span>{descriptionText}</span>
 }
@@ -48,7 +48,7 @@ export const lovdataBase = (nationalLaw: string) => {
   }
 }
 
-const legalBasisLinkProcessor = (law: string, text?: string) => {
+const legalBasisLinkProcessor = (law: string, text?: string, openOnSamePage?: boolean) => {
   if (!findLovId(law).match(/^\d+.*/)) {
     return text
   }
@@ -63,16 +63,17 @@ const legalBasisLinkProcessor = (law: string, text?: string) => {
       // triple '§§§' is hidden, used as a trick in combination with rule 1 above
       regex: /(.*) §(§§)?(§)?\s*(\d+(-\d+)?)/g,
       fn: (key: string, result: string[]) => (
-        <CustomizedLink key={key} href={`${lovdataBase(law)}/§${result[4]}`} target="_blank" rel="noopener noreferrer">
-          {result[1]} {!result[2] && !result[3] && '§'} {result[3] && '§§'} {result[4]} <FontAwesomeIcon size="xs" icon={faExternalLinkAlt} />
+        <CustomizedLink key={key} href={`${lovdataBase(law)}/§${result[4]}`} target={openOnSamePage ? '_self' : '_blank'} rel="noopener noreferrer">
+          {result[1]} {!result[2] && !result[3] && '§'} {result[3] && '§§'} {result[4]} {openOnSamePage ? '' : ' (ny fane)'}
+          {/* <FontAwesomeIcon size="xs" icon={faExternalLinkAlt} /> */}
         </CustomizedLink>
       ),
     },
     {
       regex: /(.*) kap(ittel)?\s*(\d+)/gi,
       fn: (key: string, result: string[]) => (
-        <CustomizedLink key={key} href={`${lovdataBase(law)}/KAPITTEL_${result[3]}`} target="_blank" rel="noopener noreferrer">
-          {result[1]} Kapittel {result[3]} <FontAwesomeIcon size="xs" icon={faExternalLinkAlt} />
+        <CustomizedLink key={key} href={`${lovdataBase(law)}/KAPITTEL_${result[3]}`} target={openOnSamePage ? '_self' : '_blank'} rel="noopener noreferrer">
+          {result[1]} Kapittel {result[3]} {openOnSamePage ? '' : ' (ny fane)'}
         </CustomizedLink>
       ),
     },

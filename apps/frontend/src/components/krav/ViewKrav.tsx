@@ -175,7 +175,7 @@ const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVersjoner:
         </Label>
 
         <Label display={responsiveView} title="Regelverk" hide={!krav.regelverk.length}>
-          <LovViewList regelverk={krav.regelverk} />
+          <LovViewList openOnSamePage regelverk={krav.regelverk} />
         </Label>
 
         <Label display={responsiveView} title="Varslingsadresser" hide={!user.isKraveier()}>
