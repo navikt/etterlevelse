@@ -88,7 +88,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
                 position="sticky"
                 top={0}
                 display={!stickyHeader ? 'block' : 'flex'}
-                $style={{ zIndex: 1 }}
+                $style={{ zIndex: 3 }}
               >
                 {stickyHeader && (
                   <Block display="flex" width="100%" justifyContent="flex-start">
