@@ -150,7 +150,7 @@ const BurgerMenu = () => {
                 </ExternalLink>
               </Block>
               <Block width={'100%'}>
-                <ExternalLink href={documentationLink} hideUnderline>
+                <ExternalLink href={documentationLink} hideUnderline openOnSamePage>
                   <Block display="flex" justifyContent="center" paddingBottom={theme.sizing.scale400} alignItems="center">
                     <Paragraph4 color={theme.colors.white}>Dokumentasjon </Paragraph4>
                   </Block>

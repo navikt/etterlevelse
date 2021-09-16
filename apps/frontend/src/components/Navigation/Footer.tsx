@@ -53,7 +53,7 @@ export const Footer = () => {
               alignItems="center"
               overrides={{ Block: { props: { role: 'navigation', 'aria-label': 'Ekstern lenker' } } }}
             >
-              <ExternalLink href={datajegerSlackLink} hideUnderline>
+              <ExternalLink href={datajegerSlackLink} hideUnderline openOnSamePage>
                 <Block display="flex" alignItems="center">
                   <Block position="relative" display="flex" top={'1px'}>
                     <img src={SlackLogo} width="60px" alt="slack logo" />
@@ -64,13 +64,13 @@ export const Footer = () => {
 
               <StatefulTooltip content={`Versjon: ${env.githubVersion}`}>
                 <span>
-                  <ExternalLink fontColor="#F8F8F8" href={githubRepo} hideUnderline>
+                  <ExternalLink fontColor="#F8F8F8" href={githubRepo} hideUnderline openOnSamePage>
                     <FontAwesomeIcon color="#F8F8F8" icon={faCodeBranch} /> Github
                   </ExternalLink>
                 </span>
               </StatefulTooltip>
 
-              <ExternalLink href={documentationLink} hideUnderline>
+              <ExternalLink href={documentationLink} hideUnderline openOnSamePage>
                 <LabelMedium color="#F8F8F8" marginLeft={theme.sizing.scale200}>
                   Dokumentasjon
                 </LabelMedium>

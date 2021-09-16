@@ -190,7 +190,7 @@ const MineBehandlinger = ({ behandlinger, teams, loading }: { behandlinger: Beha
                 </ParagraphSmall>
               </Block>
               <Block alignSelf={'flex-end'} marginBottom={theme.sizing.scale400}>
-                <ExternalButton href={`${env.pollyBaseUrl}process/team/${t.id}`} underlineHover size={'mini'}>
+                <ExternalButton href={`${env.pollyBaseUrl}process/team/${t.id}`} underlineHover size={'mini'} openOnSamePage>
                   Legg til behandling
                 </ExternalButton>
               </Block>

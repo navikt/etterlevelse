@@ -112,17 +112,19 @@ export const ExternalLink = ({
   hideUnderline,
   label,
   fontColor,
+  openOnSamePage
 }: {
   href: string
   hideUnderline?: boolean
   label?: string
   children: React.ReactNode
-  fontColor?: string
+  fontColor?: string,
+  openOnSamePage?: boolean
 }) => {
   return (
     <CustomizedLink
       href={href}
-      target="_blank"
+      target={openOnSamePage ? '_self' : '_blank'}
       rel="noopener noreferrer"
       style={{ color: fontColor ? fontColor : undefined, textDecoration: hideUnderline ? 'none' : undefined }}
       aria-label={label}

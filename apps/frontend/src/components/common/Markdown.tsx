@@ -58,7 +58,7 @@ export const Markdown = ({
       return (
         <StatefulTooltip content={href}>
           <span>
-            <ExternalLink fontColor={fontColor} href={href}>
+            <ExternalLink fontColor={fontColor} href={href} openOnSamePage>
               {content} <FontAwesomeIcon size="sm" icon={faExternalLinkAlt} />
             </ExternalLink>
           </span>
@@ -70,7 +70,7 @@ export const Markdown = ({
       const content = shortenLinks && node.children[0]?.value.indexOf('http') === 0 ? 'Lenke' : children
 
       return (
-        <ExternalLink fontColor={fontColor} href={href}>
+        <ExternalLink fontColor={fontColor} href={href} openOnSamePage>
           {content}
         </ExternalLink>
       )
