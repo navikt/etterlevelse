@@ -2,8 +2,6 @@ import React from 'react'
 import ReactMarkdown from 'react-markdown'
 import { Paragraph1, Paragraph2 } from 'baseui/typography'
 import { StatefulTooltip } from 'baseui/tooltip'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons'
 import { useDebouncedState } from '../../util/hooks'
 import MdEditor from 'react-markdown-editor-lite'
 import 'react-markdown-editor-lite/lib/index.css'
@@ -59,7 +57,7 @@ export const Markdown = ({
         <StatefulTooltip content={href}>
           <span>
             <ExternalLink fontColor={fontColor} href={href} openOnSamePage>
-              {content} <FontAwesomeIcon size="sm" icon={faExternalLinkAlt} />
+              {content}
             </ExternalLink>
           </span>
         </StatefulTooltip>

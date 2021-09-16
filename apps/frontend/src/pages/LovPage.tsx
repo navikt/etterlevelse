@@ -7,8 +7,7 @@ import { ExternalLink, ObjectLink } from '../components/common/RouteLink'
 import { theme } from '../util'
 import { LovBilde } from '../components/Images'
 import { lovdataBase } from '../components/Lov'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronDown, faChevronUp, faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons'
+import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons'
 import { Markdown } from '../components/common/Markdown'
 import { ettlevColors, maxPageWidth } from '../util/theme'
 import Button from '../components/common/Button'
@@ -117,7 +116,7 @@ const LovSide = ({ lov }: { lov: LovCode }) => {
               </H2>
               <Paragraph2 color={fontColor}>
                 <ExternalLink fontColor={fontColor} href={lovdataBase(lov.code)} openOnSamePage>
-                  {lov.shortName} i lovdata <FontAwesomeIcon size={'sm'} icon={faExternalLinkAlt} />
+                  {lov.shortName} i lovdata
                 </ExternalLink>
               </Paragraph2>
             </Block>

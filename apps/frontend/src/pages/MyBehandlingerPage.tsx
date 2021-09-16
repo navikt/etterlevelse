@@ -20,9 +20,10 @@ import { useDebouncedState } from '../util/hooks'
 import { SkeletonPanel } from '../components/common/LoadingSkeleton'
 import { user } from '../services/User'
 import { useHistory, useParams } from 'react-router-dom'
-import { faPlus } from '@fortawesome/free-solid-svg-icons'
+import { faExternalLinkAlt, faPlus } from '@fortawesome/free-solid-svg-icons'
 import { borderWidth } from '../components/common/Style'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 type Section = 'mine' | 'siste' | 'alle'
 
@@ -191,7 +192,7 @@ const MineBehandlinger = ({ behandlinger, teams, loading }: { behandlinger: Beha
               </Block>
               <Block alignSelf={'flex-end'} marginBottom={theme.sizing.scale400}>
                 <ExternalButton href={`${env.pollyBaseUrl}process/team/${t.id}`} underlineHover size={'mini'} openOnSamePage>
-                  Legg til behandling
+                  Legg til behandling <FontAwesomeIcon icon={faExternalLinkAlt} />
                 </ExternalButton>
               </Block>
             </Block>

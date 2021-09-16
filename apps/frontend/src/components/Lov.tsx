@@ -4,8 +4,6 @@ import { env } from '../util/env'
 import { Regelverk } from '../constants'
 import { Block } from 'baseui/block'
 import CustomizedLink from './common/CustomizedLink'
-import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const reactProcessString = require('react-process-string')
 const processString = reactProcessString as (converters: { regex: RegExp; fn: (key: string, result: string[]) => JSX.Element | string }[]) => (input?: string) => JSX.Element[]

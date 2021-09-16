@@ -10,7 +10,6 @@ import { StyleObject } from 'styletron-react'
 import { Block } from 'baseui/block'
 import { borderRadius, borderStyle, borderWidth, paddingAll } from './Style'
 import { ettlevColors } from '../../util/theme'
-import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons'
 import { ExternalLink } from './RouteLink'
 import _ from 'lodash'
 
@@ -143,7 +142,7 @@ export const ExternalButton = ({ href, children, underlineHover, size, openOnSam
   return (
     <ExternalLink href={href} hideUnderline openOnSamePage={openOnSamePage}>
       <Button kind={kind} size={actualSize}>
-        {children} <FontAwesomeIcon icon={faExternalLinkAlt} />
+        {children}
       </Button>
     </ExternalLink>
   )
