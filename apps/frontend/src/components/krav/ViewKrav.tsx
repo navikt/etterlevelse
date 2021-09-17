@@ -1,27 +1,26 @@
-import { AdresseType, Begrep, KravQL, KravVersjon } from '../../constants'
-import { Block, Display, Responsive } from 'baseui/block'
+import {AdresseType, Begrep, KravQL, KravVersjon} from '../../constants'
+import {Block, Display, Responsive} from 'baseui/block'
 import React from 'react'
-import { kravStatus } from '../../pages/KravPage'
-import { theme } from '../../util'
+import {kravStatus} from '../../pages/KravPage'
+import {theme} from '../../util'
 import moment from 'moment'
-import { DotTag, DotTags } from '../common/DotTag'
-import { ListName } from '../../services/Codelist'
-import { Label, LabelAboveContent } from '../common/PropertyLabel'
-import RouteLink, { ExternalLink, ObjectLink } from '../common/RouteLink'
-import { slackLink, slackUserLink, termUrl } from '../../util/config'
-import { user } from '../../services/User'
-import { LovViewList } from '../Lov'
-import { SuksesskriterieCard } from './Suksesskriterie'
-import { Label3, Paragraph2 } from 'baseui/typography'
+import {DotTag, DotTags} from '../common/DotTag'
+import {ListName} from '../../services/Codelist'
+import {Label, LabelAboveContent} from '../common/PropertyLabel'
+import RouteLink, {ExternalLink, ObjectLink} from '../common/RouteLink'
+import {slackLink, slackUserLink, termUrl} from '../../util/config'
+import {user} from '../../services/User'
+import {LovViewList} from '../Lov'
+import {SuksesskriterieCard} from './Suksesskriterie'
+import {Label3, Paragraph2} from 'baseui/typography'
 import CustomizedLink from '../common/CustomizedLink'
-import { CustomizedAccordion, CustomizedPanel } from '../common/CustomizedAccordion'
-import { ettlevColors } from '../../util/theme'
-import { borderStyle } from '../common/Style'
-import { Markdown } from '../common/Markdown'
+import {CustomizedAccordion, CustomizedPanel} from '../common/CustomizedAccordion'
+import {ettlevColors} from '../../util/theme'
+import {borderStyle} from '../common/Style'
+import {Markdown} from '../common/Markdown'
 import ExpiredAlert from './ExpiredAlert'
-import { StyledLink } from 'baseui/link'
 
-const LabelWrapper = ({ children }: { children: React.ReactNode }) => (
+const LabelWrapper = ({children}: { children: React.ReactNode }) => (
   <Block marginTop="48px" marginBottom="48px">
     {children}
   </Block>
@@ -29,21 +28,21 @@ const LabelWrapper = ({ children }: { children: React.ReactNode }) => (
 
 const responsiveView: Responsive<Display> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
 
-export const ViewKrav = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVersjoner: KravVersjon[] }) => {
+export const ViewKrav = ({krav, alleKravVersjoner}: { krav: KravQL; alleKravVersjoner: KravVersjon[] }) => {
   return (
     <Block width="100%">
       {krav.suksesskriterier.map((s, i) => (
-        <SuksesskriterieCard key={s.id} suksesskriterie={s} num={i + 1} totalt={krav.suksesskriterier.length} />
+        <SuksesskriterieCard key={s.id} suksesskriterie={s} num={i + 1} totalt={krav.suksesskriterier.length}/>
       ))}
 
       {/*  <LabelAboveContent header title='Beskrivelse' markdown={krav.beskrivelse} /> */}
 
-      {<AllInfo krav={krav} alleKravVersjoner={alleKravVersjoner} />}
+      {<AllInfo krav={krav} alleKravVersjoner={alleKravVersjoner}/>}
     </Block>
   )
 }
 
-const MediumInfo = ({ krav }: { krav: KravQL }) => (
+const MediumInfo = ({krav}: { krav: KravQL }) => (
   <>
     <Label title="Status">{kravStatus(krav.status)}</Label>
     <Label title="Underavdeling">
@@ -54,7 +53,7 @@ const MediumInfo = ({ krav }: { krav: KravQL }) => (
   </>
 )
 
-const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVersjoner: KravVersjon[] }) => {
+const AllInfo = ({krav, alleKravVersjoner}: { krav: KravQL; alleKravVersjoner: KravVersjon[] }) => {
   const hasKravExpired = () => {
     return krav && krav.kravVersjon < alleKravVersjoner[0].kravVersjon
   }
@@ -71,7 +70,7 @@ const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVersjoner:
 
       <LabelWrapper>
         <LabelAboveContent header title="Kilder">
-          <DotTags items={krav.dokumentasjon} markdown inColumn />
+          <DotTags items={krav.dokumentasjon} markdown inColumn/>
         </LabelAboveContent>
       </LabelWrapper>
 
@@ -88,13 +87,13 @@ const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVersjoner:
       )}
 
       <LabelWrapper>
-        <LabelAboveContent header title="Relevante implementasjoner" markdown={krav.implementasjoner} />
+        <LabelAboveContent header title="Relevante implementasjoner" markdown={krav.implementasjoner}/>
       </LabelWrapper>
 
       <LabelWrapper>
         <LabelAboveContent header title="Begreper">
           {krav.begreper.map((b, i) => (
-            <BegrepView key={i} begrep={b} />
+            <BegrepView key={i} begrep={b}/>
           ))}
         </LabelAboveContent>
       </LabelWrapper>
@@ -103,7 +102,7 @@ const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVersjoner:
 
       <LabelWrapper>
         <LabelAboveContent header title="Kravet er relevant for">
-          <DotTags list={ListName.RELEVANS} codes={krav.relevansFor} inColumn />
+          <DotTags list={ListName.RELEVANS} codes={krav.relevansFor} inColumn/>
         </LabelAboveContent>
       </LabelWrapper>
 
@@ -125,7 +124,7 @@ const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVersjoner:
               <Block marginTop={theme.sizing.scale900} marginBottom={theme.sizing.scale1600}>
                 <CustomizedAccordion>
                   <CustomizedPanel
-                    title={<Label3 $style={{ color: ettlevColors.green800, marginRight: '7px' }}>Dette er nytt fra forrige versjon</Label3>}
+                    title={<Label3 $style={{color: ettlevColors.green800, marginRight: '7px'}}>Dette er nytt fra forrige versjon</Label3>}
                     overrides={{
                       Header: {
                         style: {
@@ -154,7 +153,7 @@ const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVersjoner:
                       },
                     }}
                   >
-                    <Markdown source={krav.versjonEndringer} noMargin />
+                    <Markdown source={krav.versjonEndringer} noMargin/>
                   </CustomizedPanel>
                 </CustomizedAccordion>
               </Block>
@@ -164,8 +163,8 @@ const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVersjoner:
       )}
 
       {hasKravExpired() && (
-        <Block $style={{ marginTop: theme.sizing.scale900, marginBottom: theme.sizing.scale1200 }}>
-          <ExpiredAlert alleKravVersjoner={alleKravVersjoner} />
+        <Block $style={{marginTop: theme.sizing.scale900, marginBottom: theme.sizing.scale1200}}>
+          <ExpiredAlert alleKravVersjoner={alleKravVersjoner}/>
         </Block>
       )}
 
@@ -175,31 +174,29 @@ const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVersjoner:
         </Label>
 
         <Label display={responsiveView} title="Regelverk" hide={!krav.regelverk.length}>
-          <LovViewList openOnSamePage regelverk={krav.regelverk} />
+          <LovViewList openOnSamePage regelverk={krav.regelverk}/>
         </Label>
 
         <Label display={responsiveView} title="Varslingsadresser" hide={!user.isKraveier()}>
-          <DotTags
-            items={krav.varslingsadresser.map((va, i) => {
-              if (va.type === AdresseType.SLACK)
-                return (
-                  <Block>
-                    Slack: <CustomizedLink href={slackLink(va.adresse)}>#{va.slackChannel?.name || va.adresse}</CustomizedLink>
-                  </Block>
-                )
-              if (va.type === AdresseType.SLACK_USER)
-                return (
-                  <Block>
-                    Slack: <CustomizedLink href={slackUserLink(va.adresse)}>{va.slackUser?.name || va.adresse}</CustomizedLink>
-                  </Block>
-                )
+          {krav.varslingsadresser.map((va, i) => {
+            if (va.type === AdresseType.SLACK)
               return (
                 <Block>
-                  Epost: <CustomizedLink href={`mailto:${va.adresse}`}>{va.adresse}</CustomizedLink>
+                  Slack: <CustomizedLink href={slackLink(va.adresse)}>#{va.slackChannel?.name || va.adresse}</CustomizedLink>
                 </Block>
               )
-            })}
-          />
+            if (va.type === AdresseType.SLACK_USER)
+              return (
+                <Block>
+                  Slack: <CustomizedLink href={slackUserLink(va.adresse)}>{va.slackUser?.name || va.adresse}</CustomizedLink>
+                </Block>
+              )
+            return (
+              <Block>
+                Epost: <CustomizedLink href={`mailto:${va.adresse}`}>{va.adresse}</CustomizedLink>
+              </Block>
+            )
+          })}
         </Label>
 
         <Label title="Status" display={responsiveView}>
@@ -218,7 +215,7 @@ const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVersjoner:
   )
 }
 
-const BegrepView = ({ begrep }: { begrep: Begrep }) => (
+const BegrepView = ({begrep}: { begrep: Begrep }) => (
   <DotTag>
     <ExternalLink href={termUrl(begrep.id)} label={'Link begrepskatalogen'} openOnSamePage>
       {begrep.navn}
