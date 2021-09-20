@@ -168,7 +168,7 @@ const AllInfo = ({krav, alleKravVersjoner}: { krav: KravQL; alleKravVersjoner: K
         </Block>
       )}
 
-      <Block backgroundColor="#F1F1F1" padding="32px">
+      <Block backgroundColor="#F1F1F1" padding="32px" marginBottom="16px"> 
         <Label display={responsiveView} title="Ansvarlig">
           {krav.underavdeling?.shortName}
         </Label>
@@ -179,20 +179,21 @@ const AllInfo = ({krav, alleKravVersjoner}: { krav: KravQL; alleKravVersjoner: K
 
         <Label display={responsiveView} title="Varslingsadresser" hide={!user.isKraveier()}>
           {krav.varslingsadresser.map((va, i) => {
+            const marginBottom="8px"
             if (va.type === AdresseType.SLACK)
               return (
-                <Block>
+                <Block marginBottom={marginBottom}>
                   Slack: <CustomizedLink href={slackLink(va.adresse)}>#{va.slackChannel?.name || va.adresse}</CustomizedLink>
                 </Block>
               )
             if (va.type === AdresseType.SLACK_USER)
               return (
-                <Block>
+                <Block marginBottom={marginBottom}>
                   Slack: <CustomizedLink href={slackUserLink(va.adresse)}>{va.slackUser?.name || va.adresse}</CustomizedLink>
                 </Block>
               )
             return (
-              <Block>
+              <Block marginBottom={marginBottom}>
                 Epost: <CustomizedLink href={`mailto:${va.adresse}`}>{va.adresse}</CustomizedLink>
               </Block>
             )

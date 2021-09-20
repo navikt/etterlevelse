@@ -12,7 +12,7 @@ export const LovViewList = (props: { regelverk: Regelverk[], openOnSamePage?: bo
   return (
     <Block display="flex" flexDirection="column" $style={{ wordBreak: 'break-all' }}>
       {props.regelverk.map((r, i) => (
-        <Block key={i}>
+        <Block key={i} marginBottom="8px">
           <LovView regelverk={r} openOnSamePage={props.openOnSamePage}/>
         </Block>
       ))}
