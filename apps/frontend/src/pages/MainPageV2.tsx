@@ -52,20 +52,21 @@ export const MainPageV2 = () => {
               height={cardHeight}
               width={cardWidth}
               verticalMargin={theme.sizing.scale300}
-              href={'/status'}
-              tittel={'Status i organisasjonen'}
-              icon={grafIconBg}
-              beskrivelse={'Følg med på status i dashbord, lag egne oversikter, og se hvor godt NAV sine produktområder  dokumenterer på kravene'}
+              href={'/tema'}
+              tittel={'Forstå kravene'}
+              icon={paragrafIconBg}
+              beskrivelse={'Få oversikt over kravene, og bli trygg på at du kjenner til alle relevante krav for det du lager'}
             />
+
 
             <PanelLinkCard
               height={cardHeight}
               width={cardWidth}
               verticalMargin={theme.sizing.scale300}
-              href={'/tema'}
-              tittel={'Forstå kravene'}
-              icon={paragrafIconBg}
-              beskrivelse={'Få oversikt over kravene, og bli trygg på at du kjenner til alle relevante krav for det du lager'}
+              href={'/status'}
+              tittel={'Status i organisasjonen'}
+              icon={grafIconBg}
+              beskrivelse={'Følg med på status i dashbord, lag egne oversikter, og se hvor godt NAV sine produktområder  dokumenterer på kravene'}
             />
           </Block>
         </Wide>
