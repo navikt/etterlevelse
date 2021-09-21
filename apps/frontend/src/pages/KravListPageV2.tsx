@@ -433,10 +433,40 @@ const AllKrav = () => {
       )
     } else {
       // BRUKER KUN NÅR VI SKAL FILTRERE PÅ TEMA
-      return loverFilter?.map((t) => {
-        return { label: t.shortName, id: t.code }
-      })
+      return getOptions(
+        'Alle lover',
+        loverFilter?.map((t) => {
+          return { label: t.shortName, id: t.code }
+        }),
+      )
     }
+  }
+
+  //must be run in function to not affect other selectors others overrides
+  const getSelector = (filterId: string, kravFilter: KravListFilter, options: any[], value: Option[]) => {
+    return (
+      <Block marginLeft={selectorMarginLeft} marginTop={selectorMarginTop}>
+        <CustomizedSelect
+          key={'krav_filter_' + kravFilter}
+          clearable={false}
+          size="compact"
+          placeholder="tema"
+          options={options}
+          overrides={
+            {
+              ...customSelectOverrides,
+              ControlContainer: {
+                style: {
+                  backgroundColor: filterId === 'alle' ? 'none' : ettlevColors.green50
+                }
+              }
+            }
+          }
+          value={value}
+          onChange={(params) => updateFilter(params.value, kravFilter)}
+        />
+      </Block>
+    )
   }
 
   return loading && !kravene.numberOfElements ? (
@@ -446,167 +476,38 @@ const AllKrav = () => {
   ) : (
     <Block>
       <Block width="100%" justifyContent="center" marginTop="20px" marginBottom="20px">
-        {/* <Block
-          display={responsiveDisplay}
-          alignItems="center"
-          marginBottom="20px"
-          width="calc(100% - 62px)"
-          $style={
-            {
-              ...borderColor(ettlevColors.grey100),
-              ...borderStyle('solid'),
-              ...borderWidth('1px'),
-              backgroundColor: ettlevColors.white,
-              ...padding('23px', '31px')
-            }
-          }
-        >
-          <Block display={responsiveDisplay} alignItems="center" justifyContent='flex-start' width="100%">
-            <Label3>Filter:</Label3>
-            <Block marginLeft={selectorMarginLeft} marginTop={selectorMarginTop} width="100%" minWidth="170px">
-              <CustomizedSelect
-                clearable={false}
-                size="compact"
-                placeholder="relevans"
-                options={relevans?.map((r) => {
-                  return { label: r.shortName, id: r.code }
-                })}
-                value={filter.relevans}
-                onChange={(params) =>
-                  updateFilter(params.value, KravListFilter.RELEVANS)
-                }
-              />
-            </Block>
 
-
-            USIKKERT OM VI SKAL FILTERER BASERT PÅ TEMA
-
-
-            <Block marginLeft={selectorMarginLeft} marginTop={selectorMarginTop} width="100%" minWidth="200px">
-              <CustomizedSelect
-                clearable={false}
-                size="compact"
-                placeholder="tema"
-                options={temaer?.map((t) => {
-                  return { label: t.shortName, id: t.code }
-                })}
-                value={filter.tema}
-                onChange={(params) =>
-                  updateFilter(params.value, KravListFilter.TEMAER)
-                }
-              />
-            </Block>
-            <Block marginLeft={selectorMarginLeft} marginTop={selectorMarginTop} width="100%" minWidth="200px">
-              <CustomizedSelect
-                clearable={false}
-                size="compact"
-                placeholder="lover"
-                options={
-                  lover.map((l) => {
-                    return { label: l.shortName, id: l.code }
-                  })
-                  // BRUKER KUN NÅR VI SKAL FILTRERE PÅ TEMA
-                  // loverFilter?.map((t) => {
-                  //   return { label: t.shortName, id: t.code }
-                  // })
-
-                }
-                value={filter.lover}
-                onChange={(params) =>
-                  updateFilter(params.value, KravListFilter.LOVER)
-                }
-              />
-            </Block>
-            <Block marginLeft={selectorMarginLeft} marginTop={selectorMarginTop} width="100%" minWidth="150px">
-              <CustomizedSelect
-                clearable={false}
-                size="compact"
-                placeholder="Status"
-                options={[{ id: KravStatus.AKTIV, label: 'Aktiv' }, { id: KravStatus.UNDER_ARBEID, label: 'Under Arbeid' }, { id: KravStatus.UTGAATT, label: 'Utgått' }, { id: KravStatus.UTKAST, label: 'Utkast' },]}
-                value={filter.status}
-                onChange={(params) =>
-                  updateFilter(params.value, KravListFilter.STATUS)
-                }
-              />
-            </Block>
-          </Block>
-          <Block display='flex' justifyContent='flex-end' width='100%'>
-            <Button kind='tertiary' onClick={() => setFilter({ status: [], relevans: [], tema: [], lover: [] })}>Nullstill filter</Button>
-          </Block>
-        </Block> */}
-
-        <Block display={['block','block','block','block','block','flex',]} justifyContent="center" alignContent="center" width="100%">
+        <Block display={['block', 'block', 'block', 'block', 'block', 'flex',]} justifyContent="center" alignContent="center" width="100%">
           <Block display="flex" justifyContent="flex-start" width="100%">
             <H2 marginTop="0px" marginBottom="0px">
               {kravene.totalElements ? kravene.totalElements : 0} Krav
             </H2>
           </Block>
           <Block display="flex" justifyContent="flex-end" width="100%" alignItems="center">
-            <Block display={['block','block','block','block','flex','flex',]} alignItems="center" justifyContent="flex-start" width="100%">
+            <Block display={['block', 'block', 'block', 'block', 'flex', 'flex',]} alignItems="center" justifyContent="flex-start" width="100%">
               <Label3>Filter</Label3>
-              <Block marginLeft={selectorMarginLeft} marginTop={selectorMarginTop}>
-                <CustomizedSelect
-                  clearable={false}
-                  size="compact"
-                  placeholder="tema"
-                  options={getOptions(
-                    'Alle tema',
-                    temaer?.map((t) => {
-                      return { label: t.shortName, id: t.code }
-                    }),
-                  )}
-                  overrides={customSelectOverrides}
-                  value={filter.tema}
-                  onChange={(params) => updateFilter(params.value, KravListFilter.TEMAER)}
-                />
-              </Block>
-              <Block marginLeft={selectorMarginLeft} marginTop={selectorMarginTop}>
-                <CustomizedSelect
-                  clearable={false}
-                  size="compact"
-                  placeholder="relevans"
-                  options={getOptions(
-                    'Alle relevans',
-                    relevans?.map((r) => {
-                      return { label: r.shortName, id: r.code }
-                    }),
-                  )}
-                  overrides={customSelectOverrides}
-                  value={filter.relevans}
-                  onChange={(params) => updateFilter(params.value, KravListFilter.RELEVANS)}
-                />
-              </Block>
-
-              <Block marginLeft={selectorMarginLeft} marginTop={selectorMarginTop}>
-                <CustomizedSelect
-                  clearable={false}
-                  size="compact"
-                  placeholder="lover"
-                  options={getLovOptions()}
-                  value={filter.lover}
-                  overrides={customSelectOverrides}
-                  onChange={(params) => updateFilter(params.value, KravListFilter.LOVER)}
-                />
-              </Block>
-              <Block marginLeft={selectorMarginLeft} marginTop={selectorMarginTop}>
-                <CustomizedSelect
-                  clearable={false}
-                  size="compact"
-                  placeholder="Status"
-                  options={getOptions('Alle statuser', [
-                    { id: KravStatus.AKTIV, label: 'Aktiv' },
-                    { id: KravStatus.UNDER_ARBEID, label: 'Under Arbeid' },
-                    {
-                      id: KravStatus.UTGAATT,
-                      label: 'Utgått',
-                    },
-                    { id: KravStatus.UTKAST, label: 'Utkast' },
-                  ])}
-                  value={filter.status}
-                  overrides={customSelectOverrides}
-                  onChange={(params) => updateFilter(params.value, KravListFilter.STATUS)}
-                />
-              </Block>
+              {getSelector(filter.tema[0].id?.toString() || '', KravListFilter.TEMAER, getOptions(
+                'Alle tema',
+                temaer?.map((t) => {
+                  return { label: t.shortName, id: t.code }
+                }),
+              ), filter.tema)}
+              {getSelector(filter.relevans[0].id?.toString() || '', KravListFilter.RELEVANS, getOptions(
+                'Alle relevans',
+                relevans?.map((r) => {
+                  return { label: r.shortName, id: r.code }
+                }),
+              ), filter.relevans)}
+              {getSelector(filter.lover[0].id?.toString() || '', KravListFilter.LOVER, getLovOptions(), filter.lover)}
+              {getSelector(filter.status[0].id?.toString() || '', KravListFilter.STATUS, getOptions('Alle statuser', [
+                { id: KravStatus.AKTIV, label: 'Aktiv' },
+                { id: KravStatus.UNDER_ARBEID, label: 'Under Arbeid' },
+                {
+                  id: KravStatus.UTGAATT,
+                  label: 'Utgått',
+                },
+                { id: KravStatus.UTKAST, label: 'Utkast' },
+              ]), filter.status)}
             </Block>
 
             {/*
