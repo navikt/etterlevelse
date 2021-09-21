@@ -5,8 +5,6 @@ metadata:
   namespace: teamdatajegerne
   labels:
     team: teamdatajegerne
-  annotations:
-    nais.io/read-only-file-system: "false"
 spec:
   image: {{image}}
   port: 80
