@@ -35,6 +35,18 @@ export const MainPageV2 = () => {
       <Block display={'flex'} flexDirection={'column'} alignItems={'center'} width={'100%'}>
         <Wide>
           <Block display={'flex'} justifyContent={'center'} flexWrap>
+          <PanelLinkCard
+              marginRight={cardMarginRight}
+              height={cardHeight}
+              width={cardWidth}
+              verticalMargin={theme.sizing.scale300}
+              href={'/tema'}
+              tittel={'Forstå kravene'}
+              icon={paragrafIconBg}
+              beskrivelse={'Få oversikt over kravene, og bli trygg på at du kjenner til alle relevante krav for det du lager'}
+            />
+
+
             <PanelLinkCard
               marginRight={cardMarginRight}
               height={cardHeight}
@@ -47,18 +59,7 @@ export const MainPageV2 = () => {
               beskrivelse={'Få oversikt over hvilke krav som gjelder din løsning og dokumenter hvor godt løsningen etterlever kravene.'}
             />
 
-            <PanelLinkCard
-              marginRight={cardMarginRight}
-              height={cardHeight}
-              width={cardWidth}
-              verticalMargin={theme.sizing.scale300}
-              href={'/tema'}
-              tittel={'Forstå kravene'}
-              icon={paragrafIconBg}
-              beskrivelse={'Få oversikt over kravene, og bli trygg på at du kjenner til alle relevante krav for det du lager'}
-            />
-
-
+            
             <PanelLinkCard
               height={cardHeight}
               width={cardWidth}
