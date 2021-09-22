@@ -443,7 +443,7 @@ const AllKrav = () => {
   }
 
   //must be run in function to not affect other selectors others overrides
-  const getSelector = (filterId: string, kravFilter: KravListFilter, options: any[], value: Option[]) => {
+  const getSelector = (filterId: string | undefined, kravFilter: KravListFilter, options: any[], value: Option[]) => {
     return (
       <Block marginLeft={selectorMarginLeft} marginTop={selectorMarginTop}>
         <CustomizedSelect
@@ -486,20 +486,20 @@ const AllKrav = () => {
           <Block display="flex" justifyContent="flex-end" width="100%" alignItems="center">
             <Block display={['block', 'block', 'block', 'block', 'flex', 'flex',]} alignItems="center" justifyContent="flex-start" width="100%">
               <Label3>Filter</Label3>
-              {getSelector(filter.tema[0].id?.toString() || '', KravListFilter.TEMAER, getOptions(
+              {getSelector(filter.tema[0].id?.toString(), KravListFilter.TEMAER, getOptions(
                 'Alle tema',
                 temaer?.map((t) => {
                   return { label: t.shortName, id: t.code }
                 }),
               ), filter.tema)}
-              {getSelector(filter.relevans[0].id?.toString() || '', KravListFilter.RELEVANS, getOptions(
+              {getSelector(filter.relevans[0].id?.toString(), KravListFilter.RELEVANS, getOptions(
                 'Alle relevans',
                 relevans?.map((r) => {
                   return { label: r.shortName, id: r.code }
                 }),
               ), filter.relevans)}
-              {getSelector(filter.lover[0].id?.toString() || '', KravListFilter.LOVER, getLovOptions(), filter.lover)}
-              {getSelector(filter.status[0].id?.toString() || '', KravListFilter.STATUS, getOptions('Alle statuser', [
+              {getSelector(filter.lover[0].id?.toString(), KravListFilter.LOVER, getLovOptions(), filter.lover)}
+              {getSelector(filter.status[0].id?.toString(), KravListFilter.STATUS, getOptions('Alle statuser', [
                 { id: KravStatus.AKTIV, label: 'Aktiv' },
                 { id: KravStatus.UNDER_ARBEID, label: 'Under Arbeid' },
                 {
