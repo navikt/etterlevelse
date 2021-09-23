@@ -198,17 +198,20 @@ const TemaInfo = (props: { kravAntall: number; temaAntall: number }) => (
       marginTop: theme.sizing.scale400,
       marginBottom: theme.sizing.scale400,
       ...borderRadius('4px'),
-      backgroundColor: ettlevColors.grey100,
+      backgroundColor: ettlevColors.green800,
     }}
     width={cardWidth}
   >
-    <Block padding={theme.sizing.scale600}>
-      <H2>
-        Vi har totalt {props.kravAntall} krav gruppert i {props.temaAntall} kategorier
+    <Block padding={theme.sizing.scale1000}>
+      <H2 color={ettlevColors.white} $style={{ lineHeight: '40px' }}> 
+        Vi har totalt &nbsp;
+        <span style={{ fontSize: '40px', lineHeight: '40px', color: ettlevColors.warning400}}>{props.kravAntall}</span> &nbsp;
+        krav gruppert i {props.temaAntall} kategorier
       </H2>
 
-      <Paragraph2>
-        Alle vi som utvikler digitale produkter i NAV må forholde seg til en del forskjellige lover og regler. Disse skal bidra til å sikre at den generelle rettsikkerheten til
+      <Paragraph2 color={ettlevColors.white}>
+        Alle vi som utvikler digitale produkter i NAV må forholde seg til en del forskjellige lover og regler. 
+        Disse skal bidra til å sikre at den generelle rettsikkerheten til
         brukerne våre ivaretas.
       </Paragraph2>
     </Block>
