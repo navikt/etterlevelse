@@ -50,7 +50,7 @@ const CustomizedBreadcrumbs = (props: CustomizedProps) => {
     if (props.paths && props.paths.length) {
       return props.paths.map((path) => {
         return (
-          <RouteLink hideUnderline fontColor={props.fontColor} href={path.href}>
+          <RouteLink hideUnderline fontColor={props.fontColor} href={path.href} key={'breadcrumb_link_'+getName(path.pathName)}>
             {getName(path.pathName)}
           </RouteLink>
         )
