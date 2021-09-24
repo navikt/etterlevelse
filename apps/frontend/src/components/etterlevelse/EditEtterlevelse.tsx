@@ -6,7 +6,7 @@ import Button from '../common/Button'
 import React, { useEffect } from 'react'
 import * as yup from 'yup'
 import { getEtterlevelseStatus } from '../../pages/EtterlevelsePage'
-import { DateField, FieldWrapper } from '../common/Inputs'
+import { DateField, FieldWrapper, TextAreaField } from '../common/Inputs'
 import { theme } from '../../util'
 import { FormControl } from 'baseui/form-control'
 import { getKravByKravNumberAndVersion, useKrav, useSearchKrav } from '../../api/KravApi'
@@ -54,6 +54,18 @@ const etterlevelseSchema = () => {
         suksesskriterieId: yup.number().required('Begrunnelse må være knyttet til et suksesskriterie'),
       }),
     ),
+    statusBegrunnelse: yup.string().test({
+      name: 'statusBegrunnelse',
+      message: 'Du må dokumentere på begrunnelse',
+      test: function (statusBegrunnelse) {
+        const { parent } = this
+        if(parent.status === EtterlevelseStatus.IKKE_RELEVANT && (statusBegrunnelse === '' || statusBegrunnelse === undefined)) {
+          return false
+        }
+        return true
+      }
+    })
+    ,
     status: yup.string().test({
       name: 'etterlevelseStatus',
       message: 'Du må dokumentere på alle suksesskriterier før du er ferdig',
@@ -72,7 +84,6 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
   const [etterlevelseStatus, setEtterlevelseStatus] = React.useState<string>(etterlevelse.status || EtterlevelseStatus.UNDER_REDIGERING)
   const [nyereKrav, setNyereKrav] = React.useState<Krav>()
   const [disableEdit, setDisableEdit] = React.useState<boolean>(false)
-  console.log(etterlevelse)
   const submit = async (etterlevelse: Etterlevelse) => {
     const mutatedEtterlevelse = {
       ...etterlevelse,
@@ -197,6 +208,7 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
                                     fontSize: '18px',
                                     fontWeight: 400,
                                     lineHeight: '22px',
+                                    width: '100%',
                                   },
                                 },
                                 RadioMarkOuter: {
@@ -221,6 +233,17 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
                                       </Paragraph2>
 
                                       {etterlevelseStatus === EtterlevelseStatus.OPPFYLLES_SENERE && <DateField label="Frist (valgfritt)" name="fristForFerdigstillelse" />}
+                                    </Radio>
+                                  )
+                                }
+                                if (id === EtterlevelseStatus.IKKE_RELEVANT) {
+                                  return (
+                                    <Radio value={id} key={id}>
+                                      <Paragraph2 $style={{ lineHeight: '22px' }} marginTop="0px" marginBottom="0px">{getEtterlevelseStatus(id)}</Paragraph2>
+
+                                      {etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT &&
+                                        <TextAreaField label='Begrunnelse' noPlaceholder name="statusBegrunnelse" />
+                                      }
                                     </Radio>
                                   )
                                 }
@@ -256,7 +279,9 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
                       disabled={disableEdit}
                       type="button"
                       onClick={() => {
-                        values.status = EtterlevelseStatus.FERDIG_DOKUMENTERT
+                        if (values.status !== EtterlevelseStatus.IKKE_RELEVANT) {
+                          values.status = EtterlevelseStatus.FERDIG_DOKUMENTERT
+                        }
                         submitForm()
                       }}
                     >
