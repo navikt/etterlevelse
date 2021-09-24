@@ -3,7 +3,7 @@ WORKDIR application
 COPY target/app-exec.jar application.jar
 RUN java -Djarmode=layertools -jar application.jar extract
 
-FROM navikt/java:16
+FROM navikt/java:17
 
 ENV MAIN_CLASS=org.springframework.boot.loader.JarLauncher
 ENV JAVA_OPTS="-Xmx850m \
