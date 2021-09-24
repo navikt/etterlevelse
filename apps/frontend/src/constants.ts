@@ -113,7 +113,7 @@ export interface Etterlevelse extends DomainObject {
   kravNummer: number
   kravVersjon: number
   etterleves: boolean
-  begrunnelse: string
+  statusBegrunnelse: string
   dokumentasjon: string[]
   fristForFerdigstillelse: string
   status: EtterlevelseStatus

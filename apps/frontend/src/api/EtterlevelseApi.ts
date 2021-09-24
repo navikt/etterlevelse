@@ -97,7 +97,7 @@ export const mapEtterlevelseToFormValue = (etterlevelse: Partial<Etterlevelse>):
   suksesskriterieBegrunnelser: etterlevelse.suksesskriterieBegrunnelser || [],
   version: -1,
   etterleves: etterlevelse.etterleves || false,
-  begrunnelse: etterlevelse.begrunnelse || '',
+  statusBegrunnelse: etterlevelse.statusBegrunnelse || '',
   dokumentasjon: etterlevelse.dokumentasjon || [],
   fristForFerdigstillelse: etterlevelse.fristForFerdigstillelse || '',
   status: etterlevelse.status || EtterlevelseStatus.UNDER_REDIGERING,
