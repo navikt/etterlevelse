@@ -50,6 +50,7 @@ export const TextAreaField = (props: {
   onImageUpload?: (file: File) => Promise<string>
   caption?: ReactNode
   tooltip?: string
+  noPlaceholder?: boolean
 }) => {
   return (
     <FieldWrapper marginBottom={props.marginBottom}>
@@ -84,7 +85,7 @@ export const TextAreaField = (props: {
                 onImageUpload={props.onImageUpload} shortenLinks={props.shortenLinks} /> */}
                 </Block>
               )}
-              {!props.markdown && <CustomizedTextarea rows={8} {...p.field} placeholder={props.label} />}
+              {!props.markdown && <CustomizedTextarea rows={8} {...p.field} placeholder={props.noPlaceholder ? '' : props.label} />}
             </>
           </FormControl>
         )}
