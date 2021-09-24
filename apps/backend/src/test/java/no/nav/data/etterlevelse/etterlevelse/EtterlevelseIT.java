@@ -104,7 +104,7 @@ public class EtterlevelseIT extends IntegrationTestBase {
                     .kravNummer(krav.getKravNummer())
                     .kravVersjon(krav.getKravVersjon())
 
-                    .begrunnelse("begrunnelse")
+                    .statusBegrunnelse("statusBegrunnelse")
                     .dokumentasjon(List.of("dok"))
                     .etterleves(true)
                     .fristForFerdigstillelse(LocalDate.now())
@@ -130,7 +130,7 @@ public class EtterlevelseIT extends IntegrationTestBase {
             assertThat(etterlevelse.getKravNummer()).isEqualTo(50);
             assertThat(etterlevelse.getKravVersjon()).isEqualTo(1);
 
-            assertThat(etterlevelse.getBegrunnelse()).isEqualTo("begrunnelse");
+            assertThat(etterlevelse.getStatusBegrunnelse()).isEqualTo("statusBegrunnelse");
             assertThat(etterlevelse.getDokumentasjon()).containsOnly("dok");
             assertThat(etterlevelse.isEtterleves()).isTrue();
             assertThat(etterlevelse.getFristForFerdigstillelse()).isToday();

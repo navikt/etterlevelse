@@ -30,7 +30,7 @@ public class EtterlevelseResponse {
     private Integer kravVersjon;
 
     private boolean etterleves;
-    private String begrunnelse;
+    private String statusBegrunnelse;
     private List<String> dokumentasjon;
     private LocalDate fristForFerdigstillelse;
     private EtterlevelseStatus status;
