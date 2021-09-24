@@ -31,7 +31,7 @@ public class EtterlevelseRequest implements RequestElement, KravId {
     private Integer kravVersjon;
 
     private boolean etterleves;
-    private String begrunnelse;
+    private String statusBegrunnelse;
     private List<String> dokumentasjon;
     private LocalDate fristForFerdigstillelse;
     private EtterlevelseStatus status;
@@ -44,7 +44,7 @@ public class EtterlevelseRequest implements RequestElement, KravId {
         setId(trimToNull(id));
         setBehandlingId(trimToNull(behandlingId));
 
-        setBegrunnelse(trimToNull(begrunnelse));
+        setStatusBegrunnelse(trimToNull(statusBegrunnelse));
         setDokumentasjon(formatList(dokumentasjon));
         setSuksesskriterieBegrunnelser(copyOf(suksesskriterieBegrunnelser));
 

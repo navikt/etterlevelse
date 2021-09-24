@@ -33,7 +33,7 @@ public class Etterlevelse implements DomainObject, KravId {
     private Integer kravVersjon;
 
     private boolean etterleves;
-    private String begrunnelse;
+    private String statusBegrunnelse;
     private List<String> dokumentasjon;
     private LocalDate fristForFerdigstillelse;
     private EtterlevelseStatus status;
@@ -45,7 +45,7 @@ public class Etterlevelse implements DomainObject, KravId {
         kravVersjon = request.getKravVersjon();
 
         etterleves = request.isEtterleves();
-        begrunnelse = request.getBegrunnelse();
+        statusBegrunnelse = request.getStatusBegrunnelse();
         dokumentasjon = copyOf(request.getDokumentasjon());
         fristForFerdigstillelse = request.getFristForFerdigstillelse();
         status = request.getStatus();
@@ -64,7 +64,7 @@ public class Etterlevelse implements DomainObject, KravId {
                 .kravVersjon(kravVersjon)
 
                 .etterleves(etterleves)
-                .begrunnelse(begrunnelse)
+                .statusBegrunnelse(statusBegrunnelse)
                 .dokumentasjon(copyOf(dokumentasjon))
                 .fristForFerdigstillelse(fristForFerdigstillelse)
                 .status(status)
