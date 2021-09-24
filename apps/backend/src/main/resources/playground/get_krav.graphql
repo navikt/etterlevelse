@@ -16,7 +16,7 @@ query getKravByFilter {
         }
         etterlevelser {
             id
-            begrunnelse
+            statusBegrunnelse
             behandlingId
             behandling {
                 navn
