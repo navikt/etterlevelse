@@ -59,7 +59,7 @@ const etterlevelseSchema = () => {
       message: 'Du må dokumentere på begrunnelse',
       test: function (statusBegrunnelse) {
         const { parent } = this
-        if(parent.status === EtterlevelseStatus.IKKE_RELEVANT && (statusBegrunnelse === '' || statusBegrunnelse === undefined)) {
+        if (parent.status === EtterlevelseStatus.IKKE_RELEVANT && (statusBegrunnelse === '' || statusBegrunnelse === undefined)) {
           return false
         }
         return true
@@ -84,6 +84,7 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
   const [etterlevelseStatus, setEtterlevelseStatus] = React.useState<string>(etterlevelse.status || EtterlevelseStatus.UNDER_REDIGERING)
   const [nyereKrav, setNyereKrav] = React.useState<Krav>()
   const [disableEdit, setDisableEdit] = React.useState<boolean>(false)
+  const [radioHover, setRadioHover] = React.useState<string>('')
   const submit = async (etterlevelse: Etterlevelse) => {
     const mutatedEtterlevelse = {
       ...etterlevelse,
@@ -196,11 +197,13 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
                           >
                             <RadioGroup
                               disabled={disableEdit}
+                              onMouseEnter={(e) => setRadioHover(e.currentTarget.children[1].getAttribute('value') || '')}
+                              onMouseLeave={() => setRadioHover('')}
                               overrides={{
                                 Root: {
                                   style: {
+                                    width: '100%',
                                     alignItems: 'flex-start',
-                                    ':hover': { textDecoration: 'underline' },
                                   },
                                 },
                                 Label: {
@@ -228,19 +231,24 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
                                 if (id === EtterlevelseStatus.OPPFYLLES_SENERE) {
                                   return (
                                     <Radio value={id} key={id}>
-                                      <Paragraph2 $style={{ lineHeight: '22px' }} marginTop="0px" marginBottom="0px">
-                                        {getEtterlevelseStatus(id)}
-                                      </Paragraph2>
+                                      <Block $style={{ textDecoration: radioHover === id ? 'underline' : 'none' }}>
+                                        <Paragraph2 $style={{ lineHeight: '22px' }} marginTop="0px" marginBottom="0px">
+                                          {getEtterlevelseStatus(id)}
+                                        </Paragraph2>
+                                      </Block>
 
-                                      {etterlevelseStatus === EtterlevelseStatus.OPPFYLLES_SENERE && <DateField label="Frist (valgfritt)" name="fristForFerdigstillelse" />}
+                                      {etterlevelseStatus === EtterlevelseStatus.OPPFYLLES_SENERE &&
+                                        <DateField label="Frist (valgfritt)" name="fristForFerdigstillelse" />
+                                      }
                                     </Radio>
                                   )
                                 }
                                 if (id === EtterlevelseStatus.IKKE_RELEVANT) {
                                   return (
                                     <Radio value={id} key={id}>
-                                      <Paragraph2 $style={{ lineHeight: '22px' }} marginTop="0px" marginBottom="0px">{getEtterlevelseStatus(id)}</Paragraph2>
-
+                                      <Block $style={{ textDecoration:  radioHover === id ? 'underline' : 'none' }}>
+                                        <Paragraph2 $style={{ lineHeight: '22px' }} marginTop="0px" marginBottom="0px">{getEtterlevelseStatus(id)}</Paragraph2>
+                                      </Block>
                                       {etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT &&
                                         <TextAreaField label='Begrunnelse' noPlaceholder name="statusBegrunnelse" />
                                       }
@@ -252,9 +260,11 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
                                 }
                                 return (
                                   <Radio value={id} key={id}>
-                                    <Paragraph2 $style={{ lineHeight: '22px' }} marginTop="0px" marginBottom="0px">
-                                      {getEtterlevelseStatus(id)}
-                                    </Paragraph2>
+                                    <Block $style={{ textDecoration:  radioHover === id ? 'underline' : 'none' }}>
+                                      <Paragraph2 $style={{ lineHeight: '22px' }} marginTop="0px" marginBottom="0px">
+                                        {getEtterlevelseStatus(id)}
+                                      </Paragraph2>
+                                    </Block>
                                   </Radio>
                                 )
                               })}
