@@ -280,9 +280,9 @@ const MainSearchSelector = (props: SelectPropWithSetValue) => {
     },
     DropdownListItem: {
       style: {
-        paddingTop: 0,
+        paddingTop: '0px',
         paddingRight: '5px',
-        paddingBottom: 0,
+        paddingBottom: '0px',
         paddingLeft: '5px',
         fontSize: '18px',
       },
@@ -346,7 +346,7 @@ const MainSearch = () => {
           color={ettlevColors.green800}
           backgroundColor={ettlevColors.white}
           $style={{
-            ...padding('24px', '24px'),
+            ...padding('12px', '24px'),
             paddingTop: '0px',
           }}
         >
