@@ -118,7 +118,7 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
             <Paragraph2 color={ettlevColors.white}>
               <a href={'/krav/' + krav?.kravNummer + '/' + krav?.kravVersjon} style={{ color: ettlevColors.white, marginBottom: '10px' }} target="_blank"
                 rel="noopener noreferrer">
-                <span style={{display: 'inline-block', paddingBottom: '1px', borderBottom: '1px solid white'}}>
+                <span style={{ display: 'inline-block', paddingBottom: '1px', borderBottom: '1px solid white' }}>
                   detaljert kravbeskrivelse (ny fane)
                 </span>
               </a>
@@ -241,7 +241,9 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
                                       </Block>
 
                                       {etterlevelseStatus === EtterlevelseStatus.OPPFYLLES_SENERE &&
-                                        <DateField label="Frist (valgfritt)" name="fristForFerdigstillelse" />
+                                        <Block maxWidth="170px" width="100%">
+                                          <DateField label="Frist (valgfritt)" name="fristForFerdigstillelse" />
+                                        </Block>
                                       }
                                     </Radio>
                                   )
@@ -253,7 +255,9 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
                                         <Paragraph2 $style={{ lineHeight: '22px' }} marginTop="0px" marginBottom="0px">{getEtterlevelseStatus(id)}</Paragraph2>
                                       </Block>
                                       {etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT &&
-                                        <TextAreaField label='Begrunnelse' noPlaceholder name="statusBegrunnelse" />
+                                        <Block maxWidth="471px" width="100%">
+                                          <TextAreaField label='Beskriv hvorfor kravet ikke er relevant' noPlaceholder name="statusBegrunnelse" />
+                                        </Block>
                                       }
                                     </Radio>
                                   )
