@@ -20,6 +20,8 @@ const customOverrides: SelectOverrides = {
   DropdownListItem: {
     style: {
       fontSize: '18px',
+      marginTop: '4px',
+      marginBottom: '4px'
     },
   },
 }
