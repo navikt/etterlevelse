@@ -116,9 +116,12 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
             <Paragraph2 $style={{ marginTop: '0px', marginBottom: '0px', color: ettlevColors.white }}>{kravNumView(krav)}</Paragraph2>
             <H1 $style={{ marginTop: '0px', marginBottom: '0px', color: ettlevColors.white }}>{krav.navn}</H1>
             <Paragraph2 color={ettlevColors.white}>
-              <ExternalLink fontColor={ettlevColors.white} href={'/krav/' + krav?.kravNummer + '/' + krav?.kravVersjon}>
-                detaljert kravbeskrivelse (ny fane)
-              </ExternalLink>
+              <a href={'/krav/' + krav?.kravNummer + '/' + krav?.kravVersjon} style={{ color: ettlevColors.white, marginBottom: '10px' }} target="_blank"
+                rel="noopener noreferrer">
+                <span style={{display: 'inline-block', paddingBottom: '1px', borderBottom: '1px solid white'}}>
+                  detaljert kravbeskrivelse (ny fane)
+                </span>
+              </a>
             </Paragraph2>
           </Block>
           <Block display="flex" paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge} paddingBottom={theme.sizing.scale900}>
@@ -246,7 +249,7 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
                                 if (id === EtterlevelseStatus.IKKE_RELEVANT) {
                                   return (
                                     <Radio value={id} key={id}>
-                                      <Block $style={{ textDecoration:  radioHover === id ? 'underline' : 'none' }}>
+                                      <Block $style={{ textDecoration: radioHover === id ? 'underline' : 'none' }}>
                                         <Paragraph2 $style={{ lineHeight: '22px' }} marginTop="0px" marginBottom="0px">{getEtterlevelseStatus(id)}</Paragraph2>
                                       </Block>
                                       {etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT &&
@@ -260,7 +263,7 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
                                 }
                                 return (
                                   <Radio value={id} key={id}>
-                                    <Block $style={{ textDecoration:  radioHover === id ? 'underline' : 'none' }}>
+                                    <Block $style={{ textDecoration: radioHover === id ? 'underline' : 'none' }}>
                                       <Paragraph2 $style={{ lineHeight: '22px' }} marginTop="0px" marginBottom="0px">
                                         {getEtterlevelseStatus(id)}
                                       </Paragraph2>
