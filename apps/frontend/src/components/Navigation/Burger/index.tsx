@@ -5,7 +5,7 @@ import { ANCHOR, Drawer } from 'baseui/drawer'
 import { theme } from '../../../util'
 import { Block, BlockProps } from 'baseui/block'
 import { StyledLink } from 'baseui/link'
-import { H6, Paragraph2, Paragraph4 } from 'baseui/typography'
+import { H2, H6, Paragraph2, Paragraph4 } from 'baseui/typography'
 import RouteLink, { ExternalLink } from '../../common/RouteLink'
 import NavLogo from '../../../resources/navlogo.svg'
 import { useLocation } from 'react-router-dom'
@@ -18,6 +18,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronDown, faChevronRight } from '@fortawesome/free-solid-svg-icons'
 import { datajegerSlackLink, documentationLink } from '../../../util/config'
 import { ettlevColors } from '../../../util/theme'
+import { arkPennIcon, exitIcon, grafIcon, husIcon, paragrafIcon } from '../../Images'
 
 const drawerFooterProps: BlockProps = {
   display: 'flex',
@@ -30,10 +31,35 @@ const drawerFooterProps: BlockProps = {
 
 const Brand = () => (
   <StyledLink style={{ textDecoration: 'none' }} href="/">
-    <H6 color="white" marginBottom="2rem">
-      Etterlevelse
-    </H6>
+    <H2 color={ettlevColors.green800}>
+      Støtte til etterlevelse
+    </H2>
   </StyledLink>
+)
+
+const MenuItem = (props: { to: string; text: string; icon: string, setShowMenu: Function }) => (
+  <Block
+    display={'flex'}
+    alignItems={'center'}
+    $style={{
+      ':hover': {
+        textDecoration: '2px underline',
+      },
+    }}
+  >
+    <RouteLink href={props.to} hideUnderline onClick={() => props.setShowMenu(false)}>
+      <Block>
+        <Block display={'flex'} alignItems={'center'}>
+          {props.icon && (
+            <Block marginRight={theme.sizing.scale400}>
+              <img src={props.icon} alt={'link ikon'} aria-hidden />
+            </Block>
+          )}
+          <Block>{props.text}</Block>
+        </Block>
+      </Block>
+    </RouteLink>
+  </Block>
 )
 
 const NavItem = (props: { to: string; text: string }) => (
@@ -43,7 +69,7 @@ const NavItem = (props: { to: string; text: string }) => (
         <FontAwesomeIcon icon={useLocation().pathname.split('/')[1].includes(props.to.split('/')[1]) ? faChevronDown : faChevronRight} color="white" size="lg" />
       </Block>
 
-      <Paragraph2 color="white">{props.text}</Paragraph2>
+      <Paragraph2 color={ettlevColors.green800}>{props.text}</Paragraph2>
     </Block>
   </RouteLink>
 )
@@ -63,7 +89,7 @@ const SignOutButton = (props: { location: string }) => {
   const linkCss = useCss({ textDecoration: 'none', color: 'white' })
   return (
     <StyledLink href={`${env.backendBaseUrl}/logout?redirect_uri=${props.location}`} className={linkCss}>
-      <Button kind="secondary">Logg ut</Button>
+      <Button kind="secondary" startEnhancer={<img src={exitIcon} alt="" />}>Logg ut</Button>
     </StyledLink>
   )
 }
@@ -96,7 +122,7 @@ const BurgerMenu = () => {
             DrawerContainer: {
               style: () => {
                 return {
-                  backgroundColor: theme.colors.primaryA,
+                  backgroundColor: ettlevColors.white,
                   height: 'auto',
                 }
               },
@@ -110,26 +136,45 @@ const BurgerMenu = () => {
             },
           }}
         >
-          <Block display="flex" flexDirection="column" alignItems="center" height="100%">
+          <Block display="flex" flexDirection="column" height="100%">
             <Brand />
-            <Block>
+
+            <Block display="flex" flexDirection="column">
+              <Block $style={{ borderTopWidth: '1px', borderTopStyle: 'solid', borderTopColor: ettlevColors.grey100, paddingTop: '6px', paddingBottom: '6px' }}>
+                <MenuItem to="/" text="forsiden" icon={husIcon} setShowMenu={setShowMenu}/>
+              </Block>
+              <Block $style={{ borderTopWidth: '1px', borderTopStyle: 'solid', borderTopColor: ettlevColors.grey100, paddingTop: '6px', paddingBottom: '6px' }}>
+                <MenuItem to="/behandlinger" text="Dokumentere etterlevelse" icon={arkPennIcon} setShowMenu={setShowMenu}/>
+              </Block>
+              <Block $style={{ borderTopWidth: '1px', borderTopStyle: 'solid', borderTopColor: ettlevColors.grey100, paddingTop: '6px', paddingBottom: '6px' }}>
+                <MenuItem to="/status" text="Status i organisasjonen" icon={grafIcon} setShowMenu={setShowMenu}/>
+              </Block>
+              <Block $style={{
+                borderTopWidth: '1px', borderTopStyle: 'solid', borderTopColor: ettlevColors.grey100,
+                borderBottomWidth: '1px', borderBottomStyle: 'solid', borderBottomColor: ettlevColors.grey100,
+                paddingTop: '6px', paddingBottom: '6px'
+              }}>
+                <MenuItem to="/tema" text="Forstå kravene" icon={paragrafIcon} setShowMenu={setShowMenu}/>
+              </Block>
+            </Block>
+            {/* <Block>
               {user.isAdmin() && (
                 <>
                   <NavItem to="/admin/audit" text={intl.audit} />
                   <NavItem to="/admin/settings" text={intl.settings} />
                 </>
               )}
-            </Block>
+            </Block> */}
 
-            <Block display="flex" justifyContent="center" marginTop={theme.sizing.scale1000}>
+            <Block display="flex" width="100%" marginTop={theme.sizing.scale1000}>
               {!user.isLoggedIn() && <LoginButton location={url} />}
 
               {user.isLoggedIn() && (
                 <>
-                  <Block display="flex" alignItems="center" flexDirection="column">
+                  <Block>
                     <Block>
-                      <Paragraph2 color="white">
-                        <b>{user.getIdent()}</b> - {user.getName()}
+                      <Paragraph2 color={ettlevColors.green800} $style={{ fontWeight: 600 }}>
+                        {user.getIdent()}: {user.getName()}
                       </Paragraph2>
                     </Block>
                     <Block>
@@ -140,7 +185,7 @@ const BurgerMenu = () => {
               )}
             </Block>
 
-            <Block {...drawerFooterProps}>
+            {/* <Block {...drawerFooterProps}>
               <Block width={'100%'}>
                 <ExternalLink href={datajegerSlackLink} hideUnderline>
                   <Block display="flex" justifyContent="center" paddingBottom={theme.sizing.scale400} alignItems="center">
@@ -159,7 +204,7 @@ const BurgerMenu = () => {
             </Block>
             <Block paddingBottom={theme.sizing.scale600} display={'flex'} justifyContent={'center'}>
               <img src={NavLogo} alt="NAV logo" width="50%" />
-            </Block>
+            </Block> */}
           </Block>
         </Drawer>
       )}
