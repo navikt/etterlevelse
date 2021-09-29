@@ -15,7 +15,7 @@ import { useStyletron } from 'styletron-react'
 import { user } from '../../../services/User'
 import { intl } from '../../../util/intl/intl'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBars, faChevronDown, faChevronRight } from '@fortawesome/free-solid-svg-icons'
+import { faBars, faChevronDown, faChevronRight, faTimes } from '@fortawesome/free-solid-svg-icons'
 import { datajegerSlackLink, documentationLink } from '../../../util/config'
 import { ettlevColors } from '../../../util/theme'
 import { arkPennIcon, exitIcon, grafIcon, husIcon, paragrafIcon } from '../../Images'
@@ -128,15 +128,19 @@ const BurgerMenu = () => {
               },
             },
             Close: {
-              style: ({ $theme }) => {
-                return {
-                  backgroundColor: 'white',
-                }
-              },
+              style: {
+                display: 'none'
+              }
             },
           }}
         >
           <Block display="flex" flexDirection="column" height="100%">
+            <Block width="100%" display="flex" justifyContent="flex-end">
+              <Button kind="secondary" size="compact" onClick={() => setShowMenu(false)} icon={faTimes}>
+                Meny
+              </Button>
+            </Block>
+
             <Brand />
 
             <Block display="flex" flexDirection="column">
