@@ -15,7 +15,7 @@ import { useStyletron } from 'styletron-react'
 import { user } from '../../../services/User'
 import { intl } from '../../../util/intl/intl'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronDown, faChevronRight } from '@fortawesome/free-solid-svg-icons'
+import { faBars, faChevronDown, faChevronRight } from '@fortawesome/free-solid-svg-icons'
 import { datajegerSlackLink, documentationLink } from '../../../util/config'
 import { ettlevColors } from '../../../util/theme'
 import { arkPennIcon, exitIcon, grafIcon, husIcon, paragrafIcon } from '../../Images'
@@ -107,8 +107,8 @@ const BurgerMenu = () => {
   return (
     <React.Fragment>
       {!showMenu && (
-        <Button kind="minimal" onClick={() => setShowMenu(true)}>
-          <Menu size={36} color={ettlevColors.green800} />
+        <Button kind="secondary" size="compact" onClick={() => setShowMenu(true)} icon={faBars}>
+          Meny
         </Button>
       )}
 
@@ -141,20 +141,20 @@ const BurgerMenu = () => {
 
             <Block display="flex" flexDirection="column">
               <Block $style={{ borderTopWidth: '1px', borderTopStyle: 'solid', borderTopColor: ettlevColors.grey100, paddingTop: '6px', paddingBottom: '6px' }}>
-                <MenuItem to="/" text="forsiden" icon={husIcon} setShowMenu={setShowMenu}/>
+                <MenuItem to="/" text="forsiden" icon={husIcon} setShowMenu={setShowMenu} />
               </Block>
               <Block $style={{ borderTopWidth: '1px', borderTopStyle: 'solid', borderTopColor: ettlevColors.grey100, paddingTop: '6px', paddingBottom: '6px' }}>
-                <MenuItem to="/behandlinger" text="Dokumentere etterlevelse" icon={arkPennIcon} setShowMenu={setShowMenu}/>
+                <MenuItem to="/behandlinger" text="Dokumentere etterlevelse" icon={arkPennIcon} setShowMenu={setShowMenu} />
               </Block>
               <Block $style={{ borderTopWidth: '1px', borderTopStyle: 'solid', borderTopColor: ettlevColors.grey100, paddingTop: '6px', paddingBottom: '6px' }}>
-                <MenuItem to="/status" text="Status i organisasjonen" icon={grafIcon} setShowMenu={setShowMenu}/>
+                <MenuItem to="/status" text="Status i organisasjonen" icon={grafIcon} setShowMenu={setShowMenu} />
               </Block>
               <Block $style={{
                 borderTopWidth: '1px', borderTopStyle: 'solid', borderTopColor: ettlevColors.grey100,
                 borderBottomWidth: '1px', borderBottomStyle: 'solid', borderBottomColor: ettlevColors.grey100,
                 paddingTop: '6px', paddingBottom: '6px'
               }}>
-                <MenuItem to="/tema" text="Forstå kravene" icon={paragrafIcon} setShowMenu={setShowMenu}/>
+                <MenuItem to="/tema" text="Forstå kravene" icon={paragrafIcon} setShowMenu={setShowMenu} />
               </Block>
             </Block>
             {/* <Block>
