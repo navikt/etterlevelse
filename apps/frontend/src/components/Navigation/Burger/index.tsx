@@ -123,7 +123,7 @@ const BurgerMenu = () => {
               style: () => {
                 return {
                   backgroundColor: ettlevColors.white,
-                  height: 'auto',
+                  height: '100vh',
                 }
               },
             },
@@ -135,7 +135,7 @@ const BurgerMenu = () => {
           }}
         >
           <Block display="flex" flexDirection="column" height="100%">
-            <Block width="100%" display="flex" justifyContent="flex-end">
+            <Block width="100%" display="flex" justifyContent="flex-end" marginBottom={theme.sizing.scale1600}>
               <Button kind="secondary" size="compact" onClick={() => setShowMenu(false)} icon={faTimes}>
                 Meny
               </Button>
@@ -170,7 +170,7 @@ const BurgerMenu = () => {
               )}
             </Block> */}
 
-            <Block display="flex" width="100%" marginTop={theme.sizing.scale1000}>
+            <Block display="flex" flexDirection="column" width="100%" height="100%" marginBottom={theme.sizing.scale1600} justifyContent="flex-end">
               {!user.isLoggedIn() && <LoginButton location={url} />}
 
               {user.isLoggedIn() && (
