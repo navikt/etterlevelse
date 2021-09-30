@@ -1,5 +1,5 @@
 import { Block, Responsive, Scale } from 'baseui/block'
-import { H1, HeadingXLarge } from 'baseui/typography'
+import { H1, H2, HeadingXLarge } from 'baseui/typography'
 import { useParams } from 'react-router-dom'
 import { deleteKrav, getKravByKravNummer, KravIdParams, mapToFormVal } from '../api/KravApi'
 import React, { useEffect, useRef, useState } from 'react'
@@ -198,7 +198,7 @@ export const KravPage = () => {
                 <Block $style={{ color: '#F8F8F8', fontWeight: 700, fontSize: '18px', fontFamily: 'Source Sans Pro' }}>
                   {krav && krav?.kravNummer !== 0 ? kravNumView(krav) : 'Ny'}
                 </Block>
-                <H1 $style={{ color: '#F8F8F8' }}>{krav && krav?.navn ? krav.navn : 'Ny'} </H1>
+                <H1 $style={{ color: '#F8F8F8' }} marginTop="16px">{krav && krav?.navn ? krav.navn : 'Ny'} </H1>
 
                 {hasKravExpired() && <ExpiredAlert alleKravVersjoner={alleKravVersjoner} />}
               </Block>
@@ -212,7 +212,8 @@ export const KravPage = () => {
           <Block backgroundColor={ettlevColors.green100} display="flex" width="100%" justifyContent="center">
             <Block maxWidth={maxPageWidth} width="100%">
               <Block width={responsiveWidthSmall} paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall} justifyContent="center" display="flex">
-                <Block marginBottom="80px" marginTop="64px" width={pageWidth}>
+                <Block marginTop="40px" width={pageWidth}>
+                  <H2 marginTop="0px">Hensikten med kravet</H2>
                   <Label title="" p1 markdown={krav.hensikt} />
                 </Block>
               </Block>
@@ -238,7 +239,7 @@ export const KravPage = () => {
                 onChange={(k) => setTab(k.activeKey as Section)}
                 tabs={[
                   {
-                    title: 'Om kravet',
+                    title: 'Suksesskriterier',
                     key: 'krav',
                     content: <ViewKrav krav={krav} alleKravVersjoner={alleKravVersjoner} />,
                   },
