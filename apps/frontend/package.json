@@ -37,7 +37,7 @@
     "react-player": "^2.9.0",
     "react-process-string": "^1.2.0",
     "rehype-raw": "^6.0.0",
-    "remark-gfm": "^2.0.0",
+    "remark-gfm": "^3.0.0",
     "shortid": "^2.2.16",
     "styletron-engine-atomic": "^1.4.6",
     "styletron-react": "^6.0.0",
