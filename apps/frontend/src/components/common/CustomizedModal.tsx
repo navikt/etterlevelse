@@ -15,9 +15,9 @@ const CuztomizedModal = (props: ModalProps) => {
     },
     DialogContainer: {
       style: {
-        paddingLeft: '100px',
-        paddingRight: '100px',
-        width: 'calc(100% - 200px)',
+        paddingLeft: '10px',
+        paddingRight: '10px',
+        width: 'calc(100% - 20px)',
       },
     },
     Close: {

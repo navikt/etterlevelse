@@ -28,9 +28,9 @@ type EditBehandlingModalProps = {
   setBehandling: Function
 }
 
-const paddingRight = theme.sizing.scale3200
-const paddingLeft = theme.sizing.scale3200
-
+const paddingRight = ['16px', '16px', '16px', '16px', theme.sizing.scale3200, theme.sizing.scale3200]
+const paddingLeft = ['16px', '16px', '16px', '16px', theme.sizing.scale3200, theme.sizing.scale3200
+]
 const EditBehandlingModal = (props: EditBehandlingModalProps) => {
   const options = codelist.getParsedOptions(ListName.RELEVANS)
   const [selected, setSelected] = React.useState<number[]>([])
@@ -173,7 +173,7 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
                     <FormControl>
                       <Block
                         height="100%"
-                        width="100%"
+                        width="calc(100% - 16px)"
                         backgroundColor={ettlevColors.grey50}
                         paddingLeft={theme.sizing.scale700}
                         paddingTop={theme.sizing.scale750}
