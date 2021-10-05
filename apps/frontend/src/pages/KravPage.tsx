@@ -70,7 +70,7 @@ export const KravPage = () => {
   const tilbakemeldingId = useQueryParam('tilbakemeldingId')
   const [tab, setTab] = useState<Section>(!!tilbakemeldingId ? 'tilbakemeldinger' : state?.tab || 'krav')
 
-  const [alleKravVersjoner, setAlleKravVersjoner] = React.useState<KravVersjon[]>([{ kravNummer: 0, kravVersjon: 0 }])
+  const [alleKravVersjoner, setAlleKravVersjoner] = React.useState<KravVersjon[]>([{ kravNummer: 0, kravVersjon: 0, kravStatus: 'Utkast' }])
   const [kravTema, setKravTema] = useState<TemaCode>()
 
   React.useEffect(() => {
@@ -79,10 +79,11 @@ export const KravPage = () => {
         if (resp.content.length) {
           const alleVersjoner = resp.content
             .map((k) => {
-              return { kravVersjon: k.kravVersjon, kravNummer: k.kravNummer }
+              return { kravVersjon: k.kravVersjon, kravNummer: k.kravNummer, kravStatus: k.status }
             })
             .sort((a, b) => (a.kravVersjon > b.kravVersjon ? -1 : 1))
-          setAlleKravVersjoner(alleVersjoner)
+
+          setAlleKravVersjoner(alleVersjoner.filter((k) => k.kravStatus !== KravStatus.UTKAST))
         }
       })
       const lovData = codelist.getCode(ListName.LOV, krav.regelverk[0]?.lov?.code)
@@ -164,31 +165,33 @@ export const KravPage = () => {
                       />
                     )}
                   </Block>
-                  {krav?.id && ((user.isKraveier() && krav.kravVersjon >= alleKravVersjoner[0].kravVersjon) || user.isAdmin()) && (
-                    <Block flex="1" display={['none', 'none', 'none', 'none', 'flex', 'flex']} justifyContent="flex-end">
-                      <Button
-                        startEnhancer={<img alt="add" src={plusIcon} />}
-                        onClick={newVersion}
-                        marginLeft
-                        size="compact"
-                        kind="tertiary"
-                        $style={{ color: '#F8F8F8', ':hover': { backgroundColor: 'transparent', textDecoration: 'underline 3px' } }}
-                      >
-                        Ny versjon
-                      </Button>
-                      <DeleteItem fun={() => deleteKrav(krav.id)} redirect={'/krav'} />
-                      <Button
-                        startEnhancer={<img src={editIcon} alt="edit" />}
-                        size="compact"
-                        $style={{ color: '#F8F8F8', ':hover': { backgroundColor: 'transparent', textDecoration: 'underline 3px' } }}
-                        kind={'tertiary'}
-                        onClick={() => setEdit(!edit)}
-                        marginLeft
-                      >
-                        Rediger
-                      </Button>
-                    </Block>
-                  )}
+                  {krav?.id &&
+                    ((user.isKraveier() && !hasKravExpired()) || user.isAdmin())
+                    && (
+                      <Block flex="1" display={['none', 'none', 'none', 'none', 'flex', 'flex']} justifyContent="flex-end">
+                        <Button
+                          startEnhancer={<img alt="add" src={plusIcon} />}
+                          onClick={newVersion}
+                          marginLeft
+                          size="compact"
+                          kind="tertiary"
+                          $style={{ color: '#F8F8F8', ':hover': { backgroundColor: 'transparent', textDecoration: 'underline 3px' } }}
+                        >
+                          Ny versjon
+                        </Button>
+                        <DeleteItem fun={() => deleteKrav(krav.id)} redirect={'/krav'} />
+                        <Button
+                          startEnhancer={<img src={editIcon} alt="edit" />}
+                          size="compact"
+                          $style={{ color: '#F8F8F8', ':hover': { backgroundColor: 'transparent', textDecoration: 'underline 3px' } }}
+                          kind={'tertiary'}
+                          onClick={() => setEdit(!edit)}
+                          marginLeft
+                        >
+                          Rediger
+                        </Button>
+                      </Block>
+                    )}
                 </Block>
               </Block>
             </Block>
@@ -330,7 +333,7 @@ const Etterlevelser = ({ loading, etterlevelser: allEtterlevelser }: { loading: 
                         },
                       },
                     }}
-                    // panelIcon={(hover) => <PageIcon hover={hover} />}
+                  // panelIcon={(hover) => <PageIcon hover={hover} />}
                   />
                 </CustomPanelDivider>
               ))}
