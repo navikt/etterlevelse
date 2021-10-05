@@ -47,10 +47,10 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
   const filterData = (
     unfilteredData:
       | {
-          behandling: PageResponse<{
-            stats: BehandlingStats
-          }>
-        }
+        behandling: PageResponse<{
+          stats: BehandlingStats
+        }>
+      }
       | undefined,
   ) => {
     const StatusListe: any[] = []
@@ -131,7 +131,7 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
     Dialog: {
       style: {
         height: '100%',
-        borderRadius: '8px',
+        ...borderRadius('8px')
       },
     },
   }
@@ -172,14 +172,23 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
                   return (
                     <FormControl>
                       <Block
-                        maxHeight="100px"
                         height="100%"
                         width="100%"
                         backgroundColor={ettlevColors.grey50}
                         paddingLeft={theme.sizing.scale700}
                         paddingTop={theme.sizing.scale750}
                       >
-                        <ButtonGroup mode="checkbox" kind={KIND.secondary}>
+                        <ButtonGroup
+                          mode="checkbox"
+                          kind={KIND.secondary}
+                          overrides={{
+                            Root: {
+                              style: {
+                                flexWrap: 'wrap'
+                              }
+                            }
+                          }}
+                        >
                           {options.map((r, i) => (
                             <Checkbox
                               checked={selected.includes(i)}
