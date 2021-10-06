@@ -6,7 +6,7 @@ import { theme } from '../../util'
 import { crossIcon } from '../Images'
 import { ettlevColors } from '../../util/theme'
 import { H1, H2, Paragraph2, Paragraph4 } from 'baseui/typography'
-import { Behandling, BehandlingEtterlevData, PageResponse } from '../../constants'
+import { Behandling, BehandlingEtterlevData, KravQL, PageResponse } from '../../constants'
 import { ButtonGroup, SHAPE } from 'baseui/button-group'
 import { Button as BaseUIButton, KIND } from 'baseui/button'
 import { Code, codelist, ListName } from '../../services/Codelist'
@@ -42,6 +42,7 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
 
   const [stats, setStats] = React.useState<any[]>([])
   const [noRelevanceKrav, setNoRelevanceKrav] = React.useState<number>(0)
+  const [totalKrav, setTotalKrav] = React.useState<number>(0)
 
   // TODO IMPLEMENT ENDPOINT FOR FETCHING ALL KRAV BASE ON RELEVANS
   // TODO OR USE KRAVGRAPQLAPI useKravFilter
@@ -56,32 +57,27 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
   ) => {
     const StatusListe: any[] = []
     const emptyRelevanse: any[] = []
+
+    const filterKrav = (k: KravQL) => {
+      if (k.regelverk.length) {
+        const relevans = k.relevansFor.map((r) => r.code)
+        if (!relevans.length) {
+          emptyRelevanse.push(k)
+        }
+        if (!relevans.length || !relevans.every((r) => !selected.map((i) => options[i].id).includes(r))) {
+          StatusListe.push(k)
+        } else if (k.etterlevelser.filter((e) => e.behandlingId === props.behandling?.id).length) {
+          StatusListe.push(k)
+        }
+      }
+    }
+
     unfilteredData?.behandling.content.forEach(({ stats }) => {
       stats.fyltKrav.forEach((k) => {
-        if (k.regelverk.length) {
-          const relevans = k.relevansFor.map((r) => r.code)
-          if (!relevans.length) {
-            emptyRelevanse.push(k)
-          }
-          if (!relevans.length || !relevans.every((r) => !selected.map((i) => options[i].id).includes(r))) {
-            StatusListe.push(k)
-          } else if (k.etterlevelser.filter((e) => e.behandlingId === props.behandling?.id)) {
-            StatusListe.push(k)
-          }
-        }
+        filterKrav(k)
       })
       stats.ikkeFyltKrav.forEach((k) => {
-        if (k.regelverk.length) {
-          const relevans = k.relevansFor.map((r) => r.code)
-          if (!relevans.length) {
-            emptyRelevanse.push(k)
-          }
-          if (!relevans.length || !relevans.every((r) => !selected.map((i) => options[i].id).includes(r))) {
-            StatusListe.push(k)
-          } else if (k.etterlevelser.filter((e) => e.behandlingId === props.behandling?.id).length) {
-            StatusListe.push(k)
-          }
-        }
+        filterKrav(k)
       })
     })
 
@@ -111,6 +107,7 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
 
   React.useEffect(() => {
     setStats(filterData(data))
+    setTotalKrav(filterData(data).length)
   }, [data])
 
   React.useEffect(() => {
@@ -202,6 +199,7 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
                         >
                           {options.map((r, i) => (
                             <Checkbox
+                              key={'relevans_' + r.id}
                               checked={selected.includes(i)}
                               labelPlacement={LABEL_PLACEMENT.right}
                               onChange={(e) => {
@@ -231,7 +229,7 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
                                       outline: `3px solid ${ettlevColors.focusOutline}`,
                                     },
                                     width: '100%',
-                                    maxWidth: '250px'
+                                    maxWidth: '260px'
                                   },
                                 },
                                 Checkmark: {
@@ -263,16 +261,21 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
                 <Paragraph2 $style={{ lineHeight: '20px' }} marginTop={theme.sizing.scale900} marginBottom={theme.sizing.scale600}>
                   Basert på dine opplysninger, skal behandlingen etterleve
                 </Paragraph2>
-                <Block display="flex" justifyContent="space-between">
-                  <Block display="flex" alignItems="baseline" marginRight="30px">
-                    <Paragraph2
-                      $style={{ ...marginZero, fontWeight: 900, fontSize: '32px', lineHeight: '40px' }}
-                      color={ettlevColors.navOransje}
-                      marginRight={theme.sizing.scale300}
-                    >
-                      {stats.length}
-                    </Paragraph2>
-                    <Paragraph2 $style={{ ...marginZero }}>krav</Paragraph2>
+                <Block>
+                  <Block>
+                    <Block display="flex" alignItems="baseline" marginRight="30px">
+                      <Paragraph2
+                        $style={{ ...marginZero, fontWeight: 900, fontSize: '32px', lineHeight: '40px' }}
+                        color={ettlevColors.navOransje}
+                        marginRight={theme.sizing.scale300}
+                      >
+                        {stats.length}
+                      </Paragraph2>
+                      <Paragraph2 $style={{ ...marginZero }}>krav</Paragraph2>
+                    </Block>
+                    <Block>
+                      <Paragraph2>Du har fjernet {totalKrav - stats.length} krav</Paragraph2>
+                    </Block>
                   </Block>
 
                   <Block>
