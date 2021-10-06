@@ -83,7 +83,11 @@ export const KravPage = () => {
             })
             .sort((a, b) => (a.kravVersjon > b.kravVersjon ? -1 : 1))
 
-          setAlleKravVersjoner(alleVersjoner.filter((k) => k.kravStatus !== KravStatus.UTKAST))
+          const filteredVersjoner = alleVersjoner.filter((k) => k.kravStatus !== KravStatus.UTKAST)
+
+          if (filteredVersjoner.length) {
+            setAlleKravVersjoner(filteredVersjoner)
+          }
         }
       })
       const lovData = codelist.getCode(ListName.LOV, krav.regelverk[0]?.lov?.code)
