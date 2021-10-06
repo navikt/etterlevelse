@@ -41,6 +41,7 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
   })
 
   const [stats, setStats] = React.useState<any[]>([])
+  const [noRelevanceKrav, setNoRelevanceKrav] = React.useState<number>(0)
 
   // TODO IMPLEMENT ENDPOINT FOR FETCHING ALL KRAV BASE ON RELEVANS
   // TODO OR USE KRAVGRAPQLAPI useKravFilter
@@ -54,10 +55,14 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
       | undefined,
   ) => {
     const StatusListe: any[] = []
+    const emptyRelevanse: any[] = []
     unfilteredData?.behandling.content.forEach(({ stats }) => {
       stats.fyltKrav.forEach((k) => {
         if (k.regelverk.length) {
           const relevans = k.relevansFor.map((r) => r.code)
+          if (!relevans.length) {
+            emptyRelevanse.push(k)
+          }
           if (!relevans.length || !relevans.every((r) => !selected.map((i) => options[i].id).includes(r))) {
             StatusListe.push(k)
           } else if (k.etterlevelser.filter((e) => e.behandlingId === props.behandling?.id)) {
@@ -68,6 +73,9 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
       stats.ikkeFyltKrav.forEach((k) => {
         if (k.regelverk.length) {
           const relevans = k.relevansFor.map((r) => r.code)
+          if (!relevans.length) {
+            emptyRelevanse.push(k)
+          }
           if (!relevans.length || !relevans.every((r) => !selected.map((i) => options[i].id).includes(r))) {
             StatusListe.push(k)
           } else if (k.etterlevelser.filter((e) => e.behandlingId === props.behandling?.id).length) {
@@ -76,6 +84,8 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
         }
       })
     })
+
+    setNoRelevanceKrav(emptyRelevanse.length)
 
     StatusListe.sort((a, b) => {
       if (a.kravNummer === b.kravNummer) {
@@ -167,6 +177,7 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
             <Block paddingLeft={paddingLeft} paddingRight={paddingRight} marginTop={theme.sizing.scale1400}>
               <H2>Egenskaper til behandling</H2>
               <Paragraph2 $style={{ lineHeight: '20px', maxWidth: '650px' }}>Ved å oppgi egenskaper til behandlingen, vises kun relevante krav</Paragraph2>
+              <Paragraph2 $style={{ lineHeight: '20px', maxWidth: '650px' }}>Det er {noRelevanceKrav} krav som gjelder for alle behandlinger, i tillegg til krav knyttet til relevans</Paragraph2>
               <FieldArray name="irrelevansFor">
                 {(p: FieldArrayRenderProps) => {
                   return (
