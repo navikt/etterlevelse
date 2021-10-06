@@ -322,20 +322,6 @@ const AllKrav = () => {
   })
   const [sortedKravList, setSortedKravList] = useState<KravQL[]>([])
 
-  const customSelectOverrides: SelectOverrides = {
-    Root: {
-      style: {
-        width: '150px',
-      }
-    },
-    DropdownContainer: {
-      style: {
-        width: 'fit-content',
-        maxWidth: '300px'
-      }
-    }
-  }
-
   const loading = !data && gqlLoading
   const lastMer = () => {
     fetchMore({
@@ -444,6 +430,21 @@ const AllKrav = () => {
 
   //must be run in function to not affect other selectors others overrides
   const getSelector = (filterId: string | undefined, kravFilter: KravListFilter, options: any[], value: Option[]) => {
+
+    const customSelectOverrides: SelectOverrides = {
+      Root: {
+        style: {
+          width: '150px',
+        }
+      },
+      DropdownContainer: {
+        style: {
+          width: 'fit-content',
+          maxWidth: '300px'
+        }
+      }
+    }
+
     return (
       <Block marginLeft={selectorMarginLeft} marginTop={selectorMarginTop}>
         <CustomizedSelect
