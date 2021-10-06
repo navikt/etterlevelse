@@ -457,7 +457,7 @@ const AllKrav = () => {
               ...customSelectOverrides,
               ControlContainer: {
                 style: {
-                  backgroundColor: filterId === 'alle' ? 'none' : ettlevColors.green50,
+                  backgroundColor: filterId === 'alle' ? ettlevColors.white : ettlevColors.green50,
                   borderColor: filterId === 'alle' ? ettlevColors.grey200 : ettlevColors.green800,
                 }
               }
