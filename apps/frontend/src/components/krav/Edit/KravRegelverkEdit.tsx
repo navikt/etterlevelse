@@ -1,16 +1,16 @@
-import React, { useState } from 'react'
-import { Value } from 'baseui/select'
-import { codelist, ListName } from '../../../services/Codelist'
-import { FieldWrapper } from '../../common/Inputs'
-import { FieldArray } from 'formik'
-import { FormControl } from 'baseui/form-control'
-import { Block } from 'baseui/block'
-import { theme } from '../../../util'
+import React, {useState} from 'react'
+import {Value} from 'baseui/select'
+import {codelist, ListName} from '../../../services/Codelist'
+import {FieldWrapper} from '../../common/Inputs'
+import {FieldArray} from 'formik'
+import {FormControl} from 'baseui/form-control'
+import {Block} from 'baseui/block'
+import {theme} from '../../../util'
 import Button from '../../common/Button'
-import { LabelSmall } from 'baseui/typography'
-import { LovView } from '../../Lov'
-import { RenderTagList } from '../../common/TagList'
-import { Regelverk } from '../../../constants'
+import {LabelSmall} from 'baseui/typography'
+import {LovView} from '../../Lov'
+import {RenderTagList} from '../../common/TagList'
+import {Regelverk} from '../../../constants'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
 import CustomizedInput from '../../common/CustomizedInput'
 import CustomizedSelect from '../../common/CustomizedSelect'
@@ -60,7 +60,7 @@ export const KravRegelverkEdit = () => {
                       <CustomizedInput
                         value={text}
                         onChange={(e) => setText((e.target as HTMLInputElement).value)}
-                        placeholder={'Beskrivelse, paragraf eller kapittel i regelverk'}
+                        placeholder={'Beskrivelse, paragraf, artikkel eller kapittel i regelverk'}
                       />
                     </Block>
 
