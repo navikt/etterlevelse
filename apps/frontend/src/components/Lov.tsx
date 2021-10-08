@@ -1,8 +1,8 @@
 import React from 'react'
-import { codelist, ListName } from '../services/Codelist'
-import { env } from '../util/env'
-import { Regelverk } from '../constants'
-import { Block } from 'baseui/block'
+import {codelist, ListName} from '../services/Codelist'
+import {env} from '../util/env'
+import {Regelverk} from '../constants'
+import {Block} from 'baseui/block'
 import CustomizedLink from './common/CustomizedLink'
 
 const reactProcessString = require('react-process-string')
@@ -72,6 +72,14 @@ const legalBasisLinkProcessor = (law: string, text?: string, openOnSamePage?: bo
       fn: (key: string, result: string[]) => (
         <CustomizedLink key={key} href={`${lovdataBase(law)}/KAPITTEL_${result[3]}`} target={openOnSamePage ? '_self' : '_blank'} rel="noopener noreferrer">
           {result[1]} Kapittel {result[3]} {openOnSamePage ? '' : ' (ny fane)'}
+        </CustomizedLink>
+      ),
+    },
+    {
+      regex: /(.*) art(ikkel)?\s*(\d+)/gi,
+      fn: (key: string, result: string[]) => (
+        <CustomizedLink key={key} href={`${lovdataBase(law)}/ARTIKKEL_${result[3]}`} target={openOnSamePage ? '_self' : '_blank'} rel="noopener noreferrer">
+          {result[1]} Artikkel {result[3]} {openOnSamePage ? '' : ' (ny fane)'}
         </CustomizedLink>
       ),
     },
