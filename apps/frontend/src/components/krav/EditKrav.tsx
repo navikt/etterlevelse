@@ -50,11 +50,10 @@ export const EditKrav = ({krav, close, formRef, isOpen, setIsOpen}: EditKravProp
       underavdeling: underavdeling,
     }
     const etterlevelser = await getEtterlevelserByKravNumberKravVersion(krav.kravNummer, krav.kravVersjon)
-    if (etterlevelser.totalElements > 0) {
+    if (etterlevelser.totalElements > 0 && krav.status === KravStatus.UTKAST) {
       setErrorMessage('Kravet kan ikke settes til «Utkast» når det er tilknyttet dokumentasjon av etterlevelse')
       setShowErrorModal(true)
-    }
-    if (krav.id) {
+    } else if (krav.id) {
       close(await updateKrav(mutatedKrav))
     } else {
       close(await createKrav(mutatedKrav))
