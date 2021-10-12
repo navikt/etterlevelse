@@ -49,9 +49,7 @@ export const EditKrav = ({krav, close, formRef, isOpen, setIsOpen}: EditKravProp
       ...krav,
       underavdeling: underavdeling,
     }
-    console.log(krav)
     const etterlevelser = await getEtterlevelserByKravNumberKravVersion(krav.kravNummer, krav.kravVersjon)
-    console.log(etterlevelser)
     if (etterlevelser.totalElements > 0) {
       setErrorMessage('Kravet kan ikke settes til «Utkast» når det er tilknyttet dokumentasjon av etterlevelse')
       setShowErrorModal(true)
