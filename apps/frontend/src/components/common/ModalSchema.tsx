@@ -1,12 +1,12 @@
-import { ErrorMessage } from 'formik'
-import { Block } from 'baseui/block'
-import { KIND as NKIND, Notification } from 'baseui/notification'
-import { Label2 } from 'baseui/typography'
+import {ErrorMessage} from 'formik'
+import {Block} from 'baseui/block'
+import {KIND as NKIND, Notification} from 'baseui/notification'
+import {Label2} from 'baseui/typography'
 import * as React from 'react'
-import { theme } from '../../util'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons'
-import { paddingZero } from './Style'
+import {theme} from '../../util'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faExclamationCircle} from '@fortawesome/free-solid-svg-icons'
+import {paddingZero} from './Style'
 import CustomizedStatefulTooltip from './CustomizedStatefulTooltip'
 
 export const Error = (props: { fieldName: string; fullWidth?: boolean }) => (
@@ -15,7 +15,7 @@ export const Error = (props: { fieldName: string; fullWidth?: boolean }) => (
       <Block display="flex" width="100%" marginTop=".2rem">
         {!props.fullWidth && <ModalLabel />}
         <Block width="100%">
-          <Notification overrides={{ Body: { style: { width: 'auto', ...paddingZero, marginTop: 0 } } }} kind={NKIND.negative}>
+          <Notification overrides={{ Body: { style: { width: 'auto', ...paddingZero, marginTop: 0, backgroundColor:'transparent' } } }} kind={NKIND.negative}>
             {msg}
           </Notification>
         </Block>

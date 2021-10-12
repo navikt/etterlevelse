@@ -1,9 +1,9 @@
 import axios from 'axios'
-import { emptyPage, Etterlevelse, EtterlevelseStatus, PageResponse } from '../constants'
-import { env } from '../util/env'
-import { useEffect, useState } from 'react'
+import {emptyPage, Etterlevelse, EtterlevelseStatus, PageResponse} from '../constants'
+import {env} from '../util/env'
+import {useEffect, useState} from 'react'
 import * as queryString from 'querystring'
-import { KravId } from './KravApi'
+import {KravId} from './KravApi'
 
 export const getEtterlevelsePage = async (pageNumber: number, pageSize: number) => {
   return (await axios.get<PageResponse<Etterlevelse>>(`${env.backendBaseUrl}/etterlevelse?pageNumber=${pageNumber}&pageSize=${pageSize}`)).data
@@ -15,6 +15,10 @@ export const getEtterlevelseFor = async (query: { behandling: string }) => {
 
 export const getEtterlevelse = async (id: string) => {
   return (await axios.get<Etterlevelse>(`${env.backendBaseUrl}/etterlevelse/${id}`)).data
+}
+
+export const getEtterlevelserByKravNumberKravVersion = async (kravNummer:number, kravVersjon:number) => {
+  return (await axios.get<PageResponse<Etterlevelse>>(`${env.backendBaseUrl}/etterlevelse/kravnummer/${kravNummer}/${kravVersjon}`)).data
 }
 
 export const deleteEtterlevelse = async (id: string) => {
