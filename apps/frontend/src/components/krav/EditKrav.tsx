@@ -18,6 +18,7 @@ import CustomizedModal from '../common/CustomizedModal'
 import Button from '../common/Button'
 import {ettlevColors, maxPageWidth, responsivePaddingLarge, responsiveWidthLarge, theme} from '../../util/theme'
 import {getEtterlevelserByKravNumberKravVersion} from "../../api/EtterlevelseApi";
+import ErrorModal from "../ErrorModal";
 
 type EditKravProps = {
   krav: KravQL
@@ -37,6 +38,8 @@ export const kravModal = () => document.querySelector('#krav-modal')
 
 export const EditKrav = ({krav, close, formRef, isOpen, setIsOpen}: EditKravProps) => {
   const [stickyHeader, setStickyHeader] = React.useState(false)
+  const [showErrorModal, setShowErrorModal] = React.useState(false)
+  const [errorMessage, setErrorMessage] = React.useState('')
 
   const submit = async (krav: KravQL) => {
     const regelverk = codelist.getCode(ListName.LOV, krav.regelverk[0]?.lov.code)
@@ -47,18 +50,17 @@ export const EditKrav = ({krav, close, formRef, isOpen, setIsOpen}: EditKravProp
       underavdeling: underavdeling,
     }
     console.log(krav)
-    const etterlevelser = await getEtterlevelserByKravNumberKravVersion(krav.kravNummer,krav.kravVersjon)
+    const etterlevelser = await getEtterlevelserByKravNumberKravVersion(krav.kravNummer, krav.kravVersjon)
     console.log(etterlevelser)
-    try {
-      if (krav.id) {
-        close(await updateKrav(mutatedKrav))
-      } else {
-        close(await createKrav(mutatedKrav))
-      }
-    }catch (error:any){
-      console.log(error.response.data.message)
+    if (etterlevelser.totalElements > 0) {
+      setErrorMessage('Kravet kan ikke settes til «Utkast» når det er tilknyttet dokumentasjon av etterlevelse')
+      setShowErrorModal(true)
     }
-
+    if (krav.id) {
+      close(await updateKrav(mutatedKrav))
+    } else {
+      close(await createKrav(mutatedKrav))
+    }
   }
 
   useEffect(() => {
@@ -256,6 +258,7 @@ export const EditKrav = ({krav, close, formRef, isOpen, setIsOpen}: EditKravProp
                   <TextAreaField label="Notater (Kun synlig for kraveier)" name="notat" height="250px" markdown tooltip={'Kraveiers notater'}/>
                 </Block>
               </Block>
+              <ErrorModal isOpen={showErrorModal} errorMessage={errorMessage} submit={setShowErrorModal}/>
             </Form>
           )}
         </Formik>
