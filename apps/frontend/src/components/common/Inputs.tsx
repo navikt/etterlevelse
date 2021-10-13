@@ -30,7 +30,6 @@ export const InputField = (props: { label: string; name: string; caption?: React
         <FormControl
           overrides={{Label: {style: {marginTop: '0px', marginBottom: '0px', paddingTop: '8px', paddingBottom: '8px'}}}}
           label={<LabelWithTooltip label={props.label} tooltip={props.tooltip}/>}
-          // error={p.meta.touched && p.meta.error}
           caption={props.caption}
         >
           <Block>
