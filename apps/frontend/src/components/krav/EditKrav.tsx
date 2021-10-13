@@ -1,23 +1,24 @@
-import { Krav, KravQL, KravStatus } from '../../constants'
-import { Form, Formik } from 'formik'
-import { createKrav, mapToFormVal, updateKrav } from '../../api/KravApi'
-import { Block } from 'baseui/block'
-import React, { useEffect } from 'react'
+import {Krav, KravQL, KravStatus} from '../../constants'
+import {Form, Formik} from 'formik'
+import {createKrav, mapToFormVal, updateKrav} from '../../api/KravApi'
+import {Block} from 'baseui/block'
+import React, {useEffect} from 'react'
 import * as yup from 'yup'
-import { codelist, ListName } from '../../services/Codelist'
-import { kravStatus } from '../../pages/KravPage'
-import { InputField, MultiInputField, MultiOptionField, OptionField, TextAreaField } from '../common/Inputs'
+import {codelist, ListName} from '../../services/Codelist'
+import {kravStatus} from '../../pages/KravPage'
+import {InputField, MultiInputField, MultiOptionField, OptionField, TextAreaField} from '../common/Inputs'
 import axios from 'axios'
-import { env } from '../../util/env'
-import { KravVarslingsadresserEdit } from './Edit/KravVarslingsadresserEdit'
-import { KravRegelverkEdit } from './Edit/KravRegelverkEdit'
-import { KravSuksesskriterierEdit } from './Edit/KravSuksesskriterieEdit'
-import { EditBegreper } from './Edit/KravBegreperEdit'
-import { H1, H2, LabelLarge } from 'baseui/typography'
+import {env} from '../../util/env'
+import {KravVarslingsadresserEdit} from './Edit/KravVarslingsadresserEdit'
+import {KravRegelverkEdit} from './Edit/KravRegelverkEdit'
+import {KravSuksesskriterierEdit} from './Edit/KravSuksesskriterieEdit'
+import {EditBegreper} from './Edit/KravBegreperEdit'
+import {H1, H2, LabelLarge} from 'baseui/typography'
 import CustomizedModal from '../common/CustomizedModal'
 import Button from '../common/Button'
-import { ettlevColors, maxPageWidth, responsivePaddingLarge, responsiveWidthLarge, theme } from '../../util/theme'
-import { user } from '../../services/User'
+import {ettlevColors, maxPageWidth, responsivePaddingLarge, responsiveWidthLarge, theme} from '../../util/theme'
+import {getEtterlevelserByKravNumberKravVersion} from "../../api/EtterlevelseApi";
+import ErrorModal from "../ErrorModal";
 
 type EditKravProps = {
   krav: KravQL
@@ -35,8 +36,10 @@ const inputMarginBottom = theme.sizing.scale900
 
 export const kravModal = () => document.querySelector('#krav-modal')
 
-export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravProps) => {
+export const EditKrav = ({krav, close, formRef, isOpen, setIsOpen}: EditKravProps) => {
   const [stickyHeader, setStickyHeader] = React.useState(false)
+  const [showErrorModal, setShowErrorModal] = React.useState(false)
+  const [errorMessage, setErrorMessage] = React.useState('')
 
   const submit = async (krav: KravQL) => {
     const regelverk = codelist.getCode(ListName.LOV, krav.regelverk[0]?.lov.code)
@@ -46,7 +49,11 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
       ...krav,
       underavdeling: underavdeling,
     }
-    if (krav.id) {
+    const etterlevelser = await getEtterlevelserByKravNumberKravVersion(krav.kravNummer, krav.kravVersjon)
+    if (etterlevelser.totalElements > 0 && krav.status === KravStatus.UTKAST) {
+      setErrorMessage('Kravet kan ikke settes til «Utkast» når det er tilknyttet dokumentasjon av etterlevelse')
+      setShowErrorModal(true)
+    } else if (krav.id) {
       close(await updateKrav(mutatedKrav))
     } else {
       close(await createKrav(mutatedKrav))
@@ -76,8 +83,12 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
           },
         }}
       >
-        <Formik onSubmit={submit} initialValues={mapToFormVal(krav)} validationSchema={kravSchema()} innerRef={formRef}>
-          {({ isSubmitting, submitForm }) => (
+        <Formik
+          onSubmit={submit}
+          initialValues={mapToFormVal(krav)}
+          validationSchema={kravSchema()}
+          innerRef={formRef}>
+          {({isSubmitting, submitForm}) => (
             <Form>
               <Block
                 backgroundColor={ettlevColors.green800}
@@ -88,11 +99,11 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
                 position="sticky"
                 top={0}
                 display={!stickyHeader ? 'block' : 'flex'}
-                $style={{ zIndex: 3 }}
+                $style={{zIndex: 3}}
               >
                 {stickyHeader && (
                   <Block display="flex" width="100%" justifyContent="flex-start">
-                    <LabelLarge $style={{ color: '#F8F8F8' }}>{`K${krav.kravNummer}.${krav.kravVersjon} ${krav.navn}`}</LabelLarge>
+                    <LabelLarge $style={{color: '#F8F8F8'}}>{`K${krav.kravNummer}.${krav.kravVersjon} ${krav.navn}`}</LabelLarge>
                   </Block>
                 )}
                 <Block display="flex" justifyContent="flex-end">
@@ -101,7 +112,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
                   </Button>
                   <Button
                     size="compact"
-                    $style={{ color: '#F8F8F8', ':hover': { backgroundColor: 'transparent', textDecoration: 'underline 3px' } }}
+                    $style={{color: '#F8F8F8', ':hover': {backgroundColor: 'transparent', textDecoration: 'underline 3px'}}}
                     kind={'tertiary'}
                     type={'button'}
                     onClick={close}
@@ -112,8 +123,8 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
                 </Block>
                 {!stickyHeader && (
                   <Block>
-                    <H1 $style={{ color: '#F8F8F8' }}>Rediger kravside: </H1>
-                    <H2 $style={{ color: '#F8F8F8' }}>{`K${krav.kravNummer}.${krav.kravVersjon} ${krav.navn}`} </H2>
+                    <H1 $style={{color: '#F8F8F8'}}>Rediger kravside: </H1>
+                    <H2 $style={{color: '#F8F8F8'}}>{`K${krav.kravNummer}.${krav.kravVersjon} ${krav.navn}`} </H2>
                   </Block>
                 )}
               </Block>
@@ -140,10 +151,10 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
                 <Block display="flex" width="100%" justifyContent="center">
                   <Block width={responsiveWidthLarge}>
                     <H2 marginBottom={inputMarginBottom}>Suksesskriterier</H2>
-                    <KravSuksesskriterierEdit />
-                    {/* 
+                    <KravSuksesskriterierEdit/>
+                    {/*
                   <TextAreaField marginBottom='80px' label='Beskrivelse' name='beskrivelse' markdown shortenLinks onImageUpload={onImageUpload(krav.id)}
-                    tooltip={'Beskriv selve innholdet i kravet.'} /> 
+                    tooltip={'Beskriv selve innholdet i kravet.'} />
                     */}
                     {/*
                       <TextAreaField label='Utfyllende beskrivelse' name='utdypendeBeskrivelse' markdown shortenLinks onImageUpload={onImageUpload(krav.id)}
@@ -163,7 +174,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
                       tooltip="Lenke til dokumentasjon"
                       linkTooltip={'Legg inn referanse til utdypende dokumentasjon (lenke). Eksempelvis til navet, eksterne nettsider eller Websak.'}
                     />
-                    <KravRegelverkEdit />
+                    <KravRegelverkEdit/>
                     <TextAreaField
                       label="Relevante implementasjoner"
                       name="implementasjoner"
@@ -207,7 +218,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
                     />
 
                     <Block width="100%" maxWidth={maxInputWidth} marginBottom="80px">
-                      <EditBegreper />
+                      <EditBegreper/>
                     </Block>
 
                     <Block marginBottom={inputMarginBottom}>
@@ -218,14 +229,14 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
                       <OptionField
                         label="Status"
                         name="status"
-                        options={Object.values(KravStatus).map((id) => ({ id, label: kravStatus(id) }))}
+                        options={Object.values(KravStatus).map((id) => ({id, label: kravStatus(id)}))}
                         tooltip={'Velg status for kravet. Utkast er kun synlig for kraveier selv. Aktiv/utgått er synlig for alle.'}
                       />
                     </Block>
 
-                    <KravVarslingsadresserEdit />
+                    <KravVarslingsadresserEdit/>
 
-                    {/* 
+                    {/*
 
                                     <OptionField label='Ansvarlig' name='Ansvarlig' listName={ListName.UNDERAVDELING}
                     tooltip={'Angi hvilken seksjon/underavdeling som har ansvaret for kravet.'} />
@@ -236,14 +247,15 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
                       <OptionField label='Avdeling' name='avdeling' listName={ListName.AVDELING} tooltip={'Angi hvilken avdeling som har det overordnede ansvaret for kravet.'} />
 
                       <TextAreaField label='Endringer fra forrige versjon' name='versjonEndringer'
-                                     tooltip={'Gi informasjon om hva som er endret siden forrige versjon av kravet.'}/> 
+                                     tooltip={'Gi informasjon om hva som er endret siden forrige versjon av kravet.'}/>
                                      */}
                   </Block>
                 </Block>
                 <Block backgroundColor={ettlevColors.grey50} paddingTop="48px" paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge} paddingBottom="64px">
-                  <TextAreaField label="Notater (Kun synlig for kraveier)" name="notat" height="250px" markdown tooltip={'Kraveiers notater'} />
+                  <TextAreaField label="Notater (Kun synlig for kraveier)" name="notat" height="250px" markdown tooltip={'Kraveiers notater'}/>
                 </Block>
               </Block>
+              <ErrorModal isOpen={showErrorModal} errorMessage={errorMessage} submit={setShowErrorModal}/>
             </Form>
           )}
         </Formik>
@@ -252,8 +264,9 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
   )
 }
 
+
 const onImageUpload = (kravId: string) => async (file: File) => {
-  const config = { headers: { 'content-type': 'multipart/form-data' } }
+  const config = {headers: {'content-type': 'multipart/form-data'}}
   const formData = new FormData()
   formData.append('file', file)
   const id = (await axios.post<string[]>(`${env.backendBaseUrl}/krav/${kravId}/files`, formData, config)).data[0]
@@ -261,6 +274,10 @@ const onImageUpload = (kravId: string) => async (file: File) => {
   return `/api/krav/${kravId}/files/${id}`
 }
 
-const kravSchema = () => {
-  return yup.object({})
-}
+const kravSchema = () =>
+  yup.object({
+    navn: yup.string().required('Du må oppgi et navn til kravet'),
+    suksesskriterier: yup.array().of(yup.object({
+      navn: yup.string().required('Du må oppgi et navn til suksesskriteriet')
+    }))
+  })
