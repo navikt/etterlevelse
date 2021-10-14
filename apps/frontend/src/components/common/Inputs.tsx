@@ -287,7 +287,7 @@ export const MultiOptionField = (
           return (
             <FormControl
               label={<LabelWithTooltip label={props.label} tooltip={props.tooltip}/>}
-              error={p.form.touched[props.name] && p.form.errors[props.name]}
+              // error={p.form.touched[props.name] && p.form.errors[props.name]}
               caption={props.caption}
             >
               <Block>

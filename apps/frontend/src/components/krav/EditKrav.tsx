@@ -19,6 +19,7 @@ import Button from '../common/Button'
 import {ettlevColors, maxPageWidth, responsivePaddingLarge, responsiveWidthLarge, theme} from '../../util/theme'
 import {getEtterlevelserByKravNumberKravVersion} from "../../api/EtterlevelseApi";
 import ErrorModal from "../ErrorModal";
+import {Error} from "../common/ModalSchema";
 
 type EditKravProps = {
   krav: KravQL
@@ -42,6 +43,7 @@ export const EditKrav = ({krav, close, formRef, isOpen, setIsOpen}: EditKravProp
   const [errorMessage, setErrorMessage] = React.useState('')
 
   const submit = async (krav: KravQL) => {
+    console.log(krav)
     const regelverk = codelist.getCode(ListName.LOV, krav.regelverk[0]?.lov.code)
     const underavdeling = codelist.getCode(ListName.UNDERAVDELING, regelverk?.data?.underavdeling)
 
@@ -175,6 +177,7 @@ export const EditKrav = ({krav, close, formRef, isOpen, setIsOpen}: EditKravProp
                       linkTooltip={'Legg inn referanse til utdypende dokumentasjon (lenke). Eksempelvis til navet, eksterne nettsider eller Websak.'}
                     />
                     <KravRegelverkEdit/>
+                    <Error fieldName={'regelverk'} fullWidth/>
                     <TextAreaField
                       label="Relevante implementasjoner"
                       name="implementasjoner"
@@ -235,6 +238,8 @@ export const EditKrav = ({krav, close, formRef, isOpen, setIsOpen}: EditKravProp
                     </Block>
 
                     <KravVarslingsadresserEdit/>
+                    <Error fieldName={'varslingsadresser'} fullWidth/>
+
 
                     {/*
 
@@ -274,10 +279,67 @@ const onImageUpload = (kravId: string) => async (file: File) => {
   return `/api/krav/${kravId}/files/${id}`
 }
 
+const errorMessage = "Feltet er påkrevd";
+
 const kravSchema = () =>
   yup.object({
     navn: yup.string().required('Du må oppgi et navn til kravet'),
     suksesskriterier: yup.array().of(yup.object({
       navn: yup.string().required('Du må oppgi et navn til suksesskriteriet')
-    }))
+    })).test({
+      name: 'suksesskriterierCheck',
+      message: errorMessage,
+      test: function (suksesskriterier) {
+        const {parent} = this
+        if (parent.status === KravStatus.AKTIV || parent.status === KravStatus.UNDER_ARBEID) {
+          return suksesskriterier && suksesskriterier.length > 0 ? true : false
+        }
+        return true
+      },
+    }),
+    hensikt: yup.string().test({
+      name: 'hensiktCheck',
+      message: errorMessage,
+      test: function (hensikt) {
+        const {parent} = this
+        console.log(this)
+        if (parent.status === KravStatus.AKTIV || parent.status === KravStatus.UNDER_ARBEID) {
+          return hensikt ? true : false
+        }
+        return true
+      },
+    }),
+    regelverk: yup.array().test({
+      name: 'regelverkCheck',
+      message: errorMessage,
+      test: function (regelverk) {
+        const {parent} = this
+        if (parent.status === KravStatus.AKTIV || parent.status === KravStatus.UNDER_ARBEID) {
+          return regelverk && regelverk.length > 0 ? true : false
+        }
+        return true
+      },
+    }),
+    relevansFor: yup.array().test({
+      name: 'relevansForCheck',
+      message: errorMessage,
+      test: function (relevansFor) {
+        const {parent} = this
+        if (parent.status === KravStatus.AKTIV || parent.status === KravStatus.UNDER_ARBEID) {
+          return relevansFor && relevansFor.length > 0 ? true : false
+        }
+        return true
+      },
+    }),
+    varslingsadresser: yup.array().test({
+      name: 'varslingsadresserCheck',
+      message: errorMessage,
+      test: function (varslingsadresser) {
+        const {parent} = this
+        if (parent.status === KravStatus.AKTIV || parent.status === KravStatus.UNDER_ARBEID) {
+          return varslingsadresser && varslingsadresser.length > 0 ? true : false
+        }
+        return true
+      },
+    }),
   })
