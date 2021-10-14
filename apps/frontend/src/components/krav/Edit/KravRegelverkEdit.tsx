@@ -56,7 +56,7 @@ export const KravRegelverkEdit = () => {
                       />
                     </Block>
                     <Block width="100%">
-                      <LabelWithTooltip label={'Paragraf eller kapittel i regelverk'} tooltip={'Beskrivelse'} />
+                      <LabelWithTooltip label={'Paragraf, kapittel eller artikkel i regelverk'} tooltip={'Beskrivelse'} />
                       <CustomizedInput
                         value={text}
                         onChange={(e) => setText((e.target as HTMLInputElement).value)}
