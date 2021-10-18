@@ -19,7 +19,7 @@ jobs:
         runs-on: ubuntu-latest
 
         steps:
-            - uses: actions/checkout@v2.3.4
+            - uses: actions/checkout@v2.3.5
             - name: Set up node
               uses: actions/setup-node@v2.4.1
               with:
@@ -61,7 +61,7 @@ jobs:
         if: github.ref == 'refs/heads/master'
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v2.3.4
+            - uses: actions/checkout@v2.3.5
             - uses: nais/deploy/actions/deploy@v1
               env:
                   APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
@@ -76,7 +76,7 @@ jobs:
         if: github.ref == 'refs/heads/prod'
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v2.3.4
+            - uses: actions/checkout@v2.3.5
             - uses: nais/deploy/actions/deploy@v1
               env:
                   APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
