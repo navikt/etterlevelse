@@ -1,16 +1,16 @@
 import * as React from 'react'
-import { Modal, ModalBody, ModalButton, ModalFooter, ModalHeader, ROLE, SIZE } from 'baseui/modal'
+import {Modal, ModalBody, ModalButton, ModalFooter, ModalHeader, ROLE, SIZE} from 'baseui/modal'
 
-import { Field, FieldProps, Form, Formik, FormikProps } from 'formik'
+import {Field, FieldProps, Form, Formik, FormikProps} from 'formik'
 
-import { Button, KIND } from 'baseui/button'
-import { Block, BlockProps } from 'baseui/block'
-import { Label2 } from 'baseui/typography'
-import { SIZE as InputSIZE } from 'baseui/input'
-import { CodeListFormValues, codeListSchema, ListName } from '../../../services/Codelist'
-import { Error } from '../../common/ModalSchema'
-import { LovCodeDataForm, TemaCodeDataForm } from './LovCode'
-import { MarkdownInfo } from '../../common/Markdown'
+import {Button, KIND} from 'baseui/button'
+import {Block, BlockProps} from 'baseui/block'
+import {Label2} from 'baseui/typography'
+import {SIZE as InputSIZE} from 'baseui/input'
+import {CodeListFormValues, codeListSchema, ListName} from '../../../services/Codelist'
+import {Error} from '../../common/ModalSchema'
+import {LovCodeDataForm, TemaCodeDataForm} from './LovCode'
+import {MarkdownInfo} from '../../common/Markdown'
 import CustomizedInput from '../../common/CustomizedInput'
 import CustomizedTextarea from '../../common/CustomizedTextarea'
 
@@ -84,10 +84,10 @@ const UpdateCodeListModal = ({ title, initialValues, errorOnUpdate, isOpen, onCl
                 <Block display="flex" justifyContent="flex-end">
                   <Block marginRight="auto">{errorOnUpdate && <p>{errorOnUpdate}</p>}</Block>
                   <Button type="button" kind={KIND.secondary} onClick={() => onClose()}>
-                    <b>Avbryt</b>
+                    <strong>Avbryt</strong>
                   </Button>
                   <ModalButton type="button" onClick={formik.submitForm}>
-                    <b>Lagre</b>
+                    <strong>Lagre</strong>
                   </ModalButton>
                 </Block>
               </ModalFooter>

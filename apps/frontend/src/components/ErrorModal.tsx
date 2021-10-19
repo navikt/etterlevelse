@@ -8,7 +8,7 @@ const ErrorModal = (props: { isOpen: boolean, submit: Function, errorMessage: st
       <ModalBody>{props.errorMessage}</ModalBody>
       <ModalFooter>
         <ModalButton onClick={() => props.submit(false)}>
-          <b>Lukk</b>
+          <strong>Lukk</strong>
         </ModalButton>
       </ModalFooter>
     </Modal>)

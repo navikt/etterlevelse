@@ -1,16 +1,16 @@
 import * as React from 'react'
-import { ReactNode } from 'react'
-import { Button as BaseUIButton, KIND, SHAPE, SIZE } from 'baseui/button'
-import { PLACEMENT, StatefulTooltip } from 'baseui/tooltip'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
-import { theme } from '../../util'
-import { Override } from 'baseui/overrides'
-import { StyleObject } from 'styletron-react'
-import { Block } from 'baseui/block'
-import { borderRadius, borderStyle, borderWidth, paddingAll } from './Style'
-import { ettlevColors } from '../../util/theme'
-import { ExternalLink } from './RouteLink'
+import {ReactNode} from 'react'
+import {Button as BaseUIButton, KIND, SHAPE, SIZE} from 'baseui/button'
+import {PLACEMENT, StatefulTooltip} from 'baseui/tooltip'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {IconDefinition} from '@fortawesome/fontawesome-svg-core'
+import {theme} from '../../util'
+import {Override} from 'baseui/overrides'
+import {StyleObject} from 'styletron-react'
+import {Block} from 'baseui/block'
+import {borderRadius, borderStyle, borderWidth, paddingAll} from './Style'
+import {ettlevColors} from '../../util/theme'
+import {ExternalLink} from './RouteLink'
 import _ from 'lodash'
 
 export type ButtonKind = KIND[keyof KIND] | 'outline' | 'underline-hover'
@@ -116,7 +116,7 @@ const Button = (props: ButtonProps) => {
           aria-label={props.label}
         >
           {props.icon && <FontAwesomeIcon icon={props.icon} style={{ marginRight: props.children ? '.5rem' : undefined }} fixedWidth />}
-          {props.notBold ? props.children : <b>{props.children}</b>}
+          {props.notBold ? props.children : <strong>{props.children}</strong>}
           {props.iconEnd && <FontAwesomeIcon icon={props.iconEnd} style={{ marginLeft: props.children ? '.5rem' : undefined }} fixedWidth />}
         </BaseUIButton>
       </Tooltip>

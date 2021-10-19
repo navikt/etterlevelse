@@ -1,19 +1,19 @@
-import { Block } from 'baseui/block'
-import { H2, LabelSmall } from 'baseui/typography'
-import React, { useState } from 'react'
+import {Block} from 'baseui/block'
+import {H2, LabelSmall} from 'baseui/typography'
+import React, {useState} from 'react'
 import Button from '../components/common/Button'
-import { theme } from '../util'
+import {theme} from '../util'
 import RouteLink from '../components/common/RouteLink'
-import { user } from '../services/User'
-import { KravTable } from '../components/common/KravFilterTable'
-import { useKravFilter } from '../api/KravGraphQLApi'
-import { Button as BButton, KIND } from 'baseui/button'
-import { ButtonGroup } from 'baseui/button-group'
-import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
-import { PLACEMENT } from 'baseui/tooltip'
-import { StatefulMenu } from 'baseui/menu'
-import { StatefulPopover } from 'baseui/popover'
-import { maxPageWidth } from '../util/theme'
+import {user} from '../services/User'
+import {KravTable} from '../components/common/KravFilterTable'
+import {useKravFilter} from '../api/KravGraphQLApi'
+import {Button as BButton, KIND} from 'baseui/button'
+import {ButtonGroup} from 'baseui/button-group'
+import {faChevronDown} from '@fortawesome/free-solid-svg-icons'
+import {PLACEMENT} from 'baseui/tooltip'
+import {StatefulMenu} from 'baseui/menu'
+import {StatefulPopover} from 'baseui/popover'
+import {maxPageWidth} from '../util/theme'
 
 enum Mode {
   siste,
@@ -62,13 +62,13 @@ export const KravListPage = () => {
               }}
             >
               <BButton disabled={!user.isLoggedIn()}>
-                <b>Sist redigerte</b>
+                <strong>Sist redigerte</strong>
               </BButton>
               <BButton>
-                <b>Gjeldende</b>
+                <strong>Gjeldende</strong>
               </BButton>
               <BButton>
-                <b>Alle</b>
+                <strong>Alle</strong>
               </BButton>
             </ButtonGroup>
           </Block>

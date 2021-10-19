@@ -1,19 +1,19 @@
 import * as React from 'react'
-import { useEffect, useRef, useState } from 'react'
-import { Block } from 'baseui/block'
-import { Label2 } from 'baseui/typography'
-import { Value } from 'baseui/select'
-import { Button } from 'baseui/button'
+import {useEffect, useRef, useState} from 'react'
+import {Block} from 'baseui/block'
+import {Label2} from 'baseui/typography'
+import {Value} from 'baseui/select'
+import {Button} from 'baseui/button'
 
-import { StyledSpinnerNext } from 'baseui/spinner'
-import { Cell, Row, Table } from '../../common/Table'
-import { theme } from '../../../util'
-import { codelist, CodeUsage } from '../../../services/Codelist'
-import { ObjectLink } from '../../common/RouteLink'
-import { ObjectType } from '../audit/AuditTypes'
-import { replaceCodelistUsage } from '../../../api/CodelistApi'
+import {StyledSpinnerNext} from 'baseui/spinner'
+import {Cell, Row, Table} from '../../common/Table'
+import {theme} from '../../../util'
+import {codelist, CodeUsage} from '../../../services/Codelist'
+import {ObjectLink} from '../../common/RouteLink'
+import {ObjectType} from '../audit/AuditTypes'
+import {replaceCodelistUsage} from '../../../api/CodelistApi'
 import CustomizedSelect from '../../common/CustomizedSelect'
-import { ettlevColors } from '../../../util/theme'
+import {ettlevColors} from '../../../util/theme'
 
 const UsageTable = (props: { usage: CodeUsage }) => {
   const { usage } = props
@@ -98,7 +98,7 @@ export const Usage = (props: { usage?: CodeUsage; refresh: () => void }) => {
         <Label2 font="font450">Bruk</Label2>
         {!!usage?.inUse && (
           <Button type="button" kind="secondary" size="compact" onClick={() => setShowReplace(true)}>
-            <b>Erstatt all bruk</b>
+            <strong>Erstatt all bruk</strong>
           </Button>
         )}
       </Block>
@@ -115,7 +115,7 @@ export const Usage = (props: { usage?: CodeUsage; refresh: () => void }) => {
             onChange={(params) => setNewValue(params.value)}
           />
           <Button type="button" size="compact" onClick={replace} disabled={!newValue.length}>
-            <b>Erstatt</b>
+            <strong>Erstatt</strong>
           </Button>
         </Block>
       )}

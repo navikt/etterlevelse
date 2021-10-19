@@ -1,14 +1,14 @@
 import * as React from 'react'
-import { Modal, ModalBody, ModalButton, ModalFooter, ModalHeader, ROLE, SIZE } from 'baseui/modal'
-import { Block, BlockProps } from 'baseui/block'
-import { Label2 } from 'baseui/typography'
-import { Field, FieldProps, Form, Formik } from 'formik'
-import { SIZE as InputSIZE } from 'baseui/input'
-import { Button, KIND } from 'baseui/button'
-import { CodeListFormValues, codeListSchema, ListName } from '../../../services/Codelist'
-import { Error } from '../../common/ModalSchema'
-import { LovCodeDataForm, TemaCodeDataForm } from './LovCode'
-import { MarkdownInfo } from '../../common/Markdown'
+import {Modal, ModalBody, ModalButton, ModalFooter, ModalHeader, ROLE, SIZE} from 'baseui/modal'
+import {Block, BlockProps} from 'baseui/block'
+import {Label2} from 'baseui/typography'
+import {Field, FieldProps, Form, Formik} from 'formik'
+import {SIZE as InputSIZE} from 'baseui/input'
+import {Button, KIND} from 'baseui/button'
+import {CodeListFormValues, codeListSchema, ListName} from '../../../services/Codelist'
+import {Error} from '../../common/ModalSchema'
+import {LovCodeDataForm, TemaCodeDataForm} from './LovCode'
+import {MarkdownInfo} from '../../common/Markdown'
 import CustomizedInput from '../../common/CustomizedInput'
 import CustomizedTextarea from '../../common/CustomizedTextarea'
 
@@ -89,10 +89,10 @@ const CreateCodeListModal = ({ isOpen, title, list, errorOnCreate, onClose, subm
                 <Block display="flex" justifyContent="flex-end">
                   <Block marginRight="auto">{errorOnCreate && <p>{errorOnCreate}</p>}</Block>
                   <Button type="button" kind={KIND.secondary} onClick={() => onClose()}>
-                    <b>Avbryt</b>
+                    <strong>Avbryt</strong>
                   </Button>
                   <ModalButton type="button" onClick={submitForm}>
-                    <b>Lagre</b>
+                    <strong>Lagre</strong>
                   </ModalButton>
                 </Block>
               </ModalFooter>

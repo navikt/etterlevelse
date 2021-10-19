@@ -1,9 +1,9 @@
 import * as React from 'react'
-import { Modal, ModalBody, ModalFooter, ModalHeader } from 'baseui/modal'
-import { Paragraph2 } from 'baseui/typography'
-import { Button } from 'baseui/button'
-import { Block } from 'baseui/block'
-import { CodeListFormValues } from '../../../services/Codelist'
+import {Modal, ModalBody, ModalFooter, ModalHeader} from 'baseui/modal'
+import {Paragraph2} from 'baseui/typography'
+import {Button} from 'baseui/button'
+import {Block} from 'baseui/block'
+import {CodeListFormValues} from '../../../services/Codelist'
 
 type ModalDeleteProps = {
   title: string
@@ -29,10 +29,10 @@ const DeleteCodeListModal = ({ title, initialValues, isOpen, errorOnDelete, subm
         <Block display="flex" justifyContent="flex-end">
           <Block marginRight="auto">{errorOnDelete && <p>{errorOnDelete}</p>}</Block>
           <Button kind="secondary" onClick={() => onClose()} overrides={{ BaseButton: { style: { marginRight: '1rem' } } }}>
-            <b>Avbryt</b>
+            <strong>Avbryt</strong>
           </Button>
           <Button onClick={() => submit({ list: initialValues.list, code: initialValues.code })}>
-            <b>Lagre</b>
+            <strong>Lagre</strong>
           </Button>
         </Block>
       </ModalFooter>
