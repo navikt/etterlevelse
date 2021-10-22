@@ -103,7 +103,7 @@ const KriterieList = ({p}: { p: FieldArrayRenderProps }) => {
           $style={buttonBorderStyle}
           kind="secondary"
           size="compact"
-          disabled={suksesskriterier.length >= 5}
+          disabled={suksesskriterier.length >= 6}
           onClick={() => p.push({id: nextId(suksesskriterier), navn: '', beskrivelse: ''})}
         >
           Suksesskriterie
