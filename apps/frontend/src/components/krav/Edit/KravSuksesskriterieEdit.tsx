@@ -83,6 +83,7 @@ const KriterieList = ({p}: { p: FieldArrayRenderProps }) => {
                           }}
                           dragHandleProps={dprov.dragHandleProps}
                           isDragging={dsnap.isDragging}
+                          p={p}
                         />
                       </div>
                     )
@@ -120,6 +121,7 @@ const Kriterie = ({
                     remove,
                     dragHandleProps,
                     isDragging,
+                    p
                   }: {
   s: Suksesskriterie
   nummer: number
@@ -127,6 +129,7 @@ const Kriterie = ({
   remove: () => void
   dragHandleProps?: DraggableProvidedDragHandleProps
   isDragging: boolean
+  p: FieldArrayRenderProps
 }) => {
   const debounceDelay = 500
   const [navn, setNavn, navnInput] = useDebouncedState(s.navn, debounceDelay)
@@ -169,7 +172,11 @@ const Kriterie = ({
           }
         >
           <Block>
-            <CustomizedInput value={navnInput} onChange={(e) => setNavn((e.target as HTMLInputElement).value)} placeholder={'Navn'}/>
+            <CustomizedInput
+              value={navnInput}
+              onChange={(e) => setNavn((e.target as HTMLInputElement).value)}
+              placeholder={'Navn'}
+            />
             <Error fieldName={`suksesskriterier[${nummer - 1}].navn`} fullWidth/>
           </Block>
         </FormControl>

@@ -1,16 +1,16 @@
-import { FieldWrapper } from '../../common/Inputs'
-import { useBegrepSearch } from '../../../api/BegrepApi'
+import {FieldWrapper} from '../../common/Inputs'
+import {useBegrepSearch} from '../../../api/BegrepApi'
 import React from 'react'
-import { FieldArray } from 'formik'
-import { intl } from '../../../util/intl/intl'
-import { TYPE } from 'baseui/select'
-import { FormControl } from 'baseui/form-control'
-import { Error } from '../../common/ModalSchema'
-import { RenderTagList } from '../../common/TagList'
-import { Begrep } from '../../../constants'
-import { Block } from 'baseui/block'
+import {FieldArray} from 'formik'
+import {intl} from '../../../util/intl/intl'
+import {TYPE} from 'baseui/select'
+import {FormControl} from 'baseui/form-control'
+import {Error} from '../../common/ModalSchema'
+import {RenderTagList} from '../../common/TagList'
+import {Begrep} from '../../../constants'
+import {Block} from 'baseui/block'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
-import { searchIcon } from '../../Images'
+import {searchIcon} from '../../Images'
 import CustomizedSelect from '../../common/CustomizedSelect'
 
 export const EditBegreper = () => {
@@ -49,6 +49,11 @@ export const EditBegreper = () => {
                         paddingLeft: '10px',
                       },
                     },
+                    ControlContainer:{
+                      style:{
+                        borderWidth:'2px'
+                      }
+                    }
                   }}
                   labelKey={'navn'}
                   noResultsMsg={intl.emptyTable}
