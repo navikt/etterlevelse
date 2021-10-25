@@ -328,6 +328,13 @@ export const OptionList = (
       }}
       placeholder={props.label}
       aria-label={props.label}
+      overrides={{
+        ControlContainer: {
+          style:{
+            borderWidth:'2px'
+          }
+        }
+      }}
     />
   )
 }

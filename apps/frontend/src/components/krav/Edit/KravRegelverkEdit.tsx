@@ -1,22 +1,21 @@
-import React, { useState } from 'react'
-import { Select, SelectOverrides, SelectProps, Value } from 'baseui/select'
-import { codelist, ListName } from '../../../services/Codelist'
-import { FieldWrapper } from '../../common/Inputs'
-import { FieldArray } from 'formik'
-import { FormControl } from 'baseui/form-control'
-import { Block } from 'baseui/block'
-import { theme } from '../../../util'
+import React, {useState} from 'react'
+import {Select, SelectOverrides, SelectProps, Value} from 'baseui/select'
+import {codelist, ListName} from '../../../services/Codelist'
+import {FieldWrapper} from '../../common/Inputs'
+import {FieldArray} from 'formik'
+import {FormControl} from 'baseui/form-control'
+import {Block} from 'baseui/block'
+import {theme} from '../../../util'
 import Button from '../../common/Button'
-import { LabelSmall } from 'baseui/typography'
-import { LovView } from '../../Lov'
-import { RenderTagList } from '../../common/TagList'
-import { Regelverk } from '../../../constants'
+import {LabelSmall} from 'baseui/typography'
+import {LovView} from '../../Lov'
+import {RenderTagList} from '../../common/TagList'
+import {Regelverk} from '../../../constants'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
 import CustomizedInput from '../../common/CustomizedInput'
-import CustomizedSelect from '../../common/CustomizedSelect'
-import { ettlevColors } from "../../../util/theme";
-import { borderWidth } from '../../common/Style'
-import { navChevronDownIcon } from '../../Images'
+import {ettlevColors} from "../../../util/theme";
+import {borderWidth} from '../../common/Style'
+import {navChevronDownIcon} from '../../Images'
 import _ from 'lodash'
 
 const CustomizedRegelverkSelect = (props: SelectProps) => {
@@ -93,7 +92,8 @@ export const KravRegelverkEdit = () => {
                               borderRightColor: p.form.errors.regelverk ? ettlevColors.red600 : ettlevColors.grey200,
                               borderLeftColor: p.form.errors.regelverk ? ettlevColors.red600 : ettlevColors.grey200,
                               borderTopColor: p.form.errors.regelverk ? ettlevColors.red600 : ettlevColors.grey200,
-                              borderBottomColor: p.form.errors.regelverk ? ettlevColors.red600 : ettlevColors.grey200
+                              borderBottomColor: p.form.errors.regelverk ? ettlevColors.red600 : ettlevColors.grey200,
+                              borderWidth: '2px'
                             }
                           }
                         }}
@@ -116,7 +116,7 @@ export const KravRegelverkEdit = () => {
                               borderRightColor: p.form.errors.regelverk ? ettlevColors.red600 : ettlevColors.grey200,
                               borderLeftColor: p.form.errors.regelverk ? ettlevColors.red600 : ettlevColors.grey200,
                               borderTopColor: p.form.errors.regelverk ? ettlevColors.red600 : ettlevColors.grey200,
-                              borderBottomColor: p.form.errors.regelverk ? ettlevColors.red600 : ettlevColors.grey200
+                              borderBottomColor: p.form.errors.regelverk ? ettlevColors.red600 : ettlevColors.grey200,
                             }
                           }
                         }}
