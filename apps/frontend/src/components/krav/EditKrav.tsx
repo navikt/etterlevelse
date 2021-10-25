@@ -24,6 +24,7 @@ import {ErrorMessageModal} from "./ErrorMessageModal";
 import {KIND as NKIND, Notification} from "baseui/notification";
 import {faTimesCircle} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import { EditKravMultiOptionField } from './Edit/EditKravMultiOptionField'
 
 type EditKravProps = {
   krav: KravQL
@@ -194,9 +195,9 @@ export const EditKrav = ({krav, close, formRef, isOpen, setIsOpen}: EditKravProp
                     </Block>
 
                     <Block width="100%" maxWidth={maxInputWidth}>
-                      <MultiOptionField
+                      <EditKravMultiOptionField
                         marginBottom={inputMarginBottom}
-                        name={"relevansFor"}
+                        name="relevansFor"
                         label="Relevant for"
                         listName={ListName.RELEVANS}
                         tooltip={'Velg kategori(er) kravet er relevant for i nedtrekksmenyen. \n'}

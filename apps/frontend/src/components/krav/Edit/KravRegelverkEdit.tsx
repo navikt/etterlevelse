@@ -1,20 +1,52 @@
-import React, {useState} from 'react'
-import {Value} from 'baseui/select'
-import {codelist, ListName} from '../../../services/Codelist'
-import {FieldWrapper} from '../../common/Inputs'
-import {FieldArray} from 'formik'
-import {FormControl} from 'baseui/form-control'
-import {Block} from 'baseui/block'
-import {theme} from '../../../util'
+import React, { useState } from 'react'
+import { Select, SelectOverrides, SelectProps, Value } from 'baseui/select'
+import { codelist, ListName } from '../../../services/Codelist'
+import { FieldWrapper } from '../../common/Inputs'
+import { FieldArray } from 'formik'
+import { FormControl } from 'baseui/form-control'
+import { Block } from 'baseui/block'
+import { theme } from '../../../util'
 import Button from '../../common/Button'
-import {LabelSmall} from 'baseui/typography'
-import {LovView} from '../../Lov'
-import {RenderTagList} from '../../common/TagList'
-import {Regelverk} from '../../../constants'
+import { LabelSmall } from 'baseui/typography'
+import { LovView } from '../../Lov'
+import { RenderTagList } from '../../common/TagList'
+import { Regelverk } from '../../../constants'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
 import CustomizedInput from '../../common/CustomizedInput'
 import CustomizedSelect from '../../common/CustomizedSelect'
-import {ettlevColors} from "../../../util/theme";
+import { ettlevColors } from "../../../util/theme";
+import { borderWidth } from '../../common/Style'
+import { navChevronDownIcon } from '../../Images'
+import _ from 'lodash'
+
+const CustomizedRegelverkSelect = (props: SelectProps) => {
+
+  const customOverrides: SelectOverrides = {
+    ControlContainer: {
+      style: {
+        ...borderWidth('1px'),
+        ':hover': {
+          backgroundColor: ettlevColors.green50,
+        },
+      },
+    },
+    SelectArrow: {
+      component: ({ $isOpen }: { $isOpen: boolean }) =>
+        $isOpen ? <img src={navChevronDownIcon} alt="Chevron opp" style={{ transform: 'rotate(180deg)' }} /> : <img src={navChevronDownIcon} alt="Chevron ned" />,
+    },
+    DropdownListItem: {
+      style: {
+        fontSize: '18px',
+        marginTop: '4px',
+        marginBottom: '4px'
+      },
+    },
+  }
+
+  const overrides = _.merge(customOverrides, props.overrides)
+
+  return <Select {...props} overrides={overrides} />
+}
 
 export const KravRegelverkEdit = () => {
   const [lov, setLov] = useState<Value>([])
@@ -44,7 +76,7 @@ export const KravRegelverkEdit = () => {
                         label={'Regelverk'}
                         tooltip={'Velg relevant regelverk fra nedtrekksmenyen, og angi hvilke(n) bestemmelse(r) kravet har sin opprinnelse fra.'}
                       />
-                      <CustomizedSelect
+                      <CustomizedRegelverkSelect
                         controlRef={controlRef}
                         placeholder={'Velg regelverk'}
                         aria-label={'Velg regelverk'}
@@ -54,22 +86,17 @@ export const KravRegelverkEdit = () => {
                         onChange={({ value }) => {
                           setLov(value)
                         }}
-                        // overrides={{
-                        //   ControlContainer: {
-                        //     style: {
-                        //       backgroundColor: p.form.errors.regelverk ? ettlevColors.error50 : '',
-                        //     }
-                        //   },
-                        //
-                        //   Root: {
-                        //     style: {
-                        //       borderRightColor: p.form.errors.regelverk ? ettlevColors.red600 : ettlevColors.grey200,
-                        //       borderLeftColor: p.form.errors.regelverk ? ettlevColors.red600 : ettlevColors.grey200,
-                        //       borderTopColor: p.form.errors.regelverk ? ettlevColors.red600 : ettlevColors.grey200,
-                        //       borderBottomColor: p.form.errors.regelverk ? ettlevColors.red600 : ettlevColors.grey200
-                        //     }
-                        //   }
-                        // }}
+                        overrides={{
+                          ControlContainer: {
+                            style: {
+                              backgroundColor: p.form.errors.regelverk && ettlevColors.error50,
+                              borderRightColor: p.form.errors.regelverk ? ettlevColors.red600 : ettlevColors.grey200,
+                              borderLeftColor: p.form.errors.regelverk ? ettlevColors.red600 : ettlevColors.grey200,
+                              borderTopColor: p.form.errors.regelverk ? ettlevColors.red600 : ettlevColors.grey200,
+                              borderBottomColor: p.form.errors.regelverk ? ettlevColors.red600 : ettlevColors.grey200
+                            }
+                          }
+                        }}
                       />
                     </Block>
                     <Block width="100%">
