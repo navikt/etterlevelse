@@ -176,20 +176,7 @@ const Kriterie = ({
               value={navnInput}
               onChange={(e) => setNavn((e.target as HTMLInputElement).value)}
               placeholder={'Navn'}
-              // overrides={{
-              //   Input: {
-              //     style: {
-              //       backgroundColor: p.form.errors.navn && ettlevColors.error50,
-              //     }
-              //   },
-              //   Root: {
-              //     style: {
-              //       border: p.form.errors.navn && `2px solid ${ettlevColors.red600}`
-              //     }
-              //   }
-              // }}
             />
-            {/*{console.log(p.form.errors.suksesskriterier !==undefined && p.form.errors.suksesskriterier.length )}*/}
             <Error fieldName={`suksesskriterier[${nummer - 1}].navn`} fullWidth/>
           </Block>
         </FormControl>
