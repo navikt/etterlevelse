@@ -27,7 +27,7 @@
         <graphql.version>16.0.1</graphql.version>
         <lombok.version>1.18.20</lombok.version>
 
-        <microsoft-graph.version>5.4.0</microsoft-graph.version>
+        <microsoft-graph.version>5.5.0</microsoft-graph.version>
         <msal4j.version>1.11.0</msal4j.version>
 
         <!-- transitive versions -->
