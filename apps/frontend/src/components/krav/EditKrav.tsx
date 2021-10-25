@@ -19,6 +19,11 @@ import Button from '../common/Button'
 import {ettlevColors, maxPageWidth, responsivePaddingLarge, responsiveWidthLarge, theme} from '../../util/theme'
 import {getEtterlevelserByKravNumberKravVersion} from "../../api/EtterlevelseApi";
 import ErrorModal from "../ErrorModal";
+import {Error} from "../common/ModalSchema";
+import {ErrorMessageModal} from "./ErrorMessageModal";
+import {KIND as NKIND, Notification} from "baseui/notification";
+import {faTimesCircle} from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 type EditKravProps = {
   krav: KravQL
@@ -88,7 +93,7 @@ export const EditKrav = ({krav, close, formRef, isOpen, setIsOpen}: EditKravProp
           initialValues={mapToFormVal(krav)}
           validationSchema={kravSchema()}
           innerRef={formRef}>
-          {({isSubmitting, submitForm}) => (
+          {({touched, errors, isSubmitting, submitForm}) => (
             <Form>
               <Block
                 backgroundColor={ettlevColors.green800}
@@ -106,21 +111,6 @@ export const EditKrav = ({krav, close, formRef, isOpen, setIsOpen}: EditKravProp
                     <LabelLarge $style={{color: '#F8F8F8'}}>{`K${krav.kravNummer}.${krav.kravVersjon} ${krav.navn}`}</LabelLarge>
                   </Block>
                 )}
-                <Block display="flex" justifyContent="flex-end">
-                  <Button size="compact" kind="secondary" onClick={submitForm} disabled={isSubmitting} type={'button'} marginLeft>
-                    Lagre
-                  </Button>
-                  <Button
-                    size="compact"
-                    $style={{color: '#F8F8F8', ':hover': {backgroundColor: 'transparent', textDecoration: 'underline 3px'}}}
-                    kind={'tertiary'}
-                    type={'button'}
-                    onClick={close}
-                    marginLeft
-                  >
-                    Avbryt
-                  </Button>
-                </Block>
                 {!stickyHeader && (
                   <Block>
                     <H1 $style={{color: '#F8F8F8'}}>Rediger kravside: </H1>
@@ -146,6 +136,8 @@ export const EditKrav = ({krav, close, formRef, isOpen, setIsOpen}: EditKravProp
                     onImageUpload={onImageUpload(krav.id)}
                     tooltip={'Bruk noen setninger på å forklare hensikten med kravet. Formålet er at leseren skal forstå hvorfor vi har dette kravet.'}
                   />
+                  <Error fieldName={'hensikt'} fullWidth/>
+
                 </Block>
 
                 <Block display="flex" width="100%" justifyContent="center">
@@ -174,7 +166,9 @@ export const EditKrav = ({krav, close, formRef, isOpen, setIsOpen}: EditKravProp
                       tooltip="Lenke til dokumentasjon"
                       linkTooltip={'Legg inn referanse til utdypende dokumentasjon (lenke). Eksempelvis til navet, eksterne nettsider eller Websak.'}
                     />
+                    {errors.dokumentasjon && <ErrorMessageModal msg={errors.dokumentasjon} fullWidth={true}/>}
                     <KravRegelverkEdit/>
+                    {errors.regelverk && <ErrorMessageModal msg={errors.regelverk} fullWidth={true}/>}
                     <TextAreaField
                       label="Relevante implementasjoner"
                       name="implementasjoner"
@@ -202,11 +196,12 @@ export const EditKrav = ({krav, close, formRef, isOpen, setIsOpen}: EditKravProp
                     <Block width="100%" maxWidth={maxInputWidth}>
                       <MultiOptionField
                         marginBottom={inputMarginBottom}
+                        name={"relevansFor"}
                         label="Relevant for"
-                        name="relevansFor"
                         listName={ListName.RELEVANS}
                         tooltip={'Velg kategori(er) kravet er relevant for i nedtrekksmenyen. \n'}
                       />
+                      {errors.relevansFor && <ErrorMessageModal msg={errors.relevansFor} fullWidth={true}/>}
                     </Block>
 
                     <MultiInputField
@@ -235,7 +230,7 @@ export const EditKrav = ({krav, close, formRef, isOpen, setIsOpen}: EditKravProp
                     </Block>
 
                     <KravVarslingsadresserEdit/>
-
+                    {errors.varslingsadresser && <ErrorMessageModal msg={errors.varslingsadresser} fullWidth={true}/>}
                     {/*
 
                                     <OptionField label='Ansvarlig' name='Ansvarlig' listName={ListName.UNDERAVDELING}
@@ -249,8 +244,50 @@ export const EditKrav = ({krav, close, formRef, isOpen, setIsOpen}: EditKravProp
                       <TextAreaField label='Endringer fra forrige versjon' name='versjonEndringer'
                                      tooltip={'Gi informasjon om hva som er endret siden forrige versjon av kravet.'}/>
                                      */}
+                    <Block width={'100%'}>
+                      {Object.keys(errors).length > 0 && (
+                        <Block display="flex" width="100%" marginTop="3rem" marginBottom=".6em">
+                          <Block width="100%">
+                            <Notification overrides={{Body: {style: {width: 'auto'}}}} kind={NKIND.negative}>
+                              <FontAwesomeIcon icon={faTimesCircle} style={{
+                                marginRight : '5px'
+                              }}/>
+                              Du må fylle ut alle obligatoriske felter
+                            </Notification>
+                          </Block>
+                        </Block>
+                      )}
+                    </Block>
                   </Block>
                 </Block>
+                <Block
+                  display="flex"
+                  justifyContent="flex-end"
+                  paddingLeft={responsivePaddingLarge}
+                  paddingRight={responsivePaddingLarge}
+                  paddingBottom="16px"
+                >
+                  <Button
+                    size="compact"
+                    kind={'secondary'}
+                    type={'button'}
+                    onClick={close}
+                    marginLeft
+                  >
+                    Avbryt
+                  </Button>
+
+                  <Button
+                    size="compact"
+                    kind="secondary"
+                    onClick={submitForm}
+                    disabled={isSubmitting}
+                    type={'button'}
+                    marginLeft>
+                    Lagre
+                  </Button>
+                </Block>
+
                 <Block backgroundColor={ettlevColors.grey50} paddingTop="48px" paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge} paddingBottom="64px">
                   <TextAreaField label="Notater (Kun synlig for kraveier)" name="notat" height="250px" markdown tooltip={'Kraveiers notater'}/>
                 </Block>
@@ -274,10 +311,77 @@ const onImageUpload = (kravId: string) => async (file: File) => {
   return `/api/krav/${kravId}/files/${id}`
 }
 
+const errorMessage = "Feltet er påkrevd";
+
 const kravSchema = () =>
   yup.object({
     navn: yup.string().required('Du må oppgi et navn til kravet'),
     suksesskriterier: yup.array().of(yup.object({
       navn: yup.string().required('Du må oppgi et navn til suksesskriteriet')
-    }))
+    })).test({
+      name: 'suksesskriterierCheck',
+      message: errorMessage,
+      test: function (suksesskriterier) {
+        const {parent} = this
+        if (parent.status === KravStatus.AKTIV || parent.status === KravStatus.UNDER_ARBEID) {
+          return suksesskriterier && suksesskriterier.length > 0 ? true : false
+        }
+        return true
+      },
+    }),
+    hensikt: yup.string().test({
+      name: 'hensiktCheck',
+      message: errorMessage,
+      test: function (hensikt) {
+        const {parent} = this
+        if (parent.status === KravStatus.AKTIV || parent.status === KravStatus.UNDER_ARBEID) {
+          return hensikt ? true : false
+        }
+        return true
+      },
+    }),
+    regelverk: yup.array().test({
+      name: 'regelverkCheck',
+      message: errorMessage,
+      test: function (regelverk) {
+        const {parent} = this
+        if (parent.status === KravStatus.AKTIV || parent.status === KravStatus.UNDER_ARBEID) {
+          return regelverk && regelverk.length > 0 ? true : false
+        }
+        return true
+      },
+    }),
+    relevansFor: yup.array().test({
+      name: 'relevansForCheck',
+      message: errorMessage,
+      test: function (relevansFor) {
+        const {parent} = this
+        if (parent.status === KravStatus.AKTIV || parent.status === KravStatus.UNDER_ARBEID) {
+          return relevansFor && relevansFor.length > 0 ? true : false
+        }
+        return true
+      },
+    }),
+    varslingsadresser: yup.array().test({
+      name: 'varslingsadresserCheck',
+      message: errorMessage,
+      test: function (varslingsadresser) {
+        const {parent} = this
+        if (parent.status === KravStatus.AKTIV || parent.status === KravStatus.UNDER_ARBEID) {
+          return varslingsadresser && varslingsadresser.length > 0 ? true : false
+        }
+        return true
+      },
+    }),
+    dokumentasjon: yup.array().test({
+      name: 'dokumentasjonCheck',
+      message: errorMessage,
+      test: function (dokumentasjon) {
+        const {parent} = this
+        if (parent.status === KravStatus.AKTIV || parent.status === KravStatus.UNDER_ARBEID) {
+          return dokumentasjon && dokumentasjon.length > 0 ? true : false
+        }
+        return true
+      },
+    }),
   })

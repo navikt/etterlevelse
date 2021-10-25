@@ -14,6 +14,7 @@ import {Regelverk} from '../../../constants'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
 import CustomizedInput from '../../common/CustomizedInput'
 import CustomizedSelect from '../../common/CustomizedSelect'
+import {ettlevColors} from "../../../util/theme";
 
 export const KravRegelverkEdit = () => {
   const [lov, setLov] = useState<Value>([])
@@ -24,7 +25,7 @@ export const KravRegelverkEdit = () => {
 
   return (
     <FieldWrapper marginBottom="32px">
-      <FieldArray name="regelverk">
+      <FieldArray name="regelverk" >
         {(p) => {
           const add = () => {
             if (!text || !lov.length) return
@@ -53,6 +54,22 @@ export const KravRegelverkEdit = () => {
                         onChange={({ value }) => {
                           setLov(value)
                         }}
+                        // overrides={{
+                        //   ControlContainer: {
+                        //     style: {
+                        //       backgroundColor: p.form.errors.regelverk ? ettlevColors.error50 : '',
+                        //     }
+                        //   },
+                        //
+                        //   Root: {
+                        //     style: {
+                        //       borderRightColor: p.form.errors.regelverk ? ettlevColors.red600 : ettlevColors.grey200,
+                        //       borderLeftColor: p.form.errors.regelverk ? ettlevColors.red600 : ettlevColors.grey200,
+                        //       borderTopColor: p.form.errors.regelverk ? ettlevColors.red600 : ettlevColors.grey200,
+                        //       borderBottomColor: p.form.errors.regelverk ? ettlevColors.red600 : ettlevColors.grey200
+                        //     }
+                        //   }
+                        // }}
                       />
                     </Block>
                     <Block width="100%">
@@ -61,6 +78,21 @@ export const KravRegelverkEdit = () => {
                         value={text}
                         onChange={(e) => setText((e.target as HTMLInputElement).value)}
                         placeholder={'Beskrivelse, paragraf, artikkel eller kapittel i regelverk'}
+                        overrides={{
+                          Input: {
+                            style: {
+                              backgroundColor: p.form.errors.regelverk ? ettlevColors.error50 : '',
+                            }
+                          },
+                          Root: {
+                            style: {
+                              borderRightColor: p.form.errors.regelverk ? ettlevColors.red600 : ettlevColors.grey200,
+                              borderLeftColor: p.form.errors.regelverk ? ettlevColors.red600 : ettlevColors.grey200,
+                              borderTopColor: p.form.errors.regelverk ? ettlevColors.red600 : ettlevColors.grey200,
+                              borderBottomColor: p.form.errors.regelverk ? ettlevColors.red600 : ettlevColors.grey200
+                            }
+                          }
+                        }}
                       />
                     </Block>
 

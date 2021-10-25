@@ -18,6 +18,7 @@ import CustomizedSelect from '../common/CustomizedSelect'
 import CustomizedTextarea from './CustomizedTextarea'
 import TextEditor from './TextEditor/TextEditor'
 import {Error} from "./ModalSchema";
+import {ettlevColors} from "../../util/theme";
 
 export const FieldWrapper = ({children, marginBottom}: { children: React.ReactNode; marginBottom?: string }) => {
   return <Block marginBottom={marginBottom ? marginBottom : '1.5rem'}>{children}</Block>
@@ -33,7 +34,23 @@ export const InputField = (props: { label: string; name: string; caption?: React
           caption={props.caption}
         >
           <Block>
-            <CustomInput {...p.field} placeholder={props.label}/>
+            <CustomInput {...p.field} placeholder={props.label}
+                         overrides={{
+                           Input: {
+                             style: {
+                               backgroundColor: p.form.errors[props.name] && ettlevColors.error50,
+                             }
+                           },
+                           Root: {
+                             style: {
+                               borderRightColor: p.form.errors[props.name] ? ettlevColors.red600 : ettlevColors.grey200,
+                               borderLeftColor: p.form.errors[props.name] ? ettlevColors.red600 : ettlevColors.grey200,
+                               borderTopColor: p.form.errors[props.name] ? ettlevColors.red600 : ettlevColors.grey200,
+                               borderBottomColor: p.form.errors[props.name] ? ettlevColors.red600 : ettlevColors.grey200
+                             }
+                           }
+                         }}
+            />
             <Error fieldName={props.name} fullWidth/>
           </Block>
         </FormControl>
@@ -59,9 +76,13 @@ export const TextAreaField = (props: {
       <Field name={props.name}>
         {(p: FieldProps) => (
           <FormControl
-            overrides={{ControlContainer: {style: {marginBottom: '0px'}}, Caption: {style: {marginBottom: '0px'}}}}
+            overrides={{
+              ControlContainer: {
+                style: {marginBottom: '0px'}
+              },
+              Caption: {style: {marginBottom: '0px'}}
+            }}
             label={<LabelWithTooltip label={props.label} tooltip={props.tooltip}/>}
-            error={p.meta.touched && p.meta.error}
             caption={
               props.markdown ? (
                 <Block display="flex" flexDirection={'column'}>
@@ -203,13 +224,34 @@ export const MultiInputField = (props: {
           const onKey = (e: React.KeyboardEvent) => e.key === 'Enter' && add()
 
           return (
-            <FormControl error={p.form.touched[props.name] && p.form.errors[props.name]} caption={props.caption}>
+            <FormControl
+              // error={p.form.touched[props.name] && p.form.errors[props.name]}
+              caption={props.caption}>
               <Block>
                 <Block display="flex" width="100%" alignItems={'flex-end'}>
                   {props.link && (
                     <Block width="100%" maxWidth={props.maxInputWidth}>
                       <LabelWithTooltip label={props.linkLabel} tooltip={props.linkTooltip}/>
-                      <CustomInput onKeyDown={onKey} value={linkName} onChange={(e) => setLinkName((e.target as HTMLInputElement).value)}/>
+                      <CustomInput
+                        onKeyDown={onKey}
+                        value={linkName}
+                        onChange={(e) => setLinkName((e.target as HTMLInputElement).value)}
+                        overrides={{
+                          Input: {
+                            style: {
+                              backgroundColor: p.form.errors[props.name] && ettlevColors.error50,
+                            }
+                          },
+                          Root: {
+                            style: {
+                              borderRightColor: p.form.errors[props.name] ? ettlevColors.red600 : ettlevColors.grey200,
+                              borderLeftColor: p.form.errors[props.name] ? ettlevColors.red600 : ettlevColors.grey200,
+                              borderTopColor: p.form.errors[props.name] ? ettlevColors.red600 : ettlevColors.grey200,
+                              borderBottomColor: p.form.errors[props.name] ? ettlevColors.red600 : ettlevColors.grey200
+                            }
+                          }
+                        }}
+                      />
                     </Block>
                   )}
                   <Block marginLeft={props.link ? '12px' : '0px'} width="100%" maxWidth={!props.link ? props.maxInputWidth : undefined}>
@@ -220,6 +262,21 @@ export const MultiInputField = (props: {
                       inputRef={inputRef}
                       onChange={(e) => setVal((e.target as HTMLInputElement).value)}
                       onBlur={!props.link ? add : undefined}
+                      overrides={{
+                        Input: {
+                          style: {
+                            backgroundColor: p.form.errors[props.name] && ettlevColors.error50 ,
+                          }
+                        },
+                        Root: {
+                          style: {
+                            borderRightColor: p.form.errors[props.name] ? ettlevColors.red600 : ettlevColors.grey200,
+                            borderLeftColor: p.form.errors[props.name] ? ettlevColors.red600 : ettlevColors.grey200,
+                            borderTopColor: p.form.errors[props.name] ? ettlevColors.red600 : ettlevColors.grey200,
+                            borderBottomColor: p.form.errors[props.name] ? ettlevColors.red600 : ettlevColors.grey200
+                          }
+                        }
+                      }}
                     />
                   </Block>
 
@@ -276,7 +333,14 @@ export const OptionList = (
 }
 
 export const MultiOptionField = (
-  props: { label: string; name: string; caption?: ReactNode; tooltip?: string; marginBottom?: string } & Or<{ options: Value }, { listName: ListName }>,
+  props: {
+    label: string;
+    name: string;
+    caption?: ReactNode;
+    tooltip?: string;
+    marginBottom?: string;
+  }
+    & Or<{ options: Value }, { listName: ListName }>,
 ) => {
   const options: Value = props.options || codelist.getParsedOptions(props.listName)
   return (
@@ -287,7 +351,6 @@ export const MultiOptionField = (
           return (
             <FormControl
               label={<LabelWithTooltip label={props.label} tooltip={props.tooltip}/>}
-              error={p.form.touched[props.name] && p.form.errors[props.name]}
               caption={props.caption}
             >
               <Block>
