@@ -1,9 +1,24 @@
 import axios from 'axios'
-import { emptyPage, Krav, KravQL, KravStatus, Or, PageResponse } from '../constants'
-import { env } from '../util/env'
-import { useEffect, useState } from 'react'
-import { useSearch } from '../util/hooks'
-import { gql } from '@apollo/client'
+import {emptyPage, Krav, KravQL, KravStatus, Or, PageResponse} from '../constants'
+import {env} from '../util/env'
+import {useEffect, useState} from 'react'
+import {useSearch} from '../util/hooks'
+import {gql} from '@apollo/client'
+
+export const getAllKrav = async () => {
+  const PAGE_SIZE = 100
+  const firstPage = await getKravPage(0, PAGE_SIZE)
+  if (firstPage.pages === 1) {
+    return firstPage.content.length > 0 ? [...firstPage.content] : []
+  }
+  else {
+    let allKrav: Krav[] = [...firstPage.content]
+    for (let currentPage = 1; currentPage < firstPage.pages; currentPage++) {
+      allKrav = [...allKrav, ...(await getKravPage(currentPage, PAGE_SIZE)).content]
+    }
+    return allKrav
+  }
+}
 
 export const getKravPage = async (pageNumber: number, pageSize: number) => {
   return (await axios.get<PageResponse<Krav>>(`${env.backendBaseUrl}/krav?pageNumber=${pageNumber}&pageSize=${pageSize}`)).data
