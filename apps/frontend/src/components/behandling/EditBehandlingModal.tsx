@@ -35,17 +35,13 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
   const options = codelist.getParsedOptions(ListName.RELEVANS)
   const [selected, setSelected] = React.useState<number[]>([])
 
-  const { data, refetch } = useQuery<{ behandling: PageResponse<{ stats: BehandlingStats }> }>(statsQuery, {
+  const { data } = useQuery<{ behandling: PageResponse<{ stats: BehandlingStats }> }>(statsQuery, {
     variables: { relevans: [] },
     skip: !props.behandling?.id,
   })
 
   const [stats, setStats] = React.useState<any[]>([])
-  const [noRelevanceKrav, setNoRelevanceKrav] = React.useState<number>(0)
-  const [totalKrav, setTotalKrav] = React.useState<number>(0)
 
-  // TODO IMPLEMENT ENDPOINT FOR FETCHING ALL KRAV BASE ON RELEVANS
-  // TODO OR USE KRAVGRAPQLAPI useKravFilter
   const filterData = (
     unfilteredData:
       | {
@@ -56,14 +52,10 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
       | undefined,
   ) => {
     const StatusListe: any[] = []
-    const emptyRelevanse: any[] = []
 
     const filterKrav = (k: KravQL) => {
       if (k.regelverk.length) {
         const relevans = k.relevansFor.map((r) => r.code)
-        if (!relevans.length) {
-          emptyRelevanse.push(k)
-        }
         if (!relevans.length || !relevans.every((r) => !selected.map((i) => options[i].id).includes(r))) {
           StatusListe.push(k)
         } else if (k.etterlevelser.filter((e) => e.behandlingId === props.behandling?.id).length) {
@@ -80,8 +72,6 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
         filterKrav(k)
       })
     })
-
-    setNoRelevanceKrav(emptyRelevanse.length)
 
     StatusListe.sort((a, b) => {
       if (a.kravNummer === b.kravNummer) {
@@ -101,13 +91,11 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
   }
 
   React.useEffect(() => {
-    refetch()
     setStats(filterData(data))
   }, [selected])
 
   React.useEffect(() => {
     setStats(filterData(data))
-    setTotalKrav(filterData(data).length)
   }, [data])
 
   React.useEffect(() => {
@@ -173,8 +161,7 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
 
             <Block paddingLeft={paddingLeft} paddingRight={paddingRight} marginTop={theme.sizing.scale1400}>
               <H2>Egenskaper til behandling</H2>
-              <Paragraph2 $style={{ lineHeight: '20px', maxWidth: '650px' }}>Ved å oppgi egenskaper til behandlingen, vises kun relevante krav</Paragraph2>
-              <Paragraph2 $style={{ lineHeight: '20px', maxWidth: '650px' }}>Det er {noRelevanceKrav} krav som gjelder for alle behandlinger, i tillegg til krav knyttet til relevans</Paragraph2>
+              <Paragraph2 $style={{ lineHeight: '20px' }}>Ved å oppgi egenskaper til behandlingen, blir kun relevante krav synlig for dokumentasjon.</Paragraph2>
               <FieldArray name="irrelevansFor">
                 {(p: FieldArrayRenderProps) => {
                   return (
@@ -182,7 +169,6 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
                       <Block
                         height="100%"
                         width="calc(100% - 16px)"
-                        backgroundColor={ettlevColors.grey50}
                         paddingLeft={theme.sizing.scale700}
                         paddingTop={theme.sizing.scale750}
                       >
@@ -214,7 +200,7 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
                               overrides={{
                                 Root: {
                                   style: {
-                                    backgroundColor: selected.includes(i) ? ettlevColors.green50 : ettlevColors.white,
+                                    backgroundColor: selected.includes(i) ? ettlevColors.green100 : ettlevColors.white,
                                     border: '1px solid #6A6A6A',
                                     paddingLeft: '8px',
                                     paddingRight: '16px',
@@ -247,10 +233,6 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
                             </Checkbox>
                           ))}
                         </ButtonGroup>
-
-                        <Paragraph4 $style={{ lineHeight: '20px', fontWeight: 700 }} paddingBottom={theme.sizing.scale500}>
-                          Egenskaper: {selected.length}
-                        </Paragraph4>
                       </Block>
                     </FormControl>
                   )
@@ -273,19 +255,25 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
                       </Paragraph2>
                       <Paragraph2 $style={{ ...marginZero }}>krav</Paragraph2>
                     </Block>
-                    <Block>
-                      <Paragraph2>Du har fjernet {totalKrav - stats.length} krav</Paragraph2>
-                    </Block>
                   </Block>
-
+                  <Block display="flex" justifyContent="flex-end" $style={{
+                    borderBottomWidth: '1px',
+                    borderBottomStyle: 'solid',
+                    borderBottomColor: '#E3E3E3',
+                    marginBottom: '22px'
+                  }}>
+                    <Paragraph4 $style={{ lineHeight: '20px', fontWeight: 700 }}>
+                      Egenskaper: {selected.length} valgt
+                    </Paragraph4>
+                  </Block>
                   <Block>
                     <Block display="flex" justifyContent="flex-end">
                       <Block>{!isValid && JSON.stringify(errors)}</Block>
-                      <Button type="button" disabled={isSubmitting} marginRight onClick={submitForm}>
-                        Lagre
-                      </Button>
-                      <Button type="button" kind="secondary" onClick={props.close}>
+                      <Button type="button" kind="secondary" marginRight onClick={props.close}>
                         Avbryt
+                      </Button>
+                      <Button type="button" disabled={isSubmitting} onClick={submitForm}>
+                        Lagre
                       </Button>
                     </Block>
                   </Block>
