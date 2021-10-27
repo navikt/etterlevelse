@@ -38,3 +38,4 @@ export const KravPanelHeader = (props: { title: string; kravData: KravEtterlevel
     </Block>
   )
 }
+export default KravPanelHeader
