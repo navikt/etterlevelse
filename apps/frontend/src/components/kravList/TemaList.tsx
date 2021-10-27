@@ -6,10 +6,12 @@ import { Krav } from '../../constants'
 import { Block } from 'baseui/block'
 import { Label3, Paragraph2, Paragraph4 } from 'baseui/typography'
 import { KravPanelHeader } from '../behandling/KravPanelHeader'
-import { borderStyle } from '../common/Style'
+import { borderStyle, marginAll, padding, paddingAll } from '../common/Style'
 import KravStatusView from './KravStatusTag'
 import { PanelLink } from '../common/PanelLink'
 import moment from 'moment'
+import { ettlevColors, theme } from '../../util/theme'
+import Button from '../common/Button'
 
 export const TemaList = () => {
   const [allKrav, setAllKrav] = useState<Krav[]>()
@@ -87,6 +89,30 @@ const KravTemaList = (props: { kraver: Krav[]; }) => {
           </CustomPanelDivider>
         )
       })}
+      <CustomPanelDivider>
+        <Block
+          width="calc(100% - 44px)"
+          $style={{
+            backgroundColor: ettlevColors.green50,
+            ...marginAll(theme.sizing.scale300),
+            margintRight: '22px',
+            marginLeft: '22px'
+
+          }}
+        >
+          <Block display="flex" justifyContent="flex-end" $style={{
+            ...padding(theme.sizing.scale500, theme.sizing.scale1000)
+          }}>
+            <Button
+              kind="secondary"
+              size="mini"
+              onClick={() => setEdit(true)}
+            >
+              Justere rekkefølgen på krav
+            </Button>
+          </Block>
+        </Block>
+      </CustomPanelDivider>
     </Block>
   )
 }
