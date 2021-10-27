@@ -260,7 +260,8 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
                     borderBottomWidth: '1px',
                     borderBottomStyle: 'solid',
                     borderBottomColor: '#E3E3E3',
-                    marginBottom: '22px'
+                    marginBottom: '22px',
+                    marginTop: '-30px'
                   }}>
                     <Paragraph4 $style={{ lineHeight: '20px', fontWeight: 700 }}>
                       Egenskaper: {selected.length} valgt
