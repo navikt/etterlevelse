@@ -1,17 +1,17 @@
-import {useEffect, useState} from "react";
-import {codelist, ListName, LovCode} from "../../services/Codelist";
-import {useKravFilter} from "../../api/KravGraphQLApi";
-import {emptyPage, KravListFilter, KravQL, KravStatus} from "../../constants";
-import {Block, Responsive, Scale} from "baseui/block";
-import {Option, SelectOverrides} from "baseui/select";
+import { useEffect, useState } from "react";
+import { codelist, ListName, LovCode } from "../../services/Codelist";
+import { useKravFilter } from "../../api/KravGraphQLApi";
+import { emptyPage, KravListFilter, KravQL, KravStatus } from "../../constants";
+import { Block, Responsive, Scale } from "baseui/block";
+import { Option, SelectOverrides } from "baseui/select";
 import CustomizedSelect from "../common/CustomizedSelect";
-import {ettlevColors, theme} from "../../util/theme";
-import {Spinner} from "../common/Spinner";
-import {Notification} from "baseui/notification";
-import {H2, Label3, LabelSmall, Paragraph2} from "baseui/typography";
+import { ettlevColors, theme } from "../../util/theme";
+import { Spinner } from "../common/Spinner";
+import { Notification } from "baseui/notification";
+import { H2, Label3, LabelSmall, Paragraph2 } from "baseui/typography";
 import Button from "../common/Button";
-import {faPlus} from "@fortawesome/free-solid-svg-icons";
-import {KravPanels, sortKrav} from "../../pages/KravListPageV2";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { KravPanels, sortKrav } from "../../pages/KravListPageV2";
 
 type KravFilter = {
   status: Option[]
@@ -33,14 +33,14 @@ export const AllKrav = () => {
   })
 
   // USIKKERT OM VI SKAL FILTRERER BASERT PÅ TEMA
-  const [temaFilter, setTemaFilter] = useState<string[]>([])
-  const temaer = codelist.getCodes(ListName.TEMA)
+  // const [temaFilter, setTemaFilter] = useState<string[]>([])
+  // const temaer = codelist.getCodes(ListName.TEMA)
 
   const relevans = codelist.getCodes(ListName.RELEVANS)
   const lover = codelist.getCodes(ListName.LOV)
 
   // BRUKER KUN NÅR VI SKAL FILTRERE PÅ TEMA
-  const [loverFilter, setLoverFilter] = useState(lover)
+  // const [loverFilter, setLoverFilter] = useState(lover)
 
   const {
     data,
@@ -50,7 +50,8 @@ export const AllKrav = () => {
     refetch,
   } = useKravFilter({
     relevans: filter.relevans[0]?.id === 'alle' ? undefined : filter.relevans.map((r) => (r.id ? r.id.toString() : '')),
-    lover: filter.lover[0].id === 'alle' && filter.tema[0].id === 'alle' ? undefined : filter.lover[0].id !== 'alle' ? filter.lover.map((l) => (l.id ? l.id.toString() : '')) : temaFilter,
+    // lover: filter.lover[0].id === 'alle' && filter.tema[0].id === 'alle' ? undefined : filter.lover[0].id !== 'alle' ? filter.lover.map((l) => (l.id ? l.id.toString() : '')) : temaFilter,
+    lover: filter.lover[0].id === 'alle' ? undefined : filter.lover.map((l) => (l.id ? l.id.toString() : '')),
     status: filter.status[0]?.id === 'alle' ? undefined : filter.status.map((s) => (s.id ? s.id?.toString() : '')),
     pageNumber: 0,
     pageSize,
@@ -101,22 +102,22 @@ export const AllKrav = () => {
 
   useEffect(() => {
     // USIKKERT OM VI SKAL FILTRERER BASERT PÅ TEMA
+    // if (filter.tema[0].id !== 'alle') {
+    //   const temaLover: string[] = []
+    //   const gyldiglover: LovCode[] = []
+    //   lover.forEach((l) => {
+    //     if (l.data?.tema === filter.tema[0].id) {
+    //       temaLover.push(l.code)
+    //       gyldiglover.push(l)
+    //     }
+    //   })
+    //   setTemaFilter(temaLover)
+    //   setLoverFilter(gyldiglover)
+    // } else {
+    //   setTemaFilter([])
+    //   setLoverFilter(lover)
+    // }
 
-    if (filter.tema[0].id !== 'alle') {
-      const temaLover: string[] = []
-      const gyldiglover: LovCode[] = []
-      lover.forEach((l) => {
-        if (l.data?.tema === filter.tema[0].id) {
-          temaLover.push(l.code)
-          gyldiglover.push(l)
-        }
-      })
-      setTemaFilter(temaLover)
-      setLoverFilter(gyldiglover)
-    } else {
-      setTemaFilter([])
-      setLoverFilter(lover)
-    }
     refetch()
   }, [filter])
 
@@ -145,22 +146,30 @@ export const AllKrav = () => {
   const getOptions = (label: string, options: any[]) => [{ label: label, id: 'alle' }, ...options]
 
   const getLovOptions = () => {
-    if (filter.tema[0].id === 'alle') {
-      return getOptions(
-        'Alle lover',
-        lover.map((l) => {
-          return { label: l.shortName, id: l.code }
-        }),
-      )
-    } else {
-      // BRUKER KUN NÅR VI SKAL FILTRERE PÅ TEMA
-      return getOptions(
-        'Alle lover',
-        loverFilter?.map((t) => {
-          return { label: t.shortName, id: t.code }
-        }),
-      )
-    }
+    return getOptions(
+      'Alle lover',
+      lover.map((l) => {
+        return { label: l.shortName, id: l.code }
+      }),
+    )
+
+    // BRUKER KUN NÅR VI SKAL FILTRERE PÅ TEMA
+    // if (filter.tema[0].id === 'alle') {
+    //   return getOptions(
+    //     'Alle lover',
+    //     lover.map((l) => {
+    //       return { label: l.shortName, id: l.code }
+    //     }),
+    //   )
+    // } else {  
+    //   return getOptions(
+    //     'Alle lover',
+    //     loverFilter?.map((t) => {
+    //       return { label: t.shortName, id: t.code }
+    //     }),
+    //   )
+    // }
+
   }
 
   //must be run in function to not affect other selectors others overrides
@@ -223,12 +232,12 @@ export const AllKrav = () => {
           <Block display="flex" justifyContent="flex-end" width="100%" alignItems="center">
             <Block display={['block', 'block', 'block', 'block', 'flex', 'flex',]} alignItems="center" justifyContent="flex-start" width="100%">
               <Label3>Filter</Label3>
-              {getSelector(filter.tema[0].id?.toString(), KravListFilter.TEMAER, getOptions(
+              {/* {getSelector(filter.tema[0].id?.toString(), KravListFilter.TEMAER, getOptions(
                 'Alle tema',
                 temaer?.map((t) => {
                   return { label: t.shortName, id: t.code }
                 }),
-              ), filter.tema)}
+              ), filter.tema)} */}
               {getSelector(filter.relevans[0].id?.toString(), KravListFilter.RELEVANS, getOptions(
                 'Alle relevans',
                 relevans?.map((r) => {
