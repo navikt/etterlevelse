@@ -23,6 +23,7 @@ export const PanelLink = ({
   overrides,
   useTitleUnderLine,
   useDescriptionUnderline,
+  hideChevron,
 }: {
   href: string
   title: string | React.ReactNode
@@ -38,6 +39,7 @@ export const PanelLink = ({
   overrides?: BlockOverrides
   useTitleUnderLine?: boolean
   useDescriptionUnderline?: boolean
+  hideChevron?: boolean
 }) => {
   const [hover, setHover] = useState(false)
   const responsiveDisplay: Responsive<Display> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
@@ -148,7 +150,7 @@ export const PanelLink = ({
                 </Block>
               </Block>
             )}
-            <Chevron hover={hover} icon={navChevronRightIcon} distance={'4px'} />
+            {!hideChevron && <Chevron hover={hover} icon={navChevronRightIcon} distance={'4px'} />}
           </Block>
         </Block>
       </Block>
