@@ -81,9 +81,9 @@ export const PanelLink = ({
       }}
     >
       <Block display={responsiveDisplay} overrides={mergedOverrides} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
-        <Block display="flex" marginLeft="27px" alignItems="center">
+        {panelIcon && <Block display="flex" marginLeft="27px" alignItems="center">
           {typeof panelIcon === 'function' ? panelIcon(hover) : panelIcon}
-        </Block>
+        </Block>}
 
         <Block
           marginLeft={theme.sizing.scale600}
