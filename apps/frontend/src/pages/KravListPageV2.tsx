@@ -21,6 +21,7 @@ import {Option} from 'baseui/select'
 import {AllKrav} from "../components/kravList/AllKrav";
 import {SistRedigertKrav} from "../components/kravList/SisteRedigertKrav";
 import {TemaList} from "../components/kravList/TemaList";
+import KravStatusView from '../components/kravList/KravStatusTag'
 
 type Section = 'siste' | 'alle'
 
@@ -87,49 +88,6 @@ export const KravListPage = () => (
     </Block>
   </Block>
 )
-
-const KravStatusView = ({ status }: { status: KravStatus }) => {
-  const getStatusDisplay = (background: string, border: string) => (
-    <Block width="fit-content">
-      <Card
-        overrides={{
-          Contents: {
-            style: {
-              ...marginAll('0px'),
-            },
-          },
-          Body: {
-            style: {
-              ...margin('2px', '8px'),
-            },
-          },
-          Root: {
-            style: {
-              // Did not use border, margin and border radius to remove warnings.
-              backgroundColor: background,
-              ...borderColor(border),
-              ...borderWidth('1px'),
-              ...borderStyle('solid'),
-              ...borderRadius('4px'),
-            },
-          },
-        }}
-      >
-        <Paragraph4 $style={{ color: ettlevColors.navMorkGra, ...marginAll('0px') }}>{kravStatus(status)}</Paragraph4>
-      </Card>
-    </Block>
-  )
-
-  if (status === KravStatus.UTKAST) {
-    return getStatusDisplay('#FFECCC', '#D47B00')
-  } else if (status === KravStatus.AKTIV) {
-    return getStatusDisplay(ettlevColors.green50, ettlevColors.green400)
-  } else if (status === KravStatus.UTGAATT) {
-    return getStatusDisplay(ettlevColors.grey50, ettlevColors.grey200)
-  } else {
-    return getStatusDisplay('#E0D8E9', '#8269A2')
-  }
-}
 
 export const KravPanels = ({ kravene, loading }: { kravene?: KravQL[] | Krav[]; loading?: boolean}) => {
   if (loading) return <SkeletonPanel count={5} />
@@ -201,7 +159,7 @@ const KravTabs = () => {
         {
           key: 'tema',
           title: 'Tema',
-          content: <TemaList></TemaList>
+          content: <TemaList/>,
         },
         {
           key: 'alle',
