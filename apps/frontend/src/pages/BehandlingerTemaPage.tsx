@@ -7,7 +7,7 @@ import {codelist, ListName, TemaCode} from '../services/Codelist'
 import RouteLink, {urlForObject} from '../components/common/RouteLink'
 import {useBehandling} from '../api/BehandlingApi'
 import {Layout2} from '../components/scaffold/Page'
-import {Etterlevelse, EtterlevelseStatus, KravQL, PageResponse, Suksesskriterie} from '../constants'
+import {Etterlevelse, EtterlevelseStatus, KravEtterlevelseData, KravQL, PageResponse, Suksesskriterie} from '../constants'
 import {arkPennIcon, crossIcon} from '../components/Images'
 import {behandlingKravQuery} from '../components/behandling/ViewBehandling'
 import {useQuery} from '@apollo/client'
@@ -21,20 +21,9 @@ import {borderStyle} from '../components/common/Style'
 import {breadcrumbPaths} from '../components/common/CustomizedBreadcrumbs'
 import Button from '../components/common/Button'
 import {Responsive} from 'baseui/theme'
+import { KravPanelHeader } from '../components/behandling/KravPanelHeader'
 
 const responsiveBreakPoints: Responsive<Display> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
-
-type KravEtterlevelseData = {
-  kravNummer: number
-  kravVersjon: number
-  navn: string
-  etterlevelseId?: string
-  etterleves: boolean
-  frist?: string
-  etterlevelseStatus?: EtterlevelseStatus
-  suksesskriterier: Suksesskriterie[]
-  gammelVersjon?: boolean
-}
 
 const mapEtterlevelseData = (etterlevelse?: Etterlevelse) => ({
   etterlevelseId: etterlevelse?.id,
@@ -221,13 +210,13 @@ export const BehandlingerTemaPage = () => {
     >
       <Block display="flex" width="100%" justifyContent="space-between" flexWrap marginTop="87px" marginBottom="87px">
         <CustomizedAccordion accordion={false}>
-          <CustomizedPanel HeaderActiveBackgroundColor={ettlevColors.green50} title={<PanelHeader title={'Skal fylles ut'} kravData={skalUtfyllesKrav} />}>
+          <CustomizedPanel HeaderActiveBackgroundColor={ettlevColors.green50} title={<KravPanelHeader title={'Skal fylles ut'} kravData={skalUtfyllesKrav} />}>
             {getKravList(skalUtfyllesKrav, 'Ingen krav som skal fylles ut')}
           </CustomizedPanel>
-          <CustomizedPanel HeaderActiveBackgroundColor={ettlevColors.green50} title={<PanelHeader title={'Under utfylling'} kravData={underArbeidKrav} />}>
+          <CustomizedPanel HeaderActiveBackgroundColor={ettlevColors.green50} title={<KravPanelHeader title={'Under utfylling'} kravData={underArbeidKrav} />}>
             {getKravList(underArbeidKrav, 'Ingen krav under utfylling')}
           </CustomizedPanel>
-          <CustomizedPanel HeaderActiveBackgroundColor={ettlevColors.green50} title={<PanelHeader title={'Ferdig utfylt'} kravData={utfyltKrav} />}>
+          <CustomizedPanel HeaderActiveBackgroundColor={ettlevColors.green50} title={<KravPanelHeader title={'Ferdig utfylt'} kravData={utfyltKrav} />}>
             {getKravList(utfyltKrav, 'Ingen krav er ferdig utfylt')}
           </CustomizedPanel>
         </CustomizedAccordion>
@@ -259,37 +248,6 @@ export const BehandlingerTemaPage = () => {
         )}
       </Block>
     </Layout2>
-  )
-}
-
-const PanelHeader = (props: { title: string; kravData: KravEtterlevelseData[] }) => {
-  let antallSuksesskriterier = 0
-
-  props.kravData.forEach((k) => {
-    antallSuksesskriterier += k.suksesskriterier.length
-  })
-
-  const responsiveAlignment: Responsive<JustifyContent> = ['flex-start', 'flex-start', 'flex-start', 'flex-end', 'flex-end', 'flex-end']
-
-  return (
-    <Block display={responsiveBreakPoints} width="100%">
-      <HeadingLarge marginTop={theme.sizing.scale100} marginBottom={theme.sizing.scale100} color={ettlevColors.green600}>
-        {props.title}
-      </HeadingLarge>
-      <Block display="flex" justifyContent={responsiveAlignment} flex="1" marginRight="26px">
-        <Block>
-          <Block display="flex" justifyContent={responsiveAlignment} alignItems="baseline" flex="1">
-            <Label3 marginRight="4px" $style={{ color: ettlevColors.navOransje, fontSize: '20px', lineHeight: '21px', marginTop: '0px', marginBottom: '0px' }}>
-              {props.kravData.length}
-            </Label3>
-            <Paragraph4 $style={{ lineHeight: '21px', marginTop: '0px', marginBottom: '0px' }}>krav</Paragraph4>
-          </Block>
-          <Block display="flex" justifyContent={responsiveAlignment} flex="1">
-            <Paragraph4 $style={{ lineHeight: '21px', marginTop: '0px', marginBottom: '0px' }}>{antallSuksesskriterier} suksesskriterier</Paragraph4>
-          </Block>
-        </Block>
-      </Block>
-    </Block>
   )
 }
 

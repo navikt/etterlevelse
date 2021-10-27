@@ -121,6 +121,18 @@ export interface Etterlevelse extends DomainObject {
   suksesskriterieBegrunnelser: SuksesskriterieBegrunnelse[]
 }
 
+export type KravEtterlevelseData = {
+  kravNummer: number
+  kravVersjon: number
+  navn: string
+  etterlevelseId?: string
+  etterleves: boolean
+  frist?: string
+  etterlevelseStatus?: EtterlevelseStatus
+  suksesskriterier: Suksesskriterie[]
+  gammelVersjon?: boolean
+}
+
 export interface SuksesskriterieBegrunnelse {
   suksesskriterieId: number
   begrunnelse: string
