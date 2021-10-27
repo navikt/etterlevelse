@@ -49,6 +49,8 @@ export const PanelLink = ({
       style: {
         width: '100%',
         ...paddingAll(theme.sizing.scale600),
+        paddingTop: theme.sizing.scale500,
+        paddingBottom: theme.sizing.scale500,
         paddingLeft: theme.sizing.scale300,
         display: 'flex',
         justifyContent: 'space-between',
@@ -143,7 +145,7 @@ export const PanelLink = ({
                 >
                   {rightTitle && <Label3 $style={{ fontSize: '14px' }}>{rightTitle}</Label3>}
                   {rightBeskrivelse && (
-                    <Paragraph4 marginBottom="0px" marginTop={rightTitle ? theme.sizing.scale100 : '0px'} $style={{ lineHeight: '24px' }}>
+                    <Paragraph4 marginBottom="0px" marginTop="0px" $style={{ lineHeight: '15px' }}>
                       {rightBeskrivelse}
                     </Paragraph4>
                   )}

@@ -116,7 +116,7 @@ export const KravPanels = ({ kravene, loading }: { kravene?: KravQL[] | Krav[]; 
               useDescriptionUnderline
               href={`/krav/${k.kravNummer}/${k.kravVersjon}`}
               title={
-                <Paragraph2 $style={{ fontSize: '16px', marginBottom: '0px', marginTop: '0px' }}>
+                <Paragraph2 $style={{ fontSize: '14px', marginBottom: '0px', marginTop: '0px', lineHeight: '15px' }}>
                   K{k.kravNummer}.{k.kravVersjon}
                 </Paragraph2>
               }
