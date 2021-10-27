@@ -11,7 +11,7 @@ import moment from 'moment'
 import {ettlevColors, maxPageWidth, responsivePaddingLarge} from '../util/theme'
 import {plusIcon} from '../components/Images'
 import {PanelLink} from '../components/common/PanelLink'
-import {KravQL, KravStatus} from '../constants'
+import {Krav, KravQL, KravStatus} from '../constants'
 import {SkeletonPanel} from '../components/common/LoadingSkeleton'
 import {kravStatus} from '../pages/KravPage'
 import {codelist, ListName} from '../services/Codelist'
@@ -131,7 +131,7 @@ const KravStatusView = ({ status }: { status: KravStatus }) => {
   }
 }
 
-export const KravPanels = ({ kravene, loading }: { kravene: KravQL[]; loading?: boolean }) => {
+export const KravPanels = ({ kravene, loading }: { kravene?: KravQL[] | Krav[]; loading?: boolean}) => {
   if (loading) return <SkeletonPanel count={5} />
   return (
     <Block
@@ -144,7 +144,7 @@ export const KravPanels = ({ kravene, loading }: { kravene: KravQL[]; loading?: 
         backgroundColor: 'white',
       }}
     >
-      {kravene.map((k, index) => {
+      {kravene && kravene.map((k, index) => {
         const lov = codelist.getCode(ListName.LOV, k.regelverk[0]?.lov?.code)
         const tema = codelist.getCode(ListName.TEMA, lov?.data?.tema)
         return (
