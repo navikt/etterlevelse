@@ -48,10 +48,8 @@ export const PanelLink = ({
     Block: {
       style: {
         width: '100%',
-        ...paddingAll(theme.sizing.scale600),
-        paddingTop: theme.sizing.scale500,
-        paddingBottom: theme.sizing.scale500,
-        paddingLeft: theme.sizing.scale300,
+        ...paddingAll(theme.sizing.scale300),
+        paddingRight: theme.sizing.scale600,
         display: 'flex',
         justifyContent: 'space-between',
         backgroundColor: ettlevColors.white,
