@@ -6,6 +6,7 @@ import {Krav} from "../../constants";
 import {Block} from "baseui/block";
 import {KravPanels} from "../../pages/KravListPageV2";
 import {Paragraph4} from "baseui/typography";
+import { KravPanelHeader } from "../behandling/KravPanelHeader";
 
 export const TemaList = () => {
   const [allKrav, setAllKrav] = useState<Krav[]>()
@@ -32,11 +33,11 @@ export const TemaList = () => {
               return k.regelverk.map(r => r.lov.data && r.lov.data.tema).includes(t.code)
             })
             return kraver && kraver.length > 0 ? (
-                <CustomizedPanel title={t.shortName} key={`${t.code}_krav_list`}>
+                <CustomizedPanel title={<KravPanelHeader title={t.shortName} kravData={kraver}/>} key={`${t.code}_krav_list`}>
                   <KravPanels kravene={kraver}/>
                 </CustomizedPanel>
               ) :
-              <CustomizedPanel title={t.shortName} key={`${t.code}_krav_list`}>
+              <CustomizedPanel title={<KravPanelHeader title={t.shortName} kravData={[]}/>} key={`${t.code}_krav_list`}>
                 <CustomPanelDivider>
                   <Block display="flex" width="100%" marginLeft="24px">
                     <Paragraph4>Ingen krav under utfylling</Paragraph4>
