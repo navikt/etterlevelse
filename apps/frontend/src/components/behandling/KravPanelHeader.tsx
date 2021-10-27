@@ -1,7 +1,7 @@
 import { JustifyContent, Block, Display } from 'baseui/block'
 import { Responsive } from 'baseui/theme'
-import { HeadingLarge, Label3, Paragraph4 } from'baseui/typography'
-import { Krav, KravEtterlevelseData } from'../../constants'
+import { HeadingLarge, Label3, Paragraph4 } from 'baseui/typography'
+import { Krav, KravEtterlevelseData } from '../../constants'
 import { theme } from '../../util'
 import { ettlevColors } from '../../util/theme'
 
@@ -19,9 +19,11 @@ export const KravPanelHeader = (props: { title: string; kravData: KravEtterlevel
 
   return (
     <Block display={responsiveBreakPoints} width="100%">
-      <HeadingLarge marginTop={theme.sizing.scale100} marginBottom={theme.sizing.scale100} color={ettlevColors.green600}>
-        {props.title}
-      </HeadingLarge>
+      <Block display="flex" justifyContent="center">
+        <HeadingLarge $style={{lineHeight: '35px'}} marginTop={theme.sizing.scale100} marginBottom={theme.sizing.scale100} color={ettlevColors.green600}>
+          {props.title}
+        </HeadingLarge>
+      </Block>
       <Block display="flex" justifyContent={responsiveAlignment} flex="1" marginRight="26px">
         <Block>
           <Block display="flex" justifyContent={responsiveAlignment} alignItems="baseline" flex="1">

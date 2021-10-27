@@ -33,6 +33,8 @@ export const CustomizedPanel = (props: CustomProps) => {
       style: {
         backgroundColor: ettlevColors.white,
         ...borderRadius('4px'),
+        paddingTop: theme.sizing.scale300,
+        paddingBottom: theme.sizing.scale300,
         ':hover': {
           textDecoration: 'underline',
           color: ettlevColors.green800,
@@ -55,7 +57,7 @@ export const CustomizedPanel = (props: CustomProps) => {
       style: {
         ...borderRadius('4px'),
         backgroundColor: ettlevColors.grey50,
-        ...paddingAll('0'),
+        ...paddingAll('0px'),
         overflow: 'visible', // fix box shadows of content
       },
     },
