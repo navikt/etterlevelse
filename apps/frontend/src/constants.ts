@@ -1,5 +1,5 @@
-import { Code, LovCode } from './services/Codelist'
-import { Group } from './services/User'
+import {Code, LovCode} from './services/Codelist'
+import {Group} from './services/User'
 
 export type RecursivePartial<T> = {
   [P in keyof T]?: T[P] extends (infer U)[] ? RecursivePartial<U>[] : T[P] extends object ? RecursivePartial<T[P]> : T[P]
@@ -59,6 +59,7 @@ export interface Krav extends DomainObject {
   dokumentasjon: string[]
   implementasjoner: string
   notat?: string
+  prioriteringsId?: string
   begrepIder: string[]
   varslingsadresser: Varslingsadresse[]
   rettskilder: string[]
