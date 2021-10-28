@@ -23,6 +23,7 @@ export const PanelLink = ({
   overrides,
   useTitleUnderLine,
   useDescriptionUnderline,
+  hideChevron,
 }: {
   href: string
   title: string | React.ReactNode
@@ -38,6 +39,7 @@ export const PanelLink = ({
   overrides?: BlockOverrides
   useTitleUnderLine?: boolean
   useDescriptionUnderline?: boolean
+  hideChevron?: boolean
 }) => {
   const [hover, setHover] = useState(false)
   const responsiveDisplay: Responsive<Display> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
@@ -46,8 +48,8 @@ export const PanelLink = ({
     Block: {
       style: {
         width: '100%',
-        ...paddingAll(theme.sizing.scale600),
-        paddingLeft: theme.sizing.scale300,
+        ...paddingAll(theme.sizing.scale300),
+        paddingRight: theme.sizing.scale600,
         display: 'flex',
         justifyContent: 'space-between',
         backgroundColor: ettlevColors.white,
@@ -79,9 +81,9 @@ export const PanelLink = ({
       }}
     >
       <Block display={responsiveDisplay} overrides={mergedOverrides} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
-        <Block display="flex" marginLeft="27px" alignItems="center">
+        {panelIcon && <Block display="flex" marginLeft="27px" alignItems="center">
           {typeof panelIcon === 'function' ? panelIcon(hover) : panelIcon}
-        </Block>
+        </Block>}
 
         <Block
           marginLeft={theme.sizing.scale600}
@@ -141,14 +143,14 @@ export const PanelLink = ({
                 >
                   {rightTitle && <Label3 $style={{ fontSize: '14px' }}>{rightTitle}</Label3>}
                   {rightBeskrivelse && (
-                    <Paragraph4 marginBottom="0px" marginTop={rightTitle ? theme.sizing.scale100 : '0px'} $style={{ lineHeight: '24px' }}>
+                    <Paragraph4 marginBottom="0px" marginTop="0px" $style={{ lineHeight: '15px' }}>
                       {rightBeskrivelse}
                     </Paragraph4>
                   )}
                 </Block>
               </Block>
             )}
-            <Chevron hover={hover} icon={navChevronRightIcon} distance={'4px'} />
+            {!hideChevron && <Chevron hover={hover} icon={navChevronRightIcon} distance={'4px'} />}
           </Block>
         </Block>
       </Block>

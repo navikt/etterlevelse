@@ -12,6 +12,7 @@ type Krav {
     versjonEndringer: String
     dokumentasjon: [String!]!
     notat: String
+    prioriteringsId: String
     implementasjoner: String
     begrepIder: [String!]!
     rettskilder: [String!]!
