@@ -38,6 +38,7 @@ public class KravRequest implements RequestElement {
     private String utdypendeBeskrivelse;
     private String versjonEndringer;
     private String notat;
+    private String prioriteringsId;
     private List<String> dokumentasjon;
     private String implementasjoner;
     private List<String> begrepIder;
