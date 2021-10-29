@@ -57,7 +57,7 @@ export const TemaList = () => {
   )
 }
 
-const KravTemaList = (props: { kraver: Krav[]; tema: String}) => {
+const KravTemaList = (props: { kraver: Krav[]; tema: string}) => {
   const [kraver, setKraver] = React.useState<Krav[]>(props.kraver)
   const [edit, setEdit] = React.useState(false)
 
@@ -114,7 +114,7 @@ const KravTemaList = (props: { kraver: Krav[]; tema: String}) => {
           </Block>
         </Block>
       </CustomPanelDivider>
-      <EditPriorityModal isOpen={edit} onClose={() => setEdit(false)} kravListe={kraver}></EditPriorityModal>
+      <EditPriorityModal tema={props.tema} isOpen={edit} onClose={() => setEdit(false)} kravListe={kraver}></EditPriorityModal>
     </Block>
   )
 }
