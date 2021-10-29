@@ -29,6 +29,6 @@ const CuztomizedModal = (props: ModalProps) => {
 
   const mergedOverrides = _.merge(customOverrides, props.overrides)
 
-  return <Modal closeable={false} {...otherProps} unstable_ModalBackdropScroll size={SIZE.full} overrides={mergedOverrides} />
+  return <Modal closeable={false} {...otherProps} unstable_ModalBackdropScroll size={props.size ? props.size : SIZE.full} overrides={mergedOverrides} />
 }
 export default CuztomizedModal

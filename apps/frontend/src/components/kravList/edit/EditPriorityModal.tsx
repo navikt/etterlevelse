@@ -8,14 +8,17 @@ import { FieldWrapper } from '../../common/Inputs'
 import { arrayMove, List } from 'baseui/dnd-list'
 import { CustomPanelDivider } from '../../common/CustomizedAccordion'
 import { PanelLink } from '../../common/PanelLink'
-import { Label3, Paragraph2 } from 'baseui/typography'
+import { H1, H2, Label3, Paragraph2 } from 'baseui/typography'
 import moment from 'moment'
 import KravStatusView from '../KravStatusTag'
-import { borderStyle } from '../../common/Style'
+import { borderRadius, borderStyle, paddingZero } from '../../common/Style'
 import { mapToFormVal, updateKrav } from "../../../api/KravApi";
 import { Spinner } from '../../common/Spinner'
 import { theme } from '../../../util'
 import { Block } from 'baseui/block'
+import { ettlevColors, responsivePaddingLarge } from '../../../util/theme'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faGripVertical } from '@fortawesome/free-solid-svg-icons'
 
 export const EditPriorityModal = (props: { isOpen: boolean; onClose: Function; kravListe: Krav[], tema: string }) => {
   const { isOpen, onClose, kravListe, tema } = props
@@ -103,8 +106,48 @@ export const EditPriorityModal = (props: { isOpen: boolean; onClose: Function; k
       }
     >
       {(p) => (
-        <CustomizedModal isOpen={isOpen}>
-          <ModalBody>
+        <CustomizedModal isOpen={isOpen} size="auto" overrides={{
+          Dialog: {
+            style: {
+              ...borderRadius('0px'),
+              background: ettlevColors.white
+            }
+          }
+        }}>
+          <Block
+            backgroundColor={ettlevColors.green800}
+            paddingTop="23px"
+            paddingBottom="48px"
+            paddingLeft={responsivePaddingLarge}
+            paddingRight={responsivePaddingLarge}
+            maxHeight="55px"
+            marginBottom="54px"
+          >
+            <H1 $style={{ lineHeight: '48px', color: ettlevColors.white }}>
+              Justere rekkefølgen på krav
+            </H1>
+          </Block>
+          <Block
+            display="flex"
+            justifyContent="center"
+            paddingLeft={responsivePaddingLarge}
+            paddingRight={responsivePaddingLarge}
+          >
+            <Block display="flex" justifyContent="flex-start" flex="1">
+              <H2 $style={{ lineHeight: '24px', color: ettlevColors.green600, marginTop: '0px', marginBottom: '0px' }}>
+                {tema}
+              </H2>
+            </Block>
+            <Block display="flex" justifyContent="flex-end" flex="1">
+              <Paragraph2 $style={{ marginTop: '0px', marginBottom: '0px', color: ettlevColors.green800 }}>
+                Klikk og dra kravene i ønsket rekkefølge
+              </Paragraph2>
+            </Block>
+          </Block>
+          <Block
+            paddingLeft={responsivePaddingLarge}
+            paddingRight={responsivePaddingLarge}
+          >
             {loading ?
               <Block display="flex" justifyContent="center">
                 <Spinner size={theme.sizing.scale1200} />
@@ -118,25 +161,52 @@ export const EditPriorityModal = (props: { isOpen: boolean; onClose: Function; k
                       onChange={({ oldIndex, newIndex }) => {
                         setItems(arrayMove(items, oldIndex, newIndex))
                         setKravElements(arrayMove(kravElements, oldIndex, newIndex))
-                      }
-                      }
+                      }}
+                      overrides={{
+                        DragHandle: CustomDragHandle,
+                        Root: {
+                          style: {
+                            ...paddingZero
+                          }
+                        },
+                        Item: {
+                          style: {
+                            ...paddingZero,
+                            flexDirection: 'row-reverse'
+                          }
+                        },
+                      }}
                     />
                   )}</FieldArray>
                 </FieldWrapper>
               </Form>
             }
-          </ModalBody>
-          <ModalFooter>
-            <Button onClick={() => onClose()}>Close</Button>
-            <Button
-              size="compact"
-              kind="secondary"
-              onClick={p.submitForm}
-              marginLeft>
-              Lagre
-            </Button>
-          </ModalFooter>
+            <Block paddingBottom="23px" display="flex" justifyContent="flex-end">
+              <Button onClick={() => onClose()}>Close</Button>
+              <Button
+                size="compact"
+                kind="secondary"
+                onClick={p.submitForm}
+                marginLeft>
+                Lagre
+              </Button>
+            </Block>
+          </Block>
         </CustomizedModal>
       )}
     </Formik>)
+}
+
+const CustomDragHandle = () => {
+  return (
+    <Block
+      $style={{
+        display: 'flex',
+        alignItems: 'cneter',
+        marginRight: '1em'
+      }}
+    >
+      <FontAwesomeIcon icon={faGripVertical} aria-label={'Dra og slipp håndtak'} />
+    </Block>
+  )
 }
