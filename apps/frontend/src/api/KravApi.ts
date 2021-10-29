@@ -144,7 +144,7 @@ export const mapToFormVal = (krav: Partial<KravQL>): KravQL => ({
   status: krav.status || KravStatus.UTKAST,
   suksesskriterier: krav.suksesskriterier || [],
   nyKravVersjon: krav.nyKravVersjon || false,
-
+  prioriteringsId: krav.prioriteringsId || '',
   // not used
   begrepIder: [],
   etterlevelser: [],
@@ -164,6 +164,7 @@ export const kravFullQuery = gql`
       versjonEndringer
 
       dokumentasjon
+      prioriteringsId
       implementasjoner
       begrepIder
       begreper {
