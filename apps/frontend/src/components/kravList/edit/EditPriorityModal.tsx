@@ -1,53 +1,57 @@
-import {ModalBody, ModalFooter, ModalHeader} from 'baseui/modal'
+import { ModalBody, ModalFooter, ModalHeader } from 'baseui/modal'
 import CustomizedModal from '../../common/CustomizedModal'
-import {Krav} from '../../../constants'
+import { Krav } from '../../../constants'
 import Button from '../../common/Button'
-import React, {ReactElement, useEffect} from 'react'
-import {FieldArray, Form, Formik} from 'formik'
-import {FieldWrapper} from '../../common/Inputs'
-import {arrayMove, List} from 'baseui/dnd-list'
-import {CustomPanelDivider} from '../../common/CustomizedAccordion'
-import {PanelLink} from '../../common/PanelLink'
-import {Label3, Paragraph2} from 'baseui/typography'
+import React, { ReactElement, useEffect } from 'react'
+import { FieldArray, Form, Formik } from 'formik'
+import { FieldWrapper } from '../../common/Inputs'
+import { arrayMove, List } from 'baseui/dnd-list'
+import { CustomPanelDivider } from '../../common/CustomizedAccordion'
+import { PanelLink } from '../../common/PanelLink'
+import { Label3, Paragraph2 } from 'baseui/typography'
 import moment from 'moment'
 import KravStatusView from '../KravStatusTag'
-import {borderStyle} from '../../common/Style'
-import {mapToFormVal, updateKrav} from "../../../api/KravApi";
+import { borderStyle } from '../../common/Style'
+import { mapToFormVal, updateKrav } from "../../../api/KravApi";
+import { Spinner } from '../../common/Spinner'
+import { theme } from '../../../util'
+import { Block } from 'baseui/block'
 
 export const EditPriorityModal = (props: { isOpen: boolean; onClose: Function; kravListe: Krav[], tema: string }) => {
-  const {isOpen, onClose, kravListe, tema} = props
+  const { isOpen, onClose, kravListe, tema } = props
   const [items, setItems] = React.useState<ReactElement[]>([])
   const [kravElements, setKravElements] = React.useState<Krav[]>(kravListe)
+  const [loading, setLoading] = React.useState(false)
 
   useEffect(() => {
     setItems(kravListe.map((k) => {
-          return (
-            <CustomPanelDivider key={`${k.navn}_${k.kravNummer}`}>
-              <PanelLink
-                hideChevron
-                useDescriptionUnderline
-                href={`/krav/${k.kravNummer}/${k.kravVersjon}`}
-                title={
-                  <Paragraph2 $style={{fontSize: '14px', marginBottom: '0px', marginTop: '0px', lineHeight: '15px'}}>
-                    K{k.kravNummer}.{k.kravVersjon}
-                  </Paragraph2>
-                }
-                beskrivelse={<Label3 $style={{fontSize: '18px', lineHeight: '28px'}}>{k.navn}</Label3>}
-                rightBeskrivelse={!!k.changeStamp.lastModifiedDate ? `Sist endret: ${moment(k.changeStamp.lastModifiedDate).format('ll')}` : ''}
-                statusText={<KravStatusView status={k.status}/>}
-                overrides={{
-                  Block: {
-                    style: {
-                      ':hover': {boxShadow: 'none'},
-                      ...borderStyle('hidden'),
-                    },
-                  },
-                }}
-              />
-            </CustomPanelDivider>
-          )
-        }
+      return (
+        <CustomPanelDivider key={`${k.navn}_${k.kravNummer}`}>
+          <PanelLink
+            hideChevron
+            useDescriptionUnderline
+            href={`/krav/${k.kravNummer}/${k.kravVersjon}`}
+            title={
+              <Paragraph2 $style={{ fontSize: '14px', marginBottom: '0px', marginTop: '0px', lineHeight: '15px' }}>
+                K{k.kravNummer}.{k.kravVersjon}
+              </Paragraph2>
+            }
+            beskrivelse={<Label3 $style={{ fontSize: '18px', lineHeight: '28px' }}>{k.navn}</Label3>}
+            rightBeskrivelse={!!k.changeStamp.lastModifiedDate ? `Sist endret: ${moment(k.changeStamp.lastModifiedDate).format('ll')}` : ''}
+            statusText={<KravStatusView status={k.status} />}
+            overrides={{
+              Block: {
+                style: {
+                  ':hover': { boxShadow: 'none' },
+                  ...borderStyle('hidden'),
+                },
+              },
+            }}
+          />
+        </CustomPanelDivider>
       )
+    }
+    )
     )
   }, []);
 
@@ -84,31 +88,34 @@ export const EditPriorityModal = (props: { isOpen: boolean; onClose: Function; k
         krav: kravElements
       }}
       onSubmit={(value) => {
+        setLoading(true)
         let updateKraver: Promise<any>[] = []
         const kravMedPrioriteting = setPriority([...kravElements])
-        console.log(kravMedPrioriteting)
         kravMedPrioriteting.forEach(kmp => {
           updateKraver.push((async () => (await updateKrav(mapToFormVal(kmp))))())
         })
-        console.log(kravMedPrioriteting)
-        Promise.all(updateKraver)
+        Promise.all(updateKraver).then(() => {
+          setLoading(false)
+          onClose()
+        }
+        )
       }
       }
     >
-      {
-        (p) => (
-          <CustomizedModal isOpen={isOpen}>
-            <ModalHeader>
-
-            </ModalHeader>
-            <ModalBody>
-
+      {(p) => (
+        <CustomizedModal isOpen={isOpen}>
+          <ModalBody>
+            {loading ?
+              <Block display="flex" justifyContent="center">
+                <Spinner size={theme.sizing.scale1200} />
+              </Block>
+              :
               <Form>
                 <FieldWrapper>
                   <FieldArray name={'krav'}>{(p) => (
                     <List
                       items={items}
-                      onChange={({oldIndex, newIndex}) => {
+                      onChange={({ oldIndex, newIndex }) => {
                         setItems(arrayMove(items, oldIndex, newIndex))
                         setKravElements(arrayMove(kravElements, oldIndex, newIndex))
                       }
@@ -117,19 +124,19 @@ export const EditPriorityModal = (props: { isOpen: boolean; onClose: Function; k
                   )}</FieldArray>
                 </FieldWrapper>
               </Form>
-            </ModalBody>
-            <ModalFooter>
-              <Button onClick={() => onClose()}>Close</Button>
-              <Button
-                size="compact"
-                kind="secondary"
-                onClick={p.submitForm}
-                marginLeft>
-                Lagre
-              </Button>
-            </ModalFooter>
-          </CustomizedModal>
-        )
-      }
+            }
+          </ModalBody>
+          <ModalFooter>
+            <Button onClick={() => onClose()}>Close</Button>
+            <Button
+              size="compact"
+              kind="secondary"
+              onClick={p.submitForm}
+              marginLeft>
+              Lagre
+            </Button>
+          </ModalFooter>
+        </CustomizedModal>
+      )}
     </Formik>)
 }

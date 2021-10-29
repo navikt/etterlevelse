@@ -21,8 +21,7 @@ export const TemaList = () => {
   useEffect(() => {
     (async () => {
       // setLoading(true)
-      setAllKrav(await getAllKrav());
-      console.log(await getAllKrav())
+      setAllKrav(await getAllKrav())
       // if (processes) {
       //   setDpProcesses(processes)
       // }
