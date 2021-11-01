@@ -1,5 +1,5 @@
-import {intl} from './intl/intl'
-import {Krav} from "../constants";
+import { intl } from './intl/intl'
+import { Krav } from "../constants";
 
 const start = (prefix: string) => (text: string) => {
   const startIndex = text.indexOf(prefix.toLowerCase())
@@ -15,19 +15,32 @@ export const prefixBiasedSort: (prefix: string, a: string, b: string) => number 
 }
 
 export const sortKraverByPriority = (kraver: Krav[], tema: string) => {
-  console.log("kraver", kraver)
+
+
+  const getPriorityId = (unfilteredId: string) => {
+    let id = 0
+
+    const matchId = unfilteredId.match(pattern)
+    if (matchId) {
+      const filteredId = matchId[0] ? matchId[0].match(/[0-9]+/) : 0
+      if (filteredId) {
+        id = parseInt(filteredId[0])
+      }
+    }
+
+    return id
+  }
+
   const pattern = new RegExp(tema.substr(0, 3).toUpperCase() + '[0-9]+')
   return kraver.sort((a, b) => {
-    if (a.prioriteringsId && b.prioriteringsId) {
-      let aResult = a.prioriteringsId.match(pattern)
-      let bResult = b.prioriteringsId.match(pattern)
-      let aaResult = aResult ? aResult[0].match(/[0-9]+/) : ""
-      let bbResult = bResult ? bResult[0].match(/[0-9]+/) : ""
 
-      let aTemp = aResult ? aaResult ? parseInt(aaResult[0]) : 0 : 0
-      let bTemp = bResult ? bbResult ? parseInt(bbResult[0]) : 0 : 0
-      return aTemp - bTemp
+    if (a.prioriteringsId && !b.prioriteringsId) {
+      return -1
+    } else if (!a.prioriteringsId && b.prioriteringsId) {
+      return 1
+    } else if (a.prioriteringsId && b.prioriteringsId) {
+      return getPriorityId(a.prioriteringsId) - getPriorityId(b.prioriteringsId)
     }
-    return 0
+    return -1
   })
 }
