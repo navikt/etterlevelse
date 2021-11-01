@@ -107,7 +107,6 @@ export const EditPriorityModal = (props: { isOpen: boolean; onClose: Function; k
         } catch (error: any) {
           console.log(error)
         }
-
       }
       }
     >
