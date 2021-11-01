@@ -22,6 +22,7 @@ import {breadcrumbPaths} from '../components/common/CustomizedBreadcrumbs'
 import Button from '../components/common/Button'
 import {Responsive} from 'baseui/theme'
 import { KravPanelHeader } from '../components/behandling/KravPanelHeader'
+import { sortKraverByPriority } from '../util/sort'
 
 const responsiveBreakPoints: Responsive<Display> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
 
@@ -54,7 +55,8 @@ export const BehandlingerTemaPage = () => {
   const [kravId, setKravId] = useState<KravId | undefined>()
 
   useEffect(() => {
-    const mapped = (rawData?.krav.content || []).map((krav) => {
+    const sortedKrav = sortKraverByPriority<KravQL>(rawData?.krav.content || [], temaData?.shortName || '')
+    const mapped = sortedKrav.map((krav) => {
       const etterlevelse = krav.etterlevelser.length ? krav.etterlevelser[0] : undefined
       return {
         kravNummer: krav.kravNummer,

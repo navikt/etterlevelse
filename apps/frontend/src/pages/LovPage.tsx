@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom'
 import { Block } from 'baseui/block'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { H1, H2, Paragraph2 } from 'baseui/typography'
 import { codelist, ListName, LovCode } from '../services/Codelist'
 import { ExternalLink, ObjectLink } from '../components/common/RouteLink'
@@ -17,6 +17,8 @@ import { useKravCounter } from './TemaPage'
 import { PanelLink } from '../components/common/PanelLink'
 import { kravNumView } from './KravPage'
 import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
+import { sortKraverByPriority } from '../util/sort'
+import { Krav } from '../constants'
 
 const fontColor = ettlevColors.white
 
@@ -52,6 +54,7 @@ export const LovPage = () => {
 const LovSide = ({ lov }: { lov: LovCode }) => {
   const [expand, setExpand] = React.useState(false)
   const { data, loading } = useKravCounter({ lover: [lov.code] })
+  const [kravList, setKravList] = useState<Krav[]>([])
 
   const underavdeling = codelist.getCode(ListName.UNDERAVDELING, lov.data?.underavdeling)
 
@@ -67,6 +70,12 @@ const LovSide = ({ lov }: { lov: LovCode }) => {
       href: '/tema/' + tema?.code,
     },
   ]
+
+  useEffect(() => {
+    if (data && data.krav && data.krav.content && data.krav.content.length > 0) {
+      setKravList(sortKraverByPriority<Krav>(data.krav.content, tema?.shortName || ''))
+    }
+  }, [data])
 
   return (
     <Page
@@ -134,7 +143,7 @@ const LovSide = ({ lov }: { lov: LovCode }) => {
         <H2 color={ettlevColors.white}>{loading ? '?' : data?.krav.numberOfElements || 0} krav</H2>
         {loading && <SkeletonPanel count={10} />}
         {!loading &&
-          data?.krav.content.map((k) => (
+          kravList.map((k) => (
             <Block key={k.id} marginBottom={'8px'}>
               <PanelLink useUnderline href={`/krav/${k.kravNummer}/${k.kravVersjon}`} beskrivelse={kravNumView(k)} title={k.navn} flip />
             </Block>
