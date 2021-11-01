@@ -1,59 +1,59 @@
 import CustomizedModal from '../../common/CustomizedModal'
-import {Krav} from '../../../constants'
+import { Krav } from '../../../constants'
 import Button from '../../common/Button'
-import React, {ReactElement, useEffect} from 'react'
-import {FieldArray, Form, Formik} from 'formik'
-import {FieldWrapper} from '../../common/Inputs'
-import {arrayMove, List} from 'baseui/dnd-list'
-import {CustomPanelDivider} from '../../common/CustomizedAccordion'
-import {PanelLink} from '../../common/PanelLink'
-import {H1, H2, Label3, Paragraph2} from 'baseui/typography'
+import React, { ReactElement, useEffect } from 'react'
+import { FieldArray, Form, Formik } from 'formik'
+import { FieldWrapper } from '../../common/Inputs'
+import { arrayMove, List } from 'baseui/dnd-list'
+import { CustomPanelDivider } from '../../common/CustomizedAccordion'
+import { PanelLink } from '../../common/PanelLink'
+import { H1, H2, Label3, Paragraph2 } from 'baseui/typography'
 import moment from 'moment'
 import KravStatusView from '../KravStatusTag'
-import {borderRadius, borderStyle, paddingZero} from '../../common/Style'
-import {mapToFormVal, updateKrav} from "../../../api/KravApi";
-import {Spinner} from '../../common/Spinner'
-import {theme} from '../../../util'
-import {Block} from 'baseui/block'
-import {ettlevColors, responsivePaddingLarge} from '../../../util/theme'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faGripVertical} from '@fortawesome/free-solid-svg-icons'
+import { borderRadius, borderStyle, paddingZero } from '../../common/Style'
+import { mapToFormVal, updateKrav } from "../../../api/KravApi";
+import { Spinner } from '../../common/Spinner'
+import { theme } from '../../../util'
+import { Block } from 'baseui/block'
+import { ettlevColors, responsivePaddingLarge } from '../../../util/theme'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faGripVertical } from '@fortawesome/free-solid-svg-icons'
 
 export const EditPriorityModal = (props: { isOpen: boolean; onClose: Function; kravListe: Krav[], tema: string, refresh: Function }) => {
-  const {isOpen, onClose, kravListe, tema, refresh} = props
+  const { isOpen, onClose, kravListe, tema, refresh } = props
   const [items, setItems] = React.useState<ReactElement[]>([])
   const [kravElements, setKravElements] = React.useState<Krav[]>(kravListe)
   const [loading, setLoading] = React.useState(false)
 
   useEffect(() => {
     setItems(kravListe.map((k) => {
-          return (
-            <CustomPanelDivider key={`${k.navn}_${k.kravNummer}`}>
-              <PanelLink
-                hideChevron
-                useDescriptionUnderline
-                href={`/krav/${k.kravNummer}/${k.kravVersjon}`}
-                title={
-                  <Paragraph2 $style={{fontSize: '14px', marginBottom: '0px', marginTop: '0px', lineHeight: '15px'}}>
-                    K{k.kravNummer}.{k.kravVersjon}
-                  </Paragraph2>
-                }
-                beskrivelse={<Label3 $style={{fontSize: '18px', lineHeight: '28px'}}>{k.navn}</Label3>}
-                rightBeskrivelse={!!k.changeStamp.lastModifiedDate ? `Sist endret: ${moment(k.changeStamp.lastModifiedDate).format('ll')}` : ''}
-                statusText={<KravStatusView status={k.status}/>}
-                overrides={{
-                  Block: {
-                    style: {
-                      ':hover': {boxShadow: 'none'},
-                      ...borderStyle('hidden'),
-                    },
-                  },
-                }}
-              />
-            </CustomPanelDivider>
-          )
-        }
+      return (
+        <CustomPanelDivider key={`${k.navn}_${k.kravNummer}`}>
+          <PanelLink
+            hideChevron
+            useDescriptionUnderline
+            href={`/krav/${k.kravNummer}/${k.kravVersjon}`}
+            title={
+              <Paragraph2 $style={{ fontSize: '14px', marginBottom: '0px', marginTop: '0px', lineHeight: '15px' }}>
+                K{k.kravNummer}.{k.kravVersjon}
+              </Paragraph2>
+            }
+            beskrivelse={<Label3 $style={{ fontSize: '18px', lineHeight: '28px' }}>{k.navn}</Label3>}
+            rightBeskrivelse={!!k.changeStamp.lastModifiedDate ? `Sist endret: ${moment(k.changeStamp.lastModifiedDate).format('ll')}` : ''}
+            statusText={<KravStatusView status={k.status} />}
+            overrides={{
+              Block: {
+                style: {
+                  ':hover': { boxShadow: 'none' },
+                  ...borderStyle('hidden'),
+                },
+              },
+            }}
+          />
+        </CustomPanelDivider>
       )
+    }
+    )
     )
   }, []);
 
@@ -99,10 +99,10 @@ export const EditPriorityModal = (props: { isOpen: boolean; onClose: Function; k
         })
         try {
           Promise.all(updateKraver).then(() => {
-              setLoading(false)
-              refresh()
-              onClose()
-            }
+            setLoading(false)
+            refresh()
+            onClose()
+          }
           )
         } catch (error: any) {
           console.log(error)
@@ -128,7 +128,7 @@ export const EditPriorityModal = (props: { isOpen: boolean; onClose: Function; k
             maxHeight="55px"
             marginBottom="54px"
           >
-            <H1 $style={{lineHeight: '48px', color: ettlevColors.white}}>
+            <H1 $style={{ lineHeight: '48px', color: ettlevColors.white }}>
               Justere rekkefølgen på krav
             </H1>
           </Block>
@@ -139,12 +139,12 @@ export const EditPriorityModal = (props: { isOpen: boolean; onClose: Function; k
             paddingRight={responsivePaddingLarge}
           >
             <Block display="flex" justifyContent="flex-start" flex="1">
-              <H2 $style={{lineHeight: '24px', color: ettlevColors.green600, marginTop: '0px', marginBottom: '0px'}}>
+              <H2 $style={{ lineHeight: '24px', color: ettlevColors.green600, marginTop: '0px', marginBottom: '0px' }}>
                 {tema}
               </H2>
             </Block>
             <Block display="flex" justifyContent="flex-end" flex="1">
-              <Paragraph2 $style={{marginTop: '0px', marginBottom: '0px', color: ettlevColors.green800}}>
+              <Paragraph2 $style={{ marginTop: '0px', marginBottom: '0px', color: ettlevColors.green800 }}>
                 Klikk og dra kravene i ønsket rekkefølge
               </Paragraph2>
             </Block>
@@ -155,7 +155,7 @@ export const EditPriorityModal = (props: { isOpen: boolean; onClose: Function; k
           >
             {loading ?
               <Block display="flex" justifyContent="center">
-                <Spinner size={theme.sizing.scale1200}/>
+                <Spinner size={theme.sizing.scale1200} />
               </Block>
               :
               <Form>
@@ -163,7 +163,7 @@ export const EditPriorityModal = (props: { isOpen: boolean; onClose: Function; k
                   <FieldArray name={'krav'}>{(p) => (
                     <List
                       items={items}
-                      onChange={({oldIndex, newIndex}) => {
+                      onChange={({ oldIndex, newIndex }) => {
                         setItems(arrayMove(items, oldIndex, newIndex))
                         setKravElements(arrayMove(kravElements, oldIndex, newIndex))
                       }}
@@ -187,11 +187,12 @@ export const EditPriorityModal = (props: { isOpen: boolean; onClose: Function; k
               </Form>
             }
             <Block paddingBottom="23px" display="flex" justifyContent="flex-end">
-              <Button onClick={() => onClose()}>Close</Button>
+              <Button onClick={() => onClose()} disabled={loading}>Close</Button>
               <Button
                 size="compact"
                 kind="secondary"
                 onClick={p.submitForm}
+                disabled={loading}
                 marginLeft>
                 Lagre
               </Button>
@@ -211,7 +212,7 @@ const CustomDragHandle = () => {
         marginRight: '1em'
       }}
     >
-      <FontAwesomeIcon icon={faGripVertical} aria-label={'Dra og slipp håndtak'}/>
+      <FontAwesomeIcon icon={faGripVertical} aria-label={'Dra og slipp håndtak'} />
     </Block>
   )
 }
