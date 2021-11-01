@@ -13,21 +13,22 @@ import moment from 'moment'
 import {ettlevColors, theme} from '../../util/theme'
 import Button from '../common/Button'
 import {EditPriorityModal} from "./edit/EditPriorityModal";
+import {sortKraverByPriority} from "../../util/sort";
 
 export const TemaList = () => {
   const [allKrav, setAllKrav] = useState<Krav[]>()
   const tema = codelist.getCodes(ListName.TEMA)
 
   useEffect(() => {
-    (async () => {
-      // setLoading(true)
-      setAllKrav(await getAllKrav())
-      // if (processes) {
-      //   setDpProcesses(processes)
-      // }
-      // setLoading(false)
-    })()
+    fetchKrav()
   }, []);
+
+  const fetchKrav = () => {
+    (async () => {
+      setAllKrav(await getAllKrav())
+      console.log("REFRESH")
+    })()
+  }
 
   return (
     <>
@@ -39,7 +40,7 @@ export const TemaList = () => {
             })
             return kraver && kraver.length > 0 ? (
                 <CustomizedPanel title={<KravPanelHeader title={t.shortName} kravData={kraver}/>} key={`${t.code}_krav_list`}>
-                  <KravTemaList kraver={kraver} tema={t.shortName}/>
+                  <KravTemaList kraver={kraver} tema={t.shortName} refresh={fetchKrav}/>
                 </CustomizedPanel>
               ) :
               <CustomizedPanel title={<KravPanelHeader title={t.shortName} kravData={[]}/>} key={`${t.code}_krav_list`}>
@@ -56,13 +57,13 @@ export const TemaList = () => {
   )
 }
 
-const KravTemaList = (props: { kraver: Krav[]; tema: string}) => {
-  const [kraver, setKraver] = React.useState<Krav[]>(props.kraver)
+const KravTemaList = (props: { kraver: Krav[]; tema: string; refresh: Function }) => {
+  const [kraver, setKraver] = React.useState<Krav[]>(sortKraverByPriority(props.kraver, props.tema))
   const [edit, setEdit] = React.useState(false)
 
   return (
     <Block>
-      {kraver.map((k,index) => {
+      {kraver.map((k, index) => {
         return (
           <CustomPanelDivider key={`${k.navn}_${k.kravNummer}_${props.tema}_${index}`}>
             <PanelLink
@@ -113,7 +114,7 @@ const KravTemaList = (props: { kraver: Krav[]; tema: string}) => {
           </Block>
         </Block>
       </CustomPanelDivider>
-      <EditPriorityModal tema={props.tema} isOpen={edit} onClose={() => setEdit(false)} kravListe={kraver}></EditPriorityModal>
+      <EditPriorityModal tema={props.tema} isOpen={edit} onClose={() => setEdit(false)} kravListe={kraver} refresh={props.refresh}></EditPriorityModal>
     </Block>
   )
 }
