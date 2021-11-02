@@ -20,6 +20,7 @@ public class SuksesskriterieBegrunnelseRequest implements Validated {
     private int suksesskriterieId;
     private String begrunnelse;
     private Boolean oppfylt;
+    private Boolean ikkeRelevant;
 
     @Override
     public void format() {
