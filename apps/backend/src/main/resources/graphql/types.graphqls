@@ -135,6 +135,7 @@ type SuksesskriterieBegrunnelse {
     suksesskriterieId: Int!
     begrunnelse: String
     oppfylt: Boolean
+    ikkeRelevant: Boolean
 }
 
 enum EtterlevelseStatus {
