@@ -352,17 +352,6 @@ const kravSchema = () =>
         return true
       },
     }),
-    relevansFor: yup.array().test({
-      name: 'relevansForCheck',
-      message: errorMessage,
-      test: function (relevansFor) {
-        const {parent} = this
-        if (parent.status === KravStatus.AKTIV || parent.status === KravStatus.UNDER_ARBEID) {
-          return relevansFor && relevansFor.length > 0 ? true : false
-        }
-        return true
-      },
-    }),
     varslingsadresser: yup.array().test({
       name: 'varslingsadresserCheck',
       message: errorMessage,
@@ -380,7 +369,16 @@ const kravSchema = () =>
       test: function (dokumentasjon) {
         const {parent} = this
         if (parent.status === KravStatus.AKTIV || parent.status === KravStatus.UNDER_ARBEID) {
-          return dokumentasjon && dokumentasjon.length > 0 ? true : false
+          if(dokumentasjon && dokumentasjon.length > 1) {
+            let temp = true
+            dokumentasjon.forEach((d: string) => {
+              if(!d.startsWith('[')){
+                temp = false
+              }
+            })
+
+            return temp
+          }
         }
         return true
       },
