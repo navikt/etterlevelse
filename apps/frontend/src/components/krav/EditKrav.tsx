@@ -6,7 +6,7 @@ import React, {useEffect} from 'react'
 import * as yup from 'yup'
 import {codelist, ListName} from '../../services/Codelist'
 import {kravStatus} from '../../pages/KravPage'
-import {InputField, MultiInputField, MultiOptionField, OptionField, TextAreaField} from '../common/Inputs'
+import {InputField, MultiInputField, OptionField, TextAreaField} from '../common/Inputs'
 import axios from 'axios'
 import {env} from '../../util/env'
 import {KravVarslingsadresserEdit} from './Edit/KravVarslingsadresserEdit'
@@ -24,7 +24,7 @@ import {ErrorMessageModal} from "./ErrorMessageModal";
 import {KIND as NKIND, Notification} from "baseui/notification";
 import {faTimesCircle} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import { EditKravMultiOptionField } from './Edit/EditKravMultiOptionField'
+import {EditKravMultiOptionField} from './Edit/EditKravMultiOptionField'
 
 type EditKravProps = {
   krav: KravQL
@@ -94,7 +94,7 @@ export const EditKrav = ({krav, close, formRef, isOpen, setIsOpen}: EditKravProp
           initialValues={mapToFormVal(krav)}
           validationSchema={kravSchema()}
           innerRef={formRef}>
-          {({touched, errors, isSubmitting, submitForm}) => (
+          {({touched, errors, isSubmitting, submitForm,setErrors}) => (
             <Form>
               <Block
                 backgroundColor={ettlevColors.green800}
@@ -166,6 +166,7 @@ export const EditKrav = ({krav, close, formRef, isOpen, setIsOpen}: EditKravProp
                       label="Lenke eller websaknr"
                       tooltip="Lenke til dokumentasjon"
                       linkTooltip={'Legg inn referanse til utdypende dokumentasjon (lenke). Eksempelvis til navet, eksterne nettsider eller Websak.'}
+                      setErrors={setErrors}
                     />
                     {errors.dokumentasjon && <ErrorMessageModal msg={errors.dokumentasjon} fullWidth={true}/>}
                     <KravRegelverkEdit/>
@@ -359,26 +360,6 @@ const kravSchema = () =>
         const {parent} = this
         if (parent.status === KravStatus.AKTIV || parent.status === KravStatus.UNDER_ARBEID) {
           return varslingsadresser && varslingsadresser.length > 0 ? true : false
-        }
-        return true
-      },
-    }),
-    dokumentasjon: yup.array().test({
-      name: 'dokumentasjonCheck',
-      message: errorMessage,
-      test: function (dokumentasjon) {
-        const {parent} = this
-        if (parent.status === KravStatus.AKTIV || parent.status === KravStatus.UNDER_ARBEID) {
-          if(dokumentasjon && dokumentasjon.length > 1) {
-            let temp = true
-            dokumentasjon.forEach((d: string) => {
-              if(!d.startsWith('[')){
-                temp = false
-              }
-            })
-
-            return temp
-          }
         }
         return true
       },

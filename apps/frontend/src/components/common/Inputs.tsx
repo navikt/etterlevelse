@@ -191,6 +191,7 @@ export const MultiInputField = (props: {
   tooltip?: string
   maxInputWidth?: string
   marginBottom?: string
+  setErrors?: Function
 }) => {
   const [val, setVal] = useState('')
   const [linkName, setLinkName] = useState('')
@@ -214,10 +215,20 @@ export const MultiInputField = (props: {
       <FieldArray name={props.name}>
         {(p: FieldArrayRenderProps) => {
           const add = () => {
-            if (!val) return
-            if (linkName) {
+            if (linkName && val) {
               p.push(`[${linkName}](${val})`)
-            } else p.push(val)
+            } else if (linkName && !val) {
+              p.push(linkName)
+            } else if (!linkName && !val) {
+              return
+            } else {
+              const errorMessage = {}
+              const name = props.name
+              // @ts-ignore
+              errorMessage[name] = "Feltet er påkrevd"
+              props.setErrors && props.setErrors(errorMessage)
+              return
+            }
             setVal('')
             setLinkName('')
           }
@@ -265,7 +276,7 @@ export const MultiInputField = (props: {
                       overrides={{
                         Input: {
                           style: {
-                            backgroundColor: p.form.errors[props.name] && ettlevColors.error50 ,
+                            backgroundColor: p.form.errors[props.name] && ettlevColors.error50,
                           }
                         },
                         Root: {
@@ -330,8 +341,8 @@ export const OptionList = (
       aria-label={props.label}
       overrides={{
         ControlContainer: {
-          style:{
-            borderWidth:'2px'
+          style: {
+            borderWidth: '2px'
           }
         }
       }}
@@ -341,12 +352,12 @@ export const OptionList = (
 
 export const MultiOptionField = (
   props: {
-    label: string;
-    name: string;
-    caption?: ReactNode;
-    tooltip?: string;
-    marginBottom?: string;
-  }
+      label: string;
+      name: string;
+      caption?: ReactNode;
+      tooltip?: string;
+      marginBottom?: string;
+    }
     & Or<{ options: Value }, { listName: ListName }>,
 ) => {
   const options: Value = props.options || codelist.getParsedOptions(props.listName)
