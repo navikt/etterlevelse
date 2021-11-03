@@ -222,11 +222,7 @@ export const MultiInputField = (props: {
             } else if (!linkName && !val) {
               return
             } else {
-              const errorMessage = {}
-              const name = props.name
-              // @ts-ignore
-              errorMessage[name] = "Feltet er påkrevd"
-              props.setErrors && props.setErrors(errorMessage)
+              props.setErrors && props.setErrors()
               return
             }
             setVal('')

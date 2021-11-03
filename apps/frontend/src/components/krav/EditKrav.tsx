@@ -1,30 +1,30 @@
-import {Krav, KravQL, KravStatus} from '../../constants'
-import {Form, Formik} from 'formik'
-import {createKrav, mapToFormVal, updateKrav} from '../../api/KravApi'
-import {Block} from 'baseui/block'
-import React, {useEffect} from 'react'
+import { Krav, KravQL, KravStatus } from '../../constants'
+import { Form, Formik } from 'formik'
+import { createKrav, mapToFormVal, updateKrav } from '../../api/KravApi'
+import { Block } from 'baseui/block'
+import React, { useEffect } from 'react'
 import * as yup from 'yup'
-import {codelist, ListName} from '../../services/Codelist'
-import {kravStatus} from '../../pages/KravPage'
-import {InputField, MultiInputField, OptionField, TextAreaField} from '../common/Inputs'
+import { codelist, ListName } from '../../services/Codelist'
+import { kravStatus } from '../../pages/KravPage'
+import { InputField, MultiInputField, OptionField, TextAreaField } from '../common/Inputs'
 import axios from 'axios'
-import {env} from '../../util/env'
-import {KravVarslingsadresserEdit} from './Edit/KravVarslingsadresserEdit'
-import {KravRegelverkEdit} from './Edit/KravRegelverkEdit'
-import {KravSuksesskriterierEdit} from './Edit/KravSuksesskriterieEdit'
-import {EditBegreper} from './Edit/KravBegreperEdit'
-import {H1, H2, LabelLarge} from 'baseui/typography'
+import { env } from '../../util/env'
+import { KravVarslingsadresserEdit } from './Edit/KravVarslingsadresserEdit'
+import { KravRegelverkEdit } from './Edit/KravRegelverkEdit'
+import { KravSuksesskriterierEdit } from './Edit/KravSuksesskriterieEdit'
+import { EditBegreper } from './Edit/KravBegreperEdit'
+import { H1, H2, LabelLarge } from 'baseui/typography'
 import CustomizedModal from '../common/CustomizedModal'
 import Button from '../common/Button'
-import {ettlevColors, maxPageWidth, responsivePaddingLarge, responsiveWidthLarge, theme} from '../../util/theme'
-import {getEtterlevelserByKravNumberKravVersion} from "../../api/EtterlevelseApi";
+import { ettlevColors, maxPageWidth, responsivePaddingLarge, responsiveWidthLarge, theme } from '../../util/theme'
+import { getEtterlevelserByKravNumberKravVersion } from "../../api/EtterlevelseApi";
 import ErrorModal from "../ErrorModal";
-import {Error} from "../common/ModalSchema";
-import {ErrorMessageModal} from "./ErrorMessageModal";
-import {KIND as NKIND, Notification} from "baseui/notification";
-import {faTimesCircle} from "@fortawesome/free-solid-svg-icons";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {EditKravMultiOptionField} from './Edit/EditKravMultiOptionField'
+import { Error } from "../common/ModalSchema";
+import { ErrorMessageModal } from "./ErrorMessageModal";
+import { KIND as NKIND, Notification } from "baseui/notification";
+import { faTimesCircle } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { EditKravMultiOptionField } from './Edit/EditKravMultiOptionField'
 
 type EditKravProps = {
   krav: KravQL
@@ -42,7 +42,7 @@ const inputMarginBottom = theme.sizing.scale900
 
 export const kravModal = () => document.querySelector('#krav-modal')
 
-export const EditKrav = ({krav, close, formRef, isOpen, setIsOpen}: EditKravProps) => {
+export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravProps) => {
   const [stickyHeader, setStickyHeader] = React.useState(false)
   const [showErrorModal, setShowErrorModal] = React.useState(false)
   const [errorMessage, setErrorMessage] = React.useState('')
@@ -94,7 +94,7 @@ export const EditKrav = ({krav, close, formRef, isOpen, setIsOpen}: EditKravProp
           initialValues={mapToFormVal(krav)}
           validationSchema={kravSchema()}
           innerRef={formRef}>
-          {({touched, errors, isSubmitting, submitForm,setErrors}) => (
+          {({ touched, errors, isSubmitting, submitForm, setErrors }) => (
             <Form>
               <Block
                 backgroundColor={ettlevColors.green800}
@@ -105,17 +105,17 @@ export const EditKrav = ({krav, close, formRef, isOpen, setIsOpen}: EditKravProp
                 position="sticky"
                 top={0}
                 display={!stickyHeader ? 'block' : 'flex'}
-                $style={{zIndex: 3}}
+                $style={{ zIndex: 3 }}
               >
                 {stickyHeader && (
                   <Block display="flex" width="100%" justifyContent="flex-start">
-                    <LabelLarge $style={{color: '#F8F8F8'}}>{`K${krav.kravNummer}.${krav.kravVersjon} ${krav.navn}`}</LabelLarge>
+                    <LabelLarge $style={{ color: '#F8F8F8' }}>{`K${krav.kravNummer}.${krav.kravVersjon} ${krav.navn}`}</LabelLarge>
                   </Block>
                 )}
                 {!stickyHeader && (
                   <Block>
-                    <H1 $style={{color: '#F8F8F8'}}>Rediger kravside: </H1>
-                    <H2 $style={{color: '#F8F8F8'}}>{`K${krav.kravNummer}.${krav.kravVersjon} ${krav.navn}`} </H2>
+                    <H1 $style={{ color: '#F8F8F8' }}>Rediger kravside: </H1>
+                    <H2 $style={{ color: '#F8F8F8' }}>{`K${krav.kravNummer}.${krav.kravVersjon} ${krav.navn}`} </H2>
                   </Block>
                 )}
               </Block>
@@ -137,14 +137,14 @@ export const EditKrav = ({krav, close, formRef, isOpen, setIsOpen}: EditKravProp
                     onImageUpload={onImageUpload(krav.id)}
                     tooltip={'Bruk noen setninger på å forklare hensikten med kravet. Formålet er at leseren skal forstå hvorfor vi har dette kravet.'}
                   />
-                  <Error fieldName={'hensikt'} fullWidth/>
+                  <Error fieldName={'hensikt'} fullWidth />
 
                 </Block>
 
                 <Block display="flex" width="100%" justifyContent="center">
                   <Block width={responsiveWidthLarge}>
                     <H2 marginBottom={inputMarginBottom}>Suksesskriterier</H2>
-                    <KravSuksesskriterierEdit/>
+                    <KravSuksesskriterierEdit />
                     {/*
                   <TextAreaField marginBottom='80px' label='Beskrivelse' name='beskrivelse' markdown shortenLinks onImageUpload={onImageUpload(krav.id)}
                     tooltip={'Beskriv selve innholdet i kravet.'} />
@@ -166,11 +166,11 @@ export const EditKrav = ({krav, close, formRef, isOpen, setIsOpen}: EditKravProp
                       label="Lenke eller websaknr"
                       tooltip="Lenke til dokumentasjon"
                       linkTooltip={'Legg inn referanse til utdypende dokumentasjon (lenke). Eksempelvis til navet, eksterne nettsider eller Websak.'}
-                      setErrors={setErrors}
+                      setErrors={() => setErrors({dokumentasjon: 'Må ha navn på kilde.'})}
                     />
-                    {errors.dokumentasjon && <ErrorMessageModal msg={errors.dokumentasjon} fullWidth={true}/>}
-                    <KravRegelverkEdit/>
-                    {errors.regelverk && <ErrorMessageModal msg={errors.regelverk} fullWidth={true}/>}
+                    {errors.dokumentasjon && <ErrorMessageModal msg={errors.dokumentasjon} fullWidth={true} />}
+                    <KravRegelverkEdit />
+                    {errors.regelverk && <ErrorMessageModal msg={errors.regelverk} fullWidth={true} />}
                     <TextAreaField
                       label="Relevante implementasjoner"
                       name="implementasjoner"
@@ -203,7 +203,7 @@ export const EditKrav = ({krav, close, formRef, isOpen, setIsOpen}: EditKravProp
                         listName={ListName.RELEVANS}
                         tooltip={'Velg kategori(er) kravet er relevant for i nedtrekksmenyen. \n'}
                       />
-                      {errors.relevansFor && <ErrorMessageModal msg={errors.relevansFor} fullWidth={true}/>}
+                      {errors.relevansFor && <ErrorMessageModal msg={errors.relevansFor} fullWidth={true} />}
                     </Block>
 
                     <MultiInputField
@@ -215,7 +215,7 @@ export const EditKrav = ({krav, close, formRef, isOpen, setIsOpen}: EditKravProp
                     />
 
                     <Block width="100%" maxWidth={maxInputWidth} marginBottom="80px">
-                      <EditBegreper/>
+                      <EditBegreper />
                     </Block>
 
                     <Block marginBottom={inputMarginBottom}>
@@ -226,13 +226,13 @@ export const EditKrav = ({krav, close, formRef, isOpen, setIsOpen}: EditKravProp
                       <OptionField
                         label="Status"
                         name="status"
-                        options={Object.values(KravStatus).map((id) => ({id, label: kravStatus(id)}))}
+                        options={Object.values(KravStatus).map((id) => ({ id, label: kravStatus(id) }))}
                         tooltip={'Velg status for kravet. Utkast er kun synlig for kraveier selv. Aktiv/utgått er synlig for alle.'}
                       />
                     </Block>
 
-                    <KravVarslingsadresserEdit/>
-                    {errors.varslingsadresser && <ErrorMessageModal msg={errors.varslingsadresser} fullWidth={true}/>}
+                    <KravVarslingsadresserEdit />
+                    {errors.varslingsadresser && <ErrorMessageModal msg={errors.varslingsadresser} fullWidth={true} />}
                     {/*
 
                                     <OptionField label='Ansvarlig' name='Ansvarlig' listName={ListName.UNDERAVDELING}
@@ -247,13 +247,13 @@ export const EditKrav = ({krav, close, formRef, isOpen, setIsOpen}: EditKravProp
                                      tooltip={'Gi informasjon om hva som er endret siden forrige versjon av kravet.'}/>
                                      */}
                     <Block width={'100%'}>
-                      {Object.keys(errors).length > 0 && (
+                      {Object.keys(errors).length > 0 && !errors.dokumentasjon && (
                         <Block display="flex" width="100%" marginTop="3rem" marginBottom=".6em">
                           <Block width="100%">
-                            <Notification overrides={{Body: {style: {width: 'auto'}}}} kind={NKIND.negative}>
+                            <Notification overrides={{ Body: { style: { width: 'auto' } } }} kind={NKIND.negative}>
                               <FontAwesomeIcon icon={faTimesCircle} style={{
-                                marginRight : '5px'
-                              }}/>
+                                marginRight: '5px'
+                              }} />
                               Du må fylle ut alle obligatoriske felter
                             </Notification>
                           </Block>
@@ -291,10 +291,10 @@ export const EditKrav = ({krav, close, formRef, isOpen, setIsOpen}: EditKravProp
                 </Block>
 
                 <Block backgroundColor={ettlevColors.grey50} paddingTop="48px" paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge} paddingBottom="64px">
-                  <TextAreaField label="Notater (Kun synlig for kraveier)" name="notat" height="250px" markdown tooltip={'Kraveiers notater'}/>
+                  <TextAreaField label="Notater (Kun synlig for kraveier)" name="notat" height="250px" markdown tooltip={'Kraveiers notater'} />
                 </Block>
               </Block>
-              <ErrorModal isOpen={showErrorModal} errorMessage={errorMessage} submit={setShowErrorModal}/>
+              <ErrorModal isOpen={showErrorModal} errorMessage={errorMessage} submit={setShowErrorModal} />
             </Form>
           )}
         </Formik>
@@ -305,7 +305,7 @@ export const EditKrav = ({krav, close, formRef, isOpen, setIsOpen}: EditKravProp
 
 
 const onImageUpload = (kravId: string) => async (file: File) => {
-  const config = {headers: {'content-type': 'multipart/form-data'}}
+  const config = { headers: { 'content-type': 'multipart/form-data' } }
   const formData = new FormData()
   formData.append('file', file)
   const id = (await axios.post<string[]>(`${env.backendBaseUrl}/krav/${kravId}/files`, formData, config)).data[0]
@@ -324,7 +324,7 @@ const kravSchema = () =>
       name: 'suksesskriterierCheck',
       message: errorMessage,
       test: function (suksesskriterier) {
-        const {parent} = this
+        const { parent } = this
         if (parent.status === KravStatus.AKTIV || parent.status === KravStatus.UNDER_ARBEID) {
           return suksesskriterier && suksesskriterier.length > 0 ? true : false
         }
@@ -335,7 +335,7 @@ const kravSchema = () =>
       name: 'hensiktCheck',
       message: errorMessage,
       test: function (hensikt) {
-        const {parent} = this
+        const { parent } = this
         if (parent.status === KravStatus.AKTIV || parent.status === KravStatus.UNDER_ARBEID) {
           return hensikt ? true : false
         }
@@ -346,7 +346,7 @@ const kravSchema = () =>
       name: 'regelverkCheck',
       message: errorMessage,
       test: function (regelverk) {
-        const {parent} = this
+        const { parent } = this
         if (parent.status === KravStatus.AKTIV || parent.status === KravStatus.UNDER_ARBEID) {
           return regelverk && regelverk.length > 0 ? true : false
         }
@@ -357,7 +357,7 @@ const kravSchema = () =>
       name: 'varslingsadresserCheck',
       message: errorMessage,
       test: function (varslingsadresser) {
-        const {parent} = this
+        const { parent } = this
         if (parent.status === KravStatus.AKTIV || parent.status === KravStatus.UNDER_ARBEID) {
           return varslingsadresser && varslingsadresser.length > 0 ? true : false
         }
