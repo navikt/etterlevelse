@@ -43,12 +43,13 @@ const etterlevelseSchema = () => {
     suksesskriterieBegrunnelser: yup.array().of(
       yup.object({
         oppfylt: yup.boolean(),
+        ikkeRelevant: yup.boolean(),
         begrunnelse: yup.string().test({
           name: 'begrunnelseText',
           message: 'Du må fylle ut dokumentasjonen',
           test: function (begrunnelse) {
             const { parent } = this
-            return (parent.oppfylt && !!begrunnelse === true) || !parent.oppfylt
+            return ((parent.oppfylt || parent.ikkeRelevant) && !!begrunnelse === true) || (!parent.oppfylt && !parent.ikkeRelevant)
           },
         }),
         suksesskriterieId: yup.number().required('Begrunnelse må være knyttet til et suksesskriterie'),
@@ -72,7 +73,7 @@ const etterlevelseSchema = () => {
       test: function (status) {
         const { parent } = this
         if (status === EtterlevelseStatus.FERDIG || status === EtterlevelseStatus.FERDIG_DOKUMENTERT) {
-          return parent.suksesskriterieBegrunnelser.every((skb: any) => skb.oppfylt && !!skb.begrunnelse)
+          return parent.suksesskriterieBegrunnelser.every((skb: any) => (skb.oppfylt || skb.ikkeRelevant) && !!skb.begrunnelse)
         }
         return true
       },
