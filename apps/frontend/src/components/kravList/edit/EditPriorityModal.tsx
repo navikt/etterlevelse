@@ -115,7 +115,7 @@ export const EditPriorityModal = (props: { isOpen: boolean; onClose: Function; k
           Dialog: {
             style: {
               ...borderRadius('0px'),
-              background: ettlevColors.white
+              backgroundColor: ettlevColors.white
             }
           }
         }}>
