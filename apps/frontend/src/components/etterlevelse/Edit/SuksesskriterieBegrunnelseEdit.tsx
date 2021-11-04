@@ -3,7 +3,7 @@ import { FormControl } from 'baseui/form-control'
 import { H3, Label3 } from 'baseui/typography'
 import { FieldArray, FieldArrayRenderProps } from 'formik'
 import React from 'react'
-import { Suksesskriterie, SuksesskriterieBegrunnelse } from '../../../constants'
+import { EtterlevelseStatus, Suksesskriterie, SuksesskriterieBegrunnelse } from '../../../constants'
 import { useDebouncedState } from '../../../util/hooks'
 import { ettlevColors, theme } from '../../../util/theme'
 import { CustomizedAccordion, CustomizedPanel } from '../../common/CustomizedAccordion'
@@ -47,6 +47,7 @@ const KriterieBegrunnelseList = ({ props, suksesskriterie, disableEdit }: { prop
         return (
           <Block key={s.navn + '_' + i}>
             <KriterieBegrunnelse
+              status={props.form.values.status}
               disableEdit={disableEdit}
               suksesskriterie={s}
               index={i}
@@ -66,12 +67,14 @@ const KriterieBegrunnelse = ({
   suksesskriterieBegrunnelser,
   disableEdit,
   update,
+  status,
 }: {
   suksesskriterie: Suksesskriterie
   index: number
   suksesskriterieBegrunnelser: SuksesskriterieBegrunnelse[]
   disableEdit: boolean
-  update: (s: SuksesskriterieBegrunnelse) => void
+  update: (s: SuksesskriterieBegrunnelse) => void,
+  status: string
 }) => {
   const suksesskriterieBegrunnelse = getSuksesskriterieBegrunnelse(suksesskriterieBegrunnelser, suksesskriterie)
   const debounceDelay = 500
@@ -83,20 +86,23 @@ const KriterieBegrunnelse = ({
     update({ suksesskriterieId: suksesskriterie.id, begrunnelse: begrunnelse, oppfylt: oppfylt, ikkeRelevant: ikkerelevant })
   }, [begrunnelse, oppfylt, ikkerelevant])
 
-  const buttonOverrides = (): ButtonOverrides => {
-    return {
-      BaseButton: {
-        style: {
-          ...borderColor(ettlevColors.green800),
-          ...borderStyle('solid'),
-          ...borderWidth('1px')
-        }
+  const getBorderColor = () => {
+    if (status === EtterlevelseStatus.FERDIG || status === EtterlevelseStatus.FERDIG_DOKUMENTERT) {
+      if ((!oppfylt && !ikkerelevant) || !begrunnelse) {
+        return { border: '2px solid #842D08' }
       }
+    } else {
+      return { border: '1px solid #C9C9C9' }
     }
   }
 
   return (
-    <Block $style={{ border: '1px solid #C9C9C9' }} backgroundColor={ettlevColors.white} padding={theme.sizing.scale750} marginBottom={theme.sizing.scale600}>
+    <Block
+      $style={getBorderColor()}
+      backgroundColor={ettlevColors.white}
+      padding={theme.sizing.scale750}
+      marginBottom={theme.sizing.scale600}
+    >
 
       <H3 color={ettlevColors.green800}>
         {suksesskriterie.navn}
