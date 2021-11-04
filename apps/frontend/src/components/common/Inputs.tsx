@@ -192,6 +192,7 @@ export const MultiInputField = (props: {
   tooltip?: string
   maxInputWidth?: string
   marginBottom?: string
+  setErrors?: Function
 }) => {
   const [val, setVal] = useState('')
   const [linkName, setLinkName] = useState('')
@@ -215,10 +216,16 @@ export const MultiInputField = (props: {
       <FieldArray name={props.name}>
         {(p: FieldArrayRenderProps) => {
           const add = () => {
-            if (!val) return
-            if (linkName) {
+            if (linkName && val) {
               p.push(`[${linkName}](${val})`)
-            } else p.push(val)
+            } else if (linkName && !val) {
+              p.push(linkName)
+            } else if (!linkName && !val) {
+              return
+            } else {
+              props.setErrors && props.setErrors()
+              return
+            }
             setVal('')
             setLinkName('')
           }
@@ -266,7 +273,7 @@ export const MultiInputField = (props: {
                       overrides={{
                         Input: {
                           style: {
-                            backgroundColor: p.form.errors[props.name] && ettlevColors.error50 ,
+                            backgroundColor: p.form.errors[props.name] && ettlevColors.error50,
                           }
                         },
                         Root: {
@@ -342,12 +349,12 @@ export const OptionList = (
 
 export const MultiOptionField = (
   props: {
-    label: string;
-    name: string;
-    caption?: ReactNode;
-    tooltip?: string;
-    marginBottom?: string;
-  }
+      label: string;
+      name: string;
+      caption?: ReactNode;
+      tooltip?: string;
+      marginBottom?: string;
+    }
     & Or<{ options: Value }, { listName: ListName }>,
 ) => {
   const options: Value = props.options || codelist.getParsedOptions(props.listName)
