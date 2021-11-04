@@ -69,7 +69,7 @@ const etterlevelseSchema = () => {
     ,
     status: yup.string().test({
       name: 'etterlevelseStatus',
-      message: 'Du må dokumentere på alle suksesskriterier før du er ferdig',
+      message: 'Du må dokumentere alle kriterier før du har dokumentert  ferdig. Du kan velge å lagre og fortsette senere.',
       test: function (status) {
         const { parent } = this
         if (status === EtterlevelseStatus.FERDIG || status === EtterlevelseStatus.FERDIG_DOKUMENTERT) {
@@ -157,7 +157,6 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
               <Form>
                 <Block>
                   <Block paddingBottom={theme.sizing.scale1600}>
-
                     <FieldWrapper>
                       <Field name={'status'}>
                         {(p: FieldProps<string | Code>) => (
