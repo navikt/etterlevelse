@@ -12,6 +12,7 @@ import {Block} from 'baseui/block'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
 import {searchIcon} from '../../Images'
 import CustomizedSelect from '../../common/CustomizedSelect'
+import { borderWidth } from '../../common/Style'
 
 export const EditBegreper = () => {
   const [result, setSearch, loading] = useBegrepSearch()
@@ -51,7 +52,7 @@ export const EditBegreper = () => {
                     },
                     ControlContainer:{
                       style:{
-                        borderWidth:'2px'
+                        ...borderWidth('2px')
                       }
                     }
                   }}
