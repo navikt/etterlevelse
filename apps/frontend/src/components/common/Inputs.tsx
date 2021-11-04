@@ -19,6 +19,7 @@ import CustomizedTextarea from './CustomizedTextarea'
 import TextEditor from './TextEditor/TextEditor'
 import {Error} from "./ModalSchema";
 import {ettlevColors} from "../../util/theme";
+import { borderWidth } from './Style'
 
 export const FieldWrapper = ({children, marginBottom}: { children: React.ReactNode; marginBottom?: string }) => {
   return <Block marginBottom={marginBottom ? marginBottom : '1.5rem'}>{children}</Block>
@@ -337,8 +338,8 @@ export const OptionList = (
       aria-label={props.label}
       overrides={{
         ControlContainer: {
-          style: {
-            borderWidth: '2px'
+          style:{
+            ...borderWidth('2px')
           }
         }
       }}

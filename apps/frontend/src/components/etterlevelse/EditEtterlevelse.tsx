@@ -1,27 +1,29 @@
-import { Etterlevelse, EtterlevelseStatus, Krav } from '../../constants'
-import { Field, FieldProps, Form, Formik, FormikProps } from 'formik'
-import { createEtterlevelse, mapEtterlevelseToFormValue, updateEtterlevelse } from '../../api/EtterlevelseApi'
-import { Block } from 'baseui/block'
+import {Etterlevelse, EtterlevelseStatus, Krav} from '../../constants'
+import {Field, FieldProps, Form, Formik, FormikProps} from 'formik'
+import {createEtterlevelse, mapEtterlevelseToFormValue, updateEtterlevelse} from '../../api/EtterlevelseApi'
+import {Block} from 'baseui/block'
 import Button from '../common/Button'
-import React, { useEffect } from 'react'
+import React, {useEffect} from 'react'
 import * as yup from 'yup'
-import { getEtterlevelseStatus } from '../../pages/EtterlevelsePage'
-import { DateField, FieldWrapper, TextAreaField } from '../common/Inputs'
-import { theme } from '../../util'
-import { FormControl } from 'baseui/form-control'
-import { getKravByKravNumberAndVersion, useKrav, useSearchKrav } from '../../api/KravApi'
-import { kravName, kravNumView } from '../../pages/KravPage'
-import { behandlingName, useBehandling, useSearchBehandling } from '../../api/BehandlingApi'
+import {getEtterlevelseStatus} from '../../pages/EtterlevelsePage'
+import {DateField, FieldWrapper, TextAreaField} from '../common/Inputs'
+import {theme} from '../../util'
+import {FormControl} from 'baseui/form-control'
+import {getKravByKravNumberAndVersion, useKrav, useSearchKrav} from '../../api/KravApi'
+import {kravName, kravNumView} from '../../pages/KravPage'
+import {behandlingName, useBehandling, useSearchBehandling} from '../../api/BehandlingApi'
 import CustomizedSelect from '../common/CustomizedSelect'
-import { H1, H2, Label3, Paragraph2 } from 'baseui/typography'
-import { ExternalLink } from '../common/RouteLink'
-import { arkPennIcon } from '../Images'
-import { ettlevColors, responsivePaddingLarge } from '../../util/theme'
-import { SuksesskriterierBegrunnelseEdit } from './Edit/SuksesskriterieBegrunnelseEdit'
-import { Radio, RadioGroup } from 'baseui/radio'
-import { Code } from '../../services/Codelist'
-import { Error } from '../common/ModalSchema'
-import { user } from '../../services/User'
+import {H1, H2, Label3, Paragraph2} from 'baseui/typography'
+import {arkPennIcon} from '../Images'
+import {ettlevColors, responsivePaddingLarge} from '../../util/theme'
+import {SuksesskriterierBegrunnelseEdit} from './Edit/SuksesskriterieBegrunnelseEdit'
+import {Radio, RadioGroup} from 'baseui/radio'
+import {Code} from '../../services/Codelist'
+import {Error} from '../common/ModalSchema'
+import {user} from '../../services/User'
+import {KIND as NKIND, Notification} from "baseui/notification";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faTimesCircle} from "@fortawesome/free-solid-svg-icons";
 
 type EditEttlevProps = {
   etterlevelse: Etterlevelse
@@ -43,12 +45,13 @@ const etterlevelseSchema = () => {
     suksesskriterieBegrunnelser: yup.array().of(
       yup.object({
         oppfylt: yup.boolean(),
+        ikkeRelevant: yup.boolean(),
         begrunnelse: yup.string().test({
           name: 'begrunnelseText',
           message: 'Du må fylle ut dokumentasjonen',
           test: function (begrunnelse) {
             const { parent } = this
-            return (parent.oppfylt && !!begrunnelse === true) || !parent.oppfylt
+            return ((parent.oppfylt || parent.ikkeRelevant) && !!begrunnelse === true) || (!parent.oppfylt && !parent.ikkeRelevant)
           },
         }),
         suksesskriterieId: yup.number().required('Begrunnelse må være knyttet til et suksesskriterie'),
@@ -68,11 +71,11 @@ const etterlevelseSchema = () => {
     ,
     status: yup.string().test({
       name: 'etterlevelseStatus',
-      message: 'Du må dokumentere på alle suksesskriterier før du er ferdig',
+      message: 'Du må dokumentere alle kriterier før du har dokumentert  ferdig. Du kan velge å lagre og fortsette senere.',
       test: function (status) {
         const { parent } = this
         if (status === EtterlevelseStatus.FERDIG || status === EtterlevelseStatus.FERDIG_DOKUMENTERT) {
-          return parent.suksesskriterieBegrunnelser.every((skb: any) => skb.oppfylt && !!skb.begrunnelse)
+          return parent.suksesskriterieBegrunnelser.every((skb: any) => (skb.oppfylt || skb.ikkeRelevant) && !!skb.begrunnelse)
         }
         return true
       },
@@ -152,36 +155,10 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
       <Block paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge}>
         <Block marginTop="51px">
           <Formik onSubmit={submit} initialValues={mapEtterlevelseToFormValue(etterlevelse)} validationSchema={etterlevelseSchema()} innerRef={formRef}>
-            {({ values, isSubmitting, submitForm }: FormikProps<Etterlevelse>) => (
+            {({ values, isSubmitting, submitForm, errors}: FormikProps<Etterlevelse>) => (
               <Form>
                 <Block>
-                  <Block paddingTop={theme.sizing.scale1000} paddingBottom={theme.sizing.scale1600}>
-                    <Label3 $style={{ lineHeight: '32px' }}>Hvilke suksesskriterier er oppfylt?</Label3>
-
-                    <SuksesskriterierBegrunnelseEdit disableEdit={disableEdit} suksesskriterie={krav.suksesskriterier} />
-
-                    {/*
-              {!documentEdit &&
-                <>
-                  <Block height={theme.sizing.scale600} />
-
-                  <BoolField label='Etterleves' name='etterleves' />
-                </>
-              }
-
-              <TextAreaField label='Dokumentasjon' name='begrunnelse' markdown />
-              */}
-
-                    {/*
-          <MultiInputField label='Dokumentasjon' name='dokumentasjon'/>
-
-          <Block height={theme.sizing.scale600}/>
-
-          <DateField label='Frist for ferdigstillelse' name='fristForFerdigstillelse'/>
-
-          <Block height={theme.sizing.scale600}/>
-         */}
-
+                  <Block paddingBottom={theme.sizing.scale1200}>
                     <FieldWrapper>
                       <Field name={'status'}>
                         {(p: FieldProps<string | Code>) => (
@@ -280,7 +257,50 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
                         )}
                       </Field>
                     </FieldWrapper>
-                    <Error fieldName={'status'} fullWidth={true} />
+
+
+                    <Label3 $style={{ lineHeight: '32px' }}>Hvilke suksesskriterier er oppfylt?</Label3>
+
+                    <SuksesskriterierBegrunnelseEdit disableEdit={disableEdit} suksesskriterie={krav.suksesskriterier} />
+
+                    {/*
+              {!documentEdit &&
+                <>
+                  <Block height={theme.sizing.scale600} />
+
+                  <BoolField label='Etterleves' name='etterleves' />
+                </>
+              }
+
+              <TextAreaField label='Dokumentasjon' name='begrunnelse' markdown />
+              */}
+
+                    {/*
+          <MultiInputField label='Dokumentasjon' name='dokumentasjon'/>
+
+          <Block height={theme.sizing.scale600}/>
+
+          <DateField label='Frist for ferdigstillelse' name='fristForFerdigstillelse'/>
+
+          <Block height={theme.sizing.scale600}/>
+         */}
+
+
+                    <Error fieldName={'status'} fullWidth={true}/>
+                    <Block width={'100%'} marginTop={"65px"}>
+                      {Object.keys(errors).length > 0 && (
+                        <Block display="flex" width="60%">
+                          <Block width="100%">
+                            <Notification overrides={{Body: {style: {width: 'auto'}}}} kind={NKIND.negative}>
+                              <FontAwesomeIcon icon={faTimesCircle} style={{
+                                marginRight : '5px'
+                              }}/>
+                              Du må fylle ut alle obligatoriske felter
+                            </Notification>
+                          </Block>
+                        </Block>
+                      )}
+                    </Block>
                   </Block>
                 </Block>
 

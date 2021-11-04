@@ -1,10 +1,9 @@
 import { Block } from 'baseui/block'
-import { Checkbox } from 'baseui/checkbox'
 import { FormControl } from 'baseui/form-control'
-import { Label3, Paragraph2 } from 'baseui/typography'
+import { H3, Label3, Paragraph2 } from 'baseui/typography'
 import { FieldArray, FieldArrayRenderProps } from 'formik'
-import React from 'react'
-import { Suksesskriterie, SuksesskriterieBegrunnelse } from '../../../constants'
+import React, { useEffect } from 'react'
+import { EtterlevelseStatus, Suksesskriterie, SuksesskriterieBegrunnelse } from '../../../constants'
 import { useDebouncedState } from '../../../util/hooks'
 import { ettlevColors, theme } from '../../../util/theme'
 import { CustomizedAccordion, CustomizedPanel } from '../../common/CustomizedAccordion'
@@ -15,6 +14,8 @@ import { Error } from '../../common/ModalSchema'
 import LabelWithToolTip from '../../common/LabelWithTooltip'
 import { borderColor, borderStyle, borderWidth } from '../../common/Style'
 import { LabelAboveContent } from '../../common/PropertyLabel'
+import { MODE, StatefulButtonGroup } from 'baseui/button-group'
+import { Button, ButtonOverrides } from 'baseui/button'
 
 const paddingLeft = '30px'
 
@@ -23,7 +24,7 @@ export const getSuksesskriterieBegrunnelse = (suksesskriterieBegrunnelser: Sukse
     return item.suksesskriterieId === suksessKriterie.id
   })
   if (!sb) {
-    return { suksesskriterieId: suksessKriterie.id, begrunnelse: '', oppfylt: false }
+    return { suksesskriterieId: suksessKriterie.id, begrunnelse: '', oppfylt: false, ikkeRelevant: false }
   } else {
     return sb
   }
@@ -46,6 +47,7 @@ const KriterieBegrunnelseList = ({ props, suksesskriterie, disableEdit }: { prop
         return (
           <Block key={s.navn + '_' + i}>
             <KriterieBegrunnelse
+              status={props.form.values.status}
               disableEdit={disableEdit}
               suksesskriterie={s}
               index={i}
@@ -65,46 +67,98 @@ const KriterieBegrunnelse = ({
   suksesskriterieBegrunnelser,
   disableEdit,
   update,
+  status,
 }: {
   suksesskriterie: Suksesskriterie
   index: number
   suksesskriterieBegrunnelser: SuksesskriterieBegrunnelse[]
   disableEdit: boolean
-  update: (s: SuksesskriterieBegrunnelse) => void
+  update: (s: SuksesskriterieBegrunnelse) => void,
+  status: string
 }) => {
   const suksesskriterieBegrunnelse = getSuksesskriterieBegrunnelse(suksesskriterieBegrunnelser, suksesskriterie)
   const debounceDelay = 500
-  const [checked, setChecked] = React.useState(!!suksesskriterieBegrunnelse.oppfylt)
-  const [textHover, setTextHover] = React.useState(false)
   const [begrunnelse, setBegrunnelse] = useDebouncedState(suksesskriterieBegrunnelse.begrunnelse || '', debounceDelay)
+  const [oppfylt, setOppfylt] = React.useState(suksesskriterieBegrunnelse.oppfylt)
+  const [ikkerelevant, setIkkeRelevant] = React.useState(suksesskriterieBegrunnelse.ikkeRelevant)
 
   React.useEffect(() => {
-    update({ suksesskriterieId: suksesskriterie.id, begrunnelse: begrunnelse, oppfylt: checked })
-  }, [begrunnelse, checked])
+    update({ suksesskriterieId: suksesskriterie.id, begrunnelse: begrunnelse, oppfylt: oppfylt, ikkeRelevant: ikkerelevant })
+  }, [begrunnelse, oppfylt, ikkerelevant])
+
+  const getBorderColor = () => {
+    if (status === EtterlevelseStatus.FERDIG || status === EtterlevelseStatus.FERDIG_DOKUMENTERT) {
+      if ((!oppfylt && !ikkerelevant) || !begrunnelse) {
+        return { border: '2px solid #842D08' }
+      }
+    } else {
+      return { border: '1px solid #C9C9C9' }
+    }
+  }
 
   return (
-    <Block $style={{ border: '1px solid #C9C9C9' }} backgroundColor={ettlevColors.white} padding={theme.sizing.scale750} marginBottom={theme.sizing.scale600}>
-      <Checkbox
-        checked={checked}
-        disabled={disableEdit}
-        onChange={() => setChecked(!checked)}
-        onMouseEnter={() => setTextHover(true)}
-        onMouseLeave={() => setTextHover(false)}
-        overrides={{
-          Checkmark: {
-            style: {
-              ...borderWidth('1px'),
-            },
-          },
-        }}
-      >
-        <Paragraph2 margin="0px" $style={{ textDecoration: textHover ? 'underline' : 'none' }}>
-          {suksesskriterie.navn}
-        </Paragraph2>
-      </Checkbox>
+    <Block
+      $style={getBorderColor()}
+      backgroundColor={status === EtterlevelseStatus.IKKE_RELEVANT ? ettlevColors.grey50 : ettlevColors.white}
+      padding={theme.sizing.scale750}
+      marginBottom={theme.sizing.scale600}
+    >
 
-      {checked && !disableEdit && (
-        <Block paddingLeft={paddingLeft} marginTop={theme.sizing.scale1000}>
+      <H3 color={ettlevColors.green800}>
+        {suksesskriterie.navn}
+      </H3>
+
+      <StatefulButtonGroup
+        mode={MODE.radio}
+        initialState={{ selected: oppfylt ? 0 : ikkerelevant ? 1 : [] }}
+      >
+        <Button
+          type={'button'}
+          disabled={status === EtterlevelseStatus.IKKE_RELEVANT}
+          overrides={{
+            BaseButton: {
+              style: {
+                ...borderColor(ettlevColors.green800),
+                ...borderStyle('solid'),
+                ...borderWidth('1px'),
+                borderRightWidth: '0px',
+                borderTopRightRadius: '0px',
+                borderBottomRightRadius: '0px'
+              }
+            }
+          }}
+          onClick={() => {
+            setOppfylt(!oppfylt)
+            setIkkeRelevant(false)
+          }}
+        >
+          Vi Oppfyller
+        </Button>
+        <Button
+          type={'button'}
+          disabled={status === EtterlevelseStatus.IKKE_RELEVANT}
+          overrides={{
+            BaseButton: {
+              style: {
+                ...borderColor(ettlevColors.green800),
+                ...borderStyle('solid'),
+                ...borderWidth('1px'),
+                borderTopLeftRadius: '0px',
+                borderBottomLeftRadius: '0px'
+              }
+            }
+          }}
+          onClick={() => {
+            setIkkeRelevant(!ikkerelevant)
+            setOppfylt(false)
+          }}
+        >
+          Ikke relevant
+        </Button>
+      </StatefulButtonGroup>
+
+      {(oppfylt || ikkerelevant) && status !== EtterlevelseStatus.IKKE_RELEVANT && !disableEdit && (
+        <Block marginTop={theme.sizing.scale1000}>
           <FormControl label={<LabelWithToolTip label="Dokumentasjon" />}>
             <TextEditor initialValue={begrunnelse} setValue={setBegrunnelse} height={'188px'} />
           </FormControl>
@@ -112,21 +166,35 @@ const KriterieBegrunnelse = ({
         </Block>
       )}
 
-      {checked && disableEdit && (
+      {(oppfylt || ikkerelevant) && disableEdit && (
         <Block paddingLeft={paddingLeft} marginTop={theme.sizing.scale1000}>
           <LabelAboveContent title="Dokumentasjon" markdown={begrunnelse} />
         </Block>
       )}
 
+      <Block width="100%" height="1px" backgroundColor={ettlevColors.grey100} marginTop="40px" />
+      {status === EtterlevelseStatus.IKKE_RELEVANT &&
+        <Block width="100%" display="flex" justifyContent="flex-end" marginTop="20px" marginBottom="-29px">
+          <Paragraph2
+            $style={{
+              marginTop: '0px',
+              marginBottom: '0px',
+              color: ettlevColors.red600,
+              fontStyle: 'italic'
+            }}
+          >
+            Ikke relevant
+          </Paragraph2>
+        </Block>}
       <CustomizedAccordion>
         <CustomizedPanel
           title={<Label3 $style={{ color: ettlevColors.green600 }}>Utfyllende om kriteriet</Label3>}
           overrides={{
             Header: {
               style: {
-                backgroundColor: 'transparent',
+                backgroundColor: status === EtterlevelseStatus.IKKE_RELEVANT ? ettlevColors.grey50 : ettlevColors.white,
                 maxWidth: '210px',
-                paddingLeft: paddingLeft,
+                paddingLeft: '0px',
                 ':hover': {
                   boxShadow: 'none',
                 },
@@ -134,16 +202,17 @@ const KriterieBegrunnelse = ({
             },
             Content: {
               style: {
-                backgroundColor: 'transparent',
+                backgroundColor: status === EtterlevelseStatus.IKKE_RELEVANT ? ettlevColors.grey50 : ettlevColors.white,
                 borderBottomWidth: 'none',
                 borderBottomStyle: 'none',
                 borderBottomColor: 'none',
-                paddingLeft: paddingLeft,
+                paddingLeft: '0px',
               },
             },
             PanelContainer: {
               style: {
                 ...borderStyle('hidden'),
+                backgroundColor: status === EtterlevelseStatus.IKKE_RELEVANT ? ettlevColors.grey50 : ettlevColors.white,
               },
             },
           }}

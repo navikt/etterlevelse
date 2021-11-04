@@ -18,15 +18,13 @@ import { Block } from 'baseui/block'
 import { ettlevColors, responsivePaddingLarge } from '../../../util/theme'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGripVertical } from '@fortawesome/free-solid-svg-icons'
-import { ModalBody, ModalButton, ModalFooter, ROLE, SIZE } from "baseui/modal";
-import { KIND } from "baseui/button";
 
 export const EditPriorityModal = (props: { isOpen: boolean; onClose: Function; kravListe: Krav[], tema: string, refresh: Function }) => {
   const { isOpen, onClose, kravListe, tema, refresh } = props
   const [items, setItems] = React.useState<ReactElement[]>([])
   const [kravElements, setKravElements] = React.useState<Krav[]>(kravListe)
   const [loading, setLoading] = React.useState(false)
-  const [isOpenWarningModal, setIsOpenWarningModal] = React.useState(false);
+
   useEffect(() => {
     setItems(kravListe.map((k) => {
       return (
@@ -113,131 +111,102 @@ export const EditPriorityModal = (props: { isOpen: boolean; onClose: Function; k
       }
     >
       {(p) => (
-        <>
-          <CustomizedModal isOpen={isOpen} size="auto" overrides={{
-            Dialog: {
-              style: {
-                ...borderRadius('0px'),
-                background: ettlevColors.white
-              }
+        <CustomizedModal isOpen={isOpen} size="auto" overrides={{
+          Dialog: {
+            style: {
+              ...borderRadius('0px'),
+              backgroundColor: ettlevColors.white
             }
-          }}>
-            <Block
-              backgroundColor={ettlevColors.green800}
-              paddingTop="23px"
-              paddingBottom="48px"
-              paddingLeft={responsivePaddingLarge}
-              paddingRight={responsivePaddingLarge}
-              maxHeight="55px"
-              marginBottom="54px"
-            >
-              <H1 $style={{ lineHeight: '48px', color: ettlevColors.white }}>
-                Justere rekkefølgen på krav
-              </H1>
-            </Block>
-            <Block
-              display="flex"
-              justifyContent="center"
-              paddingLeft={responsivePaddingLarge}
-              paddingRight={responsivePaddingLarge}
-            >
-              <Block display="flex" justifyContent="flex-start" flex="1">
-                <H2 $style={{ lineHeight: '24px', color: ettlevColors.green600, marginTop: '0px', marginBottom: '0px' }}>
-                  {tema}
-                </H2>
-              </Block>
-              <Block display="flex" justifyContent="flex-end" flex="1">
-                <Paragraph2 $style={{ marginTop: '0px', marginBottom: '0px', color: ettlevColors.green800 }}>
-                  Klikk og dra kravene i ønsket rekkefølge
-                </Paragraph2>
-              </Block>
-            </Block>
-            <Block
-              paddingLeft={responsivePaddingLarge}
-              paddingRight={responsivePaddingLarge}
-            >
-              {loading ?
-                <Block display="flex" justifyContent="center">
-                  <Spinner size={theme.sizing.scale1200} />
-                </Block>
-                :
-                <Form>
-                  <FieldWrapper>
-                    <FieldArray name={'krav'}>{(p) => (
-                      <List
-                        items={items}
-                        onChange={({ oldIndex, newIndex }) => {
-                          setItems(arrayMove(items, oldIndex, newIndex))
-                          setKravElements(arrayMove(kravElements, oldIndex, newIndex))
-                        }}
-                        overrides={{
-                          DragHandle: CustomDragHandle,
-                          Root: {
-                            style: {
-                              ...paddingZero
-                            }
-                          },
-                          Item: {
-                            style: {
-                              ...paddingZero,
-                              flexDirection: 'row-reverse'
-                            }
-                          },
-                        }}
-                      />
-                    )}</FieldArray>
-                  </FieldWrapper>
-                </Form>
-              }
-              <Block paddingBottom="23px" display="flex" justifyContent="flex-end">
-                <Button onClick={() => setIsOpenWarningModal(true)} disabled={loading}>Abryt</Button>
-                <Button
-                  size="compact"
-                  kind="secondary"
-                  onClick={p.submitForm}
-                  disabled={loading}
-                  marginLeft>
-                  Lagre
-                </Button>
-              </Block>
-            </Block>
-          </CustomizedModal>
-          <CustomizedModal
-            onClose={() => setIsOpenWarningModal(false)}
-            closeable
-            isOpen={isOpenWarningModal}
-            animate
-            autoFocus
-            size={SIZE.auto}
-            role={ROLE.dialog}
-            overrides={{
-              Dialog: {
-                style: {
-                  width: '30%'
-                }
-              }
-            }}
+          }
+        }}>
+          <Block
+            backgroundColor={ettlevColors.green800}
+            paddingTop="23px"
+            paddingBottom="48px"
+            paddingLeft={responsivePaddingLarge}
+            paddingRight={responsivePaddingLarge}
+            maxHeight="55px"
+            marginBottom="54px"
           >
-            <ModalBody $style={{
-              display: 'flex',
-              justifyContent: 'center',
-              marginTop: '30px',
-              marginBottom: '0px'
-            }}>
-              Er du sikkert på at du vil abryte uten å lagre?
-            </ModalBody>
-            <ModalFooter>
-              <ModalButton kind={KIND.tertiary} onClick={() => setIsOpenWarningModal(false)}>
-                Nei
-              </ModalButton>
-              <ModalButton onClick={() => {
-                setIsOpenWarningModal(false)
-                refresh()
-                onClose()
-              }}>Ja</ModalButton>
-            </ModalFooter>
-          </CustomizedModal>
-        </>
+            <H1 $style={{ lineHeight: '48px', color: ettlevColors.white }}>
+              Justere rekkefølgen på krav
+            </H1>
+          </Block>
+          <Block
+            display="flex"
+            justifyContent="center"
+            paddingLeft={responsivePaddingLarge}
+            paddingRight={responsivePaddingLarge}
+          >
+            <Block display="flex" justifyContent="flex-start" flex="1">
+              <H2 $style={{ lineHeight: '24px', color: ettlevColors.green600, marginTop: '0px', marginBottom: '0px' }}>
+                {tema}
+              </H2>
+            </Block>
+            <Block display="flex" justifyContent="flex-end" flex="1">
+              <Paragraph2 $style={{ marginTop: '0px', marginBottom: '0px', color: ettlevColors.green800 }}>
+                Klikk og dra kravene i ønsket rekkefølge
+              </Paragraph2>
+            </Block>
+          </Block>
+          <Block
+            paddingLeft={responsivePaddingLarge}
+            paddingRight={responsivePaddingLarge}
+          >
+            {loading ?
+              <Block display="flex" justifyContent="center">
+                <Spinner size={theme.sizing.scale1200} />
+              </Block>
+              :
+              <Form>
+                <FieldWrapper>
+                  <FieldArray name={'krav'}>{(p) => (
+                    <List
+                      items={items}
+                      onChange={({ oldIndex, newIndex }) => {
+                        setItems(arrayMove(items, oldIndex, newIndex))
+                        setKravElements(arrayMove(kravElements, oldIndex, newIndex))
+                      }}
+                      overrides={{
+                        DragHandle: CustomDragHandle,
+                        Root: {
+                          style: {
+                            ...paddingZero
+                          }
+                        },
+                        Item: {
+                          style: {
+                            ...paddingZero,
+                            flexDirection: 'row-reverse'
+                          }
+                        },
+                      }}
+                    />
+                  )}</FieldArray>
+                </FieldWrapper>
+              </Form>
+            }
+            <Block paddingBottom="23px" display="flex" justifyContent="flex-end">
+              <Button
+                onClick={() => {
+                  refresh()
+                  onClose()
+                }}
+                disabled={loading}
+              >
+                Abryt
+              </Button>
+              <Button
+                size="compact"
+                kind="secondary"
+                onClick={p.submitForm}
+                disabled={loading}
+                marginLeft>
+                Lagre
+              </Button>
+            </Block>
+          </Block>
+        </CustomizedModal>
       )}
     </Formik>)
 }

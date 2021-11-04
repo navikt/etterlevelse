@@ -14,7 +14,7 @@ import {Regelverk} from '../../../constants'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
 import CustomizedInput from '../../common/CustomizedInput'
 import {ettlevColors} from "../../../util/theme";
-import {borderWidth} from '../../common/Style'
+import {borderColor, borderWidth} from '../../common/Style'
 import {navChevronDownIcon} from '../../Images'
 import _ from 'lodash'
 
@@ -89,11 +89,8 @@ export const KravRegelverkEdit = () => {
                           ControlContainer: {
                             style: {
                               backgroundColor: p.form.errors.regelverk && ettlevColors.error50,
-                              borderRightColor: p.form.errors.regelverk ? ettlevColors.red600 : ettlevColors.grey200,
-                              borderLeftColor: p.form.errors.regelverk ? ettlevColors.red600 : ettlevColors.grey200,
-                              borderTopColor: p.form.errors.regelverk ? ettlevColors.red600 : ettlevColors.grey200,
-                              borderBottomColor: p.form.errors.regelverk ? ettlevColors.red600 : ettlevColors.grey200,
-                              borderWidth: '2px'
+                              ...borderColor(p.form.errors.regelverk ? ettlevColors.red600 : ettlevColors.grey200),
+                              ...borderWidth('2px')
                             }
                           }
                         }}

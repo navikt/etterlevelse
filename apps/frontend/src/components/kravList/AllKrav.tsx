@@ -12,6 +12,7 @@ import { H2, Label3, LabelSmall, Paragraph2 } from "baseui/typography";
 import Button from "../common/Button";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { KravPanels, sortKrav } from "../../pages/KravListPageV2";
+import { borderColor } from "../common/Style";
 
 type KravFilter = {
   status: Option[]
@@ -203,7 +204,7 @@ export const AllKrav = () => {
               ControlContainer: {
                 style: {
                   backgroundColor: filterId === 'alle' ? ettlevColors.white : ettlevColors.green50,
-                  borderColor: filterId === 'alle' ? ettlevColors.grey200 : ettlevColors.green800,
+                  ...borderColor(filterId === 'alle' ? ettlevColors.grey200 : ettlevColors.green800),
                 }
               }
             }

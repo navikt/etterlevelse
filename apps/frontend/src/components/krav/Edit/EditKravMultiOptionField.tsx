@@ -9,7 +9,7 @@ import { ListName, codelist, Code } from '../../../services/Codelist'
 import { ettlevColors } from '../../../util/theme'
 import { FieldWrapper } from '../../common/Inputs'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
-import { borderWidth } from '../../common/Style'
+import { borderColor, borderWidth } from '../../common/Style'
 import { RenderTagList } from '../../common/TagList'
 import { navChevronDownIcon } from '../../Images'
 
@@ -73,11 +73,8 @@ export const EditKravMultiOptionField = (
                       ...overrides,
                       ControlContainer: {
                         style: {
-                          background: p.form.errors[props.name] && ettlevColors.error50,
-                          borderRightColor: p.form.errors[props.name] ? ettlevColors.red600 : ettlevColors.grey200,
-                          borderLeftColor: p.form.errors[props.name] ? ettlevColors.red600 : ettlevColors.grey200,
-                          borderTopColor: p.form.errors[props.name] ? ettlevColors.red600 : ettlevColors.grey200,
-                          borderBottomColor: p.form.errors[props.name] ? ettlevColors.red600 : ettlevColors.grey200
+                          backgroundColor: p.form.errors[props.name] && ettlevColors.error50,
+                          ...borderColor(p.form.errors[props.name] ? ettlevColors.red600 : ettlevColors.grey200),
                         }
                       }
                     }}
