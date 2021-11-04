@@ -156,32 +156,7 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
             {({ values, isSubmitting, submitForm }: FormikProps<Etterlevelse>) => (
               <Form>
                 <Block>
-                  <Block paddingTop={theme.sizing.scale1000} paddingBottom={theme.sizing.scale1600}>
-                    <Label3 $style={{ lineHeight: '32px' }}>Hvilke suksesskriterier er oppfylt?</Label3>
-
-                    <SuksesskriterierBegrunnelseEdit disableEdit={disableEdit} suksesskriterie={krav.suksesskriterier} />
-
-                    {/*
-              {!documentEdit &&
-                <>
-                  <Block height={theme.sizing.scale600} />
-
-                  <BoolField label='Etterleves' name='etterleves' />
-                </>
-              }
-
-              <TextAreaField label='Dokumentasjon' name='begrunnelse' markdown />
-              */}
-
-                    {/*
-          <MultiInputField label='Dokumentasjon' name='dokumentasjon'/>
-
-          <Block height={theme.sizing.scale600}/>
-
-          <DateField label='Frist for ferdigstillelse' name='fristForFerdigstillelse'/>
-
-          <Block height={theme.sizing.scale600}/>
-         */}
+                  <Block paddingBottom={theme.sizing.scale1600}>
 
                     <FieldWrapper>
                       <Field name={'status'}>
@@ -281,6 +256,35 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
                         )}
                       </Field>
                     </FieldWrapper>
+
+
+                    <Label3 $style={{ lineHeight: '32px' }}>Hvilke suksesskriterier er oppfylt?</Label3>
+
+                    <SuksesskriterierBegrunnelseEdit disableEdit={disableEdit} suksesskriterie={krav.suksesskriterier} />
+
+                    {/*
+              {!documentEdit &&
+                <>
+                  <Block height={theme.sizing.scale600} />
+
+                  <BoolField label='Etterleves' name='etterleves' />
+                </>
+              }
+
+              <TextAreaField label='Dokumentasjon' name='begrunnelse' markdown />
+              */}
+
+                    {/*
+          <MultiInputField label='Dokumentasjon' name='dokumentasjon'/>
+
+          <Block height={theme.sizing.scale600}/>
+
+          <DateField label='Frist for ferdigstillelse' name='fristForFerdigstillelse'/>
+
+          <Block height={theme.sizing.scale600}/>
+         */}
+
+
                     <Error fieldName={'status'} fullWidth={true} />
                   </Block>
                 </Block>
