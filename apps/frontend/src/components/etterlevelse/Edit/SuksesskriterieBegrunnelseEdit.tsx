@@ -1,8 +1,8 @@
 import { Block } from 'baseui/block'
 import { FormControl } from 'baseui/form-control'
-import { H3, Label3 } from 'baseui/typography'
+import { H3, Label3, Paragraph2 } from 'baseui/typography'
 import { FieldArray, FieldArrayRenderProps } from 'formik'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { EtterlevelseStatus, Suksesskriterie, SuksesskriterieBegrunnelse } from '../../../constants'
 import { useDebouncedState } from '../../../util/hooks'
 import { ettlevColors, theme } from '../../../util/theme'
@@ -79,8 +79,8 @@ const KriterieBegrunnelse = ({
   const suksesskriterieBegrunnelse = getSuksesskriterieBegrunnelse(suksesskriterieBegrunnelser, suksesskriterie)
   const debounceDelay = 500
   const [begrunnelse, setBegrunnelse] = useDebouncedState(suksesskriterieBegrunnelse.begrunnelse || '', debounceDelay)
-  const [oppfylt, setOppfylt] = React.useState(!!suksesskriterieBegrunnelse.oppfylt)
-  const [ikkerelevant, setIkkeRelevant] = React.useState(!!suksesskriterieBegrunnelse.ikkeRelevant)
+  const [oppfylt, setOppfylt] = React.useState(suksesskriterieBegrunnelse.oppfylt)
+  const [ikkerelevant, setIkkeRelevant] = React.useState(suksesskriterieBegrunnelse.ikkeRelevant)
 
   React.useEffect(() => {
     update({ suksesskriterieId: suksesskriterie.id, begrunnelse: begrunnelse, oppfylt: oppfylt, ikkeRelevant: ikkerelevant })
@@ -99,7 +99,7 @@ const KriterieBegrunnelse = ({
   return (
     <Block
       $style={getBorderColor()}
-      backgroundColor={ettlevColors.white}
+      backgroundColor={status === EtterlevelseStatus.IKKE_RELEVANT ? ettlevColors.grey50 : ettlevColors.white}
       padding={theme.sizing.scale750}
       marginBottom={theme.sizing.scale600}
     >
@@ -114,6 +114,7 @@ const KriterieBegrunnelse = ({
       >
         <Button
           type={'button'}
+          disabled={status === EtterlevelseStatus.IKKE_RELEVANT}
           overrides={{
             BaseButton: {
               style: {
@@ -135,6 +136,7 @@ const KriterieBegrunnelse = ({
         </Button>
         <Button
           type={'button'}
+          disabled={status === EtterlevelseStatus.IKKE_RELEVANT}
           overrides={{
             BaseButton: {
               style: {
@@ -155,7 +157,7 @@ const KriterieBegrunnelse = ({
         </Button>
       </StatefulButtonGroup>
 
-      {(oppfylt || ikkerelevant) && !disableEdit && (
+      {(oppfylt || ikkerelevant) && status !== EtterlevelseStatus.IKKE_RELEVANT && !disableEdit && (
         <Block marginTop={theme.sizing.scale1000}>
           <FormControl label={<LabelWithToolTip label="Dokumentasjon" />}>
             <TextEditor initialValue={begrunnelse} setValue={setBegrunnelse} height={'188px'} />
@@ -171,13 +173,26 @@ const KriterieBegrunnelse = ({
       )}
 
       <Block width="100%" height="1px" backgroundColor={ettlevColors.grey100} marginTop="40px" />
+      {status === EtterlevelseStatus.IKKE_RELEVANT &&
+        <Block width="100%" display="flex" justifyContent="flex-end" marginTop="20px" marginBottom="-29px">
+          <Paragraph2
+            $style={{
+              marginTop: '0px',
+              marginBottom: '0px',
+              color: ettlevColors.red600,
+              fontStyle: 'italic'
+            }}
+          >
+            Ikke relevant
+          </Paragraph2>
+        </Block>}
       <CustomizedAccordion>
         <CustomizedPanel
           title={<Label3 $style={{ color: ettlevColors.green600 }}>Utfyllende om kriteriet</Label3>}
           overrides={{
             Header: {
               style: {
-                backgroundColor: 'transparent',
+                backgroundColor: status === EtterlevelseStatus.IKKE_RELEVANT ? ettlevColors.grey50 : ettlevColors.white,
                 maxWidth: '210px',
                 paddingLeft: '0px',
                 ':hover': {
@@ -187,7 +202,7 @@ const KriterieBegrunnelse = ({
             },
             Content: {
               style: {
-                backgroundColor: 'transparent',
+                backgroundColor: status === EtterlevelseStatus.IKKE_RELEVANT ? ettlevColors.grey50 : ettlevColors.white,
                 borderBottomWidth: 'none',
                 borderBottomStyle: 'none',
                 borderBottomColor: 'none',
@@ -197,6 +212,7 @@ const KriterieBegrunnelse = ({
             PanelContainer: {
               style: {
                 ...borderStyle('hidden'),
+                backgroundColor: status === EtterlevelseStatus.IKKE_RELEVANT ? ettlevColors.grey50 : ettlevColors.white,
               },
             },
           }}
