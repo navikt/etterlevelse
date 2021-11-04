@@ -1,20 +1,21 @@
-import { Block } from 'baseui/block'
-import { Checkbox } from 'baseui/checkbox'
-import { FormControl } from 'baseui/form-control'
-import { Label3, Paragraph2 } from 'baseui/typography'
-import { FieldArray, FieldArrayRenderProps } from 'formik'
+import {Block} from 'baseui/block'
+import {FormControl} from 'baseui/form-control'
+import {Label3} from 'baseui/typography'
+import {FieldArray, FieldArrayRenderProps} from 'formik'
 import React from 'react'
-import { Suksesskriterie, SuksesskriterieBegrunnelse } from '../../../constants'
-import { useDebouncedState } from '../../../util/hooks'
-import { ettlevColors, theme } from '../../../util/theme'
-import { CustomizedAccordion, CustomizedPanel } from '../../common/CustomizedAccordion'
-import { FieldWrapper } from '../../common/Inputs'
-import { Markdown } from '../../common/Markdown'
+import {Suksesskriterie, SuksesskriterieBegrunnelse} from '../../../constants'
+import {useDebouncedState} from '../../../util/hooks'
+import {ettlevColors, theme} from '../../../util/theme'
+import {CustomizedAccordion, CustomizedPanel} from '../../common/CustomizedAccordion'
+import {FieldWrapper} from '../../common/Inputs'
+import {Markdown} from '../../common/Markdown'
 import TextEditor from '../../common/TextEditor/TextEditor'
-import { Error } from '../../common/ModalSchema'
+import {Error} from '../../common/ModalSchema'
 import LabelWithToolTip from '../../common/LabelWithTooltip'
-import { borderColor, borderStyle, borderWidth } from '../../common/Style'
-import { LabelAboveContent } from '../../common/PropertyLabel'
+import {borderStyle} from '../../common/Style'
+import {LabelAboveContent} from '../../common/PropertyLabel'
+import {MODE, StatefulButtonGroup} from 'baseui/button-group'
+import {Button} from "baseui/button";
 
 const paddingLeft = '30px'
 
@@ -23,21 +24,21 @@ export const getSuksesskriterieBegrunnelse = (suksesskriterieBegrunnelser: Sukse
     return item.suksesskriterieId === suksessKriterie.id
   })
   if (!sb) {
-    return { suksesskriterieId: suksessKriterie.id, begrunnelse: '', oppfylt: false }
+    return {suksesskriterieId: suksessKriterie.id, begrunnelse: '', oppfylt: false, ikkeRelevant: false}
   } else {
     return sb
   }
 }
 
-export const SuksesskriterierBegrunnelseEdit = ({ suksesskriterie, disableEdit }: { suksesskriterie: Suksesskriterie[]; disableEdit: boolean }) => {
+export const SuksesskriterierBegrunnelseEdit = ({suksesskriterie, disableEdit}: { suksesskriterie: Suksesskriterie[]; disableEdit: boolean }) => {
   return (
     <FieldWrapper>
-      <FieldArray name={'suksesskriterieBegrunnelser'}>{(p) => <KriterieBegrunnelseList props={p} disableEdit={disableEdit} suksesskriterie={suksesskriterie} />}</FieldArray>
+      <FieldArray name={'suksesskriterieBegrunnelser'}>{(p) => <KriterieBegrunnelseList props={p} disableEdit={disableEdit} suksesskriterie={suksesskriterie}/>}</FieldArray>
     </FieldWrapper>
   )
 }
 
-const KriterieBegrunnelseList = ({ props, suksesskriterie, disableEdit }: { props: FieldArrayRenderProps; suksesskriterie: Suksesskriterie[]; disableEdit: boolean }) => {
+const KriterieBegrunnelseList = ({props, suksesskriterie, disableEdit}: { props: FieldArrayRenderProps; suksesskriterie: Suksesskriterie[]; disableEdit: boolean }) => {
   const suksesskriterieBegrunnelser = props.form.values.suksesskriterieBegrunnelser as SuksesskriterieBegrunnelse[]
 
   return (
@@ -60,12 +61,12 @@ const KriterieBegrunnelseList = ({ props, suksesskriterie, disableEdit }: { prop
 }
 
 const KriterieBegrunnelse = ({
-  suksesskriterie,
-  index,
-  suksesskriterieBegrunnelser,
-  disableEdit,
-  update,
-}: {
+                               suksesskriterie,
+                               index,
+                               suksesskriterieBegrunnelser,
+                               disableEdit,
+                               update,
+                             }: {
   suksesskriterie: Suksesskriterie
   index: number
   suksesskriterieBegrunnelser: SuksesskriterieBegrunnelse[]
@@ -74,53 +75,48 @@ const KriterieBegrunnelse = ({
 }) => {
   const suksesskriterieBegrunnelse = getSuksesskriterieBegrunnelse(suksesskriterieBegrunnelser, suksesskriterie)
   const debounceDelay = 500
-  const [checked, setChecked] = React.useState(!!suksesskriterieBegrunnelse.oppfylt)
-  const [textHover, setTextHover] = React.useState(false)
   const [begrunnelse, setBegrunnelse] = useDebouncedState(suksesskriterieBegrunnelse.begrunnelse || '', debounceDelay)
+  const [oppfylt, setOppfylt] = React.useState(!!suksesskriterieBegrunnelse.oppfylt)
+  const [ikkerelevant, setIkkeRelevant] = React.useState(!!suksesskriterieBegrunnelse.ikkeRelevant)
 
   React.useEffect(() => {
-    update({ suksesskriterieId: suksesskriterie.id, begrunnelse: begrunnelse, oppfylt: checked })
-  }, [begrunnelse, checked])
+    update({suksesskriterieId: suksesskriterie.id, begrunnelse: begrunnelse, oppfylt: oppfylt, ikkeRelevant: ikkerelevant})
+  }, [begrunnelse, oppfylt,ikkerelevant])
 
   return (
-    <Block $style={{ border: '1px solid #C9C9C9' }} backgroundColor={ettlevColors.white} padding={theme.sizing.scale750} marginBottom={theme.sizing.scale600}>
-      <Checkbox
-        checked={checked}
-        disabled={disableEdit}
-        onChange={() => setChecked(!checked)}
-        onMouseEnter={() => setTextHover(true)}
-        onMouseLeave={() => setTextHover(false)}
-        overrides={{
-          Checkmark: {
-            style: {
-              ...borderWidth('1px'),
-            },
-          },
-        }}
+    <Block $style={{border: '1px solid #C9C9C9'}} backgroundColor={ettlevColors.white} padding={theme.sizing.scale750} marginBottom={theme.sizing.scale600}>
+      <StatefulButtonGroup
+        mode={MODE.radio}
+        initialState={{selected: oppfylt ? 0 : ikkerelevant ? 1 : []}}
       >
-        <Paragraph2 margin="0px" $style={{ textDecoration: textHover ? 'underline' : 'none' }}>
-          {suksesskriterie.navn}
-        </Paragraph2>
-      </Checkbox>
+        <Button type={'button'} onClick={(e) => {
+          setOppfylt(!oppfylt)
+          setIkkeRelevant(false)
+        }}>Vi Oppfyller</Button>
+        <Button type={'button'} onClick={(e) => {
+          setIkkeRelevant(!ikkerelevant)
+          setOppfylt(false)
+        }}>Ikke relevant</Button>
+      </StatefulButtonGroup>
 
-      {checked && !disableEdit && (
+      {(oppfylt || ikkerelevant) && !disableEdit && (
         <Block paddingLeft={paddingLeft} marginTop={theme.sizing.scale1000}>
-          <FormControl label={<LabelWithToolTip label="Dokumentasjon" />}>
-            <TextEditor initialValue={begrunnelse} setValue={setBegrunnelse} height={'188px'} />
+          <FormControl label={<LabelWithToolTip label="Dokumentasjon"/>}>
+            <TextEditor initialValue={begrunnelse} setValue={setBegrunnelse} height={'188px'}/>
           </FormControl>
-          <Error fieldName={`suksesskriterieBegrunnelser[${index}].begrunnelse`} fullWidth={true} />
+          <Error fieldName={`suksesskriterieBegrunnelser[${index}].begrunnelse`} fullWidth={true}/>
         </Block>
       )}
 
-      {checked && disableEdit && (
+      {(oppfylt || ikkerelevant) && disableEdit && (
         <Block paddingLeft={paddingLeft} marginTop={theme.sizing.scale1000}>
-          <LabelAboveContent title="Dokumentasjon" markdown={begrunnelse} />
+          <LabelAboveContent title="Dokumentasjon" markdown={begrunnelse}/>
         </Block>
       )}
 
       <CustomizedAccordion>
         <CustomizedPanel
-          title={<Label3 $style={{ color: ettlevColors.green600 }}>Utfyllende om kriteriet</Label3>}
+          title={<Label3 $style={{color: ettlevColors.green600}}>Utfyllende om kriteriet</Label3>}
           overrides={{
             Header: {
               style: {
@@ -148,7 +144,7 @@ const KriterieBegrunnelse = ({
             },
           }}
         >
-          <Markdown source={suksesskriterie.beskrivelse} />
+          <Markdown source={suksesskriterie.beskrivelse}/>
         </CustomizedPanel>
       </CustomizedAccordion>
     </Block>

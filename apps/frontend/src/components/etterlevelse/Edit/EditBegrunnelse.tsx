@@ -1,19 +1,19 @@
 import React from 'react'
-import { Etterlevelse, Krav, Suksesskriterie, SuksesskriterieBegrunnelse } from '../../../constants'
-import { mapEtterlevelseToFormValue, updateEtterlevelse } from '../../../api/EtterlevelseApi'
-import { FieldArray, FieldArrayRenderProps, Form, Formik, FormikProps } from 'formik'
-import { Card } from 'baseui/card'
-import { Block } from 'baseui/block'
-import { theme } from '../../../util'
-import { ettlevColors } from '../../../util/theme'
-import { getSuksesskriterieBegrunnelse } from './SuksesskriterieBegrunnelseEdit'
+import {Etterlevelse, Krav, Suksesskriterie, SuksesskriterieBegrunnelse} from '../../../constants'
+import {mapEtterlevelseToFormValue, updateEtterlevelse} from '../../../api/EtterlevelseApi'
+import {FieldArray, FieldArrayRenderProps, Form, Formik, FormikProps} from 'formik'
+import {Card} from 'baseui/card'
+import {Block} from 'baseui/block'
+import {theme} from '../../../util'
+import {ettlevColors} from '../../../util/theme'
+import {getSuksesskriterieBegrunnelse} from './SuksesskriterieBegrunnelseEdit'
 import * as yup from 'yup'
-import { FieldWrapper } from '../../common/Inputs'
-import { useDebouncedState } from '../../../util/hooks'
-import { Label3 } from 'baseui/typography'
-import { FormControl } from 'baseui/form-control'
+import {FieldWrapper} from '../../common/Inputs'
+import {useDebouncedState} from '../../../util/hooks'
+import {Label3} from 'baseui/typography'
+import {FormControl} from 'baseui/form-control'
 import TextEditor from '../../common/TextEditor/TextEditor'
-import { Error } from '../../common/ModalSchema'
+import {Error} from '../../common/ModalSchema'
 
 type EditBegrunnelseProps = {
   etterlevelse: Etterlevelse
@@ -103,7 +103,10 @@ const Begrunnelse = ({
   const [begrunnelse, setBegrunnelse] = useDebouncedState(suksesskriterieBegrunnelse.begrunnelse || '', debounceDelay)
 
   React.useEffect(() => {
-    update({ suksesskriterieId: suksesskriterie.id, begrunnelse: begrunnelse, oppfylt: suksesskriterieBegrunnelse.oppfylt })
+    update({ suksesskriterieId: suksesskriterie.id,
+      begrunnelse: begrunnelse,
+      oppfylt: suksesskriterieBegrunnelse.oppfylt,
+      ikkeRelevant: suksesskriterieBegrunnelse.ikkeRelevant })
   }, [begrunnelse])
 
   return (
