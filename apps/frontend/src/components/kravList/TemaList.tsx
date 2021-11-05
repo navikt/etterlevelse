@@ -93,7 +93,7 @@ const KravTemaList = (props: { kraver: Krav[]; tema: string; refresh: Function }
         <Block
           width="calc(100% - 44px)"
           $style={{
-            backgroundColor: ettlevColors.green50,
+            backgroundColor: ettlevColors.white,
             ...marginAll(theme.sizing.scale300),
             margintRight: '22px',
             marginLeft: '22px'
