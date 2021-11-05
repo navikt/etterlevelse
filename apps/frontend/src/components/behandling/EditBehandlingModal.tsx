@@ -3,7 +3,7 @@ import CustomizedModal from '../common/CustomizedModal'
 import Button from '../common/Button'
 import { Block } from 'baseui/block'
 import { theme } from '../../util'
-import { crossIcon } from '../Images'
+import { checkboxChecked, checkboxUnchecked, checkboxUncheckedHover, crossIcon } from '../Images'
 import { ettlevColors } from '../../util/theme'
 import { H1, H2, Paragraph2, Paragraph4 } from 'baseui/typography'
 import { Behandling, BehandlingEtterlevData, KravQL, PageResponse } from '../../constants'
@@ -175,30 +175,42 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
                         <ButtonGroup
                           mode="checkbox"
                           kind={KIND.secondary}
+                          selected={selected}
+                          size="mini"
+                          onClick={(e, i) => {
+                            if (!selected.includes(i)) {
+                              setSelected([...selected, i])
+                              p.remove(p.form.values.irrelevansFor.findIndex((ir: Code) => ir.code === options[i].id))
+                            } else {
+                              setSelected(selected.filter((value) => value !== i))
+                              p.push(codelist.getCode(ListName.RELEVANS, options[i].id as string))
+                            }
+                          }}
                           overrides={{
                             Root: {
                               style: {
-                                flexWrap: 'wrap'
+                                flexWrap: 'wrap',
                               }
                             }
                           }}
                         >
                           {options.map((r, i) => (
-                            <Checkbox
+                            <BaseUIButton
                               key={'relevans_' + r.id}
-                              checked={selected.includes(i)}
-                              labelPlacement={LABEL_PLACEMENT.right}
-                              onChange={(e) => {
-                                if (!selected.includes(i)) {
-                                  setSelected([...selected, i])
-                                  p.remove(p.form.values.irrelevansFor.findIndex((ir: Code) => ir.code === options[i].id))
+                              startEnhancer={() => {
+                                if (selected.includes(i)) {
+                                  return <img src={checkboxChecked} alt="" />
                                 } else {
-                                  setSelected(selected.filter((value) => value !== i))
-                                  p.push(codelist.getCode(ListName.RELEVANS, options[i].id as string))
+                                  return <img
+                                    src={checkboxUnchecked}
+                                    alt=""
+                                    onMouseEnter={(e) => e.currentTarget.src = checkboxUncheckedHover}
+                                    onMouseLeave={(e) => e.currentTarget.src = checkboxUnchecked}
+                                  />
                                 }
                               }}
                               overrides={{
-                                Root: {
+                                BaseButton: {
                                   style: {
                                     backgroundColor: selected.includes(i) ? ettlevColors.green100 : ettlevColors.white,
                                     border: '1px solid #6A6A6A',
@@ -209,20 +221,16 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
                                     marginRight: '16px',
                                     marginBottom: '16px',
                                     borderRadius: '4px',
-                                    ':hover': { boxShadow: '0px 2px 0px rgba(0, 0, 0, 0.25), inset 0px -1px 0px rgba(0, 0, 0, 0.25);' },
+                                    ':hover': {
+                                      boxShadow: '0px 2px 0px rgba(0, 0, 0, 0.25), inset 0px -1px 0px rgba(0, 0, 0, 0.25);',
+                                    },
                                     ':focus': {
                                       boxShadow: '0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 3px 0 rgba(0, 0, 0, .12)',
                                       outline: `3px solid ${ettlevColors.focusOutline}`,
                                     },
                                     width: '100%',
-                                    maxWidth: '260px'
-                                  },
-                                },
-                                Checkmark: {
-                                  style: {
-                                    ...borderStyle('solid'),
-                                    ...borderColor('#6A6A6A'),
-                                    ...borderWidth('1px'),
+                                    maxWidth: '260px',
+                                    justifyContent: 'flex-start'
                                   },
                                 },
                               }}
@@ -230,7 +238,7 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
                               <Paragraph2 margin="0px" $style={{ lineHeight: '22px' }}>
                                 {r.label}
                               </Paragraph2>
-                            </Checkbox>
+                            </BaseUIButton>
                           ))}
                         </ButtonGroup>
                       </Block>
