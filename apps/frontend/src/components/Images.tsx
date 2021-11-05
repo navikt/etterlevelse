@@ -53,10 +53,11 @@ import clearSearchIcon from '../resources/icons/clearSearchIcon.svg'
 import illustration from '../resources/giammarco-boscaro-zeH-ljawHtg-unsplash.jpg'
 import warningAlert from '../resources/icons/warning-alert.svg'
 import exitIcon from '../resources/icons/exit-icon.svg'
-import { codelist, ListName, LovCode, TemaCode } from '../services/Codelist'
+import handWithLeaf from '../resources/icons/hand-with-leaf.svg'
+import {codelist, ListName, LovCode, TemaCode} from '../services/Codelist'
 
 import React from 'react'
-import { theme } from '../util'
+import {theme} from '../util'
 
 export {
   pencilFill,
@@ -101,6 +102,7 @@ export {
   clearSearchIcon,
   exitIcon,
   warningAlert,
+  handWithLeaf
 }
 
 export const temaBilder: { [id: string]: string } = {
