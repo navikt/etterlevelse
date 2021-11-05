@@ -34,6 +34,7 @@ const paddingLeft = ['16px', '16px', '16px', '16px', theme.sizing.scale3200, the
 const EditBehandlingModal = (props: EditBehandlingModalProps) => {
   const options = codelist.getParsedOptions(ListName.RELEVANS)
   const [selected, setSelected] = React.useState<number[]>([])
+  const [hover, setHover] = React.useState<number[]>([])
 
   const { data } = useQuery<{ behandling: PageResponse<{ stats: BehandlingStats }> }>(statsQuery, {
     variables: { relevans: [] },
@@ -194,52 +195,63 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
                             }
                           }}
                         >
-                          {options.map((r, i) => (
-                            <BaseUIButton
-                              key={'relevans_' + r.id}
-                              startEnhancer={() => {
-                                if (selected.includes(i)) {
-                                  return <img src={checkboxChecked} alt="" />
-                                } else {
-                                  return <img
-                                    src={checkboxUnchecked}
-                                    alt=""
-                                    onMouseEnter={(e) => e.currentTarget.src = checkboxUncheckedHover}
-                                    onMouseLeave={(e) => e.currentTarget.src = checkboxUnchecked}
-                                  />
-                                }
-                              }}
-                              overrides={{
-                                BaseButton: {
-                                  style: {
-                                    backgroundColor: selected.includes(i) ? ettlevColors.green100 : ettlevColors.white,
-                                    border: '1px solid #6A6A6A',
-                                    paddingLeft: '8px',
-                                    paddingRight: '16px',
-                                    paddingTop: '8px',
-                                    paddingBottom: '10px',
-                                    marginRight: '16px',
-                                    marginBottom: '16px',
-                                    borderRadius: '4px',
-                                    ':hover': {
-                                      boxShadow: '0px 2px 0px rgba(0, 0, 0, 0.25), inset 0px -1px 0px rgba(0, 0, 0, 0.25);',
+                          {options.map((r, i) => {
+                            return (
+                              <BaseUIButton
+                                key={'relevans_' + r.id}
+                                startEnhancer={() => {
+                                  if (selected.includes(i)) {
+                                    return <img src={checkboxChecked} alt="" />
+                                  } else if (!selected.includes(i) && hover.includes(i)) {
+                                    return <img src={checkboxUncheckedHover} alt="" />
+                                  } else {
+                                    return <img
+                                      src={checkboxUnchecked}
+                                      alt=""
+                                      onMouseEnter={(e) => e.currentTarget.src = checkboxUncheckedHover}
+                                      onMouseLeave={(e) => e.currentTarget.src = checkboxUnchecked}
+                                    />
+                                  }
+                                }}
+                                overrides={{
+                                  BaseButton: {
+                                    style: {
+                                      backgroundColor: selected.includes(i) ? ettlevColors.green100 : ettlevColors.white,
+                                      border: '1px solid #6A6A6A',
+                                      paddingLeft: '8px',
+                                      paddingRight: '16px',
+                                      paddingTop: '8px',
+                                      paddingBottom: '10px',
+                                      marginRight: '16px',
+                                      marginBottom: '16px',
+                                      borderRadius: '4px',
+                                      ':hover': {
+                                        backgroundColor: ettlevColors.white,
+                                        boxShadow: '0px 2px 0px rgba(0, 0, 0, 0.25), inset 0px -1px 0px rgba(0, 0, 0, 0.25);',
+                                      },
+                                      ':focus': {
+                                        boxShadow: '0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 3px 0 rgba(0, 0, 0, .12)',
+                                        outline: `3px solid ${ettlevColors.focusOutline}`,
+                                      },
+                                      width: '100%',
+                                      maxWidth: '260px',
+                                      justifyContent: 'flex-start'
                                     },
-                                    ':focus': {
-                                      boxShadow: '0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 3px 0 rgba(0, 0, 0, .12)',
-                                      outline: `3px solid ${ettlevColors.focusOutline}`,
-                                    },
-                                    width: '100%',
-                                    maxWidth: '260px',
-                                    justifyContent: 'flex-start'
+                                    props: {
+                                      onMouseEnter: () => { setHover([...hover, i]) },
+                                      onMouseLeave: () => { setHover(hover.filter((value) => value !== i)) }
+                                    }
                                   },
-                                },
-                              }}
-                            >
-                              <Paragraph2 margin="0px" $style={{ lineHeight: '22px' }}>
-                                {r.label}
-                              </Paragraph2>
-                            </BaseUIButton>
-                          ))}
+                                }}
+                              >
+                                <Paragraph2 margin="0px" $style={{ lineHeight: '22px' }}>
+                                  {r.label}
+                                </Paragraph2>
+                              </BaseUIButton>
+                            )
+                          }
+                          )
+                          }
                         </ButtonGroup>
                       </Block>
                     </FormControl>
