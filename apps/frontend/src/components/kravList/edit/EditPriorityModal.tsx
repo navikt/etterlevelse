@@ -6,7 +6,7 @@ import { FieldArray, Form, Formik } from 'formik'
 import { FieldWrapper } from '../../common/Inputs'
 import { arrayMove, List } from 'baseui/dnd-list'
 import { CustomPanelDivider } from '../../common/CustomizedAccordion'
-import { PanelLink } from '../../common/PanelLink'
+import { SimplePanel } from '../../common/PanelLink'
 import { H1, H2, Label3, Paragraph2 } from 'baseui/typography'
 import moment from 'moment'
 import KravStatusView from '../KravStatusTag'
@@ -29,10 +29,8 @@ export const EditPriorityModal = (props: { isOpen: boolean; onClose: Function; k
     setItems(kravListe.map((k) => {
       return (
         <CustomPanelDivider key={`${k.navn}_${k.kravNummer}`}>
-          <PanelLink
+          <SimplePanel
             hideChevron
-            useDescriptionUnderline
-            href={`/krav/${k.kravNummer}/${k.kravVersjon}`}
             title={
               <Paragraph2 $style={{ fontSize: '14px', marginBottom: '0px', marginTop: '0px', lineHeight: '15px' }}>
                 K{k.kravNummer}.{k.kravVersjon}

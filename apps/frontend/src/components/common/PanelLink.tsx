@@ -41,37 +41,6 @@ export const PanelLink = ({
   useDescriptionUnderline?: boolean
   hideChevron?: boolean
 }) => {
-  const [hover, setHover] = useState(false)
-  const responsiveDisplay: Responsive<Display> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
-
-  const customOverrides: BlockOverrides = {
-    Block: {
-      style: {
-        width: '100%',
-        ...paddingAll(theme.sizing.scale300),
-        paddingRight: theme.sizing.scale600,
-        display: 'flex',
-        justifyContent: 'space-between',
-        backgroundColor: ettlevColors.white,
-        ...borderWidth('1px'),
-        ...borderColor(ettlevColors.grey100),
-        ...borderStyle('solid'),
-        borderBottomStyle: hideBorderBottom ? 'hidden' : 'solid',
-        ...(square ? {} : borderRadius('4px')),
-        ...borderRadius('4px'),
-
-        ':hover': {
-          position: 'relative',
-          boxSizing: 'border-box',
-          boxShadow: '0px 3px 4px rgba(0, 0, 0, 0.12)',
-          textDecoration: useUnderline ? 'underline' : 'none',
-        },
-      },
-    },
-  }
-
-  const mergedOverrides = _.merge(customOverrides, overrides)
-
   return (
     <RouteLink
       href={href}
@@ -80,80 +49,22 @@ export const PanelLink = ({
         display: 'flex',
       }}
     >
-      <Block display={responsiveDisplay} overrides={mergedOverrides} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
-        {panelIcon && <Block display="flex" marginLeft="27px" alignItems="center">
-          {typeof panelIcon === 'function' ? panelIcon(hover) : panelIcon}
-        </Block>}
-
-        <Block
-          marginLeft={theme.sizing.scale600}
-          marginRight={theme.sizing.scale600}
-          $style={{ flexGrow: 1 }}
-          display={'flex'}
-          flexDirection={flip ? 'column-reverse' : 'column'}
-          justifyContent={'center'}
-        >
-          <Block
-            $style={{
-              textDecoration: useTitleUnderLine && hover ? 'underline' : 'none',
-            }}
-          >
-            {title instanceof String ? <LabelLarge $style={{ lineHeight: '20px' }}>{title}</LabelLarge> : title}
-          </Block>
-          <Block
-            $style={{
-              textDecoration: useDescriptionUnderline && hover ? 'underline' : 'none',
-            }}
-          >
-            {beskrivelse instanceof String ? (
-              <ParagraphSmall marginBottom={0} marginTop={theme.sizing.scale100}>
-                {beskrivelse}
-              </ParagraphSmall>
-            ) : (
-              beskrivelse
-            )}
-          </Block>
-        </Block>
-
-        <Block display="flex">
-          {statusText && (
-            <Block
-              minWidth="100px"
-              display="flex"
-              flexDirection={['row', 'row', 'row', 'row-reverse', 'row-reverse', 'row-reverse']}
-              marginRight="20px"
-              alignItems="center"
-              marginLeft={[theme.sizing.scale600, theme.sizing.scale600, theme.sizing.scale600, '0px', '0px', '0px']}
-              marginTop={[theme.sizing.scale600, theme.sizing.scale600, theme.sizing.scale600, '0px', '0px', '0px']}
-            >
-              {statusText instanceof String ? <LabelSmall>{statusText}</LabelSmall> : statusText}
-            </Block>
-          )}
-          <Block display="flex" width="100%">
-            {(rightTitle || rightBeskrivelse) && (
-              <Block display="flex">
-                <Block
-                  minWidth="150px"
-                  maxWidth="150px"
-                  display="flex"
-                  flexDirection={flip ? 'column-reverse' : 'column'}
-                  justifyContent="center"
-                  marginLeft={[theme.sizing.scale600, theme.sizing.scale600, theme.sizing.scale600, '0px', '0px', '0px']}
-                  marginTop={[theme.sizing.scale600, theme.sizing.scale600, theme.sizing.scale600, '0px', '0px', '0px']}
-                >
-                  {rightTitle && <Label3 $style={{ fontSize: '14px' }}>{rightTitle}</Label3>}
-                  {rightBeskrivelse && (
-                    <Paragraph4 marginBottom="0px" marginTop="0px" $style={{ lineHeight: '15px' }}>
-                      {rightBeskrivelse}
-                    </Paragraph4>
-                  )}
-                </Block>
-              </Block>
-            )}
-            {!hideChevron && <Chevron hover={hover} icon={navChevronRightIcon} distance={'4px'} />}
-          </Block>
-        </Block>
-      </Block>
+      <SimplePanel
+        title={title}
+        rightTitle={rightTitle}
+        beskrivelse={beskrivelse}
+        rightBeskrivelse={rightBeskrivelse}
+        panelIcon={panelIcon}
+        flip={flip}
+        square={square}
+        hideBorderBottom={hideBorderBottom}
+        useUnderline={useUnderline}
+        statusText={statusText}
+        overrides={overrides}
+        useTitleUnderLine={useTitleUnderLine}
+        useDescriptionUnderline={useDescriptionUnderline}
+        hideChevron={hideChevron}
+      />
     </RouteLink>
   )
 }
@@ -312,3 +223,145 @@ const Chevron = ({ hover, icon, distance }: { hover: boolean; icon: string; dist
     <img src={icon} aria-hidden alt={'Chevron høyre ikon'} width={'24px'} height={'24px'} />
   </Block>
 )
+
+export const SimplePanel = (
+  {
+    title,
+    rightTitle,
+    beskrivelse,
+    rightBeskrivelse,
+    panelIcon,
+    flip,
+    statusText,
+    useTitleUnderLine,
+    overrides,
+    useDescriptionUnderline,
+    hideChevron,
+    square,
+    hideBorderBottom,
+    useUnderline,
+  }: {
+    title: string | React.ReactNode
+    rightTitle?: string
+    beskrivelse?: string | React.ReactNode
+    rightBeskrivelse?: string
+    flip?: boolean
+    square?: boolean
+    hideBorderBottom?: boolean
+    useUnderline?: boolean
+    statusText?: string | React.ReactNode
+    panelIcon?: React.ReactNode | ((hover: boolean) => React.ReactNode)
+    overrides?: BlockOverrides
+    useTitleUnderLine?: boolean
+    useDescriptionUnderline?: boolean
+    hideChevron?: boolean
+  }
+) => {
+  const [hover, setHover] = useState(false)
+  const responsiveDisplay: Responsive<Display> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
+
+  const customOverrides: BlockOverrides = {
+    Block: {
+      style: {
+        width: '100%',
+        ...paddingAll(theme.sizing.scale300),
+        paddingRight: theme.sizing.scale600,
+        display: 'flex',
+        justifyContent: 'space-between',
+        backgroundColor: ettlevColors.white,
+        ...borderWidth('1px'),
+        ...borderColor(ettlevColors.grey100),
+        ...borderStyle('solid'),
+        borderBottomStyle: hideBorderBottom ? 'hidden' : 'solid',
+        ...(square ? {} : borderRadius('4px')),
+        ...borderRadius('4px'),
+
+        ':hover': {
+          position: 'relative',
+          boxSizing: 'border-box',
+          boxShadow: '0px 3px 4px rgba(0, 0, 0, 0.12)',
+          textDecoration: useUnderline ? 'underline' : 'none',
+        },
+      },
+    },
+  }
+
+  const mergedOverrides = _.merge(customOverrides, overrides)
+
+  return (
+    <Block display={responsiveDisplay} overrides={mergedOverrides} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
+      {panelIcon && <Block display="flex" marginLeft="27px" alignItems="center">
+        {typeof panelIcon === 'function' ? panelIcon(hover) : panelIcon}
+      </Block>}
+
+      <Block
+        marginLeft={theme.sizing.scale600}
+        marginRight={theme.sizing.scale600}
+        $style={{ flexGrow: 1 }}
+        display={'flex'}
+        flexDirection={flip ? 'column-reverse' : 'column'}
+        justifyContent={'center'}
+      >
+        <Block
+          $style={{
+            textDecoration: useTitleUnderLine && hover ? 'underline' : 'none',
+          }}
+        >
+          {title instanceof String ? <LabelLarge $style={{ lineHeight: '20px' }}>{title}</LabelLarge> : title}
+        </Block>
+        <Block
+          $style={{
+            textDecoration: useDescriptionUnderline && hover ? 'underline' : 'none',
+          }}
+        >
+          {beskrivelse instanceof String ? (
+            <ParagraphSmall marginBottom={0} marginTop={theme.sizing.scale100}>
+              {beskrivelse}
+            </ParagraphSmall>
+          ) : (
+            beskrivelse
+          )}
+        </Block>
+      </Block>
+
+      <Block display="flex">
+        {statusText && (
+          <Block
+            minWidth="100px"
+            display="flex"
+            flexDirection={['row', 'row', 'row', 'row-reverse', 'row-reverse', 'row-reverse']}
+            marginRight="20px"
+            alignItems="center"
+            marginLeft={[theme.sizing.scale600, theme.sizing.scale600, theme.sizing.scale600, '0px', '0px', '0px']}
+            marginTop={[theme.sizing.scale600, theme.sizing.scale600, theme.sizing.scale600, '0px', '0px', '0px']}
+          >
+            {statusText instanceof String ? <LabelSmall>{statusText}</LabelSmall> : statusText}
+          </Block>
+        )}
+        <Block display="flex" width="100%">
+          {(rightTitle || rightBeskrivelse) && (
+            <Block display="flex">
+              <Block
+                minWidth="150px"
+                maxWidth="150px"
+                display="flex"
+                flexDirection={flip ? 'column-reverse' : 'column'}
+                justifyContent="center"
+                marginLeft={[theme.sizing.scale600, theme.sizing.scale600, theme.sizing.scale600, '0px', '0px', '0px']}
+                marginTop={[theme.sizing.scale600, theme.sizing.scale600, theme.sizing.scale600, '0px', '0px', '0px']}
+              >
+                {rightTitle && <Label3 $style={{ fontSize: '14px' }}>{rightTitle}</Label3>}
+                {rightBeskrivelse && (
+                  <Paragraph4 marginBottom="0px" marginTop="0px" $style={{ lineHeight: '15px' }}>
+                    {rightBeskrivelse}
+                  </Paragraph4>
+                )}
+              </Block>
+            </Block>
+          )}
+          {!hideChevron && <Chevron hover={hover} icon={navChevronRightIcon} distance={'4px'} />}
+        </Block>
+      </Block>
+    </Block>
+  )
+}
