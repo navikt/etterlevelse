@@ -34,7 +34,7 @@ const paddingLeft = ['16px', '16px', '16px', '16px', theme.sizing.scale3200, the
 const EditBehandlingModal = (props: EditBehandlingModalProps) => {
   const options = codelist.getParsedOptions(ListName.RELEVANS)
   const [selected, setSelected] = React.useState<number[]>([])
-  const [hover, setHover] = React.useState<number[]>([])
+  const [hover, setHover] = React.useState<number>()
 
   const { data } = useQuery<{ behandling: PageResponse<{ stats: BehandlingStats }> }>(statsQuery, {
     variables: { relevans: [] },
@@ -202,15 +202,11 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
                                 startEnhancer={() => {
                                   if (selected.includes(i)) {
                                     return <img src={checkboxChecked} alt="" />
-                                  } else if (!selected.includes(i) && hover.includes(i)) {
+                                  } else if (!selected.includes(i) && hover === i) {
                                     return <img src={checkboxUncheckedHover} alt="" />
                                   } else {
                                     return <img
-                                      src={checkboxUnchecked}
-                                      alt=""
-                                      onMouseEnter={(e) => e.currentTarget.src = checkboxUncheckedHover}
-                                      onMouseLeave={(e) => e.currentTarget.src = checkboxUnchecked}
-                                    />
+                                      src={checkboxUnchecked} alt="" />
                                   }
                                 }}
                                 overrides={{
@@ -238,8 +234,8 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
                                       justifyContent: 'flex-start'
                                     },
                                     props: {
-                                      onMouseEnter: () => { setHover([...hover, i]) },
-                                      onMouseLeave: () => { setHover(hover.filter((value) => value !== i)) }
+                                      onMouseEnter: () => { setHover(i) },
+                                      onMouseLeave: () => { setHover(undefined) }
                                     }
                                   },
                                 }}
