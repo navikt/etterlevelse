@@ -54,6 +54,9 @@ import illustration from '../resources/giammarco-boscaro-zeH-ljawHtg-unsplash.jp
 import warningAlert from '../resources/icons/warning-alert.svg'
 import exitIcon from '../resources/icons/exit-icon.svg'
 import handWithLeaf from '../resources/icons/hand-with-leaf.svg'
+import checkboxChecked from '../resources/icons/checkbox/checkbox-checked.svg'
+import checkboxUnchecked from '../resources/icons/checkbox/checkbox-unchecked.svg'
+import checkboxUncheckedHover from '../resources/icons/checkbox/checkbox-unchecked-hover.svg'
 import {codelist, ListName, LovCode, TemaCode} from '../services/Codelist'
 
 import React from 'react'
@@ -102,7 +105,10 @@ export {
   clearSearchIcon,
   exitIcon,
   warningAlert,
-  handWithLeaf
+  handWithLeaf,
+  checkboxChecked,
+  checkboxUnchecked,
+  checkboxUncheckedHover
 }
 
 export const temaBilder: { [id: string]: string } = {
