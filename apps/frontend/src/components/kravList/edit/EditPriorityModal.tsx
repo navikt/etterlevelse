@@ -188,6 +188,8 @@ export const EditPriorityModal = (props: { isOpen: boolean; onClose: Function; k
             }
             <Block paddingBottom="23px" display="flex" justifyContent="flex-end">
               <Button
+                size="compact"
+                kind="secondary"
                 onClick={() => {
                   refresh()
                   onClose()
@@ -198,7 +200,6 @@ export const EditPriorityModal = (props: { isOpen: boolean; onClose: Function; k
               </Button>
               <Button
                 size="compact"
-                kind="secondary"
                 onClick={p.submitForm}
                 disabled={loading}
                 marginLeft>
