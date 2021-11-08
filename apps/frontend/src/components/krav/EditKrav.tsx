@@ -318,11 +318,9 @@ const errorMessage = "Feltet er påkrevd";
 const kravSchema = () =>
   yup.object({
     navn: yup.string().required('Du må oppgi et navn til kravet'),
-    suksesskriterier: yup.array()
-    //   .of(yup.object({
-    //   navn: yup.string().required('Du må oppgi et navn til suksesskriteriet')
-    // }))
-      .test({
+    suksesskriterier: yup.array().of(yup.object({
+      navn: yup.string().required('Du må oppgi et navn til suksesskriteriet')
+    })).test({
       name: 'suksesskriterierCheck',
       message: errorMessage,
       test: function (suksesskriterier) {
