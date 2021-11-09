@@ -108,6 +108,7 @@ const ChevronLeft = (props: { fill?: string }) => (
 export const Layout2 = (props: {
   backBtnColor?: string
   backBtnUrl?: string
+  headerOverlap?: string
   headerBackgroundColor?: string
   mainHeader?: React.ReactNode
   secondaryHeaderBackgroundColor?: string
@@ -122,7 +123,7 @@ export const Layout2 = (props: {
   // console.log(history.location.pathname)
   return (
     <Block width="100%" id="content" overrides={{ Block: { props: { role: 'main' } } }}>
-      <Block backgroundColor={props.headerBackgroundColor} display="flex" width="100%" justifyContent="center">
+      <Block backgroundColor={props.headerBackgroundColor} display="flex" width="100%" justifyContent="center" paddingBottom={props.headerOverlap} >
         <Block maxWidth={maxPageWidth} width="100%">
           <Block paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall} display="flex" flexDirection="column" justifyContent="center">
             <Block width="100%" justifyContent="center" marginTop="24px">
@@ -160,7 +161,7 @@ export const Layout2 = (props: {
 
       <Block backgroundColor={props.childrenBackgroundColor} display="flex" width="100%" justifyContent="center">
         <Block maxWidth={maxPageWidth} width="100%">
-          <Block paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall}>
+          <Block paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall} marginTop={props.headerOverlap ? '-' + props.headerOverlap : undefined}>
             {props.children}
           </Block>
         </Block>

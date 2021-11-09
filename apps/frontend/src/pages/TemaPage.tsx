@@ -154,6 +154,7 @@ const TemaListe = () => {
       headerBackgroundColor={ettlevColors.grey50}
       childrenBackgroundColor={ettlevColors.grey25}
       currentPage={'Forstå kravene'}
+      headerOverlap={'100px'}
     >
       {visFilter && <RelevansFilter relevans={relevans} onClickFilter={onClickFilter} kravAntall={kravAntall} />}
       <Block {...sectionProps} marginTop={theme.sizing.scale600}>
