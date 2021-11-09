@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldNameConstants;
+import no.nav.data.common.storage.domain.ChangeStamp;
 import no.nav.data.common.validator.RequestElement;
 import no.nav.data.common.validator.Validator;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
@@ -47,6 +48,7 @@ public class KravRequest implements RequestElement {
     private List<String> tagger;
     private List<RegelverkRequest> regelverk;
     private Periode periode;
+    private ChangeStamp changeStamp;
 
     private List<SuksesskriterieRequest> suksesskriterier;
 
@@ -74,7 +76,7 @@ public class KravRequest implements RequestElement {
         setAvdeling(toUpperCaseAndTrim(avdeling));
         setUnderavdeling(toUpperCaseAndTrim(underavdeling));
         setNotat(trimToNull(notat));
-
+        setPrioriteringsId(trimToNull(prioriteringsId));
         setDokumentasjon(formatList(dokumentasjon));
         setImplementasjoner(trimToNull(implementasjoner));
         setBegrepIder(formatList(begrepIder));
@@ -82,6 +84,7 @@ public class KravRequest implements RequestElement {
         setRettskilder(formatList(rettskilder));
         setTagger(formatList(tagger));
         setSuksesskriterier(copyOf(suksesskriterier));
+        setChangeStamp(changeStamp);
 
         if (status == null) {
             status = KravStatus.UTKAST;

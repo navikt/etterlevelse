@@ -86,7 +86,13 @@ public class KravService extends DomainService<Krav> {
                 .ifErrorsThrowValidationException();
 
         var krav = request.isUpdate() ? storage.get(request.getIdAsUUID(), Krav.class) : new Krav();
-        krav.convert(request);
+
+        if(request.getChangeStamp() != null){
+            krav.convertWithChangeStamp(request);
+        } else {
+            krav.convert(request);
+        }
+
         if (request.isNyKravVersjon()) {
             krav.setKravNummer(request.getKravNummer());
             krav.setKravVersjon(kravRepo.nextKravVersjon(request.getKravNummer()));
