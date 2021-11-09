@@ -170,7 +170,6 @@ const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVersjoner:
       )}
 
       <Block backgroundColor="#F1F1F1" padding="32px">
-
         <Block marginBottom={labelMargin}>
           <Label display={responsiveView} title="Ansvarlig" compact>
             {krav.underavdeling?.shortName}
@@ -186,7 +185,7 @@ const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVersjoner:
         <Block marginBottom={labelMargin}>
           <Label display={responsiveView} title="Varslingsadresser" hide={!user.isKraveier()} compact>
             {krav.varslingsadresser.map((va, i) => {
-              const marginBottom = "8px"
+              const marginBottom = '8px'
               if (va.type === AdresseType.SLACK)
                 return (
                   <Block marginBottom={marginBottom}>

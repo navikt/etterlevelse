@@ -21,7 +21,7 @@ const customOverrides: SelectOverrides = {
     style: {
       fontSize: '18px',
       marginTop: '4px',
-      marginBottom: '4px'
+      marginBottom: '4px',
     },
   },
 }

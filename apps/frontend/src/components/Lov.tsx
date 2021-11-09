@@ -1,26 +1,26 @@
 import React from 'react'
-import {codelist, ListName} from '../services/Codelist'
-import {env} from '../util/env'
-import {Regelverk} from '../constants'
-import {Block} from 'baseui/block'
+import { codelist, ListName } from '../services/Codelist'
+import { env } from '../util/env'
+import { Regelverk } from '../constants'
+import { Block } from 'baseui/block'
 import CustomizedLink from './common/CustomizedLink'
 
 const reactProcessString = require('react-process-string')
 const processString = reactProcessString as (converters: { regex: RegExp; fn: (key: string, result: string[]) => JSX.Element | string }[]) => (input?: string) => JSX.Element[]
 
-export const LovViewList = (props: { regelverk: Regelverk[], openOnSamePage?: boolean }) => {
+export const LovViewList = (props: { regelverk: Regelverk[]; openOnSamePage?: boolean }) => {
   return (
     <Block display="flex" flexDirection="column" $style={{ wordBreak: 'break-all' }}>
       {props.regelverk.map((r, i) => (
         <Block key={i} marginBottom="8px">
-          <LovView regelverk={r} openOnSamePage={props.openOnSamePage}/>
+          <LovView regelverk={r} openOnSamePage={props.openOnSamePage} />
         </Block>
       ))}
     </Block>
   )
 }
 
-export const LovView = (props: { regelverk?: Regelverk, openOnSamePage?: boolean }) => {
+export const LovView = (props: { regelverk?: Regelverk; openOnSamePage?: boolean }) => {
   if (!props.regelverk) return null
   const { spesifisering, lov } = props.regelverk
   const lovCode = lov?.code

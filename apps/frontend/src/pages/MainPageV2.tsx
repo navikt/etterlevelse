@@ -1,9 +1,9 @@
 import { Narrow, Page, Wide } from '../components/scaffold/Page'
 import { ettlevColors, theme } from '../util/theme'
 import { Block } from 'baseui/block'
-import { H2, HeadingXXLarge } from 'baseui/typography'
-import { PanelLinkCard } from '../components/common/PanelLink'
-import { grafIconBg, paperPenIconBg, paragrafIconBg } from '../components/Images'
+import { H2, HeadingXXLarge, Label4, Paragraph1 } from 'baseui/typography'
+import { PanelExternalLink, PanelLinkCard } from '../components/common/PanelLink'
+import { grafIconBg, handWithLeaf, paperPenIconBg, paragrafIconBg } from '../components/Images'
 import { Card } from 'baseui/card'
 import { borderRadius, margin } from '../components/common/Style'
 import ReactPlayer from 'react-player'
@@ -27,7 +27,7 @@ export const MainPageV2 = () => {
       rawMain
       header={
         <HeadingXXLarge display={'flex'} flexDirection={'column'} color={ettlevColors.white} marginTop={theme.sizing.scale1400} marginBottom={theme.sizing.scale1400}>
-          <span style={{ fontWeight: 400 }}>Støtte til etterlevelse av krav</span>
+          <span style={{ fontWeight: 400 }}>Støtte til etterlevelse</span>
           <span>som sikrer rettssikkerheten til brukerne våre</span>
         </HeadingXXLarge>
       }
@@ -35,7 +35,7 @@ export const MainPageV2 = () => {
       <Block display={'flex'} flexDirection={'column'} alignItems={'center'} width={'100%'}>
         <Wide>
           <Block display={'flex'} justifyContent={'center'} flexWrap>
-          <PanelLinkCard
+            <PanelLinkCard
               marginRight={cardMarginRight}
               height={cardHeight}
               width={cardWidth}
@@ -43,9 +43,8 @@ export const MainPageV2 = () => {
               href={'/tema'}
               tittel={'Forstå kravene'}
               icon={paragrafIconBg}
-              beskrivelse={'Få oversikt over kravene, og bli trygg på at du kjenner til alle relevante krav for det du lager'}
+              beskrivelse={'Få oversikt over krav til etterlevelse, og bli trygg på at du kjenner til alle relevante krav for det du lager'}
             />
-
 
             <PanelLinkCard
               marginRight={cardMarginRight}
@@ -56,10 +55,8 @@ export const MainPageV2 = () => {
               href={'/behandlinger'}
               tittel={'Dokumentere etterlevelse'}
               icon={paperPenIconBg}
-              beskrivelse={'Få oversikt over hvilke krav som gjelder din løsning og dokumenter hvor godt løsningen etterlever kravene.'}
+              beskrivelse={'Se hvilke krav som gjelder din løsning og dokumenter hvordan løsningen etterlever kravene'}
             />
-
-            
             <PanelLinkCard
               height={cardHeight}
               width={cardWidth}
@@ -67,18 +64,24 @@ export const MainPageV2 = () => {
               href={'/status'}
               tittel={'Status i organisasjonen'}
               icon={grafIconBg}
-              beskrivelse={'Følg med på status i dashbord, lag egne oversikter, og se hvor godt NAV sine produktområder  dokumenterer på kravene'}
+              beskrivelse={'Følg med på status og se hvor godt NAV sine produktområder  dokumenterer på kravene'}
             />
           </Block>
         </Wide>
 
         <Narrow>
-          <Block $style={{}} marginTop={theme.sizing.scale1600} marginBottom={theme.sizing.scale900} paddingLeft={theme.sizing.scale800} paddingRight={theme.sizing.scale800}>
+          <Block
+            $style={{}}
+            marginTop={theme.sizing.scale1600}
+            marginBottom={theme.sizing.scale900}
+            // paddingLeft={theme.sizing.scale800}
+            // paddingRight={theme.sizing.scale800}
+          >
             <H2 $style={{ fontWeight: 300, fontSize: '32px', lineHeight: '42px' }} marginTop="0px" marginBottom="0px">
-              Se introduksjonsfilm
+              Etterlevelseskravene er
             </H2>
             <H2 $style={{ wordBreak: 'break-word', fontSize: '32px', lineHeight: '42px' }} marginTop="0px" marginBottom="0px">
-              om etterlevelseskravene
+              basert på norske lover og regler
             </H2>
           </Block>
 
@@ -87,7 +90,7 @@ export const MainPageV2 = () => {
               Root: {
                 style: {
                   ...borderRadius('4px'),
-                  ...margin(theme.sizing.scale1600, theme.sizing.scale800),
+                  // ...margin(theme.sizing.scale1600, theme.sizing.scale800),
                   marginTop: '0px',
                 },
               },
@@ -105,7 +108,7 @@ export const MainPageV2 = () => {
                 playIcon={
                   <Button kind="secondary" size={SIZE.compact} $style={buttonBorderStyle} startEnhancer={<FontAwesomeIcon icon={faPlay} />}>
                     {' '}
-                    Se video{' '}
+                    Start{' '}
                   </Button>
                 }
                 width="100%"
@@ -115,6 +118,27 @@ export const MainPageV2 = () => {
               />
             </Block>
           </Card>
+
+          <Block
+            $style={{
+              ...margin(theme.sizing.scale800, '0'),
+              border: `1px solid ${ettlevColors.grey100}`,
+              borderRadius: '4px',
+              backgroundColor: ettlevColors.white,
+              width: '100%',
+            }}
+          >
+            <PanelExternalLink
+              href="https://navno.sharepoint.com/sites/fag-og-ytelser-informasjonsforvaltning/SitePages/Etterlevelseskrav-for-systemutvikling.aspx"
+              title={
+                <Paragraph1 marginBottom={0} marginTop={0}>
+                  Mer om etterlevelse i NAV
+                </Paragraph1>
+              }
+              beskrivelse={<Label4>Hvordan kravene blir til og hvordan jobbe med etterlevelse i produktutviklingen</Label4>}
+              panelIcon={<img src={handWithLeaf} alt={''} />}
+            />
+          </Block>
 
           <Block
             $style={{

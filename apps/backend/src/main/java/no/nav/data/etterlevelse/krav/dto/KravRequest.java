@@ -48,7 +48,6 @@ public class KravRequest implements RequestElement {
     private List<String> tagger;
     private List<RegelverkRequest> regelverk;
     private Periode periode;
-    private ChangeStamp changeStamp;
 
     private List<SuksesskriterieRequest> suksesskriterier;
 
@@ -84,7 +83,6 @@ public class KravRequest implements RequestElement {
         setRettskilder(formatList(rettskilder));
         setTagger(formatList(tagger));
         setSuksesskriterier(copyOf(suksesskriterier));
-        setChangeStamp(changeStamp);
 
         if (status == null) {
             status = KravStatus.UTKAST;

@@ -108,7 +108,8 @@ const TemaSide = ({ tema }: { tema: TemaCode }) => {
       <Block>
         <H2>{loading ? '?' : data?.krav.numberOfElements || 0} krav</H2>
         {loading && <SkeletonPanel count={10} />}
-        {!loading && kravList &&
+        {!loading &&
+          kravList &&
           kravList.map((k, index) => (
             <Block key={k.id + '_' + index} marginBottom={'8px'}>
               <PanelLink useUnderline href={`/krav/${k.kravNummer}/${k.kravVersjon}`} beskrivelse={kravNumView(k)} title={k.navn} flip />
@@ -214,13 +215,11 @@ const TemaInfo = (props: { kravAntall: number; temaAntall: number }) => (
     <Block padding={theme.sizing.scale1000}>
       <H2 color={ettlevColors.white} $style={{ lineHeight: '40px' }}>
         Vi har totalt &nbsp;
-        <span style={{ fontSize: '40px', lineHeight: '40px', color: ettlevColors.warning400 }}>{props.kravAntall}</span> &nbsp;
-        krav gruppert i {props.temaAntall} tema
+        <span style={{ fontSize: '40px', lineHeight: '40px', color: ettlevColors.warning400 }}>{props.kravAntall}</span> &nbsp; krav gruppert i {props.temaAntall} tema
       </H2>
 
       <Paragraph2 color={ettlevColors.white}>
-        Alle vi som utvikler digitale produkter i NAV må forholde oss til en del forskjellige lover og regler.
-        Disse skal bidra til å sikre at den generelle rettsikkerheten til
+        Alle vi som utvikler digitale produkter i NAV må forholde oss til en del forskjellige lover og regler. Disse skal bidra til å sikre at den generelle rettsikkerheten til
         brukerne våre ivaretas.
       </Paragraph2>
     </Block>

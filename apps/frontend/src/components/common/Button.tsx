@@ -1,16 +1,16 @@
 import * as React from 'react'
-import {ReactNode} from 'react'
-import {Button as BaseUIButton, KIND, SHAPE, SIZE} from 'baseui/button'
-import {PLACEMENT, StatefulTooltip} from 'baseui/tooltip'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {IconDefinition} from '@fortawesome/fontawesome-svg-core'
-import {theme} from '../../util'
-import {Override} from 'baseui/overrides'
-import {StyleObject} from 'styletron-react'
-import {Block} from 'baseui/block'
-import {borderRadius, borderStyle, borderWidth, paddingAll} from './Style'
-import {ettlevColors} from '../../util/theme'
-import {ExternalLink} from './RouteLink'
+import { ReactNode } from 'react'
+import { Button as BaseUIButton, KIND, SHAPE, SIZE } from 'baseui/button'
+import { PLACEMENT, StatefulTooltip } from 'baseui/tooltip'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
+import { theme } from '../../util'
+import { Override } from 'baseui/overrides'
+import { StyleObject } from 'styletron-react'
+import { Block } from 'baseui/block'
+import { borderRadius, borderStyle, borderWidth, paddingAll } from './Style'
+import { ettlevColors } from '../../util/theme'
+import { ExternalLink } from './RouteLink'
 import _ from 'lodash'
 
 export type ButtonKind = KIND[keyof KIND] | 'outline' | 'underline-hover'
@@ -135,8 +135,19 @@ export const buttonBorderStyle: StyleObject = {
   ...borderRadius('4px'),
 }
 
-export const ExternalButton = ({ href, children, underlineHover, size, openOnSamePage }:
-                               { href: string; children: React.ReactNode; underlineHover?: boolean; size?: SIZE[keyof SIZE], openOnSamePage?: boolean }) => {
+export const ExternalButton = ({
+  href,
+  children,
+  underlineHover,
+  size,
+  openOnSamePage,
+}: {
+  href: string
+  children: React.ReactNode
+  underlineHover?: boolean
+  size?: SIZE[keyof SIZE]
+  openOnSamePage?: boolean
+}) => {
   const kind = underlineHover ? 'underline-hover' : 'outline'
   const actualSize = size || 'compact'
   return (

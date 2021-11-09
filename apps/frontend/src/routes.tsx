@@ -19,6 +19,7 @@ import { LovPage } from './pages/LovPage'
 import { MainPageV2 } from './pages/MainPageV2'
 import { BehandlingerTemaPage } from './pages/BehandlingerTemaPage'
 import ScrollToTop from './util/ScrollToTop'
+import { Status } from './pages/Status'
 
 const Routes = (): JSX.Element => (
   <ScrollToTop>
@@ -47,6 +48,7 @@ const Routes = (): JSX.Element => (
 
       <Route exact path="/tema/:tema?" component={TemaPage} />
       <Route exact path="/behandling/:id" component={BehandlingPage} />
+      <Route exact path="/status" component={Status} />
 
       <Route component={NotFound} />
     </Switch>
