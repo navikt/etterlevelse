@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import RouteLink from './RouteLink'
+import RouteLink, { ExternalLink } from './RouteLink'
 import { Block, BlockOverrides, Display, Responsive, Scale } from 'baseui/block'
 import { borderColor, borderRadius, borderStyle, borderWidth, padding, paddingAll } from './Style'
 import { theme } from '../../util'
@@ -7,6 +7,24 @@ import { ettlevColors } from '../../util/theme'
 import { HeadingXLarge, Label3, LabelLarge, LabelSmall, Paragraph4, ParagraphMedium, ParagraphSmall } from 'baseui/typography'
 import { arrowRightIcon, navChevronRightIcon } from '../Images'
 import * as _ from 'lodash'
+
+interface PanelProps {
+  href: string
+  title: string | React.ReactNode
+  rightTitle?: string
+  beskrivelse?: string | React.ReactNode
+  rightBeskrivelse?: string
+  flip?: boolean
+  square?: boolean
+  hideBorderBottom?: boolean
+  useUnderline?: boolean
+  statusText?: string | React.ReactNode
+  panelIcon?: React.ReactNode | ((hover: boolean) => React.ReactNode)
+  overrides?: BlockOverrides
+  useTitleUnderLine?: boolean
+  useDescriptionUnderline?: boolean
+  hideChevron?: boolean
+}
 
 export const PanelLink = ({
   href,
@@ -24,23 +42,7 @@ export const PanelLink = ({
   useTitleUnderLine,
   useDescriptionUnderline,
   hideChevron,
-}: {
-  href: string
-  title: string | React.ReactNode
-  rightTitle?: string
-  beskrivelse?: string | React.ReactNode
-  rightBeskrivelse?: string
-  flip?: boolean
-  square?: boolean
-  hideBorderBottom?: boolean
-  useUnderline?: boolean
-  statusText?: string | React.ReactNode
-  panelIcon?: React.ReactNode | ((hover: boolean) => React.ReactNode)
-  overrides?: BlockOverrides
-  useTitleUnderLine?: boolean
-  useDescriptionUnderline?: boolean
-  hideChevron?: boolean
-}) => {
+}: PanelProps) => {
   return (
     <RouteLink
       href={href}
@@ -66,6 +68,50 @@ export const PanelLink = ({
         hideChevron={hideChevron}
       />
     </RouteLink>
+  )
+}
+
+export const PanelExternalLink = (
+  {
+    href,
+    title,
+    rightTitle,
+    beskrivelse,
+    rightBeskrivelse,
+    panelIcon,
+    flip,
+    square,
+    hideBorderBottom,
+    useUnderline,
+    statusText,
+    overrides,
+    useTitleUnderLine,
+    useDescriptionUnderline,
+    hideChevron,
+  }: PanelProps
+) => {
+  return (
+    <ExternalLink
+      href={href}
+      hideUnderline
+    >
+      <SimplePanel
+        title={title}
+        rightTitle={rightTitle}
+        beskrivelse={beskrivelse}
+        rightBeskrivelse={rightBeskrivelse}
+        panelIcon={panelIcon}
+        flip={flip}
+        square={square}
+        hideBorderBottom={hideBorderBottom}
+        useUnderline={useUnderline}
+        statusText={statusText}
+        overrides={overrides}
+        useTitleUnderLine={useTitleUnderLine}
+        useDescriptionUnderline={useDescriptionUnderline}
+        hideChevron={hideChevron}
+      />
+    </ExternalLink>
   )
 }
 
