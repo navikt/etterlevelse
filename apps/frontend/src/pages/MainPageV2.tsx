@@ -3,7 +3,7 @@ import {ettlevColors, theme} from '../util/theme'
 import {Block} from 'baseui/block'
 import {H2, HeadingXXLarge, Label4, Paragraph1} from 'baseui/typography'
 import {PanelLinkCard} from '../components/common/PanelLink'
-import {handWithLeaf, paperPenIconBg, paragrafIconBg} from '../components/Images'
+import {grafIconBg, handWithLeaf, paperPenIconBg, paragrafIconBg} from '../components/Images'
 import {Card} from 'baseui/card'
 import {borderRadius, margin} from '../components/common/Style'
 import ReactPlayer from 'react-player'
@@ -58,22 +58,25 @@ export const MainPageV2 = () => {
               icon={paperPenIconBg}
               beskrivelse={'Se hvilke krav som gjelder din løsning og dokumenter hvordan løsningen etterlever kravene'}
             />
-
-
-            {/*<PanelLinkCard*/}
-            {/*  height={cardHeight}*/}
-            {/*  width={cardWidth}*/}
-            {/*  verticalMargin={theme.sizing.scale300}*/}
-            {/*  href={'/status'}*/}
-            {/*  tittel={'Status i organisasjonen'}*/}
-            {/*  icon={grafIconBg}*/}
-            {/*  beskrivelse={'Følg med på status og se hvor godt NAV sine produktområder  dokumenterer på kravene'}*/}
-            {/*/>*/}
+            <PanelLinkCard
+              height={cardHeight}
+              width={cardWidth}
+              verticalMargin={theme.sizing.scale300}
+              href={'/status'}
+              tittel={'Status i organisasjonen'}
+              icon={grafIconBg}
+              beskrivelse={'Følg med på status og se hvor godt NAV sine produktområder  dokumenterer på kravene'}
+            />
           </Block>
         </Wide>
 
         <Narrow>
-          <Block $style={{}} marginTop={theme.sizing.scale1600} marginBottom={theme.sizing.scale900} paddingLeft={theme.sizing.scale800} paddingRight={theme.sizing.scale800}>
+          <Block $style={{}}
+                 marginTop={theme.sizing.scale1600}
+                 marginBottom={theme.sizing.scale900}
+                 // paddingLeft={theme.sizing.scale800}
+                 // paddingRight={theme.sizing.scale800}
+          >
             <H2 $style={{fontWeight: 300, fontSize: '32px', lineHeight: '42px'}} marginTop="0px" marginBottom="0px">
               Etterlevelseskravene er
             </H2>
@@ -87,7 +90,7 @@ export const MainPageV2 = () => {
               Root: {
                 style: {
                   ...borderRadius('4px'),
-                  ...margin(theme.sizing.scale1600, theme.sizing.scale800),
+                  // ...margin(theme.sizing.scale1600, theme.sizing.scale800),
                   marginTop: '0px',
                 },
               },
@@ -118,9 +121,10 @@ export const MainPageV2 = () => {
 
           <Block
             $style={{
-              ...margin(theme.sizing.scale1600, theme.sizing.scale600),
+              ...margin(theme.sizing.scale800, "0"),
               border: `1px solid ${ettlevColors.grey100}`,
-              borderRadius: '4px'
+              borderRadius: '4px',
+              backgroundColor: ettlevColors.white
             }}
           >
             <Block display={"flex"} width={'100%'} height={'115px'}>
