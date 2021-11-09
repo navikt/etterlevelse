@@ -68,6 +68,9 @@ public class GenericStorage extends Auditable {
         type = object.type();
         data = JsonUtils.toJsonNode(object);
         domainObjectCache = object;
+        if(object.getChangeStamp() != null) {
+            domainObjectCache.setChangeStamp(object.getChangeStamp());
+        }
         return this;
     }
 
