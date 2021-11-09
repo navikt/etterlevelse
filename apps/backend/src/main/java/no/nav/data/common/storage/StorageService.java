@@ -57,9 +57,7 @@ public class StorageService {
         storage.setDomainObjectData(object);
         var saved = repository.save(storage);
         // flush to update changestamp and versions
-        if(object.getChangeStamp() == null) {
-            repository.flush();
-        }
+        repository.flush();
         //noinspection unchecked
         return (T) saved.getDomainObjectData(object.getClass());
     }
