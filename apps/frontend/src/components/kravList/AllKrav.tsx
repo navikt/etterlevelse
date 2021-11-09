@@ -1,18 +1,18 @@
-import { useEffect, useState } from "react";
-import { codelist, ListName, LovCode } from "../../services/Codelist";
-import { useKravFilter } from "../../api/KravGraphQLApi";
-import { emptyPage, KravListFilter, KravQL, KravStatus } from "../../constants";
-import { Block, Responsive, Scale } from "baseui/block";
-import { Option, SelectOverrides } from "baseui/select";
-import CustomizedSelect from "../common/CustomizedSelect";
-import { ettlevColors, theme } from "../../util/theme";
-import { Spinner } from "../common/Spinner";
-import { Notification } from "baseui/notification";
-import { H2, Label3, LabelSmall, Paragraph2 } from "baseui/typography";
-import Button from "../common/Button";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { KravPanels, sortKrav } from "../../pages/KravListPageV2";
-import { borderColor } from "../common/Style";
+import { useEffect, useState } from 'react'
+import { codelist, ListName, LovCode } from '../../services/Codelist'
+import { useKravFilter } from '../../api/KravGraphQLApi'
+import { emptyPage, KravListFilter, KravQL, KravStatus } from '../../constants'
+import { Block, Responsive, Scale } from 'baseui/block'
+import { Option, SelectOverrides } from 'baseui/select'
+import CustomizedSelect from '../common/CustomizedSelect'
+import { ettlevColors, theme } from '../../util/theme'
+import { Spinner } from '../common/Spinner'
+import { Notification } from 'baseui/notification'
+import { H2, Label3, LabelSmall, Paragraph2 } from 'baseui/typography'
+import Button from '../common/Button'
+import { faPlus } from '@fortawesome/free-solid-svg-icons'
+import { KravPanels, sortKrav } from '../../pages/KravListPageV2'
+import { borderColor } from '../common/Style'
 
 type KravFilter = {
   status: Option[]
@@ -20,7 +20,6 @@ type KravFilter = {
   tema: Option[]
   lover: Option[]
 }
-
 
 export const AllKrav = () => {
   const pageSize = 20
@@ -162,7 +161,7 @@ export const AllKrav = () => {
     //       return { label: l.shortName, id: l.code }
     //     }),
     //   )
-    // } else {  
+    // } else {
     //   return getOptions(
     //     'Alle lover',
     //     loverFilter?.map((t) => {
@@ -170,24 +169,22 @@ export const AllKrav = () => {
     //     }),
     //   )
     // }
-
   }
 
   //must be run in function to not affect other selectors others overrides
   const getSelector = (filterId: string | undefined, kravFilter: KravListFilter, options: any[], value: Option[]) => {
-
     const customSelectOverrides: SelectOverrides = {
       Root: {
         style: {
           width: '150px',
-        }
+        },
       },
       DropdownContainer: {
         style: {
           width: 'fit-content',
-          maxWidth: '300px'
-        }
-      }
+          maxWidth: '300px',
+        },
+      },
     }
 
     return (
@@ -198,17 +195,15 @@ export const AllKrav = () => {
           size="compact"
           placeholder="tema"
           options={options}
-          overrides={
-            {
-              ...customSelectOverrides,
-              ControlContainer: {
-                style: {
-                  backgroundColor: filterId === 'alle' ? ettlevColors.white : ettlevColors.green50,
-                  ...borderColor(filterId === 'alle' ? ettlevColors.grey200 : ettlevColors.green800),
-                }
-              }
-            }
-          }
+          overrides={{
+            ...customSelectOverrides,
+            ControlContainer: {
+              style: {
+                backgroundColor: filterId === 'alle' ? ettlevColors.white : ettlevColors.green50,
+                ...borderColor(filterId === 'alle' ? ettlevColors.grey200 : ettlevColors.green800),
+              },
+            },
+          }}
           value={value}
           onChange={(params) => updateFilter(params.value, kravFilter)}
         />
@@ -223,15 +218,14 @@ export const AllKrav = () => {
   ) : (
     <Block>
       <Block width="100%" justifyContent="center" marginTop="20px" marginBottom="20px">
-
-        <Block display={['block', 'block', 'block', 'block', 'block', 'flex',]} justifyContent="center" alignContent="center" width="100%">
+        <Block display={['block', 'block', 'block', 'block', 'block', 'flex']} justifyContent="center" alignContent="center" width="100%">
           <Block display="flex" justifyContent="flex-start" width="100%">
             <H2 marginTop="0px" marginBottom="0px">
               {kravene.totalElements ? kravene.totalElements : 0} Krav
             </H2>
           </Block>
           <Block display="flex" justifyContent="flex-end" width="100%" alignItems="center">
-            <Block display={['block', 'block', 'block', 'block', 'flex', 'flex',]} alignItems="center" justifyContent="flex-start" width="100%">
+            <Block display={['block', 'block', 'block', 'block', 'flex', 'flex']} alignItems="center" justifyContent="flex-start" width="100%">
               <Label3>Filter</Label3>
               {/* {getSelector(filter.tema[0].id?.toString(), KravListFilter.TEMAER, getOptions(
                 'Alle tema',
@@ -239,22 +233,32 @@ export const AllKrav = () => {
                   return { label: t.shortName, id: t.code }
                 }),
               ), filter.tema)} */}
-              {getSelector(filter.relevans[0].id?.toString(), KravListFilter.RELEVANS, getOptions(
-                'Alle relevans',
-                relevans?.map((r) => {
-                  return { label: r.shortName, id: r.code }
-                }),
-              ), filter.relevans)}
+              {getSelector(
+                filter.relevans[0].id?.toString(),
+                KravListFilter.RELEVANS,
+                getOptions(
+                  'Alle relevans',
+                  relevans?.map((r) => {
+                    return { label: r.shortName, id: r.code }
+                  }),
+                ),
+                filter.relevans,
+              )}
               {getSelector(filter.lover[0].id?.toString(), KravListFilter.LOVER, getLovOptions(), filter.lover)}
-              {getSelector(filter.status[0].id?.toString(), KravListFilter.STATUS, getOptions('Alle statuser', [
-                { id: KravStatus.AKTIV, label: 'Aktiv' },
-                { id: KravStatus.UNDER_ARBEID, label: 'Under Arbeid' },
-                {
-                  id: KravStatus.UTGAATT,
-                  label: 'Utgått',
-                },
-                { id: KravStatus.UTKAST, label: 'Utkast' },
-              ]), filter.status)}
+              {getSelector(
+                filter.status[0].id?.toString(),
+                KravListFilter.STATUS,
+                getOptions('Alle statuser', [
+                  { id: KravStatus.AKTIV, label: 'Aktiv' },
+                  { id: KravStatus.UNDER_ARBEID, label: 'Under Arbeid' },
+                  {
+                    id: KravStatus.UTGAATT,
+                    label: 'Utgått',
+                  },
+                  { id: KravStatus.UTKAST, label: 'Utkast' },
+                ]),
+                filter.status,
+              )}
             </Block>
 
             {/*

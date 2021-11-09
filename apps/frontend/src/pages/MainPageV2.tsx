@@ -46,7 +46,6 @@ export const MainPageV2 = () => {
               beskrivelse={'Få oversikt over krav til etterlevelse, og bli trygg på at du kjenner til alle relevante krav for det du lager'}
             />
 
-
             <PanelLinkCard
               marginRight={cardMarginRight}
               height={cardHeight}
@@ -71,11 +70,12 @@ export const MainPageV2 = () => {
         </Wide>
 
         <Narrow>
-          <Block $style={{}}
+          <Block
+            $style={{}}
             marginTop={theme.sizing.scale1600}
             marginBottom={theme.sizing.scale900}
-          // paddingLeft={theme.sizing.scale800}
-          // paddingRight={theme.sizing.scale800}
+            // paddingLeft={theme.sizing.scale800}
+            // paddingRight={theme.sizing.scale800}
           >
             <H2 $style={{ fontWeight: 300, fontSize: '32px', lineHeight: '42px' }} marginTop="0px" marginBottom="0px">
               Etterlevelseskravene er
@@ -121,7 +121,7 @@ export const MainPageV2 = () => {
 
           <Block
             $style={{
-              ...margin(theme.sizing.scale800, "0"),
+              ...margin(theme.sizing.scale800, '0'),
               border: `1px solid ${ettlevColors.grey100}`,
               borderRadius: '4px',
               backgroundColor: ettlevColors.white,
@@ -130,7 +130,11 @@ export const MainPageV2 = () => {
           >
             <PanelExternalLink
               href="https://navno.sharepoint.com/sites/fag-og-ytelser-informasjonsforvaltning/SitePages/Etterlevelseskrav-for-systemutvikling.aspx"
-              title={<Paragraph1 marginBottom={0} marginTop={0}>Mer om etterlevelse i NAV</Paragraph1>}
+              title={
+                <Paragraph1 marginBottom={0} marginTop={0}>
+                  Mer om etterlevelse i NAV
+                </Paragraph1>
+              }
               beskrivelse={<Label4>Hvordan kravene blir til og hvordan jobbe med etterlevelse i produktutviklingen</Label4>}
               panelIcon={<img src={handWithLeaf} alt={''} />}
             />

@@ -13,7 +13,6 @@ import { borderColor, borderWidth } from '../../common/Style'
 import { RenderTagList } from '../../common/TagList'
 import { navChevronDownIcon } from '../../Images'
 
-
 const customOverrides: SelectOverrides = {
   ControlContainer: {
     style: {
@@ -31,21 +30,20 @@ const customOverrides: SelectOverrides = {
     style: {
       fontSize: '18px',
       marginTop: '4px',
-      marginBottom: '4px'
+      marginBottom: '4px',
     },
   },
 }
 
 export const EditKravMultiOptionField = (
   props: {
-    label: string;
-    name: string;
-    caption?: ReactNode;
-    tooltip?: string;
-    marginBottom?: string;
-    overrides?: SelectOverrides;
-  }
-    & Or<{ options: Value }, { listName: ListName }>,
+    label: string
+    name: string
+    caption?: ReactNode
+    tooltip?: string
+    marginBottom?: string
+    overrides?: SelectOverrides
+  } & Or<{ options: Value }, { listName: ListName }>,
 ) => {
   const options: Value = props.options || codelist.getParsedOptions(props.listName)
   const overrides = _.merge(customOverrides, props.overrides)
@@ -55,10 +53,7 @@ export const EditKravMultiOptionField = (
         {(p: FieldArrayRenderProps) => {
           const selectedIds = (p.form.values[props.name] as any[]).map((v) => (props.listName ? (v as Code).code : v))
           return (
-            <FormControl
-              label={<LabelWithTooltip label={props.label} tooltip={props.tooltip} />}
-              caption={props.caption}
-            >
+            <FormControl label={<LabelWithTooltip label={props.label} tooltip={props.tooltip} />} caption={props.caption}>
               <Block>
                 <Block display="flex">
                   <Select
@@ -75,8 +70,8 @@ export const EditKravMultiOptionField = (
                         style: {
                           backgroundColor: p.form.errors[props.name] && ettlevColors.error50,
                           ...borderColor(p.form.errors[props.name] ? ettlevColors.red600 : ettlevColors.grey200),
-                        }
-                      }
+                        },
+                      },
                     }}
                   />
                 </Block>

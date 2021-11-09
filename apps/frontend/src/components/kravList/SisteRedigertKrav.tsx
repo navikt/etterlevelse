@@ -1,12 +1,12 @@
-import {useEffect, useState} from "react";
-import {emptyPage, KravQL} from "../../constants";
-import {useKravFilter} from "../../api/KravGraphQLApi";
-import {Spinner} from "../common/Spinner";
-import {theme} from "../../util";
-import {Notification} from "baseui/notification";
-import {Block, Display, Responsive} from "baseui/block";
-import {H2, Paragraph2} from "baseui/typography";
-import {KravPanels, sortKrav} from "../../pages/KravListPageV2";
+import { useEffect, useState } from 'react'
+import { emptyPage, KravQL } from '../../constants'
+import { useKravFilter } from '../../api/KravGraphQLApi'
+import { Spinner } from '../common/Spinner'
+import { theme } from '../../util'
+import { Notification } from 'baseui/notification'
+import { Block, Display, Responsive } from 'baseui/block'
+import { H2, Paragraph2 } from 'baseui/typography'
+import { KravPanels, sortKrav } from '../../pages/KravListPageV2'
 
 const responsiveDisplay: Responsive<Display> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
 

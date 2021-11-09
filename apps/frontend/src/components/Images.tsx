@@ -57,10 +57,10 @@ import handWithLeaf from '../resources/icons/hand-with-leaf.svg'
 import checkboxChecked from '../resources/icons/checkbox/checkbox-checked.svg'
 import checkboxUnchecked from '../resources/icons/checkbox/checkbox-unchecked.svg'
 import checkboxUncheckedHover from '../resources/icons/checkbox/checkbox-unchecked-hover.svg'
-import {codelist, ListName, LovCode, TemaCode} from '../services/Codelist'
+import { codelist, ListName, LovCode, TemaCode } from '../services/Codelist'
 
 import React from 'react'
-import {theme} from '../util'
+import { theme } from '../util'
 
 export {
   pencilFill,
@@ -108,7 +108,7 @@ export {
   handWithLeaf,
   checkboxChecked,
   checkboxUnchecked,
-  checkboxUncheckedHover
+  checkboxUncheckedHover,
 }
 
 export const temaBilder: { [id: string]: string } = {

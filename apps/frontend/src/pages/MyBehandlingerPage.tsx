@@ -191,7 +191,7 @@ const MineBehandlinger = ({ behandlinger, teams, loading }: { behandlinger: Beha
                 </ParagraphSmall>
               </Block>
               <Block alignSelf={'flex-end'} marginBottom={theme.sizing.scale400}>
-                <ExternalButton href={`${env.pollyBaseUrl}process/team/${t.id}`} underlineHover size={'mini'} >
+                <ExternalButton href={`${env.pollyBaseUrl}process/team/${t.id}`} underlineHover size={'mini'}>
                   Legg til behandling <FontAwesomeIcon icon={faExternalLinkAlt} />
                 </ExternalButton>
               </Block>
@@ -211,7 +211,9 @@ const MineBehandlinger = ({ behandlinger, teams, loading }: { behandlinger: Beha
           backgroundColor={ettlevColors.grey25}
         >
           <Block marginTop={theme.sizing.scale600}>
-            <ExternalButton href={`${env.teamKatBaseUrl}`}>Teamkatalogen <FontAwesomeIcon icon={faExternalLinkAlt} /></ExternalButton>
+            <ExternalButton href={`${env.teamKatBaseUrl}`}>
+              Teamkatalogen <FontAwesomeIcon icon={faExternalLinkAlt} />
+            </ExternalButton>
           </Block>
         </InfoBlock2>
       </Block>
