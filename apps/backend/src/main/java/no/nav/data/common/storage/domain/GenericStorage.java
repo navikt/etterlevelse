@@ -68,9 +68,6 @@ public class GenericStorage extends Auditable {
         type = object.type();
         data = JsonUtils.toJsonNode(object);
         domainObjectCache = object;
-        if(object.getChangeStamp() != null) {
-            domainObjectCache.setChangeStamp(object.getChangeStamp());
-        }
         return this;
     }
 
@@ -80,9 +77,7 @@ public class GenericStorage extends Auditable {
         if (domainObjectCache == null) {
             domainObjectCache = JsonUtils.toObject(data, clazz);
         }
-        if(domainObjectCache.getChangeStamp() == null) {
-            domainObjectCache.setChangeStamp(new ChangeStamp(getCreatedBy(), getCreatedDate(), getLastModifiedBy(), getLastModifiedDate()));
-        }
+        domainObjectCache.setChangeStamp(new ChangeStamp(getCreatedBy(), getCreatedDate(), getLastModifiedBy(), getLastModifiedDate()));
         domainObjectCache.setVersion(getVersion());
         return (T) domainObjectCache;
     }

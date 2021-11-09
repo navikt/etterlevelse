@@ -93,12 +93,6 @@ public class Krav implements DomainObject, KravIdStatus {
         return this;
     }
 
-    public Krav convertWithChangeStamp(KravRequest request) {
-        changeStamp = request.getChangeStamp();
-        convert(request);
-        return this;
-    }
-
     public KravResponse toResponse() {
         var response = KravResponse.builder()
                 .id(id)
