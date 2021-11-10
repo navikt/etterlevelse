@@ -37,7 +37,7 @@ public class KravResponse implements KravId {
     private String utdypendeBeskrivelse;
     private String versjonEndringer;
     private String notat;
-    private String prioriteringsId;
+
     private List<String> dokumentasjon;
     private String implementasjoner;
     private List<String> begrepIder;
@@ -62,5 +62,7 @@ public class KravResponse implements KravId {
     private List<TilbakemeldingResponse> tilbakemeldinger;
     @JsonIgnore
     private List<BegrepResponse> begreper;
+    @JsonIgnore
+    private String prioriteringsId;
 
 }
