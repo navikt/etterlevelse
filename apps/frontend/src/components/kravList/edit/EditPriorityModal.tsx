@@ -15,7 +15,7 @@ import { mapToFormVal, updateKrav } from '../../../api/KravApi'
 import { Spinner } from '../../common/Spinner'
 import { theme } from '../../../util'
 import { Block } from 'baseui/block'
-import { ettlevColors, responsivePaddingLarge } from '../../../util/theme'
+import { ettlevColors, responsivePaddingSmall } from '../../../util/theme'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGripVertical } from '@fortawesome/free-solid-svg-icons'
 
@@ -29,8 +29,9 @@ export const EditPriorityModal = (props: { isOpen: boolean; onClose: Function; k
     setItems(
       kravListe.map((k) => {
         return (
-          <CustomPanelDivider key={`${k.navn}_${k.kravNummer}`}>
+          <CustomPanelDivider >
             <SimplePanel
+              key={`${k.navn}_${k.kravNummer}`}
               hideChevron
               title={
                 <Paragraph2 $style={{ fontSize: '14px', marginBottom: '0px', marginTop: '0px', lineHeight: '15px' }}>
@@ -43,7 +44,8 @@ export const EditPriorityModal = (props: { isOpen: boolean; onClose: Function; k
               overrides={{
                 Block: {
                   style: {
-                    ':hover': { boxShadow: 'none' },
+                    width: '97%',
+                    ':hover': { boxShadow: 'none', boxSizing: 'content-box' },
                     ...borderStyle('hidden'),
                   },
                 },
@@ -121,14 +123,14 @@ export const EditPriorityModal = (props: { isOpen: boolean; onClose: Function; k
             backgroundColor={ettlevColors.green800}
             paddingTop="23px"
             paddingBottom="48px"
-            paddingLeft={responsivePaddingLarge}
-            paddingRight={responsivePaddingLarge}
+            paddingLeft={responsivePaddingSmall}
+            paddingRight={responsivePaddingSmall}
             maxHeight="55px"
             marginBottom="54px"
           >
             <H1 $style={{ lineHeight: '48px', color: ettlevColors.white }}>Justere rekkefølgen på krav</H1>
           </Block>
-          <Block display="flex" justifyContent="center" paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge}>
+          <Block display="flex" justifyContent="center" paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall}>
             <Block display="flex" justifyContent="flex-start" flex="1">
               <H2 $style={{ lineHeight: '24px', color: ettlevColors.green600, marginTop: '0px', marginBottom: '0px' }}>{tema}</H2>
             </Block>
@@ -136,7 +138,7 @@ export const EditPriorityModal = (props: { isOpen: boolean; onClose: Function; k
               <Paragraph2 $style={{ marginTop: '0px', marginBottom: '0px', color: ettlevColors.green800 }}>Klikk og dra kravene i ønsket rekkefølge</Paragraph2>
             </Block>
           </Block>
-          <Block paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge}>
+          <Block paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall}>
             {loading ? (
               <Block display="flex" justifyContent="center">
                 <Spinner size={theme.sizing.scale1200} />
@@ -200,7 +202,7 @@ const CustomDragHandle = () => {
     <Block
       $style={{
         display: 'flex',
-        alignItems: 'cneter',
+        alignItems: 'center',
         marginRight: '1em',
       }}
     >
