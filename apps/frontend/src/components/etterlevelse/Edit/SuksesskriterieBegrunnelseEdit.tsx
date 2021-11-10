@@ -105,7 +105,10 @@ const KriterieBegrunnelse = ({
     >
       <H3 color={ettlevColors.green800}>{suksesskriterie.navn}</H3>
 
-      <StatefulButtonGroup mode={MODE.radio} initialState={{ selected: oppfylt ? 0 : ikkerelevant ? 1 : [] }}>
+      <StatefulButtonGroup
+        mode={MODE.radio}
+        initialState={{ selected: oppfylt ? 0 : ikkerelevant ? 1 : [] }}
+      >
         <Button
           type={'button'}
           disabled={status === EtterlevelseStatus.IKKE_RELEVANT}
@@ -119,6 +122,9 @@ const KriterieBegrunnelse = ({
                 borderTopRightRadius: '0px',
                 borderBottomRightRadius: '0px',
               },
+              props: {
+                tabIndex: 0
+              }
             },
           }}
           onClick={() => {
@@ -126,7 +132,7 @@ const KriterieBegrunnelse = ({
             setIkkeRelevant(false)
           }}
         >
-          Vi Oppfyller
+          Vi oppfyller
         </Button>
         <Button
           type={'button'}
@@ -140,6 +146,9 @@ const KriterieBegrunnelse = ({
                 borderTopLeftRadius: '0px',
                 borderBottomLeftRadius: '0px',
               },
+              props: {
+                tabIndex: 0
+              }
             },
           }}
           onClick={() => {
@@ -153,7 +162,7 @@ const KriterieBegrunnelse = ({
 
       {(oppfylt || ikkerelevant) && status !== EtterlevelseStatus.IKKE_RELEVANT && !disableEdit && (
         <Block marginTop={theme.sizing.scale1000}>
-          <FormControl label={<LabelWithToolTip label="Dokumentasjon" />}>
+          <FormControl label={<LabelWithToolTip label={oppfylt ? 'Hvordan oppfylles kriteriet?' : 'Hvorfor er ikke kriteriet relevant?'} />}>
             <TextEditor initialValue={begrunnelse} setValue={setBegrunnelse} height={'188px'} />
           </FormControl>
           <Error fieldName={`suksesskriterieBegrunnelser[${index}].begrunnelse`} fullWidth={true} />
