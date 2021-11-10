@@ -25,6 +25,8 @@ public class KravPrioriteringRequest implements RequestElement, KravId {
 
     private String prioriteringsId;
 
+    private Boolean update;
+
     @Override
     public void format() {
         setId(trimToNull(id));
