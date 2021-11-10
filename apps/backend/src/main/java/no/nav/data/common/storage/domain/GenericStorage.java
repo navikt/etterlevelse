@@ -13,6 +13,7 @@ import no.nav.data.common.utils.StreamUtils;
 import no.nav.data.etterlevelse.behandling.domain.BehandlingData;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.krav.domain.Krav;
+import no.nav.data.etterlevelse.kravprioritering.domain.KravPrioritering;
 import org.hibernate.annotations.Type;
 import org.springframework.util.Assert;
 
@@ -100,6 +101,10 @@ public class GenericStorage extends Auditable {
 
     public Krav toKrav() {
         return getDomainObjectData(Krav.class);
+    }
+
+    public KravPrioritering toKravPrioritering() {
+        return getDomainObjectData(KravPrioritering.class);
     }
 
     public Etterlevelse toEtterlevelse() {
