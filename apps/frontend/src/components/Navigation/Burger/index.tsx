@@ -31,13 +31,11 @@ const drawerFooterProps: BlockProps = {
 
 const Brand = () => (
   <StyledLink style={{ textDecoration: 'none' }} href="/">
-    <H2 color={ettlevColors.green800}>
-      Støtte til etterlevelse
-    </H2>
+    <H2 color={ettlevColors.green800}>Støtte til etterlevelse</H2>
   </StyledLink>
 )
 
-const MenuItem = (props: { to: string; text: string; icon: string, setShowMenu: Function }) => (
+const MenuItem = (props: { to: string; text: string; icon: string; setShowMenu: Function }) => (
   <Block
     display={'flex'}
     alignItems={'center'}
@@ -89,7 +87,9 @@ const SignOutButton = (props: { location: string }) => {
   const linkCss = useCss({ textDecoration: 'none', color: 'white' })
   return (
     <StyledLink href={`${env.backendBaseUrl}/logout?redirect_uri=${props.location}`} className={linkCss}>
-      <Button kind="secondary" startEnhancer={<img src={exitIcon} alt="" />}>Logg ut</Button>
+      <Button kind="secondary" startEnhancer={<img src={exitIcon} alt="" />}>
+        Logg ut
+      </Button>
     </StyledLink>
   )
 }
@@ -129,8 +129,8 @@ const BurgerMenu = () => {
             },
             Close: {
               style: {
-                display: 'none'
-              }
+                display: 'none',
+              },
             },
           }}
         >
@@ -153,11 +153,18 @@ const BurgerMenu = () => {
               <Block $style={{ borderTopWidth: '1px', borderTopStyle: 'solid', borderTopColor: ettlevColors.grey100, paddingTop: '6px', paddingBottom: '6px' }}>
                 <MenuItem to="/status" text="Status i organisasjonen" icon={grafIcon} setShowMenu={setShowMenu} />
               </Block>
-              <Block $style={{
-                borderTopWidth: '1px', borderTopStyle: 'solid', borderTopColor: ettlevColors.grey100,
-                borderBottomWidth: '1px', borderBottomStyle: 'solid', borderBottomColor: ettlevColors.grey100,
-                paddingTop: '6px', paddingBottom: '6px'
-              }}>
+              <Block
+                $style={{
+                  borderTopWidth: '1px',
+                  borderTopStyle: 'solid',
+                  borderTopColor: ettlevColors.grey100,
+                  borderBottomWidth: '1px',
+                  borderBottomStyle: 'solid',
+                  borderBottomColor: ettlevColors.grey100,
+                  paddingTop: '6px',
+                  paddingBottom: '6px',
+                }}
+              >
                 <MenuItem to="/tema" text="Forstå kravene" icon={paragrafIcon} setShowMenu={setShowMenu} />
               </Block>
             </Block>

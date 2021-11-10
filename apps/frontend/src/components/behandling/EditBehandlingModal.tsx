@@ -29,8 +29,7 @@ type EditBehandlingModalProps = {
 }
 
 const paddingRight = ['16px', '16px', '16px', '16px', theme.sizing.scale3200, theme.sizing.scale3200]
-const paddingLeft = ['16px', '16px', '16px', '16px', theme.sizing.scale3200, theme.sizing.scale3200
-]
+const paddingLeft = ['16px', '16px', '16px', '16px', theme.sizing.scale3200, theme.sizing.scale3200]
 const EditBehandlingModal = (props: EditBehandlingModalProps) => {
   const options = codelist.getParsedOptions(ListName.RELEVANS)
   const [selected, setSelected] = React.useState<number[]>([])
@@ -46,10 +45,10 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
   const filterData = (
     unfilteredData:
       | {
-        behandling: PageResponse<{
-          stats: BehandlingStats
-        }>
-      }
+          behandling: PageResponse<{
+            stats: BehandlingStats
+          }>
+        }
       | undefined,
   ) => {
     const StatusListe: any[] = []
@@ -127,7 +126,7 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
     Dialog: {
       style: {
         height: '100%',
-        ...borderRadius('8px')
+        ...borderRadius('8px'),
       },
     },
   }
@@ -167,12 +166,7 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
                 {(p: FieldArrayRenderProps) => {
                   return (
                     <FormControl>
-                      <Block
-                        height="100%"
-                        width="calc(100% - 16px)"
-                        paddingLeft={theme.sizing.scale700}
-                        paddingTop={theme.sizing.scale750}
-                      >
+                      <Block height="100%" width="calc(100% - 16px)" paddingLeft={theme.sizing.scale700} paddingTop={theme.sizing.scale750}>
                         <ButtonGroup
                           mode="checkbox"
                           kind={KIND.secondary}
@@ -191,8 +185,8 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
                             Root: {
                               style: {
                                 flexWrap: 'wrap',
-                              }
-                            }
+                              },
+                            },
                           }}
                         >
                           {options.map((r, i) => {
@@ -205,8 +199,7 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
                                   } else if (!selected.includes(i) && hover === i) {
                                     return <img src={checkboxUncheckedHover} alt="" />
                                   } else {
-                                    return <img
-                                      src={checkboxUnchecked} alt="" />
+                                    return <img src={checkboxUnchecked} alt="" />
                                   }
                                 }}
                                 overrides={{
@@ -231,12 +224,16 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
                                       },
                                       width: '100%',
                                       maxWidth: '260px',
-                                      justifyContent: 'flex-start'
+                                      justifyContent: 'flex-start',
                                     },
                                     props: {
-                                      onMouseEnter: () => { setHover(i) },
-                                      onMouseLeave: () => { setHover(undefined) }
-                                    }
+                                      onMouseEnter: () => {
+                                        setHover(i)
+                                      },
+                                      onMouseLeave: () => {
+                                        setHover(undefined)
+                                      },
+                                    },
                                   },
                                 }}
                               >
@@ -245,9 +242,7 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
                                 </Paragraph2>
                               </BaseUIButton>
                             )
-                          }
-                          )
-                          }
+                          })}
                         </ButtonGroup>
                       </Block>
                     </FormControl>
@@ -272,16 +267,18 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
                       <Paragraph2 $style={{ ...marginZero }}>krav</Paragraph2>
                     </Block>
                   </Block>
-                  <Block display="flex" justifyContent="flex-end" $style={{
-                    borderBottomWidth: '1px',
-                    borderBottomStyle: 'solid',
-                    borderBottomColor: '#E3E3E3',
-                    marginBottom: '22px',
-                    marginTop: '-30px'
-                  }}>
-                    <Paragraph4 $style={{ lineHeight: '20px', fontWeight: 700 }}>
-                      Egenskaper: {selected.length} valgt
-                    </Paragraph4>
+                  <Block
+                    display="flex"
+                    justifyContent="flex-end"
+                    $style={{
+                      borderBottomWidth: '1px',
+                      borderBottomStyle: 'solid',
+                      borderBottomColor: '#E3E3E3',
+                      marginBottom: '22px',
+                      marginTop: '-30px',
+                    }}
+                  >
+                    <Paragraph4 $style={{ lineHeight: '20px', fontWeight: 700 }}>Egenskaper: {selected.length} valgt</Paragraph4>
                   </Block>
                   <Block>
                     <Block display="flex" justifyContent="flex-end">

@@ -1,29 +1,29 @@
-import {Etterlevelse, EtterlevelseStatus, Krav} from '../../constants'
-import {Field, FieldProps, Form, Formik, FormikProps} from 'formik'
-import {createEtterlevelse, mapEtterlevelseToFormValue, updateEtterlevelse} from '../../api/EtterlevelseApi'
-import {Block} from 'baseui/block'
+import { Etterlevelse, EtterlevelseStatus, Krav } from '../../constants'
+import { Field, FieldProps, Form, Formik, FormikProps } from 'formik'
+import { createEtterlevelse, mapEtterlevelseToFormValue, updateEtterlevelse } from '../../api/EtterlevelseApi'
+import { Block } from 'baseui/block'
 import Button from '../common/Button'
-import React, {useEffect} from 'react'
+import React, { useEffect } from 'react'
 import * as yup from 'yup'
-import {getEtterlevelseStatus} from '../../pages/EtterlevelsePage'
-import {DateField, FieldWrapper, TextAreaField} from '../common/Inputs'
-import {theme} from '../../util'
-import {FormControl} from 'baseui/form-control'
-import {getKravByKravNumberAndVersion, useKrav, useSearchKrav} from '../../api/KravApi'
-import {kravName, kravNumView} from '../../pages/KravPage'
-import {behandlingName, useBehandling, useSearchBehandling} from '../../api/BehandlingApi'
+import { getEtterlevelseStatus } from '../../pages/EtterlevelsePage'
+import { DateField, FieldWrapper, TextAreaField } from '../common/Inputs'
+import { theme } from '../../util'
+import { FormControl } from 'baseui/form-control'
+import { getKravByKravNumberAndVersion, useKrav, useSearchKrav } from '../../api/KravApi'
+import { kravName, kravNumView } from '../../pages/KravPage'
+import { behandlingName, useBehandling, useSearchBehandling } from '../../api/BehandlingApi'
 import CustomizedSelect from '../common/CustomizedSelect'
-import {H1, H2, Label3, Paragraph2} from 'baseui/typography'
-import {arkPennIcon} from '../Images'
-import {ettlevColors, responsivePaddingLarge} from '../../util/theme'
-import {SuksesskriterierBegrunnelseEdit} from './Edit/SuksesskriterieBegrunnelseEdit'
-import {Radio, RadioGroup} from 'baseui/radio'
-import {Code} from '../../services/Codelist'
-import {Error} from '../common/ModalSchema'
-import {user} from '../../services/User'
-import {KIND as NKIND, Notification} from "baseui/notification";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faTimesCircle} from "@fortawesome/free-solid-svg-icons";
+import { H1, H2, Label3, Paragraph2 } from 'baseui/typography'
+import { arkPennIcon } from '../Images'
+import { ettlevColors, responsivePaddingLarge } from '../../util/theme'
+import { SuksesskriterierBegrunnelseEdit } from './Edit/SuksesskriterieBegrunnelseEdit'
+import { Radio, RadioGroup } from 'baseui/radio'
+import { Code } from '../../services/Codelist'
+import { Error } from '../common/ModalSchema'
+import { user } from '../../services/User'
+import { KIND as NKIND, Notification } from 'baseui/notification'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTimesCircle } from '@fortawesome/free-solid-svg-icons'
 
 type EditEttlevProps = {
   etterlevelse: Etterlevelse
@@ -66,9 +66,8 @@ const etterlevelseSchema = () => {
           return false
         }
         return true
-      }
-    })
-    ,
+      },
+    }),
     status: yup.string().test({
       name: 'etterlevelseStatus',
       message: 'Du må dokumentere alle kriterier før du har dokumentert  ferdig. Du kan velge å lagre og fortsette senere.',
@@ -119,11 +118,8 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
             <Paragraph2 $style={{ marginTop: '0px', marginBottom: '0px', color: ettlevColors.white }}>{kravNumView(krav)}</Paragraph2>
             <H1 $style={{ marginTop: '0px', marginBottom: '0px', color: ettlevColors.white }}>{krav.navn}</H1>
             <Paragraph2 color={ettlevColors.white}>
-              <a href={'/krav/' + krav?.kravNummer + '/' + krav?.kravVersjon} style={{ color: ettlevColors.white, marginBottom: '10px' }} target="_blank"
-                rel="noopener noreferrer">
-                <span style={{ display: 'inline-block', paddingBottom: '1px', borderBottom: '1px solid white' }}>
-                  detaljert kravbeskrivelse (ny fane)
-                </span>
+              <a href={'/krav/' + krav?.kravNummer + '/' + krav?.kravVersjon} style={{ color: ettlevColors.white, marginBottom: '10px' }} target="_blank" rel="noopener noreferrer">
+                <span style={{ display: 'inline-block', paddingBottom: '1px', borderBottom: '1px solid white' }}>detaljert kravbeskrivelse (ny fane)</span>
               </a>
             </Paragraph2>
           </Block>
@@ -155,7 +151,7 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
       <Block paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge}>
         <Block marginTop="51px">
           <Formik onSubmit={submit} initialValues={mapEtterlevelseToFormValue(etterlevelse)} validationSchema={etterlevelseSchema()} innerRef={formRef}>
-            {({ values, isSubmitting, submitForm, errors}: FormikProps<Etterlevelse>) => (
+            {({ values, isSubmitting, submitForm, errors }: FormikProps<Etterlevelse>) => (
               <Form>
                 <Block>
                   <Block paddingBottom={theme.sizing.scale1200}>
@@ -217,11 +213,11 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
                                         </Paragraph2>
                                       </Block>
 
-                                      {etterlevelseStatus === EtterlevelseStatus.OPPFYLLES_SENERE &&
+                                      {etterlevelseStatus === EtterlevelseStatus.OPPFYLLES_SENERE && (
                                         <Block maxWidth="170px" width="100%">
                                           <DateField label="Frist (valgfritt)" name="fristForFerdigstillelse" />
                                         </Block>
-                                      }
+                                      )}
                                     </Radio>
                                   )
                                 }
@@ -229,13 +225,15 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
                                   return (
                                     <Radio value={id} key={id}>
                                       <Block $style={{ textDecoration: radioHover === id ? 'underline' : 'none' }}>
-                                        <Paragraph2 $style={{ lineHeight: '22px' }} marginTop="0px" marginBottom="0px">{getEtterlevelseStatus(id)}</Paragraph2>
+                                        <Paragraph2 $style={{ lineHeight: '22px' }} marginTop="0px" marginBottom="0px">
+                                          {getEtterlevelseStatus(id)}
+                                        </Paragraph2>
                                       </Block>
-                                      {etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT &&
+                                      {etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT && (
                                         <Block maxWidth="471px" width="100%">
-                                          <TextAreaField label='Beskriv hvorfor kravet ikke er relevant' noPlaceholder name="statusBegrunnelse" />
+                                          <TextAreaField label="Beskriv hvorfor kravet ikke er relevant" noPlaceholder name="statusBegrunnelse" />
                                         </Block>
-                                      }
+                                      )}
                                     </Radio>
                                   )
                                 }
@@ -257,7 +255,6 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
                         )}
                       </Field>
                     </FieldWrapper>
-
 
                     <Label3 $style={{ lineHeight: '32px' }}>Hvilke suksesskriterier er oppfylt?</Label3>
 
@@ -285,16 +282,18 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
           <Block height={theme.sizing.scale600}/>
          */}
 
-
-                    <Error fieldName={'status'} fullWidth={true}/>
-                    <Block width={'100%'} marginTop={"65px"}>
+                    <Error fieldName={'status'} fullWidth={true} />
+                    <Block width={'100%'} marginTop={'65px'}>
                       {Object.keys(errors).length > 0 && (
                         <Block display="flex" width="60%">
                           <Block width="100%">
-                            <Notification overrides={{Body: {style: {width: 'auto'}}}} kind={NKIND.negative}>
-                              <FontAwesomeIcon icon={faTimesCircle} style={{
-                                marginRight : '5px'
-                              }}/>
+                            <Notification overrides={{ Body: { style: { width: 'auto' } } }} kind={NKIND.negative}>
+                              <FontAwesomeIcon
+                                icon={faTimesCircle}
+                                style={{
+                                  marginRight: '5px',
+                                }}
+                              />
                               Du må fylle ut alle obligatoriske felter
                             </Notification>
                           </Block>

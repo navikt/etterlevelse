@@ -169,33 +169,31 @@ export const KravPage = () => {
                       />
                     )}
                   </Block>
-                  {krav?.id &&
-                    ((user.isKraveier() && !hasKravExpired()) || user.isAdmin())
-                    && (
-                      <Block flex="1" display={['none', 'none', 'none', 'none', 'flex', 'flex']} justifyContent="flex-end">
-                        <Button
-                          startEnhancer={<img alt="add" src={plusIcon} />}
-                          onClick={newVersion}
-                          marginLeft
-                          size="compact"
-                          kind="tertiary"
-                          $style={{ color: '#F8F8F8', ':hover': { backgroundColor: 'transparent', textDecoration: 'underline 3px' } }}
-                        >
-                          Ny versjon
-                        </Button>
-                        <DeleteItem fun={() => deleteKrav(krav.id)} redirect={'/krav'} />
-                        <Button
-                          startEnhancer={<img src={editIcon} alt="edit" />}
-                          size="compact"
-                          $style={{ color: '#F8F8F8', ':hover': { backgroundColor: 'transparent', textDecoration: 'underline 3px' } }}
-                          kind={'tertiary'}
-                          onClick={() => setEdit(!edit)}
-                          marginLeft
-                        >
-                          Rediger
-                        </Button>
-                      </Block>
-                    )}
+                  {krav?.id && ((user.isKraveier() && !hasKravExpired()) || user.isAdmin()) && (
+                    <Block flex="1" display={['none', 'none', 'none', 'none', 'flex', 'flex']} justifyContent="flex-end">
+                      <Button
+                        startEnhancer={<img alt="add" src={plusIcon} />}
+                        onClick={newVersion}
+                        marginLeft
+                        size="compact"
+                        kind="tertiary"
+                        $style={{ color: '#F8F8F8', ':hover': { backgroundColor: 'transparent', textDecoration: 'underline 3px' } }}
+                      >
+                        Ny versjon
+                      </Button>
+                      <DeleteItem fun={() => deleteKrav(krav.id)} redirect={'/krav'} />
+                      <Button
+                        startEnhancer={<img src={editIcon} alt="edit" />}
+                        size="compact"
+                        $style={{ color: '#F8F8F8', ':hover': { backgroundColor: 'transparent', textDecoration: 'underline 3px' } }}
+                        kind={'tertiary'}
+                        onClick={() => setEdit(!edit)}
+                        marginLeft
+                      >
+                        Rediger
+                      </Button>
+                    </Block>
+                  )}
                 </Block>
               </Block>
             </Block>
@@ -205,7 +203,9 @@ export const KravPage = () => {
                 <Block $style={{ color: '#F8F8F8', fontWeight: 700, fontSize: '18px', fontFamily: 'Source Sans Pro' }}>
                   {krav && krav?.kravNummer !== 0 ? kravNumView(krav) : 'Ny'}
                 </Block>
-                <H1 $style={{ color: '#F8F8F8' }} marginTop="16px">{krav && krav?.navn ? krav.navn : 'Ny'} </H1>
+                <H1 $style={{ color: '#F8F8F8' }} marginTop="16px">
+                  {krav && krav?.navn ? krav.navn : 'Ny'}{' '}
+                </H1>
 
                 {hasKravExpired() && <ExpiredAlert alleKravVersjoner={alleKravVersjoner} />}
               </Block>
@@ -337,7 +337,7 @@ const Etterlevelser = ({ loading, etterlevelser: allEtterlevelser }: { loading: 
                         },
                       },
                     }}
-                  // panelIcon={(hover) => <PageIcon hover={hover} />}
+                    // panelIcon={(hover) => <PageIcon hover={hover} />}
                   />
                 </CustomPanelDivider>
               ))}

@@ -1,30 +1,30 @@
-import {Krav, KravQL, KravStatus} from '../../constants'
-import {Form, Formik} from 'formik'
-import {createKrav, mapToFormVal, updateKrav} from '../../api/KravApi'
-import {Block} from 'baseui/block'
-import React, {useEffect} from 'react'
+import { Krav, KravQL, KravStatus } from '../../constants'
+import { Form, Formik } from 'formik'
+import { createKrav, mapToFormVal, updateKrav } from '../../api/KravApi'
+import { Block } from 'baseui/block'
+import React, { useEffect } from 'react'
 import * as yup from 'yup'
-import {codelist, ListName} from '../../services/Codelist'
-import {kravStatus} from '../../pages/KravPage'
-import {InputField, MultiInputField, OptionField, TextAreaField} from '../common/Inputs'
+import { codelist, ListName } from '../../services/Codelist'
+import { kravStatus } from '../../pages/KravPage'
+import { InputField, MultiInputField, OptionField, TextAreaField } from '../common/Inputs'
 import axios from 'axios'
-import {env} from '../../util/env'
-import {KravVarslingsadresserEdit} from './Edit/KravVarslingsadresserEdit'
-import {KravRegelverkEdit} from './Edit/KravRegelverkEdit'
-import {KravSuksesskriterierEdit} from './Edit/KravSuksesskriterieEdit'
-import {EditBegreper} from './Edit/KravBegreperEdit'
-import {H1, H2, LabelLarge} from 'baseui/typography'
+import { env } from '../../util/env'
+import { KravVarslingsadresserEdit } from './Edit/KravVarslingsadresserEdit'
+import { KravRegelverkEdit } from './Edit/KravRegelverkEdit'
+import { KravSuksesskriterierEdit } from './Edit/KravSuksesskriterieEdit'
+import { EditBegreper } from './Edit/KravBegreperEdit'
+import { H1, H2, LabelLarge } from 'baseui/typography'
 import CustomizedModal from '../common/CustomizedModal'
 import Button from '../common/Button'
-import {ettlevColors, maxPageWidth, responsivePaddingLarge, responsiveWidthLarge, theme} from '../../util/theme'
-import {getEtterlevelserByKravNumberKravVersion} from "../../api/EtterlevelseApi";
-import ErrorModal from "../ErrorModal";
-import {Error} from "../common/ModalSchema";
-import {ErrorMessageModal} from "./ErrorMessageModal";
-import {KIND as NKIND, Notification} from "baseui/notification";
-import {faTimesCircle} from "@fortawesome/free-solid-svg-icons";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {EditKravMultiOptionField} from './Edit/EditKravMultiOptionField'
+import { ettlevColors, maxPageWidth, responsivePaddingLarge, responsiveWidthLarge, theme } from '../../util/theme'
+import { getEtterlevelserByKravNumberKravVersion } from '../../api/EtterlevelseApi'
+import ErrorModal from '../ErrorModal'
+import { Error } from '../common/ModalSchema'
+import { ErrorMessageModal } from './ErrorMessageModal'
+import { KIND as NKIND, Notification } from 'baseui/notification'
+import { faTimesCircle } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { EditKravMultiOptionField } from './Edit/EditKravMultiOptionField'
 
 type EditKravProps = {
   krav: KravQL
@@ -89,11 +89,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
           },
         }}
       >
-        <Formik
-          onSubmit={submit}
-          initialValues={mapToFormVal(krav)}
-          validationSchema={kravSchema()}
-          innerRef={formRef}>
+        <Formik onSubmit={submit} initialValues={mapToFormVal(krav)} validationSchema={kravSchema()} innerRef={formRef}>
           {({ touched, errors, isSubmitting, submitForm, setErrors }) => (
             <Form>
               <Block
@@ -138,7 +134,6 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
                     tooltip={'Bruk noen setninger på å forklare hensikten med kravet. Formålet er at leseren skal forstå hvorfor vi har dette kravet.'}
                   />
                   <Error fieldName={'hensikt'} fullWidth />
-
                 </Block>
 
                 <Block display="flex" width="100%" justifyContent="center">
@@ -166,7 +161,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
                       label="Lenke eller websaknr"
                       tooltip="Lenke til dokumentasjon"
                       linkTooltip={'Legg inn referanse til utdypende dokumentasjon (lenke). Eksempelvis til navet, eksterne nettsider eller Websak.'}
-                      setErrors={() => setErrors({dokumentasjon: 'Må ha navn på kilde.'})}
+                      setErrors={() => setErrors({ dokumentasjon: 'Må ha navn på kilde.' })}
                     />
                     {errors.dokumentasjon && <ErrorMessageModal msg={errors.dokumentasjon} fullWidth={true} />}
                     <KravRegelverkEdit />
@@ -251,9 +246,12 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
                         <Block display="flex" width="100%" marginTop="3rem" marginBottom=".6em">
                           <Block width="100%">
                             <Notification overrides={{ Body: { style: { width: 'auto' } } }} kind={NKIND.negative}>
-                              <FontAwesomeIcon icon={faTimesCircle} style={{
-                                marginRight: '5px'
-                              }} />
+                              <FontAwesomeIcon
+                                icon={faTimesCircle}
+                                style={{
+                                  marginRight: '5px',
+                                }}
+                              />
                               Du må fylle ut alle obligatoriske felter
                             </Notification>
                           </Block>
@@ -262,30 +260,12 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
                     </Block>
                   </Block>
                 </Block>
-                <Block
-                  display="flex"
-                  justifyContent="flex-end"
-                  paddingLeft={responsivePaddingLarge}
-                  paddingRight={responsivePaddingLarge}
-                  paddingBottom="16px"
-                >
-                  <Button
-                    size="compact"
-                    kind={'secondary'}
-                    type={'button'}
-                    onClick={close}
-                    marginLeft
-                  >
+                <Block display="flex" justifyContent="flex-end" paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge} paddingBottom="16px">
+                  <Button size="compact" kind={'secondary'} type={'button'} onClick={close} marginLeft>
                     Avbryt
                   </Button>
 
-                  <Button
-                    size="compact"
-                    kind="secondary"
-                    onClick={submitForm}
-                    disabled={isSubmitting}
-                    type={'button'}
-                    marginLeft>
+                  <Button size="compact" kind="secondary" onClick={submitForm} disabled={isSubmitting} type={'button'} marginLeft>
                     Lagre
                   </Button>
                 </Block>
@@ -303,7 +283,6 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
   )
 }
 
-
 const onImageUpload = (kravId: string) => async (file: File) => {
   const config = { headers: { 'content-type': 'multipart/form-data' } }
   const formData = new FormData()
@@ -313,24 +292,27 @@ const onImageUpload = (kravId: string) => async (file: File) => {
   return `/api/krav/${kravId}/files/${id}`
 }
 
-const errorMessage = "Feltet er påkrevd";
+const errorMessage = 'Feltet er påkrevd'
 
 const kravSchema = () =>
   yup.object({
     navn: yup.string().required('Du må oppgi et navn til kravet'),
-    suksesskriterier: yup.array().of(yup.object({
-      navn: yup.string().required('Du må oppgi et navn til suksesskriteriet')
-    })).test({
-      name: 'suksesskriterierCheck',
-      message: errorMessage,
-      test: function (suksesskriterier) {
-        const { parent } = this
-        if (parent.status === KravStatus.AKTIV || parent.status === KravStatus.UNDER_ARBEID) {
-          return suksesskriterier && suksesskriterier.length > 0 ? true : false
-        }
-        return true
-      },
-    }),
+    suksesskriterier: yup
+      .array()
+      //   .of(yup.object({
+      //   navn: yup.string().required('Du må oppgi et navn til suksesskriteriet')
+      // }))
+      .test({
+        name: 'suksesskriterierCheck',
+        message: errorMessage,
+        test: function (suksesskriterier) {
+          const { parent } = this
+          if (parent.status === KravStatus.AKTIV || parent.status === KravStatus.UNDER_ARBEID) {
+            return suksesskriterier && suksesskriterier.length > 0 ? true : false
+          }
+          return true
+        },
+      }),
     hensikt: yup.string().test({
       name: 'hensiktCheck',
       message: errorMessage,

@@ -112,13 +112,13 @@ export const ExternalLink = ({
   hideUnderline,
   label,
   fontColor,
-  openOnSamePage
+  openOnSamePage,
 }: {
   href: string
   hideUnderline?: boolean
   label?: string
   children: React.ReactNode
-  fontColor?: string,
+  fontColor?: string
   openOnSamePage?: boolean
 }) => {
   return (

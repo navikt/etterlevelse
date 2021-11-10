@@ -73,7 +73,7 @@ const KriterieBegrunnelse = ({
   index: number
   suksesskriterieBegrunnelser: SuksesskriterieBegrunnelse[]
   disableEdit: boolean
-  update: (s: SuksesskriterieBegrunnelse) => void,
+  update: (s: SuksesskriterieBegrunnelse) => void
   status: string
 }) => {
   const suksesskriterieBegrunnelse = getSuksesskriterieBegrunnelse(suksesskriterieBegrunnelser, suksesskriterie)
@@ -103,15 +103,9 @@ const KriterieBegrunnelse = ({
       padding={theme.sizing.scale750}
       marginBottom={theme.sizing.scale600}
     >
+      <H3 color={ettlevColors.green800}>{suksesskriterie.navn}</H3>
 
-      <H3 color={ettlevColors.green800}>
-        {suksesskriterie.navn}
-      </H3>
-
-      <StatefulButtonGroup
-        mode={MODE.radio}
-        initialState={{ selected: oppfylt ? 0 : ikkerelevant ? 1 : [] }}
-      >
+      <StatefulButtonGroup mode={MODE.radio} initialState={{ selected: oppfylt ? 0 : ikkerelevant ? 1 : [] }}>
         <Button
           type={'button'}
           disabled={status === EtterlevelseStatus.IKKE_RELEVANT}
@@ -123,9 +117,9 @@ const KriterieBegrunnelse = ({
                 ...borderWidth('1px'),
                 borderRightWidth: '0px',
                 borderTopRightRadius: '0px',
-                borderBottomRightRadius: '0px'
-              }
-            }
+                borderBottomRightRadius: '0px',
+              },
+            },
           }}
           onClick={() => {
             setOppfylt(!oppfylt)
@@ -144,9 +138,9 @@ const KriterieBegrunnelse = ({
                 ...borderStyle('solid'),
                 ...borderWidth('1px'),
                 borderTopLeftRadius: '0px',
-                borderBottomLeftRadius: '0px'
-              }
-            }
+                borderBottomLeftRadius: '0px',
+              },
+            },
           }}
           onClick={() => {
             setIkkeRelevant(!ikkerelevant)
@@ -173,19 +167,20 @@ const KriterieBegrunnelse = ({
       )}
 
       <Block width="100%" height="1px" backgroundColor={ettlevColors.grey100} marginTop="40px" />
-      {status === EtterlevelseStatus.IKKE_RELEVANT &&
+      {status === EtterlevelseStatus.IKKE_RELEVANT && (
         <Block width="100%" display="flex" justifyContent="flex-end" marginTop="20px" marginBottom="-29px">
           <Paragraph2
             $style={{
               marginTop: '0px',
               marginBottom: '0px',
               color: ettlevColors.red600,
-              fontStyle: 'italic'
+              fontStyle: 'italic',
             }}
           >
             Ikke relevant
           </Paragraph2>
-        </Block>}
+        </Block>
+      )}
       <CustomizedAccordion>
         <CustomizedPanel
           title={<Label3 $style={{ color: ettlevColors.green600 }}>Utfyllende om kriteriet</Label3>}

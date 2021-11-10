@@ -1,6 +1,6 @@
 import axios from 'axios'
-import React, {useState} from 'react'
-import {Modal, ModalBody, ModalButton, ModalFooter, ModalHeader} from 'baseui/modal'
+import React, { useState } from 'react'
+import { Modal, ModalBody, ModalButton, ModalFooter, ModalHeader } from 'baseui/modal'
 
 let done = false
 

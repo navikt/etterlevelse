@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import RouteLink from './RouteLink'
+import RouteLink, { ExternalLink } from './RouteLink'
 import { Block, BlockOverrides, Display, Responsive, Scale } from 'baseui/block'
 import { borderColor, borderRadius, borderStyle, borderWidth, padding, paddingAll } from './Style'
 import { theme } from '../../util'
@@ -7,6 +7,24 @@ import { ettlevColors } from '../../util/theme'
 import { HeadingXLarge, Label3, LabelLarge, LabelSmall, Paragraph4, ParagraphMedium, ParagraphSmall } from 'baseui/typography'
 import { arrowRightIcon, navChevronRightIcon } from '../Images'
 import * as _ from 'lodash'
+
+interface PanelProps {
+  href: string
+  title: string | React.ReactNode
+  rightTitle?: string
+  beskrivelse?: string | React.ReactNode
+  rightBeskrivelse?: string
+  flip?: boolean
+  square?: boolean
+  hideBorderBottom?: boolean
+  useUnderline?: boolean
+  statusText?: string | React.ReactNode
+  panelIcon?: React.ReactNode | ((hover: boolean) => React.ReactNode)
+  overrides?: BlockOverrides
+  useTitleUnderLine?: boolean
+  useDescriptionUnderline?: boolean
+  hideChevron?: boolean
+}
 
 export const PanelLink = ({
   href,
@@ -24,23 +42,7 @@ export const PanelLink = ({
   useTitleUnderLine,
   useDescriptionUnderline,
   hideChevron,
-}: {
-  href: string
-  title: string | React.ReactNode
-  rightTitle?: string
-  beskrivelse?: string | React.ReactNode
-  rightBeskrivelse?: string
-  flip?: boolean
-  square?: boolean
-  hideBorderBottom?: boolean
-  useUnderline?: boolean
-  statusText?: string | React.ReactNode
-  panelIcon?: React.ReactNode | ((hover: boolean) => React.ReactNode)
-  overrides?: BlockOverrides
-  useTitleUnderLine?: boolean
-  useDescriptionUnderline?: boolean
-  hideChevron?: boolean
-}) => {
+}: PanelProps) => {
   return (
     <RouteLink
       href={href}
@@ -66,6 +68,45 @@ export const PanelLink = ({
         hideChevron={hideChevron}
       />
     </RouteLink>
+  )
+}
+
+export const PanelExternalLink = ({
+  href,
+  title,
+  rightTitle,
+  beskrivelse,
+  rightBeskrivelse,
+  panelIcon,
+  flip,
+  square,
+  hideBorderBottom,
+  useUnderline,
+  statusText,
+  overrides,
+  useTitleUnderLine,
+  useDescriptionUnderline,
+  hideChevron,
+}: PanelProps) => {
+  return (
+    <ExternalLink href={href} hideUnderline>
+      <SimplePanel
+        title={title}
+        rightTitle={rightTitle}
+        beskrivelse={beskrivelse}
+        rightBeskrivelse={rightBeskrivelse}
+        panelIcon={panelIcon}
+        flip={flip}
+        square={square}
+        hideBorderBottom={hideBorderBottom}
+        useUnderline={useUnderline}
+        statusText={statusText}
+        overrides={overrides}
+        useTitleUnderLine={useTitleUnderLine}
+        useDescriptionUnderline={useDescriptionUnderline}
+        hideChevron={hideChevron}
+      />
+    </ExternalLink>
   )
 }
 
@@ -224,39 +265,37 @@ const Chevron = ({ hover, icon, distance }: { hover: boolean; icon: string; dist
   </Block>
 )
 
-export const SimplePanel = (
-  {
-    title,
-    rightTitle,
-    beskrivelse,
-    rightBeskrivelse,
-    panelIcon,
-    flip,
-    statusText,
-    useTitleUnderLine,
-    overrides,
-    useDescriptionUnderline,
-    hideChevron,
-    square,
-    hideBorderBottom,
-    useUnderline,
-  }: {
-    title: string | React.ReactNode
-    rightTitle?: string
-    beskrivelse?: string | React.ReactNode
-    rightBeskrivelse?: string
-    flip?: boolean
-    square?: boolean
-    hideBorderBottom?: boolean
-    useUnderline?: boolean
-    statusText?: string | React.ReactNode
-    panelIcon?: React.ReactNode | ((hover: boolean) => React.ReactNode)
-    overrides?: BlockOverrides
-    useTitleUnderLine?: boolean
-    useDescriptionUnderline?: boolean
-    hideChevron?: boolean
-  }
-) => {
+export const SimplePanel = ({
+  title,
+  rightTitle,
+  beskrivelse,
+  rightBeskrivelse,
+  panelIcon,
+  flip,
+  statusText,
+  useTitleUnderLine,
+  overrides,
+  useDescriptionUnderline,
+  hideChevron,
+  square,
+  hideBorderBottom,
+  useUnderline,
+}: {
+  title: string | React.ReactNode
+  rightTitle?: string
+  beskrivelse?: string | React.ReactNode
+  rightBeskrivelse?: string
+  flip?: boolean
+  square?: boolean
+  hideBorderBottom?: boolean
+  useUnderline?: boolean
+  statusText?: string | React.ReactNode
+  panelIcon?: React.ReactNode | ((hover: boolean) => React.ReactNode)
+  overrides?: BlockOverrides
+  useTitleUnderLine?: boolean
+  useDescriptionUnderline?: boolean
+  hideChevron?: boolean
+}) => {
   const [hover, setHover] = useState(false)
   const responsiveDisplay: Responsive<Display> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
 
@@ -290,9 +329,11 @@ export const SimplePanel = (
 
   return (
     <Block display={responsiveDisplay} overrides={mergedOverrides} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
-      {panelIcon && <Block display="flex" marginLeft="27px" alignItems="center">
-        {typeof panelIcon === 'function' ? panelIcon(hover) : panelIcon}
-      </Block>}
+      {panelIcon && (
+        <Block display="flex" marginLeft="27px" alignItems="center">
+          {typeof panelIcon === 'function' ? panelIcon(hover) : panelIcon}
+        </Block>
+      )}
 
       <Block
         marginLeft={theme.sizing.scale600}

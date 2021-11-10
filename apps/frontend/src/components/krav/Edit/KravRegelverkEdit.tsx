@@ -1,25 +1,24 @@
-import React, {useState} from 'react'
-import {Select, SelectOverrides, SelectProps, Value} from 'baseui/select'
-import {codelist, ListName} from '../../../services/Codelist'
-import {FieldWrapper} from '../../common/Inputs'
-import {FieldArray} from 'formik'
-import {FormControl} from 'baseui/form-control'
-import {Block} from 'baseui/block'
-import {theme} from '../../../util'
+import React, { useState } from 'react'
+import { Select, SelectOverrides, SelectProps, Value } from 'baseui/select'
+import { codelist, ListName } from '../../../services/Codelist'
+import { FieldWrapper } from '../../common/Inputs'
+import { FieldArray } from 'formik'
+import { FormControl } from 'baseui/form-control'
+import { Block } from 'baseui/block'
+import { theme } from '../../../util'
 import Button from '../../common/Button'
-import {LabelSmall} from 'baseui/typography'
-import {LovView} from '../../Lov'
-import {RenderTagList} from '../../common/TagList'
-import {Regelverk} from '../../../constants'
+import { LabelSmall } from 'baseui/typography'
+import { LovView } from '../../Lov'
+import { RenderTagList } from '../../common/TagList'
+import { Regelverk } from '../../../constants'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
 import CustomizedInput from '../../common/CustomizedInput'
-import {ettlevColors} from "../../../util/theme";
-import {borderColor, borderWidth} from '../../common/Style'
-import {navChevronDownIcon} from '../../Images'
+import { ettlevColors } from '../../../util/theme'
+import { borderColor, borderWidth } from '../../common/Style'
+import { navChevronDownIcon } from '../../Images'
 import _ from 'lodash'
 
 const CustomizedRegelverkSelect = (props: SelectProps) => {
-
   const customOverrides: SelectOverrides = {
     ControlContainer: {
       style: {
@@ -37,7 +36,7 @@ const CustomizedRegelverkSelect = (props: SelectProps) => {
       style: {
         fontSize: '18px',
         marginTop: '4px',
-        marginBottom: '4px'
+        marginBottom: '4px',
       },
     },
   }
@@ -56,7 +55,7 @@ export const KravRegelverkEdit = () => {
 
   return (
     <FieldWrapper marginBottom="32px">
-      <FieldArray name="regelverk" >
+      <FieldArray name="regelverk">
         {(p) => {
           const add = () => {
             if (!text || !lov.length) return
@@ -90,9 +89,9 @@ export const KravRegelverkEdit = () => {
                             style: {
                               backgroundColor: p.form.errors.regelverk && ettlevColors.error50,
                               ...borderColor(p.form.errors.regelverk ? ettlevColors.red600 : ettlevColors.grey200),
-                              ...borderWidth('2px')
-                            }
-                          }
+                              ...borderWidth('2px'),
+                            },
+                          },
                         }}
                       />
                     </Block>
@@ -106,7 +105,7 @@ export const KravRegelverkEdit = () => {
                           Input: {
                             style: {
                               backgroundColor: p.form.errors.regelverk ? ettlevColors.error50 : '',
-                            }
+                            },
                           },
                           Root: {
                             style: {
@@ -114,8 +113,8 @@ export const KravRegelverkEdit = () => {
                               borderLeftColor: p.form.errors.regelverk ? ettlevColors.red600 : ettlevColors.grey200,
                               borderTopColor: p.form.errors.regelverk ? ettlevColors.red600 : ettlevColors.grey200,
                               borderBottomColor: p.form.errors.regelverk ? ettlevColors.red600 : ettlevColors.grey200,
-                            }
-                          }
+                            },
+                          },
                         }}
                       />
                     </Block>
