@@ -154,9 +154,9 @@ export const responsiveWidthSmall: Responsive<Scale> = [
   'calc(100% - 32px)',
   'calc(100% - 32px)',
   'calc(100% - 32px)',
-  'calc(100% - 80px)',
-  'calc(100% - 80px)',
-  'calc(100% - 80px)',
+  'calc(100% - 64px)',
+  'calc(100% - 64px)',
+  'calc(100% - 64px)',
 ]
 export const responsiveWidthLarge: Responsive<Scale> = [
   'calc(100% - 32px)',
