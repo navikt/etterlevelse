@@ -155,7 +155,7 @@ export const EditPriorityModal = (props: { isOpen: boolean; onClose: Function; k
                           setKravElements(arrayMove(kravElements, oldIndex, newIndex))
                         }}
                         overrides={{
-                          DragHandle: CustomDragHandle,
+                          DragHandle: ({$isDragged}) =>{ return CustomDragHandle($isDragged)},
                           Root: {
                             style: {
                               ...paddingZero,
@@ -197,7 +197,7 @@ export const EditPriorityModal = (props: { isOpen: boolean; onClose: Function; k
   )
 }
 
-const CustomDragHandle = () => {
+const CustomDragHandle = (isDragged: boolean) => {
   return (
     <Block
       $style={{
@@ -206,7 +206,7 @@ const CustomDragHandle = () => {
         marginRight: '1em',
       }}
     >
-      <FontAwesomeIcon icon={faGripVertical} aria-label={'Dra og slipp håndtak'} />
+      <FontAwesomeIcon icon={faGripVertical} aria-label={'Dra og slipp håndtak'} color={isDragged ? ettlevColors.green800 : ettlevColors.grey200} />
     </Block>
   )
 }
