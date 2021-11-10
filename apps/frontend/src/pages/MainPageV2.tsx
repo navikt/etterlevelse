@@ -144,6 +144,9 @@ export const MainPageV2 = () => {
                   style: {
                     width: 'calc(100% - 24px)',
                     maxWidth: '820px',
+                    ':hover': {
+                      boxSizing: 'content-box'
+                    }
                   }
                 }
               }}
