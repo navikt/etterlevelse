@@ -45,7 +45,7 @@ export const TemaList = () => {
             <CustomizedPanel title={<KravPanelHeader title={t.shortName} kravData={[]} />} key={`${t.code}_krav_list`}>
               <CustomPanelDivider>
                 <Block display="flex" width="100%" marginLeft="24px">
-                  <Paragraph4>Ingen krav under utfylling</Paragraph4>
+                  <Paragraph4>Ingen krav</Paragraph4>
                 </Block>
               </CustomPanelDivider>
             </CustomizedPanel>
