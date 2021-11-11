@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
-import RouteLink, { ExternalLink } from './RouteLink'
-import { Block, BlockOverrides, Display, Responsive, Scale } from 'baseui/block'
-import { borderColor, borderRadius, borderStyle, borderWidth, padding, paddingAll } from './Style'
-import { theme } from '../../util'
-import { ettlevColors } from '../../util/theme'
-import { HeadingXLarge, Label3, LabelLarge, LabelSmall, Paragraph4, ParagraphMedium, ParagraphSmall } from 'baseui/typography'
-import { arrowRightIcon, navChevronRightIcon } from '../Images'
+import React, {useState} from 'react'
+import RouteLink, {ExternalLink} from './RouteLink'
+import {Block, BlockOverrides, Display, Responsive, Scale} from 'baseui/block'
+import {borderColor, borderRadius, borderStyle, borderWidth, padding, paddingAll} from './Style'
+import {theme} from '../../util'
+import {ettlevColors} from '../../util/theme'
+import {HeadingXLarge, Label3, LabelLarge, LabelSmall, Paragraph4, ParagraphMedium, ParagraphSmall} from 'baseui/typography'
+import {arrowRightIcon, navChevronRightIcon} from '../Images'
 import * as _ from 'lodash'
 
 interface PanelProps {
@@ -383,8 +383,8 @@ export const SimplePanel = ({
           {(rightTitle || rightBeskrivelse) && (
             <Block display="flex">
               <Block
-                minWidth="150px"
-                maxWidth="150px"
+                minWidth="175px"
+                maxWidth="175px"
                 display="flex"
                 flexDirection={flip ? 'column-reverse' : 'column'}
                 justifyContent="center"
