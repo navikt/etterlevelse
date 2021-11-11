@@ -1,7 +1,7 @@
 import { Narrow, Page, Wide } from '../components/scaffold/Page'
 import { ettlevColors, theme } from '../util/theme'
 import { Block } from 'baseui/block'
-import { H2, HeadingXXLarge, Label4, Paragraph1 } from 'baseui/typography'
+import { H2, HeadingXXLarge, Label4, Paragraph1, Paragraph2 } from 'baseui/typography'
 import { PanelExternalLink, PanelLinkCard } from '../components/common/PanelLink'
 import { grafIconBg, handWithLeaf, paperPenIconBg, paragrafIconBg } from '../components/Images'
 import { Card } from 'baseui/card'
@@ -74,8 +74,8 @@ export const MainPageV2 = () => {
             $style={{}}
             marginTop={theme.sizing.scale1600}
             marginBottom={theme.sizing.scale900}
-            // paddingLeft={theme.sizing.scale800}
-            // paddingRight={theme.sizing.scale800}
+          // paddingLeft={theme.sizing.scale800}
+          // paddingRight={theme.sizing.scale800}
           >
             <H2 $style={{ fontWeight: 300, fontSize: '32px', lineHeight: '42px' }} marginTop="0px" marginBottom="0px">
               Etterlevelseskravene er
@@ -83,6 +83,9 @@ export const MainPageV2 = () => {
             <H2 $style={{ wordBreak: 'break-word', fontSize: '32px', lineHeight: '42px' }} marginTop="0px" marginBottom="0px">
               basert på norske lover og regler
             </H2>
+            <Paragraph2 $style={{ maxWidth: '600px', width: '100%' }}>
+              Hvorfor er etterlevelse viktig, og hvordan bør vi jobbe med kravene? Se filmen om etterlevelse og få en introduksjon på under 2 minutter
+            </Paragraph2>
           </Block>
 
           <Card
@@ -108,7 +111,7 @@ export const MainPageV2 = () => {
                 playIcon={
                   <Button kind="secondary" size={SIZE.compact} $style={buttonBorderStyle} startEnhancer={<FontAwesomeIcon icon={faPlay} />}>
                     {' '}
-                    Start{' '}
+                    Se film{' '}
                   </Button>
                 }
                 width="100%"
@@ -125,7 +128,6 @@ export const MainPageV2 = () => {
               border: `1px solid ${ettlevColors.grey100}`,
               borderRadius: '4px',
               backgroundColor: ettlevColors.white,
-              width: '100%',
             }}
           >
             <PanelExternalLink
@@ -137,6 +139,17 @@ export const MainPageV2 = () => {
               }
               beskrivelse={<Label4>Hvordan kravene blir til og hvordan jobbe med etterlevelse i produktutviklingen</Label4>}
               panelIcon={<img src={handWithLeaf} alt={''} />}
+              overrides={{
+                Block: {
+                  style: {
+                    width: 'calc(100% - 24px)',
+                    maxWidth: '820px',
+                    ':hover': {
+                      boxSizing: 'content-box'
+                    }
+                  }
+                }
+              }}
             />
           </Block>
 

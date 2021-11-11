@@ -148,15 +148,15 @@ export const theme = createTheme(primitives, overrides)
 export const pageWidth = '820px'
 export const maxPageWidth = '1276px'
 
-export const responsivePaddingSmall: Responsive<Scale> = ['16px', '16px', '16px', '40px', '40px', '40px']
+export const responsivePaddingSmall: Responsive<Scale> = ['16px', '16px', '16px', '32px', '32px', '32px']
 export const responsivePaddingLarge: Responsive<Scale> = ['16px', '16px', '16px', '100px', '100px', '100px']
 export const responsiveWidthSmall: Responsive<Scale> = [
   'calc(100% - 32px)',
   'calc(100% - 32px)',
   'calc(100% - 32px)',
-  'calc(100% - 80px)',
-  'calc(100% - 80px)',
-  'calc(100% - 80px)',
+  'calc(100% - 64px)',
+  'calc(100% - 64px)',
+  'calc(100% - 64px)',
 ]
 export const responsiveWidthLarge: Responsive<Scale> = [
   'calc(100% - 32px)',
