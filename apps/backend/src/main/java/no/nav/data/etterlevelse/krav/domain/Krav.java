@@ -63,7 +63,7 @@ public class Krav implements DomainObject, KravIdStatus {
     private List<String> relevansFor;
 
     @Default
-    private KravStatus status = KravStatus.UNDER_ARBEID;
+    private KravStatus status = KravStatus.UTKAST;
 
     public Krav convert(KravRequest request) {
         navn = request.getNavn();
