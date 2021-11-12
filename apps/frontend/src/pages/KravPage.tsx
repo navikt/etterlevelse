@@ -3,7 +3,7 @@ import { H1, H2, HeadingXLarge } from 'baseui/typography'
 import { useParams } from 'react-router-dom'
 import { deleteKrav, getKravByKravNummer, KravIdParams, mapToFormVal } from '../api/KravApi'
 import React, { useEffect, useRef, useState } from 'react'
-import { EtterlevelseQL, EtterlevelseStatus, ExternalCode, Krav, KravId, KravQL, KravStatus, KravVersjon, NewKravStatus } from '../constants'
+import { EtterlevelseQL, EtterlevelseStatus, ExternalCode, Krav, KravId, KravQL, KravStatus, KravVersjon } from '../constants'
 import Button from '../components/common/Button'
 import { ViewKrav } from '../components/krav/ViewKrav'
 import { EditKrav } from '../components/krav/EditKrav'
@@ -34,13 +34,11 @@ import { codelist, ListName, TemaCode } from '../services/Codelist'
 export const kravNumView = (it: { kravVersjon: number; kravNummer: number }) => `K${it.kravNummer}.${it.kravVersjon}`
 export const kravName = (krav: Krav) => `${kravNumView(krav)} - ${krav.navn}`
 
-export const kravStatus = (status: KravStatus| NewKravStatus) => {
+export const kravStatus = (status: KravStatus) => {
   if (!status) return ''
   switch (status) {
     case KravStatus.UTKAST:
       return 'Utkast'
-    case KravStatus.UNDER_ARBEID:
-      return 'Under arbeid'
     case KravStatus.AKTIV:
       return 'Aktiv'
     case KravStatus.UTGAATT:

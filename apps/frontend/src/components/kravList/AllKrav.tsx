@@ -13,6 +13,7 @@ import Button from '../common/Button'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import { KravPanels, sortKrav } from '../../pages/KravListPageV2'
 import { borderColor } from '../common/Style'
+import { kravStatus } from '../../pages/KravPage'
 
 type KravFilter = {
   status: Option[]
@@ -248,15 +249,7 @@ export const AllKrav = () => {
               {getSelector(
                 filter.status[0].id?.toString(),
                 KravListFilter.STATUS,
-                getOptions('Alle statuser', [
-                  { id: KravStatus.AKTIV, label: 'Aktiv' },
-                  { id: KravStatus.UNDER_ARBEID, label: 'Under Arbeid' },
-                  {
-                    id: KravStatus.UTGAATT,
-                    label: 'Utgått',
-                  },
-                  { id: KravStatus.UTKAST, label: 'Utkast' },
-                ]),
+                getOptions('Alle statuser', Object.values(KravStatus).map(id => ({id, label: kravStatus(id)}))),
                 filter.status,
               )}
             </Block>

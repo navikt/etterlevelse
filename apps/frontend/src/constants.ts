@@ -204,13 +204,6 @@ export enum EtterlevelseStatus {
 
 export enum KravStatus {
   UTKAST = 'UTKAST',
-  UNDER_ARBEID = 'UNDER_ARBEID',
-  AKTIV = 'AKTIV',
-  UTGAATT = 'UTGAATT',
-}
-
-export enum NewKravStatus {
-  UTKAST = 'UTKAST',
   AKTIV = 'AKTIV',
   UTGAATT = 'UTGAATT',
 }
