@@ -7,6 +7,7 @@ import no.nav.data.etterlevelse.codelist.dto.AllCodelistResponse;
 import no.nav.data.etterlevelse.codelist.dto.CodelistRequest;
 import no.nav.data.etterlevelse.codelist.dto.CodelistResponse;
 import no.nav.data.etterlevelse.krav.domain.Krav;
+import no.nav.data.etterlevelse.krav.domain.KravStatus;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -242,7 +243,7 @@ class CodelistControllerIT extends IntegrationTestBase {
         @Test
         void shouldThrowCodelistNotErasableException_whenCodelistToBeDeletedIsStillInUse() {
             saveCodelist(createCodelist(ListName.RELEVANS, "DELETE_CODE"));
-            storageService.save(Krav.builder().relevansFor(List.of("DELETE_CODE")).build());
+            storageService.save(Krav.builder().relevansFor(List.of("DELETE_CODE")).status(KravStatus.AKTIV).build());
             assertTrue(repository.findByListAndCode(ListName.RELEVANS, "DELETE_CODE").isPresent());
 
             ResponseEntity<String> responseEntity = restTemplate.exchange("/codelist/RELEVANS/DELETE_CODE", HttpMethod.DELETE, HttpEntity.EMPTY, String.class);
