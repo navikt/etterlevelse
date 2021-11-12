@@ -209,6 +209,12 @@ export enum KravStatus {
   UTGAATT = 'UTGAATT',
 }
 
+export enum NewKravStatus {
+  UTKAST = 'UTKAST',
+  AKTIV = 'AKTIV',
+  UTGAATT = 'UTGAATT',
+}
+
 export enum KravListFilter {
   RELEVANS = 'RELEVANS',
   LOVER = 'LOVER',

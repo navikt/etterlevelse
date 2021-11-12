@@ -1,4 +1,4 @@
-import { Krav, KravQL, KravStatus } from '../../constants'
+import { Krav, KravQL, KravStatus, NewKravStatus } from '../../constants'
 import { Form, Formik } from 'formik'
 import { createKrav, mapToFormVal, updateKrav } from '../../api/KravApi'
 import { Block } from 'baseui/block'
@@ -54,6 +54,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
     const mutatedKrav = {
       ...krav,
       underavdeling: underavdeling,
+      status: krav.status === KravStatus.UNDER_ARBEID ? KravStatus.UTKAST : krav.status
     }
     const etterlevelser = await getEtterlevelserByKravNumberKravVersion(krav.kravNummer, krav.kravVersjon)
     if (etterlevelser.totalElements > 0 && krav.status === KravStatus.UTKAST) {
@@ -221,7 +222,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
                       <OptionField
                         label="Status"
                         name="status"
-                        options={Object.values(KravStatus).map((id) => ({ id, label: kravStatus(id) }))}
+                        options={Object.values(NewKravStatus).map((id) => ({ id, label: kravStatus(id) }))}
                         tooltip={'Velg status for kravet. Utkast er kun synlig for kraveier selv. Aktiv/utgått er synlig for alle.'}
                       />
                     </Block>
