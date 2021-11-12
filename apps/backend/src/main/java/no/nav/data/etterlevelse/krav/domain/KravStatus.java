@@ -4,6 +4,7 @@ import java.util.List;
 
 public enum KravStatus {
     AKTIV,
+    UNDER_ARBEID,
     UTGAATT,
     UTKAST;
 
@@ -20,6 +21,6 @@ public enum KravStatus {
     }
 
     public static List<KravStatus> gjeldende() {
-        return List.of(AKTIV);
+        return List.of(AKTIV, UNDER_ARBEID);
     }
 }
