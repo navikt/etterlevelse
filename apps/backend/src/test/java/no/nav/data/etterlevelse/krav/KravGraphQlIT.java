@@ -38,6 +38,7 @@ class KravGraphQlIT extends GraphQLTestBase {
                 .navn("Krav 1").kravNummer(50).kravVersjon(1)
                 .relevansFor(List.of("SAK"))
                 .varslingsadresser(List.of(new Varslingsadresse("xyz", AdresseType.SLACK), new Varslingsadresse("notfound", AdresseType.SLACK)))
+                .status(KravStatus.AKTIV)
                 .build());
         storageService.save(Etterlevelse.builder()
                 .kravNummer(krav.getKravNummer()).kravVersjon(krav.getKravVersjon())
@@ -67,10 +68,12 @@ class KravGraphQlIT extends GraphQLTestBase {
             var krav = storageService.save(Krav.builder()
                     .navn("Krav 1").kravNummer(50).kravVersjon(1)
                     .relevansFor(List.of("SAK"))
+                    .status(KravStatus.AKTIV)
                     .build());
             storageService.save(Krav.builder()
                     .navn("Krav 2").kravNummer(51).kravVersjon(1)
                     .relevansFor(List.of("INNSYN"))
+                    .status(KravStatus.AKTIV)
                     .build());
 
             var var = Map.of("relevans", "SAK", "nummer", "50");
@@ -96,22 +99,27 @@ class KravGraphQlIT extends GraphQLTestBase {
             storageService.save(Krav.builder()
                     .navn("gammel versjon av krav 50").kravNummer(50).kravVersjon(1)
                     .relevansFor(behandlingRelevans)
+                    .status(KravStatus.AKTIV)
                     .build());
             var krav50RelevansMatch = storageService.save(Krav.builder()
                     .navn("Krav 1").kravNummer(50).kravVersjon(2)
                     .relevansFor(behandlingRelevans)
+                    .status(KravStatus.AKTIV)
                     .build());
             var krav51MedEtterlevelse = storageService.save(Krav.builder()
                     .navn("Krav 2").kravNummer(51).kravVersjon(1)
                     .relevansFor(List.of("INNSYN"))
+                    .status(KravStatus.AKTIV)
                     .build());
             var krav51NyesteVersjon = storageService.save(Krav.builder()
                     .navn("Krav 2").kravNummer(51).kravVersjon(2)
                     .relevansFor(List.of("INNSYN", "SAK"))
+                    .status(KravStatus.AKTIV)
                     .build());
             storageService.save(Krav.builder()
                     .navn("Irrelevant").kravNummer(52).kravVersjon(1)
                     .relevansFor(List.of("INNSYN"))
+                    .status(KravStatus.AKTIV)
                     .build());
             storageService.save(Krav.builder()
                     .navn("UTKAST").kravNummer(53).kravVersjon(1)
@@ -146,10 +154,12 @@ class KravGraphQlIT extends GraphQLTestBase {
             var krav = storageService.save(Krav.builder()
                     .navn("Krav 1").kravNummer(50).kravVersjon(1)
                     .relevansFor(List.of("SAK"))
+                    .status(KravStatus.AKTIV)
                     .build());
             var krav2 = storageService.save(Krav.builder()
                     .navn("Krav 2").kravNummer(51).kravVersjon(1)
                     .relevansFor(List.of("INNSYN"))
+                    .status(KravStatus.AKTIV)
                     .build());
             storageService.save(Etterlevelse.builder()
                     .kravNummer(50).kravVersjon(1)

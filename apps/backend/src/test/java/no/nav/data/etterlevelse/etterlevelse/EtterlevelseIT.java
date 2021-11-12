@@ -98,7 +98,7 @@ public class EtterlevelseIT extends IntegrationTestBase {
 
         @Test
         void createEtterlevelse() {
-            var krav = storageService.save(Krav.builder().kravNummer(50).build());
+            var krav = storageService.save(Krav.builder().kravNummer(50).status(KravStatus.AKTIV).build());
             var req = EtterlevelseRequest.builder()
                     .behandlingId("behandling1")
                     .kravNummer(krav.getKravNummer())
@@ -169,7 +169,7 @@ public class EtterlevelseIT extends IntegrationTestBase {
 
     @Test
     void updateEtterlevelse() {
-        var krav = storageService.save(Krav.builder().kravNummer(50).kravVersjon(1).build());
+        var krav = storageService.save(Krav.builder().kravNummer(50).kravVersjon(1).status(KravStatus.AKTIV).build());
         var etterlevelse = storageService.save(Etterlevelse.builder().behandlingId("b1").kravNummer(krav.getKravNummer()).kravVersjon(krav.getKravVersjon()).build());
         var req = EtterlevelseRequest.builder()
                 .behandlingId("b2")
