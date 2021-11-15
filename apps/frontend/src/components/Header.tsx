@@ -1,31 +1,31 @@
 import * as React from 'react'
-import { useState } from 'react'
-import { ALIGN, HeaderNavigation, StyledNavigationItem as NavigationItem, StyledNavigationList as NavigationList } from 'baseui/header-navigation'
-import { Block } from 'baseui/block'
-import { KIND, SIZE } from 'baseui/button'
-import Button, { ButtonKind } from '../components/common/Button'
-import { Popover } from 'baseui/popover'
-import { useHistory } from 'react-router-dom'
-import { StyledLink } from 'baseui/link'
-import { useQueryParam } from '../util/hooks'
-import { theme } from '../util'
-import { HeadingXLarge } from 'baseui/typography'
-import { intl } from '../util/intl/intl'
+import {useState} from 'react'
+import {ALIGN, HeaderNavigation, StyledNavigationItem as NavigationItem, StyledNavigationList as NavigationList} from 'baseui/header-navigation'
+import {Block} from 'baseui/block'
+import {KIND, SIZE} from 'baseui/button'
+import Button, {ButtonKind} from '../components/common/Button'
+import {Popover} from 'baseui/popover'
+import {useHistory} from 'react-router-dom'
+import {StyledLink} from 'baseui/link'
+import {useQueryParam} from '../util/hooks'
+import {theme} from '../util'
+import {HeadingXLarge} from 'baseui/typography'
+import {intl} from '../util/intl/intl'
 import BurgerMenu from './Navigation/Burger'
 import RouteLink from './common/RouteLink'
-import { ampli } from '../services/Amplitude'
-import { user } from '../services/User'
-import { writeLog } from '../api/LogApi'
+import {ampli} from '../services/Amplitude'
+import {user} from '../services/User'
+import {writeLog} from '../api/LogApi'
 import MainSearch from './search/MainSearch'
-import { arkPennIcon, grafIcon, husIcon, logo, paragrafIcon } from './Images'
-import { ettlevColors, maxPageWidth, responsivePaddingSmall, responsiveWidthSmall } from '../util/theme'
-import { buttonBorderStyle } from './common/Button'
-import { Checkbox } from 'baseui/checkbox'
-import { Portrait } from './common/Portrait'
-import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
-import { faBars, faChevronDown, faChevronUp, faTimes } from '@fortawesome/free-solid-svg-icons'
-import { faUser } from '@fortawesome/free-regular-svg-icons'
-import { History } from 'history'
+import {arkPennIcon, grafIcon, husIcon, logo, paragrafIcon} from './Images'
+import {ettlevColors, maxPageWidth, responsivePaddingSmall, responsiveWidthSmall} from '../util/theme'
+import {buttonBorderStyle} from './common/Button'
+import {Checkbox} from 'baseui/checkbox'
+import {Portrait} from './common/Portrait'
+import {IconDefinition} from '@fortawesome/fontawesome-svg-core'
+import {faBars, faChevronDown, faChevronUp, faTimes} from '@fortawesome/free-solid-svg-icons'
+import {faUser} from '@fortawesome/free-regular-svg-icons'
+import {History} from 'history'
 import SkipToContent from './common/SkipToContent/SkipToContent'
 
 export const loginUrl = (history: History, path?: string) => {
@@ -73,8 +73,9 @@ const LoggedInHeader = () => {
   const kravPages = user.isKraveier() ? [{ label: 'Forvalte og opprette krav', href: '/krav' }] : []
   const adminPages = user.isAdmin()
     ? [
-        { label: intl.audit, href: '/admin/audit' },
-        { label: 'Kodeverk', href: '/admin/codelist' },
+      { label: 'Administrere krav', href: '/admin/krav' },
+      { label: intl.audit, href: '/admin/audit' },
+      { label: 'Kodeverk', href: '/admin/codelist' },
         { label: intl.mailLog, href: '/admin/maillog' },
         { label: intl.settings, href: '/admin/settings', disabled: true },
       ]
