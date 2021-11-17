@@ -25,21 +25,16 @@ export const TemaList = () => {
   }, [])
 
   const fetchKrav = () => {
-    ;(async () => {
+    ; (async () => {
       const kraver = await getAllKrav()
       const allKravPriority = await getAllKravPriority()
 
-      allKravPriority.forEach((kp) => {
-        kraver.map((k) => {
-          if(k.kravNummer === kp.kravNummer && k.kravVersjon === kp.kravVersjon) {
-            k.prioriteringsId = kp.prioriteringsId
-            k.kravPriorityUID = kp.id
-          } else {
-            k.prioriteringsId = ''
-            k.kravPriorityUID = ''
-          }
-        })
+      kraver.map((k) => {
+        const priority = allKravPriority.filter((kp) => kp.kravNummer === k.kravNummer && kp.kravVersjon === k.kravVersjon)
+        k.prioriteringsId = priority.length ? priority[0].prioriteringsId : ''
+        k.kravPriorityUID = priority.length ? priority[0].id : ''
       })
+
       setAllKrav(kraver)
     })()
   }
