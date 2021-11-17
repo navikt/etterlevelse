@@ -11,13 +11,13 @@ import {H1, H2, Label3, Paragraph2} from 'baseui/typography'
 import moment from 'moment'
 import KravStatusView from '../KravStatusTag'
 import {borderRadius, borderStyle, paddingZero} from '../../common/Style'
-import {kravMapToFormVal, updateKrav} from '../../../api/KravApi'
 import {Spinner} from '../../common/Spinner'
 import {theme} from '../../../util'
 import {Block} from 'baseui/block'
 import {ettlevColors, responsivePaddingSmall} from '../../../util/theme'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faGripVertical} from '@fortawesome/free-solid-svg-icons'
+import { updateKravPriority, kravMapToKravPrioriting, createKravPriority} from '../../../api/KravPriorityApi'
 
 export const EditPriorityModal = (props: { isOpen: boolean; onClose: Function; kravListe: Krav[]; tema: string; refresh: Function }) => {
   const { isOpen, onClose, kravListe, tema, refresh } = props
@@ -90,13 +90,17 @@ export const EditPriorityModal = (props: { isOpen: boolean; onClose: Function; k
       }}
       onSubmit={(value) => {
         setLoading(true)
-        let updateKraver: Promise<any>[] = []
+        let updateKravPriorityPromise: Promise<any>[] = []
         const kravMedPrioriteting = setPriority([...kravElements])
         kravMedPrioriteting.forEach((kmp) => {
-          updateKraver.push((async () => await updateKrav(kravMapToFormVal(kmp)))())
+          if(kmp.kravPriorityUID) {
+            updateKravPriorityPromise.push((async () => await updateKravPriority(kravMapToKravPrioriting(kmp)))())
+          } else {
+            updateKravPriorityPromise.push((async () => await createKravPriority(kravMapToKravPrioriting(kmp)))())
+          }
         })
         try {
-          Promise.all(updateKraver).then(() => {
+          Promise.all(updateKravPriorityPromise).then(() => {
             setLoading(false)
             refresh()
             onClose()

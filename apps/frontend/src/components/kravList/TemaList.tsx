@@ -14,6 +14,7 @@ import { ettlevColors, theme } from '../../util/theme'
 import Button from '../common/Button'
 import { EditPriorityModal } from './edit/EditPriorityModal'
 import { sortKraverByPriority } from '../../util/sort'
+import { getAllKravPriority } from '../../api/KravPriorityApi'
 
 export const TemaList = () => {
   const [allKrav, setAllKrav] = useState<Krav[]>()
@@ -25,8 +26,21 @@ export const TemaList = () => {
 
   const fetchKrav = () => {
     ;(async () => {
-      setAllKrav(await getAllKrav())
-      console.log('REFRESH')
+      const kraver = await getAllKrav()
+      const allKravPriority = await getAllKravPriority()
+
+      allKravPriority.forEach((kp) => {
+        kraver.map((k) => {
+          if(k.kravNummer === kp.kravNummer && k.kravVersjon === kp.kravVersjon) {
+            k.prioriteringsId = kp.prioriteringsId
+            k.kravPriorityUID = kp.id
+          } else {
+            k.prioriteringsId = ''
+            k.kravPriorityUID = ''
+          }
+        })
+      })
+      setAllKrav(kraver)
     })()
   }
 
