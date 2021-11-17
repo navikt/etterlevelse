@@ -17,6 +17,7 @@ import {Pagination} from "baseui/pagination";
 import {codelist, ListName} from "../services/Codelist";
 import {kravStatus} from "./KravPage";
 import {Layout2} from "../components/scaffold/Page";
+import RouteLink from "../components/common/RouteLink";
 
 const kravSorting: ColumnCompares<Krav> = {
   kravNummer: (a, b) => a.kravNummer - b.kravNummer,
@@ -47,7 +48,7 @@ export const KravTablePage = () => {
     (async () => {
       const kraver = await getKravPage(page - 1, limit)
       const mappedKraver = kraver.content.map(k => kravMapToFormVal(k))
-      setTableContent({ ...kraver, content: mappedKraver })
+      setTableContent({...kraver, content: mappedKraver})
     })()
   }, [page, limit])
 
@@ -71,12 +72,12 @@ export const KravTablePage = () => {
             sorting: kravSorting
           }}
           headers={[
-            { $style: { maxWidth: '6%' }, title: "Krav ID", column: 'kravNummer' },
-            { $style: { maxWidth: '20%', minWidth: '20%' }, title: "Kravnavn", column: 'navn' },
-            { title: "Ansvarlig", column: 'avdeling' },
-            { title: "Tema", column: 'tema' },
-            { title: "Status", column: 'status' },
-            { title: "Siste endret", column: 'changeStamp' },
+            {$style: {maxWidth: '6%'}, title: "Krav ID", column: 'kravNummer'},
+            {$style: {maxWidth: '25%', minWidth: '25%'}, title: "Kravnavn", column: 'navn'},
+            {title: "Ansvarlig", column: 'avdeling'},
+            {title: "Tema", column: 'tema'},
+            {title: "Status", column: 'status'},
+            {title: "Siste endret", column: 'changeStamp'},
           ]}
           render={(tableData) =>
             tableData.data.map((krav, index) => {
@@ -84,17 +85,17 @@ export const KravTablePage = () => {
               const rowNum = tableContent.pageNumber * tableContent.pageSize + index + 1
               return (
                 <Row key={krav.id}>
-                  <Cell $style={{ maxWidth: '6%' }}>
+                  <Cell $style={{maxWidth: '6%'}}>
                     {krav.kravNummer}.{krav.kravVersjon}
                   </Cell>
-                  <Cell $style={{ maxWidth: '20%', minWidth: '20%' }}>
-                    {krav.navn}
+                  <Cell $style={{maxWidth: '25%', minWidth: '25%'}}>
+                    <RouteLink href={`/krav/${krav.kravNummer}/${krav.kravVersjon}`}>{krav.navn}</RouteLink>
                   </Cell>
                   <Cell>
                     {krav.avdeling && krav.avdeling.shortName}
                   </Cell>
                   <Cell>
-                    {codelist.getCode(ListName.TEMA, krav.tema)?.shortName}
+                    <RouteLink href={`/tema/${krav.tema}`}>{codelist.getCode(ListName.TEMA, krav.tema)?.shortName}</RouteLink>
                   </Cell>
                   <Cell>
                     {kravStatus(krav.status)}
@@ -110,16 +111,16 @@ export const KravTablePage = () => {
       </Block>
       <Block display="flex" justifyContent="space-between" marginTop="1rem" marginBottom="40px">
         <StatefulPopover
-          content={({ close }) => (
+          content={({close}) => (
             <StatefulMenu
-              items={[5, 10, 20, 50, 100].map((i) => ({ label: i }))}
-              onItemSelect={({ item }) => {
+              items={[5, 10, 20, 50, 100].map((i) => ({label: i}))}
+              onItemSelect={({item}) => {
                 setLimit(item.label)
                 close()
               }}
               overrides={{
                 List: {
-                  style: { height: '150px', width: '100px' },
+                  style: {height: '150px', width: '100px'},
                 },
               }}
             />
@@ -133,8 +134,8 @@ export const KravTablePage = () => {
         <Pagination
           currentPage={page}
           numPages={tableContent.pages}
-          onPageChange={({ nextPage }) => handlePageChange(nextPage)}
-          labels={{ nextButton: intl.nextButton, prevButton: intl.prevButton }}
+          onPageChange={({nextPage}) => handlePageChange(nextPage)}
+          labels={{nextButton: intl.nextButton, prevButton: intl.prevButton}}
         />
       </Block>
     </Layout2>
