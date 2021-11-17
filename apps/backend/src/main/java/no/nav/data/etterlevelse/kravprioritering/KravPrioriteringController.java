@@ -75,7 +75,7 @@ public class KravPrioriteringController {
 
     @Operation(summary = "Update krav prioritering")
     @ApiResponse(description = "ok")
-    @PostMapping("/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<KravPrioriteringResponse> updateKravPrioritering(@PathVariable UUID id,@Valid @RequestBody KravPrioriteringRequest request) {
         log.info("Update krav prioritering id={}", id);
 
