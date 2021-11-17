@@ -8,6 +8,7 @@ import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravImage;
 import no.nav.data.etterlevelse.krav.domain.Tilbakemelding;
+import no.nav.data.etterlevelse.kravprioritering.domain.KravPrioritering;
 import org.springframework.util.Assert;
 
 import java.util.HashMap;
@@ -23,6 +24,7 @@ public final class TypeRegistration {
 
     static {
         addDomainClass(Krav.class, true);
+        addDomainClass(KravPrioritering.class, true);
         addDomainClass(Etterlevelse.class, true);
         addDomainClass(BehandlingData.class, true);
         addDomainClass(Tilbakemelding.class, false);
@@ -34,7 +36,6 @@ public final class TypeRegistration {
 
     private TypeRegistration() {
     }
-
     private static void addDomainClass(Class<? extends DomainObject> aClass, boolean audited) {
         String typeName = aClass.getSimpleName();
         classToType.put(aClass, typeName);
