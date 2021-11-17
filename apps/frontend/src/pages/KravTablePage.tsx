@@ -5,16 +5,26 @@ import {HeadingXXLarge} from "baseui/typography";
 import * as React from "react";
 import {useEffect, useState} from "react";
 import {emptyPage, Krav, PageResponse} from "../constants";
-import {ObjectType} from "../components/admin/audit/AuditTypes";
-import {getKravPage} from "../api/KravApi";
+import {getKravPage, kravMapToFormVal} from "../api/KravApi";
 import {Cell, Row, Table} from "../components/common/Table";
 import {ColumnCompares} from "../util/hooks";
+import moment from "moment";
+import {PLACEMENT, StatefulPopover} from "baseui/popover";
+import {StatefulMenu} from "baseui/menu";
+import {Button, KIND} from "baseui/button";
+import {TriangleDown} from "baseui/icon";
+import {intl} from "../util/intl/intl";
+import {Pagination} from "baseui/pagination";
+import {codelist, ListName} from "../services/Codelist";
+import {kravStatus} from "./KravPage";
 
 const kravSorting: ColumnCompares<Krav> = {
   kravNummer: (a, b) => a.kravNummer - b.kravNummer,
   navn: (a, b) => (a.navn || '').localeCompare(b.navn || ''),
   avdeling: (a, b) => (a.avdeling?.shortName || '').localeCompare(b.avdeling?.shortName || ''),
-  // products: (a, b) => ((a.products.length && a.products[0].shortName) || '').localeCompare((b.products.length && b.products[0].shortName) || '')
+  tema: (a, b) => (codelist.getCode(ListName.TEMA, a.tema)?.shortName || '').localeCompare(codelist.getCode(ListName.TEMA, b.tema)?.shortName || ''),
+  status: (a, b) => ((a.status) || '').localeCompare((b.status) || ''),
+  changeStamp: (a, b) => ((a.changeStamp.lastModifiedDate) || '').localeCompare((b.changeStamp.lastModifiedDate) || ''),
 }
 
 export const KravTablePage = () => {
@@ -22,19 +32,25 @@ export const KravTablePage = () => {
   const [tableContent, setTableContent] = useState<PageResponse<Krav>>(emptyPage)
   const [page, setPage] = useState(1)
   const [limit, setLimit] = useState(20)
-  const [table, setTable] = useState<ObjectType | undefined>(undefined)
 
-  // useEffect(() => {
-  //   (async () => {
-  //     setTableContent(await getKravPage(page - 1, limit))
-  //   })()
-  // }, [])
+  const handlePageChange = (nextPage: number) => {
+    if (nextPage < 1) {
+      return
+    }
+    if (nextPage > tableContent.pages) {
+      return
+    }
+    setPage(nextPage)
+  }
 
   useEffect(() => {
     (async () => {
-      setTableContent(await getKravPage(page - 1, limit))
+      const kraver = await getKravPage(page - 1, limit)
+      const mappedKraver = kraver.content.map(k => kravMapToFormVal(k))
+      setTableContent({...kraver, content: mappedKraver})
     })()
-  }, [page, limit, table])
+  }, [page, limit])
+
 
   return (
     <Block width="100%" paddingBottom={'200px'} id="content" overrides={{Block: {props: {role: 'main'}}}}>
@@ -58,11 +74,11 @@ export const KravTablePage = () => {
           }}
           headers={[
             {$style: {maxWidth: '5%'}, title: "Krav ID", column: 'kravNummer'},
-            {$style: {maxWidth: '20%', minWidth:'20%'}, title: "Kravnavn", column:'navn'},
-            {title: "Ansvarlig", column:'avdeling'},
-            {title: "Tema"},
-            {title: "Status"},
-            {title: "Siste endret"},
+            {$style: {maxWidth: '20%', minWidth: '20%'}, title: "Kravnavn", column: 'navn'},
+            {title: "Ansvarlig", column: 'avdeling'},
+            {title: "Tema", column: 'tema'},
+            {title: "Status", column: 'status'},
+            {title: "Siste endret",column:'changeStamp'},
           ]}
           render={(tableData) =>
             tableData.data.map((krav, index) => {
@@ -73,11 +89,20 @@ export const KravTablePage = () => {
                   <Cell $style={{maxWidth: '5%'}}>
                     {krav.kravNummer}.{krav.kravVersjon}
                   </Cell>
-                  <Cell $style={{maxWidth:'20%'}}>
+                  <Cell $style={{maxWidth: '20%', minWidth: '20%'}}>
                     {krav.navn}
                   </Cell>
                   <Cell>
                     {krav.avdeling && krav.avdeling.shortName}
+                  </Cell>
+                  <Cell>
+                    {codelist.getCode(ListName.TEMA, krav.tema)?.shortName}
+                  </Cell>
+                  <Cell>
+                    {kravStatus(krav.status)}
+                  </Cell>
+                  <Cell>
+                    {moment(krav.changeStamp.lastModifiedDate).format('ll')}
                   </Cell>
                 </Row>
               )
@@ -85,6 +110,36 @@ export const KravTablePage = () => {
           }
         />
       </Block>
+      <Block display="flex" justifyContent="space-between" marginTop="1rem">
+        <StatefulPopover
+          content={({close}) => (
+            <StatefulMenu
+              items={[5, 10, 20, 50, 100].map((i) => ({label: i}))}
+              onItemSelect={({item}) => {
+                setLimit(item.label)
+                close()
+              }}
+              overrides={{
+                List: {
+                  style: {height: '150px', width: '100px'},
+                },
+              }}
+            />
+          )}
+          placement={PLACEMENT.bottom}
+        >
+          <Button kind={KIND.tertiary} endEnhancer={TriangleDown}>
+            <strong>{`${limit} ${intl.rows}`}</strong>
+          </Button>
+        </StatefulPopover>
+        <Pagination
+          currentPage={page}
+          numPages={tableContent.pages}
+          onPageChange={({nextPage}) => handlePageChange(nextPage)}
+          labels={{nextButton: intl.nextButton, prevButton: intl.prevButton}}
+        />
+      </Block>
+
       {/*<Block display={'flex'} justifyContent="center" width="100%">*/}
       {/*  <Block maxWidth={maxPageWidth} width="100%">*/}
       {/*    <Block paddingLeft={'100px'} paddingRight={'100px'} paddingTop={theme.sizing.scale800}>*/}
