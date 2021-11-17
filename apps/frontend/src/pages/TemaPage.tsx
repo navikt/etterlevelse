@@ -24,6 +24,7 @@ import { useForceUpdate } from '../util/hooks'
 import { borderRadius } from '../components/common/Style'
 import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 import { sortKraverByPriority } from '../util/sort'
+import { getAllKravPriority } from '../api/KravPriorityApi'
 
 export const TemaPage = () => {
   const { tema } = useParams<{ tema: string }>()
@@ -50,7 +51,15 @@ const TemaSide = ({ tema }: { tema: TemaCode }) => {
 
   useEffect(() => {
     if (data && data.krav && data.krav.content && data.krav.content.length > 0) {
-      setKravList(sortKraverByPriority(data.krav.content, tema.shortName))
+      ; (async () => {
+        const allKravPriority = await getAllKravPriority()
+        const kraver = _.cloneDeep(data.krav.content)
+        kraver.map((k) => {
+          const priority = allKravPriority.filter((kp) => kp.kravNummer === k.kravNummer && kp.kravVersjon === k.kravVersjon)
+          k.prioriteringsId = priority.length ? priority[0].prioriteringsId : ''
+        })
+        setKravList(sortKraverByPriority(kraver, tema.shortName))
+      })()
     }
   }, [data])
 

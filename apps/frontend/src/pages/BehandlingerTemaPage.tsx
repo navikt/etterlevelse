@@ -23,6 +23,8 @@ import Button from '../components/common/Button'
 import { Responsive } from 'baseui/theme'
 import { KravPanelHeader } from '../components/behandling/KravPanelHeader'
 import { sortKraverByPriority } from '../util/sort'
+import _ from 'lodash'
+import { getAllKravPriority } from '../api/KravPriorityApi'
 
 const responsiveBreakPoints: Responsive<Display> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
 
@@ -55,27 +57,37 @@ export const BehandlingerTemaPage = () => {
   const [kravId, setKravId] = useState<KravId | undefined>()
 
   useEffect(() => {
-    const sortedKrav = sortKraverByPriority<KravQL>(rawData?.krav.content || [], temaData?.shortName || '')
-    const mapped = sortedKrav.map((krav) => {
-      const etterlevelse = krav.etterlevelser.length ? krav.etterlevelser[0] : undefined
-      return {
-        kravNummer: krav.kravNummer,
-        kravVersjon: krav.kravVersjon,
-        navn: krav.navn,
-        suksesskriterier: krav.suksesskriterier,
-        ...mapEtterlevelseData(etterlevelse),
-      }
-    })
+    ; (async () => {
+      const allKravPriority = await getAllKravPriority()
+      const kraver = _.cloneDeep(rawData?.krav.content) || []
 
-    for (let index = mapped.length - 1; index > 0; index--) {
-      if (mapped[index].kravNummer === mapped[index - 1].kravNummer && mapped[index - 1].etterlevelseStatus !== EtterlevelseStatus.FERDIG_DOKUMENTERT) {
-        mapped.splice(index - 1, 1)
+      kraver.map((k) => {
+        const priority = allKravPriority.filter((kp) => kp.kravNummer === k.kravNummer && kp.kravVersjon === k.kravVersjon)
+        k.prioriteringsId = priority.length ? priority[0].prioriteringsId : ''
+      })
+
+      const sortedKrav = sortKraverByPriority<KravQL>(kraver, temaData?.shortName || '')
+      const mapped = sortedKrav.map((krav) => {
+        const etterlevelse = krav.etterlevelser.length ? krav.etterlevelser[0] : undefined
+        return {
+          kravNummer: krav.kravNummer,
+          kravVersjon: krav.kravVersjon,
+          navn: krav.navn,
+          suksesskriterier: krav.suksesskriterier,
+          ...mapEtterlevelseData(etterlevelse),
+        }
+      })
+
+      for (let index = mapped.length - 1; index > 0; index--) {
+        if (mapped[index].kravNummer === mapped[index - 1].kravNummer && mapped[index - 1].etterlevelseStatus !== EtterlevelseStatus.FERDIG_DOKUMENTERT) {
+          mapped.splice(index - 1, 1)
+        }
+        if (mapped[index].kravNummer === mapped[index - 1].kravNummer && mapped[index - 1].etterlevelseStatus === EtterlevelseStatus.FERDIG_DOKUMENTERT) {
+          mapped[index - 1].gammelVersjon = true
+        }
       }
-      if (mapped[index].kravNummer === mapped[index - 1].kravNummer && mapped[index - 1].etterlevelseStatus === EtterlevelseStatus.FERDIG_DOKUMENTERT) {
-        mapped[index - 1].gammelVersjon = true
-      }
-    }
-    setKravData(mapped)
+      setKravData(mapped)
+    })()
   }, [rawData])
 
   const update = (etterlevelse: Etterlevelse) => {
