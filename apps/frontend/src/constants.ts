@@ -35,6 +35,14 @@ export interface DomainObject {
   version: number
 }
 
+export interface KravPrioritering extends DomainObject {
+  id: string
+
+  kravVersjon: number
+  kravNummer: number
+  prioriteringsId: string
+}
+
 export interface KravId {
   id: string
   kravVersjon: number
@@ -60,6 +68,7 @@ export interface Krav extends DomainObject {
   implementasjoner: string
   notat?: string
   prioriteringsId?: string
+  kravPriorityUID?: string
   begrepIder: string[]
   varslingsadresser: Varslingsadresse[]
   rettskilder: string[]
