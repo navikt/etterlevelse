@@ -1,22 +1,22 @@
-import {Block} from "baseui/block";
-import {maxPageWidth, theme} from "../util/theme";
-import CustomizedBreadcrumbs from "../components/common/CustomizedBreadcrumbs";
-import {HeadingXXLarge} from "baseui/typography";
+import { Block } from "baseui/block";
+import { ettlevColors, maxPageWidth, theme } from "../util/theme";
+import { HeadingXXLarge } from "baseui/typography";
 import * as React from "react";
-import {useEffect, useState} from "react";
-import {emptyPage, Krav, PageResponse} from "../constants";
-import {getKravPage, kravMapToFormVal} from "../api/KravApi";
-import {Cell, Row, Table} from "../components/common/Table";
-import {ColumnCompares} from "../util/hooks";
+import { useEffect, useState } from "react";
+import { emptyPage, Krav, PageResponse } from "../constants";
+import { getKravPage, kravMapToFormVal } from "../api/KravApi";
+import { Cell, Row, Table } from "../components/common/Table";
+import { ColumnCompares } from "../util/hooks";
 import moment from "moment";
-import {PLACEMENT, StatefulPopover} from "baseui/popover";
-import {StatefulMenu} from "baseui/menu";
-import {Button, KIND} from "baseui/button";
-import {TriangleDown} from "baseui/icon";
-import {intl} from "../util/intl/intl";
-import {Pagination} from "baseui/pagination";
-import {codelist, ListName} from "../services/Codelist";
-import {kravStatus} from "./KravPage";
+import { PLACEMENT, StatefulPopover } from "baseui/popover";
+import { StatefulMenu } from "baseui/menu";
+import { Button, KIND } from "baseui/button";
+import { TriangleDown } from "baseui/icon";
+import { intl } from "../util/intl/intl";
+import { Pagination } from "baseui/pagination";
+import { codelist, ListName } from "../services/Codelist";
+import { kravStatus } from "./KravPage";
+import { Layout2 } from "../components/scaffold/Page";
 
 const kravSorting: ColumnCompares<Krav> = {
   kravNummer: (a, b) => a.kravNummer - b.kravNummer,
@@ -47,38 +47,36 @@ export const KravTablePage = () => {
     (async () => {
       const kraver = await getKravPage(page - 1, limit)
       const mappedKraver = kraver.content.map(k => kravMapToFormVal(k))
-      setTableContent({...kraver, content: mappedKraver})
+      setTableContent({ ...kraver, content: mappedKraver })
     })()
   }, [page, limit])
 
-
   return (
-    <Block width="100%" paddingBottom={'200px'} id="content" overrides={{Block: {props: {role: 'main'}}}}>
-      <Block width="100%" display={'flex'} justifyContent={'center'}>
-        <Block maxWidth={maxPageWidth} width="100%">
-          <Block paddingLeft={'100px'} paddingRight={'100px'} paddingTop={theme.sizing.scale800}>
-            <CustomizedBreadcrumbs currentPage="Administere Krav"/>
-            <HeadingXXLarge marginTop="0">Administere Krav</HeadingXXLarge>
-          </Block>
+    <Layout2
+      headerBackgroundColor={ettlevColors.grey25}
+      childrenBackgroundColor={ettlevColors.grey25}
+      currentPage="Administere Krav"
+      mainHeader={
+        <Block maxWidth={maxPageWidth} width="100%" display={'flex'} justifyContent="flex-start">
+          <HeadingXXLarge marginTop="0">Administere Krav</HeadingXXLarge>
         </Block>
-      </Block>
-
-
+      }
+    >
       <Block>
         <Table
-          emptyText={""}
+          emptyText=""
           data={tableContent.content}
           config={{
             initialSortColumn: 'kravNummer',
             sorting: kravSorting
           }}
           headers={[
-            {$style: {maxWidth: '5%'}, title: "Krav ID", column: 'kravNummer'},
-            {$style: {maxWidth: '20%', minWidth: '20%'}, title: "Kravnavn", column: 'navn'},
-            {title: "Ansvarlig", column: 'avdeling'},
-            {title: "Tema", column: 'tema'},
-            {title: "Status", column: 'status'},
-            {title: "Siste endret",column:'changeStamp'},
+            { $style: { maxWidth: '5%' }, title: "Krav ID", column: 'kravNummer' },
+            { $style: { maxWidth: '20%', minWidth: '20%' }, title: "Kravnavn", column: 'navn' },
+            { title: "Ansvarlig", column: 'avdeling' },
+            { title: "Tema", column: 'tema' },
+            { title: "Status", column: 'status' },
+            { title: "Siste endret", column: 'changeStamp' },
           ]}
           render={(tableData) =>
             tableData.data.map((krav, index) => {
@@ -86,10 +84,10 @@ export const KravTablePage = () => {
               const rowNum = tableContent.pageNumber * tableContent.pageSize + index + 1
               return (
                 <Row key={krav.id}>
-                  <Cell $style={{maxWidth: '5%'}}>
+                  <Cell $style={{ maxWidth: '5%' }}>
                     {krav.kravNummer}.{krav.kravVersjon}
                   </Cell>
-                  <Cell $style={{maxWidth: '20%', minWidth: '20%'}}>
+                  <Cell $style={{ maxWidth: '20%', minWidth: '20%' }}>
                     {krav.navn}
                   </Cell>
                   <Cell>
@@ -110,18 +108,18 @@ export const KravTablePage = () => {
           }
         />
       </Block>
-      <Block display="flex" justifyContent="space-between" marginTop="1rem">
+      <Block display="flex" justifyContent="space-between" marginTop="1rem" marginBottom="40px">
         <StatefulPopover
-          content={({close}) => (
+          content={({ close }) => (
             <StatefulMenu
-              items={[5, 10, 20, 50, 100].map((i) => ({label: i}))}
-              onItemSelect={({item}) => {
+              items={[5, 10, 20, 50, 100].map((i) => ({ label: i }))}
+              onItemSelect={({ item }) => {
                 setLimit(item.label)
                 close()
               }}
               overrides={{
                 List: {
-                  style: {height: '150px', width: '100px'},
+                  style: { height: '150px', width: '100px' },
                 },
               }}
             />
@@ -135,20 +133,10 @@ export const KravTablePage = () => {
         <Pagination
           currentPage={page}
           numPages={tableContent.pages}
-          onPageChange={({nextPage}) => handlePageChange(nextPage)}
-          labels={{nextButton: intl.nextButton, prevButton: intl.prevButton}}
+          onPageChange={({ nextPage }) => handlePageChange(nextPage)}
+          labels={{ nextButton: intl.nextButton, prevButton: intl.prevButton }}
         />
       </Block>
-
-      {/*<Block display={'flex'} justifyContent="center" width="100%">*/}
-      {/*  <Block maxWidth={maxPageWidth} width="100%">*/}
-      {/*    <Block paddingLeft={'100px'} paddingRight={'100px'} paddingTop={theme.sizing.scale800}>*/}
-      {/*      <Paragraph1>*/}
-      {/*        Vi jobber med å få på plass nyttig statistikk og oversikter over etterlevels Har du innspill hører vi gjerne fra deg på <strong>#etterlevelse</strong>.*/}
-      {/*      </Paragraph1>*/}
-      {/*    </Block>*/}
-      {/*  </Block>*/}
-      {/*</Block>*/}
-    </Block>
+    </Layout2>
   )
 }
