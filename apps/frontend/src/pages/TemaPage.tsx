@@ -303,7 +303,6 @@ const query = gql`
         kravNummer
         kravVersjon
         navn
-        prioriteringsId
         relevansFor {
           code
         }
