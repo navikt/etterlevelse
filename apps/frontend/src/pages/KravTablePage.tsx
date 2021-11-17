@@ -1,22 +1,22 @@
-import { Block } from "baseui/block";
-import { ettlevColors, maxPageWidth, theme } from "../util/theme";
-import { HeadingXXLarge } from "baseui/typography";
+import {Block} from "baseui/block";
+import {ettlevColors, maxPageWidth} from "../util/theme";
+import {HeadingXXLarge} from "baseui/typography";
 import * as React from "react";
-import { useEffect, useState } from "react";
-import { emptyPage, Krav, PageResponse } from "../constants";
-import { getKravPage, kravMapToFormVal } from "../api/KravApi";
-import { Cell, Row, Table } from "../components/common/Table";
-import { ColumnCompares } from "../util/hooks";
+import {useEffect, useState} from "react";
+import {emptyPage, Krav, PageResponse} from "../constants";
+import {getKravPage, kravMapToFormVal} from "../api/KravApi";
+import {Cell, Row, Table} from "../components/common/Table";
+import {ColumnCompares} from "../util/hooks";
 import moment from "moment";
-import { PLACEMENT, StatefulPopover } from "baseui/popover";
-import { StatefulMenu } from "baseui/menu";
-import { Button, KIND } from "baseui/button";
-import { TriangleDown } from "baseui/icon";
-import { intl } from "../util/intl/intl";
-import { Pagination } from "baseui/pagination";
-import { codelist, ListName } from "../services/Codelist";
-import { kravStatus } from "./KravPage";
-import { Layout2 } from "../components/scaffold/Page";
+import {PLACEMENT, StatefulPopover} from "baseui/popover";
+import {StatefulMenu} from "baseui/menu";
+import {Button, KIND} from "baseui/button";
+import {TriangleDown} from "baseui/icon";
+import {intl} from "../util/intl/intl";
+import {Pagination} from "baseui/pagination";
+import {codelist, ListName} from "../services/Codelist";
+import {kravStatus} from "./KravPage";
+import {Layout2} from "../components/scaffold/Page";
 
 const kravSorting: ColumnCompares<Krav> = {
   kravNummer: (a, b) => a.kravNummer - b.kravNummer,
@@ -71,7 +71,7 @@ export const KravTablePage = () => {
             sorting: kravSorting
           }}
           headers={[
-            { $style: { maxWidth: '5%' }, title: "Krav ID", column: 'kravNummer' },
+            { $style: { maxWidth: '6%' }, title: "Krav ID", column: 'kravNummer' },
             { $style: { maxWidth: '20%', minWidth: '20%' }, title: "Kravnavn", column: 'navn' },
             { title: "Ansvarlig", column: 'avdeling' },
             { title: "Tema", column: 'tema' },
@@ -84,7 +84,7 @@ export const KravTablePage = () => {
               const rowNum = tableContent.pageNumber * tableContent.pageSize + index + 1
               return (
                 <Row key={krav.id}>
-                  <Cell $style={{ maxWidth: '5%' }}>
+                  <Cell $style={{ maxWidth: '6%' }}>
                     {krav.kravNummer}.{krav.kravVersjon}
                   </Cell>
                   <Cell $style={{ maxWidth: '20%', minWidth: '20%' }}>
