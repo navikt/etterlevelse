@@ -1,33 +1,33 @@
 import axios from 'axios'
-import { Krav, KravPrioritering, PageResponse} from '../constants'
+import { KravPrioritering, KravQL, PageResponse} from '../constants'
 import {env} from '../util/env'
 
 
-export const getAllKravPrioritering = async () => {
+export const getAllKravPriority = async () => {
   const PAGE_SIZE = 100
-  const firstPage = await getKravPrioriteringPage(0, PAGE_SIZE)
+  const firstPage = await getKravPriorityPage(0, PAGE_SIZE)
   if (firstPage.pages === 1) {
     return firstPage.content.length > 0 ? [...firstPage.content] : []
   } else {
-    let allKrav: Krav[] = [...firstPage.content]
+    let allKravPrioritering: KravPrioritering[] = [...firstPage.content]
     for (let currentPage = 1; currentPage < firstPage.pages; currentPage++) {
-      allKrav = [...allKrav, ...(await getKravPrioriteringPage(currentPage, PAGE_SIZE)).content]
+      allKravPrioritering = [...allKravPrioritering, ...(await getKravPriorityPage(currentPage, PAGE_SIZE)).content]
     }
-    return allKrav
+    return allKravPrioritering
   }
 }
 
-export const getKravPrioriteringPage = async (pageNumber: number, pageSize: number) => {
-  return (await axios.get<PageResponse<Krav>>(`${env.backendBaseUrl}/kravprioritering?pageNumber=${pageNumber}&pageSize=${pageSize}`)).data
+export const getKravPriorityPage = async (pageNumber: number, pageSize: number) => {
+  return (await axios.get<PageResponse<KravPrioritering>>(`${env.backendBaseUrl}/kravprioritering?pageNumber=${pageNumber}&pageSize=${pageSize}`)).data
 }
 
-export const getKravPrioritering = async (id: string) => {
-  return (await axios.get<Krav>(`${env.backendBaseUrl}/kravprioritering/${id}`)).data
+export const getKravPriority = async (id: string) => {
+  return (await axios.get<KravPrioritering>(`${env.backendBaseUrl}/kravprioritering/${id}`)).data
 }
 
-export const getKravByKravNumberAndVersion = async (kravNummer: number | string, kravVersjon: number | string) => {
+export const getKravPriorityByKravNumberAndVersion = async (kravNummer: number | string, kravVersjon: number | string) => {
   return await axios
-    .get<Krav>(`${env.backendBaseUrl}/kravprioritering/kravnummer/${kravNummer}/${kravVersjon}`)
+    .get<KravPrioritering>(`${env.backendBaseUrl}/kravprioritering/kravnummer/${kravNummer}/${kravVersjon}`)
     .then((resp) => {
       return resp.data
     })
@@ -36,18 +36,18 @@ export const getKravByKravNumberAndVersion = async (kravNummer: number | string,
     })
 }
 
-export const getKravByKravNummer = async (kravNummer: number | string) => {
-  return (await axios.get<PageResponse<Krav>>(`${env.backendBaseUrl}/kravprioritering/kravnummer/${kravNummer}`)).data
+export const getKravPriorityByKravNummer = async (kravNummer: number | string) => {
+  return (await axios.get<PageResponse<KravPrioritering>>(`${env.backendBaseUrl}/kravprioritering/kravnummer/${kravNummer}`)).data
 }
 
-export const createKrav = async (kravPrioritering: KravPrioritering) => {
+export const createKravPriority = async (kravPrioritering: KravPrioritering) => {
   const dto = kravPrioriteringToDto(kravPrioritering)
-  return (await axios.post<Krav>(`${env.backendBaseUrl}/kravprioritering`, dto)).data
+  return (await axios.post<KravPrioritering>(`${env.backendBaseUrl}/kravprioritering`, dto)).data
 }
 
-export const updateKrav = async (kravPrioritering: KravPrioritering) => {
+export const updateKravPriority = async (kravPrioritering: KravPrioritering) => {
   const dto = kravPrioriteringToDto(kravPrioritering)
-  return (await axios.put<Krav>(`${env.backendBaseUrl}/kravprioritering/${kravPrioritering.id}`, dto)).data
+  return (await axios.put<KravPrioritering>(`${env.backendBaseUrl}/kravprioritering/${kravPrioritering.id}`, dto)).data
 }
 
 function kravPrioriteringToDto(kravPrioriteringToDto: KravPrioritering): KravPrioritering {
@@ -58,3 +58,12 @@ function kravPrioriteringToDto(kravPrioriteringToDto: KravPrioritering): KravPri
   delete dto.version
   return dto
 }
+
+export const kravMapToKravPrioriting  = (krav: Partial<KravQL>): KravPrioritering => ({
+  id: krav.kravPriorityUID || '',
+  kravNummer: krav.kravNummer || 0,
+  kravVersjon: krav.kravVersjon || 0,
+  prioriteringsId: krav.prioriteringsId || '',
+  changeStamp: krav.changeStamp || {lastModifiedDate: '', lastModifiedBy: ''},
+  version: -1,
+})
