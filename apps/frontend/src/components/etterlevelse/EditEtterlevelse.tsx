@@ -24,6 +24,7 @@ import { user } from '../../services/User'
 import { KIND as NKIND, Notification } from 'baseui/notification'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons'
+import { borderColor, borderRadius, borderStyle, borderWidth } from '../common/Style'
 
 type EditEttlevProps = {
   etterlevelse: Etterlevelse
@@ -294,7 +295,20 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
                       {Object.keys(errors).length > 0 && (
                         <Block display="flex" width="60%">
                           <Block width="100%">
-                            <Notification overrides={{ Body: { style: { width: 'auto' } } }} kind={NKIND.negative}>
+                            <Notification
+                              overrides={{
+                                Body: {
+                                  style: {
+                                    width: 'auto',
+                                    ...borderStyle('solid'),
+                                    ...borderWidth('1px'),
+                                    ...borderColor(ettlevColors.red600),
+                                    ...borderRadius('0px')
+                                  }
+                                }
+                              }}
+                              kind={NKIND.negative}
+                            >
                               <FontAwesomeIcon
                                 icon={faTimesCircle}
                                 style={{
