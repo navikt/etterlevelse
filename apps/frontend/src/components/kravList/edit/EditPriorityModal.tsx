@@ -67,8 +67,8 @@ export const EditPriorityModal = (props: { isOpen: boolean; onClose: Function; k
     }
 
     const listener = (event: any) => {
-      const buttonPosition = document.querySelector('.krav-list-container')?.clientHeight || 0
-      if (event.target.scrollTop < event.target.scrollHeight - event.target.clientHeight - buttonPosition) {
+      const buttonPosition = document.querySelector('.krav-list-button-container')?.clientHeight || 0
+      if (event.target.scrollTop <= event.target.scrollHeight - event.target.clientHeight - buttonPosition) {
         setStickyFooterStyle(true)
       } else {
         setStickyFooterStyle(false)
@@ -221,7 +221,7 @@ export const EditPriorityModal = (props: { isOpen: boolean; onClose: Function; k
               boxShadow: stickyFooterStyle ? '0px -4px 4px rgba(0, 0, 0, 0.12)' : '',
               zIndex: 3
             }}
-            className="krav-list-container"
+            className="krav-list-button-container"
           >
             <Button
               size="compact"

@@ -41,6 +41,8 @@ const modalPaddingRight = '104px'
 const modalPaddingLeft = '112px'
 const maxTextArea = '750px'
 
+export const editEtterlevelseModal = () => document.querySelector('#edit-etterlevelse-modal')
+
 const etterlevelseSchema = () => {
   return yup.object({
     suksesskriterieBegrunnelser: yup.array().of(
@@ -88,6 +90,7 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
   const [nyereKrav, setNyereKrav] = React.useState<Krav>()
   const [disableEdit, setDisableEdit] = React.useState<boolean>(false)
   const [radioHover, setRadioHover] = React.useState<string>('')
+  const [stickyFooterStyle, setStickyFooterStyle] = React.useState(false)
   const submit = async (etterlevelse: Etterlevelse) => {
     const mutatedEtterlevelse = {
       ...etterlevelse,
@@ -111,58 +114,75 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
     }
   }, [nyereKrav])
 
+  useEffect(() => {
+    const listener = (event: any) => {
+      const buttonPosition = document.querySelector('.edit-etterlevelse-button-container')?.clientHeight || 0
+      console.log(buttonPosition)
+      console.log(event.target.scrollTop)
+      if (event.target.scrollTop <= event.target.scrollHeight - event.target.clientHeight - buttonPosition) {
+        setStickyFooterStyle(true)
+      } else {
+        setStickyFooterStyle(false)
+      }
+    }
+
+    setTimeout(() => editEtterlevelseModal()?.addEventListener('scroll', listener), 200)
+    return () => editEtterlevelseModal()?.removeEventListener('scroll', listener)
+
+  }, [])
+
   return (
-    <Block>
-      <Block flex="1" backgroundColor={ettlevColors.green800}>
+    <Formik
+      onSubmit={submit}
+      initialValues={mapEtterlevelseToFormValue(etterlevelse)}
+      validationSchema={etterlevelseSchema()}
+      innerRef={formRef}
+      validateOnChange={false}
+      validateOnBlur={false}
+    >
+      {({ values, isSubmitting, submitForm, errors }: FormikProps<Etterlevelse>) => (
         <Block>
-          <Block flex="1" paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge} paddingBottom="32px">
-            <Paragraph2 $style={{ marginTop: '0px', marginBottom: '0px', color: ettlevColors.white }}>{kravNumView(krav)}</Paragraph2>
-            <H1 $style={{ marginTop: '0px', marginBottom: '0px', color: ettlevColors.white }}>{krav.navn}</H1>
-            <Paragraph2 color={ettlevColors.white}>
-              <a href={'/krav/' + krav?.kravNummer + '/' + krav?.kravVersjon} style={{ color: ettlevColors.white, marginBottom: '10px' }} target="_blank" rel="noopener noreferrer">
-                <span style={{ display: 'inline-block', paddingBottom: '1px', borderBottom: '1px solid white' }}>detaljert kravbeskrivelse (ny fane)</span>
-              </a>
-            </Paragraph2>
-          </Block>
-          <Block display="flex" paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge} paddingBottom={theme.sizing.scale900}>
+          <Block flex="1" backgroundColor={ettlevColors.green800}>
             <Block>
-              <Block display="flex">
-                <Label3 $style={{ fontSize: '18px', color: ettlevColors.white }}>Du dokumenterer for:</Label3>
+              <Block flex="1" paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge} paddingBottom="32px">
+                <Paragraph2 $style={{ marginTop: '0px', marginBottom: '0px', color: ettlevColors.white }}>{kravNumView(krav)}</Paragraph2>
+                <H1 $style={{ marginTop: '0px', marginBottom: '0px', color: ettlevColors.white }}>{krav.navn}</H1>
+                <Paragraph2 color={ettlevColors.white}>
+                  <a href={'/krav/' + krav?.kravNummer + '/' + krav?.kravVersjon} style={{ color: ettlevColors.white, marginBottom: '10px' }} target="_blank" rel="noopener noreferrer">
+                    <span style={{ display: 'inline-block', paddingBottom: '1px', borderBottom: '1px solid white' }}>detaljert kravbeskrivelse (ny fane)</span>
+                  </a>
+                </Paragraph2>
               </Block>
-              <Paragraph2 $style={{ marginTop: '0px', color: ettlevColors.white, maxWidth: '700px' }}>{behandlingNavn}</Paragraph2>
+              <Block display="flex" paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge} paddingBottom={theme.sizing.scale900}>
+                <Block>
+                  <Block display="flex">
+                    <Label3 $style={{ fontSize: '18px', color: ettlevColors.white }}>Du dokumenterer for:</Label3>
+                  </Block>
+                  <Paragraph2 $style={{ marginTop: '0px', color: ettlevColors.white, maxWidth: '700px' }}>{behandlingNavn}</Paragraph2>
+                </Block>
+              </Block>
             </Block>
           </Block>
-        </Block>
-      </Block>
-      <Block flex="1" backgroundColor={ettlevColors.white}>
-        <Block paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge} paddingBottom="32px" display="flex" paddingTop="32px">
-          <Block marginRight="20px">
-            <img src={arkPennIcon} alt="test" height="56px" width="40px" />
+          <Block flex="1" backgroundColor={ettlevColors.white}>
+            <Block paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge} paddingBottom="32px" display="flex" paddingTop="32px">
+              <Block marginRight="20px">
+                <img src={arkPennIcon} alt="test" height="56px" width="40px" />
+              </Block>
+              <Block>
+                <Paragraph2 marginBottom="0px" marginTop="0px">
+                  Steg 3 av 3
+                </Paragraph2>
+                <H2 marginTop="0px" marginBottom="0px">
+                  Dokumentasjon
+                </H2>
+              </Block>
+            </Block>
           </Block>
-          <Block>
-            <Paragraph2 marginBottom="0px" marginTop="0px">
-              Steg 3 av 3
-            </Paragraph2>
-            <H2 marginTop="0px" marginBottom="0px">
-              Dokumentasjon
-            </H2>
-          </Block>
-        </Block>
-      </Block>
-      <Block paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge}>
-        <Block marginTop="51px">
-          <Formik
-            onSubmit={submit}
-            initialValues={mapEtterlevelseToFormValue(etterlevelse)}
-            validationSchema={etterlevelseSchema()}
-            innerRef={formRef}
-            validateOnChange={false}
-            validateOnBlur={false}
-          >
-            {({ values, isSubmitting, submitForm, errors }: FormikProps<Etterlevelse>) => (
+          <Block paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge}>
+            <Block marginTop="51px">
               <Form>
                 <Block>
-                  <Block paddingBottom={theme.sizing.scale1200}>
+                  <Block>
                     <FieldWrapper>
                       <Field name={'status'}>
                         {(p: FieldProps<string | Code>) => (
@@ -323,35 +343,49 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
                     </Block>
                   </Block>
                 </Block>
-
-                {!documentEdit && (
-                  <Block display="flex" marginTop={theme.sizing.scale850} marginBottom={theme.sizing.scale3200}>
-                    <Button disabled={disableEdit} type="button" kind="secondary" marginRight onClick={close}>
-                      Avbryt og forkast endringene
-                    </Button>
-                    <Button type="button" kind="secondary" marginRight disabled={isSubmitting || disableEdit} onClick={submitForm}>
-                      Lagre og fortsett senere
-                    </Button>
-                    <Button
-                      disabled={disableEdit}
-                      type="button"
-                      onClick={() => {
-                        if (values.status !== EtterlevelseStatus.IKKE_RELEVANT) {
-                          values.status = EtterlevelseStatus.FERDIG_DOKUMENTERT
-                        }
-                        submitForm()
-                      }}
-                    >
-                      Jeg har dokumentert ferdig
-                    </Button>
-                  </Block>
-                )}
               </Form>
-            )}
-          </Formik>
+            </Block>
+          </Block>
+          {!documentEdit && (
+            <Block
+              className="edit-etterlevelse-button-container"
+              paddingLeft={responsivePaddingLarge}
+              paddingRight={responsivePaddingLarge}
+              paddingTop="14px"
+              paddingBottom="14px"
+              display="flex"
+              marginBottom={theme.sizing.scale3200}
+              position="sticky"
+              bottom={0}
+              backgroundColor={ettlevColors.grey25}
+              $style={{
+                boxShadow: stickyFooterStyle ? '0px -4px 4px rgba(0, 0, 0, 0.12)' : '',
+                zIndex: 3
+              }}
+            >
+              <Button disabled={disableEdit} type="button" kind="secondary" marginRight onClick={close}>
+                Avbryt og forkast endringene
+              </Button>
+              <Button type="button" kind="secondary" marginRight disabled={isSubmitting || disableEdit} onClick={submitForm}>
+                Lagre og fortsett senere
+              </Button>
+              <Button
+                disabled={disableEdit}
+                type="button"
+                onClick={() => {
+                  if (values.status !== EtterlevelseStatus.IKKE_RELEVANT) {
+                    values.status = EtterlevelseStatus.FERDIG_DOKUMENTERT
+                  }
+                  submitForm()
+                }}
+              >
+                Jeg har dokumentert ferdig
+              </Button>
+            </Block>
+          )}
         </Block>
-      </Block>
-    </Block>
+      )}
+    </Formik>
   )
 }
 

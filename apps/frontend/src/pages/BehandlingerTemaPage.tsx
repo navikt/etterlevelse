@@ -235,7 +235,7 @@ export const BehandlingerTemaPage = () => {
         </CustomizedAccordion>
         {edit && behandling && (
           <Block maxWidth={maxPageWidth}>
-            <CustomizedModal isOpen={!!edit} onClose={() => setEdit(undefined)}>
+            <CustomizedModal isOpen={!!edit} onClose={() => setEdit(undefined)} overrides={{ Root: { props: { id: 'edit-etterlevelse-modal' } } }}>
               <Block flex="1" backgroundColor={ettlevColors.green800}>
                 <Block paddingTop={theme.sizing.scale1200} paddingRight={theme.sizing.scale1000} paddingLeft={theme.sizing.scale1000}>
                   <Block display="flex" flex="1" justifyContent="flex-end">
