@@ -45,6 +45,7 @@ export const kravModal = () => document.querySelector('#krav-modal')
 
 export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravProps) => {
   const [stickyHeader, setStickyHeader] = React.useState(false)
+  const [stickyFooterStyle, setStickyFooterStyle] = React.useState(true)
   const [showErrorModal, setShowErrorModal] = React.useState(false)
   const [errorMessage, setErrorMessage] = React.useState('')
 
@@ -72,7 +73,17 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
       setStickyHeader(false)
       return
     }
-    const listener = () => setStickyHeader(true)
+    const listener = (event: any) => {
+      const buttonPosition = document.querySelector('.content_container')?.clientHeight || 0
+      if (event.target.scrollTop === 0) {
+        setStickyHeader(false)
+      } else if (event.target.scrollTop > buttonPosition) {
+        setStickyFooterStyle(false)
+      } else {
+        setStickyFooterStyle(true)
+        setStickyHeader(true)
+      }
+    }
     setTimeout(() => kravModal()?.addEventListener('scroll', listener), 200)
     return () => kravModal()?.removeEventListener('scroll', listener)
   }, [isOpen])
@@ -124,7 +135,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
                 )}
               </Block>
               <Block>
-                <Block backgroundColor={ettlevColors.grey50} paddingTop="48px" paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge} paddingBottom="64px">
+                <Block className="title_container" backgroundColor={ettlevColors.grey50} paddingTop="48px" paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge} paddingBottom="64px">
                   <InputField
                     marginBottom={inputMarginBottom}
                     label="Krav-tittel"
@@ -144,7 +155,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
                   <Error fieldName={'hensikt'} fullWidth />
                 </Block>
 
-                <Block display="flex" width="100%" justifyContent="center">
+                <Block className="content_container" display="flex" width="100%" justifyContent="center">
                   <Block width={responsiveWidthLarge}>
                     <H2 marginBottom={inputMarginBottom}>Suksesskriterier</H2>
                     <KravSuksesskriterierEdit />
@@ -281,7 +292,22 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
                     </Block>
                   </Block>
                 </Block>
-                <Block display="flex" justifyContent="flex-end" paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge} paddingBottom="16px">
+                <Block
+                  className="button_container"
+                  backgroundColor={ettlevColors.grey25}
+                  position="sticky"
+                  bottom={0}
+                  display="flex"
+                  justifyContent="flex-end"
+                  paddingLeft={responsivePaddingLarge}
+                  paddingRight={responsivePaddingLarge}
+                  paddingBottom="16px"
+                  paddingTop="16px"
+                  $style={{
+                    boxShadow: stickyFooterStyle ? '0px -4px 4px rgba(0, 0, 0, 0.12)' : '',
+                    zIndex: 3
+                  }}
+                >
                   <Button size="compact" kind={'secondary'} type={'button'} onClick={close} marginLeft>
                     Avbryt
                   </Button>
@@ -329,7 +355,7 @@ const kravSchema = () =>
         test: function (suksesskriterier) {
           const { parent } = this
           if (parent.status === KravStatus.AKTIV) {
-            return suksesskriterier && suksesskriterier.length > 0 && suksesskriterier.every((s) => s.navn)? true : false
+            return suksesskriterier && suksesskriterier.length > 0 && suksesskriterier.every((s) => s.navn) ? true : false
           }
           return true
         },
