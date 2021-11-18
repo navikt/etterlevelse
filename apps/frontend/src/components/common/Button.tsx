@@ -8,7 +8,7 @@ import { theme } from '../../util'
 import { Override } from 'baseui/overrides'
 import { StyleObject } from 'styletron-react'
 import { Block } from 'baseui/block'
-import { borderRadius, borderStyle, borderWidth, paddingAll } from './Style'
+import { borderColor, borderRadius, borderStyle, borderWidth, paddingAll } from './Style'
 import { ettlevColors } from '../../util/theme'
 import { ExternalLink } from './RouteLink'
 import _ from 'lodash'
@@ -54,7 +54,7 @@ const Tooltip = (props: TooltipProps) =>
 const outlineWidth = '2px'
 const outlineStyle = 'solid'
 const outlineOverride: StyleObject = {
-  borderColor: ettlevColors.green600,
+  ...borderColor(ettlevColors.green600),
   backgroundColor: 'inherit',
   ...borderWidth(outlineWidth),
   ...borderStyle(outlineStyle),
@@ -129,7 +129,7 @@ export default Button
 
 // Må gjøres properly, laget denne for å unngå tusenvis av react warnings
 export const buttonBorderStyle: StyleObject = {
-  borderColor: ettlevColors.green600,
+  ...borderColor(ettlevColors.green600),
   ...borderStyle('solid'),
   ...borderWidth('2px'),
   ...borderRadius('4px'),

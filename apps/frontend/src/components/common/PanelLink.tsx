@@ -160,7 +160,7 @@ export const PanelLinkCard = ({
         backgroundColor: ettlevColors.white,
 
         borderWidth: '1px',
-        borderColor: ettlevColors.grey100,
+        ...borderColor(ettlevColors.grey100),
         ...borderStyle('solid'),
         ...borderRadius('4px'),
 
