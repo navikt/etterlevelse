@@ -32,7 +32,7 @@ export const EditPriorityModal = (props: { isOpen: boolean; onClose: Function; k
     setItems(
       kravListe.map((k) => {
         return (
-          <CustomPanelDivider >
+          <CustomPanelDivider fullWidth>
             <SimplePanel
               key={`${k.navn}_${k.kravNummer}`}
               hideChevron
@@ -170,7 +170,7 @@ export const EditPriorityModal = (props: { isOpen: boolean; onClose: Function; k
               <Paragraph2 $style={{ marginTop: '0px', marginBottom: '0px', color: ettlevColors.green800 }}>Klikk og dra kravene i ønsket rekkefølge</Paragraph2>
             </Block>
           </Block>
-          <Block paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall} >
+          <Block>
             {loading ? (
               <Block display="flex" justifyContent="center">
                 <Spinner size={theme.sizing.scale1200} />
