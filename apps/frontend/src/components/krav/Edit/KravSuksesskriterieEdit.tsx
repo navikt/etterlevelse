@@ -18,6 +18,7 @@ import { kravModal } from '../EditKrav'
 import CustomizedInput from '../../common/CustomizedInput'
 import { ettlevColors } from '../../../util/theme'
 import { Error } from '../../common/ModalSchema'
+import { borderColor } from '../../common/Style'
 
 export const KravSuksesskriterierEdit = () => {
   return (
@@ -172,8 +173,24 @@ const Kriterie = ({
           }
         >
           <Block>
-            <CustomizedInput value={navnInput} onChange={(e) => setNavn((e.target as HTMLInputElement).value)} placeholder={'Navn'} />
-            <Error fieldName={`suksesskriterier[${nummer - 1}].navn`} fullWidth />
+            <CustomizedInput
+              value={navnInput}
+              onChange={(e) => setNavn((e.target as HTMLInputElement).value)}
+              placeholder={'Navn'}
+              overrides={{
+                Root: {
+                  style: {
+                    ...borderColor(p.form.errors['suksesskriterier'] ? ettlevColors.red600 : ettlevColors.grey200),
+                  }
+                },
+                Input: {
+                  style: {
+                    backgroundColor: p.form.errors['suksesskriterier'] && ettlevColors.error50,
+                  }
+                }
+              }}
+            />
+            <Error fieldName={'suksesskriterier'} fullWidth />
           </Block>
         </FormControl>
         <FormControl label={<LabelWithTooltip label={'Beskrivelse av suksesskriteriet'} tooltip={'Nærmere detaljer rundt oppnåelse av suksesskriteriet.'} />}>

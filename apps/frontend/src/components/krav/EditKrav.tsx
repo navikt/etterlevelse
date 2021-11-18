@@ -329,7 +329,7 @@ const kravSchema = () =>
         test: function (suksesskriterier) {
           const { parent } = this
           if (parent.status === KravStatus.AKTIV) {
-            return suksesskriterier && suksesskriterier.length > 0 ? true : false
+            return suksesskriterier && suksesskriterier.length > 0 && suksesskriterier.every((s) => s.navn)? true : false
           }
           return true
         },
