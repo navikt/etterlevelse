@@ -1,30 +1,30 @@
-import {Krav, KravQL, KravStatus} from '../../constants'
-import {Form, Formik} from 'formik'
-import {createKrav, kravMapToFormVal, updateKrav} from '../../api/KravApi'
-import {Block} from 'baseui/block'
-import React, {useEffect} from 'react'
+import { Krav, KravQL, KravStatus } from '../../constants'
+import { Form, Formik } from 'formik'
+import { createKrav, kravMapToFormVal, updateKrav } from '../../api/KravApi'
+import { Block } from 'baseui/block'
+import React, { useEffect } from 'react'
 import * as yup from 'yup'
-import {codelist, ListName} from '../../services/Codelist'
-import {kravStatus} from '../../pages/KravPage'
-import {InputField, MultiInputField, OptionField, TextAreaField} from '../common/Inputs'
+import { codelist, ListName } from '../../services/Codelist'
+import { kravStatus } from '../../pages/KravPage'
+import { InputField, MultiInputField, OptionField, TextAreaField } from '../common/Inputs'
 import axios from 'axios'
-import {env} from '../../util/env'
-import {KravVarslingsadresserEdit} from './Edit/KravVarslingsadresserEdit'
-import {KravRegelverkEdit} from './Edit/KravRegelverkEdit'
-import {KravSuksesskriterierEdit} from './Edit/KravSuksesskriterieEdit'
-import {EditBegreper} from './Edit/KravBegreperEdit'
-import {H1, H2, LabelLarge} from 'baseui/typography'
+import { env } from '../../util/env'
+import { KravVarslingsadresserEdit } from './Edit/KravVarslingsadresserEdit'
+import { KravRegelverkEdit } from './Edit/KravRegelverkEdit'
+import { KravSuksesskriterierEdit } from './Edit/KravSuksesskriterieEdit'
+import { EditBegreper } from './Edit/KravBegreperEdit'
+import { H1, H2, LabelLarge } from 'baseui/typography'
 import CustomizedModal from '../common/CustomizedModal'
 import Button from '../common/Button'
-import {ettlevColors, maxPageWidth, responsivePaddingLarge, responsiveWidthLarge, theme} from '../../util/theme'
-import {getEtterlevelserByKravNumberKravVersion} from '../../api/EtterlevelseApi'
+import { ettlevColors, maxPageWidth, responsivePaddingLarge, responsiveWidthLarge, theme } from '../../util/theme'
+import { getEtterlevelserByKravNumberKravVersion } from '../../api/EtterlevelseApi'
 import ErrorModal from '../ErrorModal'
-import {Error} from '../common/ModalSchema'
-import {ErrorMessageModal} from './ErrorMessageModal'
-import {KIND as NKIND, Notification} from 'baseui/notification'
-import {faTimesCircle} from '@fortawesome/free-solid-svg-icons'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {EditKravMultiOptionField} from './Edit/EditKravMultiOptionField'
+import { Error } from '../common/ModalSchema'
+import { ErrorMessageModal } from './ErrorMessageModal'
+import { KIND as NKIND, Notification } from 'baseui/notification'
+import { faTimesCircle } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { EditKravMultiOptionField } from './Edit/EditKravMultiOptionField'
 
 type EditKravProps = {
   krav: KravQL
@@ -89,7 +89,14 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
           },
         }}
       >
-        <Formik onSubmit={submit} initialValues={kravMapToFormVal(krav)} validationSchema={kravSchema()} innerRef={formRef}>
+        <Formik
+          onSubmit={submit}
+          initialValues={kravMapToFormVal(krav)}
+          validationSchema={kravSchema()}
+          innerRef={formRef}
+          validateOnBlur={false}
+          validateOnChange={false}
+        >
           {({ touched, errors, isSubmitting, submitForm, setErrors }) => (
             <Form>
               <Block

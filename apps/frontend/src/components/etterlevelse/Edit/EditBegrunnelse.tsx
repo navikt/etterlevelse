@@ -48,7 +48,14 @@ const EditBegrunnelse = ({ krav, etterlevelse, close, formRef }: EditBegrunnelse
   }
 
   return (
-    <Formik onSubmit={submit} initialValues={mapEtterlevelseToFormValue(etterlevelse)} validationSchema={etterlevelseSchema()} innerRef={formRef}>
+    <Formik
+      onSubmit={submit}
+      initialValues={mapEtterlevelseToFormValue(etterlevelse)}
+      validationSchema={etterlevelseSchema()}
+      innerRef={formRef}
+      validateOnChange={false}
+      validateOnBlur={false}
+    >
       {({ values, isSubmitting, submitForm }: FormikProps<Etterlevelse>) => (
         <Form>
           <FieldWrapper>

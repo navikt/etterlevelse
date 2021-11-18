@@ -263,7 +263,13 @@ const NyTilbakemeldingModal = ({ open, close, krav }: { open?: boolean; close: (
 
   return (
     <Modal closeable={false} unstable_ModalBackdropScroll isOpen={open} onClose={() => close()}>
-      <Formik onSubmit={submit} initialValues={newTilbakemelding(krav) as CreateTilbakemeldingRequest} validationSchema={createTilbakemeldingSchema}>
+      <Formik
+       onSubmit={submit} 
+       initialValues={newTilbakemelding(krav) as CreateTilbakemeldingRequest} 
+       validationSchema={createTilbakemeldingSchema}
+       validateOnBlur={false}
+       validateOnChange={false}
+       >
         {({ isSubmitting, setFieldValue, values, submitForm }) => {
           const setVarslingsadresse = (v?: Varslingsadresse) => {
             setFieldValue('varslingsadresse', v)
