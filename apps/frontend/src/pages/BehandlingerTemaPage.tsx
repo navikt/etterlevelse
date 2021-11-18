@@ -303,7 +303,7 @@ const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function; setKra
           <Paragraph4 $style={{ fontSize: '16px', lineHeight: '24px', marginBottom: '0px', marginTop: '0px', width: 'fit-content' }}>
             K{props.krav.kravNummer}.{props.krav.kravVersjon}
           </Paragraph4>
-          <Label3 $style={{ fontSize: '18px', lineHeight: '24px', alignContent: 'flex-start' }}>{props.krav.navn}</Label3>
+          <Label3 $style={{ fontSize: '18px', fontWeight: 600, alignContent: 'flex-start' }}>{props.krav.navn}</Label3>
         </Block>
       </Block>
     </Button>

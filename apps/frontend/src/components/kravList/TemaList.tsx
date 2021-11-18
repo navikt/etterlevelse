@@ -82,7 +82,7 @@ const KravTemaList = (props: { kraver: Krav[]; tema: string; refresh: Function }
                   K{k.kravNummer}.{k.kravVersjon}
                 </Paragraph2>
               }
-              beskrivelse={<Label3 $style={{ fontSize: '18px', lineHeight: '28px' }}>{k.navn}</Label3>}
+              beskrivelse={<Label3 $style={{ fontSize: '18px', fontWeight: 600 }}>{k.navn}</Label3>}
               rightBeskrivelse={!!k.changeStamp.lastModifiedDate ? `Sist endret: ${moment(k.changeStamp.lastModifiedDate).format('ll')}` : ''}
               statusText={<KravStatusView status={k.status} />}
               overrides={{

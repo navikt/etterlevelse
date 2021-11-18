@@ -120,7 +120,7 @@ export const KravPanels = ({ kravene, loading }: { kravene?: KravQL[] | Krav[]; 
                     K{k.kravNummer}.{k.kravVersjon}
                   </Paragraph2>
                 }
-                beskrivelse={<Label3 $style={{ fontSize: '18px', lineHeight: '28px' }}>{k.navn}</Label3>}
+                beskrivelse={<Label3 $style={{ fontSize: '18px', fontWeight: 600 }}>{k.navn}</Label3>}
                 rightBeskrivelse={!!k.changeStamp.lastModifiedDate ? `Sist endret: ${moment(k.changeStamp.lastModifiedDate).format('ll')}` : ''}
                 rightTitle={tema && tema.shortName ? tema.shortName : ''}
                 statusText={<KravStatusView status={k.status} />}
