@@ -19,6 +19,8 @@ import { RenderTagList } from '../../common/TagList'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
 import CustomizedInput from '../../common/CustomizedInput'
 import { CustomizedStatefulSelect } from '../../common/CustomizedSelect'
+import { borderColor, borderStyle, borderWidth } from '../../common/Style'
+import { ettlevColors } from '../../../util/theme'
 
 export const KravVarslingsadresserEdit = () => {
   const [addSlackChannel, setAddSlackChannel] = useState<boolean>(false)
@@ -40,17 +42,52 @@ export const KravVarslingsadresserEdit = () => {
               >
                 <Block>
                   <Block marginBottom={theme.sizing.scale400}>
-                    <Button kind="secondary" size="compact" type="button" onClick={() => setAddSlackChannel(true)}>
+                    <Button
+                      kind="secondary"
+                      size="compact"
+                      type="button"
+                      onClick={() => setAddSlackChannel(true)}
+                      $style={{
+                        ...borderColor(p.form.errors['varslingsadresser'] ? ettlevColors.red600 : ettlevColors.green600),
+                        ...borderStyle(p.form.errors['varslingsadresser'] ? 'solid' : 'solid'),
+                        ...borderWidth(p.form.errors['varslingsadresser'] ? '2px' : '2px'),
+                        backgroundColor: p.form.errors['varslingsadresser'] ? ettlevColors.red50 : 'inherit'
+                      }}
+                    >
                       <span>
                         <FontAwesomeIcon icon={faSlackHash} /> Legg til slack-kanal
                       </span>
                     </Button>
-                    <Button kind="secondary" size="compact" marginLeft type="button" onClick={() => setAddSlackUser(true)}>
+                    <Button
+                      kind="secondary"
+                      size="compact"
+                      marginLeft
+                      type="button"
+                      onClick={() => setAddSlackUser(true)}
+                      $style={{
+                        ...borderColor(p.form.errors['varslingsadresser'] ? ettlevColors.red600 : ettlevColors.green600),
+                        ...borderStyle(p.form.errors['varslingsadresser'] ? 'solid' : 'solid'),
+                        ...borderWidth(p.form.errors['varslingsadresser'] ? '2px' : '2px'),
+                        backgroundColor: p.form.errors['varslingsadresser'] ? ettlevColors.red50 : 'inherit'
+                      }}
+                    >
                       <span>
                         <FontAwesomeIcon icon={faUser} /> Legg til slack-bruker
                       </span>
                     </Button>
-                    <Button kind="secondary" size="compact" marginLeft type="button" onClick={() => setAddEmail(true)}>
+                    <Button
+                      kind="secondary"
+                      size="compact"
+                      marginLeft
+                      type="button"
+                      onClick={() => setAddEmail(true)}
+                      $style={{
+                        ...borderColor(p.form.errors['varslingsadresser'] ? ettlevColors.red600 : ettlevColors.green600),
+                        ...borderStyle(p.form.errors['varslingsadresser'] ? 'solid' : 'solid'),
+                        ...borderWidth(p.form.errors['varslingsadresser'] ? '2px' : '2px'),
+                        backgroundColor: p.form.errors['varslingsadresser'] ? ettlevColors.red50 : 'inherit'
+                      }}
+                    >
                       <span>
                         <FontAwesomeIcon icon={faEnvelope} /> Legg til epost
                       </span>
@@ -96,7 +133,7 @@ export const VarslingsadresserTagList = ({ varslingsadresser, remove }: { varsli
   const [slackUsers, setSlackUsers] = useState<SlackUser[]>([])
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       const loadedChannels: SlackChannel[] = []
       const loadedUsers: SlackUser[] = []
       const channels = await Promise.all(

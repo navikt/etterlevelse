@@ -25,6 +25,7 @@ import { KIND as NKIND, Notification } from 'baseui/notification'
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { EditKravMultiOptionField } from './Edit/EditKravMultiOptionField'
+import { borderStyle, borderWidth, borderColor, borderRadius } from '../common/Style'
 
 type EditKravProps = {
   krav: KravQL
@@ -252,7 +253,20 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
                       {Object.keys(errors).length > 0 && !errors.dokumentasjon && (
                         <Block display="flex" width="100%" marginTop="3rem" marginBottom=".6em">
                           <Block width="100%">
-                            <Notification overrides={{ Body: { style: { width: 'auto' } } }} kind={NKIND.negative}>
+                            <Notification
+                              overrides={{
+                                Body: {
+                                  style: {
+                                    width: 'auto',
+                                    ...borderStyle('solid'),
+                                    ...borderWidth('1px'),
+                                    ...borderColor(ettlevColors.red600),
+                                    ...borderRadius('0px')
+                                  }
+                                }
+                              }}
+                              kind={NKIND.negative}
+                            >
                               <FontAwesomeIcon
                                 icon={faTimesCircle}
                                 style={{

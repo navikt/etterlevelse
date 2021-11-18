@@ -19,7 +19,7 @@ import CustomizedTextarea from './CustomizedTextarea'
 import TextEditor from './TextEditor/TextEditor'
 import { Error } from './ModalSchema'
 import { ettlevColors } from '../../util/theme'
-import { borderWidth } from './Style'
+import { borderColor, borderStyle, borderWidth } from './Style'
 
 export const FieldWrapper = ({ children, marginBottom }: { children: React.ReactNode; marginBottom?: string }) => {
   return <Block marginBottom={marginBottom ? marginBottom : '1.5rem'}>{children}</Block>
@@ -46,10 +46,7 @@ export const InputField = (props: { label: string; name: string; caption?: React
                 },
                 Root: {
                   style: {
-                    borderRightColor: p.form.errors[props.name] ? ettlevColors.red600 : ettlevColors.grey200,
-                    borderLeftColor: p.form.errors[props.name] ? ettlevColors.red600 : ettlevColors.grey200,
-                    borderTopColor: p.form.errors[props.name] ? ettlevColors.red600 : ettlevColors.grey200,
-                    borderBottomColor: p.form.errors[props.name] ? ettlevColors.red600 : ettlevColors.grey200,
+                    ...borderColor(p.form.errors[props.name] ? ettlevColors.red600 : ettlevColors.grey200),
                   },
                 },
               }}
@@ -106,6 +103,8 @@ export const TextAreaField = (props: {
                     setValue={(v) => p.form.setFieldValue(props.name, v)}
                     onImageUpload={props.onImageUpload}
                     shortenLinks={props.shortenLinks}
+                    errors={p.form.errors}
+                    name={props.name}
                   />
                   {/* <MarkdownEditor initialValue={p.field.value} setValue={v => p.form.setFieldValue(props.name, v)}
                 onImageUpload={props.onImageUpload} shortenLinks={props.shortenLinks} /> */}

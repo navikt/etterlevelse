@@ -7,6 +7,8 @@ import './customStyle.css'
 import { Block } from 'baseui/block'
 import { ettlevColors } from '../../../util/theme'
 import { useDebouncedState } from '../../../util/hooks'
+import { FormikErrors } from 'formik'
+import { borderColor, borderWidth, borderStyle } from '../Style'
 
 type TextEditorProps = {
   initialValue: string
@@ -14,6 +16,8 @@ type TextEditorProps = {
   shortenLinks?: boolean
   onImageUpload?: (file: File) => Promise<string>
   height?: string
+  errors?: FormikErrors<any>
+  name?: string
 }
 
 const TextEditor = (props: TextEditorProps) => {
@@ -62,9 +66,13 @@ const TextEditor = (props: TextEditorProps) => {
   }
 
   return (
-    <Block backgroundColor={ettlevColors.white} $style={{ border: `1px solid ${ettlevColors.textAreaBorder}` }}>
+    <Block backgroundColor={ettlevColors.white} $style={{
+      ...borderColor(props.errors && props.name && props.errors[props.name] ? ettlevColors.red600 : ettlevColors.textAreaBorder),
+      ...borderWidth('2px'),
+      ...borderStyle('solid'),
+    }}>
       <Editor
-        editorStyle={{ padding: '10px', height: props.height || '500px' }}
+        editorStyle={{ padding: '10px', height: props.height || '500px', backgroundColor: props.errors && props.name && props.errors[props.name] ? ettlevColors.red50 : undefined }}
         toolbarStyle={{ backgroundColor: ettlevColors.grey50, borderBottom: `1px solid ${ettlevColors.textAreaBorder}` }}
         onEditorStateChange={(data) => {
           setVal(CustomDraftToMarkdown(convertToRaw(data.getCurrentContent())))
