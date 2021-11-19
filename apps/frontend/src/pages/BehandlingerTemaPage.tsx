@@ -81,8 +81,7 @@ export const BehandlingerTemaPage = () => {
       for (let index = mapped.length - 1; index > 0; index--) {
         if (mapped[index].kravNummer === mapped[index - 1].kravNummer && mapped[index - 1].etterlevelseStatus === EtterlevelseStatus.FERDIG_DOKUMENTERT) {
           mapped[index - 1].gammelVersjon = true
-        }
-        if (mapped[index].kravNummer === mapped[index - 1].kravNummer && mapped[index - 1].etterlevelseStatus !== EtterlevelseStatus.FERDIG_DOKUMENTERT) {
+        } else if (mapped[index].kravNummer === mapped[index - 1].kravNummer && mapped[index - 1].etterlevelseStatus !== EtterlevelseStatus.FERDIG_DOKUMENTERT) {
           mapped.splice(index - 1, 1)
         }
       }
