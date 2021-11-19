@@ -1,30 +1,30 @@
-import { Etterlevelse, EtterlevelseStatus, Krav } from '../../constants'
-import { Field, FieldProps, Form, Formik, FormikProps } from 'formik'
-import { createEtterlevelse, mapEtterlevelseToFormValue, updateEtterlevelse } from '../../api/EtterlevelseApi'
-import { Block } from 'baseui/block'
+import {Etterlevelse, EtterlevelseStatus, Krav} from '../../constants'
+import {Field, FieldProps, Form, Formik, FormikProps} from 'formik'
+import {createEtterlevelse, mapEtterlevelseToFormValue, updateEtterlevelse} from '../../api/EtterlevelseApi'
+import {Block} from 'baseui/block'
 import Button from '../common/Button'
-import React, { useEffect } from 'react'
+import React, {useEffect} from 'react'
 import * as yup from 'yup'
-import { getEtterlevelseStatus } from '../../pages/EtterlevelsePage'
-import { DateField, FieldWrapper, TextAreaField } from '../common/Inputs'
-import { theme } from '../../util'
-import { FormControl } from 'baseui/form-control'
-import { getKravByKravNumberAndVersion, useKrav, useSearchKrav } from '../../api/KravApi'
-import { kravName, kravNumView } from '../../pages/KravPage'
-import { behandlingName, useBehandling, useSearchBehandling } from '../../api/BehandlingApi'
+import {getEtterlevelseStatus} from '../../pages/EtterlevelsePage'
+import {DateField, FieldWrapper, TextAreaField} from '../common/Inputs'
+import {theme} from '../../util'
+import {FormControl} from 'baseui/form-control'
+import {getKravByKravNumberAndVersion, useKrav, useSearchKrav} from '../../api/KravApi'
+import {kravName, kravNumView} from '../../pages/KravPage'
+import {behandlingName, useBehandling, useSearchBehandling} from '../../api/BehandlingApi'
 import CustomizedSelect from '../common/CustomizedSelect'
-import { H1, H2, Label3, Paragraph2 } from 'baseui/typography'
-import { arkPennIcon } from '../Images'
-import { ettlevColors, responsivePaddingLarge } from '../../util/theme'
-import { SuksesskriterierBegrunnelseEdit } from './Edit/SuksesskriterieBegrunnelseEdit'
-import { Radio, RadioGroup } from 'baseui/radio'
-import { Code } from '../../services/Codelist'
-import { Error } from '../common/ModalSchema'
-import { user } from '../../services/User'
-import { KIND as NKIND, Notification } from 'baseui/notification'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTimesCircle } from '@fortawesome/free-solid-svg-icons'
-import { borderColor, borderRadius, borderStyle, borderWidth } from '../common/Style'
+import {H1, H2, Label3, Paragraph2} from 'baseui/typography'
+import {arkPennIcon} from '../Images'
+import {ettlevColors, responsivePaddingLarge} from '../../util/theme'
+import {SuksesskriterierBegrunnelseEdit} from './Edit/SuksesskriterieBegrunnelseEdit'
+import {Radio, RadioGroup} from 'baseui/radio'
+import {Code} from '../../services/Codelist'
+import {Error} from '../common/ModalSchema'
+import {user} from '../../services/User'
+import {KIND as NKIND, Notification} from 'baseui/notification'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faTimesCircle} from '@fortawesome/free-solid-svg-icons'
+import {borderColor, borderRadius, borderStyle, borderWidth} from '../common/Style'
 
 type EditEttlevProps = {
   etterlevelse: Etterlevelse
@@ -52,7 +52,7 @@ const etterlevelseSchema = () => {
           name: 'begrunnelseText',
           message: 'Du må fylle ut dokumentasjonen',
           test: function (begrunnelse) {
-            const { parent } = this
+            const {parent} = this
             return ((parent.oppfylt || parent.ikkeRelevant) && !!begrunnelse === true) || (!parent.oppfylt && !parent.ikkeRelevant)
           },
         }),
@@ -63,7 +63,7 @@ const etterlevelseSchema = () => {
       name: 'statusBegrunnelse',
       message: 'Du må dokumentere på begrunnelse',
       test: function (statusBegrunnelse) {
-        const { parent } = this
+        const {parent} = this
         if (parent.status === EtterlevelseStatus.IKKE_RELEVANT && (statusBegrunnelse === '' || statusBegrunnelse === undefined)) {
           return false
         }
@@ -74,7 +74,7 @@ const etterlevelseSchema = () => {
       name: 'etterlevelseStatus',
       message: 'Du må dokumentere alle kriterier før du har dokumentert  ferdig. Du kan velge å lagre og fortsette senere.',
       test: function (status) {
-        const { parent } = this
+        const {parent} = this
         if (status === EtterlevelseStatus.FERDIG || status === EtterlevelseStatus.FERDIG_DOKUMENTERT) {
           return parent.suksesskriterieBegrunnelser.every((skb: any) => (skb.oppfylt || skb.ikkeRelevant) && !!skb.begrunnelse)
         }
@@ -84,7 +84,7 @@ const etterlevelseSchema = () => {
   })
 }
 
-export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentEdit, behandlingNavn }: EditEttlevProps) => {
+export const EditEtterlevelse = ({krav, etterlevelse, close, formRef, documentEdit, behandlingNavn}: EditEttlevProps) => {
   const [etterlevelseStatus, setEtterlevelseStatus] = React.useState<string>(etterlevelse.status || EtterlevelseStatus.UNDER_REDIGERING)
   const [nyereKrav, setNyereKrav] = React.useState<Krav>()
   const [disableEdit, setDisableEdit] = React.useState<boolean>(false)
@@ -121,33 +121,41 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
       validateOnChange={false}
       validateOnBlur={false}
     >
-      {({ values, isSubmitting, submitForm, errors }: FormikProps<Etterlevelse>) => (
+      {({values, isSubmitting, submitForm, errors}: FormikProps<Etterlevelse>) => (
         <Block>
-          <Block flex="1" backgroundColor={ettlevColors.green800}>
+          <Block backgroundColor={ettlevColors.green800}>
             <Block>
-              <Block flex="1" paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge} paddingBottom="32px">
-                <Paragraph2 $style={{ marginTop: '0px', marginBottom: '0px', color: ettlevColors.white }}>{kravNumView(krav)}</Paragraph2>
-                <H1 $style={{ marginTop: '0px', marginBottom: '0px', color: ettlevColors.white }}>{krav.navn}</H1>
-                <Paragraph2 color={ettlevColors.white}>
-                  <a href={'/krav/' + krav?.kravNummer + '/' + krav?.kravVersjon} style={{ color: ettlevColors.white, marginBottom: '10px' }} target="_blank" rel="noopener noreferrer">
-                    <span style={{ display: 'inline-block', paddingBottom: '1px', borderBottom: '1px solid white' }}>detaljert kravbeskrivelse (ny fane)</span>
+              <Block paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge}>
+                <Paragraph2 $style={{marginTop: '0px', marginBottom: '0px', color: ettlevColors.white}}>{kravNumView(krav)}</Paragraph2>
+                <H1 $style={{marginTop: '0px', marginBottom: '0px', color: ettlevColors.white}}>{krav.navn}</H1>
+                <Paragraph2 color={ettlevColors.white} marginBottom={0}>
+                  <a href={'/krav/' + krav?.kravNummer + '/' + krav?.kravVersjon} style={{color: ettlevColors.white}} target="_blank"
+                     rel="noopener noreferrer">
+                    <span style={{display: 'inline-block', paddingBottom: '1px', borderBottom: '1px solid white'}}>detaljert kravbeskrivelse (ny fane)</span>
                   </a>
                 </Paragraph2>
               </Block>
-              <Block display="flex" paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge} paddingBottom={theme.sizing.scale900}>
+              <Block display="flex" paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge} paddingBottom={theme.sizing.scale900}
+                     paddingTop={theme.sizing.scale800}>
                 <Block>
                   <Block display="flex">
-                    <Label3 $style={{ fontSize: '18px', color: ettlevColors.white }}>Du dokumenterer for:</Label3>
+                    <Label3 $style={{fontSize: '18px', color: ettlevColors.white}}>Du dokumenterer for:</Label3>
                   </Block>
-                  <Paragraph2 $style={{ marginTop: '0px', color: ettlevColors.white, maxWidth: '700px' }}>{behandlingNavn}</Paragraph2>
+                  <Paragraph2 $style={{marginTop: 0, marginBottom: 0, color: ettlevColors.white, maxWidth: '700px'}}>{behandlingNavn}</Paragraph2>
                 </Block>
               </Block>
             </Block>
           </Block>
           <Block flex="1" backgroundColor={ettlevColors.white}>
-            <Block paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge} paddingBottom="32px" display="flex" paddingTop="32px">
+            <Block
+              paddingLeft={responsivePaddingLarge}
+              paddingRight={responsivePaddingLarge}
+              paddingBottom="16px"
+              paddingTop="16px"
+              display="flex"
+            >
               <Block marginRight="20px">
-                <img src={arkPennIcon} alt="test" height="56px" width="40px" />
+                <img src={arkPennIcon} alt="test" height="56px" width="40px"/>
               </Block>
               <Block>
                 <Paragraph2 marginBottom="0px" marginTop="0px">
@@ -216,15 +224,15 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
                                 if (id === EtterlevelseStatus.OPPFYLLES_SENERE) {
                                   return (
                                     <Radio value={id} key={id}>
-                                      <Block $style={{ textDecoration: radioHover === id ? 'underline' : 'none' }}>
-                                        <Paragraph2 $style={{ lineHeight: '22px' }} marginTop="0px" marginBottom="0px">
+                                      <Block $style={{textDecoration: radioHover === id ? 'underline' : 'none'}}>
+                                        <Paragraph2 $style={{lineHeight: '22px'}} marginTop="0px" marginBottom="0px">
                                           {getEtterlevelseStatus(id)}
                                         </Paragraph2>
                                       </Block>
 
                                       {etterlevelseStatus === EtterlevelseStatus.OPPFYLLES_SENERE && (
                                         <Block maxWidth="170px" width="100%">
-                                          <DateField label="Frist (valgfritt)" name="fristForFerdigstillelse" />
+                                          <DateField label="Frist (valgfritt)" name="fristForFerdigstillelse"/>
                                         </Block>
                                       )}
                                     </Radio>
@@ -233,14 +241,14 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
                                 if (id === EtterlevelseStatus.IKKE_RELEVANT) {
                                   return (
                                     <Radio value={id} key={id}>
-                                      <Block $style={{ textDecoration: radioHover === id ? 'underline' : 'none' }}>
-                                        <Paragraph2 $style={{ lineHeight: '22px' }} marginTop="0px" marginBottom="0px">
+                                      <Block $style={{textDecoration: radioHover === id ? 'underline' : 'none'}}>
+                                        <Paragraph2 $style={{lineHeight: '22px'}} marginTop="0px" marginBottom="0px">
                                           {getEtterlevelseStatus(id)}
                                         </Paragraph2>
                                       </Block>
                                       {etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT && (
                                         <Block maxWidth="471px" width="100%">
-                                          <TextAreaField label="Beskriv hvorfor kravet ikke er relevant" noPlaceholder name="statusBegrunnelse" />
+                                          <TextAreaField label="Beskriv hvorfor kravet ikke er relevant" noPlaceholder name="statusBegrunnelse"/>
                                         </Block>
                                       )}
                                     </Radio>
@@ -251,8 +259,8 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
                                 }
                                 return (
                                   <Radio value={id} key={id}>
-                                    <Block $style={{ textDecoration: radioHover === id ? 'underline' : 'none' }}>
-                                      <Paragraph2 $style={{ lineHeight: '22px' }} marginTop="0px" marginBottom="0px">
+                                    <Block $style={{textDecoration: radioHover === id ? 'underline' : 'none'}}>
+                                      <Paragraph2 $style={{lineHeight: '22px'}} marginTop="0px" marginBottom="0px">
                                         {getEtterlevelseStatus(id)}
                                       </Paragraph2>
                                     </Block>
@@ -265,9 +273,9 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
                       </Field>
                     </FieldWrapper>
 
-                    <Label3 $style={{ lineHeight: '32px' }}>Hvilke suksesskriterier er oppfylt?</Label3>
+                    <Label3 $style={{lineHeight: '32px'}}>Hvilke suksesskriterier er oppfylt?</Label3>
 
-                    <SuksesskriterierBegrunnelseEdit disableEdit={disableEdit} suksesskriterie={krav.suksesskriterier} />
+                    <SuksesskriterierBegrunnelseEdit disableEdit={disableEdit} suksesskriterie={krav.suksesskriterier}/>
 
                     {/*
               {!documentEdit &&
@@ -291,7 +299,7 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
           <Block height={theme.sizing.scale600}/>
          */}
 
-                    <Error fieldName={'status'} fullWidth={true} />
+                    <Error fieldName={'status'} fullWidth={true}/>
                     <Block width={'100%'} marginTop={'65px'}>
                       {Object.keys(errors).length > 0 && (
                         <Block display="flex" width="60%">
@@ -317,7 +325,7 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
                                     marginRight: '5px',
                                   }}
                                 />
-                                <Paragraph2 marginBottom="0px" marginTop="0px" $style={{ lineHeight: '18px' }}>
+                                <Paragraph2 marginBottom="0px" marginTop="0px" $style={{lineHeight: '18px'}}>
                                   Du må fylle ut alle obligatoriske felter
                                 </Paragraph2>
                               </Block>
@@ -382,9 +390,9 @@ export const SearchKrav = (props: { kravNummer: number; kravVersjon: number }) =
               filterOptions={(o) => o}
               searchable
               noResultsMsg="Ingen resultat"
-              options={results.map((k) => ({ id: k.id, label: kravName(k) }))}
-              value={krav ? [{ id: krav.id, label: kravName(krav) }] : []}
-              onChange={({ value }) => {
+              options={results.map((k) => ({id: k.id, label: kravName(k)}))}
+              value={krav ? [{id: krav.id, label: kravName(krav)}] : []}
+              onChange={({value}) => {
                 const kravSelect = value.length ? results.find((k) => k.id === value[0].id)! : undefined
                 setKrav(kravSelect)
                 p.form.setFieldValue('kravNummer', kravSelect?.kravNummer)
@@ -415,9 +423,9 @@ export const SearchBehandling = (props: { id: string }) => {
               filterOptions={(o) => o}
               searchable
               noResultsMsg="Ingen resultat"
-              options={results.map((k) => ({ id: k.id, label: behandlingName(k) }))}
-              value={behandling ? [{ id: behandling.id, label: behandlingName(behandling) }] : []}
-              onChange={({ value }) => {
+              options={results.map((k) => ({id: k.id, label: behandlingName(k)}))}
+              value={behandling ? [{id: behandling.id, label: behandlingName(behandling)}] : []}
+              onChange={({value}) => {
                 const select = value.length ? results.find((k) => k.id === value[0].id)! : undefined
                 setBehandling(select)
                 p.form.setFieldValue('behandlingId', select?.id)
