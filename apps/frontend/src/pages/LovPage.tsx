@@ -1,24 +1,23 @@
-import { useParams } from 'react-router-dom'
-import { Block } from 'baseui/block'
-import React, { useEffect, useState } from 'react'
-import { H1, H2, Paragraph2 } from 'baseui/typography'
-import { codelist, ListName, LovCode } from '../services/Codelist'
-import { ExternalLink, ObjectLink } from '../components/common/RouteLink'
-import { theme } from '../util'
-import { LovBilde } from '../components/Images'
-import { lovdataBase } from '../components/Lov'
-import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons'
-import { Markdown } from '../components/common/Markdown'
-import { ettlevColors, maxPageWidth } from '../util/theme'
+import {useParams} from 'react-router-dom'
+import {Block} from 'baseui/block'
+import React, {useEffect, useState} from 'react'
+import {H1, H2, LabelLarge, Paragraph2} from 'baseui/typography'
+import {codelist, ListName, LovCode} from '../services/Codelist'
+import {ExternalLink, ObjectLink} from '../components/common/RouteLink'
+import {theme} from '../util'
+import {lovdataBase} from '../components/Lov'
+import {faChevronDown, faChevronUp} from '@fortawesome/free-solid-svg-icons'
+import {Markdown} from '../components/common/Markdown'
+import {ettlevColors, maxPageWidth} from '../util/theme'
 import Button from '../components/common/Button'
-import { Page } from '../components/scaffold/Page'
-import { SkeletonPanel } from '../components/common/LoadingSkeleton'
-import { useKravCounter } from './TemaPage'
-import { PanelLink } from '../components/common/PanelLink'
-import { kravNumView } from './KravPage'
-import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
-import { sortKraverByPriority } from '../util/sort'
-import { Krav } from '../constants'
+import {Page} from '../components/scaffold/Page'
+import {SkeletonPanel} from '../components/common/LoadingSkeleton'
+import {useKravCounter} from './TemaPage'
+import {PanelLink} from '../components/common/PanelLink'
+import {kravNumView} from './KravPage'
+import {breadcrumbPaths} from '../components/common/CustomizedBreadcrumbs'
+import {sortKraverByPriority} from '../util/sort'
+import {Krav} from '../constants'
 
 const fontColor = ettlevColors.white
 
@@ -145,7 +144,7 @@ const LovSide = ({ lov }: { lov: LovCode }) => {
         {!loading &&
           kravList.map((k) => (
             <Block key={k.id} marginBottom={'8px'}>
-              <PanelLink useUnderline href={`/krav/${k.kravNummer}/${k.kravVersjon}`} beskrivelse={kravNumView(k)} title={k.navn} flip />
+              <PanelLink useUnderline href={`/krav/${k.kravNummer}/${k.kravVersjon}`} beskrivelse={kravNumView(k)} title={<LabelLarge $style={{fontSize:'18px'}}>{k.navn}</LabelLarge>} flip />
             </Block>
           ))}
       </Block>
