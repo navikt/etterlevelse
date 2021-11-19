@@ -304,19 +304,23 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
                                     ...borderStyle('solid'),
                                     ...borderWidth('1px'),
                                     ...borderColor(ettlevColors.red600),
-                                    ...borderRadius('0px')
+                                    ...borderRadius('4px'),
                                   }
                                 }
                               }}
                               kind={NKIND.negative}
                             >
-                              <FontAwesomeIcon
-                                icon={faTimesCircle}
-                                style={{
-                                  marginRight: '5px',
-                                }}
-                              />
-                              Du må fylle ut alle obligatoriske felter
+                              <Block display="flex" justifyContent="center">
+                                <FontAwesomeIcon
+                                  icon={faTimesCircle}
+                                  style={{
+                                    marginRight: '5px',
+                                  }}
+                                />
+                                <Paragraph2 marginBottom="0px" marginTop="0px" $style={{ lineHeight: '18px' }}>
+                                  Du må fylle ut alle obligatoriske felter
+                                </Paragraph2>
+                              </Block>
                             </Notification>
                           </Block>
                         </Block>

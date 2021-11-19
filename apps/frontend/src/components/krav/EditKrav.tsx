@@ -13,7 +13,7 @@ import { KravVarslingsadresserEdit } from './Edit/KravVarslingsadresserEdit'
 import { KravRegelverkEdit } from './Edit/KravRegelverkEdit'
 import { KravSuksesskriterierEdit } from './Edit/KravSuksesskriterieEdit'
 import { EditBegreper } from './Edit/KravBegreperEdit'
-import { H1, H2, LabelLarge } from 'baseui/typography'
+import { H1, H2, LabelLarge, Paragraph2 } from 'baseui/typography'
 import CustomizedModal from '../common/CustomizedModal'
 import Button from '../common/Button'
 import { ettlevColors, maxPageWidth, responsivePaddingLarge, responsiveWidthLarge, theme } from '../../util/theme'
@@ -272,19 +272,23 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
                                     ...borderStyle('solid'),
                                     ...borderWidth('1px'),
                                     ...borderColor(ettlevColors.red600),
-                                    ...borderRadius('0px')
+                                    ...borderRadius('4px')
                                   }
                                 }
                               }}
                               kind={NKIND.negative}
                             >
-                              <FontAwesomeIcon
-                                icon={faTimesCircle}
-                                style={{
-                                  marginRight: '5px',
-                                }}
-                              />
-                              Du må fylle ut alle obligatoriske felter
+                              <Block display="flex" justifyContent="center">
+                                <FontAwesomeIcon
+                                  icon={faTimesCircle}
+                                  style={{
+                                    marginRight: '5px',
+                                  }}
+                                />
+                                <Paragraph2 marginBottom="0px" marginTop="0px" $style={{ lineHeight: '18px' }}>
+                                  Du må fylle ut alle obligatoriske felter
+                                </Paragraph2>
+                              </Block>
                             </Notification>
                           </Block>
                         </Block>
