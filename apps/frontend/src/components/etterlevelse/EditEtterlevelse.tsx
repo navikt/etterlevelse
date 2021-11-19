@@ -249,6 +249,7 @@ export const EditEtterlevelse = ({krav, etterlevelse, close, formRef, documentEd
                                       {etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT && (
                                         <Block maxWidth="471px" width="100%">
                                           <TextAreaField label="Beskriv hvorfor kravet ikke er relevant" noPlaceholder name="statusBegrunnelse"/>
+                                          <Error fieldName={'statusBegrunnelse'} fullWidth={true}/>
                                         </Block>
                                       )}
                                     </Radio>
