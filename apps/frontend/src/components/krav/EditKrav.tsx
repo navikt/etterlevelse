@@ -312,7 +312,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
                     Avbryt
                   </Button>
 
-                  <Button size="compact" kind="secondary" onClick={submitForm} disabled={isSubmitting} type={'button'} marginLeft>
+                  <Button size="compact" onClick={submitForm} disabled={isSubmitting} type={'button'} marginLeft>
                     Lagre
                   </Button>
                 </Block>
