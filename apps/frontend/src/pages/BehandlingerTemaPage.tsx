@@ -1,30 +1,30 @@
-import React, { useEffect, useState } from 'react'
-import { Block, Display, JustifyContent } from 'baseui/block'
-import { useParams } from 'react-router-dom'
-import { H1, H2, HeadingLarge, Label3, Paragraph2, Paragraph4 } from 'baseui/typography'
-import { ettlevColors, maxPageWidth, theme } from '../util/theme'
-import { codelist, ListName, TemaCode } from '../services/Codelist'
-import RouteLink, { urlForObject } from '../components/common/RouteLink'
-import { useBehandling } from '../api/BehandlingApi'
-import { Layout2 } from '../components/scaffold/Page'
-import { Etterlevelse, EtterlevelseStatus, KravEtterlevelseData, KravQL, PageResponse, Suksesskriterie } from '../constants'
-import { arkPennIcon, crossIcon } from '../components/Images'
-import { behandlingKravQuery } from '../components/behandling/ViewBehandling'
-import { useQuery } from '@apollo/client'
-import { CustomizedAccordion, CustomizedPanel, CustomPanelDivider } from '../components/common/CustomizedAccordion'
+import React, {useEffect, useState} from 'react'
+import {Block, Display} from 'baseui/block'
+import {useParams} from 'react-router-dom'
+import {H1, H2, Label3, Paragraph2, Paragraph4} from 'baseui/typography'
+import {ettlevColors, maxPageWidth, theme} from '../util/theme'
+import {codelist, ListName, TemaCode} from '../services/Codelist'
+import RouteLink, {urlForObject} from '../components/common/RouteLink'
+import {useBehandling} from '../api/BehandlingApi'
+import {Layout2} from '../components/scaffold/Page'
+import {Etterlevelse, EtterlevelseStatus, KravEtterlevelseData, KravQL, PageResponse} from '../constants'
+import {arkPennIcon, crossIcon} from '../components/Images'
+import {behandlingKravQuery} from '../components/behandling/ViewBehandling'
+import {useQuery} from '@apollo/client'
+import {CustomizedAccordion, CustomizedPanel, CustomPanelDivider} from '../components/common/CustomizedAccordion'
 import CustomizedModal from '../components/common/CustomizedModal'
-import { Spinner } from '../components/common/Spinner'
-import { useEtterlevelse } from '../api/EtterlevelseApi'
-import { EditEtterlevelse } from '../components/etterlevelse/EditEtterlevelse'
-import { kravFullQuery, KravId } from '../api/KravApi'
-import { borderStyle } from '../components/common/Style'
-import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
+import {Spinner} from '../components/common/Spinner'
+import {useEtterlevelse} from '../api/EtterlevelseApi'
+import {EditEtterlevelse} from '../components/etterlevelse/EditEtterlevelse'
+import {kravFullQuery, KravId} from '../api/KravApi'
+import {borderStyle} from '../components/common/Style'
+import {breadcrumbPaths} from '../components/common/CustomizedBreadcrumbs'
 import Button from '../components/common/Button'
-import { Responsive } from 'baseui/theme'
-import { KravPanelHeader } from '../components/behandling/KravPanelHeader'
-import { sortKraverByPriority } from '../util/sort'
+import {Responsive} from 'baseui/theme'
+import {KravPanelHeader} from '../components/behandling/KravPanelHeader'
+import {sortKraverByPriority} from '../util/sort'
 import _ from 'lodash'
-import { getAllKravPriority } from '../api/KravPriorityApi'
+import {getAllKravPriority} from '../api/KravPriorityApi'
 
 const responsiveBreakPoints: Responsive<Display> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
 
@@ -145,7 +145,7 @@ export const BehandlingerTemaPage = () => {
   )
 
   const getSecondaryHeader = () => (
-    <Block width="100%" paddingTop={theme.sizing.scale900} display={responsiveBreakPoints} alignItems="center" justifyContent="space-between">
+    <Block width="100%" display={responsiveBreakPoints} alignItems="center" justifyContent="space-between">
       <Block display="flex" alignItems="center">
         <Block marginRight="30px">
           <img src={arkPennIcon} alt="test" height="50px" width="40px" />
