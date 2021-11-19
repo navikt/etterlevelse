@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons'
 import { paddingZero } from './Style'
 import CustomizedStatefulTooltip from './CustomizedStatefulTooltip'
+import { ettlevColors } from '../../util/theme'
 
 export const Error = (props: { fieldName: string; fullWidth?: boolean }) => (
   <ErrorMessage name={props.fieldName}>
@@ -15,7 +16,7 @@ export const Error = (props: { fieldName: string; fullWidth?: boolean }) => (
       <Block display="flex" width="100%" marginTop=".2rem">
         {!props.fullWidth && <ModalLabel />}
         <Block width="100%">
-          <Notification overrides={{ Body: { style: { width: 'auto', ...paddingZero, marginTop: 0, backgroundColor: 'transparent' } } }} kind={NKIND.negative}>
+          <Notification overrides={{ Body: { style: { width: 'auto', ...paddingZero, marginTop: 0, backgroundColor: 'transparent', color: ettlevColors.red600 } } }} kind={NKIND.negative}>
             {msg}
           </Notification>
         </Block>

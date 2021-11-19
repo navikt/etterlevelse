@@ -41,7 +41,6 @@ const modalPaddingRight = '104px'
 const modalPaddingLeft = '112px'
 const maxTextArea = '750px'
 
-export const editEtterlevelseModal = () => document.querySelector('#edit-etterlevelse-modal')
 
 const etterlevelseSchema = () => {
   return yup.object({
@@ -90,7 +89,6 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
   const [nyereKrav, setNyereKrav] = React.useState<Krav>()
   const [disableEdit, setDisableEdit] = React.useState<boolean>(false)
   const [radioHover, setRadioHover] = React.useState<string>('')
-  const [stickyFooterStyle, setStickyFooterStyle] = React.useState(false)
   const submit = async (etterlevelse: Etterlevelse) => {
     const mutatedEtterlevelse = {
       ...etterlevelse,
@@ -113,23 +111,6 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
       setDisableEdit(true)
     }
   }, [nyereKrav])
-
-  useEffect(() => {
-    const listener = (event: any) => {
-      const buttonPosition = document.querySelector('.edit-etterlevelse-button-container')?.clientHeight || 0
-      console.log(buttonPosition)
-      console.log(event.target.scrollTop)
-      if (event.target.scrollTop <= event.target.scrollHeight - event.target.clientHeight - buttonPosition) {
-        setStickyFooterStyle(true)
-      } else {
-        setStickyFooterStyle(false)
-      }
-    }
-
-    setTimeout(() => editEtterlevelseModal()?.addEventListener('scroll', listener), 200)
-    return () => editEtterlevelseModal()?.removeEventListener('scroll', listener)
-
-  }, [])
 
   return (
     <Formik
@@ -323,19 +304,23 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
                                     ...borderStyle('solid'),
                                     ...borderWidth('1px'),
                                     ...borderColor(ettlevColors.red600),
-                                    ...borderRadius('0px')
+                                    ...borderRadius('4px'),
                                   }
                                 }
                               }}
                               kind={NKIND.negative}
                             >
-                              <FontAwesomeIcon
-                                icon={faTimesCircle}
-                                style={{
-                                  marginRight: '5px',
-                                }}
-                              />
-                              Du må fylle ut alle obligatoriske felter
+                              <Block display="flex" justifyContent="center">
+                                <FontAwesomeIcon
+                                  icon={faTimesCircle}
+                                  style={{
+                                    marginRight: '5px',
+                                  }}
+                                />
+                                <Paragraph2 marginBottom="0px" marginTop="0px" $style={{ lineHeight: '18px' }}>
+                                  Du må fylle ut alle obligatoriske felter
+                                </Paragraph2>
+                              </Block>
                             </Notification>
                           </Block>
                         </Block>
@@ -355,13 +340,6 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
               paddingBottom="14px"
               display="flex"
               marginBottom={theme.sizing.scale3200}
-              position="sticky"
-              bottom={0}
-              backgroundColor={ettlevColors.grey25}
-              $style={{
-                boxShadow: stickyFooterStyle ? '0px -4px 4px rgba(0, 0, 0, 0.12)' : '',
-                zIndex: 3
-              }}
             >
               <Button disabled={disableEdit} type="button" kind="secondary" marginRight onClick={close}>
                 Avbryt og forkast endringene
