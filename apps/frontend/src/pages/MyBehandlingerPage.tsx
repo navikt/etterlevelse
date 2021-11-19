@@ -1,29 +1,28 @@
-import { HeadingLarge, HeadingXLarge, HeadingXXLarge, LabelLarge, LabelSmall, LabelXSmall, ParagraphSmall } from 'baseui/typography'
-import { Block } from 'baseui/block'
-import React, { useEffect, useState } from 'react'
-import { useMyTeams } from '../api/TeamApi'
-import RouteLink from '../components/common/RouteLink'
-import { theme } from '../util'
-import Button, { ExternalButton } from '../components/common/Button'
-import { Spinner } from '../components/common/Spinner'
-import { BehandlingQL, emptyPage, PageResponse, Team } from '../constants'
-import { StatefulInput } from 'baseui/input'
-import { gql, useQuery } from '@apollo/client'
-import { ettlevColors, maxPageWidth } from '../util/theme'
-import CustomizedTabs, { CustomizedTab } from '../components/common/CustomizedTabs'
-import { PanelLink } from '../components/common/PanelLink'
-import { arkPennIcon, bamseIcon, clearSearchIcon, navChevronRightIcon, paperPenIconBg, searchIcon } from '../components/Images'
-import { env } from '../util/env'
-import { InfoBlock2 } from '../components/common/InfoBlock'
+import {HeadingLarge, HeadingXLarge, HeadingXXLarge, LabelLarge, LabelSmall, LabelXSmall, ParagraphSmall} from 'baseui/typography'
+import {Block} from 'baseui/block'
+import React, {useEffect, useState} from 'react'
+import {useMyTeams} from '../api/TeamApi'
+import {theme} from '../util'
+import Button, {ExternalButton} from '../components/common/Button'
+import {Spinner} from '../components/common/Spinner'
+import {BehandlingQL, emptyPage, PageResponse, Team} from '../constants'
+import {StatefulInput} from 'baseui/input'
+import {gql, useQuery} from '@apollo/client'
+import {ettlevColors, maxPageWidth} from '../util/theme'
+import CustomizedTabs from '../components/common/CustomizedTabs'
+import {PanelLink} from '../components/common/PanelLink'
+import {arkPennIcon, bamseIcon, clearSearchIcon, searchIcon} from '../components/Images'
+import {env} from '../util/env'
+import {InfoBlock2} from '../components/common/InfoBlock'
 import moment from 'moment'
-import { useDebouncedState } from '../util/hooks'
-import { SkeletonPanel } from '../components/common/LoadingSkeleton'
-import { user } from '../services/User'
-import { useHistory, useParams } from 'react-router-dom'
-import { faExternalLinkAlt, faPlus } from '@fortawesome/free-solid-svg-icons'
-import { borderWidth } from '../components/common/Style'
+import {useDebouncedState} from '../util/hooks'
+import {SkeletonPanel} from '../components/common/LoadingSkeleton'
+import {user} from '../services/User'
+import {useHistory, useParams} from 'react-router-dom'
+import {faExternalLinkAlt, faPlus} from '@fortawesome/free-solid-svg-icons'
+import {borderWidth} from '../components/common/Style'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 
 type Section = 'mine' | 'siste' | 'alle'
 
@@ -33,10 +32,10 @@ interface BehandlingCount {
 
 type CustomTeamObject = BehandlingCount & Team
 
-const tabMarginBottom = '100px'
+const tabMarginBottom = '48px'
 
 export const MyBehandlingerPage = () => (
-  <Block width="100%" paddingBottom={'200px'} id="content" overrides={{ Block: { props: { role: 'main' } } }}>
+  <Block width="100%" paddingBottom={'200px'} id="content" overrides={{Block: {props: {role: 'main'}}}}>
     <Block width="100%" backgroundColor={ettlevColors.grey50} display={'flex'} justifyContent={'center'}>
       <Block maxWidth={maxPageWidth} width="100%">
         <Block paddingLeft={'100px'} paddingRight={'100px'} paddingTop={theme.sizing.scale800}>
@@ -46,7 +45,7 @@ export const MyBehandlingerPage = () => (
               Tilbake
             </Button>
           </RouteLink> */}
-          <CustomizedBreadcrumbs currentPage="Dokumentere etterlevelse" />
+          <CustomizedBreadcrumbs currentPage="Dokumentere etterlevelse"/>
           <HeadingXXLarge marginTop="0">Dokumentere etterlevelse</HeadingXXLarge>
         </Block>
       </Block>
@@ -62,7 +61,7 @@ export const MyBehandlingerPage = () => (
     >
       <Block maxWidth={maxPageWidth} width="100%">
         <Block paddingLeft={'100px'} paddingRight={'100px'} paddingTop={theme.sizing.scale800}>
-          <BehandlingTabs />
+          <BehandlingTabs/>
         </Block>
       </Block>
     </Block>
@@ -75,7 +74,7 @@ const BehandlingTabs = () => {
   const [tab, setTab] = useState<Section>(params.tab || 'mine')
   const [doneLoading, setDoneLoading] = useState(false)
   const [variables, setVariables] = useState<Variables>({})
-  const { data, loading: behandlingerLoading } = useQuery<{ behandlinger: PageResponse<BehandlingQL> }, Variables>(query, {
+  const {data, loading: behandlingerLoading} = useQuery<{ behandlinger: PageResponse<BehandlingQL> }, Variables>(query, {
     variables,
     skip: !variables.mineBehandlinger && !variables.sistRedigert,
   })
@@ -118,10 +117,10 @@ const BehandlingTabs = () => {
   useEffect(() => {
     switch (tab) {
       case 'mine':
-        setVariables({ mineBehandlinger: true })
+        setVariables({mineBehandlinger: true})
         break
       case 'siste':
-        setVariables({ sistRedigert: 20 })
+        setVariables({sistRedigert: 20})
         break
     }
     if (tab !== params.tab) history.replace(`/behandlinger/${tab}`)
@@ -147,30 +146,30 @@ const BehandlingTabs = () => {
         {
           key: 'mine',
           title: 'Mine behandlinger',
-          content: <MineBehandlinger teams={sortedTeams} behandlinger={behandlinger.content} loading={loading} />,
+          content: <MineBehandlinger teams={sortedTeams} behandlinger={behandlinger.content} loading={loading}/>,
         },
         {
           key: 'siste',
           title: 'Mine sist dokumenterte',
-          content: <SisteBehandlinger behandlinger={behandlinger.content} loading={loading} />,
+          content: <SisteBehandlinger behandlinger={behandlinger.content} loading={loading}/>,
         },
         {
           key: 'alle',
           title: 'Alle',
-          content: <Alle />,
+          content: <Alle/>,
         },
       ]}
     />
   )
 }
 
-const MineBehandlinger = ({ behandlinger, teams, loading }: { behandlinger: BehandlingQL[]; teams: CustomTeamObject[]; loading: boolean }) => {
+const MineBehandlinger = ({behandlinger, teams, loading}: { behandlinger: BehandlingQL[]; teams: CustomTeamObject[]; loading: boolean }) => {
   if (loading)
     return (
       <>
-        <BehandlingerPanels behandlinger={[]} loading />
-        <Block height={'60px'} />
-        <BehandlingerPanels behandlinger={[]} loading />
+        <BehandlingerPanels behandlinger={[]} loading/>
+        <Block height={'60px'}/>
+        <BehandlingerPanels behandlinger={[]} loading/>
       </>
     )
   return (
@@ -187,17 +186,17 @@ const MineBehandlinger = ({ behandlinger, teams, loading }: { behandlinger: Beha
                   {t.name}
                 </HeadingXLarge>
                 <ParagraphSmall marginTop={0}>
-                  Teamet skal etterleve krav i <span style={{ fontWeight: 700 }}>{teamBehandlinger.length} behandlinger</span>
+                  Teamet skal etterleve krav i <span style={{fontWeight: 700}}>{teamBehandlinger.length} behandlinger</span>
                 </ParagraphSmall>
               </Block>
               <Block alignSelf={'flex-end'} marginBottom={theme.sizing.scale400}>
                 <ExternalButton href={`${env.pollyBaseUrl}process/team/${t.id}`} underlineHover size={'mini'}>
-                  Legg til behandling <FontAwesomeIcon icon={faExternalLinkAlt} />
+                  Legg til behandling <FontAwesomeIcon icon={faExternalLinkAlt}/>
                 </ExternalButton>
               </Block>
             </Block>
 
-            <BehandlingerPanels behandlinger={teamBehandlinger} />
+            <BehandlingerPanels behandlinger={teamBehandlinger}/>
           </Block>
         )
       })}
@@ -212,7 +211,7 @@ const MineBehandlinger = ({ behandlinger, teams, loading }: { behandlinger: Beha
         >
           <Block marginTop={theme.sizing.scale600}>
             <ExternalButton href={`${env.teamKatBaseUrl}`}>
-              Teamkatalogen <FontAwesomeIcon icon={faExternalLinkAlt} />
+              Teamkatalogen <FontAwesomeIcon icon={faExternalLinkAlt}/>
             </ExternalButton>
           </Block>
         </InfoBlock2>
@@ -221,10 +220,10 @@ const MineBehandlinger = ({ behandlinger, teams, loading }: { behandlinger: Beha
   )
 }
 
-const SisteBehandlinger = ({ behandlinger, loading }: { behandlinger: BehandlingQL[]; loading: boolean }) => {
+const SisteBehandlinger = ({behandlinger, loading}: { behandlinger: BehandlingQL[]; loading: boolean }) => {
   if (!behandlinger.length && !loading) return <ParagraphSmall>Du har ikke dokumentert etterlevelse på krav</ParagraphSmall>
   const sorted = [...behandlinger].sort((a, b) => moment(b.sistEndretEtterlevelse).valueOf() - moment(a.sistEndretEtterlevelse).valueOf())
-  return <BehandlingerPanels behandlinger={sorted} loading={loading} />
+  return <BehandlingerPanels behandlinger={sorted} loading={loading}/>
 }
 
 const Alle = () => {
@@ -238,7 +237,7 @@ const Alle = () => {
     loading: gqlLoading,
     fetchMore,
   } = useQuery<{ behandlinger: PageResponse<BehandlingQL> }, Variables>(query, {
-    variables: { pageNumber, pageSize, sok },
+    variables: {pageNumber, pageSize, sok},
     skip: tooShort,
   })
   const behandlinger = data?.behandlinger || emptyPage
@@ -288,7 +287,7 @@ const Alle = () => {
           onChange={(e) => setSok((e.target as HTMLInputElement).value)}
           clearable
           overrides={{
-            Root: { style: { paddingLeft: 0, paddingRight: 0, ...borderWidth('1px') } },
+            Root: {style: {paddingLeft: 0, paddingRight: 0, ...borderWidth('1px')}},
             Input: {
               style: {
                 backgroundColor: hover ? ettlevColors.green50 : undefined,
@@ -310,7 +309,7 @@ const Alle = () => {
                   Svg: {
                     component: (props: any) => (
                       <Button notBold size="compact" kind="tertiary" onClick={() => props.onClick()}>
-                        <img src={clearSearchIcon} alt="tøm" />
+                        <img src={clearSearchIcon} alt="tøm"/>
                       </Button>
                     ),
                   },
@@ -319,7 +318,7 @@ const Alle = () => {
             },
             // EndEnhancer: {style: {marginLeft: theme.sizing.scale400, paddingLeft: 0, paddingRight: 0, backgroundColor: ettlevColors.black}}
           }}
-          startEnhancer={<img src={searchIcon} alt="Søk ikon" />}
+          startEnhancer={<img src={searchIcon} alt="Søk ikon"/>}
           // endEnhancer={<img aria-hidden alt={'Søk ikon'} src={sokButtonIcon} />}
         />
         {tooShort && (
@@ -334,7 +333,7 @@ const Alle = () => {
           {loading && (
             <Block>
               <Block marginLeft={theme.sizing.scale400} marginTop={theme.sizing.scale400}>
-                <Spinner size={theme.sizing.scale1000} />
+                <Spinner size={theme.sizing.scale1000}/>
               </Block>
             </Block>
           )}
@@ -348,7 +347,7 @@ const Alle = () => {
             </Block>
           )}
 
-          <BehandlingerPanels behandlinger={behandlinger.content} loading={loading} />
+          <BehandlingerPanels behandlinger={behandlinger.content} loading={loading}/>
 
           {!loading && behandlinger.totalElements !== 0 && (
             <Block display={'flex'} justifyContent={'space-between'} marginTop={theme.sizing.scale1000}>
@@ -359,7 +358,7 @@ const Alle = () => {
 
                 {gqlLoading && (
                   <Block marginLeft={theme.sizing.scale400}>
-                    <Spinner size={theme.sizing.scale800} />
+                    <Spinner size={theme.sizing.scale800}/>
                   </Block>
                 )}
               </Block>
@@ -374,15 +373,15 @@ const Alle = () => {
   )
 }
 
-const BehandlingerPanels = ({ behandlinger, loading }: { behandlinger: BehandlingQL[]; loading?: boolean }) => {
-  if (loading) return <SkeletonPanel count={5} />
+const BehandlingerPanels = ({behandlinger, loading}: { behandlinger: BehandlingQL[]; loading?: boolean }) => {
+  if (loading) return <SkeletonPanel count={5}/>
   return (
     <Block marginBottom={tabMarginBottom}>
       {behandlinger.map((b) => (
         <Block key={b.id} marginBottom={'8px'}>
           <PanelLink
             useUnderline
-            panelIcon={<img src={arkPennIcon} width="33px" height="33px" aria-hidden alt={'Dokumenter behandling ikon'} />}
+            panelIcon={<img src={arkPennIcon} width="33px" height="33px" aria-hidden alt={'Dokumenter behandling ikon'}/>}
             href={`/behandling/${b.id}`}
             title={`${b.nummer}: ${b.navn}`}
             beskrivelse={b.overordnetFormaal.shortName}
