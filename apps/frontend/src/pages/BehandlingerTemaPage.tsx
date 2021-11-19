@@ -120,7 +120,7 @@ export const BehandlingerTemaPage = () => {
   }
 
   const getMainHeader = () => (
-    <Block justifyContent="space-between" marginBottom="60px">
+    <Block justifyContent="space-between" marginBottom="32px">
       {temaData && behandling && (
         <>
           <Block>
@@ -130,12 +130,12 @@ export const BehandlingerTemaPage = () => {
             </H1>
             <RouteLink href={urlForObject(ListName.TEMA, temaData?.code)}>Les om tema</RouteLink>
           </Block>
-          <Block marginTop={theme.sizing.scale1200} flex="1" width="100%" display="flex">
-            <Block padding="5px">
+          <Block marginTop={theme.sizing.scale900} flex="1" width="100%" display="flex">
+            <Block>
               <Block display="flex">
                 <Label3 $style={{ fontSize: '18px' }}>Du dokumenterer for:</Label3>
               </Block>
-              <Paragraph2 $style={{ marginTop: '0px', maxWidth: '700px' }}>{behandling.navn}</Paragraph2>
+              <Paragraph2 $style={{ marginTop: '0px', maxWidth: '700px' }} marginBottom={0}>{behandling.navn}</Paragraph2>
               {/* <Paragraph4 $style={{ lineHeight: '24px' }}>{behandling.overordnetFormaal.shortName}</Paragraph4> */}
             </Block>
           </Block>
@@ -164,14 +164,14 @@ export const BehandlingerTemaPage = () => {
 
       <Block display="flex" alignItems="center">
         <Block display="flex" alignItems="baseline" marginRight="30px">
-          <Paragraph2 $style={{ fontWeight: 900, fontSize: '32px', lineHeight: '40px' }} color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
+          <Paragraph2 $style={{ fontWeight: 900, fontSize: '32px', lineHeight: '16px' }} color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
             {kravData.filter((k) => k.gammelVersjon === false).length}
           </Paragraph2>
           <Paragraph2>krav</Paragraph2>
         </Block>
         <Block $style={{ border: '1px solid ' + ettlevColors.green50, background: '#102723' }} height="40px" />
         <Block display="flex" alignItems="baseline" marginLeft="30px">
-          <Paragraph2 $style={{ fontWeight: 900, fontSize: '32px', lineHeight: '40px' }} color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
+          <Paragraph2 $style={{ fontWeight: 900, fontSize: '32px', lineHeight: '16px' }} color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
             {getPercentageUtfylt()}
           </Paragraph2>
           <Paragraph2> ferdig utfylt</Paragraph2>
@@ -221,7 +221,7 @@ export const BehandlingerTemaPage = () => {
       currentPage={temaData?.shortName}
       breadcrumbPaths={breadcrumbPaths}
     >
-      <Block display="flex" width="100%" justifyContent="space-between" flexWrap marginTop="87px" marginBottom="87px">
+      <Block display="flex" width="100%" justifyContent="space-between" flexWrap marginTop="64px" marginBottom="64px">
         <CustomizedAccordion accordion={false}>
           <CustomizedPanel HeaderActiveBackgroundColor={ettlevColors.green50} title={<KravPanelHeader title={'Skal fylles ut'} kravData={skalUtfyllesKrav} />}>
             {getKravList(skalUtfyllesKrav, 'Ingen krav som skal fylles ut')}
