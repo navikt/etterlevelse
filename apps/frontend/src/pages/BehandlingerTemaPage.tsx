@@ -279,10 +279,10 @@ const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function; setKra
       kind="underline-hover"
       $style={{
         width: '100%',
-        paddingTop: '17px',
-        paddingBottom: '17px',
-        paddingRight: '0px',
-        paddingLeft: '0px',
+        paddingTop: '8px',
+        paddingBottom: '8px',
+        paddingRight: '8px',
+        paddingLeft: '8px',
         display: 'flex',
         justifyContent: 'flex-start',
         backgroundColor: ettlevColors.white,
