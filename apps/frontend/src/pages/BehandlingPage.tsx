@@ -132,14 +132,14 @@ export const BehandlingPage = () => {
   }
 
   const getMainHeader = (behandling: Behandling) => (
-    <Block display={responsiveDisplay} justifyContent="space-between" marginBottom="70px">
+    <Block display={responsiveDisplay} justifyContent="space-between" marginBottom="32px">
       <Block>
         <Label3 color={ettlevColors.green600}>DOKUMENTERE ETTERLEVELSE</Label3>
         <H1 marginTop="0" color={ettlevColors.green800}>
           {behandling.navn}
         </H1>
         <Paragraph2>{behandling.overordnetFormaal.shortName}</Paragraph2>
-        <Block display={'flex'}>
+        <Block display={'flex'} marginTop={'24px'}>
           <Label3 $style={{lineHeight: '22px', marginRight:'10px'}}>Team: </Label3>
           <Teams teams={behandling.teams} link/>
         </Block>
@@ -149,8 +149,8 @@ export const BehandlingPage = () => {
   )
 
   const getSecondaryHeader = (behandling: Behandling) => (
-    <Block width="100%" display={responsiveDisplay} alignItems="center" justifyContent="space-between">
-      <Block display="flex" alignItems="center">
+    <Block width="100%" display={responsiveDisplay} alignItems="center" justifyContent="space-between" marginTop={'16px'} marginBottom={'16px'}>
+      <Block display="flex" alignItems="center" >
         <Block marginRight="30px">
           <img src={arkPennIcon} alt="penn ikon" height="50px" width="40px"/>
         </Block>
@@ -166,7 +166,7 @@ export const BehandlingPage = () => {
 
       <Block display="flex" alignItems="center">
         <Block display="flex" alignItems="baseline" marginRight="30px">
-          <Paragraph2 $style={{fontWeight: 900, fontSize: '32px', lineHeight: '40px'}} color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
+          <Paragraph2 $style={{fontWeight: 900, fontSize: '32px', marginTop:0,marginBottom:0}} color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
             {stats.length}
           </Paragraph2>
           <Paragraph2>krav</Paragraph2>
@@ -175,7 +175,7 @@ export const BehandlingPage = () => {
         <Block $style={{border: '1px solid ' + ettlevColors.green50, background: '#102723'}} height="40px"/>
 
         <Block display="flex" alignItems="baseline" marginLeft="30px">
-          <Paragraph2 $style={{fontWeight: 900, fontSize: '32px', lineHeight: '40px'}} color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
+          <Paragraph2 $style={{fontWeight: 900, fontSize: '32px', marginTop:0,marginBottom:0}} color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
             {antallFylttKrav}
           </Paragraph2>
           <Paragraph2>ferdig utfylt</Paragraph2>
