@@ -155,9 +155,6 @@ export const BehandlingPage = () => {
           <img src={arkPennIcon} alt="penn ikon" height="32px" width="32px"/>
         </Block>
         <Block>
-          <Paragraph2 marginBottom="0px" marginTop="0px">
-            Steg 1 av 3
-          </Paragraph2>
           <H2 marginTop="0px" marginBottom="0px">
             Tema for dokumentasjon
           </H2>
