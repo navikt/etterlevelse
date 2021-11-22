@@ -90,6 +90,8 @@ const KriterieBegrunnelse = ({
     if (status === EtterlevelseStatus.FERDIG || status === EtterlevelseStatus.FERDIG_DOKUMENTERT) {
       if ((!oppfylt && !ikkerelevant) || !begrunnelse) {
         return { border: '2px solid #842D08' }
+      } else {
+        return { border: '1px solid #C9C9C9' }
       }
     } else {
       return { border: '1px solid #C9C9C9' }

@@ -152,7 +152,7 @@ export const BehandlingPage = () => {
     <Block width="100%" display={responsiveDisplay} alignItems="center" justifyContent="space-between" marginTop={'16px'} marginBottom={'16px'}>
       <Block display="flex" alignItems="center" >
         <Block marginRight="30px">
-          <img src={arkPennIcon} alt="penn ikon" height="50px" width="40px"/>
+          <img src={arkPennIcon} alt="penn ikon" height="32px" width="32px"/>
         </Block>
         <Block>
           <Paragraph2 marginBottom="0px" marginTop="0px">

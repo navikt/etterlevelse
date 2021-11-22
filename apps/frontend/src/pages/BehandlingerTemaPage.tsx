@@ -1,30 +1,30 @@
-import React, {useEffect, useState} from 'react'
-import {Block, Display} from 'baseui/block'
-import {useParams} from 'react-router-dom'
-import {H1, H2, Label3, Paragraph2, Paragraph4} from 'baseui/typography'
-import {ettlevColors, maxPageWidth, theme} from '../util/theme'
-import {codelist, ListName, TemaCode} from '../services/Codelist'
-import RouteLink, {urlForObject} from '../components/common/RouteLink'
-import {useBehandling} from '../api/BehandlingApi'
-import {Layout2} from '../components/scaffold/Page'
-import {Etterlevelse, EtterlevelseStatus, KravEtterlevelseData, KravQL, PageResponse} from '../constants'
-import {arkPennIcon, crossIcon} from '../components/Images'
-import {behandlingKravQuery} from '../components/behandling/ViewBehandling'
-import {useQuery} from '@apollo/client'
-import {CustomizedAccordion, CustomizedPanel, CustomPanelDivider} from '../components/common/CustomizedAccordion'
+import React, { useEffect, useState } from 'react'
+import { Block, Display } from 'baseui/block'
+import { useParams } from 'react-router-dom'
+import { H1, H2, Label3, Paragraph2, Paragraph4 } from 'baseui/typography'
+import { ettlevColors, maxPageWidth, theme } from '../util/theme'
+import { codelist, ListName, TemaCode } from '../services/Codelist'
+import RouteLink, { urlForObject } from '../components/common/RouteLink'
+import { useBehandling } from '../api/BehandlingApi'
+import { Layout2 } from '../components/scaffold/Page'
+import { Etterlevelse, EtterlevelseStatus, KravEtterlevelseData, KravQL, PageResponse } from '../constants'
+import { arkPennIcon, crossIcon } from '../components/Images'
+import { behandlingKravQuery } from '../components/behandling/ViewBehandling'
+import { useQuery } from '@apollo/client'
+import { CustomizedAccordion, CustomizedPanel, CustomPanelDivider } from '../components/common/CustomizedAccordion'
 import CustomizedModal from '../components/common/CustomizedModal'
-import {Spinner} from '../components/common/Spinner'
-import {useEtterlevelse} from '../api/EtterlevelseApi'
-import {EditEtterlevelse} from '../components/etterlevelse/EditEtterlevelse'
-import {kravFullQuery, KravId} from '../api/KravApi'
-import {borderStyle} from '../components/common/Style'
-import {breadcrumbPaths} from '../components/common/CustomizedBreadcrumbs'
+import { Spinner } from '../components/common/Spinner'
+import { useEtterlevelse } from '../api/EtterlevelseApi'
+import { EditEtterlevelse } from '../components/etterlevelse/EditEtterlevelse'
+import { kravFullQuery, KravId } from '../api/KravApi'
+import { borderStyle } from '../components/common/Style'
+import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 import Button from '../components/common/Button'
-import {Responsive} from 'baseui/theme'
-import {KravPanelHeader} from '../components/behandling/KravPanelHeader'
-import {sortKraverByPriority} from '../util/sort'
+import { Responsive } from 'baseui/theme'
+import { KravPanelHeader } from '../components/behandling/KravPanelHeader'
+import { sortKraverByPriority } from '../util/sort'
 import _ from 'lodash'
-import {getAllKravPriority} from '../api/KravPriorityApi'
+import { getAllKravPriority } from '../api/KravPriorityApi'
 
 const responsiveBreakPoints: Responsive<Display> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
 
@@ -79,13 +79,13 @@ export const BehandlingerTemaPage = () => {
       })
 
       for (let index = mapped.length - 1; index > 0; index--) {
-        if (mapped[index].kravNummer === mapped[index - 1].kravNummer && mapped[index - 1].etterlevelseStatus !== EtterlevelseStatus.FERDIG_DOKUMENTERT) {
-          mapped.splice(index - 1, 1)
-        }
         if (mapped[index].kravNummer === mapped[index - 1].kravNummer && mapped[index - 1].etterlevelseStatus === EtterlevelseStatus.FERDIG_DOKUMENTERT) {
           mapped[index - 1].gammelVersjon = true
+        } else if (mapped[index].kravNummer === mapped[index - 1].kravNummer && mapped[index - 1].etterlevelseStatus !== EtterlevelseStatus.FERDIG_DOKUMENTERT) {
+          mapped.splice(index - 1, 1)
         }
       }
+
       setKravData(mapped)
     })()
   }, [rawData])
@@ -148,14 +148,9 @@ export const BehandlingerTemaPage = () => {
     <Block width="100%" display={responsiveBreakPoints} alignItems="center" justifyContent="space-between">
       <Block display="flex" alignItems="center">
         <Block marginRight="30px">
-          <img src={arkPennIcon} alt="test" height="50px" width="40px" />
+          <img src={arkPennIcon} alt="test" height="32px" width="32px"/>
         </Block>
         <Block>
-          <Block>
-            <Paragraph2 marginBottom="0px" marginTop="0px">
-              Steg 2 av 3
-            </Paragraph2>
-          </Block>
           <H2 marginTop="0px" marginBottom="0px">
             Krav til utfylling
           </H2>
@@ -164,14 +159,14 @@ export const BehandlingerTemaPage = () => {
 
       <Block display="flex" alignItems="center">
         <Block display="flex" alignItems="baseline" marginRight="30px">
-          <Paragraph2 $style={{ fontWeight: 900, fontSize: '32px', lineHeight: '16px' }} color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
+          <Paragraph2 $style={{ fontWeight: 900, fontSize: '32px', lineHeight: '0px' }} color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
             {kravData.filter((k) => k.gammelVersjon === false).length}
           </Paragraph2>
           <Paragraph2>krav</Paragraph2>
         </Block>
         <Block $style={{ border: '1px solid ' + ettlevColors.green50, background: '#102723' }} height="40px" />
         <Block display="flex" alignItems="baseline" marginLeft="30px">
-          <Paragraph2 $style={{ fontWeight: 900, fontSize: '32px', lineHeight: '16px' }} color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
+          <Paragraph2 $style={{ fontWeight: 900, fontSize: '32px', lineHeight: '0px' }} color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
             {getPercentageUtfylt()}
           </Paragraph2>
           <Paragraph2> ferdig utfylt</Paragraph2>
