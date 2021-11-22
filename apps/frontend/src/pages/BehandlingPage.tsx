@@ -152,12 +152,9 @@ export const BehandlingPage = () => {
     <Block width="100%" display={responsiveDisplay} alignItems="center" justifyContent="space-between">
       <Block display="flex" alignItems="center">
         <Block marginRight="30px">
-          <img src={arkPennIcon} alt="penn ikon" height="50px" width="40px"/>
+          <img src={arkPennIcon} alt="penn ikon" height="32px" width="32px"/>
         </Block>
         <Block>
-          <Paragraph2 marginBottom="0px" marginTop="0px">
-            Steg 1 av 3
-          </Paragraph2>
           <H2 marginTop="0px" marginBottom="0px">
             Tema for dokumentasjon
           </H2>
@@ -166,7 +163,7 @@ export const BehandlingPage = () => {
 
       <Block display="flex" alignItems="center">
         <Block display="flex" alignItems="baseline" marginRight="30px">
-          <Paragraph2 $style={{fontWeight: 900, fontSize: '32px', lineHeight: '40px'}} color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
+          <Paragraph2 $style={{fontWeight: 900, fontSize: '32px', lineHeight: '0px'}} color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
             {stats.length}
           </Paragraph2>
           <Paragraph2>krav</Paragraph2>
@@ -175,7 +172,7 @@ export const BehandlingPage = () => {
         <Block $style={{border: '1px solid ' + ettlevColors.green50, background: '#102723'}} height="40px"/>
 
         <Block display="flex" alignItems="baseline" marginLeft="30px">
-          <Paragraph2 $style={{fontWeight: 900, fontSize: '32px', lineHeight: '40px'}} color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
+          <Paragraph2 $style={{fontWeight: 900, fontSize: '32px', lineHeight: '0px'}} color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
             {antallFylttKrav}
           </Paragraph2>
           <Paragraph2>ferdig utfylt</Paragraph2>

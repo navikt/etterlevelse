@@ -162,12 +162,9 @@ export const EditEtterlevelse = ({ krav, etterlevelse, close, formRef, documentE
               display="flex"
             >
               <Block marginRight="20px">
-                <img src={arkPennIcon} alt="test" height="56px" width="40px" />
+                <img src={arkPennIcon} alt="test" height="32px" width="32px"/>
               </Block>
               <Block>
-                <Paragraph2 marginBottom="0px" marginTop="0px">
-                  Steg 3 av 3
-                </Paragraph2>
                 <H2 marginTop="0px" marginBottom="0px">
                   Dokumentasjon
                 </H2>
