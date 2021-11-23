@@ -11,7 +11,7 @@ import {faExternalLinkAlt} from "@fortawesome/free-solid-svg-icons";
 export const TeamName = (props: { id: string; link?: boolean }) => {
   const [name] = useTeam()(props.id)
   return props.link ? (
-    <StyledLink rel="noopener noreferrer" href={teamKatTeamLink(props.id)} $style={{ color: ettlevColors.green600 }}>
+    <StyledLink rel="noopener noreferrer" target={'_blank'} href={teamKatTeamLink(props.id)} $style={{ color: ettlevColors.green600 }} >
       {name}
       <FontAwesomeIcon icon={faExternalLinkAlt} style={{marginLeft:'5px'}}/>
     </StyledLink>
