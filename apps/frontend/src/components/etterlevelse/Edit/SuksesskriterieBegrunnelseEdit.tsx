@@ -79,8 +79,8 @@ const KriterieBegrunnelse = ({
   const suksesskriterieBegrunnelse = getSuksesskriterieBegrunnelse(suksesskriterieBegrunnelser, suksesskriterie)
   const debounceDelay = 500
   const [begrunnelse, setBegrunnelse] = useDebouncedState(suksesskriterieBegrunnelse.begrunnelse || '', debounceDelay)
-  const [oppfylt, setOppfylt] = React.useState(suksesskriterieBegrunnelse.oppfylt)
-  const [ikkerelevant, setIkkeRelevant] = React.useState(suksesskriterieBegrunnelse.ikkeRelevant)
+  const [oppfylt, setOppfylt] = React.useState(suksesskriterieBegrunnelse.oppfylt || false)
+  const [ikkerelevant, setIkkeRelevant] = React.useState(suksesskriterieBegrunnelse.ikkeRelevant || false)
 
   React.useEffect(() => {
     update({ suksesskriterieId: suksesskriterie.id, begrunnelse: begrunnelse, oppfylt: oppfylt, ikkeRelevant: ikkerelevant })

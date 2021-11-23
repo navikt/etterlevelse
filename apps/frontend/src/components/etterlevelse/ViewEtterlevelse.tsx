@@ -44,80 +44,79 @@ export const ViewEtterlevelse = ({
 
   return (
     <Block width="100%" marginTop="48px">
-      <Block display="flex" width="100%">
-        <Block>
-          <H2>Kravet etterleves av</H2>
-          {behandling ? (
-            <Block>
-              <RouteLink
-                href={`/behandling/${behandling.id}`}
-                style={{
-                  fontSize: '21px',
-                  fontWeight: 700,
-                  lineHeight: '40px',
-                  color: ettlevColors.green600,
-                }}
-              >
-                {behandlingName(behandling)}
-              </RouteLink>
-              <Paragraph2 marginTop="2px">{behandling.overordnetFormaal.shortName}</Paragraph2>
-              <Block marginTop={theme.sizing.scale850}>
-                <Teams teams={behandling.teams} link list />
-              </Block>
-            </Block>
-          ) : (
-            etterlevelse.behandlingId && (
-              <Block>
-                {' '}
-                <Spinner size={theme.sizing.scale600} />
-                {etterlevelse.behandlingId}
-              </Block>
-            )
-          )}
-        </Block>
-
-        <Block display="flex" flex="1" justifyContent="flex-end" marginTop={theme.sizing.scale950}>
+      <Block>
+        <H2>Kravet etterleves av</H2>
+        {behandling ? (
           <Block>
-            <Card
-              overrides={{
-                Contents: {
-                  style: {
-                    marginRight: '8px',
-                    marginLeft: '8px',
-                    marginTop: '8px',
-                    marginBottom: '8px',
-                  },
-                },
-                Body: {
-                  style: {
-                    marginRight: '8px',
-                    marginLeft: '8px',
-                    marginTop: '8px',
-                    marginBottom: '8px',
-                  },
-                },
-                Root: {
-                  style: {
-                    // Did not use border, margin and border radius to remove warnings.
-                    backgroundColor: ettlevColors.success50,
-                    ...borderColor(ettlevColors.success400),
-                    ...borderWidth('1px'),
-                    ...borderStyle('solid'),
-                    ...borderRadius('4px'),
-                  },
-                },
+            <Paragraph2>
+              <strong>{behandling.overordnetFormaal.shortName}</strong>: {' '} {behandling.navn}
+            </Paragraph2>
+            <RouteLink
+              href={`/behandling/${behandling.id}`}
+              style={{
+                fontSize: '18px',
+                fontWeight: 400,
+                lineHeight: '22px',
+                color: ettlevColors.green800,
               }}
             >
-              <Paragraph4 $style={{ color: ettlevColors.navMorkGra, margin: '0px' }}>Kravet er: {getEtterlevelseStatus(etterlevelse.status)}</Paragraph4>
-            </Card>
+              Gå til behandling
+            </RouteLink>
+            {/* <Block marginTop={theme.sizing.scale850}>
+              <Teams teams={behandling.teams} link list />
+            </Block> */}
           </Block>
+        ) : (
+          etterlevelse.behandlingId && (
+            <Block>
+              {' '}
+              <Spinner size={theme.sizing.scale600} />
+              {etterlevelse.behandlingId}
+            </Block>
+          )
+        )}
+      </Block>
+
+      <Block marginTop={theme.sizing.scale950} width="fit-content">
+        <Block>
+          <Card
+            overrides={{
+              Contents: {
+                style: {
+                  marginRight: '8px',
+                  marginLeft: '8px',
+                  marginTop: '8px',
+                  marginBottom: '8px',
+                },
+              },
+              Body: {
+                style: {
+                  marginRight: '8px',
+                  marginLeft: '8px',
+                  marginTop: '8px',
+                  marginBottom: '8px',
+                },
+              },
+              Root: {
+                style: {
+                  // Did not use border, margin and border radius to remove warnings.
+                  backgroundColor: ettlevColors.success50,
+                  ...borderColor(ettlevColors.success400),
+                  ...borderWidth('1px'),
+                  ...borderStyle('solid'),
+                  ...borderRadius('4px'),
+                },
+              },
+            }}
+          >
+            <Paragraph4 $style={{ color: ettlevColors.navMorkGra, margin: '0px', fontWeight: 600, lineHeight: '20px' }}>Kravet er: {getEtterlevelseStatus(etterlevelse.status)}</Paragraph4>
+          </Card>
         </Block>
       </Block>
 
-      <Block marginTop={theme.sizing.scale1400}>
+      <Block marginTop={theme.sizing.scale650}>
         <Block display="flex">
-          <H2>Dokumentasjon</H2>
-          {!viewMode && (
+          {/* {!viewMode && (
             <Block display="flex" flex="1" justifyContent="flex-end">
               <Block flex="1" display={['none', 'none', 'none', 'none', 'flex', 'flex']} justifyContent="flex-end" alignItems="center">
                 {etterlevelse?.id && user.canWrite() && (
@@ -142,7 +141,7 @@ export const ViewEtterlevelse = ({
                 )}
               </Block>
             </Block>
-          )}
+          )} */}
         </Block>
         {!edit &&
           etterlevelse &&
@@ -152,14 +151,21 @@ export const ViewEtterlevelse = ({
             return (
               <Block marginBottom={theme.sizing.scale700} key={s.id}>
                 <Card>
-                  <Label3 $style={{ color: ettlevColors.green600 }}>
-                    SUKSESSKRITERIE {i + 1} AV {krav.suksesskriterier.length}
-                  </Label3>
+                  <Block display="flex" justifyContent="center">
+                    <Block display="flex" flex="1">
+                      <Label3 $style={{ color: ettlevColors.green600 }}>
+                        SUKSESSKRITERIE {i + 1} AV {krav.suksesskriterier.length}
+                      </Label3>
+                    </Block>
+                    <Block display="flex" justifyContent="flex-end">
+                      <Paragraph4 $style={{ lineHeight: '24px', color: ettlevColors.green800, marginTop: '0px', marginBottom: '0px' }}>{suksessbeskrivelseBegrunnelse.oppfylt ? 'Oppfylt' : 'Ikke Relevant'}</Paragraph4>
+                    </Block>
+                  </Block>
                   <Label3 $style={{ fontSize: '21px', lineHeight: '30px' }}>{s.navn}</Label3>
                   <Label3 $style={{ lineHeight: '22px' }} marginTop="16px">
                     Hvordan er kriteriet oppfylt?
                   </Label3>
-                  {suksessbeskrivelseBegrunnelse.oppfylt && <Markdown source={suksessbeskrivelseBegrunnelse.begrunnelse} />}
+                  {(suksessbeskrivelseBegrunnelse.oppfylt || suksessbeskrivelseBegrunnelse.ikkeRelevant) && <Markdown source={suksessbeskrivelseBegrunnelse.begrunnelse} />}
                 </Card>
               </Block>
             )
