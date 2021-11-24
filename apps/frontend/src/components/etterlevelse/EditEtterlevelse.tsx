@@ -140,10 +140,9 @@ export const EditEtterlevelse = ({krav, etterlevelse, close, formRef, documentEd
                 <Paragraph2 $style={{marginTop: '0px', marginBottom: '0px', color: ettlevColors.white}}>{kravNumView(krav)}</Paragraph2>
                 <H1 $style={{marginTop: '0px', marginBottom: '0px', color: ettlevColors.white}}>{krav.navn}</H1>
                 <Paragraph2 color={ettlevColors.white} marginBottom={0}>
-                  <strong>Veiledning: </strong>
                   <a href={'/krav/' + krav?.kravNummer + '/' + krav?.kravVersjon} style={{color: ettlevColors.white}} target="_blank"
                      rel="noopener noreferrer">
-                    <span style={{display: 'inline-block', paddingBottom: '1px', borderBottom: '1px solid white', marginRight:'5px'}}>detaljert kravbeskrivelse</span>
+                    <span style={{display: 'inline-block', paddingBottom: '1px', borderBottom: '1px solid white', marginRight: '5px'}}>Detaljert kravbeskrivelse</span>
                     <FontAwesomeIcon icon={faExternalLinkAlt}/>
                   </a>
                 </Paragraph2>
@@ -152,11 +151,17 @@ export const EditEtterlevelse = ({krav, etterlevelse, close, formRef, documentEd
                      paddingTop={theme.sizing.scale800}>
                 <Block>
                   <Paragraph2 $style={{marginTop: 0, marginBottom: 0, color: ettlevColors.white, maxWidth: '700px'}}>
-                    <strong>Du dokumenterer for: </strong>
+                    <Label3 $style={{color: ettlevColors.white}}>Behandling: </Label3>
                     <a href={`${env.pollyBaseUrl}process/${behandlingId}`} style={{color: ettlevColors.white}} target="_blank"
                        rel="noopener noreferrer">
-                      <span style={{display: 'inline-block', paddingBottom: '1px', borderBottom: '1px solid white', marginRight:'5px'}}>B{behandlingNummer} - {behandlingformaal}: {behandlingNavn}</span>
-                      <FontAwesomeIcon icon={faExternalLinkAlt}/>
+                      <span style={{
+                        display: 'inline-block',
+                        paddingBottom: '1px',
+                        borderBottom: '1px solid white',
+                        marginRight: '5px'
+                      }}>
+                        B{behandlingNummer} - {behandlingformaal}: {behandlingNavn} <FontAwesomeIcon icon={faExternalLinkAlt}/>
+                      </span>
                     </a>
                   </Paragraph2>
                 </Block>

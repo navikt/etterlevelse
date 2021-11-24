@@ -135,11 +135,18 @@ export const BehandlingerTemaPage = () => {
           <Block marginTop={theme.sizing.scale900} flex="1" width="100%" display="flex">
             <Block>
               <Paragraph2 $style={{marginTop: '0px', maxWidth: '700px'}} marginBottom={0}>
-                <strong>Behandling: </strong>
+                <Label3>Behandling: </Label3>
                 <a href={`${env.pollyBaseUrl}process/${behandling.id}`} style={{color: ettlevColors.black}} target="_blank"
                    rel="noopener noreferrer">
-                  <span style={{display: 'inline-block', paddingBottom: '1px', borderBottom: '1px solid black', marginRight:'5px'}}>B{behandling.nummer} - {behandling.overordnetFormaal.shortName}: {behandling.navn}</span>
-                  <FontAwesomeIcon icon={faExternalLinkAlt}/>
+                  <span style={{
+                    display: 'inline-block',
+                    paddingBottom: '1px',
+                    borderBottom: '1px solid black',
+                    marginRight:'5px',
+                    width:'100%'
+                  }}>
+                    B{behandling.nummer} - {behandling.overordnetFormaal.shortName}: {behandling.navn} <FontAwesomeIcon icon={faExternalLinkAlt}/>
+                  </span>
                 </a>
               </Paragraph2>
               {/*<Paragraph4 $style={{ lineHeight: '24px' }}>{behandling.overordnetFormaal.shortName}</Paragraph4>*/}
