@@ -134,7 +134,7 @@ export const BehandlingPage = () => {
   const getMainHeader = (behandling: Behandling) => (
     <Block display={responsiveDisplay} justifyContent="space-between" marginBottom="32px">
       <Block>
-        <Label3 color={ettlevColors.green600}>{behandling.nummer} - {behandling.overordnetFormaal.shortName}</Label3>
+        <Label3 color={ettlevColors.green600}>B{behandling.nummer} - {behandling.overordnetFormaal.shortName}</Label3>
         <H1 marginTop="0" color={ettlevColors.green800}>
           {behandling.navn}
         </H1>

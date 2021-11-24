@@ -148,7 +148,7 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
                     Tilpass egenskaper
                   </H1>
                   <Paragraph4 $style={{ lineHeight: '20px', color: ettlevColors.grey50 }} marginTop={theme.sizing.scale0}>
-                    {`${props.behandling.navn}, ${props.behandling.overordnetFormaal.shortName}`}
+                    {`B${props.behandling.nummer} - ${props.behandling.overordnetFormaal.shortName}: ${props.behandling.navn}`}
                   </Paragraph4>
                 </Block>
                 <Block display="flex" justifyContent="flex-end" paddingLeft={theme.sizing.scale1000}>

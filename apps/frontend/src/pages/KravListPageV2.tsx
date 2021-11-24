@@ -22,8 +22,10 @@ import { AllKrav } from '../components/kravList/AllKrav'
 import { SistRedigertKrav } from '../components/kravList/SisteRedigertKrav'
 import { TemaList } from '../components/kravList/TemaList'
 import KravStatusView from '../components/kravList/KravStatusTag'
+import { useHistory, useParams } from 'react-router-dom'
+import React from 'react'
 
-type Section = 'siste' | 'alle'
+type Section = 'siste' | 'alle' | 'tema'
 
 const tabMarginBottom = '10px'
 const responsiveDisplay: Responsive<Display> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
@@ -141,7 +143,13 @@ export const KravPanels = ({ kravene, loading }: { kravene?: KravQL[] | Krav[]; 
 }
 
 const KravTabs = () => {
-  const [tab, setTab] = useState<Section>('siste')
+  const params = useParams<{ tab?: Section }>()
+  const history = useHistory()
+  const [tab, setTab] = useState<Section>(params.tab || 'siste')
+
+  React.useEffect(() => {
+    if (tab !== params.tab) history.replace(`/kraver/${tab}`)
+  }, [tab])
 
   return (
     <CustomizedTabs
