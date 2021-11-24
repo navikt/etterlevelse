@@ -134,11 +134,10 @@ export const BehandlingPage = () => {
   const getMainHeader = (behandling: Behandling) => (
     <Block display={responsiveDisplay} justifyContent="space-between" marginBottom="32px">
       <Block>
-        <Label3 color={ettlevColors.green600}>DOKUMENTERE ETTERLEVELSE</Label3>
+        <Label3 color={ettlevColors.green600}>{behandling.nummer} - {behandling.overordnetFormaal.shortName}</Label3>
         <H1 marginTop="0" color={ettlevColors.green800}>
           {behandling.navn}
         </H1>
-        <Paragraph2>{behandling.overordnetFormaal.shortName}</Paragraph2>
         <Block display={'flex'} marginTop={'24px'}>
           <Label3 $style={{lineHeight: '22px', marginRight:'10px'}}>Team: </Label3>
           <Teams teams={behandling.teams} link/>
