@@ -138,7 +138,7 @@ export const BehandlingerTemaPage = () => {
                 <strong>Behandling: </strong>
                 <a href={`${env.pollyBaseUrl}process/${behandling.id}`} style={{color: ettlevColors.black}} target="_blank"
                    rel="noopener noreferrer">
-                  <span style={{display: 'inline-block', paddingBottom: '1px', borderBottom: '1px solid black', marginRight:'5px'}}>{behandling.overordnetFormaal.shortName}: {behandling.navn}</span>
+                  <span style={{display: 'inline-block', paddingBottom: '1px', borderBottom: '1px solid black', marginRight:'5px'}}>B{behandling.nummer} - {behandling.overordnetFormaal.shortName}: {behandling.navn}</span>
                   <FontAwesomeIcon icon={faExternalLinkAlt}/>
                 </a>
               </Paragraph2>
@@ -252,6 +252,7 @@ export const BehandlingerTemaPage = () => {
                 etterlevelseId={edit}
                 behandlingId={behandling.id}
                 behandlingformaal={behandling.overordnetFormaal.shortName || ''}
+                behandlingNummer={behandling.nummer || 0}
                 kravId={kravId}
                 close={(e) => {
                   setEdit(undefined)
@@ -268,13 +269,13 @@ export const BehandlingerTemaPage = () => {
 
 const toKravId = (it: { kravVersjon: number; kravNummer: number }) => ({kravNummer: it.kravNummer, kravVersjon: it.kravVersjon})
 
-const EditModal = (props: { etterlevelseId: string; behandlingId: string; behandlingformaal: string; kravId?: KravId; close: (e?: Etterlevelse) => void; behandlingNavn: string }) => {
+const EditModal = (props: { etterlevelseId: string; behandlingId: string; behandlingformaal: string; kravId?: KravId; close: (e?: Etterlevelse) => void; behandlingNavn: string, behandlingNummer: number }) => {
   const [etterlevelse] = useEtterlevelse(props.etterlevelseId, props.behandlingId, props.kravId)
   if (!etterlevelse) return <Spinner size={theme.sizing.scale800}/>
 
   return <Block>
     {etterlevelse && <KravView behandlingformaal={props.behandlingformaal} behandlingId={props.behandlingId} behandlingNavn={props.behandlingNavn} kravId={toKravId(etterlevelse)}
-                               etterlevelse={etterlevelse} close={props.close}/>}
+                               etterlevelse={etterlevelse} close={props.close} behandlingNummer={props.behandlingNummer}/>}
   </Block>
 }
 
@@ -322,6 +323,7 @@ const KravView = (props: {
   behandlingNavn: string;
   behandlingId: string;
   behandlingformaal: string
+  behandlingNummer: number
 }) => {
   const {data} = useQuery<{ kravById: KravQL }, KravId>(kravFullQuery, {
     variables: props.kravId,
@@ -360,6 +362,7 @@ const KravView = (props: {
           behandlingformaal={props.behandlingformaal}
           krav={krav}
           etterlevelse={props.etterlevelse}
+          behandlingNummer={props.behandlingNummer}
           close={(e) => {
             props.close(e)
           }}

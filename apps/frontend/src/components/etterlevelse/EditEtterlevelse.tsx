@@ -36,6 +36,7 @@ type EditEttlevProps = {
   behandlingNavn?: string
   behandlingId?: string
   behandlingformaal?: string
+  behandlingNummer?: number
 }
 
 const padding = '70px'
@@ -45,7 +46,7 @@ const modalPaddingLeft = '112px'
 const maxTextArea = '750px'
 
 
-export const EditEtterlevelse = ({krav, etterlevelse, close, formRef, documentEdit, behandlingNavn, behandlingId, behandlingformaal}: EditEttlevProps) => {
+export const EditEtterlevelse = ({krav, etterlevelse, close, formRef, documentEdit, behandlingNavn, behandlingId, behandlingformaal, behandlingNummer}: EditEttlevProps) => {
   const [etterlevelseStatus, setEtterlevelseStatus] = React.useState<string>(etterlevelse.status || EtterlevelseStatus.UNDER_REDIGERING)
   const [nyereKrav, setNyereKrav] = React.useState<Krav>()
   const [disableEdit, setDisableEdit] = React.useState<boolean>(false)
@@ -154,7 +155,7 @@ export const EditEtterlevelse = ({krav, etterlevelse, close, formRef, documentEd
                     <strong>Du dokumenterer for: </strong>
                     <a href={`${env.pollyBaseUrl}process/${behandlingId}`} style={{color: ettlevColors.white}} target="_blank"
                        rel="noopener noreferrer">
-                      <span style={{display: 'inline-block', paddingBottom: '1px', borderBottom: '1px solid white', marginRight:'5px'}}>{behandlingformaal}: {behandlingNavn}</span>
+                      <span style={{display: 'inline-block', paddingBottom: '1px', borderBottom: '1px solid white', marginRight:'5px'}}>B{behandlingNummer} - {behandlingformaal}: {behandlingNavn}</span>
                       <FontAwesomeIcon icon={faExternalLinkAlt}/>
                     </a>
                   </Paragraph2>
