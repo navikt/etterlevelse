@@ -383,7 +383,8 @@ const BehandlingerPanels = ({behandlinger, loading}: { behandlinger: BehandlingQ
             useUnderline
             panelIcon={<img src={arkPennIcon} width="33px" height="33px" aria-hidden alt={'Dokumenter behandling ikon'}/>}
             href={`/behandling/${b.id}`}
-            title={<><strong>{b.nummer}-{b.overordnetFormaal.shortName}</strong>: {b.navn}</>}
+            title={<><strong>B{b.nummer}-{b.overordnetFormaal.shortName}</strong>: </>}
+            beskrivelse={b.navn}
             rightBeskrivelse={!!b.sistEndretEtterlevelse ? `Sist endret: ${moment(b.sistEndretEtterlevelse).format('ll')}` : ''}
           />
         </Block>
