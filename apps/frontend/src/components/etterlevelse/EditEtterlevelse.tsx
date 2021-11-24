@@ -23,7 +23,7 @@ import {Error} from '../common/ModalSchema'
 import {user} from '../../services/User'
 import {KIND as NKIND, Notification} from 'baseui/notification'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faTimesCircle} from '@fortawesome/free-solid-svg-icons'
+import {faExternalLinkAlt, faTimesCircle} from '@fortawesome/free-solid-svg-icons'
 import {borderColor, borderRadius, borderStyle, borderWidth} from '../common/Style'
 import {env} from "../../util/env";
 
@@ -45,7 +45,7 @@ const modalPaddingLeft = '112px'
 const maxTextArea = '750px'
 
 
-export const EditEtterlevelse = ({krav, etterlevelse, close, formRef, documentEdit, behandlingNavn, behandlingId,behandlingformaal}: EditEttlevProps) => {
+export const EditEtterlevelse = ({krav, etterlevelse, close, formRef, documentEdit, behandlingNavn, behandlingId, behandlingformaal}: EditEttlevProps) => {
   const [etterlevelseStatus, setEtterlevelseStatus] = React.useState<string>(etterlevelse.status || EtterlevelseStatus.UNDER_REDIGERING)
   const [nyereKrav, setNyereKrav] = React.useState<Krav>()
   const [disableEdit, setDisableEdit] = React.useState<boolean>(false)
@@ -139,23 +139,23 @@ export const EditEtterlevelse = ({krav, etterlevelse, close, formRef, documentEd
                 <Paragraph2 $style={{marginTop: '0px', marginBottom: '0px', color: ettlevColors.white}}>{kravNumView(krav)}</Paragraph2>
                 <H1 $style={{marginTop: '0px', marginBottom: '0px', color: ettlevColors.white}}>{krav.navn}</H1>
                 <Paragraph2 color={ettlevColors.white} marginBottom={0}>
+                  <strong>Veiledning: </strong>
                   <a href={'/krav/' + krav?.kravNummer + '/' + krav?.kravVersjon} style={{color: ettlevColors.white}} target="_blank"
                      rel="noopener noreferrer">
-                    <span style={{display: 'inline-block', paddingBottom: '1px', borderBottom: '1px solid white'}}>detaljert kravbeskrivelse (ny fane)</span>
+                    <span style={{display: 'inline-block', paddingBottom: '1px', borderBottom: '1px solid white', marginRight:'5px'}}>detaljert kravbeskrivelse (ny fane)</span>
+                    <FontAwesomeIcon icon={faExternalLinkAlt}/>
                   </a>
                 </Paragraph2>
               </Block>
               <Block display="flex" paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge} paddingBottom={theme.sizing.scale900}
                      paddingTop={theme.sizing.scale800}>
                 <Block>
-                  <Block display="flex">
-                    <Label3 $style={{fontSize: '18px', color: ettlevColors.white}}>Du dokumenterer for:</Label3>
-                  </Block>
                   <Paragraph2 $style={{marginTop: 0, marginBottom: 0, color: ettlevColors.white, maxWidth: '700px'}}>
-
+                    <strong>Du dokumenterer for: </strong>
                     <a href={`${env.pollyBaseUrl}process/${behandlingId}`} style={{color: ettlevColors.white}} target="_blank"
                        rel="noopener noreferrer">
-                      <span style={{display: 'inline-block', paddingBottom: '1px', borderBottom: '1px solid white'}}>{behandlingformaal}: {behandlingNavn}</span>
+                      <span style={{display: 'inline-block', paddingBottom: '1px', borderBottom: '1px solid white', marginRight:'5px'}}>{behandlingformaal}: {behandlingNavn}</span>
+                      <FontAwesomeIcon icon={faExternalLinkAlt}/>
                     </a>
                   </Paragraph2>
                 </Block>
