@@ -142,7 +142,7 @@ export const EditEtterlevelse = ({krav, etterlevelse, close, formRef, documentEd
                   <strong>Veiledning: </strong>
                   <a href={'/krav/' + krav?.kravNummer + '/' + krav?.kravVersjon} style={{color: ettlevColors.white}} target="_blank"
                      rel="noopener noreferrer">
-                    <span style={{display: 'inline-block', paddingBottom: '1px', borderBottom: '1px solid white', marginRight:'5px'}}>detaljert kravbeskrivelse (ny fane)</span>
+                    <span style={{display: 'inline-block', paddingBottom: '1px', borderBottom: '1px solid white', marginRight:'5px'}}>detaljert kravbeskrivelse</span>
                     <FontAwesomeIcon icon={faExternalLinkAlt}/>
                   </a>
                 </Paragraph2>
