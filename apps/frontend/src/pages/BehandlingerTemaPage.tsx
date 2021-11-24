@@ -25,6 +25,9 @@ import {KravPanelHeader} from '../components/behandling/KravPanelHeader'
 import {sortKraverByPriority} from '../util/sort'
 import _ from 'lodash'
 import {getAllKravPriority} from '../api/KravPriorityApi'
+import {env} from "../util/env";
+import {faExternalLinkAlt} from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 
 const responsiveBreakPoints: Responsive<Display> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
 
@@ -124,7 +127,6 @@ export const BehandlingerTemaPage = () => {
       {temaData && behandling && (
         <>
           <Block>
-            <Label3 color={ettlevColors.green600}>DOKUMENTERE ETTERLEVELSE</Label3>
             <H1 marginTop="0" color={ettlevColors.green800}>
               {temaData?.shortName}
             </H1>
@@ -132,10 +134,14 @@ export const BehandlingerTemaPage = () => {
           </Block>
           <Block marginTop={theme.sizing.scale900} flex="1" width="100%" display="flex">
             <Block>
-              <Block display="flex">
-                <Label3 $style={{fontSize: '18px'}}>Du dokumenterer for:</Label3>
-              </Block>
-              <Paragraph2 $style={{marginTop: '0px', maxWidth: '700px'}} marginBottom={0}>{behandling.navn}</Paragraph2>
+              <Paragraph2 $style={{marginTop: '0px', maxWidth: '700px'}} marginBottom={0}>
+                <strong>Behandling: </strong>
+                <a href={`${env.pollyBaseUrl}process/${behandling.id}`} style={{color: ettlevColors.black}} target="_blank"
+                   rel="noopener noreferrer">
+                  <span style={{display: 'inline-block', paddingBottom: '1px', borderBottom: '1px solid black', marginRight:'5px'}}>{behandling.overordnetFormaal.shortName}: {behandling.navn}</span>
+                  <FontAwesomeIcon icon={faExternalLinkAlt}/>
+                </a>
+              </Paragraph2>
               {/*<Paragraph4 $style={{ lineHeight: '24px' }}>{behandling.overordnetFormaal.shortName}</Paragraph4>*/}
             </Block>
           </Block>
