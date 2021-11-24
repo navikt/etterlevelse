@@ -115,7 +115,7 @@ export const EditEtterlevelse = ({krav, etterlevelse, close, formRef, documentEd
         test: function (status) {
           const {parent} = this
           if (status === EtterlevelseStatus.FERDIG || status === EtterlevelseStatus.FERDIG_DOKUMENTERT) {
-            return parent.suksesskriterieBegrunnelser.every((skb: any) => (skb.oppfylt || skb.ikkeRelevant) && !!skb.begrunnelse)
+            return parent.suksesskriterieBegrunnelser.every((skb: any) => skb.oppfylt || skb.ikkeRelevant)
           }
           return true
         },
