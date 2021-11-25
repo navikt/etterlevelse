@@ -332,13 +332,16 @@ const KravView = (props: {
   behandlingformaal: string
   behandlingNummer: number
 }) => {
+  const [krav, setKrav] = useState<KravQL>()
   const {data} = useQuery<{ kravById: KravQL }, KravId>(kravFullQuery, {
     variables: props.kravId,
     skip: !props.kravId.id && !props.kravId.kravNummer,
   })
   const lover = codelist.getCodes(ListName.LOV)
 
-  const krav = data?.kravById
+  React.useEffect(() => {
+    setKrav(data?.kravById)
+  }, [data])
 
   const getTema = () => {
     const temaCodes: string[] = []
