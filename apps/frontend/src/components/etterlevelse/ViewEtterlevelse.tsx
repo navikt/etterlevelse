@@ -1,36 +1,31 @@
-import { Etterlevelse, Krav } from '../../constants'
-import { Block } from 'baseui/block'
-import React, { useRef, useState } from 'react'
-import { getEtterlevelseStatus } from '../../pages/EtterlevelsePage'
-import { theme } from '../../util'
+import {Etterlevelse, Krav} from '../../constants'
+import {Block} from 'baseui/block'
+import React, {useRef, useState} from 'react'
+import {getEtterlevelseStatus} from '../../pages/EtterlevelsePage'
+import {theme} from '../../util'
 import moment from 'moment'
 import RouteLink from '../common/RouteLink'
-import { behandlingName, useBehandling } from '../../api/BehandlingApi'
-import { Spinner } from '../common/Spinner'
-import { H2, Label3, Paragraph2, Paragraph4 } from 'baseui/typography'
-import { Teams } from '../common/TeamName'
-import { Card } from 'baseui/card'
-import { ettlevColors } from '../../util/theme'
-import { editSecondaryIcon } from '../Images'
-import { user } from '../../services/User'
-import Button from '../common/Button'
-import { getSuksesskriterieBegrunnelse } from './Edit/SuksesskriterieBegrunnelseEdit'
-import { FormikProps } from 'formik'
-import { useHistory } from 'react-router-dom'
-import { KIND, SIZE } from 'baseui/button'
-import { Markdown } from '../common/Markdown'
+import {useBehandling} from '../../api/BehandlingApi'
+import {Spinner} from '../common/Spinner'
+import {H2, Label3, Paragraph2, Paragraph4} from 'baseui/typography'
+import {Card} from 'baseui/card'
+import {ettlevColors} from '../../util/theme'
+import {getSuksesskriterieBegrunnelse} from './Edit/SuksesskriterieBegrunnelseEdit'
+import {FormikProps} from 'formik'
+import {useHistory} from 'react-router-dom'
+import {Markdown} from '../common/Markdown'
 import EditBegrunnelse from './Edit/EditBegrunnelse'
-import { borderColor, borderRadius, borderStyle, borderWidth } from '../common/Style'
+import {borderColor, borderRadius, borderStyle, borderWidth, marginAll} from '../common/Style'
 
 const formatDate = (date?: string) => date && moment(date).format('ll')
 
 export const ViewEtterlevelse = ({
-  etterlevelse,
-  setEtterlevelse,
-  loading,
-  viewMode,
-  krav,
-}: {
+                                   etterlevelse,
+                                   setEtterlevelse,
+                                   loading,
+                                   viewMode,
+                                   krav,
+                                 }: {
   etterlevelse: Etterlevelse
   setEtterlevelse: Function
   loading?: boolean
@@ -47,7 +42,7 @@ export const ViewEtterlevelse = ({
       <Block>
         <H2>Kravet etterleves av</H2>
         {behandling ? (
-          <Block>
+          <Block marginBottom={'48px'}>
             <Paragraph2>
               <strong>{behandling.overordnetFormaal.shortName}</strong>: {' '} {behandling.navn}
             </Paragraph2>
@@ -70,7 +65,7 @@ export const ViewEtterlevelse = ({
           etterlevelse.behandlingId && (
             <Block>
               {' '}
-              <Spinner size={theme.sizing.scale600} />
+              <Spinner size={theme.sizing.scale600}/>
               {etterlevelse.behandlingId}
             </Block>
           )
@@ -83,18 +78,12 @@ export const ViewEtterlevelse = ({
             overrides={{
               Contents: {
                 style: {
-                  marginRight: '8px',
-                  marginLeft: '8px',
-                  marginTop: '8px',
-                  marginBottom: '8px',
+                  ...marginAll('4px'),
                 },
               },
               Body: {
                 style: {
-                  marginRight: '8px',
-                  marginLeft: '8px',
-                  marginTop: '8px',
-                  marginBottom: '8px',
+                  ...marginAll('4px'),
                 },
               },
               Root: {
@@ -109,7 +98,9 @@ export const ViewEtterlevelse = ({
               },
             }}
           >
-            <Paragraph4 $style={{ color: ettlevColors.navMorkGra, margin: '0px', fontWeight: 600, lineHeight: '20px' }}>Kravet er: {getEtterlevelseStatus(etterlevelse.status)}</Paragraph4>
+            <Paragraph4 $style={{color: ettlevColors.navMorkGra, margin: '0px', fontWeight: 600, lineHeight: '20px'}}>
+              Kravet er: {getEtterlevelseStatus(etterlevelse.status)}
+            </Paragraph4>
           </Card>
         </Block>
       </Block>
@@ -144,32 +135,47 @@ export const ViewEtterlevelse = ({
           )} */}
         </Block>
         {!edit &&
-          etterlevelse &&
-          !loading &&
-          krav.suksesskriterier.map((s, i) => {
-            const suksessbeskrivelseBegrunnelse = getSuksesskriterieBegrunnelse(etterlevelse.suksesskriterieBegrunnelser, s)
-            return (
-              <Block marginBottom={theme.sizing.scale700} key={s.id}>
-                <Card>
-                  <Block display="flex" justifyContent="center">
-                    <Block display="flex" flex="1">
-                      <Label3 $style={{ color: ettlevColors.green600 }}>
-                        SUKSESSKRITERIE {i + 1} AV {krav.suksesskriterier.length}
-                      </Label3>
-                    </Block>
-                    <Block display="flex" justifyContent="flex-end">
-                      <Paragraph4 $style={{ lineHeight: '24px', color: ettlevColors.green800, marginTop: '0px', marginBottom: '0px' }}>{suksessbeskrivelseBegrunnelse.oppfylt ? 'Oppfylt' : 'Ikke Relevant'}</Paragraph4>
-                    </Block>
+        etterlevelse &&
+        !loading &&
+        krav.suksesskriterier.map((s, i) => {
+          const suksessbeskrivelseBegrunnelse = getSuksesskriterieBegrunnelse(etterlevelse.suksesskriterieBegrunnelser, s)
+          return (
+            <Block marginBottom={theme.sizing.scale700} key={s.id}>
+              <Card overrides={{
+                Body: {
+                  style: {
+                    ...borderWidth('1px'),
+                    ...borderRadius('4px')
+                  }
+                }
+              }}>
+                <Block display="flex" justifyContent="center" marginTop={'32px'} marginBottom={'16px'}>
+                  <Block display="flex" flex="1">
+                    <Label3 $style={{color: ettlevColors.green600}}>
+                      SUKSESSKRITERIE {i + 1} AV {krav.suksesskriterier.length}
+                    </Label3>
                   </Block>
-                  <Label3 $style={{ fontSize: '21px', lineHeight: '30px' }}>{s.navn}</Label3>
-                  <Label3 $style={{ lineHeight: '22px' }} marginTop="16px">
-                    Hvordan er kriteriet oppfylt?
-                  </Label3>
-                  {(suksessbeskrivelseBegrunnelse.oppfylt || suksessbeskrivelseBegrunnelse.ikkeRelevant) && <Markdown source={suksessbeskrivelseBegrunnelse.begrunnelse} />}
-                </Card>
-              </Block>
-            )
-          })}
+                  <Block display="flex" justifyContent="flex-end">
+                    <Paragraph4 $style={{
+                      lineHeight: '24px',
+                      color: ettlevColors.green800,
+                      marginTop: '0px',
+                      marginBottom: '0px'
+                    }}>{suksessbeskrivelseBegrunnelse.oppfylt ? 'Oppfylt' : 'Ikke Relevant'}</Paragraph4>
+                  </Block>
+                </Block>
+                <Label3 $style={{fontSize: '21px', lineHeight: '30px', marginTop: '16px', marginBottom: '48px'}}>{s.navn}</Label3>
+                <Label3 $style={{lineHeight: '22px'}} marginTop="16px">
+                  Hvordan er kriteriet oppfylt?
+                </Label3>
+                <Block marginBottom={'48px'}>
+                  {(suksessbeskrivelseBegrunnelse.oppfylt || suksessbeskrivelseBegrunnelse.ikkeRelevant) &&
+                  <Markdown source={suksessbeskrivelseBegrunnelse.begrunnelse}/>}
+                </Block>
+              </Card>
+            </Block>
+          )
+        })}
         {edit && etterlevelse && krav && (
           <EditBegrunnelse
             etterlevelse={etterlevelse}
