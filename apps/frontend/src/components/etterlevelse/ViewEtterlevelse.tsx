@@ -1,33 +1,34 @@
-import {Etterlevelse, Krav} from '../../constants'
-import {Block} from 'baseui/block'
-import React, {useRef, useState} from 'react'
-import {getEtterlevelseStatus} from '../../pages/EtterlevelsePage'
-import {theme} from '../../util'
+import { Etterlevelse, EtterlevelseStatus, Krav } from '../../constants'
+import { Block } from 'baseui/block'
+import React, { useRef, useState } from 'react'
+import { getEtterlevelseStatus } from '../../pages/EtterlevelsePage'
+import { theme } from '../../util'
 import moment from 'moment'
 import RouteLink from '../common/RouteLink'
-import {useBehandling} from '../../api/BehandlingApi'
-import {Spinner} from '../common/Spinner'
-import {H2, Label3, Paragraph2, Paragraph4} from 'baseui/typography'
-import {Card} from 'baseui/card'
-import {ettlevColors} from '../../util/theme'
-import {getSuksesskriterieBegrunnelse} from './Edit/SuksesskriterieBegrunnelseEdit'
-import {FormikProps} from 'formik'
-import {useHistory} from 'react-router-dom'
-import {Markdown} from '../common/Markdown'
+import { useBehandling } from '../../api/BehandlingApi'
+import { Spinner } from '../common/Spinner'
+import { H2, Label3, Paragraph2, Paragraph4 } from 'baseui/typography'
+import { Card } from 'baseui/card'
+import { ettlevColors } from '../../util/theme'
+import { getSuksesskriterieBegrunnelse } from './Edit/SuksesskriterieBegrunnelseEdit'
+import { FormikProps } from 'formik'
+import { useHistory } from 'react-router-dom'
+import { Markdown } from '../common/Markdown'
 import EditBegrunnelse from './Edit/EditBegrunnelse'
-import {borderColor, borderRadius, borderStyle, borderWidth, marginAll} from '../common/Style'
+import { borderColor, borderRadius, borderStyle, borderWidth, marginAll } from '../common/Style'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCircle } from '@fortawesome/free-solid-svg-icons'
+import { faCheck, faCircle } from '@fortawesome/free-solid-svg-icons'
+import { checkmarkIcon } from '../Images'
 
 const formatDate = (date?: string) => date && moment(date).format('ll')
 
 export const ViewEtterlevelse = ({
-                                   etterlevelse,
-                                   setEtterlevelse,
-                                   loading,
-                                   viewMode,
-                                   krav,
-                                 }: {
+  etterlevelse,
+  setEtterlevelse,
+  loading,
+  viewMode,
+  krav,
+}: {
   etterlevelse: Etterlevelse
   setEtterlevelse: Function
   loading?: boolean
@@ -49,33 +50,33 @@ export const ViewEtterlevelse = ({
               <strong>{behandling.overordnetFormaal.shortName}</strong>: {' '} {behandling.navn}
             </Paragraph2>
             <Block display='flex' alignContent='center'>
-            <FontAwesomeIcon icon={faCircle} color={ettlevColors.black} style={{ fontSize: '.45rem', paddingTop: '7px' , marginRight: '8px'}} aria-hidden={true} />
-            <RouteLink
-              href={`/behandling/${behandling.id}`}
-              style={{
-                fontSize: '18px',
-                fontWeight: 400,
-                lineHeight: '22px',
-                color: ettlevColors.green800,
-              }}
-            >
-              Gå til behandling
-            </RouteLink>
+              <FontAwesomeIcon icon={faCircle} color={ettlevColors.black} style={{ fontSize: '.45rem', paddingTop: '7px', marginRight: '8px' }} aria-hidden={true} />
+              <RouteLink
+                href={`/behandling/${behandling.id}`}
+                style={{
+                  fontSize: '18px',
+                  fontWeight: 400,
+                  lineHeight: '22px',
+                  color: ettlevColors.green800,
+                }}
+              >
+                Gå til behandling
+              </RouteLink>
             </Block>
             <Block marginTop="8px" display='flex' alignContent='center'>
-            <FontAwesomeIcon icon={faCircle} color={ettlevColors.black} style={{ fontSize: '.45rem', marginTop: '7px' , marginRight: '8px'}} aria-hidden={true} />
-            <RouteLink
-              href={`/krav/${krav.kravNummer}/${krav.kravVersjon}`}
-              style={{
-                fontSize: '18px',
-                fontWeight: 400,
-                lineHeight: '22px',
-                color: ettlevColors.green800,
-              }}
-            >
-              Gå til kravet
-            </RouteLink>
-              </Block>
+              <FontAwesomeIcon icon={faCircle} color={ettlevColors.black} style={{ fontSize: '.45rem', marginTop: '7px', marginRight: '8px' }} aria-hidden={true} />
+              <RouteLink
+                href={`/krav/${krav.kravNummer}/${krav.kravVersjon}`}
+                style={{
+                  fontSize: '18px',
+                  fontWeight: 400,
+                  lineHeight: '22px',
+                  color: ettlevColors.green800,
+                }}
+              >
+                Gå til kravet
+              </RouteLink>
+            </Block>
             {/* <Block marginTop={theme.sizing.scale850}>
               <Teams teams={behandling.teams} link list />
             </Block> */}
@@ -84,7 +85,7 @@ export const ViewEtterlevelse = ({
           etterlevelse.behandlingId && (
             <Block>
               {' '}
-              <Spinner size={theme.sizing.scale600}/>
+              <Spinner size={theme.sizing.scale600} />
               {etterlevelse.behandlingId}
             </Block>
           )
@@ -108,8 +109,8 @@ export const ViewEtterlevelse = ({
               Root: {
                 style: {
                   // Did not use border, margin and border radius to remove warnings.
-                  backgroundColor: ettlevColors.success50,
-                  ...borderColor(ettlevColors.success400),
+                  backgroundColor: etterlevelse.status === EtterlevelseStatus.FERDIG_DOKUMENTERT ? ettlevColors.success50 : '#FFECCC',
+                  ...borderColor(etterlevelse.status === EtterlevelseStatus.FERDIG_DOKUMENTERT ? ettlevColors.success400 : '#D47B00'),
                   ...borderWidth('1px'),
                   ...borderStyle('solid'),
                   ...borderRadius('4px'),
@@ -117,8 +118,8 @@ export const ViewEtterlevelse = ({
               },
             }}
           >
-            <Paragraph4 $style={{color: ettlevColors.navMorkGra, margin: '0px', fontWeight: 400, lineHeight: '20px'}}>
-              Kravet er: {getEtterlevelseStatus(etterlevelse.status)}
+            <Paragraph4 $style={{ color: ettlevColors.navMorkGra, margin: '0px', fontWeight: 400, lineHeight: '20px' }}>
+              Status: {getEtterlevelseStatus(etterlevelse.status)}
             </Paragraph4>
           </Card>
         </Block>
@@ -154,47 +155,56 @@ export const ViewEtterlevelse = ({
           )} */}
         </Block>
         {!edit &&
-        etterlevelse &&
-        !loading &&
-        krav.suksesskriterier.map((s, i) => {
-          const suksessbeskrivelseBegrunnelse = getSuksesskriterieBegrunnelse(etterlevelse.suksesskriterieBegrunnelser, s)
-          return (
-            <Block marginBottom={theme.sizing.scale700} key={s.id}>
-              <Card overrides={{
-                Body: {
-                  style: {
-                    ...borderWidth('1px'),
-                    ...borderRadius('4px')
+          etterlevelse &&
+          !loading &&
+          krav.suksesskriterier.map((s, i) => {
+            const suksessbeskrivelseBegrunnelse = getSuksesskriterieBegrunnelse(etterlevelse.suksesskriterieBegrunnelser, s)
+            return (
+              <Block marginBottom={theme.sizing.scale700} key={s.id}>
+                <Card overrides={{
+                  Body: {
+                    style: {
+                      ...borderWidth('1px'),
+                      ...borderRadius('4px')
+                    }
                   }
-                }
-              }}>
-                <Block display="flex" justifyContent="center" marginTop={'32px'} marginBottom={'16px'}>
-                  <Block display="flex" flex="1">
-                    <Label3 $style={{color: ettlevColors.green600}}>
-                      SUKSESSKRITERIE {i + 1} AV {krav.suksesskriterier.length}
+                }}>
+                  <Block display="flex" justifyContent="center" marginTop={'32px'} marginBottom={'16px'}>
+                    <Block display="flex" flex="1">
+                      <Label3 $style={{ color: ettlevColors.green600 }}>
+                        SUKSESSKRITERIE {i + 1} AV {krav.suksesskriterier.length}
+                      </Label3>
+                    </Block>
+                    {suksessbeskrivelseBegrunnelse.begrunnelse && <Block display="flex" justifyContent="flex-end">
+                      <Paragraph4 $style={{
+                        lineHeight: '24px',
+                        color: ettlevColors.green800,
+                        marginTop: '0px',
+                        marginBottom: '0px'
+                      }}>
+                        {suksessbeskrivelseBegrunnelse.oppfylt && <FontAwesomeIcon icon={faCheck} color={ettlevColors.green400} style={{ marginRight: '4px' }} />}
+                        {suksessbeskrivelseBegrunnelse.oppfylt ? 'Oppfylt' : 'Ikke Relevant'}
+                      </Paragraph4>
+                    </Block>}
+                  </Block>
+                  <Label3 $style={{ fontSize: '21px', lineHeight: '30px', marginTop: '16px', marginBottom: '48px' }}>{s.navn}</Label3>
+                  {suksessbeskrivelseBegrunnelse.begrunnelse ? (<Block>
+                    <Label3 $style={{ lineHeight: '22px' }} marginTop="16px">
+                      Hvordan er kriteriet oppfylt?
                     </Label3>
-                  </Block>
-                  <Block display="flex" justifyContent="flex-end">
-                    <Paragraph4 $style={{
-                      lineHeight: '24px',
-                      color: ettlevColors.green800,
-                      marginTop: '0px',
-                      marginBottom: '0px'
-                    }}>{suksessbeskrivelseBegrunnelse.oppfylt ? 'Oppfylt' : 'Ikke Relevant'}</Paragraph4>
-                  </Block>
-                </Block>
-                <Label3 $style={{fontSize: '21px', lineHeight: '30px', marginTop: '16px', marginBottom: '48px'}}>{s.navn}</Label3>
-                <Label3 $style={{lineHeight: '22px'}} marginTop="16px">
-                  Hvordan er kriteriet oppfylt?
-                </Label3>
-                <Block marginBottom={'48px'}>
-                  {(suksessbeskrivelseBegrunnelse.oppfylt || suksessbeskrivelseBegrunnelse.ikkeRelevant) &&
-                  <Markdown source={suksessbeskrivelseBegrunnelse.begrunnelse}/>}
-                </Block>
-              </Card>
-            </Block>
-          )
-        })}
+                    <Block marginBottom={'48px'}>
+                      {(suksessbeskrivelseBegrunnelse.oppfylt || suksessbeskrivelseBegrunnelse.ikkeRelevant) &&
+                        <Markdown source={suksessbeskrivelseBegrunnelse.begrunnelse} />}
+                    </Block>
+                  </Block>) :
+                    (<Block marginBottom={'48px'}>
+                      <Paragraph2 $style={{ lineHeight: '18px', color: ettlevColors.green800 }}>Mangler utfylling</Paragraph2>
+                    </Block>)
+                  }
+                </Card>
+              </Block>
+            )
+          })}
         {edit && etterlevelse && krav && (
           <EditBegrunnelse
             etterlevelse={etterlevelse}
