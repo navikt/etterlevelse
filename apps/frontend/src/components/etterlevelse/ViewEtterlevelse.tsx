@@ -16,6 +16,8 @@ import {useHistory} from 'react-router-dom'
 import {Markdown} from '../common/Markdown'
 import EditBegrunnelse from './Edit/EditBegrunnelse'
 import {borderColor, borderRadius, borderStyle, borderWidth, marginAll} from '../common/Style'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCircle } from '@fortawesome/free-solid-svg-icons'
 
 const formatDate = (date?: string) => date && moment(date).format('ll')
 
@@ -46,6 +48,8 @@ export const ViewEtterlevelse = ({
             <Paragraph2>
               <strong>{behandling.overordnetFormaal.shortName}</strong>: {' '} {behandling.navn}
             </Paragraph2>
+            <Block display='flex' alignContent='center'>
+            <FontAwesomeIcon icon={faCircle} color={ettlevColors.black} style={{ fontSize: '.45rem', paddingTop: '7px' , marginRight: '8px'}} aria-hidden={true} />
             <RouteLink
               href={`/behandling/${behandling.id}`}
               style={{
@@ -57,6 +61,21 @@ export const ViewEtterlevelse = ({
             >
               Gå til behandling
             </RouteLink>
+            </Block>
+            <Block marginTop="8px" display='flex' alignContent='center'>
+            <FontAwesomeIcon icon={faCircle} color={ettlevColors.black} style={{ fontSize: '.45rem', marginTop: '7px' , marginRight: '8px'}} aria-hidden={true} />
+            <RouteLink
+              href={`/krav/${krav.kravNummer}/${krav.kravVersjon}`}
+              style={{
+                fontSize: '18px',
+                fontWeight: 400,
+                lineHeight: '22px',
+                color: ettlevColors.green800,
+              }}
+            >
+              Gå til kravet
+            </RouteLink>
+              </Block>
             {/* <Block marginTop={theme.sizing.scale850}>
               <Teams teams={behandling.teams} link list />
             </Block> */}
