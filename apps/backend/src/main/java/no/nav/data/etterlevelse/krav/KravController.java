@@ -64,6 +64,15 @@ public class KravController {
         return ResponseEntity.ok(new RestResponsePage<>(page).convert(Krav::toResponse));
     }
 
+    @Operation(summary = "Get All Krav Without Login ")
+    @ApiResponse(description = "ok")
+    @GetMapping("/statistic")
+    public ResponseEntity<RestResponsePage<KravResponse>> getAllKravStatistics(PageParameters pageParameters) {
+        log.info("Get all Krav Statistics");
+        Page<Krav> page = service.getAllKravStatistics(pageParameters.createPage());
+        return ResponseEntity.ok(new RestResponsePage<>(page).convert(Krav::toResponse));
+    }
+
     @Operation(summary = "Get Krav by KravNummer")
     @ApiResponse(description = "ok")
     @GetMapping("/kravnummer/{kravNummer}")

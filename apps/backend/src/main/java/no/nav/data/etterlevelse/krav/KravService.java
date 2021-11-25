@@ -45,6 +45,12 @@ public class KravService extends DomainService<Krav> {
         return all.map(GenericStorage::toKrav);
     }
 
+    public Page<Krav> getAllKravStatistics(Pageable page) {
+        Page<GenericStorage> all = kravRepo.findAll(page);
+
+        return all.map(GenericStorage::toKrav);
+    }
+
     public List<Krav> getByFilter(KravFilter filter) {
         return convert(kravRepo.findBy(filter), GenericStorage::toKrav);
     }
