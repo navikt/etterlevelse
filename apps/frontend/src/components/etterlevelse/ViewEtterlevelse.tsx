@@ -98,7 +98,7 @@ export const ViewEtterlevelse = ({
               },
             }}
           >
-            <Paragraph4 $style={{color: ettlevColors.navMorkGra, margin: '0px', fontWeight: 600, lineHeight: '20px'}}>
+            <Paragraph4 $style={{color: ettlevColors.navMorkGra, margin: '0px', fontWeight: 400, lineHeight: '20px'}}>
               Kravet er: {getEtterlevelseStatus(etterlevelse.status)}
             </Paragraph4>
           </Card>
