@@ -1,27 +1,26 @@
 import * as React from 'react'
-import { ReactElement, useEffect, useState } from 'react'
-import { Select, SelectOverrides, SelectProps, SIZE, TYPE, Value } from 'baseui/select'
-import { theme } from '../../util'
-import { useDebouncedState, useQueryParam } from '../../util/hooks'
-import { prefixBiasedSort } from '../../util/sort'
-import { Block } from 'baseui/block'
-import { useHistory, useLocation } from 'react-router-dom'
+import {ReactElement, useEffect, useState} from 'react'
+import {Select, SelectOverrides, SelectProps, SIZE, TYPE, Value} from 'baseui/select'
+import {theme} from '../../util'
+import {useDebouncedState, useQueryParam} from '../../util/hooks'
+import {prefixBiasedSort} from '../../util/sort'
+import {Block} from 'baseui/block'
+import {useHistory, useLocation} from 'react-router-dom'
 import Button from '../common/Button'
-import { Radio, RadioGroup } from 'baseui/radio'
-import { borderColor, borderRadius, borderWidth, padding, paddingZero } from '../common/Style'
+import {Radio, RadioGroup} from 'baseui/radio'
+import {borderWidth, padding, paddingZero} from '../common/Style'
 import SearchLabel from './components/SearchLabel'
-import { NavigableItem, ObjectType } from '../admin/audit/AuditTypes'
-import { Behandling, Krav } from '../../constants'
+import {NavigableItem, ObjectType} from '../admin/audit/AuditTypes'
+import {Behandling, Krav, KravStatus} from '../../constants'
 import shortid from 'shortid'
-import { ettlevColors, searchResultColor } from '../../util/theme'
-import { kravName } from '../../pages/KravPage'
-import { getKravByKravNumberAndVersion, getKravByKravNummer, searchKrav, searchKravByNumber } from '../../api/KravApi'
-import { behandlingName, searchBehandling } from '../../api/BehandlingApi'
-import { codelist, ListName } from '../../services/Codelist'
-import { clearSearchIcon, filterIcon, navChevronDownIcon, searchIcon } from '../Images'
-import CustomizedSelect from '../common/CustomizedSelect'
-import { Paragraph2 } from 'baseui/typography'
-import { urlForObject } from '../common/RouteLink'
+import {ettlevColors, searchResultColor} from '../../util/theme'
+import {kravName} from '../../pages/KravPage'
+import {getKravByKravNumberAndVersion, searchKrav, searchKravByNumber} from '../../api/KravApi'
+import {behandlingName, searchBehandling} from '../../api/BehandlingApi'
+import {codelist, ListName} from '../../services/Codelist'
+import {clearSearchIcon, filterIcon, navChevronDownIcon, searchIcon} from '../Images'
+import {Paragraph2} from 'baseui/typography'
+import {urlForObject} from '../common/RouteLink'
 
 shortid.characters('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@')
 
@@ -213,7 +212,7 @@ const useMainSearch = (searchParam?: string) => {
           }
 
           if (type === 'all' || type === ObjectType.Krav) {
-            searches.push((async () => add((await searchKrav(search)).map(kravMap)))())
+            searches.push((async () => add((await searchKrav(search)).filter(k => k.status !== KravStatus.UTGAATT).map(kravMap)))())
 
             let kravNumber = search
             if (kravNumber[0].toLowerCase() === 'k') {
@@ -225,6 +224,7 @@ const useMainSearch = (searchParam?: string) => {
                 (async () =>
                   add(
                     (await searchKravByNumber(Number.parseFloat(kravNumber).toString()))
+                      .filter(k => k.status !== KravStatus.UTGAATT)
                       .sort((a, b) => {
                         if (a.kravNummer === b.kravNummer) {
                           return b.kravVersjon - a.kravVersjon
@@ -239,7 +239,7 @@ const useMainSearch = (searchParam?: string) => {
 
             if (Number.parseFloat(kravNumber) && Number.parseFloat(kravNumber) % 1 !== 0) {
               const kravNummerMedVersjon = kravNumber.split('.')
-              const searchResult = [await getKravByKravNumberAndVersion(kravNummerMedVersjon[0], kravNummerMedVersjon[1])]
+              const searchResult = [await getKravByKravNumberAndVersion(kravNummerMedVersjon[0], kravNummerMedVersjon[1])].filter(k => k && k.status !== KravStatus.UTGAATT)
               if (typeof searchResult[0] !== 'undefined') {
                 const mappedResult = [
                   {
