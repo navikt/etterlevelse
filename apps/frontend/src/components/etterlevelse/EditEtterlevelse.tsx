@@ -138,8 +138,6 @@ export const EditEtterlevelse = ({ kravId, etterlevelse, close, formRef, documen
 
   return (
     <Block>
-      {console.log(krav, 'KRAV')}
-      {console.log(krav?.suksesskriterier, 'Kriterie')}
       {krav && <Formik
         onSubmit={submit}
         initialValues={mapEtterlevelseToFormValue(etterlevelse)}

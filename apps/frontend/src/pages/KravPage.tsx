@@ -62,6 +62,7 @@ export const KravPage = () => {
   } = useQuery<{ kravById: KravQL }, KravIdParams>(query, {
     variables: params,
     skip: (!params.id || params.id === 'ny') && !params.kravNummer,
+    fetchPolicy: 'no-cache'
   })
 
   const { state, history, changeState } = useLocationState<LocationState>()

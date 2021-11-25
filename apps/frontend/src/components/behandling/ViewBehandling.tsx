@@ -277,6 +277,7 @@ const KravView = (props: { kravId: KravId; etterlevelse: Etterlevelse; close: Fu
   const { data } = useQuery<{ kravById: KravQL }, KravId>(kravFullQuery, {
     variables: props.kravId,
     skip: !props.kravId.id && !props.kravId.kravNummer,
+    fetchPolicy: 'no-cache'
   })
   const lover = codelist.getCodes(ListName.LOV)
 
@@ -389,6 +390,7 @@ export const statsQuery = gql`
 const BehandlingStatsView = ({ behandling }: { behandling: Behandling }) => {
   const { data } = useQuery<{ behandling: PageResponse<{ stats: BehandlingStats }> }>(statsQuery, {
     variables: { behandlingId: behandling.id },
+    fetchPolicy: 'no-cache'
   })
   const stats = data?.behandling.content[0].stats
   const [expand, setExpand] = useState<string | undefined>()
