@@ -66,7 +66,7 @@ public class KravController {
 
     @Operation(summary = "Get All Krav Without Login ")
     @ApiResponse(description = "ok")
-    @GetMapping("/krav/statistic")
+    @GetMapping("/statistic")
     public ResponseEntity<RestResponsePage<KravResponse>> getAllKravStatistics(PageParameters pageParameters) {
         log.info("Get all Krav Statistics");
         Page<Krav> page = service.getAllKravStatistics(pageParameters.createPage());
