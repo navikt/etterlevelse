@@ -52,6 +52,7 @@ export const EditEtterlevelse = ({ kravId, etterlevelse, close, formRef, documen
   const { data } = useQuery<{ kravById: KravQL }, KravId>(kravFullQuery, {
     variables: kravId,
     skip: !kravId.id && !kravId.kravNummer,
+    fetchPolicy: 'no-cache'
   })
 
   const [krav, setKrav] = React.useState<KravQL>()
