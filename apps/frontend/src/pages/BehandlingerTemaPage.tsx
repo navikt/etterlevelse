@@ -192,8 +192,8 @@ export const BehandlingerTemaPage = () => {
     if (kravList.length) {
       return kravList.map((k) => {
         return (
-          <CustomPanelDivider key={`${k.navn}_${k.kravNummer}`}>
-            <KravCard krav={k} setEdit={setEdit} setKravId={setKravId}/>
+          <CustomPanelDivider key={`${k.navn}_${k.kravNummer}_${k.kravVersjon}`}>
+            <KravCard krav={k} setEdit={setEdit} setKravId={setKravId} key={`${k.navn}_${k.kravNummer}_${k.kravVersjon}_card`}/>
           </CustomPanelDivider>
         )
       })
