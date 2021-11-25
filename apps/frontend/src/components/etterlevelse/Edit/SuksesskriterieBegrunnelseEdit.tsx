@@ -33,7 +33,6 @@ export const getSuksesskriterieBegrunnelse = (suksesskriterieBegrunnelser: Sukse
 export const SuksesskriterierBegrunnelseEdit = ({ suksesskriterie, disableEdit }: { suksesskriterie: Suksesskriterie[]; disableEdit: boolean }) => {
   return (
     <FieldWrapper>
-      {console.log(suksesskriterie)}
       <FieldArray name={'suksesskriterieBegrunnelser'}>{(p) => <KriterieBegrunnelseList props={p} disableEdit={disableEdit} suksesskriterie={suksesskriterie} />}</FieldArray>
     </FieldWrapper>
   )

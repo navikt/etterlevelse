@@ -315,7 +315,7 @@ const KravView = (props: { kravId: KravId; etterlevelse: Etterlevelse; close: Fu
           <Block paddingLeft={modalPaddingLeft} paddingRight={modalPaddingRight}>
             <Block marginTop="99px">
               <EditEtterlevelse
-                krav={krav}
+                kravId={props.kravId}
                 etterlevelse={props.etterlevelse}
                 close={(e) => {
                   props.close(e)

@@ -332,45 +332,15 @@ const KravView = (props: {
   behandlingformaal: string
   behandlingNummer: number
 }) => {
-  const [krav, setKrav] = useState<KravQL>()
-  const {data} = useQuery<{ kravById: KravQL }, KravId>(kravFullQuery, {
-    variables: props.kravId,
-    skip: !props.kravId.id && !props.kravId.kravNummer,
-  })
-  const lover = codelist.getCodes(ListName.LOV)
-
-  React.useEffect(() => {
-    setKrav(data?.kravById)
-  }, [data])
-
-  const getTema = () => {
-    const temaCodes: string[] = []
-    let temas = ''
-
-    krav?.regelverk.map((r) => {
-      const lov = lover.find((lov) => lov.code === r.lov.code)
-      temaCodes.push(lov?.data?.tema || '')
-    })
-
-    temaCodes.forEach((temaCode) => {
-      const shortName = codelist.getShortname(ListName.TEMA, temaCode)
-
-      temas = temas + shortName + ', '
-    })
-
-    temas = temas.substring(0, temas.length - 2)
-    temas = temas.replace(/,([^,]*)$/, ' og$1')
-    return temas
-  }
 
   return (
     <Block>
-      {krav && (
+      {props.kravId && (
         <EditEtterlevelse
           behandlingNavn={props.behandlingNavn}
           behandlingId={props.behandlingId}
           behandlingformaal={props.behandlingformaal}
-          krav={krav}
+          kravId={props.kravId}
           etterlevelse={props.etterlevelse}
           behandlingNummer={props.behandlingNummer}
           close={(e) => {
