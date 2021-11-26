@@ -65,6 +65,15 @@ export const EditEtterlevelse = ({ kravId, etterlevelse, close, formRef, documen
     const mutatedEtterlevelse = {
       ...etterlevelse,
       fristForFerdigstillelse: etterlevelse.status !== EtterlevelseStatus.OPPFYLLES_SENERE ? '' : etterlevelse.fristForFerdigstillelse,
+      suksesskriterieBegrunnelser: etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT ?
+        [...etterlevelse.suksesskriterieBegrunnelser.map((s) => {
+          return {
+            ...s,
+            oppfylt: false,
+            ikkeRelevant: false
+          }
+        })
+        ] : [...etterlevelse.suksesskriterieBegrunnelser]
     }
 
     if (etterlevelse.id) {
