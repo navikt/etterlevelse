@@ -1,10 +1,10 @@
-import {Block} from 'baseui/block'
-import {Card} from 'baseui/card'
-import {Paragraph4} from 'baseui/typography'
-import {KravStatus} from '../../constants'
-import {kravStatus} from '../../pages/KravPage'
-import {ettlevColors} from '../../util/theme'
-import {borderColor, borderRadius, borderStyle, borderWidth, marginAll} from '../common/Style'
+import { Block } from 'baseui/block'
+import { Card } from 'baseui/card'
+import { Paragraph4 } from 'baseui/typography'
+import { KravStatus } from '../../constants'
+import { kravStatus } from '../../pages/KravPage'
+import { ettlevColors } from '../../util/theme'
+import { borderColor, borderRadius, borderStyle, borderWidth, marginAll } from '../common/Style'
 
 export const KravStatusView = ({ status }: { status: KravStatus }) => {
   const getStatusDisplay = (background: string, border: string) => (

@@ -47,9 +47,9 @@ export const ViewEtterlevelse = ({
         {behandling ? (
           <Block marginBottom={'48px'}>
             <Paragraph2>
-              <strong>{behandling.overordnetFormaal.shortName}</strong>: {' '} {behandling.navn}
+              <strong>{behandling.overordnetFormaal.shortName}</strong>: {behandling.navn}
             </Paragraph2>
-            <Block display='flex' alignContent='center'>
+            <Block display="flex" alignContent="center">
               <FontAwesomeIcon icon={faCircle} color={ettlevColors.black} style={{ fontSize: '.45rem', paddingTop: '7px', marginRight: '8px' }} aria-hidden={true} />
               <RouteLink
                 href={`/behandling/${behandling.id}`}
@@ -63,7 +63,7 @@ export const ViewEtterlevelse = ({
                 Gå til behandling
               </RouteLink>
             </Block>
-            <Block marginTop="8px" display='flex' alignContent='center'>
+            <Block marginTop="8px" display="flex" alignContent="center">
               <FontAwesomeIcon icon={faCircle} color={ettlevColors.black} style={{ fontSize: '.45rem', marginTop: '7px', marginRight: '8px' }} aria-hidden={true} />
               <RouteLink
                 href={`/krav/${krav.kravNummer}/${krav.kravVersjon}`}
@@ -109,8 +109,11 @@ export const ViewEtterlevelse = ({
               Root: {
                 style: {
                   // Did not use border, margin and border radius to remove warnings.
-                  backgroundColor: etterlevelse.status === EtterlevelseStatus.FERDIG_DOKUMENTERT || etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT ? ettlevColors.success50 : '#FFECCC',
-                  ...borderColor(etterlevelse.status === EtterlevelseStatus.FERDIG_DOKUMENTERT || etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT ? ettlevColors.success400 : '#D47B00'),
+                  backgroundColor:
+                    etterlevelse.status === EtterlevelseStatus.FERDIG_DOKUMENTERT || etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT ? ettlevColors.success50 : '#FFECCC',
+                  ...borderColor(
+                    etterlevelse.status === EtterlevelseStatus.FERDIG_DOKUMENTERT || etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT ? ettlevColors.success400 : '#D47B00',
+                  ),
                   ...borderWidth('1px'),
                   ...borderStyle('solid'),
                   ...borderRadius('4px'),
@@ -119,7 +122,8 @@ export const ViewEtterlevelse = ({
             }}
           >
             <Paragraph4 $style={{ color: ettlevColors.navMorkGra, margin: '0px', fontWeight: 400, lineHeight: '20px' }}>
-              Status: {etterlevelse.status === EtterlevelseStatus.FERDIG_DOKUMENTERT || etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT ? 'Ferdig utfylt' : 'Under utfylling'}
+              Status:{' '}
+              {etterlevelse.status === EtterlevelseStatus.FERDIG_DOKUMENTERT || etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT ? 'Ferdig utfylt' : 'Under utfylling'}
             </Paragraph4>
           </Card>
         </Block>
@@ -161,50 +165,57 @@ export const ViewEtterlevelse = ({
             const suksessbeskrivelseBegrunnelse = getSuksesskriterieBegrunnelse(etterlevelse.suksesskriterieBegrunnelser, s)
             return (
               <Block marginBottom={theme.sizing.scale700} key={s.id}>
-                <Card overrides={{
-                  Body: {
-                    style: {
-                      ...borderWidth('1px'),
-                      ...borderRadius('4px')
-                    }
-                  }
-                }}>
+                <Card
+                  overrides={{
+                    Body: {
+                      style: {
+                        ...borderWidth('1px'),
+                        ...borderRadius('4px'),
+                      },
+                    },
+                  }}
+                >
                   <Block display="flex" justifyContent="center" marginTop={'32px'} marginBottom={'16px'}>
                     <Block display="flex" flex="1">
                       <Label3 $style={{ color: ettlevColors.green600 }}>
                         SUKSESSKRITERIE {i + 1} AV {krav.suksesskriterier.length}
                       </Label3>
                     </Block>
-                    {(suksessbeskrivelseBegrunnelse.begrunnelse || etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT) && <Block display="flex" justifyContent="flex-end">
-                      <Paragraph4 $style={{
-                        lineHeight: '24px',
-                        color: ettlevColors.green800,
-                        marginTop: '0px',
-                        marginBottom: '0px'
-                      }}>
-                        {suksessbeskrivelseBegrunnelse.oppfylt && <FontAwesomeIcon icon={faCheck} color={ettlevColors.green400} style={{ marginRight: '4px' }} />}
-                        {etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT || suksessbeskrivelseBegrunnelse.ikkeRelevant ? 'Ikke Relevant' : 'Oppfylt'}
-                      </Paragraph4>
-                    </Block>}
+                    {(suksessbeskrivelseBegrunnelse.begrunnelse || etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT) && (
+                      <Block display="flex" justifyContent="flex-end">
+                        <Paragraph4
+                          $style={{
+                            lineHeight: '24px',
+                            color: ettlevColors.green800,
+                            marginTop: '0px',
+                            marginBottom: '0px',
+                          }}
+                        >
+                          {suksessbeskrivelseBegrunnelse.oppfylt && <FontAwesomeIcon icon={faCheck} color={ettlevColors.green400} style={{ marginRight: '4px' }} />}
+                          {etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT || suksessbeskrivelseBegrunnelse.ikkeRelevant ? 'Ikke Relevant' : 'Oppfylt'}
+                        </Paragraph4>
+                      </Block>
+                    )}
                   </Block>
                   <Label3 $style={{ fontSize: '21px', lineHeight: '30px', marginTop: '16px', marginBottom: '48px' }}>{s.navn}</Label3>
-                  {etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT || suksessbeskrivelseBegrunnelse.begrunnelse ?
-                    (
-                      <Block>
-                        <Label3 $style={{ lineHeight: '22px' }} marginTop="16px">
-                          Hvordan er kriteriet oppfylt?
-                        </Label3>
-                        <Block marginBottom={'48px'}>
-                          {(suksessbeskrivelseBegrunnelse.oppfylt || suksessbeskrivelseBegrunnelse.ikkeRelevant || etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT) &&
-                            <Markdown source={etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT ? etterlevelse.statusBegrunnelse : suksessbeskrivelseBegrunnelse.begrunnelse} />}
-                        </Block>
-                      </Block>
-                    ) : (
+                  {etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT || suksessbeskrivelseBegrunnelse.begrunnelse ? (
+                    <Block>
+                      <Label3 $style={{ lineHeight: '22px' }} marginTop="16px">
+                        Hvordan er kriteriet oppfylt?
+                      </Label3>
                       <Block marginBottom={'48px'}>
-                        <Paragraph2 $style={{ lineHeight: '18px', color: ettlevColors.green800 }}>Mangler utfylling</Paragraph2>
+                        {(suksessbeskrivelseBegrunnelse.oppfylt || suksessbeskrivelseBegrunnelse.ikkeRelevant || etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT) && (
+                          <Markdown
+                            source={etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT ? etterlevelse.statusBegrunnelse : suksessbeskrivelseBegrunnelse.begrunnelse}
+                          />
+                        )}
                       </Block>
-                    )
-                  }
+                    </Block>
+                  ) : (
+                    <Block marginBottom={'48px'}>
+                      <Paragraph2 $style={{ lineHeight: '18px', color: ettlevColors.green800 }}>Mangler utfylling</Paragraph2>
+                    </Block>
+                  )}
                 </Card>
               </Block>
             )

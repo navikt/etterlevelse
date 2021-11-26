@@ -101,14 +101,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
           },
         }}
       >
-        <Formik
-          onSubmit={submit}
-          initialValues={kravMapToFormVal(krav)}
-          validationSchema={kravSchema()}
-          innerRef={formRef}
-          validateOnBlur={false}
-          validateOnChange={false}
-        >
+        <Formik onSubmit={submit} initialValues={kravMapToFormVal(krav)} validationSchema={kravSchema()} innerRef={formRef} validateOnBlur={false} validateOnChange={false}>
           {({ touched, errors, isSubmitting, submitForm, setErrors }) => (
             <Form>
               <Block
@@ -135,7 +128,14 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
                 )}
               </Block>
               <Block>
-                <Block className="title_container" backgroundColor={ettlevColors.grey50} paddingTop="48px" paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge} paddingBottom="64px">
+                <Block
+                  className="title_container"
+                  backgroundColor={ettlevColors.grey50}
+                  paddingTop="48px"
+                  paddingLeft={responsivePaddingLarge}
+                  paddingRight={responsivePaddingLarge}
+                  paddingBottom="64px"
+                >
                   <InputField
                     marginBottom={inputMarginBottom}
                     label="Krav-tittel"
@@ -272,9 +272,9 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
                                     ...borderStyle('solid'),
                                     ...borderWidth('1px'),
                                     ...borderColor(ettlevColors.red600),
-                                    ...borderRadius('4px')
-                                  }
-                                }
+                                    ...borderRadius('4px'),
+                                  },
+                                },
                               }}
                               kind={NKIND.negative}
                             >
@@ -309,7 +309,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
                   paddingTop="16px"
                   $style={{
                     boxShadow: stickyFooterStyle ? '0px -4px 4px rgba(0, 0, 0, 0.12)' : '',
-                    zIndex: 3
+                    zIndex: 3,
                   }}
                 >
                   <Button size="compact" kind={'secondary'} type={'button'} onClick={close} marginLeft>

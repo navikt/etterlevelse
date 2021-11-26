@@ -62,7 +62,7 @@ export const KravPage = () => {
   } = useQuery<{ kravById: KravQL }, KravIdParams>(query, {
     variables: params,
     skip: (!params.id || params.id === 'ny') && !params.kravNummer,
-    fetchPolicy: 'no-cache'
+    fetchPolicy: 'no-cache',
   })
 
   const { state, history, changeState } = useLocationState<LocationState>()
@@ -325,9 +325,14 @@ const Etterlevelser = ({ loading, etterlevelser: allEtterlevelser }: { loading: 
                     square
                     hideBorderBottom={i !== antall - 1}
                     useUnderline
-                    title={<>
-                      <strong>{e.behandling.nummer}-{e.behandling.overordnetFormaal.shortName}</strong>: {e.behandling.navn}
-                    </>}
+                    title={
+                      <>
+                        <strong>
+                          {e.behandling.nummer}-{e.behandling.overordnetFormaal.shortName}
+                        </strong>
+                        : {e.behandling.navn}
+                      </>
+                    }
                     rightTitle={!!e.behandling.teamsData.length ? e.behandling.teamsData.map((t) => t.name).join(', ') : 'Ingen team'}
                     rightBeskrivelse={`Utfylt: ${moment(e.changeStamp.lastModifiedDate).format('ll')}`}
                     overrides={{
@@ -337,7 +342,7 @@ const Etterlevelser = ({ loading, etterlevelser: allEtterlevelser }: { loading: 
                         },
                       },
                     }}
-                  // panelIcon={(hover) => <PageIcon hover={hover} />}
+                    // panelIcon={(hover) => <PageIcon hover={hover} />}
                   />
                 </CustomPanelDivider>
               ))}

@@ -181,13 +181,13 @@ const Kriterie = ({
                 Root: {
                   style: {
                     ...borderColor(p.form.errors['suksesskriterier'] ? ettlevColors.red600 : ettlevColors.grey200),
-                  }
+                  },
                 },
                 Input: {
                   style: {
                     backgroundColor: p.form.errors['suksesskriterier'] && ettlevColors.error50,
-                  }
-                }
+                  },
+                },
               }}
             />
             <Error fieldName={'suksesskriterier'} fullWidth />

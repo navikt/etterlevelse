@@ -1,7 +1,6 @@
 import axios from 'axios'
-import { KravPrioritering, KravQL, PageResponse} from '../constants'
-import {env} from '../util/env'
-
+import { KravPrioritering, KravQL, PageResponse } from '../constants'
+import { env } from '../util/env'
 
 export const getAllKravPriority = async () => {
   const PAGE_SIZE = 100
@@ -59,11 +58,11 @@ function kravPrioriteringToDto(kravPrioriteringToDto: KravPrioritering): KravPri
   return dto
 }
 
-export const kravMapToKravPrioriting  = (krav: Partial<KravQL>): KravPrioritering => ({
+export const kravMapToKravPrioriting = (krav: Partial<KravQL>): KravPrioritering => ({
   id: krav.kravPriorityUID || '',
   kravNummer: krav.kravNummer || 0,
   kravVersjon: krav.kravVersjon || 0,
   prioriteringsId: krav.prioriteringsId || '',
-  changeStamp: krav.changeStamp || {lastModifiedDate: '', lastModifiedBy: ''},
+  changeStamp: krav.changeStamp || { lastModifiedDate: '', lastModifiedBy: '' },
   version: -1,
 })

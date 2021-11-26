@@ -25,7 +25,7 @@ export const TemaList = () => {
   }, [])
 
   const fetchKrav = () => {
-    ; (async () => {
+    ;(async () => {
       const kraver = await getAllKrav()
       const allKravPriority = await getAllKravPriority()
 
@@ -112,7 +112,7 @@ const KravTemaList = (props: { kraver: Krav[]; tema: string; refresh: Function }
             justifyContent="flex-end"
             $style={{
               ...padding(theme.sizing.scale500, theme.sizing.scale1000),
-              paddingRight: '16px'
+              paddingRight: '16px',
             }}
           >
             <Button kind="secondary" size="mini" onClick={() => setEdit(true)}>

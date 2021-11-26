@@ -123,7 +123,7 @@ export const Layout2 = (props: {
   // console.log(history.location.pathname)
   return (
     <Block width="100%" id="content" overrides={{ Block: { props: { role: 'main' } } }}>
-      <Block backgroundColor={props.headerBackgroundColor} display="flex" width="100%" justifyContent="center" paddingBottom={props.headerOverlap} >
+      <Block backgroundColor={props.headerBackgroundColor} display="flex" width="100%" justifyContent="center" paddingBottom={props.headerOverlap}>
         <Block maxWidth={maxPageWidth} width="100%">
           <Block paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall} display="flex" flexDirection="column" justifyContent="center">
             <Block width="100%" justifyContent="center" marginTop="24px">

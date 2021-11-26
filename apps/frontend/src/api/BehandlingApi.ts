@@ -1,9 +1,9 @@
 import axios from 'axios'
-import {Behandling, BehandlingEtterlevData, PageResponse} from '../constants'
-import {env} from '../util/env'
-import {useSearch} from '../util/hooks'
-import {useEffect, useState} from 'react'
-import {user} from '../services/User'
+import { Behandling, BehandlingEtterlevData, PageResponse } from '../constants'
+import { env } from '../util/env'
+import { useSearch } from '../util/hooks'
+import { useEffect, useState } from 'react'
+import { user } from '../services/User'
 
 export const getBehandling = async (id: string) => {
   return (await axios.get<Behandling>(`${env.backendBaseUrl}/behandling/${id}`)).data
@@ -18,7 +18,7 @@ export const searchBehandling = async (name: string) => {
 }
 
 export const updateBehandling = async (behandling: BehandlingEtterlevData) => {
-  const dto = {id: behandling.id, irrelevansFor: behandling.irrelevansFor.map((c) => c.code)}
+  const dto = { id: behandling.id, irrelevansFor: behandling.irrelevansFor.map((c) => c.code) }
   return (await axios.put<Behandling>(`${env.backendBaseUrl}/behandling/${behandling.id}`, dto)).data
 }
 
@@ -27,12 +27,12 @@ export const useBehandling = (id?: string) => {
 
   useEffect(() => {
     id &&
-    getBehandling(id)
-      .then(setData)
-      .catch((e) => {
-        setData(undefined)
-        console.log("couldn't find behandling", e)
-      })
+      getBehandling(id)
+        .then(setData)
+        .catch((e) => {
+          setData(undefined)
+          console.log("couldn't find behandling", e)
+        })
   }, [id])
 
   return [data, setData] as [Behandling | undefined, (behandling: Behandling | undefined) => void]
@@ -48,16 +48,16 @@ export const useMyBehandlinger = () => {
 
   useEffect(() => {
     ident &&
-    getBehandlinger()
-      .then((r) => {
-        setData(r)
-        setLoading(false)
-      })
-      .catch((e) => {
-        setData([])
-        setLoading(false)
-        console.log("couldn't find behandlinger", e)
-      })
+      getBehandlinger()
+        .then((r) => {
+          setData(r)
+          setLoading(false)
+        })
+        .catch((e) => {
+          setData([])
+          setLoading(false)
+          console.log("couldn't find behandlinger", e)
+        })
   }, [ident])
 
   return [data, loading] as [Behandling[], boolean]

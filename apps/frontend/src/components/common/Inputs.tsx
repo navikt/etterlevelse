@@ -110,7 +110,7 @@ export const TextAreaField = (props: {
                 onImageUpload={props.onImageUpload} shortenLinks={props.shortenLinks} /> */}
                 </Block>
               )}
-              {!props.markdown &&
+              {!props.markdown && (
                 <CustomizedTextarea
                   rows={8}
                   {...p.field}
@@ -121,11 +121,11 @@ export const TextAreaField = (props: {
                         ...borderColor(p.form.errors && props.name && p.form.errors[props.name] ? ettlevColors.red600 : ettlevColors.textAreaBorder),
                         ...borderWidth('2px'),
                         ...borderStyle('solid'),
-                      }
-                    }
+                      },
+                    },
                   }}
                 />
-              }
+              )}
             </>
           </FormControl>
         )}

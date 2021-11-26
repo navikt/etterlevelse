@@ -110,60 +110,59 @@ const KriterieBegrunnelse = ({
     >
       <H3 color={ettlevColors.green800}>{suksesskriterie.navn}</H3>
 
-      {status !== EtterlevelseStatus.IKKE_RELEVANT && <StatefulButtonGroup
-        mode={MODE.radio}
-        initialState={{ selected: oppfylt ? 0 : ikkerelevant ? 1 : [] }}
-      >
-        <Button
-          type={'button'}
-          disabled={status === EtterlevelseStatus.IKKE_RELEVANT}
-          overrides={{
-            BaseButton: {
-              style: {
-                ...borderColor(ettlevColors.green800),
-                ...borderStyle('solid'),
-                ...borderWidth('1px'),
-                borderRightWidth: '0px',
-                borderTopRightRadius: '0px',
-                borderBottomRightRadius: '0px',
+      {status !== EtterlevelseStatus.IKKE_RELEVANT && (
+        <StatefulButtonGroup mode={MODE.radio} initialState={{ selected: oppfylt ? 0 : ikkerelevant ? 1 : [] }}>
+          <Button
+            type={'button'}
+            disabled={status === EtterlevelseStatus.IKKE_RELEVANT}
+            overrides={{
+              BaseButton: {
+                style: {
+                  ...borderColor(ettlevColors.green800),
+                  ...borderStyle('solid'),
+                  ...borderWidth('1px'),
+                  borderRightWidth: '0px',
+                  borderTopRightRadius: '0px',
+                  borderBottomRightRadius: '0px',
+                },
+                props: {
+                  tabIndex: 0,
+                },
               },
-              props: {
-                tabIndex: 0
-              }
-            },
-          }}
-          onClick={() => {
-            setOppfylt(!oppfylt)
-            setIkkeRelevant(false)
-          }}
-        >
-          Vi oppfyller
-        </Button>
-        <Button
-          type={'button'}
-          disabled={status === EtterlevelseStatus.IKKE_RELEVANT}
-          overrides={{
-            BaseButton: {
-              style: {
-                ...borderColor(ettlevColors.green800),
-                ...borderStyle('solid'),
-                ...borderWidth('1px'),
-                borderTopLeftRadius: '0px',
-                borderBottomLeftRadius: '0px',
+            }}
+            onClick={() => {
+              setOppfylt(!oppfylt)
+              setIkkeRelevant(false)
+            }}
+          >
+            Vi oppfyller
+          </Button>
+          <Button
+            type={'button'}
+            disabled={status === EtterlevelseStatus.IKKE_RELEVANT}
+            overrides={{
+              BaseButton: {
+                style: {
+                  ...borderColor(ettlevColors.green800),
+                  ...borderStyle('solid'),
+                  ...borderWidth('1px'),
+                  borderTopLeftRadius: '0px',
+                  borderBottomLeftRadius: '0px',
+                },
+                props: {
+                  tabIndex: 0,
+                },
               },
-              props: {
-                tabIndex: 0
-              }
-            },
-          }}
-          onClick={() => {
-            setIkkeRelevant(!ikkerelevant)
-            setOppfylt(false)
-          }}
-        >
-          Ikke relevant
-        </Button>
-      </StatefulButtonGroup>}
+            }}
+            onClick={() => {
+              setIkkeRelevant(!ikkerelevant)
+              setOppfylt(false)
+            }}
+          >
+            Ikke relevant
+          </Button>
+        </StatefulButtonGroup>
+      )}
 
       {(oppfylt || ikkerelevant) && status !== EtterlevelseStatus.IKKE_RELEVANT && !disableEdit && (
         <Block marginTop={theme.sizing.scale1000}>

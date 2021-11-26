@@ -51,7 +51,7 @@ export const KravVarslingsadresserEdit = () => {
                         ...borderColor(p.form.errors['varslingsadresser'] ? ettlevColors.red600 : ettlevColors.green600),
                         ...borderStyle(p.form.errors['varslingsadresser'] ? 'solid' : 'solid'),
                         ...borderWidth(p.form.errors['varslingsadresser'] ? '2px' : '2px'),
-                        backgroundColor: p.form.errors['varslingsadresser'] ? ettlevColors.red50 : 'inherit'
+                        backgroundColor: p.form.errors['varslingsadresser'] ? ettlevColors.red50 : 'inherit',
                       }}
                     >
                       <span>
@@ -68,7 +68,7 @@ export const KravVarslingsadresserEdit = () => {
                         ...borderColor(p.form.errors['varslingsadresser'] ? ettlevColors.red600 : ettlevColors.green600),
                         ...borderStyle(p.form.errors['varslingsadresser'] ? 'solid' : 'solid'),
                         ...borderWidth(p.form.errors['varslingsadresser'] ? '2px' : '2px'),
-                        backgroundColor: p.form.errors['varslingsadresser'] ? ettlevColors.red50 : 'inherit'
+                        backgroundColor: p.form.errors['varslingsadresser'] ? ettlevColors.red50 : 'inherit',
                       }}
                     >
                       <span>
@@ -85,7 +85,7 @@ export const KravVarslingsadresserEdit = () => {
                         ...borderColor(p.form.errors['varslingsadresser'] ? ettlevColors.red600 : ettlevColors.green600),
                         ...borderStyle(p.form.errors['varslingsadresser'] ? 'solid' : 'solid'),
                         ...borderWidth(p.form.errors['varslingsadresser'] ? '2px' : '2px'),
-                        backgroundColor: p.form.errors['varslingsadresser'] ? ettlevColors.red50 : 'inherit'
+                        backgroundColor: p.form.errors['varslingsadresser'] ? ettlevColors.red50 : 'inherit',
                       }}
                     >
                       <span>
@@ -133,7 +133,7 @@ export const VarslingsadresserTagList = ({ varslingsadresser, remove }: { varsli
   const [slackUsers, setSlackUsers] = useState<SlackUser[]>([])
 
   useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       const loadedChannels: SlackChannel[] = []
       const loadedUsers: SlackUser[] = []
       const channels = await Promise.all(

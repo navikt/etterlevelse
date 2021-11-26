@@ -25,12 +25,12 @@ import { KIND as NKIND, Notification } from 'baseui/notification'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faExternalLinkAlt, faTimesCircle } from '@fortawesome/free-solid-svg-icons'
 import { borderColor, borderRadius, borderStyle, borderWidth } from '../common/Style'
-import { env } from "../../util/env";
+import { env } from '../../util/env'
 import { useQuery } from '@apollo/client'
 
 type EditEttlevProps = {
   etterlevelse: Etterlevelse
-  kravId: KravId;
+  kravId: KravId
   close: (k?: Etterlevelse) => void
   formRef?: React.Ref<any>
   documentEdit?: boolean
@@ -46,13 +46,11 @@ const modalPaddingRight = '104px'
 const modalPaddingLeft = '112px'
 const maxTextArea = '750px'
 
-
 export const EditEtterlevelse = ({ kravId, etterlevelse, close, formRef, documentEdit, behandlingNavn, behandlingId, behandlingformaal, behandlingNummer }: EditEttlevProps) => {
-
   const { data } = useQuery<{ kravById: KravQL }, KravId>(kravFullQuery, {
     variables: kravId,
     skip: !kravId.id && !kravId.kravNummer,
-    fetchPolicy: 'no-cache'
+    fetchPolicy: 'no-cache',
   })
 
   const [krav, setKrav] = React.useState<KravQL>()
@@ -65,15 +63,18 @@ export const EditEtterlevelse = ({ kravId, etterlevelse, close, formRef, documen
     const mutatedEtterlevelse = {
       ...etterlevelse,
       fristForFerdigstillelse: etterlevelse.status !== EtterlevelseStatus.OPPFYLLES_SENERE ? '' : etterlevelse.fristForFerdigstillelse,
-      suksesskriterieBegrunnelser: etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT ?
-        [...etterlevelse.suksesskriterieBegrunnelser.map((s) => {
-          return {
-            ...s,
-            oppfylt: false,
-            ikkeRelevant: false
-          }
-        })
-        ] : [...etterlevelse.suksesskriterieBegrunnelser]
+      suksesskriterieBegrunnelser:
+        etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT
+          ? [
+              ...etterlevelse.suksesskriterieBegrunnelser.map((s) => {
+                return {
+                  ...s,
+                  oppfylt: false,
+                  ikkeRelevant: false,
+                }
+              }),
+            ]
+          : [...etterlevelse.suksesskriterieBegrunnelser],
     }
 
     if (etterlevelse.id) {
@@ -96,7 +97,6 @@ export const EditEtterlevelse = ({ kravId, etterlevelse, close, formRef, documen
     }
   }, [nyereKrav])
 
-
   const etterlevelseSchema = () => {
     return yup.object({
       suksesskriterieBegrunnelser: yup.array().of(
@@ -107,9 +107,11 @@ export const EditEtterlevelse = ({ kravId, etterlevelse, close, formRef, documen
             name: 'begrunnelseText',
             message: 'Du må fylle ut dokumentasjonen',
             test: function (begrunnelse) {
-              const { parent, } = this
-              if ((etterlevelseStatus === EtterlevelseStatus.FERDIG || etterlevelseStatus === EtterlevelseStatus.FERDIG_DOKUMENTERT)
-                && ((parent.oppfylt || parent.ikkeRelevant) && (begrunnelse === '' || begrunnelse === undefined))
+              const { parent } = this
+              if (
+                (etterlevelseStatus === EtterlevelseStatus.FERDIG || etterlevelseStatus === EtterlevelseStatus.FERDIG_DOKUMENTERT) &&
+                (parent.oppfylt || parent.ikkeRelevant) &&
+                (begrunnelse === '' || begrunnelse === undefined)
               ) {
                 return false
               } else {
@@ -147,123 +149,159 @@ export const EditEtterlevelse = ({ kravId, etterlevelse, close, formRef, documen
 
   return (
     <Block>
-      {krav && <Formik
-        onSubmit={submit}
-        initialValues={mapEtterlevelseToFormValue(etterlevelse)}
-        validationSchema={etterlevelseSchema()}
-        innerRef={formRef}
-        validateOnChange={false}
-        validateOnBlur={false}
-      >
-        {({ values, isSubmitting, submitForm, errors }: FormikProps<Etterlevelse>) => (
-          <Block>
-            <Block backgroundColor={ettlevColors.green800}>
-              <Block>
-                <Block paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge}>
-                  <Paragraph2 $style={{ marginTop: '0px', marginBottom: '0px', color: ettlevColors.white }}>{kravNumView(krav)}</Paragraph2>
-                  <H1 $style={{ marginTop: '0px', marginBottom: '0px', color: ettlevColors.white }}>{krav.navn}</H1>
-                  <Paragraph2 color={ettlevColors.white} marginBottom={0}>
-                    <a href={'/krav/' + krav?.kravNummer + '/' + krav?.kravVersjon} style={{ color: ettlevColors.white }} target="_blank"
-                      rel="noopener noreferrer">
-                      <span style={{ display: 'inline-block', paddingBottom: '1px', borderBottom: '1px solid white', marginRight: '5px' }}>Detaljert kravbeskrivelse</span>
-                      <FontAwesomeIcon icon={faExternalLinkAlt} />
-                    </a>
-                  </Paragraph2>
-                </Block>
-                <Block display="flex" paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge} paddingBottom={theme.sizing.scale900}
-                  paddingTop={theme.sizing.scale800}>
-                  <Block>
-                    <Paragraph2 $style={{ marginTop: 0, marginBottom: 0, color: ettlevColors.white, maxWidth: '700px' }}>
-                      <Label3 $style={{ color: ettlevColors.white }}>Behandling: </Label3>
-                      <a href={`${env.pollyBaseUrl}process/${behandlingId}`} style={{ color: ettlevColors.white }} target="_blank"
-                        rel="noopener noreferrer">
-                        <span style={{
-                          display: 'inline-block',
-                          paddingBottom: '1px',
-                          borderBottom: '1px solid white',
-                          marginRight: '5px'
-                        }}>
-                          B{behandlingNummer} - {behandlingformaal}: {behandlingNavn} <FontAwesomeIcon icon={faExternalLinkAlt} />
-                        </span>
+      {krav && (
+        <Formik
+          onSubmit={submit}
+          initialValues={mapEtterlevelseToFormValue(etterlevelse)}
+          validationSchema={etterlevelseSchema()}
+          innerRef={formRef}
+          validateOnChange={false}
+          validateOnBlur={false}
+        >
+          {({ values, isSubmitting, submitForm, errors }: FormikProps<Etterlevelse>) => (
+            <Block>
+              <Block backgroundColor={ettlevColors.green800}>
+                <Block>
+                  <Block paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge}>
+                    <Paragraph2 $style={{ marginTop: '0px', marginBottom: '0px', color: ettlevColors.white }}>{kravNumView(krav)}</Paragraph2>
+                    <H1 $style={{ marginTop: '0px', marginBottom: '0px', color: ettlevColors.white }}>{krav.navn}</H1>
+                    <Paragraph2 color={ettlevColors.white} marginBottom={0}>
+                      <a href={'/krav/' + krav?.kravNummer + '/' + krav?.kravVersjon} style={{ color: ettlevColors.white }} target="_blank" rel="noopener noreferrer">
+                        <span style={{ display: 'inline-block', paddingBottom: '1px', borderBottom: '1px solid white', marginRight: '5px' }}>Detaljert kravbeskrivelse</span>
+                        <FontAwesomeIcon icon={faExternalLinkAlt} />
                       </a>
                     </Paragraph2>
                   </Block>
-                </Block>
-              </Block>
-            </Block>
-            <Block flex="1" backgroundColor={ettlevColors.white}>
-              <Block
-                paddingLeft={responsivePaddingLarge}
-                paddingRight={responsivePaddingLarge}
-                paddingBottom="16px"
-                paddingTop="16px"
-                display="flex"
-              >
-                <Block marginRight="20px">
-                  <img src={arkPennIcon} alt="test" height="32px" width="32px" />
-                </Block>
-                <Block>
-                  <H2 marginTop="0px" marginBottom="0px">
-                    Dokumentasjon
-                  </H2>
-                </Block>
-              </Block>
-            </Block>
-            <Block paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge}>
-              <Block marginTop="51px">
-                <Form>
-                  <Block>
+                  <Block
+                    display="flex"
+                    paddingLeft={responsivePaddingLarge}
+                    paddingRight={responsivePaddingLarge}
+                    paddingBottom={theme.sizing.scale900}
+                    paddingTop={theme.sizing.scale800}
+                  >
                     <Block>
-                      <FieldWrapper>
-                        <Field name={'status'}>
-                          {(p: FieldProps<string | Code>) => (
-                            <FormControl
-                              label="Er kravet oppfylt?"
-                              overrides={{
-                                Label: {
-                                  style: {
-                                    color: ettlevColors.navMorkGra,
-                                    fontWeight: 700,
-                                    lineHeight: '48px',
-                                    fontSize: '18px',
-                                  },
-                                },
-                              }}
-                            >
-                              <RadioGroup
-                                disabled={disableEdit}
-                                onMouseEnter={(e) => setRadioHover(e.currentTarget.children[1].getAttribute('value') || '')}
-                                onMouseLeave={() => setRadioHover('')}
+                      <Paragraph2 $style={{ marginTop: 0, marginBottom: 0, color: ettlevColors.white, maxWidth: '700px' }}>
+                        <Label3 $style={{ color: ettlevColors.white }}>Behandling: </Label3>
+                        <a href={`${env.pollyBaseUrl}process/${behandlingId}`} style={{ color: ettlevColors.white }} target="_blank" rel="noopener noreferrer">
+                          <span
+                            style={{
+                              display: 'inline-block',
+                              paddingBottom: '1px',
+                              borderBottom: '1px solid white',
+                              marginRight: '5px',
+                            }}
+                          >
+                            B{behandlingNummer} - {behandlingformaal}: {behandlingNavn} <FontAwesomeIcon icon={faExternalLinkAlt} />
+                          </span>
+                        </a>
+                      </Paragraph2>
+                    </Block>
+                  </Block>
+                </Block>
+              </Block>
+              <Block flex="1" backgroundColor={ettlevColors.white}>
+                <Block paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge} paddingBottom="16px" paddingTop="16px" display="flex">
+                  <Block marginRight="20px">
+                    <img src={arkPennIcon} alt="test" height="32px" width="32px" />
+                  </Block>
+                  <Block>
+                    <H2 marginTop="0px" marginBottom="0px">
+                      Dokumentasjon
+                    </H2>
+                  </Block>
+                </Block>
+              </Block>
+              <Block paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge}>
+                <Block marginTop="51px">
+                  <Form>
+                    <Block>
+                      <Block>
+                        <FieldWrapper>
+                          <Field name={'status'}>
+                            {(p: FieldProps<string | Code>) => (
+                              <FormControl
+                                label="Er kravet oppfylt?"
                                 overrides={{
-                                  Root: {
-                                    style: {
-                                      width: '100%',
-                                      alignItems: 'flex-start',
-                                    },
-                                  },
                                   Label: {
                                     style: {
+                                      color: ettlevColors.navMorkGra,
+                                      fontWeight: 700,
+                                      lineHeight: '48px',
                                       fontSize: '18px',
-                                      fontWeight: 400,
-                                      lineHeight: '22px',
-                                      width: '100%',
                                     },
                                   },
-                                  RadioMarkOuter: {
-                                    style: {
-                                      height: theme.sizing.scale600,
-                                      width: theme.sizing.scale600,
-                                    },
-                                  },
-                                }}
-                                value={etterlevelseStatus === EtterlevelseStatus.FERDIG_DOKUMENTERT ? EtterlevelseStatus.FERDIG : etterlevelseStatus}
-                                onChange={(event) => {
-                                  p.form.setFieldValue('status', event.currentTarget.value)
-                                  setEtterlevelseStatus(event.currentTarget.value)
                                 }}
                               >
-                                {Object.values(EtterlevelseStatus).map((id) => {
-                                  if (id === EtterlevelseStatus.OPPFYLLES_SENERE) {
+                                <RadioGroup
+                                  disabled={disableEdit}
+                                  onMouseEnter={(e) => setRadioHover(e.currentTarget.children[1].getAttribute('value') || '')}
+                                  onMouseLeave={() => setRadioHover('')}
+                                  overrides={{
+                                    Root: {
+                                      style: {
+                                        width: '100%',
+                                        alignItems: 'flex-start',
+                                      },
+                                    },
+                                    Label: {
+                                      style: {
+                                        fontSize: '18px',
+                                        fontWeight: 400,
+                                        lineHeight: '22px',
+                                        width: '100%',
+                                      },
+                                    },
+                                    RadioMarkOuter: {
+                                      style: {
+                                        height: theme.sizing.scale600,
+                                        width: theme.sizing.scale600,
+                                      },
+                                    },
+                                  }}
+                                  value={etterlevelseStatus === EtterlevelseStatus.FERDIG_DOKUMENTERT ? EtterlevelseStatus.FERDIG : etterlevelseStatus}
+                                  onChange={(event) => {
+                                    p.form.setFieldValue('status', event.currentTarget.value)
+                                    setEtterlevelseStatus(event.currentTarget.value)
+                                  }}
+                                >
+                                  {Object.values(EtterlevelseStatus).map((id) => {
+                                    if (id === EtterlevelseStatus.OPPFYLLES_SENERE) {
+                                      return (
+                                        <Radio value={id} key={id}>
+                                          <Block $style={{ textDecoration: radioHover === id ? 'underline' : 'none' }}>
+                                            <Paragraph2 $style={{ lineHeight: '22px' }} marginTop="0px" marginBottom="0px">
+                                              {getEtterlevelseStatus(id)}
+                                            </Paragraph2>
+                                          </Block>
+
+                                          {etterlevelseStatus === EtterlevelseStatus.OPPFYLLES_SENERE && (
+                                            <Block maxWidth="170px" width="100%">
+                                              <DateField label="Frist (valgfritt)" name="fristForFerdigstillelse" />
+                                            </Block>
+                                          )}
+                                        </Radio>
+                                      )
+                                    }
+                                    if (id === EtterlevelseStatus.IKKE_RELEVANT) {
+                                      return (
+                                        <Radio value={id} key={id}>
+                                          <Block $style={{ textDecoration: radioHover === id ? 'underline' : 'none' }}>
+                                            <Paragraph2 $style={{ lineHeight: '22px' }} marginTop="0px" marginBottom="0px">
+                                              {getEtterlevelseStatus(id)}
+                                            </Paragraph2>
+                                          </Block>
+                                          {etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT && (
+                                            <Block maxWidth="471px" width="100%">
+                                              <TextAreaField label="Beskriv hvorfor kravet ikke er relevant" noPlaceholder name="statusBegrunnelse" />
+                                              <Error fieldName={'statusBegrunnelse'} fullWidth={true} />
+                                            </Block>
+                                          )}
+                                        </Radio>
+                                      )
+                                    }
+                                    if (id === EtterlevelseStatus.FERDIG_DOKUMENTERT) {
+                                      return null
+                                    }
                                     return (
                                       <Radio value={id} key={id}>
                                         <Block $style={{ textDecoration: radioHover === id ? 'underline' : 'none' }}>
@@ -271,56 +309,20 @@ export const EditEtterlevelse = ({ kravId, etterlevelse, close, formRef, documen
                                             {getEtterlevelseStatus(id)}
                                           </Paragraph2>
                                         </Block>
-
-                                        {etterlevelseStatus === EtterlevelseStatus.OPPFYLLES_SENERE && (
-                                          <Block maxWidth="170px" width="100%">
-                                            <DateField label="Frist (valgfritt)" name="fristForFerdigstillelse" />
-                                          </Block>
-                                        )}
                                       </Radio>
                                     )
-                                  }
-                                  if (id === EtterlevelseStatus.IKKE_RELEVANT) {
-                                    return (
-                                      <Radio value={id} key={id}>
-                                        <Block $style={{ textDecoration: radioHover === id ? 'underline' : 'none' }}>
-                                          <Paragraph2 $style={{ lineHeight: '22px' }} marginTop="0px" marginBottom="0px">
-                                            {getEtterlevelseStatus(id)}
-                                          </Paragraph2>
-                                        </Block>
-                                        {etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT && (
-                                          <Block maxWidth="471px" width="100%">
-                                            <TextAreaField label="Beskriv hvorfor kravet ikke er relevant" noPlaceholder name="statusBegrunnelse" />
-                                            <Error fieldName={'statusBegrunnelse'} fullWidth={true} />
-                                          </Block>
-                                        )}
-                                      </Radio>
-                                    )
-                                  }
-                                  if (id === EtterlevelseStatus.FERDIG_DOKUMENTERT) {
-                                    return null
-                                  }
-                                  return (
-                                    <Radio value={id} key={id}>
-                                      <Block $style={{ textDecoration: radioHover === id ? 'underline' : 'none' }}>
-                                        <Paragraph2 $style={{ lineHeight: '22px' }} marginTop="0px" marginBottom="0px">
-                                          {getEtterlevelseStatus(id)}
-                                        </Paragraph2>
-                                      </Block>
-                                    </Radio>
-                                  )
-                                })}
-                              </RadioGroup>
-                            </FormControl>
-                          )}
-                        </Field>
-                      </FieldWrapper>
+                                  })}
+                                </RadioGroup>
+                              </FormControl>
+                            )}
+                          </Field>
+                        </FieldWrapper>
 
-                      <Label3 $style={{ lineHeight: '32px' }}>Hvilke suksesskriterier er oppfylt?</Label3>
+                        <Label3 $style={{ lineHeight: '32px' }}>Hvilke suksesskriterier er oppfylt?</Label3>
 
-                      <SuksesskriterierBegrunnelseEdit disableEdit={disableEdit} suksesskriterie={krav.suksesskriterier} />
+                        <SuksesskriterierBegrunnelseEdit disableEdit={disableEdit} suksesskriterie={krav.suksesskriterier} />
 
-                      {/*
+                        {/*
               {!documentEdit &&
                 <>
                   <Block height={theme.sizing.scale600} />
@@ -332,7 +334,7 @@ export const EditEtterlevelse = ({ kravId, etterlevelse, close, formRef, documen
               <TextAreaField label='Dokumentasjon' name='begrunnelse' markdown />
               */}
 
-                      {/*
+                        {/*
           <MultiInputField label='Dokumentasjon' name='dokumentasjon'/>
 
           <Block height={theme.sizing.scale600}/>
@@ -342,90 +344,91 @@ export const EditEtterlevelse = ({ kravId, etterlevelse, close, formRef, documen
           <Block height={theme.sizing.scale600}/>
          */}
 
-                      <Error fieldName={'status'} fullWidth={true} />
-                      <Block width={'100%'} marginTop={'65px'}>
-                        {Object.keys(errors).length > 0 && (
-                          <Block display="flex" width="60%">
-                            <Block width="100%">
-                              <Notification
-                                overrides={{
-                                  Body: {
-                                    style: {
-                                      width: 'auto',
-                                      ...borderStyle('solid'),
-                                      ...borderWidth('1px'),
-                                      ...borderColor(ettlevColors.red600),
-                                      ...borderRadius('4px'),
-                                    }
-                                  }
-                                }}
-                                kind={NKIND.negative}
-                              >
-                                <Block display="flex" justifyContent="center">
-                                  <FontAwesomeIcon
-                                    icon={faTimesCircle}
-                                    style={{
-                                      marginRight: '5px',
-                                    }}
-                                  />
-                                  <Paragraph2 marginBottom="0px" marginTop="0px" $style={{ lineHeight: '18px' }}>
-                                    Du må fylle ut alle obligatoriske felter
-                                  </Paragraph2>
-                                </Block>
-                              </Notification>
+                        <Error fieldName={'status'} fullWidth={true} />
+                        <Block width={'100%'} marginTop={'65px'}>
+                          {Object.keys(errors).length > 0 && (
+                            <Block display="flex" width="60%">
+                              <Block width="100%">
+                                <Notification
+                                  overrides={{
+                                    Body: {
+                                      style: {
+                                        width: 'auto',
+                                        ...borderStyle('solid'),
+                                        ...borderWidth('1px'),
+                                        ...borderColor(ettlevColors.red600),
+                                        ...borderRadius('4px'),
+                                      },
+                                    },
+                                  }}
+                                  kind={NKIND.negative}
+                                >
+                                  <Block display="flex" justifyContent="center">
+                                    <FontAwesomeIcon
+                                      icon={faTimesCircle}
+                                      style={{
+                                        marginRight: '5px',
+                                      }}
+                                    />
+                                    <Paragraph2 marginBottom="0px" marginTop="0px" $style={{ lineHeight: '18px' }}>
+                                      Du må fylle ut alle obligatoriske felter
+                                    </Paragraph2>
+                                  </Block>
+                                </Notification>
+                              </Block>
                             </Block>
-                          </Block>
-                        )}
+                          )}
+                        </Block>
                       </Block>
                     </Block>
-                  </Block>
-                </Form>
+                  </Form>
+                </Block>
               </Block>
+              {!documentEdit && (
+                <Block
+                  className="edit-etterlevelse-button-container"
+                  paddingLeft={responsivePaddingLarge}
+                  paddingRight={responsivePaddingLarge}
+                  paddingTop="14px"
+                  paddingBottom="14px"
+                  display="flex"
+                  marginBottom={theme.sizing.scale3200}
+                >
+                  <Button disabled={disableEdit} type="button" kind="secondary" marginRight onClick={close}>
+                    Avbryt og forkast endringene
+                  </Button>
+                  <Button
+                    type="button"
+                    kind="secondary"
+                    marginRight
+                    disabled={isSubmitting || disableEdit}
+                    onClick={() => {
+                      if (values.status === EtterlevelseStatus.FERDIG_DOKUMENTERT) {
+                        values.status = Object.values(EtterlevelseStatus).filter((e) => e === etterlevelseStatus)[0]
+                      }
+                      submitForm()
+                    }}
+                  >
+                    Lagre og fortsett senere
+                  </Button>
+                  <Button
+                    disabled={disableEdit}
+                    type="button"
+                    onClick={() => {
+                      if (values.status !== EtterlevelseStatus.IKKE_RELEVANT) {
+                        values.status = EtterlevelseStatus.FERDIG_DOKUMENTERT
+                      }
+                      submitForm()
+                    }}
+                  >
+                    Jeg har dokumentert ferdig
+                  </Button>
+                </Block>
+              )}
             </Block>
-            {!documentEdit && (
-              <Block
-                className="edit-etterlevelse-button-container"
-                paddingLeft={responsivePaddingLarge}
-                paddingRight={responsivePaddingLarge}
-                paddingTop="14px"
-                paddingBottom="14px"
-                display="flex"
-                marginBottom={theme.sizing.scale3200}
-              >
-                <Button disabled={disableEdit} type="button" kind="secondary" marginRight onClick={close}>
-                  Avbryt og forkast endringene
-                </Button>
-                <Button
-                  type="button"
-                  kind="secondary"
-                  marginRight
-                  disabled={isSubmitting || disableEdit}
-                  onClick={() => {
-                    if (values.status === EtterlevelseStatus.FERDIG_DOKUMENTERT) {
-                      values.status = Object.values(EtterlevelseStatus).filter(e => e === etterlevelseStatus)[0]
-                    }
-                    submitForm()
-                  }}
-                >
-                  Lagre og fortsett senere
-                </Button>
-                <Button
-                  disabled={disableEdit}
-                  type="button"
-                  onClick={() => {
-                    if (values.status !== EtterlevelseStatus.IKKE_RELEVANT) {
-                      values.status = EtterlevelseStatus.FERDIG_DOKUMENTERT
-                    }
-                    submitForm()
-                  }}
-                >
-                  Jeg har dokumentert ferdig
-                </Button>
-              </Block>
-            )}
-          </Block>
-        )}
-      </Formik>}
+          )}
+        </Formik>
+      )}
     </Block>
   )
 }

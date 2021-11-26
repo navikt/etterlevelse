@@ -249,7 +249,10 @@ export const AllKrav = () => {
               {getSelector(
                 filter.status[0].id?.toString(),
                 KravListFilter.STATUS,
-                getOptions('Alle statuser', Object.values(KravStatus).map(id => ({id, label: kravStatus(id)}))),
+                getOptions(
+                  'Alle statuser',
+                  Object.values(KravStatus).map((id) => ({ id, label: kravStatus(id) })),
+                ),
                 filter.status,
               )}
             </Block>

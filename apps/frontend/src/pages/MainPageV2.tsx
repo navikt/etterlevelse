@@ -74,8 +74,8 @@ export const MainPageV2 = () => {
             $style={{}}
             marginTop={theme.sizing.scale1600}
             marginBottom={theme.sizing.scale900}
-          // paddingLeft={theme.sizing.scale800}
-          // paddingRight={theme.sizing.scale800}
+            // paddingLeft={theme.sizing.scale800}
+            // paddingRight={theme.sizing.scale800}
           >
             <H2 $style={{ fontWeight: 300, fontSize: '32px', lineHeight: '42px' }} marginTop="0px" marginBottom="0px">
               Etterlevelseskravene er
@@ -145,10 +145,10 @@ export const MainPageV2 = () => {
                     width: 'calc(100% - 24px)',
                     maxWidth: '820px',
                     ':hover': {
-                      boxSizing: 'content-box'
-                    }
-                  }
-                }
+                      boxSizing: 'content-box',
+                    },
+                  },
+                },
               }}
             />
           </Block>

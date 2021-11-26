@@ -1,8 +1,8 @@
 import * as React from 'react'
-import {maxPageWidth, theme} from '../util/theme'
-import {HeadingXXLarge, Paragraph1} from 'baseui/typography'
+import { maxPageWidth, theme } from '../util/theme'
+import { HeadingXXLarge, Paragraph1 } from 'baseui/typography'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
-import {Block} from 'baseui/block'
+import { Block } from 'baseui/block'
 
 export const StatusPage = () => {
   return (

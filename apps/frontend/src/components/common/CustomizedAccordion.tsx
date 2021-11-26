@@ -40,11 +40,11 @@ export const CustomizedPanel = (props: CustomProps) => {
           color: ettlevColors.green800,
           ...(expanded
             ? {
-              boxShadow: 'none',
-            }
+                boxShadow: 'none',
+              }
             : {
-              boxShadow: '0px 3px 4px rgba(0, 0, 0, 0.12)',
-            }),
+                boxShadow: '0px 3px 4px rgba(0, 0, 0, 0.12)',
+              }),
         },
       },
     },
@@ -65,11 +65,11 @@ export const CustomizedPanel = (props: CustomProps) => {
       style: {
         ...(expanded
           ? {
-            ...borderColor(ettlevColors.grey200),
-          }
+              ...borderColor(ettlevColors.grey200),
+            }
           : {
-            ...borderColor(ettlevColors.grey100),
-          }),
+              ...borderColor(ettlevColors.grey100),
+            }),
         ...borderStyle('solid'),
         ...borderWidth('1px'),
         ...borderRadius('4px'),
@@ -98,9 +98,15 @@ export const CustomizedPanel = (props: CustomProps) => {
   return <Panel {...props} overrides={overrides} title={getTitle()} />
 }
 
-export const CustomPanelDivider = (props: { children: React.ReactNode, fullWidth?: boolean }) => (
+export const CustomPanelDivider = (props: { children: React.ReactNode; fullWidth?: boolean }) => (
   <Block backgroundColor={ettlevColors.white} $style={{ ...borderRadius('4px') }}>
-    <Block width={props.fullWidth ? '100%' : 'calc(100% - 48px)'} backgroundColor={ettlevColors.grey100} height="1px" marginLeft={props.fullWidth ? '0px' : theme.sizing.scale800} marginRight={props.fullWidth ? '0px' : theme.sizing.scale800} />
+    <Block
+      width={props.fullWidth ? '100%' : 'calc(100% - 48px)'}
+      backgroundColor={ettlevColors.grey100}
+      height="1px"
+      marginLeft={props.fullWidth ? '0px' : theme.sizing.scale800}
+      marginRight={props.fullWidth ? '0px' : theme.sizing.scale800}
+    />
     {props.children}
   </Block>
 )

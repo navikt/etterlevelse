@@ -1,9 +1,9 @@
 import axios from 'axios'
-import {emptyPage, Krav, KravQL, KravStatus, Or, PageResponse} from '../constants'
-import {env} from '../util/env'
-import {useEffect, useState} from 'react'
-import {useSearch} from '../util/hooks'
-import {gql} from '@apollo/client'
+import { emptyPage, Krav, KravQL, KravStatus, Or, PageResponse } from '../constants'
+import { env } from '../util/env'
+import { useEffect, useState } from 'react'
+import { useSearch } from '../util/hooks'
+import { gql } from '@apollo/client'
 
 export const getAllKrav = async () => {
   const PAGE_SIZE = 100
@@ -70,7 +70,7 @@ function kravToKravDto(krav: KravQL): Krav {
     avdeling: krav.avdeling?.code,
     underavdeling: krav.underavdeling?.code,
     relevansFor: krav.relevansFor.map((c) => c.code),
-    regelverk: krav.regelverk.map((r) => ({...r, lov: r.lov.code})),
+    regelverk: krav.regelverk.map((r) => ({ ...r, lov: r.lov.code })),
     begrepIder: krav.begreper.map((b) => b.id),
   } as any
   delete dto.changeStamp
@@ -122,7 +122,7 @@ export const kravMapToFormVal = (krav: Partial<KravQL>): KravQL => ({
   navn: krav.navn || '',
   kravNummer: krav.kravNummer || 0,
   kravVersjon: krav.kravVersjon || 0,
-  changeStamp: krav.changeStamp || {lastModifiedDate: '', lastModifiedBy: ''},
+  changeStamp: krav.changeStamp || { lastModifiedDate: '', lastModifiedBy: '' },
   version: -1,
   beskrivelse: krav.beskrivelse || '',
   utdypendeBeskrivelse: krav.utdypendeBeskrivelse || '',
@@ -138,12 +138,12 @@ export const kravMapToFormVal = (krav: Partial<KravQL>): KravQL => ({
   notat: krav.notat || '',
   avdeling: krav.avdeling,
   underavdeling: krav.underavdeling,
-  periode: krav.periode || {start: undefined, slutt: undefined},
+  periode: krav.periode || { start: undefined, slutt: undefined },
   relevansFor: krav.relevansFor || [],
   status: krav.status || KravStatus.UTKAST,
   suksesskriterier: krav.suksesskriterier || [],
   nyKravVersjon: krav.nyKravVersjon || false,
-  tema: krav.regelverk && krav.regelverk?.length > 0 && krav.regelverk[0].lov && krav.regelverk[0].lov.data && krav.regelverk[0].lov.data.tema || '',
+  tema: (krav.regelverk && krav.regelverk?.length > 0 && krav.regelverk[0].lov && krav.regelverk[0].lov.data && krav.regelverk[0].lov.data.tema) || '',
   // not used
   begrepIder: [],
   etterlevelser: [],

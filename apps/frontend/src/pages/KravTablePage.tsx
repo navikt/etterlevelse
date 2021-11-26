@@ -1,35 +1,34 @@
-import {Block} from "baseui/block";
-import {ettlevColors, maxPageWidth} from "../util/theme";
-import {HeadingXXLarge} from "baseui/typography";
-import * as React from "react";
-import {useEffect, useState} from "react";
-import {emptyPage, Krav, PageResponse} from "../constants";
-import {getKravPage, kravMapToFormVal} from "../api/KravApi";
-import {Cell, Row, Table} from "../components/common/Table";
-import {ColumnCompares} from "../util/hooks";
-import moment from "moment";
-import {PLACEMENT, StatefulPopover} from "baseui/popover";
-import {StatefulMenu} from "baseui/menu";
-import {Button, KIND} from "baseui/button";
-import {TriangleDown} from "baseui/icon";
-import {intl} from "../util/intl/intl";
-import {Pagination} from "baseui/pagination";
-import {codelist, ListName} from "../services/Codelist";
-import {kravStatus} from "./KravPage";
-import {Layout2} from "../components/scaffold/Page";
-import RouteLink from "../components/common/RouteLink";
+import { Block } from 'baseui/block'
+import { ettlevColors, maxPageWidth } from '../util/theme'
+import { HeadingXXLarge } from 'baseui/typography'
+import * as React from 'react'
+import { useEffect, useState } from 'react'
+import { emptyPage, Krav, PageResponse } from '../constants'
+import { getKravPage, kravMapToFormVal } from '../api/KravApi'
+import { Cell, Row, Table } from '../components/common/Table'
+import { ColumnCompares } from '../util/hooks'
+import moment from 'moment'
+import { PLACEMENT, StatefulPopover } from 'baseui/popover'
+import { StatefulMenu } from 'baseui/menu'
+import { Button, KIND } from 'baseui/button'
+import { TriangleDown } from 'baseui/icon'
+import { intl } from '../util/intl/intl'
+import { Pagination } from 'baseui/pagination'
+import { codelist, ListName } from '../services/Codelist'
+import { kravStatus } from './KravPage'
+import { Layout2 } from '../components/scaffold/Page'
+import RouteLink from '../components/common/RouteLink'
 
 const kravSorting: ColumnCompares<Krav> = {
   kravNummer: (a, b) => a.kravNummer - b.kravNummer,
   navn: (a, b) => (a.navn || '').localeCompare(b.navn || ''),
   avdeling: (a, b) => (a.avdeling?.shortName || '').localeCompare(b.avdeling?.shortName || ''),
   tema: (a, b) => (codelist.getCode(ListName.TEMA, a.tema)?.shortName || '').localeCompare(codelist.getCode(ListName.TEMA, b.tema)?.shortName || ''),
-  status: (a, b) => ((a.status) || '').localeCompare((b.status) || ''),
-  changeStamp: (a, b) => ((a.changeStamp.lastModifiedDate) || '').localeCompare((b.changeStamp.lastModifiedDate) || ''),
+  status: (a, b) => (a.status || '').localeCompare(b.status || ''),
+  changeStamp: (a, b) => (a.changeStamp.lastModifiedDate || '').localeCompare(b.changeStamp.lastModifiedDate || ''),
 }
 
 export const KravTablePage = () => {
-
   const [tableContent, setTableContent] = useState<PageResponse<Krav>>(emptyPage)
   const [page, setPage] = useState(1)
   const [limit, setLimit] = useState(20)
@@ -45,10 +44,10 @@ export const KravTablePage = () => {
   }
 
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       const kraver = await getKravPage(page - 1, limit)
-      const mappedKraver = kraver.content.map(k => kravMapToFormVal(k))
-      setTableContent({...kraver, content: mappedKraver})
+      const mappedKraver = kraver.content.map((k) => kravMapToFormVal(k))
+      setTableContent({ ...kraver, content: mappedKraver })
     })()
   }, [page, limit])
 
@@ -69,15 +68,15 @@ export const KravTablePage = () => {
           data={tableContent.content}
           config={{
             initialSortColumn: 'kravNummer',
-            sorting: kravSorting
+            sorting: kravSorting,
           }}
           headers={[
-            {$style: {maxWidth: '6%'}, title: "Krav ID", column: 'kravNummer'},
-            {$style: {maxWidth: '25%', minWidth: '25%'}, title: "Kravnavn", column: 'navn'},
-            {title: "Ansvarlig", column: 'avdeling'},
-            {title: "Tema", column: 'tema'},
-            {title: "Status", column: 'status'},
-            {title: "Siste endret", column: 'changeStamp'},
+            { $style: { maxWidth: '6%' }, title: 'Krav ID', column: 'kravNummer' },
+            { $style: { maxWidth: '25%', minWidth: '25%' }, title: 'Kravnavn', column: 'navn' },
+            { title: 'Ansvarlig', column: 'avdeling' },
+            { title: 'Tema', column: 'tema' },
+            { title: 'Status', column: 'status' },
+            { title: 'Siste endret', column: 'changeStamp' },
           ]}
           render={(tableData) =>
             tableData.data.map((krav, index) => {
@@ -85,24 +84,18 @@ export const KravTablePage = () => {
               const rowNum = tableContent.pageNumber * tableContent.pageSize + index + 1
               return (
                 <Row key={krav.id}>
-                  <Cell $style={{maxWidth: '6%'}}>
+                  <Cell $style={{ maxWidth: '6%' }}>
                     {krav.kravNummer}.{krav.kravVersjon}
                   </Cell>
-                  <Cell $style={{maxWidth: '25%', minWidth: '25%'}}>
+                  <Cell $style={{ maxWidth: '25%', minWidth: '25%' }}>
                     <RouteLink href={`/krav/${krav.kravNummer}/${krav.kravVersjon}`}>{krav.navn}</RouteLink>
                   </Cell>
-                  <Cell>
-                    {krav.avdeling && krav.avdeling.shortName}
-                  </Cell>
+                  <Cell>{krav.avdeling && krav.avdeling.shortName}</Cell>
                   <Cell>
                     <RouteLink href={`/tema/${krav.tema}`}>{codelist.getCode(ListName.TEMA, krav.tema)?.shortName}</RouteLink>
                   </Cell>
-                  <Cell>
-                    {kravStatus(krav.status)}
-                  </Cell>
-                  <Cell>
-                    {moment(krav.changeStamp.lastModifiedDate).format('ll')}
-                  </Cell>
+                  <Cell>{kravStatus(krav.status)}</Cell>
+                  <Cell>{moment(krav.changeStamp.lastModifiedDate).format('ll')}</Cell>
                 </Row>
               )
             })
@@ -111,16 +104,16 @@ export const KravTablePage = () => {
       </Block>
       <Block display="flex" justifyContent="space-between" marginTop="1rem" marginBottom="40px">
         <StatefulPopover
-          content={({close}) => (
+          content={({ close }) => (
             <StatefulMenu
-              items={[5, 10, 20, 50, 100].map((i) => ({label: i}))}
-              onItemSelect={({item}) => {
+              items={[5, 10, 20, 50, 100].map((i) => ({ label: i }))}
+              onItemSelect={({ item }) => {
                 setLimit(item.label)
                 close()
               }}
               overrides={{
                 List: {
-                  style: {height: '150px', width: '100px'},
+                  style: { height: '150px', width: '100px' },
                 },
               }}
             />
@@ -134,8 +127,8 @@ export const KravTablePage = () => {
         <Pagination
           currentPage={page}
           numPages={tableContent.pages}
-          onPageChange={({nextPage}) => handlePageChange(nextPage)}
-          labels={{nextButton: intl.nextButton, prevButton: intl.prevButton}}
+          onPageChange={({ nextPage }) => handlePageChange(nextPage)}
+          labels={{ nextButton: intl.nextButton, prevButton: intl.prevButton }}
         />
       </Block>
     </Layout2>

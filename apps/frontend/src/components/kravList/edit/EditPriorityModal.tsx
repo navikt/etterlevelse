@@ -77,7 +77,6 @@ export const EditPriorityModal = (props: { isOpen: boolean; onClose: Function; k
 
     setTimeout(() => kravListPriorityModal()?.addEventListener('scroll', listener), 200)
     return () => kravListPriorityModal()?.removeEventListener('scroll', listener)
-
   }, [isOpen])
 
   const setPriority = (kravListe: Krav[]) => {
@@ -140,8 +139,8 @@ export const EditPriorityModal = (props: { isOpen: boolean; onClose: Function; k
           overrides={{
             Root: {
               props: {
-                id: 'krav-list-edit-priority-modal'
-              }
+                id: 'krav-list-edit-priority-modal',
+              },
             },
             Dialog: {
               style: {
@@ -162,7 +161,7 @@ export const EditPriorityModal = (props: { isOpen: boolean; onClose: Function; k
           >
             <H1 $style={{ lineHeight: '48px', color: ettlevColors.white }}>Justere rekkefølgen på krav</H1>
           </Block>
-          <Block display="flex" justifyContent="center" paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall} >
+          <Block display="flex" justifyContent="center" paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall}>
             <Block display="flex" justifyContent="flex-start" flex="1">
               <H2 $style={{ lineHeight: '24px', color: ettlevColors.green600, marginTop: '0px', marginBottom: '0px' }}>{tema}</H2>
             </Block>
@@ -187,7 +186,9 @@ export const EditPriorityModal = (props: { isOpen: boolean; onClose: Function; k
                           setKravElements(arrayMove(kravElements, oldIndex, newIndex))
                         }}
                         overrides={{
-                          DragHandle: ({ $isDragged }) => { return CustomDragHandle($isDragged) },
+                          DragHandle: ({ $isDragged }) => {
+                            return CustomDragHandle($isDragged)
+                          },
                           Root: {
                             style: {
                               ...paddingZero,
@@ -219,7 +220,7 @@ export const EditPriorityModal = (props: { isOpen: boolean; onClose: Function; k
             backgroundColor={ettlevColors.white}
             $style={{
               boxShadow: stickyFooterStyle ? '0px -4px 4px rgba(0, 0, 0, 0.12)' : '',
-              zIndex: 3
+              zIndex: 3,
             }}
             className="krav-list-button-container"
           >

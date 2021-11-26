@@ -38,7 +38,7 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
   const { data } = useQuery<{ behandling: PageResponse<{ stats: BehandlingStats }> }>(statsQuery, {
     variables: { relevans: [] },
     skip: !props.behandling?.id,
-    fetchPolicy: 'no-cache'
+    fetchPolicy: 'no-cache',
   })
 
   const [stats, setStats] = React.useState<any[]>([])
