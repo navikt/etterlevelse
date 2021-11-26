@@ -119,7 +119,7 @@ export const ViewEtterlevelse = ({
             }}
           >
             <Paragraph4 $style={{ color: ettlevColors.navMorkGra, margin: '0px', fontWeight: 400, lineHeight: '20px' }}>
-              Status: {!etterlevelse.status ? 'Skal fylles ut' : etterlevelse.status === EtterlevelseStatus.FERDIG_DOKUMENTERT || etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT ? 'Ferdig utfylt' : 'Under utfylling'}
+              Status: {etterlevelse.status === EtterlevelseStatus.FERDIG_DOKUMENTERT || etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT ? 'Ferdig utfylt' : 'Under utfylling'}
             </Paragraph4>
           </Card>
         </Block>
