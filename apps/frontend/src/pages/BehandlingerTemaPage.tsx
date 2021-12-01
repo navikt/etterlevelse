@@ -141,7 +141,6 @@ export const BehandlingerTemaPage = () => {
                     B{behandling.nummer} - {behandling.overordnetFormaal.shortName}: {behandling.navn} <FontAwesomeIcon icon={faExternalLinkAlt} />
                 </CustomizedLink>
               </Paragraph2>
-              {/*<Paragraph4 $style={{ lineHeight: '24px' }}>{behandling.overordnetFormaal.shortName}</Paragraph4>*/}
             </Block>
           </Block>
         </>
