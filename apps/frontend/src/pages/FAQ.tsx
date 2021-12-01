@@ -22,7 +22,7 @@ export const FAQ = () => {
           <Block paddingLeft={'100px'} paddingRight={'100px'} paddingTop={theme.sizing.scale800}>
             <Paragraph1>
               <ExternalLink href={'https://navno.sharepoint.com/sites/fag-og-ytelser-informasjonsforvaltning/SitePages/Etterlevelseskrav-for-systemutvikling.aspx'}>
-                Hjelp
+                Etterlevelseskrav for systemutvikling
               </ExternalLink>
             </Paragraph1>
           </Block>
