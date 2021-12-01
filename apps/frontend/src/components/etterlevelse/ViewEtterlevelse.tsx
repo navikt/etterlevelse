@@ -45,7 +45,7 @@ export const ViewEtterlevelse = ({
         {behandling ? (
           <Block marginBottom={'48px'}>
             <Paragraph2>
-              <strong>B{behandling.nummer} - {behandling.overordnetFormaal.shortName}</strong>: {behandling.navn}
+              <strong>B{behandling.nummer} {behandling.overordnetFormaal.shortName}</strong>: {behandling.navn}
             </Paragraph2>
             <Block display="flex" alignContent="center">
               <FontAwesomeIcon icon={faCircle} color={ettlevColors.black} style={{ fontSize: '.45rem', paddingTop: '7px', marginRight: '8px' }} aria-hidden={true} />

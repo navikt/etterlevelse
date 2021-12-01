@@ -386,7 +386,7 @@ const BehandlingerPanels = ({ behandlinger, loading }: { behandlinger: Behandlin
             title={
               <>
                 <strong>
-                  B{b.nummer}-{b.overordnetFormaal.shortName}
+                  B{b.nummer} {b.overordnetFormaal.shortName}
                 </strong>
                 :{' '}
               </>

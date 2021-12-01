@@ -138,7 +138,7 @@ export const BehandlingerTemaPage = () => {
               <Paragraph2 $style={{ marginTop: '0px', maxWidth: '700px' }} marginBottom={0}>
                 <Label3>Behandling: </Label3>
                 <CustomizedLink href={`${env.pollyBaseUrl}process/${behandling.id}`} style={{ color: ettlevColors.black }} target="_blank" rel="noopener noreferrer">
-                    B{behandling.nummer} - {behandling.overordnetFormaal.shortName}: {behandling.navn} <FontAwesomeIcon icon={faExternalLinkAlt} />
+                    B{behandling.nummer} {behandling.overordnetFormaal.shortName}: {behandling.navn} <FontAwesomeIcon icon={faExternalLinkAlt} />
                 </CustomizedLink>
               </Paragraph2>
             </Block>

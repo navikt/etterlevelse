@@ -198,7 +198,7 @@ export const EditEtterlevelse = ({ kravId, etterlevelse, close, formRef, documen
                               marginRight: '5px',
                             }}
                           >
-                            B{behandlingNummer} - {behandlingformaal}: {behandlingNavn} <FontAwesomeIcon icon={faExternalLinkAlt} />
+                            B{behandlingNummer} {behandlingformaal}: {behandlingNavn} <FontAwesomeIcon icon={faExternalLinkAlt} />
                           </span>
                         </a>
                       </Paragraph2>

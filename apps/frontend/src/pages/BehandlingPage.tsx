@@ -135,7 +135,7 @@ export const BehandlingPage = () => {
     <Block display={responsiveDisplay} justifyContent="space-between" marginBottom="32px">
       <Block>
         <Label3 color={ettlevColors.green600}>
-          B{behandling.nummer} - {behandling.overordnetFormaal.shortName}
+          B{behandling.nummer} {behandling.overordnetFormaal.shortName}
         </Label3>
         <H1 marginTop="0" color={ettlevColors.green800}>
           {behandling.navn}
