@@ -1,5 +1,5 @@
 import { Etterlevelse, EtterlevelseStatus, Krav, KravQL, Suksesskriterie } from '../../constants'
-import { Field, FieldProps, Form, Formik, FormikProps } from 'formik'
+import { Field, FieldProps, Form, Formik, FormikProps, validateYupSchema, yupToFormErrors } from 'formik'
 import { createEtterlevelse, mapEtterlevelseToFormValue, updateEtterlevelse } from '../../api/EtterlevelseApi'
 import { Block } from 'baseui/block'
 import Button from '../common/Button'
@@ -28,6 +28,7 @@ import { borderColor, borderRadius, borderStyle, borderWidth } from '../common/S
 import { env } from '../../util/env'
 import { useQuery } from '@apollo/client'
 import moment from 'moment'
+import { validate } from 'graphql'
 
 type EditEttlevProps = {
   etterlevelse: Etterlevelse
@@ -47,7 +48,7 @@ const modalPaddingRight = '104px'
 const modalPaddingLeft = '112px'
 const maxTextArea = '750px'
 
-const etterlevelseSchema = (etterlevelseStatus: string) => {
+const etterlevelseSchema = () => {
   return yup.object({
     suksesskriterieBegrunnelser: yup.array().of(
       yup.object({
@@ -57,11 +58,10 @@ const etterlevelseSchema = (etterlevelseStatus: string) => {
           name: 'begrunnelseText',
           message: 'Du må fylle ut dokumentasjonen',
           test: function (begrunnelse) {
-            const { parent } = this
+            const { parent, options } = this
             if (
-              (etterlevelseStatus === EtterlevelseStatus.FERDIG || etterlevelseStatus === EtterlevelseStatus.FERDIG_DOKUMENTERT) &&
-              (parent.oppfylt || parent.ikkeRelevant) &&
-              (begrunnelse === '' || begrunnelse === undefined)
+              (options.context?.status === EtterlevelseStatus.FERDIG || options.context?.status === EtterlevelseStatus.FERDIG_DOKUMENTERT) &&
+              (parent.oppfylt || parent.ikkeRelevant) && (begrunnelse === '' || begrunnelse === undefined)
             ) {
               return false
             } else {
@@ -88,10 +88,8 @@ const etterlevelseSchema = (etterlevelseStatus: string) => {
       message: 'Du må dokumentere alle kriterier før du har dokumentert  ferdig. Du kan velge å lagre og fortsette senere.',
       test: function (status) {
         const { parent } = this
-        if (status === EtterlevelseStatus.FERDIG) {
+        if (status === EtterlevelseStatus.FERDIG || status === EtterlevelseStatus.FERDIG_DOKUMENTERT) {
           return parent.suksesskriterieBegrunnelser.every((skb: any) => skb.oppfylt || skb.ikkeRelevant)
-        } if (status === EtterlevelseStatus.FERDIG_DOKUMENTERT) {
-          return parent.suksesskriterieBegrunnelser.every((skb: any) => (skb.oppfylt || skb.ikkeRelevant) && !!skb.begrunnelse)
         }
         return true
       },
@@ -156,12 +154,18 @@ export const EditEtterlevelse = ({ kravId, etterlevelse, close, formRef, documen
         <Formik
           onSubmit={submit}
           initialValues={mapEtterlevelseToFormValue(etterlevelse)}
-          validationSchema={etterlevelseSchema(etterlevelseStatus)}
+          validate={(value) => {
+            try {
+              validateYupSchema(value, etterlevelseSchema(), true, {status: value.status})
+            } catch(err) {
+              return yupToFormErrors(err)
+            }
+          }}
           innerRef={formRef}
           validateOnChange={false}
           validateOnBlur={false}
         >
-          {({ values, isSubmitting, submitForm, errors }: FormikProps<Etterlevelse>) => (
+          {({ values, isSubmitting, submitForm, errors, setFieldError }: FormikProps<Etterlevelse>) => (
             <Block>
               <Block backgroundColor={ettlevColors.green800}>
                 <Block>
@@ -419,6 +423,11 @@ export const EditEtterlevelse = ({ kravId, etterlevelse, close, formRef, documen
                     onClick={() => {
                       if (values.status !== EtterlevelseStatus.IKKE_RELEVANT) {
                         values.status = EtterlevelseStatus.FERDIG_DOKUMENTERT
+                        values.suksesskriterieBegrunnelser.forEach((skb, index) => {
+                          if (skb.begrunnelse === '' || skb.begrunnelse === undefined) {
+                            setFieldError(`suksesskriterieBegrunnelser[${index}]`, 'Du må fylle ut dokumentasjonen')
+                          }
+                        })
                       }
                       submitForm()
                     }}
