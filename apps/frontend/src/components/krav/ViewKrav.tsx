@@ -1,23 +1,23 @@
-import { AdresseType, Begrep, KravQL, KravVersjon } from '../../constants'
-import { Block, Display, Responsive } from 'baseui/block'
+import {AdresseType, Begrep, KravQL, KravVersjon} from '../../constants'
+import {Block, Display, Responsive} from 'baseui/block'
 import React from 'react'
-import { kravStatus } from '../../pages/KravPage'
-import { theme } from '../../util'
+import {kravStatus} from '../../pages/KravPage'
+import {theme} from '../../util'
 import moment from 'moment'
-import { DotTag, DotTags } from '../common/DotTag'
-import { ListName } from '../../services/Codelist'
-import { Label, LabelAboveContent } from '../common/PropertyLabel'
-import RouteLink, { ExternalLink, ObjectLink } from '../common/RouteLink'
-import { slackLink, slackUserLink, termUrl } from '../../util/config'
-import { user } from '../../services/User'
-import { LovViewList } from '../Lov'
-import { SuksesskriterieCard } from './Suksesskriterie'
-import { Label3, Paragraph2 } from 'baseui/typography'
+import {DotTag, DotTags} from '../common/DotTag'
+import {ListName} from '../../services/Codelist'
+import {Label, LabelAboveContent} from '../common/PropertyLabel'
+import RouteLink, {ExternalLink, ObjectLink} from '../common/RouteLink'
+import {slackLink, slackUserLink, termUrl} from '../../util/config'
+import {user} from '../../services/User'
+import {LovViewList} from '../Lov'
+import {SuksesskriterieCard} from './Suksesskriterie'
+import {Label3, Paragraph2} from 'baseui/typography'
 import CustomizedLink from '../common/CustomizedLink'
-import { CustomizedAccordion, CustomizedPanel } from '../common/CustomizedAccordion'
-import { ettlevColors } from '../../util/theme'
-import { borderStyle } from '../common/Style'
-import { Markdown } from '../common/Markdown'
+import {CustomizedAccordion, CustomizedPanel} from '../common/CustomizedAccordion'
+import {ettlevColors} from '../../util/theme'
+import {borderStyle} from '../common/Style'
+import {Markdown} from '../common/Markdown'
 import ExpiredAlert from './ExpiredAlert'
 
 const LabelWrapper = ({ children }: { children: React.ReactNode }) => (
@@ -165,7 +165,7 @@ const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVersjoner:
 
       {hasKravExpired() && (
         <Block $style={{ marginTop: theme.sizing.scale900, marginBottom: theme.sizing.scale1200 }}>
-          <ExpiredAlert alleKravVersjoner={alleKravVersjoner} />
+          <ExpiredAlert alleKravVersjoner={alleKravVersjoner} statusName={krav.status}/>
         </Block>
       )}
 
