@@ -13,7 +13,7 @@ import { getKravByKravNumberAndVersion, kravFullQuery, KravId, useKrav, useSearc
 import { kravName, kravNumView } from '../../pages/KravPage'
 import { behandlingName, useBehandling, useSearchBehandling } from '../../api/BehandlingApi'
 import CustomizedSelect from '../common/CustomizedSelect'
-import { H1, H2, Label3, Paragraph2 } from 'baseui/typography'
+import { H1, H2, Label3, Paragraph2, Paragraph4 } from 'baseui/typography'
 import { arkPennIcon } from '../Images'
 import { ettlevColors, responsivePaddingLarge } from '../../util/theme'
 import { SuksesskriterierBegrunnelseEdit } from './Edit/SuksesskriterieBegrunnelseEdit'
@@ -27,6 +27,7 @@ import { faExternalLinkAlt, faTimesCircle } from '@fortawesome/free-solid-svg-ic
 import { borderColor, borderRadius, borderStyle, borderWidth } from '../common/Style'
 import { env } from '../../util/env'
 import { useQuery } from '@apollo/client'
+import moment from 'moment'
 
 type EditEttlevProps = {
   etterlevelse: Etterlevelse
@@ -66,14 +67,14 @@ export const EditEtterlevelse = ({ kravId, etterlevelse, close, formRef, documen
       suksesskriterieBegrunnelser:
         etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT
           ? [
-              ...etterlevelse.suksesskriterieBegrunnelser.map((s) => {
-                return {
-                  ...s,
-                  oppfylt: false,
-                  ikkeRelevant: false,
-                }
-              }),
-            ]
+            ...etterlevelse.suksesskriterieBegrunnelser.map((s) => {
+              return {
+                ...s,
+                oppfylt: false,
+                ikkeRelevant: false,
+              }
+            }),
+          ]
           : [...etterlevelse.suksesskriterieBegrunnelser],
     }
 
@@ -390,9 +391,8 @@ export const EditEtterlevelse = ({ kravId, etterlevelse, close, formRef, documen
                   paddingLeft={responsivePaddingLarge}
                   paddingRight={responsivePaddingLarge}
                   paddingTop="14px"
-                  paddingBottom="14px"
+                  paddingBottom="24px"
                   display="flex"
-                  marginBottom={theme.sizing.scale3200}
                 >
                   <Button disabled={disableEdit} type="button" kind="secondary" marginRight onClick={close}>
                     Avbryt og forkast endringene
@@ -425,6 +425,14 @@ export const EditEtterlevelse = ({ kravId, etterlevelse, close, formRef, documen
                   </Button>
                 </Block>
               )}
+              {etterlevelse.changeStamp.lastModifiedDate && etterlevelse.changeStamp.lastModifiedBy &&
+                <Block
+                  paddingLeft={responsivePaddingLarge}
+                  paddingRight={responsivePaddingLarge}
+                  marginBottom={theme.sizing.scale3200}
+                >
+                  <Paragraph4 marginTop="0px" marginBottom="0px">Sist utfylt: {moment(etterlevelse.changeStamp.lastModifiedDate).format('ll')} av {etterlevelse.changeStamp.lastModifiedBy.split('-')[1]}</Paragraph4>
+                </Block>}
             </Block>
           )}
         </Formik>
