@@ -47,6 +47,58 @@ const modalPaddingRight = '104px'
 const modalPaddingLeft = '112px'
 const maxTextArea = '750px'
 
+const etterlevelseSchema = (etterlevelseStatus: string) => {
+  return yup.object({
+    suksesskriterieBegrunnelser: yup.array().of(
+      yup.object({
+        oppfylt: yup.boolean(),
+        ikkeRelevant: yup.boolean(),
+        begrunnelse: yup.string().test({
+          name: 'begrunnelseText',
+          message: 'Du må fylle ut dokumentasjonen',
+          test: function (begrunnelse) {
+            const { parent } = this
+            if (
+              (etterlevelseStatus === EtterlevelseStatus.FERDIG || etterlevelseStatus === EtterlevelseStatus.FERDIG_DOKUMENTERT) &&
+              (parent.oppfylt || parent.ikkeRelevant) &&
+              (begrunnelse === '' || begrunnelse === undefined)
+            ) {
+              return false
+            } else {
+              return true
+            }
+          },
+        }),
+        suksesskriterieId: yup.number().required('Begrunnelse må være knyttet til et suksesskriterie'),
+      }),
+    ),
+    statusBegrunnelse: yup.string().test({
+      name: 'statusBegrunnelse',
+      message: 'Du må dokumentere på begrunnelse',
+      test: function (statusBegrunnelse) {
+        const { parent } = this
+        if (parent.status === EtterlevelseStatus.IKKE_RELEVANT && (statusBegrunnelse === '' || statusBegrunnelse === undefined)) {
+          return false
+        }
+        return true
+      },
+    }),
+    status: yup.string().test({
+      name: 'etterlevelseStatus',
+      message: 'Du må dokumentere alle kriterier før du har dokumentert  ferdig. Du kan velge å lagre og fortsette senere.',
+      test: function (status) {
+        const { parent } = this
+        if (status === EtterlevelseStatus.FERDIG) {
+          return parent.suksesskriterieBegrunnelser.every((skb: any) => skb.oppfylt || skb.ikkeRelevant)
+        } if (status === EtterlevelseStatus.FERDIG_DOKUMENTERT) {
+          return parent.suksesskriterieBegrunnelser.every((skb: any) => (skb.oppfylt || skb.ikkeRelevant) && !!skb.begrunnelse)
+        }
+        return true
+      },
+    }),
+  })
+}
+
 export const EditEtterlevelse = ({ kravId, etterlevelse, close, formRef, documentEdit, behandlingNavn, behandlingId, behandlingformaal, behandlingNummer }: EditEttlevProps) => {
   const { data } = useQuery<{ kravById: KravQL }, KravId>(kravFullQuery, {
     variables: kravId,
@@ -98,63 +150,13 @@ export const EditEtterlevelse = ({ kravId, etterlevelse, close, formRef, documen
     }
   }, [nyereKrav])
 
-  const etterlevelseSchema = () => {
-    return yup.object({
-      suksesskriterieBegrunnelser: yup.array().of(
-        yup.object({
-          oppfylt: yup.boolean(),
-          ikkeRelevant: yup.boolean(),
-          begrunnelse: yup.string().test({
-            name: 'begrunnelseText',
-            message: 'Du må fylle ut dokumentasjonen',
-            test: function (begrunnelse) {
-              const { parent } = this
-              if (
-                (etterlevelseStatus === EtterlevelseStatus.FERDIG || etterlevelseStatus === EtterlevelseStatus.FERDIG_DOKUMENTERT) &&
-                (parent.oppfylt || parent.ikkeRelevant) &&
-                (begrunnelse === '' || begrunnelse === undefined)
-              ) {
-                return false
-              } else {
-                return true
-              }
-            },
-          }),
-          suksesskriterieId: yup.number().required('Begrunnelse må være knyttet til et suksesskriterie'),
-        }),
-      ),
-      statusBegrunnelse: yup.string().test({
-        name: 'statusBegrunnelse',
-        message: 'Du må dokumentere på begrunnelse',
-        test: function (statusBegrunnelse) {
-          const { parent } = this
-          if (parent.status === EtterlevelseStatus.IKKE_RELEVANT && (statusBegrunnelse === '' || statusBegrunnelse === undefined)) {
-            return false
-          }
-          return true
-        },
-      }),
-      status: yup.string().test({
-        name: 'etterlevelseStatus',
-        message: 'Du må dokumentere alle kriterier før du har dokumentert  ferdig. Du kan velge å lagre og fortsette senere.',
-        test: function (status) {
-          const { parent } = this
-          if (status === EtterlevelseStatus.FERDIG || status === EtterlevelseStatus.FERDIG_DOKUMENTERT) {
-            return parent.suksesskriterieBegrunnelser.every((skb: any) => skb.oppfylt || skb.ikkeRelevant)
-          }
-          return true
-        },
-      }),
-    })
-  }
-
   return (
     <Block>
       {krav && (
         <Formik
           onSubmit={submit}
           initialValues={mapEtterlevelseToFormValue(etterlevelse)}
-          validationSchema={etterlevelseSchema()}
+          validationSchema={etterlevelseSchema(etterlevelseStatus)}
           innerRef={formRef}
           validateOnChange={false}
           validateOnBlur={false}
