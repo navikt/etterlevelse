@@ -1,16 +1,16 @@
-import { Narrow, Page, Wide } from '../components/scaffold/Page'
-import { ettlevColors, theme } from '../util/theme'
-import { Block } from 'baseui/block'
-import { H2, HeadingXXLarge, Label4, Paragraph1, Paragraph2 } from 'baseui/typography'
-import { PanelExternalLink, PanelLinkCard } from '../components/common/PanelLink'
-import { grafIconBg, handWithLeaf, paperPenIconBg, paragrafIconBg } from '../components/Images'
-import { Card } from 'baseui/card'
-import { borderRadius, margin } from '../components/common/Style'
+import {Narrow, Page, Wide} from '../components/scaffold/Page'
+import {ettlevColors, theme} from '../util/theme'
+import {Block} from 'baseui/block'
+import {H2, HeadingXXLarge, Label4, Paragraph1, Paragraph2} from 'baseui/typography'
+import {PanelLink, PanelLinkCard} from '../components/common/PanelLink'
+import {grafIconBg, handWithLeaf, paperPenIconBg, paragrafIconBg} from '../components/Images'
+import {Card} from 'baseui/card'
+import {borderRadius, margin} from '../components/common/Style'
 import ReactPlayer from 'react-player'
-import { Button, SIZE } from 'baseui/button'
-import { faPlay } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { buttonBorderStyle } from '../components/common/Button'
+import {Button, SIZE} from 'baseui/button'
+import {faPlay} from '@fortawesome/free-solid-svg-icons'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {buttonBorderStyle} from '../components/common/Button'
 import React from 'react'
 
 const cardWidth = ['95%', '95%', '95%', '95%', '31%', '31%']
@@ -130,8 +130,8 @@ export const MainPageV2 = () => {
               backgroundColor: ettlevColors.white,
             }}
           >
-            <PanelExternalLink
-              href="https://navno.sharepoint.com/sites/fag-og-ytelser-informasjonsforvaltning/SitePages/Etterlevelseskrav-for-systemutvikling.aspx"
+            <PanelLink
+              href="/help"
               title={
                 <Paragraph1 marginBottom={0} marginTop={0}>
                   Mer om etterlevelse i NAV
