@@ -45,8 +45,8 @@ export const BehandlingerTemaPage = () => {
   const temaData: TemaCode | undefined = codelist.getCode(ListName.TEMA, params.tema)
   const [behandling, setBehandling] = useBehandling(params.id)
   const lover = codelist.getCodesForTema(temaData?.code).map((c) => c.code)
-  const variables = { behandlingId: params.id, lover: lover }
-  const { data: rawData, loading } = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
+  const variables = {behandlingId: params.id, lover: lover}
+  const {data: rawData, loading} = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
     variables,
     skip: !params.id || !lover.length,
   })
@@ -95,7 +95,7 @@ export const BehandlingerTemaPage = () => {
   }, [rawData])
 
   const update = (etterlevelse: Etterlevelse) => {
-    setKravData(kravData.map((e) => (e.kravVersjon === etterlevelse.kravVersjon && e.kravNummer === etterlevelse.kravNummer ? { ...e, ...mapEtterlevelseData(etterlevelse) } : e)))
+    setKravData(kravData.map((e) => (e.kravVersjon === etterlevelse.kravVersjon && e.kravNummer === etterlevelse.kravNummer ? {...e, ...mapEtterlevelseData(etterlevelse)} : e)))
   }
 
   useEffect(() => {
@@ -135,10 +135,10 @@ export const BehandlingerTemaPage = () => {
           </Block>
           <Block marginTop={theme.sizing.scale900} flex="1" width="100%" display="flex">
             <Block>
-              <Paragraph2 $style={{ marginTop: '0px', maxWidth: '700px' }} marginBottom={0}>
+              <Paragraph2 $style={{marginTop: '0px', maxWidth: '700px'}} marginBottom={0}>
                 <Label3>Behandling: </Label3>
-                <CustomizedLink href={`${env.pollyBaseUrl}process/${behandling.id}`} style={{ color: ettlevColors.black }} target="_blank" rel="noopener noreferrer">
-                    B{behandling.nummer} - {behandling.overordnetFormaal.shortName}: {behandling.navn} <FontAwesomeIcon icon={faExternalLinkAlt} />
+                <CustomizedLink href={`${env.pollyBaseUrl}process/${behandling.id}`} style={{color: ettlevColors.black}} target="_blank" rel="noopener noreferrer">
+                  B{behandling.nummer} - {behandling.overordnetFormaal.shortName}: {behandling.navn} <FontAwesomeIcon icon={faExternalLinkAlt}/>
                 </CustomizedLink>
               </Paragraph2>
             </Block>
@@ -152,7 +152,7 @@ export const BehandlingerTemaPage = () => {
     <Block width="100%" display={responsiveBreakPoints} alignItems="center" justifyContent="space-between">
       <Block display="flex" alignItems="center">
         <Block marginRight="30px">
-          <img src={arkPennIcon} alt="test" height="32px" width="32px" />
+          <img src={arkPennIcon} alt="test" height="32px" width="32px"/>
         </Block>
         <Block>
           <H2 marginTop="0px" marginBottom="0px">
@@ -163,14 +163,14 @@ export const BehandlingerTemaPage = () => {
 
       <Block display="flex" alignItems="center">
         <Block display="flex" alignItems="baseline" marginRight="30px">
-          <Paragraph2 $style={{ fontWeight: 900, fontSize: '32px', lineHeight: '0px' }} color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
+          <Paragraph2 $style={{fontWeight: 900, fontSize: '32px', lineHeight: '0px'}} color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
             {kravData.filter((k) => k.gammelVersjon === false).length}
           </Paragraph2>
           <Paragraph2>krav</Paragraph2>
         </Block>
-        <Block $style={{ border: '1px solid ' + ettlevColors.green50, background: '#102723' }} height="40px" />
+        <Block $style={{border: '1px solid ' + ettlevColors.green50, background: '#102723'}} height="40px"/>
         <Block display="flex" alignItems="baseline" marginLeft="30px">
-          <Paragraph2 $style={{ fontWeight: 900, fontSize: '32px', lineHeight: '0px' }} color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
+          <Paragraph2 $style={{fontWeight: 900, fontSize: '32px', lineHeight: '0px'}} color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
             {getPercentageUtfylt()}
           </Paragraph2>
           <Paragraph2> ferdig utfylt</Paragraph2>
@@ -184,7 +184,7 @@ export const BehandlingerTemaPage = () => {
       return kravList.map((k) => {
         return (
           <CustomPanelDivider key={`${k.navn}_${k.kravNummer}_${k.kravVersjon}`}>
-            <KravCard krav={k} setEdit={setEdit} setKravId={setKravId} key={`${k.navn}_${k.kravNummer}_${k.kravVersjon}_card`} />
+            <KravCard krav={k} setEdit={setEdit} setKravId={setKravId} key={`${k.navn}_${k.kravNummer}_${k.kravVersjon}_card`}/>
           </CustomPanelDivider>
         )
       })
@@ -222,24 +222,24 @@ export const BehandlingerTemaPage = () => {
     >
       <Block display="flex" width="100%" justifyContent="space-between" flexWrap marginTop="64px" marginBottom="64px">
         <CustomizedAccordion accordion={false}>
-          <CustomizedPanel HeaderActiveBackgroundColor={ettlevColors.green50} title={<KravPanelHeader title={'Skal fylles ut'} kravData={skalUtfyllesKrav} />}>
+          <CustomizedPanel HeaderActiveBackgroundColor={ettlevColors.green50} title={<KravPanelHeader title={'Skal fylles ut'} kravData={skalUtfyllesKrav}/>}>
             {getKravList(skalUtfyllesKrav, 'Ingen krav som skal fylles ut')}
           </CustomizedPanel>
-          <CustomizedPanel HeaderActiveBackgroundColor={ettlevColors.green50} title={<KravPanelHeader title={'Under utfylling'} kravData={underArbeidKrav} />}>
+          <CustomizedPanel HeaderActiveBackgroundColor={ettlevColors.green50} title={<KravPanelHeader title={'Under utfylling'} kravData={underArbeidKrav}/>}>
             {getKravList(underArbeidKrav, 'Ingen krav under utfylling')}
           </CustomizedPanel>
-          <CustomizedPanel HeaderActiveBackgroundColor={ettlevColors.green50} title={<KravPanelHeader title={'Ferdig utfylt'} kravData={utfyltKrav} />}>
+          <CustomizedPanel HeaderActiveBackgroundColor={ettlevColors.green50} title={<KravPanelHeader title={'Ferdig utfylt'} kravData={utfyltKrav}/>}>
             {getKravList(utfyltKrav, 'Ingen krav er ferdig utfylt')}
           </CustomizedPanel>
         </CustomizedAccordion>
         {edit && behandling && (
           <Block maxWidth={maxPageWidth}>
-            <CustomizedModal isOpen={!!edit} onClose={() => setEdit(undefined)} overrides={{ Root: { props: { id: 'edit-etterlevelse-modal' } } }}>
+            <CustomizedModal isOpen={!!edit} onClose={() => setEdit(undefined)} overrides={{Root: {props: {id: 'edit-etterlevelse-modal'}}}}>
               <Block flex="1" backgroundColor={ettlevColors.green800}>
                 <Block paddingTop={theme.sizing.scale1200} paddingRight={theme.sizing.scale1000} paddingLeft={theme.sizing.scale1000}>
                   <Block display="flex" flex="1" justifyContent="flex-end">
-                    <Button kind="tertiary" onClick={() => setEdit(undefined)} $style={{ ':hover': { backgroundColor: 'transparent' } }}>
-                      <img src={crossIcon} alt="close" />
+                    <Button kind="tertiary" onClick={() => setEdit(undefined)} $style={{':hover': {backgroundColor: 'transparent'}}}>
+                      <img src={crossIcon} alt="close"/>
                     </Button>
                   </Block>
                 </Block>
@@ -265,7 +265,7 @@ export const BehandlingerTemaPage = () => {
   )
 }
 
-const toKravId = (it: { kravVersjon: number; kravNummer: number }) => ({ kravNummer: it.kravNummer, kravVersjon: it.kravVersjon })
+const toKravId = (it: { kravVersjon: number; kravNummer: number }) => ({kravNummer: it.kravNummer, kravVersjon: it.kravVersjon})
 
 const EditModal = (props: {
   etterlevelseId: string
@@ -277,7 +277,7 @@ const EditModal = (props: {
   behandlingNummer: number
 }) => {
   const [etterlevelse] = useEtterlevelse(props.etterlevelseId, props.behandlingId, props.kravId)
-  if (!etterlevelse) return <Spinner size={theme.sizing.scale800} />
+  if (!etterlevelse) return <Spinner size={theme.sizing.scale800}/>
 
   return (
     <Block>
@@ -300,6 +300,7 @@ const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function; setKra
   return (
     <Button
       kind="underline-hover"
+      notBold={true}
       $style={{
         width: '100%',
         paddingTop: '8px',
@@ -307,10 +308,10 @@ const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function; setKra
         paddingRight: '8px',
         paddingLeft: '8px',
         display: 'flex',
-        justifyContent: 'flex-start',
+        justifyContent: 'space-between',
         backgroundColor: ettlevColors.white,
         ...borderStyle('hidden'),
-        ':hover': { backgroundColor: 'none' },
+        ':hover': {backgroundColor: 'none'},
       }}
       onClick={() => {
         if (!props.krav.etterlevelseId) {
@@ -321,13 +322,24 @@ const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function; setKra
         }
       }}
     >
-      <Block display="flex" width="100%">
+      <Block
+        display="flex"
+        minWidth={'100%'}
+        justifyContent={"space-between"}
+      >
         <Block marginLeft="24px">
-          <Paragraph4 $style={{ fontSize: '16px', lineHeight: '24px', marginBottom: '0px', marginTop: '0px', width: 'fit-content' }}>
+          <Paragraph4 $style={{fontSize: '16px', lineHeight: '24px', marginBottom: '0px', marginTop: '0px', width: 'fit-content'}}>
             K{props.krav.kravNummer}.{props.krav.kravVersjon}
           </Paragraph4>
-          <Label3 $style={{ fontSize: '18px', fontWeight: 600, alignContent: 'flex-start' }}>{props.krav.navn}</Label3>
+          <Label3 $style={{fontSize: '18px', fontWeight: 600, alignContent: 'flex-start'}}>{props.krav.navn}</Label3>
         </Block>
+        {props.krav.etterlevelseStatus === EtterlevelseStatus.OPPFYLLES_SENERE && props.krav.frist && (
+          <Block display={"flex"} flexDirection={"column"} alignItems={"flex-start"} marginRight={'8px'}>
+            <Block>Oppfyles senere</Block>
+            <Block>{props.krav.frist}</Block>
+          </Block>
+        )
+        }
       </Block>
     </Button>
   )
