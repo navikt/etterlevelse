@@ -1,22 +1,22 @@
-import {Etterlevelse, EtterlevelseStatus, Krav} from '../../constants'
-import {Block} from 'baseui/block'
-import React, {useRef, useState} from 'react'
-import {theme} from '../../util'
+import { Etterlevelse, EtterlevelseStatus, Krav } from '../../constants'
+import { Block } from 'baseui/block'
+import React, { useRef, useState } from 'react'
+import { theme } from '../../util'
 import moment from 'moment'
 import RouteLink from '../common/RouteLink'
-import {useBehandling} from '../../api/BehandlingApi'
-import {Spinner} from '../common/Spinner'
-import {H2, Label3, Paragraph2, Paragraph4} from 'baseui/typography'
-import {Card} from 'baseui/card'
-import {ettlevColors} from '../../util/theme'
-import {getSuksesskriterieBegrunnelse} from './Edit/SuksesskriterieBegrunnelseEdit'
-import {FormikProps} from 'formik'
-import {useHistory} from 'react-router-dom'
-import {Markdown} from '../common/Markdown'
+import { useBehandling } from '../../api/BehandlingApi'
+import { Spinner } from '../common/Spinner'
+import { H2, Label3, Paragraph2, Paragraph4 } from 'baseui/typography'
+import { Card } from 'baseui/card'
+import { ettlevColors } from '../../util/theme'
+import { getSuksesskriterieBegrunnelse } from './Edit/SuksesskriterieBegrunnelseEdit'
+import { FormikProps } from 'formik'
+import { useHistory } from 'react-router-dom'
+import { Markdown } from '../common/Markdown'
 import EditBegrunnelse from './Edit/EditBegrunnelse'
-import {borderColor, borderRadius, borderStyle, borderWidth, marginAll} from '../common/Style'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faCheck, faCircle} from '@fortawesome/free-solid-svg-icons'
+import { borderColor, borderRadius, borderStyle, borderWidth, marginAll } from '../common/Style'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCheck, faCircle } from '@fortawesome/free-solid-svg-icons'
 
 const formatDate = (date?: string) => date && moment(date).format('ll')
 
@@ -45,7 +45,10 @@ export const ViewEtterlevelse = ({
         {behandling ? (
           <Block marginBottom={'48px'}>
             <Paragraph2>
-              <strong>B{behandling.nummer} {behandling.overordnetFormaal.shortName}</strong>: {behandling.navn}
+              <strong>
+                B{behandling.nummer} {behandling.overordnetFormaal.shortName}
+              </strong>
+              : {behandling.navn}
             </Paragraph2>
             <Block display="flex" alignContent="center">
               <FontAwesomeIcon icon={faCircle} color={ettlevColors.black} style={{ fontSize: '.45rem', paddingTop: '7px', marginRight: '8px' }} aria-hidden={true} />

@@ -51,7 +51,7 @@ export const useTilbakemeldinger = (kravNummer: number, kravVersjon: number) => 
     setData(data.map((t) => (t.id === r.id ? r : t)))
   }
   const remove = (r: Tilbakemelding) => {
-    setData([{...r}])
+    setData([{ ...r }])
   }
 
   return [data, loading, add, replace, remove] as [Tilbakemelding[], boolean, (t: Tilbakemelding) => void, (t: Tilbakemelding) => void, (t: Tilbakemelding) => void]

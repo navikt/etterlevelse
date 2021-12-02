@@ -1,14 +1,14 @@
-import {Block} from 'baseui/block'
-import {Paragraph2} from 'baseui/typography'
-import {KravStatus, KravVersjon} from '../../constants'
-import {theme} from '../../util'
-import {ettlevColors} from '../../util/theme'
+import { Block } from 'baseui/block'
+import { Paragraph2 } from 'baseui/typography'
+import { KravStatus, KravVersjon } from '../../constants'
+import { theme } from '../../util'
+import { ettlevColors } from '../../util/theme'
 import CustomizedLink from '../common/CustomizedLink'
-import {borderColor, borderRadius, borderStyle, borderWidth, padding} from '../common/Style'
-import {warningAlert} from '../Images'
-import {kravStatus} from "../../pages/KravPage";
+import { borderColor, borderRadius, borderStyle, borderWidth, padding } from '../common/Style'
+import { warningAlert } from '../Images'
+import { kravStatus } from '../../pages/KravPage'
 
-const ExpiredAlert = ({ alleKravVersjoner, statusName }: { alleKravVersjoner: KravVersjon[], statusName?:KravStatus}) => (
+const ExpiredAlert = ({ alleKravVersjoner, statusName }: { alleKravVersjoner: KravVersjon[]; statusName?: KravStatus }) => (
   <Block
     width="fit-content"
     display="flex"

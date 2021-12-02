@@ -61,7 +61,8 @@ const etterlevelseSchema = () => {
             const { parent, options } = this
             if (
               (options.context?.status === EtterlevelseStatus.FERDIG || options.context?.status === EtterlevelseStatus.FERDIG_DOKUMENTERT) &&
-              (parent.oppfylt || parent.ikkeRelevant) && (begrunnelse === '' || begrunnelse === undefined)
+              (parent.oppfylt || parent.ikkeRelevant) &&
+              (begrunnelse === '' || begrunnelse === undefined)
             ) {
               return false
             } else {
@@ -117,14 +118,14 @@ export const EditEtterlevelse = ({ kravId, etterlevelse, close, formRef, documen
       suksesskriterieBegrunnelser:
         etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT
           ? [
-            ...etterlevelse.suksesskriterieBegrunnelser.map((s) => {
-              return {
-                ...s,
-                oppfylt: false,
-                ikkeRelevant: false,
-              }
-            }),
-          ]
+              ...etterlevelse.suksesskriterieBegrunnelser.map((s) => {
+                return {
+                  ...s,
+                  oppfylt: false,
+                  ikkeRelevant: false,
+                }
+              }),
+            ]
           : [...etterlevelse.suksesskriterieBegrunnelser],
     }
 
@@ -156,8 +157,8 @@ export const EditEtterlevelse = ({ kravId, etterlevelse, close, formRef, documen
           initialValues={mapEtterlevelseToFormValue(etterlevelse)}
           validate={(value) => {
             try {
-              validateYupSchema(value, etterlevelseSchema(), true, {status: value.status})
-            } catch(err) {
+              validateYupSchema(value, etterlevelseSchema(), true, { status: value.status })
+            } catch (err) {
               return yupToFormErrors(err)
             }
           }}
@@ -436,14 +437,13 @@ export const EditEtterlevelse = ({ kravId, etterlevelse, close, formRef, documen
                   </Button>
                 </Block>
               )}
-              {etterlevelse.changeStamp.lastModifiedDate && etterlevelse.changeStamp.lastModifiedBy &&
-                <Block
-                  paddingLeft={responsivePaddingLarge}
-                  paddingRight={responsivePaddingLarge}
-                  marginBottom={theme.sizing.scale3200}
-                >
-                  <Paragraph4 marginTop="0px" marginBottom="0px">Sist utfylt: {moment(etterlevelse.changeStamp.lastModifiedDate).format('ll')} av {etterlevelse.changeStamp.lastModifiedBy.split('-')[1]}</Paragraph4>
-                </Block>}
+              {etterlevelse.changeStamp.lastModifiedDate && etterlevelse.changeStamp.lastModifiedBy && (
+                <Block paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge} marginBottom={theme.sizing.scale3200}>
+                  <Paragraph4 marginTop="0px" marginBottom="0px">
+                    Sist utfylt: {moment(etterlevelse.changeStamp.lastModifiedDate).format('ll')} av {etterlevelse.changeStamp.lastModifiedBy.split('-')[1]}
+                  </Paragraph4>
+                </Block>
+              )}
             </Block>
           )}
         </Formik>

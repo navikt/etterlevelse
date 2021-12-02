@@ -17,7 +17,7 @@ export const FAQ = () => {
         </Block>
       </Block>
 
-      <Block display={'flex'} justifyContent="center" width="100%" >
+      <Block display={'flex'} justifyContent="center" width="100%">
         <Block maxWidth={maxPageWidth} width="100%">
           <Block paddingLeft={'100px'} paddingRight={'100px'} paddingTop={theme.sizing.scale800} maxWidth="600px">
             <Paragraph1 $style={{ fontSize: '22px', color: ettlevColors.green800 }}>
@@ -27,7 +27,8 @@ export const FAQ = () => {
               Siden er under arbeid, og vi tar gjerne imot innspill på Slack <strong>#etterlevelse.</strong>
             </Paragraph1>
             <Paragraph1 $style={{ fontSize: '22px', color: ettlevColors.green800 }}>
-              Intill videre kan dere lese om  <ExternalLink href={'https://navno.sharepoint.com/sites/fag-og-ytelser-informasjonsforvaltning/SitePages/Etterlevelseskrav-for-systemutvikling.aspx'}>
+              Intill videre kan dere lese om{' '}
+              <ExternalLink href={'https://navno.sharepoint.com/sites/fag-og-ytelser-informasjonsforvaltning/SitePages/Etterlevelseskrav-for-systemutvikling.aspx'}>
                 Støtte til etterlevelse på Navet
               </ExternalLink>
               .
