@@ -70,6 +70,7 @@ export const TextAreaField = (props: {
   caption?: ReactNode
   tooltip?: string
   noPlaceholder?: boolean
+  placeholder?: string
 }) => {
   return (
     <FieldWrapper marginBottom={props.marginBottom}>
@@ -114,7 +115,7 @@ export const TextAreaField = (props: {
                 <CustomizedTextarea
                   rows={8}
                   {...p.field}
-                  placeholder={props.noPlaceholder ? '' : props.label}
+                  placeholder={props.noPlaceholder ? '' : props.placeholder ? props.placeholder : props.label}
                   overrides={{
                     InputContainer: {
                       style: {
