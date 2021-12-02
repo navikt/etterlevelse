@@ -11,7 +11,7 @@ import {
 import React, { useEffect, useState } from 'react'
 import { Block } from 'baseui/block'
 import { theme } from '../../util'
-import { HeadingXLarge, LabelSmall, ParagraphMedium, ParagraphSmall } from 'baseui/typography'
+import { H2, HeadingXLarge, LabelSmall, ParagraphMedium, ParagraphSmall } from 'baseui/typography'
 import Button from '../common/Button'
 import { faChevronDown, faChevronUp, faEnvelope, faPencilAlt, faPlus, faSync, faUser } from '@fortawesome/free-solid-svg-icons'
 import { faTrashAlt } from '@fortawesome/free-regular-svg-icons'
@@ -38,6 +38,8 @@ import { PersonName } from '../common/PersonName'
 import CustomizedTextarea from '../common/CustomizedTextarea'
 import * as _ from 'lodash'
 import { LoginButton } from '../Header'
+import LabelWithTooltip from '../common/LabelWithTooltip'
+import CustomizedModal from '../common/CustomizedModal'
 
 const DEFAULT_COUNT_SIZE = 5
 
@@ -268,7 +270,20 @@ const NyTilbakemeldingModal = ({ open, close, krav }: { open?: boolean; close: (
   }
 
   return (
-    <Modal closeable={false} unstable_ModalBackdropScroll isOpen={open} onClose={() => close()}>
+    <CustomizedModal
+      size="default"
+      overrides={{
+        Dialog: {
+          style: {
+            maxWidth: '514px',
+          },
+        },
+      }}
+      closeable={false}
+      unstable_ModalBackdropScroll
+      isOpen={open}
+      onClose={() => close()}
+    >
       <Formik
         onSubmit={submit}
         initialValues={newTilbakemelding(krav) as CreateTilbakemeldingRequest}
@@ -283,14 +298,16 @@ const NyTilbakemeldingModal = ({ open, close, krav }: { open?: boolean; close: (
           }
           return (
             <Form>
-              <ModalHeader>Spørsmål til kraveier</ModalHeader>
+              <ModalHeader>
+                <H2>Spørsmål til kraveier</H2>
+              </ModalHeader>
               <ModalBody>
                 <Block>
-                  <TextAreaField tooltip="Skriv ditt spørsmål i tekstfeltet" label="Ditt spørsmål" name="foersteMelding" />
+                  <TextAreaField tooltip="Skriv ditt spørsmål i tekstfeltet" label="Ditt spørsmål" name="foersteMelding" placeholder="Skriv her.." />
                   {/* <OptionField label="Type" name="type" clearable={false} options={Object.values(TilbakemeldingType).map((o) => ({ id: o, label: typeText(o) }))} /> */}
                   <Field name="varslingsadresse.adresse">
                     {(p: FieldProps) => (
-                      <FormControl label="Varslingsadresse" error={p.meta.error}>
+                      <FormControl label={<LabelWithTooltip label="Varslingsadresse" tooltip="Velg ønsket varslings metode" />} error={p.meta.error}>
                         <Block>
                           <Block display="flex" flexDirection="column" marginTop={theme.sizing.scale600}>
                             {adresseType === AdresseType.SLACK && <SlackChannelSearch add={setVarslingsadresse} />}
@@ -343,7 +360,7 @@ const NyTilbakemeldingModal = ({ open, close, krav }: { open?: boolean; close: (
           )
         }}
       </Formik>
-    </Modal>
+    </CustomizedModal>
   )
 }
 
