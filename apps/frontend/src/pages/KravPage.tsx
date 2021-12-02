@@ -245,7 +245,7 @@ export const KravPage = () => {
                 onChange={(k) => setTab(k.activeKey as Section)}
                 tabs={[
                   {
-                    title: 'Suksesskriterier',
+                    title: 'Hvordan etterleve?',
                     key: 'krav',
                     content: <ViewKrav krav={krav} alleKravVersjoner={alleKravVersjoner} />,
                   },
@@ -255,7 +255,7 @@ export const KravPage = () => {
                     content: <Etterlevelser loading={etterlevelserLoading} etterlevelser={krav.etterlevelser} />,
                   },
                   {
-                    title: 'Tilbakemeldinger',
+                    title: 'Spørsmål og svar',
                     key: 'tilbakemeldinger',
                     content: <Tilbakemeldinger krav={krav} hasKravExpired={hasKravExpired()} />,
                   },
