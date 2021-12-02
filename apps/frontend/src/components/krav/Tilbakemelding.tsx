@@ -171,12 +171,18 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
       {!hasKravExpired && (
         <>
           <Block marginTop={theme.sizing.scale1000}>
-            <HeadingXLarge>Gi en tilbakemelding</HeadingXLarge>
-            <ParagraphMedium maxWidth={'600px'}>Gi tilbakemelding til kraveier dersom det er uklarheter vedrørende hvordan kravet skal forstås.</ParagraphMedium>
+            <HeadingXLarge>Spørsmål til kraveier</HeadingXLarge>
+            {user.isLoggedIn() ? (
+              <ParagraphMedium maxWidth={'600px'}>
+                Her kan du stille kraveier et spørsmål dersom det er uklarheter vedrørende hvordan kravet skal forstås. Spørsmål og svar fra kraveier blir synlig på denne siden.
+              </ParagraphMedium>
+            ) : (
+              <ParagraphMedium>Du må være innlogget for å stille kraveier et spørsmål, og for å se tidligere spørsmål og svar.</ParagraphMedium>
+            )}
 
             {user.canWrite() && (
               <Button kind={'primary'} size="compact" onClick={() => setAddTilbakemelding(true)}>
-                Ny tilbakemelding
+                Still et spørsmål
               </Button>
             )}
             {!user.isLoggedIn() && <LoginButton />}
@@ -277,11 +283,11 @@ const NyTilbakemeldingModal = ({ open, close, krav }: { open?: boolean; close: (
           }
           return (
             <Form>
-              <ModalHeader>Ny tilbakemelding</ModalHeader>
+              <ModalHeader>Spørsmål til kraveier</ModalHeader>
               <ModalBody>
                 <Block>
-                  <TextAreaField label="Melding" name="foersteMelding" />
-                  <OptionField label="Type" name="type" clearable={false} options={Object.values(TilbakemeldingType).map((o) => ({ id: o, label: typeText(o) }))} />
+                  <TextAreaField tooltip="Skriv ditt spørsmål i tekstfeltet" label="Ditt spørsmål" name="foersteMelding" />
+                  {/* <OptionField label="Type" name="type" clearable={false} options={Object.values(TilbakemeldingType).map((o) => ({ id: o, label: typeText(o) }))} /> */}
                   <Field name="varslingsadresse.adresse">
                     {(p: FieldProps) => (
                       <FormControl label="Varslingsadresse" error={p.meta.error}>
