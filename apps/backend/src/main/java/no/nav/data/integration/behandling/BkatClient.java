@@ -148,7 +148,7 @@ public class BkatClient implements BegrepService {
                 return get("/term/{id}", PollyTerm.class, id).toResponse();
             } catch (NotFound e) {
                 log.trace("fant ikke begrep " + id, e);
-                return null;
+                return BegrepResponse.builder().id(id).navn("Finner ikke begrep for id").beskrivelse("Finner ikke beskrivelse for id").build();
             }
         }));
     }
