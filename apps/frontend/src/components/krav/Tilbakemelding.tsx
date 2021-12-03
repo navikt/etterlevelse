@@ -436,7 +436,11 @@ const MeldingKnapper = (props: { melding: TilbakemeldingMelding; tilbakemeldingI
               marginLeft
               onClick={() =>
                 tilbakemeldingslettMelding({ tilbakemeldingId, meldingNr }).then((t) => {
-                  remove(t)
+                  if(meldingNr === 1) {
+                    remove({...t, meldinger: []})
+                  } else {
+                    remove(t)
+                  }
                   setDeleteModal(false)
                 })
               }

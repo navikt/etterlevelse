@@ -3,6 +3,7 @@ import { PageResponse, Tilbakemelding, TilbakemeldingRolle, TilbakemeldingType, 
 import { env } from '../util/env'
 import { useEffect, useState } from 'react'
 import moment from 'moment'
+import _ from 'lodash'
 
 export const getTilbakemeldingForKrav = async (kravNummer: number, kravVersjon: number) => {
   return (await axios.get<PageResponse<Tilbakemelding>>(`${env.backendBaseUrl}/krav/tilbakemelding/${kravNummer}/${kravVersjon}`)).data
@@ -51,7 +52,18 @@ export const useTilbakemeldinger = (kravNummer: number, kravVersjon: number) => 
     setData(data.map((t) => (t.id === r.id ? r : t)))
   }
   const remove = (r: Tilbakemelding) => {
-    setData([{ ...r }])
+
+    if (r.meldinger.length) {
+      setData(data.map((t) => {
+        if (t.id === r.id) {
+          return r
+        } else {
+          return t
+        }
+      }))
+    } else {
+      setData(data.filter((t) => t.id !== r.id))
+    }
   }
 
   return [data, loading, add, replace, remove] as [Tilbakemelding[], boolean, (t: Tilbakemelding) => void, (t: Tilbakemelding) => void, (t: Tilbakemelding) => void]
