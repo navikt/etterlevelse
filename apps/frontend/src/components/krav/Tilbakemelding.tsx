@@ -63,8 +63,6 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
 
   return (
     <Block width="100%">
-      <HeadingXLarge marginTop={0}>Tilbakemeldinger</HeadingXLarge>
-
       {loading && <Spinner size={theme.sizing.scale800} />}
       {!loading && !!tilbakemeldinger.length && (
         <Block display={'flex'} flexDirection={'column'}>
