@@ -143,12 +143,13 @@ public class BkatClient implements BegrepService {
 
     @Override
     public Optional<BegrepResponse> getBegrep(String id) {
+        termCache.cleanUp();
         return Optional.ofNullable(termCache.get(id, key -> {
             try {
                 return get("/term/{id}", PollyTerm.class, id).toResponse();
             } catch (NotFound e) {
                 log.trace("fant ikke begrep " + id, e);
-                return BegrepResponse.builder().id(id).navn("Finner ikke begrep for id").beskrivelse("Finner ikke beskrivelse for id").build();
+                return BegrepResponse.builder().id(id).navn("Finner ikke begrep for id: " + id).beskrivelse("Finner ikke beskrivelse for id").build();
             }
         }));
     }
