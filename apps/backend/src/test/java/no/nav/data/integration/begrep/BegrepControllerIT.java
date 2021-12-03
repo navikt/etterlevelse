@@ -26,7 +26,11 @@ public class BegrepControllerIT extends IntegrationTestBase {
 
     @Test
     void getBegrepNotFound() {
-        assertThat(restTemplate.getForEntity("/begrep/{termId}", String.class, "not-found").getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+        var begrep = restTemplate.getForEntity("/begrep/{termId}", BegrepResponse.class, "Ukjent-Begrep");
+        assertThat(begrep.getBody()).isNotNull();
+        assertThat(begrep.getBody().getId()).isEqualTo("Ukjent-Begrep");
+        assertThat(begrep.getBody().getNavn()).isEqualTo("Finner ikke begrep for id");
+        assertThat(begrep.getBody().getBeskrivelse()).isEqualTo("Finner ikke beskrivelse for id");
     }
 
     @Test
