@@ -228,9 +228,9 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
                       tooltip={'Tag kravet med et eller flere nøkkelord. Hensikten er å skape relasjon(er) til andre krav.'}
                     />
 
-                    {/* <Block width="100%" maxWidth={maxInputWidth} marginBottom="80px">
+                    <Block width="100%" maxWidth={maxInputWidth} marginBottom="80px">
                       <EditBegreper />
-                    </Block> */}
+                    </Block>
 
                     <Block marginBottom={inputMarginBottom}>
                       <H2>Egenskaper</H2>
