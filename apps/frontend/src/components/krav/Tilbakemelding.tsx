@@ -73,6 +73,30 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
             {tilbakemeldinger.slice(0, count).map((t) => {
               const focused = focusNr === t.id
               const { ubesvart, ubesvartOgKraveier, melderOrKraveier, sistMelding } = tilbakeMeldingStatus(t)
+
+              const statusView = (icon: React.ReactNode) => (
+                <Block>
+                  <Block width="100%" maxWidth="70px">
+                    <Block display="flex" flexDirection="column" alignItems="flex-end">
+                      <StatusView
+                        status={ubesvart ? 'Ubesvart' : 'Besvart'}
+                        statusDisplay={ubesvart ? { background: ettlevColors.white, border: ettlevColors.green100 } : { background: ettlevColors.green100, border: ettlevColors.green100 }}
+                        overrides={{
+                          Root: {
+                            style: {
+                              ...borderRadius('20px')
+                            }
+                          }
+                        }}
+                      />
+                    </Block>
+                    <Block width="50px" marginLeft="20px" marginTop="18px" display="flex" flexDirection="column" alignItems="center">
+                      {icon}
+                    </Block>
+                  </Block>
+                </Block>
+              )
+
               return (
                 <CustomizedPanel
                   onClick={() => setFocus(focused ? '' : t.id)}
@@ -84,53 +108,19 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
                         display: 'flex',
                         alignItems: 'flex-start'
                       }
+                    },
+                    Content: {
+                      style: {
+                        backgroundColor: ettlevColors.white,
+                        paddingLeft: '20px',
+                        paddingRight: '20px',
+                        paddingBottom: '8px'
+                      }
                     }
                   }}
                   toggleIcon={{
-                    expanded: (
-                      <Block>
-                        <Block width="100%" maxWidth="70px">
-                          <Block display="flex" flexDirection="column" alignItems="flex-end">
-                            <StatusView
-                              status={ubesvart ? 'Ubesvart' : 'Besvart'}
-                              statusDisplay={ubesvart ? { background: ettlevColors.white, border: ettlevColors.green100 } : { background: ettlevColors.green100, border: ettlevColors.green100 }}
-                              overrides={{
-                                Root: {
-                                  style: {
-                                    ...borderRadius('20px')
-                                  }
-                                }
-                              }}
-                            />
-                          </Block>
-                          <Block width="50px" marginLeft="20px" marginTop="18px" display="flex" flexDirection="column" alignItems="center">
-                            <FontAwesomeIcon icon={faChevronUp} />
-                          </Block>
-                        </Block>
-                      </Block>
-                    ),
-                    unexpanded: (
-                      <Block>
-                        <Block width="100%" maxWidth="70px">
-                          <Block display="flex" flexDirection="column" alignItems="flex-end">
-                            <StatusView
-                              status={ubesvart ? 'Ubesvart' : 'Besvart'}
-                              statusDisplay={ubesvart ? { background: ettlevColors.white, border: ettlevColors.green100 } : { background: ettlevColors.green100, border: ettlevColors.green100 }}
-                              overrides={{
-                                Root: {
-                                  style: {
-                                    ...borderRadius('20px')
-                                  }
-                                }
-                              }}
-                            />
-                          </Block>
-                          <Block width="50px" marginLeft="20px" marginTop="18px" display="flex" flexDirection="column" alignItems="center">
-                            <FontAwesomeIcon icon={faChevronDown} />
-                          </Block>
-                        </Block>
-                      </Block>
-                    )
+                    expanded: statusView(<FontAwesomeIcon icon={faChevronUp} />),
+                    unexpanded: statusView(<FontAwesomeIcon icon={faChevronDown} />)
                   }}
                   title={
                     <Block display="flex" width="100%">
@@ -155,7 +145,21 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
                     </Block>
                   }
                 >
-                  test
+                  <Block display="flex" width="100%" alignItems="center" marginTop="17px">
+                    {focused && t.meldinger.length === 1 && <MeldingKnapper marginLeft melding={t.meldinger[0]} tilbakemeldingId={t.id} oppdater={replace} remove={remove} />}
+
+                    {focused && <EndretInfo melding={t.meldinger[0]} />}
+                  </Block>
+
+                  {/* meldingsliste */}
+                  {focused && (
+                    <Block display={'flex'} flexDirection={'column'} marginTop={theme.sizing.scale600}>
+                      {t.meldinger.slice(1).map((m) => (
+                        <ResponseMelding key={m.meldingNr} m={m} tilbakemelding={t} oppdater={replace} remove={remove} />
+                      ))}
+                    </Block>
+                  )}
+
                 </CustomizedPanel>
                 // <Card
                 //   key={t.id}
@@ -172,42 +176,10 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
                 //   <Block display={'flex'}>
                 //     <Portrait ident={t.melderIdent} />
                 //     <Block display={'flex'} flexDirection={'column'} marginLeft={theme.sizing.scale400} width={'100%'}>
-                //       <Block display={'flex'} justifyContent={'space-between'}>
-                //         <Block>
-                //           <LabelSmall>
-                //             <PersonName ident={t.melderIdent} />
-                //           </LabelSmall>
-                //           <ParagraphSmall marginTop={0} marginBottom={0}>
-                //             {moment(t.meldinger[0].tid).format('ll')}: {typeText(t.type)}
-                //           </ParagraphSmall>
-                //         </Block>
-
-                //         <Block display={'flex'} flexDirection={'column'} alignItems={'flex-end'}>
-                //           <ParagraphSmall marginTop={0} marginBottom={0}>
-                //             {t.meldinger.length} melding{t.meldinger.length > 1 ? 'er' : ''}
-                //           </ParagraphSmall>
-                //           <ParagraphSmall marginTop={0} marginBottom={0}>
-                //             {ubesvart ? 'Ubesvart' : `Sist besvart ${moment(sistMelding.tid).format('ll')}`}
-                //           </ParagraphSmall>
-                //         </Block>
-                //       </Block>
-
-                //       <ParagraphMedium marginBottom={0} marginRight={theme.sizing.scale600}>
-                //         {focused ? t.meldinger[0].innhold : _.truncate(t.meldinger[0].innhold, { length: 180, separator: /[.,] +/ })}
-                //       </ParagraphMedium>
-                //       {focused && <EndretInfo melding={t.meldinger[0]} />}
-
-                //       {focused && t.meldinger.length === 1 && <MeldingKnapper melding={t.meldinger[0]} tilbakemeldingId={t.id} oppdater={replace} remove={remove} />}
 
                 //       <Block marginTop={theme.sizing.scale600} $style={{ borderTop: focused && t.meldinger.length === 1 ? `1px solid ${ettlevColors.green50}` : undefined }}>
-                //         {/* meldingsliste */}
-                //         {focused && (
-                //           <Block display={'flex'} flexDirection={'column'} marginTop={theme.sizing.scale600}>
-                //             {t.meldinger.slice(1).map((m) => (
-                //               <ResponseMelding key={m.meldingNr} m={m} tilbakemelding={t} oppdater={replace} remove={remove}/>
-                //             ))}
-                //           </Block>
-                //         )}
+                //         
+
 
                 //         {/* knapprad bunn */}
                 //         <Block display={'flex'} justifyContent={'space-between'} width={'100%'}>
@@ -308,7 +280,7 @@ const ResponseMelding = (props: { m: TilbakemeldingMelding; tilbakemelding: Tilb
       flexDirection={'column'}
       marginBottom={theme.sizing.scale600}
       backgroundColor={melder ? 'inherit' : ettlevColors.grey50}
-      padding={theme.sizing.scale600}
+      padding={theme.sizing.scale500}
     >
       <Block display={'flex'}>
         <Portrait ident={m.fraIdent} />
@@ -325,8 +297,10 @@ const ResponseMelding = (props: { m: TilbakemeldingMelding; tilbakemelding: Tilb
       <ParagraphMedium marginBottom={0} marginTop={theme.sizing.scale400} marginRight={theme.sizing.scale600}>
         {m.innhold}
       </ParagraphMedium>
-      <EndretInfo melding={m} />
-      {sisteMelding && <MeldingKnapper melding={m} tilbakemeldingId={tilbakemelding.id} oppdater={oppdater} remove={remove} />}
+      <Block display="flex" width="100%" alignItems="center" marginTop="17px">
+        {sisteMelding && <MeldingKnapper melding={m} tilbakemeldingId={tilbakemelding.id} oppdater={oppdater} remove={remove} />}
+        <EndretInfo melding={m} />
+      </Block>
     </Block>
   )
 }
@@ -334,8 +308,8 @@ const ResponseMelding = (props: { m: TilbakemeldingMelding; tilbakemelding: Tilb
 const EndretInfo = (props: { melding: TilbakemeldingMelding }) => {
   if (!props.melding.endretAvIdent) return null
   return (
-    <Block alignSelf={'flex-end'}>
-      <ParagraphSmall marginBottom={0}>
+    <Block justifyContent="flex-end" display="flex" width="100%">
+      <ParagraphSmall marginBottom="0px" marginTop="0px">
         Sist endret av <PersonName ident={props.melding.endretAvIdent} /> - {moment(props.melding.endretTid).format('lll')}
       </ParagraphSmall>
     </Block>
@@ -483,7 +457,7 @@ const TilbakemeldingSvarModal = ({ tilbakemelding, close }: { tilbakemelding?: T
   )
 }
 
-const MeldingKnapper = (props: { melding: TilbakemeldingMelding; tilbakemeldingId: string; oppdater: (t: Tilbakemelding) => void; remove: (t: Tilbakemelding) => void }) => {
+const MeldingKnapper = (props: { melding: TilbakemeldingMelding; tilbakemeldingId: string; oppdater: (t: Tilbakemelding) => void; remove: (t: Tilbakemelding) => void; marginLeft?: boolean }) => {
   const { melding, tilbakemeldingId, oppdater, remove } = props
   const meldingNr = melding.meldingNr
   const [deleteModal, setDeleteModal] = useState(false)
@@ -492,7 +466,7 @@ const MeldingKnapper = (props: { melding: TilbakemeldingMelding; tilbakemeldingI
 
   return (
     <>
-      <Block marginTop={theme.sizing.scale400}>
+      <Block marginLeft={props.marginLeft ? '42px' : undefined} width="100%">
         <Button kind={'underline-hover'} size={'mini'} icon={faPencilAlt} onClick={() => setEditModal(true)}>
           Rediger
         </Button>
