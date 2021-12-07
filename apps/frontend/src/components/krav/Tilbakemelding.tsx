@@ -160,6 +160,24 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
                     </Block>
                   )}
 
+                  {/* knapprad bunn */}
+                  <Block display={'flex'} justifyContent={'flex-end'} width={'100%'}>
+
+                    {melderOrKraveier && user.canWrite() && focused && (
+                      <Block>
+                        <Button
+                          kind={ubesvartOgKraveier ? 'primary' : 'outline'}
+                          size={'compact'}
+                          onClick={() => {
+                            setFocusNr(t.id)
+                            setTilbakemelding(t)
+                          }}
+                        >
+                          {ubesvartOgKraveier ? 'Besvar' : 'Ny melding'}
+                        </Button>
+                      </Block>
+                    )}
+                  </Block>
                 </CustomizedPanel>
                 // <Card
                 //   key={t.id}
@@ -178,32 +196,8 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
                 //     <Block display={'flex'} flexDirection={'column'} marginLeft={theme.sizing.scale400} width={'100%'}>
 
                 //       <Block marginTop={theme.sizing.scale600} $style={{ borderTop: focused && t.meldinger.length === 1 ? `1px solid ${ettlevColors.green50}` : undefined }}>
-                //         
+                //
 
-
-                //         {/* knapprad bunn */}
-                //         <Block display={'flex'} justifyContent={'space-between'} width={'100%'}>
-                //           <Block>
-                //             <Button kind={'underline-hover'} onClick={() => setFocus(focused ? '' : t.id)} hidePadding icon={focused ? faChevronUp : faChevronDown}>
-                //               Vis {focused ? 'mindre' : 'mer'}
-                //             </Button>
-                //           </Block>
-
-                //           {melderOrKraveier && user.canWrite() && focused && (
-                //             <Block>
-                //               <Button
-                //                 kind={ubesvartOgKraveier ? 'primary' : 'outline'}
-                //                 size={'compact'}
-                //                 onClick={() => {
-                //                   setFocusNr(t.id)
-                //                   setTilbakemelding(t)
-                //                 }}
-                //               >
-                //                 {ubesvartOgKraveier ? 'Besvar' : 'Ny melding'}
-                //               </Button>
-                //             </Block>
-                //           )}
-                //         </Block>
                 //       </Block>
                 //     </Block>
                 //   </Block>
@@ -212,60 +206,66 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
             })}
           </CustomizedAccordion>
 
-          {tilbakemeldinger.length > DEFAULT_COUNT_SIZE && (
-            <Block $style={{ alignSelf: 'flex-end' }} marginTop={theme.sizing.scale400}>
-              <Button kind="tertiary" size="compact" icon={faPlus} onClick={() => setCount(count + DEFAULT_COUNT_SIZE)} disabled={tilbakemeldinger.length <= count}>
-                Last flere
-              </Button>
+          {
+            tilbakemeldinger.length > DEFAULT_COUNT_SIZE && (
+              <Block $style={{ alignSelf: 'flex-end' }} marginTop={theme.sizing.scale400}>
+                <Button kind="tertiary" size="compact" icon={faPlus} onClick={() => setCount(count + DEFAULT_COUNT_SIZE)} disabled={tilbakemeldinger.length <= count}>
+                  Last flere
+                </Button>
+              </Block>
+            )
+          }
+        </Block >
+      )}
+
+      {
+        !loading && !tilbakemeldinger.length && (
+          <InfoBlock icon={mailboxPoppingIcon} alt={'Åpen mailboks icon'} text={'Det har ikke kommet inn noen tilbakemeldinger'} color={ettlevColors.red50} />
+        )
+      }
+
+      {
+        !hasKravExpired && (
+          <>
+            <Block marginTop={theme.sizing.scale1000}>
+              <HeadingXLarge>Spørsmål til kraveier</HeadingXLarge>
+              {user.isLoggedIn() ? (
+                <ParagraphMedium maxWidth={'600px'}>
+                  Her kan du stille kraveier et spørsmål dersom det er uklarheter vedrørende hvordan kravet skal forstås. Spørsmål og svar fra kraveier blir synlig på denne siden.
+                </ParagraphMedium>
+              ) : (
+                <ParagraphMedium>Du må være innlogget for å stille kraveier et spørsmål, og for å se tidligere spørsmål og svar.</ParagraphMedium>
+              )}
+
+              {user.canWrite() && (
+                <Button kind={'primary'} size="compact" onClick={() => setAddTilbakemelding(true)}>
+                  Still et spørsmål
+                </Button>
+              )}
+              {!user.isLoggedIn() && <LoginButton />}
             </Block>
-          )}
-        </Block>
-      )}
 
-      {!loading && !tilbakemeldinger.length && (
-        <InfoBlock icon={mailboxPoppingIcon} alt={'Åpen mailboks icon'} text={'Det har ikke kommet inn noen tilbakemeldinger'} color={ettlevColors.red50} />
-      )}
-
-      {!hasKravExpired && (
-        <>
-          <Block marginTop={theme.sizing.scale1000}>
-            <HeadingXLarge>Spørsmål til kraveier</HeadingXLarge>
-            {user.isLoggedIn() ? (
-              <ParagraphMedium maxWidth={'600px'}>
-                Her kan du stille kraveier et spørsmål dersom det er uklarheter vedrørende hvordan kravet skal forstås. Spørsmål og svar fra kraveier blir synlig på denne siden.
-              </ParagraphMedium>
-            ) : (
-              <ParagraphMedium>Du må være innlogget for å stille kraveier et spørsmål, og for å se tidligere spørsmål og svar.</ParagraphMedium>
-            )}
-
-            {user.canWrite() && (
-              <Button kind={'primary'} size="compact" onClick={() => setAddTilbakemelding(true)}>
-                Still et spørsmål
-              </Button>
-            )}
-            {!user.isLoggedIn() && <LoginButton />}
-          </Block>
-
-          <NyTilbakemeldingModal
-            krav={krav}
-            open={addTilbakemelding}
-            close={(t) => {
-              t && add(t)
-              setAddTilbakemelding(false)
-            }}
-          />
-          <TilbakemeldingSvarModal
-            tilbakemelding={tilbakemelding}
-            close={(t) => {
-              t && replace(t)
-              setTilbakemelding(undefined)
-            }}
-          />
-        </>
-      )}
+            <NyTilbakemeldingModal
+              krav={krav}
+              open={addTilbakemelding}
+              close={(t) => {
+                t && add(t)
+                setAddTilbakemelding(false)
+              }}
+            />
+            <TilbakemeldingSvarModal
+              tilbakemelding={tilbakemelding}
+              close={(t) => {
+                t && replace(t)
+                setTilbakemelding(undefined)
+              }}
+            />
+          </>
+        )
+      }
 
       <Block height="300px" />
-    </Block>
+    </Block >
   )
 }
 
