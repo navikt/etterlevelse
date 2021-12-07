@@ -78,9 +78,17 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
                   onClick={() => setFocus(focused ? '' : t.id)}
                   noUnderLine
                   key={t.id}
+                  overrides={{
+                    Header: {
+                      style: {
+                        display: 'flex',
+                        alignItems: 'flex-start'
+                      }
+                    }
+                  }}
                   toggleIcon={{
                     expanded: (
-                      <Block height="100%" backgroundColor="red">
+                      <Block>
                         <Block width="100%" maxWidth="70px">
                           <Block display="flex" flexDirection="column" alignItems="flex-end">
                             <StatusView
@@ -95,14 +103,14 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
                               }}
                             />
                           </Block>
-                          <Block marginLeft="20px" marginTop="18px" display="flex" flexDirection="column" alignItems="center">
+                          <Block width="50px" marginLeft="20px" marginTop="18px" display="flex" flexDirection="column" alignItems="center">
                             <FontAwesomeIcon icon={faChevronUp} />
                           </Block>
                         </Block>
                       </Block>
                     ),
                     unexpanded: (
-                      <Block height="100%" backgroundColor="red">
+                      <Block>
                         <Block width="100%" maxWidth="70px">
                           <Block display="flex" flexDirection="column" alignItems="flex-end">
                             <StatusView
@@ -117,7 +125,7 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
                               }}
                             />
                           </Block>
-                          <Block marginLeft="20px" marginTop="18px" display="flex" flexDirection="column" alignItems="center">
+                          <Block width="50px" marginLeft="20px" marginTop="18px" display="flex" flexDirection="column" alignItems="center">
                             <FontAwesomeIcon icon={faChevronDown} />
                           </Block>
                         </Block>
@@ -139,8 +147,8 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
                           </Block>
                         </Block>
                         <Block display="flex" width="100%">
-                          <ParagraphMedium marginBottom={0} marginRight={theme.sizing.scale600} marginTop="4px">
-                            {focused ? t.meldinger[0].innhold : _.truncate(t.meldinger[0].innhold, { length: 180, separator: /[.,] +/ })}
+                          <ParagraphMedium marginBottom={0} marginRight="29px" marginTop="4px">
+                            {focused ? t.meldinger[0].innhold : _.truncate(t.meldinger[0].innhold, { length: 150, separator: /[.,] +/ })}
                           </ParagraphMedium>
                         </Block>
                       </Block>
