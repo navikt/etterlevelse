@@ -7,7 +7,7 @@ import { Block } from 'baseui/block'
 import { Label3, Paragraph2, Paragraph4 } from 'baseui/typography'
 import { KravPanelHeader } from '../behandling/KravPanelHeader'
 import { borderStyle, marginAll, padding } from '../common/Style'
-import KravStatusView from './KravStatusTag'
+import StatusView from '../common/StatusTag'
 import { PanelLink } from '../common/PanelLink'
 import moment from 'moment'
 import { ettlevColors, theme } from '../../util/theme'
@@ -84,7 +84,7 @@ const KravTemaList = (props: { kraver: Krav[]; tema: string; refresh: Function }
               }
               beskrivelse={<Label3 $style={{ fontSize: '18px', fontWeight: 600 }}>{k.navn}</Label3>}
               rightBeskrivelse={!!k.changeStamp.lastModifiedDate ? `Sist endret: ${moment(k.changeStamp.lastModifiedDate).format('ll')}` : ''}
-              statusText={<KravStatusView status={k.status} />}
+              statusText={<StatusView status={k.status} />}
               overrides={{
                 Block: {
                   style: {
