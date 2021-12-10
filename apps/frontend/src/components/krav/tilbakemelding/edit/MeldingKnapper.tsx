@@ -1,15 +1,15 @@
-import { faPencilAlt, faTrashAlt } from '@fortawesome/free-solid-svg-icons'
-import { Block } from 'baseui/block'
+import {faPencilAlt, faTrashAlt} from '@fortawesome/free-solid-svg-icons'
+import {Block} from 'baseui/block'
 import Button from '../../../common/Button'
-import { Modal, ModalHeader, ModalBody, ModalFooter } from 'baseui/modal'
-import { ParagraphMedium, ParagraphSmall } from 'baseui/typography'
+import {Modal, ModalBody, ModalFooter, ModalHeader} from 'baseui/modal'
+import {ParagraphMedium, ParagraphSmall} from 'baseui/typography'
 import moment from 'moment'
-import { useState } from 'react'
-import { tilbakemeldingslettMelding } from '../../../../api/TilbakemeldingApi'
-import { TilbakemeldingMelding, Tilbakemelding } from '../../../../constants'
-import { user } from '../../../../services/User'
-import { pageWidth } from '../../../../util/theme'
-import { PersonName } from '../../../common/PersonName'
+import {useState} from 'react'
+import {tilbakemeldingslettMelding} from '../../../../api/TilbakemeldingApi'
+import {Tilbakemelding, TilbakemeldingMelding} from '../../../../constants'
+import {user} from '../../../../services/User'
+import {pageWidth} from '../../../../util/theme'
+import {PersonName} from '../../../common/PersonName'
 import TilbakemeldingEdit from './TilbakemeldingEdit'
 
 export const MeldingKnapper = (props: { melding: TilbakemeldingMelding; tilbakemeldingId: string; oppdater: (t: Tilbakemelding) => void; remove: (t: Tilbakemelding) => void; marginLeft?: boolean }) => {
@@ -67,7 +67,6 @@ export const MeldingKnapper = (props: { melding: TilbakemeldingMelding; tilbakem
 
       {editModal && (
         <Modal
-          closeable={false}
           isOpen
           onClose={() => setEditModal(false)}
           unstable_ModalBackdropScroll
