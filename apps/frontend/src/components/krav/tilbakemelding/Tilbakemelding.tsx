@@ -1,17 +1,11 @@
-import { Krav, Tilbakemelding, TilbakemeldingRolle, TilbakemeldingType} from '../../../constants'
-import {
-  createNewTilbakemelding,
-  CreateTilbakemeldingRequest,
-  tilbakemeldingNewMelding,
-  TilbakemeldingNewMeldingRequest,
-  useTilbakemeldinger,
-} from '../../../api/TilbakemeldingApi'
+import {Krav, Tilbakemelding, TilbakemeldingRolle, TilbakemeldingType} from '../../../constants'
+import {tilbakemeldingNewMelding, TilbakemeldingNewMeldingRequest, useTilbakemeldinger,} from '../../../api/TilbakemeldingApi'
 import React, {useEffect, useState} from 'react'
 import {Block} from 'baseui/block'
 import {theme} from '../../../util'
-import { HeadingXLarge, LabelSmall, ParagraphMedium, ParagraphSmall} from 'baseui/typography'
+import {HeadingXLarge, LabelSmall, ParagraphMedium, ParagraphSmall} from 'baseui/typography'
 import Button from '../../common/Button'
-import {faChevronDown, faChevronUp, faEnvelope, faPlus, faSync} from '@fortawesome/free-solid-svg-icons'
+import {faChevronDown, faChevronUp, faPlus, faSync} from '@fortawesome/free-solid-svg-icons'
 import {borderRadius} from '../../common/Style'
 import {Spinner} from '../../common/Spinner'
 import moment from 'moment'
@@ -19,7 +13,7 @@ import {user} from '../../../services/User'
 import {Notification} from 'baseui/notification'
 import {useHistory} from 'react-router-dom'
 import {useQueryParam, useRefs} from '../../../util/hooks'
-import {ettlevColors, pageWidth} from '../../../util/theme'
+import {ettlevColors} from '../../../util/theme'
 import {mailboxPoppingIcon} from '../../Images'
 import {InfoBlock} from '../../common/InfoBlock'
 import {Portrait} from '../../common/Portrait'
@@ -155,21 +149,16 @@ export const Tilbakemeldinger = ({krav, hasKravExpired}: { krav: Krav; hasKravEx
                   )}
 
                   {/* knapprad bunn */}
-                  <Block display={'flex'} justifyContent={'flex-end'} width={'100%'}>
-
-                    {melderOrKraveier && user.canWrite() && focused && (
-                      <Block>
-                        <TilbakemeldingSvar
-                          tilbakemelding={t}
-                          setFocusNummer={setFocusNr}
-                          ubesvartOgKraveier={ubesvartOgKraveier}
-                          close={(t) => {
-                            t && replace(t)
-                          }}
-                        />
-                      </Block>
-                    )}
-                  </Block>
+                  {melderOrKraveier && user.canWrite() && focused && (
+                    <TilbakemeldingSvar
+                      tilbakemelding={t}
+                      setFocusNummer={setFocusNr}
+                      ubesvartOgKraveier={ubesvartOgKraveier}
+                      close={(t) => {
+                        t && replace(t)
+                      }}
+                    />
+                  )}
                 </CustomizedPanel>
               )
             })}
@@ -256,59 +245,70 @@ const TilbakemeldingSvar = ({tilbakemelding, setFocusNummer, close, ubesvartOgKr
   const [loading, setLoading] = useState(false)
 
   const submit = () => {
-    setFocusNummer(tilbakemelding.id)
+    if (response) {
+      setFocusNummer(tilbakemelding.id)
 
-    const req: TilbakemeldingNewMeldingRequest = {
-      tilbakemeldingId: tilbakemelding.id,
-      rolle: replyRole,
-      melding: response,
+      const req: TilbakemeldingNewMeldingRequest = {
+        tilbakemeldingId: tilbakemelding.id,
+        rolle: replyRole,
+        melding: response,
+      }
+
+      setLoading(true)
+
+      tilbakemeldingNewMelding(req)
+        .then((t) => {
+          close(t)
+          setLoading(false)
+          setResponse('')
+        })
+        .catch((e) => {
+          setError(e.error)
+          setLoading(false)
+        })
     }
-
-    setLoading(true)
-
-    tilbakemeldingNewMelding(req)
-      .then((t)=>{
-        close(t)
-        setLoading(false)
-        setResponse('')
-      })
-      .catch((e) => {
-        setError(e.error)
-        setLoading(false)
-      })
   }
 
   return (
-    <Block display="flex" alignItems="flex-end">
-      <CustomizedTextarea rows={15} onChange={(e) => setResponse((e.target as HTMLInputElement).value)} value={response} disabled={loading}/>
+    <Block display="flex" width={'100%'}>
+      <Block display={"flex"} flex={'1'}>
+        <CustomizedTextarea
+          rows={5}
+          onChange={(e) => setResponse((e.target as HTMLInputElement).value)}
+          value={response}
+          disabled={loading}
+        />
+      </Block>
+      <Block>
+        <Block display="flex" justifyContent="space-between" flexDirection="column" marginLeft={theme.sizing.scale400}>
+          {user.isKraveier() && !loading && melderInfo.melder && (
+            <Block marginBottom={theme.sizing.scale400} display="flex" flexDirection="column">
+              <LabelSmall alignSelf="center">Jeg er</LabelSmall>
+              <Button
+                size="compact"
+                icon={faSync}
+                kind={'secondary'}
+                onClick={() => setReplyRole(replyRole === TilbakemeldingRolle.MELDER ? TilbakemeldingRolle.KRAVEIER : TilbakemeldingRolle.MELDER)}
+              >
+                {rolleText(replyRole)}
+              </Button>
+            </Block>
+          )}
+          {loading && (
+            <Block alignSelf="center" marginBottom={theme.sizing.scale400}>
+              <Spinner size={theme.sizing.scale800}/>
+            </Block>
+          )}
 
-      <Block display="flex" justifyContent="space-between" flexDirection="column" marginLeft={theme.sizing.scale400}>
-        {user.isKraveier() && !loading && melderInfo.melder && (
-          <Block marginBottom={theme.sizing.scale400} display="flex" flexDirection="column">
-            <LabelSmall alignSelf="center">Jeg er</LabelSmall>
-            <Button
-              size="compact"
-              icon={faSync}
-              kind={'secondary'}
-              onClick={() => setReplyRole(replyRole === TilbakemeldingRolle.MELDER ? TilbakemeldingRolle.KRAVEIER : TilbakemeldingRolle.MELDER)}
-            >
-              {rolleText(replyRole)}
-            </Button>
-          </Block>
-        )}
-        {loading && (
-          <Block alignSelf="center" marginBottom={theme.sizing.scale400}>
-            <Spinner size={theme.sizing.scale800}/>
-          </Block>
-        )}
-
-        <Button
-          kind={ubesvartOgKraveier ? 'primary' : 'outline'}
-          size={'compact'}
-          onClick={submit}
-        >
-          {ubesvartOgKraveier ? 'Besvar' : 'Ny melding'}
-        </Button>
+          <Button
+            kind={ubesvartOgKraveier ? 'primary' : 'outline'}
+            size={'compact'}
+            disabled={!response}
+            onClick={submit}
+          >
+            {ubesvartOgKraveier ? 'Besvar' : 'Ny melding'}
+          </Button>
+        </Block>
       </Block>
       {error && (
         <Notification kind="negative" overrides={{Body: {style: {marginBottom: '-25px'}}}}>
