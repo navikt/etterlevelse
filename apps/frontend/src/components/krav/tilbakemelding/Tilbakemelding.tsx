@@ -1,32 +1,22 @@
-import {AdresseType, Krav, Tilbakemelding, TilbakemeldingMelding, TilbakemeldingRolle, TilbakemeldingType, Varslingsadresse} from '../../../constants'
+import { Krav, Tilbakemelding, TilbakemeldingRolle, TilbakemeldingType} from '../../../constants'
 import {
   createNewTilbakemelding,
   CreateTilbakemeldingRequest,
-  tilbakemeldingEditMelding,
   tilbakemeldingNewMelding,
   TilbakemeldingNewMeldingRequest,
-  tilbakemeldingslettMelding,
   useTilbakemeldinger,
 } from '../../../api/TilbakemeldingApi'
 import React, {useEffect, useState} from 'react'
 import {Block} from 'baseui/block'
 import {theme} from '../../../util'
-import {H2, HeadingXLarge, LabelSmall, ParagraphMedium, ParagraphSmall} from 'baseui/typography'
+import { HeadingXLarge, LabelSmall, ParagraphMedium, ParagraphSmall} from 'baseui/typography'
 import Button from '../../common/Button'
-import {faChevronDown, faChevronUp, faEnvelope, faPencilAlt, faPlus, faSync, faUser} from '@fortawesome/free-solid-svg-icons'
-import {faTrashAlt} from '@fortawesome/free-regular-svg-icons'
+import {faChevronDown, faChevronUp, faEnvelope, faPlus, faSync} from '@fortawesome/free-solid-svg-icons'
 import {borderRadius} from '../../common/Style'
 import {Spinner} from '../../common/Spinner'
 import moment from 'moment'
 import {user} from '../../../services/User'
-import {Modal, ModalBody, ModalFooter, ModalHeader} from 'baseui/modal'
-import {Field, FieldProps, Form, Formik} from 'formik'
-import {TextAreaField} from '../../common/Inputs'
-import * as yup from 'yup'
 import {Notification} from 'baseui/notification'
-import {faSlackHash} from '@fortawesome/free-brands-svg-icons'
-import {FormControl} from 'baseui/form-control'
-import {AddEmail, SlackChannelSearch, SlackUserSearch, VarslingsadresserTagList} from '../Edit/KravVarslingsadresserEdit'
 import {useHistory} from 'react-router-dom'
 import {useQueryParam, useRefs} from '../../../util/hooks'
 import {ettlevColors, pageWidth} from '../../../util/theme'
@@ -37,11 +27,13 @@ import {PersonName} from '../../common/PersonName'
 import CustomizedTextarea from '../../common/CustomizedTextarea'
 import * as _ from 'lodash'
 import {LoginButton} from '../../Header'
-import LabelWithTooltip from '../../common/LabelWithTooltip'
-import CustomizedModal from '../../common/CustomizedModal'
 import {CustomizedAccordion, CustomizedPanel} from '../../common/CustomizedAccordion'
 import StatusView from '../../common/StatusTag'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import ResponseMelding from './edit/ResponseMelding'
+import EndretInfo from './edit/EndreInfo'
+import MeldingKnapper from './edit/MeldingKnapper'
+import NyTilbakemeldingModal from './edit/NyTilbakemeldingModal'
 
 const DEFAULT_COUNT_SIZE = 5
 
@@ -239,158 +231,6 @@ export const Tilbakemeldinger = ({krav, hasKravExpired}: { krav: Krav; hasKravEx
   )
 }
 
-const ResponseMelding = (props: { m: TilbakemeldingMelding; tilbakemelding: Tilbakemelding; oppdater: (t: Tilbakemelding) => void; remove: (t: Tilbakemelding) => void }) => {
-  const {m, tilbakemelding, oppdater, remove} = props
-  const melder = m.rolle === TilbakemeldingRolle.MELDER
-  const sisteMelding = m.meldingNr === tilbakemelding.meldinger[tilbakemelding.meldinger.length - 1].meldingNr
-
-  return (
-    <Block
-      display={'flex'}
-      flexDirection={'column'}
-      marginBottom={theme.sizing.scale600}
-      backgroundColor={melder ? 'inherit' : ettlevColors.grey50}
-      padding={theme.sizing.scale500}
-    >
-      <Block display={'flex'}>
-        <Portrait ident={m.fraIdent}/>
-        <Block marginLeft={theme.sizing.scale200} marginRight={theme.sizing.scale200} display={'flex'} flexDirection={'column'}>
-          <LabelSmall>
-            {melder ? <PersonName ident={m.fraIdent}/> : 'Kraveier'}
-          </LabelSmall>
-          <ParagraphSmall marginTop={0} marginBottom={0}>
-            {moment(m.tid).format('ll')}
-          </ParagraphSmall>
-        </Block>
-      </Block>
-
-      <ParagraphMedium marginBottom={0} marginTop={theme.sizing.scale400} marginRight={theme.sizing.scale600}>
-        {m.innhold}
-      </ParagraphMedium>
-      <Block display="flex" width="100%" alignItems="center" marginTop="17px">
-        {sisteMelding && <MeldingKnapper melding={m} tilbakemeldingId={tilbakemelding.id} oppdater={oppdater} remove={remove}/>}
-        <EndretInfo melding={m}/>
-      </Block>
-    </Block>
-  )
-}
-
-const EndretInfo = (props: { melding: TilbakemeldingMelding }) => {
-  if (!props.melding.endretAvIdent) return null
-  return (
-    <Block justifyContent="flex-end" display="flex" width="100%">
-      <ParagraphSmall marginBottom="0px" marginTop="0px">
-        Sist endret av <PersonName ident={props.melding.endretAvIdent}/> - {moment(props.melding.endretTid).format('lll')}
-      </ParagraphSmall>
-    </Block>
-  )
-}
-
-const NyTilbakemeldingModal = ({open, close, krav}: { open?: boolean; close: (add?: Tilbakemelding) => void; krav: Krav }) => {
-  const [error, setError] = useState()
-  const [adresseType, setAdresseType] = useState<AdresseType>()
-
-  const submit = (req: CreateTilbakemeldingRequest) => {
-    createNewTilbakemelding(req)
-      .then(close)
-      .catch((e) => setError(e.error))
-  }
-
-  return (
-    <CustomizedModal
-      size="default"
-      overrides={{
-        Dialog: {
-          style: {
-            maxWidth: '514px',
-          },
-        },
-      }}
-      closeable={false}
-      unstable_ModalBackdropScroll
-      isOpen={open}
-      onClose={() => close()}
-    >
-      <Formik
-        onSubmit={submit}
-        initialValues={newTilbakemelding(krav) as CreateTilbakemeldingRequest}
-        validationSchema={createTilbakemeldingSchema}
-        validateOnBlur={false}
-        validateOnChange={false}
-      >
-        {({isSubmitting, setFieldValue, values, submitForm}) => {
-          const setVarslingsadresse = (v?: Varslingsadresse) => {
-            setFieldValue('varslingsadresse', v)
-            setAdresseType(undefined)
-          }
-          return (
-            <Form>
-              <ModalHeader>
-                <H2>Spørsmål til kraveier</H2>
-              </ModalHeader>
-              <ModalBody>
-                <Block>
-                  <TextAreaField tooltip="Skriv ditt spørsmål i tekstfeltet" label="Ditt spørsmål" name="foersteMelding" placeholder="Skriv her.."/>
-                  {/* <OptionField label="Type" name="type" clearable={false} options={Object.values(TilbakemeldingType).map((o) => ({ id: o, label: typeText(o) }))} /> */}
-                  <Field name="varslingsadresse.adresse">
-                    {(p: FieldProps) => (
-                      <FormControl label={<LabelWithTooltip label="Varslingsadresse" tooltip="Velg ønsket varslings metode"/>} error={p.meta.error}>
-                        <Block>
-                          <Block display="flex" flexDirection="column" marginTop={theme.sizing.scale600}>
-                            {adresseType === AdresseType.SLACK && <SlackChannelSearch add={setVarslingsadresse}/>}
-                            {adresseType !== AdresseType.SLACK && !values.varslingsadresse && (
-                              <Button kind="secondary" size="compact" type="button" icon={faSlackHash} onClick={() => setAdresseType(AdresseType.SLACK)}>
-                                Slack-kanal
-                              </Button>
-                            )}
-                            <Block marginTop={theme.sizing.scale400}/>
-                            {adresseType === AdresseType.SLACK_USER && <SlackUserSearch add={setVarslingsadresse}/>}
-                            {adresseType !== AdresseType.SLACK_USER && !values.varslingsadresse && (
-                              <Button kind="secondary" size="compact" marginLeft type="button" icon={faUser} onClick={() => setAdresseType(AdresseType.SLACK_USER)}>
-                                Slack-bruker
-                              </Button>
-                            )}
-                            <Block marginTop={theme.sizing.scale400}/>
-                            {adresseType === AdresseType.EPOST && <AddEmail add={setVarslingsadresse}/>}
-                            {adresseType !== AdresseType.EPOST && !values.varslingsadresse && (
-                              <Button kind="secondary" size="compact" marginLeft type="button" icon={faEnvelope} onClick={() => setAdresseType(AdresseType.EPOST)}>
-                                Epost
-                              </Button>
-                            )}
-                          </Block>
-                          {values.varslingsadresse && <VarslingsadresserTagList varslingsadresser={[values.varslingsadresse]} remove={() => setVarslingsadresse(undefined)}/>}
-                        </Block>
-                      </FormControl>
-                    )}
-                  </Field>
-                </Block>
-              </ModalBody>
-              <ModalFooter>
-                <Block display="flex" justifyContent="flex-end">
-                  <Block>
-                    {error && (
-                      <Notification kind="negative" overrides={{Body: {style: {marginBottom: '-25px'}}}}>
-                        {error}
-                      </Notification>
-                    )}
-                  </Block>
-                  <Button kind="secondary" size="compact" type="button" onClick={close}>
-                    {' '}
-                    Avbryt{' '}
-                  </Button>
-                  <Button type="button" marginLeft disabled={isSubmitting} onClick={submitForm}>
-                    Lagre
-                  </Button>
-                </Block>
-              </ModalFooter>
-            </Form>
-          )
-        }}
-      </Formik>
-    </CustomizedModal>
-  )
-}
-
 const tilbakeMeldingStatus = (tilbakemelding: Tilbakemelding) => {
   const sistMelding = tilbakemelding.meldinger[tilbakemelding.meldinger.length - 1]
   const ubesvart = sistMelding.rolle === TilbakemeldingRolle.MELDER
@@ -399,94 +239,6 @@ const tilbakeMeldingStatus = (tilbakemelding: Tilbakemelding) => {
   const melderOrKraveier = melder || user.isKraveier()
   const ubesvartOgKraveier = ubesvart && user.isKraveier()
   return {ubesvart, ubesvartOgKraveier, rolle, melder, melderOrKraveier, sistMelding}
-}
-
-const MeldingKnapper = (props: { melding: TilbakemeldingMelding; tilbakemeldingId: string; oppdater: (t: Tilbakemelding) => void; remove: (t: Tilbakemelding) => void; marginLeft?: boolean }) => {
-  const {melding, tilbakemeldingId, oppdater, remove} = props
-  const meldingNr = melding.meldingNr
-  const [deleteModal, setDeleteModal] = useState(false)
-  const [editModal, setEditModal] = useState(false)
-  if ((!user.isAdmin() && melding.fraIdent !== user.getIdent()) || !user.canWrite()) return null
-
-  return (
-    <>
-      <Block marginLeft={props.marginLeft ? '42px' : undefined} width="100%">
-        <Button kind={'underline-hover'} size={'mini'} icon={faPencilAlt} onClick={() => setEditModal(true)}>
-          Rediger
-        </Button>
-        <Button kind={'underline-hover'} size={'mini'} icon={faTrashAlt} marginLeft onClick={() => setDeleteModal(true)}>
-          Slett
-        </Button>
-      </Block>
-
-      {deleteModal && (
-        <Modal closeable={false} isOpen onClose={() => setDeleteModal(false)} unstable_ModalBackdropScroll>
-          <ModalHeader>Er du sikker på at du vil slette meldingen?</ModalHeader>
-          <ModalBody>
-            {meldingNr === 1 && <ParagraphMedium>Hele meldingstråden vil bli slettet.</ParagraphMedium>}
-            <ParagraphSmall>
-              {moment(melding.tid).format('ll')} <PersonName ident={melding.fraIdent}/>
-            </ParagraphSmall>
-            <ParagraphMedium>{melding.innhold}</ParagraphMedium>
-          </ModalBody>
-          <ModalFooter>
-            <Button kind={'secondary'} size={'compact'} onClick={() => setDeleteModal(false)}>
-              Avbryt
-            </Button>
-            <Button
-              kind={'primary'}
-              size={'compact'}
-              marginLeft
-              onClick={() =>
-                tilbakemeldingslettMelding({tilbakemeldingId, meldingNr}).then((t) => {
-                  if (meldingNr === 1) {
-                    remove({...t, meldinger: []})
-                  } else {
-                    remove(t)
-                  }
-                  setDeleteModal(false)
-                })
-              }
-            >
-              Slett
-            </Button>
-          </ModalFooter>
-        </Modal>
-      )}
-
-      {editModal && (
-        <Modal
-          closeable={false}
-          isOpen
-          onClose={() => setEditModal(false)}
-          unstable_ModalBackdropScroll
-          overrides={{
-            Dialog: {
-              style: {
-                width: '60%',
-                maxWidth: pageWidth,
-              },
-            },
-          }}
-        >
-          <ModalHeader>Rediger melding</ModalHeader>
-          <ModalBody>
-            <ParagraphSmall>
-              {moment(melding.tid).format('ll')} <PersonName ident={melding.fraIdent}/>
-            </ParagraphSmall>
-            <TilbakemeldingEdit
-              tilbakemeldingId={tilbakemeldingId}
-              melding={melding}
-              close={(t) => {
-                setEditModal(false)
-                oppdater(t)
-              }}
-            />
-          </ModalBody>
-        </Modal>
-      )}
-    </>
-  )
 }
 
 type TilbakemeldingSvarProps = {
@@ -567,36 +319,6 @@ const TilbakemeldingSvar = ({tilbakemelding, setFocusNummer, close, ubesvartOgKr
   )
 }
 
-const TilbakemeldingEdit = ({tilbakemeldingId, melding, close}: { tilbakemeldingId: string; melding: TilbakemeldingMelding; close: (t: Tilbakemelding) => void }) => {
-  const [response, setResponse] = useState(melding.innhold)
-  const [error, setError] = useState()
-  const [loading, setLoading] = useState(false)
-
-  const submit = () => {
-    setLoading(true)
-    tilbakemeldingEditMelding({tilbakemeldingId, meldingNr: melding.meldingNr, text: response})
-      .then(close)
-      .catch((e) => {
-        setError(e.error)
-        setLoading(false)
-      })
-  }
-
-  return (
-    <Block display="flex" alignItems="flex-end">
-      <CustomizedTextarea rows={15} onChange={(e) => setResponse((e.target as HTMLInputElement).value)} value={response} disabled={loading}/>
-      <Button size="compact" marginLeft disabled={!response || loading} onClick={submit}>
-        Send
-      </Button>
-      {error && (
-        <Notification kind="negative" overrides={{Body: {style: {marginBottom: '-25px'}}}}>
-          {error}
-        </Notification>
-      )}
-    </Block>
-  )
-}
-
 const rolleText = (rolle: TilbakemeldingRolle) => {
   switch (rolle) {
     case TilbakemeldingRolle.KRAVEIER:
@@ -615,26 +337,3 @@ const typeText = (type: TilbakemeldingType) => {
       return 'Annet'
   }
 }
-
-const newTilbakemelding = (krav: Krav): Partial<CreateTilbakemeldingRequest> => ({
-  kravNummer: krav.kravNummer,
-  kravVersjon: krav.kravVersjon,
-  foersteMelding: '',
-  type: TilbakemeldingType.UKLAR,
-  varslingsadresse: undefined,
-})
-
-const required = 'Påkrevd'
-
-const varslingsadresse: yup.SchemaOf<Varslingsadresse> = yup.object({
-  adresse: yup.string().required(required),
-  type: yup.mixed().oneOf(Object.values(AdresseType)).required(required),
-})
-
-const createTilbakemeldingSchema: yup.SchemaOf<CreateTilbakemeldingRequest> = yup.object({
-  kravNummer: yup.number().required(required),
-  kravVersjon: yup.number().required(required),
-  foersteMelding: yup.string().required(required),
-  type: yup.mixed().oneOf(Object.values(TilbakemeldingType)).required(required),
-  varslingsadresse: varslingsadresse.required(required),
-})
