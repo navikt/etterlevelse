@@ -1,37 +1,39 @@
-import {Krav, Tilbakemelding, TilbakemeldingRolle, TilbakemeldingType} from '../../../constants'
-import {tilbakemeldingNewMelding, TilbakemeldingNewMeldingRequest, useTilbakemeldinger,} from '../../../api/TilbakemeldingApi'
-import React, {useEffect, useState} from 'react'
-import {Block} from 'baseui/block'
-import {theme} from '../../../util'
-import {HeadingXLarge, LabelSmall, ParagraphMedium, ParagraphSmall} from 'baseui/typography'
+import { Krav, Tilbakemelding, TilbakemeldingRolle, TilbakemeldingType } from '../../../constants'
+import { tilbakemeldingNewMelding, TilbakemeldingNewMeldingRequest, tilbakemeldingslettMelding, useTilbakemeldinger, } from '../../../api/TilbakemeldingApi'
+import React, { useEffect, useState } from 'react'
+import { Block } from 'baseui/block'
+import { theme } from '../../../util'
+import { H4, HeadingXLarge, LabelSmall, ParagraphMedium, ParagraphSmall } from 'baseui/typography'
 import Button from '../../common/Button'
-import {faChevronDown, faChevronUp, faPlus, faSync} from '@fortawesome/free-solid-svg-icons'
-import {borderRadius} from '../../common/Style'
-import {Spinner} from '../../common/Spinner'
+import { faChevronDown, faChevronUp, faPlus, faSync, faTrashAlt } from '@fortawesome/free-solid-svg-icons'
+import { borderRadius } from '../../common/Style'
+import { Spinner } from '../../common/Spinner'
 import moment from 'moment'
-import {user} from '../../../services/User'
-import {Notification} from 'baseui/notification'
-import {useHistory} from 'react-router-dom'
-import {useQueryParam, useRefs} from '../../../util/hooks'
-import {ettlevColors} from '../../../util/theme'
-import {mailboxPoppingIcon} from '../../Images'
-import {InfoBlock} from '../../common/InfoBlock'
-import {Portrait} from '../../common/Portrait'
-import {PersonName} from '../../common/PersonName'
+import { user } from '../../../services/User'
+import { Notification } from 'baseui/notification'
+import { useHistory } from 'react-router-dom'
+import { useQueryParam, useRefs } from '../../../util/hooks'
+import { ettlevColors } from '../../../util/theme'
+import { mailboxPoppingIcon } from '../../Images'
+import { InfoBlock } from '../../common/InfoBlock'
+import { Portrait } from '../../common/Portrait'
+import { PersonName } from '../../common/PersonName'
 import CustomizedTextarea from '../../common/CustomizedTextarea'
 import * as _ from 'lodash'
-import {LoginButton} from '../../Header'
-import {CustomizedAccordion, CustomizedPanel} from '../../common/CustomizedAccordion'
+import { LoginButton } from '../../Header'
+import { CustomizedAccordion, CustomizedPanel } from '../../common/CustomizedAccordion'
 import StatusView from '../../common/StatusTag'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import ResponseMelding from './edit/ResponseMelding'
 import EndretInfo from './edit/EndreInfo'
 import MeldingKnapper from './edit/MeldingKnapper'
 import NyTilbakemeldingModal from './edit/NyTilbakemeldingModal'
+import { Modal, ModalHeader, ModalBody, ModalFooter } from 'baseui/modal'
+import { remove } from 'lodash'
 
 const DEFAULT_COUNT_SIZE = 5
 
-export const Tilbakemeldinger = ({krav, hasKravExpired}: { krav: Krav; hasKravExpired: boolean }) => {
+export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKravExpired: boolean }) => {
   const [tilbakemeldinger, loading, add, replace, remove] = useTilbakemeldinger(krav.kravNummer, krav.kravVersjon)
   const [focusNr, setFocusNr] = useState<string | undefined>(useQueryParam('tilbakemeldingId'))
   const [addTilbakemelding, setAddTilbakemelding] = useState(false)
@@ -50,13 +52,13 @@ export const Tilbakemeldinger = ({krav, hasKravExpired}: { krav: Krav; hasKravEx
 
   return (
     <Block width="100%">
-      {loading && <Spinner size={theme.sizing.scale800}/>}
+      {loading && <Spinner size={theme.sizing.scale800} />}
       {!loading && !!tilbakemeldinger.length && (
         <Block display={'flex'} flexDirection={'column'}>
           <CustomizedAccordion>
             {tilbakemeldinger.slice(0, count).map((t) => {
               const focused = focusNr === t.id
-              const {ubesvart, ubesvartOgKraveier, melderOrKraveier, sistMelding} = tilbakeMeldingStatus(t)
+              const { ubesvart, ubesvartOgKraveier, melderOrKraveier, sistMelding } = tilbakeMeldingStatus(t)
 
               const statusView = (icon: React.ReactNode) => (
                 <Block>
@@ -64,7 +66,7 @@ export const Tilbakemeldinger = ({krav, hasKravExpired}: { krav: Krav; hasKravEx
                     <Block display="flex" flexDirection="column" alignItems="flex-end">
                       <StatusView
                         status={ubesvart ? 'Ubesvart' : 'Besvart'}
-                        statusDisplay={ubesvart ? {background: ettlevColors.white, border: ettlevColors.green100} : {
+                        statusDisplay={ubesvart ? { background: ettlevColors.white, border: ettlevColors.green100 } : {
                           background: ettlevColors.green100,
                           border: ettlevColors.green100
                         }}
@@ -107,17 +109,17 @@ export const Tilbakemeldinger = ({krav, hasKravExpired}: { krav: Krav; hasKravEx
                     }
                   }}
                   toggleIcon={{
-                    expanded: statusView(<FontAwesomeIcon icon={faChevronUp}/>),
-                    unexpanded: statusView(<FontAwesomeIcon icon={faChevronDown}/>)
+                    expanded: statusView(<FontAwesomeIcon icon={faChevronUp} />),
+                    unexpanded: statusView(<FontAwesomeIcon icon={faChevronDown} />)
                   }}
                   title={
                     <Block display="flex" width="100%">
-                      <Portrait ident={t.melderIdent}/>
+                      <Portrait ident={t.melderIdent} />
                       <Block display="flex" flexDirection="column" marginLeft={theme.sizing.scale400} width="100%">
                         <Block display="flex" width="100%">
                           <Block display="flex" alignItems="center" width="100%">
                             <LabelSmall>
-                              <PersonName ident={t.melderIdent}/>
+                              <PersonName ident={t.melderIdent} />
                             </LabelSmall>
                             <ParagraphSmall marginTop={0} marginBottom={0} marginLeft="24px">
                               Sendt: {moment(t.meldinger[0].tid).format('lll')}
@@ -126,7 +128,7 @@ export const Tilbakemeldinger = ({krav, hasKravExpired}: { krav: Krav; hasKravEx
                         </Block>
                         <Block display="flex" width="100%">
                           <ParagraphMedium marginBottom={0} marginRight="29px" marginTop="4px">
-                            {focused ? t.meldinger[0].innhold : _.truncate(t.meldinger[0].innhold, {length: 150, separator: /[.,] +/})}
+                            {focused ? t.meldinger[0].innhold : _.truncate(t.meldinger[0].innhold, { length: 150, separator: /[.,] +/ })}
                           </ParagraphMedium>
                         </Block>
                       </Block>
@@ -134,16 +136,16 @@ export const Tilbakemeldinger = ({krav, hasKravExpired}: { krav: Krav; hasKravEx
                   }
                 >
                   <Block display="flex" width="100%" alignItems="center" marginTop="17px">
-                    {focused && t.meldinger.length === 1 && <MeldingKnapper marginLeft melding={t.meldinger[0]} tilbakemeldingId={t.id} oppdater={replace} remove={remove}/>}
+                    {focused && t.meldinger.length === 1 && <MeldingKnapper marginLeft melding={t.meldinger[0]} tilbakemeldingId={t.id} oppdater={replace} remove={remove} />}
 
-                    {focused && <EndretInfo melding={t.meldinger[0]}/>}
+                    {focused && <EndretInfo melding={t.meldinger[0]} />}
                   </Block>
 
                   {/* meldingsliste */}
                   {focused && (
                     <Block display={'flex'} flexDirection={'column'} marginTop={theme.sizing.scale600}>
                       {t.meldinger.slice(1).map((m) => (
-                        <ResponseMelding key={m.meldingNr} m={m} tilbakemelding={t} oppdater={replace} remove={remove}/>
+                        <ResponseMelding key={m.meldingNr} m={m} tilbakemelding={t} oppdater={replace} remove={remove} />
                       ))}
                     </Block>
                   )}
@@ -157,6 +159,7 @@ export const Tilbakemeldinger = ({krav, hasKravExpired}: { krav: Krav; hasKravEx
                       close={(t) => {
                         t && replace(t)
                       }}
+                      remove={remove}
                     />
                   )}
                 </CustomizedPanel>
@@ -166,7 +169,7 @@ export const Tilbakemeldinger = ({krav, hasKravExpired}: { krav: Krav; hasKravEx
 
           {
             tilbakemeldinger.length > DEFAULT_COUNT_SIZE && (
-              <Block $style={{alignSelf: 'flex-end'}} marginTop={theme.sizing.scale400}>
+              <Block $style={{ alignSelf: 'flex-end' }} marginTop={theme.sizing.scale400}>
                 <Button kind="tertiary" size="compact" icon={faPlus} onClick={() => setCount(count + DEFAULT_COUNT_SIZE)} disabled={tilbakemeldinger.length <= count}>
                   Last flere
                 </Button>
@@ -178,7 +181,7 @@ export const Tilbakemeldinger = ({krav, hasKravExpired}: { krav: Krav; hasKravEx
 
       {
         !loading && !tilbakemeldinger.length && (
-          <InfoBlock icon={mailboxPoppingIcon} alt={'Åpen mailboks icon'} text={'Det har ikke kommet inn noen tilbakemeldinger'} color={ettlevColors.red50}/>
+          <InfoBlock icon={mailboxPoppingIcon} alt={'Åpen mailboks icon'} text={'Det har ikke kommet inn noen tilbakemeldinger'} color={ettlevColors.red50} />
         )
       }
 
@@ -200,7 +203,7 @@ export const Tilbakemeldinger = ({krav, hasKravExpired}: { krav: Krav; hasKravEx
                   Still et spørsmål
                 </Button>
               )}
-              {!user.isLoggedIn() && <LoginButton/>}
+              {!user.isLoggedIn() && <LoginButton />}
             </Block>
 
             <NyTilbakemeldingModal
@@ -215,7 +218,7 @@ export const Tilbakemeldinger = ({krav, hasKravExpired}: { krav: Krav; hasKravEx
         )
       }
 
-      <Block height="300px"/>
+      <Block height="300px" />
     </Block>
   )
 }
@@ -227,7 +230,7 @@ const tilbakeMeldingStatus = (tilbakemelding: Tilbakemelding) => {
   const rolle = tilbakemelding?.melderIdent === user.getIdent() ? TilbakemeldingRolle.MELDER : TilbakemeldingRolle.KRAVEIER
   const melderOrKraveier = melder || user.isKraveier()
   const ubesvartOgKraveier = ubesvart && user.isKraveier()
-  return {ubesvart, ubesvartOgKraveier, rolle, melder, melderOrKraveier, sistMelding}
+  return { ubesvart, ubesvartOgKraveier, rolle, melder, melderOrKraveier, sistMelding }
 }
 
 type TilbakemeldingSvarProps = {
@@ -235,14 +238,16 @@ type TilbakemeldingSvarProps = {
   setFocusNummer: (fn: string | undefined) => void
   close: (t: Tilbakemelding) => void
   ubesvartOgKraveier: boolean
+  remove: (t: Tilbakemelding) => void
 }
 
-const TilbakemeldingSvar = ({tilbakemelding, setFocusNummer, close, ubesvartOgKraveier}: TilbakemeldingSvarProps) => {
+const TilbakemeldingSvar = ({ tilbakemelding, setFocusNummer, close, ubesvartOgKraveier, remove }: TilbakemeldingSvarProps) => {
   const melderInfo = tilbakeMeldingStatus(tilbakemelding)
   const [response, setResponse] = useState('')
   const [replyRole, setReplyRole] = useState(melderInfo.rolle)
   const [error, setError] = useState()
   const [loading, setLoading] = useState(false)
+  const [deleteModal, setDeleteModal] = useState(false)
 
   const submit = () => {
     if (response) {
@@ -270,51 +275,95 @@ const TilbakemeldingSvar = ({tilbakemelding, setFocusNummer, close, ubesvartOgKr
   }
 
   return (
-    <Block display="flex" width={'100%'}>
-      <Block display={"flex"} flex={'1'}>
-        <CustomizedTextarea
-          rows={5}
-          onChange={(e) => setResponse((e.target as HTMLInputElement).value)}
-          value={response}
-          disabled={loading}
-        />
-      </Block>
-      <Block>
-        <Block display="flex" justifyContent="space-between" flexDirection="column" marginLeft={theme.sizing.scale400}>
-          {user.isKraveier() && !loading && melderInfo.melder && (
-            <Block marginBottom={theme.sizing.scale400} display="flex" flexDirection="column">
-              <LabelSmall alignSelf="center">Jeg er</LabelSmall>
-              <Button
-                size="compact"
-                icon={faSync}
-                kind={'secondary'}
-                onClick={() => setReplyRole(replyRole === TilbakemeldingRolle.MELDER ? TilbakemeldingRolle.KRAVEIER : TilbakemeldingRolle.MELDER)}
-              >
-                {rolleText(replyRole)}
-              </Button>
-            </Block>
-          )}
-          {loading && (
-            <Block alignSelf="center" marginBottom={theme.sizing.scale400}>
-              <Spinner size={theme.sizing.scale800}/>
-            </Block>
-          )}
-
-          <Button
-            kind={ubesvartOgKraveier ? 'primary' : 'outline'}
-            size={'compact'}
-            disabled={!response}
-            onClick={submit}
-          >
-            {ubesvartOgKraveier ? 'Besvar' : 'Ny melding'}
-          </Button>
+    <Block width={'100%'}>
+      <H4 color={ettlevColors.green800} marginBottom="9px" marginTop="34px">{ubesvartOgKraveier ? 'Besvar' : 'Ny melding'}</H4>
+      <Block display="flex" width="100%" alignItems="flex-end">
+        <Block display="flex" flex="1">
+          <CustomizedTextarea
+            rows={6}
+            onChange={(e) => setResponse((e.target as HTMLInputElement).value)}
+            value={response}
+            disabled={loading}
+          />
         </Block>
+        <Block marginBottom="2px" width="188px">
+          <Block display="flex" justifyContent="space-between" flexDirection="column" marginLeft={theme.sizing.scale400}>
+            {user.isAdmin() && (
+              <Block marginBottom={theme.sizing.scale400} display="flex" flexDirection="column">
+                <Button
+                  size="compact"
+                  icon={faTrashAlt}
+                  kind={'secondary'}
+                  onClick={() => setDeleteModal(true)}
+                >
+                  Slett hele
+                </Button>
+              </Block>
+            )}
+            {user.isKraveier() && !loading && melderInfo.melder && (
+              <Block marginBottom={theme.sizing.scale400} display="flex" flexDirection="column">
+                <Button
+                  size="compact"
+                  icon={faSync}
+                  kind={'secondary'}
+                  onClick={() => setReplyRole(replyRole === TilbakemeldingRolle.MELDER ? TilbakemeldingRolle.KRAVEIER : TilbakemeldingRolle.MELDER)}
+                >
+                  Jeg er {rolleText(replyRole)}
+                </Button>
+              </Block>
+            )}
+            {loading && (
+              <Block alignSelf="center" marginBottom={theme.sizing.scale400}>
+                <Spinner size={theme.sizing.scale800} />
+              </Block>
+            )}
+
+            <Button
+              kind={ubesvartOgKraveier ? 'primary' : 'outline'}
+              size={'compact'}
+              disabled={!response}
+              onClick={submit}
+            >
+              {ubesvartOgKraveier ? 'Svar' : 'Ny melding'}
+            </Button>
+          </Block>
+        </Block>
+        {error && (
+          <Notification kind="negative" overrides={{ Body: { style: { marginBottom: '-25px' } } }}>
+            {error}
+          </Notification>
+        )}
+
+        {deleteModal && (
+          <Modal closeable={false} isOpen onClose={() => setDeleteModal(false)} unstable_ModalBackdropScroll>
+            <ModalHeader>Er du sikker på at du vil slette hele meldingen?</ModalHeader>
+            <ModalBody>
+              <ParagraphSmall>
+                {moment(tilbakemelding.meldinger[0].tid).format('ll')} <PersonName ident={tilbakemelding.meldinger[0].fraIdent} />
+              </ParagraphSmall>
+              <ParagraphMedium>{tilbakemelding.meldinger[0].innhold}</ParagraphMedium>
+            </ModalBody>
+            <ModalFooter>
+              <Button kind={'secondary'} size={'compact'} onClick={() => setDeleteModal(false)}>
+                Avbryt
+              </Button>
+              <Button
+                kind={'primary'}
+                size={'compact'}
+                marginLeft
+                onClick={() =>
+                  tilbakemeldingslettMelding({ tilbakemeldingId: tilbakemelding.id, meldingNr: 1 }).then((t) => {
+                    remove({ ...t, meldinger: [] })
+                    setDeleteModal(false)
+                  })
+                }
+              >
+                Slett
+              </Button>
+            </ModalFooter>
+          </Modal>
+        )}
       </Block>
-      {error && (
-        <Notification kind="negative" overrides={{Body: {style: {marginBottom: '-25px'}}}}>
-          {error}
-        </Notification>
-      )}
     </Block>
   )
 }
@@ -322,9 +371,9 @@ const TilbakemeldingSvar = ({tilbakemelding, setFocusNummer, close, ubesvartOgKr
 const rolleText = (rolle: TilbakemeldingRolle) => {
   switch (rolle) {
     case TilbakemeldingRolle.KRAVEIER:
-      return 'Kraveier'
+      return 'kraveier'
     case TilbakemeldingRolle.MELDER:
-      return 'Melder'
+      return 'melder'
   }
 }
 const typeText = (type: TilbakemeldingType) => {
