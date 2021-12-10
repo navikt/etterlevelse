@@ -1,4 +1,4 @@
-import { AdresseType, Krav, Tilbakemelding, TilbakemeldingMelding, TilbakemeldingRolle, TilbakemeldingType, Varslingsadresse } from '../../constants'
+import {AdresseType, Krav, Tilbakemelding, TilbakemeldingMelding, TilbakemeldingRolle, TilbakemeldingType, Varslingsadresse} from '../../constants'
 import {
   createNewTilbakemelding,
   CreateTilbakemeldingRequest,
@@ -8,45 +8,44 @@ import {
   tilbakemeldingslettMelding,
   useTilbakemeldinger,
 } from '../../api/TilbakemeldingApi'
-import React, { useEffect, useState } from 'react'
-import { Block } from 'baseui/block'
-import { theme } from '../../util'
-import { H2, HeadingXLarge, LabelSmall, ParagraphMedium, ParagraphSmall } from 'baseui/typography'
+import React, {useEffect, useState} from 'react'
+import {Block} from 'baseui/block'
+import {theme} from '../../util'
+import {H2, HeadingXLarge, LabelSmall, ParagraphMedium, ParagraphSmall} from 'baseui/typography'
 import Button from '../common/Button'
-import { faChevronDown, faChevronUp, faEnvelope, faPencilAlt, faPlus, faSync, faUser } from '@fortawesome/free-solid-svg-icons'
-import { faTrashAlt } from '@fortawesome/free-regular-svg-icons'
-import { borderColor, borderRadius, borderWidth } from '../common/Style'
-import { Spinner } from '../common/Spinner'
+import {faChevronDown, faChevronUp, faEnvelope, faPencilAlt, faPlus, faSync, faUser} from '@fortawesome/free-solid-svg-icons'
+import {faTrashAlt} from '@fortawesome/free-regular-svg-icons'
+import {borderRadius} from '../common/Style'
+import {Spinner} from '../common/Spinner'
 import moment from 'moment'
-import { Card } from 'baseui/card'
-import { user } from '../../services/User'
-import { Modal, ModalBody, ModalFooter, ModalHeader } from 'baseui/modal'
-import { Field, FieldProps, Form, Formik } from 'formik'
-import { TextAreaField } from '../common/Inputs'
+import {user} from '../../services/User'
+import {Modal, ModalBody, ModalFooter, ModalHeader} from 'baseui/modal'
+import {Field, FieldProps, Form, Formik} from 'formik'
+import {TextAreaField} from '../common/Inputs'
 import * as yup from 'yup'
-import { Notification } from 'baseui/notification'
-import { faSlackHash } from '@fortawesome/free-brands-svg-icons'
-import { FormControl } from 'baseui/form-control'
-import { AddEmail, SlackChannelSearch, SlackUserSearch, VarslingsadresserTagList } from './Edit/KravVarslingsadresserEdit'
-import { useHistory } from 'react-router-dom'
-import { useQueryParam, useRefs } from '../../util/hooks'
-import { ettlevColors, pageWidth } from '../../util/theme'
-import { mailboxPoppingIcon } from '../Images'
-import { InfoBlock } from '../common/InfoBlock'
-import { Portrait } from '../common/Portrait'
-import { PersonName } from '../common/PersonName'
+import {Notification} from 'baseui/notification'
+import {faSlackHash} from '@fortawesome/free-brands-svg-icons'
+import {FormControl} from 'baseui/form-control'
+import {AddEmail, SlackChannelSearch, SlackUserSearch, VarslingsadresserTagList} from './Edit/KravVarslingsadresserEdit'
+import {useHistory} from 'react-router-dom'
+import {useQueryParam, useRefs} from '../../util/hooks'
+import {ettlevColors, pageWidth} from '../../util/theme'
+import {mailboxPoppingIcon} from '../Images'
+import {InfoBlock} from '../common/InfoBlock'
+import {Portrait} from '../common/Portrait'
+import {PersonName} from '../common/PersonName'
 import CustomizedTextarea from '../common/CustomizedTextarea'
 import * as _ from 'lodash'
-import { LoginButton } from '../Header'
+import {LoginButton} from '../Header'
 import LabelWithTooltip from '../common/LabelWithTooltip'
 import CustomizedModal from '../common/CustomizedModal'
-import { CustomizedAccordion, CustomizedPanel } from '../common/CustomizedAccordion'
+import {CustomizedAccordion, CustomizedPanel} from '../common/CustomizedAccordion'
 import StatusView from '../common/StatusTag'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 
 const DEFAULT_COUNT_SIZE = 5
 
-export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKravExpired: boolean }) => {
+export const Tilbakemeldinger = ({krav, hasKravExpired}: { krav: Krav; hasKravExpired: boolean }) => {
   const [tilbakemeldinger, loading, add, replace, remove] = useTilbakemeldinger(krav.kravNummer, krav.kravVersjon)
   const [focusNr, setFocusNr] = useState<string | undefined>(useQueryParam('tilbakemeldingId'))
   const [addTilbakemelding, setAddTilbakemelding] = useState(false)
@@ -66,13 +65,13 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
 
   return (
     <Block width="100%">
-      {loading && <Spinner size={theme.sizing.scale800} />}
+      {loading && <Spinner size={theme.sizing.scale800}/>}
       {!loading && !!tilbakemeldinger.length && (
         <Block display={'flex'} flexDirection={'column'}>
           <CustomizedAccordion>
             {tilbakemeldinger.slice(0, count).map((t) => {
               const focused = focusNr === t.id
-              const { ubesvart, ubesvartOgKraveier, melderOrKraveier, sistMelding } = tilbakeMeldingStatus(t)
+              const {ubesvart, ubesvartOgKraveier, melderOrKraveier, sistMelding} = tilbakeMeldingStatus(t)
 
               const statusView = (icon: React.ReactNode) => (
                 <Block>
@@ -80,7 +79,10 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
                     <Block display="flex" flexDirection="column" alignItems="flex-end">
                       <StatusView
                         status={ubesvart ? 'Ubesvart' : 'Besvart'}
-                        statusDisplay={ubesvart ? { background: ettlevColors.white, border: ettlevColors.green100 } : { background: ettlevColors.green100, border: ettlevColors.green100 }}
+                        statusDisplay={ubesvart ? {background: ettlevColors.white, border: ettlevColors.green100} : {
+                          background: ettlevColors.green100,
+                          border: ettlevColors.green100
+                        }}
                         overrides={{
                           Root: {
                             style: {
@@ -119,17 +121,17 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
                     }
                   }}
                   toggleIcon={{
-                    expanded: statusView(<FontAwesomeIcon icon={faChevronUp} />),
-                    unexpanded: statusView(<FontAwesomeIcon icon={faChevronDown} />)
+                    expanded: statusView(<FontAwesomeIcon icon={faChevronUp}/>),
+                    unexpanded: statusView(<FontAwesomeIcon icon={faChevronDown}/>)
                   }}
                   title={
                     <Block display="flex" width="100%">
-                      <Portrait ident={t.melderIdent} />
+                      <Portrait ident={t.melderIdent}/>
                       <Block display="flex" flexDirection="column" marginLeft={theme.sizing.scale400} width="100%">
                         <Block display="flex" width="100%">
                           <Block display="flex" alignItems="center" width="100%">
                             <LabelSmall>
-                              <PersonName ident={t.melderIdent} />
+                              <PersonName ident={t.melderIdent}/>
                             </LabelSmall>
                             <ParagraphSmall marginTop={0} marginBottom={0} marginLeft="24px">
                               Sendt: {moment(t.meldinger[0].tid).format('lll')}
@@ -138,7 +140,7 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
                         </Block>
                         <Block display="flex" width="100%">
                           <ParagraphMedium marginBottom={0} marginRight="29px" marginTop="4px">
-                            {focused ? t.meldinger[0].innhold : _.truncate(t.meldinger[0].innhold, { length: 150, separator: /[.,] +/ })}
+                            {focused ? t.meldinger[0].innhold : _.truncate(t.meldinger[0].innhold, {length: 150, separator: /[.,] +/})}
                           </ParagraphMedium>
                         </Block>
                       </Block>
@@ -146,16 +148,16 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
                   }
                 >
                   <Block display="flex" width="100%" alignItems="center" marginTop="17px">
-                    {focused && t.meldinger.length === 1 && <MeldingKnapper marginLeft melding={t.meldinger[0]} tilbakemeldingId={t.id} oppdater={replace} remove={remove} />}
+                    {focused && t.meldinger.length === 1 && <MeldingKnapper marginLeft melding={t.meldinger[0]} tilbakemeldingId={t.id} oppdater={replace} remove={remove}/>}
 
-                    {focused && <EndretInfo melding={t.meldinger[0]} />}
+                    {focused && <EndretInfo melding={t.meldinger[0]}/>}
                   </Block>
 
                   {/* meldingsliste */}
                   {focused && (
                     <Block display={'flex'} flexDirection={'column'} marginTop={theme.sizing.scale600}>
                       {t.meldinger.slice(1).map((m) => (
-                        <ResponseMelding key={m.meldingNr} m={m} tilbakemelding={t} oppdater={replace} remove={remove} />
+                        <ResponseMelding key={m.meldingNr} m={m} tilbakemelding={t} oppdater={replace} remove={remove}/>
                       ))}
                     </Block>
                   )}
@@ -165,62 +167,39 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
 
                     {melderOrKraveier && user.canWrite() && focused && (
                       <Block>
-                        <Button
-                          kind={ubesvartOgKraveier ? 'primary' : 'outline'}
-                          size={'compact'}
-                          onClick={() => {
-                            setFocusNr(t.id)
-                            setTilbakemelding(t)
+                        <TilbakemeldingSvar
+                          tilbakemelding={t}
+                          setTilbakeMelding={setTilbakemelding}
+                          setFocusNummer={setFocusNr}
+                          ubesvartOgKraveier={ubesvartOgKraveier}
+                          close={(t) => {
+                            t && replace(t)
+                            setTilbakemelding(undefined)
                           }}
-                        >
-                          {ubesvartOgKraveier ? 'Besvar' : 'Ny melding'}
-                        </Button>
+                        />
                       </Block>
                     )}
                   </Block>
                 </CustomizedPanel>
-                // <Card
-                //   key={t.id}
-                //   overrides={{
-                //     Root: {
-                //       style: {
-                //         marginBottom: theme.sizing.scale300,
-                //         ...borderColor(ettlevColors.grey100),
-                //         ...borderWidth('1px'),
-                //       },
-                //     },
-                //   }}
-                // >
-                //   <Block display={'flex'}>
-                //     <Portrait ident={t.melderIdent} />
-                //     <Block display={'flex'} flexDirection={'column'} marginLeft={theme.sizing.scale400} width={'100%'}>
-
-                //       <Block marginTop={theme.sizing.scale600} $style={{ borderTop: focused && t.meldinger.length === 1 ? `1px solid ${ettlevColors.green50}` : undefined }}>
-                //
-
-                //       </Block>
-                //     </Block>
-                //   </Block>
-                // </Card>
               )
             })}
           </CustomizedAccordion>
 
           {
             tilbakemeldinger.length > DEFAULT_COUNT_SIZE && (
-              <Block $style={{ alignSelf: 'flex-end' }} marginTop={theme.sizing.scale400}>
+              <Block $style={{alignSelf: 'flex-end'}} marginTop={theme.sizing.scale400}>
                 <Button kind="tertiary" size="compact" icon={faPlus} onClick={() => setCount(count + DEFAULT_COUNT_SIZE)} disabled={tilbakemeldinger.length <= count}>
                   Last flere
                 </Button>
               </Block>
             )
           }
-        </Block >
+        </Block>
       )}
 
       {
         !loading && !tilbakemeldinger.length && (
-          <InfoBlock icon={mailboxPoppingIcon} alt={'Åpen mailboks icon'} text={'Det har ikke kommet inn noen tilbakemeldinger'} color={ettlevColors.red50} />
+          <InfoBlock icon={mailboxPoppingIcon} alt={'Åpen mailboks icon'} text={'Det har ikke kommet inn noen tilbakemeldinger'} color={ettlevColors.red50}/>
         )
       }
 
@@ -242,7 +221,7 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
                   Still et spørsmål
                 </Button>
               )}
-              {!user.isLoggedIn() && <LoginButton />}
+              {!user.isLoggedIn() && <LoginButton/>}
             </Block>
 
             <NyTilbakemeldingModal
@@ -253,24 +232,17 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
                 setAddTilbakemelding(false)
               }}
             />
-            <TilbakemeldingSvarModal
-              tilbakemelding={tilbakemelding}
-              close={(t) => {
-                t && replace(t)
-                setTilbakemelding(undefined)
-              }}
-            />
           </>
         )
       }
 
-      <Block height="300px" />
-    </Block >
+      <Block height="300px"/>
+    </Block>
   )
 }
 
 const ResponseMelding = (props: { m: TilbakemeldingMelding; tilbakemelding: Tilbakemelding; oppdater: (t: Tilbakemelding) => void; remove: (t: Tilbakemelding) => void }) => {
-  const { m, tilbakemelding, oppdater, remove } = props
+  const {m, tilbakemelding, oppdater, remove} = props
   const melder = m.rolle === TilbakemeldingRolle.MELDER
   const sisteMelding = m.meldingNr === tilbakemelding.meldinger[tilbakemelding.meldinger.length - 1].meldingNr
 
@@ -283,10 +255,10 @@ const ResponseMelding = (props: { m: TilbakemeldingMelding; tilbakemelding: Tilb
       padding={theme.sizing.scale500}
     >
       <Block display={'flex'}>
-        <Portrait ident={m.fraIdent} />
+        <Portrait ident={m.fraIdent}/>
         <Block marginLeft={theme.sizing.scale200} marginRight={theme.sizing.scale200} display={'flex'} flexDirection={'column'}>
           <LabelSmall>
-            {melder ? <PersonName ident={m.fraIdent} /> : 'Kraveier'}
+            {melder ? <PersonName ident={m.fraIdent}/> : 'Kraveier'}
           </LabelSmall>
           <ParagraphSmall marginTop={0} marginBottom={0}>
             {moment(m.tid).format('ll')}
@@ -298,8 +270,8 @@ const ResponseMelding = (props: { m: TilbakemeldingMelding; tilbakemelding: Tilb
         {m.innhold}
       </ParagraphMedium>
       <Block display="flex" width="100%" alignItems="center" marginTop="17px">
-        {sisteMelding && <MeldingKnapper melding={m} tilbakemeldingId={tilbakemelding.id} oppdater={oppdater} remove={remove} />}
-        <EndretInfo melding={m} />
+        {sisteMelding && <MeldingKnapper melding={m} tilbakemeldingId={tilbakemelding.id} oppdater={oppdater} remove={remove}/>}
+        <EndretInfo melding={m}/>
       </Block>
     </Block>
   )
@@ -310,13 +282,13 @@ const EndretInfo = (props: { melding: TilbakemeldingMelding }) => {
   return (
     <Block justifyContent="flex-end" display="flex" width="100%">
       <ParagraphSmall marginBottom="0px" marginTop="0px">
-        Sist endret av <PersonName ident={props.melding.endretAvIdent} /> - {moment(props.melding.endretTid).format('lll')}
+        Sist endret av <PersonName ident={props.melding.endretAvIdent}/> - {moment(props.melding.endretTid).format('lll')}
       </ParagraphSmall>
     </Block>
   )
 }
 
-const NyTilbakemeldingModal = ({ open, close, krav }: { open?: boolean; close: (add?: Tilbakemelding) => void; krav: Krav }) => {
+const NyTilbakemeldingModal = ({open, close, krav}: { open?: boolean; close: (add?: Tilbakemelding) => void; krav: Krav }) => {
   const [error, setError] = useState()
   const [adresseType, setAdresseType] = useState<AdresseType>()
 
@@ -348,7 +320,7 @@ const NyTilbakemeldingModal = ({ open, close, krav }: { open?: boolean; close: (
         validateOnBlur={false}
         validateOnChange={false}
       >
-        {({ isSubmitting, setFieldValue, values, submitForm }) => {
+        {({isSubmitting, setFieldValue, values, submitForm}) => {
           const setVarslingsadresse = (v?: Varslingsadresse) => {
             setFieldValue('varslingsadresse', v)
             setAdresseType(undefined)
@@ -360,35 +332,35 @@ const NyTilbakemeldingModal = ({ open, close, krav }: { open?: boolean; close: (
               </ModalHeader>
               <ModalBody>
                 <Block>
-                  <TextAreaField tooltip="Skriv ditt spørsmål i tekstfeltet" label="Ditt spørsmål" name="foersteMelding" placeholder="Skriv her.." />
+                  <TextAreaField tooltip="Skriv ditt spørsmål i tekstfeltet" label="Ditt spørsmål" name="foersteMelding" placeholder="Skriv her.."/>
                   {/* <OptionField label="Type" name="type" clearable={false} options={Object.values(TilbakemeldingType).map((o) => ({ id: o, label: typeText(o) }))} /> */}
                   <Field name="varslingsadresse.adresse">
                     {(p: FieldProps) => (
-                      <FormControl label={<LabelWithTooltip label="Varslingsadresse" tooltip="Velg ønsket varslings metode" />} error={p.meta.error}>
+                      <FormControl label={<LabelWithTooltip label="Varslingsadresse" tooltip="Velg ønsket varslings metode"/>} error={p.meta.error}>
                         <Block>
                           <Block display="flex" flexDirection="column" marginTop={theme.sizing.scale600}>
-                            {adresseType === AdresseType.SLACK && <SlackChannelSearch add={setVarslingsadresse} />}
+                            {adresseType === AdresseType.SLACK && <SlackChannelSearch add={setVarslingsadresse}/>}
                             {adresseType !== AdresseType.SLACK && !values.varslingsadresse && (
                               <Button kind="secondary" size="compact" type="button" icon={faSlackHash} onClick={() => setAdresseType(AdresseType.SLACK)}>
                                 Slack-kanal
                               </Button>
                             )}
-                            <Block marginTop={theme.sizing.scale400} />
-                            {adresseType === AdresseType.SLACK_USER && <SlackUserSearch add={setVarslingsadresse} />}
+                            <Block marginTop={theme.sizing.scale400}/>
+                            {adresseType === AdresseType.SLACK_USER && <SlackUserSearch add={setVarslingsadresse}/>}
                             {adresseType !== AdresseType.SLACK_USER && !values.varslingsadresse && (
                               <Button kind="secondary" size="compact" marginLeft type="button" icon={faUser} onClick={() => setAdresseType(AdresseType.SLACK_USER)}>
                                 Slack-bruker
                               </Button>
                             )}
-                            <Block marginTop={theme.sizing.scale400} />
-                            {adresseType === AdresseType.EPOST && <AddEmail add={setVarslingsadresse} />}
+                            <Block marginTop={theme.sizing.scale400}/>
+                            {adresseType === AdresseType.EPOST && <AddEmail add={setVarslingsadresse}/>}
                             {adresseType !== AdresseType.EPOST && !values.varslingsadresse && (
                               <Button kind="secondary" size="compact" marginLeft type="button" icon={faEnvelope} onClick={() => setAdresseType(AdresseType.EPOST)}>
                                 Epost
                               </Button>
                             )}
                           </Block>
-                          {values.varslingsadresse && <VarslingsadresserTagList varslingsadresser={[values.varslingsadresse]} remove={() => setVarslingsadresse(undefined)} />}
+                          {values.varslingsadresse && <VarslingsadresserTagList varslingsadresser={[values.varslingsadresse]} remove={() => setVarslingsadresse(undefined)}/>}
                         </Block>
                       </FormControl>
                     )}
@@ -399,7 +371,7 @@ const NyTilbakemeldingModal = ({ open, close, krav }: { open?: boolean; close: (
                 <Block display="flex" justifyContent="flex-end">
                   <Block>
                     {error && (
-                      <Notification kind="negative" overrides={{ Body: { style: { marginBottom: '-25px' } } }}>
+                      <Notification kind="negative" overrides={{Body: {style: {marginBottom: '-25px'}}}}>
                         {error}
                       </Notification>
                     )}
@@ -428,37 +400,11 @@ const tilbakeMeldingStatus = (tilbakemelding: Tilbakemelding) => {
   const rolle = tilbakemelding?.melderIdent === user.getIdent() ? TilbakemeldingRolle.MELDER : TilbakemeldingRolle.KRAVEIER
   const melderOrKraveier = melder || user.isKraveier()
   const ubesvartOgKraveier = ubesvart && user.isKraveier()
-  return { ubesvart, ubesvartOgKraveier, rolle, melder, melderOrKraveier, sistMelding }
-}
-
-const TilbakemeldingSvarModal = ({ tilbakemelding, close }: { tilbakemelding?: Tilbakemelding; close: (t?: Tilbakemelding) => void }) => {
-  if (!tilbakemelding) return null
-
-  return (
-    <Modal
-      closeable={false}
-      unstable_ModalBackdropScroll
-      isOpen={!!tilbakemelding}
-      onClose={() => close()}
-      overrides={{
-        Dialog: {
-          style: {
-            width: '60%',
-            maxWidth: pageWidth,
-          },
-        },
-      }}
-    >
-      <ModalHeader>Svar på tilbakemelding</ModalHeader>
-      <ModalBody>
-        <TilbakemeldingSvar tilbakemelding={tilbakemelding} close={close} />
-      </ModalBody>
-    </Modal>
-  )
+  return {ubesvart, ubesvartOgKraveier, rolle, melder, melderOrKraveier, sistMelding}
 }
 
 const MeldingKnapper = (props: { melding: TilbakemeldingMelding; tilbakemeldingId: string; oppdater: (t: Tilbakemelding) => void; remove: (t: Tilbakemelding) => void; marginLeft?: boolean }) => {
-  const { melding, tilbakemeldingId, oppdater, remove } = props
+  const {melding, tilbakemeldingId, oppdater, remove} = props
   const meldingNr = melding.meldingNr
   const [deleteModal, setDeleteModal] = useState(false)
   const [editModal, setEditModal] = useState(false)
@@ -481,7 +427,7 @@ const MeldingKnapper = (props: { melding: TilbakemeldingMelding; tilbakemeldingI
           <ModalBody>
             {meldingNr === 1 && <ParagraphMedium>Hele meldingstråden vil bli slettet.</ParagraphMedium>}
             <ParagraphSmall>
-              {moment(melding.tid).format('ll')} <PersonName ident={melding.fraIdent} />
+              {moment(melding.tid).format('ll')} <PersonName ident={melding.fraIdent}/>
             </ParagraphSmall>
             <ParagraphMedium>{melding.innhold}</ParagraphMedium>
           </ModalBody>
@@ -494,9 +440,9 @@ const MeldingKnapper = (props: { melding: TilbakemeldingMelding; tilbakemeldingI
               size={'compact'}
               marginLeft
               onClick={() =>
-                tilbakemeldingslettMelding({ tilbakemeldingId, meldingNr }).then((t) => {
+                tilbakemeldingslettMelding({tilbakemeldingId, meldingNr}).then((t) => {
                   if (meldingNr === 1) {
-                    remove({ ...t, meldinger: [] })
+                    remove({...t, meldinger: []})
                   } else {
                     remove(t)
                   }
@@ -528,7 +474,7 @@ const MeldingKnapper = (props: { melding: TilbakemeldingMelding; tilbakemeldingI
           <ModalHeader>Rediger melding</ModalHeader>
           <ModalBody>
             <ParagraphSmall>
-              {moment(melding.tid).format('ll')} <PersonName ident={melding.fraIdent} />
+              {moment(melding.tid).format('ll')} <PersonName ident={melding.fraIdent}/>
             </ParagraphSmall>
             <TilbakemeldingEdit
               tilbakemeldingId={tilbakemeldingId}
@@ -545,7 +491,15 @@ const MeldingKnapper = (props: { melding: TilbakemeldingMelding; tilbakemeldingI
   )
 }
 
-const TilbakemeldingSvar = ({ tilbakemelding, close }: { tilbakemelding: Tilbakemelding; close: (t: Tilbakemelding) => void }) => {
+type TilbakemeldingSvarProps = {
+  tilbakemelding: Tilbakemelding
+  setTilbakeMelding: (t: Tilbakemelding) => void
+  setFocusNummer: (fn: string | undefined) => void
+  close: (t: Tilbakemelding) => void
+  ubesvartOgKraveier: boolean
+}
+
+const TilbakemeldingSvar = ({tilbakemelding, setTilbakeMelding, setFocusNummer, close, ubesvartOgKraveier}: TilbakemeldingSvarProps) => {
   const melderInfo = tilbakeMeldingStatus(tilbakemelding)
   const [response, setResponse] = useState('')
   const [replyRole, setReplyRole] = useState(melderInfo.rolle)
@@ -553,14 +507,23 @@ const TilbakemeldingSvar = ({ tilbakemelding, close }: { tilbakemelding: Tilbake
   const [loading, setLoading] = useState(false)
 
   const submit = () => {
+    setFocusNummer(tilbakemelding.id)
+    setTilbakeMelding(tilbakemelding)
+
     const req: TilbakemeldingNewMeldingRequest = {
       tilbakemeldingId: tilbakemelding.id,
       rolle: replyRole,
       melding: response,
     }
+
     setLoading(true)
+
     tilbakemeldingNewMelding(req)
-      .then(close)
+      .then((t)=>{
+        close(t)
+        setLoading(false)
+        setResponse('')
+      })
       .catch((e) => {
         setError(e.error)
         setLoading(false)
@@ -569,7 +532,7 @@ const TilbakemeldingSvar = ({ tilbakemelding, close }: { tilbakemelding: Tilbake
 
   return (
     <Block display="flex" alignItems="flex-end">
-      <CustomizedTextarea rows={15} onChange={(e) => setResponse((e.target as HTMLInputElement).value)} value={response} disabled={loading} />
+      <CustomizedTextarea rows={15} onChange={(e) => setResponse((e.target as HTMLInputElement).value)} value={response} disabled={loading}/>
 
       <Block display="flex" justifyContent="space-between" flexDirection="column" marginLeft={theme.sizing.scale400}>
         {user.isKraveier() && !loading && melderInfo.melder && (
@@ -587,16 +550,20 @@ const TilbakemeldingSvar = ({ tilbakemelding, close }: { tilbakemelding: Tilbake
         )}
         {loading && (
           <Block alignSelf="center" marginBottom={theme.sizing.scale400}>
-            <Spinner size={theme.sizing.scale800} />
+            <Spinner size={theme.sizing.scale800}/>
           </Block>
         )}
 
-        <Button size="compact" disabled={!response || loading} onClick={submit}>
-          Send
+        <Button
+          kind={ubesvartOgKraveier ? 'primary' : 'outline'}
+          size={'compact'}
+          onClick={submit}
+        >
+          {ubesvartOgKraveier ? 'Besvar' : 'Ny melding'}
         </Button>
       </Block>
       {error && (
-        <Notification kind="negative" overrides={{ Body: { style: { marginBottom: '-25px' } } }}>
+        <Notification kind="negative" overrides={{Body: {style: {marginBottom: '-25px'}}}}>
           {error}
         </Notification>
       )}
@@ -604,14 +571,14 @@ const TilbakemeldingSvar = ({ tilbakemelding, close }: { tilbakemelding: Tilbake
   )
 }
 
-const TilbakemeldingEdit = ({ tilbakemeldingId, melding, close }: { tilbakemeldingId: string; melding: TilbakemeldingMelding; close: (t: Tilbakemelding) => void }) => {
+const TilbakemeldingEdit = ({tilbakemeldingId, melding, close}: { tilbakemeldingId: string; melding: TilbakemeldingMelding; close: (t: Tilbakemelding) => void }) => {
   const [response, setResponse] = useState(melding.innhold)
   const [error, setError] = useState()
   const [loading, setLoading] = useState(false)
 
   const submit = () => {
     setLoading(true)
-    tilbakemeldingEditMelding({ tilbakemeldingId, meldingNr: melding.meldingNr, text: response })
+    tilbakemeldingEditMelding({tilbakemeldingId, meldingNr: melding.meldingNr, text: response})
       .then(close)
       .catch((e) => {
         setError(e.error)
@@ -621,12 +588,12 @@ const TilbakemeldingEdit = ({ tilbakemeldingId, melding, close }: { tilbakemeldi
 
   return (
     <Block display="flex" alignItems="flex-end">
-      <CustomizedTextarea rows={15} onChange={(e) => setResponse((e.target as HTMLInputElement).value)} value={response} disabled={loading} />
+      <CustomizedTextarea rows={15} onChange={(e) => setResponse((e.target as HTMLInputElement).value)} value={response} disabled={loading}/>
       <Button size="compact" marginLeft disabled={!response || loading} onClick={submit}>
         Send
       </Button>
       {error && (
-        <Notification kind="negative" overrides={{ Body: { style: { marginBottom: '-25px' } } }}>
+        <Notification kind="negative" overrides={{Body: {style: {marginBottom: '-25px'}}}}>
           {error}
         </Notification>
       )}
