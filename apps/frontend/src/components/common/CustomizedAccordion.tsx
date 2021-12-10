@@ -16,7 +16,7 @@ interface CustomizedPanelProps {
   HeaderBackgroundColor?: string
   HeaderActiveBackgroundColor?: string
   noUnderLine?: boolean
-  toggleIcon?: { expanded: React.ReactElement<any, any>, unexpanded: React.ReactElement<any, any> }
+  toggleIcon?: { expanded: React.ReactElement<any, any>; unexpanded: React.ReactElement<any, any> }
 }
 
 type CustomProps = CustomizedPanelProps & PanelProps
@@ -30,7 +30,7 @@ export const CustomizedPanel = (props: CustomProps) => {
   const customOverrides: PanelOverrides<any> = {
     ToggleIcon: {
       component: () => {
-        if(props.toggleIcon) {
+        if (props.toggleIcon) {
           return expanded ? props.toggleIcon.expanded : props.toggleIcon.unexpanded
         } else {
           return expanded ? <FontAwesomeIcon icon={faChevronUp} /> : <FontAwesomeIcon icon={faChevronDown} />
@@ -48,11 +48,11 @@ export const CustomizedPanel = (props: CustomProps) => {
           color: ettlevColors.green800,
           ...(expanded
             ? {
-              boxShadow: 'none',
-            }
+                boxShadow: 'none',
+              }
             : {
-              boxShadow: '0px 3px 4px rgba(0, 0, 0, 0.12)',
-            }),
+                boxShadow: '0px 3px 4px rgba(0, 0, 0, 0.12)',
+              }),
         },
       },
     },
@@ -73,11 +73,11 @@ export const CustomizedPanel = (props: CustomProps) => {
       style: {
         ...(expanded
           ? {
-            ...borderColor(ettlevColors.grey200),
-          }
+              ...borderColor(ettlevColors.grey200),
+            }
           : {
-            ...borderColor(ettlevColors.grey100),
-          }),
+              ...borderColor(ettlevColors.grey100),
+            }),
         ...borderStyle('solid'),
         ...borderWidth('1px'),
         ...borderRadius('4px'),

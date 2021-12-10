@@ -24,12 +24,7 @@ type NyTilbakemeldingModalProps = {
   setShowNotification: (varslingsAddress: AdresseType) => void
 }
 
-export const NyTilbakemeldingModal = ({
-  open,
-  close,
-  krav,
-  setShowNotification
-}: NyTilbakemeldingModalProps) => {
+export const NyTilbakemeldingModal = ({ open, close, krav, setShowNotification }: NyTilbakemeldingModalProps) => {
   const [error, setError] = useState()
   const [adresseType, setAdresseType] = useState<AdresseType>()
 

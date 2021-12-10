@@ -9,7 +9,7 @@ export const EndretInfo = (props: { melding: TilbakemeldingMelding }) => {
   return (
     <Block justifyContent="flex-end" display="flex" width="100%">
       <ParagraphSmall marginBottom="0px" marginTop="0px">
-        Sist endret av <PersonName ident={props.melding.endretAvIdent}/> - {moment(props.melding.endretTid).format('lll')}
+        Sist endret av <PersonName ident={props.melding.endretAvIdent} /> - {moment(props.melding.endretTid).format('lll')}
       </ParagraphSmall>
     </Block>
   )

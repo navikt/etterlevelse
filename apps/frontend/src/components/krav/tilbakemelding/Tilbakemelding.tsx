@@ -1,5 +1,5 @@
 import { AdresseType, Krav, Tilbakemelding, TilbakemeldingRolle, TilbakemeldingType } from '../../../constants'
-import { tilbakemeldingNewMelding, TilbakemeldingNewMeldingRequest, tilbakemeldingslettMelding, useTilbakemeldinger, } from '../../../api/TilbakemeldingApi'
+import { tilbakemeldingNewMelding, TilbakemeldingNewMeldingRequest, tilbakemeldingslettMelding, useTilbakemeldinger } from '../../../api/TilbakemeldingApi'
 import React, { useEffect, useState } from 'react'
 import { Block } from 'baseui/block'
 import { theme } from '../../../util'
@@ -33,7 +33,6 @@ import { Card } from 'baseui/card'
 import { faThumbsUp } from '@fortawesome/free-regular-svg-icons'
 
 const DEFAULT_COUNT_SIZE = 5
-
 
 const getMessageType = (type: AdresseType) => {
   switch (type) {
@@ -69,40 +68,48 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
       {loading && <Spinner size={theme.sizing.scale800} />}
       {!loading && !!tilbakemeldinger.length && (
         <Block display={'flex'} flexDirection={'column'}>
-          {showNotification &&
-            <Card overrides={{
-              Root: {
-                style: {
-                  backgroundColor: ettlevColors.green50,
-                  marginBottom: '35px',
-                  ...borderRadius('4px'),
-                  ...borderWidth('1px'),
-                  ...borderColor(ettlevColors.green100)
-                }
-              }
-            }}>
+          {showNotification && (
+            <Card
+              overrides={{
+                Root: {
+                  style: {
+                    backgroundColor: ettlevColors.green50,
+                    marginBottom: '35px',
+                    ...borderRadius('4px'),
+                    ...borderWidth('1px'),
+                    ...borderColor(ettlevColors.green100),
+                  },
+                },
+              }}
+            >
               <Block display="flex" alignItems="center">
                 <FontAwesomeIcon icon={faThumbsUp} size="lg" />
-                <H3 $style={{
-                  fontSize: '20px',
-                  lineHeight: '25px',
-                  marginLeft: '5px',
-                  marginTop: '0px',
-                  marginBottom: '0px'
-                }}>Spørsmålet er sendt til kraveier!</H3>
+                <H3
+                  $style={{
+                    fontSize: '20px',
+                    lineHeight: '25px',
+                    marginLeft: '5px',
+                    marginTop: '0px',
+                    marginBottom: '0px',
+                  }}
+                >
+                  Spørsmålet er sendt til kraveier!
+                </H3>
               </Block>
               <Block marginTop={'17px'}>
-                <Paragraph1 $style={{
-                  fontSize: '20px',
-                  lineHeight: '25px',
-                  marginTop: '0px',
-                  marginBottom: '0px'
-                }}>
+                <Paragraph1
+                  $style={{
+                    fontSize: '20px',
+                    lineHeight: '25px',
+                    marginTop: '0px',
+                    marginBottom: '0px',
+                  }}
+                >
                   Du får varsel på {getMessageType(showNotification)} når spørsmålet er besvart.
                 </Paragraph1>
               </Block>
             </Card>
-          }
+          )}
           <CustomizedAccordion>
             {tilbakemeldinger.slice(0, count).map((t) => {
               const focused = focusNr === t.id
@@ -114,16 +121,20 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
                     <Block display="flex" flexDirection="column" alignItems="flex-end">
                       <StatusView
                         status={ubesvart ? 'Ubesvart' : 'Besvart'}
-                        statusDisplay={ubesvart ? { background: ettlevColors.white, border: ettlevColors.green100 } : {
-                          background: ettlevColors.green100,
-                          border: ettlevColors.green100
-                        }}
+                        statusDisplay={
+                          ubesvart
+                            ? { background: ettlevColors.white, border: ettlevColors.green100 }
+                            : {
+                                background: ettlevColors.green100,
+                                border: ettlevColors.green100,
+                              }
+                        }
                         overrides={{
                           Root: {
                             style: {
-                              ...borderRadius('20px')
-                            }
-                          }
+                              ...borderRadius('20px'),
+                            },
+                          },
                         }}
                       />
                     </Block>
@@ -144,21 +155,21 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
                     Header: {
                       style: {
                         display: 'flex',
-                        alignItems: 'flex-start'
-                      }
+                        alignItems: 'flex-start',
+                      },
                     },
                     Content: {
                       style: {
                         backgroundColor: ettlevColors.white,
                         paddingLeft: '20px',
                         paddingRight: '20px',
-                        paddingBottom: '8px'
-                      }
-                    }
+                        paddingBottom: '8px',
+                      },
+                    },
                   }}
                   toggleIcon={{
                     expanded: statusView(<FontAwesomeIcon icon={faChevronUp} />),
-                    unexpanded: statusView(<FontAwesomeIcon icon={faChevronDown} />)
+                    unexpanded: statusView(<FontAwesomeIcon icon={faChevronDown} />),
                   }}
                   title={
                     <Block display="flex" width="100%">
@@ -215,57 +226,51 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
             })}
           </CustomizedAccordion>
 
-          {
-            tilbakemeldinger.length > DEFAULT_COUNT_SIZE && (
-              <Block $style={{ alignSelf: 'flex-end' }} marginTop={theme.sizing.scale400}>
-                <Button kind="tertiary" size="compact" icon={faPlus} onClick={() => setCount(count + DEFAULT_COUNT_SIZE)} disabled={tilbakemeldinger.length <= count}>
-                  Last flere
-                </Button>
-              </Block>
-            )
-          }
+          {tilbakemeldinger.length > DEFAULT_COUNT_SIZE && (
+            <Block $style={{ alignSelf: 'flex-end' }} marginTop={theme.sizing.scale400}>
+              <Button kind="tertiary" size="compact" icon={faPlus} onClick={() => setCount(count + DEFAULT_COUNT_SIZE)} disabled={tilbakemeldinger.length <= count}>
+                Last flere
+              </Button>
+            </Block>
+          )}
         </Block>
       )}
 
-      {
-        !loading && !tilbakemeldinger.length && (
-          <InfoBlock icon={mailboxPoppingIcon} alt={'Åpen mailboks icon'} text={'Det har ikke kommet inn noen tilbakemeldinger'} color={ettlevColors.red50} />
-        )
-      }
+      {!loading && !tilbakemeldinger.length && (
+        <InfoBlock icon={mailboxPoppingIcon} alt={'Åpen mailboks icon'} text={'Det har ikke kommet inn noen tilbakemeldinger'} color={ettlevColors.red50} />
+      )}
 
-      {
-        !hasKravExpired && (
-          <>
-            <Block marginTop={theme.sizing.scale1000}>
-              <HeadingXLarge>Spørsmål til kraveier</HeadingXLarge>
-              {user.isLoggedIn() ? (
-                <ParagraphMedium maxWidth={'600px'}>
-                  Her kan du stille kraveier et spørsmål dersom det er uklarheter vedrørende hvordan kravet skal forstås. Spørsmål og svar fra kraveier blir synlig på denne siden.
-                </ParagraphMedium>
-              ) : (
-                <ParagraphMedium>Du må være innlogget for å stille kraveier et spørsmål, og for å se tidligere spørsmål og svar.</ParagraphMedium>
-              )}
+      {!hasKravExpired && (
+        <>
+          <Block marginTop={theme.sizing.scale1000}>
+            <HeadingXLarge>Spørsmål til kraveier</HeadingXLarge>
+            {user.isLoggedIn() ? (
+              <ParagraphMedium maxWidth={'600px'}>
+                Her kan du stille kraveier et spørsmål dersom det er uklarheter vedrørende hvordan kravet skal forstås. Spørsmål og svar fra kraveier blir synlig på denne siden.
+              </ParagraphMedium>
+            ) : (
+              <ParagraphMedium>Du må være innlogget for å stille kraveier et spørsmål, og for å se tidligere spørsmål og svar.</ParagraphMedium>
+            )}
 
-              {user.canWrite() && (
-                <Button kind={'primary'} size="compact" onClick={() => setAddTilbakemelding(true)}>
-                  Still et spørsmål
-                </Button>
-              )}
-              {!user.isLoggedIn() && <LoginButton />}
-            </Block>
+            {user.canWrite() && (
+              <Button kind={'primary'} size="compact" onClick={() => setAddTilbakemelding(true)}>
+                Still et spørsmål
+              </Button>
+            )}
+            {!user.isLoggedIn() && <LoginButton />}
+          </Block>
 
-            <NyTilbakemeldingModal
-              krav={krav}
-              open={addTilbakemelding}
-              close={(t) => {
-                t && add(t)
-                setAddTilbakemelding(false)
-              }}
-              setShowNotification={setShowNotification}
-            />
-          </>
-        )
-      }
+          <NyTilbakemeldingModal
+            krav={krav}
+            open={addTilbakemelding}
+            close={(t) => {
+              t && add(t)
+              setAddTilbakemelding(false)
+            }}
+            setShowNotification={setShowNotification}
+          />
+        </>
+      )}
 
       <Block height="300px" />
     </Block>
@@ -325,26 +330,18 @@ const TilbakemeldingSvar = ({ tilbakemelding, setFocusNummer, close, ubesvartOgK
 
   return (
     <Block width={'100%'}>
-      <H4 color={ettlevColors.green800} marginBottom="9px" marginTop="34px">{ubesvartOgKraveier ? 'Besvar' : 'Ny melding'}</H4>
+      <H4 color={ettlevColors.green800} marginBottom="9px" marginTop="34px">
+        {ubesvartOgKraveier ? 'Besvar' : 'Ny melding'}
+      </H4>
       <Block display="flex" width="100%" alignItems="flex-end">
         <Block display="flex" flex="1">
-          <CustomizedTextarea
-            rows={6}
-            onChange={(e) => setResponse((e.target as HTMLInputElement).value)}
-            value={response}
-            disabled={loading}
-          />
+          <CustomizedTextarea rows={6} onChange={(e) => setResponse((e.target as HTMLInputElement).value)} value={response} disabled={loading} />
         </Block>
         <Block marginBottom="2px" width="188px">
           <Block display="flex" justifyContent="space-between" flexDirection="column" marginLeft={theme.sizing.scale400}>
             {user.isAdmin() && (
               <Block marginBottom={theme.sizing.scale400} display="flex" flexDirection="column">
-                <Button
-                  size="compact"
-                  icon={faTrashAlt}
-                  kind={'secondary'}
-                  onClick={() => setDeleteModal(true)}
-                >
+                <Button size="compact" icon={faTrashAlt} kind={'secondary'} onClick={() => setDeleteModal(true)}>
                   Slett hele
                 </Button>
               </Block>
@@ -367,12 +364,7 @@ const TilbakemeldingSvar = ({ tilbakemelding, setFocusNummer, close, ubesvartOgK
               </Block>
             )}
 
-            <Button
-              kind={ubesvartOgKraveier ? 'primary' : 'outline'}
-              size={'compact'}
-              disabled={!response}
-              onClick={submit}
-            >
+            <Button kind={ubesvartOgKraveier ? 'primary' : 'outline'} size={'compact'} disabled={!response} onClick={submit}>
               {ubesvartOgKraveier ? 'Svar' : 'Ny melding'}
             </Button>
           </Block>

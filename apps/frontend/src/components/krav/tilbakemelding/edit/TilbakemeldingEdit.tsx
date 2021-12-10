@@ -4,16 +4,16 @@ import { useState } from 'react'
 import { tilbakemeldingEditMelding } from '../../../../api/TilbakemeldingApi'
 import { TilbakemeldingMelding, Tilbakemelding } from '../../../../constants'
 import CustomizedTextarea from '../../../common/CustomizedTextarea'
-import {Notification} from 'baseui/notification'
+import { Notification } from 'baseui/notification'
 
-export const TilbakemeldingEdit = ({tilbakemeldingId, melding, close}: { tilbakemeldingId: string; melding: TilbakemeldingMelding; close: (t: Tilbakemelding) => void }) => {
+export const TilbakemeldingEdit = ({ tilbakemeldingId, melding, close }: { tilbakemeldingId: string; melding: TilbakemeldingMelding; close: (t: Tilbakemelding) => void }) => {
   const [response, setResponse] = useState(melding.innhold)
   const [error, setError] = useState()
   const [loading, setLoading] = useState(false)
 
   const submit = () => {
     setLoading(true)
-    tilbakemeldingEditMelding({tilbakemeldingId, meldingNr: melding.meldingNr, text: response})
+    tilbakemeldingEditMelding({ tilbakemeldingId, meldingNr: melding.meldingNr, text: response })
       .then(close)
       .catch((e) => {
         setError(e.error)
@@ -23,12 +23,12 @@ export const TilbakemeldingEdit = ({tilbakemeldingId, melding, close}: { tilbake
 
   return (
     <Block display="flex" alignItems="flex-end">
-      <CustomizedTextarea rows={15} onChange={(e) => setResponse((e.target as HTMLInputElement).value)} value={response} disabled={loading}/>
+      <CustomizedTextarea rows={15} onChange={(e) => setResponse((e.target as HTMLInputElement).value)} value={response} disabled={loading} />
       <Button size="compact" marginLeft disabled={!response || loading} onClick={submit}>
         Send
       </Button>
       {error && (
-        <Notification kind="negative" overrides={{Body: {style: {marginBottom: '-25px'}}}}>
+        <Notification kind="negative" overrides={{ Body: { style: { marginBottom: '-25px' } } }}>
           {error}
         </Notification>
       )}

@@ -1,19 +1,25 @@
-import {faPencilAlt, faTrashAlt} from '@fortawesome/free-solid-svg-icons'
-import {Block} from 'baseui/block'
+import { faPencilAlt, faTrashAlt } from '@fortawesome/free-solid-svg-icons'
+import { Block } from 'baseui/block'
 import Button from '../../../common/Button'
-import {Modal, ModalBody, ModalFooter, ModalHeader} from 'baseui/modal'
-import {ParagraphMedium, ParagraphSmall} from 'baseui/typography'
+import { Modal, ModalBody, ModalFooter, ModalHeader } from 'baseui/modal'
+import { ParagraphMedium, ParagraphSmall } from 'baseui/typography'
 import moment from 'moment'
-import {useState} from 'react'
-import {tilbakemeldingslettMelding} from '../../../../api/TilbakemeldingApi'
-import {Tilbakemelding, TilbakemeldingMelding} from '../../../../constants'
-import {user} from '../../../../services/User'
-import {pageWidth} from '../../../../util/theme'
-import {PersonName} from '../../../common/PersonName'
+import { useState } from 'react'
+import { tilbakemeldingslettMelding } from '../../../../api/TilbakemeldingApi'
+import { Tilbakemelding, TilbakemeldingMelding } from '../../../../constants'
+import { user } from '../../../../services/User'
+import { pageWidth } from '../../../../util/theme'
+import { PersonName } from '../../../common/PersonName'
 import TilbakemeldingEdit from './TilbakemeldingEdit'
 
-export const MeldingKnapper = (props: { melding: TilbakemeldingMelding; tilbakemeldingId: string; oppdater: (t: Tilbakemelding) => void; remove: (t: Tilbakemelding) => void; marginLeft?: boolean }) => {
-  const {melding, tilbakemeldingId, oppdater, remove} = props
+export const MeldingKnapper = (props: {
+  melding: TilbakemeldingMelding
+  tilbakemeldingId: string
+  oppdater: (t: Tilbakemelding) => void
+  remove: (t: Tilbakemelding) => void
+  marginLeft?: boolean
+}) => {
+  const { melding, tilbakemeldingId, oppdater, remove } = props
   const meldingNr = melding.meldingNr
   const [deleteModal, setDeleteModal] = useState(false)
   const [editModal, setEditModal] = useState(false)
@@ -36,7 +42,7 @@ export const MeldingKnapper = (props: { melding: TilbakemeldingMelding; tilbakem
           <ModalBody>
             {meldingNr === 1 && <ParagraphMedium>Hele meldingstråden vil bli slettet.</ParagraphMedium>}
             <ParagraphSmall>
-              {moment(melding.tid).format('ll')} <PersonName ident={melding.fraIdent}/>
+              {moment(melding.tid).format('ll')} <PersonName ident={melding.fraIdent} />
             </ParagraphSmall>
             <ParagraphMedium>{melding.innhold}</ParagraphMedium>
           </ModalBody>
@@ -49,9 +55,9 @@ export const MeldingKnapper = (props: { melding: TilbakemeldingMelding; tilbakem
               size={'compact'}
               marginLeft
               onClick={() =>
-                tilbakemeldingslettMelding({tilbakemeldingId, meldingNr}).then((t) => {
+                tilbakemeldingslettMelding({ tilbakemeldingId, meldingNr }).then((t) => {
                   if (meldingNr === 1) {
-                    remove({...t, meldinger: []})
+                    remove({ ...t, meldinger: [] })
                   } else {
                     remove(t)
                   }
@@ -82,7 +88,7 @@ export const MeldingKnapper = (props: { melding: TilbakemeldingMelding; tilbakem
           <ModalHeader>Rediger melding</ModalHeader>
           <ModalBody>
             <ParagraphSmall>
-              {moment(melding.tid).format('ll')} <PersonName ident={melding.fraIdent}/>
+              {moment(melding.tid).format('ll')} <PersonName ident={melding.fraIdent} />
             </ParagraphSmall>
             <TilbakemeldingEdit
               tilbakemeldingId={tilbakemeldingId}

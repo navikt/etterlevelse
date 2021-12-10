@@ -9,8 +9,13 @@ import { Portrait } from '../../../common/Portrait'
 import EndretInfo from './EndreInfo'
 import MeldingKnapper from './MeldingKnapper'
 
-export const ResponseMelding = (props: { m: TilbakemeldingMelding; tilbakemelding: Tilbakemelding; oppdater: (t: Tilbakemelding) => void; remove: (t: Tilbakemelding) => void }) => {
-  const {m, tilbakemelding, oppdater, remove} = props
+export const ResponseMelding = (props: {
+  m: TilbakemeldingMelding
+  tilbakemelding: Tilbakemelding
+  oppdater: (t: Tilbakemelding) => void
+  remove: (t: Tilbakemelding) => void
+}) => {
+  const { m, tilbakemelding, oppdater, remove } = props
   const melder = m.rolle === TilbakemeldingRolle.MELDER
   const sisteMelding = m.meldingNr === tilbakemelding.meldinger[tilbakemelding.meldinger.length - 1].meldingNr
 
@@ -23,11 +28,9 @@ export const ResponseMelding = (props: { m: TilbakemeldingMelding; tilbakemeldin
       padding={theme.sizing.scale500}
     >
       <Block display={'flex'}>
-        <Portrait ident={m.fraIdent}/>
+        <Portrait ident={m.fraIdent} />
         <Block marginLeft={theme.sizing.scale200} marginRight={theme.sizing.scale200} display={'flex'} flexDirection={'column'}>
-          <LabelSmall>
-            {melder ? <PersonName ident={m.fraIdent}/> : 'Kraveier'}
-          </LabelSmall>
+          <LabelSmall>{melder ? <PersonName ident={m.fraIdent} /> : 'Kraveier'}</LabelSmall>
           <ParagraphSmall marginTop={0} marginBottom={0}>
             {moment(m.tid).format('ll')}
           </ParagraphSmall>
@@ -38,8 +41,8 @@ export const ResponseMelding = (props: { m: TilbakemeldingMelding; tilbakemeldin
         {m.innhold}
       </ParagraphMedium>
       <Block display="flex" width="100%" alignItems="center" marginTop="17px">
-        {sisteMelding && <MeldingKnapper melding={m} tilbakemeldingId={tilbakemelding.id} oppdater={oppdater} remove={remove}/>}
-        <EndretInfo melding={m}/>
+        {sisteMelding && <MeldingKnapper melding={m} tilbakemeldingId={tilbakemelding.id} oppdater={oppdater} remove={remove} />}
+        <EndretInfo melding={m} />
       </Block>
     </Block>
   )

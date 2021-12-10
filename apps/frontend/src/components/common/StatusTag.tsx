@@ -7,7 +7,15 @@ import { kravStatus } from '../../pages/KravPage'
 import { ettlevColors } from '../../util/theme'
 import { borderColor, borderRadius, borderStyle, borderWidth, marginAll } from './Style'
 
-export const StatusView = ({ status, statusDisplay, overrides }: { status: KravStatus | string, statusDisplay?: { background: string, border: string }, overrides?: CardOverrides }) => {
+export const StatusView = ({
+  status,
+  statusDisplay,
+  overrides,
+}: {
+  status: KravStatus | string
+  statusDisplay?: { background: string; border: string }
+  overrides?: CardOverrides
+}) => {
   const getStatusDisplay = (background: string, border: string) => {
     const cardOverrides: CardOverrides = {
       Contents: {
@@ -32,14 +40,11 @@ export const StatusView = ({ status, statusDisplay, overrides }: { status: KravS
       },
     }
 
-
     const customOverrides = _.merge(cardOverrides, overrides)
 
     return (
       <Block width="fit-content">
-        <Card
-          overrides={customOverrides}
-        >
+        <Card overrides={customOverrides}>
           <Paragraph4 $style={{ color: ettlevColors.navMorkGra, ...marginAll('0px') }}>{typeof status === 'string' ? status : kravStatus(status)}</Paragraph4>
         </Card>
       </Block>
