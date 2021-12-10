@@ -1,4 +1,4 @@
-import {AdresseType, Krav, Tilbakemelding, TilbakemeldingMelding, TilbakemeldingRolle, TilbakemeldingType, Varslingsadresse} from '../../constants'
+import {AdresseType, Krav, Tilbakemelding, TilbakemeldingMelding, TilbakemeldingRolle, TilbakemeldingType, Varslingsadresse} from '../../../constants'
 import {
   createNewTilbakemelding,
   CreateTilbakemeldingRequest,
@@ -7,40 +7,40 @@ import {
   TilbakemeldingNewMeldingRequest,
   tilbakemeldingslettMelding,
   useTilbakemeldinger,
-} from '../../api/TilbakemeldingApi'
+} from '../../../api/TilbakemeldingApi'
 import React, {useEffect, useState} from 'react'
 import {Block} from 'baseui/block'
-import {theme} from '../../util'
+import {theme} from '../../../util'
 import {H2, HeadingXLarge, LabelSmall, ParagraphMedium, ParagraphSmall} from 'baseui/typography'
-import Button from '../common/Button'
+import Button from '../../common/Button'
 import {faChevronDown, faChevronUp, faEnvelope, faPencilAlt, faPlus, faSync, faUser} from '@fortawesome/free-solid-svg-icons'
 import {faTrashAlt} from '@fortawesome/free-regular-svg-icons'
-import {borderRadius} from '../common/Style'
-import {Spinner} from '../common/Spinner'
+import {borderRadius} from '../../common/Style'
+import {Spinner} from '../../common/Spinner'
 import moment from 'moment'
-import {user} from '../../services/User'
+import {user} from '../../../services/User'
 import {Modal, ModalBody, ModalFooter, ModalHeader} from 'baseui/modal'
 import {Field, FieldProps, Form, Formik} from 'formik'
-import {TextAreaField} from '../common/Inputs'
+import {TextAreaField} from '../../common/Inputs'
 import * as yup from 'yup'
 import {Notification} from 'baseui/notification'
 import {faSlackHash} from '@fortawesome/free-brands-svg-icons'
 import {FormControl} from 'baseui/form-control'
-import {AddEmail, SlackChannelSearch, SlackUserSearch, VarslingsadresserTagList} from './Edit/KravVarslingsadresserEdit'
+import {AddEmail, SlackChannelSearch, SlackUserSearch, VarslingsadresserTagList} from '../Edit/KravVarslingsadresserEdit'
 import {useHistory} from 'react-router-dom'
-import {useQueryParam, useRefs} from '../../util/hooks'
-import {ettlevColors, pageWidth} from '../../util/theme'
-import {mailboxPoppingIcon} from '../Images'
-import {InfoBlock} from '../common/InfoBlock'
-import {Portrait} from '../common/Portrait'
-import {PersonName} from '../common/PersonName'
-import CustomizedTextarea from '../common/CustomizedTextarea'
+import {useQueryParam, useRefs} from '../../../util/hooks'
+import {ettlevColors, pageWidth} from '../../../util/theme'
+import {mailboxPoppingIcon} from '../../Images'
+import {InfoBlock} from '../../common/InfoBlock'
+import {Portrait} from '../../common/Portrait'
+import {PersonName} from '../../common/PersonName'
+import CustomizedTextarea from '../../common/CustomizedTextarea'
 import * as _ from 'lodash'
-import {LoginButton} from '../Header'
-import LabelWithTooltip from '../common/LabelWithTooltip'
-import CustomizedModal from '../common/CustomizedModal'
-import {CustomizedAccordion, CustomizedPanel} from '../common/CustomizedAccordion'
-import StatusView from '../common/StatusTag'
+import {LoginButton} from '../../Header'
+import LabelWithTooltip from '../../common/LabelWithTooltip'
+import CustomizedModal from '../../common/CustomizedModal'
+import {CustomizedAccordion, CustomizedPanel} from '../../common/CustomizedAccordion'
+import StatusView from '../../common/StatusTag'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 
 const DEFAULT_COUNT_SIZE = 5
@@ -49,7 +49,6 @@ export const Tilbakemeldinger = ({krav, hasKravExpired}: { krav: Krav; hasKravEx
   const [tilbakemeldinger, loading, add, replace, remove] = useTilbakemeldinger(krav.kravNummer, krav.kravVersjon)
   const [focusNr, setFocusNr] = useState<string | undefined>(useQueryParam('tilbakemeldingId'))
   const [addTilbakemelding, setAddTilbakemelding] = useState(false)
-  const [tilbakemelding, setTilbakemelding] = useState<Tilbakemelding>()
   const [count, setCount] = useState(DEFAULT_COUNT_SIZE)
   const history = useHistory()
 
@@ -102,6 +101,7 @@ export const Tilbakemeldinger = ({krav, hasKravExpired}: { krav: Krav; hasKravEx
               return (
                 <CustomizedPanel
                   onClick={() => setFocus(focused ? '' : t.id)}
+                  expanded={t.id === focusNr}
                   noUnderLine
                   key={t.id}
                   overrides={{
@@ -169,12 +169,10 @@ export const Tilbakemeldinger = ({krav, hasKravExpired}: { krav: Krav; hasKravEx
                       <Block>
                         <TilbakemeldingSvar
                           tilbakemelding={t}
-                          setTilbakeMelding={setTilbakemelding}
                           setFocusNummer={setFocusNr}
                           ubesvartOgKraveier={ubesvartOgKraveier}
                           close={(t) => {
                             t && replace(t)
-                            setTilbakemelding(undefined)
                           }}
                         />
                       </Block>
@@ -493,13 +491,12 @@ const MeldingKnapper = (props: { melding: TilbakemeldingMelding; tilbakemeldingI
 
 type TilbakemeldingSvarProps = {
   tilbakemelding: Tilbakemelding
-  setTilbakeMelding: (t: Tilbakemelding) => void
   setFocusNummer: (fn: string | undefined) => void
   close: (t: Tilbakemelding) => void
   ubesvartOgKraveier: boolean
 }
 
-const TilbakemeldingSvar = ({tilbakemelding, setTilbakeMelding, setFocusNummer, close, ubesvartOgKraveier}: TilbakemeldingSvarProps) => {
+const TilbakemeldingSvar = ({tilbakemelding, setFocusNummer, close, ubesvartOgKraveier}: TilbakemeldingSvarProps) => {
   const melderInfo = tilbakeMeldingStatus(tilbakemelding)
   const [response, setResponse] = useState('')
   const [replyRole, setReplyRole] = useState(melderInfo.rolle)
@@ -508,7 +505,6 @@ const TilbakemeldingSvar = ({tilbakemelding, setTilbakeMelding, setFocusNummer, 
 
   const submit = () => {
     setFocusNummer(tilbakemelding.id)
-    setTilbakeMelding(tilbakemelding)
 
     const req: TilbakemeldingNewMeldingRequest = {
       tilbakemeldingId: tilbakemelding.id,
