@@ -1,29 +1,37 @@
-import { faSlackHash } from '@fortawesome/free-brands-svg-icons'
-import { faUser, faEnvelope } from '@fortawesome/free-solid-svg-icons'
-import { Block } from 'baseui/block'
+import {faSlackHash} from '@fortawesome/free-brands-svg-icons'
+import {faEnvelope, faUser} from '@fortawesome/free-solid-svg-icons'
+import {Block} from 'baseui/block'
 import Button from '../../../common/Button'
-import { FormControl } from 'baseui/form-control'
-import { ModalHeader, ModalBody, ModalFooter } from 'baseui/modal'
-import { H2 } from 'baseui/typography'
-import { Formik, Form, Field, FieldProps } from 'formik'
-import { useState } from 'react'
-import { CreateTilbakemeldingRequest, createNewTilbakemelding } from '../../../../api/TilbakemeldingApi'
-import { Tilbakemelding, Krav, AdresseType, Varslingsadresse, TilbakemeldingType } from '../../../../constants'
-import { theme } from '../../../../util'
+import {FormControl} from 'baseui/form-control'
+import {ModalBody, ModalFooter, ModalHeader} from 'baseui/modal'
+import {H2} from 'baseui/typography'
+import {Field, FieldProps, Form, Formik} from 'formik'
+import {useState} from 'react'
+import {createNewTilbakemelding, CreateTilbakemeldingRequest} from '../../../../api/TilbakemeldingApi'
+import {AdresseType, Krav, Tilbakemelding, TilbakemeldingType, Varslingsadresse} from '../../../../constants'
+import {theme} from '../../../../util'
 import CustomizedModal from '../../../common/CustomizedModal'
-import { TextAreaField } from '../../../common/Inputs'
+import {TextAreaField} from '../../../common/Inputs'
 import LabelWithTooltip from '../../../common/LabelWithTooltip'
-import { SlackChannelSearch, SlackUserSearch, AddEmail, VarslingsadresserTagList } from '../../Edit/KravVarslingsadresserEdit'
+import {AddEmail, SlackChannelSearch, SlackUserSearch, VarslingsadresserTagList} from '../../Edit/KravVarslingsadresserEdit'
 import {Notification} from 'baseui/notification'
 import * as yup from 'yup'
 
-export const NyTilbakemeldingModal = ({open, close, krav}: { open?: boolean; close: (add?: Tilbakemelding) => void; krav: Krav }) => {
+export const NyTilbakemeldingModal = ({
+                                        open,
+                                        close,
+                                        krav,
+                                        setShowNotification
+                                      }: { open?: boolean; close: (add?: Tilbakemelding) => void; krav: Krav, setShowNotification: (varslingsAddress: AdresseType) => void }) => {
   const [error, setError] = useState()
   const [adresseType, setAdresseType] = useState<AdresseType>()
 
   const submit = (req: CreateTilbakemeldingRequest) => {
     createNewTilbakemelding(req)
-      .then(close)
+      .then((t)=>{
+        setShowNotification(req.varslingsadresse.type)
+        close(t)
+      })
       .catch((e) => setError(e.error))
   }
 
