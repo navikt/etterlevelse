@@ -9,7 +9,7 @@ import { CustomPanelDivider } from '../../common/CustomizedAccordion'
 import { SimplePanel } from '../../common/PanelLink'
 import { H1, H2, Label3, Paragraph2 } from 'baseui/typography'
 import moment from 'moment'
-import KravStatusView from '../KravStatusTag'
+import StatusView from '../../common/StatusTag'
 import { borderRadius, borderStyle, paddingZero } from '../../common/Style'
 import { Spinner } from '../../common/Spinner'
 import { theme } from '../../../util'
@@ -43,7 +43,7 @@ export const EditPriorityModal = (props: { isOpen: boolean; onClose: Function; k
               }
               beskrivelse={<Label3 $style={{ fontSize: '18px', lineHeight: '28px' }}>{k.navn}</Label3>}
               rightBeskrivelse={!!k.changeStamp.lastModifiedDate ? `Sist endret: ${moment(k.changeStamp.lastModifiedDate).format('ll')}` : ''}
-              statusText={<KravStatusView status={k.status} />}
+              statusText={<StatusView status={k.status} />}
               overrides={{
                 Block: {
                   style: {

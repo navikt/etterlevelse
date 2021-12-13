@@ -21,7 +21,7 @@ import { Option } from 'baseui/select'
 import { AllKrav } from '../components/kravList/AllKrav'
 import { SistRedigertKrav } from '../components/kravList/SisteRedigertKrav'
 import { TemaList } from '../components/kravList/TemaList'
-import KravStatusView from '../components/kravList/KravStatusTag'
+import StatusView from '../components/common/StatusTag'
 import { useHistory, useParams } from 'react-router-dom'
 import React from 'react'
 
@@ -125,7 +125,7 @@ export const KravPanels = ({ kravene, loading }: { kravene?: KravQL[] | Krav[]; 
                 beskrivelse={<Label3 $style={{ fontSize: '18px', fontWeight: 600 }}>{k.navn}</Label3>}
                 rightBeskrivelse={!!k.changeStamp.lastModifiedDate ? `Sist endret: ${moment(k.changeStamp.lastModifiedDate).format('ll')}` : ''}
                 rightTitle={tema && tema.shortName ? tema.shortName : ''}
-                statusText={<KravStatusView status={k.status} />}
+                statusText={<StatusView status={k.status} />}
                 overrides={{
                   Block: {
                     style: {

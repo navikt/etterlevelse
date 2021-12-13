@@ -15,6 +15,8 @@ export const CustomizedAccordion = (props: AccordionProps) => {
 interface CustomizedPanelProps {
   HeaderBackgroundColor?: string
   HeaderActiveBackgroundColor?: string
+  noUnderLine?: boolean
+  toggleIcon?: { expanded: React.ReactElement<any, any>; unexpanded: React.ReactElement<any, any> }
 }
 
 type CustomProps = CustomizedPanelProps & PanelProps
@@ -27,7 +29,13 @@ export const CustomizedPanel = (props: CustomProps) => {
 
   const customOverrides: PanelOverrides<any> = {
     ToggleIcon: {
-      component: () => (expanded ? <FontAwesomeIcon icon={faChevronUp} /> : <FontAwesomeIcon icon={faChevronDown} />),
+      component: () => {
+        if (props.toggleIcon) {
+          return expanded ? props.toggleIcon.expanded : props.toggleIcon.unexpanded
+        } else {
+          return expanded ? <FontAwesomeIcon icon={faChevronUp} /> : <FontAwesomeIcon icon={faChevronDown} />
+        }
+      },
     },
     Header: {
       style: {
@@ -36,7 +44,7 @@ export const CustomizedPanel = (props: CustomProps) => {
         paddingTop: theme.sizing.scale300,
         paddingBottom: theme.sizing.scale300,
         ':hover': {
-          textDecoration: 'underline',
+          textDecoration: props.noUnderLine ? 'none' : 'underline',
           color: ettlevColors.green800,
           ...(expanded
             ? {

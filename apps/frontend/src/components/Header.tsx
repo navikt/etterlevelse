@@ -77,6 +77,7 @@ const LoggedInHeader = () => {
         { label: intl.audit, href: '/admin/audit' },
         { label: 'Kodeverk', href: '/admin/codelist' },
         { label: intl.mailLog, href: '/admin/maillog' },
+        {label: intl.questionAndAnswers, href: '/admin/messageslog'},
         { label: intl.settings, href: '/admin/settings', disabled: true },
       ]
     : []

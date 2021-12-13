@@ -52,15 +52,16 @@ export const useTilbakemeldinger = (kravNummer: number, kravVersjon: number) => 
     setData(data.map((t) => (t.id === r.id ? r : t)))
   }
   const remove = (r: Tilbakemelding) => {
-
     if (r.meldinger.length) {
-      setData(data.map((t) => {
-        if (t.id === r.id) {
-          return r
-        } else {
-          return t
-        }
-      }))
+      setData(
+        data.map((t) => {
+          if (t.id === r.id) {
+            return r
+          } else {
+            return t
+          }
+        }),
+      )
     } else {
       setData(data.filter((t) => t.id !== r.id))
     }

@@ -16,7 +16,7 @@ export const no: IStrings = {
   emptyTable: 'ingen',
   id: 'Id',
   lastChanges: 'Siste endringer',
-  mailLog: 'Mail log',
+  mailLog: 'Varslinger',
   nextButton: 'Neste',
   prevButton: 'Forrige',
   pageNotFound: 'Oida 404! Fant ikke den siden der nei',
@@ -29,6 +29,7 @@ export const no: IStrings = {
   version: 'Versjon',
   view: 'Vis',
   settings: 'Instillinger',
+  questionAndAnswers: 'Spørsmål og svar'
 }
 
 // Markdown norsk locale
@@ -79,7 +80,7 @@ export const en: IStrings = {
   emptyTable: 'empty',
   id: 'Id',
   lastChanges: 'Last changes',
-  mailLog: 'Mail log',
+  mailLog: 'Notification',
   nextButton: 'Next',
   prevButton: 'Prev',
   pageNotFound: "Oops 404! couldn't find page",
@@ -92,4 +93,5 @@ export const en: IStrings = {
   version: 'Version',
   view: 'View',
   settings: 'Settings',
+  questionAndAnswers: 'Questions and answer'
 }
