@@ -277,7 +277,7 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
   )
 }
 
-const tilbakeMeldingStatus = (tilbakemelding: Tilbakemelding) => {
+export const tilbakeMeldingStatus = (tilbakemelding: Tilbakemelding) => {
   const sistMelding = tilbakemelding.meldinger[tilbakemelding.meldinger.length - 1]
   const ubesvart = sistMelding.rolle === TilbakemeldingRolle.MELDER
   const melder = user.getIdent() === tilbakemelding.melderIdent
