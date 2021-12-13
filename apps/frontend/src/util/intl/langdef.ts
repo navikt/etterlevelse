@@ -24,6 +24,7 @@ export interface IStrings {
   abort: string
   save: string
   pageNotFound: string
+  questionAndAnswers: string
 
   CREATE: string
   UPDATE: string
