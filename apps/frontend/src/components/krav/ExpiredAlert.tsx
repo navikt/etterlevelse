@@ -23,7 +23,7 @@ const ExpiredAlert = ({ alleKravVersjoner, statusName }: { alleKravVersjoner: Kr
   >
     <img src={warningAlert} alt="" />
     <Paragraph2 marginLeft={theme.sizing.scale500} marginTop="0px" marginBottom="0px">
-      Dette er {statusName ? `et ${kravStatus(statusName).toLocaleLowerCase()}` : 'en utgått'} versjon. Gjeldende versjon:{' '}
+      Dette er {statusName ? `et ${kravStatus(statusName).toLocaleLowerCase()}` : 'en utgått versjon'}. Gjeldende versjon:{' '}
       <CustomizedLink href={`/krav/${alleKravVersjoner[0].kravNummer}/${alleKravVersjoner[0].kravVersjon}`}>
         K{alleKravVersjoner[0].kravNummer}.{alleKravVersjoner[0].kravVersjon}
       </CustomizedLink>
