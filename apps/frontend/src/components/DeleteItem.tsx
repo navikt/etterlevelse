@@ -1,8 +1,8 @@
 import Button from './common/Button'
-import React, { useState } from 'react'
-import { Modal, ModalBody, ModalFooter, ModalHeader } from 'baseui/modal'
-import { useHistory } from 'react-router-dom'
-import { deleteIcon } from './Images'
+import React, {useState} from 'react'
+import {Modal, ModalBody, ModalFooter, ModalHeader} from 'baseui/modal'
+import {useHistory} from 'react-router-dom'
+import {deleteIcon} from './Images'
 
 export const DeleteItem = (props: { fun: () => Promise<any>; redirect: string }) => {
   const [open, setOpen] = useState(false)
@@ -24,7 +24,7 @@ export const DeleteItem = (props: { fun: () => Promise<any>; redirect: string })
         <ModalHeader>Bekreft slett</ModalHeader>
         <ModalBody>Er du sikker på at du vil slette?</ModalBody>
         <ModalFooter>
-          <Button onClick={() => setOpen(false)} size={'compact'} kind={'secondary'}>
+          <Button onClick={() => setOpen(false)} size={'compact'} kind={'secondary'} marginRight>
             Avbryt
           </Button>
           <Button onClick={() => props.fun().then(() => history.push(props.redirect))} size={'compact'}>
