@@ -125,9 +125,9 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
                           ubesvart
                             ? { background: ettlevColors.white, border: ettlevColors.green100 }
                             : {
-                                background: ettlevColors.green50,
-                                border: ettlevColors.green100,
-                              }
+                              background: ettlevColors.green50,
+                              border: ettlevColors.green100,
+                            }
                         }
                         overrides={{
                           Root: {
@@ -284,7 +284,8 @@ export const tilbakeMeldingStatus = (tilbakemelding: Tilbakemelding) => {
   const rolle = tilbakemelding?.melderIdent === user.getIdent() ? TilbakemeldingRolle.MELDER : TilbakemeldingRolle.KRAVEIER
   const melderOrKraveier = melder || user.isKraveier()
   const ubesvartOgKraveier = ubesvart && user.isKraveier()
-  return { ubesvart, ubesvartOgKraveier, rolle, melder, melderOrKraveier, sistMelding }
+  const kanSkrive = (ubesvart && rolle === TilbakemeldingRolle.KRAVEIER) || (!ubesvart && rolle === TilbakemeldingRolle.MELDER)
+  return { ubesvart, ubesvartOgKraveier, rolle, melder, melderOrKraveier, sistMelding, kanSkrive }
 }
 
 type TilbakemeldingSvarProps = {
@@ -298,7 +299,7 @@ type TilbakemeldingSvarProps = {
 const TilbakemeldingSvar = ({ tilbakemelding, setFocusNummer, close, ubesvartOgKraveier, remove }: TilbakemeldingSvarProps) => {
   const melderInfo = tilbakeMeldingStatus(tilbakemelding)
   const [response, setResponse] = useState('')
-  const [replyRole, setReplyRole] = useState(melderInfo.rolle)
+  const [replyRole, z] = useState(melderInfo.rolle)
   const [error, setError] = useState()
   const [loading, setLoading] = useState(false)
   const [deleteModal, setDeleteModal] = useState(false)
@@ -330,23 +331,28 @@ const TilbakemeldingSvar = ({ tilbakemelding, setFocusNummer, close, ubesvartOgK
 
   return (
     <Block width={'100%'}>
-      <H4 color={ettlevColors.green800} marginBottom="9px" marginTop="34px">
+      {melderInfo.kanSkrive && <H4 color={ettlevColors.green800} marginBottom="9px" marginTop="34px">
         {ubesvartOgKraveier ? 'Besvar' : 'Ny melding'}
-      </H4>
-      <Block display="flex" width="100%" alignItems="flex-end">
-        <Block display="flex" flex="1">
-          <CustomizedTextarea rows={6} onChange={(e) => setResponse((e.target as HTMLInputElement).value)} value={response} disabled={loading} />
-        </Block>
-        <Block marginBottom="2px" width="188px">
-          <Block display="flex" justifyContent="space-between" flexDirection="column" marginLeft={theme.sizing.scale400}>
-            {user.isAdmin() && (
-              <Block marginBottom={theme.sizing.scale400} display="flex" flexDirection="column">
-                <Button size="compact" icon={faTrashAlt} kind={'secondary'} onClick={() => setDeleteModal(true)}>
-                  Slett hele
-                </Button>
-              </Block>
-            )}
-            {/* {user.isKraveier() && !loading && melderInfo.melder && (
+      </H4>}
+      <Block display="flex" width="100%" alignItems="flex-end" justifyContent="center">
+        {melderInfo.kanSkrive &&
+          <Block display="flex" width="100%">
+
+            <CustomizedTextarea rows={6} onChange={(e) => setResponse((e.target as HTMLInputElement).value)} value={response} disabled={loading} />
+          </Block>
+        }
+
+        <Block display="flex" justifyContent="flex-end" flex="1">
+          <Block marginBottom="2px" width="188px">
+            <Block display="flex" justifyContent="space-between" flexDirection="column" marginLeft={theme.sizing.scale400}>
+              {user.isAdmin() && (
+                <Block marginBottom={theme.sizing.scale400} display="flex" flexDirection="column">
+                  <Button size="compact" icon={faTrashAlt} kind={'secondary'} onClick={() => setDeleteModal(true)}>
+                    Slett hele
+                  </Button>
+                </Block>
+              )}
+              {/* {user.isKraveier() && !loading && melderInfo.melder && (
               <Block marginBottom={theme.sizing.scale400} display="flex" flexDirection="column">
                 <Button
                   size="compact"
@@ -358,15 +364,16 @@ const TilbakemeldingSvar = ({ tilbakemelding, setFocusNummer, close, ubesvartOgK
                 </Button>
               </Block>
             )} */}
-            {loading && (
-              <Block alignSelf="center" marginBottom={theme.sizing.scale400}>
-                <Spinner size={theme.sizing.scale800} />
-              </Block>
-            )}
+              {loading && (
+                <Block alignSelf="center" marginBottom={theme.sizing.scale400}>
+                  <Spinner size={theme.sizing.scale800} />
+                </Block>
+              )}
 
-            <Button kind={ubesvartOgKraveier ? 'primary' : 'outline'} size={'compact'} disabled={!response} onClick={submit}>
-              {ubesvartOgKraveier ? 'Svar' : 'Ny melding'}
-            </Button>
+              {melderInfo.kanSkrive && <Button kind={ubesvartOgKraveier ? 'primary' : 'outline'} size={'compact'} disabled={!response} onClick={submit}>
+                {ubesvartOgKraveier ? 'Svar' : 'Ny melding'}
+              </Button>}
+            </Block>
           </Block>
         </Block>
         {error && (
