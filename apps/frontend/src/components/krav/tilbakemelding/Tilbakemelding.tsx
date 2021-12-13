@@ -125,7 +125,7 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
                           ubesvart
                             ? { background: ettlevColors.white, border: ettlevColors.green100 }
                             : {
-                                background: ettlevColors.green100,
+                                background: ettlevColors.green50,
                                 border: ettlevColors.green100,
                               }
                         }
@@ -138,7 +138,7 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
                         }}
                       />
                     </Block>
-                    <Block width="50px" marginLeft="20px" marginTop="18px" display="flex" flexDirection="column" alignItems="center">
+                    <Block width="50px" marginLeft="20px" marginTop="8px" display="flex" flexDirection="column" alignItems="center">
                       {icon}
                     </Block>
                   </Block>
@@ -346,7 +346,7 @@ const TilbakemeldingSvar = ({ tilbakemelding, setFocusNummer, close, ubesvartOgK
                 </Button>
               </Block>
             )}
-            {user.isKraveier() && !loading && melderInfo.melder && (
+            {/* {user.isKraveier() && !loading && melderInfo.melder && (
               <Block marginBottom={theme.sizing.scale400} display="flex" flexDirection="column">
                 <Button
                   size="compact"
@@ -357,7 +357,7 @@ const TilbakemeldingSvar = ({ tilbakemelding, setFocusNummer, close, ubesvartOgK
                   Jeg er {rolleText(replyRole)}
                 </Button>
               </Block>
-            )}
+            )} */}
             {loading && (
               <Block alignSelf="center" marginBottom={theme.sizing.scale400}>
                 <Spinner size={theme.sizing.scale800} />

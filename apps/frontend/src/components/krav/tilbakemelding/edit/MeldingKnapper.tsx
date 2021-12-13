@@ -27,7 +27,7 @@ export const MeldingKnapper = (props: {
 
   return (
     <>
-      <Block marginLeft={props.marginLeft ? '42px' : undefined} width="100%">
+      <Block marginLeft={props.marginLeft ? '42px' : undefined} width="50%">
         <Button kind={'underline-hover'} size={'mini'} icon={faPencilAlt} onClick={() => setEditModal(true)}>
           Rediger
         </Button>

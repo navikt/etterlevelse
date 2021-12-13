@@ -27,19 +27,26 @@ export const ResponseMelding = (props: {
       backgroundColor={melder ? 'inherit' : ettlevColors.grey50}
       padding={theme.sizing.scale500}
     >
-      <Block display={'flex'}>
+      <Block display="flex" width="100%">
         <Portrait ident={m.fraIdent} />
-        <Block marginLeft={theme.sizing.scale200} marginRight={theme.sizing.scale200} display={'flex'} flexDirection={'column'}>
-          <LabelSmall>{melder ? <PersonName ident={m.fraIdent} /> : 'Kraveier'}</LabelSmall>
-          <ParagraphSmall marginTop={0} marginBottom={0}>
-            {moment(m.tid).format('ll')}
-          </ParagraphSmall>
+        <Block display="flex" flexDirection="column" marginLeft={theme.sizing.scale400} width="100%">
+          <Block display="flex" width="100%">
+            <Block display="flex" alignItems="center" width="100%">
+              <LabelSmall>
+                {melder ? <PersonName ident={m.fraIdent} /> : 'Kraveier'}
+              </LabelSmall>
+              <ParagraphSmall marginTop={0} marginBottom={0} marginLeft="24px">
+                Sendt: {moment(m.tid).format('lll')}
+              </ParagraphSmall>
+            </Block>
+          </Block>
+          <Block display="flex" width="100%">
+            <ParagraphMedium marginBottom={0} marginRight="29px" marginTop="4px">
+              {m.innhold}
+            </ParagraphMedium>
+          </Block>
         </Block>
       </Block>
-
-      <ParagraphMedium marginBottom={0} marginTop={theme.sizing.scale400} marginRight={theme.sizing.scale600}>
-        {m.innhold}
-      </ParagraphMedium>
       <Block display="flex" width="100%" alignItems="center" marginTop="17px">
         {sisteMelding && <MeldingKnapper melding={m} tilbakemeldingId={tilbakemelding.id} oppdater={oppdater} remove={remove} />}
         <EndretInfo melding={m} />
