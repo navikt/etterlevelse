@@ -22,6 +22,7 @@ import ScrollToTop from './util/ScrollToTop'
 import { StatusPage } from './pages/StatusPage'
 import { KravTablePage } from './pages/KravTablePage'
 import { FAQ } from './pages/FAQ'
+import SpørsmålOgSvarLogPage from './pages/SpørsmålOgSvarLogPage'
 
 const Routes = (): JSX.Element => (
   <ScrollToTop>
@@ -48,6 +49,7 @@ const Routes = (): JSX.Element => (
       <Route exact path="/admin/settings" component={SettingsPage} />
       <Route exact path="/admin/maillog" component={MailLogPage} />
       <Route exact path="/admin/krav" component={KravTablePage} />
+      <Route exact path="/admin/messageslog" component={SpørsmålOgSvarLogPage} />
 
       <Route exact path="/tema/:tema?" component={TemaPage} />
       <Route exact path="/behandling/:id" component={BehandlingPage} />
