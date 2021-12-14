@@ -29,28 +29,14 @@ import EndretInfo from './edit/EndreInfo'
 import MeldingKnapper from './edit/MeldingKnapper'
 import NyTilbakemeldingModal from './edit/NyTilbakemeldingModal'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from 'baseui/modal'
-import { Card } from 'baseui/card'
-import { faThumbsUp } from '@fortawesome/free-regular-svg-icons'
 
 const DEFAULT_COUNT_SIZE = 5
-
-const getMessageType = (type: AdresseType) => {
-  switch (type) {
-    case AdresseType.EPOST:
-      return 'din epost'
-    case AdresseType.SLACK:
-      return 'slack kanal'
-    case AdresseType.SLACK_USER:
-      return 'din slack bruker'
-  }
-}
 
 export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKravExpired: boolean }) => {
   const [tilbakemeldinger, loading, add, replace, remove] = useTilbakemeldinger(krav.kravNummer, krav.kravVersjon)
   const [focusNr, setFocusNr] = useState<string | undefined>(useQueryParam('tilbakemeldingId'))
   const [addTilbakemelding, setAddTilbakemelding] = useState(false)
   const [count, setCount] = useState(DEFAULT_COUNT_SIZE)
-  const [showNotification, setShowNotification] = React.useState<AdresseType>()
   const history = useHistory()
 
   const refs = useRefs<HTMLDivElement>(tilbakemeldinger.map((t) => t.id))
@@ -68,48 +54,6 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
       {loading && <Spinner size={theme.sizing.scale800} />}
       {!loading && !!tilbakemeldinger.length && (
         <Block display={'flex'} flexDirection={'column'}>
-          {showNotification && (
-            <Card
-              overrides={{
-                Root: {
-                  style: {
-                    backgroundColor: ettlevColors.green50,
-                    marginBottom: '35px',
-                    ...borderRadius('4px'),
-                    ...borderWidth('1px'),
-                    ...borderColor(ettlevColors.green100),
-                  },
-                },
-              }}
-            >
-              <Block display="flex" alignItems="center">
-                <FontAwesomeIcon icon={faThumbsUp} size="lg" />
-                <H3
-                  $style={{
-                    fontSize: '20px',
-                    lineHeight: '25px',
-                    marginLeft: '5px',
-                    marginTop: '0px',
-                    marginBottom: '0px',
-                  }}
-                >
-                  Spørsmålet er sendt til kraveier!
-                </H3>
-              </Block>
-              <Block marginTop={'17px'}>
-                <Paragraph1
-                  $style={{
-                    fontSize: '20px',
-                    lineHeight: '25px',
-                    marginTop: '0px',
-                    marginBottom: '0px',
-                  }}
-                >
-                  Du får varsel på {getMessageType(showNotification)} når spørsmålet er besvart.
-                </Paragraph1>
-              </Block>
-            </Card>
-          )}
           <CustomizedAccordion>
             {tilbakemeldinger.slice(0, count).map((t) => {
               const focused = focusNr === t.id
@@ -267,7 +211,6 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
               t && add(t)
               setAddTilbakemelding(false)
             }}
-            setShowNotification={setShowNotification}
           />
         </>
       )}
