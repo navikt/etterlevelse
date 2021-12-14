@@ -35,7 +35,7 @@ export const ResponseMelding = (props: {
               <LabelSmall>
                 {melder ? <PersonName ident={m.fraIdent} /> : 'Kraveier'}
               </LabelSmall>
-              <ParagraphSmall marginTop={0} marginBottom={0} marginLeft="24px">
+              <ParagraphSmall marginTop={0} marginBottom={0} marginLeft="24px" $style={{fontSize: '14px'}}>
                 Sendt: {moment(m.tid).format('lll')}
               </ParagraphSmall>
             </Block>

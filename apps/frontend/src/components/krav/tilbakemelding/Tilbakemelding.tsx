@@ -180,7 +180,7 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
                             <LabelSmall>
                               <PersonName ident={t.melderIdent} />
                             </LabelSmall>
-                            <ParagraphSmall marginTop={0} marginBottom={0} marginLeft="24px">
+                            <ParagraphSmall marginTop={0} marginBottom={0} marginLeft="24px" $style={{fontSize: '14px'}}>
                               Sendt: {moment(t.meldinger[0].tid).format('lll')}
                             </ParagraphSmall>
                           </Block>
@@ -337,7 +337,6 @@ const TilbakemeldingSvar = ({ tilbakemelding, setFocusNummer, close, ubesvartOgK
       <Block display="flex" width="100%" alignItems="flex-end" justifyContent="center">
         {melderInfo.kanSkrive &&
           <Block display="flex" width="100%">
-
             <CustomizedTextarea rows={6} onChange={(e) => setResponse((e.target as HTMLInputElement).value)} value={response} disabled={loading} />
           </Block>
         }
@@ -370,8 +369,8 @@ const TilbakemeldingSvar = ({ tilbakemelding, setFocusNummer, close, ubesvartOgK
                 </Block>
               )}
 
-              {melderInfo.kanSkrive && <Button kind={ubesvartOgKraveier ? 'primary' : 'outline'} size={'compact'} disabled={!response} onClick={submit}>
-                {ubesvartOgKraveier ? 'Svar' : 'Ny melding'}
+              {melderInfo.kanSkrive && <Button kind='primary' size={'compact'} disabled={!response} onClick={submit}>
+                {ubesvartOgKraveier ? 'Svar' : 'Send'}
               </Button>}
             </Block>
           </Block>
