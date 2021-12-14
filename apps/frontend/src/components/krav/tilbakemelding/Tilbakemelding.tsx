@@ -131,7 +131,7 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
                         </Block>
                         <Block display="flex" width="100%">
                           <ParagraphMedium marginBottom={0} marginRight="29px" marginTop="4px">
-                            {focused ? t.meldinger[0].innhold : _.truncate(t.meldinger[0].innhold, { length: 150, separator: /[.,] +/ })}
+                            {focused ? t.meldinger[0].innhold : _.truncate(t.meldinger[0].innhold, { length: 80, separator: /[.,] +/ })}
                           </ParagraphMedium>
                         </Block>
                       </Block>
