@@ -94,7 +94,7 @@ const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVersjoner:
       <LabelWrapper>
         <LabelAboveContent header title="Begreper">
           {krav.begreper.map((b, i) => (
-            <BegrepView key={i} begrep={b} />
+            <BegrepView key={'begrep_' + i} begrep={b} />
           ))}
         </LabelAboveContent>
       </LabelWrapper>
@@ -110,10 +110,10 @@ const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVersjoner:
       {alleKravVersjoner.length !== 0 && krav.kravVersjon > 1 && (
         <LabelWrapper>
           <LabelAboveContent title={'Tidligere versjoner'} header>
-            {alleKravVersjoner.map((k) => {
+            {alleKravVersjoner.map((k, i) => {
               if (k.kravVersjon && k.kravVersjon < krav.kravVersjon) {
                 return (
-                  <DotTag>
+                  <DotTag key={'kravVersjon_list_' + i}>
                     <RouteLink href={'/krav/' + k.kravNummer + '/' + k.kravVersjon}>
                       K{k.kravNummer}.{k.kravVersjon}
                     </RouteLink>
@@ -188,18 +188,18 @@ const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVersjoner:
               const marginBottom = '8px'
               if (va.type === AdresseType.SLACK)
                 return (
-                  <Block marginBottom={marginBottom}>
+                  <Block marginBottom={marginBottom} key={'kravVarsling_list_SLACK_' + i}>
                     Slack: <CustomizedLink href={slackLink(va.adresse)}>#{va.slackChannel?.name || va.adresse}</CustomizedLink>
                   </Block>
                 )
               if (va.type === AdresseType.SLACK_USER)
                 return (
-                  <Block marginBottom={marginBottom}>
+                  <Block marginBottom={marginBottom} key={'kravVarsling_list_SLACK_USER_' + i}>
                     Slack: <CustomizedLink href={slackUserLink(va.adresse)}>{va.slackUser?.name || va.adresse}</CustomizedLink>
                   </Block>
                 )
               return (
-                <Block marginBottom={marginBottom}>
+                <Block marginBottom={marginBottom} key={'kravVarsling_list_EMAIL_' + i}>
                   Epost: <CustomizedLink href={`mailto:${va.adresse}`}>{va.adresse}</CustomizedLink>
                 </Block>
               )

@@ -233,15 +233,24 @@ export const MultiInputField = (props: {
       <FieldArray name={props.name}>
         {(p: FieldArrayRenderProps) => {
           const add = () => {
-            if (linkName && val) {
-              p.push(`[${linkName}](${val})`)
-            } else if (linkName && !val) {
-              p.push(linkName)
-            } else if (!linkName && !val) {
-              return
+            if (props.link) {
+              if (linkName && val) {
+                p.push(`[${linkName}](${val})`)
+              } else if (linkName && !val) {
+                p.push(linkName)
+              } else if (!linkName && !val) {
+                return
+              } else {
+                props.setErrors && props.setErrors()
+                return
+              }
             } else {
-              props.setErrors && props.setErrors()
-              return
+              if(val) {
+                p.push(val)
+              } else {
+                props.setErrors && props.setErrors()
+                return
+              }
             }
             setVal('')
             setLinkName('')
