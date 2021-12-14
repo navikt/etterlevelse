@@ -102,7 +102,10 @@ public class KravRequest implements RequestElement {
         validator.checkCodelists(Fields.relevansFor, relevansFor, ListName.RELEVANS);
         validator.validateType(Fields.varslingsadresser, varslingsadresser);
         validator.validateType(Fields.regelverk, regelverk);
-        validator.validateType(Fields.suksesskriterier, suksesskriterier);
+
+        if(status != KravStatus.UTKAST) {
+            validator.validateType(Fields.suksesskriterier, suksesskriterier);
+        }
 
         if (duplicates(suksesskriterier, SuksesskriterieRequest::getId)) {
             validator.addError(Fields.suksesskriterier, "DUPLICATE_SUKSESSKRITERIE", "Dukplikat på suksesskriterie id");
