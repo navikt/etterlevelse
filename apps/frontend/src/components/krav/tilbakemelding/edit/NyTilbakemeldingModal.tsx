@@ -168,7 +168,11 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: NyTilbakemeldingMod
               <ModalFooter>
                 {showNotification ?
                   <Block display="flex" justifyContent="flex-end">
-                    <Button type="button" onClick={() => close(newTilbakeMelding)}>
+                    <Button type="button" onClick={() => {
+                      close(newTilbakeMelding)
+                      setShowNotification(undefined)
+                      setNewTilbakeMelding(undefined)
+                    }}>
                       Lukk
                     </Button>
                   </Block>
