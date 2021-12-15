@@ -305,7 +305,7 @@ const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function; setKra
         width: '100%',
         paddingTop: '8px',
         paddingBottom: '8px',
-        paddingRight: '8px',
+        paddingRight: '24px',
         paddingLeft: '8px',
         display: 'flex',
         justifyContent: 'flex-start',
@@ -330,20 +330,22 @@ const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function; setKra
           <Label3 $style={{ fontSize: '18px', fontWeight: 600, alignContent: 'flex-start', textAlign: 'left', textDecoration: hover ? 'underline' : 'none' }}>{props.krav.navn}</Label3>
         </Block>
         <Block display="flex" justifyContent="flex-end" flex="1" width="100%">
-          {props.krav.etterlevelseLastModified &&
-            <Block width="fit-content" display="flex" alignItems="center" marginRight="31px">
-              <Paragraph4 $style={{ lineHeight: '19px', textAlign: 'right', marginTop: '0px', marginBottom: '0px', whiteSpace: 'nowrap' }}>
-                Sist utfylt: {moment(props.krav.etterlevelseLastModified).format('ll')}
-              </Paragraph4>
-            </Block>
-          }
-          <StatusView
-            status={ferdigUtfylt ? 'Ferdig utfylt' : props.krav.etterlevelseStatus ? 'Under utfylling' : 'Ikke påbegynt'}
-            statusDisplay={{
-              background: ferdigUtfylt ? ettlevColors.green50 : props.krav.etterlevelseStatus ? '#FFECCC' : ettlevColors.white,
-              border: ferdigUtfylt ? ettlevColors.green400 : props.krav.etterlevelseStatus ? '#D47B00' : '#0B483F'
-            }}
-          />
+          <Block width="275px" display="flex" justifyContent="flex-end" marginLeft="32px">
+            {props.krav.etterlevelseLastModified &&
+              <Block width="fit-content" display="flex" alignItems="center" marginRight="31px">
+                <Paragraph4 $style={{ lineHeight: '19px', textAlign: 'right', marginTop: '0px', marginBottom: '0px', whiteSpace: 'nowrap' }}>
+                  Sist utfylt: {moment(props.krav.etterlevelseLastModified).format('ll')}
+                </Paragraph4>
+              </Block>
+            }
+            <StatusView
+              status={ferdigUtfylt ? 'Ferdig utfylt' : props.krav.etterlevelseStatus ? 'Under utfylling' : 'Ikke påbegynt'}
+              statusDisplay={{
+                background: ferdigUtfylt ? ettlevColors.green50 : props.krav.etterlevelseStatus ? '#FFECCC' : ettlevColors.white,
+                border: ferdigUtfylt ? ettlevColors.green400 : props.krav.etterlevelseStatus ? '#D47B00' : '#0B483F'
+              }}
+            />
+          </Block>
         </Block>
       </Block>
     </Button>
