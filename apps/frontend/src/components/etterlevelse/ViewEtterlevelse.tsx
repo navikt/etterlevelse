@@ -174,7 +174,7 @@ export const ViewEtterlevelse = ({
                         ...borderRadius('4px'),
                       },
                     },
-                    Root:{
+                    Root: {
                       style: {
                         ...borderWidth('1px'),
                         ...borderRadius('4px'),
@@ -196,6 +196,7 @@ export const ViewEtterlevelse = ({
                             color: ettlevColors.green800,
                             marginTop: '0px',
                             marginBottom: '0px',
+                            fontStyle: 'italic'
                           }}
                         >
                           {suksessbeskrivelseBegrunnelse.oppfylt && <FontAwesomeIcon icon={faCheck} color={ettlevColors.green400} style={{marginRight: '4px'}}/>}
@@ -247,10 +248,10 @@ export const ViewEtterlevelse = ({
 
       <Block>
         <Paragraph2 $style={{
-          marginTop:0,
-          marginBottom:0,
-          fontSize:'16px',
-          lineHeight:'22px'
+          marginTop: 0,
+          marginBottom: 0,
+          fontSize: '16px',
+          lineHeight: '22px'
         }}>
           Sist endret: {moment(etterlevelse.changeStamp.lastModifiedDate).format('ll')} av {etterlevelse.changeStamp.lastModifiedBy.split('-')[1]}
         </Paragraph2>
