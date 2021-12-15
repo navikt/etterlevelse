@@ -392,7 +392,7 @@ const BehandlingerPanels = ({ behandlinger, loading }: { behandlinger: Behandlin
               </>
             }
             beskrivelse={b.navn}
-            rightBeskrivelse={!!b.sistEndretEtterlevelse ? `Sist endret: ${moment(b.sistEndretEtterlevelse).format('ll')}` : ''}
+            //rightBeskrivelse={!!b.sistEndretEtterlevelse ? `Sist endret: ${moment(b.sistEndretEtterlevelse).format('ll')}` : ''}
           />
         </Block>
       ))}
