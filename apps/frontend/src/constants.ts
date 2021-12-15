@@ -141,6 +141,7 @@ export type KravEtterlevelseData = {
   etterlevelseStatus?: EtterlevelseStatus
   suksesskriterier: Suksesskriterie[]
   gammelVersjon?: boolean
+  etterlevelseLastModified?: string
 }
 
 export interface SuksesskriterieBegrunnelse {
