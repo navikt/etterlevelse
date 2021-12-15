@@ -21,12 +21,12 @@ import {faCheck, faCircle} from '@fortawesome/free-solid-svg-icons'
 const formatDate = (date?: string) => date && moment(date).format('ll')
 
 export const ViewEtterlevelse = ({
-  etterlevelse,
-  setEtterlevelse,
-  loading,
-  viewMode,
-  krav,
-}: {
+                                   etterlevelse,
+                                   setEtterlevelse,
+                                   loading,
+                                   viewMode,
+                                   krav,
+                                 }: {
   etterlevelse: Etterlevelse
   setEtterlevelse: Function
   loading?: boolean
@@ -51,7 +51,7 @@ export const ViewEtterlevelse = ({
               : {behandling.navn}
             </Paragraph2>
             <Block display="flex" alignContent="center">
-              <FontAwesomeIcon icon={faCircle} color={ettlevColors.black} style={{ fontSize: '.45rem', paddingTop: '7px', marginRight: '8px' }} aria-hidden={true} />
+              <FontAwesomeIcon icon={faCircle} color={ettlevColors.black} style={{fontSize: '.45rem', paddingTop: '7px', marginRight: '8px'}} aria-hidden={true}/>
               <RouteLink
                 href={`/behandling/${behandling.id}`}
                 style={{
@@ -65,7 +65,7 @@ export const ViewEtterlevelse = ({
               </RouteLink>
             </Block>
             <Block marginTop="8px" display="flex" alignContent="center">
-              <FontAwesomeIcon icon={faCircle} color={ettlevColors.black} style={{ fontSize: '.45rem', marginTop: '7px', marginRight: '8px' }} aria-hidden={true} />
+              <FontAwesomeIcon icon={faCircle} color={ettlevColors.black} style={{fontSize: '.45rem', marginTop: '7px', marginRight: '8px'}} aria-hidden={true}/>
               <RouteLink
                 href={`/krav/${krav.kravNummer}/${krav.kravVersjon}`}
                 style={{
@@ -86,7 +86,7 @@ export const ViewEtterlevelse = ({
           etterlevelse.behandlingId && (
             <Block>
               {' '}
-              <Spinner size={theme.sizing.scale600} />
+              <Spinner size={theme.sizing.scale600}/>
               {etterlevelse.behandlingId}
             </Block>
           )
@@ -122,7 +122,7 @@ export const ViewEtterlevelse = ({
               },
             }}
           >
-            <Paragraph4 $style={{ color: ettlevColors.navMorkGra, margin: '0px', fontWeight: 400, lineHeight: '20px' }}>
+            <Paragraph4 $style={{color: ettlevColors.navMorkGra, margin: '0px', fontWeight: 400, lineHeight: '20px'}}>
               Status:{' '}
               {etterlevelse.status === EtterlevelseStatus.FERDIG_DOKUMENTERT || etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT ? 'Ferdig utfylt' : 'Under utfylling'}
             </Paragraph4>
@@ -174,11 +174,17 @@ export const ViewEtterlevelse = ({
                         ...borderRadius('4px'),
                       },
                     },
+                    Root:{
+                      style: {
+                        ...borderWidth('1px'),
+                        ...borderRadius('4px'),
+                      },
+                    }
                   }}
                 >
                   <Block display="flex" justifyContent="center" marginTop={'32px'} marginBottom={'16px'}>
                     <Block display="flex" flex="1">
-                      <Label3 $style={{ color: ettlevColors.green600 }}>
+                      <Label3 $style={{color: ettlevColors.green600}}>
                         SUKSESSKRITERIE {i + 1} AV {krav.suksesskriterier.length}
                       </Label3>
                     </Block>
@@ -192,16 +198,16 @@ export const ViewEtterlevelse = ({
                             marginBottom: '0px',
                           }}
                         >
-                          {suksessbeskrivelseBegrunnelse.oppfylt && <FontAwesomeIcon icon={faCheck} color={ettlevColors.green400} style={{ marginRight: '4px' }} />}
+                          {suksessbeskrivelseBegrunnelse.oppfylt && <FontAwesomeIcon icon={faCheck} color={ettlevColors.green400} style={{marginRight: '4px'}}/>}
                           {etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT || suksessbeskrivelseBegrunnelse.ikkeRelevant ? 'Ikke Relevant' : 'Oppfylt'}
                         </Paragraph4>
                       </Block>
                     )}
                   </Block>
-                  <Label3 $style={{ fontSize: '21px', lineHeight: '30px', marginTop: '16px', marginBottom: '48px' }}>{s.navn}</Label3>
+                  <Label3 $style={{fontSize: '21px', lineHeight: '30px', marginTop: '16px', marginBottom: '48px'}}>{s.navn}</Label3>
                   {etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT || suksessbeskrivelseBegrunnelse.begrunnelse ? (
                     <Block>
-                      <Label3 $style={{ lineHeight: '22px' }} marginTop="16px">
+                      <Label3 $style={{lineHeight: '22px'}} marginTop="16px">
                         Hvordan er kriteriet oppfylt?
                       </Label3>
                       <Block marginBottom={'48px'}>
@@ -214,7 +220,7 @@ export const ViewEtterlevelse = ({
                     </Block>
                   ) : (
                     <Block marginBottom={'48px'}>
-                      <Paragraph2 $style={{color: ettlevColors.green800, fontStyle:'italic'}}>Mangler utfylling</Paragraph2>
+                      <Paragraph2 $style={{color: ettlevColors.green800, fontStyle: 'italic'}}>Mangler utfylling</Paragraph2>
                     </Block>
                   )}
                 </Card>
@@ -239,6 +245,16 @@ export const ViewEtterlevelse = ({
         )}
       </Block>
 
+      <Block>
+        <Paragraph2 $style={{
+          marginTop:0,
+          marginBottom:0,
+          fontSize:'16px',
+          lineHeight:'22px'
+        }}>
+          Sist endret: {moment(etterlevelse.changeStamp.lastModifiedDate).format('ll')} av {etterlevelse.changeStamp.lastModifiedBy.split('-')[1]}
+        </Paragraph2>
+      </Block>
       {/* <Block height={theme.sizing.scale600} />
 
 
