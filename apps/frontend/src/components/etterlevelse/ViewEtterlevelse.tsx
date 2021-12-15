@@ -252,7 +252,7 @@ export const ViewEtterlevelse = ({
                       {(suksessbeskrivelseBegrunnelse.oppfylt || suksessbeskrivelseBegrunnelse.ikkeRelevant) && (
                         <Block>
                           <Label3 $style={{lineHeight: '22px'}} marginTop="16px">
-                            Hvordan er kriteriet oppfylt?
+                            {suksessbeskrivelseBegrunnelse.ikkeRelevant ? 'Hvordan er ikke kriteriet relevant?' : 'Hvordan er kriteriet oppfylt?'}
                           </Label3>
                           <Block marginBottom={'48px'}>
                             <Markdown
