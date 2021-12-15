@@ -182,7 +182,11 @@ export const DateField = (props: { label: string; name: string; caption?: ReactN
             value={p.field.value ? moment(p.field.value).toDate() : undefined}
             onChange={({ date }) => {
               const dateSingle = Array.isArray(date) ? date[0] : date
-              if (dateSingle) p.form.setFieldValue(props.name, dateSingle.toISOString().split('T')[0])
+              if (dateSingle) {
+                const newDate = dateSingle.toLocaleDateString().split('/')
+                const formatedDate = newDate[2] + '-' + newDate[1] + '-' + newDate[0]
+                p.form.setFieldValue(props.name, formatedDate)
+              }
               else p.form.setFieldValue(props.name, undefined)
             }}
           />
@@ -245,7 +249,7 @@ export const MultiInputField = (props: {
                 return
               }
             } else {
-              if(val) {
+              if (val) {
                 p.push(val)
               } else {
                 props.setErrors && props.setErrors()
