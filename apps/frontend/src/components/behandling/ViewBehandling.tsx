@@ -88,6 +88,10 @@ export const behandlingKravQuery = gql`
           etterleves
           fristForFerdigstillelse
           status
+          changeStamp {
+            lastModifiedBy
+            lastModifiedDate
+          }
         }
       }
     }
