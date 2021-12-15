@@ -45,7 +45,7 @@ export const StatusView = ({
     return (
       <Block width="fit-content">
         <Card overrides={customOverrides}>
-          <Paragraph4 $style={{ color: ettlevColors.navMorkGra, ...marginAll('0px'), whiteSpace: 'nowrap'}}>{typeof status === 'string' ? status : kravStatus(status)}</Paragraph4>
+          <Paragraph4 $style={{ color: ettlevColors.navMorkGra, ...marginAll('0px'), whiteSpace: 'nowrap'}}>{kravStatus(status)}</Paragraph4>
         </Card>
       </Block>
     )
