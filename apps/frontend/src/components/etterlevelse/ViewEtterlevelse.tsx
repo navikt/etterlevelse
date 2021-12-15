@@ -6,7 +6,7 @@ import moment from 'moment'
 import RouteLink from '../common/RouteLink'
 import {useBehandling} from '../../api/BehandlingApi'
 import {Spinner} from '../common/Spinner'
-import {H2, Label3, Paragraph2, Paragraph4} from 'baseui/typography'
+import {H2, H3, Label3, Paragraph2, Paragraph4} from 'baseui/typography'
 import {Card} from 'baseui/card'
 import {ettlevColors} from '../../util/theme'
 import {getSuksesskriterieBegrunnelse} from './Edit/SuksesskriterieBegrunnelseEdit'
@@ -41,7 +41,7 @@ export const ViewEtterlevelse = ({
   return (
     <Block width="100%" marginTop="48px">
       <Block>
-        <H2>Kravet etterleves av:</H2>
+        <H2>{etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT ? 'Kravet er ikke relevant for:' : 'Kravet etterleves av:'}</H2>
         {behandling ? (
           <Block marginBottom={'48px'}>
             <Paragraph2>
@@ -130,6 +130,21 @@ export const ViewEtterlevelse = ({
         </Block>
       </Block>
 
+      {etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT &&
+        (<Block marginTop={'32px'} marginBottom={'40px'}>
+          <H3 $style={{
+            marginTop: 0,
+            marginBottom: '12px'
+          }}>
+            Hvorfor er ikke kravet relevant?
+          </H3>
+          <Paragraph2 $style={{
+            marginTop: 0,
+            marginBottom: '12px'
+          }}>
+            {etterlevelse.statusBegrunnelse}
+          </Paragraph2>
+        </Block>)}
       <Block marginTop={theme.sizing.scale650}>
         <Block display="flex">
           {/* {!viewMode && (
@@ -188,7 +203,7 @@ export const ViewEtterlevelse = ({
                         SUKSESSKRITERIE {i + 1} AV {krav.suksesskriterier.length}
                       </Label3>
                     </Block>
-                    {(suksessbeskrivelseBegrunnelse.begrunnelse || etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT) && (
+                    {(suksessbeskrivelseBegrunnelse.begrunnelse) && (
                       <Block display="flex" justifyContent="flex-end">
                         <Paragraph4
                           $style={{
@@ -206,7 +221,7 @@ export const ViewEtterlevelse = ({
                     )}
                   </Block>
                   <Label3 $style={{fontSize: '21px', lineHeight: '30px', marginTop: '16px', marginBottom: '48px'}}>{s.navn}</Label3>
-                  {etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT || suksessbeskrivelseBegrunnelse.begrunnelse ? (
+                  {suksessbeskrivelseBegrunnelse.begrunnelse ? (
                     <Block>
                       <Label3 $style={{lineHeight: '22px'}} marginTop="16px">
                         Hvordan er kriteriet oppfylt?
@@ -214,7 +229,7 @@ export const ViewEtterlevelse = ({
                       <Block marginBottom={'48px'}>
                         {(suksessbeskrivelseBegrunnelse.oppfylt || suksessbeskrivelseBegrunnelse.ikkeRelevant || etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT) && (
                           <Markdown
-                            source={etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT ? etterlevelse.statusBegrunnelse : suksessbeskrivelseBegrunnelse.begrunnelse}
+                            source={suksessbeskrivelseBegrunnelse.begrunnelse}
                           />
                         )}
                       </Block>
