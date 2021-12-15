@@ -32,3 +32,6 @@
 .rdw-editor-main {
   font-family: sans-serif;
 }
+.DraftEditor-root {
+  height: calc(100% - 20px)
+}
