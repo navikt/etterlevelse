@@ -29,6 +29,8 @@ import { env } from '../util/env'
 import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import CustomizedLink from '../components/common/CustomizedLink'
+import StatusView from '../components/common/StatusTag'
+import moment from 'moment'
 
 const responsiveBreakPoints: Responsive<Display> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
 
@@ -37,6 +39,7 @@ const mapEtterlevelseData = (etterlevelse?: Etterlevelse) => ({
   etterleves: !!etterlevelse?.etterleves,
   frist: etterlevelse?.fristForFerdigstillelse,
   etterlevelseStatus: etterlevelse?.status,
+  etterlevelseLastModified: etterlevelse?.changeStamp?.lastModifiedDate,
   gammelVersjon: false,
 })
 
@@ -54,7 +57,6 @@ export const BehandlingerTemaPage = () => {
   const [kravData, setKravData] = useState<KravEtterlevelseData[]>([])
 
   const [utfyltKrav, setUtfyltKrav] = useState<KravEtterlevelseData[]>([])
-  const [underArbeidKrav, setUnderArbeidKrav] = useState<KravEtterlevelseData[]>([])
   const [skalUtfyllesKrav, setSkalUtfyllesKrav] = useState<KravEtterlevelseData[]>([])
 
   const [edit, setEdit] = useState<string | undefined>()
@@ -73,6 +75,7 @@ export const BehandlingerTemaPage = () => {
       const sortedKrav = sortKraverByPriority<KravQL>(kraver, temaData?.shortName || '')
       const mapped = sortedKrav.map((krav) => {
         const etterlevelse = krav.etterlevelser.length ? krav.etterlevelser[0] : undefined
+        console.log(etterlevelse)
         return {
           kravNummer: krav.kravNummer,
           kravVersjon: krav.kravVersjon,
@@ -294,9 +297,11 @@ const EditModal = (props: {
 }
 
 const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function; setKravId: Function }) => {
+  const ferdigUtfylt = props.krav.etterlevelseStatus === EtterlevelseStatus.FERDIG_DOKUMENTERT || props.krav.etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT
   return (
     <Button
       kind="underline-hover"
+      notBold
       $style={{
         width: '100%',
         paddingTop: '8px',
@@ -318,12 +323,28 @@ const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function; setKra
         }
       }}
     >
-      <Block display="flex" width="100%">
-        <Block marginLeft="24px">
+      <Block display="flex" justifyContent="center" alignItems="center" id="test_1" width="100%">
+        <Block marginLeft="24px" >
           <Paragraph4 $style={{ fontSize: '16px', lineHeight: '24px', marginBottom: '0px', marginTop: '0px', width: 'fit-content' }}>
             K{props.krav.kravNummer}.{props.krav.kravVersjon}
           </Paragraph4>
           <Label3 $style={{ fontSize: '18px', fontWeight: 600, alignContent: 'flex-start', textAlign: 'left' }}>{props.krav.navn}</Label3>
+        </Block>
+        <Block display="flex" justifyContent="flex-end" flex="1" width="100%">
+          {props.krav.etterlevelseLastModified &&
+            <Block width="fit-content" display="flex" alignItems="center" marginRight="31px">
+              <Paragraph4 $style={{ lineHeight: '19px', textAlign: 'right', marginTop: '0px', marginBottom: '0px', whiteSpace: 'nowrap' }}>
+                Sist utfylt: {moment(props.krav.etterlevelseLastModified).format('ll')}
+              </Paragraph4>
+            </Block>
+          }
+          <StatusView
+            status={ferdigUtfylt ? 'Ferdig utfylt' : props.krav.etterlevelseStatus ? 'Under utfylling' : 'Ikke påbegynt'}
+            statusDisplay={{
+              background: ferdigUtfylt ? ettlevColors.green50 : props.krav.etterlevelseStatus ? '#FFECCC' : ettlevColors.white,
+              border: ferdigUtfylt ? ettlevColors.green400 : props.krav.etterlevelseStatus ? '#D47B00' : '#0B483F'
+            }}
+          />
         </Block>
       </Block>
     </Button>
