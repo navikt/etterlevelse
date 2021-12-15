@@ -1,32 +1,32 @@
-import {Etterlevelse, EtterlevelseStatus, Krav} from '../../constants'
-import {Block} from 'baseui/block'
-import React, {useRef, useState} from 'react'
-import {theme} from '../../util'
+import { Etterlevelse, EtterlevelseStatus, Krav } from '../../constants'
+import { Block } from 'baseui/block'
+import React, { useRef, useState } from 'react'
+import { theme } from '../../util'
 import moment from 'moment'
 import RouteLink from '../common/RouteLink'
-import {useBehandling} from '../../api/BehandlingApi'
-import {Spinner} from '../common/Spinner'
-import {H2, H3, Label3, Paragraph2, Paragraph4} from 'baseui/typography'
-import {Card} from 'baseui/card'
-import {ettlevColors} from '../../util/theme'
-import {getSuksesskriterieBegrunnelse} from './Edit/SuksesskriterieBegrunnelseEdit'
-import {FormikProps} from 'formik'
-import {useHistory} from 'react-router-dom'
-import {Markdown} from '../common/Markdown'
+import { useBehandling } from '../../api/BehandlingApi'
+import { Spinner } from '../common/Spinner'
+import { H2, H3, Label3, Paragraph2, Paragraph4 } from 'baseui/typography'
+import { Card } from 'baseui/card'
+import { ettlevColors } from '../../util/theme'
+import { getSuksesskriterieBegrunnelse } from './Edit/SuksesskriterieBegrunnelseEdit'
+import { FormikProps } from 'formik'
+import { useHistory } from 'react-router-dom'
+import { Markdown } from '../common/Markdown'
 import EditBegrunnelse from './Edit/EditBegrunnelse'
-import {borderColor, borderRadius, borderStyle, borderWidth, marginAll} from '../common/Style'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faCheck, faCircle} from '@fortawesome/free-solid-svg-icons'
+import { borderColor, borderRadius, borderStyle, borderWidth, marginAll } from '../common/Style'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCheck, faCircle } from '@fortawesome/free-solid-svg-icons'
 
 const formatDate = (date?: string) => date && moment(date).format('ll')
 
 export const ViewEtterlevelse = ({
-                                   etterlevelse,
-                                   setEtterlevelse,
-                                   loading,
-                                   viewMode,
-                                   krav,
-                                 }: {
+  etterlevelse,
+  setEtterlevelse,
+  loading,
+  viewMode,
+  krav,
+}: {
   etterlevelse: Etterlevelse
   setEtterlevelse: Function
   loading?: boolean
@@ -51,7 +51,7 @@ export const ViewEtterlevelse = ({
               : {behandling.navn}
             </Paragraph2>
             <Block display="flex" alignContent="center">
-              <FontAwesomeIcon icon={faCircle} color={ettlevColors.black} style={{fontSize: '.45rem', paddingTop: '7px', marginRight: '8px'}} aria-hidden={true}/>
+              <FontAwesomeIcon icon={faCircle} color={ettlevColors.black} style={{ fontSize: '.45rem', paddingTop: '7px', marginRight: '8px' }} aria-hidden={true} />
               <RouteLink
                 href={`/behandling/${behandling.id}`}
                 style={{
@@ -65,7 +65,7 @@ export const ViewEtterlevelse = ({
               </RouteLink>
             </Block>
             <Block marginTop="8px" display="flex" alignContent="center">
-              <FontAwesomeIcon icon={faCircle} color={ettlevColors.black} style={{fontSize: '.45rem', marginTop: '7px', marginRight: '8px'}} aria-hidden={true}/>
+              <FontAwesomeIcon icon={faCircle} color={ettlevColors.black} style={{ fontSize: '.45rem', marginTop: '7px', marginRight: '8px' }} aria-hidden={true} />
               <RouteLink
                 href={`/krav/${krav.kravNummer}/${krav.kravVersjon}`}
                 style={{
@@ -86,7 +86,7 @@ export const ViewEtterlevelse = ({
           etterlevelse.behandlingId && (
             <Block>
               {' '}
-              <Spinner size={theme.sizing.scale600}/>
+              <Spinner size={theme.sizing.scale600} />
               {etterlevelse.behandlingId}
             </Block>
           )
@@ -122,7 +122,7 @@ export const ViewEtterlevelse = ({
               },
             }}
           >
-            <Paragraph4 $style={{color: ettlevColors.navMorkGra, margin: '0px', fontWeight: 400, lineHeight: '20px'}}>
+            <Paragraph4 $style={{ color: ettlevColors.navMorkGra, margin: '0px', fontWeight: 400, lineHeight: '20px' }}>
               Status:{' '}
               {etterlevelse.status === EtterlevelseStatus.FERDIG_DOKUMENTERT || etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT ? 'Ferdig utfylt' : 'Under utfylling'}
             </Paragraph4>
@@ -193,17 +193,18 @@ export const ViewEtterlevelse = ({
                       style: {
                         ...borderWidth('1px'),
                         ...borderRadius('4px'),
+                        backgroundColor: etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT ? ettlevColors.grey50 : ettlevColors.white
                       },
                     }
                   }}
                 >
                   <Block display="flex" justifyContent="center" marginTop={'32px'} marginBottom={'16px'}>
                     <Block display="flex" flex="1">
-                      <Label3 $style={{color: ettlevColors.green600}}>
+                      <Label3 $style={{ color: ettlevColors.green600 }}>
                         SUKSESSKRITERIE {i + 1} AV {krav.suksesskriterier.length}
                       </Label3>
                     </Block>
-                    {(suksessbeskrivelseBegrunnelse.begrunnelse) && (
+                    {(etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT || suksessbeskrivelseBegrunnelse.begrunnelse) && (
                       <Block display="flex" justifyContent="flex-end">
                         <Paragraph4
                           $style={{
@@ -214,29 +215,31 @@ export const ViewEtterlevelse = ({
                             fontStyle: 'italic'
                           }}
                         >
-                          {suksessbeskrivelseBegrunnelse.oppfylt && <FontAwesomeIcon icon={faCheck} color={ettlevColors.green400} style={{marginRight: '4px'}}/>}
+                          {suksessbeskrivelseBegrunnelse.oppfylt && <FontAwesomeIcon icon={faCheck} color={ettlevColors.green400} style={{ marginRight: '4px' }} />}
                           {etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT || suksessbeskrivelseBegrunnelse.ikkeRelevant ? 'Ikke Relevant' : 'Oppfylt'}
                         </Paragraph4>
                       </Block>
                     )}
                   </Block>
-                  <Label3 $style={{fontSize: '21px', lineHeight: '30px', marginTop: '16px', marginBottom: '48px'}}>{s.navn}</Label3>
-                  {suksessbeskrivelseBegrunnelse.begrunnelse ? (
+                  <Label3 $style={{ fontSize: '21px', lineHeight: '30px', marginTop: '16px', marginBottom: '48px' }}>{s.navn}</Label3>
+                  {suksessbeskrivelseBegrunnelse.begrunnelse || etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT ? (
                     <Block>
-                      <Label3 $style={{lineHeight: '22px'}} marginTop="16px">
-                        Hvordan er kriteriet oppfylt?
-                      </Label3>
-                      <Block marginBottom={'48px'}>
-                        {(suksessbeskrivelseBegrunnelse.oppfylt || suksessbeskrivelseBegrunnelse.ikkeRelevant || etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT) && (
-                          <Markdown
-                            source={suksessbeskrivelseBegrunnelse.begrunnelse}
-                          />
-                        )}
-                      </Block>
+                      {(suksessbeskrivelseBegrunnelse.oppfylt || suksessbeskrivelseBegrunnelse.ikkeRelevant) && (
+                        <Block>
+                          <Label3 $style={{ lineHeight: '22px' }} marginTop="16px">
+                            Hvordan er kriteriet oppfylt?
+                          </Label3>
+                          <Block marginBottom={'48px'}>
+                            <Markdown
+                              source={suksessbeskrivelseBegrunnelse.begrunnelse}
+                            />
+                          </Block>
+                        </Block>
+                      )}
                     </Block>
                   ) : (
                     <Block marginBottom={'48px'}>
-                      <Paragraph2 $style={{color: ettlevColors.green800, fontStyle: 'italic'}}>Mangler utfylling</Paragraph2>
+                      <Paragraph2 $style={{ color: ettlevColors.green800, fontStyle: 'italic' }}>Mangler utfylling</Paragraph2>
                     </Block>
                   )}
                 </Card>
