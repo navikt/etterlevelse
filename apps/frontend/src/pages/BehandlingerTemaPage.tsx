@@ -61,7 +61,7 @@ export const BehandlingerTemaPage = () => {
   const [kravId, setKravId] = useState<KravId | undefined>()
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       const allKravPriority = await getAllKravPriority()
       const kraver = _.cloneDeep(rawData?.krav.content) || []
 
@@ -100,15 +100,15 @@ export const BehandlingerTemaPage = () => {
 
   useEffect(() => {
     setUtfyltKrav(kravData.filter((k) => k.etterlevelseStatus === EtterlevelseStatus.FERDIG_DOKUMENTERT || k.etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT))
-    setUnderArbeidKrav(
+    setSkalUtfyllesKrav(
       kravData.filter(
         (k) =>
           k.etterlevelseStatus === EtterlevelseStatus.OPPFYLLES_SENERE ||
           k.etterlevelseStatus === EtterlevelseStatus.UNDER_REDIGERING ||
-          k.etterlevelseStatus === EtterlevelseStatus.FERDIG,
+          k.etterlevelseStatus === EtterlevelseStatus.FERDIG ||
+          k.etterlevelseStatus === undefined || null
       ),
     )
-    setSkalUtfyllesKrav(kravData.filter((k) => k.etterlevelseStatus === undefined || null))
   }, [kravData])
 
   const getPercentageUtfylt = () => {
@@ -224,9 +224,6 @@ export const BehandlingerTemaPage = () => {
         <CustomizedAccordion accordion={false}>
           <CustomizedPanel HeaderActiveBackgroundColor={ettlevColors.green50} title={<KravPanelHeader title={'Skal fylles ut'} kravData={skalUtfyllesKrav} />}>
             {getKravList(skalUtfyllesKrav, 'Ingen krav som skal fylles ut')}
-          </CustomizedPanel>
-          <CustomizedPanel HeaderActiveBackgroundColor={ettlevColors.green50} title={<KravPanelHeader title={'Under utfylling'} kravData={underArbeidKrav} />}>
-            {getKravList(underArbeidKrav, 'Ingen krav under utfylling')}
           </CustomizedPanel>
           <CustomizedPanel HeaderActiveBackgroundColor={ettlevColors.green50} title={<KravPanelHeader title={'Ferdig utfylt'} kravData={utfyltKrav} />}>
             {getKravList(utfyltKrav, 'Ingen krav er ferdig utfylt')}
