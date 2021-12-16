@@ -380,7 +380,8 @@ const BehandlingerPanels = ({ behandlinger, loading }: { behandlinger: Behandlin
       {behandlinger.map((b) => (
         <Block key={b.id} marginBottom={'8px'}>
           <PanelLink
-            useUnderline
+            useTitleUnderLine
+            useDescriptionUnderline
             panelIcon={<img src={arkPennIcon} width="33px" height="33px" aria-hidden alt={'Dokumenter behandling ikon'} />}
             href={`/behandling/${b.id}`}
             title={
@@ -392,7 +393,7 @@ const BehandlingerPanels = ({ behandlinger, loading }: { behandlinger: Behandlin
               </>
             }
             beskrivelse={b.navn}
-            //rightBeskrivelse={!!b.sistEndretEtterlevelse ? `Sist endret: ${moment(b.sistEndretEtterlevelse).format('ll')}` : ''}
+            rightBeskrivelse={!!b.sistEndretEtterlevelse ? `Sist endret: ${moment(b.sistEndretEtterlevelse).format('ll')}` : ''}
           />
         </Block>
       ))}
