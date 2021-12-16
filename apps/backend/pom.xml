@@ -24,7 +24,7 @@
         <shedlock.version>4.30.0</shedlock.version>
         <commons-collections4.version>4.4</commons-collections4.version>
         <graphql-spring-boot-starter.version>11.1.0</graphql-spring-boot-starter.version>
-        <graphql.version>16.0.1</graphql.version>
+        <graphql.version>17.0</graphql.version>
         <lombok.version>1.18.20</lombok.version>
 
         <microsoft-graph.version>5.9.0</microsoft-graph.version>
@@ -91,6 +91,12 @@
             <groupId>com.graphql-java-kickstart</groupId>
             <artifactId>graphql-spring-boot-starter</artifactId>
             <version>${graphql-spring-boot-starter.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.graphql-java</groupId>
+                    <artifactId>graphql-java-extended-scalars</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.graphql-java-kickstart</groupId>
