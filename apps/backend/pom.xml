@@ -15,7 +15,7 @@
     <description>Etterlevelse</description>
 
     <properties>
-        <java.version>16</java.version>
+        <java.version>17</java.version>
 
         <springdoc-openapi-ui.version>1.6.1</springdoc-openapi-ui.version>
         <hibernate-types-52.version>2.14.0</hibernate-types-52.version>
@@ -25,7 +25,6 @@
         <commons-collections4.version>4.4</commons-collections4.version>
         <graphql-spring-boot-starter.version>11.1.0</graphql-spring-boot-starter.version>
         <graphql.version>17.0</graphql.version>
-        <lombok.version>1.18.20</lombok.version>
 
         <microsoft-graph.version>5.9.0</microsoft-graph.version>
         <msal4j.version>1.11.0</msal4j.version>
