@@ -1,6 +1,6 @@
 # Frontend for Etterlevelse
 
-### Requires node 15
+### Requires node 17
 
 ### Install deps
 `yarn install`
