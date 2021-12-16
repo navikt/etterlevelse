@@ -27,7 +27,7 @@ export const FAQ = () => {
               Siden er under arbeid, og vi tar gjerne imot innspill på Slack <strong>#etterlevelse.</strong>
             </Paragraph1>
             <Paragraph1 $style={{ fontSize: '22px', color: ettlevColors.green800 }}>
-              Intill videre kan dere lese om{' '}
+              Inntil videre kan dere lese om{' '}
               <ExternalLink href={'https://navno.sharepoint.com/sites/fag-og-ytelser-informasjonsforvaltning/SitePages/Etterlevelseskrav-for-systemutvikling.aspx'}>
                 Støtte til etterlevelse på Navet
               </ExternalLink>
