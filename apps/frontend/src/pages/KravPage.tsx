@@ -34,7 +34,7 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faExclamationCircle} from "@fortawesome/free-solid-svg-icons";
 
 export const kravNumView = (it: { kravVersjon: number; kravNummer: number }) => `K${it.kravNummer}.${it.kravVersjon}`
-export const kravName = (krav: Krav) => `${kravNumView(krav)} - ${krav.navn}`
+export const kravName = (krav: Krav) => `${kravNumView(krav)} ${krav.navn}`
 
 export const kravStatus = (status: KravStatus | string) => {
   if (!status) return ''
