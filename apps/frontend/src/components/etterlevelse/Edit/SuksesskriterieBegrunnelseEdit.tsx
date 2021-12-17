@@ -1,21 +1,21 @@
-import { Block } from 'baseui/block'
-import { FormControl } from 'baseui/form-control'
-import { H3, Label3, Paragraph2 } from 'baseui/typography'
-import { FieldArray, FieldArrayRenderProps } from 'formik'
-import React, { useEffect } from 'react'
-import { EtterlevelseStatus, Suksesskriterie, SuksesskriterieBegrunnelse } from '../../../constants'
-import { useDebouncedState } from '../../../util/hooks'
-import { ettlevColors, theme } from '../../../util/theme'
-import { CustomizedAccordion, CustomizedPanel } from '../../common/CustomizedAccordion'
-import { FieldWrapper } from '../../common/Inputs'
-import { Markdown } from '../../common/Markdown'
+import {Block} from 'baseui/block'
+import {FormControl} from 'baseui/form-control'
+import {H3, Label3, Paragraph2} from 'baseui/typography'
+import {FieldArray, FieldArrayRenderProps} from 'formik'
+import React from 'react'
+import {EtterlevelseStatus, Suksesskriterie, SuksesskriterieBegrunnelse} from '../../../constants'
+import {useDebouncedState} from '../../../util/hooks'
+import {ettlevColors, theme} from '../../../util/theme'
+import {CustomizedAccordion, CustomizedPanel} from '../../common/CustomizedAccordion'
+import {FieldWrapper} from '../../common/Inputs'
+import {Markdown} from '../../common/Markdown'
 import TextEditor from '../../common/TextEditor/TextEditor'
-import { Error } from '../../common/ModalSchema'
+import {Error} from '../../common/ModalSchema'
 import LabelWithToolTip from '../../common/LabelWithTooltip'
-import { borderColor, borderStyle, borderWidth } from '../../common/Style'
-import { LabelAboveContent } from '../../common/PropertyLabel'
-import { MODE, StatefulButtonGroup } from 'baseui/button-group'
-import { Button, ButtonOverrides } from 'baseui/button'
+import {borderColor, borderStyle, borderWidth} from '../../common/Style'
+import {LabelAboveContent} from '../../common/PropertyLabel'
+import {MODE, StatefulButtonGroup} from 'baseui/button-group'
+import {Button} from 'baseui/button'
 
 const paddingLeft = '30px'
 
@@ -186,7 +186,7 @@ const KriterieBegrunnelse = ({
               setIkkeRelevant(false)
             }}
           >
-            Vi oppfyller
+            Oppfylt
           </Button>
           <Button
             type={'button'}
