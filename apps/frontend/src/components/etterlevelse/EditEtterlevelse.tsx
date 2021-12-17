@@ -1,5 +1,5 @@
 import { Etterlevelse, EtterlevelseStatus, Krav, KravQL, Suksesskriterie } from '../../constants'
-import { Field, FieldProps, Form, Formik, FormikProps, validateYupSchema, yupToFormErrors } from 'formik'
+import { ErrorMessage, Field, FieldProps, Form, Formik, FormikProps, validateYupSchema, yupToFormErrors } from 'formik'
 import { createEtterlevelse, mapEtterlevelseToFormValue, updateEtterlevelse } from '../../api/EtterlevelseApi'
 import { Block } from 'baseui/block'
 import Button from '../common/Button'
@@ -23,7 +23,7 @@ import { user } from '../../services/User'
 import { KIND as NKIND, Notification } from 'baseui/notification'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faExternalLinkAlt, faTimesCircle } from '@fortawesome/free-solid-svg-icons'
-import { borderColor, borderRadius, borderStyle, borderWidth } from '../common/Style'
+import { borderColor, borderRadius, borderStyle, borderWidth, paddingZero } from '../common/Style'
 import { env } from '../../util/env'
 import { useQuery } from '@apollo/client'
 import moment from 'moment'
@@ -94,6 +94,17 @@ const etterlevelseSchema = () => {
         return true
       },
     }),
+    fristForFerdigstillelse: yup.string().test({
+      name: 'frist',
+      message: 'Du må sette på en frist dato for ferdistilling',
+      test: function (fristForFerdigstillelse) {
+        const { parent } = this
+        if (parent.status === EtterlevelseStatus.OPPFYLLES_SENERE && (fristForFerdigstillelse === undefined || fristForFerdigstillelse === null)) {
+          return false
+        }
+        return true
+      }
+    })
   })
 }
 
@@ -292,8 +303,22 @@ export const EditEtterlevelse = ({ kravId, etterlevelse, close, formRef, documen
                                           </Block>
 
                                           {etterlevelseStatus === EtterlevelseStatus.OPPFYLLES_SENERE && (
-                                            <Block maxWidth="170px" width="100%">
-                                              <DateField label="Frist (valgfritt)" name="fristForFerdigstillelse" />
+                                            <Block width="100%">
+                                              <Block maxWidth="170px" width="100%">
+                                                <DateField error={!!p.form.errors.fristForFerdigstillelse} label="Frist" name="fristForFerdigstillelse" />
+                                              </Block>
+                                              {p.form.errors.fristForFerdigstillelse &&
+                                                <Block display="flex" width="100%" marginTop=".2rem">
+                                                  <Block width="100%">
+                                                    <Notification
+                                                      overrides={{ Body: { style: { width: 'auto', ...paddingZero, marginTop: 0, backgroundColor: 'transparent', color: ettlevColors.red600 } } }}
+                                                      kind={NKIND.negative}
+                                                    >
+                                                      {p.form.errors.fristForFerdigstillelse}
+                                                    </Notification>
+                                                  </Block>
+                                                </Block>
+                                              }
                                             </Block>
                                           )}
                                         </Radio>
@@ -431,7 +456,8 @@ export const EditEtterlevelse = ({ kravId, etterlevelse, close, formRef, documen
                     disabled={disableEdit}
                     type="button"
                     onClick={() => {
-                      if (values.status !== EtterlevelseStatus.IKKE_RELEVANT) {
+                      if (values.status !== EtterlevelseStatus.IKKE_RELEVANT && values.status !== EtterlevelseStatus.OPPFYLLES_SENERE) {
+                        console.log('TRIIGER')
                         values.status = EtterlevelseStatus.FERDIG_DOKUMENTERT
                         values.suksesskriterieBegrunnelser.forEach((skb, index) => {
                           if (skb.begrunnelse === '' || skb.begrunnelse === undefined) {

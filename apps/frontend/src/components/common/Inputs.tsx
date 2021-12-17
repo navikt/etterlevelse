@@ -171,7 +171,7 @@ export const BoolField = (props: { label: string; name: string; nullable?: boole
   </FieldWrapper>
 )
 
-export const DateField = (props: { label: string; name: string; caption?: ReactNode; tooltip?: string }) => (
+export const DateField = (props: { label: string; name: string; caption?: ReactNode; tooltip?: string; error?: boolean }) => (
   <FieldWrapper>
     <Field name={props.name}>
       {(p: FieldProps) => (
@@ -188,6 +188,19 @@ export const DateField = (props: { label: string; name: string; caption?: ReactN
                 p.form.setFieldValue(props.name, formatedDate.toISOString().split('T')[0])
               }
               else p.form.setFieldValue(props.name, undefined)
+            }}
+            overrides={{
+              Input: {
+                props: {
+                  overrides: {
+                    Root: {
+                      style: {
+                        ...borderColor(props.error ?  ettlevColors.red600 : undefined)
+                      }
+                    }
+                  }
+                }
+              }
             }}
           />
         </FormControl>
