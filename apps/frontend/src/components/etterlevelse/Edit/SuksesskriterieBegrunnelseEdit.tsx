@@ -175,6 +175,7 @@ const KriterieBegrunnelse = ({
                   borderRightWidth: '0px',
                   borderTopRightRadius: '0px',
                   borderBottomRightRadius: '0px',
+                  minWidth:'160px'
                 },
                 props: {
                   tabIndex: 0,
@@ -199,6 +200,7 @@ const KriterieBegrunnelse = ({
                   ...borderWidth('1px'),
                   borderTopLeftRadius: '0px',
                   borderBottomLeftRadius: '0px',
+                  minWidth:'160px'
                 },
                 props: {
                   tabIndex: 0,
