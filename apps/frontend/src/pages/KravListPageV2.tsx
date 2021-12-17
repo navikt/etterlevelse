@@ -9,7 +9,7 @@ import { user } from '../services/User'
 import { theme } from '../util'
 import moment from 'moment'
 import { ettlevColors, maxPageWidth, responsivePaddingLarge } from '../util/theme'
-import { plusIcon } from '../components/Images'
+import { informationIcon, plusIcon } from '../components/Images'
 import { PanelLink } from '../components/common/PanelLink'
 import { Krav, KravQL } from '../constants'
 import { SkeletonPanel } from '../components/common/LoadingSkeleton'
@@ -123,7 +123,13 @@ export const KravPanels = ({ kravene, loading }: { kravene?: KravQL[] | Krav[]; 
                 beskrivelse={<Label3 $style={{ fontSize: '18px', fontWeight: 600 }}>{k.navn}</Label3>}
                 rightBeskrivelse={!!k.changeStamp.lastModifiedDate ? `Sist endret: ${moment(k.changeStamp.lastModifiedDate).format('ll')}` : ''}
                 rightTitle={tema && tema.shortName ? tema.shortName : ''}
-                statusText={<StatusView status={k.status} />}
+                statusText={
+                  <StatusView
+                    status={k.status}
+                    icon={k.varselMelding ? <img src={informationIcon} alt="" /> : undefined}
+                    statusDisplay={k.varselMelding ? {background: ettlevColors.white} : undefined}
+                  />
+                }
                 overrides={{
                   Block: {
                     style: {

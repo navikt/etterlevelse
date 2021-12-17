@@ -43,6 +43,7 @@ const kravtableQuery = gql`
         kravNummer
         kravVersjon
         status
+        varselMelding
         avdeling {
           code
           shortName

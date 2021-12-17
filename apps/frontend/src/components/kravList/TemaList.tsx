@@ -15,6 +15,7 @@ import Button from '../common/Button'
 import { EditPriorityModal } from './edit/EditPriorityModal'
 import { sortKraverByPriority } from '../../util/sort'
 import { getAllKravPriority } from '../../api/KravPriorityApi'
+import { informationIcon } from '../Images'
 
 export const TemaList = () => {
   const [allKrav, setAllKrav] = useState<Krav[]>()
@@ -25,7 +26,7 @@ export const TemaList = () => {
   }, [])
 
   const fetchKrav = () => {
-    ;(async () => {
+    ; (async () => {
       const kraver = await getAllKrav()
       const allKravPriority = await getAllKravPriority()
 
@@ -84,7 +85,13 @@ const KravTemaList = (props: { kraver: Krav[]; tema: string; refresh: Function }
               }
               beskrivelse={<Label3 $style={{ fontSize: '18px', fontWeight: 600 }}>{k.navn}</Label3>}
               rightBeskrivelse={!!k.changeStamp.lastModifiedDate ? `Sist endret: ${moment(k.changeStamp.lastModifiedDate).format('ll')}` : ''}
-              statusText={<StatusView status={k.status} />}
+              statusText={
+                <StatusView
+                  status={k.status}
+                  icon={k.varselMelding ? <img src={informationIcon} alt="" /> : undefined}
+                  statusDisplay={k.varselMelding ? { background: ettlevColors.white } : undefined}
+                />
+              }
               overrides={{
                 Block: {
                   style: {
