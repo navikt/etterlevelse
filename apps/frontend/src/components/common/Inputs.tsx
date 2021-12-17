@@ -183,9 +183,10 @@ export const DateField = (props: { label: string; name: string; caption?: ReactN
             onChange={({ date }) => {
               const dateSingle = Array.isArray(date) ? date[0] : date
               if (dateSingle) {
-                const newDate = dateSingle.toLocaleDateString().split('/')
-                const formatedDate = newDate[2] + '-' + newDate[1] + '-' + newDate[0]
-                p.form.setFieldValue(props.name, formatedDate)
+                const newDate = dateSingle.setDate(dateSingle.getDate() + 1)
+                const formatedDate = new Date(newDate)
+                console.log(formatedDate.toISOString().split('T')[0])
+                p.form.setFieldValue(props.name, formatedDate.toISOString().split('T')[0])
               }
               else p.form.setFieldValue(props.name, undefined)
             }}
