@@ -1,33 +1,32 @@
-import { Etterlevelse, EtterlevelseStatus, Krav, KravQL, Suksesskriterie } from '../../constants'
-import { ErrorMessage, Field, FieldProps, Form, Formik, FormikProps, validateYupSchema, yupToFormErrors } from 'formik'
-import { createEtterlevelse, mapEtterlevelseToFormValue, updateEtterlevelse } from '../../api/EtterlevelseApi'
-import { Block } from 'baseui/block'
+import {Etterlevelse, EtterlevelseStatus, Krav, KravQL} from '../../constants'
+import {Field, FieldProps, Form, Formik, FormikProps, validateYupSchema, yupToFormErrors} from 'formik'
+import {createEtterlevelse, mapEtterlevelseToFormValue, updateEtterlevelse} from '../../api/EtterlevelseApi'
+import {Block} from 'baseui/block'
 import Button from '../common/Button'
-import React, { useEffect } from 'react'
+import React, {useEffect} from 'react'
 import * as yup from 'yup'
-import { getEtterlevelseStatus } from '../../pages/EtterlevelsePage'
-import { DateField, FieldWrapper, TextAreaField } from '../common/Inputs'
-import { theme } from '../../util'
-import { FormControl } from 'baseui/form-control'
-import { getKravByKravNumberAndVersion, kravFullQuery, KravId, useKrav, useSearchKrav } from '../../api/KravApi'
-import { kravName, kravNumView } from '../../pages/KravPage'
-import { behandlingName, useBehandling, useSearchBehandling } from '../../api/BehandlingApi'
+import {getEtterlevelseStatus} from '../../pages/EtterlevelsePage'
+import {DateField, FieldWrapper, TextAreaField} from '../common/Inputs'
+import {theme} from '../../util'
+import {FormControl} from 'baseui/form-control'
+import {getKravByKravNumberAndVersion, kravFullQuery, KravId, useKrav, useSearchKrav} from '../../api/KravApi'
+import {kravName, kravNumView} from '../../pages/KravPage'
+import {behandlingName, useBehandling, useSearchBehandling} from '../../api/BehandlingApi'
 import CustomizedSelect from '../common/CustomizedSelect'
-import { H1, H2, Label3, Paragraph2, Paragraph4 } from 'baseui/typography'
-import { ettlevColors, responsivePaddingLarge } from '../../util/theme'
-import { SuksesskriterierBegrunnelseEdit } from './Edit/SuksesskriterieBegrunnelseEdit'
-import { Radio, RadioGroup } from 'baseui/radio'
-import { Code } from '../../services/Codelist'
-import { Error } from '../common/ModalSchema'
-import { user } from '../../services/User'
-import { KIND as NKIND, Notification } from 'baseui/notification'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faExternalLinkAlt, faTimesCircle } from '@fortawesome/free-solid-svg-icons'
-import { borderColor, borderRadius, borderStyle, borderWidth, paddingZero } from '../common/Style'
-import { env } from '../../util/env'
-import { useQuery } from '@apollo/client'
+import {H1, H2, Label3, Paragraph2, Paragraph4} from 'baseui/typography'
+import {ettlevColors, responsivePaddingLarge} from '../../util/theme'
+import {SuksesskriterierBegrunnelseEdit} from './Edit/SuksesskriterieBegrunnelseEdit'
+import {Radio, RadioGroup} from 'baseui/radio'
+import {Code} from '../../services/Codelist'
+import {Error} from '../common/ModalSchema'
+import {user} from '../../services/User'
+import {KIND as NKIND, Notification} from 'baseui/notification'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faExternalLinkAlt, faTimesCircle} from '@fortawesome/free-solid-svg-icons'
+import {borderColor, borderRadius, borderStyle, borderWidth, paddingZero} from '../common/Style'
+import {env} from '../../util/env'
+import {useQuery} from '@apollo/client'
 import moment from 'moment'
-import { validate } from 'graphql'
 
 type EditEttlevProps = {
   etterlevelse: Etterlevelse
@@ -231,7 +230,7 @@ export const EditEtterlevelse = ({ kravId, etterlevelse, close, formRef, documen
                         }}
                       >
                         <Paragraph2 marginBottom={0} marginTop={0}>
-                          <span style={{ display: 'inline-block', marginRight: '5px' }}>Åpne veiledning og spørsmål til kraveier</span>
+                          <span style={{ display: 'inline-block', marginRight: '5px' , fontSize:'16px' }}><strong>Åpne veiledning og spørsmål til kraveier</strong></span>
                           <FontAwesomeIcon icon={faExternalLinkAlt} />
                         </Paragraph2>
                       </Button>
