@@ -67,6 +67,7 @@ export interface Krav extends DomainObject {
   dokumentasjon: string[]
   implementasjoner: string
   notat?: string
+  varselMelding?: string
   prioriteringsId?: string
   kravPriorityUID?: string
   begrepIder: string[]

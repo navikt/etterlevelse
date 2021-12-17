@@ -71,6 +71,8 @@ export const TextAreaField = (props: {
   tooltip?: string
   noPlaceholder?: boolean
   placeholder?: string
+  maxCharacter?: number
+  rows?: number
 }) => {
   return (
     <FieldWrapper marginBottom={props.marginBottom}>
@@ -113,7 +115,8 @@ export const TextAreaField = (props: {
               )}
               {!props.markdown && (
                 <CustomizedTextarea
-                  rows={8}
+                  rows={props.rows ? props.rows : 8}
+                  maxLength={props.maxCharacter ? props.maxCharacter : undefined}
                   {...p.field}
                   placeholder={props.noPlaceholder ? '' : props.placeholder ? props.placeholder : props.label}
                   overrides={{
@@ -195,7 +198,7 @@ export const DateField = (props: { label: string; name: string; caption?: ReactN
                   overrides: {
                     Root: {
                       style: {
-                        ...borderColor(props.error ?  ettlevColors.red600 : undefined)
+                        ...borderColor(props.error ? ettlevColors.red600 : undefined)
                       }
                     }
                   }

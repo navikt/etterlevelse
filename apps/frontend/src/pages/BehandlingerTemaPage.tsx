@@ -295,7 +295,7 @@ const EditModal = (props: {
 }
 
 const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function; setKravId: Function }) => {
-  const ferdigUtfylt = props.krav.etterlevelseStatus === EtterlevelseStatus.FERDIG_DOKUMENTERT || props.krav.etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT
+  const ferdigUtfylt = props.krav.etterlevelseStatus === EtterlevelseStatus.FERDIG_DOKUMENTERT || props.krav.etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT || props.krav.etterlevelseStatus === EtterlevelseStatus.OPPFYLLES_SENERE
   const [hover, setHover] = useState(false)
   return (
     <Button
@@ -330,6 +330,7 @@ const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function; setKra
         </Block>
         <Block display="flex" justifyContent="flex-end" flex="1" width="100%">
           <Block width="275px" display="flex" justifyContent="flex-end" marginLeft="32px">
+            <Block>
             {props.krav.etterlevelseLastModified &&
               <Block width="fit-content" display="flex" alignItems="center" marginRight="31px">
                 <Paragraph4 $style={{ lineHeight: '19px', textAlign: 'right', marginTop: '0px', marginBottom: '0px', whiteSpace: 'nowrap' }}>
@@ -337,6 +338,14 @@ const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function; setKra
                 </Paragraph4>
               </Block>
             }
+            {props.krav.frist &&
+              <Block width="fit-content" display="flex" alignItems="center" marginRight="31px">
+                <Paragraph4 $style={{ lineHeight: '19px', textAlign: 'right', marginTop: '0px', marginBottom: '0px', whiteSpace: 'nowrap' }}>
+                  Oppfylles senere: {moment(props.krav.frist).format('ll')}
+                </Paragraph4>
+              </Block>
+            }
+            </Block>
             <StatusView
               status={ferdigUtfylt ? 'Ferdig utfylt' : props.krav.etterlevelseStatus ? 'Under utfylling' : 'Ikke påbegynt'}
               statusDisplay={{
