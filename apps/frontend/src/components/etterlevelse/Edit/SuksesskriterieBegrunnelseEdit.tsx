@@ -108,7 +108,58 @@ const KriterieBegrunnelse = ({
       padding={theme.sizing.scale750}
       marginBottom={theme.sizing.scale600}
     >
-      <H3 color={ettlevColors.green800}>{suksesskriterie.navn}</H3>
+      <H3 color={ettlevColors.green800} marginTop="0px">{suksesskriterie.navn}</H3>
+
+      {status === EtterlevelseStatus.IKKE_RELEVANT && (
+        <Block width="100%" display="flex" justifyContent="flex-end" marginTop="20px" marginBottom="-29px">
+          <Paragraph2
+            $style={{
+              marginTop: '0px',
+              marginBottom: '0px',
+              color: ettlevColors.red600,
+              fontStyle: 'italic',
+            }}
+          >
+            Ikke relevant
+          </Paragraph2>
+        </Block>
+      )}
+      <CustomizedAccordion>
+        <CustomizedPanel
+          title={<Label3 $style={{ color: ettlevColors.green600 }}>Utfyllende om kriteriet</Label3>}
+          overrides={{
+            Header: {
+              style: {
+                backgroundColor: status === EtterlevelseStatus.IKKE_RELEVANT ? ettlevColors.grey50 : ettlevColors.white,
+                maxWidth: '210px',
+                paddingLeft: '0px',
+                ':hover': {
+                  boxShadow: 'none',
+                },
+              },
+            },
+            Content: {
+              style: {
+                backgroundColor: status === EtterlevelseStatus.IKKE_RELEVANT ? ettlevColors.grey50 : ettlevColors.white,
+                borderBottomWidth: 'none',
+                borderBottomStyle: 'none',
+                borderBottomColor: 'none',
+                paddingLeft: '0px',
+              },
+            },
+            PanelContainer: {
+              style: {
+                ...borderStyle('hidden'),
+                backgroundColor: status === EtterlevelseStatus.IKKE_RELEVANT ? ettlevColors.grey50 : ettlevColors.white,
+              },
+            },
+          }}
+        >
+          <Markdown source={suksesskriterie.beskrivelse} />
+        </CustomizedPanel>
+      </CustomizedAccordion>
+
+      <Block width="100%" height="1px" backgroundColor={ettlevColors.grey100} marginTop="24px" marginBottom="24px" />
 
       {status !== EtterlevelseStatus.IKKE_RELEVANT && (
         <StatefulButtonGroup mode={MODE.radio} initialState={{ selected: oppfylt ? 0 : ikkerelevant ? 1 : [] }}>
@@ -178,56 +229,6 @@ const KriterieBegrunnelse = ({
           <LabelAboveContent title="Dokumentasjon" markdown={begrunnelse} />
         </Block>
       )}
-
-      <Block width="100%" height="1px" backgroundColor={ettlevColors.grey100} marginTop="40px" />
-      {status === EtterlevelseStatus.IKKE_RELEVANT && (
-        <Block width="100%" display="flex" justifyContent="flex-end" marginTop="20px" marginBottom="-29px">
-          <Paragraph2
-            $style={{
-              marginTop: '0px',
-              marginBottom: '0px',
-              color: ettlevColors.red600,
-              fontStyle: 'italic',
-            }}
-          >
-            Ikke relevant
-          </Paragraph2>
-        </Block>
-      )}
-      <CustomizedAccordion>
-        <CustomizedPanel
-          title={<Label3 $style={{ color: ettlevColors.green600 }}>Utfyllende om kriteriet</Label3>}
-          overrides={{
-            Header: {
-              style: {
-                backgroundColor: status === EtterlevelseStatus.IKKE_RELEVANT ? ettlevColors.grey50 : ettlevColors.white,
-                maxWidth: '210px',
-                paddingLeft: '0px',
-                ':hover': {
-                  boxShadow: 'none',
-                },
-              },
-            },
-            Content: {
-              style: {
-                backgroundColor: status === EtterlevelseStatus.IKKE_RELEVANT ? ettlevColors.grey50 : ettlevColors.white,
-                borderBottomWidth: 'none',
-                borderBottomStyle: 'none',
-                borderBottomColor: 'none',
-                paddingLeft: '0px',
-              },
-            },
-            PanelContainer: {
-              style: {
-                ...borderStyle('hidden'),
-                backgroundColor: status === EtterlevelseStatus.IKKE_RELEVANT ? ettlevColors.grey50 : ettlevColors.white,
-              },
-            },
-          }}
-        >
-          <Markdown source={suksesskriterie.beskrivelse} />
-        </CustomizedPanel>
-      </CustomizedAccordion>
     </Block>
   )
 }
