@@ -14,7 +14,6 @@ import { kravName, kravNumView } from '../../pages/KravPage'
 import { behandlingName, useBehandling, useSearchBehandling } from '../../api/BehandlingApi'
 import CustomizedSelect from '../common/CustomizedSelect'
 import { H1, H2, Label3, Paragraph2, Paragraph4 } from 'baseui/typography'
-import { arkPennIcon } from '../Images'
 import { ettlevColors, responsivePaddingLarge } from '../../util/theme'
 import { SuksesskriterierBegrunnelseEdit } from './Edit/SuksesskriterieBegrunnelseEdit'
 import { Radio, RadioGroup } from 'baseui/radio'
@@ -118,14 +117,14 @@ export const EditEtterlevelse = ({ kravId, etterlevelse, close, formRef, documen
       suksesskriterieBegrunnelser:
         etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT
           ? [
-              ...etterlevelse.suksesskriterieBegrunnelser.map((s) => {
-                return {
-                  ...s,
-                  oppfylt: false,
-                  ikkeRelevant: false,
-                }
-              }),
-            ]
+            ...etterlevelse.suksesskriterieBegrunnelser.map((s) => {
+              return {
+                ...s,
+                oppfylt: false,
+                ikkeRelevant: false,
+              }
+            }),
+          ]
           : [...etterlevelse.suksesskriterieBegrunnelser],
     }
 
@@ -173,19 +172,13 @@ export const EditEtterlevelse = ({ kravId, etterlevelse, close, formRef, documen
                   <Block paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge}>
                     <Paragraph2 $style={{ marginTop: '0px', marginBottom: '0px', color: ettlevColors.white }}>{kravNumView(krav)}</Paragraph2>
                     <H1 $style={{ marginTop: '0px', marginBottom: '0px', color: ettlevColors.white }}>{krav.navn}</H1>
-                    <Paragraph2 color={ettlevColors.white} marginBottom={0}>
-                      <a href={'/krav/' + krav?.kravNummer + '/' + krav?.kravVersjon} style={{ color: ettlevColors.white }} target="_blank" rel="noopener noreferrer">
-                        <span style={{ display: 'inline-block', paddingBottom: '1px', borderBottom: '1px solid white', marginRight: '5px' }}>Detaljert kravbeskrivelse</span>
-                        <FontAwesomeIcon icon={faExternalLinkAlt} />
-                      </a>
-                    </Paragraph2>
                   </Block>
                   <Block
                     display="flex"
                     paddingLeft={responsivePaddingLarge}
                     paddingRight={responsivePaddingLarge}
-                    paddingBottom={theme.sizing.scale900}
-                    paddingTop={theme.sizing.scale800}
+                    paddingBottom="32px"
+                    paddingTop="32px"
                   >
                     <Block>
                       <Paragraph2 $style={{ marginTop: 0, marginBottom: 0, color: ettlevColors.white, maxWidth: '700px' }}>
@@ -207,15 +200,31 @@ export const EditEtterlevelse = ({ kravId, etterlevelse, close, formRef, documen
                   </Block>
                 </Block>
               </Block>
-              <Block flex="1" backgroundColor={ettlevColors.white}>
-                <Block paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge} paddingBottom="16px" paddingTop="16px" display="flex">
-                  <Block marginRight="20px">
-                    <img src={arkPennIcon} alt="test" height="32px" width="32px" />
-                  </Block>
-                  <Block>
+              <Block flex="1" backgroundColor={ettlevColors.green100}>
+                <Block paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge} paddingBottom="16px" paddingTop="16px" display="flex" alignItems="center">
+                  <Block display="flex" width="100%">
                     <H2 marginTop="0px" marginBottom="0px">
-                      Dokumentasjon
+                      Utfylling av dokumentasjon
                     </H2>
+                  </Block>
+                  <Block display="flex" justifyContent="flex-end" width="100%">
+                    <a href={'/krav/' + krav?.kravNummer + '/' + krav?.kravVersjon} style={{ color: ettlevColors.green600 }} target="_blank" rel="noopener noreferrer">
+                      <Button
+                        kind='secondary'
+                        size='compact'
+                        $style={{
+                          ...borderColor('#0B483F'),
+                          ...borderStyle('solid'),
+                          ...borderWidth('1px'),
+                          ...borderRadius('4px'),
+                        }}
+                      >
+                        <Paragraph2 marginBottom={0} marginTop={0}>
+                          <span style={{ display: 'inline-block', marginRight: '5px' }}>Åpne veiledning og spørsmål til kraveier</span>
+                          <FontAwesomeIcon icon={faExternalLinkAlt} />
+                        </Paragraph2>
+                      </Button>
+                    </a>
                   </Block>
                 </Block>
               </Block>
@@ -433,7 +442,7 @@ export const EditEtterlevelse = ({ kravId, etterlevelse, close, formRef, documen
                       submitForm()
                     }}
                   >
-                    Jeg har dokumentert ferdig
+                    Registrer som ferdig utfylt
                   </Button>
                 </Block>
               )}
