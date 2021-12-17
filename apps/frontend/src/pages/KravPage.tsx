@@ -1,5 +1,5 @@
 import {Block} from 'baseui/block'
-import {H1, H2, HeadingXLarge} from 'baseui/typography'
+import {H1, H2, HeadingXLarge, Paragraph2} from 'baseui/typography'
 import {useParams} from 'react-router-dom'
 import {deleteKrav, getKravByKravNummer, KravIdParams, kravMapToFormVal} from '../api/KravApi'
 import React, {useEffect, useRef, useState} from 'react'
@@ -13,7 +13,7 @@ import {theme} from '../util'
 import {FormikProps} from 'formik'
 import {DeleteItem} from '../components/DeleteItem'
 import {Spinner} from '../components/common/Spinner'
-import {borderRadius, borderStyle} from '../components/common/Style'
+import {borderColor, borderRadius, borderStyle, borderWidth, padding} from '../components/common/Style'
 import {useQuery} from '@apollo/client'
 import {Tilbakemeldinger} from '../components/krav/tilbakemelding/Tilbakemelding'
 import {editIcon, pageIcon, plusIcon, sadFolderIcon} from '../components/Images'
@@ -30,6 +30,8 @@ import {PanelLink} from '../components/common/PanelLink'
 import ExpiredAlert from '../components/krav/ExpiredAlert'
 import CustomizedBreadcrumbs, {breadcrumbPaths} from '../components/common/CustomizedBreadcrumbs'
 import {codelist, ListName, TemaCode} from '../services/Codelist'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faExclamationCircle} from "@fortawesome/free-solid-svg-icons";
 
 export const kravNumView = (it: { kravVersjon: number; kravNummer: number }) => `K${it.kravNummer}.${it.kravVersjon}`
 export const kravName = (krav: Krav) => `${kravNumView(krav)} - ${krav.navn}`
@@ -65,11 +67,11 @@ export const KravPage = () => {
     fetchPolicy: 'no-cache',
   })
 
-  const { state, history, changeState } = useLocationState<LocationState>()
+  const {state, history, changeState} = useLocationState<LocationState>()
   const tilbakemeldingId = useQueryParam('tilbakemeldingId')
   const [tab, setTab] = useState<Section>(!!tilbakemeldingId ? 'tilbakemeldinger' : state?.tab || 'krav')
 
-  const [alleKravVersjoner, setAlleKravVersjoner] = React.useState<KravVersjon[]>([{ kravNummer: 0, kravVersjon: 0, kravStatus: 'Utkast' }])
+  const [alleKravVersjoner, setAlleKravVersjoner] = React.useState<KravVersjon[]>([{kravNummer: 0, kravVersjon: 0, kravStatus: 'Utkast'}])
   const [kravTema, setKravTema] = useState<TemaCode>()
 
   React.useEffect(() => {
@@ -78,7 +80,7 @@ export const KravPage = () => {
         if (resp.content.length) {
           const alleVersjoner = resp.content
             .map((k) => {
-              return { kravVersjon: k.kravVersjon, kravNummer: k.kravNummer, kravStatus: k.status }
+              return {kravVersjon: k.kravVersjon, kravNummer: k.kravNummer, kravStatus: k.status}
             })
             .sort((a, b) => (a.kravVersjon > b.kravVersjon ? -1 : 1))
 
@@ -97,7 +99,7 @@ export const KravPage = () => {
   }, [krav])
 
   useEffect(() => {
-    if (tab !== state?.tab) changeState({ tab })
+    if (tab !== state?.tab) changeState({tab})
   }, [tab])
 
   useEffect(() => {
@@ -123,8 +125,8 @@ export const KravPage = () => {
 
   const newVersion = () => {
     if (!krav) return
-    setKravId({ id: krav.id, kravVersjon: krav.kravVersjon })
-    setKrav({ ...krav, id: '', kravVersjon: krav.kravVersjon + 1, nyKravVersjon: true })
+    setKravId({id: krav.id, kravVersjon: krav.kravVersjon})
+    setKrav({...krav, id: '', kravVersjon: krav.kravVersjon + 1, nyKravVersjon: true})
     setEdit(true)
   }
 
@@ -151,8 +153,8 @@ export const KravPage = () => {
   }, [edit])
 
   return (
-    <Block key={'K' + krav?.kravNummer + '/' + krav?.kravVersjon} width="100%" id="content" overrides={{ Block: { props: { role: 'main' } } }}>
-      {kravLoading && <LoadingSkeleton header="Krav" />}
+    <Block key={'K' + krav?.kravNummer + '/' + krav?.kravVersjon} width="100%" id="content" overrides={{Block: {props: {role: 'main'}}}}>
+      {kravLoading && <LoadingSkeleton header="Krav"/>}
       {!kravLoading && (
         <Block backgroundColor={ettlevColors.green800} display="flex" width="100%" justifyContent="center" paddingBottom="32px">
           <Block maxWidth={maxPageWidth} width="100%">
@@ -163,7 +165,7 @@ export const KravPage = () => {
                     {krav?.id && (
                       <CustomizedBreadcrumbs
                         fontColor={ettlevColors.grey25}
-                        currentPage={kravNumView({ kravNummer: krav?.kravNummer, kravVersjon: krav?.kravVersjon })}
+                        currentPage={kravNumView({kravNummer: krav?.kravNummer, kravVersjon: krav?.kravVersjon})}
                         paths={getBreadcrumPaths()}
                       />
                     )}
@@ -171,20 +173,20 @@ export const KravPage = () => {
                   {krav?.id && ((user.isKraveier() && !hasKravExpired()) || user.isAdmin()) && (
                     <Block flex="1" display={['none', 'none', 'none', 'none', 'flex', 'flex']} justifyContent="flex-end">
                       <Button
-                        startEnhancer={<img alt="add" src={plusIcon} />}
+                        startEnhancer={<img alt="add" src={plusIcon}/>}
                         onClick={newVersion}
                         marginLeft
                         size="compact"
                         kind="tertiary"
-                        $style={{ color: '#F8F8F8', ':hover': { backgroundColor: 'transparent', textDecoration: 'underline 3px' } }}
+                        $style={{color: '#F8F8F8', ':hover': {backgroundColor: 'transparent', textDecoration: 'underline 3px'}}}
                       >
                         Ny versjon
                       </Button>
-                      <DeleteItem fun={() => deleteKrav(krav.id)} redirect={'/kraver'} />
+                      <DeleteItem fun={() => deleteKrav(krav.id)} redirect={'/kraver'}/>
                       <Button
-                        startEnhancer={<img src={editIcon} alt="edit" />}
+                        startEnhancer={<img src={editIcon} alt="edit"/>}
                         size="compact"
-                        $style={{ color: '#F8F8F8', ':hover': { backgroundColor: 'transparent', textDecoration: 'underline 3px' } }}
+                        $style={{color: '#F8F8F8', ':hover': {backgroundColor: 'transparent', textDecoration: 'underline 3px'}}}
                         kind={'tertiary'}
                         onClick={() => setEdit(!edit)}
                         marginLeft
@@ -199,14 +201,38 @@ export const KravPage = () => {
 
             <Block paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall} width={responsiveWidthSmall} display="flex" justifyContent="center">
               <Block maxWidth={pageWidth} width="100%">
-                <Block $style={{ color: '#F8F8F8', fontWeight: 700, fontSize: '18px', fontFamily: 'Source Sans Pro' }}>
+                <Block $style={{color: '#F8F8F8', fontWeight: 700, fontSize: '18px', fontFamily: 'Source Sans Pro'}}>
                   {krav && krav?.kravNummer !== 0 ? kravNumView(krav) : 'Ny'}
                 </Block>
-                <H1 $style={{ color: '#F8F8F8' }} marginTop="16px">
+                <H1 $style={{color: '#F8F8F8'}} marginTop="16px">
                   {krav && krav?.navn ? krav.navn : 'Ny'}{' '}
                 </H1>
 
-                {hasKravExpired() && krav && <ExpiredAlert alleKravVersjoner={alleKravVersjoner} statusName={krav.status} />}
+
+                {krav?.varselMelding &&
+                  <Block
+                    width="fit-content"
+                    display="flex"
+                    backgroundColor={"#E5F0F7"}
+                    $style={{
+                      ...padding('12px', '16px'),
+                      ...borderColor('#102723'),
+                      ...borderWidth('1px'),
+                      ...borderStyle('solid'),
+                      ...borderRadius('4px'),
+                      marginBottom: '32px'
+                    }}
+                    alignItems={"center"}
+                    justifyContent={"center"}
+                  >
+                    <FontAwesomeIcon icon={faExclamationCircle}/>
+                    <Paragraph2 marginLeft={theme.sizing.scale500} marginTop="0px" marginBottom="0px">
+                      {krav.varselMelding}
+                    </Paragraph2>
+                  </Block>
+                }
+
+                {hasKravExpired() && krav && <ExpiredAlert alleKravVersjoner={alleKravVersjoner} statusName={krav.status}/>}
               </Block>
             </Block>
           </Block>
@@ -220,7 +246,7 @@ export const KravPage = () => {
               <Block width={responsiveWidthSmall} paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall} justifyContent="center" display="flex">
                 <Block marginTop="40px" width={pageWidth}>
                   <H2 marginTop="0px">Hensikten med kravet</H2>
-                  <Label title="" p1 markdown={krav.hensikt} />
+                  <Label title="" p1 markdown={krav.hensikt}/>
                 </Block>
               </Block>
             </Block>
@@ -247,17 +273,17 @@ export const KravPage = () => {
                   {
                     title: 'Hvordan etterleve?',
                     key: 'krav',
-                    content: <ViewKrav krav={krav} alleKravVersjoner={alleKravVersjoner} />,
+                    content: <ViewKrav krav={krav} alleKravVersjoner={alleKravVersjoner}/>,
                   },
                   {
                     title: 'Eksempler på etterlevelse',
                     key: 'etterlevelser',
-                    content: <Etterlevelser loading={etterlevelserLoading} etterlevelser={krav.etterlevelser} />,
+                    content: <Etterlevelser loading={etterlevelserLoading} etterlevelser={krav.etterlevelser}/>,
                   },
                   {
                     title: 'Spørsmål og svar',
                     key: 'tilbakemeldinger',
-                    content: <Tilbakemeldinger krav={krav} hasKravExpired={hasKravExpired()} />,
+                    content: <Tilbakemeldinger krav={krav} hasKravExpired={hasKravExpired()}/>,
                   },
                 ]}
               />
@@ -280,7 +306,7 @@ export const KravPage = () => {
                 reloadKrav()
               }
             } else if (krav.nyKravVersjon) {
-              setKrav({ ...krav, id: kravId!.id, kravVersjon: kravId!.kravVersjon })
+              setKrav({...krav, id: kravId!.id, kravVersjon: kravId!.kravVersjon})
             }
             setEdit(false)
           }}
@@ -290,7 +316,7 @@ export const KravPage = () => {
   )
 }
 
-const Etterlevelser = ({ loading, etterlevelser: allEtterlevelser }: { loading: boolean; etterlevelser?: EtterlevelseQL[] }) => {
+const Etterlevelser = ({loading, etterlevelser: allEtterlevelser}: { loading: boolean; etterlevelser?: EtterlevelseQL[] }) => {
   const etterlevelser = (allEtterlevelser || [])
     .filter((e) => e.status === EtterlevelseStatus.FERDIG_DOKUMENTERT)
     .sort((a, b) => a.behandling.navn.localeCompare(b.behandling.navn))
@@ -306,9 +332,9 @@ const Etterlevelser = ({ loading, etterlevelser: allEtterlevelser }: { loading: 
   return (
     <Block>
       <HeadingXLarge maxWidth={'500px'}>Her kan du se hvordan andre team har dokumentert etterlevelse</HeadingXLarge>
-      {loading && <Spinner size={theme.sizing.scale800} />}
+      {loading && <Spinner size={theme.sizing.scale800}/>}
       {!loading && !etterlevelser.length && (
-        <InfoBlock icon={sadFolderIcon} alt={'Trist mappe ikon'} text={'Det er ikke dokumentert etterlevelse på dette kravet'} color={ettlevColors.red50} />
+        <InfoBlock icon={sadFolderIcon} alt={'Trist mappe ikon'} text={'Det er ikke dokumentert etterlevelse på dette kravet'} color={ettlevColors.red50}/>
       )}
 
       <CustomizedAccordion accordion={false}>
@@ -368,7 +394,7 @@ const PageIcon = (props: { hover: boolean }) => (
       justifyContent: 'center',
     }}
   >
-    <img src={pageIcon} alt={'Page icon'} width={'22px'} height={'30px'} />
+    <img src={pageIcon} alt={'Page icon'} width={'22px'} height={'30px'}/>
   </Block>
 )
 
