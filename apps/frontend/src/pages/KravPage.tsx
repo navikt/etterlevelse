@@ -73,6 +73,7 @@ export const KravPage = () => {
 
   const [alleKravVersjoner, setAlleKravVersjoner] = React.useState<KravVersjon[]>([{kravNummer: 0, kravVersjon: 0, kravStatus: 'Utkast'}])
   const [kravTema, setKravTema] = useState<TemaCode>()
+  const [newVersionWarning, setNewVersionWarning] = useState<boolean>(false)
 
   React.useEffect(() => {
     if (krav) {
@@ -128,6 +129,7 @@ export const KravPage = () => {
     setKravId({id: krav.id, kravVersjon: krav.kravVersjon})
     setKrav({...krav, id: '', kravVersjon: krav.kravVersjon + 1, nyKravVersjon: true})
     setEdit(true)
+    setNewVersionWarning(true)
   }
 
   const getBreadcrumPaths = () => {
@@ -298,6 +300,7 @@ export const KravPage = () => {
           setIsOpen={setEdit}
           krav={krav}
           formRef={formRef}
+          newVersion={newVersionWarning}
           close={(k) => {
             if (k) {
               if (k.id !== krav.id) {
@@ -309,6 +312,7 @@ export const KravPage = () => {
               setKrav({...krav, id: kravId!.id, kravVersjon: kravId!.kravVersjon})
             }
             setEdit(false)
+            setNewVersionWarning(false)
           }}
         />
       )}

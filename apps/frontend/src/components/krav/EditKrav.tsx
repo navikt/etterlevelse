@@ -13,7 +13,7 @@ import { KravVarslingsadresserEdit } from './Edit/KravVarslingsadresserEdit'
 import { KravRegelverkEdit } from './Edit/KravRegelverkEdit'
 import { KravSuksesskriterierEdit } from './Edit/KravSuksesskriterieEdit'
 import { EditBegreper } from './Edit/KravBegreperEdit'
-import { H1, H2, LabelLarge, Paragraph2 } from 'baseui/typography'
+import { H1, H2, Label3, LabelLarge, Paragraph2, Paragraph4 } from 'baseui/typography'
 import CustomizedModal from '../common/CustomizedModal'
 import Button from '../common/Button'
 import { ettlevColors, maxPageWidth, responsivePaddingLarge, responsiveWidthLarge, theme } from '../../util/theme'
@@ -27,6 +27,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { EditKravMultiOptionField } from './Edit/EditKravMultiOptionField'
 import { borderStyle, borderWidth, borderColor, borderRadius } from '../common/Style'
 import { Checkbox } from 'baseui/checkbox'
+import { warningAlert } from '../Images'
 
 type EditKravProps = {
   krav: KravQL
@@ -34,6 +35,7 @@ type EditKravProps = {
   formRef: React.Ref<any>
   isOpen: boolean | undefined
   setIsOpen: Function
+  newVersion?: boolean
 }
 
 const padding = 212
@@ -44,7 +46,7 @@ const inputMarginBottom = theme.sizing.scale900
 
 export const kravModal = () => document.querySelector('#krav-modal')
 
-export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravProps) => {
+export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion }: EditKravProps) => {
   const [stickyHeader, setStickyHeader] = React.useState(false)
   const [stickyFooterStyle, setStickyFooterStyle] = React.useState(true)
   const [showErrorModal, setShowErrorModal] = React.useState(false)
@@ -125,9 +127,37 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
                   </Block>
                 )}
                 {!stickyHeader && (
-                  <Block>
-                    <H1 $style={{ color: '#F8F8F8' }}>Rediger kravside: </H1>
+                  <Block width="100%">
+                    <H1 $style={{ color: '#F8F8F8' }}>{newVersion ? 'Ny versjon' : 'Rediger kravside'}: </H1>
                     <H2 $style={{ color: '#F8F8F8' }}>{`K${krav.kravNummer}.${krav.kravVersjon} ${krav.navn}`} </H2>
+                    {newVersion &&
+                      <Notification
+                        closeable
+                        overrides={{
+                          Body: {
+                            style: {
+                              backgroundColor: ettlevColors.warning50,
+                              ...borderWidth('1px'),
+                              ...borderColor('#D47B00'),
+                              ...borderRadius('4px'),
+                              width: '100%'
+                            }
+                          }
+                        }}
+                      >
+                        <Block display="flex">
+                          <Block marginRight="12px">
+                            <img src={warningAlert} alt=""/>
+                          </Block>
+                          <Block>
+                            <Label3 $style={{ fontSize: '16px', lineHeight: '20px' }}>Sikker på at du vil opprette en ny versjon?</Label3>
+                            <Paragraph4 $style={{ fontSize: '16px', lineHeight: '20px' }}>
+                              Ny versjon av kravet skal opprettes når det er <strong>vesentlige endringer</strong> i kravet som gjør at <strong>teamene må revurdere</strong> sin besvarelse av kravet. Ved alle mindre justeringer, endre i det aktive kravet, og da slipper teamene å revurdere sin besvarelse.
+                            </Paragraph4>
+                          </Block>
+                        </Block>
+                      </Notification>
+                    }
                   </Block>
                 )}
               </Block>
