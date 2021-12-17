@@ -26,6 +26,7 @@ import { faTimesCircle } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { EditKravMultiOptionField } from './Edit/EditKravMultiOptionField'
 import { borderStyle, borderWidth, borderColor, borderRadius } from '../common/Style'
+import { Checkbox } from 'baseui/checkbox'
 
 type EditKravProps = {
   krav: KravQL
@@ -48,6 +49,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
   const [stickyFooterStyle, setStickyFooterStyle] = React.useState(true)
   const [showErrorModal, setShowErrorModal] = React.useState(false)
   const [errorMessage, setErrorMessage] = React.useState('')
+  const [varlselMeldingActive, setVarselMeldingActive] = React.useState<boolean>(krav.varselMelding ? true : false)
 
   const submit = async (krav: KravQL) => {
     const regelverk = codelist.getCode(ListName.LOV, krav.regelverk[0]?.lov.code)
@@ -63,8 +65,10 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
       setShowErrorModal(true)
     } else if (krav.id) {
       close(await updateKrav(mutatedKrav))
+      setVarselMeldingActive(!!mutatedKrav.varselMelding)
     } else {
       close(await createKrav(mutatedKrav))
+      setVarselMeldingActive(!!mutatedKrav.varselMelding)
     }
   }
 
@@ -142,6 +146,22 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
                     name="navn"
                     tooltip={'Gi kravet en kort tittel. Kravet formuleres som en aktivitet eller målsetting.'}
                   />
+                  <Block marginBottom="55px">
+                    <Checkbox
+                      checked={varlselMeldingActive}
+                      onChange={() => setVarselMeldingActive(!varlselMeldingActive)}
+                    >
+                      Gi kravet en varselmelding (eks. for kommende krav)
+                    </Checkbox>
+                    {varlselMeldingActive &&
+                      <TextAreaField
+                        label=""
+                        name="varselMelding"
+                        maxCharacter={100}
+                        rows={1}
+                      />
+                    }
+                  </Block>
                   <TextAreaField
                     label="Hensikt"
                     name="hensikt"

@@ -387,6 +387,7 @@ const query = gql`
       beskrivelse
       hensikt
       notat
+      varselMelding
       utdypendeBeskrivelse
       versjonEndringer
 
