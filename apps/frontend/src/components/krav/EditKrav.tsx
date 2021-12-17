@@ -154,12 +154,14 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen }: EditKravPr
                       Gi kravet en varselmelding (eks. for kommende krav)
                     </Checkbox>
                     {varlselMeldingActive &&
-                      <TextAreaField
-                        label=""
-                        name="varselMelding"
-                        maxCharacter={100}
-                        rows={1}
-                      />
+                      <Block width="100%" marginLeft="30px" marginTop="24px">
+                        <TextAreaField
+                          label="Forklaring til etterlevere"
+                          name="varselMelding"
+                          maxCharacter={100}
+                          rows={1}
+                        />
+                      </Block>
                     }
                   </Block>
                   <TextAreaField
