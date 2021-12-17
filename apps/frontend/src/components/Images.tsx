@@ -58,6 +58,7 @@ import checkboxChecked from '../resources/icons/checkbox/checkbox-checked.svg'
 import checkboxUnchecked from '../resources/icons/checkbox/checkbox-unchecked.svg'
 import checkboxUncheckedHover from '../resources/icons/checkbox/checkbox-unchecked-hover.svg'
 import avatarPlaceholder from '../resources/icons/avatar-placeholder.svg'
+import informationIcon from '../resources/icons/information-icon.svg'
 import { codelist, ListName, LovCode, TemaCode } from '../services/Codelist'
 
 import React from 'react'
@@ -110,7 +111,8 @@ export {
   checkboxChecked,
   checkboxUnchecked,
   checkboxUncheckedHover,
-  avatarPlaceholder
+  avatarPlaceholder,
+  informationIcon
 }
 
 export const temaBilder: { [id: string]: string } = {
