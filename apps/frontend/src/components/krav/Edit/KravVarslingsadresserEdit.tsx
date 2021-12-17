@@ -133,7 +133,7 @@ export const VarslingsadresserTagList = ({ varslingsadresser, remove }: { varsli
   const [slackUsers, setSlackUsers] = useState<SlackUser[]>([])
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       const loadedChannels: SlackChannel[] = []
       const loadedUsers: SlackUser[] = []
       const channels = await Promise.all(
@@ -215,7 +215,14 @@ export const SlackChannelSearch = ({ added, add, close }: AddVarslingsadressePro
         if (channel) add({ type: AdresseType.SLACK, adresse: channel.id })
         close && close()
       }}
-      onInputChange={(event) => setSlackSearch(event.currentTarget.value)}
+      onInputChange={(event) => {
+        if (event.currentTarget.value.includes('#')) {
+          const newValue = event.currentTarget.value.slice(1)
+          setSlackSearch(newValue)
+        } else {
+          setSlackSearch(event.currentTarget.value)
+        }
+      }}
       isLoading={loading}
     />
   )
