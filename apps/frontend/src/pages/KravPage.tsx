@@ -74,6 +74,7 @@ export const KravPage = () => {
   const [alleKravVersjoner, setAlleKravVersjoner] = React.useState<KravVersjon[]>([{kravNummer: 0, kravVersjon: 0, kravStatus: 'Utkast'}])
   const [kravTema, setKravTema] = useState<TemaCode>()
   const [newVersionWarning, setNewVersionWarning] = useState<boolean>(false)
+  const [newKrav, setNewKrav] = useState<boolean>(false)
 
   React.useEffect(() => {
     if (krav) {
@@ -111,6 +112,7 @@ export const KravPage = () => {
     if (params.id === 'ny') {
       setKrav(kravMapToFormVal({}) as KravQL)
       setEdit(true)
+      setNewKrav(true)
     }
   }, [params.id])
 
@@ -301,6 +303,7 @@ export const KravPage = () => {
           krav={krav}
           formRef={formRef}
           newVersion={newVersionWarning}
+          newKrav={newKrav}
           close={(k) => {
             if (k) {
               if (k.id !== krav.id) {
@@ -313,6 +316,7 @@ export const KravPage = () => {
             }
             setEdit(false)
             setNewVersionWarning(false)
+            setNewKrav(false)
           }}
         />
       )}

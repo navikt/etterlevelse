@@ -36,6 +36,7 @@ type EditKravProps = {
   isOpen: boolean | undefined
   setIsOpen: Function
   newVersion?: boolean
+  newKrav?: boolean
 }
 
 const padding = 212
@@ -46,7 +47,7 @@ const inputMarginBottom = theme.sizing.scale900
 
 export const kravModal = () => document.querySelector('#krav-modal')
 
-export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion }: EditKravProps) => {
+export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, newKrav }: EditKravProps) => {
   const [stickyHeader, setStickyHeader] = React.useState(false)
   const [stickyFooterStyle, setStickyFooterStyle] = React.useState(true)
   const [showErrorModal, setShowErrorModal] = React.useState(false)
@@ -128,7 +129,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion }
                 )}
                 {!stickyHeader && (
                   <Block width="100%">
-                    <H1 $style={{ color: '#F8F8F8' }}>{newVersion ? 'Ny versjon' : 'Rediger kravside'}: </H1>
+                    <H1 $style={{ color: '#F8F8F8' }}>{newVersion ? 'Ny versjon' : newKrav ? 'Ny krav' : 'Rediger kravside'}: </H1>
                     <H2 $style={{ color: '#F8F8F8' }}>{`K${krav.kravNummer}.${krav.kravVersjon} ${krav.navn}`} </H2>
                     {newVersion &&
                       <Notification
@@ -147,7 +148,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion }
                       >
                         <Block display="flex">
                           <Block marginRight="12px">
-                            <img src={warningAlert} alt=""/>
+                            <img src={warningAlert} alt="" />
                           </Block>
                           <Block>
                             <Label3 $style={{ fontSize: '16px', lineHeight: '20px' }}>Sikker på at du vil opprette en ny versjon?</Label3>
@@ -245,7 +246,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion }
                       tooltip={'Vis til gode eksisterende implementasjoner som ivaretar kravet.'}
                     />
 
-                    <TextAreaField
+                    {!newKrav && <TextAreaField
                       label="Endringer siden siste versjon"
                       name="versjonEndringer"
                       height="250px"
@@ -253,7 +254,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion }
                       markdown
                       shortenLinks
                       tooltip={'Beskrivelse av hva som er nytt siden siste versjon.'}
-                    />
+                    />}
 
                     {/* <MultiInputField label='Rettskilder' name='rettskilder' link /> */}
 
