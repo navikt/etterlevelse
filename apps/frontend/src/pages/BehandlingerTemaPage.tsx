@@ -8,7 +8,7 @@ import RouteLink, { urlForObject } from '../components/common/RouteLink'
 import { useBehandling } from '../api/BehandlingApi'
 import { Layout2 } from '../components/scaffold/Page'
 import { Etterlevelse, EtterlevelseStatus, KravEtterlevelseData, KravQL, PageResponse } from '../constants'
-import { arkPennIcon, crossIcon } from '../components/Images'
+import { arkPennIcon, crossIcon, informationIcon } from '../components/Images'
 import { behandlingKravQuery } from '../components/behandling/ViewBehandling'
 import { useQuery } from '@apollo/client'
 import { CustomizedAccordion, CustomizedPanel, CustomPanelDivider } from '../components/common/CustomizedAccordion'
@@ -80,6 +80,7 @@ export const BehandlingerTemaPage = () => {
           kravVersjon: krav.kravVersjon,
           navn: krav.navn,
           suksesskriterier: krav.suksesskriterier,
+          varselMelding: krav.varselMelding,
           ...mapEtterlevelseData(etterlevelse),
         }
       })
@@ -91,7 +92,6 @@ export const BehandlingerTemaPage = () => {
           mapped.splice(index - 1, 1)
         }
       }
-
       setKravData(mapped)
     })()
   }, [rawData])
@@ -329,7 +329,7 @@ const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function; setKra
           <Label3 $style={{ fontSize: '18px', fontWeight: 600, alignContent: 'flex-start', textAlign: 'left', textDecoration: hover ? 'underline' : 'none' }}>{props.krav.navn}</Label3>
         </Block>
         <Block display="flex" justifyContent="flex-end" flex="1" width="100%">
-          <Block width="275px" display="flex" justifyContent="flex-end" marginLeft="32px">
+          <Block width="350px" display="flex" justifyContent="flex-end" marginLeft="32px">
             <Block>
             {props.krav.etterlevelseLastModified &&
               <Block width="fit-content" display="flex" alignItems="center" marginRight="31px">
@@ -348,10 +348,12 @@ const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function; setKra
             </Block>
             <StatusView
               status={ferdigUtfylt ? 'Ferdig utfylt' : props.krav.etterlevelseStatus ? 'Under utfylling' : 'Ikke påbegynt'}
+              icon={props.krav.varselMelding ? <img src={informationIcon} alt=""/> : undefined}
               statusDisplay={{
                 background: ferdigUtfylt ? ettlevColors.green50 : props.krav.etterlevelseStatus ? '#FFECCC' : ettlevColors.white,
                 border: ferdigUtfylt ? ettlevColors.green400 : props.krav.etterlevelseStatus ? '#D47B00' : '#0B483F'
               }}
+              background={props.krav.varselMelding? ettlevColors.white : undefined}
             />
           </Block>
         </Block>

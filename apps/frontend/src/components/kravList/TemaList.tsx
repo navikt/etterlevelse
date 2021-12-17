@@ -89,7 +89,7 @@ const KravTemaList = (props: { kraver: Krav[]; tema: string; refresh: Function }
                 <StatusView
                   status={k.status}
                   icon={k.varselMelding ? <img src={informationIcon} alt="" /> : undefined}
-                  statusDisplay={k.varselMelding ? { background: ettlevColors.white } : undefined}
+                  background={k.varselMelding ? ettlevColors.white : undefined}
                 />
               }
               overrides={{

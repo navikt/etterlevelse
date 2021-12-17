@@ -69,6 +69,7 @@ export const behandlingKravQuery = gql`
         navn
         kravNummer
         kravVersjon
+        varselMelding
         suksesskriterier {
           id
           navn

@@ -127,7 +127,7 @@ export const KravPanels = ({ kravene, loading }: { kravene?: KravQL[] | Krav[]; 
                   <StatusView
                     status={k.status}
                     icon={k.varselMelding ? <img src={informationIcon} alt="" /> : undefined}
-                    statusDisplay={k.varselMelding ? {background: ettlevColors.white} : undefined}
+                    background={k.varselMelding ? ettlevColors.white : undefined}
                   />
                 }
                 overrides={{
