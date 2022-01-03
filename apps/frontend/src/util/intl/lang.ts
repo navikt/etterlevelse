@@ -29,7 +29,7 @@ export const no: IStrings = {
   version: 'Versjon',
   view: 'Vis',
   settings: 'Instillinger',
-  questionAndAnswers: 'Spørsmål og svar'
+  questionAndAnswers: 'Spørsmål og svar',
 }
 
 // Markdown norsk locale
@@ -93,5 +93,5 @@ export const en: IStrings = {
   version: 'Version',
   view: 'View',
   settings: 'Settings',
-  questionAndAnswers: 'Questions and answer'
+  questionAndAnswers: 'Questions and answer',
 }

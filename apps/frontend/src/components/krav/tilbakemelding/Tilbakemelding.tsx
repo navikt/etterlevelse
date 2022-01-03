@@ -69,9 +69,9 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
                           ubesvart
                             ? { background: ettlevColors.white, border: ettlevColors.green100 }
                             : {
-                              background: ettlevColors.green50,
-                              border: ettlevColors.green100,
-                            }
+                                background: ettlevColors.green50,
+                                border: ettlevColors.green100,
+                              }
                         }
                         overrides={{
                           Root: {
@@ -124,7 +124,7 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
                             <LabelSmall>
                               <PersonName ident={t.melderIdent} />
                             </LabelSmall>
-                            <ParagraphSmall marginTop={0} marginBottom={0} marginLeft="24px" $style={{fontSize: '14px'}}>
+                            <ParagraphSmall marginTop={0} marginBottom={0} marginLeft="24px" $style={{ fontSize: '14px' }}>
                               Sendt: {moment(t.meldinger[0].tid).format('lll')}
                             </ParagraphSmall>
                           </Block>
@@ -274,15 +274,17 @@ const TilbakemeldingSvar = ({ tilbakemelding, setFocusNummer, close, ubesvartOgK
 
   return (
     <Block width={'100%'}>
-      {melderInfo.kanSkrive && <H4 color={ettlevColors.green800} marginBottom="9px" marginTop="34px">
-        {ubesvartOgKraveier ? 'Besvar' : 'Ny melding'}
-      </H4>}
+      {melderInfo.kanSkrive && (
+        <H4 color={ettlevColors.green800} marginBottom="9px" marginTop="34px">
+          {ubesvartOgKraveier ? 'Besvar' : 'Ny melding'}
+        </H4>
+      )}
       <Block display="flex" width="100%" alignItems="flex-end" justifyContent="center">
-        {melderInfo.kanSkrive &&
+        {melderInfo.kanSkrive && (
           <Block display="flex" width="100%">
             <CustomizedTextarea rows={6} onChange={(e) => setResponse((e.target as HTMLInputElement).value)} value={response} disabled={loading} />
           </Block>
-        }
+        )}
 
         <Block display="flex" justifyContent="flex-end" flex="1">
           <Block marginBottom="2px" width="188px">
@@ -312,9 +314,11 @@ const TilbakemeldingSvar = ({ tilbakemelding, setFocusNummer, close, ubesvartOgK
                 </Block>
               )}
 
-              {melderInfo.kanSkrive && <Button kind='primary' size={'compact'} disabled={!response} onClick={submit}>
-                {ubesvartOgKraveier ? 'Svar' : 'Send'}
-              </Button>}
+              {melderInfo.kanSkrive && (
+                <Button kind="primary" size={'compact'} disabled={!response} onClick={submit}>
+                  {ubesvartOgKraveier ? 'Svar' : 'Send'}
+                </Button>
+              )}
             </Block>
           </Block>
         </Block>

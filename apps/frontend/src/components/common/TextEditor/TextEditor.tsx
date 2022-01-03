@@ -74,7 +74,7 @@ const TextEditor = (props: TextEditorProps) => {
         ...borderColor(props.errors && props.name && props.errors[props.name] ? ettlevColors.red600 : ettlevColors.textAreaBorder),
         ...borderWidth('2px'),
         ...borderStyle('solid'),
-        width: props.width || undefined
+        width: props.width || undefined,
       }}
     >
       <Editor

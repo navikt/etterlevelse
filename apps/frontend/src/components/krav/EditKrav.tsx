@@ -131,7 +131,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                   <Block width="100%">
                     <H1 $style={{ color: '#F8F8F8' }}>{newVersion ? 'Ny versjon' : newKrav ? 'Ny krav' : 'Rediger kravside'}: </H1>
                     <H2 $style={{ color: '#F8F8F8' }}>{`K${krav.kravNummer}.${krav.kravVersjon} ${krav.navn}`} </H2>
-                    {newVersion &&
+                    {newVersion && (
                       <Notification
                         closeable
                         overrides={{
@@ -141,9 +141,9 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                               ...borderWidth('1px'),
                               ...borderColor('#D47B00'),
                               ...borderRadius('4px'),
-                              width: '100%'
-                            }
-                          }
+                              width: '100%',
+                            },
+                          },
                         }}
                       >
                         <Block display="flex">
@@ -153,12 +153,13 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                           <Block>
                             <Label3 $style={{ fontSize: '16px', lineHeight: '20px' }}>Sikker på at du vil opprette en ny versjon?</Label3>
                             <Paragraph4 $style={{ fontSize: '16px', lineHeight: '20px' }}>
-                              Ny versjon av kravet skal opprettes når det er <strong>vesentlige endringer</strong> i kravet som gjør at <strong>teamene må revurdere</strong> sin besvarelse av kravet. Ved alle mindre justeringer, endre i det aktive kravet, og da slipper teamene å revurdere sin besvarelse.
+                              Ny versjon av kravet skal opprettes når det er <strong>vesentlige endringer</strong> i kravet som gjør at <strong>teamene må revurdere</strong> sin
+                              besvarelse av kravet. Ved alle mindre justeringer, endre i det aktive kravet, og da slipper teamene å revurdere sin besvarelse.
                             </Paragraph4>
                           </Block>
                         </Block>
                       </Notification>
-                    }
+                    )}
                   </Block>
                 )}
               </Block>
@@ -178,22 +179,14 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                     tooltip={'Gi kravet en kort tittel. Kravet formuleres som en aktivitet eller målsetting.'}
                   />
                   <Block marginBottom="55px">
-                    <Checkbox
-                      checked={varlselMeldingActive}
-                      onChange={() => setVarselMeldingActive(!varlselMeldingActive)}
-                    >
+                    <Checkbox checked={varlselMeldingActive} onChange={() => setVarselMeldingActive(!varlselMeldingActive)}>
                       Gi kravet en varselmelding (eks. for kommende krav)
                     </Checkbox>
-                    {varlselMeldingActive &&
+                    {varlselMeldingActive && (
                       <Block width="100%" marginLeft="30px" marginTop="24px">
-                        <TextAreaField
-                          label="Forklaring til etterlevere"
-                          name="varselMelding"
-                          maxCharacter={100}
-                          rows={1}
-                        />
+                        <TextAreaField label="Forklaring til etterlevere" name="varselMelding" maxCharacter={100} rows={1} />
                       </Block>
-                    }
+                    )}
                   </Block>
                   <TextAreaField
                     label="Hensikt"
@@ -246,15 +239,17 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                       tooltip={'Vis til gode eksisterende implementasjoner som ivaretar kravet.'}
                     />
 
-                    {!newKrav && <TextAreaField
-                      label="Endringer siden siste versjon"
-                      name="versjonEndringer"
-                      height="250px"
-                      marginBottom="0px"
-                      markdown
-                      shortenLinks
-                      tooltip={'Beskrivelse av hva som er nytt siden siste versjon.'}
-                    />}
+                    {!newKrav && (
+                      <TextAreaField
+                        label="Endringer siden siste versjon"
+                        name="versjonEndringer"
+                        height="250px"
+                        marginBottom="0px"
+                        markdown
+                        shortenLinks
+                        tooltip={'Beskrivelse av hva som er nytt siden siste versjon.'}
+                      />
+                    )}
 
                     {/* <MultiInputField label='Rettskilder' name='rettskilder' link /> */}
 

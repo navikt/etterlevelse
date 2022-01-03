@@ -112,7 +112,7 @@ export {
   checkboxUnchecked,
   checkboxUncheckedHover,
   avatarPlaceholder,
-  informationIcon
+  informationIcon,
 }
 
 export const temaBilder: { [id: string]: string } = {

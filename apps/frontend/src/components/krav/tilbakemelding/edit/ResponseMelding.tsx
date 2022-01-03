@@ -32,10 +32,8 @@ export const ResponseMelding = (props: {
         <Block display="flex" flexDirection="column" marginLeft={theme.sizing.scale400} width="100%">
           <Block display="flex" width="100%">
             <Block display="flex" alignItems="center" width="100%">
-              <LabelSmall>
-                {melder ? <PersonName ident={m.fraIdent} /> : 'Kraveier'}
-              </LabelSmall>
-              <ParagraphSmall marginTop={0} marginBottom={0} marginLeft="24px" $style={{fontSize: '14px'}}>
+              <LabelSmall>{melder ? <PersonName ident={m.fraIdent} /> : 'Kraveier'}</LabelSmall>
+              <ParagraphSmall marginTop={0} marginBottom={0} marginLeft="24px" $style={{ fontSize: '14px' }}>
                 Sendt: {moment(m.tid).format('lll')}
               </ParagraphSmall>
             </Block>

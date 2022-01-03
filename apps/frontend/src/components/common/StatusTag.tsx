@@ -12,7 +12,7 @@ export const StatusView = ({
   statusDisplay,
   overrides,
   background,
-  icon
+  icon,
 }: {
   status: KravStatus | string
   statusDisplay?: { background: string; border?: string }
@@ -51,7 +51,9 @@ export const StatusView = ({
         <Card overrides={customOverrides}>
           <Block display="flex" justifyContent="center">
             {icon}
-            <Paragraph4 $style={{ color: ettlevColors.navMorkGra, ...marginAll('0px'), whiteSpace: 'nowrap', marginLeft: icon ? '10px' : undefined }}>{kravStatus(status)}</Paragraph4>
+            <Paragraph4 $style={{ color: ettlevColors.navMorkGra, ...marginAll('0px'), whiteSpace: 'nowrap', marginLeft: icon ? '10px' : undefined }}>
+              {kravStatus(status)}
+            </Paragraph4>
           </Block>
         </Card>
       </Block>

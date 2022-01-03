@@ -140,38 +140,46 @@ export const ViewEtterlevelse = ({
         </Block>
       </Block>
 
-      {etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT &&
-        (<Block marginTop={'32px'} marginBottom={'40px'}>
-          <H3 $style={{
-            marginTop: 0,
-            marginBottom: '12px'
-          }}>
+      {etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT && (
+        <Block marginTop={'32px'} marginBottom={'40px'}>
+          <H3
+            $style={{
+              marginTop: 0,
+              marginBottom: '12px',
+            }}
+          >
             Hvorfor er ikke kravet relevant?
           </H3>
-          <Paragraph2 $style={{
-            marginTop: 0,
-            marginBottom: '12px'
-          }}>
-            <Markdown
-              source={etterlevelse.statusBegrunnelse}
-            />
+          <Paragraph2
+            $style={{
+              marginTop: 0,
+              marginBottom: '12px',
+            }}
+          >
+            <Markdown source={etterlevelse.statusBegrunnelse} />
           </Paragraph2>
-        </Block>)}
-      {etterlevelse.status === EtterlevelseStatus.OPPFYLLES_SENERE &&
-        (<Block marginTop={'32px'} marginBottom={'40px'}>
-          <H3 $style={{
-            marginTop: 0,
-            marginBottom: '12px'
-          }}>
+        </Block>
+      )}
+      {etterlevelse.status === EtterlevelseStatus.OPPFYLLES_SENERE && (
+        <Block marginTop={'32px'} marginBottom={'40px'}>
+          <H3
+            $style={{
+              marginTop: 0,
+              marginBottom: '12px',
+            }}
+          >
             Oppfylles innen
           </H3>
-          <Paragraph2 $style={{
-            marginTop: 0,
-            marginBottom: '12px'
-          }}>
+          <Paragraph2
+            $style={{
+              marginTop: 0,
+              marginBottom: '12px',
+            }}
+          >
             {moment(etterlevelse.fristForFerdigstillelse).format('ll')}
           </Paragraph2>
-        </Block>)}
+        </Block>
+      )}
       <Block marginTop={theme.sizing.scale650}>
         <Block display="flex">
           {/* {!viewMode && (
@@ -220,9 +228,9 @@ export const ViewEtterlevelse = ({
                       style: {
                         ...borderWidth('1px'),
                         ...borderRadius('4px'),
-                        backgroundColor: etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT ? ettlevColors.grey50 : ettlevColors.white
+                        backgroundColor: etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT ? ettlevColors.grey50 : ettlevColors.white,
                       },
-                    }
+                    },
                   }}
                 >
                   <Block display="flex" justifyContent="center" marginTop={'32px'} marginBottom={'16px'}>
@@ -239,7 +247,7 @@ export const ViewEtterlevelse = ({
                             color: ettlevColors.green800,
                             marginTop: '0px',
                             marginBottom: '0px',
-                            fontStyle: 'italic'
+                            fontStyle: 'italic',
                           }}
                         >
                           {suksessbeskrivelseBegrunnelse.oppfylt && <FontAwesomeIcon icon={faCheck} color={ettlevColors.green400} style={{ marginRight: '4px' }} />}
@@ -257,9 +265,7 @@ export const ViewEtterlevelse = ({
                             {suksessbeskrivelseBegrunnelse.ikkeRelevant ? 'Hvordan er ikke kriteriet relevant?' : 'Hvordan er kriteriet oppfylt?'}
                           </Label3>
                           <Block marginBottom={'48px'}>
-                            <Markdown
-                              source={suksessbeskrivelseBegrunnelse.begrunnelse}
-                            />
+                            <Markdown source={suksessbeskrivelseBegrunnelse.begrunnelse} />
                           </Block>
                         </Block>
                       )}
@@ -294,12 +300,14 @@ export const ViewEtterlevelse = ({
       </Block>
 
       <Block>
-        <Paragraph2 $style={{
-          marginTop: 0,
-          marginBottom: 0,
-          fontSize: '16px',
-          lineHeight: '22px'
-        }}>
+        <Paragraph2
+          $style={{
+            marginTop: 0,
+            marginBottom: 0,
+            fontSize: '16px',
+            lineHeight: '22px',
+          }}
+        >
           Sist endret: {moment(etterlevelse.changeStamp.lastModifiedDate).format('ll')} av {etterlevelse.changeStamp.lastModifiedBy.split('-')[1]}
         </Paragraph2>
       </Block>

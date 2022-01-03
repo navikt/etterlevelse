@@ -1,31 +1,31 @@
-import {Etterlevelse, EtterlevelseStatus, Krav, KravQL} from '../../constants'
-import {Field, FieldProps, Form, Formik, FormikProps, validateYupSchema, yupToFormErrors} from 'formik'
-import {createEtterlevelse, mapEtterlevelseToFormValue, updateEtterlevelse} from '../../api/EtterlevelseApi'
-import {Block} from 'baseui/block'
+import { Etterlevelse, EtterlevelseStatus, Krav, KravQL } from '../../constants'
+import { Field, FieldProps, Form, Formik, FormikProps, validateYupSchema, yupToFormErrors } from 'formik'
+import { createEtterlevelse, mapEtterlevelseToFormValue, updateEtterlevelse } from '../../api/EtterlevelseApi'
+import { Block } from 'baseui/block'
 import Button from '../common/Button'
-import React, {useEffect} from 'react'
+import React, { useEffect } from 'react'
 import * as yup from 'yup'
-import {getEtterlevelseStatus} from '../../pages/EtterlevelsePage'
-import {DateField, FieldWrapper, TextAreaField} from '../common/Inputs'
-import {theme} from '../../util'
-import {FormControl} from 'baseui/form-control'
-import {getKravByKravNumberAndVersion, kravFullQuery, KravId, useKrav, useSearchKrav} from '../../api/KravApi'
-import {kravName, kravNumView} from '../../pages/KravPage'
-import {behandlingName, useBehandling, useSearchBehandling} from '../../api/BehandlingApi'
+import { getEtterlevelseStatus } from '../../pages/EtterlevelsePage'
+import { DateField, FieldWrapper, TextAreaField } from '../common/Inputs'
+import { theme } from '../../util'
+import { FormControl } from 'baseui/form-control'
+import { getKravByKravNumberAndVersion, kravFullQuery, KravId, useKrav, useSearchKrav } from '../../api/KravApi'
+import { kravName, kravNumView } from '../../pages/KravPage'
+import { behandlingName, useBehandling, useSearchBehandling } from '../../api/BehandlingApi'
 import CustomizedSelect from '../common/CustomizedSelect'
-import {H1, H2, Label3, Paragraph2, Paragraph4} from 'baseui/typography'
-import {ettlevColors, responsivePaddingLarge} from '../../util/theme'
-import {SuksesskriterierBegrunnelseEdit} from './Edit/SuksesskriterieBegrunnelseEdit'
-import {Radio, RadioGroup} from 'baseui/radio'
-import {Code} from '../../services/Codelist'
-import {Error} from '../common/ModalSchema'
-import {user} from '../../services/User'
-import {KIND as NKIND, Notification} from 'baseui/notification'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faExternalLinkAlt, faTimesCircle} from '@fortawesome/free-solid-svg-icons'
-import {borderColor, borderRadius, borderStyle, borderWidth, paddingZero} from '../common/Style'
-import {env} from '../../util/env'
-import {useQuery} from '@apollo/client'
+import { H1, H2, Label3, Paragraph2, Paragraph4 } from 'baseui/typography'
+import { ettlevColors, responsivePaddingLarge } from '../../util/theme'
+import { SuksesskriterierBegrunnelseEdit } from './Edit/SuksesskriterieBegrunnelseEdit'
+import { Radio, RadioGroup } from 'baseui/radio'
+import { Code } from '../../services/Codelist'
+import { Error } from '../common/ModalSchema'
+import { user } from '../../services/User'
+import { KIND as NKIND, Notification } from 'baseui/notification'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faExternalLinkAlt, faTimesCircle } from '@fortawesome/free-solid-svg-icons'
+import { borderColor, borderRadius, borderStyle, borderWidth, paddingZero } from '../common/Style'
+import { env } from '../../util/env'
+import { useQuery } from '@apollo/client'
 import moment from 'moment'
 
 type EditEttlevProps = {
@@ -102,8 +102,8 @@ const etterlevelseSchema = () => {
           return false
         }
         return true
-      }
-    })
+      },
+    }),
   })
 }
 
@@ -127,14 +127,14 @@ export const EditEtterlevelse = ({ kravId, etterlevelse, close, formRef, documen
       suksesskriterieBegrunnelser:
         etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT
           ? [
-            ...etterlevelse.suksesskriterieBegrunnelser.map((s) => {
-              return {
-                ...s,
-                oppfylt: false,
-                ikkeRelevant: false,
-              }
-            }),
-          ]
+              ...etterlevelse.suksesskriterieBegrunnelser.map((s) => {
+                return {
+                  ...s,
+                  oppfylt: false,
+                  ikkeRelevant: false,
+                }
+              }),
+            ]
           : [...etterlevelse.suksesskriterieBegrunnelser],
     }
 
@@ -183,13 +183,7 @@ export const EditEtterlevelse = ({ kravId, etterlevelse, close, formRef, documen
                     <Paragraph2 $style={{ marginTop: '0px', marginBottom: '0px', color: ettlevColors.white }}>{kravNumView(krav)}</Paragraph2>
                     <H1 $style={{ marginTop: '0px', marginBottom: '0px', color: ettlevColors.white }}>{krav.navn}</H1>
                   </Block>
-                  <Block
-                    display="flex"
-                    paddingLeft={responsivePaddingLarge}
-                    paddingRight={responsivePaddingLarge}
-                    paddingBottom="32px"
-                    paddingTop="32px"
-                  >
+                  <Block display="flex" paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge} paddingBottom="32px" paddingTop="32px">
                     <Block>
                       <Paragraph2 $style={{ marginTop: 0, marginBottom: 0, color: ettlevColors.white, maxWidth: '700px' }}>
                         <Label3 $style={{ color: ettlevColors.white }}>Behandling: </Label3>
@@ -220,8 +214,8 @@ export const EditEtterlevelse = ({ kravId, etterlevelse, close, formRef, documen
                   <Block display="flex" justifyContent="flex-end" width="100%">
                     <a href={'/krav/' + krav?.kravNummer + '/' + krav?.kravVersjon} style={{ color: ettlevColors.green600 }} target="_blank" rel="noopener noreferrer">
                       <Button
-                        kind='secondary'
-                        size='compact'
+                        kind="secondary"
+                        size="compact"
                         $style={{
                           ...borderColor('#0B483F'),
                           ...borderStyle('solid'),
@@ -230,7 +224,9 @@ export const EditEtterlevelse = ({ kravId, etterlevelse, close, formRef, documen
                         }}
                       >
                         <Paragraph2 marginBottom={0} marginTop={0}>
-                          <span style={{ display: 'inline-block', marginRight: '5px' , fontSize:'16px' }}><strong>Åpne veiledning og spørsmål til kraveier</strong></span>
+                          <span style={{ display: 'inline-block', marginRight: '5px', fontSize: '16px' }}>
+                            <strong>Åpne veiledning og spørsmål til kraveier</strong>
+                          </span>
                           <FontAwesomeIcon icon={faExternalLinkAlt} />
                         </Paragraph2>
                       </Button>
@@ -306,18 +302,22 @@ export const EditEtterlevelse = ({ kravId, etterlevelse, close, formRef, documen
                                               <Block maxWidth="170px" width="100%">
                                                 <DateField error={!!p.form.errors.fristForFerdigstillelse} label="Frist" name="fristForFerdigstillelse" />
                                               </Block>
-                                              {p.form.errors.fristForFerdigstillelse &&
+                                              {p.form.errors.fristForFerdigstillelse && (
                                                 <Block display="flex" width="100%" marginTop=".2rem">
                                                   <Block width="100%">
                                                     <Notification
-                                                      overrides={{ Body: { style: { width: 'auto', ...paddingZero, marginTop: 0, backgroundColor: 'transparent', color: ettlevColors.red600 } } }}
+                                                      overrides={{
+                                                        Body: {
+                                                          style: { width: 'auto', ...paddingZero, marginTop: 0, backgroundColor: 'transparent', color: ettlevColors.red600 },
+                                                        },
+                                                      }}
                                                       kind={NKIND.negative}
                                                     >
                                                       {p.form.errors.fristForFerdigstillelse}
                                                     </Notification>
                                                   </Block>
                                                 </Block>
-                                              }
+                                              )}
                                             </Block>
                                           )}
                                         </Radio>

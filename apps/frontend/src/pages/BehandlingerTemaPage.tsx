@@ -63,7 +63,7 @@ export const BehandlingerTemaPage = () => {
   const [kravId, setKravId] = useState<KravId | undefined>()
 
   useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       const allKravPriority = await getAllKravPriority()
       const kraver = _.cloneDeep(rawData?.krav.content) || []
 
@@ -101,13 +101,17 @@ export const BehandlingerTemaPage = () => {
   }
 
   useEffect(() => {
-    setUtfyltKrav(kravData.filter((k) => k.etterlevelseStatus === EtterlevelseStatus.FERDIG_DOKUMENTERT || k.etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT || k.etterlevelseStatus === EtterlevelseStatus.OPPFYLLES_SENERE))
-    setSkalUtfyllesKrav(
+    setUtfyltKrav(
       kravData.filter(
         (k) =>
-          k.etterlevelseStatus === EtterlevelseStatus.UNDER_REDIGERING ||
-          k.etterlevelseStatus === EtterlevelseStatus.FERDIG ||
-          k.etterlevelseStatus === undefined || null
+          k.etterlevelseStatus === EtterlevelseStatus.FERDIG_DOKUMENTERT ||
+          k.etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT ||
+          k.etterlevelseStatus === EtterlevelseStatus.OPPFYLLES_SENERE,
+      ),
+    )
+    setSkalUtfyllesKrav(
+      kravData.filter(
+        (k) => k.etterlevelseStatus === EtterlevelseStatus.UNDER_REDIGERING || k.etterlevelseStatus === EtterlevelseStatus.FERDIG || k.etterlevelseStatus === undefined || null,
       ),
     )
   }, [kravData])
@@ -295,7 +299,10 @@ const EditModal = (props: {
 }
 
 const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function; setKravId: Function }) => {
-  const ferdigUtfylt = props.krav.etterlevelseStatus === EtterlevelseStatus.FERDIG_DOKUMENTERT || props.krav.etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT || props.krav.etterlevelseStatus === EtterlevelseStatus.OPPFYLLES_SENERE
+  const ferdigUtfylt =
+    props.krav.etterlevelseStatus === EtterlevelseStatus.FERDIG_DOKUMENTERT ||
+    props.krav.etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT ||
+    props.krav.etterlevelseStatus === EtterlevelseStatus.OPPFYLLES_SENERE
   const [hover, setHover] = useState(false)
   return (
     <Button
@@ -326,34 +333,36 @@ const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function; setKra
           <Paragraph4 $style={{ fontSize: '16px', lineHeight: '24px', marginBottom: '0px', marginTop: '0px', width: 'fit-content', textDecoration: hover ? 'underline' : 'none' }}>
             K{props.krav.kravNummer}.{props.krav.kravVersjon}
           </Paragraph4>
-          <Label3 $style={{ fontSize: '18px', fontWeight: 600, alignContent: 'flex-start', textAlign: 'left', textDecoration: hover ? 'underline' : 'none' }}>{props.krav.navn}</Label3>
+          <Label3 $style={{ fontSize: '18px', fontWeight: 600, alignContent: 'flex-start', textAlign: 'left', textDecoration: hover ? 'underline' : 'none' }}>
+            {props.krav.navn}
+          </Label3>
         </Block>
         <Block display="flex" justifyContent="flex-end" flex="1" width="100%">
           <Block width="350px" display="flex" justifyContent="flex-end" marginLeft="32px">
             <Block>
-            {props.krav.etterlevelseLastModified &&
-              <Block width="fit-content" display="flex" alignItems="center" marginRight="31px">
-                <Paragraph4 $style={{ lineHeight: '19px', textAlign: 'right', marginTop: '0px', marginBottom: '0px', whiteSpace: 'nowrap' }}>
-                  Sist utfylt: {moment(props.krav.etterlevelseLastModified).format('ll')}
-                </Paragraph4>
-              </Block>
-            }
-            {props.krav.frist &&
-              <Block width="fit-content" display="flex" alignItems="center" marginRight="31px">
-                <Paragraph4 $style={{ lineHeight: '19px', textAlign: 'right', marginTop: '0px', marginBottom: '0px', whiteSpace: 'nowrap' }}>
-                  Oppfylles senere: {moment(props.krav.frist).format('ll')}
-                </Paragraph4>
-              </Block>
-            }
+              {props.krav.etterlevelseLastModified && (
+                <Block width="fit-content" display="flex" alignItems="center" marginRight="31px">
+                  <Paragraph4 $style={{ lineHeight: '19px', textAlign: 'right', marginTop: '0px', marginBottom: '0px', whiteSpace: 'nowrap' }}>
+                    Sist utfylt: {moment(props.krav.etterlevelseLastModified).format('ll')}
+                  </Paragraph4>
+                </Block>
+              )}
+              {props.krav.frist && (
+                <Block width="fit-content" display="flex" alignItems="center" marginRight="31px">
+                  <Paragraph4 $style={{ lineHeight: '19px', textAlign: 'right', marginTop: '0px', marginBottom: '0px', whiteSpace: 'nowrap' }}>
+                    Oppfylles senere: {moment(props.krav.frist).format('ll')}
+                  </Paragraph4>
+                </Block>
+              )}
             </Block>
             <StatusView
               status={ferdigUtfylt ? 'Ferdig utfylt' : props.krav.etterlevelseStatus ? 'Under utfylling' : 'Ikke påbegynt'}
-              icon={props.krav.varselMelding ? <img src={informationIcon} alt=""/> : undefined}
+              icon={props.krav.varselMelding ? <img src={informationIcon} alt="" /> : undefined}
               statusDisplay={{
                 background: ferdigUtfylt ? ettlevColors.green50 : props.krav.etterlevelseStatus ? '#FFECCC' : ettlevColors.white,
-                border: ferdigUtfylt ? ettlevColors.green400 : props.krav.etterlevelseStatus ? '#D47B00' : '#0B483F'
+                border: ferdigUtfylt ? ettlevColors.green400 : props.krav.etterlevelseStatus ? '#D47B00' : '#0B483F',
               }}
-              background={props.krav.varselMelding? ettlevColors.white : undefined}
+              background={props.krav.varselMelding ? ettlevColors.white : undefined}
             />
           </Block>
         </Block>

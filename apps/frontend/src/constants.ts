@@ -139,7 +139,7 @@ export type KravEtterlevelseData = {
   etterlevelseId?: string
   etterleves: boolean
   frist?: string
-  varselMelding?:string
+  varselMelding?: string
   etterlevelseStatus?: EtterlevelseStatus
   suksesskriterier: Suksesskriterie[]
   gammelVersjon?: boolean

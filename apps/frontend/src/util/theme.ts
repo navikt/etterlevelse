@@ -126,7 +126,7 @@ const overrides: RecursivePartial<Theme> = {
     font300: { fontWeight: 400, fontSize: '18px', lineHeight: '24px' }, //P2
     font350: { fontWeight: 600 },
 
-    font400: { fontWeight: 400, fontSize: '22px', lineHeight: '32px' }, //P1 
+    font400: { fontWeight: 400, fontSize: '22px', lineHeight: '32px' }, //P1
 
     font450: { fontWeight: 600 },
     font550: { fontWeight: 600 },

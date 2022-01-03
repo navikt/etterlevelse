@@ -21,9 +21,9 @@ import { intl } from '../util/intl/intl'
 import { ettlevColors, maxPageWidth } from '../util/theme'
 
 type kravName = {
-  kravNavn: string,
-  tidForSpørsmål: string,
-  tidForSvar?: string,
+  kravNavn: string
+  tidForSpørsmål: string
+  tidForSvar?: string
   melderNavn: ReactElement
 }
 
@@ -52,7 +52,7 @@ export const SpørsmålOgSvarLogPage = () => {
   }
 
   useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       const kraver = await getKravPage(page - 1, 20)
       const mappedKraver = kraver.content.map((k) => kravMapToFormVal(k))
       setTableContent({ ...kraver, content: mappedKraver })
@@ -84,13 +84,12 @@ export const SpørsmålOgSvarLogPage = () => {
             kravNavn: kravNavn,
             tidForSpørsmål: t.meldinger[0].tid,
             tidForSvar: ubesvart ? undefined : sistMelding.tid,
-            melderNavn: <PersonName ident={t.melderIdent} />
+            melderNavn: <PersonName ident={t.melderIdent} />,
           })
         })
 
         setKravMessages(kravMessages)
       })
-
     } catch (e: any) {
       console.log(e)
     }
@@ -121,7 +120,7 @@ export const SpørsmålOgSvarLogPage = () => {
             { $style: { maxWidth: '25%', minWidth: '25%' }, title: 'Kravnavn', column: 'kravNavn' },
             { title: 'Fra', column: 'melderIdent' },
             { title: 'Tid for spørsmål', column: 'tidForSpørsmål' },
-            { title: 'Tid for svar', column: 'tidForSvar' }
+            { title: 'Tid for svar', column: 'tidForSvar' },
           ]}
           render={(tableData) =>
             tableData.data.map((t, index) => {
@@ -137,7 +136,13 @@ export const SpørsmålOgSvarLogPage = () => {
                   </Cell>
                   <Cell>{t.melderNavn}</Cell>
                   <Cell>{moment(t.tidForSpørsmål).format('lll')}</Cell>
-                  <Cell>{t.tidForSvar ? moment(t.tidForSpørsmål).format('lll') : <Paragraph2 $style={{ fontSize: '16px', lineHeight: '22px', marginTop: '0px', marginBottom: '0px', color: ettlevColors.red600 }}>Ikke besvart</Paragraph2>}</Cell>
+                  <Cell>
+                    {t.tidForSvar ? (
+                      moment(t.tidForSpørsmål).format('lll')
+                    ) : (
+                      <Paragraph2 $style={{ fontSize: '16px', lineHeight: '22px', marginTop: '0px', marginBottom: '0px', color: ettlevColors.red600 }}>Ikke besvart</Paragraph2>
+                    )}
+                  </Cell>
                 </Row>
               )
             })

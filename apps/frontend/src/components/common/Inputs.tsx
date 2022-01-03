@@ -189,8 +189,7 @@ export const DateField = (props: { label: string; name: string; caption?: ReactN
                 const newDate = dateSingle.setDate(dateSingle.getDate() + 1)
                 const formatedDate = new Date(newDate)
                 p.form.setFieldValue(props.name, formatedDate.toISOString().split('T')[0])
-              }
-              else p.form.setFieldValue(props.name, undefined)
+              } else p.form.setFieldValue(props.name, undefined)
             }}
             overrides={{
               Input: {
@@ -198,12 +197,12 @@ export const DateField = (props: { label: string; name: string; caption?: ReactN
                   overrides: {
                     Root: {
                       style: {
-                        ...borderColor(props.error ? ettlevColors.red600 : undefined)
-                      }
-                    }
-                  }
-                }
-              }
+                        ...borderColor(props.error ? ettlevColors.red600 : undefined),
+                      },
+                    },
+                  },
+                },
+              },
             }}
           />
         </FormControl>

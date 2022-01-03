@@ -86,7 +86,7 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: NyTilbakemeldingMod
                 <H2>Spørsmål til kraveier</H2>
               </ModalHeader>
               <ModalBody>
-                {showNotification ?
+                {showNotification ? (
                   <Card
                     overrides={{
                       Root: {
@@ -127,8 +127,7 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: NyTilbakemeldingMod
                       </Paragraph1>
                     </Block>
                   </Card>
-
-                  :
+                ) : (
                   <Block>
                     <TextAreaField tooltip="Skriv ditt spørsmål i tekstfeltet" label="Ditt spørsmål" name="foersteMelding" placeholder="Skriv her.." />
                     {/* <OptionField label="Type" name="type" clearable={false} options={Object.values(TilbakemeldingType).map((o) => ({ id: o, label: typeText(o) }))} /> */}
@@ -163,20 +162,24 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: NyTilbakemeldingMod
                         </FormControl>
                       )}
                     </Field>
-                  </Block>}
+                  </Block>
+                )}
               </ModalBody>
               <ModalFooter>
-                {showNotification ?
+                {showNotification ? (
                   <Block display="flex" justifyContent="flex-end">
-                    <Button type="button" onClick={() => {
-                      close(newTilbakeMelding)
-                      setShowNotification(undefined)
-                      setNewTilbakeMelding(undefined)
-                    }}>
+                    <Button
+                      type="button"
+                      onClick={() => {
+                        close(newTilbakeMelding)
+                        setShowNotification(undefined)
+                        setNewTilbakeMelding(undefined)
+                      }}
+                    >
                       Lukk
                     </Button>
                   </Block>
-                  :
+                ) : (
                   <Block display="flex" justifyContent="flex-end">
                     <Block>
                       {error && (
@@ -192,7 +195,8 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: NyTilbakemeldingMod
                     <Button type="button" marginLeft disabled={isSubmitting} onClick={submitForm}>
                       Lagre
                     </Button>
-                  </Block>}
+                  </Block>
+                )}
               </ModalFooter>
             </Form>
           )

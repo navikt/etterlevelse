@@ -1,21 +1,21 @@
-import {Block} from 'baseui/block'
-import {FormControl} from 'baseui/form-control'
-import {H3, Label3, Paragraph2} from 'baseui/typography'
-import {FieldArray, FieldArrayRenderProps} from 'formik'
+import { Block } from 'baseui/block'
+import { FormControl } from 'baseui/form-control'
+import { H3, Label3, Paragraph2 } from 'baseui/typography'
+import { FieldArray, FieldArrayRenderProps } from 'formik'
 import React from 'react'
-import {EtterlevelseStatus, Suksesskriterie, SuksesskriterieBegrunnelse} from '../../../constants'
-import {useDebouncedState} from '../../../util/hooks'
-import {ettlevColors, theme} from '../../../util/theme'
-import {CustomizedAccordion, CustomizedPanel} from '../../common/CustomizedAccordion'
-import {FieldWrapper} from '../../common/Inputs'
-import {Markdown} from '../../common/Markdown'
+import { EtterlevelseStatus, Suksesskriterie, SuksesskriterieBegrunnelse } from '../../../constants'
+import { useDebouncedState } from '../../../util/hooks'
+import { ettlevColors, theme } from '../../../util/theme'
+import { CustomizedAccordion, CustomizedPanel } from '../../common/CustomizedAccordion'
+import { FieldWrapper } from '../../common/Inputs'
+import { Markdown } from '../../common/Markdown'
 import TextEditor from '../../common/TextEditor/TextEditor'
-import {Error} from '../../common/ModalSchema'
+import { Error } from '../../common/ModalSchema'
 import LabelWithToolTip from '../../common/LabelWithTooltip'
-import {borderColor, borderStyle, borderWidth} from '../../common/Style'
-import {LabelAboveContent} from '../../common/PropertyLabel'
-import {MODE, StatefulButtonGroup} from 'baseui/button-group'
-import {Button} from 'baseui/button'
+import { borderColor, borderStyle, borderWidth } from '../../common/Style'
+import { LabelAboveContent } from '../../common/PropertyLabel'
+import { MODE, StatefulButtonGroup } from 'baseui/button-group'
+import { Button } from 'baseui/button'
 
 const paddingLeft = '30px'
 
@@ -108,7 +108,9 @@ const KriterieBegrunnelse = ({
       padding={theme.sizing.scale750}
       marginBottom={theme.sizing.scale600}
     >
-      <H3 color={ettlevColors.green800} marginTop="0px">{suksesskriterie.navn}</H3>
+      <H3 color={ettlevColors.green800} marginTop="0px">
+        {suksesskriterie.navn}
+      </H3>
 
       {status === EtterlevelseStatus.IKKE_RELEVANT && (
         <Block width="100%" display="flex" justifyContent="flex-end" marginTop="20px" marginBottom="-29px">
@@ -175,7 +177,7 @@ const KriterieBegrunnelse = ({
                   borderRightWidth: '0px',
                   borderTopRightRadius: '0px',
                   borderBottomRightRadius: '0px',
-                  minWidth:'160px'
+                  minWidth: '160px',
                 },
                 props: {
                   tabIndex: 0,
@@ -200,7 +202,7 @@ const KriterieBegrunnelse = ({
                   ...borderWidth('1px'),
                   borderTopLeftRadius: '0px',
                   borderBottomLeftRadius: '0px',
-                  minWidth:'160px'
+                  minWidth: '160px',
                 },
                 props: {
                   tabIndex: 0,
@@ -220,7 +222,7 @@ const KriterieBegrunnelse = ({
       {(oppfylt || ikkerelevant) && status !== EtterlevelseStatus.IKKE_RELEVANT && !disableEdit && (
         <Block marginTop={theme.sizing.scale1000}>
           <FormControl label={<LabelWithToolTip label={oppfylt ? 'Hvordan oppfylles kriteriet?' : 'Hvorfor er ikke kriteriet relevant?'} />}>
-            <TextEditor initialValue={begrunnelse} setValue={setBegrunnelse} height={'188px'} errors={props.form.errors} simple width="680px"/>
+            <TextEditor initialValue={begrunnelse} setValue={setBegrunnelse} height={'188px'} errors={props.form.errors} simple width="680px" />
           </FormControl>
           <Error fieldName={`suksesskriterieBegrunnelser[${index}].begrunnelse`} fullWidth={true} />
         </Block>
