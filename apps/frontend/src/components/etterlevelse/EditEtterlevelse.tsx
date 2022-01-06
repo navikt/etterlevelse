@@ -27,7 +27,7 @@ import {borderColor, borderRadius, borderStyle, borderWidth, padding, paddingZer
 import {env} from '../../util/env'
 import {useQuery} from '@apollo/client'
 import moment from 'moment'
-import {warningAlert} from "../Images";
+import {warningAlert} from '../Images'
 
 type EditEttlevProps = {
   etterlevelse: Etterlevelse
@@ -52,7 +52,7 @@ const etterlevelseSchema = () => {
           name: 'begrunnelseText',
           message: 'Du må fylle ut dokumentasjonen',
           test: function (begrunnelse) {
-            const {parent, options} = this
+            const { parent, options } = this
             if (
               (options.context?.status === EtterlevelseStatus.FERDIG || options.context?.status === EtterlevelseStatus.FERDIG_DOKUMENTERT) &&
               (parent.oppfylt || parent.ikkeRelevant) &&
@@ -71,7 +71,7 @@ const etterlevelseSchema = () => {
       name: 'statusBegrunnelse',
       message: 'Du må dokumentere på begrunnelse',
       test: function (statusBegrunnelse) {
-        const {parent} = this
+        const { parent } = this
         if (parent.status === EtterlevelseStatus.IKKE_RELEVANT && (statusBegrunnelse === '' || statusBegrunnelse === undefined)) {
           return false
         }
@@ -82,7 +82,7 @@ const etterlevelseSchema = () => {
       name: 'etterlevelseStatus',
       message: 'Du må dokumentere alle kriterier før du har dokumentert  ferdig. Du kan velge å lagre og fortsette senere.',
       test: function (status) {
-        const {parent} = this
+        const { parent } = this
         if (status === EtterlevelseStatus.FERDIG || status === EtterlevelseStatus.FERDIG_DOKUMENTERT) {
           return parent.suksesskriterieBegrunnelser.every((skb: any) => skb.oppfylt || skb.ikkeRelevant)
         }
@@ -93,7 +93,7 @@ const etterlevelseSchema = () => {
       name: 'frist',
       message: 'Du må sette på en frist dato for ferdistilling',
       test: function (fristForFerdigstillelse) {
-        const {parent} = this
+        const { parent } = this
         if (parent.status === EtterlevelseStatus.OPPFYLLES_SENERE && (fristForFerdigstillelse === undefined || fristForFerdigstillelse === null)) {
           return false
         }
@@ -104,18 +104,18 @@ const etterlevelseSchema = () => {
 }
 
 export const EditEtterlevelse = ({
-                                   kravId,
-                                   etterlevelse,
-                                   varsleMelding,
-                                   close,
-                                   formRef,
-                                   documentEdit,
-                                   behandlingNavn,
-                                   behandlingId,
-                                   behandlingformaal,
-                                   behandlingNummer
-                                 }: EditEttlevProps) => {
-  const {data} = useQuery<{ kravById: KravQL }, KravId>(kravFullQuery, {
+  kravId,
+  etterlevelse,
+  varsleMelding,
+  close,
+  formRef,
+  documentEdit,
+  behandlingNavn,
+  behandlingId,
+  behandlingformaal,
+  behandlingNummer,
+}: EditEttlevProps) => {
+  const { data } = useQuery<{ kravById: KravQL }, KravId>(kravFullQuery, {
     variables: kravId,
     skip: !kravId.id && !kravId.kravNummer,
     fetchPolicy: 'no-cache',
@@ -135,14 +135,14 @@ export const EditEtterlevelse = ({
       suksesskriterieBegrunnelser:
         etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT
           ? [
-            ...etterlevelse.suksesskriterieBegrunnelser.map((s) => {
-              return {
-                ...s,
-                oppfylt: false,
-                ikkeRelevant: false,
-              }
-            }),
-          ]
+              ...etterlevelse.suksesskriterieBegrunnelser.map((s) => {
+                return {
+                  ...s,
+                  oppfylt: false,
+                  ikkeRelevant: false,
+                }
+              }),
+            ]
           : [...etterlevelse.suksesskriterieBegrunnelser],
     }
 
@@ -174,7 +174,7 @@ export const EditEtterlevelse = ({
           initialValues={mapEtterlevelseToFormValue(etterlevelse)}
           validate={(value) => {
             try {
-              validateYupSchema(value, etterlevelseSchema(), true, {status: value.status})
+              validateYupSchema(value, etterlevelseSchema(), true, { status: value.status })
             } catch (err) {
               return yupToFormErrors(err)
             }
@@ -183,15 +183,15 @@ export const EditEtterlevelse = ({
           validateOnChange={false}
           validateOnBlur={false}
         >
-          {({values, isSubmitting, submitForm, errors, setFieldError}: FormikProps<Etterlevelse>) => (
+          {({ values, isSubmitting, submitForm, errors, setFieldError }: FormikProps<Etterlevelse>) => (
             <Block>
               <Block backgroundColor={ettlevColors.green800}>
                 <Block>
                   <Block paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge}>
-                    <Paragraph2 $style={{marginTop: '0px', marginBottom: '0px', color: ettlevColors.white}}>{kravNumView(krav)}</Paragraph2>
-                    <H1 $style={{marginTop: '0px', marginBottom: '0px', color: ettlevColors.white}}>{krav.navn}</H1>
+                    <Paragraph2 $style={{ marginTop: '0px', marginBottom: '0px', color: ettlevColors.white }}>{kravNumView(krav)}</Paragraph2>
+                    <H1 $style={{ marginTop: '0px', marginBottom: '0px', color: ettlevColors.white }}>{krav.navn}</H1>
 
-                    {varsleMelding &&
+                    {varsleMelding && (
                       <Block
                         width="fit-content"
                         display="flex"
@@ -202,23 +202,28 @@ export const EditEtterlevelse = ({
                           ...borderWidth('1px'),
                           ...borderStyle('solid'),
                           ...borderRadius('4px'),
-                          marginTop: "16px"
+                          marginTop: '16px',
                         }}
                       >
-                        <img src={warningAlert} alt=""/>
+                        <img src={warningAlert} alt="" />
                         <Paragraph2 marginLeft={theme.sizing.scale500} marginTop="0px" marginBottom="0px">
                           {varsleMelding}
                         </Paragraph2>
-                      </Block>}
-
+                      </Block>
+                    )}
                   </Block>
 
-                  <Block display="flex" paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge} paddingBottom="32px"
-                         paddingTop={varsleMelding ? "16px" : "32px"}>
+                  <Block
+                    display="flex"
+                    paddingLeft={responsivePaddingLarge}
+                    paddingRight={responsivePaddingLarge}
+                    paddingBottom="32px"
+                    paddingTop={varsleMelding ? '16px' : '32px'}
+                  >
                     <Block>
-                      <Paragraph2 $style={{marginTop: 0, marginBottom: 0, color: ettlevColors.white, maxWidth: '700px'}}>
-                        <Label3 $style={{color: ettlevColors.white}}>Behandling: </Label3>
-                        <a href={`${env.pollyBaseUrl}process/${behandlingId}`} style={{color: ettlevColors.white}} target="_blank" rel="noopener noreferrer">
+                      <Paragraph2 $style={{ marginTop: 0, marginBottom: 0, color: ettlevColors.white, maxWidth: '700px' }}>
+                        <Label3 $style={{ color: ettlevColors.white }}>Behandling: </Label3>
+                        <a href={`${env.pollyBaseUrl}process/${behandlingId}`} style={{ color: ettlevColors.white }} target="_blank" rel="noopener noreferrer">
                           <span
                             style={{
                               display: 'inline-block',
@@ -227,7 +232,7 @@ export const EditEtterlevelse = ({
                               marginRight: '5px',
                             }}
                           >
-                            B{behandlingNummer} {behandlingformaal}: {behandlingNavn} <FontAwesomeIcon icon={faExternalLinkAlt}/>
+                            B{behandlingNummer} {behandlingformaal}: {behandlingNavn} <FontAwesomeIcon icon={faExternalLinkAlt} />
                           </span>
                         </a>
                       </Paragraph2>
@@ -243,7 +248,7 @@ export const EditEtterlevelse = ({
                     </H2>
                   </Block>
                   <Block display="flex" justifyContent="flex-end" width="100%">
-                    <a href={'/krav/' + krav?.kravNummer + '/' + krav?.kravVersjon} style={{color: ettlevColors.green600}} target="_blank" rel="noopener noreferrer">
+                    <a href={'/krav/' + krav?.kravNummer + '/' + krav?.kravVersjon} style={{ color: ettlevColors.green600 }} target="_blank" rel="noopener noreferrer">
                       <Button
                         kind="secondary"
                         size="compact"
@@ -255,10 +260,10 @@ export const EditEtterlevelse = ({
                         }}
                       >
                         <Paragraph2 marginBottom={0} marginTop={0}>
-                          <span style={{display: 'inline-block', marginRight: '5px', fontSize: '16px'}}>
+                          <span style={{ display: 'inline-block', marginRight: '5px', fontSize: '16px' }}>
                             <strong>Åpne veiledning og spørsmål til kraveier</strong>
                           </span>
-                          <FontAwesomeIcon icon={faExternalLinkAlt}/>
+                          <FontAwesomeIcon icon={faExternalLinkAlt} />
                         </Paragraph2>
                       </Button>
                     </a>
@@ -322,8 +327,8 @@ export const EditEtterlevelse = ({
                                     if (id === EtterlevelseStatus.OPPFYLLES_SENERE) {
                                       return (
                                         <Radio value={id} key={id}>
-                                          <Block $style={{textDecoration: radioHover === id ? 'underline' : 'none'}}>
-                                            <Paragraph2 $style={{lineHeight: '22px'}} marginTop="0px" marginBottom="0px">
+                                          <Block $style={{ textDecoration: radioHover === id ? 'underline' : 'none' }}>
+                                            <Paragraph2 $style={{ lineHeight: '22px' }} marginTop="0px" marginBottom="0px">
                                               {getEtterlevelseStatus(id)}
                                             </Paragraph2>
                                           </Block>
@@ -331,7 +336,7 @@ export const EditEtterlevelse = ({
                                           {etterlevelseStatus === EtterlevelseStatus.OPPFYLLES_SENERE && (
                                             <Block width="100%">
                                               <Block maxWidth="170px" width="100%">
-                                                <DateField error={!!p.form.errors.fristForFerdigstillelse} label="Frist" name="fristForFerdigstillelse"/>
+                                                <DateField error={!!p.form.errors.fristForFerdigstillelse} label="Frist" name="fristForFerdigstillelse" />
                                               </Block>
                                               {p.form.errors.fristForFerdigstillelse && (
                                                 <Block display="flex" width="100%" marginTop=".2rem">
@@ -339,7 +344,7 @@ export const EditEtterlevelse = ({
                                                     <Notification
                                                       overrides={{
                                                         Body: {
-                                                          style: {width: 'auto', ...paddingZero, marginTop: 0, backgroundColor: 'transparent', color: ettlevColors.red600},
+                                                          style: { width: 'auto', ...paddingZero, marginTop: 0, backgroundColor: 'transparent', color: ettlevColors.red600 },
                                                         },
                                                       }}
                                                       kind={NKIND.negative}
@@ -357,15 +362,15 @@ export const EditEtterlevelse = ({
                                     if (id === EtterlevelseStatus.IKKE_RELEVANT) {
                                       return (
                                         <Radio value={id} key={id}>
-                                          <Block $style={{textDecoration: radioHover === id ? 'underline' : 'none'}}>
-                                            <Paragraph2 $style={{lineHeight: '22px'}} marginTop="0px" marginBottom="0px">
+                                          <Block $style={{ textDecoration: radioHover === id ? 'underline' : 'none' }}>
+                                            <Paragraph2 $style={{ lineHeight: '22px' }} marginTop="0px" marginBottom="0px">
                                               {getEtterlevelseStatus(id)}
                                             </Paragraph2>
                                           </Block>
                                           {etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT && (
                                             <Block maxWidth="471px" width="100%">
-                                              <TextAreaField label="Beskriv hvorfor kravet ikke er relevant" noPlaceholder name="statusBegrunnelse"/>
-                                              <Error fieldName={'statusBegrunnelse'} fullWidth={true}/>
+                                              <TextAreaField label="Beskriv hvorfor kravet ikke er relevant" noPlaceholder name="statusBegrunnelse" />
+                                              <Error fieldName={'statusBegrunnelse'} fullWidth={true} />
                                             </Block>
                                           )}
                                         </Radio>
@@ -376,8 +381,8 @@ export const EditEtterlevelse = ({
                                     }
                                     return (
                                       <Radio value={id} key={id}>
-                                        <Block $style={{textDecoration: radioHover === id ? 'underline' : 'none'}}>
-                                          <Paragraph2 $style={{lineHeight: '22px'}} marginTop="0px" marginBottom="0px">
+                                        <Block $style={{ textDecoration: radioHover === id ? 'underline' : 'none' }}>
+                                          <Paragraph2 $style={{ lineHeight: '22px' }} marginTop="0px" marginBottom="0px">
                                             {getEtterlevelseStatus(id)}
                                           </Paragraph2>
                                         </Block>
@@ -390,9 +395,9 @@ export const EditEtterlevelse = ({
                           </Field>
                         </FieldWrapper>
 
-                        <Label3 $style={{lineHeight: '32px'}}>Hvilke suksesskriterier er oppfylt?</Label3>
+                        <Label3 $style={{ lineHeight: '32px' }}>Hvilke suksesskriterier er oppfylt?</Label3>
 
-                        <SuksesskriterierBegrunnelseEdit disableEdit={disableEdit} suksesskriterie={krav.suksesskriterier}/>
+                        <SuksesskriterierBegrunnelseEdit disableEdit={disableEdit} suksesskriterie={krav.suksesskriterier} />
 
                         {/*
               {!documentEdit &&
@@ -416,7 +421,7 @@ export const EditEtterlevelse = ({
           <Block height={theme.sizing.scale600}/>
          */}
 
-                        <Error fieldName={'status'} fullWidth={true}/>
+                        <Error fieldName={'status'} fullWidth={true} />
                         <Block width={'100%'} marginTop={'65px'}>
                           {Object.keys(errors).length > 0 && (
                             <Block display="flex" width="60%">
@@ -442,7 +447,7 @@ export const EditEtterlevelse = ({
                                         marginRight: '5px',
                                       }}
                                     />
-                                    <Paragraph2 marginBottom="0px" marginTop="0px" $style={{lineHeight: '18px'}}>
+                                    <Paragraph2 marginBottom="0px" marginTop="0px" $style={{ lineHeight: '18px' }}>
                                       Du må fylle ut alle obligatoriske felter
                                     </Paragraph2>
                                   </Block>
@@ -532,9 +537,9 @@ export const SearchKrav = (props: { kravNummer: number; kravVersjon: number }) =
               filterOptions={(o) => o}
               searchable
               noResultsMsg="Ingen resultat"
-              options={results.map((k) => ({id: k.id, label: kravName(k)}))}
-              value={krav ? [{id: krav.id, label: kravName(krav)}] : []}
-              onChange={({value}) => {
+              options={results.map((k) => ({ id: k.id, label: kravName(k) }))}
+              value={krav ? [{ id: krav.id, label: kravName(krav) }] : []}
+              onChange={({ value }) => {
                 const kravSelect = value.length ? results.find((k) => k.id === value[0].id)! : undefined
                 setKrav(kravSelect)
                 p.form.setFieldValue('kravNummer', kravSelect?.kravNummer)
@@ -565,9 +570,9 @@ export const SearchBehandling = (props: { id: string }) => {
               filterOptions={(o) => o}
               searchable
               noResultsMsg="Ingen resultat"
-              options={results.map((k) => ({id: k.id, label: behandlingName(k)}))}
-              value={behandling ? [{id: behandling.id, label: behandlingName(behandling)}] : []}
-              onChange={({value}) => {
+              options={results.map((k) => ({ id: k.id, label: behandlingName(k) }))}
+              value={behandling ? [{ id: behandling.id, label: behandlingName(behandling) }] : []}
+              onChange={({ value }) => {
                 const select = value.length ? results.find((k) => k.id === value[0].id)! : undefined
                 setBehandling(select)
                 p.form.setFieldValue('behandlingId', select?.id)

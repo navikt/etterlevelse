@@ -3,7 +3,7 @@ import {emptyPage, Etterlevelse, EtterlevelseStatus, PageResponse} from '../cons
 import {env} from '../util/env'
 import {useEffect, useState} from 'react'
 import {KravId} from './KravApi'
-import {stringify} from "query-string";
+import {stringify} from 'query-string'
 
 export const getEtterlevelsePage = async (pageNumber: number, pageSize: number) => {
   return (await axios.get<PageResponse<Etterlevelse>>(`${env.backendBaseUrl}/etterlevelse?pageNumber=${pageNumber}&pageSize=${pageSize}`)).data
