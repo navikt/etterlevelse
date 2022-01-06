@@ -27,7 +27,7 @@ import {borderColor, borderRadius, borderStyle, borderWidth, padding, paddingZer
 import {env} from '../../util/env'
 import {useQuery} from '@apollo/client'
 import moment from 'moment'
-import {warningAlert} from '../Images'
+import {informationIcon} from '../Images'
 
 type EditEttlevProps = {
   etterlevelse: Etterlevelse
@@ -195,17 +195,17 @@ export const EditEtterlevelse = ({
                       <Block
                         width="fit-content"
                         display="flex"
-                        backgroundColor={ettlevColors.warning50}
+                        backgroundColor={"#E5F0F7"}
                         $style={{
                           ...padding('12px', '16px'),
-                          ...borderColor('#D47B00'),
+                          ...borderColor('#005B82'),
                           ...borderWidth('1px'),
                           ...borderStyle('solid'),
                           ...borderRadius('4px'),
                           marginTop: '16px',
                         }}
                       >
-                        <img src={warningAlert} alt="" />
+                        <img src={informationIcon} alt="" width={'24px'} height={'24px'}/>
                         <Paragraph2 marginLeft={theme.sizing.scale500} marginTop="0px" marginBottom="0px">
                           {varsleMelding}
                         </Paragraph2>
