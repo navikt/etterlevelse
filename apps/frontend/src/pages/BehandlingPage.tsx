@@ -1,26 +1,26 @@
-import React, { useRef, useState } from 'react'
-import { Block, Display, Responsive } from 'baseui/block'
-import { useParams } from 'react-router-dom'
-import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
-import { useBehandling } from '../api/BehandlingApi'
-import { H1, H2, Label3, Paragraph2, Paragraph4 } from 'baseui/typography'
-import { FormikProps } from 'formik'
-import { ettlevColors, theme } from '../util/theme'
-import { Layout2 } from '../components/scaffold/Page'
-import { Teams } from '../components/common/TeamName'
-import { arkPennIcon, ellipse80, warningAlert } from '../components/Images'
-import { Behandling, BehandlingEtterlevData, EtterlevelseStatus, PageResponse } from '../constants'
-import { useQuery } from '@apollo/client'
-import { BehandlingStats, statsQuery } from '../components/behandling/ViewBehandling'
-import { Code, codelist, ListName, TemaCode } from '../services/Codelist'
-import { PanelLinkCard, PanelLinkCardOverrides } from '../components/common/PanelLink'
-import { cardWidth } from './TemaPage'
-import { ProgressBar, SIZE } from 'baseui/progress-bar'
-import { Button } from 'baseui/button'
+import React, {useRef, useState} from 'react'
+import {Block, Display, Responsive} from 'baseui/block'
+import {useParams} from 'react-router-dom'
+import {LoadingSkeleton} from '../components/common/LoadingSkeleton'
+import {useBehandling} from '../api/BehandlingApi'
+import {H1, H2, Label3, Paragraph2, Paragraph4} from 'baseui/typography'
+import {FormikProps} from 'formik'
+import {ettlevColors, theme} from '../util/theme'
+import {Layout2} from '../components/scaffold/Page'
+import {Teams} from '../components/common/TeamName'
+import {arkPennIcon, ellipse80, warningAlert} from '../components/Images'
+import {Behandling, BehandlingEtterlevData, EtterlevelseStatus, PageResponse} from '../constants'
+import {useQuery} from '@apollo/client'
+import {BehandlingStats, statsQuery} from '../components/behandling/ViewBehandling'
+import {Code, codelist, ListName, TemaCode} from '../services/Codelist'
+import {PanelLinkCard, PanelLinkCardOverrides} from '../components/common/PanelLink'
+import {cardWidth} from './TemaPage'
+import {ProgressBar, SIZE} from 'baseui/progress-bar'
+import {Button} from 'baseui/button'
 import EditBehandlingModal from '../components/behandling/EditBehandlingModal'
-import { Tag } from 'baseui/tag'
-import { borderColor, borderStyle, borderWidth, marginZero, padding } from '../components/common/Style'
-import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
+import {Tag} from 'baseui/tag'
+import {borderColor, borderStyle, borderWidth, marginZero, padding} from '../components/common/Style'
+import {breadcrumbPaths} from '../components/common/CustomizedBreadcrumbs'
 
 const responsiveDisplay: Responsive<Display> = ['block', 'block', 'block', 'block', 'flex', 'flex']
 
@@ -150,9 +150,9 @@ export const BehandlingPage = () => {
   )
 
   const getSecondaryHeader = (behandling: Behandling) => (
-    <Block width="100%" display={responsiveDisplay} alignItems="center" justifyContent="space-between" marginTop={'16px'} marginBottom={'16px'}>
+    <Block width="100%" display={responsiveDisplay} alignItems="center" justifyContent="space-between" marginTop={'8px'} marginBottom={'8px'}>
       <Block display="flex" alignItems="center">
-        <Block marginRight="30px">
+        <Block marginRight="12px">
           <img src={arkPennIcon} alt="penn ikon" height="32px" width="32px" />
         </Block>
         <Block>

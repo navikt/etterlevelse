@@ -156,7 +156,7 @@ export const BehandlingerTemaPage = () => {
   const getSecondaryHeader = () => (
     <Block width="100%" display={responsiveBreakPoints} alignItems="center" justifyContent="space-between">
       <Block display="flex" alignItems="center">
-        <Block marginRight="30px">
+        <Block marginRight="12px">
           <img src={arkPennIcon} alt="test" height="32px" width="32px" />
         </Block>
         <Block>
