@@ -88,7 +88,7 @@ export const BehandlingPage = () => {
   const temaListe = codelist.getCodes(ListName.TEMA).sort((a, b) => a.shortName.localeCompare(b.shortName, 'nb'))
   let antallFylttKrav = 0
   stats.forEach((k) => {
-    if (k.etterlevelser.length && (k.etterlevelser[0].status !== EtterlevelseStatus.FERDIG && k.etterlevelser[0].status !== EtterlevelseStatus.UNDER_REDIGERING)) {
+    if (k.etterlevelser.length && (k.etterlevelser[0].status === EtterlevelseStatus.FERDIG_DOKUMENTERT || k.etterlevelser[0].status === EtterlevelseStatus.IKKE_RELEVANT || k.etterlevelser[0].status === EtterlevelseStatus.OPPFYLLES_SENERE)) {
       antallFylttKrav += 1
     }
   })
@@ -301,7 +301,7 @@ const TemaCardBehandling = ({ tema, stats, behandling }: { tema: TemaCode; stats
   let tilUtfylling = 0
 
   krav.forEach((k) => {
-    if (k.etterlevelser.length && k.etterlevelser[0].status === EtterlevelseStatus.FERDIG_DOKUMENTERT) {
+    if (k.etterlevelser.length && (k.etterlevelser[0].status === EtterlevelseStatus.FERDIG_DOKUMENTERT || k.etterlevelser[0].status === EtterlevelseStatus.IKKE_RELEVANT || k.etterlevelser[0].status === EtterlevelseStatus.OPPFYLLES_SENERE)) {
       utfylt += 1
     } else if (
       k.etterlevelser.length &&

@@ -64,7 +64,7 @@ export const BehandlingerTemaPage = () => {
   const [kravId, setKravId] = useState<KravId | undefined>()
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       const allKravPriority = await getAllKravPriority()
       const kraver = _.cloneDeep(rawData?.krav.content) || []
 
@@ -121,7 +121,7 @@ export const BehandlingerTemaPage = () => {
     let antallUtfylt = 0
 
     kravData.forEach((k) => {
-      if ((k.etterlevelseStatus !== EtterlevelseStatus.FERDIG && k.etterlevelseStatus !== EtterlevelseStatus.UNDER_REDIGERING) && k.gammelVersjon !== true) {
+      if ((k.etterlevelseStatus === EtterlevelseStatus.FERDIG_DOKUMENTERT || k.etterlevelseStatus === EtterlevelseStatus.OPPFYLLES_SENERE || k.etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT) && k.gammelVersjon !== true) {
         antallUtfylt += 1
       }
     })
@@ -390,7 +390,7 @@ const KravView = (props: {
   const [varsleMelding, setVarsleMelding] = useState('')
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       if (props.kravId.kravNummer && props.kravId.kravVersjon) {
         const krav = await getKravByKravNumberAndVersion(props.kravId.kravNummer, props.kravId.kravVersjon)
         if (krav) {
