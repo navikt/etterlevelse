@@ -1,36 +1,37 @@
-import React, {useEffect, useState} from 'react'
-import {Block, Display} from 'baseui/block'
-import {useParams} from 'react-router-dom'
-import {H1, H2, Label3, Paragraph2, Paragraph4} from 'baseui/typography'
-import {ettlevColors, maxPageWidth, theme} from '../util/theme'
-import {codelist, ListName, TemaCode} from '../services/Codelist'
-import RouteLink, {urlForObject} from '../components/common/RouteLink'
-import {useBehandling} from '../api/BehandlingApi'
-import {Layout2} from '../components/scaffold/Page'
-import {Etterlevelse, EtterlevelseStatus, KravEtterlevelseData, KravQL, PageResponse} from '../constants'
-import {arkPennIcon, crossIcon, informationIcon} from '../components/Images'
-import {behandlingKravQuery} from '../components/behandling/ViewBehandling'
-import {useQuery} from '@apollo/client'
-import {CustomizedAccordion, CustomizedPanel, CustomPanelDivider} from '../components/common/CustomizedAccordion'
+import React, { useEffect, useState } from 'react'
+import { Block, Display } from 'baseui/block'
+import { useParams } from 'react-router-dom'
+import { H1, H2, Label3, Paragraph2, Paragraph4 } from 'baseui/typography'
+import { ettlevColors, maxPageWidth, theme } from '../util/theme'
+import { codelist, ListName, TemaCode } from '../services/Codelist'
+import RouteLink, { urlForObject } from '../components/common/RouteLink'
+import { useBehandling } from '../api/BehandlingApi'
+import { Layout2 } from '../components/scaffold/Page'
+import { Etterlevelse, EtterlevelseStatus, KravEtterlevelseData, KravQL, PageResponse } from '../constants'
+import { arkPennIcon, crossIcon, informationIcon } from '../components/Images'
+import { behandlingKravQuery } from '../components/behandling/ViewBehandling'
+import { useQuery } from '@apollo/client'
+import { CustomizedAccordion, CustomizedPanel, CustomPanelDivider } from '../components/common/CustomizedAccordion'
 import CustomizedModal from '../components/common/CustomizedModal'
-import {Spinner} from '../components/common/Spinner'
-import {useEtterlevelse} from '../api/EtterlevelseApi'
-import {EditEtterlevelse} from '../components/etterlevelse/EditEtterlevelse'
-import {getKravByKravNumberAndVersion, KravId} from '../api/KravApi'
-import {borderStyle} from '../components/common/Style'
-import {breadcrumbPaths} from '../components/common/CustomizedBreadcrumbs'
+import { Spinner } from '../components/common/Spinner'
+import { useEtterlevelse } from '../api/EtterlevelseApi'
+import { EditEtterlevelse } from '../components/etterlevelse/EditEtterlevelse'
+import { getKravByKravNumberAndVersion, KravId } from '../api/KravApi'
+import { borderStyle } from '../components/common/Style'
+import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 import Button from '../components/common/Button'
-import {Responsive} from 'baseui/theme'
-import {KravPanelHeader} from '../components/behandling/KravPanelHeader'
-import {sortKraverByPriority} from '../util/sort'
+import { Responsive } from 'baseui/theme'
+import { KravPanelHeader } from '../components/behandling/KravPanelHeader'
+import { sortKraverByPriority } from '../util/sort'
 import _ from 'lodash'
-import {getAllKravPriority} from '../api/KravPriorityApi'
-import {env} from '../util/env'
-import {faExternalLinkAlt} from '@fortawesome/free-solid-svg-icons'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import { getAllKravPriority } from '../api/KravPriorityApi'
+import { env } from '../util/env'
+import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import CustomizedLink from '../components/common/CustomizedLink'
 import StatusView from '../components/common/StatusTag'
 import moment from 'moment'
+import { Helmet } from 'react-helmet'
 
 const responsiveBreakPoints: Responsive<Display> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
 
@@ -63,7 +64,7 @@ export const BehandlingerTemaPage = () => {
   const [kravId, setKravId] = useState<KravId | undefined>()
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       const allKravPriority = await getAllKravPriority()
       const kraver = _.cloneDeep(rawData?.krav.content) || []
 
@@ -120,7 +121,7 @@ export const BehandlingerTemaPage = () => {
     let antallUtfylt = 0
 
     kravData.forEach((k) => {
-      if (k.etterlevelseStatus === EtterlevelseStatus.FERDIG_DOKUMENTERT && k.gammelVersjon !== true) {
+      if ((k.etterlevelseStatus === EtterlevelseStatus.FERDIG_DOKUMENTERT || k.etterlevelseStatus === EtterlevelseStatus.OPPFYLLES_SENERE || k.etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT) && k.gammelVersjon !== true) {
         antallUtfylt += 1
       }
     })
@@ -132,6 +133,12 @@ export const BehandlingerTemaPage = () => {
     <Block justifyContent="space-between" marginBottom="32px">
       {temaData && behandling && (
         <>
+          <Helmet>
+            <meta charSet="utf-8" />
+            <title>
+              B{behandling.nummer.toString()} {behandling.navn.toString()}
+            </title>
+          </Helmet>
           <Block>
             <H1 marginTop="0" color={ettlevColors.green800}>
               {temaData?.shortName}
@@ -383,7 +390,7 @@ const KravView = (props: {
   const [varsleMelding, setVarsleMelding] = useState('')
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       if (props.kravId.kravNummer && props.kravId.kravVersjon) {
         const krav = await getKravByKravNumberAndVersion(props.kravId.kravNummer, props.kravId.kravVersjon)
         if (krav) {
