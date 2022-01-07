@@ -1,26 +1,27 @@
-import React, {useRef, useState} from 'react'
-import {Block, Display, Responsive} from 'baseui/block'
-import {useParams} from 'react-router-dom'
-import {LoadingSkeleton} from '../components/common/LoadingSkeleton'
-import {useBehandling} from '../api/BehandlingApi'
-import {H1, H2, Label3, Paragraph2, Paragraph4} from 'baseui/typography'
-import {FormikProps} from 'formik'
-import {ettlevColors, theme} from '../util/theme'
-import {Layout2} from '../components/scaffold/Page'
-import {Teams} from '../components/common/TeamName'
-import {arkPennIcon, ellipse80, warningAlert} from '../components/Images'
-import {Behandling, BehandlingEtterlevData, EtterlevelseStatus, PageResponse} from '../constants'
-import {useQuery} from '@apollo/client'
-import {BehandlingStats, statsQuery} from '../components/behandling/ViewBehandling'
-import {Code, codelist, ListName, TemaCode} from '../services/Codelist'
-import {PanelLinkCard, PanelLinkCardOverrides} from '../components/common/PanelLink'
-import {cardWidth} from './TemaPage'
-import {ProgressBar, SIZE} from 'baseui/progress-bar'
-import {Button} from 'baseui/button'
+import React, { useRef, useState } from 'react'
+import { Block, Display, Responsive } from 'baseui/block'
+import { useParams } from 'react-router-dom'
+import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
+import { useBehandling } from '../api/BehandlingApi'
+import { H1, H2, Label3, Paragraph2, Paragraph4 } from 'baseui/typography'
+import { FormikProps } from 'formik'
+import { ettlevColors, theme } from '../util/theme'
+import { Layout2 } from '../components/scaffold/Page'
+import { Teams } from '../components/common/TeamName'
+import { arkPennIcon, ellipse80, warningAlert } from '../components/Images'
+import { Behandling, BehandlingEtterlevData, EtterlevelseStatus, PageResponse } from '../constants'
+import { useQuery } from '@apollo/client'
+import { BehandlingStats, statsQuery } from '../components/behandling/ViewBehandling'
+import { Code, codelist, ListName, TemaCode } from '../services/Codelist'
+import { PanelLinkCard, PanelLinkCardOverrides } from '../components/common/PanelLink'
+import { cardWidth } from './TemaPage'
+import { ProgressBar, SIZE } from 'baseui/progress-bar'
+import { Button } from 'baseui/button'
 import EditBehandlingModal from '../components/behandling/EditBehandlingModal'
-import {Tag} from 'baseui/tag'
-import {borderColor, borderStyle, borderWidth, marginZero, padding} from '../components/common/Style'
-import {breadcrumbPaths} from '../components/common/CustomizedBreadcrumbs'
+import { Tag } from 'baseui/tag'
+import { borderColor, borderStyle, borderWidth, marginZero, padding } from '../components/common/Style'
+import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
+import { Helmet } from 'react-helmet'
 
 const responsiveDisplay: Responsive<Display> = ['block', 'block', 'block', 'block', 'flex', 'flex']
 
@@ -133,6 +134,10 @@ export const BehandlingPage = () => {
 
   const getMainHeader = (behandling: Behandling) => (
     <Block display={responsiveDisplay} justifyContent="space-between" marginBottom="32px">
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>B{behandling.nummer.toString()} {behandling.navn.toString()}</title>
+      </Helmet>
       <Block>
         <Label3 color={ettlevColors.green600}>
           B{behandling.nummer} {behandling.overordnetFormaal.shortName}
