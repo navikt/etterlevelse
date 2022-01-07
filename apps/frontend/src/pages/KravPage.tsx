@@ -32,6 +32,7 @@ import CustomizedBreadcrumbs, { breadcrumbPaths } from '../components/common/Cus
 import { codelist, ListName, TemaCode } from '../services/Codelist'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons'
+import { Helmet } from 'react-helmet'
 
 export const kravNumView = (it: { kravVersjon: number; kravNummer: number }) => `K${it.kravNummer}.${it.kravVersjon}`
 export const kravName = (krav: Krav) => `${kravNumView(krav)} ${krav.navn}`
@@ -161,6 +162,12 @@ export const KravPage = () => {
       {kravLoading && <LoadingSkeleton header="Krav" />}
       {!kravLoading && (
         <Block backgroundColor={ettlevColors.green800} display="flex" width="100%" justifyContent="center" paddingBottom="32px">
+          {krav?.id && (
+            <Helmet>
+              <meta charSet="utf-8" />
+              <title>{kravNumView({ kravNummer: krav?.kravNummer, kravVersjon: krav?.kravVersjon })} {krav.navn}</title>
+            </Helmet>
+          )}
           <Block maxWidth={maxPageWidth} width="100%">
             <Block paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall} display="flex" flexDirection="column" justifyContent="center">
               <Block display="flex" width="100%" justifyContent="center" marginTop="24px">
