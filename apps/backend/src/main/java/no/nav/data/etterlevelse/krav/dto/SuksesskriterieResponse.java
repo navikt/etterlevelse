@@ -17,5 +17,6 @@ public class SuksesskriterieResponse {
     private int id;
     private String navn;
     private String beskrivelse;
+    private boolean behovForBegrunnelse;
 
 }

@@ -16,12 +16,15 @@ public class Suksesskriterie {
     private int id;
     private String navn;
     private String beskrivelse;
+    private boolean behovForBegrunnelse;
+
 
     public static Suksesskriterie convert(SuksesskriterieRequest request) {
         return Suksesskriterie.builder()
                 .id(request.getId())
                 .navn(request.getNavn())
                 .beskrivelse(request.getBeskrivelse())
+                .behovForBegrunnelse(request.isBehovForBegrunnelse())
                 .build();
     }
 
@@ -30,6 +33,7 @@ public class Suksesskriterie {
                 .id(id)
                 .navn(navn)
                 .beskrivelse(beskrivelse)
+                .behovForBegrunnelse(behovForBegrunnelse)
                 .build();
     }
 

@@ -21,11 +21,14 @@ public class SuksesskriterieRequest implements Validated {
     private int id;
     private String navn;
     private String beskrivelse;
+    private boolean behovForBegrunnelse = true;
+
 
     @Override
     public void format() {
         setNavn(trimToNull(navn));
         setBeskrivelse(trimToNull(beskrivelse));
+        setBehovForBegrunnelse(behovForBegrunnelse);
     }
 
     @Override
