@@ -88,7 +88,7 @@ export const BehandlingPage = () => {
   const temaListe = codelist.getCodes(ListName.TEMA).sort((a, b) => a.shortName.localeCompare(b.shortName, 'nb'))
   let antallFylttKrav = 0
   stats.forEach((k) => {
-    if (k.etterlevelser.length && k.etterlevelser[0].status === EtterlevelseStatus.FERDIG_DOKUMENTERT) {
+    if (k.etterlevelser.length && (k.etterlevelser[0].status !== EtterlevelseStatus.FERDIG && k.etterlevelser[0].status !== EtterlevelseStatus.UNDER_REDIGERING)) {
       antallFylttKrav += 1
     }
   })

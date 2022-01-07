@@ -121,7 +121,7 @@ export const BehandlingerTemaPage = () => {
     let antallUtfylt = 0
 
     kravData.forEach((k) => {
-      if (k.etterlevelseStatus === EtterlevelseStatus.FERDIG_DOKUMENTERT && k.gammelVersjon !== true) {
+      if ((k.etterlevelseStatus !== EtterlevelseStatus.FERDIG && k.etterlevelseStatus !== EtterlevelseStatus.UNDER_REDIGERING) && k.gammelVersjon !== true) {
         antallUtfylt += 1
       }
     })
