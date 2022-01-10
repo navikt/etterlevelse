@@ -200,7 +200,7 @@ const Kriterie = ({
           {/* <MarkdownEditor initialValue={beskrivelse} setValue={setBeskrivelse} height={'250px'} /> */}
           <TextEditor initialValue={beskrivelse} setValue={setBeskrivelse} height={'250px'}/>
         </FormControl>
-        <FormControl>
+        <FormControl label={"Velg type besvarelse:"}>
           <RadioGroup
             value={behovForBegrunnelse}
             onChange={e => {
@@ -208,10 +208,10 @@ const Kriterie = ({
               setBehovForBegrunnelse(e.target.value)
             }}
             name="behovForBegrunnelse"
-            align={ALIGN.vertical}
+            align={ALIGN.horizontal}
           >
-            <Radio value="true">True</Radio>
-            <Radio value="false">False</Radio>
+            <Radio value="true">Bekreftelse med tekstlig begrunnelse</Radio>
+            <Radio value="false">Kun bekreftelse</Radio>
           </RadioGroup>
         </FormControl>
       </Block>
