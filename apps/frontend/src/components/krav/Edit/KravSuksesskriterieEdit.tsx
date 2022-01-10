@@ -136,7 +136,7 @@ const Kriterie = ({
   const debounceDelay = 500
   const [navn, setNavn, navnInput] = useDebouncedState(s.navn, debounceDelay)
   const [beskrivelse, setBeskrivelse] = useDebouncedState(s.beskrivelse || '', debounceDelay)
-  const [behovForBegrunnelse, setBehovForBegrunnelse] = useState<string>("")
+  const [behovForBegrunnelse, setBehovForBegrunnelse] = useState<string>(s.behovForBegrunnelse === undefined ? 'true' : s.behovForBegrunnelse.toString())
 
 
   useEffect(() => {
