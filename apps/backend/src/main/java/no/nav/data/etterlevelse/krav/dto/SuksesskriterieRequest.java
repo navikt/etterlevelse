@@ -21,7 +21,7 @@ public class SuksesskriterieRequest implements Validated {
     private int id;
     private String navn;
     private String beskrivelse;
-    private boolean behovForBegrunnelse = true;
+    private boolean behovForBegrunnelse;
 
 
     @Override
