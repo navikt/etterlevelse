@@ -136,14 +136,13 @@ const Kriterie = ({
   const debounceDelay = 500
   const [navn, setNavn, navnInput] = useDebouncedState(s.navn, debounceDelay)
   const [beskrivelse, setBeskrivelse] = useDebouncedState(s.beskrivelse || '', debounceDelay)
-  const [behovForBegrunnelse, setBehovForBegrunnelse] = useState<string>(s.behovForBegrunnelse)
+  const [behovForBegrunnelse, setBehovForBegrunnelse] = useState<string>("")
 
 
   useEffect(() => {
-    update({id: s.id, navn, beskrivelse, behovForBegrunnelse: behovForBegrunnelse})
-  }, [navn, beskrivelse])
+    update({id: s.id, navn, beskrivelse, behovForBegrunnelse: behovForBegrunnelse === "true" ? true : false})
+  }, [navn, beskrivelse, behovForBegrunnelse])
 
-  console.log(s)
   return (
     <Card
       overrides={{
@@ -201,18 +200,20 @@ const Kriterie = ({
           {/* <MarkdownEditor initialValue={beskrivelse} setValue={setBeskrivelse} height={'250px'} /> */}
           <TextEditor initialValue={beskrivelse} setValue={setBeskrivelse} height={'250px'}/>
         </FormControl>
-        <RadioGroup
-          value={behovForBegrunnelse}
-          onChange={e => {
-            p.form.setFieldValue('behovForBegrunnelse', e.currentTarget.value)
-            setBehovForBegrunnelse(e.currentTarget.value)
-          }}
-          name="behovForBegrunnelse"
-          align={ALIGN.vertical}
-        >
-          <Radio value="true">True</Radio>
-          <Radio value="false">False</Radio>
-        </RadioGroup>
+        <FormControl>
+          <RadioGroup
+            value={behovForBegrunnelse}
+            onChange={e => {
+              p.form.setFieldValue('behovForBegrunnelse', e.target.value === 'true' ? true : false)
+              setBehovForBegrunnelse(e.target.value)
+            }}
+            name="behovForBegrunnelse"
+            align={ALIGN.vertical}
+          >
+            <Radio value="true">True</Radio>
+            <Radio value="false">False</Radio>
+          </RadioGroup>
+        </FormControl>
       </Block>
     </Card>
   )

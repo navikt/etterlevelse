@@ -89,7 +89,7 @@ export interface Suksesskriterie {
   id: number
   navn: string
   beskrivelse?: string
-  behovForBegrunnelse: string
+  behovForBegrunnelse: boolean
 }
 
 export interface Regelverk {
