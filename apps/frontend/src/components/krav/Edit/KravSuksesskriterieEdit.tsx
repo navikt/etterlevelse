@@ -201,11 +201,11 @@ const Kriterie = ({
           <TextEditor initialValue={beskrivelse} setValue={setBeskrivelse} height={'250px'} />
         </FormControl>
         <Block display="flex" flex="1" justifyContent="center">
-          <Label3 marginBottom="6px" marginTop="6px" marginRight="14px" $style={{ whiteSpace: 'nowrap', fontWeight: '600', lineHeight: '22px' }}>
+          <Label3 marginBottom="6px" marginTop="6px" marginRight="14px" $style={{ maxWidth: '162px', width: '100%', fontWeight: 600, lineHeight: '22px' }}>
             Velg type besvarelse:
           </Label3>
 
-          <FormControl>
+          <FormControl overrides={{ ControlContainer: { style: { marginBottom: '0px' } } }}>
             <RadioGroup
               value={behovForBegrunnelse}
               onChange={(e) => {
@@ -214,6 +214,11 @@ const Kriterie = ({
               }}
               name="behovForBegrunnelse"
               align={ALIGN.horizontal}
+              overrides={{Root: {
+                style: {
+                  marginRight: '34px'
+                }
+              }}}
             >
               <Radio value="true">Bekreftelse med tekstlig begrunnelse</Radio>
               <Radio value="false">Kun bekreftelse </Radio>
