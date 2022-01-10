@@ -75,6 +75,7 @@ type Suksesskriterie {
     id: NonNegativeInt!
     navn: String!
     beskrivelse: String
+    behovForBegrunnelse: Boolean
 }
 
 type Regelverk {
