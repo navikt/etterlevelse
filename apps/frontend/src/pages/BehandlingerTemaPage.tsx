@@ -49,7 +49,7 @@ export const BehandlingerTemaPage = () => {
   const temaData: TemaCode | undefined = codelist.getCode(ListName.TEMA, params.tema)
   const [behandling, setBehandling] = useBehandling(params.id)
   const lover = codelist.getCodesForTema(temaData?.code).map((c) => c.code)
-  const variables = { behandlingId: params.id, lover: lover }
+  const variables = { behandlingId: params.id, lover: lover, gjeldendeKrav: false}
   const { data: rawData, loading } = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
     variables,
     skip: !params.id || !lover.length,
