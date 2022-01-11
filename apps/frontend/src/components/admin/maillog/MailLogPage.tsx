@@ -15,6 +15,7 @@ import { TriangleDown } from 'baseui/icon'
 import { Pagination } from 'baseui/pagination'
 import { Markdown } from '../../common/Markdown'
 import { responsivePaddingSmall, responsiveWidthSmall } from '../../../util/theme'
+import { Helmet } from 'react-helmet'
 
 interface MailLog {
   time: string
@@ -55,6 +56,10 @@ export const MailLogPage = () => {
 
   return (
     <Block width={responsiveWidthSmall} paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall}>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Varslinger</title>
+      </Helmet>
       <H4>{intl.mailLog}</H4>
       {log?.content.map((l, i) => {
         let html = l.body

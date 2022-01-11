@@ -8,6 +8,7 @@ import { StatefulPopover, PLACEMENT } from 'baseui/popover'
 import { H2, HeadingXXLarge, Paragraph2 } from 'baseui/typography'
 import moment from 'moment'
 import { ReactElement, useEffect, useState } from 'react'
+import { Helmet } from 'react-helmet'
 import { getKravPage, kravMapToFormVal } from '../api/KravApi'
 import { getTilbakemeldingForKrav } from '../api/TilbakemeldingApi'
 import { PersonName } from '../components/common/PersonName'
@@ -102,6 +103,10 @@ export const SpørsmålOgSvarLogPage = () => {
       currentPage="Spørsmål og svar"
       mainHeader={
         <Block maxWidth={maxPageWidth} width="100%" display={'flex'} justifyContent="flex-start">
+          <Helmet>
+            <meta charSet="utf-8" />
+            <title>Spørsmål og svar</title>
+          </Helmet>
           <HeadingXXLarge marginTop="0">Spørsmål og svar</HeadingXXLarge>
         </Block>
       }

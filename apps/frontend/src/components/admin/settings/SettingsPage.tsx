@@ -9,6 +9,7 @@ import Button from '../../common/Button'
 import { Markdown } from '../../common/Markdown'
 import { CustomizedStatefulTextarea } from '../../common/CustomizedTextarea'
 import { ettlevColors, responsivePaddingSmall, responsiveWidthSmall } from '../../../util/theme'
+import { Helmet } from 'react-helmet'
 
 export const SettingsPage = () => {
   const [loading, setLoading] = React.useState<boolean>(true)
@@ -39,6 +40,10 @@ export const SettingsPage = () => {
 
   return (
     <Block width={responsiveWidthSmall} paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall}>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Instillinger</title>
+      </Helmet>
       <H4>{intl.settings}</H4>
       {loading ? (
         <StyledSpinnerNext color={ettlevColors.green400} size={40} />
