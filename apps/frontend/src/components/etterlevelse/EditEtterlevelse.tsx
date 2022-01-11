@@ -48,6 +48,7 @@ const etterlevelseSchema = () => {
       yup.object({
         oppfylt: yup.boolean(),
         ikkeRelevant: yup.boolean(),
+        behovForBegrunnelse: yup.boolean(),
         begrunnelse: yup.string().test({
           name: 'begrunnelseText',
           message: 'Du må fylle ut dokumentasjonen',
@@ -56,7 +57,7 @@ const etterlevelseSchema = () => {
             if (
               (options.context?.status === EtterlevelseStatus.FERDIG || options.context?.status === EtterlevelseStatus.FERDIG_DOKUMENTERT) &&
               (parent.oppfylt || parent.ikkeRelevant) &&
-              (begrunnelse === '' || begrunnelse === undefined)
+              (begrunnelse === '' || begrunnelse === undefined) && parent.behovForBegrunnelse
             ) {
               return false
             } else {

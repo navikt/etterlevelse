@@ -24,7 +24,7 @@ export const getSuksesskriterieBegrunnelse = (suksesskriterieBegrunnelser: Sukse
     return item.suksesskriterieId === suksessKriterie.id
   })
   if (!sb) {
-    return { suksesskriterieId: suksessKriterie.id, begrunnelse: '', oppfylt: false, ikkeRelevant: false }
+    return { suksesskriterieId: suksessKriterie.id, begrunnelse: '', oppfylt: false, ikkeRelevant: false, behovForBegrunnelse: suksessKriterie.behovForBegrunnelse }
   } else {
     return sb
   }
@@ -86,12 +86,12 @@ const KriterieBegrunnelse = ({
   const [ikkerelevant, setIkkeRelevant] = React.useState(suksesskriterieBegrunnelse.ikkeRelevant || false)
 
   React.useEffect(() => {
-    update({ suksesskriterieId: suksesskriterie.id, begrunnelse: begrunnelse, oppfylt: oppfylt, ikkeRelevant: ikkerelevant })
+    update({ suksesskriterieId: suksesskriterie.id, begrunnelse: begrunnelse, oppfylt: oppfylt, ikkeRelevant: ikkerelevant, behovForBegrunnelse: suksesskriterie.behovForBegrunnelse })
   }, [begrunnelse, oppfylt, ikkerelevant])
 
   const getBorderColor = () => {
     if (status === EtterlevelseStatus.FERDIG || status === EtterlevelseStatus.FERDIG_DOKUMENTERT) {
-      if ((!oppfylt && !ikkerelevant) || !begrunnelse) {
+      if (!begrunnelse && suksesskriterie.behovForBegrunnelse) {
         return { border: '2px solid #842D08' }
       } else {
         return { border: '1px solid #C9C9C9' }
@@ -219,7 +219,7 @@ const KriterieBegrunnelse = ({
         </StatefulButtonGroup>
       )}
 
-      {(oppfylt || ikkerelevant) && status !== EtterlevelseStatus.IKKE_RELEVANT && !disableEdit && (
+      {(oppfylt || ikkerelevant) && status !== EtterlevelseStatus.IKKE_RELEVANT && !disableEdit && suksesskriterie.behovForBegrunnelse && (
         <Block marginTop={theme.sizing.scale1000}>
           <FormControl label={<LabelWithToolTip label={oppfylt ? 'Hvordan oppfylles kriteriet?' : 'Hvorfor er ikke kriteriet relevant?'} />}>
             <TextEditor initialValue={begrunnelse} setValue={setBegrunnelse} height={'188px'} errors={props.form.errors} simple width="680px" />

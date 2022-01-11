@@ -49,7 +49,7 @@ export const BehandlingerTemaPage = () => {
   const temaData: TemaCode | undefined = codelist.getCode(ListName.TEMA, params.tema)
   const [behandling, setBehandling] = useBehandling(params.id)
   const lover = codelist.getCodesForTema(temaData?.code).map((c) => c.code)
-  const variables = { behandlingId: params.id, lover: lover }
+  const variables = { behandlingId: params.id, lover: lover, gjeldendeKrav: false}
   const { data: rawData, loading } = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
     variables,
     skip: !params.id || !lover.length,
@@ -346,31 +346,33 @@ const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function; setKra
         </Block>
         <Block display="flex" justifyContent="flex-end" flex="1" width="100%">
           <Block width="350px" display="flex" justifyContent="flex-end" marginLeft="32px">
-            <Block>
+            <Block marginRight="31px">
               {props.krav.etterlevelseLastModified && (
-                <Block width="fit-content" display="flex" alignItems="center" marginRight="31px">
+                <Block width="100%" display="flex" justifyContent="flex-end">
                   <Paragraph4 $style={{ lineHeight: '19px', textAlign: 'right', marginTop: '0px', marginBottom: '0px', whiteSpace: 'nowrap' }}>
                     Sist utfylt: {moment(props.krav.etterlevelseLastModified).format('ll')}
                   </Paragraph4>
                 </Block>
               )}
               {props.krav.frist && (
-                <Block width="fit-content" display="flex" alignItems="center" marginRight="31px">
+                <Block width="100%" display="flex" justifyContent="flex-end" >
                   <Paragraph4 $style={{ lineHeight: '19px', textAlign: 'right', marginTop: '0px', marginBottom: '0px', whiteSpace: 'nowrap' }}>
                     Oppfylles senere: {moment(props.krav.frist).format('ll')}
                   </Paragraph4>
                 </Block>
               )}
             </Block>
-            <StatusView
-              status={ferdigUtfylt ? 'Ferdig utfylt' : props.krav.etterlevelseStatus ? 'Under utfylling' : 'Ikke påbegynt'}
-              icon={props.krav.varselMelding ? <img src={informationIcon} alt="" /> : undefined}
-              statusDisplay={{
-                background: ferdigUtfylt ? ettlevColors.green50 : props.krav.etterlevelseStatus ? '#FFECCC' : ettlevColors.white,
-                border: ferdigUtfylt ? ettlevColors.green400 : props.krav.etterlevelseStatus ? '#D47B00' : '#0B483F',
-              }}
-              background={props.krav.varselMelding ? ettlevColors.white : undefined}
-            />
+            <Block display="flex" width="100%" maxWidth="132px" justifyContent="flex-end">
+              <StatusView
+                status={ferdigUtfylt ? 'Ferdig utfylt' : props.krav.etterlevelseStatus ? 'Under utfylling' : 'Ikke påbegynt'}
+                icon={props.krav.varselMelding ? <img src={informationIcon} alt="" /> : undefined}
+                statusDisplay={{
+                  background: ferdigUtfylt ? ettlevColors.green50 : props.krav.etterlevelseStatus ? '#FFECCC' : ettlevColors.white,
+                  border: ferdigUtfylt ? ettlevColors.green400 : props.krav.etterlevelseStatus ? '#D47B00' : '#0B483F',
+                }}
+                background={props.krav.varselMelding ? ettlevColors.white : undefined}
+              />
+            </Block>
           </Block>
         </Block>
       </Block>

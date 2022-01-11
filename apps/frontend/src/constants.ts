@@ -152,6 +152,7 @@ export interface SuksesskriterieBegrunnelse {
   begrunnelse: string
   oppfylt: boolean
   ikkeRelevant: boolean
+  behovForBegrunnelse: boolean
 }
 
 export interface Behandling extends BehandlingEtterlevData {
