@@ -53,7 +53,7 @@ public interface KravRepo extends JpaRepository<GenericStorage, UUID>, KravRepoC
     GenericStorage findKravImage(UUID kravId, UUID fileId);
 
     @Query(value = "update generic_storage set data = jsonb_set(DATA, '{status}', '\"UTGAATT\"', false ) where data -> 'kravNummer' = to_jsonb(?1) and data -> 'kravVersjon' = to_jsonb(?2) and type = 'Krav' ", nativeQuery = true)
-    GenericStorage updateKravToUtgaatt(int kravNummer, int kravVersjon);
+    void updateKravToUtgaatt(int kravNummer, int kravVersjon);
 
     @Modifying
     @Transactional
