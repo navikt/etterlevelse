@@ -16,7 +16,7 @@ import {Spinner} from '../components/common/Spinner'
 import {borderColor, borderRadius, borderStyle, borderWidth, padding} from '../components/common/Style'
 import {useQuery} from '@apollo/client'
 import {Tilbakemeldinger} from '../components/krav/tilbakemelding/Tilbakemelding'
-import {editIcon, pageIcon, plusIcon, sadFolderIcon} from '../components/Images'
+import {editIcon, informationIcon, pageIcon, plusIcon, sadFolderIcon} from '../components/Images'
 import {Label} from '../components/common/PropertyLabel'
 import {CustomizedTabs} from '../components/common/CustomizedTabs'
 import {ettlevColors, maxPageWidth, pageWidth, responsivePaddingSmall, responsiveWidthSmall} from '../util/theme'
@@ -30,8 +30,6 @@ import {PanelLink} from '../components/common/PanelLink'
 import ExpiredAlert from '../components/krav/ExpiredAlert'
 import CustomizedBreadcrumbs, {breadcrumbPaths} from '../components/common/CustomizedBreadcrumbs'
 import {codelist, ListName, TemaCode} from '../services/Codelist'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faExclamationCircle} from '@fortawesome/free-solid-svg-icons'
 import {Helmet} from 'react-helmet'
 
 export const kravNumView = (it: { kravVersjon: number; kravNummer: number }) => `K${it.kravNummer}.${it.kravVersjon}`
@@ -235,7 +233,7 @@ export const KravPage = () => {
                     alignItems={'center'}
                     justifyContent={'center'}
                   >
-                    <FontAwesomeIcon icon={faExclamationCircle} />
+                    <img src={informationIcon} alt=""/>
                     <Paragraph2 marginLeft={theme.sizing.scale500} marginTop="0px" marginBottom="0px">
                       {krav.varselMelding}
                     </Paragraph2>
