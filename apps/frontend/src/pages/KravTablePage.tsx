@@ -18,6 +18,7 @@ import { codelist, ListName } from '../services/Codelist'
 import { kravStatus } from './KravPage'
 import { Layout2 } from '../components/scaffold/Page'
 import RouteLink from '../components/common/RouteLink'
+import { Helmet } from 'react-helmet'
 
 const kravSorting: ColumnCompares<Krav> = {
   kravNummer: (a, b) => a.kravNummer - b.kravNummer,
@@ -58,6 +59,10 @@ export const KravTablePage = () => {
       currentPage="Administere Krav"
       mainHeader={
         <Block maxWidth={maxPageWidth} width="100%" display={'flex'} justifyContent="flex-start">
+          <Helmet>
+            <meta charSet="utf-8" />
+            <title>Administere Krav</title>
+          </Helmet>
           <HeadingXXLarge marginTop="0">Administere Krav</HeadingXXLarge>
         </Block>
       }

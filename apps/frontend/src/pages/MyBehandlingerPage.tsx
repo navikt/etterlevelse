@@ -23,6 +23,7 @@ import { faExternalLinkAlt, faPlus } from '@fortawesome/free-solid-svg-icons'
 import { borderWidth } from '../components/common/Style'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { Helmet } from 'react-helmet'
 
 type Section = 'mine' | 'siste' | 'alle'
 
@@ -36,6 +37,10 @@ const tabMarginBottom = '48px'
 
 export const MyBehandlingerPage = () => (
   <Block width="100%" paddingBottom={'200px'} id="content" overrides={{ Block: { props: { role: 'main' } } }}>
+    <Helmet>
+      <meta charSet="utf-8" />
+      <title>Dokumentere etterlevelse</title>
+    </Helmet>
     <Block width="100%" backgroundColor={ettlevColors.grey50} display={'flex'} justifyContent={'center'}>
       <Block maxWidth={maxPageWidth} width="100%">
         <Block paddingLeft={'100px'} paddingRight={'100px'} paddingTop={theme.sizing.scale800}>
@@ -271,7 +276,6 @@ const Alle = () => {
   return (
     <Block marginBottom={tabMarginBottom}>
       <LabelLarge marginBottom={theme.sizing.scale200}>Søk i alle behandlinger</LabelLarge>
-
       <Block
         maxWidth="600px"
         marginBottom={theme.sizing.scale1000}

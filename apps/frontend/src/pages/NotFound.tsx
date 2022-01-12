@@ -6,11 +6,16 @@ import { Paragraph1 } from 'baseui/typography'
 import { intl } from '../util/intl/intl'
 import notFound from '../resources/notfound.svg'
 import { maxPageWidth } from '../util/theme'
+import { Helmet } from 'react-helmet'
 
 const NotFound = () => {
   const location = useLocation()
   return (
     <Block id="content" overrides={{ Block: { props: { role: 'main' } } }} maxWidth={maxPageWidth} width="100%">
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>404 not found</title>
+      </Helmet>
       <Block paddingLeft="40px" paddingRight="40px" width="calc(100%-80px)" display="flex" justifyContent="center" alignContent="center" marginTop={theme.sizing.scale2400}>
         <Paragraph1>
           {intl.pageNotFound} - {location.pathname}

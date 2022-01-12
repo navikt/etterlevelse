@@ -25,6 +25,7 @@ import { borderRadius } from '../components/common/Style'
 import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 import { sortKraverByPriority } from '../util/sort'
 import { getAllKravPriority } from '../api/KravPriorityApi'
+import { Helmet } from 'react-helmet'
 
 export const TemaPage = () => {
   const { tema } = useParams<{ tema: string }>()
@@ -73,7 +74,10 @@ const TemaSide = ({ tema }: { tema: TemaCode }) => {
       header={
         <>
           <H1 marginTop="0px">{tema.shortName}</H1>
-
+          <Helmet>
+            <meta charSet="utf-8" />
+            <title>{tema.shortName} </title>
+          </Helmet>
           <Block
             minHeight={'125px'}
             maxHeight={expand ? undefined : '125px'}
@@ -175,6 +179,10 @@ const TemaListe = () => {
     >
       {visFilter && <RelevansFilter relevans={relevans} onClickFilter={onClickFilter} kravAntall={kravAntall} />}
       <Block {...sectionProps} marginTop={theme.sizing.scale600}>
+        <Helmet>
+          <meta charSet="utf-8" />
+          <title>Forstå kravene</title>
+        </Helmet>
         {!visFilter && <TemaInfo kravAntall={kravAntall} temaAntall={temaListe.length} />}
         {temaListe.map((tema) => (
           <TemaCard key={tema.code} tema={tema} relevans={relevans} setNum={updateNum} />

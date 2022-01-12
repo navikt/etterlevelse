@@ -12,6 +12,7 @@ import { useDebouncedState } from '../../../util/hooks'
 import { intl } from '../../../util/intl/intl'
 import CustomInput from '../../common/CustomizedInput'
 import { responsivePaddingSmall, responsiveWidthSmall } from '../../../util/theme'
+import { Helmet } from 'react-helmet'
 
 const format = (id: string) => _.trim(id, '"')
 
@@ -53,6 +54,10 @@ export const AuditPage = () => {
 
   return (
     <Block width={responsiveWidthSmall} paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall}>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Versjonering</title>
+      </Helmet>
       <H4>{intl.audit}</H4>
       <Block marginBottom="1rem">
         <AuditLabel label={intl.searchId}>

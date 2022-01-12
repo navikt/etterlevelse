@@ -8,6 +8,7 @@ import { theme } from '../util'
 import { KravFilterTable } from '../components/common/KravFilterTable'
 import { BehandlingFilterTable } from '../components/common/BehandlingFilterTable'
 import { maxPageWidth, responsivePaddingSmall, responsiveWidthSmall } from '../util/theme'
+import { Helmet } from 'react-helmet'
 
 export const RelevansPage = () => {
   const { relevans } = useParams<{ relevans: string }>()
@@ -15,6 +16,10 @@ export const RelevansPage = () => {
   if (!relevans) {
     return (
       <Block id="content" overrides={{ Block: { props: { role: 'main' } } }} maxWidth={maxPageWidth} width="100%">
+        <Helmet>
+          <meta charSet="utf-8" />
+          <title>Velg relevans</title>
+        </Helmet>
         <Block paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall} width={responsiveWidthSmall} display="flex" justifyContent="center">
           <Block>
             <HeadingMedium>Velg relevans</HeadingMedium>
@@ -34,6 +39,10 @@ export const RelevansPage = () => {
   const code = codelist.getCode(ListName.RELEVANS, relevans)
   return (
     <Block id="content" overrides={{ Block: { props: { role: 'main' } } }} maxWidth={maxPageWidth} width="100%">
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>{code?.shortName} </title>
+      </Helmet>
       <Block paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall} width={responsiveWidthSmall} display="flex" justifyContent="center">
         <Block>
           <HeadingMedium>Relevans: {code?.shortName}</HeadingMedium>
