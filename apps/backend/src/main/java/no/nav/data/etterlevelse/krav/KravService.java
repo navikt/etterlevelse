@@ -11,12 +11,14 @@ import no.nav.data.etterlevelse.krav.domain.KravStatus;
 import no.nav.data.etterlevelse.krav.domain.dto.KravFilter;
 import no.nav.data.etterlevelse.krav.dto.KravRequest;
 import no.nav.data.etterlevelse.krav.dto.KravRequest.Fields;
+import no.nav.data.etterlevelse.kravprioritering.domain.KravPrioriteringRepo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -100,6 +102,11 @@ public class KravService extends DomainService<Krav> {
             krav.setKravVersjon(kravRepo.nextKravVersjon(request.getKravNummer()));
         } else if (!request.isUpdate()) {
             krav.setKravNummer(kravRepo.nextKravNummer());
+        }
+
+        if(krav.getKravVersjon() > 1 && krav.getStatus() == KravStatus.AKTIV) {
+            kravRepo.updateKravToUtgaatt(krav.getKravNummer(), krav.getKravVersjon() - 1);
+            kravPrioriteringRepo.transferPriority(krav.getKravVersjon(), krav.getKravNummer(), krav.getKravVersjon() -1);
         }
 
         return storage.save(krav);
