@@ -1,13 +1,13 @@
 import {Block} from 'baseui/block'
 import {LabelSmall, ParagraphMedium, ParagraphSmall} from 'baseui/typography'
 import moment from 'moment'
-import {Tilbakemelding, TilbakemeldingMelding, TilbakemeldingRolle} from '../../../../constants'
-import {theme} from '../../../../util'
-import {ettlevColors} from '../../../../util/theme'
-import {PersonName} from '../../../common/PersonName'
-import {Portrait} from '../../../common/Portrait'
-import EndretInfo from './EndreInfo'
-import MeldingKnapper from './MeldingKnapper'
+import {Tilbakemelding, TilbakemeldingMelding, TilbakemeldingRolle} from '../../../constants'
+import {theme} from '../../../util'
+import {ettlevColors} from '../../../util/theme'
+import {PersonName} from '../../common/PersonName'
+import {Portrait} from '../../common/Portrait'
+import EndretInfo from './edit/EndreInfo'
+import MeldingKnapper from './edit/MeldingKnapper'
 
 export const ResponseMelding = (props: {
   m: TilbakemeldingMelding
@@ -45,7 +45,7 @@ export const ResponseMelding = (props: {
           </Block>
         </Block>
       </Block>
-      <Block display="flex" width="100%" alignItems="center" marginTop="17px" paddingLeft={theme.sizing.scale1200}>
+      <Block display="flex" width="calc(100% - 42px)" alignItems="center" marginTop="17px" paddingLeft={theme.sizing.scale1200}>
         {sisteMelding && <MeldingKnapper melding={m} tilbakemeldingId={tilbakemelding.id} oppdater={oppdater} remove={remove} />}
         <EndretInfo melding={m} />
       </Block>
