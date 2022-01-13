@@ -28,6 +28,8 @@ import { EditKravMultiOptionField } from './Edit/EditKravMultiOptionField'
 import { borderStyle, borderWidth, borderColor, borderRadius } from '../common/Style'
 import { Checkbox } from 'baseui/checkbox'
 import { warningAlert } from '../Images'
+import { user } from '../../services/User'
+import { ModalBody, ModalHeader, Modal as BaseModal } from 'baseui/modal'
 
 type EditKravProps = {
   krav: KravQL
@@ -53,6 +55,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
   const [showErrorModal, setShowErrorModal] = React.useState(false)
   const [errorMessage, setErrorMessage] = React.useState('')
   const [varlselMeldingActive, setVarselMeldingActive] = React.useState<boolean>(krav.varselMelding ? true : false)
+  const [UtgaattKravMessage, setUtgaattKravMessage] = React.useState<boolean>(false)
 
   const submit = async (krav: KravQL) => {
     const regelverk = codelist.getCode(ListName.LOV, krav.regelverk[0]?.lov.code)
@@ -62,6 +65,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
       ...krav,
       underavdeling: underavdeling,
     }
+
     const etterlevelser = await getEtterlevelserByKravNumberKravVersion(krav.kravNummer, krav.kravVersjon)
     if (etterlevelser.totalElements > 0 && krav.status === KravStatus.UTKAST) {
       setErrorMessage('Kravet kan ikke settes til «Utkast» når det er tilknyttet dokumentasjon av etterlevelse')
@@ -109,7 +113,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
         }}
       >
         <Formik onSubmit={submit} initialValues={kravMapToFormVal(krav)} validationSchema={kravSchema()} innerRef={formRef} validateOnBlur={false} validateOnChange={false}>
-          {({ touched, errors, isSubmitting, submitForm, setErrors }) => (
+          {({ values, touched, errors, isSubmitting, submitForm, setErrors }) => (
             <Form>
               <Block
                 backgroundColor={ettlevColors.green800}
@@ -284,14 +288,14 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                       <H2>Egenskaper</H2>
                     </Block>
 
-                    <Block width="100%" maxWidth={maxInputWidth} marginBottom={inputMarginBottom}>
+                    {user.isAdmin() && <Block width="100%" maxWidth={maxInputWidth} marginBottom={inputMarginBottom}>
                       <OptionField
                         label="Status"
                         name="status"
                         options={Object.values(KravStatus).map((id) => ({ id, label: kravStatus(id) }))}
                         tooltip={'Velg status for kravet. Utkast er kun synlig for kraveier selv. Aktiv/utgått er synlig for alle.'}
                       />
-                    </Block>
+                    </Block>}
 
                     <KravVarslingsadresserEdit />
                     {errors.varslingsadresser && <ErrorMessageModal msg={errors.varslingsadresser} fullWidth={true} />}
@@ -350,7 +354,6 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                   position="sticky"
                   bottom={0}
                   display="flex"
-                  justifyContent="flex-end"
                   paddingLeft={responsivePaddingLarge}
                   paddingRight={responsivePaddingLarge}
                   paddingBottom="16px"
@@ -360,13 +363,83 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                     zIndex: 3,
                   }}
                 >
-                  <Button size="compact" kind={'secondary'} type={'button'} onClick={close} marginLeft>
-                    Avbryt
-                  </Button>
+                  <Block display="flex" width="100%">
+                    {krav.status === KravStatus.AKTIV && <Button
+                      size="compact"
+                      kind="secondary"
+                      onClick={() => {
+                        setUtgaattKravMessage(true)
+                      }}
+                      disabled={isSubmitting}
+                      type={'button'}
+                      marginLeft
+                    >
+                      Sett kravet til utgått
+                    </Button>}
 
-                  <Button size="compact" onClick={submitForm} disabled={isSubmitting} type={'button'} marginLeft>
-                    Lagre
-                  </Button>
+                    <BaseModal
+                      overrides={{ Dialog: { style: { ...borderRadius('4px') } } }}
+                      closeable={false}
+                      isOpen={UtgaattKravMessage}
+                      onClose={() => setUtgaattKravMessage(false)}
+                    >
+                      <ModalHeader>Sikker på at du vil sette kravet til utgått?</ModalHeader>
+                      <ModalBody>Denne handligen kan ikke reverseres</ModalBody>
+                      <Block marginRight="24px" marginLeft="24px" marginBottom="34px" marginTop="27px">
+                        <Block display="flex" width="100%">
+                          <Button onClick={() => setUtgaattKravMessage(false)}kind={'secondary'} marginRight>
+                            Nei, avbryt handlingen
+                          </Button>
+                        </Block>
+                        <Block display="flex" width="100%" justifyContent="flex-end">
+                          <Button
+                            onClick={() => {
+                              values.status = KravStatus.UTGAATT
+                              submitForm()
+                              setUtgaattKravMessage(false)
+                            }}
+                            >
+                            Ja, sett til utgått
+                          </Button>
+                        </Block>
+                      </Block>
+                    </BaseModal>
+
+                  </Block>
+                  <Block display="flex" justifyContent="flex-end" width="100%">
+                    <Button size="compact" kind={'secondary'} type={'button'} onClick={close} marginLeft>
+                      Avbryt
+                    </Button>
+
+                    <Button
+                      size="compact"
+                      kind={newVersion ? 'secondary' : 'primary'}
+                      onClick={() => {
+                        if (newVersion) {
+                          values.status = KravStatus.UTKAST
+                        }
+                        submitForm()
+                      }}
+                      disabled={isSubmitting}
+                      type={'button'}
+                      marginLeft
+                    >
+                      {newVersion ? 'Lagre' : 'Publiser endringer'}
+                    </Button>
+
+                    {(newVersion || krav.status === KravStatus.UTKAST) && <Button
+                      size="compact"
+                      onClick={() => {
+                        values.status = KravStatus.AKTIV
+                        submitForm()
+                      }}
+                      disabled={isSubmitting}
+                      type={'button'}
+                      marginLeft
+                    >
+                      Publiser og gjør aktiv
+                    </Button>}
+                  </Block>
                 </Block>
 
                 <Block backgroundColor={ettlevColors.grey50} paddingTop="48px" paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge} paddingBottom="64px">
@@ -378,6 +451,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
           )}
         </Formik>
       </CustomizedModal>
+
     </Block>
   )
 }
