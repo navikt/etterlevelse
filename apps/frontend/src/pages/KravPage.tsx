@@ -181,7 +181,7 @@ export const KravPage = () => {
                   </Block>
                   {krav?.id && ((user.isKraveier() && !hasKravExpired()) || user.isAdmin()) && (
                     <Block flex="1" display={['none', 'none', 'none', 'none', 'flex', 'flex']} justifyContent="flex-end">
-                      <Button
+                     {krav.status === KravStatus.AKTIV && <Button
                         startEnhancer={<img alt="add" src={plusIcon} />}
                         onClick={newVersion}
                         marginLeft
@@ -190,7 +190,7 @@ export const KravPage = () => {
                         $style={{ color: '#F8F8F8', ':hover': { backgroundColor: 'transparent', textDecoration: 'underline 3px' } }}
                       >
                         Ny versjon
-                      </Button>
+                      </Button>}
                       <DeleteItem fun={() => deleteKrav(krav.id)} redirect={'/kraver'} />
                       <Button
                         startEnhancer={<img src={editIcon} alt="edit" />}
