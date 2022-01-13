@@ -365,7 +365,7 @@ const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function; setKra
             <Block display="flex" width="100%" maxWidth="132px" justifyContent="flex-end">
               <StatusView
                 status={ferdigUtfylt ? 'Ferdig utfylt' : props.krav.etterlevelseStatus ? 'Under utfylling' : 'Ikke påbegynt'}
-                icon={props.krav.varselMelding ? <img src={informationIcon} alt="" /> : undefined}
+                icon={props.krav.varselMelding ? <img src={informationIcon} alt="" width="16px" height="16px"/> : undefined}
                 statusDisplay={{
                   background: ferdigUtfylt ? ettlevColors.green50 : props.krav.etterlevelseStatus ? '#FFECCC' : ettlevColors.white,
                   border: ferdigUtfylt ? ettlevColors.green400 : props.krav.etterlevelseStatus ? '#D47B00' : '#0B483F',

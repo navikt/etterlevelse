@@ -126,7 +126,7 @@ export const KravPanels = ({ kravene, loading }: { kravene?: KravQL[] | Krav[]; 
                 statusText={
                   <StatusView
                     status={k.status}
-                    icon={k.varselMelding ? <img src={informationIcon} alt="" /> : undefined}
+                    icon={k.varselMelding ? <img src={informationIcon} alt="" width="16px" height="16px"/> : undefined}
                     background={k.varselMelding ? ettlevColors.white : undefined}
                   />
                 }
