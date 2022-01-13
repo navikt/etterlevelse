@@ -2,7 +2,7 @@ import { codelist, ListName } from '../../services/Codelist'
 import { CustomizedAccordion, CustomizedPanel, CustomPanelDivider } from '../common/CustomizedAccordion'
 import React, { useEffect, useState } from 'react'
 import { getAllKrav } from '../../api/KravApi'
-import { Krav } from '../../constants'
+import { Krav, KravStatus } from '../../constants'
 import { Block } from 'baseui/block'
 import { Label3, Paragraph2, Paragraph4 } from 'baseui/typography'
 import { KravPanelHeader } from '../behandling/KravPanelHeader'
@@ -36,7 +36,7 @@ export const TemaList = () => {
         k.kravPriorityUID = priority.length ? priority[0].id : ''
       })
 
-      setAllKrav(kraver)
+      setAllKrav(kraver.filter((k) => k.status !== KravStatus.UTGAATT))
     })()
   }
 
