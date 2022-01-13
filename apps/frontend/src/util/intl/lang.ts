@@ -28,7 +28,7 @@ export const no: IStrings = {
   user: 'Bruker',
   version: 'Versjon',
   view: 'Vis',
-  settings: 'Instillinger',
+  settings: 'Innstillinger',
   questionAndAnswers: 'Spørsmål og svar',
 }
 

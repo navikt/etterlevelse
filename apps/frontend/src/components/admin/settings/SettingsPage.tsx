@@ -42,7 +42,7 @@ export const SettingsPage = () => {
     <Block width={responsiveWidthSmall} paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall}>
       <Helmet>
         <meta charSet="utf-8" />
-        <title>Instillinger</title>
+        <title>Innstillinger</title>
       </Helmet>
       <H4>{intl.settings}</H4>
       {loading ? (

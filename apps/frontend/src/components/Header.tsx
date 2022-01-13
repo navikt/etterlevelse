@@ -82,7 +82,7 @@ const LoggedInHeader = () => {
       ]
     : []
   const otherPages = [
-    { label: 'Mine instillinger', href: '/instillinger', disabled: true },
+    { label: 'Mine innstillinger', href: '/innstillinger', disabled: true },
     { label: 'Hjelp', href: '/hjelp', disabled: true },
   ]
 
