@@ -13,12 +13,14 @@ export const StatusView = ({
   overrides,
   background,
   icon,
+  marginTop,
 }: {
   status: KravStatus | string
   statusDisplay?: { background: string; border?: string }
   background?: string
   overrides?: CardOverrides
   icon?: React.ReactNode
+  marginTop?: string
 }) => {
   const getStatusDisplay = (background: string, border?: string) => {
     const cardOverrides: CardOverrides = {
@@ -51,7 +53,7 @@ export const StatusView = ({
         <Card overrides={customOverrides}>
           <Block display="flex" justifyContent="center">
             {icon}
-            <Paragraph4 $style={{ color: ettlevColors.navMorkGra, ...marginAll('0px'), whiteSpace: 'nowrap', marginTop: '2px',marginLeft: icon ? '10px' : undefined }}>
+            <Paragraph4 $style={{ color: ettlevColors.navMorkGra, ...marginAll('0px'), whiteSpace: 'nowrap', marginTop: marginTop ? marginTop : '2px',marginLeft: icon ? '10px' : undefined }}>
               {kravStatus(status)}
             </Paragraph4>
           </Block>

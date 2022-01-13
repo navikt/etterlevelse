@@ -65,6 +65,7 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
                     <Block display="flex" flexDirection="column" alignItems="flex-end">
                       <StatusView
                         status={ubesvart ? 'Ubesvart' : 'Besvart'}
+                        marginTop="0px"
                         statusDisplay={
                           ubesvart
                             ? { background: ettlevColors.white, border: ettlevColors.green100 }
