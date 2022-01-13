@@ -17,6 +17,7 @@ import { user } from '../../../services/User'
 import CreateCodeListModal from './ModalCreateCodeList'
 import CodeListTable from './CodeListStyledTable'
 import { ettlevColors, responsivePaddingSmall, responsiveWidthSmall } from '../../../util/theme'
+import { Helmet } from 'react-helmet'
 
 const CodeListPage = () => {
   const params = useParams<{ listname?: string }>()
@@ -65,6 +66,10 @@ const CodeListPage = () => {
 
   return (
     <Block width={responsiveWidthSmall} paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall}>
+          <Helmet>
+            <meta charSet="utf-8" />
+            <title>Administrering av kodeverk{listname?': '+ listname : ''} </title>
+          </Helmet>
       <H4>Administrering av kodeverk</H4>
       {loading ? (
         <StyledSpinnerNext color={ettlevColors.green400} />
