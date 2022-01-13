@@ -376,6 +376,7 @@ export const EditEtterlevelse = ({
                               <Button
                                 kind="secondary"
                                 size="compact"
+                                type="button"
                                 $style={{
                                   ...borderColor('#0B483F'),
                                   ...borderStyle('solid'),
