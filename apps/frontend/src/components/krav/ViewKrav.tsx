@@ -207,11 +207,11 @@ const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVersjoner:
           </Label>
         </Block>
 
-        <Block marginBottom={labelMargin}>
+        {/* <Block marginBottom={labelMargin}>
           <Label title="Status" display={responsiveView} compact>
             {kravStatus(krav.status)}
           </Label>
-        </Block>
+        </Block> */}
 
         {/* {krav.periode?.start && <Label title='Gyldig fom'>{formatDate(krav.periode?.start)}</Label>}
       {krav.periode?.slutt && <Label title='Gyldig tom'>{formatDate(krav.periode?.slutt)}</Label>} */}
