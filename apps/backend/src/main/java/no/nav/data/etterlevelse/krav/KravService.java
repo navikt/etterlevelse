@@ -106,8 +106,8 @@ public class KravService extends DomainService<Krav> {
 
         if(krav.getKravVersjon() > 1 && krav.getStatus() == KravStatus.AKTIV) {
             int olderKravVersjon = krav.getKravVersjon() - 1;
-            updateKravToUtgaatt(krav.getKravNummer(), olderKravVersjon);
-            //kravPrioriteringRepo.transferPriority(krav.getKravVersjon(), krav.getKravNummer(), krav.getKravVersjon() -1);
+            kravRepo.updateKravToUtgaatt(krav.getKravNummer(), olderKravVersjon);
+            kravPrioriteringRepo.transferPriority(krav.getKravVersjon(), krav.getKravNummer(), olderKravVersjon);
         }
 
         return storage.save(krav);
@@ -127,10 +127,6 @@ public class KravService extends DomainService<Krav> {
 
     public KravImage getImage(UUID kravId, UUID fileId) {
         return kravRepo.findKravImage(kravId, fileId).getDomainObjectData(KravImage.class);
-    }
-
-    private void updateKravToUtgaatt(int kravNummer, int kravVersjon) {
-        kravRepo.updateKravToUtgaatt(kravNummer, kravVersjon);
     }
 
     private void validateName(Validator<KravRequest> validator) {
