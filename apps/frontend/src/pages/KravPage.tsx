@@ -173,7 +173,7 @@ export const KravPage = () => {
             <Block paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall} display="flex" flexDirection="column" justifyContent="center">
               <Block display="flex" width="100%" justifyContent="center" marginTop="24px">
                 <Block display="flex" alignItems="center" width="100%">
-                  <Block flex="1" display="flex" justifyContent="flex-start">
+                  <Block width="100%" display="flex" justifyContent="flex-start">
                     {krav?.id && (
                       <CustomizedBreadcrumbs
                         fontColor={ettlevColors.grey25}
@@ -183,7 +183,7 @@ export const KravPage = () => {
                     )}
                   </Block>
                   {krav && (
-                    <Block display="flex" flex="1" justifyContent="flex-end">
+                    <Block display="flex" width="100%" justifyContent="flex-end">
                       <Block $style={{ ...borderWidth('1px'), ...borderColor('#A0A0A0'), ...borderStyle('solid'), ...borderRadius('4px') }}>
                         <Paragraph4 $style={{color: '#CCD9D7', fontSize: '16px', lineHeight: '20px', paddingLeft: '8px', paddingRight:'8px', marginTop: '2px', marginBottom: '2px'}}>Status: {kravStatus(krav.status)}</Paragraph4>
                       </Block>
@@ -198,7 +198,7 @@ export const KravPage = () => {
                           marginLeft
                           size="compact"
                           kind="tertiary"
-                          $style={{ color: '#F8F8F8', ':hover': { backgroundColor: 'transparent', textDecoration: 'underline 3px' } }}
+                          $style={{ color: '#F8F8F8', whiteSpace: 'nowrap', ':hover': { backgroundColor: 'transparent', textDecoration: 'underline 3px', whiteSpace: 'nowrap' } }}
                         >
                           Ny versjon
                         </Button>
