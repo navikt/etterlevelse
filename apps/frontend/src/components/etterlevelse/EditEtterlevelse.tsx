@@ -492,7 +492,6 @@ export const EditEtterlevelse = ({
                     type="button"
                     onClick={() => {
                       if (values.status !== EtterlevelseStatus.IKKE_RELEVANT && values.status !== EtterlevelseStatus.OPPFYLLES_SENERE) {
-                        console.log('TRIIGER')
                         values.status = EtterlevelseStatus.FERDIG_DOKUMENTERT
                         values.suksesskriterieBegrunnelser.forEach((skb, index) => {
                           if (skb.begrunnelse === '' || skb.begrunnelse === undefined) {
