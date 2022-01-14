@@ -1,4 +1,4 @@
-import { Krav, KravQL, KravStatus } from '../../constants'
+import { Krav, KravQL, KravStatus, KravVersjon } from '../../constants'
 import { Form, Formik } from 'formik'
 import { createKrav, kravMapToFormVal, updateKrav } from '../../api/KravApi'
 import { Block } from 'baseui/block'
@@ -39,6 +39,7 @@ type EditKravProps = {
   setIsOpen: Function
   newVersion?: boolean
   newKrav?: boolean
+  alleKravVersjoner: KravVersjon[]
 }
 
 const padding = 212
@@ -49,13 +50,79 @@ const inputMarginBottom = theme.sizing.scale900
 
 export const kravModal = () => document.querySelector('#krav-modal')
 
-export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, newKrav }: EditKravProps) => {
+export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, newKrav, alleKravVersjoner }: EditKravProps) => {
   const [stickyHeader, setStickyHeader] = React.useState(false)
   const [stickyFooterStyle, setStickyFooterStyle] = React.useState(true)
   const [showErrorModal, setShowErrorModal] = React.useState(false)
   const [errorMessage, setErrorMessage] = React.useState('')
   const [varlselMeldingActive, setVarselMeldingActive] = React.useState<boolean>(krav.varselMelding ? true : false)
   const [UtgaattKravMessage, setUtgaattKravMessage] = React.useState<boolean>(false)
+
+  const kravSchema = () =>
+    yup.object({
+      navn: yup.string().required('Du må oppgi et navn til kravet'),
+      suksesskriterier: yup
+        .array()
+        //   .of(yup.object({
+        //   navn: yup.string().required('Du må oppgi et navn til suksesskriteriet')
+        // }))
+        .test({
+          name: 'suksesskriterierCheck',
+          message: errorMessage,
+          test: function (suksesskriterier) {
+            const { parent } = this
+            if (parent.status === KravStatus.AKTIV) {
+              return suksesskriterier && suksesskriterier.length > 0 && suksesskriterier.every((s) => s.navn) ? true : false
+            }
+            return true
+          },
+        }),
+      hensikt: yup.string().test({
+        name: 'hensiktCheck',
+        message: errorMessage,
+        test: function (hensikt) {
+          const { parent } = this
+          if (parent.status === KravStatus.AKTIV) {
+            return hensikt ? true : false
+          }
+          return true
+        },
+      }),
+      regelverk: yup.array().test({
+        name: 'regelverkCheck',
+        message: errorMessage,
+        test: function (regelverk) {
+          const { parent } = this
+          if (parent.status === KravStatus.AKTIV) {
+            return regelverk && regelverk.length > 0 ? true : false
+          }
+          return true
+        },
+      }),
+      varslingsadresser: yup.array().test({
+        name: 'varslingsadresserCheck',
+        message: errorMessage,
+        test: function (varslingsadresser) {
+          const { parent } = this
+          if (parent.status === KravStatus.AKTIV) {
+            return varslingsadresser && varslingsadresser.length > 0 ? true : false
+          }
+          return true
+        },
+      }),
+      status: yup.string().test({
+        name: 'statusCheck',
+        message: 'Det er ikke lov å sette versjonen til utgått. Det eksistere en aktiv versjon som er lavere enn denne versjonen',
+        test: function (status) {
+          const { parent } = this
+          const nyesteAktivKravVersjon = alleKravVersjoner.filter((k) => k.kravStatus === KravStatus.AKTIV)
+          if (status === KravStatus.UTGAATT && parent.kravVersjon > nyesteAktivKravVersjon[0].kravVersjon) {
+            return false
+          }
+          return true
+        }
+      })
+    })
 
   const submit = async (krav: KravQL) => {
     const regelverk = codelist.getCode(ListName.LOV, krav.regelverk[0]?.lov.code)
@@ -354,6 +421,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                   position="sticky"
                   bottom={0}
                   display="flex"
+                  flexDirection="column"
                   paddingLeft={responsivePaddingLarge}
                   paddingRight={responsivePaddingLarge}
                   paddingBottom="16px"
@@ -363,82 +431,86 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                     zIndex: 3,
                   }}
                 >
+                  {errors.status && <Block marginBottom="12px">
+                    <Error fieldName='status' fullWidth />
+                  </Block>}
+
                   <Block display="flex" width="100%">
-                    {krav.status === KravStatus.AKTIV && <Button
-                      size="compact"
-                      kind="secondary"
-                      onClick={() => {
-                        setUtgaattKravMessage(true)
-                      }}
-                      disabled={isSubmitting}
-                      type={'button'}
-                      marginLeft
-                    >
-                      Sett versjonen til utgått
-                    </Button>}
+                    <Block display="flex" width="100%">
+                      {(krav.status === KravStatus.AKTIV && !newVersion) && <Button
+                        size="compact"
+                        kind="secondary"
+                        onClick={() => {
+                          setUtgaattKravMessage(true)
+                        }}
+                        disabled={isSubmitting}
+                        type={'button'}
+                      >
+                        Sett versjonen til utgått
+                      </Button>}
 
-                    <BaseModal
-                      overrides={{ Dialog: { style: { ...borderRadius('4px') } } }}
-                      closeable={false}
-                      isOpen={UtgaattKravMessage}
-                      onClose={() => setUtgaattKravMessage(false)}
-                    >
-                      <ModalHeader>Sikker på at du vil sette versjonen til utgått?</ModalHeader>
-                      <ModalBody>Denne handligen kan ikke reverseres</ModalBody>
-                      <Block marginRight="24px" marginLeft="24px" marginBottom="34px" marginTop="27px">
-                        <Block display="flex" width="100%">
-                          <Button onClick={() => setUtgaattKravMessage(false)}kind={'secondary'} marginRight>
-                            Nei, avbryt handlingen
-                          </Button>
-                        </Block>
-                        <Block display="flex" width="100%" justifyContent="flex-end">
-                          <Button
-                            onClick={() => {
-                              values.status = KravStatus.UTGAATT
-                              submitForm()
-                              setUtgaattKravMessage(false)
-                            }}
+                      <BaseModal
+                        overrides={{ Dialog: { style: { ...borderRadius('4px') } } }}
+                        closeable={false}
+                        isOpen={UtgaattKravMessage}
+                        onClose={() => setUtgaattKravMessage(false)}
+                      >
+                        <ModalHeader>Sikker på at du vil sette versjonen til utgått?</ModalHeader>
+                        <ModalBody>Denne handligen kan ikke reverseres</ModalBody>
+                        <Block marginRight="24px" marginLeft="24px" marginBottom="34px" marginTop="27px" display="flex" justifyContent="center">
+                          <Block display="flex" width="100%">
+                            <Button onClick={() => setUtgaattKravMessage(false)} kind={'secondary'} marginRight>
+                              Nei, avbryt handlingen
+                            </Button>
+                          </Block>
+                          <Block display="flex" width="100%" justifyContent="flex-end">
+                            <Button
+                              onClick={() => {
+                                values.status = KravStatus.UTGAATT
+                                submitForm()
+                                setUtgaattKravMessage(false)
+                              }}
                             >
-                            Ja, sett til utgått
-                          </Button>
+                              Ja, sett til utgått
+                            </Button>
+                          </Block>
                         </Block>
-                      </Block>
-                    </BaseModal>
+                      </BaseModal>
+                    </Block>
+                    <Block display="flex" justifyContent="flex-end" width="100%">
+                      <Button size="compact" kind={'secondary'} type={'button'} onClick={close} marginLeft>
+                        Avbryt
+                      </Button>
 
-                  </Block>
-                  <Block display="flex" justifyContent="flex-end" width="100%">
-                    <Button size="compact" kind={'secondary'} type={'button'} onClick={close} marginLeft>
-                      Avbryt
-                    </Button>
+                      <Button
+                        size="compact"
+                        kind={newVersion ? 'secondary' : 'primary'}
+                        onClick={() => {
+                          if (newVersion) {
+                            values.status = KravStatus.UTKAST
+                          }
+                          submitForm()
+                        }}
+                        disabled={isSubmitting}
+                        type={'button'}
+                        marginLeft
+                      >
+                        {newVersion ? 'Lagre' : 'Publiser endringer'}
+                      </Button>
 
-                    <Button
-                      size="compact"
-                      kind={newVersion ? 'secondary' : 'primary'}
-                      onClick={() => {
-                        if (newVersion) {
-                          values.status = KravStatus.UTKAST
-                        }
-                        submitForm()
-                      }}
-                      disabled={isSubmitting}
-                      type={'button'}
-                      marginLeft
-                    >
-                      {newVersion ? 'Lagre' : 'Publiser endringer'}
-                    </Button>
-
-                    {(newVersion || krav.status === KravStatus.UTKAST) && <Button
-                      size="compact"
-                      onClick={() => {
-                        values.status = KravStatus.AKTIV
-                        submitForm()
-                      }}
-                      disabled={isSubmitting}
-                      type={'button'}
-                      marginLeft
-                    >
-                      Publiser og gjør aktiv
-                    </Button>}
+                      {(newVersion || krav.status === KravStatus.UTKAST) && <Button
+                        size="compact"
+                        onClick={() => {
+                          values.status = KravStatus.AKTIV
+                          submitForm()
+                        }}
+                        disabled={isSubmitting}
+                        type={'button'}
+                        marginLeft
+                      >
+                        Publiser og gjør aktiv
+                      </Button>}
+                    </Block>
                   </Block>
                 </Block>
 
@@ -467,56 +539,3 @@ const onImageUpload = (kravId: string) => async (file: File) => {
 
 const errorMessage = 'Feltet er påkrevd'
 
-const kravSchema = () =>
-  yup.object({
-    navn: yup.string().required('Du må oppgi et navn til kravet'),
-    suksesskriterier: yup
-      .array()
-      //   .of(yup.object({
-      //   navn: yup.string().required('Du må oppgi et navn til suksesskriteriet')
-      // }))
-      .test({
-        name: 'suksesskriterierCheck',
-        message: errorMessage,
-        test: function (suksesskriterier) {
-          const { parent } = this
-          if (parent.status === KravStatus.AKTIV) {
-            return suksesskriterier && suksesskriterier.length > 0 && suksesskriterier.every((s) => s.navn) ? true : false
-          }
-          return true
-        },
-      }),
-    hensikt: yup.string().test({
-      name: 'hensiktCheck',
-      message: errorMessage,
-      test: function (hensikt) {
-        const { parent } = this
-        if (parent.status === KravStatus.AKTIV) {
-          return hensikt ? true : false
-        }
-        return true
-      },
-    }),
-    regelverk: yup.array().test({
-      name: 'regelverkCheck',
-      message: errorMessage,
-      test: function (regelverk) {
-        const { parent } = this
-        if (parent.status === KravStatus.AKTIV) {
-          return regelverk && regelverk.length > 0 ? true : false
-        }
-        return true
-      },
-    }),
-    varslingsadresser: yup.array().test({
-      name: 'varslingsadresserCheck',
-      message: errorMessage,
-      test: function (varslingsadresser) {
-        const { parent } = this
-        if (parent.status === KravStatus.AKTIV) {
-          return varslingsadresser && varslingsadresser.length > 0 ? true : false
-        }
-        return true
-      },
-    }),
-  })

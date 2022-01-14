@@ -170,52 +170,52 @@ export const KravPage = () => {
             </Helmet>
           )}
           <Block maxWidth={maxPageWidth} width="100%">
-            <Block paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall} display="flex" flexDirection="column" justifyContent="center">
-              <Block display="flex" width="100%" justifyContent="center" marginTop="24px">
-                <Block display="flex" alignItems="center" width="100%">
-                  <Block width="100%" display="flex" justifyContent="flex-start">
-                    {krav?.id && (
-                      <CustomizedBreadcrumbs
-                        fontColor={ettlevColors.grey25}
-                        currentPage={kravNumView({ kravNummer: krav?.kravNummer, kravVersjon: krav?.kravVersjon })}
-                        paths={getBreadcrumPaths()}
-                      />
+            <Block paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall} display="flex" flexDirection="column" justifyContent="center" marginBottom="40px">
+              <Block display="flex" alignItems="center" width="100%" justifyContent="center" marginTop="24px">
+                <Block width="100%" display="flex" flexDirection="column">
+                  {krav?.id && (
+                    <CustomizedBreadcrumbs
+                      fontColor={ettlevColors.grey25}
+                      currentPage={kravNumView({ kravNummer: krav?.kravNummer, kravVersjon: krav?.kravVersjon })}
+                      paths={getBreadcrumPaths()}
+                    />
+                  )}
+                  <Block display="flex" width="100%" justifyContent="flex-end" alignItems="center">
+                    {krav && (
+                      <Block display="flex" width="100%" justifyContent="flex-end">
+                        <Block $style={{ ...borderWidth('1px'), ...borderColor('#A0A0A0'), ...borderStyle('solid'), ...borderRadius('4px') }}>
+                          <Paragraph4 $style={{ color: '#CCD9D7', fontSize: '16px', lineHeight: '20px', paddingLeft: '8px', paddingRight: '8px', marginTop: '2px', marginBottom: '2px' }}>Status: {kravStatus(krav.status)}</Paragraph4>
+                        </Block>
+                      </Block>
+                    )}
+                    {krav?.id && ((user.isKraveier() && !hasKravExpired()) || user.isAdmin()) && (
+                      <Block flex="1" display={['none', 'none', 'none', 'none', 'flex', 'flex']} justifyContent="flex-end">
+                        {krav.status === KravStatus.AKTIV && (
+                          <Button
+                            startEnhancer={<img alt="add" src={plusIcon} />}
+                            onClick={newVersion}
+                            marginLeft
+                            size="compact"
+                            kind="tertiary"
+                            $style={{ color: '#F8F8F8', whiteSpace: 'nowrap', ':hover': { backgroundColor: 'transparent', textDecoration: 'underline 3px', whiteSpace: 'nowrap' } }}
+                          >
+                            Ny versjon
+                          </Button>
+                        )}
+                        <DeleteItem fun={() => deleteKrav(krav.id)} redirect={'/kraver'} />
+                        <Button
+                          startEnhancer={<img src={editIcon} alt="edit" />}
+                          size="compact"
+                          $style={{ color: '#F8F8F8', ':hover': { backgroundColor: 'transparent', textDecoration: 'underline 3px' } }}
+                          kind={'tertiary'}
+                          onClick={() => setEdit(!edit)}
+                          marginLeft
+                        >
+                          Rediger
+                        </Button>
+                      </Block>
                     )}
                   </Block>
-                  {krav && (
-                    <Block display="flex" width="100%" justifyContent="flex-end">
-                      <Block $style={{ ...borderWidth('1px'), ...borderColor('#A0A0A0'), ...borderStyle('solid'), ...borderRadius('4px') }}>
-                        <Paragraph4 $style={{color: '#CCD9D7', fontSize: '16px', lineHeight: '20px', paddingLeft: '8px', paddingRight:'8px', marginTop: '2px', marginBottom: '2px'}}>Status: {kravStatus(krav.status)}</Paragraph4>
-                      </Block>
-                    </Block>
-                  )}
-                  {krav?.id && ((user.isKraveier() && !hasKravExpired()) || user.isAdmin()) && (
-                    <Block flex="1" display={['none', 'none', 'none', 'none', 'flex', 'flex']} justifyContent="flex-end">
-                      {krav.status === KravStatus.AKTIV && (
-                        <Button
-                          startEnhancer={<img alt="add" src={plusIcon} />}
-                          onClick={newVersion}
-                          marginLeft
-                          size="compact"
-                          kind="tertiary"
-                          $style={{ color: '#F8F8F8', whiteSpace: 'nowrap', ':hover': { backgroundColor: 'transparent', textDecoration: 'underline 3px', whiteSpace: 'nowrap' } }}
-                        >
-                          Ny versjon
-                        </Button>
-                      )}
-                      <DeleteItem fun={() => deleteKrav(krav.id)} redirect={'/kraver'} />
-                      <Button
-                        startEnhancer={<img src={editIcon} alt="edit" />}
-                        size="compact"
-                        $style={{ color: '#F8F8F8', ':hover': { backgroundColor: 'transparent', textDecoration: 'underline 3px' } }}
-                        kind={'tertiary'}
-                        onClick={() => setEdit(!edit)}
-                        marginLeft
-                      >
-                        Rediger
-                      </Button>
-                    </Block>
-                  )}
                 </Block>
               </Block>
             </Block>
@@ -320,6 +320,7 @@ export const KravPage = () => {
           formRef={formRef}
           newVersion={newVersionWarning}
           newKrav={newKrav}
+          alleKravVersjoner={alleKravVersjoner}
           close={(k) => {
             if (k) {
               if (k.id !== krav.id) {
@@ -392,7 +393,7 @@ const Etterlevelser = ({ loading, etterlevelser: allEtterlevelser }: { loading: 
                         },
                       },
                     }}
-                    // panelIcon={(hover) => <PageIcon hover={hover} />}
+                  // panelIcon={(hover) => <PageIcon hover={hover} />}
                   />
                 </CustomPanelDivider>
               ))}
