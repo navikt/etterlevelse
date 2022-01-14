@@ -374,7 +374,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                       type={'button'}
                       marginLeft
                     >
-                      Sett kravet til utgått
+                      Sett versjonen til utgått
                     </Button>}
 
                     <BaseModal
@@ -383,7 +383,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                       isOpen={UtgaattKravMessage}
                       onClose={() => setUtgaattKravMessage(false)}
                     >
-                      <ModalHeader>Sikker på at du vil sette kravet til utgått?</ModalHeader>
+                      <ModalHeader>Sikker på at du vil sette versjonen til utgått?</ModalHeader>
                       <ModalBody>Denne handligen kan ikke reverseres</ModalBody>
                       <Block marginRight="24px" marginLeft="24px" marginBottom="34px" marginTop="27px">
                         <Block display="flex" width="100%">
