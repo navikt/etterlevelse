@@ -30,7 +30,6 @@ const CustomizedBreadcrumbs = (props: CustomizedProps) => {
     Root: {
       style: {
         color: props.fontColor ? props.fontColor : undefined,
-        marginBottom: theme.sizing.scale1000,
       },
     },
     ListItem: {
