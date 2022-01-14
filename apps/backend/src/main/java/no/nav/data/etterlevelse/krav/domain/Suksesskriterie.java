@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.Value;
 import no.nav.data.etterlevelse.krav.dto.SuksesskriterieRequest;
 import no.nav.data.etterlevelse.krav.dto.SuksesskriterieResponse;
 
@@ -18,8 +19,8 @@ public class Suksesskriterie {
     private int id;
     private String navn;
     private String beskrivelse;
-    @DefaultValue(value="true")
-    private boolean behovForBegrunnelse;
+    @Builder.Default
+    private boolean behovForBegrunnelse = true;
 
 
     public static Suksesskriterie convert(SuksesskriterieRequest request) {
