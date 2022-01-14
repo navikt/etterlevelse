@@ -484,7 +484,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
 
                       <Button
                         size="compact"
-                        kind={newVersion ? 'secondary' : 'primary'}
+                        kind={newVersion || krav.status !== KravStatus.AKTIV ? 'secondary' :'primary'}
                         onClick={() => {
                           if (newVersion) {
                             values.status = KravStatus.UTKAST
@@ -495,7 +495,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                         type={'button'}
                         marginLeft
                       >
-                        {newVersion ? 'Lagre' : 'Publiser endringer'}
+                        {newVersion || krav.status !== KravStatus.AKTIV ? 'Lagre' : 'Publiser endringer'}
                       </Button>
 
                       {(newVersion || krav.status === KravStatus.UTKAST) && <Button
