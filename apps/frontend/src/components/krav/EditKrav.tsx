@@ -446,7 +446,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                         disabled={isSubmitting}
                         type={'button'}
                       >
-                        Sett versjonen til utgått
+                        Sett kravet til utgått
                       </Button>}
 
                       <BaseModal
