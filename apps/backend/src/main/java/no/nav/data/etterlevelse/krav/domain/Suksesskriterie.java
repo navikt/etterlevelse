@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import no.nav.data.etterlevelse.krav.dto.SuksesskriterieRequest;
 import no.nav.data.etterlevelse.krav.dto.SuksesskriterieResponse;
 
+import javax.ws.rs.DefaultValue;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -16,6 +18,7 @@ public class Suksesskriterie {
     private int id;
     private String navn;
     private String beskrivelse;
+    @DefaultValue(value="true")
     private boolean behovForBegrunnelse;
 
 
