@@ -201,7 +201,7 @@ export const KravPage = () => {
                             Ny versjon
                           </Button>
                         )}
-                        { user.isAdmin() || krav.status!==KravStatus.AKTIV && (
+                        { (user.isAdmin() || krav.status!==KravStatus.AKTIV) && (
                         <DeleteItem fun={() => deleteKrav(krav.id)} redirect={'/kraver'} />
                         )}
                         <Button
