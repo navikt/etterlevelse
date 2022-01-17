@@ -31,7 +31,7 @@ export const useNetworkStatus = () => {
   return (
     <Modal closeable={false} isOpen={error} onClose={clear} unstable_ModalBackdropScroll>
       <ModalHeader>Nettverksfeil</ModalHeader>
-      <ModalBody>{error?.toString()}</ModalBody>
+      <ModalBody>{error?.response?.data?.message ? error?.response?.data?.message : error?.toString()}</ModalBody>
       <ModalFooter>
         <ModalButton onClick={clear}>
           <strong>Lukk</strong>

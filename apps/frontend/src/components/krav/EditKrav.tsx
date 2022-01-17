@@ -517,10 +517,7 @@ export const EditKrav = ({krav, close, formRef, isOpen, setIsOpen, newVersion, n
                                         submitForm()
                                         setAktivKravMessage(false)
                                       }
-                                    ).catch((e)=>{
-                                      console.log(e)
-                                    })
-
+                                    )
                                 } else {
                                   values.status = KravStatus.AKTIV
                                   submitForm()
