@@ -141,10 +141,11 @@ export type KravEtterlevelseData = {
   etterleves: boolean
   frist?: string
   varselMelding?: string
+  prioriteringsId?: string
   etterlevelseStatus?: EtterlevelseStatus
   suksesskriterier: Suksesskriterie[]
   gammelVersjon?: boolean
-  etterlevelseLastModified?: string
+  etterlevelseChangeStamp?: ChangeStamp
 }
 
 export interface SuksesskriterieBegrunnelse {
