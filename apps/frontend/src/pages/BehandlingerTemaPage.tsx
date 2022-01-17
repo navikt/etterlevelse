@@ -32,6 +32,9 @@ import CustomizedLink from '../components/common/CustomizedLink'
 import StatusView from '../components/common/StatusTag'
 import moment from 'moment'
 import { Helmet } from 'react-helmet'
+import CustomizedSelect from '../components/common/CustomizedSelect'
+import { Option } from 'baseui/select'
+import { user } from '../services/User'
 
 const responsiveBreakPoints: Responsive<Display> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
 
@@ -40,7 +43,7 @@ const mapEtterlevelseData = (etterlevelse?: Etterlevelse) => ({
   etterleves: !!etterlevelse?.etterleves,
   frist: etterlevelse?.fristForFerdigstillelse,
   etterlevelseStatus: etterlevelse?.status,
-  etterlevelseLastModified: etterlevelse?.changeStamp?.lastModifiedDate,
+  etterlevelseChangeStamp: etterlevelse?.changeStamp,
   gammelVersjon: false,
 })
 
@@ -49,7 +52,7 @@ export const BehandlingerTemaPage = () => {
   const temaData: TemaCode | undefined = codelist.getCode(ListName.TEMA, params.tema)
   const [behandling, setBehandling] = useBehandling(params.id)
   const lover = codelist.getCodesForTema(temaData?.code).map((c) => c.code)
-  const variables = { behandlingId: params.id, lover: lover, gjeldendeKrav: false}
+  const variables = { behandlingId: params.id, lover: lover, gjeldendeKrav: false }
   const { data: rawData, loading } = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
     variables,
     skip: !params.id || !lover.length,
@@ -62,6 +65,12 @@ export const BehandlingerTemaPage = () => {
 
   const [edit, setEdit] = useState<string | undefined>()
   const [kravId, setKravId] = useState<KravId | undefined>()
+  const [isExpanded, setIsExpanded] = useState<boolean>(false)
+  const sortingOptions = [
+    { label: 'Anbefalt rekkefølge', id: 'priority' },
+    { label: 'Sist endret av meg', id: 'lastModified' }
+  ]
+  const [sorting, setSorting] = useState<readonly Option[]>([sortingOptions[0]])
 
   useEffect(() => {
     ; (async () => {
@@ -82,6 +91,7 @@ export const BehandlingerTemaPage = () => {
           navn: krav.navn,
           suksesskriterier: krav.suksesskriterier,
           varselMelding: krav.varselMelding,
+          prioriteringsId: krav.prioriteringsId,
           ...mapEtterlevelseData(etterlevelse),
         }
       })
@@ -191,15 +201,43 @@ export const BehandlingerTemaPage = () => {
     </Block>
   )
 
-  const getKravList = (kravList: KravEtterlevelseData[], emptyMessage: string) => {
+  const getKravList = (kravList: KravEtterlevelseData[], emptyMessage: string, sortingAvailable?: boolean) => {
     if (kravList.length) {
-      return kravList.map((k) => {
-        return (
-          <CustomPanelDivider key={`${k.navn}_${k.kravNummer}_${k.kravVersjon}`}>
-            <KravCard krav={k} setEdit={setEdit} setKravId={setKravId} key={`${k.navn}_${k.kravNummer}_${k.kravVersjon}_card`} />
-          </CustomPanelDivider>
-        )
-      })
+      let sortedKravList
+      if(sortingAvailable && sorting[0].id === sortingOptions[1].id) {
+        sortedKravList = _.cloneDeep(kravList)
+        sortedKravList.sort((a,b) => {
+          if(a.etterlevelseChangeStamp?.lastModifiedBy.split(' ')[0] === user.getIdent() && b.etterlevelseChangeStamp?.lastModifiedBy.split(' ')[0] === user.getIdent()) {
+            return a.etterlevelseChangeStamp.lastModifiedDate < b.etterlevelseChangeStamp.lastModifiedDate ? 1 : -1
+          } else {
+            return 0
+          }
+        })
+      } else {
+        sortedKravList = kravList
+      }
+
+      return (
+        <Block $style={{ backgroundColor: 'white' }}>
+          {isExpanded && sortingAvailable &&
+            <Block marginBottom="12px" paddingLeft="20px" paddingRight="20px" width="100%" maxWidth="290px">
+              <CustomizedSelect
+                clearable={false}
+                options={sortingOptions}
+                value={sorting}
+                onChange={params => setSorting(params.value)}
+              />
+            </Block>
+          }
+          {sortedKravList.map((k) => {
+            return (
+              <CustomPanelDivider key={`${k.navn}_${k.kravNummer}_${k.kravVersjon}`}>
+                <KravCard krav={k} setEdit={setEdit} setKravId={setKravId} key={`${k.navn}_${k.kravNummer}_${k.kravVersjon}_card`} />
+              </CustomPanelDivider>
+            )
+          })}
+        </Block>
+      )
     } else {
       return (
         <CustomPanelDivider>
@@ -234,8 +272,8 @@ export const BehandlingerTemaPage = () => {
     >
       <Block display="flex" width="100%" justifyContent="space-between" flexWrap marginTop="64px" marginBottom="64px">
         <CustomizedAccordion accordion={false}>
-          <CustomizedPanel HeaderActiveBackgroundColor={ettlevColors.green50} title={<KravPanelHeader title={'Skal fylles ut'} kravData={skalUtfyllesKrav} />}>
-            {getKravList(skalUtfyllesKrav, 'Ingen krav som skal fylles ut')}
+          <CustomizedPanel HeaderActiveBackgroundColor={ettlevColors.green50} onClick={() => setIsExpanded(!isExpanded)} title={<KravPanelHeader title={'Skal fylles ut'} kravData={skalUtfyllesKrav} />} >
+            {getKravList(skalUtfyllesKrav, 'Ingen krav som skal fylles ut', true)}
           </CustomizedPanel>
           <CustomizedPanel HeaderActiveBackgroundColor={ettlevColors.green50} title={<KravPanelHeader title={'Ferdig utfylt'} kravData={utfyltKrav} />}>
             {getKravList(utfyltKrav, 'Ingen krav er ferdig utfylt')}
@@ -347,10 +385,10 @@ const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function; setKra
         <Block display="flex" justifyContent="flex-end" flex="1" width="100%">
           <Block width="350px" display="flex" justifyContent="flex-end" marginLeft="32px">
             <Block marginRight="31px">
-              {props.krav.etterlevelseLastModified && (
+              {props.krav.etterlevelseChangeStamp?.lastModifiedDate && (
                 <Block width="100%" display="flex" justifyContent="flex-end">
                   <Paragraph4 $style={{ lineHeight: '19px', textAlign: 'right', marginTop: '0px', marginBottom: '0px', whiteSpace: 'nowrap' }}>
-                    Sist utfylt: {moment(props.krav.etterlevelseLastModified).format('ll')}
+                    Sist utfylt: {moment(props.krav.etterlevelseChangeStamp?.lastModifiedDate).format('ll')}
                   </Paragraph4>
                 </Block>
               )}
@@ -365,7 +403,7 @@ const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function; setKra
             <Block display="flex" width="100%" maxWidth="132px" justifyContent="flex-end">
               <StatusView
                 status={ferdigUtfylt ? 'Ferdig utfylt' : props.krav.etterlevelseStatus ? 'Under utfylling' : 'Ikke påbegynt'}
-                icon={props.krav.varselMelding ? <img src={informationIcon} alt="" width="16px" height="16px"/> : undefined}
+                icon={props.krav.varselMelding ? <img src={informationIcon} alt="" width="16px" height="16px" /> : undefined}
                 statusDisplay={{
                   background: ferdigUtfylt ? ettlevColors.green50 : props.krav.etterlevelseStatus ? '#FFECCC' : ettlevColors.white,
                   border: ferdigUtfylt ? ettlevColors.green400 : props.krav.etterlevelseStatus ? '#D47B00' : '#0B483F',
