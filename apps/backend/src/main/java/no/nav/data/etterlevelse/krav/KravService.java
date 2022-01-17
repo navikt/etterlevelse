@@ -104,9 +104,11 @@ public class KravService extends DomainService<Krav> {
             krav.setKravNummer(kravRepo.nextKravNummer());
         }
 
-        if(krav.getKravVersjon() > 1 && krav.getStatus() == KravStatus.AKTIV) {
-            int olderKravVersjon = krav.getKravVersjon() - 1;
-            kravRepo.updateKravToUtgaatt(krav.getKravNummer(), olderKravVersjon);
+        if(krav.getStatus() == KravStatus.AKTIV) {
+            if(krav.getKravVersjon() > 1) {
+                int olderKravVersjon = krav.getKravVersjon() - 1;
+                kravRepo.updateKravToUtgaatt(krav.getKravNummer(), olderKravVersjon);
+            }
             kravPrioriteringRepo.transferPriority(krav.getKravVersjon(), krav.getKravNummer());
         }
 
