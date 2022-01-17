@@ -6,7 +6,7 @@ import { theme } from '../../util'
 import { Notification } from 'baseui/notification'
 import { Block, Display, Responsive } from 'baseui/block'
 import { H2, Paragraph2 } from 'baseui/typography'
-import { KravPanels, sortKrav } from '../../pages/KravListPageV2'
+import { KravPanels, sortKrav } from '../../pages/KravListPage'
 
 const responsiveDisplay: Responsive<Display> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
 

@@ -11,7 +11,7 @@ import { Notification } from 'baseui/notification'
 import { H2, Label3, LabelSmall, Paragraph2 } from 'baseui/typography'
 import Button from '../common/Button'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
-import { KravPanels, sortKrav } from '../../pages/KravListPageV2'
+import { KravPanels, sortKrav } from '../../pages/KravListPage'
 import { borderColor } from '../common/Style'
 import { kravStatus } from '../../pages/KravPage'
 
