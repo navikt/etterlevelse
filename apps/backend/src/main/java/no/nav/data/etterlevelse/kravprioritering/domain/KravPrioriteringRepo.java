@@ -27,6 +27,6 @@ public interface KravPrioriteringRepo extends JpaRepository<GenericStorage, UUID
 
     @Modifying(clearAutomatically = true)
     @Transactional
-    @Query(value = "update generic_storage set DATA = jsonb_set(DATA, '{kravVersjon}', to_jsonb(?1) , false ) where data -> 'kravNummer' = to_jsonb(?2) and data -> 'kravVersjon' = to_jsonb(?3) and type = 'KravPrioritering'", nativeQuery = true)
-    void transferPriority(int newKravVersjon, int kravNummer, int oldKravVersjon);
+    @Query(value = "update generic_storage set DATA = jsonb_set(DATA, '{kravVersjon}', to_jsonb(?1) , false ) where data -> 'kravNummer' = to_jsonb(?2) and type = 'KravPrioritering'", nativeQuery = true)
+    void transferPriority(int newKravVersjon, int kravNummer);
 }
