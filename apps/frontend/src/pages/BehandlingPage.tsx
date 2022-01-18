@@ -8,7 +8,7 @@ import { FormikProps } from 'formik'
 import { ettlevColors, theme } from '../util/theme'
 import { Layout2 } from '../components/scaffold/Page'
 import { Teams } from '../components/common/TeamName'
-import { arkPennIcon, ellipse80, warningAlert } from '../components/Images'
+import { arkPennIcon, editIcon, ellipse80, pencilFill, warningAlert } from '../components/Images'
 import { Behandling, BehandlingEtterlevData, EtterlevelseStatus, PageResponse } from '../constants'
 import { useQuery } from '@apollo/client'
 import { BehandlingStats, statsQuery } from '../components/behandling/ViewBehandling'
@@ -22,6 +22,10 @@ import { Tag } from 'baseui/tag'
 import { borderColor, borderStyle, borderWidth, marginZero, padding } from '../components/common/Style'
 import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 import { Helmet } from 'react-helmet'
+import { ExternalButton } from '../components/common/Button'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { env } from '../util/env'
+import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons'
 
 const responsiveDisplay: Responsive<Display> = ['block', 'block', 'block', 'block', 'flex', 'flex']
 
@@ -41,10 +45,10 @@ export const BehandlingPage = () => {
   const filterData = (
     unfilteredData:
       | {
-          behandling: PageResponse<{
-            stats: BehandlingStats
-          }>
-        }
+        behandling: PageResponse<{
+          stats: BehandlingStats
+        }>
+      }
       | undefined,
   ) => {
     const StatusListe: any[] = []
@@ -98,59 +102,56 @@ export const BehandlingPage = () => {
     const emptyRelevans = behandling.irrelevansFor.length === options.length ? true : false
 
     return (
-      <Block
-        maxWidth="335px"
-        width="calc(100% - 48px)"
-        $style={{
-          ...borderWidth('2px'),
-          ...borderStyle('solid'),
-          ...borderColor(emptyRelevans ? ettlevColors.navOransje : ettlevColors.green100),
-          ...padding('15px', '24px'),
-        }}
-      >
-        <Block flexDirection="column">
+      <Block display="flex" width="100%" alignItems="center">
+        <Block width="100%" display="flex">
           {emptyRelevans ? (
-            <Block display="flex">
-              <img style={{ marginTop: '-12px', marginRight: theme.sizing.scale400 }} src={warningAlert} alt="" />
-              <H2 $style={{ color: ettlevColors.green600, fontSize: '22px' }} margin="0px" marginBottom="14px">
+            <Block display="flex" alignItems="center">
+              <img height="16px" width="16px" src={warningAlert} alt="" />
+              <Label3 margin="0px" marginBottom="0px" marginRight="5px" marginLeft="5px" $style={{ fontSize: '16px' }}>
                 Ingen egenskaper er oppgitt
-              </H2>
+              </Label3>
             </Block>
           ) : (
-            <H2 margin="0px" marginBottom="14px">
-              Nå vises krav for:
-            </H2>
+            <Label3 margin="0px" marginBottom="0px" marginRight="5px" $style={{ fontSize: '16px' }}>
+              Behandlingen skal etterleve krav for:
+            </Label3>
           )}
 
           {!behandling.irrelevansFor.length ? getRelevans() : getRelevans(behandling.irrelevansFor)}
 
-          <Block marginTop={theme.sizing.scale650}>
-            <Button onClick={() => setEdit(!edit)}>Tilpass egenskaper</Button>
-          </Block>
+        </Block>
+        <Block display="flex" flex="1" justifyContent="flex-end" $style={{ whiteSpace: 'nowrap' }}>
+          <Button onClick={() => setEdit(!edit)} startEnhancer={<img src={editIcon} alt="" />}>Tilpass egenskaper</Button>
         </Block>
       </Block>
     )
   }
 
   const getMainHeader = (behandling: Behandling) => (
-    <Block display={responsiveDisplay} justifyContent="space-between" marginBottom="32px">
+    <Block display={responsiveDisplay} justifyContent="space-between" marginBottom="32px" marginTop="38px">
       <Helmet>
         <meta charSet="utf-8" />
         <title>B{behandling.nummer.toString()} {behandling.navn.toString()}</title>
       </Helmet>
-      <Block>
+      <Block width="100%">
         <Label3 color={ettlevColors.green600}>
           B{behandling.nummer} {behandling.overordnetFormaal.shortName}
         </Label3>
         <H1 marginTop="0" color={ettlevColors.green800}>
           {behandling.navn}
         </H1>
-        <Block display={'flex'} marginTop={'24px'}>
-          <Label3 $style={{ lineHeight: '22px', marginRight: '10px' }}>Team: </Label3>
-          <Teams teams={behandling.teams} link />
+        <Block display="flex" alignItems="center" width="100%">
+          <Block display={'flex'} marginTop={'24px'} width="100%">
+            <Label3 $style={{ lineHeight: '22px', marginRight: '10px' }}>Team: </Label3>
+            <Teams teams={behandling.teams} link />
+          </Block>
+          <Block display="flex" justifyContent="flex-end" $style={{whiteSpace: 'nowrap'}}>
+            <ExternalButton href={`${env.pollyBaseUrl}process/${behandling.id}`} size="mini">
+              Til behandlingskatalogen <FontAwesomeIcon icon={faExternalLinkAlt} />
+            </ExternalButton>
+          </Block>
         </Block>
       </Block>
-      {getRelevansContent(behandling)}
     </Block>
   )
 
@@ -246,6 +247,7 @@ export const BehandlingPage = () => {
         breadcrumbPaths={breadcrumbPaths}
       >
         <Block backgroundColor={ettlevColors.grey50} marginTop={theme.sizing.scale800}></Block>
+        {getRelevansContent(behandling)}
         <Block display="flex" width="100%" justifyContent="space-between" flexWrap marginTop={theme.sizing.scale550}>
           {temaListe.map((tema) => (
             <TemaCardBehandling tema={tema} stats={stats} behandling={behandling} key={`${tema.shortName}_panel`} />
