@@ -354,6 +354,7 @@ const TemaCardBehandling = ({ tema, stats, behandling }: { tema: TemaCode; stats
       headerContent={<HeaderContent kravLength={krav.length} />}
       flexContent
       hideArrow
+      titleColor={ettlevColors.green600}
     >
       <Block marginTop={theme.sizing.scale650} width={'100%'}>
         <Block display="flex" flex={1}>

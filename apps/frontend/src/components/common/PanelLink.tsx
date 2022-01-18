@@ -115,6 +115,7 @@ export type PanelLinkCardOverrides = { Root?: BlockOverrides; Header?: BlockOver
 export const PanelLinkCard = ({
   href,
   tittel,
+  titleColor,
   beskrivelse,
   headerContent,
   footerContent,
@@ -133,6 +134,7 @@ export const PanelLinkCard = ({
 }: {
   href?: string
   tittel: string
+  titleColor?: string
   beskrivelse?: string
   headerContent?: React.ReactNode
   footerContent?: React.ReactNode
@@ -223,7 +225,7 @@ export const PanelLinkCard = ({
             <Block display="flex" alignItems="flex-end" height={headerContent ? '60%' : ''} marginRight={'auto'}>
               <HeadingXLarge
                 marginBottom={['0px', '0px', '0px', '0px', theme.sizing.scale700, theme.sizing.scale700]}
-                $style={{ textDecoration: href && hover ? '3px underline ' : undefined }}
+                $style={{ textDecoration: href && hover ? '3px underline ' : undefined, color: titleColor ? titleColor : undefined }}
               >
                 {tittel}
               </HeadingXLarge>
