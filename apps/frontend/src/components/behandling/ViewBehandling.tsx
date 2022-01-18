@@ -1,33 +1,33 @@
-import { Block } from 'baseui/block'
-import React, { useEffect, useState } from 'react'
-import { theme } from '../../util'
-import { Teams } from '../common/TeamName'
-import { DotTags } from '../common/DotTag'
-import { Code, codelist, ListName } from '../../services/Codelist'
-import { H1, HeadingSmall, Paragraph2 } from 'baseui/typography'
-import RouteLink, { ObjectLink } from '../common/RouteLink'
-import { etterlevelseName, getEtterlevelseStatus } from '../../pages/EtterlevelsePage'
-import { Behandling, Etterlevelse, EtterlevelseStatus, Krav, KravQL, PageResponse } from '../../constants'
-import { Label } from '../common/PropertyLabel'
-import { KravFilters } from '../../api/KravGraphQLApi'
-import { Spinner } from '../common/Spinner'
-import { Cell, Row, Table } from '../common/Table'
+import {Block} from 'baseui/block'
+import React, {useEffect, useState} from 'react'
+import {theme} from '../../util'
+import {Teams} from '../common/TeamName'
+import {DotTags} from '../common/DotTag'
+import {Code, codelist, ListName} from '../../services/Codelist'
+import {H1, HeadingSmall, Paragraph2} from 'baseui/typography'
+import RouteLink, {ObjectLink} from '../common/RouteLink'
+import {etterlevelseName, getEtterlevelseStatus} from '../../pages/EtterlevelsePage'
+import {Behandling, Etterlevelse, EtterlevelseStatus, Krav, KravQL, PageResponse} from '../../constants'
+import {Label} from '../common/PropertyLabel'
+import {KravFilters} from '../../api/KravGraphQLApi'
+import {Spinner} from '../common/Spinner'
+import {Cell, Row, Table} from '../common/Table'
 import moment from 'moment'
 import Button from '../common/Button'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEdit, faEye, faPlus } from '@fortawesome/free-solid-svg-icons'
-import { Modal, ModalBody, ModalHeader } from 'baseui/modal'
-import { EditEtterlevelse } from '../etterlevelse/EditEtterlevelse'
-import { useEtterlevelse } from '../../api/EtterlevelseApi'
-import { getKravByKravNumberAndVersion, kravFullQuery, KravId } from '../../api/KravApi'
-import { kravName, kravNumView } from '../../pages/KravPage'
-import { ViewEtterlevelse } from '../etterlevelse/ViewEtterlevelse'
-import { ObjectType } from '../admin/audit/AuditTypes'
-import { gql, useQuery } from '@apollo/client'
-import { Chart } from '../Chart'
-import { ettlevColors, maxPageWidth } from '../../util/theme'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faEdit, faEye, faPlus} from '@fortawesome/free-solid-svg-icons'
+import {Modal, ModalBody, ModalHeader} from 'baseui/modal'
+import {EditEtterlevelse} from '../etterlevelse/EditEtterlevelse'
+import {useEtterlevelse} from '../../api/EtterlevelseApi'
+import {getKravByKravNumberAndVersion, kravFullQuery, KravId} from '../../api/KravApi'
+import {kravName, kravNumView} from '../../pages/KravPage'
+import {ViewEtterlevelse} from '../etterlevelse/ViewEtterlevelse'
+import {ObjectType} from '../admin/audit/AuditTypes'
+import {gql, useQuery} from '@apollo/client'
+import {Chart} from '../Chart'
+import {ettlevColors, maxPageWidth} from '../../util/theme'
 import CustomizedModal from '../common/CustomizedModal'
-import { crossIcon } from '../Images'
+import {crossIcon} from '../Images'
 
 export const filterForBehandling = (behandling: Behandling): KravFilters => ({ behandlingId: behandling.id })
 
@@ -391,7 +391,62 @@ export const statsQuery = gql`
     }
   }
 `
-
+export const statsQueryRelevans = gql`
+  query getBehandlingStats($relevans: [String!]) {
+    behandling(filter: { relevans: $relevans }) {
+      content {
+        stats {
+          fyltKrav {
+            kravNummer
+            kravVersjon
+            etterlevelser(onlyForBehandling: true) {
+              behandlingId
+              status
+            }
+            regelverk {
+              lov {
+                code
+                shortName
+              }
+            }
+          }
+          ikkeFyltKrav {
+            kravNummer
+            kravVersjon
+            etterlevelser(onlyForBehandling: true) {
+              behandlingId
+              status
+            }
+            regelverk {
+              lov {
+                code
+                shortName
+              }
+            }
+          }
+          lovStats {
+            lovCode {
+              code
+              shortName
+            }
+            fyltKrav {
+              id
+              kravNummer
+              kravVersjon
+              navn
+            }
+            ikkeFyltKrav {
+              id
+              kravNummer
+              kravVersjon
+              navn
+            }
+          }
+        }
+      }
+    }
+  }
+`
 const BehandlingStatsView = ({ behandling }: { behandling: Behandling }) => {
   const { data } = useQuery<{ behandling: PageResponse<{ stats: BehandlingStats }> }>(statsQuery, {
     variables: { behandlingId: behandling.id },
