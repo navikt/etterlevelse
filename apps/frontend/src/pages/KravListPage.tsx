@@ -22,6 +22,7 @@ import { TemaList } from '../components/kravList/TemaList'
 import StatusView from '../components/common/StatusTag'
 import { useHistory, useParams } from 'react-router-dom'
 import React from 'react'
+import { Helmet } from 'react-helmet'
 
 type Section = 'siste' | 'alle' | 'tema'
 
@@ -48,6 +49,10 @@ export const sortKrav = (kravene: KravQL[]) => {
 
 export const KravListPage = () => (
   <Block width="100%" paddingBottom={'200px'} id="content" overrides={{ Block: { props: { role: 'main' } } }}>
+    <Helmet>
+      <meta charSet="utf-8" />
+      <title>Forvalte og opprette krav</title>
+    </Helmet>
     <Block width="100%" backgroundColor={ettlevColors.grey50} display={'flex'} justifyContent={'center'}>
       <Block maxWidth={maxPageWidth} width="100%">
         <Block paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge} paddingTop={theme.sizing.scale800}>
@@ -126,7 +131,7 @@ export const KravPanels = ({ kravene, loading }: { kravene?: KravQL[] | Krav[]; 
                 statusText={
                   <StatusView
                     status={k.status}
-                    icon={k.varselMelding ? <img src={informationIcon} alt="" width="16px" height="16px"/> : undefined}
+                    icon={k.varselMelding ? <img src={informationIcon} alt="" width="16px" height="16px" /> : undefined}
                     background={k.varselMelding ? ettlevColors.white : undefined}
                   />
                 }

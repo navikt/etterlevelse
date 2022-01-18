@@ -18,6 +18,7 @@ import { kravNumView } from './KravPage'
 import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 import { sortKraverByPriority } from '../util/sort'
 import { Krav } from '../constants'
+import { Helmet } from 'react-helmet'
 
 const fontColor = ettlevColors.white
 
@@ -27,6 +28,10 @@ export const LovPage = () => {
   if (!lov) {
     return (
       <Block id="content" overrides={{ Block: { props: { role: 'main' } } }} maxWidth={maxPageWidth} width="100%">
+        <Helmet>
+          <meta charSet="utf-8" />
+          <title>Velg lov</title>
+        </Helmet>
         <Block paddingLeft="40px" paddingRight="40px" width="calc(100%-80px)" display="flex" justifyContent="center">
           <Block>
             <H1>Velg lov</H1>
@@ -86,6 +91,10 @@ const LovSide = ({ lov }: { lov: LovCode }) => {
       headerOverlap={'125px'}
       header={
         <>
+          <Helmet>
+            <meta charSet="utf-8" />
+            <title>{lov.shortName ? lov.shortName : ''} </title>
+          </Helmet>
           <H1 marginTop="0px" color={fontColor}>
             {lov.shortName}
           </H1>

@@ -7,6 +7,7 @@ import RouteLink from '../components/common/RouteLink'
 import { theme } from '../util'
 import { KravFilterTable } from '../components/common/KravFilterTable'
 import { maxPageWidth, responsivePaddingSmall, responsiveWidthSmall } from '../util/theme'
+import { Helmet } from 'react-helmet'
 
 export const UnderavdelingPage = () => {
   const { underavdeling } = useParams<{ underavdeling: string }>()
@@ -14,6 +15,10 @@ export const UnderavdelingPage = () => {
   if (!underavdeling) {
     return (
       <Block maxWidth={maxPageWidth} width="100%">
+        <Helmet>
+          <meta charSet="utf-8" />
+          <title>Velg underavdeling</title>
+        </Helmet>
         <Block paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall} width={responsiveWidthSmall} display="flex" justifyContent="center">
           <Block>
             <HeadingMedium>Velg underavdeling</HeadingMedium>
@@ -33,6 +38,10 @@ export const UnderavdelingPage = () => {
   const code = codelist.getCode(ListName.UNDERAVDELING, underavdeling)
   return (
     <Block id="content" overrides={{ Block: { props: { role: 'main' } } }} maxWidth={maxPageWidth} width="100%">
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>{code?.shortName ? code?.shortName : ''} </title>
+      </Helmet>
       <Block paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall} width={responsiveWidthSmall} display="flex" justifyContent="center">
         <Block>
           <HeadingMedium>Underavdeling: {code?.shortName}</HeadingMedium>

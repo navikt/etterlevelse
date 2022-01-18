@@ -14,6 +14,7 @@ import { ettlevColors, maxPageWidth, pageWidth, responsivePaddingSmall, responsi
 import { chevronLeft } from '../components/Images'
 import { getKravByKravNumberAndVersion } from '../api/KravApi'
 import CustomizedBreadcrumbs, { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
+import { Helmet } from 'react-helmet'
 
 export const etterlevelseName = (etterlevelse: Etterlevelse) => `${kravNumView(etterlevelse)}`
 
@@ -69,6 +70,10 @@ export const EtterlevelsePage = () => {
       {loading && <LoadingSkeleton header="Etterlevelse" />}
       {!loading && (
         <Block backgroundColor={ettlevColors.green800} display="flex" width="100%" justifyContent="center" paddingBottom="32px">
+          <Helmet>
+            <meta charSet="utf-8" />
+            <title>Etterlevelse: {etterlevelse?.kravNummer ? 'K' + etterlevelse.kravNummer.toString() + '.' + etterlevelse.kravVersjon.toString() + ' '+ krav?.navn : ""} </title>
+          </Helmet>
           <Block maxWidth={maxPageWidth} width="100%">
             <Block paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall} display="flex" flexDirection="column" justifyContent="center">
               <Block display="flex" width="100%" justifyContent="center" marginTop="24px">

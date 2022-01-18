@@ -9,6 +9,7 @@ import { etterlevelseName } from './EtterlevelsePage'
 import { Spinner } from '../components/common/Spinner'
 import { user } from '../services/User'
 import { maxPageWidth, pageWidth, responsivePaddingSmall, responsiveWidthSmall } from '../util/theme'
+import { Helmet } from 'react-helmet'
 
 export const EtterlevelseListPage = () => {
   const [etterlevelse, prev, next, loading] = useEtterlevelsePage(20)
@@ -18,7 +19,11 @@ export const EtterlevelseListPage = () => {
       <Block paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall} width={responsiveWidthSmall} display="flex" justifyContent="center">
         <Block minWidth={pageWidth}>
           <Block display="flex" justifyContent="space-between" alignItems="center">
-            <H2>Etterlevelse</H2>
+          <Helmet>
+            <meta charSet="utf-8" />
+            <title>Dokumentasjons liste for etterlevelse</title>
+          </Helmet>
+            <H2>Dokumentasjons liste for etterlevelse</H2>
 
             <Block>
               {user.canWrite() && (

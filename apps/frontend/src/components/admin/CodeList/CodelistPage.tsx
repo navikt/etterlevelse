@@ -68,7 +68,7 @@ const CodeListPage = () => {
     <Block width={responsiveWidthSmall} paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall}>
           <Helmet>
             <meta charSet="utf-8" />
-            <title>Administrering av kodeverk{listname?': '+ listname : ''} </title>
+            <title>{listname? listname : ''} </title>
           </Helmet>
       <H4>Administrering av kodeverk</H4>
       {loading ? (
