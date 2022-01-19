@@ -65,6 +65,7 @@ public class BehandlingFieldResolver implements GraphQLResolver<Behandling> {
 
         var fylt = filter(krav, k -> etterlevelser.stream().anyMatch(e -> e.isEtterleves() && e.kravId().equals(k.kravId())));
         var ikkeFylt = filter(krav, k -> !fylt.contains(k));
+
         var irrelevantFylt = filter(irrelevantKrav, k -> etterlevelser.stream().anyMatch(e -> e.isEtterleves() && e.kravId().equals(k.kravId())));
         var irrelevantIkkeFylt = filter(irrelevantKrav, k -> !irrelevantFylt.contains(k));
         var irrelevant = Stream.concat(irrelevantFylt.stream(), irrelevantIkkeFylt.stream()).collect(Collectors.toList());

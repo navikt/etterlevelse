@@ -1,6 +1,7 @@
 package no.nav.data.etterlevelse.krav.domain;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.security.SecurityUtils;
 import no.nav.data.common.storage.domain.GenericStorage;
 import no.nav.data.common.storage.domain.GenericStorageRepository;
@@ -23,6 +24,7 @@ import static no.nav.data.common.utils.StreamUtils.convert;
 import static no.nav.data.common.utils.StreamUtils.exists;
 
 @Repository
+@Slf4j
 @RequiredArgsConstructor
 public class KravRepoImpl implements KravRepoCustom {
 
@@ -138,6 +140,7 @@ public class KravRepoImpl implements KravRepoCustom {
 
         List<GenericStorage> kravList = fetch(jdbcTemplate.queryForList(query, par));
         List<GenericStorage> filtered = StreamUtils.filter(kravList, krav -> filterStateAndStatus(kravList, krav, filter, kravIdSafeList));
+        log.warn(query);
         sort(filter, filtered);
         return filtered;
     }
