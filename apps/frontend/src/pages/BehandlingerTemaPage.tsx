@@ -203,14 +203,13 @@ export const BehandlingerTemaPage = () => {
 
   const getKravList = (kravList: KravEtterlevelseData[], emptyMessage: string, sortingAvailable?: boolean) => {
     if (kravList.length) {
-      let sortedKravList
+      let sortedKravList = _.cloneDeep(kravList)
       if (sortingAvailable && sorting[0].id === sortingOptions[1].id) {
-        sortedKravList = _.cloneDeep(kravList)
         sortedKravList.sort((a, b) => {
           if (a.etterlevelseChangeStamp?.lastModifiedBy.split(' ')[0] === user.getIdent() && b.etterlevelseChangeStamp?.lastModifiedBy.split(' ')[0] === user.getIdent()) {
             return a.etterlevelseChangeStamp.lastModifiedDate < b.etterlevelseChangeStamp.lastModifiedDate ? 1 : -1
           } else {
-            return 0
+            return -1
           }
         })
       } else {
