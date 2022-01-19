@@ -21,7 +21,6 @@ public class BehandlingFilter {
     private List<String> relevans;
     private Integer sistRedigert;
     private Boolean mineBehandlinger;
-    private Boolean irrelevans;
     private List<String> teams;
     private String sok;
 
@@ -33,7 +32,6 @@ public class BehandlingFilter {
                 && getTeams().isEmpty()
                 && sistRedigert == null
                 && mineBehandlinger == null
-                && irrelevans == null
                 ;
     }
 
@@ -53,8 +51,6 @@ public class BehandlingFilter {
     public boolean isGetMineBehandlinger() {
         return Boolean.TRUE.equals(getMineBehandlinger());
     }
-
-    public boolean isIrrelevans() {return Boolean.TRUE.equals(getIrrelevans()); }
 
     public boolean isSok() {
         return !StringUtils.isBlank(sok);

@@ -35,6 +35,5 @@ input BehandlingFilter {
     sistRedigert: NonNegativeInt
     teams: [String!]
     mineBehandlinger: Boolean
-    irrelevans: Boolean
     sok: String
 }
