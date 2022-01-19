@@ -66,10 +66,10 @@ const CodeListPage = () => {
 
   return (
     <Block width={responsiveWidthSmall} paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall}>
-          <Helmet>
-            <meta charSet="utf-8" />
-            <title>{listname? listname : ''} </title>
-          </Helmet>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>{listname ? listname : ''} </title>
+      </Helmet>
       <H4>Administrering av kodeverk</H4>
       {loading ? (
         <StyledSpinnerNext color={ettlevColors.green400} />

@@ -19,10 +19,10 @@ export const EtterlevelseListPage = () => {
       <Block paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall} width={responsiveWidthSmall} display="flex" justifyContent="center">
         <Block minWidth={pageWidth}>
           <Block display="flex" justifyContent="space-between" alignItems="center">
-          <Helmet>
-            <meta charSet="utf-8" />
-            <title>Dokumentasjons liste for etterlevelse</title>
-          </Helmet>
+            <Helmet>
+              <meta charSet="utf-8" />
+              <title>Dokumentasjons liste for etterlevelse</title>
+            </Helmet>
             <H2>Dokumentasjons liste for etterlevelse</H2>
 
             <Block>

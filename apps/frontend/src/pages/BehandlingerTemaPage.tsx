@@ -68,12 +68,12 @@ export const BehandlingerTemaPage = () => {
   const [isExpanded, setIsExpanded] = useState<boolean>(false)
   const sortingOptions = [
     { label: 'Anbefalt rekkefølge', id: 'priority' },
-    { label: 'Sist endret av meg', id: 'lastModified' }
+    { label: 'Sist endret av meg', id: 'lastModified' },
   ]
   const [sorting, setSorting] = useState<readonly Option[]>([sortingOptions[0]])
 
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       const allKravPriority = await getAllKravPriority()
       const kraver = _.cloneDeep(rawData?.krav.content) || []
 
@@ -131,7 +131,12 @@ export const BehandlingerTemaPage = () => {
     let antallUtfylt = 0
 
     kravData.forEach((k) => {
-      if ((k.etterlevelseStatus === EtterlevelseStatus.FERDIG_DOKUMENTERT || k.etterlevelseStatus === EtterlevelseStatus.OPPFYLLES_SENERE || k.etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT) && k.gammelVersjon !== true) {
+      if (
+        (k.etterlevelseStatus === EtterlevelseStatus.FERDIG_DOKUMENTERT ||
+          k.etterlevelseStatus === EtterlevelseStatus.OPPFYLLES_SENERE ||
+          k.etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT) &&
+        k.gammelVersjon !== true
+      ) {
         antallUtfylt += 1
       }
     })
@@ -222,16 +227,11 @@ export const BehandlingerTemaPage = () => {
 
       return (
         <Block $style={{ backgroundColor: 'white' }}>
-          {isExpanded && sortingAvailable &&
+          {isExpanded && sortingAvailable && (
             <Block marginBottom="12px" paddingLeft="20px" paddingRight="20px" width="100%" maxWidth="290px">
-              <CustomizedSelect
-                clearable={false}
-                options={sortingOptions}
-                value={sorting}
-                onChange={params => setSorting(params.value)}
-              />
+              <CustomizedSelect clearable={false} options={sortingOptions} value={sorting} onChange={(params) => setSorting(params.value)} />
             </Block>
-          }
+          )}
           {sortedKravList.map((k) => {
             return (
               <CustomPanelDivider key={`${k.navn}_${k.kravNummer}_${k.kravVersjon}`}>
@@ -275,8 +275,11 @@ export const BehandlingerTemaPage = () => {
     >
       <Block display="flex" width="100%" justifyContent="space-between" flexWrap marginTop="64px" marginBottom="64px">
         <CustomizedAccordion accordion={false}>
-          <CustomizedPanel HeaderActiveBackgroundColor={ettlevColors.green50} onClick={() => setIsExpanded(!isExpanded)}
-            title={<KravPanelHeader title={'Skal fylles ut'} kravData={skalUtfyllesKrav} />}>
+          <CustomizedPanel
+            HeaderActiveBackgroundColor={ettlevColors.green50}
+            onClick={() => setIsExpanded(!isExpanded)}
+            title={<KravPanelHeader title={'Skal fylles ut'} kravData={skalUtfyllesKrav} />}
+          >
             {getKravList(skalUtfyllesKrav, 'Ingen krav som skal fylles ut', true)}
           </CustomizedPanel>
           <CustomizedPanel HeaderActiveBackgroundColor={ettlevColors.green50} title={<KravPanelHeader title={'Ferdig utfylt'} kravData={utfyltKrav} />}>
@@ -434,7 +437,7 @@ const KravView = (props: {
   const [varsleMelding, setVarsleMelding] = useState('')
 
   useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       if (props.kravId.kravNummer && props.kravId.kravVersjon) {
         const krav = await getKravByKravNumberAndVersion(props.kravId.kravNummer, props.kravId.kravVersjon)
         if (krav) {

@@ -86,7 +86,13 @@ const KriterieBegrunnelse = ({
   const [ikkerelevant, setIkkeRelevant] = React.useState(suksesskriterieBegrunnelse.ikkeRelevant || false)
 
   React.useEffect(() => {
-    update({ suksesskriterieId: suksesskriterie.id, begrunnelse: begrunnelse, oppfylt: oppfylt, ikkeRelevant: ikkerelevant, behovForBegrunnelse: suksesskriterie.behovForBegrunnelse })
+    update({
+      suksesskriterieId: suksesskriterie.id,
+      begrunnelse: begrunnelse,
+      oppfylt: oppfylt,
+      ikkeRelevant: ikkerelevant,
+      behovForBegrunnelse: suksesskriterie.behovForBegrunnelse,
+    })
   }, [begrunnelse, oppfylt, ikkerelevant])
 
   const getBorderColor = () => {

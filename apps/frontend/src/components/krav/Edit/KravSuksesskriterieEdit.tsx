@@ -214,11 +214,13 @@ const Kriterie = ({
               }}
               name="behovForBegrunnelse"
               align={ALIGN.horizontal}
-              overrides={{Root: {
-                style: {
-                  marginRight: '34px'
-                }
-              }}}
+              overrides={{
+                Root: {
+                  style: {
+                    marginRight: '34px',
+                  },
+                },
+              }}
             >
               <Radio value="true">Bekreftelse med tekstlig begrunnelse</Radio>
               <Radio value="false">Kun bekreftelse </Radio>

@@ -57,7 +57,8 @@ const etterlevelseSchema = () => {
             if (
               (options.context?.status === EtterlevelseStatus.FERDIG || options.context?.status === EtterlevelseStatus.FERDIG_DOKUMENTERT) &&
               (parent.oppfylt || parent.ikkeRelevant) &&
-              (begrunnelse === '' || begrunnelse === undefined) && parent.behovForBegrunnelse
+              (begrunnelse === '' || begrunnelse === undefined) &&
+              parent.behovForBegrunnelse
             ) {
               return false
             } else {
@@ -136,14 +137,14 @@ export const EditEtterlevelse = ({
       suksesskriterieBegrunnelser:
         etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT
           ? [
-            ...etterlevelse.suksesskriterieBegrunnelser.map((s) => {
-              return {
-                ...s,
-                oppfylt: false,
-                ikkeRelevant: false,
-              }
-            }),
-          ]
+              ...etterlevelse.suksesskriterieBegrunnelser.map((s) => {
+                return {
+                  ...s,
+                  oppfylt: false,
+                  ikkeRelevant: false,
+                }
+              }),
+            ]
           : [...etterlevelse.suksesskriterieBegrunnelser],
     }
 
@@ -196,7 +197,7 @@ export const EditEtterlevelse = ({
                       <Block
                         width="fit-content"
                         display="flex"
-                        backgroundColor={"#E5F0F7"}
+                        backgroundColor={'#E5F0F7'}
                         $style={{
                           ...padding('12px', '16px'),
                           ...borderColor('#005B82'),
@@ -261,7 +262,7 @@ export const EditEtterlevelse = ({
                                           lineHeight: '48px',
                                           fontSize: '18px',
                                           marginTop: '0px',
-                                          marginBottom: '0px'
+                                          marginBottom: '0px',
                                         },
                                       },
                                     }}

@@ -1,36 +1,36 @@
-import {Block} from 'baseui/block'
-import {H1, H2, HeadingXLarge, Paragraph2, Paragraph4} from 'baseui/typography'
-import {useParams} from 'react-router-dom'
-import {deleteKrav, getKravByKravNummer, KravIdParams, kravMapToFormVal} from '../api/KravApi'
-import React, {useEffect, useRef, useState} from 'react'
-import {EtterlevelseQL, EtterlevelseStatus, ExternalCode, Krav, KravId, KravQL, KravStatus, KravVersjon} from '../constants'
+import { Block } from 'baseui/block'
+import { H1, H2, HeadingXLarge, Paragraph2, Paragraph4 } from 'baseui/typography'
+import { useParams } from 'react-router-dom'
+import { deleteKrav, getKravByKravNummer, KravIdParams, kravMapToFormVal } from '../api/KravApi'
+import React, { useEffect, useRef, useState } from 'react'
+import { EtterlevelseQL, EtterlevelseStatus, ExternalCode, Krav, KravId, KravQL, KravStatus, KravVersjon } from '../constants'
 import Button from '../components/common/Button'
-import {ViewKrav} from '../components/krav/ViewKrav'
-import {EditKrav} from '../components/krav/EditKrav'
-import {LoadingSkeleton} from '../components/common/LoadingSkeleton'
-import {user} from '../services/User'
-import {theme} from '../util'
-import {FormikProps} from 'formik'
-import {DeleteItem} from '../components/DeleteItem'
-import {Spinner} from '../components/common/Spinner'
-import {borderColor, borderRadius, borderStyle, borderWidth, padding} from '../components/common/Style'
-import {useQuery} from '@apollo/client'
-import {Tilbakemeldinger} from '../components/krav/tilbakemelding/Tilbakemelding'
-import {editIcon, informationIcon, pageIcon, plusIcon, sadFolderIcon} from '../components/Images'
-import {Label} from '../components/common/PropertyLabel'
-import {CustomizedTabs} from '../components/common/CustomizedTabs'
-import {ettlevColors, maxPageWidth, pageWidth, responsivePaddingSmall, responsiveWidthSmall} from '../util/theme'
-import {CustomizedAccordion, CustomizedPanel, CustomPanelDivider} from '../components/common/CustomizedAccordion'
+import { ViewKrav } from '../components/krav/ViewKrav'
+import { EditKrav } from '../components/krav/EditKrav'
+import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
+import { user } from '../services/User'
+import { theme } from '../util'
+import { FormikProps } from 'formik'
+import { DeleteItem } from '../components/DeleteItem'
+import { Spinner } from '../components/common/Spinner'
+import { borderColor, borderRadius, borderStyle, borderWidth, padding } from '../components/common/Style'
+import { useQuery } from '@apollo/client'
+import { Tilbakemeldinger } from '../components/krav/tilbakemelding/Tilbakemelding'
+import { editIcon, informationIcon, pageIcon, plusIcon, sadFolderIcon } from '../components/Images'
+import { Label } from '../components/common/PropertyLabel'
+import { CustomizedTabs } from '../components/common/CustomizedTabs'
+import { ettlevColors, maxPageWidth, pageWidth, responsivePaddingSmall, responsiveWidthSmall } from '../util/theme'
+import { CustomizedAccordion, CustomizedPanel, CustomPanelDivider } from '../components/common/CustomizedAccordion'
 import * as _ from 'lodash'
 import moment from 'moment'
-import {useLocationState, useQueryParam} from '../util/hooks'
-import {InfoBlock} from '../components/common/InfoBlock'
-import {gql} from '@apollo/client/core'
-import {PanelLink} from '../components/common/PanelLink'
+import { useLocationState, useQueryParam } from '../util/hooks'
+import { InfoBlock } from '../components/common/InfoBlock'
+import { gql } from '@apollo/client/core'
+import { PanelLink } from '../components/common/PanelLink'
 import ExpiredAlert from '../components/krav/ExpiredAlert'
-import CustomizedBreadcrumbs, {breadcrumbPaths} from '../components/common/CustomizedBreadcrumbs'
-import {codelist, ListName, TemaCode} from '../services/Codelist'
-import {Helmet} from 'react-helmet'
+import CustomizedBreadcrumbs, { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
+import { codelist, ListName, TemaCode } from '../services/Codelist'
+import { Helmet } from 'react-helmet'
 
 export const kravNumView = (it: { kravVersjon: number; kravNummer: number }) => `K${it.kravNummer}.${it.kravVersjon}`
 export const kravName = (krav: Krav) => `${kravNumView(krav)} ${krav.navn}`
@@ -116,7 +116,7 @@ export const KravPage = () => {
   }, [params.id])
 
   const hasKravExpired = () => {
-    if(krav && krav.status === KravStatus.UTGAATT && alleKravVersjoner.length === 1){
+    if (krav && krav.status === KravStatus.UTGAATT && alleKravVersjoner.length === 1) {
       return true
     } else {
       return krav ? krav.kravVersjon < alleKravVersjoner[0].kravVersjon : false
@@ -187,7 +187,11 @@ export const KravPage = () => {
                     {krav && (
                       <Block display="flex" width="100%" justifyContent="flex-end">
                         <Block $style={{ ...borderWidth('1px'), ...borderColor('#A0A0A0'), ...borderStyle('solid'), ...borderRadius('4px') }}>
-                          <Paragraph4 $style={{ color: '#CCD9D7', fontSize: '16px', lineHeight: '20px', paddingLeft: '8px', paddingRight: '8px', marginTop: '2px', marginBottom: '2px' }}>Status: {kravStatus(krav.status)}</Paragraph4>
+                          <Paragraph4
+                            $style={{ color: '#CCD9D7', fontSize: '16px', lineHeight: '20px', paddingLeft: '8px', paddingRight: '8px', marginTop: '2px', marginBottom: '2px' }}
+                          >
+                            Status: {kravStatus(krav.status)}
+                          </Paragraph4>
                         </Block>
                       </Block>
                     )}
@@ -205,9 +209,7 @@ export const KravPage = () => {
                             Ny versjon
                           </Button>
                         )}
-                        { (user.isAdmin() || krav.status!==KravStatus.AKTIV) && (
-                        <DeleteItem fun={() => deleteKrav(krav.id)} redirect={'/kraver'} />
-                        )}
+                        {(user.isAdmin() || krav.status !== KravStatus.AKTIV) && <DeleteItem fun={() => deleteKrav(krav.id)} redirect={'/kraver'} />}
                         <Button
                           startEnhancer={<img src={editIcon} alt="edit" />}
                           size="compact"
@@ -398,7 +400,7 @@ const Etterlevelser = ({ loading, etterlevelser: allEtterlevelser }: { loading: 
                         },
                       },
                     }}
-                  // panelIcon={(hover) => <PageIcon hover={hover} />}
+                    // panelIcon={(hover) => <PageIcon hover={hover} />}
                   />
                 </CustomPanelDivider>
               ))}

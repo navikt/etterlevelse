@@ -110,7 +110,12 @@ export const AuditRecentTable = (props: { show: boolean }) => {
                         <FontAwesomeIcon icon={faBinoculars} />
                       </Button>
                     </ObjectLink>
-                    <StatefulPopover accessibilityType="tooltip" overrides={{ Body: { style: { width: '80%' } } }} placement={PLACEMENT.leftBottom} content={<ReactJson src={audit.data} name={null} />}>
+                    <StatefulPopover
+                      accessibilityType="tooltip"
+                      overrides={{ Body: { style: { width: '80%' } } }}
+                      placement={PLACEMENT.leftBottom}
+                      content={<ReactJson src={audit.data} name={null} />}
+                    >
                       <Button size="compact" shape="round" kind="tertiary">
                         <FontAwesomeIcon icon={faCode} />
                       </Button>

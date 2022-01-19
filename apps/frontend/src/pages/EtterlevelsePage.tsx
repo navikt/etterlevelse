@@ -72,7 +72,7 @@ export const EtterlevelsePage = () => {
         <Block backgroundColor={ettlevColors.green800} display="flex" width="100%" justifyContent="center" paddingBottom="32px">
           <Helmet>
             <meta charSet="utf-8" />
-            <title>Etterlevelse: {etterlevelse?.kravNummer ? 'K' + etterlevelse.kravNummer.toString() + '.' + etterlevelse.kravVersjon.toString() + ' '+ krav?.navn : ""} </title>
+            <title>Etterlevelse: {etterlevelse?.kravNummer ? 'K' + etterlevelse.kravNummer.toString() + '.' + etterlevelse.kravVersjon.toString() + ' ' + krav?.navn : ''} </title>
           </Helmet>
           <Block maxWidth={maxPageWidth} width="100%">
             <Block paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall} display="flex" flexDirection="column" justifyContent="center">

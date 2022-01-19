@@ -1,11 +1,11 @@
-import {Block} from 'baseui/block'
-import {LabelSmall, ParagraphMedium, ParagraphSmall} from 'baseui/typography'
+import { Block } from 'baseui/block'
+import { LabelSmall, ParagraphMedium, ParagraphSmall } from 'baseui/typography'
 import moment from 'moment'
-import {Tilbakemelding, TilbakemeldingMelding, TilbakemeldingRolle} from '../../../constants'
-import {theme} from '../../../util'
-import {ettlevColors} from '../../../util/theme'
-import {PersonName} from '../../common/PersonName'
-import {Portrait} from '../../common/Portrait'
+import { Tilbakemelding, TilbakemeldingMelding, TilbakemeldingRolle } from '../../../constants'
+import { theme } from '../../../util'
+import { ettlevColors } from '../../../util/theme'
+import { PersonName } from '../../common/PersonName'
+import { Portrait } from '../../common/Portrait'
 import EndretInfo from './edit/EndreInfo'
 import MeldingKnapper from './edit/MeldingKnapper'
 
@@ -20,13 +20,7 @@ export const ResponseMelding = (props: {
   const sisteMelding = m.meldingNr === tilbakemelding.meldinger[tilbakemelding.meldinger.length - 1].meldingNr
 
   return (
-    <Block
-      display={'flex'}
-      flexDirection={'column'}
-      marginBottom={theme.sizing.scale600}
-      backgroundColor={melder ? 'inherit' : ettlevColors.grey50}
-      padding={"8px"}
-    >
+    <Block display={'flex'} flexDirection={'column'} marginBottom={theme.sizing.scale600} backgroundColor={melder ? 'inherit' : ettlevColors.grey50} padding={'8px'}>
       <Block display="flex" width="100%">
         <Portrait ident={m.fraIdent} />
         <Block display="flex" flexDirection="column" marginLeft={theme.sizing.scale400} width="100%">
