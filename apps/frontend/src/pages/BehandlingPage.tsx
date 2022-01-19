@@ -11,7 +11,7 @@ import {Teams} from '../components/common/TeamName'
 import {arkPennIcon, editIcon, ellipse80, warningAlert} from '../components/Images'
 import {Behandling, BehandlingEtterlevData, EtterlevelseStatus, PageResponse} from '../constants'
 import {useQuery} from '@apollo/client'
-import {BehandlingStats, statsQuery, statsQueryRelevans} from '../components/behandling/ViewBehandling'
+import {BehandlingStats, statsQuery} from '../components/behandling/ViewBehandling'
 import {Code, codelist, ListName, TemaCode} from '../services/Codelist'
 import {PanelLinkCard, PanelLinkCardOverrides} from '../components/common/PanelLink'
 import {cardWidth} from './TemaPage'
@@ -40,17 +40,10 @@ export const BehandlingPage = () => {
     skip: !behandling?.id,
   })
 
-  const {data: irelevanteData, refetch: refetchIrelevanteData} = useQuery<{ behandling: PageResponse<{ stats: BehandlingStats }> }>(statsQueryRelevans, {
-    variables: {relevans: behandling?.irrelevansFor.map(b => b.code)},
-    skip: !behandling?.id,
-  })
-
-  console.log(irelevanteData)
-  console.log(behandling?.irrelevansFor)
-
   const [edit, setEdit] = useState(false)
 
-  const [stats, setStats] = useState<any[]>([])
+  const [relevanteStats, setRelevanteStats] = useState<any[]>([])
+  const [irrelevanteStats, setIrrelevanteStats] = useState<any[]>([])
 
   const filterData = (
     unfilteredData:
@@ -61,38 +54,63 @@ export const BehandlingPage = () => {
     }
       | undefined,
   ) => {
-    const StatusListe: any[] = []
+    const relevanteStatusListe: any[] = []
+    const irrelevanteStatusListe: any[] = []
+
     unfilteredData?.behandling.content.forEach(({stats}) => {
       stats.fyltKrav.forEach((k) => {
         if (k.regelverk.length) {
-          StatusListe.push({...k, etterlevelser: k.etterlevelser.filter((e) => e.behandlingId === behandling?.id)})
+          relevanteStatusListe.push({...k, etterlevelser: k.etterlevelser.filter((e) => e.behandlingId === behandling?.id)})
         }
       })
       stats.ikkeFyltKrav.forEach((k) => {
         if (k.regelverk.length) {
-          StatusListe.push({...k, etterlevelser: k.etterlevelser.filter((e) => e.behandlingId === behandling?.id)})
+          relevanteStatusListe.push({...k, etterlevelser: k.etterlevelser.filter((e) => e.behandlingId === behandling?.id)})
         }
       })
     })
-    StatusListe.sort((a, b) => {
+
+    unfilteredData?.behandling.content.forEach(({stats}) => {
+      stats.irrelevantKrav.forEach((k) => {
+        if (k.regelverk.length) {
+          irrelevanteStatusListe.push({...k, etterlevelser: k.etterlevelser.filter((e) => e.behandlingId === behandling?.id)})
+        }
+      })
+    })
+
+    relevanteStatusListe.sort((a, b) => {
       if (a.kravNummer === b.kravNummer) {
         return a.kravVersjon - b.kravVersjon
       }
-
       return a.kravNummer - b.kravNummer
     })
 
-    for (let index = StatusListe.length - 1; index > 0; index--) {
-      if (StatusListe[index].kravNummer === StatusListe[index - 1].kravNummer) {
-        StatusListe.splice(index - 1, 1)
+    irrelevanteStatusListe.sort((a, b) => {
+      if (a.kravNummer === b.kravNummer) {
+        return a.kravVersjon - b.kravVersjon
+      }
+      return a.kravNummer - b.kravNummer
+    })
+
+    for (let index = relevanteStatusListe.length - 1; index > 0; index--) {
+      if (relevanteStatusListe[index].kravNummer === relevanteStatusListe[index - 1].kravNummer) {
+        relevanteStatusListe.splice(index - 1, 1)
       }
     }
 
-    return StatusListe
+    for (let index = irrelevanteStatusListe.length - 1; index > 0; index--) {
+      if (irrelevanteStatusListe[index].kravNummer === irrelevanteStatusListe[index - 1].kravNummer) {
+        irrelevanteStatusListe.splice(index - 1, 1)
+      }
+    }
+
+    return [relevanteStatusListe, irrelevanteStatusListe]
   }
 
   React.useEffect(() => {
-    setStats(filterData(relevanteData))
+    const [relevanteStatusListe, irrelevanteStatusListe] = filterData(relevanteData)
+    setRelevanteStats(relevanteStatusListe)
+    setIrrelevanteStats(irrelevanteStatusListe)
   }, [relevanteData])
 
   React.useEffect(() => {
@@ -101,12 +119,12 @@ export const BehandlingPage = () => {
 
   const temaListe = codelist.getCodes(ListName.TEMA).sort((a, b) => a.shortName.localeCompare(b.shortName, 'nb'))
   let antallFylttKrav = 0
-  stats.forEach((k) => {
+  relevanteStats.forEach((k) => {
     if (k.etterlevelser.length && (k.etterlevelser[0].status === EtterlevelseStatus.FERDIG_DOKUMENTERT || k.etterlevelser[0].status === EtterlevelseStatus.IKKE_RELEVANT || k.etterlevelser[0].status === EtterlevelseStatus.OPPFYLLES_SENERE)) {
       antallFylttKrav += 1
     }
   })
-  const getPercentageUtfylt = stats && stats.length && (antallFylttKrav / stats.length) * 100
+  const getPercentageUtfylt = relevanteStats && relevanteStats.length && (antallFylttKrav / relevanteStats.length) * 100
 
   const getRelevansContent = (behandling: Behandling) => {
     const emptyRelevans = behandling.irrelevansFor.length === options.length ? true : false
@@ -181,7 +199,7 @@ export const BehandlingPage = () => {
       <Block display="flex" alignItems="center">
         <Block display="flex" alignItems="baseline" marginRight="30px">
           <Paragraph2 $style={{fontWeight: 900, fontSize: '32px', marginTop: 0, marginBottom: 0}} color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
-            {stats.length}
+            {relevanteStats.length}
           </Paragraph2>
           <Paragraph2>krav</Paragraph2>
         </Block>
@@ -260,18 +278,22 @@ export const BehandlingPage = () => {
         {getRelevansContent(behandling)}
         <Block display="flex" width="100%" justifyContent="space-between" flexWrap marginTop={theme.sizing.scale550}>
           {temaListe.map((tema) => (
-            <TemaCardBehandling tema={tema} stats={stats} behandling={behandling} key={`${tema.shortName}_panel`}/>
+            <TemaCardBehandling tema={tema} stats={relevanteStats} behandling={behandling} key={`${tema.shortName}_panel`}/>
           ))}
         </Block>
-        <Block>
-          <H3>Tema dere har filtrert bort</H3>
-          <Paragraph2 maxWidth={"574px"}>Dere har filtrert bort tema med krav som dere må kjenne til og selv vurdere om dere skal etterleve.</Paragraph2>
-        </Block>
-        <Block display="flex" width="100%" justifyContent="space-between" flexWrap marginTop={theme.sizing.scale550}>
-          {temaListe.map((tema) => (
-            <TemaCardBehandling tema={tema} stats={stats} behandling={behandling} key={`${tema.shortName}_panel`}/>
-          ))}
-        </Block>
+        {irrelevanteStats.length > 0 && (
+          <>
+            <Block>
+              <H3>Tema dere har filtrert bort</H3>
+              <Paragraph2 maxWidth={"574px"}>Dere har filtrert bort tema med krav som dere må kjenne til og selv vurdere om dere skal etterleve.</Paragraph2>
+            </Block>
+            <Block display="flex" width="100%" justifyContent="space-between" flexWrap marginTop={theme.sizing.scale550}>
+              {temaListe.map((tema) => (
+                <TemaCardBehandling tema={tema} stats={irrelevanteStats} behandling={behandling} key={`${tema.shortName}_panel`}/>
+              ))}
+            </Block>
+          </>
+        )}
       </Layout2>
 
       {edit && (
