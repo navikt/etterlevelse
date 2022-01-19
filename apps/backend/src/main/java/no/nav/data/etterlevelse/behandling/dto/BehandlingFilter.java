@@ -21,7 +21,6 @@ public class BehandlingFilter {
     private List<String> relevans;
     private Integer sistRedigert;
     private Boolean mineBehandlinger;
-    private Boolean irelevans;
     private List<String> teams;
     private String sok;
 
@@ -33,7 +32,6 @@ public class BehandlingFilter {
                 && getTeams().isEmpty()
                 && sistRedigert == null
                 && mineBehandlinger == null
-                && irelevans == null
                 ;
     }
 

@@ -50,7 +50,7 @@ public class KravRepoImpl implements KravRepoCustom {
             query += " and data -> 'kravNummer' = to_jsonb(:kravNummer) ";
             par.addValue("kravNummer", filter.getNummer());
         }
-        if (filter.getBehandlingId() != null) {
+        if (filter.getBehandlingId() != null && !filter.isBehandlingIrrevantKrav()) {
             kravIdSafeList.addAll(convert(behandlingRepo.findKravIdsForBehandling(filter.getBehandlingId()), KravId::kravId));
             query += """
                     and (
@@ -65,6 +65,25 @@ public class KravRepoImpl implements KravRepoCustom {
                     or jsonb_array_length((data -> 'relevansFor') - array(select jsonb_array_elements_text(data -> 'irrelevansFor') 
                         from generic_storage where data ->> 'behandlingId' = :behandlingId
                         and type = 'BehandlingData')) > 0
+                    )
+                    """;
+            par.addValue("behandlingId", filter.getBehandlingId());
+        } else if (filter.getBehandlingId() != null && filter.isBehandlingIrrevantKrav()) {
+            kravIdSafeList.addAll(convert(behandlingRepo.findKravIdsForBehandling(filter.getBehandlingId()), KravId::kravId));
+            query += """
+                    and (
+                     exists(select 1
+                               from generic_storage ettlev
+                               where ettlev.data ->> 'kravNummer' = krav.data ->> 'kravNummer'
+                                 and ettlev.data ->> 'kravVersjon' = krav.data ->> 'kravVersjon'
+                                 and type = 'Etterlevelse'
+                                 and data ->> 'behandlingId' = :behandlingId
+                            ) 
+                    or data -> 'relevansFor' ??| array(
+                     select jsonb_array_elements_text(data -> 'irrelevansFor')
+                      from generic_storage
+                      where data ->> 'behandlingId' = :behandlingId
+                        and type = 'BehandlingData')
                     )
                     """;
             par.addValue("behandlingId", filter.getBehandlingId());

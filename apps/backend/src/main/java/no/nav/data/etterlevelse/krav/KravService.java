@@ -123,6 +123,10 @@ public class KravService extends DomainService<Krav> {
         return getByFilter(KravFilter.builder().behandlingId(behandlingId).build());
     }
 
+    public List<Krav> findForBehandlingIrrelevans(String behandlingId) {
+        return getByFilter(KravFilter.builder().behandlingId(behandlingId).behandlingIrrevantKrav(true).build());
+    }
+
     public List<KravImage> saveImages(List<KravImage> images) {
         return GenericStorage.to(storage.saveAll(images), KravImage.class);
     }

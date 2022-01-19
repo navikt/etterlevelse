@@ -20,6 +20,8 @@ public class BehandlingStats {
     private List<KravResponse> fyltKrav;
     @Singular("ikkeFylt")
     private List<KravResponse> ikkeFyltKrav;
+    @Singular("irrelevant")
+    private List<KravResponse> irrelevantKrav;
     @Singular
     private List<LovStats> lovStats;
 
@@ -34,6 +36,8 @@ public class BehandlingStats {
         private List<KravResponse> fyltKrav;
         @Singular("ikkeFylt")
         private List<KravResponse> ikkeFyltKrav;
+        @Singular("irrelevant")
+        private List<KravResponse> irrelevantKrav;
     }
 
     public static BehandlingStats empty() {

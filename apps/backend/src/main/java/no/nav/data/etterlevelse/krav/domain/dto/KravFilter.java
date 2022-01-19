@@ -24,6 +24,7 @@ public class KravFilter {
     private List<String> relevans;
     private Integer nummer;
     private String behandlingId;
+    private boolean behandlingIrrevantKrav;
     private String underavdeling;
     private String lov;
     private List<String> status;
@@ -53,6 +54,7 @@ public class KravFilter {
                 && getLover().isEmpty()
                 && !gjeldendeKrav
                 && sistRedigert == null
+                && !behandlingIrrevantKrav
                 ;
     }
 

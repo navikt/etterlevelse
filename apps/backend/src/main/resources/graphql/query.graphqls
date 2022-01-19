@@ -16,6 +16,7 @@ type Query {
 input KravFilter {
     nummer: Int
     behandlingId: String
+    behandlingIrrevantKrav: Boolean
     underavdeling: String
     lov: String
     status: [String!]
@@ -35,6 +36,5 @@ input BehandlingFilter {
     sistRedigert: NonNegativeInt
     teams: [String!]
     mineBehandlinger: Boolean
-    irelevans: Boolean
     sok: String
 }
