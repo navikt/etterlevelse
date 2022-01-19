@@ -43,10 +43,10 @@ public class BehandlingRepoImpl implements BehandlingRepoCustom {
     public List<GenericStorage> findBy(BehandlingFilter filter) {
         var query = "select id from generic_storage where type = 'BehandlingData' ";
         var par = new MapSqlParameterSource();
-        if (!filter.getRelevans().isEmpty() && filter.getIrelevans().equals(Boolean.FALSE)) {
+        if (!filter.getRelevans().isEmpty() && !filter.isIrrelevans()) {
             query += " and NOT data -> 'irrelevansFor' ??| array[ :relevans ] ";
             par.addValue("relevans", filter.getRelevans());
-        } else if (!filter.getRelevans().isEmpty() && filter.getIrelevans().equals(Boolean.TRUE)) {
+        } else if (!filter.getRelevans().isEmpty() && filter.isIrrelevans()) {
             query += " and data -> 'irrelevansFor' ??| array[ :relevans ] ";
             par.addValue("relevans", filter.getRelevans());
         }
