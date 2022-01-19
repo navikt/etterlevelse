@@ -116,7 +116,11 @@ export const KravPage = () => {
   }, [params.id])
 
   const hasKravExpired = () => {
-    return krav ? krav.kravVersjon < alleKravVersjoner[0].kravVersjon : false
+    if(krav && krav.status === KravStatus.UTGAATT && alleKravVersjoner.length === 1){
+      return true
+    } else {
+      return krav ? krav.kravVersjon < alleKravVersjoner[0].kravVersjon : false
+    }
   }
 
   // todo split loading krav and subelements?
