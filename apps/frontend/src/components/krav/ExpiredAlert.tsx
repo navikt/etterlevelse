@@ -1,12 +1,12 @@
-import {Block} from 'baseui/block'
-import {Paragraph2} from 'baseui/typography'
-import {KravStatus, KravVersjon} from '../../constants'
-import {theme} from '../../util'
-import {ettlevColors} from '../../util/theme'
+import { Block } from 'baseui/block'
+import { Paragraph2 } from 'baseui/typography'
+import { KravStatus, KravVersjon } from '../../constants'
+import { theme } from '../../util'
+import { ettlevColors } from '../../util/theme'
 import CustomizedLink from '../common/CustomizedLink'
-import {borderColor, borderRadius, borderStyle, borderWidth, padding} from '../common/Style'
-import {warningAlert} from '../Images'
-import {kravStatus} from '../../pages/KravPage'
+import { borderColor, borderRadius, borderStyle, borderWidth, padding } from '../common/Style'
+import { warningAlert } from '../Images'
+import { kravStatus } from '../../pages/KravPage'
 
 const ExpiredAlert = ({ alleKravVersjoner, statusName }: { alleKravVersjoner: KravVersjon[]; statusName?: KravStatus }) => (
   <Block
@@ -23,10 +23,14 @@ const ExpiredAlert = ({ alleKravVersjoner, statusName }: { alleKravVersjoner: Kr
   >
     <img src={warningAlert} alt="" />
     <Paragraph2 marginLeft={theme.sizing.scale500} marginTop="0px" marginBottom="0px">
-      Denne versjonen er {statusName ? `${kravStatus(statusName).toLocaleLowerCase()}` : 'utgått'}. Gjeldende versjon:{' '}
-      <CustomizedLink href={`/krav/${alleKravVersjoner[0].kravNummer}/${alleKravVersjoner[0].kravVersjon}`}>
-        K{alleKravVersjoner[0].kravNummer}.{alleKravVersjoner[0].kravVersjon}
-      </CustomizedLink>
+      Denne versjonen er {statusName ? `${kravStatus(statusName).toLocaleLowerCase()}` : 'utgått'}.
+      {alleKravVersjoner.length > 1 ?
+        <>
+          Gjeldende versjon:{' '}
+          <CustomizedLink href={`/krav/${alleKravVersjoner[0].kravNummer}/${alleKravVersjoner[0].kravVersjon}`}>
+            K{alleKravVersjoner[0].kravNummer}.{alleKravVersjoner[0].kravVersjon}
+          </CustomizedLink>
+        </> : ''}
     </Paragraph2>
   </Block>
 )
