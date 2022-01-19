@@ -25,6 +25,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static no.nav.data.common.utils.StreamUtils.convert;
 import static no.nav.data.common.utils.StreamUtils.filter;
@@ -60,7 +62,10 @@ public class BehandlingFieldResolver implements GraphQLResolver<Behandling> {
 
         var fylt = filter(krav, k -> etterlevelser.stream().anyMatch(e -> e.isEtterleves() && e.kravId().equals(k.kravId())));
         var ikkeFylt = filter(krav, k -> !fylt.contains(k));
-        var irrelevant = filter(irrelevantKrav, k -> etterlevelser.stream().anyMatch(e -> e.isEtterleves() && e.kravId().equals(k.kravId())));
+        var irrelevantFylt = filter(irrelevantKrav, k -> etterlevelser.stream().anyMatch(e -> e.isEtterleves() && e.kravId().equals(k.kravId())));
+        var irrelevantIkkeFylt = filter(irrelevantKrav, k -> !irrelevantFylt.contains(k));
+        var irrelevant = Stream.concat(irrelevantFylt.stream(), irrelevantIkkeFylt.stream()).collect(Collectors.toList());
+
 
         return BehandlingStats.builder()
                 .fyltKrav(fylt)
@@ -69,6 +74,7 @@ public class BehandlingFieldResolver implements GraphQLResolver<Behandling> {
                         .lovCode(c.toResponse())
                         .fyltKrav(filter(fylt, k -> safeStream(k.getRegelverk()).anyMatch(r -> r.getLov().getCode().equals(c.getCode()))))
                         .ikkeFyltKrav(filter(ikkeFylt, k -> safeStream(k.getRegelverk()).anyMatch(r -> r.getLov().getCode().equals(c.getCode()))))
+                        .irrelevantKrav(filter(irrelevant,k -> safeStream(k.getRegelverk()).anyMatch(r -> r.getLov().getCode().equals(c.getCode()))))
                         .build()))
                 .build();
     }
