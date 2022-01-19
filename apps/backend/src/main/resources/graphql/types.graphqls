@@ -171,6 +171,7 @@ type Behandling {
 type BehandlingStats {
     fyltKrav: [Krav!]!
     ikkeFyltKrav: [Krav!]!
+    irrelevantKrav: [Krav!]!
     lovStats: [LovStats!]!
 }
 
