@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom'
 import { Block, BlockProps } from 'baseui/block'
 import React, { useEffect, useState } from 'react'
 import { H1, H2, Label3, LabelLarge, Paragraph2, Paragraph4, ParagraphSmall } from 'baseui/typography'
-import { codelist, ListName, TemaCode } from '../services/Codelist'
+import { codelist, ListName, LovCode, TemaCode } from '../services/Codelist'
 import { ObjectLink, urlForObject } from '../components/common/RouteLink'
 import { theme } from '../util'
 import { Markdown } from '../components/common/Markdown'
@@ -37,6 +37,59 @@ export const TemaPage = () => {
   return <TemaSide tema={code} />
 }
 
+export const getTemaMainHeader = (tema: TemaCode, lover: LovCode[], expand: boolean, setExpand: (e: boolean) => void, noExpandButton?: boolean, noHeader?: boolean) => {
+  return (
+    <>
+      {!noHeader &&
+        <>
+          <H1 marginTop="0px">{tema.shortName}</H1>
+          <Helmet>
+            <meta charSet="utf-8" />
+            <title>{tema.shortName} </title>
+          </Helmet>
+        </>
+      }
+      <Block
+        minHeight={'125px'}
+        maxHeight={expand ? undefined : '125px'}
+        maxWidth={'750px'}
+        overflow={'hidden'}
+        $style={{
+          maskImage: expand ? undefined : `linear-gradient(${ettlevColors.black} 40%, transparent)`,
+        }}
+      >
+        <Markdown source={tema.description} />
+      </Block>
+
+      {expand && (
+        <Block marginBottom={theme.sizing.scale900}>
+          <H2 marginBottom={theme.sizing.scale200}>Ansvarlig for lovtolkning</H2>
+          {_.uniq(lover.map((l) => l.data?.underavdeling)).map((code, index) => (
+            <Paragraph2 key={code + '_' + index} marginTop={0} marginBottom={theme.sizing.scale200}>
+              {codelist.getCode(ListName.UNDERAVDELING, code)?.shortName}
+            </Paragraph2>
+          ))}
+
+          <H2 marginBottom={theme.sizing.scale200}>Lovdata</H2>
+          {lover.map((l, index) => (
+            <Block key={l.code + '_' + index} marginBottom={theme.sizing.scale200}>
+              <ObjectLink type={ListName.LOV} id={l.code}>
+                {l.shortName}
+              </ObjectLink>
+            </Block>
+          ))}
+        </Block>
+      )}
+
+      {!noExpandButton && <Block alignSelf={'flex-end'} marginTop={theme.sizing.scale600}>
+        <Button onClick={() => setExpand(!expand)} icon={expand ? faChevronUp : faChevronDown} kind={'underline-hover'}>
+          {expand ? 'Mindre' : 'Mer'} om tema
+        </Button>
+      </Block>}
+    </>
+  )
+}
+
 const TemaSide = ({ tema }: { tema: TemaCode }) => {
   const lover = codelist.getCodesForTema(tema.code)
   const { data, loading } = useKravCounter({ lover: lover.map((c) => c.code) }, { skip: !lover.length })
@@ -52,7 +105,7 @@ const TemaSide = ({ tema }: { tema: TemaCode }) => {
 
   useEffect(() => {
     if (data && data.krav && data.krav.content && data.krav.content.length > 0) {
-      ;(async () => {
+      ; (async () => {
         const allKravPriority = await getAllKravPriority()
         const kraver = _.cloneDeep(data.krav.content)
         kraver.map((k) => {
@@ -71,52 +124,7 @@ const TemaSide = ({ tema }: { tema: TemaCode }) => {
       headerBackgroundColor={ettlevColors.green100}
       backgroundColor={ettlevColors.grey25}
       headerOverlap={'125px'}
-      header={
-        <>
-          <H1 marginTop="0px">{tema.shortName}</H1>
-          <Helmet>
-            <meta charSet="utf-8" />
-            <title>{tema.shortName} </title>
-          </Helmet>
-          <Block
-            minHeight={'125px'}
-            maxHeight={expand ? undefined : '125px'}
-            maxWidth={'750px'}
-            overflow={'hidden'}
-            $style={{
-              maskImage: expand ? undefined : `linear-gradient(${ettlevColors.black} 40%, transparent)`,
-            }}
-          >
-            <Markdown source={tema.description} />
-          </Block>
-
-          {expand && (
-            <Block marginBottom={theme.sizing.scale900}>
-              <H2 marginBottom={theme.sizing.scale200}>Ansvarlig for lovtolkning</H2>
-              {_.uniq(lover.map((l) => l.data?.underavdeling)).map((code, index) => (
-                <Paragraph2 key={code + '_' + index} marginTop={0} marginBottom={theme.sizing.scale200}>
-                  {codelist.getCode(ListName.UNDERAVDELING, code)?.shortName}
-                </Paragraph2>
-              ))}
-
-              <H2 marginBottom={theme.sizing.scale200}>Lovdata</H2>
-              {lover.map((l, index) => (
-                <Block key={l.code + '_' + index} marginBottom={theme.sizing.scale200}>
-                  <ObjectLink type={ListName.LOV} id={l.code}>
-                    {l.shortName}
-                  </ObjectLink>
-                </Block>
-              ))}
-            </Block>
-          )}
-
-          <Block alignSelf={'flex-end'} marginTop={theme.sizing.scale600}>
-            <Button onClick={() => setExpand(!expand)} icon={expand ? faChevronUp : faChevronDown} kind={'underline-hover'}>
-              {expand ? 'Mindre' : 'Mer'} om tema
-            </Button>
-          </Block>
-        </>
-      }
+      header={getTemaMainHeader(tema, lover, expand, setExpand)}
     >
       <Block>
         <H2>{loading ? '?' : data?.krav.numberOfElements || 0} krav</H2>
