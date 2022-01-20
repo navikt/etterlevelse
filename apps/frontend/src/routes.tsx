@@ -23,6 +23,7 @@ import { StatusPage } from './pages/StatusPage'
 import { KravTablePage } from './pages/KravTablePage'
 import { FAQ } from './pages/FAQ'
 import SpørsmålOgSvarLogPage from './pages/SpørsmålOgSvarLogPage'
+import { BehandlingerTemaPageV2 } from './pages/BehandlingerTemaPageV2'
 
 const Routes = (): JSX.Element => (
   <ScrollToTop>
@@ -38,6 +39,7 @@ const Routes = (): JSX.Element => (
       <Route exact path="/etterlevelse/:id" component={EtterlevelsePage} />
 
       <Route exact path="/behandling/:id/:tema" component={BehandlingerTemaPage} />
+      <Route exact path="/behandlingtest/:id/:tema" component={BehandlingerTemaPageV2} />
       <Route exact path="/behandlinger/:tab?" component={MyBehandlingerPage} />
 
       <Route exact path="/relevans/:relevans?" component={RelevansPage} />
