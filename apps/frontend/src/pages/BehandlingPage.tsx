@@ -48,10 +48,10 @@ export const BehandlingPage = () => {
   const filterData = (
     unfilteredData:
       | {
-          behandling: PageResponse<{
-            stats: BehandlingStats
-          }>
-        }
+        behandling: PageResponse<{
+          stats: BehandlingStats
+        }>
+      }
       | undefined,
   ) => {
     const relevanteStatusListe: any[] = []
@@ -297,7 +297,7 @@ export const BehandlingPage = () => {
             </Block>
             <Block display="flex" width="100%" justifyContent="space-between" flexWrap marginTop={theme.sizing.scale550}>
               {temaListe.map((tema) => (
-                <TemaCardBehandling tema={tema} stats={irrelevanteStats} behandling={behandling} key={`${tema.shortName}_panel`} />
+                <TemaCardBehandling tema={tema} stats={irrelevanteStats} behandling={behandling} key={`${tema.shortName}_panel`} irrelevant={true}/>
               ))}
             </Block>
           </>
@@ -343,7 +343,7 @@ const HeaderContent = (props: { kravLength: number }) => (
   </Block>
 )
 
-const TemaCardBehandling = ({ tema, stats, behandling }: { tema: TemaCode; stats: any[]; behandling: Behandling }) => {
+const TemaCardBehandling = ({ tema, stats, behandling, irrelevant }: { tema: TemaCode; stats: any[]; behandling: Behandling, irrelevant?: boolean }) => {
   const lover = codelist.getCodesForTema(tema.code).map((c) => c.code)
 
   const krav = stats.filter((k) => k.regelverk.map((r: any) => r.lov.code).some((r: any) => lover.includes(r)))
@@ -404,7 +404,7 @@ const TemaCardBehandling = ({ tema, stats, behandling }: { tema: TemaCode; stats
       width={cardWidth}
       overrides={overrides}
       verticalMargin={theme.sizing.scale400}
-      href={`/behandling/${behandling.id}/${tema.code}`}
+      href={`/behandling/${behandling.id}/${irrelevant ? 'i' : ''}${tema.code}`}
       tittel={tema.shortName}
       headerContent={<HeaderContent kravLength={krav.length} />}
       flexContent

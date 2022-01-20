@@ -49,10 +49,11 @@ const mapEtterlevelseData = (etterlevelse?: Etterlevelse) => ({
 
 export const BehandlingerTemaPage = () => {
   const params = useParams<{ id?: string; tema?: string }>()
-  const temaData: TemaCode | undefined = codelist.getCode(ListName.TEMA, params.tema)
+  const temaData: TemaCode | undefined = codelist.getCode(ListName.TEMA, params.tema?.replace('i', ''))
+  const irrelevantKrav = params?.tema?.charAt(0) === 'i' ? true : false
   const [behandling, setBehandling] = useBehandling(params.id)
   const lover = codelist.getCodesForTema(temaData?.code).map((c) => c.code)
-  const variables = { behandlingId: params.id, lover: lover, gjeldendeKrav: false }
+  const variables = { behandlingId: params.id, lover: lover, gjeldendeKrav: false, behandlingIrrevantKrav: irrelevantKrav }
   const { data: rawData, loading } = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
     variables,
     skip: !params.id || !lover.length,
@@ -73,7 +74,7 @@ export const BehandlingerTemaPage = () => {
   const [sorting, setSorting] = useState<readonly Option[]>([sortingOptions[0]])
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       const allKravPriority = await getAllKravPriority()
       const kraver = _.cloneDeep(rawData?.krav.content) || []
 
@@ -183,7 +184,7 @@ export const BehandlingerTemaPage = () => {
         </Block>
         <Block>
           <H2 marginTop="0px" marginBottom="0px">
-            Krav til utfylling
+            {irrelevantKrav ? 'Krav dere har filtrert bort' : 'Krav til utfylling'}
           </H2>
         </Block>
       </Block>
@@ -191,17 +192,19 @@ export const BehandlingerTemaPage = () => {
       <Block display="flex" alignItems="center">
         <Block display="flex" alignItems="baseline" marginRight="30px">
           <Paragraph2 $style={{ fontWeight: 900, fontSize: '32px', lineHeight: '0px' }} color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
-            {kravData.filter((k) => k.gammelVersjon === false).length}
+            {irrelevantKrav ? skalUtfyllesKrav.length : kravData.filter((k) => k.gammelVersjon === false).length}
           </Paragraph2>
           <Paragraph2>krav</Paragraph2>
         </Block>
-        <Block $style={{ border: '1px solid ' + ettlevColors.green50, background: '#102723' }} height="40px" />
-        <Block display="flex" alignItems="baseline" marginLeft="30px">
-          <Paragraph2 $style={{ fontWeight: 900, fontSize: '32px', lineHeight: '0px' }} color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
-            {getPercentageUtfylt()}
-          </Paragraph2>
-          <Paragraph2> ferdig utfylt</Paragraph2>
-        </Block>
+        {!irrelevantKrav && <>
+          <Block $style={{ border: '1px solid ' + ettlevColors.green50, background: '#102723' }} height="40px" />
+          <Block display="flex" alignItems="baseline" marginLeft="30px">
+            <Paragraph2 $style={{ fontWeight: 900, fontSize: '32px', lineHeight: '0px' }} color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
+              {getPercentageUtfylt()}
+            </Paragraph2>
+            <Paragraph2> ferdig utfylt</Paragraph2>
+          </Block>
+        </>}
       </Block>
     </Block>
   )
@@ -278,13 +281,13 @@ export const BehandlingerTemaPage = () => {
           <CustomizedPanel
             HeaderActiveBackgroundColor={ettlevColors.green50}
             onClick={() => setIsExpanded(!isExpanded)}
-            title={<KravPanelHeader title={'Skal fylles ut'} kravData={skalUtfyllesKrav} />}
+            title={<KravPanelHeader title={irrelevantKrav ? 'Må vurderes av dere' : 'Skal fylles ut'} kravData={skalUtfyllesKrav} />}
           >
             {getKravList(skalUtfyllesKrav, 'Ingen krav som skal fylles ut', true)}
           </CustomizedPanel>
-          <CustomizedPanel HeaderActiveBackgroundColor={ettlevColors.green50} title={<KravPanelHeader title={'Ferdig utfylt'} kravData={utfyltKrav} />}>
+          {!irrelevantKrav && <CustomizedPanel HeaderActiveBackgroundColor={ettlevColors.green50} title={<KravPanelHeader title={'Ferdig utfylt'} kravData={utfyltKrav} />}>
             {getKravList(utfyltKrav, 'Ingen krav er ferdig utfylt')}
-          </CustomizedPanel>
+          </CustomizedPanel>}
         </CustomizedAccordion>
         {edit && behandling && (
           <Block maxWidth={maxPageWidth}>
@@ -437,7 +440,7 @@ const KravView = (props: {
   const [varsleMelding, setVarsleMelding] = useState('')
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       if (props.kravId.kravNummer && props.kravId.kravVersjon) {
         const krav = await getKravByKravNumberAndVersion(props.kravId.kravNummer, props.kravId.kravVersjon)
         if (krav) {
