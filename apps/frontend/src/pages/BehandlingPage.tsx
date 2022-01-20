@@ -140,12 +140,12 @@ export const BehandlingPage = () => {
           {emptyRelevans ? (
             <Block display="flex" alignItems="center">
               <img height="16px" width="16px" src={warningAlert} alt="" />
-              <Label3 margin="0px" marginBottom="0px" marginRight="5px" marginLeft="5px" $style={{ fontSize: '16px' }}>
+              <Label3 marginTop="0px" marginBottom="0px" marginRight="5px" marginLeft="5px" $style={{ fontSize: '16px' }}>
                 Ingen egenskaper er oppgitt
               </Label3>
             </Block>
           ) : (
-            <Label3 margin="0px" marginBottom="0px" marginRight="5px" $style={{ fontSize: '16px' }}>
+            <Label3 marginTop="0px" marginBottom="0px" marginRight="5px" $style={{ fontSize: '16px' }}>
               Behandlingen skal etterleve krav for:
             </Label3>
           )}
