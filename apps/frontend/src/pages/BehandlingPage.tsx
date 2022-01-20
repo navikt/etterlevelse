@@ -176,8 +176,8 @@ export const BehandlingPage = () => {
         <H1 marginTop="0" color={ettlevColors.green800}>
           {behandling.navn}
         </H1>
-        <Block display="flex" alignItems="center" width="100%">
-          <Block display={'flex'} marginTop={'24px'} width="100%">
+        <Block display="flex" alignItems="center" width="100%" marginTop={'24px'}>
+          <Block display={'flex'} width="100%">
             <Label3 $style={{ lineHeight: '22px', marginRight: '10px' }}>Team: </Label3>
             <Teams teams={behandling.teams} link />
           </Block>
