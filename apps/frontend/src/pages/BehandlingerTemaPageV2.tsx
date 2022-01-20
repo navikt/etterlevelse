@@ -76,6 +76,7 @@ export const BehandlingerTemaPageV2 = () => {
     { label: 'Sist endret av meg', id: 'lastModified' },
   ]
   const [sorting, setSorting] = useState<readonly Option[]>([sortingOptions[0]])
+  const [isTemaModalOpen, setIsTemaModalOpen] = useState<boolean>(false)
 
   useEffect(() => {
     ; (async () => {
@@ -169,13 +170,19 @@ export const BehandlingerTemaPageV2 = () => {
             size="compact"
             $style={{ fontSize: '18px', fontWeight: 600, lineHeight: '22px', color: ettlevColors.green600, ':hover': { backgroundColor: 'transparent', textDecoration: 'underline 3px' } }}
             kind={'tertiary'}
-            onClick={() => test}
+            onClick={() => setIsTemaModalOpen(true)}
             marginLeft
           >
             Om personvern og ansvarlig for tema
           </Button>
         </Block>
       </Block>
+      <CustomizedModal
+        onClose={() => setIsTemaModalOpen(false)}
+      isOpen = {isTemaModalOpen}
+      >
+
+      </CustomizedModal>
     </Block>
   )
 
