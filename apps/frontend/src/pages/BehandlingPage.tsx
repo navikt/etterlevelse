@@ -29,6 +29,36 @@ import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons'
 
 const responsiveDisplay: Responsive<Display> = ['block', 'block', 'block', 'block', 'flex', 'flex']
 
+export const getMainHeader = (behandling: Behandling) => (
+  <Block display={responsiveDisplay} justifyContent="space-between" marginBottom="32px" marginTop="38px">
+    <Helmet>
+      <meta charSet="utf-8" />
+      <title>
+        B{behandling.nummer.toString()} {behandling.navn.toString()}
+      </title>
+    </Helmet>
+    <Block width="100%">
+      <Label3 color={ettlevColors.green600}>
+        B{behandling.nummer} {behandling.overordnetFormaal.shortName}
+      </Label3>
+      <H1 marginTop="0" color={ettlevColors.green800}>
+        {behandling.navn}
+      </H1>
+      <Block display="flex" alignItems="center" width="100%" marginTop={'24px'}>
+        <Block display={'flex'} width="100%">
+          <Label3 $style={{ lineHeight: '22px', marginRight: '10px' }}>Team: </Label3>
+          <Teams teams={behandling.teams} link />
+        </Block>
+        <Block display="flex" justifyContent="flex-end" $style={{ whiteSpace: 'nowrap' }}>
+          <ExternalButton href={`${env.pollyBaseUrl}process/${behandling.id}`} size="mini">
+            Til behandlingskatalogen <FontAwesomeIcon icon={faExternalLinkAlt} />
+          </ExternalButton>
+        </Block>
+      </Block>
+    </Block>
+  </Block>
+)
+
 export const BehandlingPage = () => {
   const params = useParams<{ id?: string }>()
   const options = codelist.getParsedOptions(ListName.RELEVANS)
@@ -160,36 +190,6 @@ export const BehandlingPage = () => {
       </Block>
     )
   }
-
-  const getMainHeader = (behandling: Behandling) => (
-    <Block display={responsiveDisplay} justifyContent="space-between" marginBottom="32px" marginTop="38px">
-      <Helmet>
-        <meta charSet="utf-8" />
-        <title>
-          B{behandling.nummer.toString()} {behandling.navn.toString()}
-        </title>
-      </Helmet>
-      <Block width="100%">
-        <Label3 color={ettlevColors.green600}>
-          B{behandling.nummer} {behandling.overordnetFormaal.shortName}
-        </Label3>
-        <H1 marginTop="0" color={ettlevColors.green800}>
-          {behandling.navn}
-        </H1>
-        <Block display="flex" alignItems="center" width="100%" marginTop={'24px'}>
-          <Block display={'flex'} width="100%">
-            <Label3 $style={{ lineHeight: '22px', marginRight: '10px' }}>Team: </Label3>
-            <Teams teams={behandling.teams} link />
-          </Block>
-          <Block display="flex" justifyContent="flex-end" $style={{ whiteSpace: 'nowrap' }}>
-            <ExternalButton href={`${env.pollyBaseUrl}process/${behandling.id}`} size="mini">
-              Til behandlingskatalogen <FontAwesomeIcon icon={faExternalLinkAlt} />
-            </ExternalButton>
-          </Block>
-        </Block>
-      </Block>
-    </Block>
-  )
 
   const getSecondaryHeader = (behandling: Behandling) => (
     <Block width="100%" display={responsiveDisplay} alignItems="center" justifyContent="space-between" marginTop={'8px'} marginBottom={'8px'}>
