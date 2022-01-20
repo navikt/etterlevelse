@@ -38,6 +38,7 @@ import { user } from '../services/User'
 import { Teams } from '../components/common/TeamName'
 import { ExternalButton } from '../components/common/Button'
 import { Behandling } from '../constants'
+import { getMainHeader } from './BehandlingPage'
 
 const responsiveBreakPoints: Responsive<Display> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
 const responsiveDisplay: Responsive<Display> = ['block', 'block', 'block', 'block', 'flex', 'flex']
@@ -77,7 +78,7 @@ export const BehandlingerTemaPageV2 = () => {
   const [sorting, setSorting] = useState<readonly Option[]>([sortingOptions[0]])
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       const allKravPriority = await getAllKravPriority()
       const kraver = _.cloneDeep(rawData?.krav.content) || []
 
@@ -148,36 +149,6 @@ export const BehandlingerTemaPageV2 = () => {
     return antallUtfylt
   }
 
-  const getMainHeader = (behandling: Behandling) => (
-    <Block display={responsiveDisplay} justifyContent="space-between" marginBottom="32px" marginTop="38px">
-      <Helmet>
-        <meta charSet="utf-8" />
-        <title>
-          B{behandling.nummer.toString()} {behandling.navn.toString()}
-        </title>
-      </Helmet>
-      <Block width="100%">
-        <Label3 color={ettlevColors.green600}>
-          B{behandling.nummer} {behandling.overordnetFormaal.shortName}
-        </Label3>
-        <H1 marginTop="0" color={ettlevColors.green800}>
-          {behandling.navn}
-        </H1>
-        <Block display="flex" alignItems="center" width="100%">
-          <Block display={'flex'} marginTop={'24px'} width="100%">
-            <Label3 $style={{ lineHeight: '22px', marginRight: '10px' }}>Team: </Label3>
-            <Teams teams={behandling.teams} link />
-          </Block>
-          <Block display="flex" justifyContent="flex-end" $style={{ whiteSpace: 'nowrap' }}>
-            <ExternalButton href={`${env.pollyBaseUrl}process/${behandling.id}`} size="mini">
-              Til behandlingskatalogen <FontAwesomeIcon icon={faExternalLinkAlt} />
-            </ExternalButton>
-          </Block>
-        </Block>
-      </Block>
-    </Block>
-  )
-
   const getSecondaryHeader = () => (
     <Block width="100%">
       <Block marginTop="19px">
@@ -185,8 +156,8 @@ export const BehandlingerTemaPageV2 = () => {
           Krav til utfylling
         </RouteLink>
       </Block>
-      <Block flex='1'>
-        <Block marginTop="6px" marginBottom="56px" display="flex">
+      <Block marginTop="6px" marginBottom="56px" display="flex" width="100%" alignItems="center" justifyContent="space-between">
+        <Block display="flex" >
           <img src={angleIcon} alt="" />{' '}
           <Label3 marginLeft="12px" $style={{ fontSize: '18px', fontWeight: 600, lineHeight: '22px', color: ettlevColors.green600 }}>
             {temaData?.shortName}
@@ -270,6 +241,7 @@ export const BehandlingerTemaPageV2 = () => {
       {behandling && (
         <Layout2
           headerBackgroundColor="#F8F8F8"
+          headerOverlap="31px"
           mainHeader={getMainHeader(behandling)}
           secondaryHeaderBackgroundColor={ettlevColors.green100}
           secondaryHeader={getSecondaryHeader()}
@@ -277,7 +249,7 @@ export const BehandlingerTemaPageV2 = () => {
           currentPage={temaData?.shortName}
           breadcrumbPaths={breadcrumbPaths}
         >
-          <Block display="flex" width="100%" justifyContent="space-between" flexWrap marginTop="64px" marginBottom="64px">
+          <Block display="flex" width="100%" justifyContent="space-between" flexWrap marginBottom="64px">
             <CustomizedAccordion accordion={false}>
               <CustomizedPanel
                 HeaderActiveBackgroundColor={ettlevColors.green50}
@@ -443,7 +415,7 @@ const KravView = (props: {
   const [varsleMelding, setVarsleMelding] = useState('')
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       if (props.kravId.kravNummer && props.kravId.kravVersjon) {
         const krav = await getKravByKravNumberAndVersion(props.kravId.kravNummer, props.kravId.kravVersjon)
         if (krav) {
