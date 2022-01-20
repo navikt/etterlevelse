@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Block, Display } from 'baseui/block'
 import { useParams } from 'react-router-dom'
 import { H1, H2, Label3, Paragraph2, Paragraph3, Paragraph4 } from 'baseui/typography'
-import { ettlevColors, maxPageWidth, theme } from '../util/theme'
+import { ettlevColors, maxPageWidth, responsivePaddingLarge, responsivePaddingSmall, theme } from '../util/theme'
 import { codelist, ListName, TemaCode } from '../services/Codelist'
 import RouteLink, { urlForObject } from '../components/common/RouteLink'
 import { useBehandling } from '../api/BehandlingApi'
@@ -17,7 +17,7 @@ import { Spinner } from '../components/common/Spinner'
 import { useEtterlevelse } from '../api/EtterlevelseApi'
 import { EditEtterlevelse } from '../components/etterlevelse/EditEtterlevelse'
 import { getKravByKravNumberAndVersion, KravId } from '../api/KravApi'
-import { borderStyle } from '../components/common/Style'
+import { borderRadius, borderStyle } from '../components/common/Style'
 import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 import Button from '../components/common/Button'
 import { Responsive } from 'baseui/theme'
@@ -39,6 +39,7 @@ import { Teams } from '../components/common/TeamName'
 import { ExternalButton } from '../components/common/Button'
 import { Behandling } from '../constants'
 import { getMainHeader } from './BehandlingPage'
+import { getTemaMainHeader } from './TemaPage'
 
 const responsiveBreakPoints: Responsive<Display> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
 const responsiveDisplay: Responsive<Display> = ['block', 'block', 'block', 'block', 'flex', 'flex']
@@ -56,7 +57,8 @@ export const BehandlingerTemaPageV2 = () => {
   const params = useParams<{ id?: string; tema?: string }>()
   const temaData: TemaCode | undefined = codelist.getCode(ListName.TEMA, params.tema)
   const [behandling, setBehandling] = useBehandling(params.id)
-  const lover = codelist.getCodesForTema(temaData?.code).map((c) => c.code)
+  const lovListe = codelist.getCodesForTema(temaData?.code)
+  const lover = lovListe.map((c) => c.code)
   const variables = { behandlingId: params.id, lover: lover, gjeldendeKrav: false }
   const { data: rawData, loading } = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
     variables,
@@ -153,7 +155,7 @@ export const BehandlingerTemaPageV2 = () => {
   const getSecondaryHeader = () => (
     <Block width="100%">
       <Block marginTop="19px">
-        <RouteLink $style={{ fontSize: '18px', fontWheight: 400, LineHeigt: '22px', fontColor: ettlevColors.green600 }} href={`/behandling/${behandling?.id}`}>
+        <RouteLink fontColor={ettlevColors.green600}  $style={{ fontSize: '18px', fontWheight: 400, LineHeigt: '22px'}} href={`/behandling/${behandling?.id}`}>
           Krav til utfylling
         </RouteLink>
       </Block>
@@ -173,16 +175,42 @@ export const BehandlingerTemaPageV2 = () => {
             onClick={() => setIsTemaModalOpen(true)}
             marginLeft
           >
-            Om personvern og ansvarlig for tema
+            Om {temaData?.shortName.toLocaleLowerCase()} og ansvarlig for tema
           </Button>
         </Block>
       </Block>
-      <CustomizedModal
+      {temaData && <CustomizedModal
         onClose={() => setIsTemaModalOpen(false)}
-      isOpen = {isTemaModalOpen}
+        isOpen={isTemaModalOpen}
+        size="auto"
+        overrides={{
+          Dialog: {
+            style: {
+              ...borderRadius('0px')
+            }
+          }
+        }}
       >
-
-      </CustomizedModal>
+        <Block width="100%">
+          <Block paddingTop="120px" paddingBottom="40px" backgroundColor={ettlevColors.green100} paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge}>
+            <H1 marginTop="0px" marginBottom="0px">
+              {temaData?.shortName}
+            </H1>
+          </Block>
+          <Block marginBottom="55px" marginTop="40px" paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge}>
+            <Block>
+              {getTemaMainHeader(temaData, lovListe, true, () => { }, true, true)}
+            </Block>
+            <Block display="flex" justifyContent="flex-end" width="100%" marginTop="38px">
+              <Button
+                onClick={() => setIsTemaModalOpen(false)}
+              >
+                Lukk visning
+              </Button>
+            </Block>
+          </Block>
+        </Block>
+      </CustomizedModal>}
     </Block>
   )
 
