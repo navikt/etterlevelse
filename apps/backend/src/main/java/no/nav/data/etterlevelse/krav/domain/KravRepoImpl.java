@@ -72,20 +72,11 @@ public class KravRepoImpl implements KravRepoCustom {
         } else if (filter.getBehandlingId() != null && filter.isBehandlingIrrevantKrav()) {
             kravIdSafeList.addAll(convert(behandlingRepo.findKravIdsForBehandling(filter.getBehandlingId()), KravId::kravId));
             query += """
-                    and (
-                     exists(select 1
-                               from generic_storage ettlev
-                               where ettlev.data ->> 'kravNummer' = krav.data ->> 'kravNummer'
-                                 and ettlev.data ->> 'kravVersjon' = krav.data ->> 'kravVersjon'
-                                 and type = 'Etterlevelse'
-                                 and data ->> 'behandlingId' = :behandlingId
-                            ) 
-                    or data -> 'relevansFor' ??| array(
+                    and data -> 'relevansFor' ??| array(
                      select jsonb_array_elements_text(data -> 'irrelevansFor')
                       from generic_storage
                       where data ->> 'behandlingId' = :behandlingId
                         and type = 'BehandlingData')
-                    )
                     """;
             par.addValue("behandlingId", filter.getBehandlingId());
         }
