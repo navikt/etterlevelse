@@ -60,6 +60,8 @@ import checkboxUncheckedHover from '../resources/icons/checkbox/checkbox-uncheck
 import avatarPlaceholder from '../resources/icons/avatar-placeholder.svg'
 import informationIcon from '../resources/icons/information-icon.svg'
 import { codelist, ListName, LovCode, TemaCode } from '../services/Codelist'
+import angleIcon from '../resources/icons/angleIcon.svg'
+import page2Icon from '../resources/icons/page2.svg'
 
 import React from 'react'
 import { theme } from '../util'
@@ -113,6 +115,8 @@ export {
   checkboxUncheckedHover,
   avatarPlaceholder,
   informationIcon,
+  angleIcon,
+  page2Icon,
 }
 
 export const temaBilder: { [id: string]: string } = {
