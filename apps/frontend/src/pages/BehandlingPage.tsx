@@ -289,6 +289,9 @@ export const BehandlingPage = () => {
             <TemaCardBehandling tema={tema} stats={relevanteStats} behandling={behandling} key={`${tema.shortName}_panel`} />
           ))}
         </Block>
+        
+        {/* 
+        DISABLED TEMPORARY
         {irrelevanteStats.length > 0 && (
           <>
             <Block>
@@ -301,7 +304,7 @@ export const BehandlingPage = () => {
               ))}
             </Block>
           </>
-        )}
+        )} */}
       </Layout2>
 
       {edit && (
