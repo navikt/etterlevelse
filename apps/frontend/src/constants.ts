@@ -137,6 +137,7 @@ export type KravEtterlevelseData = {
   kravNummer: number
   kravVersjon: number
   navn: string
+  status: KravStatus
   etterlevelseId?: string
   etterleves: boolean
   frist?: string

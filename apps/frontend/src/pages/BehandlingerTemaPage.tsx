@@ -7,7 +7,7 @@ import { codelist, ListName, TemaCode } from '../services/Codelist'
 import RouteLink, { urlForObject } from '../components/common/RouteLink'
 import { useBehandling } from '../api/BehandlingApi'
 import { Layout2 } from '../components/scaffold/Page'
-import { Etterlevelse, EtterlevelseStatus, KravEtterlevelseData, KravQL, PageResponse } from '../constants'
+import { Etterlevelse, EtterlevelseStatus, KravEtterlevelseData, KravQL, KravStatus, PageResponse } from '../constants'
 import { arkPennIcon, crossIcon, informationIcon } from '../components/Images'
 import { behandlingKravQuery } from '../components/behandling/ViewBehandling'
 import { useQuery } from '@apollo/client'
@@ -91,6 +91,7 @@ export const BehandlingerTemaPage = () => {
           kravVersjon: krav.kravVersjon,
           navn: krav.navn,
           suksesskriterier: krav.suksesskriterier,
+          status: krav.status,
           varselMelding: krav.varselMelding,
           prioriteringsId: krav.prioriteringsId,
           ...mapEtterlevelseData(etterlevelse),
@@ -104,7 +105,7 @@ export const BehandlingerTemaPage = () => {
           mapped.splice(index - 1, 1)
         }
       }
-      setKravData(mapped)
+      setKravData(mapped.filter((k) => k.status !== KravStatus.UTGAATT && k.etterlevelseStatus !== undefined))
     })()
   }, [rawData])
 
@@ -123,7 +124,10 @@ export const BehandlingerTemaPage = () => {
     )
     setSkalUtfyllesKrav(
       kravData.filter(
-        (k) => k.etterlevelseStatus === EtterlevelseStatus.UNDER_REDIGERING || k.etterlevelseStatus === EtterlevelseStatus.FERDIG || k.etterlevelseStatus === undefined || null,
+        (k) => k.etterlevelseStatus === EtterlevelseStatus.UNDER_REDIGERING
+          || k.etterlevelseStatus === EtterlevelseStatus.FERDIG
+          || k.etterlevelseStatus === undefined
+          || null,
       ),
     )
   }, [kravData])

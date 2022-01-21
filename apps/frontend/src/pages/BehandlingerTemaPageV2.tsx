@@ -7,7 +7,7 @@ import { codelist, ListName, TemaCode } from '../services/Codelist'
 import RouteLink from '../components/common/RouteLink'
 import { useBehandling } from '../api/BehandlingApi'
 import { Layout2 } from '../components/scaffold/Page'
-import { Etterlevelse, EtterlevelseStatus, KravEtterlevelseData, KravQL, PageResponse } from '../constants'
+import { Etterlevelse, EtterlevelseStatus, KravEtterlevelseData, KravQL, KravStatus, PageResponse } from '../constants'
 import { angleIcon, informationIcon, page2Icon } from '../components/Images'
 import { behandlingKravQuery } from '../components/behandling/ViewBehandling'
 import { useQuery } from '@apollo/client'
@@ -105,6 +105,7 @@ export const BehandlingerTemaPageV2 = () => {
           kravNummer: krav.kravNummer,
           kravVersjon: krav.kravVersjon,
           navn: krav.navn,
+          status: krav.status,
           suksesskriterier: krav.suksesskriterier,
           varselMelding: krav.varselMelding,
           prioriteringsId: krav.prioriteringsId,
@@ -118,6 +119,7 @@ export const BehandlingerTemaPageV2 = () => {
           kravNummer: krav.kravNummer,
           kravVersjon: krav.kravVersjon,
           navn: krav.navn,
+          status: krav.status,
           suksesskriterier: krav.suksesskriterier,
           varselMelding: krav.varselMelding,
           prioriteringsId: krav.prioriteringsId,
@@ -134,7 +136,7 @@ export const BehandlingerTemaPageV2 = () => {
           mapped.splice(index - 1, 1)
         }
       }
-      setKravData(mapped)
+      setKravData(mapped.filter((k) => k.status !== KravStatus.UTGAATT && k.etterlevelseStatus !== undefined))
     })()
   }, [rawData, irrelevantData])
 
@@ -153,7 +155,10 @@ export const BehandlingerTemaPageV2 = () => {
     )
     setSkalUtfyllesKrav(
       kravData.filter(
-        (k) => k.etterlevelseStatus === EtterlevelseStatus.UNDER_REDIGERING || k.etterlevelseStatus === EtterlevelseStatus.FERDIG || k.etterlevelseStatus === undefined || null,
+        (k) => k.etterlevelseStatus === EtterlevelseStatus.UNDER_REDIGERING 
+        || k.etterlevelseStatus === EtterlevelseStatus.FERDIG 
+        || k.etterlevelseStatus === undefined 
+        || null,
       ),
     )
   }, [kravData])
