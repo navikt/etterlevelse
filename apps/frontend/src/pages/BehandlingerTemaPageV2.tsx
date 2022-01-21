@@ -139,7 +139,7 @@ export const BehandlingerTemaPageV2 = () => {
 
       setKravData(mapped.filter((k) => !(k.status === KravStatus.UTGAATT && k.etterlevelseStatus === undefined)))
     })()
-  }, [rawData, irrelevantData])
+  }, [rawData])
 
   const update = (etterlevelse: Etterlevelse) => {
     setKravData(kravData.map((e) => (e.kravVersjon === etterlevelse.kravVersjon && e.kravNummer === etterlevelse.kravNummer ? { ...e, ...mapEtterlevelseData(etterlevelse) } : e)))
