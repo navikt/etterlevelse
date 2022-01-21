@@ -15,7 +15,6 @@ import { CustomizedAccordion, CustomizedPanel, CustomPanelDivider } from '../com
 import CustomizedModal from '../components/common/CustomizedModal'
 import { Spinner } from '../components/common/Spinner'
 import { useEtterlevelse } from '../api/EtterlevelseApi'
-import { EditEtterlevelse } from '../components/etterlevelse/EditEtterlevelse'
 import { getKravByKravNumberAndVersion, KravId } from '../api/KravApi'
 import { borderColor, borderRadius, borderStyle, borderWidth } from '../components/common/Style'
 import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
@@ -33,6 +32,7 @@ import { Option } from 'baseui/select'
 import { user } from '../services/User'
 import { getMainHeader } from './BehandlingPage'
 import { getTemaMainHeader } from './TemaPage'
+import { EditEtterlevelseV2 } from '../components/etterlevelse/EditEtterlevelseV2'
 
 const responsiveBreakPoints: Responsive<Display> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
 const responsiveDisplay: Responsive<Display> = ['block', 'block', 'block', 'block', 'flex', 'flex']
@@ -494,7 +494,7 @@ const KravView = (props: {
             ...borderColor(ettlevColors.green800)
           }}
         >
-          <EditEtterlevelse
+          <EditEtterlevelseV2
             behandlingNavn={props.behandlingNavn}
             behandlingId={props.behandlingId}
             behandlingformaal={props.behandlingformaal}
