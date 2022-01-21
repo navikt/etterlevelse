@@ -1,4 +1,4 @@
-import { Etterlevelse, EtterlevelseStatus, Krav, KravQL } from '../../constants'
+import { Etterlevelse, EtterlevelseStatus, Krav, KravQL, KravStatus } from '../../constants'
 import { Field, FieldProps, Form, Formik, FormikProps, validateYupSchema, yupToFormErrors } from 'formik'
 import { createEtterlevelse, mapEtterlevelseToFormValue, updateEtterlevelse } from '../../api/EtterlevelseApi'
 import { Block } from 'baseui/block'
@@ -507,8 +507,8 @@ const Edit = ({ krav, etterlevelse, submit, formRef, varsleMelding, behandlingId
                 paddingBottom="24px"
                 display="flex"
               >
-                <Button disabled={disableEdit} type="button" kind="secondary" marginRight onClick={close}>
-                  Avbryt og forkast endringene
+                <Button disabled={krav.status === KravStatus.UTGAATT ? false : disableEdit} type="button" kind="secondary" marginRight onClick={close}>
+                  {krav.status === KravStatus.UTGAATT ? 'Lukk' : 'Avbryt og forkast endringene'}
                 </Button>
                 <Button
                   type="button"

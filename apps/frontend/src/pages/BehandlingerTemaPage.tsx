@@ -105,7 +105,7 @@ export const BehandlingerTemaPage = () => {
           mapped.splice(index - 1, 1)
         }
       }
-      setKravData(mapped.filter((k) => k.status !== KravStatus.UTGAATT && k.etterlevelseStatus !== undefined))
+      setKravData(mapped.filter((k) => !(k.status === KravStatus.UTGAATT && k.etterlevelseStatus === undefined)))
     })()
   }, [rawData])
 

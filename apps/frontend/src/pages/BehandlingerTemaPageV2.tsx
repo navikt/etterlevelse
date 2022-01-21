@@ -136,7 +136,7 @@ export const BehandlingerTemaPageV2 = () => {
           mapped.splice(index - 1, 1)
         }
       }
-      setKravData(mapped.filter((k) => k.status !== KravStatus.UTGAATT && k.etterlevelseStatus !== undefined))
+      setKravData(mapped.filter((k) => !(k.status === KravStatus.UTGAATT && k.etterlevelseStatus === undefined)))
     })()
   }, [rawData, irrelevantData])
 
@@ -155,10 +155,10 @@ export const BehandlingerTemaPageV2 = () => {
     )
     setSkalUtfyllesKrav(
       kravData.filter(
-        (k) => k.etterlevelseStatus === EtterlevelseStatus.UNDER_REDIGERING 
-        || k.etterlevelseStatus === EtterlevelseStatus.FERDIG 
-        || k.etterlevelseStatus === undefined 
-        || null,
+        (k) => k.etterlevelseStatus === EtterlevelseStatus.UNDER_REDIGERING
+          || k.etterlevelseStatus === EtterlevelseStatus.FERDIG
+          || k.etterlevelseStatus === undefined
+          || null,
       ),
     )
   }, [kravData])
