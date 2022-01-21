@@ -127,8 +127,6 @@ export const BehandlingerTemaPageV2 = () => {
         }
       })
 
-      setIrrelevantKravData(irrelevantMapped.filter((k) => k.etterlevelseStatus === undefined))
-
       for (let index = mapped.length - 1; index > 0; index--) {
         if (mapped[index].kravNummer === mapped[index - 1].kravNummer && mapped[index - 1].etterlevelseStatus === EtterlevelseStatus.FERDIG_DOKUMENTERT) {
           mapped[index - 1].gammelVersjon = true
@@ -136,6 +134,9 @@ export const BehandlingerTemaPageV2 = () => {
           mapped.splice(index - 1, 1)
         }
       }
+
+      setIrrelevantKravData(irrelevantMapped.filter((k) => k.etterlevelseStatus === undefined))
+
       setKravData(mapped.filter((k) => !(k.status === KravStatus.UTGAATT && k.etterlevelseStatus === undefined)))
     })()
   }, [rawData, irrelevantData])
