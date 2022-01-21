@@ -169,7 +169,7 @@ export const EditEtterlevelse = ({
   }, [nyereKrav])
 
   return (
-    <Block>
+    <Block width="100%">
       {krav && (
         <Formik
           onSubmit={submit}

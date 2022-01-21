@@ -476,28 +476,40 @@ const KravView = (props: {
   }, [])
 
   return (
-    <Block
-      $style={{ ...borderWidth('1px'), ...borderStyle('solid'), ...borderColor(ettlevColors.green800) }}
-      width="100%"
-      display="flex"
-      justifyContent="center"
-      minHeight="50px"
-    >
-      {!etterlevelse && <Spinner size={theme.sizing.scale800} />}
+    <Block width="100%" >
+      {!etterlevelse && <Block width="100%"
+        display="flex"
+        justifyContent="center"
+        marginTop="50px"
+      >
+        <Spinner size={theme.sizing.scale1200} />
+      </Block>}
       {etterlevelse && (
-        <EditEtterlevelse
-          behandlingNavn={props.behandlingNavn}
-          behandlingId={props.behandlingId}
-          behandlingformaal={props.behandlingformaal}
-          kravId={toKravId(etterlevelse)}
-          etterlevelse={etterlevelse}
-          behandlingNummer={props.behandlingNummer}
-          varsleMelding={varsleMelding}
-          close={(e) => {
-            props.close(e)
+        <Block
+          width="100%"
+          display="flex"
+          justifyContent="center"
+          minHeight="100px"
+          $style={{
+            ...borderWidth('1px'),
+            ...borderStyle('solid'),
+            ...borderColor(ettlevColors.green800)
           }}
-        />
+        >
+          <EditEtterlevelse
+            behandlingNavn={props.behandlingNavn}
+            behandlingId={props.behandlingId}
+            behandlingformaal={props.behandlingformaal}
+            kravId={toKravId(etterlevelse)}
+            etterlevelse={etterlevelse}
+            behandlingNummer={props.behandlingNummer}
+            varsleMelding={varsleMelding}
+            close={(e) => {
+              props.close(e)
+            }}
+          />
+        </Block>
       )}
-    </Block>
+    </Block >
   )
 }
