@@ -313,43 +313,41 @@ export const BehandlingerTemaPageV2 = () => {
           breadcrumbPaths={breadcrumbPaths}
         >
           <Block display="flex" width="100%" justifyContent="space-between" flexWrap marginBottom="64px">
-            {!edit && behandling &&
-              <>
-                <CustomizedAccordion accordion={false}>
-                  <CustomizedPanel
-                    HeaderActiveBackgroundColor={ettlevColors.green50}
-                    onClick={() => setIsExpanded(!isExpanded)}
-                    title={<KravPanelHeader title={'Skal fylles ut'} kravData={skalUtfyllesKrav} />}
-                  >
-                    {getKravList(skalUtfyllesKrav, 'Ingen krav som skal fylles ut', true)}
-                  </CustomizedPanel>
-                  <CustomizedPanel HeaderActiveBackgroundColor={ettlevColors.green50} title={<KravPanelHeader title={'Ferdig utfylt'} kravData={utfyltKrav} />}>
-                    {getKravList(utfyltKrav, 'Ingen krav er ferdig utfylt')}
-                  </CustomizedPanel>
-                </CustomizedAccordion>
-                {!irrelevantDataLoading && irrelevantKravData.length > 0 &&
-                  <Block marginTop="64px" width="100%">
-                    <H3 marginTop="0px" marginBottom="16px">
-                      Krav dere har filtrert bort
-                    </H3>
-                    <Paragraph2 marginTop="0px" marginBottom="25px" maxWidth="574px" width="100%">
-                      Dere har filtrert bort krav under dette tema, som dere allikevel må kjenne til og vurdere om dere skal dokumentere på
-                    </Paragraph2>
-                    <Block width="100%">
-                      <CustomizedAccordion>
-                        <CustomizedPanel
-                          HeaderActiveBackgroundColor={ettlevColors.green50}
-                          onClick={() => setIsExpanded(!isExpanded)}
-                          title={<KravPanelHeader title="Må vurderes av dere" kravData={irrelevantKravData} />}
-                        >
-                          {getKravList(irrelevantKravData, 'Ingen krav som skal fylles ut', false, true)}
-                        </CustomizedPanel>
-                      </CustomizedAccordion>
-                    </Block>
+            <Block width="100%" display={edit ? 'none' : 'block'}>
+              <CustomizedAccordion accordion={false}>
+                <CustomizedPanel
+                  HeaderActiveBackgroundColor={ettlevColors.green50}
+                  onClick={() => setIsExpanded(!isExpanded)}
+                  title={<KravPanelHeader title={'Skal fylles ut'} kravData={skalUtfyllesKrav} />}
+                >
+                  {getKravList(skalUtfyllesKrav, 'Ingen krav som skal fylles ut', true)}
+                </CustomizedPanel>
+                <CustomizedPanel HeaderActiveBackgroundColor={ettlevColors.green50} title={<KravPanelHeader title={'Ferdig utfylt'} kravData={utfyltKrav} />}>
+                  {getKravList(utfyltKrav, 'Ingen krav er ferdig utfylt')}
+                </CustomizedPanel>
+              </CustomizedAccordion>
+              {!irrelevantDataLoading && irrelevantKravData.length > 0 &&
+                <Block marginTop="64px" width="100%">
+                  <H3 marginTop="0px" marginBottom="16px">
+                    Krav dere har filtrert bort
+                  </H3>
+                  <Paragraph2 marginTop="0px" marginBottom="25px" maxWidth="574px" width="100%">
+                    Dere har filtrert bort krav under dette tema, som dere allikevel må kjenne til og vurdere om dere skal dokumentere på
+                  </Paragraph2>
+                  <Block width="100%">
+                    <CustomizedAccordion>
+                      <CustomizedPanel
+                        HeaderActiveBackgroundColor={ettlevColors.green50}
+                        onClick={() => setIsExpanded(!isExpanded)}
+                        title={<KravPanelHeader title="Må vurderes av dere" kravData={irrelevantKravData} />}
+                      >
+                        {getKravList(irrelevantKravData, 'Ingen krav som skal fylles ut', false, true)}
+                      </CustomizedPanel>
+                    </CustomizedAccordion>
                   </Block>
-                }
-              </>
-            }
+                </Block>
+              }
+            </Block>
             {edit && behandling && (
               <KravView
                 behandlingNavn={behandling.navn}
