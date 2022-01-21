@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Block, Display } from 'baseui/block'
 import { useParams } from 'react-router-dom'
-import { H1, H2, Label3, Paragraph2, Paragraph3, Paragraph4 } from 'baseui/typography'
+import { H1, H2, H3, Label3, Paragraph2, Paragraph3, Paragraph4 } from 'baseui/typography'
 import { ettlevColors, maxPageWidth, responsivePaddingLarge, responsivePaddingSmall, theme } from '../util/theme'
 import { codelist, ListName, TemaCode } from '../services/Codelist'
 import RouteLink, { urlForObject } from '../components/common/RouteLink'
@@ -56,16 +56,23 @@ const mapEtterlevelseData = (etterlevelse?: Etterlevelse) => ({
 export const BehandlingerTemaPageV2 = () => {
   const params = useParams<{ id?: string; tema?: string }>()
   const temaData: TemaCode | undefined = codelist.getCode(ListName.TEMA, params.tema)
+  const irrelevantKrav = params?.tema?.charAt(0) === 'i' ? true : false
   const [behandling, setBehandling] = useBehandling(params.id)
   const lovListe = codelist.getCodesForTema(temaData?.code)
   const lover = lovListe.map((c) => c.code)
-  const variables = { behandlingId: params.id, lover: lover, gjeldendeKrav: false }
+  const variables = { behandlingId: params.id, lover: lover, gjeldendeKrav: false, behandlingIrrevantKrav: irrelevantKrav }
   const { data: rawData, loading } = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
     variables,
     skip: !params.id || !lover.length,
   })
 
+  const { data: irrelevantData, loading: irrelevantDataLoading } = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
+    variables: { behandlingId: params.id, lover: lover, gjeldendeKrav: false, behandlingIrrevantKrav: !irrelevantKrav },
+    skip: !params.id || !lover.length,
+  })
+
   const [kravData, setKravData] = useState<KravEtterlevelseData[]>([])
+  const [irrelevantKravData, setIrrelevantKravData] = useState<KravEtterlevelseData[]>([])
 
   const [utfyltKrav, setUtfyltKrav] = useState<KravEtterlevelseData[]>([])
   const [skalUtfyllesKrav, setSkalUtfyllesKrav] = useState<KravEtterlevelseData[]>([])
@@ -84,13 +91,21 @@ export const BehandlingerTemaPageV2 = () => {
     ; (async () => {
       const allKravPriority = await getAllKravPriority()
       const kraver = _.cloneDeep(rawData?.krav.content) || []
+      const irrelevantKraver = _.cloneDeep(irrelevantData?.krav.content) || []
 
       kraver.map((k) => {
         const priority = allKravPriority.filter((kp) => kp.kravNummer === k.kravNummer && kp.kravVersjon === k.kravVersjon)
         k.prioriteringsId = priority.length ? priority[0].prioriteringsId : ''
       })
 
+      irrelevantKraver.map((ik) => {
+        const priority = allKravPriority.filter((kp) => kp.kravNummer === ik.kravNummer && kp.kravVersjon === ik.kravVersjon)
+        ik.prioriteringsId = priority.length ? priority[0].prioriteringsId : ''
+      })
+
       const sortedKrav = sortKraverByPriority<KravQL>(kraver, temaData?.shortName || '')
+      const sortedIrrelevantKrav = sortKraverByPriority<KravQL>(irrelevantKraver, temaData?.shortName || '')
+
       const mapped = sortedKrav.map((krav) => {
         const etterlevelse = krav.etterlevelser.length ? krav.etterlevelser[0] : undefined
         return {
@@ -104,6 +119,21 @@ export const BehandlingerTemaPageV2 = () => {
         }
       })
 
+      const irrelevantMapped = sortedIrrelevantKrav.map((krav) => {
+        const etterlevelse = krav.etterlevelser.length ? krav.etterlevelser[0] : undefined
+        return {
+          kravNummer: krav.kravNummer,
+          kravVersjon: krav.kravVersjon,
+          navn: krav.navn,
+          suksesskriterier: krav.suksesskriterier,
+          varselMelding: krav.varselMelding,
+          prioriteringsId: krav.prioriteringsId,
+          ...mapEtterlevelseData(etterlevelse),
+        }
+      })
+
+      setIrrelevantKravData(irrelevantMapped.filter((k) => k.etterlevelseStatus === undefined))
+
       for (let index = mapped.length - 1; index > 0; index--) {
         if (mapped[index].kravNummer === mapped[index - 1].kravNummer && mapped[index - 1].etterlevelseStatus === EtterlevelseStatus.FERDIG_DOKUMENTERT) {
           mapped[index - 1].gammelVersjon = true
@@ -113,7 +143,7 @@ export const BehandlingerTemaPageV2 = () => {
       }
       setKravData(mapped)
     })()
-  }, [rawData])
+  }, [rawData, irrelevantData])
 
   const update = (etterlevelse: Etterlevelse) => {
     setKravData(kravData.map((e) => (e.kravVersjon === etterlevelse.kravVersjon && e.kravNummer === etterlevelse.kravNummer ? { ...e, ...mapEtterlevelseData(etterlevelse) } : e)))
@@ -155,7 +185,7 @@ export const BehandlingerTemaPageV2 = () => {
   const getSecondaryHeader = () => (
     <Block width="100%">
       <Block marginTop="19px">
-        <RouteLink fontColor={ettlevColors.green600}  $style={{ fontSize: '18px', fontWheight: 400, LineHeigt: '22px'}} href={`/behandling/${behandling?.id}`}>
+        <RouteLink fontColor={ettlevColors.green600} $style={{ fontSize: '18px', fontWheight: 400, LineHeigt: '22px' }} href={`/behandling/${behandling?.id}`}>
           Krav til utfylling
         </RouteLink>
       </Block>
@@ -214,7 +244,7 @@ export const BehandlingerTemaPageV2 = () => {
     </Block>
   )
 
-  const getKravList = (kravList: KravEtterlevelseData[], emptyMessage: string, sortingAvailable?: boolean) => {
+  const getKravList = (kravList: KravEtterlevelseData[], emptyMessage: string, sortingAvailable?: boolean, noStatus?: boolean) => {
     if (kravList.length) {
       let sortedKravList = _.cloneDeep(kravList)
       if (sortingAvailable && sorting[0].id === sortingOptions[1].id) {
@@ -243,7 +273,7 @@ export const BehandlingerTemaPageV2 = () => {
           {sortedKravList.map((k) => {
             return (
               <CustomPanelDivider key={`${k.navn}_${k.kravNummer}_${k.kravVersjon}`}>
-                <KravCard krav={k} setEdit={setEdit} setKravId={setKravId} key={`${k.navn}_${k.kravNummer}_${k.kravVersjon}_card`} />
+                <KravCard krav={k} setEdit={setEdit} setKravId={setKravId} key={`${k.navn}_${k.kravNummer}_${k.kravVersjon}_card`} noStatus={noStatus}/>
               </CustomPanelDivider>
             )
           })}
@@ -297,6 +327,27 @@ export const BehandlingerTemaPageV2 = () => {
                 {getKravList(utfyltKrav, 'Ingen krav er ferdig utfylt')}
               </CustomizedPanel>
             </CustomizedAccordion>
+            {!irrelevantDataLoading && irrelevantKravData.length > 0 &&
+              <Block marginTop="64px" width="100%">
+                <H3 marginTop="0px" marginBottom="16px">
+                  Krav dere har filtrert bort
+                </H3>
+                <Paragraph2 marginTop="0px" marginBottom="25px" maxWidth="574px" width="100%">
+                  Dere har filtrert bort krav under dette tema, som dere allikevel må kjenne til og vurdere om dere skal dokumentere på
+                </Paragraph2>
+                <Block width="100%">
+                  <CustomizedAccordion>
+                    <CustomizedPanel
+                      HeaderActiveBackgroundColor={ettlevColors.green50}
+                      onClick={() => setIsExpanded(!isExpanded)}
+                      title={<KravPanelHeader title="Må vurderes av dere" kravData={irrelevantKravData} />}
+                    >
+                      {getKravList(irrelevantKravData, 'Ingen krav som skal fylles ut',false, true)}
+                    </CustomizedPanel>
+                  </CustomizedAccordion>
+                </Block>
+              </Block>
+            }
             {edit && behandling && (
               <Block maxWidth={maxPageWidth}>
                 <CustomizedModal isOpen={!!edit} onClose={() => setEdit(undefined)} overrides={{ Root: { props: { id: 'edit-etterlevelse-modal' } } }}>
@@ -363,7 +414,7 @@ const EditModal = (props: {
   )
 }
 
-const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function; setKravId: Function }) => {
+const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function; setKravId: Function, noStatus?: boolean }) => {
   const ferdigUtfylt =
     props.krav.etterlevelseStatus === EtterlevelseStatus.FERDIG_DOKUMENTERT ||
     props.krav.etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT ||
@@ -420,7 +471,7 @@ const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function; setKra
                 </Block>
               )}
             </Block>
-            <Block display="flex" width="100%" maxWidth="132px" justifyContent="flex-end">
+            {!props.noStatus && <Block display="flex" width="100%" maxWidth="132px" justifyContent="flex-end">
               <StatusView
                 status={ferdigUtfylt ? 'Ferdig utfylt' : props.krav.etterlevelseStatus ? 'Under utfylling' : 'Ikke påbegynt'}
                 icon={props.krav.varselMelding ? <img src={informationIcon} alt="" width="16px" height="16px" /> : undefined}
@@ -430,7 +481,7 @@ const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function; setKra
                 }}
                 background={props.krav.varselMelding ? ettlevColors.white : undefined}
               />
-            </Block>
+            </Block>}
           </Block>
         </Block>
       </Block>
