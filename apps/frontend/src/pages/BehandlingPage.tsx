@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { ReactNode, useRef, useState } from 'react'
 import { Block, Display, Responsive } from 'baseui/block'
 import { useParams } from 'react-router-dom'
 import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
@@ -29,14 +29,14 @@ import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons'
 
 const responsiveDisplay: Responsive<Display> = ['block', 'block', 'block', 'block', 'flex', 'flex']
 
-export const getMainHeader = (behandling: Behandling) => (
+export const getMainHeader = (behandling: Behandling, helmet?: ReactNode) => (
   <Block display={responsiveDisplay} justifyContent="space-between" marginBottom="32px" marginTop="38px">
-    <Helmet>
+    {helmet ? helmet : <Helmet>
       <meta charSet="utf-8" />
       <title>
         B{behandling.nummer.toString()} {behandling.navn.toString()}
       </title>
-    </Helmet>
+    </Helmet>}
     <Block width="100%">
       <Label3 color={ettlevColors.green600}>
         B{behandling.nummer} {behandling.overordnetFormaal.shortName}
@@ -289,7 +289,7 @@ export const BehandlingPage = () => {
             <TemaCardBehandling tema={tema} stats={relevanteStats} behandling={behandling} key={`${tema.shortName}_panel`} />
           ))}
         </Block>
-        
+
         {/* 
         DISABLED TEMPORARY
         {irrelevanteStats.length > 0 && (
