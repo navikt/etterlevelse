@@ -139,7 +139,7 @@ export const BehandlingerTemaPageV2 = () => {
 
       setKravData(mapped.filter((k) => !(k.status === KravStatus.UTGAATT && k.etterlevelseStatus === undefined)))
     })()
-  }, [rawData])
+  }, [rawData, irrelevantData])
 
   const update = (etterlevelse: Etterlevelse) => {
     setKravData(kravData.map((e) => (e.kravVersjon === etterlevelse.kravVersjon && e.kravNummer === etterlevelse.kravNummer ? { ...e, ...mapEtterlevelseData(etterlevelse) } : e)))
@@ -332,7 +332,7 @@ export const BehandlingerTemaPageV2 = () => {
                   {getKravList(utfyltKrav, 'Ingen krav er ferdig utfylt')}
                 </CustomizedPanel>
               </CustomizedAccordion>
-              {!irrelevantDataLoading && irrelevantKravData.length > 0 &&
+              {irrelevantKravData.length > 0 &&
                 <Block marginTop="64px" width="100%">
                   <H3 marginTop="0px" marginBottom="16px">
                     Krav dere har filtrert bort
