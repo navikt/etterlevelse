@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { Block, Display } from 'baseui/block'
 import { useParams } from 'react-router-dom'
-import { H1, H2, H3, Label3, Paragraph2, Paragraph3, Paragraph4 } from 'baseui/typography'
-import { ettlevColors, maxPageWidth, responsivePaddingLarge, responsivePaddingSmall, theme } from '../util/theme'
+import { H1, H3, Label3, Paragraph2, Paragraph4 } from 'baseui/typography'
+import { ettlevColors, responsivePaddingLarge, theme } from '../util/theme'
 import { codelist, ListName, TemaCode } from '../services/Codelist'
-import RouteLink, { urlForObject } from '../components/common/RouteLink'
+import RouteLink from '../components/common/RouteLink'
 import { useBehandling } from '../api/BehandlingApi'
 import { Layout2 } from '../components/scaffold/Page'
 import { Etterlevelse, EtterlevelseStatus, KravEtterlevelseData, KravQL, PageResponse } from '../constants'
-import { angleIcon, crossIcon, informationIcon, page2Icon } from '../components/Images'
+import { angleIcon, informationIcon, page2Icon } from '../components/Images'
 import { behandlingKravQuery } from '../components/behandling/ViewBehandling'
 import { useQuery } from '@apollo/client'
 import { CustomizedAccordion, CustomizedPanel, CustomPanelDivider } from '../components/common/CustomizedAccordion'
@@ -17,7 +17,7 @@ import { Spinner } from '../components/common/Spinner'
 import { useEtterlevelse } from '../api/EtterlevelseApi'
 import { EditEtterlevelse } from '../components/etterlevelse/EditEtterlevelse'
 import { getKravByKravNumberAndVersion, KravId } from '../api/KravApi'
-import { borderRadius, borderStyle } from '../components/common/Style'
+import { borderColor, borderRadius, borderStyle, borderWidth } from '../components/common/Style'
 import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 import Button from '../components/common/Button'
 import { Responsive } from 'baseui/theme'
@@ -25,19 +25,12 @@ import { KravPanelHeader } from '../components/behandling/KravPanelHeader'
 import { sortKraverByPriority } from '../util/sort'
 import _ from 'lodash'
 import { getAllKravPriority } from '../api/KravPriorityApi'
-import { env } from '../util/env'
-import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import CustomizedLink from '../components/common/CustomizedLink'
 import StatusView from '../components/common/StatusTag'
 import moment from 'moment'
 import { Helmet } from 'react-helmet'
 import CustomizedSelect from '../components/common/CustomizedSelect'
 import { Option } from 'baseui/select'
 import { user } from '../services/User'
-import { Teams } from '../components/common/TeamName'
-import { ExternalButton } from '../components/common/Button'
-import { Behandling } from '../constants'
 import { getMainHeader } from './BehandlingPage'
 import { getTemaMainHeader } from './TemaPage'
 
@@ -273,7 +266,7 @@ export const BehandlingerTemaPageV2 = () => {
           {sortedKravList.map((k) => {
             return (
               <CustomPanelDivider key={`${k.navn}_${k.kravNummer}_${k.kravVersjon}`}>
-                <KravCard krav={k} setEdit={setEdit} setKravId={setKravId} key={`${k.navn}_${k.kravNummer}_${k.kravVersjon}_card`} noStatus={noStatus}/>
+                <KravCard krav={k} setEdit={setEdit} setKravId={setKravId} key={`${k.navn}_${k.kravNummer}_${k.kravVersjon}_card`} noStatus={noStatus} />
               </CustomPanelDivider>
             )
           })}
@@ -307,7 +300,12 @@ export const BehandlingerTemaPageV2 = () => {
         <Layout2
           headerBackgroundColor="#F8F8F8"
           headerOverlap="31px"
-          mainHeader={getMainHeader(behandling)}
+          mainHeader={getMainHeader(behandling, <Helmet>
+            <meta charSet="utf-8" />
+            <title>
+              {temaData?.shortName} B{behandling.nummer.toString()} {behandling.navn.toString()}
+            </title>
+          </Helmet>)}
           secondaryHeaderBackgroundColor={ettlevColors.green100}
           secondaryHeader={getSecondaryHeader()}
           childrenBackgroundColor={ettlevColors.grey25}
@@ -315,104 +313,66 @@ export const BehandlingerTemaPageV2 = () => {
           breadcrumbPaths={breadcrumbPaths}
         >
           <Block display="flex" width="100%" justifyContent="space-between" flexWrap marginBottom="64px">
-            <CustomizedAccordion accordion={false}>
-              <CustomizedPanel
-                HeaderActiveBackgroundColor={ettlevColors.green50}
-                onClick={() => setIsExpanded(!isExpanded)}
-                title={<KravPanelHeader title={'Skal fylles ut'} kravData={skalUtfyllesKrav} />}
-              >
-                {getKravList(skalUtfyllesKrav, 'Ingen krav som skal fylles ut', true)}
-              </CustomizedPanel>
-              <CustomizedPanel HeaderActiveBackgroundColor={ettlevColors.green50} title={<KravPanelHeader title={'Ferdig utfylt'} kravData={utfyltKrav} />}>
-                {getKravList(utfyltKrav, 'Ingen krav er ferdig utfylt')}
-              </CustomizedPanel>
-            </CustomizedAccordion>
-            {!irrelevantDataLoading && irrelevantKravData.length > 0 &&
-              <Block marginTop="64px" width="100%">
-                <H3 marginTop="0px" marginBottom="16px">
-                  Krav dere har filtrert bort
-                </H3>
-                <Paragraph2 marginTop="0px" marginBottom="25px" maxWidth="574px" width="100%">
-                  Dere har filtrert bort krav under dette tema, som dere allikevel må kjenne til og vurdere om dere skal dokumentere på
-                </Paragraph2>
-                <Block width="100%">
-                  <CustomizedAccordion>
-                    <CustomizedPanel
-                      HeaderActiveBackgroundColor={ettlevColors.green50}
-                      onClick={() => setIsExpanded(!isExpanded)}
-                      title={<KravPanelHeader title="Må vurderes av dere" kravData={irrelevantKravData} />}
-                    >
-                      {getKravList(irrelevantKravData, 'Ingen krav som skal fylles ut',false, true)}
-                    </CustomizedPanel>
-                  </CustomizedAccordion>
-                </Block>
-              </Block>
-            }
-            {edit && behandling && (
-              <Block maxWidth={maxPageWidth}>
-                <CustomizedModal isOpen={!!edit} onClose={() => setEdit(undefined)} overrides={{ Root: { props: { id: 'edit-etterlevelse-modal' } } }}>
-                  <Block flex="1" backgroundColor={ettlevColors.green800}>
-                    <Block paddingTop={theme.sizing.scale1200} paddingRight={theme.sizing.scale1000} paddingLeft={theme.sizing.scale1000}>
-                      <Block display="flex" flex="1" justifyContent="flex-end">
-                        <Button kind="tertiary" onClick={() => setEdit(undefined)} $style={{ ':hover': { backgroundColor: 'transparent' } }}>
-                          <img src={crossIcon} alt="close" />
-                        </Button>
-                      </Block>
+            {!edit && behandling &&
+              <>
+                <CustomizedAccordion accordion={false}>
+                  <CustomizedPanel
+                    HeaderActiveBackgroundColor={ettlevColors.green50}
+                    onClick={() => setIsExpanded(!isExpanded)}
+                    title={<KravPanelHeader title={'Skal fylles ut'} kravData={skalUtfyllesKrav} />}
+                  >
+                    {getKravList(skalUtfyllesKrav, 'Ingen krav som skal fylles ut', true)}
+                  </CustomizedPanel>
+                  <CustomizedPanel HeaderActiveBackgroundColor={ettlevColors.green50} title={<KravPanelHeader title={'Ferdig utfylt'} kravData={utfyltKrav} />}>
+                    {getKravList(utfyltKrav, 'Ingen krav er ferdig utfylt')}
+                  </CustomizedPanel>
+                </CustomizedAccordion>
+                {!irrelevantDataLoading && irrelevantKravData.length > 0 &&
+                  <Block marginTop="64px" width="100%">
+                    <H3 marginTop="0px" marginBottom="16px">
+                      Krav dere har filtrert bort
+                    </H3>
+                    <Paragraph2 marginTop="0px" marginBottom="25px" maxWidth="574px" width="100%">
+                      Dere har filtrert bort krav under dette tema, som dere allikevel må kjenne til og vurdere om dere skal dokumentere på
+                    </Paragraph2>
+                    <Block width="100%">
+                      <CustomizedAccordion>
+                        <CustomizedPanel
+                          HeaderActiveBackgroundColor={ettlevColors.green50}
+                          onClick={() => setIsExpanded(!isExpanded)}
+                          title={<KravPanelHeader title="Må vurderes av dere" kravData={irrelevantKravData} />}
+                        >
+                          {getKravList(irrelevantKravData, 'Ingen krav som skal fylles ut', false, true)}
+                        </CustomizedPanel>
+                      </CustomizedAccordion>
                     </Block>
                   </Block>
-
-                  <EditModal
-                    behandlingNavn={behandling.navn}
-                    etterlevelseId={edit}
-                    behandlingId={behandling.id}
-                    behandlingformaal={behandling.overordnetFormaal.shortName || ''}
-                    behandlingNummer={behandling.nummer || 0}
-                    kravId={kravId}
-                    close={(e) => {
-                      setEdit(undefined)
-                      e && update(e)
-                    }}
-                  />
-                </CustomizedModal>
-              </Block>
+                }
+              </>
+            }
+            {edit && behandling && (
+              <KravView
+                behandlingNavn={behandling.navn}
+                etterlevelseId={edit}
+                behandlingId={behandling.id}
+                behandlingformaal={behandling.overordnetFormaal.shortName || ''}
+                behandlingNummer={behandling.nummer || 0}
+                kravId={kravId}
+                close={(e) => {
+                  setEdit(undefined)
+                  e && update(e)
+                }}
+              />
             )}
           </Block>
         </Layout2>
-      )}
+      )
+      }
     </>
   )
 }
 
 const toKravId = (it: { kravVersjon: number; kravNummer: number }) => ({ kravNummer: it.kravNummer, kravVersjon: it.kravVersjon })
-
-const EditModal = (props: {
-  etterlevelseId: string
-  behandlingId: string
-  behandlingformaal: string
-  kravId?: KravId
-  close: (e?: Etterlevelse) => void
-  behandlingNavn: string
-  behandlingNummer: number
-}) => {
-  const [etterlevelse] = useEtterlevelse(props.etterlevelseId, props.behandlingId, props.kravId)
-  if (!etterlevelse) return <Spinner size={theme.sizing.scale800} />
-
-  return (
-    <Block>
-      {etterlevelse && (
-        <KravView
-          behandlingformaal={props.behandlingformaal}
-          behandlingId={props.behandlingId}
-          behandlingNavn={props.behandlingNavn}
-          kravId={toKravId(etterlevelse)}
-          etterlevelse={etterlevelse}
-          close={props.close}
-          behandlingNummer={props.behandlingNummer}
-        />
-      )}
-    </Block>
-  )
-}
 
 const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function; setKravId: Function, noStatus?: boolean }) => {
   const ferdigUtfylt =
@@ -490,35 +450,47 @@ const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function; setKra
 }
 
 const KravView = (props: {
-  kravId: KravId
-  etterlevelse: Etterlevelse
-  close: Function
+  kravId?: KravId
+  etterlevelseId: string
+  close: (e?: Etterlevelse) => void
   behandlingNavn: string
   behandlingId: string
   behandlingformaal: string
   behandlingNummer: number
 }) => {
+  const [etterlevelse] = useEtterlevelse(props.etterlevelseId, props.behandlingId, props.kravId)
   const [varsleMelding, setVarsleMelding] = useState('')
 
   useEffect(() => {
     ; (async () => {
-      if (props.kravId.kravNummer && props.kravId.kravVersjon) {
-        const krav = await getKravByKravNumberAndVersion(props.kravId.kravNummer, props.kravId.kravVersjon)
-        if (krav) {
-          setVarsleMelding(krav.varselMelding || '')
+      if (etterlevelse) {
+        const kravId = toKravId(etterlevelse)
+        if (kravId.kravNummer && kravId.kravVersjon) {
+          const krav = await getKravByKravNumberAndVersion(kravId.kravNummer, kravId.kravVersjon)
+          if (krav) {
+            setVarsleMelding(krav.varselMelding || '')
+          }
         }
       }
     })()
   }, [])
+
   return (
-    <Block>
-      {props.kravId && (
+    <Block
+      $style={{ ...borderWidth('1px'), ...borderStyle('solid'), ...borderColor(ettlevColors.green800) }}
+      width="100%"
+      display="flex"
+      justifyContent="center"
+      minHeight="50px"
+    >
+      {!etterlevelse && <Spinner size={theme.sizing.scale800} />}
+      {etterlevelse && (
         <EditEtterlevelse
           behandlingNavn={props.behandlingNavn}
           behandlingId={props.behandlingId}
           behandlingformaal={props.behandlingformaal}
-          kravId={props.kravId}
-          etterlevelse={props.etterlevelse}
+          kravId={toKravId(etterlevelse)}
+          etterlevelse={etterlevelse}
           behandlingNummer={props.behandlingNummer}
           varsleMelding={varsleMelding}
           close={(e) => {
