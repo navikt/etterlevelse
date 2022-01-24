@@ -493,7 +493,6 @@ const KravView = (props: {
           width="100%"
           display="flex"
           justifyContent="center"
-          minHeight="100px"
           $style={{
             ...borderWidth('1px'),
             ...borderStyle('solid'),
