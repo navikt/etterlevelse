@@ -178,42 +178,41 @@ export const EditEtterlevelseV2 = ({
           }}
         >
           <Block backgroundColor={ettlevColors.green800} paddingTop={'32px'}>
-            <Block>
-              <Block paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge}>
-                <Paragraph2
+            <Block paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge}>
+              <Paragraph2
+                $style={{
+                  marginTop: '0px',
+                  marginBottom: '0px',
+                  color: ettlevColors.white,
+                }}
+              >
+                {kravNumView(krav)}
+              </Paragraph2>
+              <H1 $style={{ marginTop: '0px', marginBottom: '0px', paddingBottom: '32px', color: ettlevColors.white }}>{krav.navn}</H1>
+
+              {varsleMelding && (
+                <Block
+                  width="fit-content"
+                  display="flex"
+                  backgroundColor={'#E5F0F7'}
                   $style={{
-                    marginTop: '0px',
-                    marginBottom: '0px',
-                    color: ettlevColors.white,
+                    ...padding('12px', '16px'),
+                    ...borderColor('#005B82'),
+                    ...borderWidth('1px'),
+                    ...borderStyle('solid'),
+                    ...borderRadius('4px'),
+                    marginTop: '16px',
                   }}
                 >
-                  {kravNumView(krav)}
-                </Paragraph2>
-                <H1 $style={{ marginTop: '0px', marginBotttom: '0px', paddingBottom: '32px', color: ettlevColors.white }}>{krav.navn}</H1>
-
-                {varsleMelding && (
-                  <Block
-                    width="fit-content"
-                    display="flex"
-                    backgroundColor={'#E5F0F7'}
-                    $style={{
-                      ...padding('12px', '16px'),
-                      ...borderColor('#005B82'),
-                      ...borderWidth('1px'),
-                      ...borderStyle('solid'),
-                      ...borderRadius('4px'),
-                      marginTop: '16px',
-                    }}
-                  >
-                    <img src={informationIcon} alt="" width={'24px'} height={'24px'} />
-                    <Paragraph2 marginLeft={theme.sizing.scale500} marginTop="0px" marginBottom="0px">
-                      {varsleMelding}
-                    </Paragraph2>
-                  </Block>
-                )}
-              </Block>
-
+                  <img src={informationIcon} alt="" width={'24px'} height={'24px'} />
+                  <Paragraph2 marginLeft={theme.sizing.scale500} marginTop="0px" marginBottom="0px">
+                    {varsleMelding}
+                  </Paragraph2>
+                </Block>
+              )}
             </Block>
+          </Block>
+          <Block backgroundColor={ettlevColors.green100} height="63px">
           </Block>
           <Edit
             krav={krav}
