@@ -169,20 +169,82 @@ export const EditEtterlevelseV2 = ({
   return (
     <Block width="100%">
       {krav &&
-        <Edit
-          krav={krav}
-          etterlevelse={etterlevelse}
-          submit={submit}
-          formRef={formRef}
-          varsleMelding={varsleMelding}
-          behandlingId={behandlingId}
-          behandlingNummer={behandlingNummer || 0}
-          behandlingformaal={behandlingformaal || ''}
-          behandlingNavn={behandlingNavn || ''}
-          disableEdit={disableEdit}
-          documentEdit={documentEdit}
-          close={close}
-        />}
+        <>
+          <Block backgroundColor={ettlevColors.green800} paddingTop={'32px'}>
+            <Block>
+              <Block paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge}>
+                <Paragraph2 $style={{
+                  marginTop: '0px',
+                  marginBottom: '0px',
+                  color: ettlevColors.white
+                }}>{kravNumView(krav)}</Paragraph2>
+                <H1 $style={{ marginTop: '0px', marginBottom: '0px', color: ettlevColors.white }}>{krav.navn}</H1>
+
+                {varsleMelding && (
+                  <Block
+                    width="fit-content"
+                    display="flex"
+                    backgroundColor={'#E5F0F7'}
+                    $style={{
+                      ...padding('12px', '16px'),
+                      ...borderColor('#005B82'),
+                      ...borderWidth('1px'),
+                      ...borderStyle('solid'),
+                      ...borderRadius('4px'),
+                      marginTop: '16px',
+                    }}
+                  >
+                    <img src={informationIcon} alt="" width={'24px'} height={'24px'} />
+                    <Paragraph2 marginLeft={theme.sizing.scale500} marginTop="0px" marginBottom="0px">
+                      {varsleMelding}
+                    </Paragraph2>
+                  </Block>
+                )}
+              </Block>
+
+              <Block
+                display="flex"
+                paddingLeft={responsivePaddingLarge}
+                paddingRight={responsivePaddingLarge}
+                paddingBottom="32px"
+                paddingTop={varsleMelding ? '16px' : '32px'}
+              >
+                <Block>
+                  <Paragraph2 $style={{ marginTop: 0, marginBottom: 0, color: ettlevColors.white, maxWidth: '700px' }}>
+                    <Label3 $style={{ color: ettlevColors.white }}>Behandling: </Label3>
+                    <a href={`${env.pollyBaseUrl}process/${behandlingId}`} style={{ color: ettlevColors.white }} target="_blank" rel="noopener noreferrer">
+                        <span
+                          style={{
+                            display: 'inline-block',
+                            paddingBottom: '1px',
+                            borderBottom: '1px solid white',
+                            marginRight: '5px',
+                          }}
+                        >
+                          B{behandlingNummer} {behandlingformaal}: {behandlingNavn} <FontAwesomeIcon icon={faExternalLinkAlt} />
+                        </span>
+                    </a>
+                  </Paragraph2>
+                </Block>
+              </Block>
+            </Block>
+          </Block>
+          <Edit
+            krav={krav}
+            etterlevelse={etterlevelse}
+            submit={submit}
+            formRef={formRef}
+            varsleMelding={varsleMelding}
+            behandlingId={behandlingId}
+            behandlingNummer={behandlingNummer || 0}
+            behandlingformaal={behandlingformaal || ''}
+            behandlingNavn={behandlingNavn || ''}
+            disableEdit={disableEdit}
+            documentEdit={documentEdit}
+            close={close}
+          />
+        </>
+      }
     </Block>
   )
 }
@@ -223,61 +285,6 @@ const Edit = ({ krav, etterlevelse, submit, formRef, varsleMelding, behandlingId
       >
         {({ values, isSubmitting, submitForm, errors, setFieldError }: FormikProps<Etterlevelse>) => (
           <Block>
-            <Block backgroundColor={ettlevColors.green800}>
-              <Block>
-                <Block paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge}>
-                  <Paragraph2 $style={{ marginTop: '0px', marginBottom: '0px', color: ettlevColors.white }}>{kravNumView(krav)}</Paragraph2>
-                  <H1 $style={{ marginTop: '0px', marginBottom: '0px', color: ettlevColors.white }}>{krav.navn}</H1>
-
-                  {varsleMelding && (
-                    <Block
-                      width="fit-content"
-                      display="flex"
-                      backgroundColor={'#E5F0F7'}
-                      $style={{
-                        ...padding('12px', '16px'),
-                        ...borderColor('#005B82'),
-                        ...borderWidth('1px'),
-                        ...borderStyle('solid'),
-                        ...borderRadius('4px'),
-                        marginTop: '16px',
-                      }}
-                    >
-                      <img src={informationIcon} alt="" width={'24px'} height={'24px'} />
-                      <Paragraph2 marginLeft={theme.sizing.scale500} marginTop="0px" marginBottom="0px">
-                        {varsleMelding}
-                      </Paragraph2>
-                    </Block>
-                  )}
-                </Block>
-
-                <Block
-                  display="flex"
-                  paddingLeft={responsivePaddingLarge}
-                  paddingRight={responsivePaddingLarge}
-                  paddingBottom="32px"
-                  paddingTop={varsleMelding ? '16px' : '32px'}
-                >
-                  <Block>
-                    <Paragraph2 $style={{ marginTop: 0, marginBottom: 0, color: ettlevColors.white, maxWidth: '700px' }}>
-                      <Label3 $style={{ color: ettlevColors.white }}>Behandling: </Label3>
-                      <a href={`${env.pollyBaseUrl}process/${behandlingId}`} style={{ color: ettlevColors.white }} target="_blank" rel="noopener noreferrer">
-                        <span
-                          style={{
-                            display: 'inline-block',
-                            paddingBottom: '1px',
-                            borderBottom: '1px solid white',
-                            marginRight: '5px',
-                          }}
-                        >
-                          B{behandlingNummer} {behandlingformaal}: {behandlingNavn} <FontAwesomeIcon icon={faExternalLinkAlt} />
-                        </span>
-                      </a>
-                    </Paragraph2>
-                  </Block>
-                </Block>
-              </Block>
-            </Block>
             <Block paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge}>
               <Block marginTop="32px">
                 <Form>
