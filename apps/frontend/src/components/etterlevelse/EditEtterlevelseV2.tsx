@@ -189,7 +189,7 @@ export const EditEtterlevelseV2 = ({
                 >
                   {kravNumView(krav)}
                 </Paragraph2>
-                <H1 $style={{ marginTop: '0px', marginBottom: '0px', color: ettlevColors.white }}>{krav.navn}</H1>
+                <H1 $style={{ marginTop: '0px', marginBotttom: '0px', paddingBottom: '32px', color: ettlevColors.white }}>{krav.navn}</H1>
 
                 {varsleMelding && (
                   <Block
