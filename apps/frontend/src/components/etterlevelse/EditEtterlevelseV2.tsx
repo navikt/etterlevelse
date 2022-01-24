@@ -135,14 +135,14 @@ export const EditEtterlevelseV2 = ({
       suksesskriterieBegrunnelser:
         etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT
           ? [
-            ...etterlevelse.suksesskriterieBegrunnelser.map((s) => {
-              return {
-                ...s,
-                oppfylt: false,
-                ikkeRelevant: false,
-              }
-            }),
-          ]
+              ...etterlevelse.suksesskriterieBegrunnelser.map((s) => {
+                return {
+                  ...s,
+                  oppfylt: false,
+                  ikkeRelevant: false,
+                }
+              }),
+            ]
           : [...etterlevelse.suksesskriterieBegrunnelser],
     }
 
@@ -168,16 +168,27 @@ export const EditEtterlevelseV2 = ({
 
   return (
     <Block width="100%">
-      {krav &&
-        <>
+      {krav && (
+        <Block
+          width="100%"
+          $style={{
+            ...borderWidth('1px'),
+            ...borderStyle('solid'),
+            ...borderColor(ettlevColors.green800),
+          }}
+        >
           <Block backgroundColor={ettlevColors.green800} paddingTop={'32px'}>
             <Block>
               <Block paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge}>
-                <Paragraph2 $style={{
-                  marginTop: '0px',
-                  marginBottom: '0px',
-                  color: ettlevColors.white
-                }}>{kravNumView(krav)}</Paragraph2>
+                <Paragraph2
+                  $style={{
+                    marginTop: '0px',
+                    marginBottom: '0px',
+                    color: ettlevColors.white,
+                  }}
+                >
+                  {kravNumView(krav)}
+                </Paragraph2>
                 <H1 $style={{ marginTop: '0px', marginBottom: '0px', color: ettlevColors.white }}>{krav.navn}</H1>
 
                 {varsleMelding && (
@@ -202,31 +213,6 @@ export const EditEtterlevelseV2 = ({
                 )}
               </Block>
 
-              <Block
-                display="flex"
-                paddingLeft={responsivePaddingLarge}
-                paddingRight={responsivePaddingLarge}
-                paddingBottom="32px"
-                paddingTop={varsleMelding ? '16px' : '32px'}
-              >
-                <Block>
-                  <Paragraph2 $style={{ marginTop: 0, marginBottom: 0, color: ettlevColors.white, maxWidth: '700px' }}>
-                    <Label3 $style={{ color: ettlevColors.white }}>Behandling: </Label3>
-                    <a href={`${env.pollyBaseUrl}process/${behandlingId}`} style={{ color: ettlevColors.white }} target="_blank" rel="noopener noreferrer">
-                        <span
-                          style={{
-                            display: 'inline-block',
-                            paddingBottom: '1px',
-                            borderBottom: '1px solid white',
-                            marginRight: '5px',
-                          }}
-                        >
-                          B{behandlingNummer} {behandlingformaal}: {behandlingNavn} <FontAwesomeIcon icon={faExternalLinkAlt} />
-                        </span>
-                    </a>
-                  </Paragraph2>
-                </Block>
-              </Block>
             </Block>
           </Block>
           <Edit
@@ -243,28 +229,41 @@ export const EditEtterlevelseV2 = ({
             documentEdit={documentEdit}
             close={close}
           />
-        </>
-      }
+        </Block>
+      )}
     </Block>
   )
 }
 
 type EditProps = {
-  krav: KravQL,
-  etterlevelse: Etterlevelse,
-  submit: (etterlevelse: Etterlevelse) => Promise<void>,
-  formRef?: React.Ref<any>,
-  varsleMelding?: string,
-  behandlingId?: string,
-  behandlingNummer: number,
-  behandlingformaal: string,
-  behandlingNavn: string,
-  disableEdit: boolean,
-  documentEdit?: boolean,
+  krav: KravQL
+  etterlevelse: Etterlevelse
+  submit: (etterlevelse: Etterlevelse) => Promise<void>
+  formRef?: React.Ref<any>
+  varsleMelding?: string
+  behandlingId?: string
+  behandlingNummer: number
+  behandlingformaal: string
+  behandlingNavn: string
+  disableEdit: boolean
+  documentEdit?: boolean
   close: (k?: Etterlevelse | undefined) => void
 }
 
-const Edit = ({ krav, etterlevelse, submit, formRef, varsleMelding, behandlingId, behandlingNummer, behandlingformaal, behandlingNavn, disableEdit, documentEdit, close }: EditProps) => {
+const Edit = ({
+  krav,
+  etterlevelse,
+  submit,
+  formRef,
+  varsleMelding,
+  behandlingId,
+  behandlingNummer,
+  behandlingformaal,
+  behandlingNavn,
+  disableEdit,
+  documentEdit,
+  close,
+}: EditProps) => {
   const [etterlevelseStatus, setEtterlevelseStatus] = React.useState<string>(etterlevelse.status || EtterlevelseStatus.UNDER_REDIGERING)
   const [radioHover, setRadioHover] = React.useState<string>('')
   return (

@@ -493,11 +493,7 @@ const KravView = (props: {
           width="100%"
           display="flex"
           justifyContent="center"
-          $style={{
-            ...borderWidth('1px'),
-            ...borderStyle('solid'),
-            ...borderColor(ettlevColors.green800)
-          }}
+
         >
           <EditEtterlevelseV2
             behandlingNavn={props.behandlingNavn}
