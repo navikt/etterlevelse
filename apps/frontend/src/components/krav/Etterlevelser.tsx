@@ -26,7 +26,7 @@ export const Etterlevelser = ({ loading, etterlevelser: allEtterlevelser }: { lo
   )
 
   return (
-    <Block>
+    <Block marginBottom="32px">
       <HeadingXLarge maxWidth={'500px'}>Her kan du se hvordan andre team har dokumentert etterlevelse</HeadingXLarge>
       {loading && <Spinner size={theme.sizing.scale800} />}
       {!loading && !etterlevelser.length && (
