@@ -1,11 +1,12 @@
 import * as React from 'react'
-import { useState } from 'react'
-import { FILL, ORIENTATION, Tab, TabProps, Tabs, TabsOverrides, TabsProps } from 'baseui/tabs-motion'
-import { StyleObject } from 'styletron-standard'
-import { borderColor, borderStyle, borderWidth, marginZero, paddingZero } from './Style'
-import { theme } from '../../util'
-import { ettlevColors } from '../../util/theme'
-import { ReactNode } from 'react-markdown/lib/react-markdown'
+import {useState} from 'react'
+import {FILL, ORIENTATION, Tab, TabProps, Tabs, TabsOverrides, TabsProps} from 'baseui/tabs-motion'
+import {StyleObject} from 'styletron-standard'
+import {borderColor, borderStyle, borderWidth, marginZero, paddingZero} from './Style'
+import {theme} from '../../util'
+import {ettlevColors} from '../../util/theme'
+import {ReactNode} from 'react-markdown/lib/react-markdown'
+import _ from "lodash";
 
 export const CustomizedTab = (props: TabProps) => {
   return <Tab {...props}>{props.children}</Tab>
@@ -39,7 +40,7 @@ interface CustomizedTabsProps {
 
 export const CustomizedTabs = (props: CustomizedTabsProps) => {
   const [activeKeyInternal, setActiveKeyInternal] = useState<React.Key>(0)
-  let { fontColor, activeColor, tabBackground, tabs, ...restProps } = props
+  let {fontColor, activeColor, tabBackground, tabs, overrides, ...restProps} = props
   fontColor = fontColor || 'black'
   activeColor = activeColor || fontColor
 
@@ -49,34 +50,36 @@ export const CustomizedTabs = (props: CustomizedTabsProps) => {
     background: 'transparent',
   }
 
+  const customOverrides = {
+    TabList: {
+      style: {
+        backgroundColor: tabBackground,
+        justifyContent: props.small ? 'flex-start' : 'space-between',
+        ...paddingZero,
+        marginLeft: '-2px',
+        marginRight: '-2px',
+        height: '50px',
+        whiteSpace: 'nowrap',
+      },
+    },
+    TabBorder: {
+      style: {
+        backgroundColor: 'transparent',
+      },
+    },
+    TabHighlight: {
+      style: {
+        backgroundColor: 'transparent',
+      },
+    },
+  }
+
   return (
     <Tabs
       {...restProps}
-      overrides={{
-        TabList: {
-          style: {
-            backgroundColor: tabBackground,
-            justifyContent: props.small ? 'flex-start' : 'space-between',
-            ...paddingZero,
-            marginLeft: '-2px',
-            marginRight: '-2px',
-            height: '50px',
-            whiteSpace: 'nowrap',
-          },
-        },
-        TabBorder: {
-          style: {
-            backgroundColor: 'transparent',
-          },
-        },
-        TabHighlight: {
-          style: {
-            backgroundColor: 'transparent',
-          },
-        },
-      }}
-      onChange={({ activeKey }) => {
-        if (props.onChange) props.onChange({ activeKey })
+      overrides={_.merge(customOverrides, overrides)}
+      onChange={({activeKey}) => {
+        if (props.onChange) props.onChange({activeKey})
         else setActiveKeyInternal(activeKey)
       }}
       activeKey={props.activeKey || activeKeyInternal}
@@ -112,13 +115,13 @@ export const CustomizedTabs = (props: CustomizedTabsProps) => {
 
                   ...(props.small
                     ? {
-                        marginRight: theme.sizing.scale1000,
-                        fontSize: '18px',
-                      }
+                      marginRight: theme.sizing.scale1000,
+                      fontSize: '18px',
+                    }
                     : {
-                        marginLeft: index === 0 ? 0 : theme.sizing.scale1000,
-                        fontSize: '20px',
-                      }),
+                      marginLeft: index === 0 ? 0 : theme.sizing.scale1000,
+                      fontSize: '20px',
+                    }),
                 }),
               },
               TabPanel: {

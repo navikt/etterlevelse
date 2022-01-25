@@ -14,7 +14,7 @@ import { kravName, kravNumView } from '../../pages/KravPage'
 import { behandlingName, useBehandling, useSearchBehandling } from '../../api/BehandlingApi'
 import CustomizedSelect from '../common/CustomizedSelect'
 import { H1, H2, Label3, Paragraph1, Paragraph2, Paragraph4 } from 'baseui/typography'
-import { ettlevColors, pageWidth, responsivePaddingLarge } from '../../util/theme'
+import {ettlevColors, pageWidth, responsivePaddingLarge, responsivePaddingSmall, responsiveWidthLarge, responsiveWidthSmall} from '../../util/theme'
 import { SuksesskriterierBegrunnelseEdit } from './Edit/SuksesskriterieBegrunnelseEdit'
 import { Radio, RadioGroup } from 'baseui/radio'
 import { Code } from '../../services/Codelist'
@@ -223,46 +223,55 @@ export const EditEtterlevelseV2 = ({
             <Paragraph1 paddingBottom="49px" marginTop="0px" marginBottom="0px"><Markdown sources={Array.isArray(krav.hensikt) ? krav.hensikt : [krav.hensikt]}/></Paragraph1>
           </Block>
 
-          <Block maxWidth={pageWidth} width="100%">
-            <CustomizedTabs
-              fontColor={ettlevColors.green600}
-              activeColor={ettlevColors.green800}
-              tabBackground={ettlevColors.green100}
-              activeKey={tab}
-              onChange={(k) => setTab(k.activeKey as Section)}
-              tabs={[
-                {
-                  title: 'Hvordan etterleve?',
-                  key: 'krav',
-                  content: (
-                    <Edit
-                      krav={krav}
-                      etterlevelse={etterlevelse}
-                      submit={submit}
-                      formRef={formRef}
-                      varsleMelding={varsleMelding}
-                      behandlingId={behandlingId}
-                      behandlingNummer={behandlingNummer || 0}
-                      behandlingformaal={behandlingformaal || ''}
-                      behandlingNavn={behandlingNavn || ''}
-                      disableEdit={disableEdit}
-                      documentEdit={documentEdit}
-                      close={close}
-                    />
-                  ),
-                },
-                {
-                  title: 'Eksempler på etterlevelse',
-                  key: 'etterlevelser',
-                  content: <Etterlevelser loading={etterlevelserLoading} etterlevelser={krav.etterlevelser} />,
-                },
-                {
-                  title: 'Spørsmål og svar',
-                  key: 'tilbakemeldinger',
-                  content: <Tilbakemeldinger krav={krav} hasKravExpired={false} />,
-                },
-              ]}
-            />
+          <Block
+            display={'flex'}
+            justifyContent="center"
+            width={responsiveWidthLarge}
+            paddingLeft={responsivePaddingLarge}
+            paddingRight={responsivePaddingLarge}
+            $style={{
+              background: `linear-gradient(top, ${ettlevColors.green100} 50px, ${ettlevColors.grey25} 0%)`,
+            }}
+          >
+              <CustomizedTabs
+                fontColor={ettlevColors.green600}
+                activeColor={ettlevColors.green800}
+                tabBackground={ettlevColors.green100}
+                activeKey={tab}
+                onChange={(k) => setTab(k.activeKey as Section)}
+                tabs={[
+                  {
+                    title: 'Dokumentasjon?',
+                    key: 'dokumentasjon',
+                    content: (
+                      <Edit
+                        krav={krav}
+                        etterlevelse={etterlevelse}
+                        submit={submit}
+                        formRef={formRef}
+                        varsleMelding={varsleMelding}
+                        behandlingId={behandlingId}
+                        behandlingNummer={behandlingNummer || 0}
+                        behandlingformaal={behandlingformaal || ''}
+                        behandlingNavn={behandlingNavn || ''}
+                        disableEdit={disableEdit}
+                        documentEdit={documentEdit}
+                        close={close}
+                      />
+                    ),
+                  },
+                  {
+                    title: 'Eksempler på etterlevelse',
+                    key: 'etterlevelser',
+                    content: <Etterlevelser loading={etterlevelserLoading} etterlevelser={krav.etterlevelser} />,
+                  },
+                  {
+                    title: 'Spørsmål og svar',
+                    key: 'tilbakemeldinger',
+                    content: <Tilbakemeldinger krav={krav} hasKravExpired={false} />,
+                  },
+                ]}
+              />
           </Block>
         </Block>
       )}
