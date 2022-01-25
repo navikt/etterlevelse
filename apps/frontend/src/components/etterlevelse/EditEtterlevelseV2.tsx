@@ -3,7 +3,7 @@ import { Field, FieldProps, Form, Formik, FormikProps, validateYupSchema, yupToF
 import { createEtterlevelse, mapEtterlevelseToFormValue, updateEtterlevelse } from '../../api/EtterlevelseApi'
 import { Block } from 'baseui/block'
 import Button from '../common/Button'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import * as yup from 'yup'
 import { getEtterlevelseStatus } from '../../pages/EtterlevelsePage'
 import { DateField, FieldWrapper, TextAreaField } from '../common/Inputs'
@@ -13,8 +13,8 @@ import { getKravByKravNumberAndVersion, kravFullQuery, KravId, useKrav, useSearc
 import { kravName, kravNumView } from '../../pages/KravPage'
 import { behandlingName, useBehandling, useSearchBehandling } from '../../api/BehandlingApi'
 import CustomizedSelect from '../common/CustomizedSelect'
-import { H1, H2, Label3, Paragraph2, Paragraph4 } from 'baseui/typography'
-import { ettlevColors, responsivePaddingLarge } from '../../util/theme'
+import { H1, H2, Label3, Paragraph1, Paragraph2, Paragraph4 } from 'baseui/typography'
+import { ettlevColors, pageWidth, responsivePaddingLarge } from '../../util/theme'
 import { SuksesskriterierBegrunnelseEdit } from './Edit/SuksesskriterieBegrunnelseEdit'
 import { Radio, RadioGroup } from 'baseui/radio'
 import { Code } from '../../services/Codelist'
@@ -28,6 +28,10 @@ import { env } from '../../util/env'
 import { useQuery } from '@apollo/client'
 import moment from 'moment'
 import { informationIcon } from '../Images'
+import CustomizedTabs from '../common/CustomizedTabs'
+import { Tilbakemeldinger } from '../krav/tilbakemelding/Tilbakemelding'
+import Etterlevelser from '../krav/Etterlevelser'
+import { Markdown } from '../common/Markdown'
 
 type EditEttlevProps = {
   etterlevelse: Etterlevelse
@@ -117,14 +121,16 @@ export const EditEtterlevelseV2 = ({
   behandlingformaal,
   behandlingNummer,
 }: EditEttlevProps) => {
-  const { data } = useQuery<{ kravById: KravQL }, KravId>(kravFullQuery, {
+  const { data, loading } = useQuery<{ kravById: KravQL }, KravId>(kravFullQuery, {
     variables: kravId,
     skip: !kravId.id && !kravId.kravNummer,
     fetchPolicy: 'no-cache',
   })
+  const etterlevelserLoading = loading
+  type Section = 'dokumentasjon' | 'etterlevelser' | 'tilbakemeldinger'
 
-  const [krav, setKrav] = React.useState<KravQL>()
-
+  const [krav, setKrav] = useState<KravQL>()
+  const [tab, setTab] = useState<Section>('dokumentasjon')
   const [nyereKrav, setNyereKrav] = React.useState<Krav>()
   const [disableEdit, setDisableEdit] = React.useState<boolean>(false)
 
@@ -212,22 +218,52 @@ export const EditEtterlevelseV2 = ({
               )}
             </Block>
           </Block>
-          <Block backgroundColor={ettlevColors.green100} height="63px">
+          <Block backgroundColor={ettlevColors.green100} paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge}>
+            <H2 $style={{ marginTop: '0px', marginBottom: '0px', paddingBottom: '32px', paddingTop: '41px' }}>Hensikten med kravet</H2>
+            <Paragraph1 paddingBottom="49px" marginTop="0px" marginBottom="0px"><Markdown sources={Array.isArray(krav.hensikt) ? krav.hensikt : [krav.hensikt]}/></Paragraph1>
           </Block>
-          <Edit
-            krav={krav}
-            etterlevelse={etterlevelse}
-            submit={submit}
-            formRef={formRef}
-            varsleMelding={varsleMelding}
-            behandlingId={behandlingId}
-            behandlingNummer={behandlingNummer || 0}
-            behandlingformaal={behandlingformaal || ''}
-            behandlingNavn={behandlingNavn || ''}
-            disableEdit={disableEdit}
-            documentEdit={documentEdit}
-            close={close}
-          />
+
+          <Block maxWidth={pageWidth} width="100%">
+            <CustomizedTabs
+              fontColor={ettlevColors.green600}
+              activeColor={ettlevColors.green800}
+              tabBackground={ettlevColors.green100}
+              activeKey={tab}
+              onChange={(k) => setTab(k.activeKey as Section)}
+              tabs={[
+                {
+                  title: 'Hvordan etterleve?',
+                  key: 'krav',
+                  content: (
+                    <Edit
+                      krav={krav}
+                      etterlevelse={etterlevelse}
+                      submit={submit}
+                      formRef={formRef}
+                      varsleMelding={varsleMelding}
+                      behandlingId={behandlingId}
+                      behandlingNummer={behandlingNummer || 0}
+                      behandlingformaal={behandlingformaal || ''}
+                      behandlingNavn={behandlingNavn || ''}
+                      disableEdit={disableEdit}
+                      documentEdit={documentEdit}
+                      close={close}
+                    />
+                  ),
+                },
+                {
+                  title: 'Eksempler på etterlevelse',
+                  key: 'etterlevelser',
+                  content: <Etterlevelser loading={etterlevelserLoading} etterlevelser={krav.etterlevelser} />,
+                },
+                {
+                  title: 'Spørsmål og svar',
+                  key: 'tilbakemeldinger',
+                  content: <Tilbakemeldinger krav={krav} hasKravExpired={false} />,
+                },
+              ]}
+            />
+          </Block>
         </Block>
       )}
     </Block>
