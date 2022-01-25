@@ -16,7 +16,7 @@ import CustomizedModal from '../components/common/CustomizedModal'
 import { Spinner } from '../components/common/Spinner'
 import { useEtterlevelse } from '../api/EtterlevelseApi'
 import { getKravByKravNumberAndVersion, KravId } from '../api/KravApi'
-import { borderColor, borderRadius, borderStyle, borderWidth } from '../components/common/Style'
+import { borderRadius, borderStyle } from '../components/common/Style'
 import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 import Button from '../components/common/Button'
 import { Responsive } from 'baseui/theme'
@@ -33,6 +33,7 @@ import { user } from '../services/User'
 import { getMainHeader } from './BehandlingPage'
 import { getTemaMainHeader } from './TemaPage'
 import { EditEtterlevelseV2 } from '../components/etterlevelse/EditEtterlevelseV2'
+import { getEtterlevelseStatus } from './BehandlingerTemaPage'
 
 const responsiveBreakPoints: Responsive<Display> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
 const responsiveDisplay: Responsive<Display> = ['block', 'block', 'block', 'block', 'flex', 'flex']
@@ -419,25 +420,9 @@ const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function; setKra
         </Block>
         <Block display="flex" justifyContent="flex-end" flex="1" width="100%">
           <Block width="350px" display="flex" justifyContent="flex-end" marginLeft="32px">
-            <Block marginRight="31px">
-              {props.krav.etterlevelseChangeStamp?.lastModifiedDate && (
-                <Block width="100%" display="flex" justifyContent="flex-end">
-                  <Paragraph4 $style={{ lineHeight: '19px', textAlign: 'right', marginTop: '0px', marginBottom: '0px', whiteSpace: 'nowrap' }}>
-                    Sist utfylt: {moment(props.krav.etterlevelseChangeStamp?.lastModifiedDate).format('ll')}
-                  </Paragraph4>
-                </Block>
-              )}
-              {props.krav.frist && (
-                <Block width="100%" display="flex" justifyContent="flex-end">
-                  <Paragraph4 $style={{ lineHeight: '19px', textAlign: 'right', marginTop: '0px', marginBottom: '0px', whiteSpace: 'nowrap' }}>
-                    Oppfylles senere: {moment(props.krav.frist).format('ll')}
-                  </Paragraph4>
-                </Block>
-              )}
-            </Block>
-            {!props.noStatus && <Block display="flex" width="100%" maxWidth="132px" justifyContent="flex-end">
+            <Block display="flex" width="100%" maxWidth="220px" justifyContent="flex-end">
               <StatusView
-                status={ferdigUtfylt ? 'Ferdig utfylt' : props.krav.etterlevelseStatus ? 'Under utfylling' : 'Ikke påbegynt'}
+                status={props.krav && props.krav.etterlevelseStatus ? getEtterlevelseStatus(props.krav) : 'Ikke påbegynt'}
                 icon={props.krav.varselMelding ? <img src={informationIcon} alt="" width="16px" height="16px" /> : undefined}
                 statusDisplay={{
                   background: ferdigUtfylt ? ettlevColors.green50 : props.krav.etterlevelseStatus ? '#FFECCC' : ettlevColors.white,
@@ -445,7 +430,16 @@ const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function; setKra
                 }}
                 background={props.krav.varselMelding ? ettlevColors.white : undefined}
               />
-            </Block>}
+            </Block>
+            <Block marginLeft="31px" maxWidth="140px" width="100%">
+              {props.krav.etterlevelseChangeStamp?.lastModifiedDate && (
+                <Block width="100%" display="flex" justifyContent="flex-end">
+                  <Paragraph4 $style={{ lineHeight: '19px', textAlign: 'right', marginTop: '0px', marginBottom: '0px', whiteSpace: 'nowrap' }}>
+                    Sist utfylt: {moment(props.krav.etterlevelseChangeStamp?.lastModifiedDate).format('ll')}
+                  </Paragraph4>
+                </Block>
+              )}
+            </Block>
           </Block>
         </Block>
       </Block>

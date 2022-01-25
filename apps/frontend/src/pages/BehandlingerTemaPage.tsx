@@ -426,7 +426,7 @@ const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function; setKra
   )
 }
 
-const getEtterlevelseStatus = (etterlevelse: KravEtterlevelseData) => {
+export const getEtterlevelseStatus = (etterlevelse: KravEtterlevelseData) => {
   switch (etterlevelse.etterlevelseStatus) {
     case EtterlevelseStatus.UNDER_REDIGERING:
       return 'Kravet er under arbeid'
