@@ -222,7 +222,7 @@ export const EditEtterlevelseV2 = ({
           </Block>
           <Block backgroundColor={ettlevColors.green100} paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge}>
             <H2 $style={{ marginTop: '0px', marginBottom: '0px', paddingBottom: '32px', paddingTop: '41px' }}>Hensikten med kravet</H2>
-            <Markdown p1 sources={Array.isArray(krav.hensikt) ? krav.hensikt : [krav.hensikt]} />
+            <Markdown noMargin p1 sources={Array.isArray(krav.hensikt) ? krav.hensikt : [krav.hensikt]} />
           </Block>
 
           <Block
