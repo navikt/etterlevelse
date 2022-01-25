@@ -282,6 +282,13 @@ export const EditEtterlevelseV2 = ({
               ]}
             />
           </Block>
+          <Block
+            display={tab === 'dokumentasjon' ? 'block' : 'none'}
+            width="100%"
+            height="140px"
+            backgroundColor={ettlevColors.green100} marginTop="-140px"
+          />
+
         </Block>
       )}
     </Block>
@@ -502,7 +509,7 @@ const Edit = ({
 
                         </CustomizedPanel>
                         <CustomizedPanel title="Mer om kravet" overrides={{ Content: { style: { backgroundColor: ettlevColors.white, paddingLeft: '20px', paddingRight: '20px' } } }}>
-                          <AllInfo krav={krav} alleKravVersjoner={[{kravNummer: krav.kravNummer, kravVersjon: krav.kravVersjon, kravStatus: krav.status}]}/> 
+                          <AllInfo krav={krav} alleKravVersjoner={[{ kravNummer: krav.kravNummer, kravVersjon: krav.kravVersjon, kravStatus: krav.status }]} />
                         </CustomizedPanel>
                       </CustomizedAccordion>
                     </Block>
@@ -546,55 +553,71 @@ const Edit = ({
               </Form>
             </Block>
 
-            {!documentEdit && (
-              <Block
-                paddingTop="14px"
-                paddingBottom="24px"
-                display="flex"
-              >
-                <Button disabled={krav.status === KravStatus.UTGAATT ? false : disableEdit} type="button" kind="secondary" marginRight onClick={close}>
-                  {krav.status === KravStatus.UTGAATT ? 'Lukk' : 'Avbryt og forkast endringene'}
-                </Button>
-                <Button
-                  type="button"
-                  kind="secondary"
-                  marginRight
-                  disabled={isSubmitting || disableEdit}
-                  onClick={() => {
-                    if (values.status === EtterlevelseStatus.FERDIG_DOKUMENTERT) {
-                      values.status = Object.values(EtterlevelseStatus).filter((e) => e === etterlevelseStatus)[0]
-                    }
-                    submitForm()
-                  }}
+            <Block
+              width="100%"
+              height="140px"
+              backgroundColor={ettlevColors.green100}
+            >
+
+              {!documentEdit && (
+                <Block
+                  paddingTop="27px"
+                  paddingBottom="24px"
+                  display="flex"
+                  justifyContent="flex-end"
+                  width="100%"
+
                 >
-                  Lagre og fortsett senere
-                </Button>
-                <Button
-                  disabled={disableEdit}
-                  type="button"
-                  onClick={() => {
-                    if (values.status !== EtterlevelseStatus.IKKE_RELEVANT && values.status !== EtterlevelseStatus.OPPFYLLES_SENERE) {
-                      values.status = EtterlevelseStatus.FERDIG_DOKUMENTERT
-                      values.suksesskriterieBegrunnelser.forEach((skb, index) => {
-                        if (skb.begrunnelse === '' || skb.begrunnelse === undefined) {
-                          setFieldError(`suksesskriterieBegrunnelser[${index}]`, 'Du må fylle ut dokumentasjonen')
-                        }
-                      })
-                    }
-                    submitForm()
-                  }}
+                  <Button disabled={krav.status === KravStatus.UTGAATT ? false : disableEdit} type="button" kind="secondary" marginRight onClick={close}>
+                    {krav.status === KravStatus.UTGAATT ? 'Lukk' : 'Avbryt og forkast endringene'}
+                  </Button>
+                  <Button
+                    type="button"
+                    kind="secondary"
+                    marginRight
+                    disabled={isSubmitting || disableEdit}
+                    onClick={() => {
+                      if (values.status === EtterlevelseStatus.FERDIG_DOKUMENTERT) {
+                        values.status = Object.values(EtterlevelseStatus).filter((e) => e === etterlevelseStatus)[0]
+                      }
+                      submitForm()
+                    }}
+                  >
+                    Lagre og fortsett senere
+                  </Button>
+                  <Button
+                    disabled={disableEdit}
+                    type="button"
+                    onClick={() => {
+                      if (values.status !== EtterlevelseStatus.IKKE_RELEVANT && values.status !== EtterlevelseStatus.OPPFYLLES_SENERE) {
+                        values.status = EtterlevelseStatus.FERDIG_DOKUMENTERT
+                        values.suksesskriterieBegrunnelser.forEach((skb, index) => {
+                          if (skb.begrunnelse === '' || skb.begrunnelse === undefined) {
+                            setFieldError(`suksesskriterieBegrunnelser[${index}]`, 'Du må fylle ut dokumentasjonen')
+                          }
+                        })
+                      }
+                      submitForm()
+                    }}
+                  >
+                    Registrer som ferdig utfylt
+                  </Button>
+                </Block>
+              )}
+              {etterlevelse.changeStamp.lastModifiedDate && etterlevelse.changeStamp.lastModifiedBy && (
+                <Block
+                  paddingBottom="16px"
+                  display="flex"
+                  justifyContent="flex-end"
+                  width="100%"
                 >
-                  Registrer som ferdig utfylt
-                </Button>
-              </Block>
-            )}
-            {etterlevelse.changeStamp.lastModifiedDate && etterlevelse.changeStamp.lastModifiedBy && (
-              <Block marginBottom={theme.sizing.scale3200}>
-                <Paragraph4 marginTop="0px" marginBottom="0px">
-                  Sist utfylt: {moment(etterlevelse.changeStamp.lastModifiedDate).format('ll')} av {etterlevelse.changeStamp.lastModifiedBy.split('-')[1]}
-                </Paragraph4>
-              </Block>
-            )}
+                  <Paragraph4 marginTop="0px" marginBottom="0px">
+                    Sist utfylt: {moment(etterlevelse.changeStamp.lastModifiedDate).format('ll')} av {etterlevelse.changeStamp.lastModifiedBy.split('-')[1]}
+                  </Paragraph4>
+                </Block>
+              )}
+
+            </Block>
           </Block>
         )}
       </Formik>
