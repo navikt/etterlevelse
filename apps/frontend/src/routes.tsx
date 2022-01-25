@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Route, Switch } from 'react-router-dom'
+import { Route, BrowserRouter } from 'react-router-dom'
 import { MainPage } from './pages/MainPage'
 import NotFound from './pages/NotFound'
 import CodeListPage from './components/admin/CodeList/CodelistPage'
@@ -27,39 +27,39 @@ import { BehandlingerTemaPageV2 } from './pages/BehandlingerTemaPageV2'
 
 const Routes = (): JSX.Element => (
   <ScrollToTop>
-    <Switch>
-      <Route exact path="/old" component={MainPage} />
-      <Route exact path="/" component={MainPageV2} />
+    <BrowserRouter>
+      <Route path="/old" element={MainPage} />
+      <Route path="/" element={MainPageV2} />
 
-      <Route exact path="/kraver/:tab?" component={KravListPage} />
-      <Route exact path="/krav/:id" component={KravPage} />
-      <Route exact path="/krav/:kravNummer/:kravVersjon" component={KravPage} />
+      <Route path="/kraver/:tab?" element={KravListPage} />
+      <Route path="/krav/:id" element={KravPage} />
+      <Route path="/krav/:kravNummer/:kravVersjon" element={KravPage} />
 
-      <Route exact path="/etterlevelse" component={EtterlevelseListPage} />
-      <Route exact path="/etterlevelse/:id" component={EtterlevelsePage} />
+      <Route path="/etterlevelse" element={EtterlevelseListPage} />
+      <Route path="/etterlevelse/:id" element={EtterlevelsePage} />
 
-      <Route exact path="/behandling/:id/:tema" component={BehandlingerTemaPage} />
-      <Route exact path="/behandlingtest/:id/:tema" component={BehandlingerTemaPageV2} />
-      <Route exact path="/behandlinger/:tab?" component={MyBehandlingerPage} />
+      <Route path="/behandling/:id/:tema" element={BehandlingerTemaPage} />
+      <Route path="/behandlingtest/:id/:tema" element={BehandlingerTemaPageV2} />
+      <Route path="/behandlinger/:tab?" element={MyBehandlingerPage} />
 
-      <Route exact path="/relevans/:relevans?" component={RelevansPage} />
-      <Route exact path="/underavdeling/:underavdeling?" component={UnderavdelingPage} />
-      <Route exact path="/lov/:lov?" component={LovPage} />
+      <Route path="/relevans/:relevans?" element={RelevansPage} />
+      <Route path="/underavdeling/:underavdeling?" element={UnderavdelingPage} />
+      <Route path="/lov/:lov?" element={LovPage} />
 
-      <Route exact path="/admin/codelist/:listname?" component={CodeListPage} />
-      <Route exact path="/admin/audit/:id?/:auditId?" component={AuditPage} />
-      <Route exact path="/admin/settings" component={SettingsPage} />
-      <Route exact path="/admin/maillog" component={MailLogPage} />
-      <Route exact path="/admin/krav" component={KravTablePage} />
-      <Route exact path="/admin/messageslog" component={SpørsmålOgSvarLogPage} />
+      <Route path="/admin/codelist/:listname?" element={CodeListPage} />
+      <Route path="/admin/audit/:id?/:auditId?" element={AuditPage} />
+      <Route path="/admin/settings" element={SettingsPage} />
+      <Route path="/admin/maillog" element={MailLogPage} />
+      <Route path="/admin/krav" element={KravTablePage} />
+      <Route path="/admin/messageslog" element={SpørsmålOgSvarLogPage} />
 
-      <Route exact path="/tema/:tema?" component={TemaPage} />
-      <Route exact path="/behandling/:id" component={BehandlingPage} />
-      <Route exact path="/status" component={StatusPage} />
-      <Route exact path="/help" component={FAQ} />
+      <Route path="/tema/:tema?" element={TemaPage} />
+      <Route path="/behandling/:id" element={BehandlingPage} />
+      <Route path="/status" element={StatusPage} />
+      <Route path="/help" element={FAQ} />
 
-      <Route component={NotFound} />
-    </Switch>
+      <Route element={NotFound} />
+    </BrowserRouter>
   </ScrollToTop>
 )
 

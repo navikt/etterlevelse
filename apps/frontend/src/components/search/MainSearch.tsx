@@ -5,7 +5,7 @@ import { theme } from '../../util'
 import { useDebouncedState, useQueryParam } from '../../util/hooks'
 import { prefixBiasedSort } from '../../util/sort'
 import { Block } from 'baseui/block'
-import { useHistory, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import Button from '../common/Button'
 import { Radio, RadioGroup } from 'baseui/radio'
 import { borderWidth, padding, paddingZero } from '../common/Style'
@@ -321,7 +321,7 @@ const MainSearch = () => {
   const [filterClicked, setFilterClicked] = useState<boolean>(false)
   const [value, setValue] = useState<Value>(searchParam ? [{ id: searchParam, label: searchParam }] : [])
   const location = useLocation()
-  const history = useHistory()
+  const navigate = useNavigate()
 
   const getNoResultMessage = () => {
     let msg = ''
@@ -422,7 +422,7 @@ const MainSearch = () => {
             ;(async () => {
               if (item && item.type !== '__ungrouped') {
                 setValue([item])
-                history.push(urlForObject(item.type, item.id))
+                navigate(urlForObject(item.type, item.id))
                 window.location.reload()
               } else if (item && item.type === '__ungrouped') {
                 setFilterClicked(true)

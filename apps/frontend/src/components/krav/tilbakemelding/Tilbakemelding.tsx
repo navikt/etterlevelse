@@ -11,7 +11,7 @@ import { Spinner } from '../../common/Spinner'
 import moment from 'moment'
 import { user } from '../../../services/User'
 import { Notification } from 'baseui/notification'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useQueryParam, useRefs } from '../../../util/hooks'
 import { ettlevColors } from '../../../util/theme'
 import { mailboxPoppingIcon } from '../../Images'
@@ -37,7 +37,7 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
   const [focusNr, setFocusNr] = useState<string | undefined>(useQueryParam('tilbakemeldingId'))
   const [addTilbakemelding, setAddTilbakemelding] = useState(false)
   const [count, setCount] = useState(DEFAULT_COUNT_SIZE)
-  const history = useHistory()
+  const navigate = useNavigate()
 
   const refs = useRefs<HTMLDivElement>(tilbakemeldinger.map((t) => t.id))
   useEffect(() => {
@@ -46,7 +46,7 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
 
   const setFocus = (id: string) => {
     setFocusNr(id)
-    history.replace(`/krav/${krav.kravNummer}/${krav.kravVersjon}?tilbakemeldingId=${id}`)
+    navigate(`/krav/${krav.kravNummer}/${krav.kravVersjon}?tilbakemeldingId=${id}`)
   }
 
   return (

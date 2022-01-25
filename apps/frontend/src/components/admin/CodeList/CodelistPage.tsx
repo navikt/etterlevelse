@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 import { StatefulSelect } from 'baseui/select'
 import { Block } from 'baseui/block'
 import { KIND, SIZE as ButtonSize } from 'baseui/button'
-import { useHistory, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import { H4 } from 'baseui/typography'
 import { StyledSpinnerNext } from 'baseui/spinner'
@@ -21,7 +21,7 @@ import { Helmet } from 'react-helmet'
 
 const CodeListPage = () => {
   const params = useParams<{ listname?: string }>()
-  const history = useHistory()
+  const navigate = useNavigate()
   const [loading, setLoading] = React.useState(true)
   const [listname, setListname] = React.useState(params.listname)
   const [createCodeListModal, setCreateCodeListModal] = React.useState(false)
@@ -56,7 +56,7 @@ const CodeListPage = () => {
 
   useEffect(() => {
     if (listname && listname !== params.listname) {
-      history.replace(`/admin/codelist/${listname}`)
+      navigate(`/admin/codelist/${listname}`)
     }
   }, [listname, lists])
 

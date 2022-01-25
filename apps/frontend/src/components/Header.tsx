@@ -5,7 +5,7 @@ import { Block } from 'baseui/block'
 import { KIND, SIZE } from 'baseui/button'
 import Button, { ButtonKind } from '../components/common/Button'
 import { Popover } from 'baseui/popover'
-import { useHistory } from 'react-router-dom'
+import { useNavigate, Location, useLocation } from 'react-router-dom'
 import { StyledLink } from 'baseui/link'
 import { useQueryParam } from '../util/hooks'
 import { theme } from '../util'
@@ -28,17 +28,17 @@ import { faUser } from '@fortawesome/free-regular-svg-icons'
 import { History } from 'history'
 import SkipToContent from './common/SkipToContent/SkipToContent'
 
-export const loginUrl = (history: History, path?: string) => {
-  const frontpage = window.location.href.substr(0, window.location.href.length - history.location.pathname.length)
+export const loginUrl = (location: Location, path?: string) => {
+  const frontpage = window.location.href.substr(0, window.location.href.length - location.pathname.length)
 
   return `/login?redirect_uri=${frontpage}${path || ''}`
 }
 
 export const LoginButton = () => {
   // updates window.location on navigation
-  const history = useHistory()
+  const location = useLocation()
   return (
-    <StyledLink style={{ textDecoration: 'none' }} href={loginUrl(history, history.location.pathname)}>
+    <StyledLink style={{ textDecoration: 'none' }} href={loginUrl(location, location.pathname)}>
       <Button size={SIZE.compact} kind={KIND.secondary} $style={buttonBorderStyle}>
         <strong>Logg inn</strong>
       </Button>
@@ -123,9 +123,9 @@ const Divider = (props: { compact?: boolean }) => (
 )
 
 const UserInfo = () => {
-  const history = useHistory()
-  const frontpage = window.location.href.substr(0, window.location.href.length - history.location.pathname.length)
-  const path = history.location.pathname
+  const location = useLocation()
+  const frontpage = window.location.href.substr(0, window.location.href.length - location.pathname.length)
+  const path = location.pathname
   return (
     <Block display={'flex'} marginBottom={theme.sizing.scale600}>
       <Portrait ident={user.getIdent()} size={'48px'} />

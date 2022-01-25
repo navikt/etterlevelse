@@ -18,7 +18,7 @@ import moment from 'moment'
 import { useDebouncedState } from '../util/hooks'
 import { SkeletonPanel } from '../components/common/LoadingSkeleton'
 import { user } from '../services/User'
-import { useHistory, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { faExternalLinkAlt, faPlus } from '@fortawesome/free-solid-svg-icons'
 import { borderWidth } from '../components/common/Style'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
@@ -75,7 +75,7 @@ export const MyBehandlingerPage = () => (
 
 const BehandlingTabs = () => {
   const params = useParams<{ tab?: Section }>()
-  const history = useHistory()
+  const navigate = useNavigate()
   const [tab, setTab] = useState<Section>(params.tab || 'mine')
   const [doneLoading, setDoneLoading] = useState(false)
   const [variables, setVariables] = useState<Variables>({})
@@ -128,7 +128,7 @@ const BehandlingTabs = () => {
         setVariables({ sistRedigert: 20 })
         break
     }
-    if (tab !== params.tab) history.replace(`/behandlinger/${tab}`)
+    if (tab !== params.tab) navigate(`/behandlinger/${tab}`)
   }, [tab])
 
   useEffect(() => {

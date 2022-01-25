@@ -11,7 +11,7 @@ import { Card } from 'baseui/card'
 import { ettlevColors } from '../../util/theme'
 import { getSuksesskriterieBegrunnelse } from './Edit/SuksesskriterieBegrunnelseEdit'
 import { FormikProps } from 'formik'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { Markdown } from '../common/Markdown'
 import EditBegrunnelse from './Edit/EditBegrunnelse'
 import { borderColor, borderRadius, borderStyle, borderWidth, marginAll } from '../common/Style'
@@ -46,7 +46,7 @@ export const ViewEtterlevelse = ({
   const [behandling] = useBehandling(etterlevelse.behandlingId)
   const formRef = useRef<FormikProps<any>>()
   const [edit, setEdit] = useState(etterlevelse && !etterlevelse.id)
-  const history = useHistory()
+  const navigate = useNavigate()
 
   return (
     <Block width="100%" marginTop="48px">
@@ -290,7 +290,7 @@ export const ViewEtterlevelse = ({
               if (k) {
                 setEtterlevelse(k)
                 if (k.id !== etterlevelse.id) {
-                  history.push(`/etterlevelse/${k.id}`)
+                  navigate(`/etterlevelse/${k.id}`)
                 }
               }
               setEdit(false)

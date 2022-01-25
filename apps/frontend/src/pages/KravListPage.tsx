@@ -20,7 +20,7 @@ import { AllKrav } from '../components/kravList/AllKrav'
 import { SistRedigertKrav } from '../components/kravList/SisteRedigertKrav'
 import { TemaList } from '../components/kravList/TemaList'
 import StatusView from '../components/common/StatusTag'
-import { useHistory, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import React from 'react'
 import { Helmet } from 'react-helmet'
 
@@ -153,11 +153,11 @@ export const KravPanels = ({ kravene, loading }: { kravene?: KravQL[] | Krav[]; 
 
 const KravTabs = () => {
   const params = useParams<{ tab?: Section }>()
-  const history = useHistory()
+  const navigate = useNavigate()
   const [tab, setTab] = useState<Section>(params.tab || 'siste')
 
   React.useEffect(() => {
-    if (tab !== params.tab) history.replace(`/kraver/${tab}`)
+    if (tab !== params.tab) navigate(`/kraver/${tab}`)
   }, [tab])
 
   return (
