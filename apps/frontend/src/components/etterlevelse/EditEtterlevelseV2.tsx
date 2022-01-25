@@ -14,7 +14,7 @@ import { kravName, kravNumView } from '../../pages/KravPage'
 import { behandlingName, useBehandling, useSearchBehandling } from '../../api/BehandlingApi'
 import CustomizedSelect from '../common/CustomizedSelect'
 import { H1, H2, Label3, Paragraph1, Paragraph2, Paragraph4 } from 'baseui/typography'
-import {ettlevColors, pageWidth, responsivePaddingLarge, responsivePaddingSmall, responsiveWidthLarge, responsiveWidthSmall} from '../../util/theme'
+import { ettlevColors, pageWidth, responsivePaddingLarge, responsivePaddingSmall, responsiveWidthLarge, responsiveWidthSmall } from '../../util/theme'
 import { SuksesskriterierBegrunnelseEdit } from './Edit/SuksesskriterieBegrunnelseEdit'
 import { Radio, RadioGroup } from 'baseui/radio'
 import { Code } from '../../services/Codelist'
@@ -32,6 +32,8 @@ import CustomizedTabs from '../common/CustomizedTabs'
 import { Tilbakemeldinger } from '../krav/tilbakemelding/Tilbakemelding'
 import Etterlevelser from '../krav/Etterlevelser'
 import { Markdown } from '../common/Markdown'
+import { CustomizedAccordion, CustomizedPanel } from '../common/CustomizedAccordion'
+import { AllInfo } from '../krav/ViewKrav'
 
 type EditEttlevProps = {
   etterlevelse: Etterlevelse
@@ -141,14 +143,14 @@ export const EditEtterlevelseV2 = ({
       suksesskriterieBegrunnelser:
         etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT
           ? [
-              ...etterlevelse.suksesskriterieBegrunnelser.map((s) => {
-                return {
-                  ...s,
-                  oppfylt: false,
-                  ikkeRelevant: false,
-                }
-              }),
-            ]
+            ...etterlevelse.suksesskriterieBegrunnelser.map((s) => {
+              return {
+                ...s,
+                oppfylt: false,
+                ikkeRelevant: false,
+              }
+            }),
+          ]
           : [...etterlevelse.suksesskriterieBegrunnelser],
     }
 
@@ -183,7 +185,7 @@ export const EditEtterlevelseV2 = ({
             ...borderColor(ettlevColors.green800),
           }}
         >
-          <Block backgroundColor={ettlevColors.green800} paddingTop={'32px'}>
+          <Block backgroundColor={ettlevColors.green800} paddingTop="32px" paddingBottom="32px">
             <Block paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge}>
               <Paragraph2
                 $style={{
@@ -220,7 +222,7 @@ export const EditEtterlevelseV2 = ({
           </Block>
           <Block backgroundColor={ettlevColors.green100} paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge}>
             <H2 $style={{ marginTop: '0px', marginBottom: '0px', paddingBottom: '32px', paddingTop: '41px' }}>Hensikten med kravet</H2>
-            <Paragraph1 paddingBottom="49px" marginTop="0px" marginBottom="0px"><Markdown sources={Array.isArray(krav.hensikt) ? krav.hensikt : [krav.hensikt]}/></Paragraph1>
+            <Markdown p1 sources={Array.isArray(krav.hensikt) ? krav.hensikt : [krav.hensikt]} />
           </Block>
 
           <Block
@@ -233,45 +235,52 @@ export const EditEtterlevelseV2 = ({
               background: `linear-gradient(top, ${ettlevColors.green100} 50px, ${ettlevColors.grey25} 0%)`,
             }}
           >
-              <CustomizedTabs
-                fontColor={ettlevColors.green600}
-                activeColor={ettlevColors.green800}
-                tabBackground={ettlevColors.green100}
-                activeKey={tab}
-                onChange={(k) => setTab(k.activeKey as Section)}
-                tabs={[
-                  {
-                    title: 'Dokumentasjon?',
-                    key: 'dokumentasjon',
-                    content: (
-                      <Edit
-                        krav={krav}
-                        etterlevelse={etterlevelse}
-                        submit={submit}
-                        formRef={formRef}
-                        varsleMelding={varsleMelding}
-                        behandlingId={behandlingId}
-                        behandlingNummer={behandlingNummer || 0}
-                        behandlingformaal={behandlingformaal || ''}
-                        behandlingNavn={behandlingNavn || ''}
-                        disableEdit={disableEdit}
-                        documentEdit={documentEdit}
-                        close={close}
-                      />
-                    ),
-                  },
-                  {
-                    title: 'Eksempler på etterlevelse',
-                    key: 'etterlevelser',
-                    content: <Etterlevelser loading={etterlevelserLoading} etterlevelser={krav.etterlevelser} />,
-                  },
-                  {
-                    title: 'Spørsmål og svar',
-                    key: 'tilbakemeldinger',
-                    content: <Tilbakemeldinger krav={krav} hasKravExpired={false} />,
-                  },
-                ]}
-              />
+            <CustomizedTabs
+              fontColor={ettlevColors.green600}
+              activeColor={ettlevColors.green800}
+              tabBackground={ettlevColors.green100}
+              activeKey={tab}
+              onChange={(k) => setTab(k.activeKey as Section)}
+              overrides={{
+                Root: {
+                  style: {
+                    width: '100%'
+                  }
+                }
+              }}
+              tabs={[
+                {
+                  title: 'Dokumentasjon?',
+                  key: 'dokumentasjon',
+                  content: (
+                    <Edit
+                      krav={krav}
+                      etterlevelse={etterlevelse}
+                      submit={submit}
+                      formRef={formRef}
+                      varsleMelding={varsleMelding}
+                      behandlingId={behandlingId}
+                      behandlingNummer={behandlingNummer || 0}
+                      behandlingformaal={behandlingformaal || ''}
+                      behandlingNavn={behandlingNavn || ''}
+                      disableEdit={disableEdit}
+                      documentEdit={documentEdit}
+                      close={close}
+                    />
+                  ),
+                },
+                {
+                  title: 'Eksempler på etterlevelse',
+                  key: 'etterlevelser',
+                  content: <Etterlevelser loading={etterlevelserLoading} etterlevelser={krav.etterlevelser} />,
+                },
+                {
+                  title: 'Spørsmål og svar',
+                  key: 'tilbakemeldinger',
+                  content: <Tilbakemeldinger krav={krav} hasKravExpired={false} />,
+                },
+              ]}
+            />
           </Block>
         </Block>
       )}
@@ -328,119 +337,64 @@ const Edit = ({
       >
         {({ values, isSubmitting, submitForm, errors, setFieldError }: FormikProps<Etterlevelse>) => (
           <Block>
-            <Block paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge}>
-              <Block marginTop="32px">
-                <Form>
+            <Block marginTop="32px">
+              <Form>
+                <Block>
                   <Block>
-                    <Block>
-                      <Block display="flex">
-                        <Block width="100%">
-                          <FieldWrapper>
-                            <Field name={'status'}>
-                              {(p: FieldProps<string | Code>) => (
-                                <FormControl
-                                  label="Er kravet oppfylt?"
+                    <Block display="flex">
+                      <Block width="100%">
+                        <FieldWrapper>
+                          <Field name={'status'}>
+                            {(p: FieldProps<string | Code>) => (
+                              <FormControl
+                                label="Er kravet oppfylt?"
+                                overrides={{
+                                  Label: {
+                                    style: {
+                                      color: ettlevColors.navMorkGra,
+                                      fontWeight: 700,
+                                      lineHeight: '48px',
+                                      fontSize: '18px',
+                                      marginTop: '0px',
+                                      marginBottom: '0px',
+                                    },
+                                  },
+                                }}
+                              >
+                                <RadioGroup
+                                  disabled={disableEdit}
+                                  onMouseEnter={(e) => setRadioHover(e.currentTarget.children[1].getAttribute('value') || '')}
+                                  onMouseLeave={() => setRadioHover('')}
                                   overrides={{
+                                    Root: {
+                                      style: {
+                                        width: '100%',
+                                        alignItems: 'flex-start',
+                                      },
+                                    },
                                     Label: {
                                       style: {
-                                        color: ettlevColors.navMorkGra,
-                                        fontWeight: 700,
-                                        lineHeight: '48px',
                                         fontSize: '18px',
-                                        marginTop: '0px',
-                                        marginBottom: '0px',
+                                        fontWeight: 400,
+                                        lineHeight: '22px',
+                                        width: '100%',
+                                      },
+                                    },
+                                    RadioMarkOuter: {
+                                      style: {
+                                        height: theme.sizing.scale600,
+                                        width: theme.sizing.scale600,
                                       },
                                     },
                                   }}
+                                  value={etterlevelseStatus === EtterlevelseStatus.FERDIG_DOKUMENTERT ? EtterlevelseStatus.FERDIG : etterlevelseStatus}
+                                  onChange={(event) => {
+                                    p.form.setFieldValue('status', event.currentTarget.value)
+                                    setEtterlevelseStatus(event.currentTarget.value)
+                                  }}
                                 >
-                                  <RadioGroup
-                                    disabled={disableEdit}
-                                    onMouseEnter={(e) => setRadioHover(e.currentTarget.children[1].getAttribute('value') || '')}
-                                    onMouseLeave={() => setRadioHover('')}
-                                    overrides={{
-                                      Root: {
-                                        style: {
-                                          width: '100%',
-                                          alignItems: 'flex-start',
-                                        },
-                                      },
-                                      Label: {
-                                        style: {
-                                          fontSize: '18px',
-                                          fontWeight: 400,
-                                          lineHeight: '22px',
-                                          width: '100%',
-                                        },
-                                      },
-                                      RadioMarkOuter: {
-                                        style: {
-                                          height: theme.sizing.scale600,
-                                          width: theme.sizing.scale600,
-                                        },
-                                      },
-                                    }}
-                                    value={etterlevelseStatus === EtterlevelseStatus.FERDIG_DOKUMENTERT ? EtterlevelseStatus.FERDIG : etterlevelseStatus}
-                                    onChange={(event) => {
-                                      p.form.setFieldValue('status', event.currentTarget.value)
-                                      setEtterlevelseStatus(event.currentTarget.value)
-                                    }}
-                                  >
-                                    {Object.values(EtterlevelseStatus).map((id) => {
-                                      if (id === EtterlevelseStatus.OPPFYLLES_SENERE) {
-                                        return (
-                                          <Radio value={id} key={id}>
-                                            <Block $style={{ textDecoration: radioHover === id ? 'underline' : 'none' }}>
-                                              <Paragraph2 $style={{ lineHeight: '22px' }} marginTop="0px" marginBottom="0px">
-                                                {getEtterlevelseStatus(id)}
-                                              </Paragraph2>
-                                            </Block>
-
-                                            {etterlevelseStatus === EtterlevelseStatus.OPPFYLLES_SENERE && (
-                                              <Block width="100%">
-                                                <Block maxWidth="170px" width="100%">
-                                                  <DateField error={!!p.form.errors.fristForFerdigstillelse} label="Frist" name="fristForFerdigstillelse" />
-                                                </Block>
-                                                {p.form.errors.fristForFerdigstillelse && (
-                                                  <Block display="flex" width="100%" marginTop=".2rem">
-                                                    <Block width="100%">
-                                                      <Notification
-                                                        overrides={{
-                                                          Body: {
-                                                            style: { width: 'auto', ...paddingZero, marginTop: 0, backgroundColor: 'transparent', color: ettlevColors.red600 },
-                                                          },
-                                                        }}
-                                                        kind={NKIND.negative}
-                                                      >
-                                                        {p.form.errors.fristForFerdigstillelse}
-                                                      </Notification>
-                                                    </Block>
-                                                  </Block>
-                                                )}
-                                              </Block>
-                                            )}
-                                          </Radio>
-                                        )
-                                      }
-                                      if (id === EtterlevelseStatus.IKKE_RELEVANT) {
-                                        return (
-                                          <Radio value={id} key={id}>
-                                            <Block $style={{ textDecoration: radioHover === id ? 'underline' : 'none' }}>
-                                              <Paragraph2 $style={{ lineHeight: '22px' }} marginTop="0px" marginBottom="0px">
-                                                {getEtterlevelseStatus(id)}
-                                              </Paragraph2>
-                                            </Block>
-                                            {etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT && (
-                                              <Block maxWidth="471px" width="100%">
-                                                <TextAreaField label="Beskriv hvorfor kravet ikke er relevant" noPlaceholder name="statusBegrunnelse" />
-                                                <Error fieldName={'statusBegrunnelse'} fullWidth={true} />
-                                              </Block>
-                                            )}
-                                          </Radio>
-                                        )
-                                      }
-                                      if (id === EtterlevelseStatus.FERDIG_DOKUMENTERT) {
-                                        return null
-                                      }
+                                  {Object.values(EtterlevelseStatus).map((id) => {
+                                    if (id === EtterlevelseStatus.OPPFYLLES_SENERE) {
                                       return (
                                         <Radio value={id} key={id}>
                                           <Block $style={{ textDecoration: radioHover === id ? 'underline' : 'none' }}>
@@ -448,45 +402,77 @@ const Edit = ({
                                               {getEtterlevelseStatus(id)}
                                             </Paragraph2>
                                           </Block>
+
+                                          {etterlevelseStatus === EtterlevelseStatus.OPPFYLLES_SENERE && (
+                                            <Block width="100%">
+                                              <Block maxWidth="170px" width="100%">
+                                                <DateField error={!!p.form.errors.fristForFerdigstillelse} label="Frist" name="fristForFerdigstillelse" />
+                                              </Block>
+                                              {p.form.errors.fristForFerdigstillelse && (
+                                                <Block display="flex" width="100%" marginTop=".2rem">
+                                                  <Block width="100%">
+                                                    <Notification
+                                                      overrides={{
+                                                        Body: {
+                                                          style: { width: 'auto', ...paddingZero, marginTop: 0, backgroundColor: 'transparent', color: ettlevColors.red600 },
+                                                        },
+                                                      }}
+                                                      kind={NKIND.negative}
+                                                    >
+                                                      {p.form.errors.fristForFerdigstillelse}
+                                                    </Notification>
+                                                  </Block>
+                                                </Block>
+                                              )}
+                                            </Block>
+                                          )}
                                         </Radio>
                                       )
-                                    })}
-                                  </RadioGroup>
-                                </FormControl>
-                              )}
-                            </Field>
-                          </FieldWrapper>
-                        </Block>
-
-                        <Block display="flex" justifyContent="flex-end" width="100%" height="46px">
-                          <a href={'/krav/' + krav?.kravNummer + '/' + krav?.kravVersjon} style={{ color: ettlevColors.green600 }} target="_blank" rel="noopener noreferrer">
-                            <Button
-                              kind="secondary"
-                              size="compact"
-                              type="button"
-                              $style={{
-                                ...borderColor('#0B483F'),
-                                ...borderStyle('solid'),
-                                ...borderWidth('1px'),
-                                ...borderRadius('4px'),
-                              }}
-                            >
-                              <Paragraph2 marginBottom={0} marginTop={0}>
-                                <span style={{ display: 'inline-block', marginRight: '5px', fontSize: '16px' }}>
-                                  <strong>Åpne veiledning og spørsmål til kraveier</strong>
-                                </span>
-                                <FontAwesomeIcon icon={faExternalLinkAlt} />
-                              </Paragraph2>
-                            </Button>
-                          </a>
-                        </Block>
+                                    }
+                                    if (id === EtterlevelseStatus.IKKE_RELEVANT) {
+                                      return (
+                                        <Radio value={id} key={id}>
+                                          <Block $style={{ textDecoration: radioHover === id ? 'underline' : 'none' }}>
+                                            <Paragraph2 $style={{ lineHeight: '22px' }} marginTop="0px" marginBottom="0px">
+                                              {getEtterlevelseStatus(id)}
+                                            </Paragraph2>
+                                          </Block>
+                                          {etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT && (
+                                            <Block maxWidth="471px" width="100%">
+                                              <TextAreaField label="Beskriv hvorfor kravet ikke er relevant" noPlaceholder name="statusBegrunnelse" />
+                                              <Error fieldName={'statusBegrunnelse'} fullWidth={true} />
+                                            </Block>
+                                          )}
+                                        </Radio>
+                                      )
+                                    }
+                                    if (id === EtterlevelseStatus.FERDIG_DOKUMENTERT) {
+                                      return null
+                                    }
+                                    return (
+                                      <Radio value={id} key={id}>
+                                        <Block $style={{ textDecoration: radioHover === id ? 'underline' : 'none' }}>
+                                          <Paragraph2 $style={{ lineHeight: '22px' }} marginTop="0px" marginBottom="0px">
+                                            {getEtterlevelseStatus(id)}
+                                          </Paragraph2>
+                                        </Block>
+                                      </Radio>
+                                    )
+                                  })}
+                                </RadioGroup>
+                              </FormControl>
+                            )}
+                          </Field>
+                        </FieldWrapper>
                       </Block>
 
-                      <Label3 $style={{ lineHeight: '32px' }}>Hvilke suksesskriterier er oppfylt?</Label3>
+                    </Block>
 
-                      <SuksesskriterierBegrunnelseEdit disableEdit={disableEdit} suksesskriterie={krav.suksesskriterier} />
+                    <Label3 $style={{ lineHeight: '32px' }}>Hvilke suksesskriterier er oppfylt?</Label3>
 
-                      {/*
+                    <SuksesskriterierBegrunnelseEdit disableEdit={disableEdit} suksesskriterie={krav.suksesskriterier} />
+
+                    {/*
               {!documentEdit &&
                 <>
                   <Block height={theme.sizing.scale600} />
@@ -498,7 +484,7 @@ const Edit = ({
               <TextAreaField label='Dokumentasjon' name='begrunnelse' markdown />
               */}
 
-                      {/*
+                    {/*
           <MultiInputField label='Dokumentasjon' name='dokumentasjon'/>
 
           <Block height={theme.sizing.scale600}/>
@@ -508,51 +494,60 @@ const Edit = ({
           <Block height={theme.sizing.scale600}/>
          */}
 
-                      <Error fieldName={'status'} fullWidth={true} />
-                      <Block width={'100%'} marginTop={'65px'}>
-                        {Object.keys(errors).length > 0 && (
-                          <Block display="flex" width="60%">
-                            <Block width="100%">
-                              <Notification
-                                overrides={{
-                                  Body: {
-                                    style: {
-                                      width: 'auto',
-                                      ...borderStyle('solid'),
-                                      ...borderWidth('1px'),
-                                      ...borderColor(ettlevColors.red600),
-                                      ...borderRadius('4px'),
-                                    },
+                    <Error fieldName={'status'} fullWidth={true} />
+
+                    <Block marginBottom="24px">
+                      <CustomizedAccordion>
+                        <CustomizedPanel title="Krav du bør se i relasjon til dette" overrides={{ Content: { style: { backgroundColor: ettlevColors.white, paddingLeft: '20px', paddingRight: '20px' } } }}>
+
+                        </CustomizedPanel>
+                        <CustomizedPanel title="Mer om kravet" overrides={{ Content: { style: { backgroundColor: ettlevColors.white, paddingLeft: '20px', paddingRight: '20px' } } }}>
+                          <AllInfo krav={krav} alleKravVersjoner={[{kravNummer: krav.kravNummer, kravVersjon: krav.kravVersjon, kravStatus: krav.status}]}/> 
+                        </CustomizedPanel>
+                      </CustomizedAccordion>
+                    </Block>
+
+                    <Block width={'100%'} marginTop={'65px'}>
+                      {Object.keys(errors).length > 0 && (
+                        <Block display="flex" width="60%">
+                          <Block width="100%">
+                            <Notification
+                              overrides={{
+                                Body: {
+                                  style: {
+                                    width: 'auto',
+                                    ...borderStyle('solid'),
+                                    ...borderWidth('1px'),
+                                    ...borderColor(ettlevColors.red600),
+                                    ...borderRadius('4px'),
                                   },
-                                }}
-                                kind={NKIND.negative}
-                              >
-                                <Block display="flex" justifyContent="center">
-                                  <FontAwesomeIcon
-                                    icon={faTimesCircle}
-                                    style={{
-                                      marginRight: '5px',
-                                    }}
-                                  />
-                                  <Paragraph2 marginBottom="0px" marginTop="0px" $style={{ lineHeight: '18px' }}>
-                                    Du må fylle ut alle obligatoriske felter
-                                  </Paragraph2>
-                                </Block>
-                              </Notification>
-                            </Block>
+                                },
+                              }}
+                              kind={NKIND.negative}
+                            >
+                              <Block display="flex" justifyContent="center">
+                                <FontAwesomeIcon
+                                  icon={faTimesCircle}
+                                  style={{
+                                    marginRight: '5px',
+                                  }}
+                                />
+                                <Paragraph2 marginBottom="0px" marginTop="0px" $style={{ lineHeight: '18px' }}>
+                                  Du må fylle ut alle obligatoriske felter
+                                </Paragraph2>
+                              </Block>
+                            </Notification>
                           </Block>
-                        )}
-                      </Block>
+                        </Block>
+                      )}
                     </Block>
                   </Block>
-                </Form>
-              </Block>
+                </Block>
+              </Form>
             </Block>
+
             {!documentEdit && (
               <Block
-                className="edit-etterlevelse-button-container"
-                paddingLeft={responsivePaddingLarge}
-                paddingRight={responsivePaddingLarge}
                 paddingTop="14px"
                 paddingBottom="24px"
                 display="flex"
@@ -594,7 +589,7 @@ const Edit = ({
               </Block>
             )}
             {etterlevelse.changeStamp.lastModifiedDate && etterlevelse.changeStamp.lastModifiedBy && (
-              <Block paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge} marginBottom={theme.sizing.scale3200}>
+              <Block marginBottom={theme.sizing.scale3200}>
                 <Paragraph4 marginTop="0px" marginBottom="0px">
                   Sist utfylt: {moment(etterlevelse.changeStamp.lastModifiedDate).format('ll')} av {etterlevelse.changeStamp.lastModifiedBy.split('-')[1]}
                 </Paragraph4>
