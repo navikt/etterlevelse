@@ -54,7 +54,7 @@ const MediumInfo = ({ krav }: { krav: KravQL }) => (
   </>
 )
 
-const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVersjoner: KravVersjon[] }) => {
+export const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVersjoner: KravVersjon[] }) => {
   const hasKravExpired = () => {
     return krav && krav.kravVersjon < alleKravVersjoner[0].kravVersjon
   }
