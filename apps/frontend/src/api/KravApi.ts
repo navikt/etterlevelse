@@ -171,6 +171,10 @@ export const kravFullQuery = gql`
         navn
         beskrivelse
       }
+      changeStamp {
+        lastModifiedBy
+        lastModifiedDate
+      }
       varslingsadresser {
         adresse
         type
