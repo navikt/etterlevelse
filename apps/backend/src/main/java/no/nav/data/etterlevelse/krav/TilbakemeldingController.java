@@ -30,6 +30,7 @@ public class TilbakemeldingController {
 
     @Operation(summary = "Create Tilbakemelding")
     @ApiResponse(responseCode = "201", description = "Tilbakemelding created")
+    @PostMapping
     public ResponseEntity<TilbakemeldingResponse> createTilbakemelding(@RequestBody CreateTilbakemeldingRequest request) {
         log.info("Create Tilbakemelding");
         var tilbakemelding = tilbakemeldingService.create(request);
