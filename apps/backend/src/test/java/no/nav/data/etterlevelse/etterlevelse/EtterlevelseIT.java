@@ -1,5 +1,6 @@
 package no.nav.data.etterlevelse.etterlevelse;
 
+import lombok.extern.slf4j.Slf4j;
 import no.nav.data.IntegrationTestBase;
 import no.nav.data.etterlevelse.codelist.CodelistStub;
 import no.nav.data.etterlevelse.etterlevelse.EtterlevelseController.EtterlevelsePage;
@@ -23,6 +24,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Slf4j
 public class EtterlevelseIT extends IntegrationTestBase {
 
     @BeforeEach
@@ -77,6 +79,48 @@ public class EtterlevelseIT extends IntegrationTestBase {
             body = resp.getBody();
             assertThat(body).isNotNull();
             assertThat(body.getNumberOfElements()).isZero();
+        }
+
+        @Test
+        void getEtterlevelseByBehandlingsIdAndKravId_fetchEtterlevelseWithbehandlingIdAndKravNummer_OneEtterlevelse(){
+            storageService.save(Etterlevelse.builder()
+                    .behandlingId("b1")
+                    .kravNummer(50)
+                    .kravVersjon(1)
+                    .build());
+            storageService.save(Etterlevelse.builder()
+                    .behandlingId("b2")
+                    .kravNummer(50)
+                    .kravVersjon(2)
+                    .build());
+            var resp = restTemplate.getForEntity("/etterlevelse/behandling/b1/50", EtterlevelsePage.class);
+            assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
+            assertThat(resp.getBody()).isNotNull();
+            assertThat(resp.getBody().getNumberOfElements()).isOne();
+            assertThat(resp.getBody().getTotalElements()).isEqualTo(1L);
+        }
+
+        @Test
+        void getEtterlevelseByBehandlingsIdAndKravId_fetchEtterlevelseWithbehandlingIdAndKravNummer_TwoEtterlevelse(){
+            storageService.save(Etterlevelse.builder()
+                    .behandlingId("b1")
+                    .kravNummer(50)
+                    .kravVersjon(1)
+                    .build());
+            storageService.save(Etterlevelse.builder()
+                    .behandlingId("b2")
+                    .kravNummer(50)
+                    .kravVersjon(2)
+                    .build());
+            storageService.save(Etterlevelse.builder()
+                    .behandlingId("b1")
+                    .kravNummer(50)
+                    .kravVersjon(3)
+                    .build());
+            var resp = restTemplate.getForEntity("/etterlevelse/behandling/b1/50", EtterlevelsePage.class);
+            assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
+            assertThat(resp.getBody()).isNotNull();
+            assertThat(resp.getBody().getTotalElements()).isEqualTo(2L);
         }
 
         @Test

@@ -90,6 +90,16 @@ public class EtterlevelseController {
         return ResponseEntity.ok(service.get(id).toResponse());
     }
 
+    @Operation(summary = "Get Etterlevelse by BehandlingsId and KravNummer")
+    @ApiResponse(description = "ok")
+    @GetMapping("/behandling/{behandlingsId}/{kravNummer}")
+    public ResponseEntity<RestResponsePage<EtterlevelseResponse>> getByBehandlingsIdAndKravNummer(@PathVariable String behandlingsId, @PathVariable Integer kravNummer) {
+        log.info("Get Etterlevelse by behandlingsId={} and kravNummer={}", behandlingsId, kravNummer);
+        List<Etterlevelse> etterlevelseList = service.getByBehandlingsIdAndKravNummer(behandlingsId, kravNummer);
+        return ResponseEntity.ok(new RestResponsePage<>(etterlevelseList).convert(Etterlevelse::toResponse));
+    }
+
+
     @Operation(summary = "Create Etterlevelse")
     @ApiResponse(responseCode = "201", description = "Etterlevelse created")
     @PostMapping
