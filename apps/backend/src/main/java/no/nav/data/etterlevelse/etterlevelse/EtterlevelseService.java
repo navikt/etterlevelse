@@ -50,6 +50,10 @@ public class EtterlevelseService extends DomainService<Etterlevelse> {
         return GenericStorage.to(repo.findByBehandling(behandlingId), Etterlevelse.class);
     }
 
+    public Page<Etterlevelse> getByBehandlingsIdAndKravNummer(String behandlingsId, int kravNummer) {
+        return (repo.findByBehandlingsIdAndKravNummer(behandlingsId, kravNummer)).map(GenericStorage::toEtterlevelse);
+    }
+
     public Map<String, List<Etterlevelse>> getByBehandlinger(Collection<String> behandlingIds) {
         return groupBy(GenericStorage.to(repo.findByBehandlinger(new ArrayList<>(behandlingIds)), Etterlevelse.class), Etterlevelse::getBehandlingId);
     }
