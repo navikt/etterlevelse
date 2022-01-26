@@ -6,23 +6,23 @@ import moment from 'moment'
 import _ from 'lodash'
 
 export const getTilbakemeldingForKrav = async (kravNummer: number, kravVersjon: number) => {
-  return (await axios.get<PageResponse<Tilbakemelding>>(`${env.backendBaseUrl}/krav/tilbakemelding/${kravNummer}/${kravVersjon}`)).data
+  return (await axios.get<PageResponse<Tilbakemelding>>(`${env.backendBaseUrl}/tilbakemelding/${kravNummer}/${kravVersjon}`)).data
 }
 
 export const createNewTilbakemelding = async (request: CreateTilbakemeldingRequest) => {
-  return (await axios.post<Tilbakemelding>(`${env.backendBaseUrl}/krav/tilbakemelding`, request)).data
+  return (await axios.post<Tilbakemelding>(`${env.backendBaseUrl}/tilbakemelding`, request)).data
 }
 
 export const tilbakemeldingNewMelding = async (request: TilbakemeldingNewMeldingRequest) => {
-  return (await axios.post<Tilbakemelding>(`${env.backendBaseUrl}/krav/tilbakemelding/melding`, request)).data
+  return (await axios.post<Tilbakemelding>(`${env.backendBaseUrl}/tilbakemelding/melding`, request)).data
 }
 
 export const tilbakemeldingEditMelding = async (request: { tilbakemeldingId: string; meldingNr: number; text: string }) => {
-  return (await axios.post<Tilbakemelding>(`${env.backendBaseUrl}/krav/tilbakemelding/${request.tilbakemeldingId}/${request.meldingNr}`, { innhold: request.text })).data
+  return (await axios.post<Tilbakemelding>(`${env.backendBaseUrl}/tilbakemelding/${request.tilbakemeldingId}/${request.meldingNr}`, { innhold: request.text })).data
 }
 
 export const tilbakemeldingslettMelding = async (request: { tilbakemeldingId: string; meldingNr: number }) => {
-  return (await axios.delete<Tilbakemelding>(`${env.backendBaseUrl}/krav/tilbakemelding/${request.tilbakemeldingId}/${request.meldingNr}`)).data
+  return (await axios.delete<Tilbakemelding>(`${env.backendBaseUrl}/tilbakemelding/${request.tilbakemeldingId}/${request.meldingNr}`)).data
 }
 
 export const useTilbakemeldinger = (kravNummer: number, kravVersjon: number) => {
