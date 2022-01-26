@@ -4,13 +4,13 @@ import { Block } from 'baseui/block'
 import { HeadingLarge } from 'baseui/typography'
 import * as React from 'react'
 import { Helmet } from 'react-helmet'
-import { BrowserRouter as Router } from 'react-router-dom'
+import {BrowserRouter, BrowserRouter as Router} from 'react-router-dom'
 import { Client as Styletron } from 'styletron-engine-atomic'
 import { Provider as StyletronProvider } from 'styletron-react'
 import { apolloClient } from './api/ApolloClient'
 import Header from './components/Header'
 import { Footer } from './components/Navigation/Footer'
-import Routes from './routes'
+import AppRoutes from './AppRoutes'
 import { ampli } from './services/Amplitude'
 import { codelist } from './services/Codelist'
 import { useAwait, useAwaitUser } from './util/hooks'
@@ -37,7 +37,7 @@ const Main = (props) => {
     <StyletronProvider value={engine}>
       <BaseProvider theme={customTheme}>
         <ApolloProvider client={apolloClient}>
-          <Router history={history}>
+          <BrowserRouter history={history}>
             <Helmet>
               <meta charSet="utf-8" />
               <title>Etterlevelse Beta</title>
@@ -46,14 +46,14 @@ const Main = (props) => {
             <Block {...containerProps} minHeight="100vh" position="relative">
               <Block {...containerProps} display="flex" flexDirection="column">
                 <Header />
-                <Routes />
+                <AppRoutes />
               </Block>
               <Block backgroundColor={ettlevColors.grey25} height={'150px'} width={'100%'}>
                 {/* <HeadingLarge>Hvordan opplever du løsningen?</HeadingLarge> */}
               </Block>
               <Footer />
             </Block>
-          </Router>
+          </BrowserRouter>
           <ErrorModal />
         </ApolloProvider>
       </BaseProvider>

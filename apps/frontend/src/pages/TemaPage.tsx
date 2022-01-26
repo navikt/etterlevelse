@@ -29,7 +29,6 @@ import { Helmet } from 'react-helmet'
 
 export const TemaPage = () => {
   const { tema } = useParams<{ tema: string }>()
-
   if (!tema) return <TemaListe />
 
   const code = codelist.getCode(ListName.TEMA, tema)
