@@ -1,12 +1,12 @@
 import Button from './common/Button'
 import React, { useState } from 'react'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from 'baseui/modal'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { deleteIcon } from './Images'
 
 export const DeleteItem = (props: { fun: () => Promise<any>; redirect: string }) => {
   const [open, setOpen] = useState(false)
-  const history = useHistory()
+  const navigate = useNavigate()
 
   return (
     <>
@@ -27,7 +27,7 @@ export const DeleteItem = (props: { fun: () => Promise<any>; redirect: string })
           <Button onClick={() => setOpen(false)} size={'compact'} kind={'secondary'} marginRight>
             Avbryt
           </Button>
-          <Button onClick={() => props.fun().then(() => history.push(props.redirect))} size={'compact'}>
+          <Button onClick={() => props.fun().then(() => navigate(props.redirect))} size={'compact'}>
             Slett
           </Button>
         </ModalFooter>

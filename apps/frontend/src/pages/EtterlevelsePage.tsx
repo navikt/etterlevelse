@@ -1,20 +1,16 @@
-import { Block } from 'baseui/block'
-import { H1, Label3 } from 'baseui/typography'
-import { useHistory, useParams } from 'react-router-dom'
-import { useEtterlevelse } from '../api/EtterlevelseApi'
-import React, { useEffect, useRef, useState } from 'react'
-import { Etterlevelse, EtterlevelseStatus, Krav } from '../constants'
-import Button from '../components/common/Button'
-import { ViewEtterlevelse } from '../components/etterlevelse/ViewEtterlevelse'
-import RouteLink from '../components/common/RouteLink'
-import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
-import { FormikProps } from 'formik'
-import { kravNumView } from './KravPage'
-import { ettlevColors, maxPageWidth, pageWidth, responsivePaddingSmall, responsiveWidthSmall } from '../util/theme'
-import { chevronLeft } from '../components/Images'
-import { getKravByKravNumberAndVersion } from '../api/KravApi'
-import CustomizedBreadcrumbs, { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
-import { Helmet } from 'react-helmet'
+import {Block} from 'baseui/block'
+import {H1, Label3} from 'baseui/typography'
+import {useParams} from 'react-router-dom'
+import {useEtterlevelse} from '../api/EtterlevelseApi'
+import React, {useEffect, useState} from 'react'
+import {Etterlevelse, EtterlevelseStatus, Krav} from '../constants'
+import {ViewEtterlevelse} from '../components/etterlevelse/ViewEtterlevelse'
+import {LoadingSkeleton} from '../components/common/LoadingSkeleton'
+import {kravNumView} from './KravPage'
+import {ettlevColors, maxPageWidth, pageWidth, responsivePaddingSmall, responsiveWidthSmall} from '../util/theme'
+import {getKravByKravNumberAndVersion} from '../api/KravApi'
+import CustomizedBreadcrumbs, {breadcrumbPaths} from '../components/common/CustomizedBreadcrumbs'
+import {Helmet} from 'react-helmet'
 
 export const etterlevelseName = (etterlevelse: Etterlevelse) => `${kravNumView(etterlevelse)}`
 
@@ -45,8 +41,6 @@ export const EtterlevelsePage = () => {
   const [etterlevelse, setEtterlevelse] = useEtterlevelse(params.id)
   const [edit, setEdit] = useState(etterlevelse && !etterlevelse.id)
   const [krav, setKrav] = useState<Krav>()
-  const formRef = useRef<FormikProps<any>>()
-  const history = useHistory()
 
   const loading = !edit && !etterlevelse
 

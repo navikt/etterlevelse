@@ -1,6 +1,6 @@
 import { Block } from 'baseui/block'
 import React, { useEffect, useState } from 'react'
-import { useHistory, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import _ from 'lodash'
 import { H4, Paragraph2 } from 'baseui/typography'
 import { AuditLog } from './AuditTypes'
@@ -18,7 +18,7 @@ const format = (id: string) => _.trim(id, '"')
 
 export const AuditPage = () => {
   const params = useParams<{ id?: string; auditId?: string }>()
-  const history = useHistory()
+  const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState()
   const [auditLog, setAuditLog] = useState<AuditLog>()
@@ -32,7 +32,7 @@ export const AuditPage = () => {
       setAuditLog(undefined)
       setError(undefined)
       if (!id) {
-        !!params.id && history.push('/admin/audit')
+        !!params.id && navigate('/admin/audit')
         return
       }
       setLoading(true)
@@ -40,7 +40,7 @@ export const AuditPage = () => {
         const log = await getAuditLog(_.escape(id))
         setAuditLog(log)
         if (log.audits.length && id !== params.id) {
-          history.push(`/admin/audit/${id}`)
+          navigate(`/admin/audit/${id}`)
         }
       } catch (e: any) {
         setError(e)
