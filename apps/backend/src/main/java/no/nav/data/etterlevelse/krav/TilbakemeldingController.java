@@ -30,7 +30,6 @@ public class TilbakemeldingController {
 
     @Operation(summary = "Create Tilbakemelding")
     @ApiResponse(responseCode = "201", description = "Tilbakemelding created")
-    @PostMapping("/tilbakemelding")
     public ResponseEntity<TilbakemeldingResponse> createTilbakemelding(@RequestBody CreateTilbakemeldingRequest request) {
         log.info("Create Tilbakemelding");
         var tilbakemelding = tilbakemeldingService.create(request);
@@ -39,7 +38,7 @@ public class TilbakemeldingController {
 
     @Operation(summary = "New Melding on Tilbakemelding")
     @ApiResponse(description = "Melding added")
-    @PostMapping("/tilbakemelding/melding")
+    @PostMapping("/melding")
     public ResponseEntity<TilbakemeldingResponse> tilbakemeldingNewMelding(@RequestBody TilbakemeldingNewMeldingRequest request) {
         log.info("New Melding on Tilbakemelding");
         var tilbakemelding = tilbakemeldingService.newMelding(request);
@@ -48,7 +47,7 @@ public class TilbakemeldingController {
 
     @Operation(summary = "Delete Melding on Tilbakemelding")
     @ApiResponse(description = "Melding deleted")
-    @DeleteMapping("/tilbakemelding/{tilbakemeldingId}/{meldingNr}")
+    @DeleteMapping("/{tilbakemeldingId}/{meldingNr}")
     public ResponseEntity<TilbakemeldingResponse> tilbakemeldingDeleteMelding(@PathVariable UUID tilbakemeldingId, @PathVariable int meldingNr) {
         log.info("Slett Melding on Tilbakemelding");
         var tilbakemelding = tilbakemeldingService.deleteMelding(tilbakemeldingId, meldingNr);
@@ -57,7 +56,7 @@ public class TilbakemeldingController {
 
     @Operation(summary = "Edit Melding on Tilbakemelding")
     @ApiResponse(description = "Melding edited")
-    @PostMapping("/tilbakemelding/{tilbakemeldingId}/{meldingNr}")
+    @PostMapping("/{tilbakemeldingId}/{meldingNr}")
     public ResponseEntity<TilbakemeldingResponse> tilbakemeldingEditMelding(@PathVariable UUID tilbakemeldingId, @PathVariable int meldingNr, @RequestBody EditTilbakemeldingRequest req) {
         log.info("Edit Melding on Tilbakemelding");
         var tilbakemelding = tilbakemeldingService.editMelding(tilbakemeldingId, meldingNr, req.getInnhold());
@@ -66,7 +65,7 @@ public class TilbakemeldingController {
 
     @Operation(summary = "Get Tilbakemeldinger for krav")
     @ApiResponse(description = "Tilbakemeldinger for krav")
-    @GetMapping("/tilbakemelding/{kravNummer}/{kravVersjon}")
+    @GetMapping("/{kravNummer}/{kravVersjon}")
     public ResponseEntity<RestResponsePage<TilbakemeldingResponse>> getTilbakemeldinger(@PathVariable int kravNummer, @PathVariable int kravVersjon) {
         log.info("Get Tilbakemeldinger for krav K{}.{}", kravNummer, kravVersjon);
         var tilbakemeldinger = tilbakemeldingService.getForKrav(kravNummer, kravVersjon);
