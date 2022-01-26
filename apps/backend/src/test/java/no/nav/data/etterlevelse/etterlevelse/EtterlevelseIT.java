@@ -1,5 +1,6 @@
 package no.nav.data.etterlevelse.etterlevelse;
 
+import lombok.extern.slf4j.Slf4j;
 import no.nav.data.IntegrationTestBase;
 import no.nav.data.etterlevelse.codelist.CodelistStub;
 import no.nav.data.etterlevelse.etterlevelse.EtterlevelseController.EtterlevelsePage;
@@ -23,6 +24,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Slf4j
 public class EtterlevelseIT extends IntegrationTestBase {
 
     @BeforeEach
@@ -118,7 +120,6 @@ public class EtterlevelseIT extends IntegrationTestBase {
             var resp = restTemplate.getForEntity("/etterlevelse/behandling/b1/50", EtterlevelsePage.class);
             assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
             assertThat(resp.getBody()).isNotNull();
-            assertThat(resp.getBody().getNumberOfElements()).isOne();
             assertThat(resp.getBody().getTotalElements()).isEqualTo(2L);
         }
 
