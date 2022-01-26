@@ -1,6 +1,5 @@
 import * as React from 'react'
-import {Location, NavigateFunction, useLocation, useNavigate} from 'react-router-dom'
-import {ReactComponentElement} from "react";
+import { useLocation} from 'react-router-dom'
 
 const ScrollToTop = ({children}: { children: any }) => {
 
@@ -9,15 +8,8 @@ const ScrollToTop = ({children}: { children: any }) => {
   React.useEffect(() => {
     if (!location.pathname.includes('/krav')) {
       window.scrollTo(0, 0)
-      console.log("krav")
-    } else {
-      console.log("ikke krav")
     }
-    // })
-    // return () => {
-    //   unlisten()
-    // }
-  }, [])
+  }, [location])
 
   return children
 }
