@@ -3,7 +3,6 @@ package no.nav.data.etterlevelse.krav;
 import no.nav.data.IntegrationTestBase;
 import no.nav.data.TestConfig.MockFilter;
 import no.nav.data.common.utils.JsonUtils;
-import no.nav.data.etterlevelse.krav.KravController.TilbakemeldingPage;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.Tilbakemelding;
 import no.nav.data.etterlevelse.krav.domain.Tilbakemelding.Rolle;
@@ -56,9 +55,9 @@ class TilbakemeldingIT extends IntegrationTestBase {
         MockFilter.setUser("A123456");
         Krav krav = createKrav();
         var req = createCreateTilbakemeldingRequest(krav.getKravNummer(), krav.getKravVersjon());
-        restTemplate.postForEntity("/krav/tilbakemelding", req, TilbakemeldingResponse.class);
+        restTemplate.postForEntity("/tilbakemelding", req, TilbakemeldingResponse.class);
 
-        var resp = restTemplate.getForEntity("/krav/tilbakemelding/{kravNummer}/{kravVersjon}", TilbakemeldingPage.class, krav.getKravNummer(), krav.getKravVersjon());
+        var resp = restTemplate.getForEntity("/tilbakemelding/{kravNummer}/{kravVersjon}", TilbakemeldingController.TilbakemeldingPage.class, krav.getKravNummer(), krav.getKravVersjon());
 
         assertThat(resp.getBody()).isNotNull();
         assertThat(resp.getBody().getContent()).hasSize(1);
@@ -68,7 +67,7 @@ class TilbakemeldingIT extends IntegrationTestBase {
         var req = createCreateTilbakemeldingRequest(kravNummer, kravVersjon);
 
         MockFilter.setUser("A123456");
-        var resp = restTemplate.postForEntity("/krav/tilbakemelding", req, TilbakemeldingResponse.class);
+        var resp = restTemplate.postForEntity("/tilbakemelding", req, TilbakemeldingResponse.class);
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         assertThat(resp.getBody()).isNotNull();
         assertThat(resp.getBody().getKravNummer()).isEqualTo(kravNummer);
@@ -94,7 +93,7 @@ class TilbakemeldingIT extends IntegrationTestBase {
                 .melding("takk")
                 .rolle(Rolle.KRAVEIER)
                 .build();
-        var resp = restTemplate.postForEntity("/krav/tilbakemelding/melding", meldingReq, TilbakemeldingResponse.class);
+        var resp = restTemplate.postForEntity("/tilbakemelding/melding", meldingReq, TilbakemeldingResponse.class);
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(resp.getBody()).isNotNull();
         assertTilbakemelding(resp.getBody());
