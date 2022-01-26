@@ -42,14 +42,20 @@ const AppRoutes = (): JSX.Element => {
 
         <Route path="/behandling/:id/:tema" element={<BehandlingerTemaPage/>} caseSensitive={true}/>
         <Route path="/behandlingtest/:id/:tema" element={<BehandlingerTemaPageV2/>} caseSensitive={true}/>
+        <Route path="/behandling/:id" element={<BehandlingPage/>} caseSensitive={true}/>
+        <Route path="/behandling/" element={<MyBehandlingerPage/>} caseSensitive={true}/>
+
         <Route path="/behandlinger/:tab" element={<MyBehandlingerPage/>} caseSensitive={true}/>
         <Route path="/behandlinger/" element={<MyBehandlingerPage/>} caseSensitive={true}/>
 
         <Route path="/relevans/:relevans" element={<RelevansPage/>} caseSensitive={true}/>
         <Route path="/relevans/" element={<RelevansPage/>} caseSensitive={true}/>
+
         <Route path="/underavdeling/:underavdeling" element={<UnderavdelingPage/>} caseSensitive={true}/>
         <Route path="/underavdeling/" element={<UnderavdelingPage/>} caseSensitive={true}/>
-        <Route path="/lov/:lov?" element={<LovPage/>} caseSensitive={true}/>
+
+        <Route path="/lov/:lov" element={<LovPage/>} caseSensitive={true}/>
+        <Route path="/lov/" element={<LovPage/>} caseSensitive={true}/>
 
         <Route path="/admin/codelist/:listname" element={<CodeListPage/>} caseSensitive={true}/>
         <Route path="/admin/codelist/" element={<CodeListPage/>} caseSensitive={true}/>
@@ -65,7 +71,7 @@ const AppRoutes = (): JSX.Element => {
 
         <Route path="/tema/:tema" element={<TemaPage/>} caseSensitive={true}/>
         <Route path="/tema/" element={<TemaPage/>} caseSensitive={true}/>
-        <Route path="/behandling/:id" element={<BehandlingPage/>} caseSensitive={true}/>
+
         <Route path="/status" element={<StatusPage/>} caseSensitive={true}/>
         <Route path="/help" element={<FAQ/>} caseSensitive={true}/>
 
