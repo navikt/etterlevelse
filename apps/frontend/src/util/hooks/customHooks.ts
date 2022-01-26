@@ -78,10 +78,9 @@ export function useLocationState<T>() {
   const location = useLocation()
 
   const changeState = (newState: Partial<T>) => {
-    // history.replace({ ...location, state: { ...location.state, ...newState } })
     navigate({...location}, {
       replace: true, state: {
-        ...location.state as T,
+        ...location.state as Partial<T>,
         ...newState
       }
     })
