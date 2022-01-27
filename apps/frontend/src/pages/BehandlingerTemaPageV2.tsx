@@ -47,6 +47,12 @@ const mapEtterlevelseData = (etterlevelse?: Etterlevelse) => ({
   gammelVersjon: false,
 })
 
+const isFerdigUtfylt = (status: EtterlevelseStatus | undefined) => {  
+  return (status === EtterlevelseStatus.FERDIG_DOKUMENTERT ||
+    status === EtterlevelseStatus.OPPFYLLES_SENERE ||
+    status === EtterlevelseStatus.IKKE_RELEVANT)
+}
+
 export const BehandlingerTemaPageV2 = () => {
   const params = useParams<{ id?: string; tema?: string }>()
   const temaData: TemaCode | undefined = codelist.getCode(ListName.TEMA, params.tema)
@@ -151,10 +157,7 @@ export const BehandlingerTemaPageV2 = () => {
   useEffect(() => {
     setUtfyltKrav(
       kravData.filter(
-        (k) =>
-          k.etterlevelseStatus === EtterlevelseStatus.FERDIG_DOKUMENTERT ||
-          k.etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT ||
-          k.etterlevelseStatus === EtterlevelseStatus.OPPFYLLES_SENERE,
+        (k) => isFerdigUtfylt(k.etterlevelseStatus),
       ),
     )
     setSkalUtfyllesKrav(
@@ -169,9 +172,7 @@ export const BehandlingerTemaPageV2 = () => {
 
     kravData.forEach((k) => {
       if (
-        (k.etterlevelseStatus === EtterlevelseStatus.FERDIG_DOKUMENTERT ||
-          k.etterlevelseStatus === EtterlevelseStatus.OPPFYLLES_SENERE ||
-          k.etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT) &&
+        (isFerdigUtfylt(k.etterlevelseStatus)) &&
         k.gammelVersjon !== true
       ) {
         antallUtfylt += 1
@@ -202,11 +203,13 @@ export const BehandlingerTemaPageV2 = () => {
             </Label3>
           </Button>
         </Block>}
-      <Block marginTop={edit ? '0px' : '8px'} marginBottom="56px" display="flex" width={edit ? 'calc(100% - 35px)' :'100%'} alignItems="center" justifyContent="center" marginLeft={edit ? '35px' : '0px'}>
+      <Block marginTop={edit ? '0px' : '8px'} marginBottom="56px" display="flex" width={edit ? 'calc(100% - 35px)' : '100%'} alignItems="center" justifyContent="center" marginLeft={edit ? '35px' : '0px'}>
         <Block display="flex" flex="1">
           <img src={angleIcon} alt="" />{' '}
           <Label3 marginLeft="12px" $style={{ fontSize: '18px', fontWeight: 600, lineHeight: '22px', color: ettlevColors.green600, whiteSpace: 'nowrap' }}>
-            {edit ? activeEtterlevleseStatus === EtterlevelseStatus.FERDIG_DOKUMENTERT || activeEtterlevleseStatus === EtterlevelseStatus.IKKE_RELEVANT ? 'Ferdig utfyllt' : 'Skal fylles ut' : temaData?.shortName}
+            {edit ? isFerdigUtfylt(activeEtterlevleseStatus) ?
+                'Ferdig utfyllt' : 'Skal fylles ut' : temaData?.shortName
+            }
           </Label3>
           {console.log(activeEtterlevleseStatus)}
         </Block>
@@ -397,11 +400,8 @@ export const BehandlingerTemaPageV2 = () => {
 
 const toKravId = (it: { kravVersjon: number; kravNummer: number }) => ({ kravNummer: it.kravNummer, kravVersjon: it.kravVersjon })
 
-const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function; setKravId: Function; noStatus?: boolean; setActiveEtterlevelseStatus: Function}) => {
-  const ferdigUtfylt =
-    props.krav.etterlevelseStatus === EtterlevelseStatus.FERDIG_DOKUMENTERT ||
-    props.krav.etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT ||
-    props.krav.etterlevelseStatus === EtterlevelseStatus.OPPFYLLES_SENERE
+const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function; setKravId: Function; noStatus?: boolean; setActiveEtterlevelseStatus: Function }) => {
+  const ferdigUtfylt = isFerdigUtfylt(props.krav.etterlevelseStatus)
   const [hover, setHover] = useState(false)
   return (
     <Button
