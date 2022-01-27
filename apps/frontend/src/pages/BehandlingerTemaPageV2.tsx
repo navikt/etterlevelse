@@ -211,7 +211,6 @@ export const BehandlingerTemaPageV2 = () => {
                 'Ferdig utfylt' : 'Skal fylles ut' : temaData?.shortName
             }
           </Label3>
-          {console.log(activeEtterlevleseStatus)}
         </Block>
         <Block display="flex" justifyContent="flex-end" width="100%">
           <Button
