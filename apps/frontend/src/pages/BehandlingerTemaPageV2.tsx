@@ -82,7 +82,7 @@ export const BehandlingerTemaPageV2 = () => {
   const [isTemaModalOpen, setIsTemaModalOpen] = useState<boolean>(false)
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       const allKravPriority = await getAllKravPriority()
       const kraver = _.cloneDeep(rawData?.krav.content) || []
       const irrelevantKraver = _.cloneDeep(irrelevantData?.krav.content) || []
@@ -186,14 +186,29 @@ export const BehandlingerTemaPageV2 = () => {
           Krav til utfylling
         </RouteLink>
       </Block>
-      <Block marginTop="6px" marginBottom="56px" display="flex" width="100%" alignItems="center" justifyContent="space-between">
-        <Block display="flex">
+      {edit && kravId &&
+        <Block marginTop="8px">
           <img src={angleIcon} alt="" />{' '}
-          <Label3 marginLeft="12px" $style={{ fontSize: '18px', fontWeight: 600, lineHeight: '22px', color: ettlevColors.green600 }}>
-            {temaData?.shortName}
+          <Button
+            kind="underline-hover"
+            onClick={() => {
+              setEdit(undefined)
+              setKravId(undefined)
+            }}
+          >
+            <Label3 marginLeft="12px" $style={{ fontSize: '18px', fontWeight: 600, lineHeight: '22px', color: ettlevColors.green600 }}>
+              {temaData?.shortName}
+            </Label3>
+          </Button>
+        </Block>}
+      <Block marginTop={edit && kravId ? '0px' : '8px'} marginBottom="56px" display="flex" width={edit && kravId ? 'calc(100% - 35px)' :'100%'} alignItems="center" justifyContent="center" marginLeft={edit && kravId ? '35px' : '0px'}>
+        <Block display="flex" flex="1">
+          <img src={angleIcon} alt="" />{' '}
+          <Label3 marginLeft="12px" $style={{ fontSize: '18px', fontWeight: 600, lineHeight: '22px', color: ettlevColors.green600, whiteSpace: 'nowrap' }}>
+            {edit && kravId ? 'Skal fylles ut' : temaData?.shortName}
           </Label3>
         </Block>
-        <Block display="flex" justifyContent="flex-end">
+        <Block display="flex" justifyContent="flex-end" width="100%">
           <Button
             startEnhancer={<img src={page2Icon} alt="Om personvern og ansvarlig for tema" />}
             size="compact"
@@ -232,7 +247,7 @@ export const BehandlingerTemaPageV2 = () => {
               </H1>
             </Block>
             <Block marginBottom="55px" marginTop="40px" paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge}>
-              <Block>{getTemaMainHeader(temaData, lovListe, true, () => {}, true, true)}</Block>
+              <Block>{getTemaMainHeader(temaData, lovListe, true, () => { }, true, true)}</Block>
               <Block display="flex" justifyContent="flex-end" width="100%" marginTop="38px">
                 <Button onClick={() => setIsTemaModalOpen(false)}>Lukk visning</Button>
               </Block>
@@ -461,7 +476,7 @@ const KravView = (props: {
   const [varsleMelding, setVarsleMelding] = useState('')
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       if (etterlevelse) {
         const kravId = toKravId(etterlevelse)
         if (kravId.kravNummer && kravId.kravVersjon) {
