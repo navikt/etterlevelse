@@ -1,6 +1,6 @@
 import { Etterlevelse, EtterlevelseStatus, Krav, KravQL, KravStatus } from '../../constants'
 import { Field, FieldProps, Form, Formik, FormikProps, validateYupSchema, yupToFormErrors } from 'formik'
-import { createEtterlevelse, mapEtterlevelseToFormValue, updateEtterlevelse } from '../../api/EtterlevelseApi'
+import { createEtterlevelse, getEtterlevelserByBehandlingsIdKravNumber, mapEtterlevelseToFormValue, updateEtterlevelse } from '../../api/EtterlevelseApi'
 import { Block } from 'baseui/block'
 import Button from '../common/Button'
 import React, { useEffect, useState } from 'react'
@@ -310,17 +310,14 @@ const Edit = ({
   etterlevelse,
   submit,
   formRef,
-  varsleMelding,
   behandlingId,
-  behandlingNummer,
-  behandlingformaal,
-  behandlingNavn,
   disableEdit,
   documentEdit,
   close,
 }: EditProps) => {
   const [etterlevelseStatus, setEtterlevelseStatus] = React.useState<string>(etterlevelse.status || EtterlevelseStatus.UNDER_REDIGERING)
   const [radioHover, setRadioHover] = React.useState<string>('')
+  const tidligereEtterlevelser = behandlingId && krav.kravNummer ? getEtterlevelserByBehandlingsIdKravNumber(behandlingId, krav.kravNummer) : []
   return (
     <Block width="100%">
       <Formik
