@@ -317,7 +317,17 @@ const Edit = ({
 }: EditProps) => {
   const [etterlevelseStatus, setEtterlevelseStatus] = React.useState<string>(etterlevelse.status || EtterlevelseStatus.UNDER_REDIGERING)
   const [radioHover, setRadioHover] = React.useState<string>('')
-  const tidligereEtterlevelser = behandlingId && krav.kravNummer ? getEtterlevelserByBehandlingsIdKravNumber(behandlingId, krav.kravNummer) : []
+  const [tidligereEtterlevelser, setTidligereEtterlevelser] = React.useState<Etterlevelse[]>()
+
+  useEffect(() => {
+    ; (async () => {
+      if (behandlingId && krav.kravNummer) {
+        const etterlevelser = await getEtterlevelserByBehandlingsIdKravNumber(behandlingId, krav.kravNummer)
+        setTidligereEtterlevelser(etterlevelser.content.sort((a, b) => a.kravVersjon > b.kravVersjon ? -1 : 1))
+      }
+    })()
+  }, [])
+
   return (
     <Block width="100%">
       <Formik
