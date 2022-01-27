@@ -39,7 +39,7 @@ export const TemaPage = () => {
 export const getTemaMainHeader = (tema: TemaCode, lover: LovCode[], expand: boolean, setExpand: (e: boolean) => void, noExpandButton?: boolean, noHeader?: boolean) => {
   return (
     <>
-      {!noHeader &&
+      {!noHeader && (
         <>
           <H1 marginTop="0px">{tema.shortName}</H1>
           <Helmet>
@@ -47,7 +47,7 @@ export const getTemaMainHeader = (tema: TemaCode, lover: LovCode[], expand: bool
             <title>{tema.shortName} </title>
           </Helmet>
         </>
-      }
+      )}
       <Block
         minHeight={'125px'}
         maxHeight={expand ? undefined : '125px'}
@@ -80,11 +80,13 @@ export const getTemaMainHeader = (tema: TemaCode, lover: LovCode[], expand: bool
         </Block>
       )}
 
-      {!noExpandButton && <Block alignSelf={'flex-end'} marginTop={theme.sizing.scale600}>
-        <Button onClick={() => setExpand(!expand)} icon={expand ? faChevronUp : faChevronDown} kind={'underline-hover'}>
-          {expand ? 'Mindre' : 'Mer'} om tema
-        </Button>
-      </Block>}
+      {!noExpandButton && (
+        <Block alignSelf={'flex-end'} marginTop={theme.sizing.scale600}>
+          <Button onClick={() => setExpand(!expand)} icon={expand ? faChevronUp : faChevronDown} kind={'underline-hover'}>
+            {expand ? 'Mindre' : 'Mer'} om tema
+          </Button>
+        </Block>
+      )}
     </>
   )
 }
@@ -104,7 +106,7 @@ const TemaSide = ({ tema }: { tema: TemaCode }) => {
 
   useEffect(() => {
     if (data && data.krav && data.krav.content && data.krav.content.length > 0) {
-      ; (async () => {
+      ;(async () => {
         const allKravPriority = await getAllKravPriority()
         const kraver = _.cloneDeep(data.krav.content)
         kraver.map((k) => {

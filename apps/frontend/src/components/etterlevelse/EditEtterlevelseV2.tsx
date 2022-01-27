@@ -143,14 +143,14 @@ export const EditEtterlevelseV2 = ({
       suksesskriterieBegrunnelser:
         etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT
           ? [
-            ...etterlevelse.suksesskriterieBegrunnelser.map((s) => {
-              return {
-                ...s,
-                oppfylt: false,
-                ikkeRelevant: false,
-              }
-            }),
-          ]
+              ...etterlevelse.suksesskriterieBegrunnelser.map((s) => {
+                return {
+                  ...s,
+                  oppfylt: false,
+                  ikkeRelevant: false,
+                }
+              }),
+            ]
           : [...etterlevelse.suksesskriterieBegrunnelser],
     }
 
@@ -244,9 +244,9 @@ export const EditEtterlevelseV2 = ({
               overrides={{
                 Root: {
                   style: {
-                    width: '100%'
-                  }
-                }
+                    width: '100%',
+                  },
+                },
               }}
               tabs={[
                 {
@@ -282,13 +282,7 @@ export const EditEtterlevelseV2 = ({
               ]}
             />
           </Block>
-          <Block
-            display={tab === 'dokumentasjon' ? 'block' : 'none'}
-            width="100%"
-            height="140px"
-            backgroundColor={ettlevColors.green100} marginTop="-140px"
-          />
-
+          <Block display={tab === 'dokumentasjon' ? 'block' : 'none'} width="100%" height="140px" backgroundColor={ettlevColors.green100} marginTop="-140px" />
         </Block>
       )}
     </Block>
@@ -472,7 +466,6 @@ const Edit = ({
                           </Field>
                         </FieldWrapper>
                       </Block>
-
                     </Block>
 
                     <Label3 $style={{ lineHeight: '32px' }}>Hvilke suksesskriterier er oppfylt?</Label3>
@@ -505,10 +498,14 @@ const Edit = ({
 
                     <Block marginBottom="24px">
                       <CustomizedAccordion>
-                        <CustomizedPanel title="Krav du bør se i relasjon til dette" overrides={{ Content: { style: { backgroundColor: ettlevColors.white, paddingLeft: '20px', paddingRight: '20px' } } }}>
-
-                        </CustomizedPanel>
-                        <CustomizedPanel title="Mer om kravet" overrides={{ Content: { style: { backgroundColor: ettlevColors.white, paddingLeft: '20px', paddingRight: '20px' } } }}>
+                        <CustomizedPanel
+                          title="Krav du bør se i relasjon til dette"
+                          overrides={{ Content: { style: { backgroundColor: ettlevColors.white, paddingLeft: '20px', paddingRight: '20px' } } }}
+                        ></CustomizedPanel>
+                        <CustomizedPanel
+                          title="Mer om kravet"
+                          overrides={{ Content: { style: { backgroundColor: ettlevColors.white, paddingLeft: '20px', paddingRight: '20px' } } }}
+                        >
                           <AllInfo krav={krav} alleKravVersjoner={[{ kravNummer: krav.kravNummer, kravVersjon: krav.kravVersjon, kravStatus: krav.status }]} />
                         </CustomizedPanel>
                       </CustomizedAccordion>
@@ -553,21 +550,9 @@ const Edit = ({
               </Form>
             </Block>
 
-            <Block
-              width="100%"
-              height="140px"
-              backgroundColor={ettlevColors.green100}
-            >
-
+            <Block width="100%" height="140px" backgroundColor={ettlevColors.green100}>
               {!documentEdit && (
-                <Block
-                  paddingTop="27px"
-                  paddingBottom="24px"
-                  display="flex"
-                  justifyContent="flex-end"
-                  width="100%"
-
-                >
+                <Block paddingTop="27px" paddingBottom="24px" display="flex" justifyContent="flex-end" width="100%">
                   <Button disabled={krav.status === KravStatus.UTGAATT ? false : disableEdit} type="button" kind="secondary" marginRight onClick={close}>
                     {krav.status === KravStatus.UTGAATT ? 'Lukk' : 'Avbryt og forkast endringene'}
                   </Button>
@@ -605,18 +590,12 @@ const Edit = ({
                 </Block>
               )}
               {etterlevelse.changeStamp.lastModifiedDate && etterlevelse.changeStamp.lastModifiedBy && (
-                <Block
-                  paddingBottom="16px"
-                  display="flex"
-                  justifyContent="flex-end"
-                  width="100%"
-                >
+                <Block paddingBottom="16px" display="flex" justifyContent="flex-end" width="100%">
                   <Paragraph4 marginTop="0px" marginBottom="0px">
                     Sist utfylt: {moment(etterlevelse.changeStamp.lastModifiedDate).format('ll')} av {etterlevelse.changeStamp.lastModifiedBy.split('-')[1]}
                   </Paragraph4>
                 </Block>
               )}
-
             </Block>
           </Block>
         )}

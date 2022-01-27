@@ -56,7 +56,7 @@ const CodeListPage = () => {
 
   useEffect(() => {
     if (listname && listname !== params.listname) {
-      navigate(`/admin/codelist/${listname}`, {replace: true})
+      navigate(`/admin/codelist/${listname}`, { replace: true })
     }
   }, [listname, lists])
 

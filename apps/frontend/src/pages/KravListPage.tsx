@@ -157,7 +157,7 @@ const KravTabs = () => {
   const [tab, setTab] = useState<Section>(params.tab || 'siste')
 
   React.useEffect(() => {
-    if (tab !== params.tab) navigate(`/kraver/${tab}`, {replace: true})
+    if (tab !== params.tab) navigate(`/kraver/${tab}`, { replace: true })
   }, [tab])
 
   return (

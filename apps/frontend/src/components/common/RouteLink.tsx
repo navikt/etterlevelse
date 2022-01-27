@@ -1,15 +1,15 @@
-import {useLocation, useNavigate} from 'react-router-dom'
-import React, {useState} from 'react'
-import {AuditItem, NavigableItem, ObjectType} from '../admin/audit/AuditTypes'
-import {Block} from 'baseui/block'
-import {AuditButton} from '../admin/audit/AuditButton'
-import {KIND} from 'baseui/button'
-import {ListName} from '../../services/Codelist'
+import { useLocation, useNavigate } from 'react-router-dom'
+import React, { useState } from 'react'
+import { AuditItem, NavigableItem, ObjectType } from '../admin/audit/AuditTypes'
+import { Block } from 'baseui/block'
+import { AuditButton } from '../admin/audit/AuditButton'
+import { KIND } from 'baseui/button'
+import { ListName } from '../../services/Codelist'
 import CustomizedLink from './CustomizedLink'
 import _ from 'lodash'
-import {user} from '../../services/User'
-import {loginUrl} from '../Header'
-import {ettlevColors} from '../../util/theme'
+import { user } from '../../services/User'
+import { loginUrl } from '../Header'
+import { ettlevColors } from '../../util/theme'
 
 type RouteLinkProps = {
   href?: string
@@ -20,9 +20,9 @@ type RouteLinkProps = {
 } & any
 
 const RouteLink = (props: RouteLinkProps) => {
-  const {hideUnderline, plain, requireLogin, style, fontColor, ...restprops} = props
+  const { hideUnderline, plain, requireLogin, style, fontColor, ...restprops } = props
   const navigate = useNavigate()
-  const location = useLocation();
+  const location = useLocation()
 
   const onClick = (e: Event) => {
     if (requireLogin && !user.isLoggedIn()) return
@@ -45,7 +45,7 @@ const RouteLink = (props: RouteLinkProps) => {
 
   const href = !requireLogin || user.isLoggedIn() ? restprops.href : loginUrl(location, restprops.href)
 
-  return <CustomizedLink style={mergedStyle} {...restprops} href={href} onClick={onClick}/>
+  return <CustomizedLink style={mergedStyle} {...restprops} href={href} onClick={onClick} />
 }
 
 export default RouteLink
@@ -100,7 +100,7 @@ export const ObjectLink = (props: ObjectLinkProps) => {
   return props.withHistory ? (
     <Block color={props.fontColor ? props.fontColor : ettlevColors.green800} display="flex" justifyContent="space-between" width="100%" alignItems="center">
       {link}
-      <AuditButton fontColor={props.fontColor} id={props.id} kind={KIND.tertiary}/>
+      <AuditButton fontColor={props.fontColor} id={props.id} kind={KIND.tertiary} />
     </Block>
   ) : (
     link
@@ -108,13 +108,13 @@ export const ObjectLink = (props: ObjectLinkProps) => {
 }
 
 export const ExternalLink = ({
-                               href,
-                               children,
-                               hideUnderline,
-                               label,
-                               fontColor,
-                               openOnSamePage,
-                             }: {
+  href,
+  children,
+  hideUnderline,
+  label,
+  fontColor,
+  openOnSamePage,
+}: {
   href: string
   hideUnderline?: boolean
   label?: string
@@ -127,7 +127,7 @@ export const ExternalLink = ({
       href={href}
       target={openOnSamePage ? '_self' : '_blank'}
       rel="noopener noreferrer"
-      style={{color: fontColor ? fontColor : undefined, textDecoration: hideUnderline ? 'none' : undefined}}
+      style={{ color: fontColor ? fontColor : undefined, textDecoration: hideUnderline ? 'none' : undefined }}
       aria-label={label}
     >
       {children}

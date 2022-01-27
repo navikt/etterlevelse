@@ -82,7 +82,7 @@ export const BehandlingerTemaPageV2 = () => {
   const [isTemaModalOpen, setIsTemaModalOpen] = useState<boolean>(false)
 
   useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       const allKravPriority = await getAllKravPriority()
       const kraver = _.cloneDeep(rawData?.krav.content) || []
       const irrelevantKraver = _.cloneDeep(irrelevantData?.krav.content) || []
@@ -157,10 +157,7 @@ export const BehandlingerTemaPageV2 = () => {
     )
     setSkalUtfyllesKrav(
       kravData.filter(
-        (k) => k.etterlevelseStatus === EtterlevelseStatus.UNDER_REDIGERING
-          || k.etterlevelseStatus === EtterlevelseStatus.FERDIG
-          || k.etterlevelseStatus === undefined
-          || null,
+        (k) => k.etterlevelseStatus === EtterlevelseStatus.UNDER_REDIGERING || k.etterlevelseStatus === EtterlevelseStatus.FERDIG || k.etterlevelseStatus === undefined || null,
       ),
     )
   }, [kravData])
@@ -190,7 +187,7 @@ export const BehandlingerTemaPageV2 = () => {
         </RouteLink>
       </Block>
       <Block marginTop="6px" marginBottom="56px" display="flex" width="100%" alignItems="center" justifyContent="space-between">
-        <Block display="flex" >
+        <Block display="flex">
           <img src={angleIcon} alt="" />{' '}
           <Label3 marginLeft="12px" $style={{ fontSize: '18px', fontWeight: 600, lineHeight: '22px', color: ettlevColors.green600 }}>
             {temaData?.shortName}
@@ -200,7 +197,13 @@ export const BehandlingerTemaPageV2 = () => {
           <Button
             startEnhancer={<img src={page2Icon} alt="Om personvern og ansvarlig for tema" />}
             size="compact"
-            $style={{ fontSize: '18px', fontWeight: 600, lineHeight: '22px', color: ettlevColors.green600, ':hover': { backgroundColor: 'transparent', textDecoration: 'underline 3px' } }}
+            $style={{
+              fontSize: '18px',
+              fontWeight: 600,
+              lineHeight: '22px',
+              color: ettlevColors.green600,
+              ':hover': { backgroundColor: 'transparent', textDecoration: 'underline 3px' },
+            }}
             kind={'tertiary'}
             onClick={() => setIsTemaModalOpen(true)}
             marginLeft
@@ -209,38 +212,34 @@ export const BehandlingerTemaPageV2 = () => {
           </Button>
         </Block>
       </Block>
-      {temaData && <CustomizedModal
-        onClose={() => setIsTemaModalOpen(false)}
-        isOpen={isTemaModalOpen}
-        size="auto"
-        overrides={{
-          Dialog: {
-            style: {
-              ...borderRadius('0px')
-            }
-          }
-        }}
-      >
-        <Block width="100%">
-          <Block paddingTop="120px" paddingBottom="40px" backgroundColor={ettlevColors.green100} paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge}>
-            <H1 marginTop="0px" marginBottom="0px">
-              {temaData?.shortName}
-            </H1>
-          </Block>
-          <Block marginBottom="55px" marginTop="40px" paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge}>
-            <Block>
-              {getTemaMainHeader(temaData, lovListe, true, () => { }, true, true)}
+      {temaData && (
+        <CustomizedModal
+          onClose={() => setIsTemaModalOpen(false)}
+          isOpen={isTemaModalOpen}
+          size="auto"
+          overrides={{
+            Dialog: {
+              style: {
+                ...borderRadius('0px'),
+              },
+            },
+          }}
+        >
+          <Block width="100%">
+            <Block paddingTop="120px" paddingBottom="40px" backgroundColor={ettlevColors.green100} paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge}>
+              <H1 marginTop="0px" marginBottom="0px">
+                {temaData?.shortName}
+              </H1>
             </Block>
-            <Block display="flex" justifyContent="flex-end" width="100%" marginTop="38px">
-              <Button
-                onClick={() => setIsTemaModalOpen(false)}
-              >
-                Lukk visning
-              </Button>
+            <Block marginBottom="55px" marginTop="40px" paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge}>
+              <Block>{getTemaMainHeader(temaData, lovListe, true, () => {}, true, true)}</Block>
+              <Block display="flex" justifyContent="flex-end" width="100%" marginTop="38px">
+                <Button onClick={() => setIsTemaModalOpen(false)}>Lukk visning</Button>
+              </Block>
             </Block>
           </Block>
-        </Block>
-      </CustomizedModal>}
+        </CustomizedModal>
+      )}
     </Block>
   )
 
@@ -307,12 +306,15 @@ export const BehandlingerTemaPageV2 = () => {
         <Layout2
           headerBackgroundColor="#F8F8F8"
           headerOverlap="31px"
-          mainHeader={getMainHeader(behandling, <Helmet>
-            <meta charSet="utf-8" />
-            <title>
-              {temaData?.shortName} B{behandling.nummer.toString()} {behandling.navn.toString()}
-            </title>
-          </Helmet>)}
+          mainHeader={getMainHeader(
+            behandling,
+            <Helmet>
+              <meta charSet="utf-8" />
+              <title>
+                {temaData?.shortName} B{behandling.nummer.toString()} {behandling.navn.toString()}
+              </title>
+            </Helmet>,
+          )}
           secondaryHeaderBackgroundColor={ettlevColors.green100}
           secondaryHeader={getSecondaryHeader()}
           childrenBackgroundColor={ettlevColors.grey25}
@@ -333,7 +335,7 @@ export const BehandlingerTemaPageV2 = () => {
                   {getKravList(utfyltKrav, 'Ingen krav er ferdig utfylt')}
                 </CustomizedPanel>
               </CustomizedAccordion>
-              {irrelevantKravData.length > 0 &&
+              {irrelevantKravData.length > 0 && (
                 <Block marginTop="64px" width="100%">
                   <H3 marginTop="0px" marginBottom="16px">
                     Krav dere har filtrert bort
@@ -353,7 +355,7 @@ export const BehandlingerTemaPageV2 = () => {
                     </CustomizedAccordion>
                   </Block>
                 </Block>
-              }
+              )}
             </Block>
             {edit && behandling && (
               <KravView
@@ -371,15 +373,14 @@ export const BehandlingerTemaPageV2 = () => {
             )}
           </Block>
         </Layout2>
-      )
-      }
+      )}
     </>
   )
 }
 
 const toKravId = (it: { kravVersjon: number; kravNummer: number }) => ({ kravNummer: it.kravNummer, kravVersjon: it.kravVersjon })
 
-const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function; setKravId: Function, noStatus?: boolean }) => {
+const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function; setKravId: Function; noStatus?: boolean }) => {
   const ferdigUtfylt =
     props.krav.etterlevelseStatus === EtterlevelseStatus.FERDIG_DOKUMENTERT ||
     props.krav.etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT ||
@@ -460,7 +461,7 @@ const KravView = (props: {
   const [varsleMelding, setVarsleMelding] = useState('')
 
   useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       if (etterlevelse) {
         const kravId = toKravId(etterlevelse)
         if (kravId.kravNummer && kravId.kravVersjon) {
@@ -474,21 +475,14 @@ const KravView = (props: {
   }, [])
 
   return (
-    <Block width="100%" >
-      {!etterlevelse && <Block width="100%"
-        display="flex"
-        justifyContent="center"
-        marginTop="50px"
-      >
-        <Spinner size={theme.sizing.scale1200} />
-      </Block>}
+    <Block width="100%">
+      {!etterlevelse && (
+        <Block width="100%" display="flex" justifyContent="center" marginTop="50px">
+          <Spinner size={theme.sizing.scale1200} />
+        </Block>
+      )}
       {etterlevelse && (
-        <Block
-          width="100%"
-          display="flex"
-          justifyContent="center"
-
-        >
+        <Block width="100%" display="flex" justifyContent="center">
           <EditEtterlevelseV2
             behandlingNavn={props.behandlingNavn}
             behandlingId={props.behandlingId}
@@ -503,6 +497,6 @@ const KravView = (props: {
           />
         </Block>
       )}
-    </Block >
+    </Block>
   )
 }

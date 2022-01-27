@@ -1,16 +1,16 @@
-import { Block } from "baseui/block"
-import { Spinner } from "baseui/icon"
-import { HeadingXLarge } from "baseui/typography"
-import _ from "lodash"
-import moment from "moment"
-import { EtterlevelseQL, EtterlevelseStatus, ExternalCode } from "../../constants"
-import { theme } from "../../util"
-import { ettlevColors } from "../../util/theme"
-import { CustomizedAccordion, CustomizedPanel, CustomPanelDivider } from "../common/CustomizedAccordion"
-import { InfoBlock } from "../common/InfoBlock"
-import { PanelLink } from "../common/PanelLink"
-import { borderStyle } from "../common/Style"
-import { sadFolderIcon } from "../Images"
+import { Block } from 'baseui/block'
+import { Spinner } from 'baseui/icon'
+import { HeadingXLarge } from 'baseui/typography'
+import _ from 'lodash'
+import moment from 'moment'
+import { EtterlevelseQL, EtterlevelseStatus, ExternalCode } from '../../constants'
+import { theme } from '../../util'
+import { ettlevColors } from '../../util/theme'
+import { CustomizedAccordion, CustomizedPanel, CustomPanelDivider } from '../common/CustomizedAccordion'
+import { InfoBlock } from '../common/InfoBlock'
+import { PanelLink } from '../common/PanelLink'
+import { borderStyle } from '../common/Style'
+import { sadFolderIcon } from '../Images'
 
 export const Etterlevelser = ({ loading, etterlevelser: allEtterlevelser }: { loading: boolean; etterlevelser?: EtterlevelseQL[] }) => {
   const etterlevelser = (allEtterlevelser || [])

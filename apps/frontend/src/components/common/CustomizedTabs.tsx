@@ -1,12 +1,12 @@
 import * as React from 'react'
-import {useState} from 'react'
-import {FILL, ORIENTATION, Tab, TabProps, Tabs, TabsOverrides, TabsProps} from 'baseui/tabs-motion'
-import {StyleObject} from 'styletron-standard'
-import {borderColor, borderStyle, borderWidth, marginZero, paddingZero} from './Style'
-import {theme} from '../../util'
-import {ettlevColors} from '../../util/theme'
-import {ReactNode} from 'react-markdown/lib/react-markdown'
-import _ from "lodash";
+import { useState } from 'react'
+import { FILL, ORIENTATION, Tab, TabProps, Tabs, TabsOverrides, TabsProps } from 'baseui/tabs-motion'
+import { StyleObject } from 'styletron-standard'
+import { borderColor, borderStyle, borderWidth, marginZero, paddingZero } from './Style'
+import { theme } from '../../util'
+import { ettlevColors } from '../../util/theme'
+import { ReactNode } from 'react-markdown/lib/react-markdown'
+import _ from 'lodash'
 
 export const CustomizedTab = (props: TabProps) => {
   return <Tab {...props}>{props.children}</Tab>
@@ -40,7 +40,7 @@ interface CustomizedTabsProps {
 
 export const CustomizedTabs = (props: CustomizedTabsProps) => {
   const [activeKeyInternal, setActiveKeyInternal] = useState<React.Key>(0)
-  let {fontColor, activeColor, tabBackground, tabs, overrides, ...restProps} = props
+  let { fontColor, activeColor, tabBackground, tabs, overrides, ...restProps } = props
   fontColor = fontColor || 'black'
   activeColor = activeColor || fontColor
 
@@ -78,8 +78,8 @@ export const CustomizedTabs = (props: CustomizedTabsProps) => {
     <Tabs
       {...restProps}
       overrides={_.merge(customOverrides, overrides)}
-      onChange={({activeKey}) => {
-        if (props.onChange) props.onChange({activeKey})
+      onChange={({ activeKey }) => {
+        if (props.onChange) props.onChange({ activeKey })
         else setActiveKeyInternal(activeKey)
       }}
       activeKey={props.activeKey || activeKeyInternal}
@@ -115,13 +115,13 @@ export const CustomizedTabs = (props: CustomizedTabsProps) => {
 
                   ...(props.small
                     ? {
-                      marginRight: theme.sizing.scale1000,
-                      fontSize: '18px',
-                    }
+                        marginRight: theme.sizing.scale1000,
+                        fontSize: '18px',
+                      }
                     : {
-                      marginLeft: index === 0 ? 0 : theme.sizing.scale1000,
-                      fontSize: '20px',
-                    }),
+                        marginLeft: index === 0 ? 0 : theme.sizing.scale1000,
+                        fontSize: '20px',
+                      }),
                 }),
               },
               TabPanel: {

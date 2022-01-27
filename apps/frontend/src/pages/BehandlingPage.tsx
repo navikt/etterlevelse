@@ -31,12 +31,16 @@ const responsiveDisplay: Responsive<Display> = ['block', 'block', 'block', 'bloc
 
 export const getMainHeader = (behandling: Behandling, helmet?: ReactNode) => (
   <Block display={responsiveDisplay} justifyContent="space-between" marginBottom="32px" marginTop="38px">
-    {helmet ? helmet : <Helmet>
-      <meta charSet="utf-8" />
-      <title>
-        B{behandling.nummer.toString()} {behandling.navn.toString()}
-      </title>
-    </Helmet>}
+    {helmet ? (
+      helmet
+    ) : (
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>
+          B{behandling.nummer.toString()} {behandling.navn.toString()}
+        </title>
+      </Helmet>
+    )}
     <Block width="100%">
       <Label3 color={ettlevColors.green600}>
         B{behandling.nummer} {behandling.overordnetFormaal.shortName}
@@ -78,10 +82,10 @@ export const BehandlingPage = () => {
   const filterData = (
     unfilteredData:
       | {
-        behandling: PageResponse<{
-          stats: BehandlingStats
-        }>
-      }
+          behandling: PageResponse<{
+            stats: BehandlingStats
+          }>
+        }
       | undefined,
   ) => {
     const relevanteStatusListe: any[] = []
@@ -346,7 +350,7 @@ const HeaderContent = (props: { kravLength: number }) => (
   </Block>
 )
 
-const TemaCardBehandling = ({ tema, stats, behandling, irrelevant }: { tema: TemaCode; stats: any[]; behandling: Behandling, irrelevant?: boolean }) => {
+const TemaCardBehandling = ({ tema, stats, behandling, irrelevant }: { tema: TemaCode; stats: any[]; behandling: Behandling; irrelevant?: boolean }) => {
   const lover = codelist.getCodesForTema(tema.code).map((c) => c.code)
 
   const krav = stats.filter((k) => k.regelverk.map((r: any) => r.lov.code).some((r: any) => lover.includes(r)))

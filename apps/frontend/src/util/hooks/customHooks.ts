@@ -1,6 +1,6 @@
-import React, {Dispatch, ReactComponentElement, RefObject, SetStateAction, useEffect, useState} from 'react'
-import {useLocation, useNavigate} from 'react-router-dom'
-import {user} from '../../services/User'
+import React, { Dispatch, ReactComponentElement, RefObject, SetStateAction, useEffect, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { user } from '../../services/User'
 
 export function useDebouncedState<T>(initialValue: T, delay: number, passThrough?: (val: T) => void): [T, Dispatch<SetStateAction<T>>, T] {
   const [value, setValue] = useState<T>(initialValue)
@@ -78,15 +78,19 @@ export function useLocationState<T>() {
   const location = useLocation()
 
   const changeState = (newState: Partial<T>) => {
-    navigate({...location}, {
-      replace: true, state: {
-        ...location.state as Partial<T>,
-        ...newState
-      }
-    })
+    navigate(
+      { ...location },
+      {
+        replace: true,
+        state: {
+          ...(location.state as Partial<T>),
+          ...newState,
+        },
+      },
+    )
   }
 
-  return {location, navigate, state: location.state as T, changeState}
+  return { location, navigate, state: location.state as T, changeState }
 }
 
 export const useSearch = <T>(searchFunction: (term: string) => Promise<T[]>) => {

@@ -1,8 +1,7 @@
 import * as React from 'react'
-import { useLocation} from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 
-const ScrollToTop = ({children}: { children: any }) => {
-
+const ScrollToTop = ({ children }: { children: any }) => {
   const location = useLocation()
 
   React.useEffect(() => {
