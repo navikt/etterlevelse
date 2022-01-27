@@ -231,8 +231,9 @@ export const EditEtterlevelseV2 = ({
             width={responsiveWidthLarge}
             paddingLeft={responsivePaddingLarge}
             paddingRight={responsivePaddingLarge}
+            paddingTop="33px"
             $style={{
-              background: `linear-gradient(top, ${ettlevColors.green100} 50px, ${ettlevColors.grey25} 0%)`,
+              background: `linear-gradient(top, ${ettlevColors.green100} 83px, ${ettlevColors.grey25} 0%)`,
             }}
           >
             <CustomizedTabs
