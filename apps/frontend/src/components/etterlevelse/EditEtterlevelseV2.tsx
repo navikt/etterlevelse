@@ -250,7 +250,7 @@ export const EditEtterlevelseV2 = ({
               }}
               tabs={[
                 {
-                  title: 'Dokumentasjon?',
+                  title: 'Dokumentasjon',
                   key: 'dokumentasjon',
                   content: (
                     <Edit
