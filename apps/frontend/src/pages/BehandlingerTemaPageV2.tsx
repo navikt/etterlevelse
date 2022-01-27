@@ -71,6 +71,8 @@ export const BehandlingerTemaPageV2 = () => {
   const [utfyltKrav, setUtfyltKrav] = useState<KravEtterlevelseData[]>([])
   const [skalUtfyllesKrav, setSkalUtfyllesKrav] = useState<KravEtterlevelseData[]>([])
 
+  const [activeEtterlevleseStatus, setActiveEtterlevelseStatus] = useState<EtterlevelseStatus | undefined>()
+
   const [edit, setEdit] = useState<string | undefined>()
   const [kravId, setKravId] = useState<KravId | undefined>()
   const [isExpanded, setIsExpanded] = useState<boolean>(false)
@@ -186,14 +188,13 @@ export const BehandlingerTemaPageV2 = () => {
           Krav til utfylling
         </RouteLink>
       </Block>
-      {edit && kravId &&
+      {edit &&
         <Block marginTop="8px">
           <img src={angleIcon} alt="" />{' '}
           <Button
             kind="underline-hover"
             onClick={() => {
               setEdit(undefined)
-              setKravId(undefined)
             }}
           >
             <Label3 marginLeft="12px" $style={{ fontSize: '18px', fontWeight: 600, lineHeight: '22px', color: ettlevColors.green600 }}>
@@ -201,12 +202,13 @@ export const BehandlingerTemaPageV2 = () => {
             </Label3>
           </Button>
         </Block>}
-      <Block marginTop={edit && kravId ? '0px' : '8px'} marginBottom="56px" display="flex" width={edit && kravId ? 'calc(100% - 35px)' :'100%'} alignItems="center" justifyContent="center" marginLeft={edit && kravId ? '35px' : '0px'}>
+      <Block marginTop={edit ? '0px' : '8px'} marginBottom="56px" display="flex" width={edit ? 'calc(100% - 35px)' :'100%'} alignItems="center" justifyContent="center" marginLeft={edit ? '35px' : '0px'}>
         <Block display="flex" flex="1">
           <img src={angleIcon} alt="" />{' '}
           <Label3 marginLeft="12px" $style={{ fontSize: '18px', fontWeight: 600, lineHeight: '22px', color: ettlevColors.green600, whiteSpace: 'nowrap' }}>
-            {edit && kravId ? 'Skal fylles ut' : temaData?.shortName}
+            {edit ? activeEtterlevleseStatus === EtterlevelseStatus.FERDIG_DOKUMENTERT || activeEtterlevleseStatus === EtterlevelseStatus.IKKE_RELEVANT ? 'Ferdig utfyllt' : 'Skal fylles ut' : temaData?.shortName}
           </Label3>
+          {console.log(activeEtterlevleseStatus)}
         </Block>
         <Block display="flex" justifyContent="flex-end" width="100%">
           <Button
@@ -287,7 +289,7 @@ export const BehandlingerTemaPageV2 = () => {
           {sortedKravList.map((k) => {
             return (
               <CustomPanelDivider key={`${k.navn}_${k.kravNummer}_${k.kravVersjon}`}>
-                <KravCard krav={k} setEdit={setEdit} setKravId={setKravId} key={`${k.navn}_${k.kravNummer}_${k.kravVersjon}_card`} noStatus={noStatus} />
+                <KravCard setActiveEtterlevelseStatus={setActiveEtterlevelseStatus} krav={k} setEdit={setEdit} setKravId={setKravId} key={`${k.navn}_${k.kravNummer}_${k.kravVersjon}_card`} noStatus={noStatus} />
               </CustomPanelDivider>
             )
           })}
@@ -395,7 +397,7 @@ export const BehandlingerTemaPageV2 = () => {
 
 const toKravId = (it: { kravVersjon: number; kravNummer: number }) => ({ kravNummer: it.kravNummer, kravVersjon: it.kravVersjon })
 
-const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function; setKravId: Function; noStatus?: boolean }) => {
+const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function; setKravId: Function; noStatus?: boolean; setActiveEtterlevelseStatus: Function}) => {
   const ferdigUtfylt =
     props.krav.etterlevelseStatus === EtterlevelseStatus.FERDIG_DOKUMENTERT ||
     props.krav.etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT ||
@@ -420,7 +422,9 @@ const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function; setKra
         if (!props.krav.etterlevelseId) {
           props.setKravId(toKravId(props.krav))
           props.setEdit('ny')
+          props.setActiveEtterlevelseStatus(undefined)
         } else {
+          props.setActiveEtterlevelseStatus(props.krav.etterlevelseStatus)
           props.setEdit(props.krav.etterlevelseId)
         }
       }}
