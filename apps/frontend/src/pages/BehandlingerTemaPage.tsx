@@ -436,7 +436,7 @@ export const getEtterlevelseStatus = (etterlevelse: KravEtterlevelseData) => {
     case EtterlevelseStatus.IKKE_RELEVANT:
       return 'Kravet er ikke relevant'
     case EtterlevelseStatus.FERDIG_DOKUMENTERT:
-      return 'Kravet er erdig utfylt'
+      return 'Kravet er ferdig utfylt'
     case EtterlevelseStatus.OPPFYLLES_SENERE:
       if (etterlevelse.frist) {
         return 'Kravet oppfylles ' + moment(etterlevelse.frist).format('ll')
