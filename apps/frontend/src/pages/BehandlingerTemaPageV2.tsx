@@ -208,7 +208,7 @@ export const BehandlingerTemaPageV2 = () => {
           <img src={angleIcon} alt="" />{' '}
           <Label3 marginLeft="12px" $style={{ fontSize: '18px', fontWeight: 600, lineHeight: '22px', color: ettlevColors.green600, whiteSpace: 'nowrap' }}>
             {edit ? isFerdigUtfylt(activeEtterlevleseStatus) ?
-                'Ferdig utfyllt' : 'Skal fylles ut' : temaData?.shortName
+                'Ferdig utfylt' : 'Skal fylles ut' : temaData?.shortName
             }
           </Label3>
           {console.log(activeEtterlevleseStatus)}
