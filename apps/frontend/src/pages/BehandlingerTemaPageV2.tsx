@@ -47,7 +47,7 @@ const mapEtterlevelseData = (etterlevelse?: Etterlevelse) => ({
   gammelVersjon: false,
 })
 
-const isFerdigUtfylt = (status: EtterlevelseStatus | undefined) => {  
+export const isFerdigUtfylt = (status: EtterlevelseStatus | undefined) => {  
   return (status === EtterlevelseStatus.FERDIG_DOKUMENTERT ||
     status === EtterlevelseStatus.OPPFYLLES_SENERE ||
     status === EtterlevelseStatus.IKKE_RELEVANT)

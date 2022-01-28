@@ -38,7 +38,7 @@ export const ViewEtterlevelse = ({
   krav,
 }: {
   etterlevelse: Etterlevelse
-  setEtterlevelse: Function
+  setEtterlevelse?: Function
   loading?: boolean
   viewMode?: boolean
   krav: Krav
@@ -281,13 +281,13 @@ export const ViewEtterlevelse = ({
               </Block>
             )
           })}
-        {edit && etterlevelse && krav && (
+        {edit && etterlevelse && krav && !viewMode && (
           <EditBegrunnelse
             etterlevelse={etterlevelse}
             formRef={formRef}
             krav={krav}
             close={(k) => {
-              if (k) {
+              if (k && setEtterlevelse) {
                 setEtterlevelse(k)
                 if (k.id !== etterlevelse.id) {
                   navigate(`/etterlevelse/${k.id}`)

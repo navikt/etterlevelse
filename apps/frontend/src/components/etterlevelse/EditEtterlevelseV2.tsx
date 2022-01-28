@@ -5,7 +5,7 @@ import { Block } from 'baseui/block'
 import Button from '../common/Button'
 import React, { useEffect, useState } from 'react'
 import * as yup from 'yup'
-import { getEtterlevelseStatus } from '../../pages/EtterlevelsePage'
+import { etterlevelseName, getEtterlevelseStatus } from '../../pages/EtterlevelsePage'
 import { DateField, FieldWrapper, TextAreaField } from '../common/Inputs'
 import { theme } from '../../util'
 import { FormControl } from 'baseui/form-control'
@@ -32,8 +32,12 @@ import CustomizedTabs from '../common/CustomizedTabs'
 import { Tilbakemeldinger } from '../krav/tilbakemelding/Tilbakemelding'
 import Etterlevelser from '../krav/Etterlevelser'
 import { Markdown } from '../common/Markdown'
-import { CustomizedAccordion, CustomizedPanel } from '../common/CustomizedAccordion'
+import { CustomizedAccordion, CustomizedPanel, CustomPanelDivider } from '../common/CustomizedAccordion'
 import { AllInfo } from '../krav/ViewKrav'
+import StatusView from '../common/StatusTag'
+import { isFerdigUtfylt } from '../../pages/BehandlingerTemaPageV2'
+import CustomizedModal from '../common/CustomizedModal'
+import { ViewEtterlevelse } from './ViewEtterlevelse'
 
 type EditEttlevProps = {
   etterlevelse: Etterlevelse
@@ -323,10 +327,24 @@ const Edit = ({
     ; (async () => {
       if (behandlingId && krav.kravNummer) {
         const etterlevelser = await getEtterlevelserByBehandlingsIdKravNumber(behandlingId, krav.kravNummer)
-        setTidligereEtterlevelser(etterlevelser.content.sort((a, b) => a.kravVersjon > b.kravVersjon ? -1 : 1))
+        const etterlevelserList = etterlevelser.content.sort((a, b) => a.kravVersjon > b.kravVersjon ? -1 : 1)
+        if (etterlevelserList[0].kravVersjon === krav.kravVersjon) {
+          etterlevelserList.splice(0, 1)
+        }
+        setTidligereEtterlevelser(etterlevelserList)
       }
     })()
   }, [])
+
+  const getTidligereEtterlevelser = () => {
+    return tidligereEtterlevelser?.map((e) => {
+      return (
+        <CustomPanelDivider>
+          <EtterlevelseCard etterlevelse={e} key={'tidligere_etterlevese_' + e.kravNummer + '_' + e.kravVersjon} />
+        </CustomPanelDivider>
+      )
+    })
+  }
 
   return (
     <Block width="100%">
@@ -473,6 +491,16 @@ const Edit = ({
                             )}
                           </Field>
                         </FieldWrapper>
+                      </Block>
+                      <Block display="flex" width="100%" maxWidth="460px">
+                        <CustomizedAccordion>
+                          <CustomizedPanel
+                            title="Se dokumentasjon på tidligere versjoner"
+                            overrides={{ Content: { style: { backgroundColor: ettlevColors.white } } }}
+                          >
+                            {getTidligereEtterlevelser()}
+                          </CustomizedPanel>
+                        </CustomizedAccordion>
                       </Block>
                     </Block>
 
@@ -645,6 +673,113 @@ export const SearchKrav = (props: { kravNummer: number; kravVersjon: number }) =
         )
       }}
     </Field>
+  )
+}
+
+const EtterlevelseCard = ({ etterlevelse }: { etterlevelse: Etterlevelse }) => {
+  const [hover, setHover] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [kravData, setKravData] = useState<Krav>()
+
+  useEffect(() => {
+    ; (async () => {
+      const krav = await getKravByKravNumberAndVersion(etterlevelse.kravNummer, etterlevelse.kravVersjon)
+      if (krav) {
+        setKravData(krav)
+      }
+    })()
+  }, [])
+
+  return (
+    <Block width="100%">
+      <Button
+        notBold
+        type="button"
+        $style={{
+          width: '100%',
+          paddingTop: '8px',
+          paddingBottom: '8px',
+          paddingRight: '24px',
+          paddingLeft: '8px',
+          display: 'flex',
+          justifyContent: 'flex-start',
+          backgroundColor: ettlevColors.white,
+          ...borderStyle('hidden'),
+          ':hover': { backgroundColor: 'none' },
+        }}
+        onClick={() => setIsModalOpen(true)}
+      >
+        <Block display="flex" width="100%" onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} paddingLeft='15px' paddingRight='15px'>
+          <Block display="flex" alignContent="center" flexDirection="column" width="100%">
+            <Paragraph2 $style={{ lineHeight: '16px', marginTop: '0px', marinBottom: '0px', textAlign: 'start', textDecoration: hover ? 'underline' : 'none' }}>
+              K{etterlevelse.kravNummer}.{etterlevelse.kravVersjon}
+            </Paragraph2>
+            <Paragraph4 $style={{ lineHeight: '14px', marginTop: '0px', marinBottom: '0px', textAlign: 'start' }}>
+              Sist utfylt: {moment(etterlevelse.changeStamp.lastModifiedDate).format('ll')} av {etterlevelse.changeStamp.lastModifiedBy.split('-')[1]}
+            </Paragraph4>
+          </Block>
+          <Block display="flex" justifyContent="flex-end">
+            <StatusView
+              status={getEtterlevelseStatus(etterlevelse.status)}
+              statusDisplay={{
+                background: isFerdigUtfylt(etterlevelse.status) ? ettlevColors.green50 : '#FFECCC',
+                border: isFerdigUtfylt(etterlevelse.status) ? ettlevColors.green400 : '#D47B00',
+              }}
+            />
+          </Block>
+        </Block>
+      </Button>
+
+      {kravData && (
+        <CustomizedModal
+          onClose={() => setIsModalOpen(false)}
+          isOpen={isModalOpen}
+          size="auto"
+          overrides={{
+            Dialog: {
+              style: {
+                ...borderRadius('0px'),
+              },
+            },
+          }}
+        >
+          <Block width="100%">
+            <Block backgroundColor={ettlevColors.green800} paddingTop="32px" paddingBottom="32px">
+              <Block paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge}>
+                <Paragraph2
+                  $style={{
+                    marginTop: '0px',
+                    marginBottom: '0px',
+                    color: ettlevColors.white,
+                  }}
+                >
+                  {kravNumView(kravData)}
+                </Paragraph2>
+                <H1 $style={{ marginTop: '0px', marginBottom: '0px', paddingBottom: '32px', color: ettlevColors.white }}>{kravData.navn}</H1>
+              </Block>
+            </Block>
+
+            <Block paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge}>
+              <ViewEtterlevelse
+                etterlevelse={etterlevelse}
+                viewMode
+                krav={kravData}
+              />
+              <Block display="flex" justifyContent="flex-end" paddingBottom="31px" paddingTop="95px">
+                <Button onClick={() => {
+                  console.log('CLICK')
+                  console.log(isModalOpen)
+                  setIsModalOpen(false)
+                  console.log(isModalOpen)
+                }}>
+                  Lukk visning
+                </Button>
+              </Block>
+            </Block>
+          </Block>
+        </CustomizedModal>
+      )}
+    </Block>
   )
 }
 
