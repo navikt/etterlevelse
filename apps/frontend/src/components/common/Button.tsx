@@ -141,18 +141,20 @@ export const ExternalButton = ({
   underlineHover,
   size,
   openOnSamePage,
+  kind
 }: {
   href: string
   children: React.ReactNode
   underlineHover?: boolean
   size?: SIZE[keyof SIZE]
   openOnSamePage?: boolean
+  kind?: ButtonKind
 }) => {
-  const kind = underlineHover ? 'underline-hover' : 'outline'
+  const underlineStyle = underlineHover ? 'underline-hover' : 'outline'
   const actualSize = size || 'compact'
   return (
     <ExternalLink href={href} hideUnderline openOnSamePage={openOnSamePage}>
-      <Button kind={kind} size={actualSize}>
+      <Button kind={kind ? kind : underlineStyle} size={actualSize}>
         {children}
       </Button>
     </ExternalLink>

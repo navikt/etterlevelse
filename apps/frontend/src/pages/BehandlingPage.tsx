@@ -54,7 +54,7 @@ export const getMainHeader = (behandling: Behandling, helmet?: ReactNode) => (
           <Teams teams={behandling.teams} link fontColor={ettlevColors.green800} style={{fontSize: "16px", lineHeight: "22px", fontWeight: 400 }}/>
         </Block>
         <Block display="flex" justifyContent="flex-end" $style={{whiteSpace: 'nowrap'}}>
-          <ExternalButton href={`${env.pollyBaseUrl}process/${behandling.id}`} size="mini">
+          <ExternalButton kind={'secondary'} href={`${env.pollyBaseUrl}process/${behandling.id}`} size="mini">
             Til behandlingskatalogen <FontAwesomeIcon icon={faExternalLinkAlt}/>
           </ExternalButton>
         </Block>
