@@ -8,7 +8,7 @@ import {FormikProps} from 'formik'
 import {ettlevColors, theme} from '../util/theme'
 import {Layout2} from '../components/scaffold/Page'
 import {Teams} from '../components/common/TeamName'
-import {arkPennIcon, editIcon, ellipse80, warningAlert} from '../components/Images'
+import {arkPennIcon, editIcon, ellipse80, externalLinkIcon, warningAlert} from '../components/Images'
 import {Behandling, BehandlingEtterlevData, EtterlevelseStatus, PageResponse} from '../constants'
 import {useQuery} from '@apollo/client'
 import {BehandlingStats, statsQuery} from '../components/behandling/ViewBehandling'
@@ -53,9 +53,11 @@ export const getMainHeader = (behandling: Behandling, helmet?: ReactNode) => (
           <Label3 $style={{lineHeight: '22px', marginRight: '10px', fontSize:'16px', color: ettlevColors.green600}}>Team: </Label3>
           <Teams teams={behandling.teams} link fontColor={ettlevColors.green800} style={{fontSize: "16px", lineHeight: "22px", fontWeight: 400 }}/>
         </Block>
-        <Block display="flex" justifyContent="flex-end" $style={{whiteSpace: 'nowrap'}}>
+        <Block display="flex" justifyContent="flex-end" alignContent="center" $style={{whiteSpace: 'nowrap'}}>
           <ExternalButton kind={'secondary'} href={`${env.pollyBaseUrl}process/${behandling.id}`} size="mini">
-            Til behandlingskatalogen <FontAwesomeIcon icon={faExternalLinkAlt}/>
+            <Block display="flex" justifyContent="center">
+            Til behandlingskatalogen <img style={{marginLeft: "8px"}} height="18px" width="18px" src={externalLinkIcon}/>
+            </Block>
           </ExternalButton>
         </Block>
       </Block>
