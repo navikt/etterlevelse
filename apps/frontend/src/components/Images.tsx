@@ -62,6 +62,7 @@ import informationIcon from '../resources/icons/information-icon.svg'
 import { codelist, ListName, LovCode, TemaCode } from '../services/Codelist'
 import angleIcon from '../resources/icons/angleIcon.svg'
 import page2Icon from '../resources/icons/page2.svg'
+import externalLinkIcon from '../resources/icons/externalLinkIcon.svg'
 
 import React from 'react'
 import { theme } from '../util'
@@ -117,6 +118,7 @@ export {
   informationIcon,
   angleIcon,
   page2Icon,
+  externalLinkIcon,
 }
 
 export const temaBilder: { [id: string]: string } = {
