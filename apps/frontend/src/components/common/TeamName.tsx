@@ -1,30 +1,38 @@
-import { useTeam } from '../../api/TeamApi'
+import {useTeam} from '../../api/TeamApi'
 import React from 'react'
-import { teamKatTeamLink } from '../../util/config'
-import { StyledLink } from 'baseui/link'
-import { Block } from 'baseui/block'
-import { theme } from '../../util'
-import { ettlevColors } from '../../util/theme'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons'
+import {teamKatTeamLink} from '../../util/config'
+import {StyledLink} from 'baseui/link'
+import {Block} from 'baseui/block'
+import {theme} from '../../util'
+import {ettlevColors} from '../../util/theme'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faExternalLinkAlt} from '@fortawesome/free-solid-svg-icons'
 
-export const TeamName = (props: { id: string; link?: boolean }) => {
+export const TeamName = (props: { id: string; link?: boolean, fontColor?: string }) => {
   const [name] = useTeam()(props.id)
   return props.link ? (
-    <StyledLink rel="noopener noreferrer" target={'_blank'} href={teamKatTeamLink(props.id)} $style={{ color: ettlevColors.green600 }}>
+    <StyledLink
+      rel="noopener noreferrer"
+      target={'_blank'}
+      href={teamKatTeamLink(props.id)}
+      $style={{color: props.fontColor ? props.fontColor : ettlevColors.green600}}
+    >
       {name}
-      <FontAwesomeIcon icon={faExternalLinkAlt} style={{ marginLeft: '5px' }} />
+      <FontAwesomeIcon icon={faExternalLinkAlt} style={{marginLeft: '5px'}}/>
     </StyledLink>
   ) : (
     <>{name}</>
   )
 }
 
-export const Teams = (props: { teams: string[]; link?: boolean; list?: boolean }) => (
+export const Teams = (props: { teams: string[]; link?: boolean; list?: boolean, fontColor?: string }) => (
   <Block display={props.list ? 'block' : 'flex'} flexWrap>
     {props.teams.map((t) => (
-      <Block key={t} marginRight={props.list ? 'none' : theme.sizing.scale600} marginBottom={props.list ? theme.sizing.scale600 : 'none'}>
-        <TeamName id={t} link={props.link} />
+      <Block
+        key={t}
+        marginRight={props.list ? 'none' : theme.sizing.scale600}
+        marginBottom={props.list ? theme.sizing.scale600 : 'none'}>
+        <TeamName id={t} link={props.link} fontColor={props.fontColor}/>
       </Block>
     ))}
   </Block>
