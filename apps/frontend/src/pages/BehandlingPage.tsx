@@ -50,8 +50,8 @@ export const getMainHeader = (behandling: Behandling, helmet?: ReactNode) => (
       </H1>
       <Block display="flex" alignItems="center" width="100%" marginTop={'24px'}>
         <Block display={'flex'} width="100%">
-          <Label3 $style={{lineHeight: '22px', marginRight: '10px', color: ettlevColors.green600}}>Team: </Label3>
-          <Teams teams={behandling.teams} link fontColor={ettlevColors.green800}/>
+          <Label3 $style={{lineHeight: '22px', marginRight: '10px', fontSize:'16px', color: ettlevColors.green600}}>Team: </Label3>
+          <Teams teams={behandling.teams} link fontColor={ettlevColors.green800} style={{fontSize: "16px", lineHeight: "22px", fontWeight: 400 }}/>
         </Block>
         <Block display="flex" justifyContent="flex-end" $style={{whiteSpace: 'nowrap'}}>
           <ExternalButton href={`${env.pollyBaseUrl}process/${behandling.id}`} size="mini">
