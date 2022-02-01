@@ -37,6 +37,7 @@ import StatusView from '../common/StatusTag'
 import { isFerdigUtfylt } from '../../pages/BehandlingerTemaPageV2'
 import CustomizedModal from '../common/CustomizedModal'
 import { ViewEtterlevelse } from './ViewEtterlevelse'
+import { useNavigate } from 'react-router-dom'
 
 type EditEttlevProps = {
   etterlevelse: Etterlevelse
@@ -49,6 +50,9 @@ type EditEttlevProps = {
   behandlingformaal?: string
   behandlingNummer?: number
   varsleMelding?: string
+  setIsAlertUnsavedModalOpen: (state: boolean) => void
+  isAlertUnsavedModalOpen: boolean
+  isNavigateButtonClicked: boolean
 }
 
 const etterlevelseSchema = () => {
@@ -125,6 +129,9 @@ export const EditEtterlevelseV2 = ({
   behandlingId,
   behandlingformaal,
   behandlingNummer,
+  setIsAlertUnsavedModalOpen,
+  isAlertUnsavedModalOpen,
+  isNavigateButtonClicked,
 }: EditEttlevProps) => {
   const { data, loading } = useQuery<{ kravById: KravQL }, KravId>(kravFullQuery, {
     variables: kravId,
@@ -270,6 +277,9 @@ export const EditEtterlevelseV2 = ({
                       disableEdit={disableEdit}
                       documentEdit={documentEdit}
                       close={close}
+                      setIsAlertUnsavedModalOpen={setIsAlertUnsavedModalOpen}
+                      isAlertUnsavedModalOpen={isAlertUnsavedModalOpen}
+                      isNavigateButtonClicked={isNavigateButtonClicked}
                     />
                   ),
                 },
@@ -306,12 +316,18 @@ type EditProps = {
   disableEdit: boolean
   documentEdit?: boolean
   close: (k?: Etterlevelse | undefined) => void
+  setIsAlertUnsavedModalOpen: (state: boolean) => void
+  isAlertUnsavedModalOpen: boolean
+  isNavigateButtonClicked: boolean
 }
 
-const Edit = ({ krav, etterlevelse, submit, formRef, behandlingId, disableEdit, documentEdit, close }: EditProps) => {
+const Edit = ({ krav, etterlevelse, submit, formRef, behandlingId, disableEdit, documentEdit, close, setIsAlertUnsavedModalOpen,
+  isAlertUnsavedModalOpen,
+  isNavigateButtonClicked }: EditProps) => {
   const [etterlevelseStatus, setEtterlevelseStatus] = React.useState<string>(etterlevelse.status || EtterlevelseStatus.UNDER_REDIGERING)
   const [radioHover, setRadioHover] = React.useState<string>('')
   const [tidligereEtterlevelser, setTidligereEtterlevelser] = React.useState<Etterlevelse[]>()
+  const navigate = useNavigate()
 
   useEffect(() => {
     ; (async () => {
@@ -645,6 +661,55 @@ const Edit = ({ krav, etterlevelse, submit, formRef, behandlingId, disableEdit, 
                 </Block>
               )}
             </Block>
+            
+            <CustomizedModal
+              onClose={() => setIsAlertUnsavedModalOpen(false)}
+              isOpen={isAlertUnsavedModalOpen}
+              size="default"
+              overrides={{
+                Dialog: {
+                  style: {
+                    ...borderRadius('0px'),
+                    ...marginAll('0px'),
+                  },
+                },
+              }}
+            >
+              <Block width="100%">
+                <Block>
+                  <Button onClick={() => {
+                    if (values.status === EtterlevelseStatus.FERDIG_DOKUMENTERT) {
+                      values.status = Object.values(EtterlevelseStatus).filter((e) => e === etterlevelseStatus)[0]
+                    }
+                    submitForm()
+                    
+                    if (isNavigateButtonClicked) {
+                      navigate(`/behandling/${etterlevelse.behandlingId}`)
+                    }
+
+                    setIsAlertUnsavedModalOpen(false)
+                  }}>
+                    Ja, og lagre
+                  </Button>
+                  <Button onClick={() => {
+                    if (isNavigateButtonClicked) {
+                      navigate(`/behandling/${etterlevelse.behandlingId}`)
+                    }
+                    close()
+                    setIsAlertUnsavedModalOpen(false)
+                  }}>
+                    Ja
+                  </Button>
+                  <Button
+                    kind='secondary'
+                    onClick={() => {
+                      setIsAlertUnsavedModalOpen(false)
+                    }}>
+                    Nei
+                  </Button>
+                </Block>
+              </Block>
+            </CustomizedModal>
           </Block>
         )}
       </Formik>

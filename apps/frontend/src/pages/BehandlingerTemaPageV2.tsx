@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Block, Display } from 'baseui/block'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { H1, H3, Label3, Paragraph2, Paragraph4 } from 'baseui/typography'
 import { ettlevColors, maxPageWidth, responsivePaddingLarge, theme } from '../util/theme'
 import { codelist, ListName, TemaCode } from '../services/Codelist'
@@ -86,6 +86,9 @@ export const BehandlingerTemaPageV2 = () => {
   ]
   const [sorting, setSorting] = useState<readonly Option[]>([sortingOptions[0]])
   const [isTemaModalOpen, setIsTemaModalOpen] = useState<boolean>(false)
+  const [isAlertUnsavedModalOpen, setIsAlertUnsavedModalOpen] = useState<boolean>(false)
+  const [isNavigateButtonClicked, setIsNavigateButtonClicked] = useState<boolean>(false)
+  const navigate = useNavigate()
 
   useEffect(() => {
     ; (async () => {
@@ -176,10 +179,26 @@ export const BehandlingerTemaPageV2 = () => {
   const getSecondaryHeader = () => (
     <Block width="100%">
       <Block marginTop="19px" width="fit-content">
-        <RouteLink
-          fontColor={ettlevColors.green600}
-          hideUnderline
-          href={`/behandling/${behandling?.id}`}
+        <Button
+          kind="tertiary"
+          onClick={() => {
+            if (edit) {
+              setIsAlertUnsavedModalOpen(true)
+              setIsNavigateButtonClicked(true)
+            } else {
+              setEdit(undefined)
+              navigate(`/behandling/${behandling?.id}`)
+            }
+          }}
+          $style={{
+            ...paddingAll('0px'),
+            ':hover': {
+              backgroundColor: 'inherit',
+            },
+            ':focus': {
+              backgroundColor: 'inherit',
+            },
+          }}
         >
           <Label3
             $style={{
@@ -190,11 +209,10 @@ export const BehandlingerTemaPageV2 = () => {
               ':hover': {
                 color: ettlevColors.green400
               }
-            }}
-          >
+            }}>
             Krav til utfylling
           </Label3>
-        </RouteLink>
+        </Button>
       </Block>
       {edit && (
         <Block marginTop="8px">
@@ -202,7 +220,11 @@ export const BehandlingerTemaPageV2 = () => {
           <Button
             kind="tertiary"
             onClick={() => {
-              setEdit(undefined)
+              if (edit) {
+                setIsAlertUnsavedModalOpen(true)
+              } else {
+                setEdit(undefined)
+              }
             }}
             $style={{
               ...paddingAll('0px'),
@@ -423,6 +445,9 @@ export const BehandlingerTemaPageV2 = () => {
                 behandlingformaal={behandling.overordnetFormaal.shortName || ''}
                 behandlingNummer={behandling.nummer || 0}
                 kravId={kravId}
+                setIsAlertUnsavedModalOpen={setIsAlertUnsavedModalOpen}
+                isAlertUnsavedModalOpen={isAlertUnsavedModalOpen}
+                isNavigateButtonClicked={isNavigateButtonClicked}
                 close={(e) => {
                   setEdit(undefined)
                   e && update(e)
@@ -509,6 +534,9 @@ const KravView = (props: {
   behandlingId: string
   behandlingformaal: string
   behandlingNummer: number
+  setIsAlertUnsavedModalOpen: (state: boolean) => void
+  isAlertUnsavedModalOpen: boolean
+  isNavigateButtonClicked: boolean
 }) => {
   const [etterlevelse] = useEtterlevelse(props.etterlevelseId, props.behandlingId, props.kravId)
   const [varsleMelding, setVarsleMelding] = useState('')
@@ -547,6 +575,9 @@ const KravView = (props: {
             close={(e) => {
               props.close(e)
             }}
+            setIsAlertUnsavedModalOpen={props.setIsAlertUnsavedModalOpen}
+            isAlertUnsavedModalOpen={props.isAlertUnsavedModalOpen}
+            isNavigateButtonClicked={props.isNavigateButtonClicked}
           />
         </Block>
       )}
