@@ -313,10 +313,6 @@ export const BehandlingerTemaPageV2 = () => {
       pathName: 'Dokumenter etterlevelse',
       href: '/behandlinger',
     },
-    {
-      pathName: `${behandling?.navn}`,
-      href: '/behandling/' + behandling?.id,
-    },
   ]
 
   return (
@@ -337,7 +333,7 @@ export const BehandlingerTemaPageV2 = () => {
           secondaryHeaderBackgroundColor={ettlevColors.green100}
           secondaryHeader={getSecondaryHeader()}
           childrenBackgroundColor={ettlevColors.grey25}
-          currentPage={temaData?.shortName}
+          currentPage={behandling?.navn}
           breadcrumbPaths={breadcrumbPaths}
         >
           <Block display="flex" width="100%" justifyContent="space-between" flexWrap marginBottom="64px">
