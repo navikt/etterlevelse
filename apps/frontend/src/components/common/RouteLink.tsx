@@ -59,6 +59,7 @@ type ObjectLinkProps = {
   disable?: boolean
   hideUnderline?: boolean
   fontColor?: string
+  external?: boolean
 }
 
 export const urlForObject = (type: NavigableItem | string, id: string, audit?: AuditItem) => {
@@ -89,13 +90,23 @@ export const urlForObject = (type: NavigableItem | string, id: string, audit?: A
 
 export const ObjectLink = (props: ObjectLinkProps) => {
   if (!props.id) return null
-  const link = props.disable ? (
-    props.children
-  ) : (
-    <RouteLink fontColor={props.fontColor} href={urlForObject(props.type, props.id, props.audit)} hideUnderline={props.hideUnderline}>
-      {props.children}
-    </RouteLink>
-  )
+  let link
+  
+  if (props.disable) {
+    link = props.children
+  } else if(props.external) {
+    link = (
+      <ExternalLink fontColor={props.fontColor} href={urlForObject(props.type, props.id, props.audit)} hideUnderline={props.hideUnderline}>
+        {props.children}
+      </ExternalLink>
+    )
+  } else {
+    link = (
+      <RouteLink fontColor={props.fontColor} href={urlForObject(props.type, props.id, props.audit)} hideUnderline={props.hideUnderline}>
+        {props.children}
+      </RouteLink>
+    )
+  }
 
   return props.withHistory ? (
     <Block color={props.fontColor ? props.fontColor : ettlevColors.green800} display="flex" justifyContent="space-between" width="100%" alignItems="center">

@@ -26,6 +26,7 @@ import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 import { sortKraverByPriority } from '../util/sort'
 import { getAllKravPriority } from '../api/KravPriorityApi'
 import { Helmet } from 'react-helmet'
+import { externalLinkIcon } from '../components/Images'
 
 export const TemaPage = () => {
   const { tema } = useParams<{ tema: string }>()
@@ -72,8 +73,10 @@ export const getTemaMainHeader = (tema: TemaCode, lover: LovCode[], expand: bool
           <H2 marginBottom={theme.sizing.scale200}>Lovdata</H2>
           {lover.map((l, index) => (
             <Block key={l.code + '_' + index} marginBottom={theme.sizing.scale200}>
-              <ObjectLink type={ListName.LOV} id={l.code}>
-                {l.shortName}
+              <ObjectLink external type={ListName.LOV} id={l.code}>
+                <Block display="flex" alignItems="center">
+                    {l.shortName} <img alt=" " width="16px" height="16px" style={{marginLeft: "8px"}} src={externalLinkIcon} />
+                </Block>
               </ObjectLink>
             </Block>
           ))}
