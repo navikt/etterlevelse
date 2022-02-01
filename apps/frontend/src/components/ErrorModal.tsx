@@ -1,4 +1,5 @@
 import { Modal, ModalBody, ModalButton, ModalFooter, ModalHeader } from 'baseui/modal'
+import { buttonContentStyle } from './common/Button'
 import React from 'react'
 
 const ErrorModal = (props: { isOpen: boolean; submit: Function; errorMessage: string }) => {
@@ -7,7 +8,16 @@ const ErrorModal = (props: { isOpen: boolean; submit: Function; errorMessage: st
       <ModalHeader>Feilmelding</ModalHeader>
       <ModalBody>{props.errorMessage}</ModalBody>
       <ModalFooter>
-        <ModalButton onClick={() => props.submit(false)}>
+        <ModalButton
+          onClick={() => props.submit(false)}
+          overrides={{
+            BaseButton: {
+              style: {
+                ...buttonContentStyle
+              }
+            }
+          }}
+        >
           <strong>Lukk</strong>
         </ModalButton>
       </ModalFooter>

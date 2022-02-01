@@ -16,6 +16,7 @@ import { borderColor, borderStyle, borderWidth } from '../../common/Style'
 import { LabelAboveContent } from '../../common/PropertyLabel'
 import { MODE, StatefulButtonGroup } from 'baseui/button-group'
 import { Button } from 'baseui/button'
+import { buttonContentStyle } from '../../common/Button'
 
 const paddingLeft = '30px'
 
@@ -180,6 +181,7 @@ const KriterieBegrunnelse = ({
                   ...borderColor(ettlevColors.green800),
                   ...borderStyle('solid'),
                   ...borderWidth('1px'),
+                  ...buttonContentStyle,
                   borderRightWidth: '0px',
                   borderTopRightRadius: '0px',
                   borderBottomRightRadius: '0px',
@@ -206,6 +208,7 @@ const KriterieBegrunnelse = ({
                   ...borderColor(ettlevColors.green800),
                   ...borderStyle('solid'),
                   ...borderWidth('1px'),
+                  ...buttonContentStyle,
                   borderTopLeftRadius: '0px',
                   borderBottomLeftRadius: '0px',
                   minWidth: '160px',

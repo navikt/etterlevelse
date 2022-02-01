@@ -8,7 +8,7 @@ import { theme } from '../../util'
 import { Override } from 'baseui/overrides'
 import { StyleObject } from 'styletron-react'
 import { Block } from 'baseui/block'
-import { borderColor, borderRadius, borderStyle, borderWidth, paddingAll } from './Style'
+import { borderColor, borderRadius, borderStyle, borderWidth, padding, paddingAll } from './Style'
 import { ettlevColors } from '../../util/theme'
 import { ExternalLink } from './RouteLink'
 import _ from 'lodash'
@@ -74,23 +74,33 @@ const underlineOverride: StyleObject = {
   },
 }
 
+export const buttonContentStyle = {
+  fontSize: '18px',
+  ...padding('10px', '12px'),
+}
+
 const Button = (props: ButtonProps) => {
   const baseuiKind = props.kind === 'outline' ? KIND.secondary : props.kind === 'underline-hover' ? KIND.tertiary : props.kind
 
   const boxShadow =
     !props.kind || props.kind === 'primary' || props.kind === 'secondary'
       ? {
-          style: {
-            boxShadow: '0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 2px 0 rgba(0, 0, 0, .12)',
-            ':hover': { boxShadow: '0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 3px 0 rgba(0, 0, 0, .12)' },
-            ':active': { boxShadow: '0 2px 1px -2px rgba(0, 0, 0, .2), 0 1px 1px 0 rgba(0, 0, 0, .14), 0 1px 1px 0 rgba(0, 0, 0, .12)' },
-            ':focus': {
-              boxShadow: '0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 3px 0 rgba(0, 0, 0, .12)',
-              outline: `3px solid ${ettlevColors.focusOutline}`,
-            },
+        style: {
+          ...buttonContentStyle,
+          boxShadow: '0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 2px 0 rgba(0, 0, 0, .12)',
+          ':hover': { boxShadow: '0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 3px 0 rgba(0, 0, 0, .12)' },
+          ':active': { boxShadow: '0 2px 1px -2px rgba(0, 0, 0, .2), 0 1px 1px 0 rgba(0, 0, 0, .14), 0 1px 1px 0 rgba(0, 0, 0, .12)' },
+          ':focus': {
+            boxShadow: '0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 3px 0 rgba(0, 0, 0, .12)',
+            outline: `3px solid ${ettlevColors.focusOutline}`,
           },
+        },
+      }
+      : {
+        style: {
+          buttonContentStyle
         }
-      : {}
+      }
 
   let overrides: Override<any> = boxShadow
   overrides.style = _.merge(overrides.style, props.kind === 'outline' ? outlineOverride : {})

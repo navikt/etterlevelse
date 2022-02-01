@@ -10,7 +10,7 @@ import ReactPlayer from 'react-player'
 import { Button, SIZE } from 'baseui/button'
 import { faPlay } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { buttonBorderStyle } from '../components/common/Button'
+import { buttonBorderStyle, buttonContentStyle } from '../components/common/Button'
 import React from 'react'
 
 const cardWidth = ['95%', '95%', '95%', '95%', '31%', '31%']
@@ -109,7 +109,15 @@ export const MainPageV2 = () => {
                 controls={true}
                 playing={true}
                 playIcon={
-                  <Button kind="secondary" size={SIZE.compact} $style={buttonBorderStyle} startEnhancer={<FontAwesomeIcon icon={faPlay} />}>
+                  <Button kind="secondary" size={SIZE.compact} $style={buttonBorderStyle} startEnhancer={<FontAwesomeIcon icon={faPlay} />}
+                  overrides={{
+                    BaseButton: {
+                      style: {
+                        ...buttonContentStyle
+                      }
+                    }
+                  }}
+                  >
                     {' '}
                     Se film{' '}
                   </Button>

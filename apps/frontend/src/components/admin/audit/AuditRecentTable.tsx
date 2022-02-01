@@ -23,6 +23,7 @@ import { theme } from '../../../util'
 import ReactJson from 'react-json-view'
 import { ObjectLink } from '../../common/RouteLink'
 import { CustomizedStatefulSelect } from '../../common/CustomizedSelect'
+import { buttonContentStyle } from '../../common/Button'
 
 export const AuditRecentTable = (props: { show: boolean }) => {
   const [audits, setAudits] = useState<PageResponse<AuditItem>>(emptyPage)
@@ -36,7 +37,7 @@ export const AuditRecentTable = (props: { show: boolean }) => {
   }, {} as { [id: string]: string })
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       props.show && setAudits(await getAudits(page - 1, limit, table))
     })()
   }, [page, limit, props.show, table])
@@ -106,7 +107,18 @@ export const AuditRecentTable = (props: { show: boolean }) => {
                   <Block>{audit.user}</Block>
                   <Block>
                     <ObjectLink id={tableId(audit)} type={audit.table} audit={audit}>
-                      <Button size="compact" shape="round" kind="tertiary">
+                      <Button
+                        size="compact"
+                        shape="round"
+                        kind="tertiary"
+                        overrides={{
+                          BaseButton: {
+                            style: {
+                              ...buttonContentStyle
+                            }
+                          }
+                        }}
+                      >
                         <FontAwesomeIcon icon={faBinoculars} />
                       </Button>
                     </ObjectLink>
@@ -116,7 +128,18 @@ export const AuditRecentTable = (props: { show: boolean }) => {
                       placement={PLACEMENT.leftBottom}
                       content={<ReactJson src={audit.data} name={null} />}
                     >
-                      <Button size="compact" shape="round" kind="tertiary">
+                      <Button
+                        size="compact"
+                        shape="round"
+                        kind="tertiary"
+                        overrides={{
+                          BaseButton: {
+                            style: {
+                              ...buttonContentStyle
+                            }
+                          }
+                        }}
+                      >
                         <FontAwesomeIcon icon={faCode} />
                       </Button>
                     </StatefulPopover>
@@ -146,7 +169,17 @@ export const AuditRecentTable = (props: { show: boolean }) => {
           )}
           placement={PLACEMENT.bottom}
         >
-          <Button kind={KIND.tertiary} endEnhancer={TriangleDown}>
+          <Button 
+          kind={KIND.tertiary} 
+          endEnhancer={TriangleDown}
+          overrides={{
+            BaseButton: {
+              style: {
+                ...buttonContentStyle
+              }
+            }
+          }}
+          >
             <strong>{`${limit} ${intl.rows}`}</strong>
           </Button>
         </StatefulPopover>

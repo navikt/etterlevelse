@@ -19,6 +19,7 @@ import { kravStatus } from './KravPage'
 import { Layout2 } from '../components/scaffold/Page'
 import RouteLink from '../components/common/RouteLink'
 import { Helmet } from 'react-helmet'
+import { buttonContentStyle } from '../components/common/Button'
 
 const kravSorting: ColumnCompares<Krav> = {
   kravNummer: (a, b) => a.kravNummer - b.kravNummer,
@@ -125,7 +126,15 @@ export const KravTablePage = () => {
           )}
           placement={PLACEMENT.bottom}
         >
-          <Button kind={KIND.tertiary} endEnhancer={TriangleDown}>
+          <Button kind={KIND.tertiary} endEnhancer={TriangleDown}
+          overrides={{
+            BaseButton: {
+              style: {
+                ...buttonContentStyle
+              }
+            }
+          }}
+          >
             <strong>{`${limit} ${intl.rows}`}</strong>
           </Button>
         </StatefulPopover>

@@ -1,6 +1,6 @@
 import * as React from 'react'
 import CustomizedModal from '../common/CustomizedModal'
-import Button from '../common/Button'
+import Button, { buttonContentStyle } from '../common/Button'
 import { Block } from 'baseui/block'
 import { theme } from '../../util'
 import { checkboxChecked, checkboxUnchecked, checkboxUncheckedHover, crossIcon } from '../Images'
@@ -206,6 +206,7 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
                                 overrides={{
                                   BaseButton: {
                                     style: {
+                                      ...buttonContentStyle,
                                       backgroundColor: selected.includes(i) ? ettlevColors.green100 : ettlevColors.white,
                                       border: '1px solid #6A6A6A',
                                       paddingLeft: '8px',
