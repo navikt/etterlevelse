@@ -12,6 +12,7 @@ import { markdownLink } from '../../util/config'
 import remarkGfm from 'remark-gfm'
 import rehypeRaw from 'rehype-raw'
 import { ettlevColors } from '../../util/theme'
+import { externalLinkIcon } from '../Images'
 
 export const Markdown = ({
   vertical,
@@ -23,6 +24,7 @@ export const Markdown = ({
   p1,
   fontColor,
   maxWidth,
+  externalLink
 }: {
   source?: string
   sources?: string[]
@@ -33,6 +35,7 @@ export const Markdown = ({
   p1?: boolean
   fontColor?: string
   maxWidth?: string
+  externalLink?: boolean
 }) => {
   const renderers = {
     p: (parProps: any) => {
@@ -56,8 +59,10 @@ export const Markdown = ({
       return (
         <StatefulTooltip content={href}>
           <span>
-            <ExternalLink fontColor={fontColor} href={href} openOnSamePage>
-              {content}
+            <ExternalLink fontColor={fontColor} href={href}>
+              <Block display="flex" alignItems="center">
+                {content} <img alt=" " width="inherit" height="inherit" style={{ marginLeft: "8px" }} src={externalLinkIcon} />
+              </Block>
             </ExternalLink>
           </span>
         </StatefulTooltip>
@@ -68,8 +73,10 @@ export const Markdown = ({
       const content = shortenLinks && node.children[0]?.value.indexOf('http') === 0 ? 'Lenke' : children
 
       return (
-        <ExternalLink fontColor={fontColor} href={href} openOnSamePage>
-          {content}
+        <ExternalLink fontColor={fontColor} href={href}>
+          <Block display="flex" alignItems="center">
+            {content} <img alt=" " width="inherit" height="inherit" style={{ marginLeft: "8px" }} src={externalLinkIcon} />
+          </Block>
         </ExternalLink>
       )
     },
