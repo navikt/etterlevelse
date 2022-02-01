@@ -23,7 +23,7 @@ export const Markdown = ({
   p1,
   fontColor,
   maxWidth,
-  externalLink
+  externalLink,
 }: {
   source?: string
   sources?: string[]

@@ -109,14 +109,18 @@ export const MainPageV2 = () => {
                 controls={true}
                 playing={true}
                 playIcon={
-                  <Button kind="secondary" size={SIZE.compact} $style={buttonBorderStyle} startEnhancer={<FontAwesomeIcon icon={faPlay} />}
-                  overrides={{
-                    BaseButton: {
-                      style: {
-                        ...buttonContentStyle
-                      }
-                    }
-                  }}
+                  <Button
+                    kind="secondary"
+                    size={SIZE.compact}
+                    $style={buttonBorderStyle}
+                    startEnhancer={<FontAwesomeIcon icon={faPlay} />}
+                    overrides={{
+                      BaseButton: {
+                        style: {
+                          ...buttonContentStyle,
+                        },
+                      },
+                    }}
                   >
                     {' '}
                     Se film{' '}

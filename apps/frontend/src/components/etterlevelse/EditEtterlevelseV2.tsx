@@ -146,14 +146,14 @@ export const EditEtterlevelseV2 = ({
       suksesskriterieBegrunnelser:
         etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT
           ? [
-            ...etterlevelse.suksesskriterieBegrunnelser.map((s) => {
-              return {
-                ...s,
-                oppfylt: false,
-                ikkeRelevant: false,
-              }
-            }),
-          ]
+              ...etterlevelse.suksesskriterieBegrunnelser.map((s) => {
+                return {
+                  ...s,
+                  oppfylt: false,
+                  ikkeRelevant: false,
+                }
+              }),
+            ]
           : [...etterlevelse.suksesskriterieBegrunnelser],
     }
 
@@ -308,25 +308,16 @@ type EditProps = {
   close: (k?: Etterlevelse | undefined) => void
 }
 
-const Edit = ({
-  krav,
-  etterlevelse,
-  submit,
-  formRef,
-  behandlingId,
-  disableEdit,
-  documentEdit,
-  close,
-}: EditProps) => {
+const Edit = ({ krav, etterlevelse, submit, formRef, behandlingId, disableEdit, documentEdit, close }: EditProps) => {
   const [etterlevelseStatus, setEtterlevelseStatus] = React.useState<string>(etterlevelse.status || EtterlevelseStatus.UNDER_REDIGERING)
   const [radioHover, setRadioHover] = React.useState<string>('')
   const [tidligereEtterlevelser, setTidligereEtterlevelser] = React.useState<Etterlevelse[]>()
 
   useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       if (behandlingId && krav.kravNummer) {
         const etterlevelser = await getEtterlevelserByBehandlingsIdKravNumber(behandlingId, krav.kravNummer)
-        const etterlevelserList = etterlevelser.content.sort((a, b) => a.kravVersjon > b.kravVersjon ? -1 : 1).filter((e) => e.kravVersjon < etterlevelse.kravVersjon)
+        const etterlevelserList = etterlevelser.content.sort((a, b) => (a.kravVersjon > b.kravVersjon ? -1 : 1)).filter((e) => e.kravVersjon < etterlevelse.kravVersjon)
         setTidligereEtterlevelser(etterlevelserList)
       }
     })()
@@ -365,7 +356,7 @@ const Edit = ({
                 <Block>
                   <Block>
                     <Block display="flex">
-                      <Block display="flex" flexDirection="column" width="100%"  maxWidth="200px">
+                      <Block display="flex" flexDirection="column" width="100%" maxWidth="200px">
                         <FieldWrapper>
                           <Field name={'status'}>
                             {(p: FieldProps<string | Code>) => (
@@ -492,10 +483,7 @@ const Edit = ({
                         {tidligereEtterlevelser && tidligereEtterlevelser.length > 1 && (
                           <Block width="100%" maxWidth="460px">
                             <CustomizedAccordion>
-                              <CustomizedPanel
-                                title="Se dokumentasjon på tidligere versjoner"
-                                overrides={{ Content: { style: { backgroundColor: ettlevColors.white } } }}
-                              >
+                              <CustomizedPanel title="Se dokumentasjon på tidligere versjoner" overrides={{ Content: { style: { backgroundColor: ettlevColors.white } } }}>
                                 {getTidligereEtterlevelser()}
                               </CustomizedPanel>
                             </CustomizedAccordion>
@@ -682,7 +670,7 @@ const EtterlevelseCard = ({ etterlevelse }: { etterlevelse: Etterlevelse }) => {
   const [kravData, setKravData] = useState<Krav>()
 
   useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       const krav = await getKravByKravNumberAndVersion(etterlevelse.kravNummer, etterlevelse.kravVersjon)
       if (krav) {
         setKravData(krav)
@@ -709,7 +697,7 @@ const EtterlevelseCard = ({ etterlevelse }: { etterlevelse: Etterlevelse }) => {
         }}
         onClick={() => setIsModalOpen(true)}
       >
-        <Block display="flex" width="100%" onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} paddingLeft='15px' paddingRight='15px'>
+        <Block display="flex" width="100%" onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} paddingLeft="15px" paddingRight="15px">
           <Block display="flex" alignContent="center" flexDirection="column" width="100%">
             <Paragraph2 $style={{ lineHeight: '16px', marginTop: '0px', marinBottom: '0px', textAlign: 'start', textDecoration: hover ? 'underline' : 'none' }}>
               K{etterlevelse.kravNummer}.{etterlevelse.kravVersjon}
@@ -741,7 +729,7 @@ const EtterlevelseCard = ({ etterlevelse }: { etterlevelse: Etterlevelse }) => {
                 ...borderRadius('0px'),
                 ...marginAll('0px'),
                 width: '100%',
-                maxWidth: maxPageWidth
+                maxWidth: maxPageWidth,
               },
             },
           }}
@@ -763,18 +751,16 @@ const EtterlevelseCard = ({ etterlevelse }: { etterlevelse: Etterlevelse }) => {
             </Block>
 
             <Block paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge}>
-              <ViewEtterlevelse
-                etterlevelse={etterlevelse}
-                viewMode
-                krav={kravData}
-              />
+              <ViewEtterlevelse etterlevelse={etterlevelse} viewMode krav={kravData} />
               <Block display="flex" justifyContent="flex-end" paddingBottom="31px" paddingTop="95px">
-                <Button onClick={() => {
-                  console.log('CLICK')
-                  console.log(isModalOpen)
-                  setIsModalOpen(false)
-                  console.log(isModalOpen)
-                }}>
+                <Button
+                  onClick={() => {
+                    console.log('CLICK')
+                    console.log(isModalOpen)
+                    setIsModalOpen(false)
+                    console.log(isModalOpen)
+                  }}
+                >
                   Lukk visning
                 </Button>
               </Block>

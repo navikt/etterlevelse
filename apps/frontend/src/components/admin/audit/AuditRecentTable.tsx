@@ -37,7 +37,7 @@ export const AuditRecentTable = (props: { show: boolean }) => {
   }, {} as { [id: string]: string })
 
   useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       props.show && setAudits(await getAudits(page - 1, limit, table))
     })()
   }, [page, limit, props.show, table])
@@ -114,9 +114,9 @@ export const AuditRecentTable = (props: { show: boolean }) => {
                         overrides={{
                           BaseButton: {
                             style: {
-                              ...buttonContentStyle
-                            }
-                          }
+                              ...buttonContentStyle,
+                            },
+                          },
                         }}
                       >
                         <FontAwesomeIcon icon={faBinoculars} />
@@ -135,9 +135,9 @@ export const AuditRecentTable = (props: { show: boolean }) => {
                         overrides={{
                           BaseButton: {
                             style: {
-                              ...buttonContentStyle
-                            }
-                          }
+                              ...buttonContentStyle,
+                            },
+                          },
                         }}
                       >
                         <FontAwesomeIcon icon={faCode} />
@@ -169,16 +169,16 @@ export const AuditRecentTable = (props: { show: boolean }) => {
           )}
           placement={PLACEMENT.bottom}
         >
-          <Button 
-          kind={KIND.tertiary} 
-          endEnhancer={TriangleDown}
-          overrides={{
-            BaseButton: {
-              style: {
-                ...buttonContentStyle
-              }
-            }
-          }}
+          <Button
+            kind={KIND.tertiary}
+            endEnhancer={TriangleDown}
+            overrides={{
+              BaseButton: {
+                style: {
+                  ...buttonContentStyle,
+                },
+              },
+            }}
           >
             <strong>{`${limit} ${intl.rows}`}</strong>
           </Button>

@@ -91,9 +91,9 @@ const UpdateCodeListModal = ({ title, initialValues, errorOnUpdate, isOpen, onCl
                     overrides={{
                       BaseButton: {
                         style: {
-                          ...buttonContentStyle
-                        }
-                      }
+                          ...buttonContentStyle,
+                        },
+                      },
                     }}
                   >
                     <strong>Avbryt</strong>
@@ -104,9 +104,9 @@ const UpdateCodeListModal = ({ title, initialValues, errorOnUpdate, isOpen, onCl
                     overrides={{
                       BaseButton: {
                         style: {
-                          ...buttonContentStyle
-                        }
-                      }
+                          ...buttonContentStyle,
+                        },
+                      },
                     }}
                   >
                     <strong>Lagre</strong>

@@ -73,7 +73,7 @@ export const getTemaMainHeader = (tema: TemaCode, lover: LovCode[], expand: bool
           {lover.map((l, index) => (
             <Block key={l.code + '_' + index} marginBottom={theme.sizing.scale200}>
               <ObjectLink external type={ListName.LOV} id={l.code}>
-                <ExternalLinkWrapper text={l.shortName}/>
+                <ExternalLinkWrapper text={l.shortName} />
               </ObjectLink>
             </Block>
           ))}

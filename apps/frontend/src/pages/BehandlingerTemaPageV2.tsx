@@ -48,9 +48,7 @@ const mapEtterlevelseData = (etterlevelse?: Etterlevelse) => ({
 })
 
 export const isFerdigUtfylt = (status: EtterlevelseStatus | undefined) => {
-  return (status === EtterlevelseStatus.FERDIG_DOKUMENTERT ||
-    status === EtterlevelseStatus.OPPFYLLES_SENERE ||
-    status === EtterlevelseStatus.IKKE_RELEVANT)
+  return status === EtterlevelseStatus.FERDIG_DOKUMENTERT || status === EtterlevelseStatus.OPPFYLLES_SENERE || status === EtterlevelseStatus.IKKE_RELEVANT
 }
 
 export const BehandlingerTemaPageV2 = () => {
@@ -90,7 +88,7 @@ export const BehandlingerTemaPageV2 = () => {
   const [isTemaModalOpen, setIsTemaModalOpen] = useState<boolean>(false)
 
   useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       const allKravPriority = await getAllKravPriority()
       const kraver = _.cloneDeep(rawData?.krav.content) || []
       const irrelevantKraver = _.cloneDeep(irrelevantData?.krav.content) || []
@@ -155,11 +153,7 @@ export const BehandlingerTemaPageV2 = () => {
   }
 
   useEffect(() => {
-    setUtfyltKrav(
-      kravData.filter(
-        (k) => isFerdigUtfylt(k.etterlevelseStatus),
-      ),
-    )
+    setUtfyltKrav(kravData.filter((k) => isFerdigUtfylt(k.etterlevelseStatus)))
     setSkalUtfyllesKrav(
       kravData.filter(
         (k) => k.etterlevelseStatus === EtterlevelseStatus.UNDER_REDIGERING || k.etterlevelseStatus === EtterlevelseStatus.FERDIG || k.etterlevelseStatus === undefined || null,
@@ -171,10 +165,7 @@ export const BehandlingerTemaPageV2 = () => {
     let antallUtfylt = 0
 
     kravData.forEach((k) => {
-      if (
-        (isFerdigUtfylt(k.etterlevelseStatus)) &&
-        k.gammelVersjon !== true
-      ) {
+      if (isFerdigUtfylt(k.etterlevelseStatus) && k.gammelVersjon !== true) {
         antallUtfylt += 1
       }
     })
@@ -189,7 +180,7 @@ export const BehandlingerTemaPageV2 = () => {
           Krav til utfylling
         </RouteLink>
       </Block>
-      {edit &&
+      {edit && (
         <Block marginTop="8px">
           <img src={angleIcon} alt="" />{' '}
           <Button
@@ -202,14 +193,21 @@ export const BehandlingerTemaPageV2 = () => {
               {temaData?.shortName}
             </Label3>
           </Button>
-        </Block>}
-      <Block marginTop={edit ? '0px' : '8px'} marginBottom="56px" display="flex" width={edit ? 'calc(100% - 35px)' : '100%'} alignItems="center" justifyContent="center" marginLeft={edit ? '35px' : '0px'}>
+        </Block>
+      )}
+      <Block
+        marginTop={edit ? '0px' : '8px'}
+        marginBottom="56px"
+        display="flex"
+        width={edit ? 'calc(100% - 35px)' : '100%'}
+        alignItems="center"
+        justifyContent="center"
+        marginLeft={edit ? '35px' : '0px'}
+      >
         <Block display="flex" flex="1">
           <img src={angleIcon} alt="" />{' '}
           <Label3 marginLeft="12px" $style={{ fontSize: '18px', fontWeight: 600, lineHeight: '22px', color: ettlevColors.green600, whiteSpace: 'nowrap' }}>
-            {edit ? isFerdigUtfylt(activeEtterlevleseStatus) ?
-              'Ferdig utfylt' : 'Skal fylles ut' : temaData?.shortName
-            }
+            {edit ? (isFerdigUtfylt(activeEtterlevleseStatus) ? 'Ferdig utfylt' : 'Skal fylles ut') : temaData?.shortName}
           </Label3>
         </Block>
         <Block display="flex" justifyContent="flex-end" width="100%">
@@ -254,7 +252,7 @@ export const BehandlingerTemaPageV2 = () => {
               </H1>
             </Block>
             <Block marginBottom="55px" marginTop="40px" paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge}>
-              <Block>{getTemaMainHeader(temaData, lovListe, true, () => { }, true, true)}</Block>
+              <Block>{getTemaMainHeader(temaData, lovListe, true, () => {}, true, true)}</Block>
               <Block display="flex" justifyContent="flex-end" width="100%" marginTop="38px">
                 <Button onClick={() => setIsTemaModalOpen(false)}>Lukk visning</Button>
               </Block>
@@ -294,7 +292,14 @@ export const BehandlingerTemaPageV2 = () => {
           {sortedKravList.map((k) => {
             return (
               <CustomPanelDivider key={`${k.navn}_${k.kravNummer}_${k.kravVersjon}`}>
-                <KravCard setActiveEtterlevelseStatus={setActiveEtterlevelseStatus} krav={k} setEdit={setEdit} setKravId={setKravId} key={`${k.navn}_${k.kravNummer}_${k.kravVersjon}_card`} noStatus={noStatus} />
+                <KravCard
+                  setActiveEtterlevelseStatus={setActiveEtterlevelseStatus}
+                  krav={k}
+                  setEdit={setEdit}
+                  setKravId={setKravId}
+                  key={`${k.navn}_${k.kravNummer}_${k.kravVersjon}_card`}
+                  noStatus={noStatus}
+                />
               </CustomPanelDivider>
             )
           })}
@@ -478,7 +483,7 @@ const KravView = (props: {
   const [varsleMelding, setVarsleMelding] = useState('')
 
   useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       if (etterlevelse) {
         const kravId = toKravId(etterlevelse)
         if (kravId.kravNummer && kravId.kravVersjon) {

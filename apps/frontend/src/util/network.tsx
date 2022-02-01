@@ -34,7 +34,7 @@ export const useNetworkStatus = () => {
       <ModalHeader>Nettverksfeil</ModalHeader>
       <ModalBody>{error?.response?.data?.message ? error?.response?.data?.message : error?.toString()}</ModalBody>
       <ModalFooter>
-        <ModalButton onClick={clear} overrides={{BaseButton: {style: {...buttonContentStyle}}}}>
+        <ModalButton onClick={clear} overrides={{ BaseButton: { style: { ...buttonContentStyle } } }}>
           <strong>Lukk</strong>
         </ModalButton>
       </ModalFooter>

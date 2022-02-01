@@ -96,9 +96,9 @@ const CreateCodeListModal = ({ isOpen, title, list, errorOnCreate, onClose, subm
                     overrides={{
                       BaseButton: {
                         style: {
-                          ...buttonContentStyle
-                        }
-                      }
+                          ...buttonContentStyle,
+                        },
+                      },
                     }}
                   >
                     <strong>Avbryt</strong>
@@ -109,9 +109,9 @@ const CreateCodeListModal = ({ isOpen, title, list, errorOnCreate, onClose, subm
                     overrides={{
                       BaseButton: {
                         style: {
-                          ...buttonContentStyle
-                        }
-                      }
+                          ...buttonContentStyle,
+                        },
+                      },
                     }}
                   >
                     <strong>Lagre</strong>

@@ -13,9 +13,9 @@ const ErrorModal = (props: { isOpen: boolean; submit: Function; errorMessage: st
           overrides={{
             BaseButton: {
               style: {
-                ...buttonContentStyle
-              }
-            }
+                ...buttonContentStyle,
+              },
+            },
           }}
         >
           <strong>Lukk</strong>

@@ -149,6 +149,6 @@ export const ExternalLink = ({
 
 export const ExternalLinkWrapper = ({ text }: { text: React.ReactNode }) => (
   <Block display="flex" alignItems="center">
-    {text} <img alt=" " width="inherit" height="inherit" style={{ marginLeft: "8px" }} src={externalLinkIcon} />
+    {text} <img alt=" " width="inherit" height="inherit" style={{ marginLeft: '8px' }} src={externalLinkIcon} />
   </Block>
 )

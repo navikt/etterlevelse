@@ -126,14 +126,16 @@ export const KravTablePage = () => {
           )}
           placement={PLACEMENT.bottom}
         >
-          <Button kind={KIND.tertiary} endEnhancer={TriangleDown}
-          overrides={{
-            BaseButton: {
-              style: {
-                ...buttonContentStyle
-              }
-            }
-          }}
+          <Button
+            kind={KIND.tertiary}
+            endEnhancer={TriangleDown}
+            overrides={{
+              BaseButton: {
+                style: {
+                  ...buttonContentStyle,
+                },
+              },
+            }}
           >
             <strong>{`${limit} ${intl.rows}`}</strong>
           </Button>

@@ -141,7 +141,7 @@ const overrides: RecursivePartial<Theme> = {
     font1250: { fontWeight: 600 },
     font1350: { fontWeight: 600 },
     font1450: { fontWeight: 600 },
-  }
+  },
 }
 
 export const theme = createTheme(primitives, overrides)

@@ -22,9 +22,11 @@ const Content = (props: { item: ReactNode | string; list?: ListName; linkCodelis
   if (list) {
     const itemString = item as string
     if (linkCodelist)
-      return <ExternalLink href={urlForObject(list as ListName & NavigableItem, itemString)}>
-        <ExternalLinkWrapper text={codelist.getShortname(list as ListName & NavigableItem, itemString)} />
-      </ExternalLink>
+      return (
+        <ExternalLink href={urlForObject(list as ListName & NavigableItem, itemString)}>
+          <ExternalLinkWrapper text={codelist.getShortname(list as ListName & NavigableItem, itemString)} />
+        </ExternalLink>
+      )
     return <>{codelist.getShortname(list, itemString)}</>
   }
   if (markdown) return <Markdown source={item as string} noMargin />

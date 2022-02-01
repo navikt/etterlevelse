@@ -106,9 +106,9 @@ export const Usage = (props: { usage?: CodeUsage; refresh: () => void }) => {
             overrides={{
               BaseButton: {
                 style: {
-                  ...buttonContentStyle
-                }
-              }
+                  ...buttonContentStyle,
+                },
+              },
             }}
           >
             <strong>Erstatt all bruk</strong>
@@ -127,18 +127,18 @@ export const Usage = (props: { usage?: CodeUsage; refresh: () => void }) => {
             value={newValue}
             onChange={(params) => setNewValue(params.value)}
           />
-          <Button 
-          type="button" 
-          size="compact" 
-          onClick={replace} 
-          disabled={!newValue.length}
-          overrides={{
-            BaseButton: {
-              style: {
-                ...buttonContentStyle
-              }
-            }
-          }}
+          <Button
+            type="button"
+            size="compact"
+            onClick={replace}
+            disabled={!newValue.length}
+            overrides={{
+              BaseButton: {
+                style: {
+                  ...buttonContentStyle,
+                },
+              },
+            }}
           >
             <strong>Erstatt</strong>
           </Button>

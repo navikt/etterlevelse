@@ -36,9 +36,9 @@ const DeleteCodeListModal = ({ title, initialValues, isOpen, errorOnDelete, subm
               BaseButton: {
                 style: {
                   marginRight: '1rem',
-                  ...buttonContentStyle
-                }
-              }
+                  ...buttonContentStyle,
+                },
+              },
             }}
           >
             <strong>Avbryt</strong>
@@ -48,9 +48,9 @@ const DeleteCodeListModal = ({ title, initialValues, isOpen, errorOnDelete, subm
             overrides={{
               BaseButton: {
                 style: {
-                  ...buttonContentStyle
-                }
-              }
+                  ...buttonContentStyle,
+                },
+              },
             }}
           >
             <strong>Lagre</strong>

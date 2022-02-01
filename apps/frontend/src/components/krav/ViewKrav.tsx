@@ -189,9 +189,7 @@ export const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVer
               if (va.type === AdresseType.SLACK)
                 return (
                   <Block marginBottom={marginBottom} key={'kravVarsling_list_SLACK_' + i} display="flex">
-                    <Block marginRight="4px">
-                      Slack:
-                    </Block>
+                    <Block marginRight="4px">Slack:</Block>
                     <ExternalLink href={slackLink(va.adresse)}>
                       <ExternalLinkWrapper text={`#${va.slackChannel?.name || va.adresse}`} />
                     </ExternalLink>
@@ -200,9 +198,7 @@ export const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVer
               if (va.type === AdresseType.SLACK_USER)
                 return (
                   <Block marginBottom={marginBottom} key={'kravVarsling_list_SLACK_USER_' + i} display="flex">
-                    <Block marginRight="4px">
-                      Slack:
-                    </Block>
+                    <Block marginRight="4px">Slack:</Block>
                     <ExternalLink href={slackUserLink(va.adresse)}>
                       <ExternalLinkWrapper text={`${va.slackUser?.name || va.adresse}`} />
                     </ExternalLink>
@@ -210,9 +206,7 @@ export const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVer
                 )
               return (
                 <Block marginBottom={marginBottom} key={'kravVarsling_list_EMAIL_' + i} display="flex">
-                  <Block marginRight="4px">
-                    Epost:
-                  </Block>
+                  <Block marginRight="4px">Epost:</Block>
                   <ExternalLink href={`mailto:${va.adresse}`}>
                     <ExternalLinkWrapper text={va.adresse} />
                   </ExternalLink>

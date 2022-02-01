@@ -21,7 +21,7 @@ export const getEtterlevelserByKravNumberKravVersion = async (kravNummer: number
   return (await axios.get<PageResponse<Etterlevelse>>(`${env.backendBaseUrl}/etterlevelse/kravnummer/${kravNummer}/${kravVersjon}`)).data
 }
 
-export const getEtterlevelserByBehandlingsIdKravNumber = async (behandlingsId: string,kravNummer: number) => {
+export const getEtterlevelserByBehandlingsIdKravNumber = async (behandlingsId: string, kravNummer: number) => {
   return (await axios.get<PageResponse<Etterlevelse>>(`${env.backendBaseUrl}/etterlevelse/behandling/${behandlingsId}/${kravNummer}`)).data
 }
 
