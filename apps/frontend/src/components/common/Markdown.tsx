@@ -7,12 +7,11 @@ import MdEditor from 'react-markdown-editor-lite'
 import 'react-markdown-editor-lite/lib/index.css'
 import { Block } from 'baseui/block'
 import { theme } from '../../util'
-import { ExternalLink } from './RouteLink'
+import { ExternalLink, ExternalLinkWrapper } from './RouteLink'
 import { markdownLink } from '../../util/config'
 import remarkGfm from 'remark-gfm'
 import rehypeRaw from 'rehype-raw'
 import { ettlevColors } from '../../util/theme'
-import { externalLinkIcon } from '../Images'
 
 export const Markdown = ({
   vertical,
@@ -60,9 +59,7 @@ export const Markdown = ({
         <StatefulTooltip content={href}>
           <span>
             <ExternalLink fontColor={fontColor} href={href}>
-              <Block display="flex" alignItems="center">
-                {content} <img alt=" " width="inherit" height="inherit" style={{ marginLeft: "8px" }} src={externalLinkIcon} />
-              </Block>
+              <ExternalLinkWrapper text={content} />
             </ExternalLink>
           </span>
         </StatefulTooltip>
@@ -74,9 +71,7 @@ export const Markdown = ({
 
       return (
         <ExternalLink fontColor={fontColor} href={href}>
-          <Block display="flex" alignItems="center">
-            {content} <img alt=" " width="inherit" height="inherit" style={{ marginLeft: "8px" }} src={externalLinkIcon} />
-          </Block>
+          <ExternalLinkWrapper text={content} />
         </ExternalLink>
       )
     },
