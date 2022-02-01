@@ -13,7 +13,7 @@ import { getKravByKravNumberAndVersion, kravFullQuery, KravId, useKrav, useSearc
 import { kravName, kravNumView } from '../../pages/KravPage'
 import { behandlingName, useBehandling, useSearchBehandling } from '../../api/BehandlingApi'
 import CustomizedSelect from '../common/CustomizedSelect'
-import { H1, H2, Label3, Paragraph2, Paragraph4 } from 'baseui/typography'
+import { H1, H2, H3, Label3, Paragraph2, Paragraph4 } from 'baseui/typography'
 import { ettlevColors, maxPageWidth, responsivePaddingLarge, responsiveWidthLarge } from '../../util/theme'
 import { SuksesskriterierBegrunnelseEdit } from './Edit/SuksesskriterieBegrunnelseEdit'
 import { Radio, RadioGroup } from 'baseui/radio'
@@ -146,14 +146,14 @@ export const EditEtterlevelseV2 = ({
       suksesskriterieBegrunnelser:
         etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT
           ? [
-              ...etterlevelse.suksesskriterieBegrunnelser.map((s) => {
-                return {
-                  ...s,
-                  oppfylt: false,
-                  ikkeRelevant: false,
-                }
-              }),
-            ]
+            ...etterlevelse.suksesskriterieBegrunnelser.map((s) => {
+              return {
+                ...s,
+                oppfylt: false,
+                ikkeRelevant: false,
+              }
+            }),
+          ]
           : [...etterlevelse.suksesskriterieBegrunnelser],
     }
 
@@ -314,7 +314,7 @@ const Edit = ({ krav, etterlevelse, submit, formRef, behandlingId, disableEdit, 
   const [tidligereEtterlevelser, setTidligereEtterlevelser] = React.useState<Etterlevelse[]>()
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       if (behandlingId && krav.kravNummer) {
         const etterlevelser = await getEtterlevelserByBehandlingsIdKravNumber(behandlingId, krav.kravNummer)
         const etterlevelserList = etterlevelser.content.sort((a, b) => (a.kravVersjon > b.kravVersjon ? -1 : 1)).filter((e) => e.kravVersjon < etterlevelse.kravVersjon)
@@ -479,17 +479,38 @@ const Edit = ({ krav, etterlevelse, submit, formRef, behandlingId, disableEdit, 
                           </Field>
                         </FieldWrapper>
                       </Block>
-                      <Block display="flex" width="100%" justifyContent="flex-end">
-                        {tidligereEtterlevelser && tidligereEtterlevelser.length > 1 && (
-                          <Block width="100%" maxWidth="460px">
-                            <CustomizedAccordion>
-                              <CustomizedPanel title="Se dokumentasjon på tidligere versjoner" overrides={{ Content: { style: { backgroundColor: ettlevColors.white } } }}>
-                                {getTidligereEtterlevelser()}
-                              </CustomizedPanel>
-                            </CustomizedAccordion>
-                          </Block>
-                        )}
-                      </Block>
+                      {etterlevelse.kravVersjon > 1 &&
+                        <Block display="flex" width="100%" justifyContent="flex-end">
+                          {tidligereEtterlevelser && tidligereEtterlevelser.length > 1 ? (
+                            <Block width="100%" maxWidth="460px">
+                              <CustomizedAccordion>
+                                <CustomizedPanel title="Se dokumentasjon på tidligere versjoner" overrides={{ Content: { style: { backgroundColor: ettlevColors.white } } }}>
+                                  {getTidligereEtterlevelser()}
+                                </CustomizedPanel>
+                              </CustomizedAccordion>
+                            </Block>
+                          ) : (
+                            <Block
+                              $style={{
+                                ...padding('8px', '20px'),
+                                ...borderWidth('1px'),
+                                ...borderStyle('solid'),
+                                ...borderRadius('4px'),
+                                ...borderColor(ettlevColors.grey100),
+                                backgroundColor: ettlevColors.white,
+                              }}
+                              width="100%"
+                              maxWidth="460px"
+                              height="34px"
+                              display="flex"
+                              alignItems="center"
+                            >
+                              <H3 marginTop="0px" marginBottom="0px">
+                                Ingen dokumentasjon på tidligere versjoner
+                              </H3>
+                            </Block>
+                          )}
+                        </Block>}
                     </Block>
 
                     <Label3 $style={{ lineHeight: '32px' }}>Hvilke suksesskriterier er oppfylt?</Label3>
@@ -670,7 +691,7 @@ const EtterlevelseCard = ({ etterlevelse }: { etterlevelse: Etterlevelse }) => {
   const [kravData, setKravData] = useState<Krav>()
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       const krav = await getKravByKravNumberAndVersion(etterlevelse.kravNummer, etterlevelse.kravVersjon)
       if (krav) {
         setKravData(krav)
