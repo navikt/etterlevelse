@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons'
 import { $StyleProp } from 'styletron-react'
 import _ from 'lodash'
-import { externalLinkIcon } from '../Images'
+import { ExternalLinkWrapper } from './RouteLink'
 
 export const TeamName = (props: { id: string; link?: boolean; fontColor?: string; style?: $StyleProp<LinkProps> }) => {
   const [name] = useTeam()(props.id)
@@ -17,10 +17,7 @@ export const TeamName = (props: { id: string; link?: boolean; fontColor?: string
   const mergedStyle = _.merge(customStyle, props.style)
   return props.link ? (
     <StyledLink rel="noopener noreferrer" target={'_blank'} href={teamKatTeamLink(props.id)} $style={mergedStyle}>
-      <Block display="flex" alignItems="center">
-        {name}
-        <img src={externalLinkIcon} width="12.25" height="12.25" style={{ marginLeft: '5px' }} />
-      </Block>
+      <ExternalLinkWrapper text={name} />
     </StyledLink>
   ) : (
     <>{name}</>

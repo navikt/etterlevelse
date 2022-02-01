@@ -3,7 +3,7 @@ import { Block, BlockProps } from 'baseui/block'
 import React, { useEffect, useState } from 'react'
 import { H1, H2, Label3, LabelLarge, Paragraph2, Paragraph4, ParagraphSmall } from 'baseui/typography'
 import { codelist, ListName, LovCode, TemaCode } from '../services/Codelist'
-import { ObjectLink, urlForObject } from '../components/common/RouteLink'
+import { ExternalLinkWrapper, ObjectLink, urlForObject } from '../components/common/RouteLink'
 import { theme } from '../util'
 import { Markdown } from '../components/common/Markdown'
 import { ettlevColors } from '../util/theme'
@@ -26,7 +26,6 @@ import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 import { sortKraverByPriority } from '../util/sort'
 import { getAllKravPriority } from '../api/KravPriorityApi'
 import { Helmet } from 'react-helmet'
-import { externalLinkIcon } from '../components/Images'
 
 export const TemaPage = () => {
   const { tema } = useParams<{ tema: string }>()
@@ -74,9 +73,7 @@ export const getTemaMainHeader = (tema: TemaCode, lover: LovCode[], expand: bool
           {lover.map((l, index) => (
             <Block key={l.code + '_' + index} marginBottom={theme.sizing.scale200}>
               <ObjectLink external type={ListName.LOV} id={l.code}>
-                <Block display="flex" alignItems="center">
-                    {l.shortName} <img alt=" " width="16px" height="16px" style={{marginLeft: "8px"}} src={externalLinkIcon} />
-                </Block>
+                <ExternalLinkWrapper text={l.shortName}/>
               </ObjectLink>
             </Block>
           ))}

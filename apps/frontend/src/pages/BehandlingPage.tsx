@@ -8,7 +8,7 @@ import {FormikProps} from 'formik'
 import {ettlevColors, theme} from '../util/theme'
 import {Layout2} from '../components/scaffold/Page'
 import {Teams} from '../components/common/TeamName'
-import {arkPennIcon, editIcon, ellipse80, externalLinkIcon, warningAlert} from '../components/Images'
+import {arkPennIcon, editIcon, ellipse80, warningAlert} from '../components/Images'
 import {Behandling, BehandlingEtterlevData, EtterlevelseStatus, PageResponse} from '../constants'
 import {useQuery} from '@apollo/client'
 import {BehandlingStats, statsQuery} from '../components/behandling/ViewBehandling'
@@ -26,6 +26,7 @@ import {ExternalButton} from '../components/common/Button'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {env} from '../util/env'
 import {faExternalLinkAlt} from '@fortawesome/free-solid-svg-icons'
+import { ExternalLinkWrapper } from '../components/common/RouteLink'
 
 const responsiveDisplay: Responsive<Display> = ['block', 'block', 'block', 'block', 'flex', 'flex']
 
@@ -55,9 +56,7 @@ export const getMainHeader = (behandling: Behandling, helmet?: ReactNode) => (
         </Block>
         <Block display="flex" justifyContent="flex-end" alignContent="center" $style={{whiteSpace: 'nowrap'}}>
           <ExternalButton kind={'secondary'} href={`${env.pollyBaseUrl}process/${behandling.id}`} size="mini">
-            <Block display="flex" justifyContent="center">
-            Til behandlingskatalogen <img style={{marginLeft: "8px"}} height="18px" width="18px" src={externalLinkIcon}/>
-            </Block>
+            <ExternalLinkWrapper text="Til behandlingskatalogen"/>
           </ExternalButton>
         </Block>
       </Block>
