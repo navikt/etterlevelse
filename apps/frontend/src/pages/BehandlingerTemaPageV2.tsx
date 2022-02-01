@@ -16,7 +16,7 @@ import CustomizedModal from '../components/common/CustomizedModal'
 import { Spinner } from '../components/common/Spinner'
 import { useEtterlevelse } from '../api/EtterlevelseApi'
 import { getKravByKravNumberAndVersion, KravId } from '../api/KravApi'
-import { borderRadius, borderStyle, marginAll } from '../components/common/Style'
+import { borderRadius, borderStyle, marginAll, paddingAll } from '../components/common/Style'
 import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 import Button from '../components/common/Button'
 import { Responsive } from 'baseui/theme'
@@ -33,7 +33,7 @@ import { user } from '../services/User'
 import { getMainHeader } from './BehandlingPage'
 import { getTemaMainHeader } from './TemaPage'
 import { EditEtterlevelseV2 } from '../components/etterlevelse/EditEtterlevelseV2'
-import {getEtterlevelseStatus, getEtterlevelseStatusLabelColor} from "../components/behandling/utils";
+import { getEtterlevelseStatus, getEtterlevelseStatusLabelColor } from "../components/behandling/utils";
 
 const responsiveBreakPoints: Responsive<Display> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
 const responsiveDisplay: Responsive<Display> = ['block', 'block', 'block', 'block', 'flex', 'flex']
@@ -88,7 +88,7 @@ export const BehandlingerTemaPageV2 = () => {
   const [isTemaModalOpen, setIsTemaModalOpen] = useState<boolean>(false)
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       const allKravPriority = await getAllKravPriority()
       const kraver = _.cloneDeep(rawData?.krav.content) || []
       const irrelevantKraver = _.cloneDeep(irrelevantData?.krav.content) || []
@@ -175,28 +175,63 @@ export const BehandlingerTemaPageV2 = () => {
 
   const getSecondaryHeader = () => (
     <Block width="100%">
-      <Block marginTop="19px">
-        <RouteLink fontColor={ettlevColors.green600} $style={{ fontSize: '18px', fontWheight: 400, LineHeigt: '22px' }} href={`/behandling/${behandling?.id}`}>
-          Krav til utfylling
+      <Block marginTop="19px" width="fit-content">
+        <RouteLink
+          fontColor={ettlevColors.green600}
+          hideUnderline
+          href={`/behandling/${behandling?.id}`}
+        >
+          <Label3
+            $style={{
+              fontSize: '18px',
+              fontWeight: 'normal',
+              lineHeight: '22px',
+              color: ettlevColors.green600, textDecoration: 'underline',
+              ':hover': {
+                color: ettlevColors.green400
+              }
+            }}
+          >
+            Krav til utfylling
+          </Label3>
         </RouteLink>
       </Block>
       {edit && (
         <Block marginTop="8px">
           <img src={angleIcon} alt="" />{' '}
           <Button
-            kind="underline-hover"
+            kind="tertiary"
             onClick={() => {
               setEdit(undefined)
             }}
+            $style={{
+              ...paddingAll('0px'),
+              ':hover': {
+                backgroundColor: 'inherit',
+              },
+              ':focus': {
+                backgroundColor: 'inherit',
+              },
+            }}
           >
-            <Label3 marginLeft="12px" $style={{ fontSize: '18px', fontWeight: 600, lineHeight: '22px', color: ettlevColors.green600 }}>
+            <Label3
+              marginLeft="12px"
+              $style={{
+                fontSize: '18px',
+                fontWeight: 'normal',
+                lineHeight: '22px',
+                color: ettlevColors.green600, textDecoration: 'underline',
+                ':hover': {
+                  color: ettlevColors.green400
+                }
+              }}>
               {temaData?.shortName}
             </Label3>
           </Button>
         </Block>
       )}
       <Block
-        marginTop={edit ? '0px' : '8px'}
+        marginTop="0px"
         marginBottom="56px"
         display="flex"
         width={edit ? 'calc(100% - 35px)' : '100%'}
@@ -252,7 +287,7 @@ export const BehandlingerTemaPageV2 = () => {
               </H1>
             </Block>
             <Block marginBottom="55px" marginTop="40px" paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge}>
-              <Block>{getTemaMainHeader(temaData, lovListe, true, () => {}, true, true)}</Block>
+              <Block>{getTemaMainHeader(temaData, lovListe, true, () => { }, true, true)}</Block>
               <Block display="flex" justifyContent="flex-end" width="100%" marginTop="38px">
                 <Button onClick={() => setIsTemaModalOpen(false)}>Lukk visning</Button>
               </Block>
@@ -479,7 +514,7 @@ const KravView = (props: {
   const [varsleMelding, setVarsleMelding] = useState('')
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       if (etterlevelse) {
         const kravId = toKravId(etterlevelse)
         if (kravId.kravNummer && kravId.kravVersjon) {
