@@ -1,40 +1,41 @@
-import React, { useEffect, useState } from 'react'
-import { Block, Display } from 'baseui/block'
-import { useParams } from 'react-router-dom'
-import { H1, H2, Label3, Paragraph2, Paragraph4 } from 'baseui/typography'
-import { ettlevColors, maxPageWidth, theme } from '../util/theme'
-import { codelist, ListName, TemaCode } from '../services/Codelist'
-import RouteLink, { urlForObject } from '../components/common/RouteLink'
-import { useBehandling } from '../api/BehandlingApi'
-import { Layout2 } from '../components/scaffold/Page'
-import { Etterlevelse, EtterlevelseStatus, KravEtterlevelseData, KravQL, KravStatus, PageResponse } from '../constants'
-import { arkPennIcon, crossIcon, informationIcon } from '../components/Images'
-import { behandlingKravQuery } from '../components/behandling/ViewBehandling'
-import { useQuery } from '@apollo/client'
-import { CustomizedAccordion, CustomizedPanel, CustomPanelDivider } from '../components/common/CustomizedAccordion'
+import React, {useEffect, useState} from 'react'
+import {Block, Display} from 'baseui/block'
+import {useParams} from 'react-router-dom'
+import {H1, H2, Label3, Paragraph2, Paragraph4} from 'baseui/typography'
+import {ettlevColors, maxPageWidth, theme} from '../util/theme'
+import {codelist, ListName, TemaCode} from '../services/Codelist'
+import RouteLink, {urlForObject} from '../components/common/RouteLink'
+import {useBehandling} from '../api/BehandlingApi'
+import {Layout2} from '../components/scaffold/Page'
+import {Etterlevelse, EtterlevelseStatus, KravEtterlevelseData, KravQL, KravStatus, PageResponse} from '../constants'
+import {arkPennIcon, crossIcon, informationIcon} from '../components/Images'
+import {behandlingKravQuery} from '../components/behandling/ViewBehandling'
+import {useQuery} from '@apollo/client'
+import {CustomizedAccordion, CustomizedPanel, CustomPanelDivider} from '../components/common/CustomizedAccordion'
 import CustomizedModal from '../components/common/CustomizedModal'
-import { Spinner } from '../components/common/Spinner'
-import { useEtterlevelse } from '../api/EtterlevelseApi'
-import { EditEtterlevelse } from '../components/etterlevelse/EditEtterlevelse'
-import { getKravByKravNumberAndVersion, KravId } from '../api/KravApi'
-import { borderStyle } from '../components/common/Style'
-import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
+import {Spinner} from '../components/common/Spinner'
+import {useEtterlevelse} from '../api/EtterlevelseApi'
+import {EditEtterlevelse} from '../components/etterlevelse/EditEtterlevelse'
+import {getKravByKravNumberAndVersion, KravId} from '../api/KravApi'
+import {borderStyle} from '../components/common/Style'
+import {breadcrumbPaths} from '../components/common/CustomizedBreadcrumbs'
 import Button from '../components/common/Button'
-import { Responsive } from 'baseui/theme'
-import { KravPanelHeader } from '../components/behandling/KravPanelHeader'
-import { sortKraverByPriority } from '../util/sort'
+import {Responsive} from 'baseui/theme'
+import {KravPanelHeader} from '../components/behandling/KravPanelHeader'
+import {sortKraverByPriority} from '../util/sort'
 import _ from 'lodash'
-import { getAllKravPriority } from '../api/KravPriorityApi'
-import { env } from '../util/env'
-import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {getAllKravPriority} from '../api/KravPriorityApi'
+import {env} from '../util/env'
+import {faExternalLinkAlt} from '@fortawesome/free-solid-svg-icons'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import CustomizedLink from '../components/common/CustomizedLink'
 import StatusView from '../components/common/StatusTag'
 import moment from 'moment'
-import { Helmet } from 'react-helmet'
+import {Helmet} from 'react-helmet'
 import CustomizedSelect from '../components/common/CustomizedSelect'
-import { Option } from 'baseui/select'
-import { user } from '../services/User'
+import {Option} from 'baseui/select'
+import {user} from '../services/User'
+import {getEtterlevelseStatus, getEtterlevelseStatusLabelColor} from '../components/behandling/utils'
 
 const responsiveBreakPoints: Responsive<Display> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
 
@@ -53,8 +54,8 @@ export const BehandlingerTemaPage = () => {
   const irrelevantKrav = params?.tema?.charAt(0) === 'i' ? true : false
   const [behandling, setBehandling] = useBehandling(params.id)
   const lover = codelist.getCodesForTema(temaData?.code).map((c) => c.code)
-  const variables = { behandlingId: params.id, lover: lover, gjeldendeKrav: false, behandlingIrrevantKrav: irrelevantKrav }
-  const { data: rawData, loading } = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
+  const variables = {behandlingId: params.id, lover: lover, gjeldendeKrav: false, behandlingIrrevantKrav: irrelevantKrav}
+  const {data: rawData, loading} = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
     variables,
     skip: !params.id || !lover.length,
   })
@@ -68,8 +69,8 @@ export const BehandlingerTemaPage = () => {
   const [kravId, setKravId] = useState<KravId | undefined>()
   const [isExpanded, setIsExpanded] = useState<boolean>(false)
   const sortingOptions = [
-    { label: 'Anbefalt rekkefølge', id: 'priority' },
-    { label: 'Sist endret av meg', id: 'lastModified' },
+    {label: 'Anbefalt rekkefølge', id: 'priority'},
+    {label: 'Sist endret av meg', id: 'lastModified'},
   ]
   const [sorting, setSorting] = useState<readonly Option[]>([sortingOptions[0]])
 
@@ -111,7 +112,7 @@ export const BehandlingerTemaPage = () => {
   }, [rawData])
 
   const update = (etterlevelse: Etterlevelse) => {
-    setKravData(kravData.map((e) => (e.kravVersjon === etterlevelse.kravVersjon && e.kravNummer === etterlevelse.kravNummer ? { ...e, ...mapEtterlevelseData(etterlevelse) } : e)))
+    setKravData(kravData.map((e) => (e.kravVersjon === etterlevelse.kravVersjon && e.kravNummer === etterlevelse.kravNummer ? {...e, ...mapEtterlevelseData(etterlevelse)} : e)))
   }
 
   useEffect(() => {
@@ -152,7 +153,7 @@ export const BehandlingerTemaPage = () => {
       {temaData && behandling && (
         <>
           <Helmet>
-            <meta charSet="utf-8" />
+            <meta charSet="utf-8"/>
             <title>
               B{behandling.nummer.toString()} {behandling.navn.toString()}
             </title>
@@ -165,10 +166,10 @@ export const BehandlingerTemaPage = () => {
           </Block>
           <Block marginTop={theme.sizing.scale900} flex="1" width="100%" display="flex">
             <Block>
-              <Paragraph2 $style={{ marginTop: '0px', maxWidth: '700px' }} marginBottom={0}>
+              <Paragraph2 $style={{marginTop: '0px', maxWidth: '700px'}} marginBottom={0}>
                 <Label3>Behandling: </Label3>
-                <CustomizedLink href={`${env.pollyBaseUrl}process/${behandling.id}`} style={{ color: ettlevColors.black }} target="_blank" rel="noopener noreferrer">
-                  B{behandling.nummer} {behandling.overordnetFormaal.shortName}: {behandling.navn} <FontAwesomeIcon icon={faExternalLinkAlt} />
+                <CustomizedLink href={`${env.pollyBaseUrl}process/${behandling.id}`} style={{color: ettlevColors.black}} target="_blank" rel="noopener noreferrer">
+                  B{behandling.nummer} {behandling.overordnetFormaal.shortName}: {behandling.navn} <FontAwesomeIcon icon={faExternalLinkAlt}/>
                 </CustomizedLink>
               </Paragraph2>
             </Block>
@@ -182,7 +183,7 @@ export const BehandlingerTemaPage = () => {
     <Block width="100%" display={responsiveBreakPoints} alignItems="center" justifyContent="space-between">
       <Block display="flex" alignItems="center">
         <Block marginRight="12px">
-          <img src={arkPennIcon} alt="test" height="32px" width="32px" />
+          <img src={arkPennIcon} alt="test" height="32px" width="32px"/>
         </Block>
         <Block>
           <H2 marginTop="0px" marginBottom="0px">
@@ -193,16 +194,16 @@ export const BehandlingerTemaPage = () => {
 
       <Block display="flex" alignItems="center">
         <Block display="flex" alignItems="baseline" marginRight="30px">
-          <Paragraph2 $style={{ fontWeight: 900, fontSize: '32px', lineHeight: '0px' }} color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
+          <Paragraph2 $style={{fontWeight: 900, fontSize: '32px', lineHeight: '0px'}} color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
             {irrelevantKrav ? skalUtfyllesKrav.length : kravData.filter((k) => k.gammelVersjon === false).length}
           </Paragraph2>
           <Paragraph2>krav</Paragraph2>
         </Block>
         {!irrelevantKrav && (
           <>
-            <Block $style={{ border: '1px solid ' + ettlevColors.green50, background: '#102723' }} height="40px" />
+            <Block $style={{border: '1px solid ' + ettlevColors.green50, background: '#102723'}} height="40px"/>
             <Block display="flex" alignItems="baseline" marginLeft="30px">
-              <Paragraph2 $style={{ fontWeight: 900, fontSize: '32px', lineHeight: '0px' }} color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
+              <Paragraph2 $style={{fontWeight: 900, fontSize: '32px', lineHeight: '0px'}} color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
                 {getPercentageUtfylt()}
               </Paragraph2>
               <Paragraph2> ferdig utfylt</Paragraph2>
@@ -233,16 +234,16 @@ export const BehandlingerTemaPage = () => {
       }
 
       return (
-        <Block $style={{ backgroundColor: 'white' }}>
+        <Block $style={{backgroundColor: 'white'}}>
           {isExpanded && sortingAvailable && (
             <Block marginBottom="12px" paddingLeft="20px" paddingRight="20px" width="100%" maxWidth="290px">
-              <CustomizedSelect clearable={false} options={sortingOptions} value={sorting} onChange={(params) => setSorting(params.value)} />
+              <CustomizedSelect clearable={false} options={sortingOptions} value={sorting} onChange={(params) => setSorting(params.value)}/>
             </Block>
           )}
           {sortedKravList.map((k) => {
             return (
               <CustomPanelDivider key={`${k.navn}_${k.kravNummer}_${k.kravVersjon}`}>
-                <KravCard krav={k} setEdit={setEdit} setKravId={setKravId} key={`${k.navn}_${k.kravNummer}_${k.kravVersjon}_card`} />
+                <KravCard krav={k} setEdit={setEdit} setKravId={setKravId} key={`${k.navn}_${k.kravNummer}_${k.kravVersjon}_card`}/>
               </CustomPanelDivider>
             )
           })}
@@ -285,24 +286,24 @@ export const BehandlingerTemaPage = () => {
           <CustomizedPanel
             HeaderActiveBackgroundColor={ettlevColors.green50}
             onClick={() => setIsExpanded(!isExpanded)}
-            title={<KravPanelHeader title={irrelevantKrav ? 'Må vurderes av dere' : 'Skal fylles ut'} kravData={skalUtfyllesKrav} />}
+            title={<KravPanelHeader title={irrelevantKrav ? 'Må vurderes av dere' : 'Skal fylles ut'} kravData={skalUtfyllesKrav}/>}
           >
             {getKravList(skalUtfyllesKrav, 'Ingen krav som skal fylles ut', true)}
           </CustomizedPanel>
           {!irrelevantKrav && (
-            <CustomizedPanel HeaderActiveBackgroundColor={ettlevColors.green50} title={<KravPanelHeader title={'Ferdig utfylt'} kravData={utfyltKrav} />}>
+            <CustomizedPanel HeaderActiveBackgroundColor={ettlevColors.green50} title={<KravPanelHeader title={'Ferdig utfylt'} kravData={utfyltKrav}/>}>
               {getKravList(utfyltKrav, 'Ingen krav er ferdig utfylt')}
             </CustomizedPanel>
           )}
         </CustomizedAccordion>
         {edit && behandling && (
           <Block maxWidth={maxPageWidth}>
-            <CustomizedModal isOpen={!!edit} onClose={() => setEdit(undefined)} overrides={{ Root: { props: { id: 'edit-etterlevelse-modal' } } }}>
+            <CustomizedModal isOpen={!!edit} onClose={() => setEdit(undefined)} overrides={{Root: {props: {id: 'edit-etterlevelse-modal'}}}}>
               <Block flex="1" backgroundColor={ettlevColors.green800}>
                 <Block paddingTop={theme.sizing.scale1200} paddingRight={theme.sizing.scale1000} paddingLeft={theme.sizing.scale1000}>
                   <Block display="flex" flex="1" justifyContent="flex-end">
-                    <Button kind="tertiary" onClick={() => setEdit(undefined)} $style={{ ':hover': { backgroundColor: 'transparent' } }}>
-                      <img src={crossIcon} alt="close" />
+                    <Button kind="tertiary" onClick={() => setEdit(undefined)} $style={{':hover': {backgroundColor: 'transparent'}}}>
+                      <img src={crossIcon} alt="close"/>
                     </Button>
                   </Block>
                 </Block>
@@ -328,7 +329,7 @@ export const BehandlingerTemaPage = () => {
   )
 }
 
-const toKravId = (it: { kravVersjon: number; kravNummer: number }) => ({ kravNummer: it.kravNummer, kravVersjon: it.kravVersjon })
+const toKravId = (it: { kravVersjon: number; kravNummer: number }) => ({kravNummer: it.kravNummer, kravVersjon: it.kravVersjon})
 
 const EditModal = (props: {
   etterlevelseId: string
@@ -340,7 +341,7 @@ const EditModal = (props: {
   behandlingNummer: number
 }) => {
   const [etterlevelse] = useEtterlevelse(props.etterlevelseId, props.behandlingId, props.kravId)
-  if (!etterlevelse) return <Spinner size={theme.sizing.scale800} />
+  if (!etterlevelse) return <Spinner size={theme.sizing.scale800}/>
 
   return (
     <Block>
@@ -378,7 +379,7 @@ const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function; setKra
         justifyContent: 'flex-start',
         backgroundColor: ettlevColors.white,
         ...borderStyle('hidden'),
-        ':hover': { backgroundColor: 'none' },
+        ':hover': {backgroundColor: 'none'},
       }}
       onClick={() => {
         if (!props.krav.etterlevelseId) {
@@ -391,10 +392,10 @@ const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function; setKra
     >
       <Block display="flex" justifyContent="center" alignItems="center" width="100%" onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
         <Block marginLeft="24px">
-          <Paragraph4 $style={{ fontSize: '16px', lineHeight: '24px', marginBottom: '0px', marginTop: '0px', width: 'fit-content', textDecoration: hover ? 'underline' : 'none' }}>
+          <Paragraph4 $style={{fontSize: '16px', lineHeight: '24px', marginBottom: '0px', marginTop: '0px', width: 'fit-content', textDecoration: hover ? 'underline' : 'none'}}>
             K{props.krav.kravNummer}.{props.krav.kravVersjon}
           </Paragraph4>
-          <Label3 $style={{ fontSize: '18px', fontWeight: 600, alignContent: 'flex-start', textAlign: 'left', textDecoration: hover ? 'underline' : 'none' }}>
+          <Label3 $style={{fontSize: '18px', fontWeight: 600, alignContent: 'flex-start', textAlign: 'left', textDecoration: hover ? 'underline' : 'none'}}>
             {props.krav.navn}
           </Label3>
         </Block>
@@ -403,17 +404,13 @@ const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function; setKra
             <Block display="flex" width="100%" maxWidth="220px" justifyContent="flex-end">
               <StatusView
                 status={props.krav && props.krav.etterlevelseStatus ? getEtterlevelseStatus(props.krav) : 'Ikke påbegynt'}
-                statusDisplay={{
-                  background: ferdigUtfylt ? ettlevColors.green50 : props.krav.etterlevelseStatus ? '#FFECCC' : ettlevColors.white,
-                  border: ferdigUtfylt ? ettlevColors.green400 : props.krav.etterlevelseStatus ? '#D47B00' : '#0B483F',
-                }}
-                background={props.krav.varselMelding ? ettlevColors.white : undefined}
+                statusDisplay={getEtterlevelseStatusLabelColor(props.krav)}
               />
             </Block>
             <Block marginLeft="31px" maxWidth="140px" width="100%">
               {props.krav.etterlevelseChangeStamp?.lastModifiedDate && (
                 <Block width="100%" display="flex" justifyContent="flex-end">
-                  <Paragraph4 $style={{ lineHeight: '19px', textAlign: 'right', marginTop: '0px', marginBottom: '0px', whiteSpace: 'nowrap' }}>
+                  <Paragraph4 $style={{lineHeight: '19px', textAlign: 'right', marginTop: '0px', marginBottom: '0px', whiteSpace: 'nowrap'}}>
                     Sist utfylt: {moment(props.krav.etterlevelseChangeStamp?.lastModifiedDate).format('ll')}
                   </Paragraph4>
                 </Block>
@@ -426,26 +423,6 @@ const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function; setKra
   )
 }
 
-export const getEtterlevelseStatus = (etterlevelse: KravEtterlevelseData) => {
-  switch (etterlevelse.etterlevelseStatus) {
-    case EtterlevelseStatus.UNDER_REDIGERING:
-      return 'Kravet er under arbeid'
-    case EtterlevelseStatus.FERDIG:
-      return 'Kravet er  under arbeid'
-    case EtterlevelseStatus.IKKE_RELEVANT:
-      return 'Kravet er ikke relevant'
-    case EtterlevelseStatus.FERDIG_DOKUMENTERT:
-      return 'Kravet er ferdig utfylt'
-    case EtterlevelseStatus.OPPFYLLES_SENERE:
-      if (etterlevelse.frist) {
-        return 'Kravet oppfylles ' + moment(etterlevelse.frist).format('ll')
-      } else {
-        return 'Kravet oppfylles senere'
-      }
-    default:
-      return ''
-  }
-}
 const KravView = (props: {
   kravId: KravId
   etterlevelse: Etterlevelse
