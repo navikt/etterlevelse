@@ -10,6 +10,7 @@ import _ from 'lodash'
 import { user } from '../../services/User'
 import { loginUrl } from '../Header'
 import { ettlevColors } from '../../util/theme'
+import { externalLinkIcon } from '../Images'
 
 type RouteLinkProps = {
   href?: string
@@ -91,10 +92,10 @@ export const urlForObject = (type: NavigableItem | string, id: string, audit?: A
 export const ObjectLink = (props: ObjectLinkProps) => {
   if (!props.id) return null
   let link
-  
+
   if (props.disable) {
     link = props.children
-  } else if(props.external) {
+  } else if (props.external) {
     link = (
       <ExternalLink fontColor={props.fontColor} href={urlForObject(props.type, props.id, props.audit)} hideUnderline={props.hideUnderline}>
         {props.children}
@@ -145,3 +146,9 @@ export const ExternalLink = ({
     </CustomizedLink>
   )
 }
+
+export const ExternalLinkWrapper = ({ text }: { text: React.ReactNode }) => (
+  <Block display="flex" alignItems="center">
+    {text} <img alt=" " width="inherit" height="inherit" style={{ marginLeft: "8px" }} src={externalLinkIcon} />
+  </Block>
+)
