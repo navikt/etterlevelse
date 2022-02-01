@@ -7,7 +7,7 @@ import moment from 'moment'
 import { DotTag, DotTags } from '../common/DotTag'
 import { ListName } from '../../services/Codelist'
 import { Label, LabelAboveContent } from '../common/PropertyLabel'
-import RouteLink, { ExternalLink, ObjectLink } from '../common/RouteLink'
+import RouteLink, { ExternalLink, ExternalLinkWrapper, ObjectLink } from '../common/RouteLink'
 import { slackLink, slackUserLink, termUrl } from '../../util/config'
 import { user } from '../../services/User'
 import { LovViewList } from '../Lov'
@@ -114,9 +114,9 @@ export const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVer
               if (k.kravVersjon && k.kravVersjon < krav.kravVersjon) {
                 return (
                   <DotTag key={'kravVersjon_list_' + i}>
-                    <RouteLink href={'/krav/' + k.kravNummer + '/' + k.kravVersjon}>
-                      K{k.kravNummer}.{k.kravVersjon}
-                    </RouteLink>
+                    <ExternalLink href={'/krav/' + k.kravNummer + '/' + k.kravVersjon}>
+                      <ExternalLinkWrapper text={`K${k.kravNummer}.${k.kravVersjon}`} />
+                    </ExternalLink>
                   </DotTag>
                 )
               }
@@ -178,7 +178,7 @@ export const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVer
 
         <Block marginBottom={labelMargin}>
           <Label display={responsiveView} title="Regelverk" hide={!krav.regelverk.length} compact>
-            <LovViewList openOnSamePage regelverk={krav.regelverk} />
+            <LovViewList regelverk={krav.regelverk} />
           </Label>
         </Block>
 
@@ -188,19 +188,34 @@ export const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVer
               const marginBottom = '8px'
               if (va.type === AdresseType.SLACK)
                 return (
-                  <Block marginBottom={marginBottom} key={'kravVarsling_list_SLACK_' + i}>
-                    Slack: <CustomizedLink href={slackLink(va.adresse)}>#{va.slackChannel?.name || va.adresse}</CustomizedLink>
+                  <Block marginBottom={marginBottom} key={'kravVarsling_list_SLACK_' + i} display="flex">
+                    <Block marginRight="4px">
+                      Slack:
+                    </Block>
+                    <ExternalLink href={slackLink(va.adresse)}>
+                      <ExternalLinkWrapper text={`#${va.slackChannel?.name || va.adresse}`} />
+                    </ExternalLink>
                   </Block>
                 )
               if (va.type === AdresseType.SLACK_USER)
                 return (
-                  <Block marginBottom={marginBottom} key={'kravVarsling_list_SLACK_USER_' + i}>
-                    Slack: <CustomizedLink href={slackUserLink(va.adresse)}>{va.slackUser?.name || va.adresse}</CustomizedLink>
+                  <Block marginBottom={marginBottom} key={'kravVarsling_list_SLACK_USER_' + i} display="flex">
+                    <Block marginRight="4px">
+                      Slack:
+                    </Block>
+                    <ExternalLink href={slackUserLink(va.adresse)}>
+                      <ExternalLinkWrapper text={`${va.slackUser?.name || va.adresse}`} />
+                    </ExternalLink>
                   </Block>
                 )
               return (
-                <Block marginBottom={marginBottom} key={'kravVarsling_list_EMAIL_' + i}>
-                  Epost: <CustomizedLink href={`mailto:${va.adresse}`}>{va.adresse}</CustomizedLink>
+                <Block marginBottom={marginBottom} key={'kravVarsling_list_EMAIL_' + i} display="flex">
+                  <Block marginRight="4px">
+                    Epost:
+                  </Block>
+                  <ExternalLink href={`mailto:${va.adresse}`}>
+                    <ExternalLinkWrapper text={va.adresse} />
+                  </ExternalLink>
                 </Block>
               )
             })}
@@ -228,8 +243,8 @@ export const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVer
 
 const BegrepView = ({ begrep }: { begrep: Begrep }) => (
   <DotTag>
-    <ExternalLink href={termUrl(begrep.id)} label={'Link begrepskatalogen'} openOnSamePage>
-      {begrep.navn}
+    <ExternalLink href={termUrl(begrep.id)} label={'Link begrepskatalogen'}>
+      <ExternalLinkWrapper text={begrep.navn} />
     </ExternalLink>{' '}
     - {begrep.beskrivelse}
   </DotTag>
