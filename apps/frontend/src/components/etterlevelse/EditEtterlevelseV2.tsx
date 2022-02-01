@@ -14,7 +14,7 @@ import { kravName, kravNumView } from '../../pages/KravPage'
 import { behandlingName, useBehandling, useSearchBehandling } from '../../api/BehandlingApi'
 import CustomizedSelect from '../common/CustomizedSelect'
 import { H1, H2, Label3, Paragraph2, Paragraph4 } from 'baseui/typography'
-import { ettlevColors, responsivePaddingLarge, responsiveWidthLarge } from '../../util/theme'
+import { ettlevColors, maxPageWidth, responsivePaddingLarge, responsiveWidthLarge } from '../../util/theme'
 import { SuksesskriterierBegrunnelseEdit } from './Edit/SuksesskriterieBegrunnelseEdit'
 import { Radio, RadioGroup } from 'baseui/radio'
 import { Code } from '../../services/Codelist'
@@ -22,8 +22,8 @@ import { Error } from '../common/ModalSchema'
 import { user } from '../../services/User'
 import { KIND as NKIND, Notification } from 'baseui/notification'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {  faTimesCircle } from '@fortawesome/free-solid-svg-icons'
-import { borderColor, borderRadius, borderStyle, borderWidth, padding, paddingZero } from '../common/Style'
+import { faTimesCircle } from '@fortawesome/free-solid-svg-icons'
+import { borderColor, borderRadius, borderStyle, borderWidth, marginAll, padding, paddingZero } from '../common/Style'
 import { useQuery } from '@apollo/client'
 import moment from 'moment'
 import { informationIcon } from '../Images'
@@ -326,10 +326,7 @@ const Edit = ({
     ; (async () => {
       if (behandlingId && krav.kravNummer) {
         const etterlevelser = await getEtterlevelserByBehandlingsIdKravNumber(behandlingId, krav.kravNummer)
-        const etterlevelserList = etterlevelser.content.sort((a, b) => a.kravVersjon > b.kravVersjon ? -1 : 1)
-        if (etterlevelserList[0].kravVersjon === krav.kravVersjon) {
-          etterlevelserList.splice(0, 1)
-        }
+        const etterlevelserList = etterlevelser.content.sort((a, b) => a.kravVersjon > b.kravVersjon ? -1 : 1).filter((e) => e.kravVersjon < etterlevelse.kravVersjon)
         setTidligereEtterlevelser(etterlevelserList)
       }
     })()
@@ -338,8 +335,8 @@ const Edit = ({
   const getTidligereEtterlevelser = () => {
     return tidligereEtterlevelser?.map((e) => {
       return (
-        <CustomPanelDivider>
-          <EtterlevelseCard etterlevelse={e} key={'tidligere_etterlevese_' + e.kravNummer + '_' + e.kravVersjon} />
+        <CustomPanelDivider key={'tidligere_etterlevese_' + e.kravNummer + '_' + e.kravVersjon}>
+          <EtterlevelseCard etterlevelse={e} />
         </CustomPanelDivider>
       )
     })
@@ -368,7 +365,7 @@ const Edit = ({
                 <Block>
                   <Block>
                     <Block display="flex">
-                      <Block width="100%">
+                      <Block display="flex" flexDirection="column" width="100%"  maxWidth="200px">
                         <FieldWrapper>
                           <Field name={'status'}>
                             {(p: FieldProps<string | Code>) => (
@@ -491,15 +488,19 @@ const Edit = ({
                           </Field>
                         </FieldWrapper>
                       </Block>
-                      <Block display="flex" width="100%" maxWidth="460px">
-                        <CustomizedAccordion>
-                          <CustomizedPanel
-                            title="Se dokumentasjon på tidligere versjoner"
-                            overrides={{ Content: { style: { backgroundColor: ettlevColors.white } } }}
-                          >
-                            {getTidligereEtterlevelser()}
-                          </CustomizedPanel>
-                        </CustomizedAccordion>
+                      <Block display="flex" width="100%" justifyContent="flex-end">
+                        {tidligereEtterlevelser && tidligereEtterlevelser.length > 1 && (
+                          <Block width="100%" maxWidth="460px">
+                            <CustomizedAccordion>
+                              <CustomizedPanel
+                                title="Se dokumentasjon på tidligere versjoner"
+                                overrides={{ Content: { style: { backgroundColor: ettlevColors.white } } }}
+                              >
+                                {getTidligereEtterlevelser()}
+                              </CustomizedPanel>
+                            </CustomizedAccordion>
+                          </Block>
+                        )}
                       </Block>
                     </Block>
 
@@ -733,11 +734,14 @@ const EtterlevelseCard = ({ etterlevelse }: { etterlevelse: Etterlevelse }) => {
         <CustomizedModal
           onClose={() => setIsModalOpen(false)}
           isOpen={isModalOpen}
-          size="auto"
+          size="full"
           overrides={{
             Dialog: {
               style: {
                 ...borderRadius('0px'),
+                ...marginAll('0px'),
+                width: '100%',
+                maxWidth: maxPageWidth
               },
             },
           }}

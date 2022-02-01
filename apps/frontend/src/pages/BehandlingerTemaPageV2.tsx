@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Block, Display } from 'baseui/block'
 import { useParams } from 'react-router-dom'
 import { H1, H3, Label3, Paragraph2, Paragraph4 } from 'baseui/typography'
-import { ettlevColors, responsivePaddingLarge, theme } from '../util/theme'
+import { ettlevColors, maxPageWidth, responsivePaddingLarge, theme } from '../util/theme'
 import { codelist, ListName, TemaCode } from '../services/Codelist'
 import RouteLink from '../components/common/RouteLink'
 import { useBehandling } from '../api/BehandlingApi'
@@ -16,7 +16,7 @@ import CustomizedModal from '../components/common/CustomizedModal'
 import { Spinner } from '../components/common/Spinner'
 import { useEtterlevelse } from '../api/EtterlevelseApi'
 import { getKravByKravNumberAndVersion, KravId } from '../api/KravApi'
-import { borderRadius, borderStyle } from '../components/common/Style'
+import { borderRadius, borderStyle, marginAll } from '../components/common/Style'
 import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 import Button from '../components/common/Button'
 import { Responsive } from 'baseui/theme'
@@ -47,7 +47,7 @@ const mapEtterlevelseData = (etterlevelse?: Etterlevelse) => ({
   gammelVersjon: false,
 })
 
-export const isFerdigUtfylt = (status: EtterlevelseStatus | undefined) => {  
+export const isFerdigUtfylt = (status: EtterlevelseStatus | undefined) => {
   return (status === EtterlevelseStatus.FERDIG_DOKUMENTERT ||
     status === EtterlevelseStatus.OPPFYLLES_SENERE ||
     status === EtterlevelseStatus.IKKE_RELEVANT)
@@ -208,7 +208,7 @@ export const BehandlingerTemaPageV2 = () => {
           <img src={angleIcon} alt="" />{' '}
           <Label3 marginLeft="12px" $style={{ fontSize: '18px', fontWeight: 600, lineHeight: '22px', color: ettlevColors.green600, whiteSpace: 'nowrap' }}>
             {edit ? isFerdigUtfylt(activeEtterlevleseStatus) ?
-                'Ferdig utfylt' : 'Skal fylles ut' : temaData?.shortName
+              'Ferdig utfylt' : 'Skal fylles ut' : temaData?.shortName
             }
           </Label3>
         </Block>
@@ -235,11 +235,14 @@ export const BehandlingerTemaPageV2 = () => {
         <CustomizedModal
           onClose={() => setIsTemaModalOpen(false)}
           isOpen={isTemaModalOpen}
-          size="auto"
+          size="full"
           overrides={{
             Dialog: {
               style: {
                 ...borderRadius('0px'),
+                ...marginAll('0px'),
+                width: '100%',
+                maxWidth: maxPageWidth,
               },
             },
           }}
