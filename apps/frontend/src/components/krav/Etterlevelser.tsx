@@ -17,6 +17,12 @@ export const Etterlevelser = ({ loading, etterlevelser: allEtterlevelser }: { lo
     .filter((e) => e.status === EtterlevelseStatus.FERDIG_DOKUMENTERT)
     .sort((a, b) => a.behandling.navn.localeCompare(b.behandling.navn))
 
+  etterlevelser.map((e) => {
+    if (!e.behandling.avdeling) {
+      e.behandling.avdeling = { code:'INGEN', shortName: 'Ingen avdeling' } as ExternalCode
+    }
+  })
+
   const avdelinger = _.sortedUniqBy(
     (etterlevelser
       ?.map((e) => e.behandling.avdeling)
@@ -64,7 +70,7 @@ export const Etterlevelser = ({ loading, etterlevelser: allEtterlevelser }: { lo
                         },
                       },
                     }}
-                    // panelIcon={(hover) => <PageIcon hover={hover} />}
+                  // panelIcon={(hover) => <PageIcon hover={hover} />}
                   />
                 </CustomPanelDivider>
               ))}
