@@ -33,10 +33,7 @@ import Etterlevelser from '../krav/Etterlevelser'
 import { Markdown } from '../common/Markdown'
 import { CustomizedAccordion, CustomizedPanel, CustomPanelDivider } from '../common/CustomizedAccordion'
 import { AllInfo } from '../krav/ViewKrav'
-import StatusView from '../common/StatusTag'
-import { isFerdigUtfylt } from '../../pages/BehandlingerTemaPageV2'
 import CustomizedModal from '../common/CustomizedModal'
-import { ViewEtterlevelse } from './ViewEtterlevelse'
 import { useNavigate } from 'react-router-dom'
 import EtterlevelseCard from './EtterlevelseCard'
 import { ModalHeader } from 'baseui/modal'
@@ -147,6 +144,8 @@ export const EditEtterlevelseV2 = ({
   const [tab, setTab] = useState<Section>('dokumentasjon')
   const [nyereKrav, setNyereKrav] = React.useState<Krav>()
   const [disableEdit, setDisableEdit] = React.useState<boolean>(false)
+  const [editedEtterlevelse, setEditedEtterlevelse] = React.useState<Etterlevelse>()
+  const [tempValuesForEtterlevelse, setTempValuesForEtterlevelse] = React.useState<Etterlevelse>()
 
   const submit = async (etterlevelse: Etterlevelse) => {
     const mutatedEtterlevelse = {
@@ -253,7 +252,12 @@ export const EditEtterlevelseV2 = ({
               activeColor={ettlevColors.green800}
               tabBackground={ettlevColors.green100}
               activeKey={tab}
-              onChange={(k) => setTab(k.activeKey as Section)}
+              onChange={(k) => {
+                if(k.activeKey !== 'dokumentasjon') {
+                  setEditedEtterlevelse(tempValuesForEtterlevelse)
+                }
+                setTab(k.activeKey as Section)
+              }}
               overrides={{
                 Root: {
                   style: {
@@ -282,6 +286,8 @@ export const EditEtterlevelseV2 = ({
                       setIsAlertUnsavedModalOpen={setIsAlertUnsavedModalOpen}
                       isAlertUnsavedModalOpen={isAlertUnsavedModalOpen}
                       isNavigateButtonClicked={isNavigateButtonClicked}
+                      editedEtterlevelse={editedEtterlevelse}
+                      setTempValuesForEtterlevelse={setTempValuesForEtterlevelse}
                     />
                   ),
                 },
@@ -321,11 +327,12 @@ type EditProps = {
   setIsAlertUnsavedModalOpen: (state: boolean) => void
   isAlertUnsavedModalOpen: boolean
   isNavigateButtonClicked: boolean
+  editedEtterlevelse?: Etterlevelse
+  setTempValuesForEtterlevelse: (e: Etterlevelse) => void
 }
 
 const Edit = ({ krav, etterlevelse, submit, formRef, behandlingId, disableEdit, documentEdit, close, setIsAlertUnsavedModalOpen,
-  isAlertUnsavedModalOpen,
-  isNavigateButtonClicked }: EditProps) => {
+  isAlertUnsavedModalOpen, isNavigateButtonClicked, editedEtterlevelse, setTempValuesForEtterlevelse }: EditProps) => {
   const [etterlevelseStatus, setEtterlevelseStatus] = React.useState<string>(etterlevelse.status || EtterlevelseStatus.UNDER_REDIGERING)
   const [radioHover, setRadioHover] = React.useState<string>('')
   const [tidligereEtterlevelser, setTidligereEtterlevelser] = React.useState<Etterlevelse[]>()
@@ -355,7 +362,7 @@ const Edit = ({ krav, etterlevelse, submit, formRef, behandlingId, disableEdit, 
     <Block width="100%">
       <Formik
         onSubmit={submit}
-        initialValues={mapEtterlevelseToFormValue(etterlevelse)}
+        initialValues={editedEtterlevelse ? mapEtterlevelseToFormValue(editedEtterlevelse) : mapEtterlevelseToFormValue(etterlevelse)}
         validate={(value) => {
           try {
             validateYupSchema(value, etterlevelseSchema(), true, { status: value.status })
@@ -367,8 +374,9 @@ const Edit = ({ krav, etterlevelse, submit, formRef, behandlingId, disableEdit, 
         validateOnChange={false}
         validateOnBlur={false}
       >
-        {({ values, isSubmitting, submitForm, errors, setFieldError }: FormikProps<Etterlevelse>) => (
+        {({ values, isSubmitting, submitForm, errors, setFieldError, touched }: FormikProps<Etterlevelse>) => (
           <Block>
+            {setTempValuesForEtterlevelse(values)}
             <Block marginTop="32px">
               <Form>
                 <Block>
