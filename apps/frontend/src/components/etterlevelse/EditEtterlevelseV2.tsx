@@ -37,6 +37,7 @@ import CustomizedModal from '../common/CustomizedModal'
 import { useNavigate } from 'react-router-dom'
 import EtterlevelseCard from './EtterlevelseCard'
 import { ModalHeader } from 'baseui/modal'
+import { Section } from '../../pages/BehandlingerTemaPageV2'
 
 type EditEttlevProps = {
   etterlevelse: Etterlevelse
@@ -52,6 +53,8 @@ type EditEttlevProps = {
   setIsAlertUnsavedModalOpen: (state: boolean) => void
   isAlertUnsavedModalOpen: boolean
   isNavigateButtonClicked: boolean
+  tab: Section
+  setTab: (s: Section) => void
 }
 
 const etterlevelseSchema = () => {
@@ -131,6 +134,8 @@ export const EditEtterlevelseV2 = ({
   setIsAlertUnsavedModalOpen,
   isAlertUnsavedModalOpen,
   isNavigateButtonClicked,
+  tab,
+  setTab
 }: EditEttlevProps) => {
   const { data, loading } = useQuery<{ kravById: KravQL }, KravId>(query, {
     variables: kravId,
@@ -138,10 +143,8 @@ export const EditEtterlevelseV2 = ({
     fetchPolicy: 'no-cache',
   })
   const etterlevelserLoading = loading
-  type Section = 'dokumentasjon' | 'etterlevelser' | 'tilbakemeldinger'
 
   const [krav, setKrav] = useState<KravQL>()
-  const [tab, setTab] = useState<Section>('dokumentasjon')
   const [nyereKrav, setNyereKrav] = React.useState<Krav>()
   const [disableEdit, setDisableEdit] = React.useState<boolean>(false)
   const [editedEtterlevelse, setEditedEtterlevelse] = React.useState<Etterlevelse>()
@@ -374,7 +377,7 @@ const Edit = ({ krav, etterlevelse, submit, formRef, behandlingId, disableEdit, 
         validateOnChange={false}
         validateOnBlur={false}
       >
-        {({ values, isSubmitting, submitForm, errors, setFieldError, touched }: FormikProps<Etterlevelse>) => (
+        {({ values, isSubmitting, submitForm, errors, setFieldError }: FormikProps<Etterlevelse>) => (
           <Block>
             {setTempValuesForEtterlevelse(values)}
             <Block marginTop="32px">

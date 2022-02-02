@@ -51,6 +51,9 @@ export const isFerdigUtfylt = (status: EtterlevelseStatus | undefined) => {
   return status === EtterlevelseStatus.FERDIG_DOKUMENTERT || status === EtterlevelseStatus.OPPFYLLES_SENERE || status === EtterlevelseStatus.IKKE_RELEVANT
 }
 
+export type Section = 'dokumentasjon' | 'etterlevelser' | 'tilbakemeldinger'
+   
+
 export const BehandlingerTemaPageV2 = () => {
   const params = useParams<{ id?: string; tema?: string }>()
   const temaData: TemaCode | undefined = codelist.getCode(ListName.TEMA, params.tema)
@@ -88,6 +91,7 @@ export const BehandlingerTemaPageV2 = () => {
   const [isTemaModalOpen, setIsTemaModalOpen] = useState<boolean>(false)
   const [isAlertUnsavedModalOpen, setIsAlertUnsavedModalOpen] = useState<boolean>(false)
   const [isNavigateButtonClicked, setIsNavigateButtonClicked] = useState<boolean>(false)
+  const [tab, setTab] = useState<Section>('dokumentasjon')
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -182,6 +186,9 @@ export const BehandlingerTemaPageV2 = () => {
         <Button
           kind="tertiary"
           onClick={() => {
+            if(tab !== 'dokumentasjon') {
+              setTab('dokumentasjon')
+            }
             if (edit) {
               setIsAlertUnsavedModalOpen(true)
               setIsNavigateButtonClicked(true)
@@ -220,6 +227,9 @@ export const BehandlingerTemaPageV2 = () => {
           <Button
             kind="tertiary"
             onClick={() => {
+              if(tab !== 'dokumentasjon') {
+                setTab('dokumentasjon')
+              }
               if (edit) {
                 setIsAlertUnsavedModalOpen(true)
               } else {
@@ -452,6 +462,8 @@ export const BehandlingerTemaPageV2 = () => {
                   setEdit(undefined)
                   e && update(e)
                 }}
+                tab={tab}
+                setTab={setTab}
               />
             )}
           </Block>
@@ -537,6 +549,8 @@ const KravView = (props: {
   setIsAlertUnsavedModalOpen: (state: boolean) => void
   isAlertUnsavedModalOpen: boolean
   isNavigateButtonClicked: boolean
+  tab: Section
+  setTab: (s: Section) => void
 }) => {
   const [etterlevelse] = useEtterlevelse(props.etterlevelseId, props.behandlingId, props.kravId)
   const [varsleMelding, setVarsleMelding] = useState('')
@@ -578,6 +592,8 @@ const KravView = (props: {
             setIsAlertUnsavedModalOpen={props.setIsAlertUnsavedModalOpen}
             isAlertUnsavedModalOpen={props.isAlertUnsavedModalOpen}
             isNavigateButtonClicked={props.isNavigateButtonClicked}
+            tab={props.tab}
+            setTab={props.setTab}
           />
         </Block>
       )}
