@@ -1,7 +1,7 @@
 import { Etterlevelse, EtterlevelseStatus, Krav, KravQL, KravStatus } from '../../constants'
 import { Field, FieldProps, Form, Formik, FormikProps, validateYupSchema, yupToFormErrors } from 'formik'
 import { createEtterlevelse, getEtterlevelserByBehandlingsIdKravNumber, mapEtterlevelseToFormValue, updateEtterlevelse } from '../../api/EtterlevelseApi'
-import { Block } from 'baseui/block'
+import { Block, Responsive, Scale } from 'baseui/block'
 import Button from '../common/Button'
 import React, { useEffect, useState } from 'react'
 import * as yup from 'yup'
@@ -14,7 +14,7 @@ import { kravName, kravNumView } from '../../pages/KravPage'
 import { behandlingName, useBehandling, useSearchBehandling } from '../../api/BehandlingApi'
 import CustomizedSelect from '../common/CustomizedSelect'
 import { H1, H2, H3, Label3, Paragraph2, Paragraph4 } from 'baseui/typography'
-import { ettlevColors, maxPageWidth, responsivePaddingLarge, responsiveWidthLarge } from '../../util/theme'
+import { ettlevColors, maxPageWidth, responsivePaddingExtraLarge, responsiveWidthExtraLarge } from '../../util/theme'
 import { SuksesskriterierBegrunnelseEdit } from './Edit/SuksesskriterieBegrunnelseEdit'
 import { Radio, RadioGroup } from 'baseui/radio'
 import { Code } from '../../services/Codelist'
@@ -38,6 +38,7 @@ import { isFerdigUtfylt } from '../../pages/BehandlingerTemaPageV2'
 import CustomizedModal from '../common/CustomizedModal'
 import { ViewEtterlevelse } from './ViewEtterlevelse'
 import { useNavigate } from 'react-router-dom'
+import EtterlevelseCard from './EtterlevelseCard'
 
 type EditEttlevProps = {
   etterlevelse: Etterlevelse
@@ -196,7 +197,7 @@ export const EditEtterlevelseV2 = ({
           }}
         >
           <Block backgroundColor={ettlevColors.green800} paddingTop="32px" paddingBottom="32px">
-            <Block paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge}>
+            <Block paddingLeft={responsivePaddingExtraLarge} paddingRight={responsivePaddingExtraLarge}>
               <Paragraph2
                 $style={{
                   marginTop: '0px',
@@ -230,7 +231,7 @@ export const EditEtterlevelseV2 = ({
               )}
             </Block>
           </Block>
-          <Block backgroundColor={ettlevColors.green100} paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge}>
+          <Block backgroundColor={ettlevColors.green100} paddingLeft={responsivePaddingExtraLarge} paddingRight={responsivePaddingExtraLarge}>
             <H2 $style={{ marginTop: '0px', marginBottom: '0px', paddingBottom: '32px', paddingTop: '41px' }}>Hensikten med kravet</H2>
             <Markdown noMargin p1 sources={Array.isArray(krav.hensikt) ? krav.hensikt : [krav.hensikt]} />
           </Block>
@@ -238,9 +239,9 @@ export const EditEtterlevelseV2 = ({
           <Block
             display={'flex'}
             justifyContent="center"
-            width={responsiveWidthLarge}
-            paddingLeft={responsivePaddingLarge}
-            paddingRight={responsivePaddingLarge}
+            width={responsiveWidthExtraLarge}
+            paddingLeft={responsivePaddingExtraLarge}
+            paddingRight={responsivePaddingExtraLarge}
             paddingTop="33px"
             $style={{
               background: `linear-gradient(top, ${ettlevColors.green100} 83px, ${ettlevColors.grey25} 0%)`,
@@ -714,178 +715,5 @@ const Edit = ({ krav, etterlevelse, submit, formRef, behandlingId, disableEdit, 
         )}
       </Formik>
     </Block>
-  )
-}
-
-export const SearchKrav = (props: { kravNummer: number; kravVersjon: number }) => {
-  const [results, setSearch, loading] = useSearchKrav()
-  const [krav, setKrav] = useKrav(props, true)
-
-  return (
-    <Field name={'kravNummer'}>
-      {(p: FieldProps<string>) => {
-        return (
-          <FormControl label={'Krav'} error={p.meta.error}>
-            <CustomizedSelect
-              placeholder={'Søk krav'}
-              maxDropdownHeight="400px"
-              filterOptions={(o) => o}
-              searchable
-              noResultsMsg="Ingen resultat"
-              options={results.map((k) => ({ id: k.id, label: kravName(k) }))}
-              value={krav ? [{ id: krav.id, label: kravName(krav) }] : []}
-              onChange={({ value }) => {
-                const kravSelect = value.length ? results.find((k) => k.id === value[0].id)! : undefined
-                setKrav(kravSelect)
-                p.form.setFieldValue('kravNummer', kravSelect?.kravNummer)
-                p.form.setFieldValue('kravVersjon', kravSelect?.kravVersjon)
-              }}
-              onInputChange={(event) => setSearch(event.currentTarget.value)}
-              isLoading={loading}
-            />
-          </FormControl>
-        )
-      }}
-    </Field>
-  )
-}
-
-const EtterlevelseCard = ({ etterlevelse }: { etterlevelse: Etterlevelse }) => {
-  const [hover, setHover] = useState(false)
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [kravData, setKravData] = useState<Krav>()
-
-  useEffect(() => {
-    ; (async () => {
-      const krav = await getKravByKravNumberAndVersion(etterlevelse.kravNummer, etterlevelse.kravVersjon)
-      if (krav) {
-        setKravData(krav)
-      }
-    })()
-  }, [])
-
-  return (
-    <Block width="100%">
-      <Button
-        notBold
-        type="button"
-        $style={{
-          width: '100%',
-          paddingTop: '8px',
-          paddingBottom: '8px',
-          paddingRight: '24px',
-          paddingLeft: '8px',
-          display: 'flex',
-          justifyContent: 'flex-start',
-          backgroundColor: ettlevColors.white,
-          ...borderStyle('hidden'),
-          ':hover': { backgroundColor: 'none' },
-        }}
-        onClick={() => setIsModalOpen(true)}
-      >
-        <Block display="flex" width="100%" onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} paddingLeft="15px" paddingRight="15px">
-          <Block display="flex" alignContent="center" flexDirection="column" width="100%">
-            <Paragraph2 $style={{ lineHeight: '16px', marginTop: '0px', marinBottom: '0px', textAlign: 'start', textDecoration: hover ? 'underline' : 'none' }}>
-              K{etterlevelse.kravNummer}.{etterlevelse.kravVersjon}
-            </Paragraph2>
-            <Paragraph4 $style={{ lineHeight: '14px', marginTop: '0px', marinBottom: '0px', textAlign: 'start' }}>
-              Sist utfylt: {moment(etterlevelse.changeStamp.lastModifiedDate).format('ll')} av {etterlevelse.changeStamp.lastModifiedBy.split('-')[1]}
-            </Paragraph4>
-          </Block>
-          <Block display="flex" justifyContent="flex-end">
-            <StatusView
-              status={getEtterlevelseStatus(etterlevelse.status)}
-              statusDisplay={{
-                background: isFerdigUtfylt(etterlevelse.status) ? ettlevColors.green50 : '#FFECCC',
-                border: isFerdigUtfylt(etterlevelse.status) ? ettlevColors.green400 : '#D47B00',
-              }}
-            />
-          </Block>
-        </Block>
-      </Button>
-
-      {kravData && (
-        <CustomizedModal
-          onClose={() => setIsModalOpen(false)}
-          isOpen={isModalOpen}
-          size="full"
-          overrides={{
-            Dialog: {
-              style: {
-                ...borderRadius('0px'),
-                ...marginAll('0px'),
-                width: '100%',
-                maxWidth: maxPageWidth,
-              },
-            },
-          }}
-        >
-          <Block width="100%">
-            <Block backgroundColor={ettlevColors.green800} paddingTop="32px" paddingBottom="32px">
-              <Block paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge}>
-                <Paragraph2
-                  $style={{
-                    marginTop: '0px',
-                    marginBottom: '0px',
-                    color: ettlevColors.white,
-                  }}
-                >
-                  {kravNumView(kravData)}
-                </Paragraph2>
-                <H1 $style={{ marginTop: '0px', marginBottom: '0px', paddingBottom: '32px', color: ettlevColors.white }}>{kravData.navn}</H1>
-              </Block>
-            </Block>
-
-            <Block paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge}>
-              <ViewEtterlevelse etterlevelse={etterlevelse} viewMode krav={kravData} />
-              <Block display="flex" justifyContent="flex-end" paddingBottom="31px" paddingTop="95px">
-                <Button
-                  onClick={() => {
-                    console.log('CLICK')
-                    console.log(isModalOpen)
-                    setIsModalOpen(false)
-                    console.log(isModalOpen)
-                  }}
-                >
-                  Lukk visning
-                </Button>
-              </Block>
-            </Block>
-          </Block>
-        </CustomizedModal>
-      )}
-    </Block>
-  )
-}
-
-export const SearchBehandling = (props: { id: string }) => {
-  const [results, setSearch, loading] = useSearchBehandling()
-  const [behandling, setBehandling] = useBehandling(props.id)
-
-  return (
-    <Field name={'behandlingId'}>
-      {(p: FieldProps<string>) => {
-        return (
-          <FormControl label={'Behandling'} error={p.meta.error}>
-            <CustomizedSelect
-              placeholder={'Søk behandling'}
-              maxDropdownHeight="400px"
-              filterOptions={(o) => o}
-              searchable
-              noResultsMsg="Ingen resultat"
-              options={results.map((k) => ({ id: k.id, label: behandlingName(k) }))}
-              value={behandling ? [{ id: behandling.id, label: behandlingName(behandling) }] : []}
-              onChange={({ value }) => {
-                const select = value.length ? results.find((k) => k.id === value[0].id)! : undefined
-                setBehandling(select)
-                p.form.setFieldValue('behandlingId', select?.id)
-              }}
-              onInputChange={(event) => setSearch(event.currentTarget.value)}
-              isLoading={loading}
-            />
-          </FormControl>
-        )
-      }}
-    </Field>
   )
 }

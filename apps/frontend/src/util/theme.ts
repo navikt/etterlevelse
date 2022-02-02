@@ -150,6 +150,8 @@ export const maxPageWidth = '1276px'
 
 export const responsivePaddingSmall: Responsive<Scale> = ['16px', '16px', '16px', '32px', '32px', '32px']
 export const responsivePaddingLarge: Responsive<Scale> = ['16px', '16px', '16px', '100px', '100px', '100px']
+export const responsivePaddingExtraLarge: Responsive<Scale> = ['16px', '16px', '16px', '200px', '200px', '200px']
+
 export const responsiveWidthSmall: Responsive<Scale> = [
   'calc(100% - 32px)',
   'calc(100% - 32px)',
@@ -165,6 +167,15 @@ export const responsiveWidthLarge: Responsive<Scale> = [
   'calc(100% - 200px)',
   'calc(100% - 200px)',
   'calc(100% - 200px)',
+]
+
+export const responsiveWidthExtraLarge: Responsive<Scale> = [
+  'calc(100% - 32px)',
+  'calc(100% - 32px)',
+  'calc(100% - 32px)',
+  'calc(100% - 400px)',
+  'calc(100% - 400px)',
+  'calc(100% - 400px)',
 ]
 
 const breakpoints: any = {
