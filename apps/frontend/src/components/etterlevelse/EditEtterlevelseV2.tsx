@@ -39,6 +39,7 @@ import CustomizedModal from '../common/CustomizedModal'
 import { ViewEtterlevelse } from './ViewEtterlevelse'
 import { useNavigate } from 'react-router-dom'
 import EtterlevelseCard from './EtterlevelseCard'
+import { ModalHeader } from 'baseui/modal'
 
 type EditEttlevProps = {
   etterlevelse: Etterlevelse
@@ -662,7 +663,7 @@ const Edit = ({ krav, etterlevelse, submit, formRef, behandlingId, disableEdit, 
                 </Block>
               )}
             </Block>
-            
+
             <CustomizedModal
               onClose={() => setIsAlertUnsavedModalOpen(false)}
               isOpen={isAlertUnsavedModalOpen}
@@ -672,36 +673,45 @@ const Edit = ({ krav, etterlevelse, submit, formRef, behandlingId, disableEdit, 
                   style: {
                     ...borderRadius('0px'),
                     ...marginAll('0px'),
+                    maxWidth: '500px',
+                    width: '100%'
                   },
                 },
               }}
             >
               <Block width="100%">
-                <Block>
-                  <Button onClick={() => {
-                    if (values.status === EtterlevelseStatus.FERDIG_DOKUMENTERT) {
-                      values.status = Object.values(EtterlevelseStatus).filter((e) => e === etterlevelseStatus)[0]
-                    }
-                    submitForm()
-                    
-                    if (isNavigateButtonClicked) {
-                      navigate(`/behandling/${etterlevelse.behandlingId}`)
-                    }
+                <ModalHeader>
+                  Er du sikkert på at du vil forlate redigerings siden uten å lagre?
+                </ModalHeader>
 
-                    setIsAlertUnsavedModalOpen(false)
-                  }}>
+                <Block paddingBottom="32px" paddingLeft="24px" paddingRight="32px" display="flex" justifyContent="flex-end">
+                  <Button
+                    onClick={() => {
+                      if (values.status === EtterlevelseStatus.FERDIG_DOKUMENTERT) {
+                        values.status = Object.values(EtterlevelseStatus).filter((e) => e === etterlevelseStatus)[0]
+                      }
+                      submitForm()
+
+                      if (isNavigateButtonClicked) {
+                        navigate(`/behandling/${etterlevelse.behandlingId}`)
+                      }
+                      setIsAlertUnsavedModalOpen(false)
+                    }}>
                     Ja, og lagre
                   </Button>
-                  <Button onClick={() => {
-                    if (isNavigateButtonClicked) {
-                      navigate(`/behandling/${etterlevelse.behandlingId}`)
-                    }
-                    close()
-                    setIsAlertUnsavedModalOpen(false)
-                  }}>
+                  <Button
+                    marginLeft
+                    onClick={() => {
+                      if (isNavigateButtonClicked) {
+                        navigate(`/behandling/${etterlevelse.behandlingId}`)
+                      }
+                      close()
+                      setIsAlertUnsavedModalOpen(false)
+                    }}>
                     Ja
                   </Button>
                   <Button
+                    marginLeft
                     kind='secondary'
                     onClick={() => {
                       setIsAlertUnsavedModalOpen(false)
