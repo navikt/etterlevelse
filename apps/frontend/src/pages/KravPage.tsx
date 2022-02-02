@@ -466,8 +466,15 @@ export const query = gql`
         }
         changeStamp {
           lastModifiedDate
+          lastModifiedBy
         }
         status
+        suksesskriterieBegrunnelser {
+          suksesskriterieId
+          begrunnelse
+          oppfylt
+          ikkeRelevant
+        }
       }
     }
   }
