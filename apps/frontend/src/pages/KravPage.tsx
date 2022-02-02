@@ -349,9 +349,16 @@ export const KravPage = () => {
 }
 
 const Etterlevelser = ({ loading, etterlevelser: allEtterlevelser }: { loading: boolean; etterlevelser?: EtterlevelseQL[] }) => {
+
   const etterlevelser = (allEtterlevelser || [])
     .filter((e) => e.status === EtterlevelseStatus.FERDIG_DOKUMENTERT)
     .sort((a, b) => a.behandling.navn.localeCompare(b.behandling.navn))
+
+  etterlevelser.map((e) => {
+    if (!e.behandling.avdeling) {
+      e.behandling.avdeling = {code: 'INGEN', shortName: 'Ingen avdeling'} as ExternalCode
+    }
+  })
 
   const avdelinger = _.sortedUniqBy(
     (etterlevelser
@@ -400,7 +407,7 @@ const Etterlevelser = ({ loading, etterlevelser: allEtterlevelser }: { loading: 
                         },
                       },
                     }}
-                    // panelIcon={(hover) => <PageIcon hover={hover} />}
+                  // panelIcon={(hover) => <PageIcon hover={hover} />}
                   />
                 </CustomPanelDivider>
               ))}
