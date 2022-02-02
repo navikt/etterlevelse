@@ -56,10 +56,9 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
           return (
             <CustomizedPanel key={a.code} title={a.shortName} HeaderActiveBackgroundColor={ettlevColors.green50}>
               {avdelingEtterlevelser.map((e, i) => (
-                <CustomPanelDivider>
+                <CustomPanelDivider key={e.id}>
                   {modalVersion ? (
                     <PanelButton
-                      key={e.id}
                       onClick={() => {
                         setOpenEtterlevelse(e)
                         setIsModalOpen(true)
@@ -89,7 +88,6 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
                     />
                   ) : (
                     <PanelLink
-                      key={e.id}
                       href={`/etterlevelse/${e.id}`}
                       square
                       hideBorderBottom={i !== antall - 1}
