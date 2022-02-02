@@ -129,7 +129,7 @@ export const EditEtterlevelse = ({
   const [nyereKrav, setNyereKrav] = React.useState<Krav>()
   const [disableEdit, setDisableEdit] = React.useState<boolean>(false)
   const [radioHover, setRadioHover] = React.useState<string>('')
-  console.log(varsleMelding)
+  
   const submit = async (etterlevelse: Etterlevelse) => {
     const mutatedEtterlevelse = {
       ...etterlevelse,
