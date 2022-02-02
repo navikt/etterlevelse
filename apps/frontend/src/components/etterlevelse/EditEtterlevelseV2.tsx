@@ -294,7 +294,7 @@ export const EditEtterlevelseV2 = ({
                 {
                   title: 'Eksempler på etterlevelse',
                   key: 'etterlevelser',
-                  content: <Etterlevelser loading={etterlevelserLoading} etterlevelser={krav.etterlevelser} />,
+                  content: <Etterlevelser loading={etterlevelserLoading} etterlevelser={krav.etterlevelser} modalVersion/>,
                 },
                 {
                   title: 'Spørsmål og svar',
