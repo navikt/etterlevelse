@@ -306,7 +306,7 @@ export const KravPage = () => {
                   {
                     title: 'Eksempler på etterlevelse',
                     key: 'etterlevelser',
-                    content: <Etterlevelser loading={etterlevelserLoading} etterlevelser={krav.etterlevelser} />,
+                    content: <Etterlevelser loading={etterlevelserLoading} krav={krav} />,
                   },
                   {
                     title: 'Spørsmål og svar',

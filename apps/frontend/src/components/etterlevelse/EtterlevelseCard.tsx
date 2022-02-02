@@ -14,6 +14,7 @@ import Button from '../common/Button'
 import CustomizedModal from '../common/CustomizedModal'
 import StatusView from '../common/StatusTag'
 import { borderStyle, borderRadius, marginAll } from '../common/Style'
+import { EtterlevelseModal } from '../krav/Etterlevelser'
 import { ViewEtterlevelse } from './ViewEtterlevelse'
 
 export const EtterlevelseCard = ({ etterlevelse }: { etterlevelse: Etterlevelse }) => {
@@ -71,54 +72,12 @@ export const EtterlevelseCard = ({ etterlevelse }: { etterlevelse: Etterlevelse 
       </Button>
 
       {kravData && (
-        <CustomizedModal
-          onClose={() => setIsModalOpen(false)}
-          isOpen={isModalOpen}
-          size="full"
-          overrides={{
-            Dialog: {
-              style: {
-                ...borderRadius('0px'),
-                ...marginAll('0px'),
-                width: '100%',
-                maxWidth: maxPageWidth,
-              },
-            },
-          }}
-        >
-          <Block width="100%">
-            <Block backgroundColor={ettlevColors.green800} paddingTop="32px" paddingBottom="32px">
-              <Block paddingLeft={responsivePaddingExtraLarge} paddingRight={responsivePaddingExtraLarge}>
-                <Paragraph2
-                  $style={{
-                    marginTop: '0px',
-                    marginBottom: '0px',
-                    color: ettlevColors.white,
-                  }}
-                >
-                  {kravNumView(kravData)}
-                </Paragraph2>
-                <H1 $style={{ marginTop: '0px', marginBottom: '0px', paddingBottom: '32px', color: ettlevColors.white }}>{kravData.navn}</H1>
-              </Block>
-            </Block>
-
-            <Block paddingLeft={responsivePaddingExtraLarge} paddingRight={responsivePaddingExtraLarge}>
-              <ViewEtterlevelse etterlevelse={etterlevelse} viewMode krav={kravData} />
-              <Block display="flex" justifyContent="flex-end" paddingBottom="31px" paddingTop="95px">
-                <Button
-                  onClick={() => {
-                    console.log('CLICK')
-                    console.log(isModalOpen)
-                    setIsModalOpen(false)
-                    console.log(isModalOpen)
-                  }}
-                >
-                  Lukk visning
-                </Button>
-              </Block>
-            </Block>
-          </Block>
-        </CustomizedModal>
+        <EtterlevelseModal
+          isModalOpen={isModalOpen}
+          setIsModalOpen={setIsModalOpen}
+          etterlevelse={etterlevelse}
+          kravData={kravData}
+        />
       )}
     </Block>
   )
