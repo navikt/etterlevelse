@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Block, Display } from 'baseui/block'
 import { useNavigate, useParams } from 'react-router-dom'
 import { H1, H3, Label3, Paragraph2, Paragraph4 } from 'baseui/typography'
-import { ettlevColors, maxPageWidth, responsivePaddingLarge, theme } from '../util/theme'
+import { ettlevColors, maxPageWidth, responsivePaddingExtraLarge, theme } from '../util/theme'
 import { codelist, ListName, TemaCode } from '../services/Codelist'
 import RouteLink from '../components/common/RouteLink'
 import { useBehandling } from '../api/BehandlingApi'
@@ -303,12 +303,12 @@ export const BehandlingerTemaPageV2 = () => {
           }}
         >
           <Block width="100%">
-            <Block paddingTop="120px" paddingBottom="40px" backgroundColor={ettlevColors.green100} paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge}>
+            <Block paddingTop="120px" paddingBottom="40px" backgroundColor={ettlevColors.green100} paddingLeft={responsivePaddingExtraLarge} paddingRight={responsivePaddingExtraLarge}>
               <H1 marginTop="0px" marginBottom="0px">
                 {temaData?.shortName}
               </H1>
             </Block>
-            <Block marginBottom="55px" marginTop="40px" paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge}>
+            <Block marginBottom="55px" marginTop="40px" paddingLeft={responsivePaddingExtraLarge} paddingRight={responsivePaddingExtraLarge}>
               <Block>{getTemaMainHeader(temaData, lovListe, true, () => { }, true, true)}</Block>
               <Block display="flex" justifyContent="flex-end" width="100%" marginTop="38px">
                 <Button onClick={() => setIsTemaModalOpen(false)}>Lukk visning</Button>
