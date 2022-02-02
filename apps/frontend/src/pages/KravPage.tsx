@@ -437,7 +437,7 @@ const PageIcon = (props: { hover: boolean }) => (
   </Block>
 )
 
-const query = gql`
+export const query = gql`
   query getKravWithEtterlevelse($id: ID, $kravNummer: Int, $kravVersjon: Int) {
     kravById(id: $id, nummer: $kravNummer, versjon: $kravVersjon) {
       id

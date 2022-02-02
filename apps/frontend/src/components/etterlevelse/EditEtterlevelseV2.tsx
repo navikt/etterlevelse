@@ -10,7 +10,7 @@ import { DateField, FieldWrapper, TextAreaField } from '../common/Inputs'
 import { theme } from '../../util'
 import { FormControl } from 'baseui/form-control'
 import { getKravByKravNumberAndVersion, kravFullQuery, KravId, useKrav, useSearchKrav } from '../../api/KravApi'
-import { kravName, kravNumView } from '../../pages/KravPage'
+import { kravName, kravNumView, query } from '../../pages/KravPage'
 import { behandlingName, useBehandling, useSearchBehandling } from '../../api/BehandlingApi'
 import CustomizedSelect from '../common/CustomizedSelect'
 import { H1, H2, H3, Label3, Paragraph2, Paragraph4 } from 'baseui/typography'
@@ -132,7 +132,7 @@ export const EditEtterlevelseV2 = ({
   isAlertUnsavedModalOpen,
   isNavigateButtonClicked,
 }: EditEttlevProps) => {
-  const { data, loading } = useQuery<{ kravById: KravQL }, KravId>(kravFullQuery, {
+  const { data, loading } = useQuery<{ kravById: KravQL }, KravId>(query, {
     variables: kravId,
     skip: !kravId.id && !kravId.kravNummer,
     fetchPolicy: 'no-cache',
