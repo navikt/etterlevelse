@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { emptyPage, Etterlevelse, EtterlevelseStatus, PageResponse } from '../constants'
+import { emptyPage, Etterlevelse, EtterlevelseStatus, Krav, PageResponse } from '../constants'
 import { env } from '../util/env'
 import { useEffect, useState } from 'react'
 import { KravId } from './KravApi'
@@ -72,10 +72,10 @@ export const useEtterlevelse = (id?: string, behandlingId?: string, kravId?: Kra
   const [data, setData] = useState<Etterlevelse | undefined>(
     isCreateNew
       ? mapEtterlevelseToFormValue({
-          behandlingId,
-          kravVersjon: kravId?.kravVersjon,
-          kravNummer: kravId?.kravNummer,
-        })
+        behandlingId,
+        kravVersjon: kravId?.kravVersjon,
+        kravNummer: kravId?.kravNummer,
+      })
       : undefined,
   )
 
@@ -96,17 +96,44 @@ export const useEtterlevelseForBehandling = (behandlingId?: string) => {
   return data
 }
 
-export const mapEtterlevelseToFormValue = (etterlevelse: Partial<Etterlevelse>): Etterlevelse => ({
-  id: etterlevelse.id || '',
-  behandlingId: etterlevelse.behandlingId || '',
-  kravNummer: etterlevelse.kravNummer || 0,
-  kravVersjon: etterlevelse.kravVersjon || 0,
-  changeStamp: etterlevelse.changeStamp || { lastModifiedDate: '', lastModifiedBy: '' },
-  suksesskriterieBegrunnelser: etterlevelse.suksesskriterieBegrunnelser || [],
-  version: -1,
-  etterleves: etterlevelse.etterleves || false,
-  statusBegrunnelse: etterlevelse.statusBegrunnelse || '',
-  dokumentasjon: etterlevelse.dokumentasjon || [],
-  fristForFerdigstillelse: etterlevelse.fristForFerdigstillelse || '',
-  status: etterlevelse.status || EtterlevelseStatus.UNDER_REDIGERING,
-})
+export const mapEtterlevelseToFormValue = (etterlevelse: Partial<Etterlevelse>, krav?: Krav): Etterlevelse => {
+
+  const suksesskriterieBegrunnelser = etterlevelse.suksesskriterieBegrunnelser || []
+
+  if (krav) {
+    if (suksesskriterieBegrunnelser.length) {
+      krav.suksesskriterier.forEach((s) => {
+        suksesskriterieBegrunnelser.map((sb) => {
+          if (sb.suksesskriterieId === s.id) {
+            sb.behovForBegrunnelse = s.behovForBegrunnelse
+          }
+        })
+      })
+    } else {
+      krav.suksesskriterier.forEach((s) => {
+        suksesskriterieBegrunnelser.push({
+          suksesskriterieId: s.id,
+          behovForBegrunnelse: s.behovForBegrunnelse,
+          begrunnelse: '',
+          oppfylt: false,
+          ikkeRelevant: false
+        })
+      })
+    }
+  }
+
+  return ({
+    id: etterlevelse.id || '',
+    behandlingId: etterlevelse.behandlingId || '',
+    kravNummer: etterlevelse.kravNummer || 0,
+    kravVersjon: etterlevelse.kravVersjon || 0,
+    changeStamp: etterlevelse.changeStamp || { lastModifiedDate: '', lastModifiedBy: '' },
+    suksesskriterieBegrunnelser: suksesskriterieBegrunnelser,
+    version: -1,
+    etterleves: etterlevelse.etterleves || false,
+    statusBegrunnelse: etterlevelse.statusBegrunnelse || '',
+    dokumentasjon: etterlevelse.dokumentasjon || [],
+    fristForFerdigstillelse: etterlevelse.fristForFerdigstillelse || '',
+    status: etterlevelse.status || EtterlevelseStatus.UNDER_REDIGERING,
+  })
+}
