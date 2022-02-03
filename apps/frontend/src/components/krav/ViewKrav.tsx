@@ -228,7 +228,7 @@ export const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVer
 
       <Block>
         <Paragraph2>
-          Sist endret: {moment(krav.changeStamp.lastModifiedDate).format('ll')} av {krav.changeStamp.lastModifiedBy.split(' - ')[1]}
+          Sist endret: {moment(krav.changeStamp.lastModifiedDate).format('ll')} {user.isAdmin() || user.isKraveier() ? "av " + krav.changeStamp.lastModifiedBy.split(' - ')[1] : ""}
         </Paragraph2>
       </Block>
     </>
