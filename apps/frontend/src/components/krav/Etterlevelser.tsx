@@ -60,7 +60,7 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
                   {modalVersion ? (
                     <PanelButton
                       onClick={() => {
-                        setOpenEtterlevelse(e)
+                        setOpenEtterlevelse({...e, behandlingId: e.behandling.id})
                         setIsModalOpen(true)
                       }}
                       square
@@ -122,7 +122,7 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
         <EtterlevelseModal
           isModalOpen={isModalOpen}
           setIsModalOpen={setIsModalOpen}
-          etterlevelse={krav.etterlevelser.filter((e) => e.id === openEtterlse.id)[0]}
+          etterlevelse={openEtterlse}
           kravData={krav}
         />
       }
@@ -132,6 +132,8 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
 
 
 export const EtterlevelseModal = ({ isModalOpen, setIsModalOpen, etterlevelse, kravData }: { isModalOpen: boolean, setIsModalOpen: (state: boolean) => void, etterlevelse: Etterlevelse, kravData: Krav }) => {
+  
+  console.log(etterlevelse)
   return (
     <CustomizedModal
       onClose={() => setIsModalOpen(false)}
