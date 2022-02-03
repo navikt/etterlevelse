@@ -1,34 +1,32 @@
-import { Block } from 'baseui/block'
-import { Button, KIND } from 'baseui/button'
-import { TriangleDown } from 'baseui/icon'
-import { StatefulMenu } from 'baseui/menu'
-import { Pagination } from 'baseui/pagination'
-import { StatefulPopover, PLACEMENT } from 'baseui/popover'
+import {Block} from 'baseui/block'
+import {Pagination} from 'baseui/pagination'
 
-import { H2, HeadingXXLarge, Paragraph2 } from 'baseui/typography'
+import {HeadingXXLarge, Paragraph2} from 'baseui/typography'
 import moment from 'moment'
-import { ReactElement, useEffect, useState } from 'react'
-import { Helmet } from 'react-helmet'
-import { getKravPage, kravMapToFormVal } from '../api/KravApi'
-import { getTilbakemeldingForKrav } from '../api/TilbakemeldingApi'
-import { PersonName } from '../components/common/PersonName'
+import {ReactElement, useEffect, useState} from 'react'
+import {Helmet} from 'react-helmet'
+import {getKravPage, kravMapToFormVal} from '../api/KravApi'
+import {getTilbakemeldingForKrav} from '../api/TilbakemeldingApi'
+import {PersonName} from '../components/common/PersonName'
 import RouteLink from '../components/common/RouteLink'
-import { Cell, Row, Table } from '../components/common/Table'
-import { tilbakeMeldingStatus } from '../components/krav/tilbakemelding/Tilbakemelding'
-import { Layout2 } from '../components/scaffold/Page'
-import { emptyPage, Krav, PageResponse, Tilbakemelding } from '../constants'
-import { ColumnCompares } from '../util/hooks'
-import { intl } from '../util/intl/intl'
-import { ettlevColors, maxPageWidth } from '../util/theme'
+import {Cell, Row, Table} from '../components/common/Table'
+import {tilbakeMeldingStatus} from '../components/krav/tilbakemelding/Tilbakemelding'
+import {Layout2} from '../components/scaffold/Page'
+import {emptyPage, Krav, PageResponse, Tilbakemelding} from '../constants'
+import {ColumnCompares} from '../util/hooks'
+import {intl} from '../util/intl/intl'
+import {ettlevColors, maxPageWidth} from '../util/theme'
+import {codelist, ListName} from "../services/Codelist";
 
-type kravName = {
+type SporsmaalOgSvarKrav = {
   kravNavn: string
   tidForSpørsmål: string
   tidForSvar?: string
   melderNavn: ReactElement
+  tema?: string
 }
 
-type KravMessage = Tilbakemelding & kravName
+type KravMessage = Tilbakemelding & SporsmaalOgSvarKrav
 
 const kravSorting: ColumnCompares<KravMessage> = {
   kravNummer: (a, b) => a.kravNummer - b.kravNummer,
@@ -79,6 +77,7 @@ export const SpørsmålOgSvarLogPage = () => {
 
         tilbakeMeldinger.forEach((t) => {
           const kravNavn = tableContent.content.filter((k) => k.kravNummer === t.kravNummer && k.kravVersjon === t.kravVersjon)[0].navn
+          const kravTema = tableContent.content.filter((k) => k.kravNummer === t.kravNummer && k.kravVersjon === t.kravVersjon)[0].tema
           const { ubesvart, sistMelding } = tilbakeMeldingStatus(t)
           kravMessages.push({
             ...t,
@@ -86,9 +85,9 @@ export const SpørsmålOgSvarLogPage = () => {
             tidForSpørsmål: t.meldinger[0].tid,
             tidForSvar: ubesvart ? undefined : sistMelding.tid,
             melderNavn: <PersonName ident={t.melderIdent} />,
+            tema: kravTema
           })
         })
-
         setKravMessages(kravMessages)
       })
     } catch (e: any) {
@@ -123,6 +122,7 @@ export const SpørsmålOgSvarLogPage = () => {
           headers={[
             { $style: { maxWidth: '6%' }, title: 'Krav ID', column: 'kravNummer' },
             { $style: { maxWidth: '25%', minWidth: '25%' }, title: 'Kravnavn', column: 'kravNavn' },
+            { title: 'Tema', column: 'tema' },
             { title: 'Fra', column: 'melderIdent' },
             { title: 'Tid for spørsmål', column: 'tidForSpørsmål' },
             { title: 'Tid for svar', column: 'tidForSvar' },
@@ -139,6 +139,7 @@ export const SpørsmålOgSvarLogPage = () => {
                   <Cell $style={{ maxWidth: '25%', minWidth: '25%' }}>
                     <RouteLink href={`/krav/${t.kravNummer}/${t.kravVersjon}?tilbakemeldingId=${t.id}`}>{t.kravNavn}</RouteLink>
                   </Cell>
+                  <Cell>{codelist.getCode(ListName.TEMA,t.tema)?.shortName}</Cell>
                   <Cell>{t.melderNavn}</Cell>
                   <Cell>{moment(t.tidForSpørsmål).format('lll')}</Cell>
                   <Cell>
