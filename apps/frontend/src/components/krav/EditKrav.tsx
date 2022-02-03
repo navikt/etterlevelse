@@ -356,7 +356,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                       <H2>Egenskaper</H2>
                     </Block>
 
-                    {user.isAdmin() && (
+                    {/* {user.isAdmin() && (
                       <Block width="100%" maxWidth={maxInputWidth} marginBottom={inputMarginBottom}>
                         <OptionField
                           label="Status"
@@ -365,7 +365,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                           tooltip={'Velg status for kravet. Utkast er kun synlig for kraveier selv. Aktiv/utgått er synlig for alle.'}
                         />
                       </Block>
-                    )}
+                    )} */}
 
                     <KravVarslingsadresserEdit />
                     {errors.varslingsadresser && <ErrorMessageModal msg={errors.varslingsadresser} fullWidth={true} />}
