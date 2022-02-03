@@ -3,7 +3,7 @@ import { Field, FieldProps, Form, Formik, FormikProps, validateYupSchema, yupToF
 import { createEtterlevelse, getEtterlevelserByBehandlingsIdKravNumber, mapEtterlevelseToFormValue, updateEtterlevelse } from '../../api/EtterlevelseApi'
 import { Block, Responsive, Scale } from 'baseui/block'
 import Button from '../common/Button'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import * as yup from 'yup'
 import { getEtterlevelseStatus } from '../../pages/EtterlevelsePage'
 import { DateField, FieldWrapper, TextAreaField } from '../common/Inputs'
@@ -148,7 +148,8 @@ export const EditEtterlevelseV2 = ({
   const [nyereKrav, setNyereKrav] = React.useState<Krav>()
   const [disableEdit, setDisableEdit] = React.useState<boolean>(false)
   const [editedEtterlevelse, setEditedEtterlevelse] = React.useState<Etterlevelse>()
-  const [tempValuesForEtterlevelse, setTempValuesForEtterlevelse] = React.useState<Etterlevelse>()
+
+  const etterlevelseFormRef: React.Ref<FormikProps<Etterlevelse> | undefined> = useRef()
 
   const submit = async (etterlevelse: Etterlevelse) => {
     const mutatedEtterlevelse = {
@@ -256,8 +257,8 @@ export const EditEtterlevelseV2 = ({
               tabBackground={ettlevColors.green100}
               activeKey={tab}
               onChange={(k) => {
-                if(k.activeKey !== 'dokumentasjon') {
-                  setEditedEtterlevelse(tempValuesForEtterlevelse)
+                if (k.activeKey !== 'dokumentasjon' && etterlevelseFormRef.current && etterlevelseFormRef.current.values) {
+                  setEditedEtterlevelse(etterlevelseFormRef.current.values)
                 }
                 setTab(k.activeKey as Section)
               }}
@@ -277,7 +278,7 @@ export const EditEtterlevelseV2 = ({
                       krav={krav}
                       etterlevelse={etterlevelse}
                       submit={submit}
-                      formRef={formRef}
+                      formRef={formRef ? formRef : etterlevelseFormRef}
                       varsleMelding={varsleMelding}
                       behandlingId={behandlingId}
                       behandlingNummer={behandlingNummer || 0}
@@ -290,14 +291,13 @@ export const EditEtterlevelseV2 = ({
                       isAlertUnsavedModalOpen={isAlertUnsavedModalOpen}
                       isNavigateButtonClicked={isNavigateButtonClicked}
                       editedEtterlevelse={editedEtterlevelse}
-                      setTempValuesForEtterlevelse={setTempValuesForEtterlevelse}
                     />
                   ),
                 },
                 {
                   title: 'Eksempler på etterlevelse',
                   key: 'etterlevelser',
-                  content: <Etterlevelser loading={etterlevelserLoading} krav={krav} modalVersion/>,
+                  content: <Etterlevelser loading={etterlevelserLoading} krav={krav} modalVersion />,
                 },
                 {
                   title: 'Spørsmål og svar',
@@ -331,12 +331,11 @@ type EditProps = {
   isAlertUnsavedModalOpen: boolean
   isNavigateButtonClicked: boolean
   editedEtterlevelse?: Etterlevelse
-  setTempValuesForEtterlevelse: (e: Etterlevelse) => void
 }
 
 const Edit = ({ krav, etterlevelse, submit, formRef, behandlingId, disableEdit, documentEdit, close, setIsAlertUnsavedModalOpen,
-  isAlertUnsavedModalOpen, isNavigateButtonClicked, editedEtterlevelse, setTempValuesForEtterlevelse }: EditProps) => {
-  const [etterlevelseStatus, setEtterlevelseStatus] = React.useState<string>(etterlevelse.status || EtterlevelseStatus.UNDER_REDIGERING)
+  isAlertUnsavedModalOpen, isNavigateButtonClicked, editedEtterlevelse }: EditProps) => {
+  const [etterlevelseStatus, setEtterlevelseStatus] = React.useState<string>(editedEtterlevelse ? editedEtterlevelse.status : etterlevelse.status || EtterlevelseStatus.UNDER_REDIGERING)
   const [radioHover, setRadioHover] = React.useState<string>('')
   const [tidligereEtterlevelser, setTidligereEtterlevelser] = React.useState<Etterlevelse[]>()
   const navigate = useNavigate()
@@ -379,7 +378,6 @@ const Edit = ({ krav, etterlevelse, submit, formRef, behandlingId, disableEdit, 
       >
         {({ values, isSubmitting, submitForm, errors, setFieldError }: FormikProps<Etterlevelse>) => (
           <Block>
-            {setTempValuesForEtterlevelse(values)}
             <Block marginTop="32px">
               <Form>
                 <Block>
