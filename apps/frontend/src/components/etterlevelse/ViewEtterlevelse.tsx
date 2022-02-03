@@ -36,12 +36,14 @@ export const ViewEtterlevelse = ({
   loading,
   viewMode,
   krav,
+  modalVersion
 }: {
   etterlevelse: Etterlevelse
   setEtterlevelse?: Function
   loading?: boolean
   viewMode?: boolean
   krav: Krav
+  modalVersion?: boolean
 }) => {
   const [behandling] = useBehandling(etterlevelse.behandlingId)
   const formRef = useRef<FormikProps<any>>()
@@ -60,7 +62,7 @@ export const ViewEtterlevelse = ({
               </strong>
               : {behandling.navn}
             </Paragraph2>
-            <Block display="flex" alignContent="center">
+            {!modalVersion && <Block display="flex" alignContent="center">
               <FontAwesomeIcon icon={faCircle} color={ettlevColors.black} style={{ fontSize: '.45rem', paddingTop: '7px', marginRight: '8px' }} aria-hidden={true} />
               <RouteLink
                 href={`/behandling/${behandling.id}`}
@@ -73,8 +75,8 @@ export const ViewEtterlevelse = ({
               >
                 Gå til behandling
               </RouteLink>
-            </Block>
-            <Block marginTop="8px" display="flex" alignContent="center">
+            </Block>}
+            {!modalVersion && <Block marginTop="8px" display="flex" alignContent="center">
               <FontAwesomeIcon icon={faCircle} color={ettlevColors.black} style={{ fontSize: '.45rem', marginTop: '7px', marginRight: '8px' }} aria-hidden={true} />
               <RouteLink
                 href={`/krav/${krav.kravNummer}/${krav.kravVersjon}`}
@@ -87,7 +89,7 @@ export const ViewEtterlevelse = ({
               >
                 Gå til kravet
               </RouteLink>
-            </Block>
+            </Block>}
             {/* <Block marginTop={theme.sizing.scale850}>
               <Teams teams={behandling.teams} link list />
             </Block> */}

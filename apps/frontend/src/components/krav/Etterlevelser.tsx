@@ -133,7 +133,6 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
 
 export const EtterlevelseModal = ({ isModalOpen, setIsModalOpen, etterlevelse, kravData }: { isModalOpen: boolean, setIsModalOpen: (state: boolean) => void, etterlevelse: Etterlevelse, kravData: Krav }) => {
   
-  console.log(etterlevelse)
   return (
     <CustomizedModal
       onClose={() => setIsModalOpen(false)}
@@ -167,7 +166,7 @@ export const EtterlevelseModal = ({ isModalOpen, setIsModalOpen, etterlevelse, k
         </Block>
 
         <Block paddingLeft={responsivePaddingExtraLarge} paddingRight={responsivePaddingExtraLarge}>
-          <ViewEtterlevelse etterlevelse={etterlevelse} viewMode krav={kravData} />
+          <ViewEtterlevelse etterlevelse={etterlevelse} viewMode krav={kravData} modalVersion/>
           <Block display="flex" justifyContent="flex-end" paddingBottom="31px" paddingTop="95px">
             <Button
               onClick={() => {
