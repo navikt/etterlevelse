@@ -720,7 +720,7 @@ const Edit = ({ krav, etterlevelse, submit, formRef, behandlingId, disableEdit, 
                       }
                       setIsAlertUnsavedModalOpen(false)
                     }}>
-                    Ja, og lagre
+                    Lagre og fortsett
                   </Button>
                   <Button
                     marginLeft
@@ -731,7 +731,7 @@ const Edit = ({ krav, etterlevelse, submit, formRef, behandlingId, disableEdit, 
                       close()
                       setIsAlertUnsavedModalOpen(false)
                     }}>
-                    Ja
+                    Fortsett uten å lagre
                   </Button>
                   <Button
                     marginLeft
@@ -739,7 +739,7 @@ const Edit = ({ krav, etterlevelse, submit, formRef, behandlingId, disableEdit, 
                     onClick={() => {
                       setIsAlertUnsavedModalOpen(false)
                     }}>
-                    Nei
+                    Avbryt
                   </Button>
                 </Block>
               </Block>
