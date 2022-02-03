@@ -553,7 +553,6 @@ export const EditKrav = ({krav, close, formRef, isOpen, setIsOpen, newVersion, n
                         size="compact"
                         kind={newVersion || krav.status !== KravStatus.AKTIV ? 'secondary' : 'primary'}
                         onClick={() => {
-                          console.log(errors)
                           if (newVersion) {
                             values.status = KravStatus.UTKAST
                           } else {
@@ -573,7 +572,6 @@ export const EditKrav = ({krav, close, formRef, isOpen, setIsOpen, newVersion, n
                           size="compact"
                           onClick={() => {
                             values.status = KravStatus.AKTIV
-                            console.log(errors)
                             submitForm()
                           }}
                           disabled={isSubmitting}
