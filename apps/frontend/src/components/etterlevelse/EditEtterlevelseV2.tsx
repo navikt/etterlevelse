@@ -38,6 +38,7 @@ import { useNavigate } from 'react-router-dom'
 import EtterlevelseCard from './EtterlevelseCard'
 import { ModalHeader } from 'baseui/modal'
 import { Section } from '../../pages/BehandlingerTemaPageV2'
+import _ from 'lodash'
 
 type EditEttlevProps = {
   etterlevelse: Etterlevelse
@@ -278,7 +279,7 @@ export const EditEtterlevelseV2 = ({
                       krav={krav}
                       etterlevelse={etterlevelse}
                       submit={submit}
-                      formRef={formRef ? formRef : etterlevelseFormRef}
+                      formRef={etterlevelseFormRef}
                       varsleMelding={varsleMelding}
                       behandlingId={behandlingId}
                       behandlingNummer={behandlingNummer || 0}
@@ -318,7 +319,7 @@ type EditProps = {
   krav: KravQL
   etterlevelse: Etterlevelse
   submit: (etterlevelse: Etterlevelse) => Promise<void>
-  formRef?: React.Ref<any>
+  formRef?: React.RefObject<any>
   varsleMelding?: string
   behandlingId?: string
   behandlingNummer: number
@@ -349,6 +350,19 @@ const Edit = ({ krav, etterlevelse, submit, formRef, behandlingId, disableEdit, 
       }
     })()
   }, [])
+
+  useEffect(() => {
+    if (isAlertUnsavedModalOpen) {
+      if(_.isEqualWith(mapEtterlevelseToFormValue(etterlevelse, krav), formRef?.current.values)) {
+        setIsAlertUnsavedModalOpen(false)
+        if(isNavigateButtonClicked) {
+          navigate(`/behandling/${etterlevelse.behandlingId}`)
+        } else {
+          close()
+        }
+      }
+    }
+  }, [isAlertUnsavedModalOpen])
 
   const getTidligereEtterlevelser = () => {
     return tidligereEtterlevelser?.map((e) => {
