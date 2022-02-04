@@ -4,11 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Value;
 import no.nav.data.etterlevelse.krav.dto.SuksesskriterieRequest;
 import no.nav.data.etterlevelse.krav.dto.SuksesskriterieResponse;
-
-import javax.ws.rs.DefaultValue;
 
 @Data
 @Builder
