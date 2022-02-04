@@ -16,6 +16,11 @@ export const getEtterlevelseStatusLabelColor = (etterlevelse: KravEtterlevelseDa
       }
     case EtterlevelseStatus.IKKE_RELEVANT:
       return {
+        background: ettlevColors.white,
+        border: ettlevColors.grey200
+      }
+    case EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT:
+      return {
         background: ettlevColors.grey50,
         border: ettlevColors.grey200
       }
@@ -44,6 +49,8 @@ export const getEtterlevelseStatus = (etterlevelse: KravEtterlevelseData) => {
     case EtterlevelseStatus.FERDIG:
       return 'Under arbeid'
     case EtterlevelseStatus.IKKE_RELEVANT:
+      return 'Under arbeid'
+    case EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT:
       return 'Ikke relevant'
     case EtterlevelseStatus.FERDIG_DOKUMENTERT:
       return 'Oppfylt'
