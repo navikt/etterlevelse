@@ -90,7 +90,7 @@ const etterlevelseSchema = () => {
       message: 'Du må dokumentere på begrunnelse',
       test: function (statusBegrunnelse) {
         const { parent } = this
-        if (parent.status === EtterlevelseStatus.IKKE_RELEVANT && (statusBegrunnelse === '' || statusBegrunnelse === undefined)) {
+        if (parent.status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT && (statusBegrunnelse === '' || statusBegrunnelse === undefined)) {
           return false
         }
         return true
@@ -157,7 +157,7 @@ export const EditEtterlevelseV2 = ({
       ...etterlevelse,
       fristForFerdigstillelse: etterlevelse.status !== EtterlevelseStatus.OPPFYLLES_SENERE ? '' : etterlevelse.fristForFerdigstillelse,
       suksesskriterieBegrunnelser:
-        etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT
+        etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT || etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT
           ? [
             ...etterlevelse.suksesskriterieBegrunnelser.map((s) => {
               return {
@@ -443,7 +443,11 @@ const Edit = ({ krav, etterlevelse, submit, formRef, behandlingId, disableEdit, 
                                         },
                                       },
                                     }}
-                                    value={etterlevelseStatus === EtterlevelseStatus.FERDIG_DOKUMENTERT ? EtterlevelseStatus.FERDIG : etterlevelseStatus}
+                                    value={
+                                      etterlevelseStatus === EtterlevelseStatus.FERDIG_DOKUMENTERT ? EtterlevelseStatus.FERDIG :
+                                      etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT ? EtterlevelseStatus.IKKE_RELEVANT :
+                                      etterlevelseStatus
+                                    }
                                     onChange={(event) => {
                                       p.form.setFieldValue('status', event.currentTarget.value)
                                       setEtterlevelseStatus(event.currentTarget.value)
@@ -485,7 +489,7 @@ const Edit = ({ krav, etterlevelse, submit, formRef, behandlingId, disableEdit, 
                                           </Radio>
                                         )
                                       }
-                                      if (id === EtterlevelseStatus.FERDIG_DOKUMENTERT) {
+                                      if (id === EtterlevelseStatus.FERDIG_DOKUMENTERT || id === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) {
                                         return null
                                       }
                                       return (
@@ -539,7 +543,7 @@ const Edit = ({ krav, etterlevelse, submit, formRef, behandlingId, disableEdit, 
                             </Block>}
                         </Block>
                       </Block>
-                      {etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT && (
+                      {(etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT || etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) && (
                         <Block maxWidth="471px" width="100%">
                           <TextAreaField label="Beskriv hvorfor kravet ikke er relevant" noPlaceholder name="statusBegrunnelse" />
                           <Error fieldName={'statusBegrunnelse'} fullWidth={true} />
@@ -644,7 +648,7 @@ const Edit = ({ krav, etterlevelse, submit, formRef, behandlingId, disableEdit, 
                     marginRight
                     disabled={isSubmitting || disableEdit}
                     onClick={() => {
-                      if (values.status === EtterlevelseStatus.FERDIG_DOKUMENTERT) {
+                      if (values.status === EtterlevelseStatus.FERDIG_DOKUMENTERT || values.status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) {
                         values.status = Object.values(EtterlevelseStatus).filter((e) => e === etterlevelseStatus)[0]
                       }
                       submitForm()
@@ -663,6 +667,8 @@ const Edit = ({ krav, etterlevelse, submit, formRef, behandlingId, disableEdit, 
                             setFieldError(`suksesskriterieBegrunnelser[${index}]`, 'Du må fylle ut dokumentasjonen')
                           }
                         })
+                      } else if (values.status === EtterlevelseStatus.IKKE_RELEVANT) {
+                        values.status = EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT
                       }
                       submitForm()
                     }}
