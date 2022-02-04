@@ -145,6 +145,7 @@ enum EtterlevelseStatus {
     OPPFYLLES_SENERE,
     IKKE_RELEVANT,
     FERDIG_DOKUMENTERT,
+    IKKE_RELEVANT_FERDIG_DOKUMENTERT
 }
 
 type Behandling {
