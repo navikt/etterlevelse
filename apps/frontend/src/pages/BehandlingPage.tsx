@@ -355,7 +355,7 @@ const TemaCardBehandling = ({ tema, stats, behandling, irrelevant }: { tema: Tem
   const lover = codelist.getCodesForTema(tema.code).map((c) => c.code)
 
   const krav = stats.filter((k) => k.regelverk.map((r: any) => r.lov.code).some((r: any) => lover.includes(r)))
-
+  
   let utfylt = 0
   let underArbeid = 0
   let tilUtfylling = 0
@@ -364,14 +364,14 @@ const TemaCardBehandling = ({ tema, stats, behandling, irrelevant }: { tema: Tem
     if (
       k.etterlevelser.length &&
       (k.etterlevelser[0].status === EtterlevelseStatus.FERDIG_DOKUMENTERT ||
-        k.etterlevelser[0].status === EtterlevelseStatus.IKKE_RELEVANT ||
+        k.etterlevelser[0].status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT ||
         k.etterlevelser[0].status === EtterlevelseStatus.OPPFYLLES_SENERE)
     ) {
       utfylt += 1
     } else if (
       k.etterlevelser.length &&
-      (k.etterlevelser[0].status === EtterlevelseStatus.OPPFYLLES_SENERE ||
-        k.etterlevelser[0].status === EtterlevelseStatus.UNDER_REDIGERING ||
+      ( k.etterlevelser[0].status === EtterlevelseStatus.UNDER_REDIGERING ||
+        k.etterlevelser[0].status === EtterlevelseStatus.IKKE_RELEVANT ||
         k.etterlevelser[0].status === EtterlevelseStatus.FERDIG)
     ) {
       underArbeid += 1
