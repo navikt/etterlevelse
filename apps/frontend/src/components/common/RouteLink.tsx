@@ -85,7 +85,7 @@ export const urlForObject = (type: NavigableItem | string, id: string, audit?: A
     case ObjectType.Codelist:
       return `/admin/codelist/${id}`
   }
-  console.warn("couldn't find object type" + type)
+  console.warn('couldn\'t find object type' + type)
   return ''
 }
 
@@ -148,7 +148,7 @@ export const ExternalLink = ({
 }
 
 export const ExternalLinkWrapper = ({ text }: { text: React.ReactNode }) => (
-  <Block display="flex" alignItems="center">
+  <span style={{display: 'inline-flex'}} >
     {text} <img alt=" " width="inherit" height="inherit" style={{ marginLeft: '8px' }} src={externalLinkIcon} />
-  </Block>
+  </span>
 )
