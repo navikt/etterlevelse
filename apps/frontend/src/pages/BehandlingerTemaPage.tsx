@@ -120,13 +120,13 @@ export const BehandlingerTemaPage = () => {
       kravData.filter(
         (k) =>
           k.etterlevelseStatus === EtterlevelseStatus.FERDIG_DOKUMENTERT ||
-          k.etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT ||
+          k.etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT ||
           k.etterlevelseStatus === EtterlevelseStatus.OPPFYLLES_SENERE,
       ),
     )
     setSkalUtfyllesKrav(
       kravData.filter(
-        (k) => k.etterlevelseStatus === EtterlevelseStatus.UNDER_REDIGERING || k.etterlevelseStatus === EtterlevelseStatus.FERDIG || k.etterlevelseStatus === undefined || null,
+        (k) => k.etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT || k.etterlevelseStatus === EtterlevelseStatus.UNDER_REDIGERING || k.etterlevelseStatus === EtterlevelseStatus.FERDIG || k.etterlevelseStatus === undefined || null,
       ),
     )
   }, [kravData])
@@ -138,7 +138,7 @@ export const BehandlingerTemaPage = () => {
       if (
         (k.etterlevelseStatus === EtterlevelseStatus.FERDIG_DOKUMENTERT ||
           k.etterlevelseStatus === EtterlevelseStatus.OPPFYLLES_SENERE ||
-          k.etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT) &&
+          k.etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) &&
         k.gammelVersjon !== true
       ) {
         antallUtfylt += 1
@@ -363,7 +363,7 @@ const EditModal = (props: {
 const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function; setKravId: Function }) => {
   const ferdigUtfylt =
     props.krav.etterlevelseStatus === EtterlevelseStatus.FERDIG_DOKUMENTERT ||
-    props.krav.etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT ||
+    props.krav.etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT ||
     props.krav.etterlevelseStatus === EtterlevelseStatus.OPPFYLLES_SENERE
   const [hover, setHover] = useState(false)
   return (

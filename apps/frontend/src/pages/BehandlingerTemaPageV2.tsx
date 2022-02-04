@@ -48,7 +48,7 @@ const mapEtterlevelseData = (etterlevelse?: Etterlevelse) => ({
 })
 
 export const isFerdigUtfylt = (status: EtterlevelseStatus | undefined) => {
-  return status === EtterlevelseStatus.FERDIG_DOKUMENTERT || status === EtterlevelseStatus.OPPFYLLES_SENERE || status === EtterlevelseStatus.IKKE_RELEVANT
+  return status === EtterlevelseStatus.FERDIG_DOKUMENTERT || status === EtterlevelseStatus.OPPFYLLES_SENERE || status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT
 }
 
 export type Section = 'dokumentasjon' | 'etterlevelser' | 'tilbakemeldinger'
@@ -163,7 +163,7 @@ export const BehandlingerTemaPageV2 = () => {
     setUtfyltKrav(kravData.filter((k) => isFerdigUtfylt(k.etterlevelseStatus)))
     setSkalUtfyllesKrav(
       kravData.filter(
-        (k) => k.etterlevelseStatus === EtterlevelseStatus.UNDER_REDIGERING || k.etterlevelseStatus === EtterlevelseStatus.FERDIG || k.etterlevelseStatus === undefined || null,
+        (k) => k.etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT || k.etterlevelseStatus === EtterlevelseStatus.UNDER_REDIGERING || k.etterlevelseStatus === EtterlevelseStatus.FERDIG || k.etterlevelseStatus === undefined || null,
       ),
     )
   }, [kravData])
