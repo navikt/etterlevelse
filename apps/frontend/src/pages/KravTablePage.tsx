@@ -50,7 +50,7 @@ export const KravTablePage = () => {
       }
     >
       <Block>
-        <Table
+        {tableContent.length && <Table
           emptyText=""
           data={tableContent}
           config={{
@@ -89,7 +89,7 @@ export const KravTablePage = () => {
             })
           }
           }
-        />
+        />}
       </Block>
     </Layout2>
   )
