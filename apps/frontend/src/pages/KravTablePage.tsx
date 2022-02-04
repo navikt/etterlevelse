@@ -1,18 +1,18 @@
-import { Block } from 'baseui/block'
-import { ettlevColors, maxPageWidth } from '../util/theme'
-import { HeadingXXLarge } from 'baseui/typography'
+import {Block} from 'baseui/block'
+import {ettlevColors, maxPageWidth} from '../util/theme'
+import {HeadingXXLarge} from 'baseui/typography'
 import * as React from 'react'
-import { useEffect, useState } from 'react'
-import { Krav } from '../constants'
-import { getAllKrav, kravMapToFormVal } from '../api/KravApi'
-import { Cell, Row, Table } from '../components/common/Table'
-import { ColumnCompares } from '../util/hooks'
+import {useEffect, useState} from 'react'
+import {Krav} from '../constants'
+import {getAllKrav, kravMapToFormVal} from '../api/KravApi'
+import {Cell, Row, Table} from '../components/common/Table'
+import {ColumnCompares} from '../util/hooks'
 import moment from 'moment'
-import { codelist, ListName } from '../services/Codelist'
-import { kravStatus } from './KravPage'
-import { Layout2 } from '../components/scaffold/Page'
+import {codelist, ListName} from '../services/Codelist'
+import {kravStatus} from './KravPage'
+import {Layout2} from '../components/scaffold/Page'
 import RouteLink from '../components/common/RouteLink'
-import { Helmet } from 'react-helmet'
+import {Helmet} from 'react-helmet'
 
 const kravSorting: ColumnCompares<Krav> = {
   kravNummer: (a, b) => a.kravNummer - b.kravNummer,
@@ -27,7 +27,7 @@ export const KravTablePage = () => {
   const [tableContent, setTableContent] = useState<Krav[]>([])
 
   useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       const kraver = await getAllKrav()
       const mappedKraver = kraver.map((k) => kravMapToFormVal(k))
       setTableContent(mappedKraver)
@@ -42,7 +42,7 @@ export const KravTablePage = () => {
       mainHeader={
         <Block maxWidth={maxPageWidth} width="100%" display={'flex'} justifyContent="flex-start">
           <Helmet>
-            <meta charSet="utf-8" />
+            <meta charSet="utf-8"/>
             <title>Administere Krav</title>
           </Helmet>
           <HeadingXXLarge marginTop="0">Administere Krav</HeadingXXLarge>
@@ -60,33 +60,35 @@ export const KravTablePage = () => {
             defaultPageSize: 20
           }}
           headers={[
-            { $style: { maxWidth: '6%' }, title: 'Krav ID', column: 'kravNummer' },
-            { $style: { maxWidth: '25%', minWidth: '25%' }, title: 'Kravnavn', column: 'navn' },
-            { title: 'Ansvarlig', column: 'avdeling' },
-            { title: 'Tema', column: 'tema' },
-            { title: 'Status', column: 'status' },
-            { title: 'Siste endret', column: 'changeStamp' },
+            {$style: {maxWidth: '6%'}, title: 'Krav ID', column: 'kravNummer'},
+            {$style: {maxWidth: '25%', minWidth: '25%'}, title: 'Kravnavn', column: 'navn'},
+            {title: 'Ansvarlig', column: 'avdeling'},
+            {title: 'Tema', column: 'tema'},
+            {title: 'Status', column: 'status'},
+            {title: 'Siste endret', column: 'changeStamp'},
           ]}
           render={(tableData) => {
-            const renderedTable = tableData.data.slice((tableData.page - 1) * tableData.limit, ((tableData.page - 1) * tableData.limit) + tableData.limit)
-            return renderedTable.map((krav, index) => {
-              return (
-                <Row key={krav.id}>
-                  <Cell $style={{ maxWidth: '6%' }}>
-                    {krav.kravNummer}.{krav.kravVersjon}
-                  </Cell>
-                  <Cell $style={{ maxWidth: '25%', minWidth: '25%' }}>
-                    <RouteLink href={`/krav/${krav.kravNummer}/${krav.kravVersjon}`}>{krav.navn}</RouteLink>
-                  </Cell>
-                  <Cell>{krav.avdeling && krav.avdeling.shortName}</Cell>
-                  <Cell>
-                    <RouteLink href={`/tema/${krav.tema}`}>{codelist.getCode(ListName.TEMA, krav.tema)?.shortName}</RouteLink>
-                  </Cell>
-                  <Cell>{kravStatus(krav.status)}</Cell>
-                  <Cell>{moment(krav.changeStamp.lastModifiedDate).format('ll')}</Cell>
-                </Row>
-              )
-            })
+            return tableData
+              .data
+              .slice((tableData.page - 1) * tableData.limit, ((tableData.page - 1) * tableData.limit) + tableData.limit)
+              .map((krav, index) => {
+                return (
+                  <Row key={krav.id}>
+                    <Cell $style={{maxWidth: '6%'}}>
+                      {krav.kravNummer}.{krav.kravVersjon}
+                    </Cell>
+                    <Cell $style={{maxWidth: '25%', minWidth: '25%'}}>
+                      <RouteLink href={`/krav/${krav.kravNummer}/${krav.kravVersjon}`}>{krav.navn}</RouteLink>
+                    </Cell>
+                    <Cell>{krav.avdeling && krav.avdeling.shortName}</Cell>
+                    <Cell>
+                      <RouteLink href={`/tema/${krav.tema}`}>{codelist.getCode(ListName.TEMA, krav.tema)?.shortName}</RouteLink>
+                    </Cell>
+                    <Cell>{kravStatus(krav.status)}</Cell>
+                    <Cell>{moment(krav.changeStamp.lastModifiedDate).format('ll')}</Cell>
+                  </Row>
+                )
+              })
           }
           }
         />}
