@@ -1,2 +1,2 @@
 UPDATE GENERIC_STORAGE
-SET DATA = jsonb_set(DATA, '{status}', '"UTKAST"', false ) WHERE TYPE = 'Etterlevelse' AND DATA ->> 'status' = 'UNDER_ARBEID'
+SET DATA = jsonb_set(DATA, '{status}', '"IKKE_RELEVANT_FERDIG_DOKUMENTERT"', false ) WHERE TYPE = 'Etterlevelse' AND DATA ->> 'status' = 'IKKE_RELEVANT'
