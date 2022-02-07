@@ -496,7 +496,7 @@ export const EditEtterlevelse = ({
                     disabled={disableEdit}
                     type="button"
                     onClick={() => {
-                      if (values.status !== EtterlevelseStatus.IKKE_RELEVANT && values.status !== EtterlevelseStatus.OPPFYLLES_SENERE) {
+                      if (values.status !== EtterlevelseStatus.IKKE_RELEVANT && values.status !== EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT && values.status !== EtterlevelseStatus.OPPFYLLES_SENERE) {
                         values.status = EtterlevelseStatus.FERDIG_DOKUMENTERT
                         values.suksesskriterieBegrunnelser.forEach((skb, index) => {
                           if (skb.begrunnelse === '' || skb.begrunnelse === undefined) {
