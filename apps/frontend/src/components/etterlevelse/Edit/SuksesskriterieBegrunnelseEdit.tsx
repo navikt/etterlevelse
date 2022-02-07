@@ -111,7 +111,7 @@ const KriterieBegrunnelse = ({
   return (
     <Block
       $style={getBorderColor()}
-      backgroundColor={status === EtterlevelseStatus.IKKE_RELEVANT ? ettlevColors.grey50 : ettlevColors.white}
+      backgroundColor={status === EtterlevelseStatus.IKKE_RELEVANT || status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT ? ettlevColors.grey50 : ettlevColors.white}
       padding={theme.sizing.scale750}
       marginBottom={theme.sizing.scale600}
     >
@@ -119,7 +119,7 @@ const KriterieBegrunnelse = ({
         {suksesskriterie.navn}
       </H3>
 
-      {status === EtterlevelseStatus.IKKE_RELEVANT && (
+      {(status === EtterlevelseStatus.IKKE_RELEVANT || status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) && (
         <Block width="100%" display="flex" justifyContent="flex-end" marginTop="20px" marginBottom="-29px">
           <Paragraph2
             $style={{
@@ -139,7 +139,7 @@ const KriterieBegrunnelse = ({
           overrides={{
             Header: {
               style: {
-                backgroundColor: status === EtterlevelseStatus.IKKE_RELEVANT ? ettlevColors.grey50 : ettlevColors.white,
+                backgroundColor: status === EtterlevelseStatus.IKKE_RELEVANT || status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT ? ettlevColors.grey50 : ettlevColors.white,
                 maxWidth: '210px',
                 paddingLeft: '0px',
                 ':hover': {
@@ -149,7 +149,7 @@ const KriterieBegrunnelse = ({
             },
             Content: {
               style: {
-                backgroundColor: status === EtterlevelseStatus.IKKE_RELEVANT ? ettlevColors.grey50 : ettlevColors.white,
+                backgroundColor: status === EtterlevelseStatus.IKKE_RELEVANT || status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT ? ettlevColors.grey50 : ettlevColors.white,
                 borderBottomWidth: 'none',
                 borderBottomStyle: 'none',
                 borderBottomColor: 'none',
@@ -159,7 +159,7 @@ const KriterieBegrunnelse = ({
             PanelContainer: {
               style: {
                 ...borderStyle('hidden'),
-                backgroundColor: status === EtterlevelseStatus.IKKE_RELEVANT ? ettlevColors.grey50 : ettlevColors.white,
+                backgroundColor: status === EtterlevelseStatus.IKKE_RELEVANT || status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT ? ettlevColors.grey50 : ettlevColors.white,
               },
             },
           }}
@@ -170,11 +170,11 @@ const KriterieBegrunnelse = ({
 
       <Block width="100%" height="1px" backgroundColor={ettlevColors.grey100} marginTop="24px" marginBottom="24px" />
 
-      {status !== EtterlevelseStatus.IKKE_RELEVANT && (
+      {(status !== EtterlevelseStatus.IKKE_RELEVANT && status !== EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) && (
         <StatefulButtonGroup mode={MODE.radio} initialState={{ selected: oppfylt ? 0 : ikkerelevant ? 1 : [] }}>
           <Button
             type={'button'}
-            disabled={status === EtterlevelseStatus.IKKE_RELEVANT}
+            disabled={status === EtterlevelseStatus.IKKE_RELEVANT || status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT}
             overrides={{
               BaseButton: {
                 style: {
@@ -201,7 +201,7 @@ const KriterieBegrunnelse = ({
           </Button>
           <Button
             type={'button'}
-            disabled={status === EtterlevelseStatus.IKKE_RELEVANT}
+            disabled={status === EtterlevelseStatus.IKKE_RELEVANT || status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT}
             overrides={{
               BaseButton: {
                 style: {
@@ -228,7 +228,7 @@ const KriterieBegrunnelse = ({
         </StatefulButtonGroup>
       )}
 
-      {(oppfylt || ikkerelevant) && status !== EtterlevelseStatus.IKKE_RELEVANT && !disableEdit && suksesskriterie.behovForBegrunnelse && (
+      {(oppfylt || ikkerelevant) && (status !== EtterlevelseStatus.IKKE_RELEVANT && status !== EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) && !disableEdit && suksesskriterie.behovForBegrunnelse && (
         <Block marginTop={theme.sizing.scale1000}>
           <FormControl label={<LabelWithToolTip label={oppfylt ? 'Hvordan oppfylles kriteriet?' : 'Hvorfor er ikke kriteriet relevant?'} />}>
             <TextEditor initialValue={begrunnelse} setValue={setBegrunnelse} height={'188px'} errors={props.form.errors} simple width="680px" />
