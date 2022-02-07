@@ -12,21 +12,22 @@ import no.nav.data.common.utils.JsonUtils;
 import no.nav.data.common.utils.StreamUtils;
 import no.nav.data.etterlevelse.behandling.domain.BehandlingData;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
+import no.nav.data.etterlevelse.etterlevelsemetadata.domain.EtterlevelseMetadata;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.kravprioritering.domain.KravPrioritering;
 import org.hibernate.annotations.Type;
 import org.springframework.util.Assert;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
-import java.util.function.Consumer;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
+import java.util.Collection;
+import java.util.List;
+import java.util.UUID;
+import java.util.function.Consumer;
 
 import static no.nav.data.common.utils.StreamUtils.convert;
 
@@ -114,6 +115,11 @@ public class GenericStorage extends Auditable {
     public BehandlingData toBehandlingData() {
         return getDomainObjectData(BehandlingData.class);
     }
+
+    public EtterlevelseMetadata toEtterlevelseMetadata() {
+        return getDomainObjectData(EtterlevelseMetadata.class);
+    }
+
 
     /**
      * Edit object and update data on entity

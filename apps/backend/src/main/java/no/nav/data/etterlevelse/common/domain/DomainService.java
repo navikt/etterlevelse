@@ -7,6 +7,7 @@ import no.nav.data.common.storage.domain.GenericStorage;
 import no.nav.data.common.validator.Validated;
 import no.nav.data.common.validator.Validator;
 import no.nav.data.etterlevelse.etterlevelse.domain.EtterlevelseRepo;
+import no.nav.data.etterlevelse.etterlevelsemetadata.domain.EtterlevelseMetadataRepo;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravRepo;
 import no.nav.data.etterlevelse.krav.dto.KravRequest.Fields;
@@ -31,7 +32,10 @@ public class DomainService<T extends DomainObject> {
     @Autowired
     protected EtterlevelseRepo etterlevelseRepo;
     @Autowired
+    protected EtterlevelseMetadataRepo etterlevelseMetadataRepo;
+    @Autowired
     protected BegrepService begrepService;
+
     protected final Class<T> type;
 
     public T get(UUID uuid) {
