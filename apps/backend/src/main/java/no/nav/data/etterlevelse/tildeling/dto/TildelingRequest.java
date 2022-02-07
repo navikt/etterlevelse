@@ -26,6 +26,7 @@ public class TildelingRequest implements RequestElement, KravId {
     private String behandlingId;
     private List<String> tildeltMed;
     private Boolean update;
+    private String notater;
 
     @Override
     public void format() {

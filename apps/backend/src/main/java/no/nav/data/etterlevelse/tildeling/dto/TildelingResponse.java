@@ -14,7 +14,7 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonPropertyOrder({"id", "kravNummer", "kravVersion", "behandlingId", "tildeltMed"})
+@JsonPropertyOrder({"id", "kravNummer", "kravVersjon", "behandlingId", "tildeltMed"})
 public class TildelingResponse {
     private UUID id;
     private Integer version;
@@ -23,4 +23,5 @@ public class TildelingResponse {
     private String behandlingId;
     private List<String> tildeltMed;
     private ChangeStampResponse changeStamp;
+    private String notater;
 }
