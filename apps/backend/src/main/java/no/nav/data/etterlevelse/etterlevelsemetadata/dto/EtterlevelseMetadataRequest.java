@@ -1,4 +1,4 @@
-package no.nav.data.etterlevelse.tildeling.dto;
+package no.nav.data.etterlevelse.etterlevelsemetadata.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,7 +18,7 @@ import static org.apache.commons.lang3.StringUtils.trimToNull;
 @FieldNameConstants
 @NoArgsConstructor
 @AllArgsConstructor
-public class TildelingRequest implements RequestElement, KravId {
+public class EtterlevelseMetadataRequest implements RequestElement, KravId {
 
     private String id;
     private Integer kravVersjon;

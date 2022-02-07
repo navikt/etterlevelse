@@ -1,4 +1,4 @@
-package no.nav.data.etterlevelse.tildeling.dto;
+package no.nav.data.etterlevelse.etterlevelsemetadata.dto;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.AllArgsConstructor;
@@ -15,7 +15,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonPropertyOrder({"id", "kravNummer", "kravVersjon", "behandlingId", "tildeltMed"})
-public class TildelingResponse {
+public class EtterlevelseMetadataResponse {
     private UUID id;
     private Integer version;
     private Integer kravNummer;

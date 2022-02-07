@@ -1,4 +1,4 @@
-package no.nav.data.etterlevelse.tildeling.domain;
+package no.nav.data.etterlevelse.etterlevelsemetadata.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,8 +7,8 @@ import lombok.NoArgsConstructor;
 import no.nav.data.common.storage.domain.ChangeStamp;
 import no.nav.data.common.storage.domain.DomainObject;
 import no.nav.data.etterlevelse.common.domain.KravId;
-import no.nav.data.etterlevelse.tildeling.dto.TildelingRequest;
-import no.nav.data.etterlevelse.tildeling.dto.TildelingResponse;
+import no.nav.data.etterlevelse.etterlevelsemetadata.dto.EtterlevelseMetadataRequest;
+import no.nav.data.etterlevelse.etterlevelsemetadata.dto.EtterlevelseMetadataResponse;
 
 import java.util.List;
 import java.util.UUID;
@@ -19,7 +19,7 @@ import static no.nav.data.common.utils.StreamUtils.copyOf;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Tildeling implements DomainObject, KravId {
+public class EtterlevelseMetadata implements DomainObject, KravId {
     private UUID id;
     private Integer version;
     private ChangeStamp changeStamp;
@@ -29,7 +29,7 @@ public class Tildeling implements DomainObject, KravId {
     private List<String> tildeltMed;
     private String notater;
 
-    public Tildeling convert(TildelingRequest request) {
+    public EtterlevelseMetadata convert(EtterlevelseMetadataRequest request) {
         kravNummer = request.getKravNummer();
         kravVersjon = request.getKravVersjon();
         behandlingId = request.getBehandlingId();
@@ -38,8 +38,8 @@ public class Tildeling implements DomainObject, KravId {
         return this;
     }
 
-    public TildelingResponse toResponse(){
-        return TildelingResponse.builder()
+    public EtterlevelseMetadataResponse toResponse(){
+        return EtterlevelseMetadataResponse.builder()
                 .id(id)
                 .version(version)
                 .changeStamp(convertChangeStampResponse())

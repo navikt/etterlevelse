@@ -1,4 +1,4 @@
-package no.nav.data.etterlevelse.tildeling.domain;
+package no.nav.data.etterlevelse.etterlevelsemetadata.domain;
 
 import no.nav.data.common.storage.domain.GenericStorage;
 import org.springframework.data.domain.Page;
@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 import java.util.UUID;
 
-public interface TildelingRepo extends JpaRepository<GenericStorage, UUID> {
+public interface EtterlevelseMetadataRepo extends JpaRepository<GenericStorage, UUID> {
     @Override
     @Query(value = "select * from generic_storage where type = 'EtterlevelseMetadata' order by data -> 'kravNummer', data -> 'kravVersjon'",
             countQuery = "select count(1) from generic_storage where type = 'EtterlevelseMetadata'",
