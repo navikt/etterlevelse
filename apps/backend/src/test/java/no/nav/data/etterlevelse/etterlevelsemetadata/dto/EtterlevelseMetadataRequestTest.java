@@ -11,7 +11,7 @@ class EtterlevelseMetadataRequestTest {
     private EtterlevelseMetadataRequest etterlevelseMetadataRequest;
 
     @BeforeEach
-    public void InitializeTildelt() {
+    public void initializeEtterlevelseMetadata() {
         etterlevelseMetadataRequest = EtterlevelseMetadataRequest.builder().id("testtest").build();
     }
 
