@@ -21,7 +21,7 @@ import static org.apache.commons.lang3.StringUtils.trimToNull;
 public class TildelingRequest implements RequestElement, KravId {
 
     private String id;
-    private Integer kravVersion;
+    private Integer kravVersjon;
     private Integer kravNummer;
     private String behandlingId;
     private List<String> tildeltMed;
@@ -37,7 +37,7 @@ public class TildelingRequest implements RequestElement, KravId {
         validator.checkUUID(Fields.id,id);
         validator.checkId(this);
         validator.checkNull(Fields.kravNummer, kravNummer);
-        validator.checkNull(Fields.kravVersion, kravVersion);
+        validator.checkNull(Fields.kravVersjon, kravVersjon);
         validator.checkNull(Fields.behandlingId, behandlingId);
     }
 

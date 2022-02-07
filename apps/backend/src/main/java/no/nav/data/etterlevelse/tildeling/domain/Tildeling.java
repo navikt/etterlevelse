@@ -8,6 +8,7 @@ import no.nav.data.common.storage.domain.ChangeStamp;
 import no.nav.data.common.storage.domain.DomainObject;
 import no.nav.data.etterlevelse.common.domain.KravId;
 import no.nav.data.etterlevelse.tildeling.dto.TildelingRequest;
+import no.nav.data.etterlevelse.tildeling.dto.TildelingResponse;
 
 import java.util.List;
 import java.util.UUID;
@@ -19,15 +20,27 @@ import java.util.UUID;
 public class Tildeling implements DomainObject, KravId {
     private UUID id;
     private ChangeStamp changeStamp;
-    private Integer kravVersion;
+    private Integer kravVersjon;
     private Integer kravNummer;
     private String behandlingId;
     private List<String> tildeltMed;
 
     public Tildeling convert(TildelingRequest request) {
         kravNummer = request.getKravNummer();
-        kravVersion = request.getKravVersjon();
+        kravVersjon = request.getKravVersjon();
         behandlingId = request.getBehandlingId();
         return this;
     }
+
+    public TildelingResponse toResponse(){
+        return TildelingResponse.builder()
+                .id(id)
+                .changeStamp(convertChangeStampResponse())
+                .kravNummer(kravNummer)
+                .kravVersjon(kravVersjon)
+                .behandlingId(behandlingId)
+                .tildeltMed(tildeltMed)
+                .build();
+    }
+
 }
