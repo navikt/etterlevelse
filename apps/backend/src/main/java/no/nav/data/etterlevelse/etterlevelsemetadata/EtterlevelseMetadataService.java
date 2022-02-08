@@ -32,6 +32,9 @@ public class EtterlevelseMetadataService extends DomainService<EtterlevelseMetad
     }
 
     public List<EtterlevelseMetadata> getByKravNummer(int kravNummer, @Nullable Integer kravVersjon) {
+        if (kravVersjon == null) {
+            return getByKravNummer(kravNummer);
+        }
         return GenericStorage.to(repo.findByKravNummerOgKravVersjon(kravNummer, kravVersjon), EtterlevelseMetadata.class);
     }
 

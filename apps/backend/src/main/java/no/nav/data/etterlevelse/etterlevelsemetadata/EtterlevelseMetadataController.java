@@ -50,7 +50,7 @@ public class EtterlevelseMetadataController {
 
     @Operation(summary = "Get etterlevelsemetadata by KravNummer and KravVersjon")
     @ApiResponse(description = "ok")
-    @GetMapping({"/kravnummer/{kravNummer}/{kravVersjon}", "/kravNummer/{kraVnummer}"})
+    @GetMapping({"/kravnummer/{kravNummer}/{kravVersjon}", "/kravnummer/{kravNummer}"})
     public ResponseEntity<RestResponsePage<EtterlevelseMetadataResponse>> getByKravNummerAndKravVersjon(
             @PathVariable Integer kravNummer,
             @PathVariable(required = false) Integer kravVersjon
@@ -74,7 +74,7 @@ public class EtterlevelseMetadataController {
     @Operation(summary = "Creating etterlevelsemetadata")
     @ApiResponse(description = "ok")
     @PostMapping
-    public ResponseEntity<EtterlevelseMetadataResponse> createKravPrioritering(@RequestBody EtterlevelseMetadataRequest request) {
+    public ResponseEntity<EtterlevelseMetadataResponse> createEtterlevelseMetadata(@RequestBody EtterlevelseMetadataRequest request) {
         log.info("Create krav prioritering");
         var ette = service.save(request);
         return new ResponseEntity<>(ette.toResponse(), HttpStatus.CREATED);
@@ -83,7 +83,7 @@ public class EtterlevelseMetadataController {
     @Operation(summary = "Update etterlevelsemetadata")
     @ApiResponse(description = "ok")
     @PutMapping("/{id}")
-    public ResponseEntity<EtterlevelseMetadataResponse> updateKravPrioritering(@PathVariable UUID id, @Valid @RequestBody EtterlevelseMetadataRequest request) {
+    public ResponseEntity<EtterlevelseMetadataResponse> updateEtterlevelseMetadata(@PathVariable UUID id, @Valid @RequestBody EtterlevelseMetadataRequest request) {
         log.info("Update EtterlevelseMetadataResponseid={}", id);
 
         if (!Objects.equals(id, request.getIdAsUUID())) {
@@ -97,9 +97,13 @@ public class EtterlevelseMetadataController {
     @Operation(summary = "Delete etterlevelsemetadata")
     @ApiResponse(description = "ok")
     @DeleteMapping("/{id}")
-    public ResponseEntity<EtterlevelseMetadataResponse> deleteKravPrioritering(@PathVariable UUID id) {
+    public ResponseEntity<EtterlevelseMetadataResponse> deleteEtterlevelseMetadata(@PathVariable UUID id) {
         log.info("Delete EtterlevelseMetadataResponse id={}", id);
         var etterlevelseMetadata = service.delete(id);
         return ResponseEntity.ok(etterlevelseMetadata.toResponse());
+    }
+
+    static class EtterlevelseMetadataPage extends RestResponsePage<EtterlevelseMetadataResponse> {
+
     }
 }

@@ -9,6 +9,7 @@ import no.nav.data.common.storage.domain.GenericStorageRepository;
 import no.nav.data.etterlevelse.behandling.BehandlingService;
 import no.nav.data.etterlevelse.codelist.CodelistStub;
 import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
+import no.nav.data.etterlevelse.etterlevelsemetadata.EtterlevelseMetadataService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -50,6 +51,8 @@ public abstract class IntegrationTestBase {
     protected BehandlingService behandlingService;
     @Autowired
     protected EtterlevelseService etterlevelseService;
+    @Autowired
+    protected EtterlevelseMetadataService etterlevelseMetadataService;
 
     @BeforeEach
     void setUpBase() {
