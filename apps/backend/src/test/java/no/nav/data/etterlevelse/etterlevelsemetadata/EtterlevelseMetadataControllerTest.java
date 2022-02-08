@@ -165,6 +165,23 @@ class EtterlevelseMetadataControllerTest extends IntegrationTestBase {
     }
 
     @Test
+    void updateEtterlevelseMetadata_invalidId() {
+        var etterlevelseMetadata = storageService.save(EtterlevelseMetadata.builder().kravNummer(200).kravVersjon(1).behandlingId("behandling1").tildeltMed(List.of("Y789012 - Doe, John")).build());
+
+        var req = EtterlevelseMetadataRequest.builder()
+                .behandlingId("behandling1")
+                .kravNummer(200)
+                .kravVersjon(1)
+                .tildeltMed(List.of("Y123456 - Rogan, Joe"))
+                .id("test_invalid_id")
+                .build();
+
+        var resp = restTemplate.exchange("/etterlevelsemetadata/{id}", HttpMethod.PUT, new HttpEntity<>(req), EtterlevelseMetadataResponse.class, etterlevelseMetadata.getId());
+
+        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+    }
+
+    @Test
     void deleteEtterlevelseMetadata() {
         var etterlevelseMetadata = storageService.save(EtterlevelseMetadata.builder().kravNummer(50).kravVersjon(1).build());
         restTemplate.delete("/etterlevelsemetadata/{id}", etterlevelseMetadata.getId());
