@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
+import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseResponse;
 import no.nav.data.etterlevelse.etterlevelsemetadata.domain.EtterlevelseMetadata;
 import no.nav.data.etterlevelse.etterlevelsemetadata.dto.EtterlevelseMetadataRequest;
 import no.nav.data.etterlevelse.etterlevelsemetadata.dto.EtterlevelseMetadataResponse;
@@ -50,7 +51,7 @@ public class EtterlevelseMetadataController {
 
     @Operation(summary = "Get etterlevelsemetadata by KravNummer and KravVersjon")
     @ApiResponse(description = "ok")
-    @GetMapping({"/kravnummer/{kravNummer}/{kravVersjon}", "/kravNummer/{kraVnummer}"})
+    @GetMapping({"/kravnummer/{kravNummer}/{kravVersjon}", "/kravnummer/{kravNummer}"})
     public ResponseEntity<RestResponsePage<EtterlevelseMetadataResponse>> getByKravNummerAndKravVersjon(
             @PathVariable Integer kravNummer,
             @PathVariable(required = false) Integer kravVersjon
@@ -101,5 +102,9 @@ public class EtterlevelseMetadataController {
         log.info("Delete EtterlevelseMetadataResponse id={}", id);
         var etterlevelseMetadata = service.delete(id);
         return ResponseEntity.ok(etterlevelseMetadata.toResponse());
+    }
+
+    static class EtterlevelseMetadataPage extends RestResponsePage<EtterlevelseMetadataResponse> {
+
     }
 }
