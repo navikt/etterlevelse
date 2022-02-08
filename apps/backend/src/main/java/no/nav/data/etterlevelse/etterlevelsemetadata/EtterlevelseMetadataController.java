@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
-import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseResponse;
 import no.nav.data.etterlevelse.etterlevelsemetadata.domain.EtterlevelseMetadata;
 import no.nav.data.etterlevelse.etterlevelsemetadata.dto.EtterlevelseMetadataRequest;
 import no.nav.data.etterlevelse.etterlevelsemetadata.dto.EtterlevelseMetadataResponse;
@@ -75,7 +74,7 @@ public class EtterlevelseMetadataController {
     @Operation(summary = "Creating etterlevelsemetadata")
     @ApiResponse(description = "ok")
     @PostMapping
-    public ResponseEntity<EtterlevelseMetadataResponse> createKravPrioritering(@RequestBody EtterlevelseMetadataRequest request) {
+    public ResponseEntity<EtterlevelseMetadataResponse> createEtterlevelseMetadata(@RequestBody EtterlevelseMetadataRequest request) {
         log.info("Create krav prioritering");
         var ette = service.save(request);
         return new ResponseEntity<>(ette.toResponse(), HttpStatus.CREATED);
@@ -84,7 +83,7 @@ public class EtterlevelseMetadataController {
     @Operation(summary = "Update etterlevelsemetadata")
     @ApiResponse(description = "ok")
     @PutMapping("/{id}")
-    public ResponseEntity<EtterlevelseMetadataResponse> updateKravPrioritering(@PathVariable UUID id, @Valid @RequestBody EtterlevelseMetadataRequest request) {
+    public ResponseEntity<EtterlevelseMetadataResponse> updateEtterlevelseMetadata(@PathVariable UUID id, @Valid @RequestBody EtterlevelseMetadataRequest request) {
         log.info("Update EtterlevelseMetadataResponseid={}", id);
 
         if (!Objects.equals(id, request.getIdAsUUID())) {
@@ -98,7 +97,7 @@ public class EtterlevelseMetadataController {
     @Operation(summary = "Delete etterlevelsemetadata")
     @ApiResponse(description = "ok")
     @DeleteMapping("/{id}")
-    public ResponseEntity<EtterlevelseMetadataResponse> deleteKravPrioritering(@PathVariable UUID id) {
+    public ResponseEntity<EtterlevelseMetadataResponse> deleteEtterlevelseMetadata(@PathVariable UUID id) {
         log.info("Delete EtterlevelseMetadataResponse id={}", id);
         var etterlevelseMetadata = service.delete(id);
         return ResponseEntity.ok(etterlevelseMetadata.toResponse());
