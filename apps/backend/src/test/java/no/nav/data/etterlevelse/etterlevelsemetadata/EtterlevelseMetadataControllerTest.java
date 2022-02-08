@@ -21,11 +21,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Slf4j
 class EtterlevelseMetadataControllerTest extends IntegrationTestBase {
 
-    @BeforeEach
-    void setUp() {
-        CodelistStub.initializeCodelist();
-    }
-
     @Test
     void getAllEtterlevelseMetadata_createTwoEtterlevelseMetadata_getTwoEtterlevelseMetadata() {
         storageService.save(EtterlevelseMetadata.builder().build());
