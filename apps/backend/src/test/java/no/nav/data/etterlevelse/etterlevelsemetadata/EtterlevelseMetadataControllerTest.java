@@ -54,6 +54,18 @@ class EtterlevelseMetadataControllerTest extends IntegrationTestBase {
     }
 
     @Test
+    void getByBehandlingAndKrav_createTwoEtterlevelsemetaDataWithDifferentBehandlingId_getOnlyOne() {
+        storageService.save(EtterlevelseMetadata.builder().behandlingId("test-1").kravNummer(200).build());
+        storageService.save(EtterlevelseMetadata.builder().behandlingId("test-2").kravNummer(200).build());
+
+        var resp = restTemplate.getForEntity("/etterlevelsemetadata/behandlingId/test-1/200", EtterlevelseMetadataController.EtterlevelseMetadataPage.class);
+        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
+        var etterlevelseMetadataResp = resp.getBody();
+        assertThat(etterlevelseMetadataResp).isNotNull();
+        assertThat(etterlevelseMetadataResp.getNumberOfElements()).isEqualTo(1);
+    }
+
+    @Test
     void getById_createTwoEtterlevelsemetaData_getOnlyOne() {
         var em1 = storageService.save(EtterlevelseMetadata.builder()
                 .kravNummer(200)

@@ -83,7 +83,7 @@ public class EtterlevelseMetadataController {
 
     @Operation(summary = "Get etterlevelsemetadata by behandling and krav")
     @ApiResponse(description = "ok")
-    @GetMapping({"/behandlingId/{behandlingId}/{kravNummer}/{kravVersjon}"})
+    @GetMapping({"/behandlingId/{behandlingId}/{kravNummer}/{kravVersjon}" , "/behandlingId/{behandlingId}/{kravNummer}"})
     public ResponseEntity<RestResponsePage<EtterlevelseMetadataResponse>> getByBehandlingAndKrav(
             @PathVariable String behandlingId,
             @PathVariable Integer kravNummer,
