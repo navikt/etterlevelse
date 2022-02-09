@@ -24,4 +24,10 @@ public interface EtterlevelseMetadataRepo extends JpaRepository<GenericStorage, 
 
     @Query(value = "select * from generic_storage where type = 'EtterlevelseMetadata' and data ->> 'behandlingId' = ?1", nativeQuery = true)
     List<GenericStorage> findByBehandling(String behandlingId);
+
+    @Query(value = "select * from generic_storage where type = 'EtterlevelseMetadata' and data ->> 'behandlingId' = ?1 and data -> 'kravNummer' = to_jsonb(?2) and data -> 'kravVersjon' = to_jsonb(?3)", nativeQuery = true)
+    List<GenericStorage> findByBehandlingAndKrav(String behandlingId, int nummer, int versjon);
+
+    @Query(value = "select * from generic_storage where type = 'EtterlevelseMetadata' and data ->> 'behandlingId' = ?1 and data -> 'kravNummer' = to_jsonb(?2)", nativeQuery = true)
+    List<GenericStorage> findByBehandlingAndKravNummer(String behandlingId, int nummer);
 }
