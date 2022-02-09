@@ -48,6 +48,16 @@ public class EtterlevelseMetadataController {
         return ResponseEntity.ok(new RestResponsePage<>(page).convert(EtterlevelseMetadata::toResponse));
     }
 
+    @Operation(summary = "Get etterlevelsemetadata by id")
+    @ApiResponse(description = "ok")
+    @GetMapping("/{id}")
+    public ResponseEntity<EtterlevelseMetadataResponse> getById(
+            @PathVariable UUID id
+    ) {
+        log.info("Get etterlevelsemetadata by id={}", id);
+        return ResponseEntity.ok(service.get(id).toResponse());
+    }
+
     @Operation(summary = "Get etterlevelsemetadata by KravNummer and KravVersjon")
     @ApiResponse(description = "ok")
     @GetMapping({"/kravnummer/{kravNummer}/{kravVersjon}", "/kravnummer/{kravNummer}"})
@@ -55,7 +65,7 @@ public class EtterlevelseMetadataController {
             @PathVariable Integer kravNummer,
             @PathVariable(required = false) Integer kravVersjon
     ) {
-        log.info("Get etterlevelsemetadatafor kravnummer={}", kravNummer);
+        log.info("Get etterlevelsemetadata for kravnummer={}", kravNummer);
         List<EtterlevelseMetadata> etterlevelseMetadataList = service.getByKravNummer(kravNummer, kravVersjon);
         return ResponseEntity.ok(new RestResponsePage<>(etterlevelseMetadataList).convert(EtterlevelseMetadata::toResponse));
     }

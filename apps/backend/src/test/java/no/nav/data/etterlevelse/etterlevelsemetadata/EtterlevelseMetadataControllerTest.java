@@ -2,13 +2,9 @@ package no.nav.data.etterlevelse.etterlevelsemetadata;
 
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.IntegrationTestBase;
-import no.nav.data.etterlevelse.codelist.CodelistStub;
-import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
-import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseResponse;
 import no.nav.data.etterlevelse.etterlevelsemetadata.domain.EtterlevelseMetadata;
 import no.nav.data.etterlevelse.etterlevelsemetadata.dto.EtterlevelseMetadataRequest;
 import no.nav.data.etterlevelse.etterlevelsemetadata.dto.EtterlevelseMetadataResponse;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -55,6 +51,38 @@ class EtterlevelseMetadataControllerTest extends IntegrationTestBase {
         var etterlevelseMetadataResp = resp.getBody();
         assertThat(etterlevelseMetadataResp).isNotNull();
         assertThat(etterlevelseMetadataResp.getNumberOfElements()).isEqualTo(1);
+    }
+
+    @Test
+    void getById_createTwoEtterlevelsemetaData_getOnlyOne() {
+        var em1 = storageService.save(EtterlevelseMetadata.builder()
+                .kravNummer(200)
+                .kravVersjon(1)
+                .behandlingId("test")
+                .build());
+        var em2 = storageService.save(EtterlevelseMetadata.builder().kravNummer(150).build());
+
+        var resp = restTemplate.getForEntity("/etterlevelsemetadata/" + em1.getId(), EtterlevelseMetadataResponse.class);
+        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
+        var etterlevelseMetadataResp = resp.getBody();
+        assertThat(etterlevelseMetadataResp).isNotNull();
+        assertThat(etterlevelseMetadataResp.getId()).isEqualTo(em1.getId());
+        assertThat(etterlevelseMetadataResp.getKravNummer()).isEqualTo(em1.getKravNummer());
+        assertThat(etterlevelseMetadataResp.getKravVersjon()).isEqualTo(em1.getKravVersjon());
+        assertThat(etterlevelseMetadataResp.getBehandlingId()).isEqualTo(em1.getBehandlingId());
+    }
+
+    @Test
+    void getById_createTwoEtterlevelsemetaData_getNone() {
+        var em1 = storageService.save(EtterlevelseMetadata.builder()
+                .kravNummer(200)
+                .kravVersjon(1)
+                .behandlingId("test")
+                .build());
+        var em2 = storageService.save(EtterlevelseMetadata.builder().kravNummer(150).build());
+
+        var resp = restTemplate.getForEntity("/etterlevelsemetadata/test", EtterlevelseMetadataResponse.class);
+        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     }
 
     @Test
