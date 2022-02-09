@@ -81,6 +81,19 @@ public class EtterlevelseMetadataController {
         return ResponseEntity.ok(new RestResponsePage<>(etterlevelseMetadataList).convert(EtterlevelseMetadata::toResponse));
     }
 
+    @Operation(summary = "Get etterlevelsemetadata by behandling and krav")
+    @ApiResponse(description = "ok")
+    @GetMapping({"/behandlingId/{behandlingId}/{kravNummer}/{kravVersjon}"})
+    public ResponseEntity<RestResponsePage<EtterlevelseMetadataResponse>> getByBehandlingAndKrav(
+            @PathVariable String behandlingId,
+            @PathVariable Integer kravNummer,
+            @PathVariable(required = false) Integer kravVersjon
+    ) {
+        log.info("Get etterlevelsemetadatafor behandlingId={}, kravNummer={}", behandlingId, kravNummer);
+        List<EtterlevelseMetadata> etterlevelseMetadataList = service.getByBehandlingAndKrav(behandlingId, kravNummer, kravVersjon);
+        return ResponseEntity.ok(new RestResponsePage<>(etterlevelseMetadataList).convert(EtterlevelseMetadata::toResponse));
+    }
+
     @Operation(summary = "Creating etterlevelsemetadata")
     @ApiResponse(description = "ok")
     @PostMapping

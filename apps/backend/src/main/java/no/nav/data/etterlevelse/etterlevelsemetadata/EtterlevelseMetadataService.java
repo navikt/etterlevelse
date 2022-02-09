@@ -42,13 +42,13 @@ public class EtterlevelseMetadataService extends DomainService<EtterlevelseMetad
         return GenericStorage.to(repo.findByBehandling(behandlingId), EtterlevelseMetadata.class);
     }
 
-    public List<EtterlevelseMetadata> getByBehandlingAndKrav(String behandlingId, int kravNummer) {
+    public List<EtterlevelseMetadata> getByBehandlingAndKravNummer(String behandlingId, int kravNummer) {
         return GenericStorage.to(repo.findByBehandlingAndKravNummer(behandlingId, kravNummer), EtterlevelseMetadata.class);
     }
 
     public List<EtterlevelseMetadata> getByBehandlingAndKrav(String behandlingId, int kravNummer, @Nullable Integer kravVersjon) {
         if(kravVersjon == null) {
-            return getByBehandlingAndKrav(behandlingId, kravNummer);
+            return getByBehandlingAndKravNummer(behandlingId, kravNummer);
         }
         return GenericStorage.to(repo.findByBehandlingAndKrav(behandlingId, kravNummer, kravVersjon), EtterlevelseMetadata.class);
     }
