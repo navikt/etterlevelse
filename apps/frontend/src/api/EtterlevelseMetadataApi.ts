@@ -28,7 +28,7 @@ export const getEtterlevelseMetadataByKravNummer = async (kravNummer: number | s
 
 export const getEtterlevelseMetadataByKravNumberAndVersion = async (kravNummer: number | string, kravVersjon: number | string) => {
   return await axios
-    .get<EtterlevelseMetadata>(`${env.backendBaseUrl}/etterlevelsemetadata/kravnummer/${kravNummer}/${kravVersjon}`)
+    .get<PageResponse<EtterlevelseMetadata>>(`${env.backendBaseUrl}/etterlevelsemetadata/kravnummer/${kravNummer}/${kravVersjon}`)
     .then((resp) => {
       return resp.data
     })
@@ -38,7 +38,15 @@ export const getEtterlevelseMetadataByKravNumberAndVersion = async (kravNummer: 
 }
 
 export const getEtterlevelseMetadataByBehandlingsId = async (id: string) => {
-  return (await axios.get<EtterlevelseMetadata>(`${env.backendBaseUrl}/etterlevelsemetadata/behandlingId/${id}`)).data
+  return (await axios.get<PageResponse<EtterlevelseMetadata>>(`${env.backendBaseUrl}/etterlevelsemetadata/behandlingId/${id}`)).data
+}
+
+export const getEtterlevelseMetadataByBehandlingsIdAndKravNummer = async (behandlingId: string, kravNummer: number) => {
+  return (await axios.get<PageResponse<EtterlevelseMetadata>>(`${env.backendBaseUrl}/etterlevelsemetadata/behandlingId/${behandlingId}/${kravNummer}`)).data
+}
+
+export const getEtterlevelseMetadataByBehandlingsIdAndKravNummerAndKravVersion = async (behandlingId: string, kravNummer: number, kravVersjon: number) => {
+  return (await axios.get<PageResponse<EtterlevelseMetadata>>(`${env.backendBaseUrl}/etterlevelsemetadata/behandlingId/${behandlingId}/${kravNummer}/${kravVersjon}`)).data
 }
 
 export const getEtterlevelseMetadataById = async (id: string) => {
