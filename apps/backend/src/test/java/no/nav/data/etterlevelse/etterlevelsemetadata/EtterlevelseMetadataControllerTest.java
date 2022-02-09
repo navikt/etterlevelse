@@ -66,6 +66,54 @@ class EtterlevelseMetadataControllerTest extends IntegrationTestBase {
     }
 
     @Test
+    void getByBehandlingAndKrav_createTwoEtterlevelsemetaDataWithDifferentBehandlingId_getTwo() {
+        storageService.save(EtterlevelseMetadata.builder().behandlingId("test-1").kravNummer(200).kravVersjon(2).build());
+        storageService.save(EtterlevelseMetadata.builder().behandlingId("test-1").kravNummer(200).kravVersjon(1).build());
+        storageService.save(EtterlevelseMetadata.builder().behandlingId("test-2").kravNummer(200).build());
+
+        var resp = restTemplate.getForEntity("/etterlevelsemetadata/behandlingId/test-1/200", EtterlevelseMetadataController.EtterlevelseMetadataPage.class);
+        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
+        var etterlevelseMetadataResp = resp.getBody();
+        assertThat(etterlevelseMetadataResp).isNotNull();
+        assertThat(etterlevelseMetadataResp.getNumberOfElements()).isEqualTo(2);
+    }
+
+    @Test
+    void getByBehandlingAndKrav_createTwoEtterlevelsemetaDataWithDifferentBehandlingIdAndKravNummerAndKravVersjon_getonlyOne() {
+        storageService.save(EtterlevelseMetadata.builder().behandlingId("test-1").kravNummer(200).kravVersjon(2).build());
+        storageService.save(EtterlevelseMetadata.builder().behandlingId("test-1").kravNummer(200).kravVersjon(1).build());
+
+        var resp = restTemplate.getForEntity("/etterlevelsemetadata/behandlingId/test-1/200/1", EtterlevelseMetadataController.EtterlevelseMetadataPage.class);
+        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
+        var etterlevelseMetadataResp = resp.getBody();
+        assertThat(etterlevelseMetadataResp).isNotNull();
+        assertThat(etterlevelseMetadataResp.getNumberOfElements()).isEqualTo(1);
+    }
+
+    @Test
+    void getByBehandlingAndKrav_createTwoEtterlevelsemetaDataWithDifferentBehandlingIdAndKravNummer_getNone() {
+        storageService.save(EtterlevelseMetadata.builder().behandlingId("test-1").kravNummer(200).build());
+
+        var resp = restTemplate.getForEntity("/etterlevelsemetadata/behandlingId/test-2/200", EtterlevelseMetadataController.EtterlevelseMetadataPage.class);
+        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
+        var etterlevelseMetadataResp = resp.getBody();
+        assertThat(etterlevelseMetadataResp).isNotNull();
+        assertThat(etterlevelseMetadataResp.getNumberOfElements()).isEqualTo(0);
+    }
+
+    @Test
+    void getByBehandlingAndKrav_createTwoEtterlevelsemetaDataWithDifferentBehandlingIdAndKravNummerAndKravVersjon_getNone() {
+        storageService.save(EtterlevelseMetadata.builder().behandlingId("test-1").kravNummer(200).kravVersjon(1).build());
+
+        var resp = restTemplate.getForEntity("/etterlevelsemetadata/behandlingId/test-1/200/2", EtterlevelseMetadataController.EtterlevelseMetadataPage.class);
+        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
+        var etterlevelseMetadataResp = resp.getBody();
+        assertThat(etterlevelseMetadataResp).isNotNull();
+        assertThat(etterlevelseMetadataResp.getNumberOfElements()).isEqualTo(0);
+    }
+
+
+    @Test
     void getById_createTwoEtterlevelsemetaData_getOnlyOne() {
         var em1 = storageService.save(EtterlevelseMetadata.builder()
                 .kravNummer(200)
