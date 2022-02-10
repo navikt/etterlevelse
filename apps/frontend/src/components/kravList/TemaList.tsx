@@ -36,7 +36,7 @@ export const TemaList = () => {
         k.kravPriorityUID = priority.length ? priority[0].id : ''
       })
 
-      setAllKrav(kraver.filter((k) => k.status !== KravStatus.UTGAATT))
+      setAllKrav(kraver.filter((k) => k.status === KravStatus.AKTIV))
     })()
   }
 
