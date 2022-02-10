@@ -29,6 +29,13 @@ export const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function;
       .then((resp) => {
         if (resp.content.length) {
           setEtterlevelseMetadata(resp.content[0])
+        } else {
+          setEtterlevelseMetadata(mapEtterlevelseMetadataToFormValue({
+            id: 'ny',
+            behandlingId: props.behandlingId,
+            kravNummer: props.krav.kravNummer,
+            kravVersjon: props.krav.kravVersjon,
+          }))
         }
       })
   }
@@ -129,7 +136,7 @@ export const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function;
           </Block>
         </Button>
       </Block>
-      {etterlevelseMetadata && <Block display={"flex"} alignItems={"center"}>
+      {etterlevelseMetadata && <Block display="flex" alignItems="center">
         <TildeltPopoever etterlevelseMetadata={etterlevelseMetadata} setEtterlevelseMetadata={setEtterlevelseMetadata} icon={faEllipsisVertical} />
       </Block>}
     </Block>
