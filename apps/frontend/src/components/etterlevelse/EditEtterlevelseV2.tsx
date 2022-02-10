@@ -250,13 +250,13 @@ export const EditEtterlevelseV2 = ({
                 </Block>
               )}
 
-              <Block display={"flex"} justifyContent={"flex-start"}>
+              <Block display={"flex"} justifyContent={"flex-start"} alignItems="center" marginTop="32px">
                 <Label3
                   $style={{color: ettlevColors.white, fontSize: '14px', lineHeight: '14px', textAlign: 'right'}}
                 >
                   Tildelt: {(etterlevelseMetadata && etterlevelseMetadata.tildeltMed && etterlevelseMetadata.tildeltMed.length >= 1) ? etterlevelseMetadata.tildeltMed[0] : "Ingen"}
                 </Label3>
-                <TildeltPopoever etterlevelseMetadata={etterlevelseMetadata} setEtterlevelseMetadata={setEtterlevelseMetadata} icon={faChevronDown}/>
+                <TildeltPopoever etterlevelseMetadata={etterlevelseMetadata} setEtterlevelseMetadata={setEtterlevelseMetadata} icon={faChevronDown} iconColor={ettlevColors.white}/>
               </Block>
 
             </Block>

@@ -16,9 +16,10 @@ type TildeltPopoverProps = {
   etterlevelseMetadata: EtterlevelseMetadata
   setEtterlevelseMetadata: Function
   icon: IconDefinition
+  iconColor?: string
 }
 
-export const TildeltPopoever = ({ etterlevelseMetadata, setEtterlevelseMetadata, icon }: TildeltPopoverProps) => {
+export const TildeltPopoever = ({ etterlevelseMetadata, setEtterlevelseMetadata, icon, iconColor }: TildeltPopoverProps) => {
   return (
     <StatefulPopover
       focusLock={true}
@@ -87,9 +88,9 @@ export const TildeltPopoever = ({ etterlevelseMetadata, setEtterlevelseMetadata,
           width:'24px',
           height:'24px'
         }}
-        type={"button"}
+        type="button"
       >
-        <FontAwesomeIcon icon={icon}/>
+        <FontAwesomeIcon icon={icon} color={iconColor ? iconColor : "inherit"}/>
       </BaseButton>
     </StatefulPopover>
   )
