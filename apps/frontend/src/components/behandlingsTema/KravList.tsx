@@ -22,23 +22,25 @@ type KravListProps = {
   isExpanded: boolean
   setActiveEtterlevelseStatus: React.Dispatch<React.SetStateAction<EtterlevelseStatus | undefined>>
   setEdit: React.Dispatch<React.SetStateAction<string | undefined>>
-  setKravId:  React.Dispatch<React.SetStateAction<KravId | undefined>>
+  setKravId: React.Dispatch<React.SetStateAction<KravId | undefined>>
+  edit: string | undefined
 }
 
 export const KravList = ({
-                       kravList,
-                       emptyMessage,
-                       sortingAvailable,
-                       noStatus,
-                       sorting,
-                       sortingOptions,
-                       isExpanded,
-                       setSorting,
-                       behandling,
-                       setActiveEtterlevelseStatus,
-                       setKravId,
-                       setEdit
-                     }: KravListProps) => {
+                           kravList,
+                           emptyMessage,
+                           sortingAvailable,
+                           noStatus,
+                           sorting,
+                           sortingOptions,
+                           isExpanded,
+                           setSorting,
+                           behandling,
+                           setActiveEtterlevelseStatus,
+                           setKravId,
+                           setEdit,
+                           edit
+                         }: KravListProps) => {
   if (kravList.length) {
     let sortedKravList = _.cloneDeep(kravList)
     if (sortingAvailable && sorting[0].id === sortingOptions[1].id) {
@@ -75,6 +77,7 @@ export const KravList = ({
                 key={`${k.navn}_${k.kravNummer}_${k.kravVersjon}_card`}
                 noStatus={noStatus}
                 behandlingId={behandling.id}
+                edit={edit}
               />
             </CustomPanelDivider>
           )

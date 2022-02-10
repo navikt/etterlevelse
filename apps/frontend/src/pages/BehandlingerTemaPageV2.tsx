@@ -231,6 +231,7 @@ export const BehandlingerTemaPageV2 = () => {
                     setActiveEtterlevelseStatus={setActiveEtterlevelseStatus}
                     setEdit={setEdit}
                     setKravId={setKravId}
+                    edit={edit}
                   />
                 </CustomizedPanel>
                 <CustomizedPanel HeaderActiveBackgroundColor={ettlevColors.green50} title={<KravPanelHeader title={'Ferdig utfylt'} kravData={utfyltKrav}/>}>
@@ -245,6 +246,7 @@ export const BehandlingerTemaPageV2 = () => {
                     setActiveEtterlevelseStatus={setActiveEtterlevelseStatus}
                     setEdit={setEdit}
                     setKravId={setKravId}
+                    edit={edit}
                   />
                 </CustomizedPanel>
               </CustomizedAccordion>
@@ -276,6 +278,7 @@ export const BehandlingerTemaPageV2 = () => {
                           setEdit={setEdit}
                           setKravId={setKravId}
                           noStatus={true}
+                          edit={edit}
                         />
                       </CustomizedPanel>
                     </CustomizedAccordion>
