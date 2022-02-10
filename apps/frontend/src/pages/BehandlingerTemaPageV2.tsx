@@ -1,30 +1,30 @@
-import React, {useEffect, useState} from 'react'
-import {Block, Display} from 'baseui/block'
-import {useNavigate, useParams} from 'react-router-dom'
-import {H3, Paragraph2, Paragraph4} from 'baseui/typography'
-import {ettlevColors} from '../util/theme'
-import {codelist, ListName, TemaCode} from '../services/Codelist'
-import {useBehandling} from '../api/BehandlingApi'
-import {Layout2} from '../components/scaffold/Page'
-import {Etterlevelse, EtterlevelseStatus, KravEtterlevelseData, KravQL, KravStatus, PageResponse} from '../constants'
-import {behandlingKravQuery} from '../components/behandling/ViewBehandling'
-import {useQuery} from '@apollo/client'
-import {CustomizedAccordion, CustomizedPanel, CustomPanelDivider} from '../components/common/CustomizedAccordion'
-import {KravId} from '../api/KravApi'
-import {breadcrumbPaths} from '../components/common/CustomizedBreadcrumbs'
-import {Responsive} from 'baseui/theme'
-import {KravPanelHeader} from '../components/behandling/KravPanelHeader'
-import {sortKraverByPriority} from '../util/sort'
+import React, { useEffect, useState } from 'react'
+import { Block, Display } from 'baseui/block'
+import { useNavigate, useParams } from 'react-router-dom'
+import { H3, Paragraph2, Paragraph4 } from 'baseui/typography'
+import { ettlevColors } from '../util/theme'
+import { codelist, ListName, TemaCode } from '../services/Codelist'
+import { useBehandling } from '../api/BehandlingApi'
+import { Layout2 } from '../components/scaffold/Page'
+import { Etterlevelse, EtterlevelseStatus, KravEtterlevelseData, KravQL, KravStatus, PageResponse } from '../constants'
+import { behandlingKravQuery } from '../components/behandling/ViewBehandling'
+import { useQuery } from '@apollo/client'
+import { CustomizedAccordion, CustomizedPanel, CustomPanelDivider } from '../components/common/CustomizedAccordion'
+import { KravId } from '../api/KravApi'
+import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
+import { Responsive } from 'baseui/theme'
+import { KravPanelHeader } from '../components/behandling/KravPanelHeader'
+import { sortKraverByPriority } from '../util/sort'
 import _ from 'lodash'
-import {getAllKravPriority} from '../api/KravPriorityApi'
-import {Helmet} from 'react-helmet'
+import { getAllKravPriority } from '../api/KravPriorityApi'
+import { Helmet } from 'react-helmet'
 import CustomizedSelect from '../components/common/CustomizedSelect'
-import {Option} from 'baseui/select'
-import {user} from '../services/User'
-import {getMainHeader} from './BehandlingPage'
-import {KravView} from "../components/behandlingsTema/KravView";
-import {KravCard} from "../components/behandlingsTema/KravCard";
-import {SecondaryHeader} from "../components/behandlingsTema/SecondaryHeader";
+import { Option } from 'baseui/select'
+import { user } from '../services/User'
+import { getMainHeader } from './BehandlingPage'
+import { KravView } from "../components/behandlingsTema/KravView";
+import { KravCard } from "../components/behandlingsTema/KravCard";
+import { SecondaryHeader } from "../components/behandlingsTema/SecondaryHeader";
 
 const responsiveBreakPoints: Responsive<Display> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
 const responsiveDisplay: Responsive<Display> = ['block', 'block', 'block', 'block', 'flex', 'flex']
@@ -52,14 +52,14 @@ export const BehandlingerTemaPageV2 = () => {
   const [behandling, setBehandling] = useBehandling(params.id)
   const lovListe = codelist.getCodesForTema(temaData?.code)
   const lover = lovListe.map((c) => c.code)
-  const variables = {behandlingId: params.id, lover: lover, gjeldendeKrav: false, behandlingIrrevantKrav: irrelevantKrav}
-  const {data: rawData, loading} = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
+  const variables = { behandlingId: params.id, lover: lover, gjeldendeKrav: false, behandlingIrrevantKrav: irrelevantKrav }
+  const { data: rawData, loading } = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
     variables,
     skip: !params.id || !lover.length,
   })
 
-  const {data: irrelevantData, loading: irrelevantDataLoading} = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
-    variables: {behandlingId: params.id, lover: lover, gjeldendeKrav: false, behandlingIrrevantKrav: !irrelevantKrav},
+  const { data: irrelevantData, loading: irrelevantDataLoading } = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
+    variables: { behandlingId: params.id, lover: lover, gjeldendeKrav: false, behandlingIrrevantKrav: !irrelevantKrav },
     skip: !params.id || !lover.length,
   })
 
@@ -75,8 +75,8 @@ export const BehandlingerTemaPageV2 = () => {
   const [kravId, setKravId] = useState<KravId | undefined>()
   const [isExpanded, setIsExpanded] = useState<boolean>(false)
   const sortingOptions = [
-    {label: 'Anbefalt rekkefølge', id: 'priority'},
-    {label: 'Sist endret av meg', id: 'lastModified'},
+    { label: 'Anbefalt rekkefølge', id: 'priority' },
+    { label: 'Sist endret av meg', id: 'lastModified' },
   ]
   const [sorting, setSorting] = useState<readonly Option[]>([sortingOptions[0]])
   const [isTemaModalOpen, setIsTemaModalOpen] = useState<boolean>(false)
@@ -86,7 +86,7 @@ export const BehandlingerTemaPageV2 = () => {
   const navigate = useNavigate()
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       const allKravPriority = await getAllKravPriority()
       const kraver = _.cloneDeep(rawData?.krav.content) || []
       const irrelevantKraver = _.cloneDeep(irrelevantData?.krav.content) || []
@@ -147,7 +147,7 @@ export const BehandlingerTemaPageV2 = () => {
   }, [rawData, irrelevantData])
 
   const update = (etterlevelse: Etterlevelse) => {
-    setKravData(kravData.map((e) => (e.kravVersjon === etterlevelse.kravVersjon && e.kravNummer === etterlevelse.kravNummer ? {...e, ...mapEtterlevelseData(etterlevelse)} : e)))
+    setKravData(kravData.map((e) => (e.kravVersjon === etterlevelse.kravVersjon && e.kravNummer === etterlevelse.kravNummer ? { ...e, ...mapEtterlevelseData(etterlevelse) } : e)))
   }
 
   useEffect(() => {
@@ -191,10 +191,10 @@ export const BehandlingerTemaPageV2 = () => {
       }
 
       return (
-        <Block $style={{backgroundColor: 'white'}}>
+        <Block $style={{ backgroundColor: 'white' }}>
           {isExpanded && sortingAvailable && (
             <Block marginBottom="12px" paddingLeft="20px" paddingRight="20px" width="100%" maxWidth="290px">
-              <CustomizedSelect clearable={false} options={sortingOptions} value={sorting} onChange={(params) => setSorting(params.value)}/>
+              <CustomizedSelect clearable={false} options={sortingOptions} value={sorting} onChange={(params) => setSorting(params.value)} />
             </Block>
           )}
           {behandling && sortedKravList.map((k) => {
@@ -208,6 +208,7 @@ export const BehandlingerTemaPageV2 = () => {
                   key={`${k.navn}_${k.kravNummer}_${k.kravVersjon}_card`}
                   noStatus={noStatus}
                   behandlingId={behandling.id}
+                  edit={edit}
                 />
               </CustomPanelDivider>
             )
@@ -241,28 +242,29 @@ export const BehandlingerTemaPageV2 = () => {
           mainHeader={getMainHeader(
             behandling,
             <Helmet>
-              <meta charSet="utf-8"/>
+              <meta charSet="utf-8" />
               <title>
                 {temaData?.shortName} B{behandling.nummer.toString()} {behandling.navn.toString()}
               </title>
             </Helmet>,
           )}
           secondaryHeaderBackgroundColor={ettlevColors.green100}
-          secondaryHeader={<SecondaryHeader
-            edit={edit}
-            behandling={behandling}
-            setEdit={setEdit}
-            navigate={navigate}
-            setIsAlertUnsavedModalOpen={setIsAlertUnsavedModalOpen}
-            activeEtterlevleseStatus={activeEtterlevleseStatus}
-            isTemaModalOpen={isTemaModalOpen}
-            lovListe={lovListe}
-            setIsNavigateButtonClicked={setIsNavigateButtonClicked}
-            setIsTemaModalOpen={setIsTemaModalOpen}
-            tab={tab}
-            setTab={setTab}
-            temaData={temaData}
-          />}
+          secondaryHeader={
+            <SecondaryHeader
+              edit={edit}
+              behandling={behandling}
+              setEdit={setEdit}
+              navigate={navigate}
+              setIsAlertUnsavedModalOpen={setIsAlertUnsavedModalOpen}
+              activeEtterlevleseStatus={activeEtterlevleseStatus}
+              isTemaModalOpen={isTemaModalOpen}
+              lovListe={lovListe}
+              setIsNavigateButtonClicked={setIsNavigateButtonClicked}
+              setIsTemaModalOpen={setIsTemaModalOpen}
+              tab={tab}
+              setTab={setTab}
+              temaData={temaData}
+            />}
           childrenBackgroundColor={ettlevColors.grey25}
           currentPage={behandling?.navn}
           breadcrumbPaths={breadcrumbPaths}
@@ -273,11 +275,11 @@ export const BehandlingerTemaPageV2 = () => {
                 <CustomizedPanel
                   HeaderActiveBackgroundColor={ettlevColors.green50}
                   onClick={() => setIsExpanded(!isExpanded)}
-                  title={<KravPanelHeader title={'Skal fylles ut'} kravData={skalUtfyllesKrav}/>}
+                  title={<KravPanelHeader title={'Skal fylles ut'} kravData={skalUtfyllesKrav} />}
                 >
                   {getKravList(skalUtfyllesKrav, 'Ingen krav som skal fylles ut', true)}
                 </CustomizedPanel>
-                <CustomizedPanel HeaderActiveBackgroundColor={ettlevColors.green50} title={<KravPanelHeader title={'Ferdig utfylt'} kravData={utfyltKrav}/>}>
+                <CustomizedPanel HeaderActiveBackgroundColor={ettlevColors.green50} title={<KravPanelHeader title={'Ferdig utfylt'} kravData={utfyltKrav} />}>
                   {getKravList(utfyltKrav, 'Ingen krav er ferdig utfylt')}
                 </CustomizedPanel>
               </CustomizedAccordion>
@@ -294,7 +296,7 @@ export const BehandlingerTemaPageV2 = () => {
                       <CustomizedPanel
                         HeaderActiveBackgroundColor={ettlevColors.green50}
                         onClick={() => setIsExpanded(!isExpanded)}
-                        title={<KravPanelHeader title="Må vurderes av dere" kravData={irrelevantKravData}/>}
+                        title={<KravPanelHeader title="Må vurderes av dere" kravData={irrelevantKravData} />}
                       >
                         {getKravList(irrelevantKravData, 'Ingen krav som skal fylles ut', false, true)}
                       </CustomizedPanel>
