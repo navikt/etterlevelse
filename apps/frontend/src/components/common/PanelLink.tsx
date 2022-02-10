@@ -331,7 +331,7 @@ export const PanelLinkCard = ({
   )
 }
 
-const Chevron = ({ hover, icon, distance }: { hover: boolean; icon: string; distance: string }) => (
+export const Chevron = ({ hover, icon, distance }: { hover: boolean; icon: string; distance: string }) => (
   <Block marginLeft={hover ? `calc(${theme.sizing.scale600} + ${distance})` : theme.sizing.scale600} alignSelf={'center'} marginRight={hover ? '-' + distance : 0}>
     <img src={icon} aria-hidden alt={'Chevron høyre ikon'} width={'24px'} height={'24px'} />
   </Block>

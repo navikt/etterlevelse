@@ -19,6 +19,7 @@ import { ettlevColors } from '../../util/theme'
 import { borderStyle } from '../common/Style'
 import { Markdown } from '../common/Markdown'
 import ExpiredAlert from './ExpiredAlert'
+import SidePanel from './SidePanel'
 
 const LabelWrapper = ({ children }: { children: React.ReactNode }) => (
   <Block marginTop="48px" marginBottom="48px">
@@ -31,15 +32,21 @@ const labelMargin = '24px'
 
 export const ViewKrav = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVersjoner: KravVersjon[] }) => {
   return (
-    <Block width="100%">
-      {krav.suksesskriterier.map((s, i) => (
-        <SuksesskriterieCard key={s.id} suksesskriterie={s} num={i + 1} totalt={krav.suksesskriterier.length} />
-      ))}
+    <Block display="flex" width="calc(100% + 211px)">
+      <Block width="100%">
+        {krav.suksesskriterier.map((s, i) => (
+          <SuksesskriterieCard key={s.id} suksesskriterie={s} num={i + 1} totalt={krav.suksesskriterier.length} />
+        ))}
 
-      {/*  <LabelAboveContent header title='Beskrivelse' markdown={krav.beskrivelse} /> */}
+        {/*  <LabelAboveContent header title='Beskrivelse' markdown={krav.beskrivelse} /> */}
 
-      {<AllInfo krav={krav} alleKravVersjoner={alleKravVersjoner} />}
+        {<AllInfo krav={krav} alleKravVersjoner={alleKravVersjoner} />}
+      </Block>
+      <Block marginLeft="24px" width="187px">
+        <SidePanel />
+      </Block>
     </Block>
+
   )
 }
 
