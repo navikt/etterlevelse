@@ -1,44 +1,44 @@
-import { Etterlevelse, EtterlevelseStatus, Krav, KravQL, KravStatus } from '../../constants'
-import { Field, FieldProps, Form, Formik, FormikProps, validateYupSchema, yupToFormErrors } from 'formik'
-import { createEtterlevelse, getEtterlevelserByBehandlingsIdKravNumber, mapEtterlevelseToFormValue, updateEtterlevelse } from '../../api/EtterlevelseApi'
-import { Block, Responsive, Scale } from 'baseui/block'
+import {Etterlevelse, EtterlevelseMetadata, EtterlevelseStatus, Krav, KravQL, KravStatus} from '../../constants'
+import {Field, FieldProps, Form, Formik, FormikProps, validateYupSchema, yupToFormErrors} from 'formik'
+import {createEtterlevelse, getEtterlevelserByBehandlingsIdKravNumber, mapEtterlevelseToFormValue, updateEtterlevelse} from '../../api/EtterlevelseApi'
+import {Block} from 'baseui/block'
 import Button from '../common/Button'
-import React, { useEffect, useRef, useState } from 'react'
+import React, {useEffect, useRef, useState} from 'react'
 import * as yup from 'yup'
-import { getEtterlevelseStatus } from '../../pages/EtterlevelsePage'
-import { DateField, FieldWrapper, TextAreaField } from '../common/Inputs'
-import { theme } from '../../util'
-import { FormControl } from 'baseui/form-control'
-import { getKravByKravNumberAndVersion, kravFullQuery, KravId, useKrav, useSearchKrav } from '../../api/KravApi'
-import { kravName, kravNumView, query } from '../../pages/KravPage'
-import { behandlingName, useBehandling, useSearchBehandling } from '../../api/BehandlingApi'
-import CustomizedSelect from '../common/CustomizedSelect'
-import { H1, H2, H3, Label3, Paragraph2, Paragraph4 } from 'baseui/typography'
-import { ettlevColors, maxPageWidth, responsivePaddingExtraLarge, responsiveWidthExtraLarge } from '../../util/theme'
-import { SuksesskriterierBegrunnelseEdit } from './Edit/SuksesskriterieBegrunnelseEdit'
-import { Radio, RadioGroup } from 'baseui/radio'
-import { Code } from '../../services/Codelist'
-import { Error } from '../common/ModalSchema'
-import { user } from '../../services/User'
-import { KIND as NKIND, Notification } from 'baseui/notification'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTimesCircle } from '@fortawesome/free-solid-svg-icons'
-import { borderColor, borderRadius, borderStyle, borderWidth, marginAll, padding, paddingZero } from '../common/Style'
-import { useQuery } from '@apollo/client'
+import {getEtterlevelseStatus} from '../../pages/EtterlevelsePage'
+import {DateField, FieldWrapper, TextAreaField} from '../common/Inputs'
+import {theme} from '../../util'
+import {FormControl} from 'baseui/form-control'
+import {getKravByKravNumberAndVersion, KravId} from '../../api/KravApi'
+import {kravNumView, query} from '../../pages/KravPage'
+import {H1, H2, H3, Label3, Paragraph2, Paragraph4} from 'baseui/typography'
+import {ettlevColors, responsivePaddingExtraLarge, responsiveWidthExtraLarge} from '../../util/theme'
+import {SuksesskriterierBegrunnelseEdit} from './Edit/SuksesskriterieBegrunnelseEdit'
+import {Radio, RadioGroup} from 'baseui/radio'
+import {Code} from '../../services/Codelist'
+import {Error} from '../common/ModalSchema'
+import {user} from '../../services/User'
+import {KIND as NKIND, Notification} from 'baseui/notification'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faChevronDown, faTimesCircle} from '@fortawesome/free-solid-svg-icons'
+import {borderColor, borderRadius, borderStyle, borderWidth, marginAll, padding, paddingZero} from '../common/Style'
+import {useQuery} from '@apollo/client'
 import moment from 'moment'
-import { informationIcon } from '../Images'
+import {informationIcon} from '../Images'
 import CustomizedTabs from '../common/CustomizedTabs'
-import { Tilbakemeldinger } from '../krav/tilbakemelding/Tilbakemelding'
+import {Tilbakemeldinger} from '../krav/tilbakemelding/Tilbakemelding'
 import Etterlevelser from '../krav/Etterlevelser'
-import { Markdown } from '../common/Markdown'
-import { CustomizedAccordion, CustomizedPanel, CustomPanelDivider } from '../common/CustomizedAccordion'
-import { AllInfo } from '../krav/ViewKrav'
+import {Markdown} from '../common/Markdown'
+import {CustomizedAccordion, CustomizedPanel, CustomPanelDivider} from '../common/CustomizedAccordion'
+import {AllInfo} from '../krav/ViewKrav'
 import CustomizedModal from '../common/CustomizedModal'
-import { useNavigate } from 'react-router-dom'
+import {useNavigate} from 'react-router-dom'
 import EtterlevelseCard from './EtterlevelseCard'
-import { ModalHeader } from 'baseui/modal'
-import { Section } from '../../pages/BehandlingerTemaPageV2'
+import {ModalHeader} from 'baseui/modal'
+import {Section} from '../../pages/BehandlingerTemaPageV2'
 import _ from 'lodash'
+import {getEtterlevelseMetadataByBehandlingsIdAndKravNummerAndKravVersion, mapEtterlevelseMetadataToFormValue} from "../../api/EtterlevelseMetadataApi";
+import TildeltPopoever from "../etterlevelseMetadata/TildeltPopover";
 
 type EditEttlevProps = {
   etterlevelse: Etterlevelse
@@ -69,7 +69,7 @@ const etterlevelseSchema = () => {
           name: 'begrunnelseText',
           message: 'Du må fylle ut dokumentasjonen',
           test: function (begrunnelse) {
-            const { parent, options } = this
+            const {parent, options} = this
             if (
               (options.context?.status === EtterlevelseStatus.FERDIG || options.context?.status === EtterlevelseStatus.FERDIG_DOKUMENTERT) &&
               (parent.oppfylt || parent.ikkeRelevant) &&
@@ -89,7 +89,7 @@ const etterlevelseSchema = () => {
       name: 'statusBegrunnelse',
       message: 'Du må dokumentere på begrunnelse',
       test: function (statusBegrunnelse) {
-        const { parent } = this
+        const {parent} = this
         if (parent.status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT && (statusBegrunnelse === '' || statusBegrunnelse === undefined)) {
           return false
         }
@@ -100,7 +100,7 @@ const etterlevelseSchema = () => {
       name: 'etterlevelseStatus',
       message: 'Du må dokumentere alle kriterier før du har dokumentert  ferdig. Du kan velge å lagre og fortsette senere.',
       test: function (status) {
-        const { parent } = this
+        const {parent} = this
         if (status === EtterlevelseStatus.FERDIG || status === EtterlevelseStatus.FERDIG_DOKUMENTERT) {
           return parent.suksesskriterieBegrunnelser.every((skb: any) => skb.oppfylt || skb.ikkeRelevant)
         }
@@ -111,7 +111,7 @@ const etterlevelseSchema = () => {
       name: 'frist',
       message: 'Du må sette på en frist dato for ferdistilling',
       test: function (fristForFerdigstillelse) {
-        const { parent } = this
+        const {parent} = this
         if (parent.status === EtterlevelseStatus.OPPFYLLES_SENERE && (fristForFerdigstillelse === undefined || fristForFerdigstillelse === null)) {
           return false
         }
@@ -122,35 +122,50 @@ const etterlevelseSchema = () => {
 }
 
 export const EditEtterlevelseV2 = ({
-  kravId,
-  etterlevelse,
-  varsleMelding,
-  close,
-  formRef,
-  documentEdit,
-  behandlingNavn,
-  behandlingId,
-  behandlingformaal,
-  behandlingNummer,
-  setIsAlertUnsavedModalOpen,
-  isAlertUnsavedModalOpen,
-  isNavigateButtonClicked,
-  tab,
-  setTab
-}: EditEttlevProps) => {
-  const { data, loading } = useQuery<{ kravById: KravQL }, KravId>(query, {
+                                     kravId,
+                                     etterlevelse,
+                                     varsleMelding,
+                                     close,
+                                     formRef,
+                                     documentEdit,
+                                     behandlingNavn,
+                                     behandlingId,
+                                     behandlingformaal,
+                                     behandlingNummer,
+                                     setIsAlertUnsavedModalOpen,
+                                     isAlertUnsavedModalOpen,
+                                     isNavigateButtonClicked,
+                                     tab,
+                                     setTab
+                                   }: EditEttlevProps) => {
+  const {data, loading} = useQuery<{ kravById: KravQL }, KravId>(query, {
     variables: kravId,
     skip: !kravId.id && !kravId.kravNummer,
     fetchPolicy: 'no-cache',
   })
   const etterlevelserLoading = loading
-
   const [krav, setKrav] = useState<KravQL>()
   const [nyereKrav, setNyereKrav] = React.useState<Krav>()
   const [disableEdit, setDisableEdit] = React.useState<boolean>(false)
   const [editedEtterlevelse, setEditedEtterlevelse] = React.useState<Etterlevelse>()
-
   const etterlevelseFormRef: React.Ref<FormikProps<Etterlevelse> | undefined> = useRef()
+  const [etterlevelseMetadata, setEtterlevelseMetadata] = useState<EtterlevelseMetadata>(mapEtterlevelseMetadataToFormValue({
+    id: 'ny',
+    behandlingId: behandlingId,
+    kravNummer: kravId.kravNummer,
+    kravVersjon: kravId.kravVersjon,
+  }))
+
+  useEffect(() => {
+    ;(async () => {
+      behandlingId && kravId.kravNummer && getEtterlevelseMetadataByBehandlingsIdAndKravNummerAndKravVersion(behandlingId, kravId.kravNummer, kravId.kravVersjon)
+        .then((resp) => {
+          if (resp.content.length) {
+            setEtterlevelseMetadata(resp.content[0])
+          }
+        })
+    })()
+  }, [])
 
   const submit = async (etterlevelse: Etterlevelse) => {
     const mutatedEtterlevelse = {
@@ -212,7 +227,7 @@ export const EditEtterlevelseV2 = ({
               >
                 {kravNumView(krav)}
               </Paragraph2>
-              <H1 $style={{ marginTop: '0px', marginBottom: '0px', paddingBottom: '32px', color: ettlevColors.white }}>{krav.navn}</H1>
+              <H1 $style={{marginTop: '0px', marginBottom: '0px', paddingBottom: '32px', color: ettlevColors.white}}>{krav.navn}</H1>
 
               {varsleMelding && (
                 <Block
@@ -228,17 +243,27 @@ export const EditEtterlevelseV2 = ({
                     marginTop: '16px',
                   }}
                 >
-                  <img src={informationIcon} alt="" width={'24px'} height={'24px'} />
+                  <img src={informationIcon} alt="" width={'24px'} height={'24px'}/>
                   <Paragraph2 marginLeft={theme.sizing.scale500} marginTop="0px" marginBottom="0px">
                     {varsleMelding}
                   </Paragraph2>
                 </Block>
               )}
+
+              <Block display={"flex"} justifyContent={"flex-start"}>
+                <Label3
+                  $style={{color: ettlevColors.white, fontSize: '14px', lineHeight: '14px', textAlign: 'right'}}
+                >
+                  Tildelt: {(etterlevelseMetadata && etterlevelseMetadata.tildeltMed && etterlevelseMetadata.tildeltMed.length >= 1) ? etterlevelseMetadata.tildeltMed[0] : "Ingen"}
+                </Label3>
+                <TildeltPopoever etterlevelseMetadata={etterlevelseMetadata} setEtterlevelseMetadata={setEtterlevelseMetadata} icon={faChevronDown}/>
+              </Block>
+
             </Block>
           </Block>
           <Block backgroundColor={ettlevColors.green100} paddingLeft={responsivePaddingExtraLarge} paddingRight={responsivePaddingExtraLarge}>
-            <H2 $style={{ marginTop: '0px', marginBottom: '0px', paddingBottom: '32px', paddingTop: '41px' }}>Hensikten med kravet</H2>
-            <Markdown noMargin p1 sources={Array.isArray(krav.hensikt) ? krav.hensikt : [krav.hensikt]} />
+            <H2 $style={{marginTop: '0px', marginBottom: '0px', paddingBottom: '32px', paddingTop: '41px'}}>Hensikten med kravet</H2>
+            <Markdown noMargin p1 sources={Array.isArray(krav.hensikt) ? krav.hensikt : [krav.hensikt]}/>
           </Block>
 
           <Block
@@ -298,17 +323,17 @@ export const EditEtterlevelseV2 = ({
                 {
                   title: 'Eksempler på etterlevelse',
                   key: 'etterlevelser',
-                  content: <Etterlevelser loading={etterlevelserLoading} krav={krav} modalVersion />,
+                  content: <Etterlevelser loading={etterlevelserLoading} krav={krav} modalVersion/>,
                 },
                 {
                   title: 'Spørsmål og svar',
                   key: 'tilbakemeldinger',
-                  content: <Tilbakemeldinger krav={krav} hasKravExpired={false} />,
+                  content: <Tilbakemeldinger krav={krav} hasKravExpired={false}/>,
                 },
               ]}
             />
           </Block>
-          <Block display={tab === 'dokumentasjon' ? 'block' : 'none'} width="100%" height="140px" backgroundColor={ettlevColors.green100} marginTop="-140px" />
+          <Block display={tab === 'dokumentasjon' ? 'block' : 'none'} width="100%" height="140px" backgroundColor={ettlevColors.green100} marginTop="-140px"/>
         </Block>
       )}
     </Block>
@@ -334,15 +359,17 @@ type EditProps = {
   editedEtterlevelse?: Etterlevelse
 }
 
-const Edit = ({ krav, etterlevelse, submit, formRef, behandlingId, disableEdit, documentEdit, close, setIsAlertUnsavedModalOpen,
-  isAlertUnsavedModalOpen, isNavigateButtonClicked, editedEtterlevelse }: EditProps) => {
+const Edit = ({
+                krav, etterlevelse, submit, formRef, behandlingId, disableEdit, documentEdit, close, setIsAlertUnsavedModalOpen,
+                isAlertUnsavedModalOpen, isNavigateButtonClicked, editedEtterlevelse
+              }: EditProps) => {
   const [etterlevelseStatus, setEtterlevelseStatus] = React.useState<string>(editedEtterlevelse ? editedEtterlevelse.status : etterlevelse.status || EtterlevelseStatus.UNDER_REDIGERING)
   const [radioHover, setRadioHover] = React.useState<string>('')
   const [tidligereEtterlevelser, setTidligereEtterlevelser] = React.useState<Etterlevelse[]>()
   const navigate = useNavigate()
 
   useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       if (behandlingId && krav.kravNummer) {
         const etterlevelser = await getEtterlevelserByBehandlingsIdKravNumber(behandlingId, krav.kravNummer)
         const etterlevelserList = etterlevelser.content.sort((a, b) => (a.kravVersjon > b.kravVersjon ? -1 : 1)).filter((e) => e.kravVersjon < etterlevelse.kravVersjon)
@@ -368,7 +395,7 @@ const Edit = ({ krav, etterlevelse, submit, formRef, behandlingId, disableEdit, 
     return tidligereEtterlevelser?.map((e) => {
       return (
         <CustomPanelDivider key={'tidligere_etterlevese_' + e.kravNummer + '_' + e.kravVersjon}>
-          <EtterlevelseCard etterlevelse={e} />
+          <EtterlevelseCard etterlevelse={e}/>
         </CustomPanelDivider>
       )
     })
@@ -381,7 +408,7 @@ const Edit = ({ krav, etterlevelse, submit, formRef, behandlingId, disableEdit, 
         initialValues={editedEtterlevelse ? mapEtterlevelseToFormValue(editedEtterlevelse) : mapEtterlevelseToFormValue(etterlevelse)}
         validate={(value) => {
           try {
-            validateYupSchema(value, etterlevelseSchema(), true, { status: value.status })
+            validateYupSchema(value, etterlevelseSchema(), true, {status: value.status})
           } catch (err) {
             return yupToFormErrors(err)
           }
@@ -390,7 +417,7 @@ const Edit = ({ krav, etterlevelse, submit, formRef, behandlingId, disableEdit, 
         validateOnChange={false}
         validateOnBlur={false}
       >
-        {({ values, isSubmitting, submitForm, errors, setFieldError }: FormikProps<Etterlevelse>) => (
+        {({values, isSubmitting, submitForm, errors, setFieldError}: FormikProps<Etterlevelse>) => (
           <Block>
             <Block marginTop="32px">
               <Form>
@@ -445,8 +472,8 @@ const Edit = ({ krav, etterlevelse, submit, formRef, behandlingId, disableEdit, 
                                     }}
                                     value={
                                       etterlevelseStatus === EtterlevelseStatus.FERDIG_DOKUMENTERT ? EtterlevelseStatus.FERDIG :
-                                      etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT ? EtterlevelseStatus.IKKE_RELEVANT :
-                                      etterlevelseStatus
+                                        etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT ? EtterlevelseStatus.IKKE_RELEVANT :
+                                          etterlevelseStatus
                                     }
                                     onChange={(event) => {
                                       p.form.setFieldValue('status', event.currentTarget.value)
@@ -457,8 +484,8 @@ const Edit = ({ krav, etterlevelse, submit, formRef, behandlingId, disableEdit, 
                                       if (id === EtterlevelseStatus.OPPFYLLES_SENERE) {
                                         return (
                                           <Radio value={id} key={id}>
-                                            <Block $style={{ textDecoration: radioHover === id ? 'underline' : 'none' }}>
-                                              <Paragraph2 $style={{ lineHeight: '22px' }} marginTop="0px" marginBottom="0px">
+                                            <Block $style={{textDecoration: radioHover === id ? 'underline' : 'none'}}>
+                                              <Paragraph2 $style={{lineHeight: '22px'}} marginTop="0px" marginBottom="0px">
                                                 {getEtterlevelseStatus(id)}
                                               </Paragraph2>
                                             </Block>
@@ -466,7 +493,7 @@ const Edit = ({ krav, etterlevelse, submit, formRef, behandlingId, disableEdit, 
                                             {etterlevelseStatus === EtterlevelseStatus.OPPFYLLES_SENERE && (
                                               <Block width="100%">
                                                 <Block maxWidth="170px" width="100%">
-                                                  <DateField error={!!p.form.errors.fristForFerdigstillelse} label="Frist" name="fristForFerdigstillelse" />
+                                                  <DateField error={!!p.form.errors.fristForFerdigstillelse} label="Frist" name="fristForFerdigstillelse"/>
                                                 </Block>
                                                 {p.form.errors.fristForFerdigstillelse && (
                                                   <Block display="flex" width="100%" marginTop=".2rem">
@@ -474,7 +501,7 @@ const Edit = ({ krav, etterlevelse, submit, formRef, behandlingId, disableEdit, 
                                                       <Notification
                                                         overrides={{
                                                           Body: {
-                                                            style: { width: 'auto', ...paddingZero, marginTop: 0, backgroundColor: 'transparent', color: ettlevColors.red600 },
+                                                            style: {width: 'auto', ...paddingZero, marginTop: 0, backgroundColor: 'transparent', color: ettlevColors.red600},
                                                           },
                                                         }}
                                                         kind={NKIND.negative}
@@ -494,8 +521,8 @@ const Edit = ({ krav, etterlevelse, submit, formRef, behandlingId, disableEdit, 
                                       }
                                       return (
                                         <Radio value={id} key={id}>
-                                          <Block $style={{ textDecoration: radioHover === id ? 'underline' : 'none' }}>
-                                            <Paragraph2 $style={{ lineHeight: '22px' }} marginTop="0px" marginBottom="0px">
+                                          <Block $style={{textDecoration: radioHover === id ? 'underline' : 'none'}}>
+                                            <Paragraph2 $style={{lineHeight: '22px'}} marginTop="0px" marginBottom="0px">
                                               {getEtterlevelseStatus(id)}
                                             </Paragraph2>
                                           </Block>
@@ -508,13 +535,13 @@ const Edit = ({ krav, etterlevelse, submit, formRef, behandlingId, disableEdit, 
                             </Field>
                           </FieldWrapper>
                         </Block>
-                        <Block display="flex" width="100%" >
+                        <Block display="flex" width="100%">
                           {etterlevelse.kravVersjon > 1 &&
                             <Block display="flex" width="100%" justifyContent="flex-end">
                               {tidligereEtterlevelser && tidligereEtterlevelser.length > 1 ? (
                                 <Block width="100%" maxWidth="460px">
                                   <CustomizedAccordion>
-                                    <CustomizedPanel title="Se dokumentasjon på tidligere versjoner" overrides={{ Content: { style: { backgroundColor: ettlevColors.white } } }}>
+                                    <CustomizedPanel title="Se dokumentasjon på tidligere versjoner" overrides={{Content: {style: {backgroundColor: ettlevColors.white}}}}>
                                       {getTidligereEtterlevelser()}
                                     </CustomizedPanel>
                                   </CustomizedAccordion>
@@ -545,15 +572,15 @@ const Edit = ({ krav, etterlevelse, submit, formRef, behandlingId, disableEdit, 
                       </Block>
                       {(etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT || etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) && (
                         <Block maxWidth="471px" width="100%">
-                          <TextAreaField label="Beskriv hvorfor kravet ikke er relevant" noPlaceholder name="statusBegrunnelse" />
-                          <Error fieldName={'statusBegrunnelse'} fullWidth={true} />
+                          <TextAreaField label="Beskriv hvorfor kravet ikke er relevant" noPlaceholder name="statusBegrunnelse"/>
+                          <Error fieldName={'statusBegrunnelse'} fullWidth={true}/>
                         </Block>
                       )}
                     </Block>
 
-                    <Label3 $style={{ lineHeight: '32px' }}>Hvilke suksesskriterier er oppfylt?</Label3>
+                    <Label3 $style={{lineHeight: '32px'}}>Hvilke suksesskriterier er oppfylt?</Label3>
 
-                    <SuksesskriterierBegrunnelseEdit disableEdit={disableEdit} suksesskriterie={krav.suksesskriterier} />
+                    <SuksesskriterierBegrunnelseEdit disableEdit={disableEdit} suksesskriterie={krav.suksesskriterier}/>
 
                     {/*
               {!documentEdit &&
@@ -577,22 +604,22 @@ const Edit = ({ krav, etterlevelse, submit, formRef, behandlingId, disableEdit, 
           <Block height={theme.sizing.scale600}/>
          */}
 
-                    <Error fieldName={'status'} fullWidth={true} />
+                    <Error fieldName={'status'} fullWidth={true}/>
 
                     <Block marginBottom="24px">
                       <CustomizedAccordion>
                         <CustomizedPanel
                           title="Krav du bør se i relasjon til dette"
-                          overrides={{ Content: { style: { backgroundColor: ettlevColors.white, paddingLeft: '20px', paddingRight: '20px' } } }}
+                          overrides={{Content: {style: {backgroundColor: ettlevColors.white, paddingLeft: '20px', paddingRight: '20px'}}}}
                         >
-                          <Block />
+                          <Block/>
                         </CustomizedPanel>
                         <CustomizedPanel
                           title="Mer om kravet"
-                          overrides={{ Content: { style: { backgroundColor: ettlevColors.white, paddingLeft: '20px', paddingRight: '20px' } } }}
+                          overrides={{Content: {style: {backgroundColor: ettlevColors.white, paddingLeft: '20px', paddingRight: '20px'}}}}
                         >
-                          <Block width="100%" height="1px" backgroundColor="#E3E3E3" />
-                          <AllInfo krav={krav} alleKravVersjoner={[{ kravNummer: krav.kravNummer, kravVersjon: krav.kravVersjon, kravStatus: krav.status }]} />
+                          <Block width="100%" height="1px" backgroundColor="#E3E3E3"/>
+                          <AllInfo krav={krav} alleKravVersjoner={[{kravNummer: krav.kravNummer, kravVersjon: krav.kravVersjon, kravStatus: krav.status}]}/>
                         </CustomizedPanel>
                       </CustomizedAccordion>
                     </Block>
@@ -622,7 +649,7 @@ const Edit = ({ krav, etterlevelse, submit, formRef, behandlingId, disableEdit, 
                                     marginRight: '5px',
                                   }}
                                 />
-                                <Paragraph2 marginBottom="0px" marginTop="0px" $style={{ lineHeight: '18px' }}>
+                                <Paragraph2 marginBottom="0px" marginTop="0px" $style={{lineHeight: '18px'}}>
                                   Du må fylle ut alle obligatoriske felter
                                 </Paragraph2>
                               </Block>

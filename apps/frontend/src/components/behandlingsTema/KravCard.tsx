@@ -12,6 +12,7 @@ import {getEtterlevelseStatus, getEtterlevelseStatusLabelColor} from "../behandl
 import moment from "moment";
 import TildeltPopoever from "../etterlevelseMetadata/TildeltPopover";
 import {isFerdigUtfylt} from "../../pages/BehandlingerTemaPageV2";
+import {faEllipsisVertical} from "@fortawesome/free-solid-svg-icons";
 
 export const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function; setKravId: Function; noStatus?: boolean; setActiveEtterlevelseStatus: Function, behandlingId: string }) => {
   const ferdigUtfylt = isFerdigUtfylt(props.krav.etterlevelseStatus)
@@ -118,7 +119,7 @@ export const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function;
         </Button>
       </Block>
       {etterlevelseMetadata && <Block display={"flex"} alignItems={"center"}>
-        <TildeltPopoever etterlevelseMetadata={etterlevelseMetadata} setEtterlevelseMetadata={setEtterlevelseMetadata}/>
+        <TildeltPopoever etterlevelseMetadata={etterlevelseMetadata} setEtterlevelseMetadata={setEtterlevelseMetadata} icon={faEllipsisVertical} />
       </Block>}
     </Block>
   )

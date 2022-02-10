@@ -10,14 +10,15 @@ import {ettlevColors} from '../../util/theme'
 import {Label3} from 'baseui/typography'
 import {borderColor, borderStyle, borderWidth} from '../common/Style'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faEllipsisVertical} from "@fortawesome/free-solid-svg-icons";
+import {IconDefinition} from "@fortawesome/fontawesome-svg-core";
 
 type TildeltPopoverProps = {
   etterlevelseMetadata: EtterlevelseMetadata
   setEtterlevelseMetadata: Function
+  icon: IconDefinition
 }
 
-export const TildeltPopoever = ({ etterlevelseMetadata, setEtterlevelseMetadata }: TildeltPopoverProps) => {
+export const TildeltPopoever = ({ etterlevelseMetadata, setEtterlevelseMetadata, icon }: TildeltPopoverProps) => {
   return (
     <StatefulPopover
       focusLock={true}
@@ -88,7 +89,7 @@ export const TildeltPopoever = ({ etterlevelseMetadata, setEtterlevelseMetadata 
         }}
         type={"button"}
       >
-        <FontAwesomeIcon icon={faEllipsisVertical}/>
+        <FontAwesomeIcon icon={icon}/>
       </BaseButton>
     </StatefulPopover>
   )
