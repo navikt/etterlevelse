@@ -42,7 +42,7 @@ export const ViewKrav = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVe
 
         {<AllInfo krav={krav} alleKravVersjoner={alleKravVersjoner} />}
       </Block>
-      <Block marginLeft="24px" width="187px">
+      <Block marginLeft="24px" width="187px" display={['none', 'none', 'none', 'none', 'none', 'block']}>
         <SidePanel />
       </Block>
     </Block>
