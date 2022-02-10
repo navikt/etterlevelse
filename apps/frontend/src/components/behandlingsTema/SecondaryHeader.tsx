@@ -1,21 +1,21 @@
-import {Block} from "baseui/block";
+import { Block } from "baseui/block";
 import Button from "../common/Button";
-import {borderRadius, marginAll, paddingAll} from "../common/Style";
-import {H1, Label3} from "baseui/typography";
-import {ettlevColors, maxPageWidth, responsivePaddingExtraLarge} from "../../util/theme";
-import {angleIcon, page2Icon} from "../Images";
+import { borderRadius, marginAll, paddingAll } from "../common/Style";
+import { H1, Label3 } from "baseui/typography";
+import { ettlevColors, maxPageWidth, responsivePaddingExtraLarge } from "../../util/theme";
+import { angleIcon, page2Icon } from "../Images";
 import CustomizedModal from "../common/CustomizedModal";
-import {getTemaMainHeader} from "../../pages/TemaPage";
+import { getTemaMainHeader } from "../../pages/TemaPage";
 import React from "react";
-import {isFerdigUtfylt, Section} from "../../pages/BehandlingerTemaPageV2";
-import {NavigateFunction} from "react-router-dom";
-import {Behandling, EtterlevelseStatus} from "../../constants";
-import {LovCode, TemaCode} from "../../services/Codelist";
+import { isFerdigUtfylt, Section } from "../../pages/BehandlingerTemaPageV2";
+import { NavigateFunction } from "react-router-dom";
+import { Behandling, EtterlevelseStatus } from "../../constants";
+import { LovCode, TemaCode } from "../../services/Codelist";
 
 type SecondaryHeaderProps = {
   tab: string
-  setTab:  React.Dispatch<React.SetStateAction<Section>>
-  edit: string|undefined
+  setTab: React.Dispatch<React.SetStateAction<Section>>
+  edit: string | undefined
   setEdit: (edit: string | undefined) => void
   setIsAlertUnsavedModalOpen: (state: boolean) => void
   setIsTemaModalOpen: (state: boolean) => void
@@ -28,20 +28,20 @@ type SecondaryHeaderProps = {
   lovListe: LovCode[]
 }
 export const SecondaryHeader = ({
-                              tab,
-                              setTab,
-                              edit,
-                              setEdit,
-                              setIsAlertUnsavedModalOpen,
-                              setIsNavigateButtonClicked,
-                              navigate,
-                              behandling,
-                              temaData,
-                              setIsTemaModalOpen,
-                              activeEtterlevleseStatus,
-                              isTemaModalOpen,
-                              lovListe
-                            }: SecondaryHeaderProps) => (
+  tab,
+  setTab,
+  edit,
+  setEdit,
+  setIsAlertUnsavedModalOpen,
+  setIsNavigateButtonClicked,
+  navigate,
+  behandling,
+  temaData,
+  setIsTemaModalOpen,
+  activeEtterlevleseStatus,
+  isTemaModalOpen,
+  lovListe,
+}: SecondaryHeaderProps) => (
   <Block width="100%">
     <Block marginTop="19px" width="fit-content">
       <Button
@@ -84,7 +84,7 @@ export const SecondaryHeader = ({
     </Block>
     {edit && (
       <Block marginTop="8px">
-        <img src={angleIcon} alt=""/>{' '}
+        <img src={angleIcon} alt="" />{' '}
         <Button
           kind="tertiary"
           onClick={() => {
@@ -133,21 +133,21 @@ export const SecondaryHeader = ({
       marginLeft={edit ? '35px' : '0px'}
     >
       <Block display="flex" flex="1">
-        <img src={angleIcon} alt=""/>{' '}
-        <Label3 marginLeft="12px" $style={{fontSize: '18px', fontWeight: 600, lineHeight: '22px', color: ettlevColors.green600, whiteSpace: 'nowrap'}}>
+        <img src={angleIcon} alt="" />{' '}
+        <Label3 marginLeft="12px" $style={{ fontSize: '18px', fontWeight: 600, lineHeight: '22px', color: ettlevColors.green600, whiteSpace: 'nowrap' }}>
           {edit ? (isFerdigUtfylt(activeEtterlevleseStatus) ? 'Ferdig utfylt' : 'Skal fylles ut') : temaData?.shortName}
         </Label3>
       </Block>
       <Block display="flex" justifyContent="flex-end" width="100%">
         <Button
-          startEnhancer={<img src={page2Icon} alt="Om personvern og ansvarlig for tema"/>}
+          startEnhancer={<img src={page2Icon} alt="Om personvern og ansvarlig for tema" />}
           size="compact"
           $style={{
             fontSize: '18px',
             fontWeight: 600,
             lineHeight: '22px',
             color: ettlevColors.green600,
-            ':hover': {backgroundColor: 'transparent', textDecoration: 'underline 3px'},
+            ':hover': { backgroundColor: 'transparent', textDecoration: 'underline 3px' },
           }}
           kind={'tertiary'}
           onClick={() => setIsTemaModalOpen(true)}
@@ -175,7 +175,7 @@ export const SecondaryHeader = ({
       >
         <Block width="100%">
           <Block paddingTop="120px" paddingBottom="40px" backgroundColor={ettlevColors.green100} paddingLeft={responsivePaddingExtraLarge}
-                 paddingRight={responsivePaddingExtraLarge}>
+            paddingRight={responsivePaddingExtraLarge}>
             <H1 marginTop="0px" marginBottom="0px">
               {temaData?.shortName}
             </H1>
