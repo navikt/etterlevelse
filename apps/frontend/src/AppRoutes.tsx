@@ -32,8 +32,8 @@ const AppRoutes = (): JSX.Element => {
         <Route path="/old" element={<MainPage />} caseSensitive={true} />
         <Route path="/" element={<MainPageV2 />} caseSensitive={true} />
 
-        <Route path="/kraver/:tab" element={<KravListPage />} caseSensitive={true} />
-        <Route path="/kraver/" element={<KravListPage />} caseSensitive={true} />
+        <Route path="/kravliste/:tab" element={<KravListPage />} caseSensitive={true} />
+        <Route path="/kravliste/" element={<KravListPage />} caseSensitive={true} />
         <Route path="/krav/:id" element={<KravPage />} caseSensitive={true} />
         <Route path="/krav/:kravNummer/:kravVersjon" element={<KravPage />} caseSensitive={true} />
 

@@ -210,7 +210,7 @@ export const KravPage = () => {
                             Ny versjon
                           </Button>
                         )}
-                        {(user.isAdmin() || krav.status !== KravStatus.AKTIV) && <DeleteItem fun={() => deleteKrav(krav.id)} redirect={'/kraver'} />}
+                        {(user.isAdmin() || krav.status !== KravStatus.AKTIV) && <DeleteItem fun={() => deleteKrav(krav.id)} redirect={'/kravliste'} />}
                         <Button
                           startEnhancer={<img src={editIcon} alt="edit" />}
                           size="compact"
