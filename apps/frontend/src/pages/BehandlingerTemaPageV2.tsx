@@ -197,7 +197,7 @@ export const BehandlingerTemaPageV2 = () => {
               <CustomizedSelect clearable={false} options={sortingOptions} value={sorting} onChange={(params) => setSorting(params.value)}/>
             </Block>
           )}
-          {sortedKravList.map((k) => {
+          {behandling && sortedKravList.map((k) => {
             return (
               <CustomPanelDivider key={`${k.navn}_${k.kravNummer}_${k.kravVersjon}`}>
                 <KravCard
@@ -207,6 +207,7 @@ export const BehandlingerTemaPageV2 = () => {
                   setKravId={setKravId}
                   key={`${k.navn}_${k.kravNummer}_${k.kravVersjon}_card`}
                   noStatus={noStatus}
+                  behandlingId={behandling.id}
                 />
               </CustomPanelDivider>
             )

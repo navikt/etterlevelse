@@ -6,29 +6,47 @@ import { PLACEMENT } from 'baseui/tooltip'
 import Button from '../common/Button'
 import { createEtterlevelseMetadata, updateEtterlevelseMetadata } from '../../api/EtterlevelseMetadataApi'
 import { user } from '../../services/User'
+import { ettlevColors } from '../../util/theme'
 
 type TildeltPopoverProps = {
   etterlevelseMetadata: EtterlevelseMetadata
+  setEtterlevelseMetadata: Function
 }
 
-export const TildeltPopoever = ({ etterlevelseMetadata }: TildeltPopoverProps) => {
+export const TildeltPopoever = ({ etterlevelseMetadata, setEtterlevelseMetadata }: TildeltPopoverProps) => {
   return (
     <StatefulPopover
+      overrides={{
+        Inner: {
+          style: {
+            backgroundColor: ettlevColors.white
+          }
+        }
+      }}
       content={() => (
         <Block padding={'20px'}>
-          <Button onClick={() => {
-            if (etterlevelseMetadata.id) {
-              updateEtterlevelseMetadata({
-                ...etterlevelseMetadata,
-                tildeltMed: [user.getIdent.toString()]
-              })
-            } else {
-              createEtterlevelseMetadata({
-                ...etterlevelseMetadata,
-                tildeltMed: [user.getIdent.toString()],
-              } as EtterlevelseMetadata)
-            }
-          }}>Tildelt med meg</Button>
+          <Button
+            kind="tertiary"
+            onClick={() => {
+              const ident = user.getName()
+              if (etterlevelseMetadata.id !== 'ny') {
+                updateEtterlevelseMetadata({
+                  ...etterlevelseMetadata,
+                  tildeltMed: [ident]
+                }).then((resp) => {
+                  setEtterlevelseMetadata(resp)
+                })
+              } else {
+                createEtterlevelseMetadata({
+                  ...etterlevelseMetadata,
+                  tildeltMed: [ident],
+                }).then((resp) => {
+                  setEtterlevelseMetadata(resp)
+                })
+              }
+            }}>
+            Tildelt med meg
+          </Button>
         </Block>
       )}
       returnFocus
@@ -36,7 +54,11 @@ export const TildeltPopoever = ({ etterlevelseMetadata }: TildeltPopoverProps) =
       showArrow={true}
       placement={PLACEMENT.bottom}
     >
-      <BaseButton>Click me</BaseButton>
+      <BaseButton
+        kind="tertiary"
+      >
+        Click me
+      </BaseButton>
     </StatefulPopover>
   )
 }
