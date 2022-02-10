@@ -23,7 +23,7 @@ export const TildeltPopoever = ({ etterlevelseMetadata, setEtterlevelseMetadata 
           }
         }
       }}
-      content={() => (
+      content={({close}) => (
         <Block padding={'20px'}>
           <Button
             kind="tertiary"
@@ -35,6 +35,7 @@ export const TildeltPopoever = ({ etterlevelseMetadata, setEtterlevelseMetadata 
                   tildeltMed: [ident]
                 }).then((resp) => {
                   setEtterlevelseMetadata(resp)
+                  close()
                 })
               } else {
                 createEtterlevelseMetadata({
@@ -42,6 +43,7 @@ export const TildeltPopoever = ({ etterlevelseMetadata, setEtterlevelseMetadata 
                   tildeltMed: [ident],
                 }).then((resp) => {
                   setEtterlevelseMetadata(resp)
+                  close()
                 })
               }
             }}>
