@@ -1,17 +1,17 @@
-import { EtterlevelseMetadata, KravEtterlevelseData } from "../../constants";
-import React, { useEffect, useState } from "react";
-import { getEtterlevelseMetadataByBehandlingsIdAndKravNummerAndKravVersion, mapEtterlevelseMetadataToFormValue, useEtterlevelseMetadata } from "../../api/EtterlevelseMetadataApi";
-import { Block } from "baseui/block";
+import {EtterlevelseMetadata, KravEtterlevelseData} from "../../constants";
+import React, {useEffect, useState} from "react";
+import {getEtterlevelseMetadataByBehandlingsIdAndKravNummerAndKravVersion, mapEtterlevelseMetadataToFormValue} from "../../api/EtterlevelseMetadataApi";
+import {Block} from "baseui/block";
 import Button from "../common/Button";
-import { ettlevColors } from "../../util/theme";
-import { borderStyle } from "../common/Style";
-import { toKravId } from "./utils";
-import { Label3, Paragraph4 } from "baseui/typography";
+import {ettlevColors} from "../../util/theme";
+import {borderStyle} from "../common/Style";
+import {toKravId} from "./utils";
+import {Label3, Paragraph4} from "baseui/typography";
 import StatusView from "../common/StatusTag";
-import { getEtterlevelseStatus, getEtterlevelseStatusLabelColor } from "../behandling/utils";
+import {getEtterlevelseStatus, getEtterlevelseStatusLabelColor} from "../behandling/utils";
 import moment from "moment";
 import TildeltPopoever from "../etterlevelseMetadata/TildeltPopover";
-import { isFerdigUtfylt } from "../../pages/BehandlingerTemaPageV2";
+import {isFerdigUtfylt} from "../../pages/BehandlingerTemaPageV2";
 
 export const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function; setKravId: Function; noStatus?: boolean; setActiveEtterlevelseStatus: Function, behandlingId: string }) => {
   const ferdigUtfylt = isFerdigUtfylt(props.krav.etterlevelseStatus)
@@ -35,7 +35,7 @@ export const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function;
   }, [])
 
   return (
-    <Block 
+    <Block
       display={'flex'}
       $style={{
         boxShadow: '0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 2px 0 rgba(0, 0, 0, .12)',
@@ -117,7 +117,7 @@ export const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function;
           </Block>
         </Button>
       </Block>
-      {etterlevelseMetadata && <Block>
+      {etterlevelseMetadata && <Block display={"flex"} alignItems={"center"}>
         <TildeltPopoever etterlevelseMetadata={etterlevelseMetadata} setEtterlevelseMetadata={setEtterlevelseMetadata}/>
       </Block>}
     </Block>

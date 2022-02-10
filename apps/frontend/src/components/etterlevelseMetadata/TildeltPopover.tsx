@@ -1,14 +1,16 @@
-import { EtterlevelseMetadata } from '../../constants'
-import { StatefulPopover } from 'baseui/popover'
-import { Block } from 'baseui/block'
-import { Button as BaseButton } from 'baseui/button'
-import { PLACEMENT } from 'baseui/tooltip'
+import {EtterlevelseMetadata} from '../../constants'
+import {StatefulPopover} from 'baseui/popover'
+import {Block} from 'baseui/block'
+import {Button as BaseButton} from 'baseui/button'
+import {PLACEMENT} from 'baseui/tooltip'
 import Button from '../common/Button'
-import { createEtterlevelseMetadata, updateEtterlevelseMetadata } from '../../api/EtterlevelseMetadataApi'
-import { user } from '../../services/User'
-import { ettlevColors } from '../../util/theme'
-import { Label3 } from 'baseui/typography'
-import { borderColor, borderStyle, borderWidth } from '../common/Style'
+import {createEtterlevelseMetadata, updateEtterlevelseMetadata} from '../../api/EtterlevelseMetadataApi'
+import {user} from '../../services/User'
+import {ettlevColors} from '../../util/theme'
+import {Label3} from 'baseui/typography'
+import {borderColor, borderStyle, borderWidth} from '../common/Style'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faEllipsisVertical} from "@fortawesome/free-solid-svg-icons";
 
 type TildeltPopoverProps = {
   etterlevelseMetadata: EtterlevelseMetadata
@@ -18,6 +20,7 @@ type TildeltPopoverProps = {
 export const TildeltPopoever = ({ etterlevelseMetadata, setEtterlevelseMetadata }: TildeltPopoverProps) => {
   return (
     <StatefulPopover
+      focusLock={true}
       overrides={{
         Inner: {
           style: {
@@ -79,8 +82,13 @@ export const TildeltPopoever = ({ etterlevelseMetadata, setEtterlevelseMetadata 
     >
       <BaseButton
         kind="tertiary"
+        $style={{
+          width:'24px',
+          height:'24px'
+        }}
+        type={"button"}
       >
-        Click me
+        <FontAwesomeIcon icon={faEllipsisVertical}/>
       </BaseButton>
     </StatefulPopover>
   )
