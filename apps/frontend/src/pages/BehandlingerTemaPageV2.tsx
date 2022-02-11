@@ -51,15 +51,16 @@ export const BehandlingerTemaPageV2 = () => {
   const lovListe = codelist.getCodesForTema(temaData?.code)
   const lover = lovListe.map((c) => c.code)
   const variables = { behandlingId: params.id, lover: lover, gjeldendeKrav: false, behandlingIrrevantKrav: irrelevantKrav }
-  const { data: rawData, loading } = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
+
+  const { data: rawData } = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
     variables,
     skip: !params.id || !lover.length,
   })
 
-  // const { data: irrelevantData, loading: irrelevantDataLoading } = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
-  //   variables: { behandlingId: params.id, lover: lover, gjeldendeKrav: false, behandlingIrrevantKrav: !irrelevantKrav },
-  //   skip: !params.id || !lover.length,
-  // })
+  const { data: irrelevantData } = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
+    variables: { behandlingId: params.id, lover: lover, gjeldendeKrav: false, behandlingIrrevantKrav: !irrelevantKrav },
+    skip: !params.id || !lover.length,
+  })
 
   const [kravData, setKravData] = useState<KravEtterlevelseData[]>([])
   const [irrelevantKravData, setIrrelevantKravData] = useState<KravEtterlevelseData[]>([])
@@ -85,14 +86,15 @@ export const BehandlingerTemaPageV2 = () => {
 
 
   const filterKrav = async (kravList?: KravQL[], filterFerdigDokumentert?: boolean) => {
-    const allKravPriority = await getAllKravPriority() 
+
+    // const allKravPriority = await getAllKravPriority() 
 
     const unfilteredkraver = kravList ? _.cloneDeep(kravList) : []
 
-    unfilteredkraver.map((k) => {
-      const priority = allKravPriority.filter((kp) => kp.kravNummer === k.kravNummer && kp.kravVersjon === k.kravVersjon)
-      k.prioriteringsId = priority.length ? priority[0].prioriteringsId : ''
-    })
+    // unfilteredkraver.map((k) => {
+    //   const priority = allKravPriority.filter((kp) => kp.kravNummer === k.kravNummer && kp.kravVersjon === k.kravVersjon)
+    //   k.prioriteringsId = priority.length ? priority[0].prioriteringsId : ''
+    // })
 
     const sortedKrav = sortKraverByPriority<KravQL>(unfilteredkraver, temaData?.shortName || '')
 
@@ -131,13 +133,13 @@ export const BehandlingerTemaPageV2 = () => {
     })()
   }, [rawData])
 
-  // useEffect(() => {
-  //   (async () => {
-  //     filterKrav(irrelevantData?.krav.content).then((kravListe) => {
-  //       setIrrelevantKravData(kravListe.filter((k) => k.etterlevelseStatus === undefined))
-  //     })
-  //   })()
-  // }, [irrelevantData])
+  useEffect(() => {
+    (async () => {
+      filterKrav(irrelevantData?.krav.content).then((kravListe) => {
+        setIrrelevantKravData(kravListe.filter((k) => k.etterlevelseStatus === undefined))
+      })
+    })()
+  }, [irrelevantData])
 
   const update = (etterlevelse: Etterlevelse) => {
     setKravData(kravData.map((e) => (e.kravVersjon === etterlevelse.kravVersjon && e.kravNummer === etterlevelse.kravNummer ? { ...e, ...mapEtterlevelseData(etterlevelse) } : e)))
