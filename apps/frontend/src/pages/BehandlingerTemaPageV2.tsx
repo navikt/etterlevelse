@@ -1,28 +1,28 @@
-import React, {useEffect, useState} from 'react'
-import {Block, Display} from 'baseui/block'
-import {useNavigate, useParams} from 'react-router-dom'
-import {H3, Paragraph2} from 'baseui/typography'
-import {ettlevColors} from '../util/theme'
-import {codelist, ListName, TemaCode} from '../services/Codelist'
-import {useBehandling} from '../api/BehandlingApi'
-import {Layout2} from '../components/scaffold/Page'
-import {Etterlevelse, EtterlevelseStatus, KravEtterlevelseData, KravQL, KravStatus, PageResponse} from '../constants'
-import {behandlingKravQuery} from '../components/behandling/ViewBehandling'
-import {useQuery} from '@apollo/client'
-import {CustomizedAccordion, CustomizedPanel} from '../components/common/CustomizedAccordion'
-import {KravId} from '../api/KravApi'
-import {breadcrumbPaths} from '../components/common/CustomizedBreadcrumbs'
-import {Responsive} from 'baseui/theme'
-import {KravPanelHeader} from '../components/behandling/KravPanelHeader'
-import {sortKraverByPriority} from '../util/sort'
-import _ from 'lodash'
-import {getAllKravPriority} from '../api/KravPriorityApi'
-import {Helmet} from 'react-helmet'
-import {Option} from 'baseui/select'
-import {getMainHeader} from './BehandlingPage'
-import {KravView} from "../components/behandlingsTema/KravView";
-import {SecondaryHeader} from "../components/behandlingsTema/SecondaryHeader";
-import {KravList} from "../components/behandlingsTema/KravList";
+import React, { useEffect, useState } from 'react'
+import { Block, Display } from 'baseui/block'
+import { useNavigate, useParams } from 'react-router-dom'
+import { H3, Paragraph2 } from 'baseui/typography'
+import { ettlevColors } from '../util/theme'
+import { codelist, ListName, TemaCode } from '../services/Codelist'
+import { useBehandling } from '../api/BehandlingApi'
+import { Layout2 } from '../components/scaffold/Page'
+import { Etterlevelse, EtterlevelseStatus, KravEtterlevelseData, KravQL, KravStatus, PageResponse } from '../constants'
+import { behandlingKravQuery } from '../components/behandling/ViewBehandling'
+import { useQuery } from '@apollo/client'
+import { CustomizedAccordion, CustomizedPanel } from '../components/common/CustomizedAccordion'
+import { KravId } from '../api/KravApi'
+import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
+import { Responsive } from 'baseui/theme'
+import { KravPanelHeader } from '../components/behandling/KravPanelHeader'
+import { sortKraverByPriority } from '../util/sort'
+import _, { filter } from 'lodash'
+import { getAllKravPriority } from '../api/KravPriorityApi'
+import { Helmet } from 'react-helmet'
+import { Option } from 'baseui/select'
+import { getMainHeader } from './BehandlingPage'
+import { KravView } from "../components/behandlingsTema/KravView";
+import { SecondaryHeader } from "../components/behandlingsTema/SecondaryHeader";
+import { KravList } from "../components/behandlingsTema/KravList";
 
 const responsiveBreakPoints: Responsive<Display> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
 const responsiveDisplay: Responsive<Display> = ['block', 'block', 'block', 'block', 'flex', 'flex']
@@ -50,14 +50,14 @@ export const BehandlingerTemaPageV2 = () => {
   const [behandling, setBehandling] = useBehandling(params.id)
   const lovListe = codelist.getCodesForTema(temaData?.code)
   const lover = lovListe.map((c) => c.code)
-  const variables = {behandlingId: params.id, lover: lover, gjeldendeKrav: false, behandlingIrrevantKrav: irrelevantKrav}
-  const {data: rawData, loading} = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
+  const variables = { behandlingId: params.id, lover: lover, gjeldendeKrav: false, behandlingIrrevantKrav: irrelevantKrav }
+  const { data: rawData, loading } = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
     variables,
     skip: !params.id || !lover.length,
   })
 
-  const {data: irrelevantData, loading: irrelevantDataLoading} = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
-    variables: {behandlingId: params.id, lover: lover, gjeldendeKrav: false, behandlingIrrevantKrav: !irrelevantKrav},
+  const { data: irrelevantData, loading: irrelevantDataLoading } = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
+    variables: { behandlingId: params.id, lover: lover, gjeldendeKrav: false, behandlingIrrevantKrav: !irrelevantKrav },
     skip: !params.id || !lover.length,
   })
 
@@ -73,8 +73,8 @@ export const BehandlingerTemaPageV2 = () => {
   const [kravId, setKravId] = useState<KravId | undefined>()
   const [isExpanded, setIsExpanded] = useState<boolean>(false)
   const sortingOptions = [
-    {label: 'Anbefalt rekkefølge', id: 'priority'},
-    {label: 'Sist endret av meg', id: 'lastModified'},
+    { label: 'Anbefalt rekkefølge', id: 'priority' },
+    { label: 'Sist endret av meg', id: 'lastModified' },
   ]
   const [sorting, setSorting] = useState<readonly Option[]>([sortingOptions[0]])
   const [isTemaModalOpen, setIsTemaModalOpen] = useState<boolean>(false)
@@ -83,53 +83,34 @@ export const BehandlingerTemaPageV2 = () => {
   const [tab, setTab] = useState<Section>('dokumentasjon')
   const navigate = useNavigate()
 
-  useEffect(() => {
-    ;(async () => {
-      const allKravPriority = await getAllKravPriority()
-      const kraver = _.cloneDeep(rawData?.krav.content) || []
-      const irrelevantKraver = _.cloneDeep(irrelevantData?.krav.content) || []
 
-      kraver.map((k) => {
-        const priority = allKravPriority.filter((kp) => kp.kravNummer === k.kravNummer && kp.kravVersjon === k.kravVersjon)
-        k.prioriteringsId = priority.length ? priority[0].prioriteringsId : ''
-      })
+  const filterKrav = async (setData: (filteredKravList: KravEtterlevelseData[]) => void, kravList?: KravQL[], filterFerdigDokumentert?: boolean) => {
+    const allKravPriority = await getAllKravPriority() 
 
-      irrelevantKraver.map((ik) => {
-        const priority = allKravPriority.filter((kp) => kp.kravNummer === ik.kravNummer && kp.kravVersjon === ik.kravVersjon)
-        ik.prioriteringsId = priority.length ? priority[0].prioriteringsId : ''
-      })
+    const unfilteredkraver = kravList ? _.cloneDeep(kravList) : []
 
-      const sortedKrav = sortKraverByPriority<KravQL>(kraver, temaData?.shortName || '')
-      const sortedIrrelevantKrav = sortKraverByPriority<KravQL>(irrelevantKraver, temaData?.shortName || '')
+    unfilteredkraver.map((k) => {
+      const priority = allKravPriority.filter((kp) => kp.kravNummer === k.kravNummer && kp.kravVersjon === k.kravVersjon)
+      k.prioriteringsId = priority.length ? priority[0].prioriteringsId : ''
+    })
 
-      const mapped = sortedKrav.map((krav) => {
-        const etterlevelse = krav.etterlevelser.length ? krav.etterlevelser[0] : undefined
-        return {
-          kravNummer: krav.kravNummer,
-          kravVersjon: krav.kravVersjon,
-          navn: krav.navn,
-          status: krav.status,
-          suksesskriterier: krav.suksesskriterier,
-          varselMelding: krav.varselMelding,
-          prioriteringsId: krav.prioriteringsId,
-          ...mapEtterlevelseData(etterlevelse),
-        }
-      })
+    const sortedKrav = sortKraverByPriority<KravQL>(unfilteredkraver, temaData?.shortName || '')
 
-      const irrelevantMapped = sortedIrrelevantKrav.map((krav) => {
-        const etterlevelse = krav.etterlevelser.length ? krav.etterlevelser[0] : undefined
-        return {
-          kravNummer: krav.kravNummer,
-          kravVersjon: krav.kravVersjon,
-          navn: krav.navn,
-          status: krav.status,
-          suksesskriterier: krav.suksesskriterier,
-          varselMelding: krav.varselMelding,
-          prioriteringsId: krav.prioriteringsId,
-          ...mapEtterlevelseData(etterlevelse),
-        }
-      })
+    const mapped = sortedKrav.map((krav) => {
+      const etterlevelse = krav.etterlevelser.length ? krav.etterlevelser[0] : undefined
+      return {
+        kravNummer: krav.kravNummer,
+        kravVersjon: krav.kravVersjon,
+        navn: krav.navn,
+        status: krav.status,
+        suksesskriterier: krav.suksesskriterier,
+        varselMelding: krav.varselMelding,
+        prioriteringsId: krav.prioriteringsId,
+        ...mapEtterlevelseData(etterlevelse),
+      }
+    })
 
+    if(filterFerdigDokumentert) {
       for (let index = mapped.length - 1; index > 0; index--) {
         if (mapped[index].kravNummer === mapped[index - 1].kravNummer && mapped[index - 1].etterlevelseStatus === EtterlevelseStatus.FERDIG_DOKUMENTERT) {
           mapped[index - 1].gammelVersjon = true
@@ -137,15 +118,25 @@ export const BehandlingerTemaPageV2 = () => {
           mapped.splice(index - 1, 1)
         }
       }
+    }
 
-      setIrrelevantKravData(irrelevantMapped.filter((k) => k.etterlevelseStatus === undefined))
+    setData(mapped.filter((k) => !(k.status === KravStatus.UTGAATT && k.etterlevelseStatus === undefined)))
+  }
 
-      setKravData(mapped.filter((k) => !(k.status === KravStatus.UTGAATT && k.etterlevelseStatus === undefined)))
+  useEffect(() => {
+    (async () => {
+      filterKrav(setKravData, rawData?.krav.content, true)
     })()
-  }, [rawData, irrelevantData])
+  }, [rawData])
+
+  useEffect(() => {
+    (async () => {
+      filterKrav(setIrrelevantKravData, irrelevantData?.krav.content)
+    })()
+  }, [irrelevantData])
 
   const update = (etterlevelse: Etterlevelse) => {
-    setKravData(kravData.map((e) => (e.kravVersjon === etterlevelse.kravVersjon && e.kravNummer === etterlevelse.kravNummer ? {...e, ...mapEtterlevelseData(etterlevelse)} : e)))
+    setKravData(kravData.map((e) => (e.kravVersjon === etterlevelse.kravVersjon && e.kravNummer === etterlevelse.kravNummer ? { ...e, ...mapEtterlevelseData(etterlevelse) } : e)))
   }
 
   useEffect(() => {
@@ -185,7 +176,7 @@ export const BehandlingerTemaPageV2 = () => {
           mainHeader={getMainHeader(
             behandling,
             <Helmet>
-              <meta charSet="utf-8"/>
+              <meta charSet="utf-8" />
               <title>
                 {temaData?.shortName} B{behandling.nummer.toString()} {behandling.navn.toString()}
               </title>
@@ -217,7 +208,7 @@ export const BehandlingerTemaPageV2 = () => {
                 <CustomizedPanel
                   HeaderActiveBackgroundColor={ettlevColors.green50}
                   onClick={() => setIsExpanded(!isExpanded)}
-                  title={<KravPanelHeader title={'Skal fylles ut'} kravData={skalUtfyllesKrav}/>}
+                  title={<KravPanelHeader title={'Skal fylles ut'} kravData={skalUtfyllesKrav} />}
                 >
                   <KravList
                     kravList={skalUtfyllesKrav}
@@ -234,7 +225,7 @@ export const BehandlingerTemaPageV2 = () => {
                     edit={edit}
                   />
                 </CustomizedPanel>
-                <CustomizedPanel HeaderActiveBackgroundColor={ettlevColors.green50} title={<KravPanelHeader title={'Ferdig utfylt'} kravData={utfyltKrav}/>}>
+                <CustomizedPanel HeaderActiveBackgroundColor={ettlevColors.green50} title={<KravPanelHeader title={'Ferdig utfylt'} kravData={utfyltKrav} />}>
                   <KravList
                     kravList={utfyltKrav}
                     emptyMessage={'Ingen krav er ferdig utfylt'}
@@ -263,7 +254,7 @@ export const BehandlingerTemaPageV2 = () => {
                       <CustomizedPanel
                         HeaderActiveBackgroundColor={ettlevColors.green50}
                         onClick={() => setIsExpanded(!isExpanded)}
-                        title={<KravPanelHeader title="Må vurderes av dere" kravData={irrelevantKravData}/>}
+                        title={<KravPanelHeader title="Må vurderes av dere" kravData={irrelevantKravData} />}
                       >
                         <KravList
                           kravList={irrelevantKravData}
