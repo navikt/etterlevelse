@@ -1,7 +1,7 @@
-import { Etterlevelse, EtterlevelseStatus, Krav, KravQL, KravStatus } from '../../constants'
+import { Etterlevelse, EtterlevelseMetadata, EtterlevelseStatus, Krav, KravQL, KravStatus } from '../../constants'
 import { Field, FieldProps, Form, Formik, FormikProps, validateYupSchema, yupToFormErrors } from 'formik'
 import { createEtterlevelse, getEtterlevelserByBehandlingsIdKravNumber, mapEtterlevelseToFormValue, updateEtterlevelse } from '../../api/EtterlevelseApi'
-import { Block, Responsive, Scale } from 'baseui/block'
+import { Block } from 'baseui/block'
 import Button from '../common/Button'
 import React, { useEffect, useRef, useState } from 'react'
 import * as yup from 'yup'
@@ -9,12 +9,10 @@ import { getEtterlevelseStatus } from '../../pages/EtterlevelsePage'
 import { DateField, FieldWrapper, TextAreaField } from '../common/Inputs'
 import { theme } from '../../util'
 import { FormControl } from 'baseui/form-control'
-import { getKravByKravNumberAndVersion, kravFullQuery, KravId, useKrav, useSearchKrav } from '../../api/KravApi'
-import { kravName, kravNumView, query } from '../../pages/KravPage'
-import { behandlingName, useBehandling, useSearchBehandling } from '../../api/BehandlingApi'
-import CustomizedSelect from '../common/CustomizedSelect'
+import { getKravByKravNumberAndVersion, KravId } from '../../api/KravApi'
+import { kravNumView, query } from '../../pages/KravPage'
 import { H1, H2, H3, Label3, Paragraph2, Paragraph4 } from 'baseui/typography'
-import { ettlevColors, maxPageWidth, responsivePaddingExtraLarge, responsiveWidthExtraLarge } from '../../util/theme'
+import { ettlevColors, responsivePaddingExtraLarge, responsiveWidthExtraLarge } from '../../util/theme'
 import { SuksesskriterierBegrunnelseEdit } from './Edit/SuksesskriterieBegrunnelseEdit'
 import { Radio, RadioGroup } from 'baseui/radio'
 import { Code } from '../../services/Codelist'
@@ -22,7 +20,7 @@ import { Error } from '../common/ModalSchema'
 import { user } from '../../services/User'
 import { KIND as NKIND, Notification } from 'baseui/notification'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTimesCircle } from '@fortawesome/free-solid-svg-icons'
+import { faChevronDown, faTimesCircle } from '@fortawesome/free-solid-svg-icons'
 import { borderColor, borderRadius, borderStyle, borderWidth, marginAll, padding, paddingZero } from '../common/Style'
 import { useQuery } from '@apollo/client'
 import moment from 'moment'
@@ -39,6 +37,8 @@ import EtterlevelseCard from './EtterlevelseCard'
 import { ModalHeader } from 'baseui/modal'
 import { Section } from '../../pages/BehandlingerTemaPageV2'
 import _ from 'lodash'
+import { getEtterlevelseMetadataByBehandlingsIdAndKravNummerAndKravVersion, mapEtterlevelseMetadataToFormValue } from "../../api/EtterlevelseMetadataApi";
+import TildeltPopoever from "../etterlevelseMetadata/TildeltPopover";
 
 type EditEttlevProps = {
   etterlevelse: Etterlevelse
@@ -144,13 +144,35 @@ export const EditEtterlevelseV2 = ({
     fetchPolicy: 'no-cache',
   })
   const etterlevelserLoading = loading
-
   const [krav, setKrav] = useState<KravQL>()
   const [nyereKrav, setNyereKrav] = React.useState<Krav>()
   const [disableEdit, setDisableEdit] = React.useState<boolean>(false)
   const [editedEtterlevelse, setEditedEtterlevelse] = React.useState<Etterlevelse>()
-
   const etterlevelseFormRef: React.Ref<FormikProps<Etterlevelse> | undefined> = useRef()
+  const [etterlevelseMetadata, setEtterlevelseMetadata] = useState<EtterlevelseMetadata>(mapEtterlevelseMetadataToFormValue({
+    id: 'ny',
+    behandlingId: behandlingId,
+    kravNummer: kravId.kravNummer,
+    kravVersjon: kravId.kravVersjon,
+  }))
+
+  useEffect(() => {
+    ; (async () => {
+      behandlingId && kravId.kravNummer && getEtterlevelseMetadataByBehandlingsIdAndKravNummerAndKravVersion(behandlingId, kravId.kravNummer, kravId.kravVersjon)
+        .then((resp) => {
+          if (resp.content.length) {
+            setEtterlevelseMetadata(resp.content[0])
+          } else {
+            setEtterlevelseMetadata(mapEtterlevelseMetadataToFormValue({
+              id: 'ny',
+              behandlingId: behandlingId,
+              kravNummer: kravId.kravNummer,
+              kravVersjon: kravId.kravVersjon,
+            }))
+          }
+        })
+    })()
+  }, [])
 
   const submit = async (etterlevelse: Etterlevelse) => {
     const mutatedEtterlevelse = {
@@ -234,6 +256,16 @@ export const EditEtterlevelseV2 = ({
                   </Paragraph2>
                 </Block>
               )}
+
+              <Block display={"flex"} justifyContent={"flex-start"} alignItems="center" marginTop="32px">
+                <Label3
+                  $style={{ color: ettlevColors.white, fontSize: '14px', lineHeight: '14px', textAlign: 'right' }}
+                >
+                  Tildelt: {(etterlevelseMetadata && etterlevelseMetadata.tildeltMed && etterlevelseMetadata.tildeltMed.length >= 1) ? etterlevelseMetadata.tildeltMed[0] : "Ingen"}
+                </Label3>
+                <TildeltPopoever etterlevelseMetadata={etterlevelseMetadata} setEtterlevelseMetadata={setEtterlevelseMetadata} icon={faChevronDown} iconColor={ettlevColors.white} />
+              </Block>
+
             </Block>
           </Block>
           <Block backgroundColor={ettlevColors.green100} paddingLeft={responsivePaddingExtraLarge} paddingRight={responsivePaddingExtraLarge}>
@@ -334,8 +366,10 @@ type EditProps = {
   editedEtterlevelse?: Etterlevelse
 }
 
-const Edit = ({ krav, etterlevelse, submit, formRef, behandlingId, disableEdit, documentEdit, close, setIsAlertUnsavedModalOpen,
-  isAlertUnsavedModalOpen, isNavigateButtonClicked, editedEtterlevelse }: EditProps) => {
+const Edit = ({
+  krav, etterlevelse, submit, formRef, behandlingId, disableEdit, documentEdit, close, setIsAlertUnsavedModalOpen,
+  isAlertUnsavedModalOpen, isNavigateButtonClicked, editedEtterlevelse
+}: EditProps) => {
   const [etterlevelseStatus, setEtterlevelseStatus] = React.useState<string>(editedEtterlevelse ? editedEtterlevelse.status : etterlevelse.status || EtterlevelseStatus.UNDER_REDIGERING)
   const [radioHover, setRadioHover] = React.useState<string>('')
   const [tidligereEtterlevelser, setTidligereEtterlevelser] = React.useState<Etterlevelse[]>()
@@ -445,8 +479,8 @@ const Edit = ({ krav, etterlevelse, submit, formRef, behandlingId, disableEdit, 
                                     }}
                                     value={
                                       etterlevelseStatus === EtterlevelseStatus.FERDIG_DOKUMENTERT ? EtterlevelseStatus.FERDIG :
-                                      etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT ? EtterlevelseStatus.IKKE_RELEVANT :
-                                      etterlevelseStatus
+                                        etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT ? EtterlevelseStatus.IKKE_RELEVANT :
+                                          etterlevelseStatus
                                     }
                                     onChange={(event) => {
                                       p.form.setFieldValue('status', event.currentTarget.value)
@@ -508,7 +542,7 @@ const Edit = ({ krav, etterlevelse, submit, formRef, behandlingId, disableEdit, 
                             </Field>
                           </FieldWrapper>
                         </Block>
-                        <Block display="flex" width="100%" >
+                        <Block display="flex" width="100%">
                           {etterlevelse.kravVersjon > 1 &&
                             <Block display="flex" width="100%" justifyContent="flex-end">
                               {tidligereEtterlevelser && tidligereEtterlevelser.length > 1 ? (
