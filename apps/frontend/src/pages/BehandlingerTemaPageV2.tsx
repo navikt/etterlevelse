@@ -84,7 +84,7 @@ export const BehandlingerTemaPageV2 = () => {
   const navigate = useNavigate()
 
 
-  const filterKrav = async (setData: (filteredKravList: KravEtterlevelseData[]) => void, kravList?: KravQL[], filterFerdigDokumentert?: boolean) => {
+  const filterKrav = async (kravList?: KravQL[], filterFerdigDokumentert?: boolean) => {
     const allKravPriority = await getAllKravPriority() 
 
     const unfilteredkraver = kravList ? _.cloneDeep(kravList) : []
@@ -120,18 +120,22 @@ export const BehandlingerTemaPageV2 = () => {
       }
     }
 
-    setData(mapped.filter((k) => !(k.status === KravStatus.UTGAATT && k.etterlevelseStatus === undefined)))
+    return mapped
   }
 
   useEffect(() => {
     (async () => {
-      filterKrav(setKravData, rawData?.krav.content, true)
+      filterKrav(rawData?.krav.content, true).then((kravListe) => {
+        setKravData(kravListe.filter((k) => !(k.status === KravStatus.UTGAATT && k.etterlevelseStatus === undefined)))
+      })
     })()
   }, [rawData])
 
   useEffect(() => {
     (async () => {
-      filterKrav(setIrrelevantKravData, irrelevantData?.krav.content)
+      filterKrav(irrelevantData?.krav.content).then((kravListe) => {
+        setIrrelevantKravData(kravListe.filter((k) => k.etterlevelseStatus === undefined))
+      })
     })()
   }, [irrelevantData])
 
