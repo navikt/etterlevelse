@@ -545,7 +545,7 @@ const Edit = ({
                         <Block display="flex" width="100%">
                           {etterlevelse.kravVersjon > 1 &&
                             <Block display="flex" width="100%" justifyContent="flex-end">
-                              {tidligereEtterlevelser && tidligereEtterlevelser.length > 1 ? (
+                              {tidligereEtterlevelser && tidligereEtterlevelser.length >= 1 ? (
                                 <Block width="100%" maxWidth="460px">
                                   <CustomizedAccordion>
                                     <CustomizedPanel title="Se dokumentasjon på tidligere versjoner" overrides={{ Content: { style: { backgroundColor: ettlevColors.white } } }}>
