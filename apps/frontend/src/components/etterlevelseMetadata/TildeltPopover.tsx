@@ -54,9 +54,11 @@ export const TildeltPopoever = ({ etterlevelseMetadata, setEtterlevelseMetadata,
             onClick={() => {
               const ident = user.getName()
               if (etterlevelseMetadata.tildeltMed && user.getName() === etterlevelseMetadata.tildeltMed[0] && etterlevelseMetadata.id !== 'ny') {
-                deleteEtterlevelseMetadata(etterlevelseMetadata.id)
-                .then((resp) => {
-                  setEtterlevelseMetadata({...resp, id: 'ny', tildeltMed: []})
+                updateEtterlevelseMetadata({
+                  ...etterlevelseMetadata,
+                  tildeltMed: []
+                }).then((resp) => {
+                  setEtterlevelseMetadata(resp)
                   close()
                 })
 
