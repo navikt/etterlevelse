@@ -1,9 +1,9 @@
 import axios from 'axios'
-import { emptyPage, Krav, KravQL, KravStatus, Or, PageResponse } from '../constants'
-import { env } from '../util/env'
-import { useEffect, useState } from 'react'
-import { useSearch } from '../util/hooks'
-import { gql } from '@apollo/client'
+import {emptyPage, Krav, KravQL, KravStatus, Or, PageResponse} from '../constants'
+import {env} from '../util/env'
+import {useEffect, useState} from 'react'
+import {useSearch} from '../util/hooks'
+import {gql} from '@apollo/client'
 
 export const getAllKrav = async () => {
   const PAGE_SIZE = 100
@@ -221,6 +221,115 @@ export const kravFullQuery = gql`
         behovForBegrunnelse
       }
       status
+    }
+  }
+`
+export const behandlingKravQuery = gql`
+  query getKravByFilter($behandlingId: String, $lover: [String!], $gjeldendeKrav: Boolean, $behandlingIrrevantKrav: Boolean) {
+    krav(filter: { behandlingId: $behandlingId, lover: $lover, gjeldendeKrav: $gjeldendeKrav, behandlingIrrevantKrav: $behandlingIrrevantKrav }) {
+      content {
+        id
+        navn
+        kravNummer
+        kravVersjon
+        varselMelding
+        status
+        suksesskriterier {
+          id
+          navn
+          beskrivelse
+        }
+        relevansFor {
+          code
+        }
+        regelverk {
+          lov {
+            code
+            shortName
+          }
+        }
+        etterlevelser(onlyForBehandling: true) {
+          id
+          etterleves
+          fristForFerdigstillelse
+          status
+          changeStamp {
+            lastModifiedBy
+            lastModifiedDate
+          }
+        }
+      }
+    }
+  }
+`
+
+export const statsQuery = gql`
+  query getBehandlingStats($behandlingId: ID) {
+    behandling(filter: { id: $behandlingId }) {
+      content {
+        stats {
+          fyltKrav {
+            kravNummer
+            kravVersjon
+            etterlevelser(onlyForBehandling: true) {
+              behandlingId
+              status
+            }
+            regelverk {
+              lov {
+                code
+                shortName
+              }
+            }
+          }
+          ikkeFyltKrav {
+            kravNummer
+            kravVersjon
+            etterlevelser(onlyForBehandling: true) {
+              behandlingId
+              status
+            }
+            regelverk {
+              lov {
+                code
+                shortName
+              }
+            }
+          }
+          irrelevantKrav {
+            kravNummer
+            kravVersjon
+            etterlevelser(onlyForBehandling: true) {
+              behandlingId
+              status
+            }
+            regelverk {
+              lov {
+                code
+                shortName
+              }
+            }
+          }
+          lovStats {
+            lovCode {
+              code
+              shortName
+            }
+            fyltKrav {
+              id
+              kravNummer
+              kravVersjon
+              navn
+            }
+            ikkeFyltKrav {
+              id
+              kravNummer
+              kravVersjon
+              navn
+            }
+          }
+        }
+      }
     }
   }
 `

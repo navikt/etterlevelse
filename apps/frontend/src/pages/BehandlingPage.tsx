@@ -1,32 +1,31 @@
-import React, { ReactNode, useRef, useState } from 'react'
-import { Block, Display, Responsive } from 'baseui/block'
-import { useParams } from 'react-router-dom'
-import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
-import { useBehandling } from '../api/BehandlingApi'
-import { H1, H2, H3, Label3, Paragraph2, Paragraph4 } from 'baseui/typography'
-import { FormikProps } from 'formik'
-import { ettlevColors, theme } from '../util/theme'
-import { Layout2 } from '../components/scaffold/Page'
-import { Teams } from '../components/common/TeamName'
-import { arkPennIcon, editIcon, ellipse80, warningAlert } from '../components/Images'
-import { Behandling, BehandlingEtterlevData, EtterlevelseStatus, PageResponse } from '../constants'
-import { useQuery } from '@apollo/client'
-import { BehandlingStats, statsQuery } from '../components/behandling/ViewBehandling'
-import { Code, codelist, ListName, TemaCode } from '../services/Codelist'
-import { PanelLinkCard, PanelLinkCardOverrides } from '../components/common/PanelLink'
-import { cardWidth } from './TemaPage'
-import { ProgressBar, SIZE } from 'baseui/progress-bar'
-import { Button } from 'baseui/button'
+import React, {ReactNode, useRef, useState} from 'react'
+import {Block, Display, Responsive} from 'baseui/block'
+import {useParams} from 'react-router-dom'
+import {LoadingSkeleton} from '../components/common/LoadingSkeleton'
+import {useBehandling} from '../api/BehandlingApi'
+import {H1, H2, Label3, Paragraph2, Paragraph4} from 'baseui/typography'
+import {FormikProps} from 'formik'
+import {ettlevColors, theme} from '../util/theme'
+import {Layout2} from '../components/scaffold/Page'
+import {Teams} from '../components/common/TeamName'
+import {arkPennIcon, editIcon, ellipse80, warningAlert} from '../components/Images'
+import {Behandling, BehandlingEtterlevData, EtterlevelseStatus, PageResponse} from '../constants'
+import {useQuery} from '@apollo/client'
+import {Code, codelist, ListName, TemaCode} from '../services/Codelist'
+import {PanelLinkCard, PanelLinkCardOverrides} from '../components/common/PanelLink'
+import {cardWidth} from './TemaPage'
+import {ProgressBar, SIZE} from 'baseui/progress-bar'
+import {Button} from 'baseui/button'
 import EditBehandlingModal from '../components/behandling/EditBehandlingModal'
-import { Tag } from 'baseui/tag'
-import { borderColor, marginZero } from '../components/common/Style'
-import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
-import { Helmet } from 'react-helmet'
-import { ExternalButton } from '../components/common/Button'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { env } from '../util/env'
-import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons'
-import { ExternalLinkWrapper } from '../components/common/RouteLink'
+import {Tag} from 'baseui/tag'
+import {borderColor, marginZero} from '../components/common/Style'
+import {breadcrumbPaths} from '../components/common/CustomizedBreadcrumbs'
+import {Helmet} from 'react-helmet'
+import {ExternalButton} from '../components/common/Button'
+import {env} from '../util/env'
+import {ExternalLinkWrapper} from '../components/common/RouteLink'
+import {BehandlingStats} from "../components/behandling/ViewBehandling";
+import {statsQuery} from "../api/KravApi";
 
 const responsiveDisplay: Responsive<Display> = ['block', 'block', 'block', 'block', 'flex', 'flex']
 
@@ -355,7 +354,7 @@ const TemaCardBehandling = ({ tema, stats, behandling, irrelevant }: { tema: Tem
   const lover = codelist.getCodesForTema(tema.code).map((c) => c.code)
 
   const krav = stats.filter((k) => k.regelverk.map((r: any) => r.lov.code).some((r: any) => lover.includes(r)))
-  
+
   let utfylt = 0
   let underArbeid = 0
   let tilUtfylling = 0

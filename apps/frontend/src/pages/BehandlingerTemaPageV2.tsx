@@ -1,28 +1,27 @@
-import React, { useEffect, useState } from 'react'
-import { Block, Display } from 'baseui/block'
-import { useNavigate, useParams } from 'react-router-dom'
-import { H3, Paragraph2 } from 'baseui/typography'
-import { ettlevColors } from '../util/theme'
-import { codelist, ListName, TemaCode } from '../services/Codelist'
-import { useBehandling } from '../api/BehandlingApi'
-import { Layout2 } from '../components/scaffold/Page'
-import { Etterlevelse, EtterlevelseStatus, KravEtterlevelseData, KravQL, KravStatus, PageResponse } from '../constants'
-import { behandlingKravQuery } from '../components/behandling/ViewBehandling'
-import { useQuery } from '@apollo/client'
-import { CustomizedAccordion, CustomizedPanel } from '../components/common/CustomizedAccordion'
-import { KravId } from '../api/KravApi'
-import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
-import { Responsive } from 'baseui/theme'
-import { KravPanelHeader } from '../components/behandling/KravPanelHeader'
-import { sortKraverByPriority } from '../util/sort'
-import _, { filter } from 'lodash'
-import { getAllKravPriority } from '../api/KravPriorityApi'
-import { Helmet } from 'react-helmet'
-import { Option } from 'baseui/select'
-import { getMainHeader } from './BehandlingPage'
-import { KravView } from "../components/behandlingsTema/KravView";
-import { SecondaryHeader } from "../components/behandlingsTema/SecondaryHeader";
-import { KravList } from "../components/behandlingsTema/KravList";
+import React, {useEffect, useState} from 'react'
+import {Block, Display} from 'baseui/block'
+import {useNavigate, useParams} from 'react-router-dom'
+import {H3, Paragraph2} from 'baseui/typography'
+import {ettlevColors} from '../util/theme'
+import {codelist, ListName, TemaCode} from '../services/Codelist'
+import {useBehandling} from '../api/BehandlingApi'
+import {Layout2} from '../components/scaffold/Page'
+import {Etterlevelse, EtterlevelseStatus, KravEtterlevelseData, KravQL, KravStatus, PageResponse} from '../constants'
+import {useQuery} from '@apollo/client'
+import {CustomizedAccordion, CustomizedPanel} from '../components/common/CustomizedAccordion'
+import {behandlingKravQuery, KravId} from '../api/KravApi'
+import {breadcrumbPaths} from '../components/common/CustomizedBreadcrumbs'
+import {Responsive} from 'baseui/theme'
+import {KravPanelHeader} from '../components/behandling/KravPanelHeader'
+import {sortKraverByPriority} from '../util/sort'
+import _ from 'lodash'
+import {getAllKravPriority} from '../api/KravPriorityApi'
+import {Helmet} from 'react-helmet'
+import {Option} from 'baseui/select'
+import {getMainHeader} from './BehandlingPage'
+import {KravView} from "../components/behandlingsTema/KravView";
+import {SecondaryHeader} from "../components/behandlingsTema/SecondaryHeader";
+import {KravList} from "../components/behandlingsTema/KravList";
 
 const responsiveBreakPoints: Responsive<Display> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
 const responsiveDisplay: Responsive<Display> = ['block', 'block', 'block', 'block', 'flex', 'flex']
@@ -57,10 +56,10 @@ export const BehandlingerTemaPageV2 = () => {
     skip: !params.id || !lover.length,
   })
 
-  // const { data: irrelevantData, loading: irrelevantDataLoading } = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
-  //   variables: { behandlingId: params.id, lover: lover, gjeldendeKrav: false, behandlingIrrevantKrav: !irrelevantKrav },
-  //   skip: !params.id || !lover.length,
-  // })
+  const { data: irrelevantData, loading: irrelevantDataLoading } = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
+    variables: { behandlingId: params.id, lover: lover, gjeldendeKrav: false, behandlingIrrevantKrav: !irrelevantKrav },
+    skip: !params.id || !lover.length,
+  })
 
   const [kravData, setKravData] = useState<KravEtterlevelseData[]>([])
   const [irrelevantKravData, setIrrelevantKravData] = useState<KravEtterlevelseData[]>([])
@@ -87,7 +86,7 @@ export const BehandlingerTemaPageV2 = () => {
 
   const filterKrav = async (kravList?: KravQL[], filterFerdigDokumentert?: boolean) => {
 
-    const allKravPriority = await getAllKravPriority() 
+    const allKravPriority = await getAllKravPriority()
 
     const unfilteredkraver = kravList ? _.cloneDeep(kravList) : []
 
