@@ -44,22 +44,24 @@ export type Section = 'dokumentasjon' | 'etterlevelser' | 'tilbakemeldinger'
 
 export const BehandlingerTemaPageV2 = () => {
   const params = useParams<{ id?: string; tema?: string }>()
-  const temaData: TemaCode | undefined = codelist.getCode(ListName.TEMA, params.tema)
+  const temaData: TemaCode | undefined = codelist.getCode(ListName.TEMA, params.tema?.replace('i', ''))
   const irrelevantKrav = params?.tema?.charAt(0) === 'i' ? true : false
   const [behandling, setBehandling] = useBehandling(params.id)
   const lovListe = codelist.getCodesForTema(temaData?.code)
   const lover = lovListe.map((c) => c.code)
   const variables = { behandlingId: params.id, lover: lover, gjeldendeKrav: false, behandlingIrrevantKrav: irrelevantKrav }
 
-  const { data: rawData } = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
+  const { data: rawData, loading } = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
     variables,
     skip: !params.id || !lover.length,
+    fetchPolicy: 'no-cache'
   })
 
-  // const { data: irrelevantData, loading: irrelevantDataLoading } = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
-  //   variables: { behandlingId: params.id, lover: lover, gjeldendeKrav: false, behandlingIrrevantKrav: !irrelevantKrav },
-  //   skip: !params.id || !lover.length,
-  // })
+  const { data: irrelevantData, loading: irrelevantDataLoading } = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
+    variables: { ...variables, behandlingIrrevantKrav: !irrelevantKrav },
+    skip: !params.id || !lover.length || params?.tema?.charAt(0) === 'i',
+    fetchPolicy: 'no-cache'
+  })
 
   const [kravData, setKravData] = useState<KravEtterlevelseData[]>([])
   const [irrelevantKravData, setIrrelevantKravData] = useState<KravEtterlevelseData[]>([])
@@ -132,13 +134,16 @@ export const BehandlingerTemaPageV2 = () => {
     })()
   }, [rawData])
 
-  // useEffect(() => {
-  //   (async () => {
-  //     filterKrav(irrelevantData?.krav.content).then((kravListe) => {
-  //       setIrrelevantKravData(kravListe.filter((k) => k.etterlevelseStatus === undefined))
-  //     })
-  //   })()
-  // }, [irrelevantData])
+  useEffect(() => {
+    (async () => {
+      filterKrav(irrelevantData?.krav.content).then((kravListe) => {
+        const newKravList = kravListe.filter((k) => k.etterlevelseStatus === undefined)
+
+        
+       setIrrelevantKravData(newKravList)
+      })
+    })()
+  }, [irrelevantData])
 
   const update = (etterlevelse: Etterlevelse) => {
     setKravData(kravData.map((e) => (e.kravVersjon === etterlevelse.kravVersjon && e.kravNummer === etterlevelse.kravNummer ? { ...e, ...mapEtterlevelseData(etterlevelse) } : e)))
