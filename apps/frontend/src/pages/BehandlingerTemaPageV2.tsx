@@ -56,10 +56,10 @@ export const BehandlingerTemaPageV2 = () => {
     skip: !params.id || !lover.length,
   })
 
-  const { data: irrelevantData, loading: irrelevantDataLoading } = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
-    variables: { behandlingId: params.id, lover: lover, gjeldendeKrav: false, behandlingIrrevantKrav: !irrelevantKrav },
-    skip: !params.id || !lover.length,
-  })
+  // const { data: irrelevantData, loading: irrelevantDataLoading } = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
+  //   variables: { behandlingId: params.id, lover: lover, gjeldendeKrav: false, behandlingIrrevantKrav: !irrelevantKrav },
+  //   skip: !params.id || !lover.length,
+  // })
 
   const [kravData, setKravData] = useState<KravEtterlevelseData[]>([])
   const [irrelevantKravData, setIrrelevantKravData] = useState<KravEtterlevelseData[]>([])
