@@ -47,9 +47,9 @@ export const getEtterlevelseStatus = (etterlevelse: KravEtterlevelseData) => {
     case EtterlevelseStatus.UNDER_REDIGERING:
       return 'Under arbeid'
     case EtterlevelseStatus.FERDIG:
-      return 'Under arbeid'
+      return 'Oppfylt'
     case EtterlevelseStatus.IKKE_RELEVANT:
-      return 'Under arbeid'
+      return 'Ikke relevant'
     case EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT:
       return 'Ikke relevant'
     case EtterlevelseStatus.FERDIG_DOKUMENTERT:
