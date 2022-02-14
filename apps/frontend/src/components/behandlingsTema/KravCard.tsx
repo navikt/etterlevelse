@@ -106,11 +106,13 @@ export const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function;
             <Block display="flex" justifyContent="flex-end" flex="1" width="100%">
               <Block width="350px" display="flex" justifyContent="flex-end" marginLeft="32px">
                 <Block display="flex" width="100%" maxWidth="220px" justifyContent="flex-end">
-                  <StatusView
-                    status={props.krav && props.krav.etterlevelseStatus ? getEtterlevelseStatus(props.krav) : 'Ikke påbegynt'}
+                  {props.krav && props.krav.etterlevelseStatus &&
+                    <StatusView
+                    status={getEtterlevelseStatus(props.krav)}
                     statusDisplay={getEtterlevelseStatusLabelColor(props.krav)}
                     background={props.krav.varselMelding ? ettlevColors.white : undefined}
                   />
+                  }
                 </Block>
                 <Block marginLeft="31px" maxWidth="140px" width="100%">
                   {etterlevelseMetadata && etterlevelseMetadata.tildeltMed && etterlevelseMetadata.tildeltMed.length >= 1 ? (
@@ -129,14 +131,12 @@ export const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function;
                       </Label3>
                     </Block>
                   }
+                  {props.krav.etterlevelseChangeStamp?.lastModifiedDate &&
                   <Block width="100%" display="flex" justifyContent="flex-end">
-                    <Paragraph4 $style={{lineHeight: '19px', textAlign: 'right', marginTop: '0px', marginBottom: '0px', whiteSpace: 'nowrap'}}>
-                      {props.krav.etterlevelseChangeStamp?.lastModifiedDate ?
-                        'Sist utfylt: ' + moment(props.krav.etterlevelseChangeStamp?.lastModifiedDate).format('ll') :
-                        'Ikke påbegynt'
-                      }
+                    <Paragraph4 $style={{ lineHeight: '19px', textAlign: 'right', marginTop: '0px', marginBottom: '0px', whiteSpace: 'nowrap' }}>
+                      {'Sist utfylt: ' + moment(props.krav.etterlevelseChangeStamp?.lastModifiedDate).format('ll')}
                     </Paragraph4>
-                  </Block>
+                  </Block>}
                 </Block>
               </Block>
             </Block>
