@@ -38,7 +38,7 @@ const mapEtterlevelseData = (etterlevelse?: Etterlevelse) => ({
 })
 
 export const isFerdigUtfylt = (status: EtterlevelseStatus | undefined) => {
-  return status === EtterlevelseStatus.FERDIG_DOKUMENTERT || status === EtterlevelseStatus.OPPFYLLES_SENERE || status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT
+  return status === EtterlevelseStatus.FERDIG_DOKUMENTERT || status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT
 }
 
 export type Section = 'dokumentasjon' | 'etterlevelser' | 'tilbakemeldinger'
