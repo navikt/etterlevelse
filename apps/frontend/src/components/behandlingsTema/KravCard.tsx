@@ -108,10 +108,10 @@ export const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function;
                 <Block display="flex" width="100%" maxWidth="220px" justifyContent="flex-end">
                   {props.krav && props.krav.etterlevelseStatus &&
                     <StatusView
-                    status={getEtterlevelseStatus(props.krav)}
-                    statusDisplay={getEtterlevelseStatusLabelColor(props.krav)}
-                    background={props.krav.varselMelding ? ettlevColors.white : undefined}
-                  />
+                      status={getEtterlevelseStatus(props.krav)}
+                      statusDisplay={getEtterlevelseStatusLabelColor(props.krav)}
+                      background={props.krav.varselMelding ? ettlevColors.white : undefined}
+                    />
                   }
                 </Block>
                 <Block marginLeft="31px" maxWidth="140px" width="100%">
@@ -125,26 +125,26 @@ export const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function;
                       </Block>) :
                     <Block>
                       <Label3
-                        $style={{fontSize: '14px', lineHeight: '14px', textAlign: 'right'}}
+                        $style={{fontSize: '14px', lineHeight: '14px', textAlign: 'right', fontStyle: 'italic', fontWeight: 400}}
                       >
                         Ikke tildelt
                       </Label3>
                     </Block>
                   }
                   {props.krav.etterlevelseChangeStamp?.lastModifiedDate &&
-                  <Block width="100%" display="flex" justifyContent="flex-end">
-                    <Paragraph4 $style={{ lineHeight: '19px', textAlign: 'right', marginTop: '0px', marginBottom: '0px', whiteSpace: 'nowrap' }}>
-                      {'Sist utfylt: ' + moment(props.krav.etterlevelseChangeStamp?.lastModifiedDate).format('ll')}
-                    </Paragraph4>
-                  </Block>}
+                    <Block width="100%" display="flex" justifyContent="flex-end">
+                      <Paragraph4 $style={{lineHeight: '19px', textAlign: 'right', marginTop: '0px', marginBottom: '0px', whiteSpace: 'nowrap'}}>
+                        {'Sist utfylt: ' + moment(props.krav.etterlevelseChangeStamp?.lastModifiedDate).format('ll')}
+                      </Paragraph4>
+                    </Block>}
                 </Block>
               </Block>
             </Block>
           </Block>
         </Button>
       </Block>
-      {etterlevelseMetadata && <Block display="flex" alignItems="center">
-        <TildeltPopoever etterlevelseMetadata={etterlevelseMetadata} setEtterlevelseMetadata={setEtterlevelseMetadata} icon={faEllipsisVertical}/>
+      {etterlevelseMetadata && <Block display="flex" alignItems="center" paddingRight={'8px'}>
+        <TildeltPopoever etterlevelseMetadata={etterlevelseMetadata} setEtterlevelseMetadata={setEtterlevelseMetadata} icon={faEllipsisVertical} iconColor={ettlevColors.grey600}/>
       </Block>}
     </Block>
   )

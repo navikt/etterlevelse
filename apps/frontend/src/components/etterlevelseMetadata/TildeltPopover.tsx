@@ -1,16 +1,16 @@
-import { EtterlevelseMetadata } from '../../constants'
-import { StatefulPopover } from 'baseui/popover'
-import { Block } from 'baseui/block'
-import { Button as BaseButton } from 'baseui/button'
-import { PLACEMENT } from 'baseui/tooltip'
+import {EtterlevelseMetadata} from '../../constants'
+import {StatefulPopover} from 'baseui/popover'
+import {Block} from 'baseui/block'
+import {Button as BaseButton} from 'baseui/button'
+import {PLACEMENT} from 'baseui/tooltip'
 import Button from '../common/Button'
-import { createEtterlevelseMetadata, deleteEtterlevelseMetadata, updateEtterlevelseMetadata } from '../../api/EtterlevelseMetadataApi'
-import { user } from '../../services/User'
-import { ettlevColors } from '../../util/theme'
-import { Label3 } from 'baseui/typography'
-import { borderColor, borderStyle, borderWidth } from '../common/Style'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
+import {createEtterlevelseMetadata, updateEtterlevelseMetadata} from '../../api/EtterlevelseMetadataApi'
+import {user} from '../../services/User'
+import {ettlevColors} from '../../util/theme'
+import {Label3} from 'baseui/typography'
+import {borderColor, borderStyle, borderWidth} from '../common/Style'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {IconDefinition} from "@fortawesome/fontawesome-svg-core";
 
 type TildeltPopoverProps = {
   etterlevelseMetadata: EtterlevelseMetadata
@@ -19,7 +19,7 @@ type TildeltPopoverProps = {
   iconColor?: string
 }
 
-export const TildeltPopoever = ({ etterlevelseMetadata, setEtterlevelseMetadata, icon, iconColor }: TildeltPopoverProps) => {
+export const TildeltPopoever = ({etterlevelseMetadata, setEtterlevelseMetadata, icon, iconColor}: TildeltPopoverProps) => {
   return (
     <StatefulPopover
       focusLock={true}
@@ -47,7 +47,7 @@ export const TildeltPopoever = ({ etterlevelseMetadata, setEtterlevelseMetadata,
           }
         }
       }}
-      content={({ close }) => (
+      content={({close}) => (
         <Block padding={'20px'}>
           <Button
             kind="underline-hover"
@@ -80,11 +80,11 @@ export const TildeltPopoever = ({ etterlevelseMetadata, setEtterlevelseMetadata,
                 })
               }
             }}>
-            <Label3 $style={{ fontWeight: 600 }}>
+            <Label3 $style={{fontWeight: 600}}>
               {etterlevelseMetadata.tildeltMed && user.getName() === etterlevelseMetadata.tildeltMed[0] ? 'Fjern meg selv' : 'Tildel meg selv'}
             </Label3>
           </Button>
-        </Block >
+        </Block>
       )}
       returnFocus
       autoFocus
@@ -95,13 +95,13 @@ export const TildeltPopoever = ({ etterlevelseMetadata, setEtterlevelseMetadata,
         kind="tertiary"
         $style={{
           width: '24px',
-          height: '24px'
+          height: '24px',
         }}
         type="button"
       >
         <FontAwesomeIcon icon={icon} color={iconColor ? iconColor : 'inherit'} title="Etterlevelse metadata meny"/>
       </BaseButton>
-    </StatefulPopover >
+    </StatefulPopover>
   )
 }
 export default TildeltPopoever

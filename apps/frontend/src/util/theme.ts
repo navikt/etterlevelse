@@ -1,14 +1,14 @@
-import { createTheme, lightThemePrimitives } from 'baseui'
-import { colors } from 'baseui/tokens'
-import { Theme, ThemePrimitives } from 'baseui/theme'
-import { RecursivePartial } from '../constants'
+import {createTheme, lightThemePrimitives} from 'baseui'
+import {colors} from 'baseui/tokens'
+import {Theme, ThemePrimitives} from 'baseui/theme'
+import {RecursivePartial} from '../constants'
 import '@fontsource/source-sans-pro/200.css'
 import '@fontsource/source-sans-pro/300.css'
 import '@fontsource/source-sans-pro/400.css'
 import '@fontsource/source-sans-pro/600.css'
 import '@fontsource/source-sans-pro/700.css'
 import '@fontsource/source-sans-pro/900.css'
-import { Responsive, Scale } from 'baseui/block'
+import {Responsive, Scale} from 'baseui/block'
 
 // etterlevelse colors
 export const ettlevColors = {
@@ -21,6 +21,7 @@ export const ettlevColors = {
   red400: '#AE5235',
   red200: '#EAA98D',
   red50: '#F6EAE6',
+  grey600: '#757575',
   grey200: '#A0A0A0',
   grey100: '#DFDFDF',
   grey75: '#E5E5E5',
