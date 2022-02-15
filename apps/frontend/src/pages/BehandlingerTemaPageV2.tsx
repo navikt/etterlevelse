@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Block, Display } from 'baseui/block'
 import { useNavigate, useParams } from 'react-router-dom'
-import { H3, Paragraph2 } from 'baseui/typography'
+import { H3, Label3, Paragraph2 } from 'baseui/typography'
 import { ettlevColors } from '../util/theme'
 import { codelist, ListName, TemaCode } from '../services/Codelist'
 import { useBehandling } from '../api/BehandlingApi'
@@ -12,7 +12,7 @@ import { CustomizedAccordion, CustomizedPanel } from '../components/common/Custo
 import { behandlingKravQuery, KravId } from '../api/KravApi'
 import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 import { Responsive } from 'baseui/theme'
-import { KravPanelHeader } from '../components/behandling/KravPanelHeader'
+import { KravPanelHeader, KravPanelHeaderWithSorting } from '../components/behandling/KravPanelHeader'
 import { sortKraverByPriority } from '../util/sort'
 import _ from 'lodash'
 import { getAllKravPriority } from '../api/KravPriorityApi'
@@ -22,6 +22,8 @@ import { getMainHeader } from './BehandlingPage'
 import { KravView } from "../components/behandlingsTema/KravView";
 import { SecondaryHeader } from "../components/behandlingsTema/SecondaryHeader";
 import { KravList } from "../components/behandlingsTema/KravList";
+import { padding } from '../components/common/Style'
+import CustomizedSelect from '../components/common/CustomizedSelect'
 
 const responsiveBreakPoints: Responsive<Display> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
 const responsiveDisplay: Responsive<Display> = ['block', 'block', 'block', 'block', 'flex', 'flex']
@@ -49,7 +51,7 @@ export const BehandlingerTemaPageV2 = () => {
   const [behandling, setBehandling] = useBehandling(params.id)
   const lovListe = codelist.getCodesForTema(temaData?.code)
   const lover = lovListe.map((c) => c.code)
-  const variables = { behandlingId: params.id, lover: lover, gjeldendeKrav: false, behandlingIrrevantKrav: irrelevantKrav }
+  const variables = { behandlingId: params.id, lover: lover, gjeldendeKrav: true, behandlingIrrevantKrav: irrelevantKrav }
 
   const { data: rawData, loading } = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
     variables,
@@ -65,9 +67,6 @@ export const BehandlingerTemaPageV2 = () => {
 
   const [kravData, setKravData] = useState<KravEtterlevelseData[]>([])
   const [irrelevantKravData, setIrrelevantKravData] = useState<KravEtterlevelseData[]>([])
-
-  const [utfyltKrav, setUtfyltKrav] = useState<KravEtterlevelseData[]>([])
-  const [skalUtfyllesKrav, setSkalUtfyllesKrav] = useState<KravEtterlevelseData[]>([])
 
   const [activeEtterlevleseStatus, setActiveEtterlevelseStatus] = useState<EtterlevelseStatus | undefined>()
 
@@ -162,15 +161,6 @@ export const BehandlingerTemaPageV2 = () => {
     setKravData(kravData.map((e) => (e.kravVersjon === etterlevelse.kravVersjon && e.kravNummer === etterlevelse.kravNummer ? { ...e, ...mapEtterlevelseData(etterlevelse) } : e)))
   }
 
-  useEffect(() => {
-    setUtfyltKrav(kravData.filter((k) => isFerdigUtfylt(k.etterlevelseStatus)))
-    setSkalUtfyllesKrav(
-      kravData.filter(
-        (k) => k.etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT || k.etterlevelseStatus === EtterlevelseStatus.UNDER_REDIGERING || k.etterlevelseStatus === EtterlevelseStatus.FERDIG || k.etterlevelseStatus === undefined || null,
-      ),
-    )
-  }, [kravData])
-
   const getPercentageUtfylt = () => {
     let antallUtfylt = 0
 
@@ -227,43 +217,28 @@ export const BehandlingerTemaPageV2 = () => {
         >
           <Block display="flex" width="100%" justifyContent="space-between" flexWrap marginBottom="64px">
             <Block width="100%" display={edit ? 'none' : 'block'}>
-              <CustomizedAccordion accordion={false}>
-                <CustomizedPanel
-                  HeaderActiveBackgroundColor={ettlevColors.green50}
-                  onClick={() => setIsExpanded(!isExpanded)}
-                  title={<KravPanelHeader title={'Skal fylles ut'} kravData={skalUtfyllesKrav} />}
-                >
-                  <KravList
-                    kravList={skalUtfyllesKrav}
-                    emptyMessage={'Ingen krav som skal fylles ut'}
-                    sortingAvailable={true}
-                    sorting={sorting}
-                    setSorting={setSorting}
-                    sortingOptions={sortingOptions}
-                    behandling={behandling}
-                    isExpanded={isExpanded}
-                    setActiveEtterlevelseStatus={setActiveEtterlevelseStatus}
-                    setEdit={setEdit}
-                    setKravId={setKravId}
-                    edit={edit}
-                  />
-                </CustomizedPanel>
-                <CustomizedPanel HeaderActiveBackgroundColor={ettlevColors.green50} title={<KravPanelHeader title={'Ferdig utfylt'} kravData={utfyltKrav} />}>
-                  <KravList
-                    kravList={utfyltKrav}
-                    emptyMessage={'Ingen krav er ferdig utfylt'}
-                    sorting={sorting}
-                    setSorting={setSorting}
-                    sortingOptions={sortingOptions}
-                    behandling={behandling}
-                    isExpanded={isExpanded}
-                    setActiveEtterlevelseStatus={setActiveEtterlevelseStatus}
-                    setEdit={setEdit}
-                    setKravId={setKravId}
-                    edit={edit}
-                  />
-                </CustomizedPanel>
-              </CustomizedAccordion>
+              <Block
+                $style={{
+                  backgroundColor: ettlevColors.white,
+                  borderRadius: '4px'
+                }}
+              >
+                <Block display="flex" justifyContent="center" $style={{ paddingTop: '26px', paddingBottom: '22px', paddingLeft: '16px' }}>
+                  <KravPanelHeaderWithSorting kravData={kravData} sortingOptions={sortingOptions} sorting={sorting} setSorting={setSorting}/>
+                </Block>
+                <KravList
+                  kravList={kravData}
+                  emptyMessage={'Ingen krav som skal fylles ut'}
+                  sortingAvailable={true}
+                  sorting={sorting}
+                  sortingOptions={sortingOptions}
+                  behandling={behandling}
+                  setActiveEtterlevelseStatus={setActiveEtterlevelseStatus}
+                  setEdit={setEdit}
+                  setKravId={setKravId}
+                  edit={edit}
+                />
+              </Block>
               {irrelevantKravData.length > 0 && (
                 <Block marginTop="64px" width="100%">
                   <H3 marginTop="0px" marginBottom="16px">
@@ -284,10 +259,8 @@ export const BehandlingerTemaPageV2 = () => {
                           emptyMessage={'Ingen krav som skal fylles ut'}
                           sortingAvailable={false}
                           sorting={sorting}
-                          setSorting={setSorting}
                           sortingOptions={sortingOptions}
                           behandling={behandling}
-                          isExpanded={isExpanded}
                           setActiveEtterlevelseStatus={setActiveEtterlevelseStatus}
                           setEdit={setEdit}
                           setKravId={setKravId}
