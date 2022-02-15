@@ -1,14 +1,14 @@
-import {Behandling, EtterlevelseStatus, KravEtterlevelseData} from "../../constants";
+import { Behandling, EtterlevelseStatus, KravEtterlevelseData } from "../../constants";
 import _ from "lodash";
-import {user} from "../../services/User";
-import {Block} from "baseui/block";
+import { user } from "../../services/User";
+import { Block } from "baseui/block";
 import CustomizedSelect from "../common/CustomizedSelect";
-import {CustomPanelDivider} from "../common/CustomizedAccordion";
-import {KravCard} from "./KravCard";
-import {Paragraph4} from "baseui/typography";
+import { CustomPanelDivider } from "../common/CustomizedAccordion";
+import { KravCard } from "./KravCard";
+import { Paragraph4 } from "baseui/typography";
 import React from "react";
-import {Option} from "baseui/select";
-import {KravId} from "../../api/KravApi";
+import { Option } from "baseui/select";
+import { KravId } from "../../api/KravApi";
 
 type KravListProps = {
   kravList: KravEtterlevelseData[]
@@ -16,10 +16,8 @@ type KravListProps = {
   sortingAvailable?: boolean
   noStatus?: boolean
   sorting: readonly Option[]
-  setSorting: React.Dispatch<React.SetStateAction<readonly Option[]>>
   sortingOptions: Option[]
   behandling: Behandling
-  isExpanded: boolean
   setActiveEtterlevelseStatus: React.Dispatch<React.SetStateAction<EtterlevelseStatus | undefined>>
   setEdit: React.Dispatch<React.SetStateAction<string | undefined>>
   setKravId: React.Dispatch<React.SetStateAction<KravId | undefined>>
@@ -27,20 +25,18 @@ type KravListProps = {
 }
 
 export const KravList = ({
-                           kravList,
-                           emptyMessage,
-                           sortingAvailable,
-                           noStatus,
-                           sorting,
-                           sortingOptions,
-                           isExpanded,
-                           setSorting,
-                           behandling,
-                           setActiveEtterlevelseStatus,
-                           setKravId,
-                           setEdit,
-                           edit
-                         }: KravListProps) => {
+  kravList,
+  emptyMessage,
+  sortingAvailable,
+  noStatus,
+  sorting,
+  sortingOptions,
+  behandling,
+  setActiveEtterlevelseStatus,
+  setKravId,
+  setEdit,
+  edit
+}: KravListProps) => {
   if (kravList.length) {
     let sortedKravList = _.cloneDeep(kravList)
     if (sortingAvailable && sorting[0].id === sortingOptions[1].id) {
@@ -60,12 +56,7 @@ export const KravList = ({
     }
 
     return (
-      <Block $style={{backgroundColor: 'white'}}>
-        {isExpanded && sortingAvailable && (
-          <Block marginBottom="12px" paddingLeft="20px" paddingRight="20px" width="100%" maxWidth="290px">
-            <CustomizedSelect clearable={false} options={sortingOptions} value={sorting} onChange={(params) => setSorting(params.value)}/>
-          </Block>
-        )}
+      <Block $style={{ backgroundColor: 'white' }}>
         {behandling && sortedKravList.map((k) => {
           return (
             <CustomPanelDivider key={`${k.navn}_${k.kravNummer}_${k.kravVersjon}`}>
