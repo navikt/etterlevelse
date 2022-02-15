@@ -1,18 +1,19 @@
-import {EtterlevelseMetadata, KravEtterlevelseData} from "../../constants";
-import React, {useEffect, useState} from "react";
-import {getEtterlevelseMetadataByBehandlingsIdAndKravNummerAndKravVersion, mapEtterlevelseMetadataToFormValue} from "../../api/EtterlevelseMetadataApi";
-import {Block} from "baseui/block";
+import { EtterlevelseMetadata, KravEtterlevelseData } from "../../constants";
+import React, { useEffect, useState } from "react";
+import { getEtterlevelseMetadataByBehandlingsIdAndKravNummerAndKravVersion, mapEtterlevelseMetadataToFormValue } from "../../api/EtterlevelseMetadataApi";
+import { Block } from "baseui/block";
 import Button from "../common/Button";
-import {ettlevColors} from "../../util/theme";
-import {borderStyle} from "../common/Style";
-import {toKravId} from "./utils";
-import {Label3, Paragraph4} from "baseui/typography";
+import { ettlevColors } from "../../util/theme";
+import { borderStyle } from "../common/Style";
+import { toKravId } from "./utils";
+import { Label3, Paragraph4 } from "baseui/typography";
 import StatusView from "../common/StatusTag";
-import {getEtterlevelseStatus, getEtterlevelseStatusLabelColor} from "../behandling/utils";
+import { getEtterlevelseStatus, getEtterlevelseStatusLabelColor } from "../behandling/utils";
 import moment from "moment";
 import TildeltPopoever from "../etterlevelseMetadata/TildeltPopover";
-import {isFerdigUtfylt} from "../../pages/BehandlingerTemaPageV2";
-import {faEllipsisVertical} from "@fortawesome/free-solid-svg-icons";
+import { isFerdigUtfylt } from "../../pages/BehandlingerTemaPageV2";
+import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
+import { arkCheckIcon, arkPennIcon } from "../Images";
 
 export const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function; setKravId: Function; noStatus?: boolean; setActiveEtterlevelseStatus: Function, behandlingId: string, edit: string | undefined }) => {
   const ferdigUtfylt = isFerdigUtfylt(props.krav.etterlevelseStatus)
@@ -41,14 +42,14 @@ export const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function;
   }
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       getEtterlevelseMetaData()
     })()
   }, [])
 
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       getEtterlevelseMetaData()
     })()
   }, [props.edit])
@@ -58,8 +59,8 @@ export const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function;
       display={'flex'}
       $style={{
         boxShadow: '0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 2px 0 rgba(0, 0, 0, .12)',
-        ':hover': {boxShadow: '0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 3px 0 rgba(0, 0, 0, .12)'},
-        ':active': {boxShadow: '0 2px 1px -2px rgba(0, 0, 0, .2), 0 1px 1px 0 rgba(0, 0, 0, .14), 0 1px 1px 0 rgba(0, 0, 0, .12)'},
+        ':hover': { boxShadow: '0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 3px 0 rgba(0, 0, 0, .12)' },
+        ':active': { boxShadow: '0 2px 1px -2px rgba(0, 0, 0, .2), 0 1px 1px 0 rgba(0, 0, 0, .14), 0 1px 1px 0 rgba(0, 0, 0, .12)' },
         ':focus': {
           boxShadow: '0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 3px 0 rgba(0, 0, 0, .12)',
           outline: `3px solid ${ettlevColors.focusOutline}`,
@@ -79,7 +80,7 @@ export const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function;
             justifyContent: 'flex-start',
             backgroundColor: ettlevColors.white,
             ...borderStyle('hidden'),
-            ':hover': {backgroundColor: 'none', boxShadow: ''},
+            ':hover': { backgroundColor: 'none', boxShadow: '' },
             boxShadow: '',
           }}
           onClick={() => {
@@ -94,12 +95,15 @@ export const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function;
           }}
         >
           <Block display="flex" justifyContent="center" alignItems="center" width="100%" onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
-            <Block marginLeft="24px">
+            <Block marginLeft="8px">
+              {isFerdigUtfylt(props.krav.etterlevelseStatus) ? <img  src={arkCheckIcon} alt="" /> : <img src={arkPennIcon} alt="" />}
+            </Block>
+            <Block marginLeft="14px">
               <Paragraph4
-                $style={{fontSize: '16px', lineHeight: '24px', marginBottom: '0px', marginTop: '0px', width: 'fit-content', textDecoration: hover ? 'underline' : 'none'}}>
+                $style={{ fontSize: '16px', lineHeight: '24px', marginBottom: '0px', marginTop: '0px', width: 'fit-content', textDecoration: hover ? 'underline' : 'none' }}>
                 K{props.krav.kravNummer}.{props.krav.kravVersjon}
               </Paragraph4>
-              <Label3 $style={{fontSize: '18px', fontWeight: 600, alignContent: 'flex-start', textAlign: 'left', textDecoration: hover ? 'underline' : 'none'}}>
+              <Label3 $style={{ fontSize: '18px', fontWeight: 600, alignContent: 'flex-start', textAlign: 'left', textDecoration: hover ? 'underline' : 'none' }}>
                 {props.krav.navn}
               </Label3>
             </Block>
@@ -116,16 +120,16 @@ export const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function;
                 </Block>
                 <Block marginLeft="31px" maxWidth="140px" width="100%">
                   {etterlevelseMetadata && etterlevelseMetadata.tildeltMed && etterlevelseMetadata.tildeltMed.length >= 1 ? (
-                      <Block>
-                        <Label3
-                          $style={{fontSize: '14px', lineHeight: '14px', textAlign: 'right'}}
-                        >
-                          Tildelt: {etterlevelseMetadata.tildeltMed[0].length > 12 ? etterlevelseMetadata.tildeltMed[0].substring(0, 11) + '...' : etterlevelseMetadata.tildeltMed[0]}
-                        </Label3>
-                      </Block>) :
                     <Block>
                       <Label3
-                        $style={{fontSize: '14px', lineHeight: '14px', textAlign: 'right', fontStyle: 'italic', fontWeight: 400}}
+                        $style={{ fontSize: '14px', lineHeight: '14px', textAlign: 'right' }}
+                      >
+                        Tildelt: {etterlevelseMetadata.tildeltMed[0].length > 12 ? etterlevelseMetadata.tildeltMed[0].substring(0, 11) + '...' : etterlevelseMetadata.tildeltMed[0]}
+                      </Label3>
+                    </Block>) :
+                    <Block>
+                      <Label3
+                        $style={{ fontSize: '14px', lineHeight: '14px', textAlign: 'right', fontStyle: 'italic', fontWeight: 400 }}
                       >
                         Ikke tildelt
                       </Label3>
@@ -133,7 +137,7 @@ export const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function;
                   }
                   {props.krav.etterlevelseChangeStamp?.lastModifiedDate &&
                     <Block width="100%" display="flex" justifyContent="flex-end">
-                      <Paragraph4 $style={{lineHeight: '19px', textAlign: 'right', marginTop: '0px', marginBottom: '0px', whiteSpace: 'nowrap'}}>
+                      <Paragraph4 $style={{ lineHeight: '19px', textAlign: 'right', marginTop: '0px', marginBottom: '0px', whiteSpace: 'nowrap' }}>
                         {'Sist utfylt: ' + moment(props.krav.etterlevelseChangeStamp?.lastModifiedDate).format('ll')}
                       </Paragraph4>
                     </Block>}
@@ -144,7 +148,7 @@ export const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function;
         </Button>
       </Block>
       {etterlevelseMetadata && <Block display="flex" alignItems="center" paddingRight={'8px'}>
-        <TildeltPopoever etterlevelseMetadata={etterlevelseMetadata} setEtterlevelseMetadata={setEtterlevelseMetadata} icon={faEllipsisVertical} iconColor={ettlevColors.grey600}/>
+        <TildeltPopoever etterlevelseMetadata={etterlevelseMetadata} setEtterlevelseMetadata={setEtterlevelseMetadata} icon={faEllipsisVertical} iconColor={ettlevColors.grey600} />
       </Block>}
     </Block>
   )
