@@ -43,6 +43,7 @@ import ellipse80 from '../resources/icons/ellipse80.svg'
 
 import checkmarkIcon from '../resources/icons/check.svg'
 import arkPennIcon from '../resources/icons/ark-penn-ikon.svg'
+import arkCheckIcon from '../resources/icons/ark-check-ikon.svg'
 import grafIcon from '../resources/icons/graf-ikon.svg'
 import husIcon from '../resources/icons/hus-ikon.svg'
 import paragrafIcon from '../resources/icons/paragraf-ikon.svg'
@@ -94,6 +95,7 @@ export {
   navChevronRightIcon,
   navChevronDownIcon,
   arkPennIcon,
+  arkCheckIcon,
   grafIcon,
   husIcon,
   paragrafIcon,
