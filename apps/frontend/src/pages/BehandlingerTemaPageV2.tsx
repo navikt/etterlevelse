@@ -1,29 +1,27 @@
-import React, { useEffect, useState } from 'react'
-import { Block, Display } from 'baseui/block'
-import { useNavigate, useParams } from 'react-router-dom'
-import { H3, Label3, Paragraph2 } from 'baseui/typography'
-import { ettlevColors } from '../util/theme'
-import { codelist, ListName, TemaCode } from '../services/Codelist'
-import { useBehandling } from '../api/BehandlingApi'
-import { Layout2 } from '../components/scaffold/Page'
-import { Etterlevelse, EtterlevelseStatus, KravEtterlevelseData, KravQL, KravStatus, PageResponse } from '../constants'
-import { useQuery } from '@apollo/client'
-import { CustomizedAccordion, CustomizedPanel } from '../components/common/CustomizedAccordion'
-import { behandlingKravQuery, KravId } from '../api/KravApi'
-import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
-import { Responsive } from 'baseui/theme'
-import { KravPanelHeader, KravPanelHeaderWithSorting } from '../components/behandling/KravPanelHeader'
-import { sortKraverByPriority } from '../util/sort'
+import React, {useEffect, useState} from 'react'
+import {Block, Display} from 'baseui/block'
+import {useNavigate, useParams} from 'react-router-dom'
+import {H3, Paragraph2} from 'baseui/typography'
+import {ettlevColors} from '../util/theme'
+import {codelist, ListName, TemaCode} from '../services/Codelist'
+import {useBehandling} from '../api/BehandlingApi'
+import {Layout2} from '../components/scaffold/Page'
+import {Etterlevelse, EtterlevelseStatus, KravEtterlevelseData, KravQL, KravStatus, PageResponse} from '../constants'
+import {useQuery} from '@apollo/client'
+import {CustomizedAccordion, CustomizedPanel} from '../components/common/CustomizedAccordion'
+import {behandlingKravQuery, KravId} from '../api/KravApi'
+import {breadcrumbPaths} from '../components/common/CustomizedBreadcrumbs'
+import {Responsive} from 'baseui/theme'
+import {KravPanelHeader, KravPanelHeaderWithSorting} from '../components/behandling/KravPanelHeader'
+import {sortKraverByPriority} from '../util/sort'
 import _ from 'lodash'
-import { getAllKravPriority } from '../api/KravPriorityApi'
-import { Helmet } from 'react-helmet'
-import { Option } from 'baseui/select'
-import { getMainHeader } from './BehandlingPage'
-import { KravView } from "../components/behandlingsTema/KravView";
-import { SecondaryHeader } from "../components/behandlingsTema/SecondaryHeader";
-import { KravList } from "../components/behandlingsTema/KravList";
-import { padding } from '../components/common/Style'
-import CustomizedSelect from '../components/common/CustomizedSelect'
+import {getAllKravPriority} from '../api/KravPriorityApi'
+import {Helmet} from 'react-helmet'
+import {Option} from 'baseui/select'
+import {getMainHeader} from './BehandlingPage'
+import {KravView} from "../components/behandlingsTema/KravView";
+import {SecondaryHeader} from "../components/behandlingsTema/SecondaryHeader";
+import {KravList} from "../components/behandlingsTema/KravList";
 
 const responsiveBreakPoints: Responsive<Display> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
 const responsiveDisplay: Responsive<Display> = ['block', 'block', 'block', 'block', 'flex', 'flex']
@@ -161,17 +159,6 @@ export const BehandlingerTemaPageV2 = () => {
     setKravData(kravData.map((e) => (e.kravVersjon === etterlevelse.kravVersjon && e.kravNummer === etterlevelse.kravNummer ? { ...e, ...mapEtterlevelseData(etterlevelse) } : e)))
   }
 
-  const getPercentageUtfylt = () => {
-    let antallUtfylt = 0
-
-    kravData.forEach((k) => {
-      if (isFerdigUtfylt(k.etterlevelseStatus) && k.gammelVersjon !== true) {
-        antallUtfylt += 1
-      }
-    })
-
-    return antallUtfylt
-  }
 
   const breadcrumbPaths: breadcrumbPaths[] = [
     {
