@@ -5,7 +5,7 @@ import {Block} from 'baseui/block'
 import React, {useEffect} from 'react'
 import * as yup from 'yup'
 import {codelist, ListName} from '../../services/Codelist'
-import {InputField, MultiInputField, TextAreaField} from '../common/Inputs'
+import {InputField, MultiInputField, OptionField, TextAreaField} from '../common/Inputs'
 import axios from 'axios'
 import {env} from '../../util/env'
 import {KravVarslingsadresserEdit} from './Edit/KravVarslingsadresserEdit'
@@ -29,6 +29,7 @@ import {Checkbox} from 'baseui/checkbox'
 import {warningAlert} from '../Images'
 import {user} from '../../services/User'
 import {Modal as BaseModal, ModalBody, ModalHeader} from 'baseui/modal'
+import { kravStatus } from '../../pages/KravPage'
 
 type EditKravProps = {
   krav: KravQL
@@ -360,7 +361,7 @@ export const EditKrav = ({krav, close, formRef, isOpen, setIsOpen, newVersion, n
                       <H2>Egenskaper</H2>
                     </Block>
 
-                    {/* {user.isAdmin() && (
+                    {user.isAdmin() && (
                       <Block width="100%" maxWidth={maxInputWidth} marginBottom={inputMarginBottom}>
                         <OptionField
                           label="Status"
@@ -369,7 +370,7 @@ export const EditKrav = ({krav, close, formRef, isOpen, setIsOpen, newVersion, n
                           tooltip={'Velg status for kravet. Utkast er kun synlig for kraveier selv. Aktiv/utgått er synlig for alle.'}
                         />
                       </Block>
-                    )} */}
+                    )}
 
                     <KravVarslingsadresserEdit/>
                     {errors.varslingsadresser && <ErrorMessageModal msg={errors.varslingsadresser} fullWidth={true}/>}

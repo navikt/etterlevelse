@@ -172,11 +172,12 @@ export const KravCard = (props: {
 
 const showWarningMessage = (warningMessage:string) =>{
   return(
-    <Block display={"flex"} alignItems={"center"}>
+    <Block display="flex" alignItems="center">
       <img
         src={warningAlert}
-        width={"18px"}
-        height={"18px"}
+        width="18px"
+        height="18px"
+        alt=""
         style={{
           marginLeft: '18px',
           marginRight: '5px'
@@ -186,6 +187,8 @@ const showWarningMessage = (warningMessage:string) =>{
         fontSize: '16px',
         lineHeight: '16px',
         fontStyle: 'italic',
+        marginTop: '0px',
+        marginBottom: '0px'
       }}>
         {warningMessage}
       </Paragraph4>
