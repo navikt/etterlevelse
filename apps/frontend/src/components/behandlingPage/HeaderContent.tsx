@@ -6,7 +6,7 @@ import { Label3, Paragraph4 } from "baseui/typography";
 import React from "react";
 import { warningAlert } from "../Images";
 
-export const HeaderContent = (props: { kravLength: number, documentedLength: number, nyttKravCounter: number, nyKravVersjonCounter: number }) => (
+export const HeaderContent = (props: { kravLength: number, documentedLength: number, nyttKravCounter: number, nyttKravVersjonCounter: number }) => (
   <Block marginBottom="33px" display="flex" alignItems="center">
     <Tag
       closeable={false}
@@ -26,13 +26,13 @@ export const HeaderContent = (props: { kravLength: number, documentedLength: num
         <Paragraph4 $style={{ lineHeight: '18px', marginTop: '0px', marginBottom: '0px' }}>krav</Paragraph4>
       </Block>
     </Tag>
-    {props.documentedLength >= 1 && (props.nyKravVersjonCounter > 0 || props.nyttKravCounter > 0) &&
+    {props.documentedLength >= 1 && (props.nyttKravVersjonCounter > 0 || props.nyttKravCounter > 0) &&
       <Block display="flex">
         <img alt="" src={warningAlert} height="20px" width="20px" style={{marginRight: '2px'}} />
         <Paragraph4 $style={{lineHeight: '20px', marginTop: '0px', marginBottom: '0px' }}>
           {props.nyttKravCounter > 0 ? props.nyttKravCounter === 1 ? `${ props.nyttKravCounter} nytt krav` : `${ props.nyttKravCounter} nye krav`: ''}
-          {props.nyKravVersjonCounter > 0 && props.nyttKravCounter > 0 && ', '}
-          {props.nyKravVersjonCounter > 0 ? props.nyKravVersjonCounter === 1 ? `${ props.nyKravVersjonCounter} ny versjon` : `${ props.nyKravVersjonCounter} ny versjoner`: ''}
+          {props.nyttKravVersjonCounter > 0 && props.nyttKravCounter > 0 && ', '}
+          {props.nyttKravVersjonCounter > 0 ? props.nyttKravVersjonCounter === 1 ? `${ props.nyttKravVersjonCounter} ny versjon` : `${ props.nyttKravVersjonCounter} ny versjoner`: ''}
         </Paragraph4>
       </Block>
     }
