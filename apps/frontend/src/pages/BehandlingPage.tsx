@@ -11,14 +11,10 @@ import {Teams} from '../components/common/TeamName'
 import {arkPennIcon, editIcon, ellipse80, warningAlert} from '../components/Images'
 import {Behandling, BehandlingEtterlevData, EtterlevelseStatus, PageResponse} from '../constants'
 import {useQuery} from '@apollo/client'
-import {Code, codelist, ListName, TemaCode} from '../services/Codelist'
-import {PanelLinkCard, PanelLinkCardOverrides} from '../components/common/PanelLink'
-import {cardWidth} from './TemaPage'
-import {ProgressBar, SIZE} from 'baseui/progress-bar'
+import {Code, codelist, ListName} from '../services/Codelist'
 import {Button} from 'baseui/button'
 import EditBehandlingModal from '../components/behandling/EditBehandlingModal'
-import {Tag} from 'baseui/tag'
-import {borderColor, marginZero} from '../components/common/Style'
+import {marginZero} from '../components/common/Style'
 import {breadcrumbPaths} from '../components/common/CustomizedBreadcrumbs'
 import {Helmet} from 'react-helmet'
 import {ExternalButton} from '../components/common/Button'
@@ -26,6 +22,7 @@ import {env} from '../util/env'
 import {ExternalLinkWrapper} from '../components/common/RouteLink'
 import {BehandlingStats} from "../components/behandling/ViewBehandling";
 import {statsQuery} from "../api/KravApi";
+import {TemaCardBehandling} from "../components/behandlingPage/TemaCardBehandling";
 
 const responsiveDisplay: Responsive<Display> = ['block', 'block', 'block', 'block', 'flex', 'flex']
 
@@ -324,132 +321,5 @@ export const BehandlingPage = () => {
         />
       )}
     </Block>
-  )
-}
-
-const HeaderContent = (props: { kravLength: number }) => (
-  <Block marginBottom="33px">
-    <Tag
-      closeable={false}
-      overrides={{
-        Root: {
-          style: {
-            backgroundColor: ettlevColors.green50,
-            ...borderColor(ettlevColors.green50),
-          },
-        },
-      }}
-    >
-      <Block display="flex" alignItems="baseline">
-        <Label3 color={ettlevColors.navOransje} $style={{ fontSize: '20px', lineHeight: '18px' }} marginRight="4px">
-          {props.kravLength}
-        </Label3>
-        <Paragraph4 $style={{ lineHeight: '18px', marginTop: '0px', marginBottom: '0px' }}>krav</Paragraph4>
-      </Block>
-    </Tag>
-  </Block>
-)
-
-const TemaCardBehandling = ({ tema, stats, behandling, irrelevant }: { tema: TemaCode; stats: any[]; behandling: Behandling; irrelevant?: boolean }) => {
-  const lover = codelist.getCodesForTema(tema.code).map((c) => c.code)
-
-  const krav = stats.filter((k) => k.regelverk.map((r: any) => r.lov.code).some((r: any) => lover.includes(r)))
-
-  let utfylt = 0
-  let underArbeid = 0
-  let tilUtfylling = 0
-
-  krav.forEach((k) => {
-    if (
-      k.etterlevelser.length &&
-      (k.etterlevelser[0].status === EtterlevelseStatus.FERDIG_DOKUMENTERT ||
-        k.etterlevelser[0].status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT ||
-        k.etterlevelser[0].status === EtterlevelseStatus.OPPFYLLES_SENERE)
-    ) {
-      utfylt += 1
-    } else if (
-      k.etterlevelser.length &&
-      ( k.etterlevelser[0].status === EtterlevelseStatus.UNDER_REDIGERING ||
-        k.etterlevelser[0].status === EtterlevelseStatus.IKKE_RELEVANT ||
-        k.etterlevelser[0].status === EtterlevelseStatus.FERDIG)
-    ) {
-      underArbeid += 1
-    } else {
-      tilUtfylling += 1
-    }
-  })
-
-  const overrides: PanelLinkCardOverrides = {
-    Header: {
-      Block: {
-        style: {
-          backgroundColor: ettlevColors.green100,
-          height: '180px',
-          paddingBottom: theme.sizing.scale600,
-        },
-      },
-    },
-    Content: {
-      Block: {
-        style: {
-          maskImage: `linear-gradient(${ettlevColors.black} 90%, transparent)`,
-          overflow: 'hidden',
-        },
-      },
-    },
-    Root: {
-      Block: {
-        style: {
-          display: !krav.length ? 'none' : 'block',
-        },
-      },
-    },
-  }
-
-  return (
-    <PanelLinkCard
-      width={cardWidth}
-      overrides={overrides}
-      verticalMargin={theme.sizing.scale400}
-      href={`/behandling/${behandling.id}/${irrelevant ? 'i' : ''}${tema.code}`}
-      tittel={tema.shortName}
-      headerContent={<HeaderContent kravLength={krav.length} />}
-      flexContent
-      hideArrow
-      titleColor={ettlevColors.green600}
-    >
-      <Block marginTop={theme.sizing.scale650} width={'100%'}>
-        <Block display="flex" flex={1}>
-          <Paragraph4 marginTop="0px" marginBottom="2px">
-            Ferdig utfylt:
-          </Paragraph4>
-          <Block display="flex" flex={1} justifyContent="flex-end">
-            <Paragraph4 marginTop="0px" marginBottom="2px">
-              {utfylt} av {krav.length} krav
-            </Paragraph4>
-          </Block>
-        </Block>
-        <Block>
-          <ProgressBar
-            value={utfylt}
-            successValue={krav.length}
-            size={SIZE.medium}
-            overrides={{
-              BarProgress: {
-                style: {
-                  backgroundColor: ettlevColors.green800,
-                },
-              },
-              BarContainer: {
-                style: {
-                  marginLeft: '0px',
-                  marginRight: '0px',
-                },
-              },
-            }}
-          />
-        </Block>
-      </Block>
-    </PanelLinkCard>
   )
 }
