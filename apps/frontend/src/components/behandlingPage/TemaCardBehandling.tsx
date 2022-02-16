@@ -1,5 +1,5 @@
 import {codelist, TemaCode} from "../../services/Codelist";
-import {Behandling} from "../../constants";
+import {Behandling, Krav} from "../../constants";
 import {PanelLinkCard, PanelLinkCardOverrides} from "../common/PanelLink";
 import {ettlevColors, theme} from "../../util/theme";
 import {cardWidth} from "../../pages/TemaPage";
@@ -9,6 +9,7 @@ import {ProgressBar, SIZE} from "baseui/progress-bar";
 import React from "react";
 import {HeaderContent} from "./HeaderContent";
 import {isFerdigUtfylt} from "../../pages/BehandlingerTemaPageV2";
+import {getEtterlevelserByBehandlingsIdKravNumber} from "../../api/EtterlevelseApi";
 
 type TemaCardBehandlingProps = {
   tema: TemaCode;
@@ -21,11 +22,23 @@ export const TemaCardBehandling = (props: TemaCardBehandlingProps) => {
   const lover = codelist.getCodesForTema(tema.code).map((c) => c.code)
   const krav = stats.filter((k) => k.regelverk.map((r: any) => r.lov.code).some((r: any) => lover.includes(r)))
 
+  let nyttKravCounter = 0
+  let nyttKravVersjonCounter = 0
+
   let utfylt = 0
   let underArbeid = 0
   let tilUtfylling = 0
 
+  const checkNewVersion = async (k: Krav) => {
+      return (await getEtterlevelserByBehandlingsIdKravNumber(behandling.id, k.kravNummer)).content.length >= 1
+  }
+
   krav.forEach((k) => {
+
+    if (k.etterlevelser.length === 0 && k.kravVersjon === 1) {
+      nyttKravCounter += 1
+    }
+
     if (k.etterlevelser.length && isFerdigUtfylt(k.etterlevelser[0].status)) {
       utfylt += 1
     } else if (

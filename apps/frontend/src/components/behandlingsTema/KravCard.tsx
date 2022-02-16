@@ -26,7 +26,7 @@ export const KravCard = (props: {
   edit: string | undefined
 }) => {
   const ferdigUtfylt = isFerdigUtfylt(props.krav.etterlevelseStatus)
-  const [nyVersionFlag, setnewVersionFlag] = useState<boolean>(false)
+  const [nyVersionFlag, setNyVersionFlag] = useState<boolean>(false)
   const [hover, setHover] = useState(false)
   const [etterlevelseMetadata, setEtterlevelseMetadata] = useState<EtterlevelseMetadata>(mapEtterlevelseMetadataToFormValue({
     id: 'ny',
@@ -54,7 +54,7 @@ export const KravCard = (props: {
     (async () => {
       getEtterlevelseMetaData()
       if (props.krav.kravVersjon > 1 && props.krav.etterlevelseStatus === undefined) {
-        setnewVersionFlag((await getEtterlevelserByBehandlingsIdKravNumber(props.behandlingId, props.krav.kravNummer)).content.length >= 1)
+        setNyVersionFlag((await getEtterlevelserByBehandlingsIdKravNumber(props.behandlingId, props.krav.kravNummer)).content.length >= 1)
       }
     })()
   }, [])
