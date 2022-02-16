@@ -83,7 +83,7 @@ export const TemaCardBehandling = (props: TemaCardBehandlingProps) => {
       verticalMargin={theme.sizing.scale400}
       href={`/behandling/${behandling.id}/${irrelevant ? 'i' : ''}${tema.code}`}
       tittel={tema.shortName}
-      headerContent={<HeaderContent kravLength={krav.length}/>}
+      headerContent={<HeaderContent kravLength={krav.length} documentedLength={underArbeid + utfylt} nyttKravCounter={nyttKravCounter} nyKravVersjonCounter={3}/>}
       flexContent
       hideArrow
       titleColor={ettlevColors.green600}

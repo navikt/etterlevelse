@@ -9,7 +9,7 @@ import {ettlevColors, theme} from '../util/theme'
 import {Layout2} from '../components/scaffold/Page'
 import {Teams} from '../components/common/TeamName'
 import {arkPennIcon, editIcon, ellipse80, warningAlert} from '../components/Images'
-import {Behandling, BehandlingEtterlevData, EtterlevelseStatus, PageResponse} from '../constants'
+import {Behandling, BehandlingEtterlevData, EtterlevelseStatus, KravQL, PageResponse} from '../constants'
 import {useQuery} from '@apollo/client'
 import {Code, codelist, ListName} from '../services/Codelist'
 import {Button} from 'baseui/button'
@@ -23,6 +23,7 @@ import {ExternalLinkWrapper} from '../components/common/RouteLink'
 import {BehandlingStats} from "../components/behandling/ViewBehandling";
 import {statsQuery} from "../api/KravApi";
 import {TemaCardBehandling} from "../components/behandlingPage/TemaCardBehandling";
+import { isFerdigUtfylt } from './BehandlingerTemaPageV2'
 
 const responsiveDisplay: Responsive<Display> = ['block', 'block', 'block', 'block', 'flex', 'flex']
 
@@ -150,12 +151,9 @@ export const BehandlingPage = () => {
 
   const temaListe = codelist.getCodes(ListName.TEMA).sort((a, b) => a.shortName.localeCompare(b.shortName, 'nb'))
   let antallFylttKrav = 0
-  relevanteStats.forEach((k) => {
+  relevanteStats.forEach((k: KravQL) => {
     if (
-      k.etterlevelser.length &&
-      (k.etterlevelser[0].status === EtterlevelseStatus.FERDIG_DOKUMENTERT ||
-        k.etterlevelser[0].status === EtterlevelseStatus.IKKE_RELEVANT ||
-        k.etterlevelser[0].status === EtterlevelseStatus.OPPFYLLES_SENERE)
+      k.etterlevelser.length && isFerdigUtfylt(k.etterlevelser[0].status)
     ) {
       antallFylttKrav += 1
     }
