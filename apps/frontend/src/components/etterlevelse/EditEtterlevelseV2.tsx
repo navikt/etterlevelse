@@ -8,10 +8,10 @@ import { theme } from '../../util'
 import { getKravByKravNumberAndVersion, KravId } from '../../api/KravApi'
 import { kravNumView, query } from '../../pages/KravPage'
 import { H1, H2, Label3, Paragraph2 } from 'baseui/typography'
-import { ettlevColors, responsivePaddingExtraLarge, responsiveWidthExtraLarge } from '../../util/theme'
+import { ettlevColors, maxPageWidth, responsivePaddingExtraLarge, responsiveWidthExtraLarge } from '../../util/theme'
 import { user } from '../../services/User'
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
-import { borderColor, borderRadius, borderStyle, borderWidth, padding } from '../common/Style'
+import { borderColor, borderRadius, borderStyle, borderWidth, marginAll, padding } from '../common/Style'
 import { useQuery } from '@apollo/client'
 import { informationIcon, warningAlert } from '../Images'
 import CustomizedTabs from '../common/CustomizedTabs'
@@ -22,6 +22,7 @@ import { Section } from '../../pages/BehandlingerTemaPageV2'
 import { getEtterlevelseMetadataByBehandlingsIdAndKravNummerAndKravVersion, mapEtterlevelseMetadataToFormValue } from '../../api/EtterlevelseMetadataApi'
 import TildeltPopoever from '../etterlevelseMetadata/TildeltPopover'
 import EditFields from './Edit/EditFields'
+import CustomizedModal from '../common/CustomizedModal'
 
 type EditEttlevProps = {
   etterlevelse: Etterlevelse
@@ -196,7 +197,7 @@ export const EditEtterlevelseV2 = ({
                       kind="underline-hover"
                       $style={{
                         marginLeft: '2px',
-                        ':hover': {textDecoration: 'none'}
+                        ':hover': { textDecoration: 'none' }
                       }}
                       onClick={() => setIsVersjonEndringerModalOpen(true)}
                     >
@@ -321,6 +322,45 @@ export const EditEtterlevelseV2 = ({
             />
           </Block>
           <Block display={tab === 'dokumentasjon' ? 'block' : 'none'} width="100%" height="140px" backgroundColor={ettlevColors.green100} marginTop="-140px" />
+
+          <CustomizedModal
+            onClose={() => setIsVersjonEndringerModalOpen(false)}
+            isOpen={isVersjonEndringerModalOpen}
+            size="full"
+            overrides={{
+              Dialog: {
+                style: {
+                  ...borderRadius('0px'),
+                  ...marginAll('0px'),
+                  width: '100%',
+                  maxWidth: maxPageWidth,
+                },
+              },
+            }}
+          >
+            <Block width="100%">
+              <Block paddingTop="120px" paddingBottom="40px" backgroundColor={ettlevColors.green800} paddingLeft={responsivePaddingExtraLarge}
+                paddingRight={responsivePaddingExtraLarge}>
+                <Label3 color={ettlevColors.white}>
+                  K{krav.kravNummer}.{krav.kravVersjon}
+                </Label3>
+                <H1 marginTop="0px" marginBottom="0px" color={ettlevColors.white}>
+                  {krav.navn}
+                </H1>
+              </Block>
+              <Block marginBottom="55px" marginTop="40px" paddingLeft={responsivePaddingExtraLarge} paddingRight={responsivePaddingExtraLarge}>
+                <Block minHeight="300px">
+                  <H2 marginTop="0px" marginBottom="24px">
+                    Dette er nytt fra forrige versjon
+                  </H2>
+                  <Markdown source={krav.versjonEndringer}/>
+                </Block>
+                <Block display="flex" justifyContent="flex-end" width="100%" marginTop="38px">
+                  <Button onClick={() => setIsVersjonEndringerModalOpen(false)}>Lukk visning</Button>
+                </Block>
+              </Block>
+            </Block>
+          </CustomizedModal>
         </Block>
       )}
     </Block>
