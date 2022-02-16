@@ -117,8 +117,8 @@ export const KravCard = (props: {
                   $style={{fontSize: '16px', lineHeight: '24px', marginBottom: '0px', marginTop: '0px', width: 'fit-content', textDecoration: hover ? 'underline' : 'none'}}>
                   K{props.krav.kravNummer}.{props.krav.kravVersjon}
                 </Paragraph4>
-                {(props.krav.kravVersjon === 1 && props.krav.etterlevelseStatus === undefined) && showWarningMessage("Ny krav")}
-                { props.krav.etterlevelseStatus === undefined && nyVersionFlag && showWarningMessage("Ny version")}
+                {(props.krav.kravVersjon === 1 && props.krav.etterlevelseStatus === undefined) && showWarningMessage('Nytt krav')}
+                { props.krav.etterlevelseStatus === undefined && nyVersionFlag && showWarningMessage('Ny version')}
               </Block>
               <Label3 $style={{fontSize: '18px', fontWeight: 600, alignContent: 'flex-start', textAlign: 'left', textDecoration: hover ? 'underline' : 'none'}}>
                 {props.krav.navn}
