@@ -253,6 +253,7 @@ export const BehandlingerTemaPageV2 = () => {
                           setKravId={setKravId}
                           noStatus={true}
                           edit={edit}
+                          noVarsling={true}
                         />
                       </CustomizedPanel>
                     </CustomizedAccordion>

@@ -22,6 +22,7 @@ type KravListProps = {
   setEdit: React.Dispatch<React.SetStateAction<string | undefined>>
   setKravId: React.Dispatch<React.SetStateAction<KravId | undefined>>
   edit: string | undefined
+  noVarsling?: boolean
 }
 
 export const KravList = ({
@@ -35,7 +36,8 @@ export const KravList = ({
   setActiveEtterlevelseStatus,
   setKravId,
   setEdit,
-  edit
+  edit,
+  noVarsling
 }: KravListProps) => {
   if (kravList.length) {
     let sortedKravList = _.cloneDeep(kravList)
@@ -69,6 +71,7 @@ export const KravList = ({
                 noStatus={noStatus}
                 behandlingId={behandling.id}
                 edit={edit}
+                noVarsling={noVarsling}
               />
             </CustomPanelDivider>
           )

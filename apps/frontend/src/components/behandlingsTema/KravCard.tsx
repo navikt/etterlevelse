@@ -24,6 +24,7 @@ export const KravCard = (props: {
   setActiveEtterlevelseStatus: Function,
   behandlingId: string,
   edit: string | undefined
+  noVarsling?: boolean
 }) => {
   const ferdigUtfylt = isFerdigUtfylt(props.krav.etterlevelseStatus)
   const [nyVersionFlag, setnewVersionFlag] = useState<boolean>(false)
@@ -117,8 +118,8 @@ export const KravCard = (props: {
                   $style={{fontSize: '16px', lineHeight: '24px', marginBottom: '0px', marginTop: '0px', width: 'fit-content', textDecoration: hover ? 'underline' : 'none'}}>
                   K{props.krav.kravNummer}.{props.krav.kravVersjon}
                 </Paragraph4>
-                {(props.krav.kravVersjon === 1 && props.krav.etterlevelseStatus === undefined) && showWarningMessage('Nytt krav')}
-                { props.krav.etterlevelseStatus === undefined && nyVersionFlag && showWarningMessage('Ny version')}
+                {(!props.noVarsling && props.krav.kravVersjon === 1 && props.krav.etterlevelseStatus === undefined) && showWarningMessage('Nytt krav')}
+                {!props.noVarsling && props.krav.etterlevelseStatus === undefined && nyVersionFlag && showWarningMessage('Ny version')}
               </Block>
               <Label3 $style={{fontSize: '18px', fontWeight: 600, alignContent: 'flex-start', textAlign: 'left', textDecoration: hover ? 'underline' : 'none'}}>
                 {props.krav.navn}
