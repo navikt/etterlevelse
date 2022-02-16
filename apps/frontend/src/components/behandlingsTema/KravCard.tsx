@@ -26,7 +26,7 @@ export const KravCard = (props: {
   edit: string | undefined
 }) => {
   const ferdigUtfylt = isFerdigUtfylt(props.krav.etterlevelseStatus)
-  const [nyVersionFlag, setnewVersionFlag] = useState<boolean>(false);
+  const [nyVersionFlag, setnewVersionFlag] = useState<boolean>(false)
   const [hover, setHover] = useState(false)
   const [etterlevelseMetadata, setEtterlevelseMetadata] = useState<EtterlevelseMetadata>(mapEtterlevelseMetadataToFormValue({
     id: 'ny',
@@ -80,6 +80,7 @@ export const KravCard = (props: {
       }}
     >
       <Block width="100%">
+        {props.krav.kravNummer === 152 && console.log(props.krav)}
         <Button
           notBold
           $style={{
@@ -117,7 +118,7 @@ export const KravCard = (props: {
                   K{props.krav.kravNummer}.{props.krav.kravVersjon}
                 </Paragraph4>
                 {(props.krav.kravVersjon === 1 && props.krav.etterlevelseStatus === undefined) && showWarningMessage("Ny krav")}
-                {nyVersionFlag && showWarningMessage("Ny version")}
+                { props.krav.etterlevelseStatus === undefined && nyVersionFlag && showWarningMessage("Ny version")}
               </Block>
               <Label3 $style={{fontSize: '18px', fontWeight: 600, alignContent: 'flex-start', textAlign: 'left', textDecoration: hover ? 'underline' : 'none'}}>
                 {props.krav.navn}

@@ -1,27 +1,27 @@
-import React, {useEffect, useState} from 'react'
-import {Block, Display} from 'baseui/block'
-import {useNavigate, useParams} from 'react-router-dom'
-import {H3, Paragraph2} from 'baseui/typography'
-import {ettlevColors} from '../util/theme'
-import {codelist, ListName, TemaCode} from '../services/Codelist'
-import {useBehandling} from '../api/BehandlingApi'
-import {Layout2} from '../components/scaffold/Page'
-import {Etterlevelse, EtterlevelseStatus, KravEtterlevelseData, KravQL, KravStatus, PageResponse} from '../constants'
-import {useQuery} from '@apollo/client'
-import {CustomizedAccordion, CustomizedPanel} from '../components/common/CustomizedAccordion'
-import {behandlingKravQuery, KravId} from '../api/KravApi'
-import {breadcrumbPaths} from '../components/common/CustomizedBreadcrumbs'
-import {Responsive} from 'baseui/theme'
-import {KravPanelHeader, KravPanelHeaderWithSorting} from '../components/behandling/KravPanelHeader'
-import {sortKraverByPriority} from '../util/sort'
+import React, { useEffect, useState } from 'react'
+import { Block, Display } from 'baseui/block'
+import { useNavigate, useParams } from 'react-router-dom'
+import { H3, Paragraph2 } from 'baseui/typography'
+import { ettlevColors } from '../util/theme'
+import { codelist, ListName, TemaCode } from '../services/Codelist'
+import { useBehandling } from '../api/BehandlingApi'
+import { Layout2 } from '../components/scaffold/Page'
+import { Etterlevelse, EtterlevelseStatus, KravEtterlevelseData, KravQL, KravStatus, PageResponse } from '../constants'
+import { useQuery } from '@apollo/client'
+import { CustomizedAccordion, CustomizedPanel } from '../components/common/CustomizedAccordion'
+import { behandlingKravQuery, KravId } from '../api/KravApi'
+import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
+import { Responsive } from 'baseui/theme'
+import { KravPanelHeader, KravPanelHeaderWithSorting } from '../components/behandling/KravPanelHeader'
+import { sortKraverByPriority } from '../util/sort'
 import _ from 'lodash'
-import {getAllKravPriority} from '../api/KravPriorityApi'
-import {Helmet} from 'react-helmet'
-import {Option} from 'baseui/select'
-import {getMainHeader} from './BehandlingPage'
-import {KravView} from "../components/behandlingsTema/KravView";
-import {SecondaryHeader} from "../components/behandlingsTema/SecondaryHeader";
-import {KravList} from "../components/behandlingsTema/KravList";
+import { getAllKravPriority } from '../api/KravPriorityApi'
+import { Helmet } from 'react-helmet'
+import { Option } from 'baseui/select'
+import { getMainHeader } from './BehandlingPage'
+import { KravView } from "../components/behandlingsTema/KravView";
+import { SecondaryHeader } from "../components/behandlingsTema/SecondaryHeader";
+import { KravList } from "../components/behandlingsTema/KravList";
 
 const responsiveBreakPoints: Responsive<Display> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
 const responsiveDisplay: Responsive<Display> = ['block', 'block', 'block', 'block', 'flex', 'flex']
@@ -203,7 +203,7 @@ export const BehandlingerTemaPageV2 = () => {
           breadcrumbPaths={breadcrumbPaths}
         >
           <Block display="flex" width="100%" justifyContent="space-between" flexWrap marginBottom="64px">
-            <Block width="100%" display={edit ? 'none' : 'block'}>
+            {!edit && <Block width="100%">
               <Block
                 $style={{
                   backgroundColor: ettlevColors.white,
@@ -211,7 +211,7 @@ export const BehandlingerTemaPageV2 = () => {
                 }}
               >
                 <Block display="flex" justifyContent="center" $style={{ paddingTop: '26px', paddingBottom: '22px', paddingLeft: '16px' }}>
-                  <KravPanelHeaderWithSorting kravData={kravData} sortingOptions={sortingOptions} sorting={sorting} setSorting={setSorting}/>
+                  <KravPanelHeaderWithSorting kravData={kravData} sortingOptions={sortingOptions} sorting={sorting} setSorting={setSorting} />
                 </Block>
                 <KravList
                   kravList={kravData}
@@ -259,7 +259,7 @@ export const BehandlingerTemaPageV2 = () => {
                   </Block>
                 </Block>
               )}
-            </Block>
+            </Block>}
             {edit && behandling && (
               <KravView
                 behandlingNavn={behandling.navn}
