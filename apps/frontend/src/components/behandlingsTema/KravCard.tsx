@@ -81,7 +81,6 @@ export const KravCard = (props: {
       }}
     >
       <Block width="100%">
-        {props.krav.kravNummer === 152 && console.log(props.krav)}
         <Button
           notBold
           $style={{
