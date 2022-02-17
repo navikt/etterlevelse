@@ -31,8 +31,7 @@ export const TemaCardBehandling = (props: TemaCardBehandlingProps) => {
   krav.forEach((k) => {
     if (k.etterlevelser.length === 0 && k.kravVersjon === 1) {
       nyttKravCounter += 1
-    } if (k.etterlevelser.length === 0 && k.kravVersjon > 1) {
-      console.log(krav.filter((kl) => kl.kravNummer === k.kravNummer))
+    } if (k.etterlevelser.length === 0 && k.kravVersjon > 1 && krav.filter((kl) => kl.kravNummer === k.kravNummer && kl.etterlevelser.length > 0).length > 0) {
       nyttKravVersjonCounter += 1
     }
     if (k.etterlevelser.length && isFerdigUtfylt(k.etterlevelser[0].status)) {
