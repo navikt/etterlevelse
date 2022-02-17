@@ -12,6 +12,7 @@ import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravRepo;
 import no.nav.data.etterlevelse.krav.dto.KravRequest.Fields;
 import no.nav.data.etterlevelse.kravprioritering.domain.KravPrioriteringRepo;
+import no.nav.data.etterlevelse.melding.domain.MeldingRepo;
 import no.nav.data.integration.begrep.BegrepService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -35,6 +36,8 @@ public class DomainService<T extends DomainObject> {
     protected EtterlevelseMetadataRepo etterlevelseMetadataRepo;
     @Autowired
     protected BegrepService begrepService;
+    @Autowired
+    protected MeldingRepo meldingRepo;
 
     protected final Class<T> type;
 

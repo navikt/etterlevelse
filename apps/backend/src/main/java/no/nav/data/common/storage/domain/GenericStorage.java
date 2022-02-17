@@ -15,6 +15,7 @@ import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.etterlevelsemetadata.domain.EtterlevelseMetadata;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.kravprioritering.domain.KravPrioritering;
+import no.nav.data.etterlevelse.melding.domain.Melding;
 import org.hibernate.annotations.Type;
 import org.springframework.util.Assert;
 
@@ -118,6 +119,10 @@ public class GenericStorage extends Auditable {
 
     public EtterlevelseMetadata toEtterlevelseMetadata() {
         return getDomainObjectData(EtterlevelseMetadata.class);
+    }
+
+    public Melding toMelding() {
+        return getDomainObjectData(Melding.class);
     }
 
 

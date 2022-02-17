@@ -10,6 +10,7 @@ import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravImage;
 import no.nav.data.etterlevelse.krav.domain.Tilbakemelding;
 import no.nav.data.etterlevelse.kravprioritering.domain.KravPrioritering;
+import no.nav.data.etterlevelse.melding.domain.Melding;
 import org.springframework.util.Assert;
 
 import java.util.HashMap;
@@ -34,6 +35,7 @@ public final class TypeRegistration {
         addDomainClass(KravImage.class, false);
         addDomainClass(MailTask.class, false);
         addDomainClass(MailLog.class, false);
+        addDomainClass(Melding.class, false);
     }
 
     private TypeRegistration() {
