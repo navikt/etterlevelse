@@ -1,28 +1,28 @@
-import React, {ReactNode, useRef, useState} from 'react'
-import {Block, Display, Responsive} from 'baseui/block'
-import {useParams} from 'react-router-dom'
-import {LoadingSkeleton} from '../components/common/LoadingSkeleton'
-import {useBehandling} from '../api/BehandlingApi'
-import {H1, H2, Label3, Paragraph2, Paragraph4} from 'baseui/typography'
-import {FormikProps} from 'formik'
-import {ettlevColors, theme} from '../util/theme'
-import {Layout2} from '../components/scaffold/Page'
-import {Teams} from '../components/common/TeamName'
-import {arkPennIcon, editIcon, ellipse80, warningAlert} from '../components/Images'
-import {Behandling, BehandlingEtterlevData, EtterlevelseStatus, KravQL, PageResponse} from '../constants'
-import {useQuery} from '@apollo/client'
-import {Code, codelist, ListName} from '../services/Codelist'
-import {Button} from 'baseui/button'
+import React, { ReactNode, useRef, useState } from 'react'
+import { Block, Display, Responsive } from 'baseui/block'
+import { useParams } from 'react-router-dom'
+import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
+import { useBehandling } from '../api/BehandlingApi'
+import { H1, H2, Label3, Paragraph2, Paragraph4 } from 'baseui/typography'
+import { FormikProps } from 'formik'
+import { ettlevColors, theme } from '../util/theme'
+import { Layout2 } from '../components/scaffold/Page'
+import { Teams } from '../components/common/TeamName'
+import { arkPennIcon, editIcon, ellipse80, warningAlert } from '../components/Images'
+import { Behandling, BehandlingEtterlevData, EtterlevelseStatus, KravQL, PageResponse } from '../constants'
+import { useQuery } from '@apollo/client'
+import { Code, codelist, ListName } from '../services/Codelist'
+import { Button } from 'baseui/button'
 import EditBehandlingModal from '../components/behandling/EditBehandlingModal'
-import {marginZero} from '../components/common/Style'
-import {breadcrumbPaths} from '../components/common/CustomizedBreadcrumbs'
-import {Helmet} from 'react-helmet'
-import {ExternalButton} from '../components/common/Button'
-import {env} from '../util/env'
-import {ExternalLinkWrapper} from '../components/common/RouteLink'
-import {BehandlingStats} from "../components/behandling/ViewBehandling";
-import {statsQuery} from "../api/KravApi";
-import {TemaCardBehandling} from "../components/behandlingPage/TemaCardBehandling";
+import { marginZero } from '../components/common/Style'
+import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
+import { Helmet } from 'react-helmet'
+import { ExternalButton } from '../components/common/Button'
+import { env } from '../util/env'
+import { ExternalLinkWrapper } from '../components/common/RouteLink'
+import { BehandlingStats } from "../components/behandling/ViewBehandling";
+import { statsQuery } from "../api/KravApi";
+import { TemaCardBehandling } from "../components/behandlingPage/TemaCardBehandling";
 import { isFerdigUtfylt } from './BehandlingerTemaPageV2'
 
 const responsiveDisplay: Responsive<Display> = ['block', 'block', 'block', 'block', 'flex', 'flex']
@@ -61,6 +61,17 @@ export const getMainHeader = (behandling: Behandling, helmet?: ReactNode) => (
   </Block>
 )
 
+export const getNewestKravVersjon = (list: any[]) => {
+  let relevanteStatusListe = [...list]
+
+  for (let index = relevanteStatusListe.length - 1; index > 0; index--) {
+    if (relevanteStatusListe[index].kravNummer === relevanteStatusListe[index - 1].kravNummer) {
+      relevanteStatusListe.splice(index - 1, 1)
+    }
+  }
+  return relevanteStatusListe
+}
+
 export const BehandlingPage = () => {
   const params = useParams<{ id?: string }>()
   const options = codelist.getParsedOptions(ListName.RELEVANS)
@@ -80,10 +91,10 @@ export const BehandlingPage = () => {
   const filterData = (
     unfilteredData:
       | {
-          behandling: PageResponse<{
-            stats: BehandlingStats
-          }>
-        }
+        behandling: PageResponse<{
+          stats: BehandlingStats
+        }>
+      }
       | undefined,
   ) => {
     const relevanteStatusListe: any[] = []
@@ -124,11 +135,11 @@ export const BehandlingPage = () => {
       return a.kravNummer - b.kravNummer
     })
 
-    for (let index = relevanteStatusListe.length - 1; index > 0; index--) {
-      if (relevanteStatusListe[index].kravNummer === relevanteStatusListe[index - 1].kravNummer) {
-        relevanteStatusListe.splice(index - 1, 1)
-      }
-    }
+    // for (let index = relevanteStatusListe.length - 1; index > 0; index--) {
+    //   if (relevanteStatusListe[index].kravNummer === relevanteStatusListe[index - 1].kravNummer) {
+    //     relevanteStatusListe.splice(index - 1, 1)
+    //   }
+    // }
 
     for (let index = irrelevanteStatusListe.length - 1; index > 0; index--) {
       if (irrelevanteStatusListe[index].kravNummer === irrelevanteStatusListe[index - 1].kravNummer) {
@@ -151,13 +162,15 @@ export const BehandlingPage = () => {
 
   const temaListe = codelist.getCodes(ListName.TEMA).sort((a, b) => a.shortName.localeCompare(b.shortName, 'nb'))
   let antallFylttKrav = 0
-  relevanteStats.forEach((k: KravQL) => {
+
+  getNewestKravVersjon(relevanteStats).forEach((k: KravQL) => {
     if (
       k.etterlevelser.length && isFerdigUtfylt(k.etterlevelser[0].status)
     ) {
       antallFylttKrav += 1
     }
   })
+
   const getPercentageUtfylt = relevanteStats && relevanteStats.length && (antallFylttKrav / relevanteStats.length) * 100
 
   const getRelevansContent = (behandling: Behandling) => {
@@ -206,7 +219,7 @@ export const BehandlingPage = () => {
       <Block display="flex" alignItems="center">
         <Block display="flex" alignItems="baseline" marginRight="30px">
           <Paragraph2 $style={{ fontWeight: 900, fontSize: '32px', marginTop: 0, marginBottom: 0 }} color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
-            {relevanteStats.length}
+            {getNewestKravVersjon(relevanteStats).length}
           </Paragraph2>
           <Paragraph2>krav</Paragraph2>
         </Block>

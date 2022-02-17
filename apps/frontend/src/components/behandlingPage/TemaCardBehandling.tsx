@@ -1,15 +1,14 @@
-import {codelist, TemaCode} from "../../services/Codelist";
-import {Behandling, Krav} from "../../constants";
-import {PanelLinkCard, PanelLinkCardOverrides} from "../common/PanelLink";
-import {ettlevColors, theme} from "../../util/theme";
-import {cardWidth} from "../../pages/TemaPage";
-import {Block} from "baseui/block";
-import {Paragraph4} from "baseui/typography";
-import {ProgressBar, SIZE} from "baseui/progress-bar";
-import React from "react";
-import {HeaderContent} from "./HeaderContent";
-import {isFerdigUtfylt} from "../../pages/BehandlingerTemaPageV2";
-import {getEtterlevelserByBehandlingsIdKravNumber} from "../../api/EtterlevelseApi";
+import { codelist, TemaCode } from '../../services/Codelist'
+import { Behandling, Krav } from '../../constants'
+import { PanelLinkCard, PanelLinkCardOverrides } from '../common/PanelLink'
+import { ettlevColors, theme } from '../../util/theme'
+import { cardWidth } from '../../pages/TemaPage'
+import { Block } from 'baseui/block'
+import { Paragraph4 } from 'baseui/typography'
+import { ProgressBar, SIZE } from 'baseui/progress-bar'
+import React from 'react'
+import { HeaderContent } from './HeaderContent'
+import { isFerdigUtfylt } from '../../pages/BehandlingerTemaPageV2'
 
 type TemaCardBehandlingProps = {
   tema: TemaCode;
@@ -18,7 +17,7 @@ type TemaCardBehandlingProps = {
   irrelevant?: boolean
 }
 export const TemaCardBehandling = (props: TemaCardBehandlingProps) => {
-  const {tema, stats, behandling, irrelevant} = props
+  const { tema, stats, behandling, irrelevant } = props
   const lover = codelist.getCodesForTema(tema.code).map((c) => c.code)
   const krav = stats.filter((k) => k.regelverk.map((r: any) => r.lov.code).some((r: any) => lover.includes(r)))
 
@@ -29,16 +28,13 @@ export const TemaCardBehandling = (props: TemaCardBehandlingProps) => {
   let underArbeid = 0
   let tilUtfylling = 0
 
-  const checkNewVersion = async (k: Krav) => {
-      return (await getEtterlevelserByBehandlingsIdKravNumber(behandling.id, k.kravNummer)).content.length >= 1
-  }
-
   krav.forEach((k) => {
-
     if (k.etterlevelser.length === 0 && k.kravVersjon === 1) {
       nyttKravCounter += 1
+    } if (k.etterlevelser.length === 0 && k.kravVersjon > 1) {
+      console.log(krav.filter((kl) => kl.kravNummer === k.kravNummer))
+      nyttKravVersjonCounter += 1
     }
-
     if (k.etterlevelser.length && isFerdigUtfylt(k.etterlevelser[0].status)) {
       utfylt += 1
     } else if (
@@ -48,6 +44,13 @@ export const TemaCardBehandling = (props: TemaCardBehandlingProps) => {
       tilUtfylling += 1
     }
   })
+
+
+  for (let index = krav.length - 1; index > 0; index--) {
+    if (krav[index].kravNummer === krav[index - 1].kravNummer) {
+      krav.splice(index - 1, 1)
+    }
+  }
 
   const overrides: PanelLinkCardOverrides = {
     Header: {
@@ -83,7 +86,7 @@ export const TemaCardBehandling = (props: TemaCardBehandlingProps) => {
       verticalMargin={theme.sizing.scale400}
       href={`/behandling/${behandling.id}/${irrelevant ? 'i' : ''}${tema.code}`}
       tittel={tema.shortName}
-      headerContent={<HeaderContent kravLength={krav.length} documentedLength={underArbeid + utfylt} nyttKravCounter={nyttKravCounter} nyttKravVersjonCounter={nyttKravVersjonCounter}/>}
+      headerContent={<HeaderContent kravLength={krav.length} documentedLength={underArbeid + utfylt} nyttKravCounter={nyttKravCounter} nyttKravVersjonCounter={nyttKravVersjonCounter} />}
       flexContent
       hideArrow
       titleColor={ettlevColors.green600}
