@@ -37,6 +37,7 @@ import java.util.UUID;
 @RequestMapping("/melding")
 @Tag(name = "Melding", description = "System/Forside meldinger")
 public class MeldingController {
+
     private final MeldingService service;
 
     @Operation(summary = "Get all meldinger")
