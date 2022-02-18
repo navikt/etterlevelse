@@ -12,7 +12,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -27,10 +26,6 @@ public class MeldingService extends DomainService<Melding> {
 
     public Page<Melding> getAll(PageParameters pageParameters) {
         return repo.findAll(pageParameters.createPage()).map(GenericStorage::toMelding);
-    }
-
-    public Optional<Melding> getById(UUID id) {
-        return repo.findById(id).map(GenericStorage::toMelding);
     }
 
     public List<Melding> getByMeldingType(MeldingType meldingType) {
