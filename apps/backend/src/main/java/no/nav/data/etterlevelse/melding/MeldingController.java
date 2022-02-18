@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
+import no.nav.data.etterlevelse.etterlevelsemetadata.dto.EtterlevelseMetadataResponse;
 import no.nav.data.etterlevelse.melding.domain.Melding;
 import no.nav.data.etterlevelse.melding.domain.MeldingStatus;
 import no.nav.data.etterlevelse.melding.domain.MeldingType;
@@ -111,5 +112,9 @@ public class MeldingController {
         log.info("Delete melding id={}", id);
         var melding = service.delete(id);
         return ResponseEntity.ok(melding.toResponse());
+    }
+
+    static class MeldingPage extends RestResponsePage<MeldingResponse> {
+
     }
 }

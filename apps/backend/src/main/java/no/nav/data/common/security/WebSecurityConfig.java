@@ -57,6 +57,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 "/behandling/**",
                 "/tilbakemelding/**",
                 "/etterlevelsemetadata/**",
+                "/melding/**",
 
                 "/team/**",
                 "/begrep/**"
@@ -74,6 +75,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers("/etterlevelse/**").hasAnyRole(AppRole.WRITE.name(), AppRole.KRAVEIER.name(), AppRole.ADMIN.name());
         http.authorizeRequests().antMatchers("/etterlevelsemetadata/**").hasAnyRole(AppRole.ADMIN.name(), AppRole.WRITE.name());
         http.authorizeRequests().antMatchers("/behandling/**").hasAnyRole(AppRole.KRAVEIER.name(), AppRole.ADMIN.name(), AppRole.WRITE.name());
+        http.authorizeRequests().antMatchers("/melding/**").hasAnyRole(AppRole.ADMIN.name());
 
         http.authorizeRequests().antMatchers("/logout").authenticated();
         http.authorizeRequests().anyRequest().hasRole(AppRole.WRITE.name());
