@@ -93,11 +93,11 @@ export const BehandlingPage = () => {
   const [irrelevanteStats, setIrrelevanteStats] = useState<any[]>([])
 
 
-  useEffect(() => {
-    if(!user.isLoggedIn()) {
-      navigate(loginUrl(location, location.pathname))
-    }
-  },[])
+  // useEffect(() => {
+  //   if(!user.isLoggedIn()) {
+  //     navigate(loginUrl(location, location.pathname))
+  //   }
+  // },[])
 
   const filterData = (
     unfilteredData:
