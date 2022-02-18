@@ -76,11 +76,11 @@ export const BehandlingerTemaPage = () => {
   const navigate = useNavigate()
   const location = useLocation()
 
-  useEffect(() => {
-    if(!user.isLoggedIn()) {
-      navigate(loginUrl(location, location.pathname))
-    }
-  },[])
+  // useEffect(() => {
+  //   if(!user.isLoggedIn()) {
+  //     navigate(loginUrl(location, location.pathname))
+  //   }
+  // },[])
 
   useEffect(() => {
     ; (async () => {

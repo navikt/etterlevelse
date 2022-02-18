@@ -126,11 +126,11 @@ export const BehandlingerTemaPageV2 = () => {
     return mapped
   }
 
-  useEffect(() => {
-    if(!user.isLoggedIn()) {
-      navigate(loginUrl(location, location.pathname))
-    }
-  },[])
+  // useEffect(() => {
+  //   if(!user.isLoggedIn()) {
+  //     navigate(loginUrl(location, location.pathname))
+  //   }
+  // },[])
 
   useEffect(() => {
     (async () => {
