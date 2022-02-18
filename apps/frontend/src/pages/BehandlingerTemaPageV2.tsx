@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Block, Display } from 'baseui/block'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { H3, Paragraph2 } from 'baseui/typography'
 import { ettlevColors } from '../util/theme'
 import { codelist, ListName, TemaCode } from '../services/Codelist'
@@ -22,6 +22,8 @@ import { getMainHeader } from './BehandlingPage'
 import { KravView } from "../components/behandlingsTema/KravView";
 import { SecondaryHeader } from "../components/behandlingsTema/SecondaryHeader";
 import { KravList } from "../components/behandlingsTema/KravList";
+import { user } from '../services/User'
+import { loginUrl } from '../components/Header'
 
 const responsiveBreakPoints: Responsive<Display> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
 const responsiveDisplay: Responsive<Display> = ['block', 'block', 'block', 'block', 'flex', 'flex']
@@ -81,6 +83,7 @@ export const BehandlingerTemaPageV2 = () => {
   const [isNavigateButtonClicked, setIsNavigateButtonClicked] = useState<boolean>(false)
   const [tab, setTab] = useState<Section>('dokumentasjon')
   const navigate = useNavigate()
+  const location = useLocation()
 
 
   const filterKrav = async (kravList?: KravQL[], filterFerdigDokumentert?: boolean) => {
@@ -122,6 +125,12 @@ export const BehandlingerTemaPageV2 = () => {
 
     return mapped
   }
+
+  useEffect(() => {
+    if(!user.isLoggedIn()) {
+      navigate(loginUrl(location, location.pathname))
+    }
+  },[])
 
   useEffect(() => {
     (async () => {

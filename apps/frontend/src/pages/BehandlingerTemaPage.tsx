@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import {Block, Display} from 'baseui/block'
-import {useParams} from 'react-router-dom'
+import {useLocation, useNavigate, useParams} from 'react-router-dom'
 import {H1, H2, Label3, Paragraph2, Paragraph4} from 'baseui/typography'
 import {ettlevColors, maxPageWidth, theme} from '../util/theme'
 import {codelist, ListName, TemaCode} from '../services/Codelist'
@@ -35,6 +35,7 @@ import CustomizedSelect from '../components/common/CustomizedSelect'
 import { Option } from 'baseui/select'
 import { user } from '../services/User'
 import { getEtterlevelseStatus, getEtterlevelseStatusLabelColor } from '../components/behandling/utils'
+import { loginUrl } from '../components/Header'
 
 const responsiveBreakPoints: Responsive<Display> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
 
@@ -72,6 +73,14 @@ export const BehandlingerTemaPage = () => {
     { label: 'Sist endret av meg', id: 'lastModified' },
   ]
   const [sorting, setSorting] = useState<readonly Option[]>([sortingOptions[0]])
+  const navigate = useNavigate()
+  const location = useLocation()
+
+  useEffect(() => {
+    if(!user.isLoggedIn()) {
+      navigate(loginUrl(location, location.pathname))
+    }
+  },[])
 
   useEffect(() => {
     ; (async () => {

@@ -1,6 +1,6 @@
-import React, { ReactNode, useRef, useState } from 'react'
+import React, { ReactNode, useEffect, useRef, useState } from 'react'
 import { Block, Display, Responsive } from 'baseui/block'
-import { useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
 import { useBehandling } from '../api/BehandlingApi'
 import { H1, H2, Label3, Paragraph2, Paragraph4 } from 'baseui/typography'
@@ -24,6 +24,8 @@ import { BehandlingStats } from "../components/behandling/ViewBehandling";
 import { statsQuery } from "../api/KravApi";
 import { TemaCardBehandling } from "../components/behandlingPage/TemaCardBehandling";
 import { isFerdigUtfylt } from './BehandlingerTemaPageV2'
+import { user } from '../services/User'
+import { loginUrl } from '../components/Header'
 
 const responsiveDisplay: Responsive<Display> = ['block', 'block', 'block', 'block', 'flex', 'flex']
 
@@ -77,6 +79,8 @@ export const BehandlingPage = () => {
   const options = codelist.getParsedOptions(ListName.RELEVANS)
   const [behandling, setBehandling] = useBehandling(params.id)
   const formRef = useRef<FormikProps<any>>()
+  const navigate = useNavigate()
+  const location = useLocation()
 
   const { data: relevanteData, refetch: refetchRelevanteData } = useQuery<{ behandling: PageResponse<{ stats: BehandlingStats }> }>(statsQuery, {
     variables: { behandlingId: behandling?.id },
@@ -87,6 +91,13 @@ export const BehandlingPage = () => {
 
   const [relevanteStats, setRelevanteStats] = useState<any[]>([])
   const [irrelevanteStats, setIrrelevanteStats] = useState<any[]>([])
+
+
+  useEffect(() => {
+    if(!user.isLoggedIn()) {
+      navigate(loginUrl(location, location.pathname))
+    }
+  },[])
 
   const filterData = (
     unfilteredData:
