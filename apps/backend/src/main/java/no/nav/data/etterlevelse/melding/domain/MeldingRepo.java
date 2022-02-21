@@ -18,8 +18,8 @@ public interface MeldingRepo extends JpaRepository<GenericStorage, UUID> {
     Page<GenericStorage> findAll(Pageable pageable);
 
     @Query(value = "select * from generic_storage where type = 'Melding' and data ->> 'meldingType' = ?1", nativeQuery = true)
-    List<GenericStorage> findByMeldingtype(MeldingType meldingType);
+    List<GenericStorage> findByMeldingtype(String meldingType);
 
     @Query(value = "select * from generic_storage where type = 'Melding' and data ->> 'meldingStatus' = ?1", nativeQuery = true)
-    List<GenericStorage> findByMeldingStatus(MeldingStatus meldingStatus);
+    List<GenericStorage> findByMeldingStatus(String meldingStatus);
 }

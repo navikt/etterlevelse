@@ -28,11 +28,11 @@ public class MeldingService extends DomainService<Melding> {
         return repo.findAll(pageParameters.createPage()).map(GenericStorage::toMelding);
     }
 
-    public List<Melding> getByMeldingType(MeldingType meldingType) {
+    public List<Melding> getByMeldingType(String meldingType) {
         return GenericStorage.to(repo.findByMeldingtype(meldingType),Melding.class);
     }
 
-    public List<Melding> getByMeldingStatus(MeldingStatus meldingStatus) {
+    public List<Melding> getByMeldingStatus(String meldingStatus) {
         return GenericStorage.to(repo.findByMeldingStatus(meldingStatus),Melding.class);
     }
 

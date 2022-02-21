@@ -64,7 +64,7 @@ public class MeldingController {
     @ApiResponse(description = "ok")
     @GetMapping({"/type/{meldingType}"})
     public ResponseEntity<RestResponsePage<MeldingResponse>> getByMeldingType(
-            @PathVariable MeldingType meldingType
+            @PathVariable String meldingType
     ) {
         log.info("Get melding by meldingtype={}", meldingType);
         List<Melding> meldingList = service.getByMeldingType(meldingType);
@@ -75,7 +75,7 @@ public class MeldingController {
     @ApiResponse(description = "ok")
     @GetMapping({"/status/{meldingStatus}"})
     public ResponseEntity<RestResponsePage<MeldingResponse>> getByMeldingStatus(
-            @PathVariable MeldingStatus meldingStatus
+            @PathVariable String meldingStatus
     ) {
         log.info("Get melding by meldingstatus={}", meldingStatus);
         List<Melding> meldingList = service.getByMeldingStatus(meldingStatus);
