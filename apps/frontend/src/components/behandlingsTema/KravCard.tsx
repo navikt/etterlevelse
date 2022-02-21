@@ -131,7 +131,6 @@ export const KravCard = (props: {
                     <StatusView
                       status={getEtterlevelseStatus(props.krav)}
                       statusDisplay={getEtterlevelseStatusLabelColor(props.krav)}
-                      background={props.krav.varselMelding ? ettlevColors.white : undefined}
                     />
                   }
                 </Block>
