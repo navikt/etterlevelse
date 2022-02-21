@@ -32,7 +32,7 @@ export const HeaderContent = (props: { kravLength: number, documentedLength: num
         <Paragraph4 $style={{lineHeight: '20px', marginTop: '0px', marginBottom: '0px' }}>
           {props.nyttKravCounter > 0 ? props.nyttKravCounter === 1 ? `${ props.nyttKravCounter} nytt krav` : `${ props.nyttKravCounter} nye krav`: ''}
           {props.nyttKravVersjonCounter > 0 && props.nyttKravCounter > 0 && ', '}
-          {props.nyttKravVersjonCounter > 0 ? props.nyttKravVersjonCounter === 1 ? `${ props.nyttKravVersjonCounter} ny versjon` : `${ props.nyttKravVersjonCounter} ny versjoner`: ''}
+          {props.nyttKravVersjonCounter > 0 ? props.nyttKravVersjonCounter === 1 ? `${ props.nyttKravVersjonCounter} ny versjon` : `${ props.nyttKravVersjonCounter} nye versjoner`: ''}
         </Paragraph4>
       </Block>
     }
