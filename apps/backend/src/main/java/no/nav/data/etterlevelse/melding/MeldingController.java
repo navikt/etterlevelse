@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
-import no.nav.data.etterlevelse.etterlevelsemetadata.dto.EtterlevelseMetadataResponse;
 import no.nav.data.etterlevelse.melding.domain.Melding;
 import no.nav.data.etterlevelse.melding.domain.MeldingStatus;
 import no.nav.data.etterlevelse.melding.domain.MeldingType;
@@ -63,7 +62,7 @@ public class MeldingController {
 
     @Operation(summary = "Get melding by type")
     @ApiResponse(description = "ok")
-    @GetMapping({"/{meldingType}"})
+    @GetMapping({"/type/{meldingType}"})
     public ResponseEntity<RestResponsePage<MeldingResponse>> getByMeldingType(
             @PathVariable MeldingType meldingType
     ) {
@@ -74,7 +73,7 @@ public class MeldingController {
 
     @Operation(summary = "Get melding by status")
     @ApiResponse(description = "ok")
-    @GetMapping({"/{meldingStatus}"})
+    @GetMapping({"/status/{meldingStatus}"})
     public ResponseEntity<RestResponsePage<MeldingResponse>> getByMeldingStatus(
             @PathVariable MeldingStatus meldingStatus
     ) {
