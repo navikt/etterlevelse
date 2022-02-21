@@ -3,11 +3,16 @@ package no.nav.data.etterlevelse.melding;
 import lombok.experimental.StandardException;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.IntegrationTestBase;
+import no.nav.data.etterlevelse.etterlevelsemetadata.dto.EtterlevelseMetadataResponse;
 import no.nav.data.etterlevelse.melding.domain.Melding;
 import no.nav.data.etterlevelse.melding.domain.MeldingStatus;
 import no.nav.data.etterlevelse.melding.domain.MeldingType;
+import no.nav.data.etterlevelse.melding.dto.MeldingRequest;
 import no.nav.data.etterlevelse.melding.dto.MeldingResponse;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.TestExecutionListeners;
 
@@ -99,4 +104,47 @@ class MeldingControllerTest extends IntegrationTestBase {
         var meldingResp = resp.getBody();
         assertThat(meldingResp.getNumberOfElements()).isEqualTo(0);
     }
+
+    @Test
+    void createMelding_createOneMelding_success() {
+        var req = MeldingRequest.builder().melding("Test melding").meldingType(MeldingType.SYSTEM).meldingStatus(MeldingStatus.ACTIVE).build();
+
+        var resp = restTemplate.postForEntity("/melding", req, MeldingResponse.class);
+        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        var meldingResponse = resp.getBody();
+        assertThat(meldingResponse).isNotNull();
+
+        assertThat(meldingResponse.getId()).isNotNull();
+        assertFields(meldingResponse);
+    }
+
+    @Test
+    void updateMelding_updateOneMelding_success() {
+        var melding = storageService.save(Melding.builder().melding("Test update").meldingType(MeldingType.FORSIDE).meldingStatus(MeldingStatus.DEACTIVE).build());
+        var req = MeldingRequest.builder().id(melding.getId().toString()).melding("Test melding").meldingType(MeldingType.SYSTEM).meldingStatus(MeldingStatus.ACTIVE).build();
+
+        var resp = restTemplate.exchange("/melding/{id}", HttpMethod.PUT, new HttpEntity<>(req), MeldingResponse.class, melding.getId());
+        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
+        var meldingResponse = resp.getBody();
+        assertThat(meldingResponse).isNotNull();
+
+        assertThat(meldingResponse.getId()).isNotNull();
+        assertThat(meldingResponse.getMelding()).isEqualTo("Test melding");
+        assertThat(meldingResponse.getMeldingType()).isEqualTo(MeldingType.SYSTEM);
+        assertThat(meldingResponse.getMeldingStatus()).isEqualTo(MeldingStatus.ACTIVE);
+    }
+
+
+
+    private void assertFields(@NotNull MeldingResponse melding) {
+        assertThat(melding.getChangeStamp()).isNotNull();
+        assertThat(melding.getVersion()).isEqualTo(0);
+
+        assertThat(melding.getMelding()).isEqualTo("Test update");
+        assertThat(melding.getMeldingType()).isEqualTo(MeldingType.FORSIDE);
+        assertThat(melding.getMeldingStatus()).isEqualTo(MeldingStatus.DEACTIVE);
+    }
+
+
+
 }
