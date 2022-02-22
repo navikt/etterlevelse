@@ -6,8 +6,10 @@ import {HeadingXXLarge} from "baseui/typography";
 import React, {useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import CustomizedTabs from "../components/common/CustomizedTabs";
+import EditMelding from "../components/varslinger/EditMelding";
+import { MeldingStatus } from "../constants";
 
-type Section = 'utsendtMelding' | 'systemMelding' | 'forsidenMelding'
+type Section = 'utsendtMelding' | 'systemMelding' | 'forsideMelding'
 
 export const VarselPage = () => {
   return (
@@ -67,17 +69,17 @@ const BehandlingTabs = () => {
         {
           key: 'utsendtMelding',
           title: 'Utsendte meldinger',
-          content: <>Hello</>,
+          content: <>Test</>,
         },
         {
           key: 'systemMelding',
           title: 'Systemmelding',
-          content: <>From the other side</>,
+          content: <EditMelding/>,
         },
         {
           key: 'forsideMelding',
           title: 'Informasjon på forsiden',
-          content: <>Bye</>,
+          content: <EditMelding />,
         },
       ]}
     />
