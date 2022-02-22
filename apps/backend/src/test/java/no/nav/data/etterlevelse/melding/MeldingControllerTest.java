@@ -1,9 +1,7 @@
 package no.nav.data.etterlevelse.melding;
 
-import lombok.experimental.StandardException;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.IntegrationTestBase;
-import no.nav.data.etterlevelse.etterlevelsemetadata.dto.EtterlevelseMetadataResponse;
 import no.nav.data.etterlevelse.melding.domain.Melding;
 import no.nav.data.etterlevelse.melding.domain.MeldingStatus;
 import no.nav.data.etterlevelse.melding.domain.MeldingType;
@@ -14,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.test.context.TestExecutionListeners;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -140,9 +137,9 @@ class MeldingControllerTest extends IntegrationTestBase {
         assertThat(melding.getChangeStamp()).isNotNull();
         assertThat(melding.getVersion()).isEqualTo(0);
 
-        assertThat(melding.getMelding()).isEqualTo("Test update");
-        assertThat(melding.getMeldingType()).isEqualTo(MeldingType.FORSIDE);
-        assertThat(melding.getMeldingStatus()).isEqualTo(MeldingStatus.DEACTIVE);
+        assertThat(melding.getMelding()).isEqualTo("Test melding");
+        assertThat(melding.getMeldingType()).isEqualTo(MeldingType.SYSTEM);
+        assertThat(melding.getMeldingStatus()).isEqualTo(MeldingStatus.ACTIVE);
     }
 
 
