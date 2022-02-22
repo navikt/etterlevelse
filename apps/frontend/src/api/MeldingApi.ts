@@ -29,7 +29,7 @@ export const getMeldingByType = async (meldingType: MeldingType) => {
 }
 
 export const getMeldingByStatus = async (meldingStatus: MeldingStatus) => {
-  return (await axios.get<PageResponse<Melding>>(`${env.backendBaseUrl}/melding/type/${meldingStatus}`)).data
+  return (await axios.get<PageResponse<Melding>>(`${env.backendBaseUrl}/melding/status/${meldingStatus}`)).data
 }
 
 export const deleteMelding = async (id: string) => {
