@@ -54,3 +54,14 @@ function MeldingToMeldingDto(melding: Melding): Melding {
   delete dto.version
   return dto
 }
+
+export const mapMeldingToFormValue = (melding: Partial<Melding>): Melding => {
+  return ({
+    id: melding.id || '',
+    changeStamp: melding.changeStamp || { lastModifiedDate: '', lastModifiedBy: '' },
+    version: -1,
+    meldingStatus: melding.meldingStatus || MeldingStatus.DEACTIVE,
+    meldingType: melding.meldingType || MeldingType.FORSIDE,
+    melding: melding.melding || ''
+  })
+}
