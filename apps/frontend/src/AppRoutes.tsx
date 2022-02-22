@@ -1,29 +1,29 @@
 import * as React from 'react'
-import { Route, BrowserRouter, Routes, useNavigate, useLocation } from 'react-router-dom'
-import { MainPage } from './pages/MainPage'
+import {Route, Routes} from 'react-router-dom'
+import {MainPage} from './pages/MainPage'
 import NotFound from './pages/NotFound'
 import CodeListPage from './components/admin/CodeList/CodelistPage'
-import { AuditPage } from './components/admin/audit/AuditPage'
-import { SettingsPage } from './components/admin/settings/SettingsPage'
-import { MailLogPage } from './components/admin/maillog/MailLogPage'
-import { KravListPage } from './pages/KravListPage'
-import { KravPage } from './pages/KravPage'
-import { EtterlevelseListPage } from './pages/EtterlevelseListPage'
-import { EtterlevelsePage } from './pages/EtterlevelsePage'
-import { BehandlingPage } from './pages/BehandlingPage'
-import { MyBehandlingerPage } from './pages/MyBehandlingerPage'
-import { RelevansPage } from './pages/RelevansPage'
-import { UnderavdelingPage } from './pages/UnderavdelingPage'
-import { TemaPage } from './pages/TemaPage'
-import { LovPage } from './pages/LovPage'
-import { MainPageV2 } from './pages/MainPageV2'
-import { BehandlingerTemaPage } from './pages/BehandlingerTemaPage'
+import {AuditPage} from './components/admin/audit/AuditPage'
+import {SettingsPage} from './components/admin/settings/SettingsPage'
+import {MailLogPage} from './components/admin/maillog/MailLogPage'
+import {KravListPage} from './pages/KravListPage'
+import {KravPage} from './pages/KravPage'
+import {EtterlevelseListPage} from './pages/EtterlevelseListPage'
+import {EtterlevelsePage} from './pages/EtterlevelsePage'
+import {BehandlingPage} from './pages/BehandlingPage'
+import {MyBehandlingerPage} from './pages/MyBehandlingerPage'
+import {RelevansPage} from './pages/RelevansPage'
+import {UnderavdelingPage} from './pages/UnderavdelingPage'
+import {TemaPage} from './pages/TemaPage'
+import {LovPage} from './pages/LovPage'
+import {MainPageV2} from './pages/MainPageV2'
 import ScrollToTop from './util/ScrollToTop'
-import { StatusPage } from './pages/StatusPage'
-import { KravTablePage } from './pages/KravTablePage'
-import { FAQ } from './pages/FAQ'
+import {StatusPage} from './pages/StatusPage'
+import {KravTablePage} from './pages/KravTablePage'
+import {FAQ} from './pages/FAQ'
 import SpørsmålOgSvarLogPage from './pages/SpørsmålOgSvarLogPage'
-import { BehandlingerTemaPageV2 } from './pages/BehandlingerTemaPageV2'
+import {BehandlingerTemaPageV2} from './pages/BehandlingerTemaPageV2'
+import {VarselPage} from './pages/VarselPage'
 
 const AppRoutes = (): JSX.Element => {
   return (
@@ -68,6 +68,7 @@ const AppRoutes = (): JSX.Element => {
         <Route path="/admin/maillog" element={<MailLogPage />} caseSensitive={true} />
         <Route path="/admin/krav" element={<KravTablePage />} caseSensitive={true} />
         <Route path="/admin/messageslog" element={<SpørsmålOgSvarLogPage />} caseSensitive={true} />
+        <Route path="/admin/varsel" element={<VarselPage/>} caseSensitive={true} />
 
         <Route path="/tema/:tema" element={<TemaPage />} caseSensitive={true} />
         <Route path="/tema/" element={<TemaPage />} caseSensitive={true} />
