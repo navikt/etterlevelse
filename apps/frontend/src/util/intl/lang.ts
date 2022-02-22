@@ -16,7 +16,7 @@ export const no: IStrings = {
   emptyTable: 'ingen',
   id: 'Id',
   lastChanges: 'Siste endringer',
-  mailLog: 'Varslinger',
+  mailLog: 'Tilbakemeldings log',
   nextButton: 'Neste',
   prevButton: 'Forrige',
   pageNotFound: 'Oida 404! Fant ikke den siden der nei',

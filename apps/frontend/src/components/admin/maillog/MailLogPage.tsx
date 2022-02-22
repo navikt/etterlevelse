@@ -59,7 +59,7 @@ export const MailLogPage = () => {
     <Block width={responsiveWidthSmall} paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall}>
       <Helmet>
         <meta charSet="utf-8" />
-        <title>Varslinger</title>
+        <title>Tilbakemeldings log</title>
       </Helmet>
       <H4>{intl.mailLog}</H4>
       {log?.content.map((l, i) => {
