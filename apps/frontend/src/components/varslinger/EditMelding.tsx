@@ -25,9 +25,15 @@ export const EditMelding = ({ meldingType }: { meldingType: MeldingType }) => {
     setDisableEdit(true)
 
     if (melding.id) {
-      await updateMelding(melding).then(() => setDisableEdit(false))
+      await updateMelding(melding).then((m) => {
+        setMelding(m)
+        setDisableEdit(false)
+      })
     } else {
-      await createMelding(melding).then(() => setDisableEdit(false))
+      await createMelding(melding).then((m) => {
+        setMelding(m)
+        setDisableEdit(false)
+      })
     }
   }
 
