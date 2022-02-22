@@ -1,13 +1,13 @@
-import {Helmet} from "react-helmet";
-import {Block} from "baseui/block";
-import {ettlevColors, maxPageWidth, theme} from "../util/theme";
+import { Helmet } from "react-helmet";
+import { Block } from "baseui/block";
+import { ettlevColors, maxPageWidth, theme } from "../util/theme";
 import CustomizedBreadcrumbs from "../components/common/CustomizedBreadcrumbs";
-import {HeadingXXLarge} from "baseui/typography";
-import React, {useState} from "react";
-import {useNavigate, useParams} from "react-router-dom";
+import { HeadingXXLarge } from "baseui/typography";
+import React, { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import CustomizedTabs from "../components/common/CustomizedTabs";
 import EditMelding from "../components/varslinger/EditMelding";
-import { MeldingStatus } from "../constants";
+import { MeldingType } from "../constants";
 
 type Section = 'utsendtMelding' | 'systemMelding' | 'forsideMelding'
 
@@ -74,12 +74,12 @@ const BehandlingTabs = () => {
         {
           key: 'systemMelding',
           title: 'Systemmelding',
-          content: <EditMelding/>,
+          content: <EditMelding meldingType={MeldingType.SYSTEM} />,
         },
         {
           key: 'forsideMelding',
           title: 'Informasjon på forsiden',
-          content: <EditMelding />,
+          content: <EditMelding meldingType={MeldingType.FORSIDE} />,
         },
       ]}
     />
