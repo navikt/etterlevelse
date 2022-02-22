@@ -208,6 +208,23 @@ export interface TilbakemeldingMelding {
   endretAvIdent?: string
 }
 
+export interface Melding extends DomainObject {
+  id: string
+  melding: string
+  meldingType: MeldingType
+  meldingStatus: MeldingStatus
+}
+
+export enum MeldingType {
+  SYSTEM = 'SYSTEM',
+  FORSIDE = 'FORSIDE'
+}
+
+export enum MeldingStatus {
+  ACTIVE = 'ACTIVE',
+  DEACTIVE = 'DEACTIVE'
+}
+
 export enum TilbakemeldingRolle {
   KRAVEIER = 'KRAVEIER',
   MELDER = 'MELDER',
