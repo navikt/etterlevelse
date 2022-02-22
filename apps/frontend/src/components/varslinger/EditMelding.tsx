@@ -1,8 +1,9 @@
 import { Block } from 'baseui/block'
-import { Formik } from 'formik'
+import { Formik, FormikProps } from 'formik'
 import React, { useEffect, useState } from 'react'
 import { createMelding, getMeldingByType, mapMeldingToFormValue, updateMelding } from '../../api/MeldingApi'
 import { Melding, MeldingStatus, MeldingType } from '../../constants'
+import { TextAreaField } from '../common/Inputs'
 
 export const EditMelding = ({ meldingType }: { meldingType: MeldingType }) => {
 
@@ -35,8 +36,10 @@ export const EditMelding = ({ meldingType }: { meldingType: MeldingType }) => {
       <Formik
         onSubmit={submit}
         initialValues={mapMeldingToFormValue(melding)}
+        validateOnChange={false}
+        validateOnBlur={false}
       >
-
+        <TextAreaField markdown height="200px" label={meldingType === MeldingType.SYSTEM ? 'Systemmelding' : 'Forsidemelding'} noPlaceholder name="melding" />
       </Formik>
     </Block>
   )
