@@ -55,9 +55,9 @@ export const VarselPage = () => {
 
 const VarselTabs = () => {
   const params = useParams<{ tab?: Section }>()
-  const navigate = useNavigate()
+
   const [tab, setTab] = useState<Section>(params.tab || 'utsendtMelding')
-  const [isLoading, setLoading] = useState<boolean>(false);
+  const [isLoading, setLoading] = useState<boolean>(false)
   const [melding, setMelding] = useState<Partial<Melding>>(mapMeldingToFormValue({}))
 
   useEffect(() => {
@@ -95,12 +95,12 @@ const VarselTabs = () => {
         {
           key: MeldingType.SYSTEM,
           title: 'Systemmelding',
-          content: !isLoading && <EditMelding meldingType={MeldingType.SYSTEM} melding={melding} setMelding={setMelding}/>,
+          content:<EditMelding melding={melding} setMelding={setMelding} isLoading={isLoading}/>,
         },
         {
           key: MeldingType.FORSIDE,
           title: 'Informasjon på forsiden',
-          content: !isLoading && <EditMelding meldingType={MeldingType.FORSIDE} melding={melding} setMelding={setMelding}/>,
+          content:<EditMelding melding={melding} setMelding={setMelding} isLoading={isLoading}/>,
         },
       ]}
     />
