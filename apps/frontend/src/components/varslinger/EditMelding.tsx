@@ -1,29 +1,18 @@
-import { Block } from 'baseui/block'
-import { Formik, FormikProps } from 'formik'
-import React, { useEffect, useState } from 'react'
-import { createMelding, getMeldingByType, mapMeldingToFormValue, updateMelding } from '../../api/MeldingApi'
-import { Melding, MeldingStatus, MeldingType } from '../../constants'
-import { TextAreaField } from '../common/Inputs'
+import {Block} from 'baseui/block'
+import {Formik, FormikProps} from 'formik'
+import React, {useState} from 'react'
+import {createMelding, mapMeldingToFormValue, updateMelding} from '../../api/MeldingApi'
+import {Melding, MeldingStatus, MeldingType} from '../../constants'
+import {TextAreaField} from '../common/Inputs'
+import Button from "../common/Button";
 
-export const EditMelding = ({ meldingType }: { meldingType: MeldingType }) => {
+export const EditMelding = ({meldingType, melding, setMelding}: { meldingType: MeldingType, melding: Partial<Melding>, setMelding: Function }) => {
 
-  const [melding, setMelding] = useState<Partial<Melding>>({ melding: '', meldingType: meldingType, meldingStatus: MeldingStatus.DEACTIVE })
   const [disableEdit, setDisableEdit] = useState<boolean>(false)
-
-  useEffect(() => {
-    (async () => {
-      getMeldingByType(meldingType).then((m) => {
-        if (m.numberOfElements > 0) {
-          setMelding(m.content[0])
-        }
-      })
-    })()
-  }, [])
 
   const submit = async (melding: Melding) => {
 
     setDisableEdit(true)
-
     if (melding.id) {
       await updateMelding(melding).then((m) => {
         setMelding(m)
@@ -45,7 +34,17 @@ export const EditMelding = ({ meldingType }: { meldingType: MeldingType }) => {
         validateOnChange={false}
         validateOnBlur={false}
       >
-        <TextAreaField markdown height="200px" label={meldingType === MeldingType.SYSTEM ? 'Systemmelding' : 'Forsidemelding'} noPlaceholder name="melding" />
+        {(
+          {values, submitForm}: FormikProps<Melding>
+        ) => (
+          <Block>
+            <TextAreaField markdown height="200px" label={meldingType === MeldingType.SYSTEM ? 'Systemmelding' : 'Forsidemelding'} noPlaceholder name="melding"/>
+            <Button onClick={() => {
+              values.meldingStatus = MeldingStatus.ACTIVE
+              submitForm()
+            }}>Publiser</Button>
+          </Block>
+        )}
       </Formik>
     </Block>
   )
