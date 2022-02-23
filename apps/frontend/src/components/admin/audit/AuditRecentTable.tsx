@@ -25,11 +25,11 @@ import { ObjectLink } from '../../common/RouteLink'
 import { CustomizedStatefulSelect } from '../../common/CustomizedSelect'
 import { buttonContentStyle } from '../../common/Button'
 
-export const AuditRecentTable = (props: { show: boolean }) => {
+export const AuditRecentTable = (props: { show: boolean, tableType?: ObjectType }) => {
   const [audits, setAudits] = useState<PageResponse<AuditItem>>(emptyPage)
   const [page, setPage] = useState(1)
   const [limit, setLimit] = useState(20)
-  const [table, setTable] = useState<ObjectType | undefined>(undefined)
+  const [table, setTable] = useState<ObjectType | undefined>(props.tableType)
 
   const colors = _.uniq(audits.content.map((a) => a.tableId)).reduce((val, id) => {
     val[id] = randomColor({ seed: id, luminosity: 'dark' })
@@ -37,7 +37,7 @@ export const AuditRecentTable = (props: { show: boolean }) => {
   }, {} as { [id: string]: string })
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       props.show && setAudits(await getAudits(page - 1, limit, table))
     })()
   }, [page, limit, props.show, table])
@@ -69,12 +69,12 @@ export const AuditRecentTable = (props: { show: boolean }) => {
     <>
       <Block display="flex" justifyContent="space-between" marginBottom=".5rem">
         <Label1>{intl.lastChanges}</Label1>
-        <Block width="300px" display="flex" justifyContent="space-between">
+        {!props.tableType && <Block width="300px" display="flex" justifyContent="space-between">
           <Label3 alignSelf="center" marginRight=".5rem">
             {intl.table}:{' '}
           </Label3>
           <CustomizedStatefulSelect size="compact" options={tableOptions} onChange={(p) => setTable(p?.value[0]?.id as ObjectType)} />
-        </Block>
+        </Block>}
       </Block>
 
       <Table
