@@ -5,19 +5,35 @@ import { H2, HeadingXXLarge, Label4, Paragraph1, Paragraph2 } from 'baseui/typog
 import { PanelLink, PanelLinkCard } from '../components/common/PanelLink'
 import { grafIconBg, handWithLeaf, paperPenIconBg, paragrafIconBg } from '../components/Images'
 import { Card } from 'baseui/card'
-import { borderRadius, margin } from '../components/common/Style'
+import { borderColor, borderRadius, borderStyle, borderWidth, margin, paddingAll } from '../components/common/Style'
 import ReactPlayer from 'react-player'
 import { Button, SIZE } from 'baseui/button'
 import { faPlay } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { buttonBorderStyle, buttonContentStyle } from '../components/common/Button'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { Markdown } from '../components/common/Markdown'
+import { Melding, MeldingStatus, MeldingType } from '../constants'
+import { getMeldingByType } from '../api/MeldingApi'
 
 const cardWidth = ['95%', '95%', '95%', '95%', '31%', '31%']
 const cardHeight = ['auto', 'auto', 'auto', 'auto', '140px', '140px']
 const cardMarginRight = ['none', 'none', 'none', 'none', theme.sizing.scale800, theme.sizing.scale800]
 
 export const MainPageV2 = () => {
+
+  const [forsideVarsel, setForsideVarsle] = useState<Melding>()
+
+  useEffect(() => {
+    (async () => {
+      await getMeldingByType(MeldingType.FORSIDE).then((r) => {
+        if (r.numberOfElements > 0) {
+          setForsideVarsle(r.content[0])
+        }
+      })
+    })()
+  }, [])
+
   return (
     <Page
       hideBackBtn
@@ -74,9 +90,23 @@ export const MainPageV2 = () => {
             $style={{}}
             marginTop={theme.sizing.scale1600}
             marginBottom={theme.sizing.scale900}
-            // paddingLeft={theme.sizing.scale800}
-            // paddingRight={theme.sizing.scale800}
+          // paddingLeft={theme.sizing.scale800}
+          // paddingRight={theme.sizing.scale800}
           >
+            {forsideVarsel && forsideVarsel.meldingStatus === MeldingStatus.ACTIVE &&
+              <Block
+                $style={{
+                  ...borderWidth('1px'),
+                  ...borderStyle('solid'),
+                  ...borderColor(ettlevColors.navOransje),
+                  backgroundColor: ettlevColors.warning50,
+                  ...paddingAll('32px'),
+                  marginBottom: '64px'
+                }}
+              >
+                <Markdown source={forsideVarsel.melding} />
+              </Block>
+            }
             <H2 $style={{ fontWeight: 300, fontSize: '32px', lineHeight: '42px' }} marginTop="0px" marginBottom="0px">
               Etterlevelseskravene er
             </H2>
