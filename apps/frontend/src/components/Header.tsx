@@ -17,7 +17,7 @@ import { ampli } from '../services/Amplitude'
 import { user } from '../services/User'
 import { writeLog } from '../api/LogApi'
 import MainSearch from './search/MainSearch'
-import { arkPennIcon, grafIcon, husIcon, logo, paragrafIcon } from './Images'
+import { arkPennIcon, grafIcon, husIcon, logo, paragrafIcon, warningAlert } from './Images'
 import { ettlevColors, maxPageWidth, responsivePaddingSmall, responsiveWidthSmall } from '../util/theme'
 import { buttonBorderStyle } from './common/Button'
 import { Checkbox } from 'baseui/checkbox'
@@ -26,6 +26,10 @@ import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
 import { faBars, faChevronDown, faChevronUp, faTimes } from '@fortawesome/free-solid-svg-icons'
 import { faUser } from '@fortawesome/free-regular-svg-icons'
 import SkipToContent from './common/SkipToContent/SkipToContent'
+import { borderColor, borderStyle, borderWidth } from './common/Style'
+import { Melding, MeldingStatus, MeldingType } from '../constants'
+import { getMeldingByType } from '../api/MeldingApi'
+import { Markdown } from './common/Markdown'
 
 export const loginUrl = (location: Location, path?: string) => {
   const frontpage = window.location.href.substr(0, window.location.href.length - location.pathname.length)
@@ -72,14 +76,14 @@ const LoggedInHeader = () => {
   const kravPages = user.isKraveier() ? [{ label: 'Forvalte og opprette krav', href: '/kravliste' }] : []
   const adminPages = user.isAdmin()
     ? [
-        { label: 'Administrere krav', href: '/admin/krav' },
-        { label: intl.audit, href: '/admin/audit' },
-        { label: 'Kodeverk', href: '/admin/codelist' },
-        { label: intl.mailLog, href: '/admin/maillog' },
-        { label: intl.questionAndAnswers, href: '/admin/messageslog' },
-        {label: intl.notifications, href: '/admin/varsel'},
-        { label: intl.settings, href: '/admin/settings', disabled: true },
-      ]
+      { label: 'Administrere krav', href: '/admin/krav' },
+      { label: intl.audit, href: '/admin/audit' },
+      { label: 'Kodeverk', href: '/admin/codelist' },
+      { label: intl.mailLog, href: '/admin/maillog' },
+      { label: intl.questionAndAnswers, href: '/admin/messageslog' },
+      { label: intl.notifications, href: '/admin/varsel' },
+      { label: intl.settings, href: '/admin/settings', disabled: true },
+    ]
     : []
   const otherPages = [
     { label: 'Mine innstillinger', href: '/innstillinger', disabled: true },
@@ -155,8 +159,8 @@ const Menu = (props: { pages: MenuItem[][]; title: React.ReactNode; icon?: IconD
 
   const allPages = props.pages.length
     ? props.pages
-        .filter((p) => p.length)
-        .reduce((previousValue, currentValue) => [...((previousValue as MenuItem[]) || []), { label: <Divider compact={props.compact} /> }, ...(currentValue as MenuItem[])])
+      .filter((p) => p.length)
+      .reduce((previousValue, currentValue) => [...((previousValue as MenuItem[]) || []), { label: <Divider compact={props.compact} /> }, ...(currentValue as MenuItem[])])
     : []
 
   return (
@@ -223,6 +227,10 @@ const Menu = (props: { pages: MenuItem[][]; title: React.ReactNode; icon?: IconD
 let sourceReported = false
 
 const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
+
+  const [systemVarsel, setSystemVarsel] = useState<Melding>()
+  const location = useLocation()
+
   const source = useQueryParam('source')
   if (!sourceReported) {
     sourceReported = true
@@ -232,61 +240,97 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
     }
   }
 
-  return (
-    <Block width="100%" display="flex" backgroundColor={ettlevColors.white} justifyContent="center">
-      <SkipToContent />
-      <Block width="100%" maxWidth={maxPageWidth}>
-        <StyledLink href="#main"></StyledLink>
-        <Block
-          paddingLeft={responsivePaddingSmall}
-          paddingRight={responsivePaddingSmall}
-          width={responsiveWidthSmall}
-          height="76px"
-          overrides={{ Block: { props: { role: 'banner', 'aria-label': 'Header meny' } } }}
-        >
-          <HeaderNavigation overrides={{ Root: { style: { paddingBottom: 0, borderBottomStyle: 'none' } } }}>
-            <NavigationList $align={ALIGN.left} $style={{ paddingLeft: 0 }}>
-              <NavigationItem $style={{ paddingLeft: 0 }}>
-                <Block display="flex" alignItems="center" $style={{}}>
-                  <RouteLink href={'/'} hideUnderline $style={{}}>
-                    <img src={logo} alt="Nav etterlevelse" height="44px" />
-                  </RouteLink>
-                </Block>
-              </NavigationItem>
-            </NavigationList>
+  React.useEffect(() => {
+    (async () => {
+      await getMeldingByType(MeldingType.SYSTEM).then((r) => {
+        if (r.numberOfElements > 0) {
+          setSystemVarsel(r.content[0])
+        }
+      })
+    })()
+  }, [location.pathname])
 
-            <NavigationList $style={{ justifyContent: 'center' }}>
-              {!props.noSearchBar && (
-                <NavigationItem $style={{ width: '100%', maxWidth: '600px' }}>
-                  <Block flex="1" display={['none', 'none', 'none', 'none', 'flex', 'flex']} overrides={{ Block: { props: { role: 'search' } } }}>
-                    <MainSearch />
+  return (
+    <Block width="100%">
+      <Block width="100%" display="flex" backgroundColor={ettlevColors.white} justifyContent="center">
+        <SkipToContent />
+        <Block width="100%" maxWidth={maxPageWidth}>
+          <StyledLink href="#main"></StyledLink>
+          <Block
+            paddingLeft={responsivePaddingSmall}
+            paddingRight={responsivePaddingSmall}
+            width={responsiveWidthSmall}
+            height="76px"
+            overrides={{ Block: { props: { role: 'banner', 'aria-label': 'Header meny' } } }}
+          >
+            <HeaderNavigation overrides={{ Root: { style: { paddingBottom: 0, borderBottomStyle: 'none' } } }}>
+              <NavigationList $align={ALIGN.left} $style={{ paddingLeft: 0 }}>
+                <NavigationItem $style={{ paddingLeft: 0 }}>
+                  <Block display="flex" alignItems="center" $style={{}}>
+                    <RouteLink href={'/'} hideUnderline $style={{}}>
+                      <img src={logo} alt="Nav etterlevelse" height="44px" />
+                    </RouteLink>
                   </Block>
                 </NavigationItem>
-              )}
-            </NavigationList>
+              </NavigationList>
 
-            {!props.noLoginButton && (
-              <Block display={['none', 'none', 'none', 'none', 'none', 'flex']}>
-                <NavigationList $align={ALIGN.right}>
-                  {!user.isLoggedIn() && (
-                    <NavigationItem $style={{ paddingLeft: 0 }}>
-                      <LoginButton />
-                    </NavigationItem>
-                  )}
-                  {user.isLoggedIn() && (
-                    <NavigationItem $style={{ paddingLeft: 0 }}>
-                      <LoggedInHeader />
-                    </NavigationItem>
-                  )}
-                </NavigationList>
+              <NavigationList $style={{ justifyContent: 'center' }}>
+                {!props.noSearchBar && (
+                  <NavigationItem $style={{ width: '100%', maxWidth: '600px' }}>
+                    <Block flex="1" display={['none', 'none', 'none', 'none', 'flex', 'flex']} overrides={{ Block: { props: { role: 'search' } } }}>
+                      <MainSearch />
+                    </Block>
+                  </NavigationItem>
+                )}
+              </NavigationList>
+
+              {!props.noLoginButton && (
+                <Block display={['none', 'none', 'none', 'none', 'none', 'flex']}>
+                  <NavigationList $align={ALIGN.right}>
+                    {!user.isLoggedIn() && (
+                      <NavigationItem $style={{ paddingLeft: 0 }}>
+                        <LoginButton />
+                      </NavigationItem>
+                    )}
+                    {user.isLoggedIn() && (
+                      <NavigationItem $style={{ paddingLeft: 0 }}>
+                        <LoggedInHeader />
+                      </NavigationItem>
+                    )}
+                  </NavigationList>
+                </Block>
+              )}
+              <Block display={['block', 'block', 'block', 'block', 'block', 'none']}>
+                <BurgerMenu />
               </Block>
-            )}
-            <Block display={['block', 'block', 'block', 'block', 'block', 'none']}>
-              <BurgerMenu />
-            </Block>
-          </HeaderNavigation>
+            </HeaderNavigation>
+          </Block>
         </Block>
       </Block>
+      {systemVarsel && systemVarsel.meldingStatus === MeldingStatus.ACTIVE &&
+        <Block
+          $style={{
+            ...borderWidth('1px'),
+            ...borderStyle('solid'),
+            ...borderColor(ettlevColors.navOransje),
+            backgroundColor: ettlevColors.warning50,
+          }}
+          width="100%"
+          justifyContent="center"
+          display="flex"
+          alignItems="center"
+        >
+          <img
+            src={warningAlert}
+            width="20px"
+            height="20px"
+            alt=""
+            style={{
+              marginRight: '5px'
+            }}
+          />
+          <Markdown source={systemVarsel.melding} />
+        </Block>}
     </Block>
   )
 }
