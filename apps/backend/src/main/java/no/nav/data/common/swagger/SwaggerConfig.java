@@ -25,7 +25,7 @@ public class SwaggerConfig {
                         .version("v1.0")
                         .license(new License().name("MIT License")))
                 .externalDocs(new ExternalDocumentation()
-                        .description("Etterlevelse på NADA")
-                        .url("https://dataplattform.gitbook.io/nada/kataloger/etterlevelse"));
+                        .description("Etterlevelse på NAKA")
+                        .url("https://navikt.github.io/naka/etterlevelse"));
     }
 }
