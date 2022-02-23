@@ -30,12 +30,12 @@ public final class TypeRegistration {
         addDomainClass(Etterlevelse.class, true);
         addDomainClass(BehandlingData.class, true);
         addDomainClass(EtterlevelseMetadata.class, true);
+        addDomainClass(Melding.class, true);
 
         addDomainClass(Tilbakemelding.class, false);
         addDomainClass(KravImage.class, false);
         addDomainClass(MailTask.class, false);
         addDomainClass(MailLog.class, false);
-        addDomainClass(Melding.class, false);
     }
 
     private TypeRegistration() {
