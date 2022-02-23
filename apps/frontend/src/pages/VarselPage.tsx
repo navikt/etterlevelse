@@ -9,6 +9,9 @@ import CustomizedTabs from "../components/common/CustomizedTabs";
 import EditMelding from "../components/varslinger/EditMelding";
 import {Melding, MeldingStatus, MeldingType} from "../constants";
 import {getMeldingByType, mapMeldingToFormValue} from "../api/MeldingApi";
+import VarselAudit from "../components/varslinger/VarselAudit";
+import { ObjectType } from "../components/admin/audit/AuditTypes";
+import { AuditRecentTable } from "../components/admin/audit/AuditRecentTable";
 
 
 type Section = 'utsendtMelding' | MeldingType.SYSTEM | MeldingType.FORSIDE
@@ -90,7 +93,7 @@ const VarselTabs = () => {
         {
           key: 'utsendtMelding',
           title: 'Utsendte meldinger',
-          content: <>Test</>,
+          content: <AuditRecentTable show={true} tableType={ObjectType.Melding}/>,
         },
         {
           key: MeldingType.SYSTEM,
