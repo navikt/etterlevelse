@@ -10,7 +10,7 @@ import { borderColor } from '../common/Style'
 import { ettlevColors, theme } from '../../util/theme'
 import { Spinner } from '../common/Spinner'
 
-export const EditMelding = ({ melding, setMelding, isLoading }: { melding: Partial<Melding>, setMelding: Function, isLoading: boolean }) => {
+export const EditMelding = ({ melding, setMelding, isLoading, maxChar }: { melding: Partial<Melding>, setMelding: Function, isLoading: boolean, maxChar?: number }) => {
 
   const [disableEdit, setDisableEdit] = useState<boolean>(false)
 
@@ -50,7 +50,7 @@ export const EditMelding = ({ melding, setMelding, isLoading }: { melding: Parti
           { values, submitForm }: FormikProps<Melding>
         ) => (
           <Block>
-            <TextAreaField markdown height="200px" label={melding.meldingType === MeldingType.SYSTEM ? 'Systemmelding' : 'Forsidemelding'} noPlaceholder name="melding" />
+            <TextAreaField maxCharacter={maxChar} markdown height="200px" label={melding.meldingType === MeldingType.SYSTEM ? 'Systemmelding' : 'Forsidemelding'} noPlaceholder name="melding" />
 
             <Block display="flex" justifyContent="flex-end" width="100%" >
               {melding.meldingStatus === MeldingStatus.ACTIVE &&

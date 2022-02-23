@@ -100,7 +100,7 @@ const VarselTabs = () => {
         {
           key: MeldingType.FORSIDE,
           title: 'Informasjon på forsiden',
-          content:<EditMelding melding={melding} setMelding={setMelding} isLoading={isLoading}/>,
+          content:<EditMelding melding={melding} setMelding={setMelding} isLoading={isLoading} maxChar={500}/>,
         },
       ]}
     />
