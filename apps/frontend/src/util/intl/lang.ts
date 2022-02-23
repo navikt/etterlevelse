@@ -30,6 +30,7 @@ export const no: IStrings = {
   view: 'Vis',
   settings: 'Innstillinger',
   questionAndAnswers: 'Spørsmål og svar',
+  notifications: 'Varslinger'
 }
 
 // Markdown norsk locale
@@ -80,7 +81,7 @@ export const en: IStrings = {
   emptyTable: 'empty',
   id: 'Id',
   lastChanges: 'Last changes',
-  mailLog: 'Notification',
+  mailLog: 'Mail log',
   nextButton: 'Next',
   prevButton: 'Prev',
   pageNotFound: "Oops 404! couldn't find page",
@@ -94,4 +95,5 @@ export const en: IStrings = {
   view: 'View',
   settings: 'Settings',
   questionAndAnswers: 'Questions and answer',
+  notifications: 'Notifications'
 }
