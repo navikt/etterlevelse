@@ -84,6 +84,8 @@ export const urlForObject = (type: NavigableItem | string, id: string, audit?: A
       return `/tema/${id}`
     case ObjectType.Codelist:
       return `/admin/codelist/${id}`
+    case ObjectType.Melding:
+      return '/admin/varsel'
   }
   console.warn('couldn\'t find object type' + type)
   return ''
