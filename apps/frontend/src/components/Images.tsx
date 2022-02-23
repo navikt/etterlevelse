@@ -64,6 +64,7 @@ import { codelist, ListName, LovCode, TemaCode } from '../services/Codelist'
 import angleIcon from '../resources/icons/angleIcon.svg'
 import page2Icon from '../resources/icons/page2.svg'
 import externalLinkIcon from '../resources/icons/externalLinkIcon.svg'
+import eyeSlash from '../resources/icons/eye-slash.svg'
 
 import React from 'react'
 import { theme } from '../util'
@@ -121,6 +122,7 @@ export {
   angleIcon,
   page2Icon,
   externalLinkIcon,
+  eyeSlash,
 }
 
 export const temaBilder: { [id: string]: string } = {
