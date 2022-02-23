@@ -251,7 +251,7 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
   }, [location.pathname])
 
   return (
-    <Block width="100%">
+    <Block width="100%" backgroundColor={ettlevColors.white}>
       <Block width="100%" display="flex" backgroundColor={ettlevColors.white} justifyContent="center">
         <SkipToContent />
         <Block width="100%" maxWidth={maxPageWidth}>
@@ -309,27 +309,38 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
       </Block>
       {systemVarsel && systemVarsel.meldingStatus === MeldingStatus.ACTIVE &&
         <Block
+          backgroundColor={ettlevColors.white}
           $style={{
             ...borderWidth('1px'),
             ...borderStyle('solid'),
             ...borderColor(ettlevColors.navOransje),
             backgroundColor: ettlevColors.warning50,
           }}
-          width="100%"
           justifyContent="center"
           display="flex"
           alignItems="center"
+          width="100%"
         >
-          <img
-            src={warningAlert}
-            width="20px"
-            height="20px"
-            alt=""
-            style={{
-              marginRight: '5px'
-            }}
-          />
-          <Markdown source={systemVarsel.melding} />
+          <Block
+            justifyContent="center"
+            display="flex"
+            alignItems="center"
+            paddingLeft={responsivePaddingSmall}
+            paddingRight={responsivePaddingSmall}
+            width={responsiveWidthSmall}
+            maxWidth={maxPageWidth}
+          >
+            <img
+              src={warningAlert}
+              width="20px"
+              height="20px"
+              alt=""
+              style={{
+                marginRight: '5px'
+              }}
+            />
+            <Markdown source={systemVarsel.melding} />
+          </Block>
         </Block>}
     </Block>
   )
