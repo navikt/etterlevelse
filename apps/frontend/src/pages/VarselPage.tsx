@@ -60,7 +60,7 @@ const VarselTabs = () => {
 
   const [tab, setTab] = useState<Section>(params.tab || 'utsendtMelding')
   const [isLoading, setLoading] = useState<boolean>(false)
-  const [melding, setMelding] = useState<Partial<Melding>>(mapMeldingToFormValue({}))
+  const [melding, setMelding] = useState<Melding>(mapMeldingToFormValue({}))
 
   useEffect(() => {
     (async () => {
