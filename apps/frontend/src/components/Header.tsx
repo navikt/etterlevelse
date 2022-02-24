@@ -17,7 +17,7 @@ import { ampli } from '../services/Amplitude'
 import { user } from '../services/User'
 import { writeLog } from '../api/LogApi'
 import MainSearch from './search/MainSearch'
-import { arkPennIcon, grafIcon, husIcon, logo, paragrafIcon, warningAlert } from './Images'
+import { arkPennIcon, grafIcon, husIcon, informationIcon, logo, paragrafIcon, warningAlert } from './Images'
 import { ettlevColors, maxPageWidth, responsivePaddingSmall, responsiveWidthSmall } from '../util/theme'
 import { buttonBorderStyle } from './common/Button'
 import { Checkbox } from 'baseui/checkbox'
@@ -27,7 +27,7 @@ import { faBars, faChevronDown, faChevronUp, faTimes } from '@fortawesome/free-s
 import { faUser } from '@fortawesome/free-regular-svg-icons'
 import SkipToContent from './common/SkipToContent/SkipToContent'
 import { borderColor, borderStyle, borderWidth } from './common/Style'
-import { Melding, MeldingStatus, MeldingType } from '../constants'
+import { AlertType, Melding, MeldingStatus, MeldingType } from '../constants'
 import { getMeldingByType } from '../api/MeldingApi'
 import { Markdown } from './common/Markdown'
 
@@ -313,8 +313,8 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
           $style={{
             ...borderWidth('1px'),
             ...borderStyle('solid'),
-            ...borderColor(ettlevColors.navOransje),
-            backgroundColor: ettlevColors.warning50,
+            ...borderColor(systemVarsel.alertType === AlertType.INFO ? ettlevColors.success400 : ettlevColors.navOransje),
+            backgroundColor: systemVarsel.alertType === AlertType.INFO ? ettlevColors.success50 : ettlevColors.warning50,
           }}
           justifyContent="center"
           display="flex"
@@ -331,7 +331,7 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
             maxWidth={maxPageWidth}
           >
             <img
-              src={warningAlert}
+              src={systemVarsel.alertType === AlertType.INFO ? informationIcon : warningAlert}
               width="20px"
               height="20px"
               alt=""
