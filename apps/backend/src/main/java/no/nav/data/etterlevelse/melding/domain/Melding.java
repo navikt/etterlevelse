@@ -28,6 +28,7 @@ public class Melding implements DomainObject {
         melding = request.getMelding();
         meldingType = request.getMeldingType();
         meldingStatus = request.getMeldingStatus();
+        alertType = request.getAlertType();
         return this;
     }
 
