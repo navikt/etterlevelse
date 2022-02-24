@@ -1,6 +1,6 @@
 import axios from 'axios'
 import {env} from '../util/env'
-import { Melding, MeldingStatus, MeldingType, PageResponse } from '../constants'
+import { AlertType, Melding, MeldingStatus, MeldingType, PageResponse } from '../constants'
 
 export const getAllMelding = async () => {
   const PAGE_SIZE = 100
@@ -62,6 +62,7 @@ export const mapMeldingToFormValue = (melding: Partial<Melding>): Melding => {
     version: -1,
     meldingStatus: melding.meldingStatus || MeldingStatus.DEACTIVE,
     meldingType: melding.meldingType || MeldingType.FORSIDE,
-    melding: melding.melding || ''
+    melding: melding.melding || '',
+    alertType: melding.alertType || AlertType.WARNING
   })
 }

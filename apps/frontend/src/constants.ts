@@ -213,6 +213,12 @@ export interface Melding extends DomainObject {
   melding: string
   meldingType: MeldingType
   meldingStatus: MeldingStatus
+  alertType: AlertType
+}
+
+export enum AlertType {
+  INFO = 'INFO',
+  WARNING = 'WARNING'
 }
 
 export enum MeldingType {

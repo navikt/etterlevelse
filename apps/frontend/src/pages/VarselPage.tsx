@@ -7,7 +7,7 @@ import React, {useEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import CustomizedTabs from "../components/common/CustomizedTabs";
 import EditMelding from "../components/varslinger/EditMelding";
-import {Melding, MeldingStatus, MeldingType} from "../constants";
+import {AlertType, Melding, MeldingStatus, MeldingType} from "../constants";
 import {getMeldingByType, mapMeldingToFormValue} from "../api/MeldingApi";
 import { ObjectType } from "../components/admin/audit/AuditTypes";
 import { AuditRecentTable } from "../components/admin/audit/AuditRecentTable";
@@ -69,12 +69,6 @@ const VarselTabs = () => {
         const response = await getMeldingByType(tab === 'SYSTEM' ? MeldingType.SYSTEM : MeldingType.FORSIDE)
         if (response.numberOfElements > 0) {
           setMelding(response.content[0])
-        } else {
-          setMelding({
-            melding: '',
-            meldingType: tab,
-            meldingStatus: MeldingStatus.DEACTIVE
-          })
         }
       }
       setLoading(false)
