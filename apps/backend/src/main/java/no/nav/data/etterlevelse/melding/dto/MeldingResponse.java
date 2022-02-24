@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import no.nav.data.common.rest.ChangeStampResponse;
+import no.nav.data.etterlevelse.melding.domain.AlertType;
 import no.nav.data.etterlevelse.melding.domain.MeldingStatus;
 import no.nav.data.etterlevelse.melding.domain.MeldingType;
 
@@ -22,6 +23,7 @@ public class MeldingResponse {
     private String melding;
     private MeldingType meldingType;
     private MeldingStatus meldingStatus;
+    private AlertType alertType;
     private Integer version;
 
 }

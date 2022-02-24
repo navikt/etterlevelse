@@ -8,6 +8,7 @@ import lombok.experimental.FieldNameConstants;
 import no.nav.data.common.storage.domain.ChangeStamp;
 import no.nav.data.common.validator.RequestElement;
 import no.nav.data.common.validator.Validator;
+import no.nav.data.etterlevelse.melding.domain.AlertType;
 import no.nav.data.etterlevelse.melding.domain.MeldingStatus;
 import no.nav.data.etterlevelse.melding.domain.MeldingType;
 
@@ -23,6 +24,7 @@ public class MeldingRequest implements RequestElement {
     private String melding;
     private MeldingType meldingType;
     private MeldingStatus meldingStatus;
+    private AlertType alertType;
     private Boolean update;
     private Integer version;
 
@@ -39,6 +41,7 @@ public class MeldingRequest implements RequestElement {
         validator.checkNull(Fields.melding, melding);
         validator.checkNull(Fields.meldingType, meldingType);
         validator.checkNull(Fields.meldingStatus, meldingStatus);
+        validator.checkNull(Fields.alertType, alertType);
     }
 
 }

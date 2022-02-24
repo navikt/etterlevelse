@@ -21,6 +21,7 @@ public class Melding implements DomainObject {
     private String melding;
     private MeldingType meldingType;
     private MeldingStatus meldingStatus;
+    private AlertType alertType;
     private Integer version;
 
     public Melding convert(MeldingRequest request) {
@@ -37,6 +38,7 @@ public class Melding implements DomainObject {
                 .changeStamp(convertChangeStampResponse())
                 .meldingType(meldingType)
                 .meldingStatus(meldingStatus)
+                .alertType(alertType)
                 .melding(melding)
                 .build();
     }
