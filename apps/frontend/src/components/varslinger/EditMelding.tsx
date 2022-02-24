@@ -1,6 +1,6 @@
 import { Block } from 'baseui/block'
 import { Field, FieldProps, Form, Formik, FormikProps } from 'formik'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { createMelding, mapMeldingToFormValue, updateMelding } from '../../api/MeldingApi'
 import { AlertType, Melding, MeldingStatus, MeldingType } from '../../constants'
 import { FieldWrapper, TextAreaField } from '../common/Inputs'
@@ -25,11 +25,17 @@ export const getAlertTypeText = (type: AlertType) => {
   }
 }
 
-export const EditMelding = ({ melding, setMelding, isLoading, maxChar }: { melding: Partial<Melding>, setMelding: Function, isLoading: boolean, maxChar?: number }) => {
+export const EditMelding = ({ melding, setMelding, isLoading, maxChar }: { melding: Melding, setMelding: Function, isLoading: boolean, maxChar?: number }) => {
 
   const [disableEdit, setDisableEdit] = useState<boolean>(false)
-  const [meldingAlertType, setMeldingAlertType] = useState<string>(melding.alertType ? melding.alertType : AlertType.WARNING)
+  const [meldingAlertType, setMeldingAlertType] = useState<string>(AlertType.WARNING)
   const [radioHover, setRadioHover] = useState<string>('')
+
+  useEffect(() => {
+    if (!isLoading) {
+      setMeldingAlertType(melding.alertType)
+    }
+  }, [isLoading])
 
   const submit = async (melding: Melding) => {
     console.log(melding)
@@ -136,6 +142,8 @@ export const EditMelding = ({ melding, setMelding, isLoading, maxChar }: { meldi
               </Field>
             </FieldWrapper>
 
+
+            {/* Problem med react-draft-wysiwyg Editor komponent, når du setter en custom option som props vil du man få en ' Can't perform a React state update on an unmounted component' */}
             <TextAreaField maxCharacter={maxChar} markdown height="200px" label={melding.meldingType === MeldingType.SYSTEM ? 'Systemmelding' : 'Forsidemelding'} noPlaceholder name="melding" />
 
             <Block display="flex" justifyContent="flex-end" width="100%" >
