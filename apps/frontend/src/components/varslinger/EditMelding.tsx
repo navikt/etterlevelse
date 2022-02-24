@@ -21,11 +21,13 @@ export const EditMelding = ({ melding, setMelding, isLoading, maxChar }: { meldi
       await updateMelding(melding).then((m) => {
         setMelding(m)
         setDisableEdit(false)
+        window.location.reload()
       })
     } else {
       await createMelding(melding).then((m) => {
         setMelding(m)
         setDisableEdit(false)
+        window.location.reload()
       })
     }
   }
