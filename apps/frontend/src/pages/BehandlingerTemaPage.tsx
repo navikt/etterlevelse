@@ -49,8 +49,6 @@ const mapEtterlevelseData = (etterlevelse?: Etterlevelse) => ({
   gammelVersjon: false,
 })
 
-ampli.logEvent('sidevisning', { sidetittel: 'Dokumentere etterlevelse' })
-
 export const BehandlingerTemaPage = () => {
   const params = useParams<{ id?: string; tema?: string }>()
   const temaData: TemaCode | undefined = codelist.getCode(ListName.TEMA, params.tema?.replace('i', ''))
