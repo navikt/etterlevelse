@@ -10,6 +10,7 @@ const AmplitudeConfig = {
     city: false,
     ip_address: false,
   },
+  platform: window.location.toString(),
 }
 
 export const instance = amplitude.getInstance()
