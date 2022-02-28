@@ -235,9 +235,9 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
   if (!sourceReported) {
     sourceReported = true
     writeLog('info', 'pageload', `pageload from ${source}`)
-    if (source) {
-      ampli.logEvent('etterlevelse_source', { source })
-    }
+    // if (source) {
+    //   ampli.logEvent('etterlevelse_source', { source })
+    // }
   }
 
   React.useEffect(() => {
