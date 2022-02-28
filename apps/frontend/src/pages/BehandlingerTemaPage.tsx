@@ -36,6 +36,7 @@ import { Option } from 'baseui/select'
 import { user } from '../services/User'
 import { getEtterlevelseStatus, getEtterlevelseStatusLabelColor } from '../components/behandling/utils'
 import { loginUrl } from '../components/Header'
+import { ampli } from '../services/Amplitude'
 
 const responsiveBreakPoints: Responsive<Display> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
 
@@ -47,6 +48,8 @@ const mapEtterlevelseData = (etterlevelse?: Etterlevelse) => ({
   etterlevelseChangeStamp: etterlevelse?.changeStamp,
   gammelVersjon: false,
 })
+
+ampli.logEvent('sidevisning', { sidetittel: 'Dokumentere etterlevelse' })
 
 export const BehandlingerTemaPage = () => {
   const params = useParams<{ id?: string; tema?: string }>()
