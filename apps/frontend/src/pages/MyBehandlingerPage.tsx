@@ -24,6 +24,9 @@ import { borderWidth } from '../components/common/Style'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Helmet } from 'react-helmet'
+import { ampli } from '../services/Amplitude'
+
+ampli.logEvent('sidevisning', { sidetittel: 'MyBehandlingerPage' })
 
 type Section = 'mine' | 'siste' | 'alle'
 

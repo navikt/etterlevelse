@@ -10,6 +10,9 @@ import { Spinner } from '../components/common/Spinner'
 import { user } from '../services/User'
 import { maxPageWidth, pageWidth, responsivePaddingSmall, responsiveWidthSmall } from '../util/theme'
 import { Helmet } from 'react-helmet'
+import { ampli } from '../services/Amplitude'
+
+ampli.logEvent('sidevisning', { sidetittel: 'EtterlevelseListPage' })
 
 export const EtterlevelseListPage = () => {
   const [etterlevelse, prev, next, loading] = useEtterlevelsePage(20)

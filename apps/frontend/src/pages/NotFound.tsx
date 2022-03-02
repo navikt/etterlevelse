@@ -7,6 +7,9 @@ import { intl } from '../util/intl/intl'
 import notFound from '../resources/notfound.svg'
 import { maxPageWidth } from '../util/theme'
 import { Helmet } from 'react-helmet'
+import { ampli } from '../services/Amplitude'
+
+ampli.logEvent('sidevisning', { sidetittel: 'NotFound' })
 
 const NotFound = () => {
   const location = useLocation()

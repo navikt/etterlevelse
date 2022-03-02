@@ -11,6 +11,9 @@ import {AlertType, Melding, MeldingStatus, MeldingType} from "../constants";
 import {getMeldingByType, mapMeldingToFormValue} from "../api/MeldingApi";
 import { ObjectType } from "../components/admin/audit/AuditTypes";
 import { AuditRecentTable } from "../components/admin/audit/AuditRecentTable";
+import { ampli } from "../services/Amplitude";
+
+ampli.logEvent('sidevisning', { sidetittel: 'VarselPage' })
 
 
 type Section = 'utsendtMelding' | MeldingType.SYSTEM | MeldingType.FORSIDE

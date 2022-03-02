@@ -26,6 +26,9 @@ import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 import { sortKraverByPriority } from '../util/sort'
 import { getAllKravPriority } from '../api/KravPriorityApi'
 import { Helmet } from 'react-helmet'
+import { ampli } from '../services/Amplitude'
+
+ampli.logEvent('sidevisning', { sidetittel: 'TemaPage' })
 
 export const TemaPage = () => {
   const { tema } = useParams<{ tema: string }>()

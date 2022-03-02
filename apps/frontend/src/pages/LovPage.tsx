@@ -19,6 +19,9 @@ import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 import { sortKraverByPriority } from '../util/sort'
 import { Krav } from '../constants'
 import { Helmet } from 'react-helmet'
+import { ampli } from '../services/Amplitude'
+
+ampli.logEvent('sidevisning', { sidetittel: 'LovPage' })
 
 const fontColor = ettlevColors.white
 

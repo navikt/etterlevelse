@@ -11,6 +11,9 @@ import { ettlevColors, maxPageWidth, pageWidth, responsivePaddingSmall, responsi
 import { getKravByKravNumberAndVersion } from '../api/KravApi'
 import CustomizedBreadcrumbs, { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 import { Helmet } from 'react-helmet'
+import { ampli } from '../services/Amplitude'
+
+ampli.logEvent('sidevisning', { sidetittel: 'EtterlevelsePage' })
 
 export const etterlevelseName = (etterlevelse: Etterlevelse) => `${kravNumView(etterlevelse)}`
 

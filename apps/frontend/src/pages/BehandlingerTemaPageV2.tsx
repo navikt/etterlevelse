@@ -24,6 +24,9 @@ import { SecondaryHeader } from "../components/behandlingsTema/SecondaryHeader";
 import { KravList } from "../components/behandlingsTema/KravList";
 import { user } from '../services/User'
 import { loginUrl } from '../components/Header'
+import { ampli } from '../services/Amplitude'
+
+ampli.logEvent('sidevisning', { sidetittel: 'BehandlingerTemaPage' })
 
 const responsiveBreakPoints: Responsive<Display> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
 const responsiveDisplay: Responsive<Display> = ['block', 'block', 'block', 'block', 'flex', 'flex']

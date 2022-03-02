@@ -5,6 +5,9 @@ import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
 import { Block } from 'baseui/block'
 import { ExternalLink } from '../components/common/RouteLink'
 import { Helmet } from 'react-helmet'
+import { ampli } from '../services/Amplitude'
+
+ampli.logEvent('sidevisning', { sidetittel: 'FAQ Page' })
 
 export const FAQ = () => {
   return (

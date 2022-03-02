@@ -12,7 +12,10 @@ import {codelist, ListName} from '../services/Codelist'
 import {kravStatus} from './KravPage'
 import {Layout2} from '../components/scaffold/Page'
 import RouteLink from '../components/common/RouteLink'
-import {Helmet} from 'react-helmet'
+import { Helmet } from 'react-helmet'
+import { ampli } from '../services/Amplitude'
+
+ampli.logEvent('sidevisning', { sidetittel: 'KravTablePage' })
 
 const kravSorting: ColumnCompares<Krav> = {
   kravNummer: (a, b) => a.kravNummer - b.kravNummer,

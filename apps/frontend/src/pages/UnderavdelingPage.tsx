@@ -8,6 +8,9 @@ import { theme } from '../util'
 import { KravFilterTable } from '../components/common/KravFilterTable'
 import { maxPageWidth, responsivePaddingSmall, responsiveWidthSmall } from '../util/theme'
 import { Helmet } from 'react-helmet'
+import { ampli } from '../services/Amplitude'
+
+ampli.logEvent('sidevisning', { sidetittel: 'UnderavdelingPage' })
 
 export const UnderavdelingPage = () => {
   const { underavdeling } = useParams<{ underavdeling: string }>()

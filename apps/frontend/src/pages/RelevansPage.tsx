@@ -9,6 +9,9 @@ import { KravFilterTable } from '../components/common/KravFilterTable'
 import { BehandlingFilterTable } from '../components/common/BehandlingFilterTable'
 import { maxPageWidth, responsivePaddingSmall, responsiveWidthSmall } from '../util/theme'
 import { Helmet } from 'react-helmet'
+import { ampli } from '../services/Amplitude'
+
+ampli.logEvent('sidevisning', { sidetittel: 'RelevansPage' })
 
 export const RelevansPage = () => {
   const { relevans } = useParams<{ relevans: string }>()

@@ -23,6 +23,9 @@ import StatusView from '../components/common/StatusTag'
 import { useNavigate, useParams } from 'react-router-dom'
 import React from 'react'
 import { Helmet } from 'react-helmet'
+import { ampli } from '../services/Amplitude'
+
+ampli.logEvent('sidevisning', { sidetittel: 'KravListPage' })
 
 type Section = 'siste' | 'alle' | 'tema'
 

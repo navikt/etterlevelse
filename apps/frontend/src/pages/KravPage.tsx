@@ -32,6 +32,9 @@ import CustomizedBreadcrumbs, { breadcrumbPaths } from '../components/common/Cus
 import { codelist, ListName, TemaCode } from '../services/Codelist'
 import { Helmet } from 'react-helmet'
 import Etterlevelser from '../components/krav/Etterlevelser'
+import { ampli } from '../services/Amplitude'
+
+ampli.logEvent('sidevisning', { sidetittel: 'KravPage' })
 
 export const kravNumView = (it: { kravVersjon: number; kravNummer: number }) => `K${it.kravNummer}.${it.kravVersjon}`
 export const kravName = (krav: Krav) => `${kravNumView(krav)} ${krav.navn}`

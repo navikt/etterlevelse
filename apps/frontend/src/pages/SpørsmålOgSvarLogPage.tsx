@@ -16,7 +16,10 @@ import {emptyPage, Krav, PageResponse, Tilbakemelding} from '../constants'
 import {ColumnCompares} from '../util/hooks'
 import {intl} from '../util/intl/intl'
 import {ettlevColors, maxPageWidth} from '../util/theme'
-import {codelist, ListName} from "../services/Codelist";
+import { codelist, ListName } from "../services/Codelist";
+import { ampli } from '../services/Amplitude'
+
+ampli.logEvent('sidevisning', { sidetittel: 'SpørsmålOgSvarLogPage' })
 
 type SporsmaalOgSvarKrav = {
   kravNavn: string

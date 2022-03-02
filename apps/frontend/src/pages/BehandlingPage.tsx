@@ -26,6 +26,9 @@ import { TemaCardBehandling } from "../components/behandlingPage/TemaCardBehandl
 import { isFerdigUtfylt } from './BehandlingerTemaPageV2'
 import { user } from '../services/User'
 import { loginUrl } from '../components/Header'
+import { ampli } from '../services/Amplitude'
+
+ampli.logEvent('sidevisning', { sidetittel: 'BehandlingPage' })
 
 const responsiveDisplay: Responsive<Display> = ['block', 'block', 'block', 'block', 'flex', 'flex']
 
