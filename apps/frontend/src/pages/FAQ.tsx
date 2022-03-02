@@ -7,9 +7,10 @@ import { ExternalLink } from '../components/common/RouteLink'
 import { Helmet } from 'react-helmet'
 import { ampli } from '../services/Amplitude'
 
-ampli.logEvent('sidevisning', { sidetittel: 'FAQ Page' })
-
 export const FAQ = () => {
+
+  ampli.logEvent('sidevisning', { side: 'FAQ side', sidetittel: 'Om Støtte til etterlevelse' })
+
   return (
     <Block width="100%" paddingBottom={'200px'} id="content" overrides={{ Block: { props: { role: 'main' } } }}>
       <Helmet>

@@ -6,9 +6,11 @@ import { Block } from 'baseui/block'
 import { Helmet } from 'react-helmet'
 import { ampli } from '../services/Amplitude'
 
-ampli.logEvent('sidevisning', { sidetittel: 'StatusPage' })
 
 export const StatusPage = () => {
+
+  ampli.logEvent('sidevisning', { side: 'Status side', sidetittel: 'Status i organisasjonen' })
+
   return (
     <Block width="100%" paddingBottom={'200px'} id="content" overrides={{ Block: { props: { role: 'main' } } }}>
       <Helmet>

@@ -21,14 +21,13 @@ import { Krav } from '../constants'
 import { Helmet } from 'react-helmet'
 import { ampli } from '../services/Amplitude'
 
-ampli.logEvent('sidevisning', { sidetittel: 'LovPage' })
-
 const fontColor = ettlevColors.white
 
 export const LovPage = () => {
   const { lov } = useParams<{ lov: string }>()
 
   if (!lov) {
+    ampli.logEvent('sidevisning', { side: 'Lov side' })
     return (
       <Block id="content" overrides={{ Block: { props: { role: 'main' } } }} maxWidth={maxPageWidth} width="100%">
         <Helmet>
@@ -66,6 +65,8 @@ const LovSide = ({ lov }: { lov: LovCode }) => {
   const underavdeling = codelist.getCode(ListName.UNDERAVDELING, lov.data?.underavdeling)
 
   const tema = codelist.getCode(ListName.TEMA, lov.data?.tema)
+
+  ampli.logEvent('sidevisning', { side: 'Lov side', sidetittel: lov.shortName })
 
   const breadcrumbPaths: breadcrumbPaths[] = [
     {

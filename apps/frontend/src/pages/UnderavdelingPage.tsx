@@ -10,12 +10,13 @@ import { maxPageWidth, responsivePaddingSmall, responsiveWidthSmall } from '../u
 import { Helmet } from 'react-helmet'
 import { ampli } from '../services/Amplitude'
 
-ampli.logEvent('sidevisning', { sidetittel: 'UnderavdelingPage' })
 
 export const UnderavdelingPage = () => {
   const { underavdeling } = useParams<{ underavdeling: string }>()
 
   if (!underavdeling) {
+    ampli.logEvent('sidevisning', { side: 'Underavdelin admin page' })
+
     return (
       <Block maxWidth={maxPageWidth} width="100%">
         <Helmet>
@@ -39,6 +40,9 @@ export const UnderavdelingPage = () => {
   }
 
   const code = codelist.getCode(ListName.UNDERAVDELING, underavdeling)
+  if (code) {
+    ampli.logEvent('sidevisning', { side: 'Underavdelin admin page', sidetittel: code?.shortName })
+  }
   return (
     <Block id="content" overrides={{ Block: { props: { role: 'main' } } }} maxWidth={maxPageWidth} width="100%">
       <Helmet>

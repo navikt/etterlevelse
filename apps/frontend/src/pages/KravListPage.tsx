@@ -25,7 +25,6 @@ import React from 'react'
 import { Helmet } from 'react-helmet'
 import { ampli } from '../services/Amplitude'
 
-ampli.logEvent('sidevisning', { sidetittel: 'KravListPage' })
 
 type Section = 'siste' | 'alle' | 'tema'
 
@@ -50,51 +49,55 @@ export const sortKrav = (kravene: KravQL[]) => {
   })
 }
 
-export const KravListPage = () => (
-  <Block width="100%" paddingBottom={'200px'} id="content" overrides={{ Block: { props: { role: 'main' } } }}>
-    <Helmet>
-      <meta charSet="utf-8" />
-      <title>Forvalte og opprette krav</title>
-    </Helmet>
-    <Block width="100%" backgroundColor={ettlevColors.grey50} display={'flex'} justifyContent={'center'}>
-      <Block maxWidth={maxPageWidth} width="100%">
-        <Block paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge} paddingTop={theme.sizing.scale800}>
-          <CustomizedBreadcrumbs currentPage="Forvalte og opprette krav" />
-          <Block display="flex">
-            <Block flex="1">
-              <HeadingXXLarge marginTop="0">Forvalte og opprette krav</HeadingXXLarge>
-            </Block>
+export const KravListPage = () => {
+  ampli.logEvent('sidevisning', { side: 'Kraveier side', sidetittel: 'Forvalte og opprette krav' })
 
-            <Block display="flex" justifyContent="flex-end">
-              {user.isKraveier() && (
-                <RouteLink hideUnderline href={'/krav/ny'}>
-                  <Button startEnhancer={<img src={plusIcon} alt="" />} size="compact">
-                    Nytt krav
-                  </Button>
-                </RouteLink>
-              )}
+  return (
+    <Block width="100%" paddingBottom={'200px'} id="content" overrides={{ Block: { props: { role: 'main' } } }}>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Forvalte og opprette krav</title>
+      </Helmet>
+      <Block width="100%" backgroundColor={ettlevColors.grey50} display={'flex'} justifyContent={'center'}>
+        <Block maxWidth={maxPageWidth} width="100%">
+          <Block paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge} paddingTop={theme.sizing.scale800}>
+            <CustomizedBreadcrumbs currentPage="Forvalte og opprette krav" />
+            <Block display="flex">
+              <Block flex="1">
+                <HeadingXXLarge marginTop="0">Forvalte og opprette krav</HeadingXXLarge>
+              </Block>
+
+              <Block display="flex" justifyContent="flex-end">
+                {user.isKraveier() && (
+                  <RouteLink hideUnderline href={'/krav/ny'}>
+                    <Button startEnhancer={<img src={plusIcon} alt="" />} size="compact">
+                      Nytt krav
+                    </Button>
+                  </RouteLink>
+                )}
+              </Block>
             </Block>
           </Block>
         </Block>
       </Block>
-    </Block>
 
-    <Block
-      display={'flex'}
-      justifyContent="center"
-      width="100%"
-      $style={{
-        background: `linear-gradient(top, ${ettlevColors.grey50} 80px, ${ettlevColors.grey25} 0%)`,
-      }}
-    >
-      <Block maxWidth={maxPageWidth} width="100%">
-        <Block paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge} paddingTop={theme.sizing.scale800}>
-          <KravTabs />
+      <Block
+        display={'flex'}
+        justifyContent="center"
+        width="100%"
+        $style={{
+          background: `linear-gradient(top, ${ettlevColors.grey50} 80px, ${ettlevColors.grey25} 0%)`,
+        }}
+      >
+        <Block maxWidth={maxPageWidth} width="100%">
+          <Block paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge} paddingTop={theme.sizing.scale800}>
+            <KravTabs />
+          </Block>
         </Block>
       </Block>
     </Block>
-  </Block>
-)
+  )
+}
 
 export const KravPanels = ({ kravene, loading }: { kravene?: KravQL[] | Krav[]; loading?: boolean }) => {
   if (loading) return <SkeletonPanel count={5} />

@@ -11,10 +11,11 @@ import { maxPageWidth, responsivePaddingSmall, responsiveWidthSmall } from '../u
 import { Helmet } from 'react-helmet'
 import { ampli } from '../services/Amplitude'
 
-ampli.logEvent('sidevisning', { sidetittel: 'RelevansPage' })
 
 export const RelevansPage = () => {
   const { relevans } = useParams<{ relevans: string }>()
+
+  ampli.logEvent('sidevisning', { side: 'Relevans side', sidetittel: 'Admin side for relevans side' })
 
   if (!relevans) {
     return (

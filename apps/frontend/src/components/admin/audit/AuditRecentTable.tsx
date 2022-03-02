@@ -24,6 +24,7 @@ import ReactJson from 'react-json-view'
 import { ObjectLink } from '../../common/RouteLink'
 import { CustomizedStatefulSelect } from '../../common/CustomizedSelect'
 import { buttonContentStyle } from '../../common/Button'
+import { ampli } from '../../../services/Amplitude'
 
 export const AuditRecentTable = (props: { show: boolean, tableType?: ObjectType }) => {
   const [audits, setAudits] = useState<PageResponse<AuditItem>>(emptyPage)
@@ -64,6 +65,9 @@ export const AuditRecentTable = (props: { show: boolean, tableType?: ObjectType 
   }
 
   const tableOptions = Object.keys(ObjectType).map((ot) => ({ id: ot, label: ot }))
+
+  ampli.logEvent('sidevisning', { side: 'Varsel side for admin', sidetittel: 'Log side for varslinger' })
+
 
   return (
     <>

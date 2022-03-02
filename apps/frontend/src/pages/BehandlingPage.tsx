@@ -28,7 +28,6 @@ import { user } from '../services/User'
 import { loginUrl } from '../components/Header'
 import { ampli } from '../services/Amplitude'
 
-ampli.logEvent('sidevisning', { sidetittel: 'BehandlingPage' })
 
 const responsiveDisplay: Responsive<Display> = ['block', 'block', 'block', 'block', 'flex', 'flex']
 
@@ -172,6 +171,9 @@ export const BehandlingPage = () => {
 
   React.useEffect(() => {
     setTimeout(() => refetchRelevanteData(), 200)
+    if (behandling) {
+      ampli.logEvent('sidevisning', { side: 'Behandling side', sidetittel: `B${behandling.nummer.toString()} ${behandling.navn.toString()}`})
+    }
   }, [behandling])
 
   const temaListe = codelist.getCodes(ListName.TEMA).sort((a, b) => a.shortName.localeCompare(b.shortName, 'nb'))

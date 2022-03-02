@@ -1,28 +1,25 @@
-import {Helmet} from "react-helmet";
-import {Block} from "baseui/block";
-import {ettlevColors, maxPageWidth, theme} from "../util/theme";
+import { Helmet } from "react-helmet";
+import { Block } from "baseui/block";
+import { ettlevColors, maxPageWidth, theme } from "../util/theme";
 import CustomizedBreadcrumbs from "../components/common/CustomizedBreadcrumbs";
-import {HeadingXXLarge} from "baseui/typography";
-import React, {useEffect, useState} from "react";
-import {useNavigate, useParams} from "react-router-dom";
+import { HeadingXXLarge } from "baseui/typography";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import CustomizedTabs from "../components/common/CustomizedTabs";
 import EditMelding from "../components/varslinger/EditMelding";
-import {AlertType, Melding, MeldingStatus, MeldingType} from "../constants";
-import {getMeldingByType, mapMeldingToFormValue} from "../api/MeldingApi";
+import { AlertType, Melding, MeldingStatus, MeldingType } from "../constants";
+import { getMeldingByType, mapMeldingToFormValue } from "../api/MeldingApi";
 import { ObjectType } from "../components/admin/audit/AuditTypes";
 import { AuditRecentTable } from "../components/admin/audit/AuditRecentTable";
 import { ampli } from "../services/Amplitude";
-
-ampli.logEvent('sidevisning', { sidetittel: 'VarselPage' })
-
 
 type Section = 'utsendtMelding' | MeldingType.SYSTEM | MeldingType.FORSIDE
 
 export const VarselPage = () => {
   return (
-    <Block width="100%" paddingBottom={'200px'} id="content" overrides={{Block: {props: {role: 'main'}}}}>
+    <Block width="100%" paddingBottom={'200px'} id="content" overrides={{ Block: { props: { role: 'main' } } }}>
       <Helmet>
-        <meta charSet="utf-8"/>
+        <meta charSet="utf-8" />
         <title>Varslinger</title>
       </Helmet>
       <Block width="100%" backgroundColor={ettlevColors.grey50} display={'flex'} justifyContent={'center'}>
@@ -34,7 +31,7 @@ export const VarselPage = () => {
               Tilbake
             </Button>
           </RouteLink> */}
-            <CustomizedBreadcrumbs currentPage="Varslinger"/>
+            <CustomizedBreadcrumbs currentPage="Varslinger" />
             <HeadingXXLarge marginTop="0">Varslinger</HeadingXXLarge>
           </Block>
         </Block>
@@ -50,7 +47,7 @@ export const VarselPage = () => {
       >
         <Block maxWidth={maxPageWidth} width="100%">
           <Block paddingLeft={'100px'} paddingRight={'100px'} paddingTop={theme.sizing.scale800}>
-            <VarselTabs/>
+            <VarselTabs />
           </Block>
         </Block>
       </Block>
@@ -69,6 +66,7 @@ const VarselTabs = () => {
     (async () => {
       setLoading(true)
       if (tab !== 'utsendtMelding') {
+        ampli.logEvent('sidevisning', { side: 'Varsel side for admin', sidetittel: 'Opprett varsel melding for ' + tab })
         const response = await getMeldingByType(tab === 'SYSTEM' ? MeldingType.SYSTEM : MeldingType.FORSIDE)
         if (response.numberOfElements > 0) {
           setMelding(response.content[0])
@@ -89,17 +87,17 @@ const VarselTabs = () => {
         {
           key: 'utsendtMelding',
           title: 'Utsendte meldinger',
-          content: <AuditRecentTable show={true} tableType={ObjectType.Melding}/>,
+          content: <AuditRecentTable show={true} tableType={ObjectType.Melding} />,
         },
         {
           key: MeldingType.SYSTEM,
           title: 'Systemmelding',
-          content:<EditMelding melding={melding} setMelding={setMelding} isLoading={isLoading}/>,
+          content: <EditMelding melding={melding} setMelding={setMelding} isLoading={isLoading} />,
         },
         {
           key: MeldingType.FORSIDE,
           title: 'Informasjon på forsiden',
-          content:<EditMelding melding={melding} setMelding={setMelding} isLoading={isLoading} maxChar={500}/>,
+          content: <EditMelding melding={melding} setMelding={setMelding} isLoading={isLoading} maxChar={500} />,
         },
       ]}
     />
