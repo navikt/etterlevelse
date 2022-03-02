@@ -135,7 +135,7 @@ export const BehandlingerTemaPageV2 = () => {
 
   useEffect(() => {
     if(behandling && temaData) {
-      ampli.logEvent('sidevisning', { side: 'Tema side for behandlingen', sidetittel: `B${behandling.nummer.toString()} ${behandling.navn.toString()}`, section: `${temaData.shortName} tema` })
+      ampli.logEvent('sidevisning', { side: 'Tema side for behandlingen', sidetittel: `B${behandling.nummer.toString()} ${behandling.navn.toString()}`, section: `${temaData.shortName}` })
     }
   },[behandling])
 
