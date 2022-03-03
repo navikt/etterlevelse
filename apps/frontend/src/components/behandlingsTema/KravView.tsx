@@ -10,20 +10,20 @@ import {Section} from '../../pages/EtterlevelseDokumentasjonPage'
 import {toKravId} from './utils'
 
 export const KravView = (props: {
-  kravId?: KravId
-  etterlevelseId: string
+  kravId: KravId
   close: (e?: Etterlevelse) => void
   behandlingNavn: string
   behandlingId: string
   behandlingformaal: string
   behandlingNummer: number
   setIsAlertUnsavedModalOpen: (state: boolean) => void
+  setIsNavigateButtonClicked: (state: boolean) => void
   isAlertUnsavedModalOpen: boolean
   isNavigateButtonClicked: boolean
   tab: Section
   setTab: (s: Section) => void
 }) => {
-  const [etterlevelse] = useEtterlevelse(props.etterlevelseId, props.behandlingId, props.kravId)
+  const [etterlevelse] = useEtterlevelse('ny', props.behandlingId, props.kravId)
   const [varsleMelding, setVarsleMelding] = useState('')
 
   useEffect(() => {
