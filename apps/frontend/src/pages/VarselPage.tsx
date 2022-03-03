@@ -60,7 +60,7 @@ const VarselTabs = () => {
 
   const [tab, setTab] = useState<Section>(params.tab || 'utsendtMelding')
   const [isLoading, setLoading] = useState<boolean>(false)
-  const [melding, setMelding] = useState<Melding>(mapMeldingToFormValue({}))
+  const [melding, setMelding] = useState<Melding>()
 
   useEffect(() => {
     (async () => {
@@ -70,6 +70,8 @@ const VarselTabs = () => {
         const response = await getMeldingByType(tab === 'SYSTEM' ? MeldingType.SYSTEM : MeldingType.FORSIDE)
         if (response.numberOfElements > 0) {
           setMelding(response.content[0])
+        } else {
+          setMelding(mapMeldingToFormValue({meldingType: tab === 'SYSTEM' ? MeldingType.SYSTEM : MeldingType.FORSIDE}))
         }
       }
       setLoading(false)

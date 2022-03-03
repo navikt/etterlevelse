@@ -25,20 +25,19 @@ export const getAlertTypeText = (type: AlertType) => {
   }
 }
 
-export const EditMelding = ({ melding, setMelding, isLoading, maxChar }: { melding: Melding, setMelding: Function, isLoading: boolean, maxChar?: number }) => {
+export const EditMelding = ({ melding, setMelding, isLoading, maxChar }: { melding: Melding | undefined, setMelding: Function, isLoading: boolean, maxChar?: number }) => {
 
   const [disableEdit, setDisableEdit] = useState<boolean>(false)
   const [meldingAlertType, setMeldingAlertType] = useState<string>(AlertType.WARNING)
   const [radioHover, setRadioHover] = useState<string>('')
 
   useEffect(() => {
-    if (!isLoading) {
+    if (!isLoading && melding) {
       setMeldingAlertType(melding.alertType)
     }
   }, [isLoading])
 
   const submit = async (melding: Melding) => {
-    console.log(melding)
     setDisableEdit(true)
     if (melding.id) {
       await updateMelding(melding).then((m) => {
@@ -65,7 +64,7 @@ export const EditMelding = ({ melding, setMelding, isLoading, maxChar }: { meldi
 
   return (
     <Block>
-      <Formik
+      {melding && <Formik
         onSubmit={submit}
         initialValues={mapMeldingToFormValue(melding)}
         validateOnChange={false}
@@ -175,7 +174,7 @@ export const EditMelding = ({ melding, setMelding, isLoading, maxChar }: { meldi
             </Block>
           </Block>
         )}
-      </Formik>
+      </Formik>}
     </Block>
   )
 }
