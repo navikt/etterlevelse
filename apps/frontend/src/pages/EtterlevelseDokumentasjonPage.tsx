@@ -1,20 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import { Block, Display } from 'baseui/block'
-import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import { Block } from 'baseui/block'
+import { useNavigate, useParams } from 'react-router-dom'
 import { ettlevColors } from '../util/theme'
 import { codelist, ListName, TemaCode } from '../services/Codelist'
 import { useBehandling } from '../api/BehandlingApi'
 import { Layout2 } from '../components/scaffold/Page'
-import { Etterlevelse, EtterlevelseStatus, KravEtterlevelseData, KravQL, KravStatus, PageResponse } from '../constants'
-import { useQuery } from '@apollo/client'
-import { behandlingKravQuery, KravId } from '../api/KravApi'
+import {  KravId } from '../api/KravApi'
 import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
-import { Responsive } from 'baseui/theme'
-import { sortKraverByPriority } from '../util/sort'
 import _ from 'lodash'
-import { getAllKravPriority } from '../api/KravPriorityApi'
 import { Helmet } from 'react-helmet'
-import { Option } from 'baseui/select'
 import { getMainHeader } from './BehandlingPage'
 import { KravView } from "../components/behandlingsTema/KravView";
 import { SecondaryHeader } from "../components/behandlingsTema/SecondaryHeader";
@@ -97,7 +91,7 @@ export const EtterlevelseDokumentasjonPage = () => {
                 isAlertUnsavedModalOpen={isAlertUnsavedModalOpen}
                 isNavigateButtonClicked={isNavigateButtonClicked}
                 close={() => {
-                  navigate(`/behandling/${behandling.id}/${temaData?.shortName}`)
+                  navigate(`/behandling/${behandling.id}/${temaData?.code}`)
                 }}
                 tab={tab}
                 setTab={setTab}

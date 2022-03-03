@@ -40,6 +40,7 @@ type EditEttlevProps = {
   isNavigateButtonClicked: boolean
   tab: Section
   setTab: (s: Section) => void
+  tidligereEtterlevelser: Etterlevelse[] | undefined
 }
 
 export const EditEtterlevelseV2 = ({
@@ -56,6 +57,7 @@ export const EditEtterlevelseV2 = ({
   setIsAlertUnsavedModalOpen,
   isAlertUnsavedModalOpen,
   isNavigateButtonClicked,
+  tidligereEtterlevelser,
   tab,
   setTab
 }: EditEttlevProps) => {
@@ -70,13 +72,14 @@ export const EditEtterlevelseV2 = ({
   const [disableEdit, setDisableEdit] = React.useState<boolean>(false)
   const [editedEtterlevelse, setEditedEtterlevelse] = React.useState<Etterlevelse>()
   const etterlevelseFormRef: React.Ref<FormikProps<Etterlevelse> | undefined> = useRef()
+
   const [etterlevelseMetadata, setEtterlevelseMetadata] = useState<EtterlevelseMetadata>(mapEtterlevelseMetadataToFormValue({
     id: 'ny',
     behandlingId: behandlingId,
     kravNummer: kravId.kravNummer,
     kravVersjon: kravId.kravVersjon,
   }))
-  const [tidligereEtterlevelser, setTidligereEtterlevelser] = React.useState<Etterlevelse[]>()
+  
   const [isVersjonEndringerModalOpen, setIsVersjonEndringerModalOpen] = React.useState<boolean>(false)
 
   useEffect(() => {
@@ -94,12 +97,6 @@ export const EditEtterlevelseV2 = ({
             }))
           }
         })
-
-      if (behandlingId && kravId.kravNummer) {
-        const etterlevelser = await getEtterlevelserByBehandlingsIdKravNumber(behandlingId, kravId.kravNummer)
-        const etterlevelserList = etterlevelser.content.sort((a, b) => (a.kravVersjon > b.kravVersjon ? -1 : 1)).filter((e) => e.kravVersjon < etterlevelse.kravVersjon)
-        setTidligereEtterlevelser(etterlevelserList)
-      }
     })()
   }, [])
 
