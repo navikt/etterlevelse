@@ -9,7 +9,6 @@ import { apolloClient } from './api/ApolloClient'
 import Header from './components/Header'
 import { Footer } from './components/Navigation/Footer'
 import AppRoutes from './AppRoutes'
-import { ampli } from './services/Amplitude'
 import { codelist } from './services/Codelist'
 import { useAwait, useAwaitUser } from './util/hooks'
 import { useNetworkStatus } from './util/network'
@@ -25,7 +24,6 @@ const containerProps = {
 }
 
 // ampli.logEvent('sidevisning', { sidetittel: 'Etterlevelse' })
-
 
 const Main = (props) => {
   const { history } = props

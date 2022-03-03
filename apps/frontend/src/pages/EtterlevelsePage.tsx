@@ -11,6 +11,7 @@ import { ettlevColors, maxPageWidth, pageWidth, responsivePaddingSmall, responsi
 import { getKravByKravNumberAndVersion } from '../api/KravApi'
 import CustomizedBreadcrumbs, { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 import { Helmet } from 'react-helmet'
+import { ampli } from '../services/Amplitude'
 
 export const etterlevelseName = (etterlevelse: Etterlevelse) => `${kravNumView(etterlevelse)}`
 
@@ -48,6 +49,9 @@ export const EtterlevelsePage = () => {
 
   useEffect(() => {
     etterlevelse && getKravByKravNumberAndVersion(etterlevelse?.kravNummer, etterlevelse?.kravVersjon).then(setKrav)
+    if (etterlevelse) {
+      ampli.logEvent('sidevisning', { side: 'Etterlevelse side', sidetittel: `Etterlevelse: K${etterlevelse.kravNummer.toString()}.${etterlevelse.kravVersjon.toString()} ${krav?.navn}` })
+    }
   }, [etterlevelse])
 
   const breadcrumbPaths: breadcrumbPaths[] = [

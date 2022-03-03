@@ -1,22 +1,24 @@
-import {Block} from 'baseui/block'
-import {Pagination} from 'baseui/pagination'
+import { Block } from 'baseui/block'
+import { Pagination } from 'baseui/pagination'
 
-import {HeadingXXLarge, Paragraph2} from 'baseui/typography'
+import { HeadingXXLarge, Paragraph2 } from 'baseui/typography'
 import moment from 'moment'
-import {ReactElement, useEffect, useState} from 'react'
-import {Helmet} from 'react-helmet'
-import {getKravPage, kravMapToFormVal} from '../api/KravApi'
-import {getTilbakemeldingForKrav} from '../api/TilbakemeldingApi'
-import {PersonName} from '../components/common/PersonName'
+import { ReactElement, useEffect, useState } from 'react'
+import { Helmet } from 'react-helmet'
+import { getKravPage, kravMapToFormVal } from '../api/KravApi'
+import { getTilbakemeldingForKrav } from '../api/TilbakemeldingApi'
+import { PersonName } from '../components/common/PersonName'
 import RouteLink from '../components/common/RouteLink'
-import {Cell, Row, Table} from '../components/common/Table'
-import {tilbakeMeldingStatus} from '../components/krav/tilbakemelding/Tilbakemelding'
-import {Layout2} from '../components/scaffold/Page'
-import {emptyPage, Krav, PageResponse, Tilbakemelding} from '../constants'
-import {ColumnCompares} from '../util/hooks'
-import {intl} from '../util/intl/intl'
-import {ettlevColors, maxPageWidth} from '../util/theme'
-import {codelist, ListName} from "../services/Codelist";
+import { Cell, Row, Table } from '../components/common/Table'
+import { tilbakeMeldingStatus } from '../components/krav/tilbakemelding/Tilbakemelding'
+import { Layout2 } from '../components/scaffold/Page'
+import { emptyPage, Krav, PageResponse, Tilbakemelding } from '../constants'
+import { ColumnCompares } from '../util/hooks'
+import { intl } from '../util/intl/intl'
+import { ettlevColors, maxPageWidth } from '../util/theme'
+import { codelist, ListName } from "../services/Codelist";
+import { ampli } from '../services/Amplitude'
+
 
 type SporsmaalOgSvarKrav = {
   kravNavn: string
@@ -40,6 +42,9 @@ export const SpørsmålOgSvarLogPage = () => {
   const [kravMessages, setKravMessages] = useState<KravMessage[]>([])
   const [page, setPage] = useState(1)
 
+  ampli.logEvent('sidevisning', { side: 'Log side for spørsmål og svar', sidetittel: 'Spørsmål og svar' })
+
+
   const handlePageChange = (nextPage: number) => {
     if (nextPage < 1) {
       return
@@ -51,7 +56,7 @@ export const SpørsmålOgSvarLogPage = () => {
   }
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       const kraver = await getKravPage(page - 1, 20)
       const mappedKraver = kraver.content.map((k) => kravMapToFormVal(k))
       setTableContent({ ...kraver, content: mappedKraver })
@@ -139,7 +144,7 @@ export const SpørsmålOgSvarLogPage = () => {
                   <Cell $style={{ maxWidth: '25%', minWidth: '25%' }}>
                     <RouteLink href={`/krav/${t.kravNummer}/${t.kravVersjon}?tilbakemeldingId=${t.id}`}>{t.kravNavn}</RouteLink>
                   </Cell>
-                  <Cell>{codelist.getCode(ListName.TEMA,t.tema)?.shortName}</Cell>
+                  <Cell>{codelist.getCode(ListName.TEMA, t.tema)?.shortName}</Cell>
                   <Cell>{t.melderNavn}</Cell>
                   <Cell>{moment(t.tidForSpørsmål).format('lll')}</Cell>
                   <Cell>

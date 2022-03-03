@@ -1,6 +1,6 @@
 import { Block } from 'baseui/block'
 import { H2, LabelSmall } from 'baseui/typography'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useEtterlevelsePage } from '../api/EtterlevelseApi'
 import Button from '../components/common/Button'
 import { theme } from '../util'
@@ -10,9 +10,16 @@ import { Spinner } from '../components/common/Spinner'
 import { user } from '../services/User'
 import { maxPageWidth, pageWidth, responsivePaddingSmall, responsiveWidthSmall } from '../util/theme'
 import { Helmet } from 'react-helmet'
+import { ampli } from '../services/Amplitude'
 
 export const EtterlevelseListPage = () => {
   const [etterlevelse, prev, next, loading] = useEtterlevelsePage(20)
+
+  useEffect(() => {
+    if (!loading) {
+      ampli.logEvent('sidevisning', { side: 'Dokumentasjons liste for etterlevelse' })
+    }
+  }, [loading])
 
   return (
     <Block id="content" overrides={{ Block: { props: { role: 'main' } } }} maxWidth={maxPageWidth} width="100%">

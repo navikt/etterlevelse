@@ -5,8 +5,12 @@ import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
 import { Block } from 'baseui/block'
 import { ExternalLink } from '../components/common/RouteLink'
 import { Helmet } from 'react-helmet'
+import { ampli } from '../services/Amplitude'
 
 export const FAQ = () => {
+
+  ampli.logEvent('sidevisning', { side: 'FAQ side', sidetittel: 'Om Støtte til etterlevelse' })
+
   return (
     <Block width="100%" paddingBottom={'200px'} id="content" overrides={{ Block: { props: { role: 'main' } } }}>
       <Helmet>

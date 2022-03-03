@@ -26,6 +26,7 @@ import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 import { sortKraverByPriority } from '../util/sort'
 import { getAllKravPriority } from '../api/KravPriorityApi'
 import { Helmet } from 'react-helmet'
+import { ampli } from '../services/Amplitude'
 
 export const TemaPage = () => {
   const { tema } = useParams<{ tema: string }>()
@@ -97,6 +98,9 @@ const TemaSide = ({ tema }: { tema: TemaCode }) => {
   const [expand, setExpand] = useState(false)
   const [kravList, setKravList] = useState<Krav[]>([])
 
+  ampli.logEvent('sidevisning', { side: 'Tema side', sidetittel: tema.shortName })
+
+
   const breadcrumbPaths: breadcrumbPaths[] = [
     {
       pathName: 'Forstå kravene',
@@ -106,7 +110,7 @@ const TemaSide = ({ tema }: { tema: TemaCode }) => {
 
   useEffect(() => {
     if (data && data.krav && data.krav.content && data.krav.content.length > 0) {
-      ;(async () => {
+      ; (async () => {
         const allKravPriority = await getAllKravPriority()
         const kraver = _.cloneDeep(data.krav.content)
         kraver.map((k) => {
@@ -161,6 +165,9 @@ const TemaListe = () => {
   const [num] = useState<{ [t: string]: number }>({})
   const update = useForceUpdate()
   const visFilter = false // feature toggled
+
+  ampli.logEvent('sidevisning', { side: 'Tema side' })
+
 
   const onClickFilter = (nyVerdi: string) => {
     if (relevans.indexOf(nyVerdi) >= 0) {

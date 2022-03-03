@@ -32,6 +32,7 @@ import CustomizedBreadcrumbs, { breadcrumbPaths } from '../components/common/Cus
 import { codelist, ListName, TemaCode } from '../services/Codelist'
 import { Helmet } from 'react-helmet'
 import Etterlevelser from '../components/krav/Etterlevelser'
+import { ampli } from '../services/Amplitude'
 
 export const kravNumView = (it: { kravVersjon: number; kravNummer: number }) => `K${it.kravNummer}.${it.kravVersjon}`
 export const kravName = (krav: Krav) => `${kravNumView(krav)} ${krav.navn}`
@@ -78,6 +79,9 @@ export const KravPage = () => {
 
   React.useEffect(() => {
     if (krav) {
+      
+      ampli.logEvent('sidevisning', { side: 'Krav side', sidetittel: `${kravNumView({ kravNummer: krav?.kravNummer, kravVersjon: krav?.kravVersjon })} ${krav.navn}` })
+
       getKravByKravNummer(krav.kravNummer).then((resp) => {
         if (resp.content.length) {
           const alleVersjoner = resp.content

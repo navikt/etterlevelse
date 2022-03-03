@@ -24,6 +24,8 @@ import { borderWidth } from '../components/common/Style'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Helmet } from 'react-helmet'
+import { ampli } from '../services/Amplitude'
+
 
 type Section = 'mine' | 'siste' | 'alle'
 
@@ -35,43 +37,48 @@ type CustomTeamObject = BehandlingCount & Team
 
 const tabMarginBottom = '48px'
 
-export const MyBehandlingerPage = () => (
-  <Block width="100%" paddingBottom={'200px'} id="content" overrides={{ Block: { props: { role: 'main' } } }}>
-    <Helmet>
-      <meta charSet="utf-8" />
-      <title>Dokumentere etterlevelse</title>
-    </Helmet>
-    <Block width="100%" backgroundColor={ettlevColors.grey50} display={'flex'} justifyContent={'center'}>
-      <Block maxWidth={maxPageWidth} width="100%">
-        <Block paddingLeft={'100px'} paddingRight={'100px'} paddingTop={theme.sizing.scale800}>
-          {/* <RouteLink hideUnderline>
+export const MyBehandlingerPage = () => {
+
+  ampli.logEvent('sidevisning', { side: 'Side for Behandlinger', sidetittel: 'Dokumentere etterlevelse' })
+
+  return (
+    <Block width="100%" paddingBottom={'200px'} id="content" overrides={{ Block: { props: { role: 'main' } } }}>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Dokumentere etterlevelse</title>
+      </Helmet>
+      <Block width="100%" backgroundColor={ettlevColors.grey50} display={'flex'} justifyContent={'center'}>
+        <Block maxWidth={maxPageWidth} width="100%">
+          <Block paddingLeft={'100px'} paddingRight={'100px'} paddingTop={theme.sizing.scale800}>
+            {/* <RouteLink hideUnderline>
             <Button startEnhancer={<img alt={'Chevron venstre ikon'} src={navChevronRightIcon} style={{ transform: 'rotate(180deg)' }} />} size="compact" kind="tertiary">
               {' '}
               Tilbake
             </Button>
           </RouteLink> */}
-          <CustomizedBreadcrumbs currentPage="Dokumentere etterlevelse" />
-          <HeadingXXLarge marginTop="0">Dokumentere etterlevelse</HeadingXXLarge>
+            <CustomizedBreadcrumbs currentPage="Dokumentere etterlevelse" />
+            <HeadingXXLarge marginTop="0">Dokumentere etterlevelse</HeadingXXLarge>
+          </Block>
         </Block>
       </Block>
-    </Block>
 
-    <Block
-      display={'flex'}
-      justifyContent="center"
-      width="100%"
-      $style={{
-        background: `linear-gradient(top, ${ettlevColors.grey50} 80px, ${ettlevColors.grey25} 0%)`,
-      }}
-    >
-      <Block maxWidth={maxPageWidth} width="100%">
-        <Block paddingLeft={'100px'} paddingRight={'100px'} paddingTop={theme.sizing.scale800}>
-          <BehandlingTabs />
+      <Block
+        display={'flex'}
+        justifyContent="center"
+        width="100%"
+        $style={{
+          background: `linear-gradient(top, ${ettlevColors.grey50} 80px, ${ettlevColors.grey25} 0%)`,
+        }}
+      >
+        <Block maxWidth={maxPageWidth} width="100%">
+          <Block paddingLeft={'100px'} paddingRight={'100px'} paddingTop={theme.sizing.scale800}>
+            <BehandlingTabs />
+          </Block>
         </Block>
       </Block>
     </Block>
-  </Block>
-)
+  )
+}
 
 const BehandlingTabs = () => {
   const params = useParams<{ tab?: Section }>()
@@ -323,7 +330,7 @@ const Alle = () => {
             // EndEnhancer: {style: {marginLeft: theme.sizing.scale400, paddingLeft: 0, paddingRight: 0, backgroundColor: ettlevColors.black}}
           }}
           startEnhancer={<img src={searchIcon} alt="Søk ikon" />}
-          // endEnhancer={<img aria-hidden alt={'Søk ikon'} src={sokButtonIcon} />}
+        // endEnhancer={<img aria-hidden alt={'Søk ikon'} src={sokButtonIcon} />}
         />
         {tooShort && (
           <LabelSmall color={ettlevColors.error400} alignSelf={'flex-end'} marginTop={theme.sizing.scale200}>

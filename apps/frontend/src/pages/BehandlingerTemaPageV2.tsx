@@ -24,6 +24,7 @@ import { SecondaryHeader } from "../components/behandlingsTema/SecondaryHeader";
 import { KravList } from "../components/behandlingsTema/KravList";
 import { user } from '../services/User'
 import { loginUrl } from '../components/Header'
+import { ampli } from '../services/Amplitude'
 
 const responsiveBreakPoints: Responsive<Display> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
 const responsiveDisplay: Responsive<Display> = ['block', 'block', 'block', 'block', 'flex', 'flex']
@@ -131,6 +132,12 @@ export const BehandlingerTemaPageV2 = () => {
   //     navigate(loginUrl(location, location.pathname))
   //   }
   // },[])
+
+  useEffect(() => {
+    if(behandling && temaData) {
+      ampli.logEvent('sidevisning', { side: 'Tema side for behandlingen', sidetittel: `B${behandling.nummer.toString()} ${behandling.navn.toString()}`, section: `${temaData.shortName}` })
+    }
+  },[behandling])
 
   useEffect(() => {
     (async () => {
