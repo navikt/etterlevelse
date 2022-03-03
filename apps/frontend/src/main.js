@@ -23,6 +23,7 @@ const containerProps = {
   width: '100%',
 }
 
+// ampli.logEvent('sidevisning', { sidetittel: 'Etterlevelse' })
 
 const Main = (props) => {
   const { history } = props

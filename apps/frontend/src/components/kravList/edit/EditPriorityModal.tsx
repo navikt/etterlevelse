@@ -233,7 +233,7 @@ export const EditPriorityModal = (props: { isOpen: boolean; onClose: Function; k
               }}
               disabled={loading}
             >
-              Abryt
+              Avbryt
             </Button>
             <Button size="compact" onClick={p.submitForm} disabled={loading} marginLeft>
               Lagre
