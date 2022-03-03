@@ -1,28 +1,28 @@
-import React, {useEffect, useState} from 'react'
-import {Block, Display} from 'baseui/block'
-import {useLocation, useNavigate, useParams} from 'react-router-dom'
-import {H3, Paragraph2} from 'baseui/typography'
-import {ettlevColors} from '../util/theme'
-import {codelist, ListName, TemaCode} from '../services/Codelist'
-import {useBehandling} from '../api/BehandlingApi'
-import {Layout2} from '../components/scaffold/Page'
-import {Etterlevelse, EtterlevelseStatus, KravEtterlevelseData, KravQL, KravStatus, PageResponse} from '../constants'
-import {useQuery} from '@apollo/client'
-import {CustomizedAccordion, CustomizedPanel} from '../components/common/CustomizedAccordion'
-import {behandlingKravQuery, KravId} from '../api/KravApi'
-import {breadcrumbPaths} from '../components/common/CustomizedBreadcrumbs'
-import {Responsive} from 'baseui/theme'
-import {KravPanelHeader, KravPanelHeaderWithSorting} from '../components/behandling/KravPanelHeader'
-import {sortKraverByPriority} from '../util/sort'
+import React, { useEffect, useState } from 'react'
+import { Block, Display } from 'baseui/block'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import { H3, Paragraph2 } from 'baseui/typography'
+import { ettlevColors } from '../util/theme'
+import { codelist, ListName, TemaCode } from '../services/Codelist'
+import { useBehandling } from '../api/BehandlingApi'
+import { Layout2 } from '../components/scaffold/Page'
+import { Etterlevelse, EtterlevelseStatus, KravEtterlevelseData, KravQL, KravStatus, PageResponse } from '../constants'
+import { useQuery } from '@apollo/client'
+import { CustomizedAccordion, CustomizedPanel } from '../components/common/CustomizedAccordion'
+import { behandlingKravQuery, KravId } from '../api/KravApi'
+import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
+import { Responsive } from 'baseui/theme'
+import { KravPanelHeader, KravPanelHeaderWithSorting } from '../components/behandling/KravPanelHeader'
+import { sortKraverByPriority } from '../util/sort'
 import _ from 'lodash'
-import {getAllKravPriority} from '../api/KravPriorityApi'
-import {Helmet} from 'react-helmet'
-import {Option} from 'baseui/select'
-import {getMainHeader} from './BehandlingPage'
-import {KravView} from "../components/behandlingsTema/KravView";
-import {SecondaryHeader} from "../components/behandlingsTema/SecondaryHeader";
-import {KravList} from "../components/behandlingsTema/KravList";
-import {ampli} from '../services/Amplitude'
+import { getAllKravPriority } from '../api/KravPriorityApi'
+import { Helmet } from 'react-helmet'
+import { Option } from 'baseui/select'
+import { getMainHeader } from './BehandlingPage'
+import { KravView } from "../components/behandlingsTema/KravView";
+import { SecondaryHeader } from "../components/behandlingsTema/SecondaryHeader";
+import { KravList } from "../components/behandlingsTema/KravList";
+import { ampli } from '../services/Amplitude'
 
 const responsiveBreakPoints: Responsive<Display> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
 const responsiveDisplay: Responsive<Display> = ['block', 'block', 'block', 'block', 'flex', 'flex']
@@ -40,11 +40,8 @@ export const isFerdigUtfylt = (status: EtterlevelseStatus | undefined) => {
   return status === EtterlevelseStatus.FERDIG_DOKUMENTERT || status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT
 }
 
-export type Section = 'dokumentasjon' | 'etterlevelser' | 'tilbakemeldinger'
-
-
 export const BehandlingerTemaPageV2 = () => {
-  const params = useParams<{ id?: string; tema?: string , kravNummer?:string, kravVersjon?: string}>()
+  const params = useParams<{ id?: string; tema?: string }>()
   const temaData: TemaCode | undefined = codelist.getCode(ListName.TEMA, params.tema?.replace('i', ''))
   const irrelevantKrav = params?.tema?.charAt(0) === 'i' ? true : false
   const [behandling, setBehandling] = useBehandling(params.id)
@@ -67,25 +64,13 @@ export const BehandlingerTemaPageV2 = () => {
   const [kravData, setKravData] = useState<KravEtterlevelseData[]>([])
   const [irrelevantKravData, setIrrelevantKravData] = useState<KravEtterlevelseData[]>([])
 
-  const [activeEtterlevleseStatus, setActiveEtterlevelseStatus] = useState<EtterlevelseStatus | undefined>()
-
-  const [edit, setEdit] = useState<string | undefined>()
-  const [kravId, setKravId] = useState<KravId | undefined>()
   const [isExpanded, setIsExpanded] = useState<boolean>(false)
   const sortingOptions = [
     { label: 'Anbefalt rekkefølge', id: 'priority' },
     { label: 'Sist endret av meg', id: 'lastModified' },
   ]
   const [sorting, setSorting] = useState<readonly Option[]>([sortingOptions[0]])
-  const [isTemaModalOpen, setIsTemaModalOpen] = useState<boolean>(false)
-  const [isAlertUnsavedModalOpen, setIsAlertUnsavedModalOpen] = useState<boolean>(false)
-  const [isNavigateButtonClicked, setIsNavigateButtonClicked] = useState<boolean>(false)
-  const [tab, setTab] = useState<Section>('dokumentasjon')
-  const navigate = useNavigate()
-  const location = useLocation()
 
-  console.log(params.kravNummer)
-  console.log(params.kravVersjon)
   const filterKrav = async (kravList?: KravQL[], filterFerdigDokumentert?: boolean) => {
 
     const allKravPriority = await getAllKravPriority()
@@ -133,10 +118,10 @@ export const BehandlingerTemaPageV2 = () => {
   // },[])
 
   useEffect(() => {
-    if(behandling && temaData) {
+    if (behandling && temaData) {
       ampli.logEvent('sidevisning', { side: 'Tema side for behandlingen', sidetittel: `B${behandling.nummer.toString()} ${behandling.navn.toString()}`, section: `${temaData.shortName}` })
     }
-  },[behandling])
+  }, [behandling])
 
   useEffect(() => {
     (async () => {
@@ -170,11 +155,6 @@ export const BehandlingerTemaPageV2 = () => {
     })()
   }, [irrelevantData, kravData])
 
-  const update = (etterlevelse: Etterlevelse) => {
-    setKravData(kravData.map((e) => (e.kravVersjon === etterlevelse.kravVersjon && e.kravNummer === etterlevelse.kravNummer ? { ...e, ...mapEtterlevelseData(etterlevelse) } : e)))
-  }
-
-
   const breadcrumbPaths: breadcrumbPaths[] = [
     {
       pathName: 'Dokumenter etterlevelse',
@@ -199,18 +179,8 @@ export const BehandlingerTemaPageV2 = () => {
           )}
           secondaryHeaderBackgroundColor={ettlevColors.green100}
           secondaryHeader={<SecondaryHeader
-            edit={edit}
             behandling={behandling}
-            setEdit={setEdit}
-            navigate={navigate}
-            setIsAlertUnsavedModalOpen={setIsAlertUnsavedModalOpen}
-            activeEtterlevleseStatus={activeEtterlevleseStatus}
-            isTemaModalOpen={isTemaModalOpen}
             lovListe={lovListe}
-            setIsNavigateButtonClicked={setIsNavigateButtonClicked}
-            setIsTemaModalOpen={setIsTemaModalOpen}
-            tab={tab}
-            setTab={setTab}
             temaData={temaData}
           />}
           childrenBackgroundColor={ettlevColors.grey25}
@@ -218,7 +188,7 @@ export const BehandlingerTemaPageV2 = () => {
           breadcrumbPaths={breadcrumbPaths}
         >
           <Block display="flex" width="100%" justifyContent="space-between" flexWrap marginBottom="64px">
-            {!edit && <Block width="100%">
+            <Block width="100%">
               <Block
                 $style={{
                   backgroundColor: ettlevColors.white,
@@ -235,10 +205,6 @@ export const BehandlingerTemaPageV2 = () => {
                   sorting={sorting}
                   sortingOptions={sortingOptions}
                   behandling={behandling}
-                  setActiveEtterlevelseStatus={setActiveEtterlevelseStatus}
-                  setEdit={setEdit}
-                  setKravId={setKravId}
-                  edit={edit}
                 />
               </Block>
               {irrelevantKravData.length > 0 && (
@@ -263,11 +229,7 @@ export const BehandlingerTemaPageV2 = () => {
                           sorting={sorting}
                           sortingOptions={sortingOptions}
                           behandling={behandling}
-                          setActiveEtterlevelseStatus={setActiveEtterlevelseStatus}
-                          setEdit={setEdit}
-                          setKravId={setKravId}
                           noStatus={true}
-                          edit={edit}
                           noVarsling={true}
                         />
                       </CustomizedPanel>
@@ -275,26 +237,7 @@ export const BehandlingerTemaPageV2 = () => {
                   </Block>
                 </Block>
               )}
-            </Block>}
-            {edit && behandling && params.kravNummer && params.kravVersjon && (
-              <KravView
-                behandlingNavn={behandling.navn}
-                etterlevelseId={edit}
-                behandlingId={behandling.id}
-                behandlingformaal={behandling.overordnetFormaal.shortName || ''}
-                behandlingNummer={behandling.nummer || 0}
-                kravId={kravId}
-                setIsAlertUnsavedModalOpen={setIsAlertUnsavedModalOpen}
-                isAlertUnsavedModalOpen={isAlertUnsavedModalOpen}
-                isNavigateButtonClicked={isNavigateButtonClicked}
-                close={(e) => {
-                  setEdit(undefined)
-                  e && update(e)
-                }}
-                tab={tab}
-                setTab={setTab}
-              />
-            )}
+            </Block>
           </Block>
         </Layout2>
       )}

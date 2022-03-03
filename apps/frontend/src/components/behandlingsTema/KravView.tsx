@@ -1,13 +1,13 @@
-import {getKravByKravNumberAndVersion, KravId} from "../../api/KravApi";
-import {Etterlevelse} from "../../constants";
-import {useEtterlevelse} from "../../api/EtterlevelseApi";
-import React, {useEffect, useState} from "react";
-import {Block} from "baseui/block";
-import {Spinner} from "../common/Spinner";
-import {theme} from "../../util";
-import {EditEtterlevelseV2} from "../etterlevelse/EditEtterlevelseV2";
-import {Section} from "../../pages/BehandlingerTemaPageV2";
-import {toKravId} from "./utils";
+import {getKravByKravNumberAndVersion, KravId} from '../../api/KravApi'
+import {Etterlevelse} from '../../constants'
+import {useEtterlevelse} from '../../api/EtterlevelseApi'
+import React, {useEffect, useState} from 'react'
+import {Block} from 'baseui/block'
+import {Spinner} from '../common/Spinner'
+import {theme} from '../../util'
+import {EditEtterlevelseV2} from '../etterlevelse/EditEtterlevelseV2'
+import {Section} from '../../pages/EtterlevelseDokumentasjonPage'
+import {toKravId} from './utils'
 
 export const KravView = (props: {
   kravId?: KravId

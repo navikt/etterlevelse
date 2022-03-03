@@ -1,33 +1,28 @@
-import {EtterlevelseMetadata, KravEtterlevelseData} from "../../constants";
-import React, {useEffect, useState} from "react";
-import {getEtterlevelseMetadataByBehandlingsIdAndKravNummerAndKravVersion, mapEtterlevelseMetadataToFormValue} from "../../api/EtterlevelseMetadataApi";
-import {Block} from "baseui/block";
-import Button from "../common/Button";
-import {ettlevColors} from "../../util/theme";
-import {borderStyle} from "../common/Style";
-import {toKravId} from "./utils";
-import {Label3, Paragraph4} from "baseui/typography";
-import StatusView from "../common/StatusTag";
-import {getEtterlevelseStatus, getEtterlevelseStatusLabelColor} from "../behandling/utils";
-import moment from "moment";
-import TildeltPopoever from "../etterlevelseMetadata/TildeltPopover";
-import {isFerdigUtfylt} from "../../pages/BehandlingerTemaPageV2";
-import {faEllipsisVertical} from "@fortawesome/free-solid-svg-icons";
-import {arkCheckIcon, arkPennIcon, warningAlert} from "../Images";
-import {getEtterlevelserByBehandlingsIdKravNumber} from "../../api/EtterlevelseApi";
-import {useLocation, useNavigate} from "react-router-dom";
+import {EtterlevelseMetadata, KravEtterlevelseData} from '../../constants';
+import React, {useEffect, useState} from 'react';
+import {getEtterlevelseMetadataByBehandlingsIdAndKravNummerAndKravVersion, mapEtterlevelseMetadataToFormValue} from '../../api/EtterlevelseMetadataApi';
+import {Block} from 'baseui/block';
+import Button from '../common/Button';
+import {ettlevColors} from '../../util/theme';
+import {borderStyle} from '../common/Style';
+import {toKravId} from './utils';
+import {Label3, Paragraph4} from 'baseui/typography';
+import StatusView from '../common/StatusTag';
+import {getEtterlevelseStatus, getEtterlevelseStatusLabelColor} from '../behandling/utils';
+import moment from 'moment';
+import TildeltPopoever from '../etterlevelseMetadata/TildeltPopover';
+import {isFerdigUtfylt} from '../../pages/BehandlingerTemaPageV2';
+import {faEllipsisVertical} from '@fortawesome/free-solid-svg-icons';
+import {arkCheckIcon, arkPennIcon, warningAlert} from '../Images';
+import {getEtterlevelserByBehandlingsIdKravNumber} from '../../api/EtterlevelseApi';
+import {useLocation, useNavigate} from 'react-router-dom';
 
 export const KravCard = (props: {
   krav: KravEtterlevelseData,
-  setEdit: Function,
-  setKravId: Function,
   noStatus?: boolean,
-  setActiveEtterlevelseStatus: Function,
   behandlingId: string,
-  edit: string | undefined
   noVarsling?: boolean
 }) => {
-  const ferdigUtfylt = isFerdigUtfylt(props.krav.etterlevelseStatus)
   const [nyVersionFlag, setNyVersionFlag] = useState<boolean>(false)
   const [hover, setHover] = useState(false)
   const navigate = useNavigate()
@@ -39,6 +34,8 @@ export const KravCard = (props: {
     kravNummer: props.krav.kravNummer,
     kravVersjon: props.krav.kravVersjon,
   }))
+
+  
   const getEtterlevelseMetaData = () => {
     getEtterlevelseMetadataByBehandlingsIdAndKravNummerAndKravVersion(props.behandlingId, props.krav.kravNummer, props.krav.kravVersjon)
       .then((resp) => {
@@ -63,13 +60,6 @@ export const KravCard = (props: {
       }
     })()
   }, [])
-
-
-  useEffect(() => {
-    ;(async () => {
-      getEtterlevelseMetaData()
-    })()
-  }, [props.edit])
 
   return (
     <Block
@@ -101,15 +91,7 @@ export const KravCard = (props: {
             boxShadow: '',
           }}
           onClick={() => {
-            if (!props.krav.etterlevelseId) {
-              props.setKravId(toKravId(props.krav))
-              props.setEdit('ny')
-              props.setActiveEtterlevelseStatus(undefined)
-            } else {
-              props.setActiveEtterlevelseStatus(props.krav.etterlevelseStatus)
-              props.setEdit(props.krav.etterlevelseId)
-            }
-            navigate(location.pathname + "/krav/" + props.krav.kravNummer + "/" + props.krav.kravVersjon, {replace: true})
+            navigate(location.pathname + '/krav/' + props.krav.kravNummer + '/' + props.krav.kravVersjon, {replace: true})
           }}
         >
           <Block display="flex" justifyContent="center" alignItems="center" width="100%" onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
@@ -117,7 +99,7 @@ export const KravCard = (props: {
               {isFerdigUtfylt(props.krav.etterlevelseStatus) ? <img src={arkCheckIcon} alt=""/> : <img src={arkPennIcon} alt=""/>}
             </Block>
             <Block marginLeft="14px">
-              <Block display={"flex"} alignItems={"center"}>
+              <Block display={'flex'} alignItems={'center'}>
                 <Paragraph4
                   $style={{fontSize: '16px', lineHeight: '24px', marginBottom: '0px', marginTop: '0px', width: 'fit-content', textDecoration: hover ? 'underline' : 'none'}}>
                   K{props.krav.kravNummer}.{props.krav.kravVersjon}

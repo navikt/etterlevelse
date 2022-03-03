@@ -18,10 +18,6 @@ type KravListProps = {
   sorting: readonly Option[]
   sortingOptions: Option[]
   behandling: Behandling
-  setActiveEtterlevelseStatus: React.Dispatch<React.SetStateAction<EtterlevelseStatus | undefined>>
-  setEdit: React.Dispatch<React.SetStateAction<string | undefined>>
-  setKravId: React.Dispatch<React.SetStateAction<KravId | undefined>>
-  edit: string | undefined
   noVarsling?: boolean
 }
 
@@ -33,10 +29,6 @@ export const KravList = ({
   sorting,
   sortingOptions,
   behandling,
-  setActiveEtterlevelseStatus,
-  setKravId,
-  setEdit,
-  edit,
   noVarsling
 }: KravListProps) => {
   if (kravList.length) {
@@ -63,14 +55,10 @@ export const KravList = ({
           return (
             <CustomPanelDivider key={`${k.navn}_${k.kravNummer}_${k.kravVersjon}`}>
               <KravCard
-                setActiveEtterlevelseStatus={setActiveEtterlevelseStatus}
                 krav={k}
-                setEdit={setEdit}
-                setKravId={setKravId}
                 key={`${k.navn}_${k.kravNummer}_${k.kravVersjon}_card`}
                 noStatus={noStatus}
                 behandlingId={behandling.id}
-                edit={edit}
                 noVarsling={noVarsling}
               />
             </CustomPanelDivider>
