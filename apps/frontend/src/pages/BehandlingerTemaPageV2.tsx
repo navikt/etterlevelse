@@ -1,30 +1,28 @@
-import React, { useEffect, useState } from 'react'
-import { Block, Display } from 'baseui/block'
-import { useLocation, useNavigate, useParams } from 'react-router-dom'
-import { H3, Paragraph2 } from 'baseui/typography'
-import { ettlevColors } from '../util/theme'
-import { codelist, ListName, TemaCode } from '../services/Codelist'
-import { useBehandling } from '../api/BehandlingApi'
-import { Layout2 } from '../components/scaffold/Page'
-import { Etterlevelse, EtterlevelseStatus, KravEtterlevelseData, KravQL, KravStatus, PageResponse } from '../constants'
-import { useQuery } from '@apollo/client'
-import { CustomizedAccordion, CustomizedPanel } from '../components/common/CustomizedAccordion'
-import { behandlingKravQuery, KravId } from '../api/KravApi'
-import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
-import { Responsive } from 'baseui/theme'
-import { KravPanelHeader, KravPanelHeaderWithSorting } from '../components/behandling/KravPanelHeader'
-import { sortKraverByPriority } from '../util/sort'
+import React, {useEffect, useState} from 'react'
+import {Block, Display} from 'baseui/block'
+import {useLocation, useNavigate, useParams} from 'react-router-dom'
+import {H3, Paragraph2} from 'baseui/typography'
+import {ettlevColors} from '../util/theme'
+import {codelist, ListName, TemaCode} from '../services/Codelist'
+import {useBehandling} from '../api/BehandlingApi'
+import {Layout2} from '../components/scaffold/Page'
+import {Etterlevelse, EtterlevelseStatus, KravEtterlevelseData, KravQL, KravStatus, PageResponse} from '../constants'
+import {useQuery} from '@apollo/client'
+import {CustomizedAccordion, CustomizedPanel} from '../components/common/CustomizedAccordion'
+import {behandlingKravQuery, KravId} from '../api/KravApi'
+import {breadcrumbPaths} from '../components/common/CustomizedBreadcrumbs'
+import {Responsive} from 'baseui/theme'
+import {KravPanelHeader, KravPanelHeaderWithSorting} from '../components/behandling/KravPanelHeader'
+import {sortKraverByPriority} from '../util/sort'
 import _ from 'lodash'
-import { getAllKravPriority } from '../api/KravPriorityApi'
-import { Helmet } from 'react-helmet'
-import { Option } from 'baseui/select'
-import { getMainHeader } from './BehandlingPage'
-import { KravView } from "../components/behandlingsTema/KravView";
-import { SecondaryHeader } from "../components/behandlingsTema/SecondaryHeader";
-import { KravList } from "../components/behandlingsTema/KravList";
-import { user } from '../services/User'
-import { loginUrl } from '../components/Header'
-import { ampli } from '../services/Amplitude'
+import {getAllKravPriority} from '../api/KravPriorityApi'
+import {Helmet} from 'react-helmet'
+import {Option} from 'baseui/select'
+import {getMainHeader} from './BehandlingPage'
+import {KravView} from "../components/behandlingsTema/KravView";
+import {SecondaryHeader} from "../components/behandlingsTema/SecondaryHeader";
+import {KravList} from "../components/behandlingsTema/KravList";
+import {ampli} from '../services/Amplitude'
 
 const responsiveBreakPoints: Responsive<Display> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
 const responsiveDisplay: Responsive<Display> = ['block', 'block', 'block', 'block', 'flex', 'flex']
@@ -46,7 +44,7 @@ export type Section = 'dokumentasjon' | 'etterlevelser' | 'tilbakemeldinger'
 
 
 export const BehandlingerTemaPageV2 = () => {
-  const params = useParams<{ id?: string; tema?: string }>()
+  const params = useParams<{ id?: string; tema?: string , kravNummer?:string, kravVersjon?: string}>()
   const temaData: TemaCode | undefined = codelist.getCode(ListName.TEMA, params.tema?.replace('i', ''))
   const irrelevantKrav = params?.tema?.charAt(0) === 'i' ? true : false
   const [behandling, setBehandling] = useBehandling(params.id)
@@ -86,7 +84,8 @@ export const BehandlingerTemaPageV2 = () => {
   const navigate = useNavigate()
   const location = useLocation()
 
-
+  console.log(params.kravNummer)
+  console.log(params.kravVersjon)
   const filterKrav = async (kravList?: KravQL[], filterFerdigDokumentert?: boolean) => {
 
     const allKravPriority = await getAllKravPriority()
@@ -277,7 +276,7 @@ export const BehandlingerTemaPageV2 = () => {
                 </Block>
               )}
             </Block>}
-            {edit && behandling && (
+            {edit && behandling && params.kravNummer && params.kravVersjon && (
               <KravView
                 behandlingNavn={behandling.navn}
                 etterlevelseId={edit}

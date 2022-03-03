@@ -15,6 +15,7 @@ import {isFerdigUtfylt} from "../../pages/BehandlingerTemaPageV2";
 import {faEllipsisVertical} from "@fortawesome/free-solid-svg-icons";
 import {arkCheckIcon, arkPennIcon, warningAlert} from "../Images";
 import {getEtterlevelserByBehandlingsIdKravNumber} from "../../api/EtterlevelseApi";
+import {useLocation, useNavigate} from "react-router-dom";
 
 export const KravCard = (props: {
   krav: KravEtterlevelseData,
@@ -29,6 +30,9 @@ export const KravCard = (props: {
   const ferdigUtfylt = isFerdigUtfylt(props.krav.etterlevelseStatus)
   const [nyVersionFlag, setNyVersionFlag] = useState<boolean>(false)
   const [hover, setHover] = useState(false)
+  const navigate = useNavigate()
+  const location = useLocation()
+
   const [etterlevelseMetadata, setEtterlevelseMetadata] = useState<EtterlevelseMetadata>(mapEtterlevelseMetadataToFormValue({
     id: 'ny',
     behandlingId: props.behandlingId,
@@ -105,6 +109,7 @@ export const KravCard = (props: {
               props.setActiveEtterlevelseStatus(props.krav.etterlevelseStatus)
               props.setEdit(props.krav.etterlevelseId)
             }
+            navigate(location.pathname + "/krav/" + props.krav.kravNummer + "/" + props.krav.kravVersjon, {replace: true})
           }}
         >
           <Block display="flex" justifyContent="center" alignItems="center" width="100%" onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
@@ -170,8 +175,8 @@ export const KravCard = (props: {
   )
 }
 
-const showWarningMessage = (warningMessage:string) =>{
-  return(
+const showWarningMessage = (warningMessage: string) => {
+  return (
     <Block display="flex" alignItems="center">
       <img
         src={warningAlert}
