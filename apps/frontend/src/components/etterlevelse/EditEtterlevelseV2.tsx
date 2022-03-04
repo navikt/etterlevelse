@@ -36,6 +36,7 @@ type EditEttlevProps = {
   behandlingNummer?: number
   varsleMelding?: string
   navigatePath: string
+  setNavigatePath: (state: string) => void
   tab: Section
   setTab: (s: Section) => void
   tidligereEtterlevelser: Etterlevelse[] | undefined
@@ -53,6 +54,7 @@ export const EditEtterlevelseV2 = ({
   behandlingformaal,
   behandlingNummer,
   navigatePath,
+  setNavigatePath,
   tidligereEtterlevelser,
   tab,
   setTab
@@ -299,6 +301,7 @@ export const EditEtterlevelseV2 = ({
                       setIsAlertUnsavedModalOpen={setIsAlertUnsavedModalOpen}
                       isAlertUnsavedModalOpen={isAlertUnsavedModalOpen}
                       navigatePath={navigatePath}
+                      setNavigatePath={setNavigatePath}
                       editedEtterlevelse={editedEtterlevelse}
                       tidligereEtterlevelser={tidligereEtterlevelser}
                     />

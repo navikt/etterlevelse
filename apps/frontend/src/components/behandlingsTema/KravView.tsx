@@ -17,6 +17,7 @@ export const KravView = (props: {
   behandlingformaal: string
   behandlingNummer: number
   navigatePath: string
+  setNavigatePath: (state: string) => void
   tab: Section
   setTab: (s: Section) => void
   setEtterlevelseStatus: (state: EtterlevelseStatus) => void
@@ -81,6 +82,7 @@ export const KravView = (props: {
               props.close(e)
             }}
             navigatePath={props.navigatePath}
+            setNavigatePath={props.setNavigatePath}
             tab={props.tab}
             setTab={props.setTab}
           />

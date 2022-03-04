@@ -13,8 +13,7 @@ import { getMainHeader } from './BehandlingPage'
 import { KravView } from '../components/behandlingsTema/KravView'
 import { ampli } from '../services/Amplitude'
 import { EtterlevelseSecondaryHeader } from '../components/etterlevelse/EtterlevelseSecondaryHeader'
-import { Etterlevelse, EtterlevelseStatus } from '../constants'
-import { getEtterlevelserByBehandlingsIdKravNumber, mapEtterlevelseToFormValue } from '../api/EtterlevelseApi'
+import { EtterlevelseStatus } from '../constants'
 
 export type Section = 'dokumentasjon' | 'etterlevelser' | 'tilbakemeldinger'
 
@@ -91,6 +90,7 @@ export const EtterlevelseDokumentasjonPage = () => {
                 behandlingNummer={behandling.nummer || 0}
                 kravId={kravId}
                 navigatePath={navigatePath}
+                setNavigatePath={setNavigatePath}
                 setEtterlevelseStatus={setEtterlevelseStatus}
                 close={() => {
                   navigate(`/behandling/${behandling.id}/${temaData?.code}`)

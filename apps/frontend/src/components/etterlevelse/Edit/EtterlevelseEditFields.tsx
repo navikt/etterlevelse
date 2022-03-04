@@ -45,6 +45,7 @@ type EditProps = {
   setIsAlertUnsavedModalOpen: (state: boolean) => void
   isAlertUnsavedModalOpen: boolean
   navigatePath: string
+  setNavigatePath: (state: string) => void
   editedEtterlevelse?: Etterlevelse
   tidligereEtterlevelser?: Etterlevelse[]
 }
@@ -114,20 +115,21 @@ const etterlevelseSchema = () => {
 
 export const EtterlevelseEditFields = ({
   krav, etterlevelse, submit, formRef, behandlingId, disableEdit, documentEdit, close, setIsAlertUnsavedModalOpen,
-  isAlertUnsavedModalOpen, navigatePath, editedEtterlevelse, tidligereEtterlevelser
+  isAlertUnsavedModalOpen, navigatePath, setNavigatePath, editedEtterlevelse, tidligereEtterlevelser
 }: EditProps) => {
   const [etterlevelseStatus, setEtterlevelseStatus] = React.useState<string>(editedEtterlevelse ? editedEtterlevelse.status : etterlevelse.status || EtterlevelseStatus.UNDER_REDIGERING)
   const [radioHover, setRadioHover] = React.useState<string>('')
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (isAlertUnsavedModalOpen) {
-      if (_.isEqualWith(mapEtterlevelseToFormValue(etterlevelse, krav), formRef?.current.values)) {
-        setIsAlertUnsavedModalOpen(false)
+    if(navigatePath) {
+      if(_.isEqualWith(mapEtterlevelseToFormValue(etterlevelse, krav), formRef?.current.values)) {
         navigate(navigatePath)
+      } else {
+        setIsAlertUnsavedModalOpen(true)
       }
     }
-  }, [isAlertUnsavedModalOpen])
+  },[navigatePath])
 
   const getTidligereEtterlevelser = () => {
     return tidligereEtterlevelser?.map((e) => {
@@ -495,6 +497,7 @@ export const EtterlevelseEditFields = ({
                     marginLeft
                     kind='secondary'
                     onClick={() => {
+                      setNavigatePath('')
                       setIsAlertUnsavedModalOpen(false)
                     }}>
                     Avbryt
