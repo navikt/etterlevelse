@@ -24,6 +24,7 @@ import {FAQ} from './pages/FAQ'
 import SpørsmålOgSvarLogPage from './pages/SpørsmålOgSvarLogPage'
 import {BehandlingerTemaPageV2} from './pages/BehandlingerTemaPageV2'
 import {VarselPage} from './pages/VarselPage'
+import { EtterlevelseDokumentasjonPage } from './pages/EtterlevelseDokumentasjonPage'
 
 const AppRoutes = (): JSX.Element => {
   return (
@@ -41,6 +42,7 @@ const AppRoutes = (): JSX.Element => {
         <Route path="/etterlevelse/:id" element={<EtterlevelsePage />} caseSensitive={true} />
 
         {/* <Route path="/behandlingtest/:id/:tema" element={<BehandlingerTemaPage />} caseSensitive={true} /> */}
+        <Route path="/behandling/:id/:tema/krav/:kravNummer/:kravVersjon" element={<EtterlevelseDokumentasjonPage />} caseSensitive={true} />
         <Route path="/behandling/:id/:tema" element={<BehandlingerTemaPageV2 />} caseSensitive={true} />
         <Route path="/behandling/:id" element={<BehandlingPage />} caseSensitive={true} />
         <Route path="/behandling/" element={<MyBehandlingerPage />} caseSensitive={true} />

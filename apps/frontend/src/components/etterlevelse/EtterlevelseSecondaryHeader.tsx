@@ -7,23 +7,32 @@ import { angleIcon, page2Icon } from '../Images'
 import CustomizedModal from '../common/CustomizedModal'
 import { getTemaMainHeader } from '../../pages/TemaPage'
 import React, { useState } from 'react'
-import {  useNavigate } from 'react-router-dom'
-import { Behandling } from '../../constants'
+import { isFerdigUtfylt } from '../../pages/BehandlingerTemaPageV2'
+import { Behandling, EtterlevelseStatus } from '../../constants'
 import { LovCode, TemaCode } from '../../services/Codelist'
+import { Section } from '../../pages/EtterlevelseDokumentasjonPage'
 
-type SecondaryHeaderProps = {
+type EtterlevelseSecondaryHeaderProps = {
+  tab: string
+  setTab: React.Dispatch<React.SetStateAction<Section>>
+  setNavigatePath: (state: string) => void
   behandling: Behandling | undefined
   temaData: TemaCode | undefined
+  activeEtterlevleseStatus: EtterlevelseStatus | undefined
   lovListe: LovCode[]
 }
-export const SecondaryHeader = ({
+export const EtterlevelseSecondaryHeader = ({
+  tab,
+  setTab,
+  setNavigatePath,
   behandling,
   temaData,
+  activeEtterlevleseStatus,
   lovListe,
-}: SecondaryHeaderProps) => {
-  const [isTemaModalOpen, setIsTemaModalOpen] = useState<boolean>(false)
+}: EtterlevelseSecondaryHeaderProps) => {
 
-  const navigate = useNavigate()
+
+  const [isTemaModalOpen, setIsTemaModalOpen] = useState<boolean>(false)
 
   return (
     <Block width="100%">
@@ -31,7 +40,10 @@ export const SecondaryHeader = ({
         <Button
           kind="tertiary"
           onClick={() => {
-            navigate(`/behandling/${behandling?.id}`)
+            if (tab !== 'dokumentasjon') {
+              setTab('dokumentasjon')
+            }
+            setNavigatePath('/behandling/' + behandling?.id)
           }}
           $style={{
             ...paddingAll('0px'),
@@ -58,20 +70,59 @@ export const SecondaryHeader = ({
         </Button>
       </Block>
 
+      <Block marginTop="8px">
+        <img src={angleIcon} alt="" />{' '}
+        <Button
+          kind="tertiary"
+          onClick={() => {
+            if (tab !== 'dokumentasjon') {
+              setTab('dokumentasjon')
+            }
+            setNavigatePath('/behandling/' + behandling?.id + '/' + temaData?.code)
+          }}
+          $style={{
+            ...paddingAll('0px'),
+            ':hover': {
+              backgroundColor: 'inherit',
+            },
+            ':focus': {
+              backgroundColor: 'inherit',
+            },
+          }}
+        >
+          <Label3
+            marginLeft="12px"
+            $style={{
+              fontSize: '18px',
+              fontWeight: 'normal',
+              lineHeight: '22px',
+              color: ettlevColors.green600, textDecoration: 'underline',
+              ':hover': {
+                color: ettlevColors.green400
+              }
+            }}>
+            {temaData?.shortName}
+          </Label3>
+        </Button>
+      </Block>
+
       <Block
         marginTop="0px"
         marginBottom="56px"
         display="flex"
-        width={'100%'}
+        width="calc(100% - 35px)"
         alignItems="center"
         justifyContent="center"
+        marginLeft="35px"
       >
         <Block display="flex" flex="1">
           <img src={angleIcon} alt="" />{' '}
           <Label3 marginLeft="12px" $style={{ fontSize: '18px', fontWeight: 600, lineHeight: '22px', color: ettlevColors.green600, whiteSpace: 'nowrap' }}>
-            {temaData?.shortName}
+            {isFerdigUtfylt(activeEtterlevleseStatus) ? 'Ferdig utfylt' : 'Skal fylles ut'}
           </Label3>
         </Block>
+
+
         <Block display="flex" justifyContent="flex-end" width="100%">
           <Button
             startEnhancer={<img src={page2Icon} alt="Om personvern og ansvarlig for tema" />}
@@ -91,6 +142,7 @@ export const SecondaryHeader = ({
           </Button>
         </Block>
       </Block>
+
       {temaData && (
         <CustomizedModal
           onClose={() => setIsTemaModalOpen(false)}

@@ -18,10 +18,10 @@ import CustomizedTabs from '../common/CustomizedTabs'
 import { Tilbakemeldinger } from '../krav/tilbakemelding/Tilbakemelding'
 import Etterlevelser from '../krav/Etterlevelser'
 import { Markdown } from '../common/Markdown'
-import { Section } from '../../pages/BehandlingerTemaPageV2'
+import { Section } from '../../pages/EtterlevelseDokumentasjonPage'
 import { getEtterlevelseMetadataByBehandlingsIdAndKravNummerAndKravVersion, mapEtterlevelseMetadataToFormValue } from '../../api/EtterlevelseMetadataApi'
 import TildeltPopoever from '../etterlevelseMetadata/TildeltPopover'
-import EditFields from './Edit/EditFields'
+import EtterlevelseEditFields from './Edit/EtterlevelseEditFields'
 import CustomizedModal from '../common/CustomizedModal'
 
 type EditEttlevProps = {
@@ -35,11 +35,11 @@ type EditEttlevProps = {
   behandlingformaal?: string
   behandlingNummer?: number
   varsleMelding?: string
-  setIsAlertUnsavedModalOpen: (state: boolean) => void
-  isAlertUnsavedModalOpen: boolean
-  isNavigateButtonClicked: boolean
+  navigatePath: string
+  setNavigatePath: (state: string) => void
   tab: Section
   setTab: (s: Section) => void
+  tidligereEtterlevelser: Etterlevelse[] | undefined
 }
 
 export const EditEtterlevelseV2 = ({
@@ -53,9 +53,9 @@ export const EditEtterlevelseV2 = ({
   behandlingId,
   behandlingformaal,
   behandlingNummer,
-  setIsAlertUnsavedModalOpen,
-  isAlertUnsavedModalOpen,
-  isNavigateButtonClicked,
+  navigatePath,
+  setNavigatePath,
+  tidligereEtterlevelser,
   tab,
   setTab
 }: EditEttlevProps) => {
@@ -70,17 +70,21 @@ export const EditEtterlevelseV2 = ({
   const [disableEdit, setDisableEdit] = React.useState<boolean>(false)
   const [editedEtterlevelse, setEditedEtterlevelse] = React.useState<Etterlevelse>()
   const etterlevelseFormRef: React.Ref<FormikProps<Etterlevelse> | undefined> = useRef()
+
   const [etterlevelseMetadata, setEtterlevelseMetadata] = useState<EtterlevelseMetadata>(mapEtterlevelseMetadataToFormValue({
     id: 'ny',
     behandlingId: behandlingId,
     kravNummer: kravId.kravNummer,
     kravVersjon: kravId.kravVersjon,
   }))
-  const [tidligereEtterlevelser, setTidligereEtterlevelser] = React.useState<Etterlevelse[]>()
+
   const [isVersjonEndringerModalOpen, setIsVersjonEndringerModalOpen] = React.useState<boolean>(false)
 
+  const [isAlertUnsavedModalOpen, setIsAlertUnsavedModalOpen] = useState<boolean>(false)
+
+
   useEffect(() => {
-    ; (async () => {
+    (async () => {
       behandlingId && kravId.kravNummer && getEtterlevelseMetadataByBehandlingsIdAndKravNummerAndKravVersion(behandlingId, kravId.kravNummer, kravId.kravVersjon)
         .then((resp) => {
           if (resp.content.length) {
@@ -94,12 +98,6 @@ export const EditEtterlevelseV2 = ({
             }))
           }
         })
-
-      if (behandlingId && kravId.kravNummer) {
-        const etterlevelser = await getEtterlevelserByBehandlingsIdKravNumber(behandlingId, kravId.kravNummer)
-        const etterlevelserList = etterlevelser.content.sort((a, b) => (a.kravVersjon > b.kravVersjon ? -1 : 1)).filter((e) => e.kravVersjon < etterlevelse.kravVersjon)
-        setTidligereEtterlevelser(etterlevelserList)
-      }
     })()
   }, [])
 
@@ -287,7 +285,7 @@ export const EditEtterlevelseV2 = ({
                   title: 'Dokumentasjon',
                   key: 'dokumentasjon',
                   content: (
-                    <EditFields
+                    <EtterlevelseEditFields
                       krav={krav}
                       etterlevelse={etterlevelse}
                       submit={submit}
@@ -302,7 +300,8 @@ export const EditEtterlevelseV2 = ({
                       close={close}
                       setIsAlertUnsavedModalOpen={setIsAlertUnsavedModalOpen}
                       isAlertUnsavedModalOpen={isAlertUnsavedModalOpen}
-                      isNavigateButtonClicked={isNavigateButtonClicked}
+                      navigatePath={navigatePath}
+                      setNavigatePath={setNavigatePath}
                       editedEtterlevelse={editedEtterlevelse}
                       tidligereEtterlevelser={tidligereEtterlevelser}
                     />
@@ -353,7 +352,7 @@ export const EditEtterlevelseV2 = ({
                   <H2 marginTop="0px" marginBottom="24px">
                     Dette er nytt fra forrige versjon
                   </H2>
-                  <Markdown source={krav.versjonEndringer}/>
+                  <Markdown source={krav.versjonEndringer} />
                 </Block>
                 <Block display="flex" justifyContent="flex-end" width="100%" marginTop="38px">
                   <Button onClick={() => setIsVersjonEndringerModalOpen(false)}>Lukk visning</Button>

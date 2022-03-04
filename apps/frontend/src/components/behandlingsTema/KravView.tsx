@@ -1,55 +1,76 @@
-import {getKravByKravNumberAndVersion, KravId} from "../../api/KravApi";
-import {Etterlevelse} from "../../constants";
-import {useEtterlevelse} from "../../api/EtterlevelseApi";
-import React, {useEffect, useState} from "react";
-import {Block} from "baseui/block";
-import {Spinner} from "../common/Spinner";
-import {theme} from "../../util";
-import {EditEtterlevelseV2} from "../etterlevelse/EditEtterlevelseV2";
-import {Section} from "../../pages/BehandlingerTemaPageV2";
-import {toKravId} from "./utils";
+import { getKravByKravNumberAndVersion, KravId } from '../../api/KravApi'
+import { Etterlevelse, EtterlevelseStatus } from '../../constants'
+import { getEtterlevelserByBehandlingsIdKravNumber, mapEtterlevelseToFormValue, useEtterlevelse } from '../../api/EtterlevelseApi'
+import React, { useEffect, useState } from 'react'
+import { Block } from 'baseui/block'
+import { Spinner } from '../common/Spinner'
+import { theme } from '../../util'
+import { EditEtterlevelseV2 } from '../etterlevelse/EditEtterlevelseV2'
+import { Section } from '../../pages/EtterlevelseDokumentasjonPage'
+import { toKravId } from './utils'
 
 export const KravView = (props: {
-  kravId?: KravId
-  etterlevelseId: string
+  kravId: KravId
   close: (e?: Etterlevelse) => void
   behandlingNavn: string
   behandlingId: string
   behandlingformaal: string
   behandlingNummer: number
-  setIsAlertUnsavedModalOpen: (state: boolean) => void
-  isAlertUnsavedModalOpen: boolean
-  isNavigateButtonClicked: boolean
+  navigatePath: string
+  setNavigatePath: (state: string) => void
   tab: Section
   setTab: (s: Section) => void
+  setEtterlevelseStatus: (state: EtterlevelseStatus) => void
 }) => {
-  const [etterlevelse] = useEtterlevelse(props.etterlevelseId, props.behandlingId, props.kravId)
   const [varsleMelding, setVarsleMelding] = useState('')
 
+  const [etterlevelse, setEtterlevelse] = useState<Etterlevelse>()
+  const [loadingEtterlevelseData, setLoadingEtterlevelseData] = useState<boolean>(false)
+  const [tidligereEtterlevelser, setTidligereEtterlevelser] = React.useState<Etterlevelse[]>()
+
   useEffect(() => {
-    ; (async () => {
-      if (etterlevelse) {
-        const kravId = toKravId(etterlevelse)
-        if (kravId.kravNummer && kravId.kravVersjon) {
-          const krav = await getKravByKravNumberAndVersion(kravId.kravNummer, kravId.kravVersjon)
-          if (krav) {
-            setVarsleMelding(krav.varselMelding || '')
+    (async () => {
+      setLoadingEtterlevelseData(true)
+      if (props.kravId.kravNummer && props.kravId.kravVersjon) {
+        const krav = await getKravByKravNumberAndVersion(props.kravId.kravNummer, props.kravId.kravVersjon)
+        if (krav) {
+          setVarsleMelding(krav.varselMelding || '')
+        }
+
+        if (props.behandlingId) {
+          const kravVersjon = props.kravId.kravVersjon
+          const etterlevelser = await getEtterlevelserByBehandlingsIdKravNumber(props.behandlingId, props.kravId.kravNummer)
+          const etterlevelserList = etterlevelser.content.sort((a, b) => (a.kravVersjon > b.kravVersjon ? -1 : 1))
+          setTidligereEtterlevelser(etterlevelserList.filter((e) => e.kravVersjon < kravVersjon))
+
+          if (etterlevelserList.filter((e) => e.kravVersjon === kravVersjon).length > 0) {
+            setEtterlevelse(etterlevelserList.filter((e) => e.kravVersjon === kravVersjon)[0])
+            props.setEtterlevelseStatus(etterlevelserList.filter((e) => e.kravVersjon === kravVersjon)[0].status)
+          } else {
+            setEtterlevelse(mapEtterlevelseToFormValue({
+              behandlingId: props.behandlingId,
+              kravVersjon: kravVersjon,
+              kravNummer: props.kravId.kravNummer,
+            }))
+            props.setEtterlevelseStatus(EtterlevelseStatus.UNDER_REDIGERING)
           }
         }
       }
+      setLoadingEtterlevelseData(false)
     })()
   }, [])
 
   return (
     <Block width="100%">
-      {!etterlevelse && (
+      {loadingEtterlevelseData && (
         <Block width="100%" display="flex" justifyContent="center" marginTop="50px">
           <Spinner size={theme.sizing.scale1200} />
         </Block>
       )}
-      {etterlevelse && (
+      {!loadingEtterlevelseData && etterlevelse && (
         <Block width="100%" display="flex" justifyContent="center">
           <EditEtterlevelseV2
+            tidligereEtterlevelser={tidligereEtterlevelser}
             behandlingNavn={props.behandlingNavn}
             behandlingId={props.behandlingId}
             behandlingformaal={props.behandlingformaal}
@@ -60,9 +81,8 @@ export const KravView = (props: {
             close={(e) => {
               props.close(e)
             }}
-            setIsAlertUnsavedModalOpen={props.setIsAlertUnsavedModalOpen}
-            isAlertUnsavedModalOpen={props.isAlertUnsavedModalOpen}
-            isNavigateButtonClicked={props.isNavigateButtonClicked}
+            navigatePath={props.navigatePath}
+            setNavigatePath={props.setNavigatePath}
             tab={props.tab}
             setTab={props.setTab}
           />
