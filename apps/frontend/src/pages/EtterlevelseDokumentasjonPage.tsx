@@ -13,7 +13,7 @@ import { getMainHeader } from './BehandlingPage'
 import { KravView } from '../components/behandlingsTema/KravView'
 import { ampli } from '../services/Amplitude'
 import { EtterlevelseSecondaryHeader } from '../components/etterlevelse/EtterlevelseSecondaryHeader'
-import { Etterlevelse } from '../constants'
+import { Etterlevelse, EtterlevelseStatus } from '../constants'
 import { getEtterlevelserByBehandlingsIdKravNumber, mapEtterlevelseToFormValue } from '../api/EtterlevelseApi'
 
 export type Section = 'dokumentasjon' | 'etterlevelser' | 'tilbakemeldinger'
@@ -26,44 +26,17 @@ export const EtterlevelseDokumentasjonPage = () => {
 
   const [kravId, setKravId] = useState<KravId | undefined>()
 
-  const [isAlertUnsavedModalOpen, setIsAlertUnsavedModalOpen] = useState<boolean>(false)
-  const [isNavigateButtonClicked, setIsNavigateButtonClicked] = useState<boolean>(false)
+  const [navigatePath, setNavigatePath] = useState<string>('')
 
-  const [etterlevelse, setEtterlevelse] = useState<Etterlevelse>()
-  const [loadingEtterlevelseData, setLoadingEtterlevelseData] = useState<boolean>(false)
-  const [tidligereEtterlevelser, setTidligereEtterlevelser] = React.useState<Etterlevelse[]>()
+  const [etterlevelseStatus, setEtterlevelseStatus] = useState<EtterlevelseStatus>()
 
   const [tab, setTab] = useState<Section>('dokumentasjon')
   const navigate = useNavigate()
 
   useEffect(() => {
-    (async () => {
-      setLoadingEtterlevelseData(true)
-      if (behandling && params.kravNummer && params.kravVersjon) {
-        const kravNumber = Number(params.kravNummer)
-        const kravVersjon = Number(params.kravVersjon)
-
-        const etterlevelser = await getEtterlevelserByBehandlingsIdKravNumber(behandling.id, kravNumber)
-        const etterlevelserList = etterlevelser.content.sort((a, b) => (a.kravVersjon > b.kravVersjon ? -1 : 1))
-        setTidligereEtterlevelser(etterlevelserList.filter((e) => e.kravVersjon < kravVersjon))
-
-        if (etterlevelserList.filter((e) => e.kravVersjon === kravVersjon).length > 0) {
-          setEtterlevelse(etterlevelserList.filter((e) => e.kravVersjon === kravVersjon)[0])
-        } else {
-          setEtterlevelse(mapEtterlevelseToFormValue({
-            behandlingId: behandling.id,
-            kravVersjon: kravVersjon,
-            kravNummer: kravNumber,
-          }))
-        }
-      }
-      setLoadingEtterlevelseData(false)
-    })()
-  }, [])
-
-  useEffect(() => {
-    if (params.kravNummer && params.kravVersjon)
+    if (params.kravNummer && params.kravVersjon) {
       setKravId({ kravNummer: Number(params.kravNummer), kravVersjon: Number(params.kravVersjon) })
+    }
   }, [params])
 
   useEffect(() => {
@@ -99,11 +72,10 @@ export const EtterlevelseDokumentasjonPage = () => {
             <EtterlevelseSecondaryHeader
               tab={tab}
               setTab={setTab}
-              setIsAlertUnsavedModalOpen={setIsAlertUnsavedModalOpen}
-              setIsNavigateButtonClicked={setIsNavigateButtonClicked}
+              setNavigatePath={setNavigatePath}
               behandling={behandling}
               temaData={temaData}
-              activeEtterlevleseStatus={etterlevelse?.status}
+              activeEtterlevleseStatus={etterlevelseStatus}
               lovListe={lovListe}
             />}
           childrenBackgroundColor={ettlevColors.grey25}
@@ -111,20 +83,15 @@ export const EtterlevelseDokumentasjonPage = () => {
           breadcrumbPaths={breadcrumbPaths}
         >
           <Block display="flex" width="100%" justifyContent="space-between" flexWrap marginBottom="64px">
-            {kravId && behandling && etterlevelse && (
+            {kravId && behandling && (
               <KravView
                 behandlingNavn={behandling.navn}
                 behandlingId={behandling.id}
                 behandlingformaal={behandling.overordnetFormaal.shortName || ''}
                 behandlingNummer={behandling.nummer || 0}
                 kravId={kravId}
-                setIsAlertUnsavedModalOpen={setIsAlertUnsavedModalOpen}
-                setIsNavigateButtonClicked={setIsNavigateButtonClicked}
-                isAlertUnsavedModalOpen={isAlertUnsavedModalOpen}
-                isNavigateButtonClicked={isNavigateButtonClicked}
-                etterlevelse={etterlevelse}
-                tidligereEtterlevelser={tidligereEtterlevelser}
-                loadingEtterlevelseData={loadingEtterlevelseData}
+                navigatePath={navigatePath}
+                setEtterlevelseStatus={setEtterlevelseStatus}
                 close={() => {
                   navigate(`/behandling/${behandling.id}/${temaData?.code}`)
                 }}

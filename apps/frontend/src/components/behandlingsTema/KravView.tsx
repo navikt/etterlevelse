@@ -1,5 +1,5 @@
 import { getKravByKravNumberAndVersion, KravId } from '../../api/KravApi'
-import { Etterlevelse } from '../../constants'
+import { Etterlevelse, EtterlevelseStatus } from '../../constants'
 import { getEtterlevelserByBehandlingsIdKravNumber, mapEtterlevelseToFormValue, useEtterlevelse } from '../../api/EtterlevelseApi'
 import React, { useEffect, useState } from 'react'
 import { Block } from 'baseui/block'
@@ -16,53 +16,71 @@ export const KravView = (props: {
   behandlingId: string
   behandlingformaal: string
   behandlingNummer: number
-  setIsAlertUnsavedModalOpen: (state: boolean) => void
-  setIsNavigateButtonClicked: (state: boolean) => void
-  isAlertUnsavedModalOpen: boolean
-  isNavigateButtonClicked: boolean
+  navigatePath: string
   tab: Section
   setTab: (s: Section) => void
-  etterlevelse: Etterlevelse
-  tidligereEtterlevelser: Etterlevelse[] | undefined
-  loadingEtterlevelseData: Boolean
+  setEtterlevelseStatus: (state: EtterlevelseStatus) => void
 }) => {
   const [varsleMelding, setVarsleMelding] = useState('')
 
+  const [etterlevelse, setEtterlevelse] = useState<Etterlevelse>()
+  const [loadingEtterlevelseData, setLoadingEtterlevelseData] = useState<boolean>(false)
+  const [tidligereEtterlevelser, setTidligereEtterlevelser] = React.useState<Etterlevelse[]>()
+
   useEffect(() => {
     (async () => {
+      setLoadingEtterlevelseData(true)
       if (props.kravId.kravNummer && props.kravId.kravVersjon) {
         const krav = await getKravByKravNumberAndVersion(props.kravId.kravNummer, props.kravId.kravVersjon)
         if (krav) {
           setVarsleMelding(krav.varselMelding || '')
         }
+
+        if (props.behandlingId) {
+          const kravVersjon = props.kravId.kravVersjon
+          const etterlevelser = await getEtterlevelserByBehandlingsIdKravNumber(props.behandlingId, props.kravId.kravNummer)
+          const etterlevelserList = etterlevelser.content.sort((a, b) => (a.kravVersjon > b.kravVersjon ? -1 : 1))
+          setTidligereEtterlevelser(etterlevelserList.filter((e) => e.kravVersjon < kravVersjon))
+
+          if (etterlevelserList.filter((e) => e.kravVersjon === kravVersjon).length > 0) {
+            setEtterlevelse(etterlevelserList.filter((e) => e.kravVersjon === kravVersjon)[0])
+            props.setEtterlevelseStatus(etterlevelserList.filter((e) => e.kravVersjon === kravVersjon)[0].status)
+          } else {
+            setEtterlevelse(mapEtterlevelseToFormValue({
+              behandlingId: props.behandlingId,
+              kravVersjon: kravVersjon,
+              kravNummer: props.kravId.kravNummer,
+            }))
+            props.setEtterlevelseStatus(EtterlevelseStatus.UNDER_REDIGERING)
+          }
+        }
       }
+      setLoadingEtterlevelseData(false)
     })()
   }, [])
 
   return (
     <Block width="100%">
-      {props.loadingEtterlevelseData && (
+      {loadingEtterlevelseData && (
         <Block width="100%" display="flex" justifyContent="center" marginTop="50px">
           <Spinner size={theme.sizing.scale1200} />
         </Block>
       )}
-      {!props.loadingEtterlevelseData && props.etterlevelse && (
+      {!loadingEtterlevelseData && etterlevelse && (
         <Block width="100%" display="flex" justifyContent="center">
           <EditEtterlevelseV2
-            tidligereEtterlevelser={props.tidligereEtterlevelser}
+            tidligereEtterlevelser={tidligereEtterlevelser}
             behandlingNavn={props.behandlingNavn}
             behandlingId={props.behandlingId}
             behandlingformaal={props.behandlingformaal}
-            kravId={toKravId(props.etterlevelse)}
-            etterlevelse={props.etterlevelse}
+            kravId={toKravId(etterlevelse)}
+            etterlevelse={etterlevelse}
             behandlingNummer={props.behandlingNummer}
             varsleMelding={varsleMelding}
             close={(e) => {
               props.close(e)
             }}
-            setIsAlertUnsavedModalOpen={props.setIsAlertUnsavedModalOpen}
-            isAlertUnsavedModalOpen={props.isAlertUnsavedModalOpen}
-            isNavigateButtonClicked={props.isNavigateButtonClicked}
+            navigatePath={props.navigatePath}
             tab={props.tab}
             setTab={props.setTab}
           />

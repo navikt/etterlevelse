@@ -44,7 +44,7 @@ type EditProps = {
   close: (k?: Etterlevelse | undefined) => void
   setIsAlertUnsavedModalOpen: (state: boolean) => void
   isAlertUnsavedModalOpen: boolean
-  isNavigateButtonClicked: boolean
+  navigatePath: string
   editedEtterlevelse?: Etterlevelse
   tidligereEtterlevelser?: Etterlevelse[]
 }
@@ -114,7 +114,7 @@ const etterlevelseSchema = () => {
 
 export const EtterlevelseEditFields = ({
   krav, etterlevelse, submit, formRef, behandlingId, disableEdit, documentEdit, close, setIsAlertUnsavedModalOpen,
-  isAlertUnsavedModalOpen, isNavigateButtonClicked, editedEtterlevelse, tidligereEtterlevelser
+  isAlertUnsavedModalOpen, navigatePath, editedEtterlevelse, tidligereEtterlevelser
 }: EditProps) => {
   const [etterlevelseStatus, setEtterlevelseStatus] = React.useState<string>(editedEtterlevelse ? editedEtterlevelse.status : etterlevelse.status || EtterlevelseStatus.UNDER_REDIGERING)
   const [radioHover, setRadioHover] = React.useState<string>('')
@@ -124,11 +124,7 @@ export const EtterlevelseEditFields = ({
     if (isAlertUnsavedModalOpen) {
       if (_.isEqualWith(mapEtterlevelseToFormValue(etterlevelse, krav), formRef?.current.values)) {
         setIsAlertUnsavedModalOpen(false)
-        if (isNavigateButtonClicked) {
-          navigate(`/behandling/${etterlevelse.behandlingId}`)
-        } else {
-          close()
-        }
+        navigate(navigatePath)
       }
     }
   }, [isAlertUnsavedModalOpen])
@@ -482,10 +478,7 @@ export const EtterlevelseEditFields = ({
                         values.status = Object.values(EtterlevelseStatus).filter((e) => e === etterlevelseStatus)[0]
                       }
                       submitForm()
-
-                      if (isNavigateButtonClicked) {
-                        navigate(`/behandling/${etterlevelse.behandlingId}`)
-                      }
+                      navigate(navigatePath)
                       setIsAlertUnsavedModalOpen(false)
                     }}>
                     Lagre og fortsett
@@ -493,10 +486,7 @@ export const EtterlevelseEditFields = ({
                   <Button
                     marginLeft
                     onClick={() => {
-                      if (isNavigateButtonClicked) {
-                        navigate(`/behandling/${etterlevelse.behandlingId}`)
-                      }
-                      close()
+                      navigate(navigatePath)
                       setIsAlertUnsavedModalOpen(false)
                     }}>
                     Fortsett uten å lagre

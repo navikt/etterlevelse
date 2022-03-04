@@ -35,9 +35,7 @@ type EditEttlevProps = {
   behandlingformaal?: string
   behandlingNummer?: number
   varsleMelding?: string
-  setIsAlertUnsavedModalOpen: (state: boolean) => void
-  isAlertUnsavedModalOpen: boolean
-  isNavigateButtonClicked: boolean
+  navigatePath: string
   tab: Section
   setTab: (s: Section) => void
   tidligereEtterlevelser: Etterlevelse[] | undefined
@@ -54,9 +52,7 @@ export const EditEtterlevelseV2 = ({
   behandlingId,
   behandlingformaal,
   behandlingNummer,
-  setIsAlertUnsavedModalOpen,
-  isAlertUnsavedModalOpen,
-  isNavigateButtonClicked,
+  navigatePath,
   tidligereEtterlevelser,
   tab,
   setTab
@@ -81,6 +77,9 @@ export const EditEtterlevelseV2 = ({
   }))
 
   const [isVersjonEndringerModalOpen, setIsVersjonEndringerModalOpen] = React.useState<boolean>(false)
+
+  const [isAlertUnsavedModalOpen, setIsAlertUnsavedModalOpen] = useState<boolean>(false)
+
 
   useEffect(() => {
     (async () => {
@@ -299,7 +298,7 @@ export const EditEtterlevelseV2 = ({
                       close={close}
                       setIsAlertUnsavedModalOpen={setIsAlertUnsavedModalOpen}
                       isAlertUnsavedModalOpen={isAlertUnsavedModalOpen}
-                      isNavigateButtonClicked={isNavigateButtonClicked}
+                      navigatePath={navigatePath}
                       editedEtterlevelse={editedEtterlevelse}
                       tidligereEtterlevelser={tidligereEtterlevelser}
                     />

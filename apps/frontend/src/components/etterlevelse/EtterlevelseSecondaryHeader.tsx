@@ -15,8 +15,7 @@ import { Section } from '../../pages/EtterlevelseDokumentasjonPage'
 type EtterlevelseSecondaryHeaderProps = {
   tab: string
   setTab: React.Dispatch<React.SetStateAction<Section>>
-  setIsAlertUnsavedModalOpen: (state: boolean) => void
-  setIsNavigateButtonClicked: (state: boolean) => void
+  setNavigatePath: (state: string) => void
   behandling: Behandling | undefined
   temaData: TemaCode | undefined
   activeEtterlevleseStatus: EtterlevelseStatus | undefined
@@ -25,8 +24,7 @@ type EtterlevelseSecondaryHeaderProps = {
 export const EtterlevelseSecondaryHeader = ({
   tab,
   setTab,
-  setIsAlertUnsavedModalOpen,
-  setIsNavigateButtonClicked,
+  setNavigatePath,
   behandling,
   temaData,
   activeEtterlevleseStatus,
@@ -45,9 +43,7 @@ export const EtterlevelseSecondaryHeader = ({
             if (tab !== 'dokumentasjon') {
               setTab('dokumentasjon')
             }
-            setIsAlertUnsavedModalOpen(true)
-            setIsNavigateButtonClicked(true)
-
+            setNavigatePath('/behandling/' + behandling?.id)
           }}
           $style={{
             ...paddingAll('0px'),
@@ -82,7 +78,7 @@ export const EtterlevelseSecondaryHeader = ({
             if (tab !== 'dokumentasjon') {
               setTab('dokumentasjon')
             }
-            setIsAlertUnsavedModalOpen(true)
+            setNavigatePath('/behandling/' + behandling?.id + '/' + temaData?.code)
           }}
           $style={{
             ...paddingAll('0px'),
