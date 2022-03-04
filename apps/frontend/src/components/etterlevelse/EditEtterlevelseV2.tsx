@@ -21,7 +21,7 @@ import { Markdown } from '../common/Markdown'
 import { Section } from '../../pages/EtterlevelseDokumentasjonPage'
 import { getEtterlevelseMetadataByBehandlingsIdAndKravNummerAndKravVersion, mapEtterlevelseMetadataToFormValue } from '../../api/EtterlevelseMetadataApi'
 import TildeltPopoever from '../etterlevelseMetadata/TildeltPopover'
-import EditFields from './Edit/EditFields'
+import EtterlevelseEditFields from './Edit/EtterlevelseEditFields'
 import CustomizedModal from '../common/CustomizedModal'
 
 type EditEttlevProps = {
@@ -79,11 +79,11 @@ export const EditEtterlevelseV2 = ({
     kravNummer: kravId.kravNummer,
     kravVersjon: kravId.kravVersjon,
   }))
-  
+
   const [isVersjonEndringerModalOpen, setIsVersjonEndringerModalOpen] = React.useState<boolean>(false)
 
   useEffect(() => {
-    ; (async () => {
+    (async () => {
       behandlingId && kravId.kravNummer && getEtterlevelseMetadataByBehandlingsIdAndKravNummerAndKravVersion(behandlingId, kravId.kravNummer, kravId.kravVersjon)
         .then((resp) => {
           if (resp.content.length) {
@@ -284,7 +284,7 @@ export const EditEtterlevelseV2 = ({
                   title: 'Dokumentasjon',
                   key: 'dokumentasjon',
                   content: (
-                    <EditFields
+                    <EtterlevelseEditFields
                       krav={krav}
                       etterlevelse={etterlevelse}
                       submit={submit}
@@ -350,7 +350,7 @@ export const EditEtterlevelseV2 = ({
                   <H2 marginTop="0px" marginBottom="24px">
                     Dette er nytt fra forrige versjon
                   </H2>
-                  <Markdown source={krav.versjonEndringer}/>
+                  <Markdown source={krav.versjonEndringer} />
                 </Block>
                 <Block display="flex" justifyContent="flex-end" width="100%" marginTop="38px">
                   <Button onClick={() => setIsVersjonEndringerModalOpen(false)}>Lukk visning</Button>

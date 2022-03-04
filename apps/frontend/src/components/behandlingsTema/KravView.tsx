@@ -22,58 +22,39 @@ export const KravView = (props: {
   isNavigateButtonClicked: boolean
   tab: Section
   setTab: (s: Section) => void
+  etterlevelse: Etterlevelse
+  tidligereEtterlevelser: Etterlevelse[] | undefined
+  loadingEtterlevelseData: Boolean
 }) => {
-  const [etterlevelse, setEtterlevelse] = useState<Etterlevelse>()
-  const [loadingEtterlevelseData, setLoadingEtterlevelseData] = useState<boolean>(false)
-  const [tidligereEtterlevelser, setTidligereEtterlevelser] = React.useState<Etterlevelse[]>()
-
   const [varsleMelding, setVarsleMelding] = useState('')
 
   useEffect(() => {
     (async () => {
-      setLoadingEtterlevelseData(true)
-      if (props.behandlingId && props.kravId.kravNummer && props.kravId.kravVersjon) {
-        const kravVersjon = props.kravId.kravVersjon
-
+      if (props.kravId.kravNummer && props.kravId.kravVersjon) {
         const krav = await getKravByKravNumberAndVersion(props.kravId.kravNummer, props.kravId.kravVersjon)
-          if (krav) {
-            setVarsleMelding(krav.varselMelding || '')
-          }
-        const etterlevelser = await getEtterlevelserByBehandlingsIdKravNumber(props.behandlingId, props.kravId.kravNummer)
-        const etterlevelserList = etterlevelser.content.sort((a, b) => (a.kravVersjon > b.kravVersjon ? -1 : 1))
-        setTidligereEtterlevelser(etterlevelserList.filter((e) => e.kravVersjon < kravVersjon))
-
-        if (etterlevelserList.filter((e) => e.kravVersjon === kravVersjon).length > 0) {
-          setEtterlevelse(etterlevelserList.filter((e) => e.kravVersjon === kravVersjon)[0])
-        } else {
-          setEtterlevelse(mapEtterlevelseToFormValue({
-            behandlingId: props.behandlingId,
-            kravVersjon: props.kravId.kravVersjon,
-            kravNummer: props.kravId.kravNummer,
-          }))
+        if (krav) {
+          setVarsleMelding(krav.varselMelding || '')
         }
       }
-      
-      setLoadingEtterlevelseData(false)
     })()
   }, [])
 
   return (
     <Block width="100%">
-      {loadingEtterlevelseData && (
+      {props.loadingEtterlevelseData && (
         <Block width="100%" display="flex" justifyContent="center" marginTop="50px">
           <Spinner size={theme.sizing.scale1200} />
         </Block>
       )}
-      {!loadingEtterlevelseData && etterlevelse && (
+      {!props.loadingEtterlevelseData && props.etterlevelse && (
         <Block width="100%" display="flex" justifyContent="center">
           <EditEtterlevelseV2
-            tidligereEtterlevelser={tidligereEtterlevelser}
+            tidligereEtterlevelser={props.tidligereEtterlevelser}
             behandlingNavn={props.behandlingNavn}
             behandlingId={props.behandlingId}
             behandlingformaal={props.behandlingformaal}
-            kravId={toKravId(etterlevelse)}
-            etterlevelse={etterlevelse}
+            kravId={toKravId(props.etterlevelse)}
+            etterlevelse={props.etterlevelse}
             behandlingNummer={props.behandlingNummer}
             varsleMelding={varsleMelding}
             close={(e) => {

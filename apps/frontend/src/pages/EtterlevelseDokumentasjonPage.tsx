@@ -5,14 +5,16 @@ import { ettlevColors } from '../util/theme'
 import { codelist, ListName, TemaCode } from '../services/Codelist'
 import { useBehandling } from '../api/BehandlingApi'
 import { Layout2 } from '../components/scaffold/Page'
-import {  KravId } from '../api/KravApi'
+import { KravId } from '../api/KravApi'
 import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 import _ from 'lodash'
 import { Helmet } from 'react-helmet'
 import { getMainHeader } from './BehandlingPage'
-import { KravView } from "../components/behandlingsTema/KravView";
-import { SecondaryHeader } from "../components/behandlingsTema/SecondaryHeader";
+import { KravView } from '../components/behandlingsTema/KravView'
 import { ampli } from '../services/Amplitude'
+import { EtterlevelseSecondaryHeader } from '../components/etterlevelse/EtterlevelseSecondaryHeader'
+import { Etterlevelse } from '../constants'
+import { getEtterlevelserByBehandlingsIdKravNumber, mapEtterlevelseToFormValue } from '../api/EtterlevelseApi'
 
 export type Section = 'dokumentasjon' | 'etterlevelser' | 'tilbakemeldinger'
 
@@ -26,14 +28,38 @@ export const EtterlevelseDokumentasjonPage = () => {
 
   const [isAlertUnsavedModalOpen, setIsAlertUnsavedModalOpen] = useState<boolean>(false)
   const [isNavigateButtonClicked, setIsNavigateButtonClicked] = useState<boolean>(false)
+
+  const [etterlevelse, setEtterlevelse] = useState<Etterlevelse>()
+  const [loadingEtterlevelseData, setLoadingEtterlevelseData] = useState<boolean>(false)
+  const [tidligereEtterlevelser, setTidligereEtterlevelser] = React.useState<Etterlevelse[]>()
+
   const [tab, setTab] = useState<Section>('dokumentasjon')
   const navigate = useNavigate()
 
-  // useEffect(() => {
-  //   if(!user.isLoggedIn()) {
-  //     navigate(loginUrl(location, location.pathname))
-  //   }
-  // },[])
+  useEffect(() => {
+    (async () => {
+      setLoadingEtterlevelseData(true)
+      if (behandling && params.kravNummer && params.kravVersjon) {
+        const kravNumber = Number(params.kravNummer)
+        const kravVersjon = Number(params.kravVersjon)
+
+        const etterlevelser = await getEtterlevelserByBehandlingsIdKravNumber(behandling.id, kravNumber)
+        const etterlevelserList = etterlevelser.content.sort((a, b) => (a.kravVersjon > b.kravVersjon ? -1 : 1))
+        setTidligereEtterlevelser(etterlevelserList.filter((e) => e.kravVersjon < kravVersjon))
+
+        if (etterlevelserList.filter((e) => e.kravVersjon === kravVersjon).length > 0) {
+          setEtterlevelse(etterlevelserList.filter((e) => e.kravVersjon === kravVersjon)[0])
+        } else {
+          setEtterlevelse(mapEtterlevelseToFormValue({
+            behandlingId: behandling.id,
+            kravVersjon: kravVersjon,
+            kravNummer: kravNumber,
+          }))
+        }
+      }
+      setLoadingEtterlevelseData(false)
+    })()
+  }, [])
 
   useEffect(() => {
     if (params.kravNummer && params.kravVersjon)
@@ -69,17 +95,23 @@ export const EtterlevelseDokumentasjonPage = () => {
             </Helmet>,
           )}
           secondaryHeaderBackgroundColor={ettlevColors.green100}
-          secondaryHeader={<SecondaryHeader
-            behandling={behandling}
-            lovListe={lovListe}
-            temaData={temaData}
-          />}
+          secondaryHeader={
+            <EtterlevelseSecondaryHeader
+              tab={tab}
+              setTab={setTab}
+              setIsAlertUnsavedModalOpen={setIsAlertUnsavedModalOpen}
+              setIsNavigateButtonClicked={setIsNavigateButtonClicked}
+              behandling={behandling}
+              temaData={temaData}
+              activeEtterlevleseStatus={etterlevelse?.status}
+              lovListe={lovListe}
+            />}
           childrenBackgroundColor={ettlevColors.grey25}
           currentPage={behandling?.navn}
           breadcrumbPaths={breadcrumbPaths}
         >
           <Block display="flex" width="100%" justifyContent="space-between" flexWrap marginBottom="64px">
-            {kravId && behandling && params.kravNummer && params.kravVersjon && (
+            {kravId && behandling && etterlevelse && (
               <KravView
                 behandlingNavn={behandling.navn}
                 behandlingId={behandling.id}
@@ -90,6 +122,9 @@ export const EtterlevelseDokumentasjonPage = () => {
                 setIsNavigateButtonClicked={setIsNavigateButtonClicked}
                 isAlertUnsavedModalOpen={isAlertUnsavedModalOpen}
                 isNavigateButtonClicked={isNavigateButtonClicked}
+                etterlevelse={etterlevelse}
+                tidligereEtterlevelser={tidligereEtterlevelser}
+                loadingEtterlevelseData={loadingEtterlevelseData}
                 close={() => {
                   navigate(`/behandling/${behandling.id}/${temaData?.code}`)
                 }}

@@ -91,7 +91,7 @@ export const KravCard = (props: {
             boxShadow: '',
           }}
           onClick={() => {
-            navigate(location.pathname + '/krav/' + props.krav.kravNummer + '/' + props.krav.kravVersjon, {replace: true})
+            navigate(location.pathname + '/krav/' + props.krav.kravNummer + '/' + props.krav.kravVersjon)
           }}
         >
           <Block display="flex" justifyContent="center" alignItems="center" width="100%" onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>

@@ -112,7 +112,7 @@ const etterlevelseSchema = () => {
   })
 }
 
-export const EditFields = ({
+export const EtterlevelseEditFields = ({
   krav, etterlevelse, submit, formRef, behandlingId, disableEdit, documentEdit, close, setIsAlertUnsavedModalOpen,
   isAlertUnsavedModalOpen, isNavigateButtonClicked, editedEtterlevelse, tidligereEtterlevelser
 }: EditProps) => {
@@ -519,4 +519,4 @@ export const EditFields = ({
   )
 }
 
-export default EditFields
+export default EtterlevelseEditFields
