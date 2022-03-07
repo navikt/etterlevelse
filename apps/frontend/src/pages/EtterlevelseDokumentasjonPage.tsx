@@ -39,9 +39,9 @@ export const EtterlevelseDokumentasjonPage = () => {
   }, [params])
 
   useEffect(() => {
-    // if(behandling && temaData) {
-    //   ampli.logEvent('sidevisning', { side: 'Tema side for behandlingen', sidetittel: `B${behandling.nummer.toString()} ${behandling.navn.toString()}`, section: `${temaData.shortName}` })
-    // }
+    if(behandling && temaData && kravId) {
+      ampli.logEvent('sidevisning', { side: 'Dokumentasjon side for etterlevelse', sidetittel: `B${behandling.nummer.toString()} ${behandling.navn.toString()}`, section: `K${kravId.kravNummer}.${kravId.kravVersjon}` })
+    }
   }, [behandling])
 
   const breadcrumbPaths: breadcrumbPaths[] = [
@@ -62,7 +62,7 @@ export const EtterlevelseDokumentasjonPage = () => {
             <Helmet>
               <meta charSet="utf-8" />
               <title>
-                {temaData?.shortName} B{behandling.nummer.toString()} {behandling.navn.toString()}
+                K{kravId?.kravNummer}.{kravId?.kravVersjon} {temaData?.shortName} B{behandling.nummer.toString()} {behandling.navn.toString()}
               </title>
             </Helmet>,
           )}
