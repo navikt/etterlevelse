@@ -79,9 +79,7 @@ export const KravPage = () => {
 
   React.useEffect(() => {
     if (krav) {
-      
-      ampli.logEvent('sidevisning', { side: 'Krav side', sidetittel: `${kravNumView({ kravNummer: krav?.kravNummer, kravVersjon: krav?.kravVersjon })} ${krav.navn}` })
-
+    
       getKravByKravNummer(krav.kravNummer).then((resp) => {
         if (resp.content.length) {
           const alleVersjoner = resp.content
@@ -103,6 +101,17 @@ export const KravPage = () => {
       }
     }
   }, [krav])
+
+  useEffect(() => {
+    if (krav && kravTema) {
+      ampli.logEvent('sidevisning', {
+        side: 'Krav side',
+        sidetittel: `${kravNumView({ kravNummer: krav?.kravNummer, kravVersjon: krav?.kravVersjon })} ${krav.navn}`,
+        section: kravTema?.shortName.toString()
+      })
+    }
+  }, [krav, kravTema])
+  
 
   useEffect(() => {
     if (tab !== state?.tab) changeState({ tab })
