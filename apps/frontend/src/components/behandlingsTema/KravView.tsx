@@ -20,7 +20,6 @@ export const KravView = (props: {
   setNavigatePath: (state: string) => void
   tab: Section
   setTab: (s: Section) => void
-  setEtterlevelseStatus: (state: EtterlevelseStatus) => void
 }) => {
   const [varsleMelding, setVarsleMelding] = useState('')
 
@@ -45,14 +44,12 @@ export const KravView = (props: {
 
           if (etterlevelserList.filter((e) => e.kravVersjon === kravVersjon).length > 0) {
             setEtterlevelse(etterlevelserList.filter((e) => e.kravVersjon === kravVersjon)[0])
-            props.setEtterlevelseStatus(etterlevelserList.filter((e) => e.kravVersjon === kravVersjon)[0].status)
           } else {
             setEtterlevelse(mapEtterlevelseToFormValue({
               behandlingId: props.behandlingId,
               kravVersjon: kravVersjon,
               kravNummer: props.kravId.kravNummer,
             }))
-            props.setEtterlevelseStatus(EtterlevelseStatus.UNDER_REDIGERING)
           }
         }
       }

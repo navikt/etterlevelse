@@ -26,9 +26,7 @@ export const EtterlevelseDokumentasjonPage = () => {
   const [kravId, setKravId] = useState<KravId | undefined>()
 
   const [navigatePath, setNavigatePath] = useState<string>('')
-
-  const [etterlevelseStatus, setEtterlevelseStatus] = useState<EtterlevelseStatus>()
-
+  
   const [tab, setTab] = useState<Section>('dokumentasjon')
   const navigate = useNavigate()
 
@@ -62,7 +60,7 @@ export const EtterlevelseDokumentasjonPage = () => {
             <Helmet>
               <meta charSet="utf-8" />
               <title>
-                K{kravId?.kravNummer}.{kravId?.kravVersjon} {temaData?.shortName} B{behandling.nummer.toString()} {behandling.navn.toString()}
+                K{kravId?.kravNummer?.toString()}.{kravId?.kravVersjon?.toString()} {temaData?.shortName} B{behandling.nummer.toString()} {behandling.navn.toString()}
               </title>
             </Helmet>,
           )}
@@ -74,8 +72,8 @@ export const EtterlevelseDokumentasjonPage = () => {
               setNavigatePath={setNavigatePath}
               behandling={behandling}
               temaData={temaData}
-              activeEtterlevleseStatus={etterlevelseStatus}
               lovListe={lovListe}
+              kravId={kravId}
             />}
           childrenBackgroundColor={ettlevColors.grey25}
           currentPage={behandling?.navn}
@@ -91,7 +89,6 @@ export const EtterlevelseDokumentasjonPage = () => {
                 kravId={kravId}
                 navigatePath={navigatePath}
                 setNavigatePath={setNavigatePath}
-                setEtterlevelseStatus={setEtterlevelseStatus}
                 close={() => {
                   navigate(`/behandling/${behandling.id}/${temaData?.code}`)
                 }}

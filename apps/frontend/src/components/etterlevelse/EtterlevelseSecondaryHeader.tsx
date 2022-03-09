@@ -7,10 +7,10 @@ import { angleIcon, page2Icon } from '../Images'
 import CustomizedModal from '../common/CustomizedModal'
 import { getTemaMainHeader } from '../../pages/TemaPage'
 import React, { useState } from 'react'
-import { isFerdigUtfylt } from '../../pages/BehandlingerTemaPageV2'
-import { Behandling, EtterlevelseStatus } from '../../constants'
+import { Behandling } from '../../constants'
 import { LovCode, TemaCode } from '../../services/Codelist'
 import { Section } from '../../pages/EtterlevelseDokumentasjonPage'
+import { KravId } from '../../api/KravApi'
 
 type EtterlevelseSecondaryHeaderProps = {
   tab: string
@@ -18,7 +18,7 @@ type EtterlevelseSecondaryHeaderProps = {
   setNavigatePath: (state: string) => void
   behandling: Behandling | undefined
   temaData: TemaCode | undefined
-  activeEtterlevleseStatus: EtterlevelseStatus | undefined
+  kravId: KravId | undefined
   lovListe: LovCode[]
 }
 export const EtterlevelseSecondaryHeader = ({
@@ -27,8 +27,8 @@ export const EtterlevelseSecondaryHeader = ({
   setNavigatePath,
   behandling,
   temaData,
-  activeEtterlevleseStatus,
   lovListe,
+  kravId
 }: EtterlevelseSecondaryHeaderProps) => {
 
 
@@ -58,7 +58,7 @@ export const EtterlevelseSecondaryHeader = ({
           <Label3
             $style={{
               fontSize: '18px',
-              fontWeight: 'normal',
+              fontWeight: 400,
               lineHeight: '22px',
               color: ettlevColors.green600, textDecoration: 'underline',
               ':hover': {
@@ -94,7 +94,7 @@ export const EtterlevelseSecondaryHeader = ({
             marginLeft="12px"
             $style={{
               fontSize: '18px',
-              fontWeight: 'normal',
+              fontWeight: 400,
               lineHeight: '22px',
               color: ettlevColors.green600, textDecoration: 'underline',
               ':hover': {
@@ -117,8 +117,8 @@ export const EtterlevelseSecondaryHeader = ({
       >
         <Block display="flex" flex="1">
           <img src={angleIcon} alt="" />{' '}
-          <Label3 marginLeft="12px" $style={{ fontSize: '18px', fontWeight: 600, lineHeight: '22px', color: ettlevColors.green600, whiteSpace: 'nowrap' }}>
-            {isFerdigUtfylt(activeEtterlevleseStatus) ? 'Ferdig utfylt' : 'Skal fylles ut'}
+          <Label3 marginLeft="12px" $style={{ fontSize: '24px', fontWeight: 900, lineHeight: '32px', color: ettlevColors.green600, whiteSpace: 'nowrap' }}>
+            K{kravId?.kravNummer}.{kravId?.kravVersjon}
           </Label3>
         </Block>
 

@@ -46,7 +46,7 @@ export const SecondaryHeader = ({
           <Label3
             $style={{
               fontSize: '18px',
-              fontWeight: 'normal',
+              fontWeight: 400,
               lineHeight: '22px',
               color: ettlevColors.green600, textDecoration: 'underline',
               ':hover': {
@@ -68,7 +68,7 @@ export const SecondaryHeader = ({
       >
         <Block display="flex" flex="1">
           <img src={angleIcon} alt="" />{' '}
-          <Label3 marginLeft="12px" $style={{ fontSize: '18px', fontWeight: 600, lineHeight: '22px', color: ettlevColors.green600, whiteSpace: 'nowrap' }}>
+          <Label3 marginLeft="12px" $style={{ fontSize: '24px', fontWeight: 900, lineHeight: '32px', color: ettlevColors.green600, whiteSpace: 'nowrap' }}>
             {temaData?.shortName}
           </Label3>
         </Block>
