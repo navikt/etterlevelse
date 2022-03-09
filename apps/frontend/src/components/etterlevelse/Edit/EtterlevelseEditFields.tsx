@@ -122,14 +122,14 @@ export const EtterlevelseEditFields = ({
   const navigate = useNavigate()
 
   useEffect(() => {
-    if(navigatePath) {
-      if(_.isEqualWith(mapEtterlevelseToFormValue(etterlevelse, krav), formRef?.current.values)) {
+    if (navigatePath) {
+      if (_.isEqualWith(mapEtterlevelseToFormValue(etterlevelse, krav), formRef?.current.values)) {
         navigate(navigatePath)
       } else {
         setIsAlertUnsavedModalOpen(true)
       }
     }
-  },[navigatePath])
+  }, [navigatePath])
 
   const getTidligereEtterlevelser = () => {
     return tidligereEtterlevelser?.map((e) => {
@@ -276,37 +276,32 @@ export const EtterlevelseEditFields = ({
                           </FieldWrapper>
                         </Block>
                         <Block display="flex" width="100%">
-                          {etterlevelse.kravVersjon > 1 &&
+                          {tidligereEtterlevelser && tidligereEtterlevelser.length >= 1 &&
                             <Block display="flex" width="100%" justifyContent="flex-end">
-                              {tidligereEtterlevelser && tidligereEtterlevelser.length >= 1 ? (
-                                <Block width="100%" maxWidth="460px">
-                                  <CustomizedAccordion>
-                                    <CustomizedPanel title="Se dokumentasjon på tidligere versjoner" overrides={{ Content: { style: { backgroundColor: ettlevColors.white } } }}>
-                                      {getTidligereEtterlevelser()}
-                                    </CustomizedPanel>
-                                  </CustomizedAccordion>
-                                </Block>
-                              ) : (
-                                <Block
-                                  $style={{
-                                    ...padding('8px', '20px'),
-                                    ...borderWidth('1px'),
-                                    ...borderStyle('solid'),
-                                    ...borderRadius('4px'),
-                                    ...borderColor(ettlevColors.grey100),
-                                    backgroundColor: ettlevColors.white,
-                                  }}
-                                  width="100%"
-                                  maxWidth="460px"
-                                  height="34px"
-                                  display="flex"
-                                  alignItems="center"
-                                >
-                                  <H3 marginTop="0px" marginBottom="0px">
-                                    Ingen dokumentasjon på tidligere versjoner
-                                  </H3>
-                                </Block>
-                              )}
+                              <Block width="100%" maxWidth="460px">
+                                <CustomizedAccordion>
+                                  <CustomizedPanel
+                                    title="Se dokumentasjon på tidligere versjoner"
+                                    overrides={{
+                                      Content: {
+                                        style:
+                                        {
+                                          backgroundColor: ettlevColors.white
+                                        }
+                                      },
+                                      Header: {
+                                        style: {
+                                          fontSize: '18px',
+                                          lineHeight: '18px',
+                                          fontWeight: 700
+                                        }
+                                      }
+                                    }}
+                                  >
+                                    {getTidligereEtterlevelser()}
+                                  </CustomizedPanel>
+                                </CustomizedAccordion>
+                              </Block>
                             </Block>}
                         </Block>
                       </Block>
