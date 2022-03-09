@@ -1,12 +1,13 @@
 import { Accordion, AccordionProps, Panel, PanelOverrides, PanelProps } from 'baseui/accordion'
 import { ettlevColors, theme } from '../../util/theme'
-import { Block } from 'baseui/block'
+import { Block, BlockProps } from 'baseui/block'
 import { HeadingLarge } from 'baseui/typography'
 import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons'
 import * as React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { borderColor, borderRadius, borderStyle, borderWidth, paddingAll } from './Style'
 import _ from 'lodash'
+import { $StyleProp } from 'styletron-react'
 
 export const CustomizedAccordion = (props: AccordionProps) => {
   return <Accordion {...props} overrides={{}} />
@@ -17,6 +18,7 @@ interface CustomizedPanelProps {
   HeaderActiveBackgroundColor?: string
   noUnderLine?: boolean
   toggleIcon?: { expanded: React.ReactElement<any, any>; unexpanded: React.ReactElement<any, any> }
+  headerStyle?: $StyleProp<BlockProps>
 }
 
 type CustomProps = CustomizedPanelProps & PanelProps
@@ -95,7 +97,7 @@ export const CustomizedPanel = (props: CustomProps) => {
     } else {
       return (
         <Block>
-          <HeadingLarge marginTop={theme.sizing.scale100} marginBottom={theme.sizing.scale100} color={ettlevColors.green600}>
+          <HeadingLarge marginTop={theme.sizing.scale100} marginBottom={theme.sizing.scale100} color={ettlevColors.green600} $style={props.headerStyle}>
             {props.title}
           </HeadingLarge>
         </Block>

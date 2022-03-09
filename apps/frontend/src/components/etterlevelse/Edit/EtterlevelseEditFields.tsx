@@ -289,13 +289,11 @@ export const EtterlevelseEditFields = ({
                                           backgroundColor: ettlevColors.white
                                         }
                                       },
-                                      Header: {
-                                        style: {
-                                          fontSize: '18px',
-                                          lineHeight: '18px',
-                                          fontWeight: 700
-                                        }
-                                      }
+                                    }}
+                                    headerStyle={{
+                                      fontSize: '18px',
+                                      lineHeight: '18px',
+                                      fontWeight: 700
                                     }}
                                   >
                                     {getTidligereEtterlevelser()}
