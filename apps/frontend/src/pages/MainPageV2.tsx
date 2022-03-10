@@ -144,7 +144,6 @@ export const MainPageV2 = () => {
                 playing={true}
                 playIcon={
                   <Button
-                    onClick={() => { ampli.logEvent('klikk', {title: 'Etterlevelse video spilt', type: 'Se film knapp'}) }}
                     kind="secondary"
                     size={SIZE.compact}
                     $style={buttonBorderStyle}
