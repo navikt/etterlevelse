@@ -102,6 +102,7 @@ export const BehandlingerTemaPage = () => {
           status: krav.status,
           varselMelding: krav.varselMelding,
           prioriteringsId: krav.prioriteringsId,
+          changeStamp: krav.changeStamp,
           ...mapEtterlevelseData(etterlevelse),
         }
       })
