@@ -38,6 +38,7 @@ public interface DomainObject {
             return null;
         }
         return ChangeStampResponse.builder()
+                .createdDate(getChangeStamp().getCreatedDate() == null ? LocalDateTime.now() : getChangeStamp().getCreatedDate() )
                 .lastModifiedBy(getChangeStamp().getLastModifiedBy())
                 .lastModifiedDate(getChangeStamp().getLastModifiedDate() == null ? LocalDateTime.now() : getChangeStamp().getLastModifiedDate())
                 .build();

@@ -18,4 +18,5 @@ public class ChangeStampResponse {
 
     private String lastModifiedBy;
     private LocalDateTime lastModifiedDate;
+    private LocalDateTime createdDate;
 }

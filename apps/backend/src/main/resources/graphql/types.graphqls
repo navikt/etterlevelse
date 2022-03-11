@@ -204,6 +204,7 @@ type Periode {
 }
 
 type ChangeStamp {
+    createdDate: DateTime!
     lastModifiedBy: String!
     lastModifiedDate: DateTime!
 }
