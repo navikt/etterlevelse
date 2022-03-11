@@ -40,6 +40,9 @@ export const ettlevColors = {
   navGra80: '#4f4f4f',
   navOransje: '#A86400',
   focusOutline: '#276ef1',
+  navDypBla: '#004367',
+  navLysBla: '#E5F0F7'
+
 }
 
 export const primitives: ThemePrimitives & { primary150: string; primary350: string } = {

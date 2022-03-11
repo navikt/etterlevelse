@@ -102,8 +102,8 @@ export const MainPageV2 = () => {
                 $style={{
                   ...borderWidth('1px'),
                   ...borderStyle('solid'),
-                  ...borderColor(forsideVarsel.alertType === AlertType.INFO ? ettlevColors.success400 : ettlevColors.navOransje),
-                  backgroundColor: forsideVarsel.alertType === AlertType.INFO ? ettlevColors.success50 : ettlevColors.warning50,
+                  ...borderColor(forsideVarsel.alertType === AlertType.INFO ? ettlevColors.navDypBla : ettlevColors.navOransje),
+                  backgroundColor: forsideVarsel.alertType === AlertType.INFO ? ettlevColors.navLysBla : ettlevColors.warning50,
                   ...paddingAll('32px'),
                   marginBottom: '64px'
                 }}

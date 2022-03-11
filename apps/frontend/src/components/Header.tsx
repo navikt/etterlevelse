@@ -313,8 +313,8 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
           $style={{
             ...borderWidth('1px'),
             ...borderStyle('solid'),
-            ...borderColor(systemVarsel.alertType === AlertType.INFO ? ettlevColors.success400 : ettlevColors.navOransje),
-            backgroundColor: systemVarsel.alertType === AlertType.INFO ? ettlevColors.success50 : ettlevColors.warning50,
+            ...borderColor(systemVarsel.alertType === AlertType.INFO ? ettlevColors.navDypBla : ettlevColors.navOransje),
+            backgroundColor: systemVarsel.alertType === AlertType.INFO ? ettlevColors.navLysBla : ettlevColors.warning50,
           }}
           justifyContent="center"
           display="flex"
