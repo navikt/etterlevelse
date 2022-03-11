@@ -61,7 +61,7 @@ export const EtterlevelseCard = ({ etterlevelse }: { etterlevelse: Etterlevelse 
           </Block>
           <Block display="flex" justifyContent="flex-end">
             <StatusView
-              status={getEtterlevelseStatus(etterlevelse.status)}
+              status={getEtterlevelseStatus(etterlevelse.status, etterlevelse.fristForFerdigstillelse)}
               statusDisplay={{
                 background: isFerdigUtfylt(etterlevelse.status) ? ettlevColors.green50 : '#FFECCC',
                 border: isFerdigUtfylt(etterlevelse.status) ? ettlevColors.green400 : '#D47B00',

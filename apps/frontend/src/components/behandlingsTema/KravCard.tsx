@@ -1,21 +1,21 @@
-import {EtterlevelseMetadata, KravEtterlevelseData} from '../../constants';
-import React, {useEffect, useState} from 'react';
-import {getEtterlevelseMetadataByBehandlingsIdAndKravNummerAndKravVersion, mapEtterlevelseMetadataToFormValue} from '../../api/EtterlevelseMetadataApi';
-import {Block} from 'baseui/block';
-import Button from '../common/Button';
-import {ettlevColors} from '../../util/theme';
-import {borderStyle} from '../common/Style';
-import {toKravId} from './utils';
-import {Label3, Paragraph4} from 'baseui/typography';
-import StatusView from '../common/StatusTag';
-import {getEtterlevelseStatus, getEtterlevelseStatusLabelColor} from '../behandling/utils';
-import moment from 'moment';
-import TildeltPopoever from '../etterlevelseMetadata/TildeltPopover';
-import {isFerdigUtfylt} from '../../pages/BehandlingerTemaPageV2';
-import {faEllipsisVertical} from '@fortawesome/free-solid-svg-icons';
-import {arkCheckIcon, arkPennIcon, warningAlert} from '../Images';
-import {getEtterlevelserByBehandlingsIdKravNumber} from '../../api/EtterlevelseApi';
-import {useLocation, useNavigate} from 'react-router-dom';
+import {EtterlevelseMetadata, KravEtterlevelseData} from '../../constants'
+import React, {useEffect, useState} from 'react'
+import {getEtterlevelseMetadataByBehandlingsIdAndKravNummerAndKravVersion, mapEtterlevelseMetadataToFormValue} from '../../api/EtterlevelseMetadataApi'
+import {Block} from 'baseui/block'
+import Button from '../common/Button'
+import {ettlevColors} from '../../util/theme'
+import {borderStyle} from '../common/Style'
+import {toKravId} from './utils'
+import {Label3, Paragraph4} from 'baseui/typography'
+import StatusView from '../common/StatusTag'
+import {getEtterlevelseStatus, getEtterlevelseStatusLabelColor} from '../behandling/utils'
+import moment from 'moment'
+import TildeltPopoever from '../etterlevelseMetadata/TildeltPopover'
+import {isFerdigUtfylt} from '../../pages/BehandlingerTemaPageV2'
+import {faEllipsisVertical} from '@fortawesome/free-solid-svg-icons'
+import {arkCheckIcon, arkPennIcon, warningAlert} from '../Images'
+import {getEtterlevelserByBehandlingsIdKravNumber} from '../../api/EtterlevelseApi'
+import {useLocation, useNavigate} from 'react-router-dom'
 
 export const KravCard = (props: {
   krav: KravEtterlevelseData,

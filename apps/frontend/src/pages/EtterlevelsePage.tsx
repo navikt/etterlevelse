@@ -12,6 +12,7 @@ import { getKravByKravNumberAndVersion } from '../api/KravApi'
 import CustomizedBreadcrumbs, { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 import { Helmet } from 'react-helmet'
 import { ampli } from '../services/Amplitude'
+import moment from 'moment'
 
 export const etterlevelseName = (etterlevelse: Etterlevelse) => `${kravNumView(etterlevelse)}`
 
@@ -19,21 +20,25 @@ export const kravLink = (kravNummer: string) => {
   return kravNummer.replace('.', '/').replace('K', '/krav/')
 }
 
-export const getEtterlevelseStatus = (status?: EtterlevelseStatus) => {
+export const getEtterlevelseStatus = (status?: EtterlevelseStatus, frist?: string) => {
   if (!status) return ''
   switch (status) {
     case EtterlevelseStatus.UNDER_REDIGERING:
       return 'Under arbeid'
     case EtterlevelseStatus.FERDIG:
       return 'Oppfylt'
-    case EtterlevelseStatus.OPPFYLLES_SENERE:
-      return 'Oppfylles senere'
     case EtterlevelseStatus.IKKE_RELEVANT:
       return 'Ikke relevant'
     case EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT:
       return 'Ikke relevant'
     case EtterlevelseStatus.FERDIG_DOKUMENTERT:
-      return 'Ferdig dokumentert'
+      return 'Oppfylt'
+    case EtterlevelseStatus.OPPFYLLES_SENERE:
+      if (frist) {
+        return 'Oppfylles ' + moment(frist).format('ll')
+      } else {
+        return 'Oppfylles senere'
+      }
     default:
       return status
   }
