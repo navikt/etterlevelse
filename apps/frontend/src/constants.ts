@@ -28,6 +28,7 @@ export interface PageResponse<T> {
 export interface ChangeStamp {
   lastModifiedBy: string
   lastModifiedDate: string
+  createdDate?: string
 }
 
 export interface DomainObject {
@@ -149,6 +150,7 @@ export type KravEtterlevelseData = {
   status: KravStatus
   etterlevelseId?: string
   etterleves: boolean
+  changeStamp: ChangeStamp
   frist?: string
   varselMelding?: string
   prioriteringsId?: string
