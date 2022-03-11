@@ -339,7 +339,7 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
                 marginRight: '5px'
               }}
             />
-            <Markdown source={systemVarsel.melding} />
+            <Markdown fontSize="16px" source={systemVarsel.melding} />
           </Block>
         </Block>}
     </Block>
