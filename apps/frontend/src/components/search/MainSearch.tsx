@@ -414,7 +414,11 @@ const MainSearch = () => {
           value={value}
           onOpen={() => setFilterClicked(true)}
           onInputChange={(event) => {
-            setSearch(event.currentTarget.value)
+            if(event.currentTarget.value.toLowerCase().match(/b[0-9]+/)){
+              setSearch('0'+event.currentTarget.value.substring(1))
+            } else {
+              setSearch(event.currentTarget.value)
+            }
             setValue([{ id: event.currentTarget.value, label: event.currentTarget.value }])
           }}
           onChange={(params) => {
