@@ -79,7 +79,11 @@ public class BkatClient implements BegrepService {
     }
 
     public List<BkatProcess> findProcesses(String search) {
-        return processSearchCache.get(search);
+        if (search.toLowerCase().matches("b[0-9]+(.*)")) {
+            return processSearchCache.get(search.substring(1));
+        } else {
+            return processSearchCache.get(search);
+        }
     }
 
     public List<BkatProcess> getProcessesForTeam(String teamId) {
