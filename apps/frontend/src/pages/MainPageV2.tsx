@@ -108,7 +108,7 @@ export const MainPageV2 = () => {
                   marginBottom: '64px'
                 }}
               >
-                <Markdown source={forsideVarsel.melding} />
+                <Markdown source={forsideVarsel.melding} fontSize="18px"/>
               </Block>
             }
             <H2 $style={{ fontWeight: 300, fontSize: '32px', lineHeight: '42px' }} marginTop="0px" marginBottom="0px">
