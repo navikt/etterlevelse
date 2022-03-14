@@ -9,6 +9,7 @@ import { isFerdigUtfylt } from '../../pages/BehandlingerTemaPageV2'
 import { getEtterlevelseStatus } from '../../pages/EtterlevelsePage'
 import { kravNumView } from '../../pages/KravPage'
 import { ettlevColors, maxPageWidth, responsivePaddingExtraLarge } from '../../util/theme'
+import { getStatusLabelColor } from '../behandling/utils'
 
 import Button from '../common/Button'
 import CustomizedModal from '../common/CustomizedModal'
@@ -62,10 +63,7 @@ export const EtterlevelseCard = ({ etterlevelse }: { etterlevelse: Etterlevelse 
           <Block display="flex" justifyContent="flex-end">
             <StatusView
               status={getEtterlevelseStatus(etterlevelse.status, etterlevelse.fristForFerdigstillelse)}
-              statusDisplay={{
-                background: isFerdigUtfylt(etterlevelse.status) ? ettlevColors.green50 : '#FFECCC',
-                border: isFerdigUtfylt(etterlevelse.status) ? ettlevColors.green400 : '#D47B00',
-              }}
+              statusDisplay={getStatusLabelColor(etterlevelse.status)}
             />
           </Block>
         </Block>
