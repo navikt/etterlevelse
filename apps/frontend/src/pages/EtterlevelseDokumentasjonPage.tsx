@@ -38,7 +38,7 @@ export const EtterlevelseDokumentasjonPage = () => {
 
   useEffect(() => {
     if(behandling && temaData && kravId) {
-      ampli.logEvent('sidevisning', { side: 'Dokumentasjon side for etterlevelse', sidetittel: `B${behandling.nummer.toString()} ${behandling.navn.toString()}`, section: `K${kravId.kravNummer}.${kravId.kravVersjon}` })
+      ampli.logEvent('sidevisning', { side: 'Dokumentasjon side for etterlevelse', sidetittel: `B${behandling.nummer.toString()} ${behandling.navn.toString()}`, section: `K${kravId.kravNummer}.${kravId.kravVersjon}`, temaKey: temaData.shortName.toString() })
     }
   }, [behandling])
 
