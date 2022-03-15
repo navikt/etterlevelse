@@ -23,6 +23,7 @@ import { getEtterlevelseMetadataByBehandlingsIdAndKravNummerAndKravVersion, mapE
 import TildeltPopoever from '../etterlevelseMetadata/TildeltPopover'
 import EtterlevelseEditFields from './Edit/EtterlevelseEditFields'
 import CustomizedModal from '../common/CustomizedModal'
+import { ampli } from '../../services/Amplitude'
 
 type EditEttlevProps = {
   etterlevelse: Etterlevelse
@@ -268,6 +269,7 @@ export const EditEtterlevelseV2 = ({
               tabBackground={ettlevColors.green100}
               activeKey={tab}
               onChange={(k) => {
+                ampli.logEvent('klikk', { sidetittel: `B${behandlingNummer?.toString()} ${behandlingNavn?.toString()}`, section: `K${kravId.kravNummer}.${kravId.kravVersjon}`, 'title': k.activeKey.toString() , 'type': 'tab'  })                
                 if (k.activeKey !== 'dokumentasjon' && etterlevelseFormRef.current && etterlevelseFormRef.current.values) {
                   setEditedEtterlevelse(etterlevelseFormRef.current.values)
                 }
