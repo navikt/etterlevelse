@@ -8,7 +8,7 @@ import { theme } from '../../util'
 import { getKravByKravNumberAndVersion, KravId } from '../../api/KravApi'
 import { kravNumView, query } from '../../pages/KravPage'
 import { H1, H2, Label3, Paragraph2 } from 'baseui/typography'
-import { ettlevColors, maxPageWidth, responsivePaddingExtraLarge, responsiveWidthExtraLarge } from '../../util/theme'
+import { ettlevColors, maxPageWidth, responsivePaddingExtraLarge, responsivePaddingInnerPage, responsiveWidthInnerPage } from '../../util/theme'
 import { user } from '../../services/User'
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
 import { borderColor, borderRadius, borderStyle, borderWidth, marginAll, padding } from '../common/Style'
@@ -152,7 +152,7 @@ export const EditEtterlevelseV2 = ({
           }}
         >
           <Block backgroundColor={ettlevColors.green800} paddingTop="32px" paddingBottom="32px">
-            <Block paddingLeft={responsivePaddingExtraLarge} paddingRight={responsivePaddingExtraLarge}>
+            <Block paddingLeft={responsivePaddingInnerPage} paddingRight={responsivePaddingInnerPage}>
               <Paragraph2
                 $style={{
                   marginTop: '0px',
@@ -255,9 +255,9 @@ export const EditEtterlevelseV2 = ({
           <Block
             display={'flex'}
             justifyContent="center"
-            width={responsiveWidthExtraLarge}
-            paddingLeft={responsivePaddingExtraLarge}
-            paddingRight={responsivePaddingExtraLarge}
+            width={responsiveWidthInnerPage}
+            paddingLeft={responsivePaddingInnerPage}
+            paddingRight={responsivePaddingInnerPage}
             paddingTop="33px"
             $style={{
               background: `linear-gradient(top, ${ettlevColors.green100} 83px, ${ettlevColors.grey25} 0%)`,
