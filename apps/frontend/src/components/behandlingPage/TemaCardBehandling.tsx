@@ -1,14 +1,14 @@
-import { codelist, TemaCode } from '../../services/Codelist'
-import { Behandling, Krav } from '../../constants'
-import { PanelLinkCard, PanelLinkCardOverrides } from '../common/PanelLink'
-import { ettlevColors, theme } from '../../util/theme'
-import { cardWidth } from '../../pages/TemaPage'
-import { Block } from 'baseui/block'
-import { Paragraph4 } from 'baseui/typography'
-import { ProgressBar, SIZE } from 'baseui/progress-bar'
+import {codelist, TemaCode} from '../../services/Codelist'
+import {Behandling} from '../../constants'
+import {PanelLinkCard, PanelLinkCardOverrides} from '../common/PanelLink'
+import {ettlevColors, theme} from '../../util/theme'
+import {cardWidth} from '../../pages/TemaPage'
+import {Block} from 'baseui/block'
+import {Paragraph4} from 'baseui/typography'
+import {ProgressBar, SIZE} from 'baseui/progress-bar'
 import React from 'react'
-import { HeaderContent } from './HeaderContent'
-import { isFerdigUtfylt } from '../../pages/BehandlingerTemaPageV2'
+import {HeaderContent} from './HeaderContent'
+import {isFerdigUtfylt} from '../../pages/BehandlingerTemaPageV2'
 
 type TemaCardBehandlingProps = {
   tema: TemaCode;
@@ -72,7 +72,7 @@ export const TemaCardBehandling = (props: TemaCardBehandlingProps) => {
     Root: {
       Block: {
         style: {
-          display: !krav.length ? 'none' : 'block',
+          display: 'block',
         },
       },
     },
