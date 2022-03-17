@@ -78,7 +78,7 @@ const AppRoutes = (): JSX.Element => {
         <Route path="/status" element={<StatusPage />} caseSensitive={true} />
         <Route path="/help" element={<FAQ />} caseSensitive={true} />
 
-        <Route element={<NotFound />} caseSensitive={true} />
+        <Route path="*" element={<NotFound />} caseSensitive={true} />
       </Routes>
     </ScrollToTop>
   )
