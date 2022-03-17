@@ -1,18 +1,15 @@
-import { Behandling, EtterlevelseStatus, KravEtterlevelseData } from "../../constants";
+import {Behandling, KravEtterlevelseData} from "../../constants";
 import _ from "lodash";
-import { user } from "../../services/User";
-import { Block } from "baseui/block";
-import CustomizedSelect from "../common/CustomizedSelect";
-import { CustomPanelDivider } from "../common/CustomizedAccordion";
-import { KravCard } from "./KravCard";
-import { Paragraph4 } from "baseui/typography";
-import React from "react";
-import { Option } from "baseui/select";
-import { KravId } from "../../api/KravApi";
+import {user} from "../../services/User";
+import {Block} from "baseui/block";
+import {CustomPanelDivider} from "../common/CustomizedAccordion";
+import {KravCard} from "./KravCard";
+import React, {ReactElement} from "react";
+import {Option} from "baseui/select";
 
 type KravListProps = {
   kravList: KravEtterlevelseData[]
-  emptyMessage: string
+  EmptyMessage?: ReactElement
   sortingAvailable?: boolean
   noStatus?: boolean
   sorting: readonly Option[]
@@ -23,7 +20,7 @@ type KravListProps = {
 
 export const KravList = ({
   kravList,
-  emptyMessage,
+  EmptyMessage,
   sortingAvailable,
   noStatus,
   sorting,
@@ -70,7 +67,7 @@ export const KravList = ({
     return (
       <CustomPanelDivider>
         <Block display="flex" width="100%" marginLeft="24px">
-          <Paragraph4> {emptyMessage}</Paragraph4>
+          {EmptyMessage}
         </Block>
       </CustomPanelDivider>
     )
