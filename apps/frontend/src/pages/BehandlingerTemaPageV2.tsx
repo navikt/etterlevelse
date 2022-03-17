@@ -27,6 +27,16 @@ import { ampli } from '../services/Amplitude'
 const responsiveBreakPoints: Responsive<Display> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
 const responsiveDisplay: Responsive<Display> = ['block', 'block', 'block', 'block', 'flex', 'flex']
 
+export const sortingOptions = [
+  { label: 'Anbefalt rekkefølge', id: 'priority' },
+  { label: 'Sist endret av meg', id: 'lastModified' },
+]
+
+export const kravRelevansOptions = [
+  {label:'Relevante krav', id: 'relevanteKrav' },
+  { label: 'Bortfiltrerte krav', id: 'irrelevanteKrav'}
+]
+
 const mapEtterlevelseData = (etterlevelse?: Etterlevelse) => ({
   etterlevelseId: etterlevelse?.id,
   etterleves: !!etterlevelse?.etterleves,
@@ -65,12 +75,13 @@ export const BehandlingerTemaPageV2 = () => {
   const [irrelevantKravData, setIrrelevantKravData] = useState<KravEtterlevelseData[]>([])
 
   const [isExpanded, setIsExpanded] = useState<boolean>(false)
-  const sortingOptions = [
-    { label: 'Anbefalt rekkefølge', id: 'priority' },
-    { label: 'Sist endret av meg', id: 'lastModified' },
-  ]
+
+
   const [sorting, setSorting] = useState<readonly Option[]>([sortingOptions[0]])
 
+
+  const [kravRelevans, setKravRelevans] = useState<readonly Option[]>([kravRelevansOptions[0]])
+ 
   const filterKrav = async (kravList?: KravQL[], filterFerdigDokumentert?: boolean) => {
 
     const allKravPriority = await getAllKravPriority()
@@ -197,7 +208,7 @@ export const BehandlingerTemaPageV2 = () => {
                 }}
               >
                 <Block display="flex" justifyContent="center" $style={{ paddingTop: '26px', paddingBottom: '22px', paddingLeft: '16px' }}>
-                  <KravPanelHeaderWithSorting kravData={kravData} sortingOptions={sortingOptions} sorting={sorting} setSorting={setSorting} />
+                  <KravPanelHeaderWithSorting kravRelevans={kravRelevans} setKravRelevans={setKravRelevans} kravData={kravData} sorting={sorting} setSorting={setSorting} />
                 </Block>
                 <KravList
                   kravList={kravData}
