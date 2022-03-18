@@ -6,6 +6,7 @@ import { theme } from '../../util'
 import { ettlevColors } from '../../util/theme'
 import CustomizedSelect from '../common/CustomizedSelect'
 import { Option } from 'baseui/select'
+import { kravRelevansOptions, sortingOptions } from '../../pages/BehandlingerTemaPageV2'
 
 const responsiveBreakPoints: Responsive<Display> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
 
@@ -43,7 +44,7 @@ export const KravPanelHeader = (props: { title: string; kravData: KravEtterlevel
 }
 
 
-export const KravPanelHeaderWithSorting = (props: { kravData: KravEtterlevelseData[] | Krav[], sortingOptions: Option[], sorting: readonly Option[], setSorting: React.Dispatch<React.SetStateAction<readonly Option[]>>}) => {
+export const KravPanelHeaderWithSorting = (props: {kravRelevans: readonly Option[], setKravRelevans:  React.Dispatch<React.SetStateAction<readonly Option[]>>, kravData: KravEtterlevelseData[] | Krav[], sorting: readonly Option[], setSorting: React.Dispatch<React.SetStateAction<readonly Option[]>>}) => {
   let antallSuksesskriterier = 0
 
   props.kravData.forEach((k) => {
@@ -58,9 +59,11 @@ export const KravPanelHeaderWithSorting = (props: { kravData: KravEtterlevelseDa
         <Label3 $style={{ fontSize: '16px', lineHeight: '18px' }}>
           Vis:
         </Label3>
-
-        <Block paddingLeft="20px" paddingRight="20px" width="100%" maxWidth="290px">
-          <CustomizedSelect size="default" clearable={false} options={props.sortingOptions} value={props.sorting} onChange={(params) => props.setSorting(params.value)} />
+        <Block paddingLeft="20px" paddingRight="16px" width="100%" maxWidth="290px">
+          <CustomizedSelect size="default" clearable={false} options={kravRelevansOptions} value={props.kravRelevans} onChange={(params) => props.setKravRelevans(params.value)} />
+        </Block>
+        <Block  paddingRight="20px" width="100%" maxWidth="290px">
+          <CustomizedSelect size="default" clearable={false} options={sortingOptions} value={props.sorting} onChange={(params) => props.setSorting(params.value)} />
         </Block>
       </Block>
       <Block display="flex" justifyContent={responsiveAlignment} flex="1" marginRight="26px">

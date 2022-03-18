@@ -13,8 +13,8 @@ export const HeaderContent = (props: { kravLength: number, documentedLength: num
       overrides={{
         Root: {
           style: {
-            backgroundColor: ettlevColors.green50,
-            ...borderColor(ettlevColors.green50),
+            backgroundColor: props.kravLength > 0 ? ettlevColors.green50 : ettlevColors.white,
+            ...borderColor(props.kravLength > 0 ? ettlevColors.green50 : ettlevColors.white),
           },
         },
       }}
@@ -28,11 +28,11 @@ export const HeaderContent = (props: { kravLength: number, documentedLength: num
     </Tag>
     {props.documentedLength >= 1 && (props.nyttKravVersjonCounter > 0 || props.nyttKravCounter > 0) &&
       <Block display="flex">
-        <img alt="" src={warningAlert} height="20px" width="20px" style={{marginRight: '2px'}} />
-        <Paragraph4 $style={{lineHeight: '20px', marginTop: '0px', marginBottom: '0px' }}>
-          {props.nyttKravCounter > 0 ? props.nyttKravCounter === 1 ? `${ props.nyttKravCounter} nytt krav` : `${ props.nyttKravCounter} nye krav`: ''}
+        <img alt="" src={warningAlert} height="20px" width="20px" style={{ marginRight: '2px' }} />
+        <Paragraph4 $style={{ lineHeight: '20px', marginTop: '0px', marginBottom: '0px' }}>
+          {props.nyttKravCounter > 0 ? props.nyttKravCounter === 1 ? `${props.nyttKravCounter} nytt krav` : `${props.nyttKravCounter} nye krav` : ''}
           {props.nyttKravVersjonCounter > 0 && props.nyttKravCounter > 0 && ', '}
-          {props.nyttKravVersjonCounter > 0 ? props.nyttKravVersjonCounter === 1 ? `${ props.nyttKravVersjonCounter} ny versjon` : `${ props.nyttKravVersjonCounter} nye versjoner`: ''}
+          {props.nyttKravVersjonCounter > 0 ? props.nyttKravVersjonCounter === 1 ? `${props.nyttKravVersjonCounter} ny versjon` : `${props.nyttKravVersjonCounter} nye versjoner` : ''}
         </Paragraph4>
       </Block>
     }
