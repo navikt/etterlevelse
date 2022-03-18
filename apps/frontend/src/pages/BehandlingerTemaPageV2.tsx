@@ -216,7 +216,7 @@ export const BehandlingerTemaPageV2 = () => {
                   <KravPanelHeaderWithSorting
                     kravRelevans={kravRelevans}
                     setKravRelevans={setKravRelevans}
-                    kravData={kravData}
+                    kravData={kravRelevans[0].id === 'relevanteKrav' ? kravData : irrelevantKravData}
                     sorting={sorting}
                     setSorting={setSorting}/>
                 </Block>
