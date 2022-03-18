@@ -1,14 +1,14 @@
-import {codelist, TemaCode} from '../../services/Codelist'
-import {Behandling} from '../../constants'
-import {PanelLinkCard, PanelLinkCardOverrides} from '../common/PanelLink'
-import {ettlevColors, theme} from '../../util/theme'
-import {cardWidth} from '../../pages/TemaPage'
-import {Block} from 'baseui/block'
-import {Paragraph4} from 'baseui/typography'
-import {ProgressBar, SIZE} from 'baseui/progress-bar'
+import { codelist, TemaCode } from '../../services/Codelist'
+import { Behandling } from '../../constants'
+import { PanelLinkCard, PanelLinkCardOverrides } from '../common/PanelLink'
+import { ettlevColors, theme } from '../../util/theme'
+import { cardWidth } from '../../pages/TemaPage'
+import { Block } from 'baseui/block'
+import { Paragraph4 } from 'baseui/typography'
+import { ProgressBar, SIZE } from 'baseui/progress-bar'
 import React from 'react'
-import {HeaderContent} from './HeaderContent'
-import {isFerdigUtfylt} from '../../pages/BehandlingerTemaPageV2'
+import { HeaderContent } from './HeaderContent'
+import { isFerdigUtfylt } from '../../pages/BehandlingerTemaPageV2'
 
 type TemaCardBehandlingProps = {
   tema: TemaCode;
@@ -55,7 +55,7 @@ export const TemaCardBehandling = (props: TemaCardBehandlingProps) => {
     Header: {
       Block: {
         style: {
-          backgroundColor: ettlevColors.green100,
+          backgroundColor: krav.length > 0 ? ettlevColors.green100 : ettlevColors.green50,
           height: '180px',
           paddingBottom: theme.sizing.scale600,
         },
@@ -90,37 +90,45 @@ export const TemaCardBehandling = (props: TemaCardBehandlingProps) => {
       hideArrow
       titleColor={ettlevColors.green600}
     >
-      <Block marginTop={theme.sizing.scale650} width={'100%'}>
-        <Block display="flex" flex={1}>
-          <Paragraph4 marginTop="0px" marginBottom="2px">
-            Ferdig utfylt:
-          </Paragraph4>
-          <Block display="flex" flex={1} justifyContent="flex-end">
-            <Paragraph4 marginTop="0px" marginBottom="2px">
-              {utfylt} av {krav.length} krav
-            </Paragraph4>
+      <Block display="flex" width="100%">
+        {krav.length > 0 ?
+          <Block marginTop={theme.sizing.scale650} width={'100%'}>
+            <Block display="flex" flex={1}>
+              <Paragraph4 marginTop="0px" marginBottom="2px">
+                Ferdig utfylt:
+              </Paragraph4>
+              <Block display="flex" flex={1} justifyContent="flex-end">
+                <Paragraph4 marginTop="0px" marginBottom="2px">
+                  {utfylt} av {krav.length} krav
+                </Paragraph4>
+              </Block>
+            </Block>
+            <Block>
+              <ProgressBar
+                value={utfylt}
+                successValue={krav.length}
+                size={SIZE.medium}
+                overrides={{
+                  BarProgress: {
+                    style: {
+                      backgroundColor: ettlevColors.green800,
+                    },
+                  },
+                  BarContainer: {
+                    style: {
+                      marginLeft: '0px',
+                      marginRight: '0px',
+                    },
+                  },
+                }}
+              />
+            </Block>
           </Block>
-        </Block>
-        <Block>
-          <ProgressBar
-            value={utfylt}
-            successValue={krav.length}
-            size={SIZE.medium}
-            overrides={{
-              BarProgress: {
-                style: {
-                  backgroundColor: ettlevColors.green800,
-                },
-              },
-              BarContainer: {
-                style: {
-                  marginLeft: '0px',
-                  marginRight: '0px',
-                },
-              },
-            }}
-          />
-        </Block>
+          :
+          <Paragraph4 $style={{ lineHeight: '14px', fontStyle: 'italic' }} marginTop="25px" marginBottom="0px">
+            Tema inneholder krav dere har filtrert bort
+          </Paragraph4>
+        }
       </Block>
     </PanelLinkCard>
   )
