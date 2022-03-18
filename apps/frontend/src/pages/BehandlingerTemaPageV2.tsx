@@ -80,6 +80,8 @@ export const BehandlingerTemaPageV2 = () => {
 
   const [kravRelevans, setKravRelevans] = useState<readonly Option[]>([kravRelevansOptions[0]])
 
+
+
   const filterKrav = async (kravList?: KravQL[], filterFerdigDokumentert?: boolean) => {
 
     const allKravPriority = await getAllKravPriority()
@@ -117,7 +119,6 @@ export const BehandlingerTemaPageV2 = () => {
         }
       }
     }
-
     return mapped
   }
 
@@ -147,7 +148,7 @@ export const BehandlingerTemaPageV2 = () => {
 
   useEffect(() => {
     (async () => {
-      kravData.length && filterKrav(irrelevantData?.krav.content).then((kravListe) => {
+      filterKrav(irrelevantData?.krav.content).then((kravListe) => {
         const newKravList = kravListe
           .filter((k) => {
             if (k.etterlevelseStatus === undefined) {
@@ -164,6 +165,7 @@ export const BehandlingerTemaPageV2 = () => {
               return false
             }
           })
+
         setIrrelevantKravData(newKravList)
       })
     })()
