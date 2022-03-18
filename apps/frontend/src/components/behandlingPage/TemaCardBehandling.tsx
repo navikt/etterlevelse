@@ -2,7 +2,7 @@ import { codelist, TemaCode } from '../../services/Codelist'
 import { Behandling } from '../../constants'
 import { PanelLinkCard, PanelLinkCardOverrides } from '../common/PanelLink'
 import { ettlevColors, theme } from '../../util/theme'
-import { cardWidth } from '../../pages/TemaPage'
+import { cardWidth, useKravCounter } from '../../pages/TemaPage'
 import { Block } from 'baseui/block'
 import { Paragraph4 } from 'baseui/typography'
 import { ProgressBar, SIZE } from 'baseui/progress-bar'
@@ -18,8 +18,10 @@ type TemaCardBehandlingProps = {
 }
 export const TemaCardBehandling = (props: TemaCardBehandlingProps) => {
   const { tema, stats, behandling, irrelevant } = props
-  const lover = codelist.getCodesForTema(tema.code).map((c) => c.code)
-  const krav = stats.filter((k) => k.regelverk.map((r: any) => r.lov.code).some((r: any) => lover.includes(r)))
+  const lover = codelist.getCodesForTema(tema.code)
+  const lovcodes = lover.map((c) => c.code)
+  const krav = stats.filter((k) => k.regelverk.map((r: any) => r.lov.code).some((r: any) => lovcodes.includes(r)))
+  const { data, loading } = useKravCounter({ lover: lover.map((c) => c.code) }, { skip: !lover.length })
 
   let nyttKravCounter = 0
   let nyttKravVersjonCounter = 0
@@ -126,7 +128,7 @@ export const TemaCardBehandling = (props: TemaCardBehandlingProps) => {
           </Block>
           :
           <Paragraph4 $style={{ lineHeight: '14px', fontStyle: 'italic' }} marginTop="25px" marginBottom="0px">
-            Tema inneholder krav dere har filtrert bort
+            Tema inneholder {data?.krav.numberOfElements} krav dere har filtrert bort
           </Paragraph4>
         }
       </Block>
