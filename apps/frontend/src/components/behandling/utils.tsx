@@ -11,8 +11,8 @@ export const getEtterlevelseStatusLabelColor = (etterlevelse: KravEtterlevelseDa
       }
     case EtterlevelseStatus.FERDIG:
       return {
-        background: ettlevColors.white,
-        border: "#0B483F"
+        background: ettlevColors.green50,
+        border:  ettlevColors.green400
       }
     case EtterlevelseStatus.IKKE_RELEVANT:
       return {
@@ -76,8 +76,8 @@ export const getStatusLabelColor = (status: EtterlevelseStatus) => {
       }
     case EtterlevelseStatus.FERDIG:
       return {
-        background: ettlevColors.white,
-        border: "#0B483F"
+        background: ettlevColors.green50,
+        border: ettlevColors.green400
       }
     case EtterlevelseStatus.IKKE_RELEVANT:
       return {
