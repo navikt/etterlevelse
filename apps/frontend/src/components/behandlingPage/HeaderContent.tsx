@@ -8,13 +8,13 @@ import { warningAlert } from "../Images";
 
 export const HeaderContent = (props: { kravLength: number, documentedLength: number, nyttKravCounter: number, nyttKravVersjonCounter: number }) => (
   <Block marginBottom="33px" display="flex" alignItems="center">
-    <Tag
+    { props.kravLength > 0 && <Tag
       closeable={false}
       overrides={{
         Root: {
           style: {
-            backgroundColor: props.kravLength > 0 ? ettlevColors.green50 : ettlevColors.white,
-            ...borderColor(props.kravLength > 0 ? ettlevColors.green50 : ettlevColors.white),
+            backgroundColor: ettlevColors.green50,
+            ...borderColor(ettlevColors.green50),
           },
         },
       }}
@@ -25,7 +25,7 @@ export const HeaderContent = (props: { kravLength: number, documentedLength: num
         </Label3>
         <Paragraph4 $style={{ lineHeight: '18px', marginTop: '0px', marginBottom: '0px' }}>krav</Paragraph4>
       </Block>
-    </Tag>
+    </Tag>}
     {props.documentedLength >= 1 && (props.nyttKravVersjonCounter > 0 || props.nyttKravCounter > 0) &&
       <Block display="flex">
         <img alt="" src={warningAlert} height="20px" width="20px" style={{ marginRight: '2px' }} />
