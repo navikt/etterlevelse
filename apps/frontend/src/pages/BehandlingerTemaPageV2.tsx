@@ -74,8 +74,6 @@ export const BehandlingerTemaPageV2 = () => {
 
   const [sorting, setSorting] = useState<readonly Option[]>([sortingOptions[0]])
   const [kravRelevans, setKravRelevans] = useState<readonly Option[]>([kravRelevansOptions[0]])
-  const [loadingData, setLoadingData] = useState<boolean>(false)
-
 
 
   const filterKrav = async (kravList?: KravQL[], filterFerdigDokumentert?: boolean) => {
@@ -144,7 +142,6 @@ export const BehandlingerTemaPageV2 = () => {
 
   useEffect(() => {
     (async () => {
-      setLoadingData(true)
       filterKrav(irrelevantData?.krav.content).then((kravListe) => {
         const newKravList = kravListe
           .filter((k) => {
@@ -162,7 +159,6 @@ export const BehandlingerTemaPageV2 = () => {
               return false
             }
           })
-        setLoadingData(false)
         setIrrelevantKravData(newKravList)
       })
     })()
@@ -236,7 +232,6 @@ export const BehandlingerTemaPageV2 = () => {
                     sorting={sorting}
                     sortingOptions={sortingOptions}
                     behandling={behandling}
-                    loading={loadingData}
                   />
               </Block>
             </Block>
