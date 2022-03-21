@@ -58,12 +58,12 @@ export const KravCard = (props: {
     const today = new Date()
     const kravCreatedDate = moment(props.krav.changeStamp.createdDate).toDate()
     setKravAge(getNumberOfDaysBetween(kravCreatedDate, today))
-    ;(async () => {
-      getEtterlevelseMetaData()
-      if (props.krav.kravVersjon > 1 && props.krav.etterlevelseStatus === undefined) {
-        setNyVersionFlag((await getEtterlevelserByBehandlingsIdKravNumber(props.behandlingId, props.krav.kravNummer)).content.length >= 1)
-      }
-    })()
+      ; (async () => {
+        getEtterlevelseMetaData()
+        if (props.krav.kravVersjon > 1 && props.krav.etterlevelseStatus === undefined) {
+          setNyVersionFlag((await getEtterlevelserByBehandlingsIdKravNumber(props.behandlingId, props.krav.kravNummer)).content.length >= 1)
+        }
+      })()
   }, [])
 
   return (
@@ -101,7 +101,7 @@ export const KravCard = (props: {
         >
           <Block display="flex" justifyContent="center" alignItems="center" width="100%" onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
             <Block marginLeft="8px">
-              {isFerdigUtfylt(props.krav.etterlevelseStatus) ? <img src={arkCheckIcon} alt="" /> : <img src={arkPennIcon} alt="" />}
+              {props.krav.isIrrelevant || isFerdigUtfylt(props.krav.etterlevelseStatus) ? <img src={arkCheckIcon} alt="" /> : <img src={arkPennIcon} alt="" />}
             </Block>
             <Block marginLeft="14px">
               <Block display={'flex'} alignItems={'center'}>
@@ -126,7 +126,7 @@ export const KravCard = (props: {
                     />
                   }
                 </Block>
-                <Block marginLeft="31px" maxWidth="140px" width="100%">
+                {!props.krav.isIrrelevant && <Block marginLeft="31px" maxWidth="140px" width="100%">
                   {etterlevelseMetadata && etterlevelseMetadata.tildeltMed && etterlevelseMetadata.tildeltMed.length >= 1 ? (
                     <Block>
                       <Label3
@@ -149,13 +149,21 @@ export const KravCard = (props: {
                         {'Sist utfylt: ' + moment(props.krav.etterlevelseChangeStamp?.lastModifiedDate).format('ll')}
                       </Paragraph4>
                     </Block>}
-                </Block>
+                </Block>}
+
+                {props.krav.isIrrelevant && <Block marginLeft="31px" maxWidth="140px" width="100%">
+                  <Label3
+                    $style={{ fontSize: '14px', lineHeight: '14px', textAlign: 'right', fontStyle: 'italic', fontWeight: 400 }}
+                  >
+                    Bortfiltrert
+                  </Label3>
+                </Block>}
               </Block>
             </Block>
           </Block>
         </Button>
       </Block>
-      {etterlevelseMetadata && <Block display="flex" alignItems="center" paddingRight={'8px'}>
+      {!props.krav.isIrrelevant && etterlevelseMetadata && <Block display="flex" alignItems="center" paddingRight={'8px'}>
         <TildeltPopoever etterlevelseMetadata={etterlevelseMetadata} setEtterlevelseMetadata={setEtterlevelseMetadata} icon={faEllipsisVertical} iconColor={ettlevColors.grey600} />
       </Block>}
     </Block>
