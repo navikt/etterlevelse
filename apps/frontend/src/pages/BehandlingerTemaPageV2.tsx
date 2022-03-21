@@ -1,27 +1,26 @@
-import React, { useEffect, useState } from 'react'
-import { Block, Display } from 'baseui/block'
-import { useParams } from 'react-router-dom'
-import { H4, Paragraph2 } from 'baseui/typography'
-import { ettlevColors } from '../util/theme'
-import { codelist, ListName, TemaCode } from '../services/Codelist'
-import { useBehandling } from '../api/BehandlingApi'
-import { Layout2 } from '../components/scaffold/Page'
-import { Etterlevelse, EtterlevelseStatus, KravEtterlevelseData, KravQL, KravStatus, PageResponse } from '../constants'
-import { useQuery } from '@apollo/client'
-import { behandlingKravQuery } from '../api/KravApi'
-import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
-import { Responsive } from 'baseui/theme'
-import { KravPanelHeaderWithSorting } from '../components/behandling/KravPanelHeader'
-import { sortKraverByPriority } from '../util/sort'
+import React, {useEffect, useState} from 'react'
+import {Block, Display} from 'baseui/block'
+import {useParams} from 'react-router-dom'
+import {H4, Paragraph2} from 'baseui/typography'
+import {ettlevColors} from '../util/theme'
+import {codelist, ListName, TemaCode} from '../services/Codelist'
+import {useBehandling} from '../api/BehandlingApi'
+import {Layout2} from '../components/scaffold/Page'
+import {Etterlevelse, EtterlevelseStatus, KravEtterlevelseData, KravQL, KravStatus, PageResponse} from '../constants'
+import {useQuery} from '@apollo/client'
+import {behandlingKravQuery} from '../api/KravApi'
+import {breadcrumbPaths} from '../components/common/CustomizedBreadcrumbs'
+import {Responsive} from 'baseui/theme'
+import {KravPanelHeaderWithSorting} from '../components/behandling/KravPanelHeader'
+import {sortKraverByPriority} from '../util/sort'
 import _ from 'lodash'
-import { getAllKravPriority } from '../api/KravPriorityApi'
-import { Helmet } from 'react-helmet'
-import { Option } from 'baseui/select'
-import { getMainHeader } from './BehandlingPage'
-import { SecondaryHeader } from "../components/behandlingsTema/SecondaryHeader";
-import { KravList } from "../components/behandlingsTema/KravList";
-import { ampli } from '../services/Amplitude'
-import { Spinner } from '../components/common/Spinner'
+import {getAllKravPriority} from '../api/KravPriorityApi'
+import {Helmet} from 'react-helmet'
+import {Option} from 'baseui/select'
+import {getMainHeader} from './BehandlingPage'
+import {SecondaryHeader} from "../components/behandlingsTema/SecondaryHeader";
+import {KravList} from "../components/behandlingsTema/KravList";
+import {ampli} from '../services/Amplitude'
 
 const responsiveBreakPoints: Responsive<Display> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
 const responsiveDisplay: Responsive<Display> = ['block', 'block', 'block', 'block', 'flex', 'flex']
@@ -75,7 +74,7 @@ export const BehandlingerTemaPageV2 = () => {
 
   const [sorting, setSorting] = useState<readonly Option[]>([sortingOptions[0]])
   const [kravRelevans, setKravRelevans] = useState<readonly Option[]>([kravRelevansOptions[0]])
-  const [loadingData, setLoadingData] = useState<boolean>(true)
+  const [loadingData, setLoadingData] = useState<boolean>(false)
 
 
 
@@ -145,6 +144,7 @@ export const BehandlingerTemaPageV2 = () => {
 
   useEffect(() => {
     (async () => {
+      setLoadingData(true)
       filterKrav(irrelevantData?.krav.content).then((kravListe) => {
         const newKravList = kravListe
           .filter((k) => {
@@ -162,9 +162,8 @@ export const BehandlingerTemaPageV2 = () => {
               return false
             }
           })
-
-        setIrrelevantKravData(newKravList)
         setLoadingData(false)
+        setIrrelevantKravData(newKravList)
       })
     })()
   }, [irrelevantData, kravData])
@@ -217,12 +216,6 @@ export const BehandlingerTemaPageV2 = () => {
                     sorting={sorting}
                     setSorting={setSorting} />
                 </Block>
-
-                {loadingData ? (
-                  <Block display="flex" flex="1" justifyContent="center" paddingBottom="10px">
-                    <Spinner size="20px" />
-                  </Block>
-                ) : (
                   <KravList
                     kravList={kravRelevans[0].id === 'relevanteKrav' ? kravData : irrelevantKravData}
                     EmptyMessage={
@@ -244,8 +237,7 @@ export const BehandlingerTemaPageV2 = () => {
                     sortingOptions={sortingOptions}
                     behandling={behandling}
                     loading={loadingData}
-                  />)
-                }
+                  />
               </Block>
             </Block>
           </Block>
