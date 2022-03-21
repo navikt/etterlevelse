@@ -1,11 +1,11 @@
-import {Behandling, KravEtterlevelseData} from "../../constants";
+import { Behandling, KravEtterlevelseData } from "../../constants";
 import _ from "lodash";
-import {user} from "../../services/User";
-import {Block} from "baseui/block";
-import {CustomPanelDivider} from "../common/CustomizedAccordion";
-import {KravCard} from "./KravCard";
-import React, {ReactElement} from "react";
-import {Option} from "baseui/select";
+import { user } from "../../services/User";
+import { Block } from "baseui/block";
+import { CustomPanelDivider } from "../common/CustomizedAccordion";
+import { KravCard } from "./KravCard";
+import React, { ReactElement, useState } from "react";
+import { Option } from "baseui/select";
 
 type KravListProps = {
   kravList: KravEtterlevelseData[]
@@ -16,6 +16,7 @@ type KravListProps = {
   sortingOptions: Option[]
   behandling: Behandling
   noVarsling?: boolean
+  loading: boolean
 }
 
 export const KravList = ({
@@ -26,7 +27,7 @@ export const KravList = ({
   sorting,
   sortingOptions,
   behandling,
-  noVarsling
+  noVarsling,
 }: KravListProps) => {
   if (kravList.length) {
     let sortedKravList = _.cloneDeep(kravList)
