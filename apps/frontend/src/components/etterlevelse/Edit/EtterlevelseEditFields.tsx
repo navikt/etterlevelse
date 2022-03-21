@@ -5,12 +5,11 @@ import { Block } from 'baseui/block'
 import Button from '../../common/Button'
 import React, { useEffect } from 'react'
 import * as yup from 'yup'
-import { getEtterlevelseStatus } from '../../../pages/EtterlevelsePage'
 import { DateField, FieldWrapper, TextAreaField } from '../../common/Inputs'
 import { theme } from '../../../util'
 import { FormControl } from 'baseui/form-control'
 
-import { H3, Label3, Paragraph2, Paragraph4 } from 'baseui/typography'
+import { Label3, Paragraph2, Paragraph4 } from 'baseui/typography'
 import { ettlevColors } from '../../../util/theme'
 import { SuksesskriterierBegrunnelseEdit } from './SuksesskriterieBegrunnelseEdit'
 import { Radio, RadioGroup } from 'baseui/radio'
@@ -19,7 +18,7 @@ import { Error } from '../../common/ModalSchema'
 import { KIND as NKIND, Notification } from 'baseui/notification'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons'
-import { borderColor, borderRadius, borderStyle, borderWidth, marginAll, padding, paddingZero } from '../../common/Style'
+import { borderColor, borderRadius, borderStyle, borderWidth, marginAll, paddingZero } from '../../common/Style'
 import moment from 'moment'
 import { CustomizedAccordion, CustomizedPanel, CustomPanelDivider } from '../../common/CustomizedAccordion'
 import { AllInfo } from '../../krav/ViewKrav'
@@ -113,6 +112,20 @@ const etterlevelseSchema = () => {
   })
 }
 
+const getEtterlevelseRadioLabel = (status?: EtterlevelseStatus) => {
+  if (!status) return ''
+  switch (status) {
+    case EtterlevelseStatus.UNDER_REDIGERING:
+      return 'Kravet skal etterleves nå'
+    case EtterlevelseStatus.IKKE_RELEVANT:
+      return 'Kravet er ikke relevant'
+    case EtterlevelseStatus.OPPFYLLES_SENERE:
+      return 'Kravet skal etterleves senere'
+    default:
+      return status
+  }
+}
+
 export const EtterlevelseEditFields = ({
   krav, etterlevelse, submit, formRef, behandlingId, disableEdit, documentEdit, close, setIsAlertUnsavedModalOpen,
   isAlertUnsavedModalOpen, navigatePath, setNavigatePath, editedEtterlevelse, tidligereEtterlevelser
@@ -165,12 +178,12 @@ export const EtterlevelseEditFields = ({
                   <Block>
                     <Block>
                       <Block display="flex" width="100%">
-                        <Block display="flex" width="100%" maxWidth="200px">
+                        <Block display="flex" width="100%" maxWidth="600px">
                           <FieldWrapper marginBottom="0px">
                             <Field name={'status'}>
                               {(p: FieldProps<string | Code>) => (
                                 <FormControl
-                                  label="Er kravet oppfylt?"
+                                  label="Oppgi relevans for behandlingen"
                                   overrides={{
                                     Label: {
                                       style: {
@@ -211,7 +224,7 @@ export const EtterlevelseEditFields = ({
                                       },
                                     }}
                                     value={
-                                      etterlevelseStatus === EtterlevelseStatus.FERDIG_DOKUMENTERT ? EtterlevelseStatus.FERDIG :
+                                      etterlevelseStatus === EtterlevelseStatus.FERDIG_DOKUMENTERT || etterlevelseStatus === EtterlevelseStatus.FERDIG ? EtterlevelseStatus.UNDER_REDIGERING :
                                         etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT ? EtterlevelseStatus.IKKE_RELEVANT :
                                           etterlevelseStatus
                                     }
@@ -226,7 +239,7 @@ export const EtterlevelseEditFields = ({
                                           <Radio value={id} key={id}>
                                             <Block $style={{ textDecoration: radioHover === id ? 'underline' : 'none' }}>
                                               <Paragraph2 $style={{ lineHeight: '22px' }} marginTop="0px" marginBottom="0px">
-                                                {getEtterlevelseStatus(id)}
+                                                {getEtterlevelseRadioLabel(id)}
                                               </Paragraph2>
                                             </Block>
 
@@ -256,14 +269,15 @@ export const EtterlevelseEditFields = ({
                                           </Radio>
                                         )
                                       }
-                                      if (id === EtterlevelseStatus.FERDIG_DOKUMENTERT || id === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) {
+                                      if (id === EtterlevelseStatus.FERDIG || id === EtterlevelseStatus.FERDIG_DOKUMENTERT || id === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT
+                                      ) {
                                         return null
                                       }
                                       return (
                                         <Radio value={id} key={id}>
                                           <Block $style={{ textDecoration: radioHover === id ? 'underline' : 'none' }}>
                                             <Paragraph2 $style={{ lineHeight: '22px' }} marginTop="0px" marginBottom="0px">
-                                              {getEtterlevelseStatus(id)}
+                                              {getEtterlevelseRadioLabel(id)}
                                             </Paragraph2>
                                           </Block>
                                         </Radio>
@@ -410,6 +424,27 @@ export const EtterlevelseEditFields = ({
                     onClick={() => {
                       if (values.status === EtterlevelseStatus.FERDIG_DOKUMENTERT || values.status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) {
                         values.status = Object.values(EtterlevelseStatus).filter((e) => e === etterlevelseStatus)[0]
+                      }
+                      if (values.status === EtterlevelseStatus.UNDER_REDIGERING || values.status === EtterlevelseStatus.FERDIG || values.status === EtterlevelseStatus.FERDIG_DOKUMENTERT) {
+                        let completed = true
+                        values.suksesskriterieBegrunnelser.forEach((value) => {
+                          if (value.oppfylt || value.ikkeRelevant) {
+                            if (!value.behovForBegrunnelse) {
+                              completed = true
+                            } else if (value.begrunnelse) {
+                              completed = true
+                            } else {
+                              completed = false
+                            }
+                          } else { 
+                            completed = false
+                          }
+                        })
+                        if (completed) {
+                          values.status = EtterlevelseStatus.FERDIG
+                        } else {
+                          values.status = EtterlevelseStatus.UNDER_REDIGERING
+                        }
                       }
                       submitForm()
                     }}

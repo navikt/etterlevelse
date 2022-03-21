@@ -1,17 +1,17 @@
-import { Block } from 'baseui/block'
-import { H1, Label3 } from 'baseui/typography'
-import { useParams } from 'react-router-dom'
-import { useEtterlevelse } from '../api/EtterlevelseApi'
-import React, { useEffect, useState } from 'react'
-import { Etterlevelse, EtterlevelseStatus, Krav } from '../constants'
-import { ViewEtterlevelse } from '../components/etterlevelse/ViewEtterlevelse'
-import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
-import { kravNumView } from './KravPage'
-import { ettlevColors, maxPageWidth, pageWidth, responsivePaddingSmall, responsiveWidthSmall } from '../util/theme'
-import { getKravByKravNumberAndVersion } from '../api/KravApi'
-import CustomizedBreadcrumbs, { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
-import { Helmet } from 'react-helmet'
-import { ampli } from '../services/Amplitude'
+import {Block} from 'baseui/block'
+import {H1, Label3} from 'baseui/typography'
+import {useParams} from 'react-router-dom'
+import {useEtterlevelse} from '../api/EtterlevelseApi'
+import React, {useEffect, useState} from 'react'
+import {Etterlevelse, EtterlevelseStatus, Krav} from '../constants'
+import {ViewEtterlevelse} from '../components/etterlevelse/ViewEtterlevelse'
+import {LoadingSkeleton} from '../components/common/LoadingSkeleton'
+import {kravNumView} from './KravPage'
+import {ettlevColors, maxPageWidth, pageWidth, responsivePaddingSmall, responsiveWidthSmall} from '../util/theme'
+import {getKravByKravNumberAndVersion} from '../api/KravApi'
+import CustomizedBreadcrumbs, {breadcrumbPaths} from '../components/common/CustomizedBreadcrumbs'
+import {Helmet} from 'react-helmet'
+import {ampli} from '../services/Amplitude'
 import moment from 'moment'
 
 export const etterlevelseName = (etterlevelse: Etterlevelse) => `${kravNumView(etterlevelse)}`
@@ -55,7 +55,10 @@ export const EtterlevelsePage = () => {
   useEffect(() => {
     etterlevelse && getKravByKravNumberAndVersion(etterlevelse?.kravNummer, etterlevelse?.kravVersjon).then(setKrav)
     if (etterlevelse) {
-      ampli.logEvent('sidevisning', { side: 'Etterlevelse side', sidetittel: `Etterlevelse: K${etterlevelse.kravNummer.toString()}.${etterlevelse.kravVersjon.toString()} ${krav?.navn}` })
+      ampli.logEvent('sidevisning', {
+        side: 'Etterlevelse side',
+        sidetittel: `Etterlevelse: K${etterlevelse.kravNummer.toString()}.${etterlevelse.kravVersjon.toString()} ${krav?.navn}`
+      })
     }
   }, [etterlevelse])
 
@@ -71,12 +74,12 @@ export const EtterlevelsePage = () => {
   ]
 
   return (
-    <Block width="100%" id="content" overrides={{ Block: { props: { role: 'main' } } }}>
-      {loading && <LoadingSkeleton header="Etterlevelse" />}
+    <Block width="100%" id="content" overrides={{Block: {props: {role: 'main'}}}}>
+      {loading && <LoadingSkeleton header="Etterlevelse"/>}
       {!loading && (
         <Block backgroundColor={ettlevColors.green800} display="flex" width="100%" justifyContent="center" paddingBottom="32px">
           <Helmet>
-            <meta charSet="utf-8" />
+            <meta charSet="utf-8"/>
             <title>Etterlevelse: {etterlevelse?.kravNummer ? 'K' + etterlevelse.kravNummer.toString() + '.' + etterlevelse.kravVersjon.toString() + ' ' + krav?.navn : ''} </title>
           </Helmet>
           <Block maxWidth={maxPageWidth} width="100%">
@@ -95,7 +98,7 @@ export const EtterlevelsePage = () => {
                         Tilbake
                       </Button>
                     </RouteLink> */}
-                    <CustomizedBreadcrumbs fontColor={ettlevColors.grey25} currentPage="Etterlevelse" paths={breadcrumbPaths} />
+                    <CustomizedBreadcrumbs fontColor={ettlevColors.grey25} currentPage="Etterlevelse" paths={breadcrumbPaths}/>
                   </Block>
 
                   {/*
@@ -132,7 +135,7 @@ export const EtterlevelsePage = () => {
 
             <Block paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall} width={responsiveWidthSmall} display="flex" justifyContent="center">
               <Block maxWidth={pageWidth} width="100%">
-                <H1 marginTop="0px" $style={{ color: ettlevColors.grey25 }}>
+                <H1 marginTop="0px" $style={{color: ettlevColors.grey25}}>
                   Etterlevelse
                 </H1>
                 {etterlevelse && etterlevelse?.kravNummer !== 0 && krav && (
@@ -153,7 +156,7 @@ export const EtterlevelsePage = () => {
 
       <Block display="flex" width={responsiveWidthSmall} justifyContent="center" paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall}>
         <Block maxWidth={pageWidth} width="100%">
-          {etterlevelse && !loading && krav && <ViewEtterlevelse etterlevelse={etterlevelse} setEtterlevelse={setEtterlevelse} loading={loading} krav={krav} />}
+          {etterlevelse && !loading && krav && <ViewEtterlevelse etterlevelse={etterlevelse} setEtterlevelse={setEtterlevelse} loading={loading} krav={krav}/>}
           {/* {
             edit && etterlevelse &&
 

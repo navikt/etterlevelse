@@ -26,13 +26,13 @@ const responsiveBreakPoints: Responsive<Display> = ['block', 'block', 'block', '
 const responsiveDisplay: Responsive<Display> = ['block', 'block', 'block', 'block', 'flex', 'flex']
 
 export const sortingOptions = [
-  {label: 'Anbefalt rekkefølge', id: 'priority'},
-  {label: 'Sist endret av meg', id: 'lastModified'},
+  { label: 'Anbefalt rekkefølge', id: 'priority' },
+  { label: 'Sist endret av meg', id: 'lastModified' },
 ]
 
 export const kravRelevansOptions = [
-  {label: 'Relevante krav', id: 'relevanteKrav'},
-  {label: 'Bortfiltrerte krav', id: 'irrelevanteKrav'}
+  { label: 'Relevante krav', id: 'relevanteKrav' },
+  { label: 'Bortfiltrerte krav', id: 'irrelevanteKrav' }
 ]
 
 const mapEtterlevelseData = (etterlevelse?: Etterlevelse) => ({
@@ -55,16 +55,16 @@ export const BehandlingerTemaPageV2 = () => {
   const [behandling, setBehandling] = useBehandling(params.id)
   const lovListe = codelist.getCodesForTema(temaData?.code)
   const lover = lovListe.map((c) => c.code)
-  const variables = {behandlingId: params.id, lover: lover, gjeldendeKrav: true, behandlingIrrevantKrav: irrelevantKrav}
+  const variables = { behandlingId: params.id, lover: lover, gjeldendeKrav: true, behandlingIrrevantKrav: irrelevantKrav }
 
-  const {data: rawData, loading} = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
+  const { data: rawData, loading } = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
     variables,
     skip: !params.id || !lover.length,
     fetchPolicy: 'no-cache'
   })
 
-  const {data: irrelevantData, loading: irrelevantDataLoading} = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
-    variables: {...variables, behandlingIrrevantKrav: !irrelevantKrav},
+  const { data: irrelevantData, loading: irrelevantDataLoading } = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
+    variables: { ...variables, behandlingIrrevantKrav: !irrelevantKrav },
     skip: !params.id || !lover.length || params?.tema?.charAt(0) === 'i',
     fetchPolicy: 'no-cache'
   })
@@ -72,14 +72,8 @@ export const BehandlingerTemaPageV2 = () => {
   const [kravData, setKravData] = useState<KravEtterlevelseData[]>([])
   const [irrelevantKravData, setIrrelevantKravData] = useState<KravEtterlevelseData[]>([])
 
-  const [isExpanded, setIsExpanded] = useState<boolean>(false)
-
-
   const [sorting, setSorting] = useState<readonly Option[]>([sortingOptions[0]])
-
-
   const [kravRelevans, setKravRelevans] = useState<readonly Option[]>([kravRelevansOptions[0]])
-
 
 
   const filterKrav = async (kravList?: KravQL[], filterFerdigDokumentert?: boolean) => {
@@ -165,7 +159,6 @@ export const BehandlingerTemaPageV2 = () => {
               return false
             }
           })
-
         setIrrelevantKravData(newKravList)
       })
     })()
@@ -187,7 +180,7 @@ export const BehandlingerTemaPageV2 = () => {
           mainHeader={getMainHeader(
             behandling,
             <Helmet>
-              <meta charSet="utf-8"/>
+              <meta charSet="utf-8" />
               <title>
                 {temaData?.shortName} B{behandling.nummer.toString()} {behandling.navn.toString()}
               </title>
@@ -211,36 +204,35 @@ export const BehandlingerTemaPageV2 = () => {
                   borderRadius: '4px'
                 }}
               >
-
-                <Block display="flex" justifyContent="center" $style={{paddingTop: '26px', paddingBottom: '22px', paddingLeft: '16px'}}>
+                <Block display="flex" justifyContent="center" $style={{ paddingTop: '26px', paddingBottom: '22px', paddingLeft: '16px' }}>
                   <KravPanelHeaderWithSorting
                     kravRelevans={kravRelevans}
                     setKravRelevans={setKravRelevans}
                     kravData={kravRelevans[0].id === 'relevanteKrav' ? kravData : irrelevantKravData}
                     sorting={sorting}
-                    setSorting={setSorting}/>
+                    setSorting={setSorting} />
                 </Block>
-                <KravList
-                  kravList={kravRelevans[0].id === 'relevanteKrav' ? kravData : irrelevantKravData}
-                  EmptyMessage={
-                    <Block>
-                      <H4 maxWidth={'600px'} $style={{
-                        fontStyle: 'italic'
-                      }}>
-                        {kravRelevans[0].id === 'relevanteKrav' ? "Dere har filtrert bort alle krav for " : "Dere har ingen bortfiltrerte krav for "}{temaData?.shortName}
-                      </H4>
-                      <Paragraph2 maxWidth={'600px'} $style={{
-                        fontStyle: 'italic'
-                      }}>
-                        Om bortfiltreringen av dette tema er feil, justeres det ved å velge de korrekte egenskapene for behandlingen under innstillinger.
-                      </Paragraph2>
-                    </Block>
-                  }
-                  sortingAvailable={true}
-                  sorting={sorting}
-                  sortingOptions={sortingOptions}
-                  behandling={behandling}
-                />
+                  <KravList
+                    kravList={kravRelevans[0].id === 'relevanteKrav' ? kravData : irrelevantKravData}
+                    EmptyMessage={
+                      <Block>
+                        <H4 maxWidth={'600px'} $style={{
+                          fontStyle: 'italic'
+                        }}>
+                          {kravRelevans[0].id === 'relevanteKrav' ? "Dere har filtrert bort alle krav for " : "Dere har ingen bortfiltrerte krav for "}{temaData?.shortName}
+                        </H4>
+                        <Paragraph2 maxWidth={'600px'} $style={{
+                          fontStyle: 'italic'
+                        }}>
+                          Om bortfiltreringen av dette tema er feil, justeres det ved å velge de korrekte egenskapene for behandlingen under innstillinger.
+                        </Paragraph2>
+                      </Block>
+                    }
+                    sortingAvailable={true}
+                    sorting={sorting}
+                    sortingOptions={sortingOptions}
+                    behandling={behandling}
+                  />
               </Block>
             </Block>
           </Block>
