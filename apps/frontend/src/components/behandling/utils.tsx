@@ -56,9 +56,9 @@ export const getEtterlevelseStatus = (etterlevelse: KravEtterlevelseData) => {
       return 'Oppfylt'
     case EtterlevelseStatus.OPPFYLLES_SENERE:
       if (etterlevelse.frist) {
-        return 'Oppfylles ' + moment(etterlevelse.frist).format('ll')
+        return 'Utsatt til: ' + moment(etterlevelse.frist).format('ll')
       } else {
-        return 'Oppfylles senere'
+        return 'Utsatt'
       }
     default:
       return ''
