@@ -233,56 +233,53 @@ export const EtterlevelseEditFields = ({
                                       setEtterlevelseStatus(event.currentTarget.value)
                                     }}
                                   >
-                                    {Object.values(EtterlevelseStatus).map((id) => {
-                                      if (id === EtterlevelseStatus.OPPFYLLES_SENERE) {
-                                        return (
-                                          <Radio value={id} key={id}>
-                                            <Block $style={{ textDecoration: radioHover === id ? 'underline' : 'none' }}>
-                                              <Paragraph2 $style={{ lineHeight: '22px' }} marginTop="0px" marginBottom="0px">
-                                                {getEtterlevelseRadioLabel(id)}
-                                              </Paragraph2>
-                                            </Block>
+                                    <Radio value={EtterlevelseStatus.UNDER_REDIGERING} key={EtterlevelseStatus.UNDER_REDIGERING}>
+                                      <Block $style={{ textDecoration: radioHover === EtterlevelseStatus.UNDER_REDIGERING ? 'underline' : 'none' }}>
+                                        <Paragraph2 $style={{ lineHeight: '22px' }} marginTop="0px" marginBottom="0px">
+                                          {getEtterlevelseRadioLabel(EtterlevelseStatus.UNDER_REDIGERING)}
+                                        </Paragraph2>
+                                      </Block>
+                                    </Radio>
 
-                                            {etterlevelseStatus === EtterlevelseStatus.OPPFYLLES_SENERE && (
-                                              <Block width="100%">
-                                                <Block maxWidth="170px" width="100%">
-                                                  <DateField error={!!p.form.errors.fristForFerdigstillelse} label="Frist" name="fristForFerdigstillelse" />
-                                                </Block>
-                                                {p.form.errors.fristForFerdigstillelse && (
-                                                  <Block display="flex" width="100%" marginTop=".2rem">
-                                                    <Block width="100%">
-                                                      <Notification
-                                                        overrides={{
-                                                          Body: {
-                                                            style: { width: 'auto', ...paddingZero, marginTop: 0, backgroundColor: 'transparent', color: ettlevColors.red600 },
-                                                          },
-                                                        }}
-                                                        kind={NKIND.negative}
-                                                      >
-                                                        {p.form.errors.fristForFerdigstillelse}
-                                                      </Notification>
-                                                    </Block>
-                                                  </Block>
-                                                )}
-                                              </Block>
-                                            )}
-                                          </Radio>
-                                        )
-                                      }
-                                      if (id === EtterlevelseStatus.FERDIG || id === EtterlevelseStatus.FERDIG_DOKUMENTERT || id === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT
-                                      ) {
-                                        return null
-                                      }
-                                      return (
-                                        <Radio value={id} key={id}>
-                                          <Block $style={{ textDecoration: radioHover === id ? 'underline' : 'none' }}>
-                                            <Paragraph2 $style={{ lineHeight: '22px' }} marginTop="0px" marginBottom="0px">
-                                              {getEtterlevelseRadioLabel(id)}
-                                            </Paragraph2>
+                                    <Radio value={EtterlevelseStatus.OPPFYLLES_SENERE} key={EtterlevelseStatus.OPPFYLLES_SENERE}>
+                                      <Block $style={{ textDecoration: radioHover === EtterlevelseStatus.OPPFYLLES_SENERE ? 'underline' : 'none' }}>
+                                        <Paragraph2 $style={{ lineHeight: '22px' }} marginTop="0px" marginBottom="0px">
+                                          {getEtterlevelseRadioLabel(EtterlevelseStatus.OPPFYLLES_SENERE)}
+                                        </Paragraph2>
+                                      </Block>
+
+                                      {etterlevelseStatus === EtterlevelseStatus.OPPFYLLES_SENERE && (
+                                        <Block width="100%">
+                                          <Block maxWidth="170px" width="100%">
+                                            <DateField error={!!p.form.errors.fristForFerdigstillelse} label="Frist" name="fristForFerdigstillelse" />
                                           </Block>
-                                        </Radio>
-                                      )
-                                    })}
+                                          {p.form.errors.fristForFerdigstillelse && (
+                                            <Block display="flex" width="100%" marginTop=".2rem">
+                                              <Block width="100%">
+                                                <Notification
+                                                  overrides={{
+                                                    Body: {
+                                                      style: { width: 'auto', ...paddingZero, marginTop: 0, backgroundColor: 'transparent', color: ettlevColors.red600 },
+                                                    },
+                                                  }}
+                                                  kind={NKIND.negative}
+                                                >
+                                                  {p.form.errors.fristForFerdigstillelse}
+                                                </Notification>
+                                              </Block>
+                                            </Block>
+                                          )}
+                                        </Block>
+                                      )}
+                                    </Radio>
+
+                                    <Radio value={EtterlevelseStatus.IKKE_RELEVANT} key={EtterlevelseStatus.IKKE_RELEVANT}>
+                                      <Block $style={{ textDecoration: radioHover === EtterlevelseStatus.IKKE_RELEVANT ? 'underline' : 'none' }}>
+                                        <Paragraph2 $style={{ lineHeight: '22px' }} marginTop="0px" marginBottom="0px">
+                                          {getEtterlevelseRadioLabel(EtterlevelseStatus.IKKE_RELEVANT)}
+                                        </Paragraph2>
+                                      </Block>
+                                    </Radio>
                                   </RadioGroup>
                                 </FormControl>
                               )}
@@ -436,7 +433,7 @@ export const EtterlevelseEditFields = ({
                             } else {
                               completed = false
                             }
-                          } else { 
+                          } else {
                             completed = false
                           }
                         })
