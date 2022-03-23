@@ -86,7 +86,7 @@ export interface Krav extends DomainObject {
   nyKravVersjon: boolean
 }
 
-export interface EtterlevelseMetadata extends DomainObject{
+export interface EtterlevelseMetadata extends DomainObject {
   id: string
   kravNummer: number
   kravVersjon: number
@@ -217,6 +217,11 @@ export interface Melding extends DomainObject {
   meldingType: MeldingType
   meldingStatus: MeldingStatus
   alertType: AlertType
+}
+
+export enum KRAV_FILTER_TYPE {
+  RELEVANTE_KRAV = 'RELEVANTE_KRAV',
+  BORTFILTTERTE_KRAV = 'BORTFILTERTE_KRAV'
 }
 
 export enum AlertType {
