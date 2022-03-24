@@ -76,9 +76,6 @@ export const EditEtterlevelseV2 = ({
   const [editedEtterlevelse, setEditedEtterlevelse] = React.useState<Etterlevelse>()
   const etterlevelseFormRef: React.Ref<FormikProps<Etterlevelse> | undefined> = useRef()
 
-  const [alleKravVersjoner, setAlleKravVersjoner] = React.useState<KravVersjon[]>([{kravNummer: 0, kravVersjon: 0, kravStatus: 'Utkast'}])
-  const [kravTema, setKravTema] = useState<TemaCode>()
-
   const [etterlevelseMetadata, setEtterlevelseMetadata] = useState<EtterlevelseMetadata>(mapEtterlevelseMetadataToFormValue({
     id: 'ny',
     behandlingId: behandlingId,
@@ -108,41 +105,6 @@ export const EditEtterlevelseV2 = ({
         })
     })()
   }, [])
-
-  React.useEffect(() => {
-    if (krav) {
-
-      getKravByKravNummer(krav.kravNummer).then((resp) => {
-        if (resp.content.length) {
-          const alleVersjoner = resp.content
-            .map((k) => {
-              return {kravVersjon: k.kravVersjon, kravNummer: k.kravNummer, kravStatus: k.status}
-            })
-            .sort((a, b) => (a.kravVersjon > b.kravVersjon ? -1 : 1))
-
-          const filteredVersjoner = alleVersjoner.filter((k) => k.kravStatus !== KravStatus.UTKAST)
-
-          if (filteredVersjoner.length) {
-            setAlleKravVersjoner(filteredVersjoner)
-          }
-        }
-      })
-      const lovData = codelist.getCode(ListName.LOV, krav.regelverk[0]?.lov?.code)
-      if (lovData?.data) {
-        setKravTema(codelist.getCode(ListName.TEMA, lovData.data.tema))
-      }
-    }
-  }, [krav])
-
-  useEffect(() => {
-    if (krav && kravTema) {
-      ampli.logEvent('sidevisning', {
-        side: 'Krav side',
-        sidetittel: `${kravNumView({kravNummer: krav?.kravNummer, kravVersjon: krav?.kravVersjon})} ${krav.navn}`,
-        section: kravTema?.shortName.toString()
-      })
-    }
-  }, [krav, kravTema])
 
   const submit = async (etterlevelse: Etterlevelse) => {
     const mutatedEtterlevelse = {
@@ -278,14 +240,14 @@ export const EditEtterlevelseV2 = ({
                 </Block>
               )}
 
-              <Block display="flex" justifyContent="flex-start" alignItems="center" marginTop="32px">
+              {kravFilter === KRAV_FILTER_TYPE.RELEVANTE_KRAV &&(<Block display="flex" justifyContent="flex-start" alignItems="center" marginTop="32px">
                 <Label3
                   $style={{color: ettlevColors.white, fontSize: '18px', lineHeight: '14px', textAlign: 'right'}}
                 >
                   Tildelt: {(etterlevelseMetadata && etterlevelseMetadata.tildeltMed && etterlevelseMetadata.tildeltMed.length >= 1) ? etterlevelseMetadata.tildeltMed[0] : 'Ikke tildelt'}
                 </Label3>
                 <TildeltPopoever etterlevelseMetadata={etterlevelseMetadata} setEtterlevelseMetadata={setEtterlevelseMetadata} icon={faChevronDown} iconColor={ettlevColors.white}/>
-              </Block>
+              </Block>)}
 
             </Block>
           </Block>
@@ -336,6 +298,7 @@ export const EditEtterlevelseV2 = ({
                   content: (
                     kravFilter === KRAV_FILTER_TYPE.RELEVANTE_KRAV ?
                       (<EtterlevelseEditFields
+                        viewMode={false}
                         krav={krav}
                         etterlevelse={etterlevelse}
                         submit={submit}
@@ -355,9 +318,30 @@ export const EditEtterlevelseV2 = ({
                         editedEtterlevelse={editedEtterlevelse}
                         tidligereEtterlevelser={tidligereEtterlevelser}
                       />) :
-                      (<ViewKrav
+                      // (<ViewKrav
+                      //   krav={krav}
+                      //   alleKravVersjoner={alleKravVersjoner}
+                      // />)
+                      (<EtterlevelseEditFields
+                        viewMode={true}
                         krav={krav}
-                        alleKravVersjoner={alleKravVersjoner}
+                        etterlevelse={etterlevelse}
+                        submit={submit}
+                        formRef={etterlevelseFormRef}
+                        varsleMelding={varsleMelding}
+                        behandlingId={behandlingId}
+                        behandlingNummer={behandlingNummer || 0}
+                        behandlingformaal={behandlingformaal || ''}
+                        behandlingNavn={behandlingNavn || ''}
+                        disableEdit={disableEdit}
+                        documentEdit={documentEdit}
+                        close={close}
+                        setIsAlertUnsavedModalOpen={setIsAlertUnsavedModalOpen}
+                        isAlertUnsavedModalOpen={isAlertUnsavedModalOpen}
+                        navigatePath={navigatePath}
+                        setNavigatePath={setNavigatePath}
+                        editedEtterlevelse={editedEtterlevelse}
+                        tidligereEtterlevelser={tidligereEtterlevelser}
                       />)
                   ),
                 },
