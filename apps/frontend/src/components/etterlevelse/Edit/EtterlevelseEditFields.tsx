@@ -47,6 +47,7 @@ type EditProps = {
   setNavigatePath: (state: string) => void
   editedEtterlevelse?: Etterlevelse
   tidligereEtterlevelser?: Etterlevelse[]
+  viewMode?: boolean
 }
 
 const etterlevelseSchema = () => {
@@ -128,7 +129,7 @@ const getEtterlevelseRadioLabel = (status?: EtterlevelseStatus) => {
 
 export const EtterlevelseEditFields = ({
   krav, etterlevelse, submit, formRef, behandlingId, disableEdit, documentEdit, close, setIsAlertUnsavedModalOpen,
-  isAlertUnsavedModalOpen, navigatePath, setNavigatePath, editedEtterlevelse, tidligereEtterlevelser
+  isAlertUnsavedModalOpen, navigatePath, setNavigatePath, editedEtterlevelse, tidligereEtterlevelser, viewMode
 }: EditProps) => {
   const [etterlevelseStatus, setEtterlevelseStatus] = React.useState<string>(editedEtterlevelse ? editedEtterlevelse.status : etterlevelse.status || EtterlevelseStatus.UNDER_REDIGERING)
   const [radioHover, setRadioHover] = React.useState<string>('')
@@ -156,7 +157,7 @@ export const EtterlevelseEditFields = ({
 
   return (
     <Block width="100%">
-      <Formik
+      {viewMode === false? (<Formik
         onSubmit={submit}
         initialValues={editedEtterlevelse ? mapEtterlevelseToFormValue(editedEtterlevelse) : mapEtterlevelseToFormValue(etterlevelse)}
         validate={(value) => {
@@ -531,8 +532,8 @@ export const EtterlevelseEditFields = ({
               </Block>
             </CustomizedModal>
           </Block>
-        )}
-      </Formik>
+        )} 
+      </Formik>): <Block>viewMode</Block>} 
     </Block>
   )
 }
