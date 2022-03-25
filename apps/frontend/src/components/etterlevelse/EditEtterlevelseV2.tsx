@@ -168,13 +168,13 @@ export const EditEtterlevelseV2 = ({
 
               {
                 kravFilter === KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV && (
-                  <Paragraph2  $style={{
+                  <Paragraph2 $style={{
                     marginTop: '0px',
                     marginBottom: '0px',
                     paddingBottom: '32px',
                     color: ettlevColors.white,
                     lineHeight: '22px',
-                    maxWidth:'650px'
+                    maxWidth: '650px'
                   }}>
                     <strong>Kravet er bortfiltrert.</strong> Om kravet er relevant for behandlingen, sjekk om dere har oppgitt riktig beskrivelse under egenskaper.
                   </Paragraph2>
@@ -308,53 +308,27 @@ export const EditEtterlevelseV2 = ({
                   title: 'Dokumentasjon',
                   key: 'dokumentasjon',
                   content: (
-                    kravFilter === KRAV_FILTER_TYPE.RELEVANTE_KRAV ?
-                      (<EtterlevelseEditFields
-                        viewMode={false}
-                        krav={krav}
-                        etterlevelse={etterlevelse}
-                        submit={submit}
-                        formRef={etterlevelseFormRef}
-                        varsleMelding={varsleMelding}
-                        behandlingId={behandlingId}
-                        behandlingNummer={behandlingNummer || 0}
-                        behandlingformaal={behandlingformaal || ''}
-                        behandlingNavn={behandlingNavn || ''}
-                        disableEdit={disableEdit}
-                        documentEdit={documentEdit}
-                        close={close}
-                        setIsAlertUnsavedModalOpen={setIsAlertUnsavedModalOpen}
-                        isAlertUnsavedModalOpen={isAlertUnsavedModalOpen}
-                        navigatePath={navigatePath}
-                        setNavigatePath={setNavigatePath}
-                        editedEtterlevelse={editedEtterlevelse}
-                        tidligereEtterlevelser={tidligereEtterlevelser}
-                      />) :
-                      // (<ViewKrav
-                      //   krav={krav}
-                      //   alleKravVersjoner={alleKravVersjoner}
-                      // />)
-                      (<EtterlevelseEditFields
-                        viewMode={true}
-                        krav={krav}
-                        etterlevelse={etterlevelse}
-                        submit={submit}
-                        formRef={etterlevelseFormRef}
-                        varsleMelding={varsleMelding}
-                        behandlingId={behandlingId}
-                        behandlingNummer={behandlingNummer || 0}
-                        behandlingformaal={behandlingformaal || ''}
-                        behandlingNavn={behandlingNavn || ''}
-                        disableEdit={disableEdit}
-                        documentEdit={documentEdit}
-                        close={close}
-                        setIsAlertUnsavedModalOpen={setIsAlertUnsavedModalOpen}
-                        isAlertUnsavedModalOpen={isAlertUnsavedModalOpen}
-                        navigatePath={navigatePath}
-                        setNavigatePath={setNavigatePath}
-                        editedEtterlevelse={editedEtterlevelse}
-                        tidligereEtterlevelser={tidligereEtterlevelser}
-                      />)
+                    <EtterlevelseEditFields
+                      viewMode={kravFilter === KRAV_FILTER_TYPE.RELEVANTE_KRAV ? false : true}
+                      krav={krav}
+                      etterlevelse={etterlevelse}
+                      submit={submit}
+                      formRef={etterlevelseFormRef}
+                      varsleMelding={varsleMelding}
+                      behandlingId={behandlingId}
+                      behandlingNummer={behandlingNummer || 0}
+                      behandlingformaal={behandlingformaal || ''}
+                      behandlingNavn={behandlingNavn || ''}
+                      disableEdit={disableEdit}
+                      documentEdit={documentEdit}
+                      close={close}
+                      setIsAlertUnsavedModalOpen={setIsAlertUnsavedModalOpen}
+                      isAlertUnsavedModalOpen={isAlertUnsavedModalOpen}
+                      navigatePath={navigatePath}
+                      setNavigatePath={setNavigatePath}
+                      editedEtterlevelse={editedEtterlevelse}
+                      tidligereEtterlevelser={tidligereEtterlevelser}
+                    />
                   ),
                 },
                 {
@@ -370,7 +344,8 @@ export const EditEtterlevelseV2 = ({
               ]}
             />
           </Block>
-          <Block display={tab === 'dokumentasjon' ? 'block' : 'none'} width="100%" height="140px" backgroundColor={kravFilter === KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV ? ettlevColors.grey25 : ettlevColors.green100} marginTop="-140px"/>
+          <Block display={tab === 'dokumentasjon' ? 'block' : 'none'} width="100%" height="140px"
+                 backgroundColor={kravFilter === KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV ? ettlevColors.grey25 : ettlevColors.green100} marginTop="-140px"/>
 
           <CustomizedModal
             onClose={() => setIsVersjonEndringerModalOpen(false)}
