@@ -25,8 +25,8 @@ import CustomizedModal from '../../common/CustomizedModal'
 import {useNavigate} from 'react-router-dom'
 import EtterlevelseCard from '../EtterlevelseCard'
 import {ModalHeader} from 'baseui/modal'
-import _ from 'lodash'
 import {etterlevelseSchema} from './etterlevelseSchema'
+import _ from 'lodash'
 
 type EditProps = {
   krav: KravQL
@@ -499,7 +499,11 @@ export const EtterlevelseEditFields = ({
           )}
         </Formik>
       ) : (
-        <Formik onSubmit={submit} initialValues={editedEtterlevelse ? mapEtterlevelseToFormValue(editedEtterlevelse) : mapEtterlevelseToFormValue(etterlevelse)}>
+        <Formik
+          onSubmit={submit}
+          initialValues={editedEtterlevelse ? mapEtterlevelseToFormValue(editedEtterlevelse) : mapEtterlevelseToFormValue(etterlevelse)}
+          innerRef={formRef}
+        >
           {() => (
             <Block>
               <Block marginTop="32px">
