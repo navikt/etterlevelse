@@ -141,15 +141,33 @@ const KriterieBegrunnelse = ({
 
   return (
     <Block $style={getBorderColor()} backgroundColor={getBackgroundColor()} padding={theme.sizing.scale750} marginBottom={theme.sizing.scale600}>
-      <Block><Paragraph2>Suksesskriterie {index +1} av {totalSuksesskriterie}</Paragraph2></Block>
-    {viewMode === true && (<Block>
-        ikke relevant
-      </Block>)}
+      <Block display='flex' justifyContent='space-between' width='100%' alignItems='center'>
+      <Block><Paragraph2 $style={{
+        fontSize: '16px',
+        lineHeight: '18,75',
+        marginTop: '3px',
+        marginBottom: '5px',
+        font: 'roboto',
+        color: ettlevColors.grey600
+      }}>Suksesskriterie {index +1} av {totalSuksesskriterie}</Paragraph2></Block>
+    {viewMode === true && (<Block alignSelf='flex-end'>
+    <Paragraph2
+            $style={{
+              marginTop: '0px',
+              marginBottom: '0px',
+              color: ettlevColors.red600,
+              fontStyle: 'italic',
+            }}
+          >
+            Ikke relevant
+          </Paragraph2>
+        </Block>)}
+        </Block>
       <H3 color={ettlevColors.green800} marginTop="0px">
         {suksesskriterie.navn}
       </H3>
 
-      {(status === EtterlevelseStatus.IKKE_RELEVANT || status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) && (
+      {(status === EtterlevelseStatus.IKKE_RELEVANT || status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT ) && (
         <Block width="100%" display="flex" justifyContent="flex-end" marginTop="20px" marginBottom="-29px">
           <Paragraph2
             $style={{
