@@ -1,13 +1,13 @@
-import { getKravByKravNumberAndVersion, KravId } from '../../api/KravApi'
-import { Etterlevelse, EtterlevelseStatus } from '../../constants'
-import { getEtterlevelserByBehandlingsIdKravNumber, mapEtterlevelseToFormValue, useEtterlevelse } from '../../api/EtterlevelseApi'
-import React, { useEffect, useState } from 'react'
-import { Block } from 'baseui/block'
-import { Spinner } from '../common/Spinner'
-import { theme } from '../../util'
-import { EditEtterlevelseV2 } from '../etterlevelse/EditEtterlevelseV2'
-import { Section } from '../../pages/EtterlevelseDokumentasjonPage'
-import { toKravId } from './utils'
+import {getKravByKravNumberAndVersion, KravId} from '../../api/KravApi'
+import {Etterlevelse, KRAV_FILTER_TYPE} from '../../constants'
+import {getEtterlevelserByBehandlingsIdKravNumber, mapEtterlevelseToFormValue} from '../../api/EtterlevelseApi'
+import React, {useEffect, useState} from 'react'
+import {Block} from 'baseui/block'
+import {Spinner} from '../common/Spinner'
+import {theme} from '../../util'
+import {EditEtterlevelseV2} from '../etterlevelse/EditEtterlevelseV2'
+import {Section} from '../../pages/EtterlevelseDokumentasjonPage'
+import {toKravId} from './utils'
 
 export const KravView = (props: {
   kravId: KravId
@@ -20,6 +20,7 @@ export const KravView = (props: {
   setNavigatePath: (state: string) => void
   tab: Section
   setTab: (s: Section) => void
+  kravFilter: KRAV_FILTER_TYPE
 }) => {
   const [varsleMelding, setVarsleMelding] = useState('')
 
@@ -61,7 +62,7 @@ export const KravView = (props: {
     <Block width="100%">
       {loadingEtterlevelseData && (
         <Block width="100%" display="flex" justifyContent="center" marginTop="50px">
-          <Spinner size={theme.sizing.scale1200} />
+          <Spinner size={theme.sizing.scale1200}/>
         </Block>
       )}
       {!loadingEtterlevelseData && etterlevelse && (
@@ -82,6 +83,7 @@ export const KravView = (props: {
             setNavigatePath={props.setNavigatePath}
             tab={props.tab}
             setTab={props.setTab}
+            kravFilter={props.kravFilter}
           />
         </Block>
       )}

@@ -1,28 +1,28 @@
-import { EtterlevelseMetadata, KravEtterlevelseData } from '../../constants'
-import React, { useEffect, useState } from 'react'
-import { getEtterlevelseMetadataByBehandlingsIdAndKravNummerAndKravVersion, mapEtterlevelseMetadataToFormValue } from '../../api/EtterlevelseMetadataApi'
-import { Block } from 'baseui/block'
+import {EtterlevelseMetadata, KRAV_FILTER_TYPE, KravEtterlevelseData} from '../../constants'
+import React, {useEffect, useState} from 'react'
+import {getEtterlevelseMetadataByBehandlingsIdAndKravNummerAndKravVersion, mapEtterlevelseMetadataToFormValue} from '../../api/EtterlevelseMetadataApi'
+import {Block} from 'baseui/block'
 import Button from '../common/Button'
-import { ettlevColors } from '../../util/theme'
-import { borderStyle } from '../common/Style'
-import { toKravId } from './utils'
-import { Label3, Paragraph4 } from 'baseui/typography'
+import {ettlevColors} from '../../util/theme'
+import {borderStyle} from '../common/Style'
+import {Label3, Paragraph4} from 'baseui/typography'
 import StatusView from '../common/StatusTag'
-import { getEtterlevelseStatus, getEtterlevelseStatusLabelColor } from '../behandling/utils'
+import {getEtterlevelseStatus, getEtterlevelseStatusLabelColor} from '../behandling/utils'
 import moment from 'moment'
 import TildeltPopoever from '../etterlevelseMetadata/TildeltPopover'
-import { isFerdigUtfylt } from '../../pages/BehandlingerTemaPageV2'
-import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons'
-import { arkCheckIcon, arkPennIcon, warningAlert } from '../Images'
-import { getEtterlevelserByBehandlingsIdKravNumber } from '../../api/EtterlevelseApi'
-import { useLocation, useNavigate } from 'react-router-dom'
-import { getNumberOfDaysBetween } from '../../util/checkAge'
+import {isFerdigUtfylt} from '../../pages/BehandlingerTemaPageV2'
+import {faEllipsisVertical} from '@fortawesome/free-solid-svg-icons'
+import {arkCheckIcon, arkPennIcon, warningAlert} from '../Images'
+import {getEtterlevelserByBehandlingsIdKravNumber} from '../../api/EtterlevelseApi'
+import {useLocation, useNavigate} from 'react-router-dom'
+import {getNumberOfDaysBetween} from '../../util/checkAge'
 
 export const KravCard = (props: {
   krav: KravEtterlevelseData,
   noStatus?: boolean,
   behandlingId: string,
   noVarsling?: boolean
+  kravFilter: KRAV_FILTER_TYPE
 }) => {
   const [nyVersionFlag, setNyVersionFlag] = useState<boolean>(false)
   const [hover, setHover] = useState(false)
@@ -96,7 +96,7 @@ export const KravCard = (props: {
             boxShadow: '',
           }}
           onClick={() => {
-            navigate(location.pathname + '/krav/' + props.krav.kravNummer + '/' + props.krav.kravVersjon)
+            navigate(location.pathname + '/krav/' + props.krav.kravNummer + '/' + props.krav.kravVersjon + '/' + props.kravFilter)
           }}
         >
           <Block display="flex" justifyContent="center" alignItems="center" width="100%" onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
