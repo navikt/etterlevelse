@@ -560,7 +560,7 @@ export const EtterlevelseEditFields = ({
                   <Form>
                     <Block>
                       <Block>
-                        <Block>
+                        {/* <Block>
                           <Block display="flex" width="100%">
                             <Block display="flex" width="100%">
                               {tidligereEtterlevelser && tidligereEtterlevelser.length >= 1 &&
@@ -595,7 +595,7 @@ export const EtterlevelseEditFields = ({
                               <TextAreaField label="Beskriv hvorfor kravet ikke er relevant" noPlaceholder name="statusBegrunnelse" />
                             </Block>
                           )}
-                        </Block>
+                        </Block> */}
 
                         <SuksesskriterierBegrunnelseEdit disableEdit={disableEdit} suksesskriterie={krav.suksesskriterier} viewMode={true}/>
 

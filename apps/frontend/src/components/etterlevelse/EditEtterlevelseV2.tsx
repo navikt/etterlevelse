@@ -370,7 +370,7 @@ export const EditEtterlevelseV2 = ({
               ]}
             />
           </Block>
-          <Block display={tab === 'dokumentasjon' ? 'block' : 'none'} width="100%" height="140px" backgroundColor={ettlevColors.green100} marginTop="-140px"/>
+          <Block display={tab === 'dokumentasjon' ? 'block' : 'none'} width="100%" height="140px" backgroundColor={kravFilter === KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV ? ettlevColors.grey25 : ettlevColors.green100} marginTop="-140px"/>
 
           <CustomizedModal
             onClose={() => setIsVersjonEndringerModalOpen(false)}
