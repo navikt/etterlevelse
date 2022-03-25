@@ -17,6 +17,7 @@ import { LabelAboveContent } from '../../common/PropertyLabel'
 import { MODE, StatefulButtonGroup } from 'baseui/button-group'
 import { Button } from 'baseui/button'
 import { buttonContentStyle } from '../../common/Button'
+import { size } from 'lodash'
 
 const paddingLeft = '30px'
 
@@ -68,6 +69,7 @@ const KriterieBegrunnelseList = ({
               update={(updated) => props.replace(i, updated)}
               props={props}
               viewMode={viewMode}
+              totalSuksesskriterie={suksesskriterie.length}
             />
           </Block>
         )
@@ -85,6 +87,7 @@ const KriterieBegrunnelse = ({
   status,
   props,
   viewMode,
+  totalSuksesskriterie
 }: {
   suksesskriterie: Suksesskriterie
   index: number
@@ -94,6 +97,8 @@ const KriterieBegrunnelse = ({
   status: string
   props: FieldArrayRenderProps
   viewMode: boolean
+  totalSuksesskriterie: number
+  
 }) => {
   const suksesskriterieBegrunnelse = getSuksesskriterieBegrunnelse(suksesskriterieBegrunnelser, suksesskriterie)
   const debounceDelay = 500
@@ -136,6 +141,10 @@ const KriterieBegrunnelse = ({
 
   return (
     <Block $style={getBorderColor()} backgroundColor={getBackgroundColor()} padding={theme.sizing.scale750} marginBottom={theme.sizing.scale600}>
+      <Block><Paragraph2>Suksesskriterie {index +1} av {totalSuksesskriterie}</Paragraph2></Block>
+    {viewMode === true && (<Block>
+        ikke relevant
+      </Block>)}
       <H3 color={ettlevColors.green800} marginTop="0px">
         {suksesskriterie.navn}
       </H3>
