@@ -58,7 +58,6 @@ export const KravView = (props: {
     })()
   }, [])
 
-  console.log(props.kravFilter)
   return (
     <Block width="100%">
       {loadingEtterlevelseData && (
