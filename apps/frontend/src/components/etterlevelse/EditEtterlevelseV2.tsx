@@ -1,11 +1,11 @@
-import {Etterlevelse, EtterlevelseMetadata, EtterlevelseStatus, Krav, KRAV_FILTER_TYPE, KravQL, KravStatus, KravVersjon} from '../../constants'
+import {Etterlevelse, EtterlevelseMetadata, EtterlevelseStatus, Krav, KRAV_FILTER_TYPE, KravQL} from '../../constants'
 import {FormikProps} from 'formik'
 import {createEtterlevelse, updateEtterlevelse} from '../../api/EtterlevelseApi'
 import {Block} from 'baseui/block'
 import Button from '../common/Button'
 import React, {useEffect, useRef, useState} from 'react'
 import {theme} from '../../util'
-import {getKravByKravNumberAndVersion, getKravByKravNummer, KravId} from '../../api/KravApi'
+import {getKravByKravNumberAndVersion, KravId} from '../../api/KravApi'
 import {kravNumView, query} from '../../pages/KravPage'
 import {H1, H2, Label3, Paragraph2} from 'baseui/typography'
 import {ettlevColors, maxPageWidth, responsivePaddingExtraLarge, responsivePaddingInnerPage, responsiveWidthInnerPage} from '../../util/theme'
@@ -24,8 +24,6 @@ import TildeltPopoever from '../etterlevelseMetadata/TildeltPopover'
 import EtterlevelseEditFields from './Edit/EtterlevelseEditFields'
 import CustomizedModal from '../common/CustomizedModal'
 import {ampli} from '../../services/Amplitude'
-import {ViewKrav} from "../krav/ViewKrav";
-import {codelist, ListName, TemaCode} from "../../services/Codelist";
 
 type EditEttlevProps = {
   etterlevelse: Etterlevelse
@@ -168,6 +166,20 @@ export const EditEtterlevelseV2 = ({
               </Paragraph2>
               <H1 $style={{marginTop: '0px', marginBottom: '0px', paddingBottom: '32px', color: ettlevColors.white}}>{krav.navn}</H1>
 
+              {
+                kravFilter === KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV && (
+                  <Paragraph2  $style={{
+                    marginTop: '0px',
+                    marginBottom: '0px',
+                    paddingBottom: '32px',
+                    color: ettlevColors.white,
+                    lineHeight: '22px',
+                    maxWidth:'650px'
+                  }}>
+                    <strong>Kravet er bortfiltrert.</strong> Om kravet er relevant for behandlingen, sjekk om dere har oppgitt riktig beskrivelse under egenskaper.
+                  </Paragraph2>
+                )
+              }
               {tidligereEtterlevelser && tidligereEtterlevelser.length >= 1 && (
                 <Block
                   width="fit-content"
@@ -240,7 +252,7 @@ export const EditEtterlevelseV2 = ({
                 </Block>
               )}
 
-              {kravFilter === KRAV_FILTER_TYPE.RELEVANTE_KRAV &&(<Block display="flex" justifyContent="flex-start" alignItems="center" marginTop="32px">
+              {kravFilter === KRAV_FILTER_TYPE.RELEVANTE_KRAV && (<Block display="flex" justifyContent="flex-start" alignItems="center" marginTop="32px">
                 <Label3
                   $style={{color: ettlevColors.white, fontSize: '18px', lineHeight: '14px', textAlign: 'right'}}
                 >
