@@ -79,7 +79,6 @@ export const KravPage = () => {
 
   React.useEffect(() => {
     if (krav) {
-    
       getKravByKravNummer(krav.kravNummer).then((resp) => {
         if (resp.content.length) {
           const alleVersjoner = resp.content
@@ -107,11 +106,10 @@ export const KravPage = () => {
       ampli.logEvent('sidevisning', {
         side: 'Krav side',
         sidetittel: `${kravNumView({ kravNummer: krav?.kravNummer, kravVersjon: krav?.kravVersjon })} ${krav.navn}`,
-        section: kravTema?.shortName.toString()
+        section: kravTema?.shortName.toString(),
       })
     }
   }, [krav, kravTema])
-  
 
   useEffect(() => {
     if (tab !== state?.tab) changeState({ tab })

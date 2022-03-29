@@ -11,7 +11,6 @@ import { maxPageWidth, responsivePaddingSmall, responsiveWidthSmall } from '../u
 import { Helmet } from 'react-helmet'
 import { ampli } from '../services/Amplitude'
 
-
 export const RelevansPage = () => {
   const { relevans } = useParams<{ relevans: string }>()
 

@@ -24,7 +24,7 @@ export const EtterlevelseCard = ({ etterlevelse }: { etterlevelse: Etterlevelse 
   const [kravData, setKravData] = useState<Krav>()
 
   useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       const krav = await getKravByKravNumberAndVersion(etterlevelse.kravNummer, etterlevelse.kravVersjon)
       if (krav) {
         setKravData(krav)
@@ -53,30 +53,29 @@ export const EtterlevelseCard = ({ etterlevelse }: { etterlevelse: Etterlevelse 
       >
         <Block display="flex" width="100%" onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} paddingLeft="15px" paddingRight="15px">
           <Block display="flex" alignContent="center" flexDirection="column" width="100%">
-            <Paragraph2 $style={{color:ettlevColors.green600, lineHeight: '16px', marginTop: '0px', marginBottom: '12px', textAlign: 'start', textDecoration: hover ? 'underline' : 'none' }}>
+            <Paragraph2
+              $style={{
+                color: ettlevColors.green600,
+                lineHeight: '16px',
+                marginTop: '0px',
+                marginBottom: '12px',
+                textAlign: 'start',
+                textDecoration: hover ? 'underline' : 'none',
+              }}
+            >
               K{etterlevelse.kravNummer}.{etterlevelse.kravVersjon}
             </Paragraph2>
-            <Paragraph4 $style={{color:ettlevColors.green600, lineHeight: '14px', marginTop: '0px', marginBottom: '12px', textAlign: 'start' }}>
+            <Paragraph4 $style={{ color: ettlevColors.green600, lineHeight: '14px', marginTop: '0px', marginBottom: '12px', textAlign: 'start' }}>
               Sist utfylt: {moment(etterlevelse.changeStamp.lastModifiedDate).format('ll')} av {etterlevelse.changeStamp.lastModifiedBy.split('-')[1]}
             </Paragraph4>
           </Block>
           <Block display="flex" justifyContent="flex-end">
-            <StatusView
-              status={getEtterlevelseStatus(etterlevelse.status, etterlevelse.fristForFerdigstillelse)}
-              statusDisplay={getStatusLabelColor(etterlevelse.status)}
-            />
+            <StatusView status={getEtterlevelseStatus(etterlevelse.status, etterlevelse.fristForFerdigstillelse)} statusDisplay={getStatusLabelColor(etterlevelse.status)} />
           </Block>
         </Block>
       </Button>
 
-      {kravData && (
-        <EtterlevelseModal
-          isModalOpen={isModalOpen}
-          setIsModalOpen={setIsModalOpen}
-          etterlevelse={etterlevelse}
-          kravData={kravData}
-        />
-      )}
+      {kravData && <EtterlevelseModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} etterlevelse={etterlevelse} kravData={kravData} />}
     </Block>
   )
 }

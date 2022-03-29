@@ -17,11 +17,9 @@ import { borderRadius, borderStyle, marginAll } from '../common/Style'
 import { ViewEtterlevelse } from '../etterlevelse/ViewEtterlevelse'
 import { sadFolderIcon } from '../Images'
 
-export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolean; krav: KravQL, modalVersion?: boolean }) => {
-
+export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolean; krav: KravQL; modalVersion?: boolean }) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [openEtterlse, setOpenEtterlevelse] = useState<EtterlevelseQL>()
-
 
   const etterlevelser = (krav.etterlevelser || [])
     .filter((e) => e.status === EtterlevelseStatus.FERDIG_DOKUMENTERT)
@@ -60,7 +58,7 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
                   {modalVersion ? (
                     <PanelButton
                       onClick={() => {
-                        setOpenEtterlevelse({...e, behandlingId: e.behandling.id})
+                        setOpenEtterlevelse({ ...e, behandlingId: e.behandling.id })
                         setIsModalOpen(true)
                       }}
                       square
@@ -80,11 +78,11 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
                         Block: {
                           style: {
                             ...borderStyle('hidden'),
-                            maxWidth: '812px'
+                            maxWidth: '812px',
                           },
                         },
                       }}
-                    // panelIcon={(hover) => <PageIcon hover={hover} />}
+                      // panelIcon={(hover) => <PageIcon hover={hover} />}
                     />
                   ) : (
                     <PanelLink
@@ -109,8 +107,9 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
                           },
                         },
                       }}
-                    // panelIcon={(hover) => <PageIcon hover={hover} />}
-                    />)}
+                      // panelIcon={(hover) => <PageIcon hover={hover} />}
+                    />
+                  )}
                 </CustomPanelDivider>
               ))}
             </CustomizedPanel>
@@ -118,21 +117,22 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
         })}
       </CustomizedAccordion>
 
-      {modalVersion && openEtterlse && krav &&
-        <EtterlevelseModal
-          isModalOpen={isModalOpen}
-          setIsModalOpen={setIsModalOpen}
-          etterlevelse={openEtterlse}
-          kravData={krav}
-        />
-      }
+      {modalVersion && openEtterlse && krav && <EtterlevelseModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} etterlevelse={openEtterlse} kravData={krav} />}
     </Block>
   )
 }
 
-
-export const EtterlevelseModal = ({ isModalOpen, setIsModalOpen, etterlevelse, kravData }: { isModalOpen: boolean, setIsModalOpen: (state: boolean) => void, etterlevelse: Etterlevelse, kravData: Krav }) => {
-  
+export const EtterlevelseModal = ({
+  isModalOpen,
+  setIsModalOpen,
+  etterlevelse,
+  kravData,
+}: {
+  isModalOpen: boolean
+  setIsModalOpen: (state: boolean) => void
+  etterlevelse: Etterlevelse
+  kravData: Krav
+}) => {
   return (
     <CustomizedModal
       onClose={() => setIsModalOpen(false)}
@@ -166,7 +166,7 @@ export const EtterlevelseModal = ({ isModalOpen, setIsModalOpen, etterlevelse, k
         </Block>
 
         <Block paddingLeft={responsivePaddingExtraLarge} paddingRight={responsivePaddingExtraLarge}>
-          <ViewEtterlevelse etterlevelse={etterlevelse} viewMode krav={kravData} modalVersion/>
+          <ViewEtterlevelse etterlevelse={etterlevelse} viewMode krav={kravData} modalVersion />
           <Block display="flex" justifyContent="flex-end" paddingBottom="31px" paddingTop="95px">
             <Button
               onClick={() => {

@@ -43,13 +43,23 @@ export const Markdown = ({
       const { children } = parProps
       if (p1) {
         return (
-          <Paragraph1 $style={{fontSize: fontSize? fontSize: undefined}} color={fontColor ? fontColor : ettlevColors.green800} marginTop={noMargin ? 0 : undefined} marginBottom={noMargin ? 0 : undefined}>
+          <Paragraph1
+            $style={{ fontSize: fontSize ? fontSize : undefined }}
+            color={fontColor ? fontColor : ettlevColors.green800}
+            marginTop={noMargin ? 0 : undefined}
+            marginBottom={noMargin ? 0 : undefined}
+          >
             {children}
           </Paragraph1>
         )
       }
       return (
-        <Paragraph2 $style={{fontSize: fontSize? fontSize: undefined}} color={fontColor ? fontColor : ettlevColors.green800} marginTop={noMargin ? 0 : undefined} marginBottom={noMargin ? 0 : undefined}>
+        <Paragraph2
+          $style={{ fontSize: fontSize ? fontSize : undefined }}
+          color={fontColor ? fontColor : ettlevColors.green800}
+          marginTop={noMargin ? 0 : undefined}
+          marginBottom={noMargin ? 0 : undefined}
+        >
           {children}
         </Paragraph2>
       )

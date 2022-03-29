@@ -20,14 +20,13 @@ import { Helmet } from 'react-helmet'
 import { ExternalButton } from '../components/common/Button'
 import { env } from '../util/env'
 import { ExternalLinkWrapper } from '../components/common/RouteLink'
-import { BehandlingStats } from "../components/behandling/ViewBehandling";
-import { statsQuery } from "../api/KravApi";
-import { TemaCardBehandling } from "../components/behandlingPage/TemaCardBehandling";
+import { BehandlingStats } from '../components/behandling/ViewBehandling'
+import { statsQuery } from '../api/KravApi'
+import { TemaCardBehandling } from '../components/behandlingPage/TemaCardBehandling'
 import { isFerdigUtfylt } from './BehandlingerTemaPageV2'
 import { user } from '../services/User'
 import { loginUrl } from '../components/Header'
 import { ampli } from '../services/Amplitude'
-
 
 const responsiveDisplay: Responsive<Display> = ['block', 'block', 'block', 'block', 'flex', 'flex']
 
@@ -94,7 +93,6 @@ export const BehandlingPage = () => {
   const [relevanteStats, setRelevanteStats] = useState<any[]>([])
   const [irrelevanteStats, setIrrelevanteStats] = useState<any[]>([])
 
-
   // useEffect(() => {
   //   if(!user.isLoggedIn()) {
   //     navigate(loginUrl(location, location.pathname))
@@ -104,10 +102,10 @@ export const BehandlingPage = () => {
   const filterData = (
     unfilteredData:
       | {
-        behandling: PageResponse<{
-          stats: BehandlingStats
-        }>
-      }
+          behandling: PageResponse<{
+            stats: BehandlingStats
+          }>
+        }
       | undefined,
   ) => {
     const relevanteStatusListe: any[] = []
@@ -172,7 +170,7 @@ export const BehandlingPage = () => {
   React.useEffect(() => {
     setTimeout(() => refetchRelevanteData(), 200)
     if (behandling) {
-      ampli.logEvent('sidevisning', { side: 'Behandling side', sidetittel: `B${behandling.nummer.toString()} ${behandling.navn.toString()}`})
+      ampli.logEvent('sidevisning', { side: 'Behandling side', sidetittel: `B${behandling.nummer.toString()} ${behandling.navn.toString()}` })
     }
   }, [behandling])
 
@@ -180,9 +178,7 @@ export const BehandlingPage = () => {
   let antallFylttKrav = 0
 
   getNewestKravVersjon(relevanteStats).forEach((k: KravQL) => {
-    if (
-      k.etterlevelser.length && isFerdigUtfylt(k.etterlevelser[0].status)
-    ) {
+    if (k.etterlevelser.length && isFerdigUtfylt(k.etterlevelser[0].status)) {
       antallFylttKrav += 1
     }
   })

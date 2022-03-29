@@ -10,7 +10,6 @@ import { maxPageWidth, responsivePaddingSmall, responsiveWidthSmall } from '../u
 import { Helmet } from 'react-helmet'
 import { ampli } from '../services/Amplitude'
 
-
 export const UnderavdelingPage = () => {
   const { underavdeling } = useParams<{ underavdeling: string }>()
 

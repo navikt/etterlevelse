@@ -26,7 +26,7 @@ import { CustomizedStatefulSelect } from '../../common/CustomizedSelect'
 import { buttonContentStyle } from '../../common/Button'
 import { ampli } from '../../../services/Amplitude'
 
-export const AuditRecentTable = (props: { show: boolean, tableType?: ObjectType }) => {
+export const AuditRecentTable = (props: { show: boolean; tableType?: ObjectType }) => {
   const [audits, setAudits] = useState<PageResponse<AuditItem>>(emptyPage)
   const [page, setPage] = useState(1)
   const [limit, setLimit] = useState(20)
@@ -38,7 +38,7 @@ export const AuditRecentTable = (props: { show: boolean, tableType?: ObjectType 
   }, {} as { [id: string]: string })
 
   useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       props.show && setAudits(await getAudits(page - 1, limit, table))
     })()
   }, [page, limit, props.show, table])
@@ -68,17 +68,18 @@ export const AuditRecentTable = (props: { show: boolean, tableType?: ObjectType 
 
   ampli.logEvent('sidevisning', { side: 'Varsel side for admin', sidetittel: 'Log side for varslinger' })
 
-
   return (
     <>
       <Block display="flex" justifyContent="space-between" marginBottom=".5rem">
         <Label1>{intl.lastChanges}</Label1>
-        {!props.tableType && <Block width="300px" display="flex" justifyContent="space-between">
-          <Label3 alignSelf="center" marginRight=".5rem">
-            {intl.table}:{' '}
-          </Label3>
-          <CustomizedStatefulSelect size="compact" options={tableOptions} onChange={(p) => setTable(p?.value[0]?.id as ObjectType)} />
-        </Block>}
+        {!props.tableType && (
+          <Block width="300px" display="flex" justifyContent="space-between">
+            <Label3 alignSelf="center" marginRight=".5rem">
+              {intl.table}:{' '}
+            </Label3>
+            <CustomizedStatefulSelect size="compact" options={tableOptions} onChange={(p) => setTable(p?.value[0]?.id as ObjectType)} />
+          </Block>
+        )}
       </Block>
 
       <Table

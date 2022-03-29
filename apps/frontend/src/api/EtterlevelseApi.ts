@@ -72,10 +72,10 @@ export const useEtterlevelse = (id?: string, behandlingId?: string, kravId?: Kra
   const [data, setData] = useState<Etterlevelse | undefined>(
     isCreateNew
       ? mapEtterlevelseToFormValue({
-        behandlingId,
-        kravVersjon: kravId?.kravVersjon,
-        kravNummer: kravId?.kravNummer,
-      })
+          behandlingId,
+          kravVersjon: kravId?.kravVersjon,
+          kravNummer: kravId?.kravNummer,
+        })
       : undefined,
   )
 
@@ -97,7 +97,6 @@ export const useEtterlevelseForBehandling = (behandlingId?: string) => {
 }
 
 export const mapEtterlevelseToFormValue = (etterlevelse: Partial<Etterlevelse>, krav?: Krav): Etterlevelse => {
-
   const suksesskriterieBegrunnelser = etterlevelse.suksesskriterieBegrunnelser || []
 
   if (krav) {
@@ -116,13 +115,13 @@ export const mapEtterlevelseToFormValue = (etterlevelse: Partial<Etterlevelse>, 
           behovForBegrunnelse: s.behovForBegrunnelse,
           begrunnelse: '',
           oppfylt: false,
-          ikkeRelevant: false
+          ikkeRelevant: false,
         })
       })
     }
   }
 
-  return ({
+  return {
     id: etterlevelse.id || '',
     behandlingId: etterlevelse.behandlingId || '',
     kravNummer: etterlevelse.kravNummer || 0,
@@ -135,5 +134,5 @@ export const mapEtterlevelseToFormValue = (etterlevelse: Partial<Etterlevelse>, 
     dokumentasjon: etterlevelse.dokumentasjon || [],
     fristForFerdigstillelse: etterlevelse.fristForFerdigstillelse || '',
     status: etterlevelse.status || EtterlevelseStatus.UNDER_REDIGERING,
-  })
+  }
 }

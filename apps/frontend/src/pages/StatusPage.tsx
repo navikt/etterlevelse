@@ -6,9 +6,7 @@ import { Block } from 'baseui/block'
 import { Helmet } from 'react-helmet'
 import { ampli } from '../services/Amplitude'
 
-
 export const StatusPage = () => {
-
   ampli.logEvent('sidevisning', { side: 'Status side', sidetittel: 'Status i organisasjonen' })
 
   return (

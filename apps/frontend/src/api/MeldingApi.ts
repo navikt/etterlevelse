@@ -1,5 +1,5 @@
 import axios from 'axios'
-import {env} from '../util/env'
+import { env } from '../util/env'
 import { AlertType, Melding, MeldingStatus, MeldingType, PageResponse } from '../constants'
 
 export const getAllMelding = async () => {
@@ -56,13 +56,13 @@ function MeldingToMeldingDto(melding: Melding): Melding {
 }
 
 export const mapMeldingToFormValue = (melding: Partial<Melding>): Melding => {
-  return ({
+  return {
     id: melding.id || '',
     changeStamp: melding.changeStamp || { lastModifiedDate: '', lastModifiedBy: '' },
     version: -1,
     meldingStatus: melding.meldingStatus || MeldingStatus.DEACTIVE,
     meldingType: melding.meldingType || MeldingType.FORSIDE,
     melding: melding.melding || '',
-    alertType: melding.alertType || AlertType.WARNING
-  })
+    alertType: melding.alertType || AlertType.WARNING,
+  }
 }

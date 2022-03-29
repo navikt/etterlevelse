@@ -11,9 +11,9 @@ import { HeaderContent } from './HeaderContent'
 import { isFerdigUtfylt } from '../../pages/BehandlingerTemaPageV2'
 
 type TemaCardBehandlingProps = {
-  tema: TemaCode;
-  stats: any[];
-  behandling: Behandling;
+  tema: TemaCode
+  stats: any[]
+  behandling: Behandling
   irrelevant?: boolean
 }
 export const TemaCardBehandling = (props: TemaCardBehandlingProps) => {
@@ -33,19 +33,18 @@ export const TemaCardBehandling = (props: TemaCardBehandlingProps) => {
   krav.forEach((k) => {
     if (k.etterlevelser.length === 0 && k.kravVersjon === 1) {
       nyttKravCounter += 1
-    } if (k.etterlevelser.length === 0 && k.kravVersjon > 1 && krav.filter((kl) => kl.kravNummer === k.kravNummer && kl.etterlevelser.length > 0).length > 0) {
+    }
+    if (k.etterlevelser.length === 0 && k.kravVersjon > 1 && krav.filter((kl) => kl.kravNummer === k.kravNummer && kl.etterlevelser.length > 0).length > 0) {
       nyttKravVersjonCounter += 1
     }
     if (k.etterlevelser.length && isFerdigUtfylt(k.etterlevelser[0].status)) {
       utfylt += 1
-    } else if (
-      k.etterlevelser.length && !isFerdigUtfylt(k.etterlevelser[0].status)) {
+    } else if (k.etterlevelser.length && !isFerdigUtfylt(k.etterlevelser[0].status)) {
       underArbeid += 1
     } else {
       tilUtfylling += 1
     }
   })
-
 
   for (let index = krav.length - 1; index > 0; index--) {
     if (krav[index].kravNummer === krav[index - 1].kravNummer) {
@@ -87,13 +86,15 @@ export const TemaCardBehandling = (props: TemaCardBehandlingProps) => {
       verticalMargin={theme.sizing.scale400}
       href={`/behandling/${behandling.id}/${irrelevant ? 'i' : ''}${tema.code}`}
       tittel={tema.shortName}
-      headerContent={<HeaderContent kravLength={krav.length} documentedLength={underArbeid + utfylt} nyttKravCounter={nyttKravCounter} nyttKravVersjonCounter={nyttKravVersjonCounter} />}
+      headerContent={
+        <HeaderContent kravLength={krav.length} documentedLength={underArbeid + utfylt} nyttKravCounter={nyttKravCounter} nyttKravVersjonCounter={nyttKravVersjonCounter} />
+      }
       flexContent
       hideArrow
       titleColor={ettlevColors.green600}
     >
       <Block display="flex" width="100%">
-        {krav.length > 0 ?
+        {krav.length > 0 ? (
           <Block marginTop={theme.sizing.scale650} width={'100%'}>
             <Block display="flex" flex={1}>
               <Paragraph4 marginTop="0px" marginBottom="2px">
@@ -126,11 +127,11 @@ export const TemaCardBehandling = (props: TemaCardBehandlingProps) => {
               />
             </Block>
           </Block>
-          :
+        ) : (
           <Paragraph4 $style={{ lineHeight: '14px', fontStyle: 'italic' }} marginTop="25px" marginBottom="0px">
             Tema inneholder {data?.krav.numberOfElements} krav dere har filtrert bort
           </Paragraph4>
-        }
+        )}
       </Block>
     </PanelLinkCard>
   )

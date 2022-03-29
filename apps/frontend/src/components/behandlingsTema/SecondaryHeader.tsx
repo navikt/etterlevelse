@@ -7,7 +7,7 @@ import { angleIcon, page2Icon } from '../Images'
 import CustomizedModal from '../common/CustomizedModal'
 import { getTemaMainHeader } from '../../pages/TemaPage'
 import React, { useState } from 'react'
-import {  useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { Behandling } from '../../constants'
 import { LovCode, TemaCode } from '../../services/Codelist'
 
@@ -16,11 +16,7 @@ type SecondaryHeaderProps = {
   temaData: TemaCode | undefined
   lovListe: LovCode[]
 }
-export const SecondaryHeader = ({
-  behandling,
-  temaData,
-  lovListe,
-}: SecondaryHeaderProps) => {
+export const SecondaryHeader = ({ behandling, temaData, lovListe }: SecondaryHeaderProps) => {
   const [isTemaModalOpen, setIsTemaModalOpen] = useState<boolean>(false)
 
   const navigate = useNavigate()
@@ -48,24 +44,19 @@ export const SecondaryHeader = ({
               fontSize: '18px',
               fontWeight: 400,
               lineHeight: '22px',
-              color: ettlevColors.green600, textDecoration: 'underline',
+              color: ettlevColors.green600,
+              textDecoration: 'underline',
               ':hover': {
-                color: ettlevColors.green400
-              }
-            }}>
+                color: ettlevColors.green400,
+              },
+            }}
+          >
             Krav til utfylling
           </Label3>
         </Button>
       </Block>
 
-      <Block
-        marginTop="0px"
-        marginBottom="56px"
-        display="flex"
-        width={'100%'}
-        alignItems="center"
-        justifyContent="center"
-      >
+      <Block marginTop="0px" marginBottom="56px" display="flex" width={'100%'} alignItems="center" justifyContent="center">
         <Block display="flex" flex="1">
           <img src={angleIcon} alt="" />{' '}
           <Label3 marginLeft="12px" $style={{ fontSize: '24px', fontWeight: 900, lineHeight: '32px', color: ettlevColors.green600, whiteSpace: 'nowrap' }}>
@@ -108,15 +99,19 @@ export const SecondaryHeader = ({
           }}
         >
           <Block width="100%">
-            <Block paddingTop="120px" paddingBottom="40px" backgroundColor={ettlevColors.green100} paddingLeft={responsivePaddingExtraLarge}
-              paddingRight={responsivePaddingExtraLarge}>
+            <Block
+              paddingTop="120px"
+              paddingBottom="40px"
+              backgroundColor={ettlevColors.green100}
+              paddingLeft={responsivePaddingExtraLarge}
+              paddingRight={responsivePaddingExtraLarge}
+            >
               <H1 marginTop="0px" marginBottom="0px">
                 {temaData?.shortName}
               </H1>
             </Block>
             <Block marginBottom="55px" marginTop="40px" paddingLeft={responsivePaddingExtraLarge} paddingRight={responsivePaddingExtraLarge}>
-              <Block>{getTemaMainHeader(temaData, lovListe, true, () => {
-              }, true, true)}</Block>
+              <Block>{getTemaMainHeader(temaData, lovListe, true, () => {}, true, true)}</Block>
               <Block display="flex" justifyContent="flex-end" width="100%" marginTop="38px">
                 <Button onClick={() => setIsTemaModalOpen(false)}>Lukk visning</Button>
               </Block>

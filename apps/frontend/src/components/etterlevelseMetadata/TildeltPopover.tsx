@@ -1,16 +1,16 @@
-import {EtterlevelseMetadata} from '../../constants'
-import {StatefulPopover} from 'baseui/popover'
-import {Block} from 'baseui/block'
-import {Button as BaseButton} from 'baseui/button'
-import {PLACEMENT} from 'baseui/tooltip'
+import { EtterlevelseMetadata } from '../../constants'
+import { StatefulPopover } from 'baseui/popover'
+import { Block } from 'baseui/block'
+import { Button as BaseButton } from 'baseui/button'
+import { PLACEMENT } from 'baseui/tooltip'
 import Button from '../common/Button'
-import {createEtterlevelseMetadata, updateEtterlevelseMetadata} from '../../api/EtterlevelseMetadataApi'
-import {user} from '../../services/User'
-import {ettlevColors} from '../../util/theme'
-import {Label3} from 'baseui/typography'
-import {borderColor, borderStyle, borderWidth} from '../common/Style'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {IconDefinition} from "@fortawesome/fontawesome-svg-core";
+import { createEtterlevelseMetadata, updateEtterlevelseMetadata } from '../../api/EtterlevelseMetadataApi'
+import { user } from '../../services/User'
+import { ettlevColors } from '../../util/theme'
+import { Label3 } from 'baseui/typography'
+import { borderColor, borderStyle, borderWidth } from '../common/Style'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
 
 type TildeltPopoverProps = {
   etterlevelseMetadata: EtterlevelseMetadata
@@ -19,7 +19,7 @@ type TildeltPopoverProps = {
   iconColor?: string
 }
 
-export const TildeltPopoever = ({etterlevelseMetadata, setEtterlevelseMetadata, icon, iconColor}: TildeltPopoverProps) => {
+export const TildeltPopoever = ({ etterlevelseMetadata, setEtterlevelseMetadata, icon, iconColor }: TildeltPopoverProps) => {
   return (
     <StatefulPopover
       focusLock={true}
@@ -27,7 +27,7 @@ export const TildeltPopoever = ({etterlevelseMetadata, setEtterlevelseMetadata, 
         Inner: {
           style: {
             backgroundColor: ettlevColors.white,
-          }
+          },
         },
         Body: {
           style: {
@@ -35,8 +35,8 @@ export const TildeltPopoever = ({etterlevelseMetadata, setEtterlevelseMetadata, 
             ...borderColor('#E3E3E3'),
             ...borderStyle('solid'),
             ...borderWidth('1px'),
-            boxShadow: '0px 1px 1px rgba(0, 0, 0, 0.14), 0px 2px 1px rgba(38, 38, 38, 0.12), 0px 1px 3px rgba(38, 38, 38, 0.2)'
-          }
+            boxShadow: '0px 1px 1px rgba(0, 0, 0, 0.14), 0px 2px 1px rgba(38, 38, 38, 0.12), 0px 1px 3px rgba(38, 38, 38, 0.2)',
+          },
         },
         Arrow: {
           style: {
@@ -44,10 +44,10 @@ export const TildeltPopoever = ({etterlevelseMetadata, setEtterlevelseMetadata, 
             ...borderColor('#E3E3E3'),
             ...borderStyle('solid'),
             ...borderWidth('1px'),
-          }
-        }
+          },
+        },
       }}
-      content={({close}) => (
+      content={({ close }) => (
         <Block padding={'20px'}>
           <Button
             kind="underline-hover"
@@ -56,16 +56,15 @@ export const TildeltPopoever = ({etterlevelseMetadata, setEtterlevelseMetadata, 
               if (etterlevelseMetadata.tildeltMed && user.getName() === etterlevelseMetadata.tildeltMed[0] && etterlevelseMetadata.id !== 'ny') {
                 updateEtterlevelseMetadata({
                   ...etterlevelseMetadata,
-                  tildeltMed: []
+                  tildeltMed: [],
                 }).then((resp) => {
                   setEtterlevelseMetadata(resp)
                   close()
                 })
-
               } else if (etterlevelseMetadata.id !== 'ny') {
                 updateEtterlevelseMetadata({
                   ...etterlevelseMetadata,
-                  tildeltMed: [ident]
+                  tildeltMed: [ident],
                 }).then((resp) => {
                   setEtterlevelseMetadata(resp)
                   close()
@@ -79,8 +78,9 @@ export const TildeltPopoever = ({etterlevelseMetadata, setEtterlevelseMetadata, 
                   close()
                 })
               }
-            }}>
-            <Label3 $style={{fontWeight: 600}}>
+            }}
+          >
+            <Label3 $style={{ fontWeight: 600 }}>
               {etterlevelseMetadata.tildeltMed && user.getName() === etterlevelseMetadata.tildeltMed[0] ? 'Fjern meg selv' : 'Tildel meg selv'}
             </Label3>
           </Button>
@@ -99,10 +99,9 @@ export const TildeltPopoever = ({etterlevelseMetadata, setEtterlevelseMetadata, 
         }}
         type="button"
       >
-        <FontAwesomeIcon icon={icon} color={iconColor ? iconColor : 'inherit'} title="Etterlevelse metadata meny"/>
+        <FontAwesomeIcon icon={icon} color={iconColor ? iconColor : 'inherit'} title="Etterlevelse metadata meny" />
       </BaseButton>
     </StatefulPopover>
   )
 }
 export default TildeltPopoever
-

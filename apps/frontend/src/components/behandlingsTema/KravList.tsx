@@ -1,11 +1,11 @@
-import {Behandling, KRAV_FILTER_TYPE, KravEtterlevelseData} from "../../constants";
-import _ from "lodash";
-import {user} from "../../services/User";
-import {Block} from "baseui/block";
-import {CustomPanelDivider} from "../common/CustomizedAccordion";
-import {KravCard} from "./KravCard";
-import React, {ReactElement} from "react";
-import {Option} from "baseui/select";
+import { Behandling, KRAV_FILTER_TYPE, KravEtterlevelseData } from '../../constants'
+import _ from 'lodash'
+import { user } from '../../services/User'
+import { Block } from 'baseui/block'
+import { CustomPanelDivider } from '../common/CustomizedAccordion'
+import { KravCard } from './KravCard'
+import React, { ReactElement } from 'react'
+import { Option } from 'baseui/select'
 
 type KravListProps = {
   kravList: KravEtterlevelseData[]
@@ -19,17 +19,7 @@ type KravListProps = {
   kravFilter: KRAV_FILTER_TYPE
 }
 
-export const KravList = ({
-  kravList,
-  EmptyMessage,
-  sortingAvailable,
-  noStatus,
-  sorting,
-  sortingOptions,
-  behandling,
-  noVarsling,
-  kravFilter
-}: KravListProps) => {
+export const KravList = ({ kravList, EmptyMessage, sortingAvailable, noStatus, sorting, sortingOptions, behandling, noVarsling, kravFilter }: KravListProps) => {
   if (kravList.length) {
     let sortedKravList = _.cloneDeep(kravList)
     if (sortingAvailable && sorting[0].id === sortingOptions[1].id) {
@@ -50,20 +40,21 @@ export const KravList = ({
 
     return (
       <Block $style={{ backgroundColor: 'white' }}>
-        {behandling && sortedKravList.map((k) => {
-          return (
-            <CustomPanelDivider key={`${k.navn}_${k.kravNummer}_${k.kravVersjon}`}>
-              <KravCard
-                krav={k}
-                key={`${k.navn}_${k.kravNummer}_${k.kravVersjon}_card`}
-                noStatus={noStatus}
-                behandlingId={behandling.id}
-                noVarsling={noVarsling}
-                kravFilter={kravFilter}
-              />
-            </CustomPanelDivider>
-          )
-        })}
+        {behandling &&
+          sortedKravList.map((k) => {
+            return (
+              <CustomPanelDivider key={`${k.navn}_${k.kravNummer}_${k.kravVersjon}`}>
+                <KravCard
+                  krav={k}
+                  key={`${k.navn}_${k.kravNummer}_${k.kravVersjon}_card`}
+                  noStatus={noStatus}
+                  behandlingId={behandling.id}
+                  noVarsling={noVarsling}
+                  kravFilter={kravFilter}
+                />
+              </CustomPanelDivider>
+            )
+          })}
       </Block>
     )
   } else {

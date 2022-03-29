@@ -36,7 +36,7 @@ export const ViewEtterlevelse = ({
   loading,
   viewMode,
   krav,
-  modalVersion
+  modalVersion,
 }: {
   etterlevelse: Etterlevelse
   setEtterlevelse?: Function
@@ -62,34 +62,38 @@ export const ViewEtterlevelse = ({
               </strong>
               : {behandling.navn}
             </Paragraph2>
-            {!modalVersion && <Block display="flex" alignContent="center">
-              <FontAwesomeIcon icon={faCircle} color={ettlevColors.black} style={{ fontSize: '.45rem', paddingTop: '7px', marginRight: '8px' }} aria-hidden={true} />
-              <RouteLink
-                href={`/behandling/${behandling.id}`}
-                style={{
-                  fontSize: '18px',
-                  fontWeight: 400,
-                  lineHeight: '22px',
-                  color: ettlevColors.green800,
-                }}
-              >
-                Gå til behandling
-              </RouteLink>
-            </Block>}
-            {!modalVersion && <Block marginTop="8px" display="flex" alignContent="center">
-              <FontAwesomeIcon icon={faCircle} color={ettlevColors.black} style={{ fontSize: '.45rem', marginTop: '7px', marginRight: '8px' }} aria-hidden={true} />
-              <RouteLink
-                href={`/krav/${krav.kravNummer}/${krav.kravVersjon}`}
-                style={{
-                  fontSize: '18px',
-                  fontWeight: 400,
-                  lineHeight: '22px',
-                  color: ettlevColors.green800,
-                }}
-              >
-                Gå til kravet
-              </RouteLink>
-            </Block>}
+            {!modalVersion && (
+              <Block display="flex" alignContent="center">
+                <FontAwesomeIcon icon={faCircle} color={ettlevColors.black} style={{ fontSize: '.45rem', paddingTop: '7px', marginRight: '8px' }} aria-hidden={true} />
+                <RouteLink
+                  href={`/behandling/${behandling.id}`}
+                  style={{
+                    fontSize: '18px',
+                    fontWeight: 400,
+                    lineHeight: '22px',
+                    color: ettlevColors.green800,
+                  }}
+                >
+                  Gå til behandling
+                </RouteLink>
+              </Block>
+            )}
+            {!modalVersion && (
+              <Block marginTop="8px" display="flex" alignContent="center">
+                <FontAwesomeIcon icon={faCircle} color={ettlevColors.black} style={{ fontSize: '.45rem', marginTop: '7px', marginRight: '8px' }} aria-hidden={true} />
+                <RouteLink
+                  href={`/krav/${krav.kravNummer}/${krav.kravVersjon}`}
+                  style={{
+                    fontSize: '18px',
+                    fontWeight: 400,
+                    lineHeight: '22px',
+                    color: ettlevColors.green800,
+                  }}
+                >
+                  Gå til kravet
+                </RouteLink>
+              </Block>
+            )}
             {/* <Block marginTop={theme.sizing.scale850}>
               <Teams teams={behandling.teams} link list />
             </Block> */}

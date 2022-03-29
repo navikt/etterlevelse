@@ -76,14 +76,14 @@ const LoggedInHeader = () => {
   const kravPages = user.isKraveier() ? [{ label: 'Forvalte og opprette krav', href: '/kravliste' }] : []
   const adminPages = user.isAdmin()
     ? [
-      { label: 'Administrere krav', href: '/admin/krav' },
-      { label: intl.audit, href: '/admin/audit' },
-      { label: 'Kodeverk', href: '/admin/codelist' },
-      { label: intl.mailLog, href: '/admin/maillog' },
-      { label: intl.questionAndAnswers, href: '/admin/messageslog' },
-      { label: intl.notifications, href: '/admin/varsel' },
-      { label: intl.settings, href: '/admin/settings', disabled: true },
-    ]
+        { label: 'Administrere krav', href: '/admin/krav' },
+        { label: intl.audit, href: '/admin/audit' },
+        { label: 'Kodeverk', href: '/admin/codelist' },
+        { label: intl.mailLog, href: '/admin/maillog' },
+        { label: intl.questionAndAnswers, href: '/admin/messageslog' },
+        { label: intl.notifications, href: '/admin/varsel' },
+        { label: intl.settings, href: '/admin/settings', disabled: true },
+      ]
     : []
   const otherPages = [
     { label: 'Mine innstillinger', href: '/innstillinger', disabled: true },
@@ -159,8 +159,8 @@ const Menu = (props: { pages: MenuItem[][]; title: React.ReactNode; icon?: IconD
 
   const allPages = props.pages.length
     ? props.pages
-      .filter((p) => p.length)
-      .reduce((previousValue, currentValue) => [...((previousValue as MenuItem[]) || []), { label: <Divider compact={props.compact} /> }, ...(currentValue as MenuItem[])])
+        .filter((p) => p.length)
+        .reduce((previousValue, currentValue) => [...((previousValue as MenuItem[]) || []), { label: <Divider compact={props.compact} /> }, ...(currentValue as MenuItem[])])
     : []
 
   return (
@@ -227,7 +227,6 @@ const Menu = (props: { pages: MenuItem[][]; title: React.ReactNode; icon?: IconD
 let sourceReported = false
 
 const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
-
   const [systemVarsel, setSystemVarsel] = useState<Melding>()
   const location = useLocation()
 
@@ -241,7 +240,7 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
   }
 
   React.useEffect(() => {
-    (async () => {
+    ;(async () => {
       await getMeldingByType(MeldingType.SYSTEM).then((r) => {
         if (r.numberOfElements > 0) {
           setSystemVarsel(r.content[0])
@@ -307,7 +306,7 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
           </Block>
         </Block>
       </Block>
-      {systemVarsel && systemVarsel.meldingStatus === MeldingStatus.ACTIVE &&
+      {systemVarsel && systemVarsel.meldingStatus === MeldingStatus.ACTIVE && (
         <Block
           backgroundColor={ettlevColors.white}
           $style={{
@@ -336,12 +335,13 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
               height="20px"
               alt=""
               style={{
-                marginRight: '5px'
+                marginRight: '5px',
               }}
             />
             <Markdown fontSize="16px" source={systemVarsel.melding} />
           </Block>
-        </Block>}
+        </Block>
+      )}
     </Block>
   )
 }

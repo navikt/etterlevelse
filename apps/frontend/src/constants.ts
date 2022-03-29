@@ -1,5 +1,5 @@
-import {Code, LovCode} from './services/Codelist'
-import {Group} from './services/User'
+import { Code, LovCode } from './services/Codelist'
+import { Group } from './services/User'
 
 export type RecursivePartial<T> = {
   [P in keyof T]?: T[P] extends (infer U)[] ? RecursivePartial<U>[] : T[P] extends object ? RecursivePartial<T[P]> : T[P]
@@ -221,22 +221,22 @@ export interface Melding extends DomainObject {
 
 export enum KRAV_FILTER_TYPE {
   RELEVANTE_KRAV = 'RELEVANTE_KRAV',
-  BORTFILTTERTE_KRAV = 'BORTFILTERTE_KRAV'
+  BORTFILTTERTE_KRAV = 'BORTFILTERTE_KRAV',
 }
 
 export enum AlertType {
   INFO = 'INFO',
-  WARNING = 'WARNING'
+  WARNING = 'WARNING',
 }
 
 export enum MeldingType {
   SYSTEM = 'SYSTEM',
-  FORSIDE = 'FORSIDE'
+  FORSIDE = 'FORSIDE',
 }
 
 export enum MeldingStatus {
   ACTIVE = 'ACTIVE',
-  DEACTIVE = 'DEACTIVE'
+  DEACTIVE = 'DEACTIVE',
 }
 
 export enum TilbakemeldingRolle {
@@ -256,7 +256,7 @@ export enum EtterlevelseStatus {
   OPPFYLLES_SENERE = 'OPPFYLLES_SENERE',
   IKKE_RELEVANT = 'IKKE_RELEVANT',
   FERDIG_DOKUMENTERT = 'FERDIG_DOKUMENTERT',
-  IKKE_RELEVANT_FERDIG_DOKUMENTERT = 'IKKE_RELEVANT_FERDIG_DOKUMENTERT'
+  IKKE_RELEVANT_FERDIG_DOKUMENTERT = 'IKKE_RELEVANT_FERDIG_DOKUMENTERT',
 }
 
 export enum KravStatus {
@@ -272,7 +272,7 @@ export enum KravListFilter {
   STATUS = 'STATUS',
 }
 
-export const emptyPage = {content: [], numberOfElements: 0, pageNumber: 0, pages: 0, pageSize: 1, totalElements: 0}
+export const emptyPage = { content: [], numberOfElements: 0, pageNumber: 0, pages: 0, pageSize: 1, totalElements: 0 }
 
 export interface TeamResource {
   navIdent: string
@@ -320,12 +320,14 @@ export interface Begrep {
 }
 
 // export type KravQL = Omit<Krav, 'varslingsadresser'> & {
-export type KravQL = Replace<Krav,
+export type KravQL = Replace<
+  Krav,
   {
     etterlevelser: EtterlevelseQL[]
     varslingsadresser: VarslingsadresseQL[]
     begreper: Begrep[]
-  }>
+  }
+>
 
 export type EtterlevelseQL = Etterlevelse & {
   behandling: BehandlingQL

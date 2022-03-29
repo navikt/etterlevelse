@@ -26,7 +26,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Helmet } from 'react-helmet'
 import { ampli } from '../services/Amplitude'
 
-
 type Section = 'mine' | 'siste' | 'alle'
 
 interface BehandlingCount {
@@ -38,7 +37,6 @@ type CustomTeamObject = BehandlingCount & Team
 const tabMarginBottom = '48px'
 
 export const MyBehandlingerPage = () => {
-
   ampli.logEvent('sidevisning', { side: 'Side for Behandlinger', sidetittel: 'Dokumentere etterlevelse' })
 
   return (
@@ -330,7 +328,7 @@ const Alle = () => {
             // EndEnhancer: {style: {marginLeft: theme.sizing.scale400, paddingLeft: 0, paddingRight: 0, backgroundColor: ettlevColors.black}}
           }}
           startEnhancer={<img src={searchIcon} alt="Søk ikon" />}
-        // endEnhancer={<img aria-hidden alt={'Søk ikon'} src={sokButtonIcon} />}
+          // endEnhancer={<img aria-hidden alt={'Søk ikon'} src={sokButtonIcon} />}
         />
         {tooShort && (
           <LabelSmall color={ettlevColors.error400} alignSelf={'flex-end'} marginTop={theme.sizing.scale200}>

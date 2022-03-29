@@ -16,9 +16,8 @@ import { emptyPage, Krav, PageResponse, Tilbakemelding } from '../constants'
 import { ColumnCompares } from '../util/hooks'
 import { intl } from '../util/intl/intl'
 import { ettlevColors, maxPageWidth } from '../util/theme'
-import { codelist, ListName } from "../services/Codelist";
+import { codelist, ListName } from '../services/Codelist'
 import { ampli } from '../services/Amplitude'
-
 
 type SporsmaalOgSvarKrav = {
   kravNavn: string
@@ -44,7 +43,6 @@ export const SpørsmålOgSvarLogPage = () => {
 
   ampli.logEvent('sidevisning', { side: 'Log side for spørsmål og svar', sidetittel: 'Spørsmål og svar' })
 
-
   const handlePageChange = (nextPage: number) => {
     if (nextPage < 1) {
       return
@@ -56,7 +54,7 @@ export const SpørsmålOgSvarLogPage = () => {
   }
 
   useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       const kraver = await getKravPage(page - 1, 20)
       const mappedKraver = kraver.content.map((k) => kravMapToFormVal(k))
       setTableContent({ ...kraver, content: mappedKraver })
@@ -90,7 +88,7 @@ export const SpørsmålOgSvarLogPage = () => {
             tidForSpørsmål: t.meldinger[0].tid,
             tidForSvar: ubesvart ? undefined : sistMelding.tid,
             melderNavn: <PersonName ident={t.melderIdent} />,
-            tema: kravTema
+            tema: kravTema,
           })
         })
         setKravMessages(kravMessages)

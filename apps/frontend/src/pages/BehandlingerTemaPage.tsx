@@ -1,23 +1,23 @@
-import React, {useEffect, useState} from 'react'
-import {Block, Display} from 'baseui/block'
-import {useLocation, useNavigate, useParams} from 'react-router-dom'
-import {H1, H2, Label3, Paragraph2, Paragraph4} from 'baseui/typography'
-import {ettlevColors, maxPageWidth, theme} from '../util/theme'
-import {codelist, ListName, TemaCode} from '../services/Codelist'
-import RouteLink, {urlForObject} from '../components/common/RouteLink'
-import {useBehandling} from '../api/BehandlingApi'
-import {Layout2} from '../components/scaffold/Page'
-import {Etterlevelse, EtterlevelseStatus, KravEtterlevelseData, KravQL, KravStatus, PageResponse} from '../constants'
-import {arkPennIcon, crossIcon} from '../components/Images'
-import {useQuery} from '@apollo/client'
-import {CustomizedAccordion, CustomizedPanel, CustomPanelDivider} from '../components/common/CustomizedAccordion'
+import React, { useEffect, useState } from 'react'
+import { Block, Display } from 'baseui/block'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import { H1, H2, Label3, Paragraph2, Paragraph4 } from 'baseui/typography'
+import { ettlevColors, maxPageWidth, theme } from '../util/theme'
+import { codelist, ListName, TemaCode } from '../services/Codelist'
+import RouteLink, { urlForObject } from '../components/common/RouteLink'
+import { useBehandling } from '../api/BehandlingApi'
+import { Layout2 } from '../components/scaffold/Page'
+import { Etterlevelse, EtterlevelseStatus, KravEtterlevelseData, KravQL, KravStatus, PageResponse } from '../constants'
+import { arkPennIcon, crossIcon } from '../components/Images'
+import { useQuery } from '@apollo/client'
+import { CustomizedAccordion, CustomizedPanel, CustomPanelDivider } from '../components/common/CustomizedAccordion'
 import CustomizedModal from '../components/common/CustomizedModal'
-import {Spinner} from '../components/common/Spinner'
-import {useEtterlevelse} from '../api/EtterlevelseApi'
-import {EditEtterlevelse} from '../components/etterlevelse/EditEtterlevelse'
-import {behandlingKravQuery, getKravByKravNumberAndVersion, KravId} from '../api/KravApi'
-import {borderStyle} from '../components/common/Style'
-import {breadcrumbPaths} from '../components/common/CustomizedBreadcrumbs'
+import { Spinner } from '../components/common/Spinner'
+import { useEtterlevelse } from '../api/EtterlevelseApi'
+import { EditEtterlevelse } from '../components/etterlevelse/EditEtterlevelse'
+import { behandlingKravQuery, getKravByKravNumberAndVersion, KravId } from '../api/KravApi'
+import { borderStyle } from '../components/common/Style'
+import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 import Button from '../components/common/Button'
 import { Responsive } from 'baseui/theme'
 import { KravPanelHeader } from '../components/behandling/KravPanelHeader'
@@ -82,7 +82,7 @@ export const BehandlingerTemaPage = () => {
   // },[])
 
   useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       const allKravPriority = await getAllKravPriority()
       const kraver = _.cloneDeep(rawData?.krav.content) || []
 
@@ -134,7 +134,12 @@ export const BehandlingerTemaPage = () => {
     )
     setSkalUtfyllesKrav(
       kravData.filter(
-        (k) => k.etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT || k.etterlevelseStatus === EtterlevelseStatus.UNDER_REDIGERING || k.etterlevelseStatus === EtterlevelseStatus.FERDIG || k.etterlevelseStatus === undefined || null,
+        (k) =>
+          k.etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT ||
+          k.etterlevelseStatus === EtterlevelseStatus.UNDER_REDIGERING ||
+          k.etterlevelseStatus === EtterlevelseStatus.FERDIG ||
+          k.etterlevelseStatus === undefined ||
+          null,
       ),
     )
   }, [kravData])
@@ -410,10 +415,7 @@ const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function; setKra
         <Block display="flex" justifyContent="flex-end" flex="1" width="100%">
           <Block width="350px" display="flex" justifyContent="flex-end" marginLeft="32px">
             <Block display="flex" width="100%" maxWidth="220px" justifyContent="flex-end">
-              {props.krav && props.krav.etterlevelseStatus && <StatusView
-                status={getEtterlevelseStatus(props.krav)}
-                statusDisplay={getEtterlevelseStatusLabelColor(props.krav)}
-              />}
+              {props.krav && props.krav.etterlevelseStatus && <StatusView status={getEtterlevelseStatus(props.krav)} statusDisplay={getEtterlevelseStatusLabelColor(props.krav)} />}
             </Block>
             <Block marginLeft="31px" maxWidth="140px" width="100%">
               {props.krav.etterlevelseChangeStamp?.lastModifiedDate && (
@@ -443,7 +445,7 @@ const KravView = (props: {
   const [varsleMelding, setVarsleMelding] = useState('')
 
   useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       if (props.kravId.kravNummer && props.kravId.kravVersjon) {
         const krav = await getKravByKravNumberAndVersion(props.kravId.kravNummer, props.kravId.kravVersjon)
         if (krav) {

@@ -25,7 +25,6 @@ import React from 'react'
 import { Helmet } from 'react-helmet'
 import { ampli } from '../services/Amplitude'
 
-
 type Section = 'siste' | 'alle' | 'tema'
 
 const tabMarginBottom = '10px'

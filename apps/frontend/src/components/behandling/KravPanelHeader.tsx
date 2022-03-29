@@ -43,8 +43,13 @@ export const KravPanelHeader = (props: { title: string; kravData: KravEtterlevel
   )
 }
 
-
-export const KravPanelHeaderWithSorting = (props: { kravRelevans: readonly Option[], setKravRelevans: React.Dispatch<React.SetStateAction<readonly Option[]>>, kravData: KravEtterlevelseData[] | Krav[], sorting: readonly Option[], setSorting: React.Dispatch<React.SetStateAction<readonly Option[]>> }) => {
+export const KravPanelHeaderWithSorting = (props: {
+  kravRelevans: readonly Option[]
+  setKravRelevans: React.Dispatch<React.SetStateAction<readonly Option[]>>
+  kravData: KravEtterlevelseData[] | Krav[]
+  sorting: readonly Option[]
+  setSorting: React.Dispatch<React.SetStateAction<readonly Option[]>>
+}) => {
   let antallSuksesskriterier = 0
 
   props.kravData.forEach((k) => {
@@ -56,9 +61,7 @@ export const KravPanelHeaderWithSorting = (props: { kravRelevans: readonly Optio
   return (
     <Block display={responsiveBreakPoints} width="100%">
       <Block display="flex" justifyContent="center" alignItems="center">
-        <Label3 $style={{ fontSize: '16px', lineHeight: '18px' }}>
-          Vis:
-        </Label3>
+        <Label3 $style={{ fontSize: '16px', lineHeight: '18px' }}>Vis:</Label3>
         <Block paddingLeft="20px" paddingRight="16px" width="290px">
           <CustomizedSelect
             size="default"
@@ -70,7 +73,14 @@ export const KravPanelHeaderWithSorting = (props: { kravRelevans: readonly Optio
           />
         </Block>
         <Block paddingRight="20px" width="290px">
-          <CustomizedSelect size="default" searchable={false} clearable={false} options={sortingOptions} value={props.sorting} onChange={(params) => props.setSorting(params.value)} />
+          <CustomizedSelect
+            size="default"
+            searchable={false}
+            clearable={false}
+            options={sortingOptions}
+            value={props.sorting}
+            onChange={(params) => props.setSorting(params.value)}
+          />
         </Block>
       </Block>
       <Block display="flex" justifyContent={responsiveAlignment} flex="1" marginRight="26px">
@@ -88,7 +98,6 @@ export const KravPanelHeaderWithSorting = (props: { kravRelevans: readonly Optio
       </Block>
     </Block>
   )
-
 }
 
 export default KravPanelHeader

@@ -9,7 +9,6 @@ import { maxPageWidth } from '../util/theme'
 import { Helmet } from 'react-helmet'
 import { ampli } from '../services/Amplitude'
 
-
 const NotFound = () => {
   const location = useLocation()
 

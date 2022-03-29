@@ -1,8 +1,8 @@
 import axios from 'axios'
-import {EtterlevelseMetadata, PageResponse} from '../constants'
-import {env} from '../util/env'
-import {useEffect, useState} from 'react'
-import {KravId} from "./KravApi";
+import { EtterlevelseMetadata, PageResponse } from '../constants'
+import { env } from '../util/env'
+import { useEffect, useState } from 'react'
+import { KravId } from './KravApi'
 
 export const getAllEtterlevelseMetadata = async () => {
   const PAGE_SIZE = 100
@@ -81,10 +81,10 @@ export const useEtterlevelseMetadata = (id?: string, behandlingId?: string, krav
   const [data, setData] = useState<EtterlevelseMetadata | undefined>(
     isCreateNew
       ? mapEtterlevelseMetadataToFormValue({
-        behandlingId,
-        kravVersjon: kravId?.kravVersjon,
-        kravNummer: kravId?.kravNummer,
-      })
+          behandlingId,
+          kravVersjon: kravId?.kravVersjon,
+          kravNummer: kravId?.kravNummer,
+        })
       : undefined,
   )
 
@@ -96,14 +96,14 @@ export const useEtterlevelseMetadata = (id?: string, behandlingId?: string, krav
 }
 
 export const mapEtterlevelseMetadataToFormValue = (etterlevelsemetaData: Partial<EtterlevelseMetadata>): EtterlevelseMetadata => {
-  return ({
+  return {
     id: etterlevelsemetaData.id || '',
     behandlingId: etterlevelsemetaData.behandlingId || '',
     kravNummer: etterlevelsemetaData.kravNummer || 0,
     kravVersjon: etterlevelsemetaData.kravVersjon || 0,
     tildeltMed: etterlevelsemetaData.tildeltMed || [],
     notater: etterlevelsemetaData.notater || '',
-    changeStamp: etterlevelsemetaData.changeStamp || {lastModifiedDate: '', lastModifiedBy: ''},
+    changeStamp: etterlevelsemetaData.changeStamp || { lastModifiedDate: '', lastModifiedBy: '' },
     version: -1,
-  })
+  }
 }

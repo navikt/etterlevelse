@@ -17,17 +17,15 @@ import { AlertType, Melding, MeldingStatus, MeldingType } from '../constants'
 import { getMeldingByType } from '../api/MeldingApi'
 import { ampli } from '../services/Amplitude'
 
-
 const cardWidth = ['95%', '95%', '95%', '95%', '31%', '31%']
 const cardHeight = ['auto', 'auto', 'auto', 'auto', '140px', '140px']
 const cardMarginRight = ['none', 'none', 'none', 'none', theme.sizing.scale800, theme.sizing.scale800]
 
 export const MainPageV2 = () => {
-
   const [forsideVarsel, setForsideVarsle] = useState<Melding>()
 
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       await getMeldingByType(MeldingType.FORSIDE).then((r) => {
         if (r.numberOfElements > 0) {
           setForsideVarsle(r.content[0])
@@ -94,10 +92,10 @@ export const MainPageV2 = () => {
             $style={{}}
             marginTop={theme.sizing.scale1600}
             marginBottom={theme.sizing.scale900}
-          // paddingLeft={theme.sizing.scale800}
-          // paddingRight={theme.sizing.scale800}
+            // paddingLeft={theme.sizing.scale800}
+            // paddingRight={theme.sizing.scale800}
           >
-            {forsideVarsel && forsideVarsel.meldingStatus === MeldingStatus.ACTIVE &&
+            {forsideVarsel && forsideVarsel.meldingStatus === MeldingStatus.ACTIVE && (
               <Block
                 $style={{
                   ...borderWidth('1px'),
@@ -105,12 +103,12 @@ export const MainPageV2 = () => {
                   ...borderColor(forsideVarsel.alertType === AlertType.INFO ? ettlevColors.navDypBla : ettlevColors.navOransje),
                   backgroundColor: forsideVarsel.alertType === AlertType.INFO ? ettlevColors.navLysBla : ettlevColors.warning50,
                   ...paddingAll('32px'),
-                  marginBottom: '64px'
+                  marginBottom: '64px',
                 }}
               >
-                <Markdown source={forsideVarsel.melding} fontSize="18px"/>
+                <Markdown source={forsideVarsel.melding} fontSize="18px" />
               </Block>
-            }
+            )}
             <H2 $style={{ fontWeight: 300, fontSize: '32px', lineHeight: '42px' }} marginTop="0px" marginBottom="0px">
               Etterlevelseskravene er
             </H2>
@@ -144,7 +142,9 @@ export const MainPageV2 = () => {
                 playing={true}
                 playIcon={
                   <Button
-                    onClick={() => { ampli.logEvent('klikk', {title: 'Etterlevelse video spilt', type: 'Se film knapp'}) }}
+                    onClick={() => {
+                      ampli.logEvent('klikk', { title: 'Etterlevelse video spilt', type: 'Se film knapp' })
+                    }}
                     kind="secondary"
                     size={SIZE.compact}
                     $style={buttonBorderStyle}

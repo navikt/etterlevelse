@@ -1,32 +1,32 @@
-import {Etterlevelse, EtterlevelseStatus, Krav, KravQL} from '../../constants'
-import {Field, FieldProps, Form, Formik, FormikProps, validateYupSchema, yupToFormErrors} from 'formik'
-import {createEtterlevelse, mapEtterlevelseToFormValue, updateEtterlevelse} from '../../api/EtterlevelseApi'
-import {Block} from 'baseui/block'
+import { Etterlevelse, EtterlevelseStatus, Krav, KravQL } from '../../constants'
+import { Field, FieldProps, Form, Formik, FormikProps, validateYupSchema, yupToFormErrors } from 'formik'
+import { createEtterlevelse, mapEtterlevelseToFormValue, updateEtterlevelse } from '../../api/EtterlevelseApi'
+import { Block } from 'baseui/block'
 import Button from '../common/Button'
-import React, {useEffect} from 'react'
+import React, { useEffect } from 'react'
 import * as yup from 'yup'
-import {getEtterlevelseStatus} from '../../pages/EtterlevelsePage'
-import {DateField, FieldWrapper, TextAreaField} from '../common/Inputs'
-import {theme} from '../../util'
-import {FormControl} from 'baseui/form-control'
-import {getKravByKravNumberAndVersion, kravFullQuery, KravId, useKrav, useSearchKrav} from '../../api/KravApi'
-import {kravName, kravNumView} from '../../pages/KravPage'
+import { getEtterlevelseStatus } from '../../pages/EtterlevelsePage'
+import { DateField, FieldWrapper, TextAreaField } from '../common/Inputs'
+import { theme } from '../../util'
+import { FormControl } from 'baseui/form-control'
+import { getKravByKravNumberAndVersion, kravFullQuery, KravId, useKrav, useSearchKrav } from '../../api/KravApi'
+import { kravName, kravNumView } from '../../pages/KravPage'
 import CustomizedSelect from '../common/CustomizedSelect'
-import {H1, Label3, Paragraph2, Paragraph4} from 'baseui/typography'
-import {ettlevColors, responsivePaddingLarge} from '../../util/theme'
-import {SuksesskriterierBegrunnelseEdit} from './Edit/SuksesskriterieBegrunnelseEdit'
-import {Radio, RadioGroup} from 'baseui/radio'
-import {Code} from '../../services/Codelist'
-import {Error} from '../common/ModalSchema'
-import {user} from '../../services/User'
-import {KIND as NKIND, Notification} from 'baseui/notification'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faExternalLinkAlt, faTimesCircle} from '@fortawesome/free-solid-svg-icons'
-import {borderColor, borderRadius, borderStyle, borderWidth, padding, paddingZero} from '../common/Style'
-import {env} from '../../util/env'
-import {useQuery} from '@apollo/client'
+import { H1, Label3, Paragraph2, Paragraph4 } from 'baseui/typography'
+import { ettlevColors, responsivePaddingLarge } from '../../util/theme'
+import { SuksesskriterierBegrunnelseEdit } from './Edit/SuksesskriterieBegrunnelseEdit'
+import { Radio, RadioGroup } from 'baseui/radio'
+import { Code } from '../../services/Codelist'
+import { Error } from '../common/ModalSchema'
+import { user } from '../../services/User'
+import { KIND as NKIND, Notification } from 'baseui/notification'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faExternalLinkAlt, faTimesCircle } from '@fortawesome/free-solid-svg-icons'
+import { borderColor, borderRadius, borderStyle, borderWidth, padding, paddingZero } from '../common/Style'
+import { env } from '../../util/env'
+import { useQuery } from '@apollo/client'
 import moment from 'moment'
-import {informationIcon} from '../Images'
+import { informationIcon } from '../Images'
 
 type EditEttlevProps = {
   etterlevelse: Etterlevelse
@@ -293,9 +293,11 @@ export const EditEtterlevelse = ({
                                         },
                                       }}
                                       value={
-                                        etterlevelseStatus === EtterlevelseStatus.FERDIG_DOKUMENTERT ? EtterlevelseStatus.FERDIG :
-                                        etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT ? EtterlevelseStatus.IKKE_RELEVANT :
-                                        etterlevelseStatus
+                                        etterlevelseStatus === EtterlevelseStatus.FERDIG_DOKUMENTERT
+                                          ? EtterlevelseStatus.FERDIG
+                                          : etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT
+                                          ? EtterlevelseStatus.IKKE_RELEVANT
+                                          : etterlevelseStatus
                                       }
                                       onChange={(event) => {
                                         p.form.setFieldValue('status', event.currentTarget.value)
@@ -346,7 +348,8 @@ export const EditEtterlevelse = ({
                                                   {getEtterlevelseStatus(id)}
                                                 </Paragraph2>
                                               </Block>
-                                              {(etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT || etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT )&& (
+                                              {(etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT ||
+                                                etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) && (
                                                 <Block maxWidth="471px" width="100%">
                                                   <TextAreaField label="Beskriv hvorfor kravet ikke er relevant" noPlaceholder name="statusBegrunnelse" />
                                                   <Error fieldName={'statusBegrunnelse'} fullWidth={true} />
@@ -399,9 +402,9 @@ export const EditEtterlevelse = ({
                           </Block>
                         </Block>
 
-                        {<Label3 $style={{lineHeight: '32px'}}>Hvilke suksesskriterier er oppfylt?</Label3>}
+                        {<Label3 $style={{ lineHeight: '32px' }}>Hvilke suksesskriterier er oppfylt?</Label3>}
 
-                        <SuksesskriterierBegrunnelseEdit disableEdit={disableEdit} suksesskriterie={krav.suksesskriterier} viewMode={false}/>
+                        <SuksesskriterierBegrunnelseEdit disableEdit={disableEdit} suksesskriterie={krav.suksesskriterier} viewMode={false} />
 
                         {/*
               {!documentEdit &&
@@ -483,7 +486,7 @@ export const EditEtterlevelse = ({
                     marginRight
                     disabled={isSubmitting || disableEdit}
                     onClick={() => {
-                      if (values.status === EtterlevelseStatus.FERDIG_DOKUMENTERT  || values.status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) {
+                      if (values.status === EtterlevelseStatus.FERDIG_DOKUMENTERT || values.status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) {
                         values.status = Object.values(EtterlevelseStatus).filter((e) => e === etterlevelseStatus)[0]
                       }
                       submitForm()
@@ -495,14 +498,18 @@ export const EditEtterlevelse = ({
                     disabled={disableEdit}
                     type="button"
                     onClick={() => {
-                      if (values.status !== EtterlevelseStatus.IKKE_RELEVANT && values.status !== EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT && values.status !== EtterlevelseStatus.OPPFYLLES_SENERE) {
+                      if (
+                        values.status !== EtterlevelseStatus.IKKE_RELEVANT &&
+                        values.status !== EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT &&
+                        values.status !== EtterlevelseStatus.OPPFYLLES_SENERE
+                      ) {
                         values.status = EtterlevelseStatus.FERDIG_DOKUMENTERT
                         values.suksesskriterieBegrunnelser.forEach((skb, index) => {
                           if (skb.begrunnelse === '' || skb.begrunnelse === undefined) {
                             setFieldError(`suksesskriterieBegrunnelser[${index}]`, 'Du må fylle ut dokumentasjonen')
                           }
                         })
-                      }  else if (values.status === EtterlevelseStatus.IKKE_RELEVANT) {
+                      } else if (values.status === EtterlevelseStatus.IKKE_RELEVANT) {
                         values.status = EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT
                       }
                       submitForm()

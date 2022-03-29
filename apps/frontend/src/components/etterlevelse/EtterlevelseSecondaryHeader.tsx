@@ -21,17 +21,7 @@ type EtterlevelseSecondaryHeaderProps = {
   kravId: KravId | undefined
   lovListe: LovCode[]
 }
-export const EtterlevelseSecondaryHeader = ({
-  tab,
-  setTab,
-  setNavigatePath,
-  behandling,
-  temaData,
-  lovListe,
-  kravId
-}: EtterlevelseSecondaryHeaderProps) => {
-
-
+export const EtterlevelseSecondaryHeader = ({ tab, setTab, setNavigatePath, behandling, temaData, lovListe, kravId }: EtterlevelseSecondaryHeaderProps) => {
   const [isTemaModalOpen, setIsTemaModalOpen] = useState<boolean>(false)
 
   return (
@@ -60,11 +50,13 @@ export const EtterlevelseSecondaryHeader = ({
               fontSize: '18px',
               fontWeight: 400,
               lineHeight: '22px',
-              color: ettlevColors.green600, textDecoration: 'underline',
+              color: ettlevColors.green600,
+              textDecoration: 'underline',
               ':hover': {
-                color: ettlevColors.green400
-              }
-            }}>
+                color: ettlevColors.green400,
+              },
+            }}
+          >
             Krav til utfylling
           </Label3>
         </Button>
@@ -96,32 +88,25 @@ export const EtterlevelseSecondaryHeader = ({
               fontSize: '18px',
               fontWeight: 400,
               lineHeight: '22px',
-              color: ettlevColors.green600, textDecoration: 'underline',
+              color: ettlevColors.green600,
+              textDecoration: 'underline',
               ':hover': {
-                color: ettlevColors.green400
-              }
-            }}>
+                color: ettlevColors.green400,
+              },
+            }}
+          >
             {temaData?.shortName}
           </Label3>
         </Button>
       </Block>
 
-      <Block
-        marginTop="0px"
-        marginBottom="56px"
-        display="flex"
-        width="calc(100% - 35px)"
-        alignItems="center"
-        justifyContent="center"
-        marginLeft="35px"
-      >
+      <Block marginTop="0px" marginBottom="56px" display="flex" width="calc(100% - 35px)" alignItems="center" justifyContent="center" marginLeft="35px">
         <Block display="flex" flex="1">
           <img src={angleIcon} alt="" />{' '}
           <Label3 marginLeft="12px" $style={{ fontSize: '24px', fontWeight: 900, lineHeight: '32px', color: ettlevColors.green600, whiteSpace: 'nowrap' }}>
             K{kravId?.kravNummer}.{kravId?.kravVersjon}
           </Label3>
         </Block>
-
 
         <Block display="flex" justifyContent="flex-end" width="100%">
           <Button
@@ -160,15 +145,19 @@ export const EtterlevelseSecondaryHeader = ({
           }}
         >
           <Block width="100%">
-            <Block paddingTop="120px" paddingBottom="40px" backgroundColor={ettlevColors.green100} paddingLeft={responsivePaddingExtraLarge}
-              paddingRight={responsivePaddingExtraLarge}>
+            <Block
+              paddingTop="120px"
+              paddingBottom="40px"
+              backgroundColor={ettlevColors.green100}
+              paddingLeft={responsivePaddingExtraLarge}
+              paddingRight={responsivePaddingExtraLarge}
+            >
               <H1 marginTop="0px" marginBottom="0px">
                 {temaData?.shortName}
               </H1>
             </Block>
             <Block marginBottom="55px" marginTop="40px" paddingLeft={responsivePaddingExtraLarge} paddingRight={responsivePaddingExtraLarge}>
-              <Block>{getTemaMainHeader(temaData, lovListe, true, () => {
-              }, true, true)}</Block>
+              <Block>{getTemaMainHeader(temaData, lovListe, true, () => {}, true, true)}</Block>
               <Block display="flex" justifyContent="flex-end" width="100%" marginTop="38px">
                 <Button onClick={() => setIsTemaModalOpen(false)}>Lukk visning</Button>
               </Block>

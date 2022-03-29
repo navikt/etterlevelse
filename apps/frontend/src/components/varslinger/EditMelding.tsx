@@ -25,8 +25,7 @@ export const getAlertTypeText = (type: AlertType) => {
   }
 }
 
-export const EditMelding = ({ melding, setMelding, isLoading, maxChar }: { melding: Melding | undefined, setMelding: Function, isLoading: boolean, maxChar?: number }) => {
-
+export const EditMelding = ({ melding, setMelding, isLoading, maxChar }: { melding: Melding | undefined; setMelding: Function; isLoading: boolean; maxChar?: number }) => {
   const [disableEdit, setDisableEdit] = useState<boolean>(false)
   const [meldingAlertType, setMeldingAlertType] = useState<string>(AlertType.WARNING)
   const [radioHover, setRadioHover] = useState<string>('')
@@ -64,117 +63,119 @@ export const EditMelding = ({ melding, setMelding, isLoading, maxChar }: { meldi
 
   return (
     <Block>
-      {melding && <Formik
-        onSubmit={submit}
-        initialValues={mapMeldingToFormValue(melding)}
-        validateOnChange={false}
-        validateOnBlur={false}
-      >
-        {(
-          { values, submitForm }: FormikProps<Melding>
-        ) => (
-          <Block>
-            <FieldWrapper>
-              <Field name="alertType">
-                {(p: FieldProps<string>) => (
-                  <FormControl
-                    label="Varsel type"
-                    overrides={{
-                      Label: {
-                        style: {
-                          color: ettlevColors.navMorkGra,
-                          fontWeight: 700,
-                          lineHeight: '48px',
-                          fontSize: '18px',
-                          marginTop: '0px',
-                          marginBottom: '0px',
-                        },
-                      },
-                    }}
-                  >
-                    <RadioGroup
-                      disabled={disableEdit}
-                      onMouseEnter={(e) => setRadioHover(e.currentTarget.children[1].getAttribute('value') || '')}
-                      onMouseLeave={() => setRadioHover('')}
+      {melding && (
+        <Formik onSubmit={submit} initialValues={mapMeldingToFormValue(melding)} validateOnChange={false} validateOnBlur={false}>
+          {({ values, submitForm }: FormikProps<Melding>) => (
+            <Block>
+              <FieldWrapper>
+                <Field name="alertType">
+                  {(p: FieldProps<string>) => (
+                    <FormControl
+                      label="Varsel type"
                       overrides={{
-                        Root: {
-                          style: {
-                            width: '100%',
-                            alignItems: 'flex-start',
-                          },
-                        },
                         Label: {
                           style: {
+                            color: ettlevColors.navMorkGra,
+                            fontWeight: 700,
+                            lineHeight: '48px',
                             fontSize: '18px',
-                            fontWeight: 400,
-                            lineHeight: '22px',
-                            width: '100%',
+                            marginTop: '0px',
+                            marginBottom: '0px',
                           },
                         },
-                        RadioMarkOuter: {
-                          style: {
-                            height: theme.sizing.scale600,
-                            width: theme.sizing.scale600,
-                          },
-                        },
-                      }}
-                      value={meldingAlertType}
-                      onChange={(event) => {
-                        p.form.setFieldValue('alertType', event.currentTarget.value)
-                        setMeldingAlertType(event.currentTarget.value)
                       }}
                     >
-                      {Object.values(AlertType).map((id) => {
-                        return (
-                          <Radio value={id} key={id}>
-                            <Block $style={{ textDecoration: radioHover === id ? 'underline' : 'none' }}>
-                              <Paragraph2 $style={{ lineHeight: '22px' }} marginTop="0px" marginBottom="0px">
-                                {getAlertTypeText(id)}
-                              </Paragraph2>
-                            </Block>
-                          </Radio>
-                        )
-                      })}
-                    </RadioGroup>
-                  </FormControl>
+                      <RadioGroup
+                        disabled={disableEdit}
+                        onMouseEnter={(e) => setRadioHover(e.currentTarget.children[1].getAttribute('value') || '')}
+                        onMouseLeave={() => setRadioHover('')}
+                        overrides={{
+                          Root: {
+                            style: {
+                              width: '100%',
+                              alignItems: 'flex-start',
+                            },
+                          },
+                          Label: {
+                            style: {
+                              fontSize: '18px',
+                              fontWeight: 400,
+                              lineHeight: '22px',
+                              width: '100%',
+                            },
+                          },
+                          RadioMarkOuter: {
+                            style: {
+                              height: theme.sizing.scale600,
+                              width: theme.sizing.scale600,
+                            },
+                          },
+                        }}
+                        value={meldingAlertType}
+                        onChange={(event) => {
+                          p.form.setFieldValue('alertType', event.currentTarget.value)
+                          setMeldingAlertType(event.currentTarget.value)
+                        }}
+                      >
+                        {Object.values(AlertType).map((id) => {
+                          return (
+                            <Radio value={id} key={id}>
+                              <Block $style={{ textDecoration: radioHover === id ? 'underline' : 'none' }}>
+                                <Paragraph2 $style={{ lineHeight: '22px' }} marginTop="0px" marginBottom="0px">
+                                  {getAlertTypeText(id)}
+                                </Paragraph2>
+                              </Block>
+                            </Radio>
+                          )
+                        })}
+                      </RadioGroup>
+                    </FormControl>
+                  )}
+                </Field>
+              </FieldWrapper>
+
+              {/* Problem med react-draft-wysiwyg Editor komponent, når du setter en custom option som props vil du man få en ' Can't perform a React state update on an unmounted component' */}
+              <TextAreaField
+                maxCharacter={maxChar}
+                markdown
+                height="200px"
+                label={melding.meldingType === MeldingType.SYSTEM ? 'Systemmelding' : 'Forsidemelding'}
+                noPlaceholder
+                name="melding"
+              />
+
+              <Block display="flex" justifyContent="flex-end" width="100%">
+                {melding.meldingStatus === MeldingStatus.ACTIVE && (
+                  <Button
+                    marginRight
+                    kind="secondary"
+                    disabled={disableEdit}
+                    startEnhancer={<img src={eyeSlash} alt="" />}
+                    onClick={() => {
+                      values.meldingStatus = MeldingStatus.DEACTIVE
+                      submitForm()
+                    }}
+                    $style={{
+                      ...borderColor(ettlevColors.grey200),
+                    }}
+                  >
+                    Skjul meldingen
+                  </Button>
                 )}
-              </Field>
-            </FieldWrapper>
-
-
-            {/* Problem med react-draft-wysiwyg Editor komponent, når du setter en custom option som props vil du man få en ' Can't perform a React state update on an unmounted component' */}
-            <TextAreaField maxCharacter={maxChar} markdown height="200px" label={melding.meldingType === MeldingType.SYSTEM ? 'Systemmelding' : 'Forsidemelding'} noPlaceholder name="melding" />
-
-            <Block display="flex" justifyContent="flex-end" width="100%" >
-              {melding.meldingStatus === MeldingStatus.ACTIVE &&
                 <Button
-                  marginRight
-                  kind="secondary"
                   disabled={disableEdit}
-                  startEnhancer={<img src={eyeSlash} alt="" />}
                   onClick={() => {
-                    values.meldingStatus = MeldingStatus.DEACTIVE
+                    values.meldingStatus = MeldingStatus.ACTIVE
                     submitForm()
                   }}
-                  $style={{
-                    ...borderColor(ettlevColors.grey200)
-                  }}
                 >
-                  Skjul meldingen
-                </Button>}
-              <Button
-                disabled={disableEdit}
-                onClick={() => {
-                  values.meldingStatus = MeldingStatus.ACTIVE
-                  submitForm()
-                }}
-              >
-                Publiser
-              </Button>
+                  Publiser
+                </Button>
+              </Block>
             </Block>
-          </Block>
-        )}
-      </Formik>}
+          )}
+        </Formik>
+      )}
     </Block>
   )
 }

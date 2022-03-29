@@ -1,23 +1,23 @@
-import React, {useEffect, useState} from 'react'
-import {Block} from 'baseui/block'
-import {useNavigate, useParams} from 'react-router-dom'
-import {ettlevColors} from '../util/theme'
-import {codelist, ListName, TemaCode} from '../services/Codelist'
-import {useBehandling} from '../api/BehandlingApi'
-import {Layout2} from '../components/scaffold/Page'
-import {KravId} from '../api/KravApi'
-import {breadcrumbPaths} from '../components/common/CustomizedBreadcrumbs'
-import {Helmet} from 'react-helmet'
-import {getMainHeader} from './BehandlingPage'
-import {KravView} from '../components/behandlingsTema/KravView'
-import {ampli} from '../services/Amplitude'
-import {EtterlevelseSecondaryHeader} from '../components/etterlevelse/EtterlevelseSecondaryHeader'
-import {KRAV_FILTER_TYPE} from '../constants'
+import React, { useEffect, useState } from 'react'
+import { Block } from 'baseui/block'
+import { useNavigate, useParams } from 'react-router-dom'
+import { ettlevColors } from '../util/theme'
+import { codelist, ListName, TemaCode } from '../services/Codelist'
+import { useBehandling } from '../api/BehandlingApi'
+import { Layout2 } from '../components/scaffold/Page'
+import { KravId } from '../api/KravApi'
+import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
+import { Helmet } from 'react-helmet'
+import { getMainHeader } from './BehandlingPage'
+import { KravView } from '../components/behandlingsTema/KravView'
+import { ampli } from '../services/Amplitude'
+import { EtterlevelseSecondaryHeader } from '../components/etterlevelse/EtterlevelseSecondaryHeader'
+import { KRAV_FILTER_TYPE } from '../constants'
 
 export type Section = 'dokumentasjon' | 'etterlevelser' | 'tilbakemeldinger'
 
 export const EtterlevelseDokumentasjonPage = () => {
-  const params = useParams<{ id: string; tema: string, kravNummer: string, kravVersjon: string, filter: string }>()
+  const params = useParams<{ id: string; tema: string; kravNummer: string; kravVersjon: string; filter: string }>()
   const temaData: TemaCode | undefined = codelist.getCode(ListName.TEMA, params.tema?.replace('i', ''))
   const [behandling, setBehandling] = useBehandling(params.id)
   const lovListe = codelist.getCodesForTema(temaData?.code)
@@ -31,7 +31,7 @@ export const EtterlevelseDokumentasjonPage = () => {
 
   useEffect(() => {
     if (params.kravNummer && params.kravVersjon) {
-      setKravId({kravNummer: Number(params.kravNummer), kravVersjon: Number(params.kravVersjon)})
+      setKravId({ kravNummer: Number(params.kravNummer), kravVersjon: Number(params.kravVersjon) })
     }
   }, [params])
 
@@ -41,7 +41,7 @@ export const EtterlevelseDokumentasjonPage = () => {
         side: 'Dokumentasjon side for etterlevelse',
         sidetittel: `B${behandling.nummer.toString()} ${behandling.navn.toString()}`,
         section: `K${kravId.kravNummer}.${kravId.kravVersjon}`,
-        temaKey: temaData.shortName.toString()
+        temaKey: temaData.shortName.toString(),
       })
     }
   }, [behandling])
@@ -62,7 +62,7 @@ export const EtterlevelseDokumentasjonPage = () => {
           mainHeader={getMainHeader(
             behandling,
             <Helmet>
-              <meta charSet="utf-8"/>
+              <meta charSet="utf-8" />
               <title>
                 K{kravId?.kravNummer?.toString()}.{kravId?.kravVersjon?.toString()} {temaData?.shortName} B{behandling.nummer.toString()} {behandling.navn.toString()}
               </title>
@@ -78,7 +78,8 @@ export const EtterlevelseDokumentasjonPage = () => {
               temaData={temaData}
               lovListe={lovListe}
               kravId={kravId}
-            />}
+            />
+          }
           childrenBackgroundColor={ettlevColors.grey25}
           currentPage={behandling?.navn}
           breadcrumbPaths={breadcrumbPaths}
@@ -98,7 +99,7 @@ export const EtterlevelseDokumentasjonPage = () => {
                 }}
                 tab={tab}
                 setTab={setTab}
-                kravFilter={params.filter===KRAV_FILTER_TYPE.RELEVANTE_KRAV?KRAV_FILTER_TYPE.RELEVANTE_KRAV:KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV}
+                kravFilter={params.filter === KRAV_FILTER_TYPE.RELEVANTE_KRAV ? KRAV_FILTER_TYPE.RELEVANTE_KRAV : KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV}
               />
             )}
           </Block>

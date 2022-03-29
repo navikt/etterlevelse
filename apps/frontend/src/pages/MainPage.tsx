@@ -8,8 +8,6 @@ import { ParagraphXSmall } from 'baseui/typography'
 import { maxPageWidth, primitives } from '../util/theme'
 import { barChart, illustration, lawBook, pencilFill, stepper } from '../components/Images'
 
-
-
 const sectionProps: BlockProps = {
   display: 'flex',
   width: '100%',

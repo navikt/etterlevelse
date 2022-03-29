@@ -1,26 +1,26 @@
-import React, {useEffect, useState} from 'react'
-import {Block, Display} from 'baseui/block'
-import {useParams} from 'react-router-dom'
-import {H4, Paragraph2} from 'baseui/typography'
-import {ettlevColors} from '../util/theme'
-import {codelist, ListName, TemaCode} from '../services/Codelist'
-import {useBehandling} from '../api/BehandlingApi'
-import {Layout2} from '../components/scaffold/Page'
-import {Etterlevelse, EtterlevelseStatus, KRAV_FILTER_TYPE, KravEtterlevelseData, KravQL, KravStatus, PageResponse} from '../constants'
-import {useQuery} from '@apollo/client'
-import {behandlingKravQuery} from '../api/KravApi'
-import {breadcrumbPaths} from '../components/common/CustomizedBreadcrumbs'
-import {Responsive} from 'baseui/theme'
-import {KravPanelHeaderWithSorting} from '../components/behandling/KravPanelHeader'
-import {sortKraverByPriority} from '../util/sort'
+import React, { useEffect, useState } from 'react'
+import { Block, Display } from 'baseui/block'
+import { useParams } from 'react-router-dom'
+import { H4, Paragraph2 } from 'baseui/typography'
+import { ettlevColors } from '../util/theme'
+import { codelist, ListName, TemaCode } from '../services/Codelist'
+import { useBehandling } from '../api/BehandlingApi'
+import { Layout2 } from '../components/scaffold/Page'
+import { Etterlevelse, EtterlevelseStatus, KRAV_FILTER_TYPE, KravEtterlevelseData, KravQL, KravStatus, PageResponse } from '../constants'
+import { useQuery } from '@apollo/client'
+import { behandlingKravQuery } from '../api/KravApi'
+import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
+import { Responsive } from 'baseui/theme'
+import { KravPanelHeaderWithSorting } from '../components/behandling/KravPanelHeader'
+import { sortKraverByPriority } from '../util/sort'
 import _ from 'lodash'
-import {getAllKravPriority} from '../api/KravPriorityApi'
-import {Helmet} from 'react-helmet'
-import {Option} from 'baseui/select'
-import {getMainHeader} from './BehandlingPage'
-import {SecondaryHeader} from "../components/behandlingsTema/SecondaryHeader";
-import {KravList} from "../components/behandlingsTema/KravList";
-import {ampli} from '../services/Amplitude'
+import { getAllKravPriority } from '../api/KravPriorityApi'
+import { Helmet } from 'react-helmet'
+import { Option } from 'baseui/select'
+import { getMainHeader } from './BehandlingPage'
+import { SecondaryHeader } from '../components/behandlingsTema/SecondaryHeader'
+import { KravList } from '../components/behandlingsTema/KravList'
+import { ampli } from '../services/Amplitude'
 
 const responsiveBreakPoints: Responsive<Display> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
 const responsiveDisplay: Responsive<Display> = ['block', 'block', 'block', 'block', 'flex', 'flex']
@@ -32,7 +32,7 @@ export const sortingOptions = [
 
 export const kravRelevansOptions = [
   { label: 'Relevante krav', id: 'relevanteKrav' },
-  { label: 'Bortfiltrerte krav', id: 'irrelevanteKrav' }
+  { label: 'Bortfiltrerte krav', id: 'irrelevanteKrav' },
 ]
 
 const mapEtterlevelseData = (etterlevelse?: Etterlevelse) => ({
@@ -60,13 +60,13 @@ export const BehandlingerTemaPageV2 = () => {
   const { data: rawData, loading } = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
     variables,
     skip: !params.id || !lover.length,
-    fetchPolicy: 'no-cache'
+    fetchPolicy: 'no-cache',
   })
 
   const { data: irrelevantData, loading: irrelevantDataLoading } = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
     variables: { ...variables, behandlingIrrevantKrav: !irrelevantKrav },
     skip: !params.id || !lover.length || params?.tema?.charAt(0) === 'i',
-    fetchPolicy: 'no-cache'
+    fetchPolicy: 'no-cache',
   })
 
   const [kravData, setKravData] = useState<KravEtterlevelseData[]>([])
@@ -75,9 +75,7 @@ export const BehandlingerTemaPageV2 = () => {
   const [sorting, setSorting] = useState<readonly Option[]>([sortingOptions[0]])
   const [kravRelevans, setKravRelevans] = useState<readonly Option[]>([kravRelevansOptions[0]])
 
-
   const filterKrav = async (kravList?: KravQL[], filterFerdigDokumentert?: boolean) => {
-
     const allKravPriority = await getAllKravPriority()
 
     const unfilteredkraver = kravList ? _.cloneDeep(kravList) : []
@@ -127,13 +125,13 @@ export const BehandlingerTemaPageV2 = () => {
       ampli.logEvent('sidevisning', {
         side: 'Tema side for behandlingen',
         sidetittel: `B${behandling.nummer.toString()} ${behandling.navn.toString()}`,
-        section: `${temaData.shortName}`
+        section: `${temaData.shortName}`,
       })
     }
   }, [behandling])
 
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       filterKrav(rawData?.krav.content, true).then((kravListe) => {
         setKravData(kravListe.filter((k) => !(k.status === KravStatus.UTGAATT && k.etterlevelseStatus === undefined)))
       })
@@ -141,31 +139,32 @@ export const BehandlingerTemaPageV2 = () => {
   }, [rawData])
 
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       filterKrav(irrelevantData?.krav.content).then((kravListe) => {
-        const newKravList = kravListe
-          .filter((k) => {
-            if (k.etterlevelseStatus === undefined) {
-              let notFound = true
+        const newKravList = kravListe.filter((k) => {
+          if (k.etterlevelseStatus === undefined) {
+            let notFound = true
 
-              kravData.forEach((krav) => {
-                if (krav.kravNummer === k.kravNummer && krav.kravVersjon === k.kravVersjon) {
-                  notFound = false
-                }
-              })
+            kravData.forEach((krav) => {
+              if (krav.kravNummer === k.kravNummer && krav.kravVersjon === k.kravVersjon) {
+                notFound = false
+              }
+            })
 
-              return notFound
-            } else {
-              return false
-            }
-          })
-
-        setIrrelevantKravData([...newKravList.map((k) => {
-          return {
-            ...k,
-            isIrrelevant: true
+            return notFound
+          } else {
+            return false
           }
-        })])
+        })
+
+        setIrrelevantKravData([
+          ...newKravList.map((k) => {
+            return {
+              ...k,
+              isIrrelevant: true,
+            }
+          }),
+        ])
       })
     })()
   }, [irrelevantData, kravData])
@@ -193,11 +192,7 @@ export const BehandlingerTemaPageV2 = () => {
             </Helmet>,
           )}
           secondaryHeaderBackgroundColor={ettlevColors.green100}
-          secondaryHeader={<SecondaryHeader
-            behandling={behandling}
-            lovListe={lovListe}
-            temaData={temaData}
-          />}
+          secondaryHeader={<SecondaryHeader behandling={behandling} lovListe={lovListe} temaData={temaData} />}
           childrenBackgroundColor={ettlevColors.grey25}
           currentPage={behandling?.navn}
           breadcrumbPaths={breadcrumbPaths}
@@ -207,7 +202,7 @@ export const BehandlingerTemaPageV2 = () => {
               <Block
                 $style={{
                   backgroundColor: ettlevColors.white,
-                  borderRadius: '4px'
+                  borderRadius: '4px',
                 }}
               >
                 <Block display="flex" justifyContent="center" $style={{ paddingTop: '26px', paddingBottom: '22px', paddingLeft: '16px' }}>
@@ -216,20 +211,28 @@ export const BehandlingerTemaPageV2 = () => {
                     setKravRelevans={setKravRelevans}
                     kravData={kravRelevans[0].id === 'relevanteKrav' ? kravData : irrelevantKravData}
                     sorting={sorting}
-                    setSorting={setSorting} />
+                    setSorting={setSorting}
+                  />
                 </Block>
                 <KravList
                   kravList={kravRelevans[0].id === 'relevanteKrav' ? kravData : irrelevantKravData}
                   EmptyMessage={
                     <Block>
-                      <H4 maxWidth={'600px'} $style={{
-                        fontStyle: 'italic'
-                      }}>
-                        {kravRelevans[0].id === 'relevanteKrav' ? "Dere har filtrert bort alle krav for " : "Dere har ingen bortfiltrerte krav for "}{temaData?.shortName}
+                      <H4
+                        maxWidth={'600px'}
+                        $style={{
+                          fontStyle: 'italic',
+                        }}
+                      >
+                        {kravRelevans[0].id === 'relevanteKrav' ? 'Dere har filtrert bort alle krav for ' : 'Dere har ingen bortfiltrerte krav for '}
+                        {temaData?.shortName}
                       </H4>
-                      <Paragraph2 maxWidth={'600px'} $style={{
-                        fontStyle: 'italic'
-                      }}>
+                      <Paragraph2
+                        maxWidth={'600px'}
+                        $style={{
+                          fontStyle: 'italic',
+                        }}
+                      >
                         Om bortfiltreringen av dette tema er feil, justeres det ved å velge de korrekte egenskapene for behandlingen under innstillinger.
                       </Paragraph2>
                     </Block>

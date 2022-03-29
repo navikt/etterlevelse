@@ -1,14 +1,14 @@
-import {createTheme, lightThemePrimitives} from 'baseui'
-import {colors} from 'baseui/tokens'
-import {Theme, ThemePrimitives} from 'baseui/theme'
-import {RecursivePartial} from '../constants'
+import { createTheme, lightThemePrimitives } from 'baseui'
+import { colors } from 'baseui/tokens'
+import { Theme, ThemePrimitives } from 'baseui/theme'
+import { RecursivePartial } from '../constants'
 import '@fontsource/source-sans-pro/200.css'
 import '@fontsource/source-sans-pro/300.css'
 import '@fontsource/source-sans-pro/400.css'
 import '@fontsource/source-sans-pro/600.css'
 import '@fontsource/source-sans-pro/700.css'
 import '@fontsource/source-sans-pro/900.css'
-import {Responsive, Scale} from 'baseui/block'
+import { Responsive, Scale } from 'baseui/block'
 
 // etterlevelse colors
 export const ettlevColors = {
@@ -41,8 +41,7 @@ export const ettlevColors = {
   navOransje: '#A86400',
   focusOutline: '#276ef1',
   navDypBla: '#004367',
-  navLysBla: '#E5F0F7'
-
+  navLysBla: '#E5F0F7',
 }
 
 export const primitives: ThemePrimitives & { primary150: string; primary350: string } = {
@@ -156,7 +155,6 @@ export const responsivePaddingSmall: Responsive<Scale> = ['16px', '16px', '16px'
 export const responsivePaddingLarge: Responsive<Scale> = ['16px', '16px', '16px', '100px', '100px', '100px']
 export const responsivePaddingExtraLarge: Responsive<Scale> = ['16px', '16px', '16px', '200px', '200px', '200px']
 export const responsivePaddingInnerPage: Responsive<Scale> = ['16px', '16px', '16px', '16px', '16px', '200px']
-
 
 export const responsiveWidthSmall: Responsive<Scale> = [
   'calc(100% - 32px)',

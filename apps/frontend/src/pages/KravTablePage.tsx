@@ -15,7 +15,6 @@ import RouteLink from '../components/common/RouteLink'
 import { Helmet } from 'react-helmet'
 import { ampli } from '../services/Amplitude'
 
-
 const kravSorting: ColumnCompares<Krav> = {
   kravNummer: (a, b) => a.kravNummer - b.kravNummer,
   navn: (a, b) => (a.navn || '').localeCompare(b.navn || ''),
@@ -29,7 +28,7 @@ export const KravTablePage = () => {
   const [tableContent, setTableContent] = useState<Krav[]>([])
 
   useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       const kraver = await getAllKrav()
       const mappedKraver = kraver.map((k) => kravMapToFormVal(k))
       setTableContent(mappedKraver)
@@ -53,28 +52,26 @@ export const KravTablePage = () => {
       }
     >
       <Block>
-        {tableContent.length && <Table
-          emptyText=""
-          data={tableContent}
-          config={{
-            initialSortColumn: 'kravNummer',
-            sorting: kravSorting,
-            pageSizes: [5, 10, 20, 50, 100],
-            defaultPageSize: 20
-          }}
-          headers={[
-            { $style: { maxWidth: '6%' }, title: 'Krav ID', column: 'kravNummer' },
-            { $style: { maxWidth: '25%', minWidth: '25%' }, title: 'Kravnavn', column: 'navn' },
-            { title: 'Ansvarlig', column: 'avdeling' },
-            { title: 'Tema', column: 'tema' },
-            { title: 'Status', column: 'status' },
-            { title: 'Siste endret', column: 'changeStamp' },
-          ]}
-          render={(tableData) => {
-            return tableData
-              .data
-              .slice((tableData.page - 1) * tableData.limit, ((tableData.page - 1) * tableData.limit) + tableData.limit)
-              .map((krav, index) => {
+        {tableContent.length && (
+          <Table
+            emptyText=""
+            data={tableContent}
+            config={{
+              initialSortColumn: 'kravNummer',
+              sorting: kravSorting,
+              pageSizes: [5, 10, 20, 50, 100],
+              defaultPageSize: 20,
+            }}
+            headers={[
+              { $style: { maxWidth: '6%' }, title: 'Krav ID', column: 'kravNummer' },
+              { $style: { maxWidth: '25%', minWidth: '25%' }, title: 'Kravnavn', column: 'navn' },
+              { title: 'Ansvarlig', column: 'avdeling' },
+              { title: 'Tema', column: 'tema' },
+              { title: 'Status', column: 'status' },
+              { title: 'Siste endret', column: 'changeStamp' },
+            ]}
+            render={(tableData) => {
+              return tableData.data.slice((tableData.page - 1) * tableData.limit, (tableData.page - 1) * tableData.limit + tableData.limit).map((krav, index) => {
                 return (
                   <Row key={krav.id}>
                     <Cell $style={{ maxWidth: '6%' }}>
@@ -92,9 +89,9 @@ export const KravTablePage = () => {
                   </Row>
                 )
               })
-          }
-          }
-        />}
+            }}
+          />
+        )}
       </Block>
     </Layout2>
   )
