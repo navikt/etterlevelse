@@ -11,7 +11,6 @@ import { arrowRightIcon } from '../Images'
 export const SidePanel = () => {
   const [hover, setHover] = useState<boolean>(false)
 
-  console.log('test')
   return (
     <RouteLink href="/behandlinger" hideUnderline onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
       <Block
