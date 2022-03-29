@@ -37,16 +37,11 @@ export const ViewKrav = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVe
         {krav.suksesskriterier.map((s, i) => (
           <SuksesskriterieCard key={s.id} suksesskriterie={s} num={i + 1} totalt={krav.suksesskriterier.length} />
         ))}
-
         {/*  <LabelAboveContent header title='Beskrivelse' markdown={krav.beskrivelse} /> */}
-
         {<AllInfo krav={krav} alleKravVersjoner={alleKravVersjoner} />}
       </Block>
-      <Block marginLeft="24px" width="187px" display={['none', 'none', 'none', 'none', 'none', 'block']}>
-        <SidePanel />
-      </Block>
+      <SidePanel />
     </Block>
-
   )
 }
 
@@ -235,7 +230,7 @@ export const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVer
 
       <Block>
         <Paragraph2>
-          Sist endret: {moment(krav.changeStamp.lastModifiedDate).format('ll')} {user.isAdmin() || user.isKraveier() ? "av " + krav.changeStamp.lastModifiedBy.split(' - ')[1] : ""}
+          Sist endret: {moment(krav.changeStamp.lastModifiedDate).format('ll')} {user.isAdmin() || user.isKraveier() ? 'av ' + krav.changeStamp.lastModifiedBy.split(' - ')[1] : ''}
         </Paragraph2>
       </Block>
     </>

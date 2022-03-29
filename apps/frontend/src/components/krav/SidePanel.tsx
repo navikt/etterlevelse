@@ -2,6 +2,7 @@ import {Block} from 'baseui/block'
 import {Label3} from 'baseui/typography'
 import {useState} from 'react'
 import {ettlevColors} from '../../util/theme'
+import CustomizedLink from '../common/CustomizedLink'
 import {Chevron} from '../common/PanelLink'
 import RouteLink from '../common/RouteLink'
 import {borderColor, borderStyle, borderWidth, padding} from '../common/Style'
@@ -19,7 +20,10 @@ export const SidePanel = () => {
       onMouseLeave={() => setHover(false)}
     >
       <Block
-        width="100%"
+        marginLeft='24px'
+        width="187px"
+        height="114px"
+        display={['none', 'none', 'none', 'none', 'none', 'block']}
         $style={{
           ...borderWidth('1px'),
           ...borderColor('#E3E3E3'),
@@ -27,7 +31,6 @@ export const SidePanel = () => {
           ...padding('22px', '24px'),
           backgroundColor: ettlevColors.white,
           ':hover': {boxShadow: '0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 3px 0 rgba(0, 0, 0, .12)'},
-          tabIndex: 0
         }}
       >
         <Label3
