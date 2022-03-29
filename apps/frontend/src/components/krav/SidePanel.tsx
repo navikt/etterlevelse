@@ -22,7 +22,6 @@ export const SidePanel = () => {
       <Block
         marginLeft='24px'
         width="187px"
-        height="114px"
         display={['none', 'none', 'none', 'none', 'none', 'block']}
         $style={{
           ...borderWidth('1px'),
