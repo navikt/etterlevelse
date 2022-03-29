@@ -52,7 +52,7 @@ export const TemaList = () => {
             return k.regelverk.map((r) => r.lov.data && r.lov.data.tema).includes(t.code)
           })
           return activeKraver && activeKraver.length > 0 ? (
-            <CustomizedPanel title={<KravPanelHeader title={t.shortName} kravData={activeKraver}/>} key={`${t.code}_krav_list`}>
+            <CustomizedPanel title={<KravPanelHeader title={t.shortName} kravData={[...activeKraver,...draftKraver]}/>} key={`${t.code}_krav_list`}>
               <KravTemaList activeKraver={sortKraverByPriority(activeKraver, t.shortName)} tema={t.shortName} refresh={fetchKrav} draftKrav={draftKraver}/>
             </CustomizedPanel>
           ) : (
