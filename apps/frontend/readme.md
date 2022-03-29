@@ -9,3 +9,4 @@
 `kubectl port-forward deployment/etterlevelse-backend`
 
 `yarn run start`
+
