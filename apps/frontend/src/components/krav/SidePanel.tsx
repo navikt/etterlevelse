@@ -12,6 +12,7 @@ import {arrowRightIcon} from '../Images'
 export const SidePanel = () => {
   const [hover, setHover] = useState<boolean>(false)
 
+  console.log('test')
   return (
     <RouteLink
       href="/behandlinger"
