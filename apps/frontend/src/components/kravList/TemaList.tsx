@@ -18,8 +18,9 @@ import { getAllKravPriority } from '../../api/KravPriorityApi'
 import { informationIcon } from '../Images'
 
 export const TemaList = () => {
-  const [allKrav, setAllKrav] = useState<Krav[]>()
+  const [allActiveKrav, setAllActiveKrav] = useState<Krav[]>()
   const tema = codelist.getCodes(ListName.TEMA)
+  const [allOtherKrav, setAllOtherKrav] = useState<Krav[]>()
 
   useEffect(() => {
     fetchKrav()
@@ -36,7 +37,8 @@ export const TemaList = () => {
         k.kravPriorityUID = priority.length ? priority[0].id : ''
       })
 
-      setAllKrav(kraver.filter((k) => k.status === KravStatus.AKTIV))
+      setAllActiveKrav(kraver.filter((k) => k.status === KravStatus.AKTIV))
+      setAllOtherKrav(kraver.filter((k) => k.status !== KravStatus.AKTIV))
     })()
   }
 
@@ -44,12 +46,15 @@ export const TemaList = () => {
     <>
       <CustomizedAccordion>
         {codelist.getCodes(ListName.TEMA).map((t) => {
-          const kraver = allKrav?.filter((k) => {
+          const activeKraver = allActiveKrav?.filter((k) => {
             return k.regelverk.map((r) => r.lov.data && r.lov.data.tema).includes(t.code)
           })
-          return kraver && kraver.length > 0 ? (
-            <CustomizedPanel title={<KravPanelHeader title={t.shortName} kravData={kraver} />} key={`${t.code}_krav_list`}>
-              <KravTemaList kraver={sortKraverByPriority(kraver, t.shortName)} tema={t.shortName} refresh={fetchKrav} />
+          const otherKraver = allOtherKrav?.filter((k) => {
+            return k.regelverk.map((r) => r.lov.data && r.lov.data.tema).includes(t.code)
+          })
+          return activeKraver && activeKraver.length > 0 ? (
+            <CustomizedPanel title={<KravPanelHeader title={t.shortName} kravData={activeKraver} />} key={`${t.code}_krav_list`}>
+              <KravTemaList activeKraver={sortKraverByPriority(activeKraver, t.shortName)} tema={t.shortName} refresh={fetchKrav} otherKraver={otherKraver}/>
             </CustomizedPanel>
           ) : (
             <CustomizedPanel title={<KravPanelHeader title={t.shortName} kravData={[]} />} key={`${t.code}_krav_list`}>
@@ -66,12 +71,12 @@ export const TemaList = () => {
   )
 }
 
-const KravTemaList = (props: { kraver: Krav[]; tema: string; refresh: Function }) => {
+const KravTemaList = (props: { activeKraver: Krav[]; tema: string; refresh: Function, otherKraver?: Krav[]}) => {
   const [edit, setEdit] = React.useState(false)
 
   return (
     <Block>
-      {props.kraver.map((k, index) => {
+      {props.activeKraver.map((k, index) => {
         return (
           <CustomPanelDivider key={`${k.navn}_${k.kravNummer}_${props.tema}_${index}`}>
             <PanelLink
@@ -104,6 +109,41 @@ const KravTemaList = (props: { kraver: Krav[]; tema: string; refresh: Function }
           </CustomPanelDivider>
         )
       })}
+
+{props.otherKraver && props.otherKraver.map((k, index) => {
+        return (
+          <CustomPanelDivider key={`${k.navn}_${k.kravNummer}_${props.tema}_${index}`}>
+            <PanelLink
+              hideChevron
+              useDescriptionUnderline
+              href={`/krav/${k.kravNummer}/${k.kravVersjon}`}
+              title={
+                <Paragraph2 $style={{ fontSize: '14px', marginBottom: '0px', marginTop: '0px', lineHeight: '15px' }}>
+                  K{k.kravNummer}.{k.kravVersjon}
+                </Paragraph2>
+              }
+              beskrivelse={<Label3 $style={{ fontSize: '18px', fontWeight: 600 }}>{k.navn}</Label3>}
+              rightBeskrivelse={!!k.changeStamp.lastModifiedDate ? `Sist endret: ${moment(k.changeStamp.lastModifiedDate).format('ll')}` : ''}
+              statusText={
+                <StatusView
+                  status={k.status}
+                  icon={k.varselMelding ? <img src={informationIcon} alt="" width="16px" height="16px" /> : undefined}
+                  background={k.varselMelding ? ettlevColors.white : undefined}
+                />
+              }
+              overrides={{
+                Block: {
+                  style: {
+                    ':hover': { boxShadow: 'none' },
+                    ...borderStyle('hidden'),
+                  },
+                },
+              }}
+            />
+          </CustomPanelDivider>
+        )
+      })}
+
       <CustomPanelDivider>
         <Block
           width="calc(100% - 44px)"
@@ -128,7 +168,7 @@ const KravTemaList = (props: { kraver: Krav[]; tema: string; refresh: Function }
           </Block>
         </Block>
       </CustomPanelDivider>
-      <EditPriorityModal tema={props.tema} isOpen={edit} onClose={() => setEdit(false)} kravListe={props.kraver} refresh={props.refresh}></EditPriorityModal>
+      <EditPriorityModal tema={props.tema} isOpen={edit} onClose={() => setEdit(false)} kravListe={props.activeKraver} refresh={props.refresh}></EditPriorityModal>
     </Block>
   )
 }
