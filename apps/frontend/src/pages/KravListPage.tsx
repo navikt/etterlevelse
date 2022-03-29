@@ -1,29 +1,28 @@
-import { Block, Display, Responsive } from 'baseui/block'
-import { HeadingXXLarge, Label3, Paragraph2 } from 'baseui/typography'
-import { useState } from 'react'
+import {Block, Display, Responsive} from 'baseui/block'
+import {HeadingXXLarge, Label3, Paragraph2} from 'baseui/typography'
+import React, {useState} from 'react'
 import Button from '../components/common/Button'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
 import CustomizedTabs from '../components/common/CustomizedTabs'
 import RouteLink from '../components/common/RouteLink'
-import { user } from '../services/User'
-import { theme } from '../util'
+import {user} from '../services/User'
+import {theme} from '../util'
 import moment from 'moment'
-import { ettlevColors, maxPageWidth, responsivePaddingLarge } from '../util/theme'
-import { informationIcon, plusIcon } from '../components/Images'
-import { PanelLink } from '../components/common/PanelLink'
-import { Krav, KravQL } from '../constants'
-import { SkeletonPanel } from '../components/common/LoadingSkeleton'
-import { codelist, ListName } from '../services/Codelist'
-import { borderColor, borderRadius, borderStyle, borderWidth } from '../components/common/Style'
-import { Option } from 'baseui/select'
-import { AllKrav } from '../components/kravList/AllKrav'
-import { SistRedigertKrav } from '../components/kravList/SisteRedigertKrav'
-import { TemaList } from '../components/kravList/TemaList'
+import {ettlevColors, maxPageWidth, responsivePaddingLarge} from '../util/theme'
+import {plusIcon} from '../components/Images'
+import {PanelLink} from '../components/common/PanelLink'
+import {Krav, KravQL} from '../constants'
+import {SkeletonPanel} from '../components/common/LoadingSkeleton'
+import {codelist, ListName} from '../services/Codelist'
+import {borderColor, borderRadius, borderStyle, borderWidth} from '../components/common/Style'
+import {Option} from 'baseui/select'
+import {AllKrav} from '../components/kravList/AllKrav'
+import {SistRedigertKrav} from '../components/kravList/SisteRedigertKrav'
+import {TemaList} from '../components/kravList/TemaList'
 import StatusView from '../components/common/StatusTag'
-import { useNavigate, useParams } from 'react-router-dom'
-import React from 'react'
-import { Helmet } from 'react-helmet'
-import { ampli } from '../services/Amplitude'
+import {useNavigate, useParams} from 'react-router-dom'
+import {Helmet} from 'react-helmet'
+import {ampli} from '../services/Amplitude'
 
 type Section = 'siste' | 'alle' | 'tema'
 
@@ -49,18 +48,18 @@ export const sortKrav = (kravene: KravQL[]) => {
 }
 
 export const KravListPage = () => {
-  ampli.logEvent('sidevisning', { side: 'Kraveier side', sidetittel: 'Forvalte og opprette krav' })
+  ampli.logEvent('sidevisning', {side: 'Kraveier side', sidetittel: 'Forvalte og opprette krav'})
 
   return (
-    <Block width="100%" paddingBottom={'200px'} id="content" overrides={{ Block: { props: { role: 'main' } } }}>
+    <Block width="100%" paddingBottom={'200px'} id="content" overrides={{Block: {props: {role: 'main'}}}}>
       <Helmet>
-        <meta charSet="utf-8" />
+        <meta charSet="utf-8"/>
         <title>Forvalte og opprette krav</title>
       </Helmet>
       <Block width="100%" backgroundColor={ettlevColors.grey50} display={'flex'} justifyContent={'center'}>
         <Block maxWidth={maxPageWidth} width="100%">
           <Block paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge} paddingTop={theme.sizing.scale800}>
-            <CustomizedBreadcrumbs currentPage="Forvalte og opprette krav" />
+            <CustomizedBreadcrumbs currentPage="Forvalte og opprette krav"/>
             <Block display="flex">
               <Block flex="1">
                 <HeadingXXLarge marginTop="0">Forvalte og opprette krav</HeadingXXLarge>
@@ -69,7 +68,7 @@ export const KravListPage = () => {
               <Block display="flex" justifyContent="flex-end">
                 {user.isKraveier() && (
                   <RouteLink hideUnderline href={'/krav/ny'}>
-                    <Button startEnhancer={<img src={plusIcon} alt="" />} size="compact">
+                    <Button startEnhancer={<img src={plusIcon} alt=""/>} size="compact">
                       Nytt krav
                     </Button>
                   </RouteLink>
@@ -90,7 +89,7 @@ export const KravListPage = () => {
       >
         <Block maxWidth={maxPageWidth} width="100%">
           <Block paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge} paddingTop={theme.sizing.scale800}>
-            <KravTabs />
+            <KravTabs/>
           </Block>
         </Block>
       </Block>
@@ -98,8 +97,8 @@ export const KravListPage = () => {
   )
 }
 
-export const KravPanels = ({ kravene, loading }: { kravene?: KravQL[] | Krav[]; loading?: boolean }) => {
-  if (loading) return <SkeletonPanel count={5} />
+export const KravPanels = ({kravene, loading}: { kravene?: KravQL[] | Krav[]; loading?: boolean }) => {
+  if (loading) return <SkeletonPanel count={5}/>
   return (
     <Block
       marginBottom={tabMarginBottom}
@@ -119,31 +118,29 @@ export const KravPanels = ({ kravene, loading }: { kravene?: KravQL[] | Krav[]; 
             <Block key={k.id} marginBottom={'0px'}>
               {index !== 0 && (
                 <Block width="100%" display="flex" justifyContent="center">
-                  <Block display="flex" width="98%" height="1px" backgroundColor={ettlevColors.grey100} />
+                  <Block display="flex" width="98%" height="1px" backgroundColor={ettlevColors.grey100}/>
                 </Block>
               )}
               <PanelLink
                 useDescriptionUnderline
                 href={`/krav/${k.kravNummer}/${k.kravVersjon}`}
                 title={
-                  <Paragraph2 $style={{ fontSize: '14px', marginBottom: '0px', marginTop: '0px', lineHeight: '15px' }}>
+                  <Paragraph2 $style={{fontSize: '14px', marginBottom: '0px', marginTop: '0px', lineHeight: '15px'}}>
                     K{k.kravNummer}.{k.kravVersjon}
                   </Paragraph2>
                 }
-                beskrivelse={<Label3 $style={{ fontSize: '18px', fontWeight: 600 }}>{k.navn}</Label3>}
+                beskrivelse={<Label3 $style={{fontSize: '18px', fontWeight: 600}}>{k.navn}</Label3>}
                 rightBeskrivelse={!!k.changeStamp.lastModifiedDate ? `Sist endret: ${moment(k.changeStamp.lastModifiedDate).format('ll')}` : ''}
                 rightTitle={tema && tema.shortName ? tema.shortName : ''}
                 statusText={
                   <StatusView
                     status={k.status}
-                    icon={k.varselMelding ? <img src={informationIcon} alt="" width="16px" height="16px" /> : undefined}
-                    background={k.varselMelding ? ettlevColors.white : undefined}
                   />
                 }
                 overrides={{
                   Block: {
                     style: {
-                      ':hover': { boxShadow: 'none' },
+                      ':hover': {boxShadow: 'none'},
                       ...borderStyle('hidden'),
                     },
                   },
@@ -162,7 +159,7 @@ const KravTabs = () => {
   const [tab, setTab] = useState<Section>(params.tab || 'siste')
 
   React.useEffect(() => {
-    if (tab !== params.tab) navigate(`/kravliste/${tab}`, { replace: true })
+    if (tab !== params.tab) navigate(`/kravliste/${tab}`, {replace: true})
   }, [tab])
 
   return (
@@ -176,17 +173,17 @@ const KravTabs = () => {
         {
           key: 'siste',
           title: 'Sist endret av meg',
-          content: <SistRedigertKrav />,
+          content: <SistRedigertKrav/>,
         },
         {
           key: 'tema',
           title: 'Tema',
-          content: <TemaList />,
+          content: <TemaList/>,
         },
         {
           key: 'alle',
           title: 'Alle krav',
-          content: <AllKrav />,
+          content: <AllKrav/>,
         },
       ]}
     />
