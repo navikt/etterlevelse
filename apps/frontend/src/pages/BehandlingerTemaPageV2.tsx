@@ -33,6 +33,7 @@ export const sortingOptions = [
 export const kravRelevansOptions = [
   { label: 'Relevante krav', id: 'relevanteKrav' },
   { label: 'Bortfiltrerte krav', id: 'irrelevanteKrav' },
+  { label: 'Utgåtte krav', id: 'utgaateKrav' },
 ]
 
 const mapEtterlevelseData = (etterlevelse?: Etterlevelse) => ({
@@ -176,6 +177,16 @@ export const BehandlingerTemaPageV2 = () => {
     },
   ]
 
+  const getKravData = (id: string | number | undefined) => {
+    console.log(id)
+    if (id === 'relevanteKrav') {
+      return kravData
+    } else if (id === 'irrelevantKravData') {
+      return irrelevantKravData
+    } else {
+      return [...kravData, ...irrelevantKravData]
+    }
+  }
   return (
     <>
       {behandling && (
@@ -209,13 +220,15 @@ export const BehandlingerTemaPageV2 = () => {
                   <KravPanelHeaderWithSorting
                     kravRelevans={kravRelevans}
                     setKravRelevans={setKravRelevans}
-                    kravData={kravRelevans[0].id === 'relevanteKrav' ? kravData : irrelevantKravData}
+                    kravData={getKravData(kravRelevans[0].id)}
+                    // kravData={kravRelevans[0].id === 'relevanteKrav' ? kravData : irrelevantKravData}
                     sorting={sorting}
                     setSorting={setSorting}
                   />
                 </Block>
                 <KravList
-                  kravList={kravRelevans[0].id === 'relevanteKrav' ? kravData : irrelevantKravData}
+                  kravList={getKravData(kravRelevans[0].id)}
+                  // kravList={kravRelevans[0].id === 'relevanteKrav' ? kravData : irrelevantKravData}
                   EmptyMessage={
                     <Block>
                       <H4
