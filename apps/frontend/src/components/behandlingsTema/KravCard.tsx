@@ -174,7 +174,32 @@ export const KravCard = (props: { krav: KravEtterlevelseData; noStatus?: boolean
 
                 {props.krav.isIrrelevant && (
                   <Block marginLeft="31px" maxWidth="140px" width="100%">
-                    <Label3 $style={{fontSize: '14px', lineHeight: '14px', textAlign: 'right', fontStyle: 'italic', fontWeight: 400}}>Bortfiltrert</Label3>
+                    <StatusView
+                      status={'Ikke relevant'}
+                      statusDisplay={{
+                        background: ettlevColors.grey50,
+                        border: ettlevColors.grey200
+                      }}
+                      overrides={{
+                        Root: {
+                          style: {
+                            marginLeft: '21px',
+                          }
+                        },
+                        Contents: {
+                          style: {
+                            ...marginAll('2px'),
+                          }
+                        },
+                        Body: {
+                          style: {
+                            ...marginAll('2px'),
+                            paddingRight:'8px',
+                            paddingLeft:'8px'
+                          }
+                        }
+                      }}
+                    />
                   </Block>
                 )}
               </Block>
