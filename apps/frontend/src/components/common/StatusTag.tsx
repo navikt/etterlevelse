@@ -1,25 +1,32 @@
-import { Block } from 'baseui/block'
-import { Card, CardOverrides } from 'baseui/card'
-import { Paragraph4 } from 'baseui/typography'
+import {Block} from 'baseui/block'
+import {Card, CardOverrides} from 'baseui/card'
+import {Paragraph4} from 'baseui/typography'
 import _ from 'lodash'
-import { KravStatus } from '../../constants'
-import { kravStatus } from '../../pages/KravPage'
-import { ettlevColors } from '../../util/theme'
-import { borderColor, borderRadius, borderStyle, borderWidth, marginAll } from './Style'
+import {KravStatus} from '../../constants'
+import {kravStatus} from '../../pages/KravPage'
+import {ettlevColors} from '../../util/theme'
+import {borderColor, borderRadius, borderStyle, borderWidth, marginAll} from './Style'
 
 export const StatusView = ({
-  status,
-  statusDisplay,
-  overrides,
-  background,
-  icon,
-}: {
+                             status,
+                             statusDisplay,
+                             overrides,
+                             background,
+                             icon,
+                             lineHeight,
+                             fontSize,
+                             fontStyle
+                           }: {
   status: KravStatus | string
   statusDisplay?: { background: string; border?: string }
   background?: string
   overrides?: CardOverrides
-  icon?: React.ReactNode
+  icon?: React.ReactNode,
+  lineHeight?: string
+  fontSize?: string
+  fontStyle?: string
 }) => {
+
   const getStatusDisplay = (background: string, border?: string) => {
     const cardOverrides: CardOverrides = {
       Contents: {
@@ -51,7 +58,16 @@ export const StatusView = ({
         <Card overrides={customOverrides}>
           <Block display="flex" justifyContent="center" alignItems="center">
             {icon}
-            <Paragraph4 $style={{ color: ettlevColors.navMorkGra, ...marginAll('0px'), whiteSpace: 'nowrap', marginLeft: icon ? '10px' : undefined }}>
+            <Paragraph4
+              $style={{
+                color: ettlevColors.navMorkGra,
+                ...marginAll('0px'),
+                whiteSpace: 'nowrap',
+                marginLeft: icon ? '10px' : undefined,
+                lineHeight: lineHeight ? lineHeight : undefined,
+                fontSize: fontSize ? fontSize : undefined,
+                fontStyle: fontStyle ? fontStyle : undefined
+              }}>
               {kravStatus(status)}
             </Paragraph4>
           </Block>
