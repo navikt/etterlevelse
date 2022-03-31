@@ -1,26 +1,26 @@
-import React, { useEffect, useState } from 'react'
-import { Block, Display } from 'baseui/block'
-import { useParams } from 'react-router-dom'
-import { H4, Paragraph2 } from 'baseui/typography'
-import { ettlevColors } from '../util/theme'
-import { codelist, ListName, TemaCode } from '../services/Codelist'
-import { useBehandling } from '../api/BehandlingApi'
-import { Layout2 } from '../components/scaffold/Page'
-import { Etterlevelse, EtterlevelseStatus, KRAV_FILTER_TYPE, KravEtterlevelseData, KravQL, KravStatus, PageResponse } from '../constants'
-import { useQuery } from '@apollo/client'
-import { behandlingKravQuery } from '../api/KravApi'
-import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
-import { Responsive } from 'baseui/theme'
-import { KravPanelHeaderWithSorting } from '../components/behandling/KravPanelHeader'
-import { sortKraverByPriority } from '../util/sort'
+import React, {useEffect, useState} from 'react'
+import {Block, Display} from 'baseui/block'
+import {useParams} from 'react-router-dom'
+import {H4, Paragraph2} from 'baseui/typography'
+import {ettlevColors} from '../util/theme'
+import {codelist, ListName, TemaCode} from '../services/Codelist'
+import {useBehandling} from '../api/BehandlingApi'
+import {Layout2} from '../components/scaffold/Page'
+import {Etterlevelse, EtterlevelseStatus, KRAV_FILTER_TYPE, KravEtterlevelseData, KravQL, KravStatus, PageResponse} from '../constants'
+import {useQuery} from '@apollo/client'
+import {behandlingKravQuery} from '../api/KravApi'
+import {breadcrumbPaths} from '../components/common/CustomizedBreadcrumbs'
+import {Responsive} from 'baseui/theme'
+import {KravPanelHeaderWithSorting} from '../components/behandling/KravPanelHeader'
+import {sortKraverByPriority} from '../util/sort'
 import _ from 'lodash'
-import { getAllKravPriority } from '../api/KravPriorityApi'
-import { Helmet } from 'react-helmet'
-import { Option } from 'baseui/select'
-import { getMainHeader } from './BehandlingPage'
-import { SecondaryHeader } from '../components/behandlingsTema/SecondaryHeader'
-import { KravList } from '../components/behandlingsTema/KravList'
-import { ampli } from '../services/Amplitude'
+import {getAllKravPriority} from '../api/KravPriorityApi'
+import {Helmet} from 'react-helmet'
+import {Option} from 'baseui/select'
+import {getMainHeader} from './BehandlingPage'
+import {SecondaryHeader} from '../components/behandlingsTema/SecondaryHeader'
+import {KravList} from '../components/behandlingsTema/KravList'
+import {ampli} from '../services/Amplitude'
 
 const responsiveBreakPoints: Responsive<Display> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
 const responsiveDisplay: Responsive<Display> = ['block', 'block', 'block', 'block', 'flex', 'flex']
@@ -33,7 +33,6 @@ export const sortingOptions = [
 export const kravRelevansOptions = [
   { label: 'Relevante krav', id: 'relevanteKrav' },
   { label: 'Bortfiltrerte krav', id: 'irrelevanteKrav' },
-  { label: 'Utgåtte krav', id: 'utgaateKrav' },
 ]
 
 const mapEtterlevelseData = (etterlevelse?: Etterlevelse) => ({
@@ -177,16 +176,6 @@ export const BehandlingerTemaPageV2 = () => {
     },
   ]
 
-  const getKravData = (id: string | number | undefined) => {
-    console.log(id)
-    if (id === 'relevanteKrav') {
-      return kravData
-    } else if (id === 'irrelevantKravData') {
-      return irrelevantKravData
-    } else {
-      return [...kravData, ...irrelevantKravData]
-    }
-  }
   return (
     <>
       {behandling && (
@@ -220,15 +209,13 @@ export const BehandlingerTemaPageV2 = () => {
                   <KravPanelHeaderWithSorting
                     kravRelevans={kravRelevans}
                     setKravRelevans={setKravRelevans}
-                    kravData={getKravData(kravRelevans[0].id)}
-                    // kravData={kravRelevans[0].id === 'relevanteKrav' ? kravData : irrelevantKravData}
+                    kravData={kravRelevans[0].id === 'relevanteKrav' ? kravData : irrelevantKravData}
                     sorting={sorting}
                     setSorting={setSorting}
                   />
                 </Block>
                 <KravList
-                  kravList={getKravData(kravRelevans[0].id)}
-                  // kravList={kravRelevans[0].id === 'relevanteKrav' ? kravData : irrelevantKravData}
+                  kravList={kravRelevans[0].id === 'relevanteKrav' ? kravData : irrelevantKravData}
                   EmptyMessage={
                     <Block>
                       <H4
