@@ -109,9 +109,9 @@ export const KravCard = (props: { krav: KravEtterlevelseData; noStatus?: boolean
                 {!props.noVarsling && props.krav.kravVersjon === 1 && props.krav.etterlevelseStatus === undefined && kravAge < 30 && showWarningMessage('Nytt krav')}
                 {!props.noVarsling && props.krav.etterlevelseStatus === undefined && nyVersionFlag && props.kravFilter === KRAV_FILTER_TYPE.RELEVANTE_KRAV && showWarningMessage('Ny version')}
                 {props.kravFilter === KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV && <StatusView
-                  status={'Bortfiltert'}
+                  status={'Bortfiltrert'}
                   statusDisplay={{
-                    background: ettlevColors.grey100,
+                    background: ettlevColors.grey50,
                     ...borderStyle('solid')
                   }}
                   lineHeight={'16px'}
