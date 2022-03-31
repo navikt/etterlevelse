@@ -65,7 +65,7 @@ export const StatusView = ({
                 whiteSpace: 'nowrap',
                 marginLeft: icon ? '10px' : undefined,
                 lineHeight: lineHeight ? lineHeight : undefined,
-                fontSize: fontSize ? fontSize : undefined,
+                fontSize: fontSize ? fontSize : '14px',
                 fontStyle: fontStyle ? fontStyle : undefined
               }}>
               {kravStatus(status)}
