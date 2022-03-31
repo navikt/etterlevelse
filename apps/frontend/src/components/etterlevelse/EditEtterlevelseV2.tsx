@@ -217,7 +217,7 @@ export const EditEtterlevelseV2 = ({
                   <strong>Kravet er bortfiltrert.</strong> Om kravet er relevant for behandlingen, sjekk om dere har oppgitt riktig beskrivelse under egenskaper.
                 </Paragraph2>
               )}
-              {tidligereEtterlevelser && tidligereEtterlevelser.length >= 1 && (
+              {tidligereEtterlevelser && tidligereEtterlevelser.length >= 1 && kravFilter!=KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV && (
                 <Block
                   width="fit-content"
                   display="flex"
