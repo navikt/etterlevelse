@@ -1,29 +1,30 @@
-import { Etterlevelse, EtterlevelseMetadata, EtterlevelseStatus, Krav, KRAV_FILTER_TYPE, KravQL } from '../../constants'
-import { FormikProps } from 'formik'
-import { createEtterlevelse, updateEtterlevelse } from '../../api/EtterlevelseApi'
-import { Block } from 'baseui/block'
+import {Etterlevelse, EtterlevelseMetadata, EtterlevelseStatus, Krav, KRAV_FILTER_TYPE, KravQL} from '../../constants'
+import {FormikProps} from 'formik'
+import {createEtterlevelse, updateEtterlevelse} from '../../api/EtterlevelseApi'
+import {Block} from 'baseui/block'
 import Button from '../common/Button'
-import React, { useEffect, useRef, useState } from 'react'
-import { theme } from '../../util'
-import { getKravByKravNumberAndVersion, KravId } from '../../api/KravApi'
-import { kravNumView, query } from '../../pages/KravPage'
-import { H1, H2, Label3, Paragraph2 } from 'baseui/typography'
-import { ettlevColors, maxPageWidth, responsivePaddingExtraLarge, responsivePaddingInnerPage, responsiveWidthInnerPage } from '../../util/theme'
-import { user } from '../../services/User'
-import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
-import { borderColor, borderRadius, borderStyle, borderWidth, marginAll, padding } from '../common/Style'
-import { useQuery } from '@apollo/client'
-import { informationIcon, warningAlert } from '../Images'
+import React, {useEffect, useRef, useState} from 'react'
+import {theme} from '../../util'
+import {getKravByKravNumberAndVersion, KravId} from '../../api/KravApi'
+import {kravNumView, query} from '../../pages/KravPage'
+import {H1, H2, Label3, Paragraph2} from 'baseui/typography'
+import {ettlevColors, maxPageWidth, responsivePaddingExtraLarge, responsivePaddingInnerPage, responsiveWidthInnerPage} from '../../util/theme'
+import {user} from '../../services/User'
+import {faChevronDown} from '@fortawesome/free-solid-svg-icons'
+import {borderColor, borderRadius, borderStyle, borderWidth, marginAll, padding} from '../common/Style'
+import {useQuery} from '@apollo/client'
+import {informationIcon, warningAlert} from '../Images'
 import CustomizedTabs from '../common/CustomizedTabs'
-import { Tilbakemeldinger } from '../krav/tilbakemelding/Tilbakemelding'
+import {Tilbakemeldinger} from '../krav/tilbakemelding/Tilbakemelding'
 import Etterlevelser from '../krav/Etterlevelser'
-import { Markdown } from '../common/Markdown'
-import { Section } from '../../pages/EtterlevelseDokumentasjonPage'
-import { getEtterlevelseMetadataByBehandlingsIdAndKravNummerAndKravVersion, mapEtterlevelseMetadataToFormValue } from '../../api/EtterlevelseMetadataApi'
+import {Markdown} from '../common/Markdown'
+import {Section} from '../../pages/EtterlevelseDokumentasjonPage'
+import {getEtterlevelseMetadataByBehandlingsIdAndKravNummerAndKravVersion, mapEtterlevelseMetadataToFormValue} from '../../api/EtterlevelseMetadataApi'
 import TildeltPopoever from '../etterlevelseMetadata/TildeltPopover'
 import EtterlevelseEditFields from './Edit/EtterlevelseEditFields'
 import CustomizedModal from '../common/CustomizedModal'
-import { ampli } from '../../services/Amplitude'
+import {ampli} from '../../services/Amplitude'
+import StatusView from "../common/StatusTag";
 
 type EditEttlevProps = {
   etterlevelse: Etterlevelse
@@ -45,24 +46,24 @@ type EditEttlevProps = {
 }
 
 export const EditEtterlevelseV2 = ({
-  kravId,
-  etterlevelse,
-  varsleMelding,
-  close,
-  formRef,
-  documentEdit,
-  behandlingNavn,
-  behandlingId,
-  behandlingformaal,
-  behandlingNummer,
-  navigatePath,
-  setNavigatePath,
-  tidligereEtterlevelser,
-  tab,
-  setTab,
-  kravFilter,
-}: EditEttlevProps) => {
-  const { data, loading } = useQuery<{ kravById: KravQL }, KravId>(query, {
+                                     kravId,
+                                     etterlevelse,
+                                     varsleMelding,
+                                     close,
+                                     formRef,
+                                     documentEdit,
+                                     behandlingNavn,
+                                     behandlingId,
+                                     behandlingformaal,
+                                     behandlingNummer,
+                                     navigatePath,
+                                     setNavigatePath,
+                                     tidligereEtterlevelser,
+                                     tab,
+                                     setTab,
+                                     kravFilter,
+                                   }: EditEttlevProps) => {
+  const {data, loading} = useQuery<{ kravById: KravQL }, KravId>(query, {
     variables: kravId,
     skip: !kravId.id && !kravId.kravNummer,
     fetchPolicy: 'no-cache',
@@ -90,21 +91,21 @@ export const EditEtterlevelseV2 = ({
   useEffect(() => {
     ;(async () => {
       behandlingId &&
-        kravId.kravNummer &&
-        getEtterlevelseMetadataByBehandlingsIdAndKravNummerAndKravVersion(behandlingId, kravId.kravNummer, kravId.kravVersjon).then((resp) => {
-          if (resp.content.length) {
-            setEtterlevelseMetadata(resp.content[0])
-          } else {
-            setEtterlevelseMetadata(
-              mapEtterlevelseMetadataToFormValue({
-                id: 'ny',
-                behandlingId: behandlingId,
-                kravNummer: kravId.kravNummer,
-                kravVersjon: kravId.kravVersjon,
-              }),
-            )
-          }
-        })
+      kravId.kravNummer &&
+      getEtterlevelseMetadataByBehandlingsIdAndKravNummerAndKravVersion(behandlingId, kravId.kravNummer, kravId.kravVersjon).then((resp) => {
+        if (resp.content.length) {
+          setEtterlevelseMetadata(resp.content[0])
+        } else {
+          setEtterlevelseMetadata(
+            mapEtterlevelseMetadataToFormValue({
+              id: 'ny',
+              behandlingId: behandlingId,
+              kravNummer: kravId.kravNummer,
+              kravVersjon: kravId.kravVersjon,
+            }),
+          )
+        }
+      })
     })()
   }, [])
 
@@ -115,14 +116,14 @@ export const EditEtterlevelseV2 = ({
       suksesskriterieBegrunnelser:
         etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT || etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT
           ? [
-              ...etterlevelse.suksesskriterieBegrunnelser.map((s) => {
-                return {
-                  ...s,
-                  oppfylt: false,
-                  ikkeRelevant: false,
-                }
-              }),
-            ]
+            ...etterlevelse.suksesskriterieBegrunnelser.map((s) => {
+              return {
+                ...s,
+                oppfylt: false,
+                ikkeRelevant: false,
+              }
+            }),
+          ]
           : [...etterlevelse.suksesskriterieBegrunnelser],
     }
 
@@ -166,9 +167,41 @@ export const EditEtterlevelseV2 = ({
                   color: ettlevColors.white,
                 }}
               >
-                {kravNumView(krav)}
+                <Block display={"flex"}>
+
+                  {kravNumView(krav)} {kravFilter === KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV && (
+                  <StatusView
+                    status={'Bortfiltrert'}
+                    statusDisplay={{
+                      background: ettlevColors.grey50,
+                      ...borderStyle('solid')
+                    }}
+                    lineHeight={'16px'}
+                    fontSize={'16px'}
+                    fontStyle={'italic'}
+                    overrides={{
+                      Root: {
+                        style: {
+                          marginLeft: '21px',
+                        }
+                      },
+                      Contents: {
+                        style: {
+                          ...marginAll('2px'),
+                        }
+                      },
+                      Body: {
+                        style: {
+                          ...marginAll('2px'),
+                        }
+                      }
+                    }}
+                  />
+                )}
+
+                </Block>
               </Paragraph2>
-              <H1 $style={{ marginTop: '0px', marginBottom: '0px', paddingBottom: '32px', color: ettlevColors.white }}>{krav.navn}</H1>
+              <H1 $style={{marginTop: '0px', marginBottom: '0px', paddingBottom: '32px', color: ettlevColors.white}}>{krav.navn}</H1>
 
               {kravFilter === KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV && (
                 <Paragraph2
@@ -219,7 +252,7 @@ export const EditEtterlevelseV2 = ({
                       kind="underline-hover"
                       $style={{
                         marginLeft: '2px',
-                        ':hover': { textDecoration: 'none' },
+                        ':hover': {textDecoration: 'none'},
                       }}
                       onClick={() => setIsVersjonEndringerModalOpen(true)}
                     >
@@ -254,7 +287,7 @@ export const EditEtterlevelseV2 = ({
                     marginTop: '16px',
                   }}
                 >
-                  <img src={informationIcon} alt="" width={'24px'} height={'24px'} />
+                  <img src={informationIcon} alt="" width={'24px'} height={'24px'}/>
                   <Paragraph2 marginLeft={theme.sizing.scale500} marginTop="0px" marginBottom="0px">
                     {varsleMelding}
                   </Paragraph2>
@@ -263,7 +296,7 @@ export const EditEtterlevelseV2 = ({
 
               {kravFilter === KRAV_FILTER_TYPE.RELEVANTE_KRAV && (
                 <Block display="flex" justifyContent="flex-start" alignItems="center" marginTop="32px">
-                  <Label3 $style={{ color: ettlevColors.white, fontSize: '18px', lineHeight: '14px', textAlign: 'right' }}>
+                  <Label3 $style={{color: ettlevColors.white, fontSize: '18px', lineHeight: '14px', textAlign: 'right'}}>
                     Tildelt:{' '}
                     {etterlevelseMetadata && etterlevelseMetadata.tildeltMed && etterlevelseMetadata.tildeltMed.length >= 1 ? etterlevelseMetadata.tildeltMed[0] : 'Ikke tildelt'}
                   </Label3>
@@ -278,8 +311,8 @@ export const EditEtterlevelseV2 = ({
             </Block>
           </Block>
           <Block backgroundColor={ettlevColors.green100} paddingLeft={responsivePaddingExtraLarge} paddingRight={responsivePaddingExtraLarge}>
-            <H2 $style={{ marginTop: '0px', marginBottom: '0px', paddingBottom: '32px', paddingTop: '41px' }}>Hensikten med kravet</H2>
-            <Markdown noMargin p1 sources={Array.isArray(krav.hensikt) ? krav.hensikt : [krav.hensikt]} />
+            <H2 $style={{marginTop: '0px', marginBottom: '0px', paddingBottom: '32px', paddingTop: '41px'}}>Hensikten med kravet</H2>
+            <Markdown noMargin p1 sources={Array.isArray(krav.hensikt) ? krav.hensikt : [krav.hensikt]}/>
           </Block>
 
           <Block
@@ -348,12 +381,12 @@ export const EditEtterlevelseV2 = ({
                 {
                   title: 'Eksempler på etterlevelse',
                   key: 'etterlevelser',
-                  content: <Etterlevelser loading={etterlevelserLoading} krav={krav} modalVersion />,
+                  content: <Etterlevelser loading={etterlevelserLoading} krav={krav} modalVersion/>,
                 },
                 {
                   title: 'Spørsmål og svar',
                   key: 'tilbakemeldinger',
-                  content: <Tilbakemeldinger krav={krav} hasKravExpired={false} />,
+                  content: <Tilbakemeldinger krav={krav} hasKravExpired={false}/>,
                 },
               ]}
             />
@@ -401,7 +434,7 @@ export const EditEtterlevelseV2 = ({
                   <H2 marginTop="0px" marginBottom="24px">
                     Dette er nytt fra forrige versjon
                   </H2>
-                  <Markdown source={krav.versjonEndringer} />
+                  <Markdown source={krav.versjonEndringer}/>
                 </Block>
                 <Block display="flex" justifyContent="flex-end" width="100%" marginTop="38px">
                   <Button onClick={() => setIsVersjonEndringerModalOpen(false)}>Lukk visning</Button>
