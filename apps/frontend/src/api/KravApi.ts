@@ -225,8 +225,8 @@ export const kravFullQuery = gql`
   }
 `
 export const behandlingKravQuery = gql`
-  query getKravByFilter($behandlingId: String, $lover: [String!], $gjeldendeKrav: Boolean, $behandlingIrrevantKrav: Boolean) {
-    krav(filter: { behandlingId: $behandlingId, lover: $lover, gjeldendeKrav: $gjeldendeKrav, behandlingIrrevantKrav: $behandlingIrrevantKrav }) {
+  query getKravByFilter($behandlingId: String, $lover: [String!], $gjeldendeKrav: Boolean, $behandlingIrrevantKrav: Boolean, $status: [String!]) {
+    krav(filter: { behandlingId: $behandlingId, lover: $lover, gjeldendeKrav: $gjeldendeKrav, behandlingIrrevantKrav: $behandlingIrrevantKrav, status: $status }) {
       content {
         id
         navn

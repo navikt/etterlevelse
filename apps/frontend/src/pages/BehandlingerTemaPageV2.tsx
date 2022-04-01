@@ -69,6 +69,12 @@ export const BehandlingerTemaPageV2 = () => {
     fetchPolicy: 'no-cache',
   })
 
+  const { data: utgaateData, loading: utgaateDataLoading } = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
+    variables: { behandlingId: params.id, lover: lover, status: KravStatus.UTGAATT },
+    skip: !params.id || !lover.length,
+    fetchPolicy: 'no-cache',
+  })
+
   const [kravData, setKravData] = useState<KravEtterlevelseData[]>([])
   const [irrelevantKravData, setIrrelevantKravData] = useState<KravEtterlevelseData[]>([])
 
