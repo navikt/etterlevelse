@@ -6,9 +6,9 @@ import {ettlevColors} from '../util/theme'
 import {codelist, ListName, TemaCode} from '../services/Codelist'
 import {useBehandling} from '../api/BehandlingApi'
 import {Layout2} from '../components/scaffold/Page'
-import {Etterlevelse, EtterlevelseStatus, KRAV_FILTER_TYPE, KravEtterlevelseData, KravQL, KravStatus, PageResponse} from '../constants'
+import {Etterlevelse, EtterlevelseStatus, Krav, KRAV_FILTER_TYPE, KravEtterlevelseData, KravQL, KravStatus, PageResponse} from '../constants'
 import {useQuery} from '@apollo/client'
-import {behandlingKravQuery} from '../api/KravApi'
+import {behandlingKravQuery, getAllKrav} from '../api/KravApi'
 import {breadcrumbPaths} from '../components/common/CustomizedBreadcrumbs'
 import {Responsive} from 'baseui/theme'
 import {KravPanelHeaderWithSorting} from '../components/behandling/KravPanelHeader'
@@ -26,16 +26,17 @@ const responsiveBreakPoints: Responsive<Display> = ['block', 'block', 'block', '
 const responsiveDisplay: Responsive<Display> = ['block', 'block', 'block', 'block', 'flex', 'flex']
 
 export const sortingOptions = [
-  { label: 'Anbefalt rekkefølge', id: 'priority' },
-  { label: 'Sist endret av meg', id: 'lastModified' },
+  {label: 'Anbefalt rekkefølge', id: 'priority'},
+  {label: 'Sist endret av meg', id: 'lastModified'},
 ]
 
 export const kravRelevansOptions = [
-  { label: 'Relevante krav', id: 'relevanteKrav' },
-  { label: 'Bortfiltrerte krav', id: 'irrelevanteKrav' },
+  {label: 'Relevante krav', id: 'relevanteKrav'},
+  {label: 'Bortfiltrerte krav', id: 'irrelevanteKrav'},
+  // {label: 'Utgåtte krav', id: 'utgaateKrav'},
 ]
 
-const mapEtterlevelseData = (etterlevelse?: Etterlevelse) => ({
+export const mapEtterlevelseData = (etterlevelse?: Etterlevelse) => ({
   etterlevelseId: etterlevelse?.id,
   etterleves: !!etterlevelse?.etterleves,
   frist: etterlevelse?.fristForFerdigstillelse,
@@ -55,28 +56,30 @@ export const BehandlingerTemaPageV2 = () => {
   const [behandling, setBehandling] = useBehandling(params.id)
   const lovListe = codelist.getCodesForTema(temaData?.code)
   const lover = lovListe.map((c) => c.code)
-  const variables = { behandlingId: params.id, lover: lover, gjeldendeKrav: true, behandlingIrrevantKrav: irrelevantKrav }
+  const [allKrav, setAllKrav] = useState<Krav[]>([])
+  const variables = {behandlingId: params.id, lover: lover, gjeldendeKrav: true, behandlingIrrevantKrav: irrelevantKrav}
 
-  const { data: rawData, loading } = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
+
+  const {data: rawData, loading} = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
     variables,
     skip: !params.id || !lover.length,
     fetchPolicy: 'no-cache',
   })
 
-  const { data: irrelevantData, loading: irrelevantDataLoading } = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
-    variables: { ...variables, behandlingIrrevantKrav: !irrelevantKrav },
+  const {data: irrelevantData, loading: irrelevantDataLoading} = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
+    variables: {...variables, behandlingIrrevantKrav: !irrelevantKrav},
     skip: !params.id || !lover.length || params?.tema?.charAt(0) === 'i',
     fetchPolicy: 'no-cache',
   })
 
-  const { data: utgaateData, loading: utgaateDataLoading } = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
-    variables: { behandlingId: params.id, lover: lover, status: KravStatus.UTGAATT },
-    skip: !params.id || !lover.length,
+  const {data: utgaateData, loading: utgaateDataLoading} = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
+    variables: {status: KravStatus.UTGAATT},
     fetchPolicy: 'no-cache',
   })
 
   const [kravData, setKravData] = useState<KravEtterlevelseData[]>([])
   const [irrelevantKravData, setIrrelevantKravData] = useState<KravEtterlevelseData[]>([])
+  const [utgaatKravData, setUtgaatKravData] = useState<KravEtterlevelseData[]>([])
 
   const [sorting, setSorting] = useState<readonly Option[]>([sortingOptions[0]])
   const [kravRelevans, setKravRelevans] = useState<readonly Option[]>([kravRelevansOptions[0]])
@@ -127,6 +130,16 @@ export const BehandlingerTemaPageV2 = () => {
   // },[])
 
   useEffect(() => {
+    (async () => {
+      setAllKrav(await getAllKrav())
+    })()
+  }, []);
+
+  useEffect(() => {
+    console.log(utgaateData)
+  }, []);
+
+  useEffect(() => {
     if (behandling && temaData) {
       ampli.logEvent('sidevisning', {
         side: 'Tema side for behandlingen',
@@ -135,6 +148,57 @@ export const BehandlingerTemaPageV2 = () => {
       })
     }
   }, [behandling])
+
+  useEffect(() => {
+    return () => {
+      console.log(allKrav)
+      const utgaatRelevanteKraver = allKrav.filter((k) => {
+        if (kravData)
+          return kravData.filter((kd) => (kd.kravNummer === k.kravNummer && kd.kravVersjon >= k.kravVersjon && k.status === KravStatus.UTGAATT)).length > 0
+        else
+          return true
+      })
+
+      const utgaatBortfilterteKraver = allKrav.filter((k) => {
+        if (irrelevantKravData)
+          return irrelevantKravData.filter((rdk) => (rdk.kravNummer === k.kravNummer && rdk.kravVersjon >= k.kravVersjon && k.status === KravStatus.UTGAATT)).length > 0
+        else
+          return true
+      })
+      console.log("Relevant", kravData)
+      console.log("Irrelevant", irrelevantKravData)
+      console.log("Part1", utgaatRelevanteKraver)
+      console.log("Part2", utgaatBortfilterteKraver)
+
+
+      let unfiltered: KravQL[] = []
+      if (utgaateData) {
+        unfiltered = utgaateData.krav.content.filter((ud) => {
+          return [...utgaatRelevanteKraver, ...utgaatBortfilterteKraver].filter((rdk) => (rdk.kravNummer === ud.kravNummer && rdk.kravVersjon === ud.kravVersjon)).length > 0
+        })
+      }
+      // setUtgaatKravData([...kravData.map((krav)=>{
+      //   const etterlevelse = krav.etterlevelser.length ? krav.etterlevelser[0] : undefined
+      //   return {
+      //     kravNummer: krav.kravNummer,
+      //     kravVersjon: krav.kravVersjon,
+      //     navn: krav.navn,
+      //     status: krav.status,
+      //     suksesskriterier: krav.suksesskriterier,
+      //     varselMelding: krav.varselMelding,
+      //     prioriteringsId: krav.prioriteringsId,
+      //     changeStamp: krav.changeStamp,
+      //     ...mapEtterlevelseData(etterlevelse),
+      //   }
+      // }])
+      // setUtgaatKravData([...utgaatRelevanteKraver,...utgaatBortfilterteKraver])
+      ;(async () => {
+        setUtgaatKravData(await filterKrav(unfiltered))
+        console.log(utgaatKravData)
+      })()
+    };
+  }, [kravData, irrelevantKravData]);
+
 
   useEffect(() => {
     ;(async () => {
@@ -162,7 +226,6 @@ export const BehandlingerTemaPageV2 = () => {
             return false
           }
         })
-
         setIrrelevantKravData([
           ...newKravList.map((k) => {
             return {
@@ -182,6 +245,25 @@ export const BehandlingerTemaPageV2 = () => {
     },
   ]
 
+  const getKravData = (id: string | number | undefined) => {
+    if (id === 'relevanteKrav') {
+      return kravData
+    } else if (id === 'irrelevantKravData') {
+      return irrelevantKravData
+    } else {
+      return utgaatKravData
+    }
+  }
+  // const getKravStatusById = (id: string | number | undefined):KRAV_FILTER_TYPE => {
+  //   if (id === 'relevanteKrav') {
+  //     return KRAV_FILTER_TYPE.RELEVANTE_KRAV
+  //   } else if (id === 'irrelevantKravData') {
+  //     return KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV
+  //   } else {
+  //     return KRAV_FILTER_TYPE.UTGAATE_KRAV
+  //   }
+  // }
+
   return (
     <>
       {behandling && (
@@ -191,14 +273,14 @@ export const BehandlingerTemaPageV2 = () => {
           mainHeader={getMainHeader(
             behandling,
             <Helmet>
-              <meta charSet="utf-8" />
+              <meta charSet="utf-8"/>
               <title>
                 {temaData?.shortName} B{behandling.nummer.toString()} {behandling.navn.toString()}
               </title>
             </Helmet>,
           )}
           secondaryHeaderBackgroundColor={ettlevColors.green100}
-          secondaryHeader={<SecondaryHeader behandling={behandling} lovListe={lovListe} temaData={temaData} />}
+          secondaryHeader={<SecondaryHeader behandling={behandling} lovListe={lovListe} temaData={temaData}/>}
           childrenBackgroundColor={ettlevColors.grey25}
           currentPage={behandling?.navn}
           breadcrumbPaths={breadcrumbPaths}
@@ -211,17 +293,19 @@ export const BehandlingerTemaPageV2 = () => {
                   borderRadius: '4px',
                 }}
               >
-                <Block display="flex" justifyContent="center" $style={{ paddingTop: '26px', paddingBottom: '22px', paddingLeft: '16px' }}>
+                <Block display="flex" justifyContent="center" $style={{paddingTop: '26px', paddingBottom: '22px', paddingLeft: '16px'}}>
                   <KravPanelHeaderWithSorting
                     kravRelevans={kravRelevans}
                     setKravRelevans={setKravRelevans}
                     kravData={kravRelevans[0].id === 'relevanteKrav' ? kravData : irrelevantKravData}
+                    // kravData={getKravData(kravRelevans[0].id)}
                     sorting={sorting}
                     setSorting={setSorting}
                   />
                 </Block>
                 <KravList
                   kravList={kravRelevans[0].id === 'relevanteKrav' ? kravData : irrelevantKravData}
+                  // kravList={getKravData(kravRelevans[0].id)}
                   EmptyMessage={
                     <Block>
                       <H4
@@ -248,6 +332,7 @@ export const BehandlingerTemaPageV2 = () => {
                   sortingOptions={sortingOptions}
                   behandling={behandling}
                   kravFilter={kravRelevans[0].id === 'relevanteKrav' ? KRAV_FILTER_TYPE.RELEVANTE_KRAV : KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV}
+                  // kravFilter={getKravStatusById(kravRelevans[0].id)}
                 />
               </Block>
             </Block>
