@@ -296,7 +296,6 @@ export const BehandlingerTemaPageV2 = () => {
                   sorting={sorting}
                   sortingOptions={sortingOptions}
                   behandling={behandling}
-                  // kravFilter={kravRelevans[0].id === 'relevanteKrav' ? KRAV_FILTER_TYPE.RELEVANTE_KRAV : KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV}
                   kravFilter={getFilterType(kravRelevans[0].id)}
                 />
               </Block>
