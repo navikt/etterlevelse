@@ -21,6 +21,7 @@ import {getMainHeader} from './BehandlingPage'
 import {SecondaryHeader} from '../components/behandlingsTema/SecondaryHeader'
 import {KravList} from '../components/behandlingsTema/KravList'
 import {ampli} from '../services/Amplitude'
+import {getFilterType} from "./EtterlevelseDokumentasjonPage";
 
 const responsiveBreakPoints: Responsive<Display> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
 const responsiveDisplay: Responsive<Display> = ['block', 'block', 'block', 'block', 'flex', 'flex']
@@ -31,9 +32,9 @@ export const sortingOptions = [
 ]
 
 export const kravRelevansOptions = [
-  {label: 'Relevante krav', id: 'relevanteKrav'},
-  {label: 'Bortfiltrerte krav', id: 'irrelevanteKrav'},
-  // {label: 'Utgåtte krav', id: 'utgaateKrav'},
+  {label: 'Relevante krav', id: KRAV_FILTER_TYPE.RELEVANTE_KRAV},
+  {label: 'Bortfiltrerte krav', id: KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV},
+  {label: 'Utgåtte krav', id: KRAV_FILTER_TYPE.UTGAATE_KRAV},
 ]
 
 export const mapEtterlevelseData = (etterlevelse?: Etterlevelse) => ({
@@ -60,19 +61,19 @@ export const BehandlingerTemaPageV2 = () => {
   const variables = {behandlingId: params.id, lover: lover, gjeldendeKrav: true, behandlingIrrevantKrav: irrelevantKrav}
 
 
-  const {data: rawData, loading} = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
+  const {data: relevanteKraverGraphQLResponse, loading:relevanteKraverGraphQLLoading} = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
     variables,
     skip: !params.id || !lover.length,
     fetchPolicy: 'no-cache',
   })
 
-  const {data: irrelevantData, loading: irrelevantDataLoading} = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
+  const {data: irrelevanteKraverGraphQLResponse, loading: irrelevanteKraverGraphQLLoading} = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
     variables: {...variables, behandlingIrrevantKrav: !irrelevantKrav},
     skip: !params.id || !lover.length || params?.tema?.charAt(0) === 'i',
     fetchPolicy: 'no-cache',
   })
 
-  const {data: utgaateData, loading: utgaateDataLoading} = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
+  const {data: utgaateKraverGraphQLResponse, loading: utgaateKraverGraphQLLoading} = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
     variables: {status: KravStatus.UTGAATT},
     fetchPolicy: 'no-cache',
   })
@@ -136,10 +137,6 @@ export const BehandlingerTemaPageV2 = () => {
   }, []);
 
   useEffect(() => {
-    console.log(utgaateData)
-  }, []);
-
-  useEffect(() => {
     if (behandling && temaData) {
       ampli.logEvent('sidevisning', {
         side: 'Tema side for behandlingen',
@@ -151,7 +148,6 @@ export const BehandlingerTemaPageV2 = () => {
 
   useEffect(() => {
     return () => {
-      console.log(allKrav)
       const utgaatRelevanteKraver = allKrav.filter((k) => {
         if (kravData)
           return kravData.filter((kd) => (kd.kravNummer === k.kravNummer && kd.kravVersjon >= k.kravVersjon && k.status === KravStatus.UTGAATT)).length > 0
@@ -165,36 +161,16 @@ export const BehandlingerTemaPageV2 = () => {
         else
           return true
       })
-      console.log("Relevant", kravData)
-      console.log("Irrelevant", irrelevantKravData)
-      console.log("Part1", utgaatRelevanteKraver)
-      console.log("Part2", utgaatBortfilterteKraver)
-
 
       let unfiltered: KravQL[] = []
-      if (utgaateData) {
-        unfiltered = utgaateData.krav.content.filter((ud) => {
+      if (utgaateKraverGraphQLResponse) {
+        unfiltered = utgaateKraverGraphQLResponse.krav.content.filter((ud) => {
           return [...utgaatRelevanteKraver, ...utgaatBortfilterteKraver].filter((rdk) => (rdk.kravNummer === ud.kravNummer && rdk.kravVersjon === ud.kravVersjon)).length > 0
         })
       }
-      // setUtgaatKravData([...kravData.map((krav)=>{
-      //   const etterlevelse = krav.etterlevelser.length ? krav.etterlevelser[0] : undefined
-      //   return {
-      //     kravNummer: krav.kravNummer,
-      //     kravVersjon: krav.kravVersjon,
-      //     navn: krav.navn,
-      //     status: krav.status,
-      //     suksesskriterier: krav.suksesskriterier,
-      //     varselMelding: krav.varselMelding,
-      //     prioriteringsId: krav.prioriteringsId,
-      //     changeStamp: krav.changeStamp,
-      //     ...mapEtterlevelseData(etterlevelse),
-      //   }
-      // }])
-      // setUtgaatKravData([...utgaatRelevanteKraver,...utgaatBortfilterteKraver])
+
       ;(async () => {
         setUtgaatKravData(await filterKrav(unfiltered))
-        console.log(utgaatKravData)
       })()
     };
   }, [kravData, irrelevantKravData]);
@@ -202,15 +178,15 @@ export const BehandlingerTemaPageV2 = () => {
 
   useEffect(() => {
     ;(async () => {
-      filterKrav(rawData?.krav.content, true).then((kravListe) => {
+      filterKrav(relevanteKraverGraphQLResponse?.krav.content, true).then((kravListe) => {
         setKravData(kravListe.filter((k) => !(k.status === KravStatus.UTGAATT && k.etterlevelseStatus === undefined)))
       })
     })()
-  }, [rawData])
+  }, [relevanteKraverGraphQLResponse])
 
   useEffect(() => {
     ;(async () => {
-      filterKrav(irrelevantData?.krav.content).then((kravListe) => {
+      filterKrav(irrelevanteKraverGraphQLResponse?.krav.content).then((kravListe) => {
         const newKravList = kravListe.filter((k) => {
           if (k.etterlevelseStatus === undefined) {
             let notFound = true
@@ -236,7 +212,7 @@ export const BehandlingerTemaPageV2 = () => {
         ])
       })
     })()
-  }, [irrelevantData, kravData])
+  }, [irrelevanteKraverGraphQLResponse, kravData])
 
   const breadcrumbPaths: breadcrumbPaths[] = [
     {
@@ -246,23 +222,14 @@ export const BehandlingerTemaPageV2 = () => {
   ]
 
   const getKravData = (id: string | number | undefined) => {
-    if (id === 'relevanteKrav') {
+    if (id === KRAV_FILTER_TYPE.RELEVANTE_KRAV) {
       return kravData
-    } else if (id === 'irrelevantKravData') {
+    } else if (id === KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV) {
       return irrelevantKravData
     } else {
       return utgaatKravData
     }
   }
-  // const getKravStatusById = (id: string | number | undefined):KRAV_FILTER_TYPE => {
-  //   if (id === 'relevanteKrav') {
-  //     return KRAV_FILTER_TYPE.RELEVANTE_KRAV
-  //   } else if (id === 'irrelevantKravData') {
-  //     return KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV
-  //   } else {
-  //     return KRAV_FILTER_TYPE.UTGAATE_KRAV
-  //   }
-  // }
 
   return (
     <>
@@ -297,15 +264,13 @@ export const BehandlingerTemaPageV2 = () => {
                   <KravPanelHeaderWithSorting
                     kravRelevans={kravRelevans}
                     setKravRelevans={setKravRelevans}
-                    kravData={kravRelevans[0].id === 'relevanteKrav' ? kravData : irrelevantKravData}
-                    // kravData={getKravData(kravRelevans[0].id)}
+                    kravData={getKravData(kravRelevans[0].id)}
                     sorting={sorting}
                     setSorting={setSorting}
                   />
                 </Block>
                 <KravList
-                  kravList={kravRelevans[0].id === 'relevanteKrav' ? kravData : irrelevantKravData}
-                  // kravList={getKravData(kravRelevans[0].id)}
+                  kravList={getKravData(kravRelevans[0].id)}
                   EmptyMessage={
                     <Block>
                       <H4
@@ -331,8 +296,8 @@ export const BehandlingerTemaPageV2 = () => {
                   sorting={sorting}
                   sortingOptions={sortingOptions}
                   behandling={behandling}
-                  kravFilter={kravRelevans[0].id === 'relevanteKrav' ? KRAV_FILTER_TYPE.RELEVANTE_KRAV : KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV}
-                  // kravFilter={getKravStatusById(kravRelevans[0].id)}
+                  // kravFilter={kravRelevans[0].id === 'relevanteKrav' ? KRAV_FILTER_TYPE.RELEVANTE_KRAV : KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV}
+                  kravFilter={getFilterType(kravRelevans[0].id)}
                 />
               </Block>
             </Block>

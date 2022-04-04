@@ -168,7 +168,6 @@ export const EditEtterlevelseV2 = ({
                 }}
               >
                 <Block display={"flex"}>
-
                   {kravNumView(krav)} {kravFilter === KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV && (
                   <StatusView
                     status={'Bortfiltrert'}
@@ -217,7 +216,23 @@ export const EditEtterlevelseV2 = ({
                   <strong>Kravet er bortfiltrert.</strong> Om kravet er relevant for behandlingen, sjekk om dere har oppgitt riktig beskrivelse under egenskaper.
                 </Paragraph2>
               )}
-              {tidligereEtterlevelser && tidligereEtterlevelser.length >= 1 && kravFilter!=KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV && (
+
+              {kravFilter === KRAV_FILTER_TYPE.UTGAATE_KRAV && (
+                <Paragraph2
+                  $style={{
+                    marginTop: '0px',
+                    marginBottom: '0px',
+                    paddingBottom: '32px',
+                    color: ettlevColors.white,
+                    lineHeight: '22px',
+                    maxWidth: '650px',
+                  }}
+                >
+                  <strong>Kravet er utgått.</strong>
+                </Paragraph2>
+              )}
+
+              {tidligereEtterlevelser && tidligereEtterlevelser.length >= 1 && kravFilter != KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV && (
                 <Block
                   width="fit-content"
                   display="flex"
@@ -395,7 +410,7 @@ export const EditEtterlevelseV2 = ({
             display={tab === 'dokumentasjon' ? 'block' : 'none'}
             width="100%"
             height="140px"
-            backgroundColor={kravFilter === KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV ? ettlevColors.grey25 : ettlevColors.green100}
+            backgroundColor={kravFilter === KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV || kravFilter === KRAV_FILTER_TYPE.UTGAATE_KRAV ? ettlevColors.grey25 : ettlevColors.green100}
             marginTop="-140px"
           />
 
