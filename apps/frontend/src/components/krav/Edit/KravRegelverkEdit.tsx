@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import {Select, SelectOverrides, SelectProps, Value} from 'baseui/select'
+import {ImperativeMethods, Select, SelectOverrides, SelectProps, Value} from 'baseui/select'
 import {codelist, ListName} from '../../../services/Codelist'
 import {FieldWrapper} from '../../common/Inputs'
 import {FieldArray} from 'formik'
@@ -49,7 +49,7 @@ const CustomizedRegelverkSelect = (props: SelectProps) => {
 export const KravRegelverkEdit = () => {
   const [lov, setLov] = useState<Value>([])
   const [text, setText] = useState('')
-  const controlRef: React.Ref<HTMLInputElement> = React.useRef<HTMLInputElement>(null)
+  const controlRef: React.Ref<ImperativeMethods> = React.useRef<ImperativeMethods>(null)
 
   const regelverkObject = () => ({lov: codelist.getCode(ListName.LOV, lov[0].id as string)!, spesifisering: text})
 
@@ -62,7 +62,7 @@ export const KravRegelverkEdit = () => {
             p.push(regelverkObject())
             setLov([])
             setText('')
-            controlRef.current?.focus()
+            // controlRef.current?.focus()
           }
           return (
             <FormControl>

@@ -1,5 +1,5 @@
-import { Code, LovCode } from './services/Codelist'
-import { Group } from './services/User'
+import {Code, LovCode} from './services/Codelist'
+import {Group} from './services/User'
 
 export type RecursivePartial<T> = {
   [P in keyof T]?: T[P] extends (infer U)[] ? RecursivePartial<U>[] : T[P] extends object ? RecursivePartial<T[P]> : T[P]
@@ -222,6 +222,7 @@ export interface Melding extends DomainObject {
 export enum KRAV_FILTER_TYPE {
   RELEVANTE_KRAV = 'RELEVANTE_KRAV',
   BORTFILTTERTE_KRAV = 'BORTFILTERTE_KRAV',
+  UTGAATE_KRAV = 'UTGAATE_KRAV',
 }
 
 export enum AlertType {

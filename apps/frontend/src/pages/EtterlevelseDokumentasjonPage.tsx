@@ -1,20 +1,30 @@
-import React, { useEffect, useState } from 'react'
-import { Block } from 'baseui/block'
-import { useNavigate, useParams } from 'react-router-dom'
-import { ettlevColors } from '../util/theme'
-import { codelist, ListName, TemaCode } from '../services/Codelist'
-import { useBehandling } from '../api/BehandlingApi'
-import { Layout2 } from '../components/scaffold/Page'
-import { KravId } from '../api/KravApi'
-import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
-import { Helmet } from 'react-helmet'
-import { getMainHeader } from './BehandlingPage'
-import { KravView } from '../components/behandlingsTema/KravView'
-import { ampli } from '../services/Amplitude'
-import { EtterlevelseSecondaryHeader } from '../components/etterlevelse/EtterlevelseSecondaryHeader'
-import { KRAV_FILTER_TYPE } from '../constants'
+import React, {useEffect, useState} from 'react'
+import {Block} from 'baseui/block'
+import {useNavigate, useParams} from 'react-router-dom'
+import {ettlevColors} from '../util/theme'
+import {codelist, ListName, TemaCode} from '../services/Codelist'
+import {useBehandling} from '../api/BehandlingApi'
+import {Layout2} from '../components/scaffold/Page'
+import {KravId} from '../api/KravApi'
+import {breadcrumbPaths} from '../components/common/CustomizedBreadcrumbs'
+import {Helmet} from 'react-helmet'
+import {getMainHeader} from './BehandlingPage'
+import {KravView} from '../components/behandlingsTema/KravView'
+import {ampli} from '../services/Amplitude'
+import {EtterlevelseSecondaryHeader} from '../components/etterlevelse/EtterlevelseSecondaryHeader'
+import {KRAV_FILTER_TYPE} from '../constants'
 
 export type Section = 'dokumentasjon' | 'etterlevelser' | 'tilbakemeldinger'
+
+export const getFilterType = (id: string | number | undefined): KRAV_FILTER_TYPE => {
+  if (id === KRAV_FILTER_TYPE.RELEVANTE_KRAV) {
+    return KRAV_FILTER_TYPE.RELEVANTE_KRAV
+  } else if (id === KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV) {
+    return KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV
+  } else {
+    return KRAV_FILTER_TYPE.UTGAATE_KRAV
+  }
+}
 
 export const EtterlevelseDokumentasjonPage = () => {
   const params = useParams<{ id: string; tema: string; kravNummer: string; kravVersjon: string; filter: string }>()
@@ -31,7 +41,7 @@ export const EtterlevelseDokumentasjonPage = () => {
 
   useEffect(() => {
     if (params.kravNummer && params.kravVersjon) {
-      setKravId({ kravNummer: Number(params.kravNummer), kravVersjon: Number(params.kravVersjon) })
+      setKravId({kravNummer: Number(params.kravNummer), kravVersjon: Number(params.kravVersjon)})
     }
   }, [params])
 
@@ -62,7 +72,7 @@ export const EtterlevelseDokumentasjonPage = () => {
           mainHeader={getMainHeader(
             behandling,
             <Helmet>
-              <meta charSet="utf-8" />
+              <meta charSet="utf-8"/>
               <title>
                 K{kravId?.kravNummer?.toString()}.{kravId?.kravVersjon?.toString()} {temaData?.shortName} B{behandling.nummer.toString()} {behandling.navn.toString()}
               </title>
@@ -99,7 +109,7 @@ export const EtterlevelseDokumentasjonPage = () => {
                 }}
                 tab={tab}
                 setTab={setTab}
-                kravFilter={params.filter === KRAV_FILTER_TYPE.RELEVANTE_KRAV ? KRAV_FILTER_TYPE.RELEVANTE_KRAV : KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV}
+                kravFilter={getFilterType(params.filter)}
               />
             )}
           </Block>
