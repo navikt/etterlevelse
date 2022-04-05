@@ -12,9 +12,6 @@ import {behandlingKravQuery, getAllKrav} from '../api/KravApi'
 import {breadcrumbPaths} from '../components/common/CustomizedBreadcrumbs'
 import {Responsive} from 'baseui/theme'
 import {KravPanelHeaderWithSorting} from '../components/behandling/KravPanelHeader'
-import {sortKraverByPriority} from '../util/sort'
-import _ from 'lodash'
-import {getAllKravPriority} from '../api/KravPriorityApi'
 import {Helmet} from 'react-helmet'
 import {Option} from 'baseui/select'
 import {getMainHeader} from './BehandlingPage'
@@ -22,6 +19,7 @@ import {SecondaryHeader} from '../components/behandlingsTema/SecondaryHeader'
 import {KravList} from '../components/behandlingsTema/KravList'
 import {ampli} from '../services/Amplitude'
 import {getFilterType} from "./EtterlevelseDokumentasjonPage";
+import {filterKrav} from "../components/behandlingsTema/common/utils";
 
 const responsiveBreakPoints: Responsive<Display> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
 const responsiveDisplay: Responsive<Display> = ['block', 'block', 'block', 'block', 'flex', 'flex']
@@ -78,51 +76,12 @@ export const BehandlingerTemaPageV2 = () => {
     fetchPolicy: 'no-cache',
   })
 
-  const [kravData, setKravData] = useState<KravEtterlevelseData[]>([])
+  const [relevantKravData, setRelevantKravData] = useState<KravEtterlevelseData[]>([])
   const [irrelevantKravData, setIrrelevantKravData] = useState<KravEtterlevelseData[]>([])
   const [utgaatKravData, setUtgaatKravData] = useState<KravEtterlevelseData[]>([])
 
   const [sorting, setSorting] = useState<readonly Option[]>([sortingOptions[0]])
   const [kravRelevans, setKravRelevans] = useState<readonly Option[]>([kravRelevansOptions[0]])
-
-  const filterKrav = async (kravList?: KravQL[], filterFerdigDokumentert?: boolean) => {
-    const allKravPriority = await getAllKravPriority()
-
-    const unfilteredkraver = kravList ? _.cloneDeep(kravList) : []
-
-    unfilteredkraver.map((k) => {
-      const priority = allKravPriority.filter((kp) => kp.kravNummer === k.kravNummer && kp.kravVersjon === k.kravVersjon)
-      k.prioriteringsId = priority.length ? priority[0].prioriteringsId : ''
-    })
-
-    const sortedKrav = sortKraverByPriority<KravQL>(unfilteredkraver, temaData?.shortName || '')
-
-    const mapped = sortedKrav.map((krav) => {
-      const etterlevelse = krav.etterlevelser.length ? krav.etterlevelser[0] : undefined
-      return {
-        kravNummer: krav.kravNummer,
-        kravVersjon: krav.kravVersjon,
-        navn: krav.navn,
-        status: krav.status,
-        suksesskriterier: krav.suksesskriterier,
-        varselMelding: krav.varselMelding,
-        prioriteringsId: krav.prioriteringsId,
-        changeStamp: krav.changeStamp,
-        ...mapEtterlevelseData(etterlevelse),
-      }
-    })
-
-    if (filterFerdigDokumentert) {
-      for (let index = mapped.length - 1; index > 0; index--) {
-        if (mapped[index].kravNummer === mapped[index - 1].kravNummer && mapped[index - 1].etterlevelseStatus === EtterlevelseStatus.FERDIG_DOKUMENTERT) {
-          mapped[index - 1].gammelVersjon = true
-        } else if (mapped[index].kravNummer === mapped[index - 1].kravNummer && mapped[index - 1].etterlevelseStatus !== EtterlevelseStatus.FERDIG_DOKUMENTERT) {
-          mapped.splice(index - 1, 1)
-        }
-      }
-    }
-    return mapped
-  }
 
   // useEffect(() => {
   //   if(!user.isLoggedIn()) {
@@ -149,8 +108,8 @@ export const BehandlingerTemaPageV2 = () => {
   useEffect(() => {
     return () => {
       const utgaatRelevanteKraver = allKrav.filter((k) => {
-        if (kravData)
-          return kravData.filter((kd) => (kd.kravNummer === k.kravNummer && kd.kravVersjon >= k.kravVersjon && k.status === KravStatus.UTGAATT)).length > 0
+        if (relevantKravData)
+          return relevantKravData.filter((kd) => (kd.kravNummer === k.kravNummer && kd.kravVersjon >= k.kravVersjon && k.status === KravStatus.UTGAATT)).length > 0
         else
           return true
       })
@@ -170,16 +129,16 @@ export const BehandlingerTemaPageV2 = () => {
       }
 
       ;(async () => {
-        setUtgaatKravData(await filterKrav(unfiltered))
+        setUtgaatKravData(await filterKrav(unfiltered,temaData))
       })()
     };
-  }, [kravData, irrelevantKravData]);
+  }, [relevantKravData, irrelevantKravData]);
 
 
   useEffect(() => {
     ;(async () => {
-      filterKrav(relevanteKraverGraphQLResponse?.krav.content, true).then((kravListe) => {
-        setKravData(kravListe.filter((k) => !(k.status === KravStatus.UTGAATT && k.etterlevelseStatus === undefined)))
+      filterKrav(relevanteKraverGraphQLResponse?.krav.content, temaData,true).then((kravListe) => {
+        setRelevantKravData(kravListe.filter((k) => !(k.status === KravStatus.UTGAATT && k.etterlevelseStatus === undefined)))
       })
     })()
   }, [relevanteKraverGraphQLResponse])
@@ -191,7 +150,7 @@ export const BehandlingerTemaPageV2 = () => {
           if (k.etterlevelseStatus === undefined) {
             let notFound = true
 
-            kravData.forEach((krav) => {
+            relevantKravData.forEach((krav) => {
               if (krav.kravNummer === k.kravNummer && krav.kravVersjon === k.kravVersjon) {
                 notFound = false
               }
@@ -212,7 +171,7 @@ export const BehandlingerTemaPageV2 = () => {
         ])
       })
     })()
-  }, [irrelevanteKraverGraphQLResponse, kravData])
+  }, [irrelevanteKraverGraphQLResponse, relevantKravData])
 
   const breadcrumbPaths: breadcrumbPaths[] = [
     {
@@ -223,7 +182,7 @@ export const BehandlingerTemaPageV2 = () => {
 
   const getKravData = (id: string | number | undefined) => {
     if (id === KRAV_FILTER_TYPE.RELEVANTE_KRAV) {
-      return kravData
+      return relevantKravData
     } else if (id === KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV) {
       return irrelevantKravData
     } else {
