@@ -308,7 +308,7 @@ export const EtterlevelseEditFields = ({
 
                       <Block marginBottom="24px">
                         <CustomizedAccordion>
-                          // The commented code block is part of a feature that will be implemented later.
+                          {/*The commented code block is part of a feature that will be implemented later.*/}
                           {/*<CustomizedPanel*/}
                           {/*  title="Krav du bør se i relasjon til dette"*/}
                           {/*  overrides={{ Content: { style: { backgroundColor: ettlevColors.white, paddingLeft: '20px', paddingRight: '20px' } } }}*/}
