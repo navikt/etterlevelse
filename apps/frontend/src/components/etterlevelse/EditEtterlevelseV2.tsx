@@ -160,14 +160,14 @@ export const EditEtterlevelseV2 = ({
         >
           <Block backgroundColor={ettlevColors.green800} paddingTop="32px" paddingBottom="32px">
             <Block paddingLeft={responsivePaddingInnerPage} paddingRight={responsivePaddingInnerPage}>
-              <Paragraph2
-                $style={{
-                  marginTop: '0px',
-                  marginBottom: '0px',
-                  color: ettlevColors.white,
-                }}
-              >
-                <Block display={"flex"}>
+              <Block display={"flex"}>
+                <Paragraph2
+                  $style={{
+                    marginTop: '0px',
+                    marginBottom: '0px',
+                    color: ettlevColors.white,
+                  }}
+                >
                   {kravNumView(krav)} {kravFilter === KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV && (
                   <StatusView
                     status={'Bortfiltrert'}
@@ -197,9 +197,8 @@ export const EditEtterlevelseV2 = ({
                     }}
                   />
                 )}
-
-                </Block>
-              </Paragraph2>
+                </Paragraph2>
+              </Block>
               <H1 $style={{marginTop: '0px', marginBottom: '0px', paddingBottom: '32px', color: ettlevColors.white}}>{krav.navn}</H1>
 
               {kravFilter === KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV && (
