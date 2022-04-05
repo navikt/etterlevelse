@@ -170,43 +170,35 @@ export const EditEtterlevelseV2 = ({
                 >
                   {kravNumView(krav)}
                 </Paragraph2>
-                <Paragraph2
-                  $style={{
-                    marginTop: '0px',
-                    marginBottom: '0px',
-                    color: ettlevColors.white,
-                  }}
-                >
-                  {kravFilter === KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV && (
-                    <StatusView
-                      status={'Bortfiltrert'}
-                      statusDisplay={{
-                        background: ettlevColors.grey50,
-                        ...borderStyle('solid')
-                      }}
-                      lineHeight={'16px'}
-                      fontSize={'16px'}
-                      fontStyle={'italic'}
-                      overrides={{
-                        Root: {
-                          style: {
-                            marginLeft: '21px',
-                          }
-                        },
-                        Contents: {
-                          style: {
-                            ...marginAll('2px'),
-                          }
-                        },
-                        Body: {
-                          style: {
-                            ...marginAll('2px'),
-                          }
+                {kravFilter === KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV && (
+                  <StatusView
+                    status={'Bortfiltrert'}
+                    statusDisplay={{
+                      background: ettlevColors.grey50,
+                      ...borderStyle('solid')
+                    }}
+                    lineHeight={'16px'}
+                    fontSize={'16px'}
+                    fontStyle={'italic'}
+                    overrides={{
+                      Root: {
+                        style: {
+                          marginLeft: '21px',
                         }
-                      }}
-                    />
-                  )}
-                </Paragraph2>
+                      },
+                      Contents: {
+                        style: {
+                          ...marginAll('2px'),
+                        }
+                      },
+                      Body: {
+                        style: {
+                          ...marginAll('2px'),
+                        }
+                      }
+                    }}
+                  />
+                )}
               </Block>
               <H1 $style={{marginTop: '0px', marginBottom: '0px', paddingBottom: '32px', color: ettlevColors.white}}>{krav.navn}</H1>
 
@@ -221,7 +213,7 @@ export const EditEtterlevelseV2 = ({
                     maxWidth: '650px',
                   }}
                 >
-                  <strong>Kravet er bortfiltrert.</strong> Om kravet er relevant for behandlingen, sjekk om dere har oppgitt riktig beskrivelse under egenskaper.
+                  <strong>Kravet er bortfiltrert.</strong>
                 </Paragraph2>
               )}
 
