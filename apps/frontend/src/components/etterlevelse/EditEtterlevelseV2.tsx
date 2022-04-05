@@ -168,35 +168,44 @@ export const EditEtterlevelseV2 = ({
                     color: ettlevColors.white,
                   }}
                 >
-                  {kravNumView(krav)} {kravFilter === KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV && (
-                  <StatusView
-                    status={'Bortfiltrert'}
-                    statusDisplay={{
-                      background: ettlevColors.grey50,
-                      ...borderStyle('solid')
-                    }}
-                    lineHeight={'16px'}
-                    fontSize={'16px'}
-                    fontStyle={'italic'}
-                    overrides={{
-                      Root: {
-                        style: {
-                          marginLeft: '21px',
+                  {kravNumView(krav)}
+                </Paragraph2>
+                <Paragraph2
+                  $style={{
+                    marginTop: '0px',
+                    marginBottom: '0px',
+                    color: ettlevColors.white,
+                  }}
+                >
+                  {kravFilter === KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV && (
+                    <StatusView
+                      status={'Bortfiltrert'}
+                      statusDisplay={{
+                        background: ettlevColors.grey50,
+                        ...borderStyle('solid')
+                      }}
+                      lineHeight={'16px'}
+                      fontSize={'16px'}
+                      fontStyle={'italic'}
+                      overrides={{
+                        Root: {
+                          style: {
+                            marginLeft: '21px',
+                          }
+                        },
+                        Contents: {
+                          style: {
+                            ...marginAll('2px'),
+                          }
+                        },
+                        Body: {
+                          style: {
+                            ...marginAll('2px'),
+                          }
                         }
-                      },
-                      Contents: {
-                        style: {
-                          ...marginAll('2px'),
-                        }
-                      },
-                      Body: {
-                        style: {
-                          ...marginAll('2px'),
-                        }
-                      }
-                    }}
-                  />
-                )}
+                      }}
+                    />
+                  )}
                 </Paragraph2>
               </Block>
               <H1 $style={{marginTop: '0px', marginBottom: '0px', paddingBottom: '32px', color: ettlevColors.white}}>{krav.navn}</H1>
