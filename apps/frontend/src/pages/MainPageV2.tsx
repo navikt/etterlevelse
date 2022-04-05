@@ -180,9 +180,9 @@ export const MainPageV2 = () => {
             <PanelLink
               href="/help"
               title={
-                <Paragraph1 marginBottom={0} marginTop={0}>
+                <H2 marginBottom={0} marginTop={0}>
                   Mer om etterlevelse i NAV
-                </Paragraph1>
+                </H2>
               }
               beskrivelse={<Label4>Hvordan kravene blir til og hvordan jobbe med etterlevelse i produktutviklingen</Label4>}
               panelIcon={<img src={handWithLeaf} alt={''} />}
