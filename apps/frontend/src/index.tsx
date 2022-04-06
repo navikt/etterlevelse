@@ -5,5 +5,9 @@ import Main from './main'
 
 import {createRoot} from 'react-dom/client';
 
-// @ts-ignore
-createRoot(document.getElementById('root')).render(<Main/>);
+
+const container = document.getElementById('root');
+if (container !== null) {
+  const root = createRoot(container);
+  root.render(<Main/>);
+}

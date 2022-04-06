@@ -50,13 +50,12 @@ export const isFerdigUtfylt = (status: EtterlevelseStatus | undefined) => {
 
 export const BehandlingerTemaPageV2 = () => {
   const params = useParams<{ id?: string; tema?: string }>()
-  const temaData: TemaCode | undefined = codelist.getCode(ListName.TEMA, params.tema?.replace('i', ''))
-  const irrelevantKrav = params?.tema?.charAt(0) === 'i' ? true : false
+  const temaData: TemaCode | undefined = codelist.getCode(ListName.TEMA, params.tema)
   const [behandling, setBehandling] = useBehandling(params.id)
   const lovListe = codelist.getCodesForTema(temaData?.code)
   const lover = lovListe.map((c) => c.code)
   const [allKrav, setAllKrav] = useState<Krav[]>([])
-  const variables = {behandlingId: params.id, lover: lover, gjeldendeKrav: true, behandlingIrrevantKrav: irrelevantKrav}
+  const variables = {behandlingId: params.id, lover: lover, gjeldendeKrav: true, behandlingIrrevantKrav: false, status: KravStatus.AKTIV}
 
 
   const {data: relevanteKraverGraphQLResponse, loading:relevanteKraverGraphQLLoading} = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
@@ -66,8 +65,8 @@ export const BehandlingerTemaPageV2 = () => {
   })
 
   const {data: irrelevanteKraverGraphQLResponse, loading: irrelevanteKraverGraphQLLoading} = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
-    variables: {...variables, behandlingIrrevantKrav: !irrelevantKrav},
-    skip: !params.id || !lover.length || params?.tema?.charAt(0) === 'i',
+    variables: {...variables, behandlingIrrevantKrav: true},
+    skip: !params.id || !lover.length ,
     fetchPolicy: 'no-cache',
   })
 
@@ -138,7 +137,7 @@ export const BehandlingerTemaPageV2 = () => {
   useEffect(() => {
     ;(async () => {
       filterKrav(relevanteKraverGraphQLResponse?.krav.content, temaData,true).then((kravListe) => {
-        setRelevantKravData(kravListe.filter((k) => !(k.status === KravStatus.UTGAATT && k.etterlevelseStatus === undefined)))
+        setRelevantKravData(kravListe)
       })
     })()
   }, [relevanteKraverGraphQLResponse])
