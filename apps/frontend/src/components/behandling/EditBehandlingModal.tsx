@@ -6,7 +6,7 @@ import { theme } from '../../util'
 import { checkboxChecked, checkboxUnchecked, checkboxUncheckedHover, crossIcon } from '../Images'
 import { ettlevColors } from '../../util/theme'
 import { H1, H2, Paragraph2, Paragraph4 } from 'baseui/typography'
-import { Behandling, BehandlingEtterlevData, KravQL, PageResponse } from '../../constants'
+import { Behandling, BehandlingEtterlevData, KravQL, KravStatus, PageResponse } from '../../constants'
 import { ButtonGroup } from 'baseui/button-group'
 import { Button as BaseUIButton, KIND } from 'baseui/button'
 import { Code, codelist, ListName } from '../../services/Codelist'
@@ -35,7 +35,7 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
   const [hover, setHover] = React.useState<number>()
 
   const { data } = useQuery<{ behandling: PageResponse<{ stats: BehandlingStats }> }>(statsQuery, {
-    variables: { relevans: [] },
+    variables: { relevans: options.map(o => {return o.id}) },
     skip: !props.behandling?.id,
     fetchPolicy: 'no-cache',
   })
@@ -51,10 +51,10 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
         }
       | undefined,
   ) => {
-    const StatusListe: any[] = []
+    let StatusListe: any[] = []
 
     const filterKrav = (k: KravQL) => {
-      if (k.regelverk.length) {
+      if (k.regelverk.length && k.status === KravStatus.AKTIV) {
         const relevans = k.relevansFor.map((r) => r.code)
         if (!relevans.length || !relevans.every((r) => !selected.map((i) => options[i].id).includes(r))) {
           StatusListe.push(k)
@@ -314,6 +314,7 @@ const statsQuery = gql`
           fyltKrav {
             kravNummer
             kravVersjon
+            status
             relevansFor {
               code
             }
@@ -331,6 +332,7 @@ const statsQuery = gql`
           ikkeFyltKrav {
             kravNummer
             kravVersjon
+            status
             relevansFor {
               code
             }

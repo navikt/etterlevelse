@@ -276,6 +276,7 @@ export const statsQuery = gql`
           fyltKrav {
             kravNummer
             kravVersjon
+            status
             etterlevelser(onlyForBehandling: true) {
               behandlingId
               status
@@ -290,6 +291,7 @@ export const statsQuery = gql`
           ikkeFyltKrav {
             kravNummer
             kravVersjon
+            status
             etterlevelser(onlyForBehandling: true) {
               behandlingId
               status
@@ -304,6 +306,7 @@ export const statsQuery = gql`
           irrelevantKrav {
             kravNummer
             kravVersjon
+            status
             etterlevelser(onlyForBehandling: true) {
               behandlingId
               status
@@ -324,12 +327,14 @@ export const statsQuery = gql`
               id
               kravNummer
               kravVersjon
+              status
               navn
             }
             ikkeFyltKrav {
               id
               kravNummer
               kravVersjon
+              status
               navn
             }
           }

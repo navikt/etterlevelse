@@ -9,7 +9,7 @@ import { ettlevColors, theme } from '../util/theme'
 import { Layout2 } from '../components/scaffold/Page'
 import { Teams } from '../components/common/TeamName'
 import { arkPennIcon, editIcon, ellipse80, warningAlert } from '../components/Images'
-import { Behandling, BehandlingEtterlevData, EtterlevelseStatus, KravQL, PageResponse } from '../constants'
+import { Behandling, BehandlingEtterlevData, EtterlevelseStatus, KravQL, KravStatus, PageResponse } from '../constants'
 import { useQuery } from '@apollo/client'
 import { Code, codelist, ListName } from '../services/Codelist'
 import { Button } from 'baseui/button'
@@ -113,12 +113,12 @@ export const BehandlingPage = () => {
 
     unfilteredData?.behandling.content.forEach(({ stats }) => {
       stats.fyltKrav.forEach((k) => {
-        if (k.regelverk.length) {
+        if (k.regelverk.length && k.status === KravStatus.AKTIV) {
           relevanteStatusListe.push({ ...k, etterlevelser: k.etterlevelser.filter((e) => e.behandlingId === behandling?.id) })
         }
       })
       stats.ikkeFyltKrav.forEach((k) => {
-        if (k.regelverk.length) {
+        if (k.regelverk.length && k.status === KravStatus.AKTIV) {
           relevanteStatusListe.push({ ...k, etterlevelser: k.etterlevelser.filter((e) => e.behandlingId === behandling?.id) })
         }
       })
@@ -126,7 +126,7 @@ export const BehandlingPage = () => {
 
     unfilteredData?.behandling.content.forEach(({ stats }) => {
       stats.irrelevantKrav.forEach((k) => {
-        if (k.regelverk.length) {
+        if (k.regelverk.length && k.status === KravStatus.AKTIV) {
           irrelevanteStatusListe.push({ ...k, etterlevelser: k.etterlevelser.filter((e) => e.behandlingId === behandling?.id) })
         }
       })
