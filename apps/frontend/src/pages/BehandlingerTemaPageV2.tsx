@@ -6,7 +6,7 @@ import {ettlevColors} from '../util/theme'
 import {codelist, ListName, TemaCode} from '../services/Codelist'
 import {useBehandling} from '../api/BehandlingApi'
 import {Layout2} from '../components/scaffold/Page'
-import {Etterlevelse, EtterlevelseStatus, Krav, KRAV_FILTER_TYPE, KravEtterlevelseData, KravQL, KravStatus, PageResponse} from '../constants'
+import {Etterlevelse, EtterlevelseStatus, Krav, KRAV_FILTER_TYPE, KravEtterlevelseData, KravPrioritering, KravQL, KravStatus, PageResponse} from '../constants'
 import {useQuery} from '@apollo/client'
 import {behandlingKravQuery, getAllKrav} from '../api/KravApi'
 import {breadcrumbPaths} from '../components/common/CustomizedBreadcrumbs'
@@ -20,6 +20,7 @@ import {KravList} from '../components/behandlingsTema/KravList'
 import {ampli} from '../services/Amplitude'
 import {getFilterType} from "./EtterlevelseDokumentasjonPage";
 import {filterKrav} from "../components/behandlingsTema/common/utils";
+import {getAllKravPriority} from "../api/KravPriorityApi";
 
 const responsiveBreakPoints: Responsive<Display> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
 const responsiveDisplay: Responsive<Display> = ['block', 'block', 'block', 'block', 'flex', 'flex']
@@ -56,9 +57,9 @@ export const BehandlingerTemaPageV2 = () => {
   const lover = lovListe.map((c) => c.code)
   const [allKrav, setAllKrav] = useState<Krav[]>([])
   const variables = {behandlingId: params.id, lover: lover, gjeldendeKrav: true, behandlingIrrevantKrav: false, status: KravStatus.AKTIV}
+  const [allKravPriority, setAllKravPriority] = useState<KravPrioritering[]>([])
 
-
-  const {data: relevanteKraverGraphQLResponse, loading:relevanteKraverGraphQLLoading} = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
+  const {data: relevanteKraverGraphQLResponse, loading: relevanteKraverGraphQLLoading} = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
     variables,
     skip: !params.id || !lover.length,
     fetchPolicy: 'no-cache',
@@ -66,7 +67,7 @@ export const BehandlingerTemaPageV2 = () => {
 
   const {data: irrelevanteKraverGraphQLResponse, loading: irrelevanteKraverGraphQLLoading} = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
     variables: {...variables, behandlingIrrevantKrav: true},
-    skip: !params.id || !lover.length ,
+    skip: !params.id || !lover.length,
     fetchPolicy: 'no-cache',
   })
 
@@ -74,7 +75,6 @@ export const BehandlingerTemaPageV2 = () => {
     variables: {status: KravStatus.UTGAATT},
     fetchPolicy: 'no-cache',
   })
-
   const [relevantKravData, setRelevantKravData] = useState<KravEtterlevelseData[]>([])
   const [irrelevantKravData, setIrrelevantKravData] = useState<KravEtterlevelseData[]>([])
   const [utgaatKravData, setUtgaatKravData] = useState<KravEtterlevelseData[]>([])
@@ -91,6 +91,7 @@ export const BehandlingerTemaPageV2 = () => {
   useEffect(() => {
     (async () => {
       setAllKrav(await getAllKrav())
+      setAllKravPriority(await getAllKravPriority())
     })()
   }, []);
 
@@ -120,31 +121,31 @@ export const BehandlingerTemaPageV2 = () => {
           return true
       })
 
-      let unfiltered: KravQL[] = []
+      let utgaatKraver: KravQL[] = []
       if (utgaateKraverGraphQLResponse) {
-        unfiltered = utgaateKraverGraphQLResponse.krav.content.filter((ud) => {
+        utgaatKraver = utgaateKraverGraphQLResponse.krav.content.filter((ud) => {
           return [...utgaatRelevanteKraver, ...utgaatBortfilterteKraver].filter((rdk) => (rdk.kravNummer === ud.kravNummer && rdk.kravVersjon === ud.kravVersjon)).length > 0
         })
       }
 
       ;(async () => {
-        setUtgaatKravData(await filterKrav(unfiltered,temaData))
+        setUtgaatKravData(await filterKrav(allKravPriority, utgaatKraver, temaData))
       })()
     };
-  }, [relevantKravData, irrelevantKravData]);
+  }, [relevantKravData, irrelevantKravData, allKravPriority]);
 
 
   useEffect(() => {
     ;(async () => {
-      filterKrav(relevanteKraverGraphQLResponse?.krav.content, temaData,true).then((kravListe) => {
+      filterKrav(allKravPriority, relevanteKraverGraphQLResponse?.krav.content, temaData, true).then((kravListe) => {
         setRelevantKravData(kravListe)
       })
     })()
-  }, [relevanteKraverGraphQLResponse])
+  }, [relevanteKraverGraphQLResponse, allKravPriority])
 
   useEffect(() => {
     ;(async () => {
-      filterKrav(irrelevanteKraverGraphQLResponse?.krav.content).then((kravListe) => {
+      filterKrav(allKravPriority, irrelevanteKraverGraphQLResponse?.krav.content).then((kravListe) => {
         const newKravList = kravListe.filter((k) => {
           if (k.etterlevelseStatus === undefined) {
             let notFound = true
@@ -170,7 +171,7 @@ export const BehandlingerTemaPageV2 = () => {
         ])
       })
     })()
-  }, [irrelevanteKraverGraphQLResponse, relevantKravData])
+  }, [irrelevanteKraverGraphQLResponse, relevantKravData, allKravPriority])
 
   const breadcrumbPaths: breadcrumbPaths[] = [
     {
