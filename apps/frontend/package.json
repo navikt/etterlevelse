@@ -15,7 +15,7 @@
     "@types/react-draft-wysiwyg": "^1.13.2",
     "amplitude-js": "^8.17.0",
     "axios": "^0.26.0",
-    "baseui": "^10.0.0",
+    "baseui": "^11.0.0",
     "core-js": "^3.8.3",
     "draft-js": "^0.11.7",
     "formik": "^2.2.6",
