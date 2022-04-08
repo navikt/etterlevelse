@@ -1,12 +1,12 @@
-import { JustifyContent, Block, Display } from 'baseui/block'
-import { Responsive } from 'baseui/theme'
-import { HeadingLarge, Label3, Paragraph4 } from 'baseui/typography'
-import { Krav, KravEtterlevelseData } from '../../constants'
-import { theme } from '../../util'
-import { ettlevColors } from '../../util/theme'
+import {Block, Display, JustifyContent} from 'baseui/block'
+import {Responsive} from 'baseui/theme'
+import {HeadingLarge, LabelSmall, ParagraphXSmall} from 'baseui/typography'
+import {Krav, KravEtterlevelseData} from '../../constants'
+import {theme} from '../../util'
+import {ettlevColors} from '../../util/theme'
 import CustomizedSelect from '../common/CustomizedSelect'
-import { Option } from 'baseui/select'
-import { kravRelevansOptions, sortingOptions } from '../../pages/BehandlingerTemaPageV2'
+import {Option} from 'baseui/select'
+import {kravRelevansOptions, sortingOptions} from '../../pages/BehandlingerTemaPageV2'
 
 const responsiveBreakPoints: Responsive<Display> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
 
@@ -29,13 +29,13 @@ export const KravPanelHeader = (props: { title: string; kravData: KravEtterlevel
       <Block display="flex" justifyContent={responsiveAlignment} flex="1" marginRight="26px">
         <Block>
           <Block display="flex" justifyContent={responsiveAlignment} alignItems="baseline" flex="1">
-            <Label3 marginRight="4px" $style={{ color: ettlevColors.navOransje, fontSize: '20px', lineHeight: '21px', marginTop: '0px', marginBottom: '0px' }}>
+            <LabelSmall marginRight="4px" $style={{ color: ettlevColors.navOransje, fontSize: '20px', lineHeight: '21px', marginTop: '0px', marginBottom: '0px' }}>
               {props.kravData.length}
-            </Label3>
-            <Paragraph4 $style={{ lineHeight: '21px', marginTop: '0px', marginBottom: '0px' }}>krav</Paragraph4>
+            </LabelSmall>
+            <ParagraphXSmall $style={{ lineHeight: '21px', marginTop: '0px', marginBottom: '0px' }}>krav</ParagraphXSmall>
           </Block>
           <Block display="flex" justifyContent={responsiveAlignment} flex="1">
-            <Paragraph4 $style={{ lineHeight: '21px', marginTop: '0px', marginBottom: '0px' }}>{antallSuksesskriterier} suksesskriterier</Paragraph4>
+            <ParagraphXSmall $style={{ lineHeight: '21px', marginTop: '0px', marginBottom: '0px' }}>{antallSuksesskriterier} suksesskriterier</ParagraphXSmall>
           </Block>
         </Block>
       </Block>
@@ -61,7 +61,7 @@ export const KravPanelHeaderWithSorting = (props: {
   return (
     <Block display={responsiveBreakPoints} width="100%">
       <Block display="flex" justifyContent="center" alignItems="center">
-        <Label3 $style={{ fontSize: '16px', lineHeight: '18px' }}>Vis:</Label3>
+        <LabelSmall $style={{ fontSize: '16px', lineHeight: '18px' }}>Vis:</LabelSmall>
         <Block paddingLeft="20px" paddingRight="16px" width="290px">
           <CustomizedSelect
             size="default"
@@ -86,13 +86,13 @@ export const KravPanelHeaderWithSorting = (props: {
       <Block display="flex" justifyContent={responsiveAlignment} flex="1" marginRight="26px">
         <Block>
           <Block display="flex" justifyContent={responsiveAlignment} alignItems="baseline" flex="1">
-            <Label3 marginRight="4px" $style={{ color: ettlevColors.navOransje, fontSize: '32px', lineHeight: '21px', marginTop: '0px', marginBottom: '0px' }}>
+            <LabelSmall marginRight="4px" $style={{ color: ettlevColors.navOransje, fontSize: '32px', lineHeight: '21px', marginTop: '0px', marginBottom: '0px' }}>
               {props.kravData.length}
-            </Label3>
-            <Paragraph4 $style={{ lineHeight: '21px', marginTop: '0px', marginBottom: '0px' }}>krav</Paragraph4>
+            </LabelSmall>
+            <ParagraphXSmall $style={{ lineHeight: '21px', marginTop: '0px', marginBottom: '0px' }}>krav</ParagraphXSmall>
           </Block>
           <Block display="flex" justifyContent={responsiveAlignment} flex="1">
-            <Paragraph4 $style={{ lineHeight: '21px', marginTop: '0px', marginBottom: '0px' }}>{antallSuksesskriterier} suksesskriterier</Paragraph4>
+            <ParagraphXSmall $style={{ lineHeight: '21px', marginTop: '0px', marginBottom: '0px' }}>{antallSuksesskriterier} suksesskriterier</ParagraphXSmall>
           </Block>
         </Block>
       </Block>

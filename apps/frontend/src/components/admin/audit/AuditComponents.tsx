@@ -1,12 +1,12 @@
-import { Block, BlockProps } from 'baseui/block'
-import { Label2, Label3 } from 'baseui/typography'
+import {Block, BlockProps} from 'baseui/block'
+import {LabelMedium, LabelSmall} from 'baseui/typography'
 import React from 'react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { PLACEMENT, StatefulTooltip } from 'baseui/tooltip'
-import { faInfoCircle, faMinusCircle, faPlusCircle } from '@fortawesome/free-solid-svg-icons'
-import { theme } from '../../../util'
-import { intl } from '../../../util/intl/intl'
-import { AuditAction } from './AuditTypes'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {PLACEMENT, StatefulTooltip} from 'baseui/tooltip'
+import {faInfoCircle, faMinusCircle, faPlusCircle} from '@fortawesome/free-solid-svg-icons'
+import {theme} from '../../../util'
+import {intl} from '../../../util/intl/intl'
+import {AuditAction} from './AuditTypes'
 
 const labelBlockProps: BlockProps = {
   display: ['flex', 'block', 'block', 'flex'],
@@ -18,10 +18,10 @@ export const AuditLabel = (props: { label: string; children: any }) => {
   return (
     <Block display={['flex', 'block', 'block', 'flex']}>
       <Block {...labelBlockProps}>
-        <Label2>{props.label}</Label2>
+        <LabelMedium>{props.label}</LabelMedium>
       </Block>
       <Block>
-        <Label3>{props.children}</Label3>
+        <LabelSmall>{props.children}</LabelSmall>
       </Block>
     </Block>
   )

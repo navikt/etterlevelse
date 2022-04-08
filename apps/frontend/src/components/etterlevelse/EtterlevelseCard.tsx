@@ -1,22 +1,18 @@
-import { Block } from 'baseui/block'
+import {Block} from 'baseui/block'
 
-import { Paragraph2, Paragraph4, H1 } from 'baseui/typography'
+import {ParagraphMedium, ParagraphXSmall} from 'baseui/typography'
 import moment from 'moment'
-import { useState, useEffect } from 'react'
-import { getKravByKravNumberAndVersion } from '../../api/KravApi'
-import { Etterlevelse, Krav } from '../../constants'
-import { isFerdigUtfylt } from '../../pages/BehandlingerTemaPageV2'
-import { getEtterlevelseStatus } from '../../pages/EtterlevelsePage'
-import { kravNumView } from '../../pages/KravPage'
-import { ettlevColors, maxPageWidth, responsivePaddingExtraLarge } from '../../util/theme'
-import { getStatusLabelColor } from '../behandling/utils'
+import {useEffect, useState} from 'react'
+import {getKravByKravNumberAndVersion} from '../../api/KravApi'
+import {Etterlevelse, Krav} from '../../constants'
+import {getEtterlevelseStatus} from '../../pages/EtterlevelsePage'
+import {ettlevColors} from '../../util/theme'
+import {getStatusLabelColor} from '../behandling/utils'
 
 import Button from '../common/Button'
-import CustomizedModal from '../common/CustomizedModal'
 import StatusView from '../common/StatusTag'
-import { borderStyle, borderRadius, marginAll } from '../common/Style'
-import { EtterlevelseModal } from '../krav/Etterlevelser'
-import { ViewEtterlevelse } from './ViewEtterlevelse'
+import {borderStyle} from '../common/Style'
+import {EtterlevelseModal} from '../krav/Etterlevelser'
 
 export const EtterlevelseCard = ({ etterlevelse }: { etterlevelse: Etterlevelse }) => {
   const [hover, setHover] = useState(false)
@@ -53,7 +49,7 @@ export const EtterlevelseCard = ({ etterlevelse }: { etterlevelse: Etterlevelse 
       >
         <Block display="flex" width="100%" onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} paddingLeft="15px" paddingRight="15px">
           <Block display="flex" alignContent="center" flexDirection="column" width="100%">
-            <Paragraph2
+            <ParagraphMedium
               $style={{
                 color: ettlevColors.green600,
                 lineHeight: '16px',
@@ -64,10 +60,10 @@ export const EtterlevelseCard = ({ etterlevelse }: { etterlevelse: Etterlevelse 
               }}
             >
               K{etterlevelse.kravNummer}.{etterlevelse.kravVersjon}
-            </Paragraph2>
-            <Paragraph4 $style={{ color: ettlevColors.green600, lineHeight: '14px', marginTop: '0px', marginBottom: '12px', textAlign: 'start' }}>
+            </ParagraphMedium>
+            <ParagraphXSmall $style={{ color: ettlevColors.green600, lineHeight: '14px', marginTop: '0px', marginBottom: '12px', textAlign: 'start' }}>
               Sist utfylt: {moment(etterlevelse.changeStamp.lastModifiedDate).format('ll')} av {etterlevelse.changeStamp.lastModifiedBy.split('-')[1]}
-            </Paragraph4>
+            </ParagraphXSmall>
           </Block>
           <Block display="flex" justifyContent="flex-end">
             <StatusView status={getEtterlevelseStatus(etterlevelse.status, etterlevelse.fristForFerdigstillelse)} statusDisplay={getStatusLabelColor(etterlevelse.status)} />

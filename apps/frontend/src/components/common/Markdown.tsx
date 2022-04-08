@@ -1,17 +1,17 @@
 import React from 'react'
 import ReactMarkdown from 'react-markdown'
-import { Paragraph1, Paragraph2 } from 'baseui/typography'
-import { StatefulTooltip } from 'baseui/tooltip'
-import { useDebouncedState } from '../../util/hooks'
+import {ParagraphLarge, ParagraphMedium} from 'baseui/typography'
+import {StatefulTooltip} from 'baseui/tooltip'
+import {useDebouncedState} from '../../util/hooks'
 import MdEditor from 'react-markdown-editor-lite'
 import 'react-markdown-editor-lite/lib/index.css'
-import { Block } from 'baseui/block'
-import { theme } from '../../util'
-import { ExternalLink, ExternalLinkWrapper } from './RouteLink'
-import { markdownLink } from '../../util/config'
+import {Block} from 'baseui/block'
+import {theme} from '../../util'
+import {ExternalLink, ExternalLinkWrapper} from './RouteLink'
+import {markdownLink} from '../../util/config'
 import remarkGfm from 'remark-gfm'
 import rehypeRaw from 'rehype-raw'
-import { ettlevColors } from '../../util/theme'
+import {ettlevColors} from '../../util/theme'
 
 export const Markdown = ({
   vertical,
@@ -43,25 +43,25 @@ export const Markdown = ({
       const { children } = parProps
       if (p1) {
         return (
-          <Paragraph1
+          <ParagraphLarge
             $style={{ fontSize: fontSize ? fontSize : undefined }}
             color={fontColor ? fontColor : ettlevColors.green800}
             marginTop={noMargin ? 0 : undefined}
             marginBottom={noMargin ? 0 : undefined}
           >
             {children}
-          </Paragraph1>
+          </ParagraphLarge>
         )
       }
       return (
-        <Paragraph2
+        <ParagraphMedium
           $style={{ fontSize: fontSize ? fontSize : undefined }}
           color={fontColor ? fontColor : ettlevColors.green800}
           marginTop={noMargin ? 0 : undefined}
           marginBottom={noMargin ? 0 : undefined}
         >
           {children}
-        </Paragraph2>
+        </ParagraphMedium>
       )
     },
     href: (linkProps: any) => {

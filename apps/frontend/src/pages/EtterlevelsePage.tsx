@@ -1,17 +1,17 @@
-import { Block } from 'baseui/block'
-import { H1, Label3 } from 'baseui/typography'
-import { useParams } from 'react-router-dom'
-import { useEtterlevelse } from '../api/EtterlevelseApi'
-import React, { useEffect, useState } from 'react'
-import { Etterlevelse, EtterlevelseStatus, Krav } from '../constants'
-import { ViewEtterlevelse } from '../components/etterlevelse/ViewEtterlevelse'
-import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
-import { kravNumView } from './KravPage'
-import { ettlevColors, maxPageWidth, pageWidth, responsivePaddingSmall, responsiveWidthSmall } from '../util/theme'
-import { getKravByKravNumberAndVersion } from '../api/KravApi'
-import CustomizedBreadcrumbs, { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
-import { Helmet } from 'react-helmet'
-import { ampli } from '../services/Amplitude'
+import {Block} from 'baseui/block'
+import {HeadingXXLarge, LabelSmall} from 'baseui/typography'
+import {useParams} from 'react-router-dom'
+import {useEtterlevelse} from '../api/EtterlevelseApi'
+import React, {useEffect, useState} from 'react'
+import {Etterlevelse, EtterlevelseStatus, Krav} from '../constants'
+import {ViewEtterlevelse} from '../components/etterlevelse/ViewEtterlevelse'
+import {LoadingSkeleton} from '../components/common/LoadingSkeleton'
+import {kravNumView} from './KravPage'
+import {ettlevColors, maxPageWidth, pageWidth, responsivePaddingSmall, responsiveWidthSmall} from '../util/theme'
+import {getKravByKravNumberAndVersion} from '../api/KravApi'
+import CustomizedBreadcrumbs, {breadcrumbPaths} from '../components/common/CustomizedBreadcrumbs'
+import {Helmet} from 'react-helmet'
+import {ampli} from '../services/Amplitude'
 import moment from 'moment'
 
 export const etterlevelseName = (etterlevelse: Etterlevelse) => `${kravNumView(etterlevelse)}`
@@ -135,18 +135,18 @@ export const EtterlevelsePage = () => {
 
             <Block paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall} width={responsiveWidthSmall} display="flex" justifyContent="center">
               <Block maxWidth={pageWidth} width="100%">
-                <H1 marginTop="0px" $style={{ color: ettlevColors.grey25 }}>
+                <HeadingXXLarge marginTop="0px" $style={{ color: ettlevColors.grey25 }}>
                   Etterlevelse
-                </H1>
+                </HeadingXXLarge>
                 {etterlevelse && etterlevelse?.kravNummer !== 0 && krav && (
-                  <Label3
+                  <LabelSmall
                     $style={{
                       color: ettlevColors.grey25,
                       lineHeight: '23px',
                     }}
                   >
                     {etterlevelseName(etterlevelse) + ' ' + krav?.navn}
-                  </Label3>
+                  </LabelSmall>
                 )}
               </Block>
             </Block>

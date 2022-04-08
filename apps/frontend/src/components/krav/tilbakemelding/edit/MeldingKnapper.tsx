@@ -1,15 +1,15 @@
-import { faPencilAlt, faTrashAlt } from '@fortawesome/free-solid-svg-icons'
-import { Block } from 'baseui/block'
+import {faPencilAlt, faTrashAlt} from '@fortawesome/free-solid-svg-icons'
+import {Block} from 'baseui/block'
 import Button from '../../../common/Button'
-import { Modal, ModalBody, ModalFooter, ModalHeader } from 'baseui/modal'
-import { ParagraphMedium, ParagraphSmall } from 'baseui/typography'
+import {Modal, ModalBody, ModalFooter, ModalHeader} from 'baseui/modal'
+import {ParagraphMedium, ParagraphSmall} from 'baseui/typography'
 import moment from 'moment'
-import { useState } from 'react'
-import { tilbakemeldingslettMelding } from '../../../../api/TilbakemeldingApi'
-import { Tilbakemelding, TilbakemeldingMelding } from '../../../../constants'
-import { user } from '../../../../services/User'
-import { pageWidth } from '../../../../util/theme'
-import { PersonName } from '../../../common/PersonName'
+import {useState} from 'react'
+import {tilbakemeldingslettMelding} from '../../../../api/TilbakemeldingApi'
+import {Tilbakemelding, TilbakemeldingMelding} from '../../../../constants'
+import {user} from '../../../../services/User'
+import {pageWidth} from '../../../../util/theme'
+import {PersonName} from '../../../common/PersonName'
 import TilbakemeldingEdit from './TilbakemeldingEdit'
 
 export const MeldingKnapper = (props: {
@@ -37,7 +37,7 @@ export const MeldingKnapper = (props: {
       </Block>
 
       {deleteModal && (
-        <Modal closeable={false} isOpen onClose={() => setDeleteModal(false)} unstable_ModalBackdropScroll>
+        <Modal closeable={false} isOpen onClose={() => setDeleteModal(false)}>
           <ModalHeader>Er du sikker på at du vil slette meldingen?</ModalHeader>
           <ModalBody>
             {meldingNr === 1 && <ParagraphMedium>Hele meldingstråden vil bli slettet.</ParagraphMedium>}
@@ -75,7 +75,6 @@ export const MeldingKnapper = (props: {
         <Modal
           isOpen
           onClose={() => setEditModal(false)}
-          unstable_ModalBackdropScroll
           overrides={{
             Dialog: {
               style: {

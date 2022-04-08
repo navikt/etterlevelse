@@ -1,32 +1,32 @@
-import { Etterlevelse, EtterlevelseStatus, Krav, KravQL } from '../../constants'
-import { Field, FieldProps, Form, Formik, FormikProps, validateYupSchema, yupToFormErrors } from 'formik'
-import { createEtterlevelse, mapEtterlevelseToFormValue, updateEtterlevelse } from '../../api/EtterlevelseApi'
-import { Block } from 'baseui/block'
+import {Etterlevelse, EtterlevelseStatus, Krav, KravQL} from '../../constants'
+import {Field, FieldProps, Form, Formik, FormikProps, validateYupSchema, yupToFormErrors} from 'formik'
+import {createEtterlevelse, mapEtterlevelseToFormValue, updateEtterlevelse} from '../../api/EtterlevelseApi'
+import {Block} from 'baseui/block'
 import Button from '../common/Button'
-import React, { useEffect } from 'react'
+import React, {useEffect} from 'react'
 import * as yup from 'yup'
-import { getEtterlevelseStatus } from '../../pages/EtterlevelsePage'
-import { DateField, FieldWrapper, TextAreaField } from '../common/Inputs'
-import { theme } from '../../util'
-import { FormControl } from 'baseui/form-control'
-import { getKravByKravNumberAndVersion, kravFullQuery, KravId, useKrav, useSearchKrav } from '../../api/KravApi'
-import { kravName, kravNumView } from '../../pages/KravPage'
+import {getEtterlevelseStatus} from '../../pages/EtterlevelsePage'
+import {DateField, FieldWrapper, TextAreaField} from '../common/Inputs'
+import {theme} from '../../util'
+import {FormControl} from 'baseui/form-control'
+import {getKravByKravNumberAndVersion, kravFullQuery, KravId, useKrav, useSearchKrav} from '../../api/KravApi'
+import {kravName, kravNumView} from '../../pages/KravPage'
 import CustomizedSelect from '../common/CustomizedSelect'
-import { H1, Label3, Paragraph2, Paragraph4 } from 'baseui/typography'
-import { ettlevColors, responsivePaddingLarge } from '../../util/theme'
-import { SuksesskriterierBegrunnelseEdit } from './Edit/SuksesskriterieBegrunnelseEdit'
-import { Radio, RadioGroup } from 'baseui/radio'
-import { Code } from '../../services/Codelist'
-import { Error } from '../common/ModalSchema'
-import { user } from '../../services/User'
-import { KIND as NKIND, Notification } from 'baseui/notification'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faExternalLinkAlt, faTimesCircle } from '@fortawesome/free-solid-svg-icons'
-import { borderColor, borderRadius, borderStyle, borderWidth, padding, paddingZero } from '../common/Style'
-import { env } from '../../util/env'
-import { useQuery } from '@apollo/client'
+import {HeadingXXLarge, LabelSmall, ParagraphMedium, ParagraphXSmall} from 'baseui/typography'
+import {ettlevColors, responsivePaddingLarge} from '../../util/theme'
+import {SuksesskriterierBegrunnelseEdit} from './Edit/SuksesskriterieBegrunnelseEdit'
+import {Radio, RadioGroup} from 'baseui/radio'
+import {Code} from '../../services/Codelist'
+import {Error} from '../common/ModalSchema'
+import {user} from '../../services/User'
+import {KIND as NKIND, Notification} from 'baseui/notification'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faExternalLinkAlt, faTimesCircle} from '@fortawesome/free-solid-svg-icons'
+import {borderColor, borderRadius, borderStyle, borderWidth, padding, paddingZero} from '../common/Style'
+import {env} from '../../util/env'
+import {useQuery} from '@apollo/client'
 import moment from 'moment'
-import { informationIcon } from '../Images'
+import {informationIcon} from '../Images'
 
 type EditEttlevProps = {
   etterlevelse: Etterlevelse
@@ -189,8 +189,8 @@ export const EditEtterlevelse = ({
               <Block backgroundColor={ettlevColors.green800}>
                 <Block>
                   <Block paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge}>
-                    <Paragraph2 $style={{ marginTop: '0px', marginBottom: '0px', color: ettlevColors.white }}>{kravNumView(krav)}</Paragraph2>
-                    <H1 $style={{ marginTop: '0px', marginBottom: '0px', color: ettlevColors.white }}>{krav.navn}</H1>
+                    <ParagraphMedium $style={{ marginTop: '0px', marginBottom: '0px', color: ettlevColors.white }}>{kravNumView(krav)}</ParagraphMedium>
+                    <HeadingXXLarge $style={{ marginTop: '0px', marginBottom: '0px', color: ettlevColors.white }}>{krav.navn}</HeadingXXLarge>
 
                     {varsleMelding && (
                       <Block
@@ -207,9 +207,9 @@ export const EditEtterlevelse = ({
                         }}
                       >
                         <img src={informationIcon} alt="" width={'24px'} height={'24px'} />
-                        <Paragraph2 marginLeft={theme.sizing.scale500} marginTop="0px" marginBottom="0px">
+                        <ParagraphMedium marginLeft={theme.sizing.scale500} marginTop="0px" marginBottom="0px">
                           {varsleMelding}
-                        </Paragraph2>
+                        </ParagraphMedium>
                       </Block>
                     )}
                   </Block>
@@ -222,8 +222,8 @@ export const EditEtterlevelse = ({
                     paddingTop={varsleMelding ? '16px' : '32px'}
                   >
                     <Block>
-                      <Paragraph2 $style={{ marginTop: 0, marginBottom: 0, color: ettlevColors.white, maxWidth: '700px' }}>
-                        <Label3 $style={{ color: ettlevColors.white }}>Behandling: </Label3>
+                      <ParagraphMedium $style={{ marginTop: 0, marginBottom: 0, color: ettlevColors.white, maxWidth: '700px' }}>
+                        <LabelSmall $style={{ color: ettlevColors.white }}>Behandling: </LabelSmall>
                         <a href={`${env.pollyBaseUrl}process/${behandlingId}`} style={{ color: ettlevColors.white }} target="_blank" rel="noopener noreferrer">
                           <span
                             style={{
@@ -236,7 +236,7 @@ export const EditEtterlevelse = ({
                             B{behandlingNummer} {behandlingformaal}: {behandlingNavn} <FontAwesomeIcon icon={faExternalLinkAlt} />
                           </span>
                         </a>
-                      </Paragraph2>
+                      </ParagraphMedium>
                     </Block>
                   </Block>
                 </Block>
@@ -309,9 +309,9 @@ export const EditEtterlevelse = ({
                                           return (
                                             <Radio value={id} key={id}>
                                               <Block $style={{ textDecoration: radioHover === id ? 'underline' : 'none' }}>
-                                                <Paragraph2 $style={{ lineHeight: '22px' }} marginTop="0px" marginBottom="0px">
+                                                <ParagraphMedium $style={{ lineHeight: '22px' }} marginTop="0px" marginBottom="0px">
                                                   {getEtterlevelseStatus(id)}
-                                                </Paragraph2>
+                                                </ParagraphMedium>
                                               </Block>
 
                                               {etterlevelseStatus === EtterlevelseStatus.OPPFYLLES_SENERE && (
@@ -344,9 +344,9 @@ export const EditEtterlevelse = ({
                                           return (
                                             <Radio value={id} key={id}>
                                               <Block $style={{ textDecoration: radioHover === id ? 'underline' : 'none' }}>
-                                                <Paragraph2 $style={{ lineHeight: '22px' }} marginTop="0px" marginBottom="0px">
+                                                <ParagraphMedium $style={{ lineHeight: '22px' }} marginTop="0px" marginBottom="0px">
                                                   {getEtterlevelseStatus(id)}
-                                                </Paragraph2>
+                                                </ParagraphMedium>
                                               </Block>
                                               {(etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT ||
                                                 etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) && (
@@ -364,9 +364,9 @@ export const EditEtterlevelse = ({
                                         return (
                                           <Radio value={id} key={id}>
                                             <Block $style={{ textDecoration: radioHover === id ? 'underline' : 'none' }}>
-                                              <Paragraph2 $style={{ lineHeight: '22px' }} marginTop="0px" marginBottom="0px">
+                                              <ParagraphMedium $style={{ lineHeight: '22px' }} marginTop="0px" marginBottom="0px">
                                                 {getEtterlevelseStatus(id)}
-                                              </Paragraph2>
+                                              </ParagraphMedium>
                                             </Block>
                                           </Radio>
                                         )
@@ -391,18 +391,18 @@ export const EditEtterlevelse = ({
                                   ...borderRadius('4px'),
                                 }}
                               >
-                                <Paragraph2 marginBottom={0} marginTop={0}>
+                                <ParagraphMedium marginBottom={0} marginTop={0}>
                                   <span style={{ display: 'inline-block', marginRight: '5px', fontSize: '16px' }}>
                                     <strong>Åpne veiledning og spørsmål til kraveier</strong>
                                   </span>
                                   <FontAwesomeIcon icon={faExternalLinkAlt} />
-                                </Paragraph2>
+                                </ParagraphMedium>
                               </Button>
                             </a>
                           </Block>
                         </Block>
 
-                        {<Label3 $style={{ lineHeight: '32px' }}>Hvilke suksesskriterier er oppfylt?</Label3>}
+                        {<LabelSmall $style={{ lineHeight: '32px' }}>Hvilke suksesskriterier er oppfylt?</LabelSmall>}
 
                         <SuksesskriterierBegrunnelseEdit disableEdit={disableEdit} suksesskriterie={krav.suksesskriterier} viewMode={false} />
 
@@ -454,9 +454,9 @@ export const EditEtterlevelse = ({
                                         marginRight: '5px',
                                       }}
                                     />
-                                    <Paragraph2 marginBottom="0px" marginTop="0px" $style={{ lineHeight: '18px' }}>
+                                    <ParagraphMedium marginBottom="0px" marginTop="0px" $style={{ lineHeight: '18px' }}>
                                       Du må fylle ut alle obligatoriske felter
-                                    </Paragraph2>
+                                    </ParagraphMedium>
                                   </Block>
                                 </Notification>
                               </Block>
@@ -521,9 +521,9 @@ export const EditEtterlevelse = ({
               )}
               {etterlevelse.changeStamp.lastModifiedDate && etterlevelse.changeStamp.lastModifiedBy && (
                 <Block paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge} marginBottom={theme.sizing.scale3200}>
-                  <Paragraph4 marginTop="0px" marginBottom="0px">
+                  <ParagraphXSmall marginTop="0px" marginBottom="0px">
                     Sist utfylt: {moment(etterlevelse.changeStamp.lastModifiedDate).format('ll')} av {etterlevelse.changeStamp.lastModifiedBy.split('-')[1]}
-                  </Paragraph4>
+                  </ParagraphXSmall>
                 </Block>
               )}
             </Block>

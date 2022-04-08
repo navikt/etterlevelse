@@ -1,12 +1,11 @@
-import { Block } from 'baseui/block'
-import { Label3 } from 'baseui/typography'
-import { useState } from 'react'
-import { ettlevColors } from '../../util/theme'
-import CustomizedLink from '../common/CustomizedLink'
-import { Chevron } from '../common/PanelLink'
+import {Block} from 'baseui/block'
+import {LabelSmall} from 'baseui/typography'
+import {useState} from 'react'
+import {ettlevColors} from '../../util/theme'
+import {Chevron} from '../common/PanelLink'
 import RouteLink from '../common/RouteLink'
-import { borderColor, borderStyle, borderWidth, padding } from '../common/Style'
-import { arrowRightIcon } from '../Images'
+import {borderColor, borderStyle, borderWidth, padding} from '../common/Style'
+import {arrowRightIcon} from '../Images'
 
 export const SidePanel = () => {
   const [hover, setHover] = useState<boolean>(false)
@@ -26,7 +25,7 @@ export const SidePanel = () => {
           ':hover': { boxShadow: '0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 3px 0 rgba(0, 0, 0, .12)' },
         }}
       >
-        <Label3
+        <LabelSmall
           $style={{
             fontSize: '20px',
             fontWeight: 600,
@@ -35,7 +34,7 @@ export const SidePanel = () => {
           }}
         >
           Dokumentere etterlevelse
-        </Label3>
+        </LabelSmall>
         <Block display="flex" justifyContent="flex-end" width="100%">
           <Chevron hover={hover} icon={arrowRightIcon} distance={'8px'} />
         </Block>

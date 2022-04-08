@@ -1,25 +1,25 @@
-import { faSlackHash } from '@fortawesome/free-brands-svg-icons'
-import { faEnvelope, faThumbsUp, faUser } from '@fortawesome/free-solid-svg-icons'
-import { Block } from 'baseui/block'
+import {faSlackHash} from '@fortawesome/free-brands-svg-icons'
+import {faEnvelope, faThumbsUp, faUser} from '@fortawesome/free-solid-svg-icons'
+import {Block} from 'baseui/block'
 import Button from '../../../common/Button'
-import { FormControl } from 'baseui/form-control'
-import { ModalBody, ModalFooter, ModalHeader } from 'baseui/modal'
-import { H2, H3, Paragraph1 } from 'baseui/typography'
-import { Field, FieldProps, Form, Formik } from 'formik'
-import { useState } from 'react'
-import { createNewTilbakemelding, CreateTilbakemeldingRequest } from '../../../../api/TilbakemeldingApi'
-import { AdresseType, Krav, Tilbakemelding, TilbakemeldingType, Varslingsadresse } from '../../../../constants'
-import { theme } from '../../../../util'
+import {FormControl} from 'baseui/form-control'
+import {ModalBody, ModalFooter, ModalHeader} from 'baseui/modal'
+import {HeadingLarge, HeadingXLarge, ParagraphLarge} from 'baseui/typography'
+import {Field, FieldProps, Form, Formik} from 'formik'
+import {useState} from 'react'
+import {createNewTilbakemelding, CreateTilbakemeldingRequest} from '../../../../api/TilbakemeldingApi'
+import {AdresseType, Krav, Tilbakemelding, TilbakemeldingType, Varslingsadresse} from '../../../../constants'
+import {theme} from '../../../../util'
 import CustomizedModal from '../../../common/CustomizedModal'
-import { TextAreaField } from '../../../common/Inputs'
+import {TextAreaField} from '../../../common/Inputs'
 import LabelWithTooltip from '../../../common/LabelWithTooltip'
-import { AddEmail, SlackChannelSearch, SlackUserSearch, VarslingsadresserTagList } from '../../Edit/KravVarslingsadresserEdit'
-import { Notification } from 'baseui/notification'
+import {AddEmail, SlackChannelSearch, SlackUserSearch, VarslingsadresserTagList} from '../../Edit/KravVarslingsadresserEdit'
+import {Notification} from 'baseui/notification'
 import * as yup from 'yup'
-import { Card } from 'baseui/card'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { ettlevColors } from '../../../../util/theme'
-import { borderRadius, borderWidth, borderColor } from '../../../common/Style'
+import {Card} from 'baseui/card'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {ettlevColors} from '../../../../util/theme'
+import {borderColor, borderRadius, borderWidth} from '../../../common/Style'
 
 type NyTilbakemeldingModalProps = {
   open?: boolean
@@ -64,7 +64,6 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: NyTilbakemeldingMod
         },
       }}
       closeable={false}
-      unstable_ModalBackdropScroll
       isOpen={open}
       onClose={() => close()}
     >
@@ -83,7 +82,7 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: NyTilbakemeldingMod
           return (
             <Form>
               <ModalHeader>
-                <H2>Spørsmål til kraveier</H2>
+                <HeadingXLarge>Spørsmål til kraveier</HeadingXLarge>
               </ModalHeader>
               <ModalBody>
                 {showNotification ? (
@@ -102,7 +101,7 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: NyTilbakemeldingMod
                   >
                     <Block display="flex" alignItems="center">
                       <FontAwesomeIcon icon={faThumbsUp} size="lg" />
-                      <H3
+                      <HeadingLarge
                         $style={{
                           fontSize: '20px',
                           lineHeight: '25px',
@@ -112,10 +111,10 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: NyTilbakemeldingMod
                         }}
                       >
                         Spørsmålet er sendt til kraveier!
-                      </H3>
+                      </HeadingLarge>
                     </Block>
                     <Block marginTop={'17px'}>
-                      <Paragraph1
+                      <ParagraphLarge
                         $style={{
                           fontSize: '20px',
                           lineHeight: '25px',
@@ -124,7 +123,7 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: NyTilbakemeldingMod
                         }}
                       >
                         Du får varsel på {getMessageType(showNotification)} når spørsmålet er besvart.
-                      </Paragraph1>
+                      </ParagraphLarge>
                     </Block>
                   </Card>
                 ) : (

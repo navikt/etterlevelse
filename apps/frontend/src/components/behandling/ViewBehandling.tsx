@@ -1,33 +1,33 @@
-import { Block } from 'baseui/block'
-import React, { useEffect, useState } from 'react'
-import { theme } from '../../util'
-import { Teams } from '../common/TeamName'
-import { DotTags } from '../common/DotTag'
-import { Code, codelist, ListName } from '../../services/Codelist'
-import { H1, HeadingSmall, Paragraph2 } from 'baseui/typography'
-import RouteLink, { ObjectLink } from '../common/RouteLink'
-import { etterlevelseName, getEtterlevelseStatus } from '../../pages/EtterlevelsePage'
-import { Behandling, Etterlevelse, EtterlevelseStatus, Krav, KravQL, PageResponse } from '../../constants'
-import { Label } from '../common/PropertyLabel'
-import { KravFilters } from '../../api/KravGraphQLApi'
-import { Spinner } from '../common/Spinner'
-import { Cell, Row, Table } from '../common/Table'
+import {Block} from 'baseui/block'
+import React, {useEffect, useState} from 'react'
+import {theme} from '../../util'
+import {Teams} from '../common/TeamName'
+import {DotTags} from '../common/DotTag'
+import {Code, codelist, ListName} from '../../services/Codelist'
+import {HeadingSmall, HeadingXXLarge, ParagraphMedium} from 'baseui/typography'
+import RouteLink, {ObjectLink} from '../common/RouteLink'
+import {etterlevelseName, getEtterlevelseStatus} from '../../pages/EtterlevelsePage'
+import {Behandling, Etterlevelse, EtterlevelseStatus, Krav, KravQL, PageResponse} from '../../constants'
+import {Label} from '../common/PropertyLabel'
+import {KravFilters} from '../../api/KravGraphQLApi'
+import {Spinner} from '../common/Spinner'
+import {Cell, Row, Table} from '../common/Table'
 import moment from 'moment'
 import Button from '../common/Button'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEdit, faEye, faPlus } from '@fortawesome/free-solid-svg-icons'
-import { Modal, ModalBody, ModalHeader } from 'baseui/modal'
-import { EditEtterlevelse } from '../etterlevelse/EditEtterlevelse'
-import { useEtterlevelse } from '../../api/EtterlevelseApi'
-import { behandlingKravQuery, getKravByKravNumberAndVersion, kravFullQuery, KravId, statsQuery } from '../../api/KravApi'
-import { kravName, kravNumView } from '../../pages/KravPage'
-import { ViewEtterlevelse } from '../etterlevelse/ViewEtterlevelse'
-import { ObjectType } from '../admin/audit/AuditTypes'
-import { useQuery } from '@apollo/client'
-import { Chart } from '../Chart'
-import { ettlevColors, maxPageWidth } from '../../util/theme'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faEdit, faEye, faPlus} from '@fortawesome/free-solid-svg-icons'
+import {Modal, ModalBody, ModalHeader} from 'baseui/modal'
+import {EditEtterlevelse} from '../etterlevelse/EditEtterlevelse'
+import {useEtterlevelse} from '../../api/EtterlevelseApi'
+import {behandlingKravQuery, getKravByKravNumberAndVersion, kravFullQuery, KravId, statsQuery} from '../../api/KravApi'
+import {kravName, kravNumView} from '../../pages/KravPage'
+import {ViewEtterlevelse} from '../etterlevelse/ViewEtterlevelse'
+import {ObjectType} from '../admin/audit/AuditTypes'
+import {useQuery} from '@apollo/client'
+import {Chart} from '../Chart'
+import {ettlevColors, maxPageWidth} from '../../util/theme'
 import CustomizedModal from '../common/CustomizedModal'
-import { crossIcon } from '../Images'
+import {crossIcon} from '../Images'
 
 export const filterForBehandling = (behandling: Behandling): KravFilters => ({ behandlingId: behandling.id })
 
@@ -177,7 +177,7 @@ const KravTable = (props: { behandling: Behandling }) => {
           })
         }}
       />
-      <Modal closeable={false} isOpen={!!viewEtterlevelse} onClose={() => setViewEtterlevelse(undefined)} unstable_ModalBackdropScroll>
+      <Modal closeable={false} isOpen={!!viewEtterlevelse} onClose={() => setViewEtterlevelse(undefined)}>
         <EtterlevelseModal id={viewEtterlevelse} />
       </Modal>
       {edit && (
@@ -276,8 +276,8 @@ const KravView = (props: { kravId: KravId; etterlevelse: Etterlevelse; close: Fu
         <Block>
           <Block flex="1" backgroundColor={ettlevColors.green800}>
             <Block paddingLeft={modalPaddingLeft} paddingRight={modalPaddingRight} paddingBottom="32px">
-              <H1 $style={{ color: ettlevColors.grey50, marginTop: '0px' }}>Fyll ut dokumentasjon: {getTema()}</H1>
-              <Paragraph2 $style={{ lineHeight: '12px', color: ettlevColors.green50 }}>{props.behandlingNavn}</Paragraph2>
+              <HeadingXXLarge $style={{ color: ettlevColors.grey50, marginTop: '0px' }}>Fyll ut dokumentasjon: {getTema()}</HeadingXXLarge>
+              <ParagraphMedium $style={{ lineHeight: '12px', color: ettlevColors.green50 }}>{props.behandlingNavn}</ParagraphMedium>
             </Block>
           </Block>
           <Block paddingLeft={modalPaddingLeft} paddingRight={modalPaddingRight}>

@@ -1,25 +1,25 @@
-import { SORT_DIRECTION, SortableHeadCell, StyledBody, StyledCell, StyledHead, StyledHeadCell, StyledRow, StyledTable } from 'baseui/table'
+import {SORT_DIRECTION, SortableHeadCell, StyledBody, StyledCell, StyledHead, StyledHeadCell, StyledRow, StyledTable} from 'baseui/table'
 import * as React from 'react'
-import { ReactNode, useContext, useState } from 'react'
-import { withStyle } from 'baseui'
-import { StyleObject } from 'styletron-standard'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronDown, faFilter, faSort, faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons'
-import { Block } from 'baseui/block'
-import { Label2 } from 'baseui/typography'
-import { TableConfig, TableState, useTable } from '../../util/hooks'
-import { theme } from '../../util'
-import { borderRadius, paddingAll } from './Style'
-import { intl } from '../../util/intl/intl'
-import { Modal, ModalBody, ModalHeader } from 'baseui/modal'
+import {ReactNode, useContext, useState} from 'react'
+import {withStyle} from 'baseui'
+import {StyleObject} from 'styletron-standard'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faChevronDown, faFilter, faSort, faSortDown, faSortUp} from '@fortawesome/free-solid-svg-icons'
+import {Block} from 'baseui/block'
+import {LabelMedium} from 'baseui/typography'
+import {TableConfig, TableState, useTable} from '../../util/hooks'
+import {theme} from '../../util'
+import {borderRadius, paddingAll} from './Style'
+import {intl} from '../../util/intl/intl'
+import {Modal, ModalBody, ModalHeader} from 'baseui/modal'
 import * as _ from 'lodash'
-import { PLACEMENT, StatefulPopover } from 'baseui/popover'
-import { StatefulMenu } from 'baseui/menu'
+import {PLACEMENT, StatefulPopover} from 'baseui/popover'
+import {StatefulMenu} from 'baseui/menu'
 import Button from './Button'
-import { KIND } from 'baseui/button'
-import { Pagination } from 'baseui/pagination'
+import {KIND} from 'baseui/button'
+import {Pagination} from 'baseui/pagination'
 import CustomizedInput from '../common/CustomizedInput'
-import { CustomizedStatefulSelect } from './CustomizedSelect'
+import {CustomizedStatefulSelect} from './CustomizedSelect'
 
 // Use this for entire app, or recreate maybe, added here as I needed it for audit
 
@@ -121,9 +121,9 @@ export const Table = <T, K extends keyof T>(props: TableProps<T, K>) => {
               </Row>
             ))}
           {!props.data.length && (
-            <Label2 margin="1rem">
+            <LabelMedium margin="1rem">
               {intl.emptyTable} {props.emptyText}
-            </Label2>
+            </LabelMedium>
           )}
         </StyledBody>
       </StyleTable>
@@ -152,7 +152,7 @@ export const Table = <T, K extends keyof T>(props: TableProps<T, K>) => {
             </Block>
           </StatefulPopover>
           <Block>
-            <Label2>Rader: {table.data.length}</Label2>
+            <LabelMedium>Rader: {table.data.length}</LabelMedium>
           </Block>
           <Pagination
             currentPage={table.page}

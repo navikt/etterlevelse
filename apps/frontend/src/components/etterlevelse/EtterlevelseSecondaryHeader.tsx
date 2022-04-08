@@ -1,16 +1,16 @@
-import { Block } from 'baseui/block'
+import {Block} from 'baseui/block'
 import Button from '../common/Button'
-import { borderRadius, marginAll, paddingAll } from '../common/Style'
-import { H1, Label3 } from 'baseui/typography'
-import { ettlevColors, maxPageWidth, responsivePaddingExtraLarge } from '../../util/theme'
-import { angleIcon, page2Icon } from '../Images'
+import {borderRadius, marginAll, paddingAll} from '../common/Style'
+import {HeadingXXLarge, LabelSmall} from 'baseui/typography'
+import {ettlevColors, maxPageWidth, responsivePaddingExtraLarge} from '../../util/theme'
+import {angleIcon, page2Icon} from '../Images'
 import CustomizedModal from '../common/CustomizedModal'
-import { getTemaMainHeader } from '../../pages/TemaPage'
-import React, { useState } from 'react'
-import { Behandling } from '../../constants'
-import { LovCode, TemaCode } from '../../services/Codelist'
-import { Section } from '../../pages/EtterlevelseDokumentasjonPage'
-import { KravId } from '../../api/KravApi'
+import {getTemaMainHeader} from '../../pages/TemaPage'
+import React, {useState} from 'react'
+import {Behandling} from '../../constants'
+import {LovCode, TemaCode} from '../../services/Codelist'
+import {Section} from '../../pages/EtterlevelseDokumentasjonPage'
+import {KravId} from '../../api/KravApi'
 
 type EtterlevelseSecondaryHeaderProps = {
   tab: string
@@ -45,7 +45,7 @@ export const EtterlevelseSecondaryHeader = ({ tab, setTab, setNavigatePath, beha
             },
           }}
         >
-          <Label3
+          <LabelSmall
             $style={{
               fontSize: '18px',
               fontWeight: 400,
@@ -58,7 +58,7 @@ export const EtterlevelseSecondaryHeader = ({ tab, setTab, setNavigatePath, beha
             }}
           >
             Krav til utfylling
-          </Label3>
+          </LabelSmall>
         </Button>
       </Block>
 
@@ -82,7 +82,7 @@ export const EtterlevelseSecondaryHeader = ({ tab, setTab, setNavigatePath, beha
             },
           }}
         >
-          <Label3
+          <LabelSmall
             marginLeft="12px"
             $style={{
               fontSize: '18px',
@@ -96,16 +96,16 @@ export const EtterlevelseSecondaryHeader = ({ tab, setTab, setNavigatePath, beha
             }}
           >
             {temaData?.shortName}
-          </Label3>
+          </LabelSmall>
         </Button>
       </Block>
 
       <Block marginTop="0px" marginBottom="56px" display="flex" width="calc(100% - 35px)" alignItems="center" justifyContent="center" marginLeft="35px">
         <Block display="flex" flex="1">
           <img src={angleIcon} alt="" />{' '}
-          <Label3 marginLeft="12px" $style={{ fontSize: '24px', fontWeight: 900, lineHeight: '32px', color: ettlevColors.green600, whiteSpace: 'nowrap' }}>
+          <LabelSmall marginLeft="12px" $style={{ fontSize: '24px', fontWeight: 900, lineHeight: '32px', color: ettlevColors.green600, whiteSpace: 'nowrap' }}>
             K{kravId?.kravNummer}.{kravId?.kravVersjon}
-          </Label3>
+          </LabelSmall>
         </Block>
 
         <Block display="flex" justifyContent="flex-end" width="100%">
@@ -152,9 +152,9 @@ export const EtterlevelseSecondaryHeader = ({ tab, setTab, setNavigatePath, beha
               paddingLeft={responsivePaddingExtraLarge}
               paddingRight={responsivePaddingExtraLarge}
             >
-              <H1 marginTop="0px" marginBottom="0px">
+              <HeadingXXLarge marginTop="0px" marginBottom="0px">
                 {temaData?.shortName}
-              </H1>
+              </HeadingXXLarge>
             </Block>
             <Block marginBottom="55px" marginTop="40px" paddingLeft={responsivePaddingExtraLarge} paddingRight={responsivePaddingExtraLarge}>
               <Block>{getTemaMainHeader(temaData, lovListe, true, () => {}, true, true)}</Block>

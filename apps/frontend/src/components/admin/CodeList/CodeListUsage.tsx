@@ -1,20 +1,20 @@
 import * as React from 'react'
-import { useEffect, useRef, useState } from 'react'
-import { Block } from 'baseui/block'
-import { Label2 } from 'baseui/typography'
-import { Value } from 'baseui/select'
-import { Button } from 'baseui/button'
+import {useEffect, useRef, useState} from 'react'
+import {Block} from 'baseui/block'
+import {LabelMedium} from 'baseui/typography'
+import {Value} from 'baseui/select'
+import {Button} from 'baseui/button'
 
-import { StyledSpinnerNext } from 'baseui/spinner'
-import { Cell, Row, Table } from '../../common/Table'
-import { theme } from '../../../util'
-import { codelist, CodeUsage } from '../../../services/Codelist'
-import { ObjectLink } from '../../common/RouteLink'
-import { ObjectType } from '../audit/AuditTypes'
-import { replaceCodelistUsage } from '../../../api/CodelistApi'
+import {Spinner} from 'baseui/spinner'
+import {Cell, Row, Table} from '../../common/Table'
+import {theme} from '../../../util'
+import {codelist, CodeUsage} from '../../../services/Codelist'
+import {ObjectLink} from '../../common/RouteLink'
+import {ObjectType} from '../audit/AuditTypes'
+import {replaceCodelistUsage} from '../../../api/CodelistApi'
 import CustomizedSelect from '../../common/CustomizedSelect'
-import { ettlevColors } from '../../../util/theme'
-import { buttonContentStyle } from '../../common/Button'
+import {ettlevColors} from '../../../util/theme'
+import {buttonContentStyle} from '../../common/Button'
 
 const UsageTable = (props: { usage: CodeUsage }) => {
   const { usage } = props
@@ -96,7 +96,7 @@ export const Usage = (props: { usage?: CodeUsage; refresh: () => void }) => {
   return (
     <Block marginTop="2rem" ref={ref}>
       <Block display="flex" justifyContent="space-between" marginBottom=".5rem">
-        <Label2 font="font450">Bruk</Label2>
+        <LabelMedium font="font450">Bruk</LabelMedium>
         {!!usage?.inUse && (
           <Button
             type="button"
@@ -146,7 +146,7 @@ export const Usage = (props: { usage?: CodeUsage; refresh: () => void }) => {
       )}
 
       {usage && <UsageTable usage={usage} />}
-      {!usage && <StyledSpinnerNext color={ettlevColors.green400} />}
+      {!usage && <Spinner $color={ettlevColors.green400} />}
     </Block>
   )
 }

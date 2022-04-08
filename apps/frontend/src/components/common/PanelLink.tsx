@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
-import RouteLink, { ExternalLink } from './RouteLink'
-import { Block, BlockOverrides, Display, Responsive, Scale } from 'baseui/block'
-import { borderColor, borderRadius, borderStyle, borderWidth, padding, paddingAll, paddingZero } from './Style'
-import { theme } from '../../util'
-import { ettlevColors } from '../../util/theme'
-import { HeadingXLarge, Label3, LabelLarge, LabelSmall, Paragraph4, ParagraphMedium, ParagraphSmall } from 'baseui/typography'
-import { arrowRightIcon, navChevronRightIcon } from '../Images'
+import React, {useState} from 'react'
+import RouteLink, {ExternalLink} from './RouteLink'
+import {Block, BlockOverrides, Display, Responsive, Scale} from 'baseui/block'
+import {borderColor, borderRadius, borderStyle, borderWidth, padding, paddingAll, paddingZero} from './Style'
+import {theme} from '../../util'
+import {ettlevColors} from '../../util/theme'
+import {HeadingXLarge, LabelLarge, LabelSmall, ParagraphMedium, ParagraphSmall, ParagraphXSmall} from 'baseui/typography'
+import {arrowRightIcon, navChevronRightIcon} from '../Images'
 import * as _ from 'lodash'
 import Button from './Button'
 
@@ -464,11 +464,11 @@ export const SimplePanel = ({
                 marginLeft={[theme.sizing.scale600, theme.sizing.scale600, theme.sizing.scale600, '0px', '0px', '0px']}
                 marginTop={[theme.sizing.scale600, theme.sizing.scale600, theme.sizing.scale600, '0px', '0px', '0px']}
               >
-                {rightTitle && <Label3 $style={{ fontSize: '14px' }}>{rightTitle}</Label3>}
+                {rightTitle && <LabelSmall $style={{ fontSize: '14px' }}>{rightTitle}</LabelSmall>}
                 {rightBeskrivelse && (
-                  <Paragraph4 marginBottom="0px" marginTop="0px" $style={{ lineHeight: '15px' }}>
+                  <ParagraphXSmall marginBottom="0px" marginTop="0px" $style={{ lineHeight: '15px' }}>
                     {rightBeskrivelse}
-                  </Paragraph4>
+                  </ParagraphXSmall>
                 )}
               </Block>
             </Block>

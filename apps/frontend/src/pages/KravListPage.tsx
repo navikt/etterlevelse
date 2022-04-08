@@ -1,5 +1,5 @@
 import {Block, Display, Responsive} from 'baseui/block'
-import {HeadingXXLarge, Label3, Paragraph2} from 'baseui/typography'
+import {HeadingXXLarge, LabelSmall, ParagraphMedium} from 'baseui/typography'
 import React, {useState} from 'react'
 import Button from '../components/common/Button'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
@@ -125,11 +125,11 @@ export const KravPanels = ({kravene, loading}: { kravene?: KravQL[] | Krav[]; lo
                 useDescriptionUnderline
                 href={`/krav/${k.kravNummer}/${k.kravVersjon}`}
                 title={
-                  <Paragraph2 $style={{fontSize: '14px', marginBottom: '0px', marginTop: '0px', lineHeight: '15px'}}>
+                  <ParagraphMedium $style={{fontSize: '14px', marginBottom: '0px', marginTop: '0px', lineHeight: '15px'}}>
                     K{k.kravNummer}.{k.kravVersjon}
-                  </Paragraph2>
+                  </ParagraphMedium>
                 }
-                beskrivelse={<Label3 $style={{fontSize: '18px', fontWeight: 600}}>{k.navn}</Label3>}
+                beskrivelse={<LabelSmall $style={{fontSize: '18px', fontWeight: 600}}>{k.navn}</LabelSmall>}
                 rightBeskrivelse={!!k.changeStamp.lastModifiedDate ? `Sist endret: ${moment(k.changeStamp.lastModifiedDate).format('ll')}` : ''}
                 rightTitle={tema && tema.shortName ? tema.shortName : ''}
                 statusText={

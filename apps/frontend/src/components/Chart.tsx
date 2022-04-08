@@ -1,13 +1,13 @@
-import React, { useReducer, useState } from 'react'
-import { Block } from 'baseui/block'
-import { Label1 } from 'baseui/typography'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChartBar, faChartPie, faCircle } from '@fortawesome/free-solid-svg-icons'
-import { Card } from 'baseui/card'
+import React, {useReducer, useState} from 'react'
+import {Block} from 'baseui/block'
+import {LabelLarge} from 'baseui/typography'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faChartBar, faChartPie, faCircle} from '@fortawesome/free-solid-svg-icons'
+import {Card} from 'baseui/card'
 import * as _ from 'lodash'
-import { StatefulTooltip } from 'baseui/tooltip'
-import { cardShadow, marginAll } from './common/Style'
-import { theme } from '../util'
+import {StatefulTooltip} from 'baseui/tooltip'
+import {cardShadow, marginAll} from './common/Style'
+import {theme} from '../util'
 
 const cursor = { cursor: 'pointer' }
 
@@ -99,7 +99,7 @@ const Visualization = (props: VisualizationProps) => {
             )}
             {!data.length && <Block width={size * 2 + 'px'} height={size * 2 + 'px'} />}
             <Block marginLeft={theme.sizing.scale200} marginRight={theme.sizing.scale200}>
-              <Label1 marginBottom={theme.sizing.scale300}>{title}</Label1>
+              <LabelLarge marginBottom={theme.sizing.scale300}>{title}</LabelLarge>
               {data.map((d, idx) => (
                 <div key={idx} onMouseOver={() => setHover(idx)} onClick={d.onClick}>
                   <Block backgroundColor={idx === hover ? theme.colors.accent50 : theme.colors.white} $style={cursor} display="flex" alignItems="center">

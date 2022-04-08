@@ -4,7 +4,7 @@ import React, {useEffect, useState} from 'react'
 import {getAllKrav} from '../../api/KravApi'
 import {Krav, KravStatus} from '../../constants'
 import {Block} from 'baseui/block'
-import {Label3, Paragraph2, Paragraph4} from 'baseui/typography'
+import {LabelSmall, ParagraphMedium, ParagraphXSmall} from 'baseui/typography'
 import {KravPanelHeader} from '../behandling/KravPanelHeader'
 import {borderStyle, marginAll, padding} from '../common/Style'
 import StatusView from '../common/StatusTag'
@@ -59,7 +59,7 @@ export const TemaList = () => {
             <CustomizedPanel title={<KravPanelHeader title={t.shortName} kravData={[]}/>} key={`${t.code}_krav_list`}>
               <CustomPanelDivider>
                 <Block display="flex" width="100%" marginLeft="24px">
-                  <Paragraph4>Ingen krav</Paragraph4>
+                  <ParagraphXSmall>Ingen krav</ParagraphXSmall>
                 </Block>
               </CustomPanelDivider>
             </CustomizedPanel>
@@ -80,11 +80,11 @@ const getKravTemaRowsWithLabel = (kraver: Krav[], tema: string) => {
             useDescriptionUnderline
             href={`/krav/${k.kravNummer}/${k.kravVersjon}`}
             title={
-              <Paragraph2 $style={{fontSize: '14px', marginBottom: '0px', marginTop: '0px', lineHeight: '15px'}}>
+              <ParagraphMedium $style={{fontSize: '14px', marginBottom: '0px', marginTop: '0px', lineHeight: '15px'}}>
                 K{k.kravNummer}.{k.kravVersjon}
-              </Paragraph2>
+              </ParagraphMedium>
             }
-            beskrivelse={<Label3 $style={{fontSize: '18px', fontWeight: 600}}>{k.navn}</Label3>}
+            beskrivelse={<LabelSmall $style={{fontSize: '18px', fontWeight: 600}}>{k.navn}</LabelSmall>}
             rightBeskrivelse={!!k.changeStamp.lastModifiedDate ? `Sist endret: ${moment(k.changeStamp.lastModifiedDate).format('ll')}` : ''}
             statusText={
               <StatusView status={k.status}/>

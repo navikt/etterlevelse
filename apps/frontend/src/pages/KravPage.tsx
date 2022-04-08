@@ -1,38 +1,32 @@
-import { Block } from 'baseui/block'
-import { H1, H2, HeadingXLarge, Paragraph2, Paragraph4 } from 'baseui/typography'
-import { useParams } from 'react-router-dom'
-import { deleteKrav, getKravByKravNummer, KravIdParams, kravMapToFormVal } from '../api/KravApi'
-import React, { useEffect, useRef, useState } from 'react'
-import { EtterlevelseQL, EtterlevelseStatus, ExternalCode, Krav, KravId, KravQL, KravStatus, KravVersjon } from '../constants'
+import {Block} from 'baseui/block'
+import {HeadingXLarge, HeadingXXLarge, ParagraphMedium, ParagraphXSmall} from 'baseui/typography'
+import {useParams} from 'react-router-dom'
+import {deleteKrav, getKravByKravNummer, KravIdParams, kravMapToFormVal} from '../api/KravApi'
+import React, {useEffect, useRef, useState} from 'react'
+import {Krav, KravId, KravQL, KravStatus, KravVersjon} from '../constants'
 import Button from '../components/common/Button'
-import { ViewKrav } from '../components/krav/ViewKrav'
-import { EditKrav } from '../components/krav/EditKrav'
-import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
-import { user } from '../services/User'
-import { theme } from '../util'
-import { FormikProps } from 'formik'
-import { DeleteItem } from '../components/DeleteItem'
-import { Spinner } from '../components/common/Spinner'
-import { borderColor, borderRadius, borderStyle, borderWidth, padding } from '../components/common/Style'
-import { useQuery } from '@apollo/client'
-import { Tilbakemeldinger } from '../components/krav/tilbakemelding/Tilbakemelding'
-import { editIcon, informationIcon, pageIcon, plusIcon, sadFolderIcon } from '../components/Images'
-import { Label } from '../components/common/PropertyLabel'
-import { CustomizedTabs } from '../components/common/CustomizedTabs'
-import { ettlevColors, maxPageWidth, pageWidth, responsivePaddingSmall, responsiveWidthSmall } from '../util/theme'
-import { CustomizedAccordion, CustomizedPanel, CustomPanelDivider } from '../components/common/CustomizedAccordion'
-import * as _ from 'lodash'
-import moment from 'moment'
-import { useLocationState, useQueryParam } from '../util/hooks'
-import { InfoBlock } from '../components/common/InfoBlock'
-import { gql } from '@apollo/client/core'
-import { PanelLink } from '../components/common/PanelLink'
+import {ViewKrav} from '../components/krav/ViewKrav'
+import {EditKrav} from '../components/krav/EditKrav'
+import {LoadingSkeleton} from '../components/common/LoadingSkeleton'
+import {user} from '../services/User'
+import {theme} from '../util'
+import {FormikProps} from 'formik'
+import {DeleteItem} from '../components/DeleteItem'
+import {borderColor, borderRadius, borderStyle, borderWidth, padding} from '../components/common/Style'
+import {useQuery} from '@apollo/client'
+import {Tilbakemeldinger} from '../components/krav/tilbakemelding/Tilbakemelding'
+import {editIcon, informationIcon, pageIcon, plusIcon} from '../components/Images'
+import {Label} from '../components/common/PropertyLabel'
+import {CustomizedTabs} from '../components/common/CustomizedTabs'
+import {ettlevColors, maxPageWidth, pageWidth, responsivePaddingSmall, responsiveWidthSmall} from '../util/theme'
+import {useLocationState, useQueryParam} from '../util/hooks'
+import {gql} from '@apollo/client/core'
 import ExpiredAlert from '../components/krav/ExpiredAlert'
-import CustomizedBreadcrumbs, { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
-import { codelist, ListName, TemaCode } from '../services/Codelist'
-import { Helmet } from 'react-helmet'
+import CustomizedBreadcrumbs, {breadcrumbPaths} from '../components/common/CustomizedBreadcrumbs'
+import {codelist, ListName, TemaCode} from '../services/Codelist'
+import {Helmet} from 'react-helmet'
 import Etterlevelser from '../components/krav/Etterlevelser'
-import { ampli } from '../services/Amplitude'
+import {ampli} from '../services/Amplitude'
 
 export const kravNumView = (it: { kravVersjon: number; kravNummer: number }) => `K${it.kravNummer}.${it.kravVersjon}`
 export const kravName = (krav: Krav) => `${kravNumView(krav)} ${krav.navn}`
@@ -199,11 +193,11 @@ export const KravPage = () => {
                     {krav && (
                       <Block display="flex" width="100%" justifyContent="flex-end">
                         <Block $style={{ ...borderWidth('1px'), ...borderColor('#A0A0A0'), ...borderStyle('solid'), ...borderRadius('4px') }}>
-                          <Paragraph4
+                          <ParagraphXSmall
                             $style={{ color: '#CCD9D7', fontSize: '16px', lineHeight: '20px', paddingLeft: '8px', paddingRight: '8px', marginTop: '2px', marginBottom: '2px' }}
                           >
                             Status: {kravStatus(krav.status)}
-                          </Paragraph4>
+                          </ParagraphXSmall>
                         </Block>
                       </Block>
                     )}
@@ -244,9 +238,9 @@ export const KravPage = () => {
                 <Block $style={{ color: '#F8F8F8', fontWeight: 700, fontSize: '18px', fontFamily: 'Source Sans Pro' }}>
                   {krav && krav?.kravNummer !== 0 ? kravNumView(krav) : 'Ny'}
                 </Block>
-                <H1 $style={{ color: '#F8F8F8' }} marginTop="16px">
+                <HeadingXXLarge $style={{ color: '#F8F8F8' }} marginTop="16px">
                   {krav && krav?.navn ? krav.navn : 'Ny'}{' '}
-                </H1>
+                </HeadingXXLarge>
 
                 {krav?.varselMelding && (
                   <Block
@@ -265,9 +259,9 @@ export const KravPage = () => {
                     justifyContent={'center'}
                   >
                     <img src={informationIcon} alt="" />
-                    <Paragraph2 marginLeft={theme.sizing.scale500} marginTop="0px" marginBottom="0px">
+                    <ParagraphMedium marginLeft={theme.sizing.scale500} marginTop="0px" marginBottom="0px">
                       {krav.varselMelding}
-                    </Paragraph2>
+                    </ParagraphMedium>
                   </Block>
                 )}
 
@@ -284,7 +278,7 @@ export const KravPage = () => {
             <Block maxWidth={maxPageWidth} width="100%">
               <Block width={responsiveWidthSmall} paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall} justifyContent="center" display="flex">
                 <Block marginTop="40px" width={pageWidth}>
-                  <H2 marginTop="0px">Hensikten med kravet</H2>
+                  <HeadingXLarge marginTop="0px">Hensikten med kravet</HeadingXLarge>
                   <Label title="" p1 markdown={krav.hensikt} />
                 </Block>
               </Block>

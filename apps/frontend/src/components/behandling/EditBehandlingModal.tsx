@@ -1,23 +1,23 @@
 import * as React from 'react'
 import CustomizedModal from '../common/CustomizedModal'
-import Button, { buttonContentStyle } from '../common/Button'
-import { Block } from 'baseui/block'
-import { theme } from '../../util'
-import { checkboxChecked, checkboxUnchecked, checkboxUncheckedHover, crossIcon } from '../Images'
-import { ettlevColors } from '../../util/theme'
-import { H1, H2, Paragraph2, Paragraph4 } from 'baseui/typography'
-import { Behandling, BehandlingEtterlevData, KravQL, KravStatus, PageResponse } from '../../constants'
-import { ButtonGroup } from 'baseui/button-group'
-import { Button as BaseUIButton, KIND } from 'baseui/button'
-import { Code, codelist, ListName } from '../../services/Codelist'
-import { borderRadius, marginZero } from '../common/Style'
-import { FieldArray, FieldArrayRenderProps, Form, Formik } from 'formik'
-import { mapToFormVal, updateBehandling } from '../../api/BehandlingApi'
+import Button, {buttonContentStyle} from '../common/Button'
+import {Block} from 'baseui/block'
+import {theme} from '../../util'
+import {checkboxChecked, checkboxUnchecked, checkboxUncheckedHover, crossIcon} from '../Images'
+import {ettlevColors} from '../../util/theme'
+import {HeadingXLarge, HeadingXXLarge, ParagraphMedium, ParagraphXSmall} from 'baseui/typography'
+import {Behandling, BehandlingEtterlevData, KravQL, KravStatus, PageResponse} from '../../constants'
+import {ButtonGroup} from 'baseui/button-group'
+import {Button as BaseUIButton, KIND} from 'baseui/button'
+import {Code, codelist, ListName} from '../../services/Codelist'
+import {borderRadius, marginZero} from '../common/Style'
+import {FieldArray, FieldArrayRenderProps, Form, Formik} from 'formik'
+import {mapToFormVal, updateBehandling} from '../../api/BehandlingApi'
 import * as yup from 'yup'
-import { FormControl } from 'baseui/form-control'
-import { gql, useQuery } from '@apollo/client'
-import { BehandlingStats } from './ViewBehandling'
-import { ModalOverrides } from 'baseui/modal'
+import {FormControl} from 'baseui/form-control'
+import {gql, useQuery} from '@apollo/client'
+import {BehandlingStats} from './ViewBehandling'
+import {ModalOverrides} from 'baseui/modal'
 
 type EditBehandlingModalProps = {
   showModal: boolean
@@ -144,12 +144,12 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
             <Block $style={{ borderTopLeftRadius: '8px', borderTopRightRadius: '8px' }} backgroundColor={ettlevColors.green800} height="100px" width="100%">
               <Block display="flex" justifyContent="space-between" paddingLeft={paddingLeft} paddingRight={theme.sizing.scale900}>
                 <Block>
-                  <H1 color={ettlevColors.grey50} marginBottom="0px">
+                  <HeadingXXLarge color={ettlevColors.grey50} marginBottom="0px">
                     Tilpass egenskaper
-                  </H1>
-                  <Paragraph4 $style={{ lineHeight: '20px', color: ettlevColors.grey50 }} marginTop={theme.sizing.scale0}>
+                  </HeadingXXLarge>
+                  <ParagraphXSmall $style={{ lineHeight: '20px', color: ettlevColors.grey50 }} marginTop={theme.sizing.scale0}>
                     {`B${props.behandling.nummer} - ${props.behandling.overordnetFormaal.shortName}: ${props.behandling.navn}`}
-                  </Paragraph4>
+                  </ParagraphXSmall>
                 </Block>
                 <Block display="flex" justifyContent="flex-end" paddingLeft={theme.sizing.scale1000}>
                   <Button kind="tertiary" onClick={props.close} $style={{ ':hover': { backgroundColor: 'transparent' } }}>
@@ -160,8 +160,8 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
             </Block>
 
             <Block paddingLeft={paddingLeft} paddingRight={paddingRight} marginTop={theme.sizing.scale1400}>
-              <H2>Egenskaper til behandling</H2>
-              <Paragraph2 $style={{ lineHeight: '20px' }}>Ved å oppgi egenskaper til behandlingen, blir kun relevante krav synlig for dokumentasjon.</Paragraph2>
+              <HeadingXLarge>Egenskaper til behandling</HeadingXLarge>
+              <ParagraphMedium $style={{ lineHeight: '20px' }}>Ved å oppgi egenskaper til behandlingen, blir kun relevante krav synlig for dokumentasjon.</ParagraphMedium>
               <FieldArray name="irrelevansFor">
                 {(p: FieldArrayRenderProps) => {
                   return (
@@ -238,9 +238,9 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
                                   },
                                 }}
                               >
-                                <Paragraph2 margin="0px" $style={{ lineHeight: '22px' }}>
+                                <ParagraphMedium margin="0px" $style={{ lineHeight: '22px' }}>
                                   {r.label}
-                                </Paragraph2>
+                                </ParagraphMedium>
                               </BaseUIButton>
                             )
                           })}
@@ -252,20 +252,20 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
               </FieldArray>
 
               <Block marginBottom="50px">
-                <Paragraph2 $style={{ lineHeight: '20px' }} marginTop={theme.sizing.scale900} marginBottom={theme.sizing.scale600}>
+                <ParagraphMedium $style={{ lineHeight: '20px' }} marginTop={theme.sizing.scale900} marginBottom={theme.sizing.scale600}>
                   Basert på dine opplysninger, skal behandlingen etterleve
-                </Paragraph2>
+                </ParagraphMedium>
                 <Block>
                   <Block>
                     <Block display="flex" alignItems="baseline" marginRight="30px">
-                      <Paragraph2
+                      <ParagraphMedium
                         $style={{ ...marginZero, fontWeight: 900, fontSize: '32px', lineHeight: '40px' }}
                         color={ettlevColors.navOransje}
                         marginRight={theme.sizing.scale300}
                       >
                         {stats.length}
-                      </Paragraph2>
-                      <Paragraph2 $style={{ ...marginZero }}>krav</Paragraph2>
+                      </ParagraphMedium>
+                      <ParagraphMedium $style={{ ...marginZero }}>krav</ParagraphMedium>
                     </Block>
                   </Block>
                   <Block
@@ -279,7 +279,7 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
                       marginTop: '-30px',
                     }}
                   >
-                    <Paragraph4 $style={{ lineHeight: '20px', fontWeight: 700 }}>Egenskaper: {selected.length} valgt</Paragraph4>
+                    <ParagraphXSmall $style={{ lineHeight: '20px', fontWeight: 700 }}>Egenskaper: {selected.length} valgt</ParagraphXSmall>
                   </Block>
                   <Block>
                     <Block display="flex" justifyContent="flex-end">

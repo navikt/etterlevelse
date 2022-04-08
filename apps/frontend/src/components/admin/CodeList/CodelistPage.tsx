@@ -1,23 +1,23 @@
 import * as React from 'react'
-import { useEffect } from 'react'
-import { StatefulSelect } from 'baseui/select'
-import { Block } from 'baseui/block'
-import { KIND, SIZE as ButtonSize } from 'baseui/button'
-import { useNavigate, useParams } from 'react-router-dom'
+import {useEffect} from 'react'
+import {StatefulSelect} from 'baseui/select'
+import {Block} from 'baseui/block'
+import {KIND, SIZE as ButtonSize} from 'baseui/button'
+import {useNavigate, useParams} from 'react-router-dom'
 
-import { H4 } from 'baseui/typography'
-import { StyledSpinnerNext } from 'baseui/spinner'
+import {HeadingMedium} from 'baseui/typography'
+import {Spinner} from 'baseui/spinner'
 import Button from '../../common/Button'
-import { faPlus } from '@fortawesome/free-solid-svg-icons'
-import { useAwait, useForceUpdate } from '../../../util/hooks'
-import { Code, codelist, CodeListFormValues } from '../../../services/Codelist'
-import { createCodelist } from '../../../api/CodelistApi'
-import { theme } from '../../../util'
-import { user } from '../../../services/User'
+import {faPlus} from '@fortawesome/free-solid-svg-icons'
+import {useAwait, useForceUpdate} from '../../../util/hooks'
+import {Code, codelist, CodeListFormValues} from '../../../services/Codelist'
+import {createCodelist} from '../../../api/CodelistApi'
+import {theme} from '../../../util'
+import {user} from '../../../services/User'
 import CreateCodeListModal from './ModalCreateCodeList'
 import CodeListTable from './CodeListStyledTable'
-import { ettlevColors, responsivePaddingSmall, responsiveWidthSmall } from '../../../util/theme'
-import { Helmet } from 'react-helmet'
+import {ettlevColors, responsivePaddingSmall, responsiveWidthSmall} from '../../../util/theme'
+import {Helmet} from 'react-helmet'
 
 const CodeListPage = () => {
   const params = useParams<{ listname?: string }>()
@@ -61,7 +61,7 @@ const CodeListPage = () => {
   }, [listname, lists])
 
   if (!user.isAdmin() || !lists) {
-    return <StyledSpinnerNext color={ettlevColors.green400} size={theme.sizing.scale2400} />
+    return <Spinner $color={ettlevColors.green400} $size={theme.sizing.scale2400} />
   }
 
   return (
@@ -70,9 +70,9 @@ const CodeListPage = () => {
         <meta charSet="utf-8" />
         <title>{listname ? listname : ''} </title>
       </Helmet>
-      <H4>Administrering av kodeverk</H4>
+      <HeadingMedium>Administrering av kodeverk</HeadingMedium>
       {loading ? (
-        <StyledSpinnerNext color={ettlevColors.green400} />
+        <Spinner $color={ettlevColors.green400} />
       ) : (
         <Block display="flex" justifyContent="space-between" width="100%">
           <Block width="600px">
@@ -86,7 +86,7 @@ const CodeListPage = () => {
           </Block>
           {listname && (
             <Block>
-              <Button tooltip="Legg til ny" icon={faPlus} size={ButtonSize.compact} kind={KIND.minimal} onClick={() => setCreateCodeListModal(!createCodeListModal)}>
+              <Button tooltip="Legg til ny" icon={faPlus} size={ButtonSize.compact} kind={KIND.tertiary} onClick={() => setCreateCodeListModal(!createCodeListModal)}>
                 Opprett ny kode
               </Button>
             </Block>

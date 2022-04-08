@@ -1,21 +1,21 @@
-import { Block } from 'baseui/block'
-import { Spinner } from 'baseui/icon'
-import { H1, HeadingXLarge, Paragraph2 } from 'baseui/typography'
+import {Block} from 'baseui/block'
+import {Spinner} from 'baseui/icon'
+import {HeadingXLarge, HeadingXXLarge, ParagraphMedium} from 'baseui/typography'
 import _ from 'lodash'
 import moment from 'moment'
-import { useState } from 'react'
-import { Etterlevelse, EtterlevelseQL, EtterlevelseStatus, ExternalCode, Krav, KravQL } from '../../constants'
-import { kravNumView } from '../../pages/KravPage'
-import { theme } from '../../util'
-import { ettlevColors, maxPageWidth, responsivePaddingExtraLarge } from '../../util/theme'
+import {useState} from 'react'
+import {Etterlevelse, EtterlevelseQL, EtterlevelseStatus, ExternalCode, Krav, KravQL} from '../../constants'
+import {kravNumView} from '../../pages/KravPage'
+import {theme} from '../../util'
+import {ettlevColors, maxPageWidth, responsivePaddingExtraLarge} from '../../util/theme'
 import Button from '../common/Button'
-import { CustomizedAccordion, CustomizedPanel, CustomPanelDivider } from '../common/CustomizedAccordion'
+import {CustomizedAccordion, CustomizedPanel, CustomPanelDivider} from '../common/CustomizedAccordion'
 import CustomizedModal from '../common/CustomizedModal'
-import { InfoBlock } from '../common/InfoBlock'
-import { PanelButton, PanelLink } from '../common/PanelLink'
-import { borderRadius, borderStyle, marginAll } from '../common/Style'
-import { ViewEtterlevelse } from '../etterlevelse/ViewEtterlevelse'
-import { sadFolderIcon } from '../Images'
+import {InfoBlock} from '../common/InfoBlock'
+import {PanelButton, PanelLink} from '../common/PanelLink'
+import {borderRadius, borderStyle, marginAll} from '../common/Style'
+import {ViewEtterlevelse} from '../etterlevelse/ViewEtterlevelse'
+import {sadFolderIcon} from '../Images'
 
 export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolean; krav: KravQL; modalVersion?: boolean }) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
@@ -152,7 +152,7 @@ export const EtterlevelseModal = ({
       <Block width="100%">
         <Block backgroundColor={ettlevColors.green800} paddingTop="32px" paddingBottom="32px">
           <Block paddingLeft={responsivePaddingExtraLarge} paddingRight={responsivePaddingExtraLarge}>
-            <Paragraph2
+            <ParagraphMedium
               $style={{
                 marginTop: '0px',
                 marginBottom: '0px',
@@ -160,8 +160,8 @@ export const EtterlevelseModal = ({
               }}
             >
               {kravNumView(kravData)}
-            </Paragraph2>
-            <H1 $style={{ marginTop: '0px', marginBottom: '0px', paddingBottom: '32px', color: ettlevColors.white }}>{kravData.navn}</H1>
+            </ParagraphMedium>
+            <HeadingXXLarge $style={{ marginTop: '0px', marginBottom: '0px', paddingBottom: '32px', color: ettlevColors.white }}>{kravData.navn}</HeadingXXLarge>
           </Block>
         </Block>
 

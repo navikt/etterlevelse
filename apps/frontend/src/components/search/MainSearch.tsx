@@ -1,26 +1,26 @@
 import * as React from 'react'
-import { ReactElement, useEffect, useState } from 'react'
-import { Select, SelectOverrides, SelectProps, SIZE, TYPE, Value } from 'baseui/select'
-import { theme } from '../../util'
-import { useDebouncedState, useQueryParam } from '../../util/hooks'
-import { prefixBiasedSort } from '../../util/sort'
-import { Block } from 'baseui/block'
-import { useNavigate, useLocation } from 'react-router-dom'
+import {ReactElement, useEffect, useState} from 'react'
+import {Select, SelectOverrides, SelectProps, SIZE, TYPE, Value} from 'baseui/select'
+import {theme} from '../../util'
+import {useDebouncedState, useQueryParam} from '../../util/hooks'
+import {prefixBiasedSort} from '../../util/sort'
+import {Block} from 'baseui/block'
+import {useLocation, useNavigate} from 'react-router-dom'
 import Button from '../common/Button'
-import { Radio, RadioGroup } from 'baseui/radio'
-import { borderWidth, padding, paddingZero } from '../common/Style'
+import {Radio, RadioGroup} from 'baseui/radio'
+import {borderWidth, padding, paddingZero} from '../common/Style'
 import SearchLabel from './components/SearchLabel'
-import { NavigableItem, ObjectType } from '../admin/audit/AuditTypes'
-import { Behandling, Krav, KravStatus } from '../../constants'
+import {NavigableItem, ObjectType} from '../admin/audit/AuditTypes'
+import {Behandling, Krav, KravStatus} from '../../constants'
 import shortid from 'shortid'
-import { ettlevColors, searchResultColor } from '../../util/theme'
-import { kravName } from '../../pages/KravPage'
-import { getKravByKravNumberAndVersion, searchKrav, searchKravByNumber } from '../../api/KravApi'
-import { behandlingName, searchBehandling } from '../../api/BehandlingApi'
-import { codelist, ListName } from '../../services/Codelist'
-import { clearSearchIcon, filterIcon, navChevronDownIcon, searchIcon } from '../Images'
-import { Paragraph2 } from 'baseui/typography'
-import { urlForObject } from '../common/RouteLink'
+import {ettlevColors, searchResultColor} from '../../util/theme'
+import {kravName} from '../../pages/KravPage'
+import {getKravByKravNumberAndVersion, searchKrav, searchKravByNumber} from '../../api/KravApi'
+import {behandlingName, searchBehandling} from '../../api/BehandlingApi'
+import {codelist, ListName} from '../../services/Codelist'
+import {clearSearchIcon, filterIcon, navChevronDownIcon, searchIcon} from '../Images'
+import {ParagraphMedium} from 'baseui/typography'
+import {urlForObject} from '../common/RouteLink'
 
 shortid.characters('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@')
 
@@ -64,7 +64,7 @@ const SmallRadio = (value: SearchType, label: string) => {
         },
       }}
     >
-      <Paragraph2
+      <ParagraphMedium
         $style={{
           marginLeft: theme.sizing.scale300,
           marginTop: theme.sizing.scale500,
@@ -72,7 +72,7 @@ const SmallRadio = (value: SearchType, label: string) => {
         }}
       >
         {label}
-      </Paragraph2>
+      </ParagraphMedium>
     </Radio>
   )
 }
@@ -84,7 +84,7 @@ const SelectType = (props: { type: SearchType; setType: (type: SearchType) => vo
       {!filter && (
         <Block width="100%" display="flex" flex="1" justifyContent="flex-end" marginBottom="-10px">
           <Button size="mini" onClick={() => setFilter(!filter)} startEnhancer={<img alt="" src={filterIcon} />} kind="tertiary" marginRight label="Filter søkeresultat" notBold>
-            <Paragraph2
+            <ParagraphMedium
               $style={{
                 fontSize: theme.sizing.scale600,
                 marginTop: 0,
@@ -92,7 +92,7 @@ const SelectType = (props: { type: SearchType; setType: (type: SearchType) => vo
               }}
             >
               Vis filter
-            </Paragraph2>
+            </ParagraphMedium>
           </Button>
         </Block>
       )}

@@ -1,6 +1,6 @@
-import { Modal, ModalProps, SIZE } from 'baseui/modal'
+import {Modal, ModalProps, SIZE} from 'baseui/modal'
 import _ from 'lodash'
-import { maxPageWidth } from '../../util/theme'
+import {maxPageWidth} from '../../util/theme'
 
 const CuztomizedModal = (props: ModalProps) => {
   const { overrides, ...otherProps } = props
@@ -29,6 +29,6 @@ const CuztomizedModal = (props: ModalProps) => {
 
   const mergedOverrides = _.merge(customOverrides, props.overrides)
 
-  return <Modal closeable={false} {...otherProps} unstable_ModalBackdropScroll size={props.size ? props.size : SIZE.full} overrides={mergedOverrides} />
+  return <Modal closeable={false} {...otherProps} size={props.size ? props.size : SIZE.full} overrides={mergedOverrides} />
 }
 export default CuztomizedModal

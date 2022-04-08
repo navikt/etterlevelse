@@ -1,40 +1,40 @@
-import React, { useEffect, useState } from 'react'
-import { Block, Display } from 'baseui/block'
-import { useLocation, useNavigate, useParams } from 'react-router-dom'
-import { H1, H2, Label3, Paragraph2, Paragraph4 } from 'baseui/typography'
-import { ettlevColors, maxPageWidth, theme } from '../util/theme'
-import { codelist, ListName, TemaCode } from '../services/Codelist'
-import RouteLink, { urlForObject } from '../components/common/RouteLink'
-import { useBehandling } from '../api/BehandlingApi'
-import { Layout2 } from '../components/scaffold/Page'
-import { Etterlevelse, EtterlevelseStatus, KravEtterlevelseData, KravQL, KravStatus, PageResponse } from '../constants'
-import { arkPennIcon, crossIcon } from '../components/Images'
-import { useQuery } from '@apollo/client'
-import { CustomizedAccordion, CustomizedPanel, CustomPanelDivider } from '../components/common/CustomizedAccordion'
+import React, {useEffect, useState} from 'react'
+import {Block, Display} from 'baseui/block'
+import {useLocation, useNavigate, useParams} from 'react-router-dom'
+import {HeadingXLarge, HeadingXXLarge, LabelSmall, ParagraphMedium, ParagraphXSmall} from 'baseui/typography'
+import {ettlevColors, maxPageWidth, theme} from '../util/theme'
+import {codelist, ListName, TemaCode} from '../services/Codelist'
+import RouteLink, {urlForObject} from '../components/common/RouteLink'
+import {useBehandling} from '../api/BehandlingApi'
+import {Layout2} from '../components/scaffold/Page'
+import {Etterlevelse, EtterlevelseStatus, KravEtterlevelseData, KravQL, KravStatus, PageResponse} from '../constants'
+import {arkPennIcon, crossIcon} from '../components/Images'
+import {useQuery} from '@apollo/client'
+import {CustomizedAccordion, CustomizedPanel, CustomPanelDivider} from '../components/common/CustomizedAccordion'
 import CustomizedModal from '../components/common/CustomizedModal'
-import { Spinner } from '../components/common/Spinner'
-import { useEtterlevelse } from '../api/EtterlevelseApi'
-import { EditEtterlevelse } from '../components/etterlevelse/EditEtterlevelse'
-import { behandlingKravQuery, getKravByKravNumberAndVersion, KravId } from '../api/KravApi'
-import { borderStyle } from '../components/common/Style'
-import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
+import {Spinner} from '../components/common/Spinner'
+import {useEtterlevelse} from '../api/EtterlevelseApi'
+import {EditEtterlevelse} from '../components/etterlevelse/EditEtterlevelse'
+import {behandlingKravQuery, getKravByKravNumberAndVersion, KravId} from '../api/KravApi'
+import {borderStyle} from '../components/common/Style'
+import {breadcrumbPaths} from '../components/common/CustomizedBreadcrumbs'
 import Button from '../components/common/Button'
-import { Responsive } from 'baseui/theme'
-import { KravPanelHeader } from '../components/behandling/KravPanelHeader'
-import { sortKraverByPriority } from '../util/sort'
+import {Responsive} from 'baseui/theme'
+import {KravPanelHeader} from '../components/behandling/KravPanelHeader'
+import {sortKraverByPriority} from '../util/sort'
 import _ from 'lodash'
-import { getAllKravPriority } from '../api/KravPriorityApi'
-import { env } from '../util/env'
-import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {getAllKravPriority} from '../api/KravPriorityApi'
+import {env} from '../util/env'
+import {faExternalLinkAlt} from '@fortawesome/free-solid-svg-icons'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import CustomizedLink from '../components/common/CustomizedLink'
 import StatusView from '../components/common/StatusTag'
 import moment from 'moment'
-import { Helmet } from 'react-helmet'
+import {Helmet} from 'react-helmet'
 import CustomizedSelect from '../components/common/CustomizedSelect'
-import { Option } from 'baseui/select'
-import { user } from '../services/User'
-import { getEtterlevelseStatus, getEtterlevelseStatusLabelColor } from '../components/behandling/utils'
+import {Option} from 'baseui/select'
+import {user} from '../services/User'
+import {getEtterlevelseStatus, getEtterlevelseStatusLabelColor} from '../components/behandling/utils'
 
 const responsiveBreakPoints: Responsive<Display> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
 
@@ -172,19 +172,19 @@ export const BehandlingerTemaPage = () => {
             </title>
           </Helmet>
           <Block>
-            <H1 marginTop="0" color={ettlevColors.green800}>
+            <HeadingXXLarge marginTop="0" color={ettlevColors.green800}>
               {temaData?.shortName}
-            </H1>
+            </HeadingXXLarge>
             <RouteLink href={urlForObject(ListName.TEMA, temaData?.code)}>Les om tema</RouteLink>
           </Block>
           <Block marginTop={theme.sizing.scale900} flex="1" width="100%" display="flex">
             <Block>
-              <Paragraph2 $style={{ marginTop: '0px', maxWidth: '700px' }} marginBottom={0}>
-                <Label3>Behandling: </Label3>
+              <ParagraphMedium $style={{ marginTop: '0px', maxWidth: '700px' }} marginBottom={0}>
+                <LabelSmall>Behandling: </LabelSmall>
                 <CustomizedLink href={`${env.pollyBaseUrl}process/${behandling.id}`} style={{ color: ettlevColors.black }} target="_blank" rel="noopener noreferrer">
                   B{behandling.nummer} {behandling.overordnetFormaal.shortName}: {behandling.navn} <FontAwesomeIcon icon={faExternalLinkAlt} />
                 </CustomizedLink>
-              </Paragraph2>
+              </ParagraphMedium>
             </Block>
           </Block>
         </>
@@ -199,27 +199,27 @@ export const BehandlingerTemaPage = () => {
           <img src={arkPennIcon} alt="test" height="32px" width="32px" />
         </Block>
         <Block>
-          <H2 marginTop="0px" marginBottom="0px">
+          <HeadingXLarge marginTop="0px" marginBottom="0px">
             {irrelevantKrav ? 'Krav dere har filtrert bort' : 'Krav til utfylling'}
-          </H2>
+          </HeadingXLarge>
         </Block>
       </Block>
 
       <Block display="flex" alignItems="center">
         <Block display="flex" alignItems="baseline" marginRight="30px">
-          <Paragraph2 $style={{ fontWeight: 900, fontSize: '32px', lineHeight: '0px' }} color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
+          <ParagraphMedium $style={{ fontWeight: 900, fontSize: '32px', lineHeight: '0px' }} color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
             {irrelevantKrav ? skalUtfyllesKrav.length : kravData.filter((k) => k.gammelVersjon === false).length}
-          </Paragraph2>
-          <Paragraph2>krav</Paragraph2>
+          </ParagraphMedium>
+          <ParagraphMedium>krav</ParagraphMedium>
         </Block>
         {!irrelevantKrav && (
           <>
             <Block $style={{ border: '1px solid ' + ettlevColors.green50, background: '#102723' }} height="40px" />
             <Block display="flex" alignItems="baseline" marginLeft="30px">
-              <Paragraph2 $style={{ fontWeight: 900, fontSize: '32px', lineHeight: '0px' }} color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
+              <ParagraphMedium $style={{ fontWeight: 900, fontSize: '32px', lineHeight: '0px' }} color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
                 {getPercentageUtfylt()}
-              </Paragraph2>
-              <Paragraph2> ferdig utfylt</Paragraph2>
+              </ParagraphMedium>
+              <ParagraphMedium> ferdig utfylt</ParagraphMedium>
             </Block>
           </>
         )}
@@ -266,7 +266,7 @@ export const BehandlingerTemaPage = () => {
       return (
         <CustomPanelDivider>
           <Block display="flex" width="100%" marginLeft="24px">
-            <Paragraph4> {emptyMessage}</Paragraph4>
+            <ParagraphXSmall> {emptyMessage}</ParagraphXSmall>
           </Block>
         </CustomPanelDivider>
       )
@@ -405,12 +405,12 @@ const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function; setKra
     >
       <Block display="flex" justifyContent="center" alignItems="center" width="100%" onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
         <Block marginLeft="24px">
-          <Paragraph4 $style={{ fontSize: '16px', lineHeight: '24px', marginBottom: '0px', marginTop: '0px', width: 'fit-content', textDecoration: hover ? 'underline' : 'none' }}>
+          <ParagraphXSmall $style={{ fontSize: '16px', lineHeight: '24px', marginBottom: '0px', marginTop: '0px', width: 'fit-content', textDecoration: hover ? 'underline' : 'none' }}>
             K{props.krav.kravNummer}.{props.krav.kravVersjon}
-          </Paragraph4>
-          <Label3 $style={{ fontSize: '18px', fontWeight: 600, alignContent: 'flex-start', textAlign: 'left', textDecoration: hover ? 'underline' : 'none' }}>
+          </ParagraphXSmall>
+          <LabelSmall $style={{ fontSize: '18px', fontWeight: 600, alignContent: 'flex-start', textAlign: 'left', textDecoration: hover ? 'underline' : 'none' }}>
             {props.krav.navn}
-          </Label3>
+          </LabelSmall>
         </Block>
         <Block display="flex" justifyContent="flex-end" flex="1" width="100%">
           <Block width="350px" display="flex" justifyContent="flex-end" marginLeft="32px">
@@ -420,9 +420,9 @@ const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function; setKra
             <Block marginLeft="31px" maxWidth="140px" width="100%">
               {props.krav.etterlevelseChangeStamp?.lastModifiedDate && (
                 <Block width="100%" display="flex" justifyContent="flex-end">
-                  <Paragraph4 $style={{ lineHeight: '19px', textAlign: 'right', marginTop: '0px', marginBottom: '0px', whiteSpace: 'nowrap' }}>
+                  <ParagraphXSmall $style={{ lineHeight: '19px', textAlign: 'right', marginTop: '0px', marginBottom: '0px', whiteSpace: 'nowrap' }}>
                     Sist utfylt: {moment(props.krav.etterlevelseChangeStamp?.lastModifiedDate).format('ll')}
-                  </Paragraph4>
+                  </ParagraphXSmall>
                 </Block>
               )}
             </Block>

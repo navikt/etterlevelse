@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import {Block, Display} from 'baseui/block'
 import {useParams} from 'react-router-dom'
-import {H4, Paragraph2} from 'baseui/typography'
+import {HeadingMedium, ParagraphMedium} from 'baseui/typography'
 import {ettlevColors} from '../util/theme'
 import {codelist, ListName, TemaCode} from '../services/Codelist'
 import {useBehandling} from '../api/BehandlingApi'
@@ -232,7 +232,7 @@ export const BehandlingerTemaPageV2 = () => {
                   kravList={getKravData(kravRelevans[0].id)}
                   EmptyMessage={
                     <Block>
-                      <H4
+                      <HeadingMedium
                         maxWidth={'600px'}
                         $style={{
                           fontStyle: 'italic',
@@ -240,15 +240,15 @@ export const BehandlingerTemaPageV2 = () => {
                       >
                         {kravRelevans[0].id === 'relevanteKrav' ? 'Dere har filtrert bort alle krav for ' : 'Dere har ingen bortfiltrerte krav for '}
                         {temaData?.shortName}
-                      </H4>
-                      <Paragraph2
+                      </HeadingMedium>
+                      <ParagraphMedium
                         maxWidth={'600px'}
                         $style={{
                           fontStyle: 'italic',
                         }}
                       >
                         Om bortfiltreringen av dette tema er feil, justeres det ved å velge de korrekte egenskapene for behandlingen under innstillinger.
-                      </Paragraph2>
+                      </ParagraphMedium>
                     </Block>
                   }
                   sortingAvailable={true}

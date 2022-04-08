@@ -1,19 +1,19 @@
-import { useEffect, useState } from 'react'
-import { codelist, ListName, LovCode } from '../../services/Codelist'
-import { useKravFilter } from '../../api/KravGraphQLApi'
-import { emptyPage, KravListFilter, KravQL, KravStatus } from '../../constants'
-import { Block, Responsive, Scale } from 'baseui/block'
-import { Option, SelectOverrides } from 'baseui/select'
+import {useEffect, useState} from 'react'
+import {codelist, ListName} from '../../services/Codelist'
+import {useKravFilter} from '../../api/KravGraphQLApi'
+import {emptyPage, KravListFilter, KravQL, KravStatus} from '../../constants'
+import {Block, Responsive, Scale} from 'baseui/block'
+import {Option, SelectOverrides} from 'baseui/select'
 import CustomizedSelect from '../common/CustomizedSelect'
-import { ettlevColors, theme } from '../../util/theme'
-import { Spinner } from '../common/Spinner'
-import { Notification } from 'baseui/notification'
-import { H2, Label3, LabelSmall, Paragraph2 } from 'baseui/typography'
+import {ettlevColors, theme} from '../../util/theme'
+import {Spinner} from '../common/Spinner'
+import {Notification} from 'baseui/notification'
+import {HeadingXLarge, LabelSmall, ParagraphMedium} from 'baseui/typography'
 import Button from '../common/Button'
-import { faPlus } from '@fortawesome/free-solid-svg-icons'
-import { KravPanels, sortKrav } from '../../pages/KravListPage'
-import { borderColor } from '../common/Style'
-import { kravStatus } from '../../pages/KravPage'
+import {faPlus} from '@fortawesome/free-solid-svg-icons'
+import {KravPanels, sortKrav} from '../../pages/KravListPage'
+import {borderColor} from '../common/Style'
+import {kravStatus} from '../../pages/KravPage'
 
 type KravFilter = {
   status: Option[]
@@ -221,13 +221,13 @@ export const AllKrav = () => {
       <Block width="100%" justifyContent="center" marginTop="20px" marginBottom="20px">
         <Block display={['block', 'block', 'block', 'block', 'block', 'flex']} justifyContent="center" alignContent="center" width="100%">
           <Block display="flex" justifyContent="flex-start" width="100%">
-            <H2 marginTop="0px" marginBottom="0px">
+            <HeadingXLarge marginTop="0px" marginBottom="0px">
               {kravene.totalElements ? kravene.totalElements : 0} Krav
-            </H2>
+            </HeadingXLarge>
           </Block>
           <Block display="flex" justifyContent="flex-end" width="100%" alignItems="center">
             <Block display={['block', 'block', 'block', 'block', 'flex', 'flex']} alignItems="center" justifyContent="flex-start" width="100%">
-              <Label3>Filter</Label3>
+              <LabelSmall>Filter</LabelSmall>
               {/* {getSelector(filter.tema[0].id?.toString(), KravListFilter.TEMAER, getOptions(
                 'Alle tema',
                 temaer?.map((t) => {
@@ -259,7 +259,7 @@ export const AllKrav = () => {
 
             {/*
             <Block >
-              <Label3>Sorter:</Label3>
+              <LabelSmall>Sorter:</LabelSmall>
             </Block>
             <Block marginLeft="17px">
               <RadioGroup
@@ -283,7 +283,7 @@ export const AllKrav = () => {
       <KravPanels kravene={sortedKravList} loading={loading} />
       {sortedKravList.length === 0 && (
         <Block width="100%" display="flex" justifyContent="center">
-          <Paragraph2>Fant ingen krav</Paragraph2>
+          <ParagraphMedium>Fant ingen krav</ParagraphMedium>
         </Block>
       )}
 

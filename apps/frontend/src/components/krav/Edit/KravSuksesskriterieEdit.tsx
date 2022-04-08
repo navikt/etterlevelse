@@ -1,26 +1,26 @@
-import { FieldWrapper } from '../../common/Inputs'
-import { FieldArray, FieldArrayRenderProps } from 'formik'
-import React, { useEffect, useState } from 'react'
-import { Suksesskriterie } from '../../../constants'
-import { FormControl } from 'baseui/form-control'
-import { Block } from 'baseui/block'
-import Button, { buttonBorderStyle } from '../../common/Button'
+import {FieldWrapper} from '../../common/Inputs'
+import {FieldArray, FieldArrayRenderProps} from 'formik'
+import React, {useEffect, useState} from 'react'
+import {Suksesskriterie} from '../../../constants'
+import {FormControl} from 'baseui/form-control'
+import {Block} from 'baseui/block'
+import Button, {buttonBorderStyle} from '../../common/Button'
 import * as _ from 'lodash'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
-import { faGripVertical, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons'
+import {faGripVertical, faPlus, faTrash} from '@fortawesome/free-solid-svg-icons'
 import TextEditor from '../../common/TextEditor/TextEditor'
-import { Card } from 'baseui/card'
-import { theme } from '../../../util'
-import { useDebouncedState } from '../../../util/hooks'
-import { DragDropContext, Draggable, DraggableProvidedDragHandleProps, DraggingStyle, Droppable } from 'react-beautiful-dnd'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { kravModal } from '../EditKrav'
+import {Card} from 'baseui/card'
+import {theme} from '../../../util'
+import {useDebouncedState} from '../../../util/hooks'
+import {DragDropContext, Draggable, DraggableProvidedDragHandleProps, DraggingStyle, Droppable} from 'react-beautiful-dnd'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {kravModal} from '../EditKrav'
 import CustomizedInput from '../../common/CustomizedInput'
-import { ettlevColors } from '../../../util/theme'
-import { Error } from '../../common/ModalSchema'
-import { borderColor } from '../../common/Style'
-import { ALIGN, Radio, RadioGroup } from 'baseui/radio'
-import { Label3 } from 'baseui/typography'
+import {ettlevColors} from '../../../util/theme'
+import {Error} from '../../common/ModalSchema'
+import {borderColor} from '../../common/Style'
+import {ALIGN, Radio, RadioGroup} from 'baseui/radio'
+import {LabelSmall} from 'baseui/typography'
 
 export const KravSuksesskriterierEdit = () => {
   return (
@@ -201,9 +201,9 @@ const Kriterie = ({
           <TextEditor initialValue={beskrivelse} setValue={setBeskrivelse} height={'250px'} />
         </FormControl>
         <Block display="flex" flex="1" justifyContent="center">
-          <Label3 marginBottom="6px" marginTop="6px" marginRight="14px" $style={{ maxWidth: '162px', width: '100%', fontWeight: 600, lineHeight: '22px' }}>
+          <LabelSmall marginBottom="6px" marginTop="6px" marginRight="14px" $style={{ maxWidth: '162px', width: '100%', fontWeight: 600, lineHeight: '22px' }}>
             Velg type besvarelse:
-          </Label3>
+          </LabelSmall>
 
           <FormControl overrides={{ ControlContainer: { style: { marginBottom: '0px' } } }}>
             <RadioGroup
