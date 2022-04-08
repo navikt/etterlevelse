@@ -2,6 +2,12 @@ import 'react-app-polyfill/ie11'
 import 'react-app-polyfill/stable'
 import React from 'react'
 import Main from './main'
-import ReactDOM from 'react-dom'
 
-ReactDOM.render(<Main/>, document.getElementById('root'))
+import {createRoot} from 'react-dom/client'
+
+
+const container = document.getElementById('root')
+if (container !== null) {
+  const root = createRoot(container)
+  root.render(<Main/>)
+}
