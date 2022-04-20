@@ -176,7 +176,7 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: ObjectType 
         >
           <Button
             kind={KIND.tertiary}
-            endEnhancer={<>{TriangleDown}</>}
+            endEnhancer={TriangleDown}
             overrides={{
               BaseButton: {
                 style: {

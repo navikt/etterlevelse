@@ -108,7 +108,7 @@ export const MailLogPage = () => {
         >
           <Button
             kind={KIND.tertiary}
-            endEnhancer={<>{TriangleDown}</>}
+            endEnhancer={TriangleDown}
             overrides={{
               BaseButton: {
                 style: {
