@@ -18,3 +18,4 @@
 - Gi tilgang til epostinnlogging i azure
     - App-registrations -> finn app -> Authentication
         - Advanced settings -> Allow public client flows -> Enable the following mobile and desktop flows: Yes
+
