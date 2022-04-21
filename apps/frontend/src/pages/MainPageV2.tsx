@@ -1,21 +1,21 @@
-import { Narrow, Page, Wide } from '../components/scaffold/Page'
-import { ettlevColors, theme } from '../util/theme'
-import { Block } from 'baseui/block'
-import { H2, HeadingXXLarge, Label4, Paragraph1, Paragraph2 } from 'baseui/typography'
-import { PanelLink, PanelLinkCard } from '../components/common/PanelLink'
-import { grafIconBg, handWithLeaf, paperPenIconBg, paragrafIconBg } from '../components/Images'
-import { Card } from 'baseui/card'
-import { borderColor, borderRadius, borderStyle, borderWidth, margin, paddingAll } from '../components/common/Style'
+import {Narrow, Page, Wide} from '../components/scaffold/Page'
+import {ettlevColors, theme} from '../util/theme'
+import {Block} from 'baseui/block'
+import {HeadingXLarge, HeadingXXLarge, LabelXSmall, ParagraphMedium} from 'baseui/typography'
+import {PanelLink, PanelLinkCard} from '../components/common/PanelLink'
+import {grafIconBg, handWithLeaf, paperPenIconBg, paragrafIconBg} from '../components/Images'
+import {Card} from 'baseui/card'
+import {borderColor, borderRadius, borderStyle, borderWidth, margin, paddingAll} from '../components/common/Style'
 import ReactPlayer from 'react-player'
-import { Button, SIZE } from 'baseui/button'
-import { faPlay } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { buttonBorderStyle, buttonContentStyle } from '../components/common/Button'
-import React, { useEffect, useState } from 'react'
-import { Markdown } from '../components/common/Markdown'
-import { AlertType, Melding, MeldingStatus, MeldingType } from '../constants'
-import { getMeldingByType } from '../api/MeldingApi'
-import { ampli } from '../services/Amplitude'
+import {Button, SIZE} from 'baseui/button'
+import {faPlay} from '@fortawesome/free-solid-svg-icons'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {buttonBorderStyle, buttonContentStyle} from '../components/common/Button'
+import React, {useEffect, useState} from 'react'
+import {Markdown} from '../components/common/Markdown'
+import {AlertType, Melding, MeldingStatus, MeldingType} from '../constants'
+import {getMeldingByType} from '../api/MeldingApi'
+import {ampli} from '../services/Amplitude'
 
 const cardWidth = ['95%', '95%', '95%', '95%', '31%', '31%']
 const cardHeight = ['auto', 'auto', 'auto', 'auto', '140px', '140px']
@@ -109,15 +109,15 @@ export const MainPageV2 = () => {
                 <Markdown source={forsideVarsel.melding} fontSize="18px" />
               </Block>
             )}
-            <H2 $style={{ fontWeight: 300, fontSize: '32px', lineHeight: '42px' }} marginTop="0px" marginBottom="0px">
+            <HeadingXLarge $style={{ fontWeight: 300, fontSize: '32px', lineHeight: '42px' }} marginTop="0px" marginBottom="0px">
               Etterlevelseskravene er
-            </H2>
-            <H2 $style={{ wordBreak: 'break-word', fontSize: '32px', lineHeight: '42px' }} marginTop="0px" marginBottom="0px">
+            </HeadingXLarge>
+            <HeadingXLarge $style={{ wordBreak: 'break-word', fontSize: '32px', lineHeight: '42px' }} marginTop="0px" marginBottom="0px">
               basert på norske lover og regler
-            </H2>
-            <Paragraph2 $style={{ maxWidth: '600px', width: '100%' }}>
+            </HeadingXLarge>
+            <ParagraphMedium $style={{ maxWidth: '600px', width: '100%' }}>
               Hvorfor er etterlevelse viktig, og hvordan bør vi jobbe med kravene? Se filmen om etterlevelse og få en introduksjon på under 2 minutter
-            </Paragraph2>
+            </ParagraphMedium>
           </Block>
 
           <Card
@@ -180,11 +180,11 @@ export const MainPageV2 = () => {
             <PanelLink
               href="/help"
               title={
-                <H2 marginBottom={0} marginTop={0}>
+                <HeadingXLarge marginBottom={0} marginTop={0}>
                   Mer om etterlevelse i NAV
-                </H2>
+                </HeadingXLarge>
               }
-              beskrivelse={<Label4>Hvordan kravene blir til og hvordan jobbe med etterlevelse i produktutviklingen</Label4>}
+              beskrivelse={<LabelXSmall>Hvordan kravene blir til og hvordan jobbe med etterlevelse i produktutviklingen</LabelXSmall>}
               panelIcon={<img src={handWithLeaf} alt={''} />}
               overrides={{
                 Block: {

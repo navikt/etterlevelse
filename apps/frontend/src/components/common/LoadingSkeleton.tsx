@@ -1,20 +1,20 @@
-import { Block } from 'baseui/block'
-import { H2 } from 'baseui/typography'
-import { theme } from '../../util'
-import { Skeleton } from 'baseui/skeleton'
+import {Block} from 'baseui/block'
+import {HeadingXLarge} from 'baseui/typography'
+import {theme} from '../../util'
+import {Skeleton} from 'baseui/skeleton'
 import React from 'react'
 import * as _ from 'lodash'
-import { ettlevColors } from '../../util/theme'
-import { borderRadius } from './Style'
+import {ettlevColors} from '../../util/theme'
+import {borderRadius} from './Style'
 
 export const LoadingSkeleton = (props: { header: string }) => (
   <Block width="100%">
     <Block display="flex" justifyContent="space-between" alignItems="center" width="100%">
-      <H2 display="flex" alignItems="center">
+      <HeadingXLarge display="flex" alignItems="center">
         {props.header}
         <Block marginRight={theme.sizing.scale400} />
         <Skeleton height={theme.sizing.scale1000} width="400px" animation />
-      </H2>
+      </HeadingXLarge>
       <Block display="flex">
         <Skeleton height={theme.sizing.scale1000} width="40px" animation />
         <Block marginRight={theme.sizing.scale400} />

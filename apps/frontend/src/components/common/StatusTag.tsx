@@ -1,6 +1,6 @@
 import {Block} from 'baseui/block'
 import {Card, CardOverrides} from 'baseui/card'
-import {Paragraph4} from 'baseui/typography'
+import {ParagraphXSmall} from 'baseui/typography'
 import _ from 'lodash'
 import {KravStatus} from '../../constants'
 import {kravStatus} from '../../pages/KravPage'
@@ -58,7 +58,7 @@ export const StatusView = ({
         <Card overrides={customOverrides}>
           <Block display="flex" justifyContent="center" alignItems="center">
             {icon}
-            <Paragraph4
+            <ParagraphXSmall
               $style={{
                 color: ettlevColors.navMorkGra,
                 ...marginAll('0px'),
@@ -69,7 +69,7 @@ export const StatusView = ({
                 fontStyle: fontStyle ? fontStyle : undefined
               }}>
               {kravStatus(status)}
-            </Paragraph4>
+            </ParagraphXSmall>
           </Block>
         </Card>
       </Block>

@@ -4,7 +4,7 @@ import {ANCHOR, Drawer} from 'baseui/drawer'
 import {theme} from '../../../util'
 import {Block, BlockProps} from 'baseui/block'
 import {StyledLink} from 'baseui/link'
-import {H2, Paragraph2} from 'baseui/typography'
+import {HeadingXLarge, ParagraphMedium} from 'baseui/typography'
 import RouteLink from '../../common/RouteLink'
 import {useLocation} from 'react-router-dom'
 import {env} from '../../../util/env'
@@ -26,7 +26,7 @@ const drawerFooterProps: BlockProps = {
 
 const Brand = () => (
   <StyledLink style={{ textDecoration: 'none' }} href="/">
-    <H2 color={ettlevColors.green800}>Støtte til etterlevelse</H2>
+    <HeadingXLarge color={ettlevColors.green800}>Støtte til etterlevelse</HeadingXLarge>
   </StyledLink>
 )
 
@@ -62,7 +62,7 @@ const NavItem = (props: { to: string; text: string }) => (
         <FontAwesomeIcon icon={useLocation().pathname.split('/')[1].includes(props.to.split('/')[1]) ? faChevronDown : faChevronRight} color="white" size="lg" />
       </Block>
 
-      <Paragraph2 color={ettlevColors.green800}>{props.text}</Paragraph2>
+      <ParagraphMedium color={ettlevColors.green800}>{props.text}</ParagraphMedium>
     </Block>
   </RouteLink>
 )
@@ -179,9 +179,9 @@ const BurgerMenu = () => {
                 <>
                   <Block>
                     <Block>
-                      <Paragraph2 color={ettlevColors.green800} $style={{ fontWeight: 600 }}>
+                      <ParagraphMedium color={ettlevColors.green800} $style={{ fontWeight: 600 }}>
                         {user.getIdent()}: {user.getName()}
-                      </Paragraph2>
+                      </ParagraphMedium>
                     </Block>
                     <Block>
                       <SignOutButton location={url} />
@@ -196,14 +196,14 @@ const BurgerMenu = () => {
                 <ExternalLink href={datajegerSlackLink} hideUnderline>
                   <Block display="flex" justifyContent="center" paddingBottom={theme.sizing.scale400} alignItems="center">
                     <img src={SlackLogo} width="60px" alt="slack logo" />
-                    <Paragraph4 color={theme.colors.white}>#etterlevelse </Paragraph4>
+                    <ParagraphXSmall color={theme.colors.white}>#etterlevelse </ParagraphXSmall>
                   </Block>
                 </ExternalLink>
               </Block>
               <Block width={'100%'}>
                 <ExternalLink href={documentationLink} hideUnderline openOnSamePage>
                   <Block display="flex" justifyContent="center" paddingBottom={theme.sizing.scale400} alignItems="center">
-                    <Paragraph4 color={theme.colors.white}>Dokumentasjon </Paragraph4>
+                    <ParagraphXSmall color={theme.colors.white}>Dokumentasjon </ParagraphXSmall>
                   </Block>
                 </ExternalLink>
               </Block>

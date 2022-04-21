@@ -7,7 +7,7 @@ import React, {useEffect, useRef, useState} from 'react'
 import {theme} from '../../util'
 import {getKravByKravNumberAndVersion, KravId} from '../../api/KravApi'
 import {kravNumView, query} from '../../pages/KravPage'
-import {H1, H2, Label3, Paragraph2} from 'baseui/typography'
+import {HeadingXLarge, HeadingXXLarge, LabelSmall, ParagraphMedium} from 'baseui/typography'
 import {ettlevColors, maxPageWidth, responsivePaddingExtraLarge, responsivePaddingInnerPage, responsiveWidthInnerPage} from '../../util/theme'
 import {user} from '../../services/User'
 import {faChevronDown} from '@fortawesome/free-solid-svg-icons'
@@ -161,7 +161,7 @@ export const EditEtterlevelseV2 = ({
           <Block backgroundColor={ettlevColors.green800} paddingTop="32px" paddingBottom="32px">
             <Block paddingLeft={responsivePaddingInnerPage} paddingRight={responsivePaddingInnerPage}>
               <Block display={"flex"}>
-                <Paragraph2
+                <ParagraphMedium
                   $style={{
                     marginTop: '0px',
                     marginBottom: '0px',
@@ -169,7 +169,7 @@ export const EditEtterlevelseV2 = ({
                   }}
                 >
                   {kravNumView(krav)}
-                </Paragraph2>
+                </ParagraphMedium>
                 {kravFilter === KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV && (
                   <StatusView
                     status={'Bortfiltrert'}
@@ -200,10 +200,10 @@ export const EditEtterlevelseV2 = ({
                   />
                 )}
               </Block>
-              <H1 $style={{marginTop: '0px', marginBottom: '0px', paddingBottom: '32px', color: ettlevColors.white}}>{krav.navn}</H1>
+              <HeadingXXLarge $style={{marginTop: '0px', marginBottom: '0px', paddingBottom: '32px', color: ettlevColors.white}}>{krav.navn}</HeadingXXLarge>
 
               {kravFilter === KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV && (
-                <Paragraph2
+                <ParagraphMedium
                   $style={{
                     marginTop: '0px',
                     marginBottom: '0px',
@@ -214,11 +214,11 @@ export const EditEtterlevelseV2 = ({
                   }}
                 >
                   <strong>Kravet er bortfiltrert.</strong>
-                </Paragraph2>
+                </ParagraphMedium>
               )}
 
               {kravFilter === KRAV_FILTER_TYPE.UTGAATE_KRAV && (
-                <Paragraph2
+                <ParagraphMedium
                   $style={{
                     marginTop: '0px',
                     marginBottom: '0px',
@@ -229,7 +229,7 @@ export const EditEtterlevelseV2 = ({
                   }}
                 >
                   <strong>Kravet er utgått.</strong>
-                </Paragraph2>
+                </ParagraphMedium>
               )}
 
               {tidligereEtterlevelser && tidligereEtterlevelser.length >= 1 && kravFilter != KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV && (
@@ -250,7 +250,7 @@ export const EditEtterlevelseV2 = ({
                       marginRight: '5px',
                     }}
                   />
-                  <Paragraph2
+                  <ParagraphMedium
                     $style={{
                       lineHeight: '22px',
                       marginTop: '0px',
@@ -260,7 +260,7 @@ export const EditEtterlevelseV2 = ({
                     }}
                   >
                     Dette er en ny versjon.
-                  </Paragraph2>
+                  </ParagraphMedium>
                   {krav.versjonEndringer && (
                     <Button
                       type="button"
@@ -271,7 +271,7 @@ export const EditEtterlevelseV2 = ({
                       }}
                       onClick={() => setIsVersjonEndringerModalOpen(true)}
                     >
-                      <Paragraph2
+                      <ParagraphMedium
                         $style={{
                           lineHeight: '22px',
                           marginTop: '0px',
@@ -282,7 +282,7 @@ export const EditEtterlevelseV2 = ({
                         }}
                       >
                         Se hva som er nytt fra forrige versjon.
-                      </Paragraph2>
+                      </ParagraphMedium>
                     </Button>
                   )}
                 </Block>
@@ -303,18 +303,18 @@ export const EditEtterlevelseV2 = ({
                   }}
                 >
                   <img src={informationIcon} alt="" width={'24px'} height={'24px'}/>
-                  <Paragraph2 marginLeft={theme.sizing.scale500} marginTop="0px" marginBottom="0px">
+                  <ParagraphMedium marginLeft={theme.sizing.scale500} marginTop="0px" marginBottom="0px">
                     {varsleMelding}
-                  </Paragraph2>
+                  </ParagraphMedium>
                 </Block>
               )}
 
               {kravFilter === KRAV_FILTER_TYPE.RELEVANTE_KRAV && (
                 <Block display="flex" justifyContent="flex-start" alignItems="center" marginTop="32px">
-                  <Label3 $style={{color: ettlevColors.white, fontSize: '18px', lineHeight: '14px', textAlign: 'right'}}>
+                  <LabelSmall $style={{color: ettlevColors.white, fontSize: '18px', lineHeight: '14px', textAlign: 'right'}}>
                     Tildelt:{' '}
                     {etterlevelseMetadata && etterlevelseMetadata.tildeltMed && etterlevelseMetadata.tildeltMed.length >= 1 ? etterlevelseMetadata.tildeltMed[0] : 'Ikke tildelt'}
-                  </Label3>
+                  </LabelSmall>
                   <TildeltPopoever
                     etterlevelseMetadata={etterlevelseMetadata}
                     setEtterlevelseMetadata={setEtterlevelseMetadata}
@@ -326,7 +326,7 @@ export const EditEtterlevelseV2 = ({
             </Block>
           </Block>
           <Block backgroundColor={ettlevColors.green100} paddingLeft={responsivePaddingExtraLarge} paddingRight={responsivePaddingExtraLarge}>
-            <H2 $style={{marginTop: '0px', marginBottom: '0px', paddingBottom: '32px', paddingTop: '41px'}}>Hensikten med kravet</H2>
+            <HeadingXLarge $style={{marginTop: '0px', marginBottom: '0px', paddingBottom: '32px', paddingTop: '41px'}}>Hensikten med kravet</HeadingXLarge>
             <Markdown noMargin p1 sources={Array.isArray(krav.hensikt) ? krav.hensikt : [krav.hensikt]}/>
           </Block>
 
@@ -437,18 +437,18 @@ export const EditEtterlevelseV2 = ({
                 paddingLeft={responsivePaddingExtraLarge}
                 paddingRight={responsivePaddingExtraLarge}
               >
-                <Label3 color={ettlevColors.white}>
+                <LabelSmall color={ettlevColors.white}>
                   K{krav.kravNummer}.{krav.kravVersjon}
-                </Label3>
-                <H1 marginTop="0px" marginBottom="0px" color={ettlevColors.white}>
+                </LabelSmall>
+                <HeadingXXLarge marginTop="0px" marginBottom="0px" color={ettlevColors.white}>
                   {krav.navn}
-                </H1>
+                </HeadingXXLarge>
               </Block>
               <Block marginBottom="55px" marginTop="40px" paddingLeft={responsivePaddingExtraLarge} paddingRight={responsivePaddingExtraLarge}>
                 <Block minHeight="300px">
-                  <H2 marginTop="0px" marginBottom="24px">
+                  <HeadingXLarge marginTop="0px" marginBottom="24px">
                     Dette er nytt fra forrige versjon
-                  </H2>
+                  </HeadingXLarge>
                   <Markdown source={krav.versjonEndringer}/>
                 </Block>
                 <Block display="flex" justifyContent="flex-end" width="100%" marginTop="38px">

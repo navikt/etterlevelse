@@ -1,7 +1,7 @@
 import axios from 'axios'
-import React, { useState } from 'react'
-import { Modal, ModalBody, ModalButton, ModalFooter, ModalHeader } from 'baseui/modal'
-import { buttonContentStyle } from '../components/common/Button'
+import React, {useState} from 'react'
+import {Modal, ModalBody, ModalButton, ModalFooter, ModalHeader} from 'baseui/modal'
+import {buttonContentStyle} from '../components/common/Button'
 
 let done = false
 
@@ -30,7 +30,7 @@ export const useNetworkStatus = () => {
   }
 
   return (
-    <Modal closeable={false} isOpen={error} onClose={clear} unstable_ModalBackdropScroll>
+    <Modal closeable={false} isOpen={error} onClose={clear}>
       <ModalHeader>Nettverksfeil</ModalHeader>
       <ModalBody>{error?.response?.data?.message ? error?.response?.data?.message : error?.toString()}</ModalBody>
       <ModalFooter>

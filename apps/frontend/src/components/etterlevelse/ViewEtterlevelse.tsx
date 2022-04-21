@@ -1,22 +1,22 @@
-import { Etterlevelse, EtterlevelseStatus, Krav } from '../../constants'
-import { Block } from 'baseui/block'
-import React, { useRef, useState } from 'react'
-import { theme } from '../../util'
+import {Etterlevelse, EtterlevelseStatus, Krav} from '../../constants'
+import {Block} from 'baseui/block'
+import React, {useRef, useState} from 'react'
+import {theme} from '../../util'
 import moment from 'moment'
 import RouteLink from '../common/RouteLink'
-import { useBehandling } from '../../api/BehandlingApi'
-import { Spinner } from '../common/Spinner'
-import { H2, H3, Label3, Paragraph2, Paragraph4 } from 'baseui/typography'
-import { Card } from 'baseui/card'
-import { ettlevColors } from '../../util/theme'
-import { getSuksesskriterieBegrunnelse } from './Edit/SuksesskriterieBegrunnelseEdit'
-import { FormikProps } from 'formik'
-import { useNavigate } from 'react-router-dom'
-import { Markdown } from '../common/Markdown'
+import {useBehandling} from '../../api/BehandlingApi'
+import {Spinner} from '../common/Spinner'
+import {HeadingLarge, HeadingXLarge, LabelSmall, ParagraphMedium, ParagraphXSmall} from 'baseui/typography'
+import {Card} from 'baseui/card'
+import {ettlevColors} from '../../util/theme'
+import {getSuksesskriterieBegrunnelse} from './Edit/SuksesskriterieBegrunnelseEdit'
+import {FormikProps} from 'formik'
+import {useNavigate} from 'react-router-dom'
+import {Markdown} from '../common/Markdown'
 import EditBegrunnelse from './Edit/EditBegrunnelse'
-import { borderColor, borderRadius, borderStyle, borderWidth, marginAll } from '../common/Style'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCheck, faCircle } from '@fortawesome/free-solid-svg-icons'
+import {borderColor, borderRadius, borderStyle, borderWidth, marginAll} from '../common/Style'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faCheck, faCircle} from '@fortawesome/free-solid-svg-icons'
 
 const formatDate = (date?: string) => date && moment(date).format('ll')
 
@@ -53,15 +53,15 @@ export const ViewEtterlevelse = ({
   return (
     <Block width="100%" marginTop="48px">
       <Block>
-        <H2>{getHeaderText(etterlevelse.status)}</H2>
+        <HeadingXLarge>{getHeaderText(etterlevelse.status)}</HeadingXLarge>
         {behandling ? (
           <Block marginBottom={'48px'}>
-            <Paragraph2>
+            <ParagraphMedium>
               <strong>
                 B{behandling.nummer} {behandling.overordnetFormaal.shortName}
               </strong>
               : {behandling.navn}
-            </Paragraph2>
+            </ParagraphMedium>
             {!modalVersion && (
               <Block display="flex" alignContent="center">
                 <FontAwesomeIcon icon={faCircle} color={ettlevColors.black} style={{ fontSize: '.45rem', paddingTop: '7px', marginRight: '8px' }} aria-hidden={true} />
@@ -138,52 +138,52 @@ export const ViewEtterlevelse = ({
               },
             }}
           >
-            <Paragraph4 $style={{ color: ettlevColors.navMorkGra, margin: '0px', fontWeight: 400, lineHeight: '20px' }}>
+            <ParagraphXSmall $style={{ color: ettlevColors.navMorkGra, margin: '0px', fontWeight: 400, lineHeight: '20px' }}>
               Status:{' '}
               {etterlevelse.status === EtterlevelseStatus.FERDIG_DOKUMENTERT || etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT ? 'Ferdig utfylt' : 'Under utfylling'}
-            </Paragraph4>
+            </ParagraphXSmall>
           </Card>
         </Block>
       </Block>
 
       {etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT && (
         <Block marginTop={'32px'} marginBottom={'40px'}>
-          <H3
+          <HeadingLarge
             $style={{
               marginTop: 0,
               marginBottom: '12px',
             }}
           >
             Hvorfor er ikke kravet relevant?
-          </H3>
-          <Paragraph2
+          </HeadingLarge>
+          <ParagraphMedium
             $style={{
               marginTop: 0,
               marginBottom: '12px',
             }}
           >
             <Markdown source={etterlevelse.statusBegrunnelse} />
-          </Paragraph2>
+          </ParagraphMedium>
         </Block>
       )}
       {etterlevelse.status === EtterlevelseStatus.OPPFYLLES_SENERE && (
         <Block marginTop={'32px'} marginBottom={'40px'}>
-          <H3
+          <HeadingLarge
             $style={{
               marginTop: 0,
               marginBottom: '12px',
             }}
           >
             Oppfylles innen
-          </H3>
-          <Paragraph2
+          </HeadingLarge>
+          <ParagraphMedium
             $style={{
               marginTop: 0,
               marginBottom: '12px',
             }}
           >
             {moment(etterlevelse.fristForFerdigstillelse).format('ll')}
-          </Paragraph2>
+          </ParagraphMedium>
         </Block>
       )}
       <Block marginTop={theme.sizing.scale650}>
@@ -241,13 +241,13 @@ export const ViewEtterlevelse = ({
                 >
                   <Block display="flex" justifyContent="center" marginTop={'32px'} marginBottom={'16px'}>
                     <Block display="flex" flex="1">
-                      <Label3 $style={{ color: ettlevColors.green600 }}>
+                      <LabelSmall $style={{ color: ettlevColors.green600 }}>
                         SUKSESSKRITERIE {i + 1} AV {krav.suksesskriterier.length}
-                      </Label3>
+                      </LabelSmall>
                     </Block>
                     {(etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT || suksessbeskrivelseBegrunnelse.begrunnelse) && (
                       <Block display="flex" justifyContent="flex-end">
-                        <Paragraph4
+                        <ParagraphXSmall
                           $style={{
                             lineHeight: '24px',
                             color: ettlevColors.green800,
@@ -258,18 +258,18 @@ export const ViewEtterlevelse = ({
                         >
                           {suksessbeskrivelseBegrunnelse.oppfylt && <FontAwesomeIcon icon={faCheck} color={ettlevColors.green400} style={{ marginRight: '4px' }} />}
                           {etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT || suksessbeskrivelseBegrunnelse.ikkeRelevant ? 'Ikke Relevant' : 'Oppfylt'}
-                        </Paragraph4>
+                        </ParagraphXSmall>
                       </Block>
                     )}
                   </Block>
-                  <Label3 $style={{ fontSize: '21px', lineHeight: '30px', marginTop: '16px', marginBottom: '48px' }}>{s.navn}</Label3>
+                  <LabelSmall $style={{ fontSize: '21px', lineHeight: '30px', marginTop: '16px', marginBottom: '48px' }}>{s.navn}</LabelSmall>
                   {suksessbeskrivelseBegrunnelse.begrunnelse || etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT ? (
                     <Block>
                       {(suksessbeskrivelseBegrunnelse.oppfylt || suksessbeskrivelseBegrunnelse.ikkeRelevant) && (
                         <Block>
-                          <Label3 $style={{ lineHeight: '22px' }} marginTop="16px">
+                          <LabelSmall $style={{ lineHeight: '22px' }} marginTop="16px">
                             {suksessbeskrivelseBegrunnelse.ikkeRelevant ? 'Hvordan er ikke kriteriet relevant?' : 'Hvordan er kriteriet oppfylt?'}
-                          </Label3>
+                          </LabelSmall>
                           <Block marginBottom={'48px'}>
                             <Markdown source={suksessbeskrivelseBegrunnelse.begrunnelse} />
                           </Block>
@@ -278,9 +278,9 @@ export const ViewEtterlevelse = ({
                     </Block>
                   ) : (
                     <Block marginBottom={'48px'}>
-                      <Paragraph2 $style={{ color: ettlevColors.green800, fontStyle: 'italic' }}>
+                      <ParagraphMedium $style={{ color: ettlevColors.green800, fontStyle: 'italic' }}>
                         {etterlevelse.status === EtterlevelseStatus.OPPFYLLES_SENERE ? 'Oppfyles senere' : 'Mangler utfylling'}
-                      </Paragraph2>
+                      </ParagraphMedium>
                     </Block>
                   )}
                 </Card>
@@ -306,7 +306,7 @@ export const ViewEtterlevelse = ({
       </Block>
 
       <Block>
-        <Paragraph2
+        <ParagraphMedium
           $style={{
             marginTop: 0,
             marginBottom: 0,
@@ -315,7 +315,7 @@ export const ViewEtterlevelse = ({
           }}
         >
           Sist endret: {moment(etterlevelse.changeStamp.lastModifiedDate).format('ll')} av {etterlevelse.changeStamp.lastModifiedBy.split('-')[1]}
-        </Paragraph2>
+        </ParagraphMedium>
       </Block>
       {/* <Block height={theme.sizing.scale600} />
 

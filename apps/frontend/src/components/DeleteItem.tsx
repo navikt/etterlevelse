@@ -1,8 +1,8 @@
 import Button from './common/Button'
-import React, { useState } from 'react'
-import { Modal, ModalBody, ModalFooter, ModalHeader } from 'baseui/modal'
-import { useNavigate } from 'react-router-dom'
-import { deleteIcon } from './Images'
+import React, {useState} from 'react'
+import {Modal, ModalBody, ModalFooter, ModalHeader} from 'baseui/modal'
+import {useNavigate} from 'react-router-dom'
+import {deleteIcon} from './Images'
 
 export const DeleteItem = (props: { fun: () => Promise<any>; redirect: string }) => {
   const [open, setOpen] = useState(false)
@@ -20,7 +20,7 @@ export const DeleteItem = (props: { fun: () => Promise<any>; redirect: string })
       >
         Slett
       </Button>
-      <Modal closeable={false} isOpen={open} onClose={() => setOpen(false)} unstable_ModalBackdropScroll>
+      <Modal closeable={false} isOpen={open} onClose={() => setOpen(false)}>
         <ModalHeader>Bekreft slett</ModalHeader>
         <ModalBody>Er du sikker på at du vil slette?</ModalBody>
         <ModalFooter>

@@ -1,17 +1,17 @@
 import * as React from 'react'
-import { Modal, ModalBody, ModalButton, ModalFooter, ModalHeader, ROLE, SIZE } from 'baseui/modal'
-import { Block, BlockProps } from 'baseui/block'
-import { Label2 } from 'baseui/typography'
-import { Field, FieldProps, Form, Formik } from 'formik'
-import { SIZE as InputSIZE } from 'baseui/input'
-import { Button, KIND } from 'baseui/button'
-import { CodeListFormValues, codeListSchema, ListName } from '../../../services/Codelist'
-import { Error } from '../../common/ModalSchema'
-import { LovCodeDataForm, TemaCodeDataForm } from './LovCode'
-import { MarkdownInfo } from '../../common/Markdown'
+import {Modal, ModalBody, ModalButton, ModalFooter, ModalHeader, ROLE, SIZE} from 'baseui/modal'
+import {Block, BlockProps} from 'baseui/block'
+import {LabelMedium} from 'baseui/typography'
+import {Field, FieldProps, Form, Formik} from 'formik'
+import {SIZE as InputSIZE} from 'baseui/input'
+import {Button, KIND} from 'baseui/button'
+import {CodeListFormValues, codeListSchema, ListName} from '../../../services/Codelist'
+import {Error} from '../../common/ModalSchema'
+import {LovCodeDataForm, TemaCodeDataForm} from './LovCode'
+import {MarkdownInfo} from '../../common/Markdown'
 import CustomizedInput from '../../common/CustomizedInput'
 import CustomizedTextarea from '../../common/CustomizedTextarea'
-import { buttonContentStyle } from '../../common/Button'
+import {buttonContentStyle} from '../../common/Button'
 
 const modalBlockProps: BlockProps = {
   width: '700px',
@@ -37,7 +37,7 @@ type ModalCreateProps = {
 
 const CreateCodeListModal = ({ isOpen, title, list, errorOnCreate, onClose, submit }: ModalCreateProps) => {
   return (
-    <Modal closeable={false} animate autoFocus size={SIZE.auto} role={ROLE.dialog} isOpen={isOpen} unstable_ModalBackdropScroll onClose={() => onClose()}>
+    <Modal closeable={false} animate autoFocus size={SIZE.auto} role={ROLE.dialog} isOpen={isOpen} onClose={() => onClose()}>
       <Block {...modalBlockProps}>
         <Formik
           onSubmit={(values) => {
@@ -59,25 +59,25 @@ const CreateCodeListModal = ({ isOpen, title, list, errorOnCreate, onClose, subm
               <ModalHeader>{title}</ModalHeader>
               <ModalBody>
                 <Block {...rowBlockProps}>
-                  <Label2 marginRight={'1rem'} width="25%">
+                  <LabelMedium marginRight={'1rem'} width="25%">
                     Code:
-                  </Label2>
+                  </LabelMedium>
                   <Field name="code" render={({ field }: FieldProps) => <CustomizedInput {...field} type="input" size={InputSIZE.default} />} />
                 </Block>
                 <Error fieldName="code" />
 
                 <Block {...rowBlockProps}>
-                  <Label2 marginRight={'1rem'} width="25%">
+                  <LabelMedium marginRight={'1rem'} width="25%">
                     Short name:
-                  </Label2>
+                  </LabelMedium>
                   <Field name="shortName" render={({ field }: FieldProps) => <CustomizedInput {...field} type="input" size={InputSIZE.default} />} />
                 </Block>
                 <Error fieldName="shortName" />
 
                 <Block {...rowBlockProps}>
-                  <Label2 marginRight={'1rem'} width="25%">
+                  <LabelMedium marginRight={'1rem'} width="25%">
                     Description:
-                  </Label2>
+                  </LabelMedium>
                   <Field name="description" render={({ field }: FieldProps) => <CustomizedTextarea {...field} type="input" rows={10} />} />
                 </Block>
                 <Error fieldName="description" />

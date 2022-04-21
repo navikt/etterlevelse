@@ -1,18 +1,18 @@
-import { Block } from 'baseui/block'
-import React, { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import {Block} from 'baseui/block'
+import React, {useEffect, useState} from 'react'
+import {useNavigate, useParams} from 'react-router-dom'
 import _ from 'lodash'
-import { H4, Paragraph2 } from 'baseui/typography'
-import { AuditLog } from './AuditTypes'
-import { getAuditLog } from './AuditApi'
-import { AuditView } from './AuditView'
-import { AuditRecentTable } from './AuditRecentTable'
-import { AuditLabel } from './AuditComponents'
-import { useDebouncedState } from '../../../util/hooks'
-import { intl } from '../../../util/intl/intl'
+import {HeadingMedium, ParagraphMedium} from 'baseui/typography'
+import {AuditLog} from './AuditTypes'
+import {getAuditLog} from './AuditApi'
+import {AuditView} from './AuditView'
+import {AuditRecentTable} from './AuditRecentTable'
+import {AuditLabel} from './AuditComponents'
+import {useDebouncedState} from '../../../util/hooks'
+import {intl} from '../../../util/intl/intl'
 import CustomInput from '../../common/CustomizedInput'
-import { responsivePaddingSmall, responsiveWidthSmall } from '../../../util/theme'
-import { Helmet } from 'react-helmet'
+import {responsivePaddingSmall, responsiveWidthSmall} from '../../../util/theme'
+import {Helmet} from 'react-helmet'
 
 const format = (id: string) => _.trim(id, '"')
 
@@ -58,7 +58,7 @@ export const AuditPage = () => {
         <meta charSet="utf-8" />
         <title>Versjonering</title>
       </Helmet>
-      <H4>{intl.audit}</H4>
+      <HeadingMedium>{intl.audit}</HeadingMedium>
       <Block marginBottom="1rem">
         <AuditLabel label={intl.searchId}>
           <CustomInput
@@ -71,7 +71,7 @@ export const AuditPage = () => {
         </AuditLabel>
       </Block>
 
-      {error && <Paragraph2>{_.escape(error)}</Paragraph2>}
+      {error && <ParagraphMedium>{_.escape(error)}</ParagraphMedium>}
       {idInput && <AuditView auditLog={auditLog} auditId={params.auditId} loading={loading} viewId={lookupVersion} />}
       <AuditRecentTable show={!idInput} />
     </Block>

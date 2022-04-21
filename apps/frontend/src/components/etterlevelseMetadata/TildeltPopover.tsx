@@ -1,16 +1,16 @@
-import { EtterlevelseMetadata } from '../../constants'
-import { StatefulPopover } from 'baseui/popover'
-import { Block } from 'baseui/block'
-import { Button as BaseButton } from 'baseui/button'
-import { PLACEMENT } from 'baseui/tooltip'
+import {EtterlevelseMetadata} from '../../constants'
+import {StatefulPopover} from 'baseui/popover'
+import {Block} from 'baseui/block'
+import {Button as BaseButton} from 'baseui/button'
+import {PLACEMENT} from 'baseui/tooltip'
 import Button from '../common/Button'
-import { createEtterlevelseMetadata, updateEtterlevelseMetadata } from '../../api/EtterlevelseMetadataApi'
-import { user } from '../../services/User'
-import { ettlevColors } from '../../util/theme'
-import { Label3 } from 'baseui/typography'
-import { borderColor, borderStyle, borderWidth } from '../common/Style'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
+import {createEtterlevelseMetadata, updateEtterlevelseMetadata} from '../../api/EtterlevelseMetadataApi'
+import {user} from '../../services/User'
+import {ettlevColors} from '../../util/theme'
+import {LabelSmall} from 'baseui/typography'
+import {borderColor, borderStyle, borderWidth} from '../common/Style'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {IconDefinition} from '@fortawesome/fontawesome-svg-core'
 
 type TildeltPopoverProps = {
   etterlevelseMetadata: EtterlevelseMetadata
@@ -80,9 +80,9 @@ export const TildeltPopoever = ({ etterlevelseMetadata, setEtterlevelseMetadata,
               }
             }}
           >
-            <Label3 $style={{ fontWeight: 600 }}>
+            <LabelSmall $style={{ fontWeight: 600 }}>
               {etterlevelseMetadata.tildeltMed && user.getName() === etterlevelseMetadata.tildeltMed[0] ? 'Fjern meg selv' : 'Tildel meg selv'}
-            </Label3>
+            </LabelSmall>
           </Button>
         </Block>
       )}

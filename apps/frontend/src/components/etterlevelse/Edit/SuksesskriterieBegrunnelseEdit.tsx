@@ -1,22 +1,22 @@
-import { Block } from 'baseui/block'
-import { FormControl } from 'baseui/form-control'
-import { H3, Label3, Paragraph2 } from 'baseui/typography'
-import { FieldArray, FieldArrayRenderProps } from 'formik'
+import {Block} from 'baseui/block'
+import {FormControl} from 'baseui/form-control'
+import {HeadingLarge, LabelSmall, ParagraphMedium} from 'baseui/typography'
+import {FieldArray, FieldArrayRenderProps} from 'formik'
 import React from 'react'
-import { EtterlevelseStatus, Suksesskriterie, SuksesskriterieBegrunnelse } from '../../../constants'
-import { useDebouncedState } from '../../../util/hooks'
-import { ettlevColors, theme } from '../../../util/theme'
-import { CustomizedAccordion, CustomizedPanel } from '../../common/CustomizedAccordion'
-import { FieldWrapper } from '../../common/Inputs'
-import { Markdown } from '../../common/Markdown'
+import {EtterlevelseStatus, Suksesskriterie, SuksesskriterieBegrunnelse} from '../../../constants'
+import {useDebouncedState} from '../../../util/hooks'
+import {ettlevColors, theme} from '../../../util/theme'
+import {CustomizedAccordion, CustomizedPanel} from '../../common/CustomizedAccordion'
+import {FieldWrapper} from '../../common/Inputs'
+import {Markdown} from '../../common/Markdown'
 import TextEditor from '../../common/TextEditor/TextEditor'
-import { Error } from '../../common/ModalSchema'
+import {Error} from '../../common/ModalSchema'
 import LabelWithToolTip from '../../common/LabelWithTooltip'
-import { borderColor, borderStyle, borderWidth } from '../../common/Style'
-import { LabelAboveContent } from '../../common/PropertyLabel'
-import { MODE, StatefulButtonGroup } from 'baseui/button-group'
-import { Button } from 'baseui/button'
-import { buttonContentStyle } from '../../common/Button'
+import {borderColor, borderStyle, borderWidth} from '../../common/Style'
+import {LabelAboveContent} from '../../common/PropertyLabel'
+import {MODE, StatefulButtonGroup} from 'baseui/button-group'
+import {Button} from 'baseui/button'
+import {buttonContentStyle} from '../../common/Button'
 
 const paddingLeft = '30px'
 
@@ -141,7 +141,7 @@ const KriterieBegrunnelse = ({
     <Block $style={getBorderColor()} backgroundColor={getBackgroundColor()} padding={theme.sizing.scale750} marginBottom={theme.sizing.scale600}>
       <Block display="flex" justifyContent="space-between" width="100%" alignItems="center">
         <Block>
-          <Paragraph2
+          <ParagraphMedium
             $style={{
               fontSize: '16px',
               lineHeight: '18,75',
@@ -152,11 +152,11 @@ const KriterieBegrunnelse = ({
             }}
           >
             Suksesskriterie {index + 1} av {totalSuksesskriterie}
-          </Paragraph2>
+          </ParagraphMedium>
         </Block>
         {viewMode === true && (
           <Block alignSelf="flex-end">
-            <Paragraph2
+            <ParagraphMedium
               $style={{
                 marginTop: '0px',
                 marginBottom: '0px',
@@ -165,18 +165,18 @@ const KriterieBegrunnelse = ({
               }}
             >
               Ikke relevant
-            </Paragraph2>
+            </ParagraphMedium>
           </Block>
         )}
       </Block>
 
-      <H3 color={ettlevColors.green800} marginTop="0px">
+      <HeadingLarge color={ettlevColors.green800} marginTop="0px">
         {suksesskriterie.navn}
-      </H3>
+      </HeadingLarge>
 
       {(status === EtterlevelseStatus.IKKE_RELEVANT || status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) && (
         <Block width="100%" display="flex" justifyContent="flex-end" marginTop="20px" marginBottom="-29px">
-          <Paragraph2
+          <ParagraphMedium
             $style={{
               marginTop: '0px',
               marginBottom: '0px',
@@ -185,12 +185,12 @@ const KriterieBegrunnelse = ({
             }}
           >
             Ikke relevant
-          </Paragraph2>
+          </ParagraphMedium>
         </Block>
       )}
       <CustomizedAccordion>
         <CustomizedPanel
-          title={<Label3 $style={{ color: ettlevColors.green600 }}>Utfyllende om kriteriet</Label3>}
+          title={<LabelSmall $style={{ color: ettlevColors.green600 }}>Utfyllende om kriteriet</LabelSmall>}
           overrides={{
             Header: {
               style: {

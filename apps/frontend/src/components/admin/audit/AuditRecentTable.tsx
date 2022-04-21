@@ -1,4 +1,4 @@
-import {Label1, Label3} from 'baseui/typography'
+import {LabelLarge, LabelSmall} from 'baseui/typography'
 import React, {useEffect, useState} from 'react'
 import moment from 'moment'
 import {Pagination} from 'baseui/pagination'
@@ -71,12 +71,12 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: ObjectType 
   return (
     <>
       <Block display="flex" justifyContent="space-between" marginBottom=".5rem">
-        <Label1>{intl.lastChanges}</Label1>
+        <LabelLarge>{intl.lastChanges}</LabelLarge>
         {!props.tableType && (
           <Block width="300px" display="flex" justifyContent="space-between">
-            <Label3 alignSelf="center" marginRight=".5rem">
+            <LabelSmall alignSelf="center" marginRight=".5rem">
               {intl.table}:{' '}
-            </Label3>
+            </LabelSmall>
             <CustomizedStatefulSelect size="compact" options={tableOptions} onChange={(p) => setTable(p?.value[0]?.id as ObjectType)} />
           </Block>
         )}

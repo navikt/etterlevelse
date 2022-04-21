@@ -5,7 +5,7 @@ import {Block} from 'baseui/block'
 import Button from '../common/Button'
 import {ettlevColors} from '../../util/theme'
 import {borderStyle, marginAll} from '../common/Style'
-import {Label3, Paragraph4} from 'baseui/typography'
+import {LabelSmall, ParagraphXSmall} from 'baseui/typography'
 import StatusView from '../common/StatusTag'
 import {getEtterlevelseStatus, getEtterlevelseStatusLabelColor} from '../behandling/utils'
 import moment from 'moment'
@@ -101,11 +101,11 @@ export const KravCard = (props: { krav: KravEtterlevelseData; noStatus?: boolean
             </Block>
             <Block marginLeft="14px">
               <Block display={'flex'} alignItems={'center'}>
-                <Paragraph4
+                <ParagraphXSmall
                   $style={{fontSize: '16px', lineHeight: '24px', marginBottom: '0px', marginTop: '0px', width: 'fit-content', textDecoration: hover ? 'underline' : 'none'}}
                 >
                   K{props.krav.kravNummer}.{props.krav.kravVersjon}
-                </Paragraph4>
+                </ParagraphXSmall>
                 {!props.noVarsling && props.krav.kravVersjon === 1 && props.krav.etterlevelseStatus === undefined && kravAge < 30 && showWarningMessage('Nytt krav')}
                 {!props.noVarsling && props.krav.etterlevelseStatus === undefined && nyVersionFlag && props.kravFilter === KRAV_FILTER_TYPE.RELEVANTE_KRAV && showWarningMessage('Ny version')}
                 {props.kravFilter === KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV && <StatusView
@@ -137,9 +137,9 @@ export const KravCard = (props: { krav: KravEtterlevelseData; noStatus?: boolean
                 />
                 }
               </Block>
-              <Label3 $style={{fontSize: '18px', fontWeight: 600, alignContent: 'flex-start', textAlign: 'left', textDecoration: hover ? 'underline' : 'none'}}>
+              <LabelSmall $style={{fontSize: '18px', fontWeight: 600, alignContent: 'flex-start', textAlign: 'left', textDecoration: hover ? 'underline' : 'none'}}>
                 {props.krav.navn}
-              </Label3>
+              </LabelSmall>
             </Block>
             <Block display="flex" justifyContent="flex-end" flex="1" width="100%">
               <Block width="350px" display="flex" justifyContent="flex-end" marginLeft="32px">
@@ -152,21 +152,21 @@ export const KravCard = (props: { krav: KravEtterlevelseData; noStatus?: boolean
                   <Block marginLeft="31px" maxWidth="140px" width="100%">
                     {etterlevelseMetadata && etterlevelseMetadata.tildeltMed && etterlevelseMetadata.tildeltMed.length >= 1 ? (
                       <Block>
-                        <Label3 $style={{fontSize: '14px', lineHeight: '14px', textAlign: 'right'}}>
+                        <LabelSmall $style={{fontSize: '14px', lineHeight: '14px', textAlign: 'right'}}>
                           Tildelt:{' '}
                           {etterlevelseMetadata.tildeltMed[0].length > 12 ? etterlevelseMetadata.tildeltMed[0].substring(0, 11) + '...' : etterlevelseMetadata.tildeltMed[0]}
-                        </Label3>
+                        </LabelSmall>
                       </Block>
                     ) : (
                       <Block>
-                        <Label3 $style={{fontSize: '14px', lineHeight: '14px', textAlign: 'right', fontStyle: 'italic', fontWeight: 400}}>Ikke tildelt</Label3>
+                        <LabelSmall $style={{fontSize: '14px', lineHeight: '14px', textAlign: 'right', fontStyle: 'italic', fontWeight: 400}}>Ikke tildelt</LabelSmall>
                       </Block>
                     )}
                     {props.krav.etterlevelseChangeStamp?.lastModifiedDate && (
                       <Block width="100%" display="flex" justifyContent="flex-end">
-                        <Paragraph4 $style={{lineHeight: '19px', textAlign: 'right', marginTop: '0px', marginBottom: '0px', whiteSpace: 'nowrap'}}>
+                        <ParagraphXSmall $style={{lineHeight: '19px', textAlign: 'right', marginTop: '0px', marginBottom: '0px', whiteSpace: 'nowrap'}}>
                           {'Sist utfylt: ' + moment(props.krav.etterlevelseChangeStamp?.lastModifiedDate).format('ll')}
-                        </Paragraph4>
+                        </ParagraphXSmall>
                       </Block>
                     )}
                   </Block>
@@ -234,7 +234,7 @@ const showWarningMessage = (warningMessage: string) => {
           marginRight: '5px',
         }}
       />
-      <Paragraph4
+      <ParagraphXSmall
         $style={{
           fontSize: '16px',
           lineHeight: '16px',
@@ -244,7 +244,7 @@ const showWarningMessage = (warningMessage: string) => {
         }}
       >
         {warningMessage}
-      </Paragraph4>
+      </ParagraphXSmall>
     </Block>
   )
 }

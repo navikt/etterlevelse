@@ -1,32 +1,32 @@
-import { useParams } from 'react-router-dom'
-import { Block, BlockProps } from 'baseui/block'
-import React, { useEffect, useState } from 'react'
-import { H1, H2, Label3, LabelLarge, Paragraph2, Paragraph4, ParagraphSmall } from 'baseui/typography'
-import { codelist, ListName, LovCode, TemaCode } from '../services/Codelist'
-import { ExternalLinkWrapper, ObjectLink, urlForObject } from '../components/common/RouteLink'
-import { theme } from '../util'
-import { Markdown } from '../components/common/Markdown'
-import { ettlevColors } from '../util/theme'
+import {useParams} from 'react-router-dom'
+import {Block, BlockProps} from 'baseui/block'
+import React, {useEffect, useState} from 'react'
+import {HeadingXLarge, HeadingXXLarge, LabelLarge, LabelSmall, ParagraphMedium, ParagraphSmall, ParagraphXSmall} from 'baseui/typography'
+import {codelist, ListName, LovCode, TemaCode} from '../services/Codelist'
+import {ExternalLinkWrapper, ObjectLink, urlForObject} from '../components/common/RouteLink'
+import {theme} from '../util'
+import {Markdown} from '../components/common/Markdown'
+import {ettlevColors} from '../util/theme'
 import Button from '../components/common/Button'
-import { KravFilters } from '../api/KravGraphQLApi'
-import { SkeletonPanel } from '../components/common/LoadingSkeleton'
-import { PanelLink, PanelLinkCard, PanelLinkCardOverrides } from '../components/common/PanelLink'
-import { kravNumView } from './KravPage'
+import {KravFilters} from '../api/KravGraphQLApi'
+import {SkeletonPanel} from '../components/common/LoadingSkeleton'
+import {PanelLink, PanelLinkCard, PanelLinkCardOverrides} from '../components/common/PanelLink'
+import {kravNumView} from './KravPage'
 import * as _ from 'lodash'
-import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons'
-import { Layout2, Page } from '../components/scaffold/Page'
-import { SimpleTag } from '../components/common/SimpleTag'
-import { Krav, KravQL, PageResponse } from '../constants'
-import { useQuery } from '@apollo/client'
-import { QueryHookOptions } from '@apollo/client/react/types/types'
-import { gql } from '@apollo/client/core'
-import { useForceUpdate } from '../util/hooks'
-import { borderRadius } from '../components/common/Style'
-import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
-import { sortKraverByPriority } from '../util/sort'
-import { getAllKravPriority } from '../api/KravPriorityApi'
-import { Helmet } from 'react-helmet'
-import { ampli } from '../services/Amplitude'
+import {faChevronDown, faChevronUp} from '@fortawesome/free-solid-svg-icons'
+import {Layout2, Page} from '../components/scaffold/Page'
+import {SimpleTag} from '../components/common/SimpleTag'
+import {Krav, KravQL, PageResponse} from '../constants'
+import {useQuery} from '@apollo/client'
+import {QueryHookOptions} from '@apollo/client/react/types/types'
+import {gql} from '@apollo/client/core'
+import {useForceUpdate} from '../util/hooks'
+import {borderRadius} from '../components/common/Style'
+import {breadcrumbPaths} from '../components/common/CustomizedBreadcrumbs'
+import {sortKraverByPriority} from '../util/sort'
+import {getAllKravPriority} from '../api/KravPriorityApi'
+import {Helmet} from 'react-helmet'
+import {ampli} from '../services/Amplitude'
 
 export const TemaPage = () => {
   const { tema } = useParams<{ tema: string }>()
@@ -42,7 +42,7 @@ export const getTemaMainHeader = (tema: TemaCode, lover: LovCode[], expand: bool
     <>
       {!noHeader && (
         <>
-          <H1 marginTop="0px">{tema.shortName}</H1>
+          <HeadingXXLarge marginTop="0px">{tema.shortName}</HeadingXXLarge>
           <Helmet>
             <meta charSet="utf-8" />
             <title>{tema.shortName} </title>
@@ -63,14 +63,14 @@ export const getTemaMainHeader = (tema: TemaCode, lover: LovCode[], expand: bool
 
       {expand && (
         <Block marginBottom={theme.sizing.scale900}>
-          <H2 marginBottom={theme.sizing.scale200}>Ansvarlig for lovtolkning</H2>
+          <HeadingXLarge marginBottom={theme.sizing.scale200}>Ansvarlig for lovtolkning</HeadingXLarge>
           {_.uniq(lover.map((l) => l.data?.underavdeling)).map((code, index) => (
-            <Paragraph2 key={code + '_' + index} marginTop={0} marginBottom={theme.sizing.scale200}>
+            <ParagraphMedium key={code + '_' + index} marginTop={0} marginBottom={theme.sizing.scale200}>
               {codelist.getCode(ListName.UNDERAVDELING, code)?.shortName}
-            </Paragraph2>
+            </ParagraphMedium>
           ))}
 
-          <H2 marginBottom={theme.sizing.scale200}>Lovdata</H2>
+          <HeadingXLarge marginBottom={theme.sizing.scale200}>Lovdata</HeadingXLarge>
           {lover.map((l, index) => (
             <Block key={l.code + '_' + index} marginBottom={theme.sizing.scale200}>
               <ObjectLink external type={ListName.LOV} id={l.code}>
@@ -131,7 +131,7 @@ const TemaSide = ({ tema }: { tema: TemaCode }) => {
       header={getTemaMainHeader(tema, lover, expand, setExpand)}
     >
       <Block>
-        <H2>{loading ? '?' : data?.krav.numberOfElements || 0} krav</H2>
+        <HeadingXLarge>{loading ? '?' : data?.krav.numberOfElements || 0} krav</HeadingXLarge>
         {loading && <SkeletonPanel count={10} />}
         {!loading &&
           kravList &&
@@ -185,7 +185,7 @@ const TemaListe = () => {
 
   return (
     <Layout2
-      mainHeader={<H1 marginTop="0px">Forstå kravene</H1>}
+      mainHeader={<HeadingXXLarge marginTop="0px">Forstå kravene</HeadingXXLarge>}
       headerBackgroundColor={ettlevColors.grey50}
       childrenBackgroundColor={ettlevColors.grey25}
       currentPage={'Forstå kravene'}
@@ -251,15 +251,15 @@ const TemaInfo = (props: { kravAntall: number; temaAntall: number }) => (
     width={cardWidth}
   >
     <Block padding={theme.sizing.scale1000}>
-      <H2 color={ettlevColors.white} $style={{ lineHeight: '40px' }}>
+      <HeadingXLarge color={ettlevColors.white} $style={{ lineHeight: '40px' }}>
         Vi har totalt &nbsp;
         <span style={{ fontSize: '40px', lineHeight: '40px', color: ettlevColors.warning400 }}>{props.kravAntall}</span> &nbsp; krav gruppert i {props.temaAntall} tema
-      </H2>
+      </HeadingXLarge>
 
-      <Paragraph2 color={ettlevColors.white}>
+      <ParagraphMedium color={ettlevColors.white}>
         Alle vi som utvikler digitale produkter i NAV må forholde oss til en del forskjellige lover og regler. Disse skal bidra til å sikre at den generelle rettsikkerheten til
         brukerne våre ivaretas.
-      </Paragraph2>
+      </ParagraphMedium>
     </Block>
   </Block>
 )
@@ -312,10 +312,10 @@ export const TemaCard = ({ tema, relevans, setNum }: { tema: TemaCode; relevans:
         <SimpleTag active>
           <Block display={'flex'} alignItems={'center'} justifyContent={'center'} height={'35px'} width={'60px'}>
             {/* <img src={gavelIcon} width={'35px'} height={'35px'} aria-hidden alt={'Hammer ikon'} /> */}
-            <Label3 color={ettlevColors.navOransje} $style={{ fontSize: '20px', lineHeight: '18px' }} marginRight="4px">
+            <LabelSmall color={ettlevColors.navOransje} $style={{ fontSize: '20px', lineHeight: '18px' }} marginRight="4px">
               {krav?.length || 0}
-            </Label3>
-            <Paragraph4 $style={{ lineHeight: '18px', marginTop: '0px', marginBottom: '0px' }}>krav</Paragraph4>
+            </LabelSmall>
+            <ParagraphXSmall $style={{ lineHeight: '18px', marginTop: '0px', marginBottom: '0px' }}>krav</ParagraphXSmall>
           </Block>
         </SimpleTag>
 

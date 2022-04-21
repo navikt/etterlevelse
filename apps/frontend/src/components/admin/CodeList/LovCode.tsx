@@ -1,20 +1,20 @@
-import { Block, BlockProps } from 'baseui/block'
-import { Label2 } from 'baseui/typography'
-import { Field, FieldProps } from 'formik'
-import { Code, codelist, CodeListFormValues, ListName, LovCodeData, TemaCodeData } from '../../../services/Codelist'
+import {Block, BlockProps} from 'baseui/block'
+import {LabelMedium} from 'baseui/typography'
+import {Field, FieldProps} from 'formik'
+import {Code, codelist, CodeListFormValues, ListName, LovCodeData, TemaCodeData} from '../../../services/Codelist'
 import * as React from 'react'
-import { SIZE as InputSIZE } from 'baseui/input'
-import { OptionList } from '../../common/Inputs'
-import { temaBilder } from '../../Images'
-import { StatefulTooltip } from 'baseui/tooltip'
-import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { theme } from '../../../util'
+import {SIZE as InputSIZE} from 'baseui/input'
+import {OptionList} from '../../common/Inputs'
+import {temaBilder} from '../../Images'
+import {StatefulTooltip} from 'baseui/tooltip'
+import {faQuestionCircle} from '@fortawesome/free-solid-svg-icons'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {theme} from '../../../util'
 import Button from '../../common/Button'
 import CustomizedInput from '../../common/CustomizedInput'
 import CustomizedSelect from '../../common/CustomizedSelect'
 import CustomizedTextarea from '../../common/CustomizedTextarea'
-import { Error } from '../../common/ModalSchema'
+import {Error} from '../../common/ModalSchema'
 
 const rowBlockProps: BlockProps = {
   display: 'flex',
@@ -27,9 +27,9 @@ export const LovCodeDataForm = () => {
   return (
     <Block {...rowBlockProps} flexDirection="column">
       <Block {...rowBlockProps}>
-        <Label2 marginRight={'1rem'} width="25%">
+        <LabelMedium marginRight={'1rem'} width="25%">
           Lovkode data
-        </Label2>
+        </LabelMedium>
       </Block>
       <Field name="data">
         {({ field, form }: FieldProps<LovCodeData, CodeListFormValues>) => {
@@ -47,17 +47,17 @@ export const LovCodeDataForm = () => {
           return (
             <>
               <Block {...rowBlockProps}>
-                <Label2 marginRight={'1rem'} width="25%">
+                <LabelMedium marginRight={'1rem'} width="25%">
                   Lov ID:
-                </Label2>
+                </LabelMedium>
                 <CustomizedInput type="input" size={InputSIZE.default} value={data.lovId} onChange={(str) => set({ lovId: (str.target as HTMLInputElement).value })} />
               </Block>
 
               <Block {...rowBlockProps}>
-                <Label2 marginRight={'1rem'} width="25%">
+                <LabelMedium marginRight={'1rem'} width="25%">
                   {' '}
                   Underavdeling:{' '}
-                </Label2>
+                </LabelMedium>
                 <OptionList
                   listName={ListName.UNDERAVDELING}
                   value={codelist.getCode(ListName.UNDERAVDELING, data.underavdeling)}
@@ -67,9 +67,9 @@ export const LovCodeDataForm = () => {
               </Block>
 
               <Block {...rowBlockProps}>
-                <Label2 marginRight={'1rem'} width="25%">
+                <LabelMedium marginRight={'1rem'} width="25%">
                   Tema:{' '}
-                </Label2>
+                </LabelMedium>
                 <OptionList
                   listName={ListName.TEMA}
                   value={codelist.getCode(ListName.TEMA, data.tema) as Code | undefined}
@@ -95,9 +95,9 @@ export const TemaCodeDataForm = () => {
   return (
     <Block {...rowBlockProps} flexDirection="column">
       <Block {...rowBlockProps}>
-        <Label2 marginRight={'1rem'} width="25%">
+        <LabelMedium marginRight={'1rem'} width="25%">
           Lovkode data
-        </Label2>
+        </LabelMedium>
       </Block>
       <Field name="data">
         {({ field, form }: FieldProps<TemaCodeData, CodeListFormValues>) => {
@@ -109,14 +109,14 @@ export const TemaCodeDataForm = () => {
           return (
             <>
               <Block {...rowBlockProps}>
-                <Label2 marginRight={'1rem'} width="25%">
+                <LabelMedium marginRight={'1rem'} width="25%">
                   Bilde:
                   <StatefulTooltip content={<PreviewImages set={(image) => set({ image })} />}>
                     <Block display="inline" marginLeft={theme.sizing.scale600}>
                       <FontAwesomeIcon color={theme.colors.primary400} icon={faQuestionCircle} />
                     </Block>
                   </StatefulTooltip>
-                </Label2>
+                </LabelMedium>
                 <CustomizedSelect
                   options={temaBildeOptions}
                   clearable={false}
@@ -128,9 +128,9 @@ export const TemaCodeDataForm = () => {
                 />
               </Block>
               <Block {...rowBlockProps}>
-                <Label2 marginRight={'1rem'} width="25%">
+                <LabelMedium marginRight={'1rem'} width="25%">
                   Short Desciption:
-                </Label2>
+                </LabelMedium>
                 <CustomizedTextarea
                   type="input"
                   size={InputSIZE.default}

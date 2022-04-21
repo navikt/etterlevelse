@@ -1,23 +1,23 @@
 import moment from 'moment'
-import { Block } from 'baseui/block'
+import {Block} from 'baseui/block'
 import ReactJson from 'react-json-view'
-import React, { useEffect, useState } from 'react'
-import { Label1 } from 'baseui/typography'
-import { AuditActionIcon, AuditLabel as Label } from './AuditComponents'
-import { Card } from 'baseui/card'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBinoculars, faExchangeAlt, faTimes } from '@fortawesome/free-solid-svg-icons'
-import { PLACEMENT, StatefulTooltip } from 'baseui/tooltip'
-import { StatefulPopover } from 'baseui/popover'
+import React, {useEffect, useState} from 'react'
+import {LabelLarge} from 'baseui/typography'
+import {AuditActionIcon, AuditLabel as Label} from './AuditComponents'
+import {Card} from 'baseui/card'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faBinoculars, faExchangeAlt, faTimes} from '@fortawesome/free-solid-svg-icons'
+import {PLACEMENT, StatefulTooltip} from 'baseui/tooltip'
+import {StatefulPopover} from 'baseui/popover'
 import DiffViewer from 'react-diff-viewer'
-import { StyledSpinnerNext } from 'baseui/spinner'
-import { useRefs } from '../../../util/hooks'
-import { theme } from '../../../util'
-import { intl } from '../../../util/intl/intl'
-import { AuditAction, AuditLog } from './AuditTypes'
-import { ObjectLink } from '../../common/RouteLink'
+import {Spinner} from 'baseui/spinner'
+import {useRefs} from '../../../util/hooks'
+import {theme} from '../../../util'
+import {intl} from '../../../util/intl/intl'
+import {AuditAction, AuditLog} from './AuditTypes'
+import {ObjectLink} from '../../common/RouteLink'
 import Button from '../../common/Button'
-import { ettlevColors } from '../../../util/theme'
+import {ettlevColors} from '../../../util/theme'
 
 type AuditViewProps = {
   auditLog?: AuditLog
@@ -47,8 +47,8 @@ export const AuditView = (props: AuditViewProps) => {
 
   return (
     <Card>
-      {loading && <StyledSpinnerNext color={ettlevColors.green400} size={theme.sizing.scale2400} />}
-      {!loading && auditLog && !logFound && <Label1>{intl.auditNotFound}</Label1>}
+      {loading && <Spinner $color={ettlevColors.green400} $size={theme.sizing.scale2400} />}
+      {!loading && auditLog && !logFound && <LabelLarge>{intl.auditNotFound}</LabelLarge>}
 
       {logFound && (
         <>

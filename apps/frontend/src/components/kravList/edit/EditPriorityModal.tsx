@@ -1,23 +1,23 @@
 import CustomizedModal from '../../common/CustomizedModal'
-import { Krav } from '../../../constants'
+import {Krav} from '../../../constants'
 import Button from '../../common/Button'
-import React, { ReactElement, useEffect } from 'react'
-import { FieldArray, Form, Formik } from 'formik'
-import { FieldWrapper } from '../../common/Inputs'
-import { arrayMove, List } from 'baseui/dnd-list'
-import { CustomPanelDivider } from '../../common/CustomizedAccordion'
-import { SimplePanel } from '../../common/PanelLink'
-import { H1, H2, Label3, Paragraph2 } from 'baseui/typography'
+import React, {ReactElement, useEffect} from 'react'
+import {FieldArray, Form, Formik} from 'formik'
+import {FieldWrapper} from '../../common/Inputs'
+import {arrayMove, List} from 'baseui/dnd-list'
+import {CustomPanelDivider} from '../../common/CustomizedAccordion'
+import {SimplePanel} from '../../common/PanelLink'
+import {HeadingXLarge, HeadingXXLarge, LabelSmall, ParagraphMedium} from 'baseui/typography'
 import moment from 'moment'
 import StatusView from '../../common/StatusTag'
-import { borderRadius, borderStyle, paddingZero } from '../../common/Style'
-import { Spinner } from '../../common/Spinner'
-import { theme } from '../../../util'
-import { Block } from 'baseui/block'
-import { ettlevColors, responsivePaddingSmall } from '../../../util/theme'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faGripVertical } from '@fortawesome/free-solid-svg-icons'
-import { updateKravPriority, kravMapToKravPrioriting, createKravPriority } from '../../../api/KravPriorityApi'
+import {borderRadius, borderStyle, paddingZero} from '../../common/Style'
+import {Spinner} from '../../common/Spinner'
+import {theme} from '../../../util'
+import {Block} from 'baseui/block'
+import {ettlevColors, responsivePaddingSmall} from '../../../util/theme'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faGripVertical} from '@fortawesome/free-solid-svg-icons'
+import {createKravPriority, kravMapToKravPrioriting, updateKravPriority} from '../../../api/KravPriorityApi'
 
 export const kravListPriorityModal = () => document.querySelector('#krav-list-edit-priority-modal')
 
@@ -37,11 +37,11 @@ export const EditPriorityModal = (props: { isOpen: boolean; onClose: Function; k
               key={`${k.navn}_${k.kravNummer}`}
               hideChevron
               title={
-                <Paragraph2 $style={{ fontSize: '14px', marginBottom: '0px', marginTop: '0px', lineHeight: '15px' }}>
+                <ParagraphMedium $style={{ fontSize: '14px', marginBottom: '0px', marginTop: '0px', lineHeight: '15px' }}>
                   K{k.kravNummer}.{k.kravVersjon}
-                </Paragraph2>
+                </ParagraphMedium>
               }
-              beskrivelse={<Label3 $style={{ fontSize: '18px', lineHeight: '28px' }}>{k.navn}</Label3>}
+              beskrivelse={<LabelSmall $style={{ fontSize: '18px', lineHeight: '28px' }}>{k.navn}</LabelSmall>}
               rightBeskrivelse={!!k.changeStamp.lastModifiedDate ? `Sist endret: ${moment(k.changeStamp.lastModifiedDate).format('ll')}` : ''}
               statusText={<StatusView status={k.status} />}
               overrides={{
@@ -159,14 +159,14 @@ export const EditPriorityModal = (props: { isOpen: boolean; onClose: Function; k
             maxHeight="55px"
             marginBottom="54px"
           >
-            <H1 $style={{ lineHeight: '48px', color: ettlevColors.white }}>Justere rekkefølgen på krav</H1>
+            <HeadingXXLarge $style={{ lineHeight: '48px', color: ettlevColors.white }}>Justere rekkefølgen på krav</HeadingXXLarge>
           </Block>
           <Block display="flex" justifyContent="center" paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall}>
             <Block display="flex" justifyContent="flex-start" flex="1">
-              <H2 $style={{ lineHeight: '24px', color: ettlevColors.green600, marginTop: '0px', marginBottom: '0px' }}>{tema}</H2>
+              <HeadingXLarge $style={{ lineHeight: '24px', color: ettlevColors.green600, marginTop: '0px', marginBottom: '0px' }}>{tema}</HeadingXLarge>
             </Block>
             <Block display="flex" justifyContent="flex-end" flex="1">
-              <Paragraph2 $style={{ marginTop: '0px', marginBottom: '0px', color: ettlevColors.green800 }}>Klikk og dra kravene i ønsket rekkefølge</Paragraph2>
+              <ParagraphMedium $style={{ marginTop: '0px', marginBottom: '0px', color: ettlevColors.green800 }}>Klikk og dra kravene i ønsket rekkefølge</ParagraphMedium>
             </Block>
           </Block>
           <Block>

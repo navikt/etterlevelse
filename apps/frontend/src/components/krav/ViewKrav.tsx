@@ -1,23 +1,22 @@
-import { AdresseType, Begrep, KravQL, KravVersjon } from '../../constants'
-import { Block, Display, Responsive } from 'baseui/block'
+import {AdresseType, Begrep, KravQL, KravVersjon} from '../../constants'
+import {Block, Display, Responsive} from 'baseui/block'
 import React from 'react'
-import { kravStatus } from '../../pages/KravPage'
-import { theme } from '../../util'
+import {kravStatus} from '../../pages/KravPage'
+import {theme} from '../../util'
 import moment from 'moment'
-import { DotTag, DotTags } from '../common/DotTag'
-import { ListName } from '../../services/Codelist'
-import { Label, LabelAboveContent } from '../common/PropertyLabel'
-import RouteLink, { ExternalLink, ExternalLinkWrapper, ObjectLink } from '../common/RouteLink'
-import { slackLink, slackUserLink, termUrl } from '../../util/config'
-import { user } from '../../services/User'
-import { LovViewList } from '../Lov'
-import { SuksesskriterieCard } from './Suksesskriterie'
-import { Label3, Paragraph2 } from 'baseui/typography'
-import CustomizedLink from '../common/CustomizedLink'
-import { CustomizedAccordion, CustomizedPanel } from '../common/CustomizedAccordion'
-import { ettlevColors } from '../../util/theme'
-import { borderStyle } from '../common/Style'
-import { Markdown } from '../common/Markdown'
+import {DotTag, DotTags} from '../common/DotTag'
+import {ListName} from '../../services/Codelist'
+import {Label, LabelAboveContent} from '../common/PropertyLabel'
+import {ExternalLink, ExternalLinkWrapper, ObjectLink} from '../common/RouteLink'
+import {slackLink, slackUserLink, termUrl} from '../../util/config'
+import {user} from '../../services/User'
+import {LovViewList} from '../Lov'
+import {SuksesskriterieCard} from './Suksesskriterie'
+import {LabelSmall, ParagraphMedium} from 'baseui/typography'
+import {CustomizedAccordion, CustomizedPanel} from '../common/CustomizedAccordion'
+import {ettlevColors} from '../../util/theme'
+import {borderStyle} from '../common/Style'
+import {Markdown} from '../common/Markdown'
 import ExpiredAlert from './ExpiredAlert'
 import SidePanel from './SidePanel'
 
@@ -127,7 +126,7 @@ export const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVer
               <Block marginTop={theme.sizing.scale900} marginBottom={theme.sizing.scale1600}>
                 <CustomizedAccordion>
                   <CustomizedPanel
-                    title={<Label3 $style={{ color: ettlevColors.green800, marginRight: '7px' }}>Dette er nytt fra forrige versjon</Label3>}
+                    title={<LabelSmall $style={{ color: ettlevColors.green800, marginRight: '7px' }}>Dette er nytt fra forrige versjon</LabelSmall>}
                     overrides={{
                       Header: {
                         style: {
@@ -229,9 +228,9 @@ export const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVer
       </Block>
 
       <Block>
-        <Paragraph2>
+        <ParagraphMedium>
           Sist endret: {moment(krav.changeStamp.lastModifiedDate).format('ll')} {user.isAdmin() || user.isKraveier() ? 'av ' + krav.changeStamp.lastModifiedBy.split(' - ')[1] : ''}
-        </Paragraph2>
+        </ParagraphMedium>
       </Block>
     </>
   )

@@ -8,7 +8,7 @@ import {DateField, FieldWrapper, TextAreaField} from '../../common/Inputs'
 import {theme} from '../../../util'
 import {FormControl} from 'baseui/form-control'
 
-import {Label3, Paragraph2, Paragraph4} from 'baseui/typography'
+import {LabelSmall, ParagraphMedium, ParagraphXSmall} from 'baseui/typography'
 import {ettlevColors} from '../../../util/theme'
 import {SuksesskriterierBegrunnelseEdit} from './SuksesskriterieBegrunnelseEdit'
 import {Radio, RadioGroup} from 'baseui/radio'
@@ -191,17 +191,17 @@ export const EtterlevelseEditFields = ({
                                     >
                                       <Radio value={EtterlevelseStatus.UNDER_REDIGERING} key={EtterlevelseStatus.UNDER_REDIGERING}>
                                         <Block $style={{ textDecoration: radioHover === EtterlevelseStatus.UNDER_REDIGERING ? 'underline' : 'none' }}>
-                                          <Paragraph2 $style={{ lineHeight: '22px' }} marginTop="0px" marginBottom="0px">
+                                          <ParagraphMedium $style={{ lineHeight: '22px' }} marginTop="0px" marginBottom="0px">
                                             {getEtterlevelseRadioLabel(EtterlevelseStatus.UNDER_REDIGERING)}
-                                          </Paragraph2>
+                                          </ParagraphMedium>
                                         </Block>
                                       </Radio>
 
                                       <Radio value={EtterlevelseStatus.OPPFYLLES_SENERE} key={EtterlevelseStatus.OPPFYLLES_SENERE}>
                                         <Block $style={{ textDecoration: radioHover === EtterlevelseStatus.OPPFYLLES_SENERE ? 'underline' : 'none' }}>
-                                          <Paragraph2 $style={{ lineHeight: '22px' }} marginTop="0px" marginBottom="0px">
+                                          <ParagraphMedium $style={{ lineHeight: '22px' }} marginTop="0px" marginBottom="0px">
                                             {getEtterlevelseRadioLabel(EtterlevelseStatus.OPPFYLLES_SENERE)}
-                                          </Paragraph2>
+                                          </ParagraphMedium>
                                         </Block>
 
                                         {etterlevelseStatus === EtterlevelseStatus.OPPFYLLES_SENERE && (
@@ -231,9 +231,9 @@ export const EtterlevelseEditFields = ({
 
                                       <Radio value={EtterlevelseStatus.IKKE_RELEVANT} key={EtterlevelseStatus.IKKE_RELEVANT}>
                                         <Block $style={{ textDecoration: radioHover === EtterlevelseStatus.IKKE_RELEVANT ? 'underline' : 'none' }}>
-                                          <Paragraph2 $style={{ lineHeight: '22px' }} marginTop="0px" marginBottom="0px">
+                                          <ParagraphMedium $style={{ lineHeight: '22px' }} marginTop="0px" marginBottom="0px">
                                             {getEtterlevelseRadioLabel(EtterlevelseStatus.IKKE_RELEVANT)}
-                                          </Paragraph2>
+                                          </ParagraphMedium>
                                         </Block>
                                       </Radio>
                                     </RadioGroup>
@@ -278,7 +278,7 @@ export const EtterlevelseEditFields = ({
                         )}
                       </Block>
 
-                      <Label3 $style={{ lineHeight: '32px' }}>Hvilke suksesskriterier er oppfylt?</Label3>
+                      <LabelSmall $style={{ lineHeight: '32px' }}>Hvilke suksesskriterier er oppfylt?</LabelSmall>
 
                       <SuksesskriterierBegrunnelseEdit disableEdit={disableEdit} suksesskriterie={krav.suksesskriterier} viewMode={false} />
 
@@ -350,9 +350,9 @@ export const EtterlevelseEditFields = ({
                                       marginRight: '5px',
                                     }}
                                   />
-                                  <Paragraph2 marginBottom="0px" marginTop="0px" $style={{ lineHeight: '18px' }}>
+                                  <ParagraphMedium marginBottom="0px" marginTop="0px" $style={{ lineHeight: '18px' }}>
                                     Du må fylle ut alle obligatoriske felter
-                                  </Paragraph2>
+                                  </ParagraphMedium>
                                 </Block>
                               </Notification>
                             </Block>
@@ -436,9 +436,9 @@ export const EtterlevelseEditFields = ({
                 )}
                 {etterlevelse.changeStamp.lastModifiedDate && etterlevelse.changeStamp.lastModifiedBy && (
                   <Block paddingBottom="16px" display="flex" justifyContent="flex-end" width="100%">
-                    <Paragraph4 marginTop="0px" marginBottom="0px">
+                    <ParagraphXSmall marginTop="0px" marginBottom="0px">
                       Sist utfylt: {moment(etterlevelse.changeStamp.lastModifiedDate).format('ll')} av {etterlevelse.changeStamp.lastModifiedBy.split('-')[1]}
-                    </Paragraph4>
+                    </ParagraphXSmall>
                   </Block>
                 )}
               </Block>

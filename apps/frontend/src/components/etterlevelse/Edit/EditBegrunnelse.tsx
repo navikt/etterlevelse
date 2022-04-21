@@ -1,19 +1,19 @@
 import React from 'react'
-import { Etterlevelse, Krav, Suksesskriterie, SuksesskriterieBegrunnelse } from '../../../constants'
-import { mapEtterlevelseToFormValue, updateEtterlevelse } from '../../../api/EtterlevelseApi'
-import { FieldArray, FieldArrayRenderProps, Form, Formik, FormikProps } from 'formik'
-import { Card } from 'baseui/card'
-import { Block } from 'baseui/block'
-import { theme } from '../../../util'
-import { ettlevColors } from '../../../util/theme'
-import { getSuksesskriterieBegrunnelse } from './SuksesskriterieBegrunnelseEdit'
+import {Etterlevelse, Krav, Suksesskriterie, SuksesskriterieBegrunnelse} from '../../../constants'
+import {mapEtterlevelseToFormValue, updateEtterlevelse} from '../../../api/EtterlevelseApi'
+import {FieldArray, FieldArrayRenderProps, Form, Formik, FormikProps} from 'formik'
+import {Card} from 'baseui/card'
+import {Block} from 'baseui/block'
+import {theme} from '../../../util'
+import {ettlevColors} from '../../../util/theme'
+import {getSuksesskriterieBegrunnelse} from './SuksesskriterieBegrunnelseEdit'
 import * as yup from 'yup'
-import { FieldWrapper } from '../../common/Inputs'
-import { useDebouncedState } from '../../../util/hooks'
-import { Label3 } from 'baseui/typography'
-import { FormControl } from 'baseui/form-control'
+import {FieldWrapper} from '../../common/Inputs'
+import {useDebouncedState} from '../../../util/hooks'
+import {LabelSmall} from 'baseui/typography'
+import {FormControl} from 'baseui/form-control'
 import TextEditor from '../../common/TextEditor/TextEditor'
-import { Error } from '../../common/ModalSchema'
+import {Error} from '../../common/ModalSchema'
 
 type EditBegrunnelseProps = {
   etterlevelse: Etterlevelse
@@ -122,13 +122,13 @@ const Begrunnelse = ({
   return (
     <Block marginBottom={theme.sizing.scale700}>
       <Card>
-        <Label3 $style={{ color: ettlevColors.green600 }}>
+        <LabelSmall $style={{ color: ettlevColors.green600 }}>
           SUKSESSKRITERIE {index + 1} AV {kriterieLength}
-        </Label3>
-        <Label3 $style={{ fontSize: '21px', lineHeight: '30px' }}>{suksesskriterie.navn}</Label3>
-        <Label3 $style={{ lineHeight: '22px' }} marginTop="16px">
+        </LabelSmall>
+        <LabelSmall $style={{ fontSize: '21px', lineHeight: '30px' }}>{suksesskriterie.navn}</LabelSmall>
+        <LabelSmall $style={{ lineHeight: '22px' }} marginTop="16px">
           Hvordan er kriteriet oppfylt?
-        </Label3>
+        </LabelSmall>
 
         {suksesskriterieBegrunnelse.oppfylt && (
           <Block>

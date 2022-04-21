@@ -1,17 +1,17 @@
-import { Block } from 'baseui/block'
-import { Field, FieldProps, Form, Formik, FormikProps } from 'formik'
-import React, { useEffect, useState } from 'react'
-import { createMelding, mapMeldingToFormValue, updateMelding } from '../../api/MeldingApi'
-import { AlertType, Melding, MeldingStatus, MeldingType } from '../../constants'
-import { FieldWrapper, TextAreaField } from '../common/Inputs'
+import {Block} from 'baseui/block'
+import {Field, FieldProps, Formik, FormikProps} from 'formik'
+import React, {useEffect, useState} from 'react'
+import {createMelding, mapMeldingToFormValue, updateMelding} from '../../api/MeldingApi'
+import {AlertType, Melding, MeldingStatus, MeldingType} from '../../constants'
+import {FieldWrapper, TextAreaField} from '../common/Inputs'
 import Button from '../common/Button'
-import { eyeSlash } from '../Images'
-import { borderColor } from '../common/Style'
-import { ettlevColors, theme } from '../../util/theme'
-import { Spinner } from '../common/Spinner'
-import { FormControl } from 'baseui/form-control'
-import { Radio, RadioGroup } from 'baseui/radio'
-import { Paragraph2 } from 'baseui/typography'
+import {eyeSlash} from '../Images'
+import {borderColor} from '../common/Style'
+import {ettlevColors, theme} from '../../util/theme'
+import {Spinner} from '../common/Spinner'
+import {FormControl} from 'baseui/form-control'
+import {Radio, RadioGroup} from 'baseui/radio'
+import {ParagraphMedium} from 'baseui/typography'
 
 export const getAlertTypeText = (type: AlertType) => {
   if (!type) return ''
@@ -121,9 +121,9 @@ export const EditMelding = ({ melding, setMelding, isLoading, maxChar }: { meldi
                           return (
                             <Radio value={id} key={id}>
                               <Block $style={{ textDecoration: radioHover === id ? 'underline' : 'none' }}>
-                                <Paragraph2 $style={{ lineHeight: '22px' }} marginTop="0px" marginBottom="0px">
+                                <ParagraphMedium $style={{ lineHeight: '22px' }} marginTop="0px" marginBottom="0px">
                                   {getAlertTypeText(id)}
-                                </Paragraph2>
+                                </ParagraphMedium>
                               </Block>
                             </Radio>
                           )

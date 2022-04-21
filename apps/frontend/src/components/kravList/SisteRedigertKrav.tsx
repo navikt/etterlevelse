@@ -1,12 +1,12 @@
-import { useEffect, useState } from 'react'
-import { emptyPage, KravQL } from '../../constants'
-import { useKravFilter } from '../../api/KravGraphQLApi'
-import { Spinner } from '../common/Spinner'
-import { theme } from '../../util'
-import { Notification } from 'baseui/notification'
-import { Block, Display, Responsive } from 'baseui/block'
-import { H2, Paragraph2 } from 'baseui/typography'
-import { KravPanels, sortKrav } from '../../pages/KravListPage'
+import {useEffect, useState} from 'react'
+import {emptyPage, KravQL} from '../../constants'
+import {useKravFilter} from '../../api/KravGraphQLApi'
+import {Spinner} from '../common/Spinner'
+import {theme} from '../../util'
+import {Notification} from 'baseui/notification'
+import {Block, Display, Responsive} from 'baseui/block'
+import {HeadingXLarge, ParagraphMedium} from 'baseui/typography'
+import {KravPanels, sortKrav} from '../../pages/KravListPage'
 
 const responsiveDisplay: Responsive<Display> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
 
@@ -52,13 +52,13 @@ export const SistRedigertKrav = () => {
     <Block>
       <Block display={responsiveDisplay} justifyContent="center" alignContent="center" width="100%" marginTop="20px" marginBottom="20px">
         <Block display="flex" justifyContent="flex-start" width="100%">
-          <H2 marginTop="0px" marginBottom="0px">
+          <HeadingXLarge marginTop="0px" marginBottom="0px">
             {sortedKravList.length ? sortedKravList.length : 0} Krav
-          </H2>
+          </HeadingXLarge>
         </Block>
         {/* <Block display="flex" justifyContent="flex-end" width="100%" alignItems="center">
           <Block >
-            <Label3>Sorter:</Label3>
+            <LabelSmall>Sorter:</LabelSmall>
           </Block>
           <Block marginLeft="17px">
             <RadioGroup
@@ -80,7 +80,7 @@ export const SistRedigertKrav = () => {
       <KravPanels kravene={sortedKravList} loading={loading} />
       {sortedKravList.length === 0 && (
         <Block width="100%" display="flex" justifyContent="center">
-          <Paragraph2>Fant ingen krav</Paragraph2>
+          <ParagraphMedium>Fant ingen krav</ParagraphMedium>
         </Block>
       )}
     </Block>

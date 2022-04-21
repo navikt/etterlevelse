@@ -1,14 +1,14 @@
-import { createTheme, lightThemePrimitives } from 'baseui'
-import { colors } from 'baseui/tokens'
-import { Theme, ThemePrimitives } from 'baseui/theme'
-import { RecursivePartial } from '../constants'
+import {createTheme, lightThemePrimitives} from 'baseui'
+import {colors} from 'baseui/tokens'
+import {Theme, ThemePrimitives} from 'baseui/theme'
+import {RecursivePartial} from '../constants'
 import '@fontsource/source-sans-pro/200.css'
 import '@fontsource/source-sans-pro/300.css'
 import '@fontsource/source-sans-pro/400.css'
 import '@fontsource/source-sans-pro/600.css'
 import '@fontsource/source-sans-pro/700.css'
 import '@fontsource/source-sans-pro/900.css'
-import { Responsive, Scale } from 'baseui/block'
+import {Responsive, Scale} from 'baseui/block'
 
 // etterlevelse colors
 export const ettlevColors = {
@@ -98,7 +98,7 @@ const overrides: RecursivePartial<Theme> = {
     inputBorder: ettlevColors.grey200,
     inputFill: ettlevColors.white,
     inputFillActive: ettlevColors.white,
-    borderFocus: ettlevColors.green400, // same as inputFillActive to hide
+    // borderFocus: ettlevColors.green400, // same as inputFillActive to hide
     menuFill: ettlevColors.white,
     menuFillHover: ettlevColors.green50,
     menuFontHighlighted: ettlevColors.green400,
@@ -122,23 +122,23 @@ const overrides: RecursivePartial<Theme> = {
   },
   typography: {
     // Increase weight 500->600 on bold texts
-    font100: { fontWeight: 400, fontSize: '14px', lineHeight: '21px' }, //P4
+    font100: { fontWeight: 400, fontSize: '14px', lineHeight: '21px' }, //P4 ParagraphXSmall
     font150: { fontWeight: 500, fontSize: '14px', lineHeight: '20px' }, // mini button
     font200: { fontWeight: 400, fontSize: '16px', lineHeight: '20px' },
-    font250: { fontWeight: 700, fontSize: '18px', lineHeight: '24px' }, //compact button, label3
-    font300: { fontWeight: 400, fontSize: '18px', lineHeight: '24px' }, //P2
+    font250: { fontWeight: 700, fontSize: '18px', lineHeight: '24px' }, //compact button, LabelSmall
+    font300: { fontWeight: 400, fontSize: '18px', lineHeight: '24px' }, //P2 ParagraphMedium
     font350: { fontWeight: 600 },
 
-    font400: { fontWeight: 400, fontSize: '22px', lineHeight: '32px' }, //P1
+    font400: { fontWeight: 400, fontSize: '22px', lineHeight: '32px' }, //P1 ParagraphLarge
 
     font450: { fontWeight: 600 },
     font550: { fontWeight: 600 },
     font650: { fontWeight: 600 },
 
-    font750: { fontWeight: 700, fontSize: '18px', lineHeight: '24px' }, //H4
-    font850: { fontWeight: 700, fontSize: '22px', lineHeight: '28px' }, //H3
-    font950: { fontWeight: 900, fontSize: '24px', lineHeight: '32px' }, //H2
-    font1050: { fontWeight: 900, fontSize: '32px', lineHeight: '40px' }, //H1
+    font750: { fontWeight: 700, fontSize: '18px', lineHeight: '24px' }, //H4 HeadingMedium
+    font850: { fontWeight: 700, fontSize: '22px', lineHeight: '28px' }, //H3 HeadingLarge
+    font950: { fontWeight: 900, fontSize: '24px', lineHeight: '32px' }, //H2 HeadingXLarge
+    font1050: { fontWeight: 900, fontSize: '32px', lineHeight: '40px' }, //H1 HeadingXXLarge
 
     font1150: { fontWeight: 600 },
     font1250: { fontWeight: 600 },

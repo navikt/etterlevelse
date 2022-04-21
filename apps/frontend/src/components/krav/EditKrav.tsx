@@ -1,35 +1,34 @@
-import { Krav, KravQL, KravStatus, KravVersjon } from '../../constants'
-import { Form, Formik } from 'formik'
-import { createKrav, getKravByKravNumberAndVersion, kravMapToFormVal, updateKrav } from '../../api/KravApi'
-import { Block } from 'baseui/block'
-import React, { useEffect } from 'react'
+import {Krav, KravQL, KravStatus, KravVersjon} from '../../constants'
+import {Form, Formik} from 'formik'
+import {createKrav, getKravByKravNumberAndVersion, kravMapToFormVal, updateKrav} from '../../api/KravApi'
+import {Block} from 'baseui/block'
+import React, {useEffect} from 'react'
 import * as yup from 'yup'
-import { codelist, ListName } from '../../services/Codelist'
-import { InputField, MultiInputField, OptionField, TextAreaField } from '../common/Inputs'
+import {codelist, ListName} from '../../services/Codelist'
+import {InputField, MultiInputField, TextAreaField} from '../common/Inputs'
 import axios from 'axios'
-import { env } from '../../util/env'
-import { KravVarslingsadresserEdit } from './Edit/KravVarslingsadresserEdit'
-import { KravRegelverkEdit } from './Edit/KravRegelverkEdit'
-import { KravSuksesskriterierEdit } from './Edit/KravSuksesskriterieEdit'
-import { EditBegreper } from './Edit/KravBegreperEdit'
-import { H1, H2, Label3, LabelLarge, Paragraph2, Paragraph4 } from 'baseui/typography'
+import {env} from '../../util/env'
+import {KravVarslingsadresserEdit} from './Edit/KravVarslingsadresserEdit'
+import {KravRegelverkEdit} from './Edit/KravRegelverkEdit'
+import {KravSuksesskriterierEdit} from './Edit/KravSuksesskriterieEdit'
+import {EditBegreper} from './Edit/KravBegreperEdit'
+import {HeadingXLarge, HeadingXXLarge, LabelLarge, LabelSmall, ParagraphMedium, ParagraphXSmall} from 'baseui/typography'
 import CustomizedModal from '../common/CustomizedModal'
 import Button from '../common/Button'
-import { ettlevColors, maxPageWidth, responsivePaddingLarge, responsiveWidthLarge, theme } from '../../util/theme'
-import { getEtterlevelserByKravNumberKravVersion } from '../../api/EtterlevelseApi'
+import {ettlevColors, maxPageWidth, responsivePaddingLarge, responsiveWidthLarge, theme} from '../../util/theme'
+import {getEtterlevelserByKravNumberKravVersion} from '../../api/EtterlevelseApi'
 import ErrorModal from '../ErrorModal'
-import { Error } from '../common/ModalSchema'
-import { ErrorMessageModal } from './ErrorMessageModal'
-import { KIND as NKIND, Notification } from 'baseui/notification'
-import { faTimesCircle } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { EditKravMultiOptionField } from './Edit/EditKravMultiOptionField'
-import { borderColor, borderRadius, borderStyle, borderWidth } from '../common/Style'
-import { Checkbox } from 'baseui/checkbox'
-import { warningAlert } from '../Images'
-import { user } from '../../services/User'
-import { Modal as BaseModal, ModalBody, ModalHeader } from 'baseui/modal'
-import { kravStatus } from '../../pages/KravPage'
+import {Error} from '../common/ModalSchema'
+import {ErrorMessageModal} from './ErrorMessageModal'
+import {KIND as NKIND, Notification} from 'baseui/notification'
+import {faTimesCircle} from '@fortawesome/free-solid-svg-icons'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {EditKravMultiOptionField} from './Edit/EditKravMultiOptionField'
+import {borderColor, borderRadius, borderStyle, borderWidth} from '../common/Style'
+import {Checkbox} from 'baseui/checkbox'
+import {warningAlert} from '../Images'
+import {user} from '../../services/User'
+import {Modal as BaseModal, ModalBody, ModalHeader} from 'baseui/modal'
 
 type EditKravProps = {
   krav: KravQL
@@ -206,8 +205,8 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                 )}
                 {!stickyHeader && (
                   <Block width="100%">
-                    <H1 $style={{ color: '#F8F8F8' }}>{newVersion ? 'Ny versjon' : newKrav ? 'Ny krav' : 'Rediger kravside'}: </H1>
-                    <H2 $style={{ color: '#F8F8F8' }}>{`K${krav.kravNummer}.${krav.kravVersjon} ${krav.navn}`} </H2>
+                    <HeadingXXLarge $style={{ color: '#F8F8F8' }}>{newVersion ? 'Ny versjon' : newKrav ? 'Ny krav' : 'Rediger kravside'}: </HeadingXXLarge>
+                    <HeadingXLarge $style={{ color: '#F8F8F8' }}>{`K${krav.kravNummer}.${krav.kravVersjon} ${krav.navn}`} </HeadingXLarge>
                     {newVersion && (
                       <Notification
                         closeable
@@ -228,11 +227,11 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                             <img src={warningAlert} alt="" />
                           </Block>
                           <Block>
-                            <Label3 $style={{ fontSize: '16px', lineHeight: '20px' }}>Sikker på at du vil opprette en ny versjon?</Label3>
-                            <Paragraph4 $style={{ fontSize: '16px', lineHeight: '20px' }}>
+                            <LabelSmall $style={{ fontSize: '16px', lineHeight: '20px' }}>Sikker på at du vil opprette en ny versjon?</LabelSmall>
+                            <ParagraphXSmall $style={{ fontSize: '16px', lineHeight: '20px' }}>
                               Ny versjon av kravet skal opprettes når det er <strong>vesentlige endringer</strong> i kravet som gjør at <strong>teamene må revurdere</strong> sin
                               besvarelse av kravet. Ved alle mindre justeringer, endre i det aktive kravet, og da slipper teamene å revurdere sin besvarelse.
-                            </Paragraph4>
+                            </ParagraphXSmall>
                           </Block>
                         </Block>
                       </Notification>
@@ -280,7 +279,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
 
                 <Block className="content_container" display="flex" width="100%" justifyContent="center">
                   <Block width={responsiveWidthLarge}>
-                    <H2 marginBottom={inputMarginBottom}>Suksesskriterier</H2>
+                    <HeadingXLarge marginBottom={inputMarginBottom}>Suksesskriterier</HeadingXLarge>
                     <KravSuksesskriterierEdit />
                     {/*
                   <TextAreaField marginBottom='80px' label='Beskrivelse' name='beskrivelse' markdown shortenLinks onImageUpload={onImageUpload(krav.id)}
@@ -291,7 +290,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                         tooltip={'Legg til en utfyllende beskrivelse av kravet. Benyttes kun der det er behov for det.'} /> */}
 
                     <Block marginBottom={inputMarginBottom}>
-                      <H2>Dokumentasjon</H2>
+                      <HeadingXLarge>Dokumentasjon</HeadingXLarge>
                     </Block>
 
                     <MultiInputField
@@ -331,7 +330,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                     {/* <MultiInputField label='Rettskilder' name='rettskilder' link /> */}
 
                     <Block marginTop="80px" marginBottom={inputMarginBottom}>
-                      <H2>Gruppering og etiketter</H2>
+                      <HeadingXLarge>Gruppering og etiketter</HeadingXLarge>
                     </Block>
 
                     <Block width="100%" maxWidth={maxInputWidth}>
@@ -358,7 +357,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                     </Block>
 
                     <Block marginBottom={inputMarginBottom}>
-                      <H2>Egenskaper</H2>
+                      <HeadingXLarge>Egenskaper</HeadingXLarge>
                     </Block>
 
                     {/* {user.isAdmin() && (
@@ -412,9 +411,9 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                                     marginRight: '5px',
                                   }}
                                 />
-                                <Paragraph2 marginBottom="0px" marginTop="0px" $style={{ lineHeight: '18px' }}>
+                                <ParagraphMedium marginBottom="0px" marginTop="0px" $style={{ lineHeight: '18px' }}>
                                   Du må fylle ut alle obligatoriske felter
-                                </Paragraph2>
+                                </ParagraphMedium>
                               </Block>
                             </Notification>
                           </Block>
