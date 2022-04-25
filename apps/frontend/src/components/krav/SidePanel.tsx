@@ -23,6 +23,7 @@ export const SidePanel = () => {
             fontWeight: 600,
             lineHeight: '28px',
             textDecoration: hover ? 'underline' : 'none',
+            display: 'flex'
           }}
         >
           Dokumentere etterlevelse
