@@ -213,7 +213,7 @@ export const EditEtterlevelseV2 = ({
                     maxWidth: '650px',
                   }}
                 >
-                  <strong>Kravet er bortfiltrert.</strong>
+                  <strong>Kravet er bortfiltrert og derfor ikke relevant.</strong> 
                 </ParagraphMedium>
               )}
 
@@ -228,7 +228,7 @@ export const EditEtterlevelseV2 = ({
                     maxWidth: '650px',
                   }}
                 >
-                  <strong>Kravet er utgått.</strong>
+                  <strong>Kravet er utgått.</strong> Dere skal ikke dokumentere ny etterlevelse på dette kravet. 
                 </ParagraphMedium>
               )}
 
