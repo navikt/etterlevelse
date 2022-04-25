@@ -108,8 +108,8 @@ export const KravCard = (props: { krav: KravEtterlevelseData; noStatus?: boolean
                 </ParagraphXSmall>
                 {!props.noVarsling && props.krav.kravVersjon === 1 && props.krav.etterlevelseStatus === undefined && kravAge < 30 && showWarningMessage('Nytt krav')}
                 {!props.noVarsling && props.krav.etterlevelseStatus === undefined && nyVersionFlag && props.kravFilter === KRAV_FILTER_TYPE.RELEVANTE_KRAV && showWarningMessage('Ny version')}
-                {props.kravFilter === KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV && <StatusView
-                  status={'Bortfiltrert'}
+                {props.kravFilter !== KRAV_FILTER_TYPE.RELEVANTE_KRAV && <StatusView
+                  status={props.kravFilter === KRAV_FILTER_TYPE.UTGAATE_KRAV ? 'Utgått' : 'Bortfiltrert'}
                   statusDisplay={{
                     background: ettlevColors.grey50,
                     ...borderStyle('solid')
@@ -194,8 +194,8 @@ export const KravCard = (props: { krav: KravEtterlevelseData; noStatus?: boolean
                         Body: {
                           style: {
                             ...marginAll('2px'),
-                            paddingRight:'8px',
-                            paddingLeft:'8px'
+                            paddingRight: '8px',
+                            paddingLeft: '8px'
                           }
                         }
                       }}
