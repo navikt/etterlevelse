@@ -430,7 +430,7 @@ export const EtterlevelseEditFields = ({
                         submitForm()
                       }}
                     >
-                      Registrer som ferdig utfylt
+                      Ferdig utfylt
                     </Button>
                   </Block>
                 )}

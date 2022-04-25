@@ -515,7 +515,7 @@ export const EditEtterlevelse = ({
                       submitForm()
                     }}
                   >
-                    Registrer som ferdig utfylt
+                    Ferdig utfylt
                   </Button>
                 </Block>
               )}
