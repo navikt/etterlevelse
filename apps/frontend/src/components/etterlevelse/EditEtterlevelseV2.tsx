@@ -170,9 +170,9 @@ export const EditEtterlevelseV2 = ({
                 >
                   {kravNumView(krav)}
                 </ParagraphMedium>
-                {kravFilter === KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV && (
+                {kravFilter !== KRAV_FILTER_TYPE.RELEVANTE_KRAV && (
                   <StatusView
-                    status={'Bortfiltrert'}
+                    status={kravFilter === KRAV_FILTER_TYPE.UTGAATE_KRAV ? 'Utgått' : 'Bortfiltrert'}
                     statusDisplay={{
                       background: ettlevColors.grey50,
                       ...borderStyle('solid')
