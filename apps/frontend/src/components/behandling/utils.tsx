@@ -39,7 +39,7 @@ export const getStatusLabelColor = (status: EtterlevelseStatus) => {
       }
     case EtterlevelseStatus.IKKE_RELEVANT:
       return {
-        background: ettlevColors.white,
+        background: ettlevColors.grey50,
         border: ettlevColors.grey200,
       }
     case EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT:
