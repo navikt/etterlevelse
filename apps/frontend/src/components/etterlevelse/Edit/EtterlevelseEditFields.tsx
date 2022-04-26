@@ -1,31 +1,31 @@
-import { Etterlevelse, EtterlevelseStatus, KravQL, KravStatus } from '../../../constants'
-import { Field, FieldProps, Form, Formik, FormikProps, validateYupSchema, yupToFormErrors } from 'formik'
-import { mapEtterlevelseToFormValue } from '../../../api/EtterlevelseApi'
-import { Block } from 'baseui/block'
+import {Etterlevelse, EtterlevelseStatus, KravQL, KravStatus} from '../../../constants'
+import {Field, FieldProps, Form, Formik, FormikProps, validateYupSchema, yupToFormErrors} from 'formik'
+import {mapEtterlevelseToFormValue} from '../../../api/EtterlevelseApi'
+import {Block} from 'baseui/block'
 import Button from '../../common/Button'
-import React, { useEffect } from 'react'
-import { DateField, FieldWrapper, TextAreaField } from '../../common/Inputs'
-import { theme } from '../../../util'
-import { FormControl } from 'baseui/form-control'
+import React, {useEffect} from 'react'
+import {DateField, FieldWrapper, TextAreaField} from '../../common/Inputs'
+import {theme} from '../../../util'
+import {FormControl} from 'baseui/form-control'
 
-import { LabelSmall, ParagraphMedium, ParagraphXSmall } from 'baseui/typography'
-import { ettlevColors } from '../../../util/theme'
-import { SuksesskriterierBegrunnelseEdit } from './SuksesskriterieBegrunnelseEdit'
-import { Radio, RadioGroup } from 'baseui/radio'
-import { Code } from '../../../services/Codelist'
-import { Error } from '../../common/ModalSchema'
-import { KIND as NKIND, Notification } from 'baseui/notification'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTimesCircle } from '@fortawesome/free-solid-svg-icons'
-import { borderColor, borderRadius, borderStyle, borderWidth, marginAll, paddingZero } from '../../common/Style'
+import {LabelSmall, ParagraphMedium, ParagraphXSmall} from 'baseui/typography'
+import {ettlevColors} from '../../../util/theme'
+import {SuksesskriterierBegrunnelseEdit} from './SuksesskriterieBegrunnelseEdit'
+import {Radio, RadioGroup} from 'baseui/radio'
+import {Code} from '../../../services/Codelist'
+import {Error} from '../../common/ModalSchema'
+import {KIND as NKIND, Notification} from 'baseui/notification'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faTimesCircle} from '@fortawesome/free-solid-svg-icons'
+import {borderColor, borderRadius, borderStyle, borderWidth, marginAll, paddingZero} from '../../common/Style'
 import moment from 'moment'
-import { CustomizedAccordion, CustomizedPanel, CustomPanelDivider } from '../../common/CustomizedAccordion'
-import { AllInfo } from '../../krav/ViewKrav'
+import {CustomizedAccordion, CustomizedPanel, CustomPanelDivider} from '../../common/CustomizedAccordion'
+import {AllInfo} from '../../krav/ViewKrav'
 import CustomizedModal from '../../common/CustomizedModal'
-import { useNavigate } from 'react-router-dom'
+import {useNavigate} from 'react-router-dom'
 import EtterlevelseCard from '../EtterlevelseCard'
-import { ModalHeader } from 'baseui/modal'
-import { etterlevelseSchema } from './etterlevelseSchema'
+import {ModalHeader} from 'baseui/modal'
+import {etterlevelseSchema} from './etterlevelseSchema'
 import _ from 'lodash'
 
 type EditProps = {
@@ -303,9 +303,6 @@ export const EtterlevelseEditFields = ({
 
           <Block height={theme.sizing.scale600}/>
          */}
-
-                      <Error fieldName={'status'} fullWidth={true} />
-
                       <Block marginBottom="24px">
                         <CustomizedAccordion>
                           {/*The commented code block is part of a feature that will be implemented later.*/}

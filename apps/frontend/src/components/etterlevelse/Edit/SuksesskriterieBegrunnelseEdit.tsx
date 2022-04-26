@@ -8,7 +8,6 @@ import {useDebouncedState} from '../../../util/hooks'
 import {ettlevColors, theme} from '../../../util/theme'
 import {CustomizedAccordion, CustomizedPanel} from '../../common/CustomizedAccordion'
 import {FieldWrapper} from '../../common/Inputs'
-import {Markdown} from '../../common/Markdown'
 import TextEditor from '../../common/TextEditor/TextEditor'
 import {Error} from '../../common/ModalSchema'
 import LabelWithToolTip from '../../common/LabelWithTooltip'
@@ -25,28 +24,28 @@ export const getSuksesskriterieBegrunnelse = (suksesskriterieBegrunnelser: Sukse
     return item.suksesskriterieId === suksessKriterie.id
   })
   if (!sb) {
-    return { suksesskriterieId: suksessKriterie.id, begrunnelse: '', oppfylt: false, ikkeRelevant: false, behovForBegrunnelse: suksessKriterie.behovForBegrunnelse }
+    return {suksesskriterieId: suksessKriterie.id, begrunnelse: '', oppfylt: false, ikkeRelevant: false, behovForBegrunnelse: suksessKriterie.behovForBegrunnelse}
   } else {
     return sb
   }
 }
 
-export const SuksesskriterierBegrunnelseEdit = ({ suksesskriterie, disableEdit, viewMode }: { suksesskriterie: Suksesskriterie[]; disableEdit: boolean; viewMode: boolean }) => {
+export const SuksesskriterierBegrunnelseEdit = ({suksesskriterie, disableEdit, viewMode}: { suksesskriterie: Suksesskriterie[]; disableEdit: boolean; viewMode: boolean }) => {
   return (
     <FieldWrapper>
       <FieldArray name={'suksesskriterieBegrunnelser'}>
-        {(p) => <KriterieBegrunnelseList props={p} disableEdit={disableEdit} suksesskriterie={suksesskriterie} viewMode={viewMode} />}
+        {(p) => <KriterieBegrunnelseList props={p} disableEdit={disableEdit} suksesskriterie={suksesskriterie} viewMode={viewMode}/>}
       </FieldArray>
     </FieldWrapper>
   )
 }
 
 const KriterieBegrunnelseList = ({
-  props,
-  suksesskriterie,
-  disableEdit,
-  viewMode,
-}: {
+                                   props,
+                                   suksesskriterie,
+                                   disableEdit,
+                                   viewMode,
+                                 }: {
   props: FieldArrayRenderProps
   suksesskriterie: Suksesskriterie[]
   disableEdit: boolean
@@ -78,16 +77,16 @@ const KriterieBegrunnelseList = ({
 }
 
 const KriterieBegrunnelse = ({
-  suksesskriterie,
-  index,
-  suksesskriterieBegrunnelser,
-  disableEdit,
-  update,
-  status,
-  props,
-  viewMode,
-  totalSuksesskriterie,
-}: {
+                               suksesskriterie,
+                               index,
+                               suksesskriterieBegrunnelser,
+                               disableEdit,
+                               update,
+                               status,
+                               props,
+                               viewMode,
+                               totalSuksesskriterie,
+                             }: {
   suksesskriterie: Suksesskriterie
   index: number
   suksesskriterieBegrunnelser: SuksesskriterieBegrunnelse[]
@@ -117,12 +116,12 @@ const KriterieBegrunnelse = ({
   const getBorderColor = () => {
     if (status === EtterlevelseStatus.FERDIG || status === EtterlevelseStatus.FERDIG_DOKUMENTERT) {
       if (!begrunnelse && suksesskriterie.behovForBegrunnelse) {
-        return { border: '2px solid #842D08' }
+        return {border: '2px solid #842D08'}
       } else {
-        return { border: '1px solid #C9C9C9' }
+        return {border: '1px solid #C9C9C9'}
       }
     } else {
-      return { border: '1px solid #C9C9C9' }
+      return {border: '1px solid #C9C9C9'}
     }
   }
   const getBackgroundColor = () => {
@@ -190,7 +189,7 @@ const KriterieBegrunnelse = ({
       )}
       <CustomizedAccordion>
         <CustomizedPanel
-          title={<LabelSmall $style={{ color: ettlevColors.green600 }}>Utfyllende om kriteriet</LabelSmall>}
+          title={<LabelSmall $style={{color: ettlevColors.green600}}>Utfyllende om kriteriet</LabelSmall>}
           overrides={{
             Header: {
               style: {
@@ -219,16 +218,16 @@ const KriterieBegrunnelse = ({
             },
           }}
         >
-          <Markdown source={suksesskriterie.beskrivelse} />
+          {/*<Markdown source={suksesskriterie.beskrivelse} />*/}
         </CustomizedPanel>
       </CustomizedAccordion>
 
       {viewMode === false && (
         <>
-          <Block width="100%" height="1px" backgroundColor={ettlevColors.grey100} marginTop="24px" marginBottom="24px" />
+          <Block width="100%" height="1px" backgroundColor={ettlevColors.grey100} marginTop="24px" marginBottom="24px"/>
 
           {status !== EtterlevelseStatus.IKKE_RELEVANT && status !== EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT && (
-            <StatefulButtonGroup mode={MODE.radio} initialState={{ selected: oppfylt ? 0 : ikkerelevant ? 1 : [] }}>
+            <StatefulButtonGroup mode={MODE.radio} initialState={{selected: oppfylt ? 0 : ikkerelevant ? 1 : []}}>
               <Button
                 type={'button'}
                 disabled={status === EtterlevelseStatus.IKKE_RELEVANT || status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT}
@@ -293,18 +292,19 @@ const KriterieBegrunnelse = ({
         !disableEdit &&
         suksesskriterie.behovForBegrunnelse && (
           <Block marginTop={theme.sizing.scale1000}>
-            <FormControl label={<LabelWithToolTip label={oppfylt ? 'Hvordan oppfylles kriteriet?' : 'Hvorfor er ikke kriteriet relevant?'} />}>
-              <TextEditor initialValue={begrunnelse} setValue={setBegrunnelse} height={'188px'} errors={props.form.errors} simple width="100%" />
+            <FormControl label={<LabelWithToolTip label={oppfylt ? 'Hvordan oppfylles kriteriet?' : 'Hvorfor er ikke kriteriet relevant?'}/>}>
+              <TextEditor initialValue={begrunnelse} setValue={setBegrunnelse} height={'188px'} errors={props.form.errors} simple width="100%"/>
             </FormControl>
-            <Error fieldName={`suksesskriterieBegrunnelser[${index}].begrunnelse`} fullWidth={true} />
+            <Error fieldName={`suksesskriterieBegrunnelser[${index}].begrunnelse`} fullWidth={true}/>
           </Block>
         )}
 
       {(oppfylt || ikkerelevant) && disableEdit && (
         <Block paddingLeft={paddingLeft} marginTop={theme.sizing.scale1000}>
-          <LabelAboveContent title="Dokumentasjon" markdown={begrunnelse} />
+          <LabelAboveContent title="Dokumentasjon" markdown={begrunnelse}/>
         </Block>
       )}
+      <Block marginTop={'8px'}>{(oppfylt === false && ikkerelevant === false && begrunnelse.length > 0) && <Error fieldName={'status'} fullWidth={true}/>}</Block>
     </Block>
   )
 }

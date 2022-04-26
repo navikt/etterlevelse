@@ -26,7 +26,7 @@ import {env} from '../../util/env'
 import {useQuery} from '@apollo/client'
 import moment from 'moment'
 import {informationIcon} from '../Images'
-import { getEtterlevelseStatus } from '../behandling/utils'
+import {getEtterlevelseStatus} from '../behandling/utils'
 
 type EditEttlevProps = {
   etterlevelse: Etterlevelse
@@ -50,7 +50,7 @@ const etterlevelseSchema = () => {
         behovForBegrunnelse: yup.boolean(),
         begrunnelse: yup.string().test({
           name: 'begrunnelseText',
-          message: 'Du må fylle ut dokumentasjonen',
+          message: 'Du må fylle ut beskrivelsen.',
           test: function (begrunnelse) {
             const { parent, options } = this
             if (
@@ -65,7 +65,7 @@ const etterlevelseSchema = () => {
             }
           },
         }),
-        suksesskriterieId: yup.number().required('Begrunnelse må være knyttet til et suksesskriterie'),
+        suksesskriterieId: yup.number().required('Begrunnelse må være knyttet til et suksesskriterie.'),
       }),
     ),
     statusBegrunnelse: yup.string().test({
@@ -92,7 +92,7 @@ const etterlevelseSchema = () => {
     }),
     fristForFerdigstillelse: yup.string().test({
       name: 'frist',
-      message: 'Du må sette på en frist dato for ferdistilling',
+      message: 'Du må sette på en frist dato for ferdistilling.',
       test: function (fristForFerdigstillelse) {
         const { parent } = this
         if (parent.status === EtterlevelseStatus.OPPFYLLES_SENERE && (fristForFerdigstillelse === undefined || fristForFerdigstillelse === null)) {
