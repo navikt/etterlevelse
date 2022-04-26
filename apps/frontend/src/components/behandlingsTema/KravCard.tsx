@@ -7,7 +7,7 @@ import {ettlevColors} from '../../util/theme'
 import {borderStyle, marginAll} from '../common/Style'
 import {LabelSmall, ParagraphXSmall} from 'baseui/typography'
 import StatusView from '../common/StatusTag'
-import {getEtterlevelseStatus, getEtterlevelseStatusLabelColor} from '../behandling/utils'
+import {getEtterlevelseStatus, getStatusLabelColor} from '../behandling/utils'
 import moment from 'moment'
 import TildeltPopoever from '../etterlevelseMetadata/TildeltPopover'
 import {isFerdigUtfylt} from '../../pages/BehandlingerTemaPageV2'
@@ -145,7 +145,7 @@ export const KravCard = (props: { krav: KravEtterlevelseData; noStatus?: boolean
               <Block width="350px" display="flex" justifyContent="flex-end" marginLeft="32px">
                 <Block display="flex" width="100%" maxWidth="220px" justifyContent="flex-end">
                   {props.krav && props.krav.etterlevelseStatus && (
-                    <StatusView status={getEtterlevelseStatus(props.krav)} statusDisplay={getEtterlevelseStatusLabelColor(props.krav)}/>
+                    <StatusView status={getEtterlevelseStatus(props.krav.etterlevelseStatus, props.krav.frist)} statusDisplay={getStatusLabelColor(props.krav.etterlevelseStatus)}/>
                   )}
                 </Block>
                 {!props.krav.isIrrelevant && (

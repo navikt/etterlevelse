@@ -34,7 +34,7 @@ import {Helmet} from 'react-helmet'
 import CustomizedSelect from '../components/common/CustomizedSelect'
 import {Option} from 'baseui/select'
 import {user} from '../services/User'
-import {getEtterlevelseStatus, getEtterlevelseStatusLabelColor} from '../components/behandling/utils'
+import {getEtterlevelseStatus, getStatusLabelColor} from '../components/behandling/utils'
 
 const responsiveBreakPoints: Responsive<Display> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
 
@@ -415,7 +415,7 @@ const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function; setKra
         <Block display="flex" justifyContent="flex-end" flex="1" width="100%">
           <Block width="350px" display="flex" justifyContent="flex-end" marginLeft="32px">
             <Block display="flex" width="100%" maxWidth="220px" justifyContent="flex-end">
-              {props.krav && props.krav.etterlevelseStatus && <StatusView status={getEtterlevelseStatus(props.krav)} statusDisplay={getEtterlevelseStatusLabelColor(props.krav)} />}
+              {props.krav && props.krav.etterlevelseStatus && <StatusView status={getEtterlevelseStatus(props.krav.etterlevelseStatus, props.krav.frist)} statusDisplay={getStatusLabelColor(props.krav.etterlevelseStatus)} />}
             </Block>
             <Block marginLeft="31px" maxWidth="140px" width="100%">
               {props.krav.etterlevelseChangeStamp?.lastModifiedDate && (

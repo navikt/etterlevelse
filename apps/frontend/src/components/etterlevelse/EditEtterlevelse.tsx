@@ -5,7 +5,6 @@ import {Block} from 'baseui/block'
 import Button from '../common/Button'
 import React, {useEffect} from 'react'
 import * as yup from 'yup'
-import {getEtterlevelseStatus} from '../../pages/EtterlevelsePage'
 import {DateField, FieldWrapper, TextAreaField} from '../common/Inputs'
 import {theme} from '../../util'
 import {FormControl} from 'baseui/form-control'
@@ -27,6 +26,7 @@ import {env} from '../../util/env'
 import {useQuery} from '@apollo/client'
 import moment from 'moment'
 import {informationIcon} from '../Images'
+import { getEtterlevelseStatus } from '../behandling/utils'
 
 type EditEttlevProps = {
   etterlevelse: Etterlevelse

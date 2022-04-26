@@ -232,7 +232,7 @@ export const EditEtterlevelseV2 = ({
                 </ParagraphMedium>
               )}
 
-              {tidligereEtterlevelser && tidligereEtterlevelser.length >= 1 && kravFilter != KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV && (
+              {tidligereEtterlevelser && tidligereEtterlevelser.length >= 1 && kravFilter !== KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV && (
                 <Block
                   width="fit-content"
                   display="flex"

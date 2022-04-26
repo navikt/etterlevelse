@@ -379,31 +379,31 @@ export const EtterlevelseEditFields = ({
                         if (values.status === EtterlevelseStatus.FERDIG_DOKUMENTERT || values.status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) {
                           values.status = Object.values(EtterlevelseStatus).filter((e) => e === etterlevelseStatus)[0]
                         }
-                        if (
-                          values.status === EtterlevelseStatus.UNDER_REDIGERING ||
-                          values.status === EtterlevelseStatus.FERDIG ||
-                          values.status === EtterlevelseStatus.FERDIG_DOKUMENTERT
-                        ) {
-                          let completed = true
-                          values.suksesskriterieBegrunnelser.forEach((value) => {
-                            if (value.oppfylt || value.ikkeRelevant) {
-                              if (!value.behovForBegrunnelse) {
-                                completed = true
-                              } else if (value.begrunnelse) {
-                                completed = true
-                              } else {
-                                completed = false
-                              }
-                            } else {
-                              completed = false
-                            }
-                          })
-                          if (completed) {
-                            values.status = EtterlevelseStatus.FERDIG
-                          } else {
-                            values.status = EtterlevelseStatus.UNDER_REDIGERING
-                          }
-                        }
+                        // if (
+                        //   values.status === EtterlevelseStatus.UNDER_REDIGERING ||
+                        //   values.status === EtterlevelseStatus.FERDIG ||
+                        //   values.status === EtterlevelseStatus.FERDIG_DOKUMENTERT
+                        // ) {
+                        //   let completed = true
+                        //   values.suksesskriterieBegrunnelser.forEach((value) => {
+                        //     if (value.oppfylt || value.ikkeRelevant) {
+                        //       if (!value.behovForBegrunnelse) {
+                        //         completed = true
+                        //       } else if (value.begrunnelse) {
+                        //         completed = true
+                        //       } else {
+                        //         completed = false
+                        //       }
+                        //     } else {
+                        //       completed = false
+                        //     }
+                        //   })
+                        //   if (completed) {
+                        //     values.status = EtterlevelseStatus.FERDIG
+                        //   } else {
+                        //     values.status = EtterlevelseStatus.UNDER_REDIGERING
+                        //   }
+                        // }
                         submitForm()
                       }}
                     >

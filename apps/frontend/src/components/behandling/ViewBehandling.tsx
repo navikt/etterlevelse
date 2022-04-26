@@ -6,7 +6,7 @@ import {DotTags} from '../common/DotTag'
 import {Code, codelist, ListName} from '../../services/Codelist'
 import {HeadingSmall, HeadingXXLarge, ParagraphMedium} from 'baseui/typography'
 import RouteLink, {ObjectLink} from '../common/RouteLink'
-import {etterlevelseName, getEtterlevelseStatus} from '../../pages/EtterlevelsePage'
+import {etterlevelseName} from '../../pages/EtterlevelsePage'
 import {Behandling, Etterlevelse, EtterlevelseStatus, Krav, KravQL, PageResponse} from '../../constants'
 import {Label} from '../common/PropertyLabel'
 import {KravFilters} from '../../api/KravGraphQLApi'
@@ -28,6 +28,7 @@ import {Chart} from '../Chart'
 import {ettlevColors, maxPageWidth} from '../../util/theme'
 import CustomizedModal from '../common/CustomizedModal'
 import {crossIcon} from '../Images'
+import { getEtterlevelseStatus } from './utils'
 
 export const filterForBehandling = (behandling: Behandling): KravFilters => ({ behandlingId: behandling.id })
 

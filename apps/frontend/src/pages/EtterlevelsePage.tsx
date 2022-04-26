@@ -20,30 +20,6 @@ export const kravLink = (kravNummer: string) => {
   return kravNummer.replace('.', '/').replace('K', '/krav/')
 }
 
-export const getEtterlevelseStatus = (status?: EtterlevelseStatus, frist?: string) => {
-  if (!status) return ''
-  switch (status) {
-    case EtterlevelseStatus.UNDER_REDIGERING:
-      return 'Under arbeid'
-    case EtterlevelseStatus.FERDIG:
-      return 'Oppfylt'
-    case EtterlevelseStatus.IKKE_RELEVANT:
-      return 'Ikke relevant'
-    case EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT:
-      return 'Ikke relevant'
-    case EtterlevelseStatus.FERDIG_DOKUMENTERT:
-      return 'Oppfylt'
-    case EtterlevelseStatus.OPPFYLLES_SENERE:
-      if (frist) {
-        return 'Oppfylles ' + moment(frist).format('ll')
-      } else {
-        return 'Oppfylles senere'
-      }
-    default:
-      return status
-  }
-}
-
 export const EtterlevelsePage = () => {
   const params = useParams<{ id?: string }>()
   const [etterlevelse, setEtterlevelse] = useEtterlevelse(params.id)
