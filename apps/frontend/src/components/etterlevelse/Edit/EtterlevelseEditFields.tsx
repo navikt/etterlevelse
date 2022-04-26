@@ -376,8 +376,10 @@ export const EtterlevelseEditFields = ({
                       marginRight
                       disabled={isSubmitting || disableEdit}
                       onClick={() => {
-                        if (values.status === EtterlevelseStatus.FERDIG_DOKUMENTERT || values.status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) {
-                          values.status = Object.values(EtterlevelseStatus).filter((e) => e === etterlevelseStatus)[0]
+                        if (values.status === EtterlevelseStatus.FERDIG_DOKUMENTERT) {
+                          values.status = EtterlevelseStatus.UNDER_REDIGERING
+                        } else if (values.status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) {
+                          values.status = EtterlevelseStatus.IKKE_RELEVANT
                         }
                         // if (
                         //   values.status === EtterlevelseStatus.UNDER_REDIGERING ||
