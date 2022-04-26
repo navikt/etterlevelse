@@ -327,7 +327,7 @@ export const EtterlevelseEditFields = ({
 
                       <Block width={'100%'} marginTop={'65px'}>
                         {Object.keys(errors).length > 0 && (
-                          <Block display="flex" width="60%">
+                          <Block display="flex" width="100%">
                             <Block width="100%">
                               <Notification
                                 overrides={{
