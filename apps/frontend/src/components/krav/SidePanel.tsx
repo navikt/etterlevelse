@@ -17,18 +17,20 @@ export const SidePanel = () => {
         width="187px"
         display={['none', 'none', 'none', 'none', 'none', 'flex']}
       >
-        <LabelSmall
-          $style={{
-            fontSize: '20px',
-            fontWeight: 600,
-            lineHeight: '28px',
-            textDecoration: hover ? 'underline' : 'none',
-            display: 'flex'
-          }}
-        >
-          Dokumentere etterlevelse
-          <Chevron hover={hover} icon={arrowRightIcon} distance={'8px'} size={'20px'} />
-        </LabelSmall>
+        <Block width="120px">
+          <LabelSmall
+            $style={{
+              fontSize: '20px',
+              fontWeight: 600,
+              lineHeight: '28px',
+              textDecoration: hover ? 'underline' : 'none',
+              display: 'flex'
+            }}
+          >
+            Dokumentere etterlevelse
+          </LabelSmall>
+        </Block>
+        <Chevron marginLeft="12px" hover={hover} icon={arrowRightIcon} distance={'8px'} size={'20px'} />
       </Block>
     </RouteLink>
   )
