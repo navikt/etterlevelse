@@ -14,18 +14,18 @@ import rehypeRaw from 'rehype-raw'
 import {ettlevColors} from '../../util/theme'
 
 export const Markdown = ({
-  vertical,
-  escapeHtml = true,
-  shortenLinks,
-  noMargin,
-  source,
-  sources: sourcesOrig,
-  p1,
-  fontColor,
-  fontSize,
-  maxWidth,
-  externalLink,
-}: {
+                           vertical,
+                           escapeHtml = true,
+                           shortenLinks,
+                           noMargin,
+                           source,
+                           sources: sourcesOrig,
+                           p1,
+                           fontColor,
+                           fontSize,
+                           maxWidth,
+                           externalLink,
+                         }: {
   source?: string
   sources?: string[]
   escapeHtml?: boolean
@@ -40,11 +40,11 @@ export const Markdown = ({
 }) => {
   const renderers = {
     p: (parProps: any) => {
-      const { children } = parProps
+      const {children} = parProps
       if (p1) {
         return (
           <ParagraphLarge
-            $style={{ fontSize: fontSize ? fontSize : undefined }}
+            $style={{fontSize: fontSize ? fontSize : undefined}}
             color={fontColor ? fontColor : ettlevColors.green800}
             marginTop={noMargin ? 0 : undefined}
             marginBottom={noMargin ? 0 : undefined}
@@ -55,7 +55,7 @@ export const Markdown = ({
       }
       return (
         <ParagraphMedium
-          $style={{ fontSize: fontSize ? fontSize : undefined }}
+          $style={{fontSize: fontSize ? fontSize : undefined}}
           color={fontColor ? fontColor : ettlevColors.green800}
           marginTop={noMargin ? 0 : undefined}
           marginBottom={noMargin ? 0 : undefined}
@@ -65,36 +65,59 @@ export const Markdown = ({
       )
     },
     href: (linkProps: any) => {
-      const { children, href, node } = linkProps
+      const {children, href, node} = linkProps
       const content = shortenLinks && node.children[0]?.value.indexOf('http') === 0 ? 'Lenke' : children
       return (
         <StatefulTooltip content={href}>
           <span>
             <ExternalLink fontColor={fontColor} href={href}>
-              <ExternalLinkWrapper text={content} />
+              <ExternalLinkWrapper text={content}/>
             </ExternalLink>
           </span>
         </StatefulTooltip>
       )
     },
     a: (linkProps: any) => {
-      const { children, href, node } = linkProps
+      const {children, href, node} = linkProps
       const content = shortenLinks && node.children[0]?.value.indexOf('http') === 0 ? 'Lenke' : children
 
       return (
         <ExternalLink fontColor={fontColor} href={href}>
-          <ExternalLinkWrapper text={content} />
+          <ExternalLinkWrapper text={content}/>
         </ExternalLink>
       )
     },
     code: (codeProps: any) => {
-      const { node, inline, className, children, ...props } = codeProps
+      const {node, inline, className, children, ...props} = codeProps
       return (
-        <code className={className} {...props} style={{ whiteSpace: 'normal', color: fontColor ? fontColor : ettlevColors.green800 }}>
+        <code className={className} {...props} style={{whiteSpace: 'normal', color: fontColor ? fontColor : ettlevColors.green800}}>
           {children}
         </code>
       )
     },
+    li: (liProps: any) => {
+      const {children} = liProps
+      if (p1) {
+        return (
+          <li style={{fontSize: '21px'}}>
+            <ParagraphLarge
+              $style={{fontSize: fontSize ? fontSize : undefined}}
+              color={fontColor ? fontColor : ettlevColors.green800}
+              marginTop={0}
+              marginBottom={0}
+            >
+              {children}
+            </ParagraphLarge>
+          </li>
+        )
+      } else {
+        return (
+          <li>
+            {children}
+          </li>
+        )
+      }
+    }
   }
 
   const sources: string[] = sourcesOrig || (source ? [source] : [''])
@@ -109,7 +132,7 @@ export const Markdown = ({
         maxWidth: maxWidth ? maxWidth : undefined,
       }}
     >
-      <ReactMarkdown children={sources.join(vertical ? '\n\n' : ', ')} components={renderers} remarkPlugins={[remarkGfm]} rehypePlugins={htmlPlugins} />
+      <ReactMarkdown children={sources.join(vertical ? '\n\n' : ', ')} components={renderers} remarkPlugins={[remarkGfm]} rehypePlugins={htmlPlugins}/>
     </Block>
   )
 }
@@ -128,9 +151,9 @@ export const MarkdownEditor = (props: MarkdownEditorProps) => {
 
   return (
     <MdEditor
-      style={{ height: props.height || '500px' }}
+      style={{height: props.height || '500px'}}
       defaultValue={props.initialValue}
-      renderHTML={(txt) => <Markdown source={txt} shortenLinks={props.shortenLinks} />}
+      renderHTML={(txt) => <Markdown source={txt} shortenLinks={props.shortenLinks}/>}
       onChange={(data) => setVal(data.text)}
       onImageUpload={props.onImageUpload}
     />
