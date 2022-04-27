@@ -86,8 +86,8 @@ const BehandlingTabs = () => {
   const [variables, setVariables] = useState<Variables>({})
   const { data, loading: behandlingerLoading } = useQuery<{ behandlinger: PageResponse<BehandlingQL> }, Variables>(query, {
     variables,
-    skip: !variables.mineBehandlinger && !variables.sistRedigert,
   })
+
   const [teams, teamsLoading] = useMyTeams()
 
   const behandlinger = data?.behandlinger || emptyPage

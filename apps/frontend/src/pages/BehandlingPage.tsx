@@ -83,7 +83,6 @@ export const BehandlingPage = () => {
 
   const { data: relevanteData, refetch: refetchRelevanteData } = useQuery<{ behandling: PageResponse<{ stats: BehandlingStats }> }>(statsQuery, {
     variables: { behandlingId: behandling?.id },
-    skip: !behandling?.id,
   })
 
   const [edit, setEdit] = useState(false)
