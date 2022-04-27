@@ -213,7 +213,7 @@ export const EditEtterlevelseV2 = ({
                     maxWidth: '650px',
                   }}
                 >
-                  <strong>Kravet er bortfiltrert og derfor ikke relevant.</strong> 
+                  <strong>Kravet er bortfiltrert og derfor ikke relevant.</strong>
                 </ParagraphMedium>
               )}
 
@@ -228,7 +228,7 @@ export const EditEtterlevelseV2 = ({
                     maxWidth: '650px',
                   }}
                 >
-                  <strong>Kravet er utgått.</strong> Dere skal ikke dokumentere ny etterlevelse på dette kravet. 
+                  <strong>Kravet er utgått.</strong> Dere skal ikke dokumentere ny etterlevelse på dette kravet.
                 </ParagraphMedium>
               )}
 
@@ -327,7 +327,7 @@ export const EditEtterlevelseV2 = ({
           </Block>
           <Block backgroundColor={ettlevColors.green100} paddingLeft={responsivePaddingExtraLarge} paddingRight={responsivePaddingExtraLarge}>
             <HeadingXLarge $style={{marginTop: '0px', marginBottom: '0px', paddingBottom: '32px', paddingTop: '41px'}}>Hensikten med kravet</HeadingXLarge>
-            <Markdown noMargin p1 sources={Array.isArray(krav.hensikt) ? krav.hensikt : [krav.hensikt]}/>
+            <Markdown noMargin p1 sources={Array.isArray(krav.hensikt) ? krav.hensikt : [krav.hensikt]} fontSize={'21px'} maxWidth={'800px'}/>
           </Block>
 
           <Block
