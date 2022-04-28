@@ -150,7 +150,7 @@ export const ExternalLink = ({
 }
 
 export const ExternalLinkWrapper = ({ text }: { text: React.ReactNode }) => (
-  <span style={{ display: 'inline-flex' }}>
+  <span style={{ display: 'inline-flex', fontSize: '18px' }}>
     {text} <img alt=" " width="inherit" height="inherit" style={{ marginLeft: '8px' }} src={externalLinkIcon} />
   </span>
 )
