@@ -121,14 +121,8 @@ export const BehandlingerTemaPageV2 = () => {
 
 
     //Removing utgått krav with aktiv versjons
-    relevantKravData.forEach((k) => {
-      for (let x = utgaatKravData.length - 1; x >= 0; x--) {
-        if (utgaatKravData[x].kravNummer === k.kravNummer) {
-          utgaatKravData.splice(x, 1)
-        }
-      }
-    })
-
+    utgaatKravData = utgaatKravData.filter((uk) => relevantKravData.every((rk) => uk.kravNummer !== rk.kravNummer))
+    
       ; (async () => {
         setUtgaatKravData(await filterKrav(allKravPriority, utgaatKravData, temaData))
       })()
