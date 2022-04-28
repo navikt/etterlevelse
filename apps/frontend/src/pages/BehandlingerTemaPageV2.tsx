@@ -72,7 +72,7 @@ export const BehandlingerTemaPageV2 = () => {
   })
 
   const {data: utgaateKraverGraphQLResponse, loading: utgaateKraverGraphQLLoading} = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
-    variables: {status: KravStatus.UTGAATT},
+    variables: {...variables, gjeldendeKrav: false, behandlingId: undefined ,status: KravStatus.UTGAATT},
     fetchPolicy: 'no-cache',
   })
   const [relevantKravData, setRelevantKravData] = useState<KravEtterlevelseData[]>([])
@@ -120,6 +120,8 @@ export const BehandlingerTemaPageV2 = () => {
         else
           return true
       })
+
+      console.log(utgaatBortfilterteKraver)
 
       let utgaatKraver: KravQL[] = []
       if (utgaateKraverGraphQLResponse) {
