@@ -16,6 +16,7 @@ import { LabelAboveContent } from '../../common/PropertyLabel'
 import { MODE, StatefulButtonGroup } from 'baseui/button-group'
 import { Button } from 'baseui/button'
 import { buttonContentStyle } from '../../common/Button'
+import { Markdown } from '../../common/Markdown'
 
 const paddingLeft = '30px'
 
@@ -218,7 +219,7 @@ const KriterieBegrunnelse = ({
             },
           }}
         >
-          {/*<Markdown source={suksesskriterie.beskrivelse} />*/}
+          <Markdown source={suksesskriterie.beskrivelse} />
         </CustomizedPanel>
       </CustomizedAccordion>
 
