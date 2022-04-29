@@ -1,4 +1,4 @@
-#skip a {
+.skip a {
   padding: 6px;
   position: absolute;
   top: -40px;
@@ -9,7 +9,7 @@
     z-index: 100; */
 }
 
-#skip a:focus {
+.skip a:focus {
   position: absolute;
   left: 0px;
   top: 0px;
