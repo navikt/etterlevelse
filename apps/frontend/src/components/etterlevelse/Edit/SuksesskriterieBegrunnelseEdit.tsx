@@ -219,7 +219,7 @@ const KriterieBegrunnelse = ({
             },
           }}
         >
-          <Markdown source={suksesskriterie.beskrivelse} fontSize="18px"/>
+          <Markdown source={suksesskriterie.beskrivelse} fontSize="18px" maxWidth="650px"/>
         </CustomizedPanel>
       </CustomizedAccordion>
 
