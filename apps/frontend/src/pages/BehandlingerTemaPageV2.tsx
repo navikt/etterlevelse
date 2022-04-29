@@ -127,7 +127,7 @@ export const BehandlingerTemaPageV2 = () => {
         setUtgaatKravData(await filterKrav(allKravPriority, utgaatKravData, temaData))
       })()
 
-  }, [utgaateKraverGraphQLResponse, relevantKravData, allKravPriority]);
+  }, [relevantKravData, allKravPriority]);
 
 
   useEffect(() => {
@@ -136,7 +136,7 @@ export const BehandlingerTemaPageV2 = () => {
         setRelevantKravData(kravListe)
       })
     })()
-  }, [relevanteKraverGraphQLResponse, allKravPriority])
+  }, [allKravPriority])
 
   useEffect(() => {
     ; (async () => {
@@ -166,7 +166,7 @@ export const BehandlingerTemaPageV2 = () => {
         ])
       })
     })()
-  }, [irrelevanteKraverGraphQLResponse, relevantKravData, allKravPriority])
+  }, [relevantKravData, allKravPriority])
 
   const breadcrumbPaths: breadcrumbPaths[] = [
     {
