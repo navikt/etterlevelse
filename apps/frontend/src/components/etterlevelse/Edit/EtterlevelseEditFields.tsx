@@ -1,28 +1,28 @@
-import {Etterlevelse, EtterlevelseStatus, KravQL, KravStatus} from '../../../constants'
-import {Form, Formik, FormikProps, validateYupSchema, yupToFormErrors} from 'formik'
-import {mapEtterlevelseToFormValue} from '../../../api/EtterlevelseApi'
-import {Block} from 'baseui/block'
+import { Etterlevelse, EtterlevelseStatus, KravQL, KravStatus } from '../../../constants'
+import { Form, Formik, FormikProps, validateYupSchema, yupToFormErrors } from 'formik'
+import { mapEtterlevelseToFormValue } from '../../../api/EtterlevelseApi'
+import { Block } from 'baseui/block'
 import Button from '../../common/Button'
-import React, {useEffect} from 'react'
-import {DateField} from '../../common/Inputs'
+import React, { useEffect } from 'react'
+import { DateField } from '../../common/Inputs'
 
-import {LabelSmall, ParagraphMedium, ParagraphXSmall} from 'baseui/typography'
-import {ettlevColors} from '../../../util/theme'
-import {SuksesskriterierBegrunnelseEdit} from './SuksesskriterieBegrunnelseEdit'
-import {KIND as NKIND, Notification} from 'baseui/notification'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faTimesCircle} from '@fortawesome/free-solid-svg-icons'
-import {borderColor, borderRadius, borderStyle, borderWidth, marginAll, paddingZero} from '../../common/Style'
+import { LabelSmall, ParagraphMedium, ParagraphXSmall } from 'baseui/typography'
+import { ettlevColors } from '../../../util/theme'
+import { SuksesskriterierBegrunnelseEdit } from './SuksesskriterieBegrunnelseEdit'
+import { KIND as NKIND, Notification } from 'baseui/notification'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTimesCircle } from '@fortawesome/free-solid-svg-icons'
+import { borderColor, borderRadius, borderStyle, borderWidth, marginAll, paddingZero } from '../../common/Style'
 import moment from 'moment'
-import {CustomizedAccordion, CustomizedPanel, CustomPanelDivider} from '../../common/CustomizedAccordion'
-import {AllInfo} from '../../krav/ViewKrav'
+import { CustomizedAccordion, CustomizedPanel, CustomPanelDivider } from '../../common/CustomizedAccordion'
+import { AllInfo } from '../../krav/ViewKrav'
 import CustomizedModal from '../../common/CustomizedModal'
-import {useNavigate} from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import EtterlevelseCard from '../EtterlevelseCard'
-import {ModalHeader} from 'baseui/modal'
-import {etterlevelseSchema} from './etterlevelseSchema'
+import { ModalHeader } from 'baseui/modal'
+import { etterlevelseSchema } from './etterlevelseSchema'
 import _ from 'lodash'
-import {Checkbox} from "baseui/checkbox";
+import { Checkbox } from "baseui/checkbox";
 
 type EditProps = {
   krav: KravQL
@@ -47,22 +47,22 @@ type EditProps = {
 }
 
 export const EtterlevelseEditFields = ({
-                                         krav,
-                                         etterlevelse,
-                                         submit,
-                                         formRef,
-                                         behandlingId,
-                                         disableEdit,
-                                         documentEdit,
-                                         close,
-                                         setIsAlertUnsavedModalOpen,
-                                         isAlertUnsavedModalOpen,
-                                         navigatePath,
-                                         setNavigatePath,
-                                         editedEtterlevelse,
-                                         tidligereEtterlevelser,
-                                         viewMode,
-                                       }: EditProps) => {
+  krav,
+  etterlevelse,
+  submit,
+  formRef,
+  behandlingId,
+  disableEdit,
+  documentEdit,
+  close,
+  setIsAlertUnsavedModalOpen,
+  isAlertUnsavedModalOpen,
+  navigatePath,
+  setNavigatePath,
+  editedEtterlevelse,
+  tidligereEtterlevelser,
+  viewMode,
+}: EditProps) => {
   const [etterlevelseStatus, setEtterlevelseStatus] = React.useState<string>(
     editedEtterlevelse ? editedEtterlevelse.status : etterlevelse.status || EtterlevelseStatus.UNDER_REDIGERING,
   )
@@ -85,7 +85,7 @@ export const EtterlevelseEditFields = ({
     return tidligereEtterlevelser?.map((e) => {
       return (
         <CustomPanelDivider key={'tidligere_etterlevese_' + e.kravNummer + '_' + e.kravVersjon}>
-          <EtterlevelseCard etterlevelse={e}/>
+          <EtterlevelseCard etterlevelse={e} />
         </CustomPanelDivider>
       )
     })
@@ -99,7 +99,7 @@ export const EtterlevelseEditFields = ({
           initialValues={editedEtterlevelse ? mapEtterlevelseToFormValue(editedEtterlevelse) : mapEtterlevelseToFormValue(etterlevelse)}
           validate={(value) => {
             try {
-              validateYupSchema(value, etterlevelseSchema(), true, {status: value.status})
+              validateYupSchema(value, etterlevelseSchema(), true, { status: value.status })
             } catch (err) {
               return yupToFormErrors(err)
             }
@@ -108,7 +108,7 @@ export const EtterlevelseEditFields = ({
           validateOnChange={false}
           validateOnBlur={false}
         >
-          {({values, isSubmitting, submitForm, errors, setFieldError}: FormikProps<Etterlevelse>) => (
+          {({ values, isSubmitting, submitForm, errors, setFieldError }: FormikProps<Etterlevelse>) => (
             <Block>
               <Block marginTop="32px">
                 <Form>
@@ -262,9 +262,9 @@ export const EtterlevelseEditFields = ({
                       {/*  )}*/}
                       {/*</Block>*/}
 
-                      <LabelSmall $style={{lineHeight: '32px'}}>Hvilke suksesskriterier er oppfylt?</LabelSmall>
+                      <LabelSmall $style={{ lineHeight: '32px' }}>Hvilke suksesskriterier er oppfylt?</LabelSmall>
 
-                      <SuksesskriterierBegrunnelseEdit disableEdit={disableEdit} suksesskriterie={krav.suksesskriterier} viewMode={false}/>
+                      <SuksesskriterierBegrunnelseEdit disableEdit={disableEdit} suksesskriterie={krav.suksesskriterier} viewMode={false} />
 
                       {/*
               {!documentEdit &&
@@ -298,10 +298,10 @@ export const EtterlevelseEditFields = ({
                           {/*</CustomizedPanel>*/}
                           <CustomizedPanel
                             title="Mer om kravet"
-                            overrides={{Content: {style: {backgroundColor: ettlevColors.white, paddingLeft: '20px', paddingRight: '20px'}}}}
+                            overrides={{ Content: { style: { backgroundColor: ettlevColors.white, paddingLeft: '20px', paddingRight: '20px' } } }}
                           >
-                            <Block width="100%" height="1px" backgroundColor="#E3E3E3"/>
-                            <AllInfo krav={krav} alleKravVersjoner={[{kravNummer: krav.kravNummer, kravVersjon: krav.kravVersjon, kravStatus: krav.status}]}/>
+                            <Block width="100%" height="1px" backgroundColor="#E3E3E3" />
+                            <AllInfo krav={krav} alleKravVersjoner={[{ kravNummer: krav.kravNummer, kravVersjon: krav.kravVersjon, kravStatus: krav.status }]} />
                           </CustomizedPanel>
                         </CustomizedAccordion>
                       </Block>
@@ -331,7 +331,7 @@ export const EtterlevelseEditFields = ({
                                       marginRight: '5px',
                                     }}
                                   />
-                                  <ParagraphMedium marginBottom="0px" marginTop="0px" $style={{lineHeight: '18px'}}>
+                                  <ParagraphMedium marginBottom="0px" marginTop="0px" $style={{ lineHeight: '18px' }}>
                                     Du må fylle ut alle obligatoriske felter
                                   </ParagraphMedium>
                                 </Block>
@@ -347,15 +347,24 @@ export const EtterlevelseEditFields = ({
 
               <Block width="100%" height="140px" backgroundColor={ettlevColors.green100}>
                 {!documentEdit && (
-                  <>
-                    <Block>
+                  <Block
+                    display="flex"
+                    width="100%"
+                  >
+                    <Block
+                      paddingTop="27px"
+                      paddingBottom="24px"
+                      display="flex"
+                      justifyContent="flex-end"
+                      flexDirection="column"
+                    >
                       <Checkbox
                         checked={isOppfylesSenere}
                         onChange={() => setOppfylesSenere(!isOppfylesSenere)}
                         key={EtterlevelseStatus.OPPFYLLES_SENERE}
                       >
-                        <Block $style={{textDecoration: radioHover === EtterlevelseStatus.OPPFYLLES_SENERE ? 'underline' : 'none'}}>
-                          <ParagraphMedium $style={{lineHeight: '22px'}} marginTop="0px" marginBottom="0px">
+                        <Block $style={{ textDecoration: radioHover === EtterlevelseStatus.OPPFYLLES_SENERE ? 'underline' : 'none' }}>
+                          <ParagraphMedium $style={{ lineHeight: '22px' }} marginTop="0px" marginBottom="0px">
                             Kravet skal etterleves senere
                           </ParagraphMedium>
                         </Block>
@@ -364,7 +373,7 @@ export const EtterlevelseEditFields = ({
                       {isOppfylesSenere && (
                         <Block width="100%" marginLeft="33px">
                           <Block maxWidth="170px" width="100%">
-                            <DateField error={!!errors.fristForFerdigstillelse} label="Frist" name="fristForFerdigstillelse"/>
+                            <DateField error={!!errors.fristForFerdigstillelse} label="Dato" name="fristForFerdigstillelse" />
                           </Block>
                           {errors.fristForFerdigstillelse && (
                             <Block display="flex" width="100%" marginTop=".2rem">
@@ -372,7 +381,7 @@ export const EtterlevelseEditFields = ({
                                 <Notification
                                   overrides={{
                                     Body: {
-                                      style: {width: 'auto', ...paddingZero, marginTop: 0, backgroundColor: 'transparent', color: ettlevColors.red600},
+                                      style: { width: 'auto', ...paddingZero, marginTop: 0, backgroundColor: 'transparent', color: ettlevColors.red600 },
                                     },
                                   }}
                                   kind={NKIND.negative}
@@ -385,51 +394,53 @@ export const EtterlevelseEditFields = ({
                         </Block>
                       )}
                     </Block>
-                    <Block paddingTop="27px" paddingBottom="24px" display="flex" justifyContent="flex-end" width="100%">
-                      <Button disabled={krav.status === KravStatus.UTGAATT ? false : disableEdit} type="button" kind="secondary" marginRight onClick={close}>
-                        {krav.status === KravStatus.UTGAATT ? 'Lukk' : 'Avbryt og forkast endringene'}
-                      </Button>
-                      <Button
-                        type="button"
-                        kind="secondary"
-                        marginRight
-                        disabled={isSubmitting || disableEdit}
-                        onClick={() => {
-                          if (values.status === EtterlevelseStatus.FERDIG_DOKUMENTERT || !isOppfylesSenere) {
-                            values.status = EtterlevelseStatus.UNDER_REDIGERING
-                          } else if (values.status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) {
-                            values.status = EtterlevelseStatus.IKKE_RELEVANT
-                          } else if (isOppfylesSenere && values.fristForFerdigstillelse) {
-                            values.status = EtterlevelseStatus.OPPFYLLES_SENERE
-                          }
-                          submitForm()
-                        }}
-                      >
-                        Lagre og fortsett senere
-                      </Button>
-                      <Button
-                        disabled={disableEdit}
-                        type="button"
-                        onClick={() => {
-                          values.status = EtterlevelseStatus.FERDIG_DOKUMENTERT
-                          values.suksesskriterieBegrunnelser.forEach((skb, index) => {
-                            if (skb.begrunnelse === '' || skb.begrunnelse === undefined) {
-                              setFieldError(`suksesskriterieBegrunnelser[${index}]`, 'Du må fylle ut dokumentasjonen')
+                    <Block $style={{ position: 'absolute', right: '-20%' }}>
+                      <Block paddingTop="27px" paddingBottom="24px" display="flex" justifyContent="flex-end" width="100%" >
+                        <Button disabled={krav.status === KravStatus.UTGAATT ? false : disableEdit} type="button" kind="secondary" marginRight onClick={close}>
+                          {krav.status === KravStatus.UTGAATT ? 'Lukk' : 'Avbryt og forkast endringene'}
+                        </Button>
+                        <Button
+                          type="button"
+                          kind="secondary"
+                          marginRight
+                          disabled={isSubmitting || disableEdit}
+                          onClick={() => {
+                            if (values.status === EtterlevelseStatus.FERDIG_DOKUMENTERT || !isOppfylesSenere) {
+                              values.status = EtterlevelseStatus.UNDER_REDIGERING
+                            } else if (values.status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) {
+                              values.status = EtterlevelseStatus.IKKE_RELEVANT
+                            } else if (isOppfylesSenere && values.fristForFerdigstillelse) {
+                              values.status = EtterlevelseStatus.OPPFYLLES_SENERE
                             }
-                          })
-                          submitForm()
-                        }}
-                      >
-                        Ferdig utfylt
-                      </Button>
+                            submitForm()
+                          }}
+                        >
+                          Lagre og fortsett senere
+                        </Button>
+                        <Button
+                          disabled={disableEdit}
+                          type="button"
+                          onClick={() => {
+                            values.status = EtterlevelseStatus.FERDIG_DOKUMENTERT
+                            values.suksesskriterieBegrunnelser.forEach((skb, index) => {
+                              if (skb.begrunnelse === '' || skb.begrunnelse === undefined) {
+                                setFieldError(`suksesskriterieBegrunnelser[${index}]`, 'Du må fylle ut dokumentasjonen')
+                              }
+                            })
+                            submitForm()
+                          }}
+                        >
+                          Ferdig utfylt
+                        </Button>
+                      </Block>
+                      {etterlevelse.changeStamp.lastModifiedDate && etterlevelse.changeStamp.lastModifiedBy && (
+                        <Block paddingBottom="16px" display="flex" justifyContent="flex-end" width="100%">
+                          <ParagraphXSmall marginTop="0px" marginBottom="0px">
+                            Sist utfylt: {moment(etterlevelse.changeStamp.lastModifiedDate).format('ll')} av {etterlevelse.changeStamp.lastModifiedBy.split('-')[1]}
+                          </ParagraphXSmall>
+                        </Block>
+                      )}
                     </Block>
-                  </>
-                )}
-                {etterlevelse.changeStamp.lastModifiedDate && etterlevelse.changeStamp.lastModifiedBy && (
-                  <Block paddingBottom="16px" display="flex" justifyContent="flex-end" width="100%">
-                    <ParagraphXSmall marginTop="0px" marginBottom="0px">
-                      Sist utfylt: {moment(etterlevelse.changeStamp.lastModifiedDate).format('ll')} av {etterlevelse.changeStamp.lastModifiedBy.split('-')[1]}
-                    </ParagraphXSmall>
                   </Block>
                 )}
               </Block>
@@ -497,15 +508,15 @@ export const EtterlevelseEditFields = ({
                 <Form>
                   <Block>
                     <Block>
-                      <SuksesskriterierBegrunnelseEdit disableEdit={disableEdit} suksesskriterie={krav.suksesskriterier} viewMode={true}/>
+                      <SuksesskriterierBegrunnelseEdit disableEdit={disableEdit} suksesskriterie={krav.suksesskriterier} viewMode={true} />
                       <Block marginBottom="24px">
                         <CustomizedAccordion>
                           <CustomizedPanel
                             title="Mer om kravet"
-                            overrides={{Content: {style: {backgroundColor: ettlevColors.white, paddingLeft: '20px', paddingRight: '20px'}}}}
+                            overrides={{ Content: { style: { backgroundColor: ettlevColors.white, paddingLeft: '20px', paddingRight: '20px' } } }}
                           >
-                            <Block width="100%" height="1px" backgroundColor="#E3E3E3"/>
-                            <AllInfo krav={krav} alleKravVersjoner={[{kravNummer: krav.kravNummer, kravVersjon: krav.kravVersjon, kravStatus: krav.status}]}/>
+                            <Block width="100%" height="1px" backgroundColor="#E3E3E3" />
+                            <AllInfo krav={krav} alleKravVersjoner={[{ kravNummer: krav.kravNummer, kravVersjon: krav.kravVersjon, kravStatus: krav.status }]} />
                           </CustomizedPanel>
                         </CustomizedAccordion>
                       </Block>
