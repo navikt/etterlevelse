@@ -31,7 +31,7 @@ const etterlevelseSchema = () =>
           name: 'begrunnelseCheck',
           message: 'Suksesskriterie må ha en begrunnelse',
           test: function (begrunnelse) {
-            const { parent } = this
+            const {parent} = this
             if (!parent.oppfylt || (parent.oppfylt && !!begrunnelse)) {
               return true
             }
@@ -42,7 +42,7 @@ const etterlevelseSchema = () =>
     ),
   })
 
-const EditBegrunnelse = ({ krav, etterlevelse, close, formRef }: EditBegrunnelseProps) => {
+const EditBegrunnelse = ({krav, etterlevelse, close, formRef}: EditBegrunnelseProps) => {
   const submit = async (etterlevelse: Etterlevelse) => {
     close(await updateEtterlevelse(etterlevelse))
   }
@@ -56,10 +56,10 @@ const EditBegrunnelse = ({ krav, etterlevelse, close, formRef }: EditBegrunnelse
       validateOnChange={false}
       validateOnBlur={false}
     >
-      {({ values, isSubmitting, submitForm }: FormikProps<Etterlevelse>) => (
+      {({values, isSubmitting, submitForm}: FormikProps<Etterlevelse>) => (
         <Form>
           <FieldWrapper>
-            <FieldArray name={'suksesskriterieBegrunnelser'}>{(p) => <BegrunnelseList props={p} suksesskriterier={krav.suksesskriterier} />}</FieldArray>
+            <FieldArray name={'suksesskriterieBegrunnelser'}>{(p) => <BegrunnelseList props={p} suksesskriterier={krav.suksesskriterier}/>}</FieldArray>
           </FieldWrapper>
         </Form>
       )}
@@ -67,7 +67,7 @@ const EditBegrunnelse = ({ krav, etterlevelse, close, formRef }: EditBegrunnelse
   )
 }
 
-const BegrunnelseList = ({ props, suksesskriterier }: { props: FieldArrayRenderProps; suksesskriterier: Suksesskriterie[] }) => {
+const BegrunnelseList = ({props, suksesskriterier}: { props: FieldArrayRenderProps; suksesskriterier: Suksesskriterie[] }) => {
   const suksesskriterieBegrunnelser = props.form.values.suksesskriterieBegrunnelser as SuksesskriterieBegrunnelse[]
 
   return (
@@ -90,12 +90,12 @@ const BegrunnelseList = ({ props, suksesskriterier }: { props: FieldArrayRenderP
 }
 
 const Begrunnelse = ({
-  suksesskriterie,
-  index,
-  suksesskriterieBegrunnelser,
-  kriterieLength,
-  update,
-}: {
+                       suksesskriterie,
+                       index,
+                       suksesskriterieBegrunnelser,
+                       kriterieLength,
+                       update,
+                     }: {
   suksesskriterie: Suksesskriterie
   index: number
   kriterieLength: number
@@ -115,6 +115,7 @@ const Begrunnelse = ({
       begrunnelse: begrunnelse,
       oppfylt: suksesskriterieBegrunnelse.oppfylt,
       ikkeRelevant: suksesskriterieBegrunnelse.ikkeRelevant,
+      underArbeid: suksesskriterieBegrunnelse.underArbeid,
       behovForBegrunnelse: suksesskriterieBegrunnelse.behovForBegrunnelse,
     })
   }, [begrunnelse])
@@ -122,23 +123,23 @@ const Begrunnelse = ({
   return (
     <Block marginBottom={theme.sizing.scale700}>
       <Card>
-        <LabelSmall $style={{ color: ettlevColors.green600 }}>
+        <LabelSmall $style={{color: ettlevColors.green600}}>
           SUKSESSKRITERIE {index + 1} AV {kriterieLength}
         </LabelSmall>
-        <LabelSmall $style={{ fontSize: '21px', lineHeight: '30px' }}>{suksesskriterie.navn}</LabelSmall>
-        <LabelSmall $style={{ lineHeight: '22px' }} marginTop="16px">
+        <LabelSmall $style={{fontSize: '21px', lineHeight: '30px'}}>{suksesskriterie.navn}</LabelSmall>
+        <LabelSmall $style={{lineHeight: '22px'}} marginTop="16px">
           Hvordan er kriteriet oppfylt?
         </LabelSmall>
 
         {suksesskriterieBegrunnelse.oppfylt && (
           <Block>
             <FormControl>
-              <TextEditor initialValue={begrunnelse} setValue={setBegrunnelse} height={'188px'} />
+              <TextEditor initialValue={begrunnelse} setValue={setBegrunnelse} height={'188px'}/>
             </FormControl>
           </Block>
         )}
 
-        <Error fieldName={`suksesskriterieBegrunnelser[${begrunnelseIndex}].begrunnelse`} fullWidth={true} />
+        <Error fieldName={`suksesskriterieBegrunnelser[${begrunnelseIndex}].begrunnelse`} fullWidth={true}/>
       </Card>
     </Block>
   )

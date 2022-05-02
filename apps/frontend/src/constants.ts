@@ -166,6 +166,7 @@ export interface SuksesskriterieBegrunnelse {
   begrunnelse: string
   oppfylt: boolean
   ikkeRelevant: boolean
+  underArbeid: boolean
   behovForBegrunnelse: boolean
 }
 
