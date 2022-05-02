@@ -17,6 +17,7 @@ public class SuksesskriterieBegrunnelse {
     private Boolean oppfylt;
     private Boolean ikkeRelevant;
 
+    private Boolean underArbeid;
 
     public static SuksesskriterieBegrunnelse convert(SuksesskriterieBegrunnelseRequest request) {
         return SuksesskriterieBegrunnelse.builder()
@@ -24,6 +25,7 @@ public class SuksesskriterieBegrunnelse {
                 .begrunnelse(request.getBegrunnelse())
                 .oppfylt(request.getOppfylt())
                 .ikkeRelevant(request.getIkkeRelevant())
+                .underArbeid(request.getUnderArbeid())
                 .build();
     }
 
@@ -33,6 +35,7 @@ public class SuksesskriterieBegrunnelse {
                 .begrunnelse(begrunnelse)
                 .oppfylt(oppfylt)
                 .ikkeRelevant(ikkeRelevant)
+                .underArbeid(underArbeid)
                 .build();
     }
 }

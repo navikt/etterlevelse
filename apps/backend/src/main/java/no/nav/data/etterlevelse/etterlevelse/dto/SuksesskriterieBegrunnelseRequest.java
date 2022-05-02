@@ -16,11 +16,12 @@ import static org.apache.commons.lang3.StringUtils.trimToNull;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SuksesskriterieBegrunnelseRequest implements Validated {
-
     private int suksesskriterieId;
     private String begrunnelse;
     private Boolean oppfylt;
     private Boolean ikkeRelevant;
+
+    private Boolean underArbeid;
 
     @Override
     public void format() {

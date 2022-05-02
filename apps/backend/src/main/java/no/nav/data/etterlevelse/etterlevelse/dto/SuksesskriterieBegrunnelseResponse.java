@@ -16,4 +16,6 @@ public class SuksesskriterieBegrunnelseResponse {
     private String begrunnelse;
     private Boolean oppfylt;
     private Boolean ikkeRelevant;
+
+    private Boolean underArbeid;
 }

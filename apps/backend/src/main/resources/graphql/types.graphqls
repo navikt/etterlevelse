@@ -137,6 +137,8 @@ type SuksesskriterieBegrunnelse {
     begrunnelse: String
     oppfylt: Boolean
     ikkeRelevant: Boolean
+    underArbeid: Boolean
+
 }
 
 enum EtterlevelseStatus {
