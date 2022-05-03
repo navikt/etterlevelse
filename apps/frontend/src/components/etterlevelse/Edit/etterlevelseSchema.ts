@@ -7,6 +7,7 @@ export const etterlevelseSchema = () => {
       yup.object({
         oppfylt: yup.boolean(),
         ikkeRelevant: yup.boolean(),
+        underArbeid: yup.boolean(),
         behovForBegrunnelse: yup.boolean(),
         begrunnelse: yup.string().test({
           name: 'begrunnelseText',
@@ -15,7 +16,7 @@ export const etterlevelseSchema = () => {
             const { parent, options } = this
             if (
               (options.context?.status === EtterlevelseStatus.FERDIG || options.context?.status === EtterlevelseStatus.FERDIG_DOKUMENTERT) &&
-              (parent.oppfylt || parent.ikkeRelevant) &&
+              (parent.oppfylt || parent.ikkeRelevant || parent.underArbeid) &&
               (begrunnelse === '' || begrunnelse === undefined) &&
               parent.behovForBegrunnelse
             ) {
