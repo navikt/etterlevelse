@@ -285,7 +285,7 @@ const KriterieBegrunnelse = ({
                         ...buttonContentStyle,
                         backgroundColor: underArbeid ? ettlevColors.green100 : ettlevColors.white,
                         marginRight: '16px',
-                        minWidth: '215px',
+                        minWidth: '213px',
                       },
                       props: {
                         tabIndex: 0,
@@ -306,7 +306,7 @@ const KriterieBegrunnelse = ({
                              ...buttonContentStyle,
                              backgroundColor: oppfylt ? ettlevColors.green100 : ettlevColors.white,
                              marginRight: '16px',
-                             minWidth: '215px',
+                             minWidth: '213px',
                            },
                            props: {
                              tabIndex: 0,
@@ -326,7 +326,7 @@ const KriterieBegrunnelse = ({
                              ...borderRadius('4px'),
                              ...buttonContentStyle,
                              backgroundColor: ikkerelevant ? ettlevColors.green100 : ettlevColors.white,
-                             minWidth: '215px',
+                             minWidth: '213px',
                            },
                            props: {
                              tabIndex: 0,
