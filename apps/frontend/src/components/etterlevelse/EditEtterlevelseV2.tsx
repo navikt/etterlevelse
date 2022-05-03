@@ -25,6 +25,7 @@ import EtterlevelseEditFields from './Edit/EtterlevelseEditFields'
 import CustomizedModal from '../common/CustomizedModal'
 import { ampli } from '../../services/Amplitude'
 import StatusView from "../common/StatusTag";
+import { getPageWidth } from '../../util/pageWidth'
 
 type EditEttlevProps = {
   etterlevelse: Etterlevelse
@@ -74,6 +75,7 @@ export const EditEtterlevelseV2 = ({
   const [disableEdit, setDisableEdit] = React.useState<boolean>(false)
   const [editedEtterlevelse, setEditedEtterlevelse] = React.useState<Etterlevelse>()
   const etterlevelseFormRef: React.Ref<FormikProps<Etterlevelse> | undefined> = useRef()
+  const [pageWidth, setPageWidth] = useState<number>(1276)
 
   const [etterlevelseMetadata, setEtterlevelseMetadata] = useState<EtterlevelseMetadata>(
     mapEtterlevelseMetadataToFormValue({
@@ -108,6 +110,13 @@ export const EditEtterlevelseV2 = ({
         })
     })()
   }, [])
+
+  useEffect(() => {
+    const reportWindowSize = () => {
+      setPageWidth(getPageWidth())
+    }
+    window.onresize = reportWindowSize
+  })
 
   const submit = async (etterlevelse: Etterlevelse) => {
     const mutatedEtterlevelse = {
@@ -364,12 +373,11 @@ export const EditEtterlevelseV2 = ({
                 },
                 TabList: {
                   style: {
-                    width: 'calc(100% - 400px)',
-                    paddingLeft: '200px',
-                    paddingRight: '200px',
+                    width: pageWidth <= 960 ? 'calc(100% - 32px)' : 'calc(100% - 400px)',
+                    paddingLeft: pageWidth <= 960 ? '16px' : '200px',
+                    paddingRight: pageWidth <= 960 ? '16px' : '200px',
                     marginLeft: '0px',
                     marginRight: '0px'
-
                   }
                 }
               }}
