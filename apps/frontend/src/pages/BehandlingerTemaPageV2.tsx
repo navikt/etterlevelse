@@ -32,7 +32,7 @@ export const sortingOptions = [
 ]
 
 export const kravRelevansOptions = [
-  {label: 'Relevante krav', id: KRAV_FILTER_TYPE.RELEVANTE_KRAV},
+  {label: 'Krav som skal etterleves', id: KRAV_FILTER_TYPE.RELEVANTE_KRAV},
   {label: 'Bortfiltrerte krav', id: KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV},
   {label: 'Utgåtte krav', id: KRAV_FILTER_TYPE.UTGAATE_KRAV},
 ]
