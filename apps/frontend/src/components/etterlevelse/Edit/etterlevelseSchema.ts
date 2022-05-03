@@ -7,13 +7,26 @@ export const etterlevelseSchema = () => {
       yup.object({
         oppfylt: yup.boolean(),
         ikkeRelevant: yup.boolean(),
-        underArbeid: yup.boolean(),
+        underArbeid: yup.boolean().test({
+          name: 'underArbeid',
+          message: 'Du kan ikke dokumentere ferdig hvis et suksesskriterie er under arbeid.',
+          test: function (underArbeid) {
+            const {parent, options} = this
+            if (
+              (options.context?.status === EtterlevelseStatus.FERDIG || options.context?.status === EtterlevelseStatus.FERDIG_DOKUMENTERT) &&
+              (parent.underArbeid)
+            ) {
+              return false
+            }
+            return true
+          },
+        }),
         behovForBegrunnelse: yup.boolean(),
         begrunnelse: yup.string().test({
           name: 'begrunnelseText',
           message: 'Du må fylle ut beskrivelsen.',
           test: function (begrunnelse) {
-            const { parent, options } = this
+            const {parent, options} = this
             if (
               (options.context?.status === EtterlevelseStatus.FERDIG || options.context?.status === EtterlevelseStatus.FERDIG_DOKUMENTERT) &&
               (parent.oppfylt || parent.ikkeRelevant || parent.underArbeid) &&
@@ -33,7 +46,7 @@ export const etterlevelseSchema = () => {
       name: 'statusBegrunnelse',
       message: 'Du må dokumentere på begrunnelse.',
       test: function (statusBegrunnelse) {
-        const { parent } = this
+        const {parent} = this
         if (parent.status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT && (statusBegrunnelse === '' || statusBegrunnelse === undefined)) {
           return false
         }
@@ -42,9 +55,9 @@ export const etterlevelseSchema = () => {
     }),
     status: yup.string().test({
       name: 'etterlevelseStatus',
-      message: 'Du må dokumentere alle kriterier før du har dokumentert  ferdig. Du kan velge å lagre og fortsette senere.',
+      message: 'Du må dokumentere alle kriterier før du har dokumentert ferdig. Du kan velge å lagre og fortsette senere.',
       test: function (status) {
-        const { parent } = this
+        const {parent} = this
         if (status === EtterlevelseStatus.FERDIG || status === EtterlevelseStatus.FERDIG_DOKUMENTERT) {
           return parent.suksesskriterieBegrunnelser.every((skb: any) => skb.oppfylt || skb.ikkeRelevant)
         }
@@ -55,7 +68,7 @@ export const etterlevelseSchema = () => {
       name: 'frist',
       message: 'Du må sette på en frist dato for ferdistilling.',
       test: function (fristForFerdigstillelse) {
-        const { parent } = this
+        const {parent} = this
         if (parent.status === EtterlevelseStatus.OPPFYLLES_SENERE && (fristForFerdigstillelse === undefined || fristForFerdigstillelse === null)) {
           return false
         }
