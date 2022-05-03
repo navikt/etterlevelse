@@ -325,7 +325,7 @@ export const EditEtterlevelseV2 = ({
               )}
             </Block>
           </Block>
-          <Block backgroundColor={ettlevColors.green100} paddingLeft={responsivePaddingExtraLarge} paddingRight={responsivePaddingExtraLarge}>
+          <Block backgroundColor={ettlevColors.green100} paddingLeft={responsivePaddingInnerPage} paddingRight={responsivePaddingInnerPage}>
             <HeadingXLarge $style={{ marginTop: '0px', marginBottom: '0px', paddingBottom: '32px', paddingTop: '41px' }}>Hensikten med kravet</HeadingXLarge>
             <Markdown noMargin p1 sources={Array.isArray(krav.hensikt) ? krav.hensikt : [krav.hensikt]} fontSize={'21px'} maxWidth={'800px'} />
           </Block>
@@ -333,9 +333,7 @@ export const EditEtterlevelseV2 = ({
           <Block
             display={'flex'}
             justifyContent="center"
-            width={responsiveWidthInnerPage}
-            paddingLeft={responsivePaddingInnerPage}
-            paddingRight={responsivePaddingInnerPage}
+            width='100%'
             paddingTop="33px"
             $style={{
               background: `linear-gradient(top, ${ettlevColors.green100} 83px, ${ettlevColors.grey25} 0%)`,
@@ -364,6 +362,16 @@ export const EditEtterlevelseV2 = ({
                     width: '100%',
                   },
                 },
+                TabList: {
+                  style: {
+                    width: 'calc(100% - 400px)',
+                    paddingLeft: '200px',
+                    paddingRight: '200px',
+                    marginLeft: '0px',
+                    marginRight: '0px'
+
+                  }
+                }
               }}
               tabs={[
                 {
@@ -396,23 +404,35 @@ export const EditEtterlevelseV2 = ({
                 {
                   title: 'Eksempler på etterlevelse',
                   key: 'etterlevelser',
-                  content: <Etterlevelser loading={etterlevelserLoading} krav={krav} modalVersion />,
+                  content:
+                    <Block
+                      display={'flex'}
+                      justifyContent="center"
+                      width={responsiveWidthInnerPage}
+                      paddingLeft={responsivePaddingInnerPage}
+                      paddingRight={responsivePaddingInnerPage}
+                    >
+                      <Etterlevelser loading={etterlevelserLoading} krav={krav} modalVersion />
+                    </Block>
+                  ,
                 },
                 {
                   title: 'Spørsmål og svar',
                   key: 'tilbakemeldinger',
-                  content: <Tilbakemeldinger krav={krav} hasKravExpired={false} />,
+                  content:
+                    <Block
+                      display={'flex'}
+                      justifyContent="center"
+                      width={responsiveWidthInnerPage}
+                      paddingLeft={responsivePaddingInnerPage}
+                      paddingRight={responsivePaddingInnerPage}
+                    >
+                      <Tilbakemeldinger krav={krav} hasKravExpired={false} />
+                    </Block>,
                 },
               ]}
             />
           </Block>
-          <Block
-            display={tab === 'dokumentasjon' ? 'block' : 'none'}
-            width="100%"
-            height="140px"
-            backgroundColor={kravFilter === KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV || kravFilter === KRAV_FILTER_TYPE.UTGAATE_KRAV ? ettlevColors.grey25 : ettlevColors.green100}
-            marginTop="-140px"
-          />
 
           <CustomizedModal
             onClose={() => setIsVersjonEndringerModalOpen(false)}

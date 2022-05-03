@@ -7,7 +7,7 @@ import React, { useEffect } from 'react'
 import { DateField } from '../../common/Inputs'
 
 import { LabelSmall, ParagraphMedium, ParagraphXSmall } from 'baseui/typography'
-import { ettlevColors } from '../../../util/theme'
+import { ettlevColors, responsivePaddingInnerPage, responsiveWidthInnerPage } from '../../../util/theme'
 import { SuksesskriterierBegrunnelseEdit } from './SuksesskriterieBegrunnelseEdit'
 import { KIND as NKIND, Notification } from 'baseui/notification'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -110,7 +110,12 @@ export const EtterlevelseEditFields = ({
         >
           {({ values, isSubmitting, submitForm, errors, setFieldError }: FormikProps<Etterlevelse>) => (
             <Block>
-              <Block marginTop="32px">
+              <Block
+                marginTop="32px"
+                justifyContent="center"
+                width={responsiveWidthInnerPage}
+                paddingLeft={responsivePaddingInnerPage}
+                paddingRight={responsivePaddingInnerPage}>
                 <Form>
                   <Block>
                     <Block>
@@ -266,27 +271,6 @@ export const EtterlevelseEditFields = ({
 
                       <SuksesskriterierBegrunnelseEdit disableEdit={disableEdit} suksesskriterie={krav.suksesskriterier} viewMode={false} />
 
-                      {/*
-              {!documentEdit &&
-                <>
-                  <Block height={theme.sizing.scale600} />
-
-                  <BoolField label='Etterleves' name='etterleves' />
-                </>
-              }
-
-              <TextAreaField label='Dokumentasjon' name='begrunnelse' markdown />
-              */}
-
-                      {/*
-          <MultiInputField label='Dokumentasjon' name='dokumentasjon'/>
-
-          <Block height={theme.sizing.scale600}/>
-
-          <DateField label='Frist for ferdigstillelse' name='fristForFerdigstillelse'/>
-
-          <Block height={theme.sizing.scale600}/>
-         */}
                       <Block marginBottom="24px">
                         <CustomizedAccordion>
                           {/*The commented code block is part of a feature that will be implemented later.*/}
@@ -345,18 +329,26 @@ export const EtterlevelseEditFields = ({
                 </Form>
               </Block>
 
-              <Block width="100%" height="140px" backgroundColor={ettlevColors.green100}>
+              <Block width="100%" backgroundColor={ettlevColors.green100}>
                 {!documentEdit && (
                   <Block
-                    display="flex"
-                    width="100%"
+                    display={['block', 'block', 'block', 'block', 'flex', 'flex']}
+                    width={[
+                      'calc(100% - 32px)',
+                      'calc(100% - 32px)',
+                      'calc(100% - 32px)',
+                      'calc(100% - 32px)',
+                      'calc(100% - 32px)',
+                      'calc(100% - 224px)',
+                    ]}
+                    paddingLeft={responsivePaddingInnerPage}
+                    paddingRight={['16px', '16px', '16px', '16px', '16px', '24']}
                   >
                     <Block
+                      display="flex"
+                      flexDirection="column"
                       paddingTop="27px"
                       paddingBottom="24px"
-                      display="flex"
-                      justifyContent="flex-end"
-                      flexDirection="column"
                     >
                       <Checkbox
                         checked={isOppfylesSenere}
@@ -394,8 +386,13 @@ export const EtterlevelseEditFields = ({
                         </Block>
                       )}
                     </Block>
-                    <Block $style={{ position: 'absolute', right: '-20%' }}>
-                      <Block paddingTop="27px" paddingBottom="24px" display="flex" justifyContent="flex-end" width="100%" >
+                    <Block
+                      display="flex"
+                      $style={{justifyContent: 'flex-end center'}}
+                      flexDirection="column"
+                      width="100%"
+                    >
+                      <Block paddingTop="27px" paddingBottom="24px" display={['block', 'block', 'block', 'flex', 'flex', 'flex']} justifyContent="flex-end" width="100%" >
                         <Button disabled={krav.status === KravStatus.UTGAATT ? false : disableEdit} type="button" kind="secondary" marginRight onClick={close}>
                           {krav.status === KravStatus.UTGAATT ? 'Lukk' : 'Avbryt og forkast endringene'}
                         </Button>
