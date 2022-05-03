@@ -13,10 +13,9 @@ import {Error} from '../../common/ModalSchema'
 import LabelWithToolTip from '../../common/LabelWithTooltip'
 import {borderColor, borderRadius, borderStyle, borderWidth} from '../../common/Style'
 import {LabelAboveContent} from '../../common/PropertyLabel'
-import {MODE, StatefulButtonGroup} from 'baseui/button-group'
-import {Button} from 'baseui/button'
 import {buttonContentStyle} from '../../common/Button'
 import {Markdown} from '../../common/Markdown'
+import {ALIGN, Radio, RadioGroup} from "baseui/radio";
 
 const paddingLeft = '30px'
 
@@ -38,22 +37,22 @@ export const getSuksesskriterieBegrunnelse = (suksesskriterieBegrunnelser: Sukse
   }
 }
 
-export const SuksesskriterierBegrunnelseEdit = ({ suksesskriterie, disableEdit, viewMode }: { suksesskriterie: Suksesskriterie[]; disableEdit: boolean; viewMode: boolean }) => {
+export const SuksesskriterierBegrunnelseEdit = ({suksesskriterie, disableEdit, viewMode}: { suksesskriterie: Suksesskriterie[]; disableEdit: boolean; viewMode: boolean }) => {
   return (
     <FieldWrapper>
       <FieldArray name={'suksesskriterieBegrunnelser'}>
-        {(p) => <KriterieBegrunnelseList props={p} disableEdit={disableEdit} suksesskriterie={suksesskriterie} viewMode={viewMode} />}
+        {(p) => <KriterieBegrunnelseList props={p} disableEdit={disableEdit} suksesskriterie={suksesskriterie} viewMode={viewMode}/>}
       </FieldArray>
     </FieldWrapper>
   )
 }
 
 const KriterieBegrunnelseList = ({
-  props,
-  suksesskriterie,
-  disableEdit,
-  viewMode,
-}: {
+                                   props,
+                                   suksesskriterie,
+                                   disableEdit,
+                                   viewMode,
+                                 }: {
   props: FieldArrayRenderProps
   suksesskriterie: Suksesskriterie[]
   disableEdit: boolean
@@ -85,16 +84,16 @@ const KriterieBegrunnelseList = ({
 }
 
 const KriterieBegrunnelse = ({
-  suksesskriterie,
-  index,
-  suksesskriterieBegrunnelser,
-  disableEdit,
-  update,
-  status,
-  props,
-  viewMode,
-  totalSuksesskriterie,
-}: {
+                               suksesskriterie,
+                               index,
+                               suksesskriterieBegrunnelser,
+                               disableEdit,
+                               update,
+                               status,
+                               props,
+                               viewMode,
+                               totalSuksesskriterie,
+                             }: {
   suksesskriterie: Suksesskriterie
   index: number
   suksesskriterieBegrunnelser: SuksesskriterieBegrunnelse[]
@@ -111,6 +110,7 @@ const KriterieBegrunnelse = ({
   const [oppfylt, setOppfylt] = React.useState(suksesskriterieBegrunnelse.oppfylt || false)
   const [ikkerelevant, setIkkeRelevant] = React.useState(suksesskriterieBegrunnelse.ikkeRelevant || false)
   const [underArbeid, setUnderArbeid] = React.useState(suksesskriterieBegrunnelse.underArbeid || false)
+  const [value, setValue] = React.useState('');
 
   React.useEffect(() => {
     update({
@@ -126,12 +126,12 @@ const KriterieBegrunnelse = ({
   const getBorderColor = () => {
     if (status === EtterlevelseStatus.FERDIG || status === EtterlevelseStatus.FERDIG_DOKUMENTERT) {
       if (!begrunnelse && suksesskriterie.behovForBegrunnelse) {
-        return { border: '2px solid #842D08' }
+        return {border: '2px solid #842D08'}
       } else {
-        return { border: '1px solid #C9C9C9' }
+        return {border: '1px solid #C9C9C9'}
       }
     } else {
-      return { border: '1px solid #C9C9C9' }
+      return {border: '1px solid #C9C9C9'}
     }
   }
   const getBackgroundColor = () => {
@@ -144,6 +144,19 @@ const KriterieBegrunnelse = ({
         return ettlevColors.white
       }
     }
+  }
+
+  const getInitialValueForSuksesskriterieStatus = () => {
+    if (oppfylt) {
+      return '2'
+    }
+    if (ikkerelevant) {
+      return '3'
+    }
+    if (underArbeid) {
+      return '1'
+    }
+    return ''
   }
 
   return (
@@ -199,7 +212,7 @@ const KriterieBegrunnelse = ({
       )}
       <CustomizedAccordion>
         <CustomizedPanel
-          title={<LabelSmall $style={{ color: ettlevColors.green600 }}>Utfyllende om kriteriet</LabelSmall>}
+          title={<LabelSmall $style={{color: ettlevColors.green600}}>Utfyllende om kriteriet</LabelSmall>}
           overrides={{
             Header: {
               style: {
@@ -228,98 +241,105 @@ const KriterieBegrunnelse = ({
             },
           }}
         >
-          <Markdown source={suksesskriterie.beskrivelse} fontSize="18px" maxWidth="650px" />
+          <Markdown source={suksesskriterie.beskrivelse} fontSize="18px" maxWidth="650px"/>
         </CustomizedPanel>
       </CustomizedAccordion>
 
       {viewMode === false && (
         <>
-          <Block width="100%" height="1px" backgroundColor={ettlevColors.grey100} marginTop="24px" marginBottom="24px" />
+          <Block width="100%" height="1px" backgroundColor={ettlevColors.grey100} marginTop="24px" marginBottom="24px"/>
 
           {status !== EtterlevelseStatus.IKKE_RELEVANT && status !== EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT && (
-            <StatefulButtonGroup mode={MODE.radio} initialState={{ selected: underArbeid ? 0 : oppfylt ? 1 : ikkerelevant ? 2 : [] }}>
-              <Button
-                type={'button'}
-                overrides={{
-                  BaseButton: {
-                    style: {
-                      ...borderColor(ettlevColors.green800),
-                      ...borderStyle('solid'),
-                      ...borderWidth('1px'),
-                      ...buttonContentStyle,
-                      borderRightWidth: '0px',
-                      borderTopRightRadius: '0px',
-                      borderBottomRightRadius: '0px',
-                      minWidth: '160px',
-                    },
-                    props: {
-                      tabIndex: 0,
-                    },
-                  },
+            <>
+              <RadioGroup
+                value={getInitialValueForSuksesskriterieStatus()}
+                onChange={e => {
+                  setValue(e.currentTarget.value)
+                  console.log(e.currentTarget.value)
+                  if (e.currentTarget.value === '1') {
+                    setUnderArbeid(true)
+                    setOppfylt(false)
+                    setIkkeRelevant(false)
+                  } else if (e.currentTarget.value === '2') {
+                    setUnderArbeid(false)
+                    setOppfylt(true)
+                    setIkkeRelevant(false)
+                  } else {
+                    setUnderArbeid(false)
+                    setOppfylt(false)
+                    setIkkeRelevant(true)
+                  }
                 }}
-                onClick={() => {
-                  setOppfylt(false)
-                  setUnderArbeid(!underArbeid)
-                  setIkkeRelevant(false)
-                }}
+                name="number"
+                align={ALIGN.horizontal}
               >
-                Under arbeid
-              </Button>
-              <Button
-                type={'button'}
-                overrides={{
-                  BaseButton: {
-                    style: {
-                      ...borderColor(ettlevColors.green800),
-                      ...borderStyle('solid'),
-                      ...borderWidth('1px'),
-                      ...borderRadius('0px'),
-                      ...buttonContentStyle,
-                      borderRightWidth: '0px',
-                      minWidth: '160px',
-                    },
-                    props: {
-                      tabIndex: 0,
-                    },
-                  },
-                }}
-                onClick={() => {
-                  setOppfylt(!oppfylt)
-                  setUnderArbeid(false)
-                  setIkkeRelevant(false)
-                }}
-              >
-                Oppfylt
-              </Button>
-              <Button
-                type={'button'}
-                overrides={{
-                  BaseButton: {
-                    style: {
-                      ...borderColor(ettlevColors.green800),
-                      ...borderStyle('solid'),
-                      ...borderWidth('1px'),
-                      ...buttonContentStyle,
-                      borderTopLeftRadius: '0px',
-                      borderBottomLeftRadius: '0px',
-                      minWidth: '160px',
-                    },
-                    props: {
-                      tabIndex: 0,
-                    },
-                  },
-                }}
-                onClick={() => {
-                  setOppfylt(false)
-                  setUnderArbeid(false)
-                  setIkkeRelevant(!ikkerelevant)
-                }}
-              >
-                Ikke relevant
-              </Button>
-            </StatefulButtonGroup>
+                <Radio
+                  value="1"
+                  overrides={{
+                    Root: {
+                      style: {
+                        ...borderColor(underArbeid ? ettlevColors.green400 : ettlevColors.green100),
+                        ...borderStyle('solid'),
+                        ...borderWidth('1px'),
+                        ...borderRadius('4px'),
+                        ...buttonContentStyle,
+                        backgroundColor: underArbeid ? ettlevColors.green100 : ettlevColors.white,
+                        marginRight: '16px',
+                        minWidth: '215px',
+                      },
+                      props: {
+                        tabIndex: 0,
+                      },
+                    }
+                  }}
+                >
+                  <ParagraphMedium margin={0}>Under arbeid</ParagraphMedium>
+                </Radio>
+                <Radio value="2"
+                       overrides={{
+                         Root: {
+                           style: {
+                             ...borderColor(oppfylt ? ettlevColors.green400 : ettlevColors.green100),
+                             ...borderStyle('solid'),
+                             ...borderWidth('1px'),
+                             ...borderRadius('4px'),
+                             ...buttonContentStyle,
+                             backgroundColor: oppfylt ? ettlevColors.green100 : ettlevColors.white,
+                             marginRight: '16px',
+                             minWidth: '215px',
+                           },
+                           props: {
+                             tabIndex: 0,
+                           },
+                         }
+                       }}
+                >
+                  <ParagraphMedium margin={0}> Oppfylt</ParagraphMedium>
+                </Radio>
+                <Radio value="3"
+                       overrides={{
+                         Root: {
+                           style: {
+                             ...borderColor(ikkerelevant ? ettlevColors.green400 : ettlevColors.green100),
+                             ...borderStyle('solid'),
+                             ...borderWidth('1px'),
+                             ...borderRadius('4px'),
+                             ...buttonContentStyle,
+                             backgroundColor: ikkerelevant ? ettlevColors.green100 : ettlevColors.white,
+                             minWidth: '215px',
+                           },
+                           props: {
+                             tabIndex: 0,
+                           },
+                         }
+                       }}
+                >
+                  <ParagraphMedium margin={0}>Ikke relevant</ParagraphMedium>
+                </Radio>
+              </RadioGroup>
+            </>
           )}
-          <Error fieldName={`suksesskriterieBegrunnelser[${index}].underArbeid`} fullWidth={true} />
+          <Error fieldName={`suksesskriterieBegrunnelser[${index}].underArbeid`} fullWidth={true}/>
         </>
       )}
 
@@ -329,19 +349,21 @@ const KriterieBegrunnelse = ({
         !disableEdit &&
         suksesskriterie.behovForBegrunnelse && (
           <Block marginTop={theme.sizing.scale1000}>
-            <FormControl label={<LabelWithToolTip label={underArbeid ? "Hva er oppfylt og hva er under arbeid?" : oppfylt ? 'Hvordan oppfylles kriteriet?' : 'Hvorfor er ikke kriteriet relevant?'} />}>
-              <TextEditor initialValue={begrunnelse} setValue={setBegrunnelse} height={'188px'} errors={props.form.errors} simple width="100%" />
+            <FormControl label={<LabelWithToolTip
+              label={underArbeid ? "Hva er oppfylt og hva er under arbeid?" : oppfylt ? 'Hvordan oppfylles kriteriet?' : 'Hvorfor er ikke kriteriet relevant?'}/>}>
+              <TextEditor initialValue={begrunnelse} setValue={setBegrunnelse} height={'188px'} errors={props.form.errors} simple width="100%"/>
             </FormControl>
-            <Error fieldName={`suksesskriterieBegrunnelser[${index}].begrunnelse`} fullWidth={true} />
+            <Error fieldName={`suksesskriterieBegrunnelser[${index}].begrunnelse`} fullWidth={true}/>
           </Block>
         )}
 
       {(oppfylt || ikkerelevant || underArbeid) && disableEdit && (
         <Block paddingLeft={paddingLeft} marginTop={theme.sizing.scale1000}>
-          <LabelAboveContent title="Dokumentasjon" markdown={begrunnelse} />
+          <LabelAboveContent title="Dokumentasjon" markdown={begrunnelse}/>
         </Block>
       )}
-      <Block marginTop={'8px'}>{(oppfylt === false && ikkerelevant === false && underArbeid === false && begrunnelse.length > 0) && <Error fieldName={'status'} fullWidth={true} />}</Block>
+      <Block marginTop={'8px'}>{(oppfylt === false && ikkerelevant === false && underArbeid === false && begrunnelse.length > 0) &&
+        <Error fieldName={'status'} fullWidth={true}/>}</Block>
     </Block>
   )
 }
