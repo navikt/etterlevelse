@@ -236,7 +236,7 @@ export enum AlertType {
 export enum MeldingType {
   SYSTEM = 'SYSTEM',
   FORSIDE = 'FORSIDE',
-  OMETTERLEVELSE = 'OMETTERLEVELSE'
+  OM_ETTERLEVELSE = 'OM_ETTERLEVELSE'
 }
 
 export enum MeldingStatus {

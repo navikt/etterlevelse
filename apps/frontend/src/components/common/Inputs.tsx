@@ -1,31 +1,31 @@
-import { Or } from '../../constants'
-import { Field, FieldArray, FieldArrayRenderProps, FieldProps } from 'formik'
-import { FormControl } from 'baseui/form-control'
-import React, { ReactNode, useState } from 'react'
-import { Block } from 'baseui/block'
+import {Or} from '../../constants'
+import {Field, FieldArray, FieldArrayRenderProps, FieldProps} from 'formik'
+import {FormControl} from 'baseui/form-control'
+import React, {ReactNode, useState} from 'react'
+import {Block} from 'baseui/block'
 import Button from './Button'
-import { RenderTagList } from './TagList'
-import { Value } from 'baseui/select'
-import { Code, codelist, ListName } from '../../services/Codelist'
-import { SearchType } from '../../api/TeamApi'
+import {RenderTagList} from './TagList'
+import {Value} from 'baseui/select'
+import {Code, codelist, ListName} from '../../services/Codelist'
+import {SearchType} from '../../api/TeamApi'
 import * as _ from 'lodash'
-import { Datepicker } from 'baseui/datepicker'
+import {Datepicker} from 'baseui/datepicker'
 import moment from 'moment'
-import { Radio, RadioGroup } from 'baseui/radio'
+import {Radio, RadioGroup} from 'baseui/radio'
 import LabelWithTooltip from '../common/LabelWithTooltip'
 import CustomInput from '../common/CustomizedInput'
 import CustomizedSelect from '../common/CustomizedSelect'
 import CustomizedTextarea from './CustomizedTextarea'
 import TextEditor from './TextEditor/TextEditor'
-import { Error } from './ModalSchema'
-import { ettlevColors } from '../../util/theme'
-import { borderColor, borderStyle, borderWidth } from './Style'
+import {Error} from './ModalSchema'
+import {ettlevColors} from '../../util/theme'
+import {borderColor, borderStyle, borderWidth} from './Style'
 
 export const FieldWrapper = ({ children, marginBottom }: { children: React.ReactNode; marginBottom?: string }) => {
   return <Block marginBottom={marginBottom ? marginBottom : '1.5rem'}>{children}</Block>
 }
 
-export const InputField = (props: { label: string; name: string; caption?: ReactNode; tooltip?: string; marginBottom?: string }) => (
+export const InputField = (props: { label: string; name: string; caption?: ReactNode; tooltip?: string; marginBottom?: string, disablePlaceHolder?:boolean }) => (
   <FieldWrapper marginBottom={props.marginBottom}>
     <Field name={props.name}>
       {(p: FieldProps) => (
@@ -37,7 +37,7 @@ export const InputField = (props: { label: string; name: string; caption?: React
           <Block>
             <CustomInput
               {...p.field}
-              placeholder={props.label}
+              placeholder={!props.disablePlaceHolder?props.label:undefined}
               overrides={{
                 Input: {
                   style: {

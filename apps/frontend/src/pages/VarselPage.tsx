@@ -1,17 +1,18 @@
-import { Helmet } from 'react-helmet'
-import { Block } from 'baseui/block'
-import { ettlevColors, maxPageWidth, theme } from '../util/theme'
+import {Helmet} from 'react-helmet'
+import {Block} from 'baseui/block'
+import {ettlevColors, maxPageWidth, theme} from '../util/theme'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
-import { HeadingXXLarge } from 'baseui/typography'
-import React, { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import {HeadingXXLarge} from 'baseui/typography'
+import React, {useEffect, useState} from 'react'
+import {useParams} from 'react-router-dom'
 import CustomizedTabs from '../components/common/CustomizedTabs'
 import EditMelding from '../components/varslinger/EditMelding'
-import { AlertType, Melding, MeldingStatus, MeldingType } from '../constants'
-import { getMeldingByType, mapMeldingToFormValue } from '../api/MeldingApi'
-import { ObjectType } from '../components/admin/audit/AuditTypes'
-import { AuditRecentTable } from '../components/admin/audit/AuditRecentTable'
-import { ampli } from '../services/Amplitude'
+import {Melding, MeldingType} from '../constants'
+import {getMeldingByType, mapMeldingToFormValue} from '../api/MeldingApi'
+import {ObjectType} from '../components/admin/audit/AuditTypes'
+import {AuditRecentTable} from '../components/admin/audit/AuditRecentTable'
+import {ampli} from '../services/Amplitude'
+import EditOmEtterlevelse from "../components/varslinger/EditOmEtterlevelse";
 
 type Section = 'utsendtMelding' | MeldingType.SYSTEM | MeldingType.FORSIDE
 
@@ -55,6 +56,17 @@ export const VarselPage = () => {
   )
 }
 
+const getMeldingType = (tabName:string) =>{
+  switch (tabName){
+    case 'FORSIDE':
+      return MeldingType.FORSIDE
+    case 'OM_ETTERLEVELSE':
+      return MeldingType.OM_ETTERLEVELSE
+    default:
+      return MeldingType.SYSTEM
+  }
+}
+
 const VarselTabs = () => {
   const params = useParams<{ tab?: Section }>()
 
@@ -67,11 +79,11 @@ const VarselTabs = () => {
       setLoading(true)
       if (tab !== 'utsendtMelding') {
         ampli.logEvent('sidevisning', { side: 'Varsel side for admin', sidetittel: 'Opprett varsel melding for ' + tab })
-        const response = await getMeldingByType(tab === 'SYSTEM' ? MeldingType.SYSTEM : MeldingType.FORSIDE)
+        const response = await getMeldingByType(getMeldingType(tab))
         if (response.numberOfElements > 0) {
           setMelding(response.content[0])
         } else {
-          setMelding(mapMeldingToFormValue({ meldingType: tab === 'SYSTEM' ? MeldingType.SYSTEM : MeldingType.FORSIDE }))
+          setMelding(mapMeldingToFormValue({ meldingType: getMeldingType(tab) }))
         }
       }
       setLoading(false)
@@ -100,6 +112,11 @@ const VarselTabs = () => {
           key: MeldingType.FORSIDE,
           title: 'Informasjon på forsiden',
           content: <EditMelding melding={melding} setMelding={setMelding} isLoading={isLoading} maxChar={500} />,
+        },
+        {
+          key: MeldingType.OM_ETTERLEVELSE,
+          title: 'Om etterlevelse',
+          content: <EditOmEtterlevelse melding={melding} setMelding={setMelding} isLoading={isLoading} maxChar={500} />,
         },
       ]}
     />

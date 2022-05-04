@@ -64,7 +64,7 @@ export const EditMelding = ({ melding, setMelding, isLoading, maxChar }: { meldi
   return (
     <Block>
       {melding && (
-        <Formik onSubmit={submit} initialValues={mapMeldingToFormValue(melding)} validateOnChange={false} validateOnBlur={false}>
+        <Formik onSubmit={submit} initialValues={mapMeldingToFormValue(melding)}>
           {({ values, submitForm }: FormikProps<Melding>) => (
             <Block>
               <FieldWrapper>

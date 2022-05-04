@@ -1,13 +1,38 @@
 import * as React from 'react'
+import {useEffect, useState} from 'react'
 import {ettlevColors, maxPageWidth, theme} from '../util/theme'
-import {HeadingXXLarge, ParagraphLarge} from 'baseui/typography'
+import {HeadingXXLarge, ParagraphLarge, ParagraphSmall} from 'baseui/typography'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
 import {Block} from 'baseui/block'
-import {ExternalLink} from '../components/common/RouteLink'
 import {Helmet} from 'react-helmet'
 import {ampli} from '../services/Amplitude'
+import {Melding, MeldingType} from "../constants";
+import {getMeldingByType, mapMeldingToFormValue} from "../api/MeldingApi";
+import {Markdown} from "../components/common/Markdown";
+import moment from "moment";
 
 export const FAQ = () => {
+
+  const [isLoading, setLoading] = useState<boolean>(false)
+  const [melding, setMelding] = useState<Melding>()
+
+  useEffect(() => {
+    ;(async () => {
+      setLoading(true)
+        const response = await getMeldingByType(MeldingType.OM_ETTERLEVELSE)
+        if (response.numberOfElements > 0) {
+          setMelding(response.content[0])
+        } else {
+          setMelding(mapMeldingToFormValue({ meldingType: MeldingType.OM_ETTERLEVELSE }))
+        }
+      setLoading(false)
+    })()
+  }, [])
+
+  useEffect(() => {
+    console.log(melding)
+  }, [melding]);
+
   ampli.logEvent('sidevisning', { side: 'FAQ side', sidetittel: 'Om Støtte til etterlevelse' })
 
   return (
@@ -29,18 +54,26 @@ export const FAQ = () => {
         <Block maxWidth={maxPageWidth} width="100%">
           <Block paddingLeft={'100px'} paddingRight={'100px'} paddingTop={theme.sizing.scale800} maxWidth="600px">
             <ParagraphLarge $style={{ fontSize: '22px', color: ettlevColors.green800 }}>
-              På denne siden ønsker vi å gi teamene den informasjonen de trenger for å komme godt igang med etterlevelse.
+              {melding?.secondaryTittel}
             </ParagraphLarge>
-            <ParagraphLarge $style={{ fontSize: '22px', color: ettlevColors.green800 }}>
-              Siden er under arbeid, og vi tar gjerne imot innspill på Slack <strong>#etterlevelse.</strong>
-            </ParagraphLarge>
-            <ParagraphLarge $style={{ fontSize: '22px', color: ettlevColors.green800 }}>
-              Inntil videre kan dere lese om{' '}
-              <ExternalLink href={'https://navno.sharepoint.com/sites/fag-og-ytelser-informasjonsforvaltning/SitePages/Etterlevelseskrav-for-systemutvikling.aspx'}>
-                Støtte til etterlevelse på Navet
-              </ExternalLink>
-              .
-            </ParagraphLarge>
+            <Markdown source={melding?.secondaryMelding}/>
+            <Markdown source={melding?.melding}/>
+            {/*<ParagraphLarge $style={{ fontSize: '22px', color: ettlevColors.green800 }}>*/}
+            {/*  Siden er under arbeid, og vi tar gjerne imot innspill på Slack <strong>#etterlevelse.</strong>*/}
+            {/*</ParagraphLarge>*/}
+            {/*<ParagraphLarge $style={{ fontSize: '22px', color: ettlevColors.green800 }}>*/}
+            {/*  Inntil videre kan dere lese om{' '}*/}
+            {/*  <ExternalLink href={'https://navno.sharepoint.com/sites/fag-og-ytelser-informasjonsforvaltning/SitePages/Etterlevelseskrav-for-systemutvikling.aspx'}>*/}
+            {/*    Støtte til etterlevelse på Navet*/}
+            {/*  </ExternalLink>*/}
+            {/*  .*/}
+            {/*</ParagraphLarge>*/}
+            <Block>
+              {
+                melding && <ParagraphSmall>
+                  Sist endret: {moment(melding.changeStamp.lastModifiedDate).format('ll')} av {melding.changeStamp.lastModifiedBy.split('-')[1]}
+                </ParagraphSmall>}
+            </Block>
           </Block>
         </Block>
       </Block>
