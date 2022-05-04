@@ -63,6 +63,8 @@ export const mapMeldingToFormValue = (melding: Partial<Melding>): Melding => {
     meldingStatus: melding.meldingStatus || MeldingStatus.DEACTIVE,
     meldingType: melding.meldingType || MeldingType.FORSIDE,
     melding: melding.melding || '',
+    secondaryTittel: melding.secondaryTittel || '',
+    secondaryMelding: melding.secondaryMelding || '',
     alertType: melding.alertType || AlertType.WARNING,
   }
 }
