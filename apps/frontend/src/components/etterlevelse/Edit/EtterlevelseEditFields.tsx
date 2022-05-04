@@ -296,7 +296,7 @@ export const EtterlevelseEditFields = ({
                           Lagre og fortsett senere
                         </Button>
                         <Button
-                          disabled={disableEdit}
+                          disabled={disableEdit || isOppfylesSenere}
                           type="button"
                           onClick={() => {
                             values.status = EtterlevelseStatus.FERDIG_DOKUMENTERT
