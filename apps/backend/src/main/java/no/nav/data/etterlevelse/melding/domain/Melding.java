@@ -19,6 +19,8 @@ public class Melding implements DomainObject {
     private UUID id;
     private ChangeStamp changeStamp;
     private String melding;
+    private String secondaryTittel;
+    private String secondaryMelding;
     private MeldingType meldingType;
     private MeldingStatus meldingStatus;
     private AlertType alertType;
@@ -26,6 +28,8 @@ public class Melding implements DomainObject {
 
     public Melding convert(MeldingRequest request) {
         melding = request.getMelding();
+        secondaryTittel = request.getSecondaryTittel();
+        secondaryMelding = request.getSecondaryMelding();
         meldingType = request.getMeldingType();
         meldingStatus = request.getMeldingStatus();
         alertType = request.getAlertType();
@@ -41,6 +45,8 @@ public class Melding implements DomainObject {
                 .meldingStatus(meldingStatus)
                 .alertType(alertType)
                 .melding(melding)
+                .secondaryTittel(secondaryTittel)
+                .secondaryMelding(secondaryMelding)
                 .build();
     }
 }

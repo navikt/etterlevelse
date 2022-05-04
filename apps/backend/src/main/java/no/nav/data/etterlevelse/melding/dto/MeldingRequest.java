@@ -22,6 +22,8 @@ public class MeldingRequest implements RequestElement {
     private String id;
     private ChangeStamp changeStamp;
     private String melding;
+    private String secondaryTittel;
+    private String secondaryMelding;
     private MeldingType meldingType;
     private MeldingStatus meldingStatus;
     private AlertType alertType;
