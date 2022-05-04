@@ -1,32 +1,28 @@
-import {Etterlevelse, EtterlevelseStatus, KravQL, KravStatus} from '../../../constants'
-import {Field, FieldProps, Form, Formik, FormikProps, validateYupSchema, yupToFormErrors} from 'formik'
-import {mapEtterlevelseToFormValue} from '../../../api/EtterlevelseApi'
-import {Block} from 'baseui/block'
+import { Etterlevelse, EtterlevelseStatus, KravQL, KravStatus } from '../../../constants'
+import { Form, Formik, FormikProps, validateYupSchema, yupToFormErrors } from 'formik'
+import { mapEtterlevelseToFormValue } from '../../../api/EtterlevelseApi'
+import { Block } from 'baseui/block'
 import Button from '../../common/Button'
-import React, {useEffect} from 'react'
-import {DateField, FieldWrapper, TextAreaField} from '../../common/Inputs'
-import {theme} from '../../../util'
-import {FormControl} from 'baseui/form-control'
+import React, { useEffect } from 'react'
+import { DateField } from '../../common/Inputs'
 
-import {LabelSmall, ParagraphMedium, ParagraphXSmall} from 'baseui/typography'
-import {ettlevColors} from '../../../util/theme'
-import {SuksesskriterierBegrunnelseEdit} from './SuksesskriterieBegrunnelseEdit'
-import {Radio, RadioGroup} from 'baseui/radio'
-import {Code} from '../../../services/Codelist'
-import {Error} from '../../common/ModalSchema'
-import {KIND as NKIND, Notification} from 'baseui/notification'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faTimesCircle} from '@fortawesome/free-solid-svg-icons'
-import {borderColor, borderRadius, borderStyle, borderWidth, marginAll, paddingZero} from '../../common/Style'
+import { LabelSmall, ParagraphMedium, ParagraphXSmall } from 'baseui/typography'
+import { ettlevColors, responsivePaddingInnerPage, responsiveWidthInnerPage } from '../../../util/theme'
+import { SuksesskriterierBegrunnelseEdit } from './SuksesskriterieBegrunnelseEdit'
+import { KIND as NKIND, Notification } from 'baseui/notification'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTimesCircle } from '@fortawesome/free-solid-svg-icons'
+import { borderColor, borderRadius, borderStyle, borderWidth, marginAll, paddingZero } from '../../common/Style'
 import moment from 'moment'
-import {CustomizedAccordion, CustomizedPanel, CustomPanelDivider} from '../../common/CustomizedAccordion'
-import {AllInfo} from '../../krav/ViewKrav'
+import { CustomizedAccordion, CustomizedPanel, CustomPanelDivider } from '../../common/CustomizedAccordion'
+import { AllInfo } from '../../krav/ViewKrav'
 import CustomizedModal from '../../common/CustomizedModal'
-import {useNavigate} from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import EtterlevelseCard from '../EtterlevelseCard'
-import {ModalHeader} from 'baseui/modal'
-import {etterlevelseSchema} from './etterlevelseSchema'
+import { ModalHeader } from 'baseui/modal'
+import { etterlevelseSchema } from './etterlevelseSchema'
 import _ from 'lodash'
+import { Checkbox } from "baseui/checkbox";
 
 type EditProps = {
   krav: KravQL
@@ -50,20 +46,6 @@ type EditProps = {
   viewMode?: boolean
 }
 
-const getEtterlevelseRadioLabel = (status?: EtterlevelseStatus) => {
-  if (!status) return ''
-  switch (status) {
-    case EtterlevelseStatus.UNDER_REDIGERING:
-      return 'Kravet skal etterleves nå'
-    case EtterlevelseStatus.IKKE_RELEVANT:
-      return 'Kravet er ikke relevant'
-    case EtterlevelseStatus.OPPFYLLES_SENERE:
-      return 'Kravet skal etterleves senere'
-    default:
-      return status
-  }
-}
-
 export const EtterlevelseEditFields = ({
   krav,
   etterlevelse,
@@ -85,6 +67,8 @@ export const EtterlevelseEditFields = ({
     editedEtterlevelse ? editedEtterlevelse.status : etterlevelse.status || EtterlevelseStatus.UNDER_REDIGERING,
   )
   const [radioHover, setRadioHover] = React.useState<string>('')
+  const [isOppfylesSenere, setOppfylesSenere] = React.useState<boolean>(etterlevelseStatus === EtterlevelseStatus.OPPFYLLES_SENERE)
+
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -126,154 +110,39 @@ export const EtterlevelseEditFields = ({
         >
           {({ values, isSubmitting, submitForm, errors, setFieldError }: FormikProps<Etterlevelse>) => (
             <Block>
-              <Block marginTop="32px">
+              <Block
+                marginTop="32px"
+                justifyContent="center"
+                width={responsiveWidthInnerPage}
+                paddingLeft={responsivePaddingInnerPage}
+                paddingRight={responsivePaddingInnerPage}>
                 <Form>
                   <Block>
                     <Block>
-                      <Block>
-                        <Block display="flex" width="100%">
-                          <Block display="flex" width="100%" maxWidth="600px">
-                            <FieldWrapper marginBottom="0px">
-                              <Field name={'status'}>
-                                {(p: FieldProps<string | Code>) => (
-                                  <FormControl
-                                    label="Oppgi relevans for behandlingen"
-                                    overrides={{
-                                      Label: {
-                                        style: {
-                                          color: ettlevColors.navMorkGra,
-                                          fontWeight: 700,
-                                          lineHeight: '48px',
-                                          fontSize: '18px',
-                                          marginTop: '0px',
-                                          marginBottom: '0px',
-                                        },
+                      <Block display="flex" width="100%">
+                        {tidligereEtterlevelser && tidligereEtterlevelser.length >= 1 && (
+                          <Block display="flex" width="100%" justifyContent="flex-end">
+                            <Block width="100%" maxWidth="460px">
+                              <CustomizedAccordion>
+                                <CustomizedPanel
+                                  title="Se dokumentasjon på tidligere versjoner"
+                                  overrides={{
+                                    Content: {
+                                      style: {
+                                        backgroundColor: ettlevColors.white,
                                       },
-                                    }}
-                                  >
-                                    <RadioGroup
-                                      disabled={disableEdit}
-                                      onMouseEnter={(e) => setRadioHover(e.currentTarget.children[1].getAttribute('value') || '')}
-                                      onMouseLeave={() => setRadioHover('')}
-                                      overrides={{
-                                        Root: {
-                                          style: {
-                                            width: '100%',
-                                            alignItems: 'flex-start',
-                                          },
-                                        },
-                                        Label: {
-                                          style: {
-                                            fontSize: '18px',
-                                            fontWeight: 400,
-                                            lineHeight: '22px',
-                                            width: '100%',
-                                          },
-                                        },
-                                        RadioMarkOuter: {
-                                          style: {
-                                            height: theme.sizing.scale600,
-                                            width: theme.sizing.scale600,
-                                          },
-                                        },
-                                      }}
-                                      value={
-                                        etterlevelseStatus === EtterlevelseStatus.FERDIG_DOKUMENTERT || etterlevelseStatus === EtterlevelseStatus.FERDIG
-                                          ? EtterlevelseStatus.UNDER_REDIGERING
-                                          : etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT
-                                            ? EtterlevelseStatus.IKKE_RELEVANT
-                                            : etterlevelseStatus
-                                      }
-                                      onChange={(event) => {
-                                        p.form.setFieldValue('status', event.currentTarget.value)
-                                        setEtterlevelseStatus(event.currentTarget.value)
-                                      }}
-                                    >
-                                      <Radio value={EtterlevelseStatus.UNDER_REDIGERING} key={EtterlevelseStatus.UNDER_REDIGERING}>
-                                        <Block $style={{ textDecoration: radioHover === EtterlevelseStatus.UNDER_REDIGERING ? 'underline' : 'none' }}>
-                                          <ParagraphMedium $style={{ lineHeight: '22px' }} marginTop="0px" marginBottom="0px">
-                                            {getEtterlevelseRadioLabel(EtterlevelseStatus.UNDER_REDIGERING)}
-                                          </ParagraphMedium>
-                                        </Block>
-                                      </Radio>
-
-                                      <Radio value={EtterlevelseStatus.OPPFYLLES_SENERE} key={EtterlevelseStatus.OPPFYLLES_SENERE}>
-                                        <Block $style={{ textDecoration: radioHover === EtterlevelseStatus.OPPFYLLES_SENERE ? 'underline' : 'none' }}>
-                                          <ParagraphMedium $style={{ lineHeight: '22px' }} marginTop="0px" marginBottom="0px">
-                                            {getEtterlevelseRadioLabel(EtterlevelseStatus.OPPFYLLES_SENERE)}
-                                          </ParagraphMedium>
-                                        </Block>
-                                      </Radio>
-
-                                      {etterlevelseStatus === EtterlevelseStatus.OPPFYLLES_SENERE && (
-                                        <Block width="100%" marginLeft="33px">
-                                          <Block maxWidth="170px" width="100%">
-                                            <DateField error={!!p.form.errors.fristForFerdigstillelse} label="Frist" name="fristForFerdigstillelse" />
-                                          </Block>
-                                          {p.form.errors.fristForFerdigstillelse && (
-                                            <Block display="flex" width="100%" marginTop=".2rem">
-                                              <Block width="100%">
-                                                <Notification
-                                                  overrides={{
-                                                    Body: {
-                                                      style: { width: 'auto', ...paddingZero, marginTop: 0, backgroundColor: 'transparent', color: ettlevColors.red600 },
-                                                    },
-                                                  }}
-                                                  kind={NKIND.negative}
-                                                >
-                                                  {p.form.errors.fristForFerdigstillelse}
-                                                </Notification>
-                                              </Block>
-                                            </Block>
-                                          )}
-                                        </Block>
-                                      )}
-
-                                      <Radio value={EtterlevelseStatus.IKKE_RELEVANT} key={EtterlevelseStatus.IKKE_RELEVANT}>
-                                        <Block $style={{ textDecoration: radioHover === EtterlevelseStatus.IKKE_RELEVANT ? 'underline' : 'none' }}>
-                                          <ParagraphMedium $style={{ lineHeight: '22px' }} marginTop="0px" marginBottom="0px">
-                                            {getEtterlevelseRadioLabel(EtterlevelseStatus.IKKE_RELEVANT)}
-                                          </ParagraphMedium>
-                                        </Block>
-                                      </Radio>
-                                    </RadioGroup>
-                                  </FormControl>
-                                )}
-                              </Field>
-                            </FieldWrapper>
-                          </Block>
-                          <Block display="flex" width="100%">
-                            {tidligereEtterlevelser && tidligereEtterlevelser.length >= 1 && (
-                              <Block display="flex" width="100%" justifyContent="flex-end">
-                                <Block width="100%" maxWidth="460px">
-                                  <CustomizedAccordion>
-                                    <CustomizedPanel
-                                      title="Se dokumentasjon på tidligere versjoner"
-                                      overrides={{
-                                        Content: {
-                                          style: {
-                                            backgroundColor: ettlevColors.white,
-                                          },
-                                        },
-                                      }}
-                                      headerStyle={{
-                                        fontSize: '18px',
-                                        lineHeight: '18px',
-                                        fontWeight: 700,
-                                      }}
-                                    >
-                                      {getTidligereEtterlevelser()}
-                                    </CustomizedPanel>
-                                  </CustomizedAccordion>
-                                </Block>
-                              </Block>
-                            )}
-                          </Block>
-                        </Block>
-                        {(etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT || etterlevelseStatus === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) && (
-                          <Block maxWidth="471px" width="100%">
-                            <TextAreaField label="Beskriv hvorfor kravet ikke er relevant" noPlaceholder name="statusBegrunnelse" />
-                            <Error fieldName={'statusBegrunnelse'} fullWidth={true} />
+                                    },
+                                  }}
+                                  headerStyle={{
+                                    fontSize: '18px',
+                                    lineHeight: '18px',
+                                    fontWeight: 700,
+                                  }}
+                                >
+                                  {getTidligereEtterlevelser()}
+                                </CustomizedPanel>
+                              </CustomizedAccordion>
+                            </Block>
                           </Block>
                         )}
                       </Block>
@@ -282,27 +151,6 @@ export const EtterlevelseEditFields = ({
 
                       <SuksesskriterierBegrunnelseEdit disableEdit={disableEdit} suksesskriterie={krav.suksesskriterier} viewMode={false} />
 
-                      {/*
-              {!documentEdit &&
-                <>
-                  <Block height={theme.sizing.scale600} />
-
-                  <BoolField label='Etterleves' name='etterleves' />
-                </>
-              }
-
-              <TextAreaField label='Dokumentasjon' name='begrunnelse' markdown />
-              */}
-
-                      {/*
-          <MultiInputField label='Dokumentasjon' name='dokumentasjon'/>
-
-          <Block height={theme.sizing.scale600}/>
-
-          <DateField label='Frist for ferdigstillelse' name='fristForFerdigstillelse'/>
-
-          <Block height={theme.sizing.scale600}/>
-         */}
                       <Block marginBottom="24px">
                         <CustomizedAccordion>
                           {/*The commented code block is part of a feature that will be implemented later.*/}
@@ -361,83 +209,116 @@ export const EtterlevelseEditFields = ({
                 </Form>
               </Block>
 
-              <Block width="100%" height="140px" backgroundColor={ettlevColors.green100}>
+              <Block width="100%" backgroundColor={ettlevColors.green100}>
                 {!documentEdit && (
-                  <Block paddingTop="27px" paddingBottom="24px" display="flex" justifyContent="flex-end" width="100%">
-                    <Button disabled={krav.status === KravStatus.UTGAATT ? false : disableEdit} type="button" kind="secondary" marginRight onClick={close}>
-                      {krav.status === KravStatus.UTGAATT ? 'Lukk' : 'Avbryt og forkast endringene'}
-                    </Button>
-                    <Button
-                      type="button"
-                      kind="secondary"
-                      marginRight
-                      disabled={isSubmitting || disableEdit}
-                      onClick={() => {
-                        if (values.status === EtterlevelseStatus.FERDIG_DOKUMENTERT) {
-                          values.status = EtterlevelseStatus.UNDER_REDIGERING
-                        } else if (values.status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) {
-                          values.status = EtterlevelseStatus.IKKE_RELEVANT
-                        }
-                        // if (
-                        //   values.status === EtterlevelseStatus.UNDER_REDIGERING ||
-                        //   values.status === EtterlevelseStatus.FERDIG ||
-                        //   values.status === EtterlevelseStatus.FERDIG_DOKUMENTERT
-                        // ) {
-                        //   let completed = true
-                        //   values.suksesskriterieBegrunnelser.forEach((value) => {
-                        //     if (value.oppfylt || value.ikkeRelevant) {
-                        //       if (!value.behovForBegrunnelse) {
-                        //         completed = true
-                        //       } else if (value.begrunnelse) {
-                        //         completed = true
-                        //       } else {
-                        //         completed = false
-                        //       }
-                        //     } else {
-                        //       completed = false
-                        //     }
-                        //   })
-                        //   if (completed) {
-                        //     values.status = EtterlevelseStatus.FERDIG
-                        //   } else {
-                        //     values.status = EtterlevelseStatus.UNDER_REDIGERING
-                        //   }
-                        // }
-                        submitForm()
-                      }}
+                  <Block
+                    display={['block', 'block', 'block', 'block', 'flex', 'flex']}
+                    width={[
+                      'calc(100% - 32px)',
+                      'calc(100% - 32px)',
+                      'calc(100% - 32px)',
+                      'calc(100% - 32px)',
+                      'calc(100% - 32px)',
+                      'calc(100% - 224px)',
+                    ]}
+                    paddingLeft={responsivePaddingInnerPage}
+                    paddingRight={['16px', '16px', '16px', '16px', '16px', '24']}
+                  >
+                    <Block
+                      display="flex"
+                      flexDirection="column"
+                      paddingTop="27px"
+                      paddingBottom="24px"
                     >
-                      Lagre og fortsett senere
-                    </Button>
-                    <Button
-                      disabled={disableEdit}
-                      type="button"
-                      onClick={() => {
-                        if (
-                          values.status !== EtterlevelseStatus.IKKE_RELEVANT &&
-                          values.status !== EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT &&
-                          values.status !== EtterlevelseStatus.OPPFYLLES_SENERE
-                        ) {
-                          values.status = EtterlevelseStatus.FERDIG_DOKUMENTERT
-                          values.suksesskriterieBegrunnelser.forEach((skb, index) => {
-                            if (skb.begrunnelse === '' || skb.begrunnelse === undefined) {
-                              setFieldError(`suksesskriterieBegrunnelser[${index}]`, 'Du må fylle ut dokumentasjonen')
+                      <Checkbox
+                        checked={isOppfylesSenere}
+                        onChange={() => setOppfylesSenere(!isOppfylesSenere)}
+                        key={EtterlevelseStatus.OPPFYLLES_SENERE}
+                      >
+                        <Block $style={{ textDecoration: radioHover === EtterlevelseStatus.OPPFYLLES_SENERE ? 'underline' : 'none' }}>
+                          <ParagraphMedium $style={{ lineHeight: '22px' }} marginTop="0px" marginBottom="0px">
+                            Kravet skal etterleves senere
+                          </ParagraphMedium>
+                        </Block>
+                      </Checkbox>
+
+                      {isOppfylesSenere && (
+                        <Block width="100%" marginLeft="33px">
+                          <Block maxWidth="170px" width="100%">
+                            <DateField error={!!errors.fristForFerdigstillelse} label="Dato" name="fristForFerdigstillelse" />
+                          </Block>
+                          {/* {errors.fristForFerdigstillelse && (
+                            <Block display="flex" width="100%" marginTop=".2rem">
+                              <Block width="100%">
+                                <Notification
+                                  overrides={{
+                                    Body: {
+                                      style: { width: 'auto', ...paddingZero, marginTop: 0, backgroundColor: 'transparent', color: ettlevColors.red600 },
+                                    },
+                                  }}
+                                  kind={NKIND.negative}
+                                >
+                                  {errors.fristForFerdigstillelse}
+                                </Notification>
+                              </Block>
+                            </Block>
+                          )} */}
+                        </Block>
+                      )}
+
+                    </Block>
+                    <Block
+                      display="flex"
+                      $style={{ justifyContent: 'flex-end center' }}
+                      flexDirection="column"
+                      width="100%"
+                    >
+                      <Block paddingTop="27px" paddingBottom="24px" display={['block', 'block', 'block', 'flex', 'flex', 'flex']} justifyContent="flex-end" width="100%" >
+                        <Button disabled={krav.status === KravStatus.UTGAATT ? false : disableEdit} type="button" kind="secondary" marginRight onClick={close}>
+                          {krav.status === KravStatus.UTGAATT ? 'Lukk' : 'Avbryt og forkast endringene'}
+                        </Button>
+                        <Button
+                          type="button"
+                          kind="secondary"
+                          marginRight
+                          disabled={isSubmitting || disableEdit}
+                          onClick={() => {
+                            if (values.status === EtterlevelseStatus.FERDIG_DOKUMENTERT || !isOppfylesSenere) {
+                              values.status = EtterlevelseStatus.UNDER_REDIGERING
+                            } else if (values.status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) {
+                              values.status = EtterlevelseStatus.IKKE_RELEVANT
+                            } else if (isOppfylesSenere) {
+                              values.status = EtterlevelseStatus.OPPFYLLES_SENERE
                             }
-                          })
-                        } else if (values.status === EtterlevelseStatus.IKKE_RELEVANT) {
-                          values.status = EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT
-                        }
-                        submitForm()
-                      }}
-                    >
-                      Ferdig utfylt
-                    </Button>
-                  </Block>
-                )}
-                {etterlevelse.changeStamp.lastModifiedDate && etterlevelse.changeStamp.lastModifiedBy && (
-                  <Block paddingBottom="16px" display="flex" justifyContent="flex-end" width="100%">
-                    <ParagraphXSmall marginTop="0px" marginBottom="0px">
-                      Sist utfylt: {moment(etterlevelse.changeStamp.lastModifiedDate).format('ll')} av {etterlevelse.changeStamp.lastModifiedBy.split('-')[1]}
-                    </ParagraphXSmall>
+                            submitForm()
+                          }}
+                        >
+                          Lagre og fortsett senere
+                        </Button>
+                        <Button
+                          disabled={disableEdit}
+                          type="button"
+                          onClick={() => {
+                            values.status = EtterlevelseStatus.FERDIG_DOKUMENTERT
+                            values.suksesskriterieBegrunnelser.forEach((skb, index) => {
+                              if (skb.begrunnelse === '' || skb.begrunnelse === undefined) {
+                                setFieldError(`suksesskriterieBegrunnelser[${index}]`, 'Du må fylle ut dokumentasjonen')
+                              }
+                            })
+                            submitForm()
+                          }}
+                        >
+                          Ferdig utfylt
+                        </Button>
+                      </Block>
+                      {etterlevelse.changeStamp.lastModifiedDate && etterlevelse.changeStamp.lastModifiedBy && (
+                        <Block paddingBottom="16px" display="flex" justifyContent="flex-end" width="100%">
+                          <ParagraphXSmall marginTop="0px" marginBottom="0px">
+                            Sist utfylt: {moment(etterlevelse.changeStamp.lastModifiedDate).format('ll')} av {etterlevelse.changeStamp.lastModifiedBy.split('-')[1]}
+                          </ParagraphXSmall>
+                        </Block>
+                      )}
+                    </Block>
                   </Block>
                 )}
               </Block>
@@ -459,7 +340,6 @@ export const EtterlevelseEditFields = ({
               >
                 <Block width="100%">
                   <ModalHeader>Er du sikkert på at du vil forlate redigerings siden uten å lagre?</ModalHeader>
-
                   <Block paddingBottom="32px" paddingLeft="24px" paddingRight="32px" display="flex" justifyContent="flex-end">
                     <Button
                       onClick={() => {

@@ -40,7 +40,7 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
   )
 
   return (
-    <Block marginBottom="32px">
+    <Block marginBottom="32px" width="100%">
       <HeadingXLarge maxWidth={'500px'}>Her kan du se hvordan andre team har dokumentert etterlevelse</HeadingXLarge>
       {loading && <Spinner size={theme.sizing.scale800} />}
       {!loading && !etterlevelser.length && (

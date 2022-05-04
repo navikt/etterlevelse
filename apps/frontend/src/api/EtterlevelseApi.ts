@@ -1,9 +1,9 @@
 import axios from 'axios'
-import { emptyPage, Etterlevelse, EtterlevelseStatus, Krav, PageResponse } from '../constants'
-import { env } from '../util/env'
-import { useEffect, useState } from 'react'
-import { KravId } from './KravApi'
-import { stringify } from 'query-string'
+import {emptyPage, Etterlevelse, EtterlevelseStatus, Krav, PageResponse} from '../constants'
+import {env} from '../util/env'
+import {useEffect, useState} from 'react'
+import {KravId} from './KravApi'
+import {stringify} from 'query-string'
 
 export const getEtterlevelsePage = async (pageNumber: number, pageSize: number) => {
   return (await axios.get<PageResponse<Etterlevelse>>(`${env.backendBaseUrl}/etterlevelse?pageNumber=${pageNumber}&pageSize=${pageSize}`)).data
@@ -116,6 +116,7 @@ export const mapEtterlevelseToFormValue = (etterlevelse: Partial<Etterlevelse>, 
           begrunnelse: '',
           oppfylt: false,
           ikkeRelevant: false,
+          underArbeid:false
         })
       })
     }
