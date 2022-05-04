@@ -215,6 +215,8 @@ export interface TilbakemeldingMelding {
 export interface Melding extends DomainObject {
   id: string
   melding: string
+  secondaryTittel: string
+  secondaryMelding: string
   meldingType: MeldingType
   meldingStatus: MeldingStatus
   alertType: AlertType
@@ -234,6 +236,7 @@ export enum AlertType {
 export enum MeldingType {
   SYSTEM = 'SYSTEM',
   FORSIDE = 'FORSIDE',
+  OMETTERLEVELSE = 'OMETTERLEVELSE'
 }
 
 export enum MeldingStatus {
