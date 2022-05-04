@@ -270,7 +270,7 @@ const KriterieBegrunnelse = ({
                     setIkkeRelevant(true)
                   }
                 }}
-                name="number"
+                name="suksesskriterieStatus"
                 align={ALIGN.horizontal}
               >
                 <Radio
