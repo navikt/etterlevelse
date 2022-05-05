@@ -1,15 +1,16 @@
 import * as React from 'react'
-import {useEffect, useState} from 'react'
-import {ettlevColors, maxPageWidth, theme} from '../util/theme'
-import {HeadingXXLarge, ParagraphLarge, ParagraphSmall} from 'baseui/typography'
+import { useEffect, useState } from 'react'
+import { ettlevColors, maxPageWidth, theme } from '../util/theme'
+import { HeadingXLarge, HeadingXXLarge, ParagraphLarge, ParagraphSmall } from 'baseui/typography'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
-import {Block} from 'baseui/block'
-import {Helmet} from 'react-helmet'
-import {ampli} from '../services/Amplitude'
-import {Melding, MeldingType} from "../constants";
-import {getMeldingByType, mapMeldingToFormValue} from "../api/MeldingApi";
-import {Markdown} from "../components/common/Markdown";
+import { Block } from 'baseui/block'
+import { Helmet } from 'react-helmet'
+import { ampli } from '../services/Amplitude'
+import { Melding, MeldingType } from "../constants";
+import { getMeldingByType, mapMeldingToFormValue } from "../api/MeldingApi";
+import { Markdown } from "../components/common/Markdown";
 import moment from "moment";
+import { user } from '../services/User'
 
 export const FAQ = () => {
 
@@ -17,21 +18,17 @@ export const FAQ = () => {
   const [melding, setMelding] = useState<Melding>()
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       setLoading(true)
-        const response = await getMeldingByType(MeldingType.OM_ETTERLEVELSE)
-        if (response.numberOfElements > 0) {
-          setMelding(response.content[0])
-        } else {
-          setMelding(mapMeldingToFormValue({ meldingType: MeldingType.OM_ETTERLEVELSE }))
-        }
+      const response = await getMeldingByType(MeldingType.OM_ETTERLEVELSE)
+      if (response.numberOfElements > 0) {
+        setMelding(response.content[0])
+      } else {
+        setMelding(mapMeldingToFormValue({ meldingType: MeldingType.OM_ETTERLEVELSE }))
+      }
       setLoading(false)
     })()
   }, [])
-
-  useEffect(() => {
-    console.log(melding)
-  }, [melding]);
 
   ampli.logEvent('sidevisning', { side: 'FAQ side', sidetittel: 'Om Støtte til etterlevelse' })
 
@@ -45,19 +42,20 @@ export const FAQ = () => {
         <Block maxWidth={maxPageWidth} width="100%">
           <Block paddingLeft={'100px'} paddingRight={'100px'} paddingTop={theme.sizing.scale800}>
             <CustomizedBreadcrumbs currentPage="Om Støtte til etterlevelse" />
-            <HeadingXXLarge marginTop="0">Om Støtte til etterlevelse</HeadingXXLarge>
           </Block>
         </Block>
       </Block>
 
       <Block display={'flex'} justifyContent="center" width="100%">
-        <Block maxWidth={maxPageWidth} width="100%">
-          <Block paddingLeft={'100px'} paddingRight={'100px'} paddingTop={theme.sizing.scale800} maxWidth="600px">
-            <ParagraphLarge $style={{ fontSize: '22px', color: ettlevColors.green800 }}>
-              {melding?.secondaryTittel}
+        <Block maxWidth={maxPageWidth} width="100%" display="flex" justifyContent="center">
+          <Block paddingLeft={'100px'} paddingRight={'100px'} maxWidth="600px">
+            <HeadingXXLarge marginTop="54px" marginBottom="32px">Om Støtte til etterlevelse</HeadingXXLarge>
+
+            <ParagraphLarge marginTop="0px" $style={{ fontSize: '22px', color: ettlevColors.green800 }}>
+              {melding?.melding}
             </ParagraphLarge>
-            <Markdown source={melding?.secondaryMelding}/>
-            <Markdown source={melding?.melding}/>
+            <HeadingXLarge marginTop="56px" marginBottom="24px">{melding?.secondaryTittel}</HeadingXLarge>
+            <Markdown source={melding?.secondaryMelding} />
             {/*<ParagraphLarge $style={{ fontSize: '22px', color: ettlevColors.green800 }}>*/}
             {/*  Siden er under arbeid, og vi tar gjerne imot innspill på Slack <strong>#etterlevelse.</strong>*/}
             {/*</ParagraphLarge>*/}
@@ -68,11 +66,10 @@ export const FAQ = () => {
             {/*  </ExternalLink>*/}
             {/*  .*/}
             {/*</ParagraphLarge>*/}
-            <Block>
-              {
-                melding && <ParagraphSmall>
-                  Sist endret: {moment(melding.changeStamp.lastModifiedDate).format('ll')} av {melding.changeStamp.lastModifiedBy.split('-')[1]}
-                </ParagraphSmall>}
+            <Block marginTop="88px">
+              {user.isAdmin() && melding && <ParagraphSmall>
+                Sist endret: {moment(melding.changeStamp.lastModifiedDate).format('ll')} av {melding.changeStamp.lastModifiedBy.split('-')[1]}
+              </ParagraphSmall>}
             </Block>
           </Block>
         </Block>
