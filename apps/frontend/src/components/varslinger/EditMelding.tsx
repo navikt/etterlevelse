@@ -1,17 +1,17 @@
-import {Block} from 'baseui/block'
-import {Field, FieldProps, Formik, FormikProps} from 'formik'
-import React, {useEffect, useState} from 'react'
-import {createMelding, mapMeldingToFormValue, updateMelding} from '../../api/MeldingApi'
-import {AlertType, Melding, MeldingStatus, MeldingType} from '../../constants'
-import {FieldWrapper, TextAreaField} from '../common/Inputs'
+import { Block } from 'baseui/block'
+import { Field, FieldProps, Formik, FormikProps } from 'formik'
+import React, { useEffect, useState } from 'react'
+import { createMelding, mapMeldingToFormValue, updateMelding } from '../../api/MeldingApi'
+import { AlertType, Melding, MeldingStatus, MeldingType } from '../../constants'
+import { FieldWrapper, TextAreaField } from '../common/Inputs'
 import Button from '../common/Button'
-import {eyeSlash} from '../Images'
-import {borderColor} from '../common/Style'
-import {ettlevColors, theme} from '../../util/theme'
-import {Spinner} from '../common/Spinner'
-import {FormControl} from 'baseui/form-control'
-import {Radio, RadioGroup} from 'baseui/radio'
-import {ParagraphMedium} from 'baseui/typography'
+import { deleteIconGreen600, eyeSlash } from '../Images'
+import { borderColor } from '../common/Style'
+import { ettlevColors, theme } from '../../util/theme'
+import { Spinner } from '../common/Spinner'
+import { FormControl } from 'baseui/form-control'
+import { Radio, RadioGroup } from 'baseui/radio'
+import { ParagraphMedium } from 'baseui/typography'
 
 export const getAlertTypeText = (type: AlertType) => {
   if (!type) return ''
@@ -144,33 +144,47 @@ export const EditMelding = ({ melding, setMelding, isLoading, maxChar }: { meldi
                 name="melding"
               />
 
-              <Block display="flex" justifyContent="flex-end" width="100%">
-                {melding.meldingStatus === MeldingStatus.ACTIVE && (
+              <Block display="flex" width="100%">
+                <Block display="flex" width="100%">
                   <Button
-                    marginRight
-                    kind="secondary"
+                    kind="underline-hover"
+                    onClick={() => window.location.reload()}
+                    startEnhancer={<img alt="delete" src={deleteIconGreen600} />}
+                    $style={{fontSize: '18px'}}
+                  >
+                    Forkast endringer
+                  </Button>
+                </Block>
+
+                <Block display="flex" justifyContent="flex-end" width="100%">
+                  {melding.meldingStatus === MeldingStatus.ACTIVE && (
+                    <Button
+                      marginRight
+                      kind="secondary"
+                      disabled={disableEdit}
+                      startEnhancer={<img src={eyeSlash} alt="" />}
+                      onClick={() => {
+                        values.meldingStatus = MeldingStatus.DEACTIVE
+                        submitForm()
+                      }}
+                      $style={{
+                        ...borderColor(ettlevColors.grey200),
+                      }}
+                    >
+                      Skjul meldingen
+                    </Button>
+                  )}
+                  <Button
                     disabled={disableEdit}
-                    startEnhancer={<img src={eyeSlash} alt="" />}
                     onClick={() => {
-                      values.meldingStatus = MeldingStatus.DEACTIVE
+                      values.meldingStatus = MeldingStatus.ACTIVE
                       submitForm()
                     }}
-                    $style={{
-                      ...borderColor(ettlevColors.grey200),
-                    }}
                   >
-                    Skjul meldingen
+                    Publiser
                   </Button>
-                )}
-                <Button
-                  disabled={disableEdit}
-                  onClick={() => {
-                    values.meldingStatus = MeldingStatus.ACTIVE
-                    submitForm()
-                  }}
-                >
-                  Publiser
-                </Button>
+                </Block>
+
               </Block>
             </Block>
           )}

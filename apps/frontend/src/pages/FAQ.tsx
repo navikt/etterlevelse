@@ -70,6 +70,7 @@ export const FAQ = () => {
             {/*  </ExternalLink>*/}
             {/*  .*/}
             {/*</ParagraphLarge>*/}
+
             <Block marginTop="88px">
               {user.isAdmin() && melding && <ParagraphSmall>
                 Sist endret: {moment(melding.changeStamp.lastModifiedDate).format('ll')} av {melding.changeStamp.lastModifiedBy.split('-')[1]}
