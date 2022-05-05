@@ -115,7 +115,8 @@ export const EtterlevelseEditFields = ({
                 justifyContent="center"
                 width={responsiveWidthInnerPage}
                 paddingLeft={responsivePaddingInnerPage}
-                paddingRight={responsivePaddingInnerPage}>
+                paddingRight={responsivePaddingInnerPage}
+              >
                 <Form>
                   <Block>
                     <Block>
@@ -382,7 +383,13 @@ export const EtterlevelseEditFields = ({
         <Formik onSubmit={submit} initialValues={editedEtterlevelse ? mapEtterlevelseToFormValue(editedEtterlevelse) : mapEtterlevelseToFormValue(etterlevelse)} innerRef={formRef}>
           {() => (
             <Block>
-              <Block marginTop="32px">
+              <Block
+                marginTop="32px"
+                justifyContent="center"
+                width={responsiveWidthInnerPage}
+                paddingLeft={responsivePaddingInnerPage}
+                paddingRight={responsivePaddingInnerPage}
+              >
                 <Form>
                   <Block>
                     <Block>
