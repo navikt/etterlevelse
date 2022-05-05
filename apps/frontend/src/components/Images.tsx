@@ -19,6 +19,7 @@ import chevronLeft from '../resources/icons/chevron-left.svg'
 import navChevronDownIcon from '../resources/icons/nav-chevron-down.svg'
 import plusIcon from '../resources/icons/plus.svg'
 import deleteIcon from '../resources/icons/delete.svg'
+import deleteIconGreen600 from '../resources/icons/delete-green600.svg'
 import editIcon from '../resources/icons/edit.svg'
 import editSecondaryIcon from '../resources/icons/edit-secondary.svg'
 import searchIcon from '../resources/icons/search-icon.svg'
@@ -80,6 +81,7 @@ export {
   chevronLeft,
   plusIcon,
   deleteIcon,
+  deleteIconGreen600,
   editIcon,
   editSecondaryIcon,
   ellipse80,
