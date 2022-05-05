@@ -89,6 +89,16 @@ export const EditOmEtterlevelse = ({melding, setMelding, isLoading, maxChar}: { 
                     Skjul meldingen
                   </Button>
                 )}
+
+                <Button
+                  kind="secondary"
+                  onClick={() => {
+                    window.location.reload()
+                  }}
+                  marginRight
+                >
+                  Avbryt
+                </Button>
                 <Button
                   disabled={disableEdit}
                   onClick={() => {

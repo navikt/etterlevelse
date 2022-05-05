@@ -6,7 +6,7 @@ import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
 import { Block } from 'baseui/block'
 import { Helmet } from 'react-helmet'
 import { ampli } from '../services/Amplitude'
-import { Melding, MeldingType } from "../constants";
+import { Melding, MeldingStatus, MeldingType } from "../constants";
 import { getMeldingByType, mapMeldingToFormValue } from "../api/MeldingApi";
 import { Markdown } from "../components/common/Markdown";
 import moment from "moment";
@@ -51,11 +51,15 @@ export const FAQ = () => {
           <Block paddingLeft={'100px'} paddingRight={'100px'} maxWidth="600px">
             <HeadingXXLarge marginTop="54px" marginBottom="32px">Om Støtte til etterlevelse</HeadingXXLarge>
 
-            <ParagraphLarge marginTop="0px" $style={{ fontSize: '22px', color: ettlevColors.green800 }}>
-              {melding?.melding}
-            </ParagraphLarge>
-            <HeadingXLarge marginTop="56px" marginBottom="24px">{melding?.secondaryTittel}</HeadingXLarge>
-            <Markdown source={melding?.secondaryMelding} />
+            {melding?.meldingStatus === MeldingStatus.ACTIVE &&
+              <Block>
+                <ParagraphLarge marginTop="0px" $style={{ fontSize: '22px', color: ettlevColors.green800 }}>
+                  {melding?.melding}
+                </ParagraphLarge>
+                <HeadingXLarge marginTop="56px" marginBottom="24px">{melding?.secondaryTittel}</HeadingXLarge>
+                <Markdown source={melding?.secondaryMelding} />
+              </Block>
+            }
             {/*<ParagraphLarge $style={{ fontSize: '22px', color: ettlevColors.green800 }}>*/}
             {/*  Siden er under arbeid, og vi tar gjerne imot innspill på Slack <strong>#etterlevelse.</strong>*/}
             {/*</ParagraphLarge>*/}
