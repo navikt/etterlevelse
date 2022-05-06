@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactMarkdown from 'react-markdown'
-import { ParagraphLarge, ParagraphMedium } from 'baseui/typography'
+import { HeadingLarge, HeadingMedium, ParagraphLarge, ParagraphMedium } from 'baseui/typography'
 import { StatefulTooltip } from 'baseui/tooltip'
 import { useDebouncedState } from '../../util/hooks'
 import MdEditor from 'react-markdown-editor-lite'
@@ -62,6 +62,24 @@ export const Markdown = ({
         >
           {children}
         </ParagraphMedium>
+      )
+    },
+    h3: (headerProps: any) => {
+      const {children} = headerProps
+
+      return (
+        <HeadingLarge marginTop="48px" >
+          {children}
+        </HeadingLarge>
+      )
+    },
+    h4: (headerProps: any) => {
+      const {children} = headerProps
+
+      return (
+        <HeadingMedium>
+          {children}
+        </HeadingMedium>
       )
     },
     href: (linkProps: any) => {
