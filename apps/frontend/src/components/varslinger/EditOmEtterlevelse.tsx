@@ -5,9 +5,7 @@ import {createMelding, mapMeldingToFormValue, updateMelding} from '../../api/Mel
 import {AlertType, Melding, MeldingStatus} from '../../constants'
 import {InputField, TextAreaField} from '../common/Inputs'
 import Button from '../common/Button'
-import {eyeSlash} from '../Images'
-import {borderColor} from '../common/Style'
-import {ettlevColors, theme} from '../../util/theme'
+import { theme} from '../../util/theme'
 import {Spinner} from '../common/Spinner'
 import {HeadingXXLarge} from 'baseui/typography'
 
@@ -72,24 +70,6 @@ export const EditOmEtterlevelse = ({melding, setMelding, isLoading, maxChar}: { 
               />
 
               <Block display="flex" justifyContent="flex-end" width="100%">
-                {melding.meldingStatus === MeldingStatus.ACTIVE && (
-                  <Button
-                    marginRight
-                    kind="secondary"
-                    disabled={disableEdit}
-                    startEnhancer={<img src={eyeSlash} alt=""/>}
-                    onClick={() => {
-                      values.meldingStatus = MeldingStatus.DEACTIVE
-                      submitForm()
-                    }}
-                    $style={{
-                      ...borderColor(ettlevColors.grey200),
-                    }}
-                  >
-                    Skjul meldingen
-                  </Button>
-                )}
-
                 <Button
                   kind="secondary"
                   onClick={() => {
