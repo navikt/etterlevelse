@@ -68,7 +68,7 @@ export const Markdown = ({
       const {children} = headerProps
 
       return (
-        <HeadingLarge marginTop="48px" >
+        <HeadingLarge marginTop="48px" marginBottom="24px">
           {children}
         </HeadingLarge>
       )
@@ -77,7 +77,7 @@ export const Markdown = ({
       const {children} = headerProps
 
       return (
-        <HeadingMedium>
+        <HeadingMedium  marginBottom="24px">
           {children}
         </HeadingMedium>
       )
