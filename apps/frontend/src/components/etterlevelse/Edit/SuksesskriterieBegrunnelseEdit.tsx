@@ -250,12 +250,11 @@ const KriterieBegrunnelse = ({
           <Block width="100%" height="1px" backgroundColor={ettlevColors.grey100} marginTop="24px" marginBottom="24px"/>
 
           {status !== EtterlevelseStatus.IKKE_RELEVANT && status !== EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT && (
-            <>
+            <Block>
               <RadioGroup
                 value={getInitialValueForSuksesskriterieStatus()}
                 onChange={e => {
                   setValue(e.currentTarget.value)
-                  console.log(e.currentTarget.value)
                   if (e.currentTarget.value === '1') {
                     setUnderArbeid(true)
                     setOppfylt(false)
@@ -286,10 +285,25 @@ const KriterieBegrunnelse = ({
                         backgroundColor: underArbeid ? ettlevColors.green100 : ettlevColors.white,
                         marginRight: '16px',
                         minWidth: '213px',
+                        ':hover': {backgroundColor: ettlevColors.green50, textDecoration: 'underline 3px'}
                       },
                       props: {
                         tabIndex: 0,
                       },
+                    },
+                    RadioMarkInner: {
+                      style: {
+                        backgroundColor: ettlevColors.white,
+                        ':hover': {backgroundColor: ettlevColors.white},
+                        ':active': {backgroundColor: ettlevColors.green600},
+                      }
+                    },
+                    RadioMarkOuter: {
+                      style: {
+                        backgroundColor: ettlevColors.green600,
+                        ':hover': {backgroundColor: ettlevColors.green600, borderWidth: '2px'},
+                        ':active': {backgroundColor: ettlevColors.green600, borderWidth: '2px'}
+                      }
                     }
                   }}
                 >
@@ -307,12 +321,14 @@ const KriterieBegrunnelse = ({
                              backgroundColor: oppfylt ? ettlevColors.green100 : ettlevColors.white,
                              marginRight: '16px',
                              minWidth: '213px',
+                             ':hover': {backgroundColor: ettlevColors.green50, textDecoration: 'underline 3px'}
                            },
                            props: {
                              tabIndex: 0,
                            },
-                         }
+                         },
                        }}
+
                 >
                   <ParagraphMedium margin={0}> Oppfylt</ParagraphMedium>
                 </Radio>
@@ -326,18 +342,21 @@ const KriterieBegrunnelse = ({
                              ...borderRadius('4px'),
                              ...buttonContentStyle,
                              backgroundColor: ikkerelevant ? ettlevColors.green100 : ettlevColors.white,
+                             marginRight: '16px',
                              minWidth: '213px',
+                             ':hover': {backgroundColor: ettlevColors.green50, textDecoration: 'underline 3px'}
                            },
                            props: {
                              tabIndex: 0,
                            },
-                         }
+                         },
                        }}
+
                 >
                   <ParagraphMedium margin={0}>Ikke relevant</ParagraphMedium>
                 </Radio>
               </RadioGroup>
-            </>
+            </Block>
           )}
           <Error fieldName={`suksesskriterieBegrunnelser[${index}].underArbeid`} fullWidth={true}/>
         </>
