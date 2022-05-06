@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { useEffect, useState } from 'react'
-import { ettlevColors, maxPageWidth, theme } from '../util/theme'
+import { ettlevColors, maxPageWidth, responsivePaddingLarge, responsiveWidthLarge, theme } from '../util/theme'
 import { HeadingXLarge, HeadingXXLarge, ParagraphLarge, ParagraphSmall } from 'baseui/typography'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
 import { Block } from 'baseui/block'
@@ -39,23 +39,23 @@ export const FAQ = () => {
         <title>Om Støtte til etterlevelse</title>
       </Helmet>
       <Block width="100%" display={'flex'} justifyContent={'center'}>
-        <Block maxWidth={maxPageWidth} width="100%">
-          <Block paddingLeft={'100px'} paddingRight={'100px'} paddingTop={theme.sizing.scale800}>
+        <Block maxWidth={maxPageWidth} width={responsiveWidthLarge} paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge}>
+          <Block paddingTop={theme.sizing.scale800}>
             <CustomizedBreadcrumbs currentPage="Om Støtte til etterlevelse" />
           </Block>
         </Block>
       </Block>
 
       <Block display={'flex'} justifyContent="center" width="100%">
-        <Block maxWidth={maxPageWidth} width="100%" display="flex" justifyContent="center">
-          <Block paddingLeft={'100px'} paddingRight={'100px'} maxWidth="600px">
+        <Block maxWidth={maxPageWidth} width={responsiveWidthLarge} display="flex" justifyContent="center" paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge}>
+          <Block  maxWidth="600px">
             <HeadingXXLarge marginTop="54px" marginBottom="32px">Om Støtte til etterlevelse</HeadingXXLarge>
 
             <ParagraphLarge marginTop="0px" $style={{ fontSize: '22px', color: ettlevColors.green800 }}>
               {melding?.melding}
             </ParagraphLarge>
             <HeadingXLarge marginTop="56px" marginBottom="24px">{melding?.secondaryTittel}</HeadingXLarge>
-            <Markdown source={melding?.secondaryMelding} />
+            <Markdown source={melding?.secondaryMelding} p1 fontSize="18px"/>
 
             {/*<ParagraphLarge $style={{ fontSize: '22px', color: ettlevColors.green800 }}>*/}
             {/*  Siden er under arbeid, og vi tar gjerne imot innspill på Slack <strong>#etterlevelse.</strong>*/}
