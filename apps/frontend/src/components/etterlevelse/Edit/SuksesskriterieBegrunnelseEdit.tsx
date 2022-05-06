@@ -15,10 +15,45 @@ import {borderColor, borderRadius, borderStyle, borderWidth} from '../../common/
 import {LabelAboveContent} from '../../common/PropertyLabel'
 import {buttonContentStyle} from '../../common/Button'
 import {Markdown} from '../../common/Markdown'
-import {ALIGN, Radio, RadioGroup} from "baseui/radio";
+import {ALIGN, Radio, RadioGroup, RadioGroupOverrides, RadioOverrides} from "baseui/radio";
 
 const paddingLeft = '30px'
 
+const getRadioButtonOverrides = (radioStatus: boolean): RadioOverrides & RadioGroupOverrides => {
+  return {
+    Root: {
+      style: {
+        ...borderColor(radioStatus ? ettlevColors.green400 : ettlevColors.green100),
+        ...borderStyle('solid'),
+        ...borderWidth('1px'),
+        ...borderRadius('4px'),
+        ...buttonContentStyle,
+        backgroundColor: radioStatus ? ettlevColors.green100 : ettlevColors.white,
+        marginRight: '16px',
+        minWidth: '213px',
+        textUnderlineOffset: '3px',
+        ':hover': {backgroundColor: ettlevColors.green50, textDecoration: 'underline 3px'}
+      },
+      props: {
+        tabIndex: 0,
+      },
+    },
+    RadioMarkInner: {
+      style: {
+        backgroundColor: ettlevColors.white,
+        ':hover': {backgroundColor: ettlevColors.white},
+        ':active': {backgroundColor: ettlevColors.green600},
+      }
+    },
+    RadioMarkOuter: {
+      style: {
+        backgroundColor: ettlevColors.green600,
+        ':hover': {backgroundColor: ettlevColors.green600, borderWidth: '2px'},
+        ':active': {backgroundColor: ettlevColors.green600, borderWidth: '2px'}
+      }
+    }
+  }
+}
 export const getSuksesskriterieBegrunnelse = (suksesskriterieBegrunnelser: SuksesskriterieBegrunnelse[], suksessKriterie: Suksesskriterie) => {
   const sb = suksesskriterieBegrunnelser.find((item) => {
     return item.suksesskriterieId === suksessKriterie.id
@@ -274,84 +309,19 @@ const KriterieBegrunnelse = ({
               >
                 <Radio
                   value="1"
-                  overrides={{
-                    Root: {
-                      style: {
-                        ...borderColor(underArbeid ? ettlevColors.green400 : ettlevColors.green100),
-                        ...borderStyle('solid'),
-                        ...borderWidth('1px'),
-                        ...borderRadius('4px'),
-                        ...buttonContentStyle,
-                        backgroundColor: underArbeid ? ettlevColors.green100 : ettlevColors.white,
-                        marginRight: '16px',
-                        minWidth: '213px',
-                        ':hover': {backgroundColor: ettlevColors.green50, textDecoration: 'underline 3px'}
-                      },
-                      props: {
-                        tabIndex: 0,
-                      },
-                    },
-                    RadioMarkInner: {
-                      style: {
-                        backgroundColor: ettlevColors.white,
-                        ':hover': {backgroundColor: ettlevColors.white},
-                        ':active': {backgroundColor: ettlevColors.green600},
-                      }
-                    },
-                    RadioMarkOuter: {
-                      style: {
-                        backgroundColor: ettlevColors.green600,
-                        ':hover': {backgroundColor: ettlevColors.green600, borderWidth: '2px'},
-                        ':active': {backgroundColor: ettlevColors.green600, borderWidth: '2px'}
-                      }
-                    }
-                  }}
+                  overrides={{...getRadioButtonOverrides(underArbeid)}}
                 >
                   <ParagraphMedium margin={0}>Under arbeid</ParagraphMedium>
                 </Radio>
-                <Radio value="2"
-                       overrides={{
-                         Root: {
-                           style: {
-                             ...borderColor(oppfylt ? ettlevColors.green400 : ettlevColors.green100),
-                             ...borderStyle('solid'),
-                             ...borderWidth('1px'),
-                             ...borderRadius('4px'),
-                             ...buttonContentStyle,
-                             backgroundColor: oppfylt ? ettlevColors.green100 : ettlevColors.white,
-                             marginRight: '16px',
-                             minWidth: '213px',
-                             ':hover': {backgroundColor: ettlevColors.green50, textDecoration: 'underline 3px'}
-                           },
-                           props: {
-                             tabIndex: 0,
-                           },
-                         },
-                       }}
-
+                <Radio
+                  value="2"
+                  overrides={{...getRadioButtonOverrides(oppfylt)}}
                 >
                   <ParagraphMedium margin={0}> Oppfylt</ParagraphMedium>
                 </Radio>
-                <Radio value="3"
-                       overrides={{
-                         Root: {
-                           style: {
-                             ...borderColor(ikkerelevant ? ettlevColors.green400 : ettlevColors.green100),
-                             ...borderStyle('solid'),
-                             ...borderWidth('1px'),
-                             ...borderRadius('4px'),
-                             ...buttonContentStyle,
-                             backgroundColor: ikkerelevant ? ettlevColors.green100 : ettlevColors.white,
-                             marginRight: '16px',
-                             minWidth: '213px',
-                             ':hover': {backgroundColor: ettlevColors.green50, textDecoration: 'underline 3px'}
-                           },
-                           props: {
-                             tabIndex: 0,
-                           },
-                         },
-                       }}
-
+                <Radio
+                  value="3"
+                  overrides={{...getRadioButtonOverrides(ikkerelevant)}}
                 >
                   <ParagraphMedium margin={0}>Ikke relevant</ParagraphMedium>
                 </Radio>
