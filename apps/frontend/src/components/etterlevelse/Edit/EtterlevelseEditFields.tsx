@@ -222,7 +222,7 @@ export const EtterlevelseEditFields = ({
                 </Form>
               </Block>
 
-              {(etterlevelse.status !== EtterlevelseStatus.IKKE_RELEVANT && etterlevelse.status !== EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) && <Block width="100%" backgroundColor={ettlevColors.green100}>
+              <Block width="100%" backgroundColor={ettlevColors.green100}>
                 {!documentEdit && (
                   <Block
                     display={['block', 'block', 'block', 'block', 'flex', 'flex']}
@@ -356,7 +356,7 @@ export const EtterlevelseEditFields = ({
                     </Block>
                   </Block>
                 )}
-              </Block>}
+              </Block>
 
               <CustomizedModal
                 onClose={() => setIsAlertUnsavedModalOpen(false)}
