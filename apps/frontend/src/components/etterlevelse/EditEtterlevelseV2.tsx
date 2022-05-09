@@ -129,7 +129,8 @@ export const EditEtterlevelseV2 = ({
               return {
                 ...s,
                 oppfylt: false,
-                ikkeRelevant: false,
+                ikkeRelevant: true,
+                underArbeid: false
               }
             }),
           ]
