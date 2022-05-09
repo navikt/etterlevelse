@@ -32,7 +32,7 @@ const getRadioButtonOverrides = (radioStatus: boolean): RadioOverrides & RadioGr
         marginRight: '16px',
         minWidth: '213px',
         textUnderlineOffset: '3px',
-        ':hover': {backgroundColor: ettlevColors.green50, textDecoration: 'underline 3px'}
+        ':hover': {backgroundColor: ettlevColors.green50, textDecoration: 'underline 1px'}
       },
       props: {
         tabIndex: 0,

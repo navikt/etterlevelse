@@ -240,7 +240,7 @@ export const EtterlevelseEditFields = ({
                           Root: {
                             style: {
                               textUnderlineOffset: '3px',
-                              ':hover': {textDecoration: 'underline 3px'},
+                              ':hover': {textDecoration: 'underline 1px'},
                               marginRight: 'auto',
                             }
                           },
