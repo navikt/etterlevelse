@@ -148,6 +148,14 @@ export const EtterlevelseEditFields = ({
                         )}
                       </Block>
 
+                      {etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT && (
+                        <>
+                          <LabelSmall $style={{lineHeight: '32px'}}>Beskrivelse om hvorfor kraver er ikke relevant</LabelSmall>
+                          <ParagraphMedium>
+                            {etterlevelse.statusBegrunnelse}
+                          </ParagraphMedium>
+                        </>
+                      )}
                       <LabelSmall $style={{lineHeight: '32px'}}>Hvilke suksesskriterier er oppfylt?</LabelSmall>
 
                       <SuksesskriterierBegrunnelseEdit disableEdit={disableEdit} suksesskriterie={krav.suksesskriterier} viewMode={false}/>
@@ -302,10 +310,10 @@ export const EtterlevelseEditFields = ({
                           marginRight
                           disabled={isSubmitting || disableEdit}
                           onClick={() => {
-                            if (values.status === EtterlevelseStatus.FERDIG_DOKUMENTERT || !isOppfylesSenere) {
-                              values.status = EtterlevelseStatus.UNDER_REDIGERING
-                            } else if (values.status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) {
+                            if (values.status === EtterlevelseStatus.IKKE_RELEVANT || values.status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) {
                               values.status = EtterlevelseStatus.IKKE_RELEVANT
+                            } else if (values.status === EtterlevelseStatus.FERDIG_DOKUMENTERT || !isOppfylesSenere) {
+                              values.status = EtterlevelseStatus.UNDER_REDIGERING
                             } else if (isOppfylesSenere) {
                               values.status = EtterlevelseStatus.OPPFYLLES_SENERE
                             }
@@ -318,12 +326,16 @@ export const EtterlevelseEditFields = ({
                           disabled={disableEdit || isOppfylesSenere}
                           type="button"
                           onClick={() => {
-                            values.status = EtterlevelseStatus.FERDIG_DOKUMENTERT
-                            values.suksesskriterieBegrunnelser.forEach((skb, index) => {
-                              if (skb.begrunnelse === '' || skb.begrunnelse === undefined) {
-                                setFieldError(`suksesskriterieBegrunnelser[${index}]`, 'Du må fylle ut dokumentasjonen')
-                              }
-                            })
+                            if (values.status === EtterlevelseStatus.IKKE_RELEVANT) {
+                              values.status = EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT
+                            } else {
+                              values.status = EtterlevelseStatus.FERDIG_DOKUMENTERT
+                              values.suksesskriterieBegrunnelser.forEach((skb, index) => {
+                                if (skb.begrunnelse === '' || skb.begrunnelse === undefined) {
+                                  setFieldError(`suksesskriterieBegrunnelser[${index}]`, 'Du må fylle ut dokumentasjonen')
+                                }
+                              })
+                            }
                             submitForm()
                           }}
                         >

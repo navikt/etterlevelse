@@ -173,11 +173,7 @@ const KriterieBegrunnelse = ({
     if (viewMode === true) {
       return ettlevColors.grey50
     } else {
-      if (status === EtterlevelseStatus.IKKE_RELEVANT || status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) {
-        return ettlevColors.grey50
-      } else {
-        return ettlevColors.white
-      }
+      return ettlevColors.white
     }
   }
 
@@ -231,20 +227,6 @@ const KriterieBegrunnelse = ({
         {suksesskriterie.navn}
       </HeadingLarge>
 
-      {(status === EtterlevelseStatus.IKKE_RELEVANT || status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) && (
-        <Block width="100%" display="flex" justifyContent="flex-end" marginTop="20px" marginBottom="-29px">
-          <ParagraphMedium
-            $style={{
-              marginTop: '0px',
-              marginBottom: '0px',
-              color: ettlevColors.red600,
-              fontStyle: 'italic',
-            }}
-          >
-            Ikke relevant
-          </ParagraphMedium>
-        </Block>
-      )}
       <CustomizedAccordion>
         <CustomizedPanel
           title={<LabelSmall $style={{color: ettlevColors.green600}}>Utfyllende om kriteriet</LabelSmall>}
@@ -283,58 +265,53 @@ const KriterieBegrunnelse = ({
       {viewMode === false && (
         <>
           <Block width="100%" height="1px" backgroundColor={ettlevColors.grey100} marginTop="24px" marginBottom="24px"/>
-
-          {status !== EtterlevelseStatus.IKKE_RELEVANT && status !== EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT && (
-            <Block>
-              <RadioGroup
-                value={getInitialValueForSuksesskriterieStatus()}
-                onChange={e => {
-                  setValue(e.currentTarget.value)
-                  if (e.currentTarget.value === '1') {
-                    setUnderArbeid(true)
-                    setOppfylt(false)
-                    setIkkeRelevant(false)
-                  } else if (e.currentTarget.value === '2') {
-                    setUnderArbeid(false)
-                    setOppfylt(true)
-                    setIkkeRelevant(false)
-                  } else {
-                    setUnderArbeid(false)
-                    setOppfylt(false)
-                    setIkkeRelevant(true)
-                  }
-                }}
-                name="suksesskriterieStatus"
-                align={ALIGN.horizontal}
+          <Block>
+            <RadioGroup
+              value={getInitialValueForSuksesskriterieStatus()}
+              onChange={e => {
+                setValue(e.currentTarget.value)
+                if (e.currentTarget.value === '1') {
+                  setUnderArbeid(true)
+                  setOppfylt(false)
+                  setIkkeRelevant(false)
+                } else if (e.currentTarget.value === '2') {
+                  setUnderArbeid(false)
+                  setOppfylt(true)
+                  setIkkeRelevant(false)
+                } else {
+                  setUnderArbeid(false)
+                  setOppfylt(false)
+                  setIkkeRelevant(true)
+                }
+              }}
+              name="suksesskriterieStatus"
+              align={ALIGN.horizontal}
+            >
+              <Radio
+                value="1"
+                overrides={{...getRadioButtonOverrides(underArbeid)}}
               >
-                <Radio
-                  value="1"
-                  overrides={{...getRadioButtonOverrides(underArbeid)}}
-                >
-                  <ParagraphMedium margin={0}>Under arbeid</ParagraphMedium>
-                </Radio>
-                <Radio
-                  value="2"
-                  overrides={{...getRadioButtonOverrides(oppfylt)}}
-                >
-                  <ParagraphMedium margin={0}> Oppfylt</ParagraphMedium>
-                </Radio>
-                <Radio
-                  value="3"
-                  overrides={{...getRadioButtonOverrides(ikkerelevant)}}
-                >
-                  <ParagraphMedium margin={0}>Ikke relevant</ParagraphMedium>
-                </Radio>
-              </RadioGroup>
-            </Block>
-          )}
+                <ParagraphMedium margin={0}>Under arbeid</ParagraphMedium>
+              </Radio>
+              <Radio
+                value="2"
+                overrides={{...getRadioButtonOverrides(oppfylt)}}
+              >
+                <ParagraphMedium margin={0}> Oppfylt</ParagraphMedium>
+              </Radio>
+              <Radio
+                value="3"
+                overrides={{...getRadioButtonOverrides(ikkerelevant)}}
+              >
+                <ParagraphMedium margin={0}>Ikke relevant</ParagraphMedium>
+              </Radio>
+            </RadioGroup>
+          </Block>
           <Error fieldName={`suksesskriterieBegrunnelser[${index}].underArbeid`} fullWidth={true}/>
         </>
       )}
 
       {(oppfylt || ikkerelevant || underArbeid) &&
-        status !== EtterlevelseStatus.IKKE_RELEVANT &&
-        status !== EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT &&
         !disableEdit &&
         suksesskriterie.behovForBegrunnelse && (
           <Block marginTop={theme.sizing.scale1000}>
