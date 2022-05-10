@@ -389,6 +389,7 @@ export const EditEtterlevelseV2 = ({
                   content: (
                     <EtterlevelseEditFields
                       viewMode={kravFilter === KRAV_FILTER_TYPE.RELEVANTE_KRAV ? false : true}
+                      kravFilter={kravFilter}
                       krav={krav}
                       etterlevelse={etterlevelse}
                       submit={submit}

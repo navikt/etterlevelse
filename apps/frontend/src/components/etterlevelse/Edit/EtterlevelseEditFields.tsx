@@ -1,4 +1,4 @@
-import { Etterlevelse, EtterlevelseStatus, KravQL, KravStatus } from '../../../constants'
+import { Etterlevelse, EtterlevelseStatus, KravQL, KravStatus, KRAV_FILTER_TYPE } from '../../../constants'
 import { Form, Formik, FormikProps, validateYupSchema, yupToFormErrors } from 'formik'
 import { mapEtterlevelseToFormValue } from '../../../api/EtterlevelseApi'
 import { Block } from 'baseui/block'
@@ -22,7 +22,7 @@ import EtterlevelseCard from '../EtterlevelseCard'
 import { ModalHeader } from 'baseui/modal'
 import { etterlevelseSchema } from './etterlevelseSchema'
 import _ from 'lodash'
-import { Checkbox } from "baseui/checkbox";
+import { Checkbox } from 'baseui/checkbox'
 
 type EditProps = {
   krav: KravQL
@@ -44,6 +44,7 @@ type EditProps = {
   editedEtterlevelse?: Etterlevelse
   tidligereEtterlevelser?: Etterlevelse[]
   viewMode?: boolean
+  kravFilter: KRAV_FILTER_TYPE
 }
 
 export const EtterlevelseEditFields = ({
@@ -62,6 +63,7 @@ export const EtterlevelseEditFields = ({
   editedEtterlevelse,
   tidligereEtterlevelser,
   viewMode,
+  kravFilter,
 }: EditProps) => {
   const [etterlevelseStatus, setEtterlevelseStatus] = React.useState<string>(
     editedEtterlevelse ? editedEtterlevelse.status : etterlevelse.status || EtterlevelseStatus.UNDER_REDIGERING,
@@ -120,10 +122,6 @@ export const EtterlevelseEditFields = ({
                 <Form>
                   <Block>
                     <Block>
-                      {(etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT || etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) &&
-                        <ParagraphMedium>Dette kravet er dokumentert som ikke relevant 20.05.2022, og senere blitt bortfiltrert</ParagraphMedium>
-                      }
-
                       <Block display="flex" width="100%">
                         {tidligereEtterlevelser && tidligereEtterlevelser.length >= 1 && (
                           <Block display="flex" width="100%" justifyContent="flex-end">
@@ -151,6 +149,10 @@ export const EtterlevelseEditFields = ({
                           </Block>
                         )}
                       </Block>
+
+                      {(etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT || etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) &&
+                        <ParagraphMedium>Dette kravet er dokumentert som ikke relevant 20.05.2022, og senere blitt bortfiltrert</ParagraphMedium>
+                      }
 
                       {(etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT || etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) && (
                         <>
@@ -427,7 +429,20 @@ export const EtterlevelseEditFields = ({
                 <Form>
                   <Block>
                     <Block>
-                      <SuksesskriterierBegrunnelseEdit disableEdit={disableEdit} suksesskriterie={krav.suksesskriterier} viewMode={true} />
+                      {(etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT || etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) &&
+                        <ParagraphMedium>Dette kravet er dokumentert som ikke relevant 20.05.2022, og senere blitt bortfiltrert</ParagraphMedium>
+                      }
+
+                      {(etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT || etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) && (
+                        <>
+                          <LabelSmall $style={{ lineHeight: '32px' }}>Beskrivelse av hvorfor kraver er ikke relevant</LabelSmall>
+                          <ParagraphMedium>
+                            {etterlevelse.statusBegrunnelse}
+                          </ParagraphMedium>
+                        </>
+                      )}
+
+                      <SuksesskriterierBegrunnelseEdit kravFilter={kravFilter} disableEdit={true} suksesskriterie={krav.suksesskriterier} viewMode={true} />
                       <Block marginBottom="24px">
                         <CustomizedAccordion>
                           <CustomizedPanel

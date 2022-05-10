@@ -3,7 +3,7 @@ import { FormControl } from 'baseui/form-control'
 import { HeadingLarge, LabelSmall, ParagraphMedium } from 'baseui/typography'
 import { FieldArray, FieldArrayRenderProps } from 'formik'
 import React from 'react'
-import { EtterlevelseStatus, Suksesskriterie, SuksesskriterieBegrunnelse } from '../../../constants'
+import { EtterlevelseStatus, KRAV_FILTER_TYPE, Suksesskriterie, SuksesskriterieBegrunnelse } from '../../../constants'
 import { useDebouncedState } from '../../../util/hooks'
 import { ettlevColors, theme } from '../../../util/theme'
 import { CustomizedAccordion, CustomizedPanel } from '../../common/CustomizedAccordion'
@@ -69,11 +69,11 @@ export const getSuksesskriterieBegrunnelse = (suksesskriterieBegrunnelser: Sukse
   }
 }
 
-export const SuksesskriterierBegrunnelseEdit = ({ suksesskriterie, disableEdit, viewMode }: { suksesskriterie: Suksesskriterie[]; disableEdit: boolean; viewMode: boolean }) => {
+export const SuksesskriterierBegrunnelseEdit = ({ suksesskriterie, disableEdit, viewMode, kravFilter }: { suksesskriterie: Suksesskriterie[]; disableEdit: boolean; viewMode: boolean, kravFilter?: KRAV_FILTER_TYPE }) => {
   return (
     <FieldWrapper>
       <FieldArray name={'suksesskriterieBegrunnelser'}>
-        {(p) => <KriterieBegrunnelseList props={p} disableEdit={disableEdit} suksesskriterie={suksesskriterie} viewMode={viewMode} />}
+        {(p) => <KriterieBegrunnelseList props={p} disableEdit={disableEdit} suksesskriterie={suksesskriterie} viewMode={viewMode} kravFilter={kravFilter} />}
       </FieldArray>
     </FieldWrapper>
   )
@@ -84,11 +84,13 @@ const KriterieBegrunnelseList = ({
   suksesskriterie,
   disableEdit,
   viewMode,
+  kravFilter,
 }: {
   props: FieldArrayRenderProps
   suksesskriterie: Suksesskriterie[]
   disableEdit: boolean
   viewMode: boolean
+  kravFilter?: KRAV_FILTER_TYPE
 }) => {
   const suksesskriterieBegrunnelser = props.form.values.suksesskriterieBegrunnelser as SuksesskriterieBegrunnelse[]
 
@@ -107,6 +109,7 @@ const KriterieBegrunnelseList = ({
               props={props}
               viewMode={viewMode}
               totalSuksesskriterie={suksesskriterie.length}
+              kravFilter={kravFilter}
             />
           </Block>
         )
@@ -125,6 +128,7 @@ const KriterieBegrunnelse = ({
   props,
   viewMode,
   totalSuksesskriterie,
+  kravFilter
 }: {
   suksesskriterie: Suksesskriterie
   index: number
@@ -134,14 +138,15 @@ const KriterieBegrunnelse = ({
   status: string
   props: FieldArrayRenderProps
   viewMode: boolean
-  totalSuksesskriterie: number
+  totalSuksesskriterie: number,
+  kravFilter?: KRAV_FILTER_TYPE
 }) => {
   const suksesskriterieBegrunnelse = getSuksesskriterieBegrunnelse(suksesskriterieBegrunnelser, suksesskriterie)
   const debounceDelay = 500
   const [begrunnelse, setBegrunnelse] = useDebouncedState(suksesskriterieBegrunnelse.begrunnelse || '', debounceDelay)
   const [oppfylt, setOppfylt] = React.useState(suksesskriterieBegrunnelse.oppfylt || false)
   const [ikkerelevant, setIkkeRelevant] = React.useState(suksesskriterieBegrunnelse.ikkeRelevant || false)
-  const [underArbeid, setUnderArbeid] = React.useState( !suksesskriterieBegrunnelse.oppfylt && !suksesskriterieBegrunnelse.ikkeRelevant ? true : suksesskriterieBegrunnelse.underArbeid || false)
+  const [underArbeid, setUnderArbeid] = React.useState(!suksesskriterieBegrunnelse.oppfylt && !suksesskriterieBegrunnelse.ikkeRelevant ? true : suksesskriterieBegrunnelse.underArbeid || false)
   const [value, setValue] = React.useState('');
 
   React.useEffect(() => {
@@ -203,7 +208,7 @@ const KriterieBegrunnelse = ({
             Suksesskriterie {index + 1} av {totalSuksesskriterie}
           </ParagraphMedium>
         </Block>
-        {viewMode === true && (
+        {(viewMode === true && kravFilter === KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV) && (
           <Block alignSelf="flex-end">
             <ParagraphMedium
               $style={{
@@ -308,7 +313,7 @@ const KriterieBegrunnelse = ({
       )}
 
       {(oppfylt || ikkerelevant || underArbeid) &&
-        !disableEdit &&
+        (!disableEdit || !viewMode) &&
         suksesskriterie.behovForBegrunnelse && (
           <Block marginTop={theme.sizing.scale1000}>
             <FormControl label={<LabelWithToolTip
@@ -319,11 +324,12 @@ const KriterieBegrunnelse = ({
           </Block>
         )}
 
-      {(oppfylt || ikkerelevant || underArbeid) && disableEdit && (
-        <Block paddingLeft={paddingLeft} marginTop={theme.sizing.scale1000}>
+      {(oppfylt || ikkerelevant || underArbeid) && (disableEdit || viewMode) && (
+        <Block marginTop={theme.sizing.scale1000}>
           <LabelAboveContent title="Dokumentasjon" markdown={begrunnelse} />
         </Block>
       )}
+
       <Block marginTop={'8px'}>{(oppfylt === false && ikkerelevant === false && underArbeid === false && begrunnelse.length > 0) &&
         <Error fieldName={'status'} fullWidth={true} />}</Block>
     </Block>
