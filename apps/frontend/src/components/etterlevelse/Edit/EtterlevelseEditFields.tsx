@@ -128,7 +128,7 @@ export const EtterlevelseEditFields = ({
                             <Block width="100%" maxWidth="460px">
                               <CustomizedAccordion>
                                 <CustomizedPanel
-                                  title="Se dokumentasjon på tidligere versjoner"
+                                  title="Se dokumentasjon på forrige versjon"
                                   overrides={{
                                     Content: {
                                       style: {
