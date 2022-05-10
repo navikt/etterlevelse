@@ -3,7 +3,7 @@ import {FormControl} from 'baseui/form-control'
 import {HeadingLarge, LabelSmall, ParagraphMedium} from 'baseui/typography'
 import {FieldArray, FieldArrayRenderProps} from 'formik'
 import React from 'react'
-import {EtterlevelseStatus, KRAV_FILTER_TYPE, Suksesskriterie, SuksesskriterieBegrunnelse} from '../../../constants'
+import {EtterlevelseStatus, Suksesskriterie, SuksesskriterieBegrunnelse} from '../../../constants'
 import {useDebouncedState} from '../../../util/hooks'
 import {ettlevColors, theme} from '../../../util/theme'
 import {CustomizedAccordion, CustomizedPanel} from '../../common/CustomizedAccordion'
@@ -73,17 +73,15 @@ export const SuksesskriterierBegrunnelseEdit = ({
   suksesskriterie,
   disableEdit,
   viewMode,
-  kravFilter,
 }: {
   suksesskriterie: Suksesskriterie[]
   disableEdit: boolean
   viewMode: boolean
-  kravFilter?: KRAV_FILTER_TYPE
 }) => {
   return (
     <FieldWrapper>
       <FieldArray name={'suksesskriterieBegrunnelser'}>
-        {(p) => <KriterieBegrunnelseList props={p} disableEdit={disableEdit} suksesskriterie={suksesskriterie} viewMode={viewMode} kravFilter={kravFilter} />}
+        {(p) => <KriterieBegrunnelseList props={p} disableEdit={disableEdit} suksesskriterie={suksesskriterie} viewMode={viewMode} />}
       </FieldArray>
     </FieldWrapper>
   )
@@ -94,13 +92,11 @@ const KriterieBegrunnelseList = ({
   suksesskriterie,
   disableEdit,
   viewMode,
-  kravFilter,
 }: {
   props: FieldArrayRenderProps
   suksesskriterie: Suksesskriterie[]
   disableEdit: boolean
   viewMode: boolean
-  kravFilter?: KRAV_FILTER_TYPE
 }) => {
   const suksesskriterieBegrunnelser = props.form.values.suksesskriterieBegrunnelser as SuksesskriterieBegrunnelse[]
 
@@ -119,7 +115,6 @@ const KriterieBegrunnelseList = ({
               props={props}
               viewMode={viewMode}
               totalSuksesskriterie={suksesskriterie.length}
-              kravFilter={kravFilter}
             />
           </Block>
         )
@@ -138,7 +133,6 @@ const KriterieBegrunnelse = ({
   props,
   viewMode,
   totalSuksesskriterie,
-  kravFilter,
 }: {
   suksesskriterie: Suksesskriterie
   index: number
@@ -149,7 +143,6 @@ const KriterieBegrunnelse = ({
   props: FieldArrayRenderProps
   viewMode: boolean
   totalSuksesskriterie: number
-  kravFilter?: KRAV_FILTER_TYPE
 }) => {
   const suksesskriterieBegrunnelse = getSuksesskriterieBegrunnelse(suksesskriterieBegrunnelser, suksesskriterie)
   const debounceDelay = 500
@@ -219,7 +212,7 @@ const KriterieBegrunnelse = ({
             Suksesskriterie {index + 1} av {totalSuksesskriterie}
           </ParagraphMedium>
         </Block>
-        {viewMode === true && kravFilter === KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV && (
+        {viewMode === true  && (
           <Block alignSelf="flex-end">
             <ParagraphMedium
               $style={{
