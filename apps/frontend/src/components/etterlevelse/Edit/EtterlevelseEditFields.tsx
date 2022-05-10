@@ -1,28 +1,28 @@
-import { Etterlevelse, EtterlevelseStatus, KravQL, KravStatus, KRAV_FILTER_TYPE } from '../../../constants'
-import { Form, Formik, FormikProps, validateYupSchema, yupToFormErrors } from 'formik'
-import { mapEtterlevelseToFormValue } from '../../../api/EtterlevelseApi'
-import { Block } from 'baseui/block'
+import {Etterlevelse, EtterlevelseStatus, KRAV_FILTER_TYPE, KravQL, KravStatus} from '../../../constants'
+import {Form, Formik, FormikProps, validateYupSchema, yupToFormErrors} from 'formik'
+import {mapEtterlevelseToFormValue} from '../../../api/EtterlevelseApi'
+import {Block} from 'baseui/block'
 import Button from '../../common/Button'
-import React, { useEffect } from 'react'
-import { DateField } from '../../common/Inputs'
+import React, {useEffect} from 'react'
+import {DateField} from '../../common/Inputs'
 
-import { LabelSmall, ParagraphMedium, ParagraphXSmall } from 'baseui/typography'
-import { ettlevColors, responsivePaddingInnerPage, responsiveWidthInnerPage } from '../../../util/theme'
-import { SuksesskriterierBegrunnelseEdit } from './SuksesskriterieBegrunnelseEdit'
-import { KIND as NKIND, Notification } from 'baseui/notification'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTimesCircle } from '@fortawesome/free-solid-svg-icons'
-import { borderColor, borderRadius, borderStyle, borderWidth, marginAll } from '../../common/Style'
+import {LabelSmall, ParagraphMedium, ParagraphXSmall} from 'baseui/typography'
+import {ettlevColors, responsivePaddingInnerPage, responsiveWidthInnerPage} from '../../../util/theme'
+import {SuksesskriterierBegrunnelseEdit} from './SuksesskriterieBegrunnelseEdit'
+import {KIND as NKIND, Notification} from 'baseui/notification'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faTimesCircle} from '@fortawesome/free-solid-svg-icons'
+import {borderColor, borderRadius, borderStyle, borderWidth, marginAll} from '../../common/Style'
 import moment from 'moment'
-import { CustomizedAccordion, CustomizedPanel, CustomPanelDivider } from '../../common/CustomizedAccordion'
-import { AllInfo } from '../../krav/ViewKrav'
+import {CustomizedAccordion, CustomizedPanel, CustomPanelDivider} from '../../common/CustomizedAccordion'
+import {AllInfo} from '../../krav/ViewKrav'
 import CustomizedModal from '../../common/CustomizedModal'
-import { useNavigate } from 'react-router-dom'
+import {useNavigate} from 'react-router-dom'
 import EtterlevelseCard from '../EtterlevelseCard'
-import { ModalHeader } from 'baseui/modal'
-import { etterlevelseSchema } from './etterlevelseSchema'
+import {ModalHeader} from 'baseui/modal'
+import {etterlevelseSchema} from './etterlevelseSchema'
 import _ from 'lodash'
-import { Checkbox } from 'baseui/checkbox'
+import {Checkbox} from 'baseui/checkbox'
 
 type EditProps = {
   krav: KravQL
@@ -176,7 +176,7 @@ export const EtterlevelseEditFields = ({
                           {/*  <Block />*/}
                           {/*</CustomizedPanel>*/}
                           <CustomizedPanel
-                            title="Mer om kravet"
+                            title="Lenker og annen informasjon om kravet"
                             overrides={{ Content: { style: { backgroundColor: ettlevColors.white, paddingLeft: '20px', paddingRight: '20px' } } }}
                           >
                             <Block width="100%" height="1px" backgroundColor="#E3E3E3" />
@@ -446,7 +446,7 @@ export const EtterlevelseEditFields = ({
                       <Block marginBottom="24px">
                         <CustomizedAccordion>
                           <CustomizedPanel
-                            title="Mer om kravet"
+                            title="Lenker og annen informasjon om kravet"
                             overrides={{ Content: { style: { backgroundColor: ettlevColors.white, paddingLeft: '20px', paddingRight: '20px' } } }}
                           >
                             <Block width="100%" height="1px" backgroundColor="#E3E3E3" />
