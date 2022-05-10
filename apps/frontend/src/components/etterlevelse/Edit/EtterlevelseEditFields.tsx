@@ -154,7 +154,7 @@ export const EtterlevelseEditFields = ({
 
                       {(etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT || etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) && (
                         <>
-                          <LabelSmall $style={{ lineHeight: '32px' }}>Beskrivelse om hvorfor kraver er ikke relevant</LabelSmall>
+                          <LabelSmall $style={{ lineHeight: '32px' }}>Beskrivelse av hvorfor kraver er ikke relevant</LabelSmall>
                           <ParagraphMedium>
                             {etterlevelse.statusBegrunnelse}
                           </ParagraphMedium>
