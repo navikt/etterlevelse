@@ -1,21 +1,21 @@
-import { EtterlevelseMetadata, KRAV_FILTER_TYPE, KravEtterlevelseData } from '../../constants'
-import React, { useEffect, useState } from 'react'
-import { getEtterlevelseMetadataByBehandlingsIdAndKravNummerAndKravVersion, mapEtterlevelseMetadataToFormValue } from '../../api/EtterlevelseMetadataApi'
-import { Block } from 'baseui/block'
+import {EtterlevelseMetadata, KRAV_FILTER_TYPE, KravEtterlevelseData} from '../../constants'
+import React, {useEffect, useState} from 'react'
+import {getEtterlevelseMetadataByBehandlingsIdAndKravNummerAndKravVersion, mapEtterlevelseMetadataToFormValue} from '../../api/EtterlevelseMetadataApi'
+import {Block} from 'baseui/block'
 import Button from '../common/Button'
-import { ettlevColors } from '../../util/theme'
-import { borderStyle, marginAll } from '../common/Style'
-import { LabelSmall, ParagraphXSmall } from 'baseui/typography'
+import {ettlevColors} from '../../util/theme'
+import {borderStyle, marginAll} from '../common/Style'
+import {LabelSmall, ParagraphXSmall} from 'baseui/typography'
 import StatusView from '../common/StatusTag'
-import { getEtterlevelseStatus, getStatusLabelColor } from '../behandling/utils'
+import {getEtterlevelseStatus, getStatusLabelColor} from '../behandling/utils'
 import moment from 'moment'
 import TildeltPopoever from '../etterlevelseMetadata/TildeltPopover'
-import { isFerdigUtfylt } from '../../pages/BehandlingerTemaPageV2'
-import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons'
-import { arkCheckIcon, arkPennIcon, warningAlert } from '../Images'
-import { getEtterlevelserByBehandlingsIdKravNumber } from '../../api/EtterlevelseApi'
-import { useLocation, useNavigate } from 'react-router-dom'
-import { getNumberOfDaysBetween } from '../../util/checkAge'
+import {isFerdigUtfylt} from '../../pages/BehandlingerTemaPageV2'
+import {faEllipsisVertical} from '@fortawesome/free-solid-svg-icons'
+import {arkCheckIcon, arkPennIcon, warningAlert} from '../Images'
+import {getEtterlevelserByBehandlingsIdKravNumber} from '../../api/EtterlevelseApi'
+import {useLocation, useNavigate} from 'react-router-dom'
+import {getNumberOfDaysBetween} from '../../util/checkAge'
 
 export const KravCard = (props: { krav: KravEtterlevelseData; noStatus?: boolean; behandlingId: string; noVarsling?: boolean; kravFilter: KRAV_FILTER_TYPE }) => {
   const [nyVersionFlag, setNyVersionFlag] = useState<boolean>(false)
@@ -54,12 +54,12 @@ export const KravCard = (props: { krav: KravEtterlevelseData; noStatus?: boolean
     const today = new Date()
     const kravCreatedDate = moment(props.krav.changeStamp.createdDate).toDate()
     setKravAge(getNumberOfDaysBetween(kravCreatedDate, today))
-      ; (async () => {
-        getEtterlevelseMetaData()
-        if (props.krav.kravVersjon > 1 && props.krav.etterlevelseStatus === undefined) {
-          setNyVersionFlag((await getEtterlevelserByBehandlingsIdKravNumber(props.behandlingId, props.krav.kravNummer)).content.length >= 1)
-        }
-      })()
+    ;(async () => {
+      getEtterlevelseMetaData()
+      if (props.krav.kravVersjon > 1 && props.krav.etterlevelseStatus === undefined) {
+        setNyVersionFlag((await getEtterlevelserByBehandlingsIdKravNumber(props.behandlingId, props.krav.kravNummer)).content.length >= 1)
+      }
+    })()
   }, [])
 
   return (
@@ -107,7 +107,11 @@ export const KravCard = (props: { krav: KravEtterlevelseData; noStatus?: boolean
                   K{props.krav.kravNummer}.{props.krav.kravVersjon}
                 </ParagraphXSmall>
                 {!props.noVarsling && props.krav.kravVersjon === 1 && props.krav.etterlevelseStatus === undefined && kravAge < 30 && showWarningMessage('Nytt krav')}
-                {!props.noVarsling && props.krav.etterlevelseStatus === undefined && nyVersionFlag && props.kravFilter === KRAV_FILTER_TYPE.RELEVANTE_KRAV && showWarningMessage('Ny version')}
+                {!props.noVarsling &&
+                  props.krav.etterlevelseStatus === undefined &&
+                  nyVersionFlag &&
+                  props.kravFilter === KRAV_FILTER_TYPE.RELEVANTE_KRAV &&
+                  showWarningMessage('Ny version')}
               </Block>
               <LabelSmall $style={{ fontSize: '18px', fontWeight: 600, alignContent: 'flex-start', textAlign: 'left', textDecoration: hover ? 'underline' : 'none' }}>
                 {props.krav.navn}
@@ -117,7 +121,10 @@ export const KravCard = (props: { krav: KravEtterlevelseData; noStatus?: boolean
               <Block width="350px" display="flex" justifyContent="flex-end" marginLeft="32px">
                 <Block display="flex" width="100%" maxWidth="220px" justifyContent="flex-end">
                   {props.kravFilter === KRAV_FILTER_TYPE.RELEVANTE_KRAV && props.krav && props.krav.etterlevelseStatus && (
-                    <StatusView status={getEtterlevelseStatus(props.krav.etterlevelseStatus, props.krav.frist)} statusDisplay={getStatusLabelColor(props.krav.etterlevelseStatus)} />
+                    <StatusView
+                      status={getEtterlevelseStatus(props.krav.etterlevelseStatus, props.krav.frist)}
+                      statusDisplay={getStatusLabelColor(props.krav.etterlevelseStatus)}
+                    />
                   )}
                 </Block>
 
@@ -127,26 +134,26 @@ export const KravCard = (props: { krav: KravEtterlevelseData; noStatus?: boolean
                       status={props.kravFilter === KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV ? 'Bortfiltrert' : 'Utgått'}
                       statusDisplay={{
                         background: ettlevColors.grey50,
-                        border: ettlevColors.grey200
+                        border: ettlevColors.grey200,
                       }}
                       overrides={{
                         Root: {
                           style: {
                             marginLeft: '21px',
-                          }
+                          },
                         },
                         Contents: {
                           style: {
                             ...marginAll('2px'),
-                          }
+                          },
                         },
                         Body: {
                           style: {
                             ...marginAll('2px'),
                             paddingRight: '8px',
-                            paddingLeft: '8px'
-                          }
-                        }
+                            paddingLeft: '8px',
+                          },
+                        },
                       }}
                     />
                   </Block>
@@ -191,7 +198,6 @@ export const KravCard = (props: { krav: KravEtterlevelseData; noStatus?: boolean
           />
         </Block>
       )}
-
     </Block>
   )
 }

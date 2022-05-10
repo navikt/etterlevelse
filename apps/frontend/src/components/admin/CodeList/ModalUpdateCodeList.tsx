@@ -37,23 +37,16 @@ type ModalUpdateProps = {
   submit: (process: CodeListFormValues) => Promise<void>
 }
 
-const UpdateCodeListModal = ({title, initialValues, errorOnUpdate, isOpen, onClose, submit}: ModalUpdateProps) => {
+const UpdateCodeListModal = ({ title, initialValues, errorOnUpdate, isOpen, onClose, submit }: ModalUpdateProps) => {
   return (
-    <Modal
-      onClose={onClose}
-      closeable={false}
-      isOpen={isOpen}
-      animate
-      autoFocus
-      size={SIZE.auto} role={ROLE.dialog}
-    >
+    <Modal onClose={onClose} closeable={false} isOpen={isOpen} animate autoFocus size={SIZE.auto} role={ROLE.dialog}>
       <Block {...modalBlockProps}>
         <Formik
           onSubmit={(values) => {
             submit(values)
             onClose()
           }}
-          initialValues={{...initialValues}}
+          initialValues={{ ...initialValues }}
           validationSchema={codeListSchema()}
         >
           {(formik: FormikProps<CodeListFormValues>) => (
@@ -65,28 +58,28 @@ const UpdateCodeListModal = ({title, initialValues, errorOnUpdate, isOpen, onClo
                     Short name:
                   </LabelMedium>
                   <Field name="shortName">
-                    {({field}: FieldProps<CodeListFormValues>) => (
-                      <CustomizedInput name="shortName" value={formik.values.shortName} onChange={formik.handleChange} type="input" size={InputSIZE.default}/>
+                    {({ field }: FieldProps<CodeListFormValues>) => (
+                      <CustomizedInput name="shortName" value={formik.values.shortName} onChange={formik.handleChange} type="input" size={InputSIZE.default} />
                     )}
                   </Field>
                 </Block>
-                <Error fieldName="shortName"/>
+                <Error fieldName="shortName" />
 
                 <Block {...rowBlockProps}>
                   <LabelMedium marginRight={'1rem'} width="25%">
                     Description:
                   </LabelMedium>
                   <Field name="description">
-                    {({field}: FieldProps<CodeListFormValues>) => (
-                      <CustomizedTextarea name="description" value={formik.values.description} onChange={formik.handleChange} type="input" rows={10}/>
+                    {({ field }: FieldProps<CodeListFormValues>) => (
+                      <CustomizedTextarea name="description" value={formik.values.description} onChange={formik.handleChange} type="input" rows={10} />
                     )}
                   </Field>
                 </Block>
-                <Error fieldName="description"/>
-                {(initialValues.list === ListName.LOV || initialValues.list === ListName.TEMA) && <MarkdownInfo/>}
+                <Error fieldName="description" />
+                {(initialValues.list === ListName.LOV || initialValues.list === ListName.TEMA) && <MarkdownInfo />}
 
-                {initialValues.list === ListName.LOV && <LovCodeDataForm/>}
-                {initialValues.list === ListName.TEMA && <TemaCodeDataForm/>}
+                {initialValues.list === ListName.LOV && <LovCodeDataForm />}
+                {initialValues.list === ListName.TEMA && <TemaCodeDataForm />}
               </ModalBody>
               <ModalFooter>
                 <Block display="flex" justifyContent="flex-end">

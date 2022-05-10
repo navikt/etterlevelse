@@ -29,8 +29,8 @@ const CustomizedRegelverkSelect = (props: SelectProps) => {
       },
     },
     SelectArrow: {
-      component: ({$isOpen}: { $isOpen: boolean }) =>
-        $isOpen ? <img src={navChevronDownIcon} alt="Chevron opp" style={{transform: 'rotate(180deg)'}}/> : <img src={navChevronDownIcon} alt="Chevron ned"/>,
+      component: ({ $isOpen }: { $isOpen: boolean }) =>
+        $isOpen ? <img src={navChevronDownIcon} alt="Chevron opp" style={{ transform: 'rotate(180deg)' }} /> : <img src={navChevronDownIcon} alt="Chevron ned" />,
     },
     DropdownListItem: {
       style: {
@@ -43,7 +43,7 @@ const CustomizedRegelverkSelect = (props: SelectProps) => {
 
   const overrides = _.merge(customOverrides, props.overrides)
 
-  return <Select {...props} overrides={overrides}/>
+  return <Select {...props} overrides={overrides} />
 }
 
 export const KravRegelverkEdit = () => {
@@ -51,7 +51,7 @@ export const KravRegelverkEdit = () => {
   const [text, setText] = useState('')
   const controlRef: React.Ref<ImperativeMethods> = React.useRef<ImperativeMethods>(null)
 
-  const regelverkObject = () => ({lov: codelist.getCode(ListName.LOV, lov[0].id as string)!, spesifisering: text})
+  const regelverkObject = () => ({ lov: codelist.getCode(ListName.LOV, lov[0].id as string)!, spesifisering: text })
 
   return (
     <FieldWrapper marginBottom="32px">
@@ -81,7 +81,7 @@ export const KravRegelverkEdit = () => {
                         maxDropdownHeight="400px"
                         value={lov}
                         options={codelist.getParsedOptions(ListName.LOV)}
-                        onChange={({value}) => {
+                        onChange={({ value }) => {
                           setLov(value)
                         }}
                         overrides={{
@@ -96,7 +96,7 @@ export const KravRegelverkEdit = () => {
                       />
                     </Block>
                     <Block width="100%">
-                      <LabelWithTooltip label={'Paragraf, kapittel eller artikkel i regelverk'} tooltip={'Beskrivelse'}/>
+                      <LabelWithTooltip label={'Paragraf, kapittel eller artikkel i regelverk'} tooltip={'Beskrivelse'} />
                       <CustomizedInput
                         value={text}
                         onChange={(e) => setText((e.target as HTMLInputElement).value)}
@@ -128,14 +128,14 @@ export const KravRegelverkEdit = () => {
                   {!!lov.length && text && (
                     <Block display="flex" alignItems="center" marginTop={theme.sizing.scale400}>
                       <LabelSmall marginRight={theme.sizing.scale800}>Forhåndsvisning: </LabelSmall>
-                      <LovView regelverk={regelverkObject()}/>
+                      <LovView regelverk={regelverkObject()} />
                     </Block>
                   )}
                 </Block>
                 <RenderTagList
                   wide
                   list={p.form.values.regelverk.map((r: Regelverk) => (
-                    <LovView regelverk={r}/>
+                    <LovView regelverk={r} />
                   ))}
                   onRemove={p.remove}
                 />

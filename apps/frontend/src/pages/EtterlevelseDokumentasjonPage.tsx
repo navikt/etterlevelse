@@ -41,7 +41,7 @@ export const EtterlevelseDokumentasjonPage = () => {
 
   useEffect(() => {
     if (params.kravNummer && params.kravVersjon) {
-      setKravId({kravNummer: Number(params.kravNummer), kravVersjon: Number(params.kravVersjon)})
+      setKravId({ kravNummer: Number(params.kravNummer), kravVersjon: Number(params.kravVersjon) })
     }
   }, [params])
 
@@ -72,7 +72,7 @@ export const EtterlevelseDokumentasjonPage = () => {
           mainHeader={getMainHeader(
             behandling,
             <Helmet>
-              <meta charSet="utf-8"/>
+              <meta charSet="utf-8" />
               <title>
                 K{kravId?.kravNummer?.toString()}.{kravId?.kravVersjon?.toString()} {temaData?.shortName} B{behandling.nummer.toString()} {behandling.navn.toString()}
               </title>

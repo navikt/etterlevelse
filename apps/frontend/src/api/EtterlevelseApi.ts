@@ -116,7 +116,7 @@ export const mapEtterlevelseToFormValue = (etterlevelse: Partial<Etterlevelse>, 
           begrunnelse: '',
           oppfylt: false,
           ikkeRelevant: false,
-          underArbeid:false
+          underArbeid: false,
         })
       })
     }

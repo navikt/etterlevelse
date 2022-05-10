@@ -52,11 +52,11 @@ export const TemaList = () => {
             return k.regelverk.map((r) => r.lov.data && r.lov.data.tema).includes(t.code)
           })
           return activeKraver && activeKraver.length > 0 ? (
-            <CustomizedPanel title={<KravPanelHeader title={t.shortName} kravData={[...activeKraver,...draftKraver]}/>} key={`${t.code}_krav_list`}>
-              <KravTemaList activeKraver={sortKraverByPriority(activeKraver, t.shortName)} tema={t.shortName} refresh={fetchKrav} draftKrav={draftKraver}/>
+            <CustomizedPanel title={<KravPanelHeader title={t.shortName} kravData={[...activeKraver, ...draftKraver]} />} key={`${t.code}_krav_list`}>
+              <KravTemaList activeKraver={sortKraverByPriority(activeKraver, t.shortName)} tema={t.shortName} refresh={fetchKrav} draftKrav={draftKraver} />
             </CustomizedPanel>
           ) : (
-            <CustomizedPanel title={<KravPanelHeader title={t.shortName} kravData={[]}/>} key={`${t.code}_krav_list`}>
+            <CustomizedPanel title={<KravPanelHeader title={t.shortName} kravData={[]} />} key={`${t.code}_krav_list`}>
               <CustomPanelDivider>
                 <Block display="flex" width="100%" marginLeft="24px">
                   <ParagraphXSmall>Ingen krav</ParagraphXSmall>
@@ -71,41 +71,36 @@ export const TemaList = () => {
 }
 
 const getKravTemaRowsWithLabel = (kraver: Krav[], tema: string) => {
-  return (
-    kraver.map((k, index) => {
-      return (
-        <CustomPanelDivider key={`${k.navn}_${k.kravNummer}_${tema}_${index}`}>
-          <PanelLink
-            hideChevron
-            useDescriptionUnderline
-            href={`/krav/${k.kravNummer}/${k.kravVersjon}`}
-            title={
-              <ParagraphMedium $style={{fontSize: '14px', marginBottom: '0px', marginTop: '0px', lineHeight: '15px'}}>
-                K{k.kravNummer}.{k.kravVersjon}
-              </ParagraphMedium>
-            }
-            beskrivelse={<LabelSmall $style={{fontSize: '18px', fontWeight: 600}}>{k.navn}</LabelSmall>}
-            rightBeskrivelse={!!k.changeStamp.lastModifiedDate ? `Sist endret: ${moment(k.changeStamp.lastModifiedDate).format('ll')}` : ''}
-            statusText={
-              <StatusView status={k.status}/>
-            }
-            overrides={{
-              Block: {
-                style: {
-                  ':hover': {boxShadow: 'none'},
-                  ...borderStyle('hidden'),
-                },
+  return kraver.map((k, index) => {
+    return (
+      <CustomPanelDivider key={`${k.navn}_${k.kravNummer}_${tema}_${index}`}>
+        <PanelLink
+          hideChevron
+          useDescriptionUnderline
+          href={`/krav/${k.kravNummer}/${k.kravVersjon}`}
+          title={
+            <ParagraphMedium $style={{ fontSize: '14px', marginBottom: '0px', marginTop: '0px', lineHeight: '15px' }}>
+              K{k.kravNummer}.{k.kravVersjon}
+            </ParagraphMedium>
+          }
+          beskrivelse={<LabelSmall $style={{ fontSize: '18px', fontWeight: 600 }}>{k.navn}</LabelSmall>}
+          rightBeskrivelse={!!k.changeStamp.lastModifiedDate ? `Sist endret: ${moment(k.changeStamp.lastModifiedDate).format('ll')}` : ''}
+          statusText={<StatusView status={k.status} />}
+          overrides={{
+            Block: {
+              style: {
+                ':hover': { boxShadow: 'none' },
+                ...borderStyle('hidden'),
               },
-            }}
-          />
-        </CustomPanelDivider>
-      )
-    })
-  )
+            },
+          }}
+        />
+      </CustomPanelDivider>
+    )
+  })
 }
 
-
-const KravTemaList = (props: { activeKraver: Krav[]; tema: string; refresh: Function, draftKrav: Krav[] }) => {
+const KravTemaList = (props: { activeKraver: Krav[]; tema: string; refresh: Function; draftKrav: Krav[] }) => {
   const [edit, setEdit] = React.useState(false)
 
   return (

@@ -3,7 +3,7 @@ import {HeadingXXLarge, LabelSmall} from 'baseui/typography'
 import {useParams} from 'react-router-dom'
 import {useEtterlevelse} from '../api/EtterlevelseApi'
 import React, {useEffect, useState} from 'react'
-import {Etterlevelse, EtterlevelseStatus, Krav} from '../constants'
+import {Etterlevelse, Krav} from '../constants'
 import {ViewEtterlevelse} from '../components/etterlevelse/ViewEtterlevelse'
 import {LoadingSkeleton} from '../components/common/LoadingSkeleton'
 import {kravNumView} from './KravPage'
@@ -12,7 +12,6 @@ import {getKravByKravNumberAndVersion} from '../api/KravApi'
 import CustomizedBreadcrumbs, {breadcrumbPaths} from '../components/common/CustomizedBreadcrumbs'
 import {Helmet} from 'react-helmet'
 import {ampli} from '../services/Amplitude'
-import moment from 'moment'
 
 export const etterlevelseName = (etterlevelse: Etterlevelse) => `${kravNumView(etterlevelse)}`
 

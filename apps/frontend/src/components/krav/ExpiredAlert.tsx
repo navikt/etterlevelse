@@ -26,7 +26,8 @@ const ExpiredAlert = ({ alleKravVersjoner, statusName }: { alleKravVersjoner: Kr
       Dette er et {statusName ? `${kravStatus(statusName).toLocaleLowerCase()} krav` : 'utgått krav'}.
       {alleKravVersjoner.length > 1 ? (
         <>
-          {' '}Gjeldende versjon:{' '}
+          {' '}
+          Gjeldende versjon:{' '}
           <CustomizedLink href={`/krav/${alleKravVersjoner[0].kravNummer}/${alleKravVersjoner[0].kravVersjon}`}>
             K{alleKravVersjoner[0].kravNummer}.{alleKravVersjoner[0].kravVersjon}
           </CustomizedLink>

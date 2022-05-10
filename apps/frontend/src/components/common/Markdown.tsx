@@ -1,17 +1,17 @@
 import React from 'react'
 import ReactMarkdown from 'react-markdown'
-import { HeadingLarge, HeadingMedium, ParagraphLarge, ParagraphMedium } from 'baseui/typography'
-import { StatefulTooltip } from 'baseui/tooltip'
-import { useDebouncedState } from '../../util/hooks'
+import {HeadingLarge, HeadingMedium, ParagraphLarge, ParagraphMedium} from 'baseui/typography'
+import {StatefulTooltip} from 'baseui/tooltip'
+import {useDebouncedState} from '../../util/hooks'
 import MdEditor from 'react-markdown-editor-lite'
 import 'react-markdown-editor-lite/lib/index.css'
-import { Block } from 'baseui/block'
-import { theme } from '../../util'
-import { ExternalLink, ExternalLinkWrapper } from './RouteLink'
-import { markdownLink } from '../../util/config'
+import {Block} from 'baseui/block'
+import {theme} from '../../util'
+import {ExternalLink, ExternalLinkWrapper} from './RouteLink'
+import {markdownLink} from '../../util/config'
 import remarkGfm from 'remark-gfm'
 import rehypeRaw from 'rehype-raw'
-import { ettlevColors } from '../../util/theme'
+import {ettlevColors} from '../../util/theme'
 
 export const Markdown = ({
   vertical,
@@ -65,7 +65,7 @@ export const Markdown = ({
       )
     },
     h3: (headerProps: any) => {
-      const {children} = headerProps
+      const { children } = headerProps
 
       return (
         <HeadingLarge marginTop="48px" marginBottom="24px">
@@ -74,13 +74,9 @@ export const Markdown = ({
       )
     },
     h4: (headerProps: any) => {
-      const {children} = headerProps
+      const { children } = headerProps
 
-      return (
-        <HeadingMedium  marginBottom="24px">
-          {children}
-        </HeadingMedium>
-      )
+      return <HeadingMedium marginBottom="24px">{children}</HeadingMedium>
     },
     href: (linkProps: any) => {
       const { children, href, node } = linkProps
@@ -118,24 +114,15 @@ export const Markdown = ({
       if (p1) {
         return (
           <li style={{ fontSize: '21px' }}>
-            <ParagraphLarge
-              $style={{ fontSize: fontSize ? fontSize : undefined }}
-              color={fontColor ? fontColor : ettlevColors.green800}
-              marginTop={0}
-              marginBottom={0}
-            >
+            <ParagraphLarge $style={{ fontSize: fontSize ? fontSize : undefined }} color={fontColor ? fontColor : ettlevColors.green800} marginTop={0} marginBottom={0}>
               {children}
             </ParagraphLarge>
           </li>
         )
       } else {
-        return (
-          <li>
-            {children}
-          </li>
-        )
+        return <li>{children}</li>
       }
-    }
+    },
   }
 
   const sources: string[] = sourcesOrig || (source ? [source] : [''])

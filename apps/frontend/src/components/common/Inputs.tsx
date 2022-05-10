@@ -25,7 +25,7 @@ export const FieldWrapper = ({ children, marginBottom }: { children: React.React
   return <Block marginBottom={marginBottom ? marginBottom : '1.5rem'}>{children}</Block>
 }
 
-export const InputField = (props: { label: string; name: string; caption?: ReactNode; tooltip?: string; marginBottom?: string, disablePlaceHolder?:boolean }) => (
+export const InputField = (props: { label: string; name: string; caption?: ReactNode; tooltip?: string; marginBottom?: string; disablePlaceHolder?: boolean }) => (
   <FieldWrapper marginBottom={props.marginBottom}>
     <Field name={props.name}>
       {(p: FieldProps) => (
@@ -37,7 +37,7 @@ export const InputField = (props: { label: string; name: string; caption?: React
           <Block>
             <CustomInput
               {...p.field}
-              placeholder={!props.disablePlaceHolder?props.label:undefined}
+              placeholder={!props.disablePlaceHolder ? props.label : undefined}
               overrides={{
                 Input: {
                   style: {

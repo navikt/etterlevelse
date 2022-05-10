@@ -1,22 +1,16 @@
-import { Block } from 'baseui/block'
-import { LabelSmall } from 'baseui/typography'
-import { useState } from 'react'
-import { ettlevColors } from '../../util/theme'
-import { Chevron } from '../common/PanelLink'
+import {Block} from 'baseui/block'
+import {LabelSmall} from 'baseui/typography'
+import {useState} from 'react'
+import {Chevron} from '../common/PanelLink'
 import RouteLink from '../common/RouteLink'
-import { borderColor, borderStyle, borderWidth, padding } from '../common/Style'
-import { arrowRightIcon } from '../Images'
+import {arrowRightIcon} from '../Images'
 
 export const SidePanel = () => {
   const [hover, setHover] = useState<boolean>(false)
 
   return (
     <RouteLink href="/behandlinger" hideUnderline onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
-      <Block
-        marginLeft="24px"
-        width="187px"
-        display={['none', 'none', 'none', 'none', 'none', 'flex']}
-      >
+      <Block marginLeft="24px" width="187px" display={['none', 'none', 'none', 'none', 'none', 'flex']}>
         <Block width="120px">
           <LabelSmall
             $style={{
@@ -24,7 +18,7 @@ export const SidePanel = () => {
               fontWeight: 600,
               lineHeight: '28px',
               textDecoration: hover ? 'underline' : 'none',
-              display: 'flex'
+              display: 'flex',
             }}
           >
             Dokumentere etterlevelse

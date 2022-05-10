@@ -35,7 +35,11 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
   const [hover, setHover] = React.useState<number>()
 
   const { data } = useQuery<{ behandling: PageResponse<{ stats: BehandlingStats }> }>(statsQuery, {
-    variables: { relevans: options.map(o => {return o.id}) },
+    variables: {
+      relevans: options.map((o) => {
+        return o.id
+      }),
+    },
     skip: !props.behandling?.id,
     fetchPolicy: 'no-cache',
   })

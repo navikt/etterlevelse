@@ -405,7 +405,9 @@ const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function; setKra
     >
       <Block display="flex" justifyContent="center" alignItems="center" width="100%" onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
         <Block marginLeft="24px">
-          <ParagraphXSmall $style={{ fontSize: '16px', lineHeight: '24px', marginBottom: '0px', marginTop: '0px', width: 'fit-content', textDecoration: hover ? 'underline' : 'none' }}>
+          <ParagraphXSmall
+            $style={{ fontSize: '16px', lineHeight: '24px', marginBottom: '0px', marginTop: '0px', width: 'fit-content', textDecoration: hover ? 'underline' : 'none' }}
+          >
             K{props.krav.kravNummer}.{props.krav.kravVersjon}
           </ParagraphXSmall>
           <LabelSmall $style={{ fontSize: '18px', fontWeight: 600, alignContent: 'flex-start', textAlign: 'left', textDecoration: hover ? 'underline' : 'none' }}>
@@ -415,7 +417,9 @@ const KravCard = (props: { krav: KravEtterlevelseData; setEdit: Function; setKra
         <Block display="flex" justifyContent="flex-end" flex="1" width="100%">
           <Block width="350px" display="flex" justifyContent="flex-end" marginLeft="32px">
             <Block display="flex" width="100%" maxWidth="220px" justifyContent="flex-end">
-              {props.krav && props.krav.etterlevelseStatus && <StatusView status={getEtterlevelseStatus(props.krav.etterlevelseStatus, props.krav.frist)} statusDisplay={getStatusLabelColor(props.krav.etterlevelseStatus)} />}
+              {props.krav && props.krav.etterlevelseStatus && (
+                <StatusView status={getEtterlevelseStatus(props.krav.etterlevelseStatus, props.krav.frist)} statusDisplay={getStatusLabelColor(props.krav.etterlevelseStatus)} />
+              )}
             </Block>
             <Block marginLeft="31px" maxWidth="140px" width="100%">
               {props.krav.etterlevelseChangeStamp?.lastModifiedDate && (

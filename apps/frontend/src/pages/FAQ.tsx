@@ -1,24 +1,23 @@
 import * as React from 'react'
-import { useEffect, useState } from 'react'
-import { ettlevColors, maxPageWidth, responsivePaddingLarge, responsiveWidthLarge, theme } from '../util/theme'
-import { HeadingXLarge, HeadingXXLarge, ParagraphLarge, ParagraphSmall } from 'baseui/typography'
+import {useEffect, useState} from 'react'
+import {ettlevColors, maxPageWidth, responsivePaddingLarge, responsiveWidthLarge, theme} from '../util/theme'
+import {HeadingXLarge, HeadingXXLarge, ParagraphLarge, ParagraphSmall} from 'baseui/typography'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
-import { Block } from 'baseui/block'
-import { Helmet } from 'react-helmet'
-import { ampli } from '../services/Amplitude'
-import { Melding, MeldingStatus, MeldingType } from "../constants";
-import { getMeldingByType, mapMeldingToFormValue } from "../api/MeldingApi";
-import { Markdown } from "../components/common/Markdown";
-import moment from "moment";
-import { user } from '../services/User'
+import {Block} from 'baseui/block'
+import {Helmet} from 'react-helmet'
+import {ampli} from '../services/Amplitude'
+import {Melding, MeldingType} from '../constants'
+import {getMeldingByType, mapMeldingToFormValue} from '../api/MeldingApi'
+import {Markdown} from '../components/common/Markdown'
+import moment from 'moment'
+import {user} from '../services/User'
 
 export const FAQ = () => {
-
   const [isLoading, setLoading] = useState<boolean>(false)
   const [melding, setMelding] = useState<Melding>()
 
   useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       setLoading(true)
       const response = await getMeldingByType(MeldingType.OM_ETTERLEVELSE)
       if (response.numberOfElements > 0) {
@@ -47,15 +46,26 @@ export const FAQ = () => {
       </Block>
 
       <Block display={'flex'} justifyContent="center" width="100%">
-        <Block maxWidth={maxPageWidth} width={responsiveWidthLarge} display="flex" justifyContent="center" paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge}>
-          <Block  maxWidth="600px">
-            <HeadingXXLarge marginTop="54px" marginBottom="32px">Om Støtte til etterlevelse</HeadingXXLarge>
+        <Block
+          maxWidth={maxPageWidth}
+          width={responsiveWidthLarge}
+          display="flex"
+          justifyContent="center"
+          paddingLeft={responsivePaddingLarge}
+          paddingRight={responsivePaddingLarge}
+        >
+          <Block maxWidth="600px">
+            <HeadingXXLarge marginTop="54px" marginBottom="32px">
+              Om Støtte til etterlevelse
+            </HeadingXXLarge>
 
             <ParagraphLarge marginTop="0px" $style={{ fontSize: '22px', color: ettlevColors.green800 }}>
               {melding?.melding}
             </ParagraphLarge>
-            <HeadingXLarge marginTop="56px" marginBottom="24px">{melding?.secondaryTittel}</HeadingXLarge>
-            <Markdown source={melding?.secondaryMelding} p1 fontSize="18px"/>
+            <HeadingXLarge marginTop="56px" marginBottom="24px">
+              {melding?.secondaryTittel}
+            </HeadingXLarge>
+            <Markdown source={melding?.secondaryMelding} p1 fontSize="18px" />
 
             {/*<ParagraphLarge $style={{ fontSize: '22px', color: ettlevColors.green800 }}>*/}
             {/*  Siden er under arbeid, og vi tar gjerne imot innspill på Slack <strong>#etterlevelse.</strong>*/}
@@ -69,9 +79,11 @@ export const FAQ = () => {
             {/*</ParagraphLarge>*/}
 
             <Block marginTop="88px">
-              {user.isAdmin() && melding && <ParagraphSmall>
-                Sist endret: {moment(melding.changeStamp.lastModifiedDate).format('ll')} av {melding.changeStamp.lastModifiedBy.split('-')[1]}
-              </ParagraphSmall>}
+              {user.isAdmin() && melding && (
+                <ParagraphSmall>
+                  Sist endret: {moment(melding.changeStamp.lastModifiedDate).format('ll')} av {melding.changeStamp.lastModifiedBy.split('-')[1]}
+                </ParagraphSmall>
+              )}
             </Block>
           </Block>
         </Block>

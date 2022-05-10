@@ -58,7 +58,7 @@ export const getTemaMainHeader = (tema: TemaCode, lover: LovCode[], expand: bool
           maskImage: expand ? undefined : `linear-gradient(${ettlevColors.black} 40%, transparent)`,
         }}
       >
-        <Markdown source={tema.description} fontSize={'21px'} maxWidth={'800px'} p1/>
+        <Markdown source={tema.description} fontSize={'21px'} maxWidth={'800px'} p1 />
       </Block>
 
       {expand && (

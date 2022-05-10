@@ -28,7 +28,7 @@ import {Chart} from '../Chart'
 import {ettlevColors, maxPageWidth} from '../../util/theme'
 import CustomizedModal from '../common/CustomizedModal'
 import {crossIcon} from '../Images'
-import { getEtterlevelseStatus } from './utils'
+import {getEtterlevelseStatus} from './utils'
 
 export const filterForBehandling = (behandling: Behandling): KravFilters => ({ behandlingId: behandling.id })
 

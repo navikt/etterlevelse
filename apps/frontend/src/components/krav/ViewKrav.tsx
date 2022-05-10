@@ -20,7 +20,7 @@ import {Markdown} from '../common/Markdown'
 import ExpiredAlert from './ExpiredAlert'
 import SidePanel from './SidePanel'
 
-const LabelWrapper = ({children}: { children: React.ReactNode }) => (
+const LabelWrapper = ({ children }: { children: React.ReactNode }) => (
   <Block marginTop="48px" marginBottom="48px">
     {children}
   </Block>
@@ -29,24 +29,24 @@ const LabelWrapper = ({children}: { children: React.ReactNode }) => (
 const responsiveView: Responsive<Display> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
 const labelMargin = '24px'
 
-export const ViewKrav = ({krav, alleKravVersjoner}: { krav: KravQL; alleKravVersjoner: KravVersjon[] }) => {
+export const ViewKrav = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVersjoner: KravVersjon[] }) => {
   return (
     <Block display="flex" width="calc(100% + 211px)">
       <Block width="100%">
         {krav.suksesskriterier.map((s, i) => (
-          <SuksesskriterieCard key={s.id} suksesskriterie={s} num={i + 1} totalt={krav.suksesskriterier.length}/>
+          <SuksesskriterieCard key={s.id} suksesskriterie={s} num={i + 1} totalt={krav.suksesskriterier.length} />
         ))}
         {/*  <LabelAboveContent header title='Beskrivelse' markdown={krav.beskrivelse} /> */}
-        {<AllInfo krav={krav} alleKravVersjoner={alleKravVersjoner}/>}
+        {<AllInfo krav={krav} alleKravVersjoner={alleKravVersjoner} />}
       </Block>
       <Block>
-        <SidePanel/>
+        <SidePanel />
       </Block>
     </Block>
   )
 }
 
-const MediumInfo = ({krav}: { krav: KravQL }) => (
+const MediumInfo = ({ krav }: { krav: KravQL }) => (
   <>
     <Label title="Status">{kravStatus(krav.status)}</Label>
     <Label title="Underavdeling">
@@ -57,7 +57,7 @@ const MediumInfo = ({krav}: { krav: KravQL }) => (
   </>
 )
 
-export const AllInfo = ({krav, alleKravVersjoner}: { krav: KravQL; alleKravVersjoner: KravVersjon[] }) => {
+export const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVersjoner: KravVersjon[] }) => {
   const hasKravExpired = () => {
     return krav && krav.kravVersjon < alleKravVersjoner[0].kravVersjon
   }
@@ -74,7 +74,7 @@ export const AllInfo = ({krav, alleKravVersjoner}: { krav: KravQL; alleKravVersj
 
       <LabelWrapper>
         <LabelAboveContent header title="Kilder">
-          <DotTags items={krav.dokumentasjon} markdown inColumn/>
+          <DotTags items={krav.dokumentasjon} markdown inColumn />
         </LabelAboveContent>
       </LabelWrapper>
 
@@ -91,13 +91,13 @@ export const AllInfo = ({krav, alleKravVersjoner}: { krav: KravQL; alleKravVersj
       )}
 
       <LabelWrapper>
-        <LabelAboveContent header title="Relevante implementasjoner" markdown={krav.implementasjoner}/>
+        <LabelAboveContent header title="Relevante implementasjoner" markdown={krav.implementasjoner} />
       </LabelWrapper>
 
       <LabelWrapper>
         <LabelAboveContent header title="Begreper">
           {krav.begreper.map((b, i) => (
-            <BegrepView key={'begrep_' + i} begrep={b}/>
+            <BegrepView key={'begrep_' + i} begrep={b} />
           ))}
         </LabelAboveContent>
       </LabelWrapper>
@@ -106,7 +106,7 @@ export const AllInfo = ({krav, alleKravVersjoner}: { krav: KravQL; alleKravVersj
 
       <LabelWrapper>
         <LabelAboveContent header title="Kravet er relevant for">
-          <DotTags list={ListName.RELEVANS} codes={krav.relevansFor} inColumn/>
+          <DotTags list={ListName.RELEVANS} codes={krav.relevansFor} inColumn />
         </LabelAboveContent>
       </LabelWrapper>
 
@@ -118,7 +118,7 @@ export const AllInfo = ({krav, alleKravVersjoner}: { krav: KravQL; alleKravVersj
                 return (
                   <DotTag key={'kravVersjon_list_' + i}>
                     <ExternalLink href={'/krav/' + k.kravNummer + '/' + k.kravVersjon}>
-                      <ExternalLinkWrapper text={`K${k.kravNummer}.${k.kravVersjon}`}/>
+                      <ExternalLinkWrapper text={`K${k.kravNummer}.${k.kravVersjon}`} />
                     </ExternalLink>
                   </DotTag>
                 )
@@ -128,7 +128,7 @@ export const AllInfo = ({krav, alleKravVersjoner}: { krav: KravQL; alleKravVersj
               <Block marginTop={theme.sizing.scale900} marginBottom={theme.sizing.scale1600}>
                 <CustomizedAccordion>
                   <CustomizedPanel
-                    title={<LabelSmall $style={{color: ettlevColors.green800, marginRight: '7px'}}>Dette er nytt fra forrige versjon</LabelSmall>}
+                    title={<LabelSmall $style={{ color: ettlevColors.green800, marginRight: '7px' }}>Dette er nytt fra forrige versjon</LabelSmall>}
                     overrides={{
                       Header: {
                         style: {
@@ -157,7 +157,7 @@ export const AllInfo = ({krav, alleKravVersjoner}: { krav: KravQL; alleKravVersj
                       },
                     }}
                   >
-                    <Markdown source={krav.versjonEndringer} noMargin/>
+                    <Markdown source={krav.versjonEndringer} noMargin />
                   </CustomizedPanel>
                 </CustomizedAccordion>
               </Block>
@@ -167,8 +167,8 @@ export const AllInfo = ({krav, alleKravVersjoner}: { krav: KravQL; alleKravVersj
       )}
 
       {hasKravExpired() && (
-        <Block $style={{marginTop: theme.sizing.scale900, marginBottom: theme.sizing.scale1200}}>
-          <ExpiredAlert alleKravVersjoner={alleKravVersjoner} statusName={krav.status}/>
+        <Block $style={{ marginTop: theme.sizing.scale900, marginBottom: theme.sizing.scale1200 }}>
+          <ExpiredAlert alleKravVersjoner={alleKravVersjoner} statusName={krav.status} />
         </Block>
       )}
 
@@ -181,7 +181,7 @@ export const AllInfo = ({krav, alleKravVersjoner}: { krav: KravQL; alleKravVersj
 
         <Block marginBottom={labelMargin}>
           <Label display={responsiveView} title="Regelverk" hide={!krav.regelverk.length} compact>
-            <LovViewList regelverk={krav.regelverk}/>
+            <LovViewList regelverk={krav.regelverk} />
           </Label>
         </Block>
 
@@ -194,7 +194,7 @@ export const AllInfo = ({krav, alleKravVersjoner}: { krav: KravQL; alleKravVersj
                   <Block marginBottom={marginBottom} key={'kravVarsling_list_SLACK_' + i} display="flex">
                     <Block marginRight="4px">Slack:</Block>
                     <ExternalLink href={slackLink(va.adresse)}>
-                      <ExternalLinkWrapper text={`#${va.slackChannel?.name || va.adresse}`}/>
+                      <ExternalLinkWrapper text={`#${va.slackChannel?.name || va.adresse}`} />
                     </ExternalLink>
                   </Block>
                 )
@@ -203,7 +203,7 @@ export const AllInfo = ({krav, alleKravVersjoner}: { krav: KravQL; alleKravVersj
                   <Block marginBottom={marginBottom} key={'kravVarsling_list_SLACK_USER_' + i} display="flex">
                     <Block marginRight="4px">Slack:</Block>
                     <ExternalLink href={slackUserLink(va.adresse)}>
-                      <ExternalLinkWrapper text={`${va.slackUser?.name || va.adresse}`}/>
+                      <ExternalLinkWrapper text={`${va.slackUser?.name || va.adresse}`} />
                     </ExternalLink>
                   </Block>
                 )
@@ -211,7 +211,7 @@ export const AllInfo = ({krav, alleKravVersjoner}: { krav: KravQL; alleKravVersj
                 <Block marginBottom={marginBottom} key={'kravVarsling_list_EMAIL_' + i} display="flex">
                   <Block marginRight="4px">Epost:</Block>
                   <ExternalLink href={`mailto:${va.adresse}`}>
-                    <ExternalLinkWrapper text={va.adresse}/>
+                    <ExternalLinkWrapper text={va.adresse} />
                   </ExternalLink>
                 </Block>
               )
@@ -238,11 +238,11 @@ export const AllInfo = ({krav, alleKravVersjoner}: { krav: KravQL; alleKravVersj
   )
 }
 
-const BegrepView = ({begrep}: { begrep: Begrep }) => (
+const BegrepView = ({ begrep }: { begrep: Begrep }) => (
   <Block maxWidth={'650px'}>
     <DotTag>
       <ExternalLink href={termUrl(begrep.id)} label={'Link begrepskatalogen'}>
-        <ExternalLinkWrapper text={begrep.navn}/>
+        <ExternalLinkWrapper text={begrep.navn} />
       </ExternalLink>{' '}
       - {begrep.beskrivelse}
     </DotTag>

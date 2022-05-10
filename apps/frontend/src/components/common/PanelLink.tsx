@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
-import RouteLink, { ExternalLink } from './RouteLink'
-import { Block, BlockOverrides, Display, Responsive, Scale } from 'baseui/block'
-import { borderColor, borderRadius, borderStyle, borderWidth, padding, paddingAll, paddingZero } from './Style'
-import { theme } from '../../util'
-import { ettlevColors } from '../../util/theme'
-import { HeadingXLarge, LabelLarge, LabelSmall, ParagraphMedium, ParagraphSmall, ParagraphXSmall } from 'baseui/typography'
-import { arrowRightIcon, navChevronRightIcon } from '../Images'
+import React, {useState} from 'react'
+import RouteLink, {ExternalLink} from './RouteLink'
+import {Block, BlockOverrides, Display, Responsive, Scale} from 'baseui/block'
+import {borderColor, borderRadius, borderStyle, borderWidth, padding, paddingAll, paddingZero} from './Style'
+import {theme} from '../../util'
+import {ettlevColors} from '../../util/theme'
+import {HeadingXLarge, LabelLarge, LabelSmall, ParagraphMedium, ParagraphSmall, ParagraphXSmall} from 'baseui/typography'
+import {arrowRightIcon, navChevronRightIcon} from '../Images'
 import * as _ from 'lodash'
 import Button from './Button'
 
@@ -331,8 +331,12 @@ export const PanelLinkCard = ({
   )
 }
 
-export const Chevron = ({ hover, icon, distance, size, marginLeft }: { hover: boolean; icon: string; distance: string, size?: string, marginLeft?: string }) => (
-  <Block marginLeft={hover ? `calc(${theme.sizing.scale600} + ${distance})` : marginLeft ? marginLeft : theme.sizing.scale600} alignSelf={'center'} marginRight={hover ? '-' + distance : 0}>
+export const Chevron = ({ hover, icon, distance, size, marginLeft }: { hover: boolean; icon: string; distance: string; size?: string; marginLeft?: string }) => (
+  <Block
+    marginLeft={hover ? `calc(${theme.sizing.scale600} + ${distance})` : marginLeft ? marginLeft : theme.sizing.scale600}
+    alignSelf={'center'}
+    marginRight={hover ? '-' + distance : 0}
+  >
     <img src={icon} aria-hidden alt={'Chevron høyre ikon'} width={size ? size : '24px'} height={size ? size : '24px'} />
   </Block>
 )

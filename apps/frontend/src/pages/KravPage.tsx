@@ -26,7 +26,7 @@ import {codelist, ListName, TemaCode} from '../services/Codelist'
 import {Helmet} from 'react-helmet'
 import Etterlevelser from '../components/krav/Etterlevelser'
 import {ampli} from '../services/Amplitude'
-import {Markdown} from "../components/common/Markdown";
+import {Markdown} from '../components/common/Markdown'
 
 export const kravNumView = (it: { kravVersjon: number; kravNummer: number }) => `K${it.kravNummer}.${it.kravVersjon}`
 export const kravName = (krav: Krav) => `${kravNumView(krav)} ${krav.navn}`
@@ -279,7 +279,7 @@ export const KravPage = () => {
               <Block width={responsiveWidthSmall} paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall} justifyContent="center" display="flex">
                 <Block marginTop="40px" width={pageWidth}>
                   <HeadingXLarge marginTop="0px">Hensikten med kravet</HeadingXLarge>
-                  <Markdown noMargin p1 sources={Array.isArray(krav.hensikt) ? krav.hensikt : [krav.hensikt]} fontSize={'21px'} maxWidth={'800px'}/>
+                  <Markdown noMargin p1 sources={Array.isArray(krav.hensikt) ? krav.hensikt : [krav.hensikt]} fontSize={'21px'} maxWidth={'800px'} />
                 </Block>
               </Block>
             </Block>

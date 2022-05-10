@@ -1,33 +1,33 @@
 import * as React from 'react'
-import { useState } from 'react'
-import { ALIGN, HeaderNavigation, StyledNavigationItem as NavigationItem, StyledNavigationList as NavigationList } from 'baseui/header-navigation'
-import { Block } from 'baseui/block'
-import { KIND, SIZE } from 'baseui/button'
-import Button, { buttonBorderStyle, ButtonKind } from './common/Button'
-import { Popover } from 'baseui/popover'
-import { Location, useLocation } from 'react-router-dom'
-import { StyledLink } from 'baseui/link'
-import { useQueryParam } from '../util/hooks'
-import { theme } from '../util'
-import { HeadingXLarge } from 'baseui/typography'
-import { intl } from '../util/intl/intl'
+import {useState} from 'react'
+import {ALIGN, HeaderNavigation, StyledNavigationItem as NavigationItem, StyledNavigationList as NavigationList} from 'baseui/header-navigation'
+import {Block} from 'baseui/block'
+import {KIND, SIZE} from 'baseui/button'
+import Button, {buttonBorderStyle, ButtonKind} from './common/Button'
+import {Popover} from 'baseui/popover'
+import {Location, useLocation} from 'react-router-dom'
+import {StyledLink} from 'baseui/link'
+import {useQueryParam} from '../util/hooks'
+import {theme} from '../util'
+import {HeadingXLarge} from 'baseui/typography'
+import {intl} from '../util/intl/intl'
 import BurgerMenu from './Navigation/Burger'
 import RouteLink from './common/RouteLink'
-import { user } from '../services/User'
-import { writeLog } from '../api/LogApi'
+import {user} from '../services/User'
+import {writeLog} from '../api/LogApi'
 import MainSearch from './search/MainSearch'
-import { arkPennIcon, grafIcon, husIcon, informationIcon, logo, paragrafIcon, warningAlert } from './Images'
-import { ettlevColors, maxPageWidth, responsivePaddingSmall, responsiveWidthSmall } from '../util/theme'
-import { Checkbox, STYLE_TYPE } from 'baseui/checkbox'
-import { Portrait } from './common/Portrait'
-import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
-import { faBars, faChevronDown, faChevronUp, faTimes } from '@fortawesome/free-solid-svg-icons'
-import { faUser } from '@fortawesome/free-regular-svg-icons'
+import {arkPennIcon, grafIcon, husIcon, informationIcon, logo, paragrafIcon, warningAlert} from './Images'
+import {ettlevColors, maxPageWidth, responsivePaddingSmall, responsiveWidthSmall} from '../util/theme'
+import {Checkbox, STYLE_TYPE} from 'baseui/checkbox'
+import {Portrait} from './common/Portrait'
+import {IconDefinition} from '@fortawesome/fontawesome-svg-core'
+import {faBars, faChevronDown, faChevronUp, faTimes} from '@fortawesome/free-solid-svg-icons'
+import {faUser} from '@fortawesome/free-regular-svg-icons'
 import SkipToContent from './common/SkipToContent/SkipToContent'
-import { borderColor, borderStyle, borderWidth } from './common/Style'
-import { AlertType, Melding, MeldingStatus, MeldingType } from '../constants'
-import { getMeldingByType } from '../api/MeldingApi'
-import { Markdown } from './common/Markdown'
+import {borderColor, borderStyle, borderWidth} from './common/Style'
+import {AlertType, Melding, MeldingStatus, MeldingType} from '../constants'
+import {getMeldingByType} from '../api/MeldingApi'
+import {Markdown} from './common/Markdown'
 
 export const loginUrl = (location: Location, path?: string) => {
   const frontpage = window.location.href.substr(0, window.location.href.length - location.pathname.length)
@@ -74,14 +74,14 @@ const LoggedInHeader = () => {
   const kravPages = user.isKraveier() ? [{ label: 'Forvalte og opprette krav', href: '/kravliste' }] : []
   const adminPages = user.isAdmin()
     ? [
-      { label: 'Administrere krav', href: '/admin/krav' },
-      { label: intl.audit, href: '/admin/audit' },
-      { label: 'Kodeverk', href: '/admin/codelist' },
-      { label: intl.mailLog, href: '/admin/maillog' },
-      { label: intl.questionAndAnswers, href: '/admin/messageslog' },
-      { label: intl.notifications, href: '/admin/varsel' },
-      { label: intl.settings, href: '/admin/settings', disabled: true },
-    ]
+        { label: 'Administrere krav', href: '/admin/krav' },
+        { label: intl.audit, href: '/admin/audit' },
+        { label: 'Kodeverk', href: '/admin/codelist' },
+        { label: intl.mailLog, href: '/admin/maillog' },
+        { label: intl.questionAndAnswers, href: '/admin/messageslog' },
+        { label: intl.notifications, href: '/admin/varsel' },
+        { label: intl.settings, href: '/admin/settings', disabled: true },
+      ]
     : []
   const otherPages = [
     { label: 'Mine innstillinger', href: '/innstillinger', disabled: true },
@@ -157,8 +157,8 @@ const Menu = (props: { pages: MenuItem[][]; title: React.ReactNode; icon?: IconD
 
   const allPages = props.pages.length
     ? props.pages
-      .filter((p) => p.length)
-      .reduce((previousValue, currentValue) => [...((previousValue as MenuItem[]) || []), { label: <Divider compact={props.compact} /> }, ...(currentValue as MenuItem[])])
+        .filter((p) => p.length)
+        .reduce((previousValue, currentValue) => [...((previousValue as MenuItem[]) || []), { label: <Divider compact={props.compact} /> }, ...(currentValue as MenuItem[])])
     : []
 
   return (
@@ -238,7 +238,7 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
   }
 
   React.useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       await getMeldingByType(MeldingType.SYSTEM).then((r) => {
         if (r.numberOfElements > 0) {
           setSystemVarsel(r.content[0])
@@ -259,7 +259,7 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
             height="76px"
             overrides={{ Block: { props: { role: 'banner', 'aria-label': 'Header meny' } } }}
           >
-            <StyledLink href="#main" aria-label='main link' />
+            <StyledLink href="#main" aria-label="main link" />
             <HeaderNavigation overrides={{ Root: { style: { paddingBottom: 0, borderBottomStyle: 'none' } } }}>
               <NavigationList $align={ALIGN.left} $style={{ paddingLeft: 0 }}>
                 <NavigationItem $style={{ paddingLeft: 0 }}>
@@ -314,9 +314,8 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
                 ...borderStyle('solid'),
                 ...borderColor(systemVarsel.alertType === AlertType.INFO ? ettlevColors.navDypBla : ettlevColors.navOransje),
                 backgroundColor: systemVarsel.alertType === AlertType.INFO ? ettlevColors.navLysBla : ettlevColors.warning50,
-
-              }
-            }
+              },
+            },
           }}
           backgroundColor={ettlevColors.white}
           justifyContent="center"

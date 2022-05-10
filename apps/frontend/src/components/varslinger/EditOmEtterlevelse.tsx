@@ -5,17 +5,17 @@ import {createMelding, mapMeldingToFormValue, updateMelding} from '../../api/Mel
 import {AlertType, Melding, MeldingStatus} from '../../constants'
 import {InputField, TextAreaField} from '../common/Inputs'
 import Button from '../common/Button'
-import { theme} from '../../util/theme'
+import {theme} from '../../util/theme'
 import {Spinner} from '../common/Spinner'
 import {HeadingXXLarge} from 'baseui/typography'
 
-export const EditOmEtterlevelse = ({melding, setMelding, isLoading, maxChar}: { melding: Melding | undefined; setMelding: Function; isLoading: boolean; maxChar?: number }) => {
+export const EditOmEtterlevelse = ({ melding, setMelding, isLoading, maxChar }: { melding: Melding | undefined; setMelding: Function; isLoading: boolean; maxChar?: number }) => {
   const [disableEdit, setDisableEdit] = useState<boolean>(false)
   // const [secondaryTittel, setSecondaryTittel] = useState<string>('')
   // const [secondaryMelding, setSecondaryMelding] = useState<string>('')
 
   const submit = async (melding: Melding) => {
-    const newMelding = {...melding, alertType: AlertType.INFO}
+    const newMelding = { ...melding, alertType: AlertType.INFO }
     setDisableEdit(true)
     if (melding.id) {
       await updateMelding(newMelding).then((m) => {
@@ -35,7 +35,7 @@ export const EditOmEtterlevelse = ({melding, setMelding, isLoading, maxChar}: { 
   if (isLoading) {
     return (
       <Block display="flex" justifyContent="center">
-        <Spinner size={theme.sizing.scale2400}/>
+        <Spinner size={theme.sizing.scale2400} />
       </Block>
     )
   }
@@ -44,30 +44,15 @@ export const EditOmEtterlevelse = ({melding, setMelding, isLoading, maxChar}: { 
     <Block>
       {melding && (
         <Formik onSubmit={submit} initialValues={mapMeldingToFormValue(melding)}>
-          {({values, submitForm}: FormikProps<Melding>) => (
+          {({ values, submitForm }: FormikProps<Melding>) => (
             <Block>
-              <HeadingXXLarge marginBottom={'44px'}>
-                Om støtte til etterlevelse
-              </HeadingXXLarge>
+              <HeadingXXLarge marginBottom={'44px'}>Om støtte til etterlevelse</HeadingXXLarge>
               {/* Problem med react-draft-wysiwyg Editor komponent, når du setter en custom option som props vil du man få en ' Can't perform a React state update on an unmounted component' */}
 
-              <TextAreaField
-                maxCharacter={maxChar}
-                height="200px"
-                label={'Innledende tekst'}
-                noPlaceholder
-                name="melding"
-              />
-              <InputField label={'Overskrift'} name={'secondaryTittel'} disablePlaceHolder/>
+              <TextAreaField maxCharacter={maxChar} height="200px" label={'Innledende tekst'} noPlaceholder name="melding" />
+              <InputField label={'Overskrift'} name={'secondaryTittel'} disablePlaceHolder />
 
-              <TextAreaField
-                maxCharacter={maxChar}
-                markdown
-                height="200px"
-                label={'Innhold'}
-                noPlaceholder
-                name="secondaryMelding"
-              />
+              <TextAreaField maxCharacter={maxChar} markdown height="200px" label={'Innhold'} noPlaceholder name="secondaryMelding" />
 
               <Block display="flex" justifyContent="flex-end" width="100%">
                 <Button

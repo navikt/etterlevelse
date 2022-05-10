@@ -12,7 +12,7 @@ import {getMeldingByType, mapMeldingToFormValue} from '../api/MeldingApi'
 import {ObjectType} from '../components/admin/audit/AuditTypes'
 import {AuditRecentTable} from '../components/admin/audit/AuditRecentTable'
 import {ampli} from '../services/Amplitude'
-import EditOmEtterlevelse from "../components/varslinger/EditOmEtterlevelse";
+import EditOmEtterlevelse from '../components/varslinger/EditOmEtterlevelse'
 
 type Section = 'utsendtMelding' | MeldingType.SYSTEM | MeldingType.FORSIDE
 
@@ -56,8 +56,8 @@ export const VarselPage = () => {
   )
 }
 
-const getMeldingType = (tabName:string) =>{
-  switch (tabName){
+const getMeldingType = (tabName: string) => {
+  switch (tabName) {
     case 'FORSIDE':
       return MeldingType.FORSIDE
     case 'OM_ETTERLEVELSE':

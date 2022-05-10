@@ -149,7 +149,9 @@ export const SpørsmålOgSvarLogPage = () => {
                     {t.tidForSvar ? (
                       moment(t.tidForSpørsmål).format('lll')
                     ) : (
-                      <ParagraphMedium $style={{ fontSize: '16px', lineHeight: '22px', marginTop: '0px', marginBottom: '0px', color: ettlevColors.red600 }}>Ikke besvart</ParagraphMedium>
+                      <ParagraphMedium $style={{ fontSize: '16px', lineHeight: '22px', marginTop: '0px', marginBottom: '0px', color: ettlevColors.red600 }}>
+                        Ikke besvart
+                      </ParagraphMedium>
                     )}
                   </Cell>
                 </Row>
