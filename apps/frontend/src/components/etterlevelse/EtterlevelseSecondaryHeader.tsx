@@ -117,6 +117,7 @@ export const EtterlevelseSecondaryHeader = ({ tab, setTab, setNavigatePath, beha
               fontWeight: 600,
               lineHeight: '22px',
               color: ettlevColors.green600,
+              textUnderlineOffset:'2px',
               ':hover': { backgroundColor: 'transparent', textDecoration: 'underline 3px' },
             }}
             kind={'tertiary'}

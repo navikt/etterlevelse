@@ -16,7 +16,7 @@ type SecondaryHeaderProps = {
   temaData: TemaCode | undefined
   lovListe: LovCode[]
 }
-export const SecondaryHeader = ({ behandling, temaData, lovListe }: SecondaryHeaderProps) => {
+export const SecondaryHeader = ({behandling, temaData, lovListe}: SecondaryHeaderProps) => {
   const [isTemaModalOpen, setIsTemaModalOpen] = useState<boolean>(false)
 
   const navigate = useNavigate()
@@ -58,21 +58,22 @@ export const SecondaryHeader = ({ behandling, temaData, lovListe }: SecondaryHea
 
       <Block marginTop="0px" marginBottom="56px" display="flex" width={'100%'} alignItems="center" justifyContent="center">
         <Block display="flex" flex="1">
-          <img src={angleIcon} alt="" />{' '}
-          <LabelSmall marginLeft="12px" $style={{ fontSize: '24px', fontWeight: 900, lineHeight: '32px', color: ettlevColors.green600, whiteSpace: 'nowrap' }}>
+          <img src={angleIcon} alt=""/>{' '}
+          <LabelSmall marginLeft="12px" $style={{fontSize: '24px', fontWeight: 900, lineHeight: '32px', color: ettlevColors.green600, whiteSpace: 'nowrap'}}>
             {temaData?.shortName}
           </LabelSmall>
         </Block>
         <Block display="flex" justifyContent="flex-end" width="100%">
           <Button
-            startEnhancer={<img src={page2Icon} alt="Om personvern og ansvarlig for tema" />}
+            startEnhancer={<img src={page2Icon} alt="Om personvern og ansvarlig for tema"/>}
             size="compact"
             $style={{
               fontSize: '18px',
               fontWeight: 600,
               lineHeight: '22px',
               color: ettlevColors.green600,
-              ':hover': { backgroundColor: 'transparent', textDecoration: 'underline 3px' },
+              textUnderlineOffset: '2px',
+              ':hover': {backgroundColor: 'transparent', textDecoration: 'underline 3px'},
             }}
             kind={'tertiary'}
             onClick={() => setIsTemaModalOpen(true)}
@@ -111,7 +112,8 @@ export const SecondaryHeader = ({ behandling, temaData, lovListe }: SecondaryHea
               </HeadingXXLarge>
             </Block>
             <Block marginBottom="55px" marginTop="40px" paddingLeft={responsivePaddingExtraLarge} paddingRight={responsivePaddingExtraLarge}>
-              <Block>{getTemaMainHeader(temaData, lovListe, true, () => {}, true, true)}</Block>
+              <Block>{getTemaMainHeader(temaData, lovListe, true, () => {
+              }, true, true)}</Block>
               <Block display="flex" justifyContent="flex-end" width="100%" marginTop="38px">
                 <Button onClick={() => setIsTemaModalOpen(false)}>Lukk visning</Button>
               </Block>
