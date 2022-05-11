@@ -9,6 +9,8 @@ import { ProgressBar, SIZE } from 'baseui/progress-bar'
 import React from 'react'
 import { HeaderContent } from './HeaderContent'
 import { isFerdigUtfylt } from '../../pages/BehandlingerTemaPageV2'
+import moment from 'moment'
+import { getNumberOfDaysBetween } from '../../util/checkAge'
 
 type TemaCardBehandlingProps = {
   tema: TemaCode
@@ -17,6 +19,7 @@ type TemaCardBehandlingProps = {
   irrelevant?: boolean
 }
 export const TemaCardBehandling = (props: TemaCardBehandlingProps) => {
+  const today = new Date()
   const { tema, stats, behandling, irrelevant } = props
   const lover = codelist.getCodesForTema(tema.code)
   const lovcodes = lover.map((c) => c.code)
@@ -30,8 +33,11 @@ export const TemaCardBehandling = (props: TemaCardBehandlingProps) => {
   let underArbeid = 0
   let tilUtfylling = 0
 
+
   krav.forEach((k) => {
-    if (k.etterlevelser.length === 0 && k.kravVersjon === 1) {
+    const kravCreatedDate = moment(k.changeStamp.createdDate).toDate()
+    const kravAge = getNumberOfDaysBetween(kravCreatedDate, today)
+    if (k.etterlevelser.length === 0 && k.kravVersjon === 1 && kravAge < 30) {
       nyttKravCounter += 1
     }
     if (k.etterlevelser.length === 0 && k.kravVersjon > 1 && krav.filter((kl) => kl.kravNummer === k.kravNummer && kl.etterlevelser.length > 0).length > 0) {

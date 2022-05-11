@@ -287,6 +287,11 @@ export const statsQuery = gql`
                 shortName
               }
             }
+            changeStamp {
+              lastModifiedBy
+              lastModifiedDate
+              createdDate
+            }
           }
           ikkeFyltKrav {
             kravNummer
@@ -301,6 +306,11 @@ export const statsQuery = gql`
                 code
                 shortName
               }
+            }
+            changeStamp {
+              lastModifiedBy
+              lastModifiedDate
+              createdDate
             }
           }
           irrelevantKrav {
@@ -317,6 +327,11 @@ export const statsQuery = gql`
                 shortName
               }
             }
+            changeStamp {
+              lastModifiedBy
+              lastModifiedDate
+              createdDate
+            }
           }
           lovStats {
             lovCode {
@@ -329,6 +344,11 @@ export const statsQuery = gql`
               kravVersjon
               status
               navn
+              changeStamp {
+                lastModifiedBy
+                lastModifiedDate
+                createdDate
+              }
             }
             ikkeFyltKrav {
               id
@@ -336,6 +356,11 @@ export const statsQuery = gql`
               kravVersjon
               status
               navn
+              changeStamp {
+                lastModifiedBy
+                lastModifiedDate
+                createdDate
+              }
             }
           }
         }
