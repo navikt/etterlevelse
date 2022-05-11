@@ -1,12 +1,12 @@
-import {Block} from 'baseui/block'
-import {useEffect, useState} from 'react'
-import {getKravByKravNumberAndVersion} from '../../api/KravApi'
-import {Etterlevelse, Krav} from '../../constants'
+import { Block } from 'baseui/block'
+import { useEffect, useState } from 'react'
+import { getKravByKravNumberAndVersion } from '../../api/KravApi'
+import { Etterlevelse, Krav } from '../../constants'
 
 import Button from '../common/Button'
-import {EtterlevelseModal} from '../krav/Etterlevelser'
+import { EtterlevelseModal } from '../krav/Etterlevelser'
 
-export const EtterlevelseCard = ({etterlevelse}: { etterlevelse: Etterlevelse }) => {
+export const EtterlevelseCard = ({ etterlevelse }: { etterlevelse: Etterlevelse }) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [kravData, setKravData] = useState<Krav>()
 
@@ -21,15 +21,11 @@ export const EtterlevelseCard = ({etterlevelse}: { etterlevelse: Etterlevelse })
 
   return (
     <Block width="100%">
-      <Button
-        type="button"
-        kind={'underline-hover'}
-        onClick={() => setIsModalOpen(true)}
-      >
+      <Button type="button" kind={'underline-hover'} onClick={() => setIsModalOpen(true)}>
         Se dokumentasjon på forrige versjon
       </Button>
 
-      {kravData && <EtterlevelseModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} etterlevelse={etterlevelse} kravData={kravData}/>}
+      {kravData && <EtterlevelseModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} etterlevelse={etterlevelse} kravData={kravData} />}
     </Block>
   )
 }

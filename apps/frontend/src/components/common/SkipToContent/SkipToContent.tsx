@@ -1,8 +1,8 @@
-import {Block, BlockProps} from 'baseui/block'
-import {LabelSmall} from 'baseui/typography'
+import { Block, BlockProps } from 'baseui/block'
+import { LabelSmall } from 'baseui/typography'
 import React from 'react'
-import {$StyleProp} from 'styletron-react'
-import {ettlevColors} from '../../../util/theme'
+import { $StyleProp } from 'styletron-react'
+import { ettlevColors } from '../../../util/theme'
 import CustomizedLink from '../CustomizedLink'
 import './SkipToContent.css'
 

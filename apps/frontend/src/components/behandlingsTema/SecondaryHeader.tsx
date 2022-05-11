@@ -1,22 +1,22 @@
-import {Block} from 'baseui/block'
+import { Block } from 'baseui/block'
 import Button from '../common/Button'
-import {borderRadius, marginAll, paddingAll} from '../common/Style'
-import {HeadingXXLarge, LabelSmall} from 'baseui/typography'
-import {ettlevColors, maxPageWidth, responsivePaddingExtraLarge} from '../../util/theme'
-import {angleIcon, page2Icon} from '../Images'
+import { borderRadius, marginAll, paddingAll } from '../common/Style'
+import { HeadingXXLarge, LabelSmall } from 'baseui/typography'
+import { ettlevColors, maxPageWidth, responsivePaddingExtraLarge } from '../../util/theme'
+import { angleIcon, page2Icon } from '../Images'
 import CustomizedModal from '../common/CustomizedModal'
-import {getTemaMainHeader} from '../../pages/TemaPage'
-import React, {useState} from 'react'
-import {useNavigate} from 'react-router-dom'
-import {Behandling} from '../../constants'
-import {LovCode, TemaCode} from '../../services/Codelist'
+import { getTemaMainHeader } from '../../pages/TemaPage'
+import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { Behandling } from '../../constants'
+import { LovCode, TemaCode } from '../../services/Codelist'
 
 type SecondaryHeaderProps = {
   behandling: Behandling | undefined
   temaData: TemaCode | undefined
   lovListe: LovCode[]
 }
-export const SecondaryHeader = ({behandling, temaData, lovListe}: SecondaryHeaderProps) => {
+export const SecondaryHeader = ({ behandling, temaData, lovListe }: SecondaryHeaderProps) => {
   const [isTemaModalOpen, setIsTemaModalOpen] = useState<boolean>(false)
 
   const navigate = useNavigate()
@@ -58,14 +58,14 @@ export const SecondaryHeader = ({behandling, temaData, lovListe}: SecondaryHeade
 
       <Block marginTop="0px" marginBottom="56px" display="flex" width={'100%'} alignItems="center" justifyContent="center">
         <Block display="flex" flex="1">
-          <img src={angleIcon} alt=""/>{' '}
-          <LabelSmall marginLeft="12px" $style={{fontSize: '24px', fontWeight: 900, lineHeight: '32px', color: ettlevColors.green600, whiteSpace: 'nowrap'}}>
+          <img src={angleIcon} alt="" />{' '}
+          <LabelSmall marginLeft="12px" $style={{ fontSize: '24px', fontWeight: 900, lineHeight: '32px', color: ettlevColors.green600, whiteSpace: 'nowrap' }}>
             {temaData?.shortName}
           </LabelSmall>
         </Block>
         <Block display="flex" justifyContent="flex-end" width="100%">
           <Button
-            startEnhancer={<img src={page2Icon} alt="Om personvern og ansvarlig for tema"/>}
+            startEnhancer={<img src={page2Icon} alt="Om personvern og ansvarlig for tema" />}
             size="compact"
             $style={{
               fontSize: '18px',
@@ -73,7 +73,7 @@ export const SecondaryHeader = ({behandling, temaData, lovListe}: SecondaryHeade
               lineHeight: '22px',
               color: ettlevColors.green600,
               textUnderlineOffset: '2px',
-              ':hover': {backgroundColor: 'transparent', textDecoration: 'underline 3px'},
+              ':hover': { backgroundColor: 'transparent', textDecoration: 'underline 3px' },
             }}
             kind={'tertiary'}
             onClick={() => setIsTemaModalOpen(true)}
@@ -112,8 +112,7 @@ export const SecondaryHeader = ({behandling, temaData, lovListe}: SecondaryHeade
               </HeadingXXLarge>
             </Block>
             <Block marginBottom="55px" marginTop="40px" paddingLeft={responsivePaddingExtraLarge} paddingRight={responsivePaddingExtraLarge}>
-              <Block>{getTemaMainHeader(temaData, lovListe, true, () => {
-              }, true, true)}</Block>
+              <Block>{getTemaMainHeader(temaData, lovListe, true, () => {}, true, true)}</Block>
               <Block display="flex" justifyContent="flex-end" width="100%" marginTop="38px">
                 <Button onClick={() => setIsTemaModalOpen(false)}>Lukk visning</Button>
               </Block>

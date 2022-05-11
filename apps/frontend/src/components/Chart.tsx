@@ -1,13 +1,13 @@
-import React, {useReducer, useState} from 'react'
-import {Block} from 'baseui/block'
-import {LabelLarge} from 'baseui/typography'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faChartBar, faChartPie, faCircle} from '@fortawesome/free-solid-svg-icons'
-import {Card} from 'baseui/card'
+import React, { useReducer, useState } from 'react'
+import { Block } from 'baseui/block'
+import { LabelLarge } from 'baseui/typography'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faChartBar, faChartPie, faCircle } from '@fortawesome/free-solid-svg-icons'
+import { Card } from 'baseui/card'
 import * as _ from 'lodash'
-import {StatefulTooltip} from 'baseui/tooltip'
-import {cardShadow, marginAll} from './common/Style'
-import {theme} from '../util'
+import { StatefulTooltip } from 'baseui/tooltip'
+import { cardShadow, marginAll } from './common/Style'
+import { theme } from '../util'
 
 const cursor = { cursor: 'pointer' }
 

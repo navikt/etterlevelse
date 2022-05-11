@@ -1,11 +1,11 @@
-import {Suksesskriterie} from '../../constants'
-import {Block} from 'baseui/block'
-import {Card} from 'baseui/card'
-import {theme} from '../../util'
-import {HeadingMedium, HeadingXLarge} from 'baseui/typography'
-import {Markdown} from '../common/Markdown'
-import {borderRadius, borderWidth, marginAll} from '../common/Style'
-import {ettlevColors} from '../../util/theme'
+import { Suksesskriterie } from '../../constants'
+import { Block } from 'baseui/block'
+import { Card } from 'baseui/card'
+import { theme } from '../../util'
+import { HeadingMedium, HeadingXLarge } from 'baseui/typography'
+import { Markdown } from '../common/Markdown'
+import { borderRadius, borderWidth, marginAll } from '../common/Style'
+import { ettlevColors } from '../../util/theme'
 
 export const SuksesskriterieCard = (props: { suksesskriterie: Suksesskriterie; num: number; totalt: number }) => {
   const { suksesskriterie, num, totalt } = props

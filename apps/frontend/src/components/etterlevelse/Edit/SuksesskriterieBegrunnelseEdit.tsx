@@ -1,21 +1,21 @@
-import {Block} from 'baseui/block'
-import {FormControl} from 'baseui/form-control'
-import {HeadingLarge, LabelSmall, ParagraphMedium} from 'baseui/typography'
-import {FieldArray, FieldArrayRenderProps} from 'formik'
+import { Block } from 'baseui/block'
+import { FormControl } from 'baseui/form-control'
+import { HeadingLarge, LabelSmall, ParagraphMedium } from 'baseui/typography'
+import { FieldArray, FieldArrayRenderProps } from 'formik'
 import React from 'react'
-import {EtterlevelseStatus, Suksesskriterie, SuksesskriterieBegrunnelse} from '../../../constants'
-import {useDebouncedState} from '../../../util/hooks'
-import {ettlevColors, theme} from '../../../util/theme'
-import {CustomizedAccordion, CustomizedPanel} from '../../common/CustomizedAccordion'
-import {FieldWrapper} from '../../common/Inputs'
+import { EtterlevelseStatus, Suksesskriterie, SuksesskriterieBegrunnelse } from '../../../constants'
+import { useDebouncedState } from '../../../util/hooks'
+import { ettlevColors, theme } from '../../../util/theme'
+import { CustomizedAccordion, CustomizedPanel } from '../../common/CustomizedAccordion'
+import { FieldWrapper } from '../../common/Inputs'
 import TextEditor from '../../common/TextEditor/TextEditor'
-import {Error} from '../../common/ModalSchema'
+import { Error } from '../../common/ModalSchema'
 import LabelWithToolTip from '../../common/LabelWithTooltip'
-import {borderColor, borderRadius, borderStyle, borderWidth} from '../../common/Style'
-import {LabelAboveContent} from '../../common/PropertyLabel'
-import {buttonContentStyle} from '../../common/Button'
-import {Markdown} from '../../common/Markdown'
-import {ALIGN, Radio, RadioGroup, RadioGroupOverrides, RadioOverrides} from 'baseui/radio'
+import { borderColor, borderRadius, borderStyle, borderWidth } from '../../common/Style'
+import { LabelAboveContent } from '../../common/PropertyLabel'
+import { buttonContentStyle } from '../../common/Button'
+import { Markdown } from '../../common/Markdown'
+import { ALIGN, Radio, RadioGroup, RadioGroupOverrides, RadioOverrides } from 'baseui/radio'
 
 const paddingLeft = '30px'
 
@@ -69,15 +69,7 @@ export const getSuksesskriterieBegrunnelse = (suksesskriterieBegrunnelser: Sukse
   }
 }
 
-export const SuksesskriterierBegrunnelseEdit = ({
-  suksesskriterie,
-  disableEdit,
-  viewMode,
-}: {
-  suksesskriterie: Suksesskriterie[]
-  disableEdit: boolean
-  viewMode: boolean
-}) => {
+export const SuksesskriterierBegrunnelseEdit = ({ suksesskriterie, disableEdit, viewMode }: { suksesskriterie: Suksesskriterie[]; disableEdit: boolean; viewMode: boolean }) => {
   return (
     <FieldWrapper>
       <FieldArray name={'suksesskriterieBegrunnelser'}>
@@ -212,7 +204,7 @@ const KriterieBegrunnelse = ({
             Suksesskriterie {index + 1} av {totalSuksesskriterie}
           </ParagraphMedium>
         </Block>
-        {viewMode === true  && (
+        {viewMode === true && (
           <Block alignSelf="flex-end">
             <ParagraphMedium
               $style={{

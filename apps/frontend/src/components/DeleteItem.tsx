@@ -1,8 +1,8 @@
 import Button from './common/Button'
-import React, {useState} from 'react'
-import {Modal, ModalBody, ModalFooter, ModalHeader} from 'baseui/modal'
-import {useNavigate} from 'react-router-dom'
-import {deleteIcon} from './Images'
+import React, { useState } from 'react'
+import { Modal, ModalBody, ModalFooter, ModalHeader } from 'baseui/modal'
+import { useNavigate } from 'react-router-dom'
+import { deleteIcon } from './Images'
 
 export const DeleteItem = (props: { fun: () => Promise<any>; redirect: string }) => {
   const [open, setOpen] = useState(false)

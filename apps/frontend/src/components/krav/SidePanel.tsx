@@ -1,9 +1,9 @@
-import {Block} from 'baseui/block'
-import {LabelSmall} from 'baseui/typography'
-import {useState} from 'react'
-import {Chevron} from '../common/PanelLink'
+import { Block } from 'baseui/block'
+import { LabelSmall } from 'baseui/typography'
+import { useState } from 'react'
+import { Chevron } from '../common/PanelLink'
 import RouteLink from '../common/RouteLink'
-import {arrowRightIcon} from '../Images'
+import { arrowRightIcon } from '../Images'
 
 export const SidePanel = () => {
   const [hover, setHover] = useState<boolean>(false)
