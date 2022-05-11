@@ -91,7 +91,7 @@ export const EditEtterlevelseV2 = ({
   const [isAlertUnsavedModalOpen, setIsAlertUnsavedModalOpen] = useState<boolean>(false)
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       behandlingId &&
         kravId.kravNummer &&
         getEtterlevelseMetadataByBehandlingsIdAndKravNummerAndKravVersion(behandlingId, kravId.kravNummer, kravId.kravVersjon).then((resp) => {
@@ -125,15 +125,15 @@ export const EditEtterlevelseV2 = ({
       suksesskriterieBegrunnelser:
         etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT || etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT
           ? [
-              ...etterlevelse.suksesskriterieBegrunnelser.map((s) => {
-                return {
-                  ...s,
-                  oppfylt: false,
-                  ikkeRelevant: true,
-                  underArbeid: false,
-                }
-              }),
-            ]
+            ...etterlevelse.suksesskriterieBegrunnelser.map((s) => {
+              return {
+                ...s,
+                oppfylt: false,
+                ikkeRelevant: true,
+                underArbeid: false,
+              }
+            }),
+          ]
           : [...etterlevelse.suksesskriterieBegrunnelser],
     }
 
@@ -251,26 +251,29 @@ export const EditEtterlevelseV2 = ({
                     marginTop: '16px',
                   }}
                 >
-                  <img
-                    src={warningAlert}
-                    alt=""
-                    width="24px"
-                    height="24px"
-                    style={{
-                      marginRight: '5px',
-                    }}
-                  />
-                  <ParagraphMedium
-                    $style={{
-                      lineHeight: '22px',
-                      marginTop: '0px',
-                      marginBottom: '0px',
-                      fontWeight: 600,
-                      color: ettlevColors.white,
-                    }}
-                  >
-                    Dette er en ny versjon.
-                  </ParagraphMedium>
+                 {etterlevelse.id === '' &&
+                  <>
+                    <img
+                      src={warningAlert}
+                      alt=""
+                      width="24px"
+                      height="24px"
+                      style={{
+                        marginRight: '5px',
+                      }}
+                    />
+                    <ParagraphMedium
+                      $style={{
+                        lineHeight: '22px',
+                        marginTop: '0px',
+                        marginBottom: '0px',
+                        fontWeight: 600,
+                        color: ettlevColors.white,
+                      }}
+                    >
+                      Dette er en ny versjon.
+                    </ParagraphMedium>
+                  </>}
                   {krav.versjonEndringer && (
                     <Button
                       type="button"
