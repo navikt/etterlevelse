@@ -2,6 +2,7 @@ import { Block } from 'baseui/block'
 import { useEffect, useState } from 'react'
 import { getKravByKravNumberAndVersion } from '../../api/KravApi'
 import { Etterlevelse, Krav } from '../../constants'
+import { ettlevColors } from '../../util/theme'
 
 import Button from '../common/Button'
 import { EtterlevelseModal } from '../krav/Etterlevelser'
@@ -11,7 +12,7 @@ export const EtterlevelseCard = ({ etterlevelse }: { etterlevelse: Etterlevelse 
   const [kravData, setKravData] = useState<Krav>()
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       const krav = await getKravByKravNumberAndVersion(etterlevelse.kravNummer, etterlevelse.kravVersjon)
       if (krav) {
         setKravData(krav)
@@ -21,7 +22,19 @@ export const EtterlevelseCard = ({ etterlevelse }: { etterlevelse: Etterlevelse 
 
   return (
     <Block width="100%">
-      <Button type="button" kind={'underline-hover'} onClick={() => setIsModalOpen(true)}>
+      <Button
+        type="button"
+        kind={'underline-hover'}
+        onClick={() => setIsModalOpen(true)}
+        $style={{
+          textDecoration: 'underline 1px',
+          textUnderlineOffset: '1px',
+          fontSize: '18px',
+          ':hover': {
+            color: ettlevColors.green400,
+          }
+        }}
+      >
         Se dokumentasjon på forrige versjon
       </Button>
 
