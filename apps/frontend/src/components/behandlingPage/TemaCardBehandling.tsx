@@ -15,15 +15,17 @@ import { getNumberOfDaysBetween } from '../../util/checkAge'
 type TemaCardBehandlingProps = {
   tema: TemaCode
   stats: any[]
+  utgaattStats: any[]
   behandling: Behandling
   irrelevant?: boolean
 }
 export const TemaCardBehandling = (props: TemaCardBehandlingProps) => {
   const today = new Date()
-  const { tema, stats, behandling, irrelevant } = props
+  const { tema, stats, behandling, irrelevant, utgaattStats } = props
   const lover = codelist.getCodesForTema(tema.code)
   const lovcodes = lover.map((c) => c.code)
   const krav = stats.filter((k) => k.regelverk.map((r: any) => r.lov.code).some((r: any) => lovcodes.includes(r)))
+  const utgaattKrav = utgaattStats.filter((k) => k.regelverk.map((r: any) => r.lov.code).some((r: any) => lovcodes.includes(r)))
   const { data, loading } = useKravCounter({ lover: lover.map((c) => c.code) }, { skip: !lover.length })
 
   let nyttKravCounter = 0
@@ -40,7 +42,7 @@ export const TemaCardBehandling = (props: TemaCardBehandlingProps) => {
     if (k.etterlevelser.length === 0 && k.kravVersjon === 1 && kravAge < 30) {
       nyttKravCounter += 1
     }
-    if (k.etterlevelser.length === 0 && k.kravVersjon > 1 && krav.filter((kl) => kl.kravNummer === k.kravNummer && kl.etterlevelser.length > 0).length > 0) {
+    if (k.etterlevelser.length === 0 && k.kravVersjon > 1 && utgaattKrav.filter((kl) => kl.kravNummer === k.kravNummer && kl.etterlevelser.length > 0).length > 0 && kravAge < 30) {
       nyttKravVersjonCounter += 1
     }
     if (k.etterlevelser.length && isFerdigUtfylt(k.etterlevelser[0].status)) {

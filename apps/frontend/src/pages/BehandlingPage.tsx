@@ -89,6 +89,7 @@ export const BehandlingPage = () => {
 
   const [relevanteStats, setRelevanteStats] = useState<any[]>([])
   const [irrelevanteStats, setIrrelevanteStats] = useState<any[]>([])
+  const [utgaattStats,setUtgaattStats] = useState<any[]>([])
 
   // useEffect(() => {
   //   if(!user.isLoggedIn()) {
@@ -99,24 +100,29 @@ export const BehandlingPage = () => {
   const filterData = (
     unfilteredData:
       | {
-          behandling: PageResponse<{
-            stats: BehandlingStats
-          }>
-        }
+        behandling: PageResponse<{
+          stats: BehandlingStats
+        }>
+      }
       | undefined,
   ) => {
     const relevanteStatusListe: any[] = []
     const irrelevanteStatusListe: any[] = []
+    const utgaattStatusListe: any[] = []
 
     unfilteredData?.behandling.content.forEach(({ stats }) => {
       stats.fyltKrav.forEach((k) => {
         if (k.regelverk.length && k.status === KravStatus.AKTIV) {
           relevanteStatusListe.push({ ...k, etterlevelser: k.etterlevelser.filter((e) => e.behandlingId === behandling?.id) })
+        } else if (k.regelverk.length && k.status === KravStatus.UTGAATT) {
+          utgaattStatusListe.push({ ...k, etterlevelser: k.etterlevelser.filter((e) => e.behandlingId === behandling?.id) })
         }
       })
       stats.ikkeFyltKrav.forEach((k) => {
         if (k.regelverk.length && k.status === KravStatus.AKTIV) {
           relevanteStatusListe.push({ ...k, etterlevelser: k.etterlevelser.filter((e) => e.behandlingId === behandling?.id) })
+        } else if (k.regelverk.length && k.status === KravStatus.UTGAATT) {
+          utgaattStatusListe.push({ ...k, etterlevelser: k.etterlevelser.filter((e) => e.behandlingId === behandling?.id) })
         }
       })
     })
@@ -130,38 +136,28 @@ export const BehandlingPage = () => {
     })
 
     relevanteStatusListe.sort((a, b) => {
-      if (a.kravNummer === b.kravNummer) {
-        return a.kravVersjon - b.kravVersjon
-      }
       return a.kravNummer - b.kravNummer
     })
 
     irrelevanteStatusListe.sort((a, b) => {
+      return a.kravNummer - b.kravNummer
+    })
+
+    utgaattStatusListe.sort((a, b) => {
       if (a.kravNummer === b.kravNummer) {
         return a.kravVersjon - b.kravVersjon
       }
       return a.kravNummer - b.kravNummer
     })
 
-    // for (let index = relevanteStatusListe.length - 1; index > 0; index--) {
-    //   if (relevanteStatusListe[index].kravNummer === relevanteStatusListe[index - 1].kravNummer) {
-    //     relevanteStatusListe.splice(index - 1, 1)
-    //   }
-    // }
-
-    for (let index = irrelevanteStatusListe.length - 1; index > 0; index--) {
-      if (irrelevanteStatusListe[index].kravNummer === irrelevanteStatusListe[index - 1].kravNummer) {
-        irrelevanteStatusListe.splice(index - 1, 1)
-      }
-    }
-
-    return [relevanteStatusListe, irrelevanteStatusListe]
+    return [relevanteStatusListe, irrelevanteStatusListe, utgaattStatusListe]
   }
 
   React.useEffect(() => {
-    const [relevanteStatusListe, irrelevanteStatusListe] = filterData(relevanteData)
+    const [relevanteStatusListe, irrelevanteStatusListe, utgaattStatusListe] = filterData(relevanteData)
     setRelevanteStats(relevanteStatusListe)
     setIrrelevanteStats(irrelevanteStatusListe)
+    setUtgaattStats(utgaattStatusListe)
   }, [relevanteData])
 
   React.useEffect(() => {
@@ -307,7 +303,7 @@ export const BehandlingPage = () => {
         {getRelevansContent(behandling)}
         <Block display="flex" width="100%" justifyContent="space-between" flexWrap marginTop={theme.sizing.scale550}>
           {temaListe.map((tema) => (
-            <TemaCardBehandling tema={tema} stats={relevanteStats} behandling={behandling} key={`${tema.shortName}_panel`} />
+            <TemaCardBehandling tema={tema} stats={relevanteStats} utgaattStats={utgaattStats} behandling={behandling} key={`${tema.shortName}_panel`} />
           ))}
         </Block>
 

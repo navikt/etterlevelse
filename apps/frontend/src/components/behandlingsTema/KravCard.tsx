@@ -110,7 +110,7 @@ export const KravCard = (props: { krav: KravEtterlevelseData; noStatus?: boolean
                 {!props.noVarsling &&
                   props.krav.etterlevelseStatus === undefined &&
                   nyVersionFlag &&
-                  props.kravFilter === KRAV_FILTER_TYPE.RELEVANTE_KRAV &&
+                  props.kravFilter === KRAV_FILTER_TYPE.RELEVANTE_KRAV && kravAge < 30 &&
                   showWarningMessage('Ny version')}
               </Block>
               <LabelSmall $style={{ fontSize: '18px', fontWeight: 600, alignContent: 'flex-start', textAlign: 'left', textDecoration: hover ? 'underline' : 'none' }}>
