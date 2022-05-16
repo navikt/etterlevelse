@@ -66,6 +66,9 @@ export const BehandlingerTemaPageV2 = () => {
     fetchPolicy: 'no-cache',
   })
 
+  console.log(params.id)
+  console.log(lover.length)
+
   const { data: irrelevanteKraverGraphQLResponse, loading: irrelevanteKraverGraphQLLoading } = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
     variables: { ...variables, behandlingIrrevantKrav: true },
     skip: !params.id || !lover.length,
@@ -132,7 +135,7 @@ export const BehandlingerTemaPageV2 = () => {
         setRelevantKravData(kravListe)
       })
     })()
-  }, [allKravPriority])
+  }, [allKravPriority, relevanteKraverGraphQLResponse])
 
   useEffect(() => {
     ;(async () => {
@@ -162,7 +165,7 @@ export const BehandlingerTemaPageV2 = () => {
         ])
       })
     })()
-  }, [relevantKravData, allKravPriority])
+  }, [relevantKravData, allKravPriority, irrelevanteKraverGraphQLResponse])
 
   const breadcrumbPaths: breadcrumbPaths[] = [
     {

@@ -124,7 +124,7 @@ export const EtterlevelseEditFields = ({
                           <ParagraphMedium>{etterlevelse.statusBegrunnelse}</ParagraphMedium>
                         </>
                       )}
-                      <Block display={'flex'} justifyContent={'center'} width={'100%'} marginBottom={'16px'}>
+                      <Block display={'flex'} width={'100%'} marginBottom={'16px'}>
                         <LabelSmall minWidth={'fit-content'}>Hvilke suksesskriterier er oppfylt?</LabelSmall>
                         {tidligereEtterlevelser && tidligereEtterlevelser.length > 0 && (
                           <Block display="flex" width="100%" justifyContent="flex-end">
