@@ -282,9 +282,7 @@ export const EtterlevelseEditFields = ({
                               marginRight
                               disabled={isSubmitting || disableEdit}
                               onClick={() => {
-                                if (values.status === EtterlevelseStatus.IKKE_RELEVANT || values.status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) {
-                                  values.status = EtterlevelseStatus.IKKE_RELEVANT
-                                } else if (values.status === EtterlevelseStatus.FERDIG_DOKUMENTERT || !isOppfylesSenere) {
+                                if (values.status === EtterlevelseStatus.FERDIG_DOKUMENTERT || !isOppfylesSenere) {
                                   values.status = EtterlevelseStatus.UNDER_REDIGERING
                                 } else if (isOppfylesSenere) {
                                   values.status = EtterlevelseStatus.OPPFYLLES_SENERE
@@ -298,16 +296,12 @@ export const EtterlevelseEditFields = ({
                               disabled={disableEdit || isOppfylesSenere}
                               type="button"
                               onClick={() => {
-                                if (values.status === EtterlevelseStatus.IKKE_RELEVANT) {
-                                  values.status = EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT
-                                } else {
-                                  values.status = EtterlevelseStatus.FERDIG_DOKUMENTERT
-                                  values.suksesskriterieBegrunnelser.forEach((skb, index) => {
-                                    if (skb.begrunnelse === '' || skb.begrunnelse === undefined) {
-                                      setFieldError(`suksesskriterieBegrunnelser[${index}]`, 'Du må fylle ut dokumentasjonen')
-                                    }
-                                  })
-                                }
+                                values.status = EtterlevelseStatus.FERDIG_DOKUMENTERT
+                                values.suksesskriterieBegrunnelser.forEach((skb, index) => {
+                                  if (skb.begrunnelse === '' || skb.begrunnelse === undefined) {
+                                    setFieldError(`suksesskriterieBegrunnelser[${index}]`, 'Du må fylle ut dokumentasjonen')
+                                  }
+                                })
                                 submitForm()
                               }}
                             >

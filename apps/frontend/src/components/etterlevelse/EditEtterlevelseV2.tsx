@@ -122,19 +122,7 @@ export const EditEtterlevelseV2 = ({
     const mutatedEtterlevelse = {
       ...etterlevelse,
       fristForFerdigstillelse: etterlevelse.status !== EtterlevelseStatus.OPPFYLLES_SENERE ? '' : etterlevelse.fristForFerdigstillelse,
-      suksesskriterieBegrunnelser:
-        etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT || etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT
-          ? [
-            ...etterlevelse.suksesskriterieBegrunnelser.map((s) => {
-              return {
-                ...s,
-                oppfylt: false,
-                ikkeRelevant: true,
-                underArbeid: false,
-              }
-            }),
-          ]
-          : [...etterlevelse.suksesskriterieBegrunnelser],
+      suksesskriterieBegrunnelser: [...etterlevelse.suksesskriterieBegrunnelser],
     }
 
     if (etterlevelse.id) {
