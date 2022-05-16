@@ -17,7 +17,7 @@ export const FAQ = () => {
   const [melding, setMelding] = useState<Melding>()
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       setLoading(true)
       const response = await getMeldingByType(MeldingType.OM_ETTERLEVELSE)
       if (response.numberOfElements > 0) {
@@ -54,36 +54,41 @@ export const FAQ = () => {
           paddingLeft={responsivePaddingLarge}
           paddingRight={responsivePaddingLarge}
         >
-          <Block maxWidth="600px">
-            <HeadingXXLarge marginTop="54px" marginBottom="32px">
-              Om Støtte til etterlevelse
-            </HeadingXXLarge>
+          <Block>
+            <Block maxWidth="850px">
+              <HeadingXXLarge marginTop="54px" marginBottom="32px">
+                Om Støtte til etterlevelse
+              </HeadingXXLarge>
 
-            <ParagraphLarge marginTop="0px" $style={{ fontSize: '22px', color: ettlevColors.green800 }}>
-              {melding?.melding}
-            </ParagraphLarge>
-            <HeadingXLarge marginTop="56px" marginBottom="24px">
-              {melding?.secondaryTittel}
-            </HeadingXLarge>
-            <Markdown source={melding?.secondaryMelding} p1 fontSize="18px" />
+              <ParagraphLarge marginTop="0px" $style={{ fontSize: '22px', color: ettlevColors.green800 }}>
+                {melding?.melding}
+              </ParagraphLarge>
+            </Block>
 
-            {/*<ParagraphLarge $style={{ fontSize: '22px', color: ettlevColors.green800 }}>*/}
-            {/*  Siden er under arbeid, og vi tar gjerne imot innspill på Slack <strong>#etterlevelse.</strong>*/}
-            {/*</ParagraphLarge>*/}
-            {/*<ParagraphLarge $style={{ fontSize: '22px', color: ettlevColors.green800 }}>*/}
-            {/*  Inntil videre kan dere lese om{' '}*/}
-            {/*  <ExternalLink href={'https://navno.sharepoint.com/sites/fag-og-ytelser-informasjonsforvaltning/SitePages/Etterlevelseskrav-for-systemutvikling.aspx'}>*/}
-            {/*    Støtte til etterlevelse på Navet*/}
-            {/*  </ExternalLink>*/}
-            {/*  .*/}
-            {/*</ParagraphLarge>*/}
+            <Block maxWidth="600px">
+              <HeadingXLarge marginTop="56px" marginBottom="24px">
+                {melding?.secondaryTittel}
+              </HeadingXLarge>
+              <Markdown source={melding?.secondaryMelding} fontSize="18px" fontColor={ettlevColors.green800}/>
 
-            <Block marginTop="88px">
-              {user.isAdmin() && melding && (
-                <ParagraphSmall>
-                  Sist endret: {moment(melding.changeStamp.lastModifiedDate).format('ll')} av {melding.changeStamp.lastModifiedBy.split('-')[1]}
-                </ParagraphSmall>
-              )}
+              {/*<ParagraphLarge $style={{ fontSize: '22px', color: ettlevColors.green800 }}>*/}
+              {/*  Siden er under arbeid, og vi tar gjerne imot innspill på Slack <strong>#etterlevelse.</strong>*/}
+              {/*</ParagraphLarge>*/}
+              {/*<ParagraphLarge $style={{ fontSize: '22px', color: ettlevColors.green800 }}>*/}
+              {/*  Inntil videre kan dere lese om{' '}*/}
+              {/*  <ExternalLink href={'https://navno.sharepoint.com/sites/fag-og-ytelser-informasjonsforvaltning/SitePages/Etterlevelseskrav-for-systemutvikling.aspx'}>*/}
+              {/*    Støtte til etterlevelse på Navet*/}
+              {/*  </ExternalLink>*/}
+              {/*  .*/}
+              {/*</ParagraphLarge>*/}
+
+              <Block marginTop="88px">
+                {user.isAdmin() && melding && (
+                  <ParagraphSmall>
+                    Sist endret: {moment(melding.changeStamp.lastModifiedDate).format('ll')} av {melding.changeStamp.lastModifiedBy.split('-')[1]}
+                  </ParagraphSmall>
+                )}
+              </Block>
             </Block>
           </Block>
         </Block>

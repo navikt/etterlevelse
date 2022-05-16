@@ -55,7 +55,7 @@ export const Markdown = ({
       }
       return (
         <ParagraphMedium
-          $style={{ fontSize: fontSize ? fontSize : undefined }}
+          $style={{ fontSize: fontSize ? fontSize : undefined}}
           color={fontColor ? fontColor : ettlevColors.green800}
           marginTop={noMargin ? 0 : undefined}
           marginBottom={noMargin ? 0 : undefined}
@@ -113,14 +113,14 @@ export const Markdown = ({
       const { children } = liProps
       if (p1) {
         return (
-          <li style={{ fontSize: '21px' }}>
+          <li style={{ fontSize: '21px', lineHeight: '22px' }}>
             <ParagraphLarge $style={{ fontSize: fontSize ? fontSize : undefined }} color={fontColor ? fontColor : ettlevColors.green800} marginTop={0} marginBottom={0}>
               {children}
             </ParagraphLarge>
           </li>
         )
       } else {
-        return <li>{children}</li>
+        return <li style={{lineHeight: '22px', marginBottom: '8px' }}>{children}</li>
       }
     },
   }
