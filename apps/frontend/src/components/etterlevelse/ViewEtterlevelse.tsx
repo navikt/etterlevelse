@@ -17,6 +17,7 @@ import EditBegrunnelse from './Edit/EditBegrunnelse'
 import { borderColor, borderRadius, borderStyle, borderWidth, marginAll } from '../common/Style'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCheck, faCircle } from '@fortawesome/free-solid-svg-icons'
+import { CustomizedAccordion, CustomizedPanel } from '../common/CustomizedAccordion'
 
 const formatDate = (date?: string) => date && moment(date).format('ll')
 
@@ -245,7 +246,7 @@ export const ViewEtterlevelse = ({
                         SUKSESSKRITERIE {i + 1} AV {krav.suksesskriterier.length}
                       </LabelSmall>
                     </Block>
-                    {(etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT || suksessbeskrivelseBegrunnelse.begrunnelse) && (
+                    {(!suksessbeskrivelseBegrunnelse.behovForBegrunnelse || suksessbeskrivelseBegrunnelse.begrunnelse) && (
                       <Block display="flex" justifyContent="flex-end">
                         <ParagraphXSmall
                           $style={{
@@ -262,19 +263,56 @@ export const ViewEtterlevelse = ({
                       </Block>
                     )}
                   </Block>
-                  <LabelSmall $style={{ fontSize: '21px', lineHeight: '30px', marginTop: '16px', marginBottom: '48px' }}>{s.navn}</LabelSmall>
-                  {suksessbeskrivelseBegrunnelse.begrunnelse || etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT ? (
+                  <LabelSmall $style={{ fontSize: '21px', lineHeight: '30px', marginTop: '16px', marginBottom: '10px' }}>{s.navn}</LabelSmall>
+                  
+                  <CustomizedAccordion>
+                    <CustomizedPanel
+                      title={<LabelSmall $style={{ color: ettlevColors.green600 }}>Utfyllende om kriteriet</LabelSmall>}
+                      overrides={{
+                        Header: {
+                          style: {
+                            backgroundColor: ettlevColors.white,
+                            maxWidth: '210px',
+                            paddingLeft: '0px',
+                            ':hover': {
+                              boxShadow: 'none',
+                            },
+                          },
+                        },
+                        Content: {
+                          style: {
+                            backgroundColor: ettlevColors.white,
+                            borderBottomWidth: 'none',
+                            borderBottomStyle: 'none',
+                            borderBottomColor: 'none',
+                            paddingLeft: '0px',
+                          },
+                        },
+                        PanelContainer: {
+                          style: {
+                            ...borderStyle('hidden'),
+                            backgroundColor: ettlevColors.white,
+                          },
+                        },
+                      }}
+                    >
+                      <Markdown source={s.beskrivelse} fontSize="18px" maxWidth="650px" />
+                    </CustomizedPanel>
+                  </CustomizedAccordion>
+
+                  <Block width="100%" height="1px" backgroundColor={ettlevColors.grey100} marginTop="15px" marginBottom="23px" />
+
+                  {!suksessbeskrivelseBegrunnelse.behovForBegrunnelse || suksessbeskrivelseBegrunnelse.begrunnelse ? (
                     <Block>
-                      {(suksessbeskrivelseBegrunnelse.oppfylt || suksessbeskrivelseBegrunnelse.ikkeRelevant) && (
-                        <Block>
-                          <LabelSmall $style={{ lineHeight: '22px' }} marginTop="16px">
-                            {suksessbeskrivelseBegrunnelse.ikkeRelevant ? 'Hvordan er ikke kriteriet relevant?' : 'Hvordan er kriteriet oppfylt?'}
-                          </LabelSmall>
-                          <Block marginBottom={'48px'}>
-                            <Markdown source={suksessbeskrivelseBegrunnelse.begrunnelse} />
-                          </Block>
-                        </Block>
-                      )}
+                      <LabelSmall $style={{ lineHeight: '22px' }} marginTop="16px">
+                        {suksessbeskrivelseBegrunnelse.ikkeRelevant ? 'Hvorfor er ikke kriteriet relevant?' : 'Hvordan er kriteriet oppfylt?'}
+                      </LabelSmall>
+                      <Block marginBottom={'48px'}>
+                        {!suksessbeskrivelseBegrunnelse.behovForBegrunnelse && !suksessbeskrivelseBegrunnelse.begrunnelse ?
+                          <ParagraphMedium>Kriteriet har ikke behov for begrunnelse</ParagraphMedium> :
+                          <Markdown source={suksessbeskrivelseBegrunnelse.begrunnelse} />
+                        }
+                      </Block>
                     </Block>
                   ) : (
                     <Block marginBottom={'48px'}>
