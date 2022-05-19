@@ -115,14 +115,14 @@ export const EtterlevelseEditFields = ({
                   <Block>
                     <Block>
                       {(etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT || etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) && (
-                        <ParagraphMedium>Dette kravet er dokumentert som ikke relevant 20.05.2022, og senere blitt bortfiltrert</ParagraphMedium>
+                        <ParagraphMedium $style={{fontStyle: 'italic'}}>Dette kravet er dokumentert som ikke relevant 20.05.2022</ParagraphMedium>
                       )}
 
                       {(etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT || etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) && (
-                        <>
+                        <Block marginBottom="48px">
                           <LabelSmall $style={{ lineHeight: '32px' }}>Beskrivelse av hvorfor kraver er ikke relevant</LabelSmall>
                           <ParagraphMedium>{etterlevelse.statusBegrunnelse}</ParagraphMedium>
-                        </>
+                        </Block>
                       )}
                       <Block display={'flex'} width={'100%'} marginBottom={'16px'}>
                         <LabelSmall minWidth={'fit-content'}>Hvilke suksesskriterier er oppfylt?</LabelSmall>
@@ -386,14 +386,14 @@ export const EtterlevelseEditFields = ({
                   <Block>
                     <Block>
                       {(etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT || etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) && (
-                        <ParagraphMedium>Dette kravet er dokumentert som ikke relevant 20.05.2022, og senere blitt bortfiltrert</ParagraphMedium>
+                        <ParagraphMedium $style={{fontStyle: 'italic'}}>Dette kravet er dokumentert som ikke relevant 20.05.2022, og senere blitt bortfiltrert</ParagraphMedium>
                       )}
 
                       {(etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT || etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) && (
-                        <>
+                        <Block marginBottom="48px">
                           <LabelSmall $style={{ lineHeight: '32px' }}>Beskrivelse av hvorfor kraver er ikke relevant</LabelSmall>
                           <ParagraphMedium>{etterlevelse.statusBegrunnelse}</ParagraphMedium>
-                        </>
+                        </Block>
                       )}
 
                       <SuksesskriterierBegrunnelseEdit disableEdit={true} suksesskriterie={krav.suksesskriterier} viewMode={true} />
