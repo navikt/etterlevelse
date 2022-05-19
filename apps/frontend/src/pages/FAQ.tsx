@@ -55,7 +55,7 @@ export const FAQ = () => {
           paddingRight={responsivePaddingLarge}
         >
           <Block>
-            <Block maxWidth="850px">
+            <Block maxWidth="800px">
               <HeadingXXLarge marginTop="54px" marginBottom="32px">
                 Om Støtte til etterlevelse
               </HeadingXXLarge>
