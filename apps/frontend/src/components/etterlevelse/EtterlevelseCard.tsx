@@ -1,4 +1,5 @@
 import { Block } from 'baseui/block'
+import { ParagraphMedium } from 'baseui/typography'
 import { useEffect, useState } from 'react'
 import { getKravByKravNumberAndVersion } from '../../api/KravApi'
 import { Etterlevelse, Krav } from '../../constants'
@@ -29,13 +30,23 @@ export const EtterlevelseCard = ({ etterlevelse }: { etterlevelse: Etterlevelse 
         $style={{
           textDecoration: 'underline 1px',
           textUnderlineOffset: '1px',
-          fontSize: '18px',
           ':hover': {
             color: ettlevColors.green400,
           }
         }}
       >
-        Se dokumentasjon på forrige versjon
+        <ParagraphMedium
+          marginTop="0px"
+          marginBottom="0px"
+          $style={{
+            color: ettlevColors.green600,
+            ':hover': {
+              color: ettlevColors.green400,
+            }
+          }}
+        >
+          Se dokumentasjon på forrige versjon
+        </ParagraphMedium>
       </Button>
 
       {kravData && <EtterlevelseModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} etterlevelse={etterlevelse} kravData={kravData} />}
