@@ -92,7 +92,7 @@ const overrides: RecursivePartial<Theme> = {
     linkText: ettlevColors.black,
     // linkVisited is same as active
     linkVisited: ettlevColors.black,
-    linkHover: ettlevColors.green400,
+    linkHover: ettlevColors.green600,
     linkActive: ettlevColors.green400,
     // input fields & text area
     inputBorder: ettlevColors.grey200,
