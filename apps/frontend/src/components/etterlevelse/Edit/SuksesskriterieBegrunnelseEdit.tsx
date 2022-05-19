@@ -143,10 +143,8 @@ const KriterieBegrunnelse = ({
   //SKAL OPPDATERE SUKSESSKRITERIE STATUS I BACKEND TIL ET ENUM ISTEDET FOR 3 BOOLEAN VERDIER
   //SKAL FORENKLE LOGIKKEN ETTERHVERT
   const [oppfylt, setOppfylt] = React.useState(suksesskriterieBegrunnelse.oppfylt || false)
-  const [ikkerelevant, setIkkeRelevant] = React.useState(status === EtterlevelseStatus.IKKE_RELEVANT || status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT ? true : suksesskriterieBegrunnelse.ikkeRelevant || false)
-  const [underArbeid, setUnderArbeid] = React.useState(
-    status === EtterlevelseStatus.IKKE_RELEVANT || status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT ? false : !suksesskriterieBegrunnelse.oppfylt && !suksesskriterieBegrunnelse.ikkeRelevant ? true : suksesskriterieBegrunnelse.underArbeid || false,
-  )
+  const [ikkerelevant, setIkkeRelevant] = React.useState(suksesskriterieBegrunnelse.ikkeRelevant || false)
+  const [underArbeid, setUnderArbeid] = React.useState(!suksesskriterieBegrunnelse.oppfylt && !suksesskriterieBegrunnelse.ikkeRelevant ? true : suksesskriterieBegrunnelse.underArbeid || false)
 
   const [value, setValue] = React.useState('')
 
