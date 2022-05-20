@@ -26,7 +26,7 @@
         <graphql-spring-boot-starter.version>12.0.0</graphql-spring-boot-starter.version>
         <graphql.version>18.1</graphql.version>
 
-        <microsoft-graph.version>5.24.0</microsoft-graph.version>
+        <microsoft-graph.version>5.25.0</microsoft-graph.version>
         <msal4j.version>1.12.0</msal4j.version>
 
         <!-- transitive versions -->
