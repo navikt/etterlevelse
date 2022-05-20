@@ -1,7 +1,7 @@
-import { default as React, ReactNode } from 'react'
-import { Block, Display, Responsive } from 'baseui/block'
-import { theme } from '../../util'
-import { HeadingXLarge, LabelLarge } from 'baseui/typography'
+import {default as React, ReactNode} from 'react'
+import {Block, Display, Responsive} from 'baseui/block'
+import {theme} from '../../util'
+import {HeadingXLarge, LabelLarge} from 'baseui/typography'
 
 type DataTextProps = {
   label?: string
@@ -11,12 +11,13 @@ type DataTextProps = {
   compact?: boolean
   notFlexed?: boolean
   header?: boolean
+  labelWidth?: string
   display?: Responsive<Display>
 }
 
 const DataText = (props: DataTextProps) => {
   if (props.hideComponent) return null
-  const labelWidth = '12rem'
+  const labelWidth = props.labelWidth ? props.labelWidth : '12rem'
 
   const getLabel = () => {
     if (props.header) {
@@ -28,7 +29,7 @@ const DataText = (props: DataTextProps) => {
     } else {
       return (
         <Block minWidth={labelWidth} maxWidth={labelWidth} paddingRight={theme.sizing.scale400}>
-          <LabelLarge $style={{ lineHeight: theme.sizing.scale800 }}>{props.label}</LabelLarge>
+          <LabelLarge $style={{lineHeight: theme.sizing.scale800}}>{props.label}</LabelLarge>
         </Block>
       )
     }
