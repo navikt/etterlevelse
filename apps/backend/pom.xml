@@ -38,7 +38,7 @@
         <stax2-api.version>4.2.1</stax2-api.version>
 
         <!-- Test -->
-        <testcontainers.version>1.17.1</testcontainers.version>
+        <testcontainers.version>1.17.2</testcontainers.version>
         <wiremock.version>2.27.2</wiremock.version>
     </properties>
 
