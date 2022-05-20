@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.6.7</version>
+        <version>2.7.0</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>no.nav.data</groupId>
@@ -20,13 +20,13 @@
         <springdoc-openapi-ui.version>1.6.8</springdoc-openapi-ui.version>
         <hibernate-types-52.version>2.16.2</hibernate-types-52.version>
         <simpleclient.version>0.15.0</simpleclient.version>
-        <logstash-logback-encoder.version>7.1.1</logstash-logback-encoder.version>
+        <logstash-logback-encoder.version>7.2</logstash-logback-encoder.version>
         <shedlock.version>4.35.0</shedlock.version>
         <commons-collections4.version>4.4</commons-collections4.version>
         <graphql-spring-boot-starter.version>12.0.0</graphql-spring-boot-starter.version>
         <graphql.version>18.1</graphql.version>
 
-        <microsoft-graph.version>5.24.0</microsoft-graph.version>
+        <microsoft-graph.version>5.25.0</microsoft-graph.version>
         <msal4j.version>1.12.0</msal4j.version>
 
         <!-- transitive versions -->
@@ -38,7 +38,7 @@
         <stax2-api.version>4.2.1</stax2-api.version>
 
         <!-- Test -->
-        <testcontainers.version>1.17.1</testcontainers.version>
+        <testcontainers.version>1.17.2</testcontainers.version>
         <wiremock.version>2.27.2</wiremock.version>
     </properties>
 

@@ -235,7 +235,7 @@ const RelevansFilter = ({ onClickFilter, relevans, kravAntall }: { onClickFilter
 )
 
 export const cardWidth = ['98%', '98%', '98%', '98%', '48%', '32%']
-export const cardHeight = ['auto', 'auto', 'auto', 'auto', '250px', '250px']
+export const cardHeight = ['250px', '250px', '250px', '250px', '250px', '250px']
 export const cardMaxheight = '250px'
 
 const headerBgOverlap = '29px'
