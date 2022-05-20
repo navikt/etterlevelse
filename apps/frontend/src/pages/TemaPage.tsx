@@ -109,7 +109,7 @@ const TemaSide = ({ tema }: { tema: TemaCode }) => {
 
   useEffect(() => {
     if (data && data.krav && data.krav.content && data.krav.content.length > 0) {
-      ;(async () => {
+      ; (async () => {
         const allKravPriority = await getAllKravPriority()
         const kraver = _.cloneDeep(data.krav.content)
         kraver.map((k) => {
@@ -265,8 +265,8 @@ const TemaInfo = (props: { kravAntall: number; temaAntall: number }) => (
 )
 
 export const TemaCard = ({ tema, relevans, setNum }: { tema: TemaCode; relevans: string[]; setNum: (tema: string, num: number) => void }) => {
-  const lover = codelist.getCodesForTema(tema.code).map((c) => c.code)
-  const { data, loading } = useKravCounter({ lover: lover }, { skip: !lover.length })
+  const lover = codelist.getCodesForTema(tema.code)
+  const { data, loading } = useKravCounter({ lover: [...lover.map(l => l.code)] }, { skip: !lover.length })
   const krav = data?.krav.content.filter((k) => !relevans.length || k.relevansFor.map((r) => r.code).some((r) => relevans.includes(r))) || []
   useEffect(() => setNum(tema.code, krav.length), [krav.length])
 
@@ -307,6 +307,18 @@ export const TemaCard = ({ tema, relevans, setNum }: { tema: TemaCode; relevans:
       verticalMargin={theme.sizing.scale400}
       href={loading ? undefined : urlForObject(ListName.TEMA, tema.code)}
       tittel={tema.shortName + (loading ? ' - Laster...' : '')}
+      ComplimentaryContent={
+        <Block paddingLeft="28px" paddingBottom="16px">
+          <LabelSmall $style={{ fontSize: '16px' }}>Krav og veiledning til</LabelSmall>
+          {lover.map((l) => {
+            return (
+              <ParagraphXSmall $style={{fontSize: '16px', lineHeight: '24px'}} marginTop="0px" marginBottom="0px">
+                {l.shortName}
+              </ParagraphXSmall>
+            )
+          })}
+        </Block>
+      }
     >
       <Block display={'flex'} flexDirection={'column'}>
         <SimpleTag active>
