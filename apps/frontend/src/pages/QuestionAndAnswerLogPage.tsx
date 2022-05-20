@@ -1,23 +1,23 @@
 import {Block} from 'baseui/block'
-import {Pagination} from 'baseui/pagination'
 
 import {HeadingXXLarge, ParagraphMedium} from 'baseui/typography'
 import moment from 'moment'
+import * as React from 'react'
 import {ReactElement, useEffect, useState} from 'react'
 import {Helmet} from 'react-helmet'
-import {getKravPage, kravMapToFormVal} from '../api/KravApi'
+import {getAllKrav, kravMapToFormVal} from '../api/KravApi'
 import {getTilbakemeldingForKrav} from '../api/TilbakemeldingApi'
 import {PersonName} from '../components/common/PersonName'
 import RouteLink from '../components/common/RouteLink'
 import {Cell, Row, Table} from '../components/common/Table'
 import {tilbakeMeldingStatus} from '../components/krav/tilbakemelding/Tilbakemelding'
 import {Layout2} from '../components/scaffold/Page'
-import {emptyPage, Krav, PageResponse, Tilbakemelding} from '../constants'
+import {Krav, PageResponse, Tilbakemelding} from '../constants'
 import {ColumnCompares} from '../util/hooks'
-import {intl} from '../util/intl/intl'
 import {ettlevColors, maxPageWidth} from '../util/theme'
 import {codelist, ListName} from '../services/Codelist'
 import {ampli} from '../services/Amplitude'
+import {Spinner} from "../components/common/Spinner";
 
 type SporsmaalOgSvarKrav = {
   kravNavn: string
@@ -37,36 +37,27 @@ const kravSorting: ColumnCompares<KravMessage> = {
 }
 
 export const QuestionAndAnswerLogPage = () => {
-  const [tableContent, setTableContent] = useState<PageResponse<Krav>>(emptyPage)
+  const [tableContent, setTableContent] = useState<Krav[]>([])
   const [kravMessages, setKravMessages] = useState<KravMessage[]>([])
-  const [page, setPage] = useState(1)
+  const [isloading, setIsLoading] = useState<boolean>(false)
+  ampli.logEvent('sidevisning', {side: 'Log side for spørsmål og svar', sidetittel: 'Spørsmål og svar'})
 
-  ampli.logEvent('sidevisning', { side: 'Log side for spørsmål og svar', sidetittel: 'Spørsmål og svar' })
-
-  const handlePageChange = (nextPage: number) => {
-    if (nextPage < 1) {
-      return
-    }
-    if (nextPage > tableContent.pages) {
-      return
-    }
-    setPage(nextPage)
-  }
 
   useEffect(() => {
     ;(async () => {
-      const kraver = await getKravPage(page - 1, 20)
-      const mappedKraver = kraver.content.map((k) => kravMapToFormVal(k))
-      setTableContent({ ...kraver, content: mappedKraver })
+      const kraver = await getAllKrav()
+      const mappedKraver = kraver.map((k) => kravMapToFormVal(k))
+      setTableContent([...mappedKraver])
     })()
-  }, [page])
+  }, [])
 
   useEffect(() => {
+    setIsLoading(true)
     const kravMessages: KravMessage[] = []
     const tilbakeMeldinger: Tilbakemelding[] = []
 
     const getTilbakeMeldingerPromise: Promise<any>[] = []
-    tableContent.content.forEach((k) => {
+    tableContent.forEach((k) => {
       getTilbakeMeldingerPromise.push((async () => await getTilbakemeldingForKrav(k.kravNummer, k.kravVersjon))())
     })
 
@@ -79,15 +70,15 @@ export const QuestionAndAnswerLogPage = () => {
         })
 
         tilbakeMeldinger.forEach((t) => {
-          const kravNavn = tableContent.content.filter((k) => k.kravNummer === t.kravNummer && k.kravVersjon === t.kravVersjon)[0].navn
-          const kravTema = tableContent.content.filter((k) => k.kravNummer === t.kravNummer && k.kravVersjon === t.kravVersjon)[0].tema
-          const { ubesvart, sistMelding } = tilbakeMeldingStatus(t)
+          const kravNavn = tableContent.filter((k) => k.kravNummer === t.kravNummer && k.kravVersjon === t.kravVersjon)[0].navn
+          const kravTema = tableContent.filter((k) => k.kravNummer === t.kravNummer && k.kravVersjon === t.kravVersjon)[0].tema
+          const {ubesvart, sistMelding} = tilbakeMeldingStatus(t)
           kravMessages.push({
             ...t,
             kravNavn: kravNavn,
             tidForSporsmaal: t.meldinger[0].tid,
             tidForSvar: ubesvart ? undefined : sistMelding.tid,
-            melderNavn: <PersonName ident={t.melderIdent} />,
+            melderNavn: <PersonName ident={t.melderIdent}/>,
             tema: kravTema,
           })
         })
@@ -96,6 +87,7 @@ export const QuestionAndAnswerLogPage = () => {
     } catch (e: any) {
       console.log(e)
     }
+    setIsLoading(false)
   }, [tableContent])
 
   return (
@@ -106,7 +98,7 @@ export const QuestionAndAnswerLogPage = () => {
       mainHeader={
         <Block maxWidth={maxPageWidth} width="100%" display={'flex'} justifyContent="flex-start">
           <Helmet>
-            <meta charSet="utf-8" />
+            <meta charSet="utf-8"/>
             <title>Spørsmål og svar</title>
           </Helmet>
           <HeadingXXLarge marginTop="0">Spørsmål og svar</HeadingXXLarge>
@@ -114,59 +106,56 @@ export const QuestionAndAnswerLogPage = () => {
       }
     >
       <Block>
-        {/* <HeadingXLarge $style={{lineHeight: '24px'}}>{kravMessages.length} spørsmål</HeadingXLarge> */}
-        <Table
-          emptyText=""
-          data={kravMessages}
-          config={{
-            initialSortColumn: 'kravNummer',
-            sorting: kravSorting,
-          }}
-          headers={[
-            { $style: { maxWidth: '6%' }, title: 'Krav ID', column: 'kravNummer' },
-            { $style: { maxWidth: '25%', minWidth: '25%' }, title: 'Kravnavn', column: 'kravNavn' },
-            { title: 'Tema', column: 'tema' },
-            { title: 'Fra', column: 'melderIdent' },
-            { title: 'Tid for spørsmål', column: 'tidForSporsmaal' },
-            { title: 'Tid for svar', column: 'tidForSvar' },
-          ]}
-          render={(tableData) =>
-            tableData.data.map((t, index) => {
-              const length = window.innerWidth > 1000 ? (window.innerWidth > 1200 ? 40 : 30) : 20
-              const rowNum = tableContent.pageNumber * tableContent.pageSize + index + 1
-              return (
-                <Row key={t.id}>
-                  <Cell $style={{ maxWidth: '6%' }}>
-                    {t.kravNummer}.{t.kravVersjon}
-                  </Cell>
-                  <Cell $style={{ maxWidth: '25%', minWidth: '25%' }}>
-                    <RouteLink href={`/krav/${t.kravNummer}/${t.kravVersjon}?tilbakemeldingId=${t.id}`}>{t.kravNavn}</RouteLink>
-                  </Cell>
-                  <Cell>{codelist.getCode(ListName.TEMA, t.tema)?.shortName}</Cell>
-                  <Cell>{t.melderNavn}</Cell>
-                  <Cell>{moment(t.tidForSporsmaal).format('lll')}</Cell>
-                  <Cell>
-                    {t.tidForSvar ? (
-                      moment(t.tidForSporsmaal).format('lll')
-                    ) : (
-                      <ParagraphMedium $style={{ fontSize: '16px', lineHeight: '22px', marginTop: '0px', marginBottom: '0px', color: ettlevColors.red600 }}>
-                        Ikke besvart
-                      </ParagraphMedium>
-                    )}
-                  </Cell>
-                </Row>
-              )
-            })
-          }
-        />
-      </Block>
-      <Block display="flex" justifyContent="flex-end" marginTop="1rem" marginBottom="40px">
-        <Pagination
-          currentPage={page}
-          numPages={tableContent.pages}
-          onPageChange={({ nextPage }) => handlePageChange(nextPage)}
-          labels={{ nextButton: intl.nextButton, prevButton: intl.prevButton }}
-        />
+        {!isloading && kravMessages.length ? (
+          <Table
+            emptyText=""
+            data={kravMessages}
+            config={{
+              initialSortColumn: 'kravNummer',
+              sorting: kravSorting,
+              pageSizes: [5, 10, 20, 50, 100],
+              defaultPageSize: 20,
+            }}
+            headers={[
+              {$style: {maxWidth: '6%'}, title: 'Krav ID', column: 'kravNummer'},
+              {$style: {maxWidth: '25%', minWidth: '25%'}, title: 'Kravnavn', column: 'kravNavn'},
+              {title: 'Tema', column: 'tema'},
+              {title: 'Fra', column: 'melderIdent'},
+              {title: 'Tid for spørsmål', column: 'tidForSporsmaal'},
+              {title: 'Tid for svar', column: 'tidForSvar'},
+            ]}
+            render={(tableData) => {
+              return tableData.data.slice((tableData.page - 1) * tableData.limit, (tableData.page - 1) * tableData.limit + tableData.limit).map((krav, index) => {
+                return (
+                  <Row key={krav.id}>
+                    <Cell $style={{maxWidth: '6%'}}>
+                      {krav.kravNummer}.{krav.kravVersjon}
+                    </Cell>
+                    <Cell $style={{maxWidth: '25%', minWidth: '25%'}}>
+                      <RouteLink href={`/krav/${krav.kravNummer}/${krav.kravVersjon}?tilbakemeldingId=${krav.id}`}>{krav.kravNavn}</RouteLink>
+                    </Cell>
+                    <Cell>{codelist.getCode(ListName.TEMA, krav.tema)?.shortName}</Cell>
+                    <Cell>{krav.melderNavn}</Cell>
+                    <Cell>{moment(krav.tidForSporsmaal).format('lll')}</Cell>
+                    <Cell>
+                      {krav.tidForSvar ? (
+                        moment(krav.tidForSporsmaal).format('lll')
+                      ) : (
+                        <ParagraphMedium $style={{fontSize: '16px', lineHeight: '22px', marginTop: '0px', marginBottom: '0px', color: ettlevColors.red600}}>
+                          Ikke besvart
+                        </ParagraphMedium>
+                      )}
+                    </Cell>
+                  </Row>
+                )
+              })
+            }}
+          />
+        ) : (
+          <Block display={"flex"} justifyContent={"center"}>
+            <Spinner size={'50px'}/>
+          </Block>
+        )}
       </Block>
     </Layout2>
   )
