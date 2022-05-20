@@ -17,7 +17,7 @@ import {ColumnCompares} from '../util/hooks'
 import {ettlevColors, maxPageWidth} from '../util/theme'
 import {codelist, ListName} from '../services/Codelist'
 import {ampli} from '../services/Amplitude'
-import {Spinner} from "../components/common/Spinner";
+import {Spinner} from '../components/common/Spinner'
 
 type SporsmaalOgSvarKrav = {
   kravNavn: string
@@ -120,12 +120,13 @@ export const QuestionAndAnswerLogPage = () => {
               {$style: {maxWidth: '6%'}, title: 'Krav ID', column: 'kravNummer'},
               {$style: {maxWidth: '25%', minWidth: '25%'}, title: 'Kravnavn', column: 'kravNavn'},
               {title: 'Tema', column: 'tema'},
-              {title: 'Fra', column: 'melderIdent'},
+              {title: 'Fra', column: 'melderNavn'},
               {title: 'Tid for spørsmål', column: 'tidForSporsmaal'},
               {title: 'Tid for svar', column: 'tidForSvar'},
             ]}
             render={(tableData) => {
               return tableData.data.slice((tableData.page - 1) * tableData.limit, (tableData.page - 1) * tableData.limit + tableData.limit).map((krav, index) => {
+                console.log(krav.melderNavn)
                 return (
                   <Row key={krav.id}>
                     <Cell $style={{maxWidth: '6%'}}>
@@ -139,7 +140,7 @@ export const QuestionAndAnswerLogPage = () => {
                     <Cell>{moment(krav.tidForSporsmaal).format('lll')}</Cell>
                     <Cell>
                       {krav.tidForSvar ? (
-                        moment(krav.tidForSporsmaal).format('lll')
+                        moment(krav.tidForSvar).format('lll')
                       ) : (
                         <ParagraphMedium $style={{fontSize: '16px', lineHeight: '22px', marginTop: '0px', marginBottom: '0px', color: ettlevColors.red600}}>
                           Ikke besvart
@@ -152,7 +153,7 @@ export const QuestionAndAnswerLogPage = () => {
             }}
           />
         ) : (
-          <Block display={"flex"} justifyContent={"center"}>
+          <Block display={'flex'} justifyContent={'center'}>
             <Spinner size={'50px'}/>
           </Block>
         )}
