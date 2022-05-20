@@ -1,27 +1,27 @@
-import { Block } from 'baseui/block'
-import { Pagination } from 'baseui/pagination'
+import {Block} from 'baseui/block'
+import {Pagination} from 'baseui/pagination'
 
-import { HeadingXXLarge, ParagraphMedium } from 'baseui/typography'
+import {HeadingXXLarge, ParagraphMedium} from 'baseui/typography'
 import moment from 'moment'
-import { ReactElement, useEffect, useState } from 'react'
-import { Helmet } from 'react-helmet'
-import { getKravPage, kravMapToFormVal } from '../api/KravApi'
-import { getTilbakemeldingForKrav } from '../api/TilbakemeldingApi'
-import { PersonName } from '../components/common/PersonName'
+import {ReactElement, useEffect, useState} from 'react'
+import {Helmet} from 'react-helmet'
+import {getKravPage, kravMapToFormVal} from '../api/KravApi'
+import {getTilbakemeldingForKrav} from '../api/TilbakemeldingApi'
+import {PersonName} from '../components/common/PersonName'
 import RouteLink from '../components/common/RouteLink'
-import { Cell, Row, Table } from '../components/common/Table'
-import { tilbakeMeldingStatus } from '../components/krav/tilbakemelding/Tilbakemelding'
-import { Layout2 } from '../components/scaffold/Page'
-import { emptyPage, Krav, PageResponse, Tilbakemelding } from '../constants'
-import { ColumnCompares } from '../util/hooks'
-import { intl } from '../util/intl/intl'
-import { ettlevColors, maxPageWidth } from '../util/theme'
-import { codelist, ListName } from '../services/Codelist'
-import { ampli } from '../services/Amplitude'
+import {Cell, Row, Table} from '../components/common/Table'
+import {tilbakeMeldingStatus} from '../components/krav/tilbakemelding/Tilbakemelding'
+import {Layout2} from '../components/scaffold/Page'
+import {emptyPage, Krav, PageResponse, Tilbakemelding} from '../constants'
+import {ColumnCompares} from '../util/hooks'
+import {intl} from '../util/intl/intl'
+import {ettlevColors, maxPageWidth} from '../util/theme'
+import {codelist, ListName} from '../services/Codelist'
+import {ampli} from '../services/Amplitude'
 
 type SporsmaalOgSvarKrav = {
   kravNavn: string
-  tidForSpørsmål: string
+  tidForSporsmaal: string
   tidForSvar?: string
   melderNavn: ReactElement
   tema?: string
@@ -32,11 +32,11 @@ type KravMessage = Tilbakemelding & SporsmaalOgSvarKrav
 const kravSorting: ColumnCompares<KravMessage> = {
   kravNummer: (a, b) => a.kravNummer - b.kravNummer,
   kravNavn: (a, b) => (a.kravNavn || '').localeCompare(b.kravNavn || ''),
-  tidForSpørsmål: (a, b) => (a.tidForSpørsmål || '').localeCompare(b.tidForSpørsmål || ''),
+  tidForSporsmaal: (a, b) => (a.tidForSporsmaal || '').localeCompare(b.tidForSporsmaal || ''),
   tidForSvar: (a, b) => (a.tidForSvar || '').localeCompare(b.tidForSvar || ''),
 }
 
-export const SpørsmålOgSvarLogPage = () => {
+export const QuestionAndAnswerLogPage = () => {
   const [tableContent, setTableContent] = useState<PageResponse<Krav>>(emptyPage)
   const [kravMessages, setKravMessages] = useState<KravMessage[]>([])
   const [page, setPage] = useState(1)
@@ -85,7 +85,7 @@ export const SpørsmålOgSvarLogPage = () => {
           kravMessages.push({
             ...t,
             kravNavn: kravNavn,
-            tidForSpørsmål: t.meldinger[0].tid,
+            tidForSporsmaal: t.meldinger[0].tid,
             tidForSvar: ubesvart ? undefined : sistMelding.tid,
             melderNavn: <PersonName ident={t.melderIdent} />,
             tema: kravTema,
@@ -127,7 +127,7 @@ export const SpørsmålOgSvarLogPage = () => {
             { $style: { maxWidth: '25%', minWidth: '25%' }, title: 'Kravnavn', column: 'kravNavn' },
             { title: 'Tema', column: 'tema' },
             { title: 'Fra', column: 'melderIdent' },
-            { title: 'Tid for spørsmål', column: 'tidForSpørsmål' },
+            { title: 'Tid for spørsmål', column: 'tidForSporsmaal' },
             { title: 'Tid for svar', column: 'tidForSvar' },
           ]}
           render={(tableData) =>
@@ -144,10 +144,10 @@ export const SpørsmålOgSvarLogPage = () => {
                   </Cell>
                   <Cell>{codelist.getCode(ListName.TEMA, t.tema)?.shortName}</Cell>
                   <Cell>{t.melderNavn}</Cell>
-                  <Cell>{moment(t.tidForSpørsmål).format('lll')}</Cell>
+                  <Cell>{moment(t.tidForSporsmaal).format('lll')}</Cell>
                   <Cell>
                     {t.tidForSvar ? (
-                      moment(t.tidForSpørsmål).format('lll')
+                      moment(t.tidForSporsmaal).format('lll')
                     ) : (
                       <ParagraphMedium $style={{ fontSize: '16px', lineHeight: '22px', marginTop: '0px', marginBottom: '0px', color: ettlevColors.red600 }}>
                         Ikke besvart
@@ -171,4 +171,4 @@ export const SpørsmålOgSvarLogPage = () => {
     </Layout2>
   )
 }
-export default SpørsmålOgSvarLogPage
+export default QuestionAndAnswerLogPage

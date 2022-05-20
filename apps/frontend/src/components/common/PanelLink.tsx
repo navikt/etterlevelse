@@ -201,6 +201,7 @@ export const PanelLinkCard = ({
   flexContent,
   hideArrow,
   marginRight,
+  ComplimentaryContent,
 }: {
   href?: string
   tittel: string
@@ -220,6 +221,7 @@ export const PanelLinkCard = ({
   flexContent?: boolean
   hideArrow?: boolean
   marginRight?: Responsive<Scale>
+  ComplimentaryContent?: React.ReactNode
 }) => {
   const [hover, setHover] = useState(false)
 
@@ -274,7 +276,7 @@ export const PanelLinkCard = ({
   )
 
   return (
-    <Block width={width} maxWidth={maxWidth} overrides={rootOverrides} marginRight={marginRight}>
+    <Block width={width} maxWidth={maxWidth} overrides={rootOverrides} marginRight={marginRight} height="inherit">
       <RouteLink href={href} hideUnderline requireLogin={requireLogin}>
         <Block
           onMouseEnter={() => setHover(true)}
@@ -282,8 +284,9 @@ export const PanelLinkCard = ({
           $style={{
             display: 'flex',
             flexDirection: 'column',
-            justifyContent: 'space-between',
+            justifyContent: 'start',
           }}
+          height="100%"
         >
           <Block overrides={headerOverrides} display={['flex', 'flex', 'flex', 'flex', 'block', 'block']} marginBottom={theme.sizing.scale400}>
             {icon && (
@@ -307,6 +310,7 @@ export const PanelLinkCard = ({
             $style={{
               display: 'flex',
               flexDirection: flexContent ? 'row' : 'column',
+              height: height ? '100%' : undefined
             }}
           >
             <Block height={height} maxHeight={maxHeight} overrides={contentOverrides} width={flexContent ? '100%' : undefined}>
@@ -319,11 +323,21 @@ export const PanelLinkCard = ({
               {children}
             </Block>
 
-            {!hideArrow && (
-              <Block placeSelf={'flex-end'} padding={paddingSize} paddingLeft={flexContent ? '0px' : undefined}>
-                <Chevron hover={hover} icon={arrowRightIcon} distance={'8px'} />
+            {
+              (ComplimentaryContent || !hideArrow) &&
+              <Block display="flex" width="100%" height="100%" alignItems="end">
+                {ComplimentaryContent &&
+                  <Block width="100%">
+                    {ComplimentaryContent}
+                  </Block>
+                }
+                {!hideArrow && (
+                  <Block width="100%" justifyContent="flex-end" alignSelf="flex-end" display="flex" padding={paddingSize} paddingLeft={flexContent ? '0px' : undefined}>
+                    <Chevron hover={hover} icon={arrowRightIcon} distance={'8px'} />
+                  </Block>
+                )}
               </Block>
-            )}
+            }
           </Block>
         </Block>
       </RouteLink>
