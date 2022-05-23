@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
-import RouteLink, { ExternalLink } from './RouteLink'
-import { Block, BlockOverrides, Display, Responsive, Scale } from 'baseui/block'
-import { borderColor, borderRadius, borderStyle, borderWidth, padding, paddingAll, paddingZero } from './Style'
-import { theme } from '../../util'
-import { ettlevColors } from '../../util/theme'
-import { HeadingXLarge, LabelLarge, LabelSmall, ParagraphMedium, ParagraphSmall, ParagraphXSmall } from 'baseui/typography'
-import { arrowRightIcon, navChevronRightIcon } from '../Images'
+import React, {useState} from 'react'
+import RouteLink, {ExternalLink} from './RouteLink'
+import {Block, BlockOverrides, Display, Responsive, Scale} from 'baseui/block'
+import {borderColor, borderRadius, borderStyle, borderWidth, padding, paddingAll, paddingZero} from './Style'
+import {theme} from '../../util'
+import {ettlevColors} from '../../util/theme'
+import {HeadingXLarge, LabelLarge, LabelSmall, ParagraphMedium, ParagraphSmall, ParagraphXSmall} from 'baseui/typography'
+import {arrowRightIcon, navChevronRightIcon} from '../Images'
 import * as _ from 'lodash'
 import Button from './Button'
 
@@ -327,7 +327,7 @@ export const PanelLinkCard = ({
               (ComplimentaryContent || !hideArrow) &&
               <Block display="flex" width="100%" height="100%" alignItems="end">
                 {ComplimentaryContent &&
-                  <Block width="100%">
+                  <Block minWidth="70%">
                     {ComplimentaryContent}
                   </Block>
                 }

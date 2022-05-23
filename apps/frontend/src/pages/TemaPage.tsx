@@ -21,7 +21,7 @@ import {useQuery} from '@apollo/client'
 import {QueryHookOptions} from '@apollo/client/react/types/types'
 import {gql} from '@apollo/client/core'
 import {useForceUpdate} from '../util/hooks'
-import {borderRadius} from '../components/common/Style'
+import {borderRadius, margin} from '../components/common/Style'
 import {breadcrumbPaths} from '../components/common/CustomizedBreadcrumbs'
 import {sortKraverByPriority} from '../util/sort'
 import {getAllKravPriority} from '../api/KravPriorityApi'
@@ -322,7 +322,7 @@ export const TemaCard = ({ tema, relevans, setNum }: { tema: TemaCode; relevans:
     >
       <Block display={'flex'} flexDirection={'column'}>
         <SimpleTag active>
-          <Block display={'flex'} alignItems={'center'} justifyContent={'center'} height={'35px'} width={'60px'}>
+          <Block display={'flex'} alignItems={'center'} justifyContent={'center'} {...margin('8px','16px')}>
             {/* <img src={gavelIcon} width={'35px'} height={'35px'} aria-hidden alt={'Hammer ikon'} /> */}
             <LabelSmall color={ettlevColors.navOransje} $style={{ fontSize: '20px', lineHeight: '18px' }} marginRight="4px">
               {krav?.length || 0}
@@ -331,7 +331,7 @@ export const TemaCard = ({ tema, relevans, setNum }: { tema: TemaCode; relevans:
           </Block>
         </SimpleTag>
 
-        <Markdown source={tema.data?.shortDesciption} />
+        <Markdown source={tema.data?.shortDesciption} fontSize={'18px'}/>
       </Block>
     </PanelLinkCard>
   )
