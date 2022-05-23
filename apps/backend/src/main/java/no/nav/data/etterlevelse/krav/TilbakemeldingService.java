@@ -127,7 +127,7 @@ public class TilbakemeldingService extends DomainService<Tilbakemelding> {
         // TODO consider schedule slack messages async (like email) to guard against slack downtime
         for (Varslingsadresse recipient : recipients) {
             switch (recipient.getType()) {
-                case EPOST -> emailService.scheduleMail(MailTask.builder().to(recipient.getAdresse()).subject(varsel.getTitle()).body(varsel.toHtml()).build());
+                case EPOST -> emailService.sendMail(MailTask.builder().to(recipient.getAdresse()).subject(varsel.getTitle()).body(varsel.toHtml()).build());
                 case SLACK -> slackClient.sendMessageToChannel(recipient.getAdresse(), varsel.toSlack());
                 case SLACK_USER -> slackClient.sendMessageToUserId(recipient.getAdresse(), varsel.toSlack());
                 default -> throw new NotImplementedException("%s is not an implemented varsel type".formatted(recipient.getType()));
