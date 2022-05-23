@@ -126,7 +126,6 @@ export const QuestionAndAnswerLogPage = () => {
             ]}
             render={(tableData) => {
               return tableData.data.slice((tableData.page - 1) * tableData.limit, (tableData.page - 1) * tableData.limit + tableData.limit).map((krav, index) => {
-                console.log(krav.melderNavn)
                 return (
                   <Row key={krav.id}>
                     <Cell $style={{maxWidth: '6%'}}>
