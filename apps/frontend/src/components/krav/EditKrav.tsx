@@ -116,7 +116,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
         test: function (status) {
           const { parent } = this
           const nyesteAktivKravVersjon = alleKravVersjoner.filter((k) => k.kravStatus === KravStatus.AKTIV)
-          if (status === KravStatus.UTGAATT && parent.kravVersjon > nyesteAktivKravVersjon[0].kravVersjon) {
+          if (status === KravStatus.UTGAATT && nyesteAktivKravVersjon.length >= 1 && parent.kravVersjon > nyesteAktivKravVersjon[0].kravVersjon) {
             return false
           }
           return true
