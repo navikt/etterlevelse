@@ -106,7 +106,7 @@ export const useTable = <T, K extends keyof T>(initialData: Array<T>, config?: T
     if (sortColumn) {
       const sortFunct = getSortFunction(sortColumn, !!useDefaultStringCompare, sorting)
       if (!sortFunct) {
-        console.warn(`invalid sort column ${sortColumn} no sort function supplied`)
+        console.warn(`invalid sort column ${String(sortColumn)} no sort function supplied`)
       } else {
         try {
           const sorted = initialData.slice(0).sort(sortFunct)
