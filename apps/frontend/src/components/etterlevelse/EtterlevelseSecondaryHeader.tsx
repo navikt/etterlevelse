@@ -1,16 +1,16 @@
-import { Block } from 'baseui/block'
+import {Block} from 'baseui/block'
 import Button from '../common/Button'
-import { borderRadius, marginAll, paddingAll } from '../common/Style'
-import { HeadingXXLarge, LabelSmall } from 'baseui/typography'
-import { ettlevColors, maxPageWidth, responsivePaddingExtraLarge } from '../../util/theme'
-import { angleIcon, page2Icon } from '../Images'
+import {borderRadius, marginAll, paddingAll} from '../common/Style'
+import {HeadingXXLarge, LabelSmall} from 'baseui/typography'
+import {ettlevColors, maxPageWidth, responsivePaddingExtraLarge} from '../../util/theme'
+import {angleIcon, page2Icon} from '../Images'
 import CustomizedModal from '../common/CustomizedModal'
-import { getTemaMainHeader } from '../../pages/TemaPage'
-import React, { useState } from 'react'
-import { Behandling } from '../../constants'
-import { LovCode, TemaCode } from '../../services/Codelist'
-import { Section } from '../../pages/EtterlevelseDokumentasjonPage'
-import { KravId } from '../../api/KravApi'
+import {getTemaMainHeader} from '../../pages/TemaPage'
+import React, {useState} from 'react'
+import {Behandling} from '../../constants'
+import {LovCode, TemaCode} from '../../services/Codelist'
+import {Section} from '../../pages/EtterlevelseDokumentasjonPage'
+import {KravId} from '../../api/KravApi'
 
 type EtterlevelseSecondaryHeaderProps = {
   tab: string
@@ -57,7 +57,7 @@ export const EtterlevelseSecondaryHeader = ({ tab, setTab, setNavigatePath, beha
               },
             }}
           >
-            Krav til utfylling
+            Tema for dokumentasjon
           </LabelSmall>
         </Button>
       </Block>
