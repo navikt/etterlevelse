@@ -1,21 +1,21 @@
-import { Narrow, Page, Wide } from '../components/scaffold/Page'
-import { ettlevColors, theme } from '../util/theme'
-import { Block } from 'baseui/block'
-import { HeadingXLarge, HeadingXXLarge, LabelXSmall, ParagraphMedium } from 'baseui/typography'
-import { PanelLink, PanelLinkCard } from '../components/common/PanelLink'
-import { grafIconBg, handWithLeaf, paperPenIconBg, paragrafIconBg } from '../components/Images'
-import { Card } from 'baseui/card'
-import { borderColor, borderRadius, borderStyle, borderWidth, margin, paddingAll } from '../components/common/Style'
+import {Narrow, Page, Wide} from '../components/scaffold/Page'
+import {ettlevColors, theme} from '../util/theme'
+import {Block} from 'baseui/block'
+import {HeadingXLarge, HeadingXXLarge, ParagraphMedium} from 'baseui/typography'
+import {PanelLink, PanelLinkCard} from '../components/common/PanelLink'
+import {grafIconBg, handWithLeaf, paperPenIconBg, paragrafIconBg} from '../components/Images'
+import {Card} from 'baseui/card'
+import {borderColor, borderRadius, borderStyle, borderWidth, margin, paddingAll} from '../components/common/Style'
 import ReactPlayer from 'react-player'
-import { Button, SIZE } from 'baseui/button'
-import { faPlay } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { buttonBorderStyle, buttonContentStyle } from '../components/common/Button'
-import React, { useEffect, useState } from 'react'
-import { Markdown } from '../components/common/Markdown'
-import { AlertType, Melding, MeldingStatus, MeldingType } from '../constants'
-import { getMeldingByType } from '../api/MeldingApi'
-import { ampli } from '../services/Amplitude'
+import {Button, SIZE} from 'baseui/button'
+import {faPlay} from '@fortawesome/free-solid-svg-icons'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {buttonBorderStyle, buttonContentStyle} from '../components/common/Button'
+import React, {useEffect, useState} from 'react'
+import {Markdown} from '../components/common/Markdown'
+import {AlertType, Melding, MeldingStatus, MeldingType} from '../constants'
+import {getMeldingByType} from '../api/MeldingApi'
+import {ampli} from '../services/Amplitude'
 
 const cardWidth = ['95%', '95%', '95%', '95%', '31%', '31%']
 const cardHeight = ['auto', 'auto', 'auto', 'auto', '140px', '140px']
@@ -184,7 +184,6 @@ export const MainPageV2 = () => {
                   Mer om etterlevelse i NAV
                 </HeadingXLarge>
               }
-              beskrivelse={<LabelXSmall>Hvordan kravene blir til og hvordan jobbe med etterlevelse i produktutviklingen</LabelXSmall>}
               panelIcon={<img src={handWithLeaf} alt={''} />}
               overrides={{
                 Block: {
