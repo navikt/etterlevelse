@@ -18,12 +18,13 @@ import {ettlevColors, maxPageWidth} from '../util/theme'
 import {codelist, ListName} from '../services/Codelist'
 import {ampli} from '../services/Amplitude'
 import {Spinner} from '../components/common/Spinner'
+import { ReactNode } from 'react-markdown/lib/react-markdown'
 
 type SporsmaalOgSvarKrav = {
   kravNavn: string
   tidForSporsmaal: string
   tidForSvar?: string
-  melderNavn: ReactElement
+  melderNavn: ReactNode
   tema?: string
 }
 
@@ -33,6 +34,7 @@ const kravSorting: ColumnCompares<KravMessage> = {
   kravNummer: (a, b) => a.kravNummer - b.kravNummer,
   kravNavn: (a, b) => (a.kravNavn || '').localeCompare(b.kravNavn || ''),
   tidForSporsmaal: (a, b) => (a.tidForSporsmaal || '').localeCompare(b.tidForSporsmaal || ''),
+  tema: (a,b) => (a.tema || '').localeCompare(b.tema || ''),
   tidForSvar: (a, b) => (a.tidForSvar || '').localeCompare(b.tidForSvar || ''),
 }
 
@@ -78,7 +80,7 @@ export const QuestionAndAnswerLogPage = () => {
             kravNavn: kravNavn,
             tidForSporsmaal: t.meldinger[0].tid,
             tidForSvar: ubesvart ? undefined : sistMelding.tid,
-            melderNavn: <PersonName ident={t.melderIdent}/>,
+            melderNavn: <PersonName ident={t.melderIdent} />,
             tema: kravTema,
           })
         })
