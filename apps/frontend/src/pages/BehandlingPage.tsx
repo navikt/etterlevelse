@@ -242,21 +242,19 @@ export const BehandlingPage = () => {
   )
 
   const getRelevans = (irrelevans?: Code[]) => {
+
     if (irrelevans?.length === options.length) {
       return <ParagraphXSmall>For å filtrere bort krav som ikke er relevante, må dere oppgi egenskaper ved behandlingen.</ParagraphXSmall>
     }
 
     if (irrelevans) {
-      const relevans = options
-        .map((r, i) => {
-          return i
-        })
-        .filter((n) => !irrelevans.map((ir: Code) => options.findIndex((o) => o.id === ir.code)).includes(n))
+      const relevans = options.filter((n) => !irrelevans.map((ir:Code) => ir.code).includes(n.id))
+
       return (
         <Block display={responsiveDisplay} flexWrap>
-          {relevans.map((optionIndex, index) => (
-            <Block key={options[optionIndex].id} display="flex">
-              <ParagraphXSmall $style={{ ...marginZero, marginRight: '8px', lineHeight: '24px' }}>{options[optionIndex].label}</ParagraphXSmall>
+          {relevans.map((r, index) => (
+            <Block key={r.id} display="flex">
+              <ParagraphXSmall $style={{ ...marginZero, marginRight: '8px', lineHeight: '24px' }}>{r.label}</ParagraphXSmall>
               <Block marginRight="8px" display={['none', 'none', 'none', 'none', 'block', 'block']}>
                 {index < relevans.length - 1 ? <img alt="dot" src={ellipse80} /> : undefined}
               </Block>
