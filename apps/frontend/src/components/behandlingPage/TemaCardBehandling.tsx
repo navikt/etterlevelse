@@ -1,16 +1,16 @@
-import { codelist, TemaCode } from '../../services/Codelist'
-import { Behandling } from '../../constants'
-import { PanelLinkCard, PanelLinkCardOverrides } from '../common/PanelLink'
-import { ettlevColors, theme } from '../../util/theme'
-import { cardWidth, useKravCounter } from '../../pages/TemaPage'
-import { Block } from 'baseui/block'
-import { ParagraphXSmall } from 'baseui/typography'
-import { ProgressBar, SIZE } from 'baseui/progress-bar'
+import {codelist, TemaCode} from '../../services/Codelist'
+import {Behandling, KRAV_FILTER_TYPE} from '../../constants'
+import {PanelLinkCard, PanelLinkCardOverrides} from '../common/PanelLink'
+import {ettlevColors, theme} from '../../util/theme'
+import {cardWidth, useKravCounter} from '../../pages/TemaPage'
+import {Block} from 'baseui/block'
+import {ParagraphXSmall} from 'baseui/typography'
+import {ProgressBar, SIZE} from 'baseui/progress-bar'
 import React from 'react'
-import { HeaderContent } from './HeaderContent'
-import { isFerdigUtfylt } from '../../pages/BehandlingerTemaPageV2'
+import {HeaderContent} from './HeaderContent'
+import {isFerdigUtfylt} from '../../pages/BehandlingerTemaPageV2'
 import moment from 'moment'
-import { getNumberOfDaysBetween } from '../../util/checkAge'
+import {getNumberOfDaysBetween} from '../../util/checkAge'
 
 type TemaCardBehandlingProps = {
   tema: TemaCode
@@ -92,7 +92,7 @@ export const TemaCardBehandling = (props: TemaCardBehandlingProps) => {
       width={cardWidth}
       overrides={overrides}
       verticalMargin={theme.sizing.scale400}
-      href={`/behandling/${behandling.id}/${irrelevant ? 'i' : ''}${tema.code}`}
+      href={`/behandling/${behandling.id}/${irrelevant ? 'i' : ''}${tema.code}/${KRAV_FILTER_TYPE.RELEVANTE_KRAV}`}
       tittel={tema.shortName}
       headerContent={
         <HeaderContent kravLength={krav.length} documentedLength={underArbeid + utfylt} nyttKravCounter={nyttKravCounter} nyttKravVersjonCounter={nyttKravVersjonCounter} />
