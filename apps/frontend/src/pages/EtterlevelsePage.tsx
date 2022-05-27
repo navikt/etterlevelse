@@ -12,6 +12,7 @@ import { getKravByKravNumberAndVersion } from '../api/KravApi'
 import CustomizedBreadcrumbs, { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 import { Helmet } from 'react-helmet'
 import { ampli } from '../services/Amplitude'
+import { codelist, ListName, TemaCode } from '../services/Codelist'
 
 export const etterlevelseName = (etterlevelse: Etterlevelse) => `${kravNumView(etterlevelse)}`
 
@@ -24,11 +25,22 @@ export const EtterlevelsePage = () => {
   const [etterlevelse, setEtterlevelse] = useEtterlevelse(params.id)
   const [edit, setEdit] = useState(etterlevelse && !etterlevelse.id)
   const [krav, setKrav] = useState<Krav>()
+  const [kravTema, setKravTema] = useState<TemaCode>()
 
   const loading = !edit && !etterlevelse
 
   useEffect(() => {
-    etterlevelse && getKravByKravNumberAndVersion(etterlevelse?.kravNummer, etterlevelse?.kravVersjon).then(setKrav)
+    etterlevelse && getKravByKravNumberAndVersion(etterlevelse?.kravNummer, etterlevelse?.kravVersjon)
+      .then((res) => {
+        if (res) {
+          setKrav(res)
+          const lovData = codelist.getCode(ListName.LOV, res.regelverk[0]?.lov?.code)
+          if (lovData?.data) {
+            setKravTema(codelist.getCode(ListName.TEMA, lovData.data.tema))
+          }
+        }
+      }
+      )
     if (etterlevelse) {
       ampli.logEvent('sidevisning', {
         side: 'Etterlevelse side',
@@ -37,16 +49,32 @@ export const EtterlevelsePage = () => {
     }
   }, [etterlevelse])
 
-  const breadcrumbPaths: breadcrumbPaths[] = [
-    {
-      pathName: 'Forstå kravene',
-      href: '/tema',
-    },
-    {
-      pathName: `K${krav?.kravNummer}.${krav?.kravVersjon}`,
-      href: '/krav/' + krav?.kravNummer + '/' + krav?.kravVersjon,
-    },
-  ]
+  const getBreadcrumPaths = (): breadcrumbPaths[] => {
+    const breadcrumbPaths: breadcrumbPaths[] = []
+
+    breadcrumbPaths.push(
+      {
+        pathName: 'Forstå kravene',
+        href: '/tema',
+      }
+    )
+
+    if (kravTema && kravTema.shortName) {
+      breadcrumbPaths.push({
+        pathName: kravTema.shortName.toString(),
+        href: '/tema/' + kravTema.code,
+      })
+    }
+
+    breadcrumbPaths.push(
+      {
+        pathName: `K${krav?.kravNummer}.${krav?.kravVersjon}`,
+        href: '/krav/' + krav?.kravNummer + '/' + krav?.kravVersjon,
+      }
+    )
+
+    return breadcrumbPaths
+  }
 
   return (
     <Block width="100%" id="content" overrides={{ Block: { props: { role: 'main' } } }}>
@@ -73,7 +101,7 @@ export const EtterlevelsePage = () => {
                         Tilbake
                       </Button>
                     </RouteLink> */}
-                    <CustomizedBreadcrumbs fontColor={ettlevColors.grey25} currentPage="Etterlevelse" paths={breadcrumbPaths} />
+                    <CustomizedBreadcrumbs fontColor={ettlevColors.grey25} currentPage="Etterlevelse" paths={getBreadcrumPaths()} />
                   </Block>
 
                   {/*
