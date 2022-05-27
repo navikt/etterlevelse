@@ -11,6 +11,7 @@ import {Behandling} from '../../constants'
 import {LovCode, TemaCode} from '../../services/Codelist'
 import {Section} from '../../pages/EtterlevelseDokumentasjonPage'
 import {KravId} from '../../api/KravApi'
+import {useParams} from "react-router-dom";
 
 type EtterlevelseSecondaryHeaderProps = {
   tab: string
@@ -21,8 +22,9 @@ type EtterlevelseSecondaryHeaderProps = {
   kravId: KravId | undefined
   lovListe: LovCode[]
 }
-export const EtterlevelseSecondaryHeader = ({ tab, setTab, setNavigatePath, behandling, temaData, lovListe, kravId }: EtterlevelseSecondaryHeaderProps) => {
+export const EtterlevelseSecondaryHeader = ({tab, setTab, setNavigatePath, behandling, temaData, lovListe, kravId}: EtterlevelseSecondaryHeaderProps) => {
   const [isTemaModalOpen, setIsTemaModalOpen] = useState<boolean>(false)
+  const params = useParams<{ filter?: string }>()
 
   return (
     <Block width="100%">
@@ -63,14 +65,14 @@ export const EtterlevelseSecondaryHeader = ({ tab, setTab, setNavigatePath, beha
       </Block>
 
       <Block marginTop="8px">
-        <img src={angleIcon} alt="" />{' '}
+        <img src={angleIcon} alt=""/>{' '}
         <Button
           kind="tertiary"
           onClick={() => {
             if (tab !== 'dokumentasjon') {
               setTab('dokumentasjon')
             }
-            setNavigatePath('/behandling/' + behandling?.id + '/' + temaData?.code)
+            setNavigatePath(`/behandling/${behandling?.id}/${temaData?.code}/${params.filter}`)
           }}
           $style={{
             ...paddingAll('0px'),
@@ -102,15 +104,15 @@ export const EtterlevelseSecondaryHeader = ({ tab, setTab, setNavigatePath, beha
 
       <Block marginTop="0px" marginBottom="56px" display="flex" width="calc(100% - 35px)" alignItems="center" justifyContent="center" marginLeft="35px">
         <Block display="flex" flex="1">
-          <img src={angleIcon} alt="" />{' '}
-          <LabelSmall marginLeft="12px" $style={{ fontSize: '24px', fontWeight: 900, lineHeight: '32px', color: ettlevColors.green600, whiteSpace: 'nowrap' }}>
+          <img src={angleIcon} alt=""/>{' '}
+          <LabelSmall marginLeft="12px" $style={{fontSize: '24px', fontWeight: 900, lineHeight: '32px', color: ettlevColors.green600, whiteSpace: 'nowrap'}}>
             K{kravId?.kravNummer}.{kravId?.kravVersjon}
           </LabelSmall>
         </Block>
 
         <Block display="flex" justifyContent="flex-end" width="100%">
           <Button
-            startEnhancer={<img src={page2Icon} alt="Om personvern og ansvarlig for tema" />}
+            startEnhancer={<img src={page2Icon} alt="Om personvern og ansvarlig for tema"/>}
             size="compact"
             $style={{
               fontSize: '18px',
@@ -118,7 +120,7 @@ export const EtterlevelseSecondaryHeader = ({ tab, setTab, setNavigatePath, beha
               lineHeight: '22px',
               color: ettlevColors.green600,
               textUnderlineOffset: '2px',
-              ':hover': { backgroundColor: 'transparent', textDecoration: 'underline 3px' },
+              ':hover': {backgroundColor: 'transparent', textDecoration: 'underline 3px'},
             }}
             kind={'tertiary'}
             onClick={() => setIsTemaModalOpen(true)}
@@ -158,7 +160,8 @@ export const EtterlevelseSecondaryHeader = ({ tab, setTab, setNavigatePath, beha
               </HeadingXXLarge>
             </Block>
             <Block marginBottom="55px" marginTop="40px" paddingLeft={responsivePaddingExtraLarge} paddingRight={responsivePaddingExtraLarge}>
-              <Block>{getTemaMainHeader(temaData, lovListe, true, () => {}, true, true)}</Block>
+              <Block>{getTemaMainHeader(temaData, lovListe, true, () => {
+              }, true, true)}</Block>
               <Block display="flex" justifyContent="flex-end" width="100%" marginTop="38px">
                 <Button onClick={() => setIsTemaModalOpen(false)}>Lukk visning</Button>
               </Block>
