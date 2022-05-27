@@ -320,7 +320,7 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
           justifyContent="center"
           display="flex"
           alignItems="center"
-          width="100%"
+          width="calc(100%-2px)"
         >
           <Block
             justifyContent="center"
