@@ -105,7 +105,7 @@ export const EtterlevelseDokumentasjonPage = () => {
                 navigatePath={navigatePath}
                 setNavigatePath={setNavigatePath}
                 close={() => {
-                  navigate(`/behandling/${behandling.id}/${temaData?.code}`)
+                  navigate(`/behandling/${behandling.id}/${temaData?.code}/${getFilterType(params.filter)}`)
                 }}
                 tab={tab}
                 setTab={setTab}
