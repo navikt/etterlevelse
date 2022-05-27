@@ -242,9 +242,18 @@ export const ViewEtterlevelse = ({
                 >
                   <Block display="flex" justifyContent="center" marginTop={'32px'} marginBottom={'16px'}>
                     <Block display="flex" flex="1">
-                      <LabelSmall $style={{ color: ettlevColors.green600 }}>
-                        SUKSESSKRITERIE {i + 1} AV {krav.suksesskriterier.length}
-                      </LabelSmall>
+                      <ParagraphMedium
+                        $style={{
+                          fontSize: '16px',
+                          lineHeight: '18,75',
+                          marginTop: '3px',
+                          marginBottom: '5px',
+                          font: 'roboto',
+                          color: ettlevColors.grey600,
+                        }}
+                      >
+                         Suksesskriterie {i + 1} av {krav.suksesskriterier.length}
+                      </ParagraphMedium>
                     </Block>
                     {(!suksessbeskrivelseBegrunnelse.behovForBegrunnelse || suksessbeskrivelseBegrunnelse.begrunnelse) && (
                       <Block display="flex" justifyContent="flex-end">
@@ -264,7 +273,7 @@ export const ViewEtterlevelse = ({
                     )}
                   </Block>
                   <LabelSmall $style={{ fontSize: '21px', lineHeight: '30px', marginTop: '16px', marginBottom: '10px' }}>{s.navn}</LabelSmall>
-                  
+
                   <CustomizedAccordion>
                     <CustomizedPanel
                       title={<LabelSmall $style={{ color: ettlevColors.green600 }}>Utfyllende om kriteriet</LabelSmall>}
