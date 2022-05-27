@@ -50,7 +50,7 @@ export const KravPanelHeaderWithSorting = (props: {
   kravData: KravEtterlevelseData[] | Krav[]
   sorting: readonly Option[]
   setSorting: React.Dispatch<React.SetStateAction<readonly Option[]>>
-  temaUrl: string
+  temaPageUrl: string
 }) => {
   const navigate = useNavigate()
   let antallSuksesskriterier = 0
@@ -73,7 +73,11 @@ export const KravPanelHeaderWithSorting = (props: {
             value={props.kravRelevans}
             onChange={(params) => {
               props.setKravRelevans(params.value)
-              navigate(`${props.temaUrl}/${params.value[0].id}`)
+              
+              const newTemaPageUrl = props.temaPageUrl.split('/')
+              newTemaPageUrl.pop()
+
+              navigate(`${newTemaPageUrl.join('/')}/${params.value[0].id}`)
             }}
           />
         </Block>

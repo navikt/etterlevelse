@@ -60,7 +60,7 @@ export const BehandlingerTemaPageV2 = () => {
   const variables = {behandlingId: params.id, lover: lover, gjeldendeKrav: true, behandlingIrrevantKrav: false, status: KravStatus.AKTIV}
   const [allKravPriority, setAllKravPriority] = useState<KravPrioritering[]>([])
   const location = useLocation()
-  const [temaUrl, setTemaurl] = useState<string>(location.pathname)
+  const [temaPageUrl, setTemaPageUrl] = useState<string>(location.pathname)
 
   const {data: relevanteKraverGraphQLResponse, loading: relevanteKraverGraphQLLoading} = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
     variables,
@@ -219,7 +219,7 @@ export const BehandlingerTemaPageV2 = () => {
                     kravData={getKravData(kravRelevans[0].id)}
                     sorting={sorting}
                     setSorting={setSorting}
-                    temaUrl={temaUrl}
+                    temaPageUrl={temaPageUrl}
                   />
                 </Block>
                 {!relevanteKraverGraphQLLoading && !irrelevanteKraverGraphQLLoading && !utgaateKraverGraphQLLoading ? (
