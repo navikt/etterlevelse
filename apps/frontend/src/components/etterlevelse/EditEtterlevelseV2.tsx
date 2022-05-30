@@ -239,29 +239,29 @@ export const EditEtterlevelseV2 = ({
                     marginTop: '16px',
                   }}
                 >
-                 {etterlevelse.id === '' &&
-                  <>
-                    <img
-                      src={warningAlert}
-                      alt=""
-                      width="24px"
-                      height="24px"
-                      style={{
-                        marginRight: '5px',
-                      }}
-                    />
-                    <ParagraphMedium
-                      $style={{
-                        lineHeight: '22px',
-                        marginTop: '0px',
-                        marginBottom: '0px',
-                        fontWeight: 600,
-                        color: ettlevColors.white,
-                      }}
-                    >
-                      Dette er en ny versjon.
-                    </ParagraphMedium>
-                  </>}
+                  {etterlevelse.id === '' &&
+                    <>
+                      <img
+                        src={warningAlert}
+                        alt=""
+                        width="24px"
+                        height="24px"
+                        style={{
+                          marginRight: '5px',
+                        }}
+                      />
+                      <ParagraphMedium
+                        $style={{
+                          lineHeight: '22px',
+                          marginTop: '0px',
+                          marginBottom: '0px',
+                          fontWeight: 600,
+                          color: ettlevColors.white,
+                        }}
+                      >
+                        Dette er en ny versjon.
+                      </ParagraphMedium>
+                    </>}
                   {krav.versjonEndringer && (
                     <Button
                       type="button"
@@ -440,6 +440,8 @@ export const EditEtterlevelseV2 = ({
             onClose={() => setIsVersjonEndringerModalOpen(false)}
             isOpen={isVersjonEndringerModalOpen}
             size="full"
+            closeIconColor={ettlevColors.white}
+            closeIconHoverColor={ettlevColors.green100}
             overrides={{
               Dialog: {
                 style: {
@@ -480,7 +482,8 @@ export const EditEtterlevelseV2 = ({
             </Block>
           </CustomizedModal>
         </Block>
-      )}
-    </Block>
+      )
+      }
+    </Block >
   )
 }

@@ -286,7 +286,7 @@ const HeadCell = <T, K extends keyof T>(props: HeadProps<T, K>) => {
         fillClickTarget
       />
       {filterConf && (
-        <Modal closeable={false} isOpen={showFilter} onClose={() => setShowFilter(false)}>
+        <Modal isOpen={showFilter} onClose={() => setShowFilter(false)}>
           <ModalHeader>Filter {title}</ModalHeader>
           <ModalBody>{filterBody()}</ModalBody>
         </Modal>

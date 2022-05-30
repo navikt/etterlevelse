@@ -63,7 +63,6 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: NyTilbakemeldingMod
           },
         },
       }}
-      closeable={false}
       isOpen={open}
       onClose={() => close()}
     >

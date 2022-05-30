@@ -136,6 +136,8 @@ export const EtterlevelseModal = ({
   return (
     <CustomizedModal
       onClose={() => setIsModalOpen(false)}
+      closeIconColor={ettlevColors.white}
+      closeIconHoverColor={ettlevColors.green100}
       isOpen={isModalOpen}
       size="full"
       overrides={{

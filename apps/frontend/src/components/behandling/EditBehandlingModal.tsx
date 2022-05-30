@@ -135,12 +135,6 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
     },
   }
 
-  window.addEventListener('keyup', (e) => {
-    if(e.key === 'Escape') {
-      props.close()
-    }
-  }, {once: true})
-
   return (
     <Formik
       onSubmit={async (b: BehandlingEtterlevData) => props.close(await updateBehandling(b))}
