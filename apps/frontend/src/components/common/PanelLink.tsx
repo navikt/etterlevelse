@@ -1,11 +1,11 @@
-import React, {useState} from 'react'
-import RouteLink, {ExternalLink} from './RouteLink'
-import {Block, BlockOverrides, Display, Responsive, Scale} from 'baseui/block'
-import {borderColor, borderRadius, borderStyle, borderWidth, padding, paddingAll, paddingZero} from './Style'
-import {theme} from '../../util'
-import {ettlevColors} from '../../util/theme'
-import {HeadingXLarge, LabelLarge, LabelSmall, ParagraphMedium, ParagraphSmall, ParagraphXSmall} from 'baseui/typography'
-import {arrowRightIcon, navChevronRightIcon} from '../Images'
+import React, { useState } from 'react'
+import RouteLink, { ExternalLink } from './RouteLink'
+import { Block, BlockOverrides, Display, Responsive, Scale } from 'baseui/block'
+import { borderColor, borderRadius, borderStyle, borderWidth, padding, paddingAll, paddingZero } from './Style'
+import { theme } from '../../util'
+import { ettlevColors } from '../../util/theme'
+import { HeadingXLarge, LabelLarge, LabelSmall, ParagraphMedium, ParagraphSmall, ParagraphXSmall } from 'baseui/typography'
+import { arrowRightIcon, navChevronRightIcon } from '../Images'
 import * as _ from 'lodash'
 import Button from './Button'
 
@@ -288,9 +288,13 @@ export const PanelLinkCard = ({
           }}
           height="100%"
         >
-          <Block overrides={headerOverrides} display={['flex', 'flex', 'flex', 'flex', 'block', 'block']} marginBottom={theme.sizing.scale400}>
+          <Block
+            overrides={headerOverrides}
+            display={['flex', 'flex', 'flex', 'flex', 'block', 'block']}
+            marginBottom={[theme.sizing.scale800, theme.sizing.scale800, theme.sizing.scale800, theme.sizing.scale600, theme.sizing.scale600, theme.sizing.scale600]}
+          >
             {icon && (
-              <Block display={'flex'} justifyContent={'center'} marginTop={theme.sizing.scale600} marginRight={theme.sizing.scale800}>
+              <Block display={'flex'} justifyContent={'center'} marginTop={theme.sizing.scale600} marginRight={theme.sizing.scale850}>
                 <img src={icon} alt={''} aria-hidden />
               </Block>
             )}
@@ -310,7 +314,7 @@ export const PanelLinkCard = ({
             $style={{
               display: 'flex',
               flexDirection: flexContent ? 'row' : 'column',
-              height: height ? '100%' : undefined
+              height: height ? '100%' : undefined,
             }}
           >
             <Block height={height} maxHeight={maxHeight} overrides={contentOverrides} width={flexContent ? '100%' : undefined}>
@@ -323,21 +327,16 @@ export const PanelLinkCard = ({
               {children}
             </Block>
 
-            {
-              (ComplimentaryContent || !hideArrow) &&
+            {(ComplimentaryContent || !hideArrow) && (
               <Block display="flex" width="100%" height="100%" alignItems="end">
-                {ComplimentaryContent &&
-                  <Block minWidth="70%">
-                    {ComplimentaryContent}
-                  </Block>
-                }
+                {ComplimentaryContent && <Block minWidth="70%">{ComplimentaryContent}</Block>}
                 {!hideArrow && (
                   <Block width="100%" justifyContent="flex-end" alignSelf="flex-end" display="flex" padding={paddingSize} paddingLeft={flexContent ? '0px' : undefined}>
                     <Chevron hover={hover} icon={arrowRightIcon} distance={'8px'} />
                   </Block>
                 )}
               </Block>
-            }
+            )}
           </Block>
         </Block>
       </RouteLink>
