@@ -2,8 +2,14 @@ import { Modal, ModalProps, SIZE } from 'baseui/modal'
 import _ from 'lodash'
 import { maxPageWidth } from '../../util/theme'
 
-const CuztomizedModal = (props: ModalProps) => {
-  const { overrides, ...otherProps } = props
+type CustomModalProps = {
+  closeIconColor?: string,
+  closeIconHoverColor?: string,
+  disableCloseIcon?: boolean
+}
+
+const CuztomizedModal = (props: CustomModalProps & ModalProps) => {
+  const { overrides, closeIconColor, closeIconHoverColor, disableCloseIcon, ...otherProps } = props
 
   const customOverrides = {
     Dialog: {
@@ -22,13 +28,17 @@ const CuztomizedModal = (props: ModalProps) => {
     },
     Close: {
       style: {
-        display: 'none',
+        display: disableCloseIcon ? 'none' : undefined,
+        color: closeIconColor ? closeIconColor : undefined,
+        ':hover': {
+          color: closeIconHoverColor ? closeIconHoverColor : undefined
+        }
       },
     },
   }
 
   const mergedOverrides = _.merge(customOverrides, props.overrides)
 
-  return <Modal closeable={false} {...otherProps} size={props.size ? props.size : SIZE.full} overrides={mergedOverrides} />
+  return <Modal {...otherProps} size={props.size ? props.size : SIZE.full} overrides={mergedOverrides} />
 }
 export default CuztomizedModal
