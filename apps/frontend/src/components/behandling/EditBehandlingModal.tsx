@@ -10,7 +10,7 @@ import { Behandling, BehandlingEtterlevData, KravQL, KravStatus, PageResponse } 
 import { ButtonGroup } from 'baseui/button-group'
 import { Button as BaseUIButton, KIND } from 'baseui/button'
 import { Code, codelist, ListName } from '../../services/Codelist'
-import { borderRadius, marginZero } from '../common/Style'
+import { borderColor, borderRadius, borderStyle, borderWidth, marginZero } from '../common/Style'
 import { FieldArray, FieldArrayRenderProps, Form, Formik } from 'formik'
 import { mapToFormVal, updateBehandling } from '../../api/BehandlingApi'
 import * as yup from 'yup'
@@ -49,10 +49,10 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
   const filterData = (
     unfilteredData:
       | {
-          behandling: PageResponse<{
-            stats: BehandlingStats
-          }>
-        }
+        behandling: PageResponse<{
+          stats: BehandlingStats
+        }>
+      }
       | undefined,
   ) => {
     let StatusListe: any[] = []
@@ -135,6 +135,12 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
     },
   }
 
+  window.addEventListener('keyup', (e) => {
+    if(e.key === 'Escape') {
+      props.close()
+    }
+  }, {once: true})
+
   return (
     <Formik
       onSubmit={async (b: BehandlingEtterlevData) => props.close(await updateBehandling(b))}
@@ -144,7 +150,7 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
     >
       {({ isSubmitting, isValid, errors, submitForm }) => (
         <Form>
-          <CustomizedModal isOpen={!!props.showModal} overrides={customOverrides}>
+          <CustomizedModal isOpen={!!props.showModal} overrides={customOverrides} disableCloseIcon closeable>
             <Block $style={{ borderTopLeftRadius: '8px', borderTopRightRadius: '8px' }} backgroundColor={ettlevColors.green800} height="100px" width="100%">
               <Block display="flex" justifyContent="space-between" paddingLeft={paddingLeft} paddingRight={theme.sizing.scale900}>
                 <Block>
@@ -156,7 +162,7 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
                   </ParagraphXSmall>
                 </Block>
                 <Block display="flex" justifyContent="flex-end" paddingLeft={theme.sizing.scale1000}>
-                  <Button kind="tertiary" onClick={props.close} $style={{ ':hover': { backgroundColor: 'transparent' } }}>
+                  <Button type="button" kind="tertiary" onClick={props.close} $style={{ ':hover': { backgroundColor: 'transparent' } }}>
                     <img src={crossIcon} alt="close" />
                   </Button>
                 </Block>
@@ -211,14 +217,16 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
                                     style: {
                                       ...buttonContentStyle,
                                       backgroundColor: selected.includes(i) ? ettlevColors.green100 : ettlevColors.white,
-                                      border: '1px solid #6A6A6A',
+                                      ...borderWidth('1px'),
+                                      ...borderStyle('solid'),
+                                      ...borderColor('#6A6A6A'),
                                       paddingLeft: '8px',
                                       paddingRight: '16px',
                                       paddingTop: '8px',
                                       paddingBottom: '10px',
                                       marginRight: '16px',
                                       marginBottom: '16px',
-                                      borderRadius: '4px',
+                                      ...borderRadius('4px'),
                                       ':hover': {
                                         backgroundColor: ettlevColors.white,
                                         boxShadow: '0px 2px 0px rgba(0, 0, 0, 0.25), inset 0px -1px 0px rgba(0, 0, 0, 0.25);',
