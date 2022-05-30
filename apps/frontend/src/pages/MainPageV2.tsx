@@ -24,7 +24,7 @@ const cardMarginRight = ['none', 'none', 'none', 'none', theme.sizing.scale800, 
 
 export const MainPageV2 = () => {
   const [forsideVarsel, setForsideVarsle] = useState<Melding>()
-  const [pageWidth, setPageWidth] = useState<number>(1276)
+  const [pageWidth, setPageWidth] = useState<number>()
 
   useEffect(() => {
     ;(async () => {
@@ -69,7 +69,7 @@ export const MainPageV2 = () => {
               verticalMargin={theme.sizing.scale300}
               href={'/tema'}
               tittel={'Forstå kravene'}
-              icon={pageWidth <=768 ? paragrafIconBgSmall :paragrafIconBg}
+              icon={pageWidth && pageWidth >= 768 ? paragrafIconBg : paragrafIconBgSmall}
               beskrivelse={'Få oversikt over krav til etterlevelse, og bli trygg på at du kjenner til alle relevante krav for det du lager'}
             />
 
@@ -81,7 +81,7 @@ export const MainPageV2 = () => {
               requireLogin
               href={'/behandlinger'}
               tittel={'Dokumentere etterlevelse'}
-              icon={pageWidth <=768 ? paperPenIconBgSmall :paperPenIconBg}
+              icon={pageWidth && pageWidth >= 768 ? paperPenIconBg : paperPenIconBgSmall}
               beskrivelse={'Se hvilke krav som gjelder din løsning og dokumenter hvordan løsningen etterlever kravene'}
             />
 
@@ -91,7 +91,7 @@ export const MainPageV2 = () => {
               verticalMargin={theme.sizing.scale300}
               href={'/status'}
               tittel={'Status i organisasjonen'}
-              icon={pageWidth <=768 ? grafIconBgSmall :grafIconBg}
+              icon={pageWidth && pageWidth >= 768 ? grafIconBg : grafIconBgSmall}
               beskrivelse={'Følg med på status og se hvor godt NAV sine produktområder  dokumenterer på kravene'}
             />
           </Block>
