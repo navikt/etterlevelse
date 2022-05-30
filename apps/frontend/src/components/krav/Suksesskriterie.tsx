@@ -18,7 +18,6 @@ export const SuksesskriterieCard = (props: { suksesskriterie: Suksesskriterie; n
             style: {
               ...borderRadius('4px'),
               ...borderWidth('1px'),
-              width:'100vw',
               maxWidth: pageWidth,
             },
           },
