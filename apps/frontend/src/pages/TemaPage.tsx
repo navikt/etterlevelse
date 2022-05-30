@@ -131,7 +131,7 @@ const TemaSide = ({ tema }: { tema: TemaCode }) => {
       header={getTemaMainHeader(tema, lover, expand, setExpand)}
     >
       <Block>
-        <HeadingXLarge>{loading ? '?' : data?.krav.numberOfElements || 0} krav</HeadingXLarge>
+        <HeadingXLarge marginLeft={['27px','27px','27px','27px','0px','0px']}>{loading ? '?' : data?.krav.numberOfElements || 0} krav</HeadingXLarge>
         {loading && <SkeletonPanel count={10} />}
         {!loading &&
           kravList &&
