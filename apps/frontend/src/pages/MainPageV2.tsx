@@ -3,7 +3,7 @@ import {ettlevColors, theme} from '../util/theme'
 import {Block} from 'baseui/block'
 import {HeadingXLarge, HeadingXXLarge, ParagraphMedium} from 'baseui/typography'
 import {PanelLink, PanelLinkCard} from '../components/common/PanelLink'
-import {grafIconBg, handWithLeaf, paperPenIconBg, paragrafIconBg} from '../components/Images'
+import {grafIconBg, grafIconBgSmall, handWithLeaf, paperPenIconBg, paperPenIconBgSmall, paragrafIconBg, paragrafIconBgSmall} from '../components/Images'
 import {Card} from 'baseui/card'
 import {borderColor, borderRadius, borderStyle, borderWidth, margin, paddingAll} from '../components/common/Style'
 import ReactPlayer from 'react-player'
@@ -16,6 +16,7 @@ import {Markdown} from '../components/common/Markdown'
 import {AlertType, Melding, MeldingStatus, MeldingType} from '../constants'
 import {getMeldingByType} from '../api/MeldingApi'
 import {ampli} from '../services/Amplitude'
+import { getPageWidth } from '../util/pageWidth'
 
 const cardWidth = ['95%', '95%', '95%', '95%', '31%', '31%']
 const cardHeight = ['auto', 'auto', 'auto', 'auto', '140px', '140px']
@@ -23,6 +24,7 @@ const cardMarginRight = ['none', 'none', 'none', 'none', theme.sizing.scale800, 
 
 export const MainPageV2 = () => {
   const [forsideVarsel, setForsideVarsle] = useState<Melding>()
+  const [pageWidth, setPageWidth] = useState<number>(1276)
 
   useEffect(() => {
     ;(async () => {
@@ -33,6 +35,13 @@ export const MainPageV2 = () => {
       })
     })()
   }, [])
+
+  useEffect(() => {
+    const reportWindowSize = () => {
+      setPageWidth(getPageWidth())
+    }
+    window.onresize = reportWindowSize
+  })
 
   ampli.logEvent('sidevisning', { side: 'Hovedside' })
 
@@ -60,7 +69,7 @@ export const MainPageV2 = () => {
               verticalMargin={theme.sizing.scale300}
               href={'/tema'}
               tittel={'Forstå kravene'}
-              icon={paragrafIconBg}
+              icon={pageWidth <=768 ? paragrafIconBgSmall :paragrafIconBg}
               beskrivelse={'Få oversikt over krav til etterlevelse, og bli trygg på at du kjenner til alle relevante krav for det du lager'}
             />
 
@@ -72,16 +81,17 @@ export const MainPageV2 = () => {
               requireLogin
               href={'/behandlinger'}
               tittel={'Dokumentere etterlevelse'}
-              icon={paperPenIconBg}
+              icon={pageWidth <=768 ? paperPenIconBgSmall :paperPenIconBg}
               beskrivelse={'Se hvilke krav som gjelder din løsning og dokumenter hvordan løsningen etterlever kravene'}
             />
+
             <PanelLinkCard
               height={cardHeight}
               width={cardWidth}
               verticalMargin={theme.sizing.scale300}
               href={'/status'}
               tittel={'Status i organisasjonen'}
-              icon={grafIconBg}
+              icon={pageWidth <=768 ? grafIconBgSmall :grafIconBg}
               beskrivelse={'Følg med på status og se hvor godt NAV sine produktområder  dokumenterer på kravene'}
             />
           </Block>
