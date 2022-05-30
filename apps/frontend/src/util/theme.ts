@@ -39,7 +39,7 @@ export const ettlevColors = {
   navMorkGra: '#262626',
   navGra80: '#4f4f4f',
   navOransje: '#A86400',
-  focusOutline: '#276ef1',
+  focusOutline: '#0056B4',
   navDypBla: '#004367',
   navLysBla: '#E5F0F7',
 }
@@ -69,6 +69,8 @@ export const searchResultColor = {
 
 const overrides: RecursivePartial<Theme> = {
   colors: {
+    //Focus outline color
+    accent: ettlevColors.focusOutline,
     //primary button color overrides:
     buttonPrimaryFill: ettlevColors.green400,
     buttonPrimaryText: ettlevColors.green50,
