@@ -61,6 +61,14 @@ export const EtterlevelseDokumentasjonPage = () => {
       pathName: 'Dokumenter etterlevelse',
       href: '/behandlinger',
     },
+    {
+      pathName: behandling?.navn || '',
+      href: '/behandling/' + behandling?.id,
+    },
+    {
+      pathName: temaData?.shortName || '',
+      href: '/behandling/' + behandling?.id + '/' + temaData?.code + '/' + params.filter
+    }
   ]
 
   return (
@@ -91,7 +99,7 @@ export const EtterlevelseDokumentasjonPage = () => {
             />
           }
           childrenBackgroundColor={ettlevColors.grey25}
-          currentPage={behandling?.navn}
+          currentPage={'K' + kravId?.kravNummer + '.' + kravId?.kravVersjon}
           breadcrumbPaths={breadcrumbPaths}
         >
           <Block display="flex" width="100%" justifyContent="space-between" flexWrap marginBottom="64px">
