@@ -67,7 +67,7 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
                       title={
                         <>
                           <strong>
-                            {e.behandling.nummer}-{e.behandling.overordnetFormaal.shortName}
+                            B{e.behandling.nummer}-{e.behandling.overordnetFormaal.shortName}
                           </strong>
                           : {e.behandling.navn}
                         </>
@@ -93,7 +93,7 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
                       title={
                         <>
                           <strong>
-                            {e.behandling.nummer}-{e.behandling.overordnetFormaal.shortName}
+                            B{e.behandling.nummer}-{e.behandling.overordnetFormaal.shortName} 
                           </strong>
                           : {e.behandling.navn}
                         </>
