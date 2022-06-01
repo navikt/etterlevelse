@@ -186,7 +186,7 @@ export const BehandlingPage = () => {
         <Block width="100%" display="flex">
           {emptyRelevans ? (
             <Block display="flex" alignItems="center">
-              <img height="16px" width="16px" src={warningAlert} alt="" />
+              <img height="16px" width="16px" src={warningAlert} alt="warning icon" />
               <LabelSmall color={ettlevColors.green600} marginTop="0px" marginBottom="0px" marginRight="5px" marginLeft="5px" $style={{ fontSize: '16px' }}>
                 Ingen egenskaper er oppgitt
               </LabelSmall>
@@ -200,7 +200,7 @@ export const BehandlingPage = () => {
           {!behandling.irrelevansFor.length ? getRelevans() : getRelevans(behandling.irrelevansFor)}
         </Block>
         <Block display="flex" flex="1" justifyContent="flex-end" $style={{ whiteSpace: 'nowrap' }}>
-          <Button onClick={() => setEdit(!edit)} startEnhancer={<img src={editIcon} alt="" />}>
+          <Button onClick={() => setEdit(!edit)} startEnhancer={<img src={editIcon} alt="edit icon" />}>
             Tilpass egenskaper
           </Button>
         </Block>

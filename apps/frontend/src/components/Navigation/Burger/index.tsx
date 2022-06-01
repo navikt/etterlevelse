@@ -82,7 +82,7 @@ const SignOutButton = (props: { location: string }) => {
   const linkCss = useCss({ textDecoration: 'none', color: 'white' })
   return (
     <StyledLink href={`${env.backendBaseUrl}/logout?redirect_uri=${props.location}`} className={linkCss}>
-      <Button kind="secondary" startEnhancer={<img src={exitIcon} alt="" />}>
+      <Button kind="secondary" startEnhancer={<img src={exitIcon} alt="exit icon" />}>
         Logg ut
       </Button>
     </StyledLink>

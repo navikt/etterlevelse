@@ -25,7 +25,7 @@ export const Portrait = (props: { ident: string; size?: string }) => {
             setLoading(false)
           }}
           src={image}
-          alt=""
+          alt="Avatar icon"
           aria-hidden
           style={{
             width: loading ? 0 : '100%',
@@ -36,7 +36,7 @@ export const Portrait = (props: { ident: string; size?: string }) => {
       ) : (
         <img
           src={avatarPlaceholder}
-          alt=""
+          alt="Avatar icon"
           aria-hidden
           style={{
             width: loading ? 0 : '100%',

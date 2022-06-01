@@ -97,7 +97,7 @@ export const KravCard = (props: { krav: KravEtterlevelseData; noStatus?: boolean
         >
           <Block display="flex" justifyContent="center" alignItems="center" width="100%" onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
             <Block marginLeft="8px">
-              {props.krav.isIrrelevant || isFerdigUtfylt(props.krav.etterlevelseStatus) ? <img src={arkCheckIcon} alt="" /> : <img src={arkPennIcon} alt="" />}
+              {props.krav.isIrrelevant || isFerdigUtfylt(props.krav.etterlevelseStatus) ? <img src={arkCheckIcon} alt="document check icon" /> : <img src={arkPennIcon} alt="document edit icon" />}
             </Block>
             <Block marginLeft="14px">
               <Block display={'flex'} alignItems={'center'}>
@@ -209,7 +209,7 @@ const showWarningMessage = (warningMessage: string) => {
         src={warningAlert}
         width="18px"
         height="18px"
-        alt=""
+        alt="warning icon"
         style={{
           marginLeft: '18px',
           marginRight: '5px',

@@ -206,7 +206,7 @@ export const EditEtterlevelse = ({
                           marginTop: '16px',
                         }}
                       >
-                        <img src={informationIcon} alt="" width={'24px'} height={'24px'} />
+                        <img src={informationIcon} alt="information icon" width={'24px'} height={'24px'} />
                         <ParagraphMedium marginLeft={theme.sizing.scale500} marginTop="0px" marginBottom="0px">
                           {varsleMelding}
                         </ParagraphMedium>

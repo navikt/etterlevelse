@@ -199,11 +199,11 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
                                 key={'relevans_' + r.id}
                                 startEnhancer={() => {
                                   if (selected.includes(i)) {
-                                    return <img src={checkboxChecked} alt="" />
+                                    return <img src={checkboxChecked} alt="checked" />
                                   } else if (!selected.includes(i) && hover === i) {
-                                    return <img src={checkboxUncheckedHover} alt="" />
+                                    return <img src={checkboxUncheckedHover} alt="checkbox hover" />
                                   } else {
-                                    return <img src={checkboxUnchecked} alt="" />
+                                    return <img src={checkboxUnchecked} alt="unchecked" />
                                   }
                                 }}
                                 overrides={{

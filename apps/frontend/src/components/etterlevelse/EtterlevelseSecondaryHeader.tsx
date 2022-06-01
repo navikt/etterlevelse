@@ -65,7 +65,7 @@ export const EtterlevelseSecondaryHeader = ({tab, setTab, setNavigatePath, behan
       </Block>
 
       <Block marginTop="8px">
-        <img src={angleIcon} alt=""/>{' '}
+        <img src={angleIcon} alt="angle icon"/>{' '}
         <Button
           kind="tertiary"
           onClick={() => {
@@ -104,7 +104,7 @@ export const EtterlevelseSecondaryHeader = ({tab, setTab, setNavigatePath, behan
 
       <Block marginTop="0px" marginBottom="56px" display="flex" width="calc(100% - 35px)" alignItems="center" justifyContent="center" marginLeft="35px">
         <Block display="flex" flex="1">
-          <img src={angleIcon} alt=""/>{' '}
+          <img src={angleIcon} alt="angle icon"/>{' '}
           <LabelSmall marginLeft="12px" $style={{fontSize: '24px', fontWeight: 900, lineHeight: '32px', color: ettlevColors.green600, whiteSpace: 'nowrap'}}>
             K{kravId?.kravNummer}.{kravId?.kravVersjon}
           </LabelSmall>

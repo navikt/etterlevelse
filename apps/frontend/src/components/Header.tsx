@@ -335,7 +335,7 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
               src={systemVarsel.alertType === AlertType.INFO ? informationIcon : warningAlert}
               width="20px"
               height="20px"
-              alt=""
+              alt={systemVarsel.alertType === AlertType.INFO ? "information icon" : "warning icon"}
               style={{
                 marginRight: '5px',
               }}

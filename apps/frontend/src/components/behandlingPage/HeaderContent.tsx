@@ -30,7 +30,7 @@ export const HeaderContent = (props: { kravLength: number; documentedLength: num
     )}
     {props.documentedLength >= 1 && (props.nyttKravVersjonCounter > 0 || props.nyttKravCounter > 0) && (
       <Block display="flex">
-        <img alt="" src={warningAlert} height="20px" width="20px" style={{ marginRight: '2px' }} />
+        <img alt="warning icon" src={warningAlert} height="20px" width="20px" style={{ marginRight: '2px' }} />
         <ParagraphXSmall $style={{ lineHeight: '20px', marginTop: '0px', marginBottom: '0px' }}>
           {props.nyttKravCounter > 0 ? (props.nyttKravCounter === 1 ? `${props.nyttKravCounter} nytt krav` : `${props.nyttKravCounter} nye krav`) : ''}
           {props.nyttKravVersjonCounter > 0 && props.nyttKravCounter > 0 && ', '}

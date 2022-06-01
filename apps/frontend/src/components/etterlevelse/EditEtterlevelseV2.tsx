@@ -243,7 +243,7 @@ export const EditEtterlevelseV2 = ({
                     <>
                       <img
                         src={warningAlert}
-                        alt=""
+                        alt="warning icon"
                         width="24px"
                         height="24px"
                         style={{
@@ -303,7 +303,7 @@ export const EditEtterlevelseV2 = ({
                     marginTop: '16px',
                   }}
                 >
-                  <img src={informationIcon} alt="" width={'24px'} height={'24px'} />
+                  <img src={informationIcon} alt="information icon" width={'24px'} height={'24px'} />
                   <ParagraphMedium marginLeft={theme.sizing.scale500} marginTop="0px" marginBottom="0px">
                     {varsleMelding}
                   </ParagraphMedium>

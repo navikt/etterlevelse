@@ -225,7 +225,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                       >
                         <Block display="flex">
                           <Block marginRight="12px">
-                            <img src={warningAlert} alt="" />
+                            <img src={warningAlert} alt="warning icon" />
                           </Block>
                           <Block>
                             <LabelSmall $style={{ fontSize: '16px', lineHeight: '20px' }}>Sikker på at du vil opprette en ny versjon?</LabelSmall>

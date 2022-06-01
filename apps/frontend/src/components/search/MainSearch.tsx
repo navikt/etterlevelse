@@ -83,7 +83,7 @@ const SelectType = (props: { type: SearchType; setType: (type: SearchType) => vo
     <Block width="100%" backgroundColor={ettlevColors.white}>
       {!filter && (
         <Block width="100%" display="flex" flex="1" justifyContent="flex-end" marginBottom="-10px">
-          <Button size="mini" onClick={() => setFilter(!filter)} startEnhancer={<img alt="" src={filterIcon} />} kind="tertiary" marginRight label="Filter søkeresultat" notBold>
+          <Button size="mini" onClick={() => setFilter(!filter)} startEnhancer={<img alt="filter icon" src={filterIcon} />} kind="tertiary" marginRight label="Filter søkeresultat" notBold>
             <ParagraphMedium
               $style={{
                 fontSize: theme.sizing.scale600,

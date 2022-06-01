@@ -68,7 +68,7 @@ export const KravListPage = () => {
               <Block display="flex" justifyContent="flex-end">
                 {user.isKraveier() && (
                   <RouteLink hideUnderline href={'/krav/ny'}>
-                    <Button startEnhancer={<img src={plusIcon} alt="" />} size="compact">
+                    <Button startEnhancer={<img src={plusIcon} alt="plus icon" />} size="compact">
                       Nytt krav
                     </Button>
                   </RouteLink>

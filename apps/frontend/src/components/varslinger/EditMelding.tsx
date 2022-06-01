@@ -162,7 +162,7 @@ export const EditMelding = ({ melding, setMelding, isLoading, maxChar }: { meldi
                       marginRight
                       kind="secondary"
                       disabled={disableEdit}
-                      startEnhancer={<img src={eyeSlash} alt="" />}
+                      startEnhancer={<img src={eyeSlash} alt="hide icon" />}
                       onClick={() => {
                         values.meldingStatus = MeldingStatus.DEACTIVE
                         submitForm()

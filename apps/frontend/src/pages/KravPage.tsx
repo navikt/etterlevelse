@@ -258,7 +258,7 @@ export const KravPage = () => {
                     alignItems={'center'}
                     justifyContent={'center'}
                   >
-                    <img src={informationIcon} alt="" />
+                    <img src={informationIcon} alt="information icon" />
                     <ParagraphMedium marginLeft={theme.sizing.scale500} marginTop="0px" marginBottom="0px">
                       {krav.varselMelding}
                     </ParagraphMedium>

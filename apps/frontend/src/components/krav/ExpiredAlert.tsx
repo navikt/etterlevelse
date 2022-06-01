@@ -21,7 +21,7 @@ const ExpiredAlert = ({ alleKravVersjoner, statusName }: { alleKravVersjoner: Kr
       ...borderRadius('4px'),
     }}
   >
-    <img src={warningAlert} alt="" />
+    <img src={warningAlert} alt="warning icon" />
     <ParagraphMedium marginLeft={theme.sizing.scale500} marginTop="0px" marginBottom="0px">
       Dette er et {statusName ? `${kravStatus(statusName).toLocaleLowerCase()} krav` : 'utgått krav'}.
       {alleKravVersjoner.length > 1 ? (

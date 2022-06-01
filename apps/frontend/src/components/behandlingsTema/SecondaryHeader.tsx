@@ -58,7 +58,7 @@ export const SecondaryHeader = ({ behandling, temaData, lovListe }: SecondaryHea
 
       <Block marginTop="0px" marginBottom="56px" display="flex" width={'100%'} alignItems="center" justifyContent="center">
         <Block display="flex" flex="1">
-          <img src={angleIcon} alt="" />{' '}
+          <img src={angleIcon} alt="angle icon" />{' '}
           <LabelSmall marginLeft="12px" $style={{ fontSize: '24px', fontWeight: 900, lineHeight: '32px', color: ettlevColors.green600, whiteSpace: 'nowrap' }}>
             {temaData?.shortName}
           </LabelSmall>
