@@ -91,7 +91,7 @@ export const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVer
       )}
 
       <LabelWrapper>
-        <LabelAboveContent header title="Relevante implementasjoner" markdown={krav.implementasjoner} />
+        <LabelAboveContent header title="Relevante implementasjoner" markdown={krav.implementasjoner} maxWidth="650px"/>
       </LabelWrapper>
 
       <LabelWrapper>

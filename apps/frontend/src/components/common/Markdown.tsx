@@ -97,7 +97,7 @@ export const Markdown = ({
 
       return (
         <ExternalLink href={href}>
-          <ExternalLinkWrapper text={content} />
+          <ExternalLinkWrapper text={content} fontSize={fontSize}/>
         </ExternalLink>
       )
     },

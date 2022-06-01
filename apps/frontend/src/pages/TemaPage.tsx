@@ -65,7 +65,7 @@ export const getTemaMainHeader = (tema: TemaCode, lover: LovCode[], expand: bool
         <Block marginBottom={theme.sizing.scale900}>
           <HeadingXLarge marginBottom={theme.sizing.scale200}>Ansvarlig for lovtolkning</HeadingXLarge>
           {_.uniq(lover.map((l) => l.data?.underavdeling)).map((code, index) => (
-            <ParagraphMedium key={code + '_' + index} marginTop={0} marginBottom={theme.sizing.scale200}>
+            <ParagraphMedium key={code + '_' + index} marginTop={0} marginBottom={theme.sizing.scale200} $style={{fontSize: '21px'}}>
               {codelist.getCode(ListName.UNDERAVDELING, code)?.shortName}
             </ParagraphMedium>
           ))}
@@ -74,7 +74,7 @@ export const getTemaMainHeader = (tema: TemaCode, lover: LovCode[], expand: bool
           {lover.map((l, index) => (
             <Block key={l.code + '_' + index} marginBottom={theme.sizing.scale200}>
               <ObjectLink external type={ListName.LOV} id={l.code}>
-                <ExternalLinkWrapper text={l.shortName} />
+                <ExternalLinkWrapper text={l.shortName} fontSize="21px" />
               </ObjectLink>
             </Block>
           ))}
