@@ -1,6 +1,6 @@
 import { Block, Display, Responsive } from 'baseui/block'
 import { HeadingXXLarge, LabelSmall, ParagraphMedium } from 'baseui/typography'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Button from '../components/common/Button'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
 import CustomizedTabs from '../components/common/CustomizedTabs'
@@ -153,10 +153,11 @@ const KravTabs = () => {
   const params = useParams<{ tab?: Section }>()
   const navigate = useNavigate()
   const [tab, setTab] = useState<Section>(params.tab || 'siste')
+  
+  useEffect(() => {
+      setTab(params.tab as Section || 'siste')
+  }, [params])
 
-  React.useEffect(() => {
-    if (tab !== params.tab) navigate(`/kravliste/${tab}`, { replace: true })
-  }, [tab])
 
   return (
     <CustomizedTabs
@@ -164,7 +165,10 @@ const KravTabs = () => {
       small
       backgroundColor={ettlevColors.grey25}
       activeKey={tab}
-      onChange={(args) => setTab(args.activeKey as Section)}
+      onChange={(args) => {
+        setTab(args.activeKey as Section)
+        navigate(`/kravliste/${args.activeKey}`)
+      }}
       tabs={[
         {
           key: 'siste',
