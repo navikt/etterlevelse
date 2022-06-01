@@ -256,7 +256,16 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                     tooltip={'Gi kravet en kort tittel. Kravet formuleres som en aktivitet eller målsetting.'}
                   />
                   <Block marginBottom="55px">
-                    <Checkbox checked={varlselMeldingActive} onChange={() => setVarselMeldingActive(!varlselMeldingActive)}>
+                    <Checkbox
+                      overrides={{
+                        Checkmark: {
+                          style: ({ $isFocused }) => ({
+                            outlineColor: $isFocused ? ettlevColors.focusOutline : undefined,
+                            outlineWidth: $isFocused ? '3px' : undefined,
+                            outlineStyle: $isFocused ? 'solid' : undefined
+                          })
+                        }
+                      }} checked={varlselMeldingActive} onChange={() => setVarselMeldingActive(!varlselMeldingActive)}>
                       Gi kravet en varselmelding (eks. for kommende krav)
                     </Checkbox>
                     {varlselMeldingActive && (

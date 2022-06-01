@@ -115,7 +115,7 @@ export const EtterlevelseEditFields = ({
                   <Block>
                     <Block>
                       {(etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT || etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) && (
-                        <ParagraphMedium $style={{fontStyle: 'italic'}}>Dette kravet er dokumentert som ikke relevant 20.05.2022</ParagraphMedium>
+                        <ParagraphMedium $style={{ fontStyle: 'italic' }}>Dette kravet er dokumentert som ikke relevant 20.05.2022</ParagraphMedium>
                       )}
 
                       {(etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT || etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) && (
@@ -222,6 +222,13 @@ export const EtterlevelseEditFields = ({
                                 ':active': { backgroundColor: ettlevColors.green600 },
                               },
                             },
+                            Checkmark: {
+                              style: ({ $isFocused }) => ({
+                                outlineColor: $isFocused ? ettlevColors.focusOutline : undefined,
+                                outlineWidth: $isFocused ? '3px' : undefined,
+                                outlineStyle: $isFocused ? 'solid' : undefined
+                              })
+                            }
                           }}
                         >
                           <Block $style={{ textDecoration: radioHover === EtterlevelseStatus.OPPFYLLES_SENERE ? 'underline' : 'none' }}>
@@ -386,7 +393,7 @@ export const EtterlevelseEditFields = ({
                   <Block>
                     <Block>
                       {(etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT || etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) && (
-                        <ParagraphMedium $style={{fontStyle: 'italic'}}>Dette kravet er dokumentert som ikke relevant 20.05.2022, og senere blitt bortfiltrert</ParagraphMedium>
+                        <ParagraphMedium $style={{ fontStyle: 'italic' }}>Dette kravet er dokumentert som ikke relevant 20.05.2022, og senere blitt bortfiltrert</ParagraphMedium>
                       )}
 
                       {(etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT || etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) && (

@@ -1,33 +1,33 @@
 import * as React from 'react'
-import {useState} from 'react'
-import {ALIGN, HeaderNavigation, StyledNavigationItem as NavigationItem, StyledNavigationList as NavigationList} from 'baseui/header-navigation'
-import {Block} from 'baseui/block'
-import {KIND, SIZE} from 'baseui/button'
-import Button, {buttonBorderStyle, ButtonKind} from './common/Button'
-import {Popover} from 'baseui/popover'
-import {Location, useLocation} from 'react-router-dom'
-import {StyledLink} from 'baseui/link'
-import {useQueryParam} from '../util/hooks'
-import {theme} from '../util'
-import {HeadingXLarge} from 'baseui/typography'
-import {intl} from '../util/intl/intl'
+import { useState } from 'react'
+import { ALIGN, HeaderNavigation, StyledNavigationItem as NavigationItem, StyledNavigationList as NavigationList } from 'baseui/header-navigation'
+import { Block } from 'baseui/block'
+import { KIND, SIZE } from 'baseui/button'
+import Button, { buttonBorderStyle, ButtonKind } from './common/Button'
+import { Popover } from 'baseui/popover'
+import { Location, useLocation } from 'react-router-dom'
+import { StyledLink } from 'baseui/link'
+import { useQueryParam } from '../util/hooks'
+import { theme } from '../util'
+import { HeadingXLarge } from 'baseui/typography'
+import { intl } from '../util/intl/intl'
 import BurgerMenu from './Navigation/Burger'
 import RouteLink from './common/RouteLink'
-import {user} from '../services/User'
-import {writeLog} from '../api/LogApi'
+import { user } from '../services/User'
+import { writeLog } from '../api/LogApi'
 import MainSearch from './search/MainSearch'
-import {arkPennIcon, grafIcon, husIcon, informationIcon, logo, paragrafIcon, warningAlert} from './Images'
-import {ettlevColors, maxPageWidth, responsivePaddingSmall, responsiveWidthSmall} from '../util/theme'
-import {Checkbox, STYLE_TYPE} from 'baseui/checkbox'
-import {Portrait} from './common/Portrait'
-import {IconDefinition} from '@fortawesome/fontawesome-svg-core'
-import {faBars, faChevronDown, faChevronUp, faTimes} from '@fortawesome/free-solid-svg-icons'
-import {faUser} from '@fortawesome/free-regular-svg-icons'
+import { arkPennIcon, grafIcon, husIcon, informationIcon, logo, paragrafIcon, warningAlert } from './Images'
+import { ettlevColors, maxPageWidth, responsivePaddingSmall, responsiveWidthSmall } from '../util/theme'
+import { Checkbox, STYLE_TYPE } from 'baseui/checkbox'
+import { Portrait } from './common/Portrait'
+import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
+import { faBars, faChevronDown, faChevronUp, faTimes } from '@fortawesome/free-solid-svg-icons'
+import { faUser } from '@fortawesome/free-regular-svg-icons'
 import SkipToContent from './common/SkipToContent/SkipToContent'
-import {borderColor, borderStyle, borderWidth} from './common/Style'
-import {AlertType, Melding, MeldingStatus, MeldingType} from '../constants'
-import {getMeldingByType} from '../api/MeldingApi'
-import {Markdown} from './common/Markdown'
+import { borderColor, borderStyle, borderWidth } from './common/Style'
+import { AlertType, Melding, MeldingStatus, MeldingType } from '../constants'
+import { getMeldingByType } from '../api/MeldingApi'
+import { Markdown } from './common/Markdown'
 
 export const loginUrl = (location: Location, path?: string) => {
   const frontpage = window.location.href.substr(0, window.location.href.length - location.pathname.length)
@@ -63,6 +63,15 @@ const LoggedInHeader = () => {
             checkmarkType={STYLE_TYPE.toggle_round}
             onChange={(e) => user.toggleGroup(g.group, (e.target as HTMLInputElement).checked)}
             labelPlacement={'right'}
+            overrides={{
+              Checkmark: {
+                style: ({ $isFocused }) => ({
+                  outlineColor: $isFocused ? ettlevColors.focusOutline : undefined,
+                  outlineWidth: $isFocused ? '3px' : undefined,
+                  outlineStyle: $isFocused ? 'solid' : undefined
+                })
+              }
+            }}
           >
             {g.name}
           </Checkbox>
@@ -74,13 +83,13 @@ const LoggedInHeader = () => {
   const kravPages = user.isKraveier() ? [{ label: 'Forvalte og opprette krav', href: '/kravliste' }] : []
   const adminPages = user.isAdmin()
     ? [
-        { label: 'Administrere krav', href: '/admin/krav' },
-        { label: intl.audit, href: '/admin/audit' },
-        { label: 'Kodeverk', href: '/admin/codelist' },
-        { label: intl.questionAndAnswers, href: '/admin/messageslog' },
-        { label: intl.notifications, href: '/admin/varsel' },
-        { label: intl.settings, href: '/admin/settings', disabled: true },
-      ]
+      { label: 'Administrere krav', href: '/admin/krav' },
+      { label: intl.audit, href: '/admin/audit' },
+      { label: 'Kodeverk', href: '/admin/codelist' },
+      { label: intl.questionAndAnswers, href: '/admin/messageslog' },
+      { label: intl.notifications, href: '/admin/varsel' },
+      { label: intl.settings, href: '/admin/settings', disabled: true },
+    ]
     : []
   const otherPages = [
     { label: 'Mine innstillinger', href: '/innstillinger', disabled: true },
@@ -156,8 +165,8 @@ const Menu = (props: { pages: MenuItem[][]; title: React.ReactNode; icon?: IconD
 
   const allPages = props.pages.length
     ? props.pages
-        .filter((p) => p.length)
-        .reduce((previousValue, currentValue) => [...((previousValue as MenuItem[]) || []), { label: <Divider compact={props.compact} /> }, ...(currentValue as MenuItem[])])
+      .filter((p) => p.length)
+      .reduce((previousValue, currentValue) => [...((previousValue as MenuItem[]) || []), { label: <Divider compact={props.compact} /> }, ...(currentValue as MenuItem[])])
     : []
 
   return (
@@ -237,7 +246,7 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
   }
 
   React.useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       await getMeldingByType(MeldingType.SYSTEM).then((r) => {
         if (r.numberOfElements > 0) {
           setSystemVarsel(r.content[0])
