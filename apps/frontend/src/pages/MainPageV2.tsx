@@ -116,7 +116,7 @@ export const MainPageV2 = () => {
                   marginBottom: '64px',
                 }}
               >
-                <Markdown source={forsideVarsel.melding} fontSize="18px" />
+                <Markdown source={forsideVarsel.melding} fontSize="18px" maxWidth="650px"/>
               </Block>
             )}
             <HeadingXLarge $style={{ fontWeight: 300, fontSize: '32px', lineHeight: '42px' }} marginTop="0px" marginBottom="0px">
