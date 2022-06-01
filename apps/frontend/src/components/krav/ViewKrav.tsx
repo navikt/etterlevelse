@@ -1,22 +1,22 @@
-import {AdresseType, Begrep, KravQL, KravVersjon} from '../../constants'
-import {Block, Display, Responsive} from 'baseui/block'
+import { AdresseType, Begrep, KravQL, KravVersjon } from '../../constants'
+import { Block, Display, Responsive } from 'baseui/block'
 import React from 'react'
-import {kravStatus} from '../../pages/KravPage'
-import {theme} from '../../util'
+import { kravStatus } from '../../pages/KravPage'
+import { theme } from '../../util'
 import moment from 'moment'
-import {DotTag, DotTags} from '../common/DotTag'
-import {ListName} from '../../services/Codelist'
-import {Label, LabelAboveContent} from '../common/PropertyLabel'
-import {ExternalLink, ExternalLinkWrapper, ObjectLink} from '../common/RouteLink'
-import {slackLink, slackUserLink, termUrl} from '../../util/config'
-import {user} from '../../services/User'
-import {LovViewList} from '../Lov'
-import {SuksesskriterieCard} from './Suksesskriterie'
-import {LabelSmall, ParagraphMedium} from 'baseui/typography'
-import {CustomizedAccordion, CustomizedPanel} from '../common/CustomizedAccordion'
-import {ettlevColors} from '../../util/theme'
-import {borderStyle} from '../common/Style'
-import {Markdown} from '../common/Markdown'
+import { DotTag, DotTags } from '../common/DotTag'
+import { ListName } from '../../services/Codelist'
+import { Label, LabelAboveContent } from '../common/PropertyLabel'
+import { ExternalLink, ExternalLinkWrapper, ObjectLink } from '../common/RouteLink'
+import { slackLink, slackUserLink, termUrl } from '../../util/config'
+import { user } from '../../services/User'
+import { LovViewList } from '../Lov'
+import { SuksesskriterieCard } from './Suksesskriterie'
+import { LabelSmall, ParagraphMedium } from 'baseui/typography'
+import { CustomizedAccordion, CustomizedPanel } from '../common/CustomizedAccordion'
+import { ettlevColors } from '../../util/theme'
+import { borderStyle } from '../common/Style'
+import { Markdown } from '../common/Markdown'
 import ExpiredAlert from './ExpiredAlert'
 import SidePanel from './SidePanel'
 
@@ -39,7 +39,7 @@ export const ViewKrav = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVe
         {/*  <LabelAboveContent header title='Beskrivelse' markdown={krav.beskrivelse} /> */}
         {<AllInfo krav={krav} alleKravVersjoner={alleKravVersjoner} />}
       </Block>
-      <Block display={['none','none','none','none','none','block']} position={'fixed'} right={'-211px'}>
+      <Block display={['none', 'none', 'none', 'none', 'none', 'block']} position={'fixed'} right={'-211px'}>
         <SidePanel />
       </Block>
     </Block>
@@ -91,7 +91,7 @@ export const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVer
       )}
 
       <LabelWrapper>
-        <LabelAboveContent header title="Relevante implementasjoner" markdown={krav.implementasjoner} maxWidth="650px"/>
+        <LabelAboveContent header title="Relevante implementasjoner" markdown={krav.implementasjoner} maxWidth="650px" />
       </LabelWrapper>
 
       <LabelWrapper>

@@ -153,11 +153,10 @@ const KravTabs = () => {
   const params = useParams<{ tab?: Section }>()
   const navigate = useNavigate()
   const [tab, setTab] = useState<Section>(params.tab || 'siste')
-  
-  useEffect(() => {
-      setTab(params.tab as Section || 'siste')
-  }, [params])
 
+  useEffect(() => {
+    setTab((params.tab as Section) || 'siste')
+  }, [params])
 
   return (
     <CustomizedTabs

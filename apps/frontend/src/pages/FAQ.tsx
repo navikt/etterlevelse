@@ -17,7 +17,7 @@ export const FAQ = () => {
   const [melding, setMelding] = useState<Melding>()
 
   useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       setLoading(true)
       const response = await getMeldingByType(MeldingType.OM_ETTERLEVELSE)
       if (response.numberOfElements > 0) {
@@ -69,7 +69,7 @@ export const FAQ = () => {
               <HeadingXLarge marginTop="56px" marginBottom="24px">
                 {melding?.secondaryTittel}
               </HeadingXLarge>
-              <Markdown source={melding?.secondaryMelding} fontSize="18px" fontColor={ettlevColors.green800}/>
+              <Markdown source={melding?.secondaryMelding} fontSize="18px" fontColor={ettlevColors.green800} />
 
               {/*<ParagraphLarge $style={{ fontSize: '22px', color: ettlevColors.green800 }}>*/}
               {/*  Siden er under arbeid, og vi tar gjerne imot innspill på Slack <strong>#etterlevelse.</strong>*/}

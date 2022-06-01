@@ -91,7 +91,7 @@ export const EditEtterlevelseV2 = ({
   const [isAlertUnsavedModalOpen, setIsAlertUnsavedModalOpen] = useState<boolean>(false)
 
   useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       behandlingId &&
         kravId.kravNummer &&
         getEtterlevelseMetadataByBehandlingsIdAndKravNummerAndKravVersion(behandlingId, kravId.kravNummer, kravId.kravVersjon).then((resp) => {
@@ -239,7 +239,7 @@ export const EditEtterlevelseV2 = ({
                     marginTop: '16px',
                   }}
                 >
-                  {etterlevelse.id === '' &&
+                  {etterlevelse.id === '' && (
                     <>
                       <img
                         src={warningAlert}
@@ -261,7 +261,8 @@ export const EditEtterlevelseV2 = ({
                       >
                         Dette er en ny versjon.
                       </ParagraphMedium>
-                    </>}
+                    </>
+                  )}
                   {krav.versjonEndringer && (
                     <Button
                       type="button"
@@ -482,8 +483,7 @@ export const EditEtterlevelseV2 = ({
             </Block>
           </CustomizedModal>
         </Block>
-      )
-      }
-    </Block >
+      )}
+    </Block>
   )
 }

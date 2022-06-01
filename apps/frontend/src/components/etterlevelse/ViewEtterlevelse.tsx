@@ -252,7 +252,7 @@ export const ViewEtterlevelse = ({
                           color: ettlevColors.grey600,
                         }}
                       >
-                         Suksesskriterie {i + 1} av {krav.suksesskriterier.length}
+                        Suksesskriterie {i + 1} av {krav.suksesskriterier.length}
                       </ParagraphMedium>
                     </Block>
                     {(!suksessbeskrivelseBegrunnelse.behovForBegrunnelse || suksessbeskrivelseBegrunnelse.begrunnelse) && (
@@ -317,10 +317,11 @@ export const ViewEtterlevelse = ({
                         {suksessbeskrivelseBegrunnelse.ikkeRelevant ? 'Hvorfor er ikke kriteriet relevant?' : 'Hvordan er kriteriet oppfylt?'}
                       </LabelSmall>
                       <Block marginBottom={'48px'}>
-                        {!suksessbeskrivelseBegrunnelse.behovForBegrunnelse && !suksessbeskrivelseBegrunnelse.begrunnelse ?
-                          <ParagraphMedium>Kriteriet har ikke behov for begrunnelse</ParagraphMedium> :
+                        {!suksessbeskrivelseBegrunnelse.behovForBegrunnelse && !suksessbeskrivelseBegrunnelse.begrunnelse ? (
+                          <ParagraphMedium>Kriteriet har ikke behov for begrunnelse</ParagraphMedium>
+                        ) : (
                           <Markdown source={suksessbeskrivelseBegrunnelse.begrunnelse} />
-                        }
+                        )}
                       </Block>
                     </Block>
                   ) : (

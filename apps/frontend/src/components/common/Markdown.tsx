@@ -55,7 +55,7 @@ export const Markdown = ({
       }
       return (
         <ParagraphMedium
-          $style={{ fontSize: fontSize ? fontSize : undefined}}
+          $style={{ fontSize: fontSize ? fontSize : undefined }}
           color={fontColor ? fontColor : ettlevColors.green800}
           marginTop={noMargin ? 0 : undefined}
           marginBottom={noMargin ? 0 : undefined}
@@ -97,7 +97,7 @@ export const Markdown = ({
 
       return (
         <ExternalLink href={href}>
-          <ExternalLinkWrapper text={content} fontSize={fontSize}/>
+          <ExternalLinkWrapper text={content} fontSize={fontSize} />
         </ExternalLink>
       )
     },
@@ -120,7 +120,7 @@ export const Markdown = ({
           </li>
         )
       } else {
-        return <li style={{lineHeight: '22px', marginBottom: '8px' }}>{children}</li>
+        return <li style={{ lineHeight: '22px', marginBottom: '8px' }}>{children}</li>
       }
     },
   }

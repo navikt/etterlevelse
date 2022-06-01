@@ -1,23 +1,23 @@
-import {Block} from 'baseui/block'
+import { Block } from 'baseui/block'
 
-import {HeadingXXLarge, ParagraphMedium} from 'baseui/typography'
+import { HeadingXXLarge, ParagraphMedium } from 'baseui/typography'
 import moment from 'moment'
 import * as React from 'react'
-import {ReactElement, useEffect, useState} from 'react'
-import {Helmet} from 'react-helmet'
-import {getAllKrav, kravMapToFormVal} from '../api/KravApi'
-import {getTilbakemeldingForKrav} from '../api/TilbakemeldingApi'
-import {PersonName} from '../components/common/PersonName'
+import { ReactElement, useEffect, useState } from 'react'
+import { Helmet } from 'react-helmet'
+import { getAllKrav, kravMapToFormVal } from '../api/KravApi'
+import { getTilbakemeldingForKrav } from '../api/TilbakemeldingApi'
+import { PersonName } from '../components/common/PersonName'
 import RouteLink from '../components/common/RouteLink'
-import {Cell, Row, Table} from '../components/common/Table'
-import {tilbakeMeldingStatus} from '../components/krav/tilbakemelding/Tilbakemelding'
-import {Layout2} from '../components/scaffold/Page'
-import {Krav, PageResponse, Tilbakemelding} from '../constants'
-import {ColumnCompares} from '../util/hooks'
-import {ettlevColors, maxPageWidth} from '../util/theme'
-import {codelist, ListName} from '../services/Codelist'
-import {ampli} from '../services/Amplitude'
-import {Spinner} from '../components/common/Spinner'
+import { Cell, Row, Table } from '../components/common/Table'
+import { tilbakeMeldingStatus } from '../components/krav/tilbakemelding/Tilbakemelding'
+import { Layout2 } from '../components/scaffold/Page'
+import { Krav, PageResponse, Tilbakemelding } from '../constants'
+import { ColumnCompares } from '../util/hooks'
+import { ettlevColors, maxPageWidth } from '../util/theme'
+import { codelist, ListName } from '../services/Codelist'
+import { ampli } from '../services/Amplitude'
+import { Spinner } from '../components/common/Spinner'
 import { ReactNode } from 'react-markdown/lib/react-markdown'
 
 type SporsmaalOgSvarKrav = {
@@ -34,7 +34,7 @@ const kravSorting: ColumnCompares<KravMessage> = {
   kravNummer: (a, b) => a.kravNummer - b.kravNummer,
   kravNavn: (a, b) => (a.kravNavn || '').localeCompare(b.kravNavn || ''),
   tidForSporsmaal: (a, b) => (a.tidForSporsmaal || '').localeCompare(b.tidForSporsmaal || ''),
-  tema: (a,b) => (a.tema || '').localeCompare(b.tema || ''),
+  tema: (a, b) => (a.tema || '').localeCompare(b.tema || ''),
   tidForSvar: (a, b) => (a.tidForSvar || '').localeCompare(b.tidForSvar || ''),
 }
 
@@ -42,8 +42,7 @@ export const QuestionAndAnswerLogPage = () => {
   const [tableContent, setTableContent] = useState<Krav[]>([])
   const [kravMessages, setKravMessages] = useState<KravMessage[]>([])
   const [isloading, setIsLoading] = useState<boolean>(false)
-  ampli.logEvent('sidevisning', {side: 'Log side for spørsmål og svar', sidetittel: 'Spørsmål og svar'})
-
+  ampli.logEvent('sidevisning', { side: 'Log side for spørsmål og svar', sidetittel: 'Spørsmål og svar' })
 
   useEffect(() => {
     ;(async () => {
@@ -74,7 +73,7 @@ export const QuestionAndAnswerLogPage = () => {
         tilbakeMeldinger.forEach((t) => {
           const kravNavn = tableContent.filter((k) => k.kravNummer === t.kravNummer && k.kravVersjon === t.kravVersjon)[0].navn
           const kravTema = tableContent.filter((k) => k.kravNummer === t.kravNummer && k.kravVersjon === t.kravVersjon)[0].tema
-          const {ubesvart, sistMelding} = tilbakeMeldingStatus(t)
+          const { ubesvart, sistMelding } = tilbakeMeldingStatus(t)
           kravMessages.push({
             ...t,
             kravNavn: kravNavn,
@@ -100,7 +99,7 @@ export const QuestionAndAnswerLogPage = () => {
       mainHeader={
         <Block maxWidth={maxPageWidth} width="100%" display={'flex'} justifyContent="flex-start">
           <Helmet>
-            <meta charSet="utf-8"/>
+            <meta charSet="utf-8" />
             <title>Spørsmål og svar</title>
           </Helmet>
           <HeadingXXLarge marginTop="0">Spørsmål og svar</HeadingXXLarge>
@@ -119,21 +118,21 @@ export const QuestionAndAnswerLogPage = () => {
               defaultPageSize: 20,
             }}
             headers={[
-              {$style: {maxWidth: '6%'}, title: 'Krav ID', column: 'kravNummer'},
-              {$style: {maxWidth: '25%', minWidth: '25%'}, title: 'Kravnavn', column: 'kravNavn'},
-              {title: 'Tema', column: 'tema'},
-              {title: 'Fra', column: 'melderNavn'},
-              {title: 'Tid for spørsmål', column: 'tidForSporsmaal'},
-              {title: 'Tid for svar', column: 'tidForSvar'},
+              { $style: { maxWidth: '6%' }, title: 'Krav ID', column: 'kravNummer' },
+              { $style: { maxWidth: '25%', minWidth: '25%' }, title: 'Kravnavn', column: 'kravNavn' },
+              { title: 'Tema', column: 'tema' },
+              { title: 'Fra', column: 'melderNavn' },
+              { title: 'Tid for spørsmål', column: 'tidForSporsmaal' },
+              { title: 'Tid for svar', column: 'tidForSvar' },
             ]}
             render={(tableData) => {
               return tableData.data.slice((tableData.page - 1) * tableData.limit, (tableData.page - 1) * tableData.limit + tableData.limit).map((krav, index) => {
                 return (
                   <Row key={krav.id}>
-                    <Cell $style={{maxWidth: '6%'}}>
+                    <Cell $style={{ maxWidth: '6%' }}>
                       {krav.kravNummer}.{krav.kravVersjon}
                     </Cell>
-                    <Cell $style={{maxWidth: '25%', minWidth: '25%'}}>
+                    <Cell $style={{ maxWidth: '25%', minWidth: '25%' }}>
                       <RouteLink href={`/krav/${krav.kravNummer}/${krav.kravVersjon}?tilbakemeldingId=${krav.id}`}>{krav.kravNavn}</RouteLink>
                     </Cell>
                     <Cell>{codelist.getCode(ListName.TEMA, krav.tema)?.shortName}</Cell>
@@ -143,7 +142,7 @@ export const QuestionAndAnswerLogPage = () => {
                       {krav.tidForSvar ? (
                         moment(krav.tidForSvar).format('lll')
                       ) : (
-                        <ParagraphMedium $style={{fontSize: '16px', lineHeight: '22px', marginTop: '0px', marginBottom: '0px', color: ettlevColors.red600}}>
+                        <ParagraphMedium $style={{ fontSize: '16px', lineHeight: '22px', marginTop: '0px', marginBottom: '0px', color: ettlevColors.red600 }}>
                           Ikke besvart
                         </ParagraphMedium>
                       )}
@@ -155,7 +154,7 @@ export const QuestionAndAnswerLogPage = () => {
           />
         ) : (
           <Block display={'flex'} justifyContent={'center'}>
-            <Spinner size={'50px'}/>
+            <Spinner size={'50px'} />
           </Block>
         )}
       </Block>

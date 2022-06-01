@@ -262,10 +262,13 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                           style: ({ $isFocused }) => ({
                             outlineColor: $isFocused ? ettlevColors.focusOutline : undefined,
                             outlineWidth: $isFocused ? '3px' : undefined,
-                            outlineStyle: $isFocused ? 'solid' : undefined
-                          })
-                        }
-                      }} checked={varlselMeldingActive} onChange={() => setVarselMeldingActive(!varlselMeldingActive)}>
+                            outlineStyle: $isFocused ? 'solid' : undefined,
+                          }),
+                        },
+                      }}
+                      checked={varlselMeldingActive}
+                      onChange={() => setVarselMeldingActive(!varlselMeldingActive)}
+                    >
                       Gi kravet en varselmelding (eks. for kommende krav)
                     </Checkbox>
                     {varlselMeldingActive && (

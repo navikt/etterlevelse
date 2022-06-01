@@ -67,8 +67,8 @@ export const EtterlevelseDokumentasjonPage = () => {
     },
     {
       pathName: temaData?.shortName || '',
-      href: '/behandling/' + behandling?.id + '/' + temaData?.code + '/' + params.filter
-    }
+      href: '/behandling/' + behandling?.id + '/' + temaData?.code + '/' + params.filter,
+    },
   ]
 
   return (

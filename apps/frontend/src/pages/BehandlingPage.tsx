@@ -89,7 +89,7 @@ export const BehandlingPage = () => {
 
   const [relevanteStats, setRelevanteStats] = useState<any[]>([])
   const [irrelevanteStats, setIrrelevanteStats] = useState<any[]>([])
-  const [utgaattStats,setUtgaattStats] = useState<any[]>([])
+  const [utgaattStats, setUtgaattStats] = useState<any[]>([])
 
   // useEffect(() => {
   //   if(!user.isLoggedIn()) {
@@ -100,10 +100,10 @@ export const BehandlingPage = () => {
   const filterData = (
     unfilteredData:
       | {
-        behandling: PageResponse<{
-          stats: BehandlingStats
-        }>
-      }
+          behandling: PageResponse<{
+            stats: BehandlingStats
+          }>
+        }
       | undefined,
   ) => {
     const relevanteStatusListe: any[] = []
@@ -242,13 +242,12 @@ export const BehandlingPage = () => {
   )
 
   const getRelevans = (irrelevans?: Code[]) => {
-
     if (irrelevans?.length === options.length) {
       return <ParagraphXSmall>For å filtrere bort krav som ikke er relevante, må dere oppgi egenskaper ved behandlingen.</ParagraphXSmall>
     }
 
     if (irrelevans) {
-      const relevans = options.filter((n) => !irrelevans.map((ir:Code) => ir.code).includes(n.id))
+      const relevans = options.filter((n) => !irrelevans.map((ir: Code) => ir.code).includes(n.id))
 
       return (
         <Block display={responsiveDisplay} flexWrap>

@@ -1,21 +1,21 @@
-import {EtterlevelseMetadata, KRAV_FILTER_TYPE, KravEtterlevelseData} from '../../constants'
-import React, {useEffect, useState} from 'react'
-import {getEtterlevelseMetadataByBehandlingsIdAndKravNummerAndKravVersion, mapEtterlevelseMetadataToFormValue} from '../../api/EtterlevelseMetadataApi'
-import {Block} from 'baseui/block'
+import { EtterlevelseMetadata, KRAV_FILTER_TYPE, KravEtterlevelseData } from '../../constants'
+import React, { useEffect, useState } from 'react'
+import { getEtterlevelseMetadataByBehandlingsIdAndKravNummerAndKravVersion, mapEtterlevelseMetadataToFormValue } from '../../api/EtterlevelseMetadataApi'
+import { Block } from 'baseui/block'
 import Button from '../common/Button'
-import {ettlevColors} from '../../util/theme'
-import {borderStyle, marginAll} from '../common/Style'
-import {LabelSmall, ParagraphXSmall} from 'baseui/typography'
+import { ettlevColors } from '../../util/theme'
+import { borderStyle, marginAll } from '../common/Style'
+import { LabelSmall, ParagraphXSmall } from 'baseui/typography'
 import StatusView from '../common/StatusTag'
-import {getEtterlevelseStatus, getStatusLabelColor} from '../behandling/utils'
+import { getEtterlevelseStatus, getStatusLabelColor } from '../behandling/utils'
 import moment from 'moment'
 import TildeltPopoever from '../etterlevelseMetadata/TildeltPopover'
-import {isFerdigUtfylt} from '../../pages/BehandlingerTemaPageV2'
-import {faEllipsisVertical} from '@fortawesome/free-solid-svg-icons'
-import {arkCheckIcon, arkPennIcon, warningAlert} from '../Images'
-import {getEtterlevelserByBehandlingsIdKravNumber} from '../../api/EtterlevelseApi'
-import {useLocation, useNavigate} from 'react-router-dom'
-import {getNumberOfDaysBetween} from '../../util/checkAge'
+import { isFerdigUtfylt } from '../../pages/BehandlingerTemaPageV2'
+import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons'
+import { arkCheckIcon, arkPennIcon, warningAlert } from '../Images'
+import { getEtterlevelserByBehandlingsIdKravNumber } from '../../api/EtterlevelseApi'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { getNumberOfDaysBetween } from '../../util/checkAge'
 
 export const KravCard = (props: { krav: KravEtterlevelseData; noStatus?: boolean; behandlingId: string; noVarsling?: boolean; kravFilter: KRAV_FILTER_TYPE }) => {
   const [nyVersionFlag, setNyVersionFlag] = useState<boolean>(false)
@@ -97,7 +97,11 @@ export const KravCard = (props: { krav: KravEtterlevelseData; noStatus?: boolean
         >
           <Block display="flex" justifyContent="center" alignItems="center" width="100%" onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
             <Block marginLeft="8px">
-              {props.krav.isIrrelevant || isFerdigUtfylt(props.krav.etterlevelseStatus) ? <img src={arkCheckIcon} alt="document check icon" /> : <img src={arkPennIcon} alt="document edit icon" />}
+              {props.krav.isIrrelevant || isFerdigUtfylt(props.krav.etterlevelseStatus) ? (
+                <img src={arkCheckIcon} alt="document check icon" />
+              ) : (
+                <img src={arkPennIcon} alt="document edit icon" />
+              )}
             </Block>
             <Block marginLeft="14px">
               <Block display={'flex'} alignItems={'center'}>
@@ -110,7 +114,8 @@ export const KravCard = (props: { krav: KravEtterlevelseData; noStatus?: boolean
                 {!props.noVarsling &&
                   props.krav.etterlevelseStatus === undefined &&
                   nyVersionFlag &&
-                  props.kravFilter === KRAV_FILTER_TYPE.RELEVANTE_KRAV && kravAge < 30 &&
+                  props.kravFilter === KRAV_FILTER_TYPE.RELEVANTE_KRAV &&
+                  kravAge < 30 &&
                   showWarningMessage('Ny version')}
               </Block>
               <LabelSmall $style={{ fontSize: '18px', fontWeight: 600, alignContent: 'flex-start', textAlign: 'left', textDecoration: hover ? 'underline' : 'none' }}>

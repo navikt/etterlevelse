@@ -70,7 +70,6 @@ import paperPenIconBgSmall from '../resources/icons/paperPenIconBg-small.svg'
 import paragrafIconBgSmall from '../resources/icons/paragrafIconBg-small.svg'
 import grafIconBgSmall from '../resources/icons/grafIconBg-small.svg'
 
-
 import React from 'react'
 import { theme } from '../util'
 

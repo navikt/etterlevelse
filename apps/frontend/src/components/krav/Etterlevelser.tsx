@@ -93,7 +93,7 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
                       title={
                         <>
                           <strong>
-                            B{e.behandling.nummer}-{e.behandling.overordnetFormaal.shortName} 
+                            B{e.behandling.nummer}-{e.behandling.overordnetFormaal.shortName}
                           </strong>
                           : {e.behandling.navn}
                         </>

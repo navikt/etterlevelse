@@ -17,7 +17,7 @@ export const StatusPage = () => {
       </Helmet>
       <Block width="100%" display={'flex'} justifyContent={'center'}>
         <Block maxWidth={maxPageWidth} width={responsiveWidthLarge} paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge}>
-          <Block paddingTop={theme.sizing.scale800} >
+          <Block paddingTop={theme.sizing.scale800}>
             <CustomizedBreadcrumbs currentPage="Status i organisasjonene" />
           </Block>
         </Block>

@@ -1,16 +1,16 @@
-import {codelist, TemaCode} from '../../services/Codelist'
-import {Behandling, KRAV_FILTER_TYPE} from '../../constants'
-import {PanelLinkCard, PanelLinkCardOverrides} from '../common/PanelLink'
-import {ettlevColors, theme} from '../../util/theme'
-import {cardWidth, useKravCounter} from '../../pages/TemaPage'
-import {Block} from 'baseui/block'
-import {ParagraphXSmall} from 'baseui/typography'
-import {ProgressBar, SIZE} from 'baseui/progress-bar'
+import { codelist, TemaCode } from '../../services/Codelist'
+import { Behandling, KRAV_FILTER_TYPE } from '../../constants'
+import { PanelLinkCard, PanelLinkCardOverrides } from '../common/PanelLink'
+import { ettlevColors, theme } from '../../util/theme'
+import { cardWidth, useKravCounter } from '../../pages/TemaPage'
+import { Block } from 'baseui/block'
+import { ParagraphXSmall } from 'baseui/typography'
+import { ProgressBar, SIZE } from 'baseui/progress-bar'
 import React from 'react'
-import {HeaderContent} from './HeaderContent'
-import {isFerdigUtfylt} from '../../pages/BehandlingerTemaPageV2'
+import { HeaderContent } from './HeaderContent'
+import { isFerdigUtfylt } from '../../pages/BehandlingerTemaPageV2'
 import moment from 'moment'
-import {getNumberOfDaysBetween} from '../../util/checkAge'
+import { getNumberOfDaysBetween } from '../../util/checkAge'
 
 type TemaCardBehandlingProps = {
   tema: TemaCode
@@ -34,7 +34,6 @@ export const TemaCardBehandling = (props: TemaCardBehandlingProps) => {
   let utfylt = 0
   let underArbeid = 0
   let tilUtfylling = 0
-
 
   krav.forEach((k) => {
     const kravCreatedDate = moment(k.changeStamp.createdDate).toDate()

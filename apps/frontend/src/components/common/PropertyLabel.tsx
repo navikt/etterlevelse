@@ -1,8 +1,8 @@
 import React from 'react'
 import DataText from './DataText'
-import {Markdown} from './Markdown'
-import {Or} from '../../constants'
-import {Block, Display, Responsive} from 'baseui/block'
+import { Markdown } from './Markdown'
+import { Or } from '../../constants'
+import { Block, Display, Responsive } from 'baseui/block'
 
 const empty = (arg: any) => !arg || (Array.isArray(arg) && !arg.length)
 
@@ -12,7 +12,7 @@ type LabelProps = {
   compact?: boolean
   header?: boolean
   p1?: boolean
-  labelWidth?:string
+  labelWidth?: string
   display?: Responsive<Display>
   maxWidth?: string
 } & Or<{ children: React.ReactNode }, { markdown: string | string[]; vertical?: boolean }>
@@ -23,7 +23,7 @@ export const Label = (props: LabelProps) => {
     <DataText label={props.title} compact={props.compact} header={props.header} display={props.display}>
       {props.markdown ? (
         <Block marginTop={'-1rem'} marginBottom={'-1rem'}>
-          <Markdown p1={props.p1} sources={Array.isArray(props.markdown) ? props.markdown : [props.markdown]} vertical={props.vertical} shortenLinks maxWidth={props.maxWidth}/>
+          <Markdown p1={props.p1} sources={Array.isArray(props.markdown) ? props.markdown : [props.markdown]} vertical={props.vertical} shortenLinks maxWidth={props.maxWidth} />
         </Block>
       ) : (
         props.children

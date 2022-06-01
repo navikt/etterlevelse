@@ -3,8 +3,8 @@ import _ from 'lodash'
 import { maxPageWidth } from '../../util/theme'
 
 type CustomModalProps = {
-  closeIconColor?: string,
-  closeIconHoverColor?: string,
+  closeIconColor?: string
+  closeIconHoverColor?: string
   disableCloseIcon?: boolean
 }
 
@@ -31,8 +31,8 @@ const CuztomizedModal = (props: CustomModalProps & ModalProps) => {
         display: disableCloseIcon ? 'none' : undefined,
         color: closeIconColor ? closeIconColor : undefined,
         ':hover': {
-          color: closeIconHoverColor ? closeIconHoverColor : undefined
-        }
+          color: closeIconHoverColor ? closeIconHoverColor : undefined,
+        },
       },
     },
   }

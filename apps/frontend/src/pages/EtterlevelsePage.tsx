@@ -30,8 +30,8 @@ export const EtterlevelsePage = () => {
   const loading = !edit && !etterlevelse
 
   useEffect(() => {
-    etterlevelse && getKravByKravNumberAndVersion(etterlevelse?.kravNummer, etterlevelse?.kravVersjon)
-      .then((res) => {
+    etterlevelse &&
+      getKravByKravNumberAndVersion(etterlevelse?.kravNummer, etterlevelse?.kravVersjon).then((res) => {
         if (res) {
           setKrav(res)
           const lovData = codelist.getCode(ListName.LOV, res.regelverk[0]?.lov?.code)
@@ -39,8 +39,7 @@ export const EtterlevelsePage = () => {
             setKravTema(codelist.getCode(ListName.TEMA, lovData.data.tema))
           }
         }
-      }
-      )
+      })
     if (etterlevelse) {
       ampli.logEvent('sidevisning', {
         side: 'Etterlevelse side',
@@ -52,12 +51,10 @@ export const EtterlevelsePage = () => {
   const getBreadcrumPaths = (): breadcrumbPaths[] => {
     const breadcrumbPaths: breadcrumbPaths[] = []
 
-    breadcrumbPaths.push(
-      {
-        pathName: 'Forstå kravene',
-        href: '/tema',
-      }
-    )
+    breadcrumbPaths.push({
+      pathName: 'Forstå kravene',
+      href: '/tema',
+    })
 
     if (kravTema && kravTema.shortName) {
       breadcrumbPaths.push({
@@ -66,12 +63,10 @@ export const EtterlevelsePage = () => {
       })
     }
 
-    breadcrumbPaths.push(
-      {
-        pathName: `K${krav?.kravNummer}.${krav?.kravVersjon}`,
-        href: '/krav/' + krav?.kravNummer + '/' + krav?.kravVersjon,
-      }
-    )
+    breadcrumbPaths.push({
+      pathName: `K${krav?.kravNummer}.${krav?.kravVersjon}`,
+      href: '/krav/' + krav?.kravNummer + '/' + krav?.kravVersjon,
+    })
 
     return breadcrumbPaths
   }

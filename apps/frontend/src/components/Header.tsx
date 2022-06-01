@@ -68,9 +68,9 @@ const LoggedInHeader = () => {
                 style: ({ $isFocused }) => ({
                   outlineColor: $isFocused ? ettlevColors.focusOutline : undefined,
                   outlineWidth: $isFocused ? '3px' : undefined,
-                  outlineStyle: $isFocused ? 'solid' : undefined
-                })
-              }
+                  outlineStyle: $isFocused ? 'solid' : undefined,
+                }),
+              },
             }}
           >
             {g.name}
@@ -83,13 +83,13 @@ const LoggedInHeader = () => {
   const kravPages = user.isKraveier() ? [{ label: 'Forvalte og opprette krav', href: '/kravliste' }] : []
   const adminPages = user.isAdmin()
     ? [
-      { label: 'Administrere krav', href: '/admin/krav' },
-      { label: intl.audit, href: '/admin/audit' },
-      { label: 'Kodeverk', href: '/admin/codelist' },
-      { label: intl.questionAndAnswers, href: '/admin/messageslog' },
-      { label: intl.notifications, href: '/admin/varsel' },
-      { label: intl.settings, href: '/admin/settings', disabled: true },
-    ]
+        { label: 'Administrere krav', href: '/admin/krav' },
+        { label: intl.audit, href: '/admin/audit' },
+        { label: 'Kodeverk', href: '/admin/codelist' },
+        { label: intl.questionAndAnswers, href: '/admin/messageslog' },
+        { label: intl.notifications, href: '/admin/varsel' },
+        { label: intl.settings, href: '/admin/settings', disabled: true },
+      ]
     : []
   const otherPages = [
     { label: 'Mine innstillinger', href: '/innstillinger', disabled: true },
@@ -165,8 +165,8 @@ const Menu = (props: { pages: MenuItem[][]; title: React.ReactNode; icon?: IconD
 
   const allPages = props.pages.length
     ? props.pages
-      .filter((p) => p.length)
-      .reduce((previousValue, currentValue) => [...((previousValue as MenuItem[]) || []), { label: <Divider compact={props.compact} /> }, ...(currentValue as MenuItem[])])
+        .filter((p) => p.length)
+        .reduce((previousValue, currentValue) => [...((previousValue as MenuItem[]) || []), { label: <Divider compact={props.compact} /> }, ...(currentValue as MenuItem[])])
     : []
 
   return (
@@ -246,7 +246,7 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
   }
 
   React.useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       await getMeldingByType(MeldingType.SYSTEM).then((r) => {
         if (r.numberOfElements > 0) {
           setSystemVarsel(r.content[0])
@@ -344,7 +344,7 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
               src={systemVarsel.alertType === AlertType.INFO ? informationIcon : warningAlert}
               width="20px"
               height="20px"
-              alt={systemVarsel.alertType === AlertType.INFO ? "information icon" : "warning icon"}
+              alt={systemVarsel.alertType === AlertType.INFO ? 'information icon' : 'warning icon'}
               style={{
                 marginRight: '5px',
               }}

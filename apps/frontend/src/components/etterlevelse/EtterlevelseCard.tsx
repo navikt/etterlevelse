@@ -13,7 +13,7 @@ export const EtterlevelseCard = ({ etterlevelse }: { etterlevelse: Etterlevelse 
   const [kravData, setKravData] = useState<Krav>()
 
   useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       const krav = await getKravByKravNumberAndVersion(etterlevelse.kravNummer, etterlevelse.kravVersjon)
       if (krav) {
         setKravData(krav)
@@ -32,7 +32,7 @@ export const EtterlevelseCard = ({ etterlevelse }: { etterlevelse: Etterlevelse 
           textUnderlineOffset: '1px',
           ':hover': {
             color: ettlevColors.green400,
-          }
+          },
         }}
       >
         <ParagraphMedium
@@ -42,7 +42,7 @@ export const EtterlevelseCard = ({ etterlevelse }: { etterlevelse: Etterlevelse 
             color: ettlevColors.green600,
             ':hover': {
               color: ettlevColors.green400,
-            }
+            },
           }}
         >
           Se dokumentasjon på forrige versjon

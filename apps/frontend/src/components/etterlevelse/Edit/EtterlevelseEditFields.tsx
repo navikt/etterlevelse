@@ -226,9 +226,9 @@ export const EtterlevelseEditFields = ({
                               style: ({ $isFocused }) => ({
                                 outlineColor: $isFocused ? ettlevColors.focusOutline : undefined,
                                 outlineWidth: $isFocused ? '3px' : undefined,
-                                outlineStyle: $isFocused ? 'solid' : undefined
-                              })
-                            }
+                                outlineStyle: $isFocused ? 'solid' : undefined,
+                              }),
+                            },
                           }}
                         >
                           <Block $style={{ textDecoration: radioHover === EtterlevelseStatus.OPPFYLLES_SENERE ? 'underline' : 'none' }}>

@@ -83,7 +83,7 @@ export const BehandlingerTemaPageV2 = () => {
   const [utgaatKravData, setUtgaatKravData] = useState<KravEtterlevelseData[]>([])
 
   const [sorting, setSorting] = useState<readonly Option[]>([sortingOptions[0]])
-  const [kravRelevans, setKravRelevans] = useState<readonly Option[]>(params.filter ? kravRelevansOptions.filter(kro => kro.id === params.filter) : [kravRelevansOptions[0]])
+  const [kravRelevans, setKravRelevans] = useState<readonly Option[]>(params.filter ? kravRelevansOptions.filter((kro) => kro.id === params.filter) : [kravRelevansOptions[0]])
 
   // useEffect(() => {
   //   if(!user.isLoggedIn()) {
@@ -92,7 +92,7 @@ export const BehandlingerTemaPageV2 = () => {
   // },[])
 
   useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       setAllKrav(await getAllKrav())
       setAllKravPriority(await getAllKravPriority())
     })()
@@ -123,13 +123,13 @@ export const BehandlingerTemaPageV2 = () => {
 
     //Removing utgått krav with aktiv versjons
     utgaatKravData = utgaatKravData.filter((uk) => relevantKravData.every((rk) => uk.kravNummer !== rk.kravNummer))
-      ; (async () => {
-        setUtgaatKravData(await filterKrav(allKravPriority, utgaatKravData, temaData))
-      })()
+    ;(async () => {
+      setUtgaatKravData(await filterKrav(allKravPriority, utgaatKravData, temaData))
+    })()
   }, [relevantKravData, allKravPriority])
 
   useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       filterKrav(allKravPriority, relevanteKraverGraphQLResponse?.krav.content, temaData, true).then((kravListe) => {
         setRelevantKravData(kravListe)
       })
@@ -137,7 +137,7 @@ export const BehandlingerTemaPageV2 = () => {
   }, [allKravPriority, relevanteKraverGraphQLResponse])
 
   useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       filterKrav(allKravPriority, irrelevanteKraverGraphQLResponse?.krav.content).then((kravListe) => {
         const newKravList = kravListe.filter((k) => {
           if (k.etterlevelseStatus === undefined) {
@@ -172,9 +172,9 @@ export const BehandlingerTemaPageV2 = () => {
       href: '/behandlinger',
     },
     {
-      pathName: behandling?.navn || '', 
-      href: '/behandling/' + behandling?.id
-    }
+      pathName: behandling?.navn || '',
+      href: '/behandling/' + behandling?.id,
+    },
   ]
 
   const getKravData = (id: string | number | undefined) => {

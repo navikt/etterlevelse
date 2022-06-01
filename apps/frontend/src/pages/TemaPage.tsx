@@ -1,32 +1,32 @@
-import {useParams} from 'react-router-dom'
-import {Block, BlockProps} from 'baseui/block'
-import React, {useEffect, useState} from 'react'
-import {HeadingXLarge, HeadingXXLarge, LabelLarge, LabelSmall, ParagraphMedium, ParagraphSmall, ParagraphXSmall} from 'baseui/typography'
-import {codelist, ListName, LovCode, TemaCode} from '../services/Codelist'
-import {ExternalLinkWrapper, ObjectLink, urlForObject} from '../components/common/RouteLink'
-import {theme} from '../util'
-import {Markdown} from '../components/common/Markdown'
-import {ettlevColors} from '../util/theme'
+import { useParams } from 'react-router-dom'
+import { Block, BlockProps } from 'baseui/block'
+import React, { useEffect, useState } from 'react'
+import { HeadingXLarge, HeadingXXLarge, LabelLarge, LabelSmall, ParagraphMedium, ParagraphSmall, ParagraphXSmall } from 'baseui/typography'
+import { codelist, ListName, LovCode, TemaCode } from '../services/Codelist'
+import { ExternalLinkWrapper, ObjectLink, urlForObject } from '../components/common/RouteLink'
+import { theme } from '../util'
+import { Markdown } from '../components/common/Markdown'
+import { ettlevColors } from '../util/theme'
 import Button from '../components/common/Button'
-import {KravFilters} from '../api/KravGraphQLApi'
-import {SkeletonPanel} from '../components/common/LoadingSkeleton'
-import {PanelLink, PanelLinkCard, PanelLinkCardOverrides} from '../components/common/PanelLink'
-import {kravNumView} from './KravPage'
+import { KravFilters } from '../api/KravGraphQLApi'
+import { SkeletonPanel } from '../components/common/LoadingSkeleton'
+import { PanelLink, PanelLinkCard, PanelLinkCardOverrides } from '../components/common/PanelLink'
+import { kravNumView } from './KravPage'
 import * as _ from 'lodash'
-import {faChevronDown, faChevronUp} from '@fortawesome/free-solid-svg-icons'
-import {Layout2, Page} from '../components/scaffold/Page'
-import {SimpleTag} from '../components/common/SimpleTag'
-import {Krav, KravQL, PageResponse} from '../constants'
-import {useQuery} from '@apollo/client'
-import {QueryHookOptions} from '@apollo/client/react/types/types'
-import {gql} from '@apollo/client/core'
-import {useForceUpdate} from '../util/hooks'
-import {borderRadius, margin} from '../components/common/Style'
-import {breadcrumbPaths} from '../components/common/CustomizedBreadcrumbs'
-import {sortKraverByPriority} from '../util/sort'
-import {getAllKravPriority} from '../api/KravPriorityApi'
-import {Helmet} from 'react-helmet'
-import {ampli} from '../services/Amplitude'
+import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons'
+import { Layout2, Page } from '../components/scaffold/Page'
+import { SimpleTag } from '../components/common/SimpleTag'
+import { Krav, KravQL, PageResponse } from '../constants'
+import { useQuery } from '@apollo/client'
+import { QueryHookOptions } from '@apollo/client/react/types/types'
+import { gql } from '@apollo/client/core'
+import { useForceUpdate } from '../util/hooks'
+import { borderRadius, margin } from '../components/common/Style'
+import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
+import { sortKraverByPriority } from '../util/sort'
+import { getAllKravPriority } from '../api/KravPriorityApi'
+import { Helmet } from 'react-helmet'
+import { ampli } from '../services/Amplitude'
 
 export const TemaPage = () => {
   const { tema } = useParams<{ tema: string }>()
@@ -65,7 +65,7 @@ export const getTemaMainHeader = (tema: TemaCode, lover: LovCode[], expand: bool
         <Block marginBottom={theme.sizing.scale900}>
           <HeadingXLarge marginBottom={theme.sizing.scale200}>Ansvarlig for lovtolkning</HeadingXLarge>
           {_.uniq(lover.map((l) => l.data?.underavdeling)).map((code, index) => (
-            <ParagraphMedium key={code + '_' + index} marginTop={0} marginBottom={theme.sizing.scale200} $style={{fontSize: '21px'}}>
+            <ParagraphMedium key={code + '_' + index} marginTop={0} marginBottom={theme.sizing.scale200} $style={{ fontSize: '21px' }}>
               {codelist.getCode(ListName.UNDERAVDELING, code)?.shortName}
             </ParagraphMedium>
           ))}
@@ -109,7 +109,7 @@ const TemaSide = ({ tema }: { tema: TemaCode }) => {
 
   useEffect(() => {
     if (data && data.krav && data.krav.content && data.krav.content.length > 0) {
-      ; (async () => {
+      ;(async () => {
         const allKravPriority = await getAllKravPriority()
         const kraver = _.cloneDeep(data.krav.content)
         kraver.map((k) => {
@@ -131,7 +131,7 @@ const TemaSide = ({ tema }: { tema: TemaCode }) => {
       header={getTemaMainHeader(tema, lover, expand, setExpand)}
     >
       <Block>
-        <HeadingXLarge marginLeft={['27px','27px','27px','27px','0px','0px']}>{loading ? '?' : data?.krav.numberOfElements || 0} krav</HeadingXLarge>
+        <HeadingXLarge marginLeft={['27px', '27px', '27px', '27px', '0px', '0px']}>{loading ? '?' : data?.krav.numberOfElements || 0} krav</HeadingXLarge>
         {loading && <SkeletonPanel count={10} />}
         {!loading &&
           kravList &&
@@ -266,7 +266,7 @@ const TemaInfo = (props: { kravAntall: number; temaAntall: number }) => (
 
 export const TemaCard = ({ tema, relevans, setNum }: { tema: TemaCode; relevans: string[]; setNum: (tema: string, num: number) => void }) => {
   const lover = codelist.getCodesForTema(tema.code)
-  const { data, loading } = useKravCounter({ lover: [...lover.map(l => l.code)] }, { skip: !lover.length })
+  const { data, loading } = useKravCounter({ lover: [...lover.map((l) => l.code)] }, { skip: !lover.length })
   const krav = data?.krav.content.filter((k) => !relevans.length || k.relevansFor.map((r) => r.code).some((r) => relevans.includes(r))) || []
   useEffect(() => setNum(tema.code, krav.length), [krav.length])
 
@@ -312,7 +312,7 @@ export const TemaCard = ({ tema, relevans, setNum }: { tema: TemaCode; relevans:
           <LabelSmall $style={{ fontSize: '16px' }}>Krav og veiledning til</LabelSmall>
           {lover.map((l) => {
             return (
-              <ParagraphXSmall $style={{fontSize: '16px', lineHeight: '24px'}} marginTop="0px" marginBottom="0px">
+              <ParagraphXSmall $style={{ fontSize: '16px', lineHeight: '24px' }} marginTop="0px" marginBottom="0px">
                 {l.shortName}
               </ParagraphXSmall>
             )
@@ -322,7 +322,7 @@ export const TemaCard = ({ tema, relevans, setNum }: { tema: TemaCode; relevans:
     >
       <Block display={'flex'} flexDirection={'column'}>
         <SimpleTag active>
-          <Block display={'flex'} alignItems={'center'} justifyContent={'center'} {...margin('8px','16px')}>
+          <Block display={'flex'} alignItems={'center'} justifyContent={'center'} {...margin('8px', '16px')}>
             {/* <img src={gavelIcon} width={'35px'} height={'35px'} aria-hidden alt={'Hammer ikon'} /> */}
             <LabelSmall color={ettlevColors.navOransje} $style={{ fontSize: '20px', lineHeight: '18px' }} marginRight="4px">
               {krav?.length || 0}
@@ -331,7 +331,7 @@ export const TemaCard = ({ tema, relevans, setNum }: { tema: TemaCode; relevans:
           </Block>
         </SimpleTag>
 
-        <Markdown source={tema.data?.shortDesciption} fontSize={'18px'}/>
+        <Markdown source={tema.data?.shortDesciption} fontSize={'18px'} />
       </Block>
     </PanelLinkCard>
   )
