@@ -235,10 +235,9 @@ const RelevansFilter = ({ onClickFilter, relevans, kravAntall }: { onClickFilter
 )
 
 export const cardWidth = ['98%', '98%', '98%', '98%', '48%', '32%']
-export const cardHeight = ['250px', '250px', '250px', '250px', '250px', '250px']
-export const cardMaxheight = '250px'
-
-const headerBgOverlap = '29px'
+export const cardHeight = ['300px', '300px', '300px', '300px', '300px', '300px']
+export const cardMaxheight = '300px'
+const headerBgOverlap = '47px'
 
 const TemaInfo = (props: { kravAntall: number; temaAntall: number }) => (
   <Block
