@@ -293,7 +293,7 @@ export const BehandlingPage = () => {
         secondaryHeaderBackgroundColor={ettlevColors.white}
         secondaryHeader={getSecondaryHeader(behandling)}
         childrenBackgroundColor={ettlevColors.grey25}
-        currentPage={behandling.navn}
+        currentPage={'B' + behandling?.nummer.toString()}
         breadcrumbPaths={breadcrumbPaths}
       >
         <Block backgroundColor={ettlevColors.grey50} marginTop={theme.sizing.scale800}></Block>

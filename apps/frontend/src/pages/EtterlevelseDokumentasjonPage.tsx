@@ -62,7 +62,7 @@ export const EtterlevelseDokumentasjonPage = () => {
       href: '/behandlinger',
     },
     {
-      pathName: behandling?.navn || '',
+      pathName: 'B' + behandling?.nummer.toString(),
       href: '/behandling/' + behandling?.id,
     },
     {
