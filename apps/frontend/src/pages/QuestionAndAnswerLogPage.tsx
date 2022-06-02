@@ -33,7 +33,7 @@ type KravMessage = Tilbakemelding & SporsmaalOgSvarKrav
 const kravSorting: ColumnCompares<KravMessage> = {
   kravNummer: (a, b) => a.kravNummer - b.kravNummer,
   kravNavn: (a, b) => (a.kravNavn || '').localeCompare(b.kravNavn || ''),
-  tidForSporsmaal: (a, b) => (a.tidForSporsmaal || '').localeCompare(b.tidForSporsmaal || ''),
+  tidForSporsmaal: (a, b) => (b.tidForSporsmaal || '').localeCompare(a.tidForSporsmaal || ''),
   tema: (a, b) => (a.tema || '').localeCompare(b.tema || ''),
   tidForSvar: (a, b) => (a.tidForSvar || '').localeCompare(b.tidForSvar || ''),
 }
@@ -112,7 +112,7 @@ export const QuestionAndAnswerLogPage = () => {
             emptyText=""
             data={kravMessages}
             config={{
-              initialSortColumn: 'kravNummer',
+              initialSortColumn: 'tidForSporsmaal',
               sorting: kravSorting,
               pageSizes: [5, 10, 20, 50, 100],
               defaultPageSize: 20,

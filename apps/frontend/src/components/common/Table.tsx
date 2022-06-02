@@ -152,7 +152,7 @@ export const Table = <T, K extends keyof T>(props: TableProps<T, K>) => {
             </Block>
           </StatefulPopover>
           <Block>
-            <LabelMedium>Rader: {table.data.length}</LabelMedium>
+            <LabelMedium>Totalt antall rader: {table.data.length}</LabelMedium>
           </Block>
           <Pagination
             currentPage={table.page}
