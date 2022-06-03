@@ -33,7 +33,9 @@ const getRadioButtonOverrides = (radioStatus: boolean): RadioOverrides & RadioGr
         minWidth: '213px',
         textUnderlineOffset: '3px',
         ':hover': { backgroundColor: ettlevColors.green50, textDecoration: 'underline 1px' },
-        outline: $isFocused ? '2px solid' + ettlevColors.focusOutline : undefined
+        outlineWidth: $isFocused ? '3px' : undefined,
+        outlineColor: $isFocused ? ettlevColors.focusOutline : undefined,
+        outlineStyle: $isFocused ? 'solid' : undefined,
       }),
     },
     RadioMarkInner: {

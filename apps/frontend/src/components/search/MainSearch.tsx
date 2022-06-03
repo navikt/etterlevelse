@@ -8,7 +8,7 @@ import { Block } from 'baseui/block'
 import { useLocation, useNavigate } from 'react-router-dom'
 import Button from '../common/Button'
 import { Radio, RadioGroup } from 'baseui/radio'
-import { borderWidth, padding, paddingZero } from '../common/Style'
+import { borderColor, borderRadius, borderStyle, borderWidth, padding, paddingZero } from '../common/Style'
 import SearchLabel from './components/SearchLabel'
 import { NavigableItem, ObjectType } from '../admin/audit/AuditTypes'
 import { Behandling, Krav, KravStatus } from '../../constants'
@@ -283,6 +283,14 @@ type SelectPropWithSetValue = SelectProps & customSelectProp
 
 const MainSearchSelector = (props: SelectPropWithSetValue) => {
   const overrides: SelectOverrides = {
+    Root: {
+      style: ({$isFocused}) => ({
+        ...borderWidth($isFocused ? '3px' : ''),
+        ...borderStyle($isFocused ? 'solid': ''),
+        ...borderColor($isFocused ?  ettlevColors.focusOutline : ''),
+        ...borderRadius($isFocused ? '8px' : '')
+      })
+    },
     SearchIcon: {
       component: () => <img src={searchIcon} alt="Søk ikon" />,
     },
