@@ -22,7 +22,7 @@ const paddingLeft = '30px'
 const getRadioButtonOverrides = (radioStatus: boolean): RadioOverrides & RadioGroupOverrides => {
   return {
     Root: {
-      style: {
+      style: ({ $isFocused }) => ({
         ...borderColor(radioStatus ? ettlevColors.green400 : ettlevColors.green100),
         ...borderStyle('solid'),
         ...borderWidth('1px'),
@@ -33,7 +33,8 @@ const getRadioButtonOverrides = (radioStatus: boolean): RadioOverrides & RadioGr
         minWidth: '213px',
         textUnderlineOffset: '3px',
         ':hover': { backgroundColor: ettlevColors.green50, textDecoration: 'underline 1px' },
-      },
+        outline: $isFocused ? '2px solid' + ettlevColors.focusOutline : undefined
+      }),
     },
     RadioMarkInner: {
       style: {
@@ -200,8 +201,7 @@ const KriterieBegrunnelse = ({
   const getInitialValueForSuksesskriterieStatus = () => {
     if (suksessKriterieStatus === SuksesskriterieStatus.OPPFYLT) {
       return '2'
-    }
-    if (suksessKriterieStatus === SuksesskriterieStatus.IKKE_RELEVANT) {
+    } else if (suksessKriterieStatus === SuksesskriterieStatus.IKKE_RELEVANT) {
       return '3'
     } else {
       return '1'
