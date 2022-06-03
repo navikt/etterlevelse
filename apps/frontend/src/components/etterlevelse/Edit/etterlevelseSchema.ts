@@ -1,18 +1,16 @@
 import * as yup from 'yup'
-import { EtterlevelseStatus } from '../../../constants'
+import { EtterlevelseStatus, SuksesskriterieStatus } from '../../../constants'
 
 export const etterlevelseSchema = () => {
   return yup.object({
     suksesskriterieBegrunnelser: yup.array().of(
       yup.object({
-        oppfylt: yup.boolean(),
-        ikkeRelevant: yup.boolean(),
-        underArbeid: yup.boolean().test({
-          name: 'underArbeid',
+        suksesskriterieStatus: yup.string().test({
+          name: 'suksesskriterieStatus',
           message: 'Du kan ikke dokumentere ferdig hvis et suksesskriterie er under arbeid.',
-          test: function (underArbeid) {
-            const { parent, options } = this
-            if ((options.context?.status === EtterlevelseStatus.FERDIG || options.context?.status === EtterlevelseStatus.FERDIG_DOKUMENTERT) && parent.underArbeid) {
+          test: function (suksesskriterieStatus) {
+            const { options } = this
+            if ((options.context?.status === EtterlevelseStatus.FERDIG || options.context?.status === EtterlevelseStatus.FERDIG_DOKUMENTERT) && suksesskriterieStatus === SuksesskriterieStatus.UNDER_ARBEID) {
               return false
             }
             return true
@@ -26,7 +24,6 @@ export const etterlevelseSchema = () => {
             const { parent, options } = this
             if (
               (options.context?.status === EtterlevelseStatus.FERDIG || options.context?.status === EtterlevelseStatus.FERDIG_DOKUMENTERT) &&
-              (parent.oppfylt || parent.ikkeRelevant || parent.underArbeid) &&
               (begrunnelse === '' || begrunnelse === undefined) &&
               parent.behovForBegrunnelse
             ) {
@@ -56,7 +53,7 @@ export const etterlevelseSchema = () => {
       test: function (status) {
         const { parent } = this
         if (status === EtterlevelseStatus.FERDIG || status === EtterlevelseStatus.FERDIG_DOKUMENTERT) {
-          return parent.suksesskriterieBegrunnelser.every((skb: any) => skb.oppfylt || skb.ikkeRelevant)
+          return parent.suksesskriterieBegrunnelser.every((skb: any) => skb.suksesskriterieStatus)
         }
         return true
       },

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Etterlevelse, Krav, Suksesskriterie, SuksesskriterieBegrunnelse } from '../../../constants'
+import { Etterlevelse, Krav, Suksesskriterie, SuksesskriterieBegrunnelse, SuksesskriterieStatus } from '../../../constants'
 import { mapEtterlevelseToFormValue, updateEtterlevelse } from '../../../api/EtterlevelseApi'
 import { FieldArray, FieldArrayRenderProps, Form, Formik, FormikProps } from 'formik'
 import { Card } from 'baseui/card'
@@ -113,10 +113,8 @@ const Begrunnelse = ({
     update({
       suksesskriterieId: suksesskriterie.id,
       begrunnelse: begrunnelse,
-      oppfylt: suksesskriterieBegrunnelse.oppfylt,
-      ikkeRelevant: suksesskriterieBegrunnelse.ikkeRelevant,
-      underArbeid: suksesskriterieBegrunnelse.underArbeid,
       behovForBegrunnelse: suksesskriterieBegrunnelse.behovForBegrunnelse,
+      suksesskriterieStatus: suksesskriterieBegrunnelse.suksesskriterieStatus
     })
   }, [begrunnelse])
 
@@ -131,7 +129,7 @@ const Begrunnelse = ({
           Hvordan er kriteriet oppfylt?
         </LabelSmall>
 
-        {suksesskriterieBegrunnelse.oppfylt && (
+        {suksesskriterieBegrunnelse.suksesskriterieStatus === SuksesskriterieStatus.OPPFYLT && (
           <Block>
             <FormControl>
               <TextEditor initialValue={begrunnelse} setValue={setBegrunnelse} height={'188px'} />

@@ -3,7 +3,7 @@ import { FormControl } from 'baseui/form-control'
 import { HeadingLarge, LabelSmall, ParagraphMedium } from 'baseui/typography'
 import { FieldArray, FieldArrayRenderProps } from 'formik'
 import React from 'react'
-import { EtterlevelseStatus, Suksesskriterie, SuksesskriterieBegrunnelse } from '../../../constants'
+import { EtterlevelseStatus, Suksesskriterie, SuksesskriterieBegrunnelse, SuksesskriterieStatus } from '../../../constants'
 import { useDebouncedState } from '../../../util/hooks'
 import { ettlevColors, theme } from '../../../util/theme'
 import { CustomizedAccordion, CustomizedPanel } from '../../common/CustomizedAccordion'
@@ -59,10 +59,8 @@ export const getSuksesskriterieBegrunnelse = (suksesskriterieBegrunnelser: Sukse
     return {
       suksesskriterieId: suksessKriterie.id,
       begrunnelse: '',
-      oppfylt: false,
-      ikkeRelevant: false,
-      underArbeid: false,
       behovForBegrunnelse: suksessKriterie.behovForBegrunnelse,
+      suksesskriterieStatus: SuksesskriterieStatus.UNDER_ARBEID
     }
   } else {
     return sb
@@ -142,11 +140,7 @@ const KriterieBegrunnelse = ({
 
   //SKAL OPPDATERE SUKSESSKRITERIE STATUS I BACKEND TIL ET ENUM ISTEDET FOR 3 BOOLEAN VERDIER
   //SKAL FORENKLE LOGIKKEN ETTERHVERT
-  const [oppfylt, setOppfylt] = React.useState(suksesskriterieBegrunnelse.oppfylt || false)
-  const [ikkerelevant, setIkkeRelevant] = React.useState(suksesskriterieBegrunnelse.ikkeRelevant || false)
-  const [underArbeid, setUnderArbeid] = React.useState(
-    !suksesskriterieBegrunnelse.oppfylt && !suksesskriterieBegrunnelse.ikkeRelevant ? true : suksesskriterieBegrunnelse.underArbeid || false,
-  )
+  const [suksessKriterieStatus, setSuksessKriterieStatus] = React.useState<SuksesskriterieStatus>(suksesskriterieBegrunnelse.suksesskriterieStatus || SuksesskriterieStatus.UNDER_ARBEID)
 
   const [value, setValue] = React.useState('')
 
@@ -154,22 +148,35 @@ const KriterieBegrunnelse = ({
     update({
       suksesskriterieId: suksesskriterie.id,
       begrunnelse: begrunnelse,
-      oppfylt: oppfylt,
-      ikkeRelevant: ikkerelevant,
-      underArbeid: underArbeid,
       behovForBegrunnelse: suksesskriterie.behovForBegrunnelse,
+      suksesskriterieStatus: suksessKriterieStatus
     })
-  }, [begrunnelse, oppfylt, ikkerelevant, underArbeid])
+  }, [begrunnelse, suksessKriterieStatus])
 
   const getBorderColor = () => {
     if (status === EtterlevelseStatus.FERDIG || status === EtterlevelseStatus.FERDIG_DOKUMENTERT) {
       if (!begrunnelse && suksesskriterie.behovForBegrunnelse) {
-        return { border: '2px solid #842D08' }
+        return {
+          ...borderWidth('1px'),
+          ...borderStyle('solid'),
+          ...borderColor('#C9C9C9'),
+          outline: '2px solid #842D08',
+        }
       } else {
-        return { border: '1px solid #C9C9C9' }
+        return {
+          ...borderWidth('1px'),
+          ...borderStyle('solid'),
+          ...borderColor('#C9C9C9'),
+          outline: undefined,
+        }
       }
     } else {
-      return { border: '1px solid #C9C9C9' }
+      return {
+        ...borderWidth('1px'),
+        ...borderStyle('solid'),
+        ...borderColor('#C9C9C9'),
+        outline: undefined,
+      }
     }
   }
   const getBackgroundColor = () => {
@@ -181,9 +188,9 @@ const KriterieBegrunnelse = ({
   }
 
   const getLabelForSuksessKriterie = () => {
-    if (underArbeid) {
+    if (suksessKriterieStatus === SuksesskriterieStatus.UNDER_ARBEID) {
       return 'Hva er oppfylt og hva er under arbeid?'
-    } else if (oppfylt) {
+    } else if (suksessKriterieStatus === SuksesskriterieStatus.OPPFYLT) {
       return 'Hvordan oppfylles kriteriet?'
     } else {
       return 'Hvorfor er ikke kriteriet relevant?'
@@ -191,10 +198,10 @@ const KriterieBegrunnelse = ({
   }
 
   const getInitialValueForSuksesskriterieStatus = () => {
-    if (oppfylt) {
+    if (suksessKriterieStatus === SuksesskriterieStatus.OPPFYLT) {
       return '2'
     }
-    if (ikkerelevant) {
+    if (suksessKriterieStatus === SuksesskriterieStatus.IKKE_RELEVANT) {
       return '3'
     } else {
       return '1'
@@ -283,38 +290,32 @@ const KriterieBegrunnelse = ({
               onChange={(e) => {
                 setValue(e.currentTarget.value)
                 if (e.currentTarget.value === '1') {
-                  setUnderArbeid(true)
-                  setOppfylt(false)
-                  setIkkeRelevant(false)
+                  setSuksessKriterieStatus(SuksesskriterieStatus.UNDER_ARBEID)
                 } else if (e.currentTarget.value === '2') {
-                  setUnderArbeid(false)
-                  setOppfylt(true)
-                  setIkkeRelevant(false)
+                  setSuksessKriterieStatus(SuksesskriterieStatus.OPPFYLT)
                 } else {
-                  setUnderArbeid(false)
-                  setOppfylt(false)
-                  setIkkeRelevant(true)
+                  setSuksessKriterieStatus(SuksesskriterieStatus.IKKE_RELEVANT)
                 }
               }}
               name={'suksesskriterieStatus' + suksesskriterie.id}
               align={ALIGN.horizontal}
             >
-              <Radio value="1" overrides={{ ...getRadioButtonOverrides(underArbeid) }}>
+              <Radio value="1" overrides={{ ...getRadioButtonOverrides(suksessKriterieStatus === SuksesskriterieStatus.UNDER_ARBEID) }}>
                 <ParagraphMedium margin={0}>Under arbeid</ParagraphMedium>
               </Radio>
-              <Radio value="2" overrides={{ ...getRadioButtonOverrides(oppfylt) }}>
+              <Radio value="2" overrides={{ ...getRadioButtonOverrides(suksessKriterieStatus === SuksesskriterieStatus.OPPFYLT) }}>
                 <ParagraphMedium margin={0}> Oppfylt</ParagraphMedium>
               </Radio>
-              <Radio value="3" overrides={{ ...getRadioButtonOverrides(ikkerelevant) }}>
+              <Radio value="3" overrides={{ ...getRadioButtonOverrides(suksessKriterieStatus === SuksesskriterieStatus.IKKE_RELEVANT) }}>
                 <ParagraphMedium margin={0}>Ikke relevant</ParagraphMedium>
               </Radio>
             </RadioGroup>
           </Block>
-          <Error fieldName={`suksesskriterieBegrunnelser[${index}].underArbeid`} fullWidth={true} />
+          <Error fieldName={`suksesskriterieBegrunnelser[${index}].suksesskriterieStatus`} fullWidth={true} />
         </>
       )}
 
-      {(oppfylt || ikkerelevant || underArbeid) && (!disableEdit || !viewMode) && suksesskriterie.behovForBegrunnelse && (
+      {(!disableEdit || !viewMode) && suksesskriterie.behovForBegrunnelse && (
         <Block marginTop={theme.sizing.scale1000}>
           <FormControl label={<LabelWithToolTip label={getLabelForSuksessKriterie()} />}>
             <TextEditor initialValue={begrunnelse} setValue={setBegrunnelse} height={'188px'} errors={props.form.errors} simple width="100%" />
@@ -323,14 +324,14 @@ const KriterieBegrunnelse = ({
         </Block>
       )}
 
-      {(oppfylt || ikkerelevant || underArbeid) && (disableEdit || viewMode) && (
+      {(disableEdit || viewMode) && (
         <Block marginTop={theme.sizing.scale1000}>
           <LabelAboveContent title={getLabelForSuksessKriterie()} markdown={begrunnelse} labelWidth={'24rem'} />
         </Block>
       )}
 
       <Block marginTop={'8px'}>
-        {oppfylt === false && ikkerelevant === false && underArbeid === false && begrunnelse.length > 0 && <Error fieldName={'status'} fullWidth={true} />}
+        {suksesskriterieBegrunnelse.behovForBegrunnelse && begrunnelse.length > 0 && <Error fieldName={'status'} fullWidth={true} />}
       </Block>
     </Block>
   )

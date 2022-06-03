@@ -477,8 +477,7 @@ export const query = gql`
         suksesskriterieBegrunnelser {
           suksesskriterieId
           begrunnelse
-          oppfylt
-          ikkeRelevant
+          suksesskriterieStatus
         }
       }
     }

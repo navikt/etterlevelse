@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { emptyPage, Etterlevelse, EtterlevelseStatus, Krav, PageResponse } from '../constants'
+import { emptyPage, Etterlevelse, EtterlevelseStatus, Krav, PageResponse, SuksesskriterieStatus } from '../constants'
 import { env } from '../util/env'
 import { useEffect, useState } from 'react'
 import { KravId } from './KravApi'
@@ -114,9 +114,7 @@ export const mapEtterlevelseToFormValue = (etterlevelse: Partial<Etterlevelse>, 
           suksesskriterieId: s.id,
           behovForBegrunnelse: s.behovForBegrunnelse,
           begrunnelse: '',
-          oppfylt: false,
-          ikkeRelevant: false,
-          underArbeid: false,
+          suksesskriterieStatus: SuksesskriterieStatus.UNDER_ARBEID,
         })
       })
     }

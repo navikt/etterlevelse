@@ -164,10 +164,14 @@ export type KravEtterlevelseData = {
 export interface SuksesskriterieBegrunnelse {
   suksesskriterieId: number
   begrunnelse: string
-  oppfylt: boolean
-  ikkeRelevant: boolean
-  underArbeid: boolean
   behovForBegrunnelse: boolean
+  suksesskriterieStatus: SuksesskriterieStatus
+}
+
+export enum SuksesskriterieStatus {
+  UNDER_ARBEID = 'UNDER_ARBEID',
+  OPPFYLT = 'OPPFYLT',
+  IKKE_RELEVANT = 'IKKE_RELEVANT',
 }
 
 export interface Behandling extends BehandlingEtterlevData {

@@ -1,4 +1,4 @@
-import { Etterlevelse, EtterlevelseStatus, Krav } from '../../constants'
+import { Etterlevelse, EtterlevelseStatus, Krav, SuksesskriterieStatus } from '../../constants'
 import { Block } from 'baseui/block'
 import React, { useRef, useState } from 'react'
 import { theme } from '../../util'
@@ -266,8 +266,8 @@ export const ViewEtterlevelse = ({
                             fontStyle: 'italic',
                           }}
                         >
-                          {suksessbeskrivelseBegrunnelse.oppfylt && <FontAwesomeIcon icon={faCheck} color={ettlevColors.green400} style={{ marginRight: '4px' }} />}
-                          {etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT || suksessbeskrivelseBegrunnelse.ikkeRelevant ? 'Ikke Relevant' : 'Oppfylt'}
+                          {suksessbeskrivelseBegrunnelse.suksesskriterieStatus === SuksesskriterieStatus.OPPFYLT && <FontAwesomeIcon icon={faCheck} color={ettlevColors.green400} style={{ marginRight: '4px' }} />}
+                          {etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT || suksessbeskrivelseBegrunnelse.suksesskriterieStatus === SuksesskriterieStatus.IKKE_RELEVANT ? 'Ikke Relevant' : 'Oppfylt'}
                         </ParagraphXSmall>
                       </Block>
                     )}
@@ -314,7 +314,7 @@ export const ViewEtterlevelse = ({
                   {!suksessbeskrivelseBegrunnelse.behovForBegrunnelse || suksessbeskrivelseBegrunnelse.begrunnelse ? (
                     <Block>
                       <LabelSmall $style={{ lineHeight: '22px' }} marginTop="16px">
-                        {suksessbeskrivelseBegrunnelse.ikkeRelevant ? 'Hvorfor er ikke kriteriet relevant?' : 'Hvordan er kriteriet oppfylt?'}
+                        {suksessbeskrivelseBegrunnelse.suksesskriterieStatus === SuksesskriterieStatus.IKKE_RELEVANT ? 'Hvorfor er ikke kriteriet relevant?' : 'Hvordan er kriteriet oppfylt?'}
                       </LabelSmall>
                       <Block marginBottom={'48px'}>
                         {!suksessbeskrivelseBegrunnelse.behovForBegrunnelse && !suksessbeskrivelseBegrunnelse.begrunnelse ? (
