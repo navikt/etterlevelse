@@ -14,18 +14,15 @@ import no.nav.data.etterlevelse.etterlevelse.dto.SuksesskriterieBegrunnelseRespo
 public class SuksesskriterieBegrunnelse {
     private int suksesskriterieId;
     private String begrunnelse;
-    private Boolean oppfylt;
-    private Boolean ikkeRelevant;
 
-    private Boolean underArbeid;
+    private SuksesskriterieStatus suksesskriterieStatus;
+
 
     public static SuksesskriterieBegrunnelse convert(SuksesskriterieBegrunnelseRequest request) {
         return SuksesskriterieBegrunnelse.builder()
                 .suksesskriterieId(request.getSuksesskriterieId())
                 .begrunnelse(request.getBegrunnelse())
-                .oppfylt(request.getOppfylt())
-                .ikkeRelevant(request.getIkkeRelevant())
-                .underArbeid(request.getUnderArbeid())
+                .suksesskriterieStatus(request.getSuksesskriterieStatus())
                 .build();
     }
 
@@ -33,9 +30,7 @@ public class SuksesskriterieBegrunnelse {
         return SuksesskriterieBegrunnelseResponse.builder()
                 .suksesskriterieId(suksesskriterieId)
                 .begrunnelse(begrunnelse)
-                .oppfylt(oppfylt)
-                .ikkeRelevant(ikkeRelevant)
-                .underArbeid(underArbeid)
+                .suksesskriterieStatus(suksesskriterieStatus)
                 .build();
     }
 }

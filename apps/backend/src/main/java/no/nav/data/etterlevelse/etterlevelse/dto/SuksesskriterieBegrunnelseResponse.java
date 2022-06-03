@@ -5,17 +5,16 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import no.nav.data.etterlevelse.etterlevelse.domain.SuksesskriterieStatus;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonPropertyOrder({"id", "begrunnelse", "oppfylt", "ikkeRelevant"})
+@JsonPropertyOrder({"id", "begrunnelse", "suksesskriterieStatus"})
 public class SuksesskriterieBegrunnelseResponse {
     private int suksesskriterieId;
     private String begrunnelse;
-    private Boolean oppfylt;
-    private Boolean ikkeRelevant;
 
-    private Boolean underArbeid;
+    private SuksesskriterieStatus suksesskriterieStatus;
 }

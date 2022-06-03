@@ -135,10 +135,7 @@ type Etterlevelse {
 type SuksesskriterieBegrunnelse {
     suksesskriterieId: Int!
     begrunnelse: String
-    oppfylt: Boolean
-    ikkeRelevant: Boolean
-    underArbeid: Boolean
-
+    suksesskriterieStatus: SuksesskriterieStatus
 }
 
 enum EtterlevelseStatus {
@@ -148,6 +145,12 @@ enum EtterlevelseStatus {
     IKKE_RELEVANT,
     FERDIG_DOKUMENTERT,
     IKKE_RELEVANT_FERDIG_DOKUMENTERT
+}
+
+enum SuksesskriterieStatus {
+    UNDER_ARBEID,
+    OPPFYLT,
+    IKKE_RELEVANT,
 }
 
 type Behandling {

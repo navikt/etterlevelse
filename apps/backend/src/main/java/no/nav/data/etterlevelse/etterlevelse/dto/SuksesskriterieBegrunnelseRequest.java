@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldNameConstants;
 import no.nav.data.common.validator.Validated;
 import no.nav.data.common.validator.Validator;
+import no.nav.data.etterlevelse.etterlevelse.domain.SuksesskriterieStatus;
 
 import static org.apache.commons.lang3.StringUtils.trimToNull;
 
@@ -18,14 +19,16 @@ import static org.apache.commons.lang3.StringUtils.trimToNull;
 public class SuksesskriterieBegrunnelseRequest implements Validated {
     private int suksesskriterieId;
     private String begrunnelse;
-    private Boolean oppfylt;
-    private Boolean ikkeRelevant;
 
-    private Boolean underArbeid;
+    private SuksesskriterieStatus suksesskriterieStatus;
 
     @Override
     public void format() {
         setBegrunnelse(trimToNull(begrunnelse));
+
+        if(suksesskriterieStatus == null) {
+            suksesskriterieStatus = SuksesskriterieStatus.UNDER_ARBEID;
+        }
     }
 
     @Override
