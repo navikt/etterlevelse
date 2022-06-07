@@ -19,16 +19,15 @@ import {ALIGN, Radio, RadioGroup, RadioGroupOverrides, RadioOverrides} from 'bas
 
 const paddingLeft = '30px'
 
-const getRadioButtonOverrides = (radioStatus: boolean): RadioOverrides & RadioGroupOverrides => {
-  return {
+const radioButtonOverrides: RadioOverrides & RadioGroupOverrides = {
     Root: {
-      style: ({ $isFocused }) => ({
-        ...borderColor(radioStatus ? ettlevColors.green400 : ettlevColors.green100),
+      style: ({ $isFocused, $checked }) => ({
+        ...borderColor($checked ? ettlevColors.green400 : ettlevColors.green100),
         ...borderStyle('solid'),
         ...borderWidth('1px'),
         ...borderRadius('4px'),
         ...buttonContentStyle,
-        backgroundColor: radioStatus ? ettlevColors.green100 : ettlevColors.white,
+        backgroundColor: $checked ? ettlevColors.green100 : ettlevColors.white,
         marginRight: '16px',
         minWidth: '213px',
         textUnderlineOffset: '3px',
@@ -53,7 +52,7 @@ const getRadioButtonOverrides = (radioStatus: boolean): RadioOverrides & RadioGr
       },
     },
   }
-}
+
 export const getSuksesskriterieBegrunnelse = (suksesskriterieBegrunnelser: SuksesskriterieBegrunnelse[], suksessKriterie: Suksesskriterie) => {
   const sb = suksesskriterieBegrunnelser.find((item) => {
     return item.suksesskriterieId === suksessKriterie.id
@@ -140,9 +139,6 @@ const KriterieBegrunnelse = ({
   const suksesskriterieBegrunnelse = getSuksesskriterieBegrunnelse(suksesskriterieBegrunnelser, suksesskriterie)
   const debounceDelay = 500
   const [begrunnelse, setBegrunnelse] = useDebouncedState(suksesskriterieBegrunnelse.begrunnelse || '', debounceDelay)
-
-  //SKAL OPPDATERE SUKSESSKRITERIE STATUS I BACKEND TIL ET ENUM ISTEDET FOR 3 BOOLEAN VERDIER
-  //SKAL FORENKLE LOGIKKEN ETTERHVERT
   const [suksessKriterieStatus, setSuksessKriterieStatus] = React.useState<SuksesskriterieStatus>(suksesskriterieBegrunnelse.suksesskriterieStatus || SuksesskriterieStatus.UNDER_ARBEID)
 
   React.useEffect(() => {
@@ -283,13 +279,13 @@ const KriterieBegrunnelse = ({
               name={'suksesskriterieStatus' + suksesskriterie.id}
               align={ALIGN.horizontal}
             >
-              <Radio value={SuksesskriterieStatus.UNDER_ARBEID} overrides={{ ...getRadioButtonOverrides(suksessKriterieStatus === SuksesskriterieStatus.UNDER_ARBEID) }}>
+              <Radio value={SuksesskriterieStatus.UNDER_ARBEID} overrides={{ ...radioButtonOverrides }}>
                 <ParagraphMedium margin={0}>Under arbeid</ParagraphMedium>
               </Radio>
-              <Radio value={SuksesskriterieStatus.OPPFYLT} overrides={{ ...getRadioButtonOverrides(suksessKriterieStatus === SuksesskriterieStatus.OPPFYLT) }}>
+              <Radio value={SuksesskriterieStatus.OPPFYLT} overrides={{ ...radioButtonOverrides }}>
                 <ParagraphMedium margin={0}> Oppfylt</ParagraphMedium>
               </Radio>
-              <Radio value={SuksesskriterieStatus.IKKE_RELEVANT} overrides={{ ...getRadioButtonOverrides(suksessKriterieStatus === SuksesskriterieStatus.IKKE_RELEVANT) }}>
+              <Radio value={SuksesskriterieStatus.IKKE_RELEVANT} overrides={{ ...radioButtonOverrides }}>
                 <ParagraphMedium margin={0}>Ikke relevant</ParagraphMedium>
               </Radio>
             </RadioGroup>
