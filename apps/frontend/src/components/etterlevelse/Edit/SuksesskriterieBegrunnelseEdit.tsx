@@ -1,21 +1,21 @@
-import { Block } from 'baseui/block'
-import { FormControl } from 'baseui/form-control'
-import { HeadingLarge, LabelSmall, ParagraphMedium } from 'baseui/typography'
-import { FieldArray, FieldArrayRenderProps } from 'formik'
+import {Block} from 'baseui/block'
+import {FormControl} from 'baseui/form-control'
+import {HeadingLarge, LabelSmall, ParagraphMedium} from 'baseui/typography'
+import {FieldArray, FieldArrayRenderProps} from 'formik'
 import React from 'react'
-import { EtterlevelseStatus, Suksesskriterie, SuksesskriterieBegrunnelse, SuksesskriterieStatus } from '../../../constants'
-import { useDebouncedState } from '../../../util/hooks'
-import { ettlevColors, theme } from '../../../util/theme'
-import { CustomizedAccordion, CustomizedPanel } from '../../common/CustomizedAccordion'
-import { FieldWrapper } from '../../common/Inputs'
+import {EtterlevelseStatus, Suksesskriterie, SuksesskriterieBegrunnelse, SuksesskriterieStatus} from '../../../constants'
+import {useDebouncedState} from '../../../util/hooks'
+import {ettlevColors, theme} from '../../../util/theme'
+import {CustomizedAccordion, CustomizedPanel} from '../../common/CustomizedAccordion'
+import {FieldWrapper} from '../../common/Inputs'
 import TextEditor from '../../common/TextEditor/TextEditor'
-import { Error } from '../../common/ModalSchema'
+import {Error} from '../../common/ModalSchema'
 import LabelWithToolTip from '../../common/LabelWithTooltip'
-import { borderColor, borderRadius, borderStyle, borderWidth } from '../../common/Style'
-import { LabelAboveContent } from '../../common/PropertyLabel'
-import { buttonContentStyle } from '../../common/Button'
-import { Markdown } from '../../common/Markdown'
-import { ALIGN, Radio, RadioGroup, RadioGroupOverrides, RadioOverrides } from 'baseui/radio'
+import {borderColor, borderRadius, borderStyle, borderWidth} from '../../common/Style'
+import {LabelAboveContent} from '../../common/PropertyLabel'
+import {buttonContentStyle} from '../../common/Button'
+import {Markdown} from '../../common/Markdown'
+import {ALIGN, Radio, RadioGroup, RadioGroupOverrides, RadioOverrides} from 'baseui/radio'
 
 const paddingLeft = '30px'
 
@@ -145,8 +145,6 @@ const KriterieBegrunnelse = ({
   //SKAL FORENKLE LOGIKKEN ETTERHVERT
   const [suksessKriterieStatus, setSuksessKriterieStatus] = React.useState<SuksesskriterieStatus>(suksesskriterieBegrunnelse.suksesskriterieStatus || SuksesskriterieStatus.UNDER_ARBEID)
 
-  const [value, setValue] = React.useState('')
-
   React.useEffect(() => {
     update({
       suksesskriterieId: suksesskriterie.id,
@@ -197,16 +195,6 @@ const KriterieBegrunnelse = ({
       return 'Hvordan oppfylles kriteriet?'
     } else {
       return 'Hvorfor er ikke kriteriet relevant?'
-    }
-  }
-
-  const getInitialValueForSuksesskriterieStatus = () => {
-    if (suksessKriterieStatus === SuksesskriterieStatus.OPPFYLT) {
-      return '2'
-    } else if (suksessKriterieStatus === SuksesskriterieStatus.IKKE_RELEVANT) {
-      return '3'
-    } else {
-      return '1'
     }
   }
 
@@ -288,27 +276,20 @@ const KriterieBegrunnelse = ({
         <>
           <Block>
             <RadioGroup
-              value={getInitialValueForSuksesskriterieStatus()}
+              value={suksessKriterieStatus}
               onChange={(e) => {
-                setValue(e.currentTarget.value)
-                if (e.currentTarget.value === '1') {
-                  setSuksessKriterieStatus(SuksesskriterieStatus.UNDER_ARBEID)
-                } else if (e.currentTarget.value === '2') {
-                  setSuksessKriterieStatus(SuksesskriterieStatus.OPPFYLT)
-                } else {
-                  setSuksessKriterieStatus(SuksesskriterieStatus.IKKE_RELEVANT)
-                }
+                setSuksessKriterieStatus(e.currentTarget.value as SuksesskriterieStatus)
               }}
               name={'suksesskriterieStatus' + suksesskriterie.id}
               align={ALIGN.horizontal}
             >
-              <Radio value="1" overrides={{ ...getRadioButtonOverrides(suksessKriterieStatus === SuksesskriterieStatus.UNDER_ARBEID) }}>
+              <Radio value={SuksesskriterieStatus.UNDER_ARBEID} overrides={{ ...getRadioButtonOverrides(suksessKriterieStatus === SuksesskriterieStatus.UNDER_ARBEID) }}>
                 <ParagraphMedium margin={0}>Under arbeid</ParagraphMedium>
               </Radio>
-              <Radio value="2" overrides={{ ...getRadioButtonOverrides(suksessKriterieStatus === SuksesskriterieStatus.OPPFYLT) }}>
+              <Radio value={SuksesskriterieStatus.OPPFYLT} overrides={{ ...getRadioButtonOverrides(suksessKriterieStatus === SuksesskriterieStatus.OPPFYLT) }}>
                 <ParagraphMedium margin={0}> Oppfylt</ParagraphMedium>
               </Radio>
-              <Radio value="3" overrides={{ ...getRadioButtonOverrides(suksessKriterieStatus === SuksesskriterieStatus.IKKE_RELEVANT) }}>
+              <Radio value={SuksesskriterieStatus.IKKE_RELEVANT} overrides={{ ...getRadioButtonOverrides(suksessKriterieStatus === SuksesskriterieStatus.IKKE_RELEVANT) }}>
                 <ParagraphMedium margin={0}>Ikke relevant</ParagraphMedium>
               </Radio>
             </RadioGroup>
