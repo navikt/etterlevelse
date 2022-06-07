@@ -40,6 +40,7 @@ export const MainPageV2 = () => {
     const reportWindowSize = () => {
       setPageWidth(getPageWidth())
     }
+    window.onload = reportWindowSize
     window.onresize = reportWindowSize
   })
 
