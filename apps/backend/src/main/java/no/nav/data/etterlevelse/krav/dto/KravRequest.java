@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldNameConstants;
-import no.nav.data.common.storage.domain.ChangeStamp;
 import no.nav.data.common.validator.RequestElement;
 import no.nav.data.common.validator.Validator;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
@@ -52,6 +51,8 @@ public class KravRequest implements RequestElement {
 
     private List<SuksesskriterieRequest> suksesskriterier;
 
+    private List<String> kravIdRelasjoner;
+
     @Schema(description = "Codelist AVDELING")
     private String avdeling;
     @Schema(description = "Codelist UNDERAVDELING")
@@ -85,6 +86,7 @@ public class KravRequest implements RequestElement {
         setRettskilder(formatList(rettskilder));
         setTagger(formatList(tagger));
         setSuksesskriterier(copyOf(suksesskriterier));
+        setKravIdRelasjoner(copyOf(kravIdRelasjoner));
 
         if (status == null) {
             status = KravStatus.UTKAST;

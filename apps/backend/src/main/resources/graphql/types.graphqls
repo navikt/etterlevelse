@@ -30,6 +30,8 @@ type Krav {
     etterlevelser(onlyForBehandling: Boolean): [Etterlevelse!]!
     tilbakemeldinger: [Tilbakemelding!]!
     begreper: [Begrep!]!
+    kravIdRelasjoner: [String!]!
+    kravRelasjoner: [Krav!]!
 }
 
 type Begrep {

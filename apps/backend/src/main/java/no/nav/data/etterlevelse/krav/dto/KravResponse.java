@@ -49,10 +49,9 @@ public class KravResponse implements KravId {
     private Periode periode;
 
     private List<SuksesskriterieResponse> suksesskriterier;
-
+    private List<String> kravIdRelasjoner;
     private CodelistResponse avdeling;
     private CodelistResponse underavdeling;
-
     private List<CodelistResponse> relevansFor;
     private KravStatus status;
 

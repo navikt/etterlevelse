@@ -62,6 +62,8 @@ public class Krav implements DomainObject, KravIdStatus {
     // Codelist RELEVANS
     private List<String> relevansFor;
 
+    private List<String> kravIdRelasjoner;
+
     @Default
     private KravStatus status = KravStatus.UTKAST;
 
@@ -89,7 +91,7 @@ public class Krav implements DomainObject, KravIdStatus {
         varselMelding = request.getVarselMelding();
 
         suksesskriterier = StreamUtils.convert(request.getSuksesskriterier(), Suksesskriterie::convert);
-
+        kravIdRelasjoner = copyOf(request.getKravIdRelasjoner());
         return this;
     }
 
@@ -119,6 +121,7 @@ public class Krav implements DomainObject, KravIdStatus {
                 .avdeling(CodelistService.getCodelistResponse(ListName.AVDELING, avdeling))
                 .underavdeling(CodelistService.getCodelistResponse(ListName.UNDERAVDELING, underavdeling))
                 .relevansFor(CodelistService.getCodelistResponseList(ListName.RELEVANS, relevansFor))
+                .kravIdRelasjoner(copyOf(kravIdRelasjoner))
                 .status(status)
                 .build();
         if (!SecurityUtils.isKravEier()) {
