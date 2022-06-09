@@ -167,6 +167,13 @@ export const kravFullQuery = gql`
 
       dokumentasjon
       implementasjoner
+      kravIdRelasjoner
+      kravRelasjoner {
+        id
+        kravNummer
+        kravVersjon
+        navn
+      }
       begrepIder
       begreper {
         id
@@ -236,6 +243,13 @@ export const behandlingKravQuery = gql`
         kravVersjon
         varselMelding
         status
+        kravIdRelasjoner
+        kravRelasjoner {
+          id
+          kravNummer
+          kravVersjon
+          navn
+        }
         suksesskriterier {
           id
           navn
@@ -279,6 +293,13 @@ export const statsQuery = gql`
             kravNummer
             kravVersjon
             status
+            kravIdRelasjoner
+            kravRelasjoner {
+              id
+              kravNummer
+              kravVersjon
+              navn
+            }
             etterlevelser(onlyForBehandling: true) {
               behandlingId
               status
@@ -299,6 +320,13 @@ export const statsQuery = gql`
             kravNummer
             kravVersjon
             status
+            kravIdRelasjoner
+            kravRelasjoner {
+              id
+              kravNummer
+              kravVersjon
+              navn
+            }
             etterlevelser(onlyForBehandling: true) {
               behandlingId
               status
@@ -319,6 +347,13 @@ export const statsQuery = gql`
             kravNummer
             kravVersjon
             status
+            kravIdRelasjoner
+            kravRelasjoner {
+              id
+              kravNummer
+              kravVersjon
+              navn
+            }
             etterlevelser(onlyForBehandling: true) {
               behandlingId
               status
@@ -346,6 +381,13 @@ export const statsQuery = gql`
               kravVersjon
               status
               navn
+              kravIdRelasjoner
+              kravRelasjoner {
+                id
+                kravNummer
+                kravVersjon
+                navn
+              }
               changeStamp {
                 lastModifiedBy
                 lastModifiedDate
@@ -358,6 +400,13 @@ export const statsQuery = gql`
               kravVersjon
               status
               navn
+              kravIdRelasjoner
+              kravRelasjoner {
+                id
+                kravNummer
+                kravVersjon
+                navn
+              }
               changeStamp {
                 lastModifiedBy
                 lastModifiedDate
