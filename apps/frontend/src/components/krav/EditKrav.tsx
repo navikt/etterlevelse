@@ -132,6 +132,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
       ...krav,
       underavdeling: underavdeling,
       varselMelding: varlselMeldingActive ? krav.varselMelding : undefined,
+      
     }
 
     const etterlevelser = await getEtterlevelserByKravNumberKravVersion(krav.kravNummer, krav.kravVersjon)
