@@ -145,9 +145,11 @@ export const kravMapToFormVal = (krav: Partial<KravQL>): KravQL => ({
   suksesskriterier: krav.suksesskriterier || [],
   nyKravVersjon: krav.nyKravVersjon || false,
   tema: (krav.regelverk && krav.regelverk?.length > 0 && krav.regelverk[0].lov && krav.regelverk[0].lov.data && krav.regelverk[0].lov.data.tema) || '',
+  kravIdRelasjoner: krav.kravIdRelasjoner || [],
   // not used
   begrepIder: [],
   etterlevelser: [],
+  kravRelasjoner: [],
 })
 
 export const kravFullQuery = gql`
