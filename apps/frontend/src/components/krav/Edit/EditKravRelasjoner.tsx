@@ -6,23 +6,16 @@ import { TYPE, Value } from 'baseui/select'
 import { FormControl } from 'baseui/form-control'
 import { Error } from '../../common/ModalSchema'
 import { RenderTagList } from '../../common/TagList'
-import { Krav } from '../../../constants'
+import { Krav, KravStatus } from '../../../constants'
 import { Block } from 'baseui/block'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
 import { searchIcon } from '../../Images'
 import CustomizedSelect from '../../common/CustomizedSelect'
 import { borderWidth } from '../../common/Style'
-import { useMainSearch } from '../../search/MainSearch'
-import { useQueryParam } from '../../../util/hooks'
-import { ObjectType } from '../../admin/audit/AuditTypes'
+import { useSearchKrav } from '../../../api/KravApi'
 
 export const EditKravRelasjoner = () => {
-  const searchParam = useQueryParam('search')
-  const [setSearch, searchResult, loading, type, setType] = useMainSearch(searchParam)
-
-  useEffect(() => {
-    setType(ObjectType.Krav)
-  })
+  const [searchResult, setSearch, loading] = useSearchKrav()
 
   return (
     <FieldWrapper>
@@ -63,12 +56,23 @@ export const EditKravRelasjoner = () => {
                       },
                     },
                   }}
-                  labelKey={'navn'}
                   noResultsMsg={intl.emptyTable}
                   maxDropdownHeight="350px"
                   searchable={true}
                   type={TYPE.search}
-                  options={searchResult}
+                  options={
+                    searchResult
+                      .filter((k) => k.status === KravStatus.AKTIV)
+                      .map((k) => {
+                        return {
+                          id: k.id,
+                          label: 'K' + k.kravNummer + '.' + k.kravVersjon + ' - ' + k.navn,
+                          navn: k.navn,
+                          kravNummer: k.kravNummer,
+                          kravVersjon: k.kravVersjon
+                        }
+                      })
+                  }
                   placeholder={'Krav'}
                   onInputChange={(event) => setSearch(event.currentTarget.value)}
                   onChange={(params) => {
