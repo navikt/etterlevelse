@@ -72,10 +72,12 @@ function kravToKravDto(krav: KravQL): Krav {
     relevansFor: krav.relevansFor.map((c) => c.code),
     regelverk: krav.regelverk.map((r) => ({ ...r, lov: r.lov.code })),
     begrepIder: krav.begreper.map((b) => b.id),
+    kravIdRelasjoner: krav.kravRelasjoner.map((k) => k.id),
   } as any
   delete dto.changeStamp
   delete dto.version
   delete dto.begreper
+  delete dto.kravRelasjoner
   return dto
 }
 
@@ -145,11 +147,11 @@ export const kravMapToFormVal = (krav: Partial<KravQL>): KravQL => ({
   suksesskriterier: krav.suksesskriterier || [],
   nyKravVersjon: krav.nyKravVersjon || false,
   tema: (krav.regelverk && krav.regelverk?.length > 0 && krav.regelverk[0].lov && krav.regelverk[0].lov.data && krav.regelverk[0].lov.data.tema) || '',
-  kravIdRelasjoner: krav.kravIdRelasjoner || [],
+  kravRelasjoner: krav.kravRelasjoner || [],
   // not used
   begrepIder: [],
   etterlevelser: [],
-  kravRelasjoner: [],
+  kravIdRelasjoner: [],
 })
 
 export const kravFullQuery = gql`
