@@ -29,6 +29,7 @@ import { Checkbox } from 'baseui/checkbox'
 import { warningAlert } from '../Images'
 import { user } from '../../services/User'
 import { Modal as BaseModal, ModalBody, ModalHeader } from 'baseui/modal'
+import { EditKravRelasjoner } from './Edit/EditKravRelasjoner'
 
 type EditKravProps = {
   krav: KravQL
@@ -367,6 +368,10 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
 
                     <Block width="100%" maxWidth={maxInputWidth} marginBottom="80px">
                       <EditBegreper />
+                    </Block>
+
+                    <Block width="100%" maxWidth={maxInputWidth} marginBottom="80px">
+                      <EditKravRelasjoner />
                     </Block>
 
                     <Block marginBottom={inputMarginBottom}>
