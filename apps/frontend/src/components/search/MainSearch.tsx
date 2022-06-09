@@ -185,7 +185,7 @@ const order = (type: NavigableItem | string) => {
   return -1
 }
 
-const useMainSearch = (searchParam?: string) => {
+export const useMainSearch = (searchParam?: string) => {
   const [search, setSearch] = useDebouncedState<string>(searchParam || '', 500)
   const [searchResult, setSearchResult] = React.useState<SearchItem[]>([])
   const [loading, setLoading] = React.useState<boolean>(false)
