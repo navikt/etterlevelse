@@ -1,34 +1,35 @@
-import { Krav, KravQL, KravStatus, KravVersjon } from '../../constants'
-import { Form, Formik } from 'formik'
-import { createKrav, getKravByKravNumberAndVersion, kravMapToFormVal, updateKrav } from '../../api/KravApi'
-import { Block } from 'baseui/block'
-import React, { useEffect } from 'react'
+import {Krav, KravQL, KravStatus, KravVersjon} from '../../constants'
+import {Form, Formik} from 'formik'
+import {createKrav, getKravByKravNumberAndVersion, kravMapToFormVal, updateKrav} from '../../api/KravApi'
+import {Block} from 'baseui/block'
+import React, {useEffect} from 'react'
 import * as yup from 'yup'
-import { codelist, ListName } from '../../services/Codelist'
-import { InputField, MultiInputField, TextAreaField } from '../common/Inputs'
+import {codelist, ListName} from '../../services/Codelist'
+import {InputField, MultiInputField, TextAreaField} from '../common/Inputs'
 import axios from 'axios'
-import { env } from '../../util/env'
-import { KravVarslingsadresserEdit } from './Edit/KravVarslingsadresserEdit'
-import { KravRegelverkEdit } from './Edit/KravRegelverkEdit'
-import { KravSuksesskriterierEdit } from './Edit/KravSuksesskriterieEdit'
-import { EditBegreper } from './Edit/KravBegreperEdit'
-import { HeadingXLarge, HeadingXXLarge, LabelLarge, LabelSmall, ParagraphMedium, ParagraphXSmall } from 'baseui/typography'
+import {env} from '../../util/env'
+import {KravVarslingsadresserEdit} from './Edit/KravVarslingsadresserEdit'
+import {KravRegelverkEdit} from './Edit/KravRegelverkEdit'
+import {KravSuksesskriterierEdit} from './Edit/KravSuksesskriterieEdit'
+import {EditBegreper} from './Edit/KravBegreperEdit'
+import {HeadingXLarge, HeadingXXLarge, LabelLarge, LabelSmall, ParagraphMedium, ParagraphXSmall} from 'baseui/typography'
 import CustomizedModal from '../common/CustomizedModal'
 import Button from '../common/Button'
-import { ettlevColors, maxPageWidth, responsivePaddingLarge, responsiveWidthLarge, theme } from '../../util/theme'
-import { getEtterlevelserByKravNumberKravVersion } from '../../api/EtterlevelseApi'
+import {ettlevColors, maxPageWidth, responsivePaddingLarge, responsiveWidthLarge, theme} from '../../util/theme'
+import {getEtterlevelserByKravNumberKravVersion} from '../../api/EtterlevelseApi'
 import ErrorModal from '../ErrorModal'
-import { Error } from '../common/ModalSchema'
-import { ErrorMessageModal } from './ErrorMessageModal'
-import { KIND as NKIND, Notification } from 'baseui/notification'
-import { faTimesCircle } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { EditKravMultiOptionField } from './Edit/EditKravMultiOptionField'
-import { borderColor, borderRadius, borderStyle, borderWidth } from '../common/Style'
-import { Checkbox } from 'baseui/checkbox'
-import { warningAlert } from '../Images'
-import { user } from '../../services/User'
-import { Modal as BaseModal, ModalBody, ModalHeader } from 'baseui/modal'
+import {Error} from '../common/ModalSchema'
+import {ErrorMessageModal} from './ErrorMessageModal'
+import {KIND as NKIND, Notification} from 'baseui/notification'
+import {faTimesCircle} from '@fortawesome/free-solid-svg-icons'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {EditKravMultiOptionField} from './Edit/EditKravMultiOptionField'
+import {borderColor, borderRadius, borderStyle, borderWidth} from '../common/Style'
+import {Checkbox} from 'baseui/checkbox'
+import {warningAlert} from '../Images'
+import {user} from '../../services/User'
+import {Modal as BaseModal, ModalBody, ModalHeader} from 'baseui/modal'
+import {EditKravRelasjoner} from './Edit/EditKravRelasjoner'
 
 type EditKravProps = {
   krav: KravQL
@@ -41,9 +42,6 @@ type EditKravProps = {
   alleKravVersjoner: KravVersjon[]
 }
 
-const padding = 212
-const paddingPx = padding + 'px'
-const width = `calc(100% - ${padding * 2}px)`
 const maxInputWidth = '400px'
 const inputMarginBottom = theme.sizing.scale900
 
@@ -63,9 +61,6 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
       navn: yup.string().required('Du må oppgi et navn til kravet'),
       suksesskriterier: yup
         .array()
-        //   .of(yup.object({
-        //   navn: yup.string().required('Du må oppgi et navn til suksesskriteriet')
-        // }))
         .test({
           name: 'suksesskriterierCheck',
           message: errorMessage,
@@ -367,6 +362,10 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
 
                     <Block width="100%" maxWidth={maxInputWidth} marginBottom="80px">
                       <EditBegreper />
+                    </Block>
+
+                    <Block width="100%" maxWidth={maxInputWidth} marginBottom="80px">
+                      <EditKravRelasjoner />
                     </Block>
 
                     <Block marginBottom={inputMarginBottom}>

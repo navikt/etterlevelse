@@ -83,7 +83,8 @@ export interface Krav extends DomainObject {
   status: KravStatus
   suksesskriterier: Suksesskriterie[]
   tema?: string
-  nyKravVersjon: boolean
+  nyKravVersjon: boolean,
+  kravIdRelasjoner: string[]
 }
 
 export interface EtterlevelseMetadata extends DomainObject {
@@ -335,6 +336,7 @@ export type KravQL = Replace<
     etterlevelser: EtterlevelseQL[]
     varslingsadresser: VarslingsadresseQL[]
     begreper: Begrep[]
+    kravRelasjoner: Krav[]
   }
 >
 

@@ -447,6 +447,13 @@ export const query = gql`
         behovForBegrunnelse
       }
 
+      kravIdRelasjoner
+      kravRelasjoner {
+        id
+        kravNummer
+        kravVersjon
+        navn
+      }
       etterlevelser {
         id
         behandling {

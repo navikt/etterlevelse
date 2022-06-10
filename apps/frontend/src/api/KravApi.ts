@@ -2,7 +2,7 @@ import axios from 'axios'
 import { emptyPage, Krav, KravQL, KravStatus, Or, PageResponse } from '../constants'
 import { env } from '../util/env'
 import { useEffect, useState } from 'react'
-import { useSearch } from '../util/hooks'
+import { useDebouncedState, useSearch } from '../util/hooks'
 import { gql } from '@apollo/client'
 
 export const getAllKrav = async () => {
@@ -72,10 +72,12 @@ function kravToKravDto(krav: KravQL): Krav {
     relevansFor: krav.relevansFor.map((c) => c.code),
     regelverk: krav.regelverk.map((r) => ({ ...r, lov: r.lov.code })),
     begrepIder: krav.begreper.map((b) => b.id),
+    kravIdRelasjoner: krav.kravRelasjoner.map((k) => k.id),
   } as any
   delete dto.changeStamp
   delete dto.version
   delete dto.begreper
+  delete dto.kravRelasjoner
   return dto
 }
 
@@ -115,7 +117,55 @@ export const useKrav = (params: KravId | KravIdParams, onlyLoadOnce?: boolean) =
   return [data, setData, load] as [Krav | undefined, (k?: Krav) => void, () => void]
 }
 
-export const useSearchKrav = () => useSearch(searchKrav)
+export const useSearchKrav = () => {
+  const [search, setSearch] = useDebouncedState<string>('', 200)
+  const [searchResult, setSearchResult] = useState<Krav[]>([])
+  const [loading, setLoading] = useState<boolean>(false)
+
+  useEffect(() => {
+    ; (async () => {
+      if (search && search.length > 2) {
+
+        setLoading(true)
+
+        if (search.toLowerCase().match(/k\d{1,3}/)) {
+
+          let kravNumber = search
+          if (kravNumber[0].toLowerCase() === 'k') {
+            kravNumber = kravNumber.substring(1)
+          }
+
+          if (search.length > 3) {
+
+            if (Number.parseFloat(kravNumber) && Number.parseFloat(kravNumber) % 1 !== 0) {
+              const kravNummerMedVersjon = kravNumber.split('.')
+              await getKravByKravNumberAndVersion(kravNummerMedVersjon[0], kravNummerMedVersjon[1]).then((res) => {
+                if (res && res.status === KravStatus.AKTIV) {
+                  setSearchResult([res])
+                }
+              })
+            } else {
+              await searchKrav(kravNumber).then((res) => {
+                setSearchResult(res.filter((k) => k.status === KravStatus.AKTIV))
+              })
+            }
+          }
+
+        } else {
+          await searchKrav(search).then((res) => {
+            setSearchResult(res.filter((k) => k.status === KravStatus.AKTIV))
+          })
+        }
+
+        setLoading(false)
+      } else {
+        setSearchResult([])
+      }
+    })()
+  }, [search])
+
+  return [searchResult, setSearch, loading] as [Krav[], React.Dispatch<React.SetStateAction<string>>, boolean]
+}
 
 export const kravMapToFormVal = (krav: Partial<KravQL>): KravQL => ({
   id: krav.id || '',
@@ -145,9 +195,11 @@ export const kravMapToFormVal = (krav: Partial<KravQL>): KravQL => ({
   suksesskriterier: krav.suksesskriterier || [],
   nyKravVersjon: krav.nyKravVersjon || false,
   tema: (krav.regelverk && krav.regelverk?.length > 0 && krav.regelverk[0].lov && krav.regelverk[0].lov.data && krav.regelverk[0].lov.data.tema) || '',
+  kravRelasjoner: krav.kravRelasjoner || [],
   // not used
   begrepIder: [],
   etterlevelser: [],
+  kravIdRelasjoner: [],
 })
 
 export const kravFullQuery = gql`
@@ -165,6 +217,13 @@ export const kravFullQuery = gql`
 
       dokumentasjon
       implementasjoner
+      kravIdRelasjoner
+      kravRelasjoner {
+        id
+        kravNummer
+        kravVersjon
+        navn
+      }
       begrepIder
       begreper {
         id
@@ -234,6 +293,13 @@ export const behandlingKravQuery = gql`
         kravVersjon
         varselMelding
         status
+        kravIdRelasjoner
+        kravRelasjoner {
+          id
+          kravNummer
+          kravVersjon
+          navn
+        }
         suksesskriterier {
           id
           navn
@@ -277,6 +343,13 @@ export const statsQuery = gql`
             kravNummer
             kravVersjon
             status
+            kravIdRelasjoner
+            kravRelasjoner {
+              id
+              kravNummer
+              kravVersjon
+              navn
+            }
             etterlevelser(onlyForBehandling: true) {
               behandlingId
               status
@@ -297,6 +370,13 @@ export const statsQuery = gql`
             kravNummer
             kravVersjon
             status
+            kravIdRelasjoner
+            kravRelasjoner {
+              id
+              kravNummer
+              kravVersjon
+              navn
+            }
             etterlevelser(onlyForBehandling: true) {
               behandlingId
               status
@@ -317,6 +397,13 @@ export const statsQuery = gql`
             kravNummer
             kravVersjon
             status
+            kravIdRelasjoner
+            kravRelasjoner {
+              id
+              kravNummer
+              kravVersjon
+              navn
+            }
             etterlevelser(onlyForBehandling: true) {
               behandlingId
               status
@@ -344,6 +431,13 @@ export const statsQuery = gql`
               kravVersjon
               status
               navn
+              kravIdRelasjoner
+              kravRelasjoner {
+                id
+                kravNummer
+                kravVersjon
+                navn
+              }
               changeStamp {
                 lastModifiedBy
                 lastModifiedDate
@@ -356,6 +450,13 @@ export const statsQuery = gql`
               kravVersjon
               status
               navn
+              kravIdRelasjoner
+              kravRelasjoner {
+                id
+                kravNummer
+                kravVersjon
+                navn
+              }
               changeStamp {
                 lastModifiedBy
                 lastModifiedDate

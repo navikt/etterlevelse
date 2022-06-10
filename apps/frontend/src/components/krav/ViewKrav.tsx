@@ -1,4 +1,4 @@
-import { AdresseType, Begrep, KravQL, KravVersjon } from '../../constants'
+import { AdresseType, Begrep, Krav, KravQL, KravVersjon } from '../../constants'
 import { Block, Display, Responsive } from 'baseui/block'
 import React from 'react'
 import { kravStatus } from '../../pages/KravPage'
@@ -98,6 +98,14 @@ export const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVer
         <LabelAboveContent header title="Begreper">
           {krav.begreper.map((b, i) => (
             <BegrepView key={'begrep_' + i} begrep={b} />
+          ))}
+        </LabelAboveContent>
+      </LabelWrapper>
+
+      <LabelWrapper>
+        <LabelAboveContent header title="Relasjoner til andre krav">
+          {krav.kravRelasjoner.map((kr, i) => (
+            <KravRelasjonView key={'kravRelasjon' + i} kravRelasjon={kr} />
           ))}
         </LabelAboveContent>
       </LabelWrapper>
@@ -245,6 +253,17 @@ const BegrepView = ({ begrep }: { begrep: Begrep }) => (
         <ExternalLinkWrapper text={begrep.navn} />
       </ExternalLink>{' '}
       - {begrep.beskrivelse}
+    </DotTag>
+  </Block>
+)
+
+const KravRelasjonView = ({ kravRelasjon }: { kravRelasjon: Partial<Krav> }) => (
+  <Block maxWidth={'650px'}>
+    <DotTag>
+      <ExternalLink href={`/krav/${kravRelasjon.id}`} label={'Link til krav relasjon'}>
+        <ExternalLinkWrapper text={`K${kravRelasjon.kravNummer}.${kravRelasjon.kravVersjon}`} />
+      </ExternalLink>{' '}
+      - {kravRelasjon.navn}
     </DotTag>
   </Block>
 )
