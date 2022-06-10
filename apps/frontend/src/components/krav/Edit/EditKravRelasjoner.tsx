@@ -62,7 +62,6 @@ export const EditKravRelasjoner = () => {
                   type={TYPE.search}
                   options={
                     searchResult
-                      .filter((k) => k.status === KravStatus.AKTIV)
                       .map((k) => {
                         return {
                           id: k.id,
