@@ -2,7 +2,7 @@ import axios from 'axios'
 import { emptyPage, Krav, KravQL, KravStatus, Or, PageResponse } from '../constants'
 import { env } from '../util/env'
 import { useEffect, useState } from 'react'
-import { useSearch } from '../util/hooks'
+import { useDebouncedState, useSearch } from '../util/hooks'
 import { gql } from '@apollo/client'
 
 export const getAllKrav = async () => {
@@ -117,7 +117,55 @@ export const useKrav = (params: KravId | KravIdParams, onlyLoadOnce?: boolean) =
   return [data, setData, load] as [Krav | undefined, (k?: Krav) => void, () => void]
 }
 
-export const useSearchKrav = () => useSearch(searchKrav)
+export const useSearchKrav = () => {
+  const [search, setSearch] = useDebouncedState<string>('', 200)
+  const [searchResult, setSearchResult] = useState<Krav[]>([])
+  const [loading, setLoading] = useState<boolean>(false)
+
+  useEffect(() => {
+    ; (async () => {
+      if (search && search.length > 2) {
+
+        setLoading(true)
+
+        if (search.toLowerCase().match(/k\d{1,3}/)) {
+
+          let kravNumber = search
+          if (kravNumber[0].toLowerCase() === 'k') {
+            kravNumber = kravNumber.substring(1)
+          }
+
+          if (search.length > 3) {
+
+            if (Number.parseFloat(kravNumber) && Number.parseFloat(kravNumber) % 1 !== 0) {
+              const kravNummerMedVersjon = kravNumber.split('.')
+              await getKravByKravNumberAndVersion(kravNummerMedVersjon[0], kravNummerMedVersjon[1]).then((res) => {
+                if (res && res.status === KravStatus.AKTIV) {
+                  setSearchResult([res])
+                }
+              })
+            } else {
+              await searchKrav(kravNumber).then((res) => {
+                setSearchResult(res.filter((k) => k.status === KravStatus.AKTIV))
+              })
+            }
+          }
+
+        } else {
+          await searchKrav(search).then((res) => {
+            setSearchResult(res.filter((k) => k.status === KravStatus.AKTIV))
+          })
+        }
+
+        setLoading(false)
+      } else {
+        setSearchResult([])
+      }
+    })()
+  }, [search])
+
+  return [searchResult, setSearch, loading] as [Krav[], React.Dispatch<React.SetStateAction<string>>, boolean]
+}
 
 export const kravMapToFormVal = (krav: Partial<KravQL>): KravQL => ({
   id: krav.id || '',
