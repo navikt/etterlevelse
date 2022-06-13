@@ -70,6 +70,7 @@ import paperPenIconBgSmall from '../resources/icons/paperPenIconBg-small.svg'
 import paragrafIconBgSmall from '../resources/icons/paragrafIconBg-small.svg'
 import grafIconBgSmall from '../resources/icons/grafIconBg-small.svg'
 import notesIcon from '../resources/icons/notes.svg'
+import notesWithContentIcon from '../resources/icons/notes-with-content.svg'
 
 import React from 'react'
 import { theme } from '../util'
@@ -133,6 +134,7 @@ export {
   externalLinkIcon,
   eyeSlash,
   notesIcon,
+  notesWithContentIcon,
 }
 
 export const temaBilder: { [id: string]: string } = {

@@ -11,7 +11,7 @@ import {SuksesskriterierBegrunnelseEdit} from './SuksesskriterieBegrunnelseEdit'
 import {KIND as NKIND, Notification} from 'baseui/notification'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faTimesCircle} from '@fortawesome/free-solid-svg-icons'
-import {borderColor, borderRadius, borderStyle, borderWidth, marginAll} from '../../common/Style'
+import {borderColor, borderRadius, borderStyle, borderWidth, marginAll, padding} from '../../common/Style'
 import moment from 'moment'
 import {CustomizedAccordion, CustomizedPanel} from '../../common/CustomizedAccordion'
 import {AllInfo} from '../../krav/ViewKrav'
@@ -24,6 +24,7 @@ import _ from 'lodash'
 import {Checkbox} from 'baseui/checkbox'
 import {DateField} from '../../common/Inputs'
 import EditNotatfelt from '../../etterlevelseMetadata/EditNotatfelt'
+import {notesIcon, notesWithContentIcon} from "../../Images";
 
 type EditProps = {
   krav: KravQL
@@ -100,10 +101,24 @@ export const EtterlevelseEditFields = ({
 
   return (
     <Block width="100%">
-      <Button onClick={() => setIsNotatfeltOpen(true)}>
-        click
-      </Button>
+      <Block display='flex' $style={{flexDirection: 'row-reverse'}}>
 
+
+      <Button notBold $style={{backgroundColor: ettlevColors.green50,
+      color: ettlevColors.green600,
+        ':hover': {backgroundColor: ettlevColors.green100},
+      borderBottomRightRadius: '0px',
+        borderTopRightRadius: '0px'
+
+      }} onClick={() => setIsNotatfeltOpen(true)}>
+        <Block $style={{...padding('3px', '-1px')}}>
+          <Block>
+            {etterlevelseMetadata.notater ? <img src={notesWithContentIcon} alt="Notater med innohold"/> : <img src={notesIcon} alt="Notater"/>}
+          </Block>
+          Notat
+        </Block>
+      </Button>
+    </Block>
       <EditNotatfelt
         isOpen={isNotatfeltOpen}
         setIsNotatfeltOpen ={setIsNotatfeltOpen}
