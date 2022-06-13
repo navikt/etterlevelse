@@ -1,4 +1,4 @@
-import { Etterlevelse, EtterlevelseStatus, KRAV_FILTER_TYPE, KravQL, KravStatus } from '../../../constants'
+import { Etterlevelse, EtterlevelseStatus, KRAV_FILTER_TYPE, KravQL, KravStatus, EtterlevelseMetadata } from '../../../constants'
 import { Form, Formik, FormikProps, validateYupSchema, yupToFormErrors } from 'formik'
 import { mapEtterlevelseToFormValue } from '../../../api/EtterlevelseApi'
 import { Block } from 'baseui/block'
@@ -23,6 +23,8 @@ import { etterlevelseSchema } from './etterlevelseSchema'
 import _ from 'lodash'
 import { Checkbox } from 'baseui/checkbox'
 import { DateField } from '../../common/Inputs'
+import { Drawer } from 'baseui/drawer'
+import EditNotatfelt from '../../etterlevelseMetadata/EditNotatfelt'
 
 type EditProps = {
   krav: KravQL
@@ -45,6 +47,7 @@ type EditProps = {
   tidligereEtterlevelser?: Etterlevelse[]
   viewMode?: boolean
   kravFilter: KRAV_FILTER_TYPE
+  etterlevelseMetadata: EtterlevelseMetadata
 }
 
 export const EtterlevelseEditFields = ({
@@ -64,12 +67,15 @@ export const EtterlevelseEditFields = ({
   tidligereEtterlevelser,
   viewMode,
   kravFilter,
+  etterlevelseMetadata
 }: EditProps) => {
   const [etterlevelseStatus, setEtterlevelseStatus] = React.useState<string>(
     editedEtterlevelse ? editedEtterlevelse.status : etterlevelse.status || EtterlevelseStatus.UNDER_REDIGERING,
   )
   const [radioHover, setRadioHover] = React.useState<string>('')
   const [isOppfylesSenere, setOppfylesSenere] = React.useState<boolean>(etterlevelseStatus === EtterlevelseStatus.OPPFYLLES_SENERE)
+
+  const [isNotatfeltOpen, setIsNotatfeltOpen] = React.useState(false)
 
   const navigate = useNavigate()
 
@@ -93,6 +99,16 @@ export const EtterlevelseEditFields = ({
 
   return (
     <Block width="100%">
+      <Button onClick={() => setIsNotatfeltOpen(true)}>
+        click
+      </Button>
+      
+      <EditNotatfelt 
+        isOpen={isNotatfeltOpen}
+        onClose={() => setIsNotatfeltOpen(false)}
+        etterlevelseMetadata={etterlevelseMetadata}
+      />
+
       {viewMode === false ? (
         <Formik
           onSubmit={submit}
