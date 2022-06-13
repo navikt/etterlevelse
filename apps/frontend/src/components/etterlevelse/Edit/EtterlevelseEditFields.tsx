@@ -1,29 +1,28 @@
-import { Etterlevelse, EtterlevelseStatus, KRAV_FILTER_TYPE, KravQL, KravStatus, EtterlevelseMetadata } from '../../../constants'
-import { Form, Formik, FormikProps, validateYupSchema, yupToFormErrors } from 'formik'
-import { mapEtterlevelseToFormValue } from '../../../api/EtterlevelseApi'
-import { Block } from 'baseui/block'
+import {Etterlevelse, EtterlevelseMetadata, EtterlevelseStatus, KRAV_FILTER_TYPE, KravQL, KravStatus} from '../../../constants'
+import {Form, Formik, FormikProps, validateYupSchema, yupToFormErrors} from 'formik'
+import {mapEtterlevelseToFormValue} from '../../../api/EtterlevelseApi'
+import {Block} from 'baseui/block'
 import Button from '../../common/Button'
-import React, { useEffect } from 'react'
+import React, {useEffect} from 'react'
 
-import { LabelSmall, ParagraphMedium, ParagraphXSmall } from 'baseui/typography'
-import { ettlevColors, responsivePaddingInnerPage, responsiveWidthInnerPage } from '../../../util/theme'
-import { SuksesskriterierBegrunnelseEdit } from './SuksesskriterieBegrunnelseEdit'
-import { KIND as NKIND, Notification } from 'baseui/notification'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTimesCircle } from '@fortawesome/free-solid-svg-icons'
-import { borderColor, borderRadius, borderStyle, borderWidth, marginAll } from '../../common/Style'
+import {LabelSmall, ParagraphMedium, ParagraphXSmall} from 'baseui/typography'
+import {ettlevColors, responsivePaddingInnerPage, responsiveWidthInnerPage} from '../../../util/theme'
+import {SuksesskriterierBegrunnelseEdit} from './SuksesskriterieBegrunnelseEdit'
+import {KIND as NKIND, Notification} from 'baseui/notification'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faTimesCircle} from '@fortawesome/free-solid-svg-icons'
+import {borderColor, borderRadius, borderStyle, borderWidth, marginAll} from '../../common/Style'
 import moment from 'moment'
-import { CustomizedAccordion, CustomizedPanel } from '../../common/CustomizedAccordion'
-import { AllInfo } from '../../krav/ViewKrav'
+import {CustomizedAccordion, CustomizedPanel} from '../../common/CustomizedAccordion'
+import {AllInfo} from '../../krav/ViewKrav'
 import CustomizedModal from '../../common/CustomizedModal'
-import { useNavigate } from 'react-router-dom'
+import {useNavigate} from 'react-router-dom'
 import EtterlevelseCard from '../EtterlevelseCard'
-import { ModalHeader } from 'baseui/modal'
-import { etterlevelseSchema } from './etterlevelseSchema'
+import {ModalHeader} from 'baseui/modal'
+import {etterlevelseSchema} from './etterlevelseSchema'
 import _ from 'lodash'
-import { Checkbox } from 'baseui/checkbox'
-import { DateField } from '../../common/Inputs'
-import { Drawer } from 'baseui/drawer'
+import {Checkbox} from 'baseui/checkbox'
+import {DateField} from '../../common/Inputs'
 import EditNotatfelt from '../../etterlevelseMetadata/EditNotatfelt'
 
 type EditProps = {
@@ -102,10 +101,10 @@ export const EtterlevelseEditFields = ({
       <Button onClick={() => setIsNotatfeltOpen(true)}>
         click
       </Button>
-      
-      <EditNotatfelt 
+
+      <EditNotatfelt
         isOpen={isNotatfeltOpen}
-        onClose={() => setIsNotatfeltOpen(false)}
+        setIsNotatfeltOpen ={setIsNotatfeltOpen}
         etterlevelseMetadata={etterlevelseMetadata}
       />
 
