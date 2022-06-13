@@ -401,6 +401,7 @@ export const EditEtterlevelseV2 = ({
                       editedEtterlevelse={editedEtterlevelse}
                       tidligereEtterlevelser={tidligereEtterlevelser}
                       etterlevelseMetadata={etterlevelseMetadata}
+                      setEtterlevelseMetadata={setEtterlevelseMetadata}
                     />
                   ),
                 },

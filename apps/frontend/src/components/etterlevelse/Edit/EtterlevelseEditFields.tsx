@@ -47,6 +47,7 @@ type EditProps = {
   viewMode?: boolean
   kravFilter: KRAV_FILTER_TYPE
   etterlevelseMetadata: EtterlevelseMetadata
+  setEtterlevelseMetadata: React.Dispatch<React.SetStateAction<EtterlevelseMetadata>>
 }
 
 export const EtterlevelseEditFields = ({
@@ -66,7 +67,8 @@ export const EtterlevelseEditFields = ({
   tidligereEtterlevelser,
   viewMode,
   kravFilter,
-  etterlevelseMetadata
+  etterlevelseMetadata,
+  setEtterlevelseMetadata
 }: EditProps) => {
   const [etterlevelseStatus, setEtterlevelseStatus] = React.useState<string>(
     editedEtterlevelse ? editedEtterlevelse.status : etterlevelse.status || EtterlevelseStatus.UNDER_REDIGERING,
@@ -106,6 +108,7 @@ export const EtterlevelseEditFields = ({
         isOpen={isNotatfeltOpen}
         setIsNotatfeltOpen ={setIsNotatfeltOpen}
         etterlevelseMetadata={etterlevelseMetadata}
+        setEtterlevelseMetadata={setEtterlevelseMetadata}
       />
 
       {viewMode === false ? (
