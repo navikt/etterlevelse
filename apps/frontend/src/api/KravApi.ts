@@ -123,20 +123,17 @@ export const useSearchKrav = () => {
   const [loading, setLoading] = useState<boolean>(false)
 
   useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       if (search && search.length > 2) {
-
         setLoading(true)
 
         if (search.toLowerCase().match(/k\d{1,3}/)) {
-
           let kravNumber = search
           if (kravNumber[0].toLowerCase() === 'k') {
             kravNumber = kravNumber.substring(1)
           }
 
           if (search.length > 3) {
-
             if (Number.parseFloat(kravNumber) && Number.parseFloat(kravNumber) % 1 !== 0) {
               const kravNummerMedVersjon = kravNumber.split('.')
               await getKravByKravNumberAndVersion(kravNummerMedVersjon[0], kravNummerMedVersjon[1]).then((res) => {
@@ -150,7 +147,6 @@ export const useSearchKrav = () => {
               })
             }
           }
-
         } else {
           await searchKrav(search).then((res) => {
             setSearchResult(res.filter((k) => k.status === KravStatus.AKTIV))

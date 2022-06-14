@@ -1,35 +1,35 @@
-import {Krav, KravQL, KravStatus, KravVersjon} from '../../constants'
-import {Form, Formik} from 'formik'
-import {createKrav, getKravByKravNumberAndVersion, kravMapToFormVal, updateKrav} from '../../api/KravApi'
-import {Block} from 'baseui/block'
-import React, {useEffect} from 'react'
+import { Krav, KravQL, KravStatus, KravVersjon } from '../../constants'
+import { Form, Formik } from 'formik'
+import { createKrav, getKravByKravNumberAndVersion, kravMapToFormVal, updateKrav } from '../../api/KravApi'
+import { Block } from 'baseui/block'
+import React, { useEffect } from 'react'
 import * as yup from 'yup'
-import {codelist, ListName} from '../../services/Codelist'
-import {InputField, MultiInputField, TextAreaField} from '../common/Inputs'
+import { codelist, ListName } from '../../services/Codelist'
+import { InputField, MultiInputField, TextAreaField } from '../common/Inputs'
 import axios from 'axios'
-import {env} from '../../util/env'
-import {KravVarslingsadresserEdit} from './Edit/KravVarslingsadresserEdit'
-import {KravRegelverkEdit} from './Edit/KravRegelverkEdit'
-import {KravSuksesskriterierEdit} from './Edit/KravSuksesskriterieEdit'
-import {EditBegreper} from './Edit/KravBegreperEdit'
-import {HeadingXLarge, HeadingXXLarge, LabelLarge, LabelSmall, ParagraphMedium, ParagraphXSmall} from 'baseui/typography'
+import { env } from '../../util/env'
+import { KravVarslingsadresserEdit } from './Edit/KravVarslingsadresserEdit'
+import { KravRegelverkEdit } from './Edit/KravRegelverkEdit'
+import { KravSuksesskriterierEdit } from './Edit/KravSuksesskriterieEdit'
+import { EditBegreper } from './Edit/KravBegreperEdit'
+import { HeadingXLarge, HeadingXXLarge, LabelLarge, LabelSmall, ParagraphMedium, ParagraphXSmall } from 'baseui/typography'
 import CustomizedModal from '../common/CustomizedModal'
 import Button from '../common/Button'
-import {ettlevColors, maxPageWidth, responsivePaddingLarge, responsiveWidthLarge, theme} from '../../util/theme'
-import {getEtterlevelserByKravNumberKravVersion} from '../../api/EtterlevelseApi'
+import { ettlevColors, maxPageWidth, responsivePaddingLarge, responsiveWidthLarge, theme } from '../../util/theme'
+import { getEtterlevelserByKravNumberKravVersion } from '../../api/EtterlevelseApi'
 import ErrorModal from '../ErrorModal'
-import {Error} from '../common/ModalSchema'
-import {ErrorMessageModal} from './ErrorMessageModal'
-import {KIND as NKIND, Notification} from 'baseui/notification'
-import {faTimesCircle} from '@fortawesome/free-solid-svg-icons'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {EditKravMultiOptionField} from './Edit/EditKravMultiOptionField'
-import {borderColor, borderRadius, borderStyle, borderWidth} from '../common/Style'
-import {Checkbox} from 'baseui/checkbox'
-import {warningAlert} from '../Images'
-import {user} from '../../services/User'
-import {Modal as BaseModal, ModalBody, ModalHeader} from 'baseui/modal'
-import {EditKravRelasjoner} from './Edit/EditKravRelasjoner'
+import { Error } from '../common/ModalSchema'
+import { ErrorMessageModal } from './ErrorMessageModal'
+import { KIND as NKIND, Notification } from 'baseui/notification'
+import { faTimesCircle } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { EditKravMultiOptionField } from './Edit/EditKravMultiOptionField'
+import { borderColor, borderRadius, borderStyle, borderWidth } from '../common/Style'
+import { Checkbox } from 'baseui/checkbox'
+import { warningAlert } from '../Images'
+import { user } from '../../services/User'
+import { Modal as BaseModal, ModalBody, ModalHeader } from 'baseui/modal'
+import { EditKravRelasjoner } from './Edit/EditKravRelasjoner'
 
 type EditKravProps = {
   krav: KravQL
@@ -59,19 +59,17 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
   const kravSchema = () =>
     yup.object({
       navn: yup.string().required('Du må oppgi et navn til kravet'),
-      suksesskriterier: yup
-        .array()
-        .test({
-          name: 'suksesskriterierCheck',
-          message: errorMessage,
-          test: function (suksesskriterier) {
-            const { parent } = this
-            if (parent.status === KravStatus.AKTIV) {
-              return suksesskriterier && suksesskriterier.length > 0 && suksesskriterier.every((s) => s.navn) ? true : false
-            }
-            return true
-          },
-        }),
+      suksesskriterier: yup.array().test({
+        name: 'suksesskriterierCheck',
+        message: errorMessage,
+        test: function (suksesskriterier) {
+          const { parent } = this
+          if (parent.status === KravStatus.AKTIV) {
+            return suksesskriterier && suksesskriterier.length > 0 && suksesskriterier.every((s) => s.navn) ? true : false
+          }
+          return true
+        },
+      }),
       hensikt: yup.string().test({
         name: 'hensiktCheck',
         message: errorMessage,

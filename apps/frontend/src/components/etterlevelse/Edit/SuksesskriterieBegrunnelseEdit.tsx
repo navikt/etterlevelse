@@ -1,57 +1,57 @@
-import {Block} from 'baseui/block'
-import {FormControl} from 'baseui/form-control'
-import {HeadingLarge, LabelSmall, ParagraphMedium} from 'baseui/typography'
-import {FieldArray, FieldArrayRenderProps} from 'formik'
+import { Block } from 'baseui/block'
+import { FormControl } from 'baseui/form-control'
+import { HeadingLarge, LabelSmall, ParagraphMedium } from 'baseui/typography'
+import { FieldArray, FieldArrayRenderProps } from 'formik'
 import React from 'react'
-import {EtterlevelseStatus, Suksesskriterie, SuksesskriterieBegrunnelse, SuksesskriterieStatus} from '../../../constants'
-import {useDebouncedState} from '../../../util/hooks'
-import {ettlevColors, theme} from '../../../util/theme'
-import {CustomizedAccordion, CustomizedPanel} from '../../common/CustomizedAccordion'
-import {FieldWrapper} from '../../common/Inputs'
+import { EtterlevelseStatus, Suksesskriterie, SuksesskriterieBegrunnelse, SuksesskriterieStatus } from '../../../constants'
+import { useDebouncedState } from '../../../util/hooks'
+import { ettlevColors, theme } from '../../../util/theme'
+import { CustomizedAccordion, CustomizedPanel } from '../../common/CustomizedAccordion'
+import { FieldWrapper } from '../../common/Inputs'
 import TextEditor from '../../common/TextEditor/TextEditor'
-import {Error} from '../../common/ModalSchema'
+import { Error } from '../../common/ModalSchema'
 import LabelWithToolTip from '../../common/LabelWithTooltip'
-import {borderColor, borderRadius, borderStyle, borderWidth} from '../../common/Style'
-import {LabelAboveContent} from '../../common/PropertyLabel'
-import {buttonContentStyle} from '../../common/Button'
-import {Markdown} from '../../common/Markdown'
-import {ALIGN, Radio, RadioGroup, RadioGroupOverrides, RadioOverrides} from 'baseui/radio'
+import { borderColor, borderRadius, borderStyle, borderWidth } from '../../common/Style'
+import { LabelAboveContent } from '../../common/PropertyLabel'
+import { buttonContentStyle } from '../../common/Button'
+import { Markdown } from '../../common/Markdown'
+import { ALIGN, Radio, RadioGroup, RadioGroupOverrides, RadioOverrides } from 'baseui/radio'
 
 const paddingLeft = '30px'
 
 const radioButtonOverrides: RadioOverrides & RadioGroupOverrides = {
-    Root: {
-      style: ({ $isFocused, $checked }) => ({
-        ...borderColor($checked ? ettlevColors.green400 : ettlevColors.green100),
-        ...borderStyle('solid'),
-        ...borderWidth('1px'),
-        ...borderRadius('4px'),
-        ...buttonContentStyle,
-        backgroundColor: $checked ? ettlevColors.green100 : ettlevColors.white,
-        marginRight: '16px',
-        minWidth: '213px',
-        textUnderlineOffset: '3px',
-        ':hover': { backgroundColor: ettlevColors.green50, textDecoration: 'underline 1px' },
-        outlineWidth: $isFocused ? '3px' : undefined,
-        outlineColor: $isFocused ? ettlevColors.focusOutline : undefined,
-        outlineStyle: $isFocused ? 'solid' : undefined,
-      }),
+  Root: {
+    style: ({ $isFocused, $checked }) => ({
+      ...borderColor($checked ? ettlevColors.green400 : ettlevColors.green100),
+      ...borderStyle('solid'),
+      ...borderWidth('1px'),
+      ...borderRadius('4px'),
+      ...buttonContentStyle,
+      backgroundColor: $checked ? ettlevColors.green100 : ettlevColors.white,
+      marginRight: '16px',
+      minWidth: '213px',
+      textUnderlineOffset: '3px',
+      ':hover': { backgroundColor: ettlevColors.green50, textDecoration: 'underline 1px' },
+      outlineWidth: $isFocused ? '3px' : undefined,
+      outlineColor: $isFocused ? ettlevColors.focusOutline : undefined,
+      outlineStyle: $isFocused ? 'solid' : undefined,
+    }),
+  },
+  RadioMarkInner: {
+    style: {
+      backgroundColor: ettlevColors.white,
+      ':hover': { backgroundColor: ettlevColors.white },
+      ':active': { backgroundColor: ettlevColors.green600, ...borderColor() },
     },
-    RadioMarkInner: {
-      style: {
-        backgroundColor: ettlevColors.white,
-        ':hover': { backgroundColor: ettlevColors.white },
-        ':active': { backgroundColor: ettlevColors.green600, ...borderColor() },
-      },
+  },
+  RadioMarkOuter: {
+    style: {
+      backgroundColor: ettlevColors.green600,
+      ':hover': { backgroundColor: ettlevColors.green600, borderWidth: '2px' },
+      ':active': { backgroundColor: ettlevColors.green600, borderWidth: '2px' },
     },
-    RadioMarkOuter: {
-      style: {
-        backgroundColor: ettlevColors.green600,
-        ':hover': { backgroundColor: ettlevColors.green600, borderWidth: '2px' },
-        ':active': { backgroundColor: ettlevColors.green600, borderWidth: '2px' },
-      },
-    },
-  }
+  },
+}
 
 export const getSuksesskriterieBegrunnelse = (suksesskriterieBegrunnelser: SuksesskriterieBegrunnelse[], suksessKriterie: Suksesskriterie) => {
   const sb = suksesskriterieBegrunnelser.find((item) => {
@@ -62,7 +62,7 @@ export const getSuksesskriterieBegrunnelse = (suksesskriterieBegrunnelser: Sukse
       suksesskriterieId: suksessKriterie.id,
       begrunnelse: '',
       behovForBegrunnelse: suksessKriterie.behovForBegrunnelse,
-      suksesskriterieStatus: SuksesskriterieStatus.UNDER_ARBEID
+      suksesskriterieStatus: SuksesskriterieStatus.UNDER_ARBEID,
     }
   } else {
     return sb
@@ -139,14 +139,16 @@ const KriterieBegrunnelse = ({
   const suksesskriterieBegrunnelse = getSuksesskriterieBegrunnelse(suksesskriterieBegrunnelser, suksesskriterie)
   const debounceDelay = 500
   const [begrunnelse, setBegrunnelse] = useDebouncedState(suksesskriterieBegrunnelse.begrunnelse || '', debounceDelay)
-  const [suksessKriterieStatus, setSuksessKriterieStatus] = React.useState<SuksesskriterieStatus>(suksesskriterieBegrunnelse.suksesskriterieStatus || SuksesskriterieStatus.UNDER_ARBEID)
+  const [suksessKriterieStatus, setSuksessKriterieStatus] = React.useState<SuksesskriterieStatus>(
+    suksesskriterieBegrunnelse.suksesskriterieStatus || SuksesskriterieStatus.UNDER_ARBEID,
+  )
 
   React.useEffect(() => {
     update({
       suksesskriterieId: suksesskriterie.id,
       begrunnelse: begrunnelse,
       behovForBegrunnelse: suksesskriterie.behovForBegrunnelse,
-      suksesskriterieStatus: suksessKriterieStatus
+      suksesskriterieStatus: suksessKriterieStatus,
     })
   }, [begrunnelse, suksessKriterieStatus])
 
@@ -309,9 +311,7 @@ const KriterieBegrunnelse = ({
         </Block>
       )}
 
-      <Block marginTop={'8px'}>
-        {suksesskriterieBegrunnelse.behovForBegrunnelse && begrunnelse.length > 0 && <Error fieldName={'status'} fullWidth={true} />}
-      </Block>
+      <Block marginTop={'8px'}>{suksesskriterieBegrunnelse.behovForBegrunnelse && begrunnelse.length > 0 && <Error fieldName={'status'} fullWidth={true} />}</Block>
     </Block>
   )
 }

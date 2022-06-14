@@ -10,7 +10,10 @@ export const etterlevelseSchema = () => {
           message: 'Du kan ikke dokumentere ferdig hvis et suksesskriterie er under arbeid.',
           test: function (suksesskriterieStatus) {
             const { options } = this
-            if ((options.context?.status === EtterlevelseStatus.FERDIG || options.context?.status === EtterlevelseStatus.FERDIG_DOKUMENTERT) && suksesskriterieStatus === SuksesskriterieStatus.UNDER_ARBEID) {
+            if (
+              (options.context?.status === EtterlevelseStatus.FERDIG || options.context?.status === EtterlevelseStatus.FERDIG_DOKUMENTERT) &&
+              suksesskriterieStatus === SuksesskriterieStatus.UNDER_ARBEID
+            ) {
               return false
             }
             return true

@@ -28,7 +28,6 @@ export const EditNotatfelt = ({ isOpen, setIsNotatfeltOpen, etterlevelseMetadata
   const [isFormDirty, setIsFormDirty] = useState<boolean>(false)
   const [isAlertModalOpen, setIsAlertModalOpen] = useState<boolean>(false)
 
-
   useEffect(() => {
     if (notater !== etterlevelseMetadata.notater) {
       setIsFormDirty(true)
@@ -75,7 +74,9 @@ export const EditNotatfelt = ({ isOpen, setIsNotatfeltOpen, etterlevelseMetadata
       }}
     >
       <Formik
-        onSubmit={(values) => { submit(values) }}
+        onSubmit={(values) => {
+          submit(values)
+        }}
         innerRef={formRef}
         validateOnChange={false}
         validateOnBlur={false}

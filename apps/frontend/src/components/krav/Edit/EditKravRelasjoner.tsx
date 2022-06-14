@@ -60,18 +60,15 @@ export const EditKravRelasjoner = () => {
                   maxDropdownHeight="350px"
                   searchable={true}
                   type={TYPE.search}
-                  options={
-                    searchResult
-                      .map((k) => {
-                        return {
-                          id: k.id,
-                          label: 'K' + k.kravNummer + '.' + k.kravVersjon + ' - ' + k.navn,
-                          navn: k.navn,
-                          kravNummer: k.kravNummer,
-                          kravVersjon: k.kravVersjon
-                        }
-                      })
-                  }
+                  options={searchResult.map((k) => {
+                    return {
+                      id: k.id,
+                      label: 'K' + k.kravNummer + '.' + k.kravVersjon + ' - ' + k.navn,
+                      navn: k.navn,
+                      kravNummer: k.kravNummer,
+                      kravVersjon: k.kravVersjon,
+                    }
+                  })}
                   placeholder={'Krav'}
                   onInputChange={(event) => setSearch(event.currentTarget.value)}
                   onChange={(params) => {

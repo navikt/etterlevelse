@@ -83,7 +83,7 @@ export interface Krav extends DomainObject {
   status: KravStatus
   suksesskriterier: Suksesskriterie[]
   tema?: string
-  nyKravVersjon: boolean,
+  nyKravVersjon: boolean
   kravIdRelasjoner: string[]
 }
 

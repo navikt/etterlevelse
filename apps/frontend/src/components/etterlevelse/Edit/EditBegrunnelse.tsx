@@ -114,7 +114,7 @@ const Begrunnelse = ({
       suksesskriterieId: suksesskriterie.id,
       begrunnelse: begrunnelse,
       behovForBegrunnelse: suksesskriterieBegrunnelse.behovForBegrunnelse,
-      suksesskriterieStatus: suksesskriterieBegrunnelse.suksesskriterieStatus
+      suksesskriterieStatus: suksesskriterieBegrunnelse.suksesskriterieStatus,
     })
   }, [begrunnelse])
 

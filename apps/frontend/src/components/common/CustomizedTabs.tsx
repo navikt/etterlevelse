@@ -1,11 +1,11 @@
 import * as React from 'react'
-import {useState} from 'react'
-import {FILL, ORIENTATION, Tab, TabProps, Tabs, TabsOverrides} from 'baseui/tabs-motion'
-import {StyleObject} from 'styletron-standard'
-import {borderColor, borderStyle, borderWidth, marginZero, paddingZero} from './Style'
-import {theme} from '../../util'
-import {ettlevColors} from '../../util/theme'
-import {ReactNode} from 'react-markdown/lib/react-markdown'
+import { useState } from 'react'
+import { FILL, ORIENTATION, Tab, TabProps, Tabs, TabsOverrides } from 'baseui/tabs-motion'
+import { StyleObject } from 'styletron-standard'
+import { borderColor, borderStyle, borderWidth, marginZero, paddingZero } from './Style'
+import { theme } from '../../util'
+import { ettlevColors } from '../../util/theme'
+import { ReactNode } from 'react-markdown/lib/react-markdown'
 import _ from 'lodash'
 
 export const CustomizedTab = (props: TabProps) => {

@@ -1,26 +1,26 @@
 import * as React from 'react'
-import {ReactElement, useEffect, useState} from 'react'
-import {Select, SelectOverrides, SelectProps, SIZE, TYPE, Value} from 'baseui/select'
-import {theme} from '../../util'
-import {useDebouncedState, useQueryParam} from '../../util/hooks'
-import {prefixBiasedSort} from '../../util/sort'
-import {Block} from 'baseui/block'
-import {useLocation, useNavigate} from 'react-router-dom'
+import { ReactElement, useEffect, useState } from 'react'
+import { Select, SelectOverrides, SelectProps, SIZE, TYPE, Value } from 'baseui/select'
+import { theme } from '../../util'
+import { useDebouncedState, useQueryParam } from '../../util/hooks'
+import { prefixBiasedSort } from '../../util/sort'
+import { Block } from 'baseui/block'
+import { useLocation, useNavigate } from 'react-router-dom'
 import Button from '../common/Button'
-import {Radio, RadioGroup} from 'baseui/radio'
-import {borderColor, borderRadius, borderStyle, borderWidth, padding, paddingZero} from '../common/Style'
+import { Radio, RadioGroup } from 'baseui/radio'
+import { borderColor, borderRadius, borderStyle, borderWidth, padding, paddingZero } from '../common/Style'
 import SearchLabel from './components/SearchLabel'
-import {NavigableItem, ObjectType} from '../admin/audit/AuditTypes'
-import {Behandling, Krav, KravStatus} from '../../constants'
+import { NavigableItem, ObjectType } from '../admin/audit/AuditTypes'
+import { Behandling, Krav, KravStatus } from '../../constants'
 import shortid from 'shortid'
-import {ettlevColors, searchResultColor} from '../../util/theme'
-import {kravName} from '../../pages/KravPage'
-import {getKravByKravNumberAndVersion, searchKrav, searchKravByNumber} from '../../api/KravApi'
-import {behandlingName, searchBehandling} from '../../api/BehandlingApi'
-import {codelist, ListName} from '../../services/Codelist'
-import {clearSearchIcon, filterIcon, navChevronDownIcon, searchIcon} from '../Images'
-import {ParagraphMedium} from 'baseui/typography'
-import {urlForObject} from '../common/RouteLink'
+import { ettlevColors, searchResultColor } from '../../util/theme'
+import { kravName } from '../../pages/KravPage'
+import { getKravByKravNumberAndVersion, searchKrav, searchKravByNumber } from '../../api/KravApi'
+import { behandlingName, searchBehandling } from '../../api/BehandlingApi'
+import { codelist, ListName } from '../../services/Codelist'
+import { clearSearchIcon, filterIcon, navChevronDownIcon, searchIcon } from '../Images'
+import { ParagraphMedium } from 'baseui/typography'
+import { urlForObject } from '../common/RouteLink'
 
 shortid.characters('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@')
 
@@ -284,12 +284,12 @@ type SelectPropWithSetValue = SelectProps & customSelectProp
 const MainSearchSelector = (props: SelectPropWithSetValue) => {
   const overrides: SelectOverrides = {
     Root: {
-      style: ({$isFocused}) => ({
+      style: ({ $isFocused }) => ({
         ...borderWidth($isFocused ? '3px' : ''),
-        ...borderStyle($isFocused ? 'solid': ''),
-        ...borderColor($isFocused ?  ettlevColors.focusOutline : ''),
-        ...borderRadius($isFocused ? '8px' : '')
-      })
+        ...borderStyle($isFocused ? 'solid' : ''),
+        ...borderColor($isFocused ? ettlevColors.focusOutline : ''),
+        ...borderRadius($isFocused ? '8px' : ''),
+      }),
     },
     SearchIcon: {
       component: () => <img src={searchIcon} alt="Søk ikon" />,
