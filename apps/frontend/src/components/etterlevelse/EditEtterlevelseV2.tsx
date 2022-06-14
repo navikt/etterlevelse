@@ -400,6 +400,8 @@ export const EditEtterlevelseV2 = ({
                       setNavigatePath={setNavigatePath}
                       editedEtterlevelse={editedEtterlevelse}
                       tidligereEtterlevelser={tidligereEtterlevelser}
+                      etterlevelseMetadata={etterlevelseMetadata}
+                      setEtterlevelseMetadata={setEtterlevelseMetadata}
                     />
                   ),
                 },
