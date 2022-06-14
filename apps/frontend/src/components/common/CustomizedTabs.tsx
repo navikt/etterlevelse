@@ -1,11 +1,11 @@
 import * as React from 'react'
-import { useState } from 'react'
-import { FILL, ORIENTATION, Tab, TabProps, Tabs, TabsOverrides, TabsProps } from 'baseui/tabs-motion'
-import { StyleObject } from 'styletron-standard'
-import { borderColor, borderStyle, borderWidth, marginZero, paddingZero } from './Style'
-import { theme } from '../../util'
-import { ettlevColors } from '../../util/theme'
-import { ReactNode } from 'react-markdown/lib/react-markdown'
+import {useState} from 'react'
+import {FILL, ORIENTATION, Tab, TabProps, Tabs, TabsOverrides} from 'baseui/tabs-motion'
+import {StyleObject} from 'styletron-standard'
+import {borderColor, borderStyle, borderWidth, marginZero, paddingZero} from './Style'
+import {theme} from '../../util'
+import {ettlevColors} from '../../util/theme'
+import {ReactNode} from 'react-markdown/lib/react-markdown'
 import _ from 'lodash'
 
 export const CustomizedTab = (props: TabProps) => {
@@ -29,8 +29,8 @@ interface CustomizedTabsProps {
   children?: React.ReactNode
   activeKey?: React.Key
   disabled?: boolean
-  fill?: FILL[keyof FILL]
-  orientation?: ORIENTATION[keyof ORIENTATION]
+  fill?: typeof FILL[keyof typeof FILL]
+  orientation?: typeof ORIENTATION[keyof typeof ORIENTATION]
   activateOnFocus?: boolean
   renderAll?: boolean
   onChange?: (params: { activeKey: React.Key }) => void
