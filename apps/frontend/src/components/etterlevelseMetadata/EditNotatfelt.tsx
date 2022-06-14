@@ -11,6 +11,8 @@ import Button from '../common/Button'
 import { ettlevColors } from '../../util/theme'
 import { padding } from '../common/Style'
 import { createEtterlevelseMetadata, updateEtterlevelseMetadata } from '../../api/EtterlevelseMetadataApi'
+import React, { useEffect, useState } from 'react'
+import AlertUnsavedPopup from '../common/AlertUnsavedPopup'
 
 type EditNotatfeltProps = {
   isOpen: boolean
@@ -23,29 +25,75 @@ type EditNotatfeltProps = {
 export const EditNotatfelt = ({ isOpen, setIsNotatfeltOpen, etterlevelseMetadata, setEtterlevelseMetadata, formRef }: EditNotatfeltProps) => {
   const debounceDelay = 500
   const [notater, setNotater] = useDebouncedState(etterlevelseMetadata.notater || '', debounceDelay)
+  const [isFormDirty, setIsFormDirty] = useState<boolean>(false)
+  const [isAlertModalOpen, setIsAlertModalOpen] = useState<boolean>(false)
+
+
+  useEffect(() => {
+    if (notater !== etterlevelseMetadata.notater) {
+      setIsFormDirty(true)
+    } else {
+      setIsFormDirty(false)
+    }
+  }, [notater])
+
+  const submit = (values: EtterlevelseMetadata) => {
+    if (etterlevelseMetadata.id === 'ny') {
+      createEtterlevelseMetadata({ ...values, notater: notater }).then((resp) => {
+        setEtterlevelseMetadata(resp)
+        setIsFormDirty(false)
+      })
+    } else {
+      updateEtterlevelseMetadata({ ...values, notater: notater }).then((resp) => {
+        setEtterlevelseMetadata(resp)
+        setIsFormDirty(false)
+      })
+    }
+    setIsNotatfeltOpen(false)
+  }
 
   return (
-    <Drawer isOpen={isOpen} onClose={() => setIsNotatfeltOpen(false)} onEscapeKeyDown={() => setIsNotatfeltOpen(false)}>
-      <Formik
-        onSubmit={(values) => {
-          if (etterlevelseMetadata.id === 'ny') {
-            createEtterlevelseMetadata({ ...values, notater: notater }).then((resp) => {
-              setEtterlevelseMetadata(resp)
-            })
-          } else {
-            updateEtterlevelseMetadata({ ...values, notater: notater }).then((resp) => {
-              setEtterlevelseMetadata(resp)
-            })
-          }
+    <Drawer
+      isOpen={isOpen}
+      onClose={() => {
+        if (!isFormDirty) {
+          setIsFormDirty(false)
+          setNotater(etterlevelseMetadata.notater || '')
           setIsNotatfeltOpen(false)
-        }}
+        } else {
+          setIsAlertModalOpen(true)
+        }
+      }}
+      onEscapeKeyDown={() => {
+        if (!isFormDirty) {
+          setIsFormDirty(false)
+          setNotater(etterlevelseMetadata.notater || '')
+          setIsNotatfeltOpen(false)
+        } else {
+          setIsAlertModalOpen(true)
+        }
+      }}
+    >
+      <Formik
+        onSubmit={(values) => { submit(values) }}
         innerRef={formRef}
         validateOnChange={false}
         validateOnBlur={false}
         initialValues={etterlevelseMetadata}
       >
-        {({ errors }: FormikProps<EtterlevelseMetadata>) => (
+        {({ values, errors }: FormikProps<EtterlevelseMetadata>) => (
           <Form>
+            <AlertUnsavedPopup
+              isActive={isFormDirty}
+              isModalOpen={isAlertModalOpen}
+              setIsModalOpen={setIsAlertModalOpen}
+              onClose={() => {
+                setIsFormDirty(false)
+                setNotater(etterlevelseMetadata.notater || '')
+                setIsNotatfeltOpen(false)
+              }}
+              onSubmit={() => submit(values)}
+            />
             <Block>
               <Block display="flex" alignItems="center" marginBottom="23px" marginTop="">
                 <img src={notesIcon} alt="notat ikon" />
@@ -62,7 +110,11 @@ export const EditNotatfelt = ({ isOpen, setIsNotatfeltOpen, etterlevelseMetadata
               <Button
                 type={'button'}
                 kind={'underline-hover'}
-                onClick={() => setIsNotatfeltOpen(false)}
+                onClick={() => {
+                  setIsFormDirty(false)
+                  setNotater(etterlevelseMetadata.notater || '')
+                  setIsNotatfeltOpen(false)
+                }}
                 $style={{
                   ':hover': { backgroundColor: ettlevColors.green50 },
                   ...padding('8px', '16px'),
