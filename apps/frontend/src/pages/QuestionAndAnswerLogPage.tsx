@@ -1,24 +1,24 @@
-import { Block } from 'baseui/block'
+import {Block} from 'baseui/block'
 
-import { HeadingXXLarge, ParagraphMedium } from 'baseui/typography'
+import {HeadingXXLarge, ParagraphMedium} from 'baseui/typography'
 import moment from 'moment'
 import * as React from 'react'
-import { ReactElement, useEffect, useState } from 'react'
-import { Helmet } from 'react-helmet'
-import { getAllKrav, kravMapToFormVal } from '../api/KravApi'
-import { getTilbakemeldingForKrav } from '../api/TilbakemeldingApi'
-import { PersonName } from '../components/common/PersonName'
+import {useEffect, useState} from 'react'
+import {Helmet} from 'react-helmet'
+import {getAllKrav, kravMapToFormVal} from '../api/KravApi'
+import {getTilbakemeldingForKrav} from '../api/TilbakemeldingApi'
+import {PersonName} from '../components/common/PersonName'
 import RouteLink from '../components/common/RouteLink'
-import { Cell, Row, Table } from '../components/common/Table'
-import { tilbakeMeldingStatus } from '../components/krav/tilbakemelding/Tilbakemelding'
-import { Layout2 } from '../components/scaffold/Page'
-import { Krav, PageResponse, Tilbakemelding } from '../constants'
-import { ColumnCompares } from '../util/hooks'
-import { ettlevColors, maxPageWidth } from '../util/theme'
-import { codelist, ListName } from '../services/Codelist'
-import { ampli } from '../services/Amplitude'
-import { Spinner } from '../components/common/Spinner'
-import { ReactNode } from 'react-markdown/lib/react-markdown'
+import {Cell, Row, Table} from '../components/common/Table'
+import {tilbakeMeldingStatus} from '../components/krav/tilbakemelding/Tilbakemelding'
+import {Layout2} from '../components/scaffold/Page'
+import {Krav, PageResponse, Tilbakemelding} from '../constants'
+import {ColumnCompares} from '../util/hooks'
+import {ettlevColors, maxPageWidth} from '../util/theme'
+import {codelist, ListName} from '../services/Codelist'
+import {ampli} from '../services/Amplitude'
+import {Spinner} from '../components/common/Spinner'
+import {ReactNode} from 'react-markdown/lib/react-markdown'
 
 type SporsmaalOgSvarKrav = {
   kravNavn: string
@@ -130,7 +130,7 @@ export const QuestionAndAnswerLogPage = () => {
                 return (
                   <Row key={krav.id}>
                     <Cell $style={{ maxWidth: '6%' }}>
-                      {krav.kravNummer}.{krav.kravVersjon}
+                      K{krav.kravNummer}.{krav.kravVersjon}
                     </Cell>
                     <Cell $style={{ maxWidth: '25%', minWidth: '25%' }}>
                       <RouteLink href={`/krav/${krav.kravNummer}/${krav.kravVersjon}?tilbakemeldingId=${krav.id}`}>{krav.kravNavn}</RouteLink>
