@@ -1,31 +1,32 @@
-import { Etterlevelse, EtterlevelseMetadata, EtterlevelseStatus, Krav, KRAV_FILTER_TYPE, KravQL } from '../../constants'
-import { FormikProps } from 'formik'
-import { createEtterlevelse, updateEtterlevelse } from '../../api/EtterlevelseApi'
-import { Block } from 'baseui/block'
+import {Etterlevelse, EtterlevelseMetadata, EtterlevelseStatus, Krav, KRAV_FILTER_TYPE, KravQL} from '../../constants'
+import {FormikProps} from 'formik'
+import {createEtterlevelse, updateEtterlevelse} from '../../api/EtterlevelseApi'
+import {Block} from 'baseui/block'
 import Button from '../common/Button'
-import React, { useEffect, useRef, useState } from 'react'
-import { theme } from '../../util'
-import { getKravByKravNumberAndVersion, KravId } from '../../api/KravApi'
-import { kravNumView, query } from '../../pages/KravPage'
-import { HeadingXLarge, HeadingXXLarge, LabelSmall, ParagraphMedium } from 'baseui/typography'
-import { ettlevColors, maxPageWidth, responsivePaddingExtraLarge, responsivePaddingInnerPage, responsiveWidthInnerPage } from '../../util/theme'
-import { user } from '../../services/User'
-import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
-import { borderColor, borderRadius, borderStyle, borderWidth, marginAll, padding } from '../common/Style'
-import { useQuery } from '@apollo/client'
-import { informationIcon, warningAlert } from '../Images'
+import React, {useEffect, useRef, useState} from 'react'
+import {theme} from '../../util'
+import {getKravByKravNumberAndVersion, KravId} from '../../api/KravApi'
+import {kravNumView, query} from '../../pages/KravPage'
+import {HeadingXLarge, HeadingXXLarge, LabelSmall, ParagraphMedium} from 'baseui/typography'
+import {ettlevColors, maxPageWidth, responsivePaddingExtraLarge, responsivePaddingInnerPage, responsiveWidthInnerPage} from '../../util/theme'
+import {user} from '../../services/User'
+import {faChevronDown} from '@fortawesome/free-solid-svg-icons'
+import {borderColor, borderRadius, borderStyle, borderWidth, marginAll, padding} from '../common/Style'
+import {useQuery} from '@apollo/client'
+import {informationIcon, warningAlert} from '../Images'
 import CustomizedTabs from '../common/CustomizedTabs'
-import { Tilbakemeldinger } from '../krav/tilbakemelding/Tilbakemelding'
+import {Tilbakemeldinger} from '../krav/tilbakemelding/Tilbakemelding'
 import Etterlevelser from '../krav/Etterlevelser'
-import { Markdown } from '../common/Markdown'
-import { Section } from '../../pages/EtterlevelseDokumentasjonPage'
-import { getEtterlevelseMetadataByBehandlingsIdAndKravNummerAndKravVersion, mapEtterlevelseMetadataToFormValue } from '../../api/EtterlevelseMetadataApi'
+import {Markdown} from '../common/Markdown'
+import {Section} from '../../pages/EtterlevelseDokumentasjonPage'
+import {getEtterlevelseMetadataByBehandlingsIdAndKravNummerAndKravVersion, mapEtterlevelseMetadataToFormValue} from '../../api/EtterlevelseMetadataApi'
 import TildeltPopoever from '../etterlevelseMetadata/TildeltPopover'
 import EtterlevelseEditFields from './Edit/EtterlevelseEditFields'
 import CustomizedModal from '../common/CustomizedModal'
-import { ampli } from '../../services/Amplitude'
+import {ampli} from '../../services/Amplitude'
 import StatusView from '../common/StatusTag'
-import { getPageWidth } from '../../util/pageWidth'
+import {getPageWidth} from '../../util/pageWidth'
+import {usePrompt} from "../../util/hooks/routerHooks";
 
 type EditEttlevProps = {
   etterlevelse: Etterlevelse
@@ -76,6 +77,9 @@ export const EditEtterlevelseV2 = ({
   const [editedEtterlevelse, setEditedEtterlevelse] = React.useState<Etterlevelse>()
   const etterlevelseFormRef: React.Ref<FormikProps<Etterlevelse> | undefined> = useRef()
   const [pageWidth, setPageWidth] = useState<number>(1276)
+  const [isFormDirty,setIsFormDirty] = useState<boolean>(false)
+  const [isActive,setIsActive] = useState<boolean>(false)
+  usePrompt('You have unsaved changes, do you want to continue?', isActive)
 
   const [etterlevelseMetadata, setEtterlevelseMetadata] = useState<EtterlevelseMetadata>(
     mapEtterlevelseMetadataToFormValue({
@@ -118,7 +122,13 @@ export const EditEtterlevelseV2 = ({
     window.onresize = reportWindowSize
   })
 
-  const submit = async (etterlevelse: Etterlevelse) => {
+  useEffect(()=>{
+    if(isFormDirty){
+      setIsActive(true)
+    }
+  },[isFormDirty])
+
+  const submit = async (etterlevelseSubmitValues: Etterlevelse) => {
     const mutatedEtterlevelse = {
       ...etterlevelse,
       fristForFerdigstillelse: etterlevelse.status !== EtterlevelseStatus.OPPFYLLES_SENERE ? '' : etterlevelse.fristForFerdigstillelse,
@@ -402,6 +412,7 @@ export const EditEtterlevelseV2 = ({
                       tidligereEtterlevelser={tidligereEtterlevelser}
                       etterlevelseMetadata={etterlevelseMetadata}
                       setEtterlevelseMetadata={setEtterlevelseMetadata}
+                      setIsFormDirty={setIsFormDirty}
                     />
                   ),
                 },
