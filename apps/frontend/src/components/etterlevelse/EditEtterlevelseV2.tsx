@@ -18,7 +18,7 @@ import CustomizedTabs from '../common/CustomizedTabs'
 import { Tilbakemeldinger } from '../krav/tilbakemelding/Tilbakemelding'
 import Etterlevelser from '../krav/Etterlevelser'
 import { Markdown } from '../common/Markdown'
-import { Section } from '../../pages/EtterlevelseDokumentasjonPage'
+import { getFilterType, Section } from '../../pages/EtterlevelseDokumentasjonPage'
 import { getEtterlevelseMetadataByBehandlingsIdAndKravNummerAndKravVersion, mapEtterlevelseMetadataToFormValue } from '../../api/EtterlevelseMetadataApi'
 import TildeltPopoever from '../etterlevelseMetadata/TildeltPopover'
 import EtterlevelseEditFields from './Edit/EtterlevelseEditFields'
@@ -26,11 +26,12 @@ import CustomizedModal from '../common/CustomizedModal'
 import { ampli } from '../../services/Amplitude'
 import StatusView from '../common/StatusTag'
 import { getPageWidth } from '../../util/pageWidth'
+import { usePrompt } from '../../util/hooks/routerHooks'
+import { useNavigate, useParams } from 'react-router-dom'
 
 type EditEttlevProps = {
   etterlevelse: Etterlevelse
   kravId: KravId
-  close: (k?: Etterlevelse) => void
   formRef?: React.Ref<any>
   documentEdit?: boolean
   behandlingNavn?: string
@@ -50,7 +51,6 @@ export const EditEtterlevelseV2 = ({
   kravId,
   etterlevelse,
   varsleMelding,
-  close,
   formRef,
   documentEdit,
   behandlingNavn,
@@ -64,6 +64,7 @@ export const EditEtterlevelseV2 = ({
   setTab,
   kravFilter,
 }: EditEttlevProps) => {
+  const params = useParams<{ id: string; tema: string; kravNummer: string; kravVersjon: string; filter: string }>()
   const { data, loading } = useQuery<{ kravById: KravQL }, KravId>(query, {
     variables: kravId,
     skip: !kravId.id && !kravId.kravNummer,
@@ -76,6 +77,9 @@ export const EditEtterlevelseV2 = ({
   const [editedEtterlevelse, setEditedEtterlevelse] = React.useState<Etterlevelse>()
   const etterlevelseFormRef: React.Ref<FormikProps<Etterlevelse> | undefined> = useRef()
   const [pageWidth, setPageWidth] = useState<number>(1276)
+  const [isFormDirty, setIsFormDirty] = useState<boolean>(false)
+
+  usePrompt('You have unsaved changes, do you want to continue?', isFormDirty)
 
   const [etterlevelseMetadata, setEtterlevelseMetadata] = useState<EtterlevelseMetadata>(
     mapEtterlevelseMetadataToFormValue({
@@ -89,9 +93,10 @@ export const EditEtterlevelseV2 = ({
   const [isVersjonEndringerModalOpen, setIsVersjonEndringerModalOpen] = React.useState<boolean>(false)
 
   const [isAlertUnsavedModalOpen, setIsAlertUnsavedModalOpen] = useState<boolean>(false)
+  const navigate = useNavigate()
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       behandlingId &&
         kravId.kravNummer &&
         getEtterlevelseMetadataByBehandlingsIdAndKravNummerAndKravVersion(behandlingId, kravId.kravNummer, kravId.kravVersjon).then((resp) => {
@@ -115,10 +120,12 @@ export const EditEtterlevelseV2 = ({
     const reportWindowSize = () => {
       setPageWidth(getPageWidth())
     }
+    window.onload = reportWindowSize
     window.onresize = reportWindowSize
   })
 
   const submit = async (etterlevelse: Etterlevelse) => {
+    setIsFormDirty(false)
     const mutatedEtterlevelse = {
       ...etterlevelse,
       fristForFerdigstillelse: etterlevelse.status !== EtterlevelseStatus.OPPFYLLES_SENERE ? '' : etterlevelse.fristForFerdigstillelse,
@@ -126,10 +133,16 @@ export const EditEtterlevelseV2 = ({
     }
 
     if (etterlevelse.id) {
-      close(await updateEtterlevelse(mutatedEtterlevelse))
+      await updateEtterlevelse(mutatedEtterlevelse).then(() =>
+        navigate(`/behandling/${behandlingId}/${params.tema}/${getFilterType(params.filter)}`)
+
+      )
     } else {
-      close(await createEtterlevelse(mutatedEtterlevelse))
+      await createEtterlevelse(mutatedEtterlevelse).then(() => {
+        navigate(`/behandling/${behandlingId}/${params.tema}/${getFilterType(params.filter)}`)
+      })
     }
+
   }
 
   useEffect(() => {
@@ -393,7 +406,10 @@ export const EditEtterlevelseV2 = ({
                       behandlingNavn={behandlingNavn || ''}
                       disableEdit={disableEdit}
                       documentEdit={documentEdit}
-                      close={close}
+                      close={() => {
+                        setIsFormDirty(false)
+                        setTimeout(() => navigate(`/behandling/${behandlingId}/${params.tema}/${params.filter}`), 1)
+                      }}
                       setIsAlertUnsavedModalOpen={setIsAlertUnsavedModalOpen}
                       isAlertUnsavedModalOpen={isAlertUnsavedModalOpen}
                       navigatePath={navigatePath}
@@ -402,6 +418,7 @@ export const EditEtterlevelseV2 = ({
                       tidligereEtterlevelser={tidligereEtterlevelser}
                       etterlevelseMetadata={etterlevelseMetadata}
                       setEtterlevelseMetadata={setEtterlevelseMetadata}
+                      setIsFormDirty={setIsFormDirty}
                     />
                   ),
                 },

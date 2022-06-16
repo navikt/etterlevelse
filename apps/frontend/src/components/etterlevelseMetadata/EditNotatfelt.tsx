@@ -56,7 +56,6 @@ export const EditNotatfelt = ({ isOpen, setIsNotatfeltOpen, etterlevelseMetadata
       isOpen={isOpen}
       onClose={() => {
         if (!isFormDirty) {
-          setIsFormDirty(false)
           setNotater(etterlevelseMetadata.notater || '')
           setIsNotatfeltOpen(false)
         } else {
@@ -65,7 +64,6 @@ export const EditNotatfelt = ({ isOpen, setIsNotatfeltOpen, etterlevelseMetadata
       }}
       onEscapeKeyDown={() => {
         if (!isFormDirty) {
-          setIsFormDirty(false)
           setNotater(etterlevelseMetadata.notater || '')
           setIsNotatfeltOpen(false)
         } else {

@@ -49,6 +49,7 @@ type EditProps = {
   kravFilter: KRAV_FILTER_TYPE
   etterlevelseMetadata: EtterlevelseMetadata
   setEtterlevelseMetadata: React.Dispatch<React.SetStateAction<EtterlevelseMetadata>>
+  setIsFormDirty: (v: boolean) => void
 }
 
 export const EtterlevelseEditFields = ({
@@ -70,13 +71,13 @@ export const EtterlevelseEditFields = ({
   kravFilter,
   etterlevelseMetadata,
   setEtterlevelseMetadata,
+  setIsFormDirty
 }: EditProps) => {
   const [etterlevelseStatus, setEtterlevelseStatus] = React.useState<string>(
     editedEtterlevelse ? editedEtterlevelse.status : etterlevelse.status || EtterlevelseStatus.UNDER_REDIGERING,
   )
   const [radioHover, setRadioHover] = React.useState<string>('')
   const [isOppfylesSenere, setOppfylesSenere] = React.useState<boolean>(etterlevelseStatus === EtterlevelseStatus.OPPFYLLES_SENERE)
-
   const [isNotatfeltOpen, setIsNotatfeltOpen] = React.useState(false)
 
   const navigate = useNavigate()
@@ -177,7 +178,7 @@ export const EtterlevelseEditFields = ({
                         )}
                       </Block>
 
-                      <SuksesskriterierBegrunnelseEdit disableEdit={disableEdit} suksesskriterie={krav.suksesskriterier} viewMode={false} />
+                      <SuksesskriterierBegrunnelseEdit disableEdit={disableEdit} suksesskriterie={krav.suksesskriterier} viewMode={false} setIsFormDirty={setIsFormDirty} />
 
                       <Block marginBottom="24px">
                         <CustomizedAccordion>
@@ -249,7 +250,10 @@ export const EtterlevelseEditFields = ({
                       <Block display="flex" flexDirection="column" paddingTop="27px" paddingBottom="24px" minWidth={'fit-content'}>
                         <Checkbox
                           checked={isOppfylesSenere}
-                          onChange={() => setOppfylesSenere(!isOppfylesSenere)}
+                          onChange={() => {
+                            setOppfylesSenere(!isOppfylesSenere)
+                            setIsFormDirty(true)
+                          }}
                           key={EtterlevelseStatus.OPPFYLLES_SENERE}
                           overrides={{
                             Root: {
@@ -447,7 +451,7 @@ export const EtterlevelseEditFields = ({
                         </Block>
                       )}
 
-                      <SuksesskriterierBegrunnelseEdit disableEdit={true} suksesskriterie={krav.suksesskriterier} viewMode={true} />
+                      <SuksesskriterierBegrunnelseEdit disableEdit={true} suksesskriterie={krav.suksesskriterier} viewMode={true} setIsFormDirty={setIsFormDirty} />
                       <Block marginBottom="24px">
                         <CustomizedAccordion>
                           <CustomizedPanel

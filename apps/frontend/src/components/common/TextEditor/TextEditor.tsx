@@ -1,14 +1,14 @@
 import React from 'react'
-import { convertToRaw, RawDraftContentState } from 'draft-js'
-import { Editor } from 'react-draft-wysiwyg'
-import { draftToMarkdown, markdownToDraft } from 'markdown-draft-js'
+import {convertToRaw, RawDraftContentState} from 'draft-js'
+import {Editor} from 'react-draft-wysiwyg'
+import {draftToMarkdown, markdownToDraft} from 'markdown-draft-js'
 import '../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
 import './customStyle.css'
-import { Block } from 'baseui/block'
-import { ettlevColors } from '../../../util/theme'
-import { useDebouncedState } from '../../../util/hooks'
-import { FormikErrors } from 'formik'
-import { borderColor, borderStyle, borderWidth } from '../Style'
+import {Block} from 'baseui/block'
+import {ettlevColors} from '../../../util/theme'
+import {useDebouncedState} from '../../../util/hooks'
+import {FormikErrors} from 'formik'
+import {borderColor, borderStyle, borderWidth} from '../Style'
 
 type TextEditorProps = {
   initialValue: string
@@ -20,6 +20,7 @@ type TextEditorProps = {
   name?: string
   simple?: boolean
   width?: string
+  setIsFormDirty?: (v: boolean) => void
 }
 
 const TextEditor = (props: TextEditorProps) => {
@@ -83,9 +84,12 @@ const TextEditor = (props: TextEditorProps) => {
           minHeight: props.height || '500px',
           backgroundColor: props.errors && props.name && props.errors[props.name] ? ettlevColors.red50 : undefined,
         }}
-        toolbarStyle={{ backgroundColor: ettlevColors.white, borderBottom: `1px solid ${ettlevColors.textAreaBorder}` }}
+        toolbarStyle={{backgroundColor: ettlevColors.white, borderBottom: `1px solid ${ettlevColors.textAreaBorder}`}}
         onEditorStateChange={(data) => {
           setVal(CustomDraftToMarkdown(convertToRaw(data.getCurrentContent())))
+          if(props.setIsFormDirty){
+            props.setIsFormDirty(true)
+          }
         }}
         initialContentState={CustomMarkdownToDraft(val)}
         localization={{
@@ -95,10 +99,10 @@ const TextEditor = (props: TextEditorProps) => {
         toolbar={{
           options: props.simple ? ['inline', 'list', 'link'] : ['inline', 'blockType', 'list', 'link', 'history'],
           blockType: {},
-          inline: { options: ['bold'] },
+          inline: {options: ['bold']},
           // old toolbar
           // inline: { options: ['bold', 'italic', 'underline', 'strikethrough', 'monospace'] },
-          list: { options: ['unordered', 'ordered'] },
+          list: {options: ['unordered', 'ordered']},
           link: {
             defaultTargetOption: '_blank',
             options: ['link'],
