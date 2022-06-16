@@ -112,9 +112,6 @@ export const EtterlevelseDokumentasjonPage = () => {
                 kravId={kravId}
                 navigatePath={navigatePath}
                 setNavigatePath={setNavigatePath}
-                close={() => {
-                  navigate(`/behandling/${behandling.id}/${temaData?.code}/${getFilterType(params.filter)}`)
-                }}
                 tab={tab}
                 setTab={setTab}
                 kravFilter={getFilterType(params.filter)}
