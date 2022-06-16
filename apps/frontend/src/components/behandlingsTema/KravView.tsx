@@ -11,7 +11,6 @@ import {toKravId} from './utils'
 
 export const KravView = (props: {
   kravId: KravId
-  close: (e?: Etterlevelse) => void
   behandlingNavn: string
   behandlingId: string
   behandlingformaal: string
@@ -78,9 +77,6 @@ export const KravView = (props: {
             etterlevelse={etterlevelse}
             behandlingNummer={props.behandlingNummer}
             varsleMelding={varsleMelding}
-            close={(e) => {
-              props.close(e)
-            }}
             navigatePath={props.navigatePath}
             setNavigatePath={props.setNavigatePath}
             tab={props.tab}
