@@ -1,20 +1,20 @@
-import { codelist, ListName } from '../../services/Codelist'
-import { CustomizedAccordion, CustomizedPanel, CustomPanelDivider } from '../common/CustomizedAccordion'
-import React, { useEffect, useState } from 'react'
-import { getAllKrav } from '../../api/KravApi'
-import { Krav, KravStatus } from '../../constants'
-import { Block } from 'baseui/block'
-import { LabelSmall, ParagraphMedium, ParagraphXSmall } from 'baseui/typography'
-import { KravPanelHeader } from '../behandling/KravPanelHeader'
-import { borderStyle, marginAll, padding } from '../common/Style'
+import {codelist, ListName} from '../../services/Codelist'
+import {CustomizedAccordion, CustomizedPanel, CustomPanelDivider} from '../common/CustomizedAccordion'
+import React, {useEffect, useState} from 'react'
+import {getAllKrav} from '../../api/KravApi'
+import {Krav, KravStatus} from '../../constants'
+import {Block} from 'baseui/block'
+import {LabelSmall, ParagraphMedium, ParagraphXSmall} from 'baseui/typography'
+import {KravPanelHeader} from '../behandling/KravPanelHeader'
+import {borderStyle, marginAll, padding} from '../common/Style'
 import StatusView from '../common/StatusTag'
-import { PanelLink } from '../common/PanelLink'
+import {PanelLink} from '../common/PanelLink'
 import moment from 'moment'
-import { ettlevColors, theme } from '../../util/theme'
+import {ettlevColors, theme} from '../../util/theme'
 import Button from '../common/Button'
-import { EditPriorityModal } from './edit/EditPriorityModal'
-import { sortKraverByPriority } from '../../util/sort'
-import { getAllKravPriority } from '../../api/KravPriorityApi'
+import {EditPriorityModal} from './edit/EditPriorityModal'
+import {sortKraverByPriority} from '../../util/sort'
+import {getAllKravPriority} from '../../api/KravPriorityApi'
 
 export const TemaList = () => {
   const [allActiveKrav, setAllActiveKrav] = useState<Krav[]>([])
@@ -101,7 +101,7 @@ const getKravTemaRowsWithLabel = (kraver: Krav[], tema: string) => {
 }
 
 const KravTemaList = (props: { activeKraver: Krav[]; tema: string; refresh: Function; draftKrav: Krav[] }) => {
-  const [edit, setEdit] = React.useState(false)
+  const [isEditPriorityModalOpen, setIsEditPriorityModalOpen] = React.useState(false)
 
   return (
     <Block>
@@ -126,13 +126,13 @@ const KravTemaList = (props: { activeKraver: Krav[]; tema: string; refresh: Func
               paddingRight: '16px',
             }}
           >
-            <Button kind="secondary" size="mini" onClick={() => setEdit(true)}>
+            <Button kind="secondary" size="mini" onClick={() => setIsEditPriorityModalOpen(true)}>
               Justere rekkefølgen på krav
             </Button>
           </Block>
         </Block>
       </CustomPanelDivider>
-      <EditPriorityModal tema={props.tema} isOpen={edit} onClose={() => setEdit(false)} kravListe={props.activeKraver} refresh={props.refresh}></EditPriorityModal>
+      <EditPriorityModal tema={props.tema} isOpen={isEditPriorityModalOpen} setIsOpen={setIsEditPriorityModalOpen} kravListe={props.activeKraver} refresh={props.refresh}></EditPriorityModal>
     </Block>
   )
 }

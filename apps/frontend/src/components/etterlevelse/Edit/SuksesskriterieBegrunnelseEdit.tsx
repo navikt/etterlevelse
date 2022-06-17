@@ -170,14 +170,18 @@ const KriterieBegrunnelse = ({
           ...borderWidth('1px'),
           ...borderStyle('solid'),
           ...borderColor('#C9C9C9'),
-          outline: '2px solid #842D08',
+          outlineWidth: '2px',
+          outlineStyle: 'solid',
+          outlineColor: '#842D08'
         }
       } else {
         return {
           ...borderWidth('1px'),
           ...borderStyle('solid'),
           ...borderColor('#C9C9C9'),
-          outline: undefined,
+          outlineWidth: undefined,
+          outlineStyle: undefined,
+          outlineColor: undefined
         }
       }
     } else {
@@ -185,7 +189,9 @@ const KriterieBegrunnelse = ({
         ...borderWidth('1px'),
         ...borderStyle('solid'),
         ...borderColor('#C9C9C9'),
-        outline: undefined,
+        outlineWidth: undefined,
+        outlineStyle: undefined,
+        outlineColor: undefined
       }
     }
   }

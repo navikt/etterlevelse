@@ -54,12 +54,12 @@ export const KravCard = (props: { krav: KravEtterlevelseData; noStatus?: boolean
     const today = new Date()
     const kravCreatedDate = moment(props.krav.changeStamp.createdDate).toDate()
     setKravAge(getNumberOfDaysBetween(kravCreatedDate, today))
-    ;(async () => {
-      getEtterlevelseMetaData()
-      if (props.krav.kravVersjon > 1 && props.krav.etterlevelseStatus === undefined) {
-        setNyVersionFlag((await getEtterlevelserByBehandlingsIdKravNumber(props.behandlingId, props.krav.kravNummer)).content.length >= 1)
-      }
-    })()
+      ; (async () => {
+        getEtterlevelseMetaData()
+        if (props.krav.kravVersjon > 1 && props.krav.etterlevelseStatus === undefined) {
+          setNyVersionFlag((await getEtterlevelserByBehandlingsIdKravNumber(props.behandlingId, props.krav.kravNummer)).content.length >= 1)
+        }
+      })()
   }, [])
 
   return (
@@ -71,7 +71,9 @@ export const KravCard = (props: { krav: KravEtterlevelseData; noStatus?: boolean
         ':active': { boxShadow: '0 2px 1px -2px rgba(0, 0, 0, .2), 0 1px 1px 0 rgba(0, 0, 0, .14), 0 1px 1px 0 rgba(0, 0, 0, .12)' },
         ':focus': {
           boxShadow: '0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 3px 0 rgba(0, 0, 0, .12)',
-          outline: `3px solid ${ettlevColors.focusOutline}`,
+          outlineWidth: '3px',
+          outlineStyle: 'solid',
+          outlinwColor: ettlevColors.focusOutline,
         },
       }}
     >

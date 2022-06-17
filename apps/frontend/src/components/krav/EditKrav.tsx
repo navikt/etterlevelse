@@ -30,6 +30,8 @@ import { warningAlert } from '../Images'
 import { user } from '../../services/User'
 import { Modal as BaseModal, ModalBody, ModalHeader } from 'baseui/modal'
 import { EditKravRelasjoner } from './Edit/EditKravRelasjoner'
+import AlertUnsavedPopup from '../common/AlertUnsavedPopup'
+import _ from 'lodash'
 
 type EditKravProps = {
   krav: KravQL
@@ -55,6 +57,9 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
   const [varlselMeldingActive, setVarselMeldingActive] = React.useState<boolean>(krav.varselMelding ? true : false)
   const [UtgaattKravMessage, setUtgaattKravMessage] = React.useState<boolean>(false)
   const [aktivKravMessage, setAktivKravMessage] = React.useState<boolean>(false)
+
+  const [isAlertModalOpen, setIsAlertModalOpen] = React.useState<boolean>(false)
+  const [isFormDirty, setIsFormDirty] = React.useState<boolean>(false)
 
   const kravSchema = () =>
     yup.object({
@@ -163,7 +168,13 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
   return (
     <Block maxWidth={maxPageWidth}>
       <CustomizedModal
-        onClose={() => setIsOpen(false)}
+        onClose={() => {
+          if (isFormDirty) {
+            setIsAlertModalOpen(true)
+          } else {
+            setIsOpen(false)
+          }
+        }}
         isOpen={isOpen}
         overrides={{
           Root: {
@@ -179,8 +190,21 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
           validationSchema={kravSchema()}
           innerRef={formRef}
         >
-          {({ values, touched, errors, isSubmitting, submitForm, setErrors }) => (
-            <Form>
+          {({ values, errors, isSubmitting, submitForm, setErrors, initialValues }) => (
+            <Form
+              onChange={() => {
+                if (!_.isEqual(initialValues, { ...values, suksesskriterier: values.suksesskriterier.map((s) => { return { ...s, __typename: 'Suksesskriterie' } }) })) {
+                  setIsFormDirty(true)
+                }
+              }}
+            >
+              <AlertUnsavedPopup
+                isActive={isFormDirty}
+                isModalOpen={isAlertModalOpen}
+                setIsModalOpen={setIsAlertModalOpen}
+                onClose={() => close(values)}
+                onSubmit={() => submit(values)}
+              />
               <Block
                 backgroundColor={ettlevColors.green800}
                 paddingTop="23px"
@@ -266,7 +290,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                     </Checkbox>
                     {varlselMeldingActive && (
                       <Block width="100%" marginLeft="30px" marginTop="24px">
-                        <TextAreaField label="Forklaring til etterlevere" name="varselMelding" maxCharacter={100} rows={1} />
+                        <TextAreaField label="Forklaring til etterlevere" name="varselMelding" maxCharacter={100} rows={1} setIsFormDirty={setIsFormDirty} />
                       </Block>
                     )}
                   </Block>
@@ -279,6 +303,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                     shortenLinks
                     onImageUpload={onImageUpload(krav.id)}
                     tooltip={'Bruk noen setninger på å forklare hensikten med kravet. Formålet er at leseren skal forstå hvorfor vi har dette kravet.'}
+                    setIsFormDirty={setIsFormDirty}
                   />
                   <Error fieldName={'hensikt'} fullWidth />
                 </Block>
@@ -286,7 +311,9 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                 <Block className="content_container" display="flex" width="100%" justifyContent="center">
                   <Block width={responsiveWidthLarge}>
                     <HeadingXLarge marginBottom={inputMarginBottom}>Suksesskriterier</HeadingXLarge>
-                    <KravSuksesskriterierEdit />
+                    <KravSuksesskriterierEdit
+                      setIsFormDirty={setIsFormDirty}
+                    />
                     {/*
                   <TextAreaField marginBottom='80px' label='Beskrivelse' name='beskrivelse' markdown shortenLinks onImageUpload={onImageUpload(krav.id)}
                     tooltip={'Beskriv selve innholdet i kravet.'} />
@@ -319,6 +346,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                       height="250px"
                       markdown
                       tooltip={'Vis til gode eksisterende implementasjoner som ivaretar kravet.'}
+                      setIsFormDirty={setIsFormDirty}
                     />
 
                     {!newKrav && (
@@ -330,6 +358,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                         markdown
                         shortenLinks
                         tooltip={'Beskrivelse av hva som er nytt siden siste versjon.'}
+                        setIsFormDirty={setIsFormDirty}
                       />
                     )}
 
