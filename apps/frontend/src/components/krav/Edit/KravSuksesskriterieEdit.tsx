@@ -22,10 +22,14 @@ import { borderColor } from '../../common/Style'
 import { ALIGN, Radio, RadioGroup } from 'baseui/radio'
 import { LabelSmall } from 'baseui/typography'
 
-export const KravSuksesskriterierEdit = () => {
+type KravSuksesskriterieEditProps = {
+  setIsFormDirty?: (v: boolean) => void
+}
+
+export const KravSuksesskriterierEdit = ({ setIsFormDirty }: KravSuksesskriterieEditProps) => {
   return (
     <FieldWrapper>
-      <FieldArray name={'suksesskriterier'}>{(p) => <KriterieList p={p} />}</FieldArray>
+      <FieldArray name={'suksesskriterier'}>{(p) => <KriterieList p={p} setIsFormDirty={setIsFormDirty} />}</FieldArray>
     </FieldWrapper>
   )
 }
@@ -35,7 +39,7 @@ const nextId = (suksesskriterier: Suksesskriterie[]) => {
   return max + 1
 }
 
-const KriterieList = ({ p }: { p: FieldArrayRenderProps }) => {
+const KriterieList = ({ p, setIsFormDirty }: { p: FieldArrayRenderProps; setIsFormDirty?: (v: boolean) => void; }) => {
   const suksesskriterier = p.form.values.suksesskriterier as Suksesskriterie[]
 
   if (!suksesskriterier.length) {
@@ -87,6 +91,7 @@ const KriterieList = ({ p }: { p: FieldArrayRenderProps }) => {
                           dragHandleProps={dprov.dragHandleProps}
                           isDragging={dsnap.isDragging}
                           p={p}
+                          setIsFormDirty={setIsFormDirty}
                         />
                       </div>
                     )
@@ -125,6 +130,7 @@ const Kriterie = ({
   dragHandleProps,
   isDragging,
   p,
+  setIsFormDirty
 }: {
   s: Suksesskriterie
   nummer: number
@@ -133,6 +139,7 @@ const Kriterie = ({
   dragHandleProps?: DraggableProvidedDragHandleProps
   isDragging: boolean
   p: FieldArrayRenderProps
+  setIsFormDirty?: (v:boolean) => void
 }) => {
   const debounceDelay = 500
   const [navn, setNavn, navnInput] = useDebouncedState(s.navn, debounceDelay)
@@ -198,7 +205,7 @@ const Kriterie = ({
         </FormControl>
         <FormControl label={<LabelWithTooltip label={'Beskrivelse av suksesskriteriet'} tooltip={'Nærmere detaljer rundt oppnåelse av suksesskriteriet.'} />}>
           {/* <MarkdownEditor initialValue={beskrivelse} setValue={setBeskrivelse} height={'250px'} /> */}
-          <TextEditor initialValue={beskrivelse} setValue={setBeskrivelse} height={'250px'} />
+          <TextEditor initialValue={beskrivelse} setValue={setBeskrivelse} height={'250px'} setIsFormDirty={setIsFormDirty} />
         </FormControl>
         <Block display="flex" flex="1" justifyContent="center">
           <LabelSmall marginBottom="6px" marginTop="6px" marginRight="14px" $style={{ maxWidth: '162px', width: '100%', fontWeight: 600, lineHeight: '22px' }}>

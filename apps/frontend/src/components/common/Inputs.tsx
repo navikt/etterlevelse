@@ -73,6 +73,7 @@ export const TextAreaField = (props: {
   placeholder?: string
   maxCharacter?: number
   rows?: number
+  setIsFormDirty?: (v: boolean) => void
 }) => {
   return (
     <FieldWrapper marginBottom={props.marginBottom}>
@@ -108,6 +109,7 @@ export const TextAreaField = (props: {
                     shortenLinks={props.shortenLinks}
                     errors={p.form.errors}
                     name={props.name}
+                    setIsFormDirty={props.setIsFormDirty}
                   />
                   {/* <MarkdownEditor initialValue={p.field.value} setValue={v => p.form.setFieldValue(props.name, v)}
                 onImageUpload={props.onImageUpload} shortenLinks={props.shortenLinks} /> */}
@@ -128,6 +130,7 @@ export const TextAreaField = (props: {
                       },
                     },
                   }}
+                  onChange={() => props.setIsFormDirty ? props.setIsFormDirty(true) : undefined}
                 />
               )}
             </>
