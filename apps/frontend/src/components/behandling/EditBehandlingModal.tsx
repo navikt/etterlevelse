@@ -49,10 +49,10 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
   const filterData = (
     unfilteredData:
       | {
-          behandling: PageResponse<{
-            stats: BehandlingStats
-          }>
-        }
+        behandling: PageResponse<{
+          stats: BehandlingStats
+        }>
+      }
       | undefined,
   ) => {
     let StatusListe: any[] = []
@@ -227,7 +227,9 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
                                       },
                                       ':focus': {
                                         boxShadow: '0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 3px 0 rgba(0, 0, 0, .12)',
-                                        outline: `3px solid ${ettlevColors.focusOutline}`,
+                                        outlineWidth: '3px',
+                                        outlineStyle: 'solid',
+                                        outlinwColor: ettlevColors.focusOutline,
                                       },
                                       width: '100%',
                                       maxWidth: '260px',

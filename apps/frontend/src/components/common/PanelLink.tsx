@@ -243,7 +243,9 @@ export const PanelLinkCard = ({
         },
 
         ':focus-within': {
-          outline: `3px solid ${ettlevColors.focusOutline}`,
+          outlineColor: ettlevColors.focusOutline,
+          outlineWidth: '3px',
+          outlineStyle: 'solid',
           outlineOffset: '1px',
         },
       },
