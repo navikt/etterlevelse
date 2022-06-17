@@ -193,7 +193,14 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
           {({ values, errors, isSubmitting, submitForm, setErrors, initialValues }) => (
             <Form
               onChange={() => {
-                if (!_.isEqual(initialValues, { ...values, suksesskriterier: values.suksesskriterier.map((s) => { return { ...s, __typename: 'Suksesskriterie' } }) })) {
+                if (
+                  !_.isEqual(initialValues, {
+                    ...values,
+                    suksesskriterier: values.suksesskriterier.map((s) => {
+                      return { ...s, __typename: 'Suksesskriterie' }
+                    }),
+                  })
+                ) {
                   setIsFormDirty(true)
                 }
               }}
@@ -311,9 +318,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                 <Block className="content_container" display="flex" width="100%" justifyContent="center">
                   <Block width={responsiveWidthLarge}>
                     <HeadingXLarge marginBottom={inputMarginBottom}>Suksesskriterier</HeadingXLarge>
-                    <KravSuksesskriterierEdit
-                      setIsFormDirty={setIsFormDirty}
-                    />
+                    <KravSuksesskriterierEdit setIsFormDirty={setIsFormDirty} />
                     {/*
                   <TextAreaField marginBottom='80px' label='Beskrivelse' name='beskrivelse' markdown shortenLinks onImageUpload={onImageUpload(krav.id)}
                     tooltip={'Beskriv selve innholdet i kravet.'} />

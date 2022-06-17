@@ -71,7 +71,7 @@ export const EtterlevelseEditFields = ({
   kravFilter,
   etterlevelseMetadata,
   setEtterlevelseMetadata,
-  setIsFormDirty
+  setIsFormDirty,
 }: EditProps) => {
   const [etterlevelseStatus, setEtterlevelseStatus] = React.useState<string>(
     editedEtterlevelse ? editedEtterlevelse.status : etterlevelse.status || EtterlevelseStatus.UNDER_REDIGERING,

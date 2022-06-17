@@ -137,145 +137,135 @@ export const EditPriorityModal = (props: { isOpen: boolean; setIsOpen: React.Dis
     setIsOpen(false)
   }
 
-
   return (
     <>
-      <AlertUnsavedPopup
-        isActive={isFormDirty}
-        isModalOpen={isAlertModalOpen}
-        setIsModalOpen={setIsAlertModalOpen}
-        onClose={() => close()}
-        onSubmit={() => submit()}
-      />
+      <AlertUnsavedPopup isActive={isFormDirty} isModalOpen={isAlertModalOpen} setIsModalOpen={setIsAlertModalOpen} onClose={() => close()} onSubmit={() => submit()} />
       <Formik
         initialValues={{
           krav: kravElements,
         }}
         onSubmit={() => submit()}
       >
-        {
-          (p) => (
-            <CustomizedModal
-              isOpen={isOpen}
-              onClose={() => {
-                if (isFormDirty) {
-                  setIsAlertModalOpen(true)
-                } else {
-                  close()
-                }
+        {(p) => (
+          <CustomizedModal
+            isOpen={isOpen}
+            onClose={() => {
+              if (isFormDirty) {
+                setIsAlertModalOpen(true)
+              } else {
+                close()
               }
-              }
-              size="auto"
-              closeable
-              closeIconColor={ettlevColors.white}
-              overrides={{
-                Root: {
-                  props: {
-                    id: 'krav-list-edit-priority-modal',
-                  },
+            }}
+            size="auto"
+            closeable
+            closeIconColor={ettlevColors.white}
+            overrides={{
+              Root: {
+                props: {
+                  id: 'krav-list-edit-priority-modal',
                 },
-                Dialog: {
-                  style: {
-                    ...borderRadius('0px'),
-                    backgroundColor: ettlevColors.white,
-                  },
+              },
+              Dialog: {
+                style: {
+                  ...borderRadius('0px'),
+                  backgroundColor: ettlevColors.white,
                 },
-              }}
+              },
+            }}
+          >
+            <Block
+              backgroundColor={ettlevColors.green800}
+              paddingTop="23px"
+              paddingBottom="48px"
+              paddingLeft={responsivePaddingSmall}
+              paddingRight={responsivePaddingSmall}
+              maxHeight="55px"
+              marginBottom="54px"
             >
-              <Block
-                backgroundColor={ettlevColors.green800}
-                paddingTop="23px"
-                paddingBottom="48px"
-                paddingLeft={responsivePaddingSmall}
-                paddingRight={responsivePaddingSmall}
-                maxHeight="55px"
-                marginBottom="54px"
-              >
-                <HeadingXXLarge $style={{ lineHeight: '48px', color: ettlevColors.white }}>Justere rekkefølgen på krav</HeadingXXLarge>
+              <HeadingXXLarge $style={{ lineHeight: '48px', color: ettlevColors.white }}>Justere rekkefølgen på krav</HeadingXXLarge>
+            </Block>
+            <Block display="flex" justifyContent="center" paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall}>
+              <Block display="flex" justifyContent="flex-start" flex="1">
+                <HeadingXLarge $style={{ lineHeight: '24px', color: ettlevColors.green600, marginTop: '0px', marginBottom: '0px' }}>{tema}</HeadingXLarge>
               </Block>
-              <Block display="flex" justifyContent="center" paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall}>
-                <Block display="flex" justifyContent="flex-start" flex="1">
-                  <HeadingXLarge $style={{ lineHeight: '24px', color: ettlevColors.green600, marginTop: '0px', marginBottom: '0px' }}>{tema}</HeadingXLarge>
+              <Block display="flex" justifyContent="flex-end" flex="1">
+                <ParagraphMedium $style={{ marginTop: '0px', marginBottom: '0px', color: ettlevColors.green800 }}>Klikk og dra kravene i ønsket rekkefølge</ParagraphMedium>
+              </Block>
+            </Block>
+            <Block>
+              {loading ? (
+                <Block display="flex" justifyContent="center">
+                  <Spinner size={theme.sizing.scale1200} />
                 </Block>
-                <Block display="flex" justifyContent="flex-end" flex="1">
-                  <ParagraphMedium $style={{ marginTop: '0px', marginBottom: '0px', color: ettlevColors.green800 }}>Klikk og dra kravene i ønsket rekkefølge</ParagraphMedium>
-                </Block>
-              </Block>
-              <Block>
-                {loading ? (
-                  <Block display="flex" justifyContent="center">
-                    <Spinner size={theme.sizing.scale1200} />
-                  </Block>
-                ) : (
-                  <Form>
-                    <FieldWrapper>
-                      <FieldArray name={'krav'}>
-                        {(p) => (
-                          <List
-                            items={items}
-                            onChange={({ oldIndex, newIndex }) => {
-                              setItems(arrayMove(items, oldIndex, newIndex))
-                              setKravElements(arrayMove(kravElements, oldIndex, newIndex))
-                              setIsFormDirty(true)
-                            }}
-                            overrides={{
-                              DragHandle: ({ $isDragged }) => {
-                                return CustomDragHandle($isDragged)
+              ) : (
+                <Form>
+                  <FieldWrapper>
+                    <FieldArray name={'krav'}>
+                      {(p) => (
+                        <List
+                          items={items}
+                          onChange={({ oldIndex, newIndex }) => {
+                            setItems(arrayMove(items, oldIndex, newIndex))
+                            setKravElements(arrayMove(kravElements, oldIndex, newIndex))
+                            setIsFormDirty(true)
+                          }}
+                          overrides={{
+                            DragHandle: ({ $isDragged }) => {
+                              return CustomDragHandle($isDragged)
+                            },
+                            Root: {
+                              style: {
+                                ...paddingZero,
                               },
-                              Root: {
-                                style: {
-                                  ...paddingZero,
-                                },
+                            },
+                            Item: {
+                              style: {
+                                ...paddingZero,
+                                flexDirection: 'row-reverse',
                               },
-                              Item: {
-                                style: {
-                                  ...paddingZero,
-                                  flexDirection: 'row-reverse',
-                                },
-                              },
-                            }}
-                          />
-                        )}
-                      </FieldArray>
-                    </FieldWrapper>
-                  </Form>
-                )}
-              </Block>
-              <Block
-                paddingBottom="23px"
-                display="flex"
-                justifyContent="flex-end"
-                position="sticky"
-                bottom={0}
-                paddingTop="16px"
-                paddingLeft={responsivePaddingSmall}
-                paddingRight={responsivePaddingSmall}
-                backgroundColor={ettlevColors.white}
-                $style={{
-                  boxShadow: stickyFooterStyle ? '0px -4px 4px rgba(0, 0, 0, 0.12)' : '',
-                  zIndex: 3,
+                            },
+                          }}
+                        />
+                      )}
+                    </FieldArray>
+                  </FieldWrapper>
+                </Form>
+              )}
+            </Block>
+            <Block
+              paddingBottom="23px"
+              display="flex"
+              justifyContent="flex-end"
+              position="sticky"
+              bottom={0}
+              paddingTop="16px"
+              paddingLeft={responsivePaddingSmall}
+              paddingRight={responsivePaddingSmall}
+              backgroundColor={ettlevColors.white}
+              $style={{
+                boxShadow: stickyFooterStyle ? '0px -4px 4px rgba(0, 0, 0, 0.12)' : '',
+                zIndex: 3,
+              }}
+              className="krav-list-button-container"
+            >
+              <Button
+                size="compact"
+                kind="secondary"
+                onClick={() => {
+                  refresh()
+                  close()
                 }}
-                className="krav-list-button-container"
+                disabled={loading}
               >
-                <Button
-                  size="compact"
-                  kind="secondary"
-                  onClick={() => {
-                    refresh()
-                    close()
-                  }}
-                  disabled={loading}
-                >
-                  Avbryt
-                </Button>
-                <Button size="compact" onClick={p.submitForm} disabled={loading} marginLeft>
-                  Lagre
-                </Button>
-              </Block>
-            </CustomizedModal>
-          )
-        }
-      </Formik >
+                Avbryt
+              </Button>
+              <Button size="compact" onClick={p.submitForm} disabled={loading} marginLeft>
+                Lagre
+              </Button>
+            </Block>
+          </CustomizedModal>
+        )}
+      </Formik>
     </>
   )
 }

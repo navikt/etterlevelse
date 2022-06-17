@@ -96,7 +96,7 @@ export const EditEtterlevelseV2 = ({
   const navigate = useNavigate()
 
   useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       behandlingId &&
         kravId.kravNummer &&
         getEtterlevelseMetadataByBehandlingsIdAndKravNummerAndKravVersion(behandlingId, kravId.kravNummer, kravId.kravVersjon).then((resp) => {
@@ -133,16 +133,12 @@ export const EditEtterlevelseV2 = ({
     }
 
     if (etterlevelse.id) {
-      await updateEtterlevelse(mutatedEtterlevelse).then(() =>
-        navigate(`/behandling/${behandlingId}/${params.tema}/${getFilterType(params.filter)}`)
-
-      )
+      await updateEtterlevelse(mutatedEtterlevelse).then(() => navigate(`/behandling/${behandlingId}/${params.tema}/${getFilterType(params.filter)}`))
     } else {
       await createEtterlevelse(mutatedEtterlevelse).then(() => {
         navigate(`/behandling/${behandlingId}/${params.tema}/${getFilterType(params.filter)}`)
       })
     }
-
   }
 
   useEffect(() => {

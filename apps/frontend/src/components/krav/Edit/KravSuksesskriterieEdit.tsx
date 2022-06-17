@@ -39,7 +39,7 @@ const nextId = (suksesskriterier: Suksesskriterie[]) => {
   return max + 1
 }
 
-const KriterieList = ({ p, setIsFormDirty }: { p: FieldArrayRenderProps; setIsFormDirty?: (v: boolean) => void; }) => {
+const KriterieList = ({ p, setIsFormDirty }: { p: FieldArrayRenderProps; setIsFormDirty?: (v: boolean) => void }) => {
   const suksesskriterier = p.form.values.suksesskriterier as Suksesskriterie[]
 
   if (!suksesskriterier.length) {
@@ -130,7 +130,7 @@ const Kriterie = ({
   dragHandleProps,
   isDragging,
   p,
-  setIsFormDirty
+  setIsFormDirty,
 }: {
   s: Suksesskriterie
   nummer: number
@@ -139,7 +139,7 @@ const Kriterie = ({
   dragHandleProps?: DraggableProvidedDragHandleProps
   isDragging: boolean
   p: FieldArrayRenderProps
-  setIsFormDirty?: (v:boolean) => void
+  setIsFormDirty?: (v: boolean) => void
 }) => {
   const debounceDelay = 500
   const [navn, setNavn, navnInput] = useDebouncedState(s.navn, debounceDelay)

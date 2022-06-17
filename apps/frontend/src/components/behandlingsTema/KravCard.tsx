@@ -54,12 +54,12 @@ export const KravCard = (props: { krav: KravEtterlevelseData; noStatus?: boolean
     const today = new Date()
     const kravCreatedDate = moment(props.krav.changeStamp.createdDate).toDate()
     setKravAge(getNumberOfDaysBetween(kravCreatedDate, today))
-      ; (async () => {
-        getEtterlevelseMetaData()
-        if (props.krav.kravVersjon > 1 && props.krav.etterlevelseStatus === undefined) {
-          setNyVersionFlag((await getEtterlevelserByBehandlingsIdKravNumber(props.behandlingId, props.krav.kravNummer)).content.length >= 1)
-        }
-      })()
+    ;(async () => {
+      getEtterlevelseMetaData()
+      if (props.krav.kravVersjon > 1 && props.krav.etterlevelseStatus === undefined) {
+        setNyVersionFlag((await getEtterlevelserByBehandlingsIdKravNumber(props.behandlingId, props.krav.kravNummer)).content.length >= 1)
+      }
+    })()
   }, [])
 
   return (

@@ -1,27 +1,27 @@
-import {Block} from 'baseui/block'
-import {FormControl} from 'baseui/form-control'
-import {HeadingLarge, LabelSmall, ParagraphMedium} from 'baseui/typography'
-import {FieldArray, FieldArrayRenderProps} from 'formik'
+import { Block } from 'baseui/block'
+import { FormControl } from 'baseui/form-control'
+import { HeadingLarge, LabelSmall, ParagraphMedium } from 'baseui/typography'
+import { FieldArray, FieldArrayRenderProps } from 'formik'
 import React from 'react'
-import {EtterlevelseStatus, Suksesskriterie, SuksesskriterieBegrunnelse, SuksesskriterieStatus} from '../../../constants'
-import {useDebouncedState} from '../../../util/hooks'
-import {ettlevColors, theme} from '../../../util/theme'
-import {CustomizedAccordion, CustomizedPanel} from '../../common/CustomizedAccordion'
-import {FieldWrapper} from '../../common/Inputs'
+import { EtterlevelseStatus, Suksesskriterie, SuksesskriterieBegrunnelse, SuksesskriterieStatus } from '../../../constants'
+import { useDebouncedState } from '../../../util/hooks'
+import { ettlevColors, theme } from '../../../util/theme'
+import { CustomizedAccordion, CustomizedPanel } from '../../common/CustomizedAccordion'
+import { FieldWrapper } from '../../common/Inputs'
 import TextEditor from '../../common/TextEditor/TextEditor'
-import {Error} from '../../common/ModalSchema'
+import { Error } from '../../common/ModalSchema'
 import LabelWithToolTip from '../../common/LabelWithTooltip'
-import {borderColor, borderRadius, borderStyle, borderWidth} from '../../common/Style'
-import {LabelAboveContent} from '../../common/PropertyLabel'
-import {buttonContentStyle} from '../../common/Button'
-import {Markdown} from '../../common/Markdown'
-import {ALIGN, Radio, RadioGroup, RadioGroupOverrides, RadioOverrides} from 'baseui/radio'
+import { borderColor, borderRadius, borderStyle, borderWidth } from '../../common/Style'
+import { LabelAboveContent } from '../../common/PropertyLabel'
+import { buttonContentStyle } from '../../common/Button'
+import { Markdown } from '../../common/Markdown'
+import { ALIGN, Radio, RadioGroup, RadioGroupOverrides, RadioOverrides } from 'baseui/radio'
 
 const paddingLeft = '30px'
 
 const radioButtonOverrides: RadioOverrides & RadioGroupOverrides = {
   Root: {
-    style: ({$isFocused, $checked}) => ({
+    style: ({ $isFocused, $checked }) => ({
       ...borderColor($checked ? ettlevColors.green400 : ettlevColors.green100),
       ...borderStyle('solid'),
       ...borderWidth('1px'),
@@ -31,7 +31,7 @@ const radioButtonOverrides: RadioOverrides & RadioGroupOverrides = {
       marginRight: '16px',
       minWidth: '213px',
       textUnderlineOffset: '3px',
-      ':hover': {backgroundColor: ettlevColors.green50, textDecoration: 'underline 1px'},
+      ':hover': { backgroundColor: ettlevColors.green50, textDecoration: 'underline 1px' },
       outlineWidth: $isFocused ? '3px' : undefined,
       outlineColor: $isFocused ? ettlevColors.focusOutline : undefined,
       outlineStyle: $isFocused ? 'solid' : undefined,
@@ -40,15 +40,15 @@ const radioButtonOverrides: RadioOverrides & RadioGroupOverrides = {
   RadioMarkInner: {
     style: {
       backgroundColor: ettlevColors.white,
-      ':hover': {backgroundColor: ettlevColors.white},
-      ':active': {backgroundColor: ettlevColors.green600, ...borderColor()},
+      ':hover': { backgroundColor: ettlevColors.white },
+      ':active': { backgroundColor: ettlevColors.green600, ...borderColor() },
     },
   },
   RadioMarkOuter: {
     style: {
       backgroundColor: ettlevColors.green600,
-      ':hover': {backgroundColor: ettlevColors.green600, borderWidth: '2px'},
-      ':active': {backgroundColor: ettlevColors.green600, borderWidth: '2px'},
+      ':hover': { backgroundColor: ettlevColors.green600, borderWidth: '2px' },
+      ':active': { backgroundColor: ettlevColors.green600, borderWidth: '2px' },
     },
   },
 }
@@ -69,29 +69,33 @@ export const getSuksesskriterieBegrunnelse = (suksesskriterieBegrunnelser: Sukse
   }
 }
 
-export const SuksesskriterierBegrunnelseEdit = ({suksesskriterie, disableEdit, viewMode, setIsFormDirty}: {
-                                                  suksesskriterie: Suksesskriterie[];
-                                                  disableEdit: boolean;
-                                                  viewMode: boolean;
-                                                  setIsFormDirty?: (v: boolean) => void
-                                                }
-) => {
+export const SuksesskriterierBegrunnelseEdit = ({
+  suksesskriterie,
+  disableEdit,
+  viewMode,
+  setIsFormDirty,
+}: {
+  suksesskriterie: Suksesskriterie[]
+  disableEdit: boolean
+  viewMode: boolean
+  setIsFormDirty?: (v: boolean) => void
+}) => {
   return (
     <FieldWrapper>
       <FieldArray name={'suksesskriterieBegrunnelser'}>
-        {(p) => <KriterieBegrunnelseList props={p} disableEdit={disableEdit} suksesskriterie={suksesskriterie} viewMode={viewMode} setIsFormDirty={setIsFormDirty}/>}
+        {(p) => <KriterieBegrunnelseList props={p} disableEdit={disableEdit} suksesskriterie={suksesskriterie} viewMode={viewMode} setIsFormDirty={setIsFormDirty} />}
       </FieldArray>
     </FieldWrapper>
   )
 }
 
 const KriterieBegrunnelseList = ({
-                                   props,
-                                   suksesskriterie,
-                                   disableEdit,
-                                   viewMode,
-                                   setIsFormDirty
-                                 }: {
+  props,
+  suksesskriterie,
+  disableEdit,
+  viewMode,
+  setIsFormDirty,
+}: {
   props: FieldArrayRenderProps
   suksesskriterie: Suksesskriterie[]
   disableEdit: boolean
@@ -125,17 +129,17 @@ const KriterieBegrunnelseList = ({
 }
 
 const KriterieBegrunnelse = ({
-                               suksesskriterie,
-                               index,
-                               suksesskriterieBegrunnelser,
-                               disableEdit,
-                               update,
-                               status,
-                               props,
-                               viewMode,
-                               totalSuksesskriterie,
-                               setIsFormDirty
-                             }: {
+  suksesskriterie,
+  index,
+  suksesskriterieBegrunnelser,
+  disableEdit,
+  update,
+  status,
+  props,
+  viewMode,
+  totalSuksesskriterie,
+  setIsFormDirty,
+}: {
   suksesskriterie: Suksesskriterie
   index: number
   suksesskriterieBegrunnelser: SuksesskriterieBegrunnelse[]
@@ -172,7 +176,7 @@ const KriterieBegrunnelse = ({
           ...borderColor('#C9C9C9'),
           outlineWidth: '2px',
           outlineStyle: 'solid',
-          outlineColor: '#842D08'
+          outlineColor: '#842D08',
         }
       } else {
         return {
@@ -181,7 +185,7 @@ const KriterieBegrunnelse = ({
           ...borderColor('#C9C9C9'),
           outlineWidth: undefined,
           outlineStyle: undefined,
-          outlineColor: undefined
+          outlineColor: undefined,
         }
       }
     } else {
@@ -191,7 +195,7 @@ const KriterieBegrunnelse = ({
         ...borderColor('#C9C9C9'),
         outlineWidth: undefined,
         outlineStyle: undefined,
-        outlineColor: undefined
+        outlineColor: undefined,
       }
     }
   }
@@ -252,7 +256,7 @@ const KriterieBegrunnelse = ({
 
       <CustomizedAccordion>
         <CustomizedPanel
-          title={<LabelSmall $style={{color: ettlevColors.green600}}>Utfyllende om kriteriet</LabelSmall>}
+          title={<LabelSmall $style={{ color: ettlevColors.green600 }}>Utfyllende om kriteriet</LabelSmall>}
           overrides={{
             Header: {
               style: {
@@ -281,11 +285,11 @@ const KriterieBegrunnelse = ({
             },
           }}
         >
-          <Markdown source={suksesskriterie.beskrivelse} fontSize="18px" maxWidth="650px"/>
+          <Markdown source={suksesskriterie.beskrivelse} fontSize="18px" maxWidth="650px" />
         </CustomizedPanel>
       </CustomizedAccordion>
 
-      <Block width="100%" height="1px" backgroundColor={ettlevColors.grey100} marginTop="24px" marginBottom="24px"/>
+      <Block width="100%" height="1px" backgroundColor={ettlevColors.grey100} marginTop="24px" marginBottom="24px" />
 
       {viewMode === false && (
         <>
@@ -301,37 +305,37 @@ const KriterieBegrunnelse = ({
               name={'suksesskriterieStatus' + suksesskriterie.id}
               align={ALIGN.horizontal}
             >
-              <Radio value={SuksesskriterieStatus.UNDER_ARBEID} overrides={{...radioButtonOverrides}}>
+              <Radio value={SuksesskriterieStatus.UNDER_ARBEID} overrides={{ ...radioButtonOverrides }}>
                 <ParagraphMedium margin={0}>Under arbeid</ParagraphMedium>
               </Radio>
-              <Radio value={SuksesskriterieStatus.OPPFYLT} overrides={{...radioButtonOverrides}}>
+              <Radio value={SuksesskriterieStatus.OPPFYLT} overrides={{ ...radioButtonOverrides }}>
                 <ParagraphMedium margin={0}> Oppfylt</ParagraphMedium>
               </Radio>
-              <Radio value={SuksesskriterieStatus.IKKE_RELEVANT} overrides={{...radioButtonOverrides}}>
+              <Radio value={SuksesskriterieStatus.IKKE_RELEVANT} overrides={{ ...radioButtonOverrides }}>
                 <ParagraphMedium margin={0}>Ikke relevant</ParagraphMedium>
               </Radio>
             </RadioGroup>
           </Block>
-          <Error fieldName={`suksesskriterieBegrunnelser[${index}].suksesskriterieStatus`} fullWidth={true}/>
+          <Error fieldName={`suksesskriterieBegrunnelser[${index}].suksesskriterieStatus`} fullWidth={true} />
         </>
       )}
 
       {(!disableEdit || !viewMode) && suksesskriterie.behovForBegrunnelse && (
         <Block marginTop={theme.sizing.scale1000}>
-          <FormControl label={<LabelWithToolTip label={getLabelForSuksessKriterie()}/>}>
-            <TextEditor initialValue={begrunnelse} setValue={setBegrunnelse} height={'188px'} errors={props.form.errors} simple width="100%" setIsFormDirty={setIsFormDirty}/>
+          <FormControl label={<LabelWithToolTip label={getLabelForSuksessKriterie()} />}>
+            <TextEditor initialValue={begrunnelse} setValue={setBegrunnelse} height={'188px'} errors={props.form.errors} simple width="100%" setIsFormDirty={setIsFormDirty} />
           </FormControl>
-          <Error fieldName={`suksesskriterieBegrunnelser[${index}].begrunnelse`} fullWidth={true}/>
+          <Error fieldName={`suksesskriterieBegrunnelser[${index}].begrunnelse`} fullWidth={true} />
         </Block>
       )}
 
       {(disableEdit || viewMode) && (
         <Block marginTop={theme.sizing.scale1000}>
-          <LabelAboveContent title={getLabelForSuksessKriterie()} markdown={begrunnelse} labelWidth={'24rem'}/>
+          <LabelAboveContent title={getLabelForSuksessKriterie()} markdown={begrunnelse} labelWidth={'24rem'} />
         </Block>
       )}
 
-      <Block marginTop={'8px'}>{suksesskriterieBegrunnelse.behovForBegrunnelse && begrunnelse.length > 0 && <Error fieldName={'status'} fullWidth={true}/>}</Block>
+      <Block marginTop={'8px'}>{suksesskriterieBegrunnelse.behovForBegrunnelse && begrunnelse.length > 0 && <Error fieldName={'status'} fullWidth={true} />}</Block>
     </Block>
   )
 }
