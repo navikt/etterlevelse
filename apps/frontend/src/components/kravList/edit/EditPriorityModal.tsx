@@ -18,15 +18,19 @@ import { ettlevColors, responsivePaddingSmall } from '../../../util/theme'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGripVertical } from '@fortawesome/free-solid-svg-icons'
 import { createKravPriority, kravMapToKravPrioriting, updateKravPriority } from '../../../api/KravPriorityApi'
+import AlertUnsavedPopup from '../../common/AlertUnsavedPopup'
 
 export const kravListPriorityModal = () => document.querySelector('#krav-list-edit-priority-modal')
 
-export const EditPriorityModal = (props: { isOpen: boolean; onClose: Function; kravListe: Krav[]; tema: string; refresh: Function }) => {
-  const { isOpen, onClose, kravListe, tema, refresh } = props
+export const EditPriorityModal = (props: { isOpen: boolean; setIsOpen: React.Dispatch<React.SetStateAction<boolean>>; kravListe: Krav[]; tema: string; refresh: Function }) => {
+  const { isOpen, setIsOpen, kravListe, tema, refresh } = props
   const [items, setItems] = React.useState<ReactElement[]>([])
   const [kravElements, setKravElements] = React.useState<Krav[]>(kravListe)
   const [loading, setLoading] = React.useState(false)
   const [stickyFooterStyle, setStickyFooterStyle] = React.useState(false)
+
+  const [isFormDirty, setIsFormDirty] = React.useState(false)
+  const [isAlertModalOpen, setIsAlertModalOpen] = React.useState(false)
 
   useEffect(() => {
     setItems(
@@ -83,7 +87,7 @@ export const EditPriorityModal = (props: { isOpen: boolean; onClose: Function; k
     const pattern = new RegExp(tema.substr(0, 3).toUpperCase() + '[0-9]+')
 
     return kravListe.map((k, i) => {
-      const index = i + 1
+      const index: number = i + 1
       if (!k.prioriteringsId) {
         return {
           ...k,
@@ -105,143 +109,174 @@ export const EditPriorityModal = (props: { isOpen: boolean; onClose: Function; k
     })
   }
 
+  const submit = () => {
+    setLoading(true)
+    setIsFormDirty(false)
+    let updateKravPriorityPromise: Promise<any>[] = []
+    const kravMedPrioriteting = setPriority([...kravElements])
+    kravMedPrioriteting.forEach((kmp) => {
+      if (kmp.kravPriorityUID) {
+        updateKravPriorityPromise.push((async () => await updateKravPriority(kravMapToKravPrioriting(kmp)))())
+      } else {
+        updateKravPriorityPromise.push((async () => await createKravPriority(kravMapToKravPrioriting(kmp)))())
+      }
+    })
+    try {
+      Promise.all(updateKravPriorityPromise).then(() => {
+        setLoading(false)
+        refresh()
+        setIsOpen(false)
+      })
+    } catch (error: any) {
+      console.log(error)
+    }
+  }
+
+  const close = () => {
+    setIsFormDirty(false)
+    setIsOpen(false)
+  }
+
+
   return (
-    <Formik
-      initialValues={{
-        krav: kravElements,
-      }}
-      onSubmit={(value) => {
-        setLoading(true)
-        let updateKravPriorityPromise: Promise<any>[] = []
-        const kravMedPrioriteting = setPriority([...kravElements])
-        kravMedPrioriteting.forEach((kmp) => {
-          if (kmp.kravPriorityUID) {
-            updateKravPriorityPromise.push((async () => await updateKravPriority(kravMapToKravPrioriting(kmp)))())
-          } else {
-            updateKravPriorityPromise.push((async () => await createKravPriority(kravMapToKravPrioriting(kmp)))())
-          }
-        })
-        try {
-          Promise.all(updateKravPriorityPromise).then(() => {
-            setLoading(false)
-            refresh()
-            onClose()
-          })
-        } catch (error: any) {
-          console.log(error)
-        }
-      }}
-    >
-      {(p) => (
-        <CustomizedModal
-          isOpen={isOpen}
-          size="auto"
-          overrides={{
-            Root: {
-              props: {
-                id: 'krav-list-edit-priority-modal',
-              },
-            },
-            Dialog: {
-              style: {
-                ...borderRadius('0px'),
-                backgroundColor: ettlevColors.white,
-              },
-            },
-          }}
-        >
-          <Block
-            backgroundColor={ettlevColors.green800}
-            paddingTop="23px"
-            paddingBottom="48px"
-            paddingLeft={responsivePaddingSmall}
-            paddingRight={responsivePaddingSmall}
-            maxHeight="55px"
-            marginBottom="54px"
-          >
-            <HeadingXXLarge $style={{ lineHeight: '48px', color: ettlevColors.white }}>Justere rekkefølgen på krav</HeadingXXLarge>
-          </Block>
-          <Block display="flex" justifyContent="center" paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall}>
-            <Block display="flex" justifyContent="flex-start" flex="1">
-              <HeadingXLarge $style={{ lineHeight: '24px', color: ettlevColors.green600, marginTop: '0px', marginBottom: '0px' }}>{tema}</HeadingXLarge>
-            </Block>
-            <Block display="flex" justifyContent="flex-end" flex="1">
-              <ParagraphMedium $style={{ marginTop: '0px', marginBottom: '0px', color: ettlevColors.green800 }}>Klikk og dra kravene i ønsket rekkefølge</ParagraphMedium>
-            </Block>
-          </Block>
-          <Block>
-            {loading ? (
-              <Block display="flex" justifyContent="center">
-                <Spinner size={theme.sizing.scale1200} />
-              </Block>
-            ) : (
-              <Form>
-                <FieldWrapper>
-                  <FieldArray name={'krav'}>
-                    {(p) => (
-                      <List
-                        items={items}
-                        onChange={({ oldIndex, newIndex }) => {
-                          setItems(arrayMove(items, oldIndex, newIndex))
-                          setKravElements(arrayMove(kravElements, oldIndex, newIndex))
-                        }}
-                        overrides={{
-                          DragHandle: ({ $isDragged }) => {
-                            return CustomDragHandle($isDragged)
-                          },
-                          Root: {
-                            style: {
-                              ...paddingZero,
-                            },
-                          },
-                          Item: {
-                            style: {
-                              ...paddingZero,
-                              flexDirection: 'row-reverse',
-                            },
-                          },
-                        }}
-                      />
-                    )}
-                  </FieldArray>
-                </FieldWrapper>
-              </Form>
-            )}
-          </Block>
-          <Block
-            paddingBottom="23px"
-            display="flex"
-            justifyContent="flex-end"
-            position="sticky"
-            bottom={0}
-            paddingTop="16px"
-            paddingLeft={responsivePaddingSmall}
-            paddingRight={responsivePaddingSmall}
-            backgroundColor={ettlevColors.white}
-            $style={{
-              boxShadow: stickyFooterStyle ? '0px -4px 4px rgba(0, 0, 0, 0.12)' : '',
-              zIndex: 3,
-            }}
-            className="krav-list-button-container"
-          >
-            <Button
-              size="compact"
-              kind="secondary"
-              onClick={() => {
-                refresh()
-                onClose()
+    <>
+      <AlertUnsavedPopup
+        isActive={isFormDirty}
+        isModalOpen={isAlertModalOpen}
+        setIsModalOpen={setIsAlertModalOpen}
+        onClose={() => close()}
+        onSubmit={() => submit()}
+      />
+      <Formik
+        initialValues={{
+          krav: kravElements,
+        }}
+        onSubmit={() => submit()}
+      >
+        {
+          (p) => (
+            <CustomizedModal
+              isOpen={isOpen}
+              onClose={() => {
+                if (isFormDirty) {
+                  setIsAlertModalOpen(true)
+                } else {
+                  close()
+                }
+              }
+              }
+              size="auto"
+              closeable
+              closeIconColor={ettlevColors.white}
+              overrides={{
+                Root: {
+                  props: {
+                    id: 'krav-list-edit-priority-modal',
+                  },
+                },
+                Dialog: {
+                  style: {
+                    ...borderRadius('0px'),
+                    backgroundColor: ettlevColors.white,
+                  },
+                },
               }}
-              disabled={loading}
             >
-              Avbryt
-            </Button>
-            <Button size="compact" onClick={p.submitForm} disabled={loading} marginLeft>
-              Lagre
-            </Button>
-          </Block>
-        </CustomizedModal>
-      )}
-    </Formik>
+              <Block
+                backgroundColor={ettlevColors.green800}
+                paddingTop="23px"
+                paddingBottom="48px"
+                paddingLeft={responsivePaddingSmall}
+                paddingRight={responsivePaddingSmall}
+                maxHeight="55px"
+                marginBottom="54px"
+              >
+                <HeadingXXLarge $style={{ lineHeight: '48px', color: ettlevColors.white }}>Justere rekkefølgen på krav</HeadingXXLarge>
+              </Block>
+              <Block display="flex" justifyContent="center" paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall}>
+                <Block display="flex" justifyContent="flex-start" flex="1">
+                  <HeadingXLarge $style={{ lineHeight: '24px', color: ettlevColors.green600, marginTop: '0px', marginBottom: '0px' }}>{tema}</HeadingXLarge>
+                </Block>
+                <Block display="flex" justifyContent="flex-end" flex="1">
+                  <ParagraphMedium $style={{ marginTop: '0px', marginBottom: '0px', color: ettlevColors.green800 }}>Klikk og dra kravene i ønsket rekkefølge</ParagraphMedium>
+                </Block>
+              </Block>
+              <Block>
+                {loading ? (
+                  <Block display="flex" justifyContent="center">
+                    <Spinner size={theme.sizing.scale1200} />
+                  </Block>
+                ) : (
+                  <Form>
+                    <FieldWrapper>
+                      <FieldArray name={'krav'}>
+                        {(p) => (
+                          <List
+                            items={items}
+                            onChange={({ oldIndex, newIndex }) => {
+                              setItems(arrayMove(items, oldIndex, newIndex))
+                              setKravElements(arrayMove(kravElements, oldIndex, newIndex))
+                              setIsFormDirty(true)
+                            }}
+                            overrides={{
+                              DragHandle: ({ $isDragged }) => {
+                                return CustomDragHandle($isDragged)
+                              },
+                              Root: {
+                                style: {
+                                  ...paddingZero,
+                                },
+                              },
+                              Item: {
+                                style: {
+                                  ...paddingZero,
+                                  flexDirection: 'row-reverse',
+                                },
+                              },
+                            }}
+                          />
+                        )}
+                      </FieldArray>
+                    </FieldWrapper>
+                  </Form>
+                )}
+              </Block>
+              <Block
+                paddingBottom="23px"
+                display="flex"
+                justifyContent="flex-end"
+                position="sticky"
+                bottom={0}
+                paddingTop="16px"
+                paddingLeft={responsivePaddingSmall}
+                paddingRight={responsivePaddingSmall}
+                backgroundColor={ettlevColors.white}
+                $style={{
+                  boxShadow: stickyFooterStyle ? '0px -4px 4px rgba(0, 0, 0, 0.12)' : '',
+                  zIndex: 3,
+                }}
+                className="krav-list-button-container"
+              >
+                <Button
+                  size="compact"
+                  kind="secondary"
+                  onClick={() => {
+                    refresh()
+                    close()
+                  }}
+                  disabled={loading}
+                >
+                  Avbryt
+                </Button>
+                <Button size="compact" onClick={p.submitForm} disabled={loading} marginLeft>
+                  Lagre
+                </Button>
+              </Block>
+            </CustomizedModal>
+          )
+        }
+      </Formik >
+    </>
   )
 }
 
