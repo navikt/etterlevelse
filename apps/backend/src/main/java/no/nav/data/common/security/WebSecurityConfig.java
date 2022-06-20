@@ -58,6 +58,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 "/tilbakemelding/**",
                 "/etterlevelsemetadata/**",
                 "/melding/**",
+                "/export/**",
 
                 "/team/**",
                 "/begrep/**"
@@ -66,11 +67,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         adminOnly(http,
                 "/audit/**",
                 "/settings/**",
-                "/codelist/**"
+                "/codelist/**",
+                "/export/codelist/**"
         );
 
         http.authorizeRequests().antMatchers("/krav/**").hasAnyRole(AppRole.KRAVEIER.name(), AppRole.ADMIN.name());
         http.authorizeRequests().antMatchers("/tilbakemelding/**").hasAnyRole(AppRole.WRITE.name(), AppRole.ADMIN.name(), AppRole.KRAVEIER.name());
+        http.authorizeRequests().antMatchers("/export/**").hasAnyRole(AppRole.WRITE.name(), AppRole.ADMIN.name(), AppRole.KRAVEIER.name());
         http.authorizeRequests().antMatchers("/kravprioritering/**").hasAnyRole(AppRole.KRAVEIER.name(), AppRole.ADMIN.name());
         http.authorizeRequests().antMatchers("/etterlevelse/**").hasAnyRole(AppRole.WRITE.name(), AppRole.KRAVEIER.name(), AppRole.ADMIN.name());
         http.authorizeRequests().antMatchers("/etterlevelsemetadata/**").hasAnyRole(AppRole.ADMIN.name(), AppRole.WRITE.name());
