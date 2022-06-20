@@ -106,7 +106,7 @@ public class CodelistToDoc {
 
             if(!codelistData.isEmpty()) {
                 codelistData.fieldNames().forEachRemaining(d -> {
-                    addHeading5(d);
+                    addHeading4(d);
                     addText(codelistData.get(d).toString());
                 });
             }
