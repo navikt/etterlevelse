@@ -27,7 +27,7 @@ public class CodelistToDoc {
 
     private static final ObjectFactory fac = Context.getWmlObjectFactory();
 
-    public byte[] generateDocFor(ListName list, String code) {
+    public byte[] generateDocFor(ListName list) {
         List<Codelist> codelists;
         String title;
         switch (list) {
