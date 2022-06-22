@@ -518,7 +518,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                         </Button>
                       )}
 
-                      {user.isAdmin() && (
+                      {user.isAdmin() && !newVersion && (
                         <Button
                           size="compact"
                           kind="secondary"
