@@ -41,7 +41,6 @@ public class WordDocUtils {
     WordprocessingMLPackage pack;
     MainDocumentPart main;
 
-    long listId = 1;
     long bookmarkId = 1;
 
     public RPr createRpr() {
@@ -123,17 +122,6 @@ public class WordDocUtils {
 
     public void addText(String... values) {
         main.addObject(paragraph(text(values)));
-    }
-
-    public void addToc(List<Codelist> codelists) {
-        long currListId = listId++;
-
-        for (Codelist codelist : codelists) {
-            var name = codelist.getShortName();
-            var bookmark = codelist.getCode();
-
-            addListItem(name, currListId, bookmark);
-        }
     }
 
     public void addListItem(String text, long listId, String bookmark) {
