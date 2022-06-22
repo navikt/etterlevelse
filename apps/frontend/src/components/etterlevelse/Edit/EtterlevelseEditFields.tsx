@@ -410,8 +410,9 @@ export const EtterlevelseEditFields = ({
                     <Button
                       marginLeft
                       onClick={() => {
-                        navigate(navigatePath)
+                        setIsFormDirty(false)
                         setIsAlertUnsavedModalOpen(false)
+                        setTimeout(() => navigate(navigatePath), 1)
                       }}
                     >
                       Fortsett uten å lagre
