@@ -182,7 +182,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
       >
         <Formik
           onSubmit={submit}
-          initialValues={!newKrav ? kravMapToFormVal({ ...krav, versjonEndringer: '' }) : kravMapToFormVal(krav)}
+          initialValues={!newKrav && newVersion ? kravMapToFormVal({ ...krav, versjonEndringer: '' }) : kravMapToFormVal(krav)}
           validationSchema={kravSchema()}
           innerRef={formRef}
         >
@@ -487,7 +487,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                         </Button>
                       )}
 
-                      {user.isAdmin() && (
+                      {user.isAdmin() && !newVersion && (
                         <Button
                           size="compact"
                           kind="secondary"
