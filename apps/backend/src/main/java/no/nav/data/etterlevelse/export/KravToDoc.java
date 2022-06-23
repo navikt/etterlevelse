@@ -29,13 +29,13 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class KravToDoc {
 
-    private static final ObjectFactory fac = Context.getWmlObjectFactory();
+    private static final ObjectFactory facKrav = Context.getWmlObjectFactory();
     private final KravService kravService;
     private final BegrepService begrepService;
 
 
     public byte[] generateDocForKrav(Krav krav) {
-        var doc = new DocumentBuilder();
+        var doc = new KravDocumentBuilder();
         doc.addTitle("Dokumentasjon fo krav");
         doc.generate(krav);
 
@@ -67,7 +67,7 @@ public class KravToDoc {
 
         kravList = new ArrayList<>(kravList);
 
-        var doc = new DocumentBuilder();
+        var doc = new KravDocumentBuilder();
         doc.addTitle(title);
 
         doc.addHeading1(String.format("Dokumentet inneholder følgende krav", kravList.size()));
@@ -84,16 +84,17 @@ public class KravToDoc {
     }
 
 
-    class DocumentBuilder extends WordDocUtils {
+    class KravDocumentBuilder extends WordDocUtils {
 
-        public DocumentBuilder () {
-            super(fac);
+        public KravDocumentBuilder () {
+            super(facKrav);
         }
 
         long listId = 1;
 
 
         public void generate(Krav krav) {
+
             String kravName = "K" + krav.getKravNummer() + "." + krav.getKravVersjon() + " - " + krav.getNavn();
 
             var header = addHeading1(kravName);
@@ -103,6 +104,7 @@ public class KravToDoc {
             addHeading4("Status");
             addText(kravStatusText(krav.getStatus()));
 
+            /*
 
             DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
             String date = krav.getChangeStamp().getLastModifiedDate().format(dateTimeFormatter);
@@ -113,7 +115,6 @@ public class KravToDoc {
                 addText(krav.getVarselMelding());
             }
 
-            /*
             addHeading4("Hensikten med kravet");
             addText(krav.getHensikt());
 
