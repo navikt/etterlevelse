@@ -36,6 +36,15 @@ public class KravToDoc {
     private final KravService kravService;
     private final BegrepService begrepService;
 
+
+    public byte[] generateDocForKrav(Krav krav) {
+        var doc = new DocumentBuilder();
+        doc.addTitle("Dokumentasjon fo krav");
+        doc.generate(krav);
+
+        return doc.build();
+    }
+
     public byte[] generateDocFor(ListName list, List<String> codes) {
         List<Krav> kravList;
         String title;
