@@ -8,13 +8,18 @@ import no.nav.data.etterlevelse.codelist.domain.Codelist;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
 import no.nav.data.etterlevelse.krav.KravService;
 import no.nav.data.etterlevelse.krav.domain.Krav;
+import no.nav.data.etterlevelse.krav.domain.KravStatus;
 import no.nav.data.etterlevelse.krav.domain.dto.KravFilter;
+import no.nav.data.etterlevelse.krav.dto.KravResponse;
+import no.nav.data.integration.begrep.BegrepService;
+import no.nav.data.integration.begrep.dto.BegrepResponse;
 import org.docx4j.jaxb.Context;
 import org.docx4j.wml.ObjectFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +27,7 @@ public class KravToDoc {
 
     private static final ObjectFactory fac = Context.getWmlObjectFactory();
     private final KravService kravService;
+    private final BegrepService begrepService;
 
     public byte[] generateDocFor(ListName list, List<String> codes) {
         List<Krav> kravList;
@@ -65,7 +71,7 @@ public class KravToDoc {
     }
 
 
-    static class DocumentBuilder extends WordDocUtils {
+    class DocumentBuilder extends WordDocUtils {
 
         public DocumentBuilder () {
             super(fac);
@@ -81,7 +87,84 @@ public class KravToDoc {
 
             addBookmark(header, krav.getId().toString());
 
+            addHeading4("Status");
+            addText(kravStatusText(krav.getStatus()));
+
+            if(!krav.getVarselMelding().isEmpty()) {
+                addHeading4("Varselmelding");
+                addText(krav.getVarselMelding());
+            }
+
+            addHeading4("Hensikten med kravet");
+            addText(krav.getHensikt());
+
+            for (int s = 0; s < krav.getSuksesskriterier().size(); s++) {
+                addHeading5("SUKSESSKRITERIE 1 AV " + s+1);
+                addHeading4(krav.getSuksesskriterier().get(s).getNavn());
+                addText("Id: " + krav.getSuksesskriterier().get(s).getId());
+                addText("Behov for begrunnelse: " + boolToText(krav.getSuksesskriterier().get(s).isBehovForBegrunnelse()));
+                addText(krav.getSuksesskriterier().get(s).getBeskrivelse());
+            }
+
+            addHeading4("Kilder");
+            if(!krav.getDokumentasjon().isEmpty()){
+               for(int d = 0; d < krav.getDokumentasjon().size(); d++) {
+                   addText("- " + krav.getDokumentasjon().get(d));
+               }
+            } else {
+                addText("Ikke angitt");
+            }
+
+            addHeading4("Etiketter");
+            if(!krav.getTagger().isEmpty()){
+                addText(String.join(", ", krav.getTagger()));
+            } else {
+                addText("Ikke angitt");
+            }
+
+            addHeading4("Relevante implementasjoner");
+            if(!krav.getImplementasjoner().isEmpty()){
+                addText(krav.getImplementasjoner());
+            } else {
+                addText("Ikke angitt");
+            }
+
+            addHeading4("Begreper");
+            if(!krav.getBegrepIder().isEmpty()){
+                for(int b = 0; b < krav.getBegrepIder().size(); b++) {
+                    BegrepResponse begrepResponse = begrepService.getBegrep(krav.getBegrepIder().get(b)).orElse(null);
+                    addText("- " + begrepResponse.getId() + " " + begrepResponse.getNavn());
+                    addText("  " + begrepResponse.getBeskrivelse());
+                }
+            } else {
+                addText("Ikke angitt");
+            }
+
+            addHeading4("Relasjoner til andre krav");
+            if(!krav.getKravIdRelasjoner().isEmpty()){
+                for(int k = 0; k < krav.getKravIdRelasjoner().size(); k++) {
+                    Krav kravResponse = kravService.get(UUID.fromString(krav.getKravIdRelasjoner().get(k)));
+                    addText("- K" + kravResponse.getKravNummer() + "." + kravResponse.getVersion() + " " + kravResponse.getNavn());
+                }
+            } else {
+                addText("Ikke angitt");
+            }
+
+
+
+
+
         }
+
+        public String kravStatusText(KravStatus status) {
+            return switch (status) {
+                case UTGAATT -> "Utgått";
+                case UTKAST -> "Utkast";
+                case AKTIV -> "Aktiv";
+                case UNDER_ARBEID -> "Under arbeid";
+            };
+        }
+
 
         public void addToc(List<Krav> kravList) {
 

@@ -2,6 +2,8 @@ package no.nav.data.common.utils;
 
 import lombok.SneakyThrows;
 import no.nav.data.etterlevelse.codelist.domain.Codelist;
+import no.nav.data.etterlevelse.krav.domain.KravStatus;
+import org.apache.commons.lang3.BooleanUtils;
 import org.docx4j.model.table.TblFactory;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.docx4j.openpackaging.parts.WordprocessingML.FooterPart;
@@ -223,6 +225,9 @@ public class WordDocUtils {
         p.getContent().add(0, bmStart);
     }
 
+    public String boolToText(Boolean aBoolean) {
+        return BooleanUtils.toString(aBoolean, "Ja", "Nei", "Uavklart");
+    }
 
     @SneakyThrows
     public byte[] build() {
