@@ -76,12 +76,12 @@ public class ExportController {
             @RequestParam(name = "lov", required = false) String lov,
             @RequestParam(name = "ansvarlig", required = false) String ansvarlig
     ) {
-        byte[] doc = new byte[0];
+        byte[] doc;
         String filename;
 
         if(kravId != null) {
             Krav krav = kravService.get(kravId);
-            //doc = kravToDoc.generateDocForKrav(krav);
+            doc = kravToDoc.generateDocForKrav(krav);
             filename = "Dokumentajson for K"+krav.getKravNummer()+"."+krav.getVersion()+" "+krav.getNavn() + ".docx";
         } else {
             ListName list;
@@ -112,7 +112,7 @@ public class ExportController {
             }
 
             codelistService.validateListNameAndCodes(list.name(), code);
-            //doc = kravToDoc.generateDocFor(list, code);
+            doc = kravToDoc.generateDocFor(list, code);
             filename = "Dokumentajson for krav med " + list.name() + " " + code;
         }
 

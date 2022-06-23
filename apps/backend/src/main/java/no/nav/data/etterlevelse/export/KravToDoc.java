@@ -1,6 +1,5 @@
 package no.nav.data.etterlevelse.export;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import lombok.RequiredArgsConstructor;
 import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.utils.WordDocUtils;
@@ -13,7 +12,6 @@ import no.nav.data.etterlevelse.krav.domain.KravStatus;
 import no.nav.data.etterlevelse.krav.domain.Regelverk;
 import no.nav.data.etterlevelse.krav.domain.Suksesskriterie;
 import no.nav.data.etterlevelse.krav.domain.dto.KravFilter;
-import no.nav.data.etterlevelse.krav.dto.KravResponse;
 import no.nav.data.etterlevelse.varsel.domain.AdresseType;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 import no.nav.data.integration.begrep.BegrepService;
@@ -22,7 +20,6 @@ import org.docx4j.jaxb.Context;
 import org.docx4j.wml.ObjectFactory;
 import org.springframework.stereotype.Service;
 
-import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -116,6 +113,7 @@ public class KravToDoc {
                 addText(krav.getVarselMelding());
             }
 
+            /*
             addHeading4("Hensikten med kravet");
             addText(krav.getHensikt());
 
@@ -212,7 +210,7 @@ public class KravToDoc {
                 }
             } else {
                 addText("Ikke angitt");
-            }
+            }*/
         }
 
         public String kravStatusText(KravStatus status) {
