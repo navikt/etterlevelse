@@ -10,10 +10,12 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.NotFoundException;
 import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.etterlevelse.codelist.CodelistService;
+import no.nav.data.etterlevelse.codelist.domain.Codelist;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
 import no.nav.data.etterlevelse.krav.KravService;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.dto.KravResponse;
+import org.aspectj.apache.bcel.classfile.Code;
 import org.springframework.http.HttpHeaders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StreamUtils;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -88,8 +91,14 @@ public class ExportController {
                 code = relevans;
             } else if (tema != null) {
                 list = ListName.TEMA;
-                code = new ArrayList<>();
-                code.add(tema);
+                codelistService.validateListNameAndCode(list.name(), tema);
+
+                List<String> lovKoder = CodelistService.getCodelist(ListName.LOV)
+                                          .stream().filter(l -> l.getData().get("tema").toString() == tema)
+                                          .map(l -> l.getCode())
+                                          .collect(Collectors.toList());
+                code = lovKoder;
+
             } else if (lov != null) {
                 list = ListName.LOV;
                 code = new ArrayList<>();
