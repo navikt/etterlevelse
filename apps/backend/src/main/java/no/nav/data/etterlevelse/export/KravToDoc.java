@@ -92,7 +92,6 @@ public class KravToDoc {
 
         long listId = 1;
 
-
         public void generate(Krav krav) {
 
             String kravName = "K" + krav.getKravNummer() + "." + krav.getKravVersjon() + " - " + krav.getNavn();
@@ -109,6 +108,7 @@ public class KravToDoc {
             DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
             String date = krav.getChangeStamp().getLastModifiedDate().format(dateTimeFormatter);
             addText("Sist endret: " + date + " av " + krav.getChangeStamp().getLastModifiedBy().split(" - ")[1]);
+            */
 
             if(!krav.getVarselMelding().isEmpty()) {
                 addHeading4("Varselmelding");
@@ -211,7 +211,7 @@ public class KravToDoc {
                 }
             } else {
                 addText("Ikke angitt");
-            }*/
+            }
         }
 
         public String kravStatusText(KravStatus status) {
