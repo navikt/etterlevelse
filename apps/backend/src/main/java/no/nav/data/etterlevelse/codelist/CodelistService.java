@@ -145,6 +145,12 @@ public class CodelistService implements InitializingBean {
         new CodeUsageRequest(listName, code).validate();
     }
 
+    public void validateListNameAndCodes(String listName, List<String> code) {
+        for (String c : code) {
+            new CodeUsageRequest(listName, c).validate();
+        }
+    }
+
     public void validateRequest(List<CodelistRequest> requests) {
         Set<String> requestIds = new HashSet<>();
         requests.forEach(CodelistRequest::format);
