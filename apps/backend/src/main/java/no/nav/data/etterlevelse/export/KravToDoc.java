@@ -4,19 +4,26 @@ import com.fasterxml.jackson.databind.JsonNode;
 import lombok.RequiredArgsConstructor;
 import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.utils.WordDocUtils;
+import no.nav.data.etterlevelse.codelist.CodelistService;
 import no.nav.data.etterlevelse.codelist.domain.Codelist;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
 import no.nav.data.etterlevelse.krav.KravService;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravStatus;
+import no.nav.data.etterlevelse.krav.domain.Regelverk;
+import no.nav.data.etterlevelse.krav.domain.Suksesskriterie;
 import no.nav.data.etterlevelse.krav.domain.dto.KravFilter;
 import no.nav.data.etterlevelse.krav.dto.KravResponse;
+import no.nav.data.etterlevelse.varsel.domain.AdresseType;
+import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 import no.nav.data.integration.begrep.BegrepService;
 import no.nav.data.integration.begrep.dto.BegrepResponse;
 import org.docx4j.jaxb.Context;
 import org.docx4j.wml.ObjectFactory;
 import org.springframework.stereotype.Service;
 
+import java.time.Month;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -90,6 +97,11 @@ public class KravToDoc {
             addHeading4("Status");
             addText(kravStatusText(krav.getStatus()));
 
+
+            DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            String date = krav.getChangeStamp().getLastModifiedDate().format(dateTimeFormatter);
+            addText("Sist endret: " + date + " av " + krav.getChangeStamp().getLastModifiedBy().split(" - ")[1]);
+
             if(!krav.getVarselMelding().isEmpty()) {
                 addHeading4("Varselmelding");
                 addText(krav.getVarselMelding());
@@ -99,11 +111,13 @@ public class KravToDoc {
             addText(krav.getHensikt());
 
             for (int s = 0; s < krav.getSuksesskriterier().size(); s++) {
+                Suksesskriterie suksesskriterie = krav.getSuksesskriterier().get(s);
+
                 addHeading5("SUKSESSKRITERIE 1 AV " + s+1);
-                addHeading4(krav.getSuksesskriterier().get(s).getNavn());
-                addText("Id: " + krav.getSuksesskriterier().get(s).getId());
-                addText("Behov for begrunnelse: " + boolToText(krav.getSuksesskriterier().get(s).isBehovForBegrunnelse()));
-                addText(krav.getSuksesskriterier().get(s).getBeskrivelse());
+                addHeading4(suksesskriterie.getNavn());
+                addText("Id: " + suksesskriterie.getId());
+                addText("Behov for begrunnelse: " + boolToText(suksesskriterie.isBehovForBegrunnelse()));
+                addText(suksesskriterie.getBeskrivelse());
             }
 
             addHeading4("Kilder");
@@ -150,10 +164,46 @@ public class KravToDoc {
                 addText("Ikke angitt");
             }
 
+            addHeading4("Krav er relevant for");
+            if(!krav.getRelevansFor().isEmpty()){
+                for(int r = 0; r < krav.getRelevansFor().size(); r++) {
+                    Codelist codelist = CodelistService.getCodelist(ListName.RELEVANS, krav.getRelevansFor().get(r));
+                    addText("- " + codelist.getShortName());
+                }
+            } else {
+                addText("Ikke angitt");
+            }
 
+            addHeading4("Ansvarlig");
+            if(!krav.getUnderavdeling().isEmpty()){
+                    Codelist codelist = CodelistService.getCodelist(ListName.UNDERAVDELING, krav.getUnderavdeling());
+                    addText("- " + codelist.getShortName());
+            } else {
+                addText("Ikke angitt");
+            }
 
+            addHeading4("Regelverk");
+            if(!krav.getUnderavdeling().isEmpty()){
+                for(int l = 0; l < krav.getRegelverk().size(); l++) {
+                    Regelverk regelverk = krav.getRegelverk().get(l);
 
+                    Codelist codelist = CodelistService.getCodelist(ListName.LOV, regelverk.getLov());
+                    addText("- " + codelist.getShortName() + " " + regelverk.getSpesifisering());
+                }
+            } else {
+                addText("Ikke angitt");
+            }
 
+            addHeading4("Varslingsadresser");
+            if(!krav.getVarslingsadresser().isEmpty()){
+                for(int v = 0; v < krav.getVarslingsadresser().size(); v++) {
+                    Varslingsadresse varslingsadresse = krav.getVarslingsadresser().get(v);
+
+                    addText("- " + adresseTypeText(varslingsadresse.getType()) + ": " + varslingsadresse.getAdresse());
+                }
+            } else {
+                addText("Ikke angitt");
+            }
         }
 
         public String kravStatusText(KravStatus status) {
@@ -164,6 +214,15 @@ public class KravToDoc {
                 case UNDER_ARBEID -> "Under arbeid";
             };
         }
+
+        public String adresseTypeText(AdresseType type) {
+            return switch (type) {
+                case EPOST -> "Epost";
+                case SLACK -> "Slack kanal";
+                case SLACK_USER -> "Slack bruker";
+            };
+        }
+
 
 
         public void addToc(List<Krav> kravList) {
