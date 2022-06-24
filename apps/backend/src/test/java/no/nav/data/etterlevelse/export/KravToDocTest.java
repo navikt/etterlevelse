@@ -1,4 +1,4 @@
-package no.nav.data.etterlevelse.krav;
+package no.nav.data.etterlevelse.export;
 
 
 import lombok.SneakyThrows;
@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.storage.domain.ChangeStamp;
 import no.nav.data.etterlevelse.codelist.CodelistStub;
 import no.nav.data.etterlevelse.export.KravToDoc;
+import no.nav.data.etterlevelse.krav.KravService;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravRepo;
 import no.nav.data.etterlevelse.krav.domain.KravStatus;
