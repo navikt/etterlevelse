@@ -14,6 +14,7 @@ import no.nav.data.etterlevelse.codelist.domain.Codelist;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
 import no.nav.data.etterlevelse.krav.KravService;
 import no.nav.data.etterlevelse.krav.domain.Krav;
+import no.nav.data.etterlevelse.krav.domain.KravStatus;
 import no.nav.data.etterlevelse.krav.dto.KravResponse;
 import org.aspectj.apache.bcel.classfile.Code;
 import org.springframework.http.HttpHeaders;
@@ -74,7 +75,8 @@ public class ExportController {
             @RequestParam(name = "relevans", required = false) List<String> relevans,
             @RequestParam(name = "tema", required = false) String tema,
             @RequestParam(name = "lov", required = false) String lov,
-            @RequestParam(name = "ansvarlig", required = false) String ansvarlig
+            @RequestParam(name = "ansvarlig", required = false) String ansvarlig,
+            @RequestParam(name = "status", required = false) List<KravStatus> status
     ) {
         byte[] doc;
         String filename;
@@ -111,8 +113,10 @@ public class ExportController {
                 throw new ValidationException("No paramater given");
             }
 
+            List<String> statusList = status.stream().map(Enum::name).collect(Collectors.toList());
+
             codelistService.validateListNameAndCodes(list.name(), code);
-            doc = kravToDoc.generateDocFor(list, code);
+            doc = kravToDoc.generateDocFor(list, code, statusList);
             filename = "Dokumentajson for krav med " + list.name() + " " + code;
         }
 

@@ -42,25 +42,25 @@ public class KravToDoc {
         return doc.build();
     }
 
-    public byte[] generateDocFor(ListName list, List<String> codes) {
+    public byte[] generateDocFor(ListName list, List<String> codes, List<String> status) {
         List<Krav> kravList;
         String title;
         switch (list) {
             case RELEVANS -> {
-                title = "Krav filtrert med Relevans";
-                kravList = kravService.getByFilter(KravFilter.builder().relevans(codes).build());
+                title = "Krav filtrert med relevans";
+                kravList = kravService.getByFilter(KravFilter.builder().relevans(codes).status(status).build());
             }
             case UNDERAVDELING -> {
-                title = "Krav filtrert med Underavdeling";
-                kravList = kravService.getByFilter(KravFilter.builder().underavdeling(codes.get(0)).build());
+                title = "Krav filtrert med underavdeling";
+                kravList = kravService.getByFilter(KravFilter.builder().underavdeling(codes.get(0)).status(status).build());
             }
             case LOV -> {
                 title = "Krav filtrert med lov";
-                kravList = kravService.getByFilter(KravFilter.builder().lov(codes.get(0)).build());
+                kravList = kravService.getByFilter(KravFilter.builder().lov(codes.get(0)).status(status).build());
             }
             case TEMA -> {
                 title = "Krav filtrert med tema";
-                kravList = kravService.getByFilter(KravFilter.builder().lover(codes).build());
+                kravList = kravService.getByFilter(KravFilter.builder().lover(codes).status(status).build());
             }
             default -> throw new ValidationException("no list given");
         }
