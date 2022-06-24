@@ -125,7 +125,7 @@ public class KravToDoc {
             for (int s = 0; s < krav.getSuksesskriterier().size(); s++) {
                 Suksesskriterie suksesskriterie = krav.getSuksesskriterier().get(s);
 
-                addHeading5("SUKSESSKRITERIE 1 AV " + s+1);
+                addHeading4("SUKSESSKRITERIE 1 AV " + s+1);
                 addHeading4(suksesskriterie.getNavn());
                 addText("Id: " + suksesskriterie.getId());
                 addText("Behov for begrunnelse: " + boolToText(suksesskriterie.isBehovForBegrunnelse()));
