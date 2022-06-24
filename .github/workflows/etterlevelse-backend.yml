@@ -69,6 +69,6 @@ jobs:
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: prod-gcp
-          RESOURCE: apps/backend/nais/backend-gcp.yaml
+          RESOURCE: apps/backend/nais/backend-PROD_gcp.yaml
           VARS: apps/backend/nais/backend-prod-gcp-vars.yaml
           ENVIRONMENT: prod-gcp:teamdatajegerne:etterlevelse-backend
