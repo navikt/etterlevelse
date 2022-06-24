@@ -7,16 +7,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import no.nav.data.common.exceptions.NotFoundException;
 import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.etterlevelse.codelist.CodelistService;
 import no.nav.data.etterlevelse.codelist.domain.Codelist;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
 import no.nav.data.etterlevelse.krav.KravService;
 import no.nav.data.etterlevelse.krav.domain.Krav;
-import no.nav.data.etterlevelse.krav.domain.KravStatus;
-import no.nav.data.etterlevelse.krav.dto.KravResponse;
-import org.aspectj.apache.bcel.classfile.Code;
 import org.springframework.http.HttpHeaders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StreamUtils;
@@ -72,11 +68,11 @@ public class ExportController {
     public void getKrav(
             HttpServletResponse response,
             @RequestParam(name = "kravId", required = false) UUID kravId,
-            @RequestParam(name = "relevans", required = false) List<String> relevans,
-            @RequestParam(name = "tema", required = false) String tema,
-            @RequestParam(name = "lov", required = false) String lov,
-            @RequestParam(name = "ansvarlig", required = false) String ansvarlig,
-            @RequestParam(name = "status", required = false) List<KravStatus> status
+            @RequestParam(name = "relevansKoder", required = false) List<String> relevansKoder,
+            @RequestParam(name = "temaKode", required = false) String temaKode,
+            @RequestParam(name = "lovKode", required = false) String lovKode,
+            @RequestParam(name = "ansvarligKode", required = false) String ansvarligKode,
+            @RequestParam(name = "statuskoder", required = false) List<String> statuskoder
     ) {
         byte[] doc;
         String filename;
@@ -88,35 +84,33 @@ public class ExportController {
         } else {
             ListName list;
             List<String> code;
-            if(relevans != null){
+            if(relevansKoder != null){
                 list = ListName.RELEVANS;
-                code = relevans;
-            } else if (tema != null) {
+                code = relevansKoder;
+            } else if (temaKode != null) {
                 list = ListName.TEMA;
-                codelistService.validateListNameAndCode(list.name(), tema);
+                codelistService.validateListNameAndCode(list.name(), temaKode);
 
-                List<String> lovKoder = CodelistService.getCodelist(ListName.LOV)
-                                          .stream().filter(l -> l.getData().get("tema").toString() == tema)
-                                          .map(l -> l.getCode())
-                                          .collect(Collectors.toList());
-                code = lovKoder;
+                code = CodelistService.getCodelist(ListName.LOV)
+                        .stream().filter(l -> l.getData().get("tema").toString().equals(temaKode))
+                        .map(Codelist::getCode)
+                        .collect(Collectors.toList());
 
-            } else if (lov != null) {
+            } else if (lovKode != null) {
                 list = ListName.LOV;
                 code = new ArrayList<>();
-                code.add(lov);
-            } else if (ansvarlig != null) {
+                code.add(lovKode);
+            } else if (ansvarligKode != null) {
                 list = ListName.UNDERAVDELING;
                 code = new ArrayList<>();
-                code.add(ansvarlig);
+                code.add(ansvarligKode);
             } else {
                 throw new ValidationException("No paramater given");
             }
 
-            List<String> statusList = status.stream().map(Enum::name).collect(Collectors.toList());
 
             codelistService.validateListNameAndCodes(list.name(), code);
-            doc = kravToDoc.generateDocFor(list, code, statusList);
+            doc = kravToDoc.generateDocFor(list, code, statuskoder);
             filename = "Dokumentajson for krav med " + list.name() + " " + code;
         }
 
