@@ -119,11 +119,11 @@ export const QuestionAndAnswerLogPage = () => {
             }}
             headers={[
               { $style: { maxWidth: '6%' }, title: 'Krav ID', column: 'kravNummer' },
-              { $style: { maxWidth: '25%', minWidth: '25%' }, title: 'Kravnavn', column: 'kravNavn' },
+              { $style: { maxWidth: '25%', minWidth: '25%' }, title: 'Kravtittel', column: 'kravNavn' },
               { title: 'Tema', column: 'tema' },
               { title: 'Fra', column: 'melderNavn' },
-              { title: 'Tid for spørsmål', column: 'tidForSporsmaal' },
-              { title: 'Tid for svar', column: 'tidForSvar' },
+              { title: 'Mottatt', column: 'tidForSporsmaal' },
+              { title: 'Besvart', column: 'tidForSvar' },
             ]}
             render={(tableData) => {
               return tableData.data.slice((tableData.page - 1) * tableData.limit, (tableData.page - 1) * tableData.limit + tableData.limit).map((krav, index) => {
