@@ -67,11 +67,14 @@ public class CodelistToDoc {
     }
 
 
-    class DocumentBuilder extends WordDocUtils {
+    static class DocumentBuilder extends WordDocUtils {
 
         public DocumentBuilder () {
             super(fac);
         }
+
+        long listId = 1;
+
 
         public void generate(Codelist codelist) {
             JsonNode codelistData = codelist.getData();
@@ -91,6 +94,17 @@ public class CodelistToDoc {
                 });
             }
 
+        }
+
+        public void addToc(List<Codelist> codelists) {
+            long currListId = listId++;
+
+            for (Codelist codelist : codelists) {
+                var name = codelist.getShortName();
+                var bookmark = codelist.getCode();
+
+                addListItem(name, currListId, bookmark);
+            }
         }
     }
 }

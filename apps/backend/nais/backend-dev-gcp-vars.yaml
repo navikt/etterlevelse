@@ -15,7 +15,7 @@ env:
   - name: CLIENT_POLLY_URL
     value: https://polly.dev-fss-pub.nais.io
   - name: AZURE_CLIENT_GROUPS
-    value: 2ee0ef50-718c-43d3-8c05-c839f2dc2490
+    value: 7d275d5e-59a5-473d-b530-a9091b3de4c6
   - name: AZURE_CLIENT_GROUPS_ADMIN
     value: bf05a29f-6f80-4da1-b419-22c802fd41e7
   - name: AZURE_CLIENT_GROUPS_KRAVEIER

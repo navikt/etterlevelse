@@ -2,6 +2,8 @@ package no.nav.data.common.utils;
 
 import lombok.SneakyThrows;
 import no.nav.data.etterlevelse.codelist.domain.Codelist;
+import no.nav.data.etterlevelse.krav.domain.KravStatus;
+import org.apache.commons.lang3.BooleanUtils;
 import org.docx4j.model.table.TblFactory;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.docx4j.openpackaging.parts.WordprocessingML.FooterPart;
@@ -41,7 +43,6 @@ public class WordDocUtils {
     WordprocessingMLPackage pack;
     MainDocumentPart main;
 
-    long listId = 1;
     long bookmarkId = 1;
 
     public RPr createRpr() {
@@ -123,17 +124,6 @@ public class WordDocUtils {
 
     public void addText(String... values) {
         main.addObject(paragraph(text(values)));
-    }
-
-    public void addToc(List<Codelist> codelists) {
-        long currListId = listId++;
-
-        for (Codelist codelist : codelists) {
-            var name = codelist.getShortName();
-            var bookmark = codelist.getCode();
-
-            addListItem(name, currListId, bookmark);
-        }
     }
 
     public void addListItem(String text, long listId, String bookmark) {
@@ -235,6 +225,9 @@ public class WordDocUtils {
         p.getContent().add(0, bmStart);
     }
 
+    public String boolToText(Boolean aBoolean) {
+        return BooleanUtils.toString(aBoolean, "Ja", "Nei", "Uavklart");
+    }
 
     @SneakyThrows
     public byte[] build() {
