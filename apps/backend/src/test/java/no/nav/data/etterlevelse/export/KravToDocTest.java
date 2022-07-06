@@ -52,7 +52,7 @@ public class KravToDocTest {
                         .kravVersjon(1)
                         .navn("Test krav")
                         .status(KravStatus.AKTIV)
-                        .hensikt("for å teste dokument export")
+                        .hensikt("test 3 **BOLD** \n\n# Header1\n\nvanlig text")
                         .suksesskriterier(List.of(Suksesskriterie.builder()
                                 .id(1)
                                 .navn("test suksesskriterie")
@@ -89,7 +89,7 @@ public class KravToDocTest {
                 .kravVersjon(1)
                 .navn("Test krav")
                 .status(KravStatus.AKTIV)
-                .hensikt("for å teste dokument export")
+                .hensikt("test 3 **BOLD** \n\n# Header1\n\nvanlig text")
                 .suksesskriterier(
                         List.of(
                         Suksesskriterie.builder()

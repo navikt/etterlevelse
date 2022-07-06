@@ -1,5 +1,6 @@
 package no.nav.data.common.utils;
 
+import com.vladsch.flexmark.util.ast.TextCollectingVisitor;
 import lombok.SneakyThrows;
 import no.nav.data.etterlevelse.codelist.domain.Codelist;
 import no.nav.data.etterlevelse.krav.domain.KravStatus;
@@ -25,6 +26,7 @@ public class WordDocUtils {
 
     private final ObjectFactory fac;
     private final MutableDataSet options = new MutableDataSet();
+    private final TextCollectingVisitor textCollectingVisitor = new TextCollectingVisitor();
     private final Parser markdownParser = Parser.builder(options).build();
 
     @SneakyThrows
@@ -116,7 +118,11 @@ public class WordDocUtils {
 
     public void addMarkdownText(String text) {
         var markdownText = markdownParser.parse(text);
-        main.addObject(markdownText);
+
+        String parsedText = textCollectingVisitor.collectAndGetText(markdownText);
+
+        main.addObject(paragraph(text(parsedText)));
+
     }
 
     public void addTexts(Text... values) {
