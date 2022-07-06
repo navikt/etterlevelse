@@ -119,7 +119,7 @@ public class KravToDoc {
 
             addHeading4("Hensikten med kravet");
             if(krav.getHensikt() != null && !krav.getHensikt().isEmpty()) {
-                addText(krav.getHensikt());
+                addMarkdownText(krav.getHensikt());
             }
 
             for (int s = 0; s < krav.getSuksesskriterier().size(); s++) {

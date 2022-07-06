@@ -9,6 +9,8 @@ import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.docx4j.openpackaging.parts.WordprocessingML.FooterPart;
 import org.docx4j.openpackaging.parts.WordprocessingML.MainDocumentPart;
 import org.docx4j.wml.*;
+import com.vladsch.flexmark.util.data.MutableDataSet;
+import com.vladsch.flexmark.parser.Parser;
 
 import java.io.ByteArrayOutputStream;
 import java.math.BigInteger;
@@ -22,6 +24,8 @@ import static no.nav.data.common.utils.StreamUtils.filter;
 public class WordDocUtils {
 
     private final ObjectFactory fac;
+    private final MutableDataSet options = new MutableDataSet();
+    private final Parser markdownParser = Parser.builder(options).build();
 
     @SneakyThrows
     public WordDocUtils(ObjectFactory fac) {
@@ -108,6 +112,11 @@ public class WordDocUtils {
         }
         p.getContent().add(r);
         return p;
+    }
+
+    public void addMarkdownText(String text) {
+        var markdownText = markdownParser.parse(text);
+        main.addObject(markdownText);
     }
 
     public void addTexts(Text... values) {
