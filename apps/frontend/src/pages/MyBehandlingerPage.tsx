@@ -362,7 +362,7 @@ const Alle = () => {
             <Block display={'flex'} justifyContent={'space-between'} marginTop={theme.sizing.scale1000}>
               <Block display="flex" alignItems="center">
                 <Button onClick={lastMer} icon={faPlus} kind={'secondary'} size="compact" disabled={gqlLoading || behandlinger.numberOfElements >= behandlinger.totalElements}>
-                  Last mer
+                  Vis mer
                 </Button>
 
                 {gqlLoading && (
