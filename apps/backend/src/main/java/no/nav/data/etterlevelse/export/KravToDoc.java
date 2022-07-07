@@ -129,13 +129,13 @@ public class KravToDoc {
                 addHeading4(suksesskriterie.getNavn());
                 addText("Id: " + suksesskriterie.getId());
                 addText("Behov for begrunnelse: " + boolToText(suksesskriterie.isBehovForBegrunnelse()));
-                addText(suksesskriterie.getBeskrivelse());
+                addMarkdownText(suksesskriterie.getBeskrivelse());
             }
 
             addHeading4("Kilder");
             if(!krav.getDokumentasjon().isEmpty()){
                for(int d = 0; d < krav.getDokumentasjon().size(); d++) {
-                   addText("- " + krav.getDokumentasjon().get(d));
+                   addMarkdownText("- " + krav.getDokumentasjon().get(d));
                }
             } else {
                 addText("Ikke angitt");
@@ -150,7 +150,7 @@ public class KravToDoc {
 
             addHeading4("Relevante implementasjoner");
             if(krav.getImplementasjoner() != null && !krav.getImplementasjoner().isEmpty()){
-                addText(krav.getImplementasjoner());
+                addMarkdownText(krav.getImplementasjoner());
             } else {
                 addText("Ikke angitt");
             }
@@ -185,6 +185,14 @@ public class KravToDoc {
             } else {
                 addText("Ikke angitt");
             }
+
+            addHeading4( "Dette er nytt fra forrige versjon");
+            if(krav.getVersjonEndringer() != null && !krav.getVersjonEndringer().isEmpty()){
+                addMarkdownText(krav.getVersjonEndringer());
+            } else {
+                addText("Ikke angitt");
+            }
+
 
             addHeading4("Ansvarlig");
             if(krav.getUnderavdeling() != null && !krav.getUnderavdeling().isEmpty()){
