@@ -1,9 +1,6 @@
 package no.nav.data.common.utils;
 
-import com.vladsch.flexmark.util.ast.TextCollectingVisitor;
 import lombok.SneakyThrows;
-import no.nav.data.etterlevelse.codelist.domain.Codelist;
-import no.nav.data.etterlevelse.krav.domain.KravStatus;
 import org.apache.commons.lang3.BooleanUtils;
 import org.docx4j.model.table.TblFactory;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
@@ -12,6 +9,7 @@ import org.docx4j.openpackaging.parts.WordprocessingML.MainDocumentPart;
 import org.docx4j.wml.*;
 import com.vladsch.flexmark.util.data.MutableDataSet;
 import com.vladsch.flexmark.parser.Parser;
+import com.vladsch.flexmark.docx.converter.DocxRenderer;
 
 import java.io.ByteArrayOutputStream;
 import java.math.BigInteger;
@@ -26,7 +24,7 @@ public class WordDocUtils {
 
     private final ObjectFactory fac;
     private final MutableDataSet options = new MutableDataSet();
-    private final TextCollectingVisitor textCollectingVisitor = new TextCollectingVisitor();
+    private final DocxRenderer docxRenderer = DocxRenderer.builder(options).build();
     private final Parser markdownParser = Parser.builder(options).build();
 
     @SneakyThrows
@@ -119,9 +117,7 @@ public class WordDocUtils {
     public void addMarkdownText(String text) {
         var markdownText = markdownParser.parse(text);
 
-        String parsedText = textCollectingVisitor.collectAndGetText(markdownText);
-
-        main.addObject(paragraph(text(parsedText)));
+        docxRenderer.render(markdownText, pack);
 
     }
 
