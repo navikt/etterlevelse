@@ -53,7 +53,7 @@ public class WordDocUtils {
         this.fac = fac;
 
 
-        pack = WordprocessingMLPackage.createPackage();
+        pack = DocxRenderer.getDefaultTemplate();
         main = pack.getMainDocumentPart();
 
         addFooter();
