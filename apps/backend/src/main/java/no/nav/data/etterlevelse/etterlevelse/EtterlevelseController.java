@@ -39,7 +39,7 @@ import static no.nav.data.common.utils.StreamUtils.tryFind;
 @RestController
 @RequestMapping("/etterlevelse")
 @Tag(name = "Etterlevelse", description = "Etterlevelse for behandlinger")
-public class EtterlevelseController {
+public class  EtterlevelseController {
 
 
     private final EtterlevelseService service;
