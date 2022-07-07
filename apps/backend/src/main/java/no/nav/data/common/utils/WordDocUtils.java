@@ -1,5 +1,12 @@
 package no.nav.data.common.utils;
 
+import com.vladsch.flexmark.ext.definition.DefinitionExtension;
+import com.vladsch.flexmark.ext.gfm.strikethrough.StrikethroughSubscriptExtension;
+import com.vladsch.flexmark.ext.ins.InsExtension;
+import com.vladsch.flexmark.ext.superscript.SuperscriptExtension;
+import com.vladsch.flexmark.ext.tables.TablesExtension;
+import com.vladsch.flexmark.ext.toc.SimTocExtension;
+import com.vladsch.flexmark.ext.toc.TocExtension;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.BooleanUtils;
 import org.docx4j.model.table.TblFactory;
@@ -23,13 +30,28 @@ import static no.nav.data.common.utils.StreamUtils.filter;
 public class WordDocUtils {
 
     private final ObjectFactory fac;
-    private final MutableDataSet options = new MutableDataSet();
+    private final MutableDataSet options = new MutableDataSet().set(Parser.EXTENSIONS, Arrays.asList(
+            DefinitionExtension.create(),
+            StrikethroughSubscriptExtension.create(),
+            InsExtension.create(),
+            SuperscriptExtension.create(),
+            TablesExtension.create(),
+            TocExtension.create(),
+            SimTocExtension.create()
+    ))
+            .set(DocxRenderer.SUPPRESS_HTML, true)
+            // the following two are needed to allow doc relative and site relative address resolution
+            .set(DocxRenderer.DOC_RELATIVE_URL, "file:///Users/vlad/src/pdf") // this will be used for URLs like 'images/...' or './' or '../'
+            .set(DocxRenderer.DOC_ROOT_URL, "file:///Users/vlad/src/pdf") // this will be used for URLs like: '/...'
+            ;
+
     private final DocxRenderer docxRenderer = DocxRenderer.builder(options).build();
     private final Parser markdownParser = Parser.builder(options).build();
 
     @SneakyThrows
     public WordDocUtils(ObjectFactory fac) {
         this.fac = fac;
+
 
         pack = WordprocessingMLPackage.createPackage();
         main = pack.getMainDocumentPart();
