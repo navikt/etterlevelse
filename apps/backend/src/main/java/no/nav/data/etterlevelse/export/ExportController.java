@@ -11,15 +11,21 @@ import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.etterlevelse.codelist.CodelistService;
 import no.nav.data.etterlevelse.codelist.domain.Codelist;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
+import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
 import no.nav.data.etterlevelse.krav.KravService;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import org.springframework.http.HttpHeaders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StreamUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -31,14 +37,19 @@ public class ExportController {
     private static final String WORDPROCESSINGML_DOCUMENT = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
     private final CodelistToDoc codelistToDoc;
     private final KravToDoc kravToDoc;
+
+    private final EtterlevelseToDoc etterlevelseToDoc;
     private final KravService kravService;
     private final CodelistService codelistService;
+    private final EtterlevelseService etterlevelseService;
 
-    public ExportController(CodelistToDoc codelistToDoc, KravToDoc kravToDoc, KravService kravService, CodelistService codelistService) {
+    public ExportController(CodelistToDoc codelistToDoc, KravToDoc kravToDoc, EtterlevelseToDoc etterlevelseToDoc, KravService kravService, CodelistService codelistService, EtterlevelseService etterlevelseService) {
         this.codelistToDoc = codelistToDoc;
         this.kravToDoc = kravToDoc;
+        this.etterlevelseToDoc = etterlevelseToDoc;
         this.kravService = kravService;
         this.codelistService = codelistService;
+        this.etterlevelseService = etterlevelseService;
     }
 
 
@@ -50,7 +61,7 @@ public class ExportController {
     public void getCodelist(
             HttpServletResponse response,
             @RequestParam(name = "code") ListName code
-    ){
+    ) {
         String filename = "Dokumentasjon for kodeverk - " + cleanCodelistName(code) + ".docx";
         byte[] doc = codelistToDoc.generateDocFor(code);
 
@@ -77,14 +88,14 @@ public class ExportController {
         byte[] doc;
         String filename;
 
-        if(kravId != null) {
+        if (kravId != null) {
             Krav krav = kravService.get(kravId);
             doc = kravToDoc.generateDocForKrav(krav);
-            filename = "Dokumentajson for K"+krav.getKravNummer()+"."+krav.getVersion()+" "+krav.getNavn() + ".docx";
+            filename = "Dokumentajson for K" + krav.getKravNummer() + "." + krav.getVersion() + " " + krav.getNavn() + ".docx";
         } else {
             ListName list;
             List<String> code;
-            if(relevansKoder != null){
+            if (relevansKoder != null) {
                 list = ListName.RELEVANS;
                 code = relevansKoder;
             } else if (temaKode != null) {
@@ -114,6 +125,23 @@ public class ExportController {
             filename = "Dokumentajson for krav med " + list.name() + " " + code;
         }
 
+        response.setContentType(WORDPROCESSINGML_DOCUMENT);
+        response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename);
+        StreamUtils.copy(doc, response.getOutputStream());
+        response.flushBuffer();
+    }
+
+    @Operation(summary = "Get export for etterlevelse")
+    @ApiResponse(description = "Doc fetched", content = @Content(schema = @Schema(implementation = byte[].class)))
+    @Transactional(readOnly = true)
+    @SneakyThrows
+    @GetMapping(value = "/etterlevelse", produces = WORDPROCESSINGML_DOCUMENT)
+    public void getEtterlevelse(
+            HttpServletResponse response,
+            @RequestParam(name = "etterlevelseId", required = false) UUID etterlevelseId
+    ) {
+        String filename = "Dokumentasjon for etterlevelse - " + etterlevelseId + ".docx";
+        byte[] doc = etterlevelseToDoc.generateDocForEtterlevelse(etterlevelseService.get(etterlevelseId));
         response.setContentType(WORDPROCESSINGML_DOCUMENT);
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename);
         StreamUtils.copy(doc, response.getOutputStream());
