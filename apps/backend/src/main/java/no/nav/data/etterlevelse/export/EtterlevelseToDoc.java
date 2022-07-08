@@ -6,9 +6,10 @@ import no.nav.data.common.utils.WordDocUtils;
 import no.nav.data.etterlevelse.behandling.BehandlingService;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.etterlevelse.domain.EtterlevelseStatus;
+import no.nav.data.etterlevelse.etterlevelse.domain.SuksesskriterieStatus;
 import no.nav.data.etterlevelse.krav.KravService;
 import no.nav.data.etterlevelse.krav.domain.Krav;
-import no.nav.data.integration.team.domain.Team;
+import no.nav.data.etterlevelse.krav.domain.Suksesskriterie;
 import no.nav.data.integration.team.teamcat.TeamcatTeamClient;
 import org.docx4j.jaxb.Context;
 import org.docx4j.wml.ObjectFactory;
@@ -32,10 +33,10 @@ public class EtterlevelseToDoc {
         doc.addTitle("Etterlevelse for B" + behandling.getNummer() + " " + behandling.getOverordnetFormaal().getShortName());
         doc.addHeading3(behandling.getNavn());
         doc.addHeading3("Team");
-        if(behandling.getTeams() != null && !behandling.getTeams().isEmpty()) {
+        if (behandling.getTeams() != null && !behandling.getTeams().isEmpty()) {
             behandling.getTeams().forEach(teamId -> {
                 var team = teamService.getTeam(teamId);
-                if(!team.isEmpty()){
+                if (!team.isEmpty()) {
                     doc.addText("- " + team.get().getName());
                 }
             });
@@ -66,11 +67,33 @@ public class EtterlevelseToDoc {
 
             Krav k = krav.get();
 
-            String etterlevelseName = "Etterlevelse for K" + k.getKravNummer() + "." + k.getKravVersjon();
+            String etterlevelseName = "Etterlevelse for K" + k.getKravNummer() + "." + k.getKravVersjon() + " " + k.getNavn();
 
             var header = addHeading2(etterlevelseName);
 
             addBookmark(header, etterlevelse.getId().toString());
+
+            addHeading4("Hensikten med kravet");
+            if (k.getHensikt() != null && !k.getHensikt().isEmpty()) {
+                addMarkdownText(k.getHensikt());
+            }
+
+            addHeading4("Status " + etterlevelseStatusText(etterlevelse.getStatus()));
+
+            for (int s = 0; s < k.getSuksesskriterier().size(); s++) {
+                Suksesskriterie suksesskriterie = k.getSuksesskriterier().get(s);
+
+                addHeading4("SUKSESSKRITERIE 1 AV " + s + 1);
+                addHeading4(suksesskriterie.getNavn());
+                addText("Id: " + suksesskriterie.getId());
+                addText("Behov for begrunnelse: " + boolToText(suksesskriterie.isBehovForBegrunnelse()));
+                addText("Suksesskriterie begrunnelse status ", begrunnelseStatusText(etterlevelse.getSuksesskriterieBegrunnelser().get(s).getSuksesskriterieStatus()));
+                if (suksesskriterie.isBehovForBegrunnelse()) {
+                    addMarkdownText(etterlevelse.getSuksesskriterieBegrunnelser().get(s).getBegrunnelse());
+                }
+                addHeading3("Utfyllende om kriteriet");
+                addMarkdownText(suksesskriterie.getBeskrivelse());
+            }
 
         }
 
@@ -82,6 +105,14 @@ public class EtterlevelseToDoc {
                 case IKKE_RELEVANT -> "Ikke relevant";
                 case FERDIG_DOKUMENTERT -> "Oppfylt og ferdig dokumentert";
                 case IKKE_RELEVANT_FERDIG_DOKUMENTERT -> "Ikke relevant og ferdig dokumentert ";
+            };
+        }
+
+        public String begrunnelseStatusText(SuksesskriterieStatus status) {
+            return switch (status) {
+                case OPPFYLT -> "Oppfylt";
+                case UNDER_ARBEID -> "Under arbeid";
+                case IKKE_RELEVANT -> "Ikke relevant";
             };
         }
 
