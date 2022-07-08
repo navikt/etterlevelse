@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import no.nav.data.common.exceptions.NotFoundException;
 import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.etterlevelse.codelist.CodelistService;
 import no.nav.data.etterlevelse.codelist.domain.Codelist;
@@ -150,6 +151,11 @@ public class ExportController {
         }
         else if(behandlingId != null) {
             List<Etterlevelse> etterlevelser = etterlevelseService.getByBehandling(behandlingId.toString());
+
+            if(etterlevelser.isEmpty()) {
+                throw new NotFoundException("No etterlevelser found for behandling with id " + behandlingId);
+            }
+
             doc =  etterlevelseToDoc.generateDocFor(etterlevelser, behandlingId.toString());
         } else {
             throw new ValidationException("No paramater given");
