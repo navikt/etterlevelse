@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import no.nav.data.common.exceptions.NotFoundException;
 import no.nav.data.common.utils.WordDocUtils;
 import no.nav.data.etterlevelse.behandling.BehandlingService;
+import no.nav.data.etterlevelse.behandling.dto.Behandling;
 import no.nav.data.etterlevelse.codelist.CodelistService;
 import no.nav.data.etterlevelse.codelist.domain.Codelist;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
@@ -22,6 +23,7 @@ import org.docx4j.jaxb.Context;
 import org.docx4j.wml.ObjectFactory;
 import org.springframework.stereotype.Service;
 
+import java.rmi.server.UID;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
@@ -38,9 +40,7 @@ public class EtterlevelseToDoc {
 
     private final BegrepService begrepService;
 
-    public byte[] generateDocForEtterlevelse(Etterlevelse etterlevelse) {
-        var behandling = behandlingService.getBehandling(etterlevelse.getBehandlingId());
-        var doc = new EtterlevelseDocumentBuilder();
+    public void getBehandlingData(Behandling behandling,EtterlevelseDocumentBuilder doc) {
         doc.addTitle("Etterlevelse for B" + behandling.getNummer() + " " + behandling.getOverordnetFormaal().getShortName());
         doc.addHeading3(behandling.getNavn());
         doc.addHeading3("Team");
@@ -55,8 +55,32 @@ public class EtterlevelseToDoc {
         } else {
             doc.addText("Ikke angitt");
         }
+    }
+
+    public byte[] generateDocForEtterlevelse(Etterlevelse etterlevelse) {
+        var behandling = behandlingService.getBehandling(etterlevelse.getBehandlingId());
+        var doc = new EtterlevelseDocumentBuilder();
+        getBehandlingData(behandling, doc);
 
         doc.generate(etterlevelse);
+
+        return doc.build();
+    }
+
+    public byte[] generateDocFor(List<Etterlevelse> etterlevelser) {
+        var behandling = behandlingService.getBehandling(etterlevelser.get(0).getBehandlingId());
+        var doc = new EtterlevelseDocumentBuilder();
+        getBehandlingData(behandling, doc);
+
+        doc.addHeading1("Dokumentet inneholder følgende etterlevelse for krav (" + etterlevelser.size() +")");
+        doc.addTableOfContent(etterlevelser);
+
+        for (int i = 0; i < etterlevelser.size(); i++) {
+            if (i != etterlevelser.size() - 1) {
+                doc.pageBreak();
+            }
+            doc.generate(etterlevelser.get(i));
+        }
 
         return doc.build();
     }

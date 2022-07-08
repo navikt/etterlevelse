@@ -139,19 +139,28 @@ public class ExportController {
     @GetMapping(value = "/etterlevelse", produces = WORDPROCESSINGML_DOCUMENT)
     public void getEtterlevelse(
             HttpServletResponse response,
-            @RequestParam(name = "etterlevelseId", required = false) UUID etterlevelseId
+            @RequestParam(name = "etterlevelseId", required = false) UUID etterlevelseId,
+            @RequestParam(name = "behandlingId", required = false) UUID behandlingId
     ) {
-        String filename;
+        String filename = "Dokumentasjon for etterlevelse - " + etterlevelseId + ".docx";
         byte[] doc;
         if (etterlevelseId != null) {
             Etterlevelse etterlevelse = etterlevelseService.get(etterlevelseId);
             doc = etterlevelseToDoc.generateDocForEtterlevelse(etterlevelse);
-            filename = "Dokumentasjon for etterlevelse - " + etterlevelseId + ".docx";
-            response.setContentType(WORDPROCESSINGML_DOCUMENT);
-            response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename);
-            StreamUtils.copy(doc, response.getOutputStream());
-            response.flushBuffer();
+        } else {
+            if(behandlingId != null) {
+                List<Etterlevelse> etterlevelser = etterlevelseService.getByBehandling(behandlingId.toString());
+                doc =  etterlevelseToDoc.generateDocFor(etterlevelser);
+            }
+            else {
+                throw new ValidationException("No paramater given");
+            }
         }
+
+        response.setContentType(WORDPROCESSINGML_DOCUMENT);
+        response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename);
+        StreamUtils.copy(doc, response.getOutputStream());
+        response.flushBuffer();
     }
 
     private String cleanCodelistName(ListName listName) {
