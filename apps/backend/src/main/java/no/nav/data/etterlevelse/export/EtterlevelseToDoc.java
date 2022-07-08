@@ -130,7 +130,7 @@ public class EtterlevelseToDoc {
                 addHeading4(suksesskriterie.getNavn());
                 addText("Id: " + suksesskriterie.getId());
                 addText("Behov for begrunnelse: " + boolToText(suksesskriterie.isBehovForBegrunnelse()));
-                addText("Suksesskriterie begrunnelse status: ", begrunnelseStatusText(etterlevelse.getSuksesskriterieBegrunnelser().get(s).getSuksesskriterieStatus()));
+//                addText("Suksesskriterie begrunnelse status: ", begrunnelseStatusText(etterlevelse.getSuksesskriterieBegrunnelser().get(s).getSuksesskriterieStatus()));
 //                if (suksesskriterie.isBehovForBegrunnelse()) {
 //                    addMarkdownText(etterlevelse.getSuksesskriterieBegrunnelser().get(s).getBegrunnelse());
 //                }
