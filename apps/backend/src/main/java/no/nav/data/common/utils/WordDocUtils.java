@@ -63,6 +63,7 @@ public class WordDocUtils {
     public static final String TITLE = "Title";
     public static final String HEADING_1 = "Heading1";
     public static final String HEADING_2 = "Heading2";
+    public static final String HEADING_3 = "Heading3";
     public static final String HEADING_4 = "Heading4";
     public static final String HEADING_5 = "Heading5";
 
@@ -90,9 +91,16 @@ public class WordDocUtils {
         return p;
     }
 
-    public void addHeading2(String text) {
+    public P addHeading2(String text) {
         P p = main.addStyledParagraphOfText(HEADING_2, text);
         ((R) p.getContent().get(0)).setRPr(createRpr());
+        return p;
+    }
+
+    public P addHeading3(String text) {
+        P p = main.addStyledParagraphOfText(HEADING_3, text);
+        ((R) p.getContent().get(0)).setRPr(createRpr());
+        return p;
     }
 
     public void addHeading4(String text) {
