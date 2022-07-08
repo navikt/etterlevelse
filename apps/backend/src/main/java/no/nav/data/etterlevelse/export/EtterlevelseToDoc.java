@@ -30,7 +30,7 @@ public class EtterlevelseToDoc {
         var behandling = behandlingService.getBehandling(etterlevelse.getBehandlingId());
         var doc = new EtterlevelseDocumentBuilder();
         doc.addTitle("Etterlevelse for B" + behandling.getNummer() + " " + behandling.getOverordnetFormaal().getShortName());
-        doc.addHeading2(behandling.getNavn());
+        doc.addHeading3(behandling.getNavn());
         doc.addHeading3("Team");
         if(behandling.getTeams() != null && !behandling.getTeams().isEmpty()) {
             behandling.getTeams().forEach(teamId -> {
@@ -68,7 +68,7 @@ public class EtterlevelseToDoc {
 
             String etterlevelseName = "Etterlevelse for K" + k.getKravNummer() + "." + k.getKravVersjon();
 
-            var header = addHeading1(etterlevelseName);
+            var header = addHeading2(etterlevelseName);
 
             addBookmark(header, etterlevelse.getId().toString());
 
