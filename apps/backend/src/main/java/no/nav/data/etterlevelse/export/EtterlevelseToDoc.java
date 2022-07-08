@@ -28,6 +28,7 @@ import java.rmi.server.UID;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -126,16 +127,21 @@ public class EtterlevelseToDoc {
 
             for (int s = 0; s < k.getSuksesskriterier().size(); s++) {
                 Suksesskriterie suksesskriterie = k.getSuksesskriterier().get(s);
-                SuksesskriterieBegrunnelse suksesskriterieBegrunnelse = (SuksesskriterieBegrunnelse) etterlevelse.getSuksesskriterieBegrunnelser().stream().filter(skb -> skb.getSuksesskriterieId() == suksesskriterie.getId());
+
+                SuksesskriterieBegrunnelse suksesskriterieBegrunnelse = etterlevelse.getSuksesskriterieBegrunnelser()
+                        .stream().filter(skb -> skb.getSuksesskriterieId() == suksesskriterie.getId()).toList().get(0);
+
                 int suksesskriterieNumber = s + 1;
                 addHeading4("SUKSESSKRITERIE " + suksesskriterieNumber + " AV " + k.getSuksesskriterier().size());
                 addHeading4(suksesskriterie.getNavn());
                 addText("Id: " + suksesskriterie.getId());
                 addText("Behov for begrunnelse: " + boolToText(suksesskriterie.isBehovForBegrunnelse()));
+
                 addText("Suksesskriterie begrunnelse status: ", begrunnelseStatusText(suksesskriterieBegrunnelse.getSuksesskriterieStatus()));
                 if (suksesskriterie.isBehovForBegrunnelse()) {
                     addMarkdownText(suksesskriterieBegrunnelse.getBegrunnelse());
                 }
+
                 addHeading3("Utfyllende om kriteriet");
                 addMarkdownText(suksesskriterie.getBeskrivelse());
                 addText( " ");
