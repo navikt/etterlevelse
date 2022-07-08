@@ -128,23 +128,25 @@ public class EtterlevelseToDoc {
             for (int s = 0; s < k.getSuksesskriterier().size(); s++) {
                 Suksesskriterie suksesskriterie = k.getSuksesskriterier().get(s);
 
-                SuksesskriterieBegrunnelse suksesskriterieBegrunnelse = etterlevelse.getSuksesskriterieBegrunnelser()
-                        .stream().filter(skb -> skb.getSuksesskriterieId() == suksesskriterie.getId()).toList().get(0);
+                List<SuksesskriterieBegrunnelse> suksesskriterieBegrunnelser = etterlevelse.getSuksesskriterieBegrunnelser()
+                        .stream().filter(skb -> skb.getSuksesskriterieId() == suksesskriterie.getId()).toList();
 
-                int suksesskriterieNumber = s + 1;
-                addHeading4("SUKSESSKRITERIE " + suksesskriterieNumber + " AV " + k.getSuksesskriterier().size());
-                addHeading4(suksesskriterie.getNavn());
-                addText("Id: " + suksesskriterie.getId());
-                addText("Behov for begrunnelse: " + boolToText(suksesskriterie.isBehovForBegrunnelse()));
+                if(!suksesskriterieBegrunnelser.isEmpty()) {
+                    int suksesskriterieNumber = s + 1;
+                    addHeading4("SUKSESSKRITERIE " + suksesskriterieNumber + " AV " + k.getSuksesskriterier().size());
+                    addHeading4(suksesskriterie.getNavn());
+                    addText("Id: " + suksesskriterie.getId());
+                    addText("Behov for begrunnelse: " + boolToText(suksesskriterie.isBehovForBegrunnelse()));
 
-                addText("Suksesskriterie begrunnelse status: ", begrunnelseStatusText(suksesskriterieBegrunnelse.getSuksesskriterieStatus()));
-                if (suksesskriterie.isBehovForBegrunnelse()) {
-                    addMarkdownText(suksesskriterieBegrunnelse.getBegrunnelse());
+                    addText("Suksesskriterie begrunnelse status: ", begrunnelseStatusText(suksesskriterieBegrunnelser.get(0).getSuksesskriterieStatus()));
+                    if (suksesskriterie.isBehovForBegrunnelse()) {
+                        addMarkdownText(suksesskriterieBegrunnelser.get(0).getBegrunnelse());
+                    }
+
+                    addHeading3("Utfyllende om kriteriet");
+                    addMarkdownText(suksesskriterie.getBeskrivelse());
+                    addText( " ");
                 }
-
-                addHeading3("Utfyllende om kriteriet");
-                addMarkdownText(suksesskriterie.getBeskrivelse());
-                addText( " ");
             }
 
             addHeading4("Lenker og annen informtion om kravet");
