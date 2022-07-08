@@ -10,6 +10,7 @@ import no.nav.data.etterlevelse.codelist.domain.Codelist;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.etterlevelse.domain.EtterlevelseStatus;
+import no.nav.data.etterlevelse.etterlevelse.domain.SuksesskriterieBegrunnelse;
 import no.nav.data.etterlevelse.etterlevelse.domain.SuksesskriterieStatus;
 import no.nav.data.etterlevelse.krav.KravService;
 import no.nav.data.etterlevelse.krav.domain.Krav;
@@ -125,15 +126,16 @@ public class EtterlevelseToDoc {
 
             for (int s = 0; s < k.getSuksesskriterier().size(); s++) {
                 Suksesskriterie suksesskriterie = k.getSuksesskriterier().get(s);
+                SuksesskriterieBegrunnelse suksesskriterieBegrunnelse = (SuksesskriterieBegrunnelse) etterlevelse.getSuksesskriterieBegrunnelser().stream().filter(skb -> skb.getSuksesskriterieId() == suksesskriterie.getId());
                 int suksesskriterieNumber = s + 1;
                 addHeading4("SUKSESSKRITERIE " + suksesskriterieNumber + " AV " + k.getSuksesskriterier().size());
                 addHeading4(suksesskriterie.getNavn());
                 addText("Id: " + suksesskriterie.getId());
                 addText("Behov for begrunnelse: " + boolToText(suksesskriterie.isBehovForBegrunnelse()));
-//                addText("Suksesskriterie begrunnelse status: ", begrunnelseStatusText(etterlevelse.getSuksesskriterieBegrunnelser().get(s).getSuksesskriterieStatus()));
-//                if (suksesskriterie.isBehovForBegrunnelse()) {
-//                    addMarkdownText(etterlevelse.getSuksesskriterieBegrunnelser().get(s).getBegrunnelse());
-//                }
+                addText("Suksesskriterie begrunnelse status: ", begrunnelseStatusText(suksesskriterieBegrunnelse.getSuksesskriterieStatus()));
+                if (suksesskriterie.isBehovForBegrunnelse()) {
+                    addMarkdownText(suksesskriterieBegrunnelse.getBegrunnelse());
+                }
                 addHeading3("Utfyllende om kriteriet");
                 addMarkdownText(suksesskriterie.getBeskrivelse());
                 addText( " ");

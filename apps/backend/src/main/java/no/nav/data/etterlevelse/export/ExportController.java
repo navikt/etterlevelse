@@ -151,8 +151,7 @@ public class ExportController {
             if(behandlingId != null) {
                 List<Etterlevelse> etterlevelser = etterlevelseService.getByBehandling(behandlingId.toString());
                 doc =  etterlevelseToDoc.generateDocFor(etterlevelser);
-            }
-            else {
+            } else {
                 throw new ValidationException("No paramater given");
             }
         }
