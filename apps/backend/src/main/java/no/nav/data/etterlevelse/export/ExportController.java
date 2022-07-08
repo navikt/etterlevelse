@@ -12,6 +12,7 @@ import no.nav.data.etterlevelse.codelist.CodelistService;
 import no.nav.data.etterlevelse.codelist.domain.Codelist;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
 import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
+import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.krav.KravService;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import org.springframework.http.HttpHeaders;
@@ -140,12 +141,17 @@ public class ExportController {
             HttpServletResponse response,
             @RequestParam(name = "etterlevelseId", required = false) UUID etterlevelseId
     ) {
-        String filename = "Dokumentasjon for etterlevelse - " + etterlevelseId + ".docx";
-        byte[] doc = etterlevelseToDoc.generateDocForEtterlevelse(etterlevelseService.get(etterlevelseId));
-        response.setContentType(WORDPROCESSINGML_DOCUMENT);
-        response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename);
-        StreamUtils.copy(doc, response.getOutputStream());
-        response.flushBuffer();
+        String filename;
+        byte[] doc;
+        if (etterlevelseId != null) {
+            Etterlevelse etterlevelse = etterlevelseService.get(etterlevelseId);
+            doc = etterlevelseToDoc.generateDocForEtterlevelse(etterlevelse);
+            filename = "Dokumentasjon for etterlevelse - " + etterlevelseId + ".docx";
+            response.setContentType(WORDPROCESSINGML_DOCUMENT);
+            response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename);
+            StreamUtils.copy(doc, response.getOutputStream());
+            response.flushBuffer();
+        }
     }
 
     private String cleanCodelistName(ListName listName) {
