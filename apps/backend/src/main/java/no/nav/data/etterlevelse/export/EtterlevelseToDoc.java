@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import no.nav.data.common.exceptions.NotFoundException;
 import no.nav.data.common.utils.WordDocUtils;
 import no.nav.data.etterlevelse.behandling.BehandlingService;
-import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.etterlevelse.domain.EtterlevelseStatus;
 import no.nav.data.etterlevelse.krav.KravService;
@@ -19,11 +18,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EtterlevelseToDoc {
     private static final ObjectFactory etterlevelseFactory = Context.getWmlObjectFactory();
-    private EtterlevelseService etterlevelseService;
-    private KravService kravService;
-    private BehandlingService behandlingService;
 
-    public byte[] generateDocForEtterlevelse(Etterlevelse etterlevelse){
+    private final KravService kravService;
+    private final BehandlingService behandlingService;
+
+    public byte[] generateDocForEtterlevelse(Etterlevelse etterlevelse) {
         var behandling = behandlingService.getBehandling(etterlevelse.getBehandlingId());
         var doc = new EtterlevelseDocumentBuilder();
         doc.addTitle("Etterlevelse for B" + behandling.getNummer());
