@@ -124,7 +124,6 @@ public class EtterlevelseToDoc {
             }
 
             for (int s = 0; s < k.getSuksesskriterier().size(); s++) {
-
                 Suksesskriterie suksesskriterie = k.getSuksesskriterier().get(s);
                 int suksesskriterieNumber = s + 1;
                 addHeading4("SUKSESSKRITERIE " + suksesskriterieNumber + " AV " + k.getSuksesskriterier().size());
@@ -132,9 +131,9 @@ public class EtterlevelseToDoc {
                 addText("Id: " + suksesskriterie.getId());
                 addText("Behov for begrunnelse: " + boolToText(suksesskriterie.isBehovForBegrunnelse()));
                 addText("Suksesskriterie begrunnelse status: ", begrunnelseStatusText(etterlevelse.getSuksesskriterieBegrunnelser().get(s).getSuksesskriterieStatus()));
-                if (suksesskriterie.isBehovForBegrunnelse()) {
-                    addMarkdownText(etterlevelse.getSuksesskriterieBegrunnelser().get(s).getBegrunnelse());
-                }
+//                if (suksesskriterie.isBehovForBegrunnelse()) {
+//                    addMarkdownText(etterlevelse.getSuksesskriterieBegrunnelser().get(s).getBegrunnelse());
+//                }
                 addHeading3("Utfyllende om kriteriet");
                 addMarkdownText(suksesskriterie.getBeskrivelse());
                 addText( " ");
