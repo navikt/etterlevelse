@@ -69,8 +69,8 @@ public class EtterlevelseToDoc {
         return doc.build();
     }
 
-    public byte[] generateDocFor(List<Etterlevelse> etterlevelser) {
-        var behandling = behandlingService.getBehandling(etterlevelser.get(0).getBehandlingId());
+    public byte[] generateDocFor(List<Etterlevelse> etterlevelser, String behandlingId) {
+        var behandling = behandlingService.getBehandling(behandlingId);
         var doc = new EtterlevelseDocumentBuilder();
         getBehandlingData(behandling, doc);
 

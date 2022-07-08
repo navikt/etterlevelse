@@ -147,13 +147,12 @@ public class ExportController {
         if (etterlevelseId != null) {
             Etterlevelse etterlevelse = etterlevelseService.get(etterlevelseId);
             doc = etterlevelseToDoc.generateDocForEtterlevelse(etterlevelse);
+        }
+        else if(behandlingId != null) {
+            List<Etterlevelse> etterlevelser = etterlevelseService.getByBehandling(behandlingId.toString());
+            doc =  etterlevelseToDoc.generateDocFor(etterlevelser, behandlingId.toString());
         } else {
-            if(behandlingId != null) {
-                List<Etterlevelse> etterlevelser = etterlevelseService.getByBehandling(behandlingId.toString());
-                doc =  etterlevelseToDoc.generateDocFor(etterlevelser);
-            } else {
-                throw new ValidationException("No paramater given");
-            }
+            throw new ValidationException("No paramater given");
         }
 
         response.setContentType(WORDPROCESSINGML_DOCUMENT);
