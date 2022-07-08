@@ -24,11 +24,9 @@ import org.docx4j.jaxb.Context;
 import org.docx4j.wml.ObjectFactory;
 import org.springframework.stereotype.Service;
 
-import java.rmi.server.UID;
-import java.time.format.DateTimeFormatter;
+
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -53,7 +51,6 @@ public class EtterlevelseToDoc {
                     doc.addText("- " + team.get().getName());
                 }
             });
-
         } else {
             doc.addText("Ikke angitt");
         }
@@ -77,12 +74,12 @@ public class EtterlevelseToDoc {
         doc.addHeading1("Dokumentet inneholder følgende etterlevelse for krav (" + etterlevelser.size() +")");
         doc.addTableOfContent(etterlevelser);
 
-//        for (int i = 0; i < etterlevelser.size(); i++) {
-//            if (i != etterlevelser.size() - 1) {
-//                doc.pageBreak();
-//            }
-//            doc.generate(etterlevelser.get(i));
-//        }
+        for (int i = 0; i < etterlevelser.size(); i++) {
+            if (i != etterlevelser.size() - 1) {
+                doc.pageBreak();
+            }
+            doc.generate(etterlevelser.get(i));
+        }
 
         return doc.build();
     }
@@ -98,153 +95,159 @@ public class EtterlevelseToDoc {
         public void generate(Etterlevelse etterlevelse) {
             var krav = kravService.getByKravNummer(etterlevelse.getKravNummer(), etterlevelse.getKravVersjon());
 
-            if (krav.isEmpty()) {
-                throw new NotFoundException("Couldn't find process K" + etterlevelse.getKravNummer() + "." + etterlevelse.getKravVersjon());
+            String etterlevelseName = "Etterlevelse for K" + etterlevelse.getKravNummer() + "." + etterlevelse.getKravVersjon();
+
+            if (krav.isPresent()) {
+                etterlevelseName = etterlevelseName + " " + krav.get().getNavn();
             }
-
-            Krav k = krav.get();
-
-            String etterlevelseName = "Etterlevelse for K" + k.getKravNummer() + "." + k.getKravVersjon() + " " + k.getNavn();
 
             var header = addHeading2(etterlevelseName);
 
             addBookmark(header, etterlevelse.getId().toString());
 
-            addHeading4("Hensikten med kravet");
-            if (k.getHensikt() != null && !k.getHensikt().isEmpty()) {
-                addMarkdownText(k.getHensikt());
+            if(krav.isPresent()) {
+                addHeading4("Hensikten med kravet");
+                if (krav.get().getHensikt() != null && !krav.get().getHensikt().isEmpty()) {
+                    addMarkdownText(krav.get().getHensikt());
+                }
             }
 
             addHeading4("Etterelvelses status: " + etterlevelseStatusText(etterlevelse.getStatus()));
 
             if(etterlevelse.getChangeStamp() != null && etterlevelse.getChangeStamp().getLastModifiedBy() != null && etterlevelse.getChangeStamp().getLastModifiedDate() != null) {
-                DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-                String date = etterlevelse.getChangeStamp().getLastModifiedDate().format(dateTimeFormatter);
-                addText("Sist endret: " + date + " av " + etterlevelse.getChangeStamp().getLastModifiedBy().split(" - ")[1]);
+                addLastEditedBy(etterlevelse.getChangeStamp());
             } else {
                 addText("Sist endret: Ikke angitt");
             }
 
-            for (int s = 0; s < k.getSuksesskriterier().size(); s++) {
-                Suksesskriterie suksesskriterie = k.getSuksesskriterier().get(s);
+            for (int s = 0; s < etterlevelse.getSuksesskriterieBegrunnelser().size(); s++) {
+                SuksesskriterieBegrunnelse suksesskriterieBegrunnelse = etterlevelse.getSuksesskriterieBegrunnelser().get(s);
 
-                List<SuksesskriterieBegrunnelse> suksesskriterieBegrunnelser = etterlevelse.getSuksesskriterieBegrunnelser()
-                        .stream().filter(skb -> skb.getSuksesskriterieId() == suksesskriterie.getId()).toList();
+                int suksesskriterieNumber = s + 1;
+                addHeading4("SUKSESSKRITERIE " + suksesskriterieNumber + " AV " + etterlevelse.getSuksesskriterieBegrunnelser().size());
 
-                if(!suksesskriterieBegrunnelser.isEmpty()) {
-                    int suksesskriterieNumber = s + 1;
-                    addHeading4("SUKSESSKRITERIE " + suksesskriterieNumber + " AV " + k.getSuksesskriterier().size());
-                    addHeading4(suksesskriterie.getNavn());
-                    addText("Id: " + suksesskriterie.getId());
-                    addText("Behov for begrunnelse: " + boolToText(suksesskriterie.isBehovForBegrunnelse()));
+                if(krav.isPresent()) {
+                    List<Suksesskriterie> suksesskriterieList = krav.get().getSuksesskriterier()
+                            .stream().filter(sk -> sk.getId() == suksesskriterieBegrunnelse.getSuksesskriterieId()).toList();
+                    if(!suksesskriterieList.isEmpty()) {
+                        Suksesskriterie suksesskriterie = suksesskriterieList.get(0);
+                        addHeading4(suksesskriterie.getNavn());
+                        addText("Id: " + suksesskriterie.getId());
+                        addText("Behov for begrunnelse: " + boolToText(suksesskriterie.isBehovForBegrunnelse()));
+                        addText("Suksesskriterie begrunnelse status: ", begrunnelseStatusText(suksesskriterieBegrunnelse.getSuksesskriterieStatus()));
+                        if (suksesskriterie.isBehovForBegrunnelse()) {
+                            addMarkdownText(suksesskriterieBegrunnelse.getBegrunnelse());
+                        }
 
-                    addText("Suksesskriterie begrunnelse status: ", begrunnelseStatusText(suksesskriterieBegrunnelser.get(0).getSuksesskriterieStatus()));
-                    if (suksesskriterie.isBehovForBegrunnelse()) {
-                        addMarkdownText(suksesskriterieBegrunnelser.get(0).getBegrunnelse());
+                        addHeading3("Utfyllende om kriteriet");
+                        addMarkdownText(suksesskriterie.getBeskrivelse());
                     }
-
-                    addHeading3("Utfyllende om kriteriet");
-                    addMarkdownText(suksesskriterie.getBeskrivelse());
-                    addText( " ");
+                } else {
+                    addText("Id: " + suksesskriterieBegrunnelse.getSuksesskriterieId());
+                    addText("Suksesskriterie begrunnelse status: ", begrunnelseStatusText(suksesskriterieBegrunnelse.getSuksesskriterieStatus()));
+                    addMarkdownText(suksesskriterieBegrunnelse.getBegrunnelse());
                 }
+
+                addText( " ");
             }
 
-            addHeading4("Lenker og annen informtion om kravet");
 
-            addHeading4("Kilder");
-            if(!k.getDokumentasjon().isEmpty()){
-                for(int d = 0; d < k.getDokumentasjon().size(); d++) {
-                    addMarkdownText("- " + k.getDokumentasjon().get(d));
+            if(krav.isPresent()) {
+                addHeading4("Lenker og annen informtion om kravet");
+
+                addHeading4("Kilder");
+                if(!krav.get().getDokumentasjon().isEmpty()){
+                    for(int d = 0; d < krav.get().getDokumentasjon().size(); d++) {
+                        addMarkdownText("- " + krav.get().getDokumentasjon().get(d));
+                    }
+                } else {
+                    addText("Ikke angitt");
                 }
-            } else {
-                addText("Ikke angitt");
-            }
 
-            addHeading4("Etiketter");
-            if(k.getTagger() != null && !k.getTagger().isEmpty()){
-                addText(String.join(", ", k.getTagger()));
-            } else {
-                addText("Ikke angitt");
-            }
-
-            addHeading4("Relevante implementasjoner");
-            if(k.getImplementasjoner() != null && !k.getImplementasjoner().isEmpty()){
-                addMarkdownText(k.getImplementasjoner());
-            } else {
-                addText("Ikke angitt");
-            }
-
-            addHeading4("Begreper");
-            if(k.getBegrepIder() != null && !k.getBegrepIder().isEmpty()){
-                for(int b = 0; b < k.getBegrepIder().size(); b++) {
-                    BegrepResponse begrepResponse = begrepService.getBegrep(k.getBegrepIder().get(b)).orElse(null);
-                    addText("- " + begrepResponse.getId() + " " + begrepResponse.getNavn());
-                    addText("  " + begrepResponse.getBeskrivelse());
+                addHeading4("Etiketter");
+                if(krav.get().getTagger() != null && !krav.get().getTagger().isEmpty()){
+                    addText(String.join(", ", krav.get().getTagger()));
+                } else {
+                    addText("Ikke angitt");
                 }
-            } else {
-                addText("Ikke angitt");
-            }
 
-            addHeading4("Relasjoner til andre krav");
-            if(k.getKravIdRelasjoner() != null && !k.getKravIdRelasjoner().isEmpty()){
-                for(int x = 0; x < k.getKravIdRelasjoner().size(); x++) {
-                    Krav kravResponse = kravService.get(UUID.fromString(k.getKravIdRelasjoner().get(x)));
-                    addText("- K" + kravResponse.getKravNummer() + "." + kravResponse.getVersion() + " " + kravResponse.getNavn());
+                addHeading4("Relevante implementasjoner");
+                if(krav.get().getImplementasjoner() != null && !krav.get().getImplementasjoner().isEmpty()){
+                    addMarkdownText(krav.get().getImplementasjoner());
+                } else {
+                    addText("Ikke angitt");
                 }
-            } else {
-                addText("Ikke angitt");
-            }
 
-            addHeading4("Krav er relevant for");
-            if(k.getRelevansFor() != null && !k.getRelevansFor().isEmpty()){
-                for(int r = 0; r < k.getRelevansFor().size(); r++) {
-                    Codelist codelist = CodelistService.getCodelist(ListName.RELEVANS, k.getRelevansFor().get(r));
+                addHeading4("Begreper");
+                if(krav.get().getBegrepIder() != null && !krav.get().getBegrepIder().isEmpty()){
+                    for(int b = 0; b < krav.get().getBegrepIder().size(); b++) {
+                        BegrepResponse begrepResponse = begrepService.getBegrep(krav.get().getBegrepIder().get(b)).orElse(null);
+                        addText("- " + begrepResponse.getId() + " " + begrepResponse.getNavn());
+                        addText("  " + begrepResponse.getBeskrivelse());
+                    }
+                } else {
+                    addText("Ikke angitt");
+                }
+
+                addHeading4("Relasjoner til andre krav");
+                if(krav.get().getKravIdRelasjoner() != null && !krav.get().getKravIdRelasjoner().isEmpty()){
+                    for(int x = 0; x < krav.get().getKravIdRelasjoner().size(); x++) {
+                        Krav kravResponse = kravService.get(UUID.fromString(krav.get().getKravIdRelasjoner().get(x)));
+                        addText("- K" + kravResponse.getKravNummer() + "." + kravResponse.getVersion() + " " + kravResponse.getNavn());
+                    }
+                } else {
+                    addText("Ikke angitt");
+                }
+
+                addHeading4("Krav er relevant for");
+                if(krav.get().getRelevansFor() != null && !krav.get().getRelevansFor().isEmpty()){
+                    for(int r = 0; r < krav.get().getRelevansFor().size(); r++) {
+                        Codelist codelist = CodelistService.getCodelist(ListName.RELEVANS, krav.get().getRelevansFor().get(r));
+                        addText("- " + codelist.getShortName());
+                    }
+                } else {
+                    addText("Ikke angitt");
+                }
+
+                addHeading4( "Dette er nytt fra forrige versjon");
+                if(krav.get().getVersjonEndringer() != null && !krav.get().getVersjonEndringer().isEmpty()){
+                    addMarkdownText(krav.get().getVersjonEndringer());
+                } else {
+                    addText("Ikke angitt");
+                }
+
+
+                addHeading4("Ansvarlig");
+                if(krav.get().getUnderavdeling() != null && !krav.get().getUnderavdeling().isEmpty()){
+                    Codelist codelist = CodelistService.getCodelist(ListName.UNDERAVDELING, krav.get().getUnderavdeling());
                     addText("- " + codelist.getShortName());
+                } else {
+                    addText("Ikke angitt");
                 }
-            } else {
-                addText("Ikke angitt");
-            }
 
-            addHeading4( "Dette er nytt fra forrige versjon");
-            if(k.getVersjonEndringer() != null && !k.getVersjonEndringer().isEmpty()){
-                addMarkdownText(k.getVersjonEndringer());
-            } else {
-                addText("Ikke angitt");
-            }
+                addHeading4("Regelverk");
+                if(krav.get().getRegelverk() != null && !krav.get().getRegelverk().isEmpty()){
+                    for(int l = 0; l < krav.get().getRegelverk().size(); l++) {
+                        Regelverk regelverk = krav.get().getRegelverk().get(l);
 
-
-            addHeading4("Ansvarlig");
-            if(k.getUnderavdeling() != null && !k.getUnderavdeling().isEmpty()){
-                Codelist codelist = CodelistService.getCodelist(ListName.UNDERAVDELING, k.getUnderavdeling());
-                addText("- " + codelist.getShortName());
-            } else {
-                addText("Ikke angitt");
-            }
-
-            addHeading4("Regelverk");
-            if(k.getRegelverk() != null && !k.getRegelverk().isEmpty()){
-                for(int l = 0; l < k.getRegelverk().size(); l++) {
-                    Regelverk regelverk = k.getRegelverk().get(l);
-
-                    Codelist codelist = CodelistService.getCodelist(ListName.LOV, regelverk.getLov());
-                    addText("- " + codelist.getShortName() + " " + regelverk.getSpesifisering());
+                        Codelist codelist = CodelistService.getCodelist(ListName.LOV, regelverk.getLov());
+                        addText("- " + codelist.getShortName() + " " + regelverk.getSpesifisering());
+                    }
+                } else {
+                    addText("Ikke angitt");
                 }
-            } else {
-                addText("Ikke angitt");
-            }
 
-            addHeading4("Varslingsadresser");
-            if(k.getVarslingsadresser() != null && !k.getVarslingsadresser().isEmpty()){
-                for(int v = 0; v < k.getVarslingsadresser().size(); v++) {
-                    Varslingsadresse varslingsadresse = k.getVarslingsadresser().get(v);
+                addHeading4("Varslingsadresser");
+                if(krav.get().getVarslingsadresser() != null && !krav.get().getVarslingsadresser().isEmpty()){
+                    for(int v = 0; v < krav.get().getVarslingsadresser().size(); v++) {
+                        Varslingsadresse varslingsadresse = krav.get().getVarslingsadresser().get(v);
 
-                    addText("- " + adresseTypeText(varslingsadresse.getType()) + ": " + varslingsadresse.getAdresse());
+                        addText("- " + adresseTypeText(varslingsadresse.getType()) + ": " + varslingsadresse.getAdresse());
+                    }
+                } else {
+                    addText("Ikke angitt");
                 }
-            } else {
-                addText("Ikke angitt");
             }
-
-            addText(" ");
         }
 
         public String etterlevelseStatusText(EtterlevelseStatus status) {

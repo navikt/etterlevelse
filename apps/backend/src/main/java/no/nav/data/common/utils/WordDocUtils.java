@@ -8,6 +8,8 @@ import com.vladsch.flexmark.ext.tables.TablesExtension;
 import com.vladsch.flexmark.ext.toc.SimTocExtension;
 import com.vladsch.flexmark.ext.toc.TocExtension;
 import lombok.SneakyThrows;
+import no.nav.data.common.storage.domain.ChangeStamp;
+import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.varsel.domain.AdresseType;
 import org.apache.commons.lang3.BooleanUtils;
 import org.docx4j.model.table.TblFactory;
@@ -21,6 +23,7 @@ import com.vladsch.flexmark.docx.converter.DocxRenderer;
 
 import java.io.ByteArrayOutputStream;
 import java.math.BigInteger;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -277,6 +280,12 @@ public class WordDocUtils {
             case SLACK -> "Slack kanal";
             case SLACK_USER -> "Slack bruker";
         };
+    }
+
+    public void addLastEditedBy(ChangeStamp changeStamp) {
+            DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            String date = changeStamp.getLastModifiedDate().format(dateTimeFormatter);
+            addText("Sist endret: " + date + " av " + changeStamp.getLastModifiedBy().split(" - ")[1]);
     }
 
     @SneakyThrows

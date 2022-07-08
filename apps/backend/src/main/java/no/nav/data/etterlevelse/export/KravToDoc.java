@@ -104,9 +104,7 @@ public class KravToDoc {
             addText(kravStatusText(krav.getStatus()));
 
             if(krav.getChangeStamp() != null && krav.getChangeStamp().getLastModifiedBy() != null && krav.getChangeStamp().getLastModifiedDate() != null) {
-                DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-                String date = krav.getChangeStamp().getLastModifiedDate().format(dateTimeFormatter);
-                addText("Sist endret: " + date + " av " + krav.getChangeStamp().getLastModifiedBy().split(" - ")[1]);
+                addLastEditedBy(krav.getChangeStamp());
             } else {
                 addText("Sist endret: Ikke angitt");
             }
