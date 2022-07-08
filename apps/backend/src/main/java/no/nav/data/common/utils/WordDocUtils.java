@@ -8,6 +8,7 @@ import com.vladsch.flexmark.ext.tables.TablesExtension;
 import com.vladsch.flexmark.ext.toc.SimTocExtension;
 import com.vladsch.flexmark.ext.toc.TocExtension;
 import lombok.SneakyThrows;
+import no.nav.data.etterlevelse.varsel.domain.AdresseType;
 import org.apache.commons.lang3.BooleanUtils;
 import org.docx4j.model.table.TblFactory;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
@@ -268,6 +269,14 @@ public class WordDocUtils {
 
     public String boolToText(Boolean aBoolean) {
         return BooleanUtils.toString(aBoolean, "Ja", "Nei", "Uavklart");
+    }
+
+    public String adresseTypeText(AdresseType type) {
+        return switch (type) {
+            case EPOST -> "Epost";
+            case SLACK -> "Slack kanal";
+            case SLACK_USER -> "Slack bruker";
+        };
     }
 
     @SneakyThrows

@@ -124,8 +124,8 @@ public class KravToDoc {
 
             for (int s = 0; s < krav.getSuksesskriterier().size(); s++) {
                 Suksesskriterie suksesskriterie = krav.getSuksesskriterier().get(s);
-
-                addHeading4("SUKSESSKRITERIE 1 AV " + s+1);
+                int suksesskriterieNumber = s + 1;
+                addHeading4("SUKSESSKRITERIE " + suksesskriterieNumber + " AV " + krav.getSuksesskriterier().size());
                 addHeading4(suksesskriterie.getNavn());
                 addText("Id: " + suksesskriterie.getId());
                 addText("Behov for begrunnelse: " + boolToText(suksesskriterie.isBehovForBegrunnelse()));
@@ -235,16 +235,6 @@ public class KravToDoc {
                 case UNDER_ARBEID -> "Under arbeid";
             };
         }
-
-        public String adresseTypeText(AdresseType type) {
-            return switch (type) {
-                case EPOST -> "Epost";
-                case SLACK -> "Slack kanal";
-                case SLACK_USER -> "Slack bruker";
-            };
-        }
-
-
 
         public void addToc(List<Krav> kravList) {
 
