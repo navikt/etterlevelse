@@ -145,11 +145,11 @@ public class ExportController {
     ) {
         String filename = "Dokumentasjon for etterlevelse - " + etterlevelseId + ".docx";
         byte[] doc;
+
         if (etterlevelseId != null) {
             Etterlevelse etterlevelse = etterlevelseService.get(etterlevelseId);
             doc = etterlevelseToDoc.generateDocForEtterlevelse(etterlevelse);
-        }
-        else if(behandlingId != null) {
+        } else if(behandlingId != null) {
             List<Etterlevelse> etterlevelser = etterlevelseService.getByBehandling(behandlingId.toString());
 
             if(etterlevelser.isEmpty()) {

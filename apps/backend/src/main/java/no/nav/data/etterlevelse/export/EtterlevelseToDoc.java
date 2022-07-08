@@ -77,12 +77,12 @@ public class EtterlevelseToDoc {
         doc.addHeading1("Dokumentet inneholder følgende etterlevelse for krav (" + etterlevelser.size() +")");
         doc.addTableOfContent(etterlevelser);
 
-        for (int i = 0; i < etterlevelser.size(); i++) {
-            if (i != etterlevelser.size() - 1) {
-                doc.pageBreak();
-            }
-            doc.generate(etterlevelser.get(i));
-        }
+//        for (int i = 0; i < etterlevelser.size(); i++) {
+//            if (i != etterlevelser.size() - 1) {
+//                doc.pageBreak();
+//            }
+//            doc.generate(etterlevelser.get(i));
+//        }
 
         return doc.build();
     }
