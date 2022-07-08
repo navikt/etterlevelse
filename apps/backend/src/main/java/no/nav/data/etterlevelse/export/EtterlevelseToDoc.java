@@ -1,7 +1,6 @@
 package no.nav.data.etterlevelse.export;
 
 import lombok.RequiredArgsConstructor;
-import no.nav.data.common.exceptions.NotFoundException;
 import no.nav.data.common.utils.WordDocUtils;
 import no.nav.data.etterlevelse.behandling.BehandlingService;
 import no.nav.data.etterlevelse.behandling.dto.Behandling;
@@ -136,6 +135,7 @@ public class EtterlevelseToDoc {
                         addText("Behov for begrunnelse: " + boolToText(suksesskriterie.isBehovForBegrunnelse()));
                         addText("Suksesskriterie begrunnelse status: ", begrunnelseStatusText(suksesskriterieBegrunnelse.getSuksesskriterieStatus()));
                         if (suksesskriterie.isBehovForBegrunnelse()) {
+                            getSuksesskriterieBegrunnelseHeader(suksesskriterieBegrunnelse.getSuksesskriterieStatus());
                             addMarkdownText(suksesskriterieBegrunnelse.getBegrunnelse());
                         }
 
@@ -145,6 +145,7 @@ public class EtterlevelseToDoc {
                 } else {
                     addText("Id: " + suksesskriterieBegrunnelse.getSuksesskriterieId());
                     addText("Suksesskriterie begrunnelse status: ", begrunnelseStatusText(suksesskriterieBegrunnelse.getSuksesskriterieStatus()));
+                    getSuksesskriterieBegrunnelseHeader(suksesskriterieBegrunnelse.getSuksesskriterieStatus());
                     addMarkdownText(suksesskriterieBegrunnelse.getBegrunnelse());
                 }
 
@@ -267,6 +268,14 @@ public class EtterlevelseToDoc {
                 case UNDER_ARBEID -> "Under arbeid";
                 case IKKE_RELEVANT -> "Ikke relevant";
             };
+        }
+
+        public void getSuksesskriterieBegrunnelseHeader(SuksesskriterieStatus status){
+            if(status.equals(SuksesskriterieStatus.IKKE_RELEVANT)) {
+                addHeading4("Hvorfor er ikke kriteriet relevant?");
+            } else {
+                addHeading4("Hvordan oppfylles kriteriet?");
+            }
         }
 
         public void addTableOfContent(List<Etterlevelse> etterlevelseList) {
