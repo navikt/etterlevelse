@@ -14,6 +14,7 @@ import no.nav.data.etterlevelse.codelist.domain.Codelist;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
 import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
+import no.nav.data.etterlevelse.etterlevelse.domain.EtterlevelseStatus;
 import no.nav.data.etterlevelse.krav.KravService;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import org.springframework.http.HttpHeaders;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -85,7 +87,7 @@ public class ExportController {
             @RequestParam(name = "temaKode", required = false) String temaKode,
             @RequestParam(name = "lovKode", required = false) String lovKode,
             @RequestParam(name = "ansvarligKode", required = false) String ansvarligKode,
-            @RequestParam(name = "statuskoder", required = false) List<String> statuskoder
+            @RequestParam(name = "statusKoder", required = false) List<String> statusKoder
     ) {
         byte[] doc;
         String filename;
@@ -123,7 +125,7 @@ public class ExportController {
 
 
             codelistService.validateListNameAndCodes(list.name(), code);
-            doc = kravToDoc.generateDocFor(list, code, statuskoder);
+            doc = kravToDoc.generateDocFor(list, code, statusKoder);
             filename = "Dokumentajson for krav med " + list.name() + " " + code;
         }
 
@@ -141,7 +143,8 @@ public class ExportController {
     public void getEtterlevelse(
             HttpServletResponse response,
             @RequestParam(name = "etterlevelseId", required = false) UUID etterlevelseId,
-            @RequestParam(name = "behandlingId", required = false) UUID behandlingId
+            @RequestParam(name = "behandlingId", required = false) UUID behandlingId,
+            @RequestParam(name = "statuskoder", required = false) List<String> statusKoder
     ) {
         String filename = "Dokumentasjon for etterlevelse - " + etterlevelseId + ".docx";
         byte[] doc;
@@ -149,14 +152,20 @@ public class ExportController {
         if (etterlevelseId != null) {
             Etterlevelse etterlevelse = etterlevelseService.get(etterlevelseId);
             doc = etterlevelseToDoc.generateDocForEtterlevelse(etterlevelse);
-        } else if(behandlingId != null) {
+        } else if (behandlingId != null) {
             List<Etterlevelse> etterlevelser = etterlevelseService.getByBehandling(behandlingId.toString());
-
-            if(etterlevelser.isEmpty()) {
+            if (Objects.nonNull(statusKoder)) {
+                etterlevelser = etterlevelser.stream().filter(e->statusKoder.contains(e.getStatus())).toList();
+            } else {
+                etterlevelser = etterlevelser
+                        .stream()
+                        .filter(e -> e.getStatus().equals(EtterlevelseStatus.FERDIG_DOKUMENTERT) || e.getStatus().equals(EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT))
+                        .toList();
+            }
+            if (etterlevelser.isEmpty()) {
                 throw new NotFoundException("No etterlevelser found for behandling with id " + behandlingId);
             }
-
-            doc =  etterlevelseToDoc.generateDocFor(etterlevelser, behandlingId.toString());
+            doc = etterlevelseToDoc.generateDocFor(etterlevelser, behandlingId.toString());
         } else {
             throw new ValidationException("No paramater given");
         }
