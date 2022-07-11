@@ -155,7 +155,7 @@ public class ExportController {
         } else if (behandlingId != null) {
             List<Etterlevelse> etterlevelser = etterlevelseService.getByBehandling(behandlingId.toString());
             if (Objects.nonNull(statusKoder)) {
-                etterlevelser = etterlevelser.stream().filter(e->statusKoder.contains(e.getStatus())).toList();
+                etterlevelser = etterlevelser.stream().filter(e->statusKoder.contains(e.getStatus().toString())).toList();
             } else {
                 etterlevelser = etterlevelser
                         .stream()
