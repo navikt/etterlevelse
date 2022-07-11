@@ -17,6 +17,7 @@ import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.etterlevelse.domain.EtterlevelseStatus;
 import no.nav.data.etterlevelse.krav.KravService;
 import no.nav.data.etterlevelse.krav.domain.Krav;
+import no.nav.data.etterlevelse.krav.domain.dto.KravFilter;
 import org.springframework.http.HttpHeaders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StreamUtils;
@@ -144,7 +145,8 @@ public class ExportController {
             HttpServletResponse response,
             @RequestParam(name = "etterlevelseId", required = false) UUID etterlevelseId,
             @RequestParam(name = "behandlingId", required = false) UUID behandlingId,
-            @RequestParam(name = "statuskoder", required = false) List<String> statusKoder
+            @RequestParam(name = "statuskoder", required = false) List<String> statusKoder,
+            @RequestParam(name = "temakode", required = false) String temaKode
     ) {
         String filename = "Dokumentasjon for etterlevelse - " + etterlevelseId + ".docx";
         byte[] doc;
@@ -154,14 +156,40 @@ public class ExportController {
             doc = etterlevelseToDoc.generateDocForEtterlevelse(etterlevelse);
         } else if (behandlingId != null) {
             List<Etterlevelse> etterlevelser = etterlevelseService.getByBehandling(behandlingId.toString());
+
             if (Objects.nonNull(statusKoder)) {
-                etterlevelser = etterlevelser.stream().filter(e->statusKoder.contains(e.getStatus().toString())).toList();
+                etterlevelser = etterlevelser.stream().filter(e -> statusKoder.contains(e.getStatus().toString())).toList();
             } else {
                 etterlevelser = etterlevelser
                         .stream()
                         .filter(e -> e.getStatus().equals(EtterlevelseStatus.FERDIG_DOKUMENTERT) || e.getStatus().equals(EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT))
                         .toList();
             }
+
+            if(Objects.nonNull(temaKode)){
+                List<Etterlevelse> temp = new ArrayList<>();
+                etterlevelser.forEach(etterlevelse -> {
+                    var kravNummer = etterlevelse.getKravNummer();
+                    var kravVersjon = etterlevelse.getKravVersjon();
+                    codelistService.validateListNameAndCode(ListName.TEMA.name(), temaKode);
+                    List<String> regelverker = CodelistService.getCodelist(ListName.LOV)
+                            .stream().filter(l -> l.getData().get("tema").toString().equals(temaKode))
+                            .map(Codelist::getCode).toList();
+                    var kraver = kravService.getByFilter(KravFilter
+                                    .builder()
+                                    .lover(regelverker)
+                                    .nummer(kravNummer)
+                                    .build())
+                            .stream()
+                            .filter(k -> k.getKravVersjon() == kravVersjon)
+                            .toList();
+                    if(kraver.size()>0){
+                        temp.add(etterlevelse);
+                    }
+                });
+                etterlevelser = temp.stream().toList();
+            }
+
             if (etterlevelser.isEmpty()) {
                 throw new NotFoundException("No etterlevelser found for behandling with id " + behandlingId);
             }
