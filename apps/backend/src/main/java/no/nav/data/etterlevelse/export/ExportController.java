@@ -148,13 +148,15 @@ public class ExportController {
             @RequestParam(name = "statuskoder", required = false) List<String> statusKoder,
             @RequestParam(name = "temakode", required = false) String temaKode
     ) {
-        String filename = "Dokumentasjon for etterlevelse - " + etterlevelseId + ".docx";
+        String filename;
         byte[] doc;
 
         if (etterlevelseId != null) {
+            filename = "Dokumentasjon for etterlevelse - " + etterlevelseId + ".docx";
             Etterlevelse etterlevelse = etterlevelseService.get(etterlevelseId);
             doc = etterlevelseToDoc.generateDocForEtterlevelse(etterlevelse);
         } else if (behandlingId != null) {
+            filename = "Dokumentasjon for behandling med id - " + behandlingId + ".docx";
             List<Etterlevelse> etterlevelser = etterlevelseService.getByBehandling(behandlingId.toString());
 
             if (Objects.nonNull(statusKoder)) {
@@ -167,6 +169,7 @@ public class ExportController {
             }
 
             if(Objects.nonNull(temaKode)){
+                filename = "Dokumentasjon for behandling med id - " + behandlingId + " filtert med tema " + temaKode +".docx";
                 List<Etterlevelse> temp = new ArrayList<>();
                 etterlevelser.forEach(etterlevelse -> {
                     var kravNummer = etterlevelse.getKravNummer();
@@ -181,13 +184,14 @@ public class ExportController {
                                     .nummer(kravNummer)
                                     .build())
                             .stream()
-                            .filter(k -> k.getKravVersjon() == kravVersjon)
+                            .filter(k -> Objects.equals(k.getKravVersjon(), kravVersjon))
                             .toList();
                     if(kraver.size()>0){
                         temp.add(etterlevelse);
                     }
                 });
-                etterlevelser = temp.stream().toList();
+
+                etterlevelser = temp;
             }
 
             if (etterlevelser.isEmpty()) {
