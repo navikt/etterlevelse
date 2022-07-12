@@ -7,6 +7,7 @@ import no.nav.data.common.utils.WordDocUtils;
 import no.nav.data.etterlevelse.behandling.BehandlingService;
 import no.nav.data.etterlevelse.behandling.dto.Behandling;
 import no.nav.data.etterlevelse.codelist.CodelistService;
+import no.nav.data.etterlevelse.codelist.codeusage.CodeUsageService;
 import no.nav.data.etterlevelse.codelist.domain.Codelist;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
 import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
@@ -14,11 +15,11 @@ import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.etterlevelse.domain.EtterlevelseStatus;
 import no.nav.data.etterlevelse.etterlevelse.domain.SuksesskriterieBegrunnelse;
 import no.nav.data.etterlevelse.etterlevelse.domain.SuksesskriterieStatus;
+import no.nav.data.etterlevelse.export.domain.EtterlevelseMedKravData;
 import no.nav.data.etterlevelse.krav.KravService;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.Regelverk;
 import no.nav.data.etterlevelse.krav.domain.Suksesskriterie;
-import no.nav.data.etterlevelse.krav.domain.dto.KravFilter;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 import no.nav.data.integration.begrep.BegrepService;
 import no.nav.data.integration.begrep.dto.BegrepResponse;
@@ -27,10 +28,7 @@ import org.docx4j.jaxb.Context;
 import org.docx4j.wml.ObjectFactory;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -46,6 +44,8 @@ public class EtterlevelseToDoc {
     private final BegrepService begrepService;
 
     private final EtterlevelseService etterlevelseService;
+
+    private final CodeUsageService codeUsageService;
 
     public void getBehandlingData(Behandling behandling,EtterlevelseDocumentBuilder doc) {
         doc.addTitle("Etterlevelse for B" + behandling.getNummer() + " " + behandling.getOverordnetFormaal().getShortName());
@@ -63,37 +63,37 @@ public class EtterlevelseToDoc {
         }
     }
 
-    private List<Etterlevelse> getEtterlevelseByFilter(String behandlingId, List<String> statusKoder, List<String> lover) {
+    private List<EtterlevelseMedKravData> getEtterlevelseByFilter(String behandlingId, List<String> statusKoder, List<String> lover) {
 
         List<Etterlevelse> etterlevelser = etterlevelseService.getByBehandling(behandlingId);
+        List<EtterlevelseMedKravData> etterlevelseMedKravData = new ArrayList<>();
 
         if (Objects.nonNull(statusKoder)) {
             log.info("Exporting list of etterlevelse for behandling with id " + behandlingId + " to doc filtered by status");
             etterlevelser = etterlevelser.stream().filter(e -> statusKoder.contains(e.getStatus().toString())).toList();
         }
+
+        etterlevelser.forEach(etterlevelse -> {
+            Optional<Krav> krav = kravService.getByKravNummer(etterlevelse.getKravNummer(), etterlevelse.getKravVersjon());
+            etterlevelseMedKravData.add(EtterlevelseMedKravData.builder().etterlevelseData(etterlevelse).kravData(krav).build());
+        });
+
+
         if(!lover.isEmpty()) {
-            List<Etterlevelse> temaFilteredEtterlevelse = new ArrayList<>();
-            etterlevelser.forEach(etterlevelse -> {
-                var kravNummer = etterlevelse.getKravNummer();
-                var kravVersjon = etterlevelse.getKravVersjon();
-
-                var kraver = kravService.getByFilter(KravFilter
-                                .builder()
-                                .lover(lover)
-                                .nummer(kravNummer)
-                                .build())
-                        .stream()
-                        .filter(k -> Objects.equals(k.getKravVersjon(), kravVersjon))
-                        .toList();
-
-                if(kraver.size()>0){
-                    temaFilteredEtterlevelse.add(etterlevelse);
+            List<EtterlevelseMedKravData> temaFilteredEtterlevelse = new ArrayList<>();
+            etterlevelseMedKravData.forEach(etterlevelse -> {
+                if(etterlevelse.getKravData().isPresent()) {
+                    if(etterlevelse.getKravData().get().getRegelverk().stream().anyMatch(m -> lover.contains(m.getLov())
+                    )) {
+                        temaFilteredEtterlevelse.add(etterlevelse);
+                    }
                 }
             });
+
             return temaFilteredEtterlevelse;
         }
 
-        return etterlevelser;
+        return etterlevelseMedKravData;
     }
 
     public byte[] generateDocForEtterlevelse(UUID etterlevelseId) {
@@ -104,18 +104,22 @@ public class EtterlevelseToDoc {
         var doc = new EtterlevelseDocumentBuilder();
         getBehandlingData(behandling, doc);
 
-        doc.generate(etterlevelse);
+        var krav = kravService.getByKravNummer(etterlevelse.getKravNummer(), etterlevelse.getKravVersjon());
+        EtterlevelseMedKravData etterlevelseMedKravData = EtterlevelseMedKravData.builder().etterlevelseData(etterlevelse)
+                    .kravData(krav).build();
+
+        doc.generate(etterlevelseMedKravData);
 
         return doc.build();
     }
 
-    public byte[] generateDocFor(UUID behandlingId, List<String> statusKoder, List<String> lover) {
+    public byte[] generateDocFor(UUID behandlingId, List<String> statusKoder, List<String> lover, String temaKode) {
 
         var behandling = behandlingService.getBehandling(behandlingId.toString());
 
-        List<Etterlevelse> etterlevelser = getEtterlevelseByFilter(behandlingId.toString(), statusKoder, lover);
+        List<EtterlevelseMedKravData> etterlevelseMedKravData = getEtterlevelseByFilter(behandlingId.toString(), statusKoder, lover);
 
-        if (etterlevelser.isEmpty()) {
+        if (etterlevelseMedKravData.isEmpty()) {
             throw new NotFoundException("No etterlevelser found for behandling with id " + behandlingId);
         }
 
@@ -123,14 +127,16 @@ public class EtterlevelseToDoc {
         var doc = new EtterlevelseDocumentBuilder();
         getBehandlingData(behandling, doc);
 
-        doc.addHeading1("Dokumentet inneholder følgende etterlevelse for krav (" + etterlevelser.size() +")");
-        doc.addTableOfContent(etterlevelser);
+        doc.addHeading1("Dokumentet inneholder følgende etterlevelse for krav (" + etterlevelseMedKravData.size() +")");
 
-        for (int i = 0; i < etterlevelser.size(); i++) {
-            if (i != etterlevelser.size() - 1) {
+        doc.addTableOfContent(etterlevelseMedKravData);
+
+        for (int i = 0; i < etterlevelseMedKravData.size(); i++) {
+            if (i != etterlevelseMedKravData.size() - 1) {
                 doc.pageBreak();
             }
-            doc.generate(etterlevelser.get(i));
+
+            doc.generate(etterlevelseMedKravData.get(i));
         }
 
         return doc.build();
@@ -144,8 +150,10 @@ public class EtterlevelseToDoc {
 
         long listId = 1;
 
-        public void generate(Etterlevelse etterlevelse) {
-            var krav = kravService.getByKravNummer(etterlevelse.getKravNummer(), etterlevelse.getKravVersjon());
+        public void generate(EtterlevelseMedKravData etterlevelseMedKravData) {
+
+            Etterlevelse etterlevelse = etterlevelseMedKravData.getEtterlevelseData();
+            Optional<Krav> krav = etterlevelseMedKravData.getKravData();
 
             String etterlevelseName = "Etterlevelse for K" + etterlevelse.getKravNummer() + "." + etterlevelse.getKravVersjon();
 
@@ -331,11 +339,12 @@ public class EtterlevelseToDoc {
             }
         }
 
-        public void addTableOfContent(List<Etterlevelse> etterlevelseList) {
+        public void addTableOfContent(List<EtterlevelseMedKravData> etterlevelseList) {
 
             long currListId = listId++;
 
-            for (Etterlevelse etterlevelse : etterlevelseList) {
+            for (EtterlevelseMedKravData etterlevelseMedKravData : etterlevelseList) {
+                Etterlevelse etterlevelse = etterlevelseMedKravData.getEtterlevelseData();
                 var name = "K" + etterlevelse.getKravNummer() + "." + etterlevelse.getKravVersjon();
                 var bookmark = etterlevelse.getId().toString();
                 addListItem(name, currListId, bookmark);

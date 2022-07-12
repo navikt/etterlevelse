@@ -169,7 +169,7 @@ public class ExportController {
             } else {
                 lover = new ArrayList<>();
             }
-            doc = etterlevelseToDoc.generateDocFor(behandlingId, statusKoder, lover);
+            doc = etterlevelseToDoc.generateDocFor(behandlingId, statusKoder, lover, temaKode);
         } else {
             throw new ValidationException("No paramater given");
         }
