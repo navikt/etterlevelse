@@ -349,15 +349,11 @@ public class EtterlevelseToDoc {
                 }
                 return false;
             }).sorted((a,b) -> {
-                Double aNumber = Double.parseDouble(a.getEtterlevelseData().getKravNummer() + "." + a.getEtterlevelseData().getVersion());
-                Double bNumber = Double.parseDouble(b.getEtterlevelseData().getKravNummer() + "." + b.getEtterlevelseData().getVersion());
-
-                if(aNumber - bNumber > 0) {
-                    return 1;
-                } else if (aNumber - bNumber < 0) {
-                    return -1;
+                if(a.getEtterlevelseData().getKravNummer().equals(b.getEtterlevelseData().getKravNummer())) {
+                   return a.getEtterlevelseData().getVersion().compareTo(b.getEtterlevelseData().getVersion());
+                } else {
+                    return a.getEtterlevelseData().getKravNummer().compareTo(b.getEtterlevelseData().getKravNummer());
                 }
-                return 0;
             }).toList();
         }
 
