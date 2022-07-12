@@ -342,6 +342,25 @@ public class EtterlevelseToDoc {
             }
         }
 
+        private List<EtterlevelseMedKravData> getSortedEtterlevelseMedKravData(List<EtterlevelseMedKravData> etterlevelseMedKravData, List<String> lover) {
+            return etterlevelseMedKravData.stream().filter(e -> {
+                if(e.getKravData().isPresent()) {
+                    return e.getKravData().get().getRegelverk().stream().anyMatch(l -> lover.contains(l.getLov()));
+                }
+                return false;
+            }).sorted((a,b) -> {
+                Double aNumber = Double.parseDouble(a.getEtterlevelseData().getKravNummer() + "." + a.getEtterlevelseData().getVersion());
+                Double bNumber = Double.parseDouble(b.getEtterlevelseData().getKravNummer() + "." + b.getEtterlevelseData().getVersion());
+
+                if(aNumber - bNumber > 0) {
+                    return 1;
+                } else if (aNumber - bNumber < 0) {
+                    return -1;
+                }
+                return 0;
+            }).toList();
+        }
+
         public void addTableOfContent(List<EtterlevelseMedKravData> etterlevelseList, List<CodeUsage> temaListe) {
 
             long currListId = listId++;
@@ -350,21 +369,7 @@ public class EtterlevelseToDoc {
                 String temaShortName = CodelistService.getCodelist(ListName.TEMA, tema.getCode()).getShortName();
                 List<String> lover = tema.getCodelist().stream().map(Codelist::getCode).toList();
 
-                List<EtterlevelseMedKravData> filteredDataByTema = etterlevelseList.stream().filter(e -> {
-                    if(e.getKravData().isPresent()) {
-                       return e.getKravData().get().getRegelverk().stream().anyMatch(l -> lover.contains(l.getLov()));
-                    }
-                    return false;
-                }).sorted((a,b) -> {
-                    Float aNumber = Float.parseFloat(a.getEtterlevelseData().getKravNummer() + "." + a.getEtterlevelseData().getVersion());
-                    Float bNumber = Float.parseFloat(b.getEtterlevelseData().getKravNummer() + "." + b.getEtterlevelseData().getVersion());
-                    if(aNumber - bNumber > 0) {
-                        return 1;
-                    } else if (aNumber - bNumber < 0) {
-                        return -1;
-                    }
-                    return 0;
-                }).toList();
+                List<EtterlevelseMedKravData> filteredDataByTema = getSortedEtterlevelseMedKravData(etterlevelseList,lover);
 
                 if(!filteredDataByTema.isEmpty()) {
                     addHeading3(temaShortName);
