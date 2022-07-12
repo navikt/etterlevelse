@@ -1,12 +1,14 @@
 package no.nav.data.etterlevelse.export;
 
 import lombok.RequiredArgsConstructor;
+import no.nav.data.common.exceptions.NotFoundException;
 import no.nav.data.common.utils.WordDocUtils;
 import no.nav.data.etterlevelse.behandling.BehandlingService;
 import no.nav.data.etterlevelse.behandling.dto.Behandling;
 import no.nav.data.etterlevelse.codelist.CodelistService;
 import no.nav.data.etterlevelse.codelist.domain.Codelist;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
+import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.etterlevelse.domain.EtterlevelseStatus;
 import no.nav.data.etterlevelse.etterlevelse.domain.SuksesskriterieBegrunnelse;
@@ -15,6 +17,7 @@ import no.nav.data.etterlevelse.krav.KravService;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.Regelverk;
 import no.nav.data.etterlevelse.krav.domain.Suksesskriterie;
+import no.nav.data.etterlevelse.krav.domain.dto.KravFilter;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 import no.nav.data.integration.begrep.BegrepService;
 import no.nav.data.integration.begrep.dto.BegrepResponse;
@@ -24,7 +27,9 @@ import org.docx4j.wml.ObjectFactory;
 import org.springframework.stereotype.Service;
 
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -38,6 +43,8 @@ public class EtterlevelseToDoc {
     private final TeamcatTeamClient teamService;
 
     private final BegrepService begrepService;
+
+    private final EtterlevelseService etterlevelseService;
 
     public void getBehandlingData(Behandling behandling,EtterlevelseDocumentBuilder doc) {
         doc.addTitle("Etterlevelse for B" + behandling.getNummer() + " " + behandling.getOverordnetFormaal().getShortName());
@@ -55,7 +62,10 @@ public class EtterlevelseToDoc {
         }
     }
 
-    public byte[] generateDocForEtterlevelse(Etterlevelse etterlevelse) {
+    public byte[] generateDocForEtterlevelse(UUID etterlevelseId) {
+
+        Etterlevelse etterlevelse = etterlevelseService.get(etterlevelseId);
+
         var behandling = behandlingService.getBehandling(etterlevelse.getBehandlingId());
         var doc = new EtterlevelseDocumentBuilder();
         getBehandlingData(behandling, doc);
@@ -65,8 +75,43 @@ public class EtterlevelseToDoc {
         return doc.build();
     }
 
-    public byte[] generateDocFor(List<Etterlevelse> etterlevelser, String behandlingId) {
-        var behandling = behandlingService.getBehandling(behandlingId);
+    public byte[] generateDocFor(UUID behandlingId, List<String> statusKoder, List<String> lover) {
+
+        var behandling = behandlingService.getBehandling(behandlingId.toString());
+
+        List<Etterlevelse> etterlevelser = etterlevelseService.getByBehandling(behandlingId.toString());
+
+        if (Objects.nonNull(statusKoder)) {
+            etterlevelser = etterlevelser.stream().filter(e -> statusKoder.contains(e.getStatus().toString())).toList();
+        }
+
+        if(!lover.isEmpty()) {
+            List<Etterlevelse> temp = new ArrayList<>();
+            etterlevelser.forEach(etterlevelse -> {
+                var kravNummer = etterlevelse.getKravNummer();
+                var kravVersjon = etterlevelse.getKravVersjon();
+
+                var kraver = kravService.getByFilter(KravFilter
+                                .builder()
+                                .lover(lover)
+                                .nummer(kravNummer)
+                                .build())
+                        .stream()
+                        .filter(k -> Objects.equals(k.getKravVersjon(), kravVersjon))
+                        .toList();
+
+                if(kraver.size()>0){
+                    temp.add(etterlevelse);
+                }
+            });
+            etterlevelser = temp;
+        }
+
+        if (etterlevelser.isEmpty()) {
+            throw new NotFoundException("No etterlevelser found for behandling with id " + behandlingId);
+        }
+
+
         var doc = new EtterlevelseDocumentBuilder();
         getBehandlingData(behandling, doc);
 

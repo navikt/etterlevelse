@@ -46,7 +46,6 @@ public class ExportController {
     private final EtterlevelseToDoc etterlevelseToDoc;
     private final KravService kravService;
     private final CodelistService codelistService;
-    private final EtterlevelseService etterlevelseService;
 
     public ExportController(CodelistToDoc codelistToDoc, KravToDoc kravToDoc, EtterlevelseToDoc etterlevelseToDoc, KravService kravService, CodelistService codelistService, EtterlevelseService etterlevelseService) {
         this.codelistToDoc = codelistToDoc;
@@ -54,7 +53,6 @@ public class ExportController {
         this.etterlevelseToDoc = etterlevelseToDoc;
         this.kravService = kravService;
         this.codelistService = codelistService;
-        this.etterlevelseService = etterlevelseService;
     }
 
 
@@ -153,51 +151,23 @@ public class ExportController {
 
         if (etterlevelseId != null) {
             filename = "Dokumentasjon for etterlevelse - " + etterlevelseId + ".docx";
-            Etterlevelse etterlevelse = etterlevelseService.get(etterlevelseId);
-            doc = etterlevelseToDoc.generateDocForEtterlevelse(etterlevelse);
+            doc = etterlevelseToDoc.generateDocForEtterlevelse(etterlevelseId);
         } else if (behandlingId != null) {
             filename = "Dokumentasjon for behandling med id - " + behandlingId + ".docx";
-            List<Etterlevelse> etterlevelser = etterlevelseService.getByBehandling(behandlingId.toString());
-
-            if (Objects.nonNull(statusKoder)) {
-                etterlevelser = etterlevelser.stream().filter(e -> statusKoder.contains(e.getStatus().toString())).toList();
-            } else {
-                etterlevelser = etterlevelser
-                        .stream()
-                        .filter(e -> e.getStatus().equals(EtterlevelseStatus.FERDIG_DOKUMENTERT) || e.getStatus().equals(EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT))
-                        .toList();
-            }
+            List<String> lover = new ArrayList<>();
 
             if(Objects.nonNull(temaKode)){
                 filename = "Dokumentasjon for behandling med id - " + behandlingId + " filtert med tema " + temaKode +".docx";
-                List<Etterlevelse> temp = new ArrayList<>();
-                etterlevelser.forEach(etterlevelse -> {
-                    var kravNummer = etterlevelse.getKravNummer();
-                    var kravVersjon = etterlevelse.getKravVersjon();
-                    codelistService.validateListNameAndCode(ListName.TEMA.name(), temaKode);
-                    List<String> regelverker = CodelistService.getCodelist(ListName.LOV)
-                            .stream().filter(l -> l.getData().get("tema").toString().equals(temaKode))
-                            .map(Codelist::getCode).toList();
-                    var kraver = kravService.getByFilter(KravFilter
-                                    .builder()
-                                    .lover(regelverker)
-                                    .nummer(kravNummer)
-                                    .build())
-                            .stream()
-                            .filter(k -> Objects.equals(k.getKravVersjon(), kravVersjon))
-                            .toList();
-                    if(kraver.size()>0){
-                        temp.add(etterlevelse);
-                    }
-                });
 
-                etterlevelser = temp;
+                codelistService.validateListNameAndCode(ListName.TEMA.name(), temaKode);
+
+                lover = CodelistService.getCodelist(ListName.LOV)
+                        .stream().filter(l -> l.getData().get("tema").toString().equals(temaKode))
+                        .map(Codelist::getCode)
+                        .collect(Collectors.toList());
             }
 
-            if (etterlevelser.isEmpty()) {
-                throw new NotFoundException("No etterlevelser found for behandling with id " + behandlingId);
-            }
-            doc = etterlevelseToDoc.generateDocFor(etterlevelser, behandlingId.toString());
+            doc = etterlevelseToDoc.generateDocFor(behandlingId, statusKoder, lover);
         } else {
             throw new ValidationException("No paramater given");
         }
