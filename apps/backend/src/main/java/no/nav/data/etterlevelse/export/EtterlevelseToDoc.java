@@ -357,14 +357,15 @@ public class EtterlevelseToDoc {
                     return false;
                 }).toList();
 
-                addHeading3(temaShortName);
-                for (EtterlevelseMedKravData etterlevelseMedKravData : filteredDataByTema) {
-                    Etterlevelse etterlevelse = etterlevelseMedKravData.getEtterlevelseData();
-                    var name = "K" + etterlevelse.getKravNummer() + "." + etterlevelse.getKravVersjon();
-                    var bookmark = etterlevelse.getId().toString();
-                    addListItem(name, currListId, bookmark);
+                if(!filteredDataByTema.isEmpty()) {
+                    addHeading3(temaShortName);
+                    for (EtterlevelseMedKravData etterlevelseMedKravData : filteredDataByTema) {
+                        Etterlevelse etterlevelse = etterlevelseMedKravData.getEtterlevelseData();
+                        var name = "K" + etterlevelse.getKravNummer() + "." + etterlevelse.getKravVersjon();
+                        var bookmark = etterlevelse.getId().toString();
+                        addListItem(name, currListId, bookmark);
+                    }
                 }
-
             }
         }
     }
