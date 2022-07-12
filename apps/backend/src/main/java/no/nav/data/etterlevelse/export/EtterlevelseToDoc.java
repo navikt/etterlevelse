@@ -70,7 +70,9 @@ public class EtterlevelseToDoc {
             etterlevelser = etterlevelser.stream().filter(e -> statusKoder.contains(e.getStatus().toString())).toList();
         }
 
-        if(!lover.isEmpty()) {
+        if(lover != null && !lover.isEmpty()) {
+            System.out.println(lover);
+            System.out.println(lover.size());
             List<Etterlevelse> temaFilteredEtterlevelse = new ArrayList<>();
             etterlevelser.forEach(etterlevelse -> {
                 var kravNummer = etterlevelse.getKravNummer();
