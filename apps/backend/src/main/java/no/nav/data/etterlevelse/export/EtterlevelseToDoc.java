@@ -8,6 +8,7 @@ import no.nav.data.etterlevelse.behandling.BehandlingService;
 import no.nav.data.etterlevelse.behandling.dto.Behandling;
 import no.nav.data.etterlevelse.codelist.CodelistService;
 import no.nav.data.etterlevelse.codelist.codeusage.CodeUsageService;
+import no.nav.data.etterlevelse.codelist.codeusage.dto.CodeUsage;
 import no.nav.data.etterlevelse.codelist.domain.Codelist;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
 import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
@@ -20,6 +21,7 @@ import no.nav.data.etterlevelse.krav.KravService;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.Regelverk;
 import no.nav.data.etterlevelse.krav.domain.Suksesskriterie;
+import no.nav.data.etterlevelse.kravprioritering.KravPrioriteringService;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 import no.nav.data.integration.begrep.BegrepService;
 import no.nav.data.integration.begrep.dto.BegrepResponse;
@@ -46,6 +48,8 @@ public class EtterlevelseToDoc {
     private final EtterlevelseService etterlevelseService;
 
     private final CodeUsageService codeUsageService;
+
+    private final KravPrioriteringService kravPrioriteringService;
 
     public void getBehandlingData(Behandling behandling,EtterlevelseDocumentBuilder doc) {
         doc.addTitle("Etterlevelse for B" + behandling.getNummer() + " " + behandling.getOverordnetFormaal().getShortName());
@@ -116,6 +120,7 @@ public class EtterlevelseToDoc {
     public byte[] generateDocFor(UUID behandlingId, List<String> statusKoder, List<String> lover, String temaKode) {
 
         var behandling = behandlingService.getBehandling(behandlingId.toString());
+        List<CodeUsage> temaListe = codeUsageService.findCodeUsageOfList(ListName.TEMA);
 
         List<EtterlevelseMedKravData> etterlevelseMedKravData = getEtterlevelseByFilter(behandlingId.toString(), statusKoder, lover);
 
@@ -123,19 +128,17 @@ public class EtterlevelseToDoc {
             throw new NotFoundException("No etterlevelser found for behandling with id " + behandlingId);
         }
 
-
         var doc = new EtterlevelseDocumentBuilder();
         getBehandlingData(behandling, doc);
 
         doc.addHeading1("Dokumentet inneholder følgende etterlevelse for krav (" + etterlevelseMedKravData.size() +")");
 
-        doc.addTableOfContent(etterlevelseMedKravData);
+        doc.addTableOfContent(etterlevelseMedKravData, temaListe);
 
         for (int i = 0; i < etterlevelseMedKravData.size(); i++) {
             if (i != etterlevelseMedKravData.size() - 1) {
                 doc.pageBreak();
             }
-
             doc.generate(etterlevelseMedKravData.get(i));
         }
 
@@ -339,15 +342,29 @@ public class EtterlevelseToDoc {
             }
         }
 
-        public void addTableOfContent(List<EtterlevelseMedKravData> etterlevelseList) {
+        public void addTableOfContent(List<EtterlevelseMedKravData> etterlevelseList, List<CodeUsage> temaListe) {
 
             long currListId = listId++;
 
-            for (EtterlevelseMedKravData etterlevelseMedKravData : etterlevelseList) {
-                Etterlevelse etterlevelse = etterlevelseMedKravData.getEtterlevelseData();
-                var name = "K" + etterlevelse.getKravNummer() + "." + etterlevelse.getKravVersjon();
-                var bookmark = etterlevelse.getId().toString();
-                addListItem(name, currListId, bookmark);
+            for(CodeUsage tema: temaListe) {
+                String temaShortName = CodelistService.getCodelist(ListName.TEMA, tema.getCode()).getShortName();
+                List<String> lover = tema.getCodelist().stream().map(Codelist::getCode).toList();
+
+                List<EtterlevelseMedKravData> filteredDataByTema = etterlevelseList.stream().filter(e -> {
+                    if(e.getKravData().isPresent()) {
+                       return e.getKravData().get().getRegelverk().stream().anyMatch(l -> lover.contains(l.getLov()));
+                    }
+                    return false;
+                }).toList();
+
+                addHeading3(temaShortName);
+                for (EtterlevelseMedKravData etterlevelseMedKravData : filteredDataByTema) {
+                    Etterlevelse etterlevelse = etterlevelseMedKravData.getEtterlevelseData();
+                    var name = "K" + etterlevelse.getKravNummer() + "." + etterlevelse.getKravVersjon();
+                    var bookmark = etterlevelse.getId().toString();
+                    addListItem(name, currListId, bookmark);
+                }
+
             }
         }
     }
