@@ -154,9 +154,9 @@ public class ExportController {
             doc = etterlevelseToDoc.generateDocForEtterlevelse(etterlevelseId);
         } else if (behandlingId != null) {
             filename = "Dokumentasjon for behandling med id - " + behandlingId + ".docx";
-            List<String> lover = new ArrayList<>();
+            List<String> lover;
 
-            if(Objects.nonNull(temaKode)){
+            if(temaKode != null){
                 filename = "Dokumentasjon for behandling med id - " + behandlingId + " filtert med tema " + temaKode +".docx";
 
                 codelistService.validateListNameAndCode(ListName.TEMA.name(), temaKode);
@@ -165,6 +165,8 @@ public class ExportController {
                         .stream().filter(l -> l.getData().get("tema").toString().equals(temaKode))
                         .map(Codelist::getCode)
                         .collect(Collectors.toList());
+            } else {
+                lover = new ArrayList<>();
             }
 
             doc = etterlevelseToDoc.generateDocFor(behandlingId, statusKoder, lover);
