@@ -122,8 +122,10 @@ public class ExportController {
                 throw new ValidationException("No paramater given");
             }
 
+            if(temaKode == null) {
+                codelistService.validateListNameAndCodes(list.name(), code);
+            }
 
-            codelistService.validateListNameAndCodes(list.name(), code);
             doc = kravToDoc.generateDocFor(list, code, statusKoder);
             filename = "Dokumentajson for krav med " + list.name() + " " + code;
         }
