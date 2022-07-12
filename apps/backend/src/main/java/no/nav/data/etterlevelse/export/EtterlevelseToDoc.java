@@ -358,7 +358,12 @@ public class EtterlevelseToDoc {
                 }).sorted((a,b) -> {
                     Float aNumber = Float.parseFloat(a.getEtterlevelseData().getKravNummer() + "." + a.getEtterlevelseData().getVersion());
                     Float bNumber = Float.parseFloat(b.getEtterlevelseData().getKravNummer() + "." + b.getEtterlevelseData().getVersion());
-                    return aNumber.compareTo(bNumber);
+                    if(aNumber - bNumber > 0) {
+                        return 1;
+                    } else if (aNumber - bNumber < 0) {
+                        return -1;
+                    }
+                    return 0;
                 }).toList();
 
                 if(!filteredDataByTema.isEmpty()) {
