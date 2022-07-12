@@ -62,6 +62,39 @@ public class EtterlevelseToDoc {
         }
     }
 
+    private List<Etterlevelse> getEtterlevelseByFilter(String behandlingId, List<String> statusKoder, List<String> lover) {
+
+        List<Etterlevelse> etterlevelser = etterlevelseService.getByBehandling(behandlingId);
+
+        if (Objects.nonNull(statusKoder)) {
+            etterlevelser = etterlevelser.stream().filter(e -> statusKoder.contains(e.getStatus().toString())).toList();
+        }
+
+        if(!lover.isEmpty()) {
+            List<Etterlevelse> temaFilteredEtterlevelse = new ArrayList<>();
+            etterlevelser.forEach(etterlevelse -> {
+                var kravNummer = etterlevelse.getKravNummer();
+                var kravVersjon = etterlevelse.getKravVersjon();
+
+                var kraver = kravService.getByFilter(KravFilter
+                                .builder()
+                                .lover(lover)
+                                .nummer(kravNummer)
+                                .build())
+                        .stream()
+                        .filter(k -> Objects.equals(k.getKravVersjon(), kravVersjon))
+                        .toList();
+
+                if(kraver.size()>0){
+                    temaFilteredEtterlevelse.add(etterlevelse);
+                }
+            });
+            return temaFilteredEtterlevelse;
+        }
+
+        return etterlevelser;
+    }
+
     public byte[] generateDocForEtterlevelse(UUID etterlevelseId) {
 
         Etterlevelse etterlevelse = etterlevelseService.get(etterlevelseId);
@@ -79,33 +112,7 @@ public class EtterlevelseToDoc {
 
         var behandling = behandlingService.getBehandling(behandlingId.toString());
 
-        List<Etterlevelse> etterlevelser = etterlevelseService.getByBehandling(behandlingId.toString());
-
-        if (Objects.nonNull(statusKoder)) {
-            etterlevelser = etterlevelser.stream().filter(e -> statusKoder.contains(e.getStatus().toString())).toList();
-        }
-
-        if(!lover.isEmpty()) {
-            List<Etterlevelse> temp = new ArrayList<>();
-            etterlevelser.forEach(etterlevelse -> {
-                var kravNummer = etterlevelse.getKravNummer();
-                var kravVersjon = etterlevelse.getKravVersjon();
-
-                var kraver = kravService.getByFilter(KravFilter
-                                .builder()
-                                .lover(lover)
-                                .nummer(kravNummer)
-                                .build())
-                        .stream()
-                        .filter(k -> Objects.equals(k.getKravVersjon(), kravVersjon))
-                        .toList();
-
-                if(kraver.size()>0){
-                    temp.add(etterlevelse);
-                }
-            });
-            etterlevelser = temp;
-        }
+        List<Etterlevelse> etterlevelser = getEtterlevelseByFilter(behandlingId.toString(), statusKoder, lover);
 
         if (etterlevelser.isEmpty()) {
             throw new NotFoundException("No etterlevelser found for behandling with id " + behandlingId);
