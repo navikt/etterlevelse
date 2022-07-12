@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.NotFoundException;
 import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.etterlevelse.codelist.CodelistService;
+import no.nav.data.etterlevelse.codelist.codeusage.CodeUsageService;
 import no.nav.data.etterlevelse.codelist.domain.Codelist;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
 import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
@@ -47,12 +48,15 @@ public class ExportController {
     private final KravService kravService;
     private final CodelistService codelistService;
 
-    public ExportController(CodelistToDoc codelistToDoc, KravToDoc kravToDoc, EtterlevelseToDoc etterlevelseToDoc, KravService kravService, CodelistService codelistService, EtterlevelseService etterlevelseService) {
+    private final CodeUsageService codeUsageService;
+
+    public ExportController(CodelistToDoc codelistToDoc, KravToDoc kravToDoc, EtterlevelseToDoc etterlevelseToDoc, KravService kravService, CodelistService codelistService, CodeUsageService codeUsageService) {
         this.codelistToDoc = codelistToDoc;
         this.kravToDoc = kravToDoc;
         this.etterlevelseToDoc = etterlevelseToDoc;
         this.kravService = kravService;
         this.codelistService = codelistService;
+        this.codeUsageService = codeUsageService;
     }
 
 
@@ -161,10 +165,7 @@ public class ExportController {
 
                 codelistService.validateListNameAndCode(ListName.TEMA.name(), temaKode);
 
-                lover = CodelistService.getCodelist(ListName.LOV)
-                        .stream().filter(l -> l.getData().get("tema").toString().equals(temaKode))
-                        .map(Codelist::getCode)
-                        .collect(Collectors.toList());
+                lover = codeUsageService.findCodeUsage(ListName.TEMA, temaKode).getCodelist().stream().map(Codelist::getCode).toList();
             } else {
                 lover = new ArrayList<>();
             }
