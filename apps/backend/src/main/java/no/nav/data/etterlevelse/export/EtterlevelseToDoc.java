@@ -27,7 +27,6 @@ import org.docx4j.jaxb.Context;
 import org.docx4j.wml.ObjectFactory;
 import org.springframework.stereotype.Service;
 
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -71,13 +70,7 @@ public class EtterlevelseToDoc {
         if (Objects.nonNull(statusKoder)) {
             etterlevelser = etterlevelser.stream().filter(e -> statusKoder.contains(e.getStatus().toString())).toList();
         }
-
-
-        log.info(String.valueOf(lover));
-        log.info(String.valueOf(lover.size()));
-
         if(!lover.isEmpty()) {
-            log.info("TRIGGER LOVER FILTER");
             List<Etterlevelse> temaFilteredEtterlevelse = new ArrayList<>();
             etterlevelser.forEach(etterlevelse -> {
                 var kravNummer = etterlevelse.getKravNummer();

@@ -7,18 +7,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import no.nav.data.common.exceptions.NotFoundException;
 import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.etterlevelse.codelist.CodelistService;
 import no.nav.data.etterlevelse.codelist.codeusage.CodeUsageService;
 import no.nav.data.etterlevelse.codelist.domain.Codelist;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
-import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
-import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
-import no.nav.data.etterlevelse.etterlevelse.domain.EtterlevelseStatus;
 import no.nav.data.etterlevelse.krav.KravService;
 import no.nav.data.etterlevelse.krav.domain.Krav;
-import no.nav.data.etterlevelse.krav.domain.dto.KravFilter;
 import org.springframework.http.HttpHeaders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StreamUtils;
@@ -30,9 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -108,12 +101,7 @@ public class ExportController {
             } else if (temaKode != null) {
                 list = ListName.TEMA;
                 codelistService.validateListNameAndCode(list.name(), temaKode);
-
-                code = CodelistService.getCodelist(ListName.LOV)
-                        .stream().filter(l -> l.getData().get("tema").toString().equals(temaKode))
-                        .map(Codelist::getCode)
-                        .collect(Collectors.toList());
-
+                code = codeUsageService.findCodeUsage(ListName.TEMA, temaKode).getCodelist().stream().map(Codelist::getCode).toList();
             } else if (lovKode != null) {
                 list = ListName.LOV;
                 code = new ArrayList<>();
@@ -162,14 +150,11 @@ public class ExportController {
 
             if(temaKode != null){
                 filename = "Dokumentasjon for behandling med id - " + behandlingId + " filtert med tema " + temaKode +".docx";
-
                 codelistService.validateListNameAndCode(ListName.TEMA.name(), temaKode);
-
                 lover = codeUsageService.findCodeUsage(ListName.TEMA, temaKode).getCodelist().stream().map(Codelist::getCode).toList();
             } else {
                 lover = new ArrayList<>();
             }
-
             doc = etterlevelseToDoc.generateDocFor(behandlingId, statusKoder, lover);
         } else {
             throw new ValidationException("No paramater given");
