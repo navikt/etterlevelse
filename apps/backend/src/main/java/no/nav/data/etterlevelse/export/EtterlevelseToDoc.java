@@ -355,6 +355,10 @@ public class EtterlevelseToDoc {
                        return e.getKravData().get().getRegelverk().stream().anyMatch(l -> lover.contains(l.getLov()));
                     }
                     return false;
+                }).sorted((a,b) -> {
+                    Float aNumber = Float.parseFloat(a.getEtterlevelseData().getKravNummer() + "." + a.getEtterlevelseData().getVersion());
+                    Float bNumber = Float.parseFloat(b.getEtterlevelseData().getKravNummer() + "." + b.getEtterlevelseData().getVersion());
+                    return aNumber.compareTo(bNumber);
                 }).toList();
 
                 if(!filteredDataByTema.isEmpty()) {
