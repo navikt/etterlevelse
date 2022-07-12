@@ -68,6 +68,7 @@ public class EtterlevelseToDoc {
         List<Etterlevelse> etterlevelser = etterlevelseService.getByBehandling(behandlingId);
 
         if (Objects.nonNull(statusKoder)) {
+            log.info("Exporting list of etterlevelse for behandling with id " + behandlingId + " to doc filtered by status");
             etterlevelser = etterlevelser.stream().filter(e -> statusKoder.contains(e.getStatus().toString())).toList();
         }
         if(!lover.isEmpty()) {

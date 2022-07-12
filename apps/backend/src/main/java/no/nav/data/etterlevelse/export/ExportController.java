@@ -62,6 +62,7 @@ public class ExportController {
             HttpServletResponse response,
             @RequestParam(name = "code") ListName code
     ) {
+        log.info("Exporting codelist to doc");
         String filename = "Dokumentasjon for kodeverk - " + cleanCodelistName(code) + ".docx";
         byte[] doc = codelistToDoc.generateDocFor(code);
 
@@ -85,28 +86,35 @@ public class ExportController {
             @RequestParam(name = "ansvarligKode", required = false) String ansvarligKode,
             @RequestParam(name = "statusKoder", required = false) List<String> statusKoder
     ) {
+        log.info("Exporting krav to doc");
         byte[] doc;
         String filename;
 
         if (kravId != null) {
+            log.info("Exporting krav to doc");
             Krav krav = kravService.get(kravId);
             doc = kravToDoc.generateDocForKrav(krav);
             filename = "Dokumentajson for K" + krav.getKravNummer() + "." + krav.getVersion() + " " + krav.getNavn() + ".docx";
+            log.info("Exporting krav K" + krav.getKravNummer() + "." + krav.getVersion() + " to doc");
         } else {
             ListName list;
             List<String> code;
             if (relevansKoder != null) {
+                log.info("Exporting list of krav filtered by relevans to doc");
                 list = ListName.RELEVANS;
                 code = relevansKoder;
             } else if (temaKode != null) {
+                log.info("Exporting list of krav filtered by tema to doc");
                 list = ListName.TEMA;
                 codelistService.validateListNameAndCode(list.name(), temaKode);
                 code = codeUsageService.findCodeUsage(ListName.TEMA, temaKode).getCodelist().stream().map(Codelist::getCode).toList();
             } else if (lovKode != null) {
+                log.info("Exporting list of krav filtered by lov to doc");
                 list = ListName.LOV;
                 code = new ArrayList<>();
                 code.add(lovKode);
             } else if (ansvarligKode != null) {
+                log.info("Exporting list of krav filtered by underavdeling to doc");
                 list = ListName.UNDERAVDELING;
                 code = new ArrayList<>();
                 code.add(ansvarligKode);
@@ -138,17 +146,21 @@ public class ExportController {
             @RequestParam(name = "statuskoder", required = false) List<String> statusKoder,
             @RequestParam(name = "temakode", required = false) String temaKode
     ) {
+        log.info("Exporting etterlevelse to doc");
         String filename;
         byte[] doc;
 
         if (etterlevelseId != null) {
             filename = "Dokumentasjon for etterlevelse - " + etterlevelseId + ".docx";
+            log.info("Exporting 1 etterlevelse to doc");
             doc = etterlevelseToDoc.generateDocForEtterlevelse(etterlevelseId);
         } else if (behandlingId != null) {
+            log.info("Exporting list of etterlevelse for behandling with id " + behandlingId + " to doc");
             filename = "Dokumentasjon for behandling med id - " + behandlingId + ".docx";
             List<String> lover;
 
             if(temaKode != null){
+                log.info("Exporting list of etterlevelse for behandling with id " + behandlingId + " to doc filtered by tema");
                 filename = "Dokumentasjon for behandling med id - " + behandlingId + " filtert med tema " + temaKode +".docx";
                 codelistService.validateListNameAndCode(ListName.TEMA.name(), temaKode);
                 lover = codeUsageService.findCodeUsage(ListName.TEMA, temaKode).getCodelist().stream().map(Codelist::getCode).toList();
