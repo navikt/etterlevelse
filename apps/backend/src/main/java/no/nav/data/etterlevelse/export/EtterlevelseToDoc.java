@@ -1,6 +1,7 @@
 package no.nav.data.etterlevelse.export;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.NotFoundException;
 import no.nav.data.common.utils.WordDocUtils;
 import no.nav.data.etterlevelse.behandling.BehandlingService;
@@ -32,6 +33,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class EtterlevelseToDoc {
@@ -71,8 +73,8 @@ public class EtterlevelseToDoc {
         }
 
         if(lover != null && !lover.isEmpty()) {
-            System.out.println(lover);
-            System.out.println(lover.size());
+            log.info(String.valueOf(lover));
+            log.info(String.valueOf(lover.size()));
             List<Etterlevelse> temaFilteredEtterlevelse = new ArrayList<>();
             etterlevelser.forEach(etterlevelse -> {
                 var kravNummer = etterlevelse.getKravNummer();
