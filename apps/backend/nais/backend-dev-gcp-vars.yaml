@@ -12,6 +12,8 @@ env:
     value: https://etterlevelse.dev.intern.nav.no,https://etterlevelse-api.dev.intern.nav.no,http://localhost:3000
   - name: CLIENT_TEAMCAT_URL
     value: https://teamkatalog-api.dev-fss-pub.nais.io
+  - name: CLIET_TEAMCAT_FRONTEND_URL
+    value: https://teamkatalog.nav.no/
   - name: CLIENT_POLLY_URL
     value: https://polly.dev-fss-pub.nais.io
   - name: AZURE_CLIENT_GROUPS
@@ -20,3 +22,5 @@ env:
     value: bf05a29f-6f80-4da1-b419-22c802fd41e7
   - name: AZURE_CLIENT_GROUPS_KRAVEIER
     value: d99d875c-c028-46a4-94bc-a87a633b3eee
+  - name: CLIET_TEAMCAT_FRONTEND_URL
+    value:
