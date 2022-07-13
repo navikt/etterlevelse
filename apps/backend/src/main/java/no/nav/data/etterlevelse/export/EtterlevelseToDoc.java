@@ -135,11 +135,21 @@ public class EtterlevelseToDoc {
 
         doc.addTableOfContent(etterlevelseMedKravData, temaListe);
 
-        for (int i = 0; i < etterlevelseMedKravData.size(); i++) {
-            if (i != etterlevelseMedKravData.size() - 1) {
-                doc.pageBreak();
+        for(CodeUsage tema: temaListe) {
+            String temaShortName = CodelistService.getCodelist(ListName.TEMA, tema.getCode()).getShortName();
+            List<String> regelverk = tema.getCodelist().stream().map(Codelist::getCode).toList();
+
+            List<EtterlevelseMedKravData> filteredDataByTema = doc.getSortedEtterlevelseMedKravData(etterlevelseMedKravData,regelverk);
+
+            if(!filteredDataByTema.isEmpty()) {
+                doc.addHeading2(temaShortName);
+                for (int i = 0; i < filteredDataByTema.size(); i++) {
+                    if (i != filteredDataByTema.size() - 1) {
+                        doc.pageBreak();
+                    }
+                    doc.generate(filteredDataByTema.get(i));
+                }
             }
-            doc.generate(etterlevelseMedKravData.get(i));
         }
 
         return doc.build();
