@@ -135,16 +135,14 @@ public class EtterlevelseToDoc {
 
         doc.addTableOfContent(etterlevelseMedKravData, temaListe);
 
-        for (int t = 0; t<temaListe.size(); t++) {
-            String temaShortName = CodelistService.getCodelist(ListName.TEMA, temaListe.get(t).getCode()).getShortName();
-            List<String> regelverk = temaListe.get(t).getCodelist().stream().map(Codelist::getCode).toList();
+        for (CodeUsage tema: temaListe) {
+            String temaShortName = CodelistService.getCodelist(ListName.TEMA, tema.getCode()).getShortName();
+            List<String> regelverk = tema.getCodelist().stream().map(Codelist::getCode).toList();
 
             List<EtterlevelseMedKravData> filteredDataByTema = doc.getSortedEtterlevelseMedKravData(etterlevelseMedKravData, regelverk);
 
             if (!filteredDataByTema.isEmpty()) {
-                if (t != temaListe.size() - 1) {
-                    doc.pageBreak();
-                }
+                doc.pageBreak();
                 doc.addHeading2(temaShortName);
                 for (int i = 0; i < filteredDataByTema.size(); i++) {
                     if (i != filteredDataByTema.size() - 1) {
