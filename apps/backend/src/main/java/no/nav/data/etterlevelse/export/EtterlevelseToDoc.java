@@ -143,7 +143,7 @@ public class EtterlevelseToDoc {
 
             if (!filteredDataByTema.isEmpty()) {
                 doc.pageBreak();
-                doc.addHeading2(temaShortName);
+                doc.addHeading1(temaShortName);
                 for (int i = 0; i < filteredDataByTema.size(); i++) {
                     doc.generate(filteredDataByTema.get(i));
                     if (i != filteredDataByTema.size() - 1) {
