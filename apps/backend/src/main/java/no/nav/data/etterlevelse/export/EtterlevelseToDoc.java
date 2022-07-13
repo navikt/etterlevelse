@@ -51,7 +51,7 @@ public class EtterlevelseToDoc {
 
     private final KravPrioriteringService kravPrioriteringService;
 
-    public void getBehandlingData(Behandling behandling,EtterlevelseDocumentBuilder doc) {
+    public void getBehandlingData(Behandling behandling, EtterlevelseDocumentBuilder doc) {
         doc.addTitle("Etterlevelse for B" + behandling.getNummer() + " " + behandling.getOverordnetFormaal().getShortName());
         doc.addHeading3(behandling.getNavn());
         doc.addHeading3("Team");
@@ -83,11 +83,11 @@ public class EtterlevelseToDoc {
         });
 
 
-        if(!lover.isEmpty()) {
+        if (!lover.isEmpty()) {
             List<EtterlevelseMedKravData> temaFilteredEtterlevelse = new ArrayList<>();
             etterlevelseMedKravData.forEach(etterlevelse -> {
-                if(etterlevelse.getKravData().isPresent()) {
-                    if(etterlevelse.getKravData().get().getRegelverk().stream().anyMatch(m -> lover.contains(m.getLov())
+                if (etterlevelse.getKravData().isPresent()) {
+                    if (etterlevelse.getKravData().get().getRegelverk().stream().anyMatch(m -> lover.contains(m.getLov())
                     )) {
                         temaFilteredEtterlevelse.add(etterlevelse);
                     }
@@ -110,7 +110,7 @@ public class EtterlevelseToDoc {
 
         var krav = kravService.getByKravNummer(etterlevelse.getKravNummer(), etterlevelse.getKravVersjon());
         EtterlevelseMedKravData etterlevelseMedKravData = EtterlevelseMedKravData.builder().etterlevelseData(etterlevelse)
-                    .kravData(krav).build();
+                .kravData(krav).build();
 
         doc.generate(etterlevelseMedKravData);
 
@@ -131,17 +131,20 @@ public class EtterlevelseToDoc {
         var doc = new EtterlevelseDocumentBuilder();
         getBehandlingData(behandling, doc);
 
-        doc.addHeading1("Dokumentet inneholder følgende etterlevelse for krav (" + etterlevelseMedKravData.size() +")");
+        doc.addHeading1("Dokumentet inneholder følgende etterlevelse for krav (" + etterlevelseMedKravData.size() + ")");
 
         doc.addTableOfContent(etterlevelseMedKravData, temaListe);
 
-        for(CodeUsage tema: temaListe) {
-            String temaShortName = CodelistService.getCodelist(ListName.TEMA, tema.getCode()).getShortName();
-            List<String> regelverk = tema.getCodelist().stream().map(Codelist::getCode).toList();
+        for (int t = 0; t<temaListe.size(); t++) {
+            String temaShortName = CodelistService.getCodelist(ListName.TEMA, temaListe.get(t).getCode()).getShortName();
+            List<String> regelverk = temaListe.get(t).getCodelist().stream().map(Codelist::getCode).toList();
 
-            List<EtterlevelseMedKravData> filteredDataByTema = doc.getSortedEtterlevelseMedKravData(etterlevelseMedKravData,regelverk);
+            List<EtterlevelseMedKravData> filteredDataByTema = doc.getSortedEtterlevelseMedKravData(etterlevelseMedKravData, regelverk);
 
-            if(!filteredDataByTema.isEmpty()) {
+            if (!filteredDataByTema.isEmpty()) {
+                if (t != temaListe.size() - 1) {
+                    doc.pageBreak();
+                }
                 doc.addHeading2(temaShortName);
                 for (int i = 0; i < filteredDataByTema.size(); i++) {
                     if (i != filteredDataByTema.size() - 1) {
@@ -178,7 +181,7 @@ public class EtterlevelseToDoc {
 
             addBookmark(header, etterlevelse.getId().toString());
 
-            if(krav.isPresent()) {
+            if (krav.isPresent()) {
                 addHeading4("Hensikten med kravet");
                 if (krav.get().getHensikt() != null && !krav.get().getHensikt().isEmpty()) {
                     addMarkdownText(krav.get().getHensikt());
@@ -187,7 +190,7 @@ public class EtterlevelseToDoc {
 
             addHeading4("Etterelvelses status: " + etterlevelseStatusText(etterlevelse.getStatus()));
 
-            if(etterlevelse.getChangeStamp() != null && etterlevelse.getChangeStamp().getLastModifiedBy() != null && etterlevelse.getChangeStamp().getLastModifiedDate() != null) {
+            if (etterlevelse.getChangeStamp() != null && etterlevelse.getChangeStamp().getLastModifiedBy() != null && etterlevelse.getChangeStamp().getLastModifiedDate() != null) {
                 addLastEditedBy(etterlevelse.getChangeStamp());
             } else {
                 addText("Sist endret: Ikke angitt");
@@ -199,10 +202,10 @@ public class EtterlevelseToDoc {
                 int suksesskriterieNumber = s + 1;
                 addHeading4("SUKSESSKRITERIE " + suksesskriterieNumber + " AV " + etterlevelse.getSuksesskriterieBegrunnelser().size());
 
-                if(krav.isPresent()) {
+                if (krav.isPresent()) {
                     List<Suksesskriterie> suksesskriterieList = krav.get().getSuksesskriterier()
                             .stream().filter(sk -> sk.getId() == suksesskriterieBegrunnelse.getSuksesskriterieId()).toList();
-                    if(!suksesskriterieList.isEmpty()) {
+                    if (!suksesskriterieList.isEmpty()) {
                         Suksesskriterie suksesskriterie = suksesskriterieList.get(0);
                         addHeading4(suksesskriterie.getNavn());
                         addText("Id: " + suksesskriterie.getId());
@@ -223,16 +226,16 @@ public class EtterlevelseToDoc {
                     addMarkdownText(suksesskriterieBegrunnelse.getBegrunnelse());
                 }
 
-                addText( " ");
+                addText(" ");
             }
 
 
-            if(krav.isPresent()) {
+            if (krav.isPresent()) {
                 addHeading4("Lenker og annen informtion om kravet");
 
                 addHeading4("Kilder");
-                if(!krav.get().getDokumentasjon().isEmpty()){
-                    for(int d = 0; d < krav.get().getDokumentasjon().size(); d++) {
+                if (!krav.get().getDokumentasjon().isEmpty()) {
+                    for (int d = 0; d < krav.get().getDokumentasjon().size(); d++) {
                         addMarkdownText("- " + krav.get().getDokumentasjon().get(d));
                     }
                 } else {
@@ -240,22 +243,22 @@ public class EtterlevelseToDoc {
                 }
 
                 addHeading4("Etiketter");
-                if(krav.get().getTagger() != null && !krav.get().getTagger().isEmpty()){
+                if (krav.get().getTagger() != null && !krav.get().getTagger().isEmpty()) {
                     addText(String.join(", ", krav.get().getTagger()));
                 } else {
                     addText("Ikke angitt");
                 }
 
                 addHeading4("Relevante implementasjoner");
-                if(krav.get().getImplementasjoner() != null && !krav.get().getImplementasjoner().isEmpty()){
+                if (krav.get().getImplementasjoner() != null && !krav.get().getImplementasjoner().isEmpty()) {
                     addMarkdownText(krav.get().getImplementasjoner());
                 } else {
                     addText("Ikke angitt");
                 }
 
                 addHeading4("Begreper");
-                if(krav.get().getBegrepIder() != null && !krav.get().getBegrepIder().isEmpty()){
-                    for(int b = 0; b < krav.get().getBegrepIder().size(); b++) {
+                if (krav.get().getBegrepIder() != null && !krav.get().getBegrepIder().isEmpty()) {
+                    for (int b = 0; b < krav.get().getBegrepIder().size(); b++) {
                         BegrepResponse begrepResponse = begrepService.getBegrep(krav.get().getBegrepIder().get(b)).orElse(null);
                         addText("- " + begrepResponse.getId() + " " + begrepResponse.getNavn());
                         addText("  " + begrepResponse.getBeskrivelse());
@@ -265,8 +268,8 @@ public class EtterlevelseToDoc {
                 }
 
                 addHeading4("Relasjoner til andre krav");
-                if(krav.get().getKravIdRelasjoner() != null && !krav.get().getKravIdRelasjoner().isEmpty()){
-                    for(int x = 0; x < krav.get().getKravIdRelasjoner().size(); x++) {
+                if (krav.get().getKravIdRelasjoner() != null && !krav.get().getKravIdRelasjoner().isEmpty()) {
+                    for (int x = 0; x < krav.get().getKravIdRelasjoner().size(); x++) {
                         Krav kravResponse = kravService.get(UUID.fromString(krav.get().getKravIdRelasjoner().get(x)));
                         addText("- K" + kravResponse.getKravNummer() + "." + kravResponse.getVersion() + " " + kravResponse.getNavn());
                     }
@@ -275,8 +278,8 @@ public class EtterlevelseToDoc {
                 }
 
                 addHeading4("Krav er relevant for");
-                if(krav.get().getRelevansFor() != null && !krav.get().getRelevansFor().isEmpty()){
-                    for(int r = 0; r < krav.get().getRelevansFor().size(); r++) {
+                if (krav.get().getRelevansFor() != null && !krav.get().getRelevansFor().isEmpty()) {
+                    for (int r = 0; r < krav.get().getRelevansFor().size(); r++) {
                         Codelist codelist = CodelistService.getCodelist(ListName.RELEVANS, krav.get().getRelevansFor().get(r));
                         addText("- " + codelist.getShortName());
                     }
@@ -284,8 +287,8 @@ public class EtterlevelseToDoc {
                     addText("Ikke angitt");
                 }
 
-                addHeading4( "Dette er nytt fra forrige versjon");
-                if(krav.get().getVersjonEndringer() != null && !krav.get().getVersjonEndringer().isEmpty()){
+                addHeading4("Dette er nytt fra forrige versjon");
+                if (krav.get().getVersjonEndringer() != null && !krav.get().getVersjonEndringer().isEmpty()) {
                     addMarkdownText(krav.get().getVersjonEndringer());
                 } else {
                     addText("Ikke angitt");
@@ -293,7 +296,7 @@ public class EtterlevelseToDoc {
 
 
                 addHeading4("Ansvarlig");
-                if(krav.get().getUnderavdeling() != null && !krav.get().getUnderavdeling().isEmpty()){
+                if (krav.get().getUnderavdeling() != null && !krav.get().getUnderavdeling().isEmpty()) {
                     Codelist codelist = CodelistService.getCodelist(ListName.UNDERAVDELING, krav.get().getUnderavdeling());
                     addText("- " + codelist.getShortName());
                 } else {
@@ -301,8 +304,8 @@ public class EtterlevelseToDoc {
                 }
 
                 addHeading4("Regelverk");
-                if(krav.get().getRegelverk() != null && !krav.get().getRegelverk().isEmpty()){
-                    for(int l = 0; l < krav.get().getRegelverk().size(); l++) {
+                if (krav.get().getRegelverk() != null && !krav.get().getRegelverk().isEmpty()) {
+                    for (int l = 0; l < krav.get().getRegelverk().size(); l++) {
                         Regelverk regelverk = krav.get().getRegelverk().get(l);
 
                         Codelist codelist = CodelistService.getCodelist(ListName.LOV, regelverk.getLov());
@@ -313,8 +316,8 @@ public class EtterlevelseToDoc {
                 }
 
                 addHeading4("Varslingsadresser");
-                if(krav.get().getVarslingsadresser() != null && !krav.get().getVarslingsadresser().isEmpty()){
-                    for(int v = 0; v < krav.get().getVarslingsadresser().size(); v++) {
+                if (krav.get().getVarslingsadresser() != null && !krav.get().getVarslingsadresser().isEmpty()) {
+                    for (int v = 0; v < krav.get().getVarslingsadresser().size(); v++) {
                         Varslingsadresse varslingsadresse = krav.get().getVarslingsadresser().get(v);
 
                         addText("- " + adresseTypeText(varslingsadresse.getType()) + ": " + varslingsadresse.getAdresse());
@@ -344,8 +347,8 @@ public class EtterlevelseToDoc {
             };
         }
 
-        public void getSuksesskriterieBegrunnelseHeader(SuksesskriterieStatus status){
-            if(status.equals(SuksesskriterieStatus.IKKE_RELEVANT)) {
+        public void getSuksesskriterieBegrunnelseHeader(SuksesskriterieStatus status) {
+            if (status.equals(SuksesskriterieStatus.IKKE_RELEVANT)) {
                 addHeading4("Hvorfor er ikke kriteriet relevant?");
             } else {
                 addHeading4("Hvordan oppfylles kriteriet?");
@@ -354,13 +357,13 @@ public class EtterlevelseToDoc {
 
         private List<EtterlevelseMedKravData> getSortedEtterlevelseMedKravData(List<EtterlevelseMedKravData> etterlevelseMedKravData, List<String> lover) {
             return etterlevelseMedKravData.stream().filter(e -> {
-                if(e.getKravData().isPresent()) {
+                if (e.getKravData().isPresent()) {
                     return e.getKravData().get().getRegelverk().stream().anyMatch(l -> lover.contains(l.getLov()));
                 }
                 return false;
-            }).sorted((a,b) -> {
-                if(a.getEtterlevelseData().getKravNummer().equals(b.getEtterlevelseData().getKravNummer())) {
-                   return b.getEtterlevelseData().getKravVersjon().compareTo(a.getEtterlevelseData().getKravVersjon());
+            }).sorted((a, b) -> {
+                if (a.getEtterlevelseData().getKravNummer().equals(b.getEtterlevelseData().getKravNummer())) {
+                    return b.getEtterlevelseData().getKravVersjon().compareTo(a.getEtterlevelseData().getKravVersjon());
                 } else {
                     return a.getEtterlevelseData().getKravNummer().compareTo(b.getEtterlevelseData().getKravNummer());
                 }
@@ -371,13 +374,13 @@ public class EtterlevelseToDoc {
 
             long currListId = listId++;
 
-            for(CodeUsage tema: temaListe) {
+            for (CodeUsage tema : temaListe) {
                 String temaShortName = CodelistService.getCodelist(ListName.TEMA, tema.getCode()).getShortName();
                 List<String> lover = tema.getCodelist().stream().map(Codelist::getCode).toList();
 
-                List<EtterlevelseMedKravData> filteredDataByTema = getSortedEtterlevelseMedKravData(etterlevelseList,lover);
+                List<EtterlevelseMedKravData> filteredDataByTema = getSortedEtterlevelseMedKravData(etterlevelseList, lover);
 
-                if(!filteredDataByTema.isEmpty()) {
+                if (!filteredDataByTema.isEmpty()) {
                     addHeading3(temaShortName);
                     for (EtterlevelseMedKravData etterlevelseMedKravData : filteredDataByTema) {
                         Etterlevelse etterlevelse = etterlevelseMedKravData.getEtterlevelseData();
