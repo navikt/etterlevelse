@@ -53,7 +53,7 @@ public class EtterlevelseToDoc {
 
     public void getBehandlingData(Behandling behandling, EtterlevelseDocumentBuilder doc) {
         doc.addTitle("Etterlevelse for B" + behandling.getNummer() + " " + behandling.getOverordnetFormaal().getShortName());
-        doc.addHeading3(behandling.getNavn());
+        doc.addSubtitle(behandling.getNavn());
         doc.addHeading3("Team");
         if (behandling.getTeams() != null && !behandling.getTeams().isEmpty()) {
             behandling.getTeams().forEach(teamId -> {

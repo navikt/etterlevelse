@@ -1,5 +1,6 @@
 package no.nav.data.common.utils;
 
+import com.vladsch.flexmark.docx.converter.DocxRenderer;
 import com.vladsch.flexmark.ext.definition.DefinitionExtension;
 import com.vladsch.flexmark.ext.gfm.strikethrough.StrikethroughSubscriptExtension;
 import com.vladsch.flexmark.ext.ins.InsExtension;
@@ -7,9 +8,10 @@ import com.vladsch.flexmark.ext.superscript.SuperscriptExtension;
 import com.vladsch.flexmark.ext.tables.TablesExtension;
 import com.vladsch.flexmark.ext.toc.SimTocExtension;
 import com.vladsch.flexmark.ext.toc.TocExtension;
+import com.vladsch.flexmark.parser.Parser;
+import com.vladsch.flexmark.util.data.MutableDataSet;
 import lombok.SneakyThrows;
 import no.nav.data.common.storage.domain.ChangeStamp;
-import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.varsel.domain.AdresseType;
 import org.apache.commons.lang3.BooleanUtils;
 import org.docx4j.model.table.TblFactory;
@@ -17,9 +19,6 @@ import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.docx4j.openpackaging.parts.WordprocessingML.FooterPart;
 import org.docx4j.openpackaging.parts.WordprocessingML.MainDocumentPart;
 import org.docx4j.wml.*;
-import com.vladsch.flexmark.util.data.MutableDataSet;
-import com.vladsch.flexmark.parser.Parser;
-import com.vladsch.flexmark.docx.converter.DocxRenderer;
 
 import java.io.ByteArrayOutputStream;
 import java.math.BigInteger;
@@ -65,6 +64,7 @@ public class WordDocUtils {
 
 
     public static final String TITLE = "Title";
+    public static final String SUBTITLE = "Subtitle";
     public static final String HEADING_1 = "Heading1";
     public static final String HEADING_2 = "Heading2";
     public static final String HEADING_3 = "Heading3";
@@ -86,6 +86,11 @@ public class WordDocUtils {
 
     public void addTitle(String text) {
         P p = main.addStyledParagraphOfText(TITLE, text);
+        ((R) p.getContent().get(0)).setRPr(createRpr());
+    }
+
+    public void addSubtitle(String text){
+        P p = main.addStyledParagraphOfText(SUBTITLE,text);
         ((R) p.getContent().get(0)).setRPr(createRpr());
     }
 
