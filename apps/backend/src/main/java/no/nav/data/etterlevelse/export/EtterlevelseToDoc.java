@@ -350,7 +350,7 @@ public class EtterlevelseToDoc {
                 return false;
             }).sorted((a,b) -> {
                 if(a.getEtterlevelseData().getKravNummer().equals(b.getEtterlevelseData().getKravNummer())) {
-                   return a.getEtterlevelseData().getVersion().compareTo(b.getEtterlevelseData().getVersion());
+                   return b.getEtterlevelseData().getKravVersjon().compareTo(a.getEtterlevelseData().getKravVersjon());
                 } else {
                     return a.getEtterlevelseData().getKravNummer().compareTo(b.getEtterlevelseData().getKravNummer());
                 }
