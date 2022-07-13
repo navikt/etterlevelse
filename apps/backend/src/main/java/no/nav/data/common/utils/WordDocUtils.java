@@ -70,6 +70,7 @@ public class WordDocUtils {
     public static final String HEADING_3 = "Heading3";
     public static final String HEADING_4 = "Heading4";
     public static final String HEADING_5 = "Heading5";
+    public static final String HEADING_6 = "Heading6";
 
     WordprocessingMLPackage pack;
     MainDocumentPart main;
@@ -119,6 +120,11 @@ public class WordDocUtils {
 
     public void addHeading5(String text) {
         P p = main.addStyledParagraphOfText(HEADING_5, text);
+        ((R) p.getContent().get(0)).setRPr(createRpr());
+    }
+
+    public void addHeading6(String text) {
+        P p = main.addStyledParagraphOfText(HEADING_6, text);
         ((R) p.getContent().get(0)).setRPr(createRpr());
     }
 

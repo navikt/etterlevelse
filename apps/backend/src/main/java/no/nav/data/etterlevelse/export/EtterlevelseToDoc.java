@@ -230,7 +230,7 @@ public class EtterlevelseToDoc {
             if (krav.isPresent()) {
                 addHeading5("Lenker og annen information om kravet");
 
-                addHeading5("Kilder");
+                addHeading6("Kilder");
                 if (!krav.get().getDokumentasjon().isEmpty()) {
                     for (int d = 0; d < krav.get().getDokumentasjon().size(); d++) {
                         addMarkdownText("- " + krav.get().getDokumentasjon().get(d));
@@ -239,21 +239,21 @@ public class EtterlevelseToDoc {
                     addText("Ikke angitt");
                 }
 
-                addHeading5("Etiketter");
+                addHeading6("Etiketter");
                 if (krav.get().getTagger() != null && !krav.get().getTagger().isEmpty()) {
                     addText(String.join(", ", krav.get().getTagger()));
                 } else {
                     addText("Ikke angitt");
                 }
 
-                addHeading5("Relevante implementasjoner");
+                addHeading6("Relevante implementasjoner");
                 if (krav.get().getImplementasjoner() != null && !krav.get().getImplementasjoner().isEmpty()) {
                     addMarkdownText(krav.get().getImplementasjoner());
                 } else {
                     addText("Ikke angitt");
                 }
 
-                addHeading5("Begreper");
+                addHeading6("Begreper");
                 if (krav.get().getBegrepIder() != null && !krav.get().getBegrepIder().isEmpty()) {
                     for (int b = 0; b < krav.get().getBegrepIder().size(); b++) {
                         BegrepResponse begrepResponse = begrepService.getBegrep(krav.get().getBegrepIder().get(b)).orElse(null);
@@ -264,7 +264,7 @@ public class EtterlevelseToDoc {
                     addText("Ikke angitt");
                 }
 
-                addHeading5("Relasjoner til andre krav");
+                addHeading6("Relasjoner til andre krav");
                 if (krav.get().getKravIdRelasjoner() != null && !krav.get().getKravIdRelasjoner().isEmpty()) {
                     for (int x = 0; x < krav.get().getKravIdRelasjoner().size(); x++) {
                         Krav kravResponse = kravService.get(UUID.fromString(krav.get().getKravIdRelasjoner().get(x)));
@@ -274,7 +274,7 @@ public class EtterlevelseToDoc {
                     addText("Ikke angitt");
                 }
 
-                addHeading5("Krav er relevant for");
+                addHeading6("Krav er relevant for");
                 if (krav.get().getRelevansFor() != null && !krav.get().getRelevansFor().isEmpty()) {
                     for (int r = 0; r < krav.get().getRelevansFor().size(); r++) {
                         Codelist codelist = CodelistService.getCodelist(ListName.RELEVANS, krav.get().getRelevansFor().get(r));
@@ -284,7 +284,7 @@ public class EtterlevelseToDoc {
                     addText("Ikke angitt");
                 }
 
-                addHeading5("Dette er nytt fra forrige versjon");
+                addHeading6("Dette er nytt fra forrige versjon");
                 if (krav.get().getVersjonEndringer() != null && !krav.get().getVersjonEndringer().isEmpty()) {
                     addMarkdownText(krav.get().getVersjonEndringer());
                 } else {
@@ -292,7 +292,7 @@ public class EtterlevelseToDoc {
                 }
 
 
-                addHeading5("Ansvarlig");
+                addHeading6("Ansvarlig");
                 if (krav.get().getUnderavdeling() != null && !krav.get().getUnderavdeling().isEmpty()) {
                     Codelist codelist = CodelistService.getCodelist(ListName.UNDERAVDELING, krav.get().getUnderavdeling());
                     addText("- " + codelist.getShortName());
@@ -300,7 +300,7 @@ public class EtterlevelseToDoc {
                     addText("Ikke angitt");
                 }
 
-                addHeading5("Regelverk");
+                addHeading6("Regelverk");
                 if (krav.get().getRegelverk() != null && !krav.get().getRegelverk().isEmpty()) {
                     for (int l = 0; l < krav.get().getRegelverk().size(); l++) {
                         Regelverk regelverk = krav.get().getRegelverk().get(l);
