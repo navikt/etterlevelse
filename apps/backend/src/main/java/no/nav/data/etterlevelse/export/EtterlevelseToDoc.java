@@ -145,10 +145,10 @@ public class EtterlevelseToDoc {
                 doc.pageBreak();
                 doc.addHeading2(temaShortName);
                 for (int i = 0; i < filteredDataByTema.size(); i++) {
+                    doc.generate(filteredDataByTema.get(i));
                     if (i != filteredDataByTema.size() - 1) {
                         doc.pageBreak();
                     }
-                    doc.generate(filteredDataByTema.get(i));
                 }
             }
         }
