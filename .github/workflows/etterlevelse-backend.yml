@@ -57,7 +57,13 @@ jobs:
           RESOURCE: apps/backend/nais/backend-gcp.yaml
           VARS: apps/backend/nais/backend-dev-gcp-vars.yaml
           ENVIRONMENT: dev-gcp:teamdatajegerne:etterlevelse-backend
-
+      - name: deploy alerts to dev-gcp
+        uses: nais/deploy/actions/deploy@v1
+        env:
+          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+          CLUSTER: dev-gcp
+          RESOURCE: apps/backend/nais/alerts.yaml
+          
   deploy-prod:
     name: Backend - deploy Prod GCP
     needs: build
@@ -72,3 +78,10 @@ jobs:
           RESOURCE: apps/backend/nais/backend-gcp.yaml
           VARS: apps/backend/nais/backend-prod-gcp-vars.yaml
           ENVIRONMENT: prod-gcp:teamdatajegerne:etterlevelse-backend
+      - name: deploy alerts to prod-gcp
+        uses: nais/deploy/actions/deploy@v1
+        env:
+          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+          CLUSTER: prod-gcp
+          RESOURCE: apps/backend/nais/alerts.yaml
+          
