@@ -31,7 +31,7 @@ spec:
   {{/each}}
   replicas:
     min: 2
-    max: 2
+    max: 3
     cpuThresholdPercentage: 50
   resources:
     limits:
