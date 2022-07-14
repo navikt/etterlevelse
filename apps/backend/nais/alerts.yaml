@@ -28,3 +28,8 @@ spec:
       for: 3m
       description: "App {{ $labels.app }} har høy cpu bruk i namespace {{ $labels.kubernetes_namespace }}"
       action: "Sjekk grafana og logene til app {{ $labels.log_app }} i namespace {{ $labels.log_namespace }}."
+    - alert: Høy error rate
+      expr: sum(increase(logback_events_total{app="etterlevelse-backend", level="error"} [1m])) > 50
+      for: 3m
+      description: "App {{ $labels.app }} har høy error  rate i namespace {{ $labels.kubernetes_namespace }}"
+      action: "Sjekk logs i kibana til app {{ $labels.log_app }} i namespace {{ $labels.log_namespace }}. Mulig connection error fra katalogene."
