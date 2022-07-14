@@ -36,7 +36,7 @@ spec:
   resources:
     limits:
       cpu: 1000m
-      memory: 1024Mi
+      memory: 2Gi
     requests:
       memory: 512Mi
   liveness:

@@ -15,7 +15,7 @@ spec:
       send_resolved: false
   alerts:
     - alert: Høy minne bruk
-      expr: sum(container_memory_working_set_bytes{container="etterlevelse-backend", namespace="teamdatajegerne"}) > 980
+      expr: sum(container_memory_working_set_bytes{container="etterlevelse-backend", namespace="teamdatajegerne"}) > 1980
       for: 2m
       description: "App {{ $labels.app }} har høy minne bruk i namespace {{ $labels.kubernetes_namespace }}"
       action: "`kubectl describe pod {{ $labels.kubernetes_pod_name }} -n {{ $labels.kubernetes_namespace }}` for events, og `kubectl logs {{ $labels.kubernetes_pod_name }} -n {{ $labels.kubernetes_namespace }}` for logger"
