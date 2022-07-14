@@ -58,7 +58,7 @@ public class EtterlevelseToDoc {
             behandling.getTeams().forEach(teamId -> {
                 var team = teamService.getTeam(teamId);
                 if (!team.isEmpty()) {
-                    doc.addMarkdownText("- [" + team.get().getName() +"](" + System.getenv("CLIET_TEAMCAT_FRONTEND_URL") + "/team/" + team.get().getId()  +")");
+                    doc.addMarkdownText("- [" + team.get().getName() +"](" + System.getenv("CLIENT_TEAMCAT_FRONTEND_URL") + "/team/" + team.get().getId()  +")");
                 }
             });
         } else {
@@ -257,8 +257,7 @@ public class EtterlevelseToDoc {
                 if (krav.get().getBegrepIder() != null && !krav.get().getBegrepIder().isEmpty()) {
                     for (int b = 0; b < krav.get().getBegrepIder().size(); b++) {
                         BegrepResponse begrepResponse = begrepService.getBegrep(krav.get().getBegrepIder().get(b)).orElse(null);
-                        addText("- " + begrepResponse.getId() + " " + begrepResponse.getNavn());
-                        addText("  " + begrepResponse.getBeskrivelse());
+                        addMarkdownText("- [" + begrepResponse.getNavn() + "]( " + System.getenv("CLIENT_BEGREPSKATALOG_FRONTEND_URL") +  begrepResponse.getId() +")  " + begrepResponse.getBeskrivelse());
                     }
                 } else {
                     addText("Ikke angitt");

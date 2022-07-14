@@ -12,7 +12,6 @@ import no.nav.data.etterlevelse.krav.domain.KravStatus;
 import no.nav.data.etterlevelse.krav.domain.Regelverk;
 import no.nav.data.etterlevelse.krav.domain.Suksesskriterie;
 import no.nav.data.etterlevelse.krav.domain.dto.KravFilter;
-import no.nav.data.etterlevelse.varsel.domain.AdresseType;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 import no.nav.data.integration.begrep.BegrepService;
 import no.nav.data.integration.begrep.dto.BegrepResponse;
@@ -20,7 +19,6 @@ import org.docx4j.jaxb.Context;
 import org.docx4j.wml.ObjectFactory;
 import org.springframework.stereotype.Service;
 
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -157,8 +155,7 @@ public class KravToDoc {
             if(krav.getBegrepIder() != null && !krav.getBegrepIder().isEmpty()){
                 for(int b = 0; b < krav.getBegrepIder().size(); b++) {
                     BegrepResponse begrepResponse = begrepService.getBegrep(krav.getBegrepIder().get(b)).orElse(null);
-                    addText("- " + begrepResponse.getId() + " " + begrepResponse.getNavn());
-                    addText("  " + begrepResponse.getBeskrivelse());
+                    addMarkdownText("- [" + begrepResponse.getNavn() + "]( " + System.getenv("CLIENT_BEGREPSKATALOG_FRONTEND_URL") +  begrepResponse.getId() +")  " + begrepResponse.getBeskrivelse());
                 }
             } else {
                 addText("Ikke angitt");
