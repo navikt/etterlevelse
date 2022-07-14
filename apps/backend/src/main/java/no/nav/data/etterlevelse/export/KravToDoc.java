@@ -155,7 +155,7 @@ public class KravToDoc {
             if(krav.getBegrepIder() != null && !krav.getBegrepIder().isEmpty()){
                 for(int b = 0; b < krav.getBegrepIder().size(); b++) {
                     BegrepResponse begrepResponse = begrepService.getBegrep(krav.getBegrepIder().get(b)).orElse(null);
-                    addMarkdownText("- [" + begrepResponse.getNavn() + "]( " + System.getenv("CLIENT_BEGREPSKATALOG_FRONTEND_URL") +  begrepResponse.getId() +")  " + begrepResponse.getBeskrivelse());
+                    addMarkdownText("- [" + begrepResponse.getNavn() + "]( " + System.getenv("CLIENT_BEGREPSKATALOG_FRONTEND_URL") + "/" +  begrepResponse.getId() +")\s\s" + begrepResponse.getBeskrivelse());
                 }
             } else {
                 addText("Ikke angitt");

@@ -257,7 +257,7 @@ public class EtterlevelseToDoc {
                 if (krav.get().getBegrepIder() != null && !krav.get().getBegrepIder().isEmpty()) {
                     for (int b = 0; b < krav.get().getBegrepIder().size(); b++) {
                         BegrepResponse begrepResponse = begrepService.getBegrep(krav.get().getBegrepIder().get(b)).orElse(null);
-                        addMarkdownText("- [" + begrepResponse.getNavn() + "]( " + System.getenv("CLIENT_BEGREPSKATALOG_FRONTEND_URL") +  begrepResponse.getId() +")  " + begrepResponse.getBeskrivelse());
+                        addMarkdownText("- [" + begrepResponse.getNavn() + "]( " + System.getenv("CLIENT_BEGREPSKATALOG_FRONTEND_URL") + "/" +  begrepResponse.getId() +")\s\s" + begrepResponse.getBeskrivelse());
                     }
                 } else {
                     addText("Ikke angitt");
