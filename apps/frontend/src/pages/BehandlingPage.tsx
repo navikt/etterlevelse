@@ -1,13 +1,12 @@
-import React, {ReactNode, useRef, useState} from 'react'
+import React, {useRef, useState} from 'react'
 import {Block, Display, Responsive} from 'baseui/block'
 import {useLocation, useNavigate, useParams} from 'react-router-dom'
 import {LoadingSkeleton} from '../components/common/LoadingSkeleton'
 import {useBehandling} from '../api/BehandlingApi'
-import {HeadingXLarge, HeadingXXLarge, LabelSmall, ParagraphMedium, ParagraphXSmall} from 'baseui/typography'
+import {HeadingXLarge, LabelSmall, ParagraphMedium, ParagraphXSmall} from 'baseui/typography'
 import {FormikProps} from 'formik'
 import {ettlevColors, theme} from '../util/theme'
 import {Layout2} from '../components/scaffold/Page'
-import {Teams} from '../components/common/TeamName'
 import {arkPennIcon, editIcon, ellipse80, warningAlert} from '../components/Images'
 import {Behandling, BehandlingEtterlevData, KravQL, KravStatus, PageResponse} from '../constants'
 import {useQuery} from '@apollo/client'
@@ -16,51 +15,14 @@ import {Button} from 'baseui/button'
 import EditBehandlingModal from '../components/behandling/EditBehandlingModal'
 import {marginZero} from '../components/common/Style'
 import {breadcrumbPaths} from '../components/common/CustomizedBreadcrumbs'
-import {Helmet} from 'react-helmet'
-import {ExternalButton} from '../components/common/Button'
-import {env} from '../util/env'
-import {ExternalLinkWrapper} from '../components/common/RouteLink'
 import {BehandlingStats} from '../components/behandling/ViewBehandling'
 import {statsQuery} from '../api/KravApi'
 import {TemaCardBehandling} from '../components/behandlingPage/TemaCardBehandling'
 import {isFerdigUtfylt} from './BehandlingTemaPage'
 import {ampli} from '../services/Amplitude'
+import {getMainHeader} from "../components/behandlingPage/common/utils";
 
-const responsiveDisplay: Responsive<Display> = ['block', 'block', 'block', 'block', 'flex', 'flex']
-
-export const getMainHeader = (behandling: Behandling, helmet?: ReactNode) => (
-  <Block display={responsiveDisplay} justifyContent="space-between" marginBottom="32px" marginTop="38px">
-    {helmet ? (
-      helmet
-    ) : (
-      <Helmet>
-        <meta charSet="utf-8" />
-        <title>
-          B{behandling.nummer.toString()} {behandling.navn.toString()}
-        </title>
-      </Helmet>
-    )}
-    <Block width="100%">
-      <LabelSmall color={ettlevColors.green600}>
-        B{behandling.nummer} {behandling.overordnetFormaal.shortName}
-      </LabelSmall>
-      <HeadingXXLarge marginTop="0" color={ettlevColors.green800}>
-        {behandling.navn}
-      </HeadingXXLarge>
-      <Block display="flex" alignItems="center" width="100%" marginTop={'24px'}>
-        <Block display={'flex'} width="100%">
-          <LabelSmall $style={{ lineHeight: '22px', marginRight: '10px', fontSize: '16px', color: ettlevColors.green600 }}>Team: </LabelSmall>
-          <Teams teams={behandling.teams} link fontColor={ettlevColors.green800} style={{ fontSize: '16px', lineHeight: '22px', fontWeight: 400 }} />
-        </Block>
-        <Block display="flex" justifyContent="flex-end" alignContent="center" $style={{ whiteSpace: 'nowrap' }}>
-          <ExternalButton kind={'secondary'} href={`${env.pollyBaseUrl}process/${behandling.id}`} size="mini">
-            <ExternalLinkWrapper text="Til behandlingskatalogen" />
-          </ExternalButton>
-        </Block>
-      </Block>
-    </Block>
-  </Block>
-)
+export const responsiveDisplay: Responsive<Display> = ['block', 'block', 'block', 'block', 'flex', 'flex']
 
 export const getNewestKravVersjon = (list: any[]) => {
   let relevanteStatusListe = [...list]

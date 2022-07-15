@@ -14,7 +14,6 @@ import {Responsive} from 'baseui/theme'
 import {KravPanelHeaderWithSorting} from '../components/behandling/KravPanelHeader'
 import {Helmet} from 'react-helmet'
 import {Option} from 'baseui/select'
-import {getMainHeader} from './BehandlingPage'
 import {SecondaryHeader} from '../components/behandlingsTema/SecondaryHeader'
 import {KravList} from '../components/behandlingsTema/KravList'
 import {ampli} from '../services/Amplitude'
@@ -22,6 +21,7 @@ import {getFilterType} from './EtterlevelseDokumentasjonPage'
 import {filterKrav} from '../components/behandlingsTema/common/utils'
 import {getAllKravPriority} from '../api/KravPriorityApi'
 import {Spinner} from 'baseui/spinner'
+import {getMainHeader} from "../components/behandlingPage/common/utils";
 
 const responsiveBreakPoints: Responsive<Display> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
 const responsiveDisplay: Responsive<Display> = ['block', 'block', 'block', 'block', 'flex', 'flex']
