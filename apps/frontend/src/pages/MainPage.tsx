@@ -1,127 +1,236 @@
-import { Block, BlockProps } from 'baseui/block'
-import React, { useState } from 'react'
-import { Card, CardOverrides } from 'baseui/card'
-import RouteLink from '../components/common/RouteLink'
-import { borderColor, marginAll } from '../components/common/Style'
-import { theme } from '../util'
-import { ParagraphXSmall } from 'baseui/typography'
-import { maxPageWidth, primitives } from '../util/theme'
-import { barChart, illustration, lawBook, pencilFill, stepper } from '../components/Images'
+import {Narrow, Page, Wide} from '../components/scaffold/Page'
+import {ettlevColors, theme} from '../util/theme'
+import {Block} from 'baseui/block'
+import {HeadingXLarge, HeadingXXLarge, ParagraphMedium} from 'baseui/typography'
+import {PanelLink, PanelLinkCard} from '../components/common/PanelLink'
+import {grafIconBg, grafIconBgSmall, handWithLeaf, paperPenIconBg, paperPenIconBgSmall, paragrafIconBg, paragrafIconBgSmall} from '../components/Images'
+import {Card} from 'baseui/card'
+import {borderColor, borderRadius, borderStyle, borderWidth, margin, paddingAll} from '../components/common/Style'
+import ReactPlayer from 'react-player'
+import {Button, SIZE} from 'baseui/button'
+import {faPlay} from '@fortawesome/free-solid-svg-icons'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {buttonBorderStyle, buttonContentStyle} from '../components/common/Button'
+import React, {useEffect, useState} from 'react'
+import {Markdown} from '../components/common/Markdown'
+import {AlertType, Melding, MeldingStatus, MeldingType} from '../constants'
+import {getMeldingByType} from '../api/MeldingApi'
+import {ampli} from '../services/Amplitude'
+import {getPageWidth} from '../util/pageWidth'
 
-const sectionProps: BlockProps = {
-  display: 'flex',
-  width: '100%',
-  justifyContent: 'space-between',
-  flexWrap: true,
-}
+const cardWidth = ['95%', '95%', '95%', '95%', '31%', '31%']
+const cardHeight = ['auto', 'auto', 'auto', 'auto', '140px', '140px']
+const cardMarginRight = ['none', 'none', 'none', 'none', theme.sizing.scale800, theme.sizing.scale800]
 
 export const MainPage = () => {
-  return (
-    <Block maxWidth={maxPageWidth}>
-      <Block paddingLeft="40px" paddingRight="40px" width="calc(100%-80px)" display="flex" justifyContent="center" marginTop="50px">
-        <Block id="content" display="flex" flexDirection="column" maxWidth={'1000px'} overrides={{ Block: { props: { role: 'main' } } }}>
-          <Block {...sectionProps} overrides={{ Block: { props: { role: 'navigation', 'aria-label': 'Hoved meny' } } }}>
-            <SectionCard
-              icon={pencilFill}
-              url={'/behandlinger'}
-              title={'Dokumenter etterlevelse'}
-              text={'Fyll ut hvordan du etterlever lover og regler i behandlinger du har ansvar for'}
-            />
-            <SectionCard icon={lawBook} url={'/krav'} title={'Opprett og vedlikehold krav'} text={'Kraveier kan jobbe med nye krav eller forbedre eksisterende krav'} />
-            <SectionCard
-              icon={barChart}
-              url={'/status'}
-              title={'Se status på etterlevelse i etaten'}
-              text={'Se dashboard for status på etterlevelse i NAV, i våre produktområder og avdelinger'}
-            />
-            <SectionCard icon={stepper} url={'/tema'} title={'Lær mer om etterlevelse'} text={'Utforsk temaer for krav i etaten'} />
-          </Block>
+  const [forsideVarsel, setForsideVarsle] = useState<Melding>()
+  const [pageWidth, setPageWidth] = useState<number>()
 
-          <Block {...sectionProps}>
-            <Block display={['none', 'none', 'none', 'none', 'none', 'block']} height="320px" overflow={'hidden'} marginBottom={theme.sizing.scale800}>
-              <img style={{ marginTop: '-215px', width: '100%' }} src={illustration} alt="illustrasjon" />
-            </Block>
-          </Block>
-        </Block>
-      </Block>
-    </Block>
-  )
-}
-
-const SectionCard = (props: { icon: string; url: string; title: string; text: string }) => (
-  <FrontCard
-    url={props.url}
-    width="240px"
-    title={
-      <Block display="flex" flexDirection="column" alignItems="center">
-        <Block>
-          <img src={props.icon} alt="ikon for kort" height={'40px'} />
-        </Block>
-        <Block>{props.title}</Block>
-      </Block>
-    }
-  >
-    <Block
-      {...{
-        display: 'flex',
-        width: '100%',
-        height: '60px',
-        justifyContent: 'center',
-        marginTop: theme.sizing.scale500,
-      }}
-    >
-      <ParagraphXSmall width={'90%'} $style={{ textAlign: 'justify', ...marginAll('0') }}>
-        {props.text}
-      </ParagraphXSmall>
-    </Block>
-  </FrontCard>
-)
-
-export const FrontCard = (props: { width: string; url: string; title?: React.ReactNode; children: React.ReactElement }) => {
-  const [hover, setHover] = useState(false)
-  return (
-    <div onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
-      <RouteLink href={props.url} hideUnderline>
-        <Card overrides={cardOverrides(hover, props.width)} title={props.title}>
-          {props.children}
-        </Card>
-      </RouteLink>
-    </div>
-  )
-}
-
-const cardOverrides = (hover: boolean, width: string): CardOverrides => {
-  return {
-    Root: {
-      style: () => {
-        const base = {
-          backgroundColor: 'white',
-          width,
-          marginBottom: theme.sizing.scale800,
+  useEffect(() => {
+    ;(async () => {
+      await getMeldingByType(MeldingType.FORSIDE).then((r) => {
+        if (r.numberOfElements > 0) {
+          setForsideVarsle(r.content[0])
         }
-        return hover
-          ? {
-              ...base,
-              ...borderColor(primitives.primary350),
-              boxShadow: '0px 4px 2px -1px rgba(0,0,0,0.7);',
-            }
-          : base
-      },
-    },
-    Body: {
-      style: () => ({
-        marginBottom: 0,
-      }),
-    },
-    Title: {
-      style: () => ({
-        fontSize: theme.typography.font350.fontSize,
-      }),
-    },
-    Contents: {
-      style: () => ({
-        ...marginAll(theme.sizing.scale500),
-      }),
-    },
-  } as CardOverrides
+      })
+    })()
+  }, [])
+
+  useEffect(() => {
+    const reportWindowSize = () => {
+      setPageWidth(getPageWidth())
+    }
+    window.onload = reportWindowSize
+    window.onresize = reportWindowSize
+  })
+
+  ampli.logEvent('sidevisning', { side: 'Hovedside' })
+
+  return (
+    <Page
+      hideBackBtn
+      headerBackgroundColor={ettlevColors.green800}
+      backgroundColor={ettlevColors.grey50}
+      headerOverlap={'100px'}
+      rawMain
+      header={
+        <HeadingXXLarge display={'flex'} flexDirection={'column'} color={ettlevColors.white} marginTop={theme.sizing.scale1400} marginBottom={theme.sizing.scale1400}>
+          <span style={{ fontWeight: 400 }}>Støtte til etterlevelse</span>
+          <span>som ivaretar rettssikkerheten til brukerne våre</span>
+        </HeadingXXLarge>
+      }
+    >
+      <Block display={'flex'} flexDirection={'column'} alignItems={'center'} width={'100%'}>
+        <Wide>
+          <Block display={'flex'} justifyContent={'center'} flexWrap>
+            <PanelLinkCard
+              marginRight={cardMarginRight}
+              height={cardHeight}
+              width={cardWidth}
+              verticalMargin={theme.sizing.scale300}
+              href={'/tema'}
+              tittel={'Forstå kravene'}
+              icon={pageWidth && pageWidth >= 768 ? paragrafIconBg : paragrafIconBgSmall}
+              beskrivelse={'Få oversikt over krav til etterlevelse, og bli trygg på at du kjenner til alle relevante krav for det du lager'}
+            />
+
+            <PanelLinkCard
+              marginRight={cardMarginRight}
+              height={cardHeight}
+              width={cardWidth}
+              verticalMargin={theme.sizing.scale300}
+              requireLogin
+              href={'/behandlinger'}
+              tittel={'Dokumentere etterlevelse'}
+              icon={pageWidth && pageWidth >= 768 ? paperPenIconBg : paperPenIconBgSmall}
+              beskrivelse={'Se hvilke krav som gjelder din løsning og dokumenter hvordan løsningen etterlever kravene'}
+            />
+
+            <PanelLinkCard
+              height={cardHeight}
+              width={cardWidth}
+              verticalMargin={theme.sizing.scale300}
+              href={'/status'}
+              tittel={'Status i organisasjonen'}
+              icon={pageWidth && pageWidth >= 768 ? grafIconBg : grafIconBgSmall}
+              beskrivelse={'Følg med på status og se hvor godt NAV sine produktområder  dokumenterer på kravene'}
+            />
+          </Block>
+        </Wide>
+
+        <Narrow>
+          <Block
+            $style={{}}
+            marginTop={theme.sizing.scale1600}
+            marginBottom={theme.sizing.scale900}
+            // paddingLeft={theme.sizing.scale800}
+            // paddingRight={theme.sizing.scale800}
+          >
+            {forsideVarsel && forsideVarsel.meldingStatus === MeldingStatus.ACTIVE && (
+              <Block
+                $style={{
+                  ...borderWidth('1px'),
+                  ...borderStyle('solid'),
+                  ...borderColor(forsideVarsel.alertType === AlertType.INFO ? ettlevColors.navDypBla : ettlevColors.navOransje),
+                  backgroundColor: forsideVarsel.alertType === AlertType.INFO ? ettlevColors.navLysBla : ettlevColors.warning50,
+                  ...paddingAll('32px'),
+                  marginBottom: '64px',
+                }}
+              >
+                <Markdown source={forsideVarsel.melding} fontSize="18px" maxWidth="650px" />
+              </Block>
+            )}
+            <HeadingXLarge $style={{ fontWeight: 300, fontSize: '32px', lineHeight: '42px' }} marginTop="0px" marginBottom="0px">
+              Etterlevelseskravene er
+            </HeadingXLarge>
+            <HeadingXLarge $style={{ wordBreak: 'break-word', fontSize: '32px', lineHeight: '42px' }} marginTop="0px" marginBottom="0px">
+              basert på norske lover og regler
+            </HeadingXLarge>
+            <ParagraphMedium $style={{ maxWidth: '600px', width: '100%' }}>
+              Hvorfor er etterlevelse viktig, og hvordan bør vi jobbe med kravene? Se filmen om etterlevelse og få en introduksjon på under 2 minutter
+            </ParagraphMedium>
+          </Block>
+
+          <Card
+            overrides={{
+              Root: {
+                style: {
+                  ...borderRadius('4px'),
+                  // ...margin(theme.sizing.scale1600, theme.sizing.scale800),
+                  marginTop: '0px',
+                },
+              },
+            }}
+          >
+            <Block
+              $style={{
+                display: 'flex',
+                justifyContent: 'center',
+              }}
+            >
+              <ReactPlayer
+                controls={true}
+                playing={true}
+                playIcon={
+                  <Button
+                    onClick={() => {
+                      ampli.logEvent('klikk', { title: 'Etterlevelse video spilt', type: 'Se film knapp' })
+                    }}
+                    kind="secondary"
+                    size={SIZE.compact}
+                    $style={buttonBorderStyle}
+                    startEnhancer={<FontAwesomeIcon icon={faPlay} />}
+                    overrides={{
+                      BaseButton: {
+                        style: {
+                          ...buttonContentStyle,
+                        },
+                      },
+                    }}
+                  >
+                    {' '}
+                    Se film{' '}
+                  </Button>
+                }
+                width="100%"
+                height="414px"
+                url="videos/EtterlevelseskravMedTeksting.mp4"
+                light={'img/EtterlevelseVideoDark.png'}
+              />
+            </Block>
+          </Card>
+
+          <Block
+            $style={{
+              ...margin(theme.sizing.scale800, '0'),
+              border: `1px solid ${ettlevColors.grey100}`,
+              borderRadius: '4px',
+              backgroundColor: ettlevColors.white,
+            }}
+          >
+            <PanelLink
+              href="/help"
+              title={
+                <HeadingXLarge marginBottom={0} marginTop={0}>
+                  Mer om etterlevelse i NAV
+                </HeadingXLarge>
+              }
+              panelIcon={<img src={handWithLeaf} alt={''} />}
+              overrides={{
+                Block: {
+                  style: {
+                    width: 'calc(100% - 24px)',
+                    maxWidth: '820px',
+                    ':hover': {
+                      boxSizing: 'content-box',
+                    },
+                  },
+                },
+              }}
+            />
+          </Block>
+
+          <Block
+            $style={{
+              ...margin(theme.sizing.scale1600, theme.sizing.scale600),
+            }}
+          >
+            {/* <HeadingXLarge display={'flex'} flexDirection={'column'} color={ettlevColors.green800}>
+              <span style={{ fontWeight: 400 }}>Her kan det stå</span>
+              <span>litt tekst som beskriver animasjonsfilmen</span>
+            </HeadingXLarge>
+
+            <Block>
+              <ParagraphMedium>Kjerneinnholdet / budskapet i filmen.</ParagraphMedium>
+
+              <ParagraphMedium>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Gravida venenatis, a mattis ut tempor, proin aliquam aenean. Nec amet tincidunt ut odio habitant vel
+                blandit et id. At in sed enim cursus nisi. A fermentum pellentesque nulla lacus viverra a, ultrices.
+              </ParagraphMedium>
+            </Block> */}
+          </Block>
+        </Narrow>
+      </Block>
+    </Page>
+  )
 }

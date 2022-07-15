@@ -16,7 +16,6 @@ import {RelevansPage} from './pages/RelevansPage'
 import {UnderavdelingPage} from './pages/UnderavdelingPage'
 import {TemaPage} from './pages/TemaPage'
 import {LovPage} from './pages/LovPage'
-import {MainPageV2} from './pages/MainPageV2'
 import ScrollToTop from './util/ScrollToTop'
 import {StatusPage} from './pages/StatusPage'
 import {KravTablePage} from './pages/KravTablePage'
@@ -31,7 +30,7 @@ const AppRoutes = (): JSX.Element => {
     <ScrollToTop>
       <Routes>
         <Route path="/old" element={<MainPage />} caseSensitive={true} />
-        <Route path="/" element={<MainPageV2 />} caseSensitive={true} />
+        <Route path="/" element={<MainPage />} caseSensitive={true} />
 
         <Route path="/kravliste/:tab" element={<KravListPage />} caseSensitive={true} />
         <Route path="/kravliste/" element={<KravListPage />} caseSensitive={true} />
