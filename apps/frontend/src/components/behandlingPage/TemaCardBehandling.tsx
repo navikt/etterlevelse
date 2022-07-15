@@ -8,7 +8,7 @@ import {ParagraphXSmall} from 'baseui/typography'
 import {ProgressBar, SIZE} from 'baseui/progress-bar'
 import React from 'react'
 import {HeaderContent} from './HeaderContent'
-import {isFerdigUtfylt} from '../../pages/BehandlingerTemaPageV2'
+import {isFerdigUtfylt} from '../../pages/BehandlingTemaPage'
 import moment from 'moment'
 import {getNumberOfDaysBetween} from '../../util/checkAge'
 
