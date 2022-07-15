@@ -1,5 +1,5 @@
 import React, {useRef, useState} from 'react'
-import {Block, Display, Responsive} from 'baseui/block'
+import {Block} from 'baseui/block'
 import {useLocation, useNavigate, useParams} from 'react-router-dom'
 import {LoadingSkeleton} from '../components/common/LoadingSkeleton'
 import {useBehandling} from '../api/BehandlingApi'
@@ -20,20 +20,7 @@ import {statsQuery} from '../api/KravApi'
 import {TemaCardBehandling} from '../components/behandlingPage/TemaCardBehandling'
 import {isFerdigUtfylt} from './BehandlingTemaPage'
 import {ampli} from '../services/Amplitude'
-import {getMainHeader} from "../components/behandlingPage/common/utils";
-
-export const responsiveDisplay: Responsive<Display> = ['block', 'block', 'block', 'block', 'flex', 'flex']
-
-export const getNewestKravVersjon = (list: any[]) => {
-  let relevanteStatusListe = [...list]
-
-  for (let index = relevanteStatusListe.length - 1; index > 0; index--) {
-    if (relevanteStatusListe[index].kravNummer === relevanteStatusListe[index - 1].kravNummer) {
-      relevanteStatusListe.splice(index - 1, 1)
-    }
-  }
-  return relevanteStatusListe
-}
+import {getMainHeader, getNewestKravVersjon, responsiveDisplayBehandlingPage} from "../components/behandlingPage/common/utils";
 
 export const BehandlingPage = () => {
   const params = useParams<{ id?: string }>()
@@ -171,7 +158,7 @@ export const BehandlingPage = () => {
   }
 
   const getSecondaryHeader = (behandling: Behandling) => (
-    <Block width="100%" display={responsiveDisplay} alignItems="center" justifyContent="space-between" marginTop={'8px'} marginBottom={'8px'}>
+    <Block width="100%" display={responsiveDisplayBehandlingPage} alignItems="center" justifyContent="space-between" marginTop={'8px'} marginBottom={'8px'}>
       <Block display="flex" alignItems="center">
         <Block marginRight="12px">
           <img src={arkPennIcon} alt="penn ikon" height="32px" width="32px" />
@@ -212,7 +199,7 @@ export const BehandlingPage = () => {
       const relevans = options.filter((n) => !irrelevans.map((ir: Code) => ir.code).includes(n.id))
 
       return (
-        <Block display={responsiveDisplay} flexWrap>
+        <Block display={responsiveDisplayBehandlingPage} flexWrap>
           {relevans.map((r, index) => (
             <Block key={r.id} display="flex">
               <ParagraphXSmall $style={{ ...marginZero, marginRight: '8px', lineHeight: '24px' }}>{r.label}</ParagraphXSmall>
@@ -225,7 +212,7 @@ export const BehandlingPage = () => {
       )
     }
     return (
-      <Block display={responsiveDisplay} flexWrap>
+      <Block display={responsiveDisplayBehandlingPage} flexWrap>
         {options.map((o, index) => (
           <Block key={o.id} display="flex">
             <ParagraphXSmall $style={{ ...marginZero, marginRight: '8px', lineHeight: '24px' }}>{o.label}</ParagraphXSmall>

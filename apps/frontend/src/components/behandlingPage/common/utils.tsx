@@ -1,6 +1,6 @@
 import {Behandling} from "../../../constants";
 import React, {ReactNode} from "react";
-import {Block} from "baseui/block";
+import {Block, Display, Responsive} from "baseui/block";
 import {Helmet} from "react-helmet";
 import {HeadingXXLarge, LabelSmall} from "baseui/typography";
 import {ettlevColors} from "../../../util/theme";
@@ -8,10 +8,11 @@ import {Teams} from "../../common/TeamName";
 import {ExternalButton} from "../../common/Button";
 import {env} from "../../../util/env";
 import {ExternalLinkWrapper} from "../../common/RouteLink";
-import {responsiveDisplay} from "../../../pages/BehandlingPage";
+
+export const responsiveDisplayBehandlingPage: Responsive<Display> = ['block', 'block', 'block', 'block', 'flex', 'flex']
 
 export const getMainHeader = (behandling: Behandling, helmet?: ReactNode) => (
-  <Block display={responsiveDisplay} justifyContent="space-between" marginBottom="32px" marginTop="38px">
+  <Block display={responsiveDisplayBehandlingPage} justifyContent="space-between" marginBottom="32px" marginTop="38px">
     {helmet ? (
       helmet
     ) : (
@@ -43,3 +44,14 @@ export const getMainHeader = (behandling: Behandling, helmet?: ReactNode) => (
     </Block>
   </Block>
 )
+
+export const getNewestKravVersjon = (list: any[]) => {
+  let relevanteStatusListe = [...list]
+
+  for (let index = relevanteStatusListe.length - 1; index > 0; index--) {
+    if (relevanteStatusListe[index].kravNummer === relevanteStatusListe[index - 1].kravNummer) {
+      relevanteStatusListe.splice(index - 1, 1)
+    }
+  }
+  return relevanteStatusListe
+}
