@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {Block, Display} from 'baseui/block'
+import {Block} from 'baseui/block'
 import {useLocation, useParams} from 'react-router-dom'
 import {HeadingMedium, ParagraphMedium} from 'baseui/typography'
 import {ettlevColors} from '../util/theme'
@@ -10,7 +10,6 @@ import {Etterlevelse, EtterlevelseStatus, Krav, KRAV_FILTER_TYPE, KravEtterlevel
 import {useQuery} from '@apollo/client'
 import {behandlingKravQuery, getAllKrav} from '../api/KravApi'
 import {breadcrumbPaths} from '../components/common/CustomizedBreadcrumbs'
-import {Responsive} from 'baseui/theme'
 import {KravPanelHeaderWithSorting} from '../components/behandling/KravPanelHeader'
 import {Helmet} from 'react-helmet'
 import {Option} from 'baseui/select'
@@ -22,9 +21,6 @@ import {filterKrav} from '../components/behandlingsTema/common/utils'
 import {getAllKravPriority} from '../api/KravPriorityApi'
 import {Spinner} from 'baseui/spinner'
 import {getMainHeader} from "../components/behandlingPage/common/utils";
-
-const responsiveBreakPoints: Responsive<Display> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
-const responsiveDisplay: Responsive<Display> = ['block', 'block', 'block', 'block', 'flex', 'flex']
 
 export const sortingOptions = [
   { label: 'Anbefalt rekkefølge', id: 'priority' },
