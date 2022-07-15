@@ -161,6 +161,7 @@ export type KravEtterlevelseData = {
   gammelVersjon?: boolean
   etterlevelseChangeStamp?: ChangeStamp
   isIrrelevant?: boolean
+  aktivertDato: string
 }
 
 export interface SuksesskriterieBegrunnelse {
