@@ -15,6 +15,7 @@ import no.nav.data.etterlevelse.krav.domain.KravStatus;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 import no.nav.data.integration.begrep.dto.BegrepResponse;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -54,6 +55,7 @@ public class KravResponse implements KravId {
     private CodelistResponse underavdeling;
     private List<CodelistResponse> relevansFor;
     private KravStatus status;
+    private LocalDateTime aktivertDato;
 
     // GraphQL only
     @JsonIgnore

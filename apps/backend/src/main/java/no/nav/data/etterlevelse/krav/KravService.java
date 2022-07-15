@@ -11,14 +11,13 @@ import no.nav.data.etterlevelse.krav.domain.KravStatus;
 import no.nav.data.etterlevelse.krav.domain.dto.KravFilter;
 import no.nav.data.etterlevelse.krav.dto.KravRequest;
 import no.nav.data.etterlevelse.krav.dto.KravRequest.Fields;
-import no.nav.data.etterlevelse.kravprioritering.domain.KravPrioriteringRepo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import javax.inject.Inject;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -110,6 +109,10 @@ public class KravService extends DomainService<Krav> {
                 kravRepo.updateKravToUtgaatt(krav.getKravNummer(), olderKravVersjon);
             }
             kravPrioriteringRepo.transferPriority(krav.getKravVersjon(), krav.getKravNummer());
+        }
+
+        if(krav.getAktivertDato()==null && krav.getStatus()==KravStatus.AKTIV){
+            krav.setAktivertDato(LocalDateTime.now());
         }
 
         return storage.save(krav);

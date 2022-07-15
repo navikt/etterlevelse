@@ -32,6 +32,7 @@ type Krav {
     begreper: [Begrep!]!
     kravIdRelasjoner: [String!]!
     kravRelasjoner: [Krav!]!
+    aktivertDato: DateTime
 }
 
 type Begrep {

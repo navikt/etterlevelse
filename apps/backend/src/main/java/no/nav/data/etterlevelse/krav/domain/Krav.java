@@ -18,6 +18,7 @@ import no.nav.data.etterlevelse.krav.dto.KravRequest;
 import no.nav.data.etterlevelse.krav.dto.KravResponse;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -64,6 +65,8 @@ public class Krav implements DomainObject, KravIdStatus {
 
     private List<String> kravIdRelasjoner;
 
+    private LocalDateTime aktivertDato;
+
     @Default
     private KravStatus status = KravStatus.UTKAST;
 
@@ -92,6 +95,8 @@ public class Krav implements DomainObject, KravIdStatus {
 
         suksesskriterier = StreamUtils.convert(request.getSuksesskriterier(), Suksesskriterie::convert);
         kravIdRelasjoner = copyOf(request.getKravIdRelasjoner());
+        aktivertDato = request.getAktivertDato();
+
         return this;
     }
 
@@ -123,6 +128,7 @@ public class Krav implements DomainObject, KravIdStatus {
                 .relevansFor(CodelistService.getCodelistResponseList(ListName.RELEVANS, relevansFor))
                 .kravIdRelasjoner(copyOf(kravIdRelasjoner))
                 .status(status)
+                .aktivertDato(aktivertDato)
                 .build();
         if (!SecurityUtils.isKravEier()) {
             response.getChangeStamp().setLastModifiedBy("Skjult");

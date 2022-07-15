@@ -13,6 +13,7 @@ import no.nav.data.etterlevelse.common.domain.Periode;
 import no.nav.data.etterlevelse.krav.domain.KravStatus;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static no.nav.data.common.utils.StreamUtils.copyOf;
@@ -53,6 +54,8 @@ public class KravRequest implements RequestElement {
 
     private List<String> kravIdRelasjoner;
 
+    private LocalDateTime aktivertDato;
+
     @Schema(description = "Codelist AVDELING")
     private String avdeling;
     @Schema(description = "Codelist UNDERAVDELING")
@@ -87,7 +90,6 @@ public class KravRequest implements RequestElement {
         setTagger(formatList(tagger));
         setSuksesskriterier(copyOf(suksesskriterier));
         setKravIdRelasjoner(copyOf(kravIdRelasjoner));
-
         if (status == null) {
             status = KravStatus.UTKAST;
         }
