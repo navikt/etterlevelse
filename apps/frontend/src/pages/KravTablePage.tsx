@@ -18,7 +18,7 @@ import { ampli } from '../services/Amplitude'
 const kravSorting: ColumnCompares<Krav> = {
   kravNummer: (a, b) => a.kravNummer - b.kravNummer,
   navn: (a, b) => (a.navn || '').localeCompare(b.navn || ''),
-  avdeling: (a, b) => (a.avdeling?.shortName || '').localeCompare(b.avdeling?.shortName || ''),
+  avdeling: (a, b) => (a.underavdeling?.shortName || '').localeCompare(b.underavdeling?.shortName || ''),
   tema: (a, b) => (codelist.getCode(ListName.TEMA, a.tema)?.shortName || '').localeCompare(codelist.getCode(ListName.TEMA, b.tema)?.shortName || ''),
   status: (a, b) => (a.status || '').localeCompare(b.status || ''),
   changeStamp: (a, b) => (a.changeStamp.lastModifiedDate || '').localeCompare(b.changeStamp.lastModifiedDate || ''),
@@ -65,7 +65,7 @@ export const KravTablePage = () => {
             headers={[
               { $style: { maxWidth: '6%' }, title: 'Krav ID', column: 'kravNummer' },
               { $style: { maxWidth: '25%', minWidth: '25%' }, title: 'Kravnavn', column: 'navn' },
-              { title: 'Ansvarlig', column: 'avdeling' },
+              { title: 'Ansvarlig', column: 'underavdeling' },
               { title: 'Tema', column: 'tema' },
               { title: 'Status', column: 'status' },
               { title: 'Siste endret', column: 'changeStamp' },
@@ -80,7 +80,7 @@ export const KravTablePage = () => {
                     <Cell $style={{ maxWidth: '25%', minWidth: '25%' }}>
                       <RouteLink href={`/krav/${krav.kravNummer}/${krav.kravVersjon}`}>{krav.navn}</RouteLink>
                     </Cell>
-                    <Cell>{krav.avdeling && krav.avdeling.shortName}</Cell>
+                    <Cell>{krav.underavdeling && krav.underavdeling.shortName}</Cell>
                     <Cell>
                       <RouteLink href={`/tema/${krav.tema}`}>{codelist.getCode(ListName.TEMA, krav.tema)?.shortName}</RouteLink>
                     </Cell>
