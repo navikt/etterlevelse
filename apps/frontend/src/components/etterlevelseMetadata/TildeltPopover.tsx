@@ -93,7 +93,7 @@ export const TildeltPopoever = ({ etterlevelseMetadata, setEtterlevelseMetadata,
     >
       <BaseButton
         kind="tertiary"
-        $style={{
+        style={{
           width: '24px',
           height: '24px',
         }}

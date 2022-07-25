@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import RouteLink, { ExternalLink } from './RouteLink'
-import { Block, BlockOverrides, Display, Responsive, Scale } from 'baseui/block'
+import { Block, BlockOverrides, Responsive, Scale } from 'baseui/block'
 import { borderColor, borderRadius, borderStyle, borderWidth, padding, paddingAll, paddingZero } from './Style'
 import { theme } from '../../util'
 import { ettlevColors } from '../../util/theme'
@@ -388,7 +388,7 @@ export const SimplePanel = ({
   hideChevron?: boolean
 }) => {
   const [hover, setHover] = useState(false)
-  const responsiveDisplay: Responsive<Display> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
+  const responsiveDisplay: Responsive<any> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
 
   const customOverrides: BlockOverrides = {
     Block: {

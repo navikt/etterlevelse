@@ -446,7 +446,7 @@ export const MultiSearchField = (props: { label: string; name: string; search: S
     <FieldWrapper>
       <FieldArray name={props.name}>
         {(p: FieldArrayRenderProps) => (
-          <FormControl label={props.label} error={p.form.touched[props.name] && p.form.errors[props.name]}>
+          <FormControl label={props.label} error={p.form.touched[props.name] && <>{p.form.errors[props.name]}</>}>
             <Block>
               <Block display="flex">
                 <CustomizedSelect

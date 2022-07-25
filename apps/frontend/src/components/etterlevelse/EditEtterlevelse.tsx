@@ -271,24 +271,10 @@ export const EditEtterlevelse = ({
                                       onMouseEnter={(e) => setRadioHover(e.currentTarget.children[1].getAttribute('value') || '')}
                                       onMouseLeave={() => setRadioHover('')}
                                       overrides={{
-                                        Root: {
+                                        RadioGroupRoot: {
                                           style: {
                                             width: '100%',
                                             alignItems: 'flex-start',
-                                          },
-                                        },
-                                        Label: {
-                                          style: {
-                                            fontSize: '18px',
-                                            fontWeight: 400,
-                                            lineHeight: '22px',
-                                            width: '100%',
-                                          },
-                                        },
-                                        RadioMarkOuter: {
-                                          style: {
-                                            height: theme.sizing.scale600,
-                                            width: theme.sizing.scale600,
                                           },
                                         },
                                       }}
@@ -330,7 +316,7 @@ export const EditEtterlevelse = ({
                                                           }}
                                                           kind={NKIND.negative}
                                                         >
-                                                          {p.form.errors.fristForFerdigstillelse}
+                                                          <>{p.form.errors.fristForFerdigstillelse}</>
                                                         </Notification>
                                                       </Block>
                                                     </Block>

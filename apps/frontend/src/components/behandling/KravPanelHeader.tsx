@@ -1,4 +1,4 @@
-import {Block, Display, JustifyContent} from 'baseui/block'
+import {Block} from 'baseui/block'
 import {Responsive} from 'baseui/theme'
 import {HeadingLarge, LabelSmall, ParagraphXSmall} from 'baseui/typography'
 import {Krav, KravEtterlevelseData} from '../../constants'
@@ -9,7 +9,7 @@ import {Option} from 'baseui/select'
 import {kravRelevansOptions, sortingOptions} from '../../pages/BehandlingTemaPage'
 import {useNavigate} from 'react-router-dom'
 
-const responsiveBreakPoints: Responsive<Display> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
+const responsiveBreakPoints: Responsive<any> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
 
 export const KravPanelHeader = (props: { title: string; kravData: KravEtterlevelseData[] | Krav[] }) => {
   let antallSuksesskriterier = 0
@@ -18,7 +18,7 @@ export const KravPanelHeader = (props: { title: string; kravData: KravEtterlevel
     antallSuksesskriterier += k.suksesskriterier.length
   })
 
-  const responsiveAlignment: Responsive<JustifyContent> = ['flex-start', 'flex-start', 'flex-start', 'flex-end', 'flex-end', 'flex-end']
+  const responsiveAlignment: Responsive<any> = ['flex-start', 'flex-start', 'flex-start', 'flex-end', 'flex-end', 'flex-end']
 
   return (
     <Block display={responsiveBreakPoints} width="100%">
@@ -58,7 +58,7 @@ export const KravPanelHeaderWithSorting = (props: {
     antallSuksesskriterier += k.suksesskriterier.length
   })
 
-  const responsiveAlignment: Responsive<JustifyContent> = ['flex-start', 'flex-start', 'flex-start', 'flex-end', 'flex-end', 'flex-end']
+  const responsiveAlignment: Responsive<any> = ['flex-start', 'flex-start', 'flex-start', 'flex-end', 'flex-end', 'flex-end']
 
   return (
     <Block display={responsiveBreakPoints} width="100%">

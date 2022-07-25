@@ -2,7 +2,7 @@ import React from 'react'
 import DataText from './DataText'
 import { Markdown } from './Markdown'
 import { Or } from '../../constants'
-import { Block, Display, Responsive } from 'baseui/block'
+import { Block, Responsive } from 'baseui/block'
 
 const empty = (arg: any) => !arg || (Array.isArray(arg) && !arg.length)
 
@@ -13,7 +13,7 @@ type LabelProps = {
   header?: boolean
   p1?: boolean
   labelWidth?: string
-  display?: Responsive<Display>
+  display?: Responsive<any>
   maxWidth?: string
 } & Or<{ children: React.ReactNode }, { markdown: string | string[]; vertical?: boolean }>
 
