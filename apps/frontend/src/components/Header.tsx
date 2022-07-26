@@ -1,6 +1,6 @@
 import * as React from 'react'
 import {useState} from 'react'
-import {ALIGN, HeaderNavigation, StyledNavigationItem as NavigationItem, StyledNavigationList as NavigationList} from 'baseui/header-navigation'
+import {ALIGN, HeaderNavigation, HeaderNavigationProps, StyledNavigationItem as NavigationItem, StyledNavigationList as NavigationList} from 'baseui/header-navigation'
 import {Block} from 'baseui/block'
 import {KIND, SIZE} from 'baseui/button'
 import Button, {buttonBorderStyle, ButtonKind} from './common/Button'
@@ -255,6 +255,9 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
     })()
   }, [location.pathname])
 
+  const headerNavigationProps: HeaderNavigationProps = {
+    overrides:{Root:{style:{borderBottomStyle: 'none', paddingBottom: '0px'}}}
+  }
   return (
     <Block width="100%" backgroundColor={ettlevColors.white}>
       <Block width="100%" display="flex" backgroundColor={ettlevColors.white} justifyContent="center">
@@ -268,7 +271,7 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
             overrides={{ Block: { props: { role: 'banner', 'aria-label': 'Header meny' } } }}
           >
             <StyledLink href="#main" aria-label="main link" />
-            <HeaderNavigation>
+            <HeaderNavigation {...headerNavigationProps}>
               <NavigationList $align={ALIGN.left} $style={{ paddingLeft: 0 }}>
                 <NavigationItem $style={{ paddingLeft: 0 }}>
                   <Block display="flex" alignItems="center" $style={{}}>
