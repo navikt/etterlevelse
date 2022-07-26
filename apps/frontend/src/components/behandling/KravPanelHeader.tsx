@@ -1,13 +1,13 @@
-import {Block} from 'baseui/block'
-import {Responsive} from 'baseui/theme'
-import {HeadingLarge, LabelSmall, ParagraphXSmall} from 'baseui/typography'
-import {Krav, KravEtterlevelseData} from '../../constants'
-import {theme} from '../../util'
-import {ettlevColors} from '../../util/theme'
+import { Block } from 'baseui/block'
+import { Responsive } from 'baseui/theme'
+import { HeadingLarge, LabelSmall, ParagraphXSmall } from 'baseui/typography'
+import { Krav, KravEtterlevelseData } from '../../constants'
+import { theme } from '../../util'
+import { ettlevColors } from '../../util/theme'
 import CustomizedSelect from '../common/CustomizedSelect'
-import {Option} from 'baseui/select'
-import {kravRelevansOptions, sortingOptions} from '../../pages/BehandlingTemaPage'
-import {useNavigate} from 'react-router-dom'
+import { Option } from 'baseui/select'
+import { kravRelevansOptions, sortingOptions } from '../../pages/BehandlingTemaPage'
+import { useNavigate } from 'react-router-dom'
 
 const responsiveBreakPoints: Responsive<any> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
 

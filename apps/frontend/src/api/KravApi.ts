@@ -1,9 +1,9 @@
 import axios from 'axios'
-import {emptyPage, Krav, KravQL, KravStatus, Or, PageResponse} from '../constants'
-import {env} from '../util/env'
-import {useEffect, useState} from 'react'
-import {useDebouncedState} from '../util/hooks'
-import {gql} from '@apollo/client'
+import { emptyPage, Krav, KravQL, KravStatus, Or, PageResponse } from '../constants'
+import { env } from '../util/env'
+import { useEffect, useState } from 'react'
+import { useDebouncedState } from '../util/hooks'
+import { gql } from '@apollo/client'
 
 export const getAllKrav = async () => {
   const PAGE_SIZE = 100
@@ -196,7 +196,7 @@ export const kravMapToFormVal = (krav: Partial<KravQL>): KravQL => ({
   begrepIder: [],
   etterlevelser: [],
   kravIdRelasjoner: [],
-  aktivertDato: krav.aktivertDato || ''
+  aktivertDato: krav.aktivertDato || '',
 })
 
 export const kravFullQuery = gql`

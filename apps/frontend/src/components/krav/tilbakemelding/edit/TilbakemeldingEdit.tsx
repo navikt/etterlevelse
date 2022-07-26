@@ -1,10 +1,10 @@
-import {Block} from 'baseui/block'
+import { Block } from 'baseui/block'
 import Button from '../../../common/Button'
-import {useState} from 'react'
-import {tilbakemeldingEditMelding} from '../../../../api/TilbakemeldingApi'
-import {Tilbakemelding, TilbakemeldingMelding} from '../../../../constants'
+import { useState } from 'react'
+import { tilbakemeldingEditMelding } from '../../../../api/TilbakemeldingApi'
+import { Tilbakemelding, TilbakemeldingMelding } from '../../../../constants'
 import CustomizedTextarea from '../../../common/CustomizedTextarea'
-import {Notification} from 'baseui/notification'
+import { Notification } from 'baseui/notification'
 
 export const TilbakemeldingEdit = ({ tilbakemeldingId, melding, close }: { tilbakemeldingId: string; melding: TilbakemeldingMelding; close: (t: Tilbakemelding) => void }) => {
   const [response, setResponse] = useState(melding.innhold)
