@@ -1,5 +1,5 @@
 import { default as React, ReactNode } from 'react'
-import { Block, Display, Responsive } from 'baseui/block'
+import { Block, Responsive } from 'baseui/block'
 import { theme } from '../../util'
 import { HeadingXLarge, LabelLarge } from 'baseui/typography'
 
@@ -12,7 +12,7 @@ type DataTextProps = {
   notFlexed?: boolean
   header?: boolean
   labelWidth?: string
-  display?: Responsive<Display>
+  display?: Responsive<any>
 }
 
 const DataText = (props: DataTextProps) => {

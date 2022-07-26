@@ -45,11 +45,9 @@ export const SettingsPage = () => {
         <title>Innstillinger</title>
       </Helmet>
       <HeadingMedium>{intl.settings}</HeadingMedium>
-      {loading ? (
-        <Spinner $color={ettlevColors.green400} $size={40} />
-      ) : error || !settings ? (
-        { error }
-      ) : (
+      {loading && <Spinner $color={ettlevColors.green400} $size={40} />}
+      {(error || !settings) && error}
+      {!loading && !(error || !settings) && (
         <Block>
           <FrontpageMessage message={settings?.frontpageMessage} setMessage={(frontpageMessage) => setSettings({ ...settings, frontpageMessage })} />
 

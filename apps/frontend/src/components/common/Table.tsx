@@ -186,8 +186,8 @@ export const Row = (props: RowProps) => {
   return <StyleRow>{props.children}</StyleRow>
 }
 
-const SortDirectionIcon = (props: { direction: SORT_DIRECTION | null }) => {
-  switch (props?.direction) {
+const SortDirectionIcon = ({ direction }: { direction: typeof SORT_DIRECTION.ASC | typeof SORT_DIRECTION.DESC | null }) => {
+  switch (direction) {
     case SORT_DIRECTION.ASC:
       return <FontAwesomeIcon icon={faSortDown} />
     case SORT_DIRECTION.DESC:

@@ -32,7 +32,7 @@ function initialOpen(auditLog?: AuditLog, auditId?: string) {
 
 export const AuditView = (props: AuditViewProps) => {
   const { auditLog, auditId, loading, viewId } = props
-  const refs = useRefs<HTMLElement>(auditLog?.audits.map((al) => al.id) || [])
+  const refs = useRefs<HTMLDivElement>(auditLog?.audits.map((al) => al.id) || [])
   const [open, setOpen] = useState(initialOpen(auditLog, auditId))
 
   useEffect(() => {

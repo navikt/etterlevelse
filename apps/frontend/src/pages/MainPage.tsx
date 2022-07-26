@@ -158,7 +158,7 @@ export const MainPage = () => {
                     }}
                     kind="secondary"
                     size={SIZE.compact}
-                    $style={buttonBorderStyle}
+                    style={buttonBorderStyle}
                     startEnhancer={<FontAwesomeIcon icon={faPlay} />}
                     overrides={{
                       BaseButton: {

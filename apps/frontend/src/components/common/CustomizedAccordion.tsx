@@ -9,7 +9,7 @@ import { borderColor, borderRadius, borderStyle, borderWidth, paddingAll } from 
 import _ from 'lodash'
 import { $StyleProp } from 'styletron-react'
 
-export const CustomizedAccordion = (props: AccordionProps) => {
+export const CustomizedAccordion = (props: Partial<AccordionProps>) => {
   return <Accordion {...props} overrides={{}} />
 }
 
@@ -29,7 +29,7 @@ export const CustomizedPanel = (props: CustomProps) => {
   const headerBackgroundColor = props.HeaderBackgroundColor ? props.HeaderBackgroundColor : ettlevColors.white
   const headerActiveBackgroundColor = props.HeaderActiveBackgroundColor ? props.HeaderActiveBackgroundColor : ettlevColors.grey50
 
-  const customOverrides: PanelOverrides<any> = {
+  const customOverrides: PanelOverrides = {
     ToggleIcon: {
       component: () => {
         if (props.toggleIcon) {

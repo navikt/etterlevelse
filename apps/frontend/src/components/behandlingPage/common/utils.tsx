@@ -1,6 +1,6 @@
 import {Behandling} from "../../../constants";
-import React, {ReactNode} from "react";
-import {Block, Display, Responsive} from "baseui/block";
+import {ReactNode} from "react";
+import {Block, Responsive} from "baseui/block";
 import {Helmet} from "react-helmet";
 import {HeadingXXLarge, LabelSmall} from "baseui/typography";
 import {ettlevColors} from "../../../util/theme";
@@ -9,7 +9,7 @@ import {ExternalButton} from "../../common/Button";
 import {env} from "../../../util/env";
 import {ExternalLinkWrapper} from "../../common/RouteLink";
 
-export const responsiveDisplayBehandlingPage: Responsive<Display> = ['block', 'block', 'block', 'block', 'flex', 'flex']
+export const responsiveDisplayBehandlingPage: Responsive<any> = ['block', 'block', 'block', 'block', 'flex', 'flex']
 
 export const getMainHeader = (behandling: Behandling, helmet?: ReactNode) => (
   <Block display={responsiveDisplayBehandlingPage} justifyContent="space-between" marginBottom="32px" marginTop="38px">

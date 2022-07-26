@@ -1,17 +1,17 @@
-import { Block } from 'baseui/block'
-import { Field, FieldProps, Formik, FormikProps } from 'formik'
-import React, { useEffect, useState } from 'react'
-import { createMelding, mapMeldingToFormValue, updateMelding } from '../../api/MeldingApi'
-import { AlertType, Melding, MeldingStatus, MeldingType } from '../../constants'
-import { FieldWrapper, TextAreaField } from '../common/Inputs'
+import {Block} from 'baseui/block'
+import {Field, FieldProps, Formik, FormikProps} from 'formik'
+import React, {useEffect, useState} from 'react'
+import {createMelding, mapMeldingToFormValue, updateMelding} from '../../api/MeldingApi'
+import {AlertType, Melding, MeldingStatus, MeldingType} from '../../constants'
+import {FieldWrapper, TextAreaField} from '../common/Inputs'
 import Button from '../common/Button'
-import { deleteIconGreen600, eyeSlash } from '../Images'
-import { borderColor } from '../common/Style'
-import { ettlevColors, theme } from '../../util/theme'
-import { Spinner } from '../common/Spinner'
-import { FormControl } from 'baseui/form-control'
-import { Radio, RadioGroup } from 'baseui/radio'
-import { ParagraphMedium } from 'baseui/typography'
+import {deleteIconGreen600, eyeSlash} from '../Images'
+import {borderColor} from '../common/Style'
+import {ettlevColors, theme} from '../../util/theme'
+import {Spinner} from '../common/Spinner'
+import {FormControl} from 'baseui/form-control'
+import {Radio, RadioGroup} from 'baseui/radio'
+import {ParagraphMedium} from 'baseui/typography'
 
 export const getAlertTypeText = (type: AlertType) => {
   if (!type) return ''
@@ -25,7 +25,7 @@ export const getAlertTypeText = (type: AlertType) => {
   }
 }
 
-export const EditMelding = ({ melding, setMelding, isLoading, maxChar }: { melding: Melding | undefined; setMelding: Function; isLoading: boolean; maxChar?: number }) => {
+export const EditMelding = ({melding, setMelding, isLoading, maxChar}: { melding: Melding | undefined; setMelding: Function; isLoading: boolean; maxChar?: number }) => {
   const [disableEdit, setDisableEdit] = useState<boolean>(false)
   const [meldingAlertType, setMeldingAlertType] = useState<string>(AlertType.WARNING)
   const [radioHover, setRadioHover] = useState<string>('')
@@ -56,7 +56,7 @@ export const EditMelding = ({ melding, setMelding, isLoading, maxChar }: { meldi
   if (isLoading) {
     return (
       <Block display="flex" justifyContent="center">
-        <Spinner size={theme.sizing.scale2400} />
+        <Spinner size={theme.sizing.scale2400}/>
       </Block>
     )
   }
@@ -65,7 +65,7 @@ export const EditMelding = ({ melding, setMelding, isLoading, maxChar }: { meldi
     <Block>
       {melding && (
         <Formik onSubmit={submit} initialValues={mapMeldingToFormValue(melding)}>
-          {({ values, submitForm }: FormikProps<Melding>) => (
+          {({values, submitForm}: FormikProps<Melding>) => (
             <Block>
               <FieldWrapper>
                 <Field name="alertType">
@@ -90,26 +90,12 @@ export const EditMelding = ({ melding, setMelding, isLoading, maxChar }: { meldi
                         onMouseEnter={(e) => setRadioHover(e.currentTarget.children[1].getAttribute('value') || '')}
                         onMouseLeave={() => setRadioHover('')}
                         overrides={{
-                          Root: {
+                          RadioGroupRoot: {
                             style: {
                               width: '100%',
                               alignItems: 'flex-start',
                             },
-                          },
-                          Label: {
-                            style: {
-                              fontSize: '18px',
-                              fontWeight: 400,
-                              lineHeight: '22px',
-                              width: '100%',
-                            },
-                          },
-                          RadioMarkOuter: {
-                            style: {
-                              height: theme.sizing.scale600,
-                              width: theme.sizing.scale600,
-                            },
-                          },
+                          }
                         }}
                         value={meldingAlertType}
                         onChange={(event) => {
@@ -119,9 +105,29 @@ export const EditMelding = ({ melding, setMelding, isLoading, maxChar }: { meldi
                       >
                         {Object.values(AlertType).map((id) => {
                           return (
-                            <Radio value={id} key={id}>
-                              <Block $style={{ textDecoration: radioHover === id ? 'underline' : 'none' }}>
-                                <ParagraphMedium $style={{ lineHeight: '22px' }} marginTop="0px" marginBottom="0px">
+                            <Radio
+                              value={id}
+                              key={id}
+                              overrides={{
+                                Label: {
+                                  style: {
+                                    fontSize: '18px',
+                                    fontWeight: 400,
+                                    lineHeight: '22px',
+                                    width: '100%',
+                                  },
+                                },
+                                RadioMarkOuter: {
+                                  style: {
+                                    height: theme.sizing.scale600,
+                                    width: theme.sizing.scale600,
+                                  },
+                                },
+
+                              }}
+                            >
+                              <Block $style={{textDecoration: radioHover === id ? 'underline' : 'none'}}>
+                                <ParagraphMedium $style={{lineHeight: '22px'}} marginTop="0px" marginBottom="0px">
                                   {getAlertTypeText(id)}
                                 </ParagraphMedium>
                               </Block>
@@ -149,8 +155,8 @@ export const EditMelding = ({ melding, setMelding, isLoading, maxChar }: { meldi
                   <Button
                     kind="underline-hover"
                     onClick={() => window.location.reload()}
-                    startEnhancer={<img alt="delete" src={deleteIconGreen600} />}
-                    $style={{ fontSize: '18px' }}
+                    startEnhancer={<img alt="delete" src={deleteIconGreen600}/>}
+                    $style={{fontSize: '18px'}}
                   >
                     Forkast endringer
                   </Button>
@@ -162,7 +168,7 @@ export const EditMelding = ({ melding, setMelding, isLoading, maxChar }: { meldi
                       marginRight
                       kind="secondary"
                       disabled={disableEdit}
-                      startEnhancer={<img src={eyeSlash} alt="hide icon" />}
+                      startEnhancer={<img src={eyeSlash} alt="hide icon"/>}
                       onClick={() => {
                         values.meldingStatus = MeldingStatus.DEACTIVE
                         submitForm()

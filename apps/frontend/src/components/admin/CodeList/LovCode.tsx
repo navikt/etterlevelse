@@ -135,7 +135,7 @@ export const TemaCodeDataForm = () => {
                   type="input"
                   size={InputSIZE.default}
                   value={data.shortDesciption}
-                  onChange={(str) => set({ shortDesciption: (str.target as HTMLInputElement).value })}
+                  onChange={(str) => set({ shortDesciption: (str.target as HTMLTextAreaElement).value })}
                 />
               </Block>
               <Error fieldName="data.shortDesciption" />

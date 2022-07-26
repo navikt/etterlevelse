@@ -1,6 +1,6 @@
-import { SORT_DIRECTION } from 'baseui/table'
-import { useEffect, useState } from 'react'
-import { Option, Value } from 'baseui/select'
+import {SORT_DIRECTION} from 'baseui/table'
+import {useEffect, useState} from 'react'
+import {Option, Value} from 'baseui/select'
 
 export type TableConfig<T, K extends keyof T> = {
   sorting?: ColumnCompares<T>
@@ -21,7 +21,7 @@ export type Filters<T> = {
 
 export type TableState<T, K extends keyof T> = {
   sortColumn?: K
-  sortDirection?: SORT_DIRECTION
+  sortDirection?: typeof SORT_DIRECTION.ASC | typeof SORT_DIRECTION.DESC
   direction: ColumnDirection<T>
   data: Array<T>
   sort: (column: K) => void
@@ -43,10 +43,10 @@ export type ColumnCompares<T> = {
 }
 
 export type ColumnDirection<T> = {
-  [P in keyof T]-?: SORT_DIRECTION | null
+  [P in keyof T]-?: typeof SORT_DIRECTION.ASC | typeof SORT_DIRECTION.DESC | null
 }
 
-const newSort = <T, K extends keyof T>(newColumn?: K, columnPrevious?: K, directionPrevious?: SORT_DIRECTION) => {
+const newSort = <T, K extends keyof T>(newColumn?: K, columnPrevious?: K, directionPrevious?: typeof SORT_DIRECTION.ASC | typeof SORT_DIRECTION.DESC) => {
   const newDirection = columnPrevious && newColumn === columnPrevious && directionPrevious === SORT_DIRECTION.ASC ? SORT_DIRECTION.DESC : SORT_DIRECTION.ASC
   return { newDirection, newColumn }
 }
@@ -62,7 +62,7 @@ const getSortFunction = <T, K extends keyof T>(sortColumn: K, useDefaultStringCo
   return sorting[sortColumn]
 }
 
-const toDirection = <T, K extends keyof T>(direction: SORT_DIRECTION, column?: K): ColumnDirection<T> => {
+const toDirection = <T, K extends keyof T>(direction: typeof SORT_DIRECTION.ASC | typeof SORT_DIRECTION.DESC, column?: K): ColumnDirection<T> => {
   const newDirection: any = {}
   newDirection[column] = direction
   return newDirection
