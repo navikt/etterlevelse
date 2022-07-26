@@ -42,7 +42,7 @@
     "shortid": "^2.2.16",
     "styletron-engine-atomic": "^1.4.8",
     "styletron-react": "^6.0.2",
-    "typescript": "^4.1.5",
+    "typescript": "^4.7.4",
     "yup": "^0.32.8"
   },
   "resolutions": {
