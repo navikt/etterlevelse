@@ -130,10 +130,11 @@ export const TextAreaField = (props: {
                       },
                     },
                   }}
-                  onChange={() => {
+                  onChange={(v) => {
                     if (props.setIsFormDirty) {
                       props.setIsFormDirty(true)
                     }
+                    p.field.onChange(v)
                   }}
                 />
               )}
