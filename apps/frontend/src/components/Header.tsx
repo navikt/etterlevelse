@@ -2,9 +2,9 @@ import * as React from 'react'
 import { useState } from 'react'
 import { ALIGN, HeaderNavigation, HeaderNavigationProps, StyledNavigationItem as NavigationItem, StyledNavigationList as NavigationList } from 'baseui/header-navigation'
 import { Block } from 'baseui/block'
-import { KIND, SIZE } from 'baseui/button'
-import Button, { buttonBorderStyle, ButtonKind } from './common/Button'
-import { Popover } from 'baseui/popover'
+import { KIND, SIZE, Button as BaseUIButton } from 'baseui/button'
+import Button, { buttonBorderStyle, buttonContentStyle, ButtonKind } from './common/Button'
+import { StatefulPopover } from 'baseui/popover'
 import { Location, useLocation } from 'react-router-dom'
 import { StyledLink } from 'baseui/link'
 import { useQueryParam } from '../util/hooks'
@@ -28,6 +28,7 @@ import { borderColor, borderStyle, borderWidth, marginAll } from './common/Style
 import { AlertType, Melding, MeldingStatus, MeldingType } from '../constants'
 import { getMeldingByType } from '../api/MeldingApi'
 import { Markdown } from './common/Markdown'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 export const loginUrl = (location: Location, path?: string) => {
   const frontpage = window.location.href.substr(0, window.location.href.length - location.pathname.length)
@@ -83,13 +84,13 @@ const LoggedInHeader = () => {
   const kravPages = user.isKraveier() ? [{ label: 'Forvalte og opprette krav', href: '/kravliste' }] : []
   const adminPages = user.isAdmin()
     ? [
-      { label: 'Administrere krav', href: '/admin/krav' },
-      { label: intl.audit, href: '/admin/audit' },
-      { label: 'Kodeverk', href: '/admin/codelist' },
-      { label: intl.questionAndAnswers, href: '/admin/messageslog' },
-      { label: intl.notifications, href: '/admin/varsel' },
-      { label: intl.settings, href: '/admin/settings', disabled: true },
-    ]
+        { label: 'Administrere krav', href: '/admin/krav' },
+        { label: intl.audit, href: '/admin/audit' },
+        { label: 'Kodeverk', href: '/admin/codelist' },
+        { label: intl.questionAndAnswers, href: '/admin/messageslog' },
+        { label: intl.notifications, href: '/admin/varsel' },
+        { label: intl.settings, href: '/admin/settings', disabled: true },
+      ]
     : []
   const otherPages = [
     { label: 'Mine innstillinger', href: '/innstillinger', disabled: true },
@@ -160,24 +161,23 @@ const UserInfo = () => {
 
 type MenuItem = { label: React.ReactNode; href?: string; disabled?: boolean; icon?: string }
 
-const Menu = (props: { pages: MenuItem[][]; title: React.ReactNode; icon?: IconDefinition; kind?: ButtonKind; compact?: boolean }) => {
+const Menu = (props: { pages: MenuItem[][]; title: React.ReactNode; icon?: IconDefinition; kind?: 'primary' | 'secondary' | 'tertiary'; compact?: boolean }) => {
   const [open, setOpen] = useState(false)
 
   const allPages = props.pages.length
     ? props.pages
-      .filter((p) => p.length)
-      .reduce((previousValue, currentValue) => [...((previousValue as MenuItem[]) || []), { label: <Divider compact={props.compact} /> }, ...(currentValue as MenuItem[])])
+        .filter((p) => p.length)
+        .reduce((previousValue, currentValue) => [...((previousValue as MenuItem[]) || []), { label: <Divider compact={props.compact} /> }, ...(currentValue as MenuItem[])])
     : []
 
   return (
-    <Popover
+    <StatefulPopover
       autoFocus
       returnFocus
       focusLock
-      isOpen={open}
       showArrow
-      onEsc={() => setOpen(false)}
-      onClickOutside={() => setOpen(false)}
+      onClick={() => setOpen(!open)}
+      onClose={() => setOpen(false)}
       overrides={{
         Arrow: { style: { backgroundColor: ettlevColors.white } },
         Body: { style: { ...marginAll(theme.sizing.scale900) } },
@@ -221,12 +221,42 @@ const Menu = (props: { pages: MenuItem[][]; title: React.ReactNode; icon?: IconD
         </Block>
       }
     >
-      <Block>
-        <Button size={SIZE.compact} kind={props.kind || 'secondary'} icon={open ? faTimes : props.icon} onClick={() => setOpen(!open)}>
-          {props.title}
-        </Button>
-      </Block>
-    </Popover>
+      <BaseUIButton
+        size={SIZE.compact}
+        kind={props.kind || 'secondary'}
+        overrides={
+          props.kind === 'secondary'
+            ? {
+                BaseButton: {
+                  style: {
+                    ...buttonBorderStyle,
+                    ...buttonContentStyle,
+                    boxShadow: '0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 2px 0 rgba(0, 0, 0, .12)',
+                    ':hover': { boxShadow: '0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 3px 0 rgba(0, 0, 0, .12)' },
+                    ':active': { boxShadow: '0 2px 1px -2px rgba(0, 0, 0, .2), 0 1px 1px 0 rgba(0, 0, 0, .14), 0 1px 1px 0 rgba(0, 0, 0, .12)' },
+                    ':focus': {
+                      boxShadow: '0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 3px 0 rgba(0, 0, 0, .12)',
+                      outlineWidth: '3px',
+                      outlineStyle: 'solid',
+                      outlinwColor: ettlevColors.focusOutline,
+                    },
+                  },
+                },
+              }
+            : {
+                BaseButton: {
+                  style: {
+                    buttonContentStyle,
+                  },
+                },
+              }
+        }
+      >
+        {' '}
+        {props.icon && <FontAwesomeIcon icon={open ? faTimes : props.icon} style={{ marginRight: '.5rem' }} fixedWidth />}
+        {props.title}
+      </BaseUIButton>
+    </StatefulPopover>
   )
 }
 
@@ -246,7 +276,7 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
   }
 
   React.useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       await getMeldingByType(MeldingType.SYSTEM).then((r) => {
         if (r.numberOfElements > 0) {
           setSystemVarsel(r.content[0])
@@ -282,7 +312,7 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
                 </NavigationItem>
               </NavigationList>
 
-              <NavigationList $align='center' $style={{ justifyContent: 'center' }}>
+              <NavigationList $align="center" $style={{ justifyContent: 'center' }}>
                 {!props.noSearchBar && (
                   <NavigationItem $style={{ width: '100%', maxWidth: '600px' }}>
                     <Block flex="1" display={['none', 'none', 'none', 'none', 'flex', 'flex']} overrides={{ Block: { props: { role: 'search' } } }}>
