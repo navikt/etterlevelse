@@ -278,6 +278,11 @@ const Alle = () => {
     if (sok && pageNumber != 0) setPage(0)
   }, [sok])
 
+  const getBehandlingerWithOutDuplicates = () => {
+    return behandlinger.content.filter((value, index, self) => index === self.findIndex((behandling) => behandling.id === value.id)
+    )
+  }
+
   return (
     <Block marginBottom={tabMarginBottom}>
       <LabelLarge marginBottom={theme.sizing.scale200}>Søk i alle behandlinger</LabelLarge>
@@ -356,7 +361,7 @@ const Alle = () => {
             </Block>
           )}
 
-          <BehandlingerPanels behandlinger={behandlinger.content} loading={loading} />
+          <BehandlingerPanels behandlinger={getBehandlingerWithOutDuplicates()} loading={loading} />
 
           {!loading && behandlinger.totalElements !== 0 && (
             <Block display={'flex'} justifyContent={'space-between'} marginTop={theme.sizing.scale1000}>
