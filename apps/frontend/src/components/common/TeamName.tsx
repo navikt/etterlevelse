@@ -7,11 +7,11 @@ import { theme } from '../../util'
 import { ettlevColors } from '../../util/theme'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons'
-import { $StyleProp } from 'styletron-react'
+import { StyleObject } from 'styletron-react'
 import _ from 'lodash'
 import { ExternalLinkWrapper } from './RouteLink'
 
-export const TeamName = (props: { id: string; link?: boolean; fontColor?: string; style?: $StyleProp<LinkProps> }) => {
+export const TeamName = (props: { id: string; link?: boolean; fontColor?: string; style?: StyleObject }) => {
   const [name] = useTeam()(props.id)
   const customStyle = { color: props.fontColor ? props.fontColor : ettlevColors.green600 }
   const mergedStyle = _.merge(customStyle, props.style)
@@ -24,7 +24,7 @@ export const TeamName = (props: { id: string; link?: boolean; fontColor?: string
   )
 }
 
-export const Teams = (props: { teams: string[]; link?: boolean; list?: boolean; fontColor?: string; style?: $StyleProp<LinkProps> }) => (
+export const Teams = (props: { teams: string[]; link?: boolean; list?: boolean; fontColor?: string; style?: StyleObject }) => (
   <Block display={props.list ? 'block' : 'flex'} flexWrap>
     {props.teams.map((t) => (
       <Block key={t} marginRight={props.list ? 'none' : theme.sizing.scale600} marginBottom={props.list ? theme.sizing.scale600 : 'none'}>

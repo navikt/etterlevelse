@@ -140,7 +140,7 @@ const Button = (props: ButtonProps) => {
 export default Button
 
 // Må gjøres properly, laget denne for å unngå tusenvis av react warnings
-export const buttonBorderStyle: StyleObject = {
+export const buttonBorderStyle = {
   ...borderColor(ettlevColors.green600),
   ...borderStyle('solid'),
   ...borderWidth('2px'),

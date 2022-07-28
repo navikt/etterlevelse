@@ -1,13 +1,13 @@
 import { Block, BlockProps } from 'baseui/block'
 import { LabelSmall } from 'baseui/typography'
 import React from 'react'
-import { $StyleProp } from 'styletron-react'
+import { StyleObject } from 'styletron-react'
 import { ettlevColors } from '../../../util/theme'
 import CustomizedLink from '../CustomizedLink'
 import './SkipToContent.css'
 
 const SkipToContent = () => {
-  const style: $StyleProp<BlockProps> = {
+  const style: StyleObject = {
     background: ettlevColors.white,
   }
 

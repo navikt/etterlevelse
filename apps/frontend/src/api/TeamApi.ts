@@ -139,7 +139,7 @@ export const useMyTeams = () => {
         .catch((e) => {
           setData([])
           setLoading(false)
-          console.log("couldn't find teams", e)
+          console.log('couldn\'t find teams', e)
         })
     !ident && setLoading(false)
   }, [ident, productAreas])
@@ -162,7 +162,7 @@ export const useMyProductAreas = () => {
         .catch((e) => {
           setData([])
           setLoading(false)
-          console.log("couldn't find product area", e)
+          console.log('couldn\t find product area', e)
         })
     !ident && setLoading(false)
   }, [ident])

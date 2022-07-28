@@ -39,7 +39,7 @@ type TableProps<T, K extends keyof T> = {
 type HeadProps<T, K extends keyof T> = {
   title?: string
   column?: K
-  $style?: StyleObject
+  $style?: any
   small?: boolean
   hide?: boolean
 }
@@ -295,7 +295,7 @@ const HeadCell = <T, K extends keyof T>(props: HeadProps<T, K>) => {
   )
 }
 
-export const Cell = (props: { small?: boolean; $style?: StyleObject; children?: ReactNode }) => {
+export const Cell = (props: { small?: boolean; $style?: any; children?: ReactNode }) => {
   const widthStyle = props.small ? { maxWidth: '15%' } : {}
   return <StyledCell style={{ ...props.$style, ...widthStyle }}>{props.children}</StyledCell>
 }
