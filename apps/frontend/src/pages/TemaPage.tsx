@@ -235,8 +235,8 @@ const RelevansFilter = ({ onClickFilter, relevans, kravAntall }: { onClickFilter
 )
 
 export const cardWidth = ['98%', '98%', '98%', '98%', '48%', '32%']
-export const cardHeight = ['300px', '300px', '300px', '300px', '300px', '300px']
-export const cardMaxheight = '300px'
+export const cardHeight = ['220px', '220px', '220px', '220px', '220px', '220px']
+export const cardMaxheight = '250px'
 const headerBgOverlap = '47px'
 
 const TemaInfo = (props: { kravAntall: number; temaAntall: number }) => (
@@ -300,9 +300,8 @@ export const TemaCard = ({ tema, relevans, setNum }: { tema: TemaCode; relevans:
   return (
     <PanelLinkCard
       width={cardWidth}
-      height={cardHeight}
-      maxHeight={cardMaxheight}
       overrides={overrides}
+      maxHeight={cardMaxheight}
       verticalMargin={theme.sizing.scale400}
       href={loading ? undefined : urlForObject(ListName.TEMA, tema.code)}
       tittel={tema.shortName + (loading ? ' - Laster...' : '')}
@@ -319,7 +318,7 @@ export const TemaCard = ({ tema, relevans, setNum }: { tema: TemaCode; relevans:
         </Block>
       }
     >
-      <Block display={'flex'} flexDirection={'column'}>
+      <Block display={'flex'} flexDirection={'column'} height={cardHeight}>
         <SimpleTag active>
           <Block display={'flex'} alignItems={'center'} justifyContent={'center'} {...margin('8px', '16px')}>
             {/* <img src={gavelIcon} width={'35px'} height={'35px'} aria-hidden alt={'Hammer ikon'} /> */}

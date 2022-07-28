@@ -328,18 +328,18 @@ export const PanelLinkCard = ({
 
               {children}
             </Block>
-
-            {(ComplimentaryContent || !hideArrow) && (
-              <Block display="flex" width="100%" height="100%" alignItems="end">
-                {ComplimentaryContent && <Block minWidth="70%">{ComplimentaryContent}</Block>}
-                {!hideArrow && (
-                  <Block width="100%" justifyContent="flex-end" alignSelf="flex-end" display="flex" padding={paddingSize} paddingLeft={flexContent ? '0px' : undefined}>
-                    <Chevron hover={hover} icon={arrowRightIcon} distance={'8px'} />
-                  </Block>
-                )}
-              </Block>
-            )}
           </Block>
+
+          {(ComplimentaryContent || !hideArrow) && (
+            <Block display="flex" width="100%" height="100%" >
+              {ComplimentaryContent && <Block minWidth="70%">{ComplimentaryContent}</Block>}
+              {!hideArrow && (
+                <Block width="100%" justifyContent="flex-end" alignSelf="flex-end" display="flex" padding={paddingSize} paddingLeft={flexContent ? '0px' : undefined}>
+                  <Chevron hover={hover} icon={arrowRightIcon} distance={'8px'} />
+                </Block>
+              )}
+            </Block>
+          )}
         </Block>
       </RouteLink>
     </Block>
