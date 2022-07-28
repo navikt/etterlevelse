@@ -7,7 +7,7 @@ import * as React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { borderColor, borderRadius, borderStyle, borderWidth, paddingAll } from './Style'
 import _ from 'lodash'
-import { $StyleProp } from 'styletron-react'
+import { StyleObject, StyletronProps } from 'styletron-react'
 
 export const CustomizedAccordion = (props: Partial<AccordionProps>) => {
   return <Accordion {...props} overrides={{}} />
@@ -18,7 +18,7 @@ interface CustomizedPanelProps {
   HeaderActiveBackgroundColor?: string
   noUnderLine?: boolean
   toggleIcon?: { expanded: React.ReactElement<any, any>; unexpanded: React.ReactElement<any, any> }
-  headerStyle?: $StyleProp<BlockProps>
+  headerStyle?: StyleObject
 }
 
 type CustomProps = CustomizedPanelProps & PanelProps
@@ -50,11 +50,11 @@ export const CustomizedPanel = (props: CustomProps) => {
           color: ettlevColors.green800,
           ...(expanded
             ? {
-                boxShadow: 'none',
-              }
+              boxShadow: 'none',
+            }
             : {
-                boxShadow: '0px 3px 4px rgba(0, 0, 0, 0.12)',
-              }),
+              boxShadow: '0px 3px 4px rgba(0, 0, 0, 0.12)',
+            }),
         },
       },
     },
@@ -75,11 +75,11 @@ export const CustomizedPanel = (props: CustomProps) => {
       style: {
         ...(expanded
           ? {
-              ...borderColor(ettlevColors.grey200),
-            }
+            ...borderColor(ettlevColors.grey200),
+          }
           : {
-              ...borderColor(ettlevColors.grey100),
-            }),
+            ...borderColor(ettlevColors.grey100),
+          }),
         ...borderStyle('solid'),
         ...borderWidth('1px'),
         ...borderRadius('4px'),
@@ -97,7 +97,12 @@ export const CustomizedPanel = (props: CustomProps) => {
     } else {
       return (
         <Block>
-          <HeadingLarge marginTop={theme.sizing.scale100} marginBottom={theme.sizing.scale100} color={ettlevColors.green600} $style={props.headerStyle}>
+          <HeadingLarge
+            marginTop={theme.sizing.scale100}
+            marginBottom={theme.sizing.scale100}
+            color={ettlevColors.green600}
+            $style={props.headerStyle}
+          >
             {props.title}
           </HeadingLarge>
         </Block>
