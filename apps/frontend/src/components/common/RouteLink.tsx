@@ -87,7 +87,7 @@ export const urlForObject = (type: NavigableItem | string, id: string, audit?: A
     case ObjectType.Melding:
       return '/admin/varsel'
   }
-  console.warn("couldn't find object type" + type)
+  console.warn('couldn\'t find object type' + type)
   return ''
 }
 
