@@ -48,10 +48,7 @@ export const getMainHeader = (behandling: Behandling, helmet?: ReactNode) => (
 export const getNewestKravVersjon = (list: any[]) => {
   let relevanteStatusListe = [...list]
 
-  for (let index = relevanteStatusListe.length - 1; index > 0; index--) {
-    if (relevanteStatusListe[index].kravNummer === relevanteStatusListe[index - 1].kravNummer) {
-      relevanteStatusListe.splice(index - 1, 1)
-    }
-  }
+  relevanteStatusListe = relevanteStatusListe.filter((value, index, self) => index === self.findIndex((k) => k.kravNummer === value.kravNummer) ) 
+
   return relevanteStatusListe
 }

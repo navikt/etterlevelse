@@ -85,11 +85,8 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
       return a.kravNummer - b.kravNummer
     })
 
-    for (let index = StatusListe.length - 1; index > 0; index--) {
-      if (StatusListe[index].kravNummer === StatusListe[index - 1].kravNummer) {
-        StatusListe.splice(index - 1, 1)
-      }
-    }
+    //remove duplicates krav numbers
+    StatusListe = StatusListe.filter((value, index, self) => index === self.findIndex((krav) => krav.kravNummer === value.kravNummer))
 
     return StatusListe
   }
