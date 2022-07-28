@@ -225,7 +225,7 @@ const Menu = (props: { pages: MenuItem[][]; title: React.ReactNode; icon?: IconD
         size={SIZE.compact}
         kind={props.kind || 'secondary'}
         overrides={
-          props.kind === 'secondary'
+          props.kind !== 'tertiary'
             ? {
                 BaseButton: {
                   style: {
@@ -252,7 +252,6 @@ const Menu = (props: { pages: MenuItem[][]; title: React.ReactNode; icon?: IconD
               }
         }
       >
-        {' '}
         {props.icon && <FontAwesomeIcon icon={open ? faTimes : props.icon} style={{ marginRight: '.5rem' }} fixedWidth />}
         {props.title}
       </BaseUIButton>
