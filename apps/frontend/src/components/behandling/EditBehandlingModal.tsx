@@ -49,10 +49,10 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
   const filterData = (
     unfilteredData:
       | {
-          behandling: PageResponse<{
-            stats: BehandlingStats
-          }>
-        }
+        behandling: PageResponse<{
+          stats: BehandlingStats
+        }>
+      }
       | undefined,
   ) => {
     let StatusListe: any[] = []
@@ -267,13 +267,13 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
                   <Block>
                     <Block display="flex" alignItems="baseline" marginRight="30px">
                       <ParagraphMedium
-                        overrides={{Block: {style: {...marginZero, fontWeight: 900, fontSize: '32px', lineHeight: '40px'}}}}
+                        $style={{ ...marginZero, fontWeight: 900, fontSize: '32px', lineHeight: '40px' }}
                         color={ettlevColors.navOransje}
                         marginRight={theme.sizing.scale300}
                       >
                         {stats.length}
                       </ParagraphMedium>
-                      <ParagraphMedium overrides={{Block: {style: {...marginZero}}}}>krav</ParagraphMedium>
+                      <ParagraphMedium $style={{ ...marginZero }}>krav</ParagraphMedium>
                     </Block>
                   </Block>
                   <Block
