@@ -21,6 +21,8 @@ import { filterKrav } from '../components/behandlingsTema/common/utils'
 import { getAllKravPriority } from '../api/KravPriorityApi'
 import { Spinner } from 'baseui/spinner'
 import { getMainHeader } from '../components/behandlingPage/common/utils'
+import { user } from '../services/User'
+import { loginUrl } from '../components/Header'
 
 export const sortingOptions = [
   { label: 'Anbefalt rekkefølge', id: 'priority' },
@@ -81,11 +83,11 @@ export const BehandlingTemaPage = () => {
   const [sorting, setSorting] = useState<readonly Option[]>([sortingOptions[0]])
   const [kravRelevans, setKravRelevans] = useState<readonly Option[]>(params.filter ? kravRelevansOptions.filter((kro) => kro.id === params.filter) : [kravRelevansOptions[0]])
 
-  // useEffect(() => {
-  //   if(!user.isLoggedIn()) {
-  //     navigate(loginUrl(location, location.pathname))
-  //   }
-  // },[])
+  useEffect(() => {
+    if(!user.isLoggedIn()) {
+      window.location.href = loginUrl(location, location.pathname)
+    }
+  },[])
 
   useEffect(() => {
     ;(async () => {

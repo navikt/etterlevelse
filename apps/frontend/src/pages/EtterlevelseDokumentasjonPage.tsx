@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Block } from 'baseui/block'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { ettlevColors } from '../util/theme'
 import { codelist, ListName, TemaCode } from '../services/Codelist'
 import { useBehandling } from '../api/BehandlingApi'
@@ -13,6 +13,8 @@ import { ampli } from '../services/Amplitude'
 import { EtterlevelseSecondaryHeader } from '../components/etterlevelse/EtterlevelseSecondaryHeader'
 import { KRAV_FILTER_TYPE } from '../constants'
 import { getMainHeader } from '../components/behandlingPage/common/utils'
+import { loginUrl } from '../components/Header'
+import { user } from '../services/User'
 
 export type Section = 'dokumentasjon' | 'etterlevelser' | 'tilbakemeldinger'
 
@@ -38,6 +40,14 @@ export const EtterlevelseDokumentasjonPage = () => {
 
   const [tab, setTab] = useState<Section>('dokumentasjon')
   const navigate = useNavigate()
+  const location = useLocation()
+
+
+  useEffect(() => {
+    if(!user.isLoggedIn()) {
+      window.location.href = loginUrl(location, location.pathname)
+    }
+  },[])
 
   useEffect(() => {
     if (params.kravNummer && params.kravVersjon) {

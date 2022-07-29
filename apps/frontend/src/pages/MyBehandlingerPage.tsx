@@ -18,13 +18,14 @@ import moment from 'moment'
 import { useDebouncedState } from '../util/hooks'
 import { SkeletonPanel } from '../components/common/LoadingSkeleton'
 import { user } from '../services/User'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { faExternalLinkAlt, faPlus } from '@fortawesome/free-solid-svg-icons'
 import { borderWidth } from '../components/common/Style'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Helmet } from 'react-helmet'
 import { ampli } from '../services/Amplitude'
+import { loginUrl } from '../components/Header'
 
 type Section = 'mine' | 'siste' | 'alle'
 
@@ -37,7 +38,17 @@ type CustomTeamObject = BehandlingCount & Team
 const tabMarginBottom = '48px'
 
 export const MyBehandlingerPage = () => {
+
+  
   ampli.logEvent('sidevisning', { side: 'Side for Behandlinger', sidetittel: 'Dokumentere etterlevelse' })
+
+  const location = useLocation()
+
+  useEffect(() => {
+    if(!user.isLoggedIn()) {
+      window.location.href = loginUrl(location, location.pathname)
+    }
+  },[])
 
   return (
     <Block width="100%" paddingBottom={'200px'} id="content" overrides={{ Block: { props: { role: 'main' } } }}>

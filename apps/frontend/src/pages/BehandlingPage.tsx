@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Block } from 'baseui/block'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
@@ -21,6 +21,8 @@ import { TemaCardBehandling } from '../components/behandlingPage/TemaCardBehandl
 import { isFerdigUtfylt } from './BehandlingTemaPage'
 import { ampli } from '../services/Amplitude'
 import { getMainHeader, getNewestKravVersjon, responsiveDisplayBehandlingPage } from '../components/behandlingPage/common/utils'
+import { loginUrl } from '../components/Header'
+import { user } from '../services/User'
 
 export const BehandlingPage = () => {
   const params = useParams<{ id?: string }>()
@@ -40,11 +42,11 @@ export const BehandlingPage = () => {
   const [irrelevanteStats, setIrrelevanteStats] = useState<any[]>([])
   const [utgaattStats, setUtgaattStats] = useState<any[]>([])
 
-  // useEffect(() => {
-  //   if(!user.isLoggedIn()) {
-  //     navigate(loginUrl(location, location.pathname))
-  //   }
-  // },[])
+  useEffect(() => {
+    if(!user.isLoggedIn()) {
+      window.location.href = loginUrl(location, location.pathname)
+    }
+  },[])
 
   const filterData = (
     unfilteredData:
