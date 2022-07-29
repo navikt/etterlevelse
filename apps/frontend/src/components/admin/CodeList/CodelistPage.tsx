@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 import { StatefulSelect } from 'baseui/select'
 import { Block } from 'baseui/block'
 import { KIND, SIZE as ButtonSize } from 'baseui/button'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 
 import { HeadingMedium } from 'baseui/typography'
 import { Spinner } from 'baseui/spinner'
@@ -18,6 +18,7 @@ import CreateCodeListModal from './ModalCreateCodeList'
 import CodeListTable from './CodeListStyledTable'
 import { ettlevColors, responsivePaddingSmall, responsiveWidthSmall } from '../../../util/theme'
 import { Helmet } from 'react-helmet'
+import { loginUrl } from '../../Header'
 
 const CodeListPage = () => {
   const params = useParams<{ listname?: string }>()
@@ -27,6 +28,7 @@ const CodeListPage = () => {
   const [createCodeListModal, setCreateCodeListModal] = React.useState(false)
   const [errorOnResponse, setErrorOnResponse] = React.useState(null)
   const forceUpdate = useForceUpdate()
+  const location = useLocation()
   useAwait(codelist.wait(), setLoading)
 
   const lists = codelist.lists?.codelist
@@ -52,6 +54,11 @@ const CodeListPage = () => {
 
   useEffect(() => {
     update().catch()
+    if(!user.isLoggedIn()) {
+      window.location.href = loginUrl(location, location.pathname)
+    } if (!user.isAdmin()) {
+      window.location.href = '/forbidden'
+    }
   }, [])
 
   useEffect(() => {

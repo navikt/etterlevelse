@@ -20,9 +20,10 @@ import { AllKrav } from '../components/kravList/AllKrav'
 import { SistRedigertKrav } from '../components/kravList/SisteRedigertKrav'
 import { TemaList } from '../components/kravList/TemaList'
 import StatusView from '../components/common/StatusTag'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
 import { ampli } from '../services/Amplitude'
+import { loginUrl } from '../components/Header'
 
 type Section = 'siste' | 'alle' | 'tema'
 
@@ -48,7 +49,14 @@ export const sortKrav = (kravene: KravQL[]) => {
 }
 
 export const KravListPage = () => {
+  const location = useLocation()
   ampli.logEvent('sidevisning', { side: 'Kraveier side', sidetittel: 'Forvalte og opprette krav' })
+
+  if(!user.isLoggedIn()) {
+    window.location.href = loginUrl(location, location.pathname)
+  } if (!user.isAdmin() && !user.isKraveier()) {
+    window.location.href = '/forbidden'
+  }
 
   return (
     <Block width="100%" paddingBottom={'200px'} id="content" overrides={{ Block: { props: { role: 'main' } } }}>

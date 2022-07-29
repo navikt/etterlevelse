@@ -17,6 +17,9 @@ import { Markdown } from '../../common/Markdown'
 import { responsivePaddingSmall, responsiveWidthSmall } from '../../../util/theme'
 import { Helmet } from 'react-helmet'
 import { buttonContentStyle } from '../../common/Button'
+import { useLocation } from 'react-router-dom'
+import { user } from '../../../services/User'
+import { loginUrl } from '../../Header'
 
 interface MailLog {
   time: string
@@ -33,6 +36,15 @@ export const MailLogPage = () => {
   const [log, setLog] = useState<PageResponse<MailLog>>({ content: [], numberOfElements: 0, pageNumber: 0, pages: 0, pageSize: 1, totalElements: 0 })
   const [page, setPage] = useState(1)
   const [limit, setLimit] = useState(20)
+  const location = useLocation()
+  
+  useEffect(() => {
+    if (!user.isLoggedIn()) {
+      window.location.href = loginUrl(location, location.pathname)
+    } if (!user.isAdmin()) {
+      window.location.href = '/forbidden'
+    }
+  }, [])
 
   useEffect(() => {
     getMailLog(page - 1, limit).then(setLog)

@@ -10,11 +10,15 @@ import { Markdown } from '../../common/Markdown'
 import { CustomizedStatefulTextarea } from '../../common/CustomizedTextarea'
 import { ettlevColors, responsivePaddingSmall, responsiveWidthSmall } from '../../../util/theme'
 import { Helmet } from 'react-helmet'
+import { user } from '../../../services/User'
+import { loginUrl } from '../../Header'
+import { useLocation } from 'react-router-dom'
 
 export const SettingsPage = () => {
   const [loading, setLoading] = React.useState<boolean>(true)
   const [error, setError] = useState()
   const [settings, setSettings] = useState<Settings>()
+  const location = useLocation()
 
   const load = async () => {
     setLoading(true)
@@ -36,6 +40,11 @@ export const SettingsPage = () => {
 
   useEffect(() => {
     load()
+    if (!user.isLoggedIn()) {
+      window.location.href = loginUrl(location, location.pathname)
+    } if (!user.isAdmin()) {
+      window.location.href = '/forbidden'
+    }
   }, [])
 
   return (

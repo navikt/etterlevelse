@@ -19,6 +19,9 @@ import { codelist, ListName } from '../services/Codelist'
 import { ampli } from '../services/Amplitude'
 import { Spinner } from '../components/common/Spinner'
 import { ReactNode } from 'react-markdown/lib/react-markdown'
+import { useLocation } from 'react-router-dom'
+import { loginUrl } from '../components/Header'
+import { user } from '../services/User'
 
 type SporsmaalOgSvarKrav = {
   kravNavn: string
@@ -42,9 +45,16 @@ export const QuestionAndAnswerLogPage = () => {
   const [tableContent, setTableContent] = useState<Krav[]>([])
   const [kravMessages, setKravMessages] = useState<KravMessage[]>([])
   const [isloading, setIsLoading] = useState<boolean>(false)
+  const location = useLocation()
   ampli.logEvent('sidevisning', { side: 'Log side for spørsmål og svar', sidetittel: 'Spørsmål og svar' })
 
   useEffect(() => {
+    if(!user.isLoggedIn()) {
+      window.location.href = loginUrl(location, location.pathname)
+    } if (!user.isAdmin()) {
+      window.location.href = '/forbidden'
+    }
+
     ;(async () => {
       const kraver = await getAllKrav()
       const mappedKraver = kraver.map((k) => kravMapToFormVal(k))

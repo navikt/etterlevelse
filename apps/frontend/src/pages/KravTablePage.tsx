@@ -14,6 +14,9 @@ import { Layout2 } from '../components/scaffold/Page'
 import RouteLink from '../components/common/RouteLink'
 import { Helmet } from 'react-helmet'
 import { ampli } from '../services/Amplitude'
+import { useLocation } from 'react-router-dom'
+import { loginUrl } from '../components/Header'
+import { user } from '../services/User'
 
 const kravSorting: ColumnCompares<Krav> = {
   kravNummer: (a, b) => a.kravNummer - b.kravNummer,
@@ -26,8 +29,16 @@ const kravSorting: ColumnCompares<Krav> = {
 
 export const KravTablePage = () => {
   const [tableContent, setTableContent] = useState<Krav[]>([])
+  const location = useLocation()
 
   useEffect(() => {
+
+    if(!user.isLoggedIn()) {
+      window.location.href = loginUrl(location, location.pathname)
+    } if (!user.isAdmin()) {
+      window.location.href = '/forbidden'
+    }
+
     ;(async () => {
       const kraver = await getAllKrav()
       const mappedKraver = kraver.map((k) => kravMapToFormVal(k))

@@ -4,7 +4,7 @@ import { ettlevColors, maxPageWidth, theme } from '../util/theme'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
 import { HeadingXXLarge } from 'baseui/typography'
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useLocation, useParams } from 'react-router-dom'
 import CustomizedTabs from '../components/common/CustomizedTabs'
 import EditMelding from '../components/varslinger/EditMelding'
 import { Melding, MeldingType } from '../constants'
@@ -13,10 +13,22 @@ import { ObjectType } from '../components/admin/audit/AuditTypes'
 import { AuditRecentTable } from '../components/admin/audit/AuditRecentTable'
 import { ampli } from '../services/Amplitude'
 import EditOmEtterlevelse from '../components/varslinger/EditOmEtterlevelse'
+import { user } from '../services/User'
+import { loginUrl } from '../components/Header'
 
 type Section = 'utsendtMelding' | MeldingType.SYSTEM | MeldingType.FORSIDE
 
 export const VarselPage = () => {
+  const location = useLocation()
+
+  useEffect(() => {
+    if(!user.isLoggedIn()) {
+      window.location.href = loginUrl(location, location.pathname)
+    } if (!user.isAdmin()) {
+      window.location.href = '/forbidden'
+    }
+  },[])
+
   return (
     <Block width="100%" paddingBottom={'200px'} id="content" overrides={{ Block: { props: { role: 'main' } } }}>
       <Helmet>

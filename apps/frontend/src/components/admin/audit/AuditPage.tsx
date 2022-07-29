@@ -1,6 +1,6 @@
 import { Block } from 'baseui/block'
 import React, { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import _ from 'lodash'
 import { HeadingMedium, ParagraphMedium } from 'baseui/typography'
 import { AuditLog } from './AuditTypes'
@@ -13,6 +13,8 @@ import { intl } from '../../../util/intl/intl'
 import CustomInput from '../../common/CustomizedInput'
 import { responsivePaddingSmall, responsiveWidthSmall } from '../../../util/theme'
 import { Helmet } from 'react-helmet'
+import { user } from '../../../services/User'
+import { loginUrl } from '../../Header'
 
 const format = (id: string) => _.trim(id, '"')
 
@@ -23,6 +25,7 @@ export const AuditPage = () => {
   const [error, setError] = useState()
   const [auditLog, setAuditLog] = useState<AuditLog>()
   const [idSearch, setIdInput, idInput] = useDebouncedState(params.id || '', 400)
+  const location = useLocation()
 
   const lookupVersion = (id?: string) => {
     ;(async () => {
@@ -51,6 +54,14 @@ export const AuditPage = () => {
 
   useEffect(() => setIdInput(params.id || ''), [params.id])
   useEffect(() => lookupVersion(idSearch), [idSearch])
+
+  useEffect(() => {
+    if(!user.isLoggedIn()) {
+      window.location.href = loginUrl(location, location.pathname)
+    } if (!user.isAdmin()) {
+      window.location.href = '/forbidden'
+    }
+  }, [])
 
   return (
     <Block width={responsiveWidthSmall} paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall}>
