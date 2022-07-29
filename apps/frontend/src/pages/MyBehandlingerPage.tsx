@@ -44,11 +44,11 @@ export const MyBehandlingerPage = () => {
 
   const location = useLocation()
 
-  useEffect(() => {
-    if(!user.isLoggedIn()) {
-      window.location.href = loginUrl(location, location.pathname)
-    }
-  },[])
+  // useEffect(() => {
+  //     if(!user.isLoggedIn()) {
+  //       window.location.href = loginUrl(location, location.pathname)
+  //     }
+  // },[])
 
   return (
     <Block width="100%" paddingBottom={'200px'} id="content" overrides={{ Block: { props: { role: 'main' } } }}>

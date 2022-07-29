@@ -49,9 +49,11 @@ export const QuestionAndAnswerLogPage = () => {
   ampli.logEvent('sidevisning', { side: 'Log side for spørsmål og svar', sidetittel: 'Spørsmål og svar' })
 
   useEffect(() => {
-    if(!user.isLoggedIn()) {
-      window.location.href = loginUrl(location, location.pathname)
-    } if (!user.isAdmin()) {
+    // if(!user.isLoggedIn()) {
+    //   window.location.href = loginUrl(location, location.pathname)
+    // } 
+    
+    if (!user.isAdmin()) {
       window.location.href = '/forbidden'
     }
 

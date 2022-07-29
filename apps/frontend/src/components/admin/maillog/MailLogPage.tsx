@@ -37,11 +37,12 @@ export const MailLogPage = () => {
   const [page, setPage] = useState(1)
   const [limit, setLimit] = useState(20)
   const location = useLocation()
-  
+
   useEffect(() => {
-    if (!user.isLoggedIn()) {
-      window.location.href = loginUrl(location, location.pathname)
-    } if (!user.isAdmin()) {
+    // if (!user.isLoggedIn()) {
+    //   window.location.href = loginUrl(location, location.pathname)
+    // }
+     if (!user.isAdmin()) {
       window.location.href = '/forbidden'
     }
   }, [])

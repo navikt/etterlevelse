@@ -84,12 +84,11 @@ export const BehandlingTemaPage = () => {
   const [kravRelevans, setKravRelevans] = useState<readonly Option[]>(params.filter ? kravRelevansOptions.filter((kro) => kro.id === params.filter) : [kravRelevansOptions[0]])
 
   useEffect(() => {
-    if(!user.isLoggedIn()) {
-      window.location.href = loginUrl(location, location.pathname)
-    }
-  },[])
 
-  useEffect(() => {
+    // if(!user.isLoggedIn()) {
+    //   window.location.href = loginUrl(location, location.pathname)
+    // }
+
     ;(async () => {
       setAllKrav(await getAllKrav())
       setAllKravPriority(await getAllKravPriority())

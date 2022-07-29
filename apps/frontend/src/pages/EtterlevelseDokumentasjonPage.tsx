@@ -43,11 +43,11 @@ export const EtterlevelseDokumentasjonPage = () => {
   const location = useLocation()
 
 
-  useEffect(() => {
-    if(!user.isLoggedIn()) {
-      window.location.href = loginUrl(location, location.pathname)
-    }
-  },[])
+  // useEffect(() => {
+  //   if(!user.isLoggedIn()) {
+  //     window.location.href = loginUrl(location, location.pathname)
+  //   }
+  // },[])
 
   useEffect(() => {
     if (params.kravNummer && params.kravVersjon) {

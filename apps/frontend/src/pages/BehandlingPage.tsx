@@ -42,11 +42,11 @@ export const BehandlingPage = () => {
   const [irrelevanteStats, setIrrelevanteStats] = useState<any[]>([])
   const [utgaattStats, setUtgaattStats] = useState<any[]>([])
 
-  useEffect(() => {
-    if(!user.isLoggedIn()) {
-      window.location.href = loginUrl(location, location.pathname)
-    }
-  },[])
+  // useEffect(() => {
+  //   if(!user.isLoggedIn()) {
+  //     window.location.href = loginUrl(location, location.pathname)
+  //   }
+  // },[])
 
   const filterData = (
     unfilteredData:

@@ -52,9 +52,10 @@ export const KravListPage = () => {
   const location = useLocation()
   ampli.logEvent('sidevisning', { side: 'Kraveier side', sidetittel: 'Forvalte og opprette krav' })
 
-  if(!user.isLoggedIn()) {
-    window.location.href = loginUrl(location, location.pathname)
-  } if (!user.isAdmin() && !user.isKraveier()) {
+  // if(!user.isLoggedIn()) {
+  //   window.location.href = loginUrl(location, location.pathname)
+  // } 
+  if (!user.isAdmin() && !user.isKraveier()) {
     window.location.href = '/forbidden'
   }
 
