@@ -24,6 +24,7 @@ import QuestionAndAnswerLogPage from './pages/QuestionAndAnswerLogPage'
 import { BehandlingTemaPage } from './pages/BehandlingTemaPage'
 import { VarselPage } from './pages/VarselPage'
 import { EtterlevelseDokumentasjonPage } from './pages/EtterlevelseDokumentasjonPage'
+import Forbidden from './pages/Forbidden'
 
 const AppRoutes = (): JSX.Element => {
   return (
@@ -77,6 +78,8 @@ const AppRoutes = (): JSX.Element => {
 
         <Route path="/status" element={<StatusPage />} caseSensitive={true} />
         <Route path="/help" element={<FAQ />} caseSensitive={true} />
+
+        <Route path="/forbidden" element={<Forbidden />} caseSensitive={true} />
 
         <Route path="*" element={<NotFound />} caseSensitive={true} />
       </Routes>
