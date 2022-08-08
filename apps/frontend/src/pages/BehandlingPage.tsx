@@ -21,7 +21,6 @@ import { TemaCardBehandling } from '../components/behandlingPage/TemaCardBehandl
 import { isFerdigUtfylt } from './BehandlingTemaPage'
 import { ampli } from '../services/Amplitude'
 import { getMainHeader, getNewestKravVersjon, responsiveDisplayBehandlingPage } from '../components/behandlingPage/common/utils'
-import { loginUrl } from '../components/Header'
 import { user } from '../services/User'
 
 export const BehandlingPage = () => {
@@ -30,7 +29,6 @@ export const BehandlingPage = () => {
   const [behandling, setBehandling] = useBehandling(params.id)
   const formRef = useRef<FormikProps<any>>()
   const navigate = useNavigate()
-  const location = useLocation()
 
   const { data: relevanteData, refetch: refetchRelevanteData } = useQuery<{ behandling: PageResponse<{ stats: BehandlingStats }> }>(statsQuery, {
     variables: { behandlingId: behandling?.id },
@@ -42,11 +40,13 @@ export const BehandlingPage = () => {
   const [irrelevanteStats, setIrrelevanteStats] = useState<any[]>([])
   const [utgaattStats, setUtgaattStats] = useState<any[]>([])
 
-  // useEffect(() => {
-  //   if(!user.isLoggedIn()) {
-  //     window.location.href = loginUrl(location, location.pathname)
-  //   }
-  // },[])
+  useEffect(() => {
+    setTimeout(() => {
+      if(!user.isLoggedIn()) {
+        navigate('/forbidden')
+       }
+    }, 1)
+  },[])
 
   const filterData = (
     unfilteredData:

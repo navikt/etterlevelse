@@ -40,14 +40,15 @@ export const EtterlevelseDokumentasjonPage = () => {
 
   const [tab, setTab] = useState<Section>('dokumentasjon')
   const navigate = useNavigate()
-  const location = useLocation()
 
 
-  // useEffect(() => {
-  //   if(!user.isLoggedIn()) {
-  //     window.location.href = loginUrl(location, location.pathname)
-  //   }
-  // },[])
+  useEffect(() => {
+    setTimeout(() => {
+      if(!user.isLoggedIn()) {
+        navigate('/forbidden')
+       }
+    }, 1)
+  },[])
 
   useEffect(() => {
     if (params.kravNummer && params.kravVersjon) {
