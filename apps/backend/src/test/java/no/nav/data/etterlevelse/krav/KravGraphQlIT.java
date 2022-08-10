@@ -56,7 +56,8 @@ class KravGraphQlIT extends GraphQLTestBase {
                 .hasField("varslingsadresser[0].slackChannel.name", "XYZ channel")
                 .hasField("varslingsadresser[1].adresse", "notfound")
                 .hasField("etterlevelser[0].behandlingId", behandling.getId())
-                .hasField("etterlevelser[0].behandling.navn", behandling.getNavn());
+                //.hasField("etterlevelser[0].behandling.navn", behandling.getNavn())
+                ;
     }
 
     @Nested

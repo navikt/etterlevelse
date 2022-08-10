@@ -15,18 +15,12 @@ import org.dataloader.DataLoader;
 import org.dataloader.DataLoaderRegistry;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.function.Function;
 
-import static no.nav.data.common.utils.StreamUtils.convert;
-import static no.nav.data.common.utils.StreamUtils.filter;
-import static no.nav.data.common.utils.StreamUtils.toMap;
+import static no.nav.data.common.utils.StreamUtils.*;
 
 @Slf4j
 @Component
@@ -49,8 +43,7 @@ public class DataLoaderReg {
                 .register(ETTERLEVELSER_FOR_BEHANDLING_LOADER, etterLevelserForBehandlingLoader())
                 .register(BEHANDLING, behandlingLoader())
                 .register(RESOURCES, resourcesLoader())
-                .register(TEAM, teamLoader())
-                ;
+                .register(TEAM, teamLoader());
     }
 
     private DataLoader<String, Behandling> behandlingLoader() {

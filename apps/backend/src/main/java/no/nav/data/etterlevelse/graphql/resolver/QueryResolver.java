@@ -41,9 +41,10 @@ public class QueryResolver implements GraphQLQueryResolver {
                 return null;
             }
         } else if (nummer != null && versjon != null) {
-            return kravService.getByKravNummer(nummer, versjon)
+            var resp = kravService.getByKravNummer(nummer, versjon)
                     .map(Krav::toResponse)
                     .orElse(null);
+            return resp;
         }
         return null;
     }
@@ -72,7 +73,8 @@ public class QueryResolver implements GraphQLQueryResolver {
         var pageInput = new PageParameters(page, pageSize);
 
         if (filter == null || filter.isEmpty()) {
-            return behandlingService.getAll(pageInput.createPage());
+            var resp = behandlingService.getAll(pageInput.createPage());
+            return resp;
         }
         if (SecurityUtils.getCurrentUser().isEmpty() && filter.requiresLogin()) {
             return new RestResponsePage<>();

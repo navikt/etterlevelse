@@ -1,6 +1,6 @@
 package no.nav.data.etterlevelse.graphql;
 
-import graphql.kickstart.execution.context.GraphQLContext;
+import graphql.kickstart.execution.context.DefaultGraphQLContext;
 import graphql.kickstart.servlet.context.DefaultGraphQLServletContext;
 import graphql.kickstart.servlet.context.GraphQLServletContextBuilder;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,7 @@ public class GraphQLContextBuilder implements GraphQLServletContextBuilder {
     private final DataLoaderReg dataLoaderReg;
 
     @Override
-    public GraphQLContext build(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+    public DefaultGraphQLContext build(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
         return DefaultGraphQLServletContext.createServletContext()
                 .with(httpServletRequest)
                 .with(httpServletResponse)
@@ -28,12 +28,12 @@ public class GraphQLContextBuilder implements GraphQLServletContextBuilder {
     }
 
     @Override
-    public GraphQLContext build(Session session, HandshakeRequest handshakeRequest) {
+    public DefaultGraphQLContext build(Session session, HandshakeRequest handshakeRequest) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public GraphQLContext build() {
+    public DefaultGraphQLContext build() {
         throw new UnsupportedOperationException();
     }
 }
