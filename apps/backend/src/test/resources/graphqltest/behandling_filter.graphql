@@ -8,7 +8,7 @@ query getBehandling($relevans: [String!], $sistRedigert: NonNegativeInt, $pageNu
             irrelevansFor {
                 code
             }
-#            sistEndretEtterlevelse
+            sistEndretEtterlevelse
         }
     }
 }
