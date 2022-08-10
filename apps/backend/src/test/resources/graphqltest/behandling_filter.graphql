@@ -9,6 +9,10 @@ query getBehandling($relevans: [String!], $sistRedigert: NonNegativeInt, $pageNu
                 code
             }
             sistEndretEtterlevelse
+            etterlevelser {
+                id
+                behandlingId
+            }
         }
     }
 }
