@@ -89,7 +89,7 @@ const LoggedInHeader = () => {
         { label: 'Kodeverk', href: '/admin/codelist' },
         { label: intl.questionAndAnswers, href: '/admin/messageslog' },
         { label: intl.notifications, href: '/admin/varsel' },
-        { label: intl.settings, href: '/admin/settings', disabled: true },
+        // { label: intl.settings, href: '/admin/settings', disabled: true },
       ]
     : []
   const otherPages = [
@@ -99,7 +99,7 @@ const LoggedInHeader = () => {
 
   return (
     <Block display="flex" justifyContent="center" alignItems="center">
-      <Menu pages={[[{ label: <UserInfo /> }], kravPages, adminPages, otherPages, [{ label: roller }]]} title={user.getIdent()} icon={faUser} kind={'tertiary'} />
+      <Menu pages={[[{ label: <UserInfo /> }], kravPages, adminPages, [{ label: roller }]]} title={user.getIdent()} icon={faUser} kind={'tertiary'} />
 
       <Block width={theme.sizing.scale400} />
 
