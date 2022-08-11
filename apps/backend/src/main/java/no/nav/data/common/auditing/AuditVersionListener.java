@@ -23,12 +23,13 @@ import no.nav.data.etterlevelse.codelist.domain.Codelist;
 import org.hibernate.proxy.HibernateProxy;
 import org.springframework.util.Assert;
 
-import java.util.Optional;
-import java.util.UUID;
 import javax.persistence.Entity;
 import javax.persistence.PrePersist;
 import javax.persistence.PreRemove;
 import javax.persistence.PreUpdate;
+import java.util.Optional;
+import java.util.UUID;
+
 
 import static no.nav.data.common.storage.domain.TypeRegistration.isAudited;
 

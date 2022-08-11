@@ -9,8 +9,6 @@ import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.etterlevelse.melding.domain.Melding;
-import no.nav.data.etterlevelse.melding.domain.MeldingStatus;
-import no.nav.data.etterlevelse.melding.domain.MeldingType;
 import no.nav.data.etterlevelse.melding.dto.MeldingRequest;
 import no.nav.data.etterlevelse.melding.dto.MeldingResponse;
 import org.springframework.data.domain.Page;
