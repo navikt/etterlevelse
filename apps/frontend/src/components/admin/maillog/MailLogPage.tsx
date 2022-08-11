@@ -42,7 +42,7 @@ export const MailLogPage = () => {
     // if (!user.isLoggedIn()) {
     //   window.location.href = loginUrl(location, location.pathname)
     // }
-     if (!user.isAdmin()) {
+    if (!user.isAdmin()) {
       window.location.href = '/forbidden'
     }
   }, [])

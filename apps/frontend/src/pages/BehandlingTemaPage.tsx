@@ -84,17 +84,15 @@ export const BehandlingTemaPage = () => {
   const [kravRelevans, setKravRelevans] = useState<readonly Option[]>(params.filter ? kravRelevansOptions.filter((kro) => kro.id === params.filter) : [kravRelevansOptions[0]])
 
   useEffect(() => {
-
     setTimeout(() => {
       if (!user.isLoggedIn()) {
         navigate('/forbidden')
       }
     }, 1)
-
-      ; (async () => {
-        setAllKrav(await getAllKrav())
-        setAllKravPriority(await getAllKravPriority())
-      })()
+    ;(async () => {
+      setAllKrav(await getAllKrav())
+      setAllKravPriority(await getAllKravPriority())
+    })()
   }, [])
 
   useEffect(() => {
@@ -122,13 +120,13 @@ export const BehandlingTemaPage = () => {
 
     //Removing utgått krav with aktiv versjons
     utgaatKravData = utgaatKravData.filter((uk) => relevantKravData.every((rk) => uk.kravNummer !== rk.kravNummer))
-      ; (async () => {
-        setUtgaatKravData(await filterKrav(allKravPriority, utgaatKravData, temaData))
-      })()
+    ;(async () => {
+      setUtgaatKravData(await filterKrav(allKravPriority, utgaatKravData, temaData))
+    })()
   }, [relevantKravData, allKravPriority])
 
   useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       filterKrav(allKravPriority, relevanteKraverGraphQLResponse?.krav.content, temaData, true).then((kravListe) => {
         setRelevantKravData(kravListe)
       })
@@ -136,7 +134,7 @@ export const BehandlingTemaPage = () => {
   }, [allKravPriority, relevanteKraverGraphQLResponse])
 
   useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       filterKrav(allKravPriority, irrelevanteKraverGraphQLResponse?.krav.content).then((kravListe) => {
         const newKravList = kravListe.filter((k) => {
           if (k.etterlevelseStatus === undefined) {

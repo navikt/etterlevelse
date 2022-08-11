@@ -96,7 +96,7 @@ export const EditEtterlevelseV2 = ({
   const navigate = useNavigate()
 
   useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       behandlingId &&
         kravId.kravNummer &&
         getEtterlevelseMetadataByBehandlingsIdAndKravNummerAndKravVersion(behandlingId, kravId.kravNummer, kravId.kravVersjon).then((resp) => {
@@ -156,7 +156,7 @@ export const EditEtterlevelseV2 = ({
 
   return (
     <Block width="100%">
-      {krav  && 
+      {krav && (
         <Block
           width="100%"
           $style={{
@@ -498,7 +498,7 @@ export const EditEtterlevelseV2 = ({
             </Block>
           </CustomizedModal>
         </Block>
-      }
+      )}
     </Block>
   )
 }

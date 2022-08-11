@@ -331,7 +331,7 @@ export const PanelLinkCard = ({
           </Block>
 
           {(ComplimentaryContent || !hideArrow) && (
-            <Block display="flex" width="100%" height="100%" >
+            <Block display="flex" width="100%" height="100%">
               {ComplimentaryContent && <Block minWidth="70%">{ComplimentaryContent}</Block>}
               {!hideArrow && (
                 <Block width="100%" justifyContent="flex-end" alignSelf="flex-end" display="flex" padding={paddingSize} paddingLeft={flexContent ? '0px' : undefined}>

@@ -37,20 +37,17 @@ type CustomTeamObject = BehandlingCount & Team
 const tabMarginBottom = '48px'
 
 export const MyBehandlingerPage = () => {
-
-  
   ampli.logEvent('sidevisning', { side: 'Side for Behandlinger', sidetittel: 'Dokumentere etterlevelse' })
 
   const navigate = useNavigate()
 
   useEffect(() => {
     setTimeout(() => {
-      if(!user.isLoggedIn()) {
+      if (!user.isLoggedIn()) {
         navigate('/forbidden')
-       }
+      }
     }, 1)
-  },[])
-
+  }, [])
 
   return (
     <Block width="100%" paddingBottom={'200px'} id="content" overrides={{ Block: { props: { role: 'main' } } }}>
@@ -292,8 +289,7 @@ const Alle = () => {
   }, [sok])
 
   const getBehandlingerWithOutDuplicates = () => {
-    return behandlinger.content.filter((value, index, self) => index === self.findIndex((behandling) => behandling.id === value.id)
-    )
+    return behandlinger.content.filter((value, index, self) => index === self.findIndex((behandling) => behandling.id === value.id))
   }
 
   return (

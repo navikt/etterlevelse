@@ -42,11 +42,11 @@ export const BehandlingPage = () => {
 
   useEffect(() => {
     setTimeout(() => {
-      if(!user.isLoggedIn()) {
+      if (!user.isLoggedIn()) {
         navigate('/forbidden')
-       }
+      }
     }, 1)
-  },[])
+  }, [])
 
   const filterData = (
     unfilteredData:

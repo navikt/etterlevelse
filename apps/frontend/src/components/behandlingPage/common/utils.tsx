@@ -48,7 +48,7 @@ export const getMainHeader = (behandling: Behandling, helmet?: ReactNode) => (
 export const getNewestKravVersjon = (list: any[]) => {
   let relevanteStatusListe = [...list]
 
-  relevanteStatusListe = relevanteStatusListe.filter((value, index, self) => index === self.findIndex((k) => k.kravNummer === value.kravNummer) ) 
+  relevanteStatusListe = relevanteStatusListe.filter((value, index, self) => index === self.findIndex((k) => k.kravNummer === value.kravNummer))
 
   return relevanteStatusListe
 }

@@ -49,10 +49,10 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
   const filterData = (
     unfilteredData:
       | {
-        behandling: PageResponse<{
-          stats: BehandlingStats
-        }>
-      }
+          behandling: PageResponse<{
+            stats: BehandlingStats
+          }>
+        }
       | undefined,
   ) => {
     let StatusListe: any[] = []

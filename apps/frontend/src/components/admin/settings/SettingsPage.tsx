@@ -42,7 +42,7 @@ export const SettingsPage = () => {
     load()
     // if (!user.isLoggedIn()) {
     //   window.location.href = loginUrl(location, location.pathname)
-    // } 
+    // }
     if (!user.isAdmin()) {
       window.location.href = '/forbidden'
     }

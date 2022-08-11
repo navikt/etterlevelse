@@ -19,8 +19,6 @@ const Forbidden = () => {
 
   ampli.logEvent('sidevisning', { side: 'Forbidden', sidetittel: '403 forbidden' })
 
-
-
   return (
     <Block id="content" overrides={{ Block: { props: { role: 'main' } } }} maxWidth={maxPageWidth} width="100%">
       <Helmet>
@@ -28,9 +26,7 @@ const Forbidden = () => {
         <title>403 forbidden</title>
       </Helmet>
       <Block paddingLeft="40px" paddingRight="40px" width="calc(100%-80px)" display="flex" justifyContent="center" alignContent="center" marginTop={theme.sizing.scale2400}>
-        <ParagraphLarge>
-          Du prøvde å komme inn i en side du ikke har tilgang til.
-        </ParagraphLarge>
+        <ParagraphLarge>Du prøvde å komme inn i en side du ikke har tilgang til.</ParagraphLarge>
         <img src={notFound} alt={intl.pageNotFound} style={{ maxWidth: '65%' }} />
       </Block>
     </Block>

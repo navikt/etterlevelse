@@ -54,7 +54,7 @@ export const KravListPage = () => {
 
   // if(!user.isLoggedIn()) {
   //   window.location.href = loginUrl(location, location.pathname)
-  // } 
+  // }
   if (!user.isAdmin() && !user.isKraveier()) {
     window.location.href = '/forbidden'
   }

@@ -51,8 +51,8 @@ export const QuestionAndAnswerLogPage = () => {
   useEffect(() => {
     // if(!user.isLoggedIn()) {
     //   window.location.href = loginUrl(location, location.pathname)
-    // } 
-    
+    // }
+
     if (!user.isAdmin()) {
       window.location.href = '/forbidden'
     }

@@ -25,10 +25,10 @@ export const VarselPage = () => {
     // if(!user.isLoggedIn()) {
     //   window.location.href = loginUrl(location, location.pathname)
     // }
-     if (!user.isAdmin()) {
+    if (!user.isAdmin()) {
       window.location.href = '/forbidden'
     }
-  },[])
+  }, [])
 
   return (
     <Block width="100%" paddingBottom={'200px'} id="content" overrides={{ Block: { props: { role: 'main' } } }}>

@@ -32,7 +32,6 @@ export const KravTablePage = () => {
   const location = useLocation()
 
   useEffect(() => {
-
     // if(!user.isLoggedIn()) {
     //   window.location.href = loginUrl(location, location.pathname)
     // }
