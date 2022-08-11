@@ -1,6 +1,5 @@
 package no.nav.data.etterlevelse.graphql.support;
 
-import graphql.kickstart.execution.context.GraphQLContext;
 import graphql.schema.DataFetchingEnvironment;
 import lombok.experimental.UtilityClass;
 import lombok.val;
@@ -14,7 +13,7 @@ import java.util.function.Function;
 public class LoaderUtils {
 
     public static <K, V> DataLoader<K, V> get(DataFetchingEnvironment env, String loaderName) {
-        val registry = ((GraphQLContext) env.getContext()).getDataLoaderRegistry();
+        val registry = env.getDataLoaderRegistry();
         return registry.getDataLoader(loaderName);
     }
 

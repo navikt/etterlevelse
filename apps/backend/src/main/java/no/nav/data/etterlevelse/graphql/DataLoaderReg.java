@@ -12,6 +12,7 @@ import no.nav.data.integration.team.dto.TeamResponse;
 import no.nav.data.integration.team.teamcat.TeamcatResourceClient;
 import no.nav.data.integration.team.teamcat.TeamcatTeamClient;
 import org.dataloader.DataLoader;
+import org.dataloader.DataLoaderFactory;
 import org.dataloader.DataLoaderRegistry;
 import org.springframework.stereotype.Component;
 
@@ -63,7 +64,7 @@ public class DataLoaderReg {
     }
 
     private <ID, R> DataLoader<ID, R> loader(Function<Set<ID>, Map<ID, R>> supplier) {
-        return DataLoader.newMappedDataLoader(
+        return DataLoaderFactory.newMappedDataLoader(
                 (Set<ID> set) -> CompletableFuture.supplyAsync(() -> supplier.apply(set), graphQLExecutor)
         );
     }

@@ -12,26 +12,19 @@ import no.nav.data.etterlevelse.codelist.domain.ListName;
 import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseResponse;
-import no.nav.data.etterlevelse.graphql.DataLoaderReg;
-import no.nav.data.etterlevelse.graphql.support.LoaderUtils;
 import no.nav.data.etterlevelse.krav.KravService;
 import no.nav.data.etterlevelse.krav.domain.Krav;
+import no.nav.data.integration.team.domain.Team;
 import no.nav.data.integration.team.dto.TeamResponse;
-import org.dataloader.DataLoader;
+import no.nav.data.integration.team.teamcat.TeamcatTeamClient;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.Comparator;
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import static no.nav.data.common.utils.StreamUtils.convert;
-import static no.nav.data.common.utils.StreamUtils.filter;
-import static no.nav.data.common.utils.StreamUtils.safeStream;
-import static no.nav.data.etterlevelse.graphql.DataLoaderReg.ETTERLEVELSER_FOR_BEHANDLING_LOADER;
+import static no.nav.data.common.utils.StreamUtils.*;
 
 @Slf4j
 @Component
@@ -41,9 +34,20 @@ public class BehandlingFieldResolver implements GraphQLResolver<Behandling> {
     private final KravService kravService;
     private final EtterlevelseService etterlevelseService;
 
-    public CompletableFuture<List<TeamResponse>> teamsData(Behandling behandling, DataFetchingEnvironment env) {
-        DataLoader<String, TeamResponse> loader = env.getDataLoader(DataLoaderReg.TEAM);
-        return loader.loadMany(behandling.getTeams());
+    private final TeamcatTeamClient teamClient;
+
+    public List<TeamResponse> teamsData(Behandling behandling, DataFetchingEnvironment env) {
+        List<String> teams = behandling.getTeams();
+        return getTeamsData(teams);
+    }
+
+    private List<TeamResponse> getTeamsData(Collection<String> ids) {
+        var teams = filter(teamClient.getAllTeams(), t -> ids.contains(t.getId()));
+        Map<String, TeamResponse> map = toMap(convert(teams, Team::toResponseWithMembers), TeamResponse::getId);
+        var missing = new ArrayList<>(ids);
+        missing.removeAll(map.keySet());
+        missing.forEach(id -> map.put(id, new TeamResponse(id)));
+        return new ArrayList<>(map.values());
     }
 
     public BehandlingStats stats(Behandling behandling) {
@@ -79,12 +83,12 @@ public class BehandlingFieldResolver implements GraphQLResolver<Behandling> {
                 .build();
     }
 
-    public CompletableFuture<List<EtterlevelseResponse>> etterlevelser(Behandling behandling, DataFetchingEnvironment env) {
-        return LoaderUtils.get(env, ETTERLEVELSER_FOR_BEHANDLING_LOADER, behandling.getId(), (List<Etterlevelse> e) -> convert(e, Etterlevelse::toResponse));
+    public List<EtterlevelseResponse> etterlevelser(Behandling behandling, DataFetchingEnvironment env) {
+        return etterlevelseService.getByBehandling(behandling.getId()).stream().map(Etterlevelse::toResponse).collect(Collectors.toList());
     }
 
-    public CompletableFuture<LocalDateTime> sistEndretEtterlevelse(Behandling behandling, DataFetchingEnvironment env) {
-        return LoaderUtils.get(env, ETTERLEVELSER_FOR_BEHANDLING_LOADER, behandling.getId(), this::sistEndret);
+    public LocalDateTime sistEndretEtterlevelse(Behandling behandling, DataFetchingEnvironment env) {
+        return sistEndret(etterlevelseService.getByBehandling(behandling.getId()));
     }
 
     private LocalDateTime sistEndret(List<Etterlevelse> etterlevelser) {
