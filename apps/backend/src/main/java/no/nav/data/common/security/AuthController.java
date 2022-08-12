@@ -25,11 +25,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.io.IOException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-
 
 import static no.nav.data.Constants.APP_POD_NAME;
 import static no.nav.data.Constants.COOKIE_NAME;
@@ -62,8 +61,8 @@ public class AuthController {
     })
     @GetMapping("/login")
     public void login(HttpServletRequest request, HttpServletResponse response,
-                      @RequestParam(value = REDIRECT_URI, required = false) String redirectUri,
-                      @RequestParam(value = ERROR_URI, required = false) String errorUri
+            @RequestParam(value = REDIRECT_URI, required = false) String redirectUri,
+            @RequestParam(value = ERROR_URI, required = false) String errorUri
     ) throws IOException {
         log.debug("Request to login");
         Assert.isTrue(securityProperties.isValidRedirectUri(redirectUri), "Illegal redirect_uri " + redirectUri);

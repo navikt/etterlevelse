@@ -4,14 +4,13 @@ import org.slf4j.MDC;
 import org.springframework.scheduling.concurrent.CustomizableThreadFactory;
 import org.springframework.util.concurrent.ListenableFutureCallback;
 
-import javax.annotation.PreDestroy;
-import javax.validation.constraints.NotNull;
 import java.util.Map;
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
-
+import javax.annotation.PreDestroy;
+import javax.validation.constraints.NotNull;
 
 public class MdcExecutor extends ThreadPoolExecutor {
 

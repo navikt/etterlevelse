@@ -10,6 +10,7 @@ import no.nav.data.common.auditing.domain.Auditable;
 import no.nav.data.etterlevelse.codelist.dto.CodelistResponse;
 import org.hibernate.annotations.Type;
 
+import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -17,8 +18,6 @@ import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Table;
-import java.io.Serializable;
-
 
 @Entity
 @Table(name = "CODELIST")

@@ -8,13 +8,13 @@ import no.nav.data.common.security.Encryptor;
 import org.hibernate.annotations.Type;
 import org.springframework.util.Assert;
 
+import java.time.LocalDateTime;
+import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Data
 @Builder

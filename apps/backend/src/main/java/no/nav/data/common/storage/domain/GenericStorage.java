@@ -19,7 +19,6 @@ import no.nav.data.etterlevelse.melding.domain.Melding;
 import org.hibernate.annotations.Type;
 import org.springframework.util.Assert;
 
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
