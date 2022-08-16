@@ -18,7 +18,7 @@
         <java.version>17</java.version>
 
         <hibernate-types-52.version>2.18.0</hibernate-types-52.version>
-        <springdoc-openapi-ui.version>1.6.8</springdoc-openapi-ui.version>
+        <springdoc-openapi-ui.version>1.6.10</springdoc-openapi-ui.version>
         <simpleclient.version>0.16.0</simpleclient.version>
         <logstash-logback-encoder.version>7.2</logstash-logback-encoder.version>
         <shedlock.version>4.40.0</shedlock.version>
