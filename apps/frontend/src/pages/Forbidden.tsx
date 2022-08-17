@@ -13,9 +13,11 @@ import { user } from '../services/User'
 const Forbidden = () => {
   const navigate = useNavigate()
 
-  if (user.isLoggedIn()) {
-    navigate(-1)
-  }
+  setTimeout(() => {
+    if (user.isLoggedIn()) {
+      navigate(-1)
+    }
+  }, 1)
 
   ampli.logEvent('sidevisning', { side: 'Forbidden', sidetittel: '403 forbidden' })
 
