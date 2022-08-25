@@ -78,13 +78,13 @@ public class WordDocUtils {
     long bookmarkId = 1;
 
     public void setRprFontSize(RPr rPr, int size) {
-        HpsMeasure szValue = new HpsMeasure();
+        HpsMeasure szValue = fac.createHpsMeasure();
         szValue.setVal(BigInteger.valueOf(size));
         rPr.setSz(szValue);
     }
 
     public void setRprFontColor(RPr rPr, String color) {
-        Color fontColor = new Color();
+        Color fontColor = fac.createColor();
         fontColor.setVal(color);
         rPr.setColor(fontColor);
     }
@@ -106,7 +106,7 @@ public class WordDocUtils {
         P p = main.addStyledParagraphOfText(SUBTITLE,text);
         RPr rPr = createRpr();
         setRprFontColor(rPr, "000000");
-        setRprFontSize(rPr, 30);
+        setRprFontSize(rPr, 50);
         ((R) p.getContent().get(0)).setRPr(rPr);
     }
 
