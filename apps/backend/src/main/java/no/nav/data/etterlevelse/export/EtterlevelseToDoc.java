@@ -54,8 +54,8 @@ public class EtterlevelseToDoc {
     public void getBehandlingData(Behandling behandling, EtterlevelseDocumentBuilder doc) {
         SimpleDateFormat formatter = new SimpleDateFormat("dd'.' MMMM yyyy 'kl 'HH:mm");
         Date date = new Date();
-        doc.addTitle("Etterlevelse for B" + behandling.getNummer() + " " + behandling.getOverordnetFormaal().getShortName());
-        doc.addSubtitle(behandling.getNavn());
+        doc.addTitle("Etterlevelsesdokumentasjon");
+        doc.addSubtitle("B" + behandling.getNummer() + " " + behandling.getOverordnetFormaal().getShortName() +": " + behandling.getNavn());
         doc.addText("Exportert " + formatter.format(date));
         doc.addHeading3("Team");
         if (behandling.getTeams() != null && !behandling.getTeams().isEmpty()) {
@@ -139,14 +139,13 @@ public class EtterlevelseToDoc {
         doc.addTableOfContent(etterlevelseMedKravData, temaListe);
 
         for (CodeUsage tema: temaListe) {
-            String temaShortName = CodelistService.getCodelist(ListName.TEMA, tema.getCode()).getShortName();
             List<String> regelverk = tema.getCodelist().stream().map(Codelist::getCode).toList();
 
             List<EtterlevelseMedKravData> filteredDataByTema = doc.getSortedEtterlevelseMedKravData(etterlevelseMedKravData, regelverk);
 
             if (!filteredDataByTema.isEmpty()) {
                 doc.pageBreak();
-                doc.addHeading1(temaShortName);
+                doc.addHeading1(tema.getShortName());
                 for (int i = 0; i < filteredDataByTema.size(); i++) {
                     doc.generate(filteredDataByTema.get(i));
                     if (i != filteredDataByTema.size() - 1) {
@@ -364,16 +363,23 @@ public class EtterlevelseToDoc {
             long currListId = listId++;
 
             for (CodeUsage tema : temaListe) {
-                String temaShortName = CodelistService.getCodelist(ListName.TEMA, tema.getCode()).getShortName();
                 List<String> lover = tema.getCodelist().stream().map(Codelist::getCode).toList();
 
                 List<EtterlevelseMedKravData> filteredDataByTema = getSortedEtterlevelseMedKravData(etterlevelseList, lover);
 
                 if (!filteredDataByTema.isEmpty()) {
-                    addHeading3(temaShortName);
+                    addHeading3(tema.getShortName());
                     for (EtterlevelseMedKravData etterlevelseMedKravData : filteredDataByTema) {
                         Etterlevelse etterlevelse = etterlevelseMedKravData.getEtterlevelseData();
+                        Optional<Krav> krav = etterlevelseMedKravData.getKravData();
                         var name = "K" + etterlevelse.getKravNummer() + "." + etterlevelse.getKravVersjon();
+                        if(krav.isPresent()) {
+                            if(krav.get().getNavn().length() > 50) {
+                                name = name.concat(" " + krav.get().getNavn().substring(0, 50) + "...");
+                            } else {
+                                name = name.concat(" " + krav.get().getNavn());
+                            }
+                        }
                         var bookmark = etterlevelse.getId().toString();
                         addListItem(name, currListId, bookmark);
                     }
