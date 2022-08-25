@@ -123,7 +123,8 @@ public class EtterlevelseToDoc {
     public byte[] generateDocFor(UUID behandlingId, List<String> statusKoder, List<String> lover, String temaKode) {
 
         var behandling = behandlingService.getBehandling(behandlingId.toString());
-        List<CodeUsage> temaListe = codeUsageService.findCodeUsageOfList(ListName.TEMA);
+        List<CodeUsage> temaListe = codeUsageService.findCodeUsageOfList(ListName.TEMA).stream()
+                .sorted(Comparator.comparing(CodeUsage::getShortName)).toList();
 
         List<EtterlevelseMedKravData> etterlevelseMedKravData = getEtterlevelseByFilter(behandlingId.toString(), statusKoder, lover);
 
