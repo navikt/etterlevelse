@@ -172,7 +172,7 @@ public class EtterlevelseToDoc {
             Etterlevelse etterlevelse = etterlevelseMedKravData.getEtterlevelseData();
             Optional<Krav> krav = etterlevelseMedKravData.getKravData();
 
-            String etterlevelseName = "Etterlevelse for K" + etterlevelse.getKravNummer() + "." + etterlevelse.getKravVersjon();
+            String etterlevelseName = "K" + etterlevelse.getKravNummer() + "." + etterlevelse.getKravVersjon();
 
             if (krav.isPresent()) {
                 etterlevelseName = etterlevelseName + " " + krav.get().getNavn();
@@ -183,7 +183,7 @@ public class EtterlevelseToDoc {
             addBookmark(header, etterlevelse.getId().toString());
 
             if (krav.isPresent()) {
-                addHeading4("Hensikten med kravet");
+                addHeading3("Hensikten med kravet");
                 if (krav.get().getHensikt() != null && !krav.get().getHensikt().isEmpty()) {
                     addMarkdownText(krav.get().getHensikt());
                 }
@@ -201,29 +201,32 @@ public class EtterlevelseToDoc {
                 SuksesskriterieBegrunnelse suksesskriterieBegrunnelse = etterlevelse.getSuksesskriterieBegrunnelser().get(s);
 
                 int suksesskriterieNumber = s + 1;
-                addHeading4("SUKSESSKRITERIE " + suksesskriterieNumber + " AV " + etterlevelse.getSuksesskriterieBegrunnelser().size());
+                var suksesskriteriumNavn = "SUKSESSKRITERIUM " + suksesskriterieNumber + " AV " + etterlevelse.getSuksesskriterieBegrunnelser().size();
 
                 if (krav.isPresent()) {
                     List<Suksesskriterie> suksesskriterieList = krav.get().getSuksesskriterier()
                             .stream().filter(sk -> sk.getId() == suksesskriterieBegrunnelse.getSuksesskriterieId()).toList();
                     if (!suksesskriterieList.isEmpty()) {
                         Suksesskriterie suksesskriterie = suksesskriterieList.get(0);
-                        addHeading4(suksesskriterie.getNavn());
-                        addText("Id: " + suksesskriterie.getId());
-                        addText("Behov for begrunnelse: " + boolToText(suksesskriterie.isBehovForBegrunnelse()));
-                        addText("Suksesskriterie begrunnelse status: ", begrunnelseStatusText(suksesskriterieBegrunnelse.getSuksesskriterieStatus()));
+                        addHeading4(suksesskriteriumNavn + ": " + suksesskriterie.getNavn());
+
+                        addHeading3("Utfyllende om kriteriet");
+                        addMarkdownText(suksesskriterie.getBeskrivelse());
+
+
+                        addHeading3("Status på suksesskriteriet");
+                        addText("Status: ", begrunnelseStatusText(suksesskriterieBegrunnelse.getSuksesskriterieStatus()));
+                        addText(" ");
                         if (suksesskriterie.isBehovForBegrunnelse()) {
-                            getSuksesskriterieBegrunnelseHeader(suksesskriterieBegrunnelse.getSuksesskriterieStatus());
                             addMarkdownText(suksesskriterieBegrunnelse.getBegrunnelse());
+                        } else {
+                            addText("Ingen beskrivelse kreves");
                         }
 
-                        addHeading4("Utfyllende om kriteriet");
-                        addMarkdownText(suksesskriterie.getBeskrivelse());
                     }
                 } else {
-                    addText("Id: " + suksesskriterieBegrunnelse.getSuksesskriterieId());
+                    addHeading4(suksesskriteriumNavn);
                     addText("Suksesskriterie begrunnelse status: ", begrunnelseStatusText(suksesskriterieBegrunnelse.getSuksesskriterieStatus()));
-                    getSuksesskriterieBegrunnelseHeader(suksesskriterieBegrunnelse.getSuksesskriterieStatus());
                     addMarkdownText(suksesskriterieBegrunnelse.getBegrunnelse());
                 }
 
@@ -232,7 +235,7 @@ public class EtterlevelseToDoc {
 
 
             if (krav.isPresent()) {
-                addHeading5("Lenker og annen information om kravet");
+                addHeading5("Lenker og annen Informasjon om kravet");
 
                 addHeading6("Kilder");
                 if (!krav.get().getDokumentasjon().isEmpty()) {
@@ -334,14 +337,6 @@ public class EtterlevelseToDoc {
                 case UNDER_ARBEID -> "Under arbeid";
                 case IKKE_RELEVANT -> "Ikke relevant";
             };
-        }
-
-        public void getSuksesskriterieBegrunnelseHeader(SuksesskriterieStatus status) {
-            if (status.equals(SuksesskriterieStatus.IKKE_RELEVANT)) {
-                addHeading4("Hvorfor er ikke kriteriet relevant?");
-            } else {
-                addHeading4("Hvordan oppfylles kriteriet?");
-            }
         }
 
         private List<EtterlevelseMedKravData> getSortedEtterlevelseMedKravData(List<EtterlevelseMedKravData> etterlevelseMedKravData, List<String> lover) {
