@@ -77,6 +77,14 @@ public class WordDocUtils {
 
     long bookmarkId = 1;
 
+    public RPr createRprWithSize(int size) {
+        RPr rPr = createRpr();
+        HpsMeasure szValue = new HpsMeasure();
+        szValue.setVal(BigInteger.valueOf(size));
+        rPr.setSz(szValue);
+        return rPr;
+    }
+
     public RPr createRpr() {
         RPr rPr = fac.createRPr();
         CTLanguage ctLang = fac.createCTLanguage();
@@ -97,7 +105,7 @@ public class WordDocUtils {
 
     public P addHeading1(String text) {
         P p = main.addStyledParagraphOfText(HEADING_1, text);
-        ((R) p.getContent().get(0)).setRPr(createRpr());
+        ((R) p.getContent().get(0)).setRPr(createRprWithSize(12));
         return p;
     }
 
