@@ -29,6 +29,7 @@ import org.docx4j.jaxb.Context;
 import org.docx4j.wml.ObjectFactory;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Slf4j
@@ -51,8 +52,11 @@ public class EtterlevelseToDoc {
     private final KravPrioriteringService kravPrioriteringService;
 
     public void getBehandlingData(Behandling behandling, EtterlevelseDocumentBuilder doc) {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd'.' MMMM yyyy 'kl 'HH:mm");
+        Date date = new Date();
         doc.addTitle("Etterlevelse for B" + behandling.getNummer() + " " + behandling.getOverordnetFormaal().getShortName());
         doc.addSubtitle(behandling.getNavn());
+        doc.addText("Exportert " + date);
         doc.addHeading3("Team");
         if (behandling.getTeams() != null && !behandling.getTeams().isEmpty()) {
             behandling.getTeams().forEach(teamId -> {
