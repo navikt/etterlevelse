@@ -109,15 +109,12 @@ public class WordDocUtils {
     public void addSubtitle(String text){
         P p = main.addStyledParagraphOfText(SUBTITLE,text);
         RPr rPr = createRpr();
-        setRprFontColor(rPr, "000000");
-        setRprFontSize(rPr, 50);
         ((R) p.getContent().get(0)).setRPr(rPr);
     }
 
     public P addHeading1(String text) {
         P p = main.addStyledParagraphOfText(HEADING_1, text);
         RPr rPr = createRpr();
-        setRprFontSize(rPr, 12);
         ((R) p.getContent().get(0)).setRPr(rPr);
         return p;
     }
