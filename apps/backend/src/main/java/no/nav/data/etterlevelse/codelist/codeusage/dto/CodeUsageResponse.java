@@ -18,15 +18,17 @@ public class CodeUsageResponse {
 
     private ListName listName;
     private String code;
+    private String shortName;
     private boolean inUse;
 
     private List<InstanceId> krav = new ArrayList<>();
     private List<InstanceId> behandlinger = new ArrayList<>();
     private List<CodelistResponse> codelist = new ArrayList<>();
 
-    public CodeUsageResponse(ListName listName, String code) {
+    public CodeUsageResponse(ListName listName, String code, String shortName) {
         this.listName = listName;
         this.code = code;
+        this.shortName = shortName;
     }
 
 }

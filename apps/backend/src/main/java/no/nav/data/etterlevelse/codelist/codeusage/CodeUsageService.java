@@ -28,9 +28,7 @@ import java.util.stream.Stream;
 
 import static java.util.Collections.replaceAll;
 import static java.util.stream.Collectors.toList;
-import static no.nav.data.common.utils.StreamUtils.convert;
-import static no.nav.data.common.utils.StreamUtils.filter;
-import static no.nav.data.common.utils.StreamUtils.safeStream;
+import static no.nav.data.common.utils.StreamUtils.*;
 import static no.nav.data.etterlevelse.codelist.CodelistService.getCodelist;
 
 @Service
@@ -75,8 +73,9 @@ public class CodeUsageService {
     }
 
     public CodeUsage findCodeUsage(ListName listName, String code) {
+        Codelist codelist = CodelistService.getCodelist(listName, code);
         return summary.labels(listName.name()).time(() -> {
-            CodeUsage codeUsage = new CodeUsage(listName, code);
+            CodeUsage codeUsage = new CodeUsage(listName, code, codelist.getShortName());
             codeUsage.setKrav(findKrav(listName, code));
             codeUsage.setBehandlinger(findBehandlinger(listName, code));
             codeUsage.setCodelist(findCodelists(listName, code));
