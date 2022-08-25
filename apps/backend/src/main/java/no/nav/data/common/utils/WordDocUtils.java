@@ -109,6 +109,7 @@ public class WordDocUtils {
     public void addSubtitle(String text){
         P p = main.addStyledParagraphOfText(SUBTITLE,text);
         RPr rPr = createRpr();
+        setRprFontColor(rPr, "000000");
         ((R) p.getContent().get(0)).setRPr(rPr);
     }
 
