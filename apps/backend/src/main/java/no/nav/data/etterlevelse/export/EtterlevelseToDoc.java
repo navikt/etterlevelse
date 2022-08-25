@@ -135,7 +135,7 @@ public class EtterlevelseToDoc {
         var doc = new EtterlevelseDocumentBuilder();
         getBehandlingData(behandling, doc);
 
-        doc.addHeading1("Dokumentet inneholder følgende etterlevelse for krav (" + etterlevelseMedKravData.size() + ")");
+        doc.addHeading1("Dokumentet inneholder etterlevelse for " + etterlevelseMedKravData.size() + " krav");
 
         doc.addTableOfContent(etterlevelseMedKravData, temaListe);
 
@@ -187,14 +187,6 @@ public class EtterlevelseToDoc {
                 if (krav.get().getHensikt() != null && !krav.get().getHensikt().isEmpty()) {
                     addMarkdownText(krav.get().getHensikt());
                 }
-            }
-
-            addHeading4("Etterelvelses status: " + etterlevelseStatusText(etterlevelse.getStatus()));
-
-            if (etterlevelse.getChangeStamp() != null && etterlevelse.getChangeStamp().getLastModifiedBy() != null && etterlevelse.getChangeStamp().getLastModifiedDate() != null) {
-                addLastEditedBy(etterlevelse.getChangeStamp());
-            } else {
-                addText("Sist endret: Ikke angitt");
             }
 
             for (int s = 0; s < etterlevelse.getSuksesskriterieBegrunnelser().size(); s++) {
