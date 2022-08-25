@@ -77,12 +77,16 @@ public class WordDocUtils {
 
     long bookmarkId = 1;
 
-    public RPr createRprWithSize(int size) {
-        RPr rPr = createRpr();
+    public void setRprFontSize(RPr rPr, int size) {
         HpsMeasure szValue = new HpsMeasure();
         szValue.setVal(BigInteger.valueOf(size));
         rPr.setSz(szValue);
-        return rPr;
+    }
+
+    public void setRprFontColor(RPr rPr, String color) {
+        Color fontColor = new Color();
+        fontColor.setVal(color);
+        rPr.setColor(fontColor);
     }
 
     public RPr createRpr() {
@@ -100,12 +104,15 @@ public class WordDocUtils {
 
     public void addSubtitle(String text){
         P p = main.addStyledParagraphOfText(SUBTITLE,text);
-        ((R) p.getContent().get(0)).setRPr(createRpr());
+        RPr rPr = createRpr();
+        setRprFontColor(rPr, "000000");
+        setRprFontSize(rPr, 30);
+        ((R) p.getContent().get(0)).setRPr(rPr);
     }
 
     public P addHeading1(String text) {
         P p = main.addStyledParagraphOfText(HEADING_1, text);
-        ((R) p.getContent().get(0)).setRPr(createRprWithSize(12));
+        ((R) p.getContent().get(0)).setRPr(createRpr());
         return p;
     }
 
