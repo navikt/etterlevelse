@@ -79,7 +79,11 @@ public class WordDocUtils {
 
     public void setRprFontSize(RPr rPr, int size) {
         HpsMeasure szValue = fac.createHpsMeasure();
-        szValue.setVal(BigInteger.valueOf(size));
+
+        //pixel size is half the value of size. ex.: size=50, pixelSize=25
+        // in order to have a better flow when using the method pixelValue is set to size * 2 for easier use of method
+        long pixelValue = size * 2L;
+        szValue.setVal(BigInteger.valueOf(pixelValue));
         rPr.setSz(szValue);
     }
 
@@ -112,7 +116,9 @@ public class WordDocUtils {
 
     public P addHeading1(String text) {
         P p = main.addStyledParagraphOfText(HEADING_1, text);
-        ((R) p.getContent().get(0)).setRPr(createRpr());
+        RPr rPr = createRpr();
+        setRprFontSize(rPr, 12);
+        ((R) p.getContent().get(0)).setRPr(rPr);
         return p;
     }
 
