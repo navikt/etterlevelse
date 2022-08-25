@@ -56,7 +56,7 @@ public class EtterlevelseToDoc {
         Date date = new Date();
         doc.addTitle("Etterlevelse for B" + behandling.getNummer() + " " + behandling.getOverordnetFormaal().getShortName());
         doc.addSubtitle(behandling.getNavn());
-        doc.addText("Exportert " + date);
+        doc.addText("Exportert " + formatter.format(date));
         doc.addHeading3("Team");
         if (behandling.getTeams() != null && !behandling.getTeams().isEmpty()) {
             behandling.getTeams().forEach(teamId -> {
