@@ -7,7 +7,7 @@ on:
             - "apps/frontend/**"
 
 env:
-    IMAGE: docker.pkg.github.com/${{ github.repository }}/etterlevelsefront${{ github.ref == 'refs/heads/prod' }}:${{ github.sha }}
+    IMAGE: ghcr.io/${{ github.repository }}/etterlevelsefront${{ github.ref == 'refs/heads/prod' }}:${{ github.sha }}
 
 defaults:
   run:
@@ -20,10 +20,12 @@ jobs:
 
         steps:
             - uses: actions/checkout@v3
+              
             - name: Set up node
               uses: actions/setup-node@v3
               with:
                   node-version: "17.x"
+
             - name: Get yarn cache directory path
               id: yarn-cache-dir-path
               run: echo "::set-output name=dir::$(yarn cache dir)"
@@ -36,9 +38,11 @@ jobs:
 
             - name: install
               run: yarn install
+
             - name: use prod config
               if: github.ref == 'refs/heads/prod'
               run: cp .env.prod .env
+              
             - name: add version
               env:
                 GITHUB_SHA: ${{ github.sha }}
@@ -46,14 +50,20 @@ jobs:
             
             - name: Build
               run: CI=false yarn run build
-            - name: Docker
-              if: github.ref == 'refs/heads/prod' || github.ref == 'refs/heads/master'
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              run: |
-                  docker build --tag ${IMAGE} .
-                  docker login docker.pkg.github.com -u ${GITHUB_REPOSITORY} -p ${GITHUB_TOKEN}
-                  docker push ${IMAGE}
+
+            - name: Login to DockerHub
+              uses: docker/login-action@v2
+              with:
+                registry: ghcr.io
+                username: ${{ github.actor }}
+                password: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: Build and push
+              uses: docker/build-push-action@v3
+              with:
+                push: true
+                tags: ${{env.IMAGE}}
+                context: .
 
     deploy-preprod:
         name: Frontend - deploy Dev GCP

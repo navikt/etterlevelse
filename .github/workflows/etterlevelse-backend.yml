@@ -7,7 +7,7 @@ on:
       - 'apps/backend/**'
 
 env:
-  IMAGE: docker.pkg.github.com/${{ github.repository }}/etterlevelsebackend:${{ github.sha }}
+  IMAGE: ghcr.io/${{ github.repository }}/etterlevelsebackend:${{ github.sha }}
 
 defaults:
   run:
@@ -20,6 +20,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+        
       - uses: actions/cache@v3
         with:
           path: ~/.m2/repository
@@ -30,18 +31,26 @@ jobs:
         with:
           distribution: 'adopt'
           java-version: '17.x'
+
       - name: Build
         run: mvn compile
+
       - name: Test and Package
         run: mvn package
-      - name: docker
-        if: github.ref == 'refs/heads/prod' || github.ref == 'refs/heads/master'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          docker build --tag ${IMAGE} .
-          docker login docker.pkg.github.com -u ${GITHUB_REPOSITORY} -p ${GITHUB_TOKEN}
-          docker push ${IMAGE}
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v3
+        with:
+          push: true
+          tags: ${{env.IMAGE}}
+          context: .
 
   deploy-preprod:
     name: Backend - deploy Dev GCP
@@ -50,6 +59,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        
       - uses: nais/deploy/actions/deploy@v1
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
@@ -57,6 +67,7 @@ jobs:
           RESOURCE: apps/backend/nais/backend-gcp.yaml
           VARS: apps/backend/nais/backend-dev-gcp-vars.yaml
           ENVIRONMENT: dev-gcp:teamdatajegerne:etterlevelse-backend
+
       - name: deploy alerts to dev-gcp
         uses: nais/deploy/actions/deploy@v1
         env:
@@ -71,6 +82,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        
       - uses: nais/deploy/actions/deploy@v1
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
@@ -78,6 +90,7 @@ jobs:
           RESOURCE: apps/backend/nais/backend-gcp.yaml
           VARS: apps/backend/nais/backend-prod-gcp-vars.yaml
           ENVIRONMENT: prod-gcp:teamdatajegerne:etterlevelse-backend
+          
       - name: deploy alerts to prod-gcp
         uses: nais/deploy/actions/deploy@v1
         env:
