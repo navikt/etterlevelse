@@ -50,7 +50,6 @@ jobs:
         with:
           push: true
           tags: ${{env.IMAGE}}
-          context: .
 
   deploy-preprod:
     name: Backend - deploy Dev GCP
@@ -90,7 +89,7 @@ jobs:
           RESOURCE: apps/backend/nais/backend-gcp.yaml
           VARS: apps/backend/nais/backend-prod-gcp-vars.yaml
           ENVIRONMENT: prod-gcp:teamdatajegerne:etterlevelse-backend
-          
+
       - name: deploy alerts to prod-gcp
         uses: nais/deploy/actions/deploy@v1
         env:
