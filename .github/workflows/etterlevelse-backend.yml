@@ -51,7 +51,7 @@ jobs:
         with:
           push: true
           tags: ${{env.IMAGE}}
-          context: /apps/backend
+          context: ./apps/backend
 
   deploy-preprod:
     name: Backend - deploy Dev GCP
