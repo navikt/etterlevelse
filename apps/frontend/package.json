@@ -102,7 +102,7 @@
     "@types/react-router-dom": "^5.3.3",
     "@types/shortid": "^0.0.29",
     "@types/styletron-react": "^5.0.2",
-    "@types/yup": "^0.29.11",
+    "@types/yup": "^0.32.0",
     "http-proxy-middleware": "^2.0.0",
     "prettier": "2.7.1",
     "react-helmet": "^6.1.0",

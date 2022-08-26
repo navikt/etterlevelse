@@ -77,6 +77,22 @@ public class WordDocUtils {
 
     long bookmarkId = 1;
 
+    public void setRprFontSize(RPr rPr, int size) {
+        HpsMeasure szValue = fac.createHpsMeasure();
+
+        //pixel size is half the value of size. ex.: size=50, pixelSize=25
+        // in order to have a better flow when using the method pixelValue is set to size * 2 for easier use of method
+        long pixelValue = size * 2L;
+        szValue.setVal(BigInteger.valueOf(pixelValue));
+        rPr.setSz(szValue);
+    }
+
+    public void setRprFontColor(RPr rPr, String color) {
+        Color fontColor = fac.createColor();
+        fontColor.setVal(color);
+        rPr.setColor(fontColor);
+    }
+
     public RPr createRpr() {
         RPr rPr = fac.createRPr();
         CTLanguage ctLang = fac.createCTLanguage();
@@ -92,12 +108,15 @@ public class WordDocUtils {
 
     public void addSubtitle(String text){
         P p = main.addStyledParagraphOfText(SUBTITLE,text);
-        ((R) p.getContent().get(0)).setRPr(createRpr());
+        RPr rPr = createRpr();
+        setRprFontColor(rPr, "000000");
+        ((R) p.getContent().get(0)).setRPr(rPr);
     }
 
     public P addHeading1(String text) {
         P p = main.addStyledParagraphOfText(HEADING_1, text);
-        ((R) p.getContent().get(0)).setRPr(createRpr());
+        RPr rPr = createRpr();
+        ((R) p.getContent().get(0)).setRPr(rPr);
         return p;
     }
 
