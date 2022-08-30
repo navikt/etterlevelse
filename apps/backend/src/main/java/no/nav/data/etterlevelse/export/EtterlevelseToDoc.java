@@ -200,15 +200,14 @@ public class EtterlevelseToDoc {
                             .stream().filter(sk -> sk.getId() == suksesskriterieBegrunnelse.getSuksesskriterieId()).toList();
                     if (!suksesskriterieList.isEmpty()) {
                         Suksesskriterie suksesskriterie = suksesskriterieList.get(0);
-                        addHeading4(suksesskriteriumNavn + ": " + suksesskriterie.getNavn());
+                        addHeading3(suksesskriteriumNavn + ": " + suksesskriterie.getNavn());
 
-                        addHeading3("Utfyllende om kriteriet");
+                        addHeading4("Utfyllende om kriteriet");
                         addMarkdownText(suksesskriterie.getBeskrivelse());
 
 
-                        addHeading3("Status på suksesskriteriet");
+                        addHeading4("Status på suksesskriteriet");
                         addText("Status: ", begrunnelseStatusText(suksesskriterieBegrunnelse.getSuksesskriterieStatus()));
-                        addText(" ");
                         if (suksesskriterie.isBehovForBegrunnelse()) {
                             addMarkdownText(suksesskriterieBegrunnelse.getBegrunnelse());
                         } else {
@@ -217,7 +216,7 @@ public class EtterlevelseToDoc {
 
                     }
                 } else {
-                    addHeading4(suksesskriteriumNavn);
+                    addHeading3(suksesskriteriumNavn);
                     addText("Suksesskriterie begrunnelse status: ", begrunnelseStatusText(suksesskriterieBegrunnelse.getSuksesskriterieStatus()));
                     addMarkdownText(suksesskriterieBegrunnelse.getBegrunnelse());
                 }
