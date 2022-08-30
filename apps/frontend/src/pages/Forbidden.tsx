@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { Block } from 'baseui/block'
 import { theme } from '../util'
 import { ParagraphLarge } from 'baseui/typography'
