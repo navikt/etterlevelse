@@ -17,15 +17,12 @@ public interface EtterlevelseArkivRepo extends JpaRepository<GenericStorage, UUI
     Page<GenericStorage> findAll(Pageable pageable);
 
     @Query(value = "select * from generic_storage where data -> 'webSakNummer' = to_jsonb(?1) and type = 'EtterlevelseArkiv'", nativeQuery = true)
-    List<GenericStorage> findByWebsakNummer(int nummer);
+    List<GenericStorage> findByWebsakNummer(String nummer);
 
     @Query(value = "select * from generic_storage where data -> 'tilArkivering' = to_jsonb(?1) and type = 'EtterlevelseArkiv'", nativeQuery = true)
     List<GenericStorage> findByTilArkivering(boolean tilArkivering);
 
     @Query(value = "select * from generic_storage where data ->> 'behandlingId' = ?1 and type = 'EtterlevelseArkiv'", nativeQuery = true)
     List<GenericStorage> findByBehandling(String behandlingId);
-
-    @Query(value = "select * from generic_storage where data ->> 'behandlingId' in ?1 and type = 'EtterlevelseArkiv'", nativeQuery = true)
-    List<GenericStorage> findByBehandlinger(List<String> behandlingIds);
 
 }
