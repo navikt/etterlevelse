@@ -8,10 +8,14 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.ValidationException;
+import no.nav.data.etterlevelse.behandling.BehandlingService;
+import no.nav.data.etterlevelse.behandling.dto.Behandling;
 import no.nav.data.etterlevelse.codelist.CodelistService;
 import no.nav.data.etterlevelse.codelist.codeusage.CodeUsageService;
 import no.nav.data.etterlevelse.codelist.domain.Codelist;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
+import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
+import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.krav.KravService;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import org.springframework.http.HttpHeaders;
@@ -23,7 +27,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -43,13 +49,20 @@ public class ExportController {
 
     private final CodeUsageService codeUsageService;
 
-    public ExportController(CodelistToDoc codelistToDoc, KravToDoc kravToDoc, EtterlevelseToDoc etterlevelseToDoc, KravService kravService, CodelistService codelistService, CodeUsageService codeUsageService) {
+    private final BehandlingService behandlingService;
+
+    private final EtterlevelseService etterlevelseService;
+
+    public ExportController(CodelistToDoc codelistToDoc, KravToDoc kravToDoc, EtterlevelseToDoc etterlevelseToDoc, KravService kravService, CodelistService codelistService, CodeUsageService codeUsageService, BehandlingService behandlingService,
+                            EtterlevelseService etterlevelseService) {
         this.codelistToDoc = codelistToDoc;
         this.kravToDoc = kravToDoc;
         this.etterlevelseToDoc = etterlevelseToDoc;
         this.kravService = kravService;
         this.codelistService = codelistService;
         this.codeUsageService = codeUsageService;
+        this.behandlingService = behandlingService;
+        this.etterlevelseService = etterlevelseService;
     }
 
 
@@ -151,19 +164,24 @@ public class ExportController {
         log.info("Exporting etterlevelse to doc");
         String filename;
         byte[] doc;
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy'-'MM'-'dd'_'HH'-'mm'-'ss");
+        Date date = new Date();
+
 
         if (etterlevelseId != null) {
-            filename = "Dokumentasjon for etterlevelse - " + etterlevelseId + ".docx";
+            Etterlevelse etterlevelse = etterlevelseService.get(etterlevelseId);
+            filename = formatter.format(date) + "_Etterlevelse_B" + behandlingService.getBehandling(etterlevelse.getBehandlingId()).getNummer() +".docx";
             log.info("Exporting 1 etterlevelse to doc");
             doc = etterlevelseToDoc.generateDocForEtterlevelse(etterlevelseId);
         } else if (behandlingId != null) {
             log.info("Exporting list of etterlevelse for behandling with id " + behandlingId + " to doc");
-            filename = "Dokumentasjon for behandling med id - " + behandlingId + ".docx";
+            Behandling behandling = behandlingService.getBehandling(behandlingId.toString());
+            filename = formatter.format(date) + "_Etterlevelse_B" + behandling.getNummer() + ".docx";
             List<String> lover;
 
             if(temaKode != null){
                 log.info("Exporting list of etterlevelse for behandling with id " + behandlingId + " to doc filtered by tema");
-                filename = "Dokumentasjon for behandling med id - " + behandlingId + " filtert med tema " + temaKode +".docx";
+                filename = formatter.format(date) + "_Etterlevelse_B" + behandling.getNummer() + "filtert_med_tema_" + temaKode +".docx";
                 codelistService.validateListNameAndCode(ListName.TEMA.name(), temaKode);
                 lover = codeUsageService.findCodeUsage(ListName.TEMA, temaKode).getCodelist().stream().map(Codelist::getCode).toList();
             } else {
