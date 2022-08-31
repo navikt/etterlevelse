@@ -11,7 +11,7 @@ import { arkPennIcon, editIcon, ellipse80, warningAlert } from '../components/Im
 import { Behandling, BehandlingEtterlevData, KravQL, KravStatus, PageResponse } from '../constants'
 import { useQuery } from '@apollo/client'
 import { Code, codelist, ListName } from '../services/Codelist'
-import { Button } from 'baseui/button'
+import { Button, KIND, SIZE } from 'baseui/button'
 import EditBehandlingModal from '../components/behandling/EditBehandlingModal'
 import { marginZero } from '../components/common/Style'
 import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
@@ -22,6 +22,10 @@ import { isFerdigUtfylt } from './BehandlingTemaPage'
 import { ampli } from '../services/Amplitude'
 import { getMainHeader, getNewestKravVersjon, responsiveDisplayBehandlingPage } from '../components/behandlingPage/common/utils'
 import { user } from '../services/User'
+import { faFileWord } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { StyledLink } from 'baseui/link'
+import { env } from '../util/env'
 
 export const BehandlingPage = () => {
   const params = useParams<{ id?: string }>()
@@ -173,6 +177,21 @@ export const BehandlingPage = () => {
       </Block>
 
       <Block display="flex" alignItems="center">
+      <Block display="flex" alignItems="center" marginRight='12px'>
+        <StyledLink
+            style={{textDecoration: 'none'}}
+            href={`${env.backendBaseUrl}/export/etterlevelse?behandlingId=${behandling.id}`}>
+            <Button
+              kind={KIND.tertiary}
+              size={SIZE.compact}
+            >
+              <Block marginRight='6px'>
+              <FontAwesomeIcon icon={faFileWord} />
+              </Block>
+              <Block>Eksporter Behandling</Block>
+            </Button>
+          </StyledLink>
+        </Block>
         <Block display="flex" alignItems="baseline" marginRight="30px">
           <ParagraphMedium $style={{ fontWeight: 900, fontSize: '32px', marginTop: 0, marginBottom: 0 }} color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
             {getNewestKravVersjon(relevanteStats).length}
