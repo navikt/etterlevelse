@@ -188,7 +188,7 @@ export const BehandlingPage = () => {
               <Block marginRight='6px'>
               <FontAwesomeIcon icon={faFileWord} />
               </Block>
-              <Block>Eksporter Behandling</Block>
+              <Block>Eksporter</Block>
             </Button>
           </StyledLink>
         </Block>
