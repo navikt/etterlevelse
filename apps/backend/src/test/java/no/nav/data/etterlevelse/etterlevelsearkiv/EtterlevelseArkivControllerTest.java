@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+
 public class EtterlevelseArkivControllerTest extends IntegrationTestBase {
     @Test
     void getAllEtterlevelseArkiv_createTwoEtterlevelseArkiv_getTwoEtterlevelseArkiv() {
@@ -16,8 +17,8 @@ public class EtterlevelseArkivControllerTest extends IntegrationTestBase {
 
         var resp = restTemplate.getForEntity("/etterlevelsearkiv", EtterlevelseArkivController.EtterlevelseArkivPage.class);
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
-        var etterlevelseMetadataResp = resp.getBody();
-        assertThat(etterlevelseMetadataResp).isNotNull();
-        assertThat(etterlevelseMetadataResp.getNumberOfElements()).isEqualTo(2);
+        var etterlevelseArkivPage = resp.getBody();
+        assertThat(etterlevelseArkivPage).isNotNull();
+        assertThat(etterlevelseArkivPage.getNumberOfElements()).isEqualTo(2);
     }
 }
