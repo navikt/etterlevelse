@@ -11,6 +11,7 @@ import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.etterlevelse.arkivering.domain.EtterlevelseArkiv;
 import no.nav.data.etterlevelse.arkivering.dto.EtterlevelseArkivRequest;
 import no.nav.data.etterlevelse.arkivering.dto.EtterlevelseArkivResponse;
+import no.nav.data.etterlevelse.etterlevelsemetadata.dto.EtterlevelseMetadataResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -103,5 +104,8 @@ public class EtterlevelseArkivController {
         log.info("Delete EtterlevelseArkivResponse id={}", id);
         var etterlevelseMetadata = etterlevelseArkivService.delete(id);
         return ResponseEntity.ok(etterlevelseMetadata.toResponse());
+    }
+
+    static class EtterlevelseArkivPage extends RestResponsePage<EtterlevelseArkivResponse> {
     }
 }
