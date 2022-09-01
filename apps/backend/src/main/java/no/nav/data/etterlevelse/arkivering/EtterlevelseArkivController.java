@@ -14,14 +14,7 @@ import no.nav.data.etterlevelse.arkivering.dto.EtterlevelseArkivResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -48,8 +41,10 @@ public class EtterlevelseArkivController {
 
     @Operation(summary = "Get etterlevelsearkiv by webSak nummer")
     @ApiResponse(description = "Ok")
-    @GetMapping("/websaknummer/{webSakNummer}")
-    public ResponseEntity<RestResponsePage<EtterlevelseArkivResponse>> getByWebsakNummer(@PathVariable String webSakNummer) {
+    @GetMapping("/websaknummer")
+    public ResponseEntity<RestResponsePage<EtterlevelseArkivResponse>> getByWebsakNummer(
+            @RequestParam(name="websakNummer") String webSakNummer
+    ) {
         log.info("Get etterlevelsearkiv by webSaknummer {}", webSakNummer);
         List<EtterlevelseArkiv> etterlevelseArkivList=etterlevelseArkivService.getByWebsakNummer(webSakNummer);
         return ResponseEntity.ok(new RestResponsePage<>(etterlevelseArkivList).convert(EtterlevelseArkiv::toResponse));
@@ -105,6 +100,7 @@ public class EtterlevelseArkivController {
         return ResponseEntity.ok(etterlevelseMetadata.toResponse());
     }
 
-    public static class EtterlevelseArkivPage extends RestResponsePage<EtterlevelseArkivResponse> {
+    public static class EtterlevelseArkivPage extends RestResponsePage<EtterlevelseArkiv> {
+
     }
 }
