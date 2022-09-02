@@ -30,6 +30,9 @@ public class EtterlevelseArkivRequest implements RequestElement {
     public void format() {
         setId(trimToNull(id));
         setBehandlingId(trimToNull(behandlingId));
+        if (status == null) {
+            status = EtterlevelseArkivStatus.TIL_ARKIVERING;
+        }
     }
 
     @Override

@@ -6,19 +6,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import no.nav.data.common.storage.domain.ChangeStamp;
 import no.nav.data.common.storage.domain.DomainObject;
-import no.nav.data.common.utils.StreamUtils;
 import no.nav.data.etterlevelse.arkivering.dto.EtterlevelseArkivRequest;
 import no.nav.data.etterlevelse.arkivering.dto.EtterlevelseArkivResponse;
 import no.nav.data.etterlevelse.codelist.codeusage.dto.InstanceId;
-import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
-import no.nav.data.etterlevelse.etterlevelse.domain.SuksesskriterieBegrunnelse;
-import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseRequest;
-import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseResponse;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
-
-import static no.nav.data.common.utils.StreamUtils.copyOf;
 
 @Data
 @Builder
@@ -51,7 +44,7 @@ public class EtterlevelseArkiv implements DomainObject {
                 .behandlingId(behandlingId)
                 .arkiveringDato(arkiveringDato)
                 .webSakNummer(webSakNummer)
-                .status(status)
+                .status(status.name())
                 .build();
     }
 
