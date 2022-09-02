@@ -31,14 +31,12 @@ class EtterlevelseMetadataControllerTest extends IntegrationTestBase {
 
     @Test
     void getAllEtterlevelseMetadata_NotCreateEtterlevelseMetadata_DoNotGetEtterlevelseMetadata() {
-        storageService.save(EtterlevelseMetadata.builder().build());
-        storageService.save(EtterlevelseMetadata.builder().build());
 
         var resp = restTemplate.getForEntity("/etterlevelsemetadata", EtterlevelseMetadataController.EtterlevelseMetadataPage.class);
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
         var etterlevelseMetadataResp = resp.getBody();
         assertThat(etterlevelseMetadataResp).isNotNull();
-        assertThat(etterlevelseMetadataResp.getNumberOfElements()).isNotEqualTo(0);
+        assertThat(etterlevelseMetadataResp.getNumberOfElements()).isEqualTo(0);
     }
 
     @Test
