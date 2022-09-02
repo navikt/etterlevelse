@@ -63,7 +63,7 @@ public class EtterlevelseArkivController {
     @ApiResponse(description = "Ok")
     @GetMapping("/status")
     public ResponseEntity<RestResponsePage<EtterlevelseArkivResponse>> getByStatus(@RequestParam EtterlevelseArkivStatus status) {
-        log.info("Get etterlevelsearkiv by tilArkivering {}", status);
+        log.info("Get etterlevelsearkiv by status {}", status);
         List<EtterlevelseArkiv> etterlevelseArkivList=etterlevelseArkivService.getByStatus(status.name());
         return ResponseEntity.ok(new RestResponsePage<>(etterlevelseArkivList).convert(EtterlevelseArkiv::toResponse));
     }
