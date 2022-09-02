@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldNameConstants;
 import no.nav.data.common.validator.RequestElement;
 import no.nav.data.common.validator.Validator;
+import no.nav.data.etterlevelse.arkivering.domain.EtterlevelseArkivStatus;
 
 import java.time.LocalDateTime;
 
@@ -20,7 +21,7 @@ import static org.apache.commons.lang3.StringUtils.trimToNull;
 public class EtterlevelseArkivRequest implements RequestElement {
     private String id;
     private String behandlingId;
-    private boolean tilArkivering;
+    private EtterlevelseArkivStatus status;
     private LocalDateTime arkiveringDato;
     private String webSakNummer;
     private Boolean update;

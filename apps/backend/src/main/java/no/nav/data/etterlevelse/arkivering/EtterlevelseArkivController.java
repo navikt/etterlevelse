@@ -9,6 +9,7 @@ import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.etterlevelse.arkivering.domain.EtterlevelseArkiv;
+import no.nav.data.etterlevelse.arkivering.domain.EtterlevelseArkivStatus;
 import no.nav.data.etterlevelse.arkivering.dto.EtterlevelseArkivRequest;
 import no.nav.data.etterlevelse.arkivering.dto.EtterlevelseArkivResponse;
 import org.springframework.data.domain.Page;
@@ -50,12 +51,12 @@ public class EtterlevelseArkivController {
         return ResponseEntity.ok(new RestResponsePage<>(etterlevelseArkivList).convert(EtterlevelseArkiv::toResponse));
     }
 
-    @Operation(summary = "Get etterlevelsearkiv by TilArkivering")
+    @Operation(summary = "Get etterlevelsearkiv by status")
     @ApiResponse(description = "Ok")
-    @GetMapping("/tilarkivering/{tilArkivering}")
-    public ResponseEntity<RestResponsePage<EtterlevelseArkivResponse>> getByTilArkivering(@PathVariable Boolean tilArkivering) {
-        log.info("Get etterlevelsearkiv by tilArkivering {}", tilArkivering);
-        List<EtterlevelseArkiv> etterlevelseArkivList=etterlevelseArkivService.getByTilArkivering(tilArkivering);
+    @GetMapping("/status")
+    public ResponseEntity<RestResponsePage<EtterlevelseArkivResponse>> getByStatus(@RequestParam EtterlevelseArkivStatus status) {
+        log.info("Get etterlevelsearkiv by tilArkivering {}", status);
+        List<EtterlevelseArkiv> etterlevelseArkivList=etterlevelseArkivService.getByStatus(status.name());
         return ResponseEntity.ok(new RestResponsePage<>(etterlevelseArkivList).convert(EtterlevelseArkiv::toResponse));
     }
 

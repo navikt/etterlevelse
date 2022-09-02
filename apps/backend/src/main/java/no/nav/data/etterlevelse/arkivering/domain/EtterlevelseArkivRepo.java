@@ -19,8 +19,8 @@ public interface EtterlevelseArkivRepo extends JpaRepository<GenericStorage, UUI
     @Query(value = "select * from generic_storage where data -> 'webSakNummer' = to_jsonb(?1) and type = 'EtterlevelseArkiv'", nativeQuery = true)
     List<GenericStorage> findByWebsakNummer(String nummer);
 
-    @Query(value = "select * from generic_storage where data -> 'tilArkivering' = to_jsonb(?1) and type = 'EtterlevelseArkiv'", nativeQuery = true)
-    List<GenericStorage> findByTilArkivering(boolean tilArkivering);
+    @Query(value = "select * from generic_storage where data -> 'status' = to_jsonb(?1) and type = 'EtterlevelseArkiv'", nativeQuery = true)
+    List<GenericStorage> findByStatus(String status);
 
     @Query(value = "select * from generic_storage where data ->> 'behandlingId' = ?1 and type = 'EtterlevelseArkiv'", nativeQuery = true)
     List<GenericStorage> findByBehandling(String behandlingId);

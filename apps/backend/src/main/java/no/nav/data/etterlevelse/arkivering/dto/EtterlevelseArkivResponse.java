@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import no.nav.data.common.rest.ChangeStampResponse;
+import no.nav.data.etterlevelse.arkivering.domain.EtterlevelseArkivStatus;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -21,7 +22,7 @@ public class EtterlevelseArkivResponse {
     private Integer version;
 
     private String behandlingId;
-    private boolean tilArkivering;
+    private EtterlevelseArkivStatus status;
     private LocalDateTime arkiveringDato;
     private String webSakNummer;
 }

@@ -31,8 +31,8 @@ public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
         return GenericStorage.to(repo.findByWebsakNummer(websakNummer), EtterlevelseArkiv.class);
     }
 
-    public List<EtterlevelseArkiv> getByTilArkivering(boolean tilArkivering) {
-        return GenericStorage.to(repo.findByTilArkivering(tilArkivering), EtterlevelseArkiv.class);
+    public List<EtterlevelseArkiv> getByStatus(String status) {
+        return GenericStorage.to(repo.findByStatus(status), EtterlevelseArkiv.class);
     }
 
     public List<EtterlevelseArkiv> getByBehandling(String behandlingId) {
