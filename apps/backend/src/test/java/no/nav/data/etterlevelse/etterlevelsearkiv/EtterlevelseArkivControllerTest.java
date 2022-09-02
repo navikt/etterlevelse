@@ -23,7 +23,7 @@ class EtterlevelseArkivControllerTest extends IntegrationTestBase {
     }
 
     @Test
-    void getAllEtterlevelseArkiv_NotCreateEtterlevelseArkiv_DoNotGetEtterlevelseMetadata() {
+    void getAllEtterlevelseArkiv_NotCreateEtterlevelseArkiv_DoNotGetEtterlevelseArkiv() {
         storageService.save(EtterlevelseArkiv.builder().build());
         storageService.save(EtterlevelseArkiv.builder().build());
 
