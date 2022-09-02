@@ -24,14 +24,11 @@ class EtterlevelseArkivControllerTest extends IntegrationTestBase {
 
     @Test
     void getAllEtterlevelseArkiv_NotCreateEtterlevelseArkiv_DoNotGetEtterlevelseArkiv() {
-        storageService.save(EtterlevelseArkiv.builder().build());
-        storageService.save(EtterlevelseArkiv.builder().build());
-
         var resp = restTemplate.getForEntity("/etterlevelsearkiv", EtterlevelseArkivController.EtterlevelseArkivPage.class);
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
         var etterlevelseArkivResp = resp.getBody();
         assertThat(etterlevelseArkivResp).isNotNull();
-        assertThat(etterlevelseArkivResp.getNumberOfElements()).isNotEqualTo(0);
+        assertThat(etterlevelseArkivResp.getNumberOfElements()).isEqualTo(0);
     }
 
     @Test
