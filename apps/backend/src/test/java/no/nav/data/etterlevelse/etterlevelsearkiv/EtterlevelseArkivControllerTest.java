@@ -200,6 +200,22 @@ class EtterlevelseArkivControllerTest extends IntegrationTestBase {
         assertThat(etterlevelseArkivResp.getStatus()).isEqualTo(EtterlevelseArkivStatus.BEHANDLER_ARKIVERING.name());
     }
 
+    @Test
+    void arkiver_createSixEtterlevelseArkiv_getTwoWithUpdatedStatus() {
+        storageService.save(EtterlevelseArkiv.builder().status(EtterlevelseArkivStatus.TIL_ARKIVERING).build());
+        storageService.save(EtterlevelseArkiv.builder().status(EtterlevelseArkivStatus.TIL_ARKIVERING).build());
+        storageService.save(EtterlevelseArkiv.builder().status(EtterlevelseArkivStatus.TIL_ARKIVERING).build());
+        storageService.save(EtterlevelseArkiv.builder().status(EtterlevelseArkivStatus.BEHANDLER_ARKIVERING).build());
+        storageService.save(EtterlevelseArkiv.builder().status(EtterlevelseArkivStatus.BEHANDLER_ARKIVERING).build());
+        storageService.save(EtterlevelseArkiv.builder().status(EtterlevelseArkivStatus.ARKIVERT).build());
+
+        var resp = restTemplate.getForEntity("/etterlevelsearkiv/status/arkivert", EtterlevelseArkivController.EtterlevelseArkivPage.class);
+        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
+        var etterlevelseArkivResp = resp.getBody();
+        assertThat(etterlevelseArkivResp).isNotNull();
+        assertThat(etterlevelseArkivResp.getNumberOfElements()).isEqualTo(2);
+    }
+
     private void assertFields(EtterlevelseArkivResponse etterlevelseArkiv) {
         assertThat(etterlevelseArkiv.getChangeStamp()).isNotNull();
         assertThat(etterlevelseArkiv.getVersion()).isEqualTo(0);

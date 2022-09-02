@@ -77,6 +77,16 @@ public class EtterlevelseArkivController {
         return ResponseEntity.ok(new RestResponsePage<>(etterlevelseArkivList).convert(EtterlevelseArkiv::toResponse));
     }
 
+    @Operation(summary = "Update status to arkivert")
+    @ApiResponse(description = "ok")
+    @GetMapping("/status/arkivert")
+    public ResponseEntity<RestResponsePage<EtterlevelseArkivResponse>> arkiver(){
+        log.info("Arkivering vellykket, setter status BEHANDLER_ARKIVERING til ARKIVERT");
+
+        List<EtterlevelseArkiv> etterlevelseArkivList = etterlevelseArkivService.setStatusToArkivert();
+        return ResponseEntity.ok(new RestResponsePage<>(etterlevelseArkivList).convert(EtterlevelseArkiv::toResponse));
+    }
+
     @Operation(summary = "Creating etterlevelseArkiv")
     @ApiResponse(description = "ok")
     @PostMapping
