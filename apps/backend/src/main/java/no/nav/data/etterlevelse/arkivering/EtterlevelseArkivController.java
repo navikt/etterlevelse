@@ -15,15 +15,7 @@ import no.nav.data.etterlevelse.arkivering.dto.EtterlevelseArkivResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -46,6 +38,14 @@ public class EtterlevelseArkivController {
         log.info("Get all etterlevelsearkiv");
         Page<EtterlevelseArkiv> page = etterlevelseArkivService.getAll(pageParameters);
         return ResponseEntity.ok(new RestResponsePage<>(page).convert(EtterlevelseArkiv::toResponse));
+    }
+
+    @Operation(summary = "Get One EtterlevelseArkiv")
+    @ApiResponse(description = "ok")
+    @GetMapping("/{id}")
+    public ResponseEntity<EtterlevelseArkivResponse> getById(@PathVariable UUID id) {
+        log.info("Get Etterlevelse arkiv data by id={}", id);
+        return ResponseEntity.ok(etterlevelseArkivService.get(id).toResponse());
     }
 
     @Operation(summary = "Get etterlevelsearkiv by webSak nummer")

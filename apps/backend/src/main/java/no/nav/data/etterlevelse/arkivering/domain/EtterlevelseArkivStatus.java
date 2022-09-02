@@ -1,10 +1,10 @@
 package no.nav.data.etterlevelse.arkivering.domain;
 
 public enum EtterlevelseArkivStatus {
+        TIL_ARKIVERING,
 
-    TIL_ARKIVERING,
+        BEHANDLER_ARKIVERING,
 
-    BEHANDLER_ARKIVERING,
-
-    ARKIVERT
+        ARKIVERT,
+        TEST
 }

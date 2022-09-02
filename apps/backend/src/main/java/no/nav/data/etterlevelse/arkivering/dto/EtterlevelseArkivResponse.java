@@ -15,7 +15,7 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonPropertyOrder({"id", "behandlingId", "webSakNummer", "arkiveringDato"})
+@JsonPropertyOrder({"id", "behandlingId", "webSakNummer", "arkiveringDato", "status"})
 public class EtterlevelseArkivResponse {
     private UUID id;
     private ChangeStampResponse changeStamp;
