@@ -9,4 +9,6 @@ public enum EtterlevelseArkivStatus {
         BEHANDLER_ARKIVERING,
         @JsonProperty("ARKIVERT")
         ARKIVERT,
+        @JsonProperty("IKKE_ARKIVER")
+        IKKE_ARKIVER
 }
