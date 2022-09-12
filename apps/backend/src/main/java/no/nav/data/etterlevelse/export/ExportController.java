@@ -202,9 +202,9 @@ public class ExportController {
 
         response.setContentType(WORDPROCESSINGML_DOCUMENT);
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename);
-//        StreamUtils.copy(doc, response.getOutputStream());
-        downloadZipFile(response,listOfFileNames);
+        StreamUtils.copy(doc, response.getOutputStream());
         response.flushBuffer();
+        downloadZipFile(response,listOfFileNames);
     }
 
     public void downloadZipFile(HttpServletResponse response, List<String> listOfFileNames) {
