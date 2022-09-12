@@ -24,8 +24,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -99,12 +97,11 @@ public class EtterlevelseArkivController {
         File testFile = new File("test.txt");
         List <File> files = new ArrayList<>();
         files.add(testFile);
-        zipUtils.zipOutputStream(file,files);
+        byte[] doc = zipUtils.zipOutputStream(file,files);
 
-        InputStream inputStream = new FileInputStream(file);
         response.setContentType("application/zip");
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=archive.zip");
-        StreamUtils.copy(inputStream, response.getOutputStream());
+        StreamUtils.copy(doc, response.getOutputStream());
         response.flushBuffer();
     }
 
