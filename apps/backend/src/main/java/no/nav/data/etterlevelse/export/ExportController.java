@@ -18,6 +18,7 @@ import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.krav.KravService;
 import no.nav.data.etterlevelse.krav.domain.Krav;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StreamUtils;
@@ -27,11 +28,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 @Slf4j
 @RestController
@@ -192,10 +196,36 @@ public class ExportController {
             throw new ValidationException("No paramater given");
         }
 
+
+        ArrayList<String> listOfFileNames = new ArrayList<>();
+        listOfFileNames.add(filename);
+
         response.setContentType(WORDPROCESSINGML_DOCUMENT);
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename);
         StreamUtils.copy(doc, response.getOutputStream());
         response.flushBuffer();
+        downloadZipFile(response,listOfFileNames);
+    }
+
+    public void downloadZipFile(HttpServletResponse response, List<String> listOfFileNames) {
+        response.setContentType("application/zip");
+        response.setHeader("Content-Disposition", "attachment; filename=download.zip");
+        try(ZipOutputStream zipOutputStream = new ZipOutputStream(response.getOutputStream())) {
+            for(String fileName : listOfFileNames) {
+                FileSystemResource fileSystemResource = new FileSystemResource(fileName);
+                ZipEntry zipEntry = new ZipEntry(fileSystemResource.getFilename());
+                zipEntry.setSize(fileSystemResource.contentLength());
+                zipEntry.setTime(System.currentTimeMillis());
+
+                zipOutputStream.putNextEntry(zipEntry);
+
+                StreamUtils.copy(fileSystemResource.getInputStream(), zipOutputStream);
+                zipOutputStream.closeEntry();
+            }
+            zipOutputStream.finish();
+        } catch (IOException e) {
+            log.error(e.getMessage(), e);
+        }
     }
 
     private String cleanCodelistName(ListName listName) {
