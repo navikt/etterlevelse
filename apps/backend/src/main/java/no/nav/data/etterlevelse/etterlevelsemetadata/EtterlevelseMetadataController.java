@@ -98,9 +98,9 @@ public class EtterlevelseMetadataController {
     @ApiResponse(description = "ok")
     @PostMapping
     public ResponseEntity<EtterlevelseMetadataResponse> createEtterlevelseMetadata(@RequestBody EtterlevelseMetadataRequest request) {
-        log.info("Create krav prioritering");
-        var ette = service.save(request);
-        return new ResponseEntity<>(ette.toResponse(), HttpStatus.CREATED);
+        log.info("Create etterlevelsemetadata");
+        var etterlevelseMetadata = service.save(request);
+        return new ResponseEntity<>(etterlevelseMetadata.toResponse(), HttpStatus.CREATED);
     }
 
     @Operation(summary = "Update etterlevelsemetadata")
@@ -113,8 +113,8 @@ public class EtterlevelseMetadataController {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
         }
 
-        var kravPrioritering = service.save(request);
-        return ResponseEntity.ok(kravPrioritering.toResponse());
+        var etterlevelseMetadata = service.save(request);
+        return ResponseEntity.ok(etterlevelseMetadata.toResponse());
     }
 
     @Operation(summary = "Delete etterlevelsemetadata")

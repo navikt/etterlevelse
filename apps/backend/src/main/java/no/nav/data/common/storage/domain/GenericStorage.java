@@ -10,6 +10,7 @@ import no.nav.data.common.auditing.domain.Auditable;
 import no.nav.data.common.security.azure.support.MailLog;
 import no.nav.data.common.utils.JsonUtils;
 import no.nav.data.common.utils.StreamUtils;
+import no.nav.data.etterlevelse.arkivering.domain.EtterlevelseArkiv;
 import no.nav.data.etterlevelse.behandling.domain.BehandlingData;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.etterlevelsemetadata.domain.EtterlevelseMetadata;
@@ -125,7 +126,7 @@ public class GenericStorage extends Auditable {
         return getDomainObjectData(Melding.class);
     }
 
-
+    public EtterlevelseArkiv toEtterlevelseArkiv() {return getDomainObjectData(EtterlevelseArkiv.class); }
     /**
      * Edit object and update data on entity
      */
