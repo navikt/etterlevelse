@@ -4,20 +4,29 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
+import no.nav.data.common.utils.ZipUtils;
 import no.nav.data.etterlevelse.arkivering.domain.EtterlevelseArkiv;
 import no.nav.data.etterlevelse.arkivering.domain.EtterlevelseArkivStatus;
 import no.nav.data.etterlevelse.arkivering.dto.EtterlevelseArkivRequest;
 import no.nav.data.etterlevelse.arkivering.dto.EtterlevelseArkivResponse;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -75,6 +84,28 @@ public class EtterlevelseArkivController {
         log.info("Get etterlevelsearkiv by behandlinId {}", behandlinId);
         List<EtterlevelseArkiv> etterlevelseArkivList=etterlevelseArkivService.getByBehandling(behandlinId);
         return ResponseEntity.ok(new RestResponsePage<>(etterlevelseArkivList).convert(EtterlevelseArkiv::toResponse));
+    }
+
+    @SneakyThrows
+    @Operation(summary = "Export etterlevelse to archive")
+    @ApiResponse(description = "Ok")
+    @GetMapping(value = "/export", produces = "application/zip")
+    public void getExportArchive(HttpServletResponse response) {
+        log.info("export etterlevelse to archive");
+        List<EtterlevelseArkiv> etterlevelseArkivList=etterlevelseArkivService.getByStatus(EtterlevelseArkivStatus.TIL_ARKIVERING.name());
+
+        ZipUtils zipUtils = new ZipUtils();
+        File file = new File("zipTest.zip");
+        File testFile = new File("test.txt");
+        List <File> files = new ArrayList<>();
+        files.add(testFile);
+        zipUtils.zipOutputStream(file,files);
+
+        InputStream inputStream = new FileInputStream(file);
+        response.setContentType("application/zip");
+        response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=archive.zip");
+        StreamUtils.copy(inputStream, response.getOutputStream());
+        response.flushBuffer();
     }
 
     @Operation(summary = "Update status to arkivert")
