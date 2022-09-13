@@ -45,6 +45,15 @@ export const createEtterlevelseArkiv = async (etterlevelseArkiv: EtterlevelseArk
   return (await axios.post<EtterlevelseArkiv>(`${env.backendBaseUrl}/etterlevelsearkiv`, dto)).data
 }
 
+export const deleteEtterlevelseArkiv = async (id: string) => {
+  return (await axios.delete<EtterlevelseArkiv>(`${env.backendBaseUrl}/etterlevelsearkiv/${id}`)).data
+}
+
+export const updateEtterlevelseArkiv = async (etterlevelseArkiv: EtterlevelseArkiv) => {
+  const dto = etterlevelseArkivToEtterlevelseArkivDto(etterlevelseArkiv)
+  return (await axios.put<EtterlevelseArkiv>(`${env.backendBaseUrl}/etterlevelsearkiv/${etterlevelseArkiv.id}`, dto)).data
+}
+
 function etterlevelseArkivToEtterlevelseArkivDto(etterlevelseArkiv: EtterlevelseArkiv) {
   const dto = {
     ...etterlevelseArkiv,
