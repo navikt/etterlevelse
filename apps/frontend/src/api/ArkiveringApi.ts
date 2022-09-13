@@ -1,9 +1,6 @@
 import axios from 'axios'
-import { emptyPage, EtterlevelseArkiv, Or, PageResponse } from '../constants'
-import { env } from '../util/env'
-import { useEffect, useState } from 'react'
-import { useDebouncedState } from '../util/hooks'
-
+import {EtterlevelseArkiv, EtterlevelseArkivStatus, PageResponse} from '../constants'
+import {env} from '../util/env'
 
 export const getAllArkivering = async () => {
   const PAGE_SIZE = 100
@@ -22,3 +19,25 @@ export const getAllArkivering = async () => {
 export const getArkiveringPage = async (pageNumber: number, pageSize: number) => {
   return (await axios.get<PageResponse<EtterlevelseArkiv>>(`${env.backendBaseUrl}/etterlevelsearkiv?pageNumber=${pageNumber}&pageSize=${pageSize}`)).data
 }
+
+export const getEtterlevelseArkiv = async (id: string) => {
+  return (await axios.get<EtterlevelseArkiv>(`${env.backendBaseUrl}/etterlevelsearkiv/${id}`)).data
+}
+
+export const getEtterlevelseArkivByWebsak = async (websakNummer: string) => {
+  return (await axios.get<PageResponse<EtterlevelseArkiv>>(`${env.backendBaseUrl}/etterlevelsearkiv/websaknummer/${websakNummer}`)).data
+}
+
+export const getEtterlevelseArkivByStatus = async (status: EtterlevelseArkivStatus) => {
+  return (await axios.get<PageResponse<EtterlevelseArkiv>>(`${env.backendBaseUrl}/etterlevelsearkiv/status/${status}`)).data
+}
+
+export const getEtterlevelseArkivArkivert = async () => {
+  return (await axios.get<PageResponse<EtterlevelseArkiv>>(`${env.backendBaseUrl}/etterlevelsearkiv/status/arkivert`)).data
+}
+
+export const getEtterlevelseArkivByBehandlingId = async (behandlingId: string) => {
+  return (await axios.get<PageResponse<EtterlevelseArkiv>>(`${env.backendBaseUrl}/etterlevelsearkiv/behandling/${behandlingId}`)).data
+}
+
+
