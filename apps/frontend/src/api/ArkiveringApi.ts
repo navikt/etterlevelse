@@ -40,4 +40,17 @@ export const getEtterlevelseArkivByBehandlingId = async (behandlingId: string) =
   return (await axios.get<PageResponse<EtterlevelseArkiv>>(`${env.backendBaseUrl}/etterlevelsearkiv/behandling/${behandlingId}`)).data
 }
 
+export const createEtterlevelseArkiv = async (etterlevelseArkiv: EtterlevelseArkiv) => {
+  const dto = etterlevelseArkivToEtterlevelseArkivDto(etterlevelseArkiv)
+  return (await axios.post<EtterlevelseArkiv>(`${env.backendBaseUrl}/etterlevelsearkiv`, dto)).data
+}
+
+function etterlevelseArkivToEtterlevelseArkivDto(etterlevelseArkiv: EtterlevelseArkiv) {
+  const dto = {
+    ...etterlevelseArkiv,
+  } as any
+  delete dto.changeStamp
+  delete dto.version
+  return dto
+}
 
