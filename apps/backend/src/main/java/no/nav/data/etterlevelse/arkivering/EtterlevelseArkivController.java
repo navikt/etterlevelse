@@ -9,8 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
-import no.nav.data.common.utils.ZipUtils;
-import no.nav.data.etterlevelse.arkivering.domain.ArchiveFile;
 import no.nav.data.etterlevelse.arkivering.domain.EtterlevelseArkiv;
 import no.nav.data.etterlevelse.arkivering.domain.EtterlevelseArkivStatus;
 import no.nav.data.etterlevelse.arkivering.dto.EtterlevelseArkivRequest;
@@ -20,11 +18,18 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StreamUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -92,14 +97,12 @@ public class EtterlevelseArkivController {
         log.info("export etterlevelse to archive");
         List<EtterlevelseArkiv> etterlevelseArkivList=etterlevelseArkivService.getByStatus(EtterlevelseArkivStatus.TIL_ARKIVERING.name());
 
-        ZipUtils zipUtils = new ZipUtils();
-        byte[] testFile = {1,2,3,4};
-       List<ArchiveFile> archiveFiles = new ArrayList<>();
-        byte[] doc = zipUtils.zipOutputStream(archiveFiles);
+
+        byte[] etterlevelserArchiveZip = etterlevelseArkivService.getEtterlevelserArchiveZip(etterlevelseArkivList);
 
         response.setContentType("application/zip");
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=archive.zip");
-        StreamUtils.copy(doc, response.getOutputStream());
+        StreamUtils.copy(etterlevelserArchiveZip, response.getOutputStream());
         response.flushBuffer();
     }
 
