@@ -229,6 +229,14 @@ export interface Melding extends DomainObject {
   alertType: AlertType
 }
 
+export interface EtterlevelseArkiv extends DomainObject {
+  id: string
+  behandlingId: string
+  status: EtterlevelseArkivStatus
+  arkiveringDato: string
+  webSakNummer: string
+}
+
 export enum KRAV_FILTER_TYPE {
   RELEVANTE_KRAV = 'RELEVANTE_KRAV',
   BORTFILTTERTE_KRAV = 'BORTFILTERTE_KRAV',
@@ -282,6 +290,13 @@ export enum KravListFilter {
   LOVER = 'LOVER',
   TEMAER = 'TEMAER',
   STATUS = 'STATUS',
+}
+
+export enum EtterlevelseArkivStatus {
+  TIL_ARKIVERING='TIL_ARKIVERING',
+  BEHANDLER_ARKIVERING='BEHANDLER_ARKIVERING',
+  ARKIVERT='ARKIVERT',
+  IKKE_ARKIVER='IKKE_ARKIVER',
 }
 
 export const emptyPage = { content: [], numberOfElements: 0, pageNumber: 0, pages: 0, pageSize: 1, totalElements: 0 }
