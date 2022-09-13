@@ -82,10 +82,10 @@ public class EtterlevelseArkivController {
 
     @Operation(summary = "Get etterlevelsearkiv by behandlingId")
     @ApiResponse(description = "Ok")
-    @GetMapping("/behandling/{behandlinId}")
-    public ResponseEntity<RestResponsePage<EtterlevelseArkivResponse>> getByBehandling(@PathVariable String behandlinId) {
-        log.info("Get etterlevelsearkiv by behandlinId {}", behandlinId);
-        List<EtterlevelseArkiv> etterlevelseArkivList=etterlevelseArkivService.getByBehandling(behandlinId);
+    @GetMapping("/behandling/{behandlingId}")
+    public ResponseEntity<RestResponsePage<EtterlevelseArkivResponse>> getByBehandling(@PathVariable String behandlingId) {
+        log.info("Get etterlevelsearkiv by behandlinId {}", behandlingId);
+        List<EtterlevelseArkiv> etterlevelseArkivList=etterlevelseArkivService.getByBehandling(behandlingId);
         return ResponseEntity.ok(new RestResponsePage<>(etterlevelseArkivList).convert(EtterlevelseArkiv::toResponse));
     }
 

@@ -11,5 +11,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ArchiveFile {
     private byte[] file;
-    private String filaName;
+    private String fileName;
 }
