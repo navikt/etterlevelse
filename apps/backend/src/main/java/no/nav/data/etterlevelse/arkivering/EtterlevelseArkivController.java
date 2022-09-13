@@ -10,6 +10,7 @@ import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.common.utils.ZipUtils;
+import no.nav.data.etterlevelse.arkivering.domain.ArchiveFile;
 import no.nav.data.etterlevelse.arkivering.domain.EtterlevelseArkiv;
 import no.nav.data.etterlevelse.arkivering.domain.EtterlevelseArkivStatus;
 import no.nav.data.etterlevelse.arkivering.dto.EtterlevelseArkivRequest;
@@ -93,9 +94,8 @@ public class EtterlevelseArkivController {
 
         ZipUtils zipUtils = new ZipUtils();
         byte[] testFile = {1,2,3,4};
-        List<byte[]> files = new ArrayList<>();
-        files.add(testFile);
-        byte[] doc = zipUtils.zipOutputStream(files);
+       List<ArchiveFile> archiveFiles = new ArrayList<>();
+        byte[] doc = zipUtils.zipOutputStream(archiveFiles);
 
         response.setContentType("application/zip");
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=archive.zip");
