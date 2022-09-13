@@ -25,7 +25,7 @@ public class ZipUtils {
         try(ZipOutputStream zos = new ZipOutputStream(bos)) {
             for (ArchiveFile fileToAdd : filesToAdd) {
 
-                zipParameters.setFileNameInZip(fileToAdd.getFilaName());
+                zipParameters.setFileNameInZip(fileToAdd.getFileName());
                 zos.putNextEntry(zipParameters);
 
                 try(InputStream inputStream = new ByteArrayInputStream(fileToAdd.getFile())) {

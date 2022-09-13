@@ -69,7 +69,7 @@ public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
             statuses.add(EtterlevelseStatus.FERDIG_DOKUMENTERT.name());
             statuses.add(EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT.name());
             archiveFiles.add(ArchiveFile.builder()
-                    .filaName(filename)
+                    .fileName(filename)
                     .file(etterlevelseToDoc.generateDocFor(UUID.fromString(behandling.getId()), statuses, null, ""))
                     .build());
         }
