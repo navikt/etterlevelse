@@ -73,7 +73,7 @@ export const useArkiveringByBehandlingId = (behandlingsId?: string) => {
         .then((resp) => setData(resp.content[0]))
         .catch((e) => {
           setData(undefined)
-          console.log("couldn't find behandling", e)
+          console.log("couldn't find arkivering with behandling id = ", e)
         })
   }, [behandlingsId])
 
