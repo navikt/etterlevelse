@@ -8,7 +8,7 @@ import { FormikProps } from 'formik'
 import { ettlevColors, theme } from '../util/theme'
 import { Layout2 } from '../components/scaffold/Page'
 import { arkPennIcon, editIcon, ellipse80, warningAlert } from '../components/Images'
-import { Behandling, BehandlingEtterlevData, KravQL, KravStatus, PageResponse } from '../constants'
+import { Behandling, BehandlingEtterlevData, EtterlevelseArkiv, KravQL, KravStatus, PageResponse } from '../constants'
 import { useQuery } from '@apollo/client'
 import { Code, codelist, ListName } from '../services/Codelist'
 import { Button, KIND, SIZE } from 'baseui/button'
@@ -43,6 +43,7 @@ export const BehandlingPage = () => {
   const [relevanteStats, setRelevanteStats] = useState<any[]>([])
   const [irrelevanteStats, setIrrelevanteStats] = useState<any[]>([])
   const [utgaattStats, setUtgaattStats] = useState<any[]>([])
+  const [etterlevelseArkiv, setEtterlevelseArkiv] = useState<EtterlevelseArkiv>()
 
   useEffect(() => {
     setTimeout(() => {
@@ -177,16 +178,27 @@ export const BehandlingPage = () => {
       </Block>
 
       <Block display="flex" alignItems="center">
-      <Block display="flex" alignItems="center" marginRight='12px'>
-        <StyledLink
-            style={{textDecoration: 'none'}}
-            href={`${env.backendBaseUrl}/export/etterlevelse?behandlingId=${behandling.id}`}>
-            <Button
-              kind={KIND.tertiary}
-              size={SIZE.compact}
-            >
-              <Block marginRight='6px'>
-              <FontAwesomeIcon icon={faFileWord} />
+        <Button
+          onClick={() => {
+            setEtterlevelseArkiv({
+              behandlingId: behandling.id,
+              id: " ",
+              status: EtterlevelseArkivStatus,
+              arkiveringDato: string,
+              webSakNummer: string,
+            })
+            console.log(etterlevelseArkiv)
+          }}
+          size={'compact'}
+          kind={'secondary'}
+        >
+          Arkiver
+        </Button>
+        <Block display="flex" alignItems="center" marginRight="12px">
+          <StyledLink style={{ textDecoration: 'none' }} href={`${env.backendBaseUrl}/export/etterlevelse?behandlingId=${behandling.id}`}>
+            <Button kind={KIND.tertiary} size={SIZE.compact}>
+              <Block marginRight="6px">
+                <FontAwesomeIcon icon={faFileWord} />
               </Block>
               <Block>Eksporter</Block>
             </Button>
