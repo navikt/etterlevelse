@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -70,7 +71,7 @@ public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
             statuses.add(EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT.name());
             archiveFiles.add(ArchiveFile.builder()
                     .fileName(filename)
-                    .file(etterlevelseToDoc.generateDocFor(UUID.fromString(behandling.getId()), statuses, null, ""))
+                    .file(etterlevelseToDoc.generateDocFor(UUID.fromString(behandling.getId()), statuses, Collections.emptyList(), ""))
                     .build());
         }
         return zipUtils.zipOutputStream(archiveFiles);
