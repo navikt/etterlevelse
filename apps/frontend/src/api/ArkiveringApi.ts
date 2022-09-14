@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { useEffect, useState } from 'react'
 import {EtterlevelseArkiv, EtterlevelseArkivStatus, PageResponse} from '../constants'
 import {env} from '../util/env'
 
@@ -63,3 +64,18 @@ function etterlevelseArkivToEtterlevelseArkivDto(etterlevelseArkiv: Etterlevelse
   return dto
 }
 
+export const useArkiveringByBehandlingId = (behandlingsId?: string) => {
+  const [data, setData] = useState<EtterlevelseArkiv | undefined>(undefined)
+
+  useEffect(() => {
+    behandlingsId &&
+    getEtterlevelseArkivByBehandlingId(behandlingsId)
+        .then((resp) => setData(resp.content[0]))
+        .catch((e) => {
+          setData(undefined)
+          console.log("couldn't find arkivering with behandling id = ", e)
+        })
+  }, [behandlingsId])
+
+  return [data, setData] as [EtterlevelseArkiv | undefined, (etterlevelseArkiv: EtterlevelseArkiv | undefined) => void]
+}
