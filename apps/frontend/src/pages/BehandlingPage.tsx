@@ -1,31 +1,32 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { Block } from 'baseui/block'
-import { useLocation, useNavigate, useParams } from 'react-router-dom'
-import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
-import { useBehandling } from '../api/BehandlingApi'
-import { HeadingXLarge, LabelSmall, ParagraphMedium, ParagraphXSmall } from 'baseui/typography'
-import { FormikProps } from 'formik'
-import { ettlevColors, theme } from '../util/theme'
-import { Layout2 } from '../components/scaffold/Page'
-import { arkPennIcon, editIcon, ellipse80, warningAlert } from '../components/Images'
-import { Behandling, BehandlingEtterlevData, EtterlevelseArkiv, KravQL, KravStatus, PageResponse } from '../constants'
-import { useQuery } from '@apollo/client'
-import { Code, codelist, ListName } from '../services/Codelist'
-import { Button, KIND, SIZE } from 'baseui/button'
+import React, {useEffect, useRef, useState} from 'react'
+import {Block} from 'baseui/block'
+import {useNavigate, useParams} from 'react-router-dom'
+import {LoadingSkeleton} from '../components/common/LoadingSkeleton'
+import {useBehandling} from '../api/BehandlingApi'
+import {HeadingXLarge, LabelSmall, ParagraphMedium, ParagraphXSmall} from 'baseui/typography'
+import {FormikProps} from 'formik'
+import {ettlevColors, theme} from '../util/theme'
+import {Layout2} from '../components/scaffold/Page'
+import {arkPennIcon, editIcon, ellipse80, warningAlert} from '../components/Images'
+import {Behandling, BehandlingEtterlevData, EtterlevelseArkiv, EtterlevelseArkivStatus, KravQL, KravStatus, PageResponse} from '../constants'
+import {useQuery} from '@apollo/client'
+import {Code, codelist, ListName} from '../services/Codelist'
+import {Button, KIND, SIZE} from 'baseui/button'
 import EditBehandlingModal from '../components/behandling/EditBehandlingModal'
-import { marginZero } from '../components/common/Style'
-import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
-import { BehandlingStats } from '../components/behandling/ViewBehandling'
-import { statsQuery } from '../api/KravApi'
-import { TemaCardBehandling } from '../components/behandlingPage/TemaCardBehandling'
-import { isFerdigUtfylt } from './BehandlingTemaPage'
-import { ampli } from '../services/Amplitude'
-import { getMainHeader, getNewestKravVersjon, responsiveDisplayBehandlingPage } from '../components/behandlingPage/common/utils'
-import { user } from '../services/User'
-import { faFileWord } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { StyledLink } from 'baseui/link'
-import { env } from '../util/env'
+import {marginZero} from '../components/common/Style'
+import {breadcrumbPaths} from '../components/common/CustomizedBreadcrumbs'
+import {BehandlingStats} from '../components/behandling/ViewBehandling'
+import {statsQuery} from '../api/KravApi'
+import {TemaCardBehandling} from '../components/behandlingPage/TemaCardBehandling'
+import {isFerdigUtfylt} from './BehandlingTemaPage'
+import {ampli} from '../services/Amplitude'
+import {getMainHeader, getNewestKravVersjon, responsiveDisplayBehandlingPage} from '../components/behandlingPage/common/utils'
+import {user} from '../services/User'
+import {faFileWord} from '@fortawesome/free-solid-svg-icons'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {StyledLink} from 'baseui/link'
+import {env} from '../util/env'
+import {createEtterlevelseArkiv} from "../api/ArkiveringApi";
 
 export const BehandlingPage = () => {
   const params = useParams<{ id?: string }>()
@@ -43,7 +44,7 @@ export const BehandlingPage = () => {
   const [relevanteStats, setRelevanteStats] = useState<any[]>([])
   const [irrelevanteStats, setIrrelevanteStats] = useState<any[]>([])
   const [utgaattStats, setUtgaattStats] = useState<any[]>([])
-  const [etterlevelseArkiv, setEtterlevelseArkiv] = useState<EtterlevelseArkiv>()
+  const [etterlevelseArkiv, setEtterlevelseArkiv] = useState<any>()
 
   useEffect(() => {
     setTimeout(() => {
@@ -180,14 +181,22 @@ export const BehandlingPage = () => {
       <Block display="flex" alignItems="center">
         <Button
           onClick={() => {
-            setEtterlevelseArkiv({
+
+            // setEtterlevelseArkiv({
+            //   behandlingId: behandling.id,
+            //   status: EtterlevelseArkivStatus.TIL_ARKIVERING,
+            // })
+
+            const temp = {
               behandlingId: behandling.id,
-              id: " ",
-              status: EtterlevelseArkivStatus,
-              arkiveringDato: string,
-              webSakNummer: string,
-            })
-            console.log(etterlevelseArkiv)
+              status: EtterlevelseArkivStatus.TIL_ARKIVERING,
+            }
+
+            console.log(temp)
+            ;(async()=>
+            {
+              await createEtterlevelseArkiv(temp as EtterlevelseArkiv)
+            })()
           }}
           size={'compact'}
           kind={'secondary'}
