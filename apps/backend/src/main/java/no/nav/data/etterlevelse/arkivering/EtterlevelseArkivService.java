@@ -1,6 +1,7 @@
 package no.nav.data.etterlevelse.arkivering;
 
 
+import lombok.SneakyThrows;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.storage.domain.GenericStorage;
 import no.nav.data.common.utils.ZipUtils;
@@ -14,9 +15,18 @@ import no.nav.data.etterlevelse.behandling.dto.Behandling;
 import no.nav.data.etterlevelse.common.domain.DomainService;
 import no.nav.data.etterlevelse.etterlevelse.domain.EtterlevelseStatus;
 import no.nav.data.etterlevelse.export.EtterlevelseToDoc;
+import org.docx4j.org.apache.xml.security.utils.XMLUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -65,16 +75,43 @@ public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
 
         for (EtterlevelseArkiv etterlevelseArkiv : etterlevelseArkivList) {
             Behandling behandling = behandlingService.getBehandling(etterlevelseArkiv.getBehandlingId());
-            filename = formatter.format(date) + "_Etterlevelse_B" + behandling.getNummer() + ".docx";
             ArrayList<String> statuses = new ArrayList<>();
             statuses.add(EtterlevelseStatus.FERDIG_DOKUMENTERT.name());
             statuses.add(EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT.name());
             archiveFiles.add(ArchiveFile.builder()
-                    .fileName(filename)
+                    .fileName(formatter.format(date) + "_Etterlevelse_B" + behandling.getNummer() + ".docx")
                     .file(etterlevelseToDoc.generateDocFor(UUID.fromString(behandling.getId()), statuses, Collections.emptyList(), ""))
+                    .build());
+            archiveFiles.add(ArchiveFile.builder()
+                    .fileName(formatter.format(date) + "_Etterlevelse_B" + behandling.getNummer() + ".xml")
+                    .file(createXml())
                     .build());
         }
         return zipUtils.zipOutputStream(archiveFiles);
+    }
+
+    @SneakyThrows
+    public byte[] createXml() {
+
+        DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+
+        Document doc = docBuilder.newDocument();
+        Element rootElement = doc.createElement("company");
+        doc.appendChild(rootElement);
+
+        doc.createElement("staff");
+        rootElement.appendChild(doc.createElement("staff"));
+
+        //...create XML elements, and others...
+        // write dom document to a file
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        Transformer transformer = transformerFactory.newTransformer();
+        DOMSource domSource = new DOMSource(doc);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        XMLUtils.outputDOM(doc, baos, true);
+        return baos.toByteArray();
+
     }
 
     public List<EtterlevelseArkiv> setStatusToArkivert() {
