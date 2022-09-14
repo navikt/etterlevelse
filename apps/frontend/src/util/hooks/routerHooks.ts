@@ -1,6 +1,8 @@
-import type { Blocker, History, Transition } from 'history'
-import { ContextType, useCallback, useContext, useEffect } from 'react'
-import { Navigator as BaseNavigator, UNSAFE_NavigationContext as NavigationContext } from 'react-router-dom'
+//THIS SHOULD BE REMOVED BEFORE MERGING TO MASTER
+// @ts-ignore
+import type {Blocker, History, Transition} from 'history'
+import {ContextType, useCallback, useContext, useEffect} from 'react'
+import {Navigator as BaseNavigator, UNSAFE_NavigationContext as NavigationContext} from 'react-router-dom'
 
 // THIS IS A TEMPORARY SOLUTION AND WILL BE REMOVED ONCE REACT-ROUTER UPDATES THEIR PACKAGE TO INCLUDE USEBLOCKER AND USEPROMPT
 
