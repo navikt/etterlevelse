@@ -15,7 +15,6 @@ import no.nav.data.etterlevelse.behandling.dto.Behandling;
 import no.nav.data.etterlevelse.common.domain.DomainService;
 import no.nav.data.etterlevelse.etterlevelse.domain.EtterlevelseStatus;
 import no.nav.data.etterlevelse.export.EtterlevelseToDoc;
-import org.docx4j.org.apache.xml.security.utils.XMLUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
@@ -26,6 +25,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -93,25 +93,27 @@ public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
     @SneakyThrows
     public byte[] createXml() {
 
-        DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
 
-        Document doc = docBuilder.newDocument();
-        Element rootElement = doc.createElement("company");
-        doc.appendChild(rootElement);
+        Document document = documentBuilder.newDocument();
+        Element rootElement = document.createElement("company");
+        document.appendChild(rootElement);
 
-        doc.createElement("staff");
-        rootElement.appendChild(doc.createElement("staff"));
+        document.createElement("staff");
+        rootElement.appendChild(document.createElement("staff"));
 
         //...create XML elements, and others...
         // write dom document to a file
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
-        DOMSource domSource = new DOMSource(doc);
+        DOMSource domSource = new DOMSource(document);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        XMLUtils.outputDOM(doc, baos, true);
+        StreamResult result = new StreamResult(baos);
+        transformer.transform(domSource,result);
+//        XMLUtils.outputDOM(document, baos, true);
+//        return baos.toByteArray();
         return baos.toByteArray();
-
     }
 
     public List<EtterlevelseArkiv> setStatusToArkivert() {
