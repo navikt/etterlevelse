@@ -81,7 +81,7 @@ public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
                     .build());
             archiveFiles.add(ArchiveFile.builder()
                     .fileName(formatter.format(date) + "_Etterlevelse_B" + behandling.getNummer() + ".xml")
-                    .file(createXml(date,formatter.format(date) + "_Etterlevelse_B" + behandling.getNummer() + ".docx", behandling))
+                    .file(createXml(date,formatter.format(date) + "_Etterlevelse_B" + behandling.getNummer() + ".docx", behandling, etterlevelseArkiv))
                     .build());
         }
         return zipUtils.zipOutputStream(archiveFiles);
@@ -94,7 +94,9 @@ public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
     }
 
     @SneakyThrows
-    public byte[] createXml(Date date, String wordDocFileName, Behandling behandling) {
+    public byte[] createXml(Date date, String wordDocFileName, Behandling behandling, EtterlevelseArkiv etterlevelseArkiv) {
+
+        String creatorId = etterlevelseArkiv.getChangeStamp().getCreatedBy().split(" ")[0];
 
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
@@ -131,7 +133,7 @@ public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
 
         createElement("JP.STATUS", "J", journalpost, document);
 
-        createElement("JP.SB", "T162195", journalpost, document);
+        createElement("JP.SB", creatorId, journalpost, document);
 
         createElement("JP.ENHET", "8353005", journalpost, document);
 
