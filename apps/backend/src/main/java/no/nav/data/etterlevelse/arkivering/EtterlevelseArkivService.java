@@ -85,14 +85,14 @@ public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
                     .build());
             archiveFiles.add(ArchiveFile.builder()
                     .fileName(formatter.format(date) + "_Etterlevelse_B" + behandling.getNummer() + ".xml")
-                    .file(createXml())
+                    .file(createXml(date))
                     .build());
         }
         return zipUtils.zipOutputStream(archiveFiles);
     }
 
     @SneakyThrows
-    public byte[] createXml() {
+    public byte[] createXml(Date date) {
 
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
@@ -108,6 +108,60 @@ public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
         Element sasakid = document.createElement("SA.SAKID");
         sasakid.appendChild(document.createTextNode("21/13285"));
         noarksak.appendChild(sasakid);
+
+        Element journalpostTab = document.createElement("JORNALPOST.TAB");
+        noarksak.appendChild(journalpostTab);
+
+        Element journalpost = document.createElement("JOURNALPOST");
+        journalpostTab.appendChild(journalpost);
+
+        Element jpInnhold = document.createElement("JP.INNHOLD");
+         jpInnhold.appendChild(document.createTextNode("Etterlevelse for B455 Etterlevelse: Støtte til etterlevelse og forvaltning av etterlevelseskrav"));
+         journalpost.appendChild(jpInnhold);
+
+        Element jpU1 = document.createElement("JP.U1");
+        jpU1.appendChild(document.createTextNode("2"));
+        journalpost.appendChild(jpU1);
+
+        Element jpParagraphId = document.createElement("JP.PARAGRAFID");
+        jpParagraphId.appendChild(document.createTextNode("40"));
+        journalpost.appendChild(jpParagraphId);
+
+        SimpleDateFormat dateTime = new SimpleDateFormat("yyyymmdd");
+        Element jpDokdato = document.createElement("JP.DOKDATO");
+        jpDokdato.appendChild(document.createTextNode(dateTime.format(date)));
+        journalpost.appendChild(jpDokdato);
+
+        Element jpDoktype = document.createElement("JP.DOKDATO");
+        jpDoktype.appendChild(document.createTextNode("X"));
+        journalpost.appendChild(jpDoktype);
+
+        Element jpStatus = document.createElement("JP.STATUS");
+        jpStatus.appendChild(document.createTextNode("J"));
+        journalpost.appendChild(jpStatus);
+
+        Element jpSb = document.createElement("JP.SB");
+        jpSb.appendChild(document.createTextNode("T162195"));
+        journalpost.appendChild(jpSb);
+
+        Element jbEnhet = document.createElement("JP.ENHET");
+        jbEnhet.appendChild(document.createTextNode("8353005"));
+        journalpost.appendChild(jbEnhet);
+
+        Element dokVersjonTab = document.createElement("DOKVERSJON.TAB");
+        journalpost.appendChild(dokVersjonTab);
+
+        Element dokVersjon = document.createElement("DOKVERSJON");
+        dokVersjonTab.appendChild(dokVersjon);
+
+        Element veDokformat = document.createElement("VE.DOKFORMAT");
+        veDokformat.appendChild(document.createTextNode("DOCX"));
+        dokVersjon.appendChild(veDokformat);
+
+        Element veFilref = document.createElement("VE.FILREF");
+        veFilref.appendChild(document.createTextNode("2022-07-08_12-34-56_Etterlevelse_B455.docx"));
+        dokVersjon.appendChild(veFilref);
+
         //...create XML elements, and others...
         // write dom document to a file
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
@@ -116,7 +170,6 @@ public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         StreamResult result = new StreamResult(baos);
         transformer.setOutputProperty(OutputKeys.INDENT,"yes");
-        transformer.setOutputProperty(OutputKeys.ENCODING,"ISO-8859-1");
         transformer.transform(domSource,result);
 //        XMLUtils.outputDOM(document, baos, true);
 //        return baos.toByteArray();
