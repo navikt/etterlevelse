@@ -13,20 +13,14 @@ import no.nav.data.etterlevelse.arkivering.domain.EtterlevelseArkiv;
 import no.nav.data.etterlevelse.arkivering.domain.EtterlevelseArkivStatus;
 import no.nav.data.etterlevelse.arkivering.dto.EtterlevelseArkivRequest;
 import no.nav.data.etterlevelse.arkivering.dto.EtterlevelseArkivResponse;
+import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
+import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StreamUtils;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -42,6 +36,7 @@ import java.util.UUID;
 public class EtterlevelseArkivController {
 
     private final EtterlevelseArkivService etterlevelseArkivService;
+    private final EtterlevelseService etterlevelseService;
 
     @Operation(summary = "Get all etterlevelsearkiv")
     @ApiResponse(description = "Ok")
@@ -124,8 +119,16 @@ public class EtterlevelseArkivController {
     @PostMapping
     public ResponseEntity<EtterlevelseArkivResponse> createEtterlevelseArkiv(@RequestBody EtterlevelseArkivRequest request) {
         log.info("Create etterlevelseArkiv");
-        var etterlevelseArkiv = etterlevelseArkivService.save(request);
-        return new ResponseEntity<>(etterlevelseArkiv.toResponse(), HttpStatus.CREATED);
+
+        List<Etterlevelse> etterlevelseList = etterlevelseService.getByBehandling(request.getBehandlingId());
+
+        if(etterlevelseList.isEmpty()) {
+            log.info("Ingen ferdig dokumentasjon på behandling med id: " + request.getBehandlingId());
+            throw  new ValidationException("Kan ikke arkivere en behandling som ikke har ferdig dokumentert innhold");
+        } else {
+            var etterlevelseArkiv = etterlevelseArkivService.save(request);
+            return new ResponseEntity<>(etterlevelseArkiv.toResponse(), HttpStatus.CREATED);
+        }
     }
 
     @Operation(summary = "Update etterlevelseArkiv")
@@ -138,8 +141,15 @@ public class EtterlevelseArkivController {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
         }
 
-        var etterlevelseArkiv = etterlevelseArkivService.save(request);
-        return ResponseEntity.ok(etterlevelseArkiv.toResponse());
+        List<Etterlevelse> etterlevelseList = etterlevelseService.getByBehandling(request.getBehandlingId());
+
+        if(etterlevelseList.isEmpty()) {
+            log.info("Ingen ferdig dokumentasjon på behandling med id: " + request.getBehandlingId());
+            throw  new ValidationException("Kan ikke arkivere en behandling som ikke har ferdig dokumentert innhold");
+        } else {
+            var etterlevelseArkiv = etterlevelseArkivService.save(request);
+            return ResponseEntity.ok(etterlevelseArkiv.toResponse());
+        }
     }
 
     @Operation(summary = "Delete etterlevelseArkiv")
