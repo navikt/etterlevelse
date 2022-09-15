@@ -69,7 +69,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 "/audit/**",
                 "/settings/**",
                 "/codelist/**",
-                "/export/codelist/**"
+                "/export/codelist/**",
+                "/etterlevelsearkiv/status/arkivert"
         );
 
         http.authorizeRequests().antMatchers("/krav/**").hasAnyRole(AppRole.KRAVEIER.name(), AppRole.ADMIN.name());
