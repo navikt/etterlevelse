@@ -99,10 +99,11 @@ public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
 
         Document document = documentBuilder.newDocument();
         Element rootElement = document.createElement("NOARK.H");
+        rootElement.setAttribute("xmlns:wc","http://noark4.webcruiter.no/xml/");
         document.appendChild(rootElement);
 
-        document.createElement("staff");
-        rootElement.appendChild(document.createElement("staff"));
+        Element noarksak = document.createElement("NOARKSAK");
+        rootElement.appendChild(noarksak);
 
         //...create XML elements, and others...
         // write dom document to a file
