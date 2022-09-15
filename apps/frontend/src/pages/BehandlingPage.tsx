@@ -26,12 +26,13 @@ import {faFileWord} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {StyledLink} from 'baseui/link'
 import {env} from '../util/env'
-import {createEtterlevelseArkiv} from "../api/ArkiveringApi";
+import {createEtterlevelseArkiv, updateEtterlevelseArkiv, useArkiveringByBehandlingId} from "../api/ArkiveringApi";
 
 export const BehandlingPage = () => {
   const params = useParams<{ id?: string }>()
   const options = codelist.getParsedOptions(ListName.RELEVANS)
   const [behandling, setBehandling] = useBehandling(params.id)
+  const [etterlevelseArkiv, setEtterlevelseArkiv] = useArkiveringByBehandlingId(params.id)
   const formRef = useRef<FormikProps<any>>()
   const navigate = useNavigate()
 
@@ -44,7 +45,6 @@ export const BehandlingPage = () => {
   const [relevanteStats, setRelevanteStats] = useState<any[]>([])
   const [irrelevanteStats, setIrrelevanteStats] = useState<any[]>([])
   const [utgaattStats, setUtgaattStats] = useState<any[]>([])
-  const [etterlevelseArkiv, setEtterlevelseArkiv] = useState<any>()
 
   useEffect(() => {
     setTimeout(() => {
@@ -181,21 +181,18 @@ export const BehandlingPage = () => {
       <Block display="flex" alignItems="center">
         <Button
           onClick={() => {
-
-            // setEtterlevelseArkiv({
-            //   behandlingId: behandling.id,
-            //   status: EtterlevelseArkivStatus.TIL_ARKIVERING,
-            // })
-
             const temp = {
               behandlingId: behandling.id,
               status: EtterlevelseArkivStatus.TIL_ARKIVERING,
             }
 
-            console.log(temp)
             ;(async()=>
             {
-              await createEtterlevelseArkiv(temp as EtterlevelseArkiv)
+              if(etterlevelseArkiv && etterlevelseArkiv.id) {
+                await updateEtterlevelseArkiv({...etterlevelseArkiv, status: EtterlevelseArkivStatus.TIL_ARKIVERING}).then(setEtterlevelseArkiv)
+              } else {
+                await createEtterlevelseArkiv(temp as EtterlevelseArkiv).then(setEtterlevelseArkiv)
+              }
             })()
           }}
           size={'compact'}
@@ -203,6 +200,7 @@ export const BehandlingPage = () => {
         >
           Arkiver
         </Button>
+
         <Block display="flex" alignItems="center" marginRight="12px">
           <StyledLink style={{ textDecoration: 'none' }} href={`${env.backendBaseUrl}/export/etterlevelse?behandlingId=${behandling.id}`}>
             <Button kind={KIND.tertiary} size={SIZE.compact}>
