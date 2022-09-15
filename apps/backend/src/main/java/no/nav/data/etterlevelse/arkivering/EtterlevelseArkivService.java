@@ -164,7 +164,6 @@ public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
         transformer.transform(domSource,result);
 //        XMLUtils.outputDOM(document, baos, true);
 //        return baos.toByteArray();
-        baos.flush();
         return baos.toByteArray();
     }
 
