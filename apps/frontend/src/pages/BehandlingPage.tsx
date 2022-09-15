@@ -181,7 +181,7 @@ export const BehandlingPage = () => {
       <Block display="flex" alignItems="center">
         <Button
           onClick={() => {
-            const temp = {
+            const newEtterlevelseArkivering = {
               behandlingId: behandling.id,
               status: EtterlevelseArkivStatus.TIL_ARKIVERING,
             }
@@ -191,12 +191,13 @@ export const BehandlingPage = () => {
               if(etterlevelseArkiv && etterlevelseArkiv.id) {
                 await updateEtterlevelseArkiv({...etterlevelseArkiv, status: EtterlevelseArkivStatus.TIL_ARKIVERING}).then(setEtterlevelseArkiv)
               } else {
-                await createEtterlevelseArkiv(temp as EtterlevelseArkiv).then(setEtterlevelseArkiv)
+                await createEtterlevelseArkiv(newEtterlevelseArkivering as EtterlevelseArkiv).then(setEtterlevelseArkiv)
               }
             })()
           }}
           size={'compact'}
           kind={'secondary'}
+          disabled={etterlevelseArkiv && etterlevelseArkiv.status === EtterlevelseArkivStatus.TIL_ARKIVERING}
         >
           Arkiver
         </Button>
