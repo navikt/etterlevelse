@@ -22,6 +22,7 @@ import org.w3c.dom.Element;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -97,7 +98,7 @@ public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
         DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
 
         Document document = documentBuilder.newDocument();
-        Element rootElement = document.createElement("company");
+        Element rootElement = document.createElement("NOARK.H");
         document.appendChild(rootElement);
 
         document.createElement("staff");
@@ -110,6 +111,8 @@ public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
         DOMSource domSource = new DOMSource(document);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         StreamResult result = new StreamResult(baos);
+        transformer.setOutputProperty(OutputKeys.INDENT,"yes");
+        transformer.setOutputProperty(OutputKeys.ENCODING,"ISO-8859-1");
         transformer.transform(domSource,result);
 //        XMLUtils.outputDOM(document, baos, true);
 //        return baos.toByteArray();
