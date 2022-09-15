@@ -81,7 +81,7 @@ public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
                     .build());
             archiveFiles.add(ArchiveFile.builder()
                     .fileName(formatter.format(date) + "_Etterlevelse_B" + behandling.getNummer() + ".xml")
-                    .file(createXml(date,formatter.format(date) + "_Etterlevelse_B" + behandling.getNummer() + ".docx"))
+                    .file(createXml(date,formatter.format(date) + "_Etterlevelse_B" + behandling.getNummer() + ".docx", behandling))
                     .build());
         }
         return zipUtils.zipOutputStream(archiveFiles);
@@ -94,7 +94,7 @@ public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
     }
 
     @SneakyThrows
-    public byte[] createXml(Date date, String wordDocFileName) {
+    public byte[] createXml(Date date, String wordDocFileName, Behandling behandling) {
 
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
@@ -116,34 +116,26 @@ public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
         Element journalpost = document.createElement("JOURNALPOST");
         journalpostTab.appendChild(journalpost);
 
-        createElement("JP.INNHOLD", "Etterlevelse for B455 Etterlevelse: Støtte til etterlevelse og forvaltning av etterlevelseskrav", journalpost, document);
+        createElement("JP.INNHOLD",
+                "Etterlevelse for B" + behandling.getNummer() + " " + behandling.getOverordnetFormaal().getShortName() + ": " +  behandling.getNavn(),
+                journalpost, document);
 
         createElement("JP.U1", "2", journalpost, document);
 
-        Element jpParagraphId = document.createElement("JP.PARAGRAFID");
-        jpParagraphId.appendChild(document.createTextNode("40"));
-        journalpost.appendChild(jpParagraphId);
+        createElement("JP.PARAGRAFID", "40", journalpost, document);
 
-        SimpleDateFormat dateTime = new SimpleDateFormat("yyyymmdd");
-        Element jpDokdato = document.createElement("JP.DOKDATO");
-        jpDokdato.appendChild(document.createTextNode(dateTime.format(date)));
-        journalpost.appendChild(jpDokdato);
+        SimpleDateFormat dateTime = new SimpleDateFormat("yyyyMMdd");
+        createElement("JP.DOKDATO", dateTime.format(date), journalpost, document);
 
-        Element jpDoktype = document.createElement("JP.DOKDATO");
-        jpDoktype.appendChild(document.createTextNode("X"));
-        journalpost.appendChild(jpDoktype);
+        createElement("JP.DOKTYPE", "X", journalpost, document);
 
-        Element jpStatus = document.createElement("JP.STATUS");
-        jpStatus.appendChild(document.createTextNode("J"));
-        journalpost.appendChild(jpStatus);
+        createElement("JP.STATUS", "J", journalpost, document);
 
-        Element jpSb = document.createElement("JP.SB");
-        jpSb.appendChild(document.createTextNode("T162195"));
-        journalpost.appendChild(jpSb);
+        createElement("JP.SB", "T162195", journalpost, document);
 
-        Element jbEnhet = document.createElement("JP.ENHET");
-        jbEnhet.appendChild(document.createTextNode("8353005"));
-        journalpost.appendChild(jbEnhet);
+        createElement("JP.ENHET", "8353005", journalpost, document);
+
+        createElement("NAVN", "Tjenesteplattform", journalpost, document);
 
         Element dokVersjonTab = document.createElement("DOKVERSJON.TAB");
         journalpost.appendChild(dokVersjonTab);
@@ -151,13 +143,9 @@ public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
         Element dokVersjon = document.createElement("DOKVERSJON");
         dokVersjonTab.appendChild(dokVersjon);
 
-        Element veDokformat = document.createElement("VE.DOKFORMAT");
-        veDokformat.appendChild(document.createTextNode("DOCX"));
-        dokVersjon.appendChild(veDokformat);
+        createElement("VE.DOKFORMAT", "DOCX", dokVersjon, document);
 
-        Element veFilref = document.createElement("VE.FILREF");
-        veFilref.appendChild(document.createTextNode("2022-07-08_12-34-56_Etterlevelse_B455.docx"));
-        dokVersjon.appendChild(veFilref);
+        createElement("VE.FILREF", wordDocFileName, dokVersjon, document);
 
         //...create XML elements, and others...
         // write dom document to a file
