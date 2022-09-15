@@ -105,6 +105,9 @@ public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
         Element noarksak = document.createElement("NOARKSAK");
         rootElement.appendChild(noarksak);
 
+        Element sasakid = document.createElement("SA.SAKID");
+        sasakid.appendChild(document.createTextNode("21/13285"));
+        noarksak.appendChild(sasakid);
         //...create XML elements, and others...
         // write dom document to a file
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
