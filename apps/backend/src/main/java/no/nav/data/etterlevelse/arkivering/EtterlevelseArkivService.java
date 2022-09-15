@@ -30,11 +30,7 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
@@ -85,19 +81,26 @@ public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
                     .build());
             archiveFiles.add(ArchiveFile.builder()
                     .fileName(formatter.format(date) + "_Etterlevelse_B" + behandling.getNummer() + ".xml")
-                    .file(createXml(date))
+                    .file(createXml(date,formatter.format(date) + "_Etterlevelse_B" + behandling.getNummer() + ".docx"))
                     .build());
         }
         return zipUtils.zipOutputStream(archiveFiles);
     }
 
+    private void createElement(String tagName, String data, Element parent, Document document) {
+        Element newElement = document.createElement(tagName);
+        newElement.appendChild(document.createTextNode(data));
+        parent.appendChild(newElement);
+    }
+
     @SneakyThrows
-    public byte[] createXml(Date date) {
+    public byte[] createXml(Date date, String wordDocFileName) {
 
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
 
         Document document = documentBuilder.newDocument();
+
         Element rootElement = document.createElement("NOARK.H");
         rootElement.setAttribute("xmlns:wc","http://noark4.webcruiter.no/xml/");
         document.appendChild(rootElement);
@@ -105,9 +108,7 @@ public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
         Element noarksak = document.createElement("NOARKSAK");
         rootElement.appendChild(noarksak);
 
-        Element sasakid = document.createElement("SA.SAKID");
-        sasakid.appendChild(document.createTextNode("21/13285"));
-        noarksak.appendChild(sasakid);
+        createElement("SA.SAKID", "21/13285", noarksak, document);
 
         Element journalpostTab = document.createElement("JORNALPOST.TAB");
         noarksak.appendChild(journalpostTab);
@@ -115,13 +116,9 @@ public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
         Element journalpost = document.createElement("JOURNALPOST");
         journalpostTab.appendChild(journalpost);
 
-        Element jpInnhold = document.createElement("JP.INNHOLD");
-         jpInnhold.appendChild(document.createTextNode("Etterlevelse for B455 Etterlevelse: Støtte til etterlevelse og forvaltning av etterlevelseskrav"));
-         journalpost.appendChild(jpInnhold);
+        createElement("JP.INNHOLD", "Etterlevelse for B455 Etterlevelse: Støtte til etterlevelse og forvaltning av etterlevelseskrav", journalpost, document);
 
-        Element jpU1 = document.createElement("JP.U1");
-        jpU1.appendChild(document.createTextNode("2"));
-        journalpost.appendChild(jpU1);
+        createElement("JP.U1", "2", journalpost, document);
 
         Element jpParagraphId = document.createElement("JP.PARAGRAFID");
         jpParagraphId.appendChild(document.createTextNode("40"));
