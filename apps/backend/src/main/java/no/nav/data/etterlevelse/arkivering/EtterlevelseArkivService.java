@@ -30,7 +30,11 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
 @Service
 public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
@@ -160,6 +164,7 @@ public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
         transformer.transform(domSource,result);
 //        XMLUtils.outputDOM(document, baos, true);
 //        return baos.toByteArray();
+        baos.flush();
         return baos.toByteArray();
     }
 
