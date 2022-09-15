@@ -122,7 +122,7 @@ public class EtterlevelseArkivController {
 
         List<Etterlevelse> etterlevelseList = etterlevelseService.getByBehandling(request.getBehandlingId());
 
-        if(etterlevelseList == null || etterlevelseList.isEmpty()) {
+        if(etterlevelseList.isEmpty()) {
             log.info("Ingen ferdig dokumentasjon på behandling med id: " + request.getBehandlingId());
             throw  new ValidationException("Kan ikke arkivere en behandling som ikke har ferdig dokumentert innhold");
         } else {
@@ -143,7 +143,7 @@ public class EtterlevelseArkivController {
 
         List<Etterlevelse> etterlevelseList = etterlevelseService.getByBehandling(request.getBehandlingId());
 
-        if(etterlevelseList == null || etterlevelseList.isEmpty()) {
+        if(etterlevelseList.isEmpty()) {
             log.info("Ingen ferdig dokumentasjon på behandling med id: " + request.getBehandlingId());
             throw  new ValidationException("Kan ikke arkivere en behandling som ikke har ferdig dokumentert innhold");
         } else {

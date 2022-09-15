@@ -6,6 +6,9 @@ import no.nav.data.etterlevelse.arkivering.domain.EtterlevelseArkiv;
 import no.nav.data.etterlevelse.arkivering.domain.EtterlevelseArkivStatus;
 import no.nav.data.etterlevelse.arkivering.dto.EtterlevelseArkivRequest;
 import no.nav.data.etterlevelse.arkivering.dto.EtterlevelseArkivResponse;
+import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
+import no.nav.data.etterlevelse.krav.domain.Krav;
+import no.nav.data.etterlevelse.krav.domain.KravStatus;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -157,6 +160,8 @@ class EtterlevelseArkivControllerTest extends IntegrationTestBase {
 
     @Test
     void createEtterlevelseArkiv() {
+        var krav = storageService.save(Krav.builder().kravNummer(50).kravVersjon(1).status(KravStatus.AKTIV).build());
+        storageService.save(Etterlevelse.builder().behandlingId("test_behandling").kravNummer(krav.getKravNummer()).kravVersjon(krav.getKravVersjon()).build());
         var req = EtterlevelseArkivRequest.builder()
                 .behandlingId("test_behandling")
                 .status(EtterlevelseArkivStatus.TIL_ARKIVERING)
@@ -184,6 +189,8 @@ class EtterlevelseArkivControllerTest extends IntegrationTestBase {
 
     @Test
     void updateEtterlevelseArkiv() {
+        var krav = storageService.save(Krav.builder().kravNummer(50).kravVersjon(1).status(KravStatus.AKTIV).build());
+        storageService.save(Etterlevelse.builder().behandlingId("test_Behandling").kravNummer(krav.getKravNummer()).kravVersjon(krav.getKravVersjon()).build());
         var etterlevelseArkiv = storageService.save(EtterlevelseArkiv.builder().status(EtterlevelseArkivStatus.TIL_ARKIVERING).webSakNummer("test/websak").behandlingId("test_Behandling").build());
         var req = EtterlevelseArkivRequest.builder()
                 .id(etterlevelseArkiv.getId().toString())
