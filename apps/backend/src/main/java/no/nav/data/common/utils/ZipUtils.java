@@ -1,6 +1,5 @@
 package no.nav.data.common.utils;
 
-import lombok.extern.slf4j.Slf4j;
 import net.lingala.zip4j.io.outputstream.ZipOutputStream;
 import net.lingala.zip4j.model.ZipParameters;
 import no.nav.data.etterlevelse.arkivering.domain.ArchiveFile;
@@ -11,7 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
-@Slf4j
+
 public class ZipUtils {
 
     public byte[] zipOutputStream(List<ArchiveFile> filesToAdd) throws IOException {
@@ -19,8 +18,8 @@ public class ZipUtils {
         ZipParameters zipParameters = new ZipParameters();
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
 
-        byte[] buff = new byte[4096];
-        int readLen;
+        byte[] bufferReader = new byte[4096];
+        int readLength;
 
         try(ZipOutputStream zos = new ZipOutputStream(bos)) {
             for (ArchiveFile fileToAdd : filesToAdd) {
@@ -29,8 +28,8 @@ public class ZipUtils {
                 zos.putNextEntry(zipParameters);
 
                 try(InputStream inputStream = new ByteArrayInputStream(fileToAdd.getFile())) {
-                    while ((readLen = inputStream.read(buff)) != -1) {
-                        zos.write(buff, 0, readLen);
+                    while ((readLength = inputStream.read(bufferReader)) != -1) {
+                        zos.write(bufferReader, 0, readLength);
                     }
                 }
                 zos.closeEntry();

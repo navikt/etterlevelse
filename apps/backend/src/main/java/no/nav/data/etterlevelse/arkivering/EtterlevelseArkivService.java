@@ -113,7 +113,7 @@ public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
         Element noarksak = document.createElement("NOARKSAK");
         rootElement.appendChild(noarksak);
 
-        createElement("ETTERLEVELSEID", etterlevelseArkiv.getId().toString(), noarksak, document);
+        createElement("SA.ETTERLEVELSEID", "B" + behandling.getNummer(), noarksak, document);
 
         Element journalpostTab = document.createElement("JORNALPOST.TAB");
         noarksak.appendChild(journalpostTab);
@@ -133,8 +133,6 @@ public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
         createElement("JP.STATUS", "J", journalpost, document);
 
         createElement("JP.SB", creatorId, journalpost, document);
-
-        createElement("JP.ENHET", "8353005", journalpost, document);
 
         Element dokVersjonTab = document.createElement("DOKVERSJON.TAB");
         journalpost.appendChild(dokVersjonTab);
