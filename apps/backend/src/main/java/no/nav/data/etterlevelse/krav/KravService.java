@@ -118,10 +118,14 @@ public class KravService extends DomainService<Krav> {
             kravPrioriteringRepo.transferPriority(krav.getKravVersjon(), krav.getKravNummer());
         }
 
-        List<AuditVersion> rawKravAuditList = auditRepo.findByTableIdOrderByTimeDesc(krav.getId().toString());
-        List<AuditResponse> kravAudits = new AuditLogResponse(krav.getId().toString(), convert(rawKravAuditList, AuditVersion::toResponse)).getAudits();
+        if(krav.getId() != null) {
+            var rawKravAuditList = auditRepo.findByTableIdOrderByTimeDesc(krav.getId().toString());
+            List<AuditResponse> kravAudits = new AuditLogResponse(krav.getId().toString(), convert(rawKravAuditList, AuditVersion::toResponse)).getAudits();
 
-        if(krav.getStatus()==KravStatus.AKTIV && (kravAudits.isEmpty() || !kravAudits.get(0).getData().get("data").get("status").toString().equals(KravStatus.AKTIV.name()))) {
+            if(krav.getStatus()==KravStatus.AKTIV && !kravAudits.get(0).getData().get("data").get("status").toString().equals(KravStatus.AKTIV.name())) {
+                krav.setAktivertDato(LocalDateTime.now());
+            }
+        } else if (krav.getId() == null && krav.getStatus()==KravStatus.AKTIV  ) {
             krav.setAktivertDato(LocalDateTime.now());
         }
 
