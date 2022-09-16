@@ -85,7 +85,7 @@ public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
                     .build());
             archiveFiles.add(ArchiveFile.builder()
                     .fileName(formatter.format(date) + "_Etterlevelse_B" + behandling.getNummer() + ".xml")
-                    .file(createXml(date,formatter.format(date) + "_Etterlevelse_B" + behandling.getNummer() + ".docx", behandling, etterlevelseArkiv))
+                    .file(createXml(date, formatter.format(date) + "_Etterlevelse_B" + behandling.getNummer() + ".docx", behandling, etterlevelseArkiv))
                     .build());
         }
         return zipUtils.zipOutputStream(archiveFiles);
@@ -108,13 +108,12 @@ public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
         Document document = documentBuilder.newDocument();
 
         Element rootElement = document.createElement("NOARK.H");
-        rootElement.setAttribute("xmlns:wc","http://noark4.webcruiter.no/xml/");
         document.appendChild(rootElement);
 
         Element noarksak = document.createElement("NOARKSAK");
         rootElement.appendChild(noarksak);
 
-        createElement("SA.SAKID", "21/13285", noarksak, document);
+        createElement("ETTERLEVELSEID", etterlevelseArkiv.getId().toString(), noarksak, document);
 
         Element journalpostTab = document.createElement("JORNALPOST.TAB");
         noarksak.appendChild(journalpostTab);
@@ -123,12 +122,8 @@ public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
         journalpostTab.appendChild(journalpost);
 
         createElement("JP.INNHOLD",
-                "Etterlevelse for B" + behandling.getNummer() + " " + behandling.getOverordnetFormaal().getShortName() + ": " +  behandling.getNavn(),
+                "Etterlevelse for B" + behandling.getNummer() + " " + behandling.getOverordnetFormaal().getShortName() + ": " + behandling.getNavn(),
                 journalpost, document);
-
-        createElement("JP.U1", "2", journalpost, document);
-
-        createElement("JP.PARAGRAFID", "40", journalpost, document);
 
         SimpleDateFormat dateTime = new SimpleDateFormat("yyyyMMdd");
         createElement("JP.DOKDATO", dateTime.format(date), journalpost, document);
@@ -140,8 +135,6 @@ public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
         createElement("JP.SB", creatorId, journalpost, document);
 
         createElement("JP.ENHET", "8353005", journalpost, document);
-
-        createElement("NAVN", "Tjenesteplattform", journalpost, document);
 
         Element dokVersjonTab = document.createElement("DOKVERSJON.TAB");
         journalpost.appendChild(dokVersjonTab);
@@ -160,8 +153,8 @@ public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
         DOMSource domSource = new DOMSource(document);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         StreamResult result = new StreamResult(baos);
-        transformer.setOutputProperty(OutputKeys.INDENT,"yes");
-        transformer.transform(domSource,result);
+        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+        transformer.transform(domSource, result);
 //        XMLUtils.outputDOM(document, baos, true);
 //        return baos.toByteArray();
         return baos.toByteArray();
