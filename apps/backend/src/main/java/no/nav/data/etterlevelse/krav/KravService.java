@@ -2,6 +2,10 @@ package no.nav.data.etterlevelse.krav;
 
 import lombok.extern.slf4j.Slf4j;
 import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
+import no.nav.data.common.auditing.domain.AuditVersion;
+import no.nav.data.common.auditing.domain.AuditVersionRepository;
+import no.nav.data.common.auditing.dto.AuditLogResponse;
+import no.nav.data.common.auditing.dto.AuditResponse;
 import no.nav.data.common.storage.domain.GenericStorage;
 import no.nav.data.common.validator.Validator;
 import no.nav.data.etterlevelse.common.domain.DomainService;
@@ -31,8 +35,11 @@ import static no.nav.data.common.utils.StreamUtils.filter;
 @Service
 public class KravService extends DomainService<Krav> {
 
-    public KravService() {
+    private final AuditVersionRepository auditRepo;
+
+    public KravService(AuditVersionRepository auditRepo) {
         super(Krav.class);
+        this.auditRepo = auditRepo;
     }
 
     @Override
@@ -111,7 +118,10 @@ public class KravService extends DomainService<Krav> {
             kravPrioriteringRepo.transferPriority(krav.getKravVersjon(), krav.getKravNummer());
         }
 
-        if(krav.getAktivertDato()==null && krav.getStatus()==KravStatus.AKTIV){
+        List<AuditVersion> rawKravAuditList = auditRepo.findByTableIdOrderByTimeDesc(krav.getId().toString());
+        List<AuditResponse> kravAudits = new AuditLogResponse(krav.getId().toString(), convert(rawKravAuditList, AuditVersion::toResponse)).getAudits();
+
+        if(krav.getStatus()==KravStatus.AKTIV && (kravAudits.isEmpty() || !kravAudits.get(0).getData().get("data").get("status").toString().equals(KravStatus.AKTIV.name()))) {
             krav.setAktivertDato(LocalDateTime.now());
         }
 
