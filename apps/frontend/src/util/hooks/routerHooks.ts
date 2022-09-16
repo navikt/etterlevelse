@@ -1,11 +1,10 @@
-//THIS SHOULD BE REMOVED BEFORE MERGING TO MASTER
-import type { Blocker, History, Transition } from 'history'
-import { useCallback, useContext, useEffect} from 'react'
-import { UNSAFE_NavigationContext } from 'react-router-dom'
+import type {Blocker, History, Transition} from 'history'
+import {useCallback, useContext, useEffect} from 'react'
+import {UNSAFE_NavigationContext} from 'react-router-dom'
 
 // THIS IS A TEMPORARY SOLUTION AND WILL BE REMOVED ONCE REACT-ROUTER UPDATES THEIR PACKAGE TO INCLUDE USEBLOCKER AND USEPROMPT
 
-/** 
+/**
 * @source https://github.com/remix-run/react-router/commit/256cad70d3fd4500b1abcfea66f3ee622fb90874
 */
 export function useBlocker(blocker: Blocker, when = true) {
