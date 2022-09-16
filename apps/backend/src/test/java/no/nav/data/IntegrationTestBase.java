@@ -6,6 +6,7 @@ import no.nav.data.TestConfig.MockFilter;
 import no.nav.data.common.auditing.domain.AuditVersionRepository;
 import no.nav.data.common.storage.StorageService;
 import no.nav.data.common.storage.domain.GenericStorageRepository;
+import no.nav.data.etterlevelse.arkivering.EtterlevelseArkivService;
 import no.nav.data.etterlevelse.behandling.BehandlingService;
 import no.nav.data.etterlevelse.codelist.CodelistStub;
 import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
@@ -53,6 +54,8 @@ public abstract class IntegrationTestBase {
     protected EtterlevelseService etterlevelseService;
     @Autowired
     protected EtterlevelseMetadataService etterlevelseMetadataService;
+    @Autowired
+    protected EtterlevelseArkivService etterlevelseArkivService;
 
     @BeforeEach
     void setUpBase() {
