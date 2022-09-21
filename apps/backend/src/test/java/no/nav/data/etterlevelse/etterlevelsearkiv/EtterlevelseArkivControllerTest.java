@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.RequestEntity;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -216,7 +217,7 @@ class EtterlevelseArkivControllerTest extends IntegrationTestBase {
         storageService.save(EtterlevelseArkiv.builder().status(EtterlevelseArkivStatus.BEHANDLER_ARKIVERING).build());
         storageService.save(EtterlevelseArkiv.builder().status(EtterlevelseArkivStatus.ARKIVERT).build());
 
-        var resp = restTemplate.getForEntity("/etterlevelsearkiv/status/arkivert", EtterlevelseArkivController.EtterlevelseArkivPage.class);
+        var resp = restTemplate.exchange("/etterlevelsearkiv/status/arkivert",HttpMethod.PUT, RequestEntity.EMPTY, EtterlevelseArkivController.EtterlevelseArkivPage.class);
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
         var etterlevelseArkivResp = resp.getBody();
         assertThat(etterlevelseArkivResp).isNotNull();
