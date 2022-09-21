@@ -21,13 +21,13 @@
         <springdoc-openapi-ui.version>1.6.11</springdoc-openapi-ui.version>
         <simpleclient.version>0.16.0</simpleclient.version>
         <logstash-logback-encoder.version>7.2</logstash-logback-encoder.version>
-        <shedlock.version>4.41.0</shedlock.version>
+        <shedlock.version>4.42.0</shedlock.version>
         <commons-collections4.version>4.4</commons-collections4.version>
         <graphql-spring-boot-starter.version>14.0.0</graphql-spring-boot-starter.version>
         <graphql.version>18.1</graphql.version>
 
         <microsoft-graph.version>5.35.0</microsoft-graph.version>
-        <msal4j.version>1.13.0</msal4j.version>
+        <msal4j.version>1.13.1</msal4j.version>
 
         <!-- transitive versions -->
         <commons-compress.version>1.21</commons-compress.version>
@@ -160,7 +160,7 @@
         <dependency>
             <groupId>com.graphql-java</groupId>
             <artifactId>graphql-java</artifactId>
-            <version>18.3</version>
+            <version>19.2</version>
         </dependency>
 
         <!-- Security -->
