@@ -30,6 +30,8 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -84,7 +86,7 @@ public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
                     .file(etterlevelseToDoc.generateDocFor(UUID.fromString(behandling.getId()), statuses, Collections.emptyList(), ""))
                     .build());
             archiveFiles.add(ArchiveFile.builder()
-                    .fileName(formatter.format(date) + "_Etterlevelse_B" + behandling.getNummer() + ".xml")
+                    .fileName(LocalDate.now().format(DateTimeFormatter.ofPattern("YYYYMMdd_HHmmss")) + "_Etterlevelse_B" + behandling.getNummer() + ".xml")
                     .file(createXml(date, formatter.format(date) + "_Etterlevelse_B" + behandling.getNummer() + ".docx", behandling, etterlevelseArkiv))
                     .build());
         }
@@ -115,7 +117,7 @@ public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
 
         createElement("SA.ETTERLEVELSEID", "B" + behandling.getNummer(), noarksak, document);
 
-        Element journalpostTab = document.createElement("JORNALPOST.TAB");
+        Element journalpostTab = document.createElement("JOURNALPOST.TAB");
         noarksak.appendChild(journalpostTab);
 
         Element journalpost = document.createElement("JOURNALPOST");
