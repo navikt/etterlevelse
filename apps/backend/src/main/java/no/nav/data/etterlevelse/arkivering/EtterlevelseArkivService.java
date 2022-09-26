@@ -30,8 +30,6 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -71,6 +69,7 @@ public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
     public byte[] getEtterlevelserArchiveZip(List<EtterlevelseArkiv> etterlevelseArkivList) throws IOException {
         String filename;
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy'-'MM'-'dd'_'HH'-'mm'-'ss");
+        SimpleDateFormat xmlDateFormatter = new SimpleDateFormat("YYYYMMdd_HHmmss");
         Date date = new Date();
 
         ZipUtils zipUtils = new ZipUtils();
@@ -86,7 +85,7 @@ public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
                     .file(etterlevelseToDoc.generateDocFor(UUID.fromString(behandling.getId()), statuses, Collections.emptyList(), ""))
                     .build());
             archiveFiles.add(ArchiveFile.builder()
-                    .fileName(LocalDate.now().format(DateTimeFormatter.ofPattern("YYYYMMdd_HHmmss")) + "_Etterlevelse_B" + behandling.getNummer() + ".xml")
+                    .fileName(xmlDateFormatter.format(date) + "_Etterlevelse_B" + behandling.getNummer() + ".xml")
                     .file(createXml(date, formatter.format(date) + "_Etterlevelse_B" + behandling.getNummer() + ".docx", behandling, etterlevelseArkiv))
                     .build());
         }
