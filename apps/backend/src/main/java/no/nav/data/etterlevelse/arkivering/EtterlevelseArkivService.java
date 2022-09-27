@@ -107,7 +107,6 @@ public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
         DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
 
         Document document = documentBuilder.newDocument();
-        document.createTextNode("\n");
         Element rootElement = document.createElement("NOARK.H");
         document.appendChild(rootElement);
 
@@ -152,6 +151,9 @@ public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
         DOMSource domSource = new DOMSource(document);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         StreamResult result = new StreamResult(baos);
+        transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
+        transformer.setOutputProperty(OutputKeys.VERSION, "1.0");
+        transformer.setOutputProperty(OutputKeys.ENCODING,"UTF-8");
         transformer.setOutputProperty(OutputKeys.INDENT, "yes");
         transformer.transform(domSource, result);
 //        XMLUtils.outputDOM(document, baos, true);
