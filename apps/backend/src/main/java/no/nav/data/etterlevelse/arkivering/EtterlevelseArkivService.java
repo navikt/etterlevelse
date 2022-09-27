@@ -152,6 +152,7 @@ public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         StreamResult result = new StreamResult(baos);
         transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+        transformer.setOutputProperty(OutputKeys.STANDALONE, "yes");
         transformer.transform(domSource, result);
 //        XMLUtils.outputDOM(document, baos, true);
 //        return baos.toByteArray();
