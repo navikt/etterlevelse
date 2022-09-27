@@ -107,7 +107,7 @@ public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
         DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
 
         Document document = documentBuilder.newDocument();
-
+        document.createTextNode("\n");
         Element rootElement = document.createElement("NOARK.H");
         document.appendChild(rootElement);
 
