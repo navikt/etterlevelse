@@ -13,6 +13,10 @@ export const getEtterlevelseFor = async (query: { behandling: string }) => {
   return (await axios.get<PageResponse<Etterlevelse>>(`${env.backendBaseUrl}/etterlevelse?${stringify(query)}`)).data.content
 }
 
+export const updateEtterlevelseToNewBehandling = async(oldBehandlingsId: string, newBehandlingsId: string) => {
+  return(await axios.post(`${env.backendBaseUrl}/etterlevelse/update/behandlingid/${oldBehandlingsId}/${newBehandlingsId}`)).statusText
+}
+
 export const getEtterlevelse = async (id: string) => {
   return (await axios.get<Etterlevelse>(`${env.backendBaseUrl}/etterlevelse/${id}`)).data
 }
