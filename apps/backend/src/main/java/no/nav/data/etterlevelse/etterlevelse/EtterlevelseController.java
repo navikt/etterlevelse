@@ -130,12 +130,12 @@ public class  EtterlevelseController {
 
         if(oldBehandling.size() == 0) {
             log.info("Found no behandling with id: " + oldBehandlingsId);
-            return new ResponseEntity<>("Unable to find old behandlings uid: " + oldBehandlingsId,HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Unable to find behandling with uid: " + oldBehandlingsId,HttpStatus.BAD_REQUEST);
         }
 
         if(newBehandling.size() == 0) {
             log.info("Found no behandling with id: " + newBehandlingsId);
-            return new ResponseEntity<>("Unable to find old behandlings uid: " + newBehandlingsId,HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Unable to find behandling with uid: " + newBehandlingsId,HttpStatus.BAD_REQUEST);
         }
 
         service.updateEtterlevelseToNewBehandling(oldBehandlingsId, newBehandlingsId);
