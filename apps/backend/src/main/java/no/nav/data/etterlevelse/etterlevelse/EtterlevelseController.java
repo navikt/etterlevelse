@@ -26,10 +26,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
-import javax.validation.Valid;
 
 import static no.nav.data.common.utils.StreamUtils.convert;
 import static no.nav.data.common.utils.StreamUtils.tryFind;
@@ -121,7 +121,7 @@ public class  EtterlevelseController {
     @Operation(summary = "Update Etterlevelse to new behandling")
     @ApiResponse(responseCode = "201", description = "Etterlevelse updated")
     @PostMapping("/update/behandlingid/{oldBehandlingsId}/{newBehandlingsId}")
-    public ResponseEntity<HttpStatus> updateEtterlevelseToNewBehandling(@PathVariable String oldBehandlingsId, @PathVariable String newBehandlingsId) {
+    public ResponseEntity<String> updateEtterlevelseToNewBehandling(@PathVariable String oldBehandlingsId, @PathVariable String newBehandlingsId) {
         log.info("moving etterlevelse documentations to a new behandling");
 
         Behandling oldBehandling = behandlingService.getBehandling(oldBehandlingsId);
@@ -129,17 +129,17 @@ public class  EtterlevelseController {
 
         if(oldBehandling == null) {
             log.info("Found no behandling with id: " + oldBehandlingsId);
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Unable to find old behandlings uid: " + oldBehandlingsId,HttpStatus.BAD_REQUEST);
 
         }
         if(newBehandling == null) {
             log.info("Found no behandling with id: " + newBehandlingsId);
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Unable to find old behandlings uid: " + newBehandlingsId,HttpStatus.BAD_REQUEST);
         }
 
         service.updateEtterlevelseToNewBehandling(oldBehandlingsId, newBehandlingsId);
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>("Successfully updated etterlevelses documetations to new behandlings uid: " + newBehandlingsId,HttpStatus.OK);
     }
 
     @Operation(summary = "Update Etterlevelse")

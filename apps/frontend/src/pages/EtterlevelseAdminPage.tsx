@@ -41,6 +41,7 @@ export const EtterlevelseAdminPage = () => {
             Root: {
               style: {
                 ...borderColor(ettlevColors.grey200),
+                marginRight: '5px'
               },
             },
           }}
@@ -54,6 +55,7 @@ export const EtterlevelseAdminPage = () => {
             Root: {
               style: {
                 ...borderColor(ettlevColors.grey200),
+                marginRight: '5px'
               },
             },
           }}
