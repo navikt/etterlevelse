@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -124,15 +125,15 @@ public class  EtterlevelseController {
     public ResponseEntity<String> updateEtterlevelseToNewBehandling(@PathVariable String oldBehandlingsId, @PathVariable String newBehandlingsId) {
         log.info("moving etterlevelse documentations to a new behandling");
 
-        Behandling oldBehandling = behandlingService.getBehandling(oldBehandlingsId);
-        Behandling newBehandling = behandlingService.getBehandling(newBehandlingsId);
+        List<Behandling> oldBehandling = behandlingService.findAllById(Collections.singletonList(oldBehandlingsId));
+        List<Behandling>  newBehandling = behandlingService.findAllById(Collections.singletonList(newBehandlingsId));
 
-        if(oldBehandling == null) {
+        if(oldBehandling.size() == 0) {
             log.info("Found no behandling with id: " + oldBehandlingsId);
             return new ResponseEntity<>("Unable to find old behandlings uid: " + oldBehandlingsId,HttpStatus.BAD_REQUEST);
-
         }
-        if(newBehandling == null) {
+
+        if(newBehandling.size() == 0) {
             log.info("Found no behandling with id: " + newBehandlingsId);
             return new ResponseEntity<>("Unable to find old behandlings uid: " + newBehandlingsId,HttpStatus.BAD_REQUEST);
         }
