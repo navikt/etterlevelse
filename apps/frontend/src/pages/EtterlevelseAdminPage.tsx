@@ -5,14 +5,15 @@ import { useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { updateEtterlevelseToNewBehandling } from '../api/EtterlevelseApi'
 import CustomizedInput from '../components/common/CustomizedInput'
-import { InputField } from '../components/common/Inputs'
-import { borderColor } from '../components/common/Style'
+import { borderColor, paddingZero } from '../components/common/Style'
 import { Layout2 } from '../components/scaffold/Page'
 import { ettlevColors, maxPageWidth } from '../util/theme'
+import { KIND as NKIND, Notification } from 'baseui/notification'
 
 export const EtterlevelseAdminPage = () => {
   const [oldBehandlingsId, setOldBehandlingsId] = useState<string>('')
   const [newBehandlingsId, setNewBehandlingsId] = useState<string>('')
+  const [updateMessage, setUpdateMessage] = useState<string>('')
 
 
   return (
@@ -34,8 +35,8 @@ export const EtterlevelseAdminPage = () => {
       <Block display="flex">
         <CustomizedInput
           value={oldBehandlingsId}
-          placeholder="Nåværende behandlings id"
-          onChange={(e) => {setOldBehandlingsId(e.target.value)}}
+          placeholder="Nåværende behandlings UID"
+          onChange={(e) => { setOldBehandlingsId(e.target.value) }}
           overrides={{
             Root: {
               style: {
@@ -47,8 +48,8 @@ export const EtterlevelseAdminPage = () => {
 
         <CustomizedInput
           value={newBehandlingsId}
-          placeholder="Ny behandlings id"
-          onChange={(e) => {setNewBehandlingsId(e.target.value)}}
+          placeholder="Ny behandlings UID"
+          onChange={(e) => { setNewBehandlingsId(e.target.value) }}
           overrides={{
             Root: {
               style: {
@@ -57,16 +58,45 @@ export const EtterlevelseAdminPage = () => {
             },
           }}
         />
-
         <Button
           disabled={!oldBehandlingsId || !newBehandlingsId}
           onClick={() => {
-              updateEtterlevelseToNewBehandling(oldBehandlingsId, newBehandlingsId)
+            setUpdateMessage('')
+            updateEtterlevelseToNewBehandling(oldBehandlingsId, newBehandlingsId)
+              .then(() => {
+                setUpdateMessage('Oppdatering er vellykket, byttet etterlevelses dokumentasjon med ny behandlings uid: ' + newBehandlingsId)
+                setNewBehandlingsId('')
+                setOldBehandlingsId('')
+              })
+              .catch((e) => {
+                setUpdateMessage('Oppdatering mislykket, error: ' + e)
+              })
           }}
         >
           Oppdater
         </Button>
       </Block>
+      {updateMessage ?
+        <Block>
+          {updateMessage.match('error') ?
+            <Notification
+              overrides={{ Body: { style: { width: 'auto', ...paddingZero, marginTop: 0, backgroundColor: 'transparent', color: ettlevColors.red600 } } }}
+              kind={NKIND.negative}
+            >
+              {updateMessage}
+            </Notification>
+
+            :
+
+            <Notification
+              overrides={{ Body: { style: { width: 'auto', ...paddingZero, marginTop: 0, backgroundColor: 'transparent' } } }}
+              kind={NKIND.positive}
+            >
+              {updateMessage}
+            </Notification>
+          }
+        </Block>
+        : <Block />}
     </Layout2>
   )
 }
