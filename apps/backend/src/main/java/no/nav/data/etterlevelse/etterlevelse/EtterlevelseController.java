@@ -118,6 +118,30 @@ public class  EtterlevelseController {
         return new ResponseEntity<>(krav.toResponse(), HttpStatus.CREATED);
     }
 
+    @Operation(summary = "Update Etterlevelse to new behandling")
+    @ApiResponse(responseCode = "201", description = "Etterlevelse updated")
+    @PostMapping("/update/behandlingid/{oldBehandlingsId}/{newBehandlingsId}")
+    public ResponseEntity<HttpStatus> updateEtterlevelseToNewBehandling(@PathVariable String oldBehandlingsId, @PathVariable String newBehandlingsId) {
+        log.info("moving etterlevelse documentations to a new behandling");
+
+        Behandling oldBehandling = behandlingService.getBehandling(oldBehandlingsId);
+        Behandling newBehandling = behandlingService.getBehandling(newBehandlingsId);
+
+        if(oldBehandling == null) {
+            log.info("Found no behandling with id: " + oldBehandlingsId);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+        }
+        if(newBehandling == null) {
+            log.info("Found no behandling with id: " + newBehandlingsId);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        service.updateEtterlevelseToNewBehandling(oldBehandlingsId, newBehandlingsId);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @Operation(summary = "Update Etterlevelse")
     @ApiResponse(description = "Etterlevelse updated")
     @PutMapping("/{id}")
