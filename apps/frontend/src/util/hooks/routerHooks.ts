@@ -1,20 +1,16 @@
 import type { Blocker, History, Transition } from 'history'
-import { ContextType, useCallback, useContext, useEffect } from 'react'
-import { Navigator as BaseNavigator, UNSAFE_NavigationContext as NavigationContext } from 'react-router-dom'
+import {useCallback, useContext, useEffect } from 'react'
+import { UNSAFE_NavigationContext} from 'react-router-dom'
 
 // THIS IS A TEMPORARY SOLUTION AND WILL BE REMOVED ONCE REACT-ROUTER UPDATES THEIR PACKAGE TO INCLUDE USEBLOCKER AND USEPROMPT
 
-interface Navigator extends BaseNavigator {
-  block: History['block']
-}
 
-type NavigationContextWithBlock = ContextType<typeof NavigationContext> & { navigator: Navigator }
 
 /**
  * @source https://github.com/remix-run/react-router/commit/256cad70d3fd4500b1abcfea66f3ee622fb90874
  */
 export function useBlocker(blocker: Blocker, when = true) {
-  const { navigator } = useContext(NavigationContext) as NavigationContextWithBlock
+  const  navigator  = useContext(UNSAFE_NavigationContext).navigator as History
 
   useEffect(() => {
     if (!when) {
