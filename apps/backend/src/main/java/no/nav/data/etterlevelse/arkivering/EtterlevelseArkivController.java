@@ -99,10 +99,7 @@ public class EtterlevelseArkivController {
     public void getExportArchive(HttpServletResponse response) {
         log.info("export etterlevelse to archive");
 
-        List<EtterlevelseArkiv> etterlevelseArkivList=etterlevelseArkivService.getByStatus(EtterlevelseArkivStatus.TIL_ARKIVERING.name());
-
-        //will replace code above when testing is done
-        //List<EtterlevelseArkiv> etterlevelseArkivList = etterlevelseArkivService.setStatusToBehandler_arkivering();
+        List<EtterlevelseArkiv> etterlevelseArkivList = etterlevelseArkivService.setStatusToBehandler_arkivering();
 
         byte[] etterlevelserArchiveZip = etterlevelseArkivService.getEtterlevelserArchiveZip(etterlevelseArkivList);
 
