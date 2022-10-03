@@ -114,6 +114,14 @@ public class EtterlevelseArkivController {
     @ApiResponse(description = "ok")
     @PostMapping("/status/arkivert")
     public ResponseEntity<RestResponsePage<EtterlevelseArkivResponse>> arkiver(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestBody List<String> failedToArchive){
+
+        //parse token to jwt
+        //access parsed token azp for user id
+        //access parsed token for roles "polly-admin/service-user-archiving"
+        //logging for which user id accessed for parsed token
+        //authenticate is role/s are correct
+        //log error if not and exit
+
         log.info("Arkivering vellykket, setter status BEHANDLER_ARKIVERING til ARKIVERT");
 
         List<EtterlevelseArkiv> etterlevelseArkivList = etterlevelseArkivService.setStatusToArkivert();
