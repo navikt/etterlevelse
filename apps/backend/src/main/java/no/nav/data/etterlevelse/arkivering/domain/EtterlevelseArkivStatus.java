@@ -10,5 +10,7 @@ public enum EtterlevelseArkivStatus {
         @JsonProperty("ARKIVERT")
         ARKIVERT,
         @JsonProperty("IKKE_ARKIVER")
-        IKKE_ARKIVER
+        IKKE_ARKIVER,
+        @JsonProperty("ERROR")
+        ERROR
 }

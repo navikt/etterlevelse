@@ -70,7 +70,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 "/settings/**",
                 "/codelist/**",
                 "/export/codelist/**",
-                "/etterlevelsearkiv/status/arkivert",
                 "/etterlevelse/update/behandlingid/**"
         );
 
@@ -88,6 +87,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests().antMatchers("/logout").authenticated();
         http.authorizeRequests().anyRequest().hasRole(AppRole.WRITE.name());
+        http.authorizeRequests().antMatchers( "etterlevelsearkiv/status/arkivert").permitAll();
     }
 
     private void adminOnly(HttpSecurity http, String... paths) throws Exception {
