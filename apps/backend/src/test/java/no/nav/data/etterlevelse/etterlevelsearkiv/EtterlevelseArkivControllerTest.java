@@ -11,9 +11,12 @@ import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravStatus;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.RequestEntity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -217,7 +220,13 @@ class EtterlevelseArkivControllerTest extends IntegrationTestBase {
         storageService.save(EtterlevelseArkiv.builder().status(EtterlevelseArkivStatus.BEHANDLER_ARKIVERING).build());
         storageService.save(EtterlevelseArkiv.builder().status(EtterlevelseArkivStatus.ARKIVERT).build());
 
-        var resp = restTemplate.exchange("/etterlevelsearkiv/status/arkivert",HttpMethod.PUT, RequestEntity.EMPTY, EtterlevelseArkivController.EtterlevelseArkivPage.class);
+        List<String> failed = new ArrayList<>();
+        var headers = new HttpHeaders();
+        headers.setBearerAuth("test");
+
+        HttpEntity<List<String>> request = new HttpEntity<>(failed, headers);
+
+        var resp = restTemplate.postForEntity("/etterlevelsearkiv/status/arkivert", request,EtterlevelseArkivController.EtterlevelseArkivPage.class);
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
         var etterlevelseArkivResp = resp.getBody();
         assertThat(etterlevelseArkivResp).isNotNull();
