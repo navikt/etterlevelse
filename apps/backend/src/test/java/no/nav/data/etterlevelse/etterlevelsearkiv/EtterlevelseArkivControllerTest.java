@@ -226,7 +226,7 @@ class EtterlevelseArkivControllerTest extends IntegrationTestBase {
         List<String> failed = new ArrayList<>();
         var headers = new HttpHeaders();
         headers.setBearerAuth("test");
-        ArkiverRequest req = ArkiverRequest.builder().failedToAchiveBehandlingsNr(failed).build();
+        ArkiverRequest req = ArkiverRequest.builder().failedToArchiveBehandlingsNr(failed).build();
 
         HttpEntity<ArkiverRequest> request = new HttpEntity<>(req, headers);
 

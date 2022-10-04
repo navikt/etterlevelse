@@ -128,8 +128,8 @@ public class EtterlevelseArkivController {
 
         log.info("Arkivering vellykket, setter status BEHANDLER_ARKIVERING til ARKIVERT");
 
-        if(!arkiverRequest.getFailedToAchiveBehandlingsNr().isEmpty()) {
-            for(String failedBehandlingsNr: arkiverRequest.getFailedToAchiveBehandlingsNr()) {
+        if(!arkiverRequest.getFailedToArchiveBehandlingsNr().isEmpty()) {
+            for(String failedBehandlingsNr: arkiverRequest.getFailedToArchiveBehandlingsNr()) {
                 log.info("Feilet med å arkivere: " + failedBehandlingsNr);
                 List<Behandling> sokResultat = behandlingService.findBehandlinger(failedBehandlingsNr)
                         .stream()
