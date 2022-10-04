@@ -226,7 +226,7 @@ class EtterlevelseArkivControllerTest extends IntegrationTestBase {
 
         HttpEntity<List<String>> request = new HttpEntity<>(failed, headers);
 
-        var resp = restTemplate.postForEntity("/etterlevelsearkiv/status/arkivert", request,EtterlevelseArkivController.EtterlevelseArkivPage.class);
+        var resp = restTemplate.exchange("/etterlevelsearkiv/status/arkivert",HttpMethod.PUT, request,EtterlevelseArkivController.EtterlevelseArkivPage.class);
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
         var etterlevelseArkivResp = resp.getBody();
         assertThat(etterlevelseArkivResp).isNotNull();
