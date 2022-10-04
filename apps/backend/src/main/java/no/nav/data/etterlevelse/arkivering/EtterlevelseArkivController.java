@@ -112,7 +112,7 @@ public class EtterlevelseArkivController {
 
     @Operation(summary = "Update status to arkivert")
     @ApiResponse(description = "ok")
-    @PostMapping("/status/arkivert")
+    @PutMapping("/status/arkivert")
     public ResponseEntity<RestResponsePage<EtterlevelseArkivResponse>> arkiver(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestBody List<String> failedToArchive){
 
         //parse token to jwt
