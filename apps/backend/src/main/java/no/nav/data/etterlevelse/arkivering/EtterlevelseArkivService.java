@@ -144,8 +144,6 @@ public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
 
         createElement("VE.FILREF", wordDocFileName, dokVersjon, document);
 
-        //...create XML elements, and others...
-        // write dom document to a file
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
         DOMSource domSource = new DOMSource(document);
@@ -154,8 +152,6 @@ public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
         transformer.setOutputProperty(OutputKeys.INDENT, "yes");
         transformer.setOutputProperty(OutputKeys.STANDALONE, "yes");
         transformer.transform(domSource, result);
-//        XMLUtils.outputDOM(document, baos, true);
-//        return baos.toByteArray();
         return baos.toByteArray();
     }
 
