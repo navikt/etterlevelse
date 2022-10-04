@@ -13,6 +13,8 @@ import no.nav.data.etterlevelse.arkivering.domain.EtterlevelseArkiv;
 import no.nav.data.etterlevelse.arkivering.domain.EtterlevelseArkivStatus;
 import no.nav.data.etterlevelse.arkivering.dto.EtterlevelseArkivRequest;
 import no.nav.data.etterlevelse.arkivering.dto.EtterlevelseArkivResponse;
+import no.nav.data.etterlevelse.behandling.BehandlingService;
+import no.nav.data.etterlevelse.behandling.dto.Behandling;
 import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import org.springframework.data.domain.Page;
@@ -45,6 +47,8 @@ public class EtterlevelseArkivController {
 
     private final EtterlevelseArkivService etterlevelseArkivService;
     private final EtterlevelseService etterlevelseService;
+
+    private final BehandlingService behandlingService;
 
     @Operation(summary = "Get all etterlevelsearkiv")
     @ApiResponse(description = "Ok")
@@ -123,14 +127,20 @@ public class EtterlevelseArkivController {
 
         log.info("Arkivering vellykket, setter status BEHANDLER_ARKIVERING til ARKIVERT");
 
-        List<EtterlevelseArkiv> etterlevelseArkivList = etterlevelseArkivService.setStatusToArkivert();
-
         if(!failedToArchive.isEmpty()) {
             for(String failedBehandlingsNr: failedToArchive) {
-                log.error("Feilet med å arkivere: " + failedBehandlingsNr);
-                etterlevelseArkivService.setStatusWithBehandlingsId(EtterlevelseArkivStatus.ERROR.name(), failedBehandlingsNr);
+                log.info("Feilet med å arkivere: " + failedBehandlingsNr);
+                List<Behandling> behandlinger= behandlingService.findBehandlinger(failedBehandlingsNr);
+                if(!behandlinger.isEmpty()){
+                    log.info("Fant behandling for: {}, søkeresultat:{}",failedBehandlingsNr, behandlinger.get(0).getNummer());
+                    etterlevelseArkivService.setStatusWithBehandlingsId(EtterlevelseArkivStatus.ERROR.name(), behandlinger.get(0).getId());
+                } else {
+                    throw new ValidationException("Fant ikke behandling for " + failedBehandlingsNr);
+                }
             }
         }
+
+        List<EtterlevelseArkiv> etterlevelseArkivList = etterlevelseArkivService.setStatusToArkivert();
 
         return ResponseEntity.ok(new RestResponsePage<>(etterlevelseArkivList).convert(EtterlevelseArkiv::toResponse));
     }
