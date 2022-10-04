@@ -82,7 +82,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers("/behandling/**").hasAnyRole(AppRole.KRAVEIER.name(), AppRole.ADMIN.name(), AppRole.WRITE.name());
         http.authorizeRequests().antMatchers("/melding/**").hasAnyRole(AppRole.ADMIN.name());
         http.authorizeRequests().antMatchers("/etterlevelsearkiv/**").hasAnyRole(AppRole.WRITE.name());
-        http.authorizeRequests().antMatchers("/etterlevelsearkiv/status/arkivert").hasAnyRole(AppRole.ADMIN.name());
         http.authorizeRequests().antMatchers("/etterlevelse/update/behandlingid/**").hasAnyRole(AppRole.ADMIN.name());
 
         http.authorizeRequests().antMatchers("/logout").authenticated();
