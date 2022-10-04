@@ -71,7 +71,7 @@ spec:
     inbound:
       rules:
         - application: etterlevelse-frontend
-        - application: etterlevesle-arkiv
+        - application: etterlevelse-arkiv
           cluster: prod-legacy
     outbound:
       external:
