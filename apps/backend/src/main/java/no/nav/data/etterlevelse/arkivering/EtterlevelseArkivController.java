@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -113,7 +112,7 @@ public class EtterlevelseArkivController {
     @Operation(summary = "Update status to arkivert")
     @ApiResponse(description = "ok")
     @PutMapping("/status/arkivert")
-    public ResponseEntity<RestResponsePage<EtterlevelseArkivResponse>> arkiver(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestBody List<String> failedToArchive){
+    public ResponseEntity<RestResponsePage<EtterlevelseArkivResponse>> arkiver(@RequestBody List<String> failedToArchive){
 
         //parse token to jwt
         //access parsed token azp for user id
