@@ -130,10 +130,13 @@ public class EtterlevelseArkivController {
         if(!failedToArchive.isEmpty()) {
             for(String failedBehandlingsNr: failedToArchive) {
                 log.info("Feilet med å arkivere: " + failedBehandlingsNr);
-                List<Behandling> behandlinger= behandlingService.findBehandlinger(failedBehandlingsNr);
-                if(!behandlinger.isEmpty()){
-                    log.info("Fant behandling for: {}, søkeresultat:{}",failedBehandlingsNr, behandlinger.get(0).getNummer());
-                    etterlevelseArkivService.setStatusWithBehandlingsId(EtterlevelseArkivStatus.ERROR.name(), behandlinger.get(0).getId());
+                List<Behandling> sokResultat = behandlingService.findBehandlinger(failedBehandlingsNr)
+                        .stream()
+                        .filter(behandling -> behandling.getNummer()==Integer.parseInt(failedBehandlingsNr.substring(1)))
+                        .toList();
+                if(!sokResultat.isEmpty()){
+                    log.info("Fant behandling for: {}, søkeresultat:{}",failedBehandlingsNr, sokResultat.get(0).getNummer());
+                    etterlevelseArkivService.setStatusWithBehandlingsId(EtterlevelseArkivStatus.ERROR.name(), sokResultat.get(0).getId());
                 } else {
                     throw new ValidationException("Fant ikke behandling for " + failedBehandlingsNr);
                 }
