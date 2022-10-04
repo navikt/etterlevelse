@@ -71,6 +71,8 @@ spec:
     inbound:
       rules:
         - application: etterlevelse-frontend
+        - application: etterlevesle-arkiv
+          cluster: prod-legacy
     outbound:
       external:
         - host: {{teamcat_ingress}}
