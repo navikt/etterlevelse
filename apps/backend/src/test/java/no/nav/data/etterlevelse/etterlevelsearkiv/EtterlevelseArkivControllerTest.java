@@ -4,6 +4,7 @@ import no.nav.data.IntegrationTestBase;
 import no.nav.data.etterlevelse.arkivering.EtterlevelseArkivController;
 import no.nav.data.etterlevelse.arkivering.domain.EtterlevelseArkiv;
 import no.nav.data.etterlevelse.arkivering.domain.EtterlevelseArkivStatus;
+import no.nav.data.etterlevelse.arkivering.dto.ArkiverRequest;
 import no.nav.data.etterlevelse.arkivering.dto.EtterlevelseArkivRequest;
 import no.nav.data.etterlevelse.arkivering.dto.EtterlevelseArkivResponse;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
@@ -220,11 +221,15 @@ class EtterlevelseArkivControllerTest extends IntegrationTestBase {
         storageService.save(EtterlevelseArkiv.builder().status(EtterlevelseArkivStatus.BEHANDLER_ARKIVERING).build());
         storageService.save(EtterlevelseArkiv.builder().status(EtterlevelseArkivStatus.ARKIVERT).build());
 
+
+
         List<String> failed = new ArrayList<>();
         var headers = new HttpHeaders();
         headers.setBearerAuth("test");
+        ArkiverRequest req = ArkiverRequest.builder().failedToAchiveBehandlingsNr(failed).build();
 
-        HttpEntity<List<String>> request = new HttpEntity<>(failed, headers);
+        HttpEntity<ArkiverRequest> request = new HttpEntity<>(req, headers);
+
 
         var resp = restTemplate.exchange("/etterlevelsearkiv/status/arkivert",HttpMethod.PUT, request,EtterlevelseArkivController.EtterlevelseArkivPage.class);
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);

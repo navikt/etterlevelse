@@ -11,6 +11,7 @@ import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.etterlevelse.arkivering.domain.EtterlevelseArkiv;
 import no.nav.data.etterlevelse.arkivering.domain.EtterlevelseArkivStatus;
+import no.nav.data.etterlevelse.arkivering.dto.ArkiverRequest;
 import no.nav.data.etterlevelse.arkivering.dto.EtterlevelseArkivRequest;
 import no.nav.data.etterlevelse.arkivering.dto.EtterlevelseArkivResponse;
 import no.nav.data.etterlevelse.behandling.BehandlingService;
@@ -116,7 +117,7 @@ public class EtterlevelseArkivController {
     @Operation(summary = "Update status to arkivert")
     @ApiResponse(description = "ok")
     @PutMapping("/status/arkivert")
-    public ResponseEntity<RestResponsePage<EtterlevelseArkivResponse>> arkiver(@RequestBody List<String> failedToArchive){
+    public ResponseEntity<RestResponsePage<EtterlevelseArkivResponse>> arkiver(@RequestBody ArkiverRequest arkiverRequest){
 
         //parse token to jwt
         //access parsed token azp for user id
@@ -127,8 +128,8 @@ public class EtterlevelseArkivController {
 
         log.info("Arkivering vellykket, setter status BEHANDLER_ARKIVERING til ARKIVERT");
 
-        if(!failedToArchive.isEmpty()) {
-            for(String failedBehandlingsNr: failedToArchive) {
+        if(!arkiverRequest.getFailedToAchiveBehandlingsNr().isEmpty()) {
+            for(String failedBehandlingsNr: arkiverRequest.getFailedToAchiveBehandlingsNr()) {
                 log.info("Feilet med å arkivere: " + failedBehandlingsNr);
                 List<Behandling> sokResultat = behandlingService.findBehandlinger(failedBehandlingsNr)
                         .stream()
