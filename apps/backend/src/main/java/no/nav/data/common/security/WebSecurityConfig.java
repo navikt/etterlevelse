@@ -70,7 +70,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 "/settings/**",
                 "/codelist/**",
                 "/export/codelist/**",
-                "/etterlevelse/update/behandlingid/**"
+                "/etterlevelse/update/behandlingid/**",
+                "/etterlevelsearkiv/status/arkivert"
         );
 
         http.authorizeRequests().antMatchers("/krav/**").hasAnyRole(AppRole.KRAVEIER.name(), AppRole.ADMIN.name());
@@ -81,7 +82,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers("/etterlevelsemetadata/**").hasAnyRole(AppRole.ADMIN.name(), AppRole.WRITE.name());
         http.authorizeRequests().antMatchers("/behandling/**").hasAnyRole(AppRole.KRAVEIER.name(), AppRole.ADMIN.name(), AppRole.WRITE.name());
         http.authorizeRequests().antMatchers("/melding/**").hasAnyRole(AppRole.ADMIN.name());
-        http.authorizeRequests().antMatchers( "/etterlevelsearkiv/status/arkivert").permitAll();
         http.authorizeRequests().antMatchers("/etterlevelsearkiv/**").hasAnyRole(AppRole.WRITE.name());
         http.authorizeRequests().antMatchers("/etterlevelse/update/behandlingid/**").hasAnyRole(AppRole.ADMIN.name());
 

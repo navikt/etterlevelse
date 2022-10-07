@@ -101,10 +101,8 @@ public class AADStatelessAuthenticationFilter extends OncePerRequestFilter {
     private boolean authenticate(HttpServletRequest request, HttpServletResponse response) throws ServletException {
         Credential credential = getCredential(request, response);
         if (credential != null) {
-            if(request.getHeader(HttpHeaders.AUTHORIZATION).replaceFirst(TOKEN_TYPE, "").startsWith(TOKEN_USER)) {
-
+            if(credential.getAccessToken().startsWith(TOKEN_USER)) {
                 String plainToken = credential.getAccessToken().replaceFirst(TOKEN_USER, "");
-
                 if(!JwtValidator.isJwtTokenValid(plainToken)){
                     String errorMessage = "Invalid JWT. Either expired or not yet valid. ";
                     log.warn(errorMessage);
@@ -112,7 +110,6 @@ public class AADStatelessAuthenticationFilter extends OncePerRequestFilter {
                 } else {
                     return true;
                 }
-
             } else {
                 try {
                     var principal = buildUserPrincipal(credential.getAccessToken());
