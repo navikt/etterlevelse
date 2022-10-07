@@ -102,8 +102,7 @@ public class AADStatelessAuthenticationFilter extends OncePerRequestFilter {
         Credential credential = getCredential(request, response);
         if (credential != null) {
             if(credential.getAccessToken().startsWith(TOKEN_USER)) {
-                String plainToken = credential.getAccessToken().replaceFirst(TOKEN_USER, "");
-                log.info("DEBUG: " + plainToken);
+                String plainToken = credential.getAccessToken().replaceFirst(TOKEN_USER, "").replace(" ", "").replace("\n", "");
                 if(!JwtValidator.isJwtTokenValid(plainToken)){
                     String errorMessage = "Invalid JWT. Either expired or not yet valid. ";
                     log.warn(errorMessage);
@@ -157,9 +156,12 @@ public class AADStatelessAuthenticationFilter extends OncePerRequestFilter {
             }
         }
         String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (hasText(authHeader) && authHeader.startsWith(TOKEN_TYPE)) {
+        if (hasText(authHeader)) {
             String authHeader1 = request.getHeader(HttpHeaders.AUTHORIZATION);
-            String token = authHeader1.replaceFirst(TOKEN_TYPE, "");
+            String token = authHeader1;
+            if(authHeader.startsWith(TOKEN_TYPE)) {
+                token = authHeader1.replaceFirst(TOKEN_TYPE, "");
+            }
             counter.labels("direct_token").inc();
             return new Credential(token);
         }
