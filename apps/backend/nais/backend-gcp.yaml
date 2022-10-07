@@ -75,7 +75,7 @@ spec:
           cluster: prod-legacy
           permissions:
             roles:
-              - "Arkiv-Admin"
+              - "arkiv-admin"
     outbound:
       external:
         - host: {{teamcat_ingress}}
