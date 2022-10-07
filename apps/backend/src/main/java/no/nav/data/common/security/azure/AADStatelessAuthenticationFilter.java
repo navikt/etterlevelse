@@ -24,6 +24,7 @@ import no.nav.data.common.security.AuthController;
 import no.nav.data.common.security.RoleSupport;
 import no.nav.data.common.security.domain.Auth;
 import no.nav.data.common.security.dto.Credential;
+import no.nav.data.common.security.jwt.JwtValidator;
 import no.nav.data.common.utils.MetricUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpHeaders;
@@ -31,6 +32,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.text.ParseException;
@@ -39,14 +45,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import static no.nav.data.Constants.COOKIE_NAME;
 import static no.nav.data.common.security.SecurityConstants.TOKEN_TYPE;
+import static no.nav.data.common.security.SecurityConstants.TOKEN_USER;
 import static org.springframework.util.StringUtils.hasText;
 
 @Slf4j
@@ -99,22 +101,36 @@ public class AADStatelessAuthenticationFilter extends OncePerRequestFilter {
     private boolean authenticate(HttpServletRequest request, HttpServletResponse response) throws ServletException {
         Credential credential = getCredential(request, response);
         if (credential != null) {
-            try {
-                var principal = buildUserPrincipal(credential.getAccessToken());
-                var grantedAuthorities = roleSupport.lookupGrantedAuthorities(principal.getStringListClaim("groups"));
-                var authentication = new PreAuthenticatedAuthenticationToken(principal, credential, grantedAuthorities);
-                authentication.setDetails(new AzureUserInfo(principal, grantedAuthorities));
-                authentication.setAuthenticated(true);
-                log.trace("Request token verification success for subject {} with roles {}.", AzureUserInfo.getUserId(principal), grantedAuthorities);
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-                return true;
-            } catch (BadJWTException ex) {
-                String errorMessage = "Invalid JWT. Either expired or not yet valid. " + ex.getMessage();
-                log.warn(errorMessage);
-                throw new ServletException(errorMessage, ex);
-            } catch (ParseException | BadJOSEException | JOSEException ex) {
-                log.error("Failed to initialize UserPrincipal.", ex);
-                throw new ServletException(ex);
+            if(request.getHeader(HttpHeaders.AUTHORIZATION).startsWith(TOKEN_USER)) {
+
+                String plainToken = credential.getAccessToken().replaceFirst(TOKEN_USER, "");
+
+                if(!JwtValidator.isJwtTokenValid(plainToken)){
+                    String errorMessage = "Invalid JWT. Either expired or not yet valid. ";
+                    log.warn(errorMessage);
+                    throw new ServletException(errorMessage);
+                } else {
+                    return true;
+                }
+
+            } else {
+                try {
+                    var principal = buildUserPrincipal(credential.getAccessToken());
+                    var grantedAuthorities = roleSupport.lookupGrantedAuthorities(principal.getStringListClaim("groups"));
+                    var authentication = new PreAuthenticatedAuthenticationToken(principal, credential, grantedAuthorities);
+                    authentication.setDetails(new AzureUserInfo(principal, grantedAuthorities));
+                    authentication.setAuthenticated(true);
+                    log.trace("Request token verification success for subject {} with roles {}.", AzureUserInfo.getUserId(principal), grantedAuthorities);
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                    return true;
+                } catch (BadJWTException ex) {
+                    String errorMessage = "Invalid JWT. Either expired or not yet valid. " + ex.getMessage();
+                    log.warn(errorMessage);
+                    throw new ServletException(errorMessage, ex);
+                } catch (ParseException | BadJOSEException | JOSEException ex) {
+                    log.error("Failed to initialize UserPrincipal.", ex);
+                    throw new ServletException(ex);
+                }
             }
         } else {
             if (!StringUtils.startsWith(request.getServletPath(), "/internal")) {

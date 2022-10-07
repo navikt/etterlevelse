@@ -10,4 +10,6 @@ public final class SecurityConstants {
     public static final int SESS_ID_LEN = 32;
     public static final String TOKEN_TYPE = "Bearer ";
 
+    public static final String TOKEN_USER = "System ";
+
 }

@@ -9,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
-import no.nav.data.common.security.jwt.JwtValidator;
 import no.nav.data.etterlevelse.arkivering.domain.EtterlevelseArkiv;
 import no.nav.data.etterlevelse.arkivering.domain.EtterlevelseArkivStatus;
 import no.nav.data.etterlevelse.arkivering.dto.ArkiverRequest;
@@ -121,11 +120,6 @@ public class EtterlevelseArkivController {
     @PutMapping("/status/arkivert")
     public ResponseEntity<RestResponsePage<EtterlevelseArkivResponse>> arkiver(@RequestHeader(HttpHeaders.AUTHORIZATION) String jwtToken, @RequestBody ArkiverRequest arkiverRequest){
 
-        String plainToken = jwtToken.replaceFirst("Bearer", "");
-
-        if(!JwtValidator.isJwtTokenValid(plainToken)){
-            throw new ValidationException("Invalid token");
-        } else {
         log.info("Arkivering vellykket, setter status BEHANDLER_ARKIVERING til ARKIVERT");
 
         if(!arkiverRequest.getFailedToArchiveBehandlingsNr().isEmpty()) {
@@ -147,7 +141,6 @@ public class EtterlevelseArkivController {
         List<EtterlevelseArkiv> etterlevelseArkivList = etterlevelseArkivService.setStatusToArkivert();
 
         return ResponseEntity.ok(new RestResponsePage<>(etterlevelseArkivList).convert(EtterlevelseArkiv::toResponse));
-        }
     }
 
     @Operation(summary = "Creating etterlevelseArkiv")
