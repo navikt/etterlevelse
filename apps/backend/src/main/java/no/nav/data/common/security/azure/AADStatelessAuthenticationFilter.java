@@ -103,6 +103,7 @@ public class AADStatelessAuthenticationFilter extends OncePerRequestFilter {
         if (credential != null) {
             if(credential.getAccessToken().startsWith(TOKEN_USER)) {
                 String plainToken = credential.getAccessToken().replaceFirst(TOKEN_USER, "");
+                log.info("DEBUG: " + plainToken);
                 if(!JwtValidator.isJwtTokenValid(plainToken)){
                     String errorMessage = "Invalid JWT. Either expired or not yet valid. ";
                     log.warn(errorMessage);
