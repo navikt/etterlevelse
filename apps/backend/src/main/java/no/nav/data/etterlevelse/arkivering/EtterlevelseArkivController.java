@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
+import no.nav.data.common.security.jwt.JwtValidator;
 import no.nav.data.etterlevelse.arkivering.domain.EtterlevelseArkiv;
 import no.nav.data.etterlevelse.arkivering.domain.EtterlevelseArkivStatus;
 import no.nav.data.etterlevelse.arkivering.dto.ArkiverRequest;
@@ -29,6 +30,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -117,15 +119,11 @@ public class EtterlevelseArkivController {
     @Operation(summary = "Update status to arkivert")
     @ApiResponse(description = "ok")
     @PutMapping("/status/arkivert")
-    public ResponseEntity<RestResponsePage<EtterlevelseArkivResponse>> arkiver(@RequestBody ArkiverRequest arkiverRequest){
-
-        //parse token to jwt
-        //access parsed token azp for user id
-        //access parsed token for roles "polly-admin/service-user-archiving"
-        //logging for which user id accessed for parsed token
-        //authenticate is role/s are correct
-        //log error if not and exit
-
+    public ResponseEntity<RestResponsePage<EtterlevelseArkivResponse>> arkiver(@RequestHeader(HttpHeaders.AUTHORIZATION) String jwtToken, @RequestBody ArkiverRequest arkiverRequest){
+        String plainToken = jwtToken.replaceFirst("Bearer", "");
+        if(!JwtValidator.isJwtTokenValid(plainToken)){
+            throw new ValidationException("Invalid token");
+        } else {
         log.info("Arkivering vellykket, setter status BEHANDLER_ARKIVERING til ARKIVERT");
 
         if(!arkiverRequest.getFailedToArchiveBehandlingsNr().isEmpty()) {
@@ -147,6 +145,7 @@ public class EtterlevelseArkivController {
         List<EtterlevelseArkiv> etterlevelseArkivList = etterlevelseArkivService.setStatusToArkivert();
 
         return ResponseEntity.ok(new RestResponsePage<>(etterlevelseArkivList).convert(EtterlevelseArkiv::toResponse));
+        }
     }
 
     @Operation(summary = "Creating etterlevelseArkiv")

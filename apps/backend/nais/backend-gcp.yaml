@@ -73,6 +73,9 @@ spec:
         - application: etterlevelse-frontend
         - application: etterlevelse-arkiv
           cluster: prod-legacy
+          permissions:
+            roles:
+              - "Arkiv-Admin"
     outbound:
       external:
         - host: {{teamcat_ingress}}
