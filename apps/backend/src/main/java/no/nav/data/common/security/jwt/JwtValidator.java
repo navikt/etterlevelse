@@ -31,7 +31,7 @@ public class JwtValidator {
             Claim roles = decodedJwt.getClaim("roles");
             if(roles.asList(String.class).isEmpty()){
                 throw new RuntimeException("roles are empty");
-            } else if(roles.asList(String.class).contains("Arkiv-Admin")){
+            } else if(!roles.asList(String.class).contains("Arkiv-Admin")){
                 return false;
             }
 

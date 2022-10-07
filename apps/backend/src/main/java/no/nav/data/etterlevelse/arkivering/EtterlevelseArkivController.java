@@ -120,7 +120,9 @@ public class EtterlevelseArkivController {
     @ApiResponse(description = "ok")
     @PutMapping("/status/arkivert")
     public ResponseEntity<RestResponsePage<EtterlevelseArkivResponse>> arkiver(@RequestHeader(HttpHeaders.AUTHORIZATION) String jwtToken, @RequestBody ArkiverRequest arkiverRequest){
+
         String plainToken = jwtToken.replaceFirst("Bearer", "");
+
         if(!JwtValidator.isJwtTokenValid(plainToken)){
             throw new ValidationException("Invalid token");
         } else {
