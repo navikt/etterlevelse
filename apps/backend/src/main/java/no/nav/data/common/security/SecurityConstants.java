@@ -9,7 +9,6 @@ public final class SecurityConstants {
     // UUID hex without dashes
     public static final int SESS_ID_LEN = 32;
     public static final String TOKEN_TYPE = "Bearer ";
-
     public static final String TOKEN_USER = "System ";
 
 }

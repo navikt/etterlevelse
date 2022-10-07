@@ -101,7 +101,7 @@ public class AADStatelessAuthenticationFilter extends OncePerRequestFilter {
     private boolean authenticate(HttpServletRequest request, HttpServletResponse response) throws ServletException {
         Credential credential = getCredential(request, response);
         if (credential != null) {
-            if(request.getHeader(HttpHeaders.AUTHORIZATION).startsWith(TOKEN_USER)) {
+            if(request.getHeader(HttpHeaders.AUTHORIZATION).replaceFirst(TOKEN_TYPE, "").startsWith(TOKEN_USER)) {
 
                 String plainToken = credential.getAccessToken().replaceFirst(TOKEN_USER, "");
 
@@ -161,7 +161,7 @@ public class AADStatelessAuthenticationFilter extends OncePerRequestFilter {
         String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         if (hasText(authHeader) && authHeader.startsWith(TOKEN_TYPE)) {
             String authHeader1 = request.getHeader(HttpHeaders.AUTHORIZATION);
-            String token = authHeader1.replace(TOKEN_TYPE, "");
+            String token = authHeader1.replaceFirst(TOKEN_TYPE, "");
             counter.labels("direct_token").inc();
             return new Credential(token);
         }
