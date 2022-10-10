@@ -126,10 +126,17 @@ export const EditEtterlevelseV2 = ({
 
   const submit = async (etterlevelse: Etterlevelse) => {
     setIsFormDirty(false)
+
+    const suksesskriterieBegrunnelser: any[] = []
+
+    krav?.suksesskriterier.forEach((k) => {
+      suksesskriterieBegrunnelser.push(etterlevelse.suksesskriterieBegrunnelser.filter((e) => e.suksesskriterieId === k.id)[0])
+    })
+
     const mutatedEtterlevelse = {
       ...etterlevelse,
       fristForFerdigstillelse: etterlevelse.status !== EtterlevelseStatus.OPPFYLLES_SENERE ? '' : etterlevelse.fristForFerdigstillelse,
-      suksesskriterieBegrunnelser: [...etterlevelse.suksesskriterieBegrunnelser],
+      suksesskriterieBegrunnelser: suksesskriterieBegrunnelser,
     }
 
     if (etterlevelse.id) {
