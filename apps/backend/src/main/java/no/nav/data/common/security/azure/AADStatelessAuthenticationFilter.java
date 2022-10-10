@@ -198,6 +198,7 @@ public class AADStatelessAuthenticationFilter extends OncePerRequestFilter {
                 .issueTime(jwt.getIssuedAt())
                 .jwtID(jwt.getId())
                 .subject(jwt.getSubject())
+                .notBeforeTime(jwt.getNotBefore())
                 .build();
     }
 
