@@ -26,6 +26,7 @@ import { VarselPage } from './pages/VarselPage'
 import { EtterlevelseDokumentasjonPage } from './pages/EtterlevelseDokumentasjonPage'
 import Forbidden from './pages/Forbidden'
 import EtterlevelseAdminPage from './pages/EtterlevelseAdminPage'
+import PrivateRoute from './util/PrivateRoute'
 
 const AppRoutes = (): JSX.Element => {
   return (
@@ -64,9 +65,9 @@ const AppRoutes = (): JSX.Element => {
         <Route path="/admin/codelist/:listname" element={<CodeListPage />} caseSensitive={true} />
         <Route path="/admin/codelist/" element={<CodeListPage />} caseSensitive={true} />
 
-        <Route path="/admin/audit/:id/:auditId" element={<AuditPage />} caseSensitive={true} />
-        <Route path="/admin/audit/:id/" element={<AuditPage />} caseSensitive={true} />
-        <Route path="/admin/audit/" element={<AuditPage />} caseSensitive={true} />
+        <Route path="/admin/audit/:id/:auditId" element={<PrivateRoute component={<AuditPage/>} adminPage/>} caseSensitive={true}/>
+        <Route path="/admin/audit/:id/" element={<PrivateRoute component={<AuditPage/>} adminPage/>} caseSensitive={true} />
+        <Route path="/admin/audit/" element={ <PrivateRoute component={<AuditPage/>} adminPage/>} caseSensitive={true} />
 
         <Route path="/admin/settings" element={<SettingsPage />} caseSensitive={true} />
         <Route path="/admin/maillog" element={<MailLogPage />} caseSensitive={true} />
