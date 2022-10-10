@@ -1,5 +1,7 @@
 package no.nav.data.common.security.azure;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.jose.JWSObject;
@@ -108,21 +110,12 @@ public class AADStatelessAuthenticationFilter extends OncePerRequestFilter {
                     log.warn(errorMessage);
                     throw new ServletException(errorMessage);
                 } else {
-                    try {
-                        var principal = buildUserPrincipal(credential.getAccessToken());
+                        var principal = buildFromJavaJwt(plainToken);
                         var grantedAuthorities = roleSupport.lookupGrantedAuthorities(List.of(System.getenv("AZURE_CLIENT_GROUPS_ADMIN")));
                         var authentication = new PreAuthenticatedAuthenticationToken(principal, credential, grantedAuthorities);
                         log.trace("Request token verification success with roles system.");
                         SecurityContextHolder.getContext().setAuthentication(authentication);
                         return true;
-                    } catch (BadJWTException ex) {
-                        String errorMessage = "Invalid JWT. Either expired or not yet valid. " + ex.getMessage();
-                        log.warn(errorMessage);
-                        throw new ServletException(errorMessage, ex);
-                    } catch (ParseException | BadJOSEException | JOSEException ex) {
-                        log.error("Failed to initialize UserPrincipal.", ex);
-                        throw new ServletException(ex);
-                    }
                 }
             } else {
                 try {
@@ -189,6 +182,19 @@ public class AADStatelessAuthenticationFilter extends OncePerRequestFilter {
             throw new BadJWTException("Invalid token appId. Provided value " + appIdClaim + " does not match allowed appId");
         }
         return principal;
+    }
+
+    private JWTClaimsSet buildFromJavaJwt(String token){
+        DecodedJWT jwt = JWT.decode(token);
+        var principal = new JWTClaimsSet.Builder();
+        return principal
+                .audience(jwt.getAudience())
+                .issuer(jwt.getIssuer())
+                .expirationTime(jwt.getExpiresAt())
+                .issueTime(jwt.getIssuedAt())
+                .jwtID(jwt.getId())
+                .subject(jwt.getSubject())
+                .build();
     }
 
     private static Counter initCounter() {
