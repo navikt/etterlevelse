@@ -31,15 +31,7 @@ public class JwtValidator {
                         .withIssuer(System.getenv("AZURE_OPENID_CONFIG_ISSUER"))
                         .withArrayClaim("roles", "arkiv-admin", "access_as_application")
                         .build();
-                DecodedJWT decodedJwt = verifier.verify(token);
-
-/*                Claim roles = decodedJwt.getClaim("roles");
-                if(roles.asList(String.class).isEmpty()){
-                    throw new RuntimeException("roles are empty");
-                } else if(!roles.asList(String.class).contains("arkiv-Admin")){
-                    return false;
-                }*/
-
+                verifier.verify(token);
             }catch (JwkException e){
                 log.error("Invalid token: " + e);
                 return false;
