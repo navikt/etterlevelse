@@ -1,20 +1,18 @@
-import React, { useEffect, useState } from 'react'
-import { Block } from 'baseui/block'
-import { useLocation, useNavigate, useParams } from 'react-router-dom'
-import { ettlevColors } from '../util/theme'
-import { codelist, ListName, TemaCode } from '../services/Codelist'
-import { useBehandling } from '../api/BehandlingApi'
-import { Layout2 } from '../components/scaffold/Page'
-import { KravId } from '../api/KravApi'
-import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
-import { Helmet } from 'react-helmet'
-import { KravView } from '../components/behandlingsTema/KravView'
-import { ampli } from '../services/Amplitude'
-import { EtterlevelseSecondaryHeader } from '../components/etterlevelse/EtterlevelseSecondaryHeader'
-import { KRAV_FILTER_TYPE } from '../constants'
-import { getMainHeader } from '../components/behandlingPage/common/utils'
-import { loginUrl } from '../components/Header'
-import { user } from '../services/User'
+import React, {useEffect, useState} from 'react'
+import {Block} from 'baseui/block'
+import {useParams} from 'react-router-dom'
+import {ettlevColors} from '../util/theme'
+import {codelist, ListName, TemaCode} from '../services/Codelist'
+import {useBehandling} from '../api/BehandlingApi'
+import {Layout2} from '../components/scaffold/Page'
+import {KravId} from '../api/KravApi'
+import {breadcrumbPaths} from '../components/common/CustomizedBreadcrumbs'
+import {Helmet} from 'react-helmet'
+import {KravView} from '../components/behandlingsTema/KravView'
+import {ampli} from '../services/Amplitude'
+import {EtterlevelseSecondaryHeader} from '../components/etterlevelse/EtterlevelseSecondaryHeader'
+import {KRAV_FILTER_TYPE} from '../constants'
+import {getMainHeader} from '../components/behandlingPage/common/utils'
 
 export type Section = 'dokumentasjon' | 'etterlevelser' | 'tilbakemeldinger'
 
@@ -39,15 +37,6 @@ export const EtterlevelseDokumentasjonPage = () => {
   const [navigatePath, setNavigatePath] = useState<string>('')
 
   const [tab, setTab] = useState<Section>('dokumentasjon')
-  const navigate = useNavigate()
-
-  useEffect(() => {
-    setTimeout(() => {
-      if (!user.isLoggedIn()) {
-        navigate('/forbidden')
-      }
-    }, 1)
-  }, [])
 
   useEffect(() => {
     if (params.kravNummer && params.kravVersjon) {

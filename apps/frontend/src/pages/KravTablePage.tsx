@@ -1,22 +1,19 @@
-import { Block } from 'baseui/block'
-import { ettlevColors, maxPageWidth } from '../util/theme'
-import { HeadingXXLarge } from 'baseui/typography'
+import {Block} from 'baseui/block'
+import {ettlevColors, maxPageWidth} from '../util/theme'
+import {HeadingXXLarge} from 'baseui/typography'
 import * as React from 'react'
-import { useEffect, useState } from 'react'
-import { Krav } from '../constants'
-import { getAllKrav, kravMapToFormVal } from '../api/KravApi'
-import { Cell, Row, Table } from '../components/common/Table'
-import { ColumnCompares } from '../util/hooks'
+import {useEffect, useState} from 'react'
+import {Krav} from '../constants'
+import {getAllKrav, kravMapToFormVal} from '../api/KravApi'
+import {Cell, Row, Table} from '../components/common/Table'
+import {ColumnCompares} from '../util/hooks'
 import moment from 'moment'
-import { codelist, ListName } from '../services/Codelist'
-import { kravStatus } from './KravPage'
-import { Layout2 } from '../components/scaffold/Page'
+import {codelist, ListName} from '../services/Codelist'
+import {kravStatus} from './KravPage'
+import {Layout2} from '../components/scaffold/Page'
 import RouteLink from '../components/common/RouteLink'
-import { Helmet } from 'react-helmet'
-import { ampli } from '../services/Amplitude'
-import { useLocation } from 'react-router-dom'
-import { loginUrl } from '../components/Header'
-import { user } from '../services/User'
+import {Helmet} from 'react-helmet'
+import {ampli} from '../services/Amplitude'
 
 const kravSorting: ColumnCompares<Krav> = {
   kravNummer: (a, b) => a.kravNummer - b.kravNummer,
@@ -29,15 +26,8 @@ const kravSorting: ColumnCompares<Krav> = {
 
 export const KravTablePage = () => {
   const [tableContent, setTableContent] = useState<Krav[]>([])
-  const location = useLocation()
 
   useEffect(() => {
-    // if(!user.isLoggedIn()) {
-    //   window.location.href = loginUrl(location, location.pathname)
-    // }
-    if (!user.isAdmin()) {
-      window.location.href = '/forbidden'
-    }
 
     ;(async () => {
       const kraver = await getAllKrav()
