@@ -10,7 +10,7 @@ interface PrivateRouteProps {
 }
 
 
-export const PrivateRoute = ({ component, adminPage, ...rest }: PrivateRouteProps) => {
+export const PrivateRoute = ({ component, adminPage }: PrivateRouteProps) => {
   const [isLoading, setIsLoading] = useState(true)
 
   React.useEffect(() => {
