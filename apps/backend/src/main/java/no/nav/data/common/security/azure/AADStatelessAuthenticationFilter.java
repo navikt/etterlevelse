@@ -108,7 +108,21 @@ public class AADStatelessAuthenticationFilter extends OncePerRequestFilter {
                     log.warn(errorMessage);
                     throw new ServletException(errorMessage);
                 } else {
-                    return true;
+                    try {
+                        var principal = buildUserPrincipal(credential.getAccessToken());
+                        var grantedAuthorities = roleSupport.lookupGrantedAuthorities(List.of(System.getenv("AZURE_CLIENT_GROUPS_ADMIN")));
+                        var authentication = new PreAuthenticatedAuthenticationToken(principal, credential, grantedAuthorities);
+                        log.trace("Request token verification success with roles system.");
+                        SecurityContextHolder.getContext().setAuthentication(authentication);
+                        return true;
+                    } catch (BadJWTException ex) {
+                        String errorMessage = "Invalid JWT. Either expired or not yet valid. " + ex.getMessage();
+                        log.warn(errorMessage);
+                        throw new ServletException(errorMessage, ex);
+                    } catch (ParseException | BadJOSEException | JOSEException ex) {
+                        log.error("Failed to initialize UserPrincipal.", ex);
+                        throw new ServletException(ex);
+                    }
                 }
             } else {
                 try {
