@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -37,9 +38,8 @@ public interface EtterlevelseArkivRepo extends JpaRepository<GenericStorage, UUI
     @Query(value = "update generic_storage set DATA = jsonb_set(DATA, '{status}', to_jsonb(?1) , false ) where data ->> 'behandlingId' = ?2 and type = 'EtterlevelseArkiv' returning *", nativeQuery = true)
     List<GenericStorage> updateStatusWithBehandlingsId(String newStatus, String behandlingsId);
 
-
     @Modifying(clearAutomatically = true)
     @Transactional
-    @Query(value = "update generic_storage set DATA = jsonb_set(DATA, '{status}', to_jsonb(?1) , false ) where data ->> 'behandlingId' = ?2 and type = 'EtterlevelseArkiv' returning *", nativeQuery = true)
-    List<GenericStorage> updateStatusToArkivertWithException(String newStatus, List<String> behandlingsId);
+    @Query(value = "update generic_storage set DATA = jsonb_set(DATA, '{arkiveringDato}', to_jsonb(?2) , false ) where data -> 'status' = to_jsonb(?1) and type = 'EtterlevelseArkiv'", nativeQuery = true)
+    List<GenericStorage> updateArkiveringDato(String status, LocalDateTime arkiveringDato);
 }

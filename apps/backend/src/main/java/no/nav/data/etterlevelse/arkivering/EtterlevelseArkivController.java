@@ -137,9 +137,9 @@ public class EtterlevelseArkivController {
                 }
             }
         }
-
+        LocalDateTime arkiveringDato = LocalDateTime.now();
+        etterlevelseArkivService.updateArkiveringDato(EtterlevelseArkivStatus.BEHANDLER_ARKIVERING.name(),arkiveringDato);
         List<EtterlevelseArkiv> etterlevelseArkivList = etterlevelseArkivService.setStatusToArkivert();
-
         return ResponseEntity.ok(new RestResponsePage<>(etterlevelseArkivList).convert(EtterlevelseArkiv::toResponse));
     }
 
