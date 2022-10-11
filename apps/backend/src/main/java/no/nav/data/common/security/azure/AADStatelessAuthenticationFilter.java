@@ -1,7 +1,6 @@
 package no.nav.data.common.security.azure;
 
 import com.auth0.jwk.JwkException;
-import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSAlgorithm;
@@ -108,7 +107,7 @@ public class AADStatelessAuthenticationFilter extends OncePerRequestFilter {
         Credential credential = getCredential(request, response);
         if (credential != null) {
             if(credential.getAccessToken().startsWith(TOKEN_USER)) {
-                String plainToken = credential.getAccessToken().replaceFirst(TOKEN_USER, "").replace(" ", "").replace("\n", "");
+                String plainToken = StringUtils.deleteWhitespace(credential.getAccessToken().replaceFirst(TOKEN_USER, ""));
                 try{
                     var principal = buildAndValidateFromJavaJwt(plainToken);
                     List<GrantedAuthority> roles = new ArrayList<>();
