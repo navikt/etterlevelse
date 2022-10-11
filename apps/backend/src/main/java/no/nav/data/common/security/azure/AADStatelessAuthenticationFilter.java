@@ -1,5 +1,6 @@
 package no.nav.data.common.security.azure;
 
+import com.auth0.jwk.JwkException;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.nimbusds.jose.JOSEException;
@@ -108,18 +109,18 @@ public class AADStatelessAuthenticationFilter extends OncePerRequestFilter {
         if (credential != null) {
             if(credential.getAccessToken().startsWith(TOKEN_USER)) {
                 String plainToken = credential.getAccessToken().replaceFirst(TOKEN_USER, "").replace(" ", "").replace("\n", "");
-                if(!JwtValidator.isJwtTokenValid(plainToken)){
-                    String errorMessage = "Invalid JWT. Either expired or not yet valid. ";
+                try{
+                    var principal = buildAndValidateFromJavaJwt(plainToken);
+                    List<GrantedAuthority> roles = new ArrayList<>();
+                    roles.add(AppRole.ADMIN.toAuthority());
+                    var authentication = new PreAuthenticatedAuthenticationToken(principal, credential, new HashSet<>(roles));
+                    log.trace("Request token verification success with roles system.");
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                    return true;
+                }catch (JwkException e){
+                    String errorMessage = "Invalid JWT. Either expired or not yet valid. " + e;
                     log.warn(errorMessage);
                     throw new ServletException(errorMessage);
-                } else {
-                        var principal = buildFromJavaJwt(plainToken);
-                        List<GrantedAuthority> roles = new ArrayList<>();
-                        roles.add(AppRole.ADMIN.toAuthority());
-                        var authentication = new PreAuthenticatedAuthenticationToken(principal, credential, new HashSet<>(roles));
-                        log.trace("Request token verification success with roles system.");
-                        SecurityContextHolder.getContext().setAuthentication(authentication);
-                        return true;
                 }
             } else {
                 try {
@@ -188,8 +189,8 @@ public class AADStatelessAuthenticationFilter extends OncePerRequestFilter {
         return principal;
     }
 
-    private JWTClaimsSet buildFromJavaJwt(String token){
-        DecodedJWT jwt = JWT.decode(token);
+    private JWTClaimsSet buildAndValidateFromJavaJwt(String token) throws JwkException{
+        DecodedJWT jwt = JwtValidator.isJwtTokenValid(token);
         var principal = new JWTClaimsSet.Builder();
         return principal
                 .audience(jwt.getAudience())

@@ -17,27 +17,20 @@ import java.security.interfaces.RSAPublicKey;
 @Slf4j
 public class JwtValidator {
 
-    public static boolean isJwtTokenValid(String token) {
+    public static DecodedJWT isJwtTokenValid(String token) throws JwkException{
         DecodedJWT jwt = JWT.decode(token);
         try {
             URL azureOpenIdConfig = new URL(System.getenv("AZURE_OPENID_CONFIG_JWKS_URI"));
             JwkProvider provider = new UrlJwkProvider(azureOpenIdConfig);
-            try {
-                log.info("Validating token from: " + jwt.getClaim("azp"));
-                Jwk jwk = provider.get(jwt.getKeyId());
+            log.info("Validating token from: " + jwt.getClaim("azp"));
+            Jwk jwk = provider.get(jwt.getKeyId());
 
-                Algorithm algorithm = Algorithm.RSA256((RSAPublicKey) jwk.getPublicKey(), null);
-                JWTVerifier verifier = JWT.require(algorithm)
-                        .withIssuer(System.getenv("AZURE_OPENID_CONFIG_ISSUER"))
-                        .withArrayClaim("roles", "arkiv-admin", "access_as_application")
-                        .build();
-                verifier.verify(token);
-            }catch (JwkException e){
-                log.error("Invalid token: " + e);
-                return false;
-            }
-
-            return true;
+            Algorithm algorithm = Algorithm.RSA256((RSAPublicKey) jwk.getPublicKey(), null);
+            JWTVerifier verifier = JWT.require(algorithm)
+                    .withIssuer(System.getenv("AZURE_OPENID_CONFIG_ISSUER"))
+                    .withArrayClaim("roles", "arkiv-admin", "access_as_application")
+                    .build();
+            return verifier.verify(token);
         } catch (MalformedURLException e) {
             log.error("Invalid azure openid config url for jwks uri");
             throw new RuntimeException("Invalid url: " + e);
