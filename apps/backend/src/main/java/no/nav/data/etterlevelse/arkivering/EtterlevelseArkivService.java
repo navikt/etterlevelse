@@ -30,7 +30,6 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -160,7 +159,7 @@ public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
         return GenericStorage.to(repo.updateStatus(EtterlevelseArkivStatus.BEHANDLER_ARKIVERING.name(), EtterlevelseArkivStatus.ARKIVERT.name()), EtterlevelseArkiv.class);
     }
 
-    public List<EtterlevelseArkiv> updateArkiveringDato(String status, LocalDateTime arkiveringDato) {
+    public List<EtterlevelseArkiv> updateArkiveringDato(String status, String arkiveringDato) {
         return GenericStorage.to(repo.updateArkiveringDato(status, arkiveringDato), EtterlevelseArkiv.class);
     }
 
