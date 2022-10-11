@@ -23,6 +23,7 @@ public class EtterlevelseArkivRequest implements RequestElement {
     private String behandlingId;
     private EtterlevelseArkivStatus status;
     private LocalDateTime arkiveringDato;
+    private LocalDateTime tilArkiveringDato;
     private String webSakNummer;
     private Boolean update;
 

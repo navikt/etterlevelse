@@ -35,6 +35,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -151,9 +152,13 @@ public class EtterlevelseArkivController {
         List<Etterlevelse> etterlevelseList = etterlevelseService.getByBehandling(request.getBehandlingId());
 
         if(etterlevelseList.isEmpty()) {
-            log.info("Ingen ferdig dokumentasjon på behandling med id: " + request.getBehandlingId());
+            log.info("Ingen dokumentasjon på behandling med id: " + request.getBehandlingId());
             throw  new ValidationException("Kan ikke arkivere en behandling som ikke har ferdig dokumentert innhold");
         } else {
+            if(request.getStatus() == EtterlevelseArkivStatus.TIL_ARKIVERING) {
+                LocalDateTime tilArkiveringDato = LocalDateTime.now();
+                request.setTilArkiveringDato(tilArkiveringDato);
+            }
             var etterlevelseArkiv = etterlevelseArkivService.save(request);
             return new ResponseEntity<>(etterlevelseArkiv.toResponse(), HttpStatus.CREATED);
         }
@@ -175,6 +180,10 @@ public class EtterlevelseArkivController {
             log.info("Ingen ferdig dokumentasjon på behandling med id: " + request.getBehandlingId());
             throw  new ValidationException("Kan ikke arkivere en behandling som ikke har ferdig dokumentert innhold");
         } else {
+            if(request.getStatus() == EtterlevelseArkivStatus.TIL_ARKIVERING) {
+                LocalDateTime tilArkiveringDato = LocalDateTime.now();
+                request.setTilArkiveringDato(tilArkiveringDato);
+            }
             var etterlevelseArkiv = etterlevelseArkivService.save(request);
             return ResponseEntity.ok(etterlevelseArkiv.toResponse());
         }
