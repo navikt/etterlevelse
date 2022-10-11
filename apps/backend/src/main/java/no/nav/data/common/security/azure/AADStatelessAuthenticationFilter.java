@@ -31,7 +31,6 @@ import no.nav.data.common.security.jwt.JwtValidator;
 import no.nav.data.common.utils.MetricUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpHeaders;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -44,7 +43,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.text.ParseException;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -110,9 +109,7 @@ public class AADStatelessAuthenticationFilter extends OncePerRequestFilter {
                 String plainToken = StringUtils.deleteWhitespace(credential.getAccessToken().replaceFirst(TOKEN_USER, ""));
                 try{
                     var principal = buildAndValidateFromJavaJwt(plainToken);
-                    List<GrantedAuthority> roles = new ArrayList<>();
-                    roles.add(AppRole.ADMIN.toAuthority());
-                    var authentication = new PreAuthenticatedAuthenticationToken(principal, credential, new HashSet<>(roles));
+                    var authentication = new PreAuthenticatedAuthenticationToken(principal, credential, Arrays.asList(AppRole.ADMIN.toAuthority()));
                     log.trace("Request token verification success with roles system.");
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                     return true;
