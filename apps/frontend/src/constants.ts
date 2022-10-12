@@ -1,5 +1,5 @@
-import { Code, LovCode } from './services/Codelist'
-import { Group } from './services/User'
+import {Code, LovCode} from './services/Codelist'
+import {Group} from './services/User'
 
 export type RecursivePartial<T> = {
   [P in keyof T]?: T[P] extends (infer U)[] ? RecursivePartial<U>[] : T[P] extends object ? RecursivePartial<T[P]> : T[P]
@@ -293,13 +293,14 @@ export enum KravListFilter {
 }
 
 export enum EtterlevelseArkivStatus {
-  TIL_ARKIVERING='TIL_ARKIVERING',
-  BEHANDLER_ARKIVERING='BEHANDLER_ARKIVERING',
-  ARKIVERT='ARKIVERT',
-  IKKE_ARKIVER='IKKE_ARKIVER',
+  TIL_ARKIVERING = 'TIL_ARKIVERING',
+  BEHANDLER_ARKIVERING = 'BEHANDLER_ARKIVERING',
+  ARKIVERT = 'ARKIVERT',
+  IKKE_ARKIVER = 'IKKE_ARKIVER',
+  ERROR = 'ERROR'
 }
 
-export const emptyPage = { content: [], numberOfElements: 0, pageNumber: 0, pages: 0, pageSize: 1, totalElements: 0 }
+export const emptyPage = {content: [], numberOfElements: 0, pageNumber: 0, pages: 0, pageSize: 1, totalElements: 0}
 
 export interface TeamResource {
   navIdent: string
@@ -347,15 +348,13 @@ export interface Begrep {
 }
 
 // export type KravQL = Omit<Krav, 'varslingsadresser'> & {
-export type KravQL = Replace<
-  Krav,
+export type KravQL = Replace<Krav,
   {
     etterlevelser: EtterlevelseQL[]
     varslingsadresser: VarslingsadresseQL[]
     begreper: Begrep[]
     kravRelasjoner: Krav[]
-  }
->
+  }>
 
 export type EtterlevelseQL = Etterlevelse & {
   behandling: BehandlingQL
