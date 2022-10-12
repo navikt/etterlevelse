@@ -11,8 +11,13 @@ import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.etterlevelse.arkivering.domain.EtterlevelseArkiv;
 import no.nav.data.etterlevelse.arkivering.domain.EtterlevelseArkivStatus;
+import no.nav.data.etterlevelse.arkivering.dto.ArkiverRequest;
 import no.nav.data.etterlevelse.arkivering.dto.EtterlevelseArkivRequest;
 import no.nav.data.etterlevelse.arkivering.dto.EtterlevelseArkivResponse;
+import no.nav.data.etterlevelse.behandling.BehandlingService;
+import no.nav.data.etterlevelse.behandling.dto.Behandling;
+import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
+import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -30,6 +35,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -42,6 +48,9 @@ import java.util.UUID;
 public class EtterlevelseArkivController {
 
     private final EtterlevelseArkivService etterlevelseArkivService;
+    private final EtterlevelseService etterlevelseService;
+
+    private final BehandlingService behandlingService;
 
     @Operation(summary = "Get all etterlevelsearkiv")
     @ApiResponse(description = "Ok")
@@ -95,8 +104,8 @@ public class EtterlevelseArkivController {
     @GetMapping(value = "/export", produces = "application/zip")
     public void getExportArchive(HttpServletResponse response) {
         log.info("export etterlevelse to archive");
-        List<EtterlevelseArkiv> etterlevelseArkivList=etterlevelseArkivService.getByStatus(EtterlevelseArkivStatus.TIL_ARKIVERING.name());
 
+        List<EtterlevelseArkiv> etterlevelseArkivList = etterlevelseArkivService.setStatusToBehandler_arkivering();
 
         byte[] etterlevelserArchiveZip = etterlevelseArkivService.getEtterlevelserArchiveZip(etterlevelseArkivList);
 
@@ -108,9 +117,28 @@ public class EtterlevelseArkivController {
 
     @Operation(summary = "Update status to arkivert")
     @ApiResponse(description = "ok")
-    @GetMapping("/status/arkivert")
-    public ResponseEntity<RestResponsePage<EtterlevelseArkivResponse>> arkiver(){
+    @PutMapping("/status/arkivert")
+    public ResponseEntity<RestResponsePage<EtterlevelseArkivResponse>> arkiver(@RequestBody ArkiverRequest arkiverRequest){
+
         log.info("Arkivering vellykket, setter status BEHANDLER_ARKIVERING til ARKIVERT");
+
+        if(!arkiverRequest.getFailedToArchiveBehandlingsNr().isEmpty()) {
+            for(String failedBehandlingsNr: arkiverRequest.getFailedToArchiveBehandlingsNr()) {
+                log.info("Feilet med å arkivere: " + failedBehandlingsNr);
+                List<Behandling> sokResultat = behandlingService.findBehandlinger(failedBehandlingsNr)
+                        .stream()
+                        .filter(behandling -> behandling.getNummer()==Integer.parseInt(failedBehandlingsNr.substring(1)))
+                        .toList();
+                if(!sokResultat.isEmpty()){
+                    log.info("Fant behandling for: {}, søkeresultat:{}",failedBehandlingsNr, sokResultat.get(0).getNummer());
+                    etterlevelseArkivService.setStatusWithBehandlingsId(EtterlevelseArkivStatus.ERROR.name(), sokResultat.get(0).getId());
+                } else {
+                    throw new ValidationException("Fant ikke behandling for " + failedBehandlingsNr);
+                }
+            }
+        }
+        String arkiveringDato = LocalDateTime.now().toString();
+        etterlevelseArkivService.updateArkiveringDato(EtterlevelseArkivStatus.BEHANDLER_ARKIVERING.name(),arkiveringDato);
 
         List<EtterlevelseArkiv> etterlevelseArkivList = etterlevelseArkivService.setStatusToArkivert();
         return ResponseEntity.ok(new RestResponsePage<>(etterlevelseArkivList).convert(EtterlevelseArkiv::toResponse));
@@ -121,8 +149,20 @@ public class EtterlevelseArkivController {
     @PostMapping
     public ResponseEntity<EtterlevelseArkivResponse> createEtterlevelseArkiv(@RequestBody EtterlevelseArkivRequest request) {
         log.info("Create etterlevelseArkiv");
-        var etterlevelseArkiv = etterlevelseArkivService.save(request);
-        return new ResponseEntity<>(etterlevelseArkiv.toResponse(), HttpStatus.CREATED);
+
+        List<Etterlevelse> etterlevelseList = etterlevelseService.getByBehandling(request.getBehandlingId());
+
+        if(etterlevelseList.isEmpty()) {
+            log.info("Ingen dokumentasjon på behandling med id: " + request.getBehandlingId());
+            throw  new ValidationException("Kan ikke arkivere en behandling som ikke har ferdig dokumentert innhold");
+        } else {
+            if(request.getStatus() == EtterlevelseArkivStatus.TIL_ARKIVERING) {
+                LocalDateTime tilArkiveringDato = LocalDateTime.now();
+                request.setTilArkiveringDato(tilArkiveringDato);
+            }
+            var etterlevelseArkiv = etterlevelseArkivService.save(request);
+            return new ResponseEntity<>(etterlevelseArkiv.toResponse(), HttpStatus.CREATED);
+        }
     }
 
     @Operation(summary = "Update etterlevelseArkiv")
@@ -135,8 +175,19 @@ public class EtterlevelseArkivController {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
         }
 
-        var etterlevelseArkiv = etterlevelseArkivService.save(request);
-        return ResponseEntity.ok(etterlevelseArkiv.toResponse());
+        List<Etterlevelse> etterlevelseList = etterlevelseService.getByBehandling(request.getBehandlingId());
+
+        if(etterlevelseList.isEmpty()) {
+            log.info("Ingen ferdig dokumentasjon på behandling med id: " + request.getBehandlingId());
+            throw  new ValidationException("Kan ikke arkivere en behandling som ikke har ferdig dokumentert innhold");
+        } else {
+            if(request.getStatus() == EtterlevelseArkivStatus.TIL_ARKIVERING) {
+                LocalDateTime tilArkiveringDato = LocalDateTime.now();
+                request.setTilArkiveringDato(tilArkiveringDato);
+            }
+            var etterlevelseArkiv = etterlevelseArkivService.save(request);
+            return ResponseEntity.ok(etterlevelseArkiv.toResponse());
+        }
     }
 
     @Operation(summary = "Delete etterlevelseArkiv")

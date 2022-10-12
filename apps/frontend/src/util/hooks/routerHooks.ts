@@ -1,12 +1,14 @@
-import type {Blocker, History, Transition} from 'history'
-import {useCallback, useContext, useEffect} from 'react'
-import {UNSAFE_NavigationContext} from 'react-router-dom'
+import type { Blocker, History, Transition } from 'history'
+import {useCallback, useContext, useEffect } from 'react'
+import { UNSAFE_NavigationContext} from 'react-router-dom'
 
 // THIS IS A TEMPORARY SOLUTION AND WILL BE REMOVED ONCE REACT-ROUTER UPDATES THEIR PACKAGE TO INCLUDE USEBLOCKER AND USEPROMPT
 
+
+
 /**
-* @source https://github.com/remix-run/react-router/commit/256cad70d3fd4500b1abcfea66f3ee622fb90874
-*/
+ * @source https://github.com/remix-run/react-router/commit/256cad70d3fd4500b1abcfea66f3ee622fb90874
+ */
 export function useBlocker(blocker: Blocker, when = true) {
   const  navigator  = useContext(UNSAFE_NavigationContext).navigator as History
 
@@ -38,7 +40,7 @@ export function useBlocker(blocker: Blocker, when = true) {
  * @source https://github.com/remix-run/react-router/issues/8139#issuecomment-1021457943
  */
 export function usePrompt(message: string | ((location: Transition['location'], action: Transition['action']) => string), when = true) {
-  const blocker: Blocker = useCallback(
+  const blocker = useCallback(
     (tx: Transition) => {
       let response
       if (typeof message === 'function') {

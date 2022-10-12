@@ -1,25 +1,22 @@
-import React, { useEffect, useState } from 'react'
-import { HeadingMedium, HeadingXSmall } from 'baseui/typography'
-import { intl } from '../../../util/intl/intl'
+import React, {useEffect, useState} from 'react'
+import {HeadingMedium, HeadingXSmall} from 'baseui/typography'
+import {intl} from '../../../util/intl/intl'
 import axios from 'axios'
-import { env } from '../../../util/env'
-import { PageResponse } from '../../../constants'
-import { Block } from 'baseui/block'
-import { Card } from 'baseui/card'
+import {env} from '../../../util/env'
+import {PageResponse} from '../../../constants'
+import {Block} from 'baseui/block'
+import {Card} from 'baseui/card'
 import moment from 'moment'
-import { theme } from '../../../util'
-import { PLACEMENT, StatefulPopover } from 'baseui/popover'
-import { StatefulMenu } from 'baseui/menu'
-import { Button, KIND } from 'baseui/button'
-import { TriangleDown } from 'baseui/icon'
-import { Pagination } from 'baseui/pagination'
-import { Markdown } from '../../common/Markdown'
-import { responsivePaddingSmall, responsiveWidthSmall } from '../../../util/theme'
-import { Helmet } from 'react-helmet'
-import { buttonContentStyle } from '../../common/Button'
-import { useLocation } from 'react-router-dom'
-import { user } from '../../../services/User'
-import { loginUrl } from '../../Header'
+import {theme} from '../../../util'
+import {PLACEMENT, StatefulPopover} from 'baseui/popover'
+import {StatefulMenu} from 'baseui/menu'
+import {Button, KIND} from 'baseui/button'
+import {TriangleDown} from 'baseui/icon'
+import {Pagination} from 'baseui/pagination'
+import {Markdown} from '../../common/Markdown'
+import {responsivePaddingSmall, responsiveWidthSmall} from '../../../util/theme'
+import {Helmet} from 'react-helmet'
+import {buttonContentStyle} from '../../common/Button'
 
 interface MailLog {
   time: string
@@ -36,16 +33,6 @@ export const MailLogPage = () => {
   const [log, setLog] = useState<PageResponse<MailLog>>({ content: [], numberOfElements: 0, pageNumber: 0, pages: 0, pageSize: 1, totalElements: 0 })
   const [page, setPage] = useState(1)
   const [limit, setLimit] = useState(20)
-  const location = useLocation()
-
-  useEffect(() => {
-    // if (!user.isLoggedIn()) {
-    //   window.location.href = loginUrl(location, location.pathname)
-    // }
-    if (!user.isAdmin()) {
-      window.location.href = '/forbidden'
-    }
-  }, [])
 
   useEffect(() => {
     getMailLog(page - 1, limit).then(setLog)

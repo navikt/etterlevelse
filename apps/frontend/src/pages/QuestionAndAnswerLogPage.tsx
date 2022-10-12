@@ -1,27 +1,24 @@
-import { Block } from 'baseui/block'
+import {Block} from 'baseui/block'
 
-import { HeadingXXLarge, ParagraphMedium } from 'baseui/typography'
+import {HeadingXXLarge, ParagraphMedium} from 'baseui/typography'
 import moment from 'moment'
 import * as React from 'react'
-import { useEffect, useState } from 'react'
-import { Helmet } from 'react-helmet'
-import { getAllKrav, kravMapToFormVal } from '../api/KravApi'
-import { getTilbakemeldingForKrav } from '../api/TilbakemeldingApi'
-import { PersonName } from '../components/common/PersonName'
+import {useEffect, useState} from 'react'
+import {Helmet} from 'react-helmet'
+import {getAllKrav, kravMapToFormVal} from '../api/KravApi'
+import {getTilbakemeldingForKrav} from '../api/TilbakemeldingApi'
+import {PersonName} from '../components/common/PersonName'
 import RouteLink from '../components/common/RouteLink'
-import { Cell, Row, Table } from '../components/common/Table'
-import { tilbakeMeldingStatus } from '../components/krav/tilbakemelding/Tilbakemelding'
-import { Layout2 } from '../components/scaffold/Page'
-import { Krav, PageResponse, Tilbakemelding } from '../constants'
-import { ColumnCompares } from '../util/hooks'
-import { ettlevColors, maxPageWidth } from '../util/theme'
-import { codelist, ListName } from '../services/Codelist'
-import { ampli } from '../services/Amplitude'
-import { Spinner } from '../components/common/Spinner'
-import { ReactNode } from 'react-markdown/lib/react-markdown'
-import { useLocation } from 'react-router-dom'
-import { loginUrl } from '../components/Header'
-import { user } from '../services/User'
+import {Cell, Row, Table} from '../components/common/Table'
+import {tilbakeMeldingStatus} from '../components/krav/tilbakemelding/Tilbakemelding'
+import {Layout2} from '../components/scaffold/Page'
+import {Krav, PageResponse, Tilbakemelding} from '../constants'
+import {ColumnCompares} from '../util/hooks'
+import {ettlevColors, maxPageWidth} from '../util/theme'
+import {codelist, ListName} from '../services/Codelist'
+import {ampli} from '../services/Amplitude'
+import {Spinner} from '../components/common/Spinner'
+import {ReactNode} from 'react-markdown/lib/react-markdown'
 
 type SporsmaalOgSvarKrav = {
   kravNavn: string
@@ -45,18 +42,9 @@ export const QuestionAndAnswerLogPage = () => {
   const [tableContent, setTableContent] = useState<Krav[]>([])
   const [kravMessages, setKravMessages] = useState<KravMessage[]>([])
   const [isloading, setIsLoading] = useState<boolean>(false)
-  const location = useLocation()
   ampli.logEvent('sidevisning', { side: 'Log side for spørsmål og svar', sidetittel: 'Spørsmål og svar' })
 
   useEffect(() => {
-    // if(!user.isLoggedIn()) {
-    //   window.location.href = loginUrl(location, location.pathname)
-    // }
-
-    if (!user.isAdmin()) {
-      window.location.href = '/forbidden'
-    }
-
     ;(async () => {
       const kraver = await getAllKrav()
       const mappedKraver = kraver.map((k) => kravMapToFormVal(k))

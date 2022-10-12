@@ -28,6 +28,7 @@ import StatusView from '../common/StatusTag'
 import { getPageWidth } from '../../util/pageWidth'
 import { usePrompt } from '../../util/hooks/routerHooks'
 import { useNavigate, useParams } from 'react-router-dom'
+import { syncEtterlevelseKriterieBegrunnelseWithKrav } from '../behandlingsTema/utils'
 
 type EditEttlevProps = {
   etterlevelse: Etterlevelse
@@ -129,7 +130,7 @@ export const EditEtterlevelseV2 = ({
     const mutatedEtterlevelse = {
       ...etterlevelse,
       fristForFerdigstillelse: etterlevelse.status !== EtterlevelseStatus.OPPFYLLES_SENERE ? '' : etterlevelse.fristForFerdigstillelse,
-      suksesskriterieBegrunnelser: [...etterlevelse.suksesskriterieBegrunnelser],
+      suksesskriterieBegrunnelser: syncEtterlevelseKriterieBegrunnelseWithKrav(etterlevelse, krav),
     }
 
     if (etterlevelse.id) {
@@ -502,3 +503,5 @@ export const EditEtterlevelseV2 = ({
     </Block>
   )
 }
+
+

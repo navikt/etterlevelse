@@ -34,6 +34,11 @@ public interface EtterlevelseArkivRepo extends JpaRepository<GenericStorage, UUI
 
     @Modifying(clearAutomatically = true)
     @Transactional
-    @Query(value = "update generic_storage set DATA = jsonb_set(DATA, '{status}', to_jsonb(?2) , false ) where data -> 'status' = to_jsonb(?1) and where data ->> 'behandlingId' = ?3 and type = 'EtterlevelseArkiv' returning *", nativeQuery = true)
-    List<GenericStorage> updateStatusWithBehandlingsId(String oldStatus, String newStatus, String behandlingsId);
+    @Query(value = "update generic_storage set DATA = jsonb_set(DATA, '{status}', to_jsonb(?1) , false ) where data ->> 'behandlingId' = ?2 and type = 'EtterlevelseArkiv' returning *", nativeQuery = true)
+    List<GenericStorage> updateStatusWithBehandlingsId(String newStatus, String behandlingsId);
+
+    @Modifying(clearAutomatically = true)
+    @Transactional
+    @Query(value = "update generic_storage set DATA = jsonb_set(DATA, '{arkiveringDato}', to_jsonb(?2) , false ) where data -> 'status' = to_jsonb(?1) and type = 'EtterlevelseArkiv' returning *", nativeQuery = true)
+    List<GenericStorage> updateArkiveringDato(String status, String arkiveringDato);
 }

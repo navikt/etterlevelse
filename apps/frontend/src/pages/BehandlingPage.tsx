@@ -46,14 +46,6 @@ export const BehandlingPage = () => {
   const [irrelevanteStats, setIrrelevanteStats] = useState<any[]>([])
   const [utgaattStats, setUtgaattStats] = useState<any[]>([])
 
-  useEffect(() => {
-    setTimeout(() => {
-      if (!user.isLoggedIn()) {
-        navigate('/forbidden')
-      }
-    }, 1)
-  }, [])
-
   const filterData = (
     unfilteredData:
       | {

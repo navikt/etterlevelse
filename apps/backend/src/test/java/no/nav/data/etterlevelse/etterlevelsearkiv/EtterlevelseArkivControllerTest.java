@@ -4,12 +4,19 @@ import no.nav.data.IntegrationTestBase;
 import no.nav.data.etterlevelse.arkivering.EtterlevelseArkivController;
 import no.nav.data.etterlevelse.arkivering.domain.EtterlevelseArkiv;
 import no.nav.data.etterlevelse.arkivering.domain.EtterlevelseArkivStatus;
+import no.nav.data.etterlevelse.arkivering.dto.ArkiverRequest;
 import no.nav.data.etterlevelse.arkivering.dto.EtterlevelseArkivRequest;
 import no.nav.data.etterlevelse.arkivering.dto.EtterlevelseArkivResponse;
+import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
+import no.nav.data.etterlevelse.krav.domain.Krav;
+import no.nav.data.etterlevelse.krav.domain.KravStatus;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -157,6 +164,8 @@ class EtterlevelseArkivControllerTest extends IntegrationTestBase {
 
     @Test
     void createEtterlevelseArkiv() {
+        var krav = storageService.save(Krav.builder().kravNummer(50).kravVersjon(1).status(KravStatus.AKTIV).build());
+        storageService.save(Etterlevelse.builder().behandlingId("test_behandling").kravNummer(krav.getKravNummer()).kravVersjon(krav.getKravVersjon()).build());
         var req = EtterlevelseArkivRequest.builder()
                 .behandlingId("test_behandling")
                 .status(EtterlevelseArkivStatus.TIL_ARKIVERING)
@@ -184,6 +193,8 @@ class EtterlevelseArkivControllerTest extends IntegrationTestBase {
 
     @Test
     void updateEtterlevelseArkiv() {
+        var krav = storageService.save(Krav.builder().kravNummer(50).kravVersjon(1).status(KravStatus.AKTIV).build());
+        storageService.save(Etterlevelse.builder().behandlingId("test_Behandling").kravNummer(krav.getKravNummer()).kravVersjon(krav.getKravVersjon()).build());
         var etterlevelseArkiv = storageService.save(EtterlevelseArkiv.builder().status(EtterlevelseArkivStatus.TIL_ARKIVERING).webSakNummer("test/websak").behandlingId("test_Behandling").build());
         var req = EtterlevelseArkivRequest.builder()
                 .id(etterlevelseArkiv.getId().toString())
@@ -200,6 +211,7 @@ class EtterlevelseArkivControllerTest extends IntegrationTestBase {
         assertThat(etterlevelseArkivResp.getStatus()).isEqualTo(EtterlevelseArkivStatus.BEHANDLER_ARKIVERING.name());
     }
 
+
     @Test
     void arkiver_createSixEtterlevelseArkiv_getTwoWithUpdatedStatus() {
         storageService.save(EtterlevelseArkiv.builder().status(EtterlevelseArkivStatus.TIL_ARKIVERING).build());
@@ -209,7 +221,10 @@ class EtterlevelseArkivControllerTest extends IntegrationTestBase {
         storageService.save(EtterlevelseArkiv.builder().status(EtterlevelseArkivStatus.BEHANDLER_ARKIVERING).build());
         storageService.save(EtterlevelseArkiv.builder().status(EtterlevelseArkivStatus.ARKIVERT).build());
 
-        var resp = restTemplate.getForEntity("/etterlevelsearkiv/status/arkivert", EtterlevelseArkivController.EtterlevelseArkivPage.class);
+        List<String> failed = new ArrayList<>();
+        ArkiverRequest req = ArkiverRequest.builder().failedToArchiveBehandlingsNr(failed).build();
+
+        var resp = restTemplate.exchange("/etterlevelsearkiv/status/arkivert",HttpMethod.PUT, new HttpEntity<>(req),EtterlevelseArkivController.EtterlevelseArkivPage.class);
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
         var etterlevelseArkivResp = resp.getBody();
         assertThat(etterlevelseArkivResp).isNotNull();

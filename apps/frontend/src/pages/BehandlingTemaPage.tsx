@@ -1,27 +1,26 @@
-import React, { useEffect, useState } from 'react'
-import { Block } from 'baseui/block'
-import { useLocation, useNavigate, useParams } from 'react-router-dom'
-import { HeadingMedium, ParagraphMedium } from 'baseui/typography'
-import { ettlevColors } from '../util/theme'
-import { codelist, ListName, TemaCode } from '../services/Codelist'
-import { useBehandling } from '../api/BehandlingApi'
-import { Layout2 } from '../components/scaffold/Page'
-import { Etterlevelse, EtterlevelseStatus, Krav, KRAV_FILTER_TYPE, KravEtterlevelseData, KravPrioritering, KravQL, KravStatus, PageResponse } from '../constants'
-import { useQuery } from '@apollo/client'
-import { behandlingKravQuery, getAllKrav } from '../api/KravApi'
-import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
-import { KravPanelHeaderWithSorting } from '../components/behandling/KravPanelHeader'
-import { Helmet } from 'react-helmet'
-import { Option } from 'baseui/select'
-import { SecondaryHeader } from '../components/behandlingsTema/SecondaryHeader'
-import { KravList } from '../components/behandlingsTema/KravList'
-import { ampli } from '../services/Amplitude'
-import { getFilterType } from './EtterlevelseDokumentasjonPage'
-import { filterKrav } from '../components/behandlingsTema/common/utils'
-import { getAllKravPriority } from '../api/KravPriorityApi'
-import { Spinner } from 'baseui/spinner'
-import { getMainHeader } from '../components/behandlingPage/common/utils'
-import { user } from '../services/User'
+import React, {useEffect, useState} from 'react'
+import {Block} from 'baseui/block'
+import {useLocation, useNavigate, useParams} from 'react-router-dom'
+import {HeadingMedium, ParagraphMedium} from 'baseui/typography'
+import {ettlevColors} from '../util/theme'
+import {codelist, ListName, TemaCode} from '../services/Codelist'
+import {useBehandling} from '../api/BehandlingApi'
+import {Layout2} from '../components/scaffold/Page'
+import {Etterlevelse, EtterlevelseStatus, Krav, KRAV_FILTER_TYPE, KravEtterlevelseData, KravPrioritering, KravQL, KravStatus, PageResponse} from '../constants'
+import {useQuery} from '@apollo/client'
+import {behandlingKravQuery, getAllKrav} from '../api/KravApi'
+import {breadcrumbPaths} from '../components/common/CustomizedBreadcrumbs'
+import {KravPanelHeaderWithSorting} from '../components/behandling/KravPanelHeader'
+import {Helmet} from 'react-helmet'
+import {Option} from 'baseui/select'
+import {SecondaryHeader} from '../components/behandlingsTema/SecondaryHeader'
+import {KravList} from '../components/behandlingsTema/KravList'
+import {ampli} from '../services/Amplitude'
+import {getFilterType} from './EtterlevelseDokumentasjonPage'
+import {filterKrav} from '../components/behandlingsTema/common/utils'
+import {getAllKravPriority} from '../api/KravPriorityApi'
+import {Spinner} from 'baseui/spinner'
+import {getMainHeader} from '../components/behandlingPage/common/utils'
 
 export const sortingOptions = [
   { label: 'Anbefalt rekkefølge', id: 'priority' },
@@ -84,11 +83,6 @@ export const BehandlingTemaPage = () => {
   const [kravRelevans, setKravRelevans] = useState<readonly Option[]>(params.filter ? kravRelevansOptions.filter((kro) => kro.id === params.filter) : [kravRelevansOptions[0]])
 
   useEffect(() => {
-    setTimeout(() => {
-      if (!user.isLoggedIn()) {
-        navigate('/forbidden')
-      }
-    }, 1)
     ;(async () => {
       setAllKrav(await getAllKrav())
       setAllKravPriority(await getAllKravPriority())

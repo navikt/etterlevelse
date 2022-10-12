@@ -1,5 +1,7 @@
 package no.nav.data.common.security.azure;
 
+import com.auth0.jwk.JwkException;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.jose.JWSObject;
@@ -23,7 +25,9 @@ import no.nav.data.common.security.AppIdMapping;
 import no.nav.data.common.security.AuthController;
 import no.nav.data.common.security.RoleSupport;
 import no.nav.data.common.security.domain.Auth;
+import no.nav.data.common.security.dto.AppRole;
 import no.nav.data.common.security.dto.Credential;
+import no.nav.data.common.security.jwt.JwtValidator;
 import no.nav.data.common.utils.MetricUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpHeaders;
@@ -31,22 +35,24 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.text.ParseException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Stream;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.text.ParseException;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Stream;
 
 import static no.nav.data.Constants.COOKIE_NAME;
 import static no.nav.data.common.security.SecurityConstants.TOKEN_TYPE;
+import static no.nav.data.common.security.SecurityConstants.TOKEN_USER;
 import static org.springframework.util.StringUtils.hasText;
 
 @Slf4j
@@ -99,22 +105,37 @@ public class AADStatelessAuthenticationFilter extends OncePerRequestFilter {
     private boolean authenticate(HttpServletRequest request, HttpServletResponse response) throws ServletException {
         Credential credential = getCredential(request, response);
         if (credential != null) {
-            try {
-                var principal = buildUserPrincipal(credential.getAccessToken());
-                var grantedAuthorities = roleSupport.lookupGrantedAuthorities(principal.getStringListClaim("groups"));
-                var authentication = new PreAuthenticatedAuthenticationToken(principal, credential, grantedAuthorities);
-                authentication.setDetails(new AzureUserInfo(principal, grantedAuthorities));
-                authentication.setAuthenticated(true);
-                log.trace("Request token verification success for subject {} with roles {}.", AzureUserInfo.getUserId(principal), grantedAuthorities);
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-                return true;
-            } catch (BadJWTException ex) {
-                String errorMessage = "Invalid JWT. Either expired or not yet valid. " + ex.getMessage();
-                log.warn(errorMessage);
-                throw new ServletException(errorMessage, ex);
-            } catch (ParseException | BadJOSEException | JOSEException ex) {
-                log.error("Failed to initialize UserPrincipal.", ex);
-                throw new ServletException(ex);
+            if(credential.getAccessToken().startsWith(TOKEN_USER)) {
+                String plainToken = StringUtils.deleteWhitespace(credential.getAccessToken().replaceFirst(TOKEN_USER, ""));
+                try{
+                    var principal = buildAndValidateFromJavaJwt(plainToken);
+                    var authentication = new PreAuthenticatedAuthenticationToken(principal, credential, Arrays.asList(AppRole.ADMIN.toAuthority()));
+                    log.trace("Request token verification success with roles system.");
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                    return true;
+                }catch (JwkException e){
+                    String errorMessage = "Invalid JWT. Either expired or not yet valid. " + e;
+                    log.warn(errorMessage);
+                    throw new ServletException(errorMessage);
+                }
+            } else {
+                try {
+                    var principal = buildUserPrincipal(credential.getAccessToken());
+                    var grantedAuthorities = roleSupport.lookupGrantedAuthorities(principal.getStringListClaim("groups"));
+                    var authentication = new PreAuthenticatedAuthenticationToken(principal, credential, grantedAuthorities);
+                    authentication.setDetails(new AzureUserInfo(principal, grantedAuthorities));
+                    authentication.setAuthenticated(true);
+                    log.trace("Request token verification success for subject {} with roles {}.", AzureUserInfo.getUserId(principal), grantedAuthorities);
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                    return true;
+                } catch (BadJWTException ex) {
+                    String errorMessage = "Invalid JWT. Either expired or not yet valid. " + ex.getMessage();
+                    log.warn(errorMessage);
+                    throw new ServletException(errorMessage, ex);
+                } catch (ParseException | BadJOSEException | JOSEException ex) {
+                    log.error("Failed to initialize UserPrincipal.", ex);
+                    throw new ServletException(ex);
+                }
             }
         } else {
             if (!StringUtils.startsWith(request.getServletPath(), "/internal")) {
@@ -143,9 +164,12 @@ public class AADStatelessAuthenticationFilter extends OncePerRequestFilter {
             }
         }
         String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (hasText(authHeader) && authHeader.startsWith(TOKEN_TYPE)) {
+        if (hasText(authHeader)) {
             String authHeader1 = request.getHeader(HttpHeaders.AUTHORIZATION);
-            String token = authHeader1.replace(TOKEN_TYPE, "");
+            String token = authHeader1;
+            if(authHeader.startsWith(TOKEN_TYPE)) {
+                token = authHeader1.replaceFirst(TOKEN_TYPE, "");
+            }
             counter.labels("direct_token").inc();
             return new Credential(token);
         }
@@ -159,6 +183,20 @@ public class AADStatelessAuthenticationFilter extends OncePerRequestFilter {
             throw new BadJWTException("Invalid token appId. Provided value " + appIdClaim + " does not match allowed appId");
         }
         return principal;
+    }
+
+    private JWTClaimsSet buildAndValidateFromJavaJwt(String token) throws JwkException{
+        DecodedJWT jwt = JwtValidator.isJwtTokenValid(token);
+        var principal = new JWTClaimsSet.Builder();
+        return principal
+                .audience(jwt.getAudience())
+                .issuer(jwt.getIssuer())
+                .expirationTime(jwt.getExpiresAt())
+                .issueTime(jwt.getIssuedAt())
+                .jwtID(jwt.getId())
+                .subject(jwt.getSubject())
+                .notBeforeTime(jwt.getNotBefore())
+                .build();
     }
 
     private static Counter initCounter() {

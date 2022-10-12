@@ -55,15 +55,6 @@ export const AuditPage = () => {
   useEffect(() => setIdInput(params.id || ''), [params.id])
   useEffect(() => lookupVersion(idSearch), [idSearch])
 
-  useEffect(() => {
-    // if(!user.isLoggedIn()) {
-    //   window.location.href = loginUrl(location, location.pathname)
-    // }
-    if (!user.isAdmin()) {
-      window.location.href = '/forbidden'
-    }
-  }, [])
-
   return (
     <Block width={responsiveWidthSmall} paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall}>
       <Helmet>

@@ -71,6 +71,11 @@ spec:
     inbound:
       rules:
         - application: etterlevelse-frontend
+        - application: etterlevelse-arkiv
+          cluster: prod-legacy
+          permissions:
+            roles:
+              - "arkiv-admin"
     outbound:
       external:
         - host: {{teamcat_ingress}}

@@ -69,6 +69,11 @@ public class EtterlevelseService extends DomainService<Etterlevelse> {
         return storage.save(etterlevelse);
     }
 
+
+    public void updateEtterlevelseToNewBehandling(String oldBehandlingsId, String newBehandlinsId) {
+        etterlevelseRepo.updateEtterlevelseToNewBehandling(oldBehandlingsId, newBehandlinsId);
+    };
+
     public Etterlevelse delete(UUID id) {
         return storage.delete(id, Etterlevelse.class);
     }

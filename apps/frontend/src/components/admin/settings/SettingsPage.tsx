@@ -1,18 +1,16 @@
-import React, { FormEvent, useEffect, useState } from 'react'
-import { Block } from 'baseui/block'
-import { Spinner } from 'baseui/spinner'
-import { HeadingMedium, LabelMedium } from 'baseui/typography'
-import { getSettings, Settings, writeSettings } from './SettingsApi'
-import { intl } from '../../../util/intl/intl'
-import { theme } from '../../../util'
+import React, {FormEvent, useState} from 'react'
+import {Block} from 'baseui/block'
+import {Spinner} from 'baseui/spinner'
+import {HeadingMedium, LabelMedium} from 'baseui/typography'
+import {getSettings, Settings, writeSettings} from './SettingsApi'
+import {intl} from '../../../util/intl/intl'
+import {theme} from '../../../util'
 import Button from '../../common/Button'
-import { Markdown } from '../../common/Markdown'
-import { CustomizedStatefulTextarea } from '../../common/CustomizedTextarea'
-import { ettlevColors, responsivePaddingSmall, responsiveWidthSmall } from '../../../util/theme'
-import { Helmet } from 'react-helmet'
-import { user } from '../../../services/User'
-import { loginUrl } from '../../Header'
-import { useLocation } from 'react-router-dom'
+import {Markdown} from '../../common/Markdown'
+import {CustomizedStatefulTextarea} from '../../common/CustomizedTextarea'
+import {ettlevColors, responsivePaddingSmall, responsiveWidthSmall} from '../../../util/theme'
+import {Helmet} from 'react-helmet'
+import {useLocation} from 'react-router-dom'
 
 export const SettingsPage = () => {
   const [loading, setLoading] = React.useState<boolean>(true)
@@ -37,16 +35,6 @@ export const SettingsPage = () => {
       setLoading(false)
     }
   }
-
-  useEffect(() => {
-    load()
-    // if (!user.isLoggedIn()) {
-    //   window.location.href = loginUrl(location, location.pathname)
-    // }
-    if (!user.isAdmin()) {
-      window.location.href = '/forbidden'
-    }
-  }, [])
 
   return (
     <Block width={responsiveWidthSmall} paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall}>

@@ -25,11 +25,14 @@ public class EtterlevelseArkiv implements DomainObject {
     private String behandlingId;
     private EtterlevelseArkivStatus status;
     private LocalDateTime arkiveringDato;
+    private LocalDateTime tilArkiveringDato;
     private String webSakNummer;
+
 
     public EtterlevelseArkiv convert(EtterlevelseArkivRequest request) {
         behandlingId = request.getBehandlingId();
         arkiveringDato = request.getArkiveringDato();
+        tilArkiveringDato = request.getTilArkiveringDato();
         webSakNummer = request.getWebSakNummer();
         status = request.getStatus();
 
@@ -43,6 +46,7 @@ public class EtterlevelseArkiv implements DomainObject {
                 .version(version)
                 .behandlingId(behandlingId)
                 .arkiveringDato(arkiveringDato)
+                .tilArkiveringDato(tilArkiveringDato)
                 .webSakNummer(webSakNummer)
                 .status(status.name())
                 .build();

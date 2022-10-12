@@ -2,7 +2,7 @@ import { ApolloProvider } from '@apollo/client'
 import { BaseProvider } from 'baseui'
 import { Block } from 'baseui/block'
 import { Helmet } from 'react-helmet'
-import { unstable_HistoryRouter as HistoryRouter  } from 'react-router-dom'
+import { unstable_HistoryRouter as HistoryRouter } from 'react-router-dom'
 import { Client as Styletron } from 'styletron-engine-atomic'
 import { Provider as StyletronProvider } from 'styletron-react'
 import { apolloClient } from './api/ApolloClient'
@@ -13,7 +13,7 @@ import { codelist } from './services/Codelist'
 import { useAwait, useAwaitUser } from './util/hooks'
 import { useNetworkStatus } from './util/network'
 import { customTheme, ettlevColors } from './util/theme'
-import { createBrowserHistory } from 'history';
+import { createBrowserHistory } from 'history'
 
 const engine = new Styletron()
 

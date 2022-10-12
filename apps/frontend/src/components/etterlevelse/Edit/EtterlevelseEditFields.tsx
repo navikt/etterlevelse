@@ -25,6 +25,7 @@ import { Checkbox } from 'baseui/checkbox'
 import { DateField } from '../../common/Inputs'
 import EditNotatfelt from '../../etterlevelseMetadata/EditNotatfelt'
 import { notesIcon, notesWithContentIcon } from '../../Images'
+import { syncEtterlevelseKriterieBegrunnelseWithKrav } from '../../behandlingsTema/utils'
 
 type EditProps = {
   krav: KravQL
@@ -143,8 +144,12 @@ export const EtterlevelseEditFields = ({
           onSubmit={submit}
           initialValues={editedEtterlevelse ? mapEtterlevelseToFormValue(editedEtterlevelse) : mapEtterlevelseToFormValue(etterlevelse)}
           validate={(value) => {
+        
+            const mutatedEtterlevelse = value
+            value.suksesskriterieBegrunnelser=syncEtterlevelseKriterieBegrunnelseWithKrav(value, krav)
+
             try {
-              validateYupSchema(value, etterlevelseSchema(), true, { status: value.status })
+              validateYupSchema(mutatedEtterlevelse, etterlevelseSchema(), true, { status: value.status })
             } catch (err) {
               return yupToFormErrors(err)
             }

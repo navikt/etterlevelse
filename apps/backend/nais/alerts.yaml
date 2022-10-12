@@ -18,11 +18,6 @@ spec:
       expr: count(kube_pod_container_status_running{container="etterlevelse-backend", namespace="teamdatajegerne"}) < 2
       for: 2m
       action: "Sjekk kubectl eller grafana for pod status, og sjekk logs for feilmeldinger."
-    - alert: Høy minne bruk
-      expr: sum(container_memory_working_set_bytes{container="etterlevelse-backend", namespace="teamdatajegerne"}) > 1980000000
-      for: 2m
-      description: "App {{ $labels.app }} har høy minne bruk i namespace {{ $labels.kubernetes_namespace }}"
-      action: "`kubectl describe pod {{ $labels.kubernetes_pod_name }} -n {{ $labels.kubernetes_namespace }}`, og `kubectl logs {{ $labels.kubernetes_pod_name }} -n {{ $labels.kubernetes_namespace }}` for logger"
     - alert: Høy cpu bruk
       expr: (sum(irate (container_cpu_usage_seconds_total{container="etterlevelse-backend"}[1m])) * 1000) > 980
       for: 3m
