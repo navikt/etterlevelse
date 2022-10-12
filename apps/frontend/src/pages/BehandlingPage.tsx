@@ -26,7 +26,7 @@ import {faFileWord} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {StyledLink} from 'baseui/link'
 import {env} from '../util/env'
-import {createEtterlevelseArkiv, updateEtterlevelseArkiv, useArkiveringByBehandlingId} from "../api/ArkiveringApi";
+import {createEtterlevelseArkiv, updateEtterlevelseArkiv, updateToArkivert, useArkiveringByBehandlingId} from "../api/ArkiveringApi";
 
 export const BehandlingPage = () => {
   const params = useParams<{ id?: string }>()
@@ -200,6 +200,19 @@ export const BehandlingPage = () => {
           disabled={etterlevelseArkiv && etterlevelseArkiv.status === EtterlevelseArkivStatus.TIL_ARKIVERING}
         >
           Arkiver
+        </Button>
+
+        <Button
+          onClick={() => {
+            ;(async()=>
+            {
+                await updateToArkivert([]).then(console.log)
+            })()
+          }}
+          size={'compact'}
+          kind={'secondary'}
+        >
+          Arkivert
         </Button>
 
         <Block display="flex" alignItems="center" marginRight="12px">
