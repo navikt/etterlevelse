@@ -52,7 +52,7 @@ export const ArkiveringModal = ({arkivModal, setArkivModal, behandlingsId, etter
           <Button
             onClick={() => {
               ;(async () => {
-                await updateToArkivert(['2022-10-13_10-33-54_Etterlevelse_B104']).then(console.log)
+                await updateToArkivert([]).then(console.log)
               })()
             }}
             size={'compact'}
