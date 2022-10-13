@@ -174,8 +174,8 @@ export const BehandlingPage = () => {
 
       <Block display="flex" alignItems="center">
         {user.isAdmin() && (
-          <Button onClick={() => setArkivModal(true)}>
-            Åpen modal
+          <Button kind={KIND.tertiary} size={SIZE.compact} onClick={() => setArkivModal(true)}>
+            Arkiver til websak
           </Button>
         )}
         <Block display="flex" alignItems="center" marginRight="12px">
