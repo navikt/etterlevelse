@@ -5,6 +5,7 @@ import {EtterlevelseArkiv, EtterlevelseArkivStatus} from "../../constants";
 import {createEtterlevelseArkiv, updateEtterlevelseArkiv, updateToArkivert} from "../../api/ArkiveringApi";
 import React from "react";
 import {ParagraphMedium} from "baseui/typography";
+import moment from "moment";
 
 type ArkiveringModalProps = {
   arkivModal: boolean
@@ -15,6 +16,23 @@ type ArkiveringModalProps = {
 }
 
 export const ArkiveringModal = ({arkivModal, setArkivModal, behandlingsId, etterlevelseArkiv, setEtterlevelseArkiv}: ArkiveringModalProps) => {
+  
+  const getStatustext = (etterlevelseArkivStatus: EtterlevelseArkivStatus) => {
+
+    switch (etterlevelseArkivStatus) {
+      case EtterlevelseArkivStatus.TIL_ARKIVERING: 
+        return `Arkivering bestilt: ${moment(etterlevelseArkiv?.arkiveringDato).format('lll')}`
+      case EtterlevelseArkivStatus.ARKIVERT: 
+        return `Arkivert: ${moment(etterlevelseArkiv?.arkiveringDato).format('lll')}`
+      case EtterlevelseArkivStatus.BEHANDLER_ARKIVERING: 
+        return 'Arkivering blir behandlet.'
+      case EtterlevelseArkivStatus.ERROR:
+        return 'Forrige arkivering mislykkes. Gi beskjed i #etterlevelse på slack'
+      default:
+        return ''
+    }
+  }
+
   return (
     <Modal
       isOpen={arkivModal}
@@ -23,10 +41,11 @@ export const ArkiveringModal = ({arkivModal, setArkivModal, behandlingsId, etter
       <ModalHeader>Arkivering til Websak</ModalHeader>
       <ModalBody>
         <Block>
-          <ParagraphMedium>Websakarkivering skjer to ganger hver dag (kl1200 og kl0000)</ParagraphMedium>
+            {etterlevelseArkiv ? getStatustext(etterlevelseArkiv.status) : ""}
         </Block>
         <Block>
           <Button
+            style={{marginTop: '12px'}}
             onClick={() => {
               const newEtterlevelseArkivering = {
                   behandlingId: behandlingsId,
