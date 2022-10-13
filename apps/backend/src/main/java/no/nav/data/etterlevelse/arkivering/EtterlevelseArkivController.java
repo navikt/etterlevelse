@@ -184,10 +184,17 @@ public class EtterlevelseArkivController {
         }
 
         List<Etterlevelse> etterlevelseList = etterlevelseService.getByBehandling(request.getBehandlingId());
+        EtterlevelseArkiv etterlevelseArkivToUpate = etterlevelseArkivService.get(id);
 
         if(etterlevelseList.isEmpty()) {
-            log.info("Ingen ferdig dokumentasjon på behandling med id: " + request.getBehandlingId());
+            log.info("Ingen dokumentasjon på behandling med id: " + request.getBehandlingId());
             throw  new ValidationException("Kan ikke arkivere en behandling som ikke har ferdig dokumentert innhold");
+        } else if (etterlevelseArkivToUpate.getStatus() == EtterlevelseArkivStatus.BEHANDLER_ARKIVERING) {
+            log.info("Arkivering pågår, kan ikke bestille ny arkivering for behandling med id: " + request.getBehandlingId());
+            throw new ValidationException("Arkivering pågår, kan ikke bestille ny arkivering for behandling med id: " + request.getBehandlingId());
+        } else if (etterlevelseArkivToUpate.getStatus() == EtterlevelseArkivStatus.ERROR) {
+            log.info("Kan ikke bestille ny arkivering. Forrige arkivering har ikke vellyket for behandling med id: " + request.getBehandlingId());
+            throw new ValidationException("Kan ikke bestille ny arkivering. Forrige arkivering har ikke vellyket for behandling med id: " + request.getBehandlingId());
         } else {
             if(request.getStatus() == EtterlevelseArkivStatus.TIL_ARKIVERING) {
                 LocalDateTime tilArkiveringDato = LocalDateTime.now();
