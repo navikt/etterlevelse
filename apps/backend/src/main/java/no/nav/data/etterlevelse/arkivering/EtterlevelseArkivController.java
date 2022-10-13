@@ -18,7 +18,6 @@ import no.nav.data.etterlevelse.behandling.BehandlingService;
 import no.nav.data.etterlevelse.behandling.dto.Behandling;
 import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
-import org.apache.xmlgraphics.image.loader.impl.PreloaderGIF;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -131,7 +130,7 @@ public class EtterlevelseArkivController {
                 final Pattern pattern = Pattern.compile("B\\d*" );
                 final Matcher matcher = pattern.matcher(failedBehandlingsFilnavn);
 
-                String failedBehandlingsNr = matcher.group(0);
+                String failedBehandlingsNr = matcher.find() ? matcher.group(0) : "B";
 
                 log.info("Feilet med å arkivere: " + failedBehandlingsNr);
                 List<Behandling> sokResultat = behandlingService.findBehandlinger(failedBehandlingsNr)
