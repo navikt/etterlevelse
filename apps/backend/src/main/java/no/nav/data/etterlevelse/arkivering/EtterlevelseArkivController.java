@@ -18,6 +18,7 @@ import no.nav.data.etterlevelse.behandling.BehandlingService;
 import no.nav.data.etterlevelse.behandling.dto.Behandling;
 import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
+import org.apache.xmlgraphics.image.loader.impl.PreloaderGIF;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -39,6 +40,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -123,7 +126,13 @@ public class EtterlevelseArkivController {
         log.info("Arkivering vellykket, setter status BEHANDLER_ARKIVERING til ARKIVERT");
 
         if(!arkiverRequest.getFailedToArchiveBehandlingsNr().isEmpty()) {
-            for(String failedBehandlingsNr: arkiverRequest.getFailedToArchiveBehandlingsNr()) {
+            for(String failedBehandlingsFilnavn: arkiverRequest.getFailedToArchiveBehandlingsNr()) {
+
+                final Pattern pattern = Pattern.compile("B\\d*" );
+                final Matcher matcher = pattern.matcher(failedBehandlingsFilnavn);
+
+                String failedBehandlingsNr = matcher.group(0);
+
                 log.info("Feilet med å arkivere: " + failedBehandlingsNr);
                 List<Behandling> sokResultat = behandlingService.findBehandlinger(failedBehandlingsNr)
                         .stream()
