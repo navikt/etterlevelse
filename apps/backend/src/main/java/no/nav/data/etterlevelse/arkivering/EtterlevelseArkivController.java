@@ -183,10 +183,9 @@ public class EtterlevelseArkivController {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
         }
 
-        List<Etterlevelse> etterlevelseList = etterlevelseService.getByBehandling(request.getBehandlingId());
         EtterlevelseArkiv etterlevelseArkivToUpate = etterlevelseArkivService.get(id);
 
-        if(etterlevelseList.isEmpty()) {
+        if(etterlevelseService.getByBehandling(request.getBehandlingId()).isEmpty()) {
             log.info("Ingen dokumentasjon på behandling med id: " + request.getBehandlingId());
             throw  new ValidationException("Kan ikke arkivere en behandling som ikke har ferdig dokumentert innhold");
         } else if (etterlevelseArkivToUpate.getStatus() == EtterlevelseArkivStatus.BEHANDLER_ARKIVERING) {
