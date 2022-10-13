@@ -193,8 +193,8 @@ public class EtterlevelseArkivController {
             log.info("Arkivering pågår, kan ikke bestille ny arkivering for behandling med id: " + request.getBehandlingId());
             throw new ValidationException("Arkivering pågår, kan ikke bestille ny arkivering for behandling med id: " + request.getBehandlingId());
         } else if (etterlevelseArkivToUpate.getStatus() == EtterlevelseArkivStatus.ERROR) {
-            log.info("Kan ikke bestille ny arkivering. Forrige arkivering har ikke vellyket for behandling med id: " + request.getBehandlingId());
-            throw new ValidationException("Kan ikke bestille ny arkivering. Forrige arkivering har ikke vellyket for behandling med id: " + request.getBehandlingId());
+            log.info("Kan ikke bestille ny arkivering. Forrige arkivering var ikke vellyket for behandling med id: " + request.getBehandlingId());
+            throw new ValidationException("Kan ikke bestille ny arkivering. Forrige arkivering var ikke vellyket for behandling med id: " + request.getBehandlingId());
         } else {
             if(request.getStatus() == EtterlevelseArkivStatus.TIL_ARKIVERING) {
                 LocalDateTime tilArkiveringDato = LocalDateTime.now();
