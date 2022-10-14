@@ -174,7 +174,7 @@ const Kriterie = ({
           label={
             <Block display={'flex'} width={'100%'} justifyContent={'space-between'}>
               <LabelWithTooltip
-                label={`Suksesskriterie ${nummer}`}
+                label={`Suksesskriterium ${nummer}`}
                 tooltip={
                   'Definer hvilke kriterier som skal til for at kravet er oppnådd. Formålet er å identifisere en terskel for kravoppnåelse og en enhetlig besvarelse på tvers.'
                 }
