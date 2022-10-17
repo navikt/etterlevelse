@@ -234,6 +234,7 @@ export interface EtterlevelseArkiv extends DomainObject {
   behandlingId: string
   status: EtterlevelseArkivStatus
   arkiveringDato: string
+  tilArkiveringDato: string
   webSakNummer: string
 }
 

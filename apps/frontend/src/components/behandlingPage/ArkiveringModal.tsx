@@ -2,9 +2,8 @@ import {Modal, ModalBody, ModalHeader} from "baseui/modal";
 import {Block} from "baseui/block";
 import {Button} from "baseui/button";
 import {EtterlevelseArkiv, EtterlevelseArkivStatus} from "../../constants";
-import {createEtterlevelseArkiv, updateEtterlevelseArkiv, updateToArkivert} from "../../api/ArkiveringApi";
+import {createEtterlevelseArkiv, updateEtterlevelseArkiv} from "../../api/ArkiveringApi";
 import React from "react";
-import {ParagraphMedium} from "baseui/typography";
 import moment from "moment";
 
 type ArkiveringModalProps = {
@@ -16,15 +15,15 @@ type ArkiveringModalProps = {
 }
 
 export const ArkiveringModal = ({arkivModal, setArkivModal, behandlingsId, etterlevelseArkiv, setEtterlevelseArkiv}: ArkiveringModalProps) => {
-  
+
   const getStatustext = (etterlevelseArkivStatus: EtterlevelseArkivStatus) => {
 
     switch (etterlevelseArkivStatus) {
-      case EtterlevelseArkivStatus.TIL_ARKIVERING: 
-        return `Arkivering bestilt: ${moment(etterlevelseArkiv?.arkiveringDato).format('lll')}`
-      case EtterlevelseArkivStatus.ARKIVERT: 
+      case EtterlevelseArkivStatus.TIL_ARKIVERING:
+        return `Arkivering bestilt: ${moment(etterlevelseArkiv?.tilArkiveringDato).format('lll')}`
+      case EtterlevelseArkivStatus.ARKIVERT:
         return `Arkivert: ${moment(etterlevelseArkiv?.arkiveringDato).format('lll')}`
-      case EtterlevelseArkivStatus.BEHANDLER_ARKIVERING: 
+      case EtterlevelseArkivStatus.BEHANDLER_ARKIVERING:
         return 'Arkivering blir behandlet.'
       case EtterlevelseArkivStatus.ERROR:
         return 'Forrige arkivering mislykkes. Gi beskjed i #etterlevelse på slack'
@@ -67,17 +66,6 @@ export const ArkiveringModal = ({arkivModal, setArkivModal, behandlingsId, etter
             disabled={etterlevelseArkiv && etterlevelseArkiv.status === EtterlevelseArkivStatus.BEHANDLER_ARKIVERING}
           >
             {etterlevelseArkiv && etterlevelseArkiv.status === EtterlevelseArkivStatus.TIL_ARKIVERING ? 'Avbestille arkivering' : 'Bestill arkivering'}
-          </Button>
-          <Button
-            onClick={() => {
-              ;(async () => {
-                await updateToArkivert([]).then(console.log)
-              })()
-            }}
-            size={'compact'}
-            kind={'secondary'}
-          >
-            Bytt status til arkivert (Testing)
           </Button>
         </Block>
       </ModalBody>
