@@ -47,10 +47,10 @@ const AppRoutes = (): JSX.Element => {
         <Route path="/behandling/:id/:tema/" element={<PrivateRoute component={<BehandlingTemaPage/>}/>} caseSensitive={true}/>
         <Route path="/behandling/:id/:tema/:filter" element={<PrivateRoute component={<BehandlingTemaPage/>}/>} caseSensitive={true}/>
         <Route path="/behandling/:id" element={<PrivateRoute component={<BehandlingPage/>}/>} caseSensitive={true}/>
-        <Route path="/behandling/" element={<PrivateRoute component={<MyBehandlingerPage/>}/>} caseSensitive={true}/>
+        <Route path="/behandling/" element={<MyBehandlingerPage/>} caseSensitive={true}/>
 
-        <Route path="/behandlinger/:tab" element={<PrivateRoute component={<MyBehandlingerPage/>}/>} caseSensitive={true}/>
-        <Route path="/behandlinger/" element={<PrivateRoute component={<MyBehandlingerPage/>}/>} caseSensitive={true}/>
+        <Route path="/behandlinger/:tab" element={<MyBehandlingerPage/>} caseSensitive={true}/>
+        <Route path="/behandlinger/" element={<MyBehandlingerPage/>} caseSensitive={true}/>
 
         <Route path="/relevans/:relevans" element={<RelevansPage/>} caseSensitive={true}/>
         <Route path="/relevans/" element={<RelevansPage/>} caseSensitive={true}/>

@@ -7,7 +7,7 @@ export const etterlevelseSchema = () => {
       yup.object({
         suksesskriterieStatus: yup.string().test({
           name: 'suksesskriterieStatus',
-          message: 'Du kan ikke dokumentere ferdig hvis et suksesskriterie er under arbeid.',
+          message: 'Du kan ikke dokumentere ferdig hvis et suksesskriterium er under arbeid.',
           test: function (suksesskriterieStatus) {
             const { options } = this
             if (

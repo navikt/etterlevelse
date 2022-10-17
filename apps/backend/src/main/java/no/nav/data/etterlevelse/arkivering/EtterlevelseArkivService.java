@@ -159,6 +159,10 @@ public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
         return GenericStorage.to(repo.updateStatus(EtterlevelseArkivStatus.BEHANDLER_ARKIVERING.name(), EtterlevelseArkivStatus.ARKIVERT.name()), EtterlevelseArkiv.class);
     }
 
+    public List<EtterlevelseArkiv> updateArkiveringDato(String status, String arkiveringDato) {
+        return GenericStorage.to(repo.updateArkiveringDato(status, arkiveringDato), EtterlevelseArkiv.class);
+    }
+
     public List<EtterlevelseArkiv> setStatusToBehandler_arkivering() {
         return GenericStorage.to(repo.updateStatus(EtterlevelseArkivStatus.TIL_ARKIVERING.name(), EtterlevelseArkivStatus.BEHANDLER_ARKIVERING.name()), EtterlevelseArkiv.class);
     }

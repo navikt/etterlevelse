@@ -231,7 +231,7 @@ const KriterieBegrunnelse = ({
               color: ettlevColors.grey600,
             }}
           >
-            Suksesskriterie {index + 1} av {totalSuksesskriterie}
+            Suksesskriterium {index + 1} av {totalSuksesskriterie}
           </ParagraphMedium>
         </Block>
         {viewMode === true && (

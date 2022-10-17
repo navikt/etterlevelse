@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.3</version>
+        <version>2.7.4</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>no.nav.data</groupId>
@@ -18,16 +18,16 @@
         <java.version>17</java.version>
 
         <hibernate-types-52.version>2.19.2</hibernate-types-52.version>
-        <springdoc-openapi-ui.version>1.6.11</springdoc-openapi-ui.version>
+        <springdoc-openapi-ui.version>1.6.12</springdoc-openapi-ui.version>
         <simpleclient.version>0.16.0</simpleclient.version>
         <logstash-logback-encoder.version>7.2</logstash-logback-encoder.version>
         <shedlock.version>4.42.0</shedlock.version>
         <commons-collections4.version>4.4</commons-collections4.version>
         <graphql-spring-boot-starter.version>14.0.0</graphql-spring-boot-starter.version>
-        <graphql.version>18.1</graphql.version>
+        <graphql.version>19.0</graphql.version>
 
-        <microsoft-graph.version>5.35.0</microsoft-graph.version>
-        <msal4j.version>1.13.1</msal4j.version>
+        <microsoft-graph.version>5.38.0</microsoft-graph.version>
+        <msal4j.version>1.13.2</msal4j.version>
 
         <!-- transitive versions -->
         <commons-compress.version>1.21</commons-compress.version>
@@ -38,7 +38,7 @@
         <stax2-api.version>4.2.1</stax2-api.version>
 
         <!-- Test -->
-        <testcontainers.version>1.17.3</testcontainers.version>
+        <testcontainers.version>1.17.5</testcontainers.version>
         <wiremock.version>2.27.2</wiremock.version>
         <docx4j.version>11.3.2</docx4j.version>
     </properties>
@@ -97,7 +97,7 @@
         <dependency>
             <groupId>com.auth0</groupId>
             <artifactId>java-jwt</artifactId>
-            <version>4.0.0</version>
+            <version>4.1.0</version>
         </dependency>
         <dependency>
             <groupId>com.auth0</groupId>

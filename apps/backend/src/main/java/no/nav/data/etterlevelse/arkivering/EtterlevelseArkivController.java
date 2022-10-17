@@ -35,9 +35,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -122,7 +125,13 @@ public class EtterlevelseArkivController {
         log.info("Arkivering vellykket, setter status BEHANDLER_ARKIVERING til ARKIVERT");
 
         if(!arkiverRequest.getFailedToArchiveBehandlingsNr().isEmpty()) {
-            for(String failedBehandlingsNr: arkiverRequest.getFailedToArchiveBehandlingsNr()) {
+            for(String failedBehandlingsFilnavn: arkiverRequest.getFailedToArchiveBehandlingsNr()) {
+
+                final Pattern pattern = Pattern.compile("B\\d*" );
+                final Matcher matcher = pattern.matcher(failedBehandlingsFilnavn);
+
+                String failedBehandlingsNr = matcher.find() ? matcher.group(0) : "B";
+
                 log.info("Feilet med å arkivere: " + failedBehandlingsNr);
                 List<Behandling> sokResultat = behandlingService.findBehandlinger(failedBehandlingsNr)
                         .stream()
@@ -136,9 +145,10 @@ public class EtterlevelseArkivController {
                 }
             }
         }
+        String arkiveringDato = LocalDateTime.now().toString();
+        etterlevelseArkivService.updateArkiveringDato(EtterlevelseArkivStatus.BEHANDLER_ARKIVERING.name(),arkiveringDato);
 
         List<EtterlevelseArkiv> etterlevelseArkivList = etterlevelseArkivService.setStatusToArkivert();
-
         return ResponseEntity.ok(new RestResponsePage<>(etterlevelseArkivList).convert(EtterlevelseArkiv::toResponse));
     }
 
@@ -151,9 +161,13 @@ public class EtterlevelseArkivController {
         List<Etterlevelse> etterlevelseList = etterlevelseService.getByBehandling(request.getBehandlingId());
 
         if(etterlevelseList.isEmpty()) {
-            log.info("Ingen ferdig dokumentasjon på behandling med id: " + request.getBehandlingId());
+            log.info("Ingen dokumentasjon på behandling med id: " + request.getBehandlingId());
             throw  new ValidationException("Kan ikke arkivere en behandling som ikke har ferdig dokumentert innhold");
         } else {
+            if(request.getStatus() == EtterlevelseArkivStatus.TIL_ARKIVERING) {
+                LocalDateTime tilArkiveringDato = LocalDateTime.now();
+                request.setTilArkiveringDato(tilArkiveringDato);
+            }
             var etterlevelseArkiv = etterlevelseArkivService.save(request);
             return new ResponseEntity<>(etterlevelseArkiv.toResponse(), HttpStatus.CREATED);
         }
@@ -169,12 +183,22 @@ public class EtterlevelseArkivController {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
         }
 
-        List<Etterlevelse> etterlevelseList = etterlevelseService.getByBehandling(request.getBehandlingId());
+        EtterlevelseArkiv etterlevelseArkivToUpate = etterlevelseArkivService.get(id);
 
-        if(etterlevelseList.isEmpty()) {
-            log.info("Ingen ferdig dokumentasjon på behandling med id: " + request.getBehandlingId());
+        if(etterlevelseService.getByBehandling(request.getBehandlingId()).isEmpty()) {
+            log.info("Ingen dokumentasjon på behandling med id: " + request.getBehandlingId());
             throw  new ValidationException("Kan ikke arkivere en behandling som ikke har ferdig dokumentert innhold");
+        } else if (etterlevelseArkivToUpate.getStatus() == EtterlevelseArkivStatus.BEHANDLER_ARKIVERING) {
+            log.info("Arkivering pågår, kan ikke bestille ny arkivering for behandling med id: " + request.getBehandlingId());
+            throw new ValidationException("Arkivering pågår, kan ikke bestille ny arkivering for behandling med id: " + request.getBehandlingId());
+        } else if (etterlevelseArkivToUpate.getStatus() == EtterlevelseArkivStatus.ERROR) {
+            log.info("Kan ikke bestille ny arkivering. Forrige arkivering var ikke vellyket for behandling med id: " + request.getBehandlingId());
+            throw new ValidationException("Kan ikke bestille ny arkivering. Forrige arkivering var ikke vellyket for behandling med id: " + request.getBehandlingId());
         } else {
+            if(request.getStatus() == EtterlevelseArkivStatus.TIL_ARKIVERING) {
+                LocalDateTime tilArkiveringDato = LocalDateTime.now();
+                request.setTilArkiveringDato(tilArkiveringDato);
+            }
             var etterlevelseArkiv = etterlevelseArkivService.save(request);
             return ResponseEntity.ok(etterlevelseArkiv.toResponse());
         }

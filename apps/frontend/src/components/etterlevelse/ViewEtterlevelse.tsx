@@ -252,7 +252,7 @@ export const ViewEtterlevelse = ({
                           color: ettlevColors.grey600,
                         }}
                       >
-                        Suksesskriterie {i + 1} av {krav.suksesskriterier.length}
+                        Suksesskriterium {i + 1} av {krav.suksesskriterier.length}
                       </ParagraphMedium>
                     </Block>
                     {(!suksessbeskrivelseBegrunnelse.behovForBegrunnelse || suksessbeskrivelseBegrunnelse.begrunnelse) && (

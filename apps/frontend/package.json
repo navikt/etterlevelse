@@ -14,7 +14,7 @@
     "@types/markdown-draft-js": "^2.2.2",
     "@types/react-draft-wysiwyg": "^1.13.2",
     "amplitude-js": "^8.17.0",
-    "axios": "^0.27.1",
+    "axios": "^1.1.2",
     "baseui": "^12.0.0",
     "core-js": "^3.8.3",
     "draft-js": "^0.11.7",
@@ -26,11 +26,11 @@
     "moment": "^2.29.1",
     "query-string": "^7.0.1",
     "randomcolor": "^0.6.2",
-    "react": "^18.0.0",
+    "react": "^18.2.0",
     "react-app-polyfill": "^3.0.0",
     "react-beautiful-dnd": "^13.1.0",
     "react-diff-viewer": "^3.1.1",
-    "react-dom": "^18.0.0",
+    "react-dom": "^18.2.0",
     "react-draft-wysiwyg": "^1.14.7",
     "react-json-view": "^1.21.1",
     "react-markdown": "^8.0.0",
@@ -45,11 +45,6 @@
     "typescript": "^4.7.4",
     "yup": "^0.32.8",
     "history": "5.3.0"
-  },
-  "resolutions": {
-    "mini-css-extract-plugin": "2.4.5",
-    "@types/react": "18.0.15",
-    "@types/react-dom": "17.0.2"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -92,13 +87,13 @@
     "@testing-library/react": "^13.0.0",
     "@testing-library/user-event": "^14.0.0",
     "@types/amplitude-js": "^8.0.0",
-    "@types/jest": "^28.1.1",
+    "@types/jest": "^29.1.2",
     "@types/lodash": "^4.14.165",
     "@types/node": "^18.0.0",
     "@types/randomcolor": "^0.5.5",
     "@types/react": "^18.0.15",
     "@types/react-beautiful-dnd": "^13.0.0",
-    "@types/react-dom": "^18.0.1",
+    "@types/react-dom": "^18.0.6",
     "@types/react-helmet": "^6.1.0",
     "@types/react-router-dom": "^5.3.3",
     "@types/shortid": "^0.0.29",
@@ -108,7 +103,7 @@
     "prettier": "2.7.1",
     "react-helmet": "^6.1.0",
     "react-localization": "^1.0.15",
-    "react-router-dom": "^6.3.0",
+    "react-router-dom": "^6.4.0",
     "react-scripts": "5.0.1"
   }
 }
