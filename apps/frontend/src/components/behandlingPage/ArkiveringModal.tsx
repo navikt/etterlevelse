@@ -5,6 +5,8 @@ import {EtterlevelseArkiv, EtterlevelseArkivStatus} from "../../constants";
 import {createEtterlevelseArkiv, updateEtterlevelseArkiv} from "../../api/ArkiveringApi";
 import React from "react";
 import moment from "moment";
+import CustomizedModal from '../common/CustomizedModal';
+import { borderRadius } from "../common/Style";
 
 type ArkiveringModalProps = {
   arkivModal: boolean
@@ -24,7 +26,7 @@ export const ArkiveringModal = ({arkivModal, setArkivModal, behandlingsId, etter
       case EtterlevelseArkivStatus.ARKIVERT:
         return `Arkivert: ${moment(etterlevelseArkiv?.arkiveringDato).format('lll')}`
       case EtterlevelseArkivStatus.BEHANDLER_ARKIVERING:
-        return 'Arkivering blir behandlet.'
+        return 'Arkivering under behandling.'
       case EtterlevelseArkivStatus.ERROR:
         return 'Forrige arkivering mislykkes. Gi beskjed i #etterlevelse på slack'
       default:
@@ -33,16 +35,26 @@ export const ArkiveringModal = ({arkivModal, setArkivModal, behandlingsId, etter
   }
 
   return (
-    <Modal
+    <CustomizedModal
       isOpen={arkivModal}
       onClose={() => setArkivModal(false)}
+      size="default"
+      overrides={{
+        Dialog: {
+          style: {
+            width: '375px',
+            boxShadow: '0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 3px 0 rgba(0, 0, 0, .12)',
+            ...borderRadius('4px')
+          }
+        }
+      }}
     >
-      <ModalHeader>Arkivering til Websak</ModalHeader>
+      <ModalHeader>Arkiver i Websak</ModalHeader>
       <ModalBody>
         <Block>
-            {etterlevelseArkiv ? getStatustext(etterlevelseArkiv.status) : ""}
+            {etterlevelseArkiv ? getStatustext(etterlevelseArkiv.status) : ''}
         </Block>
-        <Block>
+        <Block marginTop="16px" display="flex" $style={{justifyContent: 'flex-end'}}>
           <Button
             style={{marginTop: '12px'}}
             onClick={() => {
@@ -65,10 +77,10 @@ export const ArkiveringModal = ({arkivModal, setArkivModal, behandlingsId, etter
             kind={'primary'}
             disabled={etterlevelseArkiv && etterlevelseArkiv.status === EtterlevelseArkivStatus.BEHANDLER_ARKIVERING}
           >
-            {etterlevelseArkiv && etterlevelseArkiv.status === EtterlevelseArkivStatus.TIL_ARKIVERING ? 'Avbestille arkivering' : 'Bestill arkivering'}
+            {etterlevelseArkiv && etterlevelseArkiv.status === EtterlevelseArkivStatus.TIL_ARKIVERING ? 'Avbestill arkivering' : 'Bestill arkivering'}
           </Button>
         </Block>
       </ModalBody>
-    </Modal>
+    </CustomizedModal>
   )
 }

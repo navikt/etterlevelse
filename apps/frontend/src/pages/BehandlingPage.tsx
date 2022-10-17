@@ -7,7 +7,7 @@ import {HeadingXLarge, LabelSmall, ParagraphMedium, ParagraphXSmall} from 'baseu
 import {FormikProps} from 'formik'
 import {ettlevColors, theme} from '../util/theme'
 import {Layout2} from '../components/scaffold/Page'
-import {arkPennIcon, editIcon, ellipse80, warningAlert} from '../components/Images'
+import {arkPennIcon, editIcon, ellipse80, saveArchiveIcon, warningAlert} from '../components/Images'
 import {Behandling, BehandlingEtterlevData, KravQL, KravStatus, PageResponse} from '../constants'
 import {useQuery} from '@apollo/client'
 import {Code, codelist, ListName} from '../services/Codelist'
@@ -174,8 +174,8 @@ export const BehandlingPage = () => {
 
       <Block display="flex" alignItems="center">
         {user.isAdmin() && (
-          <Button kind={KIND.tertiary} size={SIZE.compact} onClick={() => setArkivModal(true)}>
-            Arkiver til websak
+          <Button kind={KIND.tertiary} size={SIZE.compact} onClick={() => setArkivModal(true)} startEnhancer={<img src={saveArchiveIcon} alt="arkiv ikon" />}>
+            Arkiver
           </Button>
         )}
         <Block display="flex" alignItems="center" marginRight="12px">
