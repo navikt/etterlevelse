@@ -27,6 +27,7 @@ import {EtterlevelseDokumentasjonPage} from './pages/EtterlevelseDokumentasjonPa
 import Forbidden from './pages/Forbidden'
 import EtterlevelseAdminPage from './pages/EtterlevelseAdminPage'
 import PrivateRoute from './util/PrivateRoute'
+import ArkivAdminPage from './pages/ArkivAdminPage'
 
 const AppRoutes = (): JSX.Element => {
   return (
@@ -71,7 +72,8 @@ const AppRoutes = (): JSX.Element => {
         <Route path="/admin/settings" element={<PrivateRoute component={<SettingsPage/>} adminPage/>} caseSensitive={true}/>
         <Route path="/admin/maillog" element={<PrivateRoute component={<MailLogPage/>} adminPage/>} caseSensitive={true}/>
         <Route path="/admin/krav" element={<PrivateRoute component={<KravTablePage/>} adminPage/>} caseSensitive={true}/>
-        <Route path="/admin/etterlevelse" element={<EtterlevelseAdminPage/>} caseSensitive={true}/>
+        <Route path="/admin/etterlevelse" element={<PrivateRoute component={<EtterlevelseAdminPage/>} adminPage/>} caseSensitive={true}/>
+        <Route path="/admin/arkiv" element={<PrivateRoute component={<ArkivAdminPage/>} adminPage/>} caseSensitive={true}/>
         <Route path="/admin/messageslog" element={<PrivateRoute component={<QuestionAndAnswerLogPage/>} adminPage/>} caseSensitive={true}/>
         <Route path="/admin/varsel" element={<PrivateRoute component={<VarselPage/>} adminPage/>} caseSensitive={true}/>
 
