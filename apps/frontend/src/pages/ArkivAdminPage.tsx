@@ -3,10 +3,9 @@ import { Button } from 'baseui/button'
 import { HeadingXXLarge } from 'baseui/typography'
 import { useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet'
-import { arkiveringMapToFormVal, arkiveringStatusToString, deleteEtterlevelseArkiv, getAllArkivering, getEtterlevelseArkiv, updateEtterlevelseArkiv } from '../api/ArkiveringApi'
+import { arkiveringMapToFormVal, arkiveringStatusToString, deleteEtterlevelseArkiv, getAllArkivering, getEtterlevelseArkiv, updateAsAdminEtterlevelseArkiv } from '../api/ArkiveringApi'
 import CustomizedInput from '../components/common/CustomizedInput'
 import { CustomizedStatefulSelect } from '../components/common/CustomizedSelect'
-import { borderColor } from '../components/common/Style'
 import { Cell, Row, Table } from '../components/common/Table'
 import { Layout2 } from '../components/scaffold/Page'
 import { EtterlevelseArkiv, EtterlevelseArkivStatus } from '../constants'
@@ -92,7 +91,7 @@ export const ArkivAdminPage = () => {
               onClick={() => {
                 getEtterlevelseArkiv(arkiveringId).then((arkivering) => {
                   if (arkiveringsStatus) {
-                    updateEtterlevelseArkiv({
+                    updateAsAdminEtterlevelseArkiv({
                       ...arkivering,
                       status: arkiveringsStatus
                     }).then(() => {

@@ -55,6 +55,11 @@ export const updateEtterlevelseArkiv = async (etterlevelseArkiv: EtterlevelseArk
   return (await axios.put<EtterlevelseArkiv>(`${env.backendBaseUrl}/etterlevelsearkiv/${etterlevelseArkiv.id}`, dto)).data
 }
 
+export const updateAsAdminEtterlevelseArkiv = async (etterlevelseArkiv: EtterlevelseArkiv) => {
+  const dto = etterlevelseArkivToEtterlevelseArkivDto(etterlevelseArkiv)
+  return (await axios.put<EtterlevelseArkiv>(`${env.backendBaseUrl}/etterlevelsearkiv/admin/update/${etterlevelseArkiv.id}`, dto)).data
+}
+
 export const updateToArkivert = async (failedToArchiveBehandlingsNr: String[]) => {
   return (await axios.put<PageResponse<EtterlevelseArkiv>>(`${env.backendBaseUrl}/etterlevelsearkiv/status/arkivert`, { failedToArchiveBehandlingsNr })).data
 }
