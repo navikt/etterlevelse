@@ -3,19 +3,29 @@ import { Button } from 'baseui/button'
 import { HeadingXXLarge } from 'baseui/typography'
 import { useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet'
-import { arkiveringMapToFormVal, arkiveringStatusToString, deleteEtterlevelseArkiv, getAllArkivering } from '../api/ArkiveringApi'
+import { arkiveringMapToFormVal, arkiveringStatusToString, deleteEtterlevelseArkiv, getAllArkivering, getEtterlevelseArkiv, updateEtterlevelseArkiv } from '../api/ArkiveringApi'
 import CustomizedInput from '../components/common/CustomizedInput'
+import { CustomizedStatefulSelect } from '../components/common/CustomizedSelect'
 import { borderColor } from '../components/common/Style'
 import { Cell, Row, Table } from '../components/common/Table'
 import { Layout2 } from '../components/scaffold/Page'
-import { EtterlevelseArkiv } from '../constants'
+import { EtterlevelseArkiv, EtterlevelseArkivStatus } from '../constants'
 import { ampli } from '../services/Amplitude'
 import { ettlevColors, maxPageWidth } from '../util/theme'
 
 export const ArkivAdminPage = () => {
   const [arkiveringId, setArkiveringId] = useState<string>('')
+  const [arkiveringsStatus, setArkiveringsStatus] = useState<EtterlevelseArkivStatus>()
 
   const [tableContent, setTableContent] = useState<EtterlevelseArkiv[]>([])
+
+  const options = [
+    { label: 'Ikke arkiver', id: EtterlevelseArkivStatus.IKKE_ARKIVER },
+    { label: 'Error', id: EtterlevelseArkivStatus.ERROR },
+    { label: 'Arkivert', id: EtterlevelseArkivStatus.ARKIVERT },
+    { label: 'Behandler arkivering', id: EtterlevelseArkivStatus.BEHANDLER_ARKIVERING },
+    { label: 'Til arkivering', id: EtterlevelseArkivStatus.TIL_ARKIVERING },
+  ]
 
   useEffect(() => {
 
@@ -43,32 +53,64 @@ export const ArkivAdminPage = () => {
         </Block>
       }
     >
-      <Block display="flex">
-        <CustomizedInput
-          value={arkiveringId}
-          placeholder="Nåværende behandlings UID"
-          onChange={(e) => { setArkiveringId(e.target.value) }}
-          overrides={{
-            Root: {
-              style: {
-                ...borderColor(ettlevColors.grey200),
-                marginRight: '5px'
-              },
-            },
-          }}
-        />
+      <Block display="flex" alignItems="center">
+        <Block display="flex" width="100%">
+          <Block width="100%" marginRight='5px'>
+            <CustomizedInput
+              value={arkiveringId}
+              placeholder="Arkiverings UID"
+              size='compact'
+              onChange={(e) => { setArkiveringId(e.target.value) }}
+            />
+          </Block>
+          <Block width="40%">
+            <CustomizedStatefulSelect
+              size="compact"
+              options={options}
+              onChange={(status) => setArkiveringsStatus(status?.value[0]?.id as EtterlevelseArkivStatus)}
+              overrides={{
+                Root: {
+                  style: {
+                    marginRight: '5px'
+                  },
+                },
+              }}
+            />
+          </Block>
+        </Block>
+        <Block display="flex" marginLeft='5px'>
+          <Button
+            onClick={() => {
+              deleteEtterlevelseArkiv(arkiveringId).then(() => setArkiveringId(''))
+            }}
 
-        <Button
-          onClick={() => {
-            deleteEtterlevelseArkiv(arkiveringId).then(() => setArkiveringId(''))
-          }}
-        >
-          Delete
-        </Button>
+          >
+            Delete
+          </Button>
+          <Block marginLeft='5px' marginRight="5px">
+            <Button
+              onClick={() => {
+                getEtterlevelseArkiv(arkiveringId).then((arkivering) => {
+                  if (arkiveringsStatus) {
+                    updateEtterlevelseArkiv({
+                      ...arkivering,
+                      status: arkiveringsStatus
+                    }).then(() => {
+                      setArkiveringId('')
+                      setArkiveringsStatus(undefined)
+                    })
+                  }
+                })
+              }}
+            >
+              Oppdater Status
+            </Button>
+          </Block>
+        </Block>
       </Block>
 
       <Block>
-        
+
         {tableContent.length && (
           <Table
             emptyText=""
