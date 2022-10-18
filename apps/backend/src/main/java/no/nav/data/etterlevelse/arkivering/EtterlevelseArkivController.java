@@ -9,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
-import no.nav.data.common.security.SecurityUtils;
 import no.nav.data.etterlevelse.arkivering.domain.EtterlevelseArkiv;
 import no.nav.data.etterlevelse.arkivering.domain.EtterlevelseArkivStatus;
 import no.nav.data.etterlevelse.arkivering.dto.ArkiverRequest;
@@ -153,6 +152,30 @@ public class EtterlevelseArkivController {
         return ResponseEntity.ok(new RestResponsePage<>(etterlevelseArkivList).convert(EtterlevelseArkiv::toResponse));
     }
 
+    @Operation(summary = "Update status to arkivert")
+    @ApiResponse(description = "ok")
+    @PutMapping("/admin/update/{id}")
+    public ResponseEntity<EtterlevelseArkivResponse> adminUpdate(@PathVariable UUID id, @Valid @RequestBody EtterlevelseArkivRequest request){
+
+        log.info("Oppdaterer arkivering som admin");
+
+        if (!Objects.equals(id, request.getIdAsUUID())) {
+            throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
+        }
+
+        if(etterlevelseService.getByBehandling(request.getBehandlingId()).isEmpty()) {
+            log.info("Ingen dokumentasjon på behandling med id: " + request.getBehandlingId());
+            throw  new ValidationException("Kan ikke arkivere en behandling som ikke har ferdig dokumentert innhold");
+        } else {
+            if(request.getStatus() == EtterlevelseArkivStatus.TIL_ARKIVERING) {
+                LocalDateTime tilArkiveringDato = LocalDateTime.now();
+                request.setTilArkiveringDato(tilArkiveringDato);
+            }
+            var etterlevelseArkiv = etterlevelseArkivService.save(request);
+            return ResponseEntity.ok(etterlevelseArkiv.toResponse());
+        }
+    }
+
     @Operation(summary = "Creating etterlevelseArkiv")
     @ApiResponse(description = "ok")
     @PostMapping
@@ -189,10 +212,10 @@ public class EtterlevelseArkivController {
         if(etterlevelseService.getByBehandling(request.getBehandlingId()).isEmpty()) {
             log.info("Ingen dokumentasjon på behandling med id: " + request.getBehandlingId());
             throw  new ValidationException("Kan ikke arkivere en behandling som ikke har ferdig dokumentert innhold");
-        } else if (etterlevelseArkivToUpate.getStatus() == EtterlevelseArkivStatus.BEHANDLER_ARKIVERING) {
+        } else if (etterlevelseArkivToUpate.getStatus() == EtterlevelseArkivStatus.BEHANDLER_ARKIVERING ) {
             log.info("Arkivering pågår, kan ikke bestille ny arkivering for behandling med id: " + request.getBehandlingId());
             throw new ValidationException("Arkivering pågår, kan ikke bestille ny arkivering for behandling med id: " + request.getBehandlingId());
-        } else if (etterlevelseArkivToUpate.getStatus() == EtterlevelseArkivStatus.ERROR || !SecurityUtils.isAdmin()) {
+        } else if (etterlevelseArkivToUpate.getStatus() == EtterlevelseArkivStatus.ERROR) {
             log.info("Kan ikke bestille ny arkivering. Forrige arkivering var ikke vellyket for behandling med id: " + request.getBehandlingId());
             throw new ValidationException("Kan ikke bestille ny arkivering. Forrige arkivering var ikke vellyket for behandling med id: " + request.getBehandlingId());
         } else {
