@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
-import {EtterlevelseArkiv, EtterlevelseArkivStatus, PageResponse} from '../constants'
-import {env} from '../util/env'
+import { EtterlevelseArkiv, EtterlevelseArkivStatus, PageResponse } from '../constants'
+import { env } from '../util/env'
 
 export const getAllArkivering = async () => {
   const PAGE_SIZE = 100
@@ -56,7 +56,7 @@ export const updateEtterlevelseArkiv = async (etterlevelseArkiv: EtterlevelseArk
 }
 
 export const updateToArkivert = async (failedToArchiveBehandlingsNr: String[]) => {
-  return (await axios.put<PageResponse<EtterlevelseArkiv>>(`${env.backendBaseUrl}/etterlevelsearkiv/status/arkivert`, {failedToArchiveBehandlingsNr})).data
+  return (await axios.put<PageResponse<EtterlevelseArkiv>>(`${env.backendBaseUrl}/etterlevelsearkiv/status/arkivert`, { failedToArchiveBehandlingsNr })).data
 }
 
 function etterlevelseArkivToEtterlevelseArkivDto(etterlevelseArkiv: EtterlevelseArkiv) {
@@ -73,7 +73,7 @@ export const useArkiveringByBehandlingId = (behandlingsId?: string) => {
 
   useEffect(() => {
     behandlingsId &&
-    getEtterlevelseArkivByBehandlingId(behandlingsId)
+      getEtterlevelseArkivByBehandlingId(behandlingsId)
         .then((resp) => setData(resp.content[0]))
         .catch((e) => {
           setData(undefined)
@@ -82,4 +82,30 @@ export const useArkiveringByBehandlingId = (behandlingsId?: string) => {
   }, [behandlingsId])
 
   return [data, setData] as [EtterlevelseArkiv | undefined, (etterlevelseArkiv: EtterlevelseArkiv | undefined) => void]
+}
+
+export const arkiveringMapToFormVal = (arkivering: Partial<EtterlevelseArkiv>): EtterlevelseArkiv => ({
+  id: arkivering.id || '',
+  behandlingId: arkivering.behandlingId || '',
+  status: arkivering.status || EtterlevelseArkivStatus.IKKE_ARKIVER,
+  arkiveringDato: arkivering.arkiveringDato || '',
+  tilArkiveringDato: arkivering.tilArkiveringDato || '',
+  webSakNummer: arkivering.webSakNummer || '',
+  changeStamp: arkivering.changeStamp || { lastModifiedDate: '', lastModifiedBy: '' },
+  version: arkivering.version || -1
+})
+
+export const arkiveringStatusToString = (status: EtterlevelseArkivStatus): string => {
+  switch (status) {
+    case EtterlevelseArkivStatus.TIL_ARKIVERING:
+      return 'Til arkivering'
+      case EtterlevelseArkivStatus.BEHANDLER_ARKIVERING:
+      return 'Behandler arkivering'
+      case EtterlevelseArkivStatus.ERROR:
+      return 'Error'
+      case EtterlevelseArkivStatus.ARKIVERT:
+      return 'Arkivert'
+      case EtterlevelseArkivStatus.IKKE_ARKIVER:
+      return 'Ikke arkiver'
+  }
 }
