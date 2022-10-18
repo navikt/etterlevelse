@@ -3,7 +3,7 @@ import CustomizedModal from '../common/CustomizedModal'
 import Button, { buttonContentStyle } from '../common/Button'
 import { Block } from 'baseui/block'
 import { theme } from '../../util'
-import { checkboxChecked, checkboxUnchecked, checkboxUncheckedHover, crossIcon } from '../Images'
+import { checkboxChecked, checkboxUnchecked, checkboxUncheckedHover, crossIcon, outlineInfoIcon } from '../Images'
 import { ettlevColors } from '../../util/theme'
 import { HeadingXLarge, HeadingXXLarge, ParagraphMedium, ParagraphXSmall } from 'baseui/typography'
 import { Behandling, BehandlingEtterlevData, KravQL, KravStatus, PageResponse } from '../../constants'
@@ -244,6 +244,11 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
                                   },
                                 }}
                               >
+                                <Block width="100%" marginRight="5px">
+                                  <ParagraphMedium margin="0px" $style={{ lineHeight: '22px' }}>
+                                    {r.label}
+                                  </ParagraphMedium>
+                                </Block>
                                 <StatefulTooltip
                                   content={() => (
                                     <Block padding="20px">
@@ -257,9 +262,9 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
                                   showArrow
                                   autoFocus
                                 >
-                                  <ParagraphMedium margin="0px" $style={{ lineHeight: '22px' }}>
-                                    {r.label}
-                                  </ParagraphMedium>
+                                  <Block display="flex" justifyContent="flex-end">
+                                    <img src={outlineInfoIcon} alt="informasjons ikon" />
+                                  </Block>
                                 </StatefulTooltip>
                               </BaseUIButton>
                             )
