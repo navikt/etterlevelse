@@ -152,7 +152,7 @@ public class EtterlevelseArkivController {
         return ResponseEntity.ok(new RestResponsePage<>(etterlevelseArkivList).convert(EtterlevelseArkiv::toResponse));
     }
 
-    @Operation(summary = "Update status to arkivert")
+    @Operation(summary = "Update etterlevelseArkiv as admin")
     @ApiResponse(description = "ok")
     @PutMapping("/admin/update/{id}")
     public ResponseEntity<EtterlevelseArkivResponse> adminUpdate(@PathVariable UUID id, @Valid @RequestBody EtterlevelseArkivRequest request){
