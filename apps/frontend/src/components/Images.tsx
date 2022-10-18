@@ -72,6 +72,7 @@ import grafIconBgSmall from '../resources/icons/grafIconBg-small.svg'
 import notesIcon from '../resources/icons/notes.svg'
 import notesWithContentIcon from '../resources/icons/notes-with-content.svg'
 import saveArchiveIcon from '../resources/icons/save-archive-icon.svg'
+import outlineInfoIcon from '../resources/icons/outline-info-icon.svg'
 
 import React from 'react'
 import { theme } from '../util'
@@ -130,6 +131,7 @@ export {
   checkboxUncheckedHover,
   avatarPlaceholder,
   informationIcon,
+  outlineInfoIcon,
   angleIcon,
   page2Icon,
   externalLinkIcon,

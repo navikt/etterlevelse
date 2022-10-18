@@ -3,7 +3,7 @@ import CustomizedModal from '../common/CustomizedModal'
 import Button, { buttonContentStyle } from '../common/Button'
 import { Block } from 'baseui/block'
 import { theme } from '../../util'
-import { checkboxChecked, checkboxUnchecked, checkboxUncheckedHover, crossIcon } from '../Images'
+import { checkboxChecked, checkboxUnchecked, checkboxUncheckedHover, crossIcon, outlineInfoIcon } from '../Images'
 import { ettlevColors } from '../../util/theme'
 import { HeadingXLarge, HeadingXXLarge, ParagraphMedium, ParagraphXSmall } from 'baseui/typography'
 import { Behandling, BehandlingEtterlevData, KravQL, KravStatus, PageResponse } from '../../constants'
@@ -18,6 +18,7 @@ import { FormControl } from 'baseui/form-control'
 import { gql, useQuery } from '@apollo/client'
 import { BehandlingStats } from './ViewBehandling'
 import { ModalOverrides } from 'baseui/modal'
+import { ACCESSIBILITY_TYPE, PLACEMENT, StatefulTooltip } from 'baseui/tooltip'
 
 type EditBehandlingModalProps = {
   showModal: boolean
@@ -49,10 +50,10 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
   const filterData = (
     unfilteredData:
       | {
-          behandling: PageResponse<{
-            stats: BehandlingStats
-          }>
-        }
+        behandling: PageResponse<{
+          stats: BehandlingStats
+        }>
+      }
       | undefined,
   ) => {
     let StatusListe: any[] = []
@@ -243,9 +244,28 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
                                   },
                                 }}
                               >
-                                <ParagraphMedium margin="0px" $style={{ lineHeight: '22px' }}>
-                                  {r.label}
-                                </ParagraphMedium>
+                                <Block width="100%" marginRight="5px">
+                                  <ParagraphMedium margin="0px" $style={{ lineHeight: '22px' }}>
+                                    {r.label}
+                                  </ParagraphMedium>
+                                </Block>
+                                <StatefulTooltip
+                                  content={() => (
+                                    <Block padding="20px">
+                                      {r.description}
+                                    </Block>
+
+                                  )}
+                                  placement={PLACEMENT.bottom}
+                                  accessibilityType={ACCESSIBILITY_TYPE.tooltip}
+                                  returnFocus
+                                  showArrow
+                                  autoFocus
+                                >
+                                  <Block display="flex" justifyContent="flex-end">
+                                    <img src={outlineInfoIcon} alt="informasjons ikon" />
+                                  </Block>
+                                </StatefulTooltip>
                               </BaseUIButton>
                             )
                           })}
@@ -302,8 +322,9 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
             </Block>
           </CustomizedModal>
         </Form>
-      )}
-    </Formik>
+      )
+      }
+    </Formik >
   )
 }
 
