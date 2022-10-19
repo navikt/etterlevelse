@@ -1,6 +1,7 @@
 import { Block } from 'baseui/block'
 import { Button } from 'baseui/button'
 import { HeadingXXLarge, LabelLarge } from 'baseui/typography'
+import moment from 'moment'
 import { useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import {
@@ -141,6 +142,8 @@ export const ArkivAdminPage = () => {
               { title: 'Arkivering ID', column: 'id' },
               { title: 'Behandling ID', column: 'behandlingId' },
               { title: 'Status', column: 'status' },
+              { title: 'Bestilt Arkiverings dato', column: 'tilArkiveringDato' },
+              { title: 'Arkiverings dato', column: 'arkiveringDato' },
             ]}
             render={(tableData) => {
               return tableData.data.slice((tableData.page - 1) * tableData.limit, (tableData.page - 1) * tableData.limit + tableData.limit).map((arkivering, index) => {
@@ -151,6 +154,12 @@ export const ArkivAdminPage = () => {
                       <RouteLink href={`/behandling/${arkivering.behandlingId}`}>{arkivering.behandlingId}</RouteLink>
                     </Cell>
                     <Cell>{arkiveringStatusToString(arkivering.status)}</Cell>
+                    <Cell>
+                      {moment(arkivering.tilArkiveringDato).format('lll')}
+                    </Cell>
+                    <Cell>
+                     {moment(arkivering.arkiveringDato).format('lll')}
+                    </Cell>
                   </Row>
                 )
               })
