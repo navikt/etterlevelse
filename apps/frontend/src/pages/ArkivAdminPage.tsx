@@ -16,7 +16,7 @@ import { ettlevColors, maxPageWidth } from '../util/theme'
 export const ArkivAdminPage = () => {
   const [arkiveringId, setArkiveringId] = useState<string>('')
   const [arkiveringsStatus, setArkiveringsStatus] = useState<EtterlevelseArkivStatus>()
-
+  const [reloadTable, setReloadTable] = useState(false)
   const [tableContent, setTableContent] = useState<EtterlevelseArkiv[]>([])
 
   const options = [
@@ -36,6 +36,14 @@ export const ArkivAdminPage = () => {
       ampli.logEvent('sidevisning', { side: 'Etterlevelse arkivering admin side', sidetittel: 'Administere arkivering' })
     })()
   }, [])
+
+  useEffect(() => {
+    ; (async () => {
+      const arkivering = await getAllArkivering()
+      const mappedArkivering = arkivering.map((a) => arkiveringMapToFormVal(a))
+      setTableContent(mappedArkivering)
+    })()
+  }, [reloadTable])
 
 
   return (
@@ -81,7 +89,10 @@ export const ArkivAdminPage = () => {
         <Block display="flex" marginLeft='5px'>
           <Button
             onClick={() => {
-              deleteEtterlevelseArkiv(arkiveringId).then(() => setArkiveringId(''))
+              deleteEtterlevelseArkiv(arkiveringId).then(() => {
+                setArkiveringId('')
+                setReloadTable(!reloadTable)
+              })
             }}
 
           >
@@ -98,6 +109,7 @@ export const ArkivAdminPage = () => {
                     }).then(() => {
                       setArkiveringId('')
                       setArkiveringsStatus(undefined)
+                      setReloadTable(!reloadTable)
                     })
                   }
                 })
@@ -132,7 +144,7 @@ export const ArkivAdminPage = () => {
                       {arkivering.id}
                     </Cell>
                     <Cell>
-                    <RouteLink href={`/behandling/${arkivering.behandlingId}`}>{arkivering.behandlingId}</RouteLink>
+                      <RouteLink href={`/behandling/${arkivering.behandlingId}`}>{arkivering.behandlingId}</RouteLink>
                     </Cell>
                     <Cell>
                       {arkiveringStatusToString(arkivering.status)}
