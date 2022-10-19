@@ -261,6 +261,7 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
                                     <img src={outlineInfoIcon} alt="informasjons ikon" />
                                   </Block>
                                 </StatefulTooltip>
+                                
                               </BaseUIButton>
                             )
                           })}
