@@ -49,7 +49,7 @@ export const ArkivAdminPage = () => {
             <meta charSet="utf-8" />
             <title>Administere arkivering</title>
           </Helmet>
-          <HeadingXXLarge marginTop="0">(WIP!!) Administere arkivering</HeadingXXLarge>
+          <HeadingXXLarge marginTop="0">Administere arkivering</HeadingXXLarge>
         </Block>
       }
     >
