@@ -6,6 +6,7 @@ import { Helmet } from 'react-helmet'
 import { arkiveringMapToFormVal, arkiveringStatusToString, deleteEtterlevelseArkiv, getAllArkivering, getEtterlevelseArkiv, updateAsAdminEtterlevelseArkiv } from '../api/ArkiveringApi'
 import CustomizedInput from '../components/common/CustomizedInput'
 import { CustomizedStatefulSelect } from '../components/common/CustomizedSelect'
+import RouteLink from '../components/common/RouteLink'
 import { Cell, Row, Table } from '../components/common/Table'
 import { Layout2 } from '../components/scaffold/Page'
 import { EtterlevelseArkiv, EtterlevelseArkivStatus } from '../constants'
@@ -120,6 +121,7 @@ export const ArkivAdminPage = () => {
             }}
             headers={[
               { title: 'Arkivering ID', column: 'id' },
+              { title: 'Behandling ID', column: 'behandlingId' },
               { title: 'Status', column: 'status' },
             ]}
             render={(tableData) => {
@@ -128,6 +130,9 @@ export const ArkivAdminPage = () => {
                   <Row key={arkivering.id}>
                     <Cell>
                       {arkivering.id}
+                    </Cell>
+                    <Cell>
+                    <RouteLink href={`/behandling/${arkivering.behandlingId}`}>{arkivering.behandlingId}</RouteLink>
                     </Cell>
                     <Cell>
                       {arkiveringStatusToString(arkivering.status)}
