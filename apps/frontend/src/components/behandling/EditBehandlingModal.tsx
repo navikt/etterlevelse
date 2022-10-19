@@ -249,7 +249,7 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
                                     {r.label}
                                   </ParagraphMedium>
                                 </Block>
-                                {/* <StatefulTooltip
+                                <StatefulTooltip
                                   content={() => <Block padding="20px">{r.description}</Block>}
                                   placement={PLACEMENT.bottom}
                                   accessibilityType={ACCESSIBILITY_TYPE.tooltip}
@@ -260,7 +260,7 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
                                   <Block display="flex" justifyContent="flex-end">
                                     <img src={outlineInfoIcon} alt="informasjons ikon" />
                                   </Block>
-                                </StatefulTooltip> */}
+                                </StatefulTooltip>
                               </BaseUIButton>
                             )
                           })}
