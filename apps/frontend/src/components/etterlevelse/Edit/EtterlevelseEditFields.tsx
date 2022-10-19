@@ -144,9 +144,8 @@ export const EtterlevelseEditFields = ({
           onSubmit={submit}
           initialValues={editedEtterlevelse ? mapEtterlevelseToFormValue(editedEtterlevelse) : mapEtterlevelseToFormValue(etterlevelse)}
           validate={(value) => {
-        
             const mutatedEtterlevelse = value
-            value.suksesskriterieBegrunnelser=syncEtterlevelseKriterieBegrunnelseWithKrav(value, krav)
+            value.suksesskriterieBegrunnelser = syncEtterlevelseKriterieBegrunnelseWithKrav(value, krav)
 
             try {
               validateYupSchema(mutatedEtterlevelse, etterlevelseSchema(), true, { status: value.status })

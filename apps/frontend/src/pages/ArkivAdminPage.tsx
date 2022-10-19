@@ -3,7 +3,14 @@ import { Button } from 'baseui/button'
 import { HeadingXXLarge, LabelLarge } from 'baseui/typography'
 import { useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet'
-import { arkiveringMapToFormVal, arkiveringStatusToString, deleteEtterlevelseArkiv, getAllArkivering, getEtterlevelseArkiv, updateAsAdminEtterlevelseArkiv } from '../api/ArkiveringApi'
+import {
+  arkiveringMapToFormVal,
+  arkiveringStatusToString,
+  deleteEtterlevelseArkiv,
+  getAllArkivering,
+  getEtterlevelseArkiv,
+  updateAsAdminEtterlevelseArkiv,
+} from '../api/ArkiveringApi'
 import CustomizedInput from '../components/common/CustomizedInput'
 import { CustomizedStatefulSelect } from '../components/common/CustomizedSelect'
 import RouteLink from '../components/common/RouteLink'
@@ -28,8 +35,7 @@ export const ArkivAdminPage = () => {
   ]
 
   useEffect(() => {
-
-    ; (async () => {
+    ;(async () => {
       const arkivering = await getAllArkivering()
       const mappedArkivering = arkivering.map((a) => arkiveringMapToFormVal(a))
       setTableContent(mappedArkivering)
@@ -38,13 +44,12 @@ export const ArkivAdminPage = () => {
   }, [])
 
   useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       const arkivering = await getAllArkivering()
       const mappedArkivering = arkivering.map((a) => arkiveringMapToFormVal(a))
       setTableContent(mappedArkivering)
     })()
   }, [reloadTable])
-
 
   return (
     <Layout2
@@ -63,12 +68,14 @@ export const ArkivAdminPage = () => {
     >
       <Block display="flex" alignItems="center">
         <Block display="flex" width="100%">
-          <Block width="100%" marginRight='5px'>
+          <Block width="100%" marginRight="5px">
             <CustomizedInput
               value={arkiveringId}
               placeholder="Arkiverings UID"
-              size='compact'
-              onChange={(e) => { setArkiveringId(e.target.value) }}
+              size="compact"
+              onChange={(e) => {
+                setArkiveringId(e.target.value)
+              }}
             />
           </Block>
           <Block width="40%">
@@ -79,14 +86,14 @@ export const ArkivAdminPage = () => {
               overrides={{
                 Root: {
                   style: {
-                    marginRight: '5px'
+                    marginRight: '5px',
                   },
                 },
               }}
             />
           </Block>
         </Block>
-        <Block display="flex" marginLeft='5px'>
+        <Block display="flex" marginLeft="5px">
           <Button
             onClick={() => {
               deleteEtterlevelseArkiv(arkiveringId).then(() => {
@@ -94,18 +101,17 @@ export const ArkivAdminPage = () => {
                 setReloadTable(!reloadTable)
               })
             }}
-
           >
             Delete
           </Button>
-          <Block marginLeft='5px' marginRight="5px">
+          <Block marginLeft="5px" marginRight="5px">
             <Button
               onClick={() => {
                 getEtterlevelseArkiv(arkiveringId).then((arkivering) => {
                   if (arkiveringsStatus) {
                     updateAsAdminEtterlevelseArkiv({
                       ...arkivering,
-                      status: arkiveringsStatus
+                      status: arkiveringsStatus,
                     }).then(() => {
                       setArkiveringId('')
                       setArkiveringsStatus(undefined)
@@ -140,15 +146,11 @@ export const ArkivAdminPage = () => {
               return tableData.data.slice((tableData.page - 1) * tableData.limit, (tableData.page - 1) * tableData.limit + tableData.limit).map((arkivering, index) => {
                 return (
                   <Row key={arkivering.id}>
-                    <Cell>
-                      {arkivering.id}
-                    </Cell>
+                    <Cell>{arkivering.id}</Cell>
                     <Cell>
                       <RouteLink href={`/behandling/${arkivering.behandlingId}`}>{arkivering.behandlingId}</RouteLink>
                     </Cell>
-                    <Cell>
-                      {arkiveringStatusToString(arkivering.status)}
-                    </Cell>
+                    <Cell>{arkiveringStatusToString(arkivering.status)}</Cell>
                   </Row>
                 )
               })

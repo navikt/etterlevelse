@@ -98,7 +98,7 @@ class CodelistService {
     return code ? code.description : codeName
   }
 
-  getParsedOptions(listName: ListName): { id: string; label: string, description: string }[] {
+  getParsedOptions(listName: ListName): { id: string; label: string; description: string }[] {
     return this.getCodes(listName).map((code: Code) => {
       return { id: code.code, label: code.shortName, description: code.description }
     })

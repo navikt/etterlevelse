@@ -29,7 +29,7 @@ export const SuksesskriterieCard = (props: { suksesskriterie: Suksesskriterie; n
         }}
       >
         <HeadingMedium color={ettlevColors.green600}>
-        Suksesskriterium {num} av {totalt}
+          Suksesskriterium {num} av {totalt}
         </HeadingMedium>
         <HeadingXLarge>{suksesskriterie.navn}</HeadingXLarge>
         <Markdown source={suksesskriterie.beskrivelse} maxWidth="650px" />

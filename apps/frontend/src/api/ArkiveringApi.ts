@@ -97,20 +97,20 @@ export const arkiveringMapToFormVal = (arkivering: Partial<EtterlevelseArkiv>): 
   tilArkiveringDato: arkivering.tilArkiveringDato || '',
   webSakNummer: arkivering.webSakNummer || '',
   changeStamp: arkivering.changeStamp || { lastModifiedDate: '', lastModifiedBy: '' },
-  version: arkivering.version || -1
+  version: arkivering.version || -1,
 })
 
 export const arkiveringStatusToString = (status: EtterlevelseArkivStatus): string => {
   switch (status) {
     case EtterlevelseArkivStatus.TIL_ARKIVERING:
       return 'Til arkivering'
-      case EtterlevelseArkivStatus.BEHANDLER_ARKIVERING:
+    case EtterlevelseArkivStatus.BEHANDLER_ARKIVERING:
       return 'Behandler arkivering'
-      case EtterlevelseArkivStatus.ERROR:
+    case EtterlevelseArkivStatus.ERROR:
       return 'Error'
-      case EtterlevelseArkivStatus.ARKIVERT:
+    case EtterlevelseArkivStatus.ARKIVERT:
       return 'Arkivert'
-      case EtterlevelseArkivStatus.IKKE_ARKIVER:
+    case EtterlevelseArkivStatus.IKKE_ARKIVER:
       return 'Ikke arkiver'
   }
 }

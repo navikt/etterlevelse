@@ -1,33 +1,33 @@
-import React, {useRef, useState} from 'react'
-import {Block} from 'baseui/block'
-import {useNavigate, useParams} from 'react-router-dom'
-import {LoadingSkeleton} from '../components/common/LoadingSkeleton'
-import {useBehandling} from '../api/BehandlingApi'
-import {HeadingXLarge, LabelSmall, ParagraphMedium, ParagraphXSmall} from 'baseui/typography'
-import {FormikProps} from 'formik'
-import {ettlevColors, theme} from '../util/theme'
-import {Layout2} from '../components/scaffold/Page'
-import {arkPennIcon, editIcon, ellipse80, saveArchiveIcon, warningAlert} from '../components/Images'
-import {Behandling, BehandlingEtterlevData, KravQL, KravStatus, PageResponse} from '../constants'
-import {useQuery} from '@apollo/client'
-import {Code, codelist, ListName} from '../services/Codelist'
-import {Button, KIND, SIZE} from 'baseui/button'
+import React, { useRef, useState } from 'react'
+import { Block } from 'baseui/block'
+import { useNavigate, useParams } from 'react-router-dom'
+import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
+import { useBehandling } from '../api/BehandlingApi'
+import { HeadingXLarge, LabelSmall, ParagraphMedium, ParagraphXSmall } from 'baseui/typography'
+import { FormikProps } from 'formik'
+import { ettlevColors, theme } from '../util/theme'
+import { Layout2 } from '../components/scaffold/Page'
+import { arkPennIcon, editIcon, ellipse80, saveArchiveIcon, warningAlert } from '../components/Images'
+import { Behandling, BehandlingEtterlevData, KravQL, KravStatus, PageResponse } from '../constants'
+import { useQuery } from '@apollo/client'
+import { Code, codelist, ListName } from '../services/Codelist'
+import { Button, KIND, SIZE } from 'baseui/button'
 import EditBehandlingModal from '../components/behandling/EditBehandlingModal'
-import {marginZero} from '../components/common/Style'
-import {breadcrumbPaths} from '../components/common/CustomizedBreadcrumbs'
-import {BehandlingStats} from '../components/behandling/ViewBehandling'
-import {statsQuery} from '../api/KravApi'
-import {TemaCardBehandling} from '../components/behandlingPage/TemaCardBehandling'
-import {isFerdigUtfylt} from './BehandlingTemaPage'
-import {ampli} from '../services/Amplitude'
-import {getMainHeader, getNewestKravVersjon, responsiveDisplayBehandlingPage} from '../components/behandlingPage/common/utils'
-import {user} from '../services/User'
-import {faFileWord} from '@fortawesome/free-solid-svg-icons'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {StyledLink} from 'baseui/link'
-import {env} from '../util/env'
-import {useArkiveringByBehandlingId} from "../api/ArkiveringApi";
-import {ArkiveringModal} from "../components/behandlingPage/ArkiveringModal";
+import { marginZero } from '../components/common/Style'
+import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
+import { BehandlingStats } from '../components/behandling/ViewBehandling'
+import { statsQuery } from '../api/KravApi'
+import { TemaCardBehandling } from '../components/behandlingPage/TemaCardBehandling'
+import { isFerdigUtfylt } from './BehandlingTemaPage'
+import { ampli } from '../services/Amplitude'
+import { getMainHeader, getNewestKravVersjon, responsiveDisplayBehandlingPage } from '../components/behandlingPage/common/utils'
+import { user } from '../services/User'
+import { faFileWord } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { StyledLink } from 'baseui/link'
+import { env } from '../util/env'
+import { useArkiveringByBehandlingId } from '../api/ArkiveringApi'
+import { ArkiveringModal } from '../components/behandlingPage/ArkiveringModal'
 
 export const BehandlingPage = () => {
   const params = useParams<{ id?: string }>()
@@ -37,8 +37,8 @@ export const BehandlingPage = () => {
   const formRef = useRef<FormikProps<any>>()
   const navigate = useNavigate()
 
-  const {data: relevanteData, refetch: refetchRelevanteData} = useQuery<{ behandling: PageResponse<{ stats: BehandlingStats }> }>(statsQuery, {
-    variables: {behandlingId: behandling?.id},
+  const { data: relevanteData, refetch: refetchRelevanteData } = useQuery<{ behandling: PageResponse<{ stats: BehandlingStats }> }>(statsQuery, {
+    variables: { behandlingId: behandling?.id },
   })
 
   const [edit, setEdit] = useState(false)
@@ -51,37 +51,37 @@ export const BehandlingPage = () => {
   const filterData = (
     unfilteredData:
       | {
-      behandling: PageResponse<{
-        stats: BehandlingStats
-      }>
-    }
+          behandling: PageResponse<{
+            stats: BehandlingStats
+          }>
+        }
       | undefined,
   ) => {
     const relevanteStatusListe: any[] = []
     const irrelevanteStatusListe: any[] = []
     const utgaattStatusListe: any[] = []
 
-    unfilteredData?.behandling.content.forEach(({stats}) => {
+    unfilteredData?.behandling.content.forEach(({ stats }) => {
       stats.fyltKrav.forEach((k) => {
         if (k.regelverk.length && k.status === KravStatus.AKTIV) {
-          relevanteStatusListe.push({...k, etterlevelser: k.etterlevelser.filter((e) => e.behandlingId === behandling?.id)})
+          relevanteStatusListe.push({ ...k, etterlevelser: k.etterlevelser.filter((e) => e.behandlingId === behandling?.id) })
         } else if (k.regelverk.length && k.status === KravStatus.UTGAATT) {
-          utgaattStatusListe.push({...k, etterlevelser: k.etterlevelser.filter((e) => e.behandlingId === behandling?.id)})
+          utgaattStatusListe.push({ ...k, etterlevelser: k.etterlevelser.filter((e) => e.behandlingId === behandling?.id) })
         }
       })
       stats.ikkeFyltKrav.forEach((k) => {
         if (k.regelverk.length && k.status === KravStatus.AKTIV) {
-          relevanteStatusListe.push({...k, etterlevelser: k.etterlevelser.filter((e) => e.behandlingId === behandling?.id)})
+          relevanteStatusListe.push({ ...k, etterlevelser: k.etterlevelser.filter((e) => e.behandlingId === behandling?.id) })
         } else if (k.regelverk.length && k.status === KravStatus.UTGAATT) {
-          utgaattStatusListe.push({...k, etterlevelser: k.etterlevelser.filter((e) => e.behandlingId === behandling?.id)})
+          utgaattStatusListe.push({ ...k, etterlevelser: k.etterlevelser.filter((e) => e.behandlingId === behandling?.id) })
         }
       })
     })
 
-    unfilteredData?.behandling.content.forEach(({stats}) => {
+    unfilteredData?.behandling.content.forEach(({ stats }) => {
       stats.irrelevantKrav.forEach((k) => {
         if (k.regelverk.length && k.status === KravStatus.AKTIV) {
-          irrelevanteStatusListe.push({...k, etterlevelser: k.etterlevelser.filter((e) => e.behandlingId === behandling?.id)})
+          irrelevanteStatusListe.push({ ...k, etterlevelser: k.etterlevelser.filter((e) => e.behandlingId === behandling?.id) })
         }
       })
     })
@@ -114,7 +114,7 @@ export const BehandlingPage = () => {
   React.useEffect(() => {
     setTimeout(() => refetchRelevanteData(), 200)
     if (behandling) {
-      ampli.logEvent('sidevisning', {side: 'Behandling side', sidetittel: `B${behandling.nummer.toString()} ${behandling.navn.toString()}`})
+      ampli.logEvent('sidevisning', { side: 'Behandling side', sidetittel: `B${behandling.nummer.toString()} ${behandling.navn.toString()}` })
     }
   }, [behandling])
 
@@ -137,21 +137,21 @@ export const BehandlingPage = () => {
         <Block width="100%" display="flex">
           {emptyRelevans ? (
             <Block display="flex" alignItems="center">
-              <img height="16px" width="16px" src={warningAlert} alt="warning icon"/>
-              <LabelSmall color={ettlevColors.green600} marginTop="0px" marginBottom="0px" marginRight="5px" marginLeft="5px" $style={{fontSize: '16px'}}>
+              <img height="16px" width="16px" src={warningAlert} alt="warning icon" />
+              <LabelSmall color={ettlevColors.green600} marginTop="0px" marginBottom="0px" marginRight="5px" marginLeft="5px" $style={{ fontSize: '16px' }}>
                 Ingen egenskaper er oppgitt
               </LabelSmall>
             </Block>
           ) : (
-            <LabelSmall marginTop="0px" marginBottom="0px" marginRight="5px" $style={{fontSize: '16px'}}>
+            <LabelSmall marginTop="0px" marginBottom="0px" marginRight="5px" $style={{ fontSize: '16px' }}>
               Behandlingen skal etterleve krav for:
             </LabelSmall>
           )}
 
           {!behandling.irrelevansFor.length ? getRelevans() : getRelevans(behandling.irrelevansFor)}
         </Block>
-        <Block display="flex" flex="1" justifyContent="flex-end" $style={{whiteSpace: 'nowrap'}}>
-          <Button onClick={() => setEdit(!edit)} startEnhancer={<img src={editIcon} alt="edit icon"/>}>
+        <Block display="flex" flex="1" justifyContent="flex-end" $style={{ whiteSpace: 'nowrap' }}>
+          <Button onClick={() => setEdit(!edit)} startEnhancer={<img src={editIcon} alt="edit icon" />}>
             Tilpass egenskaper
           </Button>
         </Block>
@@ -163,7 +163,7 @@ export const BehandlingPage = () => {
     <Block width="100%" display={responsiveDisplayBehandlingPage} alignItems="center" justifyContent="space-between" marginTop={'8px'} marginBottom={'8px'}>
       <Block display="flex" alignItems="center">
         <Block marginRight="12px">
-          <img src={arkPennIcon} alt="penn ikon" height="32px" width="32px"/>
+          <img src={arkPennIcon} alt="penn ikon" height="32px" width="32px" />
         </Block>
         <Block>
           <HeadingXLarge marginTop="0px" marginBottom="0px">
@@ -179,23 +179,23 @@ export const BehandlingPage = () => {
           </Button>
         )}
         <Block display="flex" alignItems="center" marginRight="12px">
-          <StyledLink style={{textDecoration: 'none'}} href={`${env.backendBaseUrl}/export/etterlevelse?behandlingId=${behandling.id}`}>
+          <StyledLink style={{ textDecoration: 'none' }} href={`${env.backendBaseUrl}/export/etterlevelse?behandlingId=${behandling.id}`}>
             <Button kind={KIND.tertiary} size={SIZE.compact}>
               <Block marginRight="6px">
-                <FontAwesomeIcon icon={faFileWord}/>
+                <FontAwesomeIcon icon={faFileWord} />
               </Block>
               <Block>Eksporter</Block>
             </Button>
           </StyledLink>
         </Block>
         <Block display="flex" alignItems="baseline" marginRight="30px">
-          <ParagraphMedium $style={{fontWeight: 900, fontSize: '32px', marginTop: 0, marginBottom: 0}} color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
+          <ParagraphMedium $style={{ fontWeight: 900, fontSize: '32px', marginTop: 0, marginBottom: 0 }} color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
             {getNewestKravVersjon(relevanteStats).length}
           </ParagraphMedium>
           <ParagraphMedium>krav</ParagraphMedium>
         </Block>
 
-        <Block $style={{border: '1px solid ' + ettlevColors.green50, background: '#102723'}} height="40px"/>
+        <Block $style={{ border: '1px solid ' + ettlevColors.green50, background: '#102723' }} height="40px" />
 
         <ArkiveringModal
           arkivModal={arkivModal}
@@ -206,7 +206,7 @@ export const BehandlingPage = () => {
         />
 
         <Block display="flex" alignItems="baseline" marginLeft="30px">
-          <ParagraphMedium $style={{fontWeight: 900, fontSize: '32px', marginTop: 0, marginBottom: 0}} color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
+          <ParagraphMedium $style={{ fontWeight: 900, fontSize: '32px', marginTop: 0, marginBottom: 0 }} color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
             {antallFylttKrav}
           </ParagraphMedium>
           <ParagraphMedium>ferdig utfylt</ParagraphMedium>
@@ -227,9 +227,9 @@ export const BehandlingPage = () => {
         <Block display={responsiveDisplayBehandlingPage} flexWrap>
           {relevans.map((r, index) => (
             <Block key={r.id} display="flex">
-              <ParagraphXSmall $style={{...marginZero, marginRight: '8px', lineHeight: '24px'}}>{r.label}</ParagraphXSmall>
+              <ParagraphXSmall $style={{ ...marginZero, marginRight: '8px', lineHeight: '24px' }}>{r.label}</ParagraphXSmall>
               <Block marginRight="8px" display={['none', 'none', 'none', 'none', 'block', 'block']}>
-                {index < relevans.length - 1 ? <img alt="dot" src={ellipse80}/> : undefined}
+                {index < relevans.length - 1 ? <img alt="dot" src={ellipse80} /> : undefined}
               </Block>
             </Block>
           ))}
@@ -240,9 +240,9 @@ export const BehandlingPage = () => {
       <Block display={responsiveDisplayBehandlingPage} flexWrap>
         {options.map((o, index) => (
           <Block key={o.id} display="flex">
-            <ParagraphXSmall $style={{...marginZero, marginRight: '8px', lineHeight: '24px'}}>{o.label}</ParagraphXSmall>
+            <ParagraphXSmall $style={{ ...marginZero, marginRight: '8px', lineHeight: '24px' }}>{o.label}</ParagraphXSmall>
             <Block marginRight="8px" display={['none', 'none', 'none', 'none', 'block', 'block']}>
-              {index < options.length - 1 ? <img alt="dot" src={ellipse80}/> : undefined}
+              {index < options.length - 1 ? <img alt="dot" src={ellipse80} /> : undefined}
             </Block>
           </Block>
         ))}
@@ -250,7 +250,7 @@ export const BehandlingPage = () => {
     )
   }
 
-  if (!behandling) return <LoadingSkeleton header="Behandling"/>
+  if (!behandling) return <LoadingSkeleton header="Behandling" />
 
   const breadcrumbPaths: breadcrumbPaths[] = [
     {
@@ -274,7 +274,7 @@ export const BehandlingPage = () => {
         {getRelevansContent(behandling)}
         <Block display="flex" width="100%" justifyContent="space-between" flexWrap marginTop={theme.sizing.scale550}>
           {temaListe.map((tema) => (
-            <TemaCardBehandling tema={tema} stats={relevanteStats} utgaattStats={utgaattStats} behandling={behandling} key={`${tema.shortName}_panel`}/>
+            <TemaCardBehandling tema={tema} stats={relevanteStats} utgaattStats={utgaattStats} behandling={behandling} key={`${tema.shortName}_panel`} />
           ))}
         </Block>
 
@@ -303,7 +303,7 @@ export const BehandlingPage = () => {
           setBehandling={setBehandling}
           close={(e?: BehandlingEtterlevData) => {
             setEdit(false)
-            e && setBehandling({...behandling, ...e})
+            e && setBehandling({ ...behandling, ...e })
           }}
         />
       )}

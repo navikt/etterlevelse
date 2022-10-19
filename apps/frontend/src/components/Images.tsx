@@ -138,7 +138,7 @@ export {
   eyeSlash,
   notesIcon,
   notesWithContentIcon,
-  saveArchiveIcon
+  saveArchiveIcon,
 }
 
 export const temaBilder: { [id: string]: string } = {

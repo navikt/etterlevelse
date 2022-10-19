@@ -503,5 +503,3 @@ export const EditEtterlevelseV2 = ({
     </Block>
   )
 }
-
-

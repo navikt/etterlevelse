@@ -1,19 +1,19 @@
-import {Block} from 'baseui/block'
-import {ettlevColors, maxPageWidth} from '../util/theme'
-import {HeadingXXLarge} from 'baseui/typography'
+import { Block } from 'baseui/block'
+import { ettlevColors, maxPageWidth } from '../util/theme'
+import { HeadingXXLarge } from 'baseui/typography'
 import * as React from 'react'
-import {useEffect, useState} from 'react'
-import {Krav} from '../constants'
-import {getAllKrav, kravMapToFormVal} from '../api/KravApi'
-import {Cell, Row, Table} from '../components/common/Table'
-import {ColumnCompares} from '../util/hooks'
+import { useEffect, useState } from 'react'
+import { Krav } from '../constants'
+import { getAllKrav, kravMapToFormVal } from '../api/KravApi'
+import { Cell, Row, Table } from '../components/common/Table'
+import { ColumnCompares } from '../util/hooks'
 import moment from 'moment'
-import {codelist, ListName} from '../services/Codelist'
-import {kravStatus} from './KravPage'
-import {Layout2} from '../components/scaffold/Page'
+import { codelist, ListName } from '../services/Codelist'
+import { kravStatus } from './KravPage'
+import { Layout2 } from '../components/scaffold/Page'
 import RouteLink from '../components/common/RouteLink'
-import {Helmet} from 'react-helmet'
-import {ampli} from '../services/Amplitude'
+import { Helmet } from 'react-helmet'
+import { ampli } from '../services/Amplitude'
 
 const kravSorting: ColumnCompares<Krav> = {
   kravNummer: (a, b) => a.kravNummer - b.kravNummer,
@@ -28,7 +28,6 @@ export const KravTablePage = () => {
   const [tableContent, setTableContent] = useState<Krav[]>([])
 
   useEffect(() => {
-
     ;(async () => {
       const kraver = await getAllKrav()
       const mappedKraver = kraver.map((k) => kravMapToFormVal(k))

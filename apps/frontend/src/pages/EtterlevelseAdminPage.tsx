@@ -15,7 +15,6 @@ export const EtterlevelseAdminPage = () => {
   const [newBehandlingsId, setNewBehandlingsId] = useState<string>('')
   const [updateMessage, setUpdateMessage] = useState<string>('')
 
-
   return (
     <Layout2
       headerBackgroundColor={ettlevColors.grey25}
@@ -36,12 +35,14 @@ export const EtterlevelseAdminPage = () => {
         <CustomizedInput
           value={oldBehandlingsId}
           placeholder="Nåværende behandlings UID"
-          onChange={(e) => { setOldBehandlingsId(e.target.value) }}
+          onChange={(e) => {
+            setOldBehandlingsId(e.target.value)
+          }}
           overrides={{
             Root: {
               style: {
                 ...borderColor(ettlevColors.grey200),
-                marginRight: '5px'
+                marginRight: '5px',
               },
             },
           }}
@@ -50,12 +51,14 @@ export const EtterlevelseAdminPage = () => {
         <CustomizedInput
           value={newBehandlingsId}
           placeholder="Ny behandlings UID"
-          onChange={(e) => { setNewBehandlingsId(e.target.value) }}
+          onChange={(e) => {
+            setNewBehandlingsId(e.target.value)
+          }}
           overrides={{
             Root: {
               style: {
                 ...borderColor(ettlevColors.grey200),
-                marginRight: '5px'
+                marginRight: '5px',
               },
             },
           }}
@@ -78,27 +81,24 @@ export const EtterlevelseAdminPage = () => {
           Oppdater
         </Button>
       </Block>
-      {updateMessage ?
+      {updateMessage ? (
         <Block>
-          {updateMessage.match('error') ?
+          {updateMessage.match('error') ? (
             <Notification
               overrides={{ Body: { style: { width: 'auto', ...paddingZero, marginTop: 0, backgroundColor: 'transparent', color: ettlevColors.red600 } } }}
               kind={NKIND.negative}
             >
               {updateMessage}
             </Notification>
-
-            :
-
-            <Notification
-              overrides={{ Body: { style: { width: 'auto', ...paddingZero, marginTop: 0, backgroundColor: 'transparent' } } }}
-              kind={NKIND.positive}
-            >
+          ) : (
+            <Notification overrides={{ Body: { style: { width: 'auto', ...paddingZero, marginTop: 0, backgroundColor: 'transparent' } } }} kind={NKIND.positive}>
               {updateMessage}
             </Notification>
-          }
+          )}
         </Block>
-        : <Block />}
+      ) : (
+        <Block />
+      )}
     </Layout2>
   )
 }

@@ -34,7 +34,7 @@ const Main = (props) => {
     <StyletronProvider value={engine}>
       <BaseProvider theme={customTheme}>
         <ApolloProvider client={apolloClient}>
-          <HistoryRouter history={createBrowserHistory({window})}>
+          <HistoryRouter history={createBrowserHistory({ window })}>
             <Helmet>
               <meta charSet="utf-8" />
               <title>Etterlevelse Beta</title>

@@ -50,10 +50,10 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
   const filterData = (
     unfilteredData:
       | {
-        behandling: PageResponse<{
-          stats: BehandlingStats
-        }>
-      }
+          behandling: PageResponse<{
+            stats: BehandlingStats
+          }>
+        }
       | undefined,
   ) => {
     let StatusListe: any[] = []
@@ -250,12 +250,7 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
                                   </ParagraphMedium>
                                 </Block>
                                 <StatefulTooltip
-                                  content={() => (
-                                    <Block padding="20px">
-                                      {r.description}
-                                    </Block>
-
-                                  )}
+                                  content={() => <Block padding="20px">{r.description}</Block>}
                                   placement={PLACEMENT.bottom}
                                   accessibilityType={ACCESSIBILITY_TYPE.tooltip}
                                   returnFocus
@@ -322,9 +317,8 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
             </Block>
           </CustomizedModal>
         </Form>
-      )
-      }
-    </Formik >
+      )}
+    </Formik>
   )
 }
 

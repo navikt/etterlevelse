@@ -122,7 +122,7 @@ const Begrunnelse = ({
     <Block marginBottom={theme.sizing.scale700}>
       <Card>
         <LabelSmall $style={{ color: ettlevColors.green600 }}>
-         Suksesskriterium {index + 1} av {kriterieLength}
+          Suksesskriterium {index + 1} av {kriterieLength}
         </LabelSmall>
         <LabelSmall $style={{ fontSize: '21px', lineHeight: '30px' }}>{suksesskriterie.navn}</LabelSmall>
         <LabelSmall $style={{ lineHeight: '22px' }} marginTop="16px">
