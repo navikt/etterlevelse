@@ -26,7 +26,7 @@ export const ArkiveringModal = ({ arkivModal, setArkivModal, behandlingsId, ette
       case EtterlevelseArkivStatus.BEHANDLER_ARKIVERING:
         return 'Arkivering under behandling.'
       case EtterlevelseArkivStatus.ERROR:
-        return 'Forrige arkivering mislykkes. Gi beskjed i #etterlevelse på slack'
+        return 'Det oppstod en feil ved forrige arkivering, gi beskjed i #etterlevelse på slack'
       default:
         return ''
     }
@@ -51,7 +51,8 @@ export const ArkiveringModal = ({ arkivModal, setArkivModal, behandlingsId, ette
       <ModalBody>
         <Block>{etterlevelseArkiv ? getStatustext(etterlevelseArkiv.status) : ''}</Block>
         <Block marginTop="16px" display="flex" $style={{ justifyContent: 'flex-end' }}>
-          <Button
+          { etterlevelseArkiv && etterlevelseArkiv.status !== EtterlevelseArkivStatus.BEHANDLER_ARKIVERING && etterlevelseArkiv.status !== EtterlevelseArkivStatus.ERROR &&
+             <Button
             style={{ marginTop: '12px' }}
             onClick={() => {
               const newEtterlevelseArkivering = {
@@ -78,12 +79,9 @@ export const ArkiveringModal = ({ arkivModal, setArkivModal, behandlingsId, ette
             }}
             size={'compact'}
             kind={'primary'}
-            disabled={
-              etterlevelseArkiv && (etterlevelseArkiv.status === EtterlevelseArkivStatus.BEHANDLER_ARKIVERING || etterlevelseArkiv.status === EtterlevelseArkivStatus.ERROR)
-            }
           >
-            {etterlevelseArkiv && etterlevelseArkiv.status === EtterlevelseArkivStatus.TIL_ARKIVERING ? 'Avbestill arkivering' : 'Bestill arkivering'}
-          </Button>
+            {etterlevelseArkiv && etterlevelseArkiv.status === EtterlevelseArkivStatus.TIL_ARKIVERING ? 'Avbryt arkivering' : 'Arkiver'}
+          </Button>}
         </Block>
       </ModalBody>
     </CustomizedModal>
