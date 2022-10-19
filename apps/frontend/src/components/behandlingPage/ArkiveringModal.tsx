@@ -1,12 +1,12 @@
-import {Modal, ModalBody, ModalHeader} from "baseui/modal";
-import {Block} from "baseui/block";
-import {Button} from "baseui/button";
-import {EtterlevelseArkiv, EtterlevelseArkivStatus} from "../../constants";
-import {createEtterlevelseArkiv, updateEtterlevelseArkiv} from "../../api/ArkiveringApi";
-import React from "react";
-import moment from "moment";
-import CustomizedModal from '../common/CustomizedModal';
-import { borderRadius } from "../common/Style";
+import {ModalBody, ModalHeader} from 'baseui/modal'
+import {Block} from 'baseui/block'
+import {Button} from 'baseui/button'
+import {EtterlevelseArkiv, EtterlevelseArkivStatus} from '../../constants'
+import {createEtterlevelseArkiv, updateEtterlevelseArkiv} from '../../api/ArkiveringApi'
+import React from 'react'
+import moment from 'moment'
+import CustomizedModal from '../common/CustomizedModal'
+import { borderRadius } from '../common/Style'
 
 type ArkiveringModalProps = {
   arkivModal: boolean
@@ -17,7 +17,6 @@ type ArkiveringModalProps = {
 }
 
 export const ArkiveringModal = ({arkivModal, setArkivModal, behandlingsId, etterlevelseArkiv, setEtterlevelseArkiv}: ArkiveringModalProps) => {
-
   const getStatustext = (etterlevelseArkivStatus: EtterlevelseArkivStatus) => {
 
     switch (etterlevelseArkivStatus) {
