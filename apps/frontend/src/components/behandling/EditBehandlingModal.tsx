@@ -280,9 +280,8 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
                   <Block>
                     <Block display="flex" alignItems="baseline" marginRight="30px">
                       <ParagraphMedium
-                        $style={{ ...marginZero, fontWeight: 900, fontSize: '32px', lineHeight: '40px' }}
+                        $style={{ ...marginZero, fontWeight: 900, fontSize: '32px', lineHeight: '40px', marginRight: theme.sizing.scale300 }}
                         color={ettlevColors.navOransje}
-                        marginRight={theme.sizing.scale300}
                       >
                         {stats.length}
                       </ParagraphMedium>
