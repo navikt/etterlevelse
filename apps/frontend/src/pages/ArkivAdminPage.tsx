@@ -1,6 +1,6 @@
 import { Block } from 'baseui/block'
 import { Button } from 'baseui/button'
-import { HeadingXXLarge } from 'baseui/typography'
+import { HeadingXXLarge, LabelLarge } from 'baseui/typography'
 import { useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { arkiveringMapToFormVal, arkiveringStatusToString, deleteEtterlevelseArkiv, getAllArkivering, getEtterlevelseArkiv, updateAsAdminEtterlevelseArkiv } from '../api/ArkiveringApi'
@@ -121,8 +121,8 @@ export const ArkivAdminPage = () => {
         </Block>
       </Block>
 
-      <Block>
-
+      <Block marginTop="32px">
+        <LabelLarge>Arkiv tabell</LabelLarge>
         {tableContent.length && (
           <Table
             emptyText=""
