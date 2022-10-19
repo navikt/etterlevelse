@@ -75,7 +75,7 @@ export const ArkiveringModal = ({arkivModal, setArkivModal, behandlingsId, etter
             }}
             size={'compact'}
             kind={'primary'}
-            disabled={etterlevelseArkiv && etterlevelseArkiv.status === EtterlevelseArkivStatus.BEHANDLER_ARKIVERING}
+            disabled={etterlevelseArkiv && (etterlevelseArkiv.status === EtterlevelseArkivStatus.BEHANDLER_ARKIVERING || etterlevelseArkiv.status === EtterlevelseArkivStatus.ERROR)}
           >
             {etterlevelseArkiv && etterlevelseArkiv.status === EtterlevelseArkivStatus.TIL_ARKIVERING ? 'Avbestill arkivering' : 'Bestill arkivering'}
           </Button>
