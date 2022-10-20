@@ -122,7 +122,7 @@ public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
         journalpostTab.appendChild(journalpost);
 
         createElement("JP.INNHOLD",
-                "Etterlevelse for B" + behandling.getNummer() + " " + behandling.getOverordnetFormaal().getShortName() + ": " + behandling.getNavn(),
+                "Etterlevelse for B" + behandling.getNummer() + " " + behandling.getOverordnetFormaal().getShortName() + " - " + behandling.getNavn(),
                 journalpost, document);
 
         SimpleDateFormat dateTime = new SimpleDateFormat("yyyyMMdd");
