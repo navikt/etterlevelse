@@ -79,9 +79,9 @@ export const useArkiveringByBehandlingId = (behandlingsId?: string) => {
   useEffect(() => {
     behandlingsId &&
       getEtterlevelseArkivByBehandlingId(behandlingsId)
-        .then((resp) => setData(resp.content[0]))
+        .then((resp) => setData(arkiveringMapToFormVal(resp.content[0])))
         .catch((e) => {
-          setData(undefined)
+          setData(arkiveringMapToFormVal({id: ''}))
           console.log("couldn't find arkivering with behandling id = ", e)
         })
   }, [behandlingsId])
