@@ -171,6 +171,10 @@ public class EtterlevelseArkivController {
                 LocalDateTime tilArkiveringDato = LocalDateTime.now();
                 request.setTilArkiveringDato(tilArkiveringDato);
             }
+            else if(request.getStatus() == EtterlevelseArkivStatus.ARKIVERT) {
+                LocalDateTime arkiveringDato = LocalDateTime.now();
+                request.setArkiveringDato(arkiveringDato);
+            }
             var etterlevelseArkiv = etterlevelseArkivService.save(request);
             return ResponseEntity.ok(etterlevelseArkiv.toResponse());
         }
