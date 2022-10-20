@@ -101,7 +101,7 @@ public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
     @SneakyThrows
     public byte[] createXml(Date date, String wordDocFileName, Behandling behandling, EtterlevelseArkiv etterlevelseArkiv) {
 
-        String creatorId = etterlevelseArkiv.getChangeStamp().getCreatedBy().split(" ")[0];
+        String creatorId = etterlevelseArkiv.getChangeStamp().getLastModifiedBy().split(" ")[0];
 
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
