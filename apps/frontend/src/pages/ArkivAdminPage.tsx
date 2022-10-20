@@ -40,7 +40,7 @@ export const ArkivAdminPage = () => {
       const arkivering = await getAllArkivering()
       const mappedArkivering = arkivering.map((a) => arkiveringMapToFormVal(a))
       setTableContent(mappedArkivering)
-      ampli.logEvent('sidevisning', { side: 'Etterlevelse arkivering admin side', sidetittel: 'Administere arkivering' })
+      ampli.logEvent('sidevisning', { side: 'Etterlevelse arkivering admin side', sidetittel: 'Administrere arkivering' })
     })()
   }, [])
 
@@ -56,14 +56,14 @@ export const ArkivAdminPage = () => {
     <Layout2
       headerBackgroundColor={ettlevColors.grey25}
       childrenBackgroundColor={ettlevColors.grey25}
-      currentPage="Administere Arkivering"
+      currentPage="Administrere Arkivering"
       mainHeader={
         <Block maxWidth={maxPageWidth} width="100%" display={'flex'} justifyContent="flex-start">
           <Helmet>
             <meta charSet="utf-8" />
-            <title>Administere arkivering</title>
+            <title>Administrere arkivering</title>
           </Helmet>
-          <HeadingXXLarge marginTop="0">Administere arkivering</HeadingXXLarge>
+          <HeadingXXLarge marginTop="0">Administrere arkivering</HeadingXXLarge>
         </Block>
       }
     >

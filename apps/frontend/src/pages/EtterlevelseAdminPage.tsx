@@ -19,14 +19,14 @@ export const EtterlevelseAdminPage = () => {
     <Layout2
       headerBackgroundColor={ettlevColors.grey25}
       childrenBackgroundColor={ettlevColors.grey25}
-      currentPage="Administere Etterlevelse"
+      currentPage="Administrere Etterlevelse"
       mainHeader={
         <Block maxWidth={maxPageWidth} width="100%" display={'flex'} justifyContent="flex-start">
           <Helmet>
             <meta charSet="utf-8" />
-            <title>Administere Etterlevelse</title>
+            <title>Administrere Etterlevelse</title>
           </Helmet>
-          <HeadingXXLarge marginTop="0">Administere Etterlevelse</HeadingXXLarge>
+          <HeadingXXLarge marginTop="0">Administrere Etterlevelse</HeadingXXLarge>
         </Block>
       }
     >

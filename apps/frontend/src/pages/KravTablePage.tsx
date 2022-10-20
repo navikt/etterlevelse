@@ -32,7 +32,7 @@ export const KravTablePage = () => {
       const kraver = await getAllKrav()
       const mappedKraver = kraver.map((k) => kravMapToFormVal(k))
       setTableContent(mappedKraver)
-      ampli.logEvent('sidevisning', { side: 'Krav admin side', sidetittel: 'Administere Krav' })
+      ampli.logEvent('sidevisning', { side: 'Krav admin side', sidetittel: 'Administrere Krav' })
     })()
   }, [])
 
@@ -40,14 +40,14 @@ export const KravTablePage = () => {
     <Layout2
       headerBackgroundColor={ettlevColors.grey25}
       childrenBackgroundColor={ettlevColors.grey25}
-      currentPage="Administere Krav"
+      currentPage="Administrere Krav"
       mainHeader={
         <Block maxWidth={maxPageWidth} width="100%" display={'flex'} justifyContent="flex-start">
           <Helmet>
             <meta charSet="utf-8" />
-            <title>Administere Krav</title>
+            <title>Administrere Krav</title>
           </Helmet>
-          <HeadingXXLarge marginTop="0">Administere Krav</HeadingXXLarge>
+          <HeadingXXLarge marginTop="0">Administrere Krav</HeadingXXLarge>
         </Block>
       }
     >
