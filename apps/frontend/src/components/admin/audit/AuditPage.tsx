@@ -1,20 +1,18 @@
-import { Block } from 'baseui/block'
-import React, { useEffect, useState } from 'react'
-import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import {Block} from 'baseui/block'
+import React, {useEffect, useState} from 'react'
+import {useNavigate, useParams} from 'react-router-dom'
 import _ from 'lodash'
-import { HeadingMedium, ParagraphMedium } from 'baseui/typography'
-import { AuditLog } from './AuditTypes'
-import { getAuditLog } from './AuditApi'
-import { AuditView } from './AuditView'
-import { AuditRecentTable } from './AuditRecentTable'
-import { AuditLabel } from './AuditComponents'
-import { useDebouncedState } from '../../../util/hooks'
-import { intl } from '../../../util/intl/intl'
+import {HeadingMedium, ParagraphMedium} from 'baseui/typography'
+import {AuditLog} from './AuditTypes'
+import {getAuditLog} from './AuditApi'
+import {AuditView} from './AuditView'
+import {AuditRecentTable} from './AuditRecentTable'
+import {AuditLabel} from './AuditComponents'
+import {useDebouncedState} from '../../../util/hooks'
+import {intl} from '../../../util/intl/intl'
 import CustomInput from '../../common/CustomizedInput'
-import { responsivePaddingSmall, responsiveWidthSmall } from '../../../util/theme'
-import { Helmet } from 'react-helmet'
-import { user } from '../../../services/User'
-import { loginUrl } from '../../Header'
+import {responsivePaddingSmall, responsiveWidthSmall} from '../../../util/theme'
+import {Helmet} from 'react-helmet'
 
 const format = (id: string) => _.trim(id, '"')
 
@@ -25,7 +23,6 @@ export const AuditPage = () => {
   const [error, setError] = useState()
   const [auditLog, setAuditLog] = useState<AuditLog>()
   const [idSearch, setIdInput, idInput] = useDebouncedState(params.id || '', 400)
-  const location = useLocation()
 
   const lookupVersion = (id?: string) => {
     ;(async () => {
