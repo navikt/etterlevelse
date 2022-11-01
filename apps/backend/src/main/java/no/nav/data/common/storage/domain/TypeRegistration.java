@@ -32,8 +32,8 @@ public final class TypeRegistration {
         addDomainClass(BehandlingData.class, true);
         addDomainClass(EtterlevelseMetadata.class, true);
         addDomainClass(Melding.class, true);
+        addDomainClass(EtterlevelseArkiv.class, true);
 
-        addDomainClass(EtterlevelseArkiv.class, false);
         addDomainClass(Tilbakemelding.class, false);
         addDomainClass(KravImage.class, false);
         addDomainClass(MailTask.class, false);
