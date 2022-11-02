@@ -79,6 +79,13 @@ export const buttonContentStyle = {
   ...padding('10px', '12px'),
 }
 
+export const primaryFocusBorder = {
+  ':focus' : {
+    outlineStyle: 'solid',
+    outlineWidth: '2px',
+  }
+}
+
 const Button = (props: ButtonProps) => {
   const baseuiKind = props.kind === 'outline' ? KIND.secondary : props.kind === 'underline-hover' ? KIND.tertiary : props.kind
 
@@ -94,7 +101,8 @@ const Button = (props: ButtonProps) => {
               boxShadow: '0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 3px 0 rgba(0, 0, 0, .12)',
               outlineWidth: '3px',
               outlineStyle: 'solid',
-              outlinwColor: ettlevColors.focusOutline,
+              outlineColor: ettlevColors.focusOutline,
+              outlineOffset: props.kind === 'primary' ? '2px' : undefined
             },
           },
         }
