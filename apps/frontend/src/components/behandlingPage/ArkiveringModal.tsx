@@ -95,6 +95,7 @@ export const ArkiveringModal = ({arkivModal, setArkivModal, behandlingsId, etter
             <Button
               onClick={() => setArkivModal(false)}
               kind="primary"
+              size="compact"
               $style={{
                 padding: '14px 16px'
               }}
