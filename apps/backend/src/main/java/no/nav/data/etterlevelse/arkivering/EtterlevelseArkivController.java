@@ -224,9 +224,11 @@ public class EtterlevelseArkivController {
             log.info("Kan ikke bestille ny arkivering. Forrige arkivering var ikke vellyket for behandling med id: " + request.getBehandlingId());
             throw new ValidationException("Kan ikke bestille ny arkivering. Forrige arkivering var ikke vellyket for behandling med id: " + request.getBehandlingId());
         } else {
+            LocalDateTime today = LocalDateTime.now();
             if(request.getStatus() == EtterlevelseArkivStatus.TIL_ARKIVERING) {
-                LocalDateTime tilArkiveringDato = LocalDateTime.now();
-                request.setTilArkiveringDato(tilArkiveringDato);
+                request.setTilArkiveringDato(today);
+            } else if(request.getStatus() == EtterlevelseArkivStatus.IKKE_ARKIVER) {
+                request.setArkiveringAvbruttDato(today);
             }
             var etterlevelseArkiv = etterlevelseArkivService.save(request);
             return ResponseEntity.ok(etterlevelseArkiv.toResponse());

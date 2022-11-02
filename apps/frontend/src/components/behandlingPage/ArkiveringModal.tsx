@@ -2,7 +2,7 @@ import {ModalBody, ModalHeader} from 'baseui/modal'
 import {Block} from 'baseui/block'
 import {EtterlevelseArkiv, EtterlevelseArkivStatus} from '../../constants'
 import {createEtterlevelseArkiv, updateEtterlevelseArkiv} from '../../api/ArkiveringApi'
-import React from 'react'
+import React, { useState } from 'react'
 import moment from 'moment'
 import CustomizedModal from '../common/CustomizedModal'
 import {borderRadius} from '../common/Style'
@@ -17,6 +17,8 @@ type ArkiveringModalProps = {
 }
 
 export const ArkiveringModal = ({arkivModal, setArkivModal, behandlingsId, etterlevelseArkiv, setEtterlevelseArkiv}: ArkiveringModalProps) => {
+  const [isArchivingCancelled, setIsArchivingCancelled] = useState<boolean>(false)
+
   const getStatustext = (etterlevelseArkivStatus: EtterlevelseArkivStatus) => {
     switch (etterlevelseArkivStatus) {
       case EtterlevelseArkivStatus.TIL_ARKIVERING:
@@ -55,6 +57,7 @@ export const ArkiveringModal = ({arkivModal, setArkivModal, behandlingsId, etter
           </Block>
         }
         <Block>{etterlevelseArkiv ? getStatustext(etterlevelseArkiv.status) : ''}</Block>
+        {isArchivingCancelled && etterlevelseArkiv?.arkiveringAvbruttDato && <Block>Avbrutt dato: {moment(etterlevelseArkiv?.arkiveringAvbruttDato).format('lll')}</Block>}
         <Block marginTop="16px" display="flex" $style={{justifyContent: 'flex-end', paddingTop: '16px'}}>
           {etterlevelseArkiv && etterlevelseArkiv.status !== EtterlevelseArkivStatus.BEHANDLER_ARKIVERING && etterlevelseArkiv.status !== EtterlevelseArkivStatus.ERROR &&
             <Button
@@ -80,6 +83,10 @@ export const ArkiveringModal = ({arkivModal, setArkivModal, behandlingsId, etter
                     await createEtterlevelseArkiv(newEtterlevelseArkivering as EtterlevelseArkiv).then(setEtterlevelseArkiv)
                   }
                 })()
+
+                if(etterlevelseArkiv.status === EtterlevelseArkivStatus.TIL_ARKIVERING) {
+                  setIsArchivingCancelled(true)
+                }
               }}
               size={'compact'}
               kind={etterlevelseArkiv.status !== EtterlevelseArkivStatus.TIL_ARKIVERING ? 'primary' : 'secondary'}
