@@ -19,6 +19,7 @@ import { gql, useQuery } from '@apollo/client'
 import { BehandlingStats } from './ViewBehandling'
 import { ModalOverrides } from 'baseui/modal'
 import { ACCESSIBILITY_TYPE, PLACEMENT, StatefulTooltip } from 'baseui/tooltip'
+import { user } from '../../services/User'
 
 type EditBehandlingModalProps = {
   showModal: boolean
@@ -249,7 +250,8 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
                                     {r.label}
                                   </ParagraphMedium>
                                 </Block>
-                                <StatefulTooltip
+                                {/* TEMP to only be seen by admin, WIP feature */}
+                                {user.isAdmin() && <StatefulTooltip
                                   content={() => <Block padding="20px">{r.description}</Block>}
                                   placement={PLACEMENT.bottom}
                                   accessibilityType={ACCESSIBILITY_TYPE.tooltip}
@@ -260,7 +262,7 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
                                   <Block display="flex" justifyContent="flex-end">
                                     <img src={outlineInfoIcon} alt="informasjons ikon" />
                                   </Block>
-                                </StatefulTooltip>
+                                </StatefulTooltip>}
                                 
                               </BaseUIButton>
                             )
