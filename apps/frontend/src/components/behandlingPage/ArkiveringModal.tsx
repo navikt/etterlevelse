@@ -89,6 +89,8 @@ export const ArkiveringModal = ({arkivModal, setArkivModal, behandlingsId, etter
 
                 if(etterlevelseArkiv.status === EtterlevelseArkivStatus.TIL_ARKIVERING) {
                   setIsArchivingCancelled(true)
+                } else {
+                  setIsArchivingCancelled(false)
                 }
               }}
               size={'compact'}
