@@ -1,7 +1,7 @@
 import { FieldWrapper } from '../../common/Inputs'
 import { FieldArray, FieldArrayRenderProps } from 'formik'
 import React, { useEffect, useState } from 'react'
-import { Suksesskriterie } from '../../../constants'
+import { KravStatus, Suksesskriterie } from '../../../constants'
 import { FormControl } from 'baseui/form-control'
 import { Block } from 'baseui/block'
 import Button, { buttonBorderStyle } from '../../common/Button'
@@ -103,7 +103,7 @@ const KriterieList = ({ p, setIsFormDirty }: { p: FieldArrayRenderProps; setIsFo
           )}
         </Droppable>
       </DragDropContext>
-      <Block alignSelf={'flex-end'} marginTop={theme.sizing.scale600} marginBottom={theme.sizing.scale600}>
+      {p.form.values.status !== KravStatus.AKTIV &&  <Block alignSelf={'flex-end'} marginTop={theme.sizing.scale600} marginBottom={theme.sizing.scale600}>
         <Button
           type="button"
           icon={faPlus}
@@ -117,7 +117,7 @@ const KriterieList = ({ p, setIsFormDirty }: { p: FieldArrayRenderProps; setIsFo
         >
           Suksesskriterie
         </Button>
-      </Block>
+      </Block>}
     </Block>
   )
 }
@@ -163,7 +163,7 @@ const Kriterie = ({
     >
       <Block position={'relative'} paddingTop={theme.sizing.scale100}>
         <Block display={'flex'} alignItems={'flex-start'} position={'absolute'} right={0} top={0}>
-          <Button type={'button'} size={'compact'} kind={'tertiary'} $style={buttonBorderStyle} icon={faTrash} onClick={remove} tooltip={'Fjern suksesskriterie'} />
+          {p.form.values.status !== KravStatus.AKTIV &&  <Button type={'button'} size={'compact'} kind={'tertiary'} $style={buttonBorderStyle} icon={faTrash} onClick={remove} tooltip={'Fjern suksesskriterie'} />}
           <Block width={theme.sizing.scale1000} />
           <Block {...dragHandleProps}>
             <FontAwesomeIcon icon={faGripVertical} aria-label={'Dra og slipp håndtak'} />
