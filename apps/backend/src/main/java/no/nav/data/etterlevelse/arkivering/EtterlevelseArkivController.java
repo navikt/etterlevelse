@@ -165,7 +165,7 @@ public class EtterlevelseArkivController {
 
         if(etterlevelseService.getByBehandling(request.getBehandlingId()).isEmpty()) {
             log.info("Ingen dokumentasjon på behandling med id: " + request.getBehandlingId());
-            throw  new ValidationException("Kan ikke arkivere en behandling som ikke har ferdig dokumentert innhold");
+            throw  new ValidationException("Kan ikke arkivere en behandling som ikke har dokumentert innhold");
         } else {
             if(request.getStatus() == EtterlevelseArkivStatus.TIL_ARKIVERING) {
                 LocalDateTime tilArkiveringDato = LocalDateTime.now();
