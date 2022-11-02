@@ -37,7 +37,10 @@ export const ArkiveringModal = ({arkivModal, setArkivModal, behandlingsId, etter
   return (
     <CustomizedModal
       isOpen={arkivModal}
-      onClose={() => setArkivModal(false)}
+      onClose={() => {
+        setIsArchivingCancelled(false)
+        setArkivModal(false)
+      }}
       size="default"
       overrides={{
         Dialog: {
@@ -100,7 +103,10 @@ export const ArkiveringModal = ({arkivModal, setArkivModal, behandlingsId, etter
             </Button>}
           {etterlevelseArkiv && etterlevelseArkiv.status === EtterlevelseArkivStatus.TIL_ARKIVERING &&
             <Button
-              onClick={() => setArkivModal(false)}
+              onClick={() => {
+                setIsArchivingCancelled(false)
+                setArkivModal(false)
+              }}
               kind="primary"
               size="compact"
               $style={{
