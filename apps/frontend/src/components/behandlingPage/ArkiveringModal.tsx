@@ -6,7 +6,7 @@ import React from 'react'
 import moment from 'moment'
 import CustomizedModal from '../common/CustomizedModal'
 import {borderRadius} from '../common/Style'
-import Button from "../common/Button";
+import Button from '../common/Button'
 
 type ArkiveringModalProps = {
   arkivModal: boolean
@@ -47,7 +47,7 @@ export const ArkiveringModal = ({arkivModal, setArkivModal, behandlingsId, etter
         },
       }}
     >
-      <ModalHeader>{etterlevelseArkiv && etterlevelseArkiv.status === EtterlevelseArkivStatus.TIL_ARKIVERING ? "Arkivering bestilt" : "Arkiver i Websak"}</ModalHeader>
+      <ModalHeader>{etterlevelseArkiv && etterlevelseArkiv.status === EtterlevelseArkivStatus.TIL_ARKIVERING ? 'Arkivering bestilt' : 'Arkiver i Websak'}</ModalHeader>
       <ModalBody>
         {etterlevelseArkiv && etterlevelseArkiv.status === EtterlevelseArkivStatus.IKKE_ARKIVER &&
           <Block marginBottom={'16px'}>
@@ -82,7 +82,7 @@ export const ArkiveringModal = ({arkivModal, setArkivModal, behandlingsId, etter
                 })()
               }}
               size={'compact'}
-              kind={etterlevelseArkiv.status !== EtterlevelseArkivStatus.TIL_ARKIVERING ? "primary" : "secondary"}
+              kind={etterlevelseArkiv.status !== EtterlevelseArkivStatus.TIL_ARKIVERING ? 'primary' : 'secondary'}
               $style={{
                 borderWidth: '2px',
                 marginRight: '16px',
@@ -94,7 +94,7 @@ export const ArkiveringModal = ({arkivModal, setArkivModal, behandlingsId, etter
           {etterlevelseArkiv && etterlevelseArkiv.status === EtterlevelseArkivStatus.TIL_ARKIVERING &&
             <Button
               onClick={() => setArkivModal(false)}
-              kind={"primary"}
+              kind="primary"
               $style={{
                 padding: '14px 16px'
               }}
