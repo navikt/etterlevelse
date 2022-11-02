@@ -24,5 +24,6 @@ public class EtterlevelseArkivResponse {
     private String status;
     private LocalDateTime arkiveringDato;
     private LocalDateTime tilArkiveringDato;
+    private LocalDateTime arkiveringAvbruttDato;
     private String webSakNummer;
 }

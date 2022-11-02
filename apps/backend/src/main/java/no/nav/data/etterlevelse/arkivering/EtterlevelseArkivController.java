@@ -167,13 +167,14 @@ public class EtterlevelseArkivController {
             log.info("Ingen dokumentasjon på behandling med id: " + request.getBehandlingId());
             throw  new ValidationException("Kan ikke arkivere en behandling som ikke har dokumentert innhold");
         } else {
+            LocalDateTime today = LocalDateTime.now();
             if(request.getStatus() == EtterlevelseArkivStatus.TIL_ARKIVERING) {
-                LocalDateTime tilArkiveringDato = LocalDateTime.now();
-                request.setTilArkiveringDato(tilArkiveringDato);
+                request.setTilArkiveringDato(today);
             }
             else if(request.getStatus() == EtterlevelseArkivStatus.ARKIVERT) {
-                LocalDateTime arkiveringDato = LocalDateTime.now();
-                request.setArkiveringDato(arkiveringDato);
+                request.setArkiveringDato(today);
+            } else if(request.getStatus() == EtterlevelseArkivStatus.IKKE_ARKIVER) {
+                request.setArkiveringAvbruttDato(today);
             }
             var etterlevelseArkiv = etterlevelseArkivService.save(request);
             return ResponseEntity.ok(etterlevelseArkiv.toResponse());

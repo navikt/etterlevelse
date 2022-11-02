@@ -24,6 +24,7 @@ public class EtterlevelseArkivRequest implements RequestElement {
     private EtterlevelseArkivStatus status;
     private LocalDateTime arkiveringDato;
     private LocalDateTime tilArkiveringDato;
+    private LocalDateTime arkiveringAvbruttDato;
     private String webSakNummer;
     private Boolean update;
 

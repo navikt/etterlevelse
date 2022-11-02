@@ -26,6 +26,7 @@ public class EtterlevelseArkiv implements DomainObject {
     private EtterlevelseArkivStatus status;
     private LocalDateTime arkiveringDato;
     private LocalDateTime tilArkiveringDato;
+    private LocalDateTime arkiveringAvbruttDato;
     private String webSakNummer;
 
 
@@ -33,6 +34,7 @@ public class EtterlevelseArkiv implements DomainObject {
         behandlingId = request.getBehandlingId();
         arkiveringDato = request.getArkiveringDato();
         tilArkiveringDato = request.getTilArkiveringDato();
+        arkiveringAvbruttDato = request.getArkiveringAvbruttDato();
         webSakNummer = request.getWebSakNummer();
         status = request.getStatus();
 
@@ -47,6 +49,7 @@ public class EtterlevelseArkiv implements DomainObject {
                 .behandlingId(behandlingId)
                 .arkiveringDato(arkiveringDato)
                 .tilArkiveringDato(tilArkiveringDato)
+                .arkiveringAvbruttDato(arkiveringAvbruttDato)
                 .webSakNummer(webSakNummer)
                 .status(status.name())
                 .build();
