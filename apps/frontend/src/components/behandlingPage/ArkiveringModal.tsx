@@ -20,7 +20,7 @@ export const ArkiveringModal = ({arkivModal, setArkivModal, behandlingsId, etter
   const getStatustext = (etterlevelseArkivStatus: EtterlevelseArkivStatus) => {
     switch (etterlevelseArkivStatus) {
       case EtterlevelseArkivStatus.TIL_ARKIVERING:
-        return `Arkivering bestilt: ${moment(etterlevelseArkiv?.tilArkiveringDato).format('lll')}`
+        return `Bestilt: ${moment(etterlevelseArkiv?.tilArkiveringDato).format('lll')}`
       case EtterlevelseArkivStatus.ARKIVERT:
         return `Sist arkivert: ${moment(etterlevelseArkiv?.arkiveringDato).format('lll')}`
       case EtterlevelseArkivStatus.BEHANDLER_ARKIVERING:
