@@ -191,7 +191,7 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
             <HeadingXLarge>Spørsmål til kraveier</HeadingXLarge>
             {user.isLoggedIn() ? (
               <ParagraphMedium maxWidth={'600px'}>
-                Her kan du stille kraveier et spørsmål dersom det er uklarheter vedrørende hvordan kravet skal forstås. Spørsmål og svar fra kraveier blir synlig på denne siden.
+                Her kan du stille kraveier et spørsmål dersom det er uklarheter vedrørende hvordan kravet skal forstås. Spørsmål og svar fra kraveier blir synlig for alle på denne siden.
               </ParagraphMedium>
             ) : (
               <ParagraphMedium>Du må være innlogget for å stille kraveier et spørsmål, og for å se tidligere spørsmål og svar.</ParagraphMedium>
