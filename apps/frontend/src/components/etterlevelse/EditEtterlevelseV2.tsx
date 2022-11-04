@@ -1,4 +1,4 @@
-import { Etterlevelse, EtterlevelseMetadata, EtterlevelseStatus, Krav, KRAV_FILTER_TYPE, KravQL } from '../../constants'
+import { Etterlevelse, EtterlevelseMetadata, EtterlevelseStatus, Krav, KRAV_FILTER_TYPE, KravQL, KravStatus } from '../../constants'
 import { FormikProps } from 'formik'
 import { createEtterlevelse, updateEtterlevelse } from '../../api/EtterlevelseApi'
 import { Block } from 'baseui/block'
@@ -145,7 +145,11 @@ export const EditEtterlevelseV2 = ({
   useEffect(() => {
     if (data?.kravById) {
       setKrav(data.kravById)
-      getKravByKravNumberAndVersion(data.kravById.kravNummer, data.kravById.kravVersjon + 1).then(setNyereKrav)
+      getKravByKravNumberAndVersion(data.kravById.kravNummer, data.kravById.kravVersjon + 1)
+      .then((krav) => {
+        if(krav && krav.status === KravStatus.AKTIV) 
+          setNyereKrav(krav)
+      })
     }
   }, [data])
 
