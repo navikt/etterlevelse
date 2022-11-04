@@ -16,7 +16,6 @@ import { mapToFormVal, updateBehandling } from '../../api/BehandlingApi'
 import * as yup from 'yup'
 import { FormControl } from 'baseui/form-control'
 import { gql, useQuery } from '@apollo/client'
-import { BehandlingStats } from './ViewBehandling'
 import { ModalOverrides } from 'baseui/modal'
 import { ACCESSIBILITY_TYPE, PLACEMENT, StatefulTooltip } from 'baseui/tooltip'
 import { user } from '../../services/User'
@@ -36,11 +35,9 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
   const [selected, setSelected] = React.useState<number[]>([])
   const [hover, setHover] = React.useState<number>()
 
-  const { data } = useQuery<{ behandling: PageResponse<{ stats: BehandlingStats }> }>(statsQuery, {
+  const { data } = useQuery<{ krav: PageResponse<KravQL> }>(statsQuery, {
     variables: {
-      relevans: options.map((o) => {
-        return o.id
-      }),
+      status: [KravStatus.AKTIV.toString()], 
     },
     skip: !props.behandling?.id,
     fetchPolicy: 'no-cache',
@@ -48,47 +45,23 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
 
   const [stats, setStats] = React.useState<any[]>([])
 
-  const filterData = (
-    unfilteredData:
-      | {
-          behandling: PageResponse<{
-            stats: BehandlingStats
-          }>
-        }
-      | undefined,
-  ) => {
+  const filterData = (unfilteredData: 
+    | { krav: PageResponse<KravQL> }
+    | undefined,) => {
     let StatusListe: any[] = []
 
     const filterKrav = (k: KravQL) => {
-      if (k.regelverk.length && k.status === KravStatus.AKTIV) {
         const relevans = k.relevansFor.map((r) => r.code)
         if (!relevans.length || !relevans.every((r) => !selected.map((i) => options[i].id).includes(r))) {
           StatusListe.push(k)
         } else if (k.etterlevelser.filter((e) => e.behandlingId === props.behandling?.id).length) {
           StatusListe.push(k)
         }
-      }
     }
 
-    unfilteredData?.behandling.content.forEach(({ stats }) => {
-      stats.fyltKrav.forEach((k) => {
-        filterKrav(k)
-      })
-      stats.ikkeFyltKrav.forEach((k) => {
-        filterKrav(k)
-      })
+    unfilteredData?.krav.content.forEach((krav) => {
+      filterKrav(krav)
     })
-
-    StatusListe.sort((a, b) => {
-      if (a.kravNummer === b.kravNummer) {
-        return a.kravVersjon - b.kravVersjon
-      }
-
-      return a.kravNummer - b.kravNummer
-    })
-
-    //remove duplicates krav numbers
-    StatusListe = StatusListe.filter((value, index, self) => index === self.findIndex((krav) => krav.kravNummer === value.kravNummer))
 
     return StatusListe
   }
@@ -329,46 +302,19 @@ const behandlingSchema = () => {
 }
 
 const statsQuery = gql`
-  query getBehandlingStats($relevans: [String!]) {
-    behandling(filter: { relevans: $relevans }) {
+  query getKravByFilter( $status: [String!]) {
+    krav(filter: { status: $status}) {
       content {
-        stats {
-          fyltKrav {
-            kravNummer
-            kravVersjon
-            status
-            relevansFor {
-              code
-            }
-            etterlevelser(onlyForBehandling: true) {
-              behandlingId
-              status
-            }
-            regelverk {
-              lov {
-                code
-                shortName
-              }
-            }
-          }
-          ikkeFyltKrav {
-            kravNummer
-            kravVersjon
-            status
-            relevansFor {
-              code
-            }
-            etterlevelser(onlyForBehandling: true) {
-              behandlingId
-              status
-            }
-            regelverk {
-              lov {
-                code
-                shortName
-              }
-            }
-          }
+        id
+        kravNummer
+        kravVersjon
+        status
+        relevansFor {
+          code
+        }
+        etterlevelser(onlyForBehandling: true) {
+          id
+          behandlingId
         }
       }
     }
