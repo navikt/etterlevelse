@@ -1,25 +1,25 @@
 import * as React from 'react'
 import CustomizedModal from '../common/CustomizedModal'
-import Button, { buttonContentStyle } from '../common/Button'
-import { Block } from 'baseui/block'
-import { theme } from '../../util'
-import { checkboxChecked, checkboxUnchecked, checkboxUncheckedHover, crossIcon, outlineInfoIcon } from '../Images'
-import { ettlevColors } from '../../util/theme'
-import { HeadingXLarge, HeadingXXLarge, ParagraphMedium, ParagraphXSmall } from 'baseui/typography'
-import { Behandling, BehandlingEtterlevData, KravQL, KravStatus, PageResponse } from '../../constants'
-import { ButtonGroup } from 'baseui/button-group'
-import { Button as BaseUIButton, KIND } from 'baseui/button'
-import { Code, codelist, ListName } from '../../services/Codelist'
-import { borderColor, borderRadius, borderStyle, borderWidth, marginZero } from '../common/Style'
-import { FieldArray, FieldArrayRenderProps, Form, Formik } from 'formik'
-import { mapToFormVal, updateBehandling } from '../../api/BehandlingApi'
+import Button, {buttonContentStyle} from '../common/Button'
+import {Block} from 'baseui/block'
+import {theme} from '../../util'
+import {checkboxChecked, checkboxUnchecked, checkboxUncheckedHover, crossIcon, outlineInfoIcon} from '../Images'
+import {ettlevColors} from '../../util/theme'
+import {HeadingXLarge, HeadingXXLarge, ParagraphMedium, ParagraphXSmall} from 'baseui/typography'
+import {Behandling, BehandlingEtterlevData, KravQL, KravStatus, PageResponse} from '../../constants'
+import {ButtonGroup} from 'baseui/button-group'
+import {Button as BaseUIButton, KIND} from 'baseui/button'
+import {Code, codelist, ListName} from '../../services/Codelist'
+import {borderColor, borderRadius, borderStyle, borderWidth, marginZero} from '../common/Style'
+import {FieldArray, FieldArrayRenderProps, Form, Formik} from 'formik'
+import {mapToFormVal, updateBehandling} from '../../api/BehandlingApi'
 import * as yup from 'yup'
-import { FormControl } from 'baseui/form-control'
-import { gql, useQuery } from '@apollo/client'
-import { BehandlingStats } from './ViewBehandling'
-import { ModalOverrides } from 'baseui/modal'
-import { ACCESSIBILITY_TYPE, PLACEMENT, StatefulTooltip } from 'baseui/tooltip'
-import { user } from '../../services/User'
+import {FormControl} from 'baseui/form-control'
+import {gql, useQuery} from '@apollo/client'
+import {BehandlingStats} from './ViewBehandling'
+import {ModalOverrides} from 'baseui/modal'
+import {ACCESSIBILITY_TYPE, PLACEMENT, StatefulTooltip} from 'baseui/tooltip'
+import {user} from '../../services/User'
 
 type EditBehandlingModalProps = {
   showModal: boolean
@@ -43,7 +43,6 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
       }),
     },
     skip: !props.behandling?.id,
-    fetchPolicy: 'no-cache',
   })
 
   const [stats, setStats] = React.useState<any[]>([])
@@ -263,7 +262,7 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
                                     <img src={outlineInfoIcon} alt="informasjons ikon" />
                                   </Block>
                                 </StatefulTooltip>}
-                                
+
                               </BaseUIButton>
                             )
                           })}
