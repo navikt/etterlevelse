@@ -18,7 +18,7 @@
         <java.version>17</java.version>
 
         <hibernate-types-52.version>2.20.0</hibernate-types-52.version>
-        <springdoc-openapi-ui.version>1.6.12</springdoc-openapi-ui.version>
+        <springdoc-openapi-ui.version>1.6.11</springdoc-openapi-ui.version>
         <simpleclient.version>0.16.0</simpleclient.version>
         <logstash-logback-encoder.version>7.2</logstash-logback-encoder.version>
         <shedlock.version>4.42.0</shedlock.version>
@@ -26,8 +26,8 @@
         <graphql-spring-boot-starter.version>14.0.0</graphql-spring-boot-starter.version>
         <graphql.version>19.0</graphql.version>
 
-        <microsoft-graph.version>5.40.0</microsoft-graph.version>
-        <msal4j.version>1.13.3</msal4j.version>
+        <microsoft-graph.version>5.39.0</microsoft-graph.version>
+        <msal4j.version>1.13.2</msal4j.version>
 
         <!-- transitive versions -->
         <commons-compress.version>1.22</commons-compress.version>
