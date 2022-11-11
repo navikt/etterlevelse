@@ -16,7 +16,7 @@ import RouteLink from './common/RouteLink'
 import { user } from '../services/User'
 import { writeLog } from '../api/LogApi'
 import MainSearch from './search/MainSearch'
-import { arkPennIcon, grafIcon, husIcon, informationIcon, logo, paragrafIcon, warningAlert } from './Images'
+import { arkPennIcon, grafIcon, handWithLeaf, husIcon, informationIcon, logo, paragrafIcon, warningAlert } from './Images'
 import { ettlevColors, maxPageWidth, responsivePaddingSmall, responsiveWidthSmall } from '../util/theme'
 import { Checkbox, STYLE_TYPE } from 'baseui/checkbox'
 import { Portrait } from './common/Portrait'
@@ -121,6 +121,7 @@ const LoggedInHeader = () => {
           [{ label: 'Dokumentere etterlevelse', href: '/behandlinger', icon: arkPennIcon }],
           [{ label: 'Status i organisasjonen', href: '/status', icon: grafIcon }],
           [{ label: 'Forstå kravene', href: '/tema', icon: paragrafIcon }],
+          [{ label: 'Mer om etterlevelse i NAV', href: '/help', icon: handWithLeaf }],
         ]}
         compact
         title={'Meny'}

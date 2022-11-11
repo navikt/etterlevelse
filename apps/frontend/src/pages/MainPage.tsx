@@ -195,7 +195,7 @@ export const MainPage = () => {
                   Mer om etterlevelse i NAV
                 </HeadingXLarge>
               }
-              panelIcon={<img src={handWithLeaf} alt={''} />}
+              panelIcon={<img src={handWithLeaf} alt={''} width="47px" height="47px"/>}
               overrides={{
                 Block: {
                   style: {
