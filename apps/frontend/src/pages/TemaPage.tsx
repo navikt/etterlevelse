@@ -256,8 +256,8 @@ const TemaInfo = (props: { kravAntall: number; temaAntall: number }) => (
       </HeadingXLarge>
 
       <ParagraphMedium color={ettlevColors.white}>
-        Alle vi som utvikler produkter i NAV må forholde oss til en del forskjellige lover og regler. Disse skal bidra til å sikre at den generelle rettsikkerheten til
-        brukerne våre ivaretas.
+        Alle vi som utvikler produkter i NAV må forholde oss til en del forskjellige lover og regler. Disse skal bidra til å sikre at den generelle rettsikkerheten til brukerne
+        våre ivaretas.
       </ParagraphMedium>
     </Block>
   </Block>

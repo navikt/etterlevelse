@@ -154,12 +154,8 @@ export const ArkivAdminPage = () => {
                       <RouteLink href={`/behandling/${arkivering.behandlingId}`}>{arkivering.behandlingId}</RouteLink>
                     </Cell>
                     <Cell>{arkiveringStatusToString(arkivering.status)}</Cell>
-                    <Cell>
-                      {moment(arkivering.tilArkiveringDato).format('lll')}
-                    </Cell>
-                    <Cell>
-                     {moment(arkivering.arkiveringDato).format('lll')}
-                    </Cell>
+                    <Cell>{moment(arkivering.tilArkiveringDato).format('lll')}</Cell>
+                    <Cell>{moment(arkivering.arkiveringDato).format('lll')}</Cell>
                   </Row>
                 )
               })

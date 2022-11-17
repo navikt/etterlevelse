@@ -1,4 +1,4 @@
-import {ListName} from '../../../services/Codelist'
+import { ListName } from '../../../services/Codelist'
 
 export interface AuditItem {
   action: AuditAction
@@ -29,7 +29,7 @@ export enum ObjectType {
   Behandling = 'Behandling',
   BehandlingData = 'BehandlingData',
   Melding = 'Melding',
-  EtterlevelseArkiv = 'EtterlevelseArkiv'
+  EtterlevelseArkiv = 'EtterlevelseArkiv',
 }
 
 export type NavigableItem = ObjectType | ListName.RELEVANS | ListName.UNDERAVDELING | ListName.TEMA | ListName.LOV

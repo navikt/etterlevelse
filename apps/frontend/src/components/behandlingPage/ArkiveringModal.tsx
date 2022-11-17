@@ -1,11 +1,11 @@
-import {ModalBody, ModalHeader} from 'baseui/modal'
-import {Block} from 'baseui/block'
-import {EtterlevelseArkiv, EtterlevelseArkivStatus} from '../../constants'
-import {createEtterlevelseArkiv, updateEtterlevelseArkiv} from '../../api/ArkiveringApi'
+import { ModalBody, ModalHeader } from 'baseui/modal'
+import { Block } from 'baseui/block'
+import { EtterlevelseArkiv, EtterlevelseArkivStatus } from '../../constants'
+import { createEtterlevelseArkiv, updateEtterlevelseArkiv } from '../../api/ArkiveringApi'
 import React, { useState } from 'react'
 import moment from 'moment'
 import CustomizedModal from '../common/CustomizedModal'
-import {borderRadius} from '../common/Style'
+import { borderRadius } from '../common/Style'
 import Button from '../common/Button'
 
 type ArkiveringModalProps = {
@@ -16,7 +16,7 @@ type ArkiveringModalProps = {
   setEtterlevelseArkiv: (etterlevelseArkiv: EtterlevelseArkiv | undefined) => void
 }
 
-export const ArkiveringModal = ({arkivModal, setArkivModal, behandlingsId, etterlevelseArkiv, setEtterlevelseArkiv}: ArkiveringModalProps) => {
+export const ArkiveringModal = ({ arkivModal, setArkivModal, behandlingsId, etterlevelseArkiv, setEtterlevelseArkiv }: ArkiveringModalProps) => {
   const [isArchivingCancelled, setIsArchivingCancelled] = useState<boolean>(false)
 
   const getStatustext = (etterlevelseArkivStatus: EtterlevelseArkivStatus) => {
@@ -54,24 +54,22 @@ export const ArkiveringModal = ({arkivModal, setArkivModal, behandlingsId, etter
     >
       <ModalHeader>{etterlevelseArkiv && etterlevelseArkiv.status === EtterlevelseArkivStatus.TIL_ARKIVERING ? 'Arkivering bestilt' : 'Arkiver i Websak'}</ModalHeader>
       <ModalBody>
-        {etterlevelseArkiv && etterlevelseArkiv.status === EtterlevelseArkivStatus.IKKE_ARKIVER &&
-          <Block marginBottom={'16px'}>
-            Arkivering av etterlevelsesdokumentasjon i Websak gir sporbarhet og dokumenterer grunnlaget for risikovurderinger og rapportering.
-          </Block>
-        }
+        {etterlevelseArkiv && etterlevelseArkiv.status === EtterlevelseArkivStatus.IKKE_ARKIVER && (
+          <Block marginBottom={'16px'}>Arkivering av etterlevelsesdokumentasjon i Websak gir sporbarhet og dokumenterer grunnlaget for risikovurderinger og rapportering.</Block>
+        )}
         <Block>{etterlevelseArkiv ? getStatustext(etterlevelseArkiv.status) : ''}</Block>
         {isArchivingCancelled && etterlevelseArkiv?.arkiveringAvbruttDato && <Block>Avbrutt dato: {moment(etterlevelseArkiv?.arkiveringAvbruttDato).format('lll')}</Block>}
-        <Block marginTop="16px" display="flex" $style={{justifyContent: 'flex-end', paddingTop: '16px'}}>
-          {etterlevelseArkiv && etterlevelseArkiv.status !== EtterlevelseArkivStatus.BEHANDLER_ARKIVERING && etterlevelseArkiv.status !== EtterlevelseArkivStatus.ERROR &&
+        <Block marginTop="16px" display="flex" $style={{ justifyContent: 'flex-end', paddingTop: '16px' }}>
+          {etterlevelseArkiv && etterlevelseArkiv.status !== EtterlevelseArkivStatus.BEHANDLER_ARKIVERING && etterlevelseArkiv.status !== EtterlevelseArkivStatus.ERROR && (
             <Button
               onClick={() => {
                 const newEtterlevelseArkivering = {
-                    behandlingId: behandlingsId,
-                    status:
-                      etterlevelseArkiv && etterlevelseArkiv.status === EtterlevelseArkivStatus.TIL_ARKIVERING
-                        ? EtterlevelseArkivStatus.IKKE_ARKIVER
-                        : EtterlevelseArkivStatus.TIL_ARKIVERING,
-                  }
+                  behandlingId: behandlingsId,
+                  status:
+                    etterlevelseArkiv && etterlevelseArkiv.status === EtterlevelseArkivStatus.TIL_ARKIVERING
+                      ? EtterlevelseArkivStatus.IKKE_ARKIVER
+                      : EtterlevelseArkivStatus.TIL_ARKIVERING,
+                }
 
                 ;(async () => {
                   if (etterlevelseArkiv && etterlevelseArkiv.id) {
@@ -87,7 +85,7 @@ export const ArkiveringModal = ({arkivModal, setArkivModal, behandlingsId, etter
                   }
                 })()
 
-                if(etterlevelseArkiv.status === EtterlevelseArkivStatus.TIL_ARKIVERING) {
+                if (etterlevelseArkiv.status === EtterlevelseArkivStatus.TIL_ARKIVERING) {
                   setIsArchivingCancelled(true)
                 } else {
                   setIsArchivingCancelled(false)
@@ -98,12 +96,13 @@ export const ArkiveringModal = ({arkivModal, setArkivModal, behandlingsId, etter
               $style={{
                 borderWidth: '2px',
                 marginRight: '16px',
-                padding: '14px 16px'
+                padding: '14px 16px',
               }}
             >
               {etterlevelseArkiv && etterlevelseArkiv.status === EtterlevelseArkivStatus.TIL_ARKIVERING ? 'Avbryt arkivering' : 'Arkiver'}
-            </Button>}
-          {etterlevelseArkiv && etterlevelseArkiv.status === EtterlevelseArkivStatus.TIL_ARKIVERING &&
+            </Button>
+          )}
+          {etterlevelseArkiv && etterlevelseArkiv.status === EtterlevelseArkivStatus.TIL_ARKIVERING && (
             <Button
               onClick={() => {
                 setIsArchivingCancelled(false)
@@ -112,12 +111,12 @@ export const ArkiveringModal = ({arkivModal, setArkivModal, behandlingsId, etter
               kind="primary"
               size="compact"
               $style={{
-                padding: '14px 16px'
+                padding: '14px 16px',
               }}
             >
               Lukk
             </Button>
-          }
+          )}
         </Block>
       </ModalBody>
     </CustomizedModal>

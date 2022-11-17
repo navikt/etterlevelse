@@ -145,10 +145,8 @@ export const EditEtterlevelseV2 = ({
   useEffect(() => {
     if (data?.kravById) {
       setKrav(data.kravById)
-      getKravByKravNumberAndVersion(data.kravById.kravNummer, data.kravById.kravVersjon + 1)
-      .then((krav) => {
-        if(krav && krav.status === KravStatus.AKTIV) 
-          setNyereKrav(krav)
+      getKravByKravNumberAndVersion(data.kravById.kravNummer, data.kravById.kravVersjon + 1).then((krav) => {
+        if (krav && krav.status === KravStatus.AKTIV) setNyereKrav(krav)
       })
     }
   }, [data])

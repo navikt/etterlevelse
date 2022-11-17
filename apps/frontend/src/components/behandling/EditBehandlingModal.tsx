@@ -37,7 +37,7 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
 
   const { data } = useQuery<{ krav: PageResponse<KravQL> }>(statsQuery, {
     variables: {
-      status: [KravStatus.AKTIV.toString()], 
+      status: [KravStatus.AKTIV.toString()],
     },
     skip: !props.behandling?.id,
     fetchPolicy: 'no-cache',
@@ -45,18 +45,16 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
 
   const [stats, setStats] = React.useState<any[]>([])
 
-  const filterData = (unfilteredData: 
-    | { krav: PageResponse<KravQL> }
-    | undefined,) => {
+  const filterData = (unfilteredData: { krav: PageResponse<KravQL> } | undefined) => {
     let StatusListe: any[] = []
 
     const filterKrav = (k: KravQL) => {
-        const relevans = k.relevansFor.map((r) => r.code)
-        if (!relevans.length || !relevans.every((r) => !selected.map((i) => options[i].id).includes(r))) {
-          StatusListe.push(k)
-        } else if (k.etterlevelser.filter((e) => e.behandlingId === props.behandling?.id).length) {
-          StatusListe.push(k)
-        }
+      const relevans = k.relevansFor.map((r) => r.code)
+      if (!relevans.length || !relevans.every((r) => !selected.map((i) => options[i].id).includes(r))) {
+        StatusListe.push(k)
+      } else if (k.etterlevelser.filter((e) => e.behandlingId === props.behandling?.id).length) {
+        StatusListe.push(k)
+      }
     }
 
     unfilteredData?.krav.content.forEach((krav) => {
@@ -224,19 +222,20 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
                                   </ParagraphMedium>
                                 </Block>
                                 {/* TEMP to only be seen by admin, WIP feature */}
-                                {user.isAdmin() && <StatefulTooltip
-                                  content={() => <Block padding="20px">{r.description}</Block>}
-                                  placement={PLACEMENT.bottom}
-                                  accessibilityType={ACCESSIBILITY_TYPE.tooltip}
-                                  returnFocus
-                                  showArrow
-                                  autoFocus
-                                >
-                                  <Block display="flex" justifyContent="flex-end">
-                                    <img src={outlineInfoIcon} alt="informasjons ikon" />
-                                  </Block>
-                                </StatefulTooltip>}
-                                
+                                {user.isAdmin() && (
+                                  <StatefulTooltip
+                                    content={() => <Block padding="20px">{r.description}</Block>}
+                                    placement={PLACEMENT.bottom}
+                                    accessibilityType={ACCESSIBILITY_TYPE.tooltip}
+                                    returnFocus
+                                    showArrow
+                                    autoFocus
+                                  >
+                                    <Block display="flex" justifyContent="flex-end">
+                                      <img src={outlineInfoIcon} alt="informasjons ikon" />
+                                    </Block>
+                                  </StatefulTooltip>
+                                )}
                               </BaseUIButton>
                             )
                           })}
@@ -302,8 +301,8 @@ const behandlingSchema = () => {
 }
 
 const statsQuery = gql`
-  query getKravByFilter( $status: [String!]) {
-    krav(filter: { status: $status}) {
+  query getKravByFilter($status: [String!]) {
+    krav(filter: { status: $status }) {
       content {
         id
         kravNummer

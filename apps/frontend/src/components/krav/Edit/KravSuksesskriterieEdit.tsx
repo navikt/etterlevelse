@@ -103,21 +103,23 @@ const KriterieList = ({ p, setIsFormDirty }: { p: FieldArrayRenderProps; setIsFo
           )}
         </Droppable>
       </DragDropContext>
-      {p.form.values.status !== KravStatus.AKTIV &&  <Block alignSelf={'flex-end'} marginTop={theme.sizing.scale600} marginBottom={theme.sizing.scale600}>
-        <Button
-          type="button"
-          icon={faPlus}
-          marginLeft
-          label={'Suksesskriterie'}
-          $style={buttonBorderStyle}
-          kind="secondary"
-          size="compact"
-          disabled={suksesskriterier.length >= 15}
-          onClick={() => p.push({ id: nextId(suksesskriterier), navn: '', beskrivelse: '', behovForBegrunnelse: 'true' })}
-        >
-          Suksesskriterie
-        </Button>
-      </Block>}
+      {p.form.values.status !== KravStatus.AKTIV && (
+        <Block alignSelf={'flex-end'} marginTop={theme.sizing.scale600} marginBottom={theme.sizing.scale600}>
+          <Button
+            type="button"
+            icon={faPlus}
+            marginLeft
+            label={'Suksesskriterie'}
+            $style={buttonBorderStyle}
+            kind="secondary"
+            size="compact"
+            disabled={suksesskriterier.length >= 15}
+            onClick={() => p.push({ id: nextId(suksesskriterier), navn: '', beskrivelse: '', behovForBegrunnelse: 'true' })}
+          >
+            Suksesskriterie
+          </Button>
+        </Block>
+      )}
     </Block>
   )
 }
@@ -163,7 +165,9 @@ const Kriterie = ({
     >
       <Block position={'relative'} paddingTop={theme.sizing.scale100}>
         <Block display={'flex'} alignItems={'flex-start'} position={'absolute'} right={0} top={0}>
-          {p.form.values.status !== KravStatus.AKTIV &&  <Button type={'button'} size={'compact'} kind={'tertiary'} $style={buttonBorderStyle} icon={faTrash} onClick={remove} tooltip={'Fjern suksesskriterie'} />}
+          {p.form.values.status !== KravStatus.AKTIV && (
+            <Button type={'button'} size={'compact'} kind={'tertiary'} $style={buttonBorderStyle} icon={faTrash} onClick={remove} tooltip={'Fjern suksesskriterie'} />
+          )}
           <Block width={theme.sizing.scale1000} />
           <Block {...dragHandleProps}>
             <FontAwesomeIcon icon={faGripVertical} aria-label={'Dra og slipp håndtak'} />

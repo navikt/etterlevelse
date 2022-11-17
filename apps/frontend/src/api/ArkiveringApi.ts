@@ -81,7 +81,7 @@ export const useArkiveringByBehandlingId = (behandlingsId?: string) => {
       getEtterlevelseArkivByBehandlingId(behandlingsId)
         .then((resp) => setData(arkiveringMapToFormVal(resp.content[0])))
         .catch((e) => {
-          setData(arkiveringMapToFormVal({id: ''}))
+          setData(arkiveringMapToFormVal({ id: '' }))
           console.log("couldn't find arkivering with behandling id = ", e)
         })
   }, [behandlingsId])

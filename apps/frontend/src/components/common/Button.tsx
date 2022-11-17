@@ -80,10 +80,10 @@ export const buttonContentStyle = {
 }
 
 export const primaryFocusBorder = {
-  ':focus' : {
+  ':focus': {
     outlineStyle: 'solid',
     outlineWidth: '2px',
-  }
+  },
 }
 
 const Button = (props: ButtonProps) => {
@@ -102,7 +102,7 @@ const Button = (props: ButtonProps) => {
               outlineWidth: '3px',
               outlineStyle: 'solid',
               outlineColor: ettlevColors.focusOutline,
-              outlineOffset: props.kind === 'primary' ? '2px' : undefined
+              outlineOffset: props.kind === 'primary' ? '2px' : undefined,
             },
           },
         }
