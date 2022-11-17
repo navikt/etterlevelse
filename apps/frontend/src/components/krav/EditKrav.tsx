@@ -616,7 +616,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
 
                       <Button
                         size="compact"
-                        kind={newVersion || krav.status !== KravStatus.AKTIV ? 'secondary' : 'primary'}
+                        kind="primary"
                         onClick={() => {
                           if (newVersion) {
                             values.status = KravStatus.UTKAST
