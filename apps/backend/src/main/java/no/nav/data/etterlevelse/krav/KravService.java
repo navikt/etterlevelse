@@ -22,10 +22,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import static no.nav.data.common.security.SecurityUtils.isKravEier;
 import static no.nav.data.common.utils.StreamUtils.convert;
@@ -119,10 +116,8 @@ public class KravService extends DomainService<Krav> {
         }
 
         if(krav.getId() != null) {
-            var rawKravAuditList = auditRepo.findByTableIdOrderByTimeDesc(krav.getId().toString());
-            List<AuditResponse> kravAudits = new AuditLogResponse(krav.getId().toString(), convert(rawKravAuditList, AuditVersion::toResponse)).getAudits();
-
-            if(krav.getStatus()==KravStatus.AKTIV && !kravAudits.get(0).getData().get("data").get("status").toString().equals(KravStatus.AKTIV.name())) {
+            var previousKrav = storage.get(krav.getId(), Krav.class);
+            if(Objects.nonNull(previousKrav) && previousKrav.getStatus() !=KravStatus.AKTIV && krav.getStatus()==KravStatus.AKTIV ) {
                 krav.setAktivertDato(LocalDateTime.now());
             }
         } else if (krav.getId() == null && krav.getStatus()==KravStatus.AKTIV  ) {
