@@ -32,7 +32,7 @@ public class StatistikkService {
         List<BehandlingStatistikk> behandlingStatistikkList = new ArrayList<>();
 
         List<Krav> aktivKravList = kravService.getByFilter(KravFilter.builder().status(List.of(KravStatus.AKTIV.name())).build());
-        List<Behandling> behandlingList = behandlingService.getByFilter(BehandlingFilter.builder().build());
+        List<Behandling> behandlingList = behandlingService.getByFilter(BehandlingFilter.builder().teams(new ArrayList<>()).build());
         behandlingList.forEach(behandling -> {
             String behandlingNavn = "B" + behandling.getNummer() + " " + behandling.getNavn();
 
