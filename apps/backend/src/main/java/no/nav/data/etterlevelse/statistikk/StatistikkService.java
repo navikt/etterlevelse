@@ -2,6 +2,8 @@ package no.nav.data.etterlevelse.statistikk;
 
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.etterlevelse.behandling.BehandlingService;
+import no.nav.data.etterlevelse.behandling.dto.Behandling;
+import no.nav.data.etterlevelse.behandling.dto.BehandlingFilter;
 import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
 import no.nav.data.etterlevelse.krav.KravService;
 import no.nav.data.etterlevelse.krav.domain.Krav;
@@ -27,11 +29,23 @@ public class StatistikkService {
     }
 
     public List<BehandlingStatistikk> getAllBehandlingStatistikk() {
-        List<BehandlingStatistikk> behandlingStatistikkListe = new ArrayList<>();
+        List<BehandlingStatistikk> behandlingStatistikkList = new ArrayList<>();
 
         List<Krav> aktivKravList = kravService.getByFilter(KravFilter.builder().status(List.of(KravStatus.AKTIV.name())).build());
-        aktivKravList.size();
+        List<Behandling> behandlingList = behandlingService.getByFilter(BehandlingFilter.builder().build());
+        behandlingList.forEach(behandling -> {
+            String behandlingNavn = "B" + behandling.getNummer() + " " + behandling.getNavn();
 
-        return behandlingStatistikkListe;
+            behandlingStatistikkList.add(
+                    BehandlingStatistikk.builder()
+                            .behandlingId(behandling.getId())
+                            .behandlingNavn(behandlingNavn)
+                            .totalKrav(aktivKravList.size())
+                            .build()
+            );
+        });
+
+
+        return behandlingStatistikkList;
     }
 }
