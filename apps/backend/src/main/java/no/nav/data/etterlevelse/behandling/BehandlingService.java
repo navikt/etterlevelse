@@ -86,7 +86,7 @@ public class BehandlingService {
         } else if (filter.isGetMineBehandlinger()) {
             filter.setTeams(convert(teamcatTeamClient.getMyTeams(), Team::getId));
         }
-        if (!filter.getTeams().isEmpty() || filter.isGetMineBehandlinger()) {
+        if ((filter.getTeams() != null && !filter.getTeams().isEmpty())|| filter.isGetMineBehandlinger()) {
             return filter.getTeams().parallelStream().map(this::getBehandlingerForTeam).flatMap(Collection::stream).toList();
         }
         if (filter.isSok()) {
