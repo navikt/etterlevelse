@@ -59,7 +59,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 "/etterlevelsemetadata/**",
                 "/melding/**",
                 "/export/**",
-
+                "/statistikk/**",
                 "/team/**",
                 "/begrep/**",
                 "/etterlevelsearkiv/**"
