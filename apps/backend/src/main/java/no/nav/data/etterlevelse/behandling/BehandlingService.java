@@ -63,6 +63,10 @@ public class BehandlingService {
         return convertBehandlinger(bkatClient.getProcessesForTeam(teamId));
     }
 
+    public List<GenericStorage> getAllBehandlingData(){
+        return repo.getAllBehandlingData();
+    }
+
     public List<Behandling> findBehandlinger(String search) {
         return convertBehandlinger(bkatClient.findProcesses(search));
     }
