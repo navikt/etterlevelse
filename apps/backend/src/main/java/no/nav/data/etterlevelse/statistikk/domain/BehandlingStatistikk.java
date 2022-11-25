@@ -23,7 +23,7 @@ public class BehandlingStatistikk {
     private Integer antallIkkeFiltrertKrav;
     private Integer antallBortfiltrertKrav;
     private Integer antallIkkePåbegynt;
-    private Integer underArbeid;
+    private Integer antallUnderArbeid;
     private Integer antallFerdigDokumentert;
 
 public BehandligStatistikkResponse toResponse() {
@@ -37,7 +37,7 @@ public BehandligStatistikkResponse toResponse() {
             .antallIkkeFiltrertKrav(antallIkkeFiltrertKrav)
             .antallBortfiltrertKrav(antallBortfiltrertKrav)
             .antallIkkePåbegynt(antallIkkePåbegynt)
-            .underArbeid(underArbeid)
+            .antallUnderArbeid(antallUnderArbeid)
             .antallFerdigDokumentert(antallFerdigDokumentert)
             .build();
 }

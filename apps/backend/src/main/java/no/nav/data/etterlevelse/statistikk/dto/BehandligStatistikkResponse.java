@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -23,6 +24,6 @@ public class BehandligStatistikkResponse {
     private Integer antallIkkeFiltrertKrav;
     private Integer antallBortfiltrertKrav;
     private Integer antallIkkePåbegynt;
-    private Integer underArbeid;
+    private Integer antallUnderArbeid;
     private Integer antallFerdigDokumentert;
 }

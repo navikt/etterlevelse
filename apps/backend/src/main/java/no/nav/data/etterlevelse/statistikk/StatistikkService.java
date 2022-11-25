@@ -5,6 +5,8 @@ import no.nav.data.etterlevelse.behandling.BehandlingService;
 import no.nav.data.etterlevelse.behandling.dto.Behandling;
 import no.nav.data.etterlevelse.codelist.dto.CodelistResponse;
 import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
+import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
+import no.nav.data.etterlevelse.etterlevelse.domain.EtterlevelseStatus;
 import no.nav.data.etterlevelse.krav.KravService;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravStatus;
@@ -38,17 +40,40 @@ public class StatistikkService {
         behandlingList.forEach(behandling -> {
             String behandlingNavn = "B" + behandling.getNummer() + " " + behandling.getNavn();
             List<String> irrelevantFor = convert(behandling.getIrrelevansFor(), CodelistResponse::getCode);
-            int valgteKrav = aktivKravList.stream().filter(krav -> krav.getRelevansFor().isEmpty() ||
-                    krav.getRelevansFor().stream().noneMatch(irrelevantFor::contains)
-            ).toList().size();
+
+            List<Etterlevelse> etterlevelseList = etterlevelseService.getByBehandling(behandling.getId())
+                    .stream().filter( etterlevelse ->
+                        aktivKravList.stream().anyMatch(krav -> krav.getKravNummer().equals(etterlevelse.getKravNummer()) && krav.getKravVersjon().equals(etterlevelse.getKravVersjon()))
+                    ).toList();
+
+            List<Krav> valgteKrav = aktivKravList.stream().filter(krav -> krav.getRelevansFor().stream().noneMatch(irrelevantFor::contains)
+            ).toList();
+
+            int antallIkkeFiltrerKrav = valgteKrav.size() +
+                    etterlevelseList.stream()
+                            .filter(etterlevelse ->
+                                    valgteKrav.stream().noneMatch(krav -> krav.getKravVersjon().equals(etterlevelse.getKravVersjon()) &&
+                                            krav.getKravNummer().equals(etterlevelse.getKravNummer()))
+                                    ).toList().size();
+
+            int antallFerdigDokumentert = etterlevelseList.stream()
+                    .filter(etterlevelse ->
+                            etterlevelse.getStatus().equals(EtterlevelseStatus.FERDIG_DOKUMENTERT) ||
+                                    etterlevelse.getStatus().equals(EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT)||
+                                    etterlevelse.getStatus().equals(EtterlevelseStatus.OPPFYLLES_SENERE)
+                    )
+                    .toList().size();
 
             behandlingStatistikkList.add(
                     BehandlingStatistikk.builder()
                             .behandlingId(behandling.getId())
                             .behandlingNavn(behandlingNavn)
                             .totalKrav(aktivKravList.size())
-                            .antallIkkeFiltrertKrav(valgteKrav)
-                            .antallBortfiltrertKrav(aktivKravList.size() - valgteKrav)
+                            .antallIkkeFiltrertKrav(antallIkkeFiltrerKrav)
+                            .antallBortfiltrertKrav(aktivKravList.size() - antallIkkeFiltrerKrav)
+                            .antallFerdigDokumentert(antallFerdigDokumentert)
+                            .antallUnderArbeid(etterlevelseList.size() - antallFerdigDokumentert)
+                            .antallIkkePåbegynt(antallIkkeFiltrerKrav - etterlevelseList.size())
                             .build()
             );
         });
