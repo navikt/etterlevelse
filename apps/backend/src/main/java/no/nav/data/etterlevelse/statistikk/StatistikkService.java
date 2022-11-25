@@ -38,7 +38,7 @@ public class StatistikkService {
         behandlingList.forEach(behandling -> {
             String behandlingNavn = "B" + behandling.getNummer() + " " + behandling.getNavn();
             List<String> irrelevantFor = convert(behandling.getIrrelevansFor(), CodelistResponse::getCode);
-            int valgteKrav = aktivKravList.stream().filter(krav ->
+            int valgteKrav = aktivKravList.stream().filter(krav -> krav.getRelevansFor().isEmpty() ||
                     krav.getRelevansFor().stream().noneMatch(irrelevantFor::contains)
             ).toList().size();
 
