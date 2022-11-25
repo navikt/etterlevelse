@@ -63,10 +63,6 @@ public class BehandlingService {
         return convertBehandlinger(bkatClient.getProcessesForTeam(teamId));
     }
 
-    public List<GenericStorage> getAllBehandlingData(){
-        return repo.getAllBehandlingData();
-    }
-
     public List<Behandling> findBehandlinger(String search) {
         return convertBehandlinger(bkatClient.findProcesses(search));
     }
@@ -98,6 +94,13 @@ public class BehandlingService {
         }
         List<GenericStorage> datas = repo.findBy(filter);
         List<String> behandlingIds = convert(GenericStorage.to(datas, BehandlingData.class), BehandlingData::getBehandlingId);
+        Collection<BkatProcess> processes = bkatClient.getProcessesById(behandlingIds).values();
+        return convert(processes, p -> convertBeh(p, datas));
+    }
+
+    public List<Behandling> getAllBehandlingWithBehandlingData(){
+        List<GenericStorage> datas = repo.getAllBehandlingData();
+        List<String> behandlingIds = convert(GenericStorage.to(datas, BehandlingData.class), BehandlingData:: getBehandlingId);
         Collection<BkatProcess> processes = bkatClient.getProcessesById(behandlingIds).values();
         return convert(processes, p -> convertBeh(p, datas));
     }
