@@ -48,6 +48,7 @@ public class StatistikkService {
                             .behandlingNavn(behandlingNavn)
                             .totalKrav(aktivKravList.size())
                             .antallIkkeFiltrertKrav(valgteKrav)
+                            .antallBortfiltrertKrav(aktivKravList.size() - valgteKrav)
                             .build()
             );
         });
