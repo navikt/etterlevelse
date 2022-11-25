@@ -39,7 +39,7 @@ public class StatistikkService {
             String behandlingNavn = "B" + behandling.getNummer() + " " + behandling.getNavn();
             List<String> irrelevantFor = convert(behandling.getIrrelevansFor(), CodelistResponse::getCode);
             Integer valgteKrav = aktivKravList.stream().filter(krav ->
-                krav.getRelevansFor().stream().anyMatch(irrelevantFor::contains)
+                !krav.getRelevansFor().stream().anyMatch(irrelevantFor::contains)
             ).toList().size();
 
             behandlingStatistikkList.add(
