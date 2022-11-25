@@ -28,6 +28,9 @@ class StatistikkServiceTest extends IntegrationTestBase {
     @Autowired
     EtterlevelseService etterlevelseService;
 
+    @Autowired
+    StatistikkService statistikkService;
+
     @Test
     void givenCodes_filterKrav_getKravBasedOnFilter(){
         List<Behandling> behandlingList=  new ArrayList<>();
