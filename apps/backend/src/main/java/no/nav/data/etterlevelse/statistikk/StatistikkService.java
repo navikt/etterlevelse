@@ -15,6 +15,7 @@ import no.nav.data.etterlevelse.statistikk.domain.BehandlingStatistikk;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import static no.nav.data.common.utils.StreamUtils.convert;
@@ -37,7 +38,7 @@ public class StatistikkService {
 
         List<String> irrelevantFor = convert(behandling.getIrrelevansFor(), CodelistResponse::getCode);
 
-        List<Krav> valgteKrav = aktivKravList.stream().filter(krav -> krav.getRelevansFor().stream().noneMatch(irrelevantFor::contains)
+        List<Krav> valgteKrav = aktivKravList.stream().filter(krav -> !new HashSet<>(irrelevantFor).containsAll(krav.getRelevansFor())
         ).toList();
 
         return valgteKrav.size() +
