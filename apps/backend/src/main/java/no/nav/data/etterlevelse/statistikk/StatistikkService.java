@@ -38,7 +38,7 @@ public class StatistikkService {
 
         List<String> irrelevantFor = convert(behandling.getIrrelevansFor(), CodelistResponse::getCode);
 
-        List<Krav> valgteKrav = aktivKravList.stream().filter(krav -> !new HashSet<>(irrelevantFor).containsAll(krav.getRelevansFor())
+        List<Krav> valgteKrav = aktivKravList.stream().filter(krav -> !new HashSet<>(irrelevantFor).containsAll(krav.getRelevansFor()) || krav.getRelevansFor().isEmpty()
         ).toList();
 
         return valgteKrav.size() +
