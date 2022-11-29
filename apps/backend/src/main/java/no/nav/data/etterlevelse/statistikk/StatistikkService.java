@@ -14,6 +14,7 @@ import no.nav.data.etterlevelse.krav.domain.dto.KravFilter;
 import no.nav.data.etterlevelse.statistikk.domain.BehandlingStatistikk;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -62,6 +63,9 @@ public class StatistikkService {
             List<Etterlevelse> etterlevelseList = etterlevelseService.getByBehandling(behandling.getId());
             etterlevelseList.sort(Comparator.comparing(a -> a.getChangeStamp().getCreatedDate()));
 
+            LocalDateTime opprettetDato = !etterlevelseList.isEmpty() ? etterlevelseList.get(0).getChangeStamp().getCreatedDate() : null;
+
+            etterlevelseList.sort(Comparator.comparing(a -> a.getChangeStamp().getLastModifiedDate()));
 
             List<Etterlevelse> aktivEtterlevelseList = etterlevelseList.stream().filter(etterlevelse ->
                     aktivKravList.stream().anyMatch(krav -> krav.getKravNummer().equals(etterlevelse.getKravNummer()) && krav.getKravVersjon().equals(etterlevelse.getKravVersjon()))
@@ -87,8 +91,8 @@ public class StatistikkService {
                             .antallFerdigDokumentert(antallFerdigDokumentert)
                             .antallUnderArbeid(etterlevelseList.size() - antallFerdigDokumentert)
                             .antallIkkePåbegynt(antallIkkeFiltrertKrav - etterlevelseList.size())
-                            .opprettetDato(!etterlevelseList.isEmpty() ? etterlevelseList.get(0).getChangeStamp().getCreatedDate() : null)
-                            .endretDato(!etterlevelseList.isEmpty() ? etterlevelseList.get(etterlevelseList.size() - 1).getChangeStamp().getCreatedDate() : null)
+                            .endretDato(!etterlevelseList.isEmpty() ? etterlevelseList.get(0).getChangeStamp().getLastModifiedDate() : null)
+                            .opprettetDato(!etterlevelseList.isEmpty() ? etterlevelseList.get(etterlevelseList.size() - 1).getChangeStamp().getLastModifiedDate() : null)
                             .build()
             );
         });
