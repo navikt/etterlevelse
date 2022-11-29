@@ -12,6 +12,7 @@ import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravStatus;
 import no.nav.data.etterlevelse.krav.domain.dto.KravFilter;
 import no.nav.data.etterlevelse.statistikk.domain.BehandlingStatistikk;
+import no.nav.data.integration.team.teamcat.TeamcatTeamClient;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -25,14 +26,18 @@ import static no.nav.data.common.utils.StreamUtils.convert;
 @Slf4j
 @Service
 public class StatistikkService {
+
     private final BehandlingService behandlingService;
     private final KravService kravService;
     private final EtterlevelseService etterlevelseService;
 
-    public StatistikkService(BehandlingService behandlingService, KravService kravService, EtterlevelseService etterlevelseService) {
+    private final TeamcatTeamClient teamService;
+
+    public StatistikkService(BehandlingService behandlingService, KravService kravService, EtterlevelseService etterlevelseService, TeamcatTeamClient teamService) {
         this.behandlingService = behandlingService;
         this.kravService = kravService;
         this.etterlevelseService = etterlevelseService;
+        this.teamService = teamService;
     }
 
 
@@ -84,6 +89,8 @@ public class StatistikkService {
                     )
                     .toList().size();
 
+            List<String> teamNames = behandling.getTeams().stream().map(t->teamService.getTeam(t).get().getName()).toList();
+
             behandlingStatistikkList.add(
                     BehandlingStatistikk.builder()
                             .behandlingId(behandling.getId())
@@ -96,6 +103,7 @@ public class StatistikkService {
                             .antallIkkePåbegynt(antallIkkeFiltrertKrav - etterlevelseList.size())
                             .endretDato(endretDato)
                             .opprettetDato(opprettetDato)
+                            .team(teamNames)
                             .build()
             );
         });
