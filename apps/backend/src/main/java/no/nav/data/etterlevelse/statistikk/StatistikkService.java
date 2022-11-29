@@ -35,7 +35,7 @@ public class StatistikkService {
     }
 
 
-    public int getAntallIkkeFiltrertKrav(List<Krav> aktivKravList,List<Etterlevelse> etterlevelseList, Behandling behandling){
+    public int getAntallIkkeFiltrertKrav(List<Krav> aktivKravList, List<Etterlevelse> etterlevelseList, Behandling behandling) {
 
         List<String> irrelevantFor = convert(behandling.getIrrelevansFor(), CodelistResponse::getCode);
 
@@ -63,17 +63,16 @@ public class StatistikkService {
             etterlevelseList.sort(Comparator.comparing(a -> a.getChangeStamp().getCreatedDate()));
 
 
-
-            List<Etterlevelse> aktivEtterlevelseList = etterlevelseList.stream().filter( etterlevelse ->
+            List<Etterlevelse> aktivEtterlevelseList = etterlevelseList.stream().filter(etterlevelse ->
                     aktivKravList.stream().anyMatch(krav -> krav.getKravNummer().equals(etterlevelse.getKravNummer()) && krav.getKravVersjon().equals(etterlevelse.getKravVersjon()))
             ).toList();
 
-            int antallIkkeFiltrertKrav = getAntallIkkeFiltrertKrav(aktivKravList,aktivEtterlevelseList, behandling);
+            int antallIkkeFiltrertKrav = getAntallIkkeFiltrertKrav(aktivKravList, aktivEtterlevelseList, behandling);
 
             int antallFerdigDokumentert = aktivEtterlevelseList.stream()
                     .filter(etterlevelse ->
                             etterlevelse.getStatus().equals(EtterlevelseStatus.FERDIG_DOKUMENTERT) ||
-                                    etterlevelse.getStatus().equals(EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT)||
+                                    etterlevelse.getStatus().equals(EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) ||
                                     etterlevelse.getStatus().equals(EtterlevelseStatus.OPPFYLLES_SENERE)
                     )
                     .toList().size();
@@ -88,8 +87,8 @@ public class StatistikkService {
                             .antallFerdigDokumentert(antallFerdigDokumentert)
                             .antallUnderArbeid(etterlevelseList.size() - antallFerdigDokumentert)
                             .antallIkkePåbegynt(antallIkkeFiltrertKrav - etterlevelseList.size())
-                            .opprettetDato(etterlevelseList.get(0).getChangeStamp().getCreatedDate())
-                            .endretDato(etterlevelseList.get(etterlevelseList.size() - 1).getChangeStamp().getCreatedDate())
+                            .opprettetDato(!etterlevelseList.isEmpty() ? etterlevelseList.get(0).getChangeStamp().getCreatedDate() : null)
+                            .endretDato(!etterlevelseList.isEmpty() ? etterlevelseList.get(etterlevelseList.size() - 1).getChangeStamp().getCreatedDate() : null)
                             .build()
             );
         });
