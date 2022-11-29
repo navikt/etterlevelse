@@ -89,7 +89,7 @@ public class StatistikkService {
                     )
                     .toList().size();
 
-            List<String> teamNames = behandling.getTeams().stream().map(t->teamService.getTeam(t).get().getName()).toList();
+            List<String> teamNames = behandling.getTeams().stream().map(t->teamService.getTeam(t).isPresent()?teamService.getTeam(t).get().getName():"").toList();
 
             behandlingStatistikkList.add(
                     BehandlingStatistikk.builder()
