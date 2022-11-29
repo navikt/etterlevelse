@@ -67,6 +67,9 @@ public class StatistikkService {
 
             etterlevelseList.sort(Comparator.comparing(a -> a.getChangeStamp().getLastModifiedDate()));
 
+            LocalDateTime endretDato = !etterlevelseList.isEmpty() ? etterlevelseList.get(etterlevelseList.size() - 1).getChangeStamp().getLastModifiedDate() : null;
+
+
             List<Etterlevelse> aktivEtterlevelseList = etterlevelseList.stream().filter(etterlevelse ->
                     aktivKravList.stream().anyMatch(krav -> krav.getKravNummer().equals(etterlevelse.getKravNummer()) && krav.getKravVersjon().equals(etterlevelse.getKravVersjon()))
             ).toList();
@@ -91,8 +94,8 @@ public class StatistikkService {
                             .antallFerdigDokumentert(antallFerdigDokumentert)
                             .antallUnderArbeid(etterlevelseList.size() - antallFerdigDokumentert)
                             .antallIkkePåbegynt(antallIkkeFiltrertKrav - etterlevelseList.size())
-                            .endretDato(!etterlevelseList.isEmpty() ? etterlevelseList.get(0).getChangeStamp().getLastModifiedDate() : null)
-                            .opprettetDato(!etterlevelseList.isEmpty() ? etterlevelseList.get(etterlevelseList.size() - 1).getChangeStamp().getLastModifiedDate() : null)
+                            .endretDato(endretDato)
+                            .opprettetDato(opprettetDato)
                             .build()
             );
         });
