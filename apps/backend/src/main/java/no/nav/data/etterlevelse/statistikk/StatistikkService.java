@@ -100,7 +100,7 @@ public class StatistikkService {
                             .antallBortfiltrertKrav(aktivKravList.size() - antallIkkeFiltrertKrav)
                             .antallFerdigDokumentert(antallFerdigDokumentert)
                             .antallUnderArbeid(etterlevelseList.size() - antallFerdigDokumentert)
-                            .antallIkkePåbegynt(antallIkkeFiltrertKrav - etterlevelseList.size())
+                            .antallIkkePaabegynt(antallIkkeFiltrertKrav - etterlevelseList.size())
                             .endretDato(endretDato)
                             .opprettetDato(opprettetDato)
                             .team(teamNames)

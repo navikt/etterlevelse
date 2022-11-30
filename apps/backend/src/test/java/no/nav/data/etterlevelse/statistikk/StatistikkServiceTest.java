@@ -34,8 +34,8 @@ class StatistikkServiceTest extends IntegrationTestBase {
     @Test
     void givenCodes_filterKrav_getKravBasedOnFilter(){
         List<Behandling> behandlingList=  new ArrayList<>();
-        var krav1 = storageService.save(Krav.builder().navn("Krav1").relevansFor(Arrays.asList("SAK1")).kravNummer(50).status(KravStatus.AKTIV).build());
-        var krav2 = storageService.save(Krav.builder().navn("Krav2").relevansFor(Arrays.asList("SAK2")).kravNummer(60).status(KravStatus.AKTIV).build());
+        var krav1 = storageService.save(Krav.builder().navn("Krav1").relevansFor(List.of("SAK1")).kravNummer(50).status(KravStatus.AKTIV).build());
+        var krav2 = storageService.save(Krav.builder().navn("Krav2").relevansFor(List.of("SAK2")).kravNummer(60).status(KravStatus.AKTIV).build());
         List<Krav> aktivKravList = kravService.getByFilter(KravFilter.builder().status(List.of(KravStatus.AKTIV.name())).build());
 
         behandlingList = behandlingService.getAllBehandlingWithBehandlingData();

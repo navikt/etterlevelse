@@ -23,7 +23,7 @@ public class BehandligStatistikkResponse {
     private Integer totalKrav;
     private Integer antallIkkeFiltrertKrav;
     private Integer antallBortfiltrertKrav;
-    private Integer antallIkkePåbegynt;
+    private Integer antallIkkePaabegynt;
     private Integer antallUnderArbeid;
     private Integer antallFerdigDokumentert;
 }
