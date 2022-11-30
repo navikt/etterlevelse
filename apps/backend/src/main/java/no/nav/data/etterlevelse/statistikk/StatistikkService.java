@@ -66,6 +66,11 @@ public class StatistikkService {
 
 
             List<Etterlevelse> etterlevelseList = etterlevelseService.getByBehandling(behandling.getId());
+
+            List<Etterlevelse> aktivEtterlevelseList = etterlevelseList.stream().filter(etterlevelse ->
+                    aktivKravList.stream().anyMatch(krav -> krav.getKravNummer().equals(etterlevelse.getKravNummer()) && krav.getKravVersjon().equals(etterlevelse.getKravVersjon()))
+            ).toList();
+
             etterlevelseList.sort(Comparator.comparing(a -> a.getChangeStamp().getCreatedDate()));
 
             LocalDateTime opprettetDato = !etterlevelseList.isEmpty() ? etterlevelseList.get(0).getChangeStamp().getCreatedDate() : null;
@@ -75,10 +80,6 @@ public class StatistikkService {
             LocalDateTime endretDato = !etterlevelseList.isEmpty() ? etterlevelseList.get(etterlevelseList.size() - 1).getChangeStamp().getLastModifiedDate() : null;
 
 
-            List<Etterlevelse> aktivEtterlevelseList = etterlevelseList.stream().filter(etterlevelse ->
-                    aktivKravList.stream().anyMatch(krav -> krav.getKravNummer().equals(etterlevelse.getKravNummer()) && krav.getKravVersjon().equals(etterlevelse.getKravVersjon()))
-            ).toList();
-
             int antallIkkeFiltrertKrav = getAntallIkkeFiltrertKrav(aktivKravList, aktivEtterlevelseList, behandling);
 
             int antallFerdigDokumentert = aktivEtterlevelseList.stream()
@@ -86,6 +87,14 @@ public class StatistikkService {
                             etterlevelse.getStatus().equals(EtterlevelseStatus.FERDIG_DOKUMENTERT) ||
                                     etterlevelse.getStatus().equals(EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) ||
                                     etterlevelse.getStatus().equals(EtterlevelseStatus.OPPFYLLES_SENERE)
+                    )
+                    .toList().size();
+
+            int antallUnderArbeid = aktivEtterlevelseList.stream()
+                    .filter(etterlevelse ->
+                            etterlevelse.getStatus().equals(EtterlevelseStatus.UNDER_REDIGERING) ||
+                                    etterlevelse.getStatus().equals(EtterlevelseStatus.IKKE_RELEVANT) ||
+                                    etterlevelse.getStatus().equals(EtterlevelseStatus.FERDIG)
                     )
                     .toList().size();
 
@@ -99,8 +108,8 @@ public class StatistikkService {
                             .antallIkkeFiltrertKrav(antallIkkeFiltrertKrav)
                             .antallBortfiltrertKrav(aktivKravList.size() - antallIkkeFiltrertKrav)
                             .antallFerdigDokumentert(antallFerdigDokumentert)
-                            .antallUnderArbeid(aktivEtterlevelseList.size() - antallFerdigDokumentert)
-                            .antallIkkePaabegynt(antallIkkeFiltrertKrav - aktivEtterlevelseList.size())
+                            .antallUnderArbeid(antallUnderArbeid)
+                            .antallIkkePaabegynt(antallIkkeFiltrertKrav - (antallFerdigDokumentert + antallUnderArbeid))
                             .endretDato(endretDato)
                             .opprettetDato(opprettetDato)
                             .team(teamNames)
