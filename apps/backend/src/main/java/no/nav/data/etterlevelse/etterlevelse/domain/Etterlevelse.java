@@ -89,6 +89,12 @@ public class Etterlevelse implements DomainObject, KravId {
         Etterlevelse other = (Etterlevelse) obj;
         return Objects.equals(kravNummer, other.kravNummer) && Objects.equals(kravVersjon, other.kravVersjon) && Objects.equals(behandlingId, other.behandlingId);
     }
+
+    @Override
+    public String toString() {
+        return "K" + kravNummer + "." + kravVersjon + ", Status: " + status;
+    }
+
     public InstanceId convertToInstanceId() {
         return new InstanceId(id.toString(), behandlingId + "-" + kravId());
     }
