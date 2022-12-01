@@ -41,12 +41,29 @@ public class StatistikkService {
     }
 
 
-    public List<Krav> getAntallIkkeFiltrertKrav(List<Krav> aktivKravList, Behandling behandling) {
+    public int getAntallIkkeFiltrertKrav(List<Krav> aktivKravList, Behandling behandling, List<Etterlevelse> etterlevelseList) {
 
         List<String> irrelevantFor = convert(behandling.getIrrelevansFor(), CodelistResponse::getCode);
 
-        return aktivKravList.stream().filter(krav -> !new HashSet<>(irrelevantFor).containsAll(krav.getRelevansFor()) || krav.getRelevansFor().isEmpty()
+        List<Krav> valgteKrav = aktivKravList.stream().filter(krav -> !new HashSet<>(irrelevantFor).containsAll(krav.getRelevansFor()) || krav.getRelevansFor().isEmpty()
         ).toList();
+
+        return valgteKrav.size() +
+                etterlevelseList.stream()
+                        .filter(etterlevelse ->
+                                valgteKrav.stream().noneMatch(krav -> krav.getKravVersjon().equals(etterlevelse.getKravVersjon()) &&
+                                        krav.getKravNummer().equals(etterlevelse.getKravNummer()))
+                        ).toList().size();
+    }
+
+    public LocalDateTime getCreatedDate(List<Etterlevelse> etterlevelseList){
+        etterlevelseList.sort(Comparator.comparing(a -> a.getChangeStamp().getCreatedDate()));
+        return !etterlevelseList.isEmpty() ? etterlevelseList.get(0).getChangeStamp().getCreatedDate() : null;
+    }
+
+    public LocalDateTime getLastUpdatedDate(List<Etterlevelse> etterlevelseList){
+        etterlevelseList.sort(Comparator.comparing(a -> a.getChangeStamp().getLastModifiedDate()));
+        return !etterlevelseList.isEmpty() ? etterlevelseList.get(etterlevelseList.size() - 1).getChangeStamp().getLastModifiedDate() : null;
     }
 
     public List<BehandlingStatistikk> getAllBehandlingStatistikk() {
@@ -57,23 +74,21 @@ public class StatistikkService {
         behandlingList.forEach(behandling -> {
             String behandlingNavn = "B" + behandling.getNummer() + " " + behandling.getNavn();
 
-
+            //Get all etterlevelse for behandling
             List<Etterlevelse> etterlevelseList = etterlevelseService.getByBehandling(behandling.getId());
 
-            etterlevelseList.sort(Comparator.comparing(a -> a.getChangeStamp().getCreatedDate()));
+            //Sort etterlevelse on created date to when the first documentation was created
+            LocalDateTime opprettetDato = getCreatedDate(etterlevelseList);
 
-            LocalDateTime opprettetDato = !etterlevelseList.isEmpty() ? etterlevelseList.get(0).getChangeStamp().getCreatedDate() : null;
+            //Sort etterlevelse on updated date to when the documentation was last updated
+            LocalDateTime endretDato = getLastUpdatedDate(etterlevelseList);
 
-            etterlevelseList.sort(Comparator.comparing(a -> a.getChangeStamp().getLastModifiedDate()));
-
-            LocalDateTime endretDato = !etterlevelseList.isEmpty() ? etterlevelseList.get(etterlevelseList.size() - 1).getChangeStamp().getLastModifiedDate() : null;
-
-
-            List<Krav> antallIkkeFiltrertKrav = getAntallIkkeFiltrertKrav(aktivKravList, behandling);
-
+            //Filter etterlevelse to only have documentation for active Krav
             List<Etterlevelse> aktivEtterlevelseList = etterlevelseList.stream().filter(etterlevelse ->
-                    antallIkkeFiltrertKrav.stream().anyMatch(krav -> krav.getKravNummer().equals(etterlevelse.getKravNummer()) && krav.getKravVersjon().equals(etterlevelse.getKravVersjon()))
+                    aktivKravList.stream().anyMatch(krav -> krav.getKravNummer().equals(etterlevelse.getKravNummer()) && krav.getKravVersjon().equals(etterlevelse.getKravVersjon()))
             ).toList();
+
+            int antallIkkeFiltrertKrav = getAntallIkkeFiltrertKrav(aktivKravList, behandling, aktivEtterlevelseList);
 
             int antallFerdigDokumentert = aktivEtterlevelseList.stream()
                     .filter(etterlevelse ->
@@ -98,11 +113,11 @@ public class StatistikkService {
                             .behandlingId(behandling.getId())
                             .behandlingNavn(behandlingNavn)
                             .totalKrav(aktivKravList.size())
-                            .antallIkkeFiltrertKrav(antallIkkeFiltrertKrav.size())
-                            .antallBortfiltrertKrav(aktivKravList.size() - antallIkkeFiltrertKrav.size())
+                            .antallIkkeFiltrertKrav(antallIkkeFiltrertKrav)
+                            .antallBortfiltrertKrav(aktivKravList.size() - antallIkkeFiltrertKrav)
                             .antallFerdigDokumentert(antallFerdigDokumentert)
                             .antallUnderArbeid(antallUnderArbeid)
-                            .antallIkkePaabegynt(antallIkkeFiltrertKrav.size() - (antallFerdigDokumentert + antallUnderArbeid))
+                            .antallIkkePaabegynt(antallIkkeFiltrertKrav - aktivEtterlevelseList.size())
                             .endretDato(endretDato)
                             .opprettetDato(opprettetDato)
                             .team(teamNames)
