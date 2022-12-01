@@ -3,7 +3,7 @@ import { Button } from 'baseui/button'
 import { HeadingXXLarge, LabelLarge } from 'baseui/typography'
 import { useState } from 'react'
 import { Helmet } from 'react-helmet'
-import { updateEtterlevelseToNewBehandling } from '../api/EtterlevelseApi'
+import { deleteEtterlevelse, updateEtterlevelseToNewBehandling } from '../api/EtterlevelseApi'
 import CustomizedInput from '../components/common/CustomizedInput'
 import { borderColor, paddingZero } from '../components/common/Style'
 import { Layout2 } from '../components/scaffold/Page'
@@ -14,6 +14,7 @@ export const EtterlevelseAdminPage = () => {
   const [oldBehandlingsId, setOldBehandlingsId] = useState<string>('')
   const [newBehandlingsId, setNewBehandlingsId] = useState<string>('')
   const [updateMessage, setUpdateMessage] = useState<string>('')
+  const [etterlevelseId, setEtterlevelseId] = useState<string>('')
 
   return (
     <Layout2
@@ -80,6 +81,42 @@ export const EtterlevelseAdminPage = () => {
         >
           Oppdater
         </Button>
+      </Block>
+      <Block  marginTop="20px">
+        <LabelLarge>Slette etterlevelses dokumentasjon ved uid</LabelLarge>
+        <Block display="flex">
+          <CustomizedInput
+            value={etterlevelseId}
+            placeholder="Etterlevelse UID"
+            onChange={(e) => {
+              setEtterlevelseId(e.target.value)
+            }}
+            overrides={{
+              Root: {
+                style: {
+                  ...borderColor(ettlevColors.grey200),
+                  marginRight: '5px',
+                },
+              },
+            }}
+          />
+          <Button
+          disabled={!etterlevelseId}
+          onClick={() => {
+            setUpdateMessage('')
+            deleteEtterlevelse(etterlevelseId)
+              .then(() => {
+                setUpdateMessage('Sletting vellykket for etterlevelses med uid: ' + etterlevelseId)
+                setEtterlevelseId('')
+              })
+              .catch((e) => {
+                setUpdateMessage('Oppdatering mislykket, error: ' + e)
+              })
+          }}
+        >
+          Slett
+        </Button>
+        </Block>
       </Block>
       {updateMessage ? (
         <Block>
