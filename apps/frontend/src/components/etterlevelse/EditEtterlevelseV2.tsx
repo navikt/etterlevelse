@@ -1,6 +1,6 @@
 import { Etterlevelse, EtterlevelseMetadata, EtterlevelseStatus, Krav, KRAV_FILTER_TYPE, KravQL, KravStatus } from '../../constants'
 import { FormikProps } from 'formik'
-import { createEtterlevelse, updateEtterlevelse } from '../../api/EtterlevelseApi'
+import { createEtterlevelse, getEtterlevelserByBehandlingsIdKravNumber, updateEtterlevelse } from '../../api/EtterlevelseApi'
 import { Block } from 'baseui/block'
 import Button from '../common/Button'
 import React, { useEffect, useRef, useState } from 'react'
@@ -133,7 +133,17 @@ export const EditEtterlevelseV2 = ({
       suksesskriterieBegrunnelser: syncEtterlevelseKriterieBegrunnelseWithKrav(etterlevelse, krav),
     }
 
-    if (etterlevelse.id) {
+    //double check if etterlevelse already exist before submitting
+    let existingEtterlevelseId = ''
+    if(behandlingId && krav) {
+      const etterlevelseList = (await getEtterlevelserByBehandlingsIdKravNumber(behandlingId, krav.kravNummer)).content.filter((e) => e.kravVersjon === krav.kravVersjon)
+      if(etterlevelseList.length) {
+        existingEtterlevelseId = etterlevelseList[0].id
+        mutatedEtterlevelse.id = etterlevelseList[0].id
+      }
+    }
+
+    if (etterlevelse.id || existingEtterlevelseId) {
       await updateEtterlevelse(mutatedEtterlevelse).then(() => navigate(`/behandling/${behandlingId}/${params.tema}/${getFilterType(params.filter)}`))
     } else {
       await createEtterlevelse(mutatedEtterlevelse).then(() => {
