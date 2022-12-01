@@ -90,21 +90,29 @@ public class StatistikkService {
 
             int antallIkkeFiltrertKrav = getAntallIkkeFiltrertKrav(aktivKravList, behandling, aktivEtterlevelseList);
 
-            int antallFerdigDokumentert = aktivEtterlevelseList.stream()
+            List<Etterlevelse> antallFerdigDokumentert = aktivEtterlevelseList.stream()
                     .filter(etterlevelse ->
                             etterlevelse.getStatus().equals(EtterlevelseStatus.FERDIG_DOKUMENTERT) ||
                                     etterlevelse.getStatus().equals(EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) ||
                                     etterlevelse.getStatus().equals(EtterlevelseStatus.OPPFYLLES_SENERE)
                     )
-                    .toList().size();
+                    .toList();
 
-            int antallUnderArbeid = aktivEtterlevelseList.stream()
+            List<Etterlevelse> antallUnderArbeid = aktivEtterlevelseList.stream()
                     .filter(etterlevelse ->
                             etterlevelse.getStatus().equals(EtterlevelseStatus.UNDER_REDIGERING) ||
                                     etterlevelse.getStatus().equals(EtterlevelseStatus.IKKE_RELEVANT) ||
                                     etterlevelse.getStatus().equals(EtterlevelseStatus.FERDIG)
                     )
-                    .toList().size();
+                    .toList();
+
+            int antallUnderArbeidSize = antallUnderArbeid.stream().filter(etterlevelseUnderArbeid ->
+                        antallFerdigDokumentert.stream()
+                                .noneMatch(e -> e.getKravNummer().equals(etterlevelseUnderArbeid.getKravNummer())
+                                        && e.getKravVersjon().equals(etterlevelseUnderArbeid.getKravVersjon()))
+                    ).toList().size();
+
+            int antallFerdigDokumentertSize = antallFerdigDokumentert.stream().distinct().toList().size();
 
             List<String> teamNames = behandling.getTeams().stream().map(t->teamService.getTeam(t).isPresent()?teamService.getTeam(t).get().getName():"").toList();
 
@@ -120,9 +128,9 @@ public class StatistikkService {
                             .totalKrav(aktivKravList.size())
                             .antallIkkeFiltrertKrav(antallIkkeFiltrertKrav)
                             .antallBortfiltrertKrav(aktivKravList.size() - antallIkkeFiltrertKrav)
-                            .antallFerdigDokumentert(antallFerdigDokumentert)
-                            .antallUnderArbeid(antallUnderArbeid)
-                            .antallIkkePaabegynt(antallIkkeFiltrertKrav - aktivEtterlevelseList.size())
+                            .antallFerdigDokumentert(antallFerdigDokumentertSize)
+                            .antallUnderArbeid(antallUnderArbeidSize)
+                            .antallIkkePaabegynt(antallIkkeFiltrertKrav - (antallFerdigDokumentertSize + antallUnderArbeidSize))
                             .endretDato(endretDato)
                             .opprettetDato(opprettetDato)
                             .team(teamNames)
