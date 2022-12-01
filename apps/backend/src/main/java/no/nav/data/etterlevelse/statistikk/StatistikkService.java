@@ -112,14 +112,8 @@ public class StatistikkService {
                                         && e.getKravVersjon().equals(etterlevelseUnderArbeid.getKravVersjon()))
                     ).toList().size();
 
-            List<Etterlevelse> antallFerdigDokumentertSize = antallFerdigDokumentert.stream().distinct().toList();
-
             List<String> teamNames = behandling.getTeams().stream().map(t->teamService.getTeam(t).isPresent()?teamService.getTeam(t).get().getName():"").toList();
 
-            if(behandling.getNummer() == 547){
-               var logString =  antallFerdigDokumentertSize.stream().map(Etterlevelse::toString).toList();
-               log.info(logString.toString());
-            }
 
             behandlingStatistikkList.add(
                     BehandlingStatistikk.builder()
@@ -128,9 +122,9 @@ public class StatistikkService {
                             .totalKrav(aktivKravList.size())
                             .antallIkkeFiltrertKrav(antallIkkeFiltrertKrav)
                             .antallBortfiltrertKrav(aktivKravList.size() - antallIkkeFiltrertKrav)
-                            .antallFerdigDokumentert(antallFerdigDokumentertSize.size())
+                            .antallFerdigDokumentert(antallFerdigDokumentert.size())
                             .antallUnderArbeid(antallUnderArbeidSize)
-                            .antallIkkePaabegynt(antallIkkeFiltrertKrav - (antallFerdigDokumentertSize.size() + antallUnderArbeidSize))
+                            .antallIkkePaabegynt(antallIkkeFiltrertKrav - (antallFerdigDokumentert.size() + antallUnderArbeidSize))
                             .endretDato(endretDato)
                             .opprettetDato(opprettetDato)
                             .team(teamNames)

@@ -14,7 +14,6 @@ import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseResponse;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 import static no.nav.data.common.utils.StreamUtils.copyOf;
@@ -72,27 +71,6 @@ public class Etterlevelse implements DomainObject, KravId {
                 .suksesskriterieBegrunnelser(StreamUtils.convert(suksesskriterieBegrunnelser,
                         SuksesskriterieBegrunnelse::toResponse))
                 .build();
-    }
-
-
-    @Override
-    public boolean equals(final Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        Etterlevelse other = (Etterlevelse) obj;
-        return Objects.equals(kravNummer, other.kravNummer) && Objects.equals(kravVersjon, other.kravVersjon) && Objects.equals(behandlingId, other.behandlingId);
-    }
-
-    @Override
-    public String toString() {
-        return "K" + kravNummer + "." + kravVersjon + ", Status: " + status;
     }
 
     public InstanceId convertToInstanceId() {
