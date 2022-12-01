@@ -108,6 +108,11 @@ public class StatistikkService {
 
             List<String> teamNames = behandling.getTeams().stream().map(t->teamService.getTeam(t).isPresent()?teamService.getTeam(t).get().getName():"").toList();
 
+            if(behandling.getNummer() == 547){
+               var logString =  aktivEtterlevelseList.stream().map(Etterlevelse::toString).toList();
+               log.info(logString.toString());
+            }
+
             behandlingStatistikkList.add(
                     BehandlingStatistikk.builder()
                             .behandlingId(behandling.getId())

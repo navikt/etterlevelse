@@ -73,6 +73,11 @@ public class Etterlevelse implements DomainObject, KravId {
                 .build();
     }
 
+    @Override
+    public String toString() {
+        return "K" + kravNummer + "." + kravVersjon + ", Status: " + status;
+    }
+
     public InstanceId convertToInstanceId() {
         return new InstanceId(id.toString(), behandlingId + "-" + kravId());
     }
