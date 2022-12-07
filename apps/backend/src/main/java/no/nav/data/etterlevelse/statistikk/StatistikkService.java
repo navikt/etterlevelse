@@ -19,16 +19,17 @@ import no.nav.data.etterlevelse.krav.domain.dto.KravFilter;
 import no.nav.data.etterlevelse.statistikk.domain.BehandlingStatistikk;
 import no.nav.data.etterlevelse.statistikk.dto.KravStatistikkResponse;
 import no.nav.data.integration.team.teamcat.TeamcatTeamClient;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
+import java.util.function.Function;
 
 import static no.nav.data.common.utils.StreamUtils.convert;
-import static no.nav.data.common.utils.StreamUtils.safeStream;
 
 @Slf4j
 @Service
@@ -143,7 +144,7 @@ public class StatistikkService {
         return behandlingStatistikkList;
     }
 
-    public KravStatistikkResponse toStatestikkResponse(Krav krav) {
+    public KravStatistikkResponse toKravStatestikkResponse(Krav krav) {
         var regelverkResponse = StreamUtils.convert(krav.getRegelverk(), Regelverk::toResponse);
         var tema = CodelistService.getCodelist(ListName.TEMA, regelverkResponse.get(0).getLov().getData().get("tema").toString()).getShortName();
         var response = KravStatistikkResponse.builder()
@@ -167,4 +168,7 @@ public class StatistikkService {
         return response;
     }
 
+    public Page<Krav> getAllKravStatistics(Pageable page) {
+        return kravService.getAllKravStatistics(page);
+    }
 }
