@@ -1,8 +1,11 @@
 package no.nav.data.etterlevelse.statistikk;
 
 import lombok.extern.slf4j.Slf4j;
+import no.nav.data.common.utils.StreamUtils;
 import no.nav.data.etterlevelse.behandling.BehandlingService;
 import no.nav.data.etterlevelse.behandling.dto.Behandling;
+import no.nav.data.etterlevelse.codelist.CodelistService;
+import no.nav.data.etterlevelse.codelist.domain.ListName;
 import no.nav.data.etterlevelse.codelist.dto.CodelistResponse;
 import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
@@ -10,8 +13,11 @@ import no.nav.data.etterlevelse.etterlevelse.domain.EtterlevelseStatus;
 import no.nav.data.etterlevelse.krav.KravService;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravStatus;
+import no.nav.data.etterlevelse.krav.domain.Regelverk;
+import no.nav.data.etterlevelse.krav.domain.Suksesskriterie;
 import no.nav.data.etterlevelse.krav.domain.dto.KravFilter;
 import no.nav.data.etterlevelse.statistikk.domain.BehandlingStatistikk;
+import no.nav.data.etterlevelse.statistikk.dto.KravStatistikkResponse;
 import no.nav.data.integration.team.teamcat.TeamcatTeamClient;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +28,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import static no.nav.data.common.utils.StreamUtils.convert;
+import static no.nav.data.common.utils.StreamUtils.safeStream;
 
 @Slf4j
 @Service
@@ -135,4 +142,29 @@ public class StatistikkService {
 
         return behandlingStatistikkList;
     }
+
+    public KravStatistikkResponse toStatestikkResponse(Krav krav) {
+        var regelverkResponse = StreamUtils.convert(krav.getRegelverk(), Regelverk::toResponse);
+        var tema = CodelistService.getCodelist(ListName.TEMA, regelverkResponse.get(0).getLov().getData().get("tema").toString()).getShortName();
+        var response = KravStatistikkResponse.builder()
+        .id(krav.getId())
+        .lastModifedDate(krav.getChangeStamp().getLastModifiedDate())
+        .createdDate(krav.getChangeStamp().getCreatedDate())
+        .kravNummer(krav.getKravNummer())
+        .kravVersjon(krav.getKravVersjon())
+        .navn(krav.getNavn())
+        .regelverk(regelverkResponse)
+        .tagger(krav.getTagger())
+        .suksesskriterier(StreamUtils.convert(krav.getSuksesskriterier(), Suksesskriterie::toResponse ))
+        .kravIdRelasjoner(krav.getKravIdRelasjoner())
+        .avdeling(CodelistService.getCodelistResponse(ListName.AVDELING, krav.getAvdeling()))
+        .underavdeling(CodelistService.getCodelistResponse(ListName.UNDERAVDELING, krav.getUnderavdeling()))
+        .relevansFor(CodelistService.getCodelistResponseList(ListName.RELEVANS, krav.getRelevansFor()))
+        .status(krav.getStatus())
+        .aktivertDato(krav.getAktivertDato())
+        .tema(tema)
+        .build();
+        return response;
+    }
+
 }
