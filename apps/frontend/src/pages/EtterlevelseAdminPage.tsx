@@ -82,7 +82,7 @@ export const EtterlevelseAdminPage = () => {
           Oppdater
         </Button>
       </Block>
-      <Block  marginTop="20px">
+      <Block marginTop="20px">
         <LabelLarge>Slette etterlevelses dokumentasjon ved uid</LabelLarge>
         <Block display="flex">
           <CustomizedInput
@@ -101,21 +101,21 @@ export const EtterlevelseAdminPage = () => {
             }}
           />
           <Button
-          disabled={!etterlevelseId}
-          onClick={() => {
-            setUpdateMessage('')
-            deleteEtterlevelse(etterlevelseId)
-              .then(() => {
-                setUpdateMessage('Sletting vellykket for etterlevelses med uid: ' + etterlevelseId)
-                setEtterlevelseId('')
-              })
-              .catch((e) => {
-                setUpdateMessage('Oppdatering mislykket, error: ' + e)
-              })
-          }}
-        >
-          Slett
-        </Button>
+            disabled={!etterlevelseId}
+            onClick={() => {
+              setUpdateMessage('')
+              deleteEtterlevelse(etterlevelseId)
+                .then(() => {
+                  setUpdateMessage('Sletting vellykket for etterlevelses med uid: ' + etterlevelseId)
+                  setEtterlevelseId('')
+                })
+                .catch((e) => {
+                  setUpdateMessage('Oppdatering mislykket, error: ' + e)
+                })
+            }}
+          >
+            Slett
+          </Button>
         </Block>
       </Block>
       {updateMessage ? (

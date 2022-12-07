@@ -135,9 +135,9 @@ export const EditEtterlevelseV2 = ({
 
     //double check if etterlevelse already exist before submitting
     let existingEtterlevelseId = ''
-    if(behandlingId && krav) {
+    if (behandlingId && krav) {
       const etterlevelseList = (await getEtterlevelserByBehandlingsIdKravNumber(behandlingId, krav.kravNummer)).content.filter((e) => e.kravVersjon === krav.kravVersjon)
-      if(etterlevelseList.length) {
+      if (etterlevelseList.length) {
         existingEtterlevelseId = etterlevelseList[0].id
         mutatedEtterlevelse.id = etterlevelseList[0].id
       }
