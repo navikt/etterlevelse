@@ -5,7 +5,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import no.nav.data.common.rest.PageParameters;
+import no.nav.data.common.rest.RestResponsePage;
+import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.statistikk.domain.BehandlingStatistikk;
+import no.nav.data.etterlevelse.statistikk.dto.KravStatistikkResponse;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,5 +33,14 @@ public class StatistikkController {
     public ResponseEntity<List<BehandlingStatistikk>>  getBehandlingStatistikk() {
         log.info("Get all behandling statistikk");
         return ResponseEntity.ok(service.getAllBehandlingStatistikk());
+    }
+
+    @Operation(summary = "Get Krav Statistics ")
+    @ApiResponse(description = "ok")
+    @GetMapping("/krav")
+    public ResponseEntity<RestResponsePage<KravStatistikkResponse>> getAllKravStatistics(PageParameters pageParameters) {
+        log.info("Get Krav Statistics");
+        Page<Krav> page = service.getAllKravStatistics(pageParameters.createPage());
+        return ResponseEntity.ok(new RestResponsePage<>(page).convert(service::toKravStatestikkResponse));
     }
 }
