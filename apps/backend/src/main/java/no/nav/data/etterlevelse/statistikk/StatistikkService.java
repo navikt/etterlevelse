@@ -148,7 +148,7 @@ public class StatistikkService {
 
     public KravStatistikkResponse toKravStatestikkResponse(Krav krav) {
         var regelverkResponse = StreamUtils.convert(krav.getRegelverk(), Regelverk::toResponse);
-        String temaName = String.valueOf(regelverkResponse.get(0).getLov().getData().get("tema"));
+        String temaName = regelverkResponse.get(0).getLov().getData().get("tema").textValue();
         var temaData = CodelistService.getCodelist(ListName.TEMA, String.valueOf(regelverkResponse.get(0).getLov().getData().get("tema")));
         if(temaData != null) {
             temaName = temaData.getShortName();
