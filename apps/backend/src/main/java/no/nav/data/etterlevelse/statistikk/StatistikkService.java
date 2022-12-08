@@ -150,9 +150,9 @@ public class StatistikkService {
         var regelverkResponse = StreamUtils.convert(krav.getRegelverk(), Regelverk::toResponse);
         String temaName = "Ingen";
         var temaData = CodelistService.getCodelist(ListName.TEMA, regelverkResponse.get(0).getLov().getData().get("tema").toString());
-                if(temaData != null && temaData.getShortName() != null) {
-                    temaName = temaData.getShortName();
-                }
+        if(temaData != null) {
+            temaName = regelverkResponse.get(0).getLov().getData().get("tema").toString();
+        }
         return KravStatistikkResponse.builder()
         .id(krav.getId())
         .lastModifedDate(krav.getChangeStamp().getLastModifiedDate())
