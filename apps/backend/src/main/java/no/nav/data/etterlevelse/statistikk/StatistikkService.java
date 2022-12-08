@@ -19,15 +19,15 @@ import no.nav.data.etterlevelse.krav.domain.dto.KravFilter;
 import no.nav.data.etterlevelse.statistikk.domain.BehandlingStatistikk;
 import no.nav.data.etterlevelse.statistikk.dto.KravStatistikkResponse;
 import no.nav.data.integration.team.teamcat.TeamcatTeamClient;
-import org.jetbrains.annotations.NotNull;
-import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.*;
-import java.util.function.Function;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
 
 import static no.nav.data.common.utils.StreamUtils.convert;
 
@@ -79,6 +79,8 @@ public class StatistikkService {
 
         List<Krav> aktivKravList = kravService.getByFilter(KravFilter.builder().status(List.of(KravStatus.AKTIV.name())).build());
         List<Behandling> behandlingList = behandlingService.getAllBehandlingWithBehandlingData();
+
+
         behandlingList.forEach(behandling -> {
             String behandlingNavn = "B" + behandling.getNummer() + " " + behandling.getNavn();
 
@@ -146,8 +148,12 @@ public class StatistikkService {
 
     public KravStatistikkResponse toKravStatestikkResponse(Krav krav) {
         var regelverkResponse = StreamUtils.convert(krav.getRegelverk(), Regelverk::toResponse);
-        var tema = CodelistService.getCodelist(ListName.TEMA, regelverkResponse.get(0).getLov().getData().get("tema").toString()).getShortName();
-        var response = KravStatistikkResponse.builder()
+        String temaName = "Ingen";
+        var temaData = CodelistService.getCodelist(ListName.TEMA, regelverkResponse.get(0).getLov().getData().get("tema").toString());
+                if(temaData != null && temaData.getShortName() != null) {
+                    temaName = temaData.getShortName();
+                }
+        return KravStatistikkResponse.builder()
         .id(krav.getId())
         .lastModifedDate(krav.getChangeStamp().getLastModifiedDate())
         .createdDate(krav.getChangeStamp().getCreatedDate())
@@ -163,9 +169,8 @@ public class StatistikkService {
         .relevansFor(CodelistService.getCodelistResponseList(ListName.RELEVANS, krav.getRelevansFor()))
         .status(krav.getStatus())
         .aktivertDato(krav.getAktivertDato())
-        .tema(tema)
+        .tema(temaName)
         .build();
-        return response;
     }
 
     public Page<Krav> getAllKravStatistics(Pageable page) {
