@@ -148,10 +148,12 @@ public class StatistikkService {
 
     public KravStatistikkResponse toKravStatestikkResponse(Krav krav) {
         var regelverkResponse = StreamUtils.convert(krav.getRegelverk(), Regelverk::toResponse);
-        String temaName = regelverkResponse.get(0).getLov().getData().get("tema").textValue();
-        var temaData = CodelistService.getCodelist(ListName.TEMA, regelverkResponse.get(0).getLov().getData().get("tema").textValue());
-        if(temaData != null) {
-            temaName = temaData.getShortName();
+        String temaName = "Ingen";
+        if(regelverkResponse.size() > 0) {
+            var temaData = CodelistService.getCodelist(ListName.TEMA, regelverkResponse.get(0).getLov().getData().get("tema").textValue());
+            if(temaData != null) {
+                temaName = temaData.getShortName();
+            }
         }
         return KravStatistikkResponse.builder()
         .id(krav.getId())
