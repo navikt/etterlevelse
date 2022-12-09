@@ -1,6 +1,7 @@
 package no.nav.data.etterlevelse.statistikk;
 
 import lombok.extern.slf4j.Slf4j;
+import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.common.utils.StreamUtils;
 import no.nav.data.etterlevelse.behandling.BehandlingService;
 import no.nav.data.etterlevelse.behandling.dto.Behandling;
@@ -20,6 +21,7 @@ import no.nav.data.etterlevelse.statistikk.domain.BehandlingStatistikk;
 import no.nav.data.etterlevelse.statistikk.dto.KravStatistikkResponse;
 import no.nav.data.integration.team.teamcat.TeamcatTeamClient;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -74,14 +76,15 @@ public class StatistikkService {
         return !etterlevelseList.isEmpty() ? etterlevelseList.get(etterlevelseList.size() - 1).getChangeStamp().getLastModifiedDate() : null;
     }
 
-    public List<BehandlingStatistikk> getAllBehandlingStatistikk() {
+    public Page<BehandlingStatistikk> getAllBehandlingStatistikk(Pageable page) {
         List<BehandlingStatistikk> behandlingStatistikkList = new ArrayList<>();
 
         List<Krav> aktivKravList = kravService.getByFilter(KravFilter.builder().status(List.of(KravStatus.AKTIV.name())).build());
-        List<Behandling> behandlingList = behandlingService.getAllBehandlingWithBehandlingData();
+
+        RestResponsePage<Behandling> behandlinger = behandlingService.getAll(page);
 
 
-        behandlingList.forEach(behandling -> {
+        behandlinger.getContent().forEach(behandling -> {
             String behandlingNavn = "B" + behandling.getNummer() + " " + behandling.getNavn();
 
             //Get all etterlevelse for behandling
@@ -142,8 +145,7 @@ public class StatistikkService {
             );
         });
 
-
-        return behandlingStatistikkList;
+        return new PageImpl<>(behandlingStatistikkList, page,behandlinger.getTotalElements());
     }
 
     public KravStatistikkResponse toKravStatestikkResponse(Krav krav) {
