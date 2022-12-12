@@ -337,7 +337,7 @@ export const EtterlevelseEditFields = ({
                           <>
                             <Button
                               type="button"
-                              kind="secondary"
+                              // kind="secondary"
                               marginRight
                               disabled={isSubmitting || disableEdit}
                               onClick={() => {
