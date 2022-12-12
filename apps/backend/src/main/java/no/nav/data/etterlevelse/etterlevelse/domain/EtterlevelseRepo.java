@@ -14,7 +14,7 @@ import java.util.UUID;
 public interface EtterlevelseRepo extends JpaRepository<GenericStorage, UUID> {
 
     @Override
-    @Query(value = "select * from generic_storage where type = 'Etterlevelse' order by data -> 'kravNummer', data -> 'kravVersjon'",
+    @Query(value = "select * from generic_storage where type = 'Etterlevelse'",
             countQuery = "select count(1) from generic_storage where type = 'Etterlevelse'",
             nativeQuery = true)
     Page<GenericStorage> findAll(Pageable pageable);
