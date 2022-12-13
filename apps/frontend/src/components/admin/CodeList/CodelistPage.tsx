@@ -5,7 +5,7 @@ import { Block } from 'baseui/block'
 import { KIND, SIZE as ButtonSize } from 'baseui/button'
 import { useNavigate, useParams } from 'react-router-dom'
 
-import {HeadingMedium, LabelLarge} from 'baseui/typography'
+import {HeadingXXLarge} from 'baseui/typography'
 import { Spinner } from 'baseui/spinner'
 import Button from '../../common/Button'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
@@ -69,7 +69,7 @@ const CodeListPage = () => {
         <meta charSet="utf-8" />
         <title>{listname ? listname : 'Velg kodeverk'} </title>
       </Helmet>
-      <HeadingMedium>Administrering av kodeverk</HeadingMedium>
+      <HeadingXXLarge>Administrering av kodeverk</HeadingXXLarge>
       {loading ? (
         <Spinner $color={ettlevColors.green400} />
       ) : (
