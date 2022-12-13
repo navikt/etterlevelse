@@ -88,7 +88,7 @@ const KriterieList = ({ p, setIsFormDirty }: { p: FieldArrayRenderProps; setIsFo
                             console.log('remove' + i)
                             p.remove(i)
                           }}
-                          dragHandleProps={dprov.dragHandleProps}
+                          dragHandleProps={dprov.dragHandleProps ? dprov.dragHandleProps : undefined}
                           isDragging={dsnap.isDragging}
                           p={p}
                           setIsFormDirty={setIsFormDirty}
