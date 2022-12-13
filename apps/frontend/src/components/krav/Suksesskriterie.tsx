@@ -2,7 +2,7 @@ import { Suksesskriterie } from '../../constants'
 import { Block } from 'baseui/block'
 import { Card } from 'baseui/card'
 import { theme } from '../../util'
-import { HeadingMedium, HeadingXLarge } from 'baseui/typography'
+import { HeadingMedium, HeadingXLarge, LabelLarge } from 'baseui/typography'
 import { Markdown } from '../common/Markdown'
 import { borderRadius, borderWidth, marginAll } from '../common/Style'
 import { ettlevColors, pageWidth } from '../../util/theme'
@@ -28,9 +28,9 @@ export const SuksesskriterieCard = (props: { suksesskriterie: Suksesskriterie; n
           },
         }}
       >
-        <HeadingMedium color={ettlevColors.green600}>
+        <LabelLarge color={ettlevColors.green600}>
           Suksesskriterium {num} av {totalt}
-        </HeadingMedium>
+        </LabelLarge>
         <HeadingXLarge>{suksesskriterie.navn}</HeadingXLarge>
         <Markdown source={suksesskriterie.beskrivelse} maxWidth="650px" />
       </Card>
