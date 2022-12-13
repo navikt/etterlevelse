@@ -5,7 +5,7 @@ import { Block } from 'baseui/block'
 import { KIND, SIZE as ButtonSize } from 'baseui/button'
 import { useNavigate, useParams } from 'react-router-dom'
 
-import { HeadingMedium } from 'baseui/typography'
+import {HeadingMedium, LabelLarge} from 'baseui/typography'
 import { Spinner } from 'baseui/spinner'
 import Button from '../../common/Button'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
@@ -57,14 +57,17 @@ const CodeListPage = () => {
   }, [listname, lists])
 
   if (!user.isAdmin() || !lists) {
-    return <Spinner $color={ettlevColors.green400} $size={theme.sizing.scale2400} />
+    return (
+    <Block overrides={{ Block: { props: { role: 'main' } } }}>
+      <Spinner $color={ettlevColors.green400} $size={theme.sizing.scale2400} />
+    </Block>)
   }
 
   return (
-    <Block width={responsiveWidthSmall} paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall}>
+    <Block overrides={{ Block: { props: { role: 'main' } } }} width={responsiveWidthSmall} paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall}>
       <Helmet>
         <meta charSet="utf-8" />
-        <title>{listname ? listname : ''} </title>
+        <title>{listname ? listname : 'Velg kodeverk'} </title>
       </Helmet>
       <HeadingMedium>Administrering av kodeverk</HeadingMedium>
       {loading ? (
@@ -72,7 +75,9 @@ const CodeListPage = () => {
       ) : (
         <Block display="flex" justifyContent="space-between" width="100%">
           <Block width="600px">
+
             <StatefulSelect
+              aria-label={'Velg kodeverk'}
               options={codelist.makeIdLabelForAllCodeLists()}
               onChange={({ value }) => setListname(value[0].id as string)}
               clearable={false}

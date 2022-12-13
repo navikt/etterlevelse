@@ -41,7 +41,7 @@ const AppRoutes = (): JSX.Element => {
         <Route path="/krav/:id" element={<KravPage />} caseSensitive={true} />
         <Route path="/krav/:kravNummer/:kravVersjon" element={<KravPage />} caseSensitive={true} />
 
-        <Route path="/etterlevelse" element={<EtterlevelseListPage />} caseSensitive={true} />
+        <Route path="/etterlevelse" element={<PrivateRoute component={<EtterlevelseListPage />} adminPage />} caseSensitive={true} />
         <Route path="/etterlevelse/:id" element={<EtterlevelsePage />} caseSensitive={true} />
 
         <Route path="/behandling/:id/:tema/:filter/krav/:kravNummer/:kravVersjon" element={<PrivateRoute component={<EtterlevelseDokumentasjonPage />} />} caseSensitive={true} />
@@ -53,11 +53,11 @@ const AppRoutes = (): JSX.Element => {
         <Route path="/behandlinger/:tab" element={<MyBehandlingerPage />} caseSensitive={true} />
         <Route path="/behandlinger/" element={<MyBehandlingerPage />} caseSensitive={true} />
 
-        <Route path="/relevans/:relevans" element={<RelevansPage />} caseSensitive={true} />
-        <Route path="/relevans/" element={<RelevansPage />} caseSensitive={true} />
+        <Route path="/relevans/:relevans" element={<PrivateRoute component={<RelevansPage />} adminPage />} caseSensitive={true} />
+        <Route path="/relevans/" element={<PrivateRoute component={<RelevansPage />} adminPage />}  caseSensitive={true} />
 
-        <Route path="/underavdeling/:underavdeling" element={<UnderavdelingPage />} caseSensitive={true} />
-        <Route path="/underavdeling/" element={<UnderavdelingPage />} caseSensitive={true} />
+        <Route path="/underavdeling/:underavdeling" element={<PrivateRoute component={<UnderavdelingPage />} adminPage />} caseSensitive={true} />
+        <Route path="/underavdeling/"  element={<PrivateRoute component={<UnderavdelingPage />} adminPage />} caseSensitive={true} />
 
         <Route path="/lov/:lov" element={<LovPage />} caseSensitive={true} />
         <Route path="/lov/" element={<LovPage />} caseSensitive={true} />
