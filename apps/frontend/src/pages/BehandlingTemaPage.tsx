@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Block } from 'baseui/block'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
-import { HeadingMedium, ParagraphMedium } from 'baseui/typography'
+import { HeadingLarge, HeadingMedium, HeadingXLarge, ParagraphMedium } from 'baseui/typography'
 import { ettlevColors } from '../util/theme'
 import { codelist, ListName, TemaCode } from '../services/Codelist'
 import { useBehandling } from '../api/BehandlingApi'
@@ -222,7 +222,7 @@ export const BehandlingTemaPage = () => {
                     kravList={getKravData(kravRelevans[0].id)}
                     EmptyMessage={
                       <Block>
-                        <HeadingMedium
+                        <HeadingXLarge
                           maxWidth={'600px'}
                           $style={{
                             fontStyle: 'italic',
@@ -230,7 +230,7 @@ export const BehandlingTemaPage = () => {
                         >
                           {kravRelevans[0].id === 'relevanteKrav' ? 'Dere har filtrert bort alle krav for ' : 'Dere har ingen bortfiltrerte krav for '}
                           {temaData?.shortName}
-                        </HeadingMedium>
+                        </HeadingXLarge>
                         <ParagraphMedium
                           maxWidth={'600px'}
                           $style={{
