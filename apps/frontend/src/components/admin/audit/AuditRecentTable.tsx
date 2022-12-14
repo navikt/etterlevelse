@@ -1,30 +1,30 @@
-import { LabelLarge, LabelSmall } from 'baseui/typography'
-import React, { useEffect, useState } from 'react'
+import {LabelLarge, LabelSmall} from 'baseui/typography'
+import React, {useEffect, useState} from 'react'
 import moment from 'moment'
-import { Pagination } from 'baseui/pagination'
-import { TriangleDown } from 'baseui/icon'
-import { Button, KIND } from 'baseui/button'
-import { PLACEMENT, StatefulPopover } from 'baseui/popover'
-import { StatefulMenu } from 'baseui/menu'
-import { Block } from 'baseui/block'
-import { StatefulTooltip } from 'baseui/tooltip'
-import { AuditButton } from './AuditButton'
-import { faBinoculars, faCode } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { AuditActionIcon } from './AuditComponents'
-import { emptyPage, PageResponse } from '../../../constants'
-import { AuditItem, ObjectType } from './AuditTypes'
-import { intl } from '../../../util/intl/intl'
-import { getAudits } from './AuditApi'
-import { Cell, Row, Table } from '../../common/Table'
+import {Pagination} from 'baseui/pagination'
+import {TriangleDown} from 'baseui/icon'
+import {Button, KIND} from 'baseui/button'
+import {PLACEMENT, StatefulPopover} from 'baseui/popover'
+import {StatefulMenu} from 'baseui/menu'
+import {Block} from 'baseui/block'
+import {StatefulTooltip} from 'baseui/tooltip'
+import {AuditButton} from './AuditButton'
+import {faBinoculars, faCode} from '@fortawesome/free-solid-svg-icons'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {AuditActionIcon} from './AuditComponents'
+import {emptyPage, PageResponse} from '../../../constants'
+import {AuditItem, ObjectType} from './AuditTypes'
+import {intl} from '../../../util/intl/intl'
+import {getAudits} from './AuditApi'
+import {Cell, Row, Table} from '../../common/Table'
 import * as _ from 'lodash'
 import randomColor from 'randomcolor'
-import { theme } from '../../../util'
+import {theme} from '../../../util'
 import ReactJson from 'react-json-view'
-import { ObjectLink } from '../../common/RouteLink'
-import { CustomizedStatefulSelect } from '../../common/CustomizedSelect'
-import { buttonContentStyle } from '../../common/Button'
-import { ampli } from '../../../services/Amplitude'
+import {ObjectLink} from '../../common/RouteLink'
+import {CustomizedStatefulSelect} from '../../common/CustomizedSelect'
+import {buttonContentStyle} from '../../common/Button'
+import {ampli} from '../../../services/Amplitude'
 
 export const AuditRecentTable = (props: { show: boolean; tableType?: ObjectType }) => {
   const [audits, setAudits] = useState<PageResponse<AuditItem>>(emptyPage)
@@ -77,7 +77,7 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: ObjectType 
             <LabelSmall alignSelf="center" marginRight=".5rem">
               {intl.table}:{' '}
             </LabelSmall>
-            <CustomizedStatefulSelect size="compact" options={tableOptions} onChange={(p) => setTable(p?.value[0]?.id as ObjectType)} />
+            <CustomizedStatefulSelect size="compact" options={tableOptions} onChange={(p) => setTable(p?.value[0]?.id as ObjectType)} aria-label={"Velg type for versjonering"}/>
           </Block>
         )}
       </Block>
@@ -116,6 +116,7 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: ObjectType 
                         size="compact"
                         shape="round"
                         kind="tertiary"
+                        aria-label={"Gå til ID"}
                         overrides={{
                           BaseButton: {
                             style: {
@@ -137,6 +138,7 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: ObjectType 
                         size="compact"
                         shape="round"
                         kind="tertiary"
+                        aria-label={"Vis kode"}
                         overrides={{
                           BaseButton: {
                             style: {

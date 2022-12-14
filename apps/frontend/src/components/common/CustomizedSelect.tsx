@@ -1,8 +1,8 @@
-import { Select, SelectOverrides, SelectProps, StatefulSelect, StatefulSelectProps } from 'baseui/select'
+import {Select, SelectOverrides, SelectProps, StatefulSelect, StatefulSelectProps} from 'baseui/select'
 import _ from 'lodash'
-import { ettlevColors } from '../../util/theme'
-import { navChevronDownIcon } from '../Images'
-import { borderWidth } from './Style'
+import {ettlevColors} from '../../util/theme'
+import {navChevronDownIcon} from '../Images'
+import {borderWidth} from './Style'
 
 const customOverrides: SelectOverrides = {
   ControlContainer: {
@@ -29,7 +29,7 @@ const customOverrides: SelectOverrides = {
 export const CustomizedStatefulSelect = (props: StatefulSelectProps) => {
   const overrides = _.merge(customOverrides, props.overrides)
 
-  return <StatefulSelect {...props} overrides={overrides} />
+  return <StatefulSelect {...props} overrides={overrides}/>
 }
 
 export const CustomizedSelect = (props: SelectProps) => {
