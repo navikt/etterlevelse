@@ -15,9 +15,10 @@ export const AuditButton = (props: {
   marginLeft?: boolean
   marginRight?: boolean
   children?: any
+  ariaLabel?: string
 }) => {
   return user.isAdmin() ? (
-    <RouteLink fontColor={props.fontColor} href={`/admin/audit/${props.id}` + (props.auditId ? `/${props.auditId}` : '')}>
+    <RouteLink ariaLabel={props.ariaLabel?props.ariaLabel:undefined} fontColor={props.fontColor} href={`/admin/audit/${props.id}` + (props.auditId ? `/${props.auditId}` : '')}>
       {props.children ? (
         props.children
       ) : (

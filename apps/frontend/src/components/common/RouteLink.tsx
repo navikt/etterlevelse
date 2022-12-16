@@ -1,16 +1,16 @@
-import { useLocation, useNavigate } from 'react-router-dom'
-import React, { useState } from 'react'
-import { AuditItem, NavigableItem, ObjectType } from '../admin/audit/AuditTypes'
-import { Block } from 'baseui/block'
-import { AuditButton } from '../admin/audit/AuditButton'
-import { KIND } from 'baseui/button'
-import { ListName } from '../../services/Codelist'
+import {useLocation, useNavigate} from 'react-router-dom'
+import React from 'react'
+import {AuditItem, NavigableItem, ObjectType} from '../admin/audit/AuditTypes'
+import {Block} from 'baseui/block'
+import {AuditButton} from '../admin/audit/AuditButton'
+import {KIND} from 'baseui/button'
+import {ListName} from '../../services/Codelist'
 import CustomizedLink from './CustomizedLink'
 import _ from 'lodash'
-import { user } from '../../services/User'
-import { loginUrl } from '../Header'
-import { ettlevColors } from '../../util/theme'
-import { externalLinkIcon } from '../Images'
+import {user} from '../../services/User'
+import {loginUrl} from '../Header'
+import {ettlevColors} from '../../util/theme'
+import {externalLinkIcon} from '../Images'
 
 type RouteLinkProps = {
   href?: string
@@ -18,10 +18,11 @@ type RouteLinkProps = {
   plain?: boolean
   requireLogin?: boolean
   fontColor?: string
+  ariaLabel?: string
 } & any
 
 const RouteLink = (props: RouteLinkProps) => {
-  const { hideUnderline, plain, requireLogin, style, fontColor, ...restprops } = props
+  const { hideUnderline, plain, requireLogin, style, fontColor, ariaLabel, ...restprops } = props
   const navigate = useNavigate()
   const location = useLocation()
 
@@ -46,7 +47,7 @@ const RouteLink = (props: RouteLinkProps) => {
 
   const href = !requireLogin || user.isLoggedIn() ? restprops.href : loginUrl(location, restprops.href)
 
-  return <CustomizedLink style={mergedStyle} {...restprops} href={href} onClick={onClick} />
+  return <CustomizedLink aria-label={ariaLabel} style={mergedStyle} {...restprops} href={href} onClick={onClick} />
 }
 
 export default RouteLink

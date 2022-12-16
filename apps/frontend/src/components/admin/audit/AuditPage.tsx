@@ -2,7 +2,7 @@ import {Block} from 'baseui/block'
 import React, {useEffect, useState} from 'react'
 import {useNavigate, useParams} from 'react-router-dom'
 import _ from 'lodash'
-import {HeadingMedium, ParagraphMedium} from 'baseui/typography'
+import {HeadingXXLarge, ParagraphMedium} from 'baseui/typography'
 import {AuditLog} from './AuditTypes'
 import {getAuditLog} from './AuditApi'
 import {AuditView} from './AuditView'
@@ -53,13 +53,12 @@ export const AuditPage = () => {
   useEffect(() => lookupVersion(idSearch), [idSearch])
 
   return (
-    <Block width={responsiveWidthSmall} paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall}>
-      <main>
+    <Block width={responsiveWidthSmall} paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall} overrides={{ Block: { props: { role: "main" } } }}>
         <Helmet>
           <meta charSet="utf-8"/>
           <title>Versjonering</title>
         </Helmet>
-        <HeadingMedium>{intl.audit}</HeadingMedium>
+        <HeadingXXLarge>{intl.audit}</HeadingXXLarge>
         <Block marginBottom="1rem">
           <AuditLabel label={intl.searchId}>
             <CustomInput
@@ -75,7 +74,6 @@ export const AuditPage = () => {
         {error && <ParagraphMedium>{_.escape(error)}</ParagraphMedium>}
         {idInput && <AuditView auditLog={auditLog} auditId={params.auditId} loading={loading} viewId={lookupVersion}/>}
         <AuditRecentTable show={!idInput}/>
-      </main>
     </Block>
   )
 }

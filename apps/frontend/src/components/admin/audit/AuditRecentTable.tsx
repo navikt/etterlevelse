@@ -94,7 +94,7 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: ObjectType 
               <Row key={audit.id}>
                 <Cell $style={{ maxWidth: '13%' }}>
                   <Block marginRight={theme.sizing.scale400}>{rowNum}</Block>
-                  <AuditButton kind="tertiary" id={audit.tableId} auditId={audit.id}>
+                  <AuditButton kind="tertiary" id={audit.tableId} auditId={audit.id} ariaLabel={`Vis versjonering for ${audit.id}`}>
                     <StatefulTooltip content={audit.time} placement={PLACEMENT.top}>
                       {moment(audit.time).fromNow()}
                     </StatefulTooltip>
@@ -105,7 +105,7 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: ObjectType 
                 </Cell>
                 <Cell>
                   <StatefulTooltip content={audit.tableId} placement={PLACEMENT.top}>
-                    <Block color={colors[audit.tableId]}>{_.truncate(audit.tableId, { length })}</Block>
+                    <Block>{_.truncate(audit.tableId, { length })}</Block>
                   </StatefulTooltip>
                 </Cell>
                 <Cell $style={{ display: 'flex', justifyContent: 'space-between' }}>
