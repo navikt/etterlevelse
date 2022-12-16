@@ -144,7 +144,7 @@ export const BehandlingPage = () => {
             </Block>
           ) : (
             <LabelSmall marginTop="0px" marginBottom="0px" marginRight="5px" $style={{ fontSize: '16px' }}>
-              Behandlingen skal etterleve krav for:
+              Aktive Krav:
             </LabelSmall>
           )}
 
@@ -152,7 +152,7 @@ export const BehandlingPage = () => {
         </Block>
         <Block display="flex" flex="1" justifyContent="flex-end" $style={{ whiteSpace: 'nowrap' }}>
           <Button onClick={() => setEdit(!edit)} startEnhancer={<img src={editIcon} alt="edit icon" />}>
-            Tilpass egenskaper
+            Filtrer Krav
           </Button>
         </Block>
       </Block>
