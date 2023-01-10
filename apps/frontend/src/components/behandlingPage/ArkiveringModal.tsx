@@ -22,11 +22,26 @@ export const ArkiveringModal = ({ arkivModal, setArkivModal, behandlingsId, ette
   const getStatustext = (etterlevelseArkivStatus: EtterlevelseArkivStatus) => {
     switch (etterlevelseArkivStatus) {
       case EtterlevelseArkivStatus.TIL_ARKIVERING:
-        return `Bestilt: ${moment(etterlevelseArkiv?.tilArkiveringDato).format('lll')}`
+        return (<>
+          <Block>
+          Bestilt: {moment(etterlevelseArkiv?.tilArkiveringDato).format('lll')}
+          </Block>
+          <Block>
+          Arkivert av: {etterlevelseArkiv?.changeStamp.lastModifiedBy.split('-')[1]}
+          </Block>
+        </>  )
       case EtterlevelseArkivStatus.ARKIVERT:
-        return `Sist arkivert: ${moment(etterlevelseArkiv?.arkiveringDato).format('lll')}`
+        return (<>
+          <Block>
+          Sist arkivert: {moment(etterlevelseArkiv?.arkiveringDato).format('lll')}
+          </Block>
+      
+          <Block>
+          Arkivert av: {etterlevelseArkiv?.changeStamp.lastModifiedBy.split('-')[1]}
+          </Block>
+        </>  )
       case EtterlevelseArkivStatus.BEHANDLER_ARKIVERING:
-        return 'Arkivering er under behandling, prøv igien om en time.'
+        return 'Arkivering er under behandling.'
       case EtterlevelseArkivStatus.ERROR:
         return 'Det oppstod en feil ved forrige arkivering, vi er på saken. Ta kontakt i #etterlevelse på Slack hvis du lurer på noe.'
       default:
