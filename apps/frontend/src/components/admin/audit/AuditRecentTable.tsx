@@ -77,7 +77,18 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: ObjectType 
             <LabelSmall alignSelf="center" marginRight=".5rem">
               {intl.table}:{' '}
             </LabelSmall>
-            <CustomizedStatefulSelect size="compact" options={tableOptions} onChange={(p) => setTable(p?.value[0]?.id as ObjectType)} aria-label={'Velg type for versjonering'} />
+            <CustomizedStatefulSelect
+              size="compact"
+              options={tableOptions}
+              onChange={(p) => {
+                if (p?.value[0]?.id === 'Codelist') {
+                  setTable(p?.value[0]?.id.toUpperCase() as ObjectType)
+                } else {
+                  setTable(p?.value[0]?.id as ObjectType)
+                }
+              }}
+              aria-label={'Velg type for versjonering'}
+            />
           </Block>
         )}
       </Block>
