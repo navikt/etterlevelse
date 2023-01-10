@@ -90,7 +90,7 @@ export const MainPage = () => {
               height={cardHeight}
               width={cardWidth}
               verticalMargin={theme.sizing.scale300}
-              href={'/status'}
+              href={'//metabase.intern.nav.no/dashboard/116-dashboard-for-etterlevelse'}
               tittel={'Status i organisasjonen'}
               icon={pageWidth && pageWidth >= 768 ? grafIconBg : grafIconBgSmall}
               beskrivelse={'Følg med på status og se hvor godt NAV sine produktområder  dokumenterer på kravene'}
