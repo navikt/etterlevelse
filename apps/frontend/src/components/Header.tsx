@@ -292,15 +292,10 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
   }
   return (
     <Block width="100%" backgroundColor={ettlevColors.white}>
-      <Block overrides={{ Block: { props: { role: 'banner'} } }} width="100%" display="flex" backgroundColor={ettlevColors.white} justifyContent="center">
+      <Block overrides={{ Block: { props: { role: 'banner' } } }} width="100%" display="flex" backgroundColor={ettlevColors.white} justifyContent="center">
         <SkipToContent />
         <Block width="100%" maxWidth={maxPageWidth}>
-          <Block
-            paddingLeft={responsivePaddingSmall}
-            paddingRight={responsivePaddingSmall}
-            width={responsiveWidthSmall}
-            height="76px"
-          >
+          <Block paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall} width={responsiveWidthSmall} height="76px">
             <StyledLink href="#main" aria-label="main link" />
             <HeaderNavigation {...headerNavigationProps}>
               <NavigationList $align={ALIGN.left} $style={{ paddingLeft: 0 }}>

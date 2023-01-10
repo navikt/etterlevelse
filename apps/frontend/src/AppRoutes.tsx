@@ -54,10 +54,10 @@ const AppRoutes = (): JSX.Element => {
         <Route path="/behandlinger/" element={<MyBehandlingerPage />} caseSensitive={true} />
 
         <Route path="/relevans/:relevans" element={<PrivateRoute component={<RelevansPage />} adminPage />} caseSensitive={true} />
-        <Route path="/relevans/" element={<PrivateRoute component={<RelevansPage />} adminPage />}  caseSensitive={true} />
+        <Route path="/relevans/" element={<PrivateRoute component={<RelevansPage />} adminPage />} caseSensitive={true} />
 
         <Route path="/underavdeling/:underavdeling" element={<PrivateRoute component={<UnderavdelingPage />} adminPage />} caseSensitive={true} />
-        <Route path="/underavdeling/"  element={<PrivateRoute component={<UnderavdelingPage />} adminPage />} caseSensitive={true} />
+        <Route path="/underavdeling/" element={<PrivateRoute component={<UnderavdelingPage />} adminPage />} caseSensitive={true} />
 
         <Route path="/lov/:lov" element={<LovPage />} caseSensitive={true} />
         <Route path="/lov/" element={<LovPage />} caseSensitive={true} />

@@ -1,11 +1,11 @@
-import {KIND, SIZE as ButtonSize} from 'baseui/button'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faHistory} from '@fortawesome/free-solid-svg-icons'
+import { KIND, SIZE as ButtonSize } from 'baseui/button'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faHistory } from '@fortawesome/free-solid-svg-icons'
 import React from 'react'
-import {user} from '../../../services/User'
+import { user } from '../../../services/User'
 import RouteLink from '../../common/RouteLink'
 import Button from '../../common/Button'
-import {intl} from '../../../util/intl/intl'
+import { intl } from '../../../util/intl/intl'
 
 export const AuditButton = (props: {
   id: string
@@ -18,7 +18,7 @@ export const AuditButton = (props: {
   ariaLabel?: string
 }) => {
   return user.isAdmin() ? (
-    <RouteLink ariaLabel={props.ariaLabel?props.ariaLabel:undefined} fontColor={props.fontColor} href={`/admin/audit/${props.id}` + (props.auditId ? `/${props.auditId}` : '')}>
+    <RouteLink ariaLabel={props.ariaLabel ? props.ariaLabel : undefined} fontColor={props.fontColor} href={`/admin/audit/${props.id}` + (props.auditId ? `/${props.auditId}` : '')}>
       {props.children ? (
         props.children
       ) : (
@@ -29,7 +29,7 @@ export const AuditButton = (props: {
             marginRight={props.marginRight}
             size={ButtonSize.compact}
             kind={props.kind || 'outline'}
-            label={"Versjonering"}
+            label={'Versjonering'}
           >
             <FontAwesomeIcon icon={faHistory} />
           </Button>

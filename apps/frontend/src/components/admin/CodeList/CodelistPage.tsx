@@ -5,7 +5,7 @@ import { Block } from 'baseui/block'
 import { KIND, SIZE as ButtonSize } from 'baseui/button'
 import { useNavigate, useParams } from 'react-router-dom'
 
-import {HeadingXXLarge} from 'baseui/typography'
+import { HeadingXXLarge } from 'baseui/typography'
 import { Spinner } from 'baseui/spinner'
 import Button from '../../common/Button'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
@@ -58,9 +58,10 @@ const CodeListPage = () => {
 
   if (!user.isAdmin() || !lists) {
     return (
-    <Block overrides={{ Block: { props: { role: 'main' } } }}>
-      <Spinner $color={ettlevColors.green400} $size={theme.sizing.scale2400} />
-    </Block>)
+      <Block overrides={{ Block: { props: { role: 'main' } } }}>
+        <Spinner $color={ettlevColors.green400} $size={theme.sizing.scale2400} />
+      </Block>
+    )
   }
 
   return (
@@ -75,7 +76,6 @@ const CodeListPage = () => {
       ) : (
         <Block display="flex" justifyContent="space-between" width="100%">
           <Block width="600px">
-
             <StatefulSelect
               aria-label={'Velg kodeverk'}
               options={codelist.makeIdLabelForAllCodeLists()}

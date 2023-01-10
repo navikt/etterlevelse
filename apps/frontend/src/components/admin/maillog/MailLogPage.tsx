@@ -1,22 +1,22 @@
-import React, {useEffect, useState} from 'react'
-import {HeadingXXLarge, LabelLarge} from 'baseui/typography'
-import {intl} from '../../../util/intl/intl'
+import React, { useEffect, useState } from 'react'
+import { HeadingXXLarge, LabelLarge } from 'baseui/typography'
+import { intl } from '../../../util/intl/intl'
 import axios from 'axios'
-import {env} from '../../../util/env'
-import {PageResponse} from '../../../constants'
-import {Block} from 'baseui/block'
-import {Card} from 'baseui/card'
+import { env } from '../../../util/env'
+import { PageResponse } from '../../../constants'
+import { Block } from 'baseui/block'
+import { Card } from 'baseui/card'
 import moment from 'moment'
-import {theme} from '../../../util'
-import {PLACEMENT, StatefulPopover} from 'baseui/popover'
-import {StatefulMenu} from 'baseui/menu'
-import {Button, KIND} from 'baseui/button'
-import {TriangleDown} from 'baseui/icon'
-import {Pagination} from 'baseui/pagination'
-import {Markdown} from '../../common/Markdown'
-import {responsivePaddingSmall, responsiveWidthSmall} from '../../../util/theme'
-import {Helmet} from 'react-helmet'
-import {buttonContentStyle} from '../../common/Button'
+import { theme } from '../../../util'
+import { PLACEMENT, StatefulPopover } from 'baseui/popover'
+import { StatefulMenu } from 'baseui/menu'
+import { Button, KIND } from 'baseui/button'
+import { TriangleDown } from 'baseui/icon'
+import { Pagination } from 'baseui/pagination'
+import { Markdown } from '../../common/Markdown'
+import { responsivePaddingSmall, responsiveWidthSmall } from '../../../util/theme'
+import { Helmet } from 'react-helmet'
+import { buttonContentStyle } from '../../common/Button'
 
 interface MailLog {
   time: string
@@ -30,7 +30,7 @@ const getMailLog = async (start: number, count: number) => {
 }
 
 export const MailLogPage = () => {
-  const [log, setLog] = useState<PageResponse<MailLog>>({content: [], numberOfElements: 0, pageNumber: 0, pages: 0, pageSize: 1, totalElements: 0})
+  const [log, setLog] = useState<PageResponse<MailLog>>({ content: [], numberOfElements: 0, pageNumber: 0, pages: 0, pageSize: 1, totalElements: 0 })
   const [page, setPage] = useState(1)
   const [limit, setLimit] = useState(20)
 
@@ -56,9 +56,9 @@ export const MailLogPage = () => {
   }, [limit, log.totalElements])
 
   return (
-    <Block width={responsiveWidthSmall} paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall} overrides={{Block: {props: {role: "main"}}}}>
+    <Block width={responsiveWidthSmall} paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall} overrides={{ Block: { props: { role: 'main' } } }}>
       <Helmet>
-        <meta charSet="utf-8"/>
+        <meta charSet="utf-8" />
         <title>Tilbakemeldings log</title>
       </Helmet>
       <HeadingXXLarge>{intl.mailLog}</HeadingXXLarge>
@@ -82,7 +82,7 @@ export const MailLogPage = () => {
               Emne: {l.subject}
             </LabelLarge>
             <Card>
-              <Markdown source={html} escapeHtml={false}/>
+              <Markdown source={html} escapeHtml={false} />
             </Card>
           </Block>
         )
@@ -90,16 +90,16 @@ export const MailLogPage = () => {
 
       <Block display="flex" justifyContent="space-between" marginTop="1rem">
         <StatefulPopover
-          content={({close}) => (
+          content={({ close }) => (
             <StatefulMenu
-              items={[5, 10, 20, 50, 100].map((i) => ({label: i}))}
-              onItemSelect={({item}) => {
+              items={[5, 10, 20, 50, 100].map((i) => ({ label: i }))}
+              onItemSelect={({ item }) => {
                 setLimit(item.label)
                 close()
               }}
               overrides={{
                 List: {
-                  style: {height: '150px', width: '100px'},
+                  style: { height: '150px', width: '100px' },
                 },
               }}
             />
@@ -123,8 +123,8 @@ export const MailLogPage = () => {
         <Pagination
           currentPage={page}
           numPages={log.pages}
-          onPageChange={({nextPage}) => handlePageChange(nextPage)}
-          labels={{nextButton: intl.nextButton, prevButton: intl.prevButton}}
+          onPageChange={({ nextPage }) => handlePageChange(nextPage)}
+          labels={{ nextButton: intl.nextButton, prevButton: intl.prevButton }}
         />
       </Block>
     </Block>

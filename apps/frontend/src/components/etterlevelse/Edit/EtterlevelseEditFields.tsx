@@ -5,8 +5,8 @@ import { Block } from 'baseui/block'
 import Button from '../../common/Button'
 import React, { useEffect } from 'react'
 
-import {HeadingLarge, HeadingXLarge, LabelSmall, ParagraphMedium, ParagraphXSmall} from 'baseui/typography'
-import {ettlevColors, responsivePaddingInnerPage, responsiveWidthInnerPage, theme} from '../../../util/theme'
+import { HeadingLarge, HeadingXLarge, LabelSmall, ParagraphMedium, ParagraphXSmall } from 'baseui/typography'
+import { ettlevColors, responsivePaddingInnerPage, responsiveWidthInnerPage, theme } from '../../../util/theme'
 import { SuksesskriterierBegrunnelseEdit } from './SuksesskriterieBegrunnelseEdit'
 import { KIND as NKIND, Notification } from 'baseui/notification'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -194,11 +194,13 @@ export const EtterlevelseEditFields = ({
                           {/*  <Block />*/}
                           {/*</CustomizedPanel>*/}
                           <CustomizedPanel
-                            title= {(<Block>
-                              <HeadingXLarge marginTop={theme.sizing.scale100} marginBottom={theme.sizing.scale100} color={ettlevColors.green600}>
-                                Lenker og annen informasjon om kravet
-                              </HeadingXLarge>
-                            </Block>)}
+                            title={
+                              <Block>
+                                <HeadingXLarge marginTop={theme.sizing.scale100} marginBottom={theme.sizing.scale100} color={ettlevColors.green600}>
+                                  Lenker og annen informasjon om kravet
+                                </HeadingXLarge>
+                              </Block>
+                            }
                             overrides={{ Content: { style: { backgroundColor: ettlevColors.white, paddingLeft: '20px', paddingRight: '20px' } } }}
                           >
                             <Block width="100%" height="1px" backgroundColor="#E3E3E3" />

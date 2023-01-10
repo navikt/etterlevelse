@@ -1,18 +1,18 @@
-import {Block} from 'baseui/block'
-import React, {useEffect, useState} from 'react'
-import {useNavigate, useParams} from 'react-router-dom'
+import { Block } from 'baseui/block'
+import React, { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 import _ from 'lodash'
-import {HeadingXXLarge, ParagraphMedium} from 'baseui/typography'
-import {AuditLog} from './AuditTypes'
-import {getAuditLog} from './AuditApi'
-import {AuditView} from './AuditView'
-import {AuditRecentTable} from './AuditRecentTable'
-import {AuditLabel} from './AuditComponents'
-import {useDebouncedState} from '../../../util/hooks'
-import {intl} from '../../../util/intl/intl'
+import { HeadingXXLarge, ParagraphMedium } from 'baseui/typography'
+import { AuditLog } from './AuditTypes'
+import { getAuditLog } from './AuditApi'
+import { AuditView } from './AuditView'
+import { AuditRecentTable } from './AuditRecentTable'
+import { AuditLabel } from './AuditComponents'
+import { useDebouncedState } from '../../../util/hooks'
+import { intl } from '../../../util/intl/intl'
 import CustomInput from '../../common/CustomizedInput'
-import {responsivePaddingSmall, responsiveWidthSmall} from '../../../util/theme'
-import {Helmet} from 'react-helmet'
+import { responsivePaddingSmall, responsiveWidthSmall } from '../../../util/theme'
+import { Helmet } from 'react-helmet'
 
 const format = (id: string) => _.trim(id, '"')
 
@@ -53,27 +53,27 @@ export const AuditPage = () => {
   useEffect(() => lookupVersion(idSearch), [idSearch])
 
   return (
-    <Block width={responsiveWidthSmall} paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall} overrides={{ Block: { props: { role: "main" } } }}>
-        <Helmet>
-          <meta charSet="utf-8"/>
-          <title>Versjonering</title>
-        </Helmet>
-        <HeadingXXLarge>{intl.audit}</HeadingXXLarge>
-        <Block marginBottom="1rem">
-          <AuditLabel label={intl.searchId}>
-            <CustomInput
-              size="compact"
-              value={idInput}
-              overrides={{Input: {style: {width: '300px'}}}}
-              placeholder={intl.id}
-              onChange={(e) => setIdInput(format((e.target as HTMLInputElement).value))}
-            />
-          </AuditLabel>
-        </Block>
+    <Block width={responsiveWidthSmall} paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall} overrides={{ Block: { props: { role: 'main' } } }}>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Versjonering</title>
+      </Helmet>
+      <HeadingXXLarge>{intl.audit}</HeadingXXLarge>
+      <Block marginBottom="1rem">
+        <AuditLabel label={intl.searchId}>
+          <CustomInput
+            size="compact"
+            value={idInput}
+            overrides={{ Input: { style: { width: '300px' } } }}
+            placeholder={intl.id}
+            onChange={(e) => setIdInput(format((e.target as HTMLInputElement).value))}
+          />
+        </AuditLabel>
+      </Block>
 
-        {error && <ParagraphMedium>{_.escape(error)}</ParagraphMedium>}
-        {idInput && <AuditView auditLog={auditLog} auditId={params.auditId} loading={loading} viewId={lookupVersion}/>}
-        <AuditRecentTable show={!idInput}/>
+      {error && <ParagraphMedium>{_.escape(error)}</ParagraphMedium>}
+      {idInput && <AuditView auditLog={auditLog} auditId={params.auditId} loading={loading} viewId={lookupVersion} />}
+      <AuditRecentTable show={!idInput} />
     </Block>
   )
 }

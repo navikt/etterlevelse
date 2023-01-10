@@ -1,18 +1,18 @@
 import * as React from 'react'
-import {useEffect, useState} from 'react'
-import {Block} from 'baseui/block'
-import {KIND, SIZE as ButtonSize} from 'baseui/button'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faEdit, faGhost, faTrash} from '@fortawesome/free-solid-svg-icons'
+import { useEffect, useState } from 'react'
+import { Block } from 'baseui/block'
+import { KIND, SIZE as ButtonSize } from 'baseui/button'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faEdit, faGhost, faTrash } from '@fortawesome/free-solid-svg-icons'
 import UpdateCodeListModal from './ModalUpdateCodeList'
 import DeleteCodeListModal from './ModalDeleteCodeList'
-import {Usage} from './CodeListUsage'
-import {AuditButton} from '../audit/AuditButton'
-import {Code, CodeListFormValues, CodeUsage} from '../../../services/Codelist'
-import {deleteCodelist, getCodelistUsage, updateCodelist} from '../../../api/CodelistApi'
-import {Cell, Row, Table} from '../../common/Table'
+import { Usage } from './CodeListUsage'
+import { AuditButton } from '../audit/AuditButton'
+import { Code, CodeListFormValues, CodeUsage } from '../../../services/Codelist'
+import { deleteCodelist, getCodelistUsage, updateCodelist } from '../../../api/CodelistApi'
+import { Cell, Row, Table } from '../../common/Table'
 import Button from '../../common/Button'
-import {theme} from '../../../util'
+import { theme } from '../../../util'
 
 type TableCodelistProps = {
   tableData: Code[]
@@ -100,11 +100,11 @@ const CodeListTable = ({ tableData, refresh }: TableCodelistProps) => {
                       setSelectedCode(row)
                       setShowUsage(true)
                     }}
-                    label={"Vis bruk"}
+                    label={'Vis bruk'}
                   >
-                    <FontAwesomeIcon icon={faGhost}/>
+                    <FontAwesomeIcon icon={faGhost} />
                   </Button>
-                  <AuditButton id={`${row.list}-${row.code}`} kind={KIND.tertiary}/>
+                  <AuditButton id={`${row.list}-${row.code}`} kind={KIND.tertiary} />
                   <Button
                     tooltip={'Rediger'}
                     size={ButtonSize.compact}
@@ -113,7 +113,7 @@ const CodeListTable = ({ tableData, refresh }: TableCodelistProps) => {
                       setSelectedCode(row)
                       setShowEditModal(true)
                     }}
-                    label={"Rediger"}
+                    label={'Rediger'}
                   >
                     <FontAwesomeIcon icon={faEdit} />
                   </Button>
@@ -125,7 +125,7 @@ const CodeListTable = ({ tableData, refresh }: TableCodelistProps) => {
                       setSelectedCode(row)
                       setShowDeleteModal(true)
                     }}
-                    label={"Slett"}
+                    label={'Slett'}
                   >
                     <FontAwesomeIcon icon={faTrash} />
                   </Button>
