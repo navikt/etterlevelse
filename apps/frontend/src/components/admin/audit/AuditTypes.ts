@@ -23,7 +23,6 @@ export enum AuditAction {
 
 export enum ObjectType {
   Codelist = 'CODELIST',
-  Settings = 'Settings',
   Krav = 'Krav',
   Etterlevelse = 'Etterlevelse',
   Behandling = 'Behandling',

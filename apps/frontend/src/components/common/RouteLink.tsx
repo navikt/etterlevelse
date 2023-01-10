@@ -66,8 +66,6 @@ type ObjectLinkProps = {
 
 export const urlForObject = (type: NavigableItem | string, id: string, audit?: AuditItem) => {
   switch (type) {
-    case ObjectType.Settings:
-      return '/admin/settings'
     case ObjectType.Krav:
       return `/krav/${id}`
     case ObjectType.Etterlevelse:
