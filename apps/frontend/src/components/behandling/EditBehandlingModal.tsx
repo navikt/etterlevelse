@@ -221,8 +221,6 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
                                     {r.label}
                                   </ParagraphMedium>
                                 </Block>
-                                {/* TEMP to only be seen by admin, WIP feature */}
-                                {user.isAdmin() && (
                                   <StatefulTooltip
                                     content={() => <Block padding="20px">{r.description}</Block>}
                                     placement={PLACEMENT.bottom}
@@ -235,7 +233,6 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
                                       <img src={outlineInfoIcon} alt="informasjons ikon" />
                                     </Block>
                                   </StatefulTooltip>
-                                )}
                               </BaseUIButton>
                             )
                           })}
