@@ -3,14 +3,14 @@ import { emptyPage, Etterlevelse, EtterlevelseStatus, Krav, PageResponse, Sukses
 import { env } from '../util/env'
 import { useEffect, useState } from 'react'
 import { KravId } from './KravApi'
-import { stringify } from 'querystring'
+import queryString from 'query-string';
 
 export const getEtterlevelsePage = async (pageNumber: number, pageSize: number) => {
   return (await axios.get<PageResponse<Etterlevelse>>(`${env.backendBaseUrl}/etterlevelse?pageNumber=${pageNumber}&pageSize=${pageSize}`)).data
 }
 
 export const getEtterlevelseFor = async (query: { behandling: string }) => {
-  return (await axios.get<PageResponse<Etterlevelse>>(`${env.backendBaseUrl}/etterlevelse?${stringify(query)}`)).data.content
+  return (await axios.get<PageResponse<Etterlevelse>>(`${env.backendBaseUrl}/etterlevelse?${queryString.stringify(query)}`)).data.content
 }
 
 export const updateEtterlevelseToNewBehandling = async (oldBehandlingsId: string, newBehandlingsId: string) => {
