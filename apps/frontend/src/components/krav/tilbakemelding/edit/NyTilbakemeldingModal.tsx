@@ -131,7 +131,7 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: NyTilbakemeldingMod
                     {/* <OptionField label="Type" name="type" clearable={false} options={Object.values(TilbakemeldingType).map((o) => ({ id: o, label: typeText(o) }))} /> */}
                     <Field name="varslingsadresse.adresse">
                       {(p: FieldProps) => (
-                        <FormControl label={<LabelWithTooltip label="Varslingsadresse" tooltip="Velg ønsket varslings metode" />} error={p.meta.error}>
+                        <FormControl label={<LabelWithTooltip label="Varslingsadresse" tooltip="Velg ønsket varslingsmetode" />} error={p.meta.error}>
                           <Block>
                             <Block display="flex" flexDirection="column" marginTop={theme.sizing.scale600}>
                               {adresseType === AdresseType.SLACK && <SlackChannelSearch add={setVarslingsadresse} />}
