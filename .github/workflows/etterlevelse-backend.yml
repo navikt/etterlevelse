@@ -47,7 +47,7 @@ jobs:
 
       - name: Build and push
         if: github.ref == 'refs/heads/prod' || github.ref == 'refs/heads/master'
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         with:
           push: true
           tags: ${{env.IMAGE}}
