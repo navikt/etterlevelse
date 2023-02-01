@@ -24,12 +24,13 @@ import { LabelSmall } from 'baseui/typography'
 
 type KravSuksesskriterieEditProps = {
   setIsFormDirty?: (v: boolean) => void
+  newVersion: boolean
 }
 
-export const KravSuksesskriterierEdit = ({ setIsFormDirty }: KravSuksesskriterieEditProps) => {
+export const KravSuksesskriterierEdit = ({ setIsFormDirty, newVersion }: KravSuksesskriterieEditProps) => {
   return (
     <FieldWrapper>
-      <FieldArray name={'suksesskriterier'}>{(p) => <KriterieList p={p} setIsFormDirty={setIsFormDirty} />}</FieldArray>
+      <FieldArray name={'suksesskriterier'}>{(p) => <KriterieList p={p} setIsFormDirty={setIsFormDirty} newVersion={newVersion}/>}</FieldArray>
     </FieldWrapper>
   )
 }
@@ -39,7 +40,7 @@ const nextId = (suksesskriterier: Suksesskriterie[]) => {
   return max + 1
 }
 
-const KriterieList = ({ p, setIsFormDirty }: { p: FieldArrayRenderProps; setIsFormDirty?: (v: boolean) => void }) => {
+const KriterieList = ({ p, setIsFormDirty, newVersion }: { p: FieldArrayRenderProps; setIsFormDirty?: (v: boolean) => void, newVersion:boolean }) => {
   const suksesskriterier = p.form.values.suksesskriterier as Suksesskriterie[]
 
   if (!suksesskriterier.length) {
@@ -92,6 +93,7 @@ const KriterieList = ({ p, setIsFormDirty }: { p: FieldArrayRenderProps; setIsFo
                           isDragging={dsnap.isDragging}
                           p={p}
                           setIsFormDirty={setIsFormDirty}
+                          newVersion={newVersion}
                         />
                       </div>
                     )
@@ -103,7 +105,7 @@ const KriterieList = ({ p, setIsFormDirty }: { p: FieldArrayRenderProps; setIsFo
           )}
         </Droppable>
       </DragDropContext>
-      {p.form.values.status !== KravStatus.AKTIV && (
+      {(p.form.values.status !== KravStatus.AKTIV || newVersion) && (
         <Block alignSelf={'flex-end'} marginTop={theme.sizing.scale600} marginBottom={theme.sizing.scale600}>
           <Button
             type="button"
@@ -133,6 +135,7 @@ const Kriterie = ({
   isDragging,
   p,
   setIsFormDirty,
+  newVersion
 }: {
   s: Suksesskriterie
   nummer: number
@@ -142,6 +145,7 @@ const Kriterie = ({
   isDragging: boolean
   p: FieldArrayRenderProps
   setIsFormDirty?: (v: boolean) => void
+  newVersion: boolean
 }) => {
   const debounceDelay = 500
   const [navn, setNavn, navnInput] = useDebouncedState(s.navn, debounceDelay)
@@ -165,7 +169,7 @@ const Kriterie = ({
     >
       <Block position={'relative'} paddingTop={theme.sizing.scale100}>
         <Block display={'flex'} alignItems={'flex-start'} position={'absolute'} right={0} top={0}>
-          {p.form.values.status !== KravStatus.AKTIV && (
+          {(p.form.values.status !== KravStatus.AKTIV || newVersion )&& (
             <Button type={'button'} size={'compact'} kind={'tertiary'} $style={buttonBorderStyle} icon={faTrash} onClick={remove} tooltip={'Fjern suksesskriterie'} />
           )}
           <Block width={theme.sizing.scale1000} />
