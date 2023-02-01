@@ -30,7 +30,7 @@ type KravSuksesskriterieEditProps = {
 export const KravSuksesskriterierEdit = ({ setIsFormDirty, newVersion }: KravSuksesskriterieEditProps) => {
   return (
     <FieldWrapper>
-      <FieldArray name={'suksesskriterier'}>{(p) => <KriterieList p={p} setIsFormDirty={setIsFormDirty} newVersion={newVersion}/>}</FieldArray>
+      <FieldArray name={'suksesskriterier'}>{(p) => <KriterieList p={p} setIsFormDirty={setIsFormDirty} newVersion={newVersion} />}</FieldArray>
     </FieldWrapper>
   )
 }
@@ -40,7 +40,7 @@ const nextId = (suksesskriterier: Suksesskriterie[]) => {
   return max + 1
 }
 
-const KriterieList = ({ p, setIsFormDirty, newVersion }: { p: FieldArrayRenderProps; setIsFormDirty?: (v: boolean) => void, newVersion:boolean }) => {
+const KriterieList = ({ p, setIsFormDirty, newVersion }: { p: FieldArrayRenderProps; setIsFormDirty?: (v: boolean) => void; newVersion: boolean }) => {
   const suksesskriterier = p.form.values.suksesskriterier as Suksesskriterie[]
 
   if (!suksesskriterier.length) {
@@ -135,7 +135,7 @@ const Kriterie = ({
   isDragging,
   p,
   setIsFormDirty,
-  newVersion
+  newVersion,
 }: {
   s: Suksesskriterie
   nummer: number
@@ -169,7 +169,7 @@ const Kriterie = ({
     >
       <Block position={'relative'} paddingTop={theme.sizing.scale100}>
         <Block display={'flex'} alignItems={'flex-start'} position={'absolute'} right={0} top={0}>
-          {(p.form.values.status !== KravStatus.AKTIV || newVersion )&& (
+          {(p.form.values.status !== KravStatus.AKTIV || newVersion) && (
             <Button type={'button'} size={'compact'} kind={'tertiary'} $style={buttonBorderStyle} icon={faTrash} onClick={remove} tooltip={'Fjern suksesskriterie'} />
           )}
           <Block width={theme.sizing.scale1000} />

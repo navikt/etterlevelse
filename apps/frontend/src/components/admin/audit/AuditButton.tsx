@@ -11,7 +11,7 @@ export const AuditButton = (props: {
   id: string
   fontColor?: string
   auditId?: string
-  kind?: typeof KIND[keyof typeof KIND]
+  kind?: (typeof KIND)[keyof typeof KIND]
   marginLeft?: boolean
   marginRight?: boolean
   children?: any

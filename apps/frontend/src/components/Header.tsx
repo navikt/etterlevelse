@@ -126,7 +126,7 @@ const LoggedInHeader = () => {
         compact
         title={'Meny'}
       />
-    </Block>  
+    </Block>
   )
 }
 

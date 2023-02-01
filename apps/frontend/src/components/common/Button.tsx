@@ -13,13 +13,13 @@ import { ettlevColors } from '../../util/theme'
 import { ExternalLink } from './RouteLink'
 import _ from 'lodash'
 
-export type ButtonKind = typeof KIND[keyof typeof KIND] | 'outline' | 'underline-hover'
+export type ButtonKind = (typeof KIND)[keyof typeof KIND] | 'outline' | 'underline-hover'
 
 interface ButtonProps {
   kind?: ButtonKind
   type?: 'submit' | 'reset' | 'button'
-  size?: typeof SIZE[keyof typeof SIZE]
-  shape?: typeof SHAPE[keyof typeof SHAPE]
+  size?: (typeof SIZE)[keyof typeof SIZE]
+  shape?: (typeof SHAPE)[keyof typeof SHAPE]
   icon?: IconDefinition
   iconEnd?: IconDefinition
   inline?: boolean
@@ -166,7 +166,7 @@ export const ExternalButton = ({
   href: string
   children: React.ReactNode
   underlineHover?: boolean
-  size?: typeof SIZE[keyof typeof SIZE]
+  size?: (typeof SIZE)[keyof typeof SIZE]
   openOnSamePage?: boolean
   kind?: ButtonKind
 }) => {

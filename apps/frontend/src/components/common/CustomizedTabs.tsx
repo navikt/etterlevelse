@@ -29,8 +29,8 @@ interface CustomizedTabsProps {
   children?: React.ReactNode
   activeKey?: React.Key
   disabled?: boolean
-  fill?: typeof FILL[keyof typeof FILL]
-  orientation?: typeof ORIENTATION[keyof typeof ORIENTATION]
+  fill?: (typeof FILL)[keyof typeof FILL]
+  orientation?: (typeof ORIENTATION)[keyof typeof ORIENTATION]
   activateOnFocus?: boolean
   renderAll?: boolean
   onChange?: (params: { activeKey: React.Key }) => void
