@@ -202,6 +202,7 @@ export const PanelLinkCard = ({
   hideArrow,
   marginRight,
   ComplimentaryContent,
+  openInNewTab,
 }: {
   href?: string
   tittel: string
@@ -222,6 +223,7 @@ export const PanelLinkCard = ({
   hideArrow?: boolean
   marginRight?: Responsive<Scale>
   ComplimentaryContent?: React.ReactNode
+  openInNewTab?: boolean
 }) => {
   const [hover, setHover] = useState(false)
 
@@ -279,7 +281,7 @@ export const PanelLinkCard = ({
 
   return (
     <Block width={width} maxWidth={maxWidth} overrides={rootOverrides} marginRight={marginRight} height="inherit">
-      <RouteLink href={href} hideUnderline requireLogin={requireLogin}>
+      <RouteLink href={href} hideUnderline requireLogin={requireLogin} openInNewTab={!!openInNewTab}>
         <Block
           onMouseEnter={() => setHover(true)}
           onMouseLeave={() => setHover(false)}

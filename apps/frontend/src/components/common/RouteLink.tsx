@@ -19,6 +19,7 @@ type RouteLinkProps = {
   requireLogin?: boolean
   fontColor?: string
   ariaLabel?: string
+  openInNewTab: boolean
 } & any
 
 const RouteLink = (props: RouteLinkProps) => {
@@ -29,7 +30,7 @@ const RouteLink = (props: RouteLinkProps) => {
   const onClick = (e: Event) => {
     if (requireLogin && !user.isLoggedIn()) return
     e.preventDefault()
-    if (!href) {
+    if (!props.href) {
       navigate(-1)
       restprops.onClick && restprops.onClick()
     }
@@ -47,7 +48,7 @@ const RouteLink = (props: RouteLinkProps) => {
 
   const href = !requireLogin || user.isLoggedIn() ? restprops.href : loginUrl(location, restprops.href)
 
-  return <CustomizedLink aria-label={ariaLabel} style={mergedStyle} {...restprops} href={href} onClick={onClick} />
+  return <CustomizedLink aria-label={ariaLabel} style={mergedStyle} {...restprops} href={href} onClick={props.href.includes('https') ? undefined : onClick} target={props.openInNewTab ? '_blank' : undefined} rel={props.openInNewTab ? 'noreferrer noopener' : undefined} />
 }
 
 export default RouteLink
@@ -86,7 +87,7 @@ export const urlForObject = (type: NavigableItem | string, id: string, audit?: A
     case ObjectType.Melding:
       return '/admin/varsel'
   }
-  console.warn("couldn't find object type" + type)
+  console.warn('couldn\'t find object type' + type)
   return ''
 }
 
