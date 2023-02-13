@@ -1,0 +1,1 @@
+create sequence etterlevelse_nummer minvalue 101 no cycle;
