@@ -29,7 +29,7 @@ public class BehandlingData implements DomainObject {
     private String behandlingId;
     // Codelist RELEVANS
     private List<String> irrelevansFor;
-
+    
     public List<CodelistResponse> irrelevantForAsCodes() {
         return CodelistService.getCodelistResponseList(ListName.RELEVANS, irrelevansFor);
     }
