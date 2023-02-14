@@ -6,6 +6,7 @@ import no.nav.data.common.validator.RequestElement;
 import no.nav.data.etterlevelse.arkivering.domain.EtterlevelseArkiv;
 import no.nav.data.etterlevelse.behandling.domain.BehandlingData;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
 import no.nav.data.etterlevelse.etterlevelsemetadata.domain.EtterlevelseMetadata;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravImage;
@@ -33,6 +34,7 @@ public final class TypeRegistration {
         addDomainClass(EtterlevelseMetadata.class, true);
         addDomainClass(Melding.class, true);
         addDomainClass(EtterlevelseArkiv.class, true);
+        addDomainClass(EtterlevelseDokumentasjon.class,true);
 
         addDomainClass(Tilbakemelding.class, false);
         addDomainClass(KravImage.class, false);

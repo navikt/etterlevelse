@@ -7,6 +7,7 @@ import no.nav.data.common.storage.domain.GenericStorage;
 import no.nav.data.common.validator.Validated;
 import no.nav.data.common.validator.Validator;
 import no.nav.data.etterlevelse.etterlevelse.domain.EtterlevelseRepo;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonRepo;
 import no.nav.data.etterlevelse.etterlevelsemetadata.domain.EtterlevelseMetadataRepo;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravRepo;
@@ -38,6 +39,8 @@ public class DomainService<T extends DomainObject> {
     protected BegrepService begrepService;
     @Autowired
     protected MeldingRepo meldingRepo;
+    @Autowired
+    protected EtterlevelseDokumentasjonRepo etterlevelseDokumentasjonRepo;
 
     protected final Class<T> type;
 
