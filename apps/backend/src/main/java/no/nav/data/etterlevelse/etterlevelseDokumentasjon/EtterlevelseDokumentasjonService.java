@@ -2,10 +2,12 @@ package no.nav.data.etterlevelse.etterlevelseDokumentasjon;
 
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.auditing.domain.AuditVersionRepository;
+import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.storage.domain.GenericStorage;
 import no.nav.data.etterlevelse.common.domain.DomainService;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonRequest;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +22,12 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
         super(EtterlevelseDokumentasjon.class);
         this.auditRepo = auditRepo;
     }
+
+    public Page<EtterlevelseDokumentasjon> getAll(PageParameters pageParameters) {
+        return etterlevelseDokumentasjonRepo.findAll(pageParameters.createPage()).map(GenericStorage::toEtterlevelseDokumentasjon);
+    }
+
+
     public EtterlevelseDokumentasjon save(EtterlevelseDokumentasjonRequest request) {
 
         var etterlevelseDokumentasjon = request.isUpdate() ? storage.get(request.getIdAsUUID(), EtterlevelseDokumentasjon.class) : new EtterlevelseDokumentasjon();
@@ -36,6 +44,5 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
     public List<EtterlevelseDokumentasjon> getByBehandlingId(List<String> ids) {
         return GenericStorage.to(etterlevelseDokumentasjonRepo.findByBehandlingIds(ids), EtterlevelseDokumentasjon.class);
     }
-
 
 }

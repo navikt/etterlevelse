@@ -13,6 +13,7 @@ import no.nav.data.common.utils.StreamUtils;
 import no.nav.data.etterlevelse.arkivering.domain.EtterlevelseArkiv;
 import no.nav.data.etterlevelse.behandling.domain.BehandlingData;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
 import no.nav.data.etterlevelse.etterlevelsemetadata.domain.EtterlevelseMetadata;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.kravprioritering.domain.KravPrioritering;
@@ -127,6 +128,9 @@ public class GenericStorage extends Auditable {
     }
 
     public EtterlevelseArkiv toEtterlevelseArkiv() {return getDomainObjectData(EtterlevelseArkiv.class); }
+
+    public EtterlevelseDokumentasjon toEtterlevelseDokumentasjon() {return getDomainObjectData(EtterlevelseDokumentasjon.class); }
+
     /**
      * Edit object and update data on entity
      */
