@@ -151,8 +151,8 @@ public class  EtterlevelseController {
         if (!Objects.equals(id, request.getIdAsUUID())) {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
         }
-        var krav = service.save(request);
-        return ResponseEntity.ok(krav.toResponse());
+        var etterlevelse = service.save(request);
+        return ResponseEntity.ok(etterlevelse.toResponse());
     }
 
     @Operation(summary = "Delete Etterlevelse")
@@ -160,8 +160,8 @@ public class  EtterlevelseController {
     @DeleteMapping("/{id}")
     public ResponseEntity<EtterlevelseResponse> deleteEtterlevelseById(@PathVariable UUID id) {
         log.info("Delete Etterlevelse id={}", id);
-        var krav = service.delete(id);
-        return ResponseEntity.ok(krav.toResponse());
+        var etterlevelse = service.delete(id);
+        return ResponseEntity.ok(etterlevelse.toResponse());
     }
 
     static class EtterlevelsePage extends RestResponsePage<EtterlevelseResponse> {
