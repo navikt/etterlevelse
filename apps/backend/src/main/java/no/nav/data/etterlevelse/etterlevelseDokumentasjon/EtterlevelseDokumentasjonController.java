@@ -54,6 +54,23 @@ public class EtterlevelseDokumentasjonController {
         return ResponseEntity.ok(etterlevelseDokumentasjonService.get(id).toResponse());
     }
 
+    @Operation(summary = "Search Etterlevelse Dokumentasjon by Behandling")
+    @ApiResponse(description = "ok")
+    @GetMapping("/search/behandling/{searchParam}")
+    public ResponseEntity<EtterlevelseDokumentasjonResponse> searchByBehandling(@PathVariable String searchParam) {
+        log.info("Search Etterlevelse Dokumentsjon by behandling with search param={}", searchParam;
+
+        //TODO logic for searching behandling
+
+        //TODO search result from behandling convert to List<String> ids
+
+        //TODO List<String>ids pass to getByBehandlingIds method in etterlevelseDokumentasjonService
+
+        //TODO return results from getByBehandlingIds
+
+        return new ResponseEntity<>(new EtterlevelseDokumentasjonResponse(), HttpStatus.OK);
+    }
+
     @Operation(summary = "Create Etterlevelse Dokumentasjon")
     @ApiResponse(responseCode = "201", description = "Etterlevelse Dokumentasjon created")
     @PostMapping
