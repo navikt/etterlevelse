@@ -11,10 +11,7 @@ import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDok
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
@@ -41,7 +38,17 @@ public class EtterlevelseDokumentasjonController {
     @ApiResponse(description = "ok")
     @GetMapping("/{id}")
     public ResponseEntity<EtterlevelseDokumentasjonResponse> getById(@PathVariable UUID id) {
-        log.info("Get Etterlevelse Dokumentasjon id={}", id);
+        log.info("Get Etterlevelse Dokumentasjon By Id Id={}", id);
         return ResponseEntity.ok(etterlevelseDokumentasjonService.get(id).toResponse());
     }
+
+
+    @ApiResponse(description = "Etterlevelse deleted")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<EtterlevelseDokumentasjonResponse> deleteEtterlevelseById(@PathVariable UUID id) {
+        log.info("Delete Etterlevelse Dokumentasjon By Id={}", id);
+        var etterlevelseDokumentasjon = etterlevelseDokumentasjonService.delete(id);
+        return ResponseEntity.ok(etterlevelseDokumentasjon.toResponse());
+    }
+
 }
