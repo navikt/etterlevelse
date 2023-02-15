@@ -58,7 +58,7 @@ public class EtterlevelseDokumentasjonController {
     @ApiResponse(description = "ok")
     @GetMapping("/search/behandling/{searchParam}")
     public ResponseEntity<EtterlevelseDokumentasjonResponse> searchByBehandling(@PathVariable String searchParam) {
-        log.info("Search Etterlevelse Dokumentsjon by behandling with search param={}", searchParam;
+        log.info("Search Etterlevelse Dokumentsjon by behandling with search param={}", searchParam);
 
         //TODO logic for searching behandling
 
