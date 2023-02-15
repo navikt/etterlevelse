@@ -4,29 +4,60 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.auditing.domain.AuditVersionRepository;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.storage.domain.GenericStorage;
+import no.nav.data.etterlevelse.behandling.dto.BehandlingFilter;
 import no.nav.data.etterlevelse.common.domain.DomainService;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonRequest;
+import no.nav.data.integration.team.domain.Team;
+import no.nav.data.integration.team.teamcat.TeamcatTeamClient;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
+
+import static no.nav.data.common.utils.StreamUtils.convert;
 
 @Slf4j
 @Service
-public class EtterlevelseDokumentasjonService extends DomainService<EtterlevelseDokumentasjon>{
+public class EtterlevelseDokumentasjonService extends DomainService<EtterlevelseDokumentasjon> {
 
     private final AuditVersionRepository auditRepo;
+    private final TeamcatTeamClient teamcatTeamClient;
 
-    public EtterlevelseDokumentasjonService(AuditVersionRepository auditRepo) {
+    public EtterlevelseDokumentasjonService(AuditVersionRepository auditRepo, TeamcatTeamClient teamcatTeamClient) {
         super(EtterlevelseDokumentasjon.class);
         this.auditRepo = auditRepo;
+        this.teamcatTeamClient = teamcatTeamClient;
     }
 
     public Page<EtterlevelseDokumentasjon> getAll(PageParameters pageParameters) {
         return etterlevelseDokumentasjonRepo.findAll(pageParameters.createPage()).map(GenericStorage::toEtterlevelseDokumentasjon);
     }
 
+    public List<EtterlevelseDokumentasjon> getByFilter(BehandlingFilter filter) {
+        if (!StringUtils.isBlank(filter.getId())) {
+//            BkatProcess process = bkatClient.getProcess(filter.getId());
+            EtterlevelseDokumentasjon etterlevelseDokumentasjon = storage.get(UUID.fromString(filter.getId()), EtterlevelseDokumentasjon.class);
+            if (etterlevelseDokumentasjon != null) {
+                return List.of(etterlevelseDokumentasjon);
+            }
+            return List.of();
+        } else if (filter.isGetMineBehandlinger()) {
+            filter.setTeams(convert(teamcatTeamClient.getMyTeams(), Team::getId));
+        }
+
+        // it will be implemented after etterlevelseDok teams
+//        if ((filter.getTeams() != null && !filter.getTeams().isEmpty()) || filter.isGetMineBehandlinger()) {
+//            return filter.getTeams().parallelStream().map(this::getBehandlingerForTeam).flatMap(Collection::stream).toList();
+//        }
+
+//        if (filter.isSok()) {
+//            return findBehandlinger(filter.getSok());
+//        }
+        return GenericStorage.to(etterlevelseDokumentasjonRepo.findBy(filter),EtterlevelseDokumentasjon.class);
+    }
 
     public EtterlevelseDokumentasjon save(EtterlevelseDokumentasjonRequest request) {
 
@@ -39,6 +70,10 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
         }
 
         return storage.save(etterlevelseDokumentasjon);
+    }
+
+    public EtterlevelseDokumentasjon delete(UUID id) {
+        return storage.delete(id, EtterlevelseDokumentasjon.class);
     }
 
     public List<EtterlevelseDokumentasjon> getByBehandlingId(List<String> ids) {
