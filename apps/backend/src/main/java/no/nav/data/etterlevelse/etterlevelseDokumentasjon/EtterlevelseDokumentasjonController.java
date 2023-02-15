@@ -5,14 +5,26 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonRequest;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+import java.util.Objects;
 import java.util.UUID;
 
 @Slf4j
@@ -40,6 +52,27 @@ public class EtterlevelseDokumentasjonController {
     public ResponseEntity<EtterlevelseDokumentasjonResponse> getById(@PathVariable UUID id) {
         log.info("Get Etterlevelse Dokumentasjon By Id Id={}", id);
         return ResponseEntity.ok(etterlevelseDokumentasjonService.get(id).toResponse());
+    }
+
+    @Operation(summary = "Create Etterlevelse Dokumentasjon")
+    @ApiResponse(responseCode = "201", description = "Etterlevelse Dokumentasjon created")
+    @PostMapping
+    public ResponseEntity<EtterlevelseDokumentasjonResponse> createEtterlevelseDokumentasjon(@RequestBody EtterlevelseDokumentasjonRequest request) {
+        log.info("Create Etterlevelse Dokumentasjon");
+        var etterlevelseDokumentasjon = etterlevelseDokumentasjonService.save(request);
+        return new ResponseEntity<>(etterlevelseDokumentasjon.toResponse(), HttpStatus.CREATED);
+    }
+
+    @Operation(summary = "Update Etterlevelse Dokumentasjon")
+    @ApiResponse(description = "Etterlevelse Dokumentasjon updated")
+    @PutMapping("/{id}")
+    public ResponseEntity<EtterlevelseDokumentasjonResponse> updateEtterlevelseDokumentasjon(@PathVariable UUID id, @Valid @RequestBody EtterlevelseDokumentasjonRequest request) {
+        log.debug("Update Etterlevelse Dokumentasjon id={}", id);
+        if (!Objects.equals(id, request.getIdAsUUID())) {
+            throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
+        }
+        var etterlevelseDokumentasjon = etterlevelseDokumentasjonService.save(request);
+        return ResponseEntity.ok(etterlevelseDokumentasjon.toResponse());
     }
 
 
