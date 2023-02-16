@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -54,21 +55,15 @@ public class EtterlevelseDokumentasjonController {
         return ResponseEntity.ok(etterlevelseDokumentasjonService.get(id).toResponse());
     }
 
-    @Operation(summary = "Search Etterlevelse Dokumentasjon by Behandling")
+    @Operation(summary = "Search Etterlevelse Dokumentasjon by BehandlingId")
     @ApiResponse(description = "ok")
-    @GetMapping("/search/behandling/{searchParam}")
-    public ResponseEntity<EtterlevelseDokumentasjonResponse> searchByBehandling(@PathVariable String searchParam) {
-        log.info("Search Etterlevelse Dokumentsjon by behandling with search param={}", searchParam);
+    @GetMapping("/search/behandling/{id}")
+    public ResponseEntity<RestResponsePage<EtterlevelseDokumentasjonResponse>> searchByBehandling(@PathVariable String id) {
+        log.info("Search Etterlevelse Dokumentsjon by behandlingId with id={}", id);
 
-        //TODO logic for searching behandling
+        var etterleveseDokumentasjon = etterlevelseDokumentasjonService.getByBehandlingId(List.of(id));
 
-        //TODO search result from behandling convert to List<String> ids
-
-        //TODO List<String>ids pass to getByBehandlingIds method in etterlevelseDokumentasjonService
-
-        //TODO return results from getByBehandlingIds
-
-        return new ResponseEntity<>(new EtterlevelseDokumentasjonResponse(), HttpStatus.OK);
+        return ResponseEntity.ok(new RestResponsePage<>(etterleveseDokumentasjon).convert(EtterlevelseDokumentasjon::toResponse));
     }
 
     @Operation(summary = "Create Etterlevelse Dokumentasjon")
