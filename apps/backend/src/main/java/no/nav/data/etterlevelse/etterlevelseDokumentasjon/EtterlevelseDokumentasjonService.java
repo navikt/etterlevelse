@@ -36,6 +36,23 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
         return etterlevelseDokumentasjonRepo.findAll(pageParameters.createPage()).map(GenericStorage::toEtterlevelseDokumentasjon);
     }
 
+    public List<EtterlevelseDokumentasjon> searchEtterlevelseDokumentasjon(String searchParam) {
+
+        String newSearchParam = searchParam;
+
+        if(searchParam.toLowerCase().matches("e[0-9]+(.*)")) {
+           newSearchParam = searchParam.substring(1);
+        }
+
+        List<GenericStorage> etterlevelseDokumentasjoner = etterlevelseDokumentasjonRepo.searchEtterlevelseDokumentasjonByTitle(newSearchParam);
+
+        if(StringUtils.isNumeric(searchParam)) {
+            etterlevelseDokumentasjoner.addAll(etterlevelseDokumentasjonRepo.searchEtterlevelseDokumentasjonByNumber(newSearchParam));
+        }
+
+        return GenericStorage.to(etterlevelseDokumentasjoner, EtterlevelseDokumentasjon.class);
+    }
+
     public List<EtterlevelseDokumentasjon> getByFilter(BehandlingFilter filter) {
         if (!StringUtils.isBlank(filter.getId())) {
 //            BkatProcess process = bkatClient.getProcess(filter.getId());

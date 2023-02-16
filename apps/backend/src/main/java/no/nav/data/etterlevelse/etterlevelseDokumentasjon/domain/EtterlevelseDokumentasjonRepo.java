@@ -33,8 +33,11 @@ public interface EtterlevelseDokumentasjonRepo  extends JpaRepository<GenericSto
             """, nativeQuery = true)
     List<KravId> findKravIdsForEtterlevelseDokumentasjon(String etterlevelseDokId);
 
-    @Query(value = "select * from generic_storage where (data ->> 'etterlevelseNummer' ilike %?1% or data ->> 'title' ilike %?1%) and type = 'EtterlevelseDokumentasjon'", nativeQuery = true)
-    List<GenericStorage> searchEtterlevelseDokumentasjon(String searchParam);
+    @Query(value = "select * from generic_storage where data ->> 'title' ilike %?1% and type = 'EtterlevelseDokumentasjon'", nativeQuery = true)
+    List<GenericStorage> searchEtterlevelseDokumentasjonByTitle(String searchParam);
+
+    @Query(value = "select * from generic_storage where data ->> 'etterlevelseNummer' ilike %?1% and type = 'EtterlevelseDokumentasjon'", nativeQuery = true)
+    List<GenericStorage> searchEtterlevelseDokumentasjonByNumber(String searchParam);
 
     @Query(value = "SELECT nextVal('etterlevelse_nummer')",nativeQuery = true)
     int nextEtterlevelseDokumentasjonNummer();

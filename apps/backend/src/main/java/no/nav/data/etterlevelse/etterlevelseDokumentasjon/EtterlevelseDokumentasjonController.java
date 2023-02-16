@@ -66,6 +66,21 @@ public class EtterlevelseDokumentasjonController {
         return ResponseEntity.ok(new RestResponsePage<>(etterleveseDokumentasjon).convert(EtterlevelseDokumentasjon::toResponse));
     }
 
+    @Operation(summary = "Search Etterlevelse Dokumentasjon")
+    @ApiResponse(description = "ok")
+    @GetMapping("/search/{searchParam}")
+    public ResponseEntity<RestResponsePage<EtterlevelseDokumentasjonResponse>> searchEtterlevelseDokumentasjon(@PathVariable String searchParam) {
+        log.info("Search Etterlevelse Dokumentsjon by={}", searchParam);
+
+        if(searchParam.length() < 3) {
+            throw new ValidationException("Search Etterlevelse Dokumentasjon must be at least 3 characters");
+        }
+
+        List<EtterlevelseDokumentasjon> etterleveseDokumentasjon = etterlevelseDokumentasjonService.searchEtterlevelseDokumentasjon(searchParam);
+
+        return ResponseEntity.ok(new RestResponsePage<>(etterleveseDokumentasjon).convert(EtterlevelseDokumentasjon::toResponse));
+    }
+
     @Operation(summary = "Create Etterlevelse Dokumentasjon")
     @ApiResponse(responseCode = "201", description = "Etterlevelse Dokumentasjon created")
     @PostMapping
