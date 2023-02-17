@@ -28,6 +28,7 @@ import { StyledLink } from 'baseui/link'
 import { env } from '../util/env'
 import { useArkiveringByBehandlingId } from '../api/ArkiveringApi'
 import { ArkiveringModal } from '../components/behandlingPage/ArkiveringModal'
+import ExportEtterlevelseModal from '../components/export/ExportEtterlevelseModal'
 
 export const BehandlingPage = () => {
   const params = useParams<{ id?: string }>()
@@ -51,10 +52,10 @@ export const BehandlingPage = () => {
   const filterData = (
     unfilteredData:
       | {
-          behandling: PageResponse<{
-            stats: BehandlingStats
-          }>
-        }
+        behandling: PageResponse<{
+          stats: BehandlingStats
+        }>
+      }
       | undefined,
   ) => {
     const relevanteStatusListe: any[] = []
@@ -178,16 +179,9 @@ export const BehandlingPage = () => {
             Arkiver
           </Button>
         )}
-        <Block display="flex" alignItems="center" marginRight="12px">
-          <StyledLink style={{ textDecoration: 'none' }} href={`${env.backendBaseUrl}/export/etterlevelse?behandlingId=${behandling.id}`}>
-            <Button kind={KIND.tertiary} size={SIZE.compact}>
-              <Block marginRight="6px">
-                <FontAwesomeIcon icon={faFileWord} />
-              </Block>
-              <Block>Eksporter</Block>
-            </Button>
-          </StyledLink>
-        </Block>
+
+        <ExportEtterlevelseModal behandlingId={behandling.id} />
+
         <Block display="flex" alignItems="baseline" marginRight="30px">
           <ParagraphMedium $style={{ fontWeight: 900, fontSize: '32px', marginTop: 0, marginBottom: 0 }} color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
             {getNewestKravVersjon(relevanteStats).length}
