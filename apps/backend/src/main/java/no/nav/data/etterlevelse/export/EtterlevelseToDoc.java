@@ -233,7 +233,7 @@ public class EtterlevelseToDoc {
                 }
 
             } catch (NullPointerException e) {
-                log.debug("Krav " + etterlevelse.getKravNummer() + "." + etterlevelse.getKravVersjon() + " has no suksesskriterietbegrunnelse");
+                log.error("Krav " + etterlevelse.getKravNummer() + "." + etterlevelse.getKravVersjon() + " has no suksesskriterietbegrunnelse");
             }
 
             if (krav.isPresent()) {
