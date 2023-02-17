@@ -3,7 +3,6 @@ package no.nav.data.etterlevelse.export;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.NotFoundException;
-import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.utils.WordDocUtils;
 import no.nav.data.etterlevelse.behandling.BehandlingService;
 import no.nav.data.etterlevelse.behandling.dto.Behandling;
@@ -80,11 +79,6 @@ public class EtterlevelseToDoc {
     private List<EtterlevelseMedKravData> getEtterlevelseByFilter(String behandlingId, List<String> statusKoder, List<String> lover) {
 
         List<Etterlevelse> etterlevelser = etterlevelseService.getByBehandling(behandlingId);
-
-        if(etterlevelser.isEmpty()) {
-           throw new ValidationException("No etterlevelser found for behandling");
-        }
-
         List<EtterlevelseMedKravData> etterlevelseMedKravData = new ArrayList<>();
 
         if (Objects.nonNull(statusKoder)) {
