@@ -18,30 +18,30 @@ import { borderColor, borderWidth } from '../../common/Style'
 import { navChevronDownIcon } from '../../Images'
 import _ from 'lodash'
 
-const CustomizedRegelverkSelect = (props: SelectProps) => {
-  const customOverrides: SelectOverrides = {
-    ControlContainer: {
-      style: {
-        ...borderWidth('1px'),
-        ':hover': {
-          backgroundColor: ettlevColors.green50,
-        },
+export const customSelectOverrides: SelectOverrides = {
+  ControlContainer: {
+    style: {
+      ...borderWidth('1px'),
+      ':hover': {
+        backgroundColor: ettlevColors.green50,
       },
     },
-    SelectArrow: {
-      component: ({ $isOpen }: { $isOpen: boolean }) =>
-        $isOpen ? <img src={navChevronDownIcon} alt="Chevron opp" style={{ transform: 'rotate(180deg)' }} /> : <img src={navChevronDownIcon} alt="Chevron ned" />,
+  },
+  SelectArrow: {
+    component: ({ $isOpen }: { $isOpen: boolean }) =>
+      $isOpen ? <img src={navChevronDownIcon} alt="Chevron opp" style={{ transform: 'rotate(180deg)' }} /> : <img src={navChevronDownIcon} alt="Chevron ned" />,
+  },
+  DropdownListItem: {
+    style: {
+      fontSize: '18px',
+      marginTop: '4px',
+      marginBottom: '4px',
     },
-    DropdownListItem: {
-      style: {
-        fontSize: '18px',
-        marginTop: '4px',
-        marginBottom: '4px',
-      },
-    },
-  }
+  },
+}
 
-  const overrides = _.merge(customOverrides, props.overrides)
+const CustomizedRegelverkSelect = (props: SelectProps) => {
+  const overrides = _.merge(customSelectOverrides, props.overrides)
 
   return <Select {...props} overrides={overrides} />
 }
