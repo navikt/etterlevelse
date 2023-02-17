@@ -3,6 +3,7 @@ package no.nav.data.etterlevelse.export;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.NotFoundException;
+import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.utils.WordDocUtils;
 import no.nav.data.etterlevelse.behandling.BehandlingService;
 import no.nav.data.etterlevelse.behandling.dto.Behandling;
@@ -30,7 +31,13 @@ import org.docx4j.wml.ObjectFactory;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -73,6 +80,11 @@ public class EtterlevelseToDoc {
     private List<EtterlevelseMedKravData> getEtterlevelseByFilter(String behandlingId, List<String> statusKoder, List<String> lover) {
 
         List<Etterlevelse> etterlevelser = etterlevelseService.getByBehandling(behandlingId);
+
+        if(etterlevelser.isEmpty()) {
+           throw new ValidationException("No etterlevelser found for behandling");
+        }
+
         List<EtterlevelseMedKravData> etterlevelseMedKravData = new ArrayList<>();
 
         if (Objects.nonNull(statusKoder)) {
