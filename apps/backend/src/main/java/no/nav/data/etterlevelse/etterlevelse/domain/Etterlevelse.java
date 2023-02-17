@@ -68,8 +68,8 @@ public class Etterlevelse implements DomainObject, KravId {
                 .dokumentasjon(copyOf(dokumentasjon))
                 .fristForFerdigstillelse(fristForFerdigstillelse)
                 .status(status)
-                .suksesskriterieBegrunnelser(copyOf(StreamUtils.convert(suksesskriterieBegrunnelser,
-                        SuksesskriterieBegrunnelse::toResponse)))
+                .suksesskriterieBegrunnelser(StreamUtils.convert(suksesskriterieBegrunnelser,
+                        SuksesskriterieBegrunnelse::toResponse))
                 .build();
     }
 
