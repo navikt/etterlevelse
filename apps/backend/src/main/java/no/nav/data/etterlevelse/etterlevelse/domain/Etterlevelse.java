@@ -49,7 +49,7 @@ public class Etterlevelse implements DomainObject, KravId {
         dokumentasjon = copyOf(request.getDokumentasjon());
         fristForFerdigstillelse = request.getFristForFerdigstillelse();
         status = request.getStatus();
-        suksesskriterieBegrunnelser = copyOf(StreamUtils.convert(request.getSuksesskriterieBegrunnelser(), SuksesskriterieBegrunnelse::convert));
+        suksesskriterieBegrunnelser = StreamUtils.convert(request.getSuksesskriterieBegrunnelser(), SuksesskriterieBegrunnelse::convert);
         return this;
     }
 
@@ -68,8 +68,8 @@ public class Etterlevelse implements DomainObject, KravId {
                 .dokumentasjon(copyOf(dokumentasjon))
                 .fristForFerdigstillelse(fristForFerdigstillelse)
                 .status(status)
-                .suksesskriterieBegrunnelser(copyOf(StreamUtils.convert(suksesskriterieBegrunnelser,
-                        SuksesskriterieBegrunnelse::toResponse)))
+                .suksesskriterieBegrunnelser(StreamUtils.convert(suksesskriterieBegrunnelser,
+                        SuksesskriterieBegrunnelse::toResponse))
                 .build();
     }
 
