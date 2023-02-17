@@ -3,15 +3,22 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Block } from 'baseui/block'
 import { Button, KIND } from 'baseui/button'
 import { SIZE } from 'baseui/input'
-import { StyledLink } from 'baseui/link'
 import React, { useState } from 'react'
 import { env } from '../../util/env'
 import CustomizedModal from '../common/CustomizedModal'
-import { borderRadius } from '../common/Style'
+import { borderColor, borderRadius, borderStyle, borderWidth, marginZero } from '../common/Style'
 import { ModalBody, ModalHeader } from 'baseui/modal'
 import { Select, Value } from 'baseui/select'
 import { customSelectOverrides } from '../krav/Edit/KravRegelverkEdit'
 import { codelist, ListName } from '../../services/Codelist'
+import axios from 'axios'
+import { theme } from '../../util'
+import { ettlevColors } from '../../util/theme'
+import { Spinner } from 'baseui/spinner'
+import { KIND as NKIND, Notification } from 'baseui/notification'
+import { ParagraphMedium } from 'baseui/typography'
+
+
 
 type ExportEtterlevelseModalProps = {
   behandlingId: String
@@ -20,6 +27,8 @@ type ExportEtterlevelseModalProps = {
 export const ExportEtterlevelseModal = (props: ExportEtterlevelseModalProps) => {
   const [isExportModalOpen, setIsExportModalOpen] = useState<boolean>(false)
   const [selectedTema, setSelectedTema] = useState<Value>([])
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [errorMessage, setErrorMessage] = useState<String>('')
 
 
   return (
@@ -50,32 +59,76 @@ export const ExportEtterlevelseModal = (props: ExportEtterlevelseModalProps) => 
       >
         <ModalHeader>Exporter Etterlevelse</ModalHeader>
         <ModalBody>
-          <Block>
-            <Select
-              placeholder="Velg tema"
-              options={codelist.getParsedOptions(ListName.TEMA)}
-              value={selectedTema}
-              onChange={({ value }) => setSelectedTema(value)}
-              overrides={customSelectOverrides}
-            />
-          </Block>
-          <Block marginTop="16px" display="flex" $style={{ justifyContent: 'flex-end', paddingTop: '16px' }}>
-            <StyledLink
-              style={{ textDecoration: 'none' }}
-              href={
-                selectedTema.length > 0 ? 
-                `${env.backendBaseUrl}/export/etterlevelse?behandlingId=${props.behandlingId}&temakode=${selectedTema[0].id}` :
-                `${env.backendBaseUrl}/export/etterlevelse?behandlingId=${props.behandlingId}`
-              }
-            >
-              <Button kind={KIND.tertiary} size={SIZE.compact}>
-                <Block marginRight="6px">
-                  <FontAwesomeIcon icon={faFileWord} />
-                </Block>
-                <Block>{selectedTema.length > 0 ? 'Eksporter med valg tema' : 'Eksporter alle'}</Block>
-              </Button>
-            </StyledLink>
-          </Block>
+          {isLoading ?
+            <Block display="flex" justifyContent="center" width="100%">
+              <Spinner $color={ettlevColors.green400} $size={theme.sizing.scale2400} />
+            </Block>
+            :
+            <Block>
+              <Select
+                placeholder="Velg tema"
+                options={codelist.getParsedOptions(ListName.TEMA)}
+                value={selectedTema}
+                onChange={({ value }) => {
+                  setErrorMessage('')
+                  setSelectedTema(value)
+                }}
+                overrides={customSelectOverrides}
+              />
+              {errorMessage &&
+                <Block width="100%" marginTop="16px">
+                  <Notification
+                    overrides={{
+                      Body: {
+                        style: {
+                          width: 'auto',
+                          ...marginZero,
+                          ...borderStyle('solid'),
+                          ...borderWidth('1px'),
+                          ...borderColor(ettlevColors.red600),
+                          ...borderRadius('4px'),
+                        },
+                      },
+                    }}
+                    kind={NKIND.negative}
+                  >
+                    <Block display="flex" justifyContent="center">
+                      <ParagraphMedium marginBottom="0px" marginTop="0px" $style={{ lineHeight: '18px' }}>
+                        {errorMessage}
+                      </ParagraphMedium>
+                    </Block>
+                  </Notification>
+                </Block>}
+              <Block marginTop="16px" display="flex" $style={{ justifyContent: 'flex-end', paddingTop: '16px' }}>
+                <Button
+                  kind={KIND.tertiary}
+                  size={SIZE.compact}
+                  onClick={() => {
+                    (async () => {
+                      setIsLoading(true)
+                      setErrorMessage('')
+                      const exportUrl = selectedTema.length > 0 ?
+                        `${env.backendBaseUrl}/export/etterlevelse?behandlingId=${props.behandlingId}&temakode=${selectedTema[0].id}` :
+                        `${env.backendBaseUrl}/export/etterlevelse?behandlingId=${props.behandlingId}`
+
+                      axios.get(exportUrl).then(() => {
+                        window.location.href = exportUrl
+                        setIsLoading(false)
+                      }).catch((e) => {
+                        setErrorMessage(e.response.data.message)
+                        setIsLoading(false)
+                      })
+                    })()
+                  }}
+                >
+                  <Block marginRight="6px">
+                    <FontAwesomeIcon icon={faFileWord} />
+                  </Block>
+                  <Block>{selectedTema.length > 0 ? 'Eksporter med valg tema' : 'Eksporter alle'}</Block>
+                </Button>
+              </Block>
+            </Block>
+          }
         </ModalBody>
       </CustomizedModal>
     </Block>
