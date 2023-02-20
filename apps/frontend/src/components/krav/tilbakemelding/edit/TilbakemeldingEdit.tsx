@@ -25,7 +25,7 @@ export const TilbakemeldingEdit = ({ tilbakemeldingId, melding, close }: { tilba
     <Block display="flex" alignItems="flex-end">
       <CustomizedTextarea rows={15} onChange={(e) => setResponse((e.target as HTMLTextAreaElement).value)} value={response} disabled={loading} />
       <Button size="compact" marginLeft disabled={!response || loading} onClick={submit}>
-        Send
+        Lagre
       </Button>
       {error && (
         <Notification kind="negative" overrides={{ Body: { style: { marginBottom: '-25px' } } }}>
