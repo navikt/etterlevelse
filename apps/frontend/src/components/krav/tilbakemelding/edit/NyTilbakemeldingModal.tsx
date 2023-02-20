@@ -4,7 +4,7 @@ import { Block } from 'baseui/block'
 import Button from '../../../common/Button'
 import { FormControl } from 'baseui/form-control'
 import { ModalBody, ModalFooter, ModalHeader } from 'baseui/modal'
-import { HeadingLarge, HeadingXLarge, ParagraphLarge } from 'baseui/typography'
+import { HeadingLarge, HeadingXLarge, LabelSmall, ParagraphLarge } from 'baseui/typography'
 import { Field, FieldProps, Form, Formik } from 'formik'
 import { useState } from 'react'
 import { createNewTilbakemelding, CreateTilbakemeldingRequest } from '../../../../api/TilbakemeldingApi'
@@ -20,6 +20,8 @@ import { Card } from 'baseui/card'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { ettlevColors } from '../../../../util/theme'
 import { borderColor, borderRadius, borderWidth } from '../../../common/Style'
+import { CustomizedAccordion, CustomizedPanel } from '../../../common/CustomizedAccordion'
+import { Markdown } from '../../../common/Markdown'
 
 type NyTilbakemeldingModalProps = {
   open?: boolean
@@ -55,11 +57,11 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: NyTilbakemeldingMod
 
   return (
     <CustomizedModal
-      size="default"
+      size="auto"
       overrides={{
         Dialog: {
           style: {
-            maxWidth: '514px',
+            //  maxWidth: '514px',
           },
         },
       }}
@@ -127,11 +129,23 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: NyTilbakemeldingMod
                   </Card>
                 ) : (
                   <Block>
+                    <CustomizedAccordion>
+                      <CustomizedPanel
+                        overrides={{ Content: { style: { backgroundColor: ettlevColors.white, paddingLeft: '20px', paddingRight: '20px' } } }}
+                        title={<LabelSmall>Hensikten med kravet</LabelSmall>}
+                      >
+                        <Markdown source={krav.hensikt} fontSize="18px" />
+                      </CustomizedPanel>
+                    </CustomizedAccordion>
                     <TextAreaField tooltip="Skriv ditt spørsmål i tekstfeltet" label="Ditt spørsmål" name="foersteMelding" placeholder="Skriv her.." />
+
                     {/* <OptionField label="Type" name="type" clearable={false} options={Object.values(TilbakemeldingType).map((o) => ({ id: o, label: typeText(o) }))} /> */}
                     <Field name="varslingsadresse.adresse">
                       {(p: FieldProps) => (
-                        <FormControl label={<LabelWithTooltip label="Din varslingsadresse" tooltip="Velg hvilken adresse du vil varsles på når kraveier svarer på spørsmålet" />} error={p.meta.error}>
+                        <FormControl
+                          label={<LabelWithTooltip label="Din varslingsadresse" tooltip="Velg hvilken adresse du vil varsles på når kraveier svarer på spørsmålet" />}
+                          error={p.meta.error}
+                        >
                           <Block>
                             <Block display="flex" flexDirection="column" marginTop={theme.sizing.scale600}>
                               {adresseType === AdresseType.SLACK && <SlackChannelSearch add={setVarslingsadresse} />}
@@ -191,7 +205,7 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: NyTilbakemeldingMod
                       Avbryt{' '}
                     </Button>
                     <Button type="button" marginLeft disabled={isSubmitting} onClick={submitForm}>
-                       Send spørsmål
+                      Send spørsmål
                     </Button>
                   </Block>
                 )}
