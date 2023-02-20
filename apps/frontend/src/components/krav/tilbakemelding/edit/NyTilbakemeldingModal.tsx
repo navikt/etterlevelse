@@ -191,7 +191,7 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: NyTilbakemeldingMod
                       Avbryt{' '}
                     </Button>
                     <Button type="button" marginLeft disabled={isSubmitting} onClick={submitForm}>
-                      Lagre
+                       Send spørsmål
                     </Button>
                   </Block>
                 )}
