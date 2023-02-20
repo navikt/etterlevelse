@@ -128,7 +128,7 @@ public class StatistikkService {
             List<String> teamNames = behandling.getTeams().stream().map(t->teamService.getTeam(t).isPresent()?teamService.getTeam(t).get().getName():"").toList();
 
             if(behandling.getNummer() == 455) {
-                log.debug(String.valueOf(aktivEtterlevelseList.size()));
+                log.debug( "aktiv etterlevleser: " +  String.valueOf(aktivEtterlevelseList.size()));
             }
 
             behandlingStatistikkList.add(
