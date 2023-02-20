@@ -57,7 +57,7 @@ export const ExportEtterlevelseModal = (props: ExportEtterlevelseModalProps) => 
           },
         }}
       >
-        <ModalHeader>Exporter Etterlevelse</ModalHeader>
+        <ModalHeader>Eksporter Etterlevelse</ModalHeader>
         <ModalBody>
           {isLoading ?
             <Block display="flex" justifyContent="center" width="100%">
@@ -66,7 +66,7 @@ export const ExportEtterlevelseModal = (props: ExportEtterlevelseModalProps) => 
             :
             <Block>
               <Select
-                placeholder="Velg tema"
+                placeholder="Velg et tema for eksportering"
                 options={codelist.getParsedOptions(ListName.TEMA)}
                 value={selectedTema}
                 onChange={({ value }) => {
@@ -101,7 +101,7 @@ export const ExportEtterlevelseModal = (props: ExportEtterlevelseModalProps) => 
                 </Block>}
               <Block marginTop="16px" display="flex" $style={{ justifyContent: 'flex-end', paddingTop: '16px' }}>
                 <Button
-                  kind={KIND.tertiary}
+                  kind={KIND.primary}
                   size={SIZE.compact}
                   onClick={() => {
                     (async () => {
@@ -124,7 +124,7 @@ export const ExportEtterlevelseModal = (props: ExportEtterlevelseModalProps) => 
                   <Block marginRight="6px">
                     <FontAwesomeIcon icon={faFileWord} />
                   </Block>
-                  <Block>{selectedTema.length > 0 ? 'Eksporter med valg tema' : 'Eksporter alle'}</Block>
+                  <Block>{selectedTema.length > 0 ? 'Eksporter med valgt tema' : 'Eksporter alle tema'}</Block>
                 </Button>
               </Block>
             </Block>
