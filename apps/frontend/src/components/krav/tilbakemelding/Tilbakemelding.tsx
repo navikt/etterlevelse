@@ -123,7 +123,7 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
                         <Block display="flex" width="100%">
                           <Block display="flex" alignItems="center" width="100%">
                             <LabelSmall>
-                              <PersonName ident={t.melderIdent} />
+                              <PersonName ident={t.melderIdent}/>
                             </LabelSmall>
                             <ParagraphSmall marginTop={0} marginBottom={0} marginLeft="24px" $style={{ fontSize: '14px' }}>
                               Sendt: {moment(t.meldinger[0].tid).format('lll')}

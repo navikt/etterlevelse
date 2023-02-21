@@ -16,6 +16,7 @@ export const ResponseMelding = (props: {
   remove: (t: Tilbakemelding) => void
 }) => {
   const { m, tilbakemelding, oppdater, remove } = props
+  const kraveier = m.rolle === TilbakemeldingRolle.KRAVEIER
   const melder = m.rolle === TilbakemeldingRolle.MELDER
   const sisteMelding = m.meldingNr === tilbakemelding.meldinger[tilbakemelding.meldinger.length - 1].meldingNr
 
@@ -26,7 +27,7 @@ export const ResponseMelding = (props: {
         <Block display="flex" flexDirection="column" marginLeft={theme.sizing.scale400} width="100%">
           <Block display="flex" width="100%">
             <Block display="flex" alignItems="center" width="100%">
-              <LabelSmall>{melder ? <PersonName ident={m.fraIdent} /> : 'Kraveier'}</LabelSmall>
+              <LabelSmall>{<PersonName ident={m.fraIdent} kraveier={kraveier}/>}</LabelSmall>
               <ParagraphSmall marginTop={0} marginBottom={0} marginLeft="24px" $style={{ fontSize: '14px' }}>
                 Sendt: {moment(m.tid).format('lll')}
               </ParagraphSmall>
