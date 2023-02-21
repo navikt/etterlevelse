@@ -74,6 +74,7 @@ export const MeldingKnapper = (props: {
       {editModal && (
         <Modal
           isOpen
+          closeable={false}
           onClose={() => setEditModal(false)}
           overrides={{
             Dialog: {
@@ -96,6 +97,7 @@ export const MeldingKnapper = (props: {
                 setEditModal(false)
                 oppdater(t)
               }}
+              setEditModal={setEditModal}
             />
           </ModalBody>
         </Modal>
