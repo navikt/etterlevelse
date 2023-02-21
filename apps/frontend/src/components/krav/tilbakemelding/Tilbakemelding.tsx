@@ -1,4 +1,4 @@
-import { Krav, Tilbakemelding, TilbakemeldingRolle, TilbakemeldingType } from '../../../constants'
+import { Krav, Tilbakemelding, TilbakemeldingMeldingStatus, TilbakemeldingRolle, TilbakemeldingType } from '../../../constants'
 import { tilbakemeldingNewMelding, TilbakemeldingNewMeldingRequest, tilbakemeldingslettMelding, useTilbakemeldinger } from '../../../api/TilbakemeldingApi'
 import React, { useEffect, useState } from 'react'
 import { Block } from 'baseui/block'
@@ -29,6 +29,7 @@ import EndretInfo from './edit/EndreInfo'
 import MeldingKnapper from './edit/MeldingKnapper'
 import NyTilbakemeldingModal from './edit/NyTilbakemeldingModal'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from 'baseui/modal'
+import { tilbakemeldingStatusToText } from './utils'
 
 const DEFAULT_COUNT_SIZE = 5
 
@@ -58,21 +59,21 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
           <CustomizedAccordion>
             {tilbakemeldinger.slice(0, count).map((t) => {
               const focused = focusNr === t.id
-              const { ubesvart, ubesvartOgKraveier, melderOrKraveier, sistMelding } = tilbakeMeldingStatus(t)
+              const { status, ubesvartOgKraveier, melderOrKraveier, sistMelding } = getMelderInfo(t)
 
               const statusView = (icon: React.ReactNode) => (
                 <Block>
                   <Block width="100%" maxWidth="70px">
                     <Block display="flex" flexDirection="column" alignItems="flex-end">
                       <StatusView
-                        status={ubesvart ? 'Ubesvart' : 'Besvart'}
+                        status={tilbakemeldingStatusToText(status)}
                         statusDisplay={
-                          ubesvart
+                          status === TilbakemeldingMeldingStatus.UBESVART
                             ? { background: ettlevColors.white, border: ettlevColors.green100 }
                             : {
-                                background: ettlevColors.green50,
-                                border: ettlevColors.green100,
-                              }
+                              background: ettlevColors.green50,
+                              border: ettlevColors.green100,
+                            }
                         }
                         overrides={{
                           Root: {
@@ -123,7 +124,7 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
                         <Block display="flex" width="100%">
                           <Block display="flex" alignItems="center" width="100%">
                             <LabelSmall>
-                              <PersonName ident={t.melderIdent}/>
+                              <PersonName ident={t.melderIdent} />
                             </LabelSmall>
                             <ParagraphSmall marginTop={0} marginBottom={0} marginLeft="24px" $style={{ fontSize: '14px' }}>
                               Sendt: {moment(t.meldinger[0].tid).format('lll')}
@@ -222,15 +223,29 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
   )
 }
 
-export const tilbakeMeldingStatus = (tilbakemelding: Tilbakemelding) => {
+const getStatus = (tilbakemelding: Tilbakemelding) => {
+  let status = TilbakemeldingMeldingStatus.UBESVART
+
+  if(tilbakemelding.status) {
+    status = tilbakemelding.status
+  } else {
+    if(tilbakemelding.meldinger[tilbakemelding.meldinger.length - 1].rolle === TilbakemeldingRolle.KRAVEIER) {
+     status = TilbakemeldingMeldingStatus.BESVART
+    }
+  }
+
+  return status
+}
+
+export const getMelderInfo = (tilbakemelding: Tilbakemelding) => {
   const sistMelding = tilbakemelding.meldinger[tilbakemelding.meldinger.length - 1]
-  const ubesvart = sistMelding.rolle === TilbakemeldingRolle.MELDER
+  const status = getStatus(tilbakemelding)
   const melder = user.getIdent() === tilbakemelding.melderIdent
   const rolle = tilbakemelding?.melderIdent === user.getIdent() ? TilbakemeldingRolle.MELDER : TilbakemeldingRolle.KRAVEIER
   const melderOrKraveier = melder || user.isKraveier()
-  const ubesvartOgKraveier = ubesvart && user.isKraveier()
-  const kanSkrive = (ubesvart && rolle === TilbakemeldingRolle.KRAVEIER) || (!ubesvart && rolle === TilbakemeldingRolle.MELDER)
-  return { ubesvart, ubesvartOgKraveier, rolle, melder, melderOrKraveier, sistMelding, kanSkrive }
+  const ubesvartOgKraveier = status === TilbakemeldingMeldingStatus.UBESVART && user.isKraveier()
+  const kanSkrive = (status === TilbakemeldingMeldingStatus.UBESVART && rolle === TilbakemeldingRolle.KRAVEIER) || (status !== TilbakemeldingMeldingStatus.UBESVART && rolle === TilbakemeldingRolle.MELDER)
+  return { status, ubesvartOgKraveier, rolle, melder, melderOrKraveier, sistMelding, kanSkrive }
 }
 
 type TilbakemeldingSvarProps = {
@@ -242,12 +257,14 @@ type TilbakemeldingSvarProps = {
 }
 
 const TilbakemeldingSvar = ({ tilbakemelding, setFocusNummer, close, ubesvartOgKraveier, remove }: TilbakemeldingSvarProps) => {
-  const melderInfo = tilbakeMeldingStatus(tilbakemelding)
+  const melderInfo = getMelderInfo(tilbakemelding)
   const [response, setResponse] = useState('')
   const [replyRole, z] = useState(melderInfo.rolle)
   const [error, setError] = useState()
   const [loading, setLoading] = useState(false)
   const [deleteModal, setDeleteModal] = useState(false)
+  const [tilbakeMeldingStatus, setTilbakemeldingStatus] = useState<TilbakemeldingMeldingStatus>(TilbakemeldingMeldingStatus.BESVART)
+  const [isEndretKrav, setIsEndretKrav] = useState<boolean>(false)
 
   const submit = () => {
     if (response) {
@@ -257,6 +274,8 @@ const TilbakemeldingSvar = ({ tilbakemelding, setFocusNummer, close, ubesvartOgK
         tilbakemeldingId: tilbakemelding.id,
         rolle: replyRole,
         melding: response,
+        status: tilbakeMeldingStatus,
+        endretKrav: isEndretKrav
       }
 
       setLoading(true)

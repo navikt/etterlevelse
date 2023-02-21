@@ -8,7 +8,7 @@ import { HeadingLarge, HeadingXLarge, LabelSmall, ParagraphLarge } from 'baseui/
 import { Field, FieldProps, Form, Formik } from 'formik'
 import { useState } from 'react'
 import { createNewTilbakemelding, CreateTilbakemeldingRequest } from '../../../../api/TilbakemeldingApi'
-import { AdresseType, Krav, Tilbakemelding, TilbakemeldingType, Varslingsadresse } from '../../../../constants'
+import { AdresseType, Krav, Tilbakemelding, TilbakemeldingMeldingStatus, TilbakemeldingType, Varslingsadresse } from '../../../../constants'
 import { theme } from '../../../../util'
 import CustomizedModal from '../../../common/CustomizedModal'
 import { TextAreaField } from '../../../common/Inputs'
@@ -235,6 +235,8 @@ const createTilbakemeldingSchema: yup.SchemaOf<CreateTilbakemeldingRequest> = yu
   kravVersjon: yup.number().required(required),
   foersteMelding: yup.string().required(required),
   type: yup.mixed().oneOf(Object.values(TilbakemeldingType)).required(required),
+  status: yup.mixed().oneOf(Object.values(TilbakemeldingMeldingStatus)).required(required),
+  endretKrav: yup.boolean().required(required),
   varslingsadresse: varslingsadresse.required(required),
 })
 

@@ -10,9 +10,9 @@ import { getTilbakemeldingForKrav } from '../api/TilbakemeldingApi'
 import { PersonName } from '../components/common/PersonName'
 import RouteLink from '../components/common/RouteLink'
 import { Cell, Row, Table } from '../components/common/Table'
-import { tilbakeMeldingStatus } from '../components/krav/tilbakemelding/Tilbakemelding'
+import { getMelderInfo } from '../components/krav/tilbakemelding/Tilbakemelding'
 import { Layout2 } from '../components/scaffold/Page'
-import { Krav, PageResponse, Tilbakemelding } from '../constants'
+import { Krav, PageResponse, Tilbakemelding, TilbakemeldingMeldingStatus } from '../constants'
 import { ColumnCompares } from '../util/hooks'
 import { ettlevColors, maxPageWidth } from '../util/theme'
 import { codelist, ListName } from '../services/Codelist'
@@ -73,12 +73,12 @@ export const QuestionAndAnswerLogPage = () => {
         tilbakeMeldinger.forEach((t) => {
           const kravNavn = tableContent.filter((k) => k.kravNummer === t.kravNummer && k.kravVersjon === t.kravVersjon)[0].navn
           const kravTema = tableContent.filter((k) => k.kravNummer === t.kravNummer && k.kravVersjon === t.kravVersjon)[0].tema
-          const { ubesvart, sistMelding } = tilbakeMeldingStatus(t)
+          const { status, sistMelding } = getMelderInfo(t)
           kravMessages.push({
             ...t,
             kravNavn: kravNavn,
             tidForSporsmaal: t.meldinger[0].tid,
-            tidForSvar: ubesvart ? undefined : sistMelding.tid,
+            tidForSvar: status === TilbakemeldingMeldingStatus.UBESVART ? undefined : sistMelding.tid,
             melderNavn: <PersonName ident={t.melderIdent} />,
             tema: kravTema,
           })
