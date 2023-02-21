@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { PageResponse, Tilbakemelding, TilbakemeldingRolle, TilbakemeldingType, Varslingsadresse } from '../constants'
+import { PageResponse, Tilbakemelding, TilbakemeldingMeldingStatus, TilbakemeldingRolle, TilbakemeldingType, Varslingsadresse } from '../constants'
 import { env } from '../util/env'
 import { useEffect, useState } from 'react'
 import moment from 'moment'
@@ -23,6 +23,10 @@ export const tilbakemeldingEditMelding = async (request: { tilbakemeldingId: str
 
 export const tilbakemeldingslettMelding = async (request: { tilbakemeldingId: string; meldingNr: number }) => {
   return (await axios.delete<Tilbakemelding>(`${env.backendBaseUrl}/tilbakemelding/${request.tilbakemeldingId}/${request.meldingNr}`)).data
+}
+
+export const updateTilbakemeldingStatusOgEndretKrav = async (request: { tilbakemeldingId: string; status: TilbakemeldingMeldingStatus; endretKrav: boolean }) => {
+  return (await axios.post<Tilbakemelding>(`${env.backendBaseUrl}/tilbakemelding/status/${request.tilbakemeldingId}/${request.status}/${request.endretKrav}`)).data
 }
 
 export const useTilbakemeldinger = (kravNummer: number, kravVersjon: number) => {
@@ -76,10 +80,14 @@ export interface CreateTilbakemeldingRequest {
   type: TilbakemeldingType
   varslingsadresse: Varslingsadresse
   foersteMelding: string
+  status: TilbakemeldingMeldingStatus
+  endretKrav: boolean
 }
 
 export interface TilbakemeldingNewMeldingRequest {
   tilbakemeldingId: string
   melding: string
   rolle: TilbakemeldingRolle
+  status: TilbakemeldingMeldingStatus
+  endretKrav: boolean
 }
