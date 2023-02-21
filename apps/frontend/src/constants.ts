@@ -206,6 +206,8 @@ export interface Tilbakemelding {
   type: TilbakemeldingType
   melderIdent: string
   meldinger: TilbakemeldingMelding[]
+  status: TilbakemeldingMeldingStatus
+  endretKrav: boolean
 }
 
 export interface TilbakemeldingMelding {
@@ -214,8 +216,6 @@ export interface TilbakemeldingMelding {
   rolle: TilbakemeldingRolle
   tid: string
   innhold: string
-  status: TilbakemeldingMeldingStatus
-  endretKrav: boolean
 
   endretTid?: string
   endretAvIdent?: string
@@ -234,8 +234,7 @@ export interface Melding extends DomainObject {
 export enum TilbakemeldingMeldingStatus {
   UBESVART = 'UBESVART',
   BESVART = 'BESVART',
-  MIDLERTIDLIG_SVAR = 'MIDLERTIDLIG_SVAR',
-  LEGACY_STATUS = 'LEGACY_STATUS'
+  MIDLERTIDLIG_SVAR = 'MIDLERTIDLIG_SVAR'
 }
 
 export interface EtterlevelseArkiv extends DomainObject {
