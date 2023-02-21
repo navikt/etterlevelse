@@ -2,7 +2,7 @@ package no.nav.data.etterlevelse.krav.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public enum TilbakemeldingService {
+public enum TilbakemeldingStatus {
     @JsonProperty("UBESVART")
     UBESVART,
     @JsonProperty("BESVART")

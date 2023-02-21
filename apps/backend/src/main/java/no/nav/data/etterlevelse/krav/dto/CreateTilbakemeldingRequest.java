@@ -11,6 +11,7 @@ import no.nav.data.common.validator.Validated;
 import no.nav.data.common.validator.Validator;
 import no.nav.data.etterlevelse.common.domain.KravId;
 import no.nav.data.etterlevelse.krav.domain.Tilbakemelding.TilbakemeldingsType;
+import no.nav.data.etterlevelse.krav.domain.TilbakemeldingStatus;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 
 import static org.apache.commons.lang3.StringUtils.trimToNull;
@@ -31,6 +32,9 @@ public class CreateTilbakemeldingRequest implements Validated, KravId {
 
     private String foersteMelding;
 
+    private TilbakemeldingStatus status;
+
+    private boolean endretKrav;
     @JsonIgnore
     private String ident;
 

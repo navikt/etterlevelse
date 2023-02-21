@@ -9,6 +9,7 @@ import no.nav.data.etterlevelse.common.domain.DomainService;
 import no.nav.data.etterlevelse.krav.domain.Tilbakemelding;
 import no.nav.data.etterlevelse.krav.domain.Tilbakemelding.Melding;
 import no.nav.data.etterlevelse.krav.domain.TilbakemeldingRepo;
+import no.nav.data.etterlevelse.krav.domain.TilbakemeldingStatus;
 import no.nav.data.etterlevelse.krav.dto.CreateTilbakemeldingRequest;
 import no.nav.data.etterlevelse.krav.dto.TilbakemeldingNewMeldingRequest;
 import no.nav.data.etterlevelse.varsel.UrlGenerator;
@@ -75,7 +76,8 @@ public class TilbakemeldingService extends DomainService<Tilbakemelding> {
         var tilbakemelding = get(request.getTilbakemeldingId());
         var melding = tilbakemelding.newMelding(request);
         varsle(tilbakemelding, melding);
-
+        tilbakemelding.setStatus(request.getStatus());
+        tilbakemelding.setEndretKrav(request.isEndretKrav());
         log.info("New melding nr {} på tilbakemelding {} på {} fra {}",
                 melding.getMeldingNr(), tilbakemelding.getId(), tilbakemelding.kravId(), tilbakemelding.getMelder().getIdent());
         return storage.save(tilbakemelding);
@@ -85,7 +87,6 @@ public class TilbakemeldingService extends DomainService<Tilbakemelding> {
     public Tilbakemelding deleteMelding(UUID tilbakemeldingId, int meldingNr) {
         var tilbakemelding = get(tilbakemeldingId);
         var melding = tilbakemelding.finnMelding(meldingNr);
-
         SecurityUtils.assertIsUserOrAdmin(melding.getFraIdent(), "Ikke din melding");
         if (meldingNr == 1) {
             return storage.delete(tilbakemelding);
@@ -98,9 +99,17 @@ public class TilbakemeldingService extends DomainService<Tilbakemelding> {
     public Tilbakemelding editMelding(UUID tilbakemeldingId, int meldingNr, String body) {
         var tilbakemelding = get(tilbakemeldingId);
         var melding = tilbakemelding.finnMelding(meldingNr);
-
         SecurityUtils.assertIsUserOrAdmin(melding.getFraIdent(), "Ikke din melding");
         melding.endre(body);
+        varsle(tilbakemelding, melding);
+        return storage.save(tilbakemelding);
+    }
+
+    @Transactional
+    public Tilbakemelding updateTilbakemeldingStatusAndEndretKrav(UUID tilbakemeldingId, TilbakemeldingStatus tilbakemeldingStatus, boolean endretKrav){
+        var tilbakemelding = get(tilbakemeldingId);
+        tilbakemelding.setStatus(tilbakemeldingStatus);
+        tilbakemelding.setEndretKrav(endretKrav);
         return storage.save(tilbakemelding);
     }
 

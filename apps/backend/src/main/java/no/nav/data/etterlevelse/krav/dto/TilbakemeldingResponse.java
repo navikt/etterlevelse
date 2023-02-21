@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import no.nav.data.common.rest.ChangeStampResponse;
 import no.nav.data.etterlevelse.krav.domain.Tilbakemelding.Rolle;
 import no.nav.data.etterlevelse.krav.domain.Tilbakemelding.TilbakemeldingsType;
+import no.nav.data.etterlevelse.krav.domain.TilbakemeldingStatus;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -23,16 +24,14 @@ public class TilbakemeldingResponse {
     private UUID id;
     private ChangeStampResponse changeStamp;
     private Integer version;
-
     private Integer kravNummer;
     private Integer kravVersjon;
-
     private String tittel;
     private TilbakemeldingsType type;
     private String melderIdent;
-
     private List<MeldingResponse> meldinger;
-
+    private TilbakemeldingStatus status;
+    private boolean endretKrav;
     @Data
     @Builder
     @NoArgsConstructor

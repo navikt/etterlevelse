@@ -40,6 +40,9 @@ public class Tilbakemelding implements DomainObject, KravId {
     private TilbakemeldingsType type;
     private Melder melder;
     private List<Melding> meldinger;
+    private TilbakemeldingStatus status;
+    private boolean endretKrav;
+
 
     @Data
     @Builder
@@ -103,6 +106,8 @@ public class Tilbakemelding implements DomainObject, KravId {
                 .kravVersjon(request.getKravVersjon())
                 .tittel(request.getTittel())
                 .type(request.getType())
+                .status(request.getStatus())
+                .endretKrav(request.isEndretKrav())
                 .melder(Melder.builder()
                         .ident(request.getIdent())
                         .varslingsadresse(request.getVarslingsadresse())
@@ -142,13 +147,13 @@ public class Tilbakemelding implements DomainObject, KravId {
                 .id(id)
                 .changeStamp(convertChangeStampResponse())
                 .version(version)
-
                 .kravNummer(kravNummer)
                 .kravVersjon(kravVersjon)
-
                 .tittel(tittel)
                 .type(type)
                 .melderIdent(melder.getIdent())
+                .endretKrav(endretKrav)
+                .status(status)
                 .meldinger(convert(meldinger, melding -> MeldingResponse.builder()
                         .meldingNr(melding.meldingNr)
                         .fraIdent(melding.fraIdent)

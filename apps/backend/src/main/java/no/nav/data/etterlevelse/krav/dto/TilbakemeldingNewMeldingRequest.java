@@ -10,6 +10,7 @@ import no.nav.data.common.security.SecurityUtils;
 import no.nav.data.common.validator.Validated;
 import no.nav.data.common.validator.Validator;
 import no.nav.data.etterlevelse.krav.domain.Tilbakemelding.Rolle;
+import no.nav.data.etterlevelse.krav.domain.TilbakemeldingStatus;
 
 import java.util.UUID;
 
@@ -25,7 +26,8 @@ public class TilbakemeldingNewMeldingRequest implements Validated {
     private UUID tilbakemeldingId;
     private String melding;
     private Rolle rolle;
-
+    private TilbakemeldingStatus status;
+    private boolean endretKrav;
     @JsonIgnore
     private String ident;
 

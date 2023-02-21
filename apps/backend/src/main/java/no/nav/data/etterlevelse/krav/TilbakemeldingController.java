@@ -7,13 +7,20 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.etterlevelse.krav.domain.Tilbakemelding;
+import no.nav.data.etterlevelse.krav.domain.TilbakemeldingStatus;
 import no.nav.data.etterlevelse.krav.dto.CreateTilbakemeldingRequest;
 import no.nav.data.etterlevelse.krav.dto.EditTilbakemeldingRequest;
 import no.nav.data.etterlevelse.krav.dto.TilbakemeldingNewMeldingRequest;
 import no.nav.data.etterlevelse.krav.dto.TilbakemeldingResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
 
@@ -71,6 +78,15 @@ public class TilbakemeldingController {
         log.info("Get Tilbakemeldinger for krav K{}.{}", kravNummer, kravVersjon);
         var tilbakemeldinger = tilbakemeldingService.getForKrav(kravNummer, kravVersjon);
         return ResponseEntity.ok(new RestResponsePage<>(tilbakemeldinger).convert(Tilbakemelding::toResponse));
+    }
+
+    @Operation(summary = "Change status and endretKrav")
+    @ApiResponse(description = "Update status and endretKrav for tilbakemelding")
+    @PostMapping("/status/{tilbakeMeldingId}/{status}/{endretkrav}")
+    public ResponseEntity<TilbakemeldingResponse> updateTilbakemeldingStatusAndEndretKrav(@PathVariable UUID tilbakeMeldingId, @PathVariable TilbakemeldingStatus status, @PathVariable boolean endretkrav) {
+        log.info("Update tilbakemelding status");
+        var tilbakemelding = tilbakemeldingService.updateTilbakemeldingStatusAndEndretKrav(tilbakeMeldingId, status, endretkrav);
+        return ResponseEntity.ok(tilbakemelding.toResponse());
     }
 
     static class TilbakemeldingPage extends RestResponsePage<TilbakemeldingResponse> {
