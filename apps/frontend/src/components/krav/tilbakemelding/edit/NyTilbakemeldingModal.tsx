@@ -22,6 +22,7 @@ import { ettlevColors } from '../../../../util/theme'
 import { borderColor, borderRadius, borderWidth } from '../../../common/Style'
 import { CustomizedAccordion, CustomizedPanel } from '../../../common/CustomizedAccordion'
 import { Markdown } from '../../../common/Markdown'
+import { SuksesskriterieCard } from '../../Suksesskriterie'
 
 type NyTilbakemeldingModalProps = {
   open?: boolean
@@ -132,9 +133,13 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: NyTilbakemeldingMod
                     <CustomizedAccordion>
                       <CustomizedPanel
                         overrides={{ Content: { style: { backgroundColor: ettlevColors.white, paddingLeft: '20px', paddingRight: '20px' } } }}
-                        title={<LabelSmall>Hensikten med kravet</LabelSmall>}
+                        title={<LabelSmall>Vis suksesskriterier</LabelSmall>}
                       >
-                        <Markdown source={krav.hensikt} fontSize="18px" />
+                        <Block width="100%">
+                          {krav.suksesskriterier.map((s, i) => (
+                            <SuksesskriterieCard key={s.id} suksesskriterie={s} num={i + 1} totalt={krav.suksesskriterier.length} fullWidth/>
+                          ))}
+                        </Block>
                       </CustomizedPanel>
                     </CustomizedAccordion>
                     <TextAreaField tooltip="Skriv ditt spørsmål i tekstfeltet" label="Ditt spørsmål" name="foersteMelding" placeholder="Skriv her.." />
