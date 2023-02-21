@@ -7,8 +7,8 @@ import { Markdown } from '../common/Markdown'
 import { borderRadius, borderWidth, marginAll } from '../common/Style'
 import { ettlevColors, pageWidth } from '../../util/theme'
 
-export const SuksesskriterieCard = (props: { suksesskriterie: Suksesskriterie; num: number; totalt: number }) => {
-  const { suksesskriterie, num, totalt } = props
+export const SuksesskriterieCard = (props: { suksesskriterie: Suksesskriterie; num: number; totalt: number;  fullWidth?: boolean}) => {
+  const { suksesskriterie, num, totalt, fullWidth } = props
 
   return (
     <Block marginBottom={theme.sizing.scale800}>
@@ -18,7 +18,7 @@ export const SuksesskriterieCard = (props: { suksesskriterie: Suksesskriterie; n
             style: {
               ...borderRadius('4px'),
               ...borderWidth('1px'),
-              maxWidth: pageWidth,
+              maxWidth: fullWidth ? '100%' : pageWidth,
             },
           },
           Contents: {
@@ -32,7 +32,7 @@ export const SuksesskriterieCard = (props: { suksesskriterie: Suksesskriterie; n
           Suksesskriterium {num} av {totalt}
         </LabelLarge>
         <HeadingXLarge>{suksesskriterie.navn}</HeadingXLarge>
-        <Markdown source={suksesskriterie.beskrivelse} maxWidth="650px" />
+        <Markdown source={suksesskriterie.beskrivelse} maxWidth={fullWidth ? '100%' : "650px"} />
       </Card>
     </Block>
   )
