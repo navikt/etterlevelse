@@ -47,11 +47,7 @@ export const NyTilbakemeldingModal = ({open, close, krav}: NyTilbakemeldingModal
   const [newTilbakeMelding, setNewTilbakeMelding] = useState<Tilbakemelding>()
 
   const submit = (request: CreateTilbakemeldingRequest) => {
-    createNewTilbakemelding({
-      ...request,
-      status: TilbakemeldingMeldingStatus.UBESVART,
-      endretKrav: false
-    })
+    createNewTilbakemelding(request)
       .then((t) => {
         setShowNotification(request.varslingsadresse.type)
         setNewTilbakeMelding(t)
@@ -249,6 +245,8 @@ const newTilbakemelding = (krav: Krav): Partial<CreateTilbakemeldingRequest> => 
   foersteMelding: '',
   type: TilbakemeldingType.UKLAR,
   varslingsadresse: undefined,
+  status: TilbakemeldingMeldingStatus.UBESVART,
+  endretKrav: false
 })
 
 export default NyTilbakemeldingModal
