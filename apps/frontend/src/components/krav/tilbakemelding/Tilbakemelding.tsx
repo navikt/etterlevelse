@@ -123,7 +123,7 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
                   }}
                   title={
                     <Block width="100%" padding={'8px'}>
-                      {t.endretKrav && <ShowWarningMessage noMarginLeft warningMessage="Spørsmålet har medført til at innholdet i kravet er endret" />}
+                      {t.endretKrav && <ShowWarningMessage noMarginLeft warningMessage="Spørsmålet har ført til at innholdet i kravet er endret" />}
                       <Block display="flex" width="100%" marginTop={t.endretKrav ? '8px' : ''}>
                         <Portrait ident={t.melderIdent} />
                         <Block display="flex" flexDirection="column" marginLeft={theme.sizing.scale400} width="100%">
@@ -304,13 +304,13 @@ const TilbakemeldingSvar = ({ tilbakemelding, setFocusNummer, close, ubesvartOgK
 
   return (
     <Block width={'100%'}>
-      {melderInfo.kanSkrive && (
+      {(melderInfo.kanSkrive || user.isKraveier()) &&  (
         <HeadingMedium color={ettlevColors.green800} marginBottom="9px" marginTop="34px">
           {ubesvartOgKraveier ? 'Besvar' : 'Ny melding'}
         </HeadingMedium>
       )}
 
-      {melderInfo.kanSkrive && (
+      {(melderInfo.kanSkrive || user.isKraveier()) &&  (
         <Block>
           <Select
             overrides={{
@@ -345,7 +345,7 @@ const TilbakemeldingSvar = ({ tilbakemelding, setFocusNummer, close, ubesvartOgK
         </Block>
       )}
       <Block display="flex" width="100%" alignItems="flex-end" justifyContent="center">
-        {melderInfo.kanSkrive && (
+        {(melderInfo.kanSkrive || user.isKraveier()) && (
           <Block display="flex" width="100%">
             <CustomizedTextarea rows={6} onChange={(e) => setResponse((e.target as HTMLTextAreaElement).value)} value={response} disabled={loading} />
           </Block>
@@ -379,7 +379,7 @@ const TilbakemeldingSvar = ({ tilbakemelding, setFocusNummer, close, ubesvartOgK
                 </Block>
               )}
 
-              {melderInfo.kanSkrive && (
+              {(melderInfo.kanSkrive || user.isKraveier()) && (
                 <Button kind="primary" size={'compact'} disabled={!response} onClick={submit}>
                   {ubesvartOgKraveier ? 'Svar' : 'Send'}
                 </Button>

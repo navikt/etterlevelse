@@ -63,7 +63,7 @@ public class TilbakemeldingService extends DomainService<Tilbakemelding> {
         var melding = tilbakemelding.getLastMelding();
 
         tilbakemelding = storage.save(tilbakemelding);
-        varsle(tilbakemelding, melding);
+        varsle(tilbakemelding, melding,false);
 
         log.info("New tilbakemelding {} på {} fra {}", tilbakemelding.getId(), tilbakemelding.kravId(), tilbakemelding.getMelder().getIdent());
         return storage.save(tilbakemelding);
@@ -75,7 +75,7 @@ public class TilbakemeldingService extends DomainService<Tilbakemelding> {
 
         var tilbakemelding = get(request.getTilbakemeldingId());
         var melding = tilbakemelding.newMelding(request);
-        varsle(tilbakemelding, melding);
+        varsle(tilbakemelding, melding, false);
         tilbakemelding.setStatus(request.getStatus());
         tilbakemelding.setEndretKrav(request.isEndretKrav());
         log.info("New melding nr {} på tilbakemelding {} på {} fra {}",
@@ -101,7 +101,7 @@ public class TilbakemeldingService extends DomainService<Tilbakemelding> {
         var melding = tilbakemelding.finnMelding(meldingNr);
         SecurityUtils.assertIsUserOrAdmin(melding.getFraIdent(), "Ikke din melding");
         melding.endre(body);
-        varsle(tilbakemelding, melding);
+        varsle(tilbakemelding, melding, true);
         return storage.save(tilbakemelding);
     }
 
@@ -113,7 +113,7 @@ public class TilbakemeldingService extends DomainService<Tilbakemelding> {
         return storage.save(tilbakemelding);
     }
 
-    private void varsle(Tilbakemelding tilbakemelding, Melding melding) {
+    private void varsle(Tilbakemelding tilbakemelding, Melding melding,boolean isEdit) {
         var krav = kravRepo.findByKravNummer(tilbakemelding.getKravNummer(), tilbakemelding.getKravVersjon()).orElseThrow().toKrav();
         var sender = resourceClient.getResource(melding.getFraIdent()).orElseThrow();
         var recipients = tilbakemelding.getRecipientsForMelding(krav, melding);
@@ -122,9 +122,11 @@ public class TilbakemeldingService extends DomainService<Tilbakemelding> {
 
         var builder = Varsel.builder();
 
-        if (melding.getMeldingNr() == 1) {
+        if(isEdit) {
+            builder.title("Meldingen endret på krav %s".formatted(kravId));
+        } else if (melding.getMeldingNr() == 1) {
             builder.title("Ny tilbakemelding på krav %s".formatted(kravId));
-        } else {
+        }  else {
             builder.title("Ny melding på tilbakemelding på krav %s".formatted(kravId));
         }
 
