@@ -309,38 +309,41 @@ const TilbakemeldingSvar = ({ tilbakemelding, setFocusNummer, close, ubesvartOgK
           {ubesvartOgKraveier ? 'Besvar' : 'Ny melding'}
         </HeadingMedium>
       )}
-      <Block>
-        <Select
-          overrides={{
-            ...customSelectOverrides,
-          }}
-          placeholder={'Velg status til tilbakemeldingen'}
-          options={getParsedOptionsforTilbakeMelding()}
-          value={getTilbakeMeldingStatusToOption(tilbakeMeldingStatus)}
-          onChange={({ value }) => {
-            if (value.length > 0) {
-              setTilbakemeldingStatus(value[0].id as TilbakemeldingMeldingStatus)
-            } else {
-              setTilbakemeldingStatus(TilbakemeldingMeldingStatus.UBESVART)
-            }
-          }}
-        />
-        <Checkbox
-          overrides={{
-            Checkmark: {
-              style: ({ $isFocused }) => ({
-                outlineColor: $isFocused ? ettlevColors.focusOutline : undefined,
-                outlineWidth: $isFocused ? '3px' : undefined,
-                outlineStyle: $isFocused ? 'solid' : undefined,
-              }),
-            },
-          }}
-          checked={isEndretKrav}
-          onChange={() => setIsEndretKrav(!isEndretKrav)}
-        >
-          Tilbakemelding har ført til kravendring
-        </Checkbox>
-      </Block>
+
+      {melderInfo.kanSkrive && (
+        <Block>
+          <Select
+            overrides={{
+              ...customSelectOverrides,
+            }}
+            placeholder={'Velg status til tilbakemeldingen'}
+            options={getParsedOptionsforTilbakeMelding()}
+            value={getTilbakeMeldingStatusToOption(tilbakeMeldingStatus)}
+            onChange={({ value }) => {
+              if (value.length > 0) {
+                setTilbakemeldingStatus(value[0].id as TilbakemeldingMeldingStatus)
+              } else {
+                setTilbakemeldingStatus(TilbakemeldingMeldingStatus.UBESVART)
+              }
+            }}
+          />
+          <Checkbox
+            overrides={{
+              Checkmark: {
+                style: ({ $isFocused }) => ({
+                  outlineColor: $isFocused ? ettlevColors.focusOutline : undefined,
+                  outlineWidth: $isFocused ? '3px' : undefined,
+                  outlineStyle: $isFocused ? 'solid' : undefined,
+                }),
+              },
+            }}
+            checked={isEndretKrav}
+            onChange={() => setIsEndretKrav(!isEndretKrav)}
+          >
+            Tilbakemelding har ført til kravendring
+          </Checkbox>
+        </Block>
+      )}
       <Block display="flex" width="100%" alignItems="flex-end" justifyContent="center">
         {melderInfo.kanSkrive && (
           <Block display="flex" width="100%">
