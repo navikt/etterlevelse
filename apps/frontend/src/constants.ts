@@ -202,6 +202,9 @@ export interface EtterlevelseDokumentasjon {
   behandlingId: string
   irrelevansFor: Code[]
   etterlevelseNummer: number;
+
+  //data field for frontend only
+  behandling?: Behandling
 }
 
 export interface Periode {
