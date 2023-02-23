@@ -123,11 +123,11 @@ public class TilbakemeldingService extends DomainService<Tilbakemelding> {
         var builder = Varsel.builder();
 
         if(isEdit) {
-            builder.title("Meldingen endret på krav %s".formatted(kravId));
+            builder.title("Melding endret på krav %s".formatted(kravId));
         } else if (melding.getMeldingNr() == 1) {
             builder.title("Ny tilbakemelding på krav %s".formatted(kravId));
         }  else {
-            builder.title("Ny melding på tilbakemelding på krav %s".formatted(kravId));
+            builder.title("Melding endret på krav %s".formatted(kravId));
         }
 
         var varsel = builder
