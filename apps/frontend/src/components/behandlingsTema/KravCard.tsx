@@ -112,13 +112,12 @@ export const KravCard = (props: { krav: KravEtterlevelseData; noStatus?: boolean
                 >
                   K{props.krav.kravNummer}.{props.krav.kravVersjon}
                 </ParagraphXSmall>
-                {!props.noVarsling && props.krav.kravVersjon === 1 && props.krav.etterlevelseStatus === undefined && kravAge < 30 && <ShowWarningMessage warningMessage="Nytt krav"/>}
-                {!props.noVarsling &&
-                  props.krav.etterlevelseStatus === undefined &&
-                  nyVersionFlag &&
-                  props.kravFilter === KRAV_FILTER_TYPE.RELEVANTE_KRAV &&
-                  kravAge < 30 &&
-                  <ShowWarningMessage warningMessage="Ny versjon"/>}
+                {!props.noVarsling && props.krav.kravVersjon === 1 && props.krav.etterlevelseStatus === undefined && kravAge < 30 && (
+                  <ShowWarningMessage warningMessage="Nytt krav" />
+                )}
+                {!props.noVarsling && props.krav.etterlevelseStatus === undefined && nyVersionFlag && props.kravFilter === KRAV_FILTER_TYPE.RELEVANTE_KRAV && kravAge < 30 && (
+                  <ShowWarningMessage warningMessage="Ny versjon" />
+                )}
               </Block>
               <LabelSmall $style={{ fontSize: '18px', fontWeight: 600, alignContent: 'flex-start', textAlign: 'left', textDecoration: hover ? 'underline' : 'none' }}>
                 {props.krav.navn}
@@ -209,7 +208,7 @@ export const KravCard = (props: { krav: KravEtterlevelseData; noStatus?: boolean
   )
 }
 
-export const ShowWarningMessage = ({ warningMessage, noMarginLeft }:{warningMessage: string, noMarginLeft?: boolean}) => {
+export const ShowWarningMessage = ({ warningMessage, noMarginLeft }: { warningMessage: string; noMarginLeft?: boolean }) => {
   return (
     <Block display="flex" alignItems="center">
       <img

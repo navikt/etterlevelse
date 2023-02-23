@@ -18,8 +18,6 @@ import { Spinner } from 'baseui/spinner'
 import { KIND as NKIND, Notification } from 'baseui/notification'
 import { ParagraphMedium } from 'baseui/typography'
 
-
-
 type ExportEtterlevelseModalProps = {
   behandlingId: String
 }
@@ -30,7 +28,6 @@ export const ExportEtterlevelseModal = (props: ExportEtterlevelseModalProps) => 
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [errorMessage, setErrorMessage] = useState<String>('')
 
-
   return (
     <Block display="flex" alignItems="center" marginRight="12px">
       <Button kind={KIND.tertiary} size={SIZE.compact} onClick={() => setIsExportModalOpen(true)}>
@@ -39,7 +36,6 @@ export const ExportEtterlevelseModal = (props: ExportEtterlevelseModalProps) => 
         </Block>
         <Block>Eksporter</Block>
       </Button>
-
 
       <CustomizedModal
         isOpen={isExportModalOpen}
@@ -59,11 +55,11 @@ export const ExportEtterlevelseModal = (props: ExportEtterlevelseModalProps) => 
       >
         <ModalHeader>Eksporter Etterlevelse</ModalHeader>
         <ModalBody>
-          {isLoading ?
+          {isLoading ? (
             <Block display="flex" justifyContent="center" width="100%">
               <Spinner $color={ettlevColors.green400} $size={theme.sizing.scale2400} />
             </Block>
-            :
+          ) : (
             <Block>
               <Select
                 placeholder="Velg et tema for eksportering"
@@ -75,7 +71,7 @@ export const ExportEtterlevelseModal = (props: ExportEtterlevelseModalProps) => 
                 }}
                 overrides={customSelectOverrides}
               />
-              {errorMessage &&
+              {errorMessage && (
                 <Block width="100%" marginTop="16px">
                   <Notification
                     overrides={{
@@ -98,26 +94,31 @@ export const ExportEtterlevelseModal = (props: ExportEtterlevelseModalProps) => 
                       </ParagraphMedium>
                     </Block>
                   </Notification>
-                </Block>}
+                </Block>
+              )}
               <Block marginTop="16px" display="flex" $style={{ justifyContent: 'flex-end', paddingTop: '16px' }}>
                 <Button
                   kind={KIND.primary}
                   size={SIZE.compact}
                   onClick={() => {
-                    (async () => {
+                    ;(async () => {
                       setIsLoading(true)
                       setErrorMessage('')
-                      const exportUrl = selectedTema.length > 0 ?
-                        `${env.backendBaseUrl}/export/etterlevelse?behandlingId=${props.behandlingId}&temakode=${selectedTema[0].id}` :
-                        `${env.backendBaseUrl}/export/etterlevelse?behandlingId=${props.behandlingId}`
+                      const exportUrl =
+                        selectedTema.length > 0
+                          ? `${env.backendBaseUrl}/export/etterlevelse?behandlingId=${props.behandlingId}&temakode=${selectedTema[0].id}`
+                          : `${env.backendBaseUrl}/export/etterlevelse?behandlingId=${props.behandlingId}`
 
-                      axios.get(exportUrl).then(() => {
-                        window.location.href = exportUrl
-                        setIsLoading(false)
-                      }).catch((e) => {
-                        setErrorMessage(e.response.data.message)
-                        setIsLoading(false)
-                      })
+                      axios
+                        .get(exportUrl)
+                        .then(() => {
+                          window.location.href = exportUrl
+                          setIsLoading(false)
+                        })
+                        .catch((e) => {
+                          setErrorMessage(e.response.data.message)
+                          setIsLoading(false)
+                        })
                     })()
                   }}
                 >
@@ -128,7 +129,7 @@ export const ExportEtterlevelseModal = (props: ExportEtterlevelseModalProps) => 
                 </Button>
               </Block>
             </Block>
-          }
+          )}
         </ModalBody>
       </CustomizedModal>
     </Block>

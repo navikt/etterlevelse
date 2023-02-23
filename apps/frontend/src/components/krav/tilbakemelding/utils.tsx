@@ -1,4 +1,4 @@
-import {TilbakemeldingMeldingStatus} from "../../../constants"
+import { TilbakemeldingMeldingStatus } from '../../../constants'
 
 export const tilbakemeldingStatusToText = (status: TilbakemeldingMeldingStatus) => {
   switch (status) {
@@ -17,14 +17,16 @@ export const getParsedOptionsforTilbakeMelding = () => {
   return Object.values(TilbakemeldingMeldingStatus).map((s: TilbakemeldingMeldingStatus) => {
     return {
       id: s,
-      label: tilbakemeldingStatusToText(s)
+      label: tilbakemeldingStatusToText(s),
     }
   })
 }
 
 export const getTilbakeMeldingStatusToOption = (status: TilbakemeldingMeldingStatus) => {
-  return [{
-    id: status,
-    label: tilbakemeldingStatusToText(status)
-  }]
+  return [
+    {
+      id: status,
+      label: tilbakemeldingStatusToText(status),
+    },
+  ]
 }

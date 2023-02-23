@@ -36,13 +36,13 @@ export const TilbakemeldingEdit = ({
   return (
     <Block alignItems="flex-end">
       <CustomizedTextarea rows={15} onChange={(e) => setResponse((e.target as HTMLTextAreaElement).value)} value={response} disabled={loading} />
-      <Block marginTop={theme.sizing.scale400} display='flex' justifyContent={'flex-end'}>
-          <Button kind={'secondary'} size={'compact'} onClick={() => setEditModal(false)}>
-            Avbryt
-          </Button>
-          <Button marginLeft size="compact" disabled={!response || loading} onClick={submit}>
-            Lagre
-          </Button>
+      <Block marginTop={theme.sizing.scale400} display="flex" justifyContent={'flex-end'}>
+        <Button kind={'secondary'} size={'compact'} onClick={() => setEditModal(false)}>
+          Avbryt
+        </Button>
+        <Button marginLeft size="compact" disabled={!response || loading} onClick={submit}>
+          Lagre
+        </Button>
       </Block>
       {error && (
         <Notification kind="negative" overrides={{ Body: { style: { marginBottom: '-25px' } } }}>

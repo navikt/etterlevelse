@@ -132,32 +132,33 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: NyTilbakemeldingMod
                   <Block>
                     <CustomizedAccordion>
                       {krav.suksesskriterier.map((s, i) => {
-                        return (<CustomizedPanel
-                          overrides={{ Content: { style: { backgroundColor: ettlevColors.white, paddingLeft: '20px', paddingRight: '20px' } } }}
-                          title={
-                            <Block>
-                              <ParagraphMedium
-                                $style={{
-                                  fontSize: '16px',
-                                  lineHeight: '18,75',
-                                  marginTop: '3px',
-                                  marginBottom: '5px',
-                                  font: 'roboto',
-                                  color: ettlevColors.grey600,
-                                }}
-                              >
-                                Suksesskriterium {i + 1} av {krav.suksesskriterier.length}
-                              </ParagraphMedium>
-                              <LabelLarge color={ettlevColors.green600}>{s.navn}</LabelLarge>
+                        return (
+                          <CustomizedPanel
+                            overrides={{ Content: { style: { backgroundColor: ettlevColors.white, paddingLeft: '20px', paddingRight: '20px' } } }}
+                            title={
+                              <Block>
+                                <ParagraphMedium
+                                  $style={{
+                                    fontSize: '16px',
+                                    lineHeight: '18,75',
+                                    marginTop: '3px',
+                                    marginBottom: '5px',
+                                    font: 'roboto',
+                                    color: ettlevColors.grey600,
+                                  }}
+                                >
+                                  Suksesskriterium {i + 1} av {krav.suksesskriterier.length}
+                                </ParagraphMedium>
+                                <LabelLarge color={ettlevColors.green600}>{s.navn}</LabelLarge>
+                              </Block>
+                            }
+                          >
+                            <Block width="100%">
+                              <Markdown source={s.beskrivelse} maxWidth="100%" />
                             </Block>
-                          }
-                        >
-                          <Block width="100%">
-                            <Markdown source={s.beskrivelse} maxWidth="100%" />
-                          </Block>
-                        </CustomizedPanel>)
+                          </CustomizedPanel>
+                        )
                       })}
-
                     </CustomizedAccordion>
                     <TextAreaField tooltip="Skriv ditt spørsmål i tekstfeltet" label="Ditt spørsmål" name="foersteMelding" placeholder="Skriv her.." />
 
@@ -264,7 +265,7 @@ const newTilbakemelding = (krav: Krav): Partial<CreateTilbakemeldingRequest> => 
   type: TilbakemeldingType.UKLAR,
   varslingsadresse: undefined,
   status: TilbakemeldingMeldingStatus.UBESVART,
-  endretKrav: false
+  endretKrav: false,
 })
 
 export default NyTilbakemeldingModal

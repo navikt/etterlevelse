@@ -1,5 +1,11 @@
 import { Krav, Tilbakemelding, TilbakemeldingMeldingStatus, TilbakemeldingRolle, TilbakemeldingType } from '../../../constants'
-import { tilbakemeldingNewMelding, TilbakemeldingNewMeldingRequest, tilbakemeldingslettMelding, updateTilbakemeldingStatusOgEndretKrav, useTilbakemeldinger } from '../../../api/TilbakemeldingApi'
+import {
+  tilbakemeldingNewMelding,
+  TilbakemeldingNewMeldingRequest,
+  tilbakemeldingslettMelding,
+  updateTilbakemeldingStatusOgEndretKrav,
+  useTilbakemeldinger,
+} from '../../../api/TilbakemeldingApi'
 import React, { useEffect, useState } from 'react'
 import { Block } from 'baseui/block'
 import { theme } from '../../../util'
@@ -75,9 +81,9 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
                           status === TilbakemeldingMeldingStatus.UBESVART
                             ? { background: ettlevColors.white, border: ettlevColors.green100 }
                             : {
-                              background: ettlevColors.green50,
-                              border: ettlevColors.green100,
-                            }
+                                background: ettlevColors.green50,
+                                border: ettlevColors.green100,
+                              }
                         }
                         overrides={{
                           Root: {
@@ -333,7 +339,9 @@ const TilbakemeldingSvar = ({ tilbakemelding, setFocusNummer, close, ubesvartOgK
             </Checkbox>
           </Block>
           <Block marginBottom={'8px'} display={'flex'} alignItems={'center'}>
-            <LabelSmall minWidth={'fit-content'} marginRight={'8px'}>Velg spørsmåls status: </LabelSmall>
+            <LabelSmall minWidth={'fit-content'} marginRight={'8px'}>
+              Velg spørsmåls status:{' '}
+            </LabelSmall>
             <Select
               overrides={{
                 ...customSelectOverrides,
@@ -389,7 +397,7 @@ const TilbakemeldingSvar = ({ tilbakemelding, setFocusNummer, close, ubesvartOgK
           </Modal>
         )}
       </Block>
-      <Block display="flex" marginTop={'8px'} width={"100%"}>
+      <Block display="flex" marginTop={'8px'} width={'100%'}>
         {user.isAdmin() && (
           <Block>
             <Button size="compact" icon={faTrashAlt} kind={'secondary'} onClick={() => setDeleteModal(true)}>
@@ -415,35 +423,38 @@ const TilbakemeldingSvar = ({ tilbakemelding, setFocusNummer, close, ubesvartOgK
           </Block>
         )}
 
-
         {(melderInfo.kanSkrive || user.isKraveier()) && (
           <Block display={'flex'} flex={'1'} justifyContent={'flex-end'}>
-            {user.isKraveier() &&
+            {user.isKraveier() && (
               <Block>
-                {isUpdatingStatus ?
+                {isUpdatingStatus ? (
                   <Block alignSelf="center" marginLeft={theme.sizing.scale400}>
                     <Spinner size={theme.sizing.scale800} />
                   </Block>
-                  :
+                ) : (
                   <Button
                     kind="secondary"
                     size={'compact'}
-                    marginLeft onClick={() => {
+                    marginLeft
+                    onClick={() => {
                       setIsUpdatingStatus(true)
                       updateTilbakemeldingStatusOgEndretKrav({
                         tilbakemeldingId: tilbakemelding.id,
                         status: tilbakeMeldingStatus,
-                        endretKrav: isEndretKrav
-                      }).then((response) => {
-                        replace(response)
-                        setIsUpdatingStatus(false)
-                      }).catch(() => setIsUpdatingStatus(false))
-                    }}>
+                        endretKrav: isEndretKrav,
+                      })
+                        .then((response) => {
+                          replace(response)
+                          setIsUpdatingStatus(false)
+                        })
+                        .catch(() => setIsUpdatingStatus(false))
+                    }}
+                  >
                     Oppdater status
                   </Button>
-                }
+                )}
               </Block>
-            }
+            )}
             <Button kind="primary" size={'compact'} marginLeft disabled={!response} onClick={submit}>
               {ubesvartOgKraveier ? 'Svar' : 'Send'}
               {user.isKraveier() ? ' og oppdater status' : ''}

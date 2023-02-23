@@ -234,7 +234,7 @@ export interface Melding extends DomainObject {
 export enum TilbakemeldingMeldingStatus {
   UBESVART = 'UBESVART',
   BESVART = 'BESVART',
-  MIDLERTIDLIG_SVAR = 'MIDLERTIDLIG_SVAR'
+  MIDLERTIDLIG_SVAR = 'MIDLERTIDLIG_SVAR',
 }
 
 export interface EtterlevelseArkiv extends DomainObject {

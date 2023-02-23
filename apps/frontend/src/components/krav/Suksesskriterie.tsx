@@ -7,7 +7,7 @@ import { Markdown } from '../common/Markdown'
 import { borderRadius, borderWidth, marginAll } from '../common/Style'
 import { ettlevColors, pageWidth } from '../../util/theme'
 
-export const SuksesskriterieCard = (props: { suksesskriterie: Suksesskriterie; num: number; totalt: number;  fullWidth?: boolean}) => {
+export const SuksesskriterieCard = (props: { suksesskriterie: Suksesskriterie; num: number; totalt: number; fullWidth?: boolean }) => {
   const { suksesskriterie, num, totalt, fullWidth } = props
 
   return (
@@ -32,7 +32,7 @@ export const SuksesskriterieCard = (props: { suksesskriterie: Suksesskriterie; n
           Suksesskriterium {num} av {totalt}
         </LabelLarge>
         <HeadingXLarge>{suksesskriterie.navn}</HeadingXLarge>
-        <Markdown source={suksesskriterie.beskrivelse} maxWidth={fullWidth ? '100%' : "650px"} />
+        <Markdown source={suksesskriterie.beskrivelse} maxWidth={fullWidth ? '100%' : '650px'} />
       </Card>
     </Block>
   )
