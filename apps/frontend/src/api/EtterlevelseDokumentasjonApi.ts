@@ -1,7 +1,9 @@
-import axios from "axios"
-import {EtterlevelseDokumentasjon, PageResponse} from "../constants"
-import {env} from "../util/env"
-import {useEffect, useState} from "react";
+import axios from 'axios'
+import { Behandling, EtterlevelseDokumentasjon, PageResponse } from '../constants'
+import { env } from '../util/env'
+import { useEffect, useState } from 'react'
+import { getBehandling } from './BehandlingApi'
+import { getEtterlevelseArkivByBehandlingId } from './ArkiveringApi'
 
 
 export const getEtterlevelseDokumentasjon = async (id: string) => {
@@ -51,11 +53,44 @@ export const deleteEtterlevelseDokumentasjon = async (etterlevelseDokumentasjonI
 export const useEtterlevelseDokumentasjon = (etterlevelseDokumentasjonId?: string, behandlingId?: string) => {
   const isCreateNew = etterlevelseDokumentasjonId === 'ny'
   const [data, setData] = useState<EtterlevelseDokumentasjon | undefined>(isCreateNew ? etterlevelseDokumentasjonMapToFormVal({}) : undefined)
-  useEffect(() => {
-    etterlevelseDokumentasjonId && !isCreateNew && getEtterlevelseDokumentasjon(etterlevelseDokumentasjonId).then(setData)
-  }, [etterlevelseDokumentasjonId])
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
-  return [data, setData] as [EtterlevelseDokumentasjon | undefined, (e: EtterlevelseDokumentasjon) => void]
+
+  const setDataWithBehandling = (mainData: EtterlevelseDokumentasjon, behandlingData: Behandling) => {
+    setData({
+      ...mainData,
+      behandling: behandlingData
+    })
+  }
+
+  useEffect(() => {
+    setIsLoading(true)
+    if (etterlevelseDokumentasjonId && !isCreateNew) {
+       getEtterlevelseDokumentasjon(etterlevelseDokumentasjonId)
+        .then((etterlevelseDokumentasjon) => {
+          if (etterlevelseDokumentasjon.behandlingId) {
+            getBehandling(etterlevelseDokumentasjon.behandlingId).then((behandlingData) => {
+              setDataWithBehandling(etterlevelseDokumentasjon, behandlingData)
+            })
+          } else {
+            setData(etterlevelseDokumentasjon)
+          }
+          setIsLoading(false)
+        })
+    } else if (behandlingId) {
+      searchEtterlevelsedokumentasjonByBehandlingId(behandlingId)
+      .then((etterlevelseDokumentasjon) => {
+        if(etterlevelseDokumentasjon){
+          getBehandling(behandlingId).then((behandlingData) => {
+            setDataWithBehandling(etterlevelseDokumentasjon[0], behandlingData)
+          })
+          setIsLoading(false)
+        } 
+      })
+    }
+  }, [etterlevelseDokumentasjonId, behandlingId])
+
+  return [data, setData, isLoading] as [EtterlevelseDokumentasjon | undefined, (e: EtterlevelseDokumentasjon) => void, boolean]
 }
 
 function etterlevelseDokumentasjonToDto(etterlevelseDokumentasjon: EtterlevelseDokumentasjon): EtterlevelseDokumentasjon {
@@ -70,7 +105,7 @@ function etterlevelseDokumentasjonToDto(etterlevelseDokumentasjon: EtterlevelseD
 
 export const etterlevelseDokumentasjonMapToFormVal = (etterlevelseDokumentasjon: Partial<EtterlevelseDokumentasjon>): EtterlevelseDokumentasjon => ({
   id: etterlevelseDokumentasjon.id || '',
-  changeStamp: etterlevelseDokumentasjon.changeStamp || {lastModifiedDate: '', lastModifiedBy: ''},
+  changeStamp: etterlevelseDokumentasjon.changeStamp || { lastModifiedDate: '', lastModifiedBy: '' },
   version: -1,
   title: etterlevelseDokumentasjon.title || '',
   behandlingId: etterlevelseDokumentasjon.behandlingId || '',
