@@ -194,6 +194,15 @@ export interface BehandlingEtterlevData {
   irrelevansFor: Code[]
 }
 
+export interface EtterlevelseDokumentasjon {
+  id: string
+  changeStamp: ChangeStamp
+  version: number
+  title: string
+  behandlingId: string
+  irrelevansFor: Code[]
+}
+
 export interface Periode {
   start?: string
   slutt?: string
