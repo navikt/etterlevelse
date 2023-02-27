@@ -1,35 +1,35 @@
-import { Krav, KravQL, KravStatus, KravVersjon } from '../../constants'
-import { Form, Formik } from 'formik'
-import { createKrav, getKravByKravNumberAndVersion, kravMapToFormVal, updateKrav } from '../../api/KravApi'
-import { Block } from 'baseui/block'
-import React, { useEffect } from 'react'
+import {Krav, KravQL, KravStatus, KravVersjon} from '../../constants'
+import {Form, Formik} from 'formik'
+import {createKrav, getKravByKravNumberAndVersion, kravMapToFormVal, updateKrav} from '../../api/KravApi'
+import {Block} from 'baseui/block'
+import React, {useEffect} from 'react'
 import * as yup from 'yup'
-import { codelist, ListName } from '../../services/Codelist'
-import { InputField, MultiInputField, TextAreaField } from '../common/Inputs'
+import {codelist, ListName} from '../../services/Codelist'
+import {InputField, MultiInputField, TextAreaField} from '../common/Inputs'
 import axios from 'axios'
-import { env } from '../../util/env'
-import { KravVarslingsadresserEdit } from './Edit/KravVarslingsadresserEdit'
-import { KravRegelverkEdit } from './Edit/KravRegelverkEdit'
-import { KravSuksesskriterierEdit } from './Edit/KravSuksesskriterieEdit'
-import { EditBegreper } from './Edit/KravBegreperEdit'
-import { HeadingXLarge, HeadingXXLarge, LabelLarge, LabelSmall, ParagraphMedium, ParagraphXSmall } from 'baseui/typography'
+import {env} from '../../util/env'
+import {KravVarslingsadresserEdit} from './Edit/KravVarslingsadresserEdit'
+import {KravRegelverkEdit} from './Edit/KravRegelverkEdit'
+import {KravSuksesskriterierEdit} from './Edit/KravSuksesskriterieEdit'
+import {EditBegreper} from './Edit/KravBegreperEdit'
+import {HeadingXLarge, HeadingXXLarge, LabelLarge, LabelSmall, ParagraphMedium, ParagraphXSmall} from 'baseui/typography'
 import CustomizedModal from '../common/CustomizedModal'
 import Button from '../common/Button'
-import { ettlevColors, maxPageWidth, responsivePaddingLarge, responsiveWidthLarge, theme } from '../../util/theme'
-import { getEtterlevelserByKravNumberKravVersion } from '../../api/EtterlevelseApi'
+import {ettlevColors, maxPageWidth, responsivePaddingLarge, responsiveWidthLarge, theme} from '../../util/theme'
+import {getEtterlevelserByKravNumberKravVersion} from '../../api/EtterlevelseApi'
 import ErrorModal from '../ErrorModal'
-import { Error } from '../common/ModalSchema'
-import { ErrorMessageModal } from './ErrorMessageModal'
-import { KIND as NKIND, Notification } from 'baseui/notification'
-import { faTimesCircle } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { EditKravMultiOptionField } from './Edit/EditKravMultiOptionField'
-import { borderColor, borderRadius, borderStyle, borderWidth } from '../common/Style'
-import { Checkbox } from 'baseui/checkbox'
-import { warningAlert } from '../Images'
-import { user } from '../../services/User'
-import { Modal as BaseModal, ModalBody, ModalHeader } from 'baseui/modal'
-import { EditKravRelasjoner } from './Edit/EditKravRelasjoner'
+import {Error} from '../common/ModalSchema'
+import {ErrorMessageModal} from './ErrorMessageModal'
+import {KIND as NKIND, Notification} from 'baseui/notification'
+import {faTimesCircle} from '@fortawesome/free-solid-svg-icons'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {EditKravMultiOptionField} from './Edit/EditKravMultiOptionField'
+import {borderColor, borderRadius, borderStyle, borderWidth} from '../common/Style'
+import {Checkbox} from 'baseui/checkbox'
+import {warningAlert} from '../Images'
+import {user} from '../../services/User'
+import {Modal as BaseModal, ModalBody, ModalHeader} from 'baseui/modal'
+import {EditKravRelasjoner} from './Edit/EditKravRelasjoner'
 import AlertUnsavedPopup from '../common/AlertUnsavedPopup'
 import _ from 'lodash'
 
@@ -319,13 +319,6 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                   <Block width={responsiveWidthLarge}>
                     <HeadingXLarge marginBottom={inputMarginBottom}>Suksesskriterier</HeadingXLarge>
                     <KravSuksesskriterierEdit setIsFormDirty={setIsFormDirty} newVersion={!!newVersion} />
-                    {/*
-                  <TextAreaField marginBottom='80px' label='Beskrivelse' name='beskrivelse' markdown shortenLinks onImageUpload={onImageUpload(krav.id)}
-                    tooltip={'Beskriv selve innholdet i kravet.'} />
-                    */}
-                    {/*
-                      <TextAreaField label='Utfyllende beskrivelse' name='utdypendeBeskrivelse' markdown shortenLinks onImageUpload={onImageUpload(krav.id)}
-                        tooltip={'Legg til en utfyllende beskrivelse av kravet. Benyttes kun der det er behov for det.'} /> */}
 
                     <Block marginBottom={inputMarginBottom}>
                       <HeadingXLarge>Dokumentasjon</HeadingXLarge>
@@ -404,32 +397,8 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                       <HeadingXLarge>Egenskaper</HeadingXLarge>
                     </Block>
 
-                    {/* {user.isAdmin() && (
-                      <Block width="100%" maxWidth={maxInputWidth} marginBottom={inputMarginBottom}>
-                        <OptionField
-                          label="Status"
-                          name="status"
-                          options={Object.values(KravStatus).map((id) => ({ id, label: kravStatus(id) }))}
-                          tooltip={'Velg status for kravet. Utkast er kun synlig for kraveier selv. Aktiv/utgått er synlig for alle.'}
-                        />
-                      </Block>
-                    )} */}
-
                     <KravVarslingsadresserEdit />
                     {errors.varslingsadresser && <ErrorMessageModal msg={errors.varslingsadresser} fullWidth={true} />}
-                    {/*
-
-                                    <OptionField label='Ansvarlig' name='Ansvarlig' listName={ListName.UNDERAVDELING}
-                    tooltip={'Angi hvilken seksjon/underavdeling som har ansvaret for kravet.'} />
-
-                      <DateField label='Gyldig fra' name='periode.start' tooltip={'Legg til gyldighetsperiode for kravet der det er aktuelt. Hvis ikke skal feltene være blanke.'}/>
-                      <DateField label='Gyldig til' name='periode.slutt' tooltip={'Legg til gyldighetsperiode for kravet der det er aktuelt. Hvis ikke skal feltene være blanke.'}/>
-
-                      <OptionField label='Avdeling' name='avdeling' listName={ListName.AVDELING} tooltip={'Angi hvilken avdeling som har det overordnede ansvaret for kravet.'} />
-
-                      <TextAreaField label='Endringer fra forrige versjon' name='versjonEndringer'
-                                     tooltip={'Gi informasjon om hva som er endret siden forrige versjon av kravet.'}/>
-                                     */}
                     <Block width={'100%'}>
                       {Object.keys(errors).length > 0 && !errors.dokumentasjon && (
                         <Block display="flex" width="100%" marginTop="3rem" marginBottom=".6em">
