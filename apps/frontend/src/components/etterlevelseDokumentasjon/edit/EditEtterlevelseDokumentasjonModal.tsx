@@ -20,7 +20,7 @@ import { theme } from '../../../util'
 import { ettlevColors } from '../../../util/theme'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
 import { borderWidth, borderStyle, borderColor, borderRadius } from '../../common/Style'
-import { checkboxChecked, checkboxUncheckedHover, checkboxUnchecked, outlineInfoIcon, searchIcon } from '../../Images'
+import { checkboxChecked, checkboxUncheckedHover, checkboxUnchecked, outlineInfoIcon, searchIcon, plusIcon } from '../../Images'
 import { Tag, VARIANT } from 'baseui/tag'
 import { Error } from '../../common/ModalSchema'
 import CustomizedSelect from '../../common/CustomizedSelect'
@@ -37,8 +37,8 @@ export const EditEtterlevelseDokumentasjonModal = () => {
   const [selectedBehandling, setSelectedBehandling] = useState<Behandling>()
 
   return (
-    <>
-      <Button onClick={() => setIsEtterlevelseDokumntasjonerModalOpen(true)}>
+    <Block>
+      <Button onClick={() => setIsEtterlevelseDokumntasjonerModalOpen(true)} startEnhancer={<img src={plusIcon} alt="plus icon" />} size="compact">
         Ny Dokumentasjon
       </Button>
 
@@ -265,7 +265,7 @@ export const EditEtterlevelseDokumentasjonModal = () => {
           </Formik>
         </ModalBody>
       </CustomizedModal>
-    </>
+    </Block>
   )
 }
 export default EditEtterlevelseDokumentasjonModal

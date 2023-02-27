@@ -57,8 +57,15 @@ export const MyEtterlevelseDokumentasjonerPage = () => {
             </Button>
           </RouteLink> */}
             <CustomizedBreadcrumbs currentPage="Dokumentere etterlevelse" />
-            <HeadingXXLarge marginTop="0">Dokumentere etterlevelse</HeadingXXLarge>
-            <EditEtterlevelseDokumentasjonModal />
+            <Block display="flex">
+              <Block flex="1">
+                <HeadingXXLarge marginTop="0">Dokumentere etterlevelse</HeadingXXLarge>
+              </Block>
+              <Block display="flex" justifyContent="flex-end">
+                <EditEtterlevelseDokumentasjonModal />
+              </Block>
+            </Block>
+
           </Block>
         </Block>
       </Block>
