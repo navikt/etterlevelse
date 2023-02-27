@@ -37,18 +37,19 @@ export const EditEtterlevelseDokumentasjonModal = () => {
   const [selectedBehandling, setSelectedBehandling] = useState<Behandling>()
 
   return (
-    <Block>
+    <>
       <Button onClick={() => setIsEtterlevelseDokumntasjonerModalOpen(true)}>
         Ny Dokumentasjon
       </Button>
-      <CustomizedModal isOpen={isEtterlevelseDokumentasjonerModalOpen} onClose={() => setIsEtterlevelseDokumntasjonerModalOpen(false)}>
+
+      <CustomizedModal isOpen={!!isEtterlevelseDokumentasjonerModalOpen} onClose={() => setIsEtterlevelseDokumntasjonerModalOpen(false)}>
         <ModalHeader>Etterlevelsedokumentasjon</ModalHeader>
         <ModalBody>
           <Formik initialValues={etterlevelseDokumentasjon} onSubmit={(values) => {
             let etterlevelseDokumentasjontemp = etterlevelseDokumentasjonToDto(values)
             console.log(values)
           }}>
-            {() => {
+            {({values}) => {
               return (
                 <Form>
                   <InputField label={"Title"} name={"title"} />
@@ -100,12 +101,10 @@ export const EditEtterlevelseDokumentasjonModal = () => {
                                 placeholder={'Begreper'}
                                 onInputChange={(event) => setbehandlingSearchResult(event.currentTarget.value)}
                                 onChange={(params) => {
-                                  console.log(params)
                                   let behandling = params.value.length ? params.value[0] : undefined
                                   if (behandling) {
                                     fp.form.values['behandlingId'] = behandling.id
                                     setSelectedBehandling(behandling as Behandling)
-                                    console.log(behandling.navn)
                                   }
                                 }}
                                 // error={!!fp.form.errors.begreper && !!fp.form.submitCount}
@@ -256,19 +255,18 @@ export const EditEtterlevelseDokumentasjonModal = () => {
                       )
                     }}
                   </FieldArray>
+
+                  <Button>Submit</Button>
+                  <Button onClick={() => setIsEtterlevelseDokumntasjonerModalOpen(false)}>Avbryt</Button>
+
                 </Form>
               )
             }}
           </Formik>
-
         </ModalBody>
-        <ModalFooter>
-          <Button>Submit</Button>
-          <Button onClick={() => setIsEtterlevelseDokumntasjonerModalOpen(false)}>Avbryt</Button>
-        </ModalFooter>
       </CustomizedModal>
 
-    </Block>
+    </>
   )
 }
 export default EditEtterlevelseDokumentasjonModal
