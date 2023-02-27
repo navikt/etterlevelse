@@ -1,8 +1,8 @@
 import axios from 'axios'
-import { Behandling, EtterlevelseDokumentasjon, PageResponse } from '../constants'
-import { env } from '../util/env'
-import { useEffect, useState } from 'react'
-import { getBehandling } from './BehandlingApi'
+import {Behandling, EtterlevelseDokumentasjon, PageResponse} from '../constants'
+import {env} from '../util/env'
+import {useEffect, useState} from 'react'
+import {getBehandling} from './BehandlingApi'
 
 export const getEtterlevelseDokumentasjon = async (id: string) => {
   return (await axios.get<EtterlevelseDokumentasjon>(`${env.backendBaseUrl}/etterlevelsedokumentasjon/${id}`)).data
@@ -87,7 +87,7 @@ export const useEtterlevelseDokumentasjon = (etterlevelseDokumentasjonId?: strin
   return [data, setData, isLoading] as [EtterlevelseDokumentasjon | undefined, (e: EtterlevelseDokumentasjon) => void, boolean]
 }
 
-function etterlevelseDokumentasjonToDto(etterlevelseDokumentasjon: EtterlevelseDokumentasjon): EtterlevelseDokumentasjon {
+export const etterlevelseDokumentasjonToDto = (etterlevelseDokumentasjon: EtterlevelseDokumentasjon): EtterlevelseDokumentasjon => {
   const dto = {
     ...etterlevelseDokumentasjon,
     irrelevansFor: etterlevelseDokumentasjon.irrelevansFor.map((c) => c.code),
@@ -99,7 +99,7 @@ function etterlevelseDokumentasjonToDto(etterlevelseDokumentasjon: EtterlevelseD
 
 export const etterlevelseDokumentasjonMapToFormVal = (etterlevelseDokumentasjon: Partial<EtterlevelseDokumentasjon>): EtterlevelseDokumentasjon => ({
   id: etterlevelseDokumentasjon.id || '',
-  changeStamp: etterlevelseDokumentasjon.changeStamp || { lastModifiedDate: '', lastModifiedBy: '' },
+  changeStamp: etterlevelseDokumentasjon.changeStamp || {lastModifiedDate: '', lastModifiedBy: ''},
   version: -1,
   title: etterlevelseDokumentasjon.title || '',
   behandlingId: etterlevelseDokumentasjon.behandlingId || '',
