@@ -52,7 +52,7 @@ export const EditEtterlevelseDokumentasjonModal = () => {
             {({values}) => {
               return (
                 <Form>
-                  <InputField label={"Title"} name={"title"} />
+                  <InputField label={'Title'} name={'title'} />
 
                   <FieldWrapper>
                     <Field name="behandlingId">
@@ -98,7 +98,7 @@ export const EditEtterlevelseDokumentasjonModal = () => {
                                 searchable={true}
                                 type={TYPE.search}
                                 options={behandlingSearchResult}
-                                placeholder={'Begreper'}
+                                placeholder={'Søk behandling'}
                                 onInputChange={(event) => setbehandlingSearchResult(event.currentTarget.value)}
                                 onChange={(params) => {
                                   let behandling = params.value.length ? params.value[0] : undefined
@@ -115,7 +115,7 @@ export const EditEtterlevelseDokumentasjonModal = () => {
                                   variant={VARIANT.outlined}
                                   onActionClick={() => {
                                     setSelectedBehandling(undefined)
-                                    fp.form.setFieldValue("behandlingId", "")
+                                    fp.form.setFieldValue('behandlingId', '')
                                   }}
                                   overrides={{
                                     Text: {
@@ -145,10 +145,10 @@ export const EditEtterlevelseDokumentasjonModal = () => {
                         )
                       }}
                     </Field>
-                    <Error fieldName="begreper" fullWidth />
+                    <Error fieldName="behandlingId" fullWidth />
                   </FieldWrapper>
 
-                  <LabelWithTooltip label={"Oppgi egenskaper til etterlevelsedokumentasjon. Kun relevante kraver blir synlig for etterlevelsedokumentasjon"} />
+                  <LabelWithTooltip label={'Oppgi egenskaper til etterlevelsedokumentasjon. Kun relevante kraver blir synlig for etterlevelsedokumentasjon'} />
                   <FieldArray name="irrelevansFor">
                     {(p: FieldArrayRenderProps) => {
                       return (
@@ -265,7 +265,6 @@ export const EditEtterlevelseDokumentasjonModal = () => {
           </Formik>
         </ModalBody>
       </CustomizedModal>
-
     </>
   )
 }
