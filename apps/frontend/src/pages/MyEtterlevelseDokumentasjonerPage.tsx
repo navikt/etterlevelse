@@ -5,7 +5,7 @@ import { useMyTeams } from '../api/TeamApi'
 import { theme } from '../util'
 import Button, { ExternalButton } from '../components/common/Button'
 import { Spinner } from '../components/common/Spinner'
-import { BehandlingQL, emptyPage, PageResponse, Team } from '../constants'
+import {BehandlingQL, emptyPage, EtterlevelseDokumentasjon, PageResponse, Team} from '../constants'
 import { StatefulInput } from 'baseui/input'
 import { gql, useQuery } from '@apollo/client'
 import { ettlevColors, maxPageWidth } from '../util/theme'
@@ -94,13 +94,13 @@ const BehandlingTabs = () => {
   const [tab, setTab] = useState<Section>(params.tab || 'mine')
   const [doneLoading, setDoneLoading] = useState(false)
   const [variables, setVariables] = useState<Variables>({})
-  const { data, loading: behandlingerLoading } = useQuery<{ behandlinger: PageResponse<BehandlingQL> }, Variables>(query, {
+  const { data, loading: behandlingerLoading } = useQuery<{ etterlevelsesDokumentasjon: PageResponse<EtterlevelseDokumentasjon> }, Variables>(query, {
     variables,
   })
 
   const [teams, teamsLoading] = useMyTeams()
 
-  const behandlinger = data?.behandlinger || emptyPage
+  const behandlinger = data?.etterlevelsesDokumentasjon || emptyPage
   const loading = teamsLoading || behandlingerLoading
 
   const [sortedTeams, setSortedTeams] = React.useState<CustomTeamObject[]>([])
@@ -108,7 +108,8 @@ const BehandlingTabs = () => {
   const sortTeams = (unSortedTeams: Team[]) => {
     return unSortedTeams
       .map((t) => {
-        const teamBehandlinger = behandlinger.content.filter((b) => b.teamsData.find((t2) => t2.id === t.id))
+        const teamBehandlinger = []
+          //behandlinger.content.filter((b) => b.teamsData.find((t2) => t2.id === t.id))
 
         return {
           ...t,
@@ -137,7 +138,7 @@ const BehandlingTabs = () => {
   useEffect(() => {
     switch (tab) {
       case 'mine':
-        setVariables({ mineBehandlinger: true })
+        setVariables({ mineEtterlevelseDokumentasjoner: true })
         break
       case 'siste':
         setVariables({ sistRedigert: 20 })
@@ -163,7 +164,7 @@ const BehandlingTabs = () => {
       activeKey={tab}
       onChange={(args) => setTab(args.activeKey as Section)}
       tabs={[
-        {
+     /*   {
           key: 'mine',
           title: 'Mine behandlinger',
           content: <MineBehandlinger teams={sortedTeams} behandlinger={behandlinger.content} loading={loading} />,
@@ -172,7 +173,7 @@ const BehandlingTabs = () => {
           key: 'siste',
           title: 'Mine sist dokumenterte',
           content: <SisteBehandlinger behandlinger={behandlinger.content} loading={loading} />,
-        },
+        },*/
         {
           key: 'alle',
           title: 'Alle',
@@ -424,11 +425,11 @@ const BehandlingerPanels = ({ behandlinger, loading }: { behandlinger: Behandlin
   )
 }
 
-type Variables = { pageNumber?: number; pageSize?: number; sistRedigert?: number; mineBehandlinger?: boolean; sok?: string; teams?: string[] }
+type Variables = { pageNumber?: number; pageSize?: number; sistRedigert?: number; mineEtterlevelseDokumentasjoner?: boolean; sok?: string; teams?: string[] }
 
 const query = gql`
-  query getMineBehandlinger($pageNumber: NonNegativeInt, $pageSize: NonNegativeInt, $mineBehandlinger: Boolean, $sistRedigert: NonNegativeInt, $sok: String) {
-    behandlinger: behandling(filter: { mineBehandlinger: $mineBehandlinger, sistRedigert: $sistRedigert, sok: $sok }, pageNumber: $pageNumber, pageSize: $pageSize) {
+  query getTest($pageNumber: NonNegativeInt, $pageSize: NonNegativeInt, $mineEtterlevelseDokumentasjoner: Boolean, $sistRedigert: NonNegativeInt, $sok: String) {
+    etterlevelseDokumentasjoner:  etterlevelseDokumentasjon(filter: { mineEtterlevelseDokumentasjoner: $mineEtterlevelseDokumentasjoner, sistRedigert: $sistRedigert, sok: $sok }, pageNumber: $pageNumber, pageSize: $pageSize) {
       pageNumber
       pageSize
       pages
@@ -436,16 +437,8 @@ const query = gql`
       totalElements
       content {
         id
-        navn
-        nummer
-        sistEndretEtterlevelse
-        overordnetFormaal {
-          shortName
-        }
-        teamsData {
-          id
-          name
-        }
+        title
+        etterlevelseNummer
       }
     }
   }
