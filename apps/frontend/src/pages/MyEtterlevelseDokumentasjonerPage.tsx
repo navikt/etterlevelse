@@ -188,9 +188,9 @@ const MineBehandlinger = ({ behandlinger, teams, loading }: { behandlinger: Beha
   if (loading)
     return (
       <>
-        <BehandlingerPanels behandlinger={[]} loading />
+        <EtterlevelseDokumentasjonerPanels etterlevelseDokumentasjoner={[]} loading />
         <Block height={'60px'} />
-        <BehandlingerPanels behandlinger={[]} loading />
+        <EtterlevelseDokumentasjonerPanels etterlevelseDokumentasjoner={[]} loading />
       </>
     )
   return (
@@ -217,7 +217,7 @@ const MineBehandlinger = ({ behandlinger, teams, loading }: { behandlinger: Beha
               </Block>
             </Block>
 
-            <BehandlingerPanels behandlinger={teamBehandlinger} />
+          {/* <EtterlevelseDokumentasjonerPanels etterlevelseDokumentasjoner={teamBehandlinger} /> */}
           </Block>
         )
       })}
@@ -241,11 +241,11 @@ const MineBehandlinger = ({ behandlinger, teams, loading }: { behandlinger: Beha
   )
 }
 
-const SisteBehandlinger = ({ behandlinger, loading }: { behandlinger: BehandlingQL[]; loading: boolean }) => {
-  if (!behandlinger.length && !loading) return <ParagraphSmall>Du har ikke dokumentert etterlevelse på krav</ParagraphSmall>
-  const sorted = [...behandlinger].sort((a, b) => moment(b.sistEndretEtterlevelse).valueOf() - moment(a.sistEndretEtterlevelse).valueOf())
-  return <BehandlingerPanels behandlinger={sorted} loading={loading} />
-}
+// const SisteBehandlinger = ({ behandlinger, loading }: { behandlinger: BehandlingQL[]; loading: boolean }) => {
+//   if (!behandlinger.length && !loading) return <ParagraphSmall>Du har ikke dokumentert etterlevelse på krav</ParagraphSmall>
+//   const sorted = [...behandlinger].sort((a, b) => moment(b.sistEndretEtterlevelse).valueOf() - moment(a.sistEndretEtterlevelse).valueOf())
+//   return <EtterlevelseDokumentasjonerPanels etterlevelseDokumentasjoner={sorted} loading={loading} />
+// }
 
 const Alle = () => {
   const [hover, setHover] = useState(false)
@@ -257,24 +257,24 @@ const Alle = () => {
     data,
     loading: gqlLoading,
     fetchMore,
-  } = useQuery<{ behandlinger: PageResponse<BehandlingQL> }, Variables>(query, {
+  } = useQuery<{ etterlevelseDokumentasjoner: PageResponse<EtterlevelseDokumentasjon> }, Variables>(query, {
     variables: { pageNumber, pageSize, sok },
     skip: tooShort,
   })
-  const behandlinger = data?.behandlinger || emptyPage
+  const etterlevelseDokumentasjoner = data?.etterlevelseDokumentasjoner || emptyPage
   const loading = !data && gqlLoading
 
   const lastMer = () => {
     fetchMore({
       variables: {
-        pageNumber: data!.behandlinger.pageNumber + 1,
+        pageNumber: data!.etterlevelseDokumentasjoner.pageNumber + 1,
         pageSize,
       },
       updateQuery: (p, o) => {
-        const oldData = p.behandlinger
-        const newData = o.fetchMoreResult!.behandlinger
+        const oldData = p.etterlevelseDokumentasjoner
+        const newData = o.fetchMoreResult!.etterlevelseDokumentasjoner
         return {
-          behandlinger: {
+          etterlevelseDokumentasjoner: {
             ...oldData,
             pageNumber: newData.pageNumber,
             numberOfElements: oldData.numberOfElements + newData.numberOfElements,
@@ -289,8 +289,8 @@ const Alle = () => {
     if (sok && pageNumber != 0) setPage(0)
   }, [sok])
 
-  const getBehandlingerWithOutDuplicates = () => {
-    return behandlinger.content.filter((value, index, self) => index === self.findIndex((behandling) => behandling.id === value.id))
+  const getEtterlevelseDokumentasjonerWithOutDuplicates = () => {
+    return etterlevelseDokumentasjoner.content.filter((value, index, self) => index === self.findIndex((etterlevelseDokumentasjon) => etterlevelseDokumentasjon.id === value.id))
   }
 
   return (
@@ -365,18 +365,18 @@ const Alle = () => {
           {!loading && !!sok && (
             <Block>
               <HeadingLarge color={ettlevColors.green600}>
-                {behandlinger.totalElements} treff: “{sok}”
+                {etterlevelseDokumentasjoner.totalElements} treff: “{sok}”
               </HeadingLarge>
-              {!behandlinger.totalElements && <LabelXSmall>Ingen treff</LabelXSmall>}
+              {!etterlevelseDokumentasjoner.totalElements && <LabelXSmall>Ingen treff</LabelXSmall>}
             </Block>
           )}
 
-          <BehandlingerPanels behandlinger={getBehandlingerWithOutDuplicates()} loading={loading} />
+          <EtterlevelseDokumentasjonerPanels etterlevelseDokumentasjoner={getEtterlevelseDokumentasjonerWithOutDuplicates()} loading={loading} />
 
-          {!loading && behandlinger.totalElements !== 0 && (
+          {!loading && etterlevelseDokumentasjoner.totalElements !== 0 && (
             <Block display={'flex'} justifyContent={'space-between'} marginTop={theme.sizing.scale1000}>
               <Block display="flex" alignItems="center">
-                <Button onClick={lastMer} icon={faPlus} kind={'secondary'} size="compact" disabled={gqlLoading || behandlinger.numberOfElements >= behandlinger.totalElements}>
+                <Button onClick={lastMer} icon={faPlus} kind={'secondary'} size="compact" disabled={gqlLoading || etterlevelseDokumentasjoner.numberOfElements >= etterlevelseDokumentasjoner.totalElements}>
                   Vis mer
                 </Button>
 
@@ -387,7 +387,7 @@ const Alle = () => {
                 )}
               </Block>
               <LabelSmall marginRight={theme.sizing.scale400}>
-                Viser {behandlinger.numberOfElements}/{behandlinger.totalElements}
+                Viser {etterlevelseDokumentasjoner.numberOfElements}/{etterlevelseDokumentasjoner.totalElements}
               </LabelSmall>
             </Block>
           )}
@@ -397,27 +397,26 @@ const Alle = () => {
   )
 }
 
-const BehandlingerPanels = ({ behandlinger, loading }: { behandlinger: BehandlingQL[]; loading?: boolean }) => {
+const EtterlevelseDokumentasjonerPanels = ({ etterlevelseDokumentasjoner, loading }: { etterlevelseDokumentasjoner: EtterlevelseDokumentasjon[]; loading?: boolean }) => {
   if (loading) return <SkeletonPanel count={5} />
   return (
     <Block marginBottom={tabMarginBottom}>
-      {behandlinger.map((b) => (
-        <Block key={b.id} marginBottom={'8px'}>
+      {etterlevelseDokumentasjoner.map((ed) => (
+        <Block key={ed.id} marginBottom={'8px'}>
           <PanelLink
             useTitleUnderLine
             useDescriptionUnderline
             panelIcon={<img src={arkPennIcon} width="33px" height="33px" aria-hidden alt={'Dokumenter behandling ikon'} />}
-            href={`/behandling/${b.id}`}
+            href={`/behandling/${ed.id}`}
             title={
               <>
                 <strong>
-                  B{b.nummer} {b.overordnetFormaal.shortName}
+                  E{ed.etterlevelseNummer}
                 </strong>
-                :{' '}
               </>
             }
-            beskrivelse={b.navn}
-            rightBeskrivelse={!!b.sistEndretEtterlevelse ? `Sist endret: ${moment(b.sistEndretEtterlevelse).format('ll')}` : ''}
+            beskrivelse={ed.title}
+         //   rightBeskrivelse={!!b.sistEndretEtterlevelse ? `Sist endret: ${moment(b.sistEndretEtterlevelse).format('ll')}` : ''}
           />
         </Block>
       ))}
