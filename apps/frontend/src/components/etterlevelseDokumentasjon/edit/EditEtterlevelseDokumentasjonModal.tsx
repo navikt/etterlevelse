@@ -2,7 +2,7 @@ import { Block } from 'baseui/block'
 import { ModalBody, ModalFooter, ModalHeader } from 'baseui/modal'
 import { useState } from 'react'
 import { useSearchBehandling } from '../../../api/BehandlingApi'
-import { etterlevelseDokumentasjonMapToFormVal, etterlevelseDokumentasjonToDto } from '../../../api/EtterlevelseDokumentasjonApi'
+import {createEtterlevelseDokumentasjon, etterlevelseDokumentasjonMapToFormVal, etterlevelseDokumentasjonToDto} from '../../../api/EtterlevelseDokumentasjonApi'
 import { Behandling, EtterlevelseDokumentasjon } from '../../../constants'
 import { Code, codelist, ListName } from '../../../services/Codelist'
 import Button, { buttonContentStyle } from '../../common/Button'
@@ -36,6 +36,17 @@ export const EditEtterlevelseDokumentasjonModal = () => {
   const [behandlingSearchResult, setbehandlingSearchResult, loadingBehandlingSearchResult] = useSearchBehandling()
   const [selectedBehandling, setSelectedBehandling] = useState<Behandling>()
 
+  const submit = async (etterlevelseDokumentasjon: EtterlevelseDokumentasjon) => {
+    const dto  = etterlevelseDokumentasjonToDto(etterlevelseDokumentasjon)
+     await createEtterlevelseDokumentasjon(dto).then((response)=>{
+       console.log(response)
+       setIsEtterlevelseDokumntasjonerModalOpen(false)
+
+            })
+
+
+  }
+
   return (
     <Block>
       <Button onClick={() => setIsEtterlevelseDokumntasjonerModalOpen(true)} startEnhancer={<img src={plusIcon} alt="plus icon" />} size="compact">
@@ -45,11 +56,8 @@ export const EditEtterlevelseDokumentasjonModal = () => {
       <CustomizedModal isOpen={!!isEtterlevelseDokumentasjonerModalOpen} onClose={() => setIsEtterlevelseDokumntasjonerModalOpen(false)}>
         <ModalHeader>Etterlevelsedokumentasjon</ModalHeader>
         <ModalBody>
-          <Formik initialValues={etterlevelseDokumentasjon} onSubmit={(values) => {
-            let etterlevelseDokumentasjontemp = etterlevelseDokumentasjonToDto(values)
-            console.log(values)
-          }}>
-            {({values}) => {
+          <Formik initialValues={etterlevelseDokumentasjon} onSubmit={submit}>
+            {({values, submitForm}) => {
               return (
                 <Form>
                   <InputField label={'Title'} name={'title'} />
@@ -148,7 +156,7 @@ export const EditEtterlevelseDokumentasjonModal = () => {
                     <Error fieldName="behandlingId" fullWidth />
                   </FieldWrapper>
 
-                  <LabelWithTooltip label={'Oppgi egenskaper til etterlevelsedokumentasjon. Kun relevante kraver blir synlig for etterlevelsedokumentasjon'} />
+                  <LabelWithTooltip label={'Oppgi egenskaper til etterlevelsedokumentasjon. Kun relevante krav blir synlig for etterlevelsedokumentasjon'} />
                   <FieldArray name="irrelevansFor">
                     {(p: FieldArrayRenderProps) => {
                       return (
@@ -256,8 +264,8 @@ export const EditEtterlevelseDokumentasjonModal = () => {
                     }}
                   </FieldArray>
 
-                  <Button>Submit</Button>
-                  <Button onClick={() => setIsEtterlevelseDokumntasjonerModalOpen(false)}>Avbryt</Button>
+                  <Button type="button" onClick={() => {submitForm()}}>Submit</Button>
+                  <Button type="button" onClick={() => setIsEtterlevelseDokumntasjonerModalOpen(false)}>Avbryt</Button>
 
                 </Form>
               )
