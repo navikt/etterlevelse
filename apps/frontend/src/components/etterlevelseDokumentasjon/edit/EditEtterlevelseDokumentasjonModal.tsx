@@ -54,19 +54,19 @@ export const EditEtterlevelseDokumentasjonModal = () => {
       </Button>
 
       <CustomizedModal isOpen={!!isEtterlevelseDokumentasjonerModalOpen} onClose={() => setIsEtterlevelseDokumntasjonerModalOpen(false)}>
-        <ModalHeader>Etterlevelsedokumentasjon</ModalHeader>
+        <ModalHeader>Opprett ny etterlevelse</ModalHeader>
         <ModalBody>
           <Formik initialValues={etterlevelseDokumentasjon} onSubmit={submit}>
             {({values, submitForm}) => {
               return (
                 <Form>
-                  <InputField label={'Title'} name={'title'} />
+                  <InputField disablePlaceHolder label={'Tittel'} name={'title'} />
 
                   <FieldWrapper>
                     <Field name="behandlingId">
                       {(fp: FieldProps) => {
                         return (
-                          <FormControl label={<LabelWithTooltip label={'Behandling'} />}>
+                          <FormControl label={<LabelWithTooltip label={'Legg til behandling'} tooltip="Søk og legg til behandling fra Behandlingskatalog"/>}>
                             <Block>
                               <CustomizedSelect
                                 overrides={{
@@ -156,7 +156,7 @@ export const EditEtterlevelseDokumentasjonModal = () => {
                     <Error fieldName="behandlingId" fullWidth />
                   </FieldWrapper>
 
-                  <LabelWithTooltip label={'Oppgi egenskaper til etterlevelsedokumentasjon. Kun relevante krav blir synlig for etterlevelsedokumentasjon'} />
+                  <LabelWithTooltip tooltip="Ved å oppgi egenskaper til etterlevelsen, blir kun relevante krav synlig for dokumentasjon." label={'Filter'} />
                   <FieldArray name="irrelevansFor">
                     {(p: FieldArrayRenderProps) => {
                       return (
@@ -264,8 +264,8 @@ export const EditEtterlevelseDokumentasjonModal = () => {
                     }}
                   </FieldArray>
 
-                  <Button type="button" onClick={() => {submitForm()}}>Submit</Button>
-                  <Button type="button" onClick={() => setIsEtterlevelseDokumntasjonerModalOpen(false)}>Avbryt</Button>
+                  <Button type="button" onClick={() => {submitForm()}}>Lagre</Button>
+                  <Button type="button" onClick={() => setIsEtterlevelseDokumntasjonerModalOpen(false)} marginLeft={true}>Avbryt</Button>
 
                 </Form>
               )
