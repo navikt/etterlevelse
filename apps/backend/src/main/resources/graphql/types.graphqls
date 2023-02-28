@@ -184,6 +184,14 @@ type BehandlingStats {
     lovStats: [LovStats!]!
 }
 
+type EtterlevelseDokumentasjon {
+    id: String!
+    title: String!
+    etterlevelseNummer: Int!
+    behandlingId: String!
+    irrelevansFor: [Code!]!
+}
+
 type LovStats {
     lovCode: Code!
     fyltKrav: [Krav!]!
@@ -247,6 +255,16 @@ type BehandlingPage {
     totalElements: Int!
     paged: Boolean
     content: [Behandling!]!
+}
+
+type EtterlevelseDokumentasjonPage {
+    pageNumber: Int!
+    pageSize: Int!
+    pages: Int!
+    numberOfElements: Int!
+    totalElements: Int!
+    paged: Boolean
+    content: [EtterlevelseDokumentasjon!]!
 }
 
 type KravPage {

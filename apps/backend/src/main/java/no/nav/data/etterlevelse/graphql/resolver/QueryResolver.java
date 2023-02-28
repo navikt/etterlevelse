@@ -12,6 +12,10 @@ import no.nav.data.etterlevelse.behandling.dto.Behandling;
 import no.nav.data.etterlevelse.behandling.dto.BehandlingFilter;
 import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
 import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseResponse;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonFilter;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse;
 import no.nav.data.etterlevelse.krav.KravService;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.dto.KravFilter;
@@ -32,6 +36,8 @@ public class QueryResolver implements GraphQLQueryResolver {
     private final KravService kravService;
     private final EtterlevelseService etterlevelseService;
     private final BehandlingService behandlingService;
+
+    private final EtterlevelseDokumentasjonService etterlevelseDokumentasjonService;
 
     public KravResponse kravById(UUID id, Integer nummer, Integer versjon) {
         if (id != null) {
@@ -89,6 +95,30 @@ public class QueryResolver implements GraphQLQueryResolver {
             return new RestResponsePage<>(filtered);
         }
         return pageInput.pageFrom(filtered);
+    }
+
+    public RestResponsePage<EtterlevelseDokumentasjonResponse> etterlevelseDokumentasjon(EtterlevelseDokumentasjonFilter filter, Integer page, Integer pageSize) {
+        log.info("etterlevelseDokumentasjon filter {}", filter);
+        var pageInput = new PageParameters(page, pageSize);
+
+        if (filter == null || filter.isEmpty()) {
+            var resp = etterlevelseDokumentasjonService.getAll(pageInput.createPage());
+
+            return new RestResponsePage<>(resp).convert(EtterlevelseDokumentasjon::toResponse);
+        }
+        if (SecurityUtils.getCurrentUser().isEmpty() && filter.requiresLogin()) {
+            return new RestResponsePage<>();
+        }
+
+        List<EtterlevelseDokumentasjon> filtered = new ArrayList<>(etterlevelseDokumentasjonService.getByFilter(filter));
+        if (filter.getSistRedigert() == null) {
+            filtered.sort(comparing(EtterlevelseDokumentasjon::getEtterlevelseNummer));
+        }
+        var all = pageSize == 0;
+        if (all) {
+            return new RestResponsePage<>(filtered).convert(EtterlevelseDokumentasjon::toResponse);
+        }
+        return pageInput.pageFrom(filtered).convert(EtterlevelseDokumentasjon::toResponse);
     }
 
     public EtterlevelseResponse etterlevelseById(UUID id) {

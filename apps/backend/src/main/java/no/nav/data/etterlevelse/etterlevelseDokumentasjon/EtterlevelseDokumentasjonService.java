@@ -4,9 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.auditing.domain.AuditVersionRepository;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.storage.domain.GenericStorage;
-import no.nav.data.etterlevelse.behandling.dto.BehandlingFilter;
 import no.nav.data.etterlevelse.common.domain.DomainService;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonFilter;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonRequest;
 import no.nav.data.integration.team.domain.Team;
 import no.nav.data.integration.team.teamcat.TeamcatTeamClient;
@@ -53,15 +53,14 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
         return GenericStorage.to(etterlevelseDokumentasjoner, EtterlevelseDokumentasjon.class);
     }
 
-    public List<EtterlevelseDokumentasjon> getByFilter(BehandlingFilter filter) {
+    public List<EtterlevelseDokumentasjon> getByFilter(EtterlevelseDokumentasjonFilter filter) {
         if (!StringUtils.isBlank(filter.getId())) {
-//            BkatProcess process = bkatClient.getProcess(filter.getId());
             EtterlevelseDokumentasjon etterlevelseDokumentasjon = storage.get(UUID.fromString(filter.getId()), EtterlevelseDokumentasjon.class);
             if (etterlevelseDokumentasjon != null) {
                 return List.of(etterlevelseDokumentasjon);
             }
             return List.of();
-        } else if (filter.isGetMineBehandlinger()) {
+        } else if (filter.isGetMineEtterlevelseDokumentasjoner()) {
             filter.setTeams(convert(teamcatTeamClient.getMyTeams(), Team::getId));
         }
 
@@ -70,9 +69,9 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
 //            return filter.getTeams().parallelStream().map(this::getBehandlingerForTeam).flatMap(Collection::stream).toList();
 //        }
 
-//        if (filter.isSok()) {
-//            return findBehandlinger(filter.getSok());
-//        }
+        if (filter.isSok()) {
+            return searchEtterlevelseDokumentasjon(filter.getSok());
+        }
         return GenericStorage.to(etterlevelseDokumentasjonRepo.findBy(filter),EtterlevelseDokumentasjon.class);
     }
 

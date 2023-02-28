@@ -11,6 +11,8 @@ type Query {
     etterlevelseById(id: ID!) : Etterlevelse
 
     behandling(filter: BehandlingFilter, pageNumber: NonNegativeInt = 0, pageSize: NonNegativeInt = 0): BehandlingPage!
+
+    etterlevelseDokumentasjon(filter: EtterlevelseDokumentasjonFilter, pageNumber: NonNegativeInt = 0, pageSize: NonNegativeInt = 0): EtterlevelseDokumentasjonPage!
 }
 
 input KravFilter {
@@ -27,6 +29,17 @@ input KravFilter {
     gjeldendeKrav: Boolean = false
     """min 1, max 20"""
     sistRedigert: NonNegativeInt
+}
+
+input EtterlevelseDokumentasjonFilter {
+    id: ID
+    relevans: [String!]
+    """min 1, max 20"""
+    sistRedigert: NonNegativeInt
+    teams: [String!]
+    mineEtterlevelseDokumentasjoner: Boolean
+    behandlingId: String
+    sok: String
 }
 
 input BehandlingFilter {

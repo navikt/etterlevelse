@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import no.nav.data.common.security.SecurityUtils;
 import no.nav.data.common.storage.domain.GenericStorage;
 import no.nav.data.common.storage.domain.GenericStorageRepository;
-import no.nav.data.etterlevelse.behandling.dto.BehandlingFilter;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonFilter;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -30,7 +30,7 @@ public class EtterlevelseDokumentasjonRepoImpl implements EtterlevelseDokumentas
     }
 
     @Override
-    public List<GenericStorage> findBy(BehandlingFilter filter) {
+    public List<GenericStorage> findBy(EtterlevelseDokumentasjonFilter filter) {
         var query = "select id from generic_storage where type = 'EtterlevelseDokumentasjon' ";
         var par = new MapSqlParameterSource();
         if (filter.getRelevans() != null && !filter.getRelevans().isEmpty()) {
