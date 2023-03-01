@@ -29,11 +29,11 @@ public class EtterlevelseDokumentasjonFieldResolver implements GraphQLResolver<E
     private final KravService kravService;
     private final EtterlevelseService etterlevelseService;
 
-    public CompletableFuture<List<EtterlevelseResponse>> etterlevelser(EtterlevelseDokumentasjon etterlevelseDokumentasjon, DataFetchingEnvironment env) {
+    public CompletableFuture<List<EtterlevelseResponse>> etterlevelseListe(EtterlevelseDokumentasjon etterlevelseDokumentasjon, DataFetchingEnvironment env) {
         return LoaderUtils.get(env, ETTERLEVELSE_FOR_ETTERLEVELSEDOKUMENTASJON_LOADER, etterlevelseDokumentasjon.getId(), (List<Etterlevelse> e) -> convert(e, Etterlevelse::toResponse));
     }
 
-    public CompletableFuture<LocalDateTime> sistEndretEtterlevelse(EtterlevelseDokumentasjon etterlevelseDokumentasjon, DataFetchingEnvironment env) {
+    public CompletableFuture<LocalDateTime> sistEndretDatoForEtterlevelse(EtterlevelseDokumentasjon etterlevelseDokumentasjon, DataFetchingEnvironment env) {
         return LoaderUtils.get(env, ETTERLEVELSE_FOR_ETTERLEVELSEDOKUMENTASJON_LOADER, etterlevelseDokumentasjon.getId(), this::sistEndret);
     }
 
