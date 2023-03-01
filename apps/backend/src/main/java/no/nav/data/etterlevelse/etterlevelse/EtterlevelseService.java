@@ -50,12 +50,20 @@ public class EtterlevelseService extends DomainService<Etterlevelse> {
         return GenericStorage.to(repo.findByBehandling(behandlingId), Etterlevelse.class);
     }
 
+    public List<Etterlevelse> getByEtterlevelseDokumentasjon(String etterlevelseDokumentasjonId) {
+        return GenericStorage.to(repo.findByEtterlevelseDokumensjon(etterlevelseDokumentasjonId), Etterlevelse.class);
+    }
+
     public List<Etterlevelse> getByBehandlingsIdAndKravNummer(String behandlingsId, int kravNummer) {
         return GenericStorage.to(repo.findByBehandlingsIdAndKravNummer(behandlingsId, kravNummer), Etterlevelse.class);
     }
 
     public Map<String, List<Etterlevelse>> getByBehandlinger(Collection<String> behandlingIds) {
         return groupBy(GenericStorage.to(repo.findByBehandlinger(new ArrayList<>(behandlingIds)), Etterlevelse.class), Etterlevelse::getBehandlingId);
+    }
+
+    public Map<String, List<Etterlevelse>> getByEtterlevelseDokumentasjoner(Collection<String> etterlevelseDokumentasjonIds) {
+        return groupBy(GenericStorage.to(repo.findByBehandlinger(new ArrayList<>(etterlevelseDokumentasjonIds)), Etterlevelse.class), Etterlevelse::getEtterlevelseDokumentasjonId);
     }
 
     public Etterlevelse save(EtterlevelseRequest request) {

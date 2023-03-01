@@ -109,6 +109,14 @@ public class  EtterlevelseController {
         return ResponseEntity.ok(new RestResponsePage<>(etterlevelseList).convert(Etterlevelse::toResponse));
     }
 
+    @Operation(summary = "Get Etterlevelse by etterlevelsedokumentasjonId")
+    @ApiResponse(description = "ok")
+    @GetMapping("/etterlevelsedokumentasjon/{etterlevelseDokumentasjonId}")
+    public ResponseEntity<RestResponsePage<EtterlevelseResponse>> getByEtterlevelseDokumentasjonId(@PathVariable String etterlevelseDokumentasjonId) {
+        log.info("Get Etterlevelse by etterlevelseDokumentasjonsId={}", etterlevelseDokumentasjonId);
+        List<Etterlevelse> etterlevelseList = service.getByEtterlevelseDokumentasjon(etterlevelseDokumentasjonId);
+        return ResponseEntity.ok(new RestResponsePage<>(etterlevelseList).convert(Etterlevelse::toResponse));
+    }
 
     @Operation(summary = "Create Etterlevelse")
     @ApiResponse(responseCode = "201", description = "Etterlevelse created")
