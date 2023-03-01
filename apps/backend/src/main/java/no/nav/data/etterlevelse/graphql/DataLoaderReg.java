@@ -16,12 +16,18 @@ import org.dataloader.DataLoaderFactory;
 import org.dataloader.DataLoaderRegistry;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.function.Function;
 
-import static no.nav.data.common.utils.StreamUtils.*;
+import static no.nav.data.common.utils.StreamUtils.convert;
+import static no.nav.data.common.utils.StreamUtils.filter;
+import static no.nav.data.common.utils.StreamUtils.toMap;
 
 @Slf4j
 @Component
@@ -32,6 +38,8 @@ public class DataLoaderReg {
     public static final String BEHANDLING = "BEHANDLING_LOADER";
     public static final String RESOURCES = "RESOURCES_LOADER";
     public static final String TEAM = "TEAM_LOADER";
+
+    public static final String ETTERLEVELSE_FOR_ETTERLEVELSEDOKUMENTASJON_LOADER = "ETTERLEVELSE_FOR_ETTERLEVELSEDOKUMENTASJON_LOADER";
 
     private final Executor graphQLExecutor;
     private final BehandlingService behandlingService;
@@ -44,7 +52,8 @@ public class DataLoaderReg {
                 .register(ETTERLEVELSER_FOR_BEHANDLING_LOADER, etterLevelserForBehandlingLoader())
                 .register(BEHANDLING, behandlingLoader())
                 .register(RESOURCES, resourcesLoader())
-                .register(TEAM, teamLoader());
+                .register(TEAM, teamLoader())
+                .register(ETTERLEVELSE_FOR_ETTERLEVELSEDOKUMENTASJON_LOADER, etterlevelseForEtterlevelseDokumentasjonLoader());
     }
 
     private DataLoader<String, Behandling> behandlingLoader() {
@@ -53,6 +62,10 @@ public class DataLoaderReg {
 
     private DataLoader<String, List<Etterlevelse>> etterLevelserForBehandlingLoader() {
         return loader(etterlevelseService::getByBehandlinger);
+    }
+
+    private DataLoader<String, List<Etterlevelse>> etterlevelseForEtterlevelseDokumentasjonLoader(){
+        return loader(etterlevelseService::getByEtterlevelseDokumentasjoner);
     }
 
     private DataLoader<String, Resource> resourcesLoader() {
