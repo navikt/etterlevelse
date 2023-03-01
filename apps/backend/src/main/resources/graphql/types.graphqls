@@ -192,8 +192,8 @@ type EtterlevelseDokumentasjon {
     behandlingId: String!
     irrelevansFor: [Code!]!
 
-    etterlevelseListe: [Etterlevelse!]!
-    sistEndretDatoForEtterlevelse: DateTime
+    etterlevelser: [Etterlevelse!]!
+    sistEndretEtterlevelse: DateTime
 }
 
 type LovStats {

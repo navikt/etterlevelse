@@ -38,7 +38,6 @@ public class DataLoaderReg {
     public static final String BEHANDLING = "BEHANDLING_LOADER";
     public static final String RESOURCES = "RESOURCES_LOADER";
     public static final String TEAM = "TEAM_LOADER";
-
     public static final String ETTERLEVELSE_FOR_ETTERLEVELSEDOKUMENTASJON_LOADER = "ETTERLEVELSE_FOR_ETTERLEVELSEDOKUMENTASJON_LOADER";
 
     private final Executor graphQLExecutor;
@@ -50,10 +49,10 @@ public class DataLoaderReg {
     public DataLoaderRegistry create() {
         return new DataLoaderRegistry()
                 .register(ETTERLEVELSER_FOR_BEHANDLING_LOADER, etterLevelserForBehandlingLoader())
+                .register(ETTERLEVELSE_FOR_ETTERLEVELSEDOKUMENTASJON_LOADER, etterlevelseForEtterlevelseDokumentasjonLoader())
                 .register(BEHANDLING, behandlingLoader())
                 .register(RESOURCES, resourcesLoader())
-                .register(TEAM, teamLoader())
-                .register(ETTERLEVELSE_FOR_ETTERLEVELSEDOKUMENTASJON_LOADER, etterlevelseForEtterlevelseDokumentasjonLoader());
+                .register(TEAM, teamLoader());
     }
 
     private DataLoader<String, Behandling> behandlingLoader() {
