@@ -36,7 +36,6 @@ public class QueryResolver implements GraphQLQueryResolver {
     private final KravService kravService;
     private final EtterlevelseService etterlevelseService;
     private final BehandlingService behandlingService;
-
     private final EtterlevelseDokumentasjonService etterlevelseDokumentasjonService;
 
     public KravResponse kravById(UUID id, Integer nummer, Integer versjon) {
