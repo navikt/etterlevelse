@@ -123,6 +123,7 @@ type Etterlevelse {
     version: Int!
 
     behandlingId: String!
+    etterlevelseDokumentasjonId: String!
     behandling: Behandling!
     kravNummer: Int!
     kravVersjon: Int!
@@ -190,6 +191,9 @@ type EtterlevelseDokumentasjon {
     etterlevelseNummer: Int!
     behandlingId: String!
     irrelevansFor: [Code!]!
+
+    etterlevelser: [Etterlevelse!]!
+    sistEndretEtterlevelse: DateTime
 }
 
 type LovStats {
