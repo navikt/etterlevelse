@@ -29,6 +29,8 @@ public class Etterlevelse implements DomainObject, KravId {
     private Integer version;
 
     private String behandlingId;
+
+    private String etterlevelseDokumentasjonId;
     private Integer kravNummer;
     private Integer kravVersjon;
 
@@ -41,6 +43,7 @@ public class Etterlevelse implements DomainObject, KravId {
 
     public Etterlevelse convert(EtterlevelseRequest request) {
         behandlingId = request.getBehandlingId();
+        etterlevelseDokumentasjonId = request.getEtterlevelseDokumentasjonId();
         kravNummer = request.getKravNummer();
         kravVersjon = request.getKravVersjon();
 
@@ -60,6 +63,7 @@ public class Etterlevelse implements DomainObject, KravId {
                 .version(version)
 
                 .behandlingId(behandlingId)
+                .etterlevelseDokumentasjonId(etterlevelseDokumentasjonId)
                 .kravNummer(kravNummer)
                 .kravVersjon(kravVersjon)
 

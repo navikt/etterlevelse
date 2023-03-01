@@ -27,6 +27,7 @@ public class EtterlevelseRequest implements RequestElement, KravId {
     private String id;
 
     private String behandlingId;
+    private String etterlevelseDokumentasjonId;
     private Integer kravNummer;
     private Integer kravVersjon;
 
@@ -43,7 +44,7 @@ public class EtterlevelseRequest implements RequestElement, KravId {
     public void format() {
         setId(trimToNull(id));
         setBehandlingId(trimToNull(behandlingId));
-
+        setEtterlevelseDokumentasjonId(trimToNull(etterlevelseDokumentasjonId));
         setStatusBegrunnelse(trimToNull(statusBegrunnelse));
         setDokumentasjon(formatList(dokumentasjon));
         setSuksesskriterieBegrunnelser(copyOf(suksesskriterieBegrunnelser));

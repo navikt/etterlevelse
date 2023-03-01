@@ -26,6 +26,7 @@ public class EtterlevelseResponse {
     private Integer version;
 
     private String behandlingId;
+    private String etterlevelseDokumentasjonId;
     private Integer kravNummer;
     private Integer kravVersjon;
 
