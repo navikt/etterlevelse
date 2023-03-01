@@ -127,6 +127,7 @@ export const mapEtterlevelseToFormValue = (etterlevelse: Partial<Etterlevelse>, 
   return {
     id: etterlevelse.id || '',
     behandlingId: etterlevelse.behandlingId || '',
+    etterlevelseDokumentasjonId: etterlevelse.etterlevelseDokumentasjonId || '',
     kravNummer: etterlevelse.kravNummer || 0,
     kravVersjon: etterlevelse.kravVersjon || 0,
     changeStamp: etterlevelse.changeStamp || { lastModifiedDate: '', lastModifiedBy: '' },

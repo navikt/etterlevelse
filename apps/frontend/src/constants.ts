@@ -135,6 +135,7 @@ export interface Etterlevelse extends DomainObject {
   id: string
 
   behandlingId: string
+  etterlevelseDokumentasjonId: string
   kravNummer: number
   kravVersjon: number
   etterleves: boolean
@@ -387,6 +388,11 @@ export type EtterlevelseQL = Etterlevelse & {
 
 export type BehandlingQL = Behandling & {
   teamsData: Team[]
+  sistEndretEtterlevelse?: string
+}
+
+export type EtterlevelseDokumentasjonQL = EtterlevelseDokumentasjon & {
+  etterlevelser?: Etterlevelse[]
   sistEndretEtterlevelse?: string
 }
 
