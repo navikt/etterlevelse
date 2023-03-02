@@ -33,8 +33,8 @@ export const ResponseMelding = (props: {
               </ParagraphSmall>
             </Block>
           </Block>
-          <Block display="flex" width="100%">
-            <ParagraphMedium marginBottom={0} marginRight="29px" marginTop="4px">
+          <Block display="flex" width="100%" >
+            <ParagraphMedium marginBottom={0} marginRight="29px" marginTop="4px" $style={{ whiteSpace: 'pre-wrap', overflowWrap: 'anywhere' }}>
               {m.innhold}
             </ParagraphMedium>
           </Block>
