@@ -54,6 +54,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 "/krav/**",
                 "/kravprioritering/**",
                 "/etterlevelse/**",
+                "/etterlevelsedokumentasjon/**",
                 "/behandling/**",
                 "/tilbakemelding/**",
                 "/etterlevelsemetadata/**",
