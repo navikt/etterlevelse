@@ -58,7 +58,6 @@ public class EtterlevelseRequest implements RequestElement, KravId {
     public void validateFieldValues(Validator<?> validator) {
         validator.checkUUID(Fields.id, id);
         validator.checkId(this);
-        validator.checkBlank(Fields.behandlingId, behandlingId);
         validator.checkNull(Fields.kravNummer, kravNummer);
         validator.checkNull(Fields.kravVersjon, kravVersjon);
     }

@@ -35,10 +35,11 @@ import static no.nav.data.common.utils.StreamUtils.toMap;
 public class DataLoaderReg {
 
     public static final String ETTERLEVELSER_FOR_BEHANDLING_LOADER = "ETTERLEVELSER_FOR_BEHANDLING_LOADER";
+    public static final String ETTERLEVELSE_FOR_ETTERLEVELSEDOKUMENTASJON_LOADER = "ETTERLEVELSE_FOR_ETTERLEVELSEDOKUMENTASJON_LOADER";
+
     public static final String BEHANDLING = "BEHANDLING_LOADER";
     public static final String RESOURCES = "RESOURCES_LOADER";
     public static final String TEAM = "TEAM_LOADER";
-    public static final String ETTERLEVELSE_FOR_ETTERLEVELSEDOKUMENTASJON_LOADER = "ETTERLEVELSE_FOR_ETTERLEVELSEDOKUMENTASJON_LOADER";
 
     private final Executor graphQLExecutor;
     private final BehandlingService behandlingService;
