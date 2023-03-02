@@ -5,7 +5,7 @@ import { useMyTeams } from '../api/TeamApi'
 import { theme } from '../util'
 import Button, { ExternalButton } from '../components/common/Button'
 import { Spinner } from '../components/common/Spinner'
-import {BehandlingQL, emptyPage, EtterlevelseDokumentasjon, PageResponse, Team} from '../constants'
+import {BehandlingQL, emptyPage, EtterlevelseDokumentasjonQL, PageResponse, Team} from '../constants'
 import { StatefulInput } from 'baseui/input'
 import { gql, useQuery } from '@apollo/client'
 import { ettlevColors, maxPageWidth } from '../util/theme'
@@ -94,7 +94,7 @@ const BehandlingTabs = () => {
   const [tab, setTab] = useState<Section>(params.tab || 'mine')
   const [doneLoading, setDoneLoading] = useState(false)
   const [variables, setVariables] = useState<Variables>({})
-  const { data, loading: behandlingerLoading } = useQuery<{ etterlevelsesDokumentasjon: PageResponse<EtterlevelseDokumentasjon> }, Variables>(query, {
+  const { data, loading: behandlingerLoading } = useQuery<{ etterlevelsesDokumentasjon: PageResponse<EtterlevelseDokumentasjonQL> }, Variables>(query, {
     variables,
   })
 
@@ -257,7 +257,7 @@ const Alle = () => {
     data,
     loading: gqlLoading,
     fetchMore,
-  } = useQuery<{ etterlevelseDokumentasjoner: PageResponse<EtterlevelseDokumentasjon> }, Variables>(query, {
+  } = useQuery<{ etterlevelseDokumentasjoner: PageResponse<EtterlevelseDokumentasjonQL> }, Variables>(query, {
     variables: { pageNumber, pageSize, sok },
     skip: tooShort,
   })
@@ -397,7 +397,7 @@ const Alle = () => {
   )
 }
 
-const EtterlevelseDokumentasjonerPanels = ({ etterlevelseDokumentasjoner, loading }: { etterlevelseDokumentasjoner: EtterlevelseDokumentasjon[]; loading?: boolean }) => {
+const EtterlevelseDokumentasjonerPanels = ({ etterlevelseDokumentasjoner, loading }: { etterlevelseDokumentasjoner: EtterlevelseDokumentasjonQL[]; loading?: boolean }) => {
   if (loading) return <SkeletonPanel count={5} />
   return (
     <Block marginBottom={tabMarginBottom}>
@@ -427,7 +427,7 @@ const EtterlevelseDokumentasjonerPanels = ({ etterlevelseDokumentasjoner, loadin
 type Variables = { pageNumber?: number; pageSize?: number; sistRedigert?: number; mineEtterlevelseDokumentasjoner?: boolean; sok?: string; teams?: string[] }
 
 const query = gql`
-  query getTest($pageNumber: NonNegativeInt, $pageSize: NonNegativeInt, $mineEtterlevelseDokumentasjoner: Boolean, $sistRedigert: NonNegativeInt, $sok: String) {
+  query getEtterlevelseDokumentasjoner($pageNumber: NonNegativeInt, $pageSize: NonNegativeInt, $mineEtterlevelseDokumentasjoner: Boolean, $sistRedigert: NonNegativeInt, $sok: String) {
     etterlevelseDokumentasjoner:  etterlevelseDokumentasjon(filter: { mineEtterlevelseDokumentasjoner: $mineEtterlevelseDokumentasjoner, sistRedigert: $sistRedigert, sok: $sok }, pageNumber: $pageNumber, pageSize: $pageSize) {
       pageNumber
       pageSize
