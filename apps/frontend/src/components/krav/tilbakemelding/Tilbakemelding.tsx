@@ -379,7 +379,7 @@ const TilbakemeldingSvar = ({tilbakemelding, setFocusNummer, close, ubesvartOgKr
               <ParagraphSmall>
                 {moment(tilbakemelding.meldinger[0].tid).format('ll')} <PersonName ident={tilbakemelding.meldinger[0].fraIdent}/>
               </ParagraphSmall>
-              <ParagraphMedium>{tilbakemelding.meldinger[0].innhold}</ParagraphMedium>
+              <ParagraphMedium $style={{whiteSpace: 'pre-wrap', overflowWrap: 'break-word'}}>{tilbakemelding.meldinger[0].innhold}</ParagraphMedium>
             </ModalBody>
             <ModalFooter>
               <Button kind={'secondary'} size={'compact'} onClick={() => setDeleteModal(false)}>

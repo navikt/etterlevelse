@@ -44,7 +44,7 @@ export const MeldingKnapper = (props: {
             <ParagraphSmall>
               {moment(melding.tid).format('ll')} <PersonName ident={melding.fraIdent} />
             </ParagraphSmall>
-            <ParagraphMedium>{melding.innhold}</ParagraphMedium>
+            <ParagraphMedium $style={{whiteSpace: 'pre-wrap', overflowWrap: 'break-word'}}>{melding.innhold}</ParagraphMedium>
           </ModalBody>
           <ModalFooter>
             <Button kind={'secondary'} size={'compact'} onClick={() => setDeleteModal(false)}>
