@@ -48,17 +48,12 @@ public class EtterlevelseDokumentasjonRepoImpl implements EtterlevelseDokumentas
                                    where table_name = 'Etterlevelse'
                                      and user_id like :user_id
                                      and data #>> '{data,etterlevelseDokumentasjonId}' is not null -- old data that lacks this field, probably only dev
-                                     and exists(select 1 from generic_storage where id = cast(table_id as uuid))
                                    order by data #>> '{data,etterlevelseDokumentasjonId}', time desc
                               ) sub
                          order by time desc
                          limit :limit
                     )
                     """;
-
-            log.debug("Using get last modified by");
-            log.debug("limit set to: " +  filter.getSistRedigert().toString());
-            log.debug("user: " + SecurityUtils.getCurrentIdent());
             par.addValue("limit", filter.getSistRedigert())
                     .addValue("user_id", SecurityUtils.getCurrentIdent() + "%");
         }
