@@ -46,8 +46,6 @@ public class EtterlevelseDokumentasjonRepoImpl implements EtterlevelseDokumentas
                                   select distinct on (data #>> '{data,etterlevelseDokumentasjonId}') data #>> '{data,etterlevelseDokumentasjonId}' etterlevelseDokumentasjonId, time
                                    from audit_version
                                    where table_name = 'Etterlevelse'
-                                     and user_id like :user_id
-                                     and data #>> '{data,etterlevelseDokumentasjonId}' is not null -- old data that lacks this field, probably only dev
                                    order by data #>> '{data,etterlevelseDokumentasjonId}', time desc
                               ) sub
                          order by time desc
