@@ -40,7 +40,7 @@ public class EtterlevelseDokumentasjonRepoImpl implements EtterlevelseDokumentas
             par.addValue("relevans", filter.getRelevans());
         } if (filter.getSistRedigert() != null) {
             query += """
-                     and id in (
+                     and id::text in (
                        select etterlevelseDokumentasjonId
                          from (
                                   select distinct on (data #>> '{data,etterlevelseDokumentasjonId}') data #>> '{data,etterlevelseDokumentasjonId}' etterlevelseDokumentasjonId, time
