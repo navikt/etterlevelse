@@ -94,13 +94,13 @@ const BehandlingTabs = () => {
   const [tab, setTab] = useState<Section>(params.tab || 'mine')
   const [doneLoading, setDoneLoading] = useState(false)
   const [variables, setVariables] = useState<Variables>({})
-  const { data, loading: etterlevelseDokumentasjonLoading } = useQuery<{ etterlevelsesDokumentasjon: PageResponse<EtterlevelseDokumentasjonQL> }, Variables>(query, {
+  const { data, loading: etterlevelseDokumentasjonLoading } = useQuery<{ etterlevelseDokumentasjoner: PageResponse<EtterlevelseDokumentasjonQL> }, Variables>(query, {
     variables,
   })
 
   const [teams, teamsLoading] = useMyTeams()
 
-  const etterlevelseDokumentasjoner = data?.etterlevelsesDokumentasjon || emptyPage
+  const etterlevelseDokumentasjoner = data?.etterlevelseDokumentasjoner || emptyPage
   const loading = teamsLoading || etterlevelseDokumentasjonLoading
 
   const [sortedTeams, setSortedTeams] = React.useState<CustomTeamObject[]>([])
@@ -242,7 +242,6 @@ const MineBehandlinger = ({ behandlinger, teams, loading }: { behandlinger: Beha
 }
 
 const SisteEtterlevelseDokumentasjoner = ({ etterlevelseDokumentasjoner, loading }: { etterlevelseDokumentasjoner: EtterlevelseDokumentasjonQL[]; loading: boolean }) => {
-  console.log(etterlevelseDokumentasjoner)
   if (!etterlevelseDokumentasjoner.length && !loading) return <ParagraphSmall>Du har ikke dokumentert etterlevelse på krav</ParagraphSmall>
   const sorted = [...etterlevelseDokumentasjoner].sort((a, b) => moment(b.sistEndretEtterlevelse).valueOf() - moment(a.sistEndretEtterlevelse).valueOf())
   return <EtterlevelseDokumentasjonerPanels etterlevelseDokumentasjoner={sorted} loading={loading} />
