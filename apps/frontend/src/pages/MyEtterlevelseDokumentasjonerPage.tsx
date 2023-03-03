@@ -94,14 +94,14 @@ const BehandlingTabs = () => {
   const [tab, setTab] = useState<Section>(params.tab || 'mine')
   const [doneLoading, setDoneLoading] = useState(false)
   const [variables, setVariables] = useState<Variables>({})
-  const { data, loading: behandlingerLoading } = useQuery<{ etterlevelsesDokumentasjon: PageResponse<EtterlevelseDokumentasjonQL> }, Variables>(query, {
+  const { data, loading: etterlevelseDokumentasjonLoading } = useQuery<{ etterlevelsesDokumentasjon: PageResponse<EtterlevelseDokumentasjonQL> }, Variables>(query, {
     variables,
   })
 
   const [teams, teamsLoading] = useMyTeams()
 
-  const behandlinger = data?.etterlevelsesDokumentasjon || emptyPage
-  const loading = teamsLoading || behandlingerLoading
+  const etterlevelseDokumentasjoner = data?.etterlevelsesDokumentasjon || emptyPage
+  const loading = teamsLoading || etterlevelseDokumentasjonLoading
 
   const [sortedTeams, setSortedTeams] = React.useState<CustomTeamObject[]>([])
 
@@ -129,11 +129,11 @@ const BehandlingTabs = () => {
 
   useEffect(() => {
     if (!doneLoading && tab === 'alle') setDoneLoading(true)
-    if (!data || behandlingerLoading || doneLoading) return
-    else if (tab === 'mine' && !behandlinger.totalElements) setTab('siste')
-    else if (tab === 'siste' && !behandlinger.totalElements) setTab('alle')
+    if (!data || etterlevelseDokumentasjonLoading || doneLoading) return
+    else if (tab === 'mine' && !etterlevelseDokumentasjoner.totalElements) setTab('siste')
+    else if (tab === 'siste' && !etterlevelseDokumentasjoner.totalElements) setTab('alle')
     else setDoneLoading(true)
-  }, [behandlinger, behandlingerLoading])
+  }, [etterlevelseDokumentasjoner, etterlevelseDokumentasjonLoading])
 
   useEffect(() => {
     switch (tab) {
@@ -168,12 +168,12 @@ const BehandlingTabs = () => {
           key: 'mine',
           title: 'Mine behandlinger',
           content: <MineBehandlinger teams={sortedTeams} behandlinger={behandlinger.content} loading={loading} />,
-        },
+        },*/
         {
           key: 'siste',
           title: 'Mine sist dokumenterte',
-          content: <SisteBehandlinger behandlinger={behandlinger.content} loading={loading} />,
-        },*/
+          content: <SisteEtterlevelseDokumentasjoner etterlevelseDokumentasjoner={etterlevelseDokumentasjoner.content} loading={loading} />,
+        },
         {
           key: 'alle',
           title: 'Alle',
@@ -241,11 +241,12 @@ const MineBehandlinger = ({ behandlinger, teams, loading }: { behandlinger: Beha
   )
 }
 
-// const SisteBehandlinger = ({ behandlinger, loading }: { behandlinger: BehandlingQL[]; loading: boolean }) => {
-//   if (!behandlinger.length && !loading) return <ParagraphSmall>Du har ikke dokumentert etterlevelse på krav</ParagraphSmall>
-//   const sorted = [...behandlinger].sort((a, b) => moment(b.sistEndretEtterlevelse).valueOf() - moment(a.sistEndretEtterlevelse).valueOf())
-//   return <EtterlevelseDokumentasjonerPanels etterlevelseDokumentasjoner={sorted} loading={loading} />
-// }
+const SisteEtterlevelseDokumentasjoner = ({ etterlevelseDokumentasjoner, loading }: { etterlevelseDokumentasjoner: EtterlevelseDokumentasjonQL[]; loading: boolean }) => {
+  console.log(etterlevelseDokumentasjoner)
+  if (!etterlevelseDokumentasjoner.length && !loading) return <ParagraphSmall>Du har ikke dokumentert etterlevelse på krav</ParagraphSmall>
+  const sorted = [...etterlevelseDokumentasjoner].sort((a, b) => moment(b.sistEndretEtterlevelse).valueOf() - moment(a.sistEndretEtterlevelse).valueOf())
+  return <EtterlevelseDokumentasjonerPanels etterlevelseDokumentasjoner={sorted} loading={loading} />
+}
 
 const Alle = () => {
   const [hover, setHover] = useState(false)
