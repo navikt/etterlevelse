@@ -56,23 +56,23 @@ public class BehandlingFieldResolver implements GraphQLResolver<Behandling> {
 
         var etterlevelser = etterlevelseService.getByBehandling(behandling.getId());
         var krav = convert(kravService.findForBehandling(behandling.getId()), Krav::toResponse);
-        //var irrelevantKrav = convert(kravService.findForBehandlingIrrelevans(behandling.getId()), Krav::toResponse);
+        var irrelevantKrav = convert(kravService.findForBehandlingIrrelevans(behandling.getId()), Krav::toResponse);
 
         var fylt = filter(krav, k -> etterlevelser.stream().anyMatch(e -> e.isEtterleves() && e.kravId().equals(k.kravId())));
         var ikkeFylt = filter(krav, k -> !fylt.contains(k));
 
-        //var irrelevant = filter(irrelevantKrav, i -> !fylt.contains(i) && !ikkeFylt.contains(i));
+        var irrelevant = filter(irrelevantKrav, i -> !fylt.contains(i) && !ikkeFylt.contains(i));
 
 
         return BehandlingStats.builder()
                 .fyltKrav(fylt)
-                .ikkeFyltKrav(ikkeFylt)
-                //.irrelevantKrav(irrelevant)
+                //.ikkeFyltKrav(ikkeFylt)
+                .irrelevantKrav(irrelevant)
                 .lovStats(convert(CodelistService.getCodelist(ListName.LOV), c -> LovStats.builder()
                         .lovCode(c.toResponse())
                         .fyltKrav(filter(fylt, k -> safeStream(k.getRegelverk()).anyMatch(r -> r.getLov().getCode().equals(c.getCode()))))
-                        .ikkeFyltKrav(filter(ikkeFylt, k -> safeStream(k.getRegelverk()).anyMatch(r -> r.getLov().getCode().equals(c.getCode()))))
-                        //.irrelevantKrav(filter(irrelevant,k -> safeStream(k.getRegelverk()).anyMatch(r -> r.getLov().getCode().equals(c.getCode()))))
+                        //.ikkeFyltKrav(filter(ikkeFylt, k -> safeStream(k.getRegelverk()).anyMatch(r -> r.getLov().getCode().equals(c.getCode()))))
+                        .irrelevantKrav(filter(irrelevant,k -> safeStream(k.getRegelverk()).anyMatch(r -> r.getLov().getCode().equals(c.getCode()))))
                         .build()))
                 .build();
     }
