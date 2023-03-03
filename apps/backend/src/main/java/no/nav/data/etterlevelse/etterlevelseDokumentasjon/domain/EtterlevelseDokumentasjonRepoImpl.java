@@ -1,6 +1,7 @@
 package no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.security.SecurityUtils;
 import no.nav.data.common.storage.domain.GenericStorage;
 import no.nav.data.common.storage.domain.GenericStorageRepository;
@@ -15,6 +16,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Repository
+@Slf4j
 @RequiredArgsConstructor
 public class EtterlevelseDokumentasjonRepoImpl implements EtterlevelseDokumentasjonRepoCustom {
 
@@ -53,6 +55,10 @@ public class EtterlevelseDokumentasjonRepoImpl implements EtterlevelseDokumentas
                          limit :limit
                     )
                     """;
+
+            log.debug("Using get last modified by");
+            log.debug("limit set to: " +  filter.getSistRedigert().toString());
+            log.debug("user: " + SecurityUtils.getCurrentIdent());
             par.addValue("limit", filter.getSistRedigert())
                     .addValue("user_id", SecurityUtils.getCurrentIdent() + "%");
         }
