@@ -31,9 +31,8 @@ public class EtterlevelseDokumentasjonFieldResolver implements GraphQLResolver<E
         return LoaderUtils.get(env, ETTERLEVELSE_FOR_ETTERLEVELSEDOKUMENTASJON_LOADER, etterlevelseDokumentasjon.getId(), (List<Etterlevelse> e) -> convert(e, Etterlevelse::toResponse));
     }
 
-    public LocalDateTime sistEndretEtterlevelse(EtterlevelseDokumentasjonResponse etterlevelseDokumentasjon, DataFetchingEnvironment env) {
-        List<Etterlevelse> etterlevelser = etterlevelseService.getByEtterlevelseDokumentasjon(etterlevelseDokumentasjon.getId().toString());
-        return sistEndret(etterlevelser);
+    public CompletableFuture<LocalDateTime> sistEndretEtterlevelse(EtterlevelseDokumentasjonResponse etterlevelseDokumentasjon, DataFetchingEnvironment env) {
+        return LoaderUtils.get(env,ETTERLEVELSE_FOR_ETTERLEVELSEDOKUMENTASJON_LOADER,etterlevelseDokumentasjon.getId().toString(),this::sistEndret);
     }
 
     private LocalDateTime sistEndret(List<Etterlevelse> etterlevelser) {
