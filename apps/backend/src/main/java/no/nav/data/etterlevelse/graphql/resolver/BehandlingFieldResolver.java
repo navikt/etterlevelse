@@ -62,7 +62,9 @@ public class BehandlingFieldResolver implements GraphQLResolver<Behandling> {
         var ikkeFylt = filter(krav, k -> !fylt.contains(k));
 
         ikkeFylt.forEach(k -> {
-            k.setEtterlevelser(k.getEtterlevelser().stream().filter(e -> e.getBehandling() != null).toList());
+            if (k.getEtterlevelser() != null) {
+                k.setEtterlevelser(k.getEtterlevelser().stream().filter(e -> e.getBehandling() != null).toList());
+            }
         });
 
         var irrelevant = filter(irrelevantKrav, i -> !fylt.contains(i) && !ikkeFylt.contains(i));
