@@ -14,6 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -34,6 +35,10 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
 
     public Page<EtterlevelseDokumentasjon> getAll(PageParameters pageParameters) {
         return etterlevelseDokumentasjonRepo.findAll(pageParameters.createPage()).map(GenericStorage::toEtterlevelseDokumentasjon);
+    }
+
+    public List<EtterlevelseDokumentasjon> getEtterlevelseDokumentasjonerByTeam(String teamId) {
+        return GenericStorage.to(etterlevelseDokumentasjonRepo.getEtterlevelseDokumentasjonerForTeam(teamId),EtterlevelseDokumentasjon.class);
     }
 
     public List<EtterlevelseDokumentasjon> searchEtterlevelseDokumentasjon(String searchParam) {
@@ -64,10 +69,9 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
             filter.setTeams(convert(teamcatTeamClient.getMyTeams(), Team::getId));
         }
 
-        // it will be implemented after etterlevelseDok teams
-//        if ((filter.getTeams() != null && !filter.getTeams().isEmpty()) || filter.isGetMineBehandlinger()) {
-//            return filter.getTeams().parallelStream().map(this::getBehandlingerForTeam).flatMap(Collection::stream).toList();
-//        }
+        if ((filter.getTeams() != null && !filter.getTeams().isEmpty()) || filter.isGetMineEtterlevelseDokumentasjoner()) {
+           return filter.getTeams().parallelStream().map(this::getEtterlevelseDokumentasjonerByTeam).flatMap(Collection::stream).toList();
+        }
 
         if (filter.isSok()) {
             return searchEtterlevelseDokumentasjon(filter.getSok());

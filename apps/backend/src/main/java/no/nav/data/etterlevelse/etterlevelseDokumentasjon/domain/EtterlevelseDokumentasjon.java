@@ -31,6 +31,8 @@ public class EtterlevelseDokumentasjon implements DomainObject {
 
     private String title;
     private String behandlingId;
+
+    private List<String> teams;
     private List<String> irrelevansFor;
 
     public List<CodelistResponse> irrelevantForAsCodes() {
@@ -43,6 +45,7 @@ public class EtterlevelseDokumentasjon implements DomainObject {
         title = request.getTitle();
         behandlingId = request.getBehandlingId();
         irrelevansFor = copyOf(request.getIrrelevansFor());
+        teams = copyOf(request.getTeams());
     }
 
     public EtterlevelseDokumentasjonResponse toResponse() {
@@ -54,6 +57,7 @@ public class EtterlevelseDokumentasjon implements DomainObject {
                 .title(title)
                 .behandlingId(behandlingId)
                 .irrelevansFor(irrelevantForAsCodes())
+                .teams(teams)
                 .build();
     }
 }

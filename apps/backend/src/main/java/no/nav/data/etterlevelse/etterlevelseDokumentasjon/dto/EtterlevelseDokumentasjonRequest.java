@@ -31,6 +31,8 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
     @Schema(description = "Codelist RELEVANS")
     private List<String> irrelevansFor;
 
+    private List<String> teams;
+
     @Override
     public void format() {
         setId(trimToNull(id));
