@@ -122,8 +122,8 @@ type Etterlevelse {
     changeStamp: ChangeStamp!
     version: Int!
 
-    behandlingId: String!
-    etterlevelseDokumentasjonId: String!
+    behandlingId: String
+    etterlevelseDokumentasjonId: String
     behandling: Behandling!
     kravNummer: Int!
     kravVersjon: Int!
@@ -189,7 +189,7 @@ type EtterlevelseDokumentasjon {
     id: String!
     title: String!
     etterlevelseNummer: Int!
-    behandlingId: String!
+    behandlingId: String
     irrelevansFor: [Code!]!
     teams: [String!]!
 
