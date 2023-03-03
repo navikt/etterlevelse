@@ -32,7 +32,7 @@ public class EtterlevelseDokumentasjonFieldResolver implements GraphQLResolver<E
     }
 
     public LocalDateTime sistEndretEtterlevelse(EtterlevelseDokumentasjonResponse etterlevelseDokumentasjon, DataFetchingEnvironment env) {
-        List<Etterlevelse> etterlevelser = etterlevelseService.getByEtterlevelseDokumentasjon(etterlevelseDokumentasjon.getBehandlingId());
+        List<Etterlevelse> etterlevelser = etterlevelseService.getByEtterlevelseDokumentasjon(etterlevelseDokumentasjon.getId().toString());
         return sistEndret(etterlevelser);
     }
 
