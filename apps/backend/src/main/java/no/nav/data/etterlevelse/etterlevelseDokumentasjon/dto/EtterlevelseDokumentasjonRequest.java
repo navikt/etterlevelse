@@ -12,6 +12,7 @@ import no.nav.data.etterlevelse.codelist.domain.ListName;
 
 import java.util.List;
 
+import static no.nav.data.common.utils.StringUtils.formatList;
 import static no.nav.data.common.utils.StringUtils.formatListToUppercase;
 import static org.apache.commons.lang3.StringUtils.trimToNull;
 
@@ -36,7 +37,9 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
     public void format() {
         setId(trimToNull(id));
         setTitle(trimToNull(title));
+        setBehandlingId(trimToNull(behandlingId));
         setIrrelevansFor(formatListToUppercase(irrelevansFor));
+        setTeams(formatList(teams));
     }
 
     @Override

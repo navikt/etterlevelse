@@ -31,7 +31,6 @@ public class EtterlevelseDokumentasjon implements DomainObject {
 
     private String title;
     private String behandlingId;
-
     private List<String> teams;
     private List<String> irrelevansFor;
 
