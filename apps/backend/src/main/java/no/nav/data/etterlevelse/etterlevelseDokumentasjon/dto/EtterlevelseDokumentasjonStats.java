@@ -23,13 +23,14 @@ public class EtterlevelseDokumentasjonStats {
     @Singular("irrelevant")
     private List<KravResponse> irrelevantKrav;
     @Singular
-    private List<LovStats> lovStats;
+    private List<LovStatsDok> lovStats;
 
     @Data
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class LovStats {
+    // temp name will refactor to LovStats after migration and removal of behandlingStats data
+    public static class LovStatsDok {
 
         private CodelistResponse lovCode;
         @Singular("fylt")
