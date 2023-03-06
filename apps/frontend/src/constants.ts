@@ -203,6 +203,7 @@ export interface EtterlevelseDokumentasjon {
   behandlingId: string
   irrelevansFor: Code[]
   etterlevelseNummer: number
+  teams: string[]
 
   //data field for frontend only
   behandling?: Behandling

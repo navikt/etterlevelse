@@ -105,4 +105,5 @@ export const etterlevelseDokumentasjonMapToFormVal = (etterlevelseDokumentasjon:
   behandlingId: etterlevelseDokumentasjon.behandlingId || '',
   irrelevansFor: etterlevelseDokumentasjon.irrelevansFor || [],
   etterlevelseNummer: etterlevelseDokumentasjon.etterlevelseNummer || 0,
+  teams: etterlevelseDokumentasjon.teams || [],
 })
