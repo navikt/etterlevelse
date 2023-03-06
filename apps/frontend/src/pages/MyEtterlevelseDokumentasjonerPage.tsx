@@ -407,7 +407,7 @@ const EtterlevelseDokumentasjonerPanels = ({ etterlevelseDokumentasjoner, loadin
             useTitleUnderLine
             useDescriptionUnderline
             panelIcon={<img src={arkPennIcon} width="33px" height="33px" aria-hidden alt={'Dokumenter behandling ikon'} />}
-            href={`/behandling/${ed.id}`}
+            href={`/dokumentasjon/${ed.id}`}
             title={
               <>
                 <strong>
