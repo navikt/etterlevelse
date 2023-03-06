@@ -56,7 +56,7 @@ public class EtterlevelseDokumentasjon implements DomainObject {
                 .title(title)
                 .behandlingId(behandlingId)
                 .irrelevansFor(irrelevantForAsCodes())
-                .teams(copyOf(teams))
+                .teams(teams != null ? copyOf(teams) : List.of())
                 .build();
     }
 }
