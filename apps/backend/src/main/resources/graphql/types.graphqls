@@ -185,6 +185,13 @@ type BehandlingStats {
     lovStats: [LovStats!]!
 }
 
+type EtterlevelseDokumentasjonStats {
+    fyltKrav: [Krav!]!
+    ikkeFyltKrav: [Krav!]!
+    irrelevantKrav: [Krav!]!
+    lovStats: [LovStats!]!
+}
+
 type EtterlevelseDokumentasjon {
     id: String!
     title: String!
@@ -194,6 +201,7 @@ type EtterlevelseDokumentasjon {
     teams: [String!]!
     etterlevelser: [Etterlevelse!]!
     sistEndretEtterlevelse: DateTime
+    stats: EtterlevelseDokumentasjonStats!
 }
 
 type LovStats {
