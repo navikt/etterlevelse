@@ -191,7 +191,7 @@ type EtterlevelseDokumentasjon {
     etterlevelseNummer: Int!
     behandlingId: String
     irrelevansFor: [Code!]!
-    teams: [String!]!
+    teams: [String!]
 
     etterlevelser: [Etterlevelse!]!
     sistEndretEtterlevelse: DateTime
