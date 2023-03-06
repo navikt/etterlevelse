@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldNameConstants;
 import no.nav.data.common.validator.RequestElement;
 import no.nav.data.common.validator.Validator;
-import no.nav.data.etterlevelse.behandling.dto.BehandlingRequest;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
 
 import java.util.List;
@@ -42,8 +41,8 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
 
     @Override
     public void validateFieldValues(Validator<?> validator) {
-        validator.checkUUID(BehandlingRequest.Fields.id, id);
+        validator.checkUUID(EtterlevelseDokumentasjonRequest.Fields.id, id);
         validator.checkId(this);
-        validator.checkCodelists(BehandlingRequest.Fields.irrelevansFor, irrelevansFor, ListName.RELEVANS);
+        validator.checkCodelists(EtterlevelseDokumentasjonRequest.Fields.irrelevansFor, irrelevansFor, ListName.RELEVANS);
     }
 }
