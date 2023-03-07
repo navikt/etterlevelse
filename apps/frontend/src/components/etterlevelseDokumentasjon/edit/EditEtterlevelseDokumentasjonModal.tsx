@@ -2,7 +2,7 @@ import { Block } from 'baseui/block'
 import { ModalBody, ModalFooter, ModalHeader } from 'baseui/modal'
 import { useState } from 'react'
 import { useSearchBehandling } from '../../../api/BehandlingApi'
-import {createEtterlevelseDokumentasjon, etterlevelseDokumentasjonMapToFormVal, etterlevelseDokumentasjonToDto} from '../../../api/EtterlevelseDokumentasjonApi'
+import { createEtterlevelseDokumentasjon, etterlevelseDokumentasjonMapToFormVal, etterlevelseDokumentasjonToDto, updateEtterlevelseDokumentasjon } from '../../../api/EtterlevelseDokumentasjonApi'
 import { Behandling, EtterlevelseDokumentasjon } from '../../../constants'
 import { Code, codelist, ListName } from '../../../services/Codelist'
 import Button, { buttonContentStyle } from '../../common/Button'
@@ -20,15 +20,21 @@ import { theme } from '../../../util'
 import { ettlevColors } from '../../../util/theme'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
 import { borderWidth, borderStyle, borderColor, borderRadius } from '../../common/Style'
-import { checkboxChecked, checkboxUncheckedHover, checkboxUnchecked, outlineInfoIcon, searchIcon, plusIcon } from '../../Images'
+import { checkboxChecked, checkboxUncheckedHover, checkboxUnchecked, outlineInfoIcon, searchIcon, plusIcon, editIcon } from '../../Images'
 import { Tag, VARIANT } from 'baseui/tag'
 import { Error } from '../../common/ModalSchema'
 import CustomizedSelect from '../../common/CustomizedSelect'
 import { intl } from '../../../util/intl/intl'
 import { TYPE } from 'baseui/select'
 
-export const EditEtterlevelseDokumentasjonModal = () => {
-  const [etterlevelseDokumentasjon, setEtterlevelseDokumentasjon] = useState<EtterlevelseDokumentasjon>(etterlevelseDokumentasjonMapToFormVal({}))
+type EditEtterlevelseDokumentasjonModalProps = {
+  etterlevelseDokumentasjon?: EtterlevelseDokumentasjon
+  setEtterlevelseDokumentasjon?: (e: EtterlevelseDokumentasjon) => void
+  isEditButton?: boolean
+}
+
+export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokumentasjonModalProps) => {
+  const [etterlevelseDokumentasjon, setEtterlevelseDokumentasjon] = useState<EtterlevelseDokumentasjon>(etterlevelseDokumentasjonMapToFormVal(props.etterlevelseDokumentasjon ? props.etterlevelseDokumentasjon : {}))
   const relevansOptions = codelist.getParsedOptions(ListName.RELEVANS)
   const [selectedFilter, setSelectedFilter] = useState<number[]>(relevansOptions.map((r, i) => i))
   const [hover, setHover] = useState<number>()
@@ -37,27 +43,35 @@ export const EditEtterlevelseDokumentasjonModal = () => {
   const [selectedBehandling, setSelectedBehandling] = useState<Behandling>()
 
   const submit = async (etterlevelseDokumentasjon: EtterlevelseDokumentasjon) => {
-    const dto  = etterlevelseDokumentasjonToDto(etterlevelseDokumentasjon)
-     await createEtterlevelseDokumentasjon(dto).then((response)=>{
-       console.log(response)
-       setIsEtterlevelseDokumntasjonerModalOpen(false)
-
-            })
-
-
+    const dto = etterlevelseDokumentasjonToDto(etterlevelseDokumentasjon)
+    if (!dto.id || dto.id === 'ny') {
+      await createEtterlevelseDokumentasjon(dto).then((response) => {
+        setIsEtterlevelseDokumntasjonerModalOpen(false)
+        if (props.setEtterlevelseDokumentasjon) {
+          props.setEtterlevelseDokumentasjon(response)
+        }
+      })
+    } else {
+      await updateEtterlevelseDokumentasjon(dto).then((response) => {
+        setIsEtterlevelseDokumntasjonerModalOpen(false)
+        if (props.setEtterlevelseDokumentasjon) {
+          props.setEtterlevelseDokumentasjon(response)
+        }
+      })
+    }
   }
 
   return (
     <Block>
-      <Button onClick={() => setIsEtterlevelseDokumntasjonerModalOpen(true)} startEnhancer={<img src={plusIcon} alt="plus icon" />} size="compact">
-        Ny Dokumentasjon
+      <Button onClick={() => setIsEtterlevelseDokumntasjonerModalOpen(true)} startEnhancer={props.isEditButton ? <img src={editIcon} alt="edit icon" /> : <img src={plusIcon} alt="plus icon" />} size="compact">
+        {props.isEditButton ? 'Rediger Dokumentasjon' : 'Ny Dokumentasjon'}
       </Button>
 
       <CustomizedModal isOpen={!!isEtterlevelseDokumentasjonerModalOpen} onClose={() => setIsEtterlevelseDokumntasjonerModalOpen(false)}>
         <ModalHeader>Opprett ny etterlevelse</ModalHeader>
         <ModalBody>
           <Formik initialValues={etterlevelseDokumentasjon} onSubmit={submit}>
-            {({values, submitForm}) => {
+            {({ values, submitForm }) => {
               return (
                 <Form>
                   <InputField disablePlaceHolder label={'Tittel'} name={'title'} />
@@ -66,7 +80,7 @@ export const EditEtterlevelseDokumentasjonModal = () => {
                     <Field name="behandlingId">
                       {(fp: FieldProps) => {
                         return (
-                          <FormControl label={<LabelWithTooltip label={'Legg til behandling'} tooltip="Søk og legg til behandling fra Behandlingskatalog"/>}>
+                          <FormControl label={<LabelWithTooltip label={'Legg til behandling'} tooltip="Søk og legg til behandling fra Behandlingskatalog" />}>
                             <Block>
                               <CustomizedSelect
                                 overrides={{
@@ -188,6 +202,7 @@ export const EditEtterlevelseDokumentasjonModal = () => {
                                 return (
                                   <BaseUIButton
                                     key={'relevans_' + r.id}
+                                    type="button"
                                     startEnhancer={() => {
                                       if (selectedFilter.includes(i)) {
                                         return <img src={checkboxChecked} alt="checked" />
@@ -264,7 +279,7 @@ export const EditEtterlevelseDokumentasjonModal = () => {
                     }}
                   </FieldArray>
 
-                  <Button type="button" onClick={() => {submitForm()}}>Lagre</Button>
+                  <Button type="button" onClick={() => { submitForm() }}>Lagre</Button>
                   <Button type="button" onClick={() => setIsEtterlevelseDokumntasjonerModalOpen(false)} marginLeft={true}>Avbryt</Button>
 
                 </Form>
