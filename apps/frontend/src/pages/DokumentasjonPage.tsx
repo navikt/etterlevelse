@@ -2,7 +2,6 @@ import React, { useRef, useState } from 'react'
 import { Block } from 'baseui/block'
 import { useNavigate, useParams } from 'react-router-dom'
 import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
-import { useBehandling } from '../api/BehandlingApi'
 import { HeadingXLarge, LabelSmall, ParagraphMedium, ParagraphXSmall } from 'baseui/typography'
 import { FormikProps } from 'formik'
 import { ettlevColors, theme } from '../util/theme'
@@ -15,8 +14,6 @@ import { Button, KIND, SIZE } from 'baseui/button'
 import EditBehandlingModal from '../components/behandling/EditBehandlingModal'
 import { marginZero } from '../components/common/Style'
 import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
-import { BehandlingStats } from '../components/behandling/ViewBehandling'
-import { TemaCardBehandling } from '../components/behandlingPage/TemaCardBehandling'
 import { isFerdigUtfylt } from './BehandlingTemaPage'
 import { ampli } from '../services/Amplitude'
 import { getMainHeader, getNewestKravVersjon } from '../components/etterlevelseDokumentasjon/common/utils'
@@ -30,6 +27,8 @@ import { ArkiveringModal } from '../components/behandlingPage/ArkiveringModal'
 import ExportEtterlevelseModal from '../components/export/ExportEtterlevelseModal'
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
 import { responsiveDisplayEtterlevelseDokumentasjonPage } from '../components/etterlevelseDokumentasjon/common/utils'
+import { TemaCardEtterlevelseDokumentasjon } from '../components/etterlevelseDokumentasjon/TemaCardEtterlevelseDokumentasjon'
+import EditEtterlevelseDokumentasjonModal from '../components/etterlevelseDokumentasjon/edit/EditEtterlevelseDokumentasjonModal'
 
 export const DokumentasjonPage = () => {
   const params = useParams<{ id?: string }>()
@@ -153,9 +152,12 @@ export const DokumentasjonPage = () => {
           {!etterlevelseDokumentasjon.irrelevansFor.length ? getRelevans() : getRelevans(etterlevelseDokumentasjon.irrelevansFor)}
         </Block>
         <Block display="flex" flex="1" justifyContent="flex-end" $style={{ whiteSpace: 'nowrap' }}>
-          <Button onClick={() => setEdit(!edit)} startEnhancer={<img src={editIcon} alt="edit icon" />}>
-            Filtrer Krav
-          </Button>
+
+        <EditEtterlevelseDokumentasjonModal 
+          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+          setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
+          isEditButton
+        />
         </Block>
       </Block>
     )
@@ -250,7 +252,7 @@ export const DokumentasjonPage = () => {
   const breadcrumbPaths: breadcrumbPaths[] = [
     {
       pathName: 'Dokumenter etterlevelse',
-      href: '/behandlinger',
+      href: '/dokumentasjoner',
     },
   ]
 
@@ -267,11 +269,11 @@ export const DokumentasjonPage = () => {
       >
         <Block backgroundColor={ettlevColors.grey50} marginTop={theme.sizing.scale800}></Block>
         {getRelevansContent(etterlevelseDokumentasjon)}
-        {/* <Block display="flex" width="100%" justifyContent="space-between" flexWrap marginTop={theme.sizing.scale550}>
+         <Block display="flex" width="100%" justifyContent="space-between" flexWrap marginTop={theme.sizing.scale550}>
           {temaListe.map((tema) => (
-            <TemaCardBehandling tema={tema} stats={relevanteStats} utgaattStats={utgaattStats} etterlevelseDokumentasjon={etterlevelseDokumentasjon} key={`${tema.shortName}_panel`} />
+            <TemaCardEtterlevelseDokumentasjon tema={tema} stats={relevanteStats} utgaattStats={utgaattStats} etterlevelseDokumentasjon={etterlevelseDokumentasjon} key={`${tema.shortName}_panel`} />
           ))}
-        </Block> */}
+        </Block> 
 
         {/*
         DISABLED TEMPORARY
@@ -289,19 +291,6 @@ export const DokumentasjonPage = () => {
           </>
         )} */}
       </Layout2>
-
-      {/* {edit && (
-        <EditBehandlingModal
-          showModal={edit}
-          behandling={behandling}
-          formRef={formRef}
-          setBehandling={setBehandling}
-          close={(e?: BehandlingEtterlevData) => {
-            setEdit(false)
-            e && setBehandling({ ...behandling, ...e })
-          }}
-        />
-      )} */}
     </Block>
   )
 }
