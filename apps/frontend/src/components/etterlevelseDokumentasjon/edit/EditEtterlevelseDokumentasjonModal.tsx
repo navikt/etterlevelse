@@ -1,6 +1,6 @@
 import { Block } from 'baseui/block'
 import { ModalBody, ModalFooter, ModalHeader } from 'baseui/modal'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useSearchBehandling } from '../../../api/BehandlingApi'
 import { createEtterlevelseDokumentasjon, etterlevelseDokumentasjonMapToFormVal, etterlevelseDokumentasjonToDto, updateEtterlevelseDokumentasjon } from '../../../api/EtterlevelseDokumentasjonApi'
 import { Behandling, EtterlevelseDokumentasjon } from '../../../constants'
@@ -42,17 +42,38 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
   const [behandlingSearchResult, setbehandlingSearchResult, loadingBehandlingSearchResult] = useSearchBehandling()
   const [selectedBehandling, setSelectedBehandling] = useState<Behandling>()
 
+  useEffect(() => {
+    if (props.etterlevelseDokumentasjon && props.etterlevelseDokumentasjon.irrelevansFor.length) {
+      const irrelevans = props.etterlevelseDokumentasjon.irrelevansFor.map((ir: Code) => relevansOptions.findIndex((o) => o.id === ir.code))
+      setSelectedFilter(
+        relevansOptions
+          .map((r, i) => {
+            return i
+          })
+          .filter((n) => !irrelevans.includes(n)),
+      )
+    } else {
+      setSelectedFilter(
+        relevansOptions.map((r, i) => {
+          return i
+        }),
+      )
+    }
+  }, [props.etterlevelseDokumentasjon])
+
+
   const submit = async (etterlevelseDokumentasjon: EtterlevelseDokumentasjon) => {
-    const dto = etterlevelseDokumentasjonToDto(etterlevelseDokumentasjon)
-    if (!dto.id || dto.id === 'ny') {
-      await createEtterlevelseDokumentasjon(dto).then((response) => {
+
+
+    if (!etterlevelseDokumentasjon.id || etterlevelseDokumentasjon.id === 'ny') {
+      await createEtterlevelseDokumentasjon(etterlevelseDokumentasjon).then((response) => {
         setIsEtterlevelseDokumntasjonerModalOpen(false)
         if (props.setEtterlevelseDokumentasjon) {
           props.setEtterlevelseDokumentasjon(response)
         }
       })
     } else {
-      await updateEtterlevelseDokumentasjon(dto).then((response) => {
+      await updateEtterlevelseDokumentasjon(etterlevelseDokumentasjon).then((response) => {
         setIsEtterlevelseDokumntasjonerModalOpen(false)
         if (props.setEtterlevelseDokumentasjon) {
           props.setEtterlevelseDokumentasjon(response)
