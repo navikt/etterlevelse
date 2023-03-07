@@ -209,6 +209,19 @@ export interface EtterlevelseDokumentasjon {
   behandling?: Behandling
 }
 
+export interface EtterlevelseDokumentasjonStats {
+  fyltKrav: KravQL[]
+  ikkeFyltKrav: KravQL[]
+  irrelevantKrav: KravQL[]
+  lovStats: LovStatsDok[]
+}
+
+export interface LovStatsDok {
+  lovCode: Code
+  fyltKrav: KravQL[]
+  ikkeFyltKrav: KravQL[]
+}
+
 export interface Periode {
   start?: string
   slutt?: string
@@ -395,6 +408,7 @@ export type BehandlingQL = Behandling & {
 export type EtterlevelseDokumentasjonQL = EtterlevelseDokumentasjon & {
   etterlevelser?: Etterlevelse[]
   sistEndretEtterlevelse?: string
+  stats?: EtterlevelseDokumentasjonStats
 }
 
 export type VarslingsadresseQL = Varslingsadresse & {

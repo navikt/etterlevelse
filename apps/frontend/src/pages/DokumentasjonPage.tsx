@@ -8,19 +8,18 @@ import { FormikProps } from 'formik'
 import { ettlevColors, theme } from '../util/theme'
 import { Layout2 } from '../components/scaffold/Page'
 import { arkPennIcon, editIcon, ellipse80, saveArchiveIcon, warningAlert } from '../components/Images'
-import { Behandling, BehandlingEtterlevData, KravQL, KravStatus, PageResponse } from '../constants'
-import { useQuery } from '@apollo/client'
+import { EtterlevelseDokumentasjon, EtterlevelseDokumentasjonStats, KravQL, KravStatus, PageResponse } from '../constants'
+import { gql, useQuery } from '@apollo/client'
 import { Code, codelist, ListName } from '../services/Codelist'
 import { Button, KIND, SIZE } from 'baseui/button'
 import EditBehandlingModal from '../components/behandling/EditBehandlingModal'
 import { marginZero } from '../components/common/Style'
 import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 import { BehandlingStats } from '../components/behandling/ViewBehandling'
-import { statsQuery } from '../api/KravApi'
 import { TemaCardBehandling } from '../components/behandlingPage/TemaCardBehandling'
 import { isFerdigUtfylt } from './BehandlingTemaPage'
 import { ampli } from '../services/Amplitude'
-import { getMainHeader, getNewestKravVersjon, responsiveDisplayBehandlingPage } from '../components/behandlingPage/common/utils'
+import { getMainHeader, getNewestKravVersjon } from '../components/etterlevelseDokumentasjon/common/utils'
 import { user } from '../services/User'
 import { faFileWord } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -29,17 +28,19 @@ import { env } from '../util/env'
 import { useArkiveringByBehandlingId } from '../api/ArkiveringApi'
 import { ArkiveringModal } from '../components/behandlingPage/ArkiveringModal'
 import ExportEtterlevelseModal from '../components/export/ExportEtterlevelseModal'
+import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
+import { responsiveDisplayEtterlevelseDokumentasjonPage } from '../components/etterlevelseDokumentasjon/common/utils'
 
 export const DokumentasjonPage = () => {
   const params = useParams<{ id?: string }>()
   const options = codelist.getParsedOptions(ListName.RELEVANS)
-  const [behandling, setBehandling] = useBehandling(params.id)
-  const [etterlevelseArkiv, setEtterlevelseArkiv] = useArkiveringByBehandlingId(params.id)
+  const [etterlevelseDokumentasjon, setEtterlevelseDokumentasjon] = useEtterlevelseDokumentasjon(params.id)
+  //const [etterlevelseArkiv, setEtterlevelseArkiv] = useArkiveringByBehandlingId(params.id)
   const formRef = useRef<FormikProps<any>>()
   const navigate = useNavigate()
 
-  const { data: relevanteData, refetch: refetchRelevanteData } = useQuery<{ behandling: PageResponse<{ stats: BehandlingStats }> }>(statsQuery, {
-    variables: { behandlingId: behandling?.id },
+  const { data: relevanteData, refetch: refetchRelevanteData } = useQuery<{ etterlevelseDokumentasjon: PageResponse<{ stats: EtterlevelseDokumentasjonStats }> }>(statsQuery, {
+    variables: { etterlevelseDokumentasjonId: etterlevelseDokumentasjon?.id },
   })
 
   const [edit, setEdit] = useState(false)
@@ -52,8 +53,8 @@ export const DokumentasjonPage = () => {
   const filterData = (
     unfilteredData:
       | {
-          behandling: PageResponse<{
-            stats: BehandlingStats
+        etterlevelseDokumentasjon: PageResponse<{
+            stats: EtterlevelseDokumentasjonStats
           }>
         }
       | undefined,
@@ -62,27 +63,27 @@ export const DokumentasjonPage = () => {
     const irrelevanteStatusListe: any[] = []
     const utgaattStatusListe: any[] = []
 
-    unfilteredData?.behandling.content.forEach(({ stats }) => {
+    unfilteredData?.etterlevelseDokumentasjon.content.forEach(({ stats }) => {
       stats.fyltKrav.forEach((k) => {
         if (k.regelverk.length && k.status === KravStatus.AKTIV) {
-          relevanteStatusListe.push({ ...k, etterlevelser: k.etterlevelser.filter((e) => e.behandlingId === behandling?.id) })
+          relevanteStatusListe.push({ ...k, etterlevelser: k.etterlevelser.filter((e) => e.etterlevelseDokumentasjonId === etterlevelseDokumentasjon?.id) })
         } else if (k.regelverk.length && k.status === KravStatus.UTGAATT) {
-          utgaattStatusListe.push({ ...k, etterlevelser: k.etterlevelser.filter((e) => e.behandlingId === behandling?.id) })
+          utgaattStatusListe.push({ ...k, etterlevelser: k.etterlevelser.filter((e) => e.etterlevelseDokumentasjonId === etterlevelseDokumentasjon?.id) })
         }
       })
       stats.ikkeFyltKrav.forEach((k) => {
         if (k.regelverk.length && k.status === KravStatus.AKTIV) {
-          relevanteStatusListe.push({ ...k, etterlevelser: k.etterlevelser.filter((e) => e.behandlingId === behandling?.id) })
+          relevanteStatusListe.push({ ...k, etterlevelser: k.etterlevelser.filter((e) => e.etterlevelseDokumentasjonId === etterlevelseDokumentasjon?.id) })
         } else if (k.regelverk.length && k.status === KravStatus.UTGAATT) {
-          utgaattStatusListe.push({ ...k, etterlevelser: k.etterlevelser.filter((e) => e.behandlingId === behandling?.id) })
+          utgaattStatusListe.push({ ...k, etterlevelser: k.etterlevelser.filter((e) => e.etterlevelseDokumentasjonId === etterlevelseDokumentasjon?.id) })
         }
       })
     })
 
-    unfilteredData?.behandling.content.forEach(({ stats }) => {
+    unfilteredData?.etterlevelseDokumentasjon.content.forEach(({ stats }) => {
       stats.irrelevantKrav.forEach((k) => {
         if (k.regelverk.length && k.status === KravStatus.AKTIV) {
-          irrelevanteStatusListe.push({ ...k, etterlevelser: k.etterlevelser.filter((e) => e.behandlingId === behandling?.id) })
+          irrelevanteStatusListe.push({ ...k, etterlevelser: k.etterlevelser.filter((e) => e.etterlevelseDokumentasjonId === etterlevelseDokumentasjon?.id) })
         }
       })
     })
@@ -114,10 +115,10 @@ export const DokumentasjonPage = () => {
 
   React.useEffect(() => {
     setTimeout(() => refetchRelevanteData(), 200)
-    if (behandling) {
-      ampli.logEvent('sidevisning', { side: 'Behandling side', sidetittel: `B${behandling.nummer.toString()} ${behandling.navn.toString()}` })
+    if (etterlevelseDokumentasjon) {
+      ampli.logEvent('sidevisning', { side: 'Etterlevelse Dokumentasjon Page', sidetittel: `E${etterlevelseDokumentasjon.etterlevelseNummer.toString()} ${etterlevelseDokumentasjon.title}` })
     }
-  }, [behandling])
+  }, [etterlevelseDokumentasjon])
 
   const temaListe = codelist.getCodes(ListName.TEMA).sort((a, b) => a.shortName.localeCompare(b.shortName, 'nb'))
   let antallFylttKrav = 0
@@ -130,8 +131,8 @@ export const DokumentasjonPage = () => {
 
   const getPercentageUtfylt = relevanteStats && relevanteStats.length && (antallFylttKrav / relevanteStats.length) * 100
 
-  const getRelevansContent = (behandling: Behandling) => {
-    const emptyRelevans = behandling.irrelevansFor.length === options.length ? true : false
+  const getRelevansContent = (etterlevelseDokumentasjon: EtterlevelseDokumentasjon) => {
+    const emptyRelevans = etterlevelseDokumentasjon.irrelevansFor.length === options.length ? true : false
 
     return (
       <Block display="flex" width="100%" alignItems="center">
@@ -149,7 +150,7 @@ export const DokumentasjonPage = () => {
             </LabelSmall>
           )}
 
-          {!behandling.irrelevansFor.length ? getRelevans() : getRelevans(behandling.irrelevansFor)}
+          {!etterlevelseDokumentasjon.irrelevansFor.length ? getRelevans() : getRelevans(etterlevelseDokumentasjon.irrelevansFor)}
         </Block>
         <Block display="flex" flex="1" justifyContent="flex-end" $style={{ whiteSpace: 'nowrap' }}>
           <Button onClick={() => setEdit(!edit)} startEnhancer={<img src={editIcon} alt="edit icon" />}>
@@ -160,8 +161,8 @@ export const DokumentasjonPage = () => {
     )
   }
 
-  const getSecondaryHeader = (behandling: Behandling) => (
-    <Block width="100%" display={responsiveDisplayBehandlingPage} alignItems="center" justifyContent="space-between" marginTop={'8px'} marginBottom={'8px'}>
+  const getSecondaryHeader = (etterlevelseDokumentasjon: EtterlevelseDokumentasjon) => (
+    <Block width="100%" display={responsiveDisplayEtterlevelseDokumentasjonPage} alignItems="center" justifyContent="space-between" marginTop={'8px'} marginBottom={'8px'}>
       <Block display="flex" alignItems="center">
         <Block marginRight="12px">
           <img src={arkPennIcon} alt="penn ikon" height="32px" width="32px" />
@@ -180,7 +181,7 @@ export const DokumentasjonPage = () => {
           </Button>
         )}
 
-        <ExportEtterlevelseModal behandlingId={behandling.id} />
+        {/* <ExportEtterlevelseModal behandlingId={behandling.id} /> */}
 
         <Block display="flex" alignItems="baseline" marginRight="30px">
           <ParagraphMedium $style={{ fontWeight: 900, fontSize: '32px', marginTop: 0, marginBottom: 0 }} color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
@@ -190,14 +191,14 @@ export const DokumentasjonPage = () => {
         </Block>
 
         <Block $style={{ border: '1px solid ' + ettlevColors.green50, background: '#102723' }} height="40px" />
-
+{/* 
         <ArkiveringModal
           arkivModal={arkivModal}
           setArkivModal={setArkivModal}
           behandlingsId={behandling.id}
           etterlevelseArkiv={etterlevelseArkiv}
           setEtterlevelseArkiv={setEtterlevelseArkiv}
-        />
+        /> */}
 
         <Block display="flex" alignItems="baseline" marginLeft="30px">
           <ParagraphMedium $style={{ fontWeight: 900, fontSize: '32px', marginTop: 0, marginBottom: 0 }} color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
@@ -218,7 +219,7 @@ export const DokumentasjonPage = () => {
       const relevans = options.filter((n) => !irrelevans.map((ir: Code) => ir.code).includes(n.id))
 
       return (
-        <Block display={responsiveDisplayBehandlingPage} flexWrap>
+        <Block display={responsiveDisplayEtterlevelseDokumentasjonPage} flexWrap>
           {relevans.map((r, index) => (
             <Block key={r.id} display="flex">
               <ParagraphXSmall $style={{ ...marginZero, marginRight: '8px', lineHeight: '24px' }}>{r.label}</ParagraphXSmall>
@@ -231,7 +232,7 @@ export const DokumentasjonPage = () => {
       )
     }
     return (
-      <Block display={responsiveDisplayBehandlingPage} flexWrap>
+      <Block display={responsiveDisplayEtterlevelseDokumentasjonPage} flexWrap>
         {options.map((o, index) => (
           <Block key={o.id} display="flex">
             <ParagraphXSmall $style={{ ...marginZero, marginRight: '8px', lineHeight: '24px' }}>{o.label}</ParagraphXSmall>
@@ -244,7 +245,7 @@ export const DokumentasjonPage = () => {
     )
   }
 
-  if (!behandling) return <LoadingSkeleton header="Behandling" />
+  if (!etterlevelseDokumentasjon) return <LoadingSkeleton header="Behandling" />
 
   const breadcrumbPaths: breadcrumbPaths[] = [
     {
@@ -257,20 +258,20 @@ export const DokumentasjonPage = () => {
     <Block width="100%">
       <Layout2
         headerBackgroundColor={ettlevColors.grey50}
-        mainHeader={getMainHeader(behandling)}
+        mainHeader={getMainHeader(etterlevelseDokumentasjon)}
         secondaryHeaderBackgroundColor={ettlevColors.white}
-        secondaryHeader={getSecondaryHeader(behandling)}
+        secondaryHeader={getSecondaryHeader(etterlevelseDokumentasjon)}
         childrenBackgroundColor={ettlevColors.grey25}
-        currentPage={'B' + behandling?.nummer.toString()}
+        currentPage={'E' + etterlevelseDokumentasjon?.etterlevelseNummer}
         breadcrumbPaths={breadcrumbPaths}
       >
         <Block backgroundColor={ettlevColors.grey50} marginTop={theme.sizing.scale800}></Block>
-        {getRelevansContent(behandling)}
-        <Block display="flex" width="100%" justifyContent="space-between" flexWrap marginTop={theme.sizing.scale550}>
+        {getRelevansContent(etterlevelseDokumentasjon)}
+        {/* <Block display="flex" width="100%" justifyContent="space-between" flexWrap marginTop={theme.sizing.scale550}>
           {temaListe.map((tema) => (
-            <TemaCardBehandling tema={tema} stats={relevanteStats} utgaattStats={utgaattStats} behandling={behandling} key={`${tema.shortName}_panel`} />
+            <TemaCardBehandling tema={tema} stats={relevanteStats} utgaattStats={utgaattStats} etterlevelseDokumentasjon={etterlevelseDokumentasjon} key={`${tema.shortName}_panel`} />
           ))}
-        </Block>
+        </Block> */}
 
         {/*
         DISABLED TEMPORARY
@@ -289,7 +290,7 @@ export const DokumentasjonPage = () => {
         )} */}
       </Layout2>
 
-      {edit && (
+      {/* {edit && (
         <EditBehandlingModal
           showModal={edit}
           behandling={behandling}
@@ -300,7 +301,151 @@ export const DokumentasjonPage = () => {
             e && setBehandling({ ...behandling, ...e })
           }}
         />
-      )}
+      )} */}
     </Block>
   )
 }
+
+
+export const statsQuery = gql`
+  query getEtterlevelseDokumentasjonStats($ettterlevelseDokumentasjonId: ID) {
+    ettterlevelseDokumentasjon(filter: { id: $ettterlevelseDokumentasjonId }) {
+      content {
+        stats {
+          fyltKrav {
+            kravNummer
+            kravVersjon
+            status
+            aktivertDato
+            kravIdRelasjoner
+            kravRelasjoner {
+              id
+              kravNummer
+              kravVersjon
+              navn
+            }
+            etterlevelser{
+              behandlingId
+              status
+              etterlevelseDokumentasjonId
+            }
+            regelverk {
+              lov {
+                code
+                shortName
+              }
+            }
+            changeStamp {
+              lastModifiedBy
+              lastModifiedDate
+              createdDate
+            }
+          }
+          ikkeFyltKrav {
+            kravNummer
+            kravVersjon
+            status
+            aktivertDato
+            kravIdRelasjoner
+            kravRelasjoner {
+              id
+              kravNummer
+              kravVersjon
+              navn
+            }
+            etterlevelser{
+              behandlingId
+              status
+              etterlevelseDokumentasjonId
+            }
+            regelverk {
+              lov {
+                code
+                shortName
+              }
+            }
+            changeStamp {
+              lastModifiedBy
+              lastModifiedDate
+              createdDate
+            }
+          }
+          irrelevantKrav {
+            kravNummer
+            kravVersjon
+            status
+            aktivertDato
+            kravIdRelasjoner
+            kravRelasjoner {
+              id
+              kravNummer
+              kravVersjon
+              navn
+            }
+            etterlevelser{
+              behandlingId
+              status
+              etterlevelseDokumentasjonId
+            }
+            regelverk {
+              lov {
+                code
+                shortName
+              }
+            }
+            changeStamp {
+              lastModifiedBy
+              lastModifiedDate
+              createdDate
+            }
+          }
+          lovStats {
+            lovCode {
+              code
+              shortName
+            }
+            fyltKrav {
+              id
+              kravNummer
+              kravVersjon
+              status
+              navn
+              kravIdRelasjoner
+              kravRelasjoner {
+                id
+                kravNummer
+                kravVersjon
+                navn
+              }
+              changeStamp {
+                lastModifiedBy
+                lastModifiedDate
+                createdDate
+              }
+            }
+            ikkeFyltKrav {
+              id
+              kravNummer
+              kravVersjon
+              status
+              aktivertDato
+              navn
+              kravIdRelasjoner
+              kravRelasjoner {
+                id
+                kravNummer
+                kravVersjon
+                navn
+              }
+              changeStamp {
+                lastModifiedBy
+                lastModifiedDate
+                createdDate
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`
