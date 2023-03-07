@@ -308,8 +308,8 @@ export const DokumentasjonPage = () => {
 
 
 export const statsQuery = gql`
-  query getEtterlevelseDokumentasjonStats($ettterlevelseDokumentasjonId: ID) {
-    ettterlevelseDokumentasjon(filter: { id: $ettterlevelseDokumentasjonId }) {
+  query getEtterlevelseDokumentasjonStats($etterlevelseDokumentasjonId: ID) {
+    etterlevelseDokumentasjon(filter: { id: $etterlevelseDokumentasjonId }) {
       content {
         stats {
           fyltKrav {
