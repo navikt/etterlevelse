@@ -14,12 +14,12 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonPropertyOrder({"id", "behandlingId", "webSakNummer", "arkiveringDato", "status"})
+@JsonPropertyOrder({"id", "behandlingId", "etterlevelseDokumentasjonId", "webSakNummer", "arkiveringDato", "status"})
 public class EtterlevelseArkivResponse {
     private UUID id;
     private ChangeStampResponse changeStamp;
     private Integer version;
-
+    private String etterlevelseDokumentasjonId;
     private String behandlingId;
     private String status;
     private LocalDateTime arkiveringDato;
