@@ -14,5 +14,5 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ArkiverRequest  {
-    private List<String> failedToArchiveBehandlingsNr;
+    private List<String> failedToArchiveEtterlevelseNr;
 }

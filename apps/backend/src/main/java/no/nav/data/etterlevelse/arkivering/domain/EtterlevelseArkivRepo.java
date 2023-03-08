@@ -24,9 +24,6 @@ public interface EtterlevelseArkivRepo extends JpaRepository<GenericStorage, UUI
     @Query(value = "select * from generic_storage where data -> 'status' = to_jsonb(?1) and type = 'EtterlevelseArkiv'", nativeQuery = true)
     List<GenericStorage> findByStatus(String status);
 
-    @Query(value = "select * from generic_storage where data ->> 'behandlingId' = ?1 and type = 'EtterlevelseArkiv'", nativeQuery = true)
-    List<GenericStorage> findByBehandling(String behandlingId);
-
     @Query(value = "select * from generic_storage where data ->> 'etterlevelseDokumentasjonId' = ?1 and type = 'EtterlevelseArkiv'", nativeQuery = true)
     List<GenericStorage> findByEtterlevelseDokumentsjonId(String behandlingId);
 
@@ -34,11 +31,6 @@ public interface EtterlevelseArkivRepo extends JpaRepository<GenericStorage, UUI
     @Transactional
     @Query(value = "update generic_storage set DATA = jsonb_set(DATA, '{status}', to_jsonb(?2) , false ) where data -> 'status' = to_jsonb(?1) and type = 'EtterlevelseArkiv' returning *", nativeQuery = true)
     List<GenericStorage> updateStatus(String oldStatus, String newStatus);
-
-    @Modifying(clearAutomatically = true)
-    @Transactional
-    @Query(value = "update generic_storage set DATA = jsonb_set(DATA, '{status}', to_jsonb(?1) , false ) where data ->> 'behandlingId' = ?2 and type = 'EtterlevelseArkiv' returning *", nativeQuery = true)
-    List<GenericStorage> updateStatusWithBehandlingsId(String newStatus, String behandlingsId);
 
     @Modifying(clearAutomatically = true)
     @Transactional
