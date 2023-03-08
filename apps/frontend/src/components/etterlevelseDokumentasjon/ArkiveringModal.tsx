@@ -1,22 +1,22 @@
-import { ModalBody, ModalHeader } from 'baseui/modal'
-import { Block } from 'baseui/block'
-import { EtterlevelseArkiv, EtterlevelseArkivStatus } from '../../constants'
-import { createEtterlevelseArkiv, updateEtterlevelseArkiv } from '../../api/ArkiveringApi'
-import React, { useState } from 'react'
+import {ModalBody, ModalHeader} from 'baseui/modal'
+import {Block} from 'baseui/block'
+import {EtterlevelseArkiv, EtterlevelseArkivStatus} from '../../constants'
+import {createEtterlevelseArkiv, updateEtterlevelseArkiv} from '../../api/ArkiveringApi'
+import React, {useState} from 'react'
 import moment from 'moment'
 import CustomizedModal from '../common/CustomizedModal'
-import { borderRadius } from '../common/Style'
+import {borderRadius} from '../common/Style'
 import Button from '../common/Button'
 
 type ArkiveringModalProps = {
   arkivModal: boolean
   setArkivModal: React.Dispatch<React.SetStateAction<boolean>>
-  behandlingsId: string
+  etterlevelseDokumentasjonId: string
   etterlevelseArkiv?: EtterlevelseArkiv
   setEtterlevelseArkiv: (etterlevelseArkiv: EtterlevelseArkiv | undefined) => void
 }
 
-export const ArkiveringModal = ({ arkivModal, setArkivModal, behandlingsId, etterlevelseArkiv, setEtterlevelseArkiv }: ArkiveringModalProps) => {
+export const ArkiveringModal = ({ arkivModal, setArkivModal, etterlevelseDokumentasjonId, etterlevelseArkiv, setEtterlevelseArkiv }: ArkiveringModalProps) => {
   const [isArchivingCancelled, setIsArchivingCancelled] = useState<boolean>(false)
 
   const getStatustext = (etterlevelseArkivStatus: EtterlevelseArkivStatus) => {
@@ -75,7 +75,7 @@ export const ArkiveringModal = ({ arkivModal, setArkivModal, behandlingsId, ette
             <Button
               onClick={() => {
                 const newEtterlevelseArkivering = {
-                  behandlingId: behandlingsId,
+                  etterlevelseDokumentasjonId: etterlevelseDokumentasjonId,
                   status:
                     etterlevelseArkiv && etterlevelseArkiv.status === EtterlevelseArkivStatus.TIL_ARKIVERING
                       ? EtterlevelseArkivStatus.IKKE_ARKIVER
