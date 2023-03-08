@@ -21,6 +21,7 @@ import static org.apache.commons.lang3.StringUtils.trimToNull;
 public class EtterlevelseArkivRequest implements RequestElement {
     private String id;
     private String behandlingId;
+    private String etterlevelseDokumentasjonId;
     private EtterlevelseArkivStatus status;
     private LocalDateTime arkiveringDato;
     private LocalDateTime tilArkiveringDato;
@@ -32,6 +33,7 @@ public class EtterlevelseArkivRequest implements RequestElement {
     public void format() {
         setId(trimToNull(id));
         setBehandlingId(trimToNull(behandlingId));
+        setEtterlevelseDokumentasjonId(trimToNull(etterlevelseDokumentasjonId));
         if (status == null) {
             status = EtterlevelseArkivStatus.TIL_ARKIVERING;
         }
@@ -41,7 +43,6 @@ public class EtterlevelseArkivRequest implements RequestElement {
     public void validateFieldValues(Validator<?> validator) {
         validator.checkUUID(Fields.id,id);
         validator.checkId(this);
-        validator.checkBlank(Fields.behandlingId,behandlingId);
 
     }
 }
