@@ -172,11 +172,6 @@ export const BehandlingPage = () => {
       </Block>
 
       <Block display="flex" alignItems="center">
-        {user.isAdmin() && (
-          <Button kind={KIND.tertiary} size={SIZE.compact} onClick={() => setArkivModal(true)} startEnhancer={<img src={saveArchiveIcon} alt="arkiv ikon" />}>
-            Arkiver
-          </Button>
-        )}
 
         <ExportEtterlevelseModal behandlingId={behandling.id} />
 
