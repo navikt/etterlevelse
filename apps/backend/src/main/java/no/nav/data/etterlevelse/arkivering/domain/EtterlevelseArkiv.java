@@ -21,7 +21,7 @@ public class EtterlevelseArkiv implements DomainObject {
     private UUID id;
     private ChangeStamp changeStamp;
     private Integer version;
-
+    private String etterlevelseDokumentasjonId;
     private String behandlingId;
     private EtterlevelseArkivStatus status;
     private LocalDateTime arkiveringDato;
@@ -32,6 +32,7 @@ public class EtterlevelseArkiv implements DomainObject {
 
     public EtterlevelseArkiv convert(EtterlevelseArkivRequest request) {
         behandlingId = request.getBehandlingId();
+        etterlevelseDokumentasjonId = request.getEtterlevelseDokumentasjonId();
         arkiveringDato = request.getArkiveringDato();
         tilArkiveringDato = request.getTilArkiveringDato();
         arkiveringAvbruttDato = request.getArkiveringAvbruttDato();
@@ -47,6 +48,7 @@ public class EtterlevelseArkiv implements DomainObject {
                 .changeStamp(convertChangeStampResponse())
                 .version(version)
                 .behandlingId(behandlingId)
+                .etterlevelseDokumentasjonId(etterlevelseDokumentasjonId)
                 .arkiveringDato(arkiveringDato)
                 .tilArkiveringDato(tilArkiveringDato)
                 .arkiveringAvbruttDato(arkiveringAvbruttDato)
