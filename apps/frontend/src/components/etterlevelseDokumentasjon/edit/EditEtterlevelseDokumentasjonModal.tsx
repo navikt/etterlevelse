@@ -85,11 +85,11 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
   return (
     <Block>
       <Button onClick={() => setIsEtterlevelseDokumntasjonerModalOpen(true)} startEnhancer={props.isEditButton ? <img src={editIcon} alt="edit icon" /> : <img src={plusIcon} alt="plus icon" />} size="compact">
-        {props.isEditButton ? 'Rediger Dokumentasjon' : 'Ny Dokumentasjon'}
+        {props.isEditButton ? 'Rediger dokumentasjon' : 'Ny dokumentasjon'}
       </Button>
 
       <CustomizedModal isOpen={!!isEtterlevelseDokumentasjonerModalOpen} onClose={() => setIsEtterlevelseDokumntasjonerModalOpen(false)}>
-        <ModalHeader>Opprett ny etterlevelse</ModalHeader>
+        <ModalHeader>{props.isEditButton ? 'Rediger dokumentasjonen' : 'Opprett ny dokumentasjon' }</ModalHeader>
         <ModalBody>
           <Formik initialValues={etterlevelseDokumentasjon} onSubmit={submit}>
             {({ values, submitForm }) => {
@@ -300,7 +300,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                     }}
                   </FieldArray>
 
-                  <Button type="button" onClick={() => { submitForm() }}>Lagre</Button>
+                  <Button type="button" onClick={() => { submitForm() }}>{props.isEditButton ? 'Lagre' : 'Opprett'}</Button>
                   <Button type="button" onClick={() => setIsEtterlevelseDokumntasjonerModalOpen(false)} marginLeft={true}>Avbryt</Button>
 
                 </Form>

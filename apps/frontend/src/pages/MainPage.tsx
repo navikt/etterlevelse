@@ -93,7 +93,7 @@ export const MainPage = () => {
               href={'https://metabase.intern.nav.no/dashboard/116-dashboard-for-etterlevelse'}
               tittel={'Status i organisasjonen'}
               icon={pageWidth && pageWidth >= 768 ? grafIconBg : grafIconBgSmall}
-              beskrivelse={'Følg med på status og se hvor godt NAV sine produktområder  dokumenterer på kravene'}
+              beskrivelse={'Følg med på status og se hvor godt NAV sine områder dokumenterer på kravene'}
               openInNewTab
             />
           </Block>
