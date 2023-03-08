@@ -268,6 +268,7 @@ export enum TilbakemeldingMeldingStatus {
 export interface EtterlevelseArkiv extends DomainObject {
   id: string
   behandlingId: string
+  etterlevelseDokumentasjonId: string
   status: EtterlevelseArkivStatus
   arkiveringDato: string
   tilArkiveringDato: string
