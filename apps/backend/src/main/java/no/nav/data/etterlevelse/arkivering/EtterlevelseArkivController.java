@@ -100,6 +100,15 @@ public class EtterlevelseArkivController {
         return ResponseEntity.ok(new RestResponsePage<>(etterlevelseArkivList).convert(EtterlevelseArkiv::toResponse));
     }
 
+    @Operation(summary = "Get etterlevelsearkiv by etterlevelseDokumentasjonId")
+    @ApiResponse(description = "Ok")
+    @GetMapping("/etterlevelsedokumentasjon/{etterlevelseDokumentasjonId}")
+    public ResponseEntity<RestResponsePage<EtterlevelseArkivResponse>> getByEtterlevelseDokumentasjon(@PathVariable String etterlevelseDokumentasjonId) {
+        log.info("Get etterlevelsearkiv by etterlevelse dokumentasjon id {}", etterlevelseDokumentasjonId);
+        List<EtterlevelseArkiv> etterlevelseArkivList=etterlevelseArkivService.getByEtterlevelseDokumentasjon(etterlevelseDokumentasjonId);
+        return ResponseEntity.ok(new RestResponsePage<>(etterlevelseArkivList).convert(EtterlevelseArkiv::toResponse));
+    }
+
     @SneakyThrows
     @Operation(summary = "Export etterlevelse to archive")
     @ApiResponse(description = "Ok")
@@ -162,7 +171,24 @@ public class EtterlevelseArkivController {
         if (!Objects.equals(id, request.getIdAsUUID())) {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
         }
-
+        if (request.getEtterlevelseDokumentasjonId() != null && !request.getEtterlevelseDokumentasjonId().equals("")){
+            if (etterlevelseService.getByEtterlevelseDokumentasjon(request.getEtterlevelseDokumentasjonId()).isEmpty()) {
+                log.info("Ingen dokumentasjon på etterlevelse dokumentasjon med id: " + request.getEtterlevelseDokumentasjonId());
+                throw  new ValidationException("Kan ikke arkivere en etterlevelse dokumentasjon som ikke har dokumentert innhold");
+            } else {
+                LocalDateTime today = LocalDateTime.now();
+                if(request.getStatus() == EtterlevelseArkivStatus.TIL_ARKIVERING) {
+                    request.setTilArkiveringDato(today);
+                }
+                else if(request.getStatus() == EtterlevelseArkivStatus.ARKIVERT) {
+                    request.setArkiveringDato(today);
+                } else if(request.getStatus() == EtterlevelseArkivStatus.IKKE_ARKIVER) {
+                    request.setArkiveringAvbruttDato(today);
+                }
+                var etterlevelseArkiv = etterlevelseArkivService.save(request);
+                return ResponseEntity.ok(etterlevelseArkiv.toResponse());
+            }
+        }
         if(etterlevelseService.getByBehandling(request.getBehandlingId()).isEmpty()) {
             log.info("Ingen dokumentasjon på behandling med id: " + request.getBehandlingId());
             throw  new ValidationException("Kan ikke arkivere en behandling som ikke har dokumentert innhold");
@@ -186,12 +212,17 @@ public class EtterlevelseArkivController {
     @PostMapping
     public ResponseEntity<EtterlevelseArkivResponse> createEtterlevelseArkiv(@RequestBody EtterlevelseArkivRequest request) {
         log.info("Create etterlevelseArkiv");
-
-        List<Etterlevelse> etterlevelseList = etterlevelseService.getByBehandling(request.getBehandlingId());
+        List<Etterlevelse> etterlevelseList;
+        if (request.getEtterlevelseDokumentasjonId() != null && !request.getEtterlevelseDokumentasjonId().equals("")){
+            etterlevelseList = etterlevelseService.getByEtterlevelseDokumentasjon(request.getEtterlevelseDokumentasjonId());
+        } else {
+            etterlevelseList = etterlevelseService.getByBehandling(request.getBehandlingId());
+        }
 
         if(etterlevelseList.isEmpty()) {
-            log.info("Ingen dokumentasjon på behandling med id: " + request.getBehandlingId());
-            throw  new ValidationException("Kan ikke arkivere en behandling som ikke har ferdig dokumentert innhold");
+            var logId = request.getEtterlevelseDokumentasjonId() != null && !request.getEtterlevelseDokumentasjonId().equals("") ? request.getEtterlevelseDokumentasjonId() :  request.getBehandlingId();
+            log.info("Ingen dokumentasjon på id: " + logId);
+            throw  new ValidationException("Kan ikke arkivere uten ferdig dokumentert innhold");
         } else {
             if(request.getStatus() == EtterlevelseArkivStatus.TIL_ARKIVERING) {
                 LocalDateTime tilArkiveringDato = LocalDateTime.now();
