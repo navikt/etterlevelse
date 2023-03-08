@@ -37,8 +37,8 @@ export const getEtterlevelseArkivArkivert = async () => {
   return (await axios.get<PageResponse<EtterlevelseArkiv>>(`${env.backendBaseUrl}/etterlevelsearkiv/status/arkivert`)).data
 }
 
-export const getEtterlevelseArkivByBehandlingId = async (behandlingId: string) => {
-  return (await axios.get<PageResponse<EtterlevelseArkiv>>(`${env.backendBaseUrl}/etterlevelsearkiv/behandling/${behandlingId}`)).data
+export const getEtterlevelseArkivByEtterlevelseDokumentasjonId = async (etterlevelseDokumentasjonId: string) => {
+  return (await axios.get<PageResponse<EtterlevelseArkiv>>(`${env.backendBaseUrl}/etterlevelsearkiv/etterlevelsedokumentasjon/${etterlevelseDokumentasjonId}`)).data
 }
 
 export const createEtterlevelseArkiv = async (etterlevelseArkiv: EtterlevelseArkiv) => {
@@ -60,8 +60,8 @@ export const updateAsAdminEtterlevelseArkiv = async (etterlevelseArkiv: Etterlev
   return (await axios.put<EtterlevelseArkiv>(`${env.backendBaseUrl}/etterlevelsearkiv/admin/update/${etterlevelseArkiv.id}`, dto)).data
 }
 
-export const updateToArkivert = async (failedToArchiveBehandlingsNr: String[]) => {
-  return (await axios.put<PageResponse<EtterlevelseArkiv>>(`${env.backendBaseUrl}/etterlevelsearkiv/status/arkivert`, { failedToArchiveBehandlingsNr })).data
+export const updateToArkivert = async (failedToArchiveEtterlevelseNr: String[]) => {
+  return (await axios.put<PageResponse<EtterlevelseArkiv>>(`${env.backendBaseUrl}/etterlevelsearkiv/status/arkivert`, { failedToArchiveEtterlevelseNr })).data
 }
 
 function etterlevelseArkivToEtterlevelseArkivDto(etterlevelseArkiv: EtterlevelseArkiv) {
@@ -73,18 +73,18 @@ function etterlevelseArkivToEtterlevelseArkivDto(etterlevelseArkiv: Etterlevelse
   return dto
 }
 
-export const useArkiveringByBehandlingId = (behandlingsId?: string) => {
+export const useArkiveringByEtterlevelseDokumentasjonId = (etterlevelseDokumentasjonId?: string) => {
   const [data, setData] = useState<EtterlevelseArkiv | undefined>(undefined)
 
   useEffect(() => {
-    behandlingsId &&
-      getEtterlevelseArkivByBehandlingId(behandlingsId)
+    etterlevelseDokumentasjonId &&
+      getEtterlevelseArkivByEtterlevelseDokumentasjonId(etterlevelseDokumentasjonId)
         .then((resp) => setData(arkiveringMapToFormVal(resp.content[0])))
         .catch((e) => {
           setData(arkiveringMapToFormVal({ id: '' }))
-          console.log("couldn't find arkivering with behandling id = ", e)
+          console.log("couldn't find arkivering with etterlevelse dokumentasjon id = ", e)
         })
-  }, [behandlingsId])
+  }, [etterlevelseDokumentasjonId])
 
   return [data, setData] as [EtterlevelseArkiv | undefined, (etterlevelseArkiv: EtterlevelseArkiv | undefined) => void]
 }
@@ -92,6 +92,7 @@ export const useArkiveringByBehandlingId = (behandlingsId?: string) => {
 export const arkiveringMapToFormVal = (arkivering: Partial<EtterlevelseArkiv>): EtterlevelseArkiv => ({
   id: arkivering.id || '',
   behandlingId: arkivering.behandlingId || '',
+  etterlevelseDokumentasjonId: arkivering.etterlevelseDokumentasjonId || '',
   status: arkivering.status || EtterlevelseArkivStatus.IKKE_ARKIVER,
   arkiveringDato: arkivering.arkiveringDato || '',
   tilArkiveringDato: arkivering.tilArkiveringDato || '',
