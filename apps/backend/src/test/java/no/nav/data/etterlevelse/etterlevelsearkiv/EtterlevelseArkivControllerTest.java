@@ -200,7 +200,7 @@ class EtterlevelseArkivControllerTest extends IntegrationTestBase {
                 .id(etterlevelseArkiv.getId().toString())
                 .status(EtterlevelseArkivStatus.BEHANDLER_ARKIVERING)
                 .webSakNummer("test/websak")
-                .behandlingId("test_dok")
+                .etterlevelseDokumentasjonId("test_dok")
                 .build();
 
         var resp = restTemplate.exchange("/etterlevelsearkiv/{id}", HttpMethod.PUT, new HttpEntity<>(req), EtterlevelseArkivResponse.class, etterlevelseArkiv.getId());
