@@ -22,7 +22,7 @@ import { faFileWord } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { StyledLink } from 'baseui/link'
 import { env } from '../util/env'
-import { useArkiveringByBehandlingId } from '../api/ArkiveringApi'
+import { useArkiveringByEtterlevelseDokumentasjonId } from '../api/ArkiveringApi'
 import { ArkiveringModal } from '../components/behandlingPage/ArkiveringModal'
 import ExportEtterlevelseModal from '../components/export/ExportEtterlevelseModal'
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
@@ -34,7 +34,7 @@ export const DokumentasjonPage = () => {
   const params = useParams<{ id?: string }>()
   const options = codelist.getParsedOptions(ListName.RELEVANS)
   const [etterlevelseDokumentasjon, setEtterlevelseDokumentasjon] = useEtterlevelseDokumentasjon(params.id)
-  //const [etterlevelseArkiv, setEtterlevelseArkiv] = useArkiveringByBehandlingId(params.id)
+  const [etterlevelseArkiv, setEtterlevelseArkiv] = useArkiveringByEtterlevelseDokumentasjonId(params.id)
   const formRef = useRef<FormikProps<any>>()
   const navigate = useNavigate()
 
@@ -193,8 +193,8 @@ export const DokumentasjonPage = () => {
         </Block>
 
         <Block $style={{ border: '1px solid ' + ettlevColors.green50, background: '#102723' }} height="40px" />
-{/* 
-        <ArkiveringModal
+
+        {/* <ArkiveringModal
           arkivModal={arkivModal}
           setArkivModal={setArkivModal}
           behandlingsId={behandling.id}

@@ -26,7 +26,6 @@ import { faFileWord } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { StyledLink } from 'baseui/link'
 import { env } from '../util/env'
-import { useArkiveringByBehandlingId } from '../api/ArkiveringApi'
 import { ArkiveringModal } from '../components/behandlingPage/ArkiveringModal'
 import ExportEtterlevelseModal from '../components/export/ExportEtterlevelseModal'
 
@@ -34,7 +33,6 @@ export const BehandlingPage = () => {
   const params = useParams<{ id?: string }>()
   const options = codelist.getParsedOptions(ListName.RELEVANS)
   const [behandling, setBehandling] = useBehandling(params.id)
-  const [etterlevelseArkiv, setEtterlevelseArkiv] = useArkiveringByBehandlingId(params.id)
   const formRef = useRef<FormikProps<any>>()
   const navigate = useNavigate()
 
@@ -190,14 +188,6 @@ export const BehandlingPage = () => {
         </Block>
 
         <Block $style={{ border: '1px solid ' + ettlevColors.green50, background: '#102723' }} height="40px" />
-
-        <ArkiveringModal
-          arkivModal={arkivModal}
-          setArkivModal={setArkivModal}
-          behandlingsId={behandling.id}
-          etterlevelseArkiv={etterlevelseArkiv}
-          setEtterlevelseArkiv={setEtterlevelseArkiv}
-        />
 
         <Block display="flex" alignItems="baseline" marginLeft="30px">
           <ParagraphMedium $style={{ fontWeight: 900, fontSize: '32px', marginTop: 0, marginBottom: 0 }} color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
