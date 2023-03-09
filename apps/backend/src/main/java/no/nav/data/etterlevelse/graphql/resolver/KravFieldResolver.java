@@ -39,13 +39,15 @@ public class KravFieldResolver implements GraphQLResolver<KravResponse> {
         Integer versjon = krav.getKravVersjon();
         log.info("etterlevelse for krav {}.{}", nummer, versjon);
 
-        var etterlevelser = etterlevelseService.getByKravNummer(nummer, versjon);
+        var etterlevelser = etterlevelseService.getByKravNummer(nummer, versjon).stream().filter(e -> e.getBehandlingId() !=  null).toList();
+
         if (onlyForBehandling) {
             String behandlingId = KravFilter.get(env, Fields.behandlingId);
             if (behandlingId != null) {
                 etterlevelser = filter(etterlevelser, e -> behandlingId.equals(e.getBehandlingId()));
             }
         }
+
         return convert(etterlevelser, Etterlevelse::toResponse);
     }
 
