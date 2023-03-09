@@ -53,7 +53,7 @@ export const ExportEtterlevelseModal = (props: ExportEtterlevelseModalProps) => 
           },
         }}
       >
-        <ModalHeader>Eksporter Etterlevelse</ModalHeader>
+        <ModalHeader>Eksporter etterlevelse</ModalHeader>
         <ModalBody>
           {isLoading ? (
             <Block display="flex" justifyContent="center" width="100%">
