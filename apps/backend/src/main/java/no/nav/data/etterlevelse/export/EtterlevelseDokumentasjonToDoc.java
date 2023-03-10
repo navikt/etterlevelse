@@ -59,8 +59,8 @@ public class EtterlevelseDokumentasjonToDoc {
     private final EtterlevelseDokumentasjonService etterlevelseDokumentasjonService;
 
     public void getBehandlingData(Behandling behandling, EtterlevelseDocumentBuilder doc) {
-        doc.addSubtitle("Knyttet behandling:");
-        doc.addSubtitle("B" + behandling.getNummer() + " " + behandling.getOverordnetFormaal().getShortName() + ": " + behandling.getNavn());
+        doc.addHeading3("Knyttet behandling");
+        doc.addText("B" + behandling.getNummer() + " " + behandling.getOverordnetFormaal().getShortName() + ": " + behandling.getNavn());
     }
 
     public void getEtterlevelseDokumentasjonData(EtterlevelseDokumentasjon etterlevelseDokumentasjon, EtterlevelseDocumentBuilder doc) {
@@ -69,6 +69,12 @@ public class EtterlevelseDokumentasjonToDoc {
         doc.addTitle("Etterlevelsesdokumentasjon");
         doc.addSubtitle("E" + etterlevelseDokumentasjon.getEtterlevelseNummer() + ": " + etterlevelseDokumentasjon.getTitle());
         doc.addText("Exportert " + formatter.format(date));
+
+        if (etterlevelseDokumentasjon.getBehandlingId() != null && !etterlevelseDokumentasjon.getBehandlingId().equals("")) {
+            var behandling = behandlingService.getBehandling(etterlevelseDokumentasjon.getBehandlingId());
+            getBehandlingData(behandling, doc);
+        }
+
         doc.addHeading3("Team");
         if (etterlevelseDokumentasjon.getTeams() != null && !etterlevelseDokumentasjon.getTeams().isEmpty()) {
             etterlevelseDokumentasjon.getTeams().forEach(teamId -> {
@@ -123,10 +129,6 @@ public class EtterlevelseDokumentasjonToDoc {
 
         getEtterlevelseDokumentasjonData(etterlevelseDokumentasjon, doc);
 
-        if (etterlevelseDokumentasjon.getBehandlingId() != null && !etterlevelseDokumentasjon.getBehandlingId().equals("")) {
-            var behandling = behandlingService.getBehandling(etterlevelse.getBehandlingId());
-            getBehandlingData(behandling, doc);
-        }
 
         var krav = kravService.getByKravNummer(etterlevelse.getKravNummer(), etterlevelse.getKravVersjon());
         EtterlevelseMedKravData etterlevelseMedKravData = EtterlevelseMedKravData.builder().etterlevelseData(etterlevelse)
@@ -152,10 +154,6 @@ public class EtterlevelseDokumentasjonToDoc {
 
         var doc = new EtterlevelseDocumentBuilder();
         getEtterlevelseDokumentasjonData(etterlevelseDokumentasjon, doc);
-        if (etterlevelseDokumentasjon.getBehandlingId() != null && !etterlevelseDokumentasjon.getBehandlingId().equals("")) {
-            var behandling = behandlingService.getBehandling(etterlevelseDokumentasjon.getBehandlingId());
-            getBehandlingData(behandling, doc);
-        }
 
         doc.addHeading1("Dokumentet inneholder etterlevelse for " + etterlevelseMedKravData.size() + " krav");
 
