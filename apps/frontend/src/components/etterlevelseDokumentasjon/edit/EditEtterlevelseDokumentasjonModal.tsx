@@ -1,14 +1,13 @@
 import { Block } from 'baseui/block'
-import { ModalBody, ModalFooter, ModalHeader } from 'baseui/modal'
+import { ModalBody, ModalHeader } from 'baseui/modal'
 import { useEffect, useState } from 'react'
 import { useSearchBehandling } from '../../../api/BehandlingApi'
 import {
   createEtterlevelseDokumentasjon,
   etterlevelseDokumentasjonMapToFormVal,
-  etterlevelseDokumentasjonToDto,
   updateEtterlevelseDokumentasjon,
 } from '../../../api/EtterlevelseDokumentasjonApi'
-import { Behandling, EtterlevelseDokumentasjon, EtterlevelseDokumentasjonQL, Team } from '../../../constants'
+import { Behandling, EtterlevelseDokumentasjon, Team } from '../../../constants'
 import { Code, codelist, ListName } from '../../../services/Codelist'
 import Button, { buttonContentStyle } from '../../common/Button'
 import CustomizedModal from '../../common/CustomizedModal'
@@ -35,8 +34,8 @@ import { useSearchTeam } from '../../../api/TeamApi'
 import { RenderTagList } from '../../common/TagList'
 
 type EditEtterlevelseDokumentasjonModalProps = {
-  etterlevelseDokumentasjon?: EtterlevelseDokumentasjonQL
-  setEtterlevelseDokumentasjon?: (e: EtterlevelseDokumentasjonQL) => void
+  etterlevelseDokumentasjon?: EtterlevelseDokumentasjon
+  setEtterlevelseDokumentasjon?: (e: EtterlevelseDokumentasjon) => void
   isEditButton?: boolean
 }
 
@@ -73,7 +72,7 @@ const selectCustomOverrides: SelectOverrides = {
 }
 
 export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokumentasjonModalProps) => {
-  const [etterlevelseDokumentasjon, setEtterlevelseDokumentasjon] = useState<EtterlevelseDokumentasjonQL>(
+  const [etterlevelseDokumentasjon, setEtterlevelseDokumentasjon] = useState<EtterlevelseDokumentasjon>(
     etterlevelseDokumentasjonMapToFormVal(props.etterlevelseDokumentasjon ? props.etterlevelseDokumentasjon : {}),
   )
   const relevansOptions = codelist.getParsedOptions(ListName.RELEVANS)
@@ -84,7 +83,6 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
   const [selectedBehandling, setSelectedBehandling] = useState<Behandling>()
   
   const [teamSearchResult, setTeamSearchResult, loadingTeamSearchResult] = useSearchTeam()
-  const [selectedTeams, setSelectedTeams] = useState<Team>()
 
   useEffect(() => {
     if (props.etterlevelseDokumentasjon && props.etterlevelseDokumentasjon.irrelevansFor.length) {
@@ -105,7 +103,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
     }
   }, [props.etterlevelseDokumentasjon])
 
-  const submit = async (etterlevelseDokumentasjon: EtterlevelseDokumentasjonQL) => {
+  const submit = async (etterlevelseDokumentasjon: EtterlevelseDokumentasjon) => {
     if (!etterlevelseDokumentasjon.id || etterlevelseDokumentasjon.id === 'ny') {
       await createEtterlevelseDokumentasjon(etterlevelseDokumentasjon).then((response) => {
         setIsEtterlevelseDokumntasjonerModalOpen(false)
@@ -144,7 +142,6 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                   <FieldWrapper>
                     <FieldArray name="teamsData">
                       {(p: FieldArrayRenderProps) => {
-                        console.log(p.form.values);
                         return (
                           <FormControl label={<LabelWithTooltip label="Legg til team" tooltip="Søk og legg til team fra teamkatalogen" />}>
                             <Block>

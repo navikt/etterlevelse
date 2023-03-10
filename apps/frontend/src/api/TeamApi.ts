@@ -19,6 +19,15 @@ export const getTeam = async (teamId: string) => {
   data.members = data.members.sort((a, b) => (a.name || '').localeCompare(b.name || ''))
   return data
 }
+
+export const getTeams = async(teamIds: string[]) => {
+  const data: Team[] = []
+   teamIds.forEach(async id => {
+    await getTeam(id).then((response) => data.push(response))
+  })
+  return data
+}
+
 export const getAllTeams = async () => {
   return (await axios.get<PageResponse<Team>>(`${env.backendBaseUrl}/team`)).data.content
 }

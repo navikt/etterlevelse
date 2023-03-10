@@ -1,8 +1,9 @@
 import axios from 'axios'
-import { Behandling, EtterlevelseDokumentasjon, PageResponse } from '../constants'
+import { Behandling, EtterlevelseDokumentasjon, PageResponse, Team } from '../constants'
 import { env } from '../util/env'
 import { useEffect, useState } from 'react'
 import { getBehandling } from './BehandlingApi'
+import { getTeam, getTeams } from './TeamApi'
 
 export const getEtterlevelseDokumentasjon = async (id: string) => {
   return (await axios.get<EtterlevelseDokumentasjon>(`${env.backendBaseUrl}/etterlevelsedokumentasjon/${id}`)).data
@@ -67,6 +68,11 @@ export const useEtterlevelseDokumentasjon = (etterlevelseDokumentasjonId?: strin
           getBehandling(etterlevelseDokumentasjon.behandlingId).then((behandlingData) => {
             setDataWithBehandling(etterlevelseDokumentasjon, behandlingData)
           })
+        } if (etterlevelseDokumentasjon.teams.length > 0) {
+          getTeams(etterlevelseDokumentasjon.teams).then((teamsData) => {
+            console.log({...etterlevelseDokumentasjon, teamsData: teamsData})
+            setData({...etterlevelseDokumentasjon, teamsData: teamsData})
+          })
         } else {
           setData(etterlevelseDokumentasjon)
         }
@@ -78,6 +84,13 @@ export const useEtterlevelseDokumentasjon = (etterlevelseDokumentasjonId?: strin
           getBehandling(behandlingId).then((behandlingData) => {
             setDataWithBehandling(etterlevelseDokumentasjon[0], behandlingData)
           })
+
+          if (etterlevelseDokumentasjon[0].teams.length > 0) {
+            getTeams(etterlevelseDokumentasjon[0].teams).then((teamsData) => {
+              setData({...etterlevelseDokumentasjon[0], teamsData: teamsData})
+            })
+          }
+          
           setIsLoading(false)
         }
       })
@@ -108,4 +121,5 @@ export const etterlevelseDokumentasjonMapToFormVal = (etterlevelseDokumentasjon:
   irrelevansFor: etterlevelseDokumentasjon.irrelevansFor || [],
   etterlevelseNummer: etterlevelseDokumentasjon.etterlevelseNummer || 0,
   teams: etterlevelseDokumentasjon.teams || [],
+  teamsData: etterlevelseDokumentasjon.teamsData || []
 })

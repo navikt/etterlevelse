@@ -29,8 +29,6 @@ export const DokumentasjonPage = () => {
   const options = codelist.getParsedOptions(ListName.RELEVANS)
   const [etterlevelseDokumentasjon, setEtterlevelseDokumentasjon] = useEtterlevelseDokumentasjon(params.id)
   const [etterlevelseArkiv, setEtterlevelseArkiv] = useArkiveringByEtterlevelseDokumentasjonId(params.id)
-  const formRef = useRef<FormikProps<any>>()
-  const navigate = useNavigate()
 
   const { data: relevanteData, refetch: refetchRelevanteData } = useQuery<{ etterlevelseDokumentasjon: PageResponse<{ stats: EtterlevelseDokumentasjonStats }> }>(statsQuery, {
     variables: { etterlevelseDokumentasjonId: etterlevelseDokumentasjon?.id },
