@@ -1,30 +1,30 @@
-import {HeadingLarge, HeadingXLarge, HeadingXXLarge, LabelLarge, LabelSmall, LabelXSmall, ParagraphSmall} from 'baseui/typography'
-import {Block} from 'baseui/block'
-import React, {useEffect, useState} from 'react'
-import {useMyTeams} from '../api/TeamApi'
-import {theme} from '../util'
-import Button, {ExternalButton} from '../components/common/Button'
-import {Spinner} from '../components/common/Spinner'
-import {BehandlingQL, emptyPage, EtterlevelseDokumentasjonQL, PageResponse, Team} from '../constants'
-import {StatefulInput} from 'baseui/input'
-import {gql, useQuery} from '@apollo/client'
-import {ettlevColors, maxPageWidth} from '../util/theme'
+import { HeadingLarge, HeadingXLarge, HeadingXXLarge, LabelLarge, LabelSmall, LabelXSmall, ParagraphSmall } from 'baseui/typography'
+import { Block } from 'baseui/block'
+import React, { useEffect, useState } from 'react'
+import { useMyTeams } from '../api/TeamApi'
+import { theme } from '../util'
+import Button, { ExternalButton } from '../components/common/Button'
+import { Spinner } from '../components/common/Spinner'
+import { BehandlingQL, emptyPage, EtterlevelseDokumentasjonQL, PageResponse, Team } from '../constants'
+import { StatefulInput } from 'baseui/input'
+import { gql, useQuery } from '@apollo/client'
+import { ettlevColors, maxPageWidth } from '../util/theme'
 import CustomizedTabs from '../components/common/CustomizedTabs'
-import {PanelLink} from '../components/common/PanelLink'
-import {arkPennIcon, bamseIcon, clearSearchIcon, searchIcon} from '../components/Images'
-import {env} from '../util/env'
-import {InfoBlock2} from '../components/common/InfoBlock'
+import { PanelLink } from '../components/common/PanelLink'
+import { arkPennIcon, bamseIcon, clearSearchIcon, searchIcon } from '../components/Images'
+import { env } from '../util/env'
+import { InfoBlock2 } from '../components/common/InfoBlock'
 import moment from 'moment'
-import {useDebouncedState} from '../util/hooks'
-import {SkeletonPanel} from '../components/common/LoadingSkeleton'
-import {user} from '../services/User'
-import {useNavigate, useParams} from 'react-router-dom'
-import {faExternalLinkAlt, faPlus} from '@fortawesome/free-solid-svg-icons'
-import {borderWidth} from '../components/common/Style'
+import { useDebouncedState } from '../util/hooks'
+import { SkeletonPanel } from '../components/common/LoadingSkeleton'
+import { user } from '../services/User'
+import { useNavigate, useParams } from 'react-router-dom'
+import { faExternalLinkAlt, faPlus } from '@fortawesome/free-solid-svg-icons'
+import { borderWidth } from '../components/common/Style'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {Helmet} from 'react-helmet'
-import {ampli} from '../services/Amplitude'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { Helmet } from 'react-helmet'
+import { ampli } from '../services/Amplitude'
 import EditEtterlevelseDokumentasjonModal from '../components/etterlevelseDokumentasjon/edit/EditEtterlevelseDokumentasjonModal'
 
 type Section = 'mine' | 'siste' | 'alle'
@@ -38,7 +38,6 @@ type CustomTeamObject = BehandlingCount & Team
 const tabMarginBottom = '48px'
 
 export const MyEtterlevelseDokumentasjonerPage = () => {
-
   ampli.logEvent('sidevisning', { side: 'Side for Behandlinger', sidetittel: 'Dokumentere etterlevelse' })
 
   return (
@@ -65,7 +64,6 @@ export const MyEtterlevelseDokumentasjonerPage = () => {
                 <EditEtterlevelseDokumentasjonModal />
               </Block>
             </Block>
-
           </Block>
         </Block>
       </Block>
@@ -109,7 +107,7 @@ const BehandlingTabs = () => {
     return unSortedTeams
       .map((t) => {
         const teamBehandlinger = []
-          //behandlinger.content.filter((b) => b.teamsData.find((t2) => t2.id === t.id))
+        //behandlinger.content.filter((b) => b.teamsData.find((t2) => t2.id === t.id))
 
         return {
           ...t,
@@ -164,7 +162,7 @@ const BehandlingTabs = () => {
       activeKey={tab}
       onChange={(args) => setTab(args.activeKey as Section)}
       tabs={[
-     /*   {
+        /*   {
           key: 'mine',
           title: 'Mine behandlinger',
           content: <MineBehandlinger teams={sortedTeams} behandlinger={behandlinger.content} loading={loading} />,
@@ -217,7 +215,7 @@ const MineBehandlinger = ({ behandlinger, teams, loading }: { behandlinger: Beha
               </Block>
             </Block>
 
-          {/* <EtterlevelseDokumentasjonerPanels etterlevelseDokumentasjoner={teamBehandlinger} /> */}
+            {/* <EtterlevelseDokumentasjonerPanels etterlevelseDokumentasjoner={teamBehandlinger} /> */}
           </Block>
         )
       })}
@@ -343,7 +341,7 @@ const Alle = () => {
             // EndEnhancer: {style: {marginLeft: theme.sizing.scale400, paddingLeft: 0, paddingRight: 0, backgroundColor: ettlevColors.black}}
           }}
           startEnhancer={<img src={searchIcon} alt="Søk ikon" />}
-        // endEnhancer={<img aria-hidden alt={'Søk ikon'} src={sokButtonIcon} />}
+          // endEnhancer={<img aria-hidden alt={'Søk ikon'} src={sokButtonIcon} />}
         />
         {tooShort && (
           <LabelSmall color={ettlevColors.error400} alignSelf={'flex-end'} marginTop={theme.sizing.scale200}>
@@ -376,7 +374,13 @@ const Alle = () => {
           {!loading && etterlevelseDokumentasjoner.totalElements !== 0 && (
             <Block display={'flex'} justifyContent={'space-between'} marginTop={theme.sizing.scale1000}>
               <Block display="flex" alignItems="center">
-                <Button onClick={lastMer} icon={faPlus} kind={'secondary'} size="compact" disabled={gqlLoading || etterlevelseDokumentasjoner.numberOfElements >= etterlevelseDokumentasjoner.totalElements}>
+                <Button
+                  onClick={lastMer}
+                  icon={faPlus}
+                  kind={'secondary'}
+                  size="compact"
+                  disabled={gqlLoading || etterlevelseDokumentasjoner.numberOfElements >= etterlevelseDokumentasjoner.totalElements}
+                >
                   Vis mer
                 </Button>
 
@@ -410,13 +414,11 @@ const EtterlevelseDokumentasjonerPanels = ({ etterlevelseDokumentasjoner, loadin
             href={`/dokumentasjon/${ed.id}`}
             title={
               <>
-                <strong>
-                  E{ed.etterlevelseNummer}
-                </strong>
+                <strong>E{ed.etterlevelseNummer}</strong>
               </>
             }
             beskrivelse={ed.title}
-           rightBeskrivelse={!!ed.sistEndretEtterlevelse ? `Sist endret: ${moment(ed.sistEndretEtterlevelse).format('ll')}` : ''}
+            rightBeskrivelse={!!ed.sistEndretEtterlevelse ? `Sist endret: ${moment(ed.sistEndretEtterlevelse).format('ll')}` : ''}
           />
         </Block>
       ))}
@@ -427,8 +429,18 @@ const EtterlevelseDokumentasjonerPanels = ({ etterlevelseDokumentasjoner, loadin
 type Variables = { pageNumber?: number; pageSize?: number; sistRedigert?: number; mineEtterlevelseDokumentasjoner?: boolean; sok?: string; teams?: string[] }
 
 const query = gql`
-  query getEtterlevelseDokumentasjoner($pageNumber: NonNegativeInt, $pageSize: NonNegativeInt, $mineEtterlevelseDokumentasjoner: Boolean, $sistRedigert: NonNegativeInt, $sok: String) {
-    etterlevelseDokumentasjoner:  etterlevelseDokumentasjon(filter: { mineEtterlevelseDokumentasjoner: $mineEtterlevelseDokumentasjoner, sistRedigert: $sistRedigert, sok: $sok }, pageNumber: $pageNumber, pageSize: $pageSize) {
+  query getEtterlevelseDokumentasjoner(
+    $pageNumber: NonNegativeInt
+    $pageSize: NonNegativeInt
+    $mineEtterlevelseDokumentasjoner: Boolean
+    $sistRedigert: NonNegativeInt
+    $sok: String
+  ) {
+    etterlevelseDokumentasjoner: etterlevelseDokumentasjon(
+      filter: { mineEtterlevelseDokumentasjoner: $mineEtterlevelseDokumentasjoner, sistRedigert: $sistRedigert, sok: $sok }
+      pageNumber: $pageNumber
+      pageSize: $pageSize
+    ) {
       pageNumber
       pageSize
       pages
@@ -439,6 +451,10 @@ const query = gql`
         title
         etterlevelseNummer
         sistEndretEtterlevelse
+        teamsData {
+          id
+          name
+        }
       }
     }
   }
