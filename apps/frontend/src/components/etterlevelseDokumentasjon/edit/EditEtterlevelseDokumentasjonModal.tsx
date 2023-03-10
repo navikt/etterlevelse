@@ -30,7 +30,7 @@ import { Error } from '../../common/ModalSchema'
 import CustomizedSelect from '../../common/CustomizedSelect'
 import { intl } from '../../../util/intl/intl'
 import { SelectOverrides, TYPE } from 'baseui/select'
-import { useSearchTeam } from '../../../api/TeamApi'
+import { getTeams, useSearchTeam } from '../../../api/TeamApi'
 import { RenderTagList } from '../../common/TagList'
 
 type EditEtterlevelseDokumentasjonModalProps = {
@@ -78,7 +78,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
   const [isEtterlevelseDokumentasjonerModalOpen, setIsEtterlevelseDokumntasjonerModalOpen] = useState<boolean>(false)
   const [behandlingSearchResult, setbehandlingSearchResult, loadingBehandlingSearchResult] = useSearchBehandling()
   const [selectedBehandling, setSelectedBehandling] = useState<Behandling>()
-  
+
   const [teamSearchResult, setTeamSearchResult, loadingTeamSearchResult] = useSearchTeam()
 
   useEffect(() => {
@@ -112,7 +112,18 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
       await updateEtterlevelseDokumentasjon(etterlevelseDokumentasjon).then((response) => {
         setIsEtterlevelseDokumntasjonerModalOpen(false)
         if (props.setEtterlevelseDokumentasjon) {
-          props.setEtterlevelseDokumentasjon(response)
+          if (response.teams.length > 0 ) {
+            getTeams(response.teams).then((teamsData) => {
+              if(props.setEtterlevelseDokumentasjon) {
+                props.setEtterlevelseDokumentasjon({
+                  ...response,
+                  teamsData: teamsData
+                })
+              }
+            })
+          } else {
+            props.setEtterlevelseDokumentasjon(response)
+          }
         }
       })
     }
@@ -154,14 +165,14 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                                   labelKey="name"
                                   onInputChange={(event) => { setTeamSearchResult(event.currentTarget.value) }}
                                   options={teamSearchResult}
-                                  onChange={({value}) => {
+                                  onChange={({ value }) => {
                                     value.length && p.push(value[0])
                                   }}
                                   isLoading={loadingTeamSearchResult}
                                   error={!!p.form.errors.teamsData && !!p.form.submitCount}
                                 />
                               </Block>
-                              <RenderTagList wide list={p.form.values.teamsData.map((t:Team) => t.name)} onRemove={p.remove} />
+                              <RenderTagList wide list={p.form.values.teamsData.map((t: Team) => t.name)} onRemove={p.remove} />
                             </Block>
                           </FormControl>
                         )
