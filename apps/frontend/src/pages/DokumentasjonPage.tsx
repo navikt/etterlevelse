@@ -7,7 +7,7 @@ import {FormikProps} from 'formik'
 import {ettlevColors, theme} from '../util/theme'
 import {Layout2} from '../components/scaffold/Page'
 import {arkPennIcon, ellipse80, saveArchiveIcon, warningAlert} from '../components/Images'
-import {EtterlevelseDokumentasjon, EtterlevelseDokumentasjonStats, KravQL, KravStatus, PageResponse} from '../constants'
+import {EtterlevelseDokumentasjonQL, EtterlevelseDokumentasjonStats, KravQL, KravStatus, PageResponse} from '../constants'
 import {gql, useQuery} from '@apollo/client'
 import {Code, codelist, ListName} from '../services/Codelist'
 import {Button, KIND, SIZE} from 'baseui/button'
@@ -122,7 +122,7 @@ export const DokumentasjonPage = () => {
 
   const getPercentageUtfylt = relevanteStats && relevanteStats.length && (antallFylttKrav / relevanteStats.length) * 100
 
-  const getRelevansContent = (etterlevelseDokumentasjon: EtterlevelseDokumentasjon) => {
+  const getRelevansContent = (etterlevelseDokumentasjon: EtterlevelseDokumentasjonQL) => {
     const emptyRelevans = etterlevelseDokumentasjon.irrelevansFor.length === options.length ? true : false
 
     return (
@@ -155,7 +155,7 @@ export const DokumentasjonPage = () => {
     )
   }
 
-  const getSecondaryHeader = (etterlevelseDokumentasjon: EtterlevelseDokumentasjon) => (
+  const getSecondaryHeader = (etterlevelseDokumentasjon: EtterlevelseDokumentasjonQL) => (
     <Block width="100%" display={responsiveDisplayEtterlevelseDokumentasjonPage} alignItems="center" justifyContent="space-between" marginTop={'8px'} marginBottom={'8px'}>
       <Block display="flex" alignItems="center">
         <Block marginRight="12px">

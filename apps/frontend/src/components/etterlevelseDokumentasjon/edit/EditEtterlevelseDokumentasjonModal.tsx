@@ -7,7 +7,7 @@ import {
   etterlevelseDokumentasjonMapToFormVal,
   updateEtterlevelseDokumentasjon,
 } from '../../../api/EtterlevelseDokumentasjonApi'
-import { Behandling, EtterlevelseDokumentasjon, Team } from '../../../constants'
+import { Behandling, EtterlevelseDokumentasjonQL, Team } from '../../../constants'
 import { Code, codelist, ListName } from '../../../services/Codelist'
 import Button, { buttonContentStyle } from '../../common/Button'
 import CustomizedModal from '../../common/CustomizedModal'
@@ -34,8 +34,8 @@ import { useSearchTeam } from '../../../api/TeamApi'
 import { RenderTagList } from '../../common/TagList'
 
 type EditEtterlevelseDokumentasjonModalProps = {
-  etterlevelseDokumentasjon?: EtterlevelseDokumentasjon
-  setEtterlevelseDokumentasjon?: (e: EtterlevelseDokumentasjon) => void
+  etterlevelseDokumentasjon?: EtterlevelseDokumentasjonQL
+  setEtterlevelseDokumentasjon?: (e: EtterlevelseDokumentasjonQL) => void
   isEditButton?: boolean
 }
 
@@ -72,9 +72,6 @@ const selectCustomOverrides: SelectOverrides = {
 }
 
 export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokumentasjonModalProps) => {
-  const [etterlevelseDokumentasjon, setEtterlevelseDokumentasjon] = useState<EtterlevelseDokumentasjon>(
-    etterlevelseDokumentasjonMapToFormVal(props.etterlevelseDokumentasjon ? props.etterlevelseDokumentasjon : {}),
-  )
   const relevansOptions = codelist.getParsedOptions(ListName.RELEVANS)
   const [selectedFilter, setSelectedFilter] = useState<number[]>(relevansOptions.map((r, i) => i))
   const [hover, setHover] = useState<number>()
@@ -103,7 +100,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
     }
   }, [props.etterlevelseDokumentasjon])
 
-  const submit = async (etterlevelseDokumentasjon: EtterlevelseDokumentasjon) => {
+  const submit = async (etterlevelseDokumentasjon: EtterlevelseDokumentasjonQL) => {
     if (!etterlevelseDokumentasjon.id || etterlevelseDokumentasjon.id === 'ny') {
       await createEtterlevelseDokumentasjon(etterlevelseDokumentasjon).then((response) => {
         setIsEtterlevelseDokumntasjonerModalOpen(false)
@@ -134,7 +131,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
       <CustomizedModal isOpen={!!isEtterlevelseDokumentasjonerModalOpen} onClose={() => setIsEtterlevelseDokumntasjonerModalOpen(false)}>
         <ModalHeader>{props.isEditButton ? 'Rediger dokumentasjonen' : 'Opprett ny dokumentasjon'}</ModalHeader>
         <ModalBody>
-          <Formik initialValues={etterlevelseDokumentasjon} onSubmit={submit}>
+          <Formik initialValues={etterlevelseDokumentasjonMapToFormVal(props.etterlevelseDokumentasjon ? props.etterlevelseDokumentasjon : {})} onSubmit={submit}>
             {({ values, submitForm }) => {
               return (
                 <Form>

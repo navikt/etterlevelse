@@ -207,7 +207,6 @@ export interface EtterlevelseDokumentasjon {
 
   //data field for frontend only
   behandling?: Behandling
-  teamsData?: Team[]
 }
 
 export interface EtterlevelseDokumentasjonStats {
@@ -411,6 +410,7 @@ export type EtterlevelseDokumentasjonQL = EtterlevelseDokumentasjon & {
   etterlevelser?: Etterlevelse[]
   sistEndretEtterlevelse?: string
   stats?: EtterlevelseDokumentasjonStats
+  teamsData?: Team[]
 }
 
 export type VarslingsadresseQL = Varslingsadresse & {

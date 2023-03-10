@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { Behandling, EtterlevelseDokumentasjon, PageResponse, Team } from '../constants'
+import { Behandling, EtterlevelseDokumentasjon, EtterlevelseDokumentasjonQL, PageResponse, Team } from '../constants'
 import { env } from '../util/env'
 import { useEffect, useState } from 'react'
 import { getBehandling } from './BehandlingApi'
@@ -34,12 +34,12 @@ export const searchEtterlevelsedokumentasjon = async (searchParam: string) => {
 export const searchEtterlevelsedokumentasjonByBehandlingId = async (behandlingId: string) => {
   return (await axios.get<PageResponse<EtterlevelseDokumentasjon>>(`${env.backendBaseUrl}/etterlevelsedokumentasjon/search/behandling/${behandlingId}`)).data.content
 }
-export const updateEtterlevelseDokumentasjon = async (etterlevelseDokumentasjon: EtterlevelseDokumentasjon) => {
+export const updateEtterlevelseDokumentasjon = async (etterlevelseDokumentasjon: EtterlevelseDokumentasjonQL) => {
   const dto = etterlevelseDokumentasjonToDto(etterlevelseDokumentasjon)
   return (await axios.put<EtterlevelseDokumentasjon>(`${env.backendBaseUrl}/etterlevelsedokumentasjon/${etterlevelseDokumentasjon.id}`, dto)).data
 }
 
-export const createEtterlevelseDokumentasjon = async (etterlevelseDokumentasjon: EtterlevelseDokumentasjon) => {
+export const createEtterlevelseDokumentasjon = async (etterlevelseDokumentasjon: EtterlevelseDokumentasjonQL) => {
   const dto = etterlevelseDokumentasjonToDto(etterlevelseDokumentasjon)
   return (await axios.post<EtterlevelseDokumentasjon>(`${env.backendBaseUrl}/etterlevelsedokumentasjon/`, dto)).data
 }
@@ -50,10 +50,10 @@ export const deleteEtterlevelseDokumentasjon = async (etterlevelseDokumentasjonI
 
 export const useEtterlevelseDokumentasjon = (etterlevelseDokumentasjonId?: string, behandlingId?: string) => {
   const isCreateNew = etterlevelseDokumentasjonId === 'ny'
-  const [data, setData] = useState<EtterlevelseDokumentasjon | undefined>(isCreateNew ? etterlevelseDokumentasjonMapToFormVal({}) : undefined)
+  const [data, setData] = useState<EtterlevelseDokumentasjonQL | undefined>(isCreateNew ? etterlevelseDokumentasjonMapToFormVal({}) : undefined)
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
-  const setDataWithBehandling = (mainData: EtterlevelseDokumentasjon, behandlingData: Behandling) => {
+  const setDataWithBehandling = (mainData: EtterlevelseDokumentasjonQL, behandlingData: Behandling) => {
     setData({
       ...mainData,
       behandling: behandlingData,
@@ -97,10 +97,10 @@ export const useEtterlevelseDokumentasjon = (etterlevelseDokumentasjonId?: strin
     }
   }, [etterlevelseDokumentasjonId, behandlingId])
 
-  return [data, setData, isLoading] as [EtterlevelseDokumentasjon | undefined, (e: EtterlevelseDokumentasjon) => void, boolean]
+  return [data, setData, isLoading] as [EtterlevelseDokumentasjonQL | undefined, (e: EtterlevelseDokumentasjonQL) => void, boolean]
 }
 
-export const etterlevelseDokumentasjonToDto = (etterlevelseDokumentasjon: EtterlevelseDokumentasjon): EtterlevelseDokumentasjon => {
+export const etterlevelseDokumentasjonToDto = (etterlevelseDokumentasjon: EtterlevelseDokumentasjonQL): EtterlevelseDokumentasjon => {
   const dto = {
     ...etterlevelseDokumentasjon,
     irrelevansFor: etterlevelseDokumentasjon.irrelevansFor.map((c) => c.code),
@@ -112,7 +112,7 @@ export const etterlevelseDokumentasjonToDto = (etterlevelseDokumentasjon: Etterl
   return dto
 }
 
-export const etterlevelseDokumentasjonMapToFormVal = (etterlevelseDokumentasjon: Partial<EtterlevelseDokumentasjon>): EtterlevelseDokumentasjon => ({
+export const etterlevelseDokumentasjonMapToFormVal = (etterlevelseDokumentasjon: Partial<EtterlevelseDokumentasjonQL>): EtterlevelseDokumentasjonQL => ({
   id: etterlevelseDokumentasjon.id || '',
   changeStamp: etterlevelseDokumentasjon.changeStamp || { lastModifiedDate: '', lastModifiedBy: '' },
   version: -1,
