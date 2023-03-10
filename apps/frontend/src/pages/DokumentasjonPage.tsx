@@ -22,6 +22,7 @@ import {useEtterlevelseDokumentasjon} from '../api/EtterlevelseDokumentasjonApi'
 import {TemaCardEtterlevelseDokumentasjon} from '../components/etterlevelseDokumentasjon/TemaCardEtterlevelseDokumentasjon'
 import EditEtterlevelseDokumentasjonModal from '../components/etterlevelseDokumentasjon/edit/EditEtterlevelseDokumentasjonModal'
 import {ArkiveringModal} from "../components/etterlevelseDokumentasjon/ArkiveringModal";
+import ExportEtterlevelseModalV2 from '../components/export/ExportEtterlevelseModalV2'
 
 export const DokumentasjonPage = () => {
   const params = useParams<{ id?: string }>()
@@ -176,7 +177,7 @@ export const DokumentasjonPage = () => {
           </Button>
         )}
 
-        {/* <ExportEtterlevelseModal behandlingId={behandling.id} /> */}
+        <ExportEtterlevelseModalV2 etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id} />
 
         <Block display="flex" alignItems="baseline" marginRight="30px">
           <ParagraphMedium $style={{ fontWeight: 900, fontSize: '32px', marginTop: 0, marginBottom: 0 }} color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
