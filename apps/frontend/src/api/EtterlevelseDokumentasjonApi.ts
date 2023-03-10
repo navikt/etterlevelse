@@ -70,7 +70,6 @@ export const useEtterlevelseDokumentasjon = (etterlevelseDokumentasjonId?: strin
           })
         } if (etterlevelseDokumentasjon.teams.length > 0) {
           getTeams(etterlevelseDokumentasjon.teams).then((teamsData) => {
-            console.log({...etterlevelseDokumentasjon, teamsData: teamsData})
             setData({...etterlevelseDokumentasjon, teamsData: teamsData})
           })
         } else {
