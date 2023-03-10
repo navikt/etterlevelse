@@ -24,22 +24,31 @@ export const getMainHeader = (etterlevelseDokumentasjon: EtterlevelseDokumentasj
       </Helmet>
     )}
     <Block width="100%">
-      <LabelSmall color={ettlevColors.green600}>
-        E{etterlevelseDokumentasjon.etterlevelseNummer.toString()}
-      </LabelSmall>
+      <LabelSmall color={ettlevColors.green600}>E{etterlevelseDokumentasjon.etterlevelseNummer.toString()}</LabelSmall>
       <HeadingXXLarge marginTop="0" color={ettlevColors.green800}>
         {etterlevelseDokumentasjon.title}
       </HeadingXXLarge>
       <Block display="flex" alignItems="center" width="100%" marginTop={'24px'}>
-        <Block display={'flex'} width="100%">
+        <Block display={'flex'} width="100%" alignItems="center">
           <LabelSmall $style={{ lineHeight: '22px', marginRight: '10px', fontSize: '16px', color: ettlevColors.green600 }}>Team: </LabelSmall>
-          <Teams teams={etterlevelseDokumentasjon.teams} link fontColor={ettlevColors.green800} style={{ fontSize: '16px', lineHeight: '22px', fontWeight: 400 }} />
+          {etterlevelseDokumentasjon.teams.length > 0 ? (
+            <Teams teams={etterlevelseDokumentasjon.teams} link fontColor={ettlevColors.green800} style={{ fontSize: '16px', lineHeight: '22px', fontWeight: 400 }} />
+          ) : (
+              <Block
+              $style={{
+                fontFamily: 'Source Sans Pro',
+                fontWeight: 500,
+              }}
+              >Team er ikke angitt</Block>
+          )}
         </Block>
-       {etterlevelseDokumentasjon.behandlingId && <Block display="flex" justifyContent="flex-end" alignContent="center" $style={{ whiteSpace: 'nowrap' }}>
-          <ExternalButton kind={'secondary'} href={`${env.pollyBaseUrl}process/${etterlevelseDokumentasjon.behandlingId}`} size="mini">
-            <ExternalLinkWrapper text="Til behandlingskatalogen" />
-          </ExternalButton>
-        </Block>}
+        {etterlevelseDokumentasjon.behandlingId && (
+          <Block display="flex" justifyContent="flex-end" alignContent="center" $style={{ whiteSpace: 'nowrap' }}>
+            <ExternalButton kind={'secondary'} href={`${env.pollyBaseUrl}process/${etterlevelseDokumentasjon.behandlingId}`} size="mini">
+              <ExternalLinkWrapper text="Til behandlingskatalogen" />
+            </ExternalButton>
+          </Block>
+        )}
       </Block>
     </Block>
   </Block>
