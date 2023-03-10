@@ -199,6 +199,7 @@ type EtterlevelseDokumentasjon {
     behandlingId: String
     irrelevansFor: [Code!]!
     teams: [String!]!
+    teamsData: [Team!]!
     etterlevelser: [Etterlevelse!]!
     sistEndretEtterlevelse: DateTime
     stats: EtterlevelseDokumentasjonStats!

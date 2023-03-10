@@ -4,6 +4,7 @@ import graphql.kickstart.tools.GraphQLResolver;
 import graphql.schema.DataFetchingEnvironment;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import no.nav.data.etterlevelse.behandling.dto.Behandling;
 import no.nav.data.etterlevelse.codelist.CodelistService;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
 import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
@@ -11,9 +12,12 @@ import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseResponse;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonStats;
+import no.nav.data.etterlevelse.graphql.DataLoaderReg;
 import no.nav.data.etterlevelse.graphql.support.LoaderUtils;
 import no.nav.data.etterlevelse.krav.KravService;
 import no.nav.data.etterlevelse.krav.domain.Krav;
+import no.nav.data.integration.team.dto.TeamResponse;
+import org.dataloader.DataLoader;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -34,6 +38,12 @@ public class EtterlevelseDokumentasjonFieldResolver implements GraphQLResolver<E
 
     private final EtterlevelseService etterlevelseService;
     private final KravService kravService;
+
+
+    public CompletableFuture<List<TeamResponse>> teamsData(EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse, DataFetchingEnvironment env) {
+        DataLoader<String, TeamResponse> loader = env.getDataLoader(DataLoaderReg.TEAM);
+        return loader.loadMany(etterlevelseDokumentasjonResponse.getTeams());
+    }
 
     public CompletableFuture<List<EtterlevelseResponse>> etterlevelser(EtterlevelseDokumentasjonResponse etterlevelseDokumentasjon, DataFetchingEnvironment env) {
         return LoaderUtils.get(env, ETTERLEVELSE_FOR_ETTERLEVELSEDOKUMENTASJON_LOADER, etterlevelseDokumentasjon.getId(), (List<Etterlevelse> e) -> convert(e, Etterlevelse::toResponse));
