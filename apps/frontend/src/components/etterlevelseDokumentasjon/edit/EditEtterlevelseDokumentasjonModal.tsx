@@ -2,8 +2,13 @@ import { Block } from 'baseui/block'
 import { ModalBody, ModalFooter, ModalHeader } from 'baseui/modal'
 import { useEffect, useState } from 'react'
 import { useSearchBehandling } from '../../../api/BehandlingApi'
-import { createEtterlevelseDokumentasjon, etterlevelseDokumentasjonMapToFormVal, etterlevelseDokumentasjonToDto, updateEtterlevelseDokumentasjon } from '../../../api/EtterlevelseDokumentasjonApi'
-import { Behandling, EtterlevelseDokumentasjon } from '../../../constants'
+import {
+  createEtterlevelseDokumentasjon,
+  etterlevelseDokumentasjonMapToFormVal,
+  etterlevelseDokumentasjonToDto,
+  updateEtterlevelseDokumentasjon,
+} from '../../../api/EtterlevelseDokumentasjonApi'
+import { Behandling, EtterlevelseDokumentasjon, EtterlevelseDokumentasjonQL, Team } from '../../../constants'
 import { Code, codelist, ListName } from '../../../services/Codelist'
 import Button, { buttonContentStyle } from '../../common/Button'
 import CustomizedModal from '../../common/CustomizedModal'
@@ -25,22 +30,61 @@ import { Tag, VARIANT } from 'baseui/tag'
 import { Error } from '../../common/ModalSchema'
 import CustomizedSelect from '../../common/CustomizedSelect'
 import { intl } from '../../../util/intl/intl'
-import { TYPE } from 'baseui/select'
+import { SelectOverrides, TYPE } from 'baseui/select'
+import { useSearchTeam } from '../../../api/TeamApi'
+import { RenderTagList } from '../../common/TagList'
 
 type EditEtterlevelseDokumentasjonModalProps = {
-  etterlevelseDokumentasjon?: EtterlevelseDokumentasjon
-  setEtterlevelseDokumentasjon?: (e: EtterlevelseDokumentasjon) => void
+  etterlevelseDokumentasjon?: EtterlevelseDokumentasjonQL
+  setEtterlevelseDokumentasjon?: (e: EtterlevelseDokumentasjonQL) => void
   isEditButton?: boolean
 }
 
+const selectCustomOverrides: SelectOverrides = {
+  SearchIcon: {
+    component: () => <img src={searchIcon} alt="search icon" />,
+    style: {
+      display: 'flex',
+      justifyContent: 'flex-end',
+    },
+  },
+  SearchIconContainer: {
+    style: {
+      width: 'calc(100% - 20px)',
+      display: 'flex',
+      justifyContent: 'flex-end',
+    },
+  },
+  IconsContainer: {
+    style: {
+      marginRight: '20px',
+    },
+  },
+  ValueContainer: {
+    style: {
+      paddingLeft: '10px',
+    },
+  },
+  ControlContainer: {
+    style: {
+      ...borderWidth('2px'),
+    },
+  },
+}
+
 export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokumentasjonModalProps) => {
-  const [etterlevelseDokumentasjon, setEtterlevelseDokumentasjon] = useState<EtterlevelseDokumentasjon>(etterlevelseDokumentasjonMapToFormVal(props.etterlevelseDokumentasjon ? props.etterlevelseDokumentasjon : {}))
+  const [etterlevelseDokumentasjon, setEtterlevelseDokumentasjon] = useState<EtterlevelseDokumentasjonQL>(
+    etterlevelseDokumentasjonMapToFormVal(props.etterlevelseDokumentasjon ? props.etterlevelseDokumentasjon : {}),
+  )
   const relevansOptions = codelist.getParsedOptions(ListName.RELEVANS)
   const [selectedFilter, setSelectedFilter] = useState<number[]>(relevansOptions.map((r, i) => i))
   const [hover, setHover] = useState<number>()
   const [isEtterlevelseDokumentasjonerModalOpen, setIsEtterlevelseDokumntasjonerModalOpen] = useState<boolean>(false)
   const [behandlingSearchResult, setbehandlingSearchResult, loadingBehandlingSearchResult] = useSearchBehandling()
   const [selectedBehandling, setSelectedBehandling] = useState<Behandling>()
+  
+  const [teamSearchResult, setTeamSearchResult, loadingTeamSearchResult] = useSearchTeam()
+  const [selectedTeams, setSelectedTeams] = useState<Team>()
 
   useEffect(() => {
     if (props.etterlevelseDokumentasjon && props.etterlevelseDokumentasjon.irrelevansFor.length) {
@@ -61,10 +105,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
     }
   }, [props.etterlevelseDokumentasjon])
 
-
-  const submit = async (etterlevelseDokumentasjon: EtterlevelseDokumentasjon) => {
-
-
+  const submit = async (etterlevelseDokumentasjon: EtterlevelseDokumentasjonQL) => {
     if (!etterlevelseDokumentasjon.id || etterlevelseDokumentasjon.id === 'ny') {
       await createEtterlevelseDokumentasjon(etterlevelseDokumentasjon).then((response) => {
         setIsEtterlevelseDokumntasjonerModalOpen(false)
@@ -84,19 +125,55 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
 
   return (
     <Block>
-      <Button onClick={() => setIsEtterlevelseDokumntasjonerModalOpen(true)} startEnhancer={props.isEditButton ? <img src={editIcon} alt="edit icon" /> : <img src={plusIcon} alt="plus icon" />} size="compact">
+      <Button
+        onClick={() => setIsEtterlevelseDokumntasjonerModalOpen(true)}
+        startEnhancer={props.isEditButton ? <img src={editIcon} alt="edit icon" /> : <img src={plusIcon} alt="plus icon" />}
+        size="compact"
+      >
         {props.isEditButton ? 'Rediger dokumentasjon' : 'Ny dokumentasjon'}
       </Button>
 
       <CustomizedModal isOpen={!!isEtterlevelseDokumentasjonerModalOpen} onClose={() => setIsEtterlevelseDokumntasjonerModalOpen(false)}>
-        <ModalHeader>{props.isEditButton ? 'Rediger dokumentasjonen' : 'Opprett ny dokumentasjon' }</ModalHeader>
+        <ModalHeader>{props.isEditButton ? 'Rediger dokumentasjonen' : 'Opprett ny dokumentasjon'}</ModalHeader>
         <ModalBody>
           <Formik initialValues={etterlevelseDokumentasjon} onSubmit={submit}>
             {({ values, submitForm }) => {
               return (
                 <Form>
                   <InputField disablePlaceHolder label={'Tittel'} name={'title'} />
-
+                  <FieldWrapper>
+                    <FieldArray name="teamsData">
+                      {(p: FieldArrayRenderProps) => {
+                        console.log(p.form.values);
+                        return (
+                          <FormControl label={<LabelWithTooltip label="Legg til team" tooltip="Søk og legg til team fra teamkatalogen" />}>
+                            <Block>
+                              <Block display="flex">
+                                <CustomizedSelect
+                                  overrides={selectCustomOverrides}
+                                  placeholder="Søk team"
+                                  aria-label="Søk team"
+                                  noResultsMsg={intl.emptyTable}
+                                  maxDropdownHeight="350px"
+                                  searchable={true}
+                                  type={TYPE.search}
+                                  labelKey="name"
+                                  onInputChange={(event) => { setTeamSearchResult(event.currentTarget.value) }}
+                                  options={teamSearchResult}
+                                  onChange={({value}) => {
+                                    value.length && p.push(value[0])
+                                  }}
+                                  isLoading={loadingTeamSearchResult}
+                                  error={!!p.form.errors.teamsData && !!p.form.submitCount}
+                                />
+                              </Block>
+                              <RenderTagList wide list={p.form.values.teamsData.map((t:Team) => t.name)} onRemove={p.remove} />
+                            </Block>
+                          </FormControl>
+                        )
+                      }}
+                    </FieldArray>
+                  </FieldWrapper>
                   <FieldWrapper>
                     <Field name="behandlingId">
                       {(fp: FieldProps) => {
@@ -104,37 +181,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                           <FormControl label={<LabelWithTooltip label={'Legg til behandling'} tooltip="Søk og legg til behandling fra Behandlingskatalog" />}>
                             <Block>
                               <CustomizedSelect
-                                overrides={{
-                                  SearchIcon: {
-                                    component: () => <img src={searchIcon} alt="search icon" />,
-                                    style: {
-                                      display: 'flex',
-                                      justifyContent: 'flex-end',
-                                    },
-                                  },
-                                  SearchIconContainer: {
-                                    style: {
-                                      width: 'calc(100% - 20px)',
-                                      display: 'flex',
-                                      justifyContent: 'flex-end',
-                                    },
-                                  },
-                                  IconsContainer: {
-                                    style: {
-                                      marginRight: '20px',
-                                    },
-                                  },
-                                  ValueContainer: {
-                                    style: {
-                                      paddingLeft: '10px',
-                                    },
-                                  },
-                                  ControlContainer: {
-                                    style: {
-                                      ...borderWidth('2px'),
-                                    },
-                                  },
-                                }}
+                                overrides={selectCustomOverrides}
                                 labelKey={'navn'}
                                 noResultsMsg={intl.emptyTable}
                                 maxDropdownHeight="350px"
@@ -182,7 +229,6 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                                   {selectedBehandling.navn}
                                 </Tag>
                               )}
-
                             </Block>
                           </FormControl>
                         )
@@ -300,9 +346,17 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                     }}
                   </FieldArray>
 
-                  <Button type="button" onClick={() => { submitForm() }}>{props.isEditButton ? 'Lagre' : 'Opprett'}</Button>
-                  <Button type="button" onClick={() => setIsEtterlevelseDokumntasjonerModalOpen(false)} marginLeft={true}>Avbryt</Button>
-
+                  <Button
+                    type="button"
+                    onClick={() => {
+                      submitForm()
+                    }}
+                  >
+                    {props.isEditButton ? 'Lagre' : 'Opprett'}
+                  </Button>
+                  <Button type="button" onClick={() => setIsEtterlevelseDokumntasjonerModalOpen(false)} marginLeft={true}>
+                    Avbryt
+                  </Button>
                 </Form>
               )
             }}

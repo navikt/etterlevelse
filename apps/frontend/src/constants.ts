@@ -207,6 +207,7 @@ export interface EtterlevelseDokumentasjon {
 
   //data field for frontend only
   behandling?: Behandling
+  teamsData?: Team[]
 }
 
 export interface EtterlevelseDokumentasjonStats {

@@ -32,7 +32,7 @@ export const myProductArea = async () => {
 }
 
 export const searchTeam = async (teamSearch: string) => {
-  return (await axios.get<PageResponse<Team>>(`${env.backendBaseUrl}/team/search/${teamSearch}`)).data
+  return (await axios.get<PageResponse<Team>>(`${env.backendBaseUrl}/team/search/${teamSearch}`)).data.content
 }
 
 export const getSlackChannelById = async (id: string) => {
@@ -93,6 +93,7 @@ export const usePersonName = () => {
     return people.get(id)?.v || id
   }
 }
+export const useSearchTeam = () => useSearch(searchTeam)
 
 export const useTeam = () => {
   const update = useForceUpdate()
