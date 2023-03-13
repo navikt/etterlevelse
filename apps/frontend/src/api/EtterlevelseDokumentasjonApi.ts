@@ -53,43 +53,34 @@ export const useEtterlevelseDokumentasjon = (etterlevelseDokumentasjonId?: strin
   const [data, setData] = useState<EtterlevelseDokumentasjonQL | undefined>(isCreateNew ? etterlevelseDokumentasjonMapToFormVal({}) : undefined)
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
-  const setDataWithBehandling = (mainData: EtterlevelseDokumentasjonQL, behandlingData: Behandling) => {
-    setData({
-      ...mainData,
-      behandling: behandlingData,
-    })
-  }
-
   useEffect(() => {
+
+    let behandling: any = {}
+    let teamsData: Team[] = []
+
     setIsLoading(true)
     if (etterlevelseDokumentasjonId && !isCreateNew) {
-      getEtterlevelseDokumentasjon(etterlevelseDokumentasjonId).then((etterlevelseDokumentasjon) => {
+      getEtterlevelseDokumentasjon(etterlevelseDokumentasjonId).then(async (etterlevelseDokumentasjon) => {
+
         if (etterlevelseDokumentasjon.behandlingId) {
-          getBehandling(etterlevelseDokumentasjon.behandlingId).then((behandlingData) => {
-            setDataWithBehandling(etterlevelseDokumentasjon, behandlingData)
-          })
+          await getBehandling(etterlevelseDokumentasjon.behandlingId).then((behandlingResponse) => behandling = behandlingResponse)
         } if (etterlevelseDokumentasjon.teams.length > 0) {
-          getTeams(etterlevelseDokumentasjon.teams).then((teamsData) => {
-            setData({...etterlevelseDokumentasjon, teamsData: teamsData})
-          })
-        } else {
-          setData(etterlevelseDokumentasjon)
+          await getTeams(etterlevelseDokumentasjon.teams).then((teamsResponse) => teamsData = teamsResponse)
         }
+
+        setData({ ...etterlevelseDokumentasjon, behandling: behandling, teamsData: teamsData })
         setIsLoading(false)
       })
     } else if (behandlingId) {
-      searchEtterlevelsedokumentasjonByBehandlingId(behandlingId).then((etterlevelseDokumentasjon) => {
+      searchEtterlevelsedokumentasjonByBehandlingId(behandlingId).then(async (etterlevelseDokumentasjon) => {
         if (etterlevelseDokumentasjon) {
-          getBehandling(behandlingId).then((behandlingData) => {
-            setDataWithBehandling(etterlevelseDokumentasjon[0], behandlingData)
-          })
+          await getBehandling(behandlingId).then((behandlingResponseData) => behandling = behandlingResponseData)
 
           if (etterlevelseDokumentasjon[0].teams.length > 0) {
-            getTeams(etterlevelseDokumentasjon[0].teams).then((teamsData) => {
-              setData({...etterlevelseDokumentasjon[0], teamsData: teamsData})
-            })
+            getTeams(etterlevelseDokumentasjon[0].teams).then((teamsResponseData) => teamsData = teamsResponseData )
           }
-          
+
+          setData({ ...etterlevelseDokumentasjon[0], behandling: behandling, teamsData: teamsData })
           setIsLoading(false)
         }
       })
