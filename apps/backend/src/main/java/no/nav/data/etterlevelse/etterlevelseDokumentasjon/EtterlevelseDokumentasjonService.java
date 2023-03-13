@@ -39,6 +39,7 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
 
     public List<EtterlevelseDokumentasjon> getEtterlevelseDokumentasjonerByTeam(String teamId) {
         log.debug("DEBUGGING SEARCH");
+        log.debug(teamId);
         log.debug(GenericStorage.to(etterlevelseDokumentasjonRepo.getEtterlevelseDokumentasjonerForTeam(teamId),EtterlevelseDokumentasjon.class).toString());
         return GenericStorage.to(etterlevelseDokumentasjonRepo.getEtterlevelseDokumentasjonerForTeam(teamId),EtterlevelseDokumentasjon.class);
     }
