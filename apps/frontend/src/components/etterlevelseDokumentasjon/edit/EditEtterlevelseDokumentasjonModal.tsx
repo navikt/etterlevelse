@@ -80,7 +80,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
   const [selectedBehandling, setSelectedBehandling] = useState<Behandling>()
 
   const [teamSearchResult, setTeamSearchResult, loadingTeamSearchResult] = useSearchTeam()
-
+console.log(props.etterlevelseDokumentasjon)
   useEffect(() => {
     if (props.etterlevelseDokumentasjon && props.etterlevelseDokumentasjon.irrelevansFor.length) {
       const irrelevans = props.etterlevelseDokumentasjon.irrelevansFor.map((ir: Code) => relevansOptions.findIndex((o) => o.id === ir.code))
@@ -97,6 +97,10 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
           return i
         }),
       )
+    }
+
+    if(props.etterlevelseDokumentasjon && props.etterlevelseDokumentasjon.behandling && props.etterlevelseDokumentasjon.behandling.navn) {
+      setSelectedBehandling(props.etterlevelseDokumentasjon.behandling)
     }
   }, [props.etterlevelseDokumentasjon])
 
