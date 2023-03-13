@@ -39,8 +39,8 @@ public interface EtterlevelseDokumentasjonRepo  extends JpaRepository<GenericSto
     @Query(value = "select * from generic_storage where data ->> 'etterlevelseNummer' ilike %?1% and type = 'EtterlevelseDokumentasjon'", nativeQuery = true)
     List<GenericStorage> searchEtterlevelseDokumentasjonByNumber(String searchParam);
 
-    @Query(value="select * from generic_storage where data -> 'teams' ??| array[?1] and type = 'EtterlevelseDokumentasjon'", nativeQuery = true)
-    List<GenericStorage> getEtterlevelseDokumentasjonerForTeam(String teamId);
+    @Query(value = "select * from generic_storage where data -> 'teams' ??| ?1 and type = 'EtterlevelseDokumentasjon'", nativeQuery = true)
+    List<GenericStorage> getEtterlevelseDokumentasjonerForTeam(List<String> teamId);
 
     @Query(value = "SELECT nextVal('etterlevelse_nummer')",nativeQuery = true)
     int nextEtterlevelseDokumentasjonNummer();
