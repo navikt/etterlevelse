@@ -10,4 +10,6 @@ public interface EtterlevelseDokumentasjonRepoCustom {
 
     List<GenericStorage> findByIrrelevans(List<String> codes);
 
+    List<GenericStorage> getEtterlevelseDokumentasjonerForTeam(List<String> teamId);
+
 }

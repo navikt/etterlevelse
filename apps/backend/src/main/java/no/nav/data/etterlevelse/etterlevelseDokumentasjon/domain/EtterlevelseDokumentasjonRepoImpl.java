@@ -32,6 +32,14 @@ public class EtterlevelseDokumentasjonRepoImpl implements EtterlevelseDokumentas
     }
 
     @Override
+    public List<GenericStorage> getEtterlevelseDokumentasjonerForTeam(List<String> teamIds) {
+        var query =  "select id from generic_storage where type = 'EtterlevelseDokumentasjon' and data -> 'teams' ??| array[ :teamIds ] ";
+        var par = new MapSqlParameterSource();
+        par.addValue("teamIds", teamIds);
+        return fetch(jdbcTemplate.queryForList(query, par));
+    }
+
+    @Override
     public List<GenericStorage> findBy(EtterlevelseDokumentasjonFilter filter) {
         var query = "select id from generic_storage where type = 'EtterlevelseDokumentasjon' ";
         var par = new MapSqlParameterSource();
