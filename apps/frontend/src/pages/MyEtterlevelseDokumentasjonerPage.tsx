@@ -106,18 +106,17 @@ const BehandlingTabs = () => {
   const sortTeams = (unSortedTeams: Team[]) => {
     return unSortedTeams
       .map((t) => {
-        const teamBehandlinger = []
-        //behandlinger.content.filter((b) => b.teamsData.find((t2) => t2.id === t.id))
+        const teamDokumentasjoner = etterlevelseDokumentasjoner.content.filter((e) => e.teamsData?.find((t2) => t2.id === t.id))
 
         return {
           ...t,
-          behandlingCount: teamBehandlinger.length,
+          etterlevelseDokumentasjonCount: teamDokumentasjoner.length,
         }
       })
       .sort((a, b) => {
-        if (a.behandlingCount === 0) {
+        if (a.etterlevelseDokumentasjonCount === 0) {
           return 1
-        } else if (b.behandlingCount === 0) {
+        } else if (b.etterlevelseDokumentasjonCount === 0) {
           return -1
         } else {
           return a.name > b.name ? 1 : -1
@@ -153,7 +152,6 @@ const BehandlingTabs = () => {
   useEffect(() => {
     setSortedTeams(sortTeams(teams))
   }, [teams])
-
   return (
     <CustomizedTabs
       fontColor={ettlevColors.green800}
@@ -162,11 +160,11 @@ const BehandlingTabs = () => {
       activeKey={tab}
       onChange={(args) => setTab(args.activeKey as Section)}
       tabs={[
-        /*   {
+        {
           key: 'mine',
-          title: 'Mine behandlinger',
-          content: <MineBehandlinger teams={sortedTeams} behandlinger={behandlinger.content} loading={loading} />,
-        },*/
+          title: 'Mine dokumentasjoner',
+          content: <MineEtterlevelseDokumentasjoner teams={sortedTeams} etterlevelseDokumentasjoner={etterlevelseDokumentasjoner.content} loading={loading} />,
+        },
         {
           key: 'siste',
           title: 'Mine sist dokumenterte',
@@ -182,7 +180,7 @@ const BehandlingTabs = () => {
   )
 }
 
-const MineBehandlinger = ({ behandlinger, teams, loading }: { behandlinger: BehandlingQL[]; teams: CustomTeamObject[]; loading: boolean }) => {
+const MineEtterlevelseDokumentasjoner = ({ etterlevelseDokumentasjoner, teams, loading }: { etterlevelseDokumentasjoner: EtterlevelseDokumentasjonQL[]; teams: CustomTeamObject[]; loading: boolean }) => {
   if (loading)
     return (
       <>
@@ -193,10 +191,10 @@ const MineBehandlinger = ({ behandlinger, teams, loading }: { behandlinger: Beha
     )
   return (
     <Block marginBottom={tabMarginBottom}>
-      {!behandlinger.length && <ParagraphSmall>Du er ikke medlem av team med registrerte behandlinger </ParagraphSmall>}
+      {!etterlevelseDokumentasjoner.length && !teams.length && <ParagraphSmall>Du er ikke medlem av team med registrerte dokumentasjoner</ParagraphSmall>}
 
       {teams.map((t) => {
-        const teamBehandlinger = behandlinger.filter((b) => b.teamsData.find((t2) => t2.id === t.id))
+        const teamDokumentasjoner = etterlevelseDokumentasjoner.filter((e) => e.teamsData?.find((t2) => t2.id === t.id))
         return (
           <Block key={t.id} marginBottom={theme.sizing.scale900}>
             <Block display={'flex'} justifyContent={'space-between'}>
@@ -205,17 +203,17 @@ const MineBehandlinger = ({ behandlinger, teams, loading }: { behandlinger: Beha
                   {t.name}
                 </HeadingXLarge>
                 <ParagraphSmall marginTop={0}>
-                  Teamet skal etterleve krav i <span style={{ fontWeight: 700 }}>{teamBehandlinger.length} behandlinger</span>
+                  Teamet skal etterleve krav i <span style={{ fontWeight: 700 }}>{teamDokumentasjoner.length} dokumentasjoner</span>
                 </ParagraphSmall>
               </Block>
-              <Block alignSelf={'flex-end'} marginBottom={theme.sizing.scale400}>
+              {/* <Block alignSelf={'flex-end'} marginBottom={theme.sizing.scale400}>
                 <ExternalButton href={`${env.pollyBaseUrl}process/team/${t.id}`} underlineHover size={'mini'}>
                   Legg til behandling <FontAwesomeIcon icon={faExternalLinkAlt} />
                 </ExternalButton>
-              </Block>
+              </Block> */}
             </Block>
 
-            {/* <EtterlevelseDokumentasjonerPanels etterlevelseDokumentasjoner={teamBehandlinger} /> */}
+            <EtterlevelseDokumentasjonerPanels etterlevelseDokumentasjoner={teamDokumentasjoner} />
           </Block>
         )
       })}
