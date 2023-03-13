@@ -66,6 +66,17 @@ public class EtterlevelseDokumentasjonController {
         return ResponseEntity.ok(new RestResponsePage<>(etterleveseDokumentasjon).convert(EtterlevelseDokumentasjon::toResponse));
     }
 
+    @Operation(summary = "Search Etterlevelse Dokumentasjon by team id")
+    @ApiResponse(description = "ok")
+    @GetMapping("/search/team/{id}")
+    public ResponseEntity<RestResponsePage<EtterlevelseDokumentasjonResponse>> searchByTeam(@PathVariable String id) {
+        log.info("Search Etterlevelse Dokumentsjon by teamId with id={}", id);
+
+        var etterleveseDokumentasjon = etterlevelseDokumentasjonService.getEtterlevelseDokumentasjonerByTeam(id);
+
+        return ResponseEntity.ok(new RestResponsePage<>(etterleveseDokumentasjon).convert(EtterlevelseDokumentasjon::toResponse));
+    }
+
     @Operation(summary = "Search Etterlevelse Dokumentasjon")
     @ApiResponse(description = "ok")
     @GetMapping("/search/{searchParam}")
