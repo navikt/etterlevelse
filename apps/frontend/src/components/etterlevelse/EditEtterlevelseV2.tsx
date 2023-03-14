@@ -1,34 +1,34 @@
-import { Etterlevelse, EtterlevelseMetadata, EtterlevelseStatus, Krav, KRAV_FILTER_TYPE, KravQL, KravStatus } from '../../constants'
-import { FormikProps } from 'formik'
-import { createEtterlevelse, getEtterlevelserByBehandlingsIdKravNumber, updateEtterlevelse } from '../../api/EtterlevelseApi'
-import { Block } from 'baseui/block'
+import {Etterlevelse, EtterlevelseMetadata, EtterlevelseStatus, Krav, KRAV_FILTER_TYPE, KravQL, KravStatus} from '../../constants'
+import {FormikProps} from 'formik'
+import {createEtterlevelse, getEtterlevelserByBehandlingsIdKravNumber, updateEtterlevelse} from '../../api/EtterlevelseApi'
+import {Block} from 'baseui/block'
 import Button from '../common/Button'
-import React, { useEffect, useRef, useState } from 'react'
-import { theme } from '../../util'
-import { getKravByKravNumberAndVersion, KravId } from '../../api/KravApi'
-import { kravNumView, query } from '../../pages/KravPage'
-import { HeadingXLarge, HeadingXXLarge, LabelSmall, ParagraphMedium } from 'baseui/typography'
-import { ettlevColors, maxPageWidth, responsivePaddingExtraLarge, responsivePaddingInnerPage, responsiveWidthInnerPage } from '../../util/theme'
-import { user } from '../../services/User'
-import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
-import { borderColor, borderRadius, borderStyle, borderWidth, marginAll, padding } from '../common/Style'
-import { useQuery } from '@apollo/client'
-import { informationIcon, warningAlert } from '../Images'
+import React, {useEffect, useRef, useState} from 'react'
+import {theme} from '../../util'
+import {getKravByKravNumberAndVersion, KravId} from '../../api/KravApi'
+import {kravNumView, query} from '../../pages/KravPage'
+import {HeadingXLarge, HeadingXXLarge, LabelSmall, ParagraphMedium} from 'baseui/typography'
+import {ettlevColors, maxPageWidth, responsivePaddingExtraLarge, responsivePaddingInnerPage, responsiveWidthInnerPage} from '../../util/theme'
+import {user} from '../../services/User'
+import {faChevronDown} from '@fortawesome/free-solid-svg-icons'
+import {borderColor, borderRadius, borderStyle, borderWidth, marginAll, padding} from '../common/Style'
+import {useQuery} from '@apollo/client'
+import {informationIcon, warningAlert} from '../Images'
 import CustomizedTabs from '../common/CustomizedTabs'
-import { Tilbakemeldinger } from '../krav/tilbakemelding/Tilbakemelding'
+import {Tilbakemeldinger} from '../krav/tilbakemelding/Tilbakemelding'
 import Etterlevelser from '../krav/Etterlevelser'
-import { Markdown } from '../common/Markdown'
-import { getFilterType, Section } from '../../pages/EtterlevelseDokumentasjonPage'
-import { getEtterlevelseMetadataByBehandlingsIdAndKravNummerAndKravVersion, mapEtterlevelseMetadataToFormValue } from '../../api/EtterlevelseMetadataApi'
+import {Markdown} from '../common/Markdown'
+import {getFilterType, Section} from '../../pages/EtterlevelseDokumentasjonPage'
+import {getEtterlevelseMetadataByBehandlingsIdAndKravNummerAndKravVersion, mapEtterlevelseMetadataToFormValue} from '../../api/EtterlevelseMetadataApi'
 import TildeltPopoever from '../etterlevelseMetadata/TildeltPopover'
 import EtterlevelseEditFields from './Edit/EtterlevelseEditFields'
 import CustomizedModal from '../common/CustomizedModal'
-import { ampli } from '../../services/Amplitude'
+import {ampli} from '../../services/Amplitude'
 import StatusView from '../common/StatusTag'
-import { getPageWidth } from '../../util/pageWidth'
-import { usePrompt } from '../../util/hooks/routerHooks'
-import { useNavigate, useParams } from 'react-router-dom'
-import { syncEtterlevelseKriterieBegrunnelseWithKrav } from '../behandlingsTema/utils'
+import {getPageWidth} from '../../util/pageWidth'
+import {usePrompt} from '../../util/hooks/routerHooks'
+import {useNavigate, useParams} from 'react-router-dom'
+import {syncEtterlevelseKriterieBegrunnelseWithKrav} from '../behandlingsTema/utils'
 
 type EditEttlevProps = {
   etterlevelse: Etterlevelse
@@ -85,7 +85,7 @@ export const EditEtterlevelseV2 = ({
   const [etterlevelseMetadata, setEtterlevelseMetadata] = useState<EtterlevelseMetadata>(
     mapEtterlevelseMetadataToFormValue({
       id: 'ny',
-      behandlingId: behandlingId,
+      etterlevelseDokumentasjonId: behandlingId,
       kravNummer: kravId.kravNummer,
       kravVersjon: kravId.kravVersjon,
     }),
@@ -107,7 +107,7 @@ export const EditEtterlevelseV2 = ({
             setEtterlevelseMetadata(
               mapEtterlevelseMetadataToFormValue({
                 id: 'ny',
-                behandlingId: behandlingId,
+                etterlevelseDokumentasjonId: behandlingId,
                 kravNummer: kravId.kravNummer,
                 kravVersjon: kravId.kravVersjon,
               }),

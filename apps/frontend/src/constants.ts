@@ -1,5 +1,5 @@
-import { Code, LovCode } from './services/Codelist'
-import { Group } from './services/User'
+import {Code, LovCode} from './services/Codelist'
+import {Group} from './services/User'
 
 export type RecursivePartial<T> = {
   [P in keyof T]?: T[P] extends (infer U)[] ? RecursivePartial<U>[] : T[P] extends object ? RecursivePartial<T[P]> : T[P]
@@ -92,7 +92,7 @@ export interface EtterlevelseMetadata extends DomainObject {
   id: string
   kravNummer: number
   kravVersjon: number
-  behandlingId: string
+  etterlevelseDokumentasjonId: string
   tildeltMed?: string[]
   notater?: string
 }

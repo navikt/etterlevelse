@@ -17,7 +17,7 @@ import {getEtterlevelserByBehandlingsIdKravNumber} from '../../api/EtterlevelseA
 import {useLocation, useNavigate} from 'react-router-dom'
 import {getNumberOfDaysBetween} from '../../util/checkAge'
 
-export const KravCard = (props: { krav: KravEtterlevelseData; noStatus?: boolean; behandlingId: string; noVarsling?: boolean; kravFilter: KRAV_FILTER_TYPE }) => {
+export const KravCard = (props: { krav: KravEtterlevelseData; noStatus?: boolean; etterlevelseDokumentasjonId: string; noVarsling?: boolean; kravFilter: KRAV_FILTER_TYPE }) => {
   const [nyVersionFlag, setNyVersionFlag] = useState<boolean>(false)
   const [hover, setHover] = useState(false)
   const navigate = useNavigate()
@@ -27,21 +27,21 @@ export const KravCard = (props: { krav: KravEtterlevelseData; noStatus?: boolean
   const [etterlevelseMetadata, setEtterlevelseMetadata] = useState<EtterlevelseMetadata>(
     mapEtterlevelseMetadataToFormValue({
       id: 'ny',
-      etterlevelseDokumentasjonId: props.behandlingId,
+      etterlevelseDokumentasjonId: props.etterlevelseDokumentasjonId,
       kravNummer: props.krav.kravNummer,
       kravVersjon: props.krav.kravVersjon,
     }),
   )
 
   const getEtterlevelseMetaData = () => {
-    getEtterlevelseMetadataByBehandlingsIdAndKravNummerAndKravVersion(props.behandlingId, props.krav.kravNummer, props.krav.kravVersjon).then((resp) => {
+    getEtterlevelseMetadataByBehandlingsIdAndKravNummerAndKravVersion(props.etterlevelseDokumentasjonId, props.krav.kravNummer, props.krav.kravVersjon).then((resp) => {
       if (resp.content.length) {
         setEtterlevelseMetadata(resp.content[0])
       } else {
         setEtterlevelseMetadata(
           mapEtterlevelseMetadataToFormValue({
             id: 'ny',
-            etterlevelseDokumentasjonId: props.behandlingId,
+            etterlevelseDokumentasjonId: props.etterlevelseDokumentasjonId,
             kravNummer: props.krav.kravNummer,
             kravVersjon: props.krav.kravVersjon,
           }),
@@ -57,7 +57,7 @@ export const KravCard = (props: { krav: KravEtterlevelseData; noStatus?: boolean
     ;(async () => {
       getEtterlevelseMetaData()
       if (props.krav.kravVersjon > 1 && props.krav.etterlevelseStatus === undefined) {
-        setNyVersionFlag((await getEtterlevelserByBehandlingsIdKravNumber(props.behandlingId, props.krav.kravNummer)).content.length >= 1)
+        setNyVersionFlag((await getEtterlevelserByBehandlingsIdKravNumber(props.etterlevelseDokumentasjonId, props.krav.kravNummer)).content.length >= 1)
       }
     })()
   }, [])
