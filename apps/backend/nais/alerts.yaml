@@ -1,5 +1,5 @@
 apiVersion: "nais.io/v1"
-kind: "Alert"
+kind: "PrometheusRule"
 metadata:
   name: etterlevelse-alerts
   namespace: teamdatajegerne
