@@ -26,6 +26,7 @@ public class EtterlevelseMetadata implements DomainObject, KravId {
     private Integer kravVersjon;
     private Integer kravNummer;
     private String behandlingId;
+    private String etterlevelseDokumentasjonId;
     private List<String> tildeltMed;
     private String notater;
 
@@ -33,6 +34,7 @@ public class EtterlevelseMetadata implements DomainObject, KravId {
         kravNummer = request.getKravNummer();
         kravVersjon = request.getKravVersjon();
         behandlingId = request.getBehandlingId();
+        etterlevelseDokumentasjonId = request.getEtterlevelseDokumentasjonId();
         tildeltMed = copyOf(request.getTildeltMed());
         notater = request.getNotater();
         return this;
@@ -46,6 +48,7 @@ public class EtterlevelseMetadata implements DomainObject, KravId {
                 .kravNummer(kravNummer)
                 .kravVersjon(kravVersjon)
                 .behandlingId(behandlingId)
+                .etterlevelseDokumentasjonId(etterlevelseDokumentasjonId)
                 .tildeltMed(copyOf(tildeltMed))
                 .notater(notater)
                 .build();

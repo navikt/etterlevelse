@@ -24,6 +24,7 @@ public class EtterlevelseMetadataRequest implements RequestElement, KravId {
     private Integer kravVersjon;
     private Integer kravNummer;
     private String behandlingId;
+    private String etterlevelseDokumentasjonId;
     private List<String> tildeltMed;
     private Boolean update;
     private String notater;

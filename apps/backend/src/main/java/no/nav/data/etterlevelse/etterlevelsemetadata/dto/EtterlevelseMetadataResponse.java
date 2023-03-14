@@ -21,6 +21,7 @@ public class EtterlevelseMetadataResponse {
     private Integer kravNummer;
     private Integer kravVersjon;
     private String behandlingId;
+    private String etterlevelseDokumentasjonId;
     private List<String> tildeltMed;
     private ChangeStampResponse changeStamp;
     private String notater;
