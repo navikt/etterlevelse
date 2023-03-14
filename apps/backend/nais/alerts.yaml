@@ -1,30 +1,47 @@
-apiVersion: "nais.io/v1"
-kind: "PrometheusRule"
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
 metadata:
   name: etterlevelse-alerts
   namespace: teamdatajegerne
   labels:
     team: teamdatajegerne
 spec:
-  receivers:
-    slack:
-      channel: etterlevelse-alerts
-      prependText: '<!here> | '
-    email:
-      to: lord.andre.groseth@nav.no
-      send_resolved: false
-  alerts:
-    - alert: Etterlevelse-backend pod nede
-      expr: count(kube_pod_container_status_running{container="etterlevelse-backend", namespace="teamdatajegerne"}) < 2
-      for: 2m
-      action: "Sjekk kubectl eller grafana for pod status, og sjekk logs for feilmeldinger."
-    - alert: Høy cpu bruk
-      expr: (sum(irate (container_cpu_usage_seconds_total{container="etterlevelse-backend"}[1m])) * 1000) > 980
-      for: 3m
-      description: "App {{ $labels.app }} har høy cpu bruk i namespace {{ $labels.kubernetes_namespace }}"
-      action: "Sjekk grafana og logene til app {{ $labels.log_app }} i namespace {{ $labels.log_namespace }}."
-    - alert: Høy error rate
-      expr: sum(increase(logback_events_total{app="etterlevelse-backend", level="error"} [1m])) > 50
-      for: 3m
-      description: "App {{ $labels.app }} har høy error  rate i namespace {{ $labels.kubernetes_namespace }}"
-      action: "Sjekk logs i kibana til app {{ $labels.log_app }} i namespace {{ $labels.log_namespace }}. Mulig connection error fra katalogene."
+  groups:
+    - name: etterlevelse-system-alerts
+      rules:
+        - alert: Etterlevelse-backend pod nede
+          expr: count(kube_pod_container_status_running{container="etterlevelse-backend", namespace="teamdatajegerne"}) < 2
+          for: 2m
+          annotations:
+            consequence: Application is unavailable
+            action: "Sjekk kubectl eller grafana for pod status, og sjekk logs for feilmeldinger."
+            summary: |-
+              Etterlevelse backend har mindre en 2 pods som er live.
+          labels:
+            namespace: teamdatajegerne
+            severity: critical
+
+        - alert: Høy cpu bruk
+          expr: (sum(irate (container_cpu_usage_seconds_total{container="etterlevelse-backend"}[1m])) * 1000) > 980
+          for: 3m
+          annotations:
+            consequence: Application is experiencing high traffic
+            action: "Sjekk grafana og logene til app {{ $labels.log_app }} i namespace {{ $labels.log_namespace }}."
+            summary: |-
+              App {{ $labels.app }} har høy cpu bruk i namespace {{ $labels.kubernetes_namespace }}
+          labels:
+            namespace: teamdatajegerne
+            severity: warning
+
+        - alert: Høy error rate
+          expr: sum(increase(logback_events_total{app="etterlevelse-backend", level="error"} [1m])) > 50
+          for: 3m
+          annotations:
+            consequence: Application is experiencing high error rate
+            action: "Sjekk logs i kibana til app {{ $labels.log_app }} i namespace {{ $labels.log_namespace }}. Mulig connection error fra katalogene."
+            summary: |-
+              App {{ $labels.app }} har høy error  rate i namespace {{ $labels.kubernetes_namespace }}
+          labels:
+            namespace: teamdatajegerne
+            severity: critical
+
