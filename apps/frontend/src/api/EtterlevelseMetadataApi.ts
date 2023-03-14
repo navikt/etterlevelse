@@ -49,6 +49,10 @@ export const getEtterlevelseMetadataByBehandlingsIdAndKravNummerAndKravVersion =
   return (await axios.get<PageResponse<EtterlevelseMetadata>>(`${env.backendBaseUrl}/etterlevelsemetadata/behandlingId/${behandlingId}/${kravNummer}/${kravVersjon}`)).data
 }
 
+export const getEtterlevelseMetadataByEtterlevelseDokumentasjonAndKravNummerAndKravVersion = async (etterlevelseDokumentasjonId: string, kravNummer: number, kravVersjon: number) => {
+  return (await axios.get<PageResponse<EtterlevelseMetadata>>(`${env.backendBaseUrl}/etterlevelsemetadata/etterlevelseDokumentasjon/${etterlevelseDokumentasjonId}/${kravNummer}/${kravVersjon}`)).data
+}
+
 export const getEtterlevelseMetadataById = async (id: string) => {
   return (await axios.get<EtterlevelseMetadata>(`${env.backendBaseUrl}/etterlevelsemetadata/${id}`)).data
 }
@@ -81,7 +85,7 @@ export const useEtterlevelseMetadata = (id?: string, behandlingId?: string, krav
   const [data, setData] = useState<EtterlevelseMetadata | undefined>(
     isCreateNew
       ? mapEtterlevelseMetadataToFormValue({
-          etterlevelseDokumentasjonId: behandlingId,
+          behandlingId: behandlingId,
           kravVersjon: kravId?.kravVersjon,
           kravNummer: kravId?.kravNummer,
         })
@@ -99,6 +103,7 @@ export const mapEtterlevelseMetadataToFormValue = (etterlevelsemetaData: Partial
   return {
     id: etterlevelsemetaData.id || '',
     etterlevelseDokumentasjonId: etterlevelsemetaData.etterlevelseDokumentasjonId || '',
+    behandlingId: etterlevelsemetaData.behandlingId || '',
     kravNummer: etterlevelsemetaData.kravNummer || 0,
     kravVersjon: etterlevelsemetaData.kravVersjon || 0,
     tildeltMed: etterlevelsemetaData.tildeltMed || [],

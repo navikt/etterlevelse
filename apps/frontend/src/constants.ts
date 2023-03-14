@@ -93,6 +93,8 @@ export interface EtterlevelseMetadata extends DomainObject {
   kravNummer: number
   kravVersjon: number
   etterlevelseDokumentasjonId: string
+
+  behandlingId: string
   tildeltMed?: string[]
   notater?: string
 }

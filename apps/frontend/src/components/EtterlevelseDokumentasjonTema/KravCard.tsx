@@ -1,6 +1,10 @@
 import {EtterlevelseMetadata, KRAV_FILTER_TYPE, KravEtterlevelseData} from '../../constants'
 import React, {useEffect, useState} from 'react'
-import {getEtterlevelseMetadataByBehandlingsIdAndKravNummerAndKravVersion, mapEtterlevelseMetadataToFormValue} from '../../api/EtterlevelseMetadataApi'
+import {
+  getEtterlevelseMetadataByBehandlingsIdAndKravNummerAndKravVersion,
+  getEtterlevelseMetadataByEtterlevelseDokumentasjonAndKravNummerAndKravVersion,
+  mapEtterlevelseMetadataToFormValue
+} from '../../api/EtterlevelseMetadataApi'
 import {Block} from 'baseui/block'
 import Button from '../common/Button'
 import {ettlevColors} from '../../util/theme'
@@ -13,7 +17,7 @@ import TildeltPopoever from '../etterlevelseMetadata/TildeltPopover'
 import {isFerdigUtfylt} from '../../pages/BehandlingTemaPage'
 import {faEllipsisVertical} from '@fortawesome/free-solid-svg-icons'
 import {arkCheckIcon, arkPennIcon, warningAlert} from '../Images'
-import {getEtterlevelserByBehandlingsIdKravNumber} from '../../api/EtterlevelseApi'
+import {getEtterlevelserByBehandlingsIdKravNumber, getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber} from '../../api/EtterlevelseApi'
 import {useLocation, useNavigate} from 'react-router-dom'
 import {getNumberOfDaysBetween} from '../../util/checkAge'
 
@@ -34,7 +38,7 @@ export const KravCard = (props: { krav: KravEtterlevelseData; noStatus?: boolean
   )
 
   const getEtterlevelseMetaData = () => {
-    getEtterlevelseMetadataByBehandlingsIdAndKravNummerAndKravVersion(props.etterlevelseDokumentasjonId, props.krav.kravNummer, props.krav.kravVersjon).then((resp) => {
+    getEtterlevelseMetadataByEtterlevelseDokumentasjonAndKravNummerAndKravVersion(props.etterlevelseDokumentasjonId, props.krav.kravNummer, props.krav.kravVersjon).then((resp) => {
       if (resp.content.length) {
         setEtterlevelseMetadata(resp.content[0])
       } else {
@@ -57,7 +61,7 @@ export const KravCard = (props: { krav: KravEtterlevelseData; noStatus?: boolean
     ;(async () => {
       getEtterlevelseMetaData()
       if (props.krav.kravVersjon > 1 && props.krav.etterlevelseStatus === undefined) {
-        setNyVersionFlag((await getEtterlevelserByBehandlingsIdKravNumber(props.etterlevelseDokumentasjonId, props.krav.kravNummer)).content.length >= 1)
+        setNyVersionFlag((await getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber(props.etterlevelseDokumentasjonId, props.krav.kravNummer)).content.length >= 1)
       }
     })()
   }, [])
