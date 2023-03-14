@@ -28,18 +28,29 @@ export const getMainHeader = (etterlevelseDokumentasjon: EtterlevelseDokumentasj
       <HeadingXXLarge marginTop="0" color={ettlevColors.green800}>
         {etterlevelseDokumentasjon.title}
       </HeadingXXLarge>
+      {etterlevelseDokumentasjon.behandlingId &&
+        <Block>
+          <LabelSmall $style={{ lineHeight: '22px', marginRight: '10px', fontSize: '16px', color: ettlevColors.green600 }}>Behandling:</LabelSmall>
+          <Block $style={{
+            fontFamily: 'Source Sans Pro',
+            fontWeight: 500,
+          }}>
+            B{etterlevelseDokumentasjon.behandling?.nummer} {etterlevelseDokumentasjon.behandling?.overordnetFormaal?.shortName}: {etterlevelseDokumentasjon.behandling?.navn}
+          </Block>
+        </Block>
+      }
       <Block display="flex" alignItems="center" width="100%" marginTop={'24px'}>
         <Block display={'flex'} width="100%" alignItems="center">
           <LabelSmall $style={{ lineHeight: '22px', marginRight: '10px', fontSize: '16px', color: ettlevColors.green600 }}>Team: </LabelSmall>
           {etterlevelseDokumentasjon.teams.length > 0 ? (
             <Teams teams={etterlevelseDokumentasjon.teams} link fontColor={ettlevColors.green800} style={{ fontSize: '16px', lineHeight: '22px', fontWeight: 400 }} />
           ) : (
-              <Block
+            <Block
               $style={{
                 fontFamily: 'Source Sans Pro',
                 fontWeight: 500,
               }}
-              >Team er ikke angitt</Block>
+            >Team er ikke angitt</Block>
           )}
         </Block>
         {etterlevelseDokumentasjon.behandlingId && (
@@ -51,7 +62,7 @@ export const getMainHeader = (etterlevelseDokumentasjon: EtterlevelseDokumentasj
         )}
       </Block>
     </Block>
-  </Block>
+  </Block >
 )
 
 export const getNewestKravVersjon = (list: any[]) => {
