@@ -19,6 +19,8 @@ input KravFilter {
     nummer: Int
     behandlingId: String
     behandlingIrrevantKrav: Boolean
+    etterlevelseDokumentasjonId: String
+    etterlevelseDokumentasjonIrrevantKrav: Boolean
     underavdeling: String
     lov: String
     status: [String!]

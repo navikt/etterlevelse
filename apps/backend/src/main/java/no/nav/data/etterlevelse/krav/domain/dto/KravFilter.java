@@ -25,6 +25,9 @@ public class KravFilter {
     private Integer nummer;
     private String behandlingId;
     private boolean behandlingIrrevantKrav;
+
+    private String etterlevelseDokumentasjonId;
+    private boolean etterlevelseDokumentasjonIrrevantKrav;
     private String underavdeling;
     private String lov;
     private List<String> status;
@@ -48,6 +51,7 @@ public class KravFilter {
         return getRelevans().isEmpty()
                 && nummer == null
                 && behandlingId == null
+                && etterlevelseDokumentasjonId == null
                 && underavdeling == null
                 && lov == null
                 && getStatus().isEmpty()
@@ -55,6 +59,7 @@ public class KravFilter {
                 && !gjeldendeKrav
                 && sistRedigert == null
                 && !behandlingIrrevantKrav
+                && !etterlevelseDokumentasjonIrrevantKrav
                 ;
     }
 

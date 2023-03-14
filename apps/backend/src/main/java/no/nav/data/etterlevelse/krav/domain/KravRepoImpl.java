@@ -1,13 +1,13 @@
 package no.nav.data.etterlevelse.krav.domain;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.security.SecurityUtils;
 import no.nav.data.common.storage.domain.GenericStorage;
 import no.nav.data.common.storage.domain.GenericStorageRepository;
 import no.nav.data.common.utils.StreamUtils;
 import no.nav.data.etterlevelse.behandling.domain.BehandlingRepo;
 import no.nav.data.etterlevelse.common.domain.KravId;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonRepo;
 import no.nav.data.etterlevelse.krav.domain.dto.KravFilter;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -30,6 +30,8 @@ public class KravRepoImpl implements KravRepoCustom {
     private final NamedParameterJdbcTemplate jdbcTemplate;
     private final GenericStorageRepository repository;
     private final BehandlingRepo behandlingRepo;
+
+    private final EtterlevelseDokumentasjonRepo etterlevelseDokumentasjonRepo;
 
     @Override
     public List<GenericStorage> findByRelevans(String code) {
@@ -80,6 +82,37 @@ public class KravRepoImpl implements KravRepoCustom {
                     """;
             par.addValue("behandlingId", filter.getBehandlingId());
         }
+
+        if (filter.getEtterlevelseDokumentasjonId() != null && !filter.isEtterlevelseDokumentasjonIrrevantKrav()) {
+            kravIdSafeList.addAll(convert(etterlevelseDokumentasjonRepo.findKravIdsForEtterlevelseDokumentasjon(filter.getEtterlevelseDokumentasjonId()), KravId::kravId));
+            query += """
+                    and (
+                     exists(select 1
+                               from generic_storage ettlev
+                               where ettlev.data ->> 'kravNummer' = krav.data ->> 'kravNummer'
+                                 and ettlev.data ->> 'kravVersjon' = krav.data ->> 'kravVersjon'
+                                 and type = 'Etterlevelse'
+                                 and data ->> 'etterlevelseDokumentasjonId' = :etterlevelseDokumentasjonId
+                            ) 
+                    or jsonb_array_length(data -> 'relevansFor') = 0
+                    or jsonb_array_length((data -> 'relevansFor') - array(select jsonb_array_elements_text(data -> 'irrelevansFor') 
+                        from generic_storage where data ->> 'id' = :etterlevelseDokumentasjonId
+                        and type = 'EtterlevelseDokumentasjon')) > 0
+                    )
+                    """;
+            par.addValue("etterlevelseDokumentasjonId", filter.getEtterlevelseDokumentasjonId());
+        } else if (filter.getEtterlevelseDokumentasjonId() != null && filter.isEtterlevelseDokumentasjonIrrevantKrav()) {
+            kravIdSafeList.addAll(convert(etterlevelseDokumentasjonRepo.findKravIdsForEtterlevelseDokumentasjon(filter.getEtterlevelseDokumentasjonId()), KravId::kravId));
+            query += """
+                    and data -> 'relevansFor' ??| array(
+                     select jsonb_array_elements_text(data -> 'irrelevansFor')
+                      from generic_storage
+                      where data ->> 'id' = :etterlevelseDokumentasjonId
+                        and type = 'BehandlingData')
+                    """;
+            par.addValue("etterlevelseDokumentasjonId", filter.getEtterlevelseDokumentasjonId());
+        }
+
         if (filter.getUnderavdeling() != null) {
             query += " and data ->> 'underavdeling' = :underavdeling ";
             par.addValue("underavdeling", filter.getUnderavdeling());
