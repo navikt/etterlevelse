@@ -7,7 +7,7 @@ import {codelist, ListName, TemaCode} from '../services/Codelist'
 import {Layout2} from '../components/scaffold/Page'
 import {Etterlevelse, EtterlevelseStatus, Krav, KRAV_FILTER_TYPE, KravEtterlevelseData, KravPrioritering, KravQL, KravStatus, PageResponse} from '../constants'
 import {useQuery} from '@apollo/client'
-import {behandlingKravQuery, getAllKrav} from '../api/KravApi'
+import {behandlingKravQuery, etterlevelseDokumentasjonKravQuery, getAllKrav} from '../api/KravApi'
 import {breadcrumbPaths} from '../components/common/CustomizedBreadcrumbs'
 import {KravPanelHeaderWithSorting} from '../components/behandling/KravPanelHeader'
 import {Helmet} from 'react-helmet'
@@ -59,19 +59,19 @@ export const EtterlevelseDokumentasjonTemaPage = () => {
   const [temaPageUrl, setTemaPageUrl] = useState<string>(location.pathname)
   const navigate = useNavigate()
 
-  const { data: relevanteKraverGraphQLResponse, loading: relevanteKraverGraphQLLoading } = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
+  const { data: relevanteKraverGraphQLResponse, loading: relevanteKraverGraphQLLoading } = useQuery<{ krav: PageResponse<KravQL> }>(etterlevelseDokumentasjonKravQuery, {
     variables,
     skip: !params.id || !lover.length,
     fetchPolicy: 'no-cache',
   })
 
-  const { data: irrelevanteKraverGraphQLResponse, loading: irrelevanteKraverGraphQLLoading } = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
+  const { data: irrelevanteKraverGraphQLResponse, loading: irrelevanteKraverGraphQLLoading } = useQuery<{ krav: PageResponse<KravQL> }>(etterlevelseDokumentasjonKravQuery, {
     variables: { ...variables, behandlingIrrevantKrav: true },
     skip: !params.id || !lover.length,
     fetchPolicy: 'no-cache',
   })
 
-  const { data: utgaateKraverGraphQLResponse, loading: utgaateKraverGraphQLLoading } = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
+  const { data: utgaateKraverGraphQLResponse, loading: utgaateKraverGraphQLLoading } = useQuery<{ krav: PageResponse<KravQL> }>(etterlevelseDokumentasjonKravQuery, {
     variables: { ...variables, gjeldendeKrav: false, status: KravStatus.UTGAATT },
     fetchPolicy: 'no-cache',
   })
