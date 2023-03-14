@@ -40,6 +40,10 @@ public interface EtterlevelseRepo extends JpaRepository<GenericStorage, UUID> {
     @Query(value = "select * from generic_storage where data ->> 'behandlingId' = ?1 and data-> 'kravNummer' = to_jsonb(?2) and type = 'Etterlevelse'", nativeQuery = true)
     List<GenericStorage> findByBehandlingsIdAndKravNummer(String behandlingsId, int nummer);
 
+    @Query(value = "select * from generic_storage where data ->> 'etterlevelseDokumentasjonId' = ?1 and data-> 'kravNummer' = to_jsonb(?2) and type = 'Etterlevelse'", nativeQuery = true)
+    List<GenericStorage> findByEtterlevelseDokumentasjonIdAndKravNummer(String etterlevelseDokumentasjonId, int nummer);
+
+
     @Modifying(clearAutomatically = true)
     @Transactional
     @Query(value= "update generic_storage set DATA = jsonb_set(DATA, '{behandlingId}', to_jsonb(?2), false) where data ->> 'behandlingId' = ?1 and type = 'Etterlevelse'", nativeQuery = true)

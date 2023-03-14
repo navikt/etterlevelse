@@ -100,6 +100,16 @@ public class  EtterlevelseController {
         return ResponseEntity.ok(new RestResponsePage<>(etterlevelseList).convert(Etterlevelse::toResponse));
     }
 
+
+    @Operation(summary = "Get Etterlevelse by etterlevelseDokumentasjonId and KravNummer")
+    @ApiResponse(description = "ok")
+    @GetMapping("/etterlevelseDokumentasjon/{etterlevelseDokumentasjonId}/{kravNummer}")
+    public ResponseEntity<RestResponsePage<EtterlevelseResponse>> getByEtterlevelseDokumentasjonIdAndKravNummer(@PathVariable String etterlevelseDokumentasjonId, @PathVariable Integer kravNummer) {
+        log.info("Get Etterlevelse by etterlevelseDokumentasjonId={} and kravNummer={}", etterlevelseDokumentasjonId, kravNummer);
+        List<Etterlevelse> etterlevelseList = service.getByEtterlevelseDokumentasjonIdAndKravNummer(etterlevelseDokumentasjonId, kravNummer);
+        return ResponseEntity.ok(new RestResponsePage<>(etterlevelseList).convert(Etterlevelse::toResponse));
+    }
+
     @Operation(summary = "Get Etterlevelse by BehandlingsId")
     @ApiResponse(description = "ok")
     @GetMapping("/behandling/{behandlingsId}")
