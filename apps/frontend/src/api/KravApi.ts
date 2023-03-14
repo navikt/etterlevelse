@@ -333,6 +333,58 @@ export const behandlingKravQuery = gql`
   }
 `
 
+export const etterlevelseDokumentasjonKravQuery = gql`
+  query getKravByFilter($etterlevelseDokumentasjonId: String, $lover: [String!], $gjeldendeKrav: Boolean, $etterlevelseDokumentasjonIrrevantKrav: Boolean, $status: [String!]) {
+    krav(filter: { etterlevelseDokumentasjonId: $etterlevelseDokumentasjonId, lover: $lover, gjeldendeKrav: $gjeldendeKrav, etterlevelseDokumentasjonIrrevantKrav: $etterlevelseDokumentasjonIrrevantKrav, status: $status }) {
+      content {
+        id
+        navn
+        kravNummer
+        kravVersjon
+        varselMelding
+        status
+        aktivertDato
+        kravIdRelasjoner
+        kravRelasjoner {
+          id
+          kravNummer
+          kravVersjon
+          navn
+        }
+        suksesskriterier {
+          id
+          navn
+          beskrivelse
+        }
+        relevansFor {
+          code
+        }
+        regelverk {
+          lov {
+            code
+            shortName
+          }
+        }
+        changeStamp {
+          lastModifiedBy
+          lastModifiedDate
+          createdDate
+        }
+        etterlevelser(onlyForEtterlevelseDokumentasjon: true) {
+          id
+          etterleves
+          fristForFerdigstillelse
+          status
+          changeStamp {
+            lastModifiedBy
+            lastModifiedDate
+          }
+        }
+      }
+    }
+  }
+`
+
 export const statsQuery = gql`
   query getBehandlingStats($behandlingId: ID) {
     behandling(filter: { id: $behandlingId }) {

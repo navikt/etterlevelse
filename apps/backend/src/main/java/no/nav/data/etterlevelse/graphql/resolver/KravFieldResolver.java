@@ -34,7 +34,7 @@ public class KravFieldResolver implements GraphQLResolver<KravResponse> {
     private final BegrepService begrepService;
     private final KravService kravService;
 
-    public List<EtterlevelseResponse> etterlevelser(KravResponse krav, boolean onlyForBehandling, DataFetchingEnvironment env) {
+    public List<EtterlevelseResponse> etterlevelser(KravResponse krav, boolean onlyForBehandling, boolean onlyForEtterlevelseDokumentasjon, DataFetchingEnvironment env) {
         Integer nummer = krav.getKravNummer();
         Integer versjon = krav.getKravVersjon();
         log.info("etterlevelse for krav {}.{}", nummer, versjon);
@@ -45,6 +45,11 @@ public class KravFieldResolver implements GraphQLResolver<KravResponse> {
             String behandlingId = KravFilter.get(env, Fields.behandlingId);
             if (behandlingId != null) {
                 etterlevelser = filter(etterlevelser, e -> behandlingId.equals(e.getBehandlingId()));
+            }
+        } else if (onlyForEtterlevelseDokumentasjon) {
+            String etterlevelseDokumentasjonId = KravFilter.get(env, Fields.etterlevelseDokumentasjonId);
+            if(etterlevelseDokumentasjonId != null) {
+                etterlevelser = filter(etterlevelser, e -> etterlevelseDokumentasjonId.equals(e.getEtterlevelseDokumentasjonId()));
             }
         }
 
