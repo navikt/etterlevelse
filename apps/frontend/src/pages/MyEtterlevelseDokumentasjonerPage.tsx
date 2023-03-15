@@ -5,7 +5,7 @@ import { useMyTeams } from '../api/TeamApi'
 import { theme } from '../util'
 import Button, { ExternalButton } from '../components/common/Button'
 import { Spinner } from '../components/common/Spinner'
-import { BehandlingQL, emptyPage, EtterlevelseDokumentasjonQL, PageResponse, Team } from '../constants'
+import { emptyPage, EtterlevelseDokumentasjonQL, PageResponse, Team } from '../constants'
 import { StatefulInput } from 'baseui/input'
 import { gql, useQuery } from '@apollo/client'
 import { ettlevColors, maxPageWidth } from '../util/theme'
@@ -29,16 +29,16 @@ import EditEtterlevelseDokumentasjonModal from '../components/etterlevelseDokume
 
 type Section = 'mine' | 'siste' | 'alle'
 
-interface BehandlingCount {
-  behandlingCount?: number
+interface dokumentasjonCount {
+  dokumentasjonCount?: number
 }
 
-type CustomTeamObject = BehandlingCount & Team
+type CustomTeamObject = dokumentasjonCount & Team
 
 const tabMarginBottom = '48px'
 
 export const MyEtterlevelseDokumentasjonerPage = () => {
-  ampli.logEvent('sidevisning', { side: 'Side for Behandlinger', sidetittel: 'Dokumentere etterlevelse' })
+  ampli.logEvent('sidevisning', { side: 'Side for Dokumentasjoner', sidetittel: 'Dokumentere etterlevelse' })
 
   return (
     <Block width="100%" paddingBottom={'200px'} id="content" overrides={{ Block: { props: { role: 'main' } } }}>
@@ -78,7 +78,7 @@ export const MyEtterlevelseDokumentasjonerPage = () => {
       >
         <Block maxWidth={maxPageWidth} width="100%">
           <Block paddingLeft={'100px'} paddingRight={'100px'} paddingTop={theme.sizing.scale800}>
-            <BehandlingTabs />
+            <DokumentasjonTabs />
           </Block>
         </Block>
       </Block>
@@ -86,7 +86,7 @@ export const MyEtterlevelseDokumentasjonerPage = () => {
   )
 }
 
-const BehandlingTabs = () => {
+const DokumentasjonTabs = () => {
   const params = useParams<{ tab?: Section }>()
   const navigate = useNavigate()
   const [tab, setTab] = useState<Section>(params.tab || 'mine')
@@ -224,7 +224,7 @@ const MineEtterlevelseDokumentasjoner = ({ etterlevelseDokumentasjoner, teams, l
           icon={bamseIcon}
           alt={'Bamseikon'}
           title={'Savner du teamet ditt?'}
-          beskrivelse={'Legg til teamet i teamkatalogen, så henter vi behandlinger som skal etterleve krav'}
+          beskrivelse={'Legg til teamet i teamkatalogen, så henter vi dokumentasjoner som skal etterleve krav'}
           backgroundColor={ettlevColors.grey25}
         >
           <Block marginTop={theme.sizing.scale600}>
@@ -292,7 +292,7 @@ const Alle = () => {
 
   return (
     <Block marginBottom={tabMarginBottom}>
-      <LabelLarge marginBottom={theme.sizing.scale200}>Søk i alle behandlinger</LabelLarge>
+      <LabelLarge marginBottom={theme.sizing.scale200}>Søk i alle dokumentasjoner</LabelLarge>
       <Block
         maxWidth="600px"
         marginBottom={theme.sizing.scale1000}
@@ -409,7 +409,7 @@ const EtterlevelseDokumentasjonerPanels = ({ etterlevelseDokumentasjoner, loadin
           <PanelLink
             useTitleUnderLine
             useDescriptionUnderline
-            panelIcon={<img src={arkPennIcon} width="33px" height="33px" aria-hidden alt={'Dokumenter behandling ikon'} />}
+            panelIcon={<img src={arkPennIcon} width="33px" height="33px" aria-hidden alt={'Dokumenter ikon'} />}
             href={`/dokumentasjon/${ed.id}`}
             title={
               <>

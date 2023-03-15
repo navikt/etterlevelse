@@ -7,20 +7,22 @@ import {codelist, ListName, TemaCode} from '../services/Codelist'
 import {Layout2} from '../components/scaffold/Page'
 import {Etterlevelse, EtterlevelseStatus, Krav, KRAV_FILTER_TYPE, KravEtterlevelseData, KravPrioritering, KravQL, KravStatus, PageResponse} from '../constants'
 import {useQuery} from '@apollo/client'
-import {behandlingKravQuery, etterlevelseDokumentasjonKravQuery, getAllKrav} from '../api/KravApi'
+import { etterlevelseDokumentasjonKravQuery, getAllKrav} from '../api/KravApi'
 import {breadcrumbPaths} from '../components/common/CustomizedBreadcrumbs'
-import {KravPanelHeaderWithSorting} from '../components/behandling/KravPanelHeader'
+
 import {Helmet} from 'react-helmet'
 import {Option} from 'baseui/select'
 import {ampli} from '../services/Amplitude'
 import {getFilterType} from './EtterlevelseDokumentasjonPage'
-import {filterKrav} from '../components/behandlingsTema/common/utils'
+
 import {getAllKravPriority} from '../api/KravPriorityApi'
 import {Spinner} from 'baseui/spinner'
-import {useEtterlevelseDokumentasjon} from "../api/EtterlevelseDokumentasjonApi";
-import {getMainHeader} from "../components/etterlevelseDokumentasjon/common/utils";
-import {SecondaryHeader} from "../components/EtterlevelseDokumentasjonTema/SecondaryHeader";
-import {KravList} from "../components/EtterlevelseDokumentasjonTema/KravList";
+import {useEtterlevelseDokumentasjon} from '../api/EtterlevelseDokumentasjonApi'
+import {getMainHeader} from '../components/etterlevelseDokumentasjon/common/utils'
+import {SecondaryHeader} from '../components/EtterlevelseDokumentasjonTema/SecondaryHeader'
+import {KravList} from '../components/EtterlevelseDokumentasjonTema/KravList'
+import { filterKrav } from '../components/EtterlevelseDokumentasjonTema/common/utils'
+import { KravPanelHeaderWithSorting } from '../components/etterlevelseDokumentasjon/KravPanelHeader'
 
 export const sortingOptions = [
   { label: 'Anbefalt rekkefølge', id: 'priority' },
@@ -66,7 +68,7 @@ export const EtterlevelseDokumentasjonTemaPage = () => {
   })
 
   const { data: irrelevanteKraverGraphQLResponse, loading: irrelevanteKraverGraphQLLoading } = useQuery<{ krav: PageResponse<KravQL> }>(etterlevelseDokumentasjonKravQuery, {
-    variables: { ...variables, behandlingIrrevantKrav: true },
+    variables: { ...variables, etterlevelseDokumentasjonIrrevantKrav: true },
     skip: !params.id || !lover.length,
     fetchPolicy: 'no-cache',
   })
@@ -238,7 +240,7 @@ export const EtterlevelseDokumentasjonTemaPage = () => {
                             fontStyle: 'italic',
                           }}
                         >
-                          Om bortfiltreringen av dette tema er feil, justeres det ved å velge de korrekte egenskapene for behandlingen under innstillinger.
+                          Om bortfiltreringen av dette tema er feil, justeres det ved å velge de korrekte egenskapene for dokumentasjonen under innstillinger.
                         </ParagraphMedium>
                       </Block>
                     }

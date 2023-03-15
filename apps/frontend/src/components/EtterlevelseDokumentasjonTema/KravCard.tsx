@@ -1,7 +1,6 @@
 import {EtterlevelseMetadata, KRAV_FILTER_TYPE, KravEtterlevelseData} from '../../constants'
 import React, {useEffect, useState} from 'react'
 import {
-  getEtterlevelseMetadataByBehandlingsIdAndKravNummerAndKravVersion,
   getEtterlevelseMetadataByEtterlevelseDokumentasjonAndKravNummerAndKravVersion,
   mapEtterlevelseMetadataToFormValue
 } from '../../api/EtterlevelseMetadataApi'
@@ -11,15 +10,15 @@ import {ettlevColors} from '../../util/theme'
 import {borderStyle, marginAll} from '../common/Style'
 import {LabelSmall, ParagraphXSmall} from 'baseui/typography'
 import StatusView from '../common/StatusTag'
-import {getEtterlevelseStatus, getStatusLabelColor} from '../behandling/utils'
 import moment from 'moment'
 import TildeltPopoever from '../etterlevelseMetadata/TildeltPopover'
-import {isFerdigUtfylt} from '../../pages/BehandlingTemaPage'
 import {faEllipsisVertical} from '@fortawesome/free-solid-svg-icons'
 import {arkCheckIcon, arkPennIcon, warningAlert} from '../Images'
-import {getEtterlevelserByBehandlingsIdKravNumber, getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber} from '../../api/EtterlevelseApi'
+import {getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber} from '../../api/EtterlevelseApi'
 import {useLocation, useNavigate} from 'react-router-dom'
 import {getNumberOfDaysBetween} from '../../util/checkAge'
+import { isFerdigUtfylt } from '../../pages/EtterlevelseDokumentasjonTemaPage'
+import { getEtterlevelseStatus, getStatusLabelColor } from '../etterlevelseDokumentasjon/common/utils'
 
 export const KravCard = (props: { krav: KravEtterlevelseData; noStatus?: boolean; etterlevelseDokumentasjonId: string; noVarsling?: boolean; kravFilter: KRAV_FILTER_TYPE }) => {
   const [nyVersionFlag, setNyVersionFlag] = useState<boolean>(false)

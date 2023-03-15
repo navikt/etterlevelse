@@ -1,13 +1,13 @@
 import {getKravByKravNumberAndVersion, KravId} from '../../api/KravApi'
 import {Etterlevelse, KRAV_FILTER_TYPE} from '../../constants'
-import {getEtterlevelserByBehandlingsIdKravNumber, mapEtterlevelseToFormValue} from '../../api/EtterlevelseApi'
+import { getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber, mapEtterlevelseToFormValue} from '../../api/EtterlevelseApi'
 import React, {useEffect, useState} from 'react'
 import {Block} from 'baseui/block'
 import {Spinner} from '../common/Spinner'
 import {theme} from '../../util'
 import {EditEtterlevelseV2} from '../etterlevelse/EditEtterlevelseV2'
 import {Section} from '../../pages/EtterlevelseDokumentasjonPage'
-import {toKravId} from "../behandlingsTema/utils";
+import { toKravId } from './common/utils'
 
 export const KravView = (props: {
   kravId: KravId
@@ -37,7 +37,7 @@ export const KravView = (props: {
 
         if (props.etterlevelseDokumentasjonId) {
           const kravVersjon = props.kravId.kravVersjon
-          const etterlevelser = await getEtterlevelserByBehandlingsIdKravNumber(props.etterlevelseDokumentasjonId, props.kravId.kravNummer)
+          const etterlevelser = await getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber(props.etterlevelseDokumentasjonId, props.kravId.kravNummer)
           const etterlevelserList = etterlevelser.content.sort((a, b) => (a.kravVersjon > b.kravVersjon ? -1 : 1))
           setTidligereEtterlevelser(etterlevelserList.filter((e) => e.kravVersjon < kravVersjon))
 
@@ -46,7 +46,7 @@ export const KravView = (props: {
           } else {
             setEtterlevelse(
               mapEtterlevelseToFormValue({
-                behandlingId: props.etterlevelseDokumentasjonId,
+                etterlevelseDokumentasjonId: props.etterlevelseDokumentasjonId,
                 kravVersjon: kravVersjon,
                 kravNummer: props.kravId.kravNummer,
               }),

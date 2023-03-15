@@ -13,7 +13,7 @@ import {Code, codelist, ListName} from '../services/Codelist'
 import {Button, KIND, SIZE} from 'baseui/button'
 import {marginZero} from '../components/common/Style'
 import {breadcrumbPaths} from '../components/common/CustomizedBreadcrumbs'
-import {isFerdigUtfylt} from './BehandlingTemaPage'
+
 import {ampli} from '../services/Amplitude'
 import {getMainHeader, getNewestKravVersjon, responsiveDisplayEtterlevelseDokumentasjonPage} from '../components/etterlevelseDokumentasjon/common/utils'
 import {user} from '../services/User'
@@ -21,8 +21,9 @@ import {useArkiveringByEtterlevelseDokumentasjonId} from '../api/ArkiveringApi'
 import {useEtterlevelseDokumentasjon} from '../api/EtterlevelseDokumentasjonApi'
 import {TemaCardEtterlevelseDokumentasjon} from '../components/etterlevelseDokumentasjon/TemaCardEtterlevelseDokumentasjon'
 import EditEtterlevelseDokumentasjonModal from '../components/etterlevelseDokumentasjon/edit/EditEtterlevelseDokumentasjonModal'
-import {ArkiveringModal} from "../components/etterlevelseDokumentasjon/ArkiveringModal";
+import {ArkiveringModal} from '../components/etterlevelseDokumentasjon/ArkiveringModal'
 import ExportEtterlevelseModalV2 from '../components/export/ExportEtterlevelseModalV2'
+import { isFerdigUtfylt } from './EtterlevelseDokumentasjonTemaPage'
 
 export const DokumentasjonPage = () => {
   const params = useParams<{ id?: string }>()
@@ -206,7 +207,7 @@ export const DokumentasjonPage = () => {
 
   const getRelevans = (irrelevans?: Code[]) => {
     if (irrelevans?.length === options.length) {
-      return <ParagraphXSmall>For å filtrere bort krav som ikke er relevante, må dere oppgi egenskaper ved behandlingen.</ParagraphXSmall>
+      return <ParagraphXSmall>For å filtrere bort krav som ikke er relevante, må dere oppgi egenskaper ved dokumentasjonen.</ParagraphXSmall>
     }
 
     if (irrelevans) {
@@ -239,7 +240,7 @@ export const DokumentasjonPage = () => {
     )
   }
 
-  if (!etterlevelseDokumentasjon) return <LoadingSkeleton header="Behandling" />
+  if (!etterlevelseDokumentasjon) return <LoadingSkeleton header="Dokumentasjon" />
 
   const breadcrumbPaths: breadcrumbPaths[] = [
     {
