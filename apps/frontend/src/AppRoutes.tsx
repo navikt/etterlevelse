@@ -31,6 +31,7 @@ import ArkivAdminPage from './pages/ArkivAdminPage'
 import {MyEtterlevelseDokumentasjonerPage} from "./pages/MyEtterlevelseDokumentasjonerPage";
 import {DokumentasjonPage} from './pages/DokumentasjonPage'
 import {EtterlevelseDokumentasjonTemaPage} from "./pages/EtterlevelseDokumentasjonTemaPage";
+import { EtterlevelseDokumentasjonPageV2 } from './pages/EtterlevelseDokumentasjonPageV2'
 
 const AppRoutes = (): JSX.Element => {
   return (
@@ -56,6 +57,7 @@ const AppRoutes = (): JSX.Element => {
         <Route path="/behandlinger/:tab" element={<MyBehandlingerPage/>} caseSensitive={true}/>
         <Route path="/behandlinger/" element={<MyBehandlingerPage/>} caseSensitive={true}/>
 
+        <Route path="/dokumentasjon/:id/:tema/:filter/krav/:kravNummer/:kravVersjon" element={<PrivateRoute component={<EtterlevelseDokumentasjonPageV2/>} adminPage/>} caseSensitive={true}/>
         <Route path="/dokumentasjon/:id/:tema/" element={<PrivateRoute component={<EtterlevelseDokumentasjonTemaPage/>} adminPage/>} caseSensitive={true}/>
         <Route path="/dokumentasjon/:id/:tema/:filter" element={<PrivateRoute component={<EtterlevelseDokumentasjonTemaPage/>} adminPage/>} caseSensitive={true}/>
         <Route path="/dokumentasjoner/:tab" element={<PrivateRoute component={<MyEtterlevelseDokumentasjonerPage/>} adminPage/>} caseSensitive={true}/>
