@@ -1,13 +1,13 @@
 import {getKravByKravNumberAndVersion, KravId} from '../../api/KravApi'
 import {Etterlevelse, KRAV_FILTER_TYPE} from '../../constants'
-import { getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber, mapEtterlevelseToFormValue} from '../../api/EtterlevelseApi'
+import {getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber, mapEtterlevelseToFormValue} from '../../api/EtterlevelseApi'
 import React, {useEffect, useState} from 'react'
 import {Block} from 'baseui/block'
 import {Spinner} from '../common/Spinner'
 import {theme} from '../../util'
-import {EditEtterlevelseV2} from '../etterlevelse/EditEtterlevelseV2'
+import {EditEtterlevelse} from '../etterlevelse/EditEtterlevelse'
 import {Section} from '../../pages/EtterlevelseDokumentasjonPage'
-import { toKravId } from './common/utils'
+import {toKravId} from './common/utils'
 
 export const KravView = (props: {
   kravId: KravId
@@ -67,7 +67,7 @@ export const KravView = (props: {
       )}
       {!loadingEtterlevelseData && etterlevelse && (
         <Block width="100%" display="flex" justifyContent="center">
-          <EditEtterlevelseV2
+          <EditEtterlevelse
             tidligereEtterlevelser={tidligereEtterlevelser}
             behandlingNavn={props.etterlevelseDokumentasjonTitle}
             behandlingId={props.etterlevelseDokumentasjonId}

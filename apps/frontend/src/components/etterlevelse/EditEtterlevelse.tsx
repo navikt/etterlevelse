@@ -48,7 +48,7 @@ type EditEttlevProps = {
   kravFilter: KRAV_FILTER_TYPE
 }
 
-export const EditEtterlevelseV2 = ({
+export const EditEtterlevelse = ({
   kravId,
   etterlevelse,
   varsleMelding,
