@@ -1,6 +1,6 @@
 import {Etterlevelse, EtterlevelseMetadata, EtterlevelseStatus, Krav, KRAV_FILTER_TYPE, KravQL, KravStatus} from '../../constants'
 import {FormikProps} from 'formik'
-import {createEtterlevelse, getEtterlevelserByBehandlingsIdKravNumber, updateEtterlevelse} from '../../api/EtterlevelseApi'
+import {createEtterlevelse, getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber, updateEtterlevelse} from '../../api/EtterlevelseApi'
 import {Block} from 'baseui/block'
 import Button from '../common/Button'
 import React, {useEffect, useRef, useState} from 'react'
@@ -18,27 +18,26 @@ import CustomizedTabs from '../common/CustomizedTabs'
 import {Tilbakemeldinger} from '../krav/tilbakemelding/Tilbakemelding'
 import Etterlevelser from '../krav/Etterlevelser'
 import {Markdown} from '../common/Markdown'
-import {getEtterlevelseMetadataByBehandlingsIdAndKravNummerAndKravVersion, mapEtterlevelseMetadataToFormValue} from '../../api/EtterlevelseMetadataApi'
+import {getEtterlevelseMetadataByEtterlevelseDokumentasjonAndKravNummerAndKravVersion, mapEtterlevelseMetadataToFormValue} from '../../api/EtterlevelseMetadataApi'
 import TildeltPopoever from '../etterlevelseMetadata/TildeltPopover'
-import EtterlevelseEditFields from './Edit/EtterlevelseEditFields'
 import CustomizedModal from '../common/CustomizedModal'
 import {ampli} from '../../services/Amplitude'
 import StatusView from '../common/StatusTag'
 import {getPageWidth} from '../../util/pageWidth'
 import {usePrompt} from '../../util/hooks/routerHooks'
 import {useNavigate, useParams} from 'react-router-dom'
-import {syncEtterlevelseKriterieBegrunnelseWithKrav} from '../behandlingsTema/utils'
 import {getFilterType, Section} from '../../pages/EtterlevelseDokumentasjonPage'
+import {syncEtterlevelseKriterieBegrunnelseWithKrav} from "../EtterlevelseDokumentasjonTema/common/utils";
+import EtterlevelseEditFields from "./Edit/EtterlevelseEditFields";
 
 type EditEttlevProps = {
   etterlevelse: Etterlevelse
   kravId: KravId
   formRef?: React.Ref<any>
   documentEdit?: boolean
-  behandlingNavn?: string
-  behandlingId?: string
-  behandlingformaal?: string
-  behandlingNummer?: number
+  etterlevelseDokumentasjonTitle?: string
+  etterlevelseDokumentasjonId?: string
+  etterlevelseNummer?: number
   varsleMelding?: string
   navigatePath: string
   setNavigatePath: (state: string) => void
@@ -48,16 +47,15 @@ type EditEttlevProps = {
   kravFilter: KRAV_FILTER_TYPE
 }
 
-export const EditEtterlevelse = ({
+export const EditEtterlevelseV2 = ({
   kravId,
   etterlevelse,
   varsleMelding,
   formRef,
   documentEdit,
-  behandlingNavn,
-  behandlingId,
-  behandlingformaal,
-  behandlingNummer,
+  etterlevelseDokumentasjonTitle,
+  etterlevelseDokumentasjonId,
+  etterlevelseNummer,
   navigatePath,
   setNavigatePath,
   tidligereEtterlevelser,
@@ -85,7 +83,7 @@ export const EditEtterlevelse = ({
   const [etterlevelseMetadata, setEtterlevelseMetadata] = useState<EtterlevelseMetadata>(
     mapEtterlevelseMetadataToFormValue({
       id: 'ny',
-      behandlingId: behandlingId,
+      etterlevelseDokumentasjonId: etterlevelseDokumentasjonId,
       kravNummer: kravId.kravNummer,
       kravVersjon: kravId.kravVersjon,
     }),
@@ -98,16 +96,16 @@ export const EditEtterlevelse = ({
 
   useEffect(() => {
     ;(async () => {
-      behandlingId &&
+      etterlevelseDokumentasjonId &&
         kravId.kravNummer &&
-        getEtterlevelseMetadataByBehandlingsIdAndKravNummerAndKravVersion(behandlingId, kravId.kravNummer, kravId.kravVersjon).then((resp) => {
+        getEtterlevelseMetadataByEtterlevelseDokumentasjonAndKravNummerAndKravVersion(etterlevelseDokumentasjonId, kravId.kravNummer, kravId.kravVersjon).then((resp) => {
           if (resp.content.length) {
             setEtterlevelseMetadata(resp.content[0])
           } else {
             setEtterlevelseMetadata(
               mapEtterlevelseMetadataToFormValue({
                 id: 'ny',
-                behandlingId: behandlingId,
+                etterlevelseDokumentasjonId: etterlevelseDokumentasjonId,
                 kravNummer: kravId.kravNummer,
                 kravVersjon: kravId.kravVersjon,
               }),
@@ -135,8 +133,8 @@ export const EditEtterlevelse = ({
 
     //double check if etterlevelse already exist before submitting
     let existingEtterlevelseId = ''
-    if (behandlingId && krav) {
-      const etterlevelseList = (await getEtterlevelserByBehandlingsIdKravNumber(behandlingId, krav.kravNummer)).content.filter((e) => e.kravVersjon === krav.kravVersjon)
+    if (etterlevelseDokumentasjonId && krav) {
+      const etterlevelseList = (await getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber(etterlevelseDokumentasjonId, krav.kravNummer)).content.filter((e) => e.kravVersjon === krav.kravVersjon)
       if (etterlevelseList.length) {
         existingEtterlevelseId = etterlevelseList[0].id
         mutatedEtterlevelse.id = etterlevelseList[0].id
@@ -144,10 +142,10 @@ export const EditEtterlevelse = ({
     }
 
     if (etterlevelse.id || existingEtterlevelseId) {
-      await updateEtterlevelse(mutatedEtterlevelse).then(() => navigate(`/behandling/${behandlingId}/${params.tema}/${getFilterType(params.filter)}`))
+      await updateEtterlevelse(mutatedEtterlevelse).then(() => navigate(`/dokumentasjon/${etterlevelseDokumentasjonId}/${params.tema}/${getFilterType(params.filter)}`))
     } else {
       await createEtterlevelse(mutatedEtterlevelse).then(() => {
-        navigate(`/behandling/${behandlingId}/${params.tema}/${getFilterType(params.filter)}`)
+        navigate(`/dokumentasjon/${etterlevelseDokumentasjonId}/${params.tema}/${getFilterType(params.filter)}`)
       })
     }
   }
@@ -370,7 +368,7 @@ export const EditEtterlevelse = ({
               activeKey={tab}
               onChange={(k) => {
                 ampli.logEvent('klikk', {
-                  sidetittel: `B${behandlingNummer?.toString()} ${behandlingNavn?.toString()}`,
+                  sidetittel: `B${etterlevelseNummer?.toString()} ${etterlevelseDokumentasjonTitle?.toString()}`,
                   section: `K${kravId.kravNummer}.${kravId.kravVersjon}`,
                   title: k.activeKey.toString(),
                   type: 'tab',
@@ -413,7 +411,7 @@ export const EditEtterlevelse = ({
                       documentEdit={documentEdit}
                       close={() => {
                         setIsFormDirty(false)
-                        setTimeout(() => navigate(`/behandling/${behandlingId}/${params.tema}/${params.filter}`), 1)
+                        setTimeout(() => navigate(`/dokumentasjon/${etterlevelseDokumentasjonId}/${params.tema}/${params.filter}`), 1)
                       }}
                       setIsAlertUnsavedModalOpen={setIsAlertUnsavedModalOpen}
                       isAlertUnsavedModalOpen={isAlertUnsavedModalOpen}
