@@ -155,20 +155,6 @@ export const EtterlevelsePage = () => {
       <Block display="flex" width={responsiveWidthSmall} justifyContent="center" paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall}>
         <Block maxWidth={pageWidth} width="100%">
           {etterlevelse && !loading && krav && <ViewEtterlevelse etterlevelse={etterlevelse} setEtterlevelse={setEtterlevelse} loading={loading} krav={krav} />}
-          {/* {
-            edit && etterlevelse &&
-
-            <EditEtterlevelse etterlevelse={etterlevelse} formRef={formRef} close={k => {
-              if (k) {
-                setEtterlevelse(k)
-                if (k.id !== etterlevelse.id) {
-                  history.push(`/etterlevelse/${k.id}`)
-                }
-              }
-              setEdit(false)
-            }} />
-
-          } */}
         </Block>
       </Block>
     </Block>

@@ -420,4 +420,17 @@ export type VarslingsadresseQL = Varslingsadresse & {
   slackUser?: SlackUser
 }
 
+export interface BehandlingStats {
+  fyltKrav: KravQL[]
+  ikkeFyltKrav: KravQL[]
+  irrelevantKrav: KravQL[]
+  lovStats: LovStats[]
+}
+
+export interface LovStats {
+  lovCode: Code
+  fyltKrav: KravQL[]
+  ikkeFyltKrav: KravQL[]
+}
+
 export type Replace<T, K> = Omit<T, keyof K> & K

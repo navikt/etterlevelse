@@ -7,7 +7,7 @@ import { Code, codelist, ListName } from '../../services/Codelist'
 import { HeadingSmall, HeadingXXLarge, ParagraphMedium } from 'baseui/typography'
 import RouteLink, { ObjectLink } from '../common/RouteLink'
 import { etterlevelseName } from '../../pages/EtterlevelsePage'
-import { Behandling, Etterlevelse, EtterlevelseStatus, Krav, KravQL, PageResponse } from '../../constants'
+import { Behandling, BehandlingStats, Etterlevelse, EtterlevelseStatus, Krav, KravQL, PageResponse } from '../../constants'
 import { Label } from '../common/PropertyLabel'
 import { KravFilters } from '../../api/KravGraphQLApi'
 import { Spinner } from '../common/Spinner'
@@ -17,7 +17,6 @@ import Button from '../common/Button'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEdit, faEye, faPlus } from '@fortawesome/free-solid-svg-icons'
 import { Modal, ModalBody, ModalHeader } from 'baseui/modal'
-import { EditEtterlevelse } from '../etterlevelse/EditEtterlevelse'
 import { useEtterlevelse } from '../../api/EtterlevelseApi'
 import { behandlingKravQuery, getKravByKravNumberAndVersion, kravFullQuery, KravId, statsQuery } from '../../api/KravApi'
 import { kravName, kravNumView } from '../../pages/KravPage'
@@ -281,17 +280,7 @@ const KravView = (props: { kravId: KravId; etterlevelse: Etterlevelse; close: Fu
               <ParagraphMedium $style={{ lineHeight: '12px', color: ettlevColors.green50 }}>{props.behandlingNavn}</ParagraphMedium>
             </Block>
           </Block>
-          <Block paddingLeft={modalPaddingLeft} paddingRight={modalPaddingRight}>
-            <Block marginTop="99px">
-              <EditEtterlevelse
-                kravId={props.kravId}
-                etterlevelse={props.etterlevelse}
-                close={(e) => {
-                  props.close(e)
-                }}
-              />
-            </Block>
-          </Block>
+
         </Block>
       )}
     </Block>
@@ -382,17 +371,4 @@ const BehandlingStatsView = ({ behandling }: { behandling: Behandling }) => {
       </Block>
     </Block>
   )
-}
-
-export interface BehandlingStats {
-  fyltKrav: KravQL[]
-  ikkeFyltKrav: KravQL[]
-  irrelevantKrav: KravQL[]
-  lovStats: LovStats[]
-}
-
-export interface LovStats {
-  lovCode: Code
-  fyltKrav: KravQL[]
-  ikkeFyltKrav: KravQL[]
 }
