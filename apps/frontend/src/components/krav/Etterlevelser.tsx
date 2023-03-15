@@ -24,6 +24,7 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
   const etterlevelser = (krav.etterlevelser || [])
     .filter((e) => e.status === EtterlevelseStatus.FERDIG_DOKUMENTERT)
     .sort((a, b) => a.behandling.navn.localeCompare(b.behandling.navn))
+    .filter((e) => e.behandling.navn !== 'LEGACY_DATA')
 
   etterlevelser.map((e) => {
     if (!e.behandling.avdeling) {
@@ -38,6 +39,8 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
       .filter((avdeling) => !!avdeling) || []) as ExternalCode[],
     (a) => a.code,
   )
+
+  console.log(etterlevelser)
 
   return (
     <Block marginBottom="32px" width="100%">
