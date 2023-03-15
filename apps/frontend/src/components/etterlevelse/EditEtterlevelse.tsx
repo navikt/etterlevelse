@@ -18,7 +18,6 @@ import CustomizedTabs from '../common/CustomizedTabs'
 import {Tilbakemeldinger} from '../krav/tilbakemelding/Tilbakemelding'
 import Etterlevelser from '../krav/Etterlevelser'
 import {Markdown} from '../common/Markdown'
-import {getFilterType, Section} from '../../pages/EtterlevelseDokumentasjonPage'
 import {getEtterlevelseMetadataByBehandlingsIdAndKravNummerAndKravVersion, mapEtterlevelseMetadataToFormValue} from '../../api/EtterlevelseMetadataApi'
 import TildeltPopoever from '../etterlevelseMetadata/TildeltPopover'
 import EtterlevelseEditFields from './Edit/EtterlevelseEditFields'
@@ -29,6 +28,7 @@ import {getPageWidth} from '../../util/pageWidth'
 import {usePrompt} from '../../util/hooks/routerHooks'
 import {useNavigate, useParams} from 'react-router-dom'
 import {syncEtterlevelseKriterieBegrunnelseWithKrav} from '../behandlingsTema/utils'
+import { getFilterType, Section } from '../../pages/EtterlevelseDokumentasjonPage'
 
 type EditEttlevProps = {
   etterlevelse: Etterlevelse
@@ -85,7 +85,7 @@ export const EditEtterlevelse = ({
   const [etterlevelseMetadata, setEtterlevelseMetadata] = useState<EtterlevelseMetadata>(
     mapEtterlevelseMetadataToFormValue({
       id: 'ny',
-      etterlevelseDokumentasjonId: behandlingId,
+      behandlingId: behandlingId,
       kravNummer: kravId.kravNummer,
       kravVersjon: kravId.kravVersjon,
     }),
@@ -107,7 +107,7 @@ export const EditEtterlevelse = ({
             setEtterlevelseMetadata(
               mapEtterlevelseMetadataToFormValue({
                 id: 'ny',
-                etterlevelseDokumentasjonId: behandlingId,
+                behandlingId: behandlingId,
                 kravNummer: kravId.kravNummer,
                 kravVersjon: kravId.kravVersjon,
               }),
