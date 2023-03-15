@@ -1,13 +1,14 @@
-import {getKravByKravNumberAndVersion, KravId} from '../../api/KravApi'
-import {Etterlevelse, KRAV_FILTER_TYPE} from '../../constants'
-import {getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber, mapEtterlevelseToFormValue} from '../../api/EtterlevelseApi'
-import React, {useEffect, useState} from 'react'
-import {Block} from 'baseui/block'
-import {Spinner} from '../common/Spinner'
-import {theme} from '../../util'
-import {EditEtterlevelse} from '../etterlevelse/EditEtterlevelse'
-import {Section} from '../../pages/EtterlevelseDokumentasjonPage'
-import {toKravId} from './common/utils'
+import { getKravByKravNumberAndVersion, KravId } from '../../api/KravApi'
+import { Etterlevelse, KRAV_FILTER_TYPE } from '../../constants'
+import { getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber, mapEtterlevelseToFormValue } from '../../api/EtterlevelseApi'
+import React, { useEffect, useState } from 'react'
+import { Block } from 'baseui/block'
+import { Spinner } from '../common/Spinner'
+import { theme } from '../../util'
+
+import { Section } from '../../pages/EtterlevelseDokumentasjonPage'
+import { toKravId } from './common/utils'
+import { EditEtterlevelseV2 } from '../etterlevelse/EditEtterlevelseV2'
 
 export const KravView = (props: {
   kravId: KravId
@@ -27,7 +28,7 @@ export const KravView = (props: {
   const [tidligereEtterlevelser, setTidligereEtterlevelser] = React.useState<Etterlevelse[]>()
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       setLoadingEtterlevelseData(true)
       if (props.kravId.kravNummer && props.kravId.kravVersjon) {
         const krav = await getKravByKravNumberAndVersion(props.kravId.kravNummer, props.kravId.kravVersjon)
@@ -67,13 +68,13 @@ export const KravView = (props: {
       )}
       {!loadingEtterlevelseData && etterlevelse && (
         <Block width="100%" display="flex" justifyContent="center">
-          <EditEtterlevelse
+          <EditEtterlevelseV2
             tidligereEtterlevelser={tidligereEtterlevelser}
-            behandlingNavn={props.etterlevelseDokumentasjonTitle}
-            behandlingId={props.etterlevelseDokumentasjonId}
+            etterlevelseDokumentasjonTitle={props.etterlevelseDokumentasjonTitle}
+            etterlevelseDokumentasjonId={props.etterlevelseDokumentasjonId}
+            etterlevelseNummer={props.etterlevelseNummer}
             kravId={toKravId(etterlevelse)}
             etterlevelse={etterlevelse}
-            behandlingNummer={props.etterlevelseNummer}
             varsleMelding={varsleMelding}
             navigatePath={props.navigatePath}
             setNavigatePath={props.setNavigatePath}
