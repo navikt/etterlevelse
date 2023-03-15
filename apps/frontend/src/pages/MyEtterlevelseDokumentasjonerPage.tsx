@@ -195,6 +195,7 @@ const MineEtterlevelseDokumentasjoner = ({ etterlevelseDokumentasjoner, teams, l
 
       {teams.map((t) => {
         const teamDokumentasjoner = etterlevelseDokumentasjoner.filter((e) => e.teamsData?.find((t2) => t2.id === t.id))
+          .filter((value, index, self) => index === self.findIndex((etterlevelseDokumentasjon) => etterlevelseDokumentasjon.id === value.id))
         return (
           <Block key={t.id} marginBottom={theme.sizing.scale900}>
             <Block display={'flex'} justifyContent={'space-between'}>
@@ -285,7 +286,7 @@ const Alle = () => {
     if (sok && pageNumber != 0) setPage(0)
   }, [sok])
 
-  const getEtterlevelseDokumentasjonerWithOutDuplicates = () => {
+  const getEtterlevelseDokumentasjonerWithoutDuplicates = () => {
     return etterlevelseDokumentasjoner.content.filter((value, index, self) => index === self.findIndex((etterlevelseDokumentasjon) => etterlevelseDokumentasjon.id === value.id))
   }
 
@@ -339,7 +340,7 @@ const Alle = () => {
             // EndEnhancer: {style: {marginLeft: theme.sizing.scale400, paddingLeft: 0, paddingRight: 0, backgroundColor: ettlevColors.black}}
           }}
           startEnhancer={<img src={searchIcon} alt="Søk ikon" />}
-          // endEnhancer={<img aria-hidden alt={'Søk ikon'} src={sokButtonIcon} />}
+        // endEnhancer={<img aria-hidden alt={'Søk ikon'} src={sokButtonIcon} />}
         />
         {tooShort && (
           <LabelSmall color={ettlevColors.error400} alignSelf={'flex-end'} marginTop={theme.sizing.scale200}>
@@ -367,7 +368,7 @@ const Alle = () => {
             </Block>
           )}
 
-          <EtterlevelseDokumentasjonerPanels etterlevelseDokumentasjoner={getEtterlevelseDokumentasjonerWithOutDuplicates()} loading={loading} />
+          <EtterlevelseDokumentasjonerPanels etterlevelseDokumentasjoner={getEtterlevelseDokumentasjonerWithoutDuplicates()} loading={loading} />
 
           {!loading && etterlevelseDokumentasjoner.totalElements !== 0 && (
             <Block display={'flex'} justifyContent={'space-between'} marginTop={theme.sizing.scale1000}>
