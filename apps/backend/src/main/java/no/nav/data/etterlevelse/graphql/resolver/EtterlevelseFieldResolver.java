@@ -21,15 +21,19 @@ import java.util.concurrent.CompletableFuture;
 public class EtterlevelseFieldResolver implements GraphQLResolver<EtterlevelseResponse> {
     public CompletableFuture<Behandling> behandling(EtterlevelseResponse etterlevelse, DataFetchingEnvironment env) {
         DataLoader<String, Behandling> loader = env.getDataLoader(DataLoaderReg.BEHANDLING);
-        if(etterlevelse.getBehandling() != null && !etterlevelse.getBehandlingId().equals("")) {
+        if(etterlevelse.getBehandlingId() != null) {
             return loader.load(etterlevelse.getBehandlingId());
-        }else {
+        } else {
             CompletableFuture<Behandling> legacy_data = new CompletableFuture<>();
             legacy_data.complete(Behandling.builder()
                     .id("LEGACY_DATA")
                     .nummer(0)
                     .navn("LEGACY_DATA")
-                    .overordnetFormaal(ExternalCode.builder().shortName("LEGACY_DATA").build())
+                    .formaal("LEGACY_DATA")
+                    .teams(List.of("LEGACY_DATA"))
+                    .irrelevansFor(List.of())
+                    .linje(ExternalCode.builder().code("LEGACY_DATA").shortName("LEGACY_DATA").build())
+                    .overordnetFormaal(ExternalCode.builder().code("LEGACY_DATA").shortName("LEGACY_DATA").build())
                     .system(ExternalCode.builder().code("LEGACY_DATA").shortName("LEGACY_DATA").build())
                     .avdeling(ExternalCode.builder().code("LEGACY_DATA").shortName("LEGACY_DATA").build())
                     .teamsData(List.of(TeamResponse.builder().id("LEGACY_DATA").name("LEGACY_DATA").build()))
