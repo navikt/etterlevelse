@@ -18,7 +18,7 @@ import java.util.concurrent.CompletableFuture;
 public class EtterlevelseFieldResolver implements GraphQLResolver<EtterlevelseResponse> {
     public CompletableFuture<Behandling> behandling(EtterlevelseResponse etterlevelse, DataFetchingEnvironment env) {
         DataLoader<String, Behandling> loader = env.getDataLoader(DataLoaderReg.BEHANDLING);
-        if(etterlevelse.getBehandling() != null || !etterlevelse.getBehandlingId().equals("")) {
+        if(etterlevelse.getBehandling() != null && !etterlevelse.getBehandlingId().equals("")) {
             return loader.load(etterlevelse.getBehandlingId());
         }else {
             return null;
