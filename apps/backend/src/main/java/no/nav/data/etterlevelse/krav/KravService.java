@@ -2,10 +2,7 @@ package no.nav.data.etterlevelse.krav;
 
 import lombok.extern.slf4j.Slf4j;
 import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
-import no.nav.data.common.auditing.domain.AuditVersion;
 import no.nav.data.common.auditing.domain.AuditVersionRepository;
-import no.nav.data.common.auditing.dto.AuditLogResponse;
-import no.nav.data.common.auditing.dto.AuditResponse;
 import no.nav.data.common.storage.domain.GenericStorage;
 import no.nav.data.common.validator.Validator;
 import no.nav.data.etterlevelse.common.domain.DomainService;
@@ -22,7 +19,11 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
 
 import static no.nav.data.common.security.SecurityUtils.isKravEier;
 import static no.nav.data.common.utils.StreamUtils.convert;
@@ -135,8 +136,16 @@ public class KravService extends DomainService<Krav> {
         return getByFilter(KravFilter.builder().behandlingId(behandlingId).build());
     }
 
+    public List<Krav> findForEtterlevelseDokumentasjon(String etterlevelseDokumentasjonId) {
+        return getByFilter(KravFilter.builder().etterlevelseDokumentasjonId(etterlevelseDokumentasjonId).build());
+    }
+
     public List<Krav> findForBehandlingIrrelevans(String behandlingId) {
         return getByFilter(KravFilter.builder().behandlingId(behandlingId).behandlingIrrevantKrav(true).build());
+    }
+
+    public List<Krav> findForEtterlevelseDokumentasjonIrrelevans(String etterlevelseDokumentasjonId) {
+        return getByFilter(KravFilter.builder().etterlevelseDokumentasjonId(etterlevelseDokumentasjonId).etterlevelseDokumentasjonIrrevantKrav(true).build());
     }
 
     public List<KravImage> saveImages(List<KravImage> images) {
