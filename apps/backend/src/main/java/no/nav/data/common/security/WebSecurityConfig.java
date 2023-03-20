@@ -63,7 +63,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 "/statistikk/**",
                 "/team/**",
                 "/begrep/**",
-                "/etterlevelsearkiv/**"
+                "/etterlevelsearkiv/**",
+                "/virkemiddel/**"
         );
 
         adminOnly(http,
@@ -88,6 +89,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers("/melding/**").hasAnyRole(AppRole.ADMIN.name());
         http.authorizeRequests().antMatchers("/etterlevelsearkiv/**").hasAnyRole(AppRole.WRITE.name());
         http.authorizeRequests().antMatchers("/etterlevelse/update/behandlingid/**").hasAnyRole(AppRole.ADMIN.name());
+        http.authorizeRequests().antMatchers("/virkemiddel/**").hasAnyRole(AppRole.KRAVEIER.name(), AppRole.ADMIN.name());
 
         http.authorizeRequests().antMatchers("/logout").authenticated();
 
