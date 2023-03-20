@@ -18,6 +18,7 @@ import no.nav.data.etterlevelse.etterlevelsemetadata.domain.EtterlevelseMetadata
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.kravprioritering.domain.KravPrioritering;
 import no.nav.data.etterlevelse.melding.domain.Melding;
+import no.nav.data.etterlevelse.virkemiddel.domain.Virkemiddel;
 import org.hibernate.annotations.Type;
 import org.springframework.util.Assert;
 
@@ -130,6 +131,8 @@ public class GenericStorage extends Auditable {
     public EtterlevelseArkiv toEtterlevelseArkiv() {return getDomainObjectData(EtterlevelseArkiv.class); }
 
     public EtterlevelseDokumentasjon toEtterlevelseDokumentasjon() {return getDomainObjectData(EtterlevelseDokumentasjon.class); }
+
+    public Virkemiddel toVirkemiddel() {return getDomainObjectData(Virkemiddel.class);}
 
     /**
      * Edit object and update data on entity

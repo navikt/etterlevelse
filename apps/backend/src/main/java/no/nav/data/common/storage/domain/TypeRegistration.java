@@ -13,6 +13,7 @@ import no.nav.data.etterlevelse.krav.domain.KravImage;
 import no.nav.data.etterlevelse.krav.domain.Tilbakemelding;
 import no.nav.data.etterlevelse.kravprioritering.domain.KravPrioritering;
 import no.nav.data.etterlevelse.melding.domain.Melding;
+import no.nav.data.etterlevelse.virkemiddel.domain.Virkemiddel;
 import org.springframework.util.Assert;
 
 import java.util.HashMap;
@@ -35,6 +36,7 @@ public final class TypeRegistration {
         addDomainClass(Melding.class, true);
         addDomainClass(EtterlevelseArkiv.class, true);
         addDomainClass(EtterlevelseDokumentasjon.class,true);
+        addDomainClass(Virkemiddel.class, true);
 
         addDomainClass(Tilbakemelding.class, false);
         addDomainClass(KravImage.class, false);
