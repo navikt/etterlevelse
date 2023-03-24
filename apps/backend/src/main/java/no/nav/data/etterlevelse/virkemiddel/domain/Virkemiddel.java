@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import no.nav.data.common.storage.domain.ChangeStamp;
 import no.nav.data.common.storage.domain.DomainObject;
 import no.nav.data.common.utils.StreamUtils;
+import no.nav.data.etterlevelse.codelist.codeusage.dto.InstanceId;
 import no.nav.data.etterlevelse.krav.domain.Regelverk;
 import no.nav.data.etterlevelse.virkemiddel.dto.VirkemiddelRequest;
 import no.nav.data.etterlevelse.virkemiddel.dto.VirkemiddelResponse;
@@ -47,6 +48,10 @@ public class Virkemiddel implements DomainObject {
                 .livsSituasjon(livsSituasjon)
                 .build();
 
+    }
+
+    public InstanceId convertToInstanceId() {
+        return new InstanceId(id.toString(), navn);
     }
 
 }

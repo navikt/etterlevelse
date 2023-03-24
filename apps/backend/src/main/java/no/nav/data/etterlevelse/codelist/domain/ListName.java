@@ -6,4 +6,5 @@ public enum ListName {
     UNDERAVDELING,
     LOV,
     TEMA,
+    VIRKEMIDDELTYPE,
 }

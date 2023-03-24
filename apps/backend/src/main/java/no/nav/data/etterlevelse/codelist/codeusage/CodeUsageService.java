@@ -120,13 +120,14 @@ public class CodeUsageService {
             case UNDERAVDELING -> kravRepo.findByUnderavdeling(code);
             case LOV -> kravRepo.findByLov(code);
             case TEMA -> List.of();
+            case VIRKEMIDDELTYPE -> List.of();
         };
     }
 
     private List<GenericStorage> findBehandlinger(ListName listName, String code) {
         return switch (listName) {
             case RELEVANS -> behandlingRepo.findByIrrelevans(List.of(code));
-            case AVDELING, UNDERAVDELING, LOV, TEMA -> List.of();
+            case AVDELING, UNDERAVDELING, LOV, TEMA, VIRKEMIDDELTYPE -> List.of();
         };
     }
 
@@ -134,7 +135,7 @@ public class CodeUsageService {
         return switch (listName) {
             case TEMA -> filter(getCodelist(ListName.LOV), c -> code.equals(getField(c, "tema")));
             case UNDERAVDELING -> filter(getCodelist(ListName.LOV), c -> code.equals(getField(c, "underavdeling")));
-            case AVDELING, LOV, RELEVANS -> List.of();
+            case AVDELING, LOV, RELEVANS, VIRKEMIDDELTYPE -> List.of();
         };
     }
 

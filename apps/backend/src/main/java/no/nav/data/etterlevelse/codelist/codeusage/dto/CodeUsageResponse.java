@@ -22,7 +22,10 @@ public class CodeUsageResponse {
     private boolean inUse;
 
     private List<InstanceId> krav = new ArrayList<>();
+
     private List<InstanceId> behandlinger = new ArrayList<>();
+    private List<InstanceId> virkemidler = new ArrayList<>();
+
     private List<CodelistResponse> codelist = new ArrayList<>();
 
     public CodeUsageResponse(ListName listName, String code, String shortName) {
