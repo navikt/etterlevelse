@@ -19,6 +19,8 @@ import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDok
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravRepo;
 import no.nav.data.etterlevelse.krav.domain.Regelverk;
+import no.nav.data.etterlevelse.virkemiddel.domain.Virkemiddel;
+import no.nav.data.etterlevelse.virkemiddel.domain.VirkemiddelRepo;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,13 +44,16 @@ public class CodeUsageService {
     private final KravRepo kravRepo;
     private final EtterlevelseDokumentasjonRepo etterlevelseDokumentasjonRepo;
     private final BehandlingRepo behandlingRepo;
+    private final VirkemiddelRepo virkemiddelRepo;
+
     private final Summary summary;
     private final CodelistService codelistService;
 
-    public CodeUsageService(KravRepo kravRepo, EtterlevelseDokumentasjonRepo etterlevelseDokumentasjonRepo, BehandlingRepo behandlingRepo, @Lazy CodelistService codelistService) {
+    public CodeUsageService(KravRepo kravRepo, EtterlevelseDokumentasjonRepo etterlevelseDokumentasjonRepo, BehandlingRepo behandlingRepo, VirkemiddelRepo virkemiddelRepo, @Lazy CodelistService codelistService) {
         this.kravRepo = kravRepo;
         this.etterlevelseDokumentasjonRepo = etterlevelseDokumentasjonRepo;
         this.behandlingRepo = behandlingRepo;
+        this.virkemiddelRepo = virkemiddelRepo;
         this.codelistService = codelistService;
         List<String[]> listnames = Stream.of(ListName.values()).map(e -> new String[]{e.name()}).collect(toList());
         this.summary = MetricUtils.summary()
@@ -85,6 +90,7 @@ public class CodeUsageService {
             codeUsage.setKrav(findKrav(listName, code));
             codeUsage.setEtterlevelseDokumentasjoner(findEtterlevelseDokumentasjoner(listName, code));
             codeUsage.setBehandlinger(findBehandlinger(listName, code));
+            codeUsage.setVirkemidler(findVirkemiddel(listName, code));
             codeUsage.setCodelist(findCodelists(listName, code));
             return codeUsage;
         });
@@ -107,6 +113,7 @@ public class CodeUsageService {
                 }
                 case LOV -> usage.getKrav().forEach(gs -> gs.asType(k -> replaceLov(oldCode, newCode, k.getRegelverk()), Krav.class));
                 case TEMA -> usage.getCodelist().forEach(c -> codelistService.replaceDataField(c, "tema", oldCode, newCode));
+                case VIRKEMIDDELTYPE -> usage.getVirkemidler().forEach(gs -> gs.asType(v -> v.setVirkemiddelType(newCode), Virkemiddel.class));
             }
         }
         if (!usage.getCodelist().isEmpty()) {
@@ -129,6 +136,13 @@ public class CodeUsageService {
             case LOV -> kravRepo.findByLov(code);
             case TEMA -> List.of();
             case VIRKEMIDDELTYPE -> List.of();
+        };
+    }
+
+    private List<GenericStorage> findVirkemiddel(ListName listName, String code) {
+        return switch (listName) {
+            case VIRKEMIDDELTYPE -> virkemiddelRepo.findByVirkemiddelType(code);
+            case TEMA, RELEVANS, AVDELING, UNDERAVDELING, LOV -> List.of();
         };
     }
 
