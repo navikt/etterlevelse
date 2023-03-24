@@ -32,6 +32,7 @@ import {MyEtterlevelseDokumentasjonerPage} from "./pages/MyEtterlevelseDokumenta
 import {DokumentasjonPage} from './pages/DokumentasjonPage'
 import {EtterlevelseDokumentasjonTemaPage} from "./pages/EtterlevelseDokumentasjonTemaPage";
 import { EtterlevelseDokumentasjonPageV2 } from './pages/EtterlevelseDokumentasjonPageV2'
+import { VirkemiddelListPage } from './pages/VirkemiddelListPage'
 
 const AppRoutes = (): JSX.Element => {
   return (
@@ -43,7 +44,9 @@ const AppRoutes = (): JSX.Element => {
         <Route path="/kravliste/:tab" element={<PrivateRoute component={<KravListPage/>} kraveierPage/>} caseSensitive={true}/>
         <Route path="/kravliste/" element={<PrivateRoute component={<KravListPage/>} kraveierPage/>} caseSensitive={true}/>
         <Route path="/krav/:id" element={<KravPage/>} caseSensitive={true}/>
-        <Route path="/krav/:kravNummer/:kravVersjon" element={<KravPage/>} caseSensitive={true}/>
+        <Route path="/krav/:kravNummer/:kravVersjon" element={<KravPage />} caseSensitive={true} />
+        
+        <Route path="/virkemiddelliste/" element={<PrivateRoute component={<VirkemiddelListPage/>} kraveierPage/>} caseSensitive={true}/>
 
         <Route path="/etterlevelse" element={<PrivateRoute component={<EtterlevelseListPage/>} adminPage/>} caseSensitive={true}/>
         <Route path="/etterlevelse/:id" element={<EtterlevelsePage/>} caseSensitive={true}/>
