@@ -45,7 +45,7 @@ public class CodeUsage {
     public CodeUsageResponse toResponse() {
         CodeUsageResponse response = new CodeUsageResponse(listName, code, shortName);
         response.setKrav(convert(krav, k -> k.toKrav().convertToInstanceId()));
-        response.setKrav(convert(etterlevelseDokumentasjoner, ed -> ed.toEtterlevelseDokumentasjon().convertToInstanceId()));
+        response.setEtterlevelseDokumentasjoner(convert(etterlevelseDokumentasjoner, ed -> ed.toEtterlevelseDokumentasjon().convertToInstanceId()));
         response.setBehandlinger(convert(behandlinger, b -> b.toBehandlingData().convertToInstanceId()));
         response.setVirkemidler(convert(virkemidler, v -> v.toVirkemiddel().convertToInstanceId()));
         response.setCodelist(convert(codelist, Codelist::toResponse));

@@ -134,8 +134,7 @@ public class CodeUsageService {
             case AVDELING -> kravRepo.findByAvdeling(code);
             case UNDERAVDELING -> kravRepo.findByUnderavdeling(code);
             case LOV -> kravRepo.findByLov(code);
-            case TEMA -> List.of();
-            case VIRKEMIDDELTYPE -> List.of();
+            case TEMA, VIRKEMIDDELTYPE -> List.of();
         };
     }
 

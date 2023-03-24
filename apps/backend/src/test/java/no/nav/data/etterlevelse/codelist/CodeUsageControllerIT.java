@@ -98,7 +98,7 @@ public class CodeUsageControllerIT extends IntegrationTestBase {
                 "AVDELING,AVD1,1,0",
                 "UNDERAVDELING,UNDAVD1,1,1",
                 "LOV,ARKIV,1,0",
-                "TEMA,ARKIV_TEMA,0,1"
+                "TEMA,ARKIV_TEMA,0,1",
         })
         void replaceCodelistUsage(String list, String code, int krav, int codelist) {
             String newCode = "REPLACECODE";
