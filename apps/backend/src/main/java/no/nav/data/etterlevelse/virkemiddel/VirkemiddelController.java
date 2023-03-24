@@ -8,13 +8,22 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
+import no.nav.data.etterlevelse.codelist.CodelistService;
+import no.nav.data.etterlevelse.codelist.domain.ListName;
 import no.nav.data.etterlevelse.virkemiddel.domain.Virkemiddel;
 import no.nav.data.etterlevelse.virkemiddel.dto.VirkemiddelRequest;
 import no.nav.data.etterlevelse.virkemiddel.dto.VirkemiddelResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.Objects;
@@ -31,6 +40,8 @@ public class VirkemiddelController {
 
     private final VirkemiddelService service;
 
+    private final CodelistService codelistService;
+
     @Operation(summary = "Get All Virkemiddel")
     @ApiResponse(description = "ok")
     @GetMapping
@@ -46,6 +57,17 @@ public class VirkemiddelController {
     public ResponseEntity<VirkemiddelResponse> getById(@PathVariable UUID id) {
         log.info("Get Virkemiddel id={}", id);
         return ResponseEntity.ok(service.get(id).toResponse());
+    }
+
+    @Operation(summary = "Get virkemiddel by virkemiddel type")
+    @ApiResponse(description = "Virkemiddel fetched")
+    @GetMapping("/virkemiddeltype/{name}")
+    public ResponseEntity<RestResponsePage<VirkemiddelResponse>> getVirkemiddelByVirkemiddelType(@PathVariable String code) {
+        log.info("Received request for Virkemiddel with the virkemiddeltype like {}", code);
+        codelistService.validateListNameAndCode(ListName.VIRKEMIDDELTYPE.name(), code);
+        var virkemiddel = service.getByVirkemiddelType(code);
+        log.info("Returned {} virkemiddel", virkemiddel.size());
+        return new ResponseEntity<>(new RestResponsePage<>(convert(virkemiddel, Virkemiddel::toResponse)), HttpStatus.OK);
     }
 
     @Operation(summary = "Search virkemiddel")

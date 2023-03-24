@@ -37,6 +37,10 @@ public class VirkemiddelService extends DomainService<Virkemiddel> {
         return convert(byNameContaining, GenericStorage::toVirkemiddel);
     }
 
+    public List<Virkemiddel> getByVirkemiddelType(String code) {
+        return convert(virkemiddelRepo.findByVirkemiddelType(code), GenericStorage::toVirkemiddel);
+    }
+
     public Virkemiddel save(VirkemiddelRequest request) {
         Validator.validate(request, storage)
                 .addValidations(this::validateName)
