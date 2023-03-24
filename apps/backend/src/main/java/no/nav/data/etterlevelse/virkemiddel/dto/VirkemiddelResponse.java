@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import no.nav.data.common.rest.ChangeStampResponse;
+import no.nav.data.etterlevelse.codelist.dto.CodelistResponse;
 import no.nav.data.etterlevelse.krav.dto.RegelverkResponse;
 
 import java.util.List;
@@ -22,6 +23,7 @@ public class VirkemiddelResponse {
     private ChangeStampResponse changeStamp;
     private Integer version;
     private String navn;
+    private CodelistResponse virkemiddelType;
     private List<RegelverkResponse> regelverk;
     private String livsSituasjon;
 }
