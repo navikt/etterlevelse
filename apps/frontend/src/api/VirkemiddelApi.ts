@@ -30,6 +30,10 @@ export const deleteVirkemiddel = async (id: string) => {
   return (await axios.delete<Virkemiddel>(`${env.backendBaseUrl}/virkemiddel/${id}`)).data
 }
 
+export const getVirkemiddelByVirkemiddelType = async (code: string) => {
+  return (await axios.get<PageResponse<Virkemiddel>>(`${env.backendBaseUrl}/virkemiddel/virkemiddeltype/${code}`)).data.content
+}
+
 export const searchVirkemiddel = async (name: string) => {
   return (await axios.get<PageResponse<Virkemiddel>>(`${env.backendBaseUrl}/virkemiddel/search/${name}`)).data.content
 }
