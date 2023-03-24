@@ -88,6 +88,14 @@ export interface Krav extends DomainObject {
   aktivertDato: string
 }
 
+export interface Virkemiddel extends DomainObject {
+  id: string
+  navn: string
+  regelverk: Regelverk[]
+  virkemiddelType?: Code
+  livsSituasjon: string
+}
+
 export interface EtterlevelseMetadata extends DomainObject {
   id: string
   kravNummer: number
