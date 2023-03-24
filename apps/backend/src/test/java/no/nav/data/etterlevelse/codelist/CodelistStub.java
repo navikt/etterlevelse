@@ -13,6 +13,7 @@ public class CodelistStub {
         add(ListName.UNDERAVDELING, "UNDERAVDELING", "Underavdeling");
         add(ListName.LOV, "ARKIV", "Arkivloven");
         add(ListName.TEMA, "PERSONVERN", "Personvern");
+        add(ListName.VIRKEMIDDELTYPE, "YTELSE", "Ytelse");
     }
 
     private static void add(ListName source, String code, String name) {
