@@ -341,6 +341,11 @@ export enum KravListFilter {
   STATUS = 'STATUS',
 }
 
+export enum VirkemiddelListFilter {
+  VIRKEMIDDELTYPE = 'VIRKEMIDDELTYPE',
+  SORTDATE = 'SORTDATE',
+}
+
 export enum EtterlevelseArkivStatus {
   TIL_ARKIVERING = 'TIL_ARKIVERING',
   BEHANDLER_ARKIVERING = 'BEHANDLER_ARKIVERING',

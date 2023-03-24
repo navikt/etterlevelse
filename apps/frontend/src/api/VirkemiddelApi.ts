@@ -49,16 +49,6 @@ export const updateVirkemiddel = async (virkemiddel: Virkemiddel) => {
   return (await axios.put<Virkemiddel>(`${env.backendBaseUrl}/virkemiddel/${virkemiddel.id}`, dto)).data
 }
 
-function virkemiddelToVirkemiddelDto(virkemiddel: Virkemiddel): Virkemiddel {
-  const dto = {
-    ...virkemiddel,
-    virkemiddelType: virkemiddel.virkemiddelType?.code,
-  } as any
-  delete dto.changeStamp
-  delete dto.version
-  return dto
-}
-
 export const useVirkemiddelPage = (pageSize: number) => {
   const [data, setData] = useState<PageResponse<Virkemiddel>>(emptyPage)
   const [page, setPage] = useState<number>(0)
@@ -97,13 +87,13 @@ export const useSearchVirkemiddel = () => {
   const [loading, setLoading] = useState<boolean>(false)
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       if (search && search.length > 2) {
         setLoading(true)
 
-          await searchVirkemiddel(search).then((res) => {
-            setSearchResult(res)
-          })
+        await searchVirkemiddel(search).then((res) => {
+          setSearchResult(res)
+        })
 
         setLoading(false)
       } else {
@@ -115,6 +105,49 @@ export const useSearchVirkemiddel = () => {
   return [searchResult, setSearch, loading] as [Virkemiddel[], React.Dispatch<React.SetStateAction<string>>, boolean]
 }
 
+export const useVirkemiddelFilter = () => {
+  const [data, setData] = useState<Virkemiddel[]>([])
+  const [totalDataLength, setTotalDataLenght] = useState<number>(0)
+  const [virkemiddelTypeFilter, setVirkemiddelTypeFilter] = useState<string>('')
+  const [sortDate,SetSortDate] = useState<string>('')
+  const [loading, setLoading] = useState<boolean>(false)
+
+  useEffect(() => {
+    ; (async () => {
+      setLoading(true)
+      let allVirkemiddel = await getAllVirkemiddel()
+      setTotalDataLenght(allVirkemiddel.length)
+
+      if(virkemiddelTypeFilter && virkemiddelTypeFilter !== 'alle') {
+        allVirkemiddel = allVirkemiddel.filter((v) => v.virkemiddelType?.code === virkemiddelTypeFilter)
+      }
+      if(sortDate && (sortDate === 'ASC' || sortDate === 'DESC')) {
+        if(sortDate === 'ASC') {
+          allVirkemiddel.sort((a, b) => (a.changeStamp.lastModifiedDate > b.changeStamp.lastModifiedDate ? -1 : 0))
+        }else if(sortDate === 'DESC'){
+          allVirkemiddel.sort((a, b) => (a.changeStamp.lastModifiedDate > b.changeStamp.lastModifiedDate ? 1 : 0))
+        }
+      } else if (!sortDate || sortDate === '') {
+        allVirkemiddel.sort((a, b) => (a.navn > b.navn ? -1 : 0))
+      }
+
+      setData(allVirkemiddel)
+      setLoading(false)
+    })()
+  }, [virkemiddelTypeFilter, sortDate])
+  return [data, totalDataLength, setVirkemiddelTypeFilter, SetSortDate,loading] as [Virkemiddel[], number, React.Dispatch<React.SetStateAction<string>>, React.Dispatch<React.SetStateAction<string>>, boolean]
+}
+
+function virkemiddelToVirkemiddelDto(virkemiddel: Virkemiddel): Virkemiddel {
+  const dto = {
+    ...virkemiddel,
+    virkemiddelType: virkemiddel.virkemiddelType?.code,
+  } as any
+  delete dto.changeStamp
+  delete dto.version
+  return dto
+}
+
 export const virkemiddelMapToFormVal = (virkemiddel: Partial<Virkemiddel>): Virkemiddel => ({
   id: virkemiddel.id || '',
   navn: virkemiddel.navn || '',
@@ -124,4 +157,3 @@ export const virkemiddelMapToFormVal = (virkemiddel: Partial<Virkemiddel>): Virk
   virkemiddelType: virkemiddel.virkemiddelType,
   livsSituasjon: virkemiddel.livsSituasjon || '',
 })
-
