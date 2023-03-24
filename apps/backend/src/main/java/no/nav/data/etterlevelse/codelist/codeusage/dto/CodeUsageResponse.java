@@ -22,7 +22,7 @@ public class CodeUsageResponse {
     private boolean inUse;
 
     private List<InstanceId> krav = new ArrayList<>();
-
+    private List<InstanceId> etterlevelseDokumentasjoner = new ArrayList<>();
     private List<InstanceId> behandlinger = new ArrayList<>();
     private List<InstanceId> virkemidler = new ArrayList<>();
 

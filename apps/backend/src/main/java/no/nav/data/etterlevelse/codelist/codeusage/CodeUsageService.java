@@ -14,6 +14,8 @@ import no.nav.data.etterlevelse.codelist.codeusage.dto.CodeUsage;
 import no.nav.data.etterlevelse.codelist.codeusage.dto.CodeUsageRequest;
 import no.nav.data.etterlevelse.codelist.domain.Codelist;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonRepo;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravRepo;
 import no.nav.data.etterlevelse.krav.domain.Regelverk;
@@ -28,7 +30,9 @@ import java.util.stream.Stream;
 
 import static java.util.Collections.replaceAll;
 import static java.util.stream.Collectors.toList;
-import static no.nav.data.common.utils.StreamUtils.*;
+import static no.nav.data.common.utils.StreamUtils.convert;
+import static no.nav.data.common.utils.StreamUtils.filter;
+import static no.nav.data.common.utils.StreamUtils.safeStream;
 import static no.nav.data.etterlevelse.codelist.CodelistService.getCodelist;
 
 @Service
@@ -36,12 +40,14 @@ import static no.nav.data.etterlevelse.codelist.CodelistService.getCodelist;
 public class CodeUsageService {
 
     private final KravRepo kravRepo;
+    private final EtterlevelseDokumentasjonRepo etterlevelseDokumentasjonRepo;
     private final BehandlingRepo behandlingRepo;
     private final Summary summary;
     private final CodelistService codelistService;
 
-    public CodeUsageService(KravRepo kravRepo, BehandlingRepo behandlingRepo, @Lazy CodelistService codelistService) {
+    public CodeUsageService(KravRepo kravRepo, EtterlevelseDokumentasjonRepo etterlevelseDokumentasjonRepo, BehandlingRepo behandlingRepo, @Lazy CodelistService codelistService) {
         this.kravRepo = kravRepo;
+        this.etterlevelseDokumentasjonRepo = etterlevelseDokumentasjonRepo;
         this.behandlingRepo = behandlingRepo;
         this.codelistService = codelistService;
         List<String[]> listnames = Stream.of(ListName.values()).map(e -> new String[]{e.name()}).collect(toList());
@@ -77,6 +83,7 @@ public class CodeUsageService {
         return summary.labels(listName.name()).time(() -> {
             CodeUsage codeUsage = new CodeUsage(listName, code, codelist.getShortName());
             codeUsage.setKrav(findKrav(listName, code));
+            codeUsage.setEtterlevelseDokumentasjoner(findEtterlevelseDokumentasjoner(listName, code));
             codeUsage.setBehandlinger(findBehandlinger(listName, code));
             codeUsage.setCodelist(findCodelists(listName, code));
             return codeUsage;
@@ -90,6 +97,7 @@ public class CodeUsageService {
             switch (listName) {
                 case RELEVANS -> {
                     usage.getKrav().forEach(gs -> gs.asType(k -> replaceAll(k.getRelevansFor(), oldCode, newCode), Krav.class));
+                    usage.getEtterlevelseDokumentasjoner().forEach(gs -> gs.asType(ed -> replaceAll(ed.getIrrelevansFor(), oldCode, newCode), EtterlevelseDokumentasjon.class));
                     usage.getBehandlinger().forEach(gs -> gs.asType(bd -> replaceAll(bd.getIrrelevansFor(), oldCode, newCode), BehandlingData.class));
                 }
                 case AVDELING -> usage.getKrav().forEach(gs -> gs.asType(k -> k.setAvdeling(newCode), Krav.class));
@@ -121,6 +129,13 @@ public class CodeUsageService {
             case LOV -> kravRepo.findByLov(code);
             case TEMA -> List.of();
             case VIRKEMIDDELTYPE -> List.of();
+        };
+    }
+
+    private List<GenericStorage> findEtterlevelseDokumentasjoner(ListName listName, String code) {
+        return switch (listName) {
+            case RELEVANS -> etterlevelseDokumentasjonRepo.findByIrrelevans(List.of(code));
+            case AVDELING, UNDERAVDELING, LOV, TEMA, VIRKEMIDDELTYPE -> List.of();
         };
     }
 
