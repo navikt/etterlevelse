@@ -61,7 +61,7 @@ public class VirkemiddelController {
 
     @Operation(summary = "Get virkemiddel by virkemiddel type")
     @ApiResponse(description = "Virkemiddel fetched")
-    @GetMapping("/virkemiddeltype/{name}")
+    @GetMapping("/virkemiddeltype/{code}")
     public ResponseEntity<RestResponsePage<VirkemiddelResponse>> getVirkemiddelByVirkemiddelType(@PathVariable String code) {
         log.info("Received request for Virkemiddel with the virkemiddeltype like {}", code);
         codelistService.validateListNameAndCode(ListName.VIRKEMIDDELTYPE.name(), code);
