@@ -42,9 +42,6 @@ export const VirkemiddelListPage = () => {
         display={'flex'}
         justifyContent="center"
         width="100%"
-        $style={{
-          background: `linear-gradient(top, ${ettlevColors.grey50} 80px, ${ettlevColors.grey25} 0%)`,
-        }}
       >
         <Block maxWidth={maxPageWidth} width="100%">
           <Block paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge} paddingTop={theme.sizing.scale800}>
