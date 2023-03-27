@@ -54,18 +54,17 @@ export const useEtterlevelseDokumentasjon = (etterlevelseDokumentasjonId?: strin
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   useEffect(() => {
-
     let behandling: any = {}
     let teamsData: Team[] = []
 
     setIsLoading(true)
     if (etterlevelseDokumentasjonId && !isCreateNew) {
       getEtterlevelseDokumentasjon(etterlevelseDokumentasjonId).then(async (etterlevelseDokumentasjon) => {
-
         if (etterlevelseDokumentasjon.behandlingId) {
-          await getBehandling(etterlevelseDokumentasjon.behandlingId).then((behandlingResponse) => behandling = behandlingResponse)
-        } if (etterlevelseDokumentasjon.teams.length > 0) {
-          await getTeams(etterlevelseDokumentasjon.teams).then((teamsResponse) => teamsData = teamsResponse)
+          await getBehandling(etterlevelseDokumentasjon.behandlingId).then((behandlingResponse) => (behandling = behandlingResponse))
+        }
+        if (etterlevelseDokumentasjon.teams.length > 0) {
+          await getTeams(etterlevelseDokumentasjon.teams).then((teamsResponse) => (teamsData = teamsResponse))
         }
 
         setData({ ...etterlevelseDokumentasjon, behandling: behandling, teamsData: teamsData })
@@ -74,10 +73,10 @@ export const useEtterlevelseDokumentasjon = (etterlevelseDokumentasjonId?: strin
     } else if (behandlingId) {
       searchEtterlevelsedokumentasjonByBehandlingId(behandlingId).then(async (etterlevelseDokumentasjon) => {
         if (etterlevelseDokumentasjon) {
-          await getBehandling(behandlingId).then((behandlingResponseData) => behandling = behandlingResponseData)
+          await getBehandling(behandlingId).then((behandlingResponseData) => (behandling = behandlingResponseData))
 
           if (etterlevelseDokumentasjon[0].teams.length > 0) {
-            getTeams(etterlevelseDokumentasjon[0].teams).then((teamsResponseData) => teamsData = teamsResponseData )
+            getTeams(etterlevelseDokumentasjon[0].teams).then((teamsResponseData) => (teamsData = teamsResponseData))
           }
 
           setData({ ...etterlevelseDokumentasjon[0], behandling: behandling, teamsData: teamsData })
@@ -111,5 +110,5 @@ export const etterlevelseDokumentasjonMapToFormVal = (etterlevelseDokumentasjon:
   irrelevansFor: etterlevelseDokumentasjon.irrelevansFor || [],
   etterlevelseNummer: etterlevelseDokumentasjon.etterlevelseNummer || 0,
   teams: etterlevelseDokumentasjon.teams || [],
-  teamsData: etterlevelseDokumentasjon.teamsData || []
+  teamsData: etterlevelseDokumentasjon.teamsData || [],
 })

@@ -335,7 +335,15 @@ export const behandlingKravQuery = gql`
 
 export const etterlevelseDokumentasjonKravQuery = gql`
   query getKravByFilter($etterlevelseDokumentasjonId: String, $lover: [String!], $gjeldendeKrav: Boolean, $etterlevelseDokumentasjonIrrevantKrav: Boolean, $status: [String!]) {
-    krav(filter: { etterlevelseDokumentasjonId: $etterlevelseDokumentasjonId, lover: $lover, gjeldendeKrav: $gjeldendeKrav, etterlevelseDokumentasjonIrrevantKrav: $etterlevelseDokumentasjonIrrevantKrav, status: $status }) {
+    krav(
+      filter: {
+        etterlevelseDokumentasjonId: $etterlevelseDokumentasjonId
+        lover: $lover
+        gjeldendeKrav: $gjeldendeKrav
+        etterlevelseDokumentasjonIrrevantKrav: $etterlevelseDokumentasjonIrrevantKrav
+        status: $status
+      }
+    ) {
       content {
         id
         navn

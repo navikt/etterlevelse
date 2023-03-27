@@ -180,7 +180,15 @@ const DokumentasjonTabs = () => {
   )
 }
 
-const MineEtterlevelseDokumentasjoner = ({ etterlevelseDokumentasjoner, teams, loading }: { etterlevelseDokumentasjoner: EtterlevelseDokumentasjonQL[]; teams: CustomTeamObject[]; loading: boolean }) => {
+const MineEtterlevelseDokumentasjoner = ({
+  etterlevelseDokumentasjoner,
+  teams,
+  loading,
+}: {
+  etterlevelseDokumentasjoner: EtterlevelseDokumentasjonQL[]
+  teams: CustomTeamObject[]
+  loading: boolean
+}) => {
   if (loading)
     return (
       <>
@@ -194,7 +202,8 @@ const MineEtterlevelseDokumentasjoner = ({ etterlevelseDokumentasjoner, teams, l
       {!etterlevelseDokumentasjoner.length && !teams.length && <ParagraphSmall>Du er ikke medlem av team med registrerte dokumentasjoner</ParagraphSmall>}
 
       {teams.map((t) => {
-        const teamDokumentasjoner = etterlevelseDokumentasjoner.filter((e) => e.teamsData?.find((t2) => t2.id === t.id))
+        const teamDokumentasjoner = etterlevelseDokumentasjoner
+          .filter((e) => e.teamsData?.find((t2) => t2.id === t.id))
           .filter((value, index, self) => index === self.findIndex((etterlevelseDokumentasjon) => etterlevelseDokumentasjon.id === value.id))
         return (
           <Block key={t.id} marginBottom={theme.sizing.scale900}>
@@ -340,7 +349,7 @@ const Alle = () => {
             // EndEnhancer: {style: {marginLeft: theme.sizing.scale400, paddingLeft: 0, paddingRight: 0, backgroundColor: ettlevColors.black}}
           }}
           startEnhancer={<img src={searchIcon} alt="Søk ikon" />}
-        // endEnhancer={<img aria-hidden alt={'Søk ikon'} src={sokButtonIcon} />}
+          // endEnhancer={<img aria-hidden alt={'Søk ikon'} src={sokButtonIcon} />}
         />
         {tooShort && (
           <LabelSmall color={ettlevColors.error400} alignSelf={'flex-end'} marginTop={theme.sizing.scale200}>

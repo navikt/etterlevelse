@@ -82,7 +82,8 @@ export const EtterlevelseDokumentasjonPageV2 = () => {
             <Helmet>
               <meta charSet="utf-8" />
               <title>
-                K{kravId?.kravNummer?.toString()}.{kravId?.kravVersjon?.toString()} {temaData?.shortName} E{etterlevelseDokumentasjon.etterlevelseNummer.toString()} {etterlevelseDokumentasjon.title.toString()}
+                K{kravId?.kravNummer?.toString()}.{kravId?.kravVersjon?.toString()} {temaData?.shortName} E{etterlevelseDokumentasjon.etterlevelseNummer.toString()}{' '}
+                {etterlevelseDokumentasjon.title.toString()}
               </title>
             </Helmet>,
           )}

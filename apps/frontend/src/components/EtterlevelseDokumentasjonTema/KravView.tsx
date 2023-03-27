@@ -28,7 +28,7 @@ export const KravView = (props: {
   const [tidligereEtterlevelser, setTidligereEtterlevelser] = React.useState<Etterlevelse[]>()
 
   useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       setLoadingEtterlevelseData(true)
       if (props.kravId.kravNummer && props.kravId.kravVersjon) {
         const krav = await getKravByKravNumberAndVersion(props.kravId.kravNummer, props.kravId.kravVersjon)

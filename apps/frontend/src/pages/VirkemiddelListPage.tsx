@@ -1,5 +1,5 @@
 import { Block, Responsive } from 'baseui/block'
-import { HeadingXXLarge} from 'baseui/typography'
+import { HeadingXXLarge } from 'baseui/typography'
 import React, { useEffect, useState } from 'react'
 import Button from '../components/common/Button'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
@@ -15,7 +15,6 @@ import { Helmet } from 'react-helmet'
 import { ampli } from '../services/Amplitude'
 import { AllVirkemiddel } from '../components/virkemiddelList/AllVirkemiddel'
 import { EditVirkemiddelModal } from '../components/virkemiddel/edit/EditVirkemiddelModal'
-
 
 export const VirkemiddelListPage = () => {
   ampli.logEvent('sidevisning', { side: 'Kraveier side', sidetittel: 'Forvalte og opprette virkemiddel' })
@@ -35,20 +34,14 @@ export const VirkemiddelListPage = () => {
                 <HeadingXXLarge marginTop="0">Forvalte og opprette virkemiddel</HeadingXXLarge>
               </Block>
               <Block display="flex" justifyContent="flex-end">
-                {user.isKraveier() && 
-                  <EditVirkemiddelModal />
-                }
+                {user.isKraveier() && <EditVirkemiddelModal />}
               </Block>
             </Block>
           </Block>
         </Block>
       </Block>
 
-      <Block
-        display={'flex'}
-        justifyContent="center"
-        width="100%"
-      >
+      <Block display={'flex'} justifyContent="center" width="100%">
         <Block maxWidth={maxPageWidth} width="100%">
           <Block paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge} paddingTop={theme.sizing.scale800}>
             <AllVirkemiddel />

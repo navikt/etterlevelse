@@ -1,27 +1,27 @@
-import React, {useRef, useState} from 'react'
-import {Block} from 'baseui/block'
-import {useNavigate, useParams} from 'react-router-dom'
-import {LoadingSkeleton} from '../components/common/LoadingSkeleton'
-import {HeadingXLarge, LabelSmall, ParagraphMedium, ParagraphXSmall} from 'baseui/typography'
-import {FormikProps} from 'formik'
-import {ettlevColors, theme} from '../util/theme'
-import {Layout2} from '../components/scaffold/Page'
-import {arkPennIcon, ellipse80, saveArchiveIcon, warningAlert} from '../components/Images'
-import {EtterlevelseDokumentasjonQL, EtterlevelseDokumentasjonStats, KravQL, KravStatus, PageResponse} from '../constants'
-import {gql, useQuery} from '@apollo/client'
-import {Code, codelist, ListName} from '../services/Codelist'
-import {Button, KIND, SIZE} from 'baseui/button'
-import {marginZero} from '../components/common/Style'
-import {breadcrumbPaths} from '../components/common/CustomizedBreadcrumbs'
+import React, { useRef, useState } from 'react'
+import { Block } from 'baseui/block'
+import { useNavigate, useParams } from 'react-router-dom'
+import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
+import { HeadingXLarge, LabelSmall, ParagraphMedium, ParagraphXSmall } from 'baseui/typography'
+import { FormikProps } from 'formik'
+import { ettlevColors, theme } from '../util/theme'
+import { Layout2 } from '../components/scaffold/Page'
+import { arkPennIcon, ellipse80, saveArchiveIcon, warningAlert } from '../components/Images'
+import { EtterlevelseDokumentasjonQL, EtterlevelseDokumentasjonStats, KravQL, KravStatus, PageResponse } from '../constants'
+import { gql, useQuery } from '@apollo/client'
+import { Code, codelist, ListName } from '../services/Codelist'
+import { Button, KIND, SIZE } from 'baseui/button'
+import { marginZero } from '../components/common/Style'
+import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 
-import {ampli} from '../services/Amplitude'
-import {getMainHeader, getNewestKravVersjon, responsiveDisplayEtterlevelseDokumentasjonPage} from '../components/etterlevelseDokumentasjon/common/utils'
-import {user} from '../services/User'
-import {useArkiveringByEtterlevelseDokumentasjonId} from '../api/ArkiveringApi'
-import {useEtterlevelseDokumentasjon} from '../api/EtterlevelseDokumentasjonApi'
-import {TemaCardEtterlevelseDokumentasjon} from '../components/etterlevelseDokumentasjon/TemaCardEtterlevelseDokumentasjon'
+import { ampli } from '../services/Amplitude'
+import { getMainHeader, getNewestKravVersjon, responsiveDisplayEtterlevelseDokumentasjonPage } from '../components/etterlevelseDokumentasjon/common/utils'
+import { user } from '../services/User'
+import { useArkiveringByEtterlevelseDokumentasjonId } from '../api/ArkiveringApi'
+import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
+import { TemaCardEtterlevelseDokumentasjon } from '../components/etterlevelseDokumentasjon/TemaCardEtterlevelseDokumentasjon'
 import EditEtterlevelseDokumentasjonModal from '../components/etterlevelseDokumentasjon/edit/EditEtterlevelseDokumentasjonModal'
-import {ArkiveringModal} from '../components/etterlevelseDokumentasjon/ArkiveringModal'
+import { ArkiveringModal } from '../components/etterlevelseDokumentasjon/ArkiveringModal'
 import ExportEtterlevelseModalV2 from '../components/export/ExportEtterlevelseModalV2'
 import { isFerdigUtfylt } from './EtterlevelseDokumentasjonTemaPage'
 
@@ -45,7 +45,7 @@ export const DokumentasjonPage = () => {
   const filterData = (
     unfilteredData:
       | {
-        etterlevelseDokumentasjon: PageResponse<{
+          etterlevelseDokumentasjon: PageResponse<{
             stats: EtterlevelseDokumentasjonStats
           }>
         }
@@ -108,7 +108,10 @@ export const DokumentasjonPage = () => {
   React.useEffect(() => {
     setTimeout(() => refetchRelevanteData(), 200)
     if (etterlevelseDokumentasjon) {
-      ampli.logEvent('sidevisning', { side: 'Etterlevelse Dokumentasjon Page', sidetittel: `E${etterlevelseDokumentasjon.etterlevelseNummer.toString()} ${etterlevelseDokumentasjon.title}` })
+      ampli.logEvent('sidevisning', {
+        side: 'Etterlevelse Dokumentasjon Page',
+        sidetittel: `E${etterlevelseDokumentasjon.etterlevelseNummer.toString()} ${etterlevelseDokumentasjon.title}`,
+      })
     }
   }, [etterlevelseDokumentasjon])
 
@@ -145,12 +148,7 @@ export const DokumentasjonPage = () => {
           {!etterlevelseDokumentasjon.irrelevansFor.length ? getRelevans() : getRelevans(etterlevelseDokumentasjon.irrelevansFor)}
         </Block>
         <Block display="flex" flex="1" justifyContent="flex-end" $style={{ whiteSpace: 'nowrap' }}>
-
-        <EditEtterlevelseDokumentasjonModal
-          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-          setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
-          isEditButton
-        />
+          <EditEtterlevelseDokumentasjonModal etterlevelseDokumentasjon={etterlevelseDokumentasjon} setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon} isEditButton />
         </Block>
       </Block>
     )
@@ -262,9 +260,15 @@ export const DokumentasjonPage = () => {
       >
         <Block backgroundColor={ettlevColors.grey50} marginTop={theme.sizing.scale800}></Block>
         {getRelevansContent(etterlevelseDokumentasjon)}
-         <Block display="flex" width="100%" justifyContent="space-between" flexWrap marginTop={theme.sizing.scale550}>
+        <Block display="flex" width="100%" justifyContent="space-between" flexWrap marginTop={theme.sizing.scale550}>
           {temaListe.map((tema) => (
-            <TemaCardEtterlevelseDokumentasjon tema={tema} stats={relevanteStats} utgaattStats={utgaattStats} etterlevelseDokumentasjon={etterlevelseDokumentasjon} key={`${tema.shortName}_panel`} />
+            <TemaCardEtterlevelseDokumentasjon
+              tema={tema}
+              stats={relevanteStats}
+              utgaattStats={utgaattStats}
+              etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+              key={`${tema.shortName}_panel`}
+            />
           ))}
         </Block>
 
@@ -288,7 +292,6 @@ export const DokumentasjonPage = () => {
   )
 }
 
-
 export const statsQuery = gql`
   query getEtterlevelseDokumentasjonStats($etterlevelseDokumentasjonId: ID) {
     etterlevelseDokumentasjon(filter: { id: $etterlevelseDokumentasjonId }) {
@@ -306,7 +309,7 @@ export const statsQuery = gql`
               kravVersjon
               navn
             }
-            etterlevelser{
+            etterlevelser {
               behandlingId
               status
               etterlevelseDokumentasjonId
@@ -335,7 +338,7 @@ export const statsQuery = gql`
               kravVersjon
               navn
             }
-            etterlevelser{
+            etterlevelser {
               behandlingId
               status
               etterlevelseDokumentasjonId
@@ -364,7 +367,7 @@ export const statsQuery = gql`
               kravVersjon
               navn
             }
-            etterlevelser{
+            etterlevelser {
               behandlingId
               status
               etterlevelseDokumentasjonId

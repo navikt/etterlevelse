@@ -18,14 +18,18 @@ import { clearSearchIcon, searchIcon } from '../Images'
 
 type VirkemiddelFilter = {
   virkemiddelType: Option[]
-  sort: Option[],
+  sort: Option[]
 }
 
 const selectorMarginLeft: Responsive<Scale> = ['0px', '0px', '0px', '12px', '12px', '12px']
 const selectorMarginTop: Responsive<Scale> = ['10px', '10px', '10px', '0px', '0px', '0px']
 
 export const AllVirkemiddel = () => {
-  const getSortDateOptions = [{ label: 'sorter på navn', id: 'navn' }, { label: 'nyest-eldst', id: 'DESC' }, { label: 'eldst-nyest', id: 'ASC' }]
+  const getSortDateOptions = [
+    { label: 'sorter på navn', id: 'navn' },
+    { label: 'nyest-eldst', id: 'DESC' },
+    { label: 'eldst-nyest', id: 'ASC' },
+  ]
   const [filter, setFilter] = useState<VirkemiddelFilter>({
     virkemiddelType: [{ label: 'Alle virkemiddel typer', id: 'alle' }],
     sort: [getSortDateOptions[0]],
@@ -110,9 +114,7 @@ export const AllVirkemiddel = () => {
           </HeadingXLarge>
         </Block>
         <Block display={['block', 'block', 'block', 'block', 'block', 'flex']} justifyContent="center" alignContent="center" width="100%">
-          <Block display="flex" justifyContent="flex-start" width="100%"
-            onMouseEnter={() => setHover(true)}
-            onMouseLeave={() => setHover(false)}>
+          <Block display="flex" justifyContent="flex-start" width="100%" onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
             <StatefulInput
               size="compact"
               placeholder="Søk"
@@ -152,7 +154,6 @@ export const AllVirkemiddel = () => {
               }}
               startEnhancer={<img src={searchIcon} alt="Søk ikon" />}
             />
-
           </Block>
           <Block display="flex" justifyContent="flex-end" width="100%" alignItems="center">
             <Block display={['block', 'block', 'block', 'block', 'flex', 'flex']} alignItems="center" justifyContent="flex-end" width="100%">

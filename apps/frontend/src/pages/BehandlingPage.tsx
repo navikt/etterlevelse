@@ -1,25 +1,25 @@
-import React, {useRef, useState} from 'react'
-import {Block} from 'baseui/block'
-import {useNavigate, useParams} from 'react-router-dom'
-import {LoadingSkeleton} from '../components/common/LoadingSkeleton'
-import {useBehandling} from '../api/BehandlingApi'
-import {HeadingXLarge, LabelSmall, ParagraphMedium, ParagraphXSmall} from 'baseui/typography'
-import {FormikProps} from 'formik'
-import {ettlevColors, theme} from '../util/theme'
-import {Layout2} from '../components/scaffold/Page'
-import {arkPennIcon, editIcon, ellipse80, warningAlert} from '../components/Images'
-import {Behandling, BehandlingEtterlevData, BehandlingStats, KravQL, KravStatus, PageResponse} from '../constants'
-import {useQuery} from '@apollo/client'
-import {Code, codelist, ListName} from '../services/Codelist'
-import {Button} from 'baseui/button'
+import React, { useRef, useState } from 'react'
+import { Block } from 'baseui/block'
+import { useNavigate, useParams } from 'react-router-dom'
+import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
+import { useBehandling } from '../api/BehandlingApi'
+import { HeadingXLarge, LabelSmall, ParagraphMedium, ParagraphXSmall } from 'baseui/typography'
+import { FormikProps } from 'formik'
+import { ettlevColors, theme } from '../util/theme'
+import { Layout2 } from '../components/scaffold/Page'
+import { arkPennIcon, editIcon, ellipse80, warningAlert } from '../components/Images'
+import { Behandling, BehandlingEtterlevData, BehandlingStats, KravQL, KravStatus, PageResponse } from '../constants'
+import { useQuery } from '@apollo/client'
+import { Code, codelist, ListName } from '../services/Codelist'
+import { Button } from 'baseui/button'
 import EditBehandlingModal from '../components/behandling/EditBehandlingModal'
-import {marginZero} from '../components/common/Style'
-import {breadcrumbPaths} from '../components/common/CustomizedBreadcrumbs'
-import {statsQuery} from '../api/KravApi'
-import {TemaCardBehandling} from '../components/behandlingPage/TemaCardBehandling'
-import {isFerdigUtfylt} from './BehandlingTemaPage'
-import {ampli} from '../services/Amplitude'
-import {getMainHeader, getNewestKravVersjon, responsiveDisplayBehandlingPage} from '../components/behandlingPage/common/utils'
+import { marginZero } from '../components/common/Style'
+import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
+import { statsQuery } from '../api/KravApi'
+import { TemaCardBehandling } from '../components/behandlingPage/TemaCardBehandling'
+import { isFerdigUtfylt } from './BehandlingTemaPage'
+import { ampli } from '../services/Amplitude'
+import { getMainHeader, getNewestKravVersjon, responsiveDisplayBehandlingPage } from '../components/behandlingPage/common/utils'
 import ExportEtterlevelseModal from '../components/export/ExportEtterlevelseModal'
 
 export const BehandlingPage = () => {
@@ -164,7 +164,6 @@ export const BehandlingPage = () => {
       </Block>
 
       <Block display="flex" alignItems="center">
-
         <ExportEtterlevelseModal behandlingId={behandling.id} />
 
         <Block display="flex" alignItems="baseline" marginRight="30px">

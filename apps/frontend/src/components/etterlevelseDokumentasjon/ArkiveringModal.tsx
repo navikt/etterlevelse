@@ -1,11 +1,11 @@
-import {ModalBody, ModalHeader} from 'baseui/modal'
-import {Block} from 'baseui/block'
-import {EtterlevelseArkiv, EtterlevelseArkivStatus} from '../../constants'
-import {createEtterlevelseArkiv, updateEtterlevelseArkiv} from '../../api/ArkiveringApi'
-import React, {useState} from 'react'
+import { ModalBody, ModalHeader } from 'baseui/modal'
+import { Block } from 'baseui/block'
+import { EtterlevelseArkiv, EtterlevelseArkivStatus } from '../../constants'
+import { createEtterlevelseArkiv, updateEtterlevelseArkiv } from '../../api/ArkiveringApi'
+import React, { useState } from 'react'
 import moment from 'moment'
 import CustomizedModal from '../common/CustomizedModal'
-import {borderRadius} from '../common/Style'
+import { borderRadius } from '../common/Style'
 import Button from '../common/Button'
 
 type ArkiveringModalProps = {

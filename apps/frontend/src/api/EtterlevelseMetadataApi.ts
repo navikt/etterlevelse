@@ -1,8 +1,8 @@
 import axios from 'axios'
-import {EtterlevelseMetadata, PageResponse} from '../constants'
-import {env} from '../util/env'
-import {useEffect, useState} from 'react'
-import {KravId} from './KravApi'
+import { EtterlevelseMetadata, PageResponse } from '../constants'
+import { env } from '../util/env'
+import { useEffect, useState } from 'react'
+import { KravId } from './KravApi'
 
 export const getAllEtterlevelseMetadata = async () => {
   const PAGE_SIZE = 100
@@ -49,8 +49,16 @@ export const getEtterlevelseMetadataByBehandlingsIdAndKravNummerAndKravVersion =
   return (await axios.get<PageResponse<EtterlevelseMetadata>>(`${env.backendBaseUrl}/etterlevelsemetadata/behandlingId/${behandlingId}/${kravNummer}/${kravVersjon}`)).data
 }
 
-export const getEtterlevelseMetadataByEtterlevelseDokumentasjonAndKravNummerAndKravVersion = async (etterlevelseDokumentasjonId: string, kravNummer: number, kravVersjon: number) => {
-  return (await axios.get<PageResponse<EtterlevelseMetadata>>(`${env.backendBaseUrl}/etterlevelsemetadata/etterlevelseDokumentasjon/${etterlevelseDokumentasjonId}/${kravNummer}/${kravVersjon}`)).data
+export const getEtterlevelseMetadataByEtterlevelseDokumentasjonAndKravNummerAndKravVersion = async (
+  etterlevelseDokumentasjonId: string,
+  kravNummer: number,
+  kravVersjon: number,
+) => {
+  return (
+    await axios.get<PageResponse<EtterlevelseMetadata>>(
+      `${env.backendBaseUrl}/etterlevelsemetadata/etterlevelseDokumentasjon/${etterlevelseDokumentasjonId}/${kravNummer}/${kravVersjon}`,
+    )
+  ).data
 }
 
 export const getEtterlevelseMetadataById = async (id: string) => {

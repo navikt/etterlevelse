@@ -81,7 +81,12 @@ const LoggedInHeader = () => {
     </Block>
   )
 
-  const kravPages = user.isKraveier() ? [{ label: 'Forvalte og opprette krav', href: '/kravliste' }, { label: 'Forvalte og opprette virkemiddel', href: '/virkemiddelliste' }] : []
+  const kravPages = user.isKraveier()
+    ? [
+        { label: 'Forvalte og opprette krav', href: '/kravliste' },
+        { label: 'Forvalte og opprette virkemiddel', href: '/virkemiddelliste' },
+      ]
+    : []
   const adminPages = user.isAdmin()
     ? [
         { label: 'Administrere krav', href: '/admin/krav' },

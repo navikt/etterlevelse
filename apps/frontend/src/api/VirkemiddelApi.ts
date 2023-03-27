@@ -38,7 +38,6 @@ export const searchVirkemiddel = async (name: string) => {
   return (await axios.get<PageResponse<Virkemiddel>>(`${env.backendBaseUrl}/virkemiddel/search/${name}`)).data.content
 }
 
-
 export const createVirkemiddel = async (virkemiddel: Virkemiddel) => {
   const dto = virkemiddelToVirkemiddelDto(virkemiddel)
   return (await axios.post<Virkemiddel>(`${env.backendBaseUrl}/virkemiddel`, dto)).data
@@ -87,7 +86,7 @@ export const useSearchVirkemiddel = () => {
   const [loading, setLoading] = useState<boolean>(false)
 
   useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       if (search && search.length > 2) {
         setLoading(true)
 
@@ -109,22 +108,22 @@ export const useVirkemiddelFilter = () => {
   const [data, setData] = useState<Virkemiddel[]>([])
   const [totalDataLength, setTotalDataLenght] = useState<number>(0)
   const [virkemiddelTypeFilter, setVirkemiddelTypeFilter] = useState<string>('')
-  const [sortDate,SetSortDate] = useState<string>('')
+  const [sortDate, SetSortDate] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(false)
 
   useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       setLoading(true)
       let allVirkemiddel = await getAllVirkemiddel()
       setTotalDataLenght(allVirkemiddel.length)
 
-      if(virkemiddelTypeFilter && virkemiddelTypeFilter !== 'alle') {
+      if (virkemiddelTypeFilter && virkemiddelTypeFilter !== 'alle') {
         allVirkemiddel = allVirkemiddel.filter((v) => v.virkemiddelType?.code === virkemiddelTypeFilter)
       }
-      if(sortDate && (sortDate === 'ASC' || sortDate === 'DESC')) {
-        if(sortDate === 'ASC') {
+      if (sortDate && (sortDate === 'ASC' || sortDate === 'DESC')) {
+        if (sortDate === 'ASC') {
           allVirkemiddel.sort((a, b) => (a.changeStamp.lastModifiedDate > b.changeStamp.lastModifiedDate ? -1 : 0))
-        }else if(sortDate === 'DESC'){
+        } else if (sortDate === 'DESC') {
           allVirkemiddel.sort((a, b) => (a.changeStamp.lastModifiedDate > b.changeStamp.lastModifiedDate ? 1 : 0))
         }
       } else if (!sortDate || sortDate === '') {
@@ -135,7 +134,13 @@ export const useVirkemiddelFilter = () => {
       setLoading(false)
     })()
   }, [virkemiddelTypeFilter, sortDate])
-  return [data, totalDataLength, setVirkemiddelTypeFilter, SetSortDate,loading] as [Virkemiddel[], number, React.Dispatch<React.SetStateAction<string>>, React.Dispatch<React.SetStateAction<string>>, boolean]
+  return [data, totalDataLength, setVirkemiddelTypeFilter, SetSortDate, loading] as [
+    Virkemiddel[],
+    number,
+    React.Dispatch<React.SetStateAction<string>>,
+    React.Dispatch<React.SetStateAction<string>>,
+    boolean,
+  ]
 }
 
 function virkemiddelToVirkemiddelDto(virkemiddel: Virkemiddel): Virkemiddel {

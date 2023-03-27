@@ -108,7 +108,7 @@ export const ExportEtterlevelseModal = (props: ExportEtterlevelseModalProps) => 
                         selectedTema.length > 0
                           ? `${env.backendBaseUrl}/export/etterlevelsedokumentasjon?etterlevelseDokumentasjonId=${props.etterlevelseDokumentasjonId}&temakode=${selectedTema[0].id}`
                           : `${env.backendBaseUrl}/export/etterlevelsedokumentasjon?etterlevelseDokumentasjonId=${props.etterlevelseDokumentasjonId}`
-                      
+
                       axios
                         .get(exportUrl)
                         .then(() => {

@@ -20,9 +20,9 @@ export const getTeam = async (teamId: string) => {
   return data
 }
 
-export const getTeams = async(teamIds: string[]) => {
+export const getTeams = async (teamIds: string[]) => {
   const data: Team[] = []
-   teamIds.forEach(async id => {
+  teamIds.forEach(async (id) => {
     await getTeam(id).then((response) => data.push(response))
   })
   return data

@@ -280,7 +280,6 @@ const KravView = (props: { kravId: KravId; etterlevelse: Etterlevelse; close: Fu
               <ParagraphMedium $style={{ lineHeight: '12px', color: ettlevColors.green50 }}>{props.behandlingNavn}</ParagraphMedium>
             </Block>
           </Block>
-
         </Block>
       )}
     </Block>
