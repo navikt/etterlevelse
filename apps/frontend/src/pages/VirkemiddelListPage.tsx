@@ -14,6 +14,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
 import { ampli } from '../services/Amplitude'
 import { AllVirkemiddel } from '../components/virkemiddelList/AllVirkemiddel'
+import { EditVirkemiddelModal } from '../components/virkemiddel/edit/EditVirkemiddelModal'
 
 
 export const VirkemiddelListPage = () => {
@@ -32,6 +33,11 @@ export const VirkemiddelListPage = () => {
             <Block display="flex">
               <Block flex="1">
                 <HeadingXXLarge marginTop="0">Forvalte og opprette virkemiddel</HeadingXXLarge>
+              </Block>
+              <Block display="flex" justifyContent="flex-end">
+                {user.isKraveier() && 
+                  <EditVirkemiddelModal />
+                }
               </Block>
             </Block>
           </Block>
