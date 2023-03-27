@@ -35,7 +35,7 @@ type EditEtterlevelseDokumentasjonModalProps = {
   isEditButton?: boolean
 }
 
-const selectCustomOverrides: SelectOverrides = {
+export const selectCustomOverrides: SelectOverrides = {
   SearchIcon: {
     component: () => <img src={searchIcon} alt="search icon"/>,
     style: {
