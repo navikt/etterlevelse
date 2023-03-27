@@ -9,7 +9,7 @@ import { InputField, MultiInputField, TextAreaField } from '../common/Inputs'
 import axios from 'axios'
 import { env } from '../../util/env'
 import { KravVarslingsadresserEdit } from './Edit/KravVarslingsadresserEdit'
-import { KravRegelverkEdit } from './Edit/KravRegelverkEdit'
+import { RegelverkEdit } from './Edit/RegelverkEdit'
 import { KravSuksesskriterierEdit } from './Edit/KravSuksesskriterieEdit'
 import { EditBegreper } from './Edit/KravBegreperEdit'
 import { HeadingXLarge, HeadingXXLarge, LabelLarge, LabelSmall, ParagraphMedium, ParagraphXSmall } from 'baseui/typography'
@@ -336,8 +336,9 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                       setErrors={() => setErrors({ dokumentasjon: 'Må ha navn på kilde.' })}
                     />
                     {errors.dokumentasjon && <ErrorMessageModal msg={errors.dokumentasjon} fullWidth={true} />}
-                    <KravRegelverkEdit />
+                    <RegelverkEdit />
                     {errors.regelverk && <ErrorMessageModal msg={errors.regelverk} fullWidth={true} />}
+                    
                     <TextAreaField
                       label="Relevante implementasjoner"
                       name="implementasjoner"

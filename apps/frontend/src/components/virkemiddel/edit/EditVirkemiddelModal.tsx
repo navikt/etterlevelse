@@ -15,7 +15,7 @@ import CustomizedSelect from '../../common/CustomizedSelect'
 import { selectCustomOverrides } from '../../etterlevelseDokumentasjon/edit/EditEtterlevelseDokumentasjonModal'
 import { intl } from '../../../util/intl/intl'
 import { Value } from 'baseui/select'
-import { KravRegelverkEdit } from '../../krav/Edit/KravRegelverkEdit'
+import { RegelverkEdit } from '../../krav/Edit/RegelverkEdit'
 
 type EditVirkemiddelModalProps = {
   virkemiddel?: Virkemiddel
@@ -25,9 +25,8 @@ type EditVirkemiddelModalProps = {
 
 export const EditVirkemiddelModal = (props: EditVirkemiddelModalProps) => {
   const virkemiddelTypeOptions = codelist.getParsedOptions(ListName.VIRKEMIDDELTYPE)
-  const lovOptions = codelist.getParsedOptions(ListName.LOV)
   const [isVirkemiddelModalOpen, setIsVirkemiddelModalOpen] = useState<boolean>(false)
-  const [valgtVirkemiddeltype, setValgtVirkemiddeltype] = useState<Value>([])
+  const [valgtVirkemiddeltype, setValgtVirkemiddeltype] = useState<Value>(props.virkemiddel ? [{id: props.virkemiddel.virkemiddelType?.code, label: props.virkemiddel.virkemiddelType?.shortName}] : [])
 
   const submit = async (virkemiddel: Virkemiddel) => {
     console.log(virkemiddel)
@@ -77,7 +76,8 @@ export const EditVirkemiddelModal = (props: EditVirkemiddelModalProps) => {
                       }}
                     </Field>
                   </FieldWrapper>
-                  <KravRegelverkEdit />
+
+                  <RegelverkEdit />
 
                   <InputField label={'Livssituasjon'} name={'livsSituasjon'} />
                   <Button

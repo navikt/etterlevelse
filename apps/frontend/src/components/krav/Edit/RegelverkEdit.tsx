@@ -46,7 +46,7 @@ const CustomizedRegelverkSelect = (props: SelectProps) => {
   return <Select {...props} overrides={overrides} />
 }
 
-export const KravRegelverkEdit = () => {
+export const RegelverkEdit = () => {
   const [lov, setLov] = useState<Value>([])
   const [text, setText] = useState('')
   const controlRef: React.Ref<ImperativeMethods> = React.useRef<ImperativeMethods>(null)

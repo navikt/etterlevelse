@@ -37,7 +37,7 @@ import NyTilbakemeldingModal from './edit/NyTilbakemeldingModal'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from 'baseui/modal'
 import { getParsedOptionsforTilbakeMelding, getTilbakeMeldingStatusToOption, tilbakemeldingStatusToText } from './utils'
 import { Select, SIZE } from 'baseui/select'
-import { customSelectOverrides } from '../Edit/KravRegelverkEdit'
+import { customSelectOverrides } from '../Edit/RegelverkEdit'
 import { Checkbox } from 'baseui/checkbox'
 import { ShowWarningMessage } from '../../behandlingsTema/KravCard'
 
