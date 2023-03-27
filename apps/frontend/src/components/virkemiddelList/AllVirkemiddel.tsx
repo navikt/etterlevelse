@@ -1,20 +1,19 @@
 import { useEffect, useState } from 'react'
 import { codelist, ListName } from '../../services/Codelist'
-import { useKravFilter } from '../../api/KravGraphQLApi'
-import { emptyPage, KravListFilter, KravQL, KravStatus, VirkemiddelListFilter } from '../../constants'
+import { VirkemiddelListFilter } from '../../constants'
 import { Block, Responsive, Scale } from 'baseui/block'
-import { Option, SelectOverrides } from 'baseui/select'
+import { Option } from 'baseui/select'
 import CustomizedSelect from '../common/CustomizedSelect'
 import { ettlevColors, theme } from '../../util/theme'
 import { Spinner } from '../common/Spinner'
 import { HeadingXLarge, LabelSmall, ParagraphMedium } from 'baseui/typography'
-import { KravPanels } from '../../pages/KravListPage'
 import { borderColor, borderWidth } from '../common/Style'
 import { useVirkemiddelFilter } from '../../api/VirkemiddelApi'
 import { useDebouncedState } from '../../util/hooks'
 import { StatefulInput } from 'baseui/input'
 import Button from '../common/Button'
 import { clearSearchIcon, searchIcon } from '../Images'
+import { VirkemiddelPanels } from './VirkemiddelPanels'
 
 type VirkemiddelFilter = {
   virkemiddelType: Option[]
@@ -159,7 +158,7 @@ export const AllVirkemiddel = () => {
           </Block>
         </Block>
       </Block>
-      {/* <KravPanels kravene={sortedKravList} loading={loading} /> */}
+      <VirkemiddelPanels virkemidler={filteredVirkemiddel} loading={loading} />
       {filteredVirkemiddel.length === 0 && (
         <Block width="100%" display="flex" justifyContent="center">
           <ParagraphMedium>Fant ingen virkemiddel</ParagraphMedium>

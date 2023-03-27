@@ -122,12 +122,12 @@ export const useVirkemiddelFilter = () => {
       }
       if (sortDate && (sortDate === 'ASC' || sortDate === 'DESC')) {
         if (sortDate === 'ASC') {
-          allVirkemiddel.sort((a, b) => (a.changeStamp.lastModifiedDate > b.changeStamp.lastModifiedDate ? -1 : 0))
-        } else if (sortDate === 'DESC') {
           allVirkemiddel.sort((a, b) => (a.changeStamp.lastModifiedDate > b.changeStamp.lastModifiedDate ? 1 : 0))
+        } else if (sortDate === 'DESC') {
+          allVirkemiddel.sort((a, b) => (a.changeStamp.lastModifiedDate > b.changeStamp.lastModifiedDate ? -1 : 0))
         }
       } else if (!sortDate || sortDate === '') {
-        allVirkemiddel.sort((a, b) => (a.navn > b.navn ? -1 : 0))
+        allVirkemiddel.sort((a, b) => (a.navn > b.navn ? 1 : 0))
       }
 
       setData(allVirkemiddel)
@@ -143,10 +143,9 @@ export const useVirkemiddelFilter = () => {
   ]
 }
 
-function virkemiddelToVirkemiddelDto(virkemiddel: Virkemiddel): Virkemiddel {
+export const virkemiddelToVirkemiddelDto = (virkemiddel: Virkemiddel): Virkemiddel  => {
   const dto = {
     ...virkemiddel,
-    virkemiddelType: virkemiddel.virkemiddelType?.code,
     regelverk: virkemiddel.regelverk.map((r) => ({ ...r, lov: r.lov.code })),
   } as any
   delete dto.changeStamp
