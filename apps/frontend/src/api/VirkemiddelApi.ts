@@ -147,6 +147,7 @@ function virkemiddelToVirkemiddelDto(virkemiddel: Virkemiddel): Virkemiddel {
   const dto = {
     ...virkemiddel,
     virkemiddelType: virkemiddel.virkemiddelType?.code,
+    regelverk: virkemiddel.regelverk.map((r) => ({ ...r, lov: r.lov.code })),
   } as any
   delete dto.changeStamp
   delete dto.version
