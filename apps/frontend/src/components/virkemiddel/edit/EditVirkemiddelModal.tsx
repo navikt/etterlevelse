@@ -7,7 +7,7 @@ import Button from '../../common/Button'
 import CustomizedModal from '../../common/CustomizedModal'
 import { editIcon, plusIcon } from '../../Images'
 import { Field, FieldProps, Form, Formik } from 'formik'
-import { virkemiddelMapToFormVal } from '../../../api/VirkemiddelApi'
+import { createVirkemiddel, updateVirkemiddel, virkemiddelMapToFormVal } from '../../../api/VirkemiddelApi'
 import { FieldWrapper, InputField } from '../../common/Inputs'
 import { FormControl } from 'baseui/form-control'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
@@ -16,6 +16,8 @@ import { selectCustomOverrides } from '../../etterlevelseDokumentasjon/edit/Edit
 import { intl } from '../../../util/intl/intl'
 import { Value } from 'baseui/select'
 import { RegelverkEdit } from '../../krav/Edit/RegelverkEdit'
+import { borderColor, borderWidth } from '../../common/Style'
+import { ettlevColors } from '../../../util/theme'
 
 type EditVirkemiddelModalProps = {
   virkemiddel?: Virkemiddel
@@ -26,10 +28,24 @@ type EditVirkemiddelModalProps = {
 export const EditVirkemiddelModal = (props: EditVirkemiddelModalProps) => {
   const virkemiddelTypeOptions = codelist.getParsedOptions(ListName.VIRKEMIDDELTYPE)
   const [isVirkemiddelModalOpen, setIsVirkemiddelModalOpen] = useState<boolean>(false)
-  const [valgtVirkemiddeltype, setValgtVirkemiddeltype] = useState<Value>(props.virkemiddel ? [{id: props.virkemiddel.virkemiddelType?.code, label: props.virkemiddel.virkemiddelType?.shortName}] : [])
+  const [valgtVirkemiddeltype, setValgtVirkemiddeltype] = useState<Value>(props.virkemiddel ? [{ id: props.virkemiddel.virkemiddelType?.code, label: props.virkemiddel.virkemiddelType?.shortName }] : [])
 
   const submit = async (virkemiddel: Virkemiddel) => {
-    console.log(virkemiddel)
+    if (!virkemiddel.id || virkemiddel.id === 'ny') {
+      await createVirkemiddel(virkemiddel).then((response) => {
+        setIsVirkemiddelModalOpen(false)
+        if (props.setVirkemiddel) {
+          props.setVirkemiddel(response)
+        }
+      })
+    } else {
+      await updateVirkemiddel(virkemiddel).then((response) => {
+        setIsVirkemiddelModalOpen(false)
+        if (props.setVirkemiddel) {
+          props.setVirkemiddel(response)
+        }
+      })
+    }
   }
 
   return (
@@ -55,9 +71,17 @@ export const EditVirkemiddelModal = (props: EditVirkemiddelModalProps) => {
                       {(fp: FieldProps) => {
                         return (
                           <FormControl label={<LabelWithTooltip label="Legg til virkemiddeltype" tooltip="Søk og legg til virkemiddeltype fra kodeverket" />}>
-                            <Block width="100%">
+                            <Block width="100%" maxWidth="400px" >
                               <CustomizedSelect
-                                overrides={selectCustomOverrides}
+                                overrides={{
+                                  ControlContainer: {
+                                    style: {
+                                      backgroundColor: fp.form.errors.regelverk && ettlevColors.error50,
+                                      ...borderColor(fp.form.errors.regelverk ? ettlevColors.red600 : ettlevColors.grey200),
+                                      ...borderWidth('2px'),
+                                    },
+                                  },
+                                }}
                                 noResultsMsg={intl.emptyTable}
                                 maxDropdownHeight="350px"
                                 searchable={true}

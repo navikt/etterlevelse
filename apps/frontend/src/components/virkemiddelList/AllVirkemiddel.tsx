@@ -65,30 +65,15 @@ export const AllVirkemiddel = () => {
 
   //must be run in function to not affect other selectors others overrides
   const getSelector = (filterId: string | undefined, virkemiddelFilter: VirkemiddelListFilter, options: any[], value: Option[]) => {
-    const customSelectOverrides: SelectOverrides = {
-      Root: {
-        style: {
-          width: '150px',
-        },
-      },
-      DropdownContainer: {
-        style: {
-          width: 'fit-content',
-          maxWidth: '300px',
-        },
-      },
-    }
-
     return (
       <Block marginLeft={selectorMarginLeft} marginTop={selectorMarginTop}>
         <CustomizedSelect
-          key={'krav_filter_' + virkemiddelFilter}
+          key={'virkemiddel_filter_' + virkemiddelFilter}
           clearable={false}
           size="compact"
           placeholder="tema"
           options={options}
           overrides={{
-            ...customSelectOverrides,
             ControlContainer: {
               style: {
                 backgroundColor: filterId === 'alle' ? ettlevColors.white : ettlevColors.green50,
