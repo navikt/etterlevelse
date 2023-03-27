@@ -19,4 +19,7 @@ public interface VirkemiddelRepo extends JpaRepository<GenericStorage, UUID> {
 
     @Query(value = "select * from generic_storage where data ->> 'navn' ilike %?1% and type = 'Virkemiddel'", nativeQuery = true)
     List<GenericStorage> findByNameContaining(String name);
+
+    @Query(value = "select * from generic_storage where data ->> 'virkemiddelType' = ?1 and type = 'Virkemiddel'", nativeQuery = true)
+    List<GenericStorage> findByVirkemiddelType(String code);
 }

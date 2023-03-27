@@ -22,8 +22,11 @@ public class CodeUsage {
 
     private String shortName;
     private List<GenericStorage> krav = new ArrayList<>();
+    private List<GenericStorage> etterlevelseDokumentasjoner = new ArrayList<>();
     private List<GenericStorage> behandlinger = new ArrayList<>();
+    private List<GenericStorage> virkemidler = new ArrayList<>();
     private List<Codelist> codelist = new ArrayList<>();
+
 
     public CodeUsage(ListName listName, String code, String shortName) {
         this.listName = listName;
@@ -33,14 +36,18 @@ public class CodeUsage {
 
     public boolean isInUse() {
         return !krav.isEmpty()
+                || !etterlevelseDokumentasjoner.isEmpty()
                 || !behandlinger.isEmpty()
+                || !virkemidler.isEmpty()
                 || !codelist.isEmpty();
     }
 
     public CodeUsageResponse toResponse() {
         CodeUsageResponse response = new CodeUsageResponse(listName, code, shortName);
         response.setKrav(convert(krav, k -> k.toKrav().convertToInstanceId()));
-        response.setBehandlinger(convert(behandlinger, k -> k.toBehandlingData().convertToInstanceId()));
+        response.setEtterlevelseDokumentasjoner(convert(etterlevelseDokumentasjoner, ed -> ed.toEtterlevelseDokumentasjon().convertToInstanceId()));
+        response.setBehandlinger(convert(behandlinger, b -> b.toBehandlingData().convertToInstanceId()));
+        response.setVirkemidler(convert(virkemidler, v -> v.toVirkemiddel().convertToInstanceId()));
         response.setCodelist(convert(codelist, Codelist::toResponse));
         response.setInUse(isInUse());
         return response;

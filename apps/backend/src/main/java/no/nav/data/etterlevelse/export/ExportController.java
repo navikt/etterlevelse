@@ -261,6 +261,7 @@ public class ExportController {
             case AVDELING -> "Avdeling";
             case UNDERAVDELING -> "underavdeling";
             case RELEVANS -> "Relevans";
+            case VIRKEMIDDELTYPE -> "Virkemiddel type";
         };
     }
 

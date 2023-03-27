@@ -14,9 +14,13 @@ import no.nav.data.etterlevelse.codelist.codeusage.dto.CodeUsage;
 import no.nav.data.etterlevelse.codelist.codeusage.dto.CodeUsageRequest;
 import no.nav.data.etterlevelse.codelist.domain.Codelist;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonRepo;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravRepo;
 import no.nav.data.etterlevelse.krav.domain.Regelverk;
+import no.nav.data.etterlevelse.virkemiddel.domain.Virkemiddel;
+import no.nav.data.etterlevelse.virkemiddel.domain.VirkemiddelRepo;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,7 +32,9 @@ import java.util.stream.Stream;
 
 import static java.util.Collections.replaceAll;
 import static java.util.stream.Collectors.toList;
-import static no.nav.data.common.utils.StreamUtils.*;
+import static no.nav.data.common.utils.StreamUtils.convert;
+import static no.nav.data.common.utils.StreamUtils.filter;
+import static no.nav.data.common.utils.StreamUtils.safeStream;
 import static no.nav.data.etterlevelse.codelist.CodelistService.getCodelist;
 
 @Service
@@ -36,13 +42,18 @@ import static no.nav.data.etterlevelse.codelist.CodelistService.getCodelist;
 public class CodeUsageService {
 
     private final KravRepo kravRepo;
+    private final EtterlevelseDokumentasjonRepo etterlevelseDokumentasjonRepo;
     private final BehandlingRepo behandlingRepo;
+    private final VirkemiddelRepo virkemiddelRepo;
+
     private final Summary summary;
     private final CodelistService codelistService;
 
-    public CodeUsageService(KravRepo kravRepo, BehandlingRepo behandlingRepo, @Lazy CodelistService codelistService) {
+    public CodeUsageService(KravRepo kravRepo, EtterlevelseDokumentasjonRepo etterlevelseDokumentasjonRepo, BehandlingRepo behandlingRepo, VirkemiddelRepo virkemiddelRepo, @Lazy CodelistService codelistService) {
         this.kravRepo = kravRepo;
+        this.etterlevelseDokumentasjonRepo = etterlevelseDokumentasjonRepo;
         this.behandlingRepo = behandlingRepo;
+        this.virkemiddelRepo = virkemiddelRepo;
         this.codelistService = codelistService;
         List<String[]> listnames = Stream.of(ListName.values()).map(e -> new String[]{e.name()}).collect(toList());
         this.summary = MetricUtils.summary()
@@ -77,7 +88,9 @@ public class CodeUsageService {
         return summary.labels(listName.name()).time(() -> {
             CodeUsage codeUsage = new CodeUsage(listName, code, codelist.getShortName());
             codeUsage.setKrav(findKrav(listName, code));
+            codeUsage.setEtterlevelseDokumentasjoner(findEtterlevelseDokumentasjoner(listName, code));
             codeUsage.setBehandlinger(findBehandlinger(listName, code));
+            codeUsage.setVirkemidler(findVirkemiddel(listName, code));
             codeUsage.setCodelist(findCodelists(listName, code));
             return codeUsage;
         });
@@ -90,6 +103,7 @@ public class CodeUsageService {
             switch (listName) {
                 case RELEVANS -> {
                     usage.getKrav().forEach(gs -> gs.asType(k -> replaceAll(k.getRelevansFor(), oldCode, newCode), Krav.class));
+                    usage.getEtterlevelseDokumentasjoner().forEach(gs -> gs.asType(ed -> replaceAll(ed.getIrrelevansFor(), oldCode, newCode), EtterlevelseDokumentasjon.class));
                     usage.getBehandlinger().forEach(gs -> gs.asType(bd -> replaceAll(bd.getIrrelevansFor(), oldCode, newCode), BehandlingData.class));
                 }
                 case AVDELING -> usage.getKrav().forEach(gs -> gs.asType(k -> k.setAvdeling(newCode), Krav.class));
@@ -99,6 +113,7 @@ public class CodeUsageService {
                 }
                 case LOV -> usage.getKrav().forEach(gs -> gs.asType(k -> replaceLov(oldCode, newCode, k.getRegelverk()), Krav.class));
                 case TEMA -> usage.getCodelist().forEach(c -> codelistService.replaceDataField(c, "tema", oldCode, newCode));
+                case VIRKEMIDDELTYPE -> usage.getVirkemidler().forEach(gs -> gs.asType(v -> v.setVirkemiddelType(newCode), Virkemiddel.class));
             }
         }
         if (!usage.getCodelist().isEmpty()) {
@@ -119,14 +134,28 @@ public class CodeUsageService {
             case AVDELING -> kravRepo.findByAvdeling(code);
             case UNDERAVDELING -> kravRepo.findByUnderavdeling(code);
             case LOV -> kravRepo.findByLov(code);
-            case TEMA -> List.of();
+            case TEMA, VIRKEMIDDELTYPE -> List.of();
+        };
+    }
+
+    private List<GenericStorage> findVirkemiddel(ListName listName, String code) {
+        return switch (listName) {
+            case VIRKEMIDDELTYPE -> virkemiddelRepo.findByVirkemiddelType(code);
+            case TEMA, RELEVANS, AVDELING, UNDERAVDELING, LOV -> List.of();
+        };
+    }
+
+    private List<GenericStorage> findEtterlevelseDokumentasjoner(ListName listName, String code) {
+        return switch (listName) {
+            case RELEVANS -> etterlevelseDokumentasjonRepo.findByIrrelevans(List.of(code));
+            case AVDELING, UNDERAVDELING, LOV, TEMA, VIRKEMIDDELTYPE -> List.of();
         };
     }
 
     private List<GenericStorage> findBehandlinger(ListName listName, String code) {
         return switch (listName) {
             case RELEVANS -> behandlingRepo.findByIrrelevans(List.of(code));
-            case AVDELING, UNDERAVDELING, LOV, TEMA -> List.of();
+            case AVDELING, UNDERAVDELING, LOV, TEMA, VIRKEMIDDELTYPE -> List.of();
         };
     }
 
@@ -134,7 +163,7 @@ public class CodeUsageService {
         return switch (listName) {
             case TEMA -> filter(getCodelist(ListName.LOV), c -> code.equals(getField(c, "tema")));
             case UNDERAVDELING -> filter(getCodelist(ListName.LOV), c -> code.equals(getField(c, "underavdeling")));
-            case AVDELING, LOV, RELEVANS -> List.of();
+            case AVDELING, LOV, RELEVANS, VIRKEMIDDELTYPE -> List.of();
         };
     }
 

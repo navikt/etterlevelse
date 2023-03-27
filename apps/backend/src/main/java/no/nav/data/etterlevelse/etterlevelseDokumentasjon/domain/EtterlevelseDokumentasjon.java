@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import no.nav.data.common.storage.domain.ChangeStamp;
 import no.nav.data.common.storage.domain.DomainObject;
 import no.nav.data.etterlevelse.codelist.CodelistService;
+import no.nav.data.etterlevelse.codelist.codeusage.dto.InstanceId;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
 import no.nav.data.etterlevelse.codelist.dto.CodelistResponse;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonRequest;
@@ -58,5 +59,8 @@ public class EtterlevelseDokumentasjon implements DomainObject {
                 .irrelevansFor(irrelevantForAsCodes())
                 .teams(teams != null ? copyOf(teams) : List.of())
                 .build();
+    }
+    public InstanceId convertToInstanceId() {
+        return new InstanceId(id.toString(), title);
     }
 }
