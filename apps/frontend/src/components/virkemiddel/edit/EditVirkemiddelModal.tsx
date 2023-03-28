@@ -1,25 +1,25 @@
-import { Block } from 'baseui/block'
-import { ModalBody, ModalHeader } from 'baseui/modal'
-import { useState } from 'react'
-import { Virkemiddel } from '../../../constants'
-import { codelist, ListName } from '../../../services/Codelist'
+import {Block} from 'baseui/block'
+import {ModalBody, ModalHeader} from 'baseui/modal'
+import {useState} from 'react'
+import {Virkemiddel} from '../../../constants'
+import {codelist, ListName} from '../../../services/Codelist'
 import Button from '../../common/Button'
 import CustomizedModal from '../../common/CustomizedModal'
-import { editIcon, plusIcon } from '../../Images'
-import { Field, FieldProps, Form, Formik } from 'formik'
-import { createVirkemiddel, updateVirkemiddel, virkemiddelMapToFormVal } from '../../../api/VirkemiddelApi'
-import { FieldWrapper, InputField } from '../../common/Inputs'
-import { FormControl } from 'baseui/form-control'
+import {Field, FieldProps, Form, Formik} from 'formik'
+import {createVirkemiddel, updateVirkemiddel, virkemiddelMapToFormVal} from '../../../api/VirkemiddelApi'
+import {FieldWrapper, InputField} from '../../common/Inputs'
+import {FormControl} from 'baseui/form-control'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
 import CustomizedSelect from '../../common/CustomizedSelect'
-import { selectCustomOverrides } from '../../etterlevelseDokumentasjon/edit/EditEtterlevelseDokumentasjonModal'
-import { intl } from '../../../util/intl/intl'
-import { Value } from 'baseui/select'
-import { RegelverkEdit } from '../../krav/Edit/RegelverkEdit'
-import { borderColor, borderWidth } from '../../common/Style'
-import { ettlevColors } from '../../../util/theme'
+import {intl} from '../../../util/intl/intl'
+import {Value} from 'baseui/select'
+import {RegelverkEdit} from '../../krav/Edit/RegelverkEdit'
+import {borderColor, borderWidth} from '../../common/Style'
+import {ettlevColors} from '../../../util/theme'
 
 type EditVirkemiddelModalProps = {
+  isOpen: boolean
+  setIsOpen: (b:boolean) => void
   virkemiddel?: Virkemiddel
   setVirkemiddel?: (v: Virkemiddel) => void
   isEdit?: boolean
@@ -27,20 +27,22 @@ type EditVirkemiddelModalProps = {
 
 export const EditVirkemiddelModal = (props: EditVirkemiddelModalProps) => {
   const virkemiddelTypeOptions = codelist.getParsedOptions(ListName.VIRKEMIDDELTYPE)
-  const [isVirkemiddelModalOpen, setIsVirkemiddelModalOpen] = useState<boolean>(false)
-  const [valgtVirkemiddeltype, setValgtVirkemiddeltype] = useState<Value>(props.virkemiddel ? [{ id: props.virkemiddel.virkemiddelType?.code, label: props.virkemiddel.virkemiddelType?.shortName }] : [])
+  const [valgtVirkemiddeltype, setValgtVirkemiddeltype] = useState<Value>(props.virkemiddel ? [{
+    id: props.virkemiddel.virkemiddelType?.code,
+    label: props.virkemiddel.virkemiddelType?.shortName
+  }] : [])
 
   const submit = async (virkemiddel: Virkemiddel) => {
     if (!virkemiddel.id || virkemiddel.id === 'ny') {
       await createVirkemiddel(virkemiddel).then((response) => {
-        setIsVirkemiddelModalOpen(false)
+        props.setIsOpen(false)
         if (props.setVirkemiddel) {
           props.setVirkemiddel(response)
         }
       })
     } else {
       await updateVirkemiddel(virkemiddel).then((response) => {
-        setIsVirkemiddelModalOpen(false)
+        props.setIsOpen(false)
         if (props.setVirkemiddel) {
           props.setVirkemiddel(response)
         }
@@ -50,28 +52,20 @@ export const EditVirkemiddelModal = (props: EditVirkemiddelModalProps) => {
 
   return (
     <Block>
-      <Button
-        onClick={() => setIsVirkemiddelModalOpen(true)}
-        startEnhancer={props.isEdit ? <img src={editIcon} alt="edit icon" /> : <img src={plusIcon} alt="plus icon" />}
-        size="compact"
-      >
-        {props.isEdit ? 'Rediger virkemiddel' : 'Nytt virkemiddel'}
-      </Button>
-
-      <CustomizedModal isOpen={!!isVirkemiddelModalOpen} onClose={() => setIsVirkemiddelModalOpen(false)}>
+      <CustomizedModal isOpen={!!props.isOpen} onClose={() => props.setIsOpen(false)}>
         <ModalHeader>{props.isEdit ? 'Rediger virkemiddel' : 'Opprett nytt virkemiddel'}</ModalHeader>
         <ModalBody>
           <Formik initialValues={virkemiddelMapToFormVal(props.virkemiddel ? props.virkemiddel : {})} onSubmit={submit}>
-            {({ values, submitForm }) => {
+            {({values, submitForm}) => {
               return (
                 <Form>
-                  <InputField label={'Navn'} name={'navn'} />
+                  <InputField label={'Navn'} name={'navn'}/>
                   <FieldWrapper>
                     <Field name="virkemiddelType">
                       {(fp: FieldProps) => {
                         return (
-                          <FormControl label={<LabelWithTooltip label="Legg til virkemiddeltype" tooltip="Søk og legg til virkemiddeltype fra kodeverket" />}>
-                            <Block width="100%" maxWidth="400px" >
+                          <FormControl label={<LabelWithTooltip label="Legg til virkemiddeltype" tooltip="Søk og legg til virkemiddeltype fra kodeverket"/>}>
+                            <Block width="100%" maxWidth="400px">
                               <CustomizedSelect
                                 overrides={{
                                   ControlContainer: {
@@ -89,7 +83,7 @@ export const EditVirkemiddelModal = (props: EditVirkemiddelModalProps) => {
                                 placeholder={'Velg virkemiddeltype'}
                                 aria-label={'Velg virkemiddeltype'}
                                 value={valgtVirkemiddeltype}
-                                onChange={({ value }) => {
+                                onChange={({value}) => {
                                   setValgtVirkemiddeltype(value)
                                   fp.form.setFieldValue('virkemiddelType', value && value.length ? value[0].id : undefined)
                                 }}
@@ -101,9 +95,9 @@ export const EditVirkemiddelModal = (props: EditVirkemiddelModalProps) => {
                     </Field>
                   </FieldWrapper>
 
-                  <RegelverkEdit />
+                  <RegelverkEdit/>
 
-                  <InputField label={'Livssituasjon'} name={'livsSituasjon'} />
+                  <InputField label={'Livssituasjon'} name={'livsSituasjon'}/>
                   <Button
                     type="button"
                     onClick={() => {
@@ -112,7 +106,7 @@ export const EditVirkemiddelModal = (props: EditVirkemiddelModalProps) => {
                   >
                     {props.isEdit ? 'Lagre' : 'Opprett'}
                   </Button>
-                  <Button type="button" onClick={() => setIsVirkemiddelModalOpen(false)} marginLeft={true}>
+                  <Button type="button" onClick={() => props.setIsOpen(false)} marginLeft={true}>
                     Avbryt
                   </Button>
                 </Form>
