@@ -143,13 +143,17 @@ export const virkemiddelToVirkemiddelDto = (virkemiddel: Virkemiddel): Virkemidd
   return dto
 }
 
-export const virkemiddelMapToFormVal = (virkemiddel: Partial<Virkemiddel>): Virkemiddel => ({
-  id: virkemiddel.id || '',
-  navn: virkemiddel.navn || '',
-  changeStamp: virkemiddel.changeStamp || { lastModifiedDate: '', lastModifiedBy: '' },
-  version: -1,
-  regelverk: virkemiddel.regelverk || [],
-  virkemiddelType: virkemiddel.virkemiddelType,
-  livsSituasjon: virkemiddel.livsSituasjon || '',
-})
+export const virkemiddelMapToFormVal = (virkemiddel: Partial<Virkemiddel>): Virkemiddel => {
+  const formVal = {
+    id: virkemiddel.id || '',
+    navn: virkemiddel.navn || '',
+    changeStamp: virkemiddel.changeStamp || { lastModifiedDate: '', lastModifiedBy: '' },
+    version: -1,
+    regelverk: virkemiddel.regelverk || [],
+    virkemiddelType: virkemiddel.virkemiddelType?.code,
+    virkemiddelTypeData: virkemiddel.virkemiddelType,
+    livsSituasjon: virkemiddel.livsSituasjon || '',
+  } as any
+  return formVal
+}
 
