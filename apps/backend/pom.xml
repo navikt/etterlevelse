@@ -27,7 +27,7 @@
         <graphql.version>20.0</graphql.version>
 
         <microsoft-graph.version>5.50.0</microsoft-graph.version>
-        <msal4j.version>1.13.6</msal4j.version>
+        <msal4j.version>1.13.7</msal4j.version>
 
         <!-- transitive versions -->
         <commons-compress.version>1.23.0</commons-compress.version>
