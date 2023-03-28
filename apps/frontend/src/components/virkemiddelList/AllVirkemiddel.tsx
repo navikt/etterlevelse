@@ -155,7 +155,7 @@ export const AllVirkemiddel = ({isCreateModalOpen, setIsCreateModalOpen} : AllVi
           </Block>
         </Block>
       </Block>
-      <VirkemiddelTable virkemidler={filteredVirkemiddel} loading={loading} />
+      <VirkemiddelTable virkemidler={filteredVirkemiddel} loading={loading} refetchData={refetchData}/>
       {filteredVirkemiddel.length === 0 && (
         <Block width="100%" display="flex" justifyContent="center">
           <ParagraphMedium>Fant ingen virkemiddel</ParagraphMedium>

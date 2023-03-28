@@ -3,19 +3,20 @@ import React, {useState} from 'react'
 import moment from 'moment'
 import {Virkemiddel} from '../../constants'
 import {SkeletonPanel} from '../common/LoadingSkeleton'
-import {Cell, Row, Table} from "../common/Table";
-import Button from "../common/Button";
-import {SIZE as ButtonSize} from "baseui/button/constants";
-import {KIND} from "baseui/button";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faEdit} from "@fortawesome/free-solid-svg-icons";
-import {ColumnCompares} from "../../util/hooks";
-import {EditVirkemiddelModal} from "../virkemiddel/edit/EditVirkemiddelModal";
+import {Cell, Row, Table} from '../common/Table'
+import Button from '../common/Button'
+import {SIZE as ButtonSize} from 'baseui/button/constants'
+import {KIND} from 'baseui/button'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faEdit} from '@fortawesome/free-solid-svg-icons'
+import {ColumnCompares} from '../../util/hooks'
+import {EditVirkemiddelModal} from '../virkemiddel/edit/EditVirkemiddelModal'
 
 
 type VirkmiddelTableProps = {
   virkemidler: Virkemiddel[]
   loading: boolean
+  refetchData: () => void
 }
 
 const virkemiddelSorting: ColumnCompares<Virkemiddel> = {
@@ -24,7 +25,7 @@ const virkemiddelSorting: ColumnCompares<Virkemiddel> = {
   changeStamp: (a, b) => (a.changeStamp.lastModifiedDate || '').localeCompare(b.changeStamp.lastModifiedDate || ''),
 }
 
-export const VirkemiddelTable = ({virkemidler, loading}: VirkmiddelTableProps) => {
+export const VirkemiddelTable = ({virkemidler, loading, refetchData}: VirkmiddelTableProps) => {
   const [selectedVirkemiddel, setSelectedVirkemiddel] = useState<Virkemiddel>()
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false)
   if (loading) return <SkeletonPanel count={5}/>
@@ -90,7 +91,7 @@ export const VirkemiddelTable = ({virkemidler, loading}: VirkmiddelTableProps) =
           ))
         }
       />
-      <EditVirkemiddelModal isOpen={isEditModalOpen} setIsOpen={setIsEditModalOpen} virkemiddel={selectedVirkemiddel} isEdit={true}/>
+      <EditVirkemiddelModal isOpen={isEditModalOpen} setIsOpen={setIsEditModalOpen} virkemiddel={selectedVirkemiddel} isEdit={true} refetchData={refetchData}/>
     </>
   )
 }
