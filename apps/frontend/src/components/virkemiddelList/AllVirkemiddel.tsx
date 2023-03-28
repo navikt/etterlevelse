@@ -1,29 +1,35 @@
-import {useEffect, useState} from 'react'
-import {codelist, ListName} from '../../services/Codelist'
-import {VirkemiddelListFilter} from '../../constants'
-import {Block, Responsive, Scale} from 'baseui/block'
-import {Option} from 'baseui/select'
+import { useEffect, useState } from 'react'
+import { codelist, ListName } from '../../services/Codelist'
+import { VirkemiddelListFilter } from '../../constants'
+import { Block, Responsive, Scale } from 'baseui/block'
+import { Option } from 'baseui/select'
 import CustomizedSelect from '../common/CustomizedSelect'
-import {ettlevColors, theme} from '../../util/theme'
-import {Spinner} from '../common/Spinner'
-import {HeadingXLarge, LabelSmall, ParagraphMedium} from 'baseui/typography'
-import {borderColor, borderWidth} from '../common/Style'
-import {useVirkemiddelFilter} from '../../api/VirkemiddelApi'
-import {useDebouncedState} from '../../util/hooks'
-import {StatefulInput} from 'baseui/input'
+import { ettlevColors, theme } from '../../util/theme'
+import { Spinner } from '../common/Spinner'
+import { HeadingXLarge, LabelSmall, ParagraphMedium } from 'baseui/typography'
+import { borderColor, borderWidth } from '../common/Style'
+import { useVirkemiddelFilter } from '../../api/VirkemiddelApi'
+import { useDebouncedState } from '../../util/hooks'
+import { StatefulInput } from 'baseui/input'
 import Button from '../common/Button'
-import {clearSearchIcon, searchIcon} from '../Images'
-import {VirkemiddelTable} from './VirkemiddelTable'
+import { clearSearchIcon, searchIcon } from '../Images'
+import { VirkemiddelTable } from './VirkemiddelTable'
+import { EditVirkemiddelModal } from '../virkemiddel/edit/EditVirkemiddelModal'
 
 type VirkemiddelFilter = {
   virkemiddelType: Option[]
   sort: Option[]
 }
 
+type AllVirkemiddelProps = {
+  isCreateModalOpen: boolean
+  setIsCreateModalOpen: (b: boolean) => void
+}
+
 const selectorMarginLeft: Responsive<Scale> = ['0px', '0px', '0px', '12px', '12px', '12px']
 const selectorMarginTop: Responsive<Scale> = ['10px', '10px', '10px', '0px', '0px', '0px']
 
-export const AllVirkemiddel = () => {
+export const AllVirkemiddel = ({isCreateModalOpen, setIsCreateModalOpen} : AllVirkemiddelProps) => {
   const getSortDateOptions = [
     { label: 'sorter på navn', id: 'navn' },
     { label: 'nyest-eldst', id: 'DESC' },
@@ -155,6 +161,8 @@ export const AllVirkemiddel = () => {
           <ParagraphMedium>Fant ingen virkemiddel</ParagraphMedium>
         </Block>
       )}
+
+      <EditVirkemiddelModal isOpen={isCreateModalOpen} setIsOpen={setIsCreateModalOpen} refetchData={refetchData}/>
     </Block>
   )
 }

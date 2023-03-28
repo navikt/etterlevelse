@@ -23,6 +23,7 @@ type EditVirkemiddelModalProps = {
   virkemiddel?: Virkemiddel
   setVirkemiddel?: (v: Virkemiddel) => void
   isEdit?: boolean
+  refetchData?: () => void
 }
 
 export const EditVirkemiddelModal = (props: EditVirkemiddelModalProps) => {
@@ -38,6 +39,8 @@ export const EditVirkemiddelModal = (props: EditVirkemiddelModalProps) => {
         props.setIsOpen(false)
         if (props.setVirkemiddel) {
           props.setVirkemiddel(response)
+        } else if(props.refetchData) {
+          props.refetchData()
         }
       })
     } else {
@@ -45,6 +48,8 @@ export const EditVirkemiddelModal = (props: EditVirkemiddelModalProps) => {
         props.setIsOpen(false)
         if (props.setVirkemiddel) {
           props.setVirkemiddel(response)
+        } else if(props.refetchData) {
+          props.refetchData()
         }
       })
     }

@@ -8,12 +8,11 @@ import {ettlevColors, maxPageWidth, responsivePaddingLarge} from '../util/theme'
 import {Helmet} from 'react-helmet'
 import {ampli} from '../services/Amplitude'
 import {AllVirkemiddel} from '../components/virkemiddelList/AllVirkemiddel'
-import {EditVirkemiddelModal} from '../components/virkemiddel/edit/EditVirkemiddelModal'
-import Button from "../components/common/Button";
-import {plusIcon} from "../components/Images";
+import Button from '../components/common/Button'
+import {plusIcon} from '../components/Images'
 
 export const VirkemiddelListPage = () => {
-  const [isVirkemiddelModalOpen,setIsVirkemiddelModalOpen] = useState<boolean>(false)
+  const [isCreateModalOpen,setIsCreateModalOpen] = useState<boolean>(false)
   ampli.logEvent('sidevisning', {side: 'Kraveier side', sidetittel: 'Forvalte og opprette virkemiddel'})
 
   return (
@@ -34,13 +33,12 @@ export const VirkemiddelListPage = () => {
                 {user.isKraveier() && (
                   <Block>
                     <Button
-                      onClick={() => setIsVirkemiddelModalOpen(true)}
+                      onClick={() => setIsCreateModalOpen(true)}
                       startEnhancer={<img src={plusIcon} alt="plus icon"/>}
                       size="compact"
                     >
                       Nytt virkemiddel
                     </Button>
-                    <EditVirkemiddelModal isOpen={isVirkemiddelModalOpen} setIsOpen={setIsVirkemiddelModalOpen}/>
                   </Block>)}
               </Block>
             </Block>
@@ -51,7 +49,7 @@ export const VirkemiddelListPage = () => {
       <Block display={'flex'} justifyContent="center" width="100%">
         <Block maxWidth={maxPageWidth} width="100%">
           <Block paddingLeft={responsivePaddingLarge} paddingRight={responsivePaddingLarge} paddingTop={theme.sizing.scale800}>
-            <AllVirkemiddel/>
+            <AllVirkemiddel isCreateModalOpen={isCreateModalOpen} setIsCreateModalOpen={setIsCreateModalOpen}/>
           </Block>
         </Block>
       </Block>
