@@ -63,7 +63,7 @@ export const AllVirkemiddel = ({ isCreateModalOpen, setIsCreateModalOpen }: AllV
   //must be run in function to not affect other selectors others overrides
   const getSelector = (filterId: string | undefined, virkemiddelFilter: VirkemiddelListFilter, options: any[], value: Option[]) => {
     return (
-      <Block marginLeft={selectorMarginLeft} marginTop={selectorMarginTop}>
+      <Block marginLeft={selectorMarginLeft} marginTop={selectorMarginTop} >
         <CustomizedSelect
           key={'virkemiddel_filter_' + virkemiddelFilter}
           clearable={false}
@@ -71,6 +71,10 @@ export const AllVirkemiddel = ({ isCreateModalOpen, setIsCreateModalOpen }: AllV
           placeholder="tema"
           options={options}
           overrides={{
+            Root: {
+              style: {
+                minWidth: '200px',
+            }},
             ControlContainer: {
               style: {
                 backgroundColor: filterId === 'alle' ? ettlevColors.white : ettlevColors.green50,
