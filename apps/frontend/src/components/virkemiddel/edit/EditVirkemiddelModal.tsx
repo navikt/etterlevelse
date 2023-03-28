@@ -102,7 +102,6 @@ export const EditVirkemiddelModal = (props: EditVirkemiddelModalProps) => {
 
                   <RegelverkEdit/>
 
-                  <InputField label={'Livssituasjon'} name={'livsSituasjon'}/>
                   <Button
                     type="button"
                     onClick={() => {
