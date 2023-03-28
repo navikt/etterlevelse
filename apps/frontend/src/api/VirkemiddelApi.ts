@@ -86,7 +86,7 @@ export const useSearchVirkemiddel = () => {
   const [loading, setLoading] = useState<boolean>(false)
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       if (search && search.length > 2) {
         setLoading(true)
 
@@ -108,11 +108,15 @@ export const useVirkemiddelFilter = () => {
   const [data, setData] = useState<Virkemiddel[]>([])
   const [totalDataLength, setTotalDataLenght] = useState<number>(0)
   const [virkemiddelTypeFilter, setVirkemiddelTypeFilter] = useState<string>('')
-  const [sortDate, SetSortDate] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(false)
+  const [refetch, setRefetch] = useState<boolean>(false)
+
+  const refetchData = () => {
+    setRefetch(!refetch)
+  }
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       setLoading(true)
       let allVirkemiddel = await getAllVirkemiddel()
       setTotalDataLenght(allVirkemiddel.length)
@@ -120,30 +124,22 @@ export const useVirkemiddelFilter = () => {
       if (virkemiddelTypeFilter && virkemiddelTypeFilter !== 'alle') {
         allVirkemiddel = allVirkemiddel.filter((v) => v.virkemiddelType?.code === virkemiddelTypeFilter)
       }
-      if (sortDate && (sortDate === 'ASC' || sortDate === 'DESC')) {
-        if (sortDate === 'ASC') {
-          allVirkemiddel.sort((a, b) => (a.changeStamp.lastModifiedDate > b.changeStamp.lastModifiedDate ? 1 : 0))
-        } else if (sortDate === 'DESC') {
-          allVirkemiddel.sort((a, b) => (a.changeStamp.lastModifiedDate > b.changeStamp.lastModifiedDate ? -1 : 0))
-        }
-      } else if (!sortDate || sortDate === '') {
-        allVirkemiddel.sort((a, b) => (a.navn > b.navn ? 1 : 0))
-      }
 
       setData(allVirkemiddel)
       setLoading(false)
     })()
-  }, [virkemiddelTypeFilter, sortDate])
-  return [data, totalDataLength, setVirkemiddelTypeFilter, SetSortDate, loading] as [
+  }, [virkemiddelTypeFilter, refetch])
+  
+  return [data, totalDataLength, setVirkemiddelTypeFilter, loading, refetchData] as [
     Virkemiddel[],
     number,
     React.Dispatch<React.SetStateAction<string>>,
-    React.Dispatch<React.SetStateAction<string>>,
     boolean,
+    () => void,
   ]
 }
 
-export const virkemiddelToVirkemiddelDto = (virkemiddel: Virkemiddel): Virkemiddel  => {
+export const virkemiddelToVirkemiddelDto = (virkemiddel: Virkemiddel): Virkemiddel => {
   const dto = {
     ...virkemiddel,
     regelverk: virkemiddel.regelverk.map((r) => ({ ...r, lov: r.lov.code })),

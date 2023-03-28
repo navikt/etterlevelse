@@ -38,7 +38,7 @@ export const AllVirkemiddel = () => {
   const virkemiddelTyper = codelist.getCodes(ListName.VIRKEMIDDELTYPE)
   const getOptions = (label: string, options: any[]) => [{ label: label, id: 'alle' }, ...options]
 
-  const [data, totalDataLength, setVirkemiddelTypeFilter, setSortDate, loading] = useVirkemiddelFilter()
+  const [data, totalDataLength, setVirkemiddelTypeFilter, loading, refetchData] = useVirkemiddelFilter()
 
   const filteredVirkemiddel = sok && sok.length > 2 ? data.filter((v) => v.navn.includes(sok)) : data
 
@@ -47,19 +47,11 @@ export const AllVirkemiddel = () => {
     if (type === VirkemiddelListFilter.VIRKEMIDDELTYPE) {
       newFilterValue.virkemiddelType = value
     }
-    if (type === VirkemiddelListFilter.SORTDATE) {
-      newFilterValue.sort = value
-    }
     setFilter(newFilterValue)
   }
 
   useEffect(() => {
     setVirkemiddelTypeFilter(filter.virkemiddelType[0].id?.toString() || '')
-    if (filter.sort[0].id?.toString() !== 'navn') {
-      setSortDate(filter.sort[0].id?.toString() || '')
-    } else {
-      setSortDate('')
-    }
   }, [filter])
 
   //must be run in function to not affect other selectors others overrides
@@ -153,7 +145,6 @@ export const AllVirkemiddel = () => {
                 ),
                 filter.virkemiddelType,
               )}
-              {getSelector(filter.sort[0].id?.toString(), VirkemiddelListFilter.SORTDATE, getSortDateOptions, filter.sort)}
             </Block>
           </Block>
         </Block>
@@ -162,14 +153,6 @@ export const AllVirkemiddel = () => {
       {filteredVirkemiddel.length === 0 && (
         <Block width="100%" display="flex" justifyContent="center">
           <ParagraphMedium>Fant ingen virkemiddel</ParagraphMedium>
-        </Block>
-      )}
-
-      {!loading && totalDataLength !== 0 && (
-        <Block display={'flex'} justifyContent={'space-between'} marginTop={theme.sizing.scale1000}>
-          <LabelSmall marginRight={theme.sizing.scale400}>
-            Viser {filteredVirkemiddel.length}/{totalDataLength}
-          </LabelSmall>
         </Block>
       )}
     </Block>
