@@ -8,9 +8,10 @@ import Button from '../common/Button'
 import {SIZE as ButtonSize} from 'baseui/button/constants'
 import {KIND} from 'baseui/button'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faEdit} from '@fortawesome/free-solid-svg-icons'
+import {faEdit, faTrash} from '@fortawesome/free-solid-svg-icons'
 import {ColumnCompares} from '../../util/hooks'
 import {EditVirkemiddelModal} from '../virkemiddel/edit/EditVirkemiddelModal'
+import DeleteVirkemiddeltModal from "../virkemiddel/edit/DeleteVirkemiddelModal";
 
 
 type VirkmiddelTableProps = {
@@ -28,6 +29,7 @@ const virkemiddelSorting: ColumnCompares<Virkemiddel> = {
 export const VirkemiddelTable = ({virkemidler, loading, refetchData}: VirkmiddelTableProps) => {
   const [selectedVirkemiddel, setSelectedVirkemiddel] = useState<Virkemiddel>()
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false)
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false)
   if (loading) return <SkeletonPanel count={5}/>
   return (
     <>
@@ -73,18 +75,18 @@ export const VirkemiddelTable = ({virkemidler, loading, refetchData}: Virkmiddel
                   >
                     <FontAwesomeIcon icon={faEdit}/>
                   </Button>
-                  {/*<Button*/}
-                  {/*  tooltip={'Slett'}*/}
-                  {/*  size={ButtonSize.compact}*/}
-                  {/*  kind={KIND.tertiary}*/}
-                  {/*  onClick={() => {*/}
-                  {/*    setSelectedCode(row)*/}
-                  {/*    setShowDeleteModal(true)*/}
-                  {/*  }}*/}
-                  {/*  label={'Slett'}*/}
-                  {/*>*/}
-                  {/*  <FontAwesomeIcon icon={faTrash} />*/}
-                  {/*</Button>*/}
+                  <Button
+                    tooltip={'Slett'}
+                    size={ButtonSize.compact}
+                    kind={KIND.tertiary}
+                    onClick={() => {
+                      setSelectedVirkemiddel(virkemiddel)
+                      setIsDeleteModalOpen(true)
+                    }}
+                    label={'Slett'}
+                  >
+                    <FontAwesomeIcon icon={faTrash} />
+                  </Button>
                 </Block>
               </Cell>
             </Row>
@@ -92,6 +94,12 @@ export const VirkemiddelTable = ({virkemidler, loading, refetchData}: Virkmiddel
         }
       />
       <EditVirkemiddelModal isOpen={isEditModalOpen} setIsOpen={setIsEditModalOpen} virkemiddel={selectedVirkemiddel} isEdit={true} refetchData={refetchData}/>
+      <DeleteVirkemiddeltModal isOpen={isDeleteModalOpen} setIsOpen={setIsDeleteModalOpen} virkemiddel={selectedVirkemiddel} refetchData={refetchData}/>
+
+
+
+
+
     </>
   )
 }
