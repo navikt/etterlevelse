@@ -1,4 +1,4 @@
-import {env} from './env'
+import { env } from './env'
 
 export const navSlackTeamId = 'T5LNAMWNA'
 export const etterlevelseSlackChannelId = 'C01V697SSR2'

@@ -1,12 +1,12 @@
-import {Block} from 'baseui/block'
-import {ParagraphMedium} from 'baseui/typography'
-import {useEffect, useState} from 'react'
-import {getKravByKravNumberAndVersion} from '../../api/KravApi'
-import {Etterlevelse, Krav} from '../../constants'
-import {ettlevColors} from '../../util/theme'
+import { Block } from 'baseui/block'
+import { ParagraphMedium } from 'baseui/typography'
+import { useEffect, useState } from 'react'
+import { getKravByKravNumberAndVersion } from '../../api/KravApi'
+import { Etterlevelse, Krav } from '../../constants'
+import { ettlevColors } from '../../util/theme'
 
 import Button from '../common/Button'
-import {EtterlevelseModal} from '../krav/Etterlevelser'
+import { EtterlevelseModal } from '../krav/Etterlevelser'
 
 export const EtterlevelseCard = ({ etterlevelse }: { etterlevelse: Etterlevelse }) => {
   const [isModalOpen, setIsModalOpen] = useState(false)

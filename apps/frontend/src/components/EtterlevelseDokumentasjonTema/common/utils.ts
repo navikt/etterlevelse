@@ -1,8 +1,8 @@
-import {Etterlevelse, EtterlevelseStatus, KravPrioritering, KravQL, SuksesskriterieBegrunnelse} from '../../../constants'
+import { Etterlevelse, EtterlevelseStatus, KravPrioritering, KravQL, SuksesskriterieBegrunnelse } from '../../../constants'
 import _ from 'lodash'
-import {sortKraverByPriority} from '../../../util/sort'
-import {mapEtterlevelseData} from '../../../pages/BehandlingTemaPage'
-import {TemaCode} from '../../../services/Codelist'
+import { sortKraverByPriority } from '../../../util/sort'
+import { mapEtterlevelseData } from '../../../pages/BehandlingTemaPage'
+import { TemaCode } from '../../../services/Codelist'
 
 export const filterKrav = async (allKravPriority: KravPrioritering[], kravList?: KravQL[], temaData?: TemaCode, filterFerdigDokumentert?: boolean) => {
   const unfilteredkraver = kravList ? _.cloneDeep(kravList) : []

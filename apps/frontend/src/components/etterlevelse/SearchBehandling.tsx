@@ -1,6 +1,6 @@
-import {FormControl} from 'baseui/form-control'
-import {Field, FieldProps} from 'formik'
-import {behandlingName, useBehandling, useSearchBehandling} from '../../api/BehandlingApi'
+import { FormControl } from 'baseui/form-control'
+import { Field, FieldProps } from 'formik'
+import { behandlingName, useBehandling, useSearchBehandling } from '../../api/BehandlingApi'
 import CustomizedSelect from '../common/CustomizedSelect'
 
 export const SearchBehandling = (props: { id: string }) => {

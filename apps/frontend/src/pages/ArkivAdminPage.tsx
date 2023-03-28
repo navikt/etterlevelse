@@ -1,9 +1,9 @@
-import {Block} from 'baseui/block'
-import {Button} from 'baseui/button'
-import {HeadingXXLarge, LabelLarge} from 'baseui/typography'
+import { Block } from 'baseui/block'
+import { Button } from 'baseui/button'
+import { HeadingXXLarge, LabelLarge } from 'baseui/typography'
 import moment from 'moment'
-import {useEffect, useState} from 'react'
-import {Helmet} from 'react-helmet'
+import { useEffect, useState } from 'react'
+import { Helmet } from 'react-helmet'
 import {
   arkiveringMapToFormVal,
   arkiveringStatusToString,
@@ -13,13 +13,13 @@ import {
   updateAsAdminEtterlevelseArkiv,
 } from '../api/ArkiveringApi'
 import CustomizedInput from '../components/common/CustomizedInput'
-import {CustomizedStatefulSelect} from '../components/common/CustomizedSelect'
+import { CustomizedStatefulSelect } from '../components/common/CustomizedSelect'
 import RouteLink from '../components/common/RouteLink'
-import {Cell, Row, Table} from '../components/common/Table'
-import {Layout2} from '../components/scaffold/Page'
-import {EtterlevelseArkiv, EtterlevelseArkivStatus} from '../constants'
-import {ampli} from '../services/Amplitude'
-import {ettlevColors, maxPageWidth} from '../util/theme'
+import { Cell, Row, Table } from '../components/common/Table'
+import { Layout2 } from '../components/scaffold/Page'
+import { EtterlevelseArkiv, EtterlevelseArkivStatus } from '../constants'
+import { ampli } from '../services/Amplitude'
+import { ettlevColors, maxPageWidth } from '../util/theme'
 
 export const ArkivAdminPage = () => {
   const [arkiveringId, setArkiveringId] = useState<string>('')

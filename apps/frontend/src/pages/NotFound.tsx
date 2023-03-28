@@ -1,13 +1,13 @@
 import * as React from 'react'
-import {useLocation} from 'react-router-dom'
-import {Block} from 'baseui/block'
-import {theme} from '../util'
-import {ParagraphLarge} from 'baseui/typography'
-import {intl} from '../util/intl/intl'
+import { useLocation } from 'react-router-dom'
+import { Block } from 'baseui/block'
+import { theme } from '../util'
+import { ParagraphLarge } from 'baseui/typography'
+import { intl } from '../util/intl/intl'
 import notFound from '../resources/notfound.svg'
-import {maxPageWidth} from '../util/theme'
-import {Helmet} from 'react-helmet'
-import {ampli} from '../services/Amplitude'
+import { maxPageWidth } from '../util/theme'
+import { Helmet } from 'react-helmet'
+import { ampli } from '../services/Amplitude'
 
 const NotFound = () => {
   const location = useLocation()

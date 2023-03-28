@@ -1,7 +1,7 @@
 import axios from 'axios'
-import React, {useState} from 'react'
-import {Modal, ModalBody, ModalButton, ModalFooter, ModalHeader} from 'baseui/modal'
-import {buttonContentStyle} from '../components/common/Button'
+import React, { useState } from 'react'
+import { Modal, ModalBody, ModalButton, ModalFooter, ModalHeader } from 'baseui/modal'
+import { buttonContentStyle } from '../components/common/Button'
 
 let done = false
 

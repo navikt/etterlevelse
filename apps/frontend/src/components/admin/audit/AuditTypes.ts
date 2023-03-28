@@ -1,4 +1,4 @@
-import {ListName} from '../../../services/Codelist'
+import { ListName } from '../../../services/Codelist'
 
 export interface AuditItem {
   action: AuditAction

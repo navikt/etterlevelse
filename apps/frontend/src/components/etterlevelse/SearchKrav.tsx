@@ -1,7 +1,7 @@
-import {FormControl} from 'baseui/form-control'
-import {Field, FieldProps} from 'formik'
-import {useKrav, useSearchKrav} from '../../api/KravApi'
-import {kravName} from '../../pages/KravPage'
+import { FormControl } from 'baseui/form-control'
+import { Field, FieldProps } from 'formik'
+import { useKrav, useSearchKrav } from '../../api/KravApi'
+import { kravName } from '../../pages/KravPage'
 import CustomizedSelect from '../common/CustomizedSelect'
 
 export const SearchKrav = (props: { kravNummer: number; kravVersjon: number }) => {

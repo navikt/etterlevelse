@@ -1,6 +1,6 @@
-import {Input, InputOverrides, InputProps} from 'baseui/input'
+import { Input, InputOverrides, InputProps } from 'baseui/input'
 import _ from 'lodash'
-import {ettlevColors} from '../../util/theme'
+import { ettlevColors } from '../../util/theme'
 
 export const CustomizedInput = (props: InputProps) => {
   const customOverrides: InputOverrides = {

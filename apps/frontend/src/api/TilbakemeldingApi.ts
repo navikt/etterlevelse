@@ -1,7 +1,7 @@
 import axios from 'axios'
-import {PageResponse, Tilbakemelding, TilbakemeldingMeldingStatus, TilbakemeldingRolle, TilbakemeldingType, Varslingsadresse} from '../constants'
-import {env} from '../util/env'
-import {useEffect, useState} from 'react'
+import { PageResponse, Tilbakemelding, TilbakemeldingMeldingStatus, TilbakemeldingRolle, TilbakemeldingType, Varslingsadresse } from '../constants'
+import { env } from '../util/env'
+import { useEffect, useState } from 'react'
 import moment from 'moment'
 
 export const getTilbakemeldingForKrav = async (kravNummer: number, kravVersjon: number) => {

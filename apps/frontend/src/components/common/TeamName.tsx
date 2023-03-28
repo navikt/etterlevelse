@@ -1,13 +1,13 @@
-import {useTeam} from '../../api/TeamApi'
+import { useTeam } from '../../api/TeamApi'
 import React from 'react'
-import {teamKatTeamLink} from '../../util/config'
-import {StyledLink} from 'baseui/link'
-import {Block} from 'baseui/block'
-import {theme} from '../../util'
-import {ettlevColors} from '../../util/theme'
-import {StyleObject} from 'styletron-react'
+import { teamKatTeamLink } from '../../util/config'
+import { StyledLink } from 'baseui/link'
+import { Block } from 'baseui/block'
+import { theme } from '../../util'
+import { ettlevColors } from '../../util/theme'
+import { StyleObject } from 'styletron-react'
 import _ from 'lodash'
-import {ExternalLinkWrapper} from './RouteLink'
+import { ExternalLinkWrapper } from './RouteLink'
 
 export const TeamName = (props: { id: string; link?: boolean; fontColor?: string; style?: StyleObject }) => {
   const [name] = useTeam()(props.id)

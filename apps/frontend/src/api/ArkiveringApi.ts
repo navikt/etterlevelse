@@ -1,7 +1,7 @@
 import axios from 'axios'
-import {useEffect, useState} from 'react'
-import {EtterlevelseArkiv, EtterlevelseArkivStatus, PageResponse} from '../constants'
-import {env} from '../util/env'
+import { useEffect, useState } from 'react'
+import { EtterlevelseArkiv, EtterlevelseArkivStatus, PageResponse } from '../constants'
+import { env } from '../util/env'
 
 export const getAllArkivering = async () => {
   const PAGE_SIZE = 100

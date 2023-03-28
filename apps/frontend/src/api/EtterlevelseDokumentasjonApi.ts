@@ -1,9 +1,9 @@
 import axios from 'axios'
-import {EtterlevelseDokumentasjon, EtterlevelseDokumentasjonQL, PageResponse, Team} from '../constants'
-import {env} from '../util/env'
-import {useEffect, useState} from 'react'
-import {getBehandling} from './BehandlingApi'
-import {getTeams} from './TeamApi'
+import { EtterlevelseDokumentasjon, EtterlevelseDokumentasjonQL, PageResponse, Team } from '../constants'
+import { env } from '../util/env'
+import { useEffect, useState } from 'react'
+import { getBehandling } from './BehandlingApi'
+import { getTeams } from './TeamApi'
 
 export const getEtterlevelseDokumentasjon = async (id: string) => {
   return (await axios.get<EtterlevelseDokumentasjon>(`${env.backendBaseUrl}/etterlevelsedokumentasjon/${id}`)).data

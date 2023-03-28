@@ -1,7 +1,7 @@
-import {ettlevColors, theme} from '../../util/theme'
-import {Block} from 'baseui/block'
-import {IconInCircle} from './Icon'
-import {HeadingXLarge, ParagraphSmall} from 'baseui/typography'
+import { ettlevColors, theme } from '../../util/theme'
+import { Block } from 'baseui/block'
+import { IconInCircle } from './Icon'
+import { HeadingXLarge, ParagraphSmall } from 'baseui/typography'
 import React from 'react'
 
 export const InfoBlock = (props: { icon: string; alt: string; text: string; color: string }) => (

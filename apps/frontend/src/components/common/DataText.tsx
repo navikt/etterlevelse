@@ -1,7 +1,7 @@
-import {default as React, ReactNode} from 'react'
-import {Block, Responsive} from 'baseui/block'
-import {theme} from '../../util'
-import {HeadingXLarge, LabelLarge} from 'baseui/typography'
+import { default as React, ReactNode } from 'react'
+import { Block, Responsive } from 'baseui/block'
+import { theme } from '../../util'
+import { HeadingXLarge, LabelLarge } from 'baseui/typography'
 
 type DataTextProps = {
   label?: string

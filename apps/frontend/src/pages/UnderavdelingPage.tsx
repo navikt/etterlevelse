@@ -1,14 +1,14 @@
-import {useParams} from 'react-router-dom'
-import {Block} from 'baseui/block'
+import { useParams } from 'react-router-dom'
+import { Block } from 'baseui/block'
 import React from 'react'
-import {HeadingMedium, HeadingSmall, ParagraphMedium} from 'baseui/typography'
-import {codelist, ListName} from '../services/Codelist'
+import { HeadingMedium, HeadingSmall, ParagraphMedium } from 'baseui/typography'
+import { codelist, ListName } from '../services/Codelist'
 import RouteLink from '../components/common/RouteLink'
-import {theme} from '../util'
-import {KravFilterTable} from '../components/common/KravFilterTable'
-import {maxPageWidth, responsivePaddingSmall, responsiveWidthSmall} from '../util/theme'
-import {Helmet} from 'react-helmet'
-import {ampli} from '../services/Amplitude'
+import { theme } from '../util'
+import { KravFilterTable } from '../components/common/KravFilterTable'
+import { maxPageWidth, responsivePaddingSmall, responsiveWidthSmall } from '../util/theme'
+import { Helmet } from 'react-helmet'
+import { ampli } from '../services/Amplitude'
 
 export const UnderavdelingPage = () => {
   const { underavdeling } = useParams<{ underavdeling: string }>()

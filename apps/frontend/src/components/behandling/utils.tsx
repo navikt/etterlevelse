@@ -1,5 +1,5 @@
-import {EtterlevelseStatus} from '../../constants'
-import {ettlevColors} from '../../util/theme'
+import { EtterlevelseStatus } from '../../constants'
+import { ettlevColors } from '../../util/theme'
 import moment from 'moment'
 
 export const getEtterlevelseStatus = (status?: EtterlevelseStatus, frist?: string) => {

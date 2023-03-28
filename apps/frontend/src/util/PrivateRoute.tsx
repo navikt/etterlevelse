@@ -1,8 +1,8 @@
-import {Navigate} from 'react-router-dom'
-import React, {useState} from 'react'
-import {user} from '../services/User'
-import {Spinner} from 'baseui/icon'
-import {ettlevColors, theme} from './theme'
+import { Navigate } from 'react-router-dom'
+import React, { useState } from 'react'
+import { user } from '../services/User'
+import { Spinner } from 'baseui/icon'
+import { ettlevColors, theme } from './theme'
 
 interface PrivateRouteProps {
   component: JSX.Element

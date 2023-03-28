@@ -1,10 +1,10 @@
 import * as React from 'react'
 import CustomizedStatefulTooltip from './CustomizedStatefulTooltip'
-import {questionmarkHoverIcon, questionmarkIcon} from '../Images'
-import {Block} from 'baseui/block'
-import {LabelLarge} from 'baseui/typography'
-import {ettlevColors, theme} from '../../util/theme'
-import {buttonContentStyle} from './Button'
+import { questionmarkHoverIcon, questionmarkIcon } from '../Images'
+import { Block } from 'baseui/block'
+import { LabelLarge } from 'baseui/typography'
+import { ettlevColors, theme } from '../../util/theme'
+import { buttonContentStyle } from './Button'
 
 const LabelWithToolTip = (props: { label?: string; tooltip?: React.ReactNode; fontColor?: string }) => {
   if (props.tooltip) {

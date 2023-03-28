@@ -1,6 +1,6 @@
 import axios from 'axios'
-import {env} from '../util/env'
-import {AlertType, Melding, MeldingStatus, MeldingType, PageResponse} from '../constants'
+import { env } from '../util/env'
+import { AlertType, Melding, MeldingStatus, MeldingType, PageResponse } from '../constants'
 
 export const getAllMelding = async () => {
   const PAGE_SIZE = 100

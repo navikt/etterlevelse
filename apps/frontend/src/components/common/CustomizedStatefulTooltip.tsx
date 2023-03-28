@@ -1,5 +1,5 @@
 import React from 'react'
-import {ACCESSIBILITY_TYPE, PLACEMENT, StatefulTooltip, StatefulTooltipProps, TRIGGER_TYPE} from 'baseui/tooltip'
+import { ACCESSIBILITY_TYPE, PLACEMENT, StatefulTooltip, StatefulTooltipProps, TRIGGER_TYPE } from 'baseui/tooltip'
 
 const CustomizedStatefulTooltip = (props: Partial<StatefulTooltipProps>) => {
   return (

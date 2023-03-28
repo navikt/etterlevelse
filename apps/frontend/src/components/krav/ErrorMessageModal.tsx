@@ -1,8 +1,8 @@
-import {Block} from 'baseui/block'
-import {KIND as NKIND, Notification} from 'baseui/notification'
-import {paddingZero} from '../common/Style'
+import { Block } from 'baseui/block'
+import { KIND as NKIND, Notification } from 'baseui/notification'
+import { paddingZero } from '../common/Style'
 import * as React from 'react'
-import {ModalLabel} from '../common/ModalSchema'
+import { ModalLabel } from '../common/ModalSchema'
 
 export const ErrorMessageModal = (props: { msg: any; fullWidth?: boolean }) => (
   <Block display="flex" width="100%" marginTop=".2rem">

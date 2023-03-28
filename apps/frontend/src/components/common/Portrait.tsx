@@ -1,8 +1,8 @@
-import React, {useState} from 'react'
-import {personImageLink} from '../../util/config'
-import {Block} from 'baseui/block'
-import {Spinner} from './Spinner'
-import {avatarPlaceholder} from '../Images'
+import React, { useState } from 'react'
+import { personImageLink } from '../../util/config'
+import { Block } from 'baseui/block'
+import { Spinner } from './Spinner'
+import { avatarPlaceholder } from '../Images'
 
 export const Portrait = (props: { ident: string; size?: string }) => {
   const [loading, setLoading] = useState(true)

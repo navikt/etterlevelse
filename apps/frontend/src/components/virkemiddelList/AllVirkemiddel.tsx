@@ -1,20 +1,20 @@
-import {useEffect, useState} from 'react'
-import {codelist, ListName} from '../../services/Codelist'
-import {VirkemiddelListFilter} from '../../constants'
-import {Block, Responsive, Scale} from 'baseui/block'
-import {Option} from 'baseui/select'
+import { useEffect, useState } from 'react'
+import { codelist, ListName } from '../../services/Codelist'
+import { VirkemiddelListFilter } from '../../constants'
+import { Block, Responsive, Scale } from 'baseui/block'
+import { Option } from 'baseui/select'
 import CustomizedSelect from '../common/CustomizedSelect'
-import {ettlevColors, theme} from '../../util/theme'
-import {Spinner} from '../common/Spinner'
-import {HeadingXLarge, LabelSmall, ParagraphMedium} from 'baseui/typography'
-import {borderColor, borderWidth} from '../common/Style'
-import {useVirkemiddelFilter} from '../../api/VirkemiddelApi'
-import {useDebouncedState} from '../../util/hooks'
-import {StatefulInput} from 'baseui/input'
+import { ettlevColors, theme } from '../../util/theme'
+import { Spinner } from '../common/Spinner'
+import { HeadingXLarge, LabelSmall, ParagraphMedium } from 'baseui/typography'
+import { borderColor, borderWidth } from '../common/Style'
+import { useVirkemiddelFilter } from '../../api/VirkemiddelApi'
+import { useDebouncedState } from '../../util/hooks'
+import { StatefulInput } from 'baseui/input'
 import Button from '../common/Button'
-import {clearSearchIcon, searchIcon} from '../Images'
-import {VirkemiddelTable} from './VirkemiddelTable'
-import {EditVirkemiddelModal} from '../virkemiddel/edit/EditVirkemiddelModal'
+import { clearSearchIcon, searchIcon } from '../Images'
+import { VirkemiddelTable } from './VirkemiddelTable'
+import { EditVirkemiddelModal } from '../virkemiddel/edit/EditVirkemiddelModal'
 
 type VirkemiddelFilter = {
   virkemiddelType: Option[]
@@ -63,7 +63,7 @@ export const AllVirkemiddel = ({ isCreateModalOpen, setIsCreateModalOpen }: AllV
   //must be run in function to not affect other selectors others overrides
   const getSelector = (filterId: string | undefined, virkemiddelFilter: VirkemiddelListFilter, options: any[], value: Option[]) => {
     return (
-      <Block marginLeft={selectorMarginLeft} marginTop={selectorMarginTop} >
+      <Block marginLeft={selectorMarginLeft} marginTop={selectorMarginTop}>
         <CustomizedSelect
           key={'virkemiddel_filter_' + virkemiddelFilter}
           clearable={false}
@@ -74,7 +74,8 @@ export const AllVirkemiddel = ({ isCreateModalOpen, setIsCreateModalOpen }: AllV
             Root: {
               style: {
                 minWidth: '200px',
-            }},
+              },
+            },
             ControlContainer: {
               style: {
                 backgroundColor: filterId === 'alle' ? ettlevColors.white : ettlevColors.green50,
