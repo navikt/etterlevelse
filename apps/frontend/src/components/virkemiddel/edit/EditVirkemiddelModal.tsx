@@ -27,9 +27,9 @@ type EditVirkemiddelModalProps = {
 
 export const EditVirkemiddelModal = (props: EditVirkemiddelModalProps) => {
   const virkemiddelTypeOptions = codelist.getParsedOptions(ListName.VIRKEMIDDELTYPE)
-  const [valgtVirkemiddeltype, setValgtVirkemiddeltype] = useState<Value>(props.virkemiddel ? [{
-    id: props.virkemiddel.virkemiddelType?.code,
-    label: props.virkemiddel.virkemiddelType?.shortName
+  const [valgtVirkemiddeltype, setValgtVirkemiddeltype] = useState<Value>(props.virkemiddel && props.virkemiddel.virkemiddelType ? [{
+    id: props.virkemiddel.virkemiddelType.code,
+    label: props.virkemiddel.virkemiddelType.shortName
   }] : [])
 
   const submit = async (virkemiddel: Virkemiddel) => {
