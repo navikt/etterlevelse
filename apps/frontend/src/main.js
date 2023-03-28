@@ -37,7 +37,7 @@ const Main = (props) => {
           <HistoryRouter history={createBrowserHistory({ window })}>
             <Helmet>
               <meta charSet="utf-8" />
-              <title>Etterlevelse Beta</title>
+              <title>Etterlevelse</title>
             </Helmet>
 
             <Block {...containerProps} minHeight="100vh" position="relative">
