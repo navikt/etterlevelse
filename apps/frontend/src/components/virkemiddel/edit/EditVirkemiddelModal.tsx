@@ -1,21 +1,21 @@
-import {Block} from 'baseui/block'
-import {ModalBody, ModalHeader} from 'baseui/modal'
-import {useEffect, useState} from 'react'
-import {Virkemiddel} from '../../../constants'
-import {codelist, ListName} from '../../../services/Codelist'
+import { Block } from 'baseui/block'
+import { ModalBody, ModalHeader } from 'baseui/modal'
+import { useEffect, useState } from 'react'
+import { Virkemiddel } from '../../../constants'
+import { codelist, ListName } from '../../../services/Codelist'
 import Button from '../../common/Button'
 import CustomizedModal from '../../common/CustomizedModal'
-import {Field, FieldProps, Form, Formik} from 'formik'
-import {createVirkemiddel, updateVirkemiddel, virkemiddelMapToFormVal} from '../../../api/VirkemiddelApi'
-import {FieldWrapper, InputField} from '../../common/Inputs'
-import {FormControl} from 'baseui/form-control'
+import { Field, FieldProps, Form, Formik } from 'formik'
+import { createVirkemiddel, updateVirkemiddel, virkemiddelMapToFormVal } from '../../../api/VirkemiddelApi'
+import { FieldWrapper, InputField } from '../../common/Inputs'
+import { FormControl } from 'baseui/form-control'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
 import CustomizedSelect from '../../common/CustomizedSelect'
-import {intl} from '../../../util/intl/intl'
-import {Value} from 'baseui/select'
-import {RegelverkEdit} from '../../krav/Edit/RegelverkEdit'
-import {borderColor, borderWidth} from '../../common/Style'
-import {ettlevColors} from '../../../util/theme'
+import { intl } from '../../../util/intl/intl'
+import { Value } from 'baseui/select'
+import { RegelverkEdit } from '../../krav/Edit/RegelverkEdit'
+import { borderColor, borderWidth } from '../../common/Style'
+import { ettlevColors } from '../../../util/theme'
 
 type EditVirkemiddelModalProps = {
   isOpen: boolean
@@ -65,7 +65,7 @@ export const EditVirkemiddelModal = (props: EditVirkemiddelModalProps) => {
 
   return (
     <Block>
-      <CustomizedModal isOpen={!!props.isOpen} onClose={() => props.setIsOpen(false)}>
+      <CustomizedModal size="default" isOpen={!!props.isOpen} onClose={() => props.setIsOpen(false)}>
         <ModalHeader>{props.isEdit ? 'Rediger virkemiddel' : 'Opprett nytt virkemiddel'}</ModalHeader>
         <ModalBody>
           <Formik initialValues={virkemiddelMapToFormVal(props.virkemiddel ? props.virkemiddel : {})} onSubmit={submit}>
@@ -109,18 +109,21 @@ export const EditVirkemiddelModal = (props: EditVirkemiddelModalProps) => {
                   </FieldWrapper>
 
                   <RegelverkEdit />
+                  <Block display="flex" justifyContent="flex-end">
+                    <Button kind="secondary" type="button" onClick={() => props.setIsOpen(false)}>
+                      Avbryt
+                    </Button>
 
-                  <Button
-                    type="button"
-                    onClick={() => {
-                      submitForm()
-                    }}
-                  >
-                    {props.isEdit ? 'Lagre' : 'Opprett'}
-                  </Button>
-                  <Button type="button" onClick={() => props.setIsOpen(false)} marginLeft={true}>
-                    Avbryt
-                  </Button>
+                    <Button
+                      marginLeft={true}
+                      type="button"
+                      onClick={() => {
+                        submitForm()
+                      }}
+                    >
+                      {props.isEdit ? 'Lagre' : 'Opprett'}
+                    </Button>
+                  </Block>
                 </Form>
               )
             }}
