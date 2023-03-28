@@ -1,33 +1,33 @@
-import {Block} from 'baseui/block'
-import {ModalBody, ModalHeader} from 'baseui/modal'
-import {useEffect, useState} from 'react'
-import {useSearchBehandling} from '../../../api/BehandlingApi'
-import {createEtterlevelseDokumentasjon, etterlevelseDokumentasjonMapToFormVal, updateEtterlevelseDokumentasjon} from '../../../api/EtterlevelseDokumentasjonApi'
-import {Behandling, EtterlevelseDokumentasjonQL, Team} from '../../../constants'
-import {Code, codelist, ListName} from '../../../services/Codelist'
-import Button, {buttonContentStyle} from '../../common/Button'
+import { Block } from 'baseui/block'
+import { ModalBody, ModalHeader } from 'baseui/modal'
+import { useEffect, useState } from 'react'
+import { useSearchBehandling } from '../../../api/BehandlingApi'
+import { createEtterlevelseDokumentasjon, etterlevelseDokumentasjonMapToFormVal, updateEtterlevelseDokumentasjon } from '../../../api/EtterlevelseDokumentasjonApi'
+import { Behandling, EtterlevelseDokumentasjonQL, Team } from '../../../constants'
+import { Code, codelist, ListName } from '../../../services/Codelist'
+import Button, { buttonContentStyle } from '../../common/Button'
 import CustomizedModal from '../../common/CustomizedModal'
-import {Button as BaseUIButton, KIND} from 'baseui/button'
-import {Field, FieldArray, FieldArrayRenderProps, FieldProps, Form, Formik} from 'formik'
-import {FormControl} from 'baseui/form-control'
-import {FieldWrapper, InputField} from '../../common/Inputs'
-import {ButtonGroup} from 'baseui/button-group'
-import {ACCESSIBILITY_TYPE} from 'baseui/popover'
-import {PLACEMENT} from 'baseui/toast'
-import {StatefulTooltip} from 'baseui/tooltip'
-import {ParagraphMedium} from 'baseui/typography'
-import {theme} from '../../../util'
-import {ettlevColors} from '../../../util/theme'
+import { Button as BaseUIButton, KIND } from 'baseui/button'
+import { Field, FieldArray, FieldArrayRenderProps, FieldProps, Form, Formik } from 'formik'
+import { FormControl } from 'baseui/form-control'
+import { FieldWrapper, InputField } from '../../common/Inputs'
+import { ButtonGroup } from 'baseui/button-group'
+import { ACCESSIBILITY_TYPE } from 'baseui/popover'
+import { PLACEMENT } from 'baseui/toast'
+import { StatefulTooltip } from 'baseui/tooltip'
+import { ParagraphMedium } from 'baseui/typography'
+import { theme } from '../../../util'
+import { ettlevColors } from '../../../util/theme'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
-import {borderColor, borderRadius, borderStyle, borderWidth} from '../../common/Style'
-import {checkboxChecked, checkboxUnchecked, checkboxUncheckedHover, editIcon, outlineInfoIcon, plusIcon, searchIcon} from '../../Images'
-import {Tag, VARIANT} from 'baseui/tag'
-import {Error} from '../../common/ModalSchema'
+import { borderColor, borderRadius, borderStyle, borderWidth } from '../../common/Style'
+import { checkboxChecked, checkboxUnchecked, checkboxUncheckedHover, editIcon, outlineInfoIcon, plusIcon, searchIcon } from '../../Images'
+import { Tag, VARIANT } from 'baseui/tag'
+import { Error } from '../../common/ModalSchema'
 import CustomizedSelect from '../../common/CustomizedSelect'
-import {intl} from '../../../util/intl/intl'
-import {SelectOverrides, TYPE} from 'baseui/select'
-import {getTeams, useSearchTeam} from '../../../api/TeamApi'
-import {RenderTagList} from '../../common/TagList'
+import { intl } from '../../../util/intl/intl'
+import { SelectOverrides, TYPE } from 'baseui/select'
+import { getTeams, useSearchTeam } from '../../../api/TeamApi'
+import { RenderTagList } from '../../common/TagList'
 
 type EditEtterlevelseDokumentasjonModalProps = {
   etterlevelseDokumentasjon?: EtterlevelseDokumentasjonQL
@@ -140,7 +140,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
         {props.isEditButton ? 'Rediger dokumentasjon' : 'Ny dokumentasjon'}
       </Button>
 
-      <CustomizedModal isOpen={!!isEtterlevelseDokumentasjonerModalOpen} onClose={() => setIsEtterlevelseDokumntasjonerModalOpen(false)}>
+      <CustomizedModal size="default" isOpen={!!isEtterlevelseDokumentasjonerModalOpen} onClose={() => setIsEtterlevelseDokumntasjonerModalOpen(false)}>
         <ModalHeader>{props.isEditButton ? 'Rediger dokumentasjonen' : 'Opprett ny dokumentasjon'}</ModalHeader>
         <ModalBody>
           <Formik initialValues={etterlevelseDokumentasjonMapToFormVal(props.etterlevelseDokumentasjon ? props.etterlevelseDokumentasjon : {})} onSubmit={submit}>
@@ -354,17 +354,20 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                     }}
                   </FieldArray>
 
-                  <Button
-                    type="button"
-                    onClick={() => {
-                      submitForm()
-                    }}
-                  >
-                    {props.isEditButton ? 'Lagre' : 'Opprett'}
-                  </Button>
-                  <Button type="button" onClick={() => setIsEtterlevelseDokumntasjonerModalOpen(false)} marginLeft={true}>
-                    Avbryt
-                  </Button>
+                  <Block display="flex" justifyContent="flex-end">
+                    <Button kind="secondary" type="button" onClick={() => setIsEtterlevelseDokumntasjonerModalOpen(false)}>
+                      Avbryt
+                    </Button>
+                    <Button
+                      marginLeft={true}
+                      type="button"
+                      onClick={() => {
+                        submitForm()
+                      }}
+                    >
+                      {props.isEditButton ? 'Lagre' : 'Opprett'}
+                    </Button>
+                  </Block>
                 </Form>
               )
             }}
