@@ -1,8 +1,8 @@
 import axios from 'axios'
-import { emptyPage, Krav, KravQL, KravStatus, Or, PageResponse, Virkemiddel } from '../constants'
-import { env } from '../util/env'
-import { useEffect, useState } from 'react'
-import { useDebouncedState } from '../util/hooks'
+import {emptyPage, PageResponse, Virkemiddel} from '../constants'
+import {env} from '../util/env'
+import {useEffect, useState} from 'react'
+import {useDebouncedState} from '../util/hooks'
 
 export const getAllVirkemiddel = async () => {
   const PAGE_SIZE = 100
@@ -86,7 +86,7 @@ export const useSearchVirkemiddel = () => {
   const [loading, setLoading] = useState<boolean>(false)
 
   useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       if (search && search.length > 2) {
         setLoading(true)
 
@@ -116,7 +116,7 @@ export const useVirkemiddelFilter = () => {
   }
 
   useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       setLoading(true)
       let allVirkemiddel = await getAllVirkemiddel()
       setTotalDataLenght(allVirkemiddel.length)
@@ -129,14 +129,8 @@ export const useVirkemiddelFilter = () => {
       setLoading(false)
     })()
   }, [virkemiddelTypeFilter, refetch])
-  
-  return [data, totalDataLength, setVirkemiddelTypeFilter, loading, refetchData] as [
-    Virkemiddel[],
-    number,
-    React.Dispatch<React.SetStateAction<string>>,
-    boolean,
-    () => void,
-  ]
+
+  return [data, totalDataLength, setVirkemiddelTypeFilter, loading, refetchData] as [Virkemiddel[], number, React.Dispatch<React.SetStateAction<string>>, boolean, () => void]
 }
 
 export const virkemiddelToVirkemiddelDto = (virkemiddel: Virkemiddel): Virkemiddel => {

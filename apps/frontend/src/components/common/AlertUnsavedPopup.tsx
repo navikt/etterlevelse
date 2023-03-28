@@ -1,10 +1,9 @@
-import { Block } from 'baseui/block'
-import { ModalHeader } from 'baseui/modal'
-import { useState } from 'react'
-import { usePrompt } from '../../util/hooks/routerHooks'
+import {Block} from 'baseui/block'
+import {ModalHeader} from 'baseui/modal'
+import {usePrompt} from '../../util/hooks/routerHooks'
 import Button from './Button'
 import CustomizedModal from './CustomizedModal'
-import { borderRadius, marginAll } from './Style'
+import {borderRadius, marginAll} from './Style'
 
 type AlertUnsavedPopupProps = {
   isActive: boolean

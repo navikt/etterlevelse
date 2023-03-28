@@ -11,8 +11,7 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faEdit, faTrash} from '@fortawesome/free-solid-svg-icons'
 import {ColumnCompares} from '../../util/hooks'
 import {EditVirkemiddelModal} from '../virkemiddel/edit/EditVirkemiddelModal'
-import DeleteVirkemiddeltModal from "../virkemiddel/edit/DeleteVirkemiddelModal";
-
+import DeleteVirkemiddeltModal from '../virkemiddel/edit/DeleteVirkemiddelModal'
 
 type VirkmiddelTableProps = {
   virkemidler: Virkemiddel[]
@@ -26,11 +25,11 @@ const virkemiddelSorting: ColumnCompares<Virkemiddel> = {
   changeStamp: (a, b) => (a.changeStamp.lastModifiedDate || '').localeCompare(b.changeStamp.lastModifiedDate || ''),
 }
 
-export const VirkemiddelTable = ({virkemidler, loading, refetchData}: VirkmiddelTableProps) => {
+export const VirkemiddelTable = ({ virkemidler, loading, refetchData }: VirkmiddelTableProps) => {
   const [selectedVirkemiddel, setSelectedVirkemiddel] = useState<Virkemiddel>()
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false)
-  if (loading) return <SkeletonPanel count={5}/>
+  if (loading) return <SkeletonPanel count={5} />
   return (
     <>
       <Table
@@ -44,18 +43,18 @@ export const VirkemiddelTable = ({virkemidler, loading, refetchData}: Virkmiddel
           defaultPageSize: 20,
         }}
         headers={[
-          {title: 'Navn', column: 'navn', small: true},
-          {title: 'Virkemiddeltype', column: 'virkemiddelType', $style: {width: '55%'}},
-          {title: 'Siste endret', column: 'changeStamp', $style: {width: '55%'}},
-          {title: '', small: true},
+          { title: 'Navn', column: 'navn', small: true },
+          { title: 'Virkemiddeltype', column: 'virkemiddelType', $style: { width: '55%' } },
+          { title: 'Siste endret', column: 'changeStamp', $style: { width: '55%' } },
+          { title: '', small: true },
         ]}
         render={(table) =>
           table.data.map((virkemiddel, index) => (
             <Row key={index}>
-              <Cell small $style={{wordBreak: 'break-word'}}>
+              <Cell small $style={{ wordBreak: 'break-word' }}>
                 {virkemiddel.navn}
               </Cell>
-              <Cell $style={{width: '55%'}}>
+              <Cell $style={{ width: '55%' }}>
                 <Block display="flex" flexDirection="column" width="100%">
                   <Block>{virkemiddel.virkemiddelType && virkemiddel.virkemiddelType.shortName}</Block>
                 </Block>
@@ -73,7 +72,7 @@ export const VirkemiddelTable = ({virkemidler, loading, refetchData}: Virkmiddel
                     }}
                     label={'Rediger'}
                   >
-                    <FontAwesomeIcon icon={faEdit}/>
+                    <FontAwesomeIcon icon={faEdit} />
                   </Button>
                   <Button
                     tooltip={'Slett'}
@@ -93,13 +92,8 @@ export const VirkemiddelTable = ({virkemidler, loading, refetchData}: Virkmiddel
           ))
         }
       />
-      <EditVirkemiddelModal isOpen={isEditModalOpen} setIsOpen={setIsEditModalOpen} virkemiddel={selectedVirkemiddel} isEdit={true} refetchData={refetchData}/>
-      <DeleteVirkemiddeltModal isOpen={isDeleteModalOpen} setIsOpen={setIsDeleteModalOpen} virkemiddel={selectedVirkemiddel} refetchData={refetchData}/>
-
-
-
-
-
+      <EditVirkemiddelModal isOpen={isEditModalOpen} setIsOpen={setIsEditModalOpen} virkemiddel={selectedVirkemiddel} isEdit={true} refetchData={refetchData} />
+      <DeleteVirkemiddeltModal isOpen={isDeleteModalOpen} setIsOpen={setIsDeleteModalOpen} virkemiddel={selectedVirkemiddel} refetchData={refetchData} />
     </>
   )
 }

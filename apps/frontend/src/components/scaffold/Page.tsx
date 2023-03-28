@@ -1,9 +1,7 @@
-import { Block } from 'baseui/block'
-import { ettlevColors, maxPageWidth, pageWidth, responsivePaddingSmall, theme } from '../../util/theme'
-import RouteLink from '../common/RouteLink'
-import Button from '../common/Button'
+import {Block} from 'baseui/block'
+import {ettlevColors, maxPageWidth, pageWidth, responsivePaddingSmall, theme} from '../../util/theme'
 import React from 'react'
-import CustomizedBreadcrumbs, { breadcrumbPaths } from '../common/CustomizedBreadcrumbs'
+import CustomizedBreadcrumbs, {breadcrumbPaths} from '../common/CustomizedBreadcrumbs'
 
 const padding = ['16px', '16px', '16px', '20px', '40px', '80px']
 

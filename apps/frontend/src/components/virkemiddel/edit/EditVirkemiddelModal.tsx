@@ -1,21 +1,21 @@
-import { Block } from 'baseui/block'
-import { ModalBody, ModalHeader } from 'baseui/modal'
-import { useEffect, useState } from 'react'
-import { Virkemiddel } from '../../../constants'
-import { codelist, ListName } from '../../../services/Codelist'
+import {Block} from 'baseui/block'
+import {ModalBody, ModalHeader} from 'baseui/modal'
+import {useEffect, useState} from 'react'
+import {Virkemiddel} from '../../../constants'
+import {codelist, ListName} from '../../../services/Codelist'
 import Button from '../../common/Button'
 import CustomizedModal from '../../common/CustomizedModal'
-import { Field, FieldProps, Form, Formik } from 'formik'
-import { createVirkemiddel, updateVirkemiddel, virkemiddelMapToFormVal } from '../../../api/VirkemiddelApi'
-import { FieldWrapper, InputField } from '../../common/Inputs'
-import { FormControl } from 'baseui/form-control'
+import {Field, FieldProps, Form, Formik} from 'formik'
+import {createVirkemiddel, updateVirkemiddel, virkemiddelMapToFormVal} from '../../../api/VirkemiddelApi'
+import {FieldWrapper, InputField} from '../../common/Inputs'
+import {FormControl} from 'baseui/form-control'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
 import CustomizedSelect from '../../common/CustomizedSelect'
-import { intl } from '../../../util/intl/intl'
-import { Value } from 'baseui/select'
-import { RegelverkEdit } from '../../krav/Edit/RegelverkEdit'
-import { borderColor, borderWidth } from '../../common/Style'
-import { ettlevColors } from '../../../util/theme'
+import {intl} from '../../../util/intl/intl'
+import {Value} from 'baseui/select'
+import {RegelverkEdit} from '../../krav/Edit/RegelverkEdit'
+import {borderColor, borderWidth} from '../../common/Style'
+import {ettlevColors} from '../../../util/theme'
 
 type EditVirkemiddelModalProps = {
   isOpen: boolean
@@ -32,10 +32,12 @@ export const EditVirkemiddelModal = (props: EditVirkemiddelModalProps) => {
 
   useEffect(() => {
     if (props.virkemiddel && props.virkemiddel.virkemiddelType) {
-      setValgtVirkemiddeltype([{
-        id: props.virkemiddel.virkemiddelType.code,
-        label: props.virkemiddel.virkemiddelType.shortName
-      }])
+      setValgtVirkemiddeltype([
+        {
+          id: props.virkemiddel.virkemiddelType.code,
+          label: props.virkemiddel.virkemiddelType.shortName,
+        },
+      ])
     }
   }, [props.virkemiddel])
 

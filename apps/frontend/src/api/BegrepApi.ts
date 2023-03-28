@@ -1,7 +1,7 @@
 import axios from 'axios'
-import { Begrep, PageResponse } from '../constants'
-import { env } from '../util/env'
-import { useSearch } from '../util/hooks'
+import {Begrep, PageResponse} from '../constants'
+import {env} from '../util/env'
+import {useSearch} from '../util/hooks'
 
 export const getBegrep = async (begrepId: string) => {
   return (await axios.get<Begrep>(`${env.backendBaseUrl}/begrep/${begrepId}`)).data

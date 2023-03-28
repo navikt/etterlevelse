@@ -1,4 +1,4 @@
-import { TilbakemeldingMeldingStatus } from '../../../constants'
+import {TilbakemeldingMeldingStatus} from '../../../constants'
 
 export const tilbakemeldingStatusToText = (status: TilbakemeldingMeldingStatus) => {
   switch (status) {

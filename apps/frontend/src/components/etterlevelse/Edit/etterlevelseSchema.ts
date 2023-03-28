@@ -1,5 +1,5 @@
 import * as yup from 'yup'
-import { EtterlevelseStatus, SuksesskriterieStatus } from '../../../constants'
+import {EtterlevelseStatus, SuksesskriterieStatus} from '../../../constants'
 
 export const etterlevelseSchema = () => {
   return yup.object({

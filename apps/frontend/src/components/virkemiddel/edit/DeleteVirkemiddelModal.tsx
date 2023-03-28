@@ -5,51 +5,43 @@ import {ParagraphMedium} from 'baseui/typography'
 import {Button} from 'baseui/button'
 import {Block} from 'baseui/block'
 import {buttonContentStyle} from '../../common/Button'
-import {Virkemiddel} from "../../../constants";
-import {deleteVirkemiddel} from "../../../api/VirkemiddelApi";
+import {Virkemiddel} from '../../../constants'
+import {deleteVirkemiddel} from '../../../api/VirkemiddelApi'
 
 type ModalDeleteProps = {
-
   isOpen: boolean
-  setIsOpen: (b: boolean)=> void
+  setIsOpen: (b: boolean) => void
   virkemiddel?: Virkemiddel
-  refetchData: ()=> void
-
+  refetchData: () => void
 }
 
-const DeleteVirkemiddeltModal = ({isOpen, setIsOpen, virkemiddel, refetchData}: ModalDeleteProps) => {
+const DeleteVirkemiddeltModal = ({ isOpen, setIsOpen, virkemiddel, refetchData }: ModalDeleteProps) => {
   const [errorOnDelete, setErrorOnDelete] = useState('')
 
-  const submit =  async (id?: string)=> {
+  const submit = async (id?: string) => {
     if (virkemiddel) {
       if (id) {
-        await deleteVirkemiddel(id).then(()=> {
-          setIsOpen(false)
-          refetchData()
-        }).catch((e)=> {
-          setErrorOnDelete(e)
-        })
-
+        await deleteVirkemiddel(id)
+          .then(() => {
+            setIsOpen(false)
+            refetchData()
+          })
+          .catch((e) => {
+            setErrorOnDelete(e)
+          })
+      } else {
+        setErrorOnDelete('Fant ikke ID for virkemiddelet')
       }
-        else {
-          setErrorOnDelete('Fant ikke ID for virkemiddelet')
-        }
-
-    }
-    else {
+    } else {
       setErrorOnDelete('Fant ikke virkemiddelet')
     }
-
   }
 
   return (
-    <Modal closeable={false} onClose={()=>setIsOpen(false)} isOpen={isOpen} autoFocus animate size="default">
+    <Modal closeable={false} onClose={() => setIsOpen(false)} isOpen={isOpen} autoFocus animate size="default">
       <ModalHeader>Bekreft sletting.</ModalHeader>
       <ModalBody>
-        <ParagraphMedium>
-          {' '}
-          Bekreft sletting av {virkemiddel?.navn}.
-        </ParagraphMedium>
+        <ParagraphMedium> Bekreft sletting av {virkemiddel?.navn}.</ParagraphMedium>
       </ModalBody>
 
       <ModalFooter>

@@ -1,8 +1,8 @@
 import axios from 'axios'
-import { EtterlevelseMetadata, PageResponse } from '../constants'
-import { env } from '../util/env'
-import { useEffect, useState } from 'react'
-import { KravId } from './KravApi'
+import {EtterlevelseMetadata, PageResponse} from '../constants'
+import {env} from '../util/env'
+import {useEffect, useState} from 'react'
+import {KravId} from './KravApi'
 
 export const getAllEtterlevelseMetadata = async () => {
   const PAGE_SIZE = 100

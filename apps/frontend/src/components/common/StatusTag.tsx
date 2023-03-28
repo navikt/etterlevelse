@@ -1,11 +1,11 @@
-import { Block } from 'baseui/block'
-import { Card, CardOverrides } from 'baseui/card'
-import { ParagraphXSmall } from 'baseui/typography'
+import {Block} from 'baseui/block'
+import {Card, CardOverrides} from 'baseui/card'
+import {ParagraphXSmall} from 'baseui/typography'
 import _ from 'lodash'
-import { KravStatus } from '../../constants'
-import { kravStatus } from '../../pages/KravPage'
-import { ettlevColors } from '../../util/theme'
-import { borderColor, borderRadius, borderStyle, borderWidth, marginAll } from './Style'
+import {KravStatus} from '../../constants'
+import {kravStatus} from '../../pages/KravPage'
+import {ettlevColors} from '../../util/theme'
+import {borderColor, borderRadius, borderStyle, borderWidth, marginAll} from './Style'
 
 export const StatusView = ({
   status,

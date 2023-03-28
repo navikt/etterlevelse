@@ -1,14 +1,14 @@
-import { getKravByKravNumberAndVersion, KravId } from '../../api/KravApi'
-import { Etterlevelse, KRAV_FILTER_TYPE } from '../../constants'
-import { getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber, mapEtterlevelseToFormValue } from '../../api/EtterlevelseApi'
-import React, { useEffect, useState } from 'react'
-import { Block } from 'baseui/block'
-import { Spinner } from '../common/Spinner'
-import { theme } from '../../util'
+import {getKravByKravNumberAndVersion, KravId} from '../../api/KravApi'
+import {Etterlevelse, KRAV_FILTER_TYPE} from '../../constants'
+import {getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber, mapEtterlevelseToFormValue} from '../../api/EtterlevelseApi'
+import React, {useEffect, useState} from 'react'
+import {Block} from 'baseui/block'
+import {Spinner} from '../common/Spinner'
+import {theme} from '../../util'
 
-import { Section } from '../../pages/EtterlevelseDokumentasjonPage'
-import { toKravId } from './common/utils'
-import { EditEtterlevelseV2 } from '../etterlevelse/EditEtterlevelseV2'
+import {Section} from '../../pages/EtterlevelseDokumentasjonPage'
+import {toKravId} from './common/utils'
+import {EditEtterlevelseV2} from '../etterlevelse/EditEtterlevelseV2'
 
 export const KravView = (props: {
   kravId: KravId

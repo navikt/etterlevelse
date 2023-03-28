@@ -1,10 +1,10 @@
 import React from 'react'
-import { Tag } from 'baseui/tag'
-import { theme } from '../../util'
-import { ettlevColors } from '../../util/theme'
-import { borderColor, borderWidth, padding } from './Style'
-import { Block } from 'baseui/block'
-import { checkmarkIcon } from '../Images'
+import {Tag} from 'baseui/tag'
+import {theme} from '../../util'
+import {ettlevColors} from '../../util/theme'
+import {borderColor, borderWidth, padding} from './Style'
+import {Block} from 'baseui/block'
+import {checkmarkIcon} from '../Images'
 
 export const SimpleTag = (props: { onClick?: () => void; active?: boolean; activeIcon?: boolean; children: React.ReactNode }) => {
   const backgroundColor = props.active ? ettlevColors.green50 : ettlevColors.white

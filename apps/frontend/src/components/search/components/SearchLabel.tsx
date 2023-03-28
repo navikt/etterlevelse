@@ -1,6 +1,6 @@
-import { Block } from 'baseui/block'
+import {Block} from 'baseui/block'
 import * as React from 'react'
-import { ettlevColors } from '../../../util/theme'
+import {ettlevColors} from '../../../util/theme'
 
 const SearchLabel = (props: { name: string; type: string; backgroundColor?: string; foregroundColor?: string }) => {
   return (

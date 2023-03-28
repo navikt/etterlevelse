@@ -1,13 +1,13 @@
-import { Spinner } from './Spinner'
-import { theme } from '../../util'
-import { Cell, Row, Table } from './Table'
+import {Spinner} from './Spinner'
+import {theme} from '../../util'
+import {Cell, Row, Table} from './Table'
 import RouteLink from './RouteLink'
 import React from 'react'
-import { ListName } from '../../services/Codelist'
-import { DotTags } from './DotTag'
-import { BehandlingFilters } from '../../api/BehandlingApi'
-import { gql, useQuery } from '@apollo/client'
-import { Behandling, PageResponse } from '../../constants'
+import {ListName} from '../../services/Codelist'
+import {DotTags} from './DotTag'
+import {BehandlingFilters} from '../../api/BehandlingApi'
+import {gql, useQuery} from '@apollo/client'
+import {Behandling, PageResponse} from '../../constants'
 
 const query = gql`
   query getBehandling($relevans: [String!]) {

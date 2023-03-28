@@ -1,13 +1,13 @@
-import React, { ReactNode } from 'react'
-import { faCircle } from '@fortawesome/free-solid-svg-icons'
-import { Block } from 'baseui/block'
-import { theme } from '../../util'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import RouteLink, { ExternalLink, ExternalLinkWrapper, urlForObject } from './RouteLink'
-import { Markdown } from './Markdown'
-import { Code, codelist, ListName } from '../../services/Codelist'
-import { NavigableItem } from '../admin/audit/AuditTypes'
-import { ettlevColors } from '../../util/theme'
+import React, {ReactNode} from 'react'
+import {faCircle} from '@fortawesome/free-solid-svg-icons'
+import {Block} from 'baseui/block'
+import {theme} from '../../util'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {ExternalLink, ExternalLinkWrapper, urlForObject} from './RouteLink'
+import {Markdown} from './Markdown'
+import {Code, codelist, ListName} from '../../services/Codelist'
+import {NavigableItem} from '../admin/audit/AuditTypes'
+import {ettlevColors} from '../../util/theme'
 
 export const DotTag = (props: { children: ReactNode }) => (
   <Block marginLeft={theme.sizing.scale100} marginRight={theme.sizing.scale100} display="flex" alignItems="flex-start">

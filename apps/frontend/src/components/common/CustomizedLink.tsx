@@ -1,4 +1,4 @@
-import { LinkProps, StyledLink } from 'baseui/link'
+import {LinkProps, StyledLink} from 'baseui/link'
 import _ from 'lodash'
 
 const CustomizedLink = (props: LinkProps) => {

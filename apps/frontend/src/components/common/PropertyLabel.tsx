@@ -1,8 +1,8 @@
 import React from 'react'
 import DataText from './DataText'
-import { Markdown } from './Markdown'
-import { Or } from '../../constants'
-import { Block, Responsive } from 'baseui/block'
+import {Markdown} from './Markdown'
+import {Or} from '../../constants'
+import {Block, Responsive} from 'baseui/block'
 
 const empty = (arg: any) => !arg || (Array.isArray(arg) && !arg.length)
 

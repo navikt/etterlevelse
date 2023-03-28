@@ -1,6 +1,6 @@
-import { Modal, ModalProps, SIZE } from 'baseui/modal'
+import {Modal, ModalProps, SIZE} from 'baseui/modal'
 import _ from 'lodash'
-import { maxPageWidth } from '../../util/theme'
+import {maxPageWidth} from '../../util/theme'
 
 type CustomModalProps = {
   closeIconColor?: string

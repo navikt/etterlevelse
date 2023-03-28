@@ -61,7 +61,7 @@ import checkboxUnchecked from '../resources/icons/checkbox/checkbox-unchecked.sv
 import checkboxUncheckedHover from '../resources/icons/checkbox/checkbox-unchecked-hover.svg'
 import avatarPlaceholder from '../resources/icons/avatar-placeholder.svg'
 import informationIcon from '../resources/icons/information-icon.svg'
-import { codelist, ListName, LovCode, TemaCode } from '../services/Codelist'
+import {codelist, ListName, LovCode, TemaCode} from '../services/Codelist'
 import angleIcon from '../resources/icons/angleIcon.svg'
 import page2Icon from '../resources/icons/page2.svg'
 import externalLinkIcon from '../resources/icons/externalLinkIcon.svg'
@@ -75,7 +75,7 @@ import saveArchiveIcon from '../resources/icons/save-archive-icon.svg'
 import outlineInfoIcon from '../resources/icons/outline-info-icon.svg'
 
 import React from 'react'
-import { theme } from '../util'
+import {theme} from '../util'
 
 export {
   pencilFill,

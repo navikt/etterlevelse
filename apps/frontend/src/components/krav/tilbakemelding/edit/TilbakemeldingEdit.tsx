@@ -1,12 +1,11 @@
-import { Block } from 'baseui/block'
+import {Block} from 'baseui/block'
 import Button from '../../../common/Button'
-import { Dispatch, SetStateAction, useState } from 'react'
-import { tilbakemeldingEditMelding } from '../../../../api/TilbakemeldingApi'
-import { Tilbakemelding, TilbakemeldingMelding } from '../../../../constants'
+import {Dispatch, SetStateAction, useState} from 'react'
+import {tilbakemeldingEditMelding} from '../../../../api/TilbakemeldingApi'
+import {Tilbakemelding, TilbakemeldingMelding} from '../../../../constants'
 import CustomizedTextarea from '../../../common/CustomizedTextarea'
-import { Notification } from 'baseui/notification'
-import { setDeviceId } from 'amplitude-js'
-import { theme } from '../../../../util'
+import {Notification} from 'baseui/notification'
+import {theme} from '../../../../util'
 
 export const TilbakemeldingEdit = ({
   tilbakemeldingId,

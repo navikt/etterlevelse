@@ -1,5 +1,5 @@
-import { Modal, ModalBody, ModalButton, ModalFooter, ModalHeader } from 'baseui/modal'
-import { buttonContentStyle } from './common/Button'
+import {Modal, ModalBody, ModalButton, ModalFooter, ModalHeader} from 'baseui/modal'
+import {buttonContentStyle} from './common/Button'
 import React from 'react'
 
 const ErrorModal = (props: { isOpen: boolean; submit: Function; errorMessage: string }) => {

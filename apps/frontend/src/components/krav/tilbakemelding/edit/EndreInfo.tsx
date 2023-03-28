@@ -1,8 +1,8 @@
-import { Block } from 'baseui/block'
-import { ParagraphSmall } from 'baseui/typography'
+import {Block} from 'baseui/block'
+import {ParagraphSmall} from 'baseui/typography'
 import moment from 'moment'
-import { TilbakemeldingMelding } from '../../../../constants'
-import { PersonName } from '../../../common/PersonName'
+import {TilbakemeldingMelding} from '../../../../constants'
+import {PersonName} from '../../../common/PersonName'
 
 export const EndretInfo = (props: { melding: TilbakemeldingMelding }) => {
   if (!props.melding.endretAvIdent) return null

@@ -1,14 +1,14 @@
 import * as React from 'react'
-import { useNavigate } from 'react-router-dom'
-import { Block } from 'baseui/block'
-import { theme } from '../util'
-import { HeadingXXLarge, ParagraphLarge } from 'baseui/typography'
-import { intl } from '../util/intl/intl'
+import {useNavigate} from 'react-router-dom'
+import {Block} from 'baseui/block'
+import {theme} from '../util'
+import {HeadingXXLarge} from 'baseui/typography'
+import {intl} from '../util/intl/intl'
 import notFound from '../resources/notfound.svg'
-import { maxPageWidth } from '../util/theme'
-import { Helmet } from 'react-helmet'
-import { ampli } from '../services/Amplitude'
-import { user } from '../services/User'
+import {maxPageWidth} from '../util/theme'
+import {Helmet} from 'react-helmet'
+import {ampli} from '../services/Amplitude'
+import {user} from '../services/User'
 
 const Forbidden = () => {
   const navigate = useNavigate()

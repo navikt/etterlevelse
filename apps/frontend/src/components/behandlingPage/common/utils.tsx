@@ -1,13 +1,13 @@
-import { Behandling } from '../../../constants'
-import { ReactNode } from 'react'
-import { Block, Responsive } from 'baseui/block'
-import { Helmet } from 'react-helmet'
-import { HeadingXXLarge, LabelSmall } from 'baseui/typography'
-import { ettlevColors } from '../../../util/theme'
-import { Teams } from '../../common/TeamName'
-import { ExternalButton } from '../../common/Button'
-import { env } from '../../../util/env'
-import { ExternalLinkWrapper } from '../../common/RouteLink'
+import {Behandling} from '../../../constants'
+import {ReactNode} from 'react'
+import {Block, Responsive} from 'baseui/block'
+import {Helmet} from 'react-helmet'
+import {HeadingXXLarge, LabelSmall} from 'baseui/typography'
+import {ettlevColors} from '../../../util/theme'
+import {Teams} from '../../common/TeamName'
+import {ExternalButton} from '../../common/Button'
+import {env} from '../../../util/env'
+import {ExternalLinkWrapper} from '../../common/RouteLink'
 
 export const responsiveDisplayBehandlingPage: Responsive<any> = ['block', 'block', 'block', 'block', 'flex', 'flex']
 

@@ -1,6 +1,6 @@
 import axios from 'axios'
-import { KravPrioritering, KravQL, PageResponse } from '../constants'
-import { env } from '../util/env'
+import {KravPrioritering, KravQL, PageResponse} from '../constants'
+import {env} from '../util/env'
 
 export const getAllKravPriority = async () => {
   const PAGE_SIZE = 100

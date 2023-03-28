@@ -1,14 +1,14 @@
-import { ErrorMessage } from 'formik'
-import { Block } from 'baseui/block'
-import { KIND as NKIND, Notification } from 'baseui/notification'
-import { LabelMedium } from 'baseui/typography'
+import {ErrorMessage} from 'formik'
+import {Block} from 'baseui/block'
+import {KIND as NKIND, Notification} from 'baseui/notification'
+import {LabelMedium} from 'baseui/typography'
 import * as React from 'react'
-import { theme } from '../../util'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons'
-import { paddingZero } from './Style'
+import {theme} from '../../util'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faExclamationCircle} from '@fortawesome/free-solid-svg-icons'
+import {paddingZero} from './Style'
 import CustomizedStatefulTooltip from './CustomizedStatefulTooltip'
-import { ettlevColors } from '../../util/theme'
+import {ettlevColors} from '../../util/theme'
 
 export const Error = (props: { fieldName: string; fullWidth?: boolean }) => (
   <ErrorMessage name={props.fieldName}>

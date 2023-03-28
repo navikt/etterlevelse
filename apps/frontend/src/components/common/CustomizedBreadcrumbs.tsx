@@ -1,10 +1,9 @@
 import React from 'react'
-import { Breadcrumbs, BreadcrumbsOverrides, BreadcrumbsProps } from 'baseui/breadcrumbs'
+import {Breadcrumbs, BreadcrumbsOverrides, BreadcrumbsProps} from 'baseui/breadcrumbs'
 import _ from 'lodash'
 import RouteLink from './RouteLink'
-import { theme } from '../../util/theme'
-import { Block } from 'baseui/block'
-import { ChevronRight } from 'baseui/icon'
+import {Block} from 'baseui/block'
+import {ChevronRight} from 'baseui/icon'
 
 export interface breadcrumbPaths {
   href: string
