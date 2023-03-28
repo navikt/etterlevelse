@@ -12,6 +12,7 @@ import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { ColumnCompares } from '../../util/hooks'
 import { EditVirkemiddelModal } from '../virkemiddel/edit/EditVirkemiddelModal'
 import DeleteVirkemiddeltModal from '../virkemiddel/edit/DeleteVirkemiddelModal'
+import { LovView } from '../Lov'
 
 type VirkmiddelTableProps = {
   virkemidler: Virkemiddel[]
@@ -43,25 +44,37 @@ export const VirkemiddelTable = ({ virkemidler, loading, refetchData }: Virkmidd
           defaultPageSize: 20,
         }}
         headers={[
-          { title: 'Navn', column: 'navn', small: true },
-          { title: 'Virkemiddeltype', column: 'virkemiddelType', $style: { width: '55%' } },
-          { title: 'Siste endret', column: 'changeStamp', $style: { width: '55%' } },
+          { title: 'Navn', column: 'navn'},
+          { title: 'Virkemiddeltype', column: 'virkemiddelType'},
+          { title: 'Regelverk', column: 'regelverk'},
+          { title: 'Siste endret', column: 'changeStamp'},
           { title: '', small: true },
         ]}
         render={(table) =>
           table.data.map((virkemiddel, index) => (
             <Row key={index}>
-              <Cell small $style={{ wordBreak: 'break-word' }}>
+              <Cell $style={{ wordBreak: 'break-word' }}>
                 {virkemiddel.navn}
               </Cell>
-              <Cell $style={{ width: '55%' }}>
+              <Cell>
                 <Block display="flex" flexDirection="column" width="100%">
                   <Block>{virkemiddel.virkemiddelType && virkemiddel.virkemiddelType.shortName}</Block>
                 </Block>
               </Cell>
+              <Cell>
+                <Block>
+                  {virkemiddel.regelverk.map((r, i) => {
+                    return (
+                      <Block key={r +'_'+i} marginBottom={ i === virkemiddel.regelverk.length - 1 ? undefined : '8px'}>
+                        <LovView regelverk={r} />
+                      </Block>
+                    )
+                  })}
+                </Block>
+              </Cell>
               <Cell>{moment(virkemiddel.changeStamp.lastModifiedDate).format('ll')}</Cell>
               <Cell small>
-                <Block display="flex" justifyContent="flex-end" width="100%">
+                <Block display="flex" justifyContent="flex-end" width="100%" >
                   <Button
                     tooltip={'Rediger'}
                     size={ButtonSize.compact}
