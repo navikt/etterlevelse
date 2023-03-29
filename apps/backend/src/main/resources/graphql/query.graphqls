@@ -41,6 +41,7 @@ input EtterlevelseDokumentasjonFilter {
     teams: [String!]
     mineEtterlevelseDokumentasjoner: Boolean
     behandlingId: String
+    virkemiddelId: String
     sok: String
 }
 

@@ -24,6 +24,7 @@ public class EtterlevelseDokumentasjonFilter {
     private List<String> teams;
 
     private String behandlingId;
+    private String virkemiddelId;
     private String sok;
 
 
@@ -36,6 +37,7 @@ public class EtterlevelseDokumentasjonFilter {
                 && sistRedigert == null
                 && mineEtterlevelseDokumentasjoner == null
                 && behandlingId == null
+                && virkemiddelId == null
                 ;
     }
 

@@ -77,6 +77,12 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
         if (filter.isSok()) {
             return searchEtterlevelseDokumentasjon(filter.getSok());
         }
+        if (filter.getBehandlingId() != null && !filter.getBehandlingId().isEmpty()) {
+            return getByBehandlingId(List.of(filter.getBehandlingId()));
+        }
+        if (filter.getVirkemiddelId() != null && !filter.getVirkemiddelId().isEmpty()) {
+            return getByVirkemiddelId(List.of(filter.getVirkemiddelId()));
+        }
         return GenericStorage.to(etterlevelseDokumentasjonRepo.findBy(filter),EtterlevelseDokumentasjon.class);
     }
 
