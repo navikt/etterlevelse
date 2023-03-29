@@ -29,8 +29,21 @@ export const getMainHeader = (etterlevelseDokumentasjon: EtterlevelseDokumentasj
       <HeadingXXLarge marginTop="0" color={ettlevColors.green800}>
         {etterlevelseDokumentasjon.title}
       </HeadingXXLarge>
+      {etterlevelseDokumentasjon.virkemiddelId && (
+        <Block display="flex" alignItems="center">
+          <LabelSmall $style={{ lineHeight: '22px', marginRight: '10px', fontSize: '16px', color: ettlevColors.green600 }}>Virkmiddel:</LabelSmall>
+          <Block
+            $style={{
+              fontFamily: 'Source Sans Pro',
+              fontWeight: 500,
+            }}
+          >
+            {etterlevelseDokumentasjon.virkemiddel?.navn}
+          </Block>
+        </Block>
+      )}
       {etterlevelseDokumentasjon.behandlingId && (
-        <Block>
+        <Block display="flex" alignItems="center" marginTop={etterlevelseDokumentasjon.virkemiddelId ? '8px' : '0px' }>
           <LabelSmall $style={{ lineHeight: '22px', marginRight: '10px', fontSize: '16px', color: ettlevColors.green600 }}>Behandling:</LabelSmall>
           <Block
             $style={{

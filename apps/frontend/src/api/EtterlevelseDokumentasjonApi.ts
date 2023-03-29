@@ -1,9 +1,10 @@
 import axios from 'axios'
-import {EtterlevelseDokumentasjon, EtterlevelseDokumentasjonQL, PageResponse, Team} from '../constants'
-import {env} from '../util/env'
-import {useEffect, useState} from 'react'
-import {getBehandling} from './BehandlingApi'
-import {getTeams} from './TeamApi'
+import { EtterlevelseDokumentasjon, EtterlevelseDokumentasjonQL, PageResponse, Team } from '../constants'
+import { env } from '../util/env'
+import { useEffect, useState } from 'react'
+import { getBehandling } from './BehandlingApi'
+import { getTeams } from './TeamApi'
+import { getVirkemiddel } from './VirkemiddelApi'
 
 export const getEtterlevelseDokumentasjon = async (id: string) => {
   return (await axios.get<EtterlevelseDokumentasjon>(`${env.backendBaseUrl}/etterlevelsedokumentasjon/${id}`)).data
@@ -59,6 +60,7 @@ export const useEtterlevelseDokumentasjon = (etterlevelseDokumentasjonId?: strin
   useEffect(() => {
     let behandling: any = {}
     let teamsData: Team[] = []
+    let virkmiddel: any = {}
 
     setIsLoading(true)
     if (etterlevelseDokumentasjonId && !isCreateNew) {
@@ -68,9 +70,11 @@ export const useEtterlevelseDokumentasjon = (etterlevelseDokumentasjonId?: strin
         }
         if (etterlevelseDokumentasjon.teams.length > 0) {
           await getTeams(etterlevelseDokumentasjon.teams).then((teamsResponse) => (teamsData = teamsResponse))
+        } 
+        if (etterlevelseDokumentasjon.virkemiddelId) {
+          await getVirkemiddel(etterlevelseDokumentasjon.virkemiddelId).then((virkemiddelResponse) => (virkmiddel = virkemiddelResponse))
         }
-
-        setData({ ...etterlevelseDokumentasjon, behandling: behandling, teamsData: teamsData })
+        setData({ ...etterlevelseDokumentasjon, behandling: behandling, teamsData: teamsData, virkemiddel: virkmiddel })
         setIsLoading(false)
       })
     } else if (behandlingId) {
@@ -80,6 +84,9 @@ export const useEtterlevelseDokumentasjon = (etterlevelseDokumentasjonId?: strin
 
           if (etterlevelseDokumentasjon[0].teams.length > 0) {
             getTeams(etterlevelseDokumentasjon[0].teams).then((teamsResponseData) => (teamsData = teamsResponseData))
+          } 
+          if (etterlevelseDokumentasjon[0].virkemiddelId) {
+            await getVirkemiddel(etterlevelseDokumentasjon[0].virkemiddelId).then((virkemiddelResponse) => (virkmiddel = virkemiddelResponse))
           }
 
           setData({ ...etterlevelseDokumentasjon[0], behandling: behandling, teamsData: teamsData })

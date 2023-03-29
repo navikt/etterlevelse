@@ -28,7 +28,7 @@ import {intl} from '../../../util/intl/intl'
 import {SelectOverrides, TYPE} from 'baseui/select'
 import {getTeams, useSearchTeam} from '../../../api/TeamApi'
 import {RenderTagList} from '../../common/TagList'
-import {useSearchVirkemiddel} from "../../../api/VirkemiddelApi";
+import {useSearchVirkemiddel} from '../../../api/VirkemiddelApi'
 
 type EditEtterlevelseDokumentasjonModalProps = {
   etterlevelseDokumentasjon?: EtterlevelseDokumentasjonQL
@@ -101,6 +101,9 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
     if (props.etterlevelseDokumentasjon && props.etterlevelseDokumentasjon.behandling && props.etterlevelseDokumentasjon.behandling.navn) {
       setSelectedBehandling(props.etterlevelseDokumentasjon.behandling)
     }
+    if (props.etterlevelseDokumentasjon && props.etterlevelseDokumentasjon.virkemiddel && props.etterlevelseDokumentasjon.virkemiddel.navn) {
+      setSelectedVirkemiddel(props.etterlevelseDokumentasjon.virkemiddel)
+    }
   }, [props.etterlevelseDokumentasjon])
 
   const submit = async (etterlevelseDokumentasjon: EtterlevelseDokumentasjonQL) => {
@@ -122,11 +125,12 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                   ...response,
                   teamsData: teamsData,
                   behandling: selectedBehandling,
+                  virkemiddel: selectedVirkemiddel
                 })
               }
             })
           } else {
-            props.setEtterlevelseDokumentasjon({ ...response, behandling: selectedBehandling })
+            props.setEtterlevelseDokumentasjon({ ...response, behandling: selectedBehandling, virkemiddel: selectedVirkemiddel })
           }
         }
       })
