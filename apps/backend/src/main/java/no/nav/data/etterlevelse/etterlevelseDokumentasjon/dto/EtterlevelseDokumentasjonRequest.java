@@ -28,6 +28,7 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
 
     private String title;
     private String behandlingId;
+    private String virkemiddelId;
     @Schema(description = "Codelist RELEVANS")
     private List<String> irrelevansFor;
 
@@ -38,6 +39,7 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
         setId(trimToNull(id));
         setTitle(trimToNull(title));
         setBehandlingId(trimToNull(behandlingId));
+        setVirkemiddelId(trimToNull(virkemiddelId));
         setIrrelevansFor(formatListToUppercase(irrelevansFor));
         setTeams(formatList(teams));
     }

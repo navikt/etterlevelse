@@ -22,6 +22,9 @@ public interface EtterlevelseDokumentasjonRepo  extends JpaRepository<GenericSto
     @Query(value = "select * from generic_storage where data ->> 'behandlingId' in ?1 and type = 'EtterlevelseDokumentasjon'", nativeQuery = true)
     List<GenericStorage> findByBehandlingIds(List<String> ids);
 
+    @Query(value = "select * from generic_storage where data ->> 'virkemiddelId' in ?1 and type = 'EtterlevelseDokumentasjon'", nativeQuery = true)
+    List<GenericStorage> findByVirkemiddelIds(List<String> ids);
+
 
     //must refactor KravRepoImpl to change usage of findBy, DO THIS AFTER MIGRATION
     @Query(value = """

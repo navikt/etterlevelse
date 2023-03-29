@@ -27,6 +27,7 @@ public class EtterlevelseDokumentasjonResponse {
 
     private String title;
     private String behandlingId;
+    private String virkemiddelId;
     @Singular("relevansForSingle")
     private List<CodelistResponse> irrelevansFor;
     @Singular("team")

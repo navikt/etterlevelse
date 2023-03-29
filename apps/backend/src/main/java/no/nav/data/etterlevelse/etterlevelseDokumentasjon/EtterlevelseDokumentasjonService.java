@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.auditing.domain.AuditVersionRepository;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.storage.domain.GenericStorage;
+import no.nav.data.common.storage.domain.GenericStorageRepository;
 import no.nav.data.etterlevelse.common.domain.DomainService;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonFilter;
@@ -98,6 +99,10 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
 
     public List<EtterlevelseDokumentasjon> getByBehandlingId(List<String> ids) {
         return GenericStorage.to(etterlevelseDokumentasjonRepo.findByBehandlingIds(ids), EtterlevelseDokumentasjon.class);
+    }
+
+    public List<EtterlevelseDokumentasjon> getByVirkemiddelId(List<String>ids) {
+        return GenericStorage.to(etterlevelseDokumentasjonRepo.findByVirkemiddelIds(ids), EtterlevelseDokumentasjon.class);
     }
 
 }
