@@ -1,9 +1,9 @@
 import axios from 'axios'
-import { EtterlevelseDokumentasjon, EtterlevelseDokumentasjonQL, PageResponse, Team } from '../constants'
-import { env } from '../util/env'
-import { useEffect, useState } from 'react'
-import { getBehandling } from './BehandlingApi'
-import { getTeams } from './TeamApi'
+import {EtterlevelseDokumentasjon, EtterlevelseDokumentasjonQL, PageResponse, Team} from '../constants'
+import {env} from '../util/env'
+import {useEffect, useState} from 'react'
+import {getBehandling} from './BehandlingApi'
+import {getTeams} from './TeamApi'
 
 export const getEtterlevelseDokumentasjon = async (id: string) => {
   return (await axios.get<EtterlevelseDokumentasjon>(`${env.backendBaseUrl}/etterlevelsedokumentasjon/${id}`)).data
@@ -33,6 +33,9 @@ export const searchEtterlevelsedokumentasjon = async (searchParam: string) => {
 
 export const searchEtterlevelsedokumentasjonByBehandlingId = async (behandlingId: string) => {
   return (await axios.get<PageResponse<EtterlevelseDokumentasjon>>(`${env.backendBaseUrl}/etterlevelsedokumentasjon/search/behandling/${behandlingId}`)).data.content
+}
+export const searchEtterlevelsedokumentasjonByVirkemiddelId = async (virkemiddelId: string) => {
+  return (await axios.get<PageResponse<EtterlevelseDokumentasjon>>(`${env.backendBaseUrl}/etterlevelsedokumentasjon/search/virkemiddel/${virkemiddelId}`)).data.content
 }
 export const updateEtterlevelseDokumentasjon = async (etterlevelseDokumentasjon: EtterlevelseDokumentasjonQL) => {
   const dto = etterlevelseDokumentasjonToDto(etterlevelseDokumentasjon)
@@ -111,4 +114,5 @@ export const etterlevelseDokumentasjonMapToFormVal = (etterlevelseDokumentasjon:
   etterlevelseNummer: etterlevelseDokumentasjon.etterlevelseNummer || 0,
   teams: etterlevelseDokumentasjon.teams || [],
   teamsData: etterlevelseDokumentasjon.teamsData || [],
+  virkemiddelId: etterlevelseDokumentasjon.virkemiddelId || ''
 })
