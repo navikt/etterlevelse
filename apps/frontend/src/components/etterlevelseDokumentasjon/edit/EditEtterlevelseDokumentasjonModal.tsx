@@ -1,33 +1,34 @@
-import { Block } from 'baseui/block'
-import { ModalBody, ModalHeader } from 'baseui/modal'
-import { useEffect, useState } from 'react'
-import { useSearchBehandling } from '../../../api/BehandlingApi'
-import { createEtterlevelseDokumentasjon, etterlevelseDokumentasjonMapToFormVal, updateEtterlevelseDokumentasjon } from '../../../api/EtterlevelseDokumentasjonApi'
-import { Behandling, EtterlevelseDokumentasjonQL, Team } from '../../../constants'
-import { Code, codelist, ListName } from '../../../services/Codelist'
-import Button, { buttonContentStyle } from '../../common/Button'
+import {Block} from 'baseui/block'
+import {ModalBody, ModalHeader} from 'baseui/modal'
+import {useEffect, useState} from 'react'
+import {useSearchBehandling} from '../../../api/BehandlingApi'
+import {createEtterlevelseDokumentasjon, etterlevelseDokumentasjonMapToFormVal, updateEtterlevelseDokumentasjon} from '../../../api/EtterlevelseDokumentasjonApi'
+import {Behandling, EtterlevelseDokumentasjonQL, Team, Virkemiddel} from '../../../constants'
+import {Code, codelist, ListName} from '../../../services/Codelist'
+import Button, {buttonContentStyle} from '../../common/Button'
 import CustomizedModal from '../../common/CustomizedModal'
-import { Button as BaseUIButton, KIND } from 'baseui/button'
-import { Field, FieldArray, FieldArrayRenderProps, FieldProps, Form, Formik } from 'formik'
-import { FormControl } from 'baseui/form-control'
-import { FieldWrapper, InputField } from '../../common/Inputs'
-import { ButtonGroup } from 'baseui/button-group'
-import { ACCESSIBILITY_TYPE } from 'baseui/popover'
-import { PLACEMENT } from 'baseui/toast'
-import { StatefulTooltip } from 'baseui/tooltip'
-import { ParagraphMedium } from 'baseui/typography'
-import { theme } from '../../../util'
-import { ettlevColors } from '../../../util/theme'
+import {Button as BaseUIButton, KIND} from 'baseui/button'
+import {Field, FieldArray, FieldArrayRenderProps, FieldProps, Form, Formik} from 'formik'
+import {FormControl} from 'baseui/form-control'
+import {FieldWrapper, InputField} from '../../common/Inputs'
+import {ButtonGroup} from 'baseui/button-group'
+import {ACCESSIBILITY_TYPE} from 'baseui/popover'
+import {PLACEMENT} from 'baseui/toast'
+import {StatefulTooltip} from 'baseui/tooltip'
+import {ParagraphMedium} from 'baseui/typography'
+import {theme} from '../../../util'
+import {ettlevColors} from '../../../util/theme'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
-import { borderColor, borderRadius, borderStyle, borderWidth } from '../../common/Style'
-import { checkboxChecked, checkboxUnchecked, checkboxUncheckedHover, editIcon, outlineInfoIcon, plusIcon, searchIcon } from '../../Images'
-import { Tag, VARIANT } from 'baseui/tag'
-import { Error } from '../../common/ModalSchema'
+import {borderColor, borderRadius, borderStyle, borderWidth} from '../../common/Style'
+import {checkboxChecked, checkboxUnchecked, checkboxUncheckedHover, editIcon, outlineInfoIcon, plusIcon, searchIcon} from '../../Images'
+import {Tag, VARIANT} from 'baseui/tag'
+import {Error} from '../../common/ModalSchema'
 import CustomizedSelect from '../../common/CustomizedSelect'
-import { intl } from '../../../util/intl/intl'
-import { SelectOverrides, TYPE } from 'baseui/select'
-import { getTeams, useSearchTeam } from '../../../api/TeamApi'
-import { RenderTagList } from '../../common/TagList'
+import {intl} from '../../../util/intl/intl'
+import {SelectOverrides, TYPE} from 'baseui/select'
+import {getTeams, useSearchTeam} from '../../../api/TeamApi'
+import {RenderTagList} from '../../common/TagList'
+import {useSearchVirkemiddel} from "../../../api/VirkemiddelApi";
 
 type EditEtterlevelseDokumentasjonModalProps = {
   etterlevelseDokumentasjon?: EtterlevelseDokumentasjonQL
@@ -72,8 +73,10 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
   const [selectedFilter, setSelectedFilter] = useState<number[]>(relevansOptions.map((r, i) => i))
   const [hover, setHover] = useState<number>()
   const [isEtterlevelseDokumentasjonerModalOpen, setIsEtterlevelseDokumntasjonerModalOpen] = useState<boolean>(false)
-  const [behandlingSearchResult, setbehandlingSearchResult, loadingBehandlingSearchResult] = useSearchBehandling()
+  const [behandlingSearchResult, setBehandlingSearchResult, loadingBehandlingSearchResult] = useSearchBehandling()
+  const [virkemiddelSearchResult, setVirkemiddelSearchResult, loadingVirkemiddelSearchResult] = useSearchVirkemiddel()
   const [selectedBehandling, setSelectedBehandling] = useState<Behandling>()
+  const [selectedVirkemiddel, setSelectedVirkemiddel] = useState<Virkemiddel>()
 
   const [teamSearchResult, setTeamSearchResult, loadingTeamSearchResult] = useSearchTeam()
 
@@ -149,6 +152,67 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                 <Form>
                   <InputField disablePlaceHolder label={'Tittel'} name={'title'} />
                   <FieldWrapper>
+                    <Field name="virkemiddelId">
+                      {(fp: FieldProps) => {
+                        return (
+                          <FormControl label={<LabelWithTooltip label={'Legg til virkemiddel'} tooltip="Søk og legg til virkemiddel" />}>
+                            <Block>
+                              <CustomizedSelect
+                                overrides={selectCustomOverrides}
+                                labelKey={'navn'}
+                                noResultsMsg={intl.emptyTable}
+                                maxDropdownHeight="350px"
+                                searchable={true}
+                                type={TYPE.search}
+                                options={virkemiddelSearchResult}
+                                placeholder={'Søk virkemiddel'}
+                                onInputChange={(event) => setVirkemiddelSearchResult(event.currentTarget.value)}
+                                onChange={(params) => {
+                                  let virkemiddel = params.value.length ? params.value[0] : undefined
+                                  if (virkemiddel) {
+                                    fp.form.values['virkemiddelId'] = virkemiddel.id
+                                    setSelectedVirkemiddel(virkemiddel as Virkemiddel)
+                                  }
+                                }}
+                                isLoading={loadingVirkemiddelSearchResult}
+                              />
+                              {selectedVirkemiddel && (
+                                <Tag
+                                  variant={VARIANT.outlined}
+                                  onActionClick={() => {
+                                    setSelectedVirkemiddel(undefined)
+                                    fp.form.setFieldValue('virkemiddelId', '')
+                                  }}
+                                  overrides={{
+                                    Text: {
+                                      style: {
+                                        fontSize: theme.sizing.scale650,
+                                        lineHeight: theme.sizing.scale750,
+                                        fontWeight: 400,
+                                      },
+                                    },
+                                    Root: {
+                                      style: {
+                                        ...borderWidth('1px'),
+                                        ':hover': {
+                                          backgroundColor: ettlevColors.green50,
+                                          borderColor: '#0B483F',
+                                        },
+                                      },
+                                    },
+                                  }}
+                                >
+                                  {selectedVirkemiddel.navn}
+                                </Tag>
+                              )}
+                            </Block>
+                          </FormControl>
+                        )
+                      }}
+                    </Field>
+                    <Error fieldName="virkemiddelId" fullWidth />
+                  </FieldWrapper>
+                  <FieldWrapper>
                     <FieldArray name="teamsData">
                       {(p: FieldArrayRenderProps) => {
                         return (
@@ -197,7 +261,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                                 type={TYPE.search}
                                 options={behandlingSearchResult}
                                 placeholder={'Søk behandling'}
-                                onInputChange={(event) => setbehandlingSearchResult(event.currentTarget.value)}
+                                onInputChange={(event) => setBehandlingSearchResult(event.currentTarget.value)}
                                 onChange={(params) => {
                                   let behandling = params.value.length ? params.value[0] : undefined
                                   if (behandling) {
@@ -205,7 +269,6 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                                     setSelectedBehandling(behandling as Behandling)
                                   }
                                 }}
-                                // error={!!fp.form.errors.begreper && !!fp.form.submitCount}
                                 isLoading={loadingBehandlingSearchResult}
                               />
                               {selectedBehandling && (
