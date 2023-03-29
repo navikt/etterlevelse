@@ -1,5 +1,5 @@
-import { Code, LovCode } from './services/Codelist'
-import { Group } from './services/User'
+import {Code, LovCode} from './services/Codelist'
+import {Group} from './services/User'
 
 export type RecursivePartial<T> = {
   [P in keyof T]?: T[P] extends (infer U)[] ? RecursivePartial<U>[] : T[P] extends object ? RecursivePartial<T[P]> : T[P]
@@ -211,12 +211,13 @@ export interface EtterlevelseDokumentasjon {
   version: number
   title: string
   behandlingId: string
+  virkemiddelId: string
   irrelevansFor: Code[]
   etterlevelseNummer: number
   teams: string[]
-
   //data field for frontend only
   behandling?: Behandling
+  virkemiddel?: Virkemiddel
 }
 
 export interface EtterlevelseDokumentasjonStats {
@@ -354,7 +355,7 @@ export enum EtterlevelseArkivStatus {
   ERROR = 'ERROR',
 }
 
-export const emptyPage = { content: [], numberOfElements: 0, pageNumber: 0, pages: 0, pageSize: 1, totalElements: 0 }
+export const emptyPage = {content: [], numberOfElements: 0, pageNumber: 0, pages: 0, pageSize: 1, totalElements: 0}
 
 export interface TeamResource {
   navIdent: string
