@@ -1,21 +1,21 @@
-import React, { useState } from 'react'
-import { ImperativeMethods, Select, SelectOverrides, SelectProps, Value } from 'baseui/select'
-import { codelist, ListName } from '../../../services/Codelist'
-import { FieldWrapper } from '../../common/Inputs'
-import { FieldArray } from 'formik'
-import { FormControl } from 'baseui/form-control'
-import { Block } from 'baseui/block'
-import { theme } from '../../../util'
+import React, {useState} from 'react'
+import {ImperativeMethods, Select, SelectOverrides, SelectProps, Value} from 'baseui/select'
+import {codelist, ListName} from '../../../services/Codelist'
+import {FieldWrapper} from '../../common/Inputs'
+import {FieldArray} from 'formik'
+import {FormControl} from 'baseui/form-control'
+import {Block} from 'baseui/block'
+import {theme} from '../../../util'
 import Button from '../../common/Button'
-import { LabelSmall } from 'baseui/typography'
-import { LovView } from '../../Lov'
-import { RenderTagList } from '../../common/TagList'
-import { Regelverk } from '../../../constants'
+import {LabelSmall} from 'baseui/typography'
+import {LovView} from '../../Lov'
+import {RenderTagList} from '../../common/TagList'
+import {Regelverk} from '../../../constants'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
 import CustomizedInput from '../../common/CustomizedInput'
-import { ettlevColors } from '../../../util/theme'
-import { borderColor, borderWidth } from '../../common/Style'
-import { navChevronDownIcon } from '../../Images'
+import {ettlevColors} from '../../../util/theme'
+import {borderColor, borderWidth} from '../../common/Style'
+import {navChevronDownIcon} from '../../Images'
 import _ from 'lodash'
 
 export const customSelectOverrides: SelectOverrides = {
@@ -28,8 +28,8 @@ export const customSelectOverrides: SelectOverrides = {
     },
   },
   SelectArrow: {
-    component: ({ $isOpen }: { $isOpen: boolean }) =>
-      $isOpen ? <img src={navChevronDownIcon} alt="Chevron opp" style={{ transform: 'rotate(180deg)' }} /> : <img src={navChevronDownIcon} alt="Chevron ned" />,
+    component: ({$isOpen}: { $isOpen: boolean }) =>
+      $isOpen ? <img src={navChevronDownIcon} alt="Chevron opp" style={{transform: 'rotate(180deg)'}}/> : <img src={navChevronDownIcon} alt="Chevron ned"/>,
   },
   DropdownListItem: {
     style: {
@@ -43,7 +43,7 @@ export const customSelectOverrides: SelectOverrides = {
 const CustomizedRegelverkSelect = (props: SelectProps) => {
   const overrides = _.merge(customSelectOverrides, props.overrides)
 
-  return <Select {...props} overrides={overrides} />
+  return <Select {...props} overrides={overrides}/>
 }
 
 export const RegelverkEdit = () => {
@@ -51,7 +51,7 @@ export const RegelverkEdit = () => {
   const [text, setText] = useState('')
   const controlRef: React.Ref<ImperativeMethods> = React.useRef<ImperativeMethods>(null)
 
-  const regelverkObject = () => ({ lov: codelist.getCode(ListName.LOV, lov[0].id as string)!, spesifisering: text })
+  const regelverkObject = () => ({lov: codelist.getCode(ListName.LOV, lov[0].id as string)!, spesifisering: text})
 
   return (
     <FieldWrapper marginBottom="32px">
@@ -81,13 +81,13 @@ export const RegelverkEdit = () => {
                         maxDropdownHeight="400px"
                         value={lov}
                         options={codelist.getParsedOptions(ListName.LOV)}
-                        onChange={({ value }) => {
+                        onChange={({value}) => {
                           setLov(value)
                         }}
                         overrides={{
                           ControlContainer: {
                             style: {
-                              backgroundColor: p.form.errors.regelverk && ettlevColors.error50,
+                              backgroundColor: p.form.errors.regelverk ? ettlevColors.error50 : ettlevColors.white,
                               ...borderColor(p.form.errors.regelverk ? ettlevColors.red600 : ettlevColors.grey200),
                               ...borderWidth('2px'),
                             },
@@ -96,7 +96,7 @@ export const RegelverkEdit = () => {
                       />
                     </Block>
                     <Block width="100%">
-                      <LabelWithTooltip label={'Paragraf, kapittel eller artikkel i regelverk'} tooltip={'Beskrivelse'} />
+                      <LabelWithTooltip label={'Paragraf, kapittel eller artikkel i regelverk'} tooltip={'Beskrivelse'}/>
                       <CustomizedInput
                         value={text}
                         onChange={(e) => setText((e.target as HTMLInputElement).value)}
@@ -128,14 +128,14 @@ export const RegelverkEdit = () => {
                   {!!lov.length && text && (
                     <Block display="flex" alignItems="center" marginTop={theme.sizing.scale400}>
                       <LabelSmall marginRight={theme.sizing.scale800}>Forhåndsvisning: </LabelSmall>
-                      <LovView regelverk={regelverkObject()} />
+                      <LovView regelverk={regelverkObject()}/>
                     </Block>
                   )}
                 </Block>
                 <RenderTagList
                   wide
                   list={p.form.values.regelverk.map((r: Regelverk) => (
-                    <LovView regelverk={r} />
+                    <LovView regelverk={r}/>
                   ))}
                   onRemove={p.remove}
                 />

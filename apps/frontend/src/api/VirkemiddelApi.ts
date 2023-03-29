@@ -1,8 +1,8 @@
 import axios from 'axios'
-import { emptyPage, PageResponse, Virkemiddel } from '../constants'
-import { env } from '../util/env'
-import { useEffect, useState } from 'react'
-import { useDebouncedState } from '../util/hooks'
+import {emptyPage, PageResponse, Virkemiddel} from '../constants'
+import {env} from '../util/env'
+import {useEffect, useState} from 'react'
+import {useDebouncedState} from '../util/hooks'
 
 export const getAllVirkemiddel = async () => {
   const PAGE_SIZE = 100
@@ -143,12 +143,15 @@ export const virkemiddelToVirkemiddelDto = (virkemiddel: Virkemiddel): Virkemidd
   return dto
 }
 
-export const virkemiddelMapToFormVal = (virkemiddel: Partial<Virkemiddel>): Virkemiddel => ({
-  id: virkemiddel.id || '',
-  navn: virkemiddel.navn || '',
-  changeStamp: virkemiddel.changeStamp || { lastModifiedDate: '', lastModifiedBy: '' },
-  version: -1,
-  regelverk: virkemiddel.regelverk || [],
-  virkemiddelType: virkemiddel.virkemiddelType,
-  livsSituasjon: virkemiddel.livsSituasjon || '',
-})
+export const virkemiddelMapToFormVal = (virkemiddel: Partial<Virkemiddel>): Virkemiddel => {
+  return {
+    id: virkemiddel.id || '',
+    navn: virkemiddel.navn || '',
+    changeStamp: virkemiddel.changeStamp || { lastModifiedDate: '', lastModifiedBy: '' },
+    version: -1,
+    regelverk: virkemiddel.regelverk || [],
+    virkemiddelType: virkemiddel.virkemiddelType?.code,
+    livsSituasjon: virkemiddel.livsSituasjon || '',
+  } as any
+}
+
