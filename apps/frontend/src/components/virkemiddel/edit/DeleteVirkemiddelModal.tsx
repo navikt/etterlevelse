@@ -19,21 +19,16 @@ const DeleteVirkemiddeltModal = ({ isOpen, setIsOpen, virkemiddel, refetchData }
   const [errorOnDelete, setErrorOnDelete] = useState('')
 
   const submit = async (id?: string) => {
-    if (virkemiddel) {
-      if (id) {
+    try {
+      if(id) {
         await deleteVirkemiddel(id)
-          .then(() => {
-            setIsOpen(false)
-            refetchData()
-          })
-          .catch((e) => {
-            setErrorOnDelete(e)
-          })
-      } else {
-        setErrorOnDelete('Fant ikke ID for virkemiddelet')
+        .then(() => {
+          setIsOpen(false)
+          refetchData()
+        })
       }
-    } else {
-      setErrorOnDelete('Fant ikke virkemiddelet')
+    } catch (error: any){
+      setErrorOnDelete(error.message)
     }
   }
 
