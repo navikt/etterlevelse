@@ -4,7 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.storage.domain.GenericStorage;
 import no.nav.data.common.validator.Validator;
 import no.nav.data.etterlevelse.common.domain.DomainService;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
 import no.nav.data.etterlevelse.virkemiddel.domain.Virkemiddel;
+import no.nav.data.etterlevelse.virkemiddel.dto.VirkemiddelNotErasableException;
 import no.nav.data.etterlevelse.virkemiddel.dto.VirkemiddelRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,9 +23,22 @@ import static no.nav.data.common.utils.StreamUtils.filter;
 @Service
 public class VirkemiddelService extends DomainService<Virkemiddel> {
 
-    public VirkemiddelService() {
+    private final EtterlevelseDokumentasjonService etterlevelseDokumentasjonService;
+
+    public VirkemiddelService(EtterlevelseDokumentasjonService etterlevelseDokumentasjonService) {
         super(Virkemiddel.class);
 
+        this.etterlevelseDokumentasjonService = etterlevelseDokumentasjonService;
+    }
+
+    private void validateVirkemiddelIsNotInUse(UUID virkemiddelId) {
+        Virkemiddel virkemiddel = storage.get(virkemiddelId, Virkemiddel.class);
+        List<String> etterlevelseDokumentasjonList = etterlevelseDokumentasjonService.getByVirkemiddelId(List.of(virkemiddelId.toString())).stream().map((e)-> 'E' + e.getEtterlevelseNummer().toString()).toList();
+        //TODO get krav list by virkemiddel id and check if is being used by krav
+        if (!etterlevelseDokumentasjonList.isEmpty()) {
+            log.warn("The virkemiddel {} is in use and cannot be erased. etterlvelse dokumentasjon: {}", virkemiddel.getNavn(), etterlevelseDokumentasjonList);
+            throw new VirkemiddelNotErasableException(String.format("The virkemiddel {} is in use and cannot be erased. etterlvelse dokumentasjon: {}", virkemiddel.getNavn(), etterlevelseDokumentasjonList));
+        }
     }
 
     @Override
@@ -54,6 +69,7 @@ public class VirkemiddelService extends DomainService<Virkemiddel> {
     }
 
     public Virkemiddel delete(UUID id) {
+        validateVirkemiddelIsNotInUse(id);
         return storage.delete(id, Virkemiddel.class);
     }
 
