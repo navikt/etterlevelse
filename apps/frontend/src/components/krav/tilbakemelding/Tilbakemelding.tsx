@@ -354,7 +354,7 @@ const TilbakemeldingSvar = ({ tilbakemelding, setFocusNummer, close, ubesvartOgK
           </Block>
           <Block marginBottom={'8px'} display={'flex'} alignItems={'center'}>
             <LabelSmall minWidth={'fit-content'} marginRight={'8px'}>
-              Velg spørsmåls status:{' '}
+              Velg spørsmål status:{' '}
             </LabelSmall>
             <Select
               overrides={{
