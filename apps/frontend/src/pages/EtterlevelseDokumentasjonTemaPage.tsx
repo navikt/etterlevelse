@@ -189,6 +189,7 @@ export const EtterlevelseDokumentasjonTemaPage = () => {
           headerOverlap="31px"
           mainHeader={getMainHeader(
             etterlevelseDokumentasjon,
+            undefined,
             <Helmet>
               <meta charSet="utf-8" />
               <title>

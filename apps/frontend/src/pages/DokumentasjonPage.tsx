@@ -146,9 +146,6 @@ export const DokumentasjonPage = () => {
 
           {!etterlevelseDokumentasjon.irrelevansFor.length ? getRelevans() : getRelevans(etterlevelseDokumentasjon.irrelevansFor)}
         </Block>
-        <Block display="flex" flex="1" justifyContent="flex-end" $style={{ whiteSpace: 'nowrap' }}>
-          <EditEtterlevelseDokumentasjonModal etterlevelseDokumentasjon={etterlevelseDokumentasjon} setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon} isEditButton />
-        </Block>
       </Block>
     )
   }
@@ -250,7 +247,7 @@ export const DokumentasjonPage = () => {
     <Block width="100%">
       <Layout2
         headerBackgroundColor={ettlevColors.grey50}
-        mainHeader={getMainHeader(etterlevelseDokumentasjon)}
+        mainHeader={getMainHeader(etterlevelseDokumentasjon, setEtterlevelseDokumentasjon)}
         secondaryHeaderBackgroundColor={ettlevColors.white}
         secondaryHeader={getSecondaryHeader(etterlevelseDokumentasjon)}
         childrenBackgroundColor={ettlevColors.grey25}

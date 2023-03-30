@@ -7,12 +7,14 @@ import { ettlevColors } from '../../../util/theme'
 import { Teams } from '../../common/TeamName'
 import { ExternalButton } from '../../common/Button'
 import { env } from '../../../util/env'
-import { ExternalLinkWrapper } from '../../common/RouteLink'
+import { ExternalLink, ExternalLinkWrapper } from '../../common/RouteLink'
 import moment from 'moment'
+import EditEtterlevelseDokumentasjonModal from '../edit/EditEtterlevelseDokumentasjonModal'
+import { StyledLink } from 'baseui/link'
 
 export const responsiveDisplayEtterlevelseDokumentasjonPage: Responsive<any> = ['block', 'block', 'block', 'block', 'flex', 'flex']
 
-export const getMainHeader = (etterlevelseDokumentasjon: EtterlevelseDokumentasjon, helmet?: ReactNode) => (
+export const getMainHeader = (etterlevelseDokumentasjon: EtterlevelseDokumentasjon, setEtterlevelseDokumentasjon?: (e: EtterlevelseDokumentasjon) => void, helmet?: ReactNode) => (
   <Block display={responsiveDisplayEtterlevelseDokumentasjonPage} justifyContent="space-between" marginBottom="32px" marginTop="38px">
     {helmet ? (
       helmet
@@ -25,10 +27,20 @@ export const getMainHeader = (etterlevelseDokumentasjon: EtterlevelseDokumentasj
       </Helmet>
     )}
     <Block width="100%">
-      <LabelSmall color={ettlevColors.green600}>E{etterlevelseDokumentasjon.etterlevelseNummer.toString()}</LabelSmall>
-      <HeadingXXLarge marginTop="0" color={ettlevColors.green800}>
-        {etterlevelseDokumentasjon.title}
-      </HeadingXXLarge>
+      <Block display="flex">
+        <Block>
+          <LabelSmall color={ettlevColors.green600}>E{etterlevelseDokumentasjon.etterlevelseNummer.toString()}</LabelSmall>
+          <HeadingXXLarge marginTop="0" color={ettlevColors.green800}>
+            {etterlevelseDokumentasjon.title}
+          </HeadingXXLarge>
+        </Block>
+        {setEtterlevelseDokumentasjon !== undefined && (
+          <Block display="flex" flex="1" justifyContent="flex-end" $style={{ whiteSpace: 'nowrap' }}>
+            <EditEtterlevelseDokumentasjonModal etterlevelseDokumentasjon={etterlevelseDokumentasjon} setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon} isEditButton />
+          </Block>
+        )}
+      </Block>
+
       {etterlevelseDokumentasjon.virkemiddelId && (
         <Block display="flex" alignItems="center">
           <LabelSmall $style={{ lineHeight: '22px', marginRight: '10px', fontSize: '16px', color: ettlevColors.green600 }}>Virkmiddel:</LabelSmall>
@@ -43,19 +55,14 @@ export const getMainHeader = (etterlevelseDokumentasjon: EtterlevelseDokumentasj
         </Block>
       )}
       {etterlevelseDokumentasjon.behandlingId && (
-        <Block display="flex" alignItems="center" marginTop={etterlevelseDokumentasjon.virkemiddelId ? '8px' : '0px' }>
+        <Block display="flex" alignItems="center" marginTop={etterlevelseDokumentasjon.virkemiddelId ? '8px' : '0px'}>
           <LabelSmall $style={{ lineHeight: '22px', marginRight: '10px', fontSize: '16px', color: ettlevColors.green600 }}>Behandling:</LabelSmall>
-          <Block
-            $style={{
-              fontFamily: 'Source Sans Pro',
-              fontWeight: 500,
-            }}
-          >
-            B{etterlevelseDokumentasjon.behandling?.nummer} {etterlevelseDokumentasjon.behandling?.overordnetFormaal?.shortName}: {etterlevelseDokumentasjon.behandling?.navn}
-          </Block>
+          <ExternalLink href={`${env.pollyBaseUrl}process/${etterlevelseDokumentasjon.behandlingId}`}>
+            <ExternalLinkWrapper text={`B${etterlevelseDokumentasjon.behandling?.nummer} ${etterlevelseDokumentasjon.behandling?.overordnetFormaal?.shortName}: ${etterlevelseDokumentasjon.behandling?.navn}`} />
+          </ExternalLink>
         </Block>
       )}
-      <Block display="flex" alignItems="center" width="100%" marginTop={'24px'}>
+      <Block display="flex" alignItems="center" width="100%" marginTop={'8px'}>
         <Block display={'flex'} width="100%" alignItems="center">
           <LabelSmall $style={{ lineHeight: '22px', marginRight: '10px', fontSize: '16px', color: ettlevColors.green600 }}>Team: </LabelSmall>
           {etterlevelseDokumentasjon.teams.length > 0 ? (
@@ -71,13 +78,6 @@ export const getMainHeader = (etterlevelseDokumentasjon: EtterlevelseDokumentasj
             </Block>
           )}
         </Block>
-        {etterlevelseDokumentasjon.behandlingId && (
-          <Block display="flex" justifyContent="flex-end" alignContent="center" $style={{ whiteSpace: 'nowrap' }}>
-            <ExternalButton kind={'secondary'} href={`${env.pollyBaseUrl}process/${etterlevelseDokumentasjon.behandlingId}`} size="mini">
-              <ExternalLinkWrapper text="Til behandlingskatalogen" />
-            </ExternalButton>
-          </Block>
-        )}
       </Block>
     </Block>
   </Block>
