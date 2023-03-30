@@ -37,7 +37,7 @@ public class VirkemiddelService extends DomainService<Virkemiddel> {
         //TODO get krav list by virkemiddel id and check if is being used by krav
         if (!etterlevelseDokumentasjonList.isEmpty()) {
             log.warn("The virkemiddel {} is in use and cannot be erased. etterlvelse dokumentasjon: {}", virkemiddel.getNavn(), etterlevelseDokumentasjonList);
-            throw new VirkemiddelNotErasableException(String.format("The virkemiddel {} is in use and cannot be erased. etterlvelse dokumentasjon: {}", virkemiddel.getNavn(), etterlevelseDokumentasjonList));
+            throw new VirkemiddelNotErasableException(String.format("The virkemiddel %s is in use and cannot be erased. etterlvelse dokumentasjon: %s", virkemiddel.getNavn(), etterlevelseDokumentasjonList.toString()));
         }
     }
 
