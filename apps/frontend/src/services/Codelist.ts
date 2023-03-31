@@ -119,37 +119,18 @@ class CodelistService {
   }
 
   getParsedOptionsForLov(forVirkemiddel?: boolean): { id: string; label: string; description: string }[] {
+    const lovList = this.getCodes(ListName.LOV)
+    let filteredLovList = []
+
     if (forVirkemiddel) {
-      return this.getCodes(ListName.LOV).filter((code: LovCode) => {
-        if (code.data) {
-          if(!code.data.relevantFor) {
-            return true
-          } else if (code.data.relevantFor === LovCodeRelevans.KRAV_OG_VIRKEMIDDEL || code.data.relevantFor === LovCodeRelevans.VIRKEMIDDEL) {
-            return true
-          }
-        } else {
-          return false
-        }
-      })
-        .map((code: LovCode) => {
-          return { id: code.code, label: code.shortName, description: code.description }
-        })
+      filteredLovList = filterLovCodeListForRelevans(lovList, LovCodeRelevans.VIRKEMIDDEL)
     } else {
-      return this.getCodes(ListName.LOV).filter((code: LovCode) => {
-        if (code.data) {
-          if(!code.data.relevantFor) {
-            return true
-          } else if (code.data.relevantFor === LovCodeRelevans.KRAV_OG_VIRKEMIDDEL || code.data.relevantFor === LovCodeRelevans.KRAV) {
-            return true
-          }
-        } else {
-          return false
-        }
-      })
-      .map((code: LovCode) => {
-        return { id: code.code, label: code.shortName, description: code.description }
-      })
+      filteredLovList = filterLovCodeListForRelevans(lovList, LovCodeRelevans.KRAV)
     }
+
+    return filteredLovList.map((code: LovCode) => {
+      return { id: code.code, label: code.shortName, description: code.description }
+    })
   }
 
   getParsedOptionsForList(listName: ListName, selected: string[]): { id: string; label: string }[] {
@@ -276,5 +257,20 @@ export const lovCodeRelevansToText = (lovCodeRelevans: string) => {
 export const lovCodeRelevansToOptions = () => {
   return Object.keys(LovCodeRelevans).map((key) => {
     return { id: key, label: lovCodeRelevansToText(key) }
+  })
+}
+
+export const filterLovCodeListForRelevans = (codeList: LovCode[], relevantFor: LovCodeRelevans) => {
+  return codeList.filter((code: LovCode) => {
+    if (code.data) {
+      //for old data
+      if(!code.data.relevantFor) {
+        return true
+      } else if (code.data.relevantFor === LovCodeRelevans.KRAV_OG_VIRKEMIDDEL || code.data.relevantFor === relevantFor) {
+        return true
+      }
+    } else {
+      return false
+    }
   })
 }
