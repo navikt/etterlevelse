@@ -180,6 +180,13 @@ export interface LovCodeData {
   lovId?: string
   underavdeling?: string
   tema?: string
+  relevantFor?: LovCodeRelevans
+}
+
+export enum LovCodeRelevans {
+  KRAV_OG_VIRKEMIDDEL = 'KRAV_OG_VIRKEMIDDEL',
+  KRAV = 'KRAV',
+  VIRKEMIDDEL = 'VIRKEMIDDEL',
 }
 
 export interface TemaCodeData {
@@ -212,4 +219,21 @@ export const codelistsCompareField = <T>(ext: (o: T) => Code[], exclude?: string
 
 export const codelistCompare = (a?: Code, b?: Code) => {
   return (a?.shortName || '').localeCompare(b?.shortName || '')
+}
+
+export const lovCodeRelevansToText = (lovCodeRelevans: string) => {
+  switch(lovCodeRelevans) {
+    case LovCodeRelevans.KRAV_OG_VIRKEMIDDEL.toString():
+      return 'Krav og virkemiddel'
+    case LovCodeRelevans.KRAV.toString():
+      return 'Krav'
+    case LovCodeRelevans.VIRKEMIDDEL.toString():
+      return 'Virkemiddel'
+  }
+}
+
+export const lovCodeRelevansToOptions = () => {
+  return Object.keys(LovCodeRelevans).map((key) => { 
+    return {id: key, label: lovCodeRelevansToText(key)}
+  })
 }

@@ -1,7 +1,7 @@
 import { Block, BlockProps } from 'baseui/block'
 import { LabelMedium } from 'baseui/typography'
 import { Field, FieldProps } from 'formik'
-import { Code, codelist, CodeListFormValues, ListName, LovCodeData, TemaCodeData } from '../../../services/Codelist'
+import { Code, codelist, CodeListFormValues, ListName, LovCodeData, LovCodeRelevans, lovCodeRelevansToOptions, lovCodeRelevansToText, TemaCodeData } from '../../../services/Codelist'
 import * as React from 'react'
 import { SIZE as InputSIZE } from 'baseui/input'
 import { OptionList } from '../../common/Inputs'
@@ -43,6 +43,10 @@ export const LovCodeDataForm = () => {
           if (!data.lovId && form.values.description) {
             set({ lovId: form.values.description })
           }
+          // Migrate old
+          if(!data.relevantFor) {
+            set({relevantFor: LovCodeRelevans.KRAV_OG_VIRKEMIDDEL})
+           }
 
           return (
             <>
@@ -75,6 +79,18 @@ export const LovCodeDataForm = () => {
                   value={codelist.getCode(ListName.TEMA, data.tema) as Code | undefined}
                   onChange={(val) => set({ tema: val.code })}
                   label={'Tema'}
+                />
+              </Block>
+
+              <Block {...rowBlockProps}>
+                <LabelMedium marginRight={'1rem'} width="25%">
+                  Relevant for:{' '}
+                </LabelMedium>
+                <OptionList
+                  options={lovCodeRelevansToOptions()}
+                  value={data.relevantFor ? data.relevantFor : undefined}
+                  onChange={(val) => set({ relevantFor: val })}
+                  label={'Relevant for'}
                 />
               </Block>
             </>
