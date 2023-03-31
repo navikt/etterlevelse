@@ -46,7 +46,11 @@ const CustomizedRegelverkSelect = (props: SelectProps) => {
   return <Select {...props} overrides={overrides}/>
 }
 
-export const RegelverkEdit = () => {
+type RegelverkEditProps = {
+  forVirkemiddel?: boolean
+}
+
+export const RegelverkEdit = ({forVirkemiddel} : RegelverkEditProps) => {
   const [lov, setLov] = useState<Value>([])
   const [text, setText] = useState('')
   const controlRef: React.Ref<ImperativeMethods> = React.useRef<ImperativeMethods>(null)
@@ -80,7 +84,7 @@ export const RegelverkEdit = () => {
                         aria-label={'Velg regelverk'}
                         maxDropdownHeight="400px"
                         value={lov}
-                        options={codelist.getParsedOptions(ListName.LOV)}
+                        options={codelist.getParsedOptionsForLov(forVirkemiddel)}
                         onChange={({value}) => {
                           setLov(value)
                         }}

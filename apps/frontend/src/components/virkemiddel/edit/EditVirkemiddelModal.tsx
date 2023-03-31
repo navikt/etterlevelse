@@ -119,7 +119,7 @@ export const EditVirkemiddelModal = (props: EditVirkemiddelModalProps) => {
                     {errors.virkemiddelType && <ErrorMessageModal msg={errors.virkemiddelType} fullWidth={true} />}
                   </FieldWrapper>
 
-                  <RegelverkEdit />
+                  <RegelverkEdit forVirkemiddel />
                   {errors.regelverk && <ErrorMessageModal msg={errors.regelverk} fullWidth={true} />}
                   <Block display="flex" justifyContent="flex-end">
                     <Button kind="secondary" type="button" onClick={() => props.setIsOpen(false)}>

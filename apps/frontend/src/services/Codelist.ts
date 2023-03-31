@@ -12,6 +12,13 @@ export enum ListName {
   VIRKEMIDDELTYPE = 'VIRKEMIDDELTYPE',
 }
 
+export enum LovCodeRelevans {
+  KRAV_OG_VIRKEMIDDEL = 'KRAV_OG_VIRKEMIDDEL',
+  KRAV = 'KRAV',
+  VIRKEMIDDEL = 'VIRKEMIDDEL',
+}
+
+
 const LOVDATA_FORSKRIFT_PREFIX = 'FORSKRIFT_'
 
 class CodelistService {
@@ -105,6 +112,46 @@ class CodelistService {
     })
   }
 
+  getOptionsForCode(codes: Code[]): { id: string; label: string; description: string }[] {
+    return codes.map((code: Code) => {
+      return { id: code.code, label: code.shortName, description: code.description }
+    })
+  }
+
+  getParsedOptionsForLov(forVirkemiddel?: boolean): { id: string; label: string; description: string }[] {
+    if (forVirkemiddel) {
+      return this.getCodes(ListName.LOV).filter((code: LovCode) => {
+        if (code.data) {
+          if(!code.data.relevantFor) {
+            return true
+          } else if (code.data.relevantFor === LovCodeRelevans.KRAV_OG_VIRKEMIDDEL || code.data.relevantFor === LovCodeRelevans.VIRKEMIDDEL) {
+            return true
+          }
+        } else {
+          return false
+        }
+      })
+        .map((code: LovCode) => {
+          return { id: code.code, label: code.shortName, description: code.description }
+        })
+    } else {
+      return this.getCodes(ListName.LOV).filter((code: LovCode) => {
+        if (code.data) {
+          if(!code.data.relevantFor) {
+            return true
+          } else if (code.data.relevantFor === LovCodeRelevans.KRAV_OG_VIRKEMIDDEL || code.data.relevantFor === LovCodeRelevans.KRAV) {
+            return true
+          }
+        } else {
+          return false
+        }
+      })
+      .map((code: LovCode) => {
+        return { id: code.code, label: code.shortName, description: code.description }
+      })
+    }
+  }
+
   getParsedOptionsForList(listName: ListName, selected: string[]): { id: string; label: string }[] {
     return selected.map((code) => ({ id: code, label: this.getShortname(listName, code) }))
   }
@@ -183,12 +230,6 @@ export interface LovCodeData {
   relevantFor?: LovCodeRelevans
 }
 
-export enum LovCodeRelevans {
-  KRAV_OG_VIRKEMIDDEL = 'KRAV_OG_VIRKEMIDDEL',
-  KRAV = 'KRAV',
-  VIRKEMIDDEL = 'VIRKEMIDDEL',
-}
-
 export interface TemaCodeData {
   image?: string
   shortDesciption?: string
@@ -222,7 +263,7 @@ export const codelistCompare = (a?: Code, b?: Code) => {
 }
 
 export const lovCodeRelevansToText = (lovCodeRelevans: string) => {
-  switch(lovCodeRelevans) {
+  switch (lovCodeRelevans) {
     case LovCodeRelevans.KRAV_OG_VIRKEMIDDEL.toString():
       return 'Krav og virkemiddel'
     case LovCodeRelevans.KRAV.toString():
@@ -233,7 +274,7 @@ export const lovCodeRelevansToText = (lovCodeRelevans: string) => {
 }
 
 export const lovCodeRelevansToOptions = () => {
-  return Object.keys(LovCodeRelevans).map((key) => { 
-    return {id: key, label: lovCodeRelevansToText(key)}
+  return Object.keys(LovCodeRelevans).map((key) => {
+    return { id: key, label: lovCodeRelevansToText(key) }
   })
 }
