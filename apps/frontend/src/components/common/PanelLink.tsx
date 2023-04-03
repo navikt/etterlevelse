@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
-import RouteLink, { ExternalLink } from './RouteLink'
-import { Block, BlockOverrides, Responsive, Scale } from 'baseui/block'
-import { borderColor, borderRadius, borderStyle, borderWidth, padding, paddingAll, paddingZero } from './Style'
-import { theme } from '../../util'
-import { ettlevColors } from '../../util/theme'
-import { HeadingXLarge, LabelLarge, LabelSmall, ParagraphMedium, ParagraphSmall, ParagraphXSmall } from 'baseui/typography'
-import { arrowRightIcon, navChevronRightIcon } from '../Images'
+import React, {useState} from 'react'
+import RouteLink, {ExternalLink} from './RouteLink'
+import {Block, BlockOverrides, Responsive, Scale} from 'baseui/block'
+import {borderColor, borderRadius, borderStyle, borderWidth, padding, paddingAll, paddingZero} from './Style'
+import {theme} from '../../util'
+import {ettlevColors} from '../../util/theme'
+import {HeadingXLarge, LabelLarge, LabelSmall, ParagraphMedium, ParagraphSmall, ParagraphXSmall} from 'baseui/typography'
+import {arrowRightIcon, navChevronRightIcon} from '../Images'
 import * as _ from 'lodash'
 import Button from './Button'
 
@@ -202,7 +202,7 @@ export const PanelLinkCard = ({
   hideArrow,
   marginRight,
   ComplimentaryContent,
-  openInNewTab,
+  openinnewtab,
 }: {
   href?: string
   tittel: string
@@ -223,7 +223,7 @@ export const PanelLinkCard = ({
   hideArrow?: boolean
   marginRight?: Responsive<Scale>
   ComplimentaryContent?: React.ReactNode
-  openInNewTab?: boolean
+  openinnewtab?: boolean
 }) => {
   const [hover, setHover] = useState(false)
 
@@ -281,7 +281,7 @@ export const PanelLinkCard = ({
 
   return (
     <Block width={width} maxWidth={maxWidth} overrides={rootOverrides} marginRight={marginRight} height="inherit">
-      <RouteLink href={href} hideUnderline requireLogin={requireLogin} openInNewTab={!!openInNewTab}>
+      <RouteLink href={href} hideUnderline requireLogin={requireLogin} openinnewtab={(!!openinnewtab).toString()}>
         <Block
           onMouseEnter={() => setHover(true)}
           onMouseLeave={() => setHover(false)}
