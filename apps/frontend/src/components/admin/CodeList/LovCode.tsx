@@ -1,7 +1,17 @@
 import { Block, BlockProps } from 'baseui/block'
 import { LabelMedium } from 'baseui/typography'
 import { Field, FieldProps } from 'formik'
-import { Code, codelist, CodeListFormValues, ListName, LovCodeData, LovCodeRelevans, lovCodeRelevansToOptions, lovCodeRelevansToText, TemaCodeData } from '../../../services/Codelist'
+import {
+  Code,
+  codelist,
+  CodeListFormValues,
+  ListName,
+  LovCodeData,
+  LovCodeRelevans,
+  lovCodeRelevansToOptions,
+  lovCodeRelevansToText,
+  TemaCodeData,
+} from '../../../services/Codelist'
 import * as React from 'react'
 import { SIZE as InputSIZE } from 'baseui/input'
 import { OptionList } from '../../common/Inputs'
@@ -44,9 +54,9 @@ export const LovCodeDataForm = () => {
             set({ lovId: form.values.description })
           }
           // Migrate old
-          if(!data.relevantFor) {
-            set({relevantFor: LovCodeRelevans.KRAV_OG_VIRKEMIDDEL})
-           }
+          if (!data.relevantFor) {
+            set({ relevantFor: LovCodeRelevans.KRAV_OG_VIRKEMIDDEL })
+          }
 
           return (
             <>

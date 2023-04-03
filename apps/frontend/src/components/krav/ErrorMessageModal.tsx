@@ -1,9 +1,9 @@
-import {Block} from 'baseui/block'
-import {Notification} from 'baseui/notification'
-import {paddingZero} from '../common/Style'
+import { Block } from 'baseui/block'
+import { Notification } from 'baseui/notification'
+import { paddingZero } from '../common/Style'
 import * as React from 'react'
-import {ModalLabel} from '../common/ModalSchema'
-import {ettlevColors} from "../../util/theme";
+import { ModalLabel } from '../common/ModalSchema'
+import { ettlevColors } from '../../util/theme'
 
 export const ErrorMessageModal = (props: { msg: any; fullWidth?: boolean }) => (
   <Block display="flex" width="100%" marginTop=".2rem">

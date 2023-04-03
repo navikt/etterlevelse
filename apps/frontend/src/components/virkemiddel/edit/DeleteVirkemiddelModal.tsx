@@ -20,14 +20,13 @@ const DeleteVirkemiddeltModal = ({ isOpen, setIsOpen, virkemiddel, refetchData }
 
   const submit = async (id?: string) => {
     try {
-      if(id) {
-        await deleteVirkemiddel(id)
-        .then(() => {
+      if (id) {
+        await deleteVirkemiddel(id).then(() => {
           setIsOpen(false)
           refetchData()
         })
       }
-    } catch (error: any){
+    } catch (error: any) {
       setErrorOnDelete(error.message)
     }
   }

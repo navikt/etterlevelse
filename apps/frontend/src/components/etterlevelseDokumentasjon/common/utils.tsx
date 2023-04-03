@@ -58,7 +58,9 @@ export const getMainHeader = (etterlevelseDokumentasjon: EtterlevelseDokumentasj
         <Block display="flex" alignItems="center" marginTop={etterlevelseDokumentasjon.virkemiddelId ? '8px' : '0px'}>
           <LabelSmall $style={{ lineHeight: '22px', marginRight: '10px', fontSize: '16px', color: ettlevColors.green600 }}>Behandling:</LabelSmall>
           <ExternalLink href={`${env.pollyBaseUrl}process/${etterlevelseDokumentasjon.behandlingId}`}>
-            <ExternalLinkWrapper text={`B${etterlevelseDokumentasjon.behandling?.nummer} ${etterlevelseDokumentasjon.behandling?.overordnetFormaal?.shortName}: ${etterlevelseDokumentasjon.behandling?.navn}`} />
+            <ExternalLinkWrapper
+              text={`B${etterlevelseDokumentasjon.behandling?.nummer} ${etterlevelseDokumentasjon.behandling?.overordnetFormaal?.shortName}: ${etterlevelseDokumentasjon.behandling?.navn}`}
+            />
           </ExternalLink>
         </Block>
       )}

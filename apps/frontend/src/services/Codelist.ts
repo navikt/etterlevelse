@@ -18,7 +18,6 @@ export enum LovCodeRelevans {
   VIRKEMIDDEL = 'VIRKEMIDDEL',
 }
 
-
 const LOVDATA_FORSKRIFT_PREFIX = 'FORSKRIFT_'
 
 class CodelistService {
@@ -264,7 +263,7 @@ export const filterLovCodeListForRelevans = (codeList: LovCode[], relevantFor: L
   return codeList.filter((code: LovCode) => {
     if (code.data) {
       //for old data
-      if(!code.data.relevantFor) {
+      if (!code.data.relevantFor) {
         return true
       } else if (code.data.relevantFor === LovCodeRelevans.KRAV_OG_VIRKEMIDDEL || code.data.relevantFor === relevantFor) {
         return true

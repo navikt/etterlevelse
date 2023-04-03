@@ -70,7 +70,7 @@ export const useEtterlevelseDokumentasjon = (etterlevelseDokumentasjonId?: strin
         }
         if (etterlevelseDokumentasjon.teams.length > 0) {
           await getTeams(etterlevelseDokumentasjon.teams).then((teamsResponse) => (teamsData = teamsResponse))
-        } 
+        }
         if (etterlevelseDokumentasjon.virkemiddelId) {
           await getVirkemiddel(etterlevelseDokumentasjon.virkemiddelId).then((virkemiddelResponse) => (virkmiddel = virkemiddelResponse))
         }
@@ -84,7 +84,7 @@ export const useEtterlevelseDokumentasjon = (etterlevelseDokumentasjonId?: strin
 
           if (etterlevelseDokumentasjon[0].teams.length > 0) {
             getTeams(etterlevelseDokumentasjon[0].teams).then((teamsResponseData) => (teamsData = teamsResponseData))
-          } 
+          }
           if (etterlevelseDokumentasjon[0].virkemiddelId) {
             await getVirkemiddel(etterlevelseDokumentasjon[0].virkemiddelId).then((virkemiddelResponse) => (virkmiddel = virkemiddelResponse))
           }
@@ -121,5 +121,5 @@ export const etterlevelseDokumentasjonMapToFormVal = (etterlevelseDokumentasjon:
   etterlevelseNummer: etterlevelseDokumentasjon.etterlevelseNummer || 0,
   teams: etterlevelseDokumentasjon.teams || [],
   teamsData: etterlevelseDokumentasjon.teamsData || [],
-  virkemiddelId: etterlevelseDokumentasjon.virkemiddelId || ''
+  virkemiddelId: etterlevelseDokumentasjon.virkemiddelId || '',
 })

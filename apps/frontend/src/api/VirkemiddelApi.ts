@@ -1,8 +1,8 @@
 import axios from 'axios'
-import {emptyPage, PageResponse, Virkemiddel} from '../constants'
-import {env} from '../util/env'
-import {useEffect, useState} from 'react'
-import {useDebouncedState} from '../util/hooks'
+import { emptyPage, PageResponse, Virkemiddel } from '../constants'
+import { env } from '../util/env'
+import { useEffect, useState } from 'react'
+import { useDebouncedState } from '../util/hooks'
 
 export const getAllVirkemiddel = async () => {
   const PAGE_SIZE = 100
@@ -154,4 +154,3 @@ export const virkemiddelMapToFormVal = (virkemiddel: Partial<Virkemiddel>): Virk
     livsSituasjon: virkemiddel.livsSituasjon || '',
   } as any
 }
-
