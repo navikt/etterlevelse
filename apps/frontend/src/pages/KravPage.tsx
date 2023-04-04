@@ -1,7 +1,7 @@
 import {Block} from 'baseui/block'
 import {HeadingXLarge, HeadingXXLarge, ParagraphMedium, ParagraphXSmall} from 'baseui/typography'
 import {useParams} from 'react-router-dom'
-import {deleteKrav, getKravByKravNummer, KravIdParams, kravMapToFormVal} from '../api/KravApi'
+import {deleteKrav, getKravByKravNummer, KravIdParams, KravId as KravIdQueryVariables, kravMapToFormVal} from '../api/KravApi'
 import React, {useEffect, useRef, useState} from 'react'
 import {Krav, KravId, KravQL, KravStatus, KravVersjon} from '../constants'
 import Button from '../components/common/Button'
@@ -48,6 +48,19 @@ export const kravStatus = (status: KravStatus | string) => {
 type Section = 'krav' | 'etterlevelser' | 'tilbakemeldinger'
 type LocationState = { tab: Section; avdelingOpen?: string }
 
+const getQueryVariableFromParams = (params: Readonly<Partial<KravIdParams>>) => {
+    if(params.id) {
+      return {id: params.id}
+    } else if (params.kravNummer && params.kravVersjon) {
+      return {
+        kravNummer: parseInt(params.kravNummer),
+        kravVersjon: parseInt(params.kravVersjon)
+      }
+    } else {
+      return undefined
+    }
+}
+
 export const KravPage = () => {
   const params = useParams<KravIdParams>()
   const [krav, setKrav] = useState<KravQL | undefined>()
@@ -56,8 +69,8 @@ export const KravPage = () => {
     loading: kravLoading,
     data: kravQuery,
     refetch: reloadKrav,
-  } = useQuery<{ kravById: KravQL }, KravIdParams>(query, {
-    variables: params as KravIdParams | undefined,
+  } = useQuery<{ kravById: KravQL }, KravIdQueryVariables>(query, {
+    variables: getQueryVariableFromParams(params),
     skip: (!params.id || params.id === 'ny') && !params.kravNummer,
     fetchPolicy: 'no-cache',
   })
