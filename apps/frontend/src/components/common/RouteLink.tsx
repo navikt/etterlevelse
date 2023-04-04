@@ -19,7 +19,7 @@ type RouteLinkProps = {
   requireLogin?: boolean
   fontColor?: string
   ariaLabel?: string
-  openInNewTab: boolean
+  openinnewtab: boolean
 } & any
 
 const RouteLink = (props: RouteLinkProps) => {
@@ -55,8 +55,8 @@ const RouteLink = (props: RouteLinkProps) => {
       {...restprops}
       href={href}
       onClick={props.href && props.href.includes('https') ? undefined : onClick}
-      target={props.openInNewTab ? '_blank' : undefined}
-      rel={props.openInNewTab ? 'noreferrer noopener' : undefined}
+      target={props.openinnewtab ? '_blank' : undefined}
+      rel={props.openinnewtab ? 'noreferrer noopener' : undefined}
     />
   )
 }
