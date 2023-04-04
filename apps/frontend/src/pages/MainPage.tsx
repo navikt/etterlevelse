@@ -1,22 +1,22 @@
-import { Narrow, Page, Wide } from '../components/scaffold/Page'
-import { ettlevColors, theme } from '../util/theme'
-import { Block } from 'baseui/block'
-import { HeadingXLarge, HeadingXXLarge, ParagraphMedium } from 'baseui/typography'
-import { PanelLink, PanelLinkCard } from '../components/common/PanelLink'
-import { grafIconBg, grafIconBgSmall, handWithLeaf, paperPenIconBg, paperPenIconBgSmall, paragrafIconBg, paragrafIconBgSmall } from '../components/Images'
-import { Card } from 'baseui/card'
-import { borderColor, borderRadius, borderStyle, borderWidth, margin, paddingAll } from '../components/common/Style'
+import {Narrow, Page, Wide} from '../components/scaffold/Page'
+import {ettlevColors, theme} from '../util/theme'
+import {Block} from 'baseui/block'
+import {HeadingXLarge, HeadingXXLarge, ParagraphMedium} from 'baseui/typography'
+import {PanelLink, PanelLinkCard} from '../components/common/PanelLink'
+import {grafIconBg, grafIconBgSmall, handWithLeaf, paperPenIconBg, paperPenIconBgSmall, paragrafIconBg, paragrafIconBgSmall} from '../components/Images'
+import {Card} from 'baseui/card'
+import {borderColor, borderRadius, borderStyle, borderWidth, margin, paddingAll} from '../components/common/Style'
 import ReactPlayer from 'react-player'
-import { Button, SIZE } from 'baseui/button'
-import { faPlay } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { buttonBorderStyle, buttonContentStyle } from '../components/common/Button'
-import React, { useEffect, useState } from 'react'
-import { Markdown } from '../components/common/Markdown'
-import { AlertType, Melding, MeldingStatus, MeldingType } from '../constants'
-import { getMeldingByType } from '../api/MeldingApi'
-import { ampli } from '../services/Amplitude'
-import { getPageWidth } from '../util/pageWidth'
+import {Button, SIZE} from 'baseui/button'
+import {faPlay} from '@fortawesome/free-solid-svg-icons'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {buttonBorderStyle, buttonContentStyle} from '../components/common/Button'
+import React, {useEffect, useState} from 'react'
+import {Markdown} from '../components/common/Markdown'
+import {AlertType, Melding, MeldingStatus, MeldingType} from '../constants'
+import {getMeldingByType} from '../api/MeldingApi'
+import {ampli} from '../services/Amplitude'
+import {getPageWidth} from '../util/pageWidth'
 
 const cardWidth = ['95%', '95%', '95%', '95%', '31%', '31%']
 const cardHeight = ['auto', 'auto', 'auto', 'auto', '140px', '140px']
@@ -94,7 +94,7 @@ export const MainPage = () => {
               tittel={'Status i organisasjonen'}
               icon={pageWidth && pageWidth >= 768 ? grafIconBg : grafIconBgSmall}
               beskrivelse={'Følg med på status og se hvor godt NAV sine områder dokumenterer på kravene'}
-              openInNewTab
+              openinnewtab
             />
           </Block>
         </Wide>
