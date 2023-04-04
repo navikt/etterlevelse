@@ -45,7 +45,7 @@ class KravGraphQlIT extends GraphQLTestBase {
                 .behandlingId(behandling.getId())
                 .build());
 
-        var var = Map.of("nummer", krav.getKravNummer().toString(), "versjon", krav.getKravVersjon().toString());
+        var var = Map.of("nummer", krav.getKravNummer(), "versjon", krav.getKravVersjon());
         var response = graphQLTestTemplate.perform("graphqltest/krav_get.graphql", vars(var));
 
         assertThat(response, "kravById")
@@ -76,7 +76,7 @@ class KravGraphQlIT extends GraphQLTestBase {
                     .status(KravStatus.AKTIV)
                     .build());
 
-            var var = Map.of("relevans", "SAK", "nummer", "50");
+            var var = Map.of("relevans", "SAK", "nummer", 50);
             var response = graphQLTestTemplate.perform("graphqltest/krav_filter.graphql", vars(var));
 
             assertThat(response, "krav")
@@ -254,7 +254,7 @@ class KravGraphQlIT extends GraphQLTestBase {
                     .status(KravStatus.UTGAATT)
                     .build());
 
-            var var = Map.of("gjeldendeKrav", "true");
+            var var = Map.of("gjeldendeKrav", true);
             var response = graphQLTestTemplate.perform("graphqltest/krav_filter.graphql", vars(var));
 
             assertThat(response, "krav")
@@ -303,14 +303,14 @@ class KravGraphQlIT extends GraphQLTestBase {
                 .hasNoErrors().hasSize("content", 10);
 
         // size 3, 2nd page
-        assertThat(graphQLTestTemplate.perform("graphqltest/krav_filter.graphql", vars(Map.of("pageNumber", "1", "pageSize", "3"))), "krav")
+        assertThat(graphQLTestTemplate.perform("graphqltest/krav_filter.graphql", vars(Map.of("pageNumber", 1, "pageSize", 3))), "krav")
                 .hasNoErrors().hasSize("content", 3)
                 .hasField("content[0].navn", "Krav 3")
                 .hasField("content[1].navn", "Krav 4")
                 .hasField("content[2].navn", "Krav 5");
 
         // size 3, 2nd page with filter
-        assertThat(graphQLTestTemplate.perform("graphqltest/krav_filter.graphql", vars(Map.of("relevans", "SAK", "pageNumber", "1", "pageSize", "3"))), "krav")
+        assertThat(graphQLTestTemplate.perform("graphqltest/krav_filter.graphql", vars(Map.of("relevans", "SAK", "pageNumber", 1, "pageSize", 3))), "krav")
                 .hasNoErrors().hasSize("content", 3)
                 .hasField("content[0].navn", "Krav 3")
                 .hasField("content[1].navn", "Krav 4")

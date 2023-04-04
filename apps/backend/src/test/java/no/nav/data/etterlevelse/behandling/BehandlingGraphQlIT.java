@@ -27,7 +27,7 @@ public class BehandlingGraphQlIT extends GraphQLTestBase {
     @Test
     @SneakyThrows
     void behandlingPage() {
-        var var = Map.of("pageNumber", "0", "pageSize", "20");
+        var var = Map.of("pageNumber", 0, "pageSize", 20);
         var response = graphQLTestTemplate.perform("graphqltest/behandling_filter.graphql", vars(var));
 
         assertThat(response, "behandling")
@@ -99,7 +99,7 @@ public class BehandlingGraphQlIT extends GraphQLTestBase {
                 .kravNummer(krav.getKravNummer()).kravVersjon(krav.getKravVersjon())
                 .build());
 
-        var var = Map.of("sistRedigert", "2");
+        var var = Map.of("sistRedigert", 2);
         var response = graphQLTestTemplate.perform("graphqltest/behandling_filter.graphql", vars(var));
 
         assertThat(response, "behandling")
