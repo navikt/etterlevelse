@@ -151,7 +151,7 @@ const YES = 'YES',
   UNCLARIFIED = 'UNCLARIFIED'
 const boolToRadio = (bool?: boolean) => (bool === undefined ? UNCLARIFIED : bool ? YES : NO)
 const radioToBool = (radio: string) => (radio === UNCLARIFIED ? undefined : radio === YES)
-export const BoolField = (props: { label: string; name: string; nullable?: boolean; tooltip?: string }) => (
+export const BoolField = (props: { label: string; name: string; nullable?: boolean; tooltip?: React.ReactNode }) => (
   <FieldWrapper>
     <Field name={props.name}>
       {(p: FieldProps) => (
