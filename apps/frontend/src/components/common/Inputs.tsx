@@ -151,11 +151,11 @@ const YES = 'YES',
   UNCLARIFIED = 'UNCLARIFIED'
 const boolToRadio = (bool?: boolean) => (bool === undefined ? UNCLARIFIED : bool ? YES : NO)
 const radioToBool = (radio: string) => (radio === UNCLARIFIED ? undefined : radio === YES)
-export const BoolField = (props: { label: string; name: string; nullable?: boolean }) => (
+export const BoolField = (props: { label: string; name: string; nullable?: boolean; tooltip?: string }) => (
   <FieldWrapper>
     <Field name={props.name}>
       {(p: FieldProps) => (
-        <FormControl label={props.label} error={p.meta.touched && p.meta.error}>
+        <FormControl label={<LabelWithTooltip label={props.label} tooltip={props.tooltip} />} error={p.meta.touched && p.meta.error}>
           <RadioGroup
             value={boolToRadio(p.field.value)}
             align="horizontal"
