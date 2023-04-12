@@ -2,6 +2,7 @@ package no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Builder.Default;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import no.nav.data.common.storage.domain.ChangeStamp;
@@ -32,9 +33,11 @@ public class EtterlevelseDokumentasjon implements DomainObject {
 
     private String title;
     private String behandlingId;
-    private boolean behandlerPersonopplysninger;
+    @Default
+    private boolean behandlerPersonopplysninger = true;
     private String virkemiddelId;
-    private boolean knyttetTilVirkemiddel;
+    @Default
+    private boolean knyttetTilVirkemiddel = true;
     private List<String> teams;
     private List<String> irrelevansFor;
 
@@ -69,6 +72,7 @@ public class EtterlevelseDokumentasjon implements DomainObject {
                 .knyttetTilVirkemiddel(knyttetTilVirkemiddel)
                 .build();
     }
+
     public InstanceId convertToInstanceId() {
         return new InstanceId(id.toString(), title);
     }
