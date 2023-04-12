@@ -33,7 +33,7 @@ public class EtterlevelseDokumentasjonRepoImpl implements EtterlevelseDokumentas
 
     @Override
     public List<GenericStorage> getEtterlevelseDokumentasjonerForTeam(List<String> teamIds) {
-        var query =  "select id from generic_storage where type = 'EtterlevelseDokumentasjon' and data -> 'teams' ??| array[ :teamIds ] ";
+        var query = "select id from generic_storage where type = 'EtterlevelseDokumentasjon' and data -> 'teams' ??| array[ :teamIds ] ";
         var par = new MapSqlParameterSource();
         par.addValue("teamIds", teamIds);
         return fetch(jdbcTemplate.queryForList(query, par));
@@ -43,10 +43,23 @@ public class EtterlevelseDokumentasjonRepoImpl implements EtterlevelseDokumentas
     public List<GenericStorage> findBy(EtterlevelseDokumentasjonFilter filter) {
         var query = "select id from generic_storage where type = 'EtterlevelseDokumentasjon' ";
         var par = new MapSqlParameterSource();
+
         if (filter.getRelevans() != null && !filter.getRelevans().isEmpty()) {
             query += " and NOT data -> 'irrelevansFor' ??| array[ :relevans ] ";
             par.addValue("relevans", filter.getRelevans());
-        } if (filter.getSistRedigert() != null) {
+        }
+
+        if (filter.getBehandlerPersonopplysninger() != null) {
+            query += " and data -> 'behandlerPersonopplysninger' = :behandlerPersonopplysninger";
+            par.addValue("behandlerPersonopplysninger", filter.getBehandlerPersonopplysninger());
+        }
+
+        if (filter.getKnyttetTilVirkemiddel() != null) {
+            query += " and data -> 'knyttetTilVirkemiddel' = :knyttetTilVirkemiddel";
+            par.addValue("knyttetTilVirkemiddel", filter.getKnyttetTilVirkemiddel());
+        }
+
+        if (filter.getSistRedigert() != null) {
             query += """
                      and id::text in (
                        select etterlevelseDokumentasjonId
@@ -66,6 +79,7 @@ public class EtterlevelseDokumentasjonRepoImpl implements EtterlevelseDokumentas
             par.addValue("limit", filter.getSistRedigert())
                     .addValue("user_id", SecurityUtils.getCurrentIdent() + "%");
         }
+
         return fetch(jdbcTemplate.queryForList(query, par));
     }
 

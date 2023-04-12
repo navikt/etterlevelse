@@ -22,12 +22,12 @@ public class EtterlevelseDokumentasjonResponse {
     private UUID id;
     private ChangeStampResponse changeStamp;
     private Integer version;
-
     private Integer etterlevelseNummer;
-
     private String title;
     private String behandlingId;
+    private boolean behandlerPersonopplysninger;
     private String virkemiddelId;
+    private boolean knyttetTilVirkemiddel;
     @Singular("relevansForSingle")
     private List<CodelistResponse> irrelevansFor;
     @Singular("team")

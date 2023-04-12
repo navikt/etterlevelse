@@ -24,7 +24,9 @@ public class EtterlevelseDokumentasjonFilter {
     private List<String> teams;
 
     private String behandlingId;
+    private Boolean behandlerPersonopplysninger;
     private String virkemiddelId;
+    private Boolean knyttetTilVirkemiddel;
     private String sok;
 
 
@@ -38,6 +40,8 @@ public class EtterlevelseDokumentasjonFilter {
                 && mineEtterlevelseDokumentasjoner == null
                 && behandlingId == null
                 && virkemiddelId == null
+                && behandlerPersonopplysninger == null
+                && knyttetTilVirkemiddel == null
                 ;
     }
 

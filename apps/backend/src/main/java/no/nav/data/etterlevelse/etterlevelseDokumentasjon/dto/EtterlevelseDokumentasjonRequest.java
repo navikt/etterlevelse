@@ -25,15 +25,14 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
     private String id;
     private Boolean update;
     private Integer etterlevelseNummer;
-
     private String title;
     private String behandlingId;
+    private boolean behandlerPersonopplysninger;
     private String virkemiddelId;
+    private boolean knyttetTilVirkemiddel;
     @Schema(description = "Codelist RELEVANS")
     private List<String> irrelevansFor;
-
     private List<String> teams;
-
     @Override
     public void format() {
         setId(trimToNull(id));
