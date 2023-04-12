@@ -167,7 +167,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
 
                   <BoolField label="Er produktet/systemet tilknyttet et virkemiddel?" name="knyttetTilVirkemiddel" />
 
-                  {values.knyttetTilVirkemiddel ?
+                  {values.knyttetTilVirkemiddel ? (
                     <FieldWrapper>
                       <Field name="virkemiddelId">
                         {(fp: FieldProps) => {
@@ -229,8 +229,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                       </Field>
                       <Error fieldName="virkemiddelId" fullWidth />
                     </FieldWrapper>
-
-                    :
+                  ) : (
                     <>
                       <LabelWithTooltip tooltip="Ved å oppgi egenskaper til etterlevelsen, blir kun relevante krav synlig for dokumentasjon." label={'Filter'} />
                       <FieldArray name="irrelevansFor">
@@ -341,9 +340,13 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                         }}
                       </FieldArray>
                     </>
-                  }
+                  )}
 
-                  <BoolField label="Behandler produktet/systemet du dokumenterer etterlevelse for personopplysninger?" name="behandlerPersonopplysninger" tooltip='Hvis produktet/systemet behandler personopplysninger må du ha en behandling i behandligskatalogen. Det er mulig å opprette etterlevelse og legge til behandling etterpå.'/>
+                  <BoolField
+                    label="Behandler produktet/systemet du dokumenterer etterlevelse for personopplysninger?"
+                    name="behandlerPersonopplysninger"
+                    tooltip="Hvis produktet/systemet behandler personopplysninger må du ha en behandling i behandligskatalogen. Det er mulig å opprette etterlevelse og legge til behandling etterpå."
+                  />
 
                   {values.behandlerPersonopplysninger && (
                     <FieldWrapper>
@@ -416,44 +419,56 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                     </FieldWrapper>
                   )}
                   <Block display="flex" alignItems="center" marginTop="100px">
-                    <Checkbox checked={checkedAddTeam} onChange={(e) => setCheckedAddTeam(e.target.checked)} labelPlacement={LABEL_PLACEMENT.right} overrides={{ Root: { style: { display: 'flex', alignItems: 'center' } } }}>
-                      <LabelWithTooltip noMarginBottom label="Jeg vil legge til team fra teamkatalogen" tooltip="Legg til eksiterende team fra teamkatalogen for å automatisk filtrere teamets dokumentasjon. Dette er ikke nødvendig for å opprette etterlevelsedokumentasjonen, men anbefales." />
-                    </Checkbox></Block>
+                    <Checkbox
+                      checked={checkedAddTeam}
+                      onChange={(e) => setCheckedAddTeam(e.target.checked)}
+                      labelPlacement={LABEL_PLACEMENT.right}
+                      overrides={{ Root: { style: { display: 'flex', alignItems: 'center' } } }}
+                    >
+                      <LabelWithTooltip
+                        noMarginBottom
+                        label="Jeg vil legge til team fra teamkatalogen"
+                        tooltip="Legg til eksiterende team fra teamkatalogen for å automatisk filtrere teamets dokumentasjon. Dette er ikke nødvendig for å opprette etterlevelsedokumentasjonen, men anbefales."
+                      />
+                    </Checkbox>
+                  </Block>
 
-                  {checkedAddTeam && <FieldWrapper>
-                    <FieldArray name="teamsData">
-                      {(p: FieldArrayRenderProps) => {
-                        return (
-                          <FormControl label={<LabelWithTooltip label="" tooltip="" />}>
-                            <Block>
-                              <Block display="flex">
-                                <CustomizedSelect
-                                  overrides={selectCustomOverrides}
-                                  placeholder="Søk team"
-                                  aria-label="Søk team"
-                                  noResultsMsg={intl.emptyTable}
-                                  maxDropdownHeight="350px"
-                                  searchable={true}
-                                  type={TYPE.search}
-                                  labelKey="name"
-                                  onInputChange={(event) => {
-                                    setTeamSearchResult(event.currentTarget.value)
-                                  }}
-                                  options={teamSearchResult}
-                                  onChange={({ value }) => {
-                                    value.length && p.push(value[0])
-                                  }}
-                                  isLoading={loadingTeamSearchResult}
-                                  error={!!p.form.errors.teamsData && !!p.form.submitCount}
-                                />
+                  {checkedAddTeam && (
+                    <FieldWrapper>
+                      <FieldArray name="teamsData">
+                        {(p: FieldArrayRenderProps) => {
+                          return (
+                            <FormControl label={<LabelWithTooltip label="" tooltip="" />}>
+                              <Block>
+                                <Block display="flex">
+                                  <CustomizedSelect
+                                    overrides={selectCustomOverrides}
+                                    placeholder="Søk team"
+                                    aria-label="Søk team"
+                                    noResultsMsg={intl.emptyTable}
+                                    maxDropdownHeight="350px"
+                                    searchable={true}
+                                    type={TYPE.search}
+                                    labelKey="name"
+                                    onInputChange={(event) => {
+                                      setTeamSearchResult(event.currentTarget.value)
+                                    }}
+                                    options={teamSearchResult}
+                                    onChange={({ value }) => {
+                                      value.length && p.push(value[0])
+                                    }}
+                                    isLoading={loadingTeamSearchResult}
+                                    error={!!p.form.errors.teamsData && !!p.form.submitCount}
+                                  />
+                                </Block>
+                                <RenderTagList wide list={p.form.values.teamsData.map((t: Team) => t.name)} onRemove={p.remove} />
                               </Block>
-                              <RenderTagList wide list={p.form.values.teamsData.map((t: Team) => t.name)} onRemove={p.remove} />
-                            </Block>
-                          </FormControl>
-                        )
-                      }}
-                    </FieldArray>
-                  </FieldWrapper>}
+                            </FormControl>
+                          )
+                        }}
+                      </FieldArray>
+                    </FieldWrapper>
+                  )}
 
                   <Block display="flex" justifyContent="flex-end">
                     <Button kind="secondary" type="button" onClick={() => setIsEtterlevelseDokumntasjonerModalOpen(false)}>

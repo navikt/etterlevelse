@@ -1,10 +1,10 @@
 import axios from 'axios'
-import {EtterlevelseDokumentasjon, EtterlevelseDokumentasjonQL, PageResponse, Team} from '../constants'
-import {env} from '../util/env'
-import {useEffect, useState} from 'react'
-import {getBehandling} from './BehandlingApi'
-import {getTeams} from './TeamApi'
-import {getVirkemiddel} from './VirkemiddelApi'
+import { EtterlevelseDokumentasjon, EtterlevelseDokumentasjonQL, PageResponse, Team } from '../constants'
+import { env } from '../util/env'
+import { useEffect, useState } from 'react'
+import { getBehandling } from './BehandlingApi'
+import { getTeams } from './TeamApi'
+import { getVirkemiddel } from './VirkemiddelApi'
 
 export const getEtterlevelseDokumentasjon = async (id: string) => {
   return (await axios.get<EtterlevelseDokumentasjon>(`${env.backendBaseUrl}/etterlevelsedokumentasjon/${id}`)).data
@@ -123,5 +123,5 @@ export const etterlevelseDokumentasjonMapToFormVal = (etterlevelseDokumentasjon:
   teams: etterlevelseDokumentasjon.teams || [],
   teamsData: etterlevelseDokumentasjon.teamsData || [],
   virkemiddelId: etterlevelseDokumentasjon.virkemiddelId || '',
-  knyttetTilVirkemiddel: etterlevelseDokumentasjon.knyttetTilVirkemiddel || true
+  knyttetTilVirkemiddel: etterlevelseDokumentasjon.knyttetTilVirkemiddel || true,
 })

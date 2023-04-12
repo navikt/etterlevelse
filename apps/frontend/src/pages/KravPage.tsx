@@ -1,32 +1,32 @@
-import {Block} from 'baseui/block'
-import {HeadingXLarge, HeadingXXLarge, ParagraphMedium, ParagraphXSmall} from 'baseui/typography'
-import {useParams} from 'react-router-dom'
-import {deleteKrav, getKravByKravNummer, KravIdParams, KravId as KravIdQueryVariables, kravMapToFormVal} from '../api/KravApi'
-import React, {useEffect, useRef, useState} from 'react'
-import {Krav, KravId, KravQL, KravStatus, KravVersjon} from '../constants'
+import { Block } from 'baseui/block'
+import { HeadingXLarge, HeadingXXLarge, ParagraphMedium, ParagraphXSmall } from 'baseui/typography'
+import { useParams } from 'react-router-dom'
+import { deleteKrav, getKravByKravNummer, KravIdParams, KravId as KravIdQueryVariables, kravMapToFormVal } from '../api/KravApi'
+import React, { useEffect, useRef, useState } from 'react'
+import { Krav, KravId, KravQL, KravStatus, KravVersjon } from '../constants'
 import Button from '../components/common/Button'
-import {ViewKrav} from '../components/krav/ViewKrav'
-import {EditKrav} from '../components/krav/EditKrav'
-import {LoadingSkeleton} from '../components/common/LoadingSkeleton'
-import {user} from '../services/User'
-import {theme} from '../util'
-import {FormikProps} from 'formik'
-import {DeleteItem} from '../components/DeleteItem'
-import {borderColor, borderRadius, borderStyle, borderWidth, padding} from '../components/common/Style'
-import {useQuery} from '@apollo/client'
-import {Tilbakemeldinger} from '../components/krav/tilbakemelding/Tilbakemelding'
-import {editIcon, informationIcon, pageIcon, plusIcon} from '../components/Images'
-import {CustomizedTabs} from '../components/common/CustomizedTabs'
-import {ettlevColors, maxPageWidth, pageWidth, responsivePaddingSmall, responsiveWidthSmall} from '../util/theme'
-import {useLocationState, useQueryParam} from '../util/hooks'
-import {gql} from '@apollo/client/core'
+import { ViewKrav } from '../components/krav/ViewKrav'
+import { EditKrav } from '../components/krav/EditKrav'
+import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
+import { user } from '../services/User'
+import { theme } from '../util'
+import { FormikProps } from 'formik'
+import { DeleteItem } from '../components/DeleteItem'
+import { borderColor, borderRadius, borderStyle, borderWidth, padding } from '../components/common/Style'
+import { useQuery } from '@apollo/client'
+import { Tilbakemeldinger } from '../components/krav/tilbakemelding/Tilbakemelding'
+import { editIcon, informationIcon, pageIcon, plusIcon } from '../components/Images'
+import { CustomizedTabs } from '../components/common/CustomizedTabs'
+import { ettlevColors, maxPageWidth, pageWidth, responsivePaddingSmall, responsiveWidthSmall } from '../util/theme'
+import { useLocationState, useQueryParam } from '../util/hooks'
+import { gql } from '@apollo/client/core'
 import ExpiredAlert from '../components/krav/ExpiredAlert'
-import CustomizedBreadcrumbs, {breadcrumbPaths} from '../components/common/CustomizedBreadcrumbs'
-import {codelist, ListName, TemaCode} from '../services/Codelist'
-import {Helmet} from 'react-helmet'
+import CustomizedBreadcrumbs, { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
+import { codelist, ListName, TemaCode } from '../services/Codelist'
+import { Helmet } from 'react-helmet'
 import Etterlevelser from '../components/krav/Etterlevelser'
-import {ampli} from '../services/Amplitude'
-import {Markdown} from '../components/common/Markdown'
+import { ampli } from '../services/Amplitude'
+import { Markdown } from '../components/common/Markdown'
 
 export const kravNumView = (it: { kravVersjon: number; kravNummer: number }) => `K${it.kravNummer}.${it.kravVersjon}`
 export const kravName = (krav: Krav) => `${kravNumView(krav)} ${krav.navn}`
@@ -49,16 +49,16 @@ type Section = 'krav' | 'etterlevelser' | 'tilbakemeldinger'
 type LocationState = { tab: Section; avdelingOpen?: string }
 
 const getQueryVariableFromParams = (params: Readonly<Partial<KravIdParams>>) => {
-    if(params.id) {
-      return {id: params.id}
-    } else if (params.kravNummer && params.kravVersjon) {
-      return {
-        kravNummer: parseInt(params.kravNummer),
-        kravVersjon: parseInt(params.kravVersjon)
-      }
-    } else {
-      return undefined
+  if (params.id) {
+    return { id: params.id }
+  } else if (params.kravNummer && params.kravVersjon) {
+    return {
+      kravNummer: parseInt(params.kravNummer),
+      kravVersjon: parseInt(params.kravVersjon),
     }
+  } else {
+    return undefined
+  }
 }
 
 export const KravPage = () => {
