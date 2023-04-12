@@ -157,7 +157,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
       </Button>
 
       <CustomizedModal size="default" isOpen={!!isEtterlevelseDokumentasjonerModalOpen} onClose={() => setIsEtterlevelseDokumntasjonerModalOpen(false)}>
-        <ModalHeader>{props.isEditButton ? 'Rediger dokumentasjonen' : 'Opprett ny dokumentasjon'}</ModalHeader>
+        <ModalHeader>{props.isEditButton ? 'Rediger dokumentasjonen' : 'Opprett ny etterlevelsedokumentasjon'}</ModalHeader>
         <ModalBody>
           <Formik initialValues={etterlevelseDokumentasjonMapToFormVal(props.etterlevelseDokumentasjon ? props.etterlevelseDokumentasjon : {})} onSubmit={submit}>
             {({ values, submitForm }) => {
@@ -165,7 +165,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                 <Form>
                   <InputField disablePlaceHolder label={'Tittel'} name={'title'} />
 
-                  <BoolField label="Er etterlevelsen tilknyttet et virkemiddel" name="knyttetTilVirkemiddel" />
+                  <BoolField label="Er produktet/systemet tilknyttet et virkemiddel?" name="knyttetTilVirkemiddel" />
 
                   {values.knyttetTilVirkemiddel ?
                     <FieldWrapper>
@@ -343,7 +343,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                     </>
                   }
 
-                  <BoolField label="Behandler etterlevelsen personopplysninger?" name="behandlerPersonopplysninger" />
+                  <BoolField label="Behandler produktet/systemet du dokumenterer etterlevelse for personopplysninger?" name="behandlerPersonopplysninger" tooltip='Hvis produktet/systemet behandler personopplysninger må du ha en behandling i behandligskatalogen. Det er mulig å opprette etterlevelse og legge til behandling etterpå.'/>
 
                   {values.behandlerPersonopplysninger && (
                     <FieldWrapper>
@@ -415,16 +415,16 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                       <Error fieldName="behandlingId" fullWidth />
                     </FieldWrapper>
                   )}
-                  <Block display="flex" alignItems="center">
+                  <Block display="flex" alignItems="center" marginTop="100px">
                     <Checkbox checked={checkedAddTeam} onChange={(e) => setCheckedAddTeam(e.target.checked)} labelPlacement={LABEL_PLACEMENT.right} overrides={{ Root: { style: { display: 'flex', alignItems: 'center' } } }}>
-                      <LabelWithTooltip noMarginBottom label="Jeg vil legge til team fra teamkatalogen" tooltip="Legg til eksiterende team fra teamkatalogen. Dette er ikke nødvendig for å opprette etterlevelse, men anbefales." />
+                      <LabelWithTooltip noMarginBottom label="Jeg vil legge til team fra teamkatalogen" tooltip="Legg til eksiterende team fra teamkatalogen for å automatisk filtrere teamets dokumentasjon. Dette er ikke nødvendig for å opprette etterlevelsedokumentasjonen, men anbefales." />
                     </Checkbox></Block>
 
                   {checkedAddTeam && <FieldWrapper>
                     <FieldArray name="teamsData">
                       {(p: FieldArrayRenderProps) => {
                         return (
-                          <FormControl label={<LabelWithTooltip label="Legg til team" tooltip="Søk og legg til team fra teamkatalogen" />}>
+                          <FormControl label={<LabelWithTooltip label="" tooltip="" />}>
                             <Block>
                               <Block display="flex">
                                 <CustomizedSelect
