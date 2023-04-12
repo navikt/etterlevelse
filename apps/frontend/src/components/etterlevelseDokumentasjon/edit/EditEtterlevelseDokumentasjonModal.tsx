@@ -10,7 +10,7 @@ import CustomizedModal from '../../common/CustomizedModal'
 import { Button as BaseUIButton, KIND } from 'baseui/button'
 import { Field, FieldArray, FieldArrayRenderProps, FieldProps, Form, Formik } from 'formik'
 import { FormControl } from 'baseui/form-control'
-import { FieldWrapper, InputField } from '../../common/Inputs'
+import { BoolField, FieldWrapper, InputField } from '../../common/Inputs'
 import { ButtonGroup } from 'baseui/button-group'
 import { ACCESSIBILITY_TYPE } from 'baseui/popover'
 import { PLACEMENT } from 'baseui/toast'
@@ -29,6 +29,8 @@ import { SelectOverrides, TYPE } from 'baseui/select'
 import { getTeams, useSearchTeam } from '../../../api/TeamApi'
 import { RenderTagList } from '../../common/TagList'
 import { useSearchVirkemiddel } from '../../../api/VirkemiddelApi'
+import { RadioGroup } from 'baseui/radio'
+import { Checkbox, LABEL_PLACEMENT } from 'baseui/checkbox'
 
 type EditEtterlevelseDokumentasjonModalProps = {
   etterlevelseDokumentasjon?: EtterlevelseDokumentasjonQL
@@ -77,6 +79,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
   const [virkemiddelSearchResult, setVirkemiddelSearchResult, loadingVirkemiddelSearchResult] = useSearchVirkemiddel()
   const [selectedBehandling, setSelectedBehandling] = useState<Behandling>()
   const [selectedVirkemiddel, setSelectedVirkemiddel] = useState<Virkemiddel>()
+  const [checkedAddTeam, setCheckedAddTeam] = useState(false)
 
   const [teamSearchResult, setTeamSearchResult, loadingTeamSearchResult] = useSearchTeam()
 
@@ -98,6 +101,10 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
       )
     }
 
+    if (props.etterlevelseDokumentasjon && props.etterlevelseDokumentasjon.teams.length > 0) {
+      setCheckedAddTeam(true)
+    }
+
     if (props.etterlevelseDokumentasjon && props.etterlevelseDokumentasjon.behandling && props.etterlevelseDokumentasjon.behandling.navn) {
       setSelectedBehandling(props.etterlevelseDokumentasjon.behandling)
     }
@@ -107,34 +114,36 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
   }, [props.etterlevelseDokumentasjon])
 
   const submit = async (etterlevelseDokumentasjon: EtterlevelseDokumentasjonQL) => {
-    if (!etterlevelseDokumentasjon.id || etterlevelseDokumentasjon.id === 'ny') {
-      await createEtterlevelseDokumentasjon(etterlevelseDokumentasjon).then((response) => {
-        setIsEtterlevelseDokumntasjonerModalOpen(false)
-        if (props.setEtterlevelseDokumentasjon) {
-          props.setEtterlevelseDokumentasjon(response)
-        }
-      })
-    } else {
-      await updateEtterlevelseDokumentasjon(etterlevelseDokumentasjon).then((response) => {
-        setIsEtterlevelseDokumntasjonerModalOpen(false)
-        if (props.setEtterlevelseDokumentasjon) {
-          if (response.teams.length > 0) {
-            getTeams(response.teams).then((teamsData) => {
-              if (props.setEtterlevelseDokumentasjon) {
-                props.setEtterlevelseDokumentasjon({
-                  ...response,
-                  teamsData: teamsData,
-                  behandling: selectedBehandling,
-                  virkemiddel: selectedVirkemiddel,
-                })
-              }
-            })
-          } else {
-            props.setEtterlevelseDokumentasjon({ ...response, behandling: selectedBehandling, virkemiddel: selectedVirkemiddel })
-          }
-        }
-      })
-    }
+    console.log(etterlevelseDokumentasjon)
+
+    // if (!etterlevelseDokumentasjon.id || etterlevelseDokumentasjon.id === 'ny') {
+    //   await createEtterlevelseDokumentasjon(etterlevelseDokumentasjon).then((response) => {
+    //     setIsEtterlevelseDokumntasjonerModalOpen(false)
+    //     if (props.setEtterlevelseDokumentasjon) {
+    //       props.setEtterlevelseDokumentasjon(response)
+    //     }
+    //   })
+    // } else {
+    //   await updateEtterlevelseDokumentasjon(etterlevelseDokumentasjon).then((response) => {
+    //     setIsEtterlevelseDokumntasjonerModalOpen(false)
+    //     if (props.setEtterlevelseDokumentasjon) {
+    //       if (response.teams.length > 0) {
+    //         getTeams(response.teams).then((teamsData) => {
+    //           if (props.setEtterlevelseDokumentasjon) {
+    //             props.setEtterlevelseDokumentasjon({
+    //               ...response,
+    //               teamsData: teamsData,
+    //               behandling: selectedBehandling,
+    //               virkemiddel: selectedVirkemiddel,
+    //             })
+    //           }
+    //         })
+    //       } else {
+    //         props.setEtterlevelseDokumentasjon({ ...response, behandling: selectedBehandling, virkemiddel: selectedVirkemiddel })
+    //       }
+    //     }
+    //   })
+    // }
   }
 
   return (
@@ -216,7 +225,84 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                     </Field>
                     <Error fieldName="virkemiddelId" fullWidth />
                   </FieldWrapper>
-                  <FieldWrapper>
+
+                  <BoolField label="Behandler etterlevelsen personopplysninger?" name="behandlerPersonopplysninger" />
+                  {values.behandlerPersonopplysninger && (
+                    <FieldWrapper>
+                      <Field name="behandlingId">
+                        {(fp: FieldProps) => {
+                          return (
+                            <FormControl
+                              label={
+                                <LabelWithTooltip
+                                  label={'Legg til eksisterende behandling fra behandlingskatalogen'}
+                                  tooltip="Søk og legg til behandling fra Behandlingskatalog. Dette er ikke nødvendig for å opprette ny etterlevelse, men anbefales."
+                                />
+                              }
+                            >
+                              <Block>
+                                <CustomizedSelect
+                                  overrides={selectCustomOverrides}
+                                  labelKey={'navn'}
+                                  noResultsMsg={intl.emptyTable}
+                                  maxDropdownHeight="350px"
+                                  searchable={true}
+                                  type={TYPE.search}
+                                  options={behandlingSearchResult}
+                                  placeholder={'Søk behandling'}
+                                  onInputChange={(event) => setBehandlingSearchResult(event.currentTarget.value)}
+                                  onChange={(params) => {
+                                    let behandling = params.value.length ? params.value[0] : undefined
+                                    if (behandling) {
+                                      fp.form.values['behandlingId'] = behandling.id
+                                      setSelectedBehandling(behandling as Behandling)
+                                    }
+                                  }}
+                                  isLoading={loadingBehandlingSearchResult}
+                                />
+                                {selectedBehandling && (
+                                  <Tag
+                                    variant={VARIANT.outlined}
+                                    onActionClick={() => {
+                                      setSelectedBehandling(undefined)
+                                      fp.form.setFieldValue('behandlingId', '')
+                                    }}
+                                    overrides={{
+                                      Text: {
+                                        style: {
+                                          fontSize: theme.sizing.scale650,
+                                          lineHeight: theme.sizing.scale750,
+                                          fontWeight: 400,
+                                        },
+                                      },
+                                      Root: {
+                                        style: {
+                                          ...borderWidth('1px'),
+                                          ':hover': {
+                                            backgroundColor: ettlevColors.green50,
+                                            borderColor: '#0B483F',
+                                          },
+                                        },
+                                      },
+                                    }}
+                                  >
+                                    {selectedBehandling.navn}
+                                  </Tag>
+                                )}
+                              </Block>
+                            </FormControl>
+                          )
+                        }}
+                      </Field>
+                      <Error fieldName="behandlingId" fullWidth />
+                    </FieldWrapper>
+                  )}
+                  <Block display="flex" alignItems="center">
+                  <Checkbox checked={checkedAddTeam} onChange={(e) => setCheckedAddTeam(e.target.checked)} labelPlacement={LABEL_PLACEMENT.right} overrides={{Root:{style:{display: 'flex', alignItems: 'center'}}}}>
+                <LabelWithTooltip noMarginBottom label="Jeg vil legge til team fra teamkatalogen" tooltip="Legg til eksiterende team fra teamkatalogen. Dette er ikke nødvendig for å opprette etterlevelse, men anbefales."/>
+                  </Checkbox></Block>
+                  
+                  { checkedAddTeam && <FieldWrapper>
                     <FieldArray name="teamsData">
                       {(p: FieldArrayRenderProps) => {
                         return (
@@ -249,68 +335,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                         )
                       }}
                     </FieldArray>
-                  </FieldWrapper>
-                  <FieldWrapper>
-                    <Field name="behandlingId">
-                      {(fp: FieldProps) => {
-                        return (
-                          <FormControl label={<LabelWithTooltip label={'Legg til behandling'} tooltip="Søk og legg til behandling fra Behandlingskatalog" />}>
-                            <Block>
-                              <CustomizedSelect
-                                overrides={selectCustomOverrides}
-                                labelKey={'navn'}
-                                noResultsMsg={intl.emptyTable}
-                                maxDropdownHeight="350px"
-                                searchable={true}
-                                type={TYPE.search}
-                                options={behandlingSearchResult}
-                                placeholder={'Søk behandling'}
-                                onInputChange={(event) => setBehandlingSearchResult(event.currentTarget.value)}
-                                onChange={(params) => {
-                                  let behandling = params.value.length ? params.value[0] : undefined
-                                  if (behandling) {
-                                    fp.form.values['behandlingId'] = behandling.id
-                                    setSelectedBehandling(behandling as Behandling)
-                                  }
-                                }}
-                                isLoading={loadingBehandlingSearchResult}
-                              />
-                              {selectedBehandling && (
-                                <Tag
-                                  variant={VARIANT.outlined}
-                                  onActionClick={() => {
-                                    setSelectedBehandling(undefined)
-                                    fp.form.setFieldValue('behandlingId', '')
-                                  }}
-                                  overrides={{
-                                    Text: {
-                                      style: {
-                                        fontSize: theme.sizing.scale650,
-                                        lineHeight: theme.sizing.scale750,
-                                        fontWeight: 400,
-                                      },
-                                    },
-                                    Root: {
-                                      style: {
-                                        ...borderWidth('1px'),
-                                        ':hover': {
-                                          backgroundColor: ettlevColors.green50,
-                                          borderColor: '#0B483F',
-                                        },
-                                      },
-                                    },
-                                  }}
-                                >
-                                  {selectedBehandling.navn}
-                                </Tag>
-                              )}
-                            </Block>
-                          </FormControl>
-                        )
-                      }}
-                    </Field>
-                    <Error fieldName="behandlingId" fullWidth />
-                  </FieldWrapper>
+                  </FieldWrapper>}
 
                   <LabelWithTooltip tooltip="Ved å oppgi egenskaper til etterlevelsen, blir kun relevante krav synlig for dokumentasjon." label={'Filter'} />
                   <FieldArray name="irrelevansFor">
