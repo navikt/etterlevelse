@@ -6,10 +6,10 @@ import { LabelLarge } from 'baseui/typography'
 import { ettlevColors, theme } from '../../util/theme'
 import { buttonContentStyle } from './Button'
 
-const LabelWithToolTip = (props: { label?: string; tooltip?: React.ReactNode; fontColor?: string }) => {
+const LabelWithToolTip = (props: { label?: string; tooltip?: React.ReactNode; fontColor?: string, noMarginBottom?: boolean}) => {
   if (props.tooltip) {
     return (
-      <Block display="flex" alignItems="center" marginBottom={theme.sizing.scale200}>
+      <Block display="flex" alignItems="center" marginBottom={props.noMarginBottom? '0px' : theme.sizing.scale200}>
         <Block marginRight="scale200">
           <LabelLarge $style={{ color: props.fontColor ? props.fontColor : 'black' }}>{props.label}</LabelLarge>
         </Block>
