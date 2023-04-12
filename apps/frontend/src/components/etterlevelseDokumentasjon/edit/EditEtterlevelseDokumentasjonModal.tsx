@@ -164,69 +164,187 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
               return (
                 <Form>
                   <InputField disablePlaceHolder label={'Tittel'} name={'title'} />
-                  <FieldWrapper>
-                    <Field name="virkemiddelId">
-                      {(fp: FieldProps) => {
-                        return (
-                          <FormControl label={<LabelWithTooltip label={'Legg til virkemiddel'} tooltip="Søk og legg til virkemiddel" />}>
-                            <Block>
-                              <CustomizedSelect
-                                overrides={selectCustomOverrides}
-                                labelKey={'navn'}
-                                noResultsMsg={intl.emptyTable}
-                                maxDropdownHeight="350px"
-                                searchable={true}
-                                type={TYPE.search}
-                                options={virkemiddelSearchResult}
-                                placeholder={'Søk virkemiddel'}
-                                onInputChange={(event) => setVirkemiddelSearchResult(event.currentTarget.value)}
-                                onChange={(params) => {
-                                  let virkemiddel = params.value.length ? params.value[0] : undefined
-                                  if (virkemiddel) {
-                                    fp.form.values['virkemiddelId'] = virkemiddel.id
-                                    setSelectedVirkemiddel(virkemiddel as Virkemiddel)
-                                  }
-                                }}
-                                isLoading={loadingVirkemiddelSearchResult}
-                              />
-                              {selectedVirkemiddel && (
-                                <Tag
-                                  variant={VARIANT.outlined}
-                                  onActionClick={() => {
-                                    setSelectedVirkemiddel(undefined)
-                                    fp.form.setFieldValue('virkemiddelId', '')
+
+                  <BoolField label="Er etterlevelsen tilknyttet et virkemiddel" name="knyttetTilVirkemiddel" />
+
+                  {values.knyttetTilVirkemiddel ?
+                    <FieldWrapper>
+                      <Field name="virkemiddelId">
+                        {(fp: FieldProps) => {
+                          return (
+                            <FormControl label={<LabelWithTooltip label={'Legg til virkemiddel'} tooltip="Søk og legg til virkemiddel" />}>
+                              <Block>
+                                <CustomizedSelect
+                                  overrides={selectCustomOverrides}
+                                  labelKey={'navn'}
+                                  noResultsMsg={intl.emptyTable}
+                                  maxDropdownHeight="350px"
+                                  searchable={true}
+                                  type={TYPE.search}
+                                  options={virkemiddelSearchResult}
+                                  placeholder={'Søk virkemiddel'}
+                                  onInputChange={(event) => setVirkemiddelSearchResult(event.currentTarget.value)}
+                                  onChange={(params) => {
+                                    let virkemiddel = params.value.length ? params.value[0] : undefined
+                                    if (virkemiddel) {
+                                      fp.form.values['virkemiddelId'] = virkemiddel.id
+                                      setSelectedVirkemiddel(virkemiddel as Virkemiddel)
+                                    }
+                                  }}
+                                  isLoading={loadingVirkemiddelSearchResult}
+                                />
+                                {selectedVirkemiddel && (
+                                  <Tag
+                                    variant={VARIANT.outlined}
+                                    onActionClick={() => {
+                                      setSelectedVirkemiddel(undefined)
+                                      fp.form.setFieldValue('virkemiddelId', '')
+                                    }}
+                                    overrides={{
+                                      Text: {
+                                        style: {
+                                          fontSize: theme.sizing.scale650,
+                                          lineHeight: theme.sizing.scale750,
+                                          fontWeight: 400,
+                                        },
+                                      },
+                                      Root: {
+                                        style: {
+                                          ...borderWidth('1px'),
+                                          ':hover': {
+                                            backgroundColor: ettlevColors.green50,
+                                            borderColor: '#0B483F',
+                                          },
+                                        },
+                                      },
+                                    }}
+                                  >
+                                    {selectedVirkemiddel.navn}
+                                  </Tag>
+                                )}
+                              </Block>
+                            </FormControl>
+                          )
+                        }}
+                      </Field>
+                      <Error fieldName="virkemiddelId" fullWidth />
+                    </FieldWrapper>
+
+                    :
+                    <>
+                      <LabelWithTooltip tooltip="Ved å oppgi egenskaper til etterlevelsen, blir kun relevante krav synlig for dokumentasjon." label={'Filter'} />
+                      <FieldArray name="irrelevansFor">
+                        {(p: FieldArrayRenderProps) => {
+                          return (
+                            <FormControl>
+                              <Block height="100%" width="calc(100% - 16px)" paddingLeft={theme.sizing.scale700} paddingTop={theme.sizing.scale750}>
+                                <ButtonGroup
+                                  mode="checkbox"
+                                  kind={KIND.secondary}
+                                  selected={selectedFilter}
+                                  size="mini"
+                                  onClick={(e, i) => {
+                                    if (!selectedFilter.includes(i)) {
+                                      setSelectedFilter([...selectedFilter, i])
+                                      p.remove(p.form.values.irrelevansFor.findIndex((ir: Code) => ir.code === relevansOptions[i].id))
+                                    } else {
+                                      setSelectedFilter(selectedFilter.filter((value) => value !== i))
+                                      p.push(codelist.getCode(ListName.RELEVANS, relevansOptions[i].id as string))
+                                    }
                                   }}
                                   overrides={{
-                                    Text: {
-                                      style: {
-                                        fontSize: theme.sizing.scale650,
-                                        lineHeight: theme.sizing.scale750,
-                                        fontWeight: 400,
-                                      },
-                                    },
                                     Root: {
                                       style: {
-                                        ...borderWidth('1px'),
-                                        ':hover': {
-                                          backgroundColor: ettlevColors.green50,
-                                          borderColor: '#0B483F',
-                                        },
+                                        flexWrap: 'wrap',
                                       },
                                     },
                                   }}
                                 >
-                                  {selectedVirkemiddel.navn}
-                                </Tag>
-                              )}
-                            </Block>
-                          </FormControl>
-                        )
-                      }}
-                    </Field>
-                    <Error fieldName="virkemiddelId" fullWidth />
-                  </FieldWrapper>
+                                  {relevansOptions.map((r, i) => {
+                                    return (
+                                      <BaseUIButton
+                                        key={'relevans_' + r.id}
+                                        type="button"
+                                        startEnhancer={() => {
+                                          if (selectedFilter.includes(i)) {
+                                            return <img src={checkboxChecked} alt="checked" />
+                                          } else if (!selectedFilter.includes(i) && hover === i) {
+                                            return <img src={checkboxUncheckedHover} alt="checkbox hover" />
+                                          } else {
+                                            return <img src={checkboxUnchecked} alt="unchecked" />
+                                          }
+                                        }}
+                                        overrides={{
+                                          BaseButton: {
+                                            style: {
+                                              ...buttonContentStyle,
+                                              backgroundColor: selectedFilter.includes(i) ? ettlevColors.green100 : ettlevColors.white,
+                                              ...borderWidth('1px'),
+                                              ...borderStyle('solid'),
+                                              ...borderColor('#6A6A6A'),
+                                              paddingLeft: '8px',
+                                              paddingRight: '16px',
+                                              paddingTop: '8px',
+                                              paddingBottom: '10px',
+                                              marginRight: '16px',
+                                              marginBottom: '16px',
+                                              ...borderRadius('4px'),
+                                              ':hover': {
+                                                backgroundColor: ettlevColors.white,
+                                                boxShadow: '0px 2px 0px rgba(0, 0, 0, 0.25), inset 0px -1px 0px rgba(0, 0, 0, 0.25);',
+                                              },
+                                              ':focus': {
+                                                boxShadow: '0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 3px 0 rgba(0, 0, 0, .12)',
+                                                outlineWidth: '3px',
+                                                outlineStyle: 'solid',
+                                                outlinwColor: ettlevColors.focusOutline,
+                                              },
+                                              width: '100%',
+                                              maxWidth: '260px',
+                                              justifyContent: 'flex-start',
+                                            },
+                                            props: {
+                                              onMouseEnter: () => {
+                                                setHover(i)
+                                              },
+                                              onMouseLeave: () => {
+                                                setHover(undefined)
+                                              },
+                                            },
+                                          },
+                                        }}
+                                      >
+                                        <Block width="100%" marginRight="5px">
+                                          <ParagraphMedium margin="0px" $style={{ lineHeight: '22px' }}>
+                                            {r.label}
+                                          </ParagraphMedium>
+                                        </Block>
+                                        <StatefulTooltip
+                                          content={() => <Block padding="20px">{r.description}</Block>}
+                                          placement={PLACEMENT.bottom}
+                                          accessibilityType={ACCESSIBILITY_TYPE.tooltip}
+                                          returnFocus
+                                          showArrow
+                                          autoFocus
+                                        >
+                                          <Block display="flex" justifyContent="flex-end">
+                                            <img src={outlineInfoIcon} alt="informasjons ikon" />
+                                          </Block>
+                                        </StatefulTooltip>
+                                      </BaseUIButton>
+                                    )
+                                  })}
+                                </ButtonGroup>
+                              </Block>
+                            </FormControl>
+                          )
+                        }}
+                      </FieldArray>
+                    </>
+                  }
 
                   <BoolField label="Behandler etterlevelsen personopplysninger?" name="behandlerPersonopplysninger" />
+
                   {values.behandlerPersonopplysninger && (
                     <FieldWrapper>
                       <Field name="behandlingId">
@@ -298,11 +416,11 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                     </FieldWrapper>
                   )}
                   <Block display="flex" alignItems="center">
-                  <Checkbox checked={checkedAddTeam} onChange={(e) => setCheckedAddTeam(e.target.checked)} labelPlacement={LABEL_PLACEMENT.right} overrides={{Root:{style:{display: 'flex', alignItems: 'center'}}}}>
-                <LabelWithTooltip noMarginBottom label="Jeg vil legge til team fra teamkatalogen" tooltip="Legg til eksiterende team fra teamkatalogen. Dette er ikke nødvendig for å opprette etterlevelse, men anbefales."/>
-                  </Checkbox></Block>
-                  
-                  { checkedAddTeam && <FieldWrapper>
+                    <Checkbox checked={checkedAddTeam} onChange={(e) => setCheckedAddTeam(e.target.checked)} labelPlacement={LABEL_PLACEMENT.right} overrides={{ Root: { style: { display: 'flex', alignItems: 'center' } } }}>
+                      <LabelWithTooltip noMarginBottom label="Jeg vil legge til team fra teamkatalogen" tooltip="Legg til eksiterende team fra teamkatalogen. Dette er ikke nødvendig for å opprette etterlevelse, men anbefales." />
+                    </Checkbox></Block>
+
+                  {checkedAddTeam && <FieldWrapper>
                     <FieldArray name="teamsData">
                       {(p: FieldArrayRenderProps) => {
                         return (
@@ -336,115 +454,6 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                       }}
                     </FieldArray>
                   </FieldWrapper>}
-
-                  <LabelWithTooltip tooltip="Ved å oppgi egenskaper til etterlevelsen, blir kun relevante krav synlig for dokumentasjon." label={'Filter'} />
-                  <FieldArray name="irrelevansFor">
-                    {(p: FieldArrayRenderProps) => {
-                      return (
-                        <FormControl>
-                          <Block height="100%" width="calc(100% - 16px)" paddingLeft={theme.sizing.scale700} paddingTop={theme.sizing.scale750}>
-                            <ButtonGroup
-                              mode="checkbox"
-                              kind={KIND.secondary}
-                              selected={selectedFilter}
-                              size="mini"
-                              onClick={(e, i) => {
-                                if (!selectedFilter.includes(i)) {
-                                  setSelectedFilter([...selectedFilter, i])
-                                  p.remove(p.form.values.irrelevansFor.findIndex((ir: Code) => ir.code === relevansOptions[i].id))
-                                } else {
-                                  setSelectedFilter(selectedFilter.filter((value) => value !== i))
-                                  p.push(codelist.getCode(ListName.RELEVANS, relevansOptions[i].id as string))
-                                }
-                              }}
-                              overrides={{
-                                Root: {
-                                  style: {
-                                    flexWrap: 'wrap',
-                                  },
-                                },
-                              }}
-                            >
-                              {relevansOptions.map((r, i) => {
-                                return (
-                                  <BaseUIButton
-                                    key={'relevans_' + r.id}
-                                    type="button"
-                                    startEnhancer={() => {
-                                      if (selectedFilter.includes(i)) {
-                                        return <img src={checkboxChecked} alt="checked" />
-                                      } else if (!selectedFilter.includes(i) && hover === i) {
-                                        return <img src={checkboxUncheckedHover} alt="checkbox hover" />
-                                      } else {
-                                        return <img src={checkboxUnchecked} alt="unchecked" />
-                                      }
-                                    }}
-                                    overrides={{
-                                      BaseButton: {
-                                        style: {
-                                          ...buttonContentStyle,
-                                          backgroundColor: selectedFilter.includes(i) ? ettlevColors.green100 : ettlevColors.white,
-                                          ...borderWidth('1px'),
-                                          ...borderStyle('solid'),
-                                          ...borderColor('#6A6A6A'),
-                                          paddingLeft: '8px',
-                                          paddingRight: '16px',
-                                          paddingTop: '8px',
-                                          paddingBottom: '10px',
-                                          marginRight: '16px',
-                                          marginBottom: '16px',
-                                          ...borderRadius('4px'),
-                                          ':hover': {
-                                            backgroundColor: ettlevColors.white,
-                                            boxShadow: '0px 2px 0px rgba(0, 0, 0, 0.25), inset 0px -1px 0px rgba(0, 0, 0, 0.25);',
-                                          },
-                                          ':focus': {
-                                            boxShadow: '0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 3px 0 rgba(0, 0, 0, .12)',
-                                            outlineWidth: '3px',
-                                            outlineStyle: 'solid',
-                                            outlinwColor: ettlevColors.focusOutline,
-                                          },
-                                          width: '100%',
-                                          maxWidth: '260px',
-                                          justifyContent: 'flex-start',
-                                        },
-                                        props: {
-                                          onMouseEnter: () => {
-                                            setHover(i)
-                                          },
-                                          onMouseLeave: () => {
-                                            setHover(undefined)
-                                          },
-                                        },
-                                      },
-                                    }}
-                                  >
-                                    <Block width="100%" marginRight="5px">
-                                      <ParagraphMedium margin="0px" $style={{ lineHeight: '22px' }}>
-                                        {r.label}
-                                      </ParagraphMedium>
-                                    </Block>
-                                    <StatefulTooltip
-                                      content={() => <Block padding="20px">{r.description}</Block>}
-                                      placement={PLACEMENT.bottom}
-                                      accessibilityType={ACCESSIBILITY_TYPE.tooltip}
-                                      returnFocus
-                                      showArrow
-                                      autoFocus
-                                    >
-                                      <Block display="flex" justifyContent="flex-end">
-                                        <img src={outlineInfoIcon} alt="informasjons ikon" />
-                                      </Block>
-                                    </StatefulTooltip>
-                                  </BaseUIButton>
-                                )
-                              })}
-                            </ButtonGroup>
-                          </Block>
-                        </FormControl>
-                      )
-                    }}
-                  </FieldArray>
 
                   <Block display="flex" justifyContent="flex-end">
                     <Button kind="secondary" type="button" onClick={() => setIsEtterlevelseDokumntasjonerModalOpen(false)}>
