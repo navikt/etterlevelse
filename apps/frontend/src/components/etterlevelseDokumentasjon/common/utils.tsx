@@ -1,16 +1,14 @@
-import { EtterlevelseDokumentasjon, EtterlevelseStatus } from '../../../constants'
-import { ReactNode } from 'react'
-import { Block, Responsive } from 'baseui/block'
-import { Helmet } from 'react-helmet'
-import { HeadingXXLarge, LabelSmall } from 'baseui/typography'
-import { ettlevColors } from '../../../util/theme'
-import { Teams } from '../../common/TeamName'
-import { ExternalButton } from '../../common/Button'
-import { env } from '../../../util/env'
-import { ExternalLink, ExternalLinkWrapper } from '../../common/RouteLink'
+import {EtterlevelseDokumentasjon, EtterlevelseStatus} from '../../../constants'
+import {ReactNode} from 'react'
+import {Block, Responsive} from 'baseui/block'
+import {Helmet} from 'react-helmet'
+import {HeadingXXLarge, LabelSmall} from 'baseui/typography'
+import {ettlevColors} from '../../../util/theme'
+import {Teams} from '../../common/TeamName'
+import {env} from '../../../util/env'
+import {ExternalLink, ExternalLinkWrapper} from '../../common/RouteLink'
 import moment from 'moment'
 import EditEtterlevelseDokumentasjonModal from '../edit/EditEtterlevelseDokumentasjonModal'
-import { StyledLink } from 'baseui/link'
 
 export const responsiveDisplayEtterlevelseDokumentasjonPage: Responsive<any> = ['block', 'block', 'block', 'block', 'flex', 'flex']
 
@@ -54,14 +52,18 @@ export const getMainHeader = (etterlevelseDokumentasjon: EtterlevelseDokumentasj
           </Block>
         </Block>
       )}
-      {etterlevelseDokumentasjon.behandlingId && (
+      {(etterlevelseDokumentasjon.behandlingId || etterlevelseDokumentasjon.behandlerPersonopplysninger) && (
         <Block display="flex" alignItems="center" marginTop={etterlevelseDokumentasjon.virkemiddelId ? '8px' : '0px'}>
-          <LabelSmall $style={{ lineHeight: '22px', marginRight: '10px', fontSize: '16px', color: ettlevColors.green600 }}>Behandling:</LabelSmall>
-          <ExternalLink href={`${env.pollyBaseUrl}process/${etterlevelseDokumentasjon.behandlingId}`}>
-            <ExternalLinkWrapper
-              text={`B${etterlevelseDokumentasjon.behandling?.nummer} ${etterlevelseDokumentasjon.behandling?.overordnetFormaal?.shortName}: ${etterlevelseDokumentasjon.behandling?.navn}`}
-            />
-          </ExternalLink>
+          {(etterlevelseDokumentasjon.behandlingId || etterlevelseDokumentasjon.behandlerPersonopplysninger) && <LabelSmall $style={{lineHeight: '22px', marginRight: '10px', fontSize: '16px', color: ettlevColors.green600}}>Behandling:</LabelSmall>}
+          {(etterlevelseDokumentasjon.behandlingId && etterlevelseDokumentasjon.behandlerPersonopplysninger)?(
+            <ExternalLink href={`${env.pollyBaseUrl}process/${etterlevelseDokumentasjon.behandlingId}`}>
+              <ExternalLinkWrapper
+                text={`B${etterlevelseDokumentasjon.behandling?.nummer} ${etterlevelseDokumentasjon.behandling?.overordnetFormaal?.shortName}: ${etterlevelseDokumentasjon.behandling?.navn}`}
+              />
+            </ExternalLink>
+          ):(
+            <Block>Feil</Block>
+          )}
         </Block>
       )}
       <Block display="flex" alignItems="center" width="100%" marginTop={'8px'}>
