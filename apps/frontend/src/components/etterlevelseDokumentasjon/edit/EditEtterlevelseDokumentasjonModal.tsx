@@ -1,36 +1,35 @@
-import { Block } from 'baseui/block'
-import { ModalBody, ModalHeader } from 'baseui/modal'
-import { useEffect, useState } from 'react'
-import { useSearchBehandling } from '../../../api/BehandlingApi'
-import { createEtterlevelseDokumentasjon, etterlevelseDokumentasjonMapToFormVal, updateEtterlevelseDokumentasjon } from '../../../api/EtterlevelseDokumentasjonApi'
-import { Behandling, EtterlevelseDokumentasjonQL, Team, Virkemiddel } from '../../../constants'
-import { Code, codelist, ListName } from '../../../services/Codelist'
-import Button, { buttonContentStyle } from '../../common/Button'
+import {Block} from 'baseui/block'
+import {ModalBody, ModalHeader} from 'baseui/modal'
+import {useEffect, useState} from 'react'
+import {useSearchBehandling} from '../../../api/BehandlingApi'
+import {createEtterlevelseDokumentasjon, etterlevelseDokumentasjonMapToFormVal, updateEtterlevelseDokumentasjon} from '../../../api/EtterlevelseDokumentasjonApi'
+import {Behandling, EtterlevelseDokumentasjonQL, Team, Virkemiddel} from '../../../constants'
+import {Code, codelist, ListName} from '../../../services/Codelist'
+import Button, {buttonContentStyle} from '../../common/Button'
 import CustomizedModal from '../../common/CustomizedModal'
-import { Button as BaseUIButton, KIND } from 'baseui/button'
-import { Field, FieldArray, FieldArrayRenderProps, FieldProps, Form, Formik } from 'formik'
-import { FormControl } from 'baseui/form-control'
-import { BoolField, FieldWrapper, InputField } from '../../common/Inputs'
-import { ButtonGroup } from 'baseui/button-group'
-import { ACCESSIBILITY_TYPE } from 'baseui/popover'
-import { PLACEMENT } from 'baseui/toast'
-import { StatefulTooltip } from 'baseui/tooltip'
-import { ParagraphMedium } from 'baseui/typography'
-import { theme } from '../../../util'
-import { ettlevColors } from '../../../util/theme'
+import {Button as BaseUIButton, KIND} from 'baseui/button'
+import {Field, FieldArray, FieldArrayRenderProps, FieldProps, Form, Formik} from 'formik'
+import {FormControl} from 'baseui/form-control'
+import {BoolField, FieldWrapper, InputField} from '../../common/Inputs'
+import {ButtonGroup} from 'baseui/button-group'
+import {ACCESSIBILITY_TYPE} from 'baseui/popover'
+import {PLACEMENT} from 'baseui/toast'
+import {StatefulTooltip} from 'baseui/tooltip'
+import {ParagraphMedium} from 'baseui/typography'
+import {theme} from '../../../util'
+import {ettlevColors} from '../../../util/theme'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
-import { borderColor, borderRadius, borderStyle, borderWidth } from '../../common/Style'
-import { checkboxChecked, checkboxUnchecked, checkboxUncheckedHover, editIcon, outlineInfoIcon, plusIcon, searchIcon } from '../../Images'
-import { Tag, VARIANT } from 'baseui/tag'
-import { Error } from '../../common/ModalSchema'
+import {borderColor, borderRadius, borderStyle, borderWidth} from '../../common/Style'
+import {checkboxChecked, checkboxUnchecked, checkboxUncheckedHover, editIcon, outlineInfoIcon, plusIcon, searchIcon} from '../../Images'
+import {Tag, VARIANT} from 'baseui/tag'
+import {Error} from '../../common/ModalSchema'
 import CustomizedSelect from '../../common/CustomizedSelect'
-import { intl } from '../../../util/intl/intl'
-import { SelectOverrides, TYPE } from 'baseui/select'
-import { getTeams, useSearchTeam } from '../../../api/TeamApi'
-import { RenderTagList } from '../../common/TagList'
-import { useSearchVirkemiddel } from '../../../api/VirkemiddelApi'
-import { RadioGroup } from 'baseui/radio'
-import { Checkbox, LABEL_PLACEMENT } from 'baseui/checkbox'
+import {intl} from '../../../util/intl/intl'
+import {SelectOverrides, TYPE} from 'baseui/select'
+import {getTeams, useSearchTeam} from '../../../api/TeamApi'
+import {RenderTagList} from '../../common/TagList'
+import {useSearchVirkemiddel} from '../../../api/VirkemiddelApi'
+import {Checkbox, LABEL_PLACEMENT} from 'baseui/checkbox'
 
 type EditEtterlevelseDokumentasjonModalProps = {
   etterlevelseDokumentasjon?: EtterlevelseDokumentasjonQL
@@ -114,36 +113,34 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
   }, [props.etterlevelseDokumentasjon])
 
   const submit = async (etterlevelseDokumentasjon: EtterlevelseDokumentasjonQL) => {
-    console.log(etterlevelseDokumentasjon)
-
-    // if (!etterlevelseDokumentasjon.id || etterlevelseDokumentasjon.id === 'ny') {
-    //   await createEtterlevelseDokumentasjon(etterlevelseDokumentasjon).then((response) => {
-    //     setIsEtterlevelseDokumntasjonerModalOpen(false)
-    //     if (props.setEtterlevelseDokumentasjon) {
-    //       props.setEtterlevelseDokumentasjon(response)
-    //     }
-    //   })
-    // } else {
-    //   await updateEtterlevelseDokumentasjon(etterlevelseDokumentasjon).then((response) => {
-    //     setIsEtterlevelseDokumntasjonerModalOpen(false)
-    //     if (props.setEtterlevelseDokumentasjon) {
-    //       if (response.teams.length > 0) {
-    //         getTeams(response.teams).then((teamsData) => {
-    //           if (props.setEtterlevelseDokumentasjon) {
-    //             props.setEtterlevelseDokumentasjon({
-    //               ...response,
-    //               teamsData: teamsData,
-    //               behandling: selectedBehandling,
-    //               virkemiddel: selectedVirkemiddel,
-    //             })
-    //           }
-    //         })
-    //       } else {
-    //         props.setEtterlevelseDokumentasjon({ ...response, behandling: selectedBehandling, virkemiddel: selectedVirkemiddel })
-    //       }
-    //     }
-    //   })
-    // }
+    if (!etterlevelseDokumentasjon.id || etterlevelseDokumentasjon.id === 'ny') {
+      await createEtterlevelseDokumentasjon(etterlevelseDokumentasjon).then((response) => {
+        setIsEtterlevelseDokumntasjonerModalOpen(false)
+        if (props.setEtterlevelseDokumentasjon) {
+          props.setEtterlevelseDokumentasjon(response)
+        }
+      })
+    } else {
+      await updateEtterlevelseDokumentasjon(etterlevelseDokumentasjon).then((response) => {
+        setIsEtterlevelseDokumntasjonerModalOpen(false)
+        if (props.setEtterlevelseDokumentasjon) {
+          if (response.teams.length > 0) {
+            getTeams(response.teams).then((teamsData) => {
+              if (props.setEtterlevelseDokumentasjon) {
+                props.setEtterlevelseDokumentasjon({
+                  ...response,
+                  teamsData: teamsData,
+                  behandling: selectedBehandling,
+                  virkemiddel: selectedVirkemiddel,
+                })
+              }
+            })
+          } else {
+            props.setEtterlevelseDokumentasjon({ ...response, behandling: selectedBehandling, virkemiddel: selectedVirkemiddel })
+          }
+        }
+      })
+    }
   }
 
   return (
