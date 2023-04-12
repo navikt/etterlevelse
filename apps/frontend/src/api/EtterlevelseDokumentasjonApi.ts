@@ -1,10 +1,10 @@
 import axios from 'axios'
-import { EtterlevelseDokumentasjon, EtterlevelseDokumentasjonQL, PageResponse, Team } from '../constants'
-import { env } from '../util/env'
-import { useEffect, useState } from 'react'
-import { getBehandling } from './BehandlingApi'
-import { getTeams } from './TeamApi'
-import { getVirkemiddel } from './VirkemiddelApi'
+import {EtterlevelseDokumentasjon, EtterlevelseDokumentasjonQL, PageResponse, Team} from '../constants'
+import {env} from '../util/env'
+import {useEffect, useState} from 'react'
+import {getBehandling} from './BehandlingApi'
+import {getTeams} from './TeamApi'
+import {getVirkemiddel} from './VirkemiddelApi'
 
 export const getEtterlevelseDokumentasjon = async (id: string) => {
   return (await axios.get<EtterlevelseDokumentasjon>(`${env.backendBaseUrl}/etterlevelsedokumentasjon/${id}`)).data
@@ -74,7 +74,7 @@ export const useEtterlevelseDokumentasjon = (etterlevelseDokumentasjonId?: strin
         if (etterlevelseDokumentasjon.virkemiddelId) {
           await getVirkemiddel(etterlevelseDokumentasjon.virkemiddelId).then((virkemiddelResponse) => (virkmiddel = virkemiddelResponse))
         }
-        setData({ ...etterlevelseDokumentasjon, behandling: behandling, teamsData: teamsData, virkemiddel: virkmiddel })
+        setData({...etterlevelseDokumentasjon, behandling: behandling, teamsData: teamsData, virkemiddel: virkmiddel})
         setIsLoading(false)
       })
     } else if (behandlingId) {
@@ -89,7 +89,7 @@ export const useEtterlevelseDokumentasjon = (etterlevelseDokumentasjonId?: strin
             await getVirkemiddel(etterlevelseDokumentasjon[0].virkemiddelId).then((virkemiddelResponse) => (virkmiddel = virkemiddelResponse))
           }
 
-          setData({ ...etterlevelseDokumentasjon[0], behandling: behandling, teamsData: teamsData })
+          setData({...etterlevelseDokumentasjon[0], behandling: behandling, teamsData: teamsData})
           setIsLoading(false)
         }
       })
@@ -113,15 +113,15 @@ export const etterlevelseDokumentasjonToDto = (etterlevelseDokumentasjon: Etterl
 
 export const etterlevelseDokumentasjonMapToFormVal = (etterlevelseDokumentasjon: Partial<EtterlevelseDokumentasjonQL>): EtterlevelseDokumentasjonQL => ({
   id: etterlevelseDokumentasjon.id || '',
-  changeStamp: etterlevelseDokumentasjon.changeStamp || { lastModifiedDate: '', lastModifiedBy: '' },
+  changeStamp: etterlevelseDokumentasjon.changeStamp || {lastModifiedDate: '', lastModifiedBy: ''},
   version: -1,
   title: etterlevelseDokumentasjon.title || '',
   behandlingId: etterlevelseDokumentasjon.behandlingId || '',
-  behandlerPersonopplysninger: etterlevelseDokumentasjon.behandlerPersonopplysninger || true,
+  behandlerPersonopplysninger: etterlevelseDokumentasjon.behandlerPersonopplysninger !== undefined ? etterlevelseDokumentasjon.behandlerPersonopplysninger : true,
   irrelevansFor: etterlevelseDokumentasjon.irrelevansFor || [],
   etterlevelseNummer: etterlevelseDokumentasjon.etterlevelseNummer || 0,
   teams: etterlevelseDokumentasjon.teams || [],
   teamsData: etterlevelseDokumentasjon.teamsData || [],
   virkemiddelId: etterlevelseDokumentasjon.virkemiddelId || '',
-  knyttetTilVirkemiddel: etterlevelseDokumentasjon.knyttetTilVirkemiddel || true,
+  knyttetTilVirkemiddel: etterlevelseDokumentasjon.knyttetTilVirkemiddel !== undefined ? etterlevelseDokumentasjon.knyttetTilVirkemiddel : true,
 })
