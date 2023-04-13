@@ -1,14 +1,17 @@
-import {EtterlevelseDokumentasjon, EtterlevelseStatus} from '../../../constants'
-import {ReactNode} from 'react'
-import {Block, Responsive} from 'baseui/block'
-import {Helmet} from 'react-helmet'
-import {HeadingXXLarge, LabelSmall} from 'baseui/typography'
-import {ettlevColors} from '../../../util/theme'
-import {Teams} from '../../common/TeamName'
-import {env} from '../../../util/env'
-import {ExternalLink, ExternalLinkWrapper} from '../../common/RouteLink'
+import { EtterlevelseDokumentasjon, EtterlevelseStatus } from '../../../constants'
+import { ReactNode } from 'react'
+import { Block, Responsive } from 'baseui/block'
+import { Helmet } from 'react-helmet'
+import { HeadingXXLarge, LabelSmall } from 'baseui/typography'
+import { ettlevColors } from '../../../util/theme'
+import { Teams } from '../../common/TeamName'
+import { env } from '../../../util/env'
+import { ExternalLink, ExternalLinkWrapper } from '../../common/RouteLink'
 import moment from 'moment'
 import EditEtterlevelseDokumentasjonModal from '../edit/EditEtterlevelseDokumentasjonModal'
+import { Notification } from 'baseui/notification'
+import { borderColor, borderRadius, borderStyle, borderWidth, padding } from '../../common/Style'
+import { warningAlert } from '../../Images'
 
 export const responsiveDisplayEtterlevelseDokumentasjonPage: Responsive<any> = ['block', 'block', 'block', 'block', 'flex', 'flex']
 
@@ -52,17 +55,48 @@ export const getMainHeader = (etterlevelseDokumentasjon: EtterlevelseDokumentasj
           </Block>
         </Block>
       )}
-      {(etterlevelseDokumentasjon.behandlingId || etterlevelseDokumentasjon.behandlerPersonopplysninger) && (
+      {etterlevelseDokumentasjon.behandlerPersonopplysninger && (
         <Block display="flex" alignItems="center" marginTop={etterlevelseDokumentasjon.virkemiddelId ? '8px' : '0px'}>
-          {(etterlevelseDokumentasjon.behandlingId || etterlevelseDokumentasjon.behandlerPersonopplysninger) && <LabelSmall $style={{lineHeight: '22px', marginRight: '10px', fontSize: '16px', color: ettlevColors.green600}}>Behandling:</LabelSmall>}
-          {(etterlevelseDokumentasjon.behandlingId && etterlevelseDokumentasjon.behandlerPersonopplysninger)?(
+          <LabelSmall $style={{ lineHeight: '22px', marginRight: '10px', fontSize: '16px', color: ettlevColors.green600 }}>Behandling:</LabelSmall>
+          {etterlevelseDokumentasjon.behandlingId && etterlevelseDokumentasjon.behandlerPersonopplysninger ? (
             <ExternalLink href={`${env.pollyBaseUrl}process/${etterlevelseDokumentasjon.behandlingId}`}>
               <ExternalLinkWrapper
                 text={`B${etterlevelseDokumentasjon.behandling?.nummer} ${etterlevelseDokumentasjon.behandling?.overordnetFormaal?.shortName}: ${etterlevelseDokumentasjon.behandling?.navn}`}
               />
             </ExternalLink>
-          ):(
-            <Block>Feil</Block>
+          ) : (
+            <Block
+              justifyContent="center"
+              display="flex"
+              alignItems="center"
+              overrides={{
+                Block: {
+                  style: {
+                    ...borderWidth('1px'),
+                    ...borderStyle('solid'),
+                    ...borderColor(ettlevColors.navOransje),
+                    ...borderRadius('4px'),
+                    backgroundColor: ettlevColors.warning50,
+                    fontWeight: 500,
+                    fontSize: '16px',
+                    fontFamily: 'Source Sans Pro',
+                    lineHeight: '22px',
+                    ...padding('8px', '4px'),
+                  },
+                },
+              }}
+            >
+              <img
+                src={warningAlert}
+                width="20px"
+                height="20px"
+                alt={'warning icon'}
+                style={{
+                  marginRight: '5px',
+                }}
+              />
+              Husk å legge til behandling fra behandlingskatalogen
+            </Block>
           )}
         </Block>
       )}
