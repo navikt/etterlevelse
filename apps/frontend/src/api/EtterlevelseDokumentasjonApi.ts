@@ -5,6 +5,7 @@ import {useEffect, useState} from 'react'
 import {getBehandling} from './BehandlingApi'
 import {getTeams} from './TeamApi'
 import {getVirkemiddel} from './VirkemiddelApi'
+import * as yup from 'yup'
 
 export const getEtterlevelseDokumentasjon = async (id: string) => {
   return (await axios.get<EtterlevelseDokumentasjon>(`${env.backendBaseUrl}/etterlevelsedokumentasjon/${id}`)).data
@@ -124,4 +125,19 @@ export const etterlevelseDokumentasjonMapToFormVal = (etterlevelseDokumentasjon:
   teamsData: etterlevelseDokumentasjon.teamsData || [],
   virkemiddelId: etterlevelseDokumentasjon.virkemiddelId || '',
   knyttetTilVirkemiddel: etterlevelseDokumentasjon.knyttetTilVirkemiddel !== undefined ? etterlevelseDokumentasjon.knyttetTilVirkemiddel : true,
+})
+
+export const etterlevelseDokumentasjonSchema = ()=> yup.object({
+  title: yup.string().required('Etterlevelsedokumentasjon trenger en tittel'),
+  virkemiddelId: yup.string().test({
+    name: 'addedVirkemiddelCheck',
+    message: 'Hvis ditt system/produkt er tilknyttet et virkemiddel må det legges til.',
+    test: function (virkemiddelId) {
+      const { parent } = this
+      if (parent.knyttetTilVirkemiddel === true) {
+        return virkemiddelId ? true : false
+      }
+      return true
+    },
+  }),
 })

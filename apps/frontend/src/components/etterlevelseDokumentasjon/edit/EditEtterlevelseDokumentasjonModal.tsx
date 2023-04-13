@@ -2,7 +2,12 @@ import {Block} from 'baseui/block'
 import {ModalBody, ModalHeader} from 'baseui/modal'
 import {useEffect, useState} from 'react'
 import {useSearchBehandling} from '../../../api/BehandlingApi'
-import {createEtterlevelseDokumentasjon, etterlevelseDokumentasjonMapToFormVal, updateEtterlevelseDokumentasjon} from '../../../api/EtterlevelseDokumentasjonApi'
+import {
+  createEtterlevelseDokumentasjon,
+  etterlevelseDokumentasjonMapToFormVal,
+  etterlevelseDokumentasjonSchema,
+  updateEtterlevelseDokumentasjon
+} from '../../../api/EtterlevelseDokumentasjonApi'
 import {Behandling, EtterlevelseDokumentasjonQL, Team, Virkemiddel} from '../../../constants'
 import {Code, codelist, ListName} from '../../../services/Codelist'
 import Button, {buttonContentStyle} from '../../common/Button'
@@ -39,7 +44,7 @@ type EditEtterlevelseDokumentasjonModalProps = {
 
 export const selectCustomOverrides: SelectOverrides = {
   SearchIcon: {
-    component: () => <img src={searchIcon} alt="search icon" />,
+    component: () => <img src={searchIcon} alt="search icon"/>,
     style: {
       display: 'flex',
       justifyContent: 'flex-end',
@@ -136,7 +141,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
               }
             })
           } else {
-            props.setEtterlevelseDokumentasjon({ ...response, behandling: selectedBehandling, virkemiddel: selectedVirkemiddel })
+            props.setEtterlevelseDokumentasjon({...response, behandling: selectedBehandling, virkemiddel: selectedVirkemiddel})
           }
         }
       })
@@ -147,32 +152,35 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
     <Block>
       <Button
         onClick={() => setIsEtterlevelseDokumntasjonerModalOpen(true)}
-        startEnhancer={props.isEditButton ? <img src={editIcon} alt="edit icon" /> : <img src={plusIcon} alt="plus icon" />}
+        startEnhancer={props.isEditButton ? <img src={editIcon} alt="edit icon"/> : <img src={plusIcon} alt="plus icon"/>}
         size="compact"
       >
         {props.isEditButton ? 'Rediger dokumentasjon' : 'Ny dokumentasjon'}
       </Button>
 
-      <CustomizedModal size="default" isOpen={!!isEtterlevelseDokumentasjonerModalOpen} onClose={() => setIsEtterlevelseDokumntasjonerModalOpen(false)}>
+      <CustomizedModal size="default" isOpen={!!isEtterlevelseDokumentasjonerModalOpen} onClose={() => setIsEtterlevelseDokumntasjonerModalOpen(false)} closeable={false}>
         <ModalHeader>{props.isEditButton ? 'Rediger dokumentasjonen' : 'Opprett ny etterlevelsedokumentasjon'}</ModalHeader>
         <ModalBody>
-          <Formik initialValues={etterlevelseDokumentasjonMapToFormVal(props.etterlevelseDokumentasjon ? props.etterlevelseDokumentasjon : {})} onSubmit={submit}>
-            {({ values, submitForm }) => {
+          <Formik
+            initialValues={etterlevelseDokumentasjonMapToFormVal(props.etterlevelseDokumentasjon ? props.etterlevelseDokumentasjon : {})}
+            onSubmit={submit}
+            validationSchema={etterlevelseDokumentasjonSchema()}
+          >
+            {({values, submitForm}) => {
               return (
                 <Form>
-                  <InputField disablePlaceHolder label={'Tittel'} name={'title'} />
+                  <InputField disablePlaceHolder label={'Tittel'} name={'title'}/>
 
-                  <BoolField label="Er produktet/systemet tilknyttet et virkemiddel?" name="knyttetTilVirkemiddel" />
+                  <BoolField label="Er produktet/systemet tilknyttet et virkemiddel?" name="knyttetTilVirkemiddel"/>
 
                   {values.knyttetTilVirkemiddel ? (
                     <FieldWrapper>
                       <Field name="virkemiddelId">
                         {(fp: FieldProps) => {
                           return (
-                            <FormControl label={<LabelWithTooltip label={'Legg til virkemiddel'} tooltip="Søk og legg til virkemiddel" />}>
+                            <FormControl label={<LabelWithTooltip label={'Legg til virkemiddel'} tooltip="Søk og legg til virkemiddel"/>}>
                               <Block>
                                 <CustomizedSelect
-                                  overrides={selectCustomOverrides}
                                   labelKey={'navn'}
                                   noResultsMsg={intl.emptyTable}
                                   maxDropdownHeight="350px"
@@ -189,6 +197,9 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                                     }
                                   }}
                                   isLoading={loadingVirkemiddelSearchResult}
+                                  overrides={{
+                                    ...selectCustomOverrides,
+                                  }}
                                 />
                                 {selectedVirkemiddel && (
                                   <Tag
@@ -224,11 +235,11 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                           )
                         }}
                       </Field>
-                      <Error fieldName="virkemiddelId" fullWidth />
+                      <Error fieldName="virkemiddelId" fullWidth/>
                     </FieldWrapper>
                   ) : (
                     <>
-                      <LabelWithTooltip tooltip="Ved å oppgi egenskaper til etterlevelsen, blir kun relevante krav synlig for dokumentasjon." label={'Filter'} />
+                      <LabelWithTooltip tooltip="Ved å oppgi egenskaper til etterlevelsen, blir kun relevante krav synlig for dokumentasjon." label={'Filter'}/>
                       <FieldArray name="irrelevansFor">
                         {(p: FieldArrayRenderProps) => {
                           return (
@@ -263,11 +274,11 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                                         type="button"
                                         startEnhancer={() => {
                                           if (selectedFilter.includes(i)) {
-                                            return <img src={checkboxChecked} alt="checked" />
+                                            return <img src={checkboxChecked} alt="checked"/>
                                           } else if (!selectedFilter.includes(i) && hover === i) {
-                                            return <img src={checkboxUncheckedHover} alt="checkbox hover" />
+                                            return <img src={checkboxUncheckedHover} alt="checkbox hover"/>
                                           } else {
-                                            return <img src={checkboxUnchecked} alt="unchecked" />
+                                            return <img src={checkboxUnchecked} alt="unchecked"/>
                                           }
                                         }}
                                         overrides={{
@@ -311,7 +322,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                                         }}
                                       >
                                         <Block width="100%" marginRight="5px">
-                                          <ParagraphMedium margin="0px" $style={{ lineHeight: '22px' }}>
+                                          <ParagraphMedium margin="0px" $style={{lineHeight: '22px'}}>
                                             {r.label}
                                           </ParagraphMedium>
                                         </Block>
@@ -324,7 +335,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                                           autoFocus
                                         >
                                           <Block display="flex" justifyContent="flex-end">
-                                            <img src={outlineInfoIcon} alt="informasjons ikon" />
+                                            <img src={outlineInfoIcon} alt="informasjons ikon"/>
                                           </Block>
                                         </StatefulTooltip>
                                       </BaseUIButton>
@@ -412,7 +423,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                           )
                         }}
                       </Field>
-                      <Error fieldName="behandlingId" fullWidth />
+                      <Error fieldName="behandlingId" fullWidth/>
                     </FieldWrapper>
                   )}
                   <Block display="flex" alignItems="center" marginTop="100px">
@@ -420,7 +431,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                       checked={checkedAddTeam}
                       onChange={(e) => setCheckedAddTeam(e.target.checked)}
                       labelPlacement={LABEL_PLACEMENT.right}
-                      overrides={{ Root: { style: { display: 'flex', alignItems: 'center' } } }}
+                      overrides={{Root: {style: {display: 'flex', alignItems: 'center'}}}}
                     >
                       <LabelWithTooltip
                         noMarginBottom
@@ -435,7 +446,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                       <FieldArray name="teamsData">
                         {(p: FieldArrayRenderProps) => {
                           return (
-                            <FormControl label={<LabelWithTooltip label="" tooltip="" />}>
+                            <FormControl label={<LabelWithTooltip label="" tooltip=""/>}>
                               <Block>
                                 <Block display="flex">
                                   <CustomizedSelect
@@ -451,14 +462,14 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                                       setTeamSearchResult(event.currentTarget.value)
                                     }}
                                     options={teamSearchResult}
-                                    onChange={({ value }) => {
+                                    onChange={({value}) => {
                                       value.length && p.push(value[0])
                                     }}
                                     isLoading={loadingTeamSearchResult}
                                     error={!!p.form.errors.teamsData && !!p.form.submitCount}
                                   />
                                 </Block>
-                                <RenderTagList wide list={p.form.values.teamsData.map((t: Team) => t.name)} onRemove={p.remove} />
+                                <RenderTagList wide list={p.form.values.teamsData.map((t: Team) => t.name)} onRemove={p.remove}/>
                               </Block>
                             </FormControl>
                           )
