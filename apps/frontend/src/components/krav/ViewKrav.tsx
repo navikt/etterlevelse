@@ -112,9 +112,9 @@ export const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVer
 
       <LabelWrapper>
         <LabelAboveContent header title="Relevant for følgende virkemiddel">
-          {krav.virkemidler.map((v, i) => (
+          {krav.virkemidler.length > 0 ? krav.virkemidler.map((v, i) => (
             <VirkemiddelView key={'virkemiddel' + i} virkemiddel={v} />
-          ))}
+          )): 'Ikke angitt'}
         </LabelAboveContent>
       </LabelWrapper>
 
