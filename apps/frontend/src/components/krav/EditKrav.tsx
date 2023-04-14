@@ -32,6 +32,7 @@ import { Modal as BaseModal, ModalBody, ModalHeader } from 'baseui/modal'
 import { EditKravRelasjoner } from './Edit/EditKravRelasjoner'
 import AlertUnsavedPopup from '../common/AlertUnsavedPopup'
 import _ from 'lodash'
+import { EditVirkemidler } from './Edit/KravEditVirkemidler'
 
 type EditKravProps = {
   krav: KravQL
@@ -365,6 +366,10 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
 
                     <Block marginTop="80px" marginBottom={inputMarginBottom}>
                       <HeadingXLarge>Gruppering og etiketter</HeadingXLarge>
+                    </Block>
+
+                    <Block width="100%" maxWidth={maxInputWidth}>
+                      <EditVirkemidler />
                     </Block>
 
                     <Block width="100%" maxWidth={maxInputWidth}>
