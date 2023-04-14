@@ -1,4 +1,4 @@
-import { AdresseType, Begrep, Krav, KravQL, KravVersjon } from '../../constants'
+import { AdresseType, Begrep, Krav, KravQL, KravVersjon, Virkemiddel } from '../../constants'
 import { Block, Responsive } from 'baseui/block'
 import React from 'react'
 import { kravStatus } from '../../pages/KravPage'
@@ -106,6 +106,14 @@ export const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVer
         <LabelAboveContent header title="Relasjoner til andre krav">
           {krav.kravRelasjoner.map((kr, i) => (
             <KravRelasjonView key={'kravRelasjon' + i} kravRelasjon={kr} />
+          ))}
+        </LabelAboveContent>
+      </LabelWrapper>
+
+      <LabelWrapper>
+        <LabelAboveContent header title="Relevant for følgende virkemiddel">
+          {krav.virkemidler.map((v, i) => (
+            <VirkemiddelView key={'virkemiddel' + i} virkemiddel={v} />
           ))}
         </LabelAboveContent>
       </LabelWrapper>
@@ -253,6 +261,16 @@ const BegrepView = ({ begrep }: { begrep: Begrep }) => (
         <ExternalLinkWrapper text={begrep.navn} />
       </ExternalLink>{' '}
       - {begrep.beskrivelse}
+    </DotTag>
+  </Block>
+)
+
+const VirkemiddelView = ({ virkemiddel }: { virkemiddel: Virkemiddel }) => (
+  <Block maxWidth={'650px'}>
+    <DotTag>
+        {virkemiddel.navn}
+      {' '}
+      - {}
     </DotTag>
   </Block>
 )
