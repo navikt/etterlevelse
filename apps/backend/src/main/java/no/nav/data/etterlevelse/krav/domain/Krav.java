@@ -48,6 +48,7 @@ public class Krav implements DomainObject, KravIdStatus {
     private List<String> dokumentasjon;
     private String implementasjoner;
     private List<String> begrepIder;
+    private List<String> virkemiddelIder;
     private List<Varslingsadresse> varslingsadresser;
     private List<String> rettskilder;
     private List<String> tagger;
@@ -80,6 +81,7 @@ public class Krav implements DomainObject, KravIdStatus {
         dokumentasjon = copyOf(request.getDokumentasjon());
         implementasjoner = request.getImplementasjoner();
         begrepIder = copyOf(request.getBegrepIder());
+        virkemiddelIder = copyOf(request.getVirkemiddelIder());
         varslingsadresser = copyOf(request.getVarslingsadresser());
         rettskilder = copyOf(request.getRettskilder());
         tagger = copyOf(request.getTagger());
