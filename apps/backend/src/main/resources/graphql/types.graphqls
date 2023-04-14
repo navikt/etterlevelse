@@ -15,6 +15,7 @@ type Krav {
     varselMelding: String
     implementasjoner: String
     begrepIder: [String!]!
+    virkemiddelIder: [String!]!
     rettskilder: [String!]!
     tagger: [String!]!
     regelverk: [Regelverk!]!
@@ -30,6 +31,7 @@ type Krav {
     etterlevelser(onlyForBehandling: Boolean, onlyForEtterlevelseDokumentasjon: Boolean): [Etterlevelse!]!
     tilbakemeldinger: [Tilbakemelding!]!
     begreper: [Begrep!]!
+    virkemidler: [Virkemiddel!]!
     kravIdRelasjoner: [String!]!
     kravRelasjoner: [Krav!]!
     aktivertDato: DateTime
@@ -39,6 +41,16 @@ type Begrep {
     id: ID!
     navn: String!
     beskrivelse:String!
+}
+
+type Virkemiddel {
+    id: ID!
+    changeStamp: ChangeStamp!
+    version: Int!
+    navn: String!
+    virkemiddelType: Code!
+    regelverk: [Regelverk!]!
+
 }
 
 type Tilbakemelding {
