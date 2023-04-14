@@ -269,8 +269,6 @@ const VirkemiddelView = ({ virkemiddel }: { virkemiddel: Virkemiddel }) => (
   <Block maxWidth={'650px'}>
     <DotTag>
         {virkemiddel.navn}
-      {' '}
-      - {}
     </DotTag>
   </Block>
 )
