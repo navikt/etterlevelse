@@ -117,6 +117,7 @@ public class Krav implements DomainObject, KravIdStatus {
                 .dokumentasjon(copyOf(dokumentasjon))
                 .implementasjoner(implementasjoner)
                 .begrepIder(copyOf(begrepIder))
+                .virkemiddelIder(copyOf(virkemiddelIder))
                 .varslingsadresser(copyOf(varslingsadresser))
                 .rettskilder(copyOf(rettskilder))
                 .tagger(copyOf(tagger))
