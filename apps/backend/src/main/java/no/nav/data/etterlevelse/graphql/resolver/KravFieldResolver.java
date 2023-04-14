@@ -14,6 +14,8 @@ import no.nav.data.etterlevelse.krav.domain.dto.KravFilter;
 import no.nav.data.etterlevelse.krav.domain.dto.KravFilter.Fields;
 import no.nav.data.etterlevelse.krav.dto.KravResponse;
 import no.nav.data.etterlevelse.krav.dto.TilbakemeldingResponse;
+import no.nav.data.etterlevelse.virkemiddel.VirkemiddelService;
+import no.nav.data.etterlevelse.virkemiddel.dto.VirkemiddelResponse;
 import no.nav.data.integration.begrep.BegrepService;
 import no.nav.data.integration.begrep.dto.BegrepResponse;
 import org.springframework.stereotype.Component;
@@ -32,6 +34,7 @@ public class KravFieldResolver implements GraphQLResolver<KravResponse> {
     private final EtterlevelseService etterlevelseService;
     private final TilbakemeldingService tilbakemeldingService;
     private final BegrepService begrepService;
+    private final VirkemiddelService virkemiddelService;
     private final KravService kravService;
 
     public List<EtterlevelseResponse> etterlevelser(KravResponse krav, boolean onlyForBehandling, boolean onlyForEtterlevelseDokumentasjon, DataFetchingEnvironment env) {
@@ -67,5 +70,9 @@ public class KravFieldResolver implements GraphQLResolver<KravResponse> {
 
     public List<KravResponse> kravRelasjoner(KravResponse krav){
         return convert(krav.getKravIdRelasjoner(), kravId -> kravService.get(UUID.fromString(kravId)).toResponse());
+    }
+
+    public List<VirkemiddelResponse> virkemidler(KravResponse krav) {
+        return convert(krav.getVirkemiddelIder(), virkemiddel -> virkemiddelService.get(UUID.fromString(virkemiddel)).toResponse());
     }
 }
