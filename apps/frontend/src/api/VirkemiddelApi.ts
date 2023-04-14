@@ -83,20 +83,28 @@ export const useVirkemiddel = (id: string, onlyLoadOnce?: boolean) => {
 export const useSearchVirkemiddel = () => {
   const [search, setSearch] = useDebouncedState<string>('', 200)
   const [searchResult, setSearchResult] = useState<Virkemiddel[]>([])
+  const [fullResult, setFullResult] = useState<Virkemiddel[]>([])
   const [loading, setLoading] = useState<boolean>(false)
+
+  useEffect(() => {
+    ;(async () => {
+      await getAllVirkemiddel().then((res) => {
+        setFullResult(res)
+        setSearchResult(res)
+      })
+    })()
+  })
 
   useEffect(() => {
     ;(async () => {
       if (search && search.length > 2) {
         setLoading(true)
 
-        await searchVirkemiddel(search).then((res) => {
-          setSearchResult(res)
-        })
+        setSearchResult(fullResult.filter((v) => v.navn.toLocaleLowerCase().includes(search)))
 
         setLoading(false)
       } else {
-        setSearchResult([])
+        setSearchResult(fullResult)
       }
     })()
   }, [search])
