@@ -72,11 +72,13 @@ function kravToKravDto(krav: KravQL): Krav {
     relevansFor: krav.relevansFor.map((c) => c.code),
     regelverk: krav.regelverk.map((r) => ({ ...r, lov: r.lov.code })),
     begrepIder: krav.begreper.map((b) => b.id),
+    virkemiddelIder: krav.virkemidler.map((v) => v.id),
     kravIdRelasjoner: krav.kravRelasjoner.map((k) => k.id),
   } as any
   delete dto.changeStamp
   delete dto.version
   delete dto.begreper
+  delete dto.virkemidler
   delete dto.kravRelasjoner
   return dto
 }
@@ -176,6 +178,7 @@ export const kravMapToFormVal = (krav: Partial<KravQL>): KravQL => ({
   dokumentasjon: krav.dokumentasjon || [],
   implementasjoner: krav.implementasjoner || '',
   begreper: krav.begreper || [],
+  virkemidler: krav.virkemidler || [],
   varslingsadresser: krav.varslingsadresser || [],
   rettskilder: krav.rettskilder || [],
   tagger: krav.tagger || [],
@@ -194,6 +197,7 @@ export const kravMapToFormVal = (krav: Partial<KravQL>): KravQL => ({
   kravRelasjoner: krav.kravRelasjoner || [],
   // not used
   begrepIder: [],
+  virkemiddelIder: [],
   etterlevelser: [],
   kravIdRelasjoner: [],
   aktivertDato: krav.aktivertDato || '',

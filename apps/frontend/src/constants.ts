@@ -72,6 +72,7 @@ export interface Krav extends DomainObject {
   prioriteringsId?: string
   kravPriorityUID?: string
   begrepIder: string[]
+  virkemiddelIder: string[]
   varslingsadresser: Varslingsadresse[]
   rettskilder: string[]
   tagger: string[]
@@ -411,6 +412,7 @@ export type KravQL = Replace<
     etterlevelser: EtterlevelseQL[]
     varslingsadresser: VarslingsadresseQL[]
     begreper: Begrep[]
+    virkemidler: Virkemiddel[]
     kravRelasjoner: Krav[]
   }
 >
