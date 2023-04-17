@@ -95,7 +95,7 @@ public class KravRepoImpl implements KravRepoCustom {
                                      and type = 'Etterlevelse'
                                      and data ->> 'etterlevelseDokumentasjonId' = :etterlevelseDokumentasjonId
                                 ) 
-                        or data->'virkemiddelIder' ??| array[:virkemiddelId]
+                        or data->'virkemiddelIder' ??| array[ :virkemiddelId ]
                         )
                         """;
                 par.addValue("virkemiddelId", List.of(filter.getVirkemiddelId()));
@@ -121,7 +121,7 @@ public class KravRepoImpl implements KravRepoCustom {
             kravIdSafeList.addAll(convert(etterlevelseDokumentasjonRepo.findKravIdsForEtterlevelseDokumentasjon(filter.getEtterlevelseDokumentasjonId()), KravId::kravId));
             if (filter.getVirkemiddelId() != null && !filter.getVirkemiddelId().isEmpty()) {
                 query += """
-                        and NOT(data -> 'virkemiddelIder' ??| array[:virkemiddelId])
+                        and NOT(data -> 'virkemiddelIder' ??| array[ :virkemiddelId ])
                         """;
                 par.addValue("virkemiddelId", List.of(filter.getVirkemiddelId()));
             } else {
