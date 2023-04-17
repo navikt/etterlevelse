@@ -42,7 +42,7 @@ export const getMainHeader = (etterlevelseDokumentasjon: EtterlevelseDokumentasj
         )}
       </Block>
 
-      {etterlevelseDokumentasjon.virkemiddelId && (
+      {etterlevelseDokumentasjon.knyttetTilVirkemiddel && etterlevelseDokumentasjon.virkemiddelId && (
         <Block display="flex" alignItems="center">
           <LabelSmall $style={{ lineHeight: '22px', marginRight: '10px', fontSize: '16px', color: ettlevColors.green600 }}>Virkmiddel:</LabelSmall>
           <Block
