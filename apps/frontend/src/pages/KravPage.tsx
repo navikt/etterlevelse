@@ -395,7 +395,6 @@ export const query = gql`
         lastModifiedBy
         lastModifiedDate
       }
-
       navn
       beskrivelse
       hensikt
