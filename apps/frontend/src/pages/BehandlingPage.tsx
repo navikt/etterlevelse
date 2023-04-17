@@ -143,7 +143,7 @@ export const BehandlingPage = () => {
         </Block>
         <Block display="flex" flex="1" justifyContent="flex-end" $style={{ whiteSpace: 'nowrap' }}>
           <Button onClick={() => setEdit(!edit)} startEnhancer={<img src={editIcon} alt="edit icon" />}>
-            Filtrer Krav
+            Filtrer krav
           </Button>
         </Block>
       </Block>

@@ -118,7 +118,7 @@ const EditBehandlingModal = (props: EditBehandlingModalProps) => {
               <Block display="flex" justifyContent="space-between" paddingLeft={paddingLeft} paddingRight={theme.sizing.scale900}>
                 <Block>
                   <HeadingXXLarge color={ettlevColors.grey50} marginBottom="0px">
-                    Filtrer Krav
+                    Filtrer krav
                   </HeadingXXLarge>
                   <ParagraphXSmall $style={{ lineHeight: '20px', color: ettlevColors.grey50 }} marginTop={theme.sizing.scale0}>
                     {`B${props.behandling.nummer} - ${props.behandling.overordnetFormaal.shortName}: ${props.behandling.navn}`}
