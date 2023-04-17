@@ -201,6 +201,7 @@ type EtterlevelseDokumentasjonStats {
     fyltKrav: [Krav!]!
     ikkeFyltKrav: [Krav!]!
     irrelevantKrav: [Krav!]!
+    utgaattKrav: [Krav!]!
     lovStats: [LovStatsDok!]!
 }
 
@@ -230,6 +231,7 @@ type LovStatsDok {
     fyltKrav: [Krav!]!
     ikkeFyltKrav: [Krav!]!
     irrelevantKrav: [Krav!]!
+    utgaattKrav: [Krav!]!
 }
 
 type Team {

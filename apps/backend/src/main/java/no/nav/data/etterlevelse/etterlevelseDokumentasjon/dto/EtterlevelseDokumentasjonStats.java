@@ -22,6 +22,8 @@ public class EtterlevelseDokumentasjonStats {
     private List<KravResponse> ikkeFyltKrav;
     @Singular("irrelevant")
     private List<KravResponse> irrelevantKrav;
+    @Singular("utgaatt")
+    private List<KravResponse> utgaattKrav;
     @Singular
     private List<LovStatsDok> lovStats;
 
@@ -39,6 +41,8 @@ public class EtterlevelseDokumentasjonStats {
         private List<KravResponse> ikkeFyltKrav;
         @Singular("irrelevant")
         private List<KravResponse> irrelevantKrav;
+        @Singular("utgaatt")
+        private List<KravResponse> utgaattKrav;
     }
 
     public static EtterlevelseDokumentasjonStats empty() {

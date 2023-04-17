@@ -15,6 +15,7 @@ import no.nav.data.etterlevelse.graphql.DataLoaderReg;
 import no.nav.data.etterlevelse.graphql.support.LoaderUtils;
 import no.nav.data.etterlevelse.krav.KravService;
 import no.nav.data.etterlevelse.krav.domain.Krav;
+import no.nav.data.etterlevelse.krav.domain.dto.KravFilter;
 import no.nav.data.etterlevelse.krav.dto.KravResponse;
 import no.nav.data.integration.team.dto.TeamResponse;
 import org.dataloader.DataLoader;
@@ -58,11 +59,14 @@ public class EtterlevelseDokumentasjonFieldResolver implements GraphQLResolver<E
         var etterlevelser = etterlevelseService.getByEtterlevelseDokumentasjon(etterlevelseDokumentasjon.getId().toString());
 
         List<KravResponse> krav;
-
+        List<KravResponse> irrelevantKrav;
+        List<KravResponse> utgaattKrav = convert(kravService.getByFilter(KravFilter.builder().status(List.of("UTGAATT")).build()), Krav::toResponse);
         if (etterlevelseDokumentasjon.isKnyttetTilVirkemiddel() && (etterlevelseDokumentasjon.getVirkemiddelId() != null)) {
             krav = convert(kravService.findForEtterlevelseDokumentasjon(etterlevelseDokumentasjon.getId().toString(), etterlevelseDokumentasjon.getVirkemiddelId()), Krav::toResponse);
+            irrelevantKrav = convert(kravService.findForEtterlevelseDokumentasjonIrrelevans(etterlevelseDokumentasjon.getId().toString(), etterlevelseDokumentasjon.getVirkemiddelId()), Krav::toResponse);
         } else {
             krav = convert(kravService.findForEtterlevelseDokumentasjon(etterlevelseDokumentasjon.getId().toString()), Krav::toResponse);
+            irrelevantKrav = convert(kravService.findForEtterlevelseDokumentasjonIrrelevans(etterlevelseDokumentasjon.getId().toString()), Krav::toResponse);
         }
 
         krav.forEach(k -> {
@@ -71,29 +75,27 @@ public class EtterlevelseDokumentasjonFieldResolver implements GraphQLResolver<E
             }
         });
 
-        List<KravResponse> irrelevantKrav;
-
-        if (etterlevelseDokumentasjon.isKnyttetTilVirkemiddel() && etterlevelseDokumentasjon.getVirkemiddelId() != null) {
-            irrelevantKrav = convert(kravService.findForEtterlevelseDokumentasjonIrrelevans(etterlevelseDokumentasjon.getId().toString(), etterlevelseDokumentasjon.getVirkemiddelId()), Krav::toResponse);
-        } else {
-            irrelevantKrav = convert(kravService.findForEtterlevelseDokumentasjonIrrelevans(etterlevelseDokumentasjon.getId().toString()), Krav::toResponse);
-        }
 
         var fylt = filter(krav, k -> etterlevelser.stream().anyMatch(e -> e.isEtterleves() && e.kravId().equals(k.kravId())));
         var ikkeFylt = filter(krav, k -> !fylt.contains(k));
 
         var irrelevant = filter(irrelevantKrav, i -> !fylt.contains(i) && !ikkeFylt.contains(i));
 
+        //filtering for only newest version for utgaatt krav
+
+
 
         return EtterlevelseDokumentasjonStats.builder()
                 .fyltKrav(fylt)
                 .ikkeFyltKrav(ikkeFylt)
                 .irrelevantKrav(irrelevant)
+                .utgaattKrav(utgaattKrav)
                 .lovStats(convert(CodelistService.getCodelist(ListName.LOV), c -> EtterlevelseDokumentasjonStats.LovStatsDok.builder()
                         .lovCode(c.toResponse())
                         .fyltKrav(filter(fylt, k -> safeStream(k.getRegelverk()).anyMatch(r -> r.getLov().getCode().equals(c.getCode()))))
                         .ikkeFyltKrav(filter(ikkeFylt, k -> safeStream(k.getRegelverk()).anyMatch(r -> r.getLov().getCode().equals(c.getCode()))))
                         .irrelevantKrav(filter(irrelevant, k -> safeStream(k.getRegelverk()).anyMatch(r -> r.getLov().getCode().equals(c.getCode()))))
+                        .utgaattKrav(filter(utgaattKrav, k-> safeStream(k.getRegelverk()).anyMatch(r -> r.getLov().getCode().equals(c.getCode()))))
                         .build()))
                 .build();
     }
