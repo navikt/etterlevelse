@@ -62,6 +62,13 @@ public class QueryResolver implements GraphQLQueryResolver {
             return new RestResponsePage<>(kravService.getAll(pageInput.createPage())).convert(Krav::toResponse);
         }
 
+        if(filter.getEtterlevelseDokumentasjonId() != null && !filter.getEtterlevelseDokumentasjonId().isEmpty()) {
+            EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(UUID.fromString(filter.getEtterlevelseDokumentasjonId()));
+            if(etterlevelseDokumentasjon.isKnyttetTilVirkemiddel() && etterlevelseDokumentasjon.getVirkemiddelId() != null && !etterlevelseDokumentasjon.getVirkemiddelId().isEmpty()){
+                filter.setVirkemiddelId(etterlevelseDokumentasjon.getVirkemiddelId());
+            }
+        }
+
         List<Krav> filtered = new ArrayList<>(kravService.getByFilter(filter));
         if (filter.getSistRedigert() == null) {
             filtered.sort(comparing(Krav::getKravNummer).thenComparing(Krav::getKravVersjon));
