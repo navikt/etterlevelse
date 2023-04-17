@@ -85,7 +85,21 @@ public class KravRepoImpl implements KravRepoCustom {
 
         if (filter.getEtterlevelseDokumentasjonId() != null && !filter.isEtterlevelseDokumentasjonIrrevantKrav()) {
             kravIdSafeList.addAll(convert(etterlevelseDokumentasjonRepo.findKravIdsForEtterlevelseDokumentasjon(filter.getEtterlevelseDokumentasjonId()), KravId::kravId));
-            if (filter.getVirkemiddelId().isEmpty()) {
+            if (filter.getVirkemiddelId() != null && !filter.getVirkemiddelId().isEmpty()) {
+                query += """
+                        and (
+                         exists(select 1
+                                   from generic_storage ettlev
+                                   where ettlev.data ->> 'kravNummer' = krav.data ->> 'kravNummer'
+                                     and ettlev.data ->> 'kravVersjon' = krav.data ->> 'kravVersjon'
+                                     and type = 'Etterlevelse'
+                                     and data ->> 'etterlevelseDokumentasjonId' = :etterlevelseDokumentasjonId
+                                ) 
+                        or data->'virkemiddelIder' ??| array[:virkemiddelId]
+                        )
+                        """;
+                par.addValue("virkemiddelId", List.of(filter.getVirkemiddelId()));
+            } else {
                 query += """
                         and (
                          exists(select 1
@@ -101,25 +115,16 @@ public class KravRepoImpl implements KravRepoCustom {
                             and type = 'EtterlevelseDokumentasjon')) > 0
                         )
                         """;
-            } else {
-                query += """
-                        and (
-                         exists(select 1
-                                   from generic_storage ettlev
-                                   where ettlev.data ->> 'kravNummer' = krav.data ->> 'kravNummer'
-                                     and ettlev.data ->> 'kravVersjon' = krav.data ->> 'kravVersjon'
-                                     and type = 'Etterlevelse'
-                                     and data ->> 'etterlevelseDokumentasjonId' = :etterlevelseDokumentasjonId
-                                ) 
-                        or data->'virkemiddelIder' ??| array[:virkemiddelId]
-                        )
-                        """;
-                par.addValue("virkemiddelId", List.of(filter.getVirkemiddelId()));
             }
             par.addValue("etterlevelseDokumentasjonId", filter.getEtterlevelseDokumentasjonId());
         } else if (filter.getEtterlevelseDokumentasjonId() != null && filter.isEtterlevelseDokumentasjonIrrevantKrav()) {
             kravIdSafeList.addAll(convert(etterlevelseDokumentasjonRepo.findKravIdsForEtterlevelseDokumentasjon(filter.getEtterlevelseDokumentasjonId()), KravId::kravId));
-            if (filter.getVirkemiddelId().isEmpty()) {
+            if (filter.getVirkemiddelId() != null && !filter.getVirkemiddelId().isEmpty()) {
+                query += """
+                        and NOT(data -> 'virkemiddelIder' ??| array[:virkemiddelId])
+                        """;
+                par.addValue("virkemiddelId", List.of(filter.getVirkemiddelId()));
+            } else {
                 query += """
                         and data -> 'relevansFor' ??| array(
                          select jsonb_array_elements_text(data -> 'irrelevansFor')
@@ -127,11 +132,6 @@ public class KravRepoImpl implements KravRepoCustom {
                           where data ->> 'id' = :etterlevelseDokumentasjonId
                             and type = 'EtterlevelseDokumentasjon')
                         """;
-            } else {
-                query += """
-                        and NOT(data -> 'virkemiddelIder' ??| array[:virkemiddelId])
-                        """;
-                par.addValue("virkemiddelId", List.of(filter.getVirkemiddelId()));
             }
             par.addValue("etterlevelseDokumentasjonId", filter.getEtterlevelseDokumentasjonId());
         }
