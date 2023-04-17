@@ -122,6 +122,7 @@ public class KravRepoImpl implements KravRepoCustom {
             if (filter.getVirkemiddelId() != null && !filter.getVirkemiddelId().isEmpty()) {
                 query += """
                         and NOT(data -> 'virkemiddelIder' ??| array[ :virkemiddelId ])
+                        OR jsonb_array_length(data -> 'virkemiddelIder') = 0
                         """;
                 par.addValue("virkemiddelId", List.of(filter.getVirkemiddelId()));
             } else {
