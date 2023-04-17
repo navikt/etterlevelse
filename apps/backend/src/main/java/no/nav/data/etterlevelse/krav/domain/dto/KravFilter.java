@@ -35,6 +35,7 @@ public class KravFilter {
     private List<String> lover;
     private boolean gjeldendeKrav;
     private Integer sistRedigert;
+    private String virkemiddelId;
 
     public List<String> getRelevans() {
         return formatList(relevans);
@@ -44,7 +45,9 @@ public class KravFilter {
         return formatList(lover);
     }
 
-    public List<String> getStatus() {return formatList(status);}
+    public List<String> getStatus() {
+        return formatList(status);
+    }
 
     public boolean isEmpty() {
         validate();
@@ -60,6 +63,7 @@ public class KravFilter {
                 && sistRedigert == null
                 && !behandlingIrrevantKrav
                 && !etterlevelseDokumentasjonIrrevantKrav
+                && virkemiddelId == null
                 ;
     }
 

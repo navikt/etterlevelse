@@ -108,20 +108,20 @@ public class KravService extends DomainService<Krav> {
             krav.setKravNummer(kravRepo.nextKravNummer());
         }
 
-        if(krav.getStatus() == KravStatus.AKTIV) {
-            if(krav.getKravVersjon() > 1) {
+        if (krav.getStatus() == KravStatus.AKTIV) {
+            if (krav.getKravVersjon() > 1) {
                 int olderKravVersjon = krav.getKravVersjon() - 1;
                 kravRepo.updateKravToUtgaatt(krav.getKravNummer(), olderKravVersjon);
             }
             kravPrioriteringRepo.transferPriority(krav.getKravVersjon(), krav.getKravNummer());
         }
 
-        if(krav.getId() != null) {
+        if (krav.getId() != null) {
             var previousKrav = storage.get(krav.getId(), Krav.class);
-            if(Objects.nonNull(previousKrav) && previousKrav.getStatus() !=KravStatus.AKTIV && krav.getStatus()==KravStatus.AKTIV ) {
+            if (Objects.nonNull(previousKrav) && previousKrav.getStatus() != KravStatus.AKTIV && krav.getStatus() == KravStatus.AKTIV) {
                 krav.setAktivertDato(LocalDateTime.now());
             }
-        } else if (krav.getId() == null && krav.getStatus()==KravStatus.AKTIV  ) {
+        } else if (krav.getId() == null && krav.getStatus() == KravStatus.AKTIV) {
             krav.setAktivertDato(LocalDateTime.now());
         }
 
@@ -140,12 +140,20 @@ public class KravService extends DomainService<Krav> {
         return getByFilter(KravFilter.builder().etterlevelseDokumentasjonId(etterlevelseDokumentasjonId).build());
     }
 
+    public List<Krav> findForEtterlevelseDokumentasjon(String etterlevelseDokumentasjonId, String virkemiddelId) {
+        return getByFilter(KravFilter.builder().etterlevelseDokumentasjonId(etterlevelseDokumentasjonId).virkemiddelId(virkemiddelId).build());
+    }
+
     public List<Krav> findForBehandlingIrrelevans(String behandlingId) {
         return getByFilter(KravFilter.builder().behandlingId(behandlingId).behandlingIrrevantKrav(true).build());
     }
 
     public List<Krav> findForEtterlevelseDokumentasjonIrrelevans(String etterlevelseDokumentasjonId) {
         return getByFilter(KravFilter.builder().etterlevelseDokumentasjonId(etterlevelseDokumentasjonId).etterlevelseDokumentasjonIrrevantKrav(true).build());
+    }
+
+    public List<Krav> findForEtterlevelseDokumentasjonIrrelevans(String etterlevelseDokumentasjonId, String virkemiddelId) {
+        return getByFilter(KravFilter.builder().etterlevelseDokumentasjonId(etterlevelseDokumentasjonId).virkemiddelId(virkemiddelId).etterlevelseDokumentasjonIrrevantKrav(true).build());
     }
 
     public List<KravImage> saveImages(List<KravImage> images) {

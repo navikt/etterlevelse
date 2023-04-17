@@ -85,31 +85,54 @@ public class KravRepoImpl implements KravRepoCustom {
 
         if (filter.getEtterlevelseDokumentasjonId() != null && !filter.isEtterlevelseDokumentasjonIrrevantKrav()) {
             kravIdSafeList.addAll(convert(etterlevelseDokumentasjonRepo.findKravIdsForEtterlevelseDokumentasjon(filter.getEtterlevelseDokumentasjonId()), KravId::kravId));
-            query += """
-                    and (
-                     exists(select 1
-                               from generic_storage ettlev
-                               where ettlev.data ->> 'kravNummer' = krav.data ->> 'kravNummer'
-                                 and ettlev.data ->> 'kravVersjon' = krav.data ->> 'kravVersjon'
-                                 and type = 'Etterlevelse'
-                                 and data ->> 'etterlevelseDokumentasjonId' = :etterlevelseDokumentasjonId
-                            ) 
-                    or jsonb_array_length(data -> 'relevansFor') = 0
-                    or jsonb_array_length((data -> 'relevansFor') - array(select jsonb_array_elements_text(data -> 'irrelevansFor') 
-                        from generic_storage where data ->> 'id' = :etterlevelseDokumentasjonId
-                        and type = 'EtterlevelseDokumentasjon')) > 0
-                    )
-                    """;
+            if (filter.getVirkemiddelId().isEmpty()) {
+                query += """
+                        and (
+                         exists(select 1
+                                   from generic_storage ettlev
+                                   where ettlev.data ->> 'kravNummer' = krav.data ->> 'kravNummer'
+                                     and ettlev.data ->> 'kravVersjon' = krav.data ->> 'kravVersjon'
+                                     and type = 'Etterlevelse'
+                                     and data ->> 'etterlevelseDokumentasjonId' = :etterlevelseDokumentasjonId
+                                ) 
+                        or jsonb_array_length(data -> 'relevansFor') = 0
+                        or jsonb_array_length((data -> 'relevansFor') - array(select jsonb_array_elements_text(data -> 'irrelevansFor') 
+                            from generic_storage where data ->> 'id' = :etterlevelseDokumentasjonId
+                            and type = 'EtterlevelseDokumentasjon')) > 0
+                        )
+                        """;
+            } else {
+                query += """
+                        and (
+                         exists(select 1
+                                   from generic_storage ettlev
+                                   where ettlev.data ->> 'kravNummer' = krav.data ->> 'kravNummer'
+                                     and ettlev.data ->> 'kravVersjon' = krav.data ->> 'kravVersjon'
+                                     and type = 'Etterlevelse'
+                                     and data ->> 'etterlevelseDokumentasjonId' = :etterlevelseDokumentasjonId
+                                ) 
+                        or data->'virkemiddelIder' ??| array[:virkemiddelId]
+                        )
+                        """;
+                par.addValue("virkemiddelId", List.of(filter.getVirkemiddelId()));
+            }
             par.addValue("etterlevelseDokumentasjonId", filter.getEtterlevelseDokumentasjonId());
         } else if (filter.getEtterlevelseDokumentasjonId() != null && filter.isEtterlevelseDokumentasjonIrrevantKrav()) {
             kravIdSafeList.addAll(convert(etterlevelseDokumentasjonRepo.findKravIdsForEtterlevelseDokumentasjon(filter.getEtterlevelseDokumentasjonId()), KravId::kravId));
-            query += """
-                    and data -> 'relevansFor' ??| array(
-                     select jsonb_array_elements_text(data -> 'irrelevansFor')
-                      from generic_storage
-                      where data ->> 'id' = :etterlevelseDokumentasjonId
-                        and type = 'BehandlingData')
-                    """;
+            if (filter.getVirkemiddelId().isEmpty()) {
+                query += """
+                        and data -> 'relevansFor' ??| array(
+                         select jsonb_array_elements_text(data -> 'irrelevansFor')
+                          from generic_storage
+                          where data ->> 'id' = :etterlevelseDokumentasjonId
+                            and type = 'EtterlevelseDokumentasjon')
+                        """;
+            } else {
+                query += """
+                        and NOT(data -> 'virkemiddelIder' ??| array[:virkemiddelId])
+                        """;
+                par.addValue("virkemiddelId", List.of(filter.getVirkemiddelId()));
+            }
             par.addValue("etterlevelseDokumentasjonId", filter.getEtterlevelseDokumentasjonId());
         }
 
@@ -117,8 +140,8 @@ public class KravRepoImpl implements KravRepoCustom {
             query += " and data ->> 'underavdeling' = :underavdeling ";
             par.addValue("underavdeling", filter.getUnderavdeling());
         }
-        if(!filter.getStatus().isEmpty()) {
-           query += "and data ->> 'status' in (:status)" ;
+        if (!filter.getStatus().isEmpty()) {
+            query += "and data ->> 'status' in (:status)";
             par.addValue("status", filter.getStatus());
         }
         if (!filter.getRelevans().isEmpty()) {

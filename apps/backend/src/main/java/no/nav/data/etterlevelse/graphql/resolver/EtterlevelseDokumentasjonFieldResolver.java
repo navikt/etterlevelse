@@ -15,6 +15,7 @@ import no.nav.data.etterlevelse.graphql.DataLoaderReg;
 import no.nav.data.etterlevelse.graphql.support.LoaderUtils;
 import no.nav.data.etterlevelse.krav.KravService;
 import no.nav.data.etterlevelse.krav.domain.Krav;
+import no.nav.data.etterlevelse.krav.dto.KravResponse;
 import no.nav.data.integration.team.dto.TeamResponse;
 import org.dataloader.DataLoader;
 import org.springframework.stereotype.Component;
@@ -53,17 +54,16 @@ public class EtterlevelseDokumentasjonFieldResolver implements GraphQLResolver<E
     }
 
     public EtterlevelseDokumentasjonStats stats(EtterlevelseDokumentasjonResponse etterlevelseDokumentasjon) {
-        var relevans = etterlevelseDokumentasjon.getIrrelevansFor();
-
-        // Temporarily disabled
-        /*
-       if (relevans.isEmpty()) {
-            return BehandlingStats.empty();
-        }
-        */
 
         var etterlevelser = etterlevelseService.getByEtterlevelseDokumentasjon(etterlevelseDokumentasjon.getId().toString());
-        var krav = convert(kravService.findForEtterlevelseDokumentasjon(etterlevelseDokumentasjon.getId().toString()), Krav::toResponse);
+
+        List<KravResponse> krav;
+
+        if (etterlevelseDokumentasjon.isKnyttetTilVirkemiddel() && etterlevelseDokumentasjon.getVirkemiddelId() != null) {
+            krav = convert(kravService.findForEtterlevelseDokumentasjon(etterlevelseDokumentasjon.getId().toString(), etterlevelseDokumentasjon.getVirkemiddelId()), Krav::toResponse);
+        } else {
+            krav = convert(kravService.findForEtterlevelseDokumentasjon(etterlevelseDokumentasjon.getId().toString()), Krav::toResponse);
+        }
 
         krav.forEach(k -> {
             if (k.getEtterlevelser() != null) {
@@ -71,7 +71,13 @@ public class EtterlevelseDokumentasjonFieldResolver implements GraphQLResolver<E
             }
         });
 
-        var irrelevantKrav = convert(kravService.findForEtterlevelseDokumentasjonIrrelevans(etterlevelseDokumentasjon.getId().toString()), Krav::toResponse);
+        List<KravResponse> irrelevantKrav;
+
+        if (etterlevelseDokumentasjon.isKnyttetTilVirkemiddel() && etterlevelseDokumentasjon.getVirkemiddelId() != null) {
+            irrelevantKrav = convert(kravService.findForEtterlevelseDokumentasjonIrrelevans(etterlevelseDokumentasjon.getId().toString(), etterlevelseDokumentasjon.getVirkemiddelId()), Krav::toResponse);
+        } else {
+            irrelevantKrav = convert(kravService.findForEtterlevelseDokumentasjonIrrelevans(etterlevelseDokumentasjon.getId().toString()), Krav::toResponse);
+        }
 
         var fylt = filter(krav, k -> etterlevelser.stream().anyMatch(e -> e.isEtterleves() && e.kravId().equals(k.kravId())));
         var ikkeFylt = filter(krav, k -> !fylt.contains(k));

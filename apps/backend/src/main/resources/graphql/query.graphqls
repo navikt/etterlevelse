@@ -21,6 +21,7 @@ input KravFilter {
     behandlingIrrevantKrav: Boolean
     etterlevelseDokumentasjonId: String
     etterlevelseDokumentasjonIrrevantKrav: Boolean
+    virkemiddelId: String
     underavdeling: String
     lov: String
     status: [String!]
