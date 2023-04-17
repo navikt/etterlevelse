@@ -135,7 +135,7 @@ export const BehandlingPage = () => {
             </Block>
           ) : (
             <LabelSmall marginTop="0px" marginBottom="0px" marginRight="5px" $style={{ fontSize: '16px' }}>
-              Aktive Krav:
+              Aktive filtre:
             </LabelSmall>
           )}
 
