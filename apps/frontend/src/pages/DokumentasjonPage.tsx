@@ -424,6 +424,26 @@ export const statsQuery = gql`
                 createdDate
               }
             }
+            irrelevantKrav {
+              id
+              kravNummer
+              kravVersjon
+              status
+              aktivertDato
+              navn
+              kravIdRelasjoner
+              kravRelasjoner {
+                id
+                kravNummer
+                kravVersjon
+                navn
+              }
+              changeStamp {
+                lastModifiedBy
+                lastModifiedDate
+                createdDate
+              }
+            }
           }
         }
       }
