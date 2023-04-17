@@ -380,6 +380,35 @@ export const statsQuery = gql`
               createdDate
             }
           }
+          utgaattKrav {
+            kravNummer
+            kravVersjon
+            status
+            aktivertDato
+            kravIdRelasjoner
+            kravRelasjoner {
+              id
+              kravNummer
+              kravVersjon
+              navn
+            }
+            etterlevelser {
+              behandlingId
+              status
+              etterlevelseDokumentasjonId
+            }
+            regelverk {
+              lov {
+                code
+                shortName
+              }
+            }
+            changeStamp {
+              lastModifiedBy
+              lastModifiedDate
+              createdDate
+            }
+          }
           lovStats {
             lovCode {
               code
