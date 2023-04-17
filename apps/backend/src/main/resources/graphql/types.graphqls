@@ -229,6 +229,7 @@ type LovStatsDok {
     lovCode: Code!
     fyltKrav: [Krav!]!
     ikkeFyltKrav: [Krav!]!
+    irrelevantKrav: [Krav!]!
 }
 
 type Team {
