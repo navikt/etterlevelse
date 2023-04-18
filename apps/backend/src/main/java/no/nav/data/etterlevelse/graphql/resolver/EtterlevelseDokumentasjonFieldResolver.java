@@ -60,7 +60,29 @@ public class EtterlevelseDokumentasjonFieldResolver implements GraphQLResolver<E
 
         List<KravResponse> krav;
         List<KravResponse> irrelevantKrav;
-        List<KravResponse> utgaattKrav = convert(kravService.getByFilter(KravFilter.builder().status(List.of("UTGAATT")).build()), Krav::toResponse);
+        List<KravResponse> utgaattKrav = convert(kravService.getByFilter(KravFilter.builder()
+                .status(List.of("UTGAATT"))
+                .etterlevelseDokumentasjonId(etterlevelseDokumentasjon.getId().toString())
+                .gjeldendeKrav(false)
+                .build()), Krav::toResponse);
+
+//        if (utgaateKraverGraphQLResponse && utgaateKraverGraphQLResponse.krav.content.length > 0) {
+//            utgaatKravData = utgaateKraverGraphQLResponse.krav.content
+//            for (let x = utgaatKravData.length - 1; x > 0; x--) {
+//                if (utgaatKravData[x].kravNummer === utgaatKravData[x - 1].kravNummer && utgaatKravData[x].kravVersjon > utgaatKravData[x - 1].kravVersjon) {
+//                    utgaatKravData.splice(x - 1, 1)
+//                }
+//            }
+//        }
+
+        if (!utgaattKrav.isEmpty()) {
+            for (int x = utgaattKrav.size() - 1; x > 0; x--) {
+                if (utgaattKrav.get(x).getKravNummer() == utgaattKrav.get(x - 1).getKravNummer() && utgaattKrav.get(x).getKravVersjon() > utgaattKrav.get(x - 1).getKravVersjon()) {
+                    utgaattKrav.subList(x - 1, 1);
+                }
+            }
+        }
+
         if (etterlevelseDokumentasjon.isKnyttetTilVirkemiddel() && (etterlevelseDokumentasjon.getVirkemiddelId() != null)) {
             krav = convert(kravService.findForEtterlevelseDokumentasjon(etterlevelseDokumentasjon.getId().toString(), etterlevelseDokumentasjon.getVirkemiddelId()), Krav::toResponse);
             irrelevantKrav = convert(kravService.findForEtterlevelseDokumentasjonIrrelevans(etterlevelseDokumentasjon.getId().toString(), etterlevelseDokumentasjon.getVirkemiddelId()), Krav::toResponse);
@@ -84,7 +106,6 @@ public class EtterlevelseDokumentasjonFieldResolver implements GraphQLResolver<E
         //filtering for only newest version for utgaatt krav
 
 
-
         return EtterlevelseDokumentasjonStats.builder()
                 .fyltKrav(fylt)
                 .ikkeFyltKrav(ikkeFylt)
@@ -95,7 +116,7 @@ public class EtterlevelseDokumentasjonFieldResolver implements GraphQLResolver<E
                         .fyltKrav(filter(fylt, k -> safeStream(k.getRegelverk()).anyMatch(r -> r.getLov().getCode().equals(c.getCode()))))
                         .ikkeFyltKrav(filter(ikkeFylt, k -> safeStream(k.getRegelverk()).anyMatch(r -> r.getLov().getCode().equals(c.getCode()))))
                         .irrelevantKrav(filter(irrelevant, k -> safeStream(k.getRegelverk()).anyMatch(r -> r.getLov().getCode().equals(c.getCode()))))
-                        .utgaattKrav(filter(utgaattKrav, k-> safeStream(k.getRegelverk()).anyMatch(r -> r.getLov().getCode().equals(c.getCode()))))
+                        .utgaattKrav(filter(utgaattKrav, k -> safeStream(k.getRegelverk()).anyMatch(r -> r.getLov().getCode().equals(c.getCode()))))
                         .build()))
                 .build();
     }
