@@ -1,36 +1,36 @@
-import { FieldWrapper } from '../../common/Inputs'
-import { FieldArray, FieldArrayRenderProps } from 'formik'
-import React, { useEffect, useState } from 'react'
-import { KravStatus, Suksesskriterie } from '../../../constants'
-import { FormControl } from 'baseui/form-control'
-import { Block } from 'baseui/block'
-import Button, { buttonBorderStyle } from '../../common/Button'
+import {FieldWrapper} from '../../common/Inputs'
+import {FieldArray, FieldArrayRenderProps} from 'formik'
+import React, {useEffect, useState} from 'react'
+import {KravStatus, Suksesskriterie} from '../../../constants'
+import {FormControl} from 'baseui/form-control'
+import {Block} from 'baseui/block'
+import Button, {buttonBorderStyle} from '../../common/Button'
 import * as _ from 'lodash'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
-import { faGripVertical, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons'
+import {faGripVertical, faPlus, faTrash} from '@fortawesome/free-solid-svg-icons'
 import TextEditor from '../../common/TextEditor/TextEditor'
-import { Card } from 'baseui/card'
-import { theme } from '../../../util'
-import { useDebouncedState } from '../../../util/hooks'
-import { DragDropContext, Draggable, DraggableProvidedDragHandleProps, DraggingStyle, Droppable } from 'react-beautiful-dnd'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { kravModal } from '../EditKrav'
+import {Card} from 'baseui/card'
+import {theme} from '../../../util'
+import {useDebouncedState} from '../../../util/hooks'
+import {DragDropContext, Draggable, DraggableProvidedDragHandleProps, DraggingStyle, Droppable} from 'react-beautiful-dnd'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {kravModal} from '../EditKrav'
 import CustomizedInput from '../../common/CustomizedInput'
-import { ettlevColors } from '../../../util/theme'
-import { Error } from '../../common/ModalSchema'
-import { borderColor } from '../../common/Style'
-import { ALIGN, Radio, RadioGroup } from 'baseui/radio'
-import { LabelSmall } from 'baseui/typography'
+import {ettlevColors} from '../../../util/theme'
+import {Error} from '../../common/ModalSchema'
+import {borderColor} from '../../common/Style'
+import {ALIGN, Radio, RadioGroup} from 'baseui/radio'
+import {LabelSmall} from 'baseui/typography'
 
 type KravSuksesskriterieEditProps = {
   setIsFormDirty?: (v: boolean) => void
   newVersion: boolean
 }
 
-export const KravSuksesskriterierEdit = ({ setIsFormDirty, newVersion }: KravSuksesskriterieEditProps) => {
+export const KravSuksesskriterierEdit = ({setIsFormDirty, newVersion}: KravSuksesskriterieEditProps) => {
   return (
     <FieldWrapper>
-      <FieldArray name={'suksesskriterier'}>{(p) => <KriterieList p={p} setIsFormDirty={setIsFormDirty} newVersion={newVersion} />}</FieldArray>
+      <FieldArray name={'suksesskriterier'}>{(p) => <KriterieList p={p} setIsFormDirty={setIsFormDirty} newVersion={newVersion}/>}</FieldArray>
     </FieldWrapper>
   )
 }
@@ -40,11 +40,11 @@ const nextId = (suksesskriterier: Suksesskriterie[]) => {
   return max + 1
 }
 
-const KriterieList = ({ p, setIsFormDirty, newVersion }: { p: FieldArrayRenderProps; setIsFormDirty?: (v: boolean) => void; newVersion: boolean }) => {
+const KriterieList = ({p, setIsFormDirty, newVersion}: { p: FieldArrayRenderProps; setIsFormDirty?: (v: boolean) => void; newVersion: boolean }) => {
   const suksesskriterier = p.form.values.suksesskriterier as Suksesskriterie[]
 
   if (!suksesskriterier.length) {
-    p.push({ id: nextId(suksesskriterier), navn: '', beskrivelse: '' })
+    p.push({id: nextId(suksesskriterier), navn: '', beskrivelse: ''})
   }
 
   return (
@@ -54,7 +54,8 @@ const KriterieList = ({ p, setIsFormDirty, newVersion }: { p: FieldArrayRenderPr
           if (!result.destination) {
             return
           }
-          const moved = p.remove(result.source.index)
+          const moved = p.form.values.suksesskriterier[result.source.index]
+          p.remove(result.source.index)
           p.insert(result.destination.index, moved)
         }}
       >
@@ -73,7 +74,7 @@ const KriterieList = ({ p, setIsFormDirty, newVersion }: { p: FieldArrayRenderPr
                     if (dsnap.isDragging) {
                       // Adjust location due to modal displacements
                       const style = dprov.draggableProps.style as DraggingStyle
-                      const offset = { x: 115, y: 15 - (kravModal()?.scrollTop || 0) }
+                      const offset = {x: 115, y: 15 - (kravModal()?.scrollTop || 0)}
                       const x = style.left - offset.x
                       const y = style.top - offset.y
                       style.left = x
@@ -116,7 +117,7 @@ const KriterieList = ({ p, setIsFormDirty, newVersion }: { p: FieldArrayRenderPr
             kind="secondary"
             size="compact"
             disabled={suksesskriterier.length >= 15}
-            onClick={() => p.push({ id: nextId(suksesskriterier), navn: '', beskrivelse: '', behovForBegrunnelse: 'true' })}
+            onClick={() => p.push({id: nextId(suksesskriterier), navn: '', beskrivelse: '', behovForBegrunnelse: 'true'})}
           >
             Suksesskriterie
           </Button>
@@ -127,16 +128,16 @@ const KriterieList = ({ p, setIsFormDirty, newVersion }: { p: FieldArrayRenderPr
 }
 
 const Kriterie = ({
-  s,
-  nummer,
-  update,
-  remove,
-  dragHandleProps,
-  isDragging,
-  p,
-  setIsFormDirty,
-  newVersion,
-}: {
+                    s,
+                    nummer,
+                    update,
+                    remove,
+                    dragHandleProps,
+                    isDragging,
+                    p,
+                    setIsFormDirty,
+                    newVersion,
+                  }: {
   s: Suksesskriterie
   nummer: number
   update: (s: Suksesskriterie) => void
@@ -153,7 +154,7 @@ const Kriterie = ({
   const [behovForBegrunnelse, setBehovForBegrunnelse] = useState<string>(s.behovForBegrunnelse === undefined ? 'true' : s.behovForBegrunnelse.toString())
 
   useEffect(() => {
-    update({ id: s.id, navn, beskrivelse, behovForBegrunnelse: behovForBegrunnelse === 'true' ? true : false })
+    update({id: s.id, navn, beskrivelse, behovForBegrunnelse: behovForBegrunnelse === 'true' ? true : false})
   }, [navn, beskrivelse, behovForBegrunnelse])
 
   return (
@@ -170,11 +171,11 @@ const Kriterie = ({
       <Block position={'relative'} paddingTop={theme.sizing.scale100}>
         <Block display={'flex'} alignItems={'flex-start'} position={'absolute'} right={0} top={0}>
           {(p.form.values.status !== KravStatus.AKTIV || newVersion) && (
-            <Button type={'button'} size={'compact'} kind={'tertiary'} $style={buttonBorderStyle} icon={faTrash} onClick={remove} tooltip={'Fjern suksesskriterie'} />
+            <Button type={'button'} size={'compact'} kind={'tertiary'} $style={buttonBorderStyle} icon={faTrash} onClick={remove} tooltip={'Fjern suksesskriterie'}/>
           )}
-          <Block width={theme.sizing.scale1000} />
+          <Block width={theme.sizing.scale1000}/>
           <Block {...dragHandleProps}>
-            <FontAwesomeIcon icon={faGripVertical} aria-label={'Dra og slipp håndtak'} />
+            <FontAwesomeIcon icon={faGripVertical} aria-label={'Dra og slipp håndtak'}/>
           </Block>
         </Block>
 
@@ -208,19 +209,19 @@ const Kriterie = ({
                 },
               }}
             />
-            <Error fieldName={'suksesskriterier'} fullWidth />
+            <Error fieldName={'suksesskriterier'} fullWidth/>
           </Block>
         </FormControl>
-        <FormControl label={<LabelWithTooltip label={'Beskrivelse av suksesskriteriet'} tooltip={'Nærmere detaljer rundt oppnåelse av suksesskriteriet.'} />}>
+        <FormControl label={<LabelWithTooltip label={'Beskrivelse av suksesskriteriet'} tooltip={'Nærmere detaljer rundt oppnåelse av suksesskriteriet.'}/>}>
           {/* <MarkdownEditor initialValue={beskrivelse} setValue={setBeskrivelse} height={'250px'} /> */}
-          <TextEditor initialValue={beskrivelse} setValue={setBeskrivelse} height={'250px'} setIsFormDirty={setIsFormDirty} />
+          <TextEditor initialValue={beskrivelse} setValue={setBeskrivelse} height={'250px'} setIsFormDirty={setIsFormDirty}/>
         </FormControl>
         <Block display="flex" flex="1" justifyContent="center">
-          <LabelSmall marginBottom="6px" marginTop="6px" marginRight="14px" $style={{ maxWidth: '162px', width: '100%', fontWeight: 600, lineHeight: '22px' }}>
+          <LabelSmall marginBottom="6px" marginTop="6px" marginRight="14px" $style={{maxWidth: '162px', width: '100%', fontWeight: 600, lineHeight: '22px'}}>
             Velg type besvarelse:
           </LabelSmall>
 
-          <FormControl overrides={{ ControlContainer: { style: { marginBottom: '0px' } } }}>
+          <FormControl overrides={{ControlContainer: {style: {marginBottom: '0px'}}}}>
             <RadioGroup
               value={behovForBegrunnelse}
               onChange={(e) => {
