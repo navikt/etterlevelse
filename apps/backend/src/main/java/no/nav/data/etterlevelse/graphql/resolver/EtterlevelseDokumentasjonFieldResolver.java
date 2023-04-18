@@ -26,7 +26,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import static no.nav.data.common.utils.StreamUtils.convert;
 import static no.nav.data.common.utils.StreamUtils.filter;
@@ -62,10 +61,6 @@ public class EtterlevelseDokumentasjonFieldResolver implements GraphQLResolver<E
         List<KravResponse> krav;
         List<KravResponse> irrelevantKrav;
         List<KravResponse> utgaattKrav = convert(kravService.getByFilter(KravFilter.builder().status(List.of("UTGAATT")).build()), Krav::toResponse);
-
-        var temp = utgaattKrav.stream().collect(Collectors.groupingBy(KravResponse::getKravNummer));
-        log.info(temp.toString());
-
         if (etterlevelseDokumentasjon.isKnyttetTilVirkemiddel() && (etterlevelseDokumentasjon.getVirkemiddelId() != null)) {
             krav = convert(kravService.findForEtterlevelseDokumentasjon(etterlevelseDokumentasjon.getId().toString(), etterlevelseDokumentasjon.getVirkemiddelId()), Krav::toResponse);
             irrelevantKrav = convert(kravService.findForEtterlevelseDokumentasjonIrrelevans(etterlevelseDokumentasjon.getId().toString(), etterlevelseDokumentasjon.getVirkemiddelId()), Krav::toResponse);
@@ -83,6 +78,7 @@ public class EtterlevelseDokumentasjonFieldResolver implements GraphQLResolver<E
 
         var fylt = filter(krav, k -> etterlevelser.stream().anyMatch(e -> e.isEtterleves() && e.kravId().equals(k.kravId())));
         var ikkeFylt = filter(krav, k -> !fylt.contains(k));
+
         var irrelevant = filter(irrelevantKrav, i -> !fylt.contains(i) && !ikkeFylt.contains(i));
 
         //filtering for only newest version for utgaatt krav
