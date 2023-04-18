@@ -1,22 +1,22 @@
-import { AdresseType, Begrep, Krav, KravQL, KravVersjon, Virkemiddel } from '../../constants'
-import { Block, Responsive } from 'baseui/block'
+import {AdresseType, Begrep, Krav, KravQL, KravVersjon, Virkemiddel} from '../../constants'
+import {Block, Responsive} from 'baseui/block'
 import React from 'react'
-import { kravStatus } from '../../pages/KravPage'
-import { theme } from '../../util'
+import {kravStatus} from '../../pages/KravPage'
+import {theme} from '../../util'
 import moment from 'moment'
-import { DotTag, DotTags } from '../common/DotTag'
-import { ListName } from '../../services/Codelist'
-import { Label, LabelAboveContent } from '../common/PropertyLabel'
-import { ExternalLink, ExternalLinkWrapper, ObjectLink } from '../common/RouteLink'
-import { slackLink, slackUserLink, termUrl } from '../../util/config'
-import { user } from '../../services/User'
-import { LovViewList } from '../Lov'
-import { SuksesskriterieCard } from './Suksesskriterie'
-import { LabelSmall, ParagraphMedium } from 'baseui/typography'
-import { CustomizedAccordion, CustomizedPanel } from '../common/CustomizedAccordion'
-import { ettlevColors } from '../../util/theme'
-import { borderStyle } from '../common/Style'
-import { Markdown } from '../common/Markdown'
+import {DotTag, DotTags} from '../common/DotTag'
+import {ListName} from '../../services/Codelist'
+import {Label, LabelAboveContent} from '../common/PropertyLabel'
+import {ExternalLink, ExternalLinkWrapper, ObjectLink} from '../common/RouteLink'
+import {slackLink, slackUserLink, termUrl} from '../../util/config'
+import {user} from '../../services/User'
+import {LovViewList} from '../Lov'
+import {SuksesskriterieCard} from './Suksesskriterie'
+import {LabelSmall, ParagraphMedium} from 'baseui/typography'
+import {CustomizedAccordion, CustomizedPanel} from '../common/CustomizedAccordion'
+import {ettlevColors} from '../../util/theme'
+import {borderStyle} from '../common/Style'
+import {Markdown} from '../common/Markdown'
 import ExpiredAlert from './ExpiredAlert'
 import SidePanel from './SidePanel'
 
@@ -112,9 +112,7 @@ export const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVer
 
       <LabelWrapper>
         <LabelAboveContent header title="Relevant for følgende virkemiddel">
-          {krav.virkemidler.length > 0 ? krav.virkemidler.map((v, i) => (
-            <VirkemiddelView key={'virkemiddel' + i} virkemiddel={v} />
-          )): 'Ikke angitt'}
+          {krav.virkemidler.length > 0 ? krav.virkemidler.map((v, i) => <VirkemiddelView key={'virkemiddel' + i} virkemiddel={v} />) : 'Ikke angitt'}
         </LabelAboveContent>
       </LabelWrapper>
 
@@ -267,9 +265,7 @@ const BegrepView = ({ begrep }: { begrep: Begrep }) => (
 
 const VirkemiddelView = ({ virkemiddel }: { virkemiddel: Virkemiddel }) => (
   <Block maxWidth={'650px'}>
-    <DotTag>
-        {virkemiddel.navn}
-    </DotTag>
+    <DotTag>{virkemiddel.navn}</DotTag>
   </Block>
 )
 

@@ -75,7 +75,7 @@ export const useEtterlevelseDokumentasjon = (etterlevelseDokumentasjonId?: strin
         if (etterlevelseDokumentasjon.virkemiddelId) {
           await getVirkemiddel(etterlevelseDokumentasjon.virkemiddelId).then((virkemiddelResponse) => (virkmiddel = virkemiddelResponse))
         }
-        setData({...etterlevelseDokumentasjon, behandling: behandling, teamsData: teamsData, virkemiddel: virkmiddel})
+        setData({ ...etterlevelseDokumentasjon, behandling: behandling, teamsData: teamsData, virkemiddel: virkmiddel })
         setIsLoading(false)
       })
     } else if (behandlingId) {
@@ -90,7 +90,7 @@ export const useEtterlevelseDokumentasjon = (etterlevelseDokumentasjonId?: strin
             await getVirkemiddel(etterlevelseDokumentasjon[0].virkemiddelId).then((virkemiddelResponse) => (virkmiddel = virkemiddelResponse))
           }
 
-          setData({...etterlevelseDokumentasjon[0], behandling: behandling, teamsData: teamsData})
+          setData({ ...etterlevelseDokumentasjon[0], behandling: behandling, teamsData: teamsData })
           setIsLoading(false)
         }
       })
@@ -114,7 +114,7 @@ export const etterlevelseDokumentasjonToDto = (etterlevelseDokumentasjon: Etterl
 
 export const etterlevelseDokumentasjonMapToFormVal = (etterlevelseDokumentasjon: Partial<EtterlevelseDokumentasjonQL>): EtterlevelseDokumentasjonQL => ({
   id: etterlevelseDokumentasjon.id || '',
-  changeStamp: etterlevelseDokumentasjon.changeStamp || {lastModifiedDate: '', lastModifiedBy: ''},
+  changeStamp: etterlevelseDokumentasjon.changeStamp || { lastModifiedDate: '', lastModifiedBy: '' },
   version: -1,
   title: etterlevelseDokumentasjon.title || '',
   behandlingId: etterlevelseDokumentasjon.behandlingId || '',
@@ -127,17 +127,18 @@ export const etterlevelseDokumentasjonMapToFormVal = (etterlevelseDokumentasjon:
   knyttetTilVirkemiddel: etterlevelseDokumentasjon.knyttetTilVirkemiddel !== undefined ? etterlevelseDokumentasjon.knyttetTilVirkemiddel : true,
 })
 
-export const etterlevelseDokumentasjonSchema = ()=> yup.object({
-  title: yup.string().required('Etterlevelsedokumentasjon trenger en tittel'),
-  virkemiddelId: yup.string().test({
-    name: 'addedVirkemiddelCheck',
-    message: 'Hvis ditt system/produkt er tilknyttet et virkemiddel må det legges til.',
-    test: function (virkemiddelId) {
-      const { parent } = this
-      if (parent.knyttetTilVirkemiddel === true) {
-        return virkemiddelId ? true : false
-      }
-      return true
-    },
-  }),
-})
+export const etterlevelseDokumentasjonSchema = () =>
+  yup.object({
+    title: yup.string().required('Etterlevelsedokumentasjon trenger en tittel'),
+    virkemiddelId: yup.string().test({
+      name: 'addedVirkemiddelCheck',
+      message: 'Hvis ditt system/produkt er tilknyttet et virkemiddel må det legges til.',
+      test: function (virkemiddelId) {
+        const { parent } = this
+        if (parent.knyttetTilVirkemiddel === true) {
+          return virkemiddelId ? true : false
+        }
+        return true
+      },
+    }),
+  })

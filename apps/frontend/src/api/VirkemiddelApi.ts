@@ -93,7 +93,7 @@ export const useSearchVirkemiddel = () => {
         setSearchResult(res)
       })
     })()
-  },[])
+  }, [])
 
   useEffect(() => {
     ;(async () => {
