@@ -170,6 +170,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
   return (
     <Block maxWidth={maxPageWidth}>
       <CustomizedModal
+        closeable={false}
         onClose={() => {
           if (isFormDirty) {
             setIsAlertModalOpen(true)
