@@ -67,7 +67,7 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: NyTilbakemeldingMod
       }}
       isOpen={open}
       closeable={false}
-      onClose={() => close()} 
+      onClose={() => close()}
     >
       <Formik
         onSubmit={submit}

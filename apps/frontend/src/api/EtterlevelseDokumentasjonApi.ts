@@ -1,10 +1,10 @@
 import axios from 'axios'
-import {EtterlevelseDokumentasjon, EtterlevelseDokumentasjonQL, PageResponse, Team} from '../constants'
-import {env} from '../util/env'
-import {useEffect, useState} from 'react'
-import {getBehandling} from './BehandlingApi'
-import {getTeams} from './TeamApi'
-import {getVirkemiddel} from './VirkemiddelApi'
+import { EtterlevelseDokumentasjon, EtterlevelseDokumentasjonQL, PageResponse, Team } from '../constants'
+import { env } from '../util/env'
+import { useEffect, useState } from 'react'
+import { getBehandling } from './BehandlingApi'
+import { getTeams } from './TeamApi'
+import { getVirkemiddel } from './VirkemiddelApi'
 import * as yup from 'yup'
 
 export const getEtterlevelseDokumentasjon = async (id: string) => {
