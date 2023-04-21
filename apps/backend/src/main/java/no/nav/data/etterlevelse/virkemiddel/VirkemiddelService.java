@@ -40,7 +40,7 @@ public class VirkemiddelService extends DomainService<Virkemiddel> {
         Virkemiddel virkemiddel = storage.get(virkemiddelId, Virkemiddel.class);
         List<String> etterlevelseDokumentasjonList = etterlevelseDokumentasjonService.getByVirkemiddelId(List.of(virkemiddelId.toString())).stream().map((e)-> 'E' + e.getEtterlevelseNummer().toString()).toList();
         List<String> kravList = kravService.getByFilter(KravFilter.builder().virkemiddelId(virkemiddelId.toString()).build()).stream()
-                .filter((k) -> !k.getVirkemiddelIder().isEmpty())
+                .filter((k) -> k.getVirkemiddelIder() != null && !k.getVirkemiddelIder().isEmpty())
                 .map((k) -> 'K' + k.getKravNummer().toString() + "." + k.getKravVersjon().toString()).toList();
         List<String> joinedList = Stream.concat(etterlevelseDokumentasjonList.stream(), kravList.stream()).toList();
         if (!joinedList.isEmpty()) {
