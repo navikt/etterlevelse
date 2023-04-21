@@ -9,6 +9,8 @@ public interface KravRepoCustom {
 
     List<GenericStorage> findByRelevans(String code);
 
+    List<GenericStorage> findByVirkemiddelIder(String virkemiddelId);
+
     List<GenericStorage> findBy(KravFilter filter);
 
     List<GenericStorage> findByLov(String lov);

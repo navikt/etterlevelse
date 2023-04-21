@@ -6,7 +6,6 @@ import no.nav.data.common.validator.Validator;
 import no.nav.data.etterlevelse.common.domain.DomainService;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
 import no.nav.data.etterlevelse.krav.KravService;
-import no.nav.data.etterlevelse.krav.domain.dto.KravFilter;
 import no.nav.data.etterlevelse.virkemiddel.domain.Virkemiddel;
 import no.nav.data.etterlevelse.virkemiddel.dto.VirkemiddelNotErasableException;
 import no.nav.data.etterlevelse.virkemiddel.dto.VirkemiddelRequest;
@@ -39,8 +38,7 @@ public class VirkemiddelService extends DomainService<Virkemiddel> {
     private void validateVirkemiddelIsNotInUse(UUID virkemiddelId) {
         Virkemiddel virkemiddel = storage.get(virkemiddelId, Virkemiddel.class);
         List<String> etterlevelseDokumentasjonList = etterlevelseDokumentasjonService.getByVirkemiddelId(List.of(virkemiddelId.toString())).stream().map((e)-> 'E' + e.getEtterlevelseNummer().toString()).toList();
-        List<String> kravList = kravService.getByFilter(KravFilter.builder().virkemiddelId(virkemiddelId.toString()).build()).stream()
-                .filter((k) -> k.getVirkemiddelIder() != null && !k.getVirkemiddelIder().isEmpty())
+        List<String> kravList = kravService.findByVirkmiddelId(virkemiddelId.toString()).stream()
                 .map((k) -> 'K' + k.getKravNummer().toString() + "." + k.getKravVersjon().toString()).toList();
         List<String> joinedList = Stream.concat(etterlevelseDokumentasjonList.stream(), kravList.stream()).toList();
         if (!joinedList.isEmpty()) {

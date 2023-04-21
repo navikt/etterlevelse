@@ -39,6 +39,17 @@ public class KravRepoImpl implements KravRepoCustom {
     }
 
     @Override
+    public List<GenericStorage> findByVirkemiddelIder(String virkemiddelId){
+        var query = "select id from generic_storage where type = 'Krav' and data->'virkemiddelIder' ??| array[ :virkemiddelId ]";
+        var par = new MapSqlParameterSource();
+
+        par.addValue("virkemiddelId", List.of(virkemiddelId));
+
+        List<GenericStorage> kravList = fetch(jdbcTemplate.queryForList(query, par));
+        return kravList;
+    }
+
+    @Override
     public List<GenericStorage> findByLov(String lov) {
         return findBy(KravFilter.builder().lov(lov).build());
     }

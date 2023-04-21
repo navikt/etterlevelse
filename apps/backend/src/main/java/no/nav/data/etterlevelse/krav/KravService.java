@@ -61,6 +61,10 @@ public class KravService extends DomainService<Krav> {
         return convert(kravRepo.findBy(filter), GenericStorage::toKrav);
     }
 
+    public List<Krav> findByVirkmiddelId(String virkemiddelId) {
+        return convert(kravRepo.findByVirkemiddelIder(virkemiddelId), GenericStorage::toKrav);
+    }
+
     public List<Krav> getByKravNummer(int kravNummer) {
         return GenericStorage.to(kravRepo.findByKravNummer(kravNummer), Krav.class);
     }
