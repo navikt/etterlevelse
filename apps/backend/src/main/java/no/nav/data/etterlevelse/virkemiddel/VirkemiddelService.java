@@ -5,6 +5,8 @@ import no.nav.data.common.storage.domain.GenericStorage;
 import no.nav.data.common.validator.Validator;
 import no.nav.data.etterlevelse.common.domain.DomainService;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
+import no.nav.data.etterlevelse.krav.KravService;
+import no.nav.data.etterlevelse.krav.domain.dto.KravFilter;
 import no.nav.data.etterlevelse.virkemiddel.domain.Virkemiddel;
 import no.nav.data.etterlevelse.virkemiddel.dto.VirkemiddelNotErasableException;
 import no.nav.data.etterlevelse.virkemiddel.dto.VirkemiddelRequest;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 import static no.nav.data.common.utils.StreamUtils.convert;
 import static no.nav.data.common.utils.StreamUtils.filter;
@@ -24,20 +27,23 @@ import static no.nav.data.common.utils.StreamUtils.filter;
 public class VirkemiddelService extends DomainService<Virkemiddel> {
 
     private final EtterlevelseDokumentasjonService etterlevelseDokumentasjonService;
+    private final KravService kravService;
 
-    public VirkemiddelService(EtterlevelseDokumentasjonService etterlevelseDokumentasjonService) {
+    public VirkemiddelService(EtterlevelseDokumentasjonService etterlevelseDokumentasjonService, KravService kravService) {
         super(Virkemiddel.class);
 
         this.etterlevelseDokumentasjonService = etterlevelseDokumentasjonService;
+        this.kravService = kravService;
     }
 
     private void validateVirkemiddelIsNotInUse(UUID virkemiddelId) {
         Virkemiddel virkemiddel = storage.get(virkemiddelId, Virkemiddel.class);
         List<String> etterlevelseDokumentasjonList = etterlevelseDokumentasjonService.getByVirkemiddelId(List.of(virkemiddelId.toString())).stream().map((e)-> 'E' + e.getEtterlevelseNummer().toString()).toList();
-        //TODO get krav list by virkemiddel id and check if is being used by krav
-        if (!etterlevelseDokumentasjonList.isEmpty()) {
-            log.warn("The virkemiddel {} is in use and cannot be erased. etterlvelse dokumentasjon: {}", virkemiddel.getNavn(), etterlevelseDokumentasjonList);
-            throw new VirkemiddelNotErasableException(String.format("The virkemiddel %s is in use and cannot be erased. etterlvelse dokumentasjon: %s", virkemiddel.getNavn(), etterlevelseDokumentasjonList.toString()));
+        List<String> kravList = kravService.getByFilter(KravFilter.builder().virkemiddelId(virkemiddelId.toString()).build()).stream().map((k) -> 'K' + k.getKravNummer().toString() + "." + k.getKravVersjon().toString()).toList();
+        List<String> joinedList = Stream.concat(etterlevelseDokumentasjonList.stream(), kravList.stream()).toList();
+        if (!joinedList.isEmpty()) {
+            log.warn("The virkemiddel {} is in use and cannot be erased. \n Currently in use at: {}", virkemiddel.getNavn(), joinedList);
+            throw new VirkemiddelNotErasableException(String.format("The virkemiddel %s is in use and cannot be erased. \n Currently in use at: %s", virkemiddel.getNavn(), joinedList.toString()));
         }
     }
 
