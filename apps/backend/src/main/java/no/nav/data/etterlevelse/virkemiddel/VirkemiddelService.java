@@ -39,14 +39,15 @@ public class VirkemiddelService extends DomainService<Virkemiddel> {
     private void validateVirkemiddelIsNotInUse(UUID virkemiddelId) {
         Virkemiddel virkemiddel = storage.get(virkemiddelId, Virkemiddel.class);
         List<String> etterlevelseDokumentasjonList = etterlevelseDokumentasjonService.getByVirkemiddelId(List.of(virkemiddelId.toString())).stream().map((e)-> 'E' + e.getEtterlevelseNummer().toString()).toList();
-        List<String> kravList = kravService.getByFilter(KravFilter.builder().virkemiddelId(virkemiddelId.toString()).build()).stream().map((k) -> 'K' + k.getKravNummer().toString() + "." + k.getKravVersjon().toString()).toList();
+        List<String> kravList = kravService.getByFilter(KravFilter.builder().virkemiddelId(virkemiddelId.toString()).build()).stream()
+                .filter((k) -> !k.getVirkemiddelIder().isEmpty())
+                .map((k) -> 'K' + k.getKravNummer().toString() + "." + k.getKravVersjon().toString()).toList();
         List<String> joinedList = Stream.concat(etterlevelseDokumentasjonList.stream(), kravList.stream()).toList();
         if (!joinedList.isEmpty()) {
             log.warn("The virkemiddel {} is in use and cannot be erased. \n Currently in use at: {}", virkemiddel.getNavn(), joinedList);
             throw new VirkemiddelNotErasableException(String.format("The virkemiddel %s is in use and cannot be erased. \n Currently in use at: %s", virkemiddel.getNavn(), joinedList.toString()));
         }
     }
-
     @Override
     public Page<Virkemiddel> getAll(Pageable page) {
         return virkemiddelRepo.findAll(page).map(GenericStorage::toVirkemiddel);
