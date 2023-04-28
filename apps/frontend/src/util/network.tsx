@@ -31,7 +31,8 @@ export const useNetworkStatus = () => {
 
   return (
     <Modal closeable={false} isOpen={error} onClose={clear}>
-      <ModalHeader>Nettverksfeil</ModalHeader>
+      
+      <ModalHeader>{error?.message ? error?.message : 'Nettverksfeil'}</ModalHeader>
       <ModalBody>{error?.response?.data?.message ? error?.response?.data?.message : error?.toString()}</ModalBody>
       <ModalFooter>
         <ModalButton onClick={clear} overrides={{ BaseButton: { style: { ...buttonContentStyle } } }}>
