@@ -1,15 +1,15 @@
 ingresses:
-  - https://etterlevelse-api.dev.intern.nav.no
+  - https://etterlevelse-api.intern.dev.nav.no
 replies:
-  - https://etterlevelse-api.dev.intern.nav.no/oauth2/callback
-  - https://etterlevelse.dev.intern.nav.no/oauth2/callback
+  - https://etterlevelse-api.intern.dev.nav.no/oauth2/callback
+  - https://etterlevelse.intern.dev.nav.no/oauth2/callback
   - http://localhost:8080/oauth2/callback
   - http://localhost:3000/oauth2/callback
 teamcat_ingress: teamkatalog-api.dev-fss-pub.nais.io
 polly_ingress: polly.dev-fss-pub.nais.io
 env:
   - name: ETTERLEV_SECURITY_REDIRECT_URIS
-    value: https://etterlevelse.dev.intern.nav.no,https://etterlevelse-api.dev.intern.nav.no,http://localhost:3000
+    value: https://etterlevelse.intern.dev.nav.no,https://etterlevelse-api.intern.dev.nav.no,http://localhost:3000
   - name: CLIENT_TEAMCAT_URL
     value: https://teamkatalog-api.dev-fss-pub.nais.io
   - name: CLIENT_TEAMCAT_FRONTEND_URL
