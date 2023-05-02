@@ -378,7 +378,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                       <EditKravMultiOptionField
                         marginBottom={inputMarginBottom}
                         name="relevansFor"
-                        label="Relevant for"
+                        label="Legg til relevante kategorier"
                         listName={ListName.RELEVANS}
                         tooltip={'Velg kategori(er) kravet er relevant for i nedtrekksmenyen. \n'}
                       />

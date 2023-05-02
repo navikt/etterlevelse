@@ -23,7 +23,7 @@ export const EditVirkemidler = () => {
       <FieldArray name="virkemidler">
         {(p) => {
           return (
-            <FormControl label={<LabelWithTooltip label={'Relevante virkemiddel for'} tooltip={'Velg vikemiddel(er) kravet er relevant for i nedtrekksmenyen. \n'} />}>
+            <FormControl label={<LabelWithTooltip label={'Legg til relevante virkemiddel'} tooltip={'Velg vikemiddel(er) som er relevant for kravet i nedtrekksmenyen. \n'} />}>
               <Block>
                 <CustomizedSelect
                   overrides={{
