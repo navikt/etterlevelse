@@ -39,7 +39,7 @@ export const useTilbakemeldinger = (kravNummer: number, kravVersjon: number) => 
   useEffect(() => {
     if (kravNummer && kravVersjon) {
       setLoading(true)
-      getTilbakemeldingForKrav(kravNummer, kravVersjon)
+      getTilbakemeldingForKravByKravNummer(kravNummer)
         .then((r) => {
           setData(r.content.sort((a, b) => moment(b.meldinger[b.meldinger.length - 1].tid).valueOf() - moment(a.meldinger[a.meldinger.length - 1].tid).valueOf()))
           setLoading(false)
