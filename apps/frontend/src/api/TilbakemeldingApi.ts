@@ -8,6 +8,10 @@ export const getTilbakemeldingForKrav = async (kravNummer: number, kravVersjon: 
   return (await axios.get<PageResponse<Tilbakemelding>>(`${env.backendBaseUrl}/tilbakemelding/${kravNummer}/${kravVersjon}`)).data
 }
 
+export const getTilbakemeldingForKravByKravNummer = async (kravNummer: number) => {
+  return (await axios.get<PageResponse<Tilbakemelding>>(`${env.backendBaseUrl}/tilbakemelding/${kravNummer}`)).data
+}
+
 export const createNewTilbakemelding = async (request: CreateTilbakemeldingRequest) => {
   return (await axios.post<Tilbakemelding>(`${env.backendBaseUrl}/tilbakemelding`, request)).data
 }
