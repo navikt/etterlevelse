@@ -100,7 +100,7 @@
     "@types/styletron-react": "^5.0.2",
     "@types/yup": "^0.32.0",
     "http-proxy-middleware": "^2.0.0",
-    "prettier": "2.8.7",
+    "prettier": "2.8.8",
     "react-helmet": "^6.1.0",
     "react-localization": "^1.0.15",
     "react-router-dom": "^6.4.0",
