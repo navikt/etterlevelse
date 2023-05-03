@@ -9,7 +9,10 @@ import java.util.UUID;
 
 public interface TilbakemeldingRepo extends JpaRepository<GenericStorage, UUID> {
 
+    @Query(value = "select * from generic_storage where data -> 'kravNummer' = to_jsonb(?1) and type = 'Tilbakemelding'", nativeQuery = true)
+    List<GenericStorage> findByKravNummer(int nummer);
+
     @Query(value = "select * from generic_storage where data -> 'kravNummer' = to_jsonb(?1) and data -> 'kravVersjon' = to_jsonb(?2) and type = 'Tilbakemelding'", nativeQuery = true)
-    List<GenericStorage> findByKravNummer(int nummer, int versjon);
+    List<GenericStorage> findByKravNummerAndVersion(int nummer, int versjon);
 
 }

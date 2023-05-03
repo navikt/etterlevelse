@@ -60,7 +60,7 @@ public class KravFieldResolver implements GraphQLResolver<KravResponse> {
     }
 
     public List<TilbakemeldingResponse> tilbakemeldinger(KravResponse krav) {
-        var tilbakemeldinger = tilbakemeldingService.getForKrav(krav.getKravNummer(), krav.getKravVersjon());
+        var tilbakemeldinger = tilbakemeldingService.getForKravByNumberAndVersion(krav.getKravNummer(), krav.getKravVersjon());
         return convert(tilbakemeldinger, Tilbakemelding::toResponse);
     }
 

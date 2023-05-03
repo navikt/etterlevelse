@@ -71,12 +71,21 @@ public class TilbakemeldingController {
         return ResponseEntity.ok(tilbakemelding.toResponse());
     }
 
-    @Operation(summary = "Get Tilbakemeldinger for krav")
-    @ApiResponse(description = "Tilbakemeldinger for krav")
+    @Operation(summary = "Get Tilbakemeldinger for krav and version")
+    @ApiResponse(description = "Tilbakemeldinger for krav and version")
     @GetMapping("/{kravNummer}/{kravVersjon}")
     public ResponseEntity<RestResponsePage<TilbakemeldingResponse>> getTilbakemeldinger(@PathVariable int kravNummer, @PathVariable int kravVersjon) {
         log.info("Get Tilbakemeldinger for krav K{}.{}", kravNummer, kravVersjon);
-        var tilbakemeldinger = tilbakemeldingService.getForKrav(kravNummer, kravVersjon);
+        var tilbakemeldinger = tilbakemeldingService.getForKravByNumberAndVersion(kravNummer, kravVersjon);
+        return ResponseEntity.ok(new RestResponsePage<>(tilbakemeldinger).convert(Tilbakemelding::toResponse));
+    }
+
+    @Operation(summary = "Get Tilbakemeldinger for krav by krav nummer")
+    @ApiResponse(description = "Tilbakemeldinger for krav by krav nummer")
+    @GetMapping("/{kravNummer}")
+    public ResponseEntity<RestResponsePage<TilbakemeldingResponse>> getTilbakemeldingerByKravNummer(@PathVariable int kravNummer) {
+        log.info("Get Tilbakemeldinger for krav K{}", kravNummer);
+        var tilbakemeldinger = tilbakemeldingService.getForKravByNumber(kravNummer);
         return ResponseEntity.ok(new RestResponsePage<>(tilbakemeldinger).convert(Tilbakemelding::toResponse));
     }
 

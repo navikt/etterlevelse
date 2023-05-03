@@ -49,8 +49,12 @@ public class TilbakemeldingService extends DomainService<Tilbakemelding> {
         this.tilbakemeldingRepo = tilbakemeldingRepo;
     }
 
-    public List<Tilbakemelding> getForKrav(int kravNummer, int kravVersjon) {
-        return to(tilbakemeldingRepo.findByKravNummer(kravNummer, kravVersjon), Tilbakemelding.class);
+    public List<Tilbakemelding> getForKravByNumberAndVersion(int kravNummer, int kravVersjon) {
+        return to(tilbakemeldingRepo.findByKravNummerAndVersion(kravNummer, kravVersjon), Tilbakemelding.class);
+    }
+
+    public List<Tilbakemelding> getForKravByNumber(int kravNummer) {
+        return to(tilbakemeldingRepo.findByKravNummer(kravNummer), Tilbakemelding.class);
     }
 
     @Transactional
