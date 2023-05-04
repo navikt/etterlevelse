@@ -138,11 +138,10 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
                               </LabelSmall>
                               <ParagraphSmall marginTop={0} marginBottom={0} marginLeft="24px" $style={{ fontSize: '14px' }}>
                                 <Block display="flex">
-
-                                  <Block >Sendt: {moment(t.meldinger[0].tid).format('lll')}</Block>
+                                  <Block>Sendt: {moment(t.meldinger[0].tid).format('lll')}</Block>
                                   <Block marginLeft="14px">
-                                  Kravversjon: K{t.kravNummer}.{t.kravVersjon}
-                                </Block>
+                                    Kravversjon: K{t.kravNummer}.{t.kravVersjon}
+                                  </Block>
                                 </Block>
                               </ParagraphSmall>
                             </Block>
