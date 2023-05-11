@@ -68,3 +68,24 @@ export const mapMeldingToFormValue = (melding: Partial<Melding>): Melding => {
     alertType: melding.alertType || AlertType.WARNING,
   }
 }
+
+export const meldingStatusToString = (status: MeldingStatus): string => {
+  switch (status) {
+    case MeldingStatus.ACTIVE:
+      return 'Synlig/Aktiv'
+    case MeldingStatus.DEACTIVE:
+      return 'Skjult/Deaktivert'
+  }
+}
+
+
+export const meldingTypeToString = (status: MeldingType): string => {
+  switch (status) {
+    case MeldingType.FORSIDE:
+      return 'Forside melding'
+    case MeldingType.SYSTEM:
+      return 'System melding'
+    case MeldingType.OM_ETTERLEVELSE:
+      return 'Om etterlevelse melding'
+  }
+}

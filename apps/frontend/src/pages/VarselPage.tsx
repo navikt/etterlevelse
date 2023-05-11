@@ -13,6 +13,7 @@ import { ObjectType } from '../components/admin/audit/AuditTypes'
 import { AuditRecentTable } from '../components/admin/audit/AuditRecentTable'
 import { ampli } from '../services/Amplitude'
 import EditOmEtterlevelse from '../components/varslinger/EditOmEtterlevelse'
+import VarselAdminPage from './VarselAdminPage'
 
 type Section = 'utsendtMelding' | MeldingType.SYSTEM | MeldingType.FORSIDE
 
@@ -117,6 +118,11 @@ const VarselTabs = () => {
           key: MeldingType.OM_ETTERLEVELSE,
           title: 'Om etterlevelse',
           content: <EditOmEtterlevelse melding={melding} setMelding={setMelding} isLoading={isLoading} maxChar={500} />,
+        },
+        {
+          key: 'Administrer meldinger',
+          title: 'Administrer meldinger',
+          content: <VarselAdminPage />,
         },
       ]}
     />
