@@ -11,13 +11,13 @@ export const getAuditLog = async (id: string) => {
 }
 
 export const getAudits = async (page: number, count: number, table?: ObjectType) => {
-  return (await axios.get<PageResponse<AuditItem>>(`${env.backendBaseUrl}/audit/?pageNumber=${page}&pageSize=${count}` + (table ? `&table=${table}` : ''))).data
+  return (await axios.get<PageResponse<AuditItem>>(`${env.backendBaseUrl}/audit?pageNumber=${page}&pageSize=${count}` + (table ? `&table=${table}` : ''))).data
 }
 
 export const getEvents = async (page: number, count: number, table: ObjectType, tableId?: string, action?: AuditAction) => {
   return (
     await axios.get<PageResponse<Event>>(
-      `${env.backendBaseUrl}/event/?pageNumber=${page}&pageSize=${count}&table=${table}` + (tableId ? `&tableId=${tableId}` : '') + (action ? `&action=${action}` : ''),
+      `${env.backendBaseUrl}/event?pageNumber=${page}&pageSize=${count}&table=${table}` + (tableId ? `&tableId=${tableId}` : '') + (action ? `&action=${action}` : ''),
     )
   ).data
 }
