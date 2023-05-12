@@ -17,7 +17,7 @@
     <properties>
         <java.version>17</java.version>
 
-        <hibernate-types-60.version>2.21.0</hibernate-types-60.version>
+        <hypersistence-utils-hibernate-60.version>3.3.2</hypersistence-utils-hibernate-60.version>
         <springdoc-openapi-ui.version>1.7.0</springdoc-openapi-ui.version>
         <simpleclient.version>0.16.0</simpleclient.version>
         <logstash-logback-encoder.version>7.3</logstash-logback-encoder.version>
@@ -203,9 +203,9 @@
             <scope>runtime</scope>
         </dependency>
         <dependency>
-            <groupId>com.vladmihalcea</groupId>
-            <artifactId>hibernate-types-60</artifactId>
-            <version>${hibernate-types-60.version}</version>
+            <groupId>io.hypersistence</groupId>
+            <artifactId>hypersistence-utils-hibernate-60</artifactId>
+            <version>${hypersistence-utils-hibernate-60.version}</version>
         </dependency>
         <dependency>
             <groupId>net.javacrumbs.shedlock</groupId>
