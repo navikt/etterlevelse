@@ -1,5 +1,6 @@
 package no.nav.data.etterlevelse.etterlevelse.domain;
 
+import jakarta.transaction.Transactional;
 import no.nav.data.common.storage.domain.GenericStorage;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -7,7 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
-import javax.transaction.Transactional;
 import java.util.List;
 import java.util.UUID;
 

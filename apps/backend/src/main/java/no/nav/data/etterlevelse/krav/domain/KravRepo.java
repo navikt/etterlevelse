@@ -1,5 +1,6 @@
 package no.nav.data.etterlevelse.krav.domain;
 
+import jakarta.transaction.Transactional;
 import no.nav.data.common.storage.domain.GenericStorage;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,7 +11,6 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import javax.transaction.Transactional;
 
 public interface KravRepo extends JpaRepository<GenericStorage, UUID>, KravRepoCustom {
 

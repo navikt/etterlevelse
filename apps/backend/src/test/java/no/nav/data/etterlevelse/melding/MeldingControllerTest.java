@@ -23,7 +23,7 @@ class MeldingControllerTest extends IntegrationTestBase {
         storageService.save(Melding.builder().build());
         storageService.save(Melding.builder().build());
 
-        var resp = restTemplate.getForEntity("/melding/", MeldingController.MeldingPage.class);
+        var resp = restTemplate.getForEntity("/melding", MeldingController.MeldingPage.class);
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
         var meldingResp = resp.getBody();
         assertThat(meldingResp).isNotNull();

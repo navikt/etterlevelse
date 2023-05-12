@@ -4,6 +4,10 @@ import com.nimbusds.jwt.JWTClaimsSet.Builder;
 import com.nimbusds.oauth2.sdk.id.Issuer;
 import com.nimbusds.openid.connect.sdk.SubjectType;
 import com.nimbusds.openid.connect.sdk.op.OIDCProviderMetadata;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.security.AppIdMapping;
 import no.nav.data.common.security.azure.AADAuthenticationProperties;
@@ -17,7 +21,6 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.client.BufferingClientHttpRequestFactory;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -32,10 +35,6 @@ import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 @Slf4j
 @Profile("test")
@@ -48,7 +47,7 @@ public class TestConfig {
             testRestTemplate.getRestTemplate().setRequestFactory(new BufferingClientHttpRequestFactory(testRestTemplate.getRestTemplate().getRequestFactory()));
             testRestTemplate.getRestTemplate().setErrorHandler(new DefaultResponseErrorHandler() {
                 @Override
-                public void handleError(ClientHttpResponse response, HttpStatus statusCode) {
+                public void handleError(ClientHttpResponse response) {
                     log.error(new String(getResponseBody(response), Optional.ofNullable(getCharset(response)).orElse(Charset.defaultCharset())));
                 }
             });

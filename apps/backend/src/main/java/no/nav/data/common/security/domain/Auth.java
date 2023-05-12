@@ -1,20 +1,19 @@
 package no.nav.data.common.security.domain;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import no.nav.data.common.security.Encryptor;
-import org.hibernate.annotations.Type;
 import org.springframework.util.Assert;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Transient;
 
 @Data
 @Builder
@@ -25,7 +24,6 @@ import javax.persistence.Transient;
 public class Auth {
 
     @Id
-    @Type(type = "pg-uuid")
     @Column(name = "ID")
     private UUID id;
 
