@@ -4,4 +4,4 @@
 
 url for løsningen:
 - prod: https://etterlevelse.intern.nav.no/
-- dev: https://etterlevelse.dev.intern.nav.no/
+- dev: https://etterlevelse.intern.dev.nav.no/
