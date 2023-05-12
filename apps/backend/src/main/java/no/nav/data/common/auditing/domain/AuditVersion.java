@@ -1,5 +1,13 @@
 package no.nav.data.common.auditing.domain;
 
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,13 +23,6 @@ import org.hibernate.annotations.Type;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Transient;
 
 @Data
 @Builder
@@ -33,7 +34,6 @@ import javax.persistence.Transient;
 public class AuditVersion {
 
     @Id
-    @Type(type = "pg-uuid")
     @Column(name = "AUDIT_ID")
     @Builder.Default
     private UUID id = UUID.randomUUID();
@@ -58,7 +58,7 @@ public class AuditVersion {
     @Column(name = "VERSION", nullable = false, updatable = false)
     private Integer version;
 
-    @Type(type = "jsonb")
+    @Type(value = JsonBinaryType.class)
     @Column(name = "DATA", nullable = false, updatable = false)
     private String data;
 

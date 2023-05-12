@@ -2,13 +2,13 @@ package no.nav.data.etterlevelse.graphql;
 
 import graphql.kickstart.execution.context.GraphQLKickstartContext;
 import graphql.kickstart.servlet.context.GraphQLServletContextBuilder;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.websocket.Session;
+import jakarta.websocket.server.HandshakeRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.websocket.Session;
-import javax.websocket.server.HandshakeRequest;
 import java.util.HashMap;
 import java.util.Map;
 

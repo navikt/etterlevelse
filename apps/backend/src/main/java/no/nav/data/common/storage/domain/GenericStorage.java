@@ -2,6 +2,13 @@ package no.nav.data.common.storage.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -22,12 +29,6 @@ import no.nav.data.etterlevelse.virkemiddel.domain.Virkemiddel;
 import org.hibernate.annotations.Type;
 import org.springframework.util.Assert;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-import javax.validation.constraints.NotNull;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -45,7 +46,6 @@ import static no.nav.data.common.utils.StreamUtils.convert;
 public class GenericStorage extends Auditable {
 
     @Id
-    @Type(type = "pg-uuid")
     @Column(name = "ID")
     private UUID id;
 
@@ -53,7 +53,7 @@ public class GenericStorage extends Auditable {
     @Column(name = "TYPE", nullable = false, updatable = false)
     private String type;
 
-    @Type(type = "jsonb")
+    @Type(value = JsonBinaryType.class)
     @Column(name = "DATA", nullable = false)
     private JsonNode data;
 
