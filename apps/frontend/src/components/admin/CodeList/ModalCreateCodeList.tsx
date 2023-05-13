@@ -35,7 +35,7 @@ type ModalCreateProps = {
   onClose: () => void
 }
 
-const CreateCodeListModal = ({ isOpen, title, list, errorOnCreate, onClose, submit }: ModalCreateProps) => {
+const CreateCodeListModal = ({isOpen, title, list, errorOnCreate, onClose, submit}: ModalCreateProps) => {
   return (
     <Modal closeable={false} animate autoFocus size={SIZE.auto} role={ROLE.dialog} isOpen={isOpen} onClose={() => onClose()}>
       <Block {...modalBlockProps}>
@@ -54,7 +54,8 @@ const CreateCodeListModal = ({ isOpen, title, list, errorOnCreate, onClose, subm
             } as CodeListFormValues
           }
           validationSchema={codeListSchema}
-          render={({ submitForm }) => (
+        >
+          {({submitForm}) => (
             <Form>
               <ModalHeader>{title}</ModalHeader>
               <ModalBody>
@@ -62,29 +63,29 @@ const CreateCodeListModal = ({ isOpen, title, list, errorOnCreate, onClose, subm
                   <LabelMedium marginRight={'1rem'} width="25%">
                     Code:
                   </LabelMedium>
-                  <Field name="code" render={({ field }: FieldProps) => <CustomizedInput {...field} type="input" size={InputSIZE.default} />} />
+                  <Field name="code" render={({field}: FieldProps) => <CustomizedInput {...field} type="input" size={InputSIZE.default}/>}/>
                 </Block>
-                <Error fieldName="code" />
+                <Error fieldName="code"/>
 
                 <Block {...rowBlockProps}>
                   <LabelMedium marginRight={'1rem'} width="25%">
                     Short name:
                   </LabelMedium>
-                  <Field name="shortName" render={({ field }: FieldProps) => <CustomizedInput {...field} type="input" size={InputSIZE.default} />} />
+                  <Field name="shortName" render={({field}: FieldProps) => <CustomizedInput {...field} type="input" size={InputSIZE.default}/>}/>
                 </Block>
-                <Error fieldName="shortName" />
+                <Error fieldName="shortName"/>
 
                 <Block {...rowBlockProps}>
                   <LabelMedium marginRight={'1rem'} width="25%">
                     Description:
                   </LabelMedium>
-                  <Field name="description" render={({ field }: FieldProps) => <CustomizedTextarea {...field} type="input" rows={10} />} />
+                  <Field name="description" render={({field}: FieldProps) => <CustomizedTextarea {...field} type="input" rows={10}/>}/>
                 </Block>
-                <Error fieldName="description" />
-                {(list === ListName.LOV || list === ListName.TEMA) && <MarkdownInfo />}
+                <Error fieldName="description"/>
+                {(list === ListName.LOV || list === ListName.TEMA) && <MarkdownInfo/>}
 
-                {list === ListName.LOV && <LovCodeDataForm />}
-                {list === ListName.TEMA && <TemaCodeDataForm />}
+                {list === ListName.LOV && <LovCodeDataForm/>}
+                {list === ListName.TEMA && <TemaCodeDataForm/>}
               </ModalBody>
               <ModalFooter>
                 <Block display="flex" justifyContent="flex-end">
@@ -120,7 +121,7 @@ const CreateCodeListModal = ({ isOpen, title, list, errorOnCreate, onClose, subm
               </ModalFooter>
             </Form>
           )}
-        />
+        </Formik>
       </Block>
     </Modal>
   )
