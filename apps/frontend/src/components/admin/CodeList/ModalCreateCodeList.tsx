@@ -1,17 +1,17 @@
 import * as React from 'react'
-import { Modal, ModalBody, ModalButton, ModalFooter, ModalHeader, ROLE, SIZE } from 'baseui/modal'
-import { Block, BlockProps } from 'baseui/block'
-import { LabelMedium } from 'baseui/typography'
-import { Field, FieldProps, Form, Formik } from 'formik'
-import { SIZE as InputSIZE } from 'baseui/input'
-import { Button, KIND } from 'baseui/button'
-import { CodeListFormValues, codeListSchema, ListName } from '../../../services/Codelist'
-import { Error } from '../../common/ModalSchema'
-import { LovCodeDataForm, TemaCodeDataForm } from './LovCode'
-import { MarkdownInfo } from '../../common/Markdown'
+import {Modal, ModalBody, ModalButton, ModalFooter, ModalHeader, ROLE, SIZE} from 'baseui/modal'
+import {Block, BlockProps} from 'baseui/block'
+import {LabelMedium} from 'baseui/typography'
+import {Field, FieldProps, Form, Formik} from 'formik'
+import {SIZE as InputSIZE} from 'baseui/input'
+import {Button, KIND} from 'baseui/button'
+import {CodeListFormValues, codeListSchema, ListName} from '../../../services/Codelist'
+import {Error} from '../../common/ModalSchema'
+import {LovCodeDataForm, TemaCodeDataForm} from './LovCode'
+import {MarkdownInfo} from '../../common/Markdown'
 import CustomizedInput from '../../common/CustomizedInput'
 import CustomizedTextarea from '../../common/CustomizedTextarea'
-import { buttonContentStyle } from '../../common/Button'
+import {buttonContentStyle} from '../../common/Button'
 
 const modalBlockProps: BlockProps = {
   width: '700px',
@@ -53,7 +53,7 @@ const CreateCodeListModal = ({ isOpen, title, list, errorOnCreate, onClose, subm
               data: {},
             } as CodeListFormValues
           }
-          validationSchema={codeListSchema()}
+          validationSchema={codeListSchema}
           render={({ submitForm }) => (
             <Form>
               <ModalHeader>{title}</ModalHeader>
