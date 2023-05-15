@@ -1,7 +1,7 @@
-import {AxiosResponse} from 'axios'
-import {getAllCodelists} from '../api/CodelistApi'
+import { AxiosResponse } from 'axios'
+import { getAllCodelists } from '../api/CodelistApi'
 import * as yup from 'yup'
-import {Replace} from '../constants'
+import { Replace } from '../constants'
 
 export enum ListName {
   AVDELING = 'AVDELING',
@@ -216,16 +216,15 @@ export interface TemaCodeData {
 }
 
 const required = 'Påkrevd'
-export const codeListSchema: yup.ObjectSchema<CodeListFormValues> =
-  yup.object({
-    list: yup.string().required(required),
-    code: yup.string().required(required),
-    shortName: yup.string().required(required),
-    description: yup.string().required(required),
-    data: yup.object().shape({
-      shortDesciption: yup.string().max(200, 'Kort beskrivelse må være mindre enn 200 tegn'),
-    }),
-  })
+export const codeListSchema: yup.ObjectSchema<CodeListFormValues> = yup.object({
+  list: yup.string().required(required),
+  code: yup.string().required(required),
+  shortName: yup.string().required(required),
+  description: yup.string().required(required),
+  data: yup.object().shape({
+    shortDesciption: yup.string().max(200, 'Kort beskrivelse må være mindre enn 200 tegn'),
+  }),
+})
 
 export const codelistCompareField = (field: string) => {
   return (a: any, b: any) => codelistCompare((a[field] as Code) || undefined, (b[field] as Code) || undefined)

@@ -78,7 +78,6 @@ export const meldingStatusToString = (status: MeldingStatus): string => {
   }
 }
 
-
 export const meldingTypeToString = (status: MeldingType): string => {
   switch (status) {
     case MeldingType.FORSIDE:

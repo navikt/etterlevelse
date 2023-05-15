@@ -1,19 +1,19 @@
 import * as React from 'react'
-import {Modal, ModalBody, ModalButton, ModalFooter, ModalHeader, ROLE, SIZE} from 'baseui/modal'
+import { Modal, ModalBody, ModalButton, ModalFooter, ModalHeader, ROLE, SIZE } from 'baseui/modal'
 
-import {Field, FieldProps, Form, Formik, FormikProps} from 'formik'
+import { Field, FieldProps, Form, Formik, FormikProps } from 'formik'
 
-import {Button, KIND} from 'baseui/button'
-import {Block, BlockProps} from 'baseui/block'
-import {LabelMedium} from 'baseui/typography'
-import {SIZE as InputSIZE} from 'baseui/input'
-import {CodeListFormValues, codeListSchema, ListName} from '../../../services/Codelist'
-import {Error} from '../../common/ModalSchema'
-import {LovCodeDataForm, TemaCodeDataForm} from './LovCode'
-import {MarkdownInfo} from '../../common/Markdown'
+import { Button, KIND } from 'baseui/button'
+import { Block, BlockProps } from 'baseui/block'
+import { LabelMedium } from 'baseui/typography'
+import { SIZE as InputSIZE } from 'baseui/input'
+import { CodeListFormValues, codeListSchema, ListName } from '../../../services/Codelist'
+import { Error } from '../../common/ModalSchema'
+import { LovCodeDataForm, TemaCodeDataForm } from './LovCode'
+import { MarkdownInfo } from '../../common/Markdown'
 import CustomizedInput from '../../common/CustomizedInput'
 import CustomizedTextarea from '../../common/CustomizedTextarea'
-import {buttonContentStyle} from '../../common/Button'
+import { buttonContentStyle } from '../../common/Button'
 
 const modalBlockProps: BlockProps = {
   width: '700px',
