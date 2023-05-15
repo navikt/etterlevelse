@@ -1,27 +1,27 @@
-import { faSlackHash } from '@fortawesome/free-brands-svg-icons'
-import { faEnvelope, faThumbsUp, faUser } from '@fortawesome/free-solid-svg-icons'
-import { Block } from 'baseui/block'
+import {faSlackHash} from '@fortawesome/free-brands-svg-icons'
+import {faEnvelope, faThumbsUp, faUser} from '@fortawesome/free-solid-svg-icons'
+import {Block} from 'baseui/block'
 import Button from '../../../common/Button'
-import { FormControl } from 'baseui/form-control'
-import { ModalBody, ModalFooter, ModalHeader } from 'baseui/modal'
-import { HeadingLarge, HeadingXLarge, LabelLarge, ParagraphLarge, ParagraphMedium } from 'baseui/typography'
-import { Field, FieldProps, Form, Formik } from 'formik'
-import { useState } from 'react'
-import { createNewTilbakemelding, CreateTilbakemeldingRequest } from '../../../../api/TilbakemeldingApi'
-import { AdresseType, Krav, Tilbakemelding, TilbakemeldingMeldingStatus, TilbakemeldingType, Varslingsadresse } from '../../../../constants'
-import { theme } from '../../../../util'
+import {FormControl} from 'baseui/form-control'
+import {ModalBody, ModalFooter, ModalHeader} from 'baseui/modal'
+import {HeadingLarge, HeadingXLarge, LabelLarge, ParagraphLarge, ParagraphMedium} from 'baseui/typography'
+import {Field, FieldProps, Form, Formik} from 'formik'
+import {useState} from 'react'
+import {createNewTilbakemelding, CreateTilbakemeldingRequest} from '../../../../api/TilbakemeldingApi'
+import {AdresseType, Krav, Tilbakemelding, TilbakemeldingMeldingStatus, TilbakemeldingType, Varslingsadresse} from '../../../../constants'
+import {theme} from '../../../../util'
 import CustomizedModal from '../../../common/CustomizedModal'
-import { TextAreaField } from '../../../common/Inputs'
+import {TextAreaField} from '../../../common/Inputs'
 import LabelWithTooltip from '../../../common/LabelWithTooltip'
-import { AddEmail, SlackChannelSearch, SlackUserSearch, VarslingsadresserTagList } from '../../Edit/KravVarslingsadresserEdit'
-import { Notification } from 'baseui/notification'
+import {AddEmail, SlackChannelSearch, SlackUserSearch, VarslingsadresserTagList} from '../../Edit/KravVarslingsadresserEdit'
+import {Notification} from 'baseui/notification'
 import * as yup from 'yup'
-import { Card } from 'baseui/card'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { ettlevColors } from '../../../../util/theme'
-import { borderColor, borderRadius, borderWidth } from '../../../common/Style'
-import { CustomizedAccordion, CustomizedPanel } from '../../../common/CustomizedAccordion'
-import { Markdown } from '../../../common/Markdown'
+import {Card} from 'baseui/card'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {ettlevColors} from '../../../../util/theme'
+import {borderColor, borderRadius, borderWidth} from '../../../common/Style'
+import {CustomizedAccordion, CustomizedPanel} from '../../../common/CustomizedAccordion'
+import {Markdown} from '../../../common/Markdown'
 
 type NyTilbakemeldingModalProps = {
   open?: boolean
@@ -243,19 +243,19 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: NyTilbakemeldingMod
 
 const required = 'Påkrevd'
 
-const varslingsadresse: yup.SchemaOf<Varslingsadresse> = yup.object({
+const varslingsadresseSchema: yup.ObjectSchema<Varslingsadresse> = yup.object({
   adresse: yup.string().required(required),
-  type: yup.mixed().oneOf(Object.values(AdresseType)).required(required),
+  type: yup.mixed<AdresseType>().oneOf(Object.values(AdresseType)).required(required)
 })
 
-const createTilbakemeldingSchema: yup.SchemaOf<CreateTilbakemeldingRequest> = yup.object({
+const createTilbakemeldingSchema: yup.ObjectSchema<CreateTilbakemeldingRequest> = yup.object({
   kravNummer: yup.number().required(required),
   kravVersjon: yup.number().required(required),
   foersteMelding: yup.string().required(required),
-  type: yup.mixed().oneOf(Object.values(TilbakemeldingType)).required(required),
-  status: yup.mixed().oneOf(Object.values(TilbakemeldingMeldingStatus)).required(required),
+  type: yup.mixed<TilbakemeldingType>().oneOf(Object.values(TilbakemeldingType)).required(required),
+  status: yup.mixed<TilbakemeldingMeldingStatus>().oneOf(Object.values(TilbakemeldingMeldingStatus)).required(required),
   endretKrav: yup.boolean().required(required),
-  varslingsadresse: varslingsadresse.required(required),
+  varslingsadresse: varslingsadresseSchema.required(required),
 })
 
 const newTilbakemelding = (krav: Krav): Partial<CreateTilbakemeldingRequest> => ({
