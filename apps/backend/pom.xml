@@ -255,7 +255,7 @@
         <dependency>
             <groupId>com.vladsch.flexmark</groupId>
             <artifactId>flexmark-docx-converter</artifactId>
-            <version>0.64.4</version>
+            <version>0.64.6</version>
             <exclusions>
                 <exclusion>
                     <groupId>commons-logging</groupId>
