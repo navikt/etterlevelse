@@ -26,12 +26,12 @@
         <graphql-spring-boot-starter.version>15.0.0</graphql-spring-boot-starter.version>
         <graphql.version>20.2</graphql.version>
 
-        <microsoft-graph.version>5.57.0</microsoft-graph.version>
+        <microsoft-graph.version>5.58.0</microsoft-graph.version>
         <msal4j.version>1.13.8</msal4j.version>
 
         <!-- transitive versions -->
         <commons-compress.version>1.23.0</commons-compress.version>
-        <commons-io.version>2.11.0</commons-io.version>
+        <commons-io.version>2.12.0</commons-io.version>
         <guava.version>31.1-jre</guava.version>
         <jna.version>5.13.0</jna.version>
         <jetbrains.annotation.version>24.0.1</jetbrains.annotation.version>
@@ -250,12 +250,12 @@
         <dependency>
             <groupId>com.vladsch.flexmark</groupId>
             <artifactId>flexmark-all</artifactId>
-            <version>0.64.4</version>
+            <version>0.64.6</version>
         </dependency>
         <dependency>
             <groupId>com.vladsch.flexmark</groupId>
             <artifactId>flexmark-docx-converter</artifactId>
-            <version>0.64.4</version>
+            <version>0.64.6</version>
             <exclusions>
                 <exclusion>
                     <groupId>commons-logging</groupId>
