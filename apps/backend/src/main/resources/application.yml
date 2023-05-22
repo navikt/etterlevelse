@@ -24,9 +24,9 @@ management:
   info:
     git:
       mode: simple
-  metrics:
-    export:
-      prometheus:
+  prometheus:
+    metrics:
+      export:
         enabled: true
 
 server:
@@ -68,7 +68,7 @@ springdoc:
   api-docs:
     path: /swagger-docs
     disable-swagger-default-url: true
-  swagger-iu:
+  swagger-ui:
     path: /swagger-ui
     disable-swagger-default-url: true
   packages-to-scan: no.nav.data
