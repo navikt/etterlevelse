@@ -38,6 +38,7 @@ public class WebSecurityConfig {
 
         } else {
             allowAll(http,
+                    "/error",
                     "/login",
                     "/oauth2/callback",
                     "/userinfo",
