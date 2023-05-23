@@ -22,6 +22,7 @@ import { ettlevColors } from '../../../../util/theme'
 import { borderColor, borderRadius, borderWidth } from '../../../common/Style'
 import { CustomizedAccordion, CustomizedPanel } from '../../../common/CustomizedAccordion'
 import { Markdown } from '../../../common/Markdown'
+import { Error } from '../../../common/ModalSchema'
 
 type NyTilbakemeldingModalProps = {
   open?: boolean
@@ -76,7 +77,7 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: NyTilbakemeldingMod
         validateOnBlur={false}
         validateOnChange={false}
       >
-        {({ isSubmitting, setFieldValue, values, submitForm }) => {
+        {({ isSubmitting, setFieldValue, values, submitForm, errors }) => {
           const setVarslingsadresse = (v?: Varslingsadresse) => {
             setFieldValue('varslingsadresse', v)
             setAdresseType(undefined)
@@ -160,7 +161,9 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: NyTilbakemeldingMod
                         )
                       })}
                     </CustomizedAccordion>
+
                     <TextAreaField tooltip="Skriv ditt spørsmål i tekstfeltet" label="Ditt spørsmål" name="foersteMelding" placeholder="Skriv her.." />
+                    {errors.foersteMelding && <Error fieldName='foersteMelding' fullWidth/>}
 
                     {/* <OptionField label="Type" name="type" clearable={false} options={Object.values(TilbakemeldingType).map((o) => ({ id: o, label: typeText(o) }))} /> */}
                     <Field name="varslingsadresse.adresse">
@@ -244,8 +247,8 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: NyTilbakemeldingMod
 const required = 'Påkrevd'
 
 const varslingsadresseSchema: yup.ObjectSchema<Varslingsadresse> = yup.object({
-  adresse: yup.string().required(required),
-  type: yup.mixed<AdresseType>().oneOf(Object.values(AdresseType)).required(required),
+  adresse: yup.string().required('Det er påkrevd å ha minst en varslingsadresse'),
+  type: yup.mixed<AdresseType>().oneOf(Object.values(AdresseType)).required('Det er påkrevd å ha minst en varslingsadresse'),
 })
 
 const createTilbakemeldingSchema: yup.ObjectSchema<CreateTilbakemeldingRequest> = yup.object({
@@ -255,7 +258,7 @@ const createTilbakemeldingSchema: yup.ObjectSchema<CreateTilbakemeldingRequest> 
   type: yup.mixed<TilbakemeldingType>().oneOf(Object.values(TilbakemeldingType)).required(required),
   status: yup.mixed<TilbakemeldingMeldingStatus>().oneOf(Object.values(TilbakemeldingMeldingStatus)).required(required),
   endretKrav: yup.boolean().required(required),
-  varslingsadresse: varslingsadresseSchema.required(required),
+  varslingsadresse: varslingsadresseSchema.required('Det er påkrevd å ha minst en varslingsadresse'),
 })
 
 const newTilbakemelding = (krav: Krav): Partial<CreateTilbakemeldingRequest> => ({
