@@ -68,6 +68,7 @@ springdoc:
   api-docs:
     path: /swagger-docs
     disable-swagger-default-url: true
+    enabled: false
   swagger-ui:
     path: /swagger-ui
     disable-swagger-default-url: true
