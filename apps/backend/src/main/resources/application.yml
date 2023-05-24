@@ -67,7 +67,6 @@ spring:
 springdoc:
   api-docs:
     path: /swagger-docs
-    enabled: false
   swagger-ui:
     path: /swagger-ui
   packages-to-scan: no.nav.data
