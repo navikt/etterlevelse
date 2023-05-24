@@ -67,8 +67,10 @@ spring:
 springdoc:
   api-docs:
     path: /swagger-docs
+    enabled: true
   swagger-ui:
     path: /swagger-ui
+    enabled: true
   packages-to-scan: no.nav.data
   paths-to-exclude: /error, /internal/**
 
