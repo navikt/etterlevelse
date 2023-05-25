@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { Block } from 'baseui/block'
 import { theme } from '../util'
 import { HeadingXXLarge } from 'baseui/typography'
@@ -11,11 +11,17 @@ import { ampli } from '../services/Amplitude'
 import { user } from '../services/User'
 
 const Forbidden = () => {
+  const params = useParams<{ role?: string }>()
+
   const navigate = useNavigate()
 
   setTimeout(() => {
     if (user.isLoggedIn()) {
-      navigate(-1)
+      if (params.role === 'admin' && user.isAdmin()) {
+        navigate(-1)
+      } else if ( params.role === 'kraveier' && (user.isKraveier() || user.isAdmin())) {
+        navigate(-1)
+      }
     }
   }, 1)
 

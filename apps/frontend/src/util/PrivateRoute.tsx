@@ -30,13 +30,13 @@ export const PrivateRoute = ({ component, adminPage, kraveierPage }: PrivateRout
       if (user.isAdmin()) {
         return component
       } else {
-        return <Navigate to={{ pathname: '/forbidden' }} />
+        return <Navigate to={{ pathname: '/forbidden', search: '?role=admin' }} />
       }
     } else if (kraveierPage) {
       if (user.isKraveier() || user.isAdmin()) {
         return component
       } else {
-        return <Navigate to={{ pathname: '/forbidden' }} />
+        return <Navigate to={{ pathname: '/forbidden', search: '?role=kraveier' }} />
       }
     } else {
       return component
