@@ -163,7 +163,7 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: NyTilbakemeldingMod
                     </CustomizedAccordion>
 
                     <TextAreaField tooltip="Skriv ditt spørsmål i tekstfeltet" label="Ditt spørsmål" name="foersteMelding" placeholder="Skriv her.." />
-                    {errors.foersteMelding && <Error fieldName='foersteMelding' fullWidth/>}
+                    {errors.foersteMelding && <Error fieldName="foersteMelding" fullWidth />}
 
                     {/* <OptionField label="Type" name="type" clearable={false} options={Object.values(TilbakemeldingType).map((o) => ({ id: o, label: typeText(o) }))} /> */}
                     <Field name="varslingsadresse.adresse">
