@@ -23,7 +23,7 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
 
   const etterlevelser = (krav.etterlevelser || [])
     .filter((e) => e.status === EtterlevelseStatus.FERDIG_DOKUMENTERT)
-    .sort((a, b) => a.behandling.navn.localeCompare(b.behandling.navn))
+    .sort((a, b) => (a.behandling.navn || '').localeCompare(b.behandling.navn || ''))
     .filter((e) => e.behandling.navn !== 'LEGACY_DATA')
 
   etterlevelser.map((e) => {
