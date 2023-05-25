@@ -56,6 +56,7 @@ spring:
     timeout-per-shutdown-phase: 20s
   main:
     cloud-platform: kubernetes
+    allow-bean-definition-overriding: true
   servlet:
     multipart:
       enabled: true
