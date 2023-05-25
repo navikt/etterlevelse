@@ -30,7 +30,7 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
         return -1
       }
     })
-    .filter((e) => e.behandling.navn !== 'LEGACY_DATA')
+    .filter((e) => e.behandling && e.behandling.navn !== 'LEGACY_DATA')
 
   etterlevelser.map((e) => {
     if (!e.behandling.avdeling) {
