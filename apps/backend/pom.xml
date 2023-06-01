@@ -18,7 +18,7 @@
         <java.version>17</java.version>
 
         <springdoc-openapi-starter-webmvc-ui.version>2.1.0</springdoc-openapi-starter-webmvc-ui.version>
-        <hypersistence-utils-hibernate-60.version>3.4.1</hypersistence-utils-hibernate-60.version>
+        <hypersistence-utils-hibernate-60.version>3.4.2</hypersistence-utils-hibernate-60.version>
         <simpleclient.version>0.16.0</simpleclient.version>
         <logstash-logback-encoder.version>7.3</logstash-logback-encoder.version>
         <shedlock.version>5.3.0</shedlock.version>
@@ -39,7 +39,7 @@
         <stax2-api.version>4.2.1</stax2-api.version>
 
         <!-- Test -->
-        <testcontainers.version>1.18.1</testcontainers.version>
+        <testcontainers.version>1.18.2</testcontainers.version>
         <wiremock.version>2.27.2</wiremock.version>
         <docx4j.version>11.4.9</docx4j.version>
     </properties>
