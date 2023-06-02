@@ -35,74 +35,74 @@ public class WebSecurityConfig {
         addFilters(http);
 
         if (securityProperties == null || !securityProperties.isEnabled()) {
-            http.authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
-
-        } else {
-            allowAll(http,
-                    "/error",
-                    "/login",
-                    "/oauth2/callback",
-                    "/userinfo",
-                    "/internal/**",
-                    "/swagger*/**",
-
-                    // Graphql
-                    "/playground*/**",
-                    "/voyager*/**",
-                    "/vendor/voyager/**",
-                    "/vendor/playground/**",
-                    "/graphql*/**"
-            );
-
-            allowGetAndOptions(http,
-                    "/settings/**",
-//                    "/codelist/**",
-
-                    "/krav/**",
-                    "/kravprioritering/**",
-                    "/etterlevelse/**",
-                    "/etterlevelsedokumentasjon/**",
-                    "/behandling/**",
-                    "/tilbakemelding/**",
-                    "/etterlevelsemetadata/**",
-                    "/melding/**",
-                    "/export/**",
-                    "/statistikk/**",
-                    "/team/**",
-                    "/begrep/**",
-                    "/etterlevelsearkiv/**",
-                    "/virkemiddel/**"
-            );
-
-            adminOnly(http,
-                    "/audit/**",
-                    "/settings/**",
-//                    "/codelist/**",
-                    "/export/codelist/**",
-                    "/etterlevelse/update/behandlingid/**",
-                    "/etterlevelsearkiv/status/arkivert",
-                    "/etterlevelsearkiv/admin/update"
-            );
-
-            http.authorizeHttpRequests(auth -> auth.requestMatchers("/krav/**").hasAnyRole(AppRole.KRAVEIER.name(), AppRole.ADMIN.name()));
-
-            http.authorizeHttpRequests(auth -> auth.requestMatchers("/tilbakemelding/**").hasAnyRole(AppRole.WRITE.name(), AppRole.ADMIN.name(), AppRole.KRAVEIER.name()));
-            http.authorizeHttpRequests(auth -> auth.requestMatchers("/tilbakemelding/status/**").hasAnyRole(AppRole.ADMIN.name(), AppRole.KRAVEIER.name()));
-            http.authorizeHttpRequests(auth -> auth.requestMatchers("/export/**").hasAnyRole(AppRole.WRITE.name(), AppRole.ADMIN.name(), AppRole.KRAVEIER.name()));
-            http.authorizeHttpRequests(auth -> auth.requestMatchers("/kravprioritering/**").hasAnyRole(AppRole.KRAVEIER.name(), AppRole.ADMIN.name()));
-            http.authorizeHttpRequests(auth -> auth.requestMatchers("/etterlevelse/**").hasAnyRole(AppRole.WRITE.name(), AppRole.KRAVEIER.name(), AppRole.ADMIN.name()));
-            http.authorizeHttpRequests(auth -> auth.requestMatchers("/etterlevelsedokumentasjon/**").hasAnyRole(AppRole.WRITE.name(), AppRole.KRAVEIER.name(), AppRole.ADMIN.name()));
-            http.authorizeHttpRequests(auth -> auth.requestMatchers("/etterlevelsemetadata/**").hasAnyRole(AppRole.ADMIN.name(), AppRole.WRITE.name()));
-            http.authorizeHttpRequests(auth -> auth.requestMatchers("/behandling/**").hasAnyRole(AppRole.KRAVEIER.name(), AppRole.ADMIN.name(), AppRole.WRITE.name()));
-            http.authorizeHttpRequests(auth -> auth.requestMatchers("/melding/**").hasAnyRole(AppRole.ADMIN.name()));
-            http.authorizeHttpRequests(auth -> auth.requestMatchers("/etterlevelsearkiv/**").hasAnyRole(AppRole.WRITE.name()));
-            http.authorizeHttpRequests(auth -> auth.requestMatchers("/etterlevelse/update/behandlingid/**").hasAnyRole(AppRole.ADMIN.name()));
-            http.authorizeHttpRequests(auth -> auth.requestMatchers("/virkemiddel/**").hasAnyRole(AppRole.KRAVEIER.name(), AppRole.ADMIN.name()));
-
-            http.authorizeHttpRequests(auth -> auth.requestMatchers("/logout").authenticated());
-
-            http.authorizeHttpRequests(auth -> auth.anyRequest().hasRole(AppRole.WRITE.name()));
+            return http.authorizeHttpRequests(auth -> auth.anyRequest().permitAll()).build();
         }
+
+        allowAll(http,
+                "/error",
+                "/login",
+                "/oauth2/callback",
+                "/userinfo",
+                "/internal/**",
+                "/swagger*/**",
+
+                // Graphql
+                "/playground*/**",
+                "/voyager*/**",
+                "/vendor/voyager/**",
+                "/vendor/playground/**",
+                "/graphql*/**"
+        );
+
+        allowGetAndOptions(http,
+                "/settings/**",
+//                    "/codelist/**",
+
+                "/krav/**",
+                "/kravprioritering/**",
+                "/etterlevelse/**",
+                "/etterlevelsedokumentasjon/**",
+                "/behandling/**",
+                "/tilbakemelding/**",
+                "/etterlevelsemetadata/**",
+                "/melding/**",
+                "/export/**",
+                "/statistikk/**",
+                "/team/**",
+                "/begrep/**",
+                "/etterlevelsearkiv/**",
+                "/virkemiddel/**"
+        );
+
+        adminOnly(http,
+                "/audit/**",
+                "/settings/**",
+//                    "/codelist/**",
+                "/export/codelist/**",
+                "/etterlevelse/update/behandlingid/**",
+                "/etterlevelsearkiv/status/arkivert",
+                "/etterlevelsearkiv/admin/update"
+        );
+
+        http.authorizeHttpRequests(auth -> auth.requestMatchers("/krav/**").hasAnyRole(AppRole.KRAVEIER.name(), AppRole.ADMIN.name()));
+
+        http.authorizeHttpRequests(auth -> auth.requestMatchers("/tilbakemelding/**").hasAnyRole(AppRole.WRITE.name(), AppRole.ADMIN.name(), AppRole.KRAVEIER.name()));
+        http.authorizeHttpRequests(auth -> auth.requestMatchers("/tilbakemelding/status/**").hasAnyRole(AppRole.ADMIN.name(), AppRole.KRAVEIER.name()));
+        http.authorizeHttpRequests(auth -> auth.requestMatchers("/export/**").hasAnyRole(AppRole.WRITE.name(), AppRole.ADMIN.name(), AppRole.KRAVEIER.name()));
+        http.authorizeHttpRequests(auth -> auth.requestMatchers("/kravprioritering/**").hasAnyRole(AppRole.KRAVEIER.name(), AppRole.ADMIN.name()));
+        http.authorizeHttpRequests(auth -> auth.requestMatchers("/etterlevelse/**").hasAnyRole(AppRole.WRITE.name(), AppRole.KRAVEIER.name(), AppRole.ADMIN.name()));
+        http.authorizeHttpRequests(auth -> auth.requestMatchers("/etterlevelsedokumentasjon/**").hasAnyRole(AppRole.WRITE.name(), AppRole.KRAVEIER.name(), AppRole.ADMIN.name()));
+        http.authorizeHttpRequests(auth -> auth.requestMatchers("/etterlevelsemetadata/**").hasAnyRole(AppRole.ADMIN.name(), AppRole.WRITE.name()));
+        http.authorizeHttpRequests(auth -> auth.requestMatchers("/behandling/**").hasAnyRole(AppRole.KRAVEIER.name(), AppRole.ADMIN.name(), AppRole.WRITE.name()));
+        http.authorizeHttpRequests(auth -> auth.requestMatchers("/melding/**").hasAnyRole(AppRole.ADMIN.name()));
+        http.authorizeHttpRequests(auth -> auth.requestMatchers("/etterlevelsearkiv/**").hasAnyRole(AppRole.WRITE.name()));
+        http.authorizeHttpRequests(auth -> auth.requestMatchers("/etterlevelse/update/behandlingid/**").hasAnyRole(AppRole.ADMIN.name()));
+        http.authorizeHttpRequests(auth -> auth.requestMatchers("/virkemiddel/**").hasAnyRole(AppRole.KRAVEIER.name(), AppRole.ADMIN.name()));
+
+        http.authorizeHttpRequests(auth -> auth.requestMatchers("/logout").authenticated());
+
+        http.authorizeHttpRequests(auth -> auth.anyRequest().hasRole(AppRole.WRITE.name()));
+
         return http.build();
     }
 
