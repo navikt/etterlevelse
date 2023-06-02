@@ -52,8 +52,7 @@ public class WebSecurityConfig {
                     "/vendor/voyager/**",
                     "/vendor/playground/**",
                     "/graphql",
-                    "/graphql/**",
-                    "/graphql*/**"
+                    "/graphql/**"
             );
 
             allowGetAndOptions(http,
