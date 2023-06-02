@@ -51,6 +51,7 @@ public class WebSecurityConfig {
                     "/voyager*/**",
                     "/vendor/voyager/**",
                     "/vendor/playground/**",
+                    "/graphql/**",
                     "/graphql*/**"
             );
 
