@@ -56,7 +56,7 @@ public class WebSecurityConfig {
 
             allowGetAndOptions(http,
                     "/settings/**",
-                    "/codelist/**",
+//                    "/codelist/**",
 
                     "/krav/**",
                     "/kravprioritering/**",
