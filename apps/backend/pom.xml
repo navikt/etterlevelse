@@ -18,7 +18,7 @@
         <java.version>17</java.version>
 
         <springdoc-openapi-starter-webmvc-ui.version>2.1.0</springdoc-openapi-starter-webmvc-ui.version>
-        <hypersistence-utils-hibernate-60.version>3.3.2</hypersistence-utils-hibernate-60.version>
+        <hypersistence-utils-hibernate-60.version>3.4.2</hypersistence-utils-hibernate-60.version>
         <simpleclient.version>0.16.0</simpleclient.version>
         <logstash-logback-encoder.version>7.3</logstash-logback-encoder.version>
         <shedlock.version>5.3.0</shedlock.version>
@@ -27,19 +27,19 @@
         <graphql.version>20.2</graphql.version>
         <flexmark.version>0.64.8</flexmark.version>
 
-        <microsoft-graph.version>5.58.0</microsoft-graph.version>
+        <microsoft-graph.version>5.59.0</microsoft-graph.version>
         <msal4j.version>1.13.8</msal4j.version>
 
         <!-- transitive versions -->
         <commons-compress.version>1.23.0</commons-compress.version>
         <commons-io.version>2.12.0</commons-io.version>
-        <guava.version>31.1-jre</guava.version>
+        <guava.version>32.0.0-jre</guava.version>
         <jna.version>5.13.0</jna.version>
         <jetbrains.annotation.version>24.0.1</jetbrains.annotation.version>
         <stax2-api.version>4.2.1</stax2-api.version>
 
         <!-- Test -->
-        <testcontainers.version>1.18.1</testcontainers.version>
+        <testcontainers.version>1.18.2</testcontainers.version>
         <wiremock.version>2.27.2</wiremock.version>
         <docx4j.version>11.4.9</docx4j.version>
     </properties>
@@ -164,7 +164,7 @@
         <dependency>
             <groupId>com.graphql-java</groupId>
             <artifactId>graphql-java</artifactId>
-            <version>20.2</version>
+            <version>20.3</version>
         </dependency>
 
         <!-- Security -->

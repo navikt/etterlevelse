@@ -20,6 +20,7 @@ public class UserInfoResponse {
     private String ident;
     private String name;
     private String email;
+    @Builder.Default
     private List<String> groups = new ArrayList<>();
 
     public static UserInfoResponse noUser(boolean securityEnabled) {
