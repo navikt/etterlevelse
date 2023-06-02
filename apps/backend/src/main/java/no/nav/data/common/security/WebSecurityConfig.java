@@ -77,7 +77,7 @@ public class WebSecurityConfig {
             adminOnly(http,
                     "/audit/**",
                     "/settings/**",
-                    "/codelist/**",
+//                    "/codelist/**",
                     "/export/codelist/**",
                     "/etterlevelse/update/behandlingid/**",
                     "/etterlevelsearkiv/status/arkivert",
