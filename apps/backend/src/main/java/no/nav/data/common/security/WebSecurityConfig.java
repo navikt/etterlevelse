@@ -43,14 +43,18 @@ public class WebSecurityConfig {
                     "/oauth2/callback",
                     "/userinfo",
                     "/internal/**",
-                    "/swagger**/**",
+                    "/swagger*/**",
 
                     // Graphql
                     "/playground*/**",
                     "/voyager*/**",
                     "/vendor/voyager/**",
                     "/vendor/playground/**",
-                    "/graphql**/**"
+                    "/graphql*/**"
+            );
+
+            allowPost(http,
+                    "/graphql*/**"
             );
 
             allowGetAndOptions(http,
@@ -121,6 +125,12 @@ public class WebSecurityConfig {
         for (String path : paths) {
             http.authorizeHttpRequests(auth -> auth.requestMatchers(HttpMethod.GET, path).permitAll());
             http.authorizeHttpRequests(auth -> auth.requestMatchers(HttpMethod.OPTIONS, path).permitAll());
+        }
+    }
+
+    private void allowPost(HttpSecurity http, String... paths) throws Exception {
+        for (String path: paths) {
+            http.authorizeHttpRequests(auth -> auth.requestMatchers(HttpMethod.POST, path).permitAll());
         }
     }
 
