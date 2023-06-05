@@ -72,9 +72,7 @@ public class WebSecurityConfig {
                     "/team/**",
                     "/begrep/**",
                     "/etterlevelsearkiv/**",
-                    "/virkemiddel/**",
-                    "/graphql",
-                    "/graphql/**"
+                    "/virkemiddel/**"
             );
 
             adminOnly(http,
