@@ -38,8 +38,6 @@ public class WebSecurityConfig {
             http.authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
         } else {
 
-            http.authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
-
             allowAll(http,
                     "/error",
                     "/login",
@@ -55,6 +53,8 @@ public class WebSecurityConfig {
                     "/vendor/playground/**",
                     "/graphql*/**"
             );
+
+            http.authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
 
             allowGetAndOptions(http,
                     "/settings/**",
