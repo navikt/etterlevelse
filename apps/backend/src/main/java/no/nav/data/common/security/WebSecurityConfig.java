@@ -50,10 +50,16 @@ public class WebSecurityConfig {
                     "/voyager*/**",
                     "/vendor/voyager/**",
                     "/vendor/playground/**",
+                    "/graphql",
+                    "/graphql/**",
+                    "/graphql**/**",
                     "/graphql*/**"
             );
 
             allowPost(http,
+                    "/graphql",
+                    "/graphql/**",
+                    "/graphql**/**",
                     "/graphql*/**"
             );
 
