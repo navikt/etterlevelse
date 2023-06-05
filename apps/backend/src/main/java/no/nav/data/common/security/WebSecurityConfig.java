@@ -53,25 +53,25 @@ public class WebSecurityConfig {
                     "/graphql*/**"
             );
 
-//            allowGetAndOptions(http,
-//                    "/settings/**",
-//                    "/codelist/**",
-//
-//                    "/krav/**",
-//                    "/kravprioritering/**",
-//                    "/etterlevelse/**",
-//                    "/etterlevelsedokumentasjon/**",
-//                    "/behandling/**",
-//                    "/tilbakemelding/**",
-//                    "/etterlevelsemetadata/**",
-//                    "/melding/**",
-//                    "/export/**",
-//                    "/statistikk/**",
-//                    "/team/**",
-//                    "/begrep/**",
-//                    "/etterlevelsearkiv/**",
-//                    "/virkemiddel/**"
-//            );
+            allowGetAndOptions(http,
+                    "/settings/**",
+                    "/codelist/**",
+
+                    "/krav/**",
+                    "/kravprioritering/**",
+                    "/etterlevelse/**",
+                    "/etterlevelsedokumentasjon/**",
+                    "/behandling/**",
+                    "/tilbakemelding/**",
+                    "/etterlevelsemetadata/**",
+                    "/melding/**",
+                    "/export/**",
+                    "/statistikk/**",
+                    "/team/**",
+                    "/begrep/**",
+                    "/etterlevelsearkiv/**",
+                    "/virkemiddel/**"
+            );
 //
 //            adminOnly(http,
 //                    "/audit/**",
