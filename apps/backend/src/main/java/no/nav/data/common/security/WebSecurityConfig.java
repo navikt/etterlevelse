@@ -52,6 +52,7 @@ public class WebSecurityConfig {
                     "/vendor/voyager/**",
                     "/vendor/playground/**",
                     "/graphql*/**"
+
             );
 
             allowGetAndOptions(http,
@@ -71,7 +72,9 @@ public class WebSecurityConfig {
                     "/team/**",
                     "/begrep/**",
                     "/etterlevelsearkiv/**",
-                    "/virkemiddel/**"
+                    "/virkemiddel/**",
+                    "/graphql",
+                    "/graphql/**"
             );
 
             adminOnly(http,
