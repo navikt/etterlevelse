@@ -34,6 +34,8 @@ public class WebSecurityConfig {
                 .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         addFilters(http);
 
+
+        //Heirarchy structure. Top-down priority
         if (securityProperties == null || !securityProperties.isEnabled()) {
             http.authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
         } else {
