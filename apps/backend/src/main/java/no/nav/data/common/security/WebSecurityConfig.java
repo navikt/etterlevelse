@@ -51,7 +51,7 @@ public class WebSecurityConfig {
                     "/voyager*/**",
                     "/vendor/voyager/**",
                     "/vendor/playground/**",
-                    "/graphql"
+                    "api/graphql"
             );
 
             allowGetAndOptions(http,
@@ -101,7 +101,7 @@ public class WebSecurityConfig {
 
             http.authorizeHttpRequests(auth -> auth.requestMatchers("/logout").authenticated());
 
-           // http.authorizeHttpRequests(auth -> auth.anyRequest().hasRole(AppRole.WRITE.name()));
+            http.authorizeHttpRequests(auth -> auth.anyRequest().hasRole(AppRole.WRITE.name()));
         }
         return http.build();
     }
