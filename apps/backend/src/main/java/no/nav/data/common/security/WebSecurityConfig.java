@@ -37,7 +37,6 @@ public class WebSecurityConfig {
         if (securityProperties == null || !securityProperties.isEnabled()) {
             http.authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
         } else {
-            http.authorizeHttpRequests(auth -> auth.requestMatchers("/graphql*/**").permitAll());
             allowAll(http,
                     "/error",
                     "/login",
