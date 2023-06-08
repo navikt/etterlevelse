@@ -352,6 +352,7 @@ public class EtterlevelseDokumentasjonToDoc {
                 case OPPFYLT -> "Oppfylt";
                 case UNDER_ARBEID -> "Under arbeid";
                 case IKKE_RELEVANT -> "Ikke relevant";
+                case IKKE_OPPFYLT -> "Ikke oppfylt";
             };
         }
 
