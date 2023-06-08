@@ -177,7 +177,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                 <Form>
                   <InputField disablePlaceHolder label={'Tittel'} name={'title'} />
 
-                  <BoolField label="Er produktet/systemet tilknyttet et virkemiddel?" name="knyttetTilVirkemiddel" />
+                  {/* <BoolField label="Er produktet/systemet tilknyttet et virkemiddel?" name="knyttetTilVirkemiddel" /> */}
 
                   {values.knyttetTilVirkemiddel ? (
                     <FieldWrapper>
