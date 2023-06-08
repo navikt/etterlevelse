@@ -212,6 +212,8 @@ const KriterieBegrunnelse = ({
       return 'Hva er oppfylt og hva er under arbeid?'
     } else if (suksessKriterieStatus === SuksesskriterieStatus.OPPFYLT) {
       return 'Hvordan oppfylles kriteriet?'
+    } else if (suksessKriterieStatus === SuksesskriterieStatus.IKKE_OPPFYLT) {
+      return 'Hvorfor er ikke kriteriet oppfylt?'
     } else {
       return 'Hvorfor er ikke kriteriet relevant?'
     }
@@ -310,6 +312,9 @@ const KriterieBegrunnelse = ({
               </Radio>
               <Radio value={SuksesskriterieStatus.OPPFYLT} overrides={{ ...radioButtonOverrides }}>
                 <ParagraphMedium margin={0}> Oppfylt</ParagraphMedium>
+              </Radio>
+              <Radio value={SuksesskriterieStatus.IKKE_OPPFYLT} overrides={{ ...radioButtonOverrides }}>
+                <ParagraphMedium margin={0}> Ikke oppfylt</ParagraphMedium>
               </Radio>
               <Radio value={SuksesskriterieStatus.IKKE_RELEVANT} overrides={{ ...radioButtonOverrides }}>
                 <ParagraphMedium margin={0}>Ikke relevant</ParagraphMedium>

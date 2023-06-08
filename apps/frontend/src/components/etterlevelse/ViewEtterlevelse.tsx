@@ -271,7 +271,10 @@ export const ViewEtterlevelse = ({
                           )}
                           {etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT || suksessbeskrivelseBegrunnelse.suksesskriterieStatus === SuksesskriterieStatus.IKKE_RELEVANT
                             ? 'Ikke Relevant'
-                            : 'Oppfylt'}
+                            : suksessbeskrivelseBegrunnelse.suksesskriterieStatus === SuksesskriterieStatus.IKKE_OPPFYLT 
+                            ? 'Ikke oppfylt'
+                            : 'Oppfylt'
+                            }
                         </ParagraphXSmall>
                       </Block>
                     )}
@@ -320,6 +323,8 @@ export const ViewEtterlevelse = ({
                       <LabelSmall $style={{ lineHeight: '22px' }} marginTop="16px">
                         {suksessbeskrivelseBegrunnelse.suksesskriterieStatus === SuksesskriterieStatus.IKKE_RELEVANT
                           ? 'Hvorfor er ikke kriteriet relevant?'
+                          : suksessbeskrivelseBegrunnelse.suksesskriterieStatus === SuksesskriterieStatus.IKKE_OPPFYLT
+                          ? 'Hvorfor er kriteriet ikke oppfylt?'
                           : 'Hvordan er kriteriet oppfylt?'}
                       </LabelSmall>
                       <Block marginBottom={'48px'}>
