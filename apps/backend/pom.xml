@@ -18,7 +18,7 @@
         <java.version>17</java.version>
 
         <springdoc-openapi-starter-webmvc-ui.version>2.1.0</springdoc-openapi-starter-webmvc-ui.version>
-        <hypersistence-utils-hibernate-60.version>3.4.3</hypersistence-utils-hibernate-60.version>
+        <hypersistence-utils-hibernate-60.version>3.4.4</hypersistence-utils-hibernate-60.version>
         <simpleclient.version>0.16.0</simpleclient.version>
         <logstash-logback-encoder.version>7.4</logstash-logback-encoder.version>
         <shedlock.version>5.4.0</shedlock.version>
