@@ -77,7 +77,8 @@ spec:
             roles:
               - "arkiv-admin"
     outbound:
+      rules:
+        - application: behandlingskatalog-backend
       external:
         - host: {{teamcat_ingress}}
-        - host: {{polly_ingress}}
         - host: slack.com
