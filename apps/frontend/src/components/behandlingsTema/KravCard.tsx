@@ -16,6 +16,7 @@ import { arkCheckIcon, arkPennIcon, warningAlert } from '../Images'
 import { getEtterlevelserByBehandlingsIdKravNumber } from '../../api/EtterlevelseApi'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { getNumberOfDaysBetween } from '../../util/checkAge'
+import RouteLink from '../common/RouteLink'
 
 export const KravCard = (props: { krav: KravEtterlevelseData; noStatus?: boolean; behandlingId: string; noVarsling?: boolean; kravFilter: KRAV_FILTER_TYPE }) => {
   const [nyVersionFlag, setNyVersionFlag] = useState<boolean>(false)
@@ -77,24 +78,18 @@ export const KravCard = (props: { krav: KravEtterlevelseData; noStatus?: boolean
         },
       }}
     >
-      <Block width="100%">
-        <Button
-          notBold
+      <Block width="100%" paddingRight="24px" paddingTop="8px" paddingBottom="8px" paddingLeft="8px">
+        <RouteLink
+          href={location.pathname + '/krav/' + props.krav.kravNummer + '/' + props.krav.kravVersjon + '/'}
+          hideUnderline
           $style={{
             width: '100%',
-            paddingTop: '8px',
-            paddingBottom: '8px',
-            paddingRight: '24px',
-            paddingLeft: '8px',
             display: 'flex',
             justifyContent: 'flex-start',
             backgroundColor: ettlevColors.white,
             ...borderStyle('hidden'),
             ':hover': { backgroundColor: 'none', boxShadow: '' },
             boxShadow: '',
-          }}
-          onClick={() => {
-            navigate(location.pathname + '/krav/' + props.krav.kravNummer + '/' + props.krav.kravVersjon + '/')
           }}
         >
           <Block display="flex" justifyContent="center" alignItems="center" width="100%" onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
@@ -191,7 +186,7 @@ export const KravCard = (props: { krav: KravEtterlevelseData; noStatus?: boolean
               </Block>
             </Block>
           </Block>
-        </Button>
+        </RouteLink>
       </Block>
 
       {props.kravFilter === KRAV_FILTER_TYPE.RELEVANTE_KRAV && etterlevelseMetadata && (
