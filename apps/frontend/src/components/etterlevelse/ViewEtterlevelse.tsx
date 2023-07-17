@@ -271,10 +271,9 @@ export const ViewEtterlevelse = ({
                           )}
                           {etterlevelse.status === EtterlevelseStatus.IKKE_RELEVANT || suksessbeskrivelseBegrunnelse.suksesskriterieStatus === SuksesskriterieStatus.IKKE_RELEVANT
                             ? 'Ikke Relevant'
-                            : suksessbeskrivelseBegrunnelse.suksesskriterieStatus === SuksesskriterieStatus.IKKE_OPPFYLT 
+                            : suksessbeskrivelseBegrunnelse.suksesskriterieStatus === SuksesskriterieStatus.IKKE_OPPFYLT
                             ? 'Ikke oppfylt'
-                            : 'Oppfylt'
-                            }
+                            : 'Oppfylt'}
                         </ParagraphXSmall>
                       </Block>
                     )}

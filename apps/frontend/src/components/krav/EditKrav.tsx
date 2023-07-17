@@ -369,7 +369,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                     <Block marginTop="80px" marginBottom={inputMarginBottom}>
                       <HeadingXLarge>Gruppering og etiketter</HeadingXLarge>
                     </Block>
-{/* 
+                    {/* 
                     <Block width="100%" maxWidth={maxInputWidth}>
                       <EditVirkemidler />
                     </Block> */}

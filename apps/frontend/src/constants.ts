@@ -187,7 +187,7 @@ export enum SuksesskriterieStatus {
   UNDER_ARBEID = 'UNDER_ARBEID',
   OPPFYLT = 'OPPFYLT',
   IKKE_RELEVANT = 'IKKE_RELEVANT',
-  IKKE_OPPFYLT = 'IKKE_OPPFYLT'
+  IKKE_OPPFYLT = 'IKKE_OPPFYLT',
 }
 
 export interface Behandling extends BehandlingEtterlevData {

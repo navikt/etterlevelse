@@ -24,7 +24,7 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
   const etterlevelser = (krav.etterlevelser || [])
     .filter((e) => e.status === EtterlevelseStatus.FERDIG_DOKUMENTERT)
     .sort((a, b) => {
-      if(a.behandling && b.behandling) {
+      if (a.behandling && b.behandling) {
         return a.behandling.navn.localeCompare(b.behandling.navn)
       } else {
         return -1

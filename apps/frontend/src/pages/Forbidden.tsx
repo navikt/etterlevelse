@@ -19,7 +19,7 @@ const Forbidden = () => {
     if (user.isLoggedIn()) {
       if (params.role === 'admin' && user.isAdmin()) {
         navigate(-1)
-      } else if ( params.role === 'kraveier' && (user.isKraveier() || user.isAdmin())) {
+      } else if (params.role === 'kraveier' && (user.isKraveier() || user.isAdmin())) {
         navigate(-1)
       }
     }

@@ -160,7 +160,7 @@ const getCodelist = (search: string, list: ListName, typeName: string) => {
           sortKey: c.shortName,
           label: <SearchLabel name={c.shortName} type={typeName} />,
           type: list,
-        } as SearchItem),
+        }) as SearchItem,
     )
 }
 
