@@ -210,7 +210,7 @@ type EtterlevelseDokumentasjon {
     id: String!
     title: String!
     etterlevelseNummer: Int!
-    behandlingId: String
+    behandlingIds: [String!]!
     virkemiddelId: String
     irrelevansFor: [Code!]!
     teams: [String!]!

@@ -32,7 +32,7 @@ public class EtterlevelseDokumentasjon implements DomainObject {
     private Integer etterlevelseNummer;
 
     private String title;
-    private String behandlingId;
+    private List<String> behandlingIds;
     @Default
     private boolean behandlerPersonopplysninger = true;
     private String virkemiddelId;
@@ -49,7 +49,7 @@ public class EtterlevelseDokumentasjon implements DomainObject {
     public void convert(EtterlevelseDokumentasjonRequest request) {
         etterlevelseNummer = request.getEtterlevelseNummer();
         title = request.getTitle();
-        behandlingId = request.getBehandlingId();
+        behandlingIds = copyOf(request.getBehandlingIds());
         virkemiddelId = request.getVirkemiddelId();
         irrelevansFor = copyOf(request.getIrrelevansFor());
         teams = copyOf(request.getTeams());
@@ -64,7 +64,7 @@ public class EtterlevelseDokumentasjon implements DomainObject {
                 .version(version)
                 .etterlevelseNummer(etterlevelseNummer)
                 .title(title)
-                .behandlingId(behandlingId)
+                .behandlingIds(behandlingIds != null ? copyOf(behandlingIds) : List.of())
                 .virkemiddelId(virkemiddelId)
                 .irrelevansFor(irrelevantForAsCodes())
                 .teams(teams != null ? copyOf(teams) : List.of())

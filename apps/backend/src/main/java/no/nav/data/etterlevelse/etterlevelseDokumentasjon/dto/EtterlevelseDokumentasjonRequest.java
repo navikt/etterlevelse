@@ -26,7 +26,7 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
     private Boolean update;
     private Integer etterlevelseNummer;
     private String title;
-    private String behandlingId;
+    private List<String> behandlingIds;
     private boolean behandlerPersonopplysninger;
     private String virkemiddelId;
     private boolean knyttetTilVirkemiddel;
@@ -37,7 +37,7 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
     public void format() {
         setId(trimToNull(id));
         setTitle(trimToNull(title));
-        setBehandlingId(trimToNull(behandlingId));
+        setBehandlingIds(formatList(behandlingIds));
         setVirkemiddelId(trimToNull(virkemiddelId));
         setIrrelevansFor(formatListToUppercase(irrelevansFor));
         setTeams(formatList(teams));
