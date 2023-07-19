@@ -45,3 +45,15 @@ spec:
           namespace: teamdatajegerne
           severity: critical
 
+      - alert: Etterlevelse-backend alle poder nede
+        expr: kube_deployment_status_replicas_available{namespace="teamdatajegerne", deployment="etterlevelse-backend"} == 0
+        for: 1m
+        annotations:
+          consequence: Application is unavailable
+          action: "Alle poder er ned. Sjekk kubectl eller grafana for pod status, og sjekk logs for feilmeldinger."
+          summary: |-
+            Etterlevelse backend: alle poder er nede.
+        labels:
+          namespace: teamdatajegerne
+          severity: critical
+
