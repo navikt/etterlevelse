@@ -15,6 +15,28 @@ import { warningAlert } from '../../Images'
 
 export const responsiveDisplayEtterlevelseDokumentasjonPage: Responsive<any> = ['block', 'block', 'block', 'block', 'flex', 'flex']
 
+const getBehandlingLinks = (etterlevelseDokumentasjon: EtterlevelseDokumentasjon) => {
+  return (
+    <Block>
+      {etterlevelseDokumentasjon.behandlingIds.map((behandlingId, index) => {
+        return (
+          <Block key={'behandling_link_' + index}>
+            <ExternalLink href={`${env.pollyBaseUrl}process/${behandlingId}`}>
+              <ExternalLinkWrapper
+                text={
+                  etterlevelseDokumentasjon.behandlinger
+                    ? `B${etterlevelseDokumentasjon.behandlinger[index].nummer} ${etterlevelseDokumentasjon.behandlinger[index].overordnetFormaal?.shortName}: ${etterlevelseDokumentasjon.behandlinger[index].navn}`
+                    : 'Ingen data'
+                }
+              />
+            </ExternalLink>
+          </Block>
+        )
+      })}
+    </Block>
+  )
+}
+
 export const getMainHeader = (etterlevelseDokumentasjon: EtterlevelseDokumentasjon, setEtterlevelseDokumentasjon?: (e: EtterlevelseDokumentasjon) => void, helmet?: ReactNode) => (
   <Block display={responsiveDisplayEtterlevelseDokumentasjonPage} justifyContent="space-between" marginBottom="32px" marginTop="38px">
     {helmet ? (
@@ -58,12 +80,8 @@ export const getMainHeader = (etterlevelseDokumentasjon: EtterlevelseDokumentasj
       {etterlevelseDokumentasjon.behandlerPersonopplysninger && (
         <Block display="flex" alignItems="center" marginTop={etterlevelseDokumentasjon.virkemiddelId ? '8px' : '0px'}>
           <LabelSmall $style={{ lineHeight: '22px', marginRight: '10px', fontSize: '16px', color: ettlevColors.green600 }}>Behandling:</LabelSmall>
-          {etterlevelseDokumentasjon.behandlingId && etterlevelseDokumentasjon.behandlerPersonopplysninger ? (
-            <ExternalLink href={`${env.pollyBaseUrl}process/${etterlevelseDokumentasjon.behandlingId}`}>
-              <ExternalLinkWrapper
-                text={`B${etterlevelseDokumentasjon.behandling?.nummer} ${etterlevelseDokumentasjon.behandling?.overordnetFormaal?.shortName}: ${etterlevelseDokumentasjon.behandling?.navn}`}
-              />
-            </ExternalLink>
+          {etterlevelseDokumentasjon.behandlingIds && etterlevelseDokumentasjon.behandlerPersonopplysninger ? (
+            getBehandlingLinks(etterlevelseDokumentasjon)
           ) : (
             <Block
               justifyContent="center"
