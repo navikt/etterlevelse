@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.NotFoundException;
 import no.nav.data.common.utils.WordDocUtils;
 import no.nav.data.etterlevelse.behandling.BehandlingService;
-import no.nav.data.etterlevelse.behandling.dto.Behandling;
 import no.nav.data.etterlevelse.codelist.CodelistService;
 import no.nav.data.etterlevelse.codelist.codeusage.CodeUsageService;
 import no.nav.data.etterlevelse.codelist.codeusage.dto.CodeUsage;
@@ -58,11 +57,6 @@ public class EtterlevelseDokumentasjonToDoc {
 
     private final EtterlevelseDokumentasjonService etterlevelseDokumentasjonService;
 
-    public void getBehandlingData(Behandling behandling, EtterlevelseDocumentBuilder doc) {
-        doc.addHeading3("Knyttet behandling");
-        doc.addText("B" + behandling.getNummer() + " " + behandling.getOverordnetFormaal().getShortName() + ": " + behandling.getNavn());
-    }
-
     public void getEtterlevelseDokumentasjonData(EtterlevelseDokumentasjon etterlevelseDokumentasjon, EtterlevelseDocumentBuilder doc) {
         SimpleDateFormat formatter = new SimpleDateFormat("dd'.' MMMM yyyy 'kl 'HH:mm");
         Date date = new Date();
@@ -70,9 +64,12 @@ public class EtterlevelseDokumentasjonToDoc {
         doc.addSubtitle("E" + etterlevelseDokumentasjon.getEtterlevelseNummer() + ": " + etterlevelseDokumentasjon.getTitle());
         doc.addText("Exportert " + formatter.format(date));
 
-        if (etterlevelseDokumentasjon.getBehandlingId() != null && !etterlevelseDokumentasjon.getBehandlingId().equals("")) {
-            var behandling = behandlingService.getBehandling(etterlevelseDokumentasjon.getBehandlingId());
-            getBehandlingData(behandling, doc);
+        if (etterlevelseDokumentasjon.getBehandlingIds() != null && !etterlevelseDokumentasjon.getBehandlingIds().isEmpty()) {
+            doc.addHeading3("Knyttet behandling");
+            etterlevelseDokumentasjon.getBehandlingIds().forEach(behandlingId -> {
+                var behandling = behandlingService.getBehandling(behandlingId);
+                doc.addText("B" + behandling.getNummer() + " " + behandling.getOverordnetFormaal().getShortName() + ": " + behandling.getNavn());
+            });
         }
 
         doc.addHeading3("Team");
