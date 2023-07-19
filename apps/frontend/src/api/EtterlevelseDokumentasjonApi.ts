@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { EtterlevelseDokumentasjon, EtterlevelseDokumentasjonQL, PageResponse, Team } from '../constants'
+import { Behandling, EtterlevelseDokumentasjon, EtterlevelseDokumentasjonQL, PageResponse, Team } from '../constants'
 import { env } from '../util/env'
 import { useEffect, useState } from 'react'
 import { getBehandling } from './BehandlingApi'
@@ -59,15 +59,17 @@ export const useEtterlevelseDokumentasjon = (etterlevelseDokumentasjonId?: strin
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   useEffect(() => {
-    let behandling: any = {}
+    let behandling: Behandling[] = []
     let teamsData: Team[] = []
     let virkmiddel: any = {}
 
     setIsLoading(true)
     if (etterlevelseDokumentasjonId && !isCreateNew) {
       getEtterlevelseDokumentasjon(etterlevelseDokumentasjonId).then(async (etterlevelseDokumentasjon) => {
-        if (etterlevelseDokumentasjon.behandlingId) {
-          await getBehandling(etterlevelseDokumentasjon.behandlingId).then((behandlingResponse) => (behandling = behandlingResponse))
+        if (etterlevelseDokumentasjon.behandlingIds) {
+          etterlevelseDokumentasjon.behandlingIds.forEach(async (behandlingId) => {
+            await getBehandling(behandlingId).then((behandlingResponse) => (behandling.push(behandlingResponse)))
+          })
         }
         if (etterlevelseDokumentasjon.teams.length > 0) {
           await getTeams(etterlevelseDokumentasjon.teams).then((teamsResponse) => (teamsData = teamsResponse))
@@ -75,13 +77,17 @@ export const useEtterlevelseDokumentasjon = (etterlevelseDokumentasjonId?: strin
         if (etterlevelseDokumentasjon.virkemiddelId) {
           await getVirkemiddel(etterlevelseDokumentasjon.virkemiddelId).then((virkemiddelResponse) => (virkmiddel = virkemiddelResponse))
         }
-        setData({ ...etterlevelseDokumentasjon, behandling: behandling, teamsData: teamsData, virkemiddel: virkmiddel })
+        setData({ ...etterlevelseDokumentasjon, behandlinger: behandling, teamsData: teamsData, virkemiddel: virkmiddel })
         setIsLoading(false)
       })
     } else if (behandlingId) {
       searchEtterlevelsedokumentasjonByBehandlingId(behandlingId).then(async (etterlevelseDokumentasjon) => {
         if (etterlevelseDokumentasjon) {
-          await getBehandling(behandlingId).then((behandlingResponseData) => (behandling = behandlingResponseData))
+          if (etterlevelseDokumentasjon[0].behandlingIds) {
+            etterlevelseDokumentasjon[0].behandlingIds.forEach(async (behandlingId) => {
+              await getBehandling(behandlingId).then((behandlingResponse) => (behandling.push(behandlingResponse)))
+            })
+          }
 
           if (etterlevelseDokumentasjon[0].teams.length > 0) {
             getTeams(etterlevelseDokumentasjon[0].teams).then((teamsResponseData) => (teamsData = teamsResponseData))
@@ -90,7 +96,7 @@ export const useEtterlevelseDokumentasjon = (etterlevelseDokumentasjonId?: strin
             await getVirkemiddel(etterlevelseDokumentasjon[0].virkemiddelId).then((virkemiddelResponse) => (virkmiddel = virkemiddelResponse))
           }
 
-          setData({ ...etterlevelseDokumentasjon[0], behandling: behandling, teamsData: teamsData })
+          setData({ ...etterlevelseDokumentasjon[0], behandlinger: behandling, teamsData: teamsData })
           setIsLoading(false)
         }
       })
@@ -117,7 +123,7 @@ export const etterlevelseDokumentasjonMapToFormVal = (etterlevelseDokumentasjon:
   changeStamp: etterlevelseDokumentasjon.changeStamp || { lastModifiedDate: '', lastModifiedBy: '' },
   version: -1,
   title: etterlevelseDokumentasjon.title || '',
-  behandlingId: etterlevelseDokumentasjon.behandlingId || '',
+  behandlingIds: etterlevelseDokumentasjon.behandlingIds || [],
   behandlerPersonopplysninger: etterlevelseDokumentasjon.behandlerPersonopplysninger !== undefined ? etterlevelseDokumentasjon.behandlerPersonopplysninger : true,
   irrelevansFor: etterlevelseDokumentasjon.irrelevansFor || [],
   etterlevelseNummer: etterlevelseDokumentasjon.etterlevelseNummer || 0,

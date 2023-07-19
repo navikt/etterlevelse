@@ -6,6 +6,7 @@ import no.nav.data.common.security.SecurityUtils;
 import no.nav.data.common.storage.domain.GenericStorage;
 import no.nav.data.common.storage.domain.GenericStorageRepository;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonFilter;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -36,6 +37,14 @@ public class EtterlevelseDokumentasjonRepoImpl implements EtterlevelseDokumentas
         var query = "select id from generic_storage where type = 'EtterlevelseDokumentasjon' and data -> 'teams' ??| array[ :teamIds ] ";
         var par = new MapSqlParameterSource();
         par.addValue("teamIds", teamIds);
+        return fetch(jdbcTemplate.queryForList(query, par));
+    }
+
+    @Override
+    public List<GenericStorage> findByBehandlingIds(List<String> ids){
+        var query = "select * from generic_storage where type = 'EtterlevelseDokumentasjon' and data -> 'behandlingIds' ??| array[ :behandlingIds ]";
+        var par = new MapSqlParameterSource();
+        par.addValue("behandlingIds", ids);
         return fetch(jdbcTemplate.queryForList(query, par));
     }
 

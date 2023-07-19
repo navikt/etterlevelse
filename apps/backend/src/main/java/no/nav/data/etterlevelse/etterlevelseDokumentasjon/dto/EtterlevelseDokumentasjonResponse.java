@@ -24,7 +24,7 @@ public class EtterlevelseDokumentasjonResponse {
     private Integer version;
     private Integer etterlevelseNummer;
     private String title;
-    private String behandlingId;
+    private List<String> behandlingIds;
     private boolean behandlerPersonopplysninger;
     private String virkemiddelId;
     private boolean knyttetTilVirkemiddel;

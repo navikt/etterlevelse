@@ -212,13 +212,13 @@ export interface EtterlevelseDokumentasjon {
   changeStamp: ChangeStamp
   version: number
   title: string
-  behandlingId: string
+  behandlingIds: string[]
   virkemiddelId: string
   irrelevansFor: Code[]
   etterlevelseNummer: number
   teams: string[]
   //data field for frontend only
-  behandling?: Behandling
+  behandlinger?: Behandling[]
   behandlerPersonopplysninger: boolean
   virkemiddel?: Virkemiddel
   knyttetTilVirkemiddel: boolean
