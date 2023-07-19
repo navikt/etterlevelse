@@ -12,4 +12,6 @@ public interface EtterlevelseDokumentasjonRepoCustom {
 
     List<GenericStorage> getEtterlevelseDokumentasjonerForTeam(List<String> teamId);
 
+    List<GenericStorage> findByBehandlingIds(List<String> ids);
+
 }
