@@ -88,7 +88,6 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
   const [selectedBehandling, setSelectedBehandling] = useState<Behandling[]>([])
   const [selectedVirkemiddel, setSelectedVirkemiddel] = useState<Virkemiddel>()
   const [checkedAddTeam, setCheckedAddTeam] = useState(false)
-
   const [teamSearchResult, setTeamSearchResult, loadingTeamSearchResult] = useSearchTeam()
 
   useEffect(() => {
@@ -392,7 +391,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                                    error={!!p.form.errors.behandlingIds && !!p.form.submitCount}
                                  />
                                </Block>
-                               {/* <RenderTagList wide list={p.form.values.behandlinger.map((b: Behandling) => b.navn)} onRemove={p.remove} /> */}
+                               <RenderTagList wide list={p.form.values.behandlingIds.map((b: Behandling) => b.navn)} onRemove={p.remove} />
                              </Block>
                            </FormControl>
                          )
