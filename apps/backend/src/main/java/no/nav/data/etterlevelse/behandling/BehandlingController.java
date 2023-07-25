@@ -11,6 +11,7 @@ import no.nav.data.common.exceptions.NotFoundException;
 import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.common.utils.StreamUtils;
+import no.nav.data.etterlevelse.behandling.domain.BehandlingData;
 import no.nav.data.etterlevelse.behandling.dto.Behandling;
 import no.nav.data.etterlevelse.behandling.dto.BehandlingRequest;
 import no.nav.data.integration.team.domain.Team;
@@ -61,6 +62,14 @@ public class BehandlingController {
             behandlinger = service.getBehandlingerForTeam(teamId);
         }
         return ResponseEntity.ok(new RestResponsePage<>(behandlinger));
+    }
+
+    @Operation(summary = "Get BehandlingeData")
+    @ApiResponses(value = {@ApiResponse(description = "BehandlingeData fetched")})
+    @GetMapping("/behandlingData")
+    public ResponseEntity<RestResponsePage<BehandlingData>> getAllBehandlingData() {
+       List<BehandlingData> datas = service.getAllBehandlingData();
+        return ResponseEntity.ok(new RestResponsePage<>(datas));
     }
 
     @Operation(summary = "Get Behandling")

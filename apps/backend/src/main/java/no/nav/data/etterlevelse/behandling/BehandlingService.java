@@ -105,6 +105,10 @@ public class BehandlingService {
         return convert(processes, p -> convertBeh(p, datas));
     }
 
+    public List<BehandlingData> getAllBehandlingData(){
+        return GenericStorage.to(repo.getAllBehandlingData(),BehandlingData.class);
+    }
+
     public RestResponsePage<Behandling> getAll(Pageable page) {
         RestResponsePage<BkatProcess> behPage = bkatClient.findByPage(page.getPageNumber(), page.getPageSize());
         return behPage.convertBatch(this::convertBehandlinger);
