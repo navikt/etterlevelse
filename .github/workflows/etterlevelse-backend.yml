@@ -34,7 +34,10 @@ jobs:
 
       - name: Build
         run: mvn compile
-
+        
+      - name: repair
+        run: mvn flyway:repair
+        
       - name: Test and Package
         run: mvn package
 
