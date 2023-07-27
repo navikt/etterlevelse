@@ -16,6 +16,8 @@ import { warningAlert } from '../../Images'
 export const responsiveDisplayEtterlevelseDokumentasjonPage: Responsive<any> = ['block', 'block', 'block', 'block', 'flex', 'flex']
 
 const getBehandlingLinks = (etterlevelseDokumentasjon: EtterlevelseDokumentasjon) => {
+  console.log(etterlevelseDokumentasjon);
+  
   return (
     <Block>
       {etterlevelseDokumentasjon.behandlingIds.map((behandlingId, index) => {
@@ -24,9 +26,10 @@ const getBehandlingLinks = (etterlevelseDokumentasjon: EtterlevelseDokumentasjon
             <ExternalLink href={`${env.pollyBaseUrl}process/${behandlingId}`}>
               <ExternalLinkWrapper
                 text={
-                  etterlevelseDokumentasjon.behandlinger
+                  etterlevelseDokumentasjon.behandlinger && etterlevelseDokumentasjon.behandlinger.length > 0
                     ? `B${etterlevelseDokumentasjon.behandlinger[index].nummer} ${etterlevelseDokumentasjon.behandlinger[index].overordnetFormaal?.shortName}: ${etterlevelseDokumentasjon.behandlinger[index].navn}`
-                    : 'Ingen data'
+                    : 
+                  'Ingen data'
                 }
               />
             </ExternalLink>
