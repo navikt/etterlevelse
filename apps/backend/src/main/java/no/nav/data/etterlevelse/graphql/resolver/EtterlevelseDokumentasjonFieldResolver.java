@@ -4,6 +4,7 @@ import graphql.kickstart.tools.GraphQLResolver;
 import graphql.schema.DataFetchingEnvironment;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import no.nav.data.etterlevelse.behandling.dto.Behandling;
 import no.nav.data.etterlevelse.codelist.CodelistService;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
 import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
@@ -44,6 +45,11 @@ public class EtterlevelseDokumentasjonFieldResolver implements GraphQLResolver<E
     public CompletableFuture<List<TeamResponse>> teamsData(EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse, DataFetchingEnvironment env) {
         DataLoader<String, TeamResponse> loader = env.getDataLoader(DataLoaderReg.TEAM);
         return loader.loadMany(etterlevelseDokumentasjonResponse.getTeams());
+    }
+
+    public CompletableFuture<List<Behandling>> behandlinger(EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse, DataFetchingEnvironment env) {
+        DataLoader<String, Behandling> loader = env.getDataLoader(DataLoaderReg.BEHANDLING);
+        return loader.loadMany(etterlevelseDokumentasjonResponse.getBehandlingIds());
     }
 
     public CompletableFuture<List<EtterlevelseResponse>> etterlevelser(EtterlevelseDokumentasjonResponse etterlevelseDokumentasjon, DataFetchingEnvironment env) {

@@ -211,6 +211,9 @@ type EtterlevelseDokumentasjon {
     title: String!
     etterlevelseNummer: Int!
     behandlingIds: [String!]!
+    behandlinger: [Behandling!]!
+    behandlerPersonopplysninger: Boolean
+    knyttetTilVirkemiddel: Boolean
     virkemiddelId: String
     irrelevansFor: [Code!]!
     teams: [String!]!
