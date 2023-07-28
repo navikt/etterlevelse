@@ -1,5 +1,6 @@
 package no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,7 +8,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.Singular;
 import no.nav.data.common.rest.ChangeStampResponse;
+import no.nav.data.etterlevelse.behandling.dto.Behandling;
 import no.nav.data.etterlevelse.codelist.dto.CodelistResponse;
+import no.nav.data.integration.team.dto.TeamResponse;
 
 import java.util.List;
 import java.util.UUID;
@@ -32,4 +35,8 @@ public class EtterlevelseDokumentasjonResponse {
     private List<CodelistResponse> irrelevansFor;
     @Singular("team")
     private List<String> teams;
+    @JsonIgnore
+    private List<TeamResponse> teamsData;
+    @JsonIgnore
+    private List<Behandling> behandlinger;
 }
