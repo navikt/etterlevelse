@@ -23,6 +23,7 @@ import EditEtterlevelseDokumentasjonModal from '../components/etterlevelseDokume
 import { ArkiveringModal } from '../components/etterlevelseDokumentasjon/ArkiveringModal'
 import ExportEtterlevelseModalV2 from '../components/export/ExportEtterlevelseModalV2'
 import { isFerdigUtfylt } from './EtterlevelseDokumentasjonTemaPage'
+import { Spinner } from '../components/common/Spinner'
 
 export const DokumentasjonPage = () => {
   const params = useParams<{ id?: string }>()
@@ -30,7 +31,7 @@ export const DokumentasjonPage = () => {
   const [etterlevelseDokumentasjon, setEtterlevelseDokumentasjon] = useEtterlevelseDokumentasjon(params.id)
   const [etterlevelseArkiv, setEtterlevelseArkiv] = useArkiveringByEtterlevelseDokumentasjonId(params.id)
 
-  const { data: relevanteData, refetch: refetchRelevanteData } = useQuery<{ etterlevelseDokumentasjon: PageResponse<{ stats: EtterlevelseDokumentasjonStats }> }>(statsQuery, {
+  const { data: relevanteData, refetch: refetchRelevanteData, loading } = useQuery<{ etterlevelseDokumentasjon: PageResponse<{ stats: EtterlevelseDokumentasjonStats }> }>(statsQuery, {
     variables: { etterlevelseDokumentasjonId: etterlevelseDokumentasjon?.id },
   })
 
@@ -44,10 +45,10 @@ export const DokumentasjonPage = () => {
   const filterData = (
     unfilteredData:
       | {
-          etterlevelseDokumentasjon: PageResponse<{
-            stats: EtterlevelseDokumentasjonStats
-          }>
-        }
+        etterlevelseDokumentasjon: PageResponse<{
+          stats: EtterlevelseDokumentasjonStats
+        }>
+      }
       | undefined,
   ) => {
     const relevanteStatusListe: any[] = []
@@ -255,19 +256,24 @@ export const DokumentasjonPage = () => {
         breadcrumbPaths={breadcrumbPaths}
       >
         <Block backgroundColor={ettlevColors.grey50} marginTop={theme.sizing.scale800}></Block>
-        {getRelevansContent(etterlevelseDokumentasjon)}
-        <Block display="flex" width="100%" justifyContent="space-between" flexWrap marginTop={theme.sizing.scale550}>
-          {temaListe.map((tema) => (
-            <TemaCardEtterlevelseDokumentasjon
-              tema={tema}
-              stats={relevanteStats}
-              utgaattStats={utgaattStats}
-              etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-              key={`${tema.shortName}_panel`}
-            />
-          ))}
+        {getRelevansContent(etterlevelseDokumentasjon)}¨
+        {loading ? 
+        <Block  display="flex" width="100%" justifyContent="center" marginTop={theme.sizing.scale550}>
+          <Spinner size="50px"/>
         </Block>
-
+      :
+          <Block display="flex" width="100%" justifyContent="space-between" flexWrap marginTop={theme.sizing.scale550}>
+            {temaListe.map((tema) => (
+              <TemaCardEtterlevelseDokumentasjon
+                tema={tema}
+                stats={relevanteStats}
+                utgaattStats={utgaattStats}
+                etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                key={`${tema.shortName}_panel`}
+              />
+            ))}
+          </Block>
+        }
         {/*
         DISABLED TEMPORARY
         {irrelevanteStats.length > 0 && (
