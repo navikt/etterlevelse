@@ -59,44 +59,24 @@ export const useEtterlevelseDokumentasjon = (etterlevelseDokumentasjonId?: strin
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   useEffect(() => {
-    let behandling: Behandling[] = []
-    let teamsData: Team[] = []
     let virkmiddel: any = {}
 
     setIsLoading(true)
     if (etterlevelseDokumentasjonId && !isCreateNew) {
       getEtterlevelseDokumentasjon(etterlevelseDokumentasjonId).then(async (etterlevelseDokumentasjon) => {
-        if (etterlevelseDokumentasjon.behandlingIds) {
-          etterlevelseDokumentasjon.behandlingIds.forEach(async (behandlingId) => {
-            await getBehandling(behandlingId).then((behandlingResponse) => (behandling.push(behandlingResponse)))
-          })
-        }
-        if (etterlevelseDokumentasjon.teams.length > 0) {
-          await getTeams(etterlevelseDokumentasjon.teams).then((teamsResponse) => (teamsData = teamsResponse))
-        }
         if (etterlevelseDokumentasjon.virkemiddelId) {
           await getVirkemiddel(etterlevelseDokumentasjon.virkemiddelId).then((virkemiddelResponse) => (virkmiddel = virkemiddelResponse))
         }
-        setData({ ...etterlevelseDokumentasjon, behandlinger: behandling, teamsData: teamsData, virkemiddel: virkmiddel })
+        setData({ ...etterlevelseDokumentasjon, virkemiddel: virkmiddel })
         setIsLoading(false)
       })
     } else if (behandlingId) {
       searchEtterlevelsedokumentasjonByBehandlingId(behandlingId).then(async (etterlevelseDokumentasjon) => {
         if (etterlevelseDokumentasjon) {
-          if (etterlevelseDokumentasjon[0].behandlingIds) {
-            etterlevelseDokumentasjon[0].behandlingIds.forEach(async (behandlingId) => {
-              await getBehandling(behandlingId).then((behandlingResponse) => (behandling.push(behandlingResponse)))
-            })
-          }
-
-          if (etterlevelseDokumentasjon[0].teams.length > 0) {
-            getTeams(etterlevelseDokumentasjon[0].teams).then((teamsResponseData) => (teamsData = teamsResponseData))
-          }
           if (etterlevelseDokumentasjon[0].virkemiddelId) {
             await getVirkemiddel(etterlevelseDokumentasjon[0].virkemiddelId).then((virkemiddelResponse) => (virkmiddel = virkemiddelResponse))
           }
-
-          setData({ ...etterlevelseDokumentasjon[0], behandlinger: behandling, teamsData: teamsData })
+          setData({ ...etterlevelseDokumentasjon[0], virkemiddel: virkmiddel })
           setIsLoading(false)
         }
       })
