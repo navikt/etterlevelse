@@ -16,8 +16,6 @@ import { warningAlert } from '../../Images'
 export const responsiveDisplayEtterlevelseDokumentasjonPage: Responsive<any> = ['block', 'block', 'block', 'block', 'flex', 'flex']
 
 const getBehandlingLinks = (etterlevelseDokumentasjon: EtterlevelseDokumentasjon) => {
-  console.log(etterlevelseDokumentasjon);
-  
   return (
     <Block>
       {etterlevelseDokumentasjon.behandlingIds.map((behandlingId, index) => {

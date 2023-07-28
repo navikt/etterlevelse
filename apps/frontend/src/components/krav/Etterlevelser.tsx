@@ -46,8 +46,6 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
     (a) => a.code,
   )
 
-  console.log(etterlevelser)
-
   return (
     <Block marginBottom="32px" width="100%">
       <HeadingXLarge maxWidth={'500px'}>Her kan du se hvordan andre team har dokumentert etterlevelse</HeadingXLarge>
