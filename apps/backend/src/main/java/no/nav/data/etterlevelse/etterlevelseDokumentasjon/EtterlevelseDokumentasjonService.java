@@ -4,17 +4,21 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.auditing.domain.AuditVersionRepository;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.storage.domain.GenericStorage;
-import no.nav.data.common.storage.domain.GenericStorageRepository;
+import no.nav.data.etterlevelse.behandling.BehandlingService;
+import no.nav.data.etterlevelse.behandling.dto.Behandling;
 import no.nav.data.etterlevelse.common.domain.DomainService;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonFilter;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonRequest;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse;
 import no.nav.data.integration.team.domain.Team;
+import no.nav.data.integration.team.dto.TeamResponse;
 import no.nav.data.integration.team.teamcat.TeamcatTeamClient;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -26,11 +30,13 @@ import static no.nav.data.common.utils.StreamUtils.convert;
 public class EtterlevelseDokumentasjonService extends DomainService<EtterlevelseDokumentasjon> {
 
     private final AuditVersionRepository auditRepo;
+    private final BehandlingService behandlingService;
     private final TeamcatTeamClient teamcatTeamClient;
 
-    public EtterlevelseDokumentasjonService(AuditVersionRepository auditRepo, TeamcatTeamClient teamcatTeamClient) {
+    public EtterlevelseDokumentasjonService(AuditVersionRepository auditRepo, BehandlingService behandlingService, TeamcatTeamClient teamcatTeamClient) {
         super(EtterlevelseDokumentasjon.class);
         this.auditRepo = auditRepo;
+        this.behandlingService = behandlingService;
         this.teamcatTeamClient = teamcatTeamClient;
     }
 
@@ -109,6 +115,30 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
 
     public List<EtterlevelseDokumentasjon> getByVirkemiddelId(List<String>ids) {
         return GenericStorage.to(etterlevelseDokumentasjonRepo.findByVirkemiddelIds(ids), EtterlevelseDokumentasjon.class);
+    }
+
+    public EtterlevelseDokumentasjonResponse getEtterlevelseDokumentasjonWithTeamAndBehandlingData(UUID uuid) {
+        EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse = get(uuid).toResponse();
+        return addBehandlingAndTeamsData(etterlevelseDokumentasjonResponse);
+    }
+
+    public EtterlevelseDokumentasjonResponse addBehandlingAndTeamsData(EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse){
+        if(etterlevelseDokumentasjonResponse.getBehandlingIds() != null && !etterlevelseDokumentasjonResponse.getBehandlingIds().isEmpty()) {
+            List<Behandling> behandlingList = new ArrayList<>();
+            etterlevelseDokumentasjonResponse.getBehandlingIds().forEach((behandlingId) -> {
+                behandlingList.add(behandlingService.getBehandling(behandlingId));
+            });
+            etterlevelseDokumentasjonResponse.setBehandlinger(behandlingList);
+        }
+        if(etterlevelseDokumentasjonResponse.getTeams() != null && !etterlevelseDokumentasjonResponse.getTeams().isEmpty()){
+            List<TeamResponse> teamsData = new ArrayList<>();
+            etterlevelseDokumentasjonResponse.getTeams().forEach((teamId) -> {
+                var teamData = teamcatTeamClient.getTeam(teamId);
+                teamData.ifPresent(team -> teamsData.add(team.toResponse()));
+            });
+            etterlevelseDokumentasjonResponse.setTeamsData(teamsData);
+        }
+        return etterlevelseDokumentasjonResponse;
     }
 
 }

@@ -9,13 +9,9 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
-import no.nav.data.etterlevelse.behandling.BehandlingService;
-import no.nav.data.etterlevelse.behandling.dto.Behandling;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonRequest;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse;
-import no.nav.data.integration.team.dto.TeamResponse;
-import no.nav.data.integration.team.teamcat.TeamcatTeamClient;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +24,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -41,8 +36,6 @@ import java.util.UUID;
 public class EtterlevelseDokumentasjonController {
 
     private final EtterlevelseDokumentasjonService etterlevelseDokumentasjonService;
-    private final BehandlingService behandlingService;
-    private final TeamcatTeamClient teamcatTeamClient;
 
 
     @Operation(summary = "Get All Etterlevelse Dokumentasjon")
@@ -59,23 +52,7 @@ public class EtterlevelseDokumentasjonController {
     @GetMapping("/{id}")
     public ResponseEntity<EtterlevelseDokumentasjonResponse> getById(@PathVariable UUID id) {
         log.info("Get Etterlevelse Dokumentasjon By Id Id={}", id);
-        EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse = etterlevelseDokumentasjonService.get(id).toResponse();
-        if(etterlevelseDokumentasjonResponse.getBehandlingIds() != null && !etterlevelseDokumentasjonResponse.getBehandlingIds().isEmpty()) {
-            List<Behandling> behandlingList = new ArrayList<>();
-            etterlevelseDokumentasjonResponse.getBehandlingIds().forEach((behandlingId) -> {
-                behandlingList.add(behandlingService.getBehandling(behandlingId));
-            });
-            etterlevelseDokumentasjonResponse.setBehandlinger(behandlingList);
-        }
-        if(etterlevelseDokumentasjonResponse.getTeams() != null && !etterlevelseDokumentasjonResponse.getTeams().isEmpty()){
-            List<TeamResponse> teamsData = new ArrayList<>();
-            etterlevelseDokumentasjonResponse.getTeams().forEach((teamId) -> {
-                var teamData = teamcatTeamClient.getTeam(teamId);
-                teamData.ifPresent(team -> teamsData.add(team.toResponse()));
-            });
-            etterlevelseDokumentasjonResponse.setTeamsData(teamsData);
-        }
-        return ResponseEntity.ok(etterlevelseDokumentasjonResponse);
+        return ResponseEntity.ok(etterlevelseDokumentasjonService.getEtterlevelseDokumentasjonWithTeamAndBehandlingData(id));
     }
 
     @Operation(summary = "Search Etterlevelse Dokumentasjon by BehandlingId")
@@ -144,7 +121,7 @@ public class EtterlevelseDokumentasjonController {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
         }
         var etterlevelseDokumentasjon = etterlevelseDokumentasjonService.save(request);
-        return ResponseEntity.ok(etterlevelseDokumentasjon.toResponse());
+        return ResponseEntity.ok(etterlevelseDokumentasjonService.addBehandlingAndTeamsData(etterlevelseDokumentasjon.toResponse()));
     }
 
 
