@@ -1,6 +1,5 @@
 package no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,8 +34,6 @@ public class EtterlevelseDokumentasjonResponse {
     private List<CodelistResponse> irrelevansFor;
     @Singular("team")
     private List<String> teams;
-    @JsonIgnore
     private List<TeamResponse> teamsData;
-    @JsonIgnore
     private List<Behandling> behandlinger;
 }
