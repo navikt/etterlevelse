@@ -89,12 +89,14 @@ export const useEtterlevelseDokumentasjon = (etterlevelseDokumentasjonId?: strin
 export const etterlevelseDokumentasjonToDto = (etterlevelseDokumentasjon: EtterlevelseDokumentasjonQL): EtterlevelseDokumentasjon => {
   const dto = {
     ...etterlevelseDokumentasjon,
+    behandlingIds: etterlevelseDokumentasjon.behandlinger?.map((b) => b.id),
     irrelevansFor: etterlevelseDokumentasjon.irrelevansFor.map((c) => c.code),
     teams: etterlevelseDokumentasjon.teamsData?.map((t) => t.id),
   } as any
   delete dto.changeStamp
   delete dto.version
   delete dto.teamsData
+  delete dto.behandlinger
   return dto
 }
 
@@ -109,6 +111,7 @@ export const etterlevelseDokumentasjonMapToFormVal = (etterlevelseDokumentasjon:
   etterlevelseNummer: etterlevelseDokumentasjon.etterlevelseNummer || 0,
   teams: etterlevelseDokumentasjon.teams || [],
   teamsData: etterlevelseDokumentasjon.teamsData || [],
+  behandlinger: etterlevelseDokumentasjon.behandlinger || [],
   virkemiddelId: etterlevelseDokumentasjon.virkemiddelId || '',
   knyttetTilVirkemiddel: etterlevelseDokumentasjon.knyttetTilVirkemiddel !== undefined ? etterlevelseDokumentasjon.knyttetTilVirkemiddel : false,
 })

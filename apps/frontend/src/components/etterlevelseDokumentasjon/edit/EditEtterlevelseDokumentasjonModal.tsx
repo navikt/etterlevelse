@@ -85,7 +85,6 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
   const [isEtterlevelseDokumentasjonerModalOpen, setIsEtterlevelseDokumntasjonerModalOpen] = useState<boolean>(false)
   const [behandlingSearchResult, setBehandlingSearchResult, loadingBehandlingSearchResult] = useSearchBehandling()
   const [virkemiddelSearchResult, setVirkemiddelSearchResult, loadingVirkemiddelSearchResult] = useSearchVirkemiddel()
-  const [selectedBehandling, setSelectedBehandling] = useState<Behandling[]>([])
   const [selectedVirkemiddel, setSelectedVirkemiddel] = useState<Virkemiddel>()
   const [checkedAddTeam, setCheckedAddTeam] = useState(false)
   const [teamSearchResult, setTeamSearchResult, loadingTeamSearchResult] = useSearchTeam()
@@ -111,10 +110,6 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
     if (props.etterlevelseDokumentasjon && props.etterlevelseDokumentasjon.teams.length > 0) {
       setCheckedAddTeam(true)
     }
-
-    if (props.etterlevelseDokumentasjon && props.etterlevelseDokumentasjon.behandlinger) {
-      setSelectedBehandling(props.etterlevelseDokumentasjon.behandlinger)
-    }
     if (props.etterlevelseDokumentasjon && props.etterlevelseDokumentasjon.virkemiddel && props.etterlevelseDokumentasjon.virkemiddel.navn) {
       setSelectedVirkemiddel(props.etterlevelseDokumentasjon.virkemiddel)
     }
@@ -132,20 +127,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
       await updateEtterlevelseDokumentasjon(etterlevelseDokumentasjon).then((response) => {
         setIsEtterlevelseDokumntasjonerModalOpen(false)
         if (props.setEtterlevelseDokumentasjon) {
-          if (response.teams.length > 0) {
-            getTeams(response.teams).then((teamsData) => {
-              if (props.setEtterlevelseDokumentasjon) {
-                props.setEtterlevelseDokumentasjon({
-                  ...response,
-                  teamsData: teamsData,
-                  behandlinger: selectedBehandling,
-                  virkemiddel: selectedVirkemiddel,
-                })
-              }
-            })
-          } else {
-            props.setEtterlevelseDokumentasjon({ ...response, behandlinger: selectedBehandling, virkemiddel: selectedVirkemiddel })
-          }
+            props.setEtterlevelseDokumentasjon({ ...response, virkemiddel: selectedVirkemiddel })
         }
       })
     }
@@ -361,7 +343,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
 
                   {values.behandlerPersonopplysninger && (
                      <FieldWrapper>
-                     <FieldArray name="behandlingIds">
+                     <FieldArray name="behandlinger">
                        {(p: FieldArrayRenderProps) => {
                          return (
                            <FormControl label={
@@ -388,85 +370,16 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                                      value.length && p.push(value[0])
                                    }}
                                    isLoading={loadingBehandlingSearchResult}
-                                   error={!!p.form.errors.behandlingIds && !!p.form.submitCount}
+                                   error={!!p.form.errors.behandlinger && !!p.form.submitCount}
                                  />
                                </Block>
-                               <RenderTagList wide list={p.form.values.behandlingIds.map((b: Behandling) => b.navn)} onRemove={p.remove} />
+                               <RenderTagList wide list={p.form.values.behandlinger.map((b: Behandling) => b.navn)} onRemove={p.remove} />
                              </Block>
                            </FormControl>
                          )
                        }}
                      </FieldArray>
                    </FieldWrapper>
-                    
-                    // <FieldWrapper>
-                    //   <Field name="behandlingId">
-                    //     {(fp: FieldProps) => {
-                    //       return (
-                    //         <FormControl
-                    //           label={
-                    //             <LabelWithTooltip
-                    //               label={'Legg til eksisterende behandling fra behandlingskatalogen'}
-                    //               tooltip="Søk og legg til behandling fra Behandlingskatalog. Dette er ikke nødvendig for å opprette ny etterlevelse, men anbefales."
-                    //             />
-                    //           }
-                    //         >
-                    //           <Block>
-                    //             <CustomizedSelect
-                    //               overrides={selectCustomOverrides('behandlingId', fp)}
-                    //               labelKey={'navn'}
-                    //               noResultsMsg={intl.emptyTable}
-                    //               maxDropdownHeight="350px"
-                    //               searchable={true}
-                    //               type={TYPE.search}
-                    //               options={behandlingSearchResult}
-                    //               placeholder={'Søk behandling'}
-                    //               onInputChange={(event) => setBehandlingSearchResult(event.currentTarget.value)}
-                    //               onChange={(params) => {
-                    //                 let behandling = params.value.length ? params.value[0] : undefined
-                    //                 if (behandling) {
-                    //                   fp.form.values['behandlingId'] = behandling.id
-                    //                   setSelectedBehandling(behandling as Behandling)
-                    //                 }
-                    //               }}
-                    //               isLoading={loadingBehandlingSearchResult}
-                    //             />
-                    //             {selectedBehandling && (
-                    //               <Tag
-                    //                 variant={VARIANT.outlined}
-                    //                 onActionClick={() => {
-                    //                   setSelectedBehandling(undefined)
-                    //                   fp.form.setFieldValue('behandlingId', '')
-                    //                 }}
-                    //                 overrides={{
-                    //                   Text: {
-                    //                     style: {
-                    //                       fontSize: theme.sizing.scale650,
-                    //                       lineHeight: theme.sizing.scale750,
-                    //                       fontWeight: 400,
-                    //                     },
-                    //                   },
-                    //                   Root: {
-                    //                     style: {
-                    //                       ...borderWidth('1px'),
-                    //                       ':hover': {
-                    //                         backgroundColor: ettlevColors.green50,
-                    //                         borderColor: '#0B483F',
-                    //                       },
-                    //                     },
-                    //                   },
-                    //                 }}
-                    //               >
-                    //                 {selectedBehandling.navn}
-                    //               </Tag>
-                    //             )}
-                    //           </Block>
-                    //         </FormControl>
-                    //       )
-                    //     }}
-                    //   </Field>
-                    //   <Error fieldName="behandlingIds" fullWidth />
-                    // </FieldWrapper>
                   )}
                   <Block display="flex" alignItems="center" marginTop="100px">
                     <Checkbox
