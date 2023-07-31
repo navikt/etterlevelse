@@ -133,16 +133,14 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
         List<EtterlevelseDokumentasjon> savedEtterlevelseDokumentasjoner = new ArrayList<>();
 
         etterlevelseDokumentasjonResponseList.forEach( (etterlevelseDok) -> {
+            try {
             var newData = addBehandlingAndTeamsData(etterlevelseDok);
 
-            if(newData.getTeamsData() != null && !newData.getTeamsData().isEmpty()){
-                List<String> teamIds = newData.getTeamsData().stream().map(TeamResponse::getId).toList();
-                etterlevelseDok.setTeams(teamIds);
-            }
-
             if(newData.getBehandlinger() != null && !newData.getBehandlinger().isEmpty()) {
-                String newTitle = newData.getBehandlinger().get(0).getOverordnetFormaal().getShortName() + ": " + newData.getBehandlinger().get(0).getNavn();
-                etterlevelseDok.setTitle(newTitle);
+                    String newTitle = newData.getBehandlinger().get(0).getOverordnetFormaal().getShortName() + ": " + newData.getBehandlinger().get(0).getNavn();
+                    etterlevelseDok.setTitle(newTitle);
+                    List<String> teamIds = newData.getBehandlinger().get(0).getTeams();
+                    etterlevelseDok.setTeams(teamIds);
             }
 
             EtterlevelseDokumentasjonRequest request = new EtterlevelseDokumentasjonRequest();
@@ -159,6 +157,9 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
 
             var savedEtterlevelseDok = save(request);
             savedEtterlevelseDokumentasjoner.add(savedEtterlevelseDok);
+            } catch (Exception ignored) {
+
+            }
         });
 
         return savedEtterlevelseDokumentasjoner;
