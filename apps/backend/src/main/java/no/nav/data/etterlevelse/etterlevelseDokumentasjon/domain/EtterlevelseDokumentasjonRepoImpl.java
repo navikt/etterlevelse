@@ -6,7 +6,6 @@ import no.nav.data.common.security.SecurityUtils;
 import no.nav.data.common.storage.domain.GenericStorage;
 import no.nav.data.common.storage.domain.GenericStorageRepository;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonFilter;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -70,7 +69,7 @@ public class EtterlevelseDokumentasjonRepoImpl implements EtterlevelseDokumentas
 
         if (filter.getSistRedigert() != null) {
             query += """
-                     and id::text in (
+                     and data ->> 'id' in (
                        select etterlevelseDokumentasjonId
                          from (
                                   select distinct on (data #>> '{data,etterlevelseDokumentasjonId}') data #>> '{data,etterlevelseDokumentasjonId}' etterlevelseDokumentasjonId, time

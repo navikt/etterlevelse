@@ -42,4 +42,7 @@ public interface EtterlevelseDokumentasjonRepo  extends JpaRepository<GenericSto
 
     @Query(value = "SELECT nextVal('etterlevelse_nummer')",nativeQuery = true)
     int nextEtterlevelseDokumentasjonNummer();
+
+    @Query(value = "select * from generic_storage where type = 'EtterlevelseDokumentasjon'", nativeQuery = true )
+    List<GenericStorage> getAllEtterlevelseDokumentasjoner();
 }
