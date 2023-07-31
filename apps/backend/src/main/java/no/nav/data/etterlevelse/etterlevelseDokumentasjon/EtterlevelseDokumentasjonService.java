@@ -3,9 +3,11 @@ package no.nav.data.etterlevelse.etterlevelseDokumentasjon;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.auditing.domain.AuditVersionRepository;
 import no.nav.data.common.rest.PageParameters;
+import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.common.storage.domain.GenericStorage;
 import no.nav.data.etterlevelse.behandling.BehandlingService;
 import no.nav.data.etterlevelse.behandling.dto.Behandling;
+import no.nav.data.etterlevelse.codelist.dto.CodelistResponse;
 import no.nav.data.etterlevelse.common.domain.DomainService;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonFilter;
@@ -120,6 +122,46 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
     public EtterlevelseDokumentasjonResponse getEtterlevelseDokumentasjonWithTeamAndBehandlingData(UUID uuid) {
         EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse = get(uuid).toResponse();
         return addBehandlingAndTeamsData(etterlevelseDokumentasjonResponse);
+    }
+
+    //REMOVE AFTER USE IN DEV AND PROD AFTER MIGRATION
+    public List<EtterlevelseDokumentasjon> updateEtterlevelseDokumentasjonWithTitleAndTeamDataFromBehandling(){
+        List<EtterlevelseDokumentasjon> etterlevelseDokumentasjoner = GenericStorage.to(etterlevelseDokumentasjonRepo.getAllEtterlevelseDokumentasjoner(), EtterlevelseDokumentasjon.class);
+        var response = new RestResponsePage<>(etterlevelseDokumentasjoner).convert(EtterlevelseDokumentasjon::toResponse);
+        List<EtterlevelseDokumentasjonResponse> etterlevelseDokumentasjonResponseList = response.getContent();
+
+        List<EtterlevelseDokumentasjon> savedEtterlevelseDokumentasjoner = new ArrayList<>();
+
+        etterlevelseDokumentasjonResponseList.forEach( (etterlevelseDok) -> {
+            var newData = addBehandlingAndTeamsData(etterlevelseDok);
+
+            if(!newData.getTeamsData().isEmpty()){
+                List<String> teamIds = newData.getTeamsData().stream().map(TeamResponse::getId).toList();
+                etterlevelseDok.setTeams(teamIds);
+            }
+
+            if(!newData.getBehandlinger().isEmpty()) {
+                String newTitle = newData.getBehandlinger().get(0).getOverordnetFormaal().getShortName() + ": " + newData.getBehandlinger().get(0).getNavn();
+                etterlevelseDok.setTitle(newTitle);
+            }
+
+            EtterlevelseDokumentasjonRequest request = new EtterlevelseDokumentasjonRequest();
+            request.setUpdate(true);
+            request.setId(etterlevelseDok.getId().toString());
+            request.setEtterlevelseNummer(etterlevelseDok.getEtterlevelseNummer());
+            request.setTitle(etterlevelseDok.getTitle());
+            request.setBehandlingIds(etterlevelseDok.getBehandlingIds());
+            request.setBehandlerPersonopplysninger(etterlevelseDok.isBehandlerPersonopplysninger());
+            request.setVirkemiddelId(etterlevelseDok.getVirkemiddelId());
+            request.setKnyttetTilVirkemiddel(false);
+            request.setIrrelevansFor(etterlevelseDok.getIrrelevansFor().stream().map(CodelistResponse::getCode).toList());
+            request.setTeams(etterlevelseDok.getTeams());
+
+            var savedEtterlevelseDok = save(request);
+            savedEtterlevelseDokumentasjoner.add(savedEtterlevelseDok);
+        });
+
+        return savedEtterlevelseDokumentasjoner;
     }
 
     public EtterlevelseDokumentasjonResponse addBehandlingAndTeamsData(EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse){

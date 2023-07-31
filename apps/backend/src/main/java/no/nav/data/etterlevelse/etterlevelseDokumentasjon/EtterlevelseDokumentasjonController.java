@@ -133,4 +133,12 @@ public class EtterlevelseDokumentasjonController {
         return ResponseEntity.ok(etterlevelseDokumentasjon.toResponse());
     }
 
+    //WILL DELETE AFTER 1 USE IN DEV AND PROD AND AFTER MIGRATION
+    @Operation(summary = "Update ettelevelse documentation with title and teams data")
+    @ApiResponse(description = "Updated etterlevelse Documentation with teams and title")
+    @PutMapping("/admin/update/title/team")
+    public ResponseEntity<RestResponsePage<EtterlevelseDokumentasjonResponse>> updateEtterlevelseDokWithTitleAndTeams(){
+        var etterlevelseDokumentasjoner = etterlevelseDokumentasjonService.updateEtterlevelseDokumentasjonWithTitleAndTeamDataFromBehandling();
+        return ResponseEntity.ok(new RestResponsePage<>(etterlevelseDokumentasjoner).convert(EtterlevelseDokumentasjon::toResponse));
+    }
 }
