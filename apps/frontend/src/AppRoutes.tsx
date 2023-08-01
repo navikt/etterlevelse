@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Route, Routes } from 'react-router-dom'
+import {Navigate, Route, Routes, useParams} from 'react-router-dom'
 import { MainPage } from './pages/MainPage'
 import NotFound from './pages/NotFound'
 import CodeListPage from './components/admin/CodeList/CodelistPage'
@@ -34,6 +34,9 @@ import { EtterlevelseDokumentasjonTemaPage } from './pages/EtterlevelseDokumenta
 import { EtterlevelseDokumentasjonPageV2 } from './pages/EtterlevelseDokumentasjonPageV2'
 import { VirkemiddelListPage } from './pages/VirkemiddelListPage'
 import EtterlevelseDokumentasjonAdminPage from "./pages/EtterlevelseDokumentasjonAdminPage";
+import {useEffect, useState} from "react";
+import {searchEtterlevelsedokumentasjonByBehandlingId} from "./api/EtterlevelseDokumentasjonApi";
+import {Block} from "baseui/block";
 
 const AppRoutes = (): JSX.Element => {
   return (
@@ -52,10 +55,10 @@ const AppRoutes = (): JSX.Element => {
         <Route path="/etterlevelse" element={<PrivateRoute component={<EtterlevelseListPage />} adminPage />} caseSensitive={true} />
         <Route path="/etterlevelse/:id" element={<EtterlevelsePage />} caseSensitive={true} />
 
-        <Route path="/behandling/:id/:tema/:filter/krav/:kravNummer/:kravVersjon" element={<PrivateRoute component={<EtterlevelseDokumentasjonPage />} />} caseSensitive={true} />
-        <Route path="/behandling/:id/:tema/" element={<PrivateRoute component={<BehandlingTemaPage />} />} caseSensitive={true} />
-        <Route path="/behandling/:id/:tema/:filter" element={<PrivateRoute component={<BehandlingTemaPage />} />} caseSensitive={true} />
-        <Route path="/behandling/:id" element={<PrivateRoute component={<BehandlingPage />} />} caseSensitive={true} />
+        <Route path="/behandling/:id/:tema/:filter/krav/:kravNummer/:kravVersjon" element={<PrivateRoute component={<Redirect />} />} caseSensitive={true} />
+        <Route path="/behandling/:id/:tema/" element={<PrivateRoute component={<Redirect />} />} caseSensitive={true} />
+        <Route path="/behandling/:id/:tema/:filter" element={<PrivateRoute component={<Redirect />} />} caseSensitive={true} />
+        <Route path="/behandling/:id" element={<PrivateRoute component={<Redirect />} />} caseSensitive={true} />
         <Route path="/behandling/" element={<MyBehandlingerPage />} caseSensitive={true} />
 
         <Route path="/behandlinger/:tab" element={<MyBehandlingerPage />} caseSensitive={true} />
@@ -109,6 +112,49 @@ const AppRoutes = (): JSX.Element => {
         <Route path="*" element={<NotFound />} caseSensitive={true} />
       </Routes>
     </ScrollToTop>
+  )
+}
+
+const Redirect = ()=> {
+  const {id, tema, filter, kravNummer, kravVersjon} = useParams()
+  const [url, setUrl] = useState('')
+
+  useEffect(() => {
+    if (id) {
+      ;(async ()=> {
+        const etterlevelseDok = await searchEtterlevelsedokumentasjonByBehandlingId(id).then((resp)=> {
+
+          if (resp.length===1) {
+            let redirectUrl = '/dokumentasjon/' + resp[0].id
+            if (tema) {
+              redirectUrl+= '/' + tema
+            }
+            if (filter) {
+              redirectUrl+= '/' + filter
+            }
+            if (kravNummer && kravVersjon) {
+              redirectUrl+= '/krav/' + kravNummer + '/' + kravVersjon
+            }
+            setUrl(redirectUrl)
+
+          }
+          else if (resp.length>=2) {
+            console.log(resp)
+          }
+          else {
+            console.log(resp)
+          }
+
+        })
+      })()
+    }
+  }, [id])
+  if (url) {
+    return <Navigate to={url} replace/>
+  }
+
+  return (
+    <Block>test redirect</Block>
   )
 }
 
