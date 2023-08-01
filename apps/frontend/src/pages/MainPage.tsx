@@ -80,7 +80,7 @@ export const MainPage = () => {
               width={cardWidth}
               verticalMargin={theme.sizing.scale300}
               requireLogin
-              href={'/behandlinger'}
+              href={'/dokumentasjoner'}
               tittel={'Dokumentere etterlevelse'}
               icon={pageWidth && pageWidth >= 768 ? paperPenIconBg : paperPenIconBgSmall}
               beskrivelse={'Se hvilke krav som gjelder din løsning og dokumenter hvordan løsningen etterlever kravene'}

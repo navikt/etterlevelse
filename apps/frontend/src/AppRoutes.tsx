@@ -56,10 +56,10 @@ const AppRoutes = (): JSX.Element => {
         <Route path="/etterlevelse" element={<PrivateRoute component={<EtterlevelseListPage />} adminPage />} caseSensitive={true} />
         <Route path="/etterlevelse/:id" element={<EtterlevelsePage />} caseSensitive={true} />
 
-        <Route path="/behandling/:id/:tema/:filter/krav/:kravNummer/:kravVersjon" element={<PrivateRoute component={<Redirect />} />} caseSensitive={true} />
-        <Route path="/behandling/:id/:tema/" element={<PrivateRoute component={<Redirect />} />} caseSensitive={true} />
-        <Route path="/behandling/:id/:tema/:filter" element={<PrivateRoute component={<Redirect />} />} caseSensitive={true} />
-        <Route path="/behandling/:id" element={<PrivateRoute component={<Redirect />} />} caseSensitive={true} />
+        <Route path="/behandling/:id/:tema/:filter/krav/:kravNummer/:kravVersjon" element={<PrivateRoute component={<RedirectToEtterlevelseDokumentasjonPage />} />} caseSensitive={true} />
+        <Route path="/behandling/:id/:tema/" element={<PrivateRoute component={<RedirectToEtterlevelseDokumentasjonPage />} />} caseSensitive={true} />
+        <Route path="/behandling/:id/:tema/:filter" element={<PrivateRoute component={<RedirectToEtterlevelseDokumentasjonPage />} />} caseSensitive={true} />
+        <Route path="/behandling/:id" element={<PrivateRoute component={<RedirectToEtterlevelseDokumentasjonPage />} />} caseSensitive={true} />
         <Route path="/behandling/" element={<MyBehandlingerPage />} caseSensitive={true} />
 
         <Route path="/behandlinger/:tab" element={<MyBehandlingerPage />} caseSensitive={true} />
@@ -67,15 +67,15 @@ const AppRoutes = (): JSX.Element => {
 
         <Route
           path="/dokumentasjon/:id/:tema/:filter/krav/:kravNummer/:kravVersjon"
-          element={<PrivateRoute component={<EtterlevelseDokumentasjonPageV2 />} adminPage />}
+          element={<PrivateRoute component={<EtterlevelseDokumentasjonPageV2 />} />}
           caseSensitive={true}
         />
-        <Route path="/dokumentasjon/:id/:tema/" element={<PrivateRoute component={<EtterlevelseDokumentasjonTemaPage />} adminPage />} caseSensitive={true} />
-        <Route path="/dokumentasjon/:id/:tema/:filter" element={<PrivateRoute component={<EtterlevelseDokumentasjonTemaPage />} adminPage />} caseSensitive={true} />
-        <Route path="/dokumentasjoner/:tab" element={<PrivateRoute component={<MyEtterlevelseDokumentasjonerPage />} adminPage />} caseSensitive={true} />
-        <Route path="/dokumentasjoner/" element={<PrivateRoute component={<MyEtterlevelseDokumentasjonerPage />} adminPage />} caseSensitive={true} />
-        <Route path="/dokumentasjon/:id" element={<PrivateRoute component={<DokumentasjonPage />} adminPage />} caseSensitive={true} />
-        <Route path="/dokumentasjon/" element={<PrivateRoute component={<MyEtterlevelseDokumentasjonerPage />} adminPage />} caseSensitive={true} />
+        <Route path="/dokumentasjon/:id/:tema/" element={<PrivateRoute component={<EtterlevelseDokumentasjonTemaPage />} />} caseSensitive={true} />
+        <Route path="/dokumentasjon/:id/:tema/:filter" element={<PrivateRoute component={<EtterlevelseDokumentasjonTemaPage />} />} caseSensitive={true} />
+        <Route path="/dokumentasjoner/:tab" element={<PrivateRoute component={<MyEtterlevelseDokumentasjonerPage />} />} caseSensitive={true} />
+        <Route path="/dokumentasjoner/" element={<PrivateRoute component={<MyEtterlevelseDokumentasjonerPage />} />} caseSensitive={true} />
+        <Route path="/dokumentasjon/:id" element={<PrivateRoute component={<DokumentasjonPage />} />} caseSensitive={true} />
+        <Route path="/dokumentasjon/" element={<PrivateRoute component={<MyEtterlevelseDokumentasjonerPage />} />} caseSensitive={true} />
 
         <Route path="/relevans/:relevans" element={<PrivateRoute component={<RelevansPage />} adminPage />} caseSensitive={true} />
         <Route path="/relevans/" element={<PrivateRoute component={<RelevansPage />} adminPage />} caseSensitive={true} />
@@ -116,7 +116,7 @@ const AppRoutes = (): JSX.Element => {
   )
 }
 
-const Redirect = () => {
+const RedirectToEtterlevelseDokumentasjonPage = () => {
   const { id, tema, filter, kravNummer, kravVersjon } = useParams()
   const [url, setUrl] = useState('')
   const [etterlevelseDokumentasjoner, setEtterlevelseDokumentasjoner] = useState<EtterlevelseDokumentasjon[]>([])
@@ -139,8 +139,6 @@ const Redirect = () => {
             setUrl(redirectUrl)
           } else if (resp.length >= 2) {
             setEtterlevelseDokumentasjoner(resp)
-          } else {
-            console.log(resp)
           }
         })
       })()
