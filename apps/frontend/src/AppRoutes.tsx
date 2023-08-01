@@ -119,7 +119,6 @@ const AppRoutes = (): JSX.Element => {
 const RedirectToEtterlevelseDokumentasjonPage = () => {
   const { id, tema, filter, kravNummer, kravVersjon } = useParams()
   const [url, setUrl] = useState('')
-  const [etterlevelseDokumentasjoner, setEtterlevelseDokumentasjoner] = useState<EtterlevelseDokumentasjon[]>([])
 
   useEffect(() => {
     if (id) {
@@ -137,8 +136,6 @@ const RedirectToEtterlevelseDokumentasjonPage = () => {
               redirectUrl += '/krav/' + kravNummer + '/' + kravVersjon
             }
             setUrl(redirectUrl)
-          } else if (resp.length >= 2) {
-            setEtterlevelseDokumentasjoner(resp)
           }
         })
       })()
@@ -148,8 +145,7 @@ const RedirectToEtterlevelseDokumentasjonPage = () => {
   if (url) {
     return <Navigate to={url} replace />
   }
-
-  return <Block>test redirect</Block>
+  return <Navigate to={'/dokumentasjoner/behandlingsok?behandlingId=' + id} replace />
 }
 
 export default AppRoutes
