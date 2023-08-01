@@ -160,7 +160,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
 
                   {/* <BoolField label="Er produktet/systemet tilknyttet et virkemiddel?" name="knyttetTilVirkemiddel" /> */}
 
-                  {values.knyttetTilVirkemiddel ? (
+                  {/* {values.knyttetTilVirkemiddel ? (
                     <FieldWrapper>
                       <Field name="virkemiddelId">
                         {(fp: FieldProps) => {
@@ -222,7 +222,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                       </Field>
                       <Error fieldName="virkemiddelId" fullWidth />
                     </FieldWrapper>
-                  ) : (
+                  ) : ( */}
                     <>
                       <LabelWithTooltip tooltip="Ved å oppgi egenskaper til etterlevelsen, blir kun relevante krav synlig for dokumentasjon." label={'Filter'} />
                       <FieldArray name="irrelevansFor">
@@ -333,7 +333,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                         }}
                       </FieldArray>
                     </>
-                  )}
+                  {/* )} */}
 
                   <BoolField
                     label="Behandler produktet/systemet du dokumenterer etterlevelse for personopplysninger?"
