@@ -1,5 +1,5 @@
 import * as React from 'react'
-import {Navigate, Route, Routes, useParams} from 'react-router-dom'
+import { Navigate, Route, Routes, useParams } from 'react-router-dom'
 import { MainPage } from './pages/MainPage'
 import NotFound from './pages/NotFound'
 import CodeListPage from './components/admin/CodeList/CodelistPage'
@@ -33,10 +33,10 @@ import { DokumentasjonPage } from './pages/DokumentasjonPage'
 import { EtterlevelseDokumentasjonTemaPage } from './pages/EtterlevelseDokumentasjonTemaPage'
 import { EtterlevelseDokumentasjonPageV2 } from './pages/EtterlevelseDokumentasjonPageV2'
 import { VirkemiddelListPage } from './pages/VirkemiddelListPage'
-import EtterlevelseDokumentasjonAdminPage from "./pages/EtterlevelseDokumentasjonAdminPage";
-import {useEffect, useState} from "react";
-import {searchEtterlevelsedokumentasjonByBehandlingId} from "./api/EtterlevelseDokumentasjonApi";
-import {Block} from "baseui/block";
+import EtterlevelseDokumentasjonAdminPage from './pages/EtterlevelseDokumentasjonAdminPage'
+import { useEffect, useState } from 'react'
+import { searchEtterlevelsedokumentasjonByBehandlingId } from './api/EtterlevelseDokumentasjonApi'
+import { Block } from 'baseui/block'
 
 const AppRoutes = (): JSX.Element => {
   return (
@@ -115,47 +115,41 @@ const AppRoutes = (): JSX.Element => {
   )
 }
 
-const Redirect = ()=> {
-  const {id, tema, filter, kravNummer, kravVersjon} = useParams()
+const Redirect = () => {
+  const { id, tema, filter, kravNummer, kravVersjon } = useParams()
   const [url, setUrl] = useState('')
 
   useEffect(() => {
     if (id) {
-      ;(async ()=> {
-        const etterlevelseDok = await searchEtterlevelsedokumentasjonByBehandlingId(id).then((resp)=> {
-
-          if (resp.length===1) {
+      ;(async () => {
+        const etterlevelseDok = await searchEtterlevelsedokumentasjonByBehandlingId(id).then((resp) => {
+          if (resp.length === 1) {
             let redirectUrl = '/dokumentasjon/' + resp[0].id
             if (tema) {
-              redirectUrl+= '/' + tema.toUpperCase()
+              redirectUrl += '/' + tema.toUpperCase()
             }
             if (filter) {
-              redirectUrl+= '/' + filter.toUpperCase()
+              redirectUrl += '/' + filter.toUpperCase()
             }
             if (kravNummer && kravVersjon) {
-              redirectUrl+= '/krav/' + kravNummer + '/' + kravVersjon
+              redirectUrl += '/krav/' + kravNummer + '/' + kravVersjon
             }
             setUrl(redirectUrl)
-
-          }
-          else if (resp.length>=2) {
+          } else if (resp.length >= 2) {
+            console.log(resp)
+          } else {
             console.log(resp)
           }
-          else {
-            console.log(resp)
-          }
-
         })
       })()
     }
   }, [id])
+
   if (url) {
-    return <Navigate to={url} replace/>
+    return <Navigate to={url} replace />
   }
 
-  return (
-    <Block>test redirect</Block>
-  )
+  return <Block>test redirect</Block>
 }
 
 export default AppRoutes

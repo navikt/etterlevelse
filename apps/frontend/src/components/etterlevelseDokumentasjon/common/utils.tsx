@@ -26,8 +26,7 @@ const getBehandlingLinks = (etterlevelseDokumentasjon: EtterlevelseDokumentasjon
                 text={
                   etterlevelseDokumentasjon.behandlinger && etterlevelseDokumentasjon.behandlinger.length > 0
                     ? `B${etterlevelseDokumentasjon.behandlinger[index].nummer} ${etterlevelseDokumentasjon.behandlinger[index].overordnetFormaal?.shortName}: ${etterlevelseDokumentasjon.behandlinger[index].navn}`
-                    : 
-                  'Ingen data'
+                    : 'Ingen data'
                 }
               />
             </ExternalLink>

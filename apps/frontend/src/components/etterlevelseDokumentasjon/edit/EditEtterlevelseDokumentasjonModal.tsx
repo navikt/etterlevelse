@@ -127,7 +127,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
       await updateEtterlevelseDokumentasjon(etterlevelseDokumentasjon).then((response) => {
         setIsEtterlevelseDokumntasjonerModalOpen(false)
         if (props.setEtterlevelseDokumentasjon) {
-            props.setEtterlevelseDokumentasjon({ ...response, virkemiddel: selectedVirkemiddel })
+          props.setEtterlevelseDokumentasjon({ ...response, virkemiddel: selectedVirkemiddel })
         }
       })
     }
@@ -342,44 +342,45 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                   />
 
                   {values.behandlerPersonopplysninger && (
-                     <FieldWrapper>
-                     <FieldArray name="behandlinger">
-                       {(p: FieldArrayRenderProps) => {
-                         return (
-                           <FormControl label={
-                            <LabelWithTooltip
-                            label={'Legg til eksisterende behandling fra behandlingskatalogen'}
-                            tooltip="Søk og legg til behandling fra Behandlingskatalog. Dette er ikke nødvendig for å opprette ny etterlevelse, men anbefales."
-                          />
-                           }
-                           >
-                             <Block>
-                               <Block display="flex">
-                                 <CustomizedSelect
-                                   overrides={selectCustomOverrides('behandlinger', p)}
-                                   placeholder="Søk behandlinger"
-                                   aria-label="Søk behandlinger"
-                                   noResultsMsg={intl.emptyTable}
-                                   maxDropdownHeight="350px"
-                                   searchable={true}
-                                   type={TYPE.search}
-                                   labelKey="navn"
-                                   onInputChange={(event) => setBehandlingSearchResult(event.currentTarget.value)}
-                                   options={behandlingSearchResult}
-                                   onChange={({ value }) => {
-                                     value.length && p.push(value[0])
-                                   }}
-                                   isLoading={loadingBehandlingSearchResult}
-                                   error={!!p.form.errors.behandlinger && !!p.form.submitCount}
-                                 />
-                               </Block>
-                               <RenderTagList wide list={p.form.values.behandlinger.map((b: Behandling) => b.navn)} onRemove={p.remove} />
-                             </Block>
-                           </FormControl>
-                         )
-                       }}
-                     </FieldArray>
-                   </FieldWrapper>
+                    <FieldWrapper>
+                      <FieldArray name="behandlinger">
+                        {(p: FieldArrayRenderProps) => {
+                          return (
+                            <FormControl
+                              label={
+                                <LabelWithTooltip
+                                  label={'Legg til eksisterende behandling fra behandlingskatalogen'}
+                                  tooltip="Søk og legg til behandling fra Behandlingskatalog. Dette er ikke nødvendig for å opprette ny etterlevelse, men anbefales."
+                                />
+                              }
+                            >
+                              <Block>
+                                <Block display="flex">
+                                  <CustomizedSelect
+                                    overrides={selectCustomOverrides('behandlinger', p)}
+                                    placeholder="Søk behandlinger"
+                                    aria-label="Søk behandlinger"
+                                    noResultsMsg={intl.emptyTable}
+                                    maxDropdownHeight="350px"
+                                    searchable={true}
+                                    type={TYPE.search}
+                                    labelKey="navn"
+                                    onInputChange={(event) => setBehandlingSearchResult(event.currentTarget.value)}
+                                    options={behandlingSearchResult}
+                                    onChange={({ value }) => {
+                                      value.length && p.push(value[0])
+                                    }}
+                                    isLoading={loadingBehandlingSearchResult}
+                                    error={!!p.form.errors.behandlinger && !!p.form.submitCount}
+                                  />
+                                </Block>
+                                <RenderTagList wide list={p.form.values.behandlinger.map((b: Behandling) => b.navn)} onRemove={p.remove} />
+                              </Block>
+                            </FormControl>
+                          )
+                        }}
+                      </FieldArray>
+                    </FieldWrapper>
                   )}
                   <Block display="flex" alignItems="center" marginTop="100px">
                     <Checkbox

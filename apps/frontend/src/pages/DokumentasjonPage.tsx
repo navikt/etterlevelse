@@ -31,7 +31,11 @@ export const DokumentasjonPage = () => {
   const [etterlevelseDokumentasjon, setEtterlevelseDokumentasjon] = useEtterlevelseDokumentasjon(params.id)
   const [etterlevelseArkiv, setEtterlevelseArkiv] = useArkiveringByEtterlevelseDokumentasjonId(params.id)
 
-  const { data: relevanteData, refetch: refetchRelevanteData, loading } = useQuery<{ etterlevelseDokumentasjon: PageResponse<{ stats: EtterlevelseDokumentasjonStats }> }>(statsQuery, {
+  const {
+    data: relevanteData,
+    refetch: refetchRelevanteData,
+    loading,
+  } = useQuery<{ etterlevelseDokumentasjon: PageResponse<{ stats: EtterlevelseDokumentasjonStats }> }>(statsQuery, {
     variables: { etterlevelseDokumentasjonId: etterlevelseDokumentasjon?.id },
   })
 
@@ -45,10 +49,10 @@ export const DokumentasjonPage = () => {
   const filterData = (
     unfilteredData:
       | {
-        etterlevelseDokumentasjon: PageResponse<{
-          stats: EtterlevelseDokumentasjonStats
-        }>
-      }
+          etterlevelseDokumentasjon: PageResponse<{
+            stats: EtterlevelseDokumentasjonStats
+          }>
+        }
       | undefined,
   ) => {
     const relevanteStatusListe: any[] = []
@@ -257,11 +261,11 @@ export const DokumentasjonPage = () => {
       >
         <Block backgroundColor={ettlevColors.grey50} marginTop={theme.sizing.scale800}></Block>
         {getRelevansContent(etterlevelseDokumentasjon)}¨
-        {loading ? 
-        <Block  display="flex" width="100%" justifyContent="center" marginTop={theme.sizing.scale550}>
-          <Spinner size="50px"/>
-        </Block>
-      :
+        {loading ? (
+          <Block display="flex" width="100%" justifyContent="center" marginTop={theme.sizing.scale550}>
+            <Spinner size="50px" />
+          </Block>
+        ) : (
           <Block display="flex" width="100%" justifyContent="space-between" flexWrap marginTop={theme.sizing.scale550}>
             {temaListe.map((tema) => (
               <TemaCardEtterlevelseDokumentasjon
@@ -273,7 +277,7 @@ export const DokumentasjonPage = () => {
               />
             ))}
           </Block>
-        }
+        )}
         {/*
         DISABLED TEMPORARY
         {irrelevanteStats.length > 0 && (
