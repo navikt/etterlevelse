@@ -37,6 +37,7 @@ import EtterlevelseDokumentasjonAdminPage from './pages/EtterlevelseDokumentasjo
 import { useEffect, useState } from 'react'
 import { searchEtterlevelsedokumentasjonByBehandlingId } from './api/EtterlevelseDokumentasjonApi'
 import { Block } from 'baseui/block'
+import { EtterlevelseDokumentasjon } from './constants'
 
 const AppRoutes = (): JSX.Element => {
   return (
@@ -118,25 +119,26 @@ const AppRoutes = (): JSX.Element => {
 const Redirect = () => {
   const { id, tema, filter, kravNummer, kravVersjon } = useParams()
   const [url, setUrl] = useState('')
+  const [etterlevelseDokumentasjoner, setEtterlevelseDokumentasjoner] = useState<EtterlevelseDokumentasjon[]>([])
 
   useEffect(() => {
     if (id) {
       ;(async () => {
-        const etterlevelseDok = await searchEtterlevelsedokumentasjonByBehandlingId(id).then((resp) => {
+        await searchEtterlevelsedokumentasjonByBehandlingId(id).then((resp) => {
           if (resp.length === 1) {
             let redirectUrl = '/dokumentasjon/' + resp[0].id
-            if (tema) {
-              redirectUrl += '/' + tema.toUpperCase()
+            if (tema && !filter) {
+              redirectUrl += '/' + tema.toUpperCase() + '/RELEVANTE_KRAV'
             }
-            if (filter) {
-              redirectUrl += '/' + filter.toUpperCase()
+            else if (tema && filter ) {
+              redirectUrl += '/' + tema.toUpperCase() + '/' + filter.toUpperCase()
             }
             if (kravNummer && kravVersjon) {
               redirectUrl += '/krav/' + kravNummer + '/' + kravVersjon
             }
             setUrl(redirectUrl)
           } else if (resp.length >= 2) {
-            console.log(resp)
+            setEtterlevelseDokumentasjoner(resp)
           } else {
             console.log(resp)
           }

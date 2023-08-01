@@ -169,7 +169,15 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
         if(etterlevelseDokumentasjonResponse.getBehandlingIds() != null && !etterlevelseDokumentasjonResponse.getBehandlingIds().isEmpty()) {
             List<Behandling> behandlingList = new ArrayList<>();
             etterlevelseDokumentasjonResponse.getBehandlingIds().forEach((behandlingId) -> {
-                behandlingList.add(behandlingService.getBehandling(behandlingId));
+                try {
+                    var behandling = behandlingService.getBehandling(behandlingId);
+                    behandlingList.add(behandling);
+                } catch (Exception e) {
+                    var behandling = new Behandling();
+                    behandling.setId(behandlingId);
+                    behandling.setNavn("Finner ikke behandlingen");
+                    behandlingList.add(behandling);
+                }
             });
             etterlevelseDokumentasjonResponse.setBehandlinger(behandlingList);
         }
