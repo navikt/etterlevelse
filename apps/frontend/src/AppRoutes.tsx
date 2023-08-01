@@ -127,10 +127,10 @@ const Redirect = ()=> {
           if (resp.length===1) {
             let redirectUrl = '/dokumentasjon/' + resp[0].id
             if (tema) {
-              redirectUrl+= '/' + tema
+              redirectUrl+= '/' + tema.toUpperCase()
             }
             if (filter) {
-              redirectUrl+= '/' + filter
+              redirectUrl+= '/' + filter.toUpperCase()
             }
             if (kravNummer && kravVersjon) {
               redirectUrl+= '/krav/' + kravNummer + '/' + kravVersjon

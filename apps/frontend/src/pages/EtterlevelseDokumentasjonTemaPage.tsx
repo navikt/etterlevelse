@@ -193,7 +193,7 @@ export const EtterlevelseDokumentasjonTemaPage = () => {
             <Helmet>
               <meta charSet="utf-8" />
               <title>
-                {temaData?.shortName} E{etterlevelseDokumentasjon.etterlevelseNummer.toString()} {etterlevelseDokumentasjon.title.toString()}
+                {temaData? temaData.shortName : ''} E{etterlevelseDokumentasjon.etterlevelseNummer.toString()} {etterlevelseDokumentasjon.title.toString()}
               </title>
             </Helmet>,
           )}
