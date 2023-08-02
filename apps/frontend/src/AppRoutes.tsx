@@ -38,6 +38,7 @@ import { useEffect, useState } from 'react'
 import { searchEtterlevelsedokumentasjonByBehandlingId } from './api/EtterlevelseDokumentasjonApi'
 import { Block } from 'baseui/block'
 import { EtterlevelseDokumentasjon } from './constants'
+import { Spinner } from './components/common/Spinner'
 
 const AppRoutes = (): JSX.Element => {
   return (
@@ -119,17 +120,19 @@ const AppRoutes = (): JSX.Element => {
 const RedirectToEtterlevelseDokumentasjonPage = () => {
   const { id, tema, filter, kravNummer, kravVersjon } = useParams()
   const [url, setUrl] = useState('')
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     if (id) {
-      ;(async () => {
+      ; (async () => {
+        setLoading(true)
         await searchEtterlevelsedokumentasjonByBehandlingId(id).then((resp) => {
           if (resp.length === 1) {
             let redirectUrl = '/dokumentasjon/' + resp[0].id
             if (tema && !filter) {
               redirectUrl += '/' + tema.toUpperCase() + '/RELEVANTE_KRAV'
             }
-            else if (tema && filter ) {
+            else if (tema && filter) {
               redirectUrl += '/' + tema.toUpperCase() + '/' + filter.toUpperCase()
             }
             if (kravNummer && kravVersjon) {
@@ -138,6 +141,7 @@ const RedirectToEtterlevelseDokumentasjonPage = () => {
             setUrl(redirectUrl)
           }
         })
+        setLoading(false)
       })()
     }
   }, [id])
@@ -145,7 +149,15 @@ const RedirectToEtterlevelseDokumentasjonPage = () => {
   if (url) {
     return <Navigate to={url} replace />
   }
-  return <Navigate to={'/dokumentasjoner/behandlingsok?behandlingId=' + id} replace />
+  if (!loading && !url) {
+    return <Navigate to={'/dokumentasjoner/behandlingsok?behandlingId=' + id} replace />
+  }
+
+  return (
+    <Block display="flex" width="100%" justifyContent="center">
+      <Spinner size="50px" />
+    </Block>
+  )
 }
 
 export default AppRoutes
