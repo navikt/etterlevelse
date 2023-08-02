@@ -51,20 +51,11 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
     }
 
     public List<EtterlevelseDokumentasjon> searchEtterlevelseDokumentasjon(String searchParam) {
-
-        String newSearchParam = searchParam;
-
         if(searchParam.toLowerCase().matches("e[0-9]+(.*)")) {
-           newSearchParam = searchParam.substring(1);
+            return GenericStorage.to(etterlevelseDokumentasjonRepo.searchEtterlevelseDokumentasjon(searchParam.substring(1)), EtterlevelseDokumentasjon.class);
+        } else {
+            return GenericStorage.to(etterlevelseDokumentasjonRepo.searchEtterlevelseDokumentasjon(searchParam),EtterlevelseDokumentasjon.class );
         }
-
-        List<GenericStorage> etterlevelseDokumentasjoner = etterlevelseDokumentasjonRepo.searchEtterlevelseDokumentasjonByTitle(newSearchParam);
-
-        if(StringUtils.isNumeric(searchParam)) {
-            etterlevelseDokumentasjoner.addAll(etterlevelseDokumentasjonRepo.searchEtterlevelseDokumentasjonByNumber(newSearchParam));
-        }
-
-        return GenericStorage.to(etterlevelseDokumentasjoner, EtterlevelseDokumentasjon.class);
     }
 
     public List<EtterlevelseDokumentasjon> getByFilter(EtterlevelseDokumentasjonFilter filter) {
