@@ -53,7 +53,7 @@ export const deleteEtterlevelseDokumentasjon = async (etterlevelseDokumentasjonI
   return (await axios.delete<EtterlevelseDokumentasjon>(`${env.backendBaseUrl}/etterlevelsedokumentasjon/${etterlevelseDokumentasjonId}`)).data
 }
 
-export const useEtterlevelseDokumentasjon = (etterlevelseDokumentasjonId?: string, behandlingId?: string) => {
+export const useEtterlevelseDokumentasjon = (etterlevelseDokumentasjonId?: string) => {
   const isCreateNew = etterlevelseDokumentasjonId === 'ny'
   const [data, setData] = useState<EtterlevelseDokumentasjonQL | undefined>(isCreateNew ? etterlevelseDokumentasjonMapToFormVal({}) : undefined)
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -63,25 +63,17 @@ export const useEtterlevelseDokumentasjon = (etterlevelseDokumentasjonId?: strin
 
     setIsLoading(true)
     if (etterlevelseDokumentasjonId && !isCreateNew) {
-      getEtterlevelseDokumentasjon(etterlevelseDokumentasjonId).then(async (etterlevelseDokumentasjon) => {
-        if (etterlevelseDokumentasjon.virkemiddelId) {
-          await getVirkemiddel(etterlevelseDokumentasjon.virkemiddelId).then((virkemiddelResponse) => (virkmiddel = virkemiddelResponse))
-        }
-        setData({ ...etterlevelseDokumentasjon, virkemiddel: virkmiddel })
-        setIsLoading(false)
-      })
-    } else if (behandlingId) {
-      searchEtterlevelsedokumentasjonByBehandlingId(behandlingId).then(async (etterlevelseDokumentasjon) => {
-        if (etterlevelseDokumentasjon) {
-          if (etterlevelseDokumentasjon[0].virkemiddelId) {
-            await getVirkemiddel(etterlevelseDokumentasjon[0].virkemiddelId).then((virkemiddelResponse) => (virkmiddel = virkemiddelResponse))
+      ;(async () => {
+        await getEtterlevelseDokumentasjon(etterlevelseDokumentasjonId).then(async (etterlevelseDokumentasjon) => {
+          if (etterlevelseDokumentasjon.virkemiddelId) {
+            await getVirkemiddel(etterlevelseDokumentasjon.virkemiddelId).then((virkemiddelResponse) => (virkmiddel = virkemiddelResponse))
           }
-          setData({ ...etterlevelseDokumentasjon[0], virkemiddel: virkmiddel })
+          setData({ ...etterlevelseDokumentasjon, virkemiddel: virkmiddel })
           setIsLoading(false)
-        }
-      })
+        })
+      })()
     }
-  }, [etterlevelseDokumentasjonId, behandlingId])
+  }, [etterlevelseDokumentasjonId])
 
   return [data, setData, isLoading] as [EtterlevelseDokumentasjonQL | undefined, (e: EtterlevelseDokumentasjonQL) => void, boolean]
 }
