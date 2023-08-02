@@ -64,6 +64,7 @@ export const primitives: ThemePrimitives & { primary150: string; primary350: str
 export const searchResultColor = {
   kravBackground: '#FFE9CC',
   behandlingBackground: '#F5DBEB',
+  dokumentasjonBackground: '#99e8a7',
   underavdelingBackground: '#99C2E8',
 }
 

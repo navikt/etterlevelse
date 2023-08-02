@@ -81,6 +81,8 @@ export const urlForObject = (type: NavigableItem | string, id: string, audit?: A
       return `/krav/${id}`
     case ObjectType.Etterlevelse:
       return `/etterlevelse/${id}`
+    case ObjectType.EtterlevelseDokumentasjon:
+      return `/dokumentasjon/${id}`
     case ObjectType.BehandlingData:
     case ObjectType.Behandling:
       return `/behandling/${id}`

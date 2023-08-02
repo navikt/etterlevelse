@@ -11,7 +11,7 @@ import { Radio, RadioGroup } from 'baseui/radio'
 import { borderColor, borderRadius, borderStyle, borderWidth, padding, paddingZero } from '../common/Style'
 import SearchLabel from './components/SearchLabel'
 import { NavigableItem, ObjectType } from '../admin/audit/AuditTypes'
-import { Behandling, Krav, KravStatus } from '../../constants'
+import { Behandling, EtterlevelseDokumentasjon, Krav, KravStatus } from '../../constants'
 import shortid from 'shortid'
 import { ettlevColors, searchResultColor } from '../../util/theme'
 import { kravName } from '../../pages/KravPage'
@@ -21,14 +21,15 @@ import { codelist, ListName } from '../../services/Codelist'
 import { clearSearchIcon, filterIcon, navChevronDownIcon, searchIcon } from '../Images'
 import { ParagraphMedium } from 'baseui/typography'
 import { urlForObject } from '../common/RouteLink'
+import { etterlevelseDokumentasjonName, searchEtterlevelsedokumentasjon } from '../../api/EtterlevelseDokumentasjonApi'
 
 shortid.characters('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@')
 
 type SearchItem = { id: string; sortKey: string; label: ReactElement; type: NavigableItem | string }
 
-type SearchType = 'all' | ObjectType.Krav | ObjectType.Behandling | ListName.UNDERAVDELING
+type SearchType = 'all' | ObjectType.Krav | ObjectType.Behandling | ListName.UNDERAVDELING | ObjectType.EtterlevelseDokumentasjon
 
-type GroupedResult = { Krav?: SearchItem[]; Behandling?: SearchItem[]; Underavdeling?: SearchItem[]; all?: SearchItem[]; __ungrouped: SearchItem[] }
+type GroupedResult = { Krav?: SearchItem[]; Dokumentasjon?: SearchItem[]; Behandling?: SearchItem[];  Underavdeling?: SearchItem[]; all?: SearchItem[]; __ungrouped: SearchItem[] }
 
 type RadioProps = {
   $isHovered: boolean
@@ -125,6 +126,7 @@ const SelectType = (props: { type: SearchType; setType: (type: SearchType) => vo
             >
               {SmallRadio('all', 'Alle')}
               {SmallRadio(ObjectType.Krav, 'Krav')}
+              {SmallRadio(ObjectType.EtterlevelseDokumentasjon, 'Dokumentasjon')}
               {SmallRadio(ObjectType.Behandling, 'Behandling')}
               {SmallRadio(ListName.UNDERAVDELING, 'Underavdeling')}
             </RadioGroup>
@@ -149,18 +151,25 @@ const behandlingMap = (t: Behandling) => ({
   type: ObjectType.Behandling,
 })
 
+const EtterlevelseDokumentasjonMap = (t: EtterlevelseDokumentasjon) => ({
+  id: t.id,
+  sortKey: t.title,
+  label: <SearchLabel name={etterlevelseDokumentasjonName(t)} type={'Dokumentasjon'} backgroundColor={searchResultColor.dokumentasjonBackground} />,
+  type: ObjectType.EtterlevelseDokumentasjon,
+})
+
 const getCodelist = (search: string, list: ListName, typeName: string) => {
   return codelist
     .getCodes(list)
     .filter((c) => c.shortName.toLowerCase().indexOf(search.toLowerCase()) >= 0)
     .map(
       (c) =>
-        ({
-          id: c.code,
-          sortKey: c.shortName,
-          label: <SearchLabel name={c.shortName} type={typeName} />,
-          type: list,
-        } as SearchItem),
+      ({
+        id: c.code,
+        sortKey: c.shortName,
+        label: <SearchLabel name={c.shortName} type={typeName} />,
+        type: list,
+      } as SearchItem),
     )
 }
 
@@ -198,7 +207,7 @@ const useMainSearch = (searchParam?: string) => {
       setSearchResult(getCodelist(search, ListName.UNDERAVDELING, 'Underavdeling'))
     } else {
       if (search && search.replace(/ /g, '').length > 2) {
-        ;(async () => {
+        ; (async () => {
           let results: SearchItem[] = []
           let searches: Promise<any>[] = []
           const compareFn = (a: SearchItem, b: SearchItem) => prefixBiasedSort(search, a.sortKey, b.sortKey)
@@ -266,6 +275,10 @@ const useMainSearch = (searchParam?: string) => {
           if (type === 'all' || type === ObjectType.Behandling) {
             searches.push((async () => add((await searchBehandling(search)).map(behandlingMap)))())
           }
+          if (type === 'all' || type === ObjectType.EtterlevelseDokumentasjon) {
+            searches.push((async () => add((await searchEtterlevelsedokumentasjon(search)).map(EtterlevelseDokumentasjonMap)))())
+          }
+
           await Promise.all(searches)
           setLoading(false)
         })()
@@ -384,9 +397,11 @@ const MainSearch = () => {
     const groupedResults: GroupedResult = {
       __ungrouped: [],
       Krav: [],
+      Dokumentasjon: [],
       all: [],
       Behandling: [],
       Underavdeling: [],
+      
     }
 
     if (value.length && value[0].id && value[0].id.toString().length > 2) {
@@ -396,6 +411,8 @@ const MainSearch = () => {
     searchResult.forEach((r: SearchItem) => {
       if (r.type === 'Krav') {
         groupedResults.Krav?.push(r)
+      } else if (r.type === 'EtterlevelseDokumentasjon') {
+        groupedResults.Dokumentasjon?.push(r)
       } else if (r.type === 'Behandling') {
         groupedResults.Behandling?.push(r)
       } else if (r.type === 'UNDERAVDELING') {
@@ -439,15 +456,15 @@ const MainSearch = () => {
           }}
           onChange={(params) => {
             const item = params.value[0] as SearchItem
-            ;(async () => {
-              if (item && item.type !== '__ungrouped') {
-                setValue([item])
-                navigate(urlForObject(item.type, item.id))
-                window.location.reload()
-              } else if (item && item.type === '__ungrouped') {
-                setFilterClicked(true)
-              }
-            })()
+              ; (async () => {
+                if (item && item.type !== '__ungrouped') {
+                  setValue([item])
+                  navigate(urlForObject(item.type, item.id))
+                  window.location.reload()
+                } else if (item && item.type === '__ungrouped') {
+                  setFilterClicked(true)
+                }
+              })()
           }}
           filterOptions={(options) => options}
           setValue={setValue}

@@ -7,6 +7,9 @@ import { getTeams } from './TeamApi'
 import { getVirkemiddel } from './VirkemiddelApi'
 import * as yup from 'yup'
 
+
+export const etterlevelseDokumentasjonName = (etterlevelseDokumentasjon?: EtterlevelseDokumentasjon) => (etterlevelseDokumentasjon ? 'E' + etterlevelseDokumentasjon.etterlevelseNummer + ' ' + etterlevelseDokumentasjon.title : '')
+
 export const getEtterlevelseDokumentasjon = async (id: string) => {
   return (await axios.get<EtterlevelseDokumentasjon>(`${env.backendBaseUrl}/etterlevelsedokumentasjon/${id}`)).data
 }
