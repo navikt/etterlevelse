@@ -52,6 +52,7 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
 
     public List<EtterlevelseDokumentasjon> searchEtterlevelseDokumentasjon(String searchParam) {
         if(searchParam.toLowerCase().matches("e[0-9]+(.*)")) {
+            log.info("TRIGGER SEARCH WITH ETTERLEVELSE NUMMER: " + searchParam + " , setting search to: " + searchParam.substring(1));
             return GenericStorage.to(etterlevelseDokumentasjonRepo.searchEtterlevelseDokumentasjon(searchParam.substring(1)), EtterlevelseDokumentasjon.class);
         } else {
             return GenericStorage.to(etterlevelseDokumentasjonRepo.searchEtterlevelseDokumentasjon(searchParam),EtterlevelseDokumentasjon.class );
