@@ -140,7 +140,7 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
             request.setEtterlevelseNummer(etterlevelseDok.getEtterlevelseNummer());
             request.setTitle(etterlevelseDok.getTitle());
             request.setBehandlingIds(etterlevelseDok.getBehandlingIds());
-            request.setBehandlerPersonopplysninger(etterlevelseDok.isBehandlerPersonopplysninger());
+            request.setBehandlerPersonopplysninger(true);
             request.setVirkemiddelId(etterlevelseDok.getVirkemiddelId());
             request.setKnyttetTilVirkemiddel(false);
             request.setIrrelevansFor(etterlevelseDok.getIrrelevansFor().stream().map(CodelistResponse::getCode).toList());
