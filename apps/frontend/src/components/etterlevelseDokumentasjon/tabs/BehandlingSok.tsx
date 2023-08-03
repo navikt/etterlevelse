@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { Behandling, EtterlevelseDokumentasjonQL, PageResponse, emptyPage } from '../../../constants'
-import { EtterlevelseDokumentasjonerPanels, Variables, query, tabMarginBottom } from '../../../pages/MyEtterlevelseDokumentasjonerPage'
-import { useQuery } from '@apollo/client'
+import { EtterlevelseDokumentasjonerPanels, Variables, tabMarginBottom } from '../../../pages/MyEtterlevelseDokumentasjonerPage'
+import { gql, useQuery } from '@apollo/client'
 import { Block } from 'baseui/block'
 import { LabelLarge, LabelSmall } from 'baseui/typography'
 import { theme } from '../../../util'
@@ -68,7 +68,7 @@ export const BehandlingSok = () => {
       const behandling = behandlinger.filter((value) => value.id === selectedBehandling?.id || value.id === behandlingUUID)[0]
       return 'Dokumentasjoner med B' + behandling.nummer + ' ' + behandling.navn + ' som behandling'
     } else if (selectedBehandling && !(!!behandlinger && behandlinger.length)) {
-      return 'Fant ingen dokumentasjoner med B' + selectedBehandling.nummer + ' ' + selectedBehandling.navn + ' som behandling'
+      return 'Fant ingen dokumentasjoner med "B' + selectedBehandling.nummer + ' ' + selectedBehandling.navn + '" som behandling'
     }
   }
 
@@ -142,5 +142,43 @@ export const BehandlingSok = () => {
     </Block>
   )
 }
+
+const query = gql`
+  query getEtterlevelseDokumentasjoner(
+    $pageNumber: NonNegativeInt
+    $pageSize: NonNegativeInt
+    $mineEtterlevelseDokumentasjoner: Boolean
+    $sistRedigert: NonNegativeInt
+    $sok: String
+    $behandlingId: String
+  ) {
+    etterlevelseDokumentasjoner: etterlevelseDokumentasjon(
+      filter: { mineEtterlevelseDokumentasjoner: $mineEtterlevelseDokumentasjoner, sistRedigert: $sistRedigert, sok: $sok, behandlingId: $behandlingId }
+      pageNumber: $pageNumber
+      pageSize: $pageSize
+    ) {
+      pageNumber
+      pageSize
+      pages
+      numberOfElements
+      totalElements
+      content {
+        id
+        title
+        etterlevelseNummer
+        sistEndretEtterlevelse
+        teamsData {
+          id
+          name
+        }
+        behandlinger {
+          id
+          navn
+          nummer
+        }
+      }
+    }
+  }
+`
 
 export default BehandlingSok

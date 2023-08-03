@@ -140,7 +140,7 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
             request.setEtterlevelseNummer(etterlevelseDok.getEtterlevelseNummer());
             request.setTitle(etterlevelseDok.getTitle());
             request.setBehandlingIds(etterlevelseDok.getBehandlingIds());
-            request.setBehandlerPersonopplysninger(etterlevelseDok.isBehandlerPersonopplysninger());
+            request.setBehandlerPersonopplysninger(true);
             request.setVirkemiddelId(etterlevelseDok.getVirkemiddelId());
             request.setKnyttetTilVirkemiddel(false);
             request.setIrrelevansFor(etterlevelseDok.getIrrelevansFor().stream().map(CodelistResponse::getCode).toList());
@@ -176,7 +176,15 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
             List<TeamResponse> teamsData = new ArrayList<>();
             etterlevelseDokumentasjonResponse.getTeams().forEach((teamId) -> {
                 var teamData = teamcatTeamClient.getTeam(teamId);
-                teamData.ifPresent(team -> teamsData.add(team.toResponse()));
+                if(teamData.isPresent()){
+                    teamsData.add(teamData.get().toResponse());
+                } else {
+                    var emptyTeamData = new TeamResponse();
+                    emptyTeamData.setId(teamId);
+                    emptyTeamData.setName(teamId);
+                    emptyTeamData.setDescription("fant ikke team med id: " + teamId);
+                    teamsData.add(emptyTeamData);
+                }
             });
             etterlevelseDokumentasjonResponse.setTeamsData(teamsData);
         }

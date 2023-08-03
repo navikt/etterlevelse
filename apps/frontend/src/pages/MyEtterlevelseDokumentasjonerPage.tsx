@@ -470,11 +470,6 @@ export const query = gql`
           id
           name
         }
-        behandlinger {
-          id
-          navn
-          nummer
-        }
       }
     }
   }
