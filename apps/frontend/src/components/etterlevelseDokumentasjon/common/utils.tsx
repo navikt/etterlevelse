@@ -21,7 +21,8 @@ const getBehandlingLinks = (etterlevelseDokumentasjon: EtterlevelseDokumentasjon
       {etterlevelseDokumentasjon.behandlingIds.map((behandlingId, index) => {
         return (
           <Block key={'behandling_link_' + index}>
-            <ExternalLink href={`${env.pollyBaseUrl}process/${behandlingId}`}>
+            {etterlevelseDokumentasjon.behandlinger && etterlevelseDokumentasjon.behandlinger[index].nummer>0 && etterlevelseDokumentasjon.behandlinger[index].overordnetFormaal && etterlevelseDokumentasjon.behandlinger[index].overordnetFormaal.shortName?
+              <ExternalLink href={`${env.pollyBaseUrl}process/${behandlingId}`}>
               <ExternalLinkWrapper
                 text={
                   etterlevelseDokumentasjon.behandlinger && etterlevelseDokumentasjon.behandlinger.length > 0
@@ -30,6 +31,12 @@ const getBehandlingLinks = (etterlevelseDokumentasjon: EtterlevelseDokumentasjon
                 }
               />
             </ExternalLink>
+              :
+              <Block $style={{fontSize: '18px', lineHeight: '22px', fontFamily: 'Source Sans Pro', fontWeight: 'normal' }}>
+                {etterlevelseDokumentasjon.behandlinger ? etterlevelseDokumentasjon.behandlinger[index].navn : 'Ingen data'}
+              </Block>
+
+            }
           </Block>
         )
       })}
