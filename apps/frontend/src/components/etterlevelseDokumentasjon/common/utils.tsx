@@ -78,9 +78,13 @@ export const getMainHeader = (etterlevelseDokumentasjon: EtterlevelseDokumentasj
         </Block>
       )}
       {etterlevelseDokumentasjon.behandlerPersonopplysninger && (
-        <Block display="flex" alignItems="flex-start" marginTop={etterlevelseDokumentasjon.virkemiddelId ? '8px' : '0px'}>
+        <Block
+          display="flex"
+          alignItems={etterlevelseDokumentasjon.behandlingIds && etterlevelseDokumentasjon.behandlingIds.length>=1 ? "flex-start" : "center"}
+          marginTop={etterlevelseDokumentasjon.virkemiddelId ? '8px' : '0px'}
+        >
           <LabelSmall $style={{ lineHeight: '22px', marginRight: '10px', fontSize: '16px', color: ettlevColors.green600 }}>Behandling:</LabelSmall>
-          {etterlevelseDokumentasjon.behandlingIds && etterlevelseDokumentasjon.behandlerPersonopplysninger ? (
+          {etterlevelseDokumentasjon.behandlingIds && etterlevelseDokumentasjon.behandlingIds.length>=1 && etterlevelseDokumentasjon.behandlerPersonopplysninger ? (
             getBehandlingLinks(etterlevelseDokumentasjon)
           ) : (
             <Block
