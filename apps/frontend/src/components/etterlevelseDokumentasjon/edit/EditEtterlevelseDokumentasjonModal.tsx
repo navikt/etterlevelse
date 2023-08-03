@@ -116,21 +116,22 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
   }, [props.etterlevelseDokumentasjon])
 
   const submit = async (etterlevelseDokumentasjon: EtterlevelseDokumentasjonQL) => {
-    if (!etterlevelseDokumentasjon.id || etterlevelseDokumentasjon.id === 'ny') {
-      await createEtterlevelseDokumentasjon(etterlevelseDokumentasjon).then((response) => {
-        setIsEtterlevelseDokumntasjonerModalOpen(false)
-        if (props.setEtterlevelseDokumentasjon) {
-          props.setEtterlevelseDokumentasjon(response)
-        }
-      })
-    } else {
-      await updateEtterlevelseDokumentasjon(etterlevelseDokumentasjon).then((response) => {
-        setIsEtterlevelseDokumntasjonerModalOpen(false)
-        if (props.setEtterlevelseDokumentasjon) {
-          props.setEtterlevelseDokumentasjon({ ...response, virkemiddel: selectedVirkemiddel })
-        }
-      })
-    }
+    console.log(etterlevelseDokumentasjon)
+    // if (!etterlevelseDokumentasjon.id || etterlevelseDokumentasjon.id === 'ny') {
+    //   await createEtterlevelseDokumentasjon(etterlevelseDokumentasjon).then((response) => {
+    //     setIsEtterlevelseDokumntasjonerModalOpen(false)
+    //     if (props.setEtterlevelseDokumentasjon) {
+    //       props.setEtterlevelseDokumentasjon(response)
+    //     }
+    //   })
+    // } else {
+    //   await updateEtterlevelseDokumentasjon(etterlevelseDokumentasjon).then((response) => {
+    //     setIsEtterlevelseDokumntasjonerModalOpen(false)
+    //     if (props.setEtterlevelseDokumentasjon) {
+    //       props.setEtterlevelseDokumentasjon({ ...response, virkemiddel: selectedVirkemiddel })
+    //     }
+    //   })
+    // }
   }
 
   return (
