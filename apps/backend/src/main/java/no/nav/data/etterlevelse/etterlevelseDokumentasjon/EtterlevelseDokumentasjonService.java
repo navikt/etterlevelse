@@ -176,7 +176,7 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
                 } catch (WebClientResponseException.NotFound e) {
                     var behandling = new Behandling();
                     behandling.setId(behandlingId);
-                    behandling.setNavn("Finner ikke behandlingen");
+                    behandling.setNavn("Fant ikke behandling med id: " + behandlingId);
                     behandlingList.add(behandling);
                 }
             });
@@ -191,8 +191,8 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
                 } else {
                     var emptyTeamData = new TeamResponse();
                     emptyTeamData.setId(teamId);
-                    emptyTeamData.setName(teamId);
-                    emptyTeamData.setDescription("fant ikke team med id: " + teamId);
+                    emptyTeamData.setName("Fant ikke team med id: " + teamId);
+                    emptyTeamData.setDescription("Fant ikke team med id: " + teamId);
                     teamsData.add(emptyTeamData);
                 }
             });
