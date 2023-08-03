@@ -28,6 +28,8 @@ import no.nav.data.integration.team.teamcat.TeamcatTeamClient;
 import org.docx4j.jaxb.Context;
 import org.docx4j.wml.ObjectFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClientException;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -67,8 +69,14 @@ public class EtterlevelseDokumentasjonToDoc {
         if (etterlevelseDokumentasjon.getBehandlingIds() != null && !etterlevelseDokumentasjon.getBehandlingIds().isEmpty()) {
             doc.addHeading3("Knyttet behandling");
             etterlevelseDokumentasjon.getBehandlingIds().forEach(behandlingId -> {
-                var behandling = behandlingService.getBehandling(behandlingId);
-                doc.addText("B" + behandling.getNummer() + " " + behandling.getOverordnetFormaal().getShortName() + ": " + behandling.getNavn());
+                try {
+                    var behandling = behandlingService.getBehandling(behandlingId);
+                    doc.addText("B" + behandling.getNummer() + " " + behandling.getOverordnetFormaal().getShortName() + ": " + behandling.getNavn());
+                }
+               catch (WebClientResponseException.NotFound e) {
+                   doc.addText("Fant ikke behandling med ID: " + behandlingId);
+                }
+
             });
         }
 
@@ -76,7 +84,13 @@ public class EtterlevelseDokumentasjonToDoc {
         if (etterlevelseDokumentasjon.getTeams() != null && !etterlevelseDokumentasjon.getTeams().isEmpty()) {
             etterlevelseDokumentasjon.getTeams().forEach(teamId -> {
                 var team = teamService.getTeam(teamId);
-                team.ifPresent(t -> doc.addMarkdownText("- [" + t.getName() + "](" + System.getenv("CLIENT_TEAMCAT_FRONTEND_URL") + "/team/" + t.getId() + ")"));
+                if (team.isPresent()) {
+                    doc.addMarkdownText("- [" + team.get().getName() + "](" + System.getenv("CLIENT_TEAMCAT_FRONTEND_URL") + "/team/" + team.get().getId() + ")");
+                }
+                else {
+                    doc.addMarkdownText("- [Fant ikke team med ID: " + teamId + "](" + System.getenv("CLIENT_TEAMCAT_FRONTEND_URL") + "/team/" + teamId + ")");
+                }
+
             });
         } else {
             doc.addText("Ikke angitt");
