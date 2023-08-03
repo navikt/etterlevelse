@@ -129,7 +129,12 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
             var newData = addBehandlingAndTeamsData(etterlevelseDok);
 
             if(newData.getBehandlinger() != null && !newData.getBehandlinger().isEmpty()) {
-                    String newTitle = newData.getBehandlinger().get(0).getOverordnetFormaal().getShortName() + ": " + newData.getBehandlinger().get(0).getNavn();
+                    String newTitle = "";
+                    if (newData.getBehandlinger().get(0).getOverordnetFormaal() != null) {
+                        newTitle += newData.getBehandlinger().get(0).getOverordnetFormaal().getShortName() + ": ";
+                    }
+                    newTitle += newData.getBehandlinger().get(0).getNavn();
+
                     etterlevelseDok.setTitle(newTitle);
                     List<String> teamIds = newData.getBehandlinger().get(0).getTeams();
                     etterlevelseDok.setTeams(teamIds);
