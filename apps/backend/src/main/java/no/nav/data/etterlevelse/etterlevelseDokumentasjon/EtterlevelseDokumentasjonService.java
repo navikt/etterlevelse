@@ -19,6 +19,7 @@ import no.nav.data.integration.team.teamcat.TeamcatTeamClient;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -148,7 +149,7 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
 
             var savedEtterlevelseDok = save(request);
             savedEtterlevelseDokumentasjoner.add(savedEtterlevelseDok);
-            } catch (Exception ignored) {
+            } catch (WebClientResponseException.NotFound ignored) {
 
             }
         });
@@ -163,7 +164,7 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
                 try {
                     var behandling = behandlingService.getBehandling(behandlingId);
                     behandlingList.add(behandling);
-                } catch (Exception e) {
+                } catch (WebClientResponseException.NotFound e) {
                     var behandling = new Behandling();
                     behandling.setId(behandlingId);
                     behandling.setNavn("Finner ikke behandlingen");
