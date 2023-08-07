@@ -133,6 +133,7 @@ public class EtterlevelseDokumentasjonController {
         return ResponseEntity.ok(etterlevelseDokumentasjon.toResponse());
     }
 
+    //TODO
     //WILL DELETE AFTER 1 USE IN DEV AND PROD AND AFTER MIGRATION
     @Operation(summary = "Update ettelevelse documentation with title and teams data")
     @ApiResponse(description = "Updated etterlevelse Documentation with teams and title")

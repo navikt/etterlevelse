@@ -116,6 +116,7 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
         return addBehandlingAndTeamsData(etterlevelseDokumentasjonResponse);
     }
 
+    //TODO
     //REMOVE AFTER USE IN DEV AND PROD AFTER MIGRATION
     public List<EtterlevelseDokumentasjon> updateEtterlevelseDokumentasjonWithTitleAndTeamDataFromBehandling(){
         List<EtterlevelseDokumentasjon> etterlevelseDokumentasjoner = GenericStorage.to(etterlevelseDokumentasjonRepo.getAllEtterlevelseDokumentasjoner(), EtterlevelseDokumentasjon.class);
