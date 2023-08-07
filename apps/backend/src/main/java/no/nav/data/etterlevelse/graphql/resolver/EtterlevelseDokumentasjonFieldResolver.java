@@ -60,6 +60,10 @@ public class EtterlevelseDokumentasjonFieldResolver implements GraphQLResolver<E
         return LoaderUtils.get(env, ETTERLEVELSE_FOR_ETTERLEVELSEDOKUMENTASJON_LOADER, etterlevelseDokumentasjon.getId().toString(), this::sistEndret);
     }
 
+    public LocalDateTime sistEndretDokumentasjon(EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse) {
+        return etterlevelseDokumentasjonResponse.getChangeStamp().getLastModifiedDate();
+    }
+
     public EtterlevelseDokumentasjonStats stats(EtterlevelseDokumentasjonResponse etterlevelseDokumentasjon) {
 
         var etterlevelser = etterlevelseService.getByEtterlevelseDokumentasjon(etterlevelseDokumentasjon.getId().toString());
