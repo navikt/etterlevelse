@@ -118,25 +118,33 @@ export const EtterlevelseAdminPage = () => {
           </Button>
         </Block>
       </Block>
-      {updateMessage ? (
+      <UpdateMessage message={updateMessage} />
+    </Layout2>
+  )
+}
+
+export const UpdateMessage = ({message}:{message?: string}) => {
+  return (
+    <Block>
+           {message ? (
         <Block>
-          {updateMessage.match('error') ? (
+          {message.match('error') ? (
             <Notification
               overrides={{ Body: { style: { width: 'auto', ...paddingZero, marginTop: 0, backgroundColor: 'transparent', color: ettlevColors.red600 } } }}
               kind={NKIND.negative}
             >
-              {updateMessage}
+              {message}
             </Notification>
           ) : (
             <Notification overrides={{ Body: { style: { width: 'auto', ...paddingZero, marginTop: 0, backgroundColor: 'transparent' } } }} kind={NKIND.positive}>
-              {updateMessage}
+              {message}
             </Notification>
           )}
         </Block>
       ) : (
         <Block />
       )}
-    </Layout2>
+    </Block>
   )
 }
 export default EtterlevelseAdminPage
