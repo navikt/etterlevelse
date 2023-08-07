@@ -69,7 +69,7 @@ public class EtterlevelseDokumentasjonRepoImpl implements EtterlevelseDokumentas
 
         if (filter.getSistRedigert() != null) {
             query += """
-                     and data ->> 'id' in (
+                     and (data ->> 'id' in (
                        select etterlevelseDokumentasjonId
                          from (
                                   select distinct on (data #>> '{data,etterlevelseDokumentasjonId}') data #>> '{data,etterlevelseDokumentasjonId}' etterlevelseDokumentasjonId, time
@@ -84,7 +84,7 @@ public class EtterlevelseDokumentasjonRepoImpl implements EtterlevelseDokumentas
                          limit :limit
                     )
                     
-                    and data ->> 'id' in (
+                    or data ->> 'id' in (
                        select etterlevelseDokumentasjonId
                          from (
                                   select distinct on (data #>> '{data,id}') data #>> '{data,id}' etterlevelseDokumentasjonId, time
@@ -97,7 +97,7 @@ public class EtterlevelseDokumentasjonRepoImpl implements EtterlevelseDokumentas
                               ) sub
                          order by time desc
                          limit :limit
-                    )
+                    ))
                     """;
             par.addValue("limit", filter.getSistRedigert())
                     .addValue("user_id", SecurityUtils.getCurrentIdent() + "%");
