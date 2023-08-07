@@ -33,6 +33,7 @@ import {useSearchTeam} from '../../../api/TeamApi'
 import {RenderTagList} from '../../common/TagList'
 import {useSearchVirkemiddel} from '../../../api/VirkemiddelApi'
 import {Checkbox, LABEL_PLACEMENT} from 'baseui/checkbox'
+import { useNavigate } from 'react-router-dom'
 
 type EditEtterlevelseDokumentasjonModalProps = {
   etterlevelseDokumentasjon?: EtterlevelseDokumentasjonQL
@@ -86,6 +87,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
   const [selectedVirkemiddel, setSelectedVirkemiddel] = useState<Virkemiddel>()
   const [checkedAddTeam, setCheckedAddTeam] = useState(false)
   const [teamSearchResult, setTeamSearchResult, loadingTeamSearchResult] = useSearchTeam()
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (props.etterlevelseDokumentasjon && props.etterlevelseDokumentasjon.irrelevansFor.length) {
@@ -121,6 +123,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
         if (props.setEtterlevelseDokumentasjon) {
           props.setEtterlevelseDokumentasjon(response)
         }
+        navigate(0)
       })
     } else {
       await updateEtterlevelseDokumentasjon(etterlevelseDokumentasjon).then((response) => {
