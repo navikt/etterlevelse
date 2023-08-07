@@ -431,6 +431,7 @@ export type BehandlingQL = Behandling & {
 export type EtterlevelseDokumentasjonQL = EtterlevelseDokumentasjon & {
   etterlevelser?: Etterlevelse[]
   sistEndretEtterlevelse?: string
+  sistEndretDokumentasjon?: string
   stats?: EtterlevelseDokumentasjonStats
 }
 
