@@ -83,6 +83,21 @@ public class EtterlevelseDokumentasjonRepoImpl implements EtterlevelseDokumentas
                          order by time desc
                          limit :limit
                     )
+                    
+                    and data ->> 'id' in (
+                       select etterlevelseDokumentasjonId
+                         from (
+                                  select distinct on (data #>> '{data,id}') data #>> '{data,id}' etterlevelseDokumentasjonId, time
+                                   from audit_version
+                                   where table_name = 'EtterlevelseDokumentasjon'
+                                   and user_id like :user_id
+                                   and data #>> '{data,id}' is not null -- old data that lacks this field, probably only dev
+                                   and exists(select 1 from generic_storage where id = cast(table_id as uuid))
+                                   order by data #>> '{data,id}', time desc
+                              ) sub
+                         order by time desc
+                         limit :limit
+                    )
                     """;
             par.addValue("limit", filter.getSistRedigert())
                     .addValue("user_id", SecurityUtils.getCurrentIdent() + "%");

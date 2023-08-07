@@ -115,7 +115,7 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
         EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse = get(uuid).toResponse();
         return addBehandlingAndTeamsData(etterlevelseDokumentasjonResponse);
     }
-
+  
     //TODO
     //REMOVE AFTER USE IN DEV AND PROD AFTER MIGRATION
     public List<EtterlevelseDokumentasjon> updateEtterlevelseDokumentasjonWithTitleAndTeamDataFromBehandling(){
