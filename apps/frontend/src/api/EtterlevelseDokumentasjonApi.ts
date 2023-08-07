@@ -1,10 +1,8 @@
 import axios from 'axios'
-import { Behandling, EtterlevelseDokumentasjon, EtterlevelseDokumentasjonQL, PageResponse, Team } from '../constants'
-import { env } from '../util/env'
-import { useEffect, useState } from 'react'
-import { getBehandling } from './BehandlingApi'
-import { getTeams } from './TeamApi'
-import { getVirkemiddel } from './VirkemiddelApi'
+import {EtterlevelseDokumentasjon, EtterlevelseDokumentasjonQL, PageResponse} from '../constants'
+import {env} from '../util/env'
+import {useEffect, useState} from 'react'
+import {getVirkemiddel} from './VirkemiddelApi'
 import * as yup from 'yup'
 
 
@@ -49,7 +47,7 @@ export const updateEtterlevelseDokumentasjon = async (etterlevelseDokumentasjon:
 
 export const createEtterlevelseDokumentasjon = async (etterlevelseDokumentasjon: EtterlevelseDokumentasjonQL) => {
   const dto = etterlevelseDokumentasjonToDto(etterlevelseDokumentasjon)
-  return (await axios.post<EtterlevelseDokumentasjon>(`${env.backendBaseUrl}/etterlevelsedokumentasjon/`, dto)).data
+  return (await axios.post<EtterlevelseDokumentasjon>(`${env.backendBaseUrl}/etterlevelsedokumentasjon`, dto)).data
 }
 
 export const deleteEtterlevelseDokumentasjon = async (etterlevelseDokumentasjonId: string) => {
