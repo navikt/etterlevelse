@@ -32,6 +32,7 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
     private boolean knyttetTilVirkemiddel;
     @Schema(description = "Codelist RELEVANS")
     private List<String> irrelevansFor;
+    private boolean knytteTilTeam;
     private List<String> teams;
     @Override
     public void format() {

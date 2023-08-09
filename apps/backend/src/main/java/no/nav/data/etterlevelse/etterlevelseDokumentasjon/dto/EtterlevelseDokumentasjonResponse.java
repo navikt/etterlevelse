@@ -32,6 +32,7 @@ public class EtterlevelseDokumentasjonResponse {
     private boolean knyttetTilVirkemiddel;
     @Singular("relevansForSingle")
     private List<CodelistResponse> irrelevansFor;
+    private boolean knytteTilTeam;
     @Singular("team")
     private List<String> teams;
     private List<TeamResponse> teamsData;

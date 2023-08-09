@@ -38,6 +38,8 @@ public class EtterlevelseDokumentasjon implements DomainObject {
     private String virkemiddelId;
     @Default
     private boolean knyttetTilVirkemiddel = true;
+    @Default
+    private boolean knytteTilTeam = true;
     private List<String> teams;
     private List<String> irrelevansFor;
 
@@ -55,6 +57,7 @@ public class EtterlevelseDokumentasjon implements DomainObject {
         teams = copyOf(request.getTeams());
         behandlerPersonopplysninger = request.isBehandlerPersonopplysninger();
         knyttetTilVirkemiddel = request.isKnyttetTilVirkemiddel();
+        knytteTilTeam = request.isKnytteTilTeam();
     }
 
     public EtterlevelseDokumentasjonResponse toResponse() {
@@ -67,6 +70,7 @@ public class EtterlevelseDokumentasjon implements DomainObject {
                 .behandlingIds(behandlingIds != null ? copyOf(behandlingIds) : List.of())
                 .virkemiddelId(virkemiddelId)
                 .irrelevansFor(irrelevantForAsCodes())
+                .knytteTilTeam(knytteTilTeam)
                 .teams(teams != null ? copyOf(teams) : List.of())
                 .behandlerPersonopplysninger(behandlerPersonopplysninger)
                 .knyttetTilVirkemiddel(knyttetTilVirkemiddel)

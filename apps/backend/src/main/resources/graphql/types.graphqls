@@ -216,6 +216,7 @@ type EtterlevelseDokumentasjon {
     knyttetTilVirkemiddel: Boolean
     virkemiddelId: String
     irrelevansFor: [Code!]!
+    knytteTilTeam: Boolean
     teams: [String!]!
     teamsData: [Team!]!
     etterlevelser: [Etterlevelse!]!
