@@ -39,21 +39,7 @@ public class WebSecurityConfig {
         if (securityProperties == null || !securityProperties.isEnabled()) {
             http.authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
         } else {
-            allowAll(http,
-                    "/error",
-                    "/login",
-                    "/oauth2/callback",
-                    "/userinfo",
-                    "/internal/**",
-                    "/swagger*/**",
 
-                    // Graphql
-                    "/playground*/**",
-                    "/voyager*/**",
-                    "/vendor/voyager/**",
-                    "/vendor/playground/**",
-                    "/graphql*/**"
-            );
 
             allowGetAndOptions(http,
                     "/settings/**",
