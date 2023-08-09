@@ -55,7 +55,7 @@ public class WebSecurityConfig {
                     "/graphql*/**"
             );
 
-/*            allowGetAndOptions(http,
+            allowGetAndOptions(http,
                     "/settings/**",
                     "/codelist/**",
 
@@ -73,7 +73,7 @@ public class WebSecurityConfig {
                     "/begrep/**",
                     "/etterlevelsearkiv/**",
                     "/virkemiddel/**"
-            );*/
+            );
 
             adminOnly(http,
                     "/audit/**",
