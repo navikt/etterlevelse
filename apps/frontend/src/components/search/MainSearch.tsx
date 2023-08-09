@@ -442,8 +442,8 @@ const MainSearch = () => {
           searchable
           type={TYPE.search}
           options={groupedSearchResult}
-          placeholder={'Søk etter krav eller behandling'}
-          aria-label={'Søk etter krav eller behandling'}
+          placeholder={'Søk etter krav, dokumentasjon eller behandling'}
+          aria-label={'Søk etter krav, dokumentasjon eller behandling'}
           value={value}
           onOpen={() => setFilterClicked(true)}
           onInputChange={(event) => {
