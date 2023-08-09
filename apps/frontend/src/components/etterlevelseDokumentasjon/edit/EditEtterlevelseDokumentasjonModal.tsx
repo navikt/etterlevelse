@@ -85,9 +85,9 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
   const [behandlingSearchResult, setBehandlingSearchResult, loadingBehandlingSearchResult] = useSearchBehandling()
   const [virkemiddelSearchResult, setVirkemiddelSearchResult, loadingVirkemiddelSearchResult] = useSearchVirkemiddel()
   const [selectedVirkemiddel, setSelectedVirkemiddel] = useState<Virkemiddel>()
-  const [checkedAddTeam, setCheckedAddTeam] = useState(false)
   const [teamSearchResult, setTeamSearchResult, loadingTeamSearchResult] = useSearchTeam()
   const navigate = useNavigate()
+
 
   useEffect(() => {
     if (props.etterlevelseDokumentasjon && props.etterlevelseDokumentasjon.irrelevansFor.length) {
@@ -107,9 +107,6 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
       )
     }
 
-    if (props.etterlevelseDokumentasjon && props.etterlevelseDokumentasjon.teams.length > 0) {
-      setCheckedAddTeam(true)
-    }
     if (props.etterlevelseDokumentasjon && props.etterlevelseDokumentasjon.virkemiddel && props.etterlevelseDokumentasjon.virkemiddel.navn) {
       setSelectedVirkemiddel(props.etterlevelseDokumentasjon.virkemiddel)
     }
@@ -158,7 +155,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
             {({ values, submitForm }) => {
               return (
                 <Form>
-                  <InputField disablePlaceHolder label={'Tittel'} name={'title'} />
+                  <InputField disablePlaceHolder label="Tittel" name="title" tooltip="Skriv tittel for dokumentasjon"/>
 
                   {/* <BoolField label="Er produktet/systemet tilknyttet et virkemiddel?" name="knyttetTilVirkemiddel" /> */}
 
@@ -384,22 +381,13 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                       </FieldArray>
                     </FieldWrapper>
                   )}
-                  <Block display="flex" alignItems="center" marginTop="100px">
-                    <Checkbox
-                      checked={checkedAddTeam}
-                      onChange={(e) => setCheckedAddTeam(e.target.checked)}
-                      labelPlacement={LABEL_PLACEMENT.right}
-                      overrides={{ Root: { style: { display: 'flex', alignItems: 'center' } } }}
-                    >
-                      <LabelWithTooltip
-                        noMarginBottom
-                        label="Jeg vil legge til team fra teamkatalogen"
-                        tooltip="Legg til eksiterende team fra teamkatalogen for å automatisk filtrere teamets dokumentasjon. Dette er ikke nødvendig for å opprette etterlevelsedokumentasjonen, men anbefales."
-                      />
-                    </Checkbox>
-                  </Block>
+                  <BoolField
+                    label="Jeg vil legge til team fra teamkatalogen"
+                    name="knytteTilTeam"
+                    tooltip="Legg til eksiterende team fra teamkatalogen for å automatisk filtrere teamets dokumentasjon. Dette er ikke nødvendig for å opprette etterlevelsedokumentasjonen, men anbefales."
+                  />
 
-                  {checkedAddTeam && (
+                  {values.knytteTilTeam && (
                     <FieldWrapper>
                       <FieldArray name="teamsData">
                         {(p: FieldArrayRenderProps) => {

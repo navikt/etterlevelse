@@ -223,6 +223,7 @@ export interface EtterlevelseDokumentasjon {
   behandlerPersonopplysninger: boolean
   virkemiddel?: Virkemiddel
   knyttetTilVirkemiddel: boolean
+  knytteTilTeam: boolean
 }
 
 export interface EtterlevelseDokumentasjonStats {
