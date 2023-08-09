@@ -40,22 +40,22 @@ public class WebSecurityConfig {
         if (securityProperties == null || !securityProperties.isEnabled()) {
             http.authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
         } else {
-//            allowAll(http,
-//                    "/error",
-//                    "/login",
-//                    "/oauth2/callback",
-//                    "/userinfo",
-//                    "/internal/**",
-//                    "/swagger*/**",
-//
-//                    // Graphql
-//                    "/playground*/**",
-//                    "/voyager*/**",
-//                    "/vendor/voyager/**",
-//                    "/vendor/playground/**",
-//                    "/graphql*/**"
-//            );
-//
+            allowAll(http,
+                    "/error",
+                    "/login",
+                    "/oauth2/callback",
+                    "/userinfo",
+                    "/internal/**",
+                    "/swagger*/**",
+
+                    // Graphql
+                    "/playground*/**",
+                    "/voyager*/**",
+                    "/vendor/voyager/**",
+                    "/vendor/playground/**",
+                    "/graphql*/**"
+            );
+
 //            allowGetAndOptions(http,
 //                    "/settings/**",
 //                    "/codelist/**",
@@ -75,17 +75,17 @@ public class WebSecurityConfig {
 //                    "/etterlevelsearkiv/**",
 //                    "/virkemiddel/**"
 //            );
-//
-//            adminOnly(http,
-//                    "/audit/**",
-//                    "/settings/**",
-//                    "/codelist/**",
-//                    "/export/codelist/**",
-//                    "/etterlevelse/update/behandlingid/**",
-//                    "/etterlevelsearkiv/status/arkivert",
-//                    "/etterlevelsearkiv/admin/update",
-//                    "/etterlevelsedokumentasjon/admin/update/title/team"
-//            );
+
+            adminOnly(http,
+                    "/audit/**",
+                    "/settings/**",
+                    "/codelist/**",
+                    "/export/codelist/**",
+                    "/etterlevelse/update/behandlingid/**",
+                    "/etterlevelsearkiv/status/arkivert",
+                    "/etterlevelsearkiv/admin/update",
+                    "/etterlevelsedokumentasjon/admin/update/title/team"
+            );
 
             http.authorizeHttpRequests(auth -> auth.requestMatchers(new AntPathRequestMatcher("/krav/**")).hasAnyRole(AppRole.KRAVEIER.name(), AppRole.ADMIN.name()));
 
@@ -112,13 +112,13 @@ public class WebSecurityConfig {
 
     private void adminOnly(HttpSecurity http, String... paths) throws Exception {
         for (String path : paths) {
-            http.authorizeHttpRequests(auth -> auth.requestMatchers(path).hasRole(AppRole.ADMIN.name()));
+            http.authorizeHttpRequests(auth -> auth.requestMatchers(new AntPathRequestMatcher(path)).hasRole(AppRole.ADMIN.name()));
         }
     }
 
     private void allowAll(HttpSecurity http, String... paths) throws Exception {
         for (String path : paths) {
-            http.authorizeHttpRequests(auth -> auth.requestMatchers(path).permitAll());
+            http.authorizeHttpRequests(auth -> auth.requestMatchers(new AntPathRequestMatcher(path)).permitAll());
         }
     }
 
