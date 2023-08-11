@@ -13,6 +13,7 @@ import { getBehandling, useSearchBehandling } from '../../../api/BehandlingApi'
 import CustomizedSelect from '../../common/CustomizedSelect'
 import { intl } from '../../../util/intl/intl'
 import { TYPE } from 'baseui/select'
+import { updateBehandlingNameWithNumber } from '../common/utils'
 
 export const BehandlingSok = () => {
   const pageSize = 20
@@ -89,7 +90,7 @@ export const BehandlingSok = () => {
           type={TYPE.search}
           labelKey="navn"
           onInputChange={(event) => setBehandlingSearchResult(event.currentTarget.value)}
-          options={behandlingSearchResult}
+          options={updateBehandlingNameWithNumber(behandlingSearchResult)}
           onChange={({ value }) => {
             if (value && value.length > 0) {
               setSelectedBehandling(value[0] as Behandling)

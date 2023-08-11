@@ -1,4 +1,4 @@
-import { EtterlevelseDokumentasjon, EtterlevelseStatus } from '../../../constants'
+import { Behandling, EtterlevelseDokumentasjon, EtterlevelseStatus } from '../../../constants'
 import { ReactNode } from 'react'
 import { Block, Responsive } from 'baseui/block'
 import { Helmet } from 'react-helmet'
@@ -179,6 +179,12 @@ export const getEtterlevelseStatus = (status?: EtterlevelseStatus, frist?: strin
     default:
       return ''
   }
+}
+
+export const updateBehandlingNameWithNumber= (behandlinger: Behandling[]) => {
+  return behandlinger.map(b => {
+    return {...b, navn: 'B' + b.nummer + ' ' + b.overordnetFormaal.shortName + ': ' + b.navn}
+  }) 
 }
 
 export const getStatusLabelColor = (status: EtterlevelseStatus) => {

@@ -34,6 +34,7 @@ import {RenderTagList} from '../../common/TagList'
 import {useSearchVirkemiddel} from '../../../api/VirkemiddelApi'
 import {Checkbox, LABEL_PLACEMENT} from 'baseui/checkbox'
 import { useNavigate } from 'react-router-dom'
+import { updateBehandlingNameWithNumber } from '../common/utils'
 
 type EditEtterlevelseDokumentasjonModalProps = {
   etterlevelseDokumentasjon?: EtterlevelseDokumentasjonQL
@@ -87,7 +88,6 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
   const [selectedVirkemiddel, setSelectedVirkemiddel] = useState<Virkemiddel>()
   const [teamSearchResult, setTeamSearchResult, loadingTeamSearchResult] = useSearchTeam()
   const navigate = useNavigate()
-
 
   useEffect(() => {
     if (props.etterlevelseDokumentasjon && props.etterlevelseDokumentasjon.irrelevansFor.length) {
@@ -365,7 +365,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                                     type={TYPE.search}
                                     labelKey="navn"
                                     onInputChange={(event) => setBehandlingSearchResult(event.currentTarget.value)}
-                                    options={behandlingSearchResult}
+                                    options={updateBehandlingNameWithNumber(behandlingSearchResult)}
                                     onChange={({ value }) => {
                                       value.length && p.push(value[0])
                                     }}
