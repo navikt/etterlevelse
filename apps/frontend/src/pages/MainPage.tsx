@@ -104,6 +104,7 @@ export const MainPage = () => {
             $style={{}}
             marginTop={theme.sizing.scale1600}
             marginBottom={theme.sizing.scale900}
+            id={"forsideVarselMelding"}
           >
             {forsideVarsel && forsideVarsel.meldingStatus === MeldingStatus.ACTIVE && (
               <Block
