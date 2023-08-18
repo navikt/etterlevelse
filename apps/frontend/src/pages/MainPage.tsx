@@ -1,22 +1,22 @@
-import { Narrow, Page, Wide } from '../components/scaffold/Page'
-import { ettlevColors, theme } from '../util/theme'
-import { Block } from 'baseui/block'
-import { HeadingXLarge, HeadingXXLarge, ParagraphMedium } from 'baseui/typography'
-import { PanelLink, PanelLinkCard } from '../components/common/PanelLink'
-import { grafIconBg, grafIconBgSmall, handWithLeaf, paperPenIconBg, paperPenIconBgSmall, paragrafIconBg, paragrafIconBgSmall } from '../components/Images'
-import { Card } from 'baseui/card'
-import { borderColor, borderRadius, borderStyle, borderWidth, margin, paddingAll } from '../components/common/Style'
+import {Narrow, Page, Wide} from '../components/scaffold/Page'
+import {ettlevColors, theme} from '../util/theme'
+import {Block} from 'baseui/block'
+import {HeadingXLarge, HeadingXXLarge, ParagraphMedium} from 'baseui/typography'
+import {PanelLink, PanelLinkCard} from '../components/common/PanelLink'
+import {grafIconBg, grafIconBgSmall, handWithLeaf, paperPenIconBg, paperPenIconBgSmall, paragrafIconBg, paragrafIconBgSmall} from '../components/Images'
+import {Card} from 'baseui/card'
+import {borderColor, borderRadius, borderStyle, borderWidth, margin, paddingAll} from '../components/common/Style'
 import ReactPlayer from 'react-player'
-import { Button, SIZE } from 'baseui/button'
-import { faPlay } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { buttonBorderStyle, buttonContentStyle } from '../components/common/Button'
-import React, { useEffect, useState } from 'react'
-import { Markdown } from '../components/common/Markdown'
-import { AlertType, Melding, MeldingStatus, MeldingType } from '../constants'
-import { getMeldingByType } from '../api/MeldingApi'
-import { ampli } from '../services/Amplitude'
-import { getPageWidth } from '../util/pageWidth'
+import {Button, SIZE} from 'baseui/button'
+import {faPlay} from '@fortawesome/free-solid-svg-icons'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {buttonBorderStyle, buttonContentStyle} from '../components/common/Button'
+import React, {useEffect, useState} from 'react'
+import {Markdown} from '../components/common/Markdown'
+import {AlertType, Melding, MeldingStatus, MeldingType} from '../constants'
+import {getMeldingByType} from '../api/MeldingApi'
+import {ampli} from '../services/Amplitude'
+import {getPageWidth} from '../util/pageWidth'
 
 const cardWidth = ['95%', '95%', '95%', '95%', '31%', '31%']
 const cardHeight = ['auto', 'auto', 'auto', 'auto', '140px', '140px']
@@ -104,8 +104,6 @@ export const MainPage = () => {
             $style={{}}
             marginTop={theme.sizing.scale1600}
             marginBottom={theme.sizing.scale900}
-            // paddingLeft={theme.sizing.scale800}
-            // paddingRight={theme.sizing.scale800}
           >
             {forsideVarsel && forsideVarsel.meldingStatus === MeldingStatus.ACTIVE && (
               <Block
@@ -137,7 +135,6 @@ export const MainPage = () => {
               Root: {
                 style: {
                   ...borderRadius('4px'),
-                  // ...margin(theme.sizing.scale1600, theme.sizing.scale800),
                   marginTop: '0px',
                 },
               },
@@ -209,26 +206,6 @@ export const MainPage = () => {
                 },
               }}
             />
-          </Block>
-
-          <Block
-            $style={{
-              ...margin(theme.sizing.scale1600, theme.sizing.scale600),
-            }}
-          >
-            {/* <HeadingXLarge display={'flex'} flexDirection={'column'} color={ettlevColors.green800}>
-              <span style={{ fontWeight: 400 }}>Her kan det stå</span>
-              <span>litt tekst som beskriver animasjonsfilmen</span>
-            </HeadingXLarge>
-
-            <Block>
-              <ParagraphMedium>Kjerneinnholdet / budskapet i filmen.</ParagraphMedium>
-
-              <ParagraphMedium>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Gravida venenatis, a mattis ut tempor, proin aliquam aenean. Nec amet tincidunt ut odio habitant vel
-                blandit et id. At in sed enim cursus nisi. A fermentum pellentesque nulla lacus viverra a, ultrices.
-              </ParagraphMedium>
-            </Block> */}
           </Block>
         </Narrow>
       </Block>
