@@ -83,22 +83,22 @@ const LoggedInHeader = () => {
 
   const kravPages = user.isKraveier()
     ? [
-        { label: 'Forvalte og opprette krav', href: '/kravliste' },
-        { label: 'Forvalte og opprette virkemiddel', href: '/virkemiddelliste' },
-      ]
+      { label: 'Forvalte og opprette krav', href: '/kravliste' },
+      { label: 'Forvalte og opprette virkemiddel', href: '/virkemiddelliste' },
+    ]
     : []
   const adminPages = user.isAdmin()
     ? [
-        { label: 'Administrere krav', href: '/admin/krav' },
-        { label: 'Administrere dokumentasjon', href: '/admin/dokumentasjon' },
-        { label: 'Administrere etterlevelse', href: '/admin/etterlevelse' },
-        { label: 'Administrere arkivering', href: '/admin/arkiv' },
-        { label: intl.audit, href: '/admin/audit' },
-        { label: 'Kodeverk', href: '/admin/codelist' },
-        { label: intl.questionAndAnswers, href: '/admin/messageslog' },
-        { label: intl.notifications, href: '/admin/varsel' },
-        // { label: intl.settings, href: '/admin/settings', disabled: true },
-      ]
+      { label: 'Administrere krav', href: '/admin/krav' },
+      { label: 'Administrere dokumentasjon', href: '/admin/dokumentasjon' },
+      { label: 'Administrere etterlevelse', href: '/admin/etterlevelse' },
+      { label: 'Administrere arkivering', href: '/admin/arkiv' },
+      { label: intl.audit, href: '/admin/audit' },
+      { label: 'Kodeverk', href: '/admin/codelist' },
+      { label: intl.questionAndAnswers, href: '/admin/messageslog' },
+      { label: intl.notifications, href: '/admin/varsel' },
+      // { label: intl.settings, href: '/admin/settings', disabled: true },
+    ]
     : []
   const otherPages = [
     { label: 'Mine innstillinger', href: '/innstillinger', disabled: true },
@@ -175,8 +175,8 @@ const Menu = (props: { pages: MenuItem[][]; title: React.ReactNode; icon?: IconD
 
   const allPages = props.pages.length
     ? props.pages
-        .filter((p) => p.length)
-        .reduce((previousValue, currentValue) => [...((previousValue as MenuItem[]) || []), { label: <Divider compact={props.compact} /> }, ...(currentValue as MenuItem[])])
+      .filter((p) => p.length)
+      .reduce((previousValue, currentValue) => [...((previousValue as MenuItem[]) || []), { label: <Divider compact={props.compact} /> }, ...(currentValue as MenuItem[])])
     : []
 
   return (
@@ -236,29 +236,29 @@ const Menu = (props: { pages: MenuItem[][]; title: React.ReactNode; icon?: IconD
         overrides={
           props.kind !== 'tertiary'
             ? {
-                BaseButton: {
-                  style: {
-                    ...buttonBorderStyle,
-                    ...buttonContentStyle,
-                    boxShadow: '0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 2px 0 rgba(0, 0, 0, .12)',
-                    ':hover': { boxShadow: '0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 3px 0 rgba(0, 0, 0, .12)' },
-                    ':active': { boxShadow: '0 2px 1px -2px rgba(0, 0, 0, .2), 0 1px 1px 0 rgba(0, 0, 0, .14), 0 1px 1px 0 rgba(0, 0, 0, .12)' },
-                    ':focus': {
-                      boxShadow: '0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 3px 0 rgba(0, 0, 0, .12)',
-                      outlineWidth: '3px',
-                      outlineStyle: 'solid',
-                      outlinwColor: ettlevColors.focusOutline,
-                    },
+              BaseButton: {
+                style: {
+                  ...buttonBorderStyle,
+                  ...buttonContentStyle,
+                  boxShadow: '0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 2px 0 rgba(0, 0, 0, .12)',
+                  ':hover': { boxShadow: '0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 3px 0 rgba(0, 0, 0, .12)' },
+                  ':active': { boxShadow: '0 2px 1px -2px rgba(0, 0, 0, .2), 0 1px 1px 0 rgba(0, 0, 0, .14), 0 1px 1px 0 rgba(0, 0, 0, .12)' },
+                  ':focus': {
+                    boxShadow: '0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 3px 0 rgba(0, 0, 0, .12)',
+                    outlineWidth: '3px',
+                    outlineStyle: 'solid',
+                    outlinwColor: ettlevColors.focusOutline,
                   },
                 },
-              }
+              },
+            }
             : {
-                BaseButton: {
-                  style: {
-                    buttonContentStyle,
-                  },
+              BaseButton: {
+                style: {
+                  buttonContentStyle,
                 },
-              }
+              },
+            }
         }
       >
         {props.icon && <FontAwesomeIcon icon={open ? faTimes : props.icon} style={{ marginRight: '.5rem' }} fixedWidth />}
@@ -284,7 +284,7 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
   }
 
   React.useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       await getMeldingByType(MeldingType.SYSTEM).then((r) => {
         if (r.numberOfElements > 0) {
           setSystemVarsel(r.content[0])
@@ -369,22 +369,26 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
           <Block
             justifyContent="center"
             display="flex"
-            alignItems="center"
+            alignItems="flex-start"
             paddingLeft={responsivePaddingSmall}
             paddingRight={responsivePaddingSmall}
             width={responsiveWidthSmall}
             maxWidth={maxPageWidth}
           >
-            <img
-              src={systemVarsel.alertType === AlertType.INFO ? informationIcon : warningAlert}
-              width="20px"
-              height="20px"
-              alt={systemVarsel.alertType === AlertType.INFO ? 'information icon' : 'warning icon'}
-              style={{
-                marginRight: '5px',
-              }}
-            />
-            <Markdown fontSize="16px" source={systemVarsel.melding} />
+            <Block marginTop="18px" marginBottom="16px">
+              <img
+                src={systemVarsel.alertType === AlertType.INFO ? informationIcon : warningAlert}
+                width="20px"
+                height="20px"
+                alt={systemVarsel.alertType === AlertType.INFO ? 'information icon' : 'warning icon'}
+                style={{
+                  marginRight: '5px',
+                }}
+              />
+            </Block>
+            <Block>
+              <Markdown fontSize="16px" source={systemVarsel.melding} />
+            </Block>
           </Block>
         </Block>
       )}
