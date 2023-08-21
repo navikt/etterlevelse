@@ -130,7 +130,7 @@ public class EtterlevelseArkivController {
         if(!arkiverRequest.getFailedToArchiveEtterlevelseNr().isEmpty()) {
             for(String failedEtterlevelseDokumentasjonFilnavn: arkiverRequest.getFailedToArchiveEtterlevelseNr()) {
 
-                final Pattern pattern = Pattern.compile("E\\d*" );
+                final Pattern pattern = Pattern.compile("E\\d+" );
                 final Matcher matcher = pattern.matcher(failedEtterlevelseDokumentasjonFilnavn);
 
                 String failedEtterlevelseNr = matcher.find() ? matcher.group(0) : "E";
