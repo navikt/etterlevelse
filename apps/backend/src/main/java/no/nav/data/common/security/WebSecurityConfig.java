@@ -100,7 +100,9 @@ public class WebSecurityConfig {
             http.authorizeHttpRequests(auth -> auth.requestMatchers(antMatcher("/etterlevelsemetadata/**")).hasAnyRole(AppRole.ADMIN.name(), AppRole.WRITE.name()));
             http.authorizeHttpRequests(auth -> auth.requestMatchers(antMatcher("/behandling/**")).hasAnyRole(AppRole.KRAVEIER.name(), AppRole.ADMIN.name(), AppRole.WRITE.name()));
             http.authorizeHttpRequests(auth -> auth.requestMatchers(antMatcher("/melding/**")).hasAnyRole(AppRole.ADMIN.name()));
+            /*
             http.authorizeHttpRequests(auth -> auth.requestMatchers(antMatcher("/etterlevelsearkiv/**")).hasAnyRole(AppRole.WRITE.name()));
+            */
             http.authorizeHttpRequests(auth -> auth.requestMatchers(antMatcher("/etterlevelse/update/behandlingid/**")).hasAnyRole(AppRole.ADMIN.name()));
             http.authorizeHttpRequests(auth -> auth.requestMatchers(antMatcher("/virkemiddel/**")).hasAnyRole(AppRole.KRAVEIER.name(), AppRole.ADMIN.name()));
 
