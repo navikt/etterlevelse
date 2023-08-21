@@ -39,8 +39,14 @@ import { searchEtterlevelsedokumentasjonByBehandlingId } from './api/Etterlevels
 import { Block } from 'baseui/block'
 import { EtterlevelseDokumentasjon } from './constants'
 import { Spinner } from './components/common/Spinner'
+import jumpToHash from './util/jumpToHash'
 
 const AppRoutes = (): JSX.Element => {
+
+  useEffect(() => {
+    jumpToHash()
+  },[])
+
   return (
     <ScrollToTop>
       <Routes>
