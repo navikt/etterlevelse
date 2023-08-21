@@ -83,8 +83,9 @@ public class WebSecurityConfig {
                     "/codelist/**",
                     "/export/codelist/**",
                     "/etterlevelse/update/behandlingid/**",
+/*                  Uncomment before relase to prod.
                     "/etterlevelsearkiv/status/arkivert",
-                    "/etterlevelsearkiv/admin/update",
+                    "/etterlevelsearkiv/admin/update",*/
                     "/etterlevelsedokumentasjon/admin/update/title/team"
             );
 
