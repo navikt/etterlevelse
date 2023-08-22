@@ -29,7 +29,7 @@ const radioButtonOverrides: RadioOverrides & RadioGroupOverrides = {
       ...buttonContentStyle,
       backgroundColor: $checked ? ettlevColors.green100 : ettlevColors.white,
       marginRight: '16px',
-      minWidth: '213px',
+      minWidth: '150px',
       textUnderlineOffset: '3px',
       ':hover': { backgroundColor: ettlevColors.green50, textDecoration: 'underline 1px' },
       outlineWidth: $isFocused ? '3px' : undefined,
