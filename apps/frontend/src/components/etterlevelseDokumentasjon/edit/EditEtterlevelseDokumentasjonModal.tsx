@@ -348,8 +348,8 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                             <FormControl
                               label={
                                 <LabelWithTooltip
-                                  label={'Legg til eksisterende behandling fra behandlingskatalogen'}
-                                  tooltip="Søk og legg til behandling fra Behandlingskatalog. Dette er ikke nødvendig for å opprette ny etterlevelse, men anbefales."
+                                  label={'Legg til eksisterende behandling/behandlinger fra behandlingskatalogen'}
+                                  tooltip="Søk og legg til behandling/behandlinger fra Behandlingskatalog. Dette er ikke nødvendig for å opprette ny etterlevelse, men anbefales."
                                 />
                               }
                             >
