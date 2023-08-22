@@ -99,7 +99,7 @@ export const TildeltPopoever = ({ etterlevelseMetadata, setEtterlevelseMetadata,
         }}
         type="button"
       >
-        <FontAwesomeIcon icon={icon} color={iconColor ? iconColor : 'inherit'} title="Etterlevelse metadata meny" />
+        <FontAwesomeIcon icon={icon} color={iconColor ? iconColor : 'inherit'} title="Tildel meg selv" />
       </BaseButton>
     </StatefulPopover>
   )
