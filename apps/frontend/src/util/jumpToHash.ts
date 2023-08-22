@@ -1,5 +1,5 @@
 
-//Methoud should be used in a useEffect
+//Method should be used in a useEffect
 export const jumpToHash = () => {
   setTimeout(() => {
     const hash = window.location.hash.slice(1) // Remove the '#' character from the hash
