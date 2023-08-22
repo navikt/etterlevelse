@@ -42,7 +42,7 @@ export const KravCard = (props: { krav: KravEtterlevelseData; noStatus?: boolean
         setEtterlevelseMetadata(
           mapEtterlevelseMetadataToFormValue({
             id: 'ny',
-            etterlevelseDokumentasjonId: props.behandlingId,
+            behandlingId: props.behandlingId,
             kravNummer: props.krav.kravNummer,
             kravVersjon: props.krav.kravVersjon,
           }),
