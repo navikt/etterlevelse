@@ -20,7 +20,7 @@
     "draft-js": "^0.11.7",
     "formik": "^2.2.6",
     "graphql": "^16.0.0",
-    "immutable": "^4.0.0-rc.12",
+    "immutable": "^5.0.0-beta.1",
     "lodash": "^4.17.20",
     "markdown-draft-js": "^2.2.1",
     "moment": "^2.29.1",
