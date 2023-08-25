@@ -24,7 +24,7 @@
         <shedlock.version>5.6.0</shedlock.version>
         <commons-collections4.version>4.4</commons-collections4.version>
         <graphql-spring-boot-starter.version>15.0.0</graphql-spring-boot-starter.version>
-        <graphql.version>20.2</graphql.version>
+        <graphql.version>21.0</graphql.version>
         <flexmark.version>0.64.8</flexmark.version>
 
         <microsoft-graph.version>5.68.0</microsoft-graph.version>
