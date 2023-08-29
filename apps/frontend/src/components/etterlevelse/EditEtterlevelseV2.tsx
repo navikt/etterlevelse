@@ -428,7 +428,7 @@ export const EditEtterlevelseV2 = ({
                   ),
                 },
                 {
-                  title: 'Eksempler på etterlevelse',
+                  title: 'Hvordan har andre gjort det?',
                   key: 'etterlevelser',
                   content: (
                     <Block

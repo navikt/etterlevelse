@@ -223,12 +223,12 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                     </FieldWrapper>
                   ) : ( */}
                     <>
-                      <LabelWithTooltip tooltip="Ved å oppgi egenskaper til etterlevelsen, blir kun relevante krav synlig for dokumentasjon." label={'Filter'} />
+                      <LabelWithTooltip tooltip="Ved å oppgi egenskaper til etterlevelsen, blir kun relevante krav synlig for dokumentasjon." label={'Hvilke egenskaper gjelder for etterlevelsen?'} />
                       <FieldArray name="irrelevansFor">
                         {(p: FieldArrayRenderProps) => {
                           return (
                             <FormControl>
-                              <Block height="100%" width="calc(100% - 16px)" paddingLeft={theme.sizing.scale700} paddingTop={theme.sizing.scale750}>
+                              <Block height="100%" width="calc(100% - 16px)"  paddingTop={theme.sizing.scale750}>
                                 <ButtonGroup
                                   mode="checkbox"
                                   kind={KIND.secondary}
