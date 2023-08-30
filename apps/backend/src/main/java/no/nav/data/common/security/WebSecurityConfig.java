@@ -43,7 +43,7 @@ public class WebSecurityConfig {
         } else {
             allowAll(http,
                     "/error",
-
+                    "/login",
                     "/oauth2/callback",
                     "/userinfo",
                     "/internal/**",
@@ -85,8 +85,7 @@ public class WebSecurityConfig {
                     "/etterlevelse/update/behandlingid/**",
                     "/etterlevelsearkiv/status/arkivert",
                     "/etterlevelsearkiv/admin/update",
-                    "/etterlevelsedokumentasjon/admin/update/title/team",
-                    "/login"
+                    "/etterlevelsedokumentasjon/admin/update/title/team"
             );
 
             http.authorizeHttpRequests(auth -> auth.requestMatchers(antMatcher("/krav/**")).hasAnyRole(AppRole.KRAVEIER.name(), AppRole.ADMIN.name()));
