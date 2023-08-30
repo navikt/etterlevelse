@@ -5,7 +5,7 @@ replies:
 teamcat_ingress: teamkatalog-api.prod-fss-pub.nais.io
 env:
   - name: ETTERLEV_SECURITY_REDIRECT_URIS
-    value: https://etterlevelse.intern.nav.no
+    value: https://etterlevelse.intern.nav.no,http://localhost:3000
   - name: CLIENT_TEAMCAT_URL
     value: https://teamkatalog-api.prod-fss-pub.nais.io
   - name: CLIENT_TEAMCAT_FRONTEND_URL
