@@ -1,4 +1,3 @@
-
 //Method should be used in a useEffect
 export const jumpToHash = () => {
   setTimeout(() => {

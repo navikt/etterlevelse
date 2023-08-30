@@ -54,10 +54,10 @@ export const BehandlingSok = () => {
   }
 
   useEffect(() => {
-    if(behandlingUUID) {
+    if (behandlingUUID) {
       getBehandling(behandlingUUID).then((resp) => setSelectedBehandling(resp))
     }
-  },[behandlingUUID])
+  }, [behandlingUUID])
 
   const getEtterlevelseDokumentasjonerWithoutDuplicates = () => {
     return etterlevelseDokumentasjoner.content.filter((value, index, self) => index === self.findIndex((etterlevelseDokumentasjon) => etterlevelseDokumentasjon.id === value.id))
@@ -75,12 +75,7 @@ export const BehandlingSok = () => {
 
   return (
     <Block marginBottom={tabMarginBottom}>
-      <Block
-        maxWidth="600px"
-        marginBottom={theme.sizing.scale1000}
-        display={'flex'}
-        flexDirection={'column'}
-      >
+      <Block maxWidth="600px" marginBottom={theme.sizing.scale1000} display={'flex'} flexDirection={'column'}>
         <CustomizedSelect
           placeholder="Søk behandlinger"
           aria-label="Søk behandlinger"
@@ -94,13 +89,12 @@ export const BehandlingSok = () => {
           onChange={({ value }) => {
             if (value && value.length > 0) {
               setSelectedBehandling(value[0] as Behandling)
-              searchParams.set('behandlingId', value[0].id? value[0].id.toString() : '' )
+              searchParams.set('behandlingId', value[0].id ? value[0].id.toString() : '')
               setSearchParams(searchParams)
             }
           }}
           isLoading={loadingBehandlingSearchResult}
         />
-
       </Block>
       {loading && (
         <Block>

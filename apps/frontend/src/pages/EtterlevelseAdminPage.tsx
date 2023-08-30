@@ -123,10 +123,10 @@ export const EtterlevelseAdminPage = () => {
   )
 }
 
-export const UpdateMessage = ({message}:{message?: string}) => {
+export const UpdateMessage = ({ message }: { message?: string }) => {
   return (
     <Block>
-           {message ? (
+      {message ? (
         <Block>
           {message.match('error') ? (
             <Notification

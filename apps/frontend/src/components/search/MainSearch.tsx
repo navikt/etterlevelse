@@ -29,7 +29,7 @@ type SearchItem = { id: string; sortKey: string; label: ReactElement; type: Navi
 
 type SearchType = 'all' | ObjectType.Krav | ObjectType.Behandling | ListName.UNDERAVDELING | ObjectType.EtterlevelseDokumentasjon
 
-type GroupedResult = { Krav?: SearchItem[]; Dokumentasjon?: SearchItem[]; Behandling?: SearchItem[];  Underavdeling?: SearchItem[]; all?: SearchItem[]; __ungrouped: SearchItem[] }
+type GroupedResult = { Krav?: SearchItem[]; Dokumentasjon?: SearchItem[]; Behandling?: SearchItem[]; Underavdeling?: SearchItem[]; all?: SearchItem[]; __ungrouped: SearchItem[] }
 
 type RadioProps = {
   $isHovered: boolean
@@ -164,12 +164,12 @@ const getCodelist = (search: string, list: ListName, typeName: string) => {
     .filter((c) => c.shortName.toLowerCase().indexOf(search.toLowerCase()) >= 0)
     .map(
       (c) =>
-      ({
-        id: c.code,
-        sortKey: c.shortName,
-        label: <SearchLabel name={c.shortName} type={typeName} />,
-        type: list,
-      } as SearchItem),
+        ({
+          id: c.code,
+          sortKey: c.shortName,
+          label: <SearchLabel name={c.shortName} type={typeName} />,
+          type: list,
+        }) as SearchItem,
     )
 }
 
@@ -207,7 +207,7 @@ const useMainSearch = (searchParam?: string) => {
       setSearchResult(getCodelist(search, ListName.UNDERAVDELING, 'Underavdeling'))
     } else {
       if (search && search.replace(/ /g, '').length > 2) {
-        ; (async () => {
+        ;(async () => {
           let results: SearchItem[] = []
           let searches: Promise<any>[] = []
           const compareFn = (a: SearchItem, b: SearchItem) => prefixBiasedSort(search, a.sortKey, b.sortKey)
@@ -401,7 +401,6 @@ const MainSearch = () => {
       all: [],
       Behandling: [],
       Underavdeling: [],
-      
     }
 
     if (value.length && value[0].id && value[0].id.toString().length > 2) {
@@ -456,15 +455,15 @@ const MainSearch = () => {
           }}
           onChange={(params) => {
             const item = params.value[0] as SearchItem
-              ; (async () => {
-                if (item && item.type !== '__ungrouped') {
-                  setValue([item])
-                  navigate(urlForObject(item.type, item.id))
-                  window.location.reload()
-                } else if (item && item.type === '__ungrouped') {
-                  setFilterClicked(true)
-                }
-              })()
+            ;(async () => {
+              if (item && item.type !== '__ungrouped') {
+                setValue([item])
+                navigate(urlForObject(item.type, item.id))
+                window.location.reload()
+              } else if (item && item.type === '__ungrouped') {
+                setFilterClicked(true)
+              }
+            })()
           }}
           filterOptions={(options) => options}
           setValue={setValue}

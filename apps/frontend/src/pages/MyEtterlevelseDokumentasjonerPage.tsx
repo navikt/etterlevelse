@@ -179,8 +179,8 @@ const DokumentasjonTabs = () => {
         {
           key: 'behandlingsok',
           title: 'Søk med behandling',
-          content: <BehandlingSok />
-        }
+          content: <BehandlingSok />,
+        },
       ]}
     />
   )
@@ -440,7 +440,15 @@ export const EtterlevelseDokumentasjonerPanels = ({ etterlevelseDokumentasjoner,
   )
 }
 
-export type Variables = { pageNumber?: number; pageSize?: number; sistRedigert?: number; mineEtterlevelseDokumentasjoner?: boolean; sok?: string; teams?: string[]; behandlingId?: string }
+export type Variables = {
+  pageNumber?: number
+  pageSize?: number
+  sistRedigert?: number
+  mineEtterlevelseDokumentasjoner?: boolean
+  sok?: string
+  teams?: string[]
+  behandlingId?: string
+}
 
 export const query = gql`
   query getEtterlevelseDokumentasjoner(

@@ -1,38 +1,38 @@
-import {Block} from 'baseui/block'
-import {ModalBody, ModalHeader} from 'baseui/modal'
-import {useEffect, useState} from 'react'
-import {useSearchBehandling} from '../../../api/BehandlingApi'
+import { Block } from 'baseui/block'
+import { ModalBody, ModalHeader } from 'baseui/modal'
+import { useEffect, useState } from 'react'
+import { useSearchBehandling } from '../../../api/BehandlingApi'
 import {
   createEtterlevelseDokumentasjon,
   etterlevelseDokumentasjonMapToFormVal,
   etterlevelseDokumentasjonSchema,
   updateEtterlevelseDokumentasjon,
 } from '../../../api/EtterlevelseDokumentasjonApi'
-import {Behandling, EtterlevelseDokumentasjonQL, Team, Virkemiddel} from '../../../constants'
-import {Code, codelist, ListName} from '../../../services/Codelist'
-import Button, {buttonContentStyle} from '../../common/Button'
+import { Behandling, EtterlevelseDokumentasjonQL, Team, Virkemiddel } from '../../../constants'
+import { Code, codelist, ListName } from '../../../services/Codelist'
+import Button, { buttonContentStyle } from '../../common/Button'
 import CustomizedModal from '../../common/CustomizedModal'
-import {Button as BaseUIButton, KIND} from 'baseui/button'
-import {FieldArray, FieldArrayRenderProps, FieldProps, Form, Formik} from 'formik'
-import {FormControl} from 'baseui/form-control'
-import {BoolField, FieldWrapper, InputField} from '../../common/Inputs'
-import {ButtonGroup} from 'baseui/button-group'
-import {ACCESSIBILITY_TYPE} from 'baseui/popover'
-import {PLACEMENT} from 'baseui/toast'
-import {StatefulTooltip} from 'baseui/tooltip'
-import {ParagraphMedium} from 'baseui/typography'
-import {theme} from '../../../util'
-import {ettlevColors} from '../../../util/theme'
+import { Button as BaseUIButton, KIND } from 'baseui/button'
+import { FieldArray, FieldArrayRenderProps, FieldProps, Form, Formik } from 'formik'
+import { FormControl } from 'baseui/form-control'
+import { BoolField, FieldWrapper, InputField } from '../../common/Inputs'
+import { ButtonGroup } from 'baseui/button-group'
+import { ACCESSIBILITY_TYPE } from 'baseui/popover'
+import { PLACEMENT } from 'baseui/toast'
+import { StatefulTooltip } from 'baseui/tooltip'
+import { ParagraphMedium } from 'baseui/typography'
+import { theme } from '../../../util'
+import { ettlevColors } from '../../../util/theme'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
-import {borderColor, borderRadius, borderStyle, borderWidth} from '../../common/Style'
-import {checkboxChecked, checkboxUnchecked, checkboxUncheckedHover, editIcon, outlineInfoIcon, plusIcon, searchIcon} from '../../Images'
+import { borderColor, borderRadius, borderStyle, borderWidth } from '../../common/Style'
+import { checkboxChecked, checkboxUnchecked, checkboxUncheckedHover, editIcon, outlineInfoIcon, plusIcon, searchIcon } from '../../Images'
 import CustomizedSelect from '../../common/CustomizedSelect'
-import {intl} from '../../../util/intl/intl'
-import {SelectOverrides, TYPE} from 'baseui/select'
-import {useSearchTeam} from '../../../api/TeamApi'
-import {RenderTagList} from '../../common/TagList'
-import {useSearchVirkemiddel} from '../../../api/VirkemiddelApi'
-import {Checkbox, LABEL_PLACEMENT} from 'baseui/checkbox'
+import { intl } from '../../../util/intl/intl'
+import { SelectOverrides, TYPE } from 'baseui/select'
+import { useSearchTeam } from '../../../api/TeamApi'
+import { RenderTagList } from '../../common/TagList'
+import { useSearchVirkemiddel } from '../../../api/VirkemiddelApi'
+import { Checkbox, LABEL_PLACEMENT } from 'baseui/checkbox'
 import { useNavigate } from 'react-router-dom'
 import { updateBehandlingNameWithNumber } from '../common/utils'
 
@@ -155,7 +155,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
             {({ values, submitForm }) => {
               return (
                 <Form>
-                  <InputField disablePlaceHolder label="Tittel" name="title" tooltip="Skriv tittel for dokumentasjon"/>
+                  <InputField disablePlaceHolder label="Tittel" name="title" tooltip="Skriv tittel for dokumentasjon" />
 
                   {/* <BoolField label="Er produktet/systemet tilknyttet et virkemiddel?" name="knyttetTilVirkemiddel" /> */}
 
@@ -222,116 +222,119 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                       <Error fieldName="virkemiddelId" fullWidth />
                     </FieldWrapper>
                   ) : ( */}
-                    <>
-                      <LabelWithTooltip tooltip="Ved å oppgi egenskaper til etterlevelsen, blir kun relevante krav synlig for dokumentasjon." label={'Hvilke egenskaper gjelder for etterlevelsen?'} />
-                      <FieldArray name="irrelevansFor">
-                        {(p: FieldArrayRenderProps) => {
-                          return (
-                            <FormControl>
-                              <Block height="100%" width="calc(100% - 16px)"  paddingTop={theme.sizing.scale750}>
-                                <ButtonGroup
-                                  mode="checkbox"
-                                  kind={KIND.secondary}
-                                  selected={selectedFilter}
-                                  size="mini"
-                                  onClick={(e, i) => {
-                                    if (!selectedFilter.includes(i)) {
-                                      setSelectedFilter([...selectedFilter, i])
-                                      p.remove(p.form.values.irrelevansFor.findIndex((ir: Code) => ir.code === relevansOptions[i].id))
-                                    } else {
-                                      setSelectedFilter(selectedFilter.filter((value) => value !== i))
-                                      p.push(codelist.getCode(ListName.RELEVANS, relevansOptions[i].id as string))
-                                    }
-                                  }}
-                                  overrides={{
-                                    Root: {
-                                      style: {
-                                        flexWrap: 'wrap',
-                                      },
+                  <>
+                    <LabelWithTooltip
+                      tooltip="Ved å oppgi egenskaper til etterlevelsen, blir kun relevante krav synlig for dokumentasjon."
+                      label={'Hvilke egenskaper gjelder for etterlevelsen?'}
+                    />
+                    <FieldArray name="irrelevansFor">
+                      {(p: FieldArrayRenderProps) => {
+                        return (
+                          <FormControl>
+                            <Block height="100%" width="calc(100% - 16px)" paddingTop={theme.sizing.scale750}>
+                              <ButtonGroup
+                                mode="checkbox"
+                                kind={KIND.secondary}
+                                selected={selectedFilter}
+                                size="mini"
+                                onClick={(e, i) => {
+                                  if (!selectedFilter.includes(i)) {
+                                    setSelectedFilter([...selectedFilter, i])
+                                    p.remove(p.form.values.irrelevansFor.findIndex((ir: Code) => ir.code === relevansOptions[i].id))
+                                  } else {
+                                    setSelectedFilter(selectedFilter.filter((value) => value !== i))
+                                    p.push(codelist.getCode(ListName.RELEVANS, relevansOptions[i].id as string))
+                                  }
+                                }}
+                                overrides={{
+                                  Root: {
+                                    style: {
+                                      flexWrap: 'wrap',
                                     },
-                                  }}
-                                >
-                                  {relevansOptions.map((r, i) => {
-                                    return (
-                                      <BaseUIButton
-                                        key={'relevans_' + r.id}
-                                        type="button"
-                                        startEnhancer={() => {
-                                          if (selectedFilter.includes(i)) {
-                                            return <img src={checkboxChecked} alt="checked" />
-                                          } else if (!selectedFilter.includes(i) && hover === i) {
-                                            return <img src={checkboxUncheckedHover} alt="checkbox hover" />
-                                          } else {
-                                            return <img src={checkboxUnchecked} alt="unchecked" />
-                                          }
-                                        }}
-                                        overrides={{
-                                          BaseButton: {
-                                            style: {
-                                              ...buttonContentStyle,
-                                              backgroundColor: selectedFilter.includes(i) ? ettlevColors.green100 : ettlevColors.white,
-                                              ...borderWidth('1px'),
-                                              ...borderStyle('solid'),
-                                              ...borderColor('#6A6A6A'),
-                                              paddingLeft: '8px',
-                                              paddingRight: '16px',
-                                              paddingTop: '8px',
-                                              paddingBottom: '10px',
-                                              marginRight: '16px',
-                                              marginBottom: '16px',
-                                              ...borderRadius('4px'),
-                                              ':hover': {
-                                                backgroundColor: ettlevColors.white,
-                                                boxShadow: '0px 2px 0px rgba(0, 0, 0, 0.25), inset 0px -1px 0px rgba(0, 0, 0, 0.25);',
-                                              },
-                                              ':focus': {
-                                                boxShadow: '0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 3px 0 rgba(0, 0, 0, .12)',
-                                                outlineWidth: '3px',
-                                                outlineStyle: 'solid',
-                                                outlinwColor: ettlevColors.focusOutline,
-                                              },
-                                              width: '100%',
-                                              maxWidth: '260px',
-                                              justifyContent: 'flex-start',
+                                  },
+                                }}
+                              >
+                                {relevansOptions.map((r, i) => {
+                                  return (
+                                    <BaseUIButton
+                                      key={'relevans_' + r.id}
+                                      type="button"
+                                      startEnhancer={() => {
+                                        if (selectedFilter.includes(i)) {
+                                          return <img src={checkboxChecked} alt="checked" />
+                                        } else if (!selectedFilter.includes(i) && hover === i) {
+                                          return <img src={checkboxUncheckedHover} alt="checkbox hover" />
+                                        } else {
+                                          return <img src={checkboxUnchecked} alt="unchecked" />
+                                        }
+                                      }}
+                                      overrides={{
+                                        BaseButton: {
+                                          style: {
+                                            ...buttonContentStyle,
+                                            backgroundColor: selectedFilter.includes(i) ? ettlevColors.green100 : ettlevColors.white,
+                                            ...borderWidth('1px'),
+                                            ...borderStyle('solid'),
+                                            ...borderColor('#6A6A6A'),
+                                            paddingLeft: '8px',
+                                            paddingRight: '16px',
+                                            paddingTop: '8px',
+                                            paddingBottom: '10px',
+                                            marginRight: '16px',
+                                            marginBottom: '16px',
+                                            ...borderRadius('4px'),
+                                            ':hover': {
+                                              backgroundColor: ettlevColors.white,
+                                              boxShadow: '0px 2px 0px rgba(0, 0, 0, 0.25), inset 0px -1px 0px rgba(0, 0, 0, 0.25);',
                                             },
-                                            props: {
-                                              onMouseEnter: () => {
-                                                setHover(i)
-                                              },
-                                              onMouseLeave: () => {
-                                                setHover(undefined)
-                                              },
+                                            ':focus': {
+                                              boxShadow: '0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 3px 0 rgba(0, 0, 0, .12)',
+                                              outlineWidth: '3px',
+                                              outlineStyle: 'solid',
+                                              outlinwColor: ettlevColors.focusOutline,
+                                            },
+                                            width: '100%',
+                                            maxWidth: '260px',
+                                            justifyContent: 'flex-start',
+                                          },
+                                          props: {
+                                            onMouseEnter: () => {
+                                              setHover(i)
+                                            },
+                                            onMouseLeave: () => {
+                                              setHover(undefined)
                                             },
                                           },
-                                        }}
+                                        },
+                                      }}
+                                    >
+                                      <Block width="100%" marginRight="5px">
+                                        <ParagraphMedium margin="0px" $style={{ lineHeight: '22px' }}>
+                                          {r.label}
+                                        </ParagraphMedium>
+                                      </Block>
+                                      <StatefulTooltip
+                                        content={() => <Block padding="20px">{r.description}</Block>}
+                                        placement={PLACEMENT.bottom}
+                                        accessibilityType={ACCESSIBILITY_TYPE.tooltip}
+                                        returnFocus
+                                        showArrow
+                                        autoFocus
                                       >
-                                        <Block width="100%" marginRight="5px">
-                                          <ParagraphMedium margin="0px" $style={{ lineHeight: '22px' }}>
-                                            {r.label}
-                                          </ParagraphMedium>
+                                        <Block display="flex" justifyContent="flex-end">
+                                          <img src={outlineInfoIcon} alt="informasjons ikon" />
                                         </Block>
-                                        <StatefulTooltip
-                                          content={() => <Block padding="20px">{r.description}</Block>}
-                                          placement={PLACEMENT.bottom}
-                                          accessibilityType={ACCESSIBILITY_TYPE.tooltip}
-                                          returnFocus
-                                          showArrow
-                                          autoFocus
-                                        >
-                                          <Block display="flex" justifyContent="flex-end">
-                                            <img src={outlineInfoIcon} alt="informasjons ikon" />
-                                          </Block>
-                                        </StatefulTooltip>
-                                      </BaseUIButton>
-                                    )
-                                  })}
-                                </ButtonGroup>
-                              </Block>
-                            </FormControl>
-                          )
-                        }}
-                      </FieldArray>
-                    </>
+                                      </StatefulTooltip>
+                                    </BaseUIButton>
+                                  )
+                                })}
+                              </ButtonGroup>
+                            </Block>
+                          </FormControl>
+                        )
+                      }}
+                    </FieldArray>
+                  </>
                   {/* )} */}
 
                   <BoolField

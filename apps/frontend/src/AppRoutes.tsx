@@ -42,10 +42,9 @@ import { Spinner } from './components/common/Spinner'
 import jumpToHash from './util/jumpToHash'
 
 const AppRoutes = (): JSX.Element => {
-
   useEffect(() => {
     jumpToHash()
-  },[])
+  }, [])
 
   return (
     <ScrollToTop>
@@ -63,7 +62,11 @@ const AppRoutes = (): JSX.Element => {
         <Route path="/etterlevelse" element={<PrivateRoute component={<EtterlevelseListPage />} adminPage />} caseSensitive={true} />
         <Route path="/etterlevelse/:id" element={<EtterlevelsePage />} caseSensitive={true} />
 
-        <Route path="/behandling/:id/:tema/:filter/krav/:kravNummer/:kravVersjon" element={<PrivateRoute component={<RedirectToEtterlevelseDokumentasjonPage />} />} caseSensitive={true} />
+        <Route
+          path="/behandling/:id/:tema/:filter/krav/:kravNummer/:kravVersjon"
+          element={<PrivateRoute component={<RedirectToEtterlevelseDokumentasjonPage />} />}
+          caseSensitive={true}
+        />
         <Route path="/behandling/:id/:tema/" element={<PrivateRoute component={<RedirectToEtterlevelseDokumentasjonPage />} />} caseSensitive={true} />
         <Route path="/behandling/:id/:tema/:filter" element={<PrivateRoute component={<RedirectToEtterlevelseDokumentasjonPage />} />} caseSensitive={true} />
         <Route path="/behandling/:id" element={<PrivateRoute component={<RedirectToEtterlevelseDokumentasjonPage />} />} caseSensitive={true} />
@@ -130,15 +133,14 @@ const RedirectToEtterlevelseDokumentasjonPage = () => {
 
   useEffect(() => {
     if (id) {
-      ; (async () => {
+      ;(async () => {
         setLoading(true)
         await searchEtterlevelsedokumentasjonByBehandlingId(id).then((resp) => {
           if (resp.length === 1) {
             let redirectUrl = '/dokumentasjon/' + resp[0].id
             if (tema && !filter) {
               redirectUrl += '/' + tema.toUpperCase() + '/RELEVANTE_KRAV'
-            }
-            else if (tema && filter) {
+            } else if (tema && filter) {
               redirectUrl += '/' + tema.toUpperCase() + '/' + filter.toUpperCase()
             }
             if (kravNummer && kravVersjon) {

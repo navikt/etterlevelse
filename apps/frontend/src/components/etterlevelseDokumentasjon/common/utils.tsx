@@ -21,22 +21,24 @@ const getBehandlingLinks = (etterlevelseDokumentasjon: EtterlevelseDokumentasjon
       {etterlevelseDokumentasjon.behandlingIds.map((behandlingId, index) => {
         return (
           <Block key={'behandling_link_' + index}>
-            {etterlevelseDokumentasjon.behandlinger && etterlevelseDokumentasjon.behandlinger[index].nummer>0 && etterlevelseDokumentasjon.behandlinger[index].overordnetFormaal && etterlevelseDokumentasjon.behandlinger[index].overordnetFormaal.shortName?
+            {etterlevelseDokumentasjon.behandlinger &&
+            etterlevelseDokumentasjon.behandlinger[index].nummer > 0 &&
+            etterlevelseDokumentasjon.behandlinger[index].overordnetFormaal &&
+            etterlevelseDokumentasjon.behandlinger[index].overordnetFormaal.shortName ? (
               <ExternalLink href={`${env.pollyBaseUrl}process/${behandlingId}`}>
-              <ExternalLinkWrapper
-                text={
-                  etterlevelseDokumentasjon.behandlinger && etterlevelseDokumentasjon.behandlinger.length > 0
-                    ? `B${etterlevelseDokumentasjon.behandlinger[index].nummer} ${etterlevelseDokumentasjon.behandlinger[index].overordnetFormaal?.shortName}: ${etterlevelseDokumentasjon.behandlinger[index].navn}`
-                    : 'Ingen data'
-                }
-              />
-            </ExternalLink>
-              :
-              <Block $style={{fontSize: '18px', lineHeight: '22px', fontFamily: 'Source Sans Pro', fontWeight: 'normal' }}>
+                <ExternalLinkWrapper
+                  text={
+                    etterlevelseDokumentasjon.behandlinger && etterlevelseDokumentasjon.behandlinger.length > 0
+                      ? `B${etterlevelseDokumentasjon.behandlinger[index].nummer} ${etterlevelseDokumentasjon.behandlinger[index].overordnetFormaal?.shortName}: ${etterlevelseDokumentasjon.behandlinger[index].navn}`
+                      : 'Ingen data'
+                  }
+                />
+              </ExternalLink>
+            ) : (
+              <Block $style={{ fontSize: '18px', lineHeight: '22px', fontFamily: 'Source Sans Pro', fontWeight: 'normal' }}>
                 {etterlevelseDokumentasjon.behandlinger ? etterlevelseDokumentasjon.behandlinger[index].navn : 'Ingen data'}
               </Block>
-
-            }
+            )}
           </Block>
         )
       })}
@@ -87,11 +89,11 @@ export const getMainHeader = (etterlevelseDokumentasjon: EtterlevelseDokumentasj
       {etterlevelseDokumentasjon.behandlerPersonopplysninger && (
         <Block
           display="flex"
-          alignItems={etterlevelseDokumentasjon.behandlingIds && etterlevelseDokumentasjon.behandlingIds.length>=1 ? "flex-start" : "center"}
+          alignItems={etterlevelseDokumentasjon.behandlingIds && etterlevelseDokumentasjon.behandlingIds.length >= 1 ? 'flex-start' : 'center'}
           marginTop={etterlevelseDokumentasjon.virkemiddelId ? '8px' : '0px'}
         >
           <LabelSmall $style={{ lineHeight: '22px', marginRight: '10px', fontSize: '16px', color: ettlevColors.green600 }}>Behandling:</LabelSmall>
-          {etterlevelseDokumentasjon.behandlingIds && etterlevelseDokumentasjon.behandlingIds.length>=1 && etterlevelseDokumentasjon.behandlerPersonopplysninger ? (
+          {etterlevelseDokumentasjon.behandlingIds && etterlevelseDokumentasjon.behandlingIds.length >= 1 && etterlevelseDokumentasjon.behandlerPersonopplysninger ? (
             getBehandlingLinks(etterlevelseDokumentasjon)
           ) : (
             <Block
@@ -181,10 +183,10 @@ export const getEtterlevelseStatus = (status?: EtterlevelseStatus, frist?: strin
   }
 }
 
-export const updateBehandlingNameWithNumber= (behandlinger: Behandling[]) => {
-  return behandlinger.map(b => {
-    return {...b, navn: 'B' + b.nummer + ' ' + b.overordnetFormaal.shortName + ': ' + b.navn}
-  }) 
+export const updateBehandlingNameWithNumber = (behandlinger: Behandling[]) => {
+  return behandlinger.map((b) => {
+    return { ...b, navn: 'B' + b.nummer + ' ' + b.overordnetFormaal.shortName + ': ' + b.navn }
+  })
 }
 
 export const getStatusLabelColor = (status: EtterlevelseStatus) => {

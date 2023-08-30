@@ -26,7 +26,7 @@ export enum ObjectType {
   Krav = 'Krav',
   Etterlevelse = 'Etterlevelse',
   Behandling = 'Behandling',
-  EtterlevelseDokumentasjon= 'EtterlevelseDokumentasjon',
+  EtterlevelseDokumentasjon = 'EtterlevelseDokumentasjon',
   BehandlingData = 'BehandlingData',
   Melding = 'Melding',
   EtterlevelseArkiv = 'EtterlevelseArkiv',

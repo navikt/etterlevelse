@@ -32,10 +32,13 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: ObjectType 
   const [limit, setLimit] = useState(20)
   const [table, setTable] = useState<ObjectType | undefined>(props.tableType)
 
-  const colors = _.uniq(audits.content.map((a) => a.tableId)).reduce((val, id) => {
-    val[id] = randomColor({ seed: id, luminosity: 'dark' })
-    return val
-  }, {} as { [id: string]: string })
+  const colors = _.uniq(audits.content.map((a) => a.tableId)).reduce(
+    (val, id) => {
+      val[id] = randomColor({ seed: id, luminosity: 'dark' })
+      return val
+    },
+    {} as { [id: string]: string },
+  )
 
   useEffect(() => {
     ;(async () => {

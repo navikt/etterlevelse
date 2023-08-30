@@ -1,12 +1,12 @@
 import axios from 'axios'
-import {EtterlevelseDokumentasjon, EtterlevelseDokumentasjonQL, PageResponse} from '../constants'
-import {env} from '../util/env'
-import {useEffect, useState} from 'react'
-import {getVirkemiddel} from './VirkemiddelApi'
+import { EtterlevelseDokumentasjon, EtterlevelseDokumentasjonQL, PageResponse } from '../constants'
+import { env } from '../util/env'
+import { useEffect, useState } from 'react'
+import { getVirkemiddel } from './VirkemiddelApi'
 import * as yup from 'yup'
 
-
-export const etterlevelseDokumentasjonName = (etterlevelseDokumentasjon?: EtterlevelseDokumentasjon) => (etterlevelseDokumentasjon ? 'E' + etterlevelseDokumentasjon.etterlevelseNummer + ' ' + etterlevelseDokumentasjon.title : '')
+export const etterlevelseDokumentasjonName = (etterlevelseDokumentasjon?: EtterlevelseDokumentasjon) =>
+  etterlevelseDokumentasjon ? 'E' + etterlevelseDokumentasjon.etterlevelseNummer + ' ' + etterlevelseDokumentasjon.title : ''
 
 export const getEtterlevelseDokumentasjon = async (id: string) => {
   return (await axios.get<EtterlevelseDokumentasjon>(`${env.backendBaseUrl}/etterlevelsedokumentasjon/${id}`)).data
