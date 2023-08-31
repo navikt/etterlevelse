@@ -395,7 +395,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                       <FieldArray name="teamsData">
                         {(p: FieldArrayRenderProps) => {
                           return (
-                            <FormControl label={<LabelWithTooltip label="" tooltip="" />}>
+                            <FormControl label={<LabelWithTooltip label="Legg til eksiterende team fra teamkatalogen" tooltip="" />}>
                               <Block>
                                 <Block display="flex">
                                   <CustomizedSelect
