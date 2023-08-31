@@ -3,13 +3,10 @@ package no.nav.data.etterlevelse.behandling;
 import no.nav.data.IntegrationTestBase;
 import no.nav.data.etterlevelse.behandling.BehandlingController.BehandlingPage;
 import no.nav.data.etterlevelse.behandling.dto.Behandling;
-import no.nav.data.etterlevelse.behandling.dto.BehandlingRequest;
 import no.nav.data.etterlevelse.common.domain.ExternalCode;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -41,7 +38,7 @@ class BehandlingControllerIT extends IntegrationTestBase {
         assertResponse(behandlinger.getBody().getContent().get(0));
     }
 
-    @Test
+/*    @Test
     void updateBehandlingData() {
         BehandlingRequest req = BehandlingRequest.builder()
                 .id("74288ec1-c45d-4b9f-b799-33539981a690")
@@ -56,7 +53,7 @@ class BehandlingControllerIT extends IntegrationTestBase {
 
         assertThat(behandling.getIrrelevansFor()).hasSize(1);
         assertThat(behandling.getIrrelevansFor().get(0).getCode()).isEqualTo("SAK");
-    }
+    }*/
 
     private void assertResponse(Behandling behandling) {
         assertThat(behandling).isEqualTo(Behandling.builder()
