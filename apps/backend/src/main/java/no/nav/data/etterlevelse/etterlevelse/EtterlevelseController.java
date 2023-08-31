@@ -133,6 +133,11 @@ public class  EtterlevelseController {
     @PostMapping
     public ResponseEntity<EtterlevelseResponse> createEtterlevelse(@RequestBody EtterlevelseRequest request) {
         log.info("Create Etterlevelse");
+
+        if(request.getBehandlingId() != null && request.getEtterlevelseDokumentasjonId() == null) {
+            throw new ValidationException("Tried to create etterlevelse with old architecture");
+        }
+
         var krav = service.save(request);
         return new ResponseEntity<>(krav.toResponse(), HttpStatus.CREATED);
     }
@@ -169,6 +174,11 @@ public class  EtterlevelseController {
         if (!Objects.equals(id, request.getIdAsUUID())) {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
         }
+
+        if(request.getBehandlingId() != null && request.getEtterlevelseDokumentasjonId() == null) {
+            throw new ValidationException("Tried to create etterlevelse with old architecture");
+        }
+
         var etterlevelse = service.save(request);
         return ResponseEntity.ok(etterlevelse.toResponse());
     }
