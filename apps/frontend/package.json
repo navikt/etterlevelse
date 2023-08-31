@@ -10,6 +10,9 @@
     "@fortawesome/free-regular-svg-icons": "^6.0.0",
     "@fortawesome/free-solid-svg-icons": "^6.0.0",
     "@fortawesome/react-fontawesome": "^0.2.0",
+    "@navikt/ds-css": "^5.2.1",
+    "@navikt/ds-react": "^5.2.1",
+    "@navikt/ds-tailwind": "^5.2.1",
     "@types/draft-js": "^0.11.2",
     "@types/markdown-draft-js": "^2.2.2",
     "@types/react-draft-wysiwyg": "^1.13.2",
@@ -20,9 +23,11 @@
     "draft-js": "^0.11.7",
     "formik": "^2.2.6",
     "graphql": "^16.0.0",
+    "history": "5.3.0",
     "lodash": "^4.17.20",
     "markdown-draft-js": "^2.2.1",
     "moment": "^2.29.1",
+    "postcss-import": "^15.1.0",
     "query-string": "^8.1.0",
     "randomcolor": "^0.6.2",
     "react": "^18.2.0",
@@ -42,8 +47,7 @@
     "styletron-engine-atomic": "^1.4.8",
     "styletron-react": "^6.0.2",
     "typescript": "^5.0.3",
-    "yup": "^1.1.1",
-    "history": "5.3.0"
+    "yup": "^1.1.1"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -98,11 +102,14 @@
     "@types/shortid": "^0.0.29",
     "@types/styletron-react": "^5.0.2",
     "@types/yup": "^0.32.0",
+    "autoprefixer": "^10.4.15",
     "http-proxy-middleware": "^2.0.0",
+    "postcss": "^8.4.29",
     "prettier": "3.0.3",
     "react-helmet": "^6.1.0",
     "react-localization": "^1.0.15",
     "react-router-dom": "^6.4.0",
-    "react-scripts": "5.0.1"
+    "react-scripts": "5.0.1",
+    "tailwindcss": "^3.3.3"
   }
 }
