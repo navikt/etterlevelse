@@ -4,30 +4,23 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.NotFoundException;
-import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.common.utils.StreamUtils;
 import no.nav.data.etterlevelse.behandling.dto.Behandling;
-import no.nav.data.etterlevelse.behandling.dto.BehandlingRequest;
 import no.nav.data.integration.team.domain.Team;
 import no.nav.data.integration.team.teamcat.TeamcatTeamClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
 
 import static java.util.stream.Collectors.toList;
 
@@ -88,7 +81,7 @@ public class BehandlingController {
         return ResponseEntity.ok(new RestResponsePage<>(behandlingList));
     }
 
-    @Operation(summary = "Update Behandling")
+/*    @Operation(summary = "Update Behandling")
     @ApiResponse(description = "Behandling updated")
     @PutMapping("/{id}")
     public ResponseEntity<Behandling> updateBehandling(@PathVariable UUID id, @Valid @RequestBody BehandlingRequest request) {
@@ -98,7 +91,7 @@ public class BehandlingController {
         }
         var behandling = service.save(request);
         return ResponseEntity.ok(behandling);
-    }
+    }*/
 
 
     static class BehandlingPage extends RestResponsePage<Behandling> {
