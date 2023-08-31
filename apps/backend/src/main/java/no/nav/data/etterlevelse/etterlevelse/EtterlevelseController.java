@@ -134,7 +134,7 @@ public class  EtterlevelseController {
     public ResponseEntity<EtterlevelseResponse> createEtterlevelse(@RequestBody EtterlevelseRequest request) {
         log.info("Create Etterlevelse");
 
-        if(request.getBehandlingId() != null && request.getEtterlevelseDokumentasjonId() == null) {
+        if(request.getEtterlevelseDokumentasjonId() == null || request.getEtterlevelseDokumentasjonId().isEmpty()) {
             throw new ValidationException("Tried to create etterlevelse with old architecture");
         }
 
@@ -175,7 +175,7 @@ public class  EtterlevelseController {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
         }
 
-        if(request.getBehandlingId() != null && request.getEtterlevelseDokumentasjonId() == null) {
+        if(request.getEtterlevelseDokumentasjonId() == null || request.getEtterlevelseDokumentasjonId().isEmpty()) {
             throw new ValidationException("Tried to create etterlevelse with old architecture");
         }
 
