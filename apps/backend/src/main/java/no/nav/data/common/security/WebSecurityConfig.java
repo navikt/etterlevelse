@@ -84,8 +84,7 @@ public class WebSecurityConfig {
                     "/export/codelist/**",
                     "/etterlevelse/update/behandlingid/**",
                     "/etterlevelsearkiv/status/arkivert",
-                    "/etterlevelsearkiv/admin/update",
-                    "/etterlevelsedokumentasjon/admin/update/title/team"
+                    "/etterlevelsearkiv/admin/update"
             );
 
             http.authorizeHttpRequests(auth -> auth.requestMatchers(antMatcher("/krav/**")).hasAnyRole(AppRole.KRAVEIER.name(), AppRole.ADMIN.name()));
