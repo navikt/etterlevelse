@@ -147,7 +147,7 @@ public class EtterlevelseIT extends IntegrationTestBase {
                     .behandlingId("behandling1")
                     .kravNummer(krav.getKravNummer())
                     .kravVersjon(krav.getKravVersjon())
-
+                    .etterlevelseDokumentasjonId("etterlevelseDok1")
                     .statusBegrunnelse("statusBegrunnelse")
                     .dokumentasjon(List.of("dok"))
                     .etterleves(true)
@@ -171,6 +171,8 @@ public class EtterlevelseIT extends IntegrationTestBase {
             assertThat(etterlevelse.getVersion()).isEqualTo(0);
 
             assertThat(etterlevelse.getBehandlingId()).isEqualTo("behandling1");
+            assertThat(etterlevelse.getEtterlevelseDokumentasjonId()).isEqualTo("etterlevelseDok1");
+
             assertThat(etterlevelse.getKravNummer()).isEqualTo(50);
             assertThat(etterlevelse.getKravVersjon()).isEqualTo(1);
 
@@ -217,6 +219,7 @@ public class EtterlevelseIT extends IntegrationTestBase {
         var etterlevelse = storageService.save(Etterlevelse.builder().behandlingId("b1").kravNummer(krav.getKravNummer()).kravVersjon(krav.getKravVersjon()).build());
         var req = EtterlevelseRequest.builder()
                 .behandlingId("b2")
+                .etterlevelseDokumentasjonId("e2")
                 .kravNummer(krav.getKravNummer())
                 .kravVersjon(krav.getKravVersjon())
                 .id(etterlevelse.getId().toString())
@@ -226,6 +229,7 @@ public class EtterlevelseIT extends IntegrationTestBase {
         EtterlevelseResponse etterlevelseResp = resp.getBody();
         assertThat(etterlevelseResp).isNotNull();
         assertThat(etterlevelseResp.getBehandlingId()).isEqualTo("b2");
+        assertThat(etterlevelseResp.getEtterlevelseDokumentasjonId()).isEqualTo("e2");
     }
 
     @Test
