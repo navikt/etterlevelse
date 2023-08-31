@@ -4,7 +4,7 @@ import { HeadingXXLarge, LabelLarge } from 'baseui/typography'
 import { Helmet } from 'react-helmet'
 import { Layout2 } from '../components/scaffold/Page'
 import { ettlevColors, maxPageWidth } from '../util/theme'
-import { deleteEtterlevelseDokumentasjon, oppdatereTittelOgTeams } from '../api/EtterlevelseDokumentasjonApi'
+import { deleteEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
 import CustomizedInput from '../components/common/CustomizedInput'
 import { useState } from 'react'
 import { borderColor } from '../components/common/Style'
@@ -28,18 +28,6 @@ export const EtterlevelseDokumentasjonAdminPage = () => {
         </Block>
       }
     >
-      <Block display="flex" width="100%" alignItems="center" $style={{ borderColor: 'red', borderWidth: '5px', borderStyle: 'solid' }}>
-        <Block display="flex" flex="1">
-          <LabelLarge>Hente tittel og teams fra behandling (SKAL FJERNES ETTER MIGRERING I DEV OG PROD. SKAL BRUKES 1 GANG I DEV OG I PROD)</LabelLarge>
-        </Block>
-        <Button
-          onClick={() => {
-            oppdatereTittelOgTeams()
-          }}
-        >
-          Oppdater
-        </Button>
-      </Block>
       <Block marginTop="20px">
         <LabelLarge>Slett dokumentasjon med uid</LabelLarge>
         <Block display="flex">
