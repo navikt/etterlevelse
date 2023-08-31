@@ -188,6 +188,7 @@ public class EtterlevelseIT extends IntegrationTestBase {
             var req = EtterlevelseRequest.builder()
                     .kravNummer(50)
                     .kravVersjon(1)
+                    .etterlevelseDokumentasjonId("e2")
                     .build();
 
             var resp = restTemplate.postForEntity("/etterlevelse", req, String.class);
@@ -203,6 +204,7 @@ public class EtterlevelseIT extends IntegrationTestBase {
             var req = EtterlevelseRequest.builder()
                     .kravNummer(krav.getKravNummer())
                     .kravVersjon(krav.getKravVersjon())
+                    .etterlevelseDokumentasjonId("e2")
                     .build();
 
             var resp = restTemplate.postForEntity("/etterlevelse", req, String.class);
