@@ -126,8 +126,3 @@ export const etterlevelseDokumentasjonSchema = () =>
       },
     }),
   })
-
-// SKAL SLETTE ETTER MIGRERING BÅDE I DEV OG PROD
-export const oppdatereTittelOgTeams = async () => {
-  return (await axios.put<PageResponse<EtterlevelseDokumentasjon>>(`${env.backendBaseUrl}/etterlevelsedokumentasjon/admin/update/title/team`)).data.content
-}
