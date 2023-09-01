@@ -176,9 +176,12 @@ public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
         return arkivert;
     }
 
+/*
+    TODO review before deleting
     public List<EtterlevelseArkiv> updateArkiveringDato(String status, String arkiveringDato) {
         return GenericStorage.to(repo.updateArkiveringDato(status, arkiveringDato), EtterlevelseArkiv.class);
     }
+*/
 
     public List<EtterlevelseArkiv> setStatusToBehandler_arkivering() {
         List<EtterlevelseArkiv> tilArkivering = getByStatus(EtterlevelseArkivStatus.TIL_ARKIVERING.name());
