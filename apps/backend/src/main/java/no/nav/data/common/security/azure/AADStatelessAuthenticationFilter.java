@@ -110,6 +110,9 @@ public class AADStatelessAuthenticationFilter extends OncePerRequestFilter {
                 try{
                     var principal = buildAndValidateFromJavaJwt(plainToken);
                     var authentication = new PreAuthenticatedAuthenticationToken(principal, credential, Arrays.asList(AppRole.ADMIN.toAuthority()));
+                    //Filling in service user info for finer/prettier audit log
+                    authentication.setDetails(new AzureUserInfo(principal, Set.of(AppRole.ADMIN.toAuthority())));
+                    authentication.setAuthenticated(true);
                     log.trace("Request token verification success with roles system.");
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                     return true;
