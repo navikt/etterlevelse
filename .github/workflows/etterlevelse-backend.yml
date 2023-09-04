@@ -17,7 +17,9 @@ jobs:
   build:
     name: Backend - build and push docker
     runs-on: ubuntu-latest
-
+    permissions:
+      packages: write
+      contents: read
     steps:
       - uses: actions/checkout@v3
         

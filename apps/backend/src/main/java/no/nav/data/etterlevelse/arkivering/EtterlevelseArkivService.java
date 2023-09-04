@@ -30,6 +30,7 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -154,19 +155,73 @@ public class EtterlevelseArkivService extends DomainService<EtterlevelseArkiv> {
     }
 
     public List<EtterlevelseArkiv> setStatusToArkivert() {
-        return GenericStorage.to(repo.updateStatus(EtterlevelseArkivStatus.BEHANDLER_ARKIVERING.name(), EtterlevelseArkivStatus.ARKIVERT.name()), EtterlevelseArkiv.class);
+        LocalDateTime arkiveringDato = LocalDateTime.now();
+        List<EtterlevelseArkiv> tilArkivertStatus = getByStatus(EtterlevelseArkivStatus.BEHANDLER_ARKIVERING.name());
+        List<EtterlevelseArkiv> arkivert = new ArrayList<>();
+        tilArkivertStatus.forEach(e -> {
+            EtterlevelseArkiv etterlevelseArkiv =  save(EtterlevelseArkivRequest.builder()
+                    .id(e.getId().toString())
+                    .behandlingId(e.getBehandlingId())
+                    .etterlevelseDokumentasjonId(e.getEtterlevelseDokumentasjonId())
+                    .status(EtterlevelseArkivStatus.ARKIVERT)
+                    .arkiveringDato(arkiveringDato)
+                    .tilArkiveringDato(e.getTilArkiveringDato())
+                    .arkiveringAvbruttDato(e.getArkiveringAvbruttDato())
+                    .webSakNummer(e.getWebSakNummer())
+                    .update(true)
+                    .build());
+            arkivert.add(etterlevelseArkiv);
+        });
+
+        return arkivert;
     }
 
+/*
+    TODO review before deleting
     public List<EtterlevelseArkiv> updateArkiveringDato(String status, String arkiveringDato) {
         return GenericStorage.to(repo.updateArkiveringDato(status, arkiveringDato), EtterlevelseArkiv.class);
     }
+*/
 
     public List<EtterlevelseArkiv> setStatusToBehandler_arkivering() {
-        return GenericStorage.to(repo.updateStatus(EtterlevelseArkivStatus.TIL_ARKIVERING.name(), EtterlevelseArkivStatus.BEHANDLER_ARKIVERING.name()), EtterlevelseArkiv.class);
+        List<EtterlevelseArkiv> tilArkivering = getByStatus(EtterlevelseArkivStatus.TIL_ARKIVERING.name());
+        List<EtterlevelseArkiv> behandlerArkivering = new ArrayList<>();
+        tilArkivering.forEach(e -> {
+            EtterlevelseArkiv etterlevelseArkiv = save(EtterlevelseArkivRequest.builder()
+                    .id(e.getId().toString())
+                    .behandlingId(e.getBehandlingId())
+                    .etterlevelseDokumentasjonId(e.getEtterlevelseDokumentasjonId())
+                    .status(EtterlevelseArkivStatus.BEHANDLER_ARKIVERING)
+                    .arkiveringDato(e.getArkiveringDato())
+                    .tilArkiveringDato(e.getTilArkiveringDato())
+                    .arkiveringAvbruttDato(e.getArkiveringAvbruttDato())
+                    .webSakNummer(e.getWebSakNummer())
+                    .update(true)
+                    .build());
+            behandlerArkivering.add(etterlevelseArkiv);
+        });
+        return behandlerArkivering;
     }
 
-    public List<EtterlevelseArkiv> setStatusWithEtterlevelseDokumentasjonId(String newStatus, String etterlevelseDokumentasjonId) {
-        return GenericStorage.to(repo.updateStatusWithEtterlevelseDokumentasjonId(newStatus, etterlevelseDokumentasjonId), EtterlevelseArkiv.class);
+    public List<EtterlevelseArkiv> setStatusWithEtterlevelseDokumentasjonId(EtterlevelseArkivStatus newStatus, String etterlevelseDokumentasjonId) {
+        List<EtterlevelseArkiv> arkiveringTilNyStatus = getByEtterlevelseDokumentasjon(etterlevelseDokumentasjonId);
+        List<EtterlevelseArkiv> oppdatertArkivering = new ArrayList<>();
+        arkiveringTilNyStatus.forEach(e -> {
+            EtterlevelseArkiv etterlevelseArkiv = save(EtterlevelseArkivRequest.builder()
+                    .id(e.getId().toString())
+                    .behandlingId(e.getBehandlingId())
+                    .etterlevelseDokumentasjonId(e.getEtterlevelseDokumentasjonId())
+                    .status(newStatus)
+                    .arkiveringDato(e.getArkiveringDato())
+                    .tilArkiveringDato(e.getTilArkiveringDato())
+                    .arkiveringAvbruttDato(e.getArkiveringAvbruttDato())
+                    .webSakNummer(e.getWebSakNummer())
+                    .update(true)
+                    .build());
+            oppdatertArkivering.add(etterlevelseArkiv);
+        });
+
+        return oppdatertArkivering;
     }
 
     public EtterlevelseArkiv save(EtterlevelseArkivRequest request) {

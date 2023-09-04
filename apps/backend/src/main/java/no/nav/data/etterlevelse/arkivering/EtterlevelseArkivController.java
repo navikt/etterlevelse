@@ -142,14 +142,12 @@ public class EtterlevelseArkivController {
                         .toList();
                 if(!sokResultat.isEmpty()){
                     log.info("Fant etterlevelse dokumentasjon for: {}, søkeresultat:{}",failedEtterlevelseNr, sokResultat.get(0).getEtterlevelseNummer());
-                    etterlevelseArkivService.setStatusWithEtterlevelseDokumentasjonId(EtterlevelseArkivStatus.ERROR.name(), sokResultat.get(0).getId().toString());
+                    etterlevelseArkivService.setStatusWithEtterlevelseDokumentasjonId(EtterlevelseArkivStatus.ERROR, sokResultat.get(0).getId().toString());
                 } else {
-                    throw new ValidationException("Fant ikke behandling for " + failedEtterlevelseNr);
+                    throw new ValidationException("Fant ikke etterlevelse dokumentasjon for " + failedEtterlevelseNr);
                 }
             }
         }
-        String arkiveringDato = LocalDateTime.now().toString();
-        etterlevelseArkivService.updateArkiveringDato(EtterlevelseArkivStatus.BEHANDLER_ARKIVERING.name(),arkiveringDato);
 
         List<EtterlevelseArkiv> etterlevelseArkivList = etterlevelseArkivService.setStatusToArkivert();
         return ResponseEntity.ok(new RestResponsePage<>(etterlevelseArkivList).convert(EtterlevelseArkiv::toResponse));

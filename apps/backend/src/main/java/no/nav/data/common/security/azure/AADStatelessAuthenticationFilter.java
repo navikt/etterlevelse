@@ -37,6 +37,7 @@ import no.nav.data.common.utils.MetricUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.core.oidc.StandardClaimNames;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -110,6 +111,13 @@ public class AADStatelessAuthenticationFilter extends OncePerRequestFilter {
                 try{
                     var principal = buildAndValidateFromJavaJwt(plainToken);
                     var authentication = new PreAuthenticatedAuthenticationToken(principal, credential, Arrays.asList(AppRole.ADMIN.toAuthority()));
+                    //Filling in service user info for finer/prettier audit log
+                    //ESU -> Etterlevlese Service User
+                    authentication.setDetails(new AzureUserInfo(new JWTClaimsSet.Builder()
+                            .claim(StandardClaimNames.NAME, "service user for archiving")
+                            .claim(AzureConstants.IDENT_CLAIM, "ESU-001")
+                            .build(), Set.of(AppRole.ADMIN.toAuthority())));
+                    authentication.setAuthenticated(true);
                     log.trace("Request token verification success with roles system.");
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                     return true;
