@@ -4,6 +4,7 @@ import { env } from '../util/env'
 import { useEffect, useState } from 'react'
 import { getVirkemiddel } from './VirkemiddelApi'
 import * as yup from 'yup'
+import { behandlingName } from './BehandlingApi'
 
 export const etterlevelseDokumentasjonName = (etterlevelseDokumentasjon?: EtterlevelseDokumentasjon) =>
   etterlevelseDokumentasjon ? 'E' + etterlevelseDokumentasjon.etterlevelseNummer + ' ' + etterlevelseDokumentasjon.title : ''
@@ -69,7 +70,13 @@ export const useEtterlevelseDokumentasjon = (etterlevelseDokumentasjonId?: strin
           if (etterlevelseDokumentasjon.virkemiddelId) {
             await getVirkemiddel(etterlevelseDokumentasjon.virkemiddelId).then((virkemiddelResponse) => (virkmiddel = virkemiddelResponse))
           }
-          setData({ ...etterlevelseDokumentasjon, virkemiddel: virkmiddel })
+          const behandlinger = etterlevelseDokumentasjon.behandlinger
+          if(behandlinger && behandlinger.length > 0) {
+            behandlinger.map((b) => {
+              b.navn = behandlingName(b)
+            })
+          }
+          setData({ ...etterlevelseDokumentasjon, behandlinger: behandlinger, virkemiddel: virkmiddel })
           setIsLoading(false)
         })
       })()
