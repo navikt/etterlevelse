@@ -8,6 +8,7 @@ import { HeadingXLarge, LabelLarge, LabelSmall, ParagraphMedium, ParagraphSmall,
 import { arrowRightIcon, navChevronRightIcon } from '../Images'
 import * as _ from 'lodash'
 import Button from './Button'
+import { ampli } from '../../services/Amplitude'
 
 interface PanelProps {
   href: string
@@ -281,7 +282,13 @@ export const PanelLinkCard = ({
 
   return (
     <Block width={width} maxWidth={maxWidth} overrides={rootOverrides} marginRight={marginRight} height="inherit">
-      <RouteLink href={href} hideUnderline requireLogin={requireLogin} openinnewtab={(!!openinnewtab).toString()}>
+      <RouteLink 
+        href={href} 
+        hideUnderline 
+        onClick={() => ampli.logEvent("navigere", {kilde: "forside-panel", app: "etterlevelse", url: href })} 
+        requireLogin={requireLogin} 
+        openinnewtab={(!!openinnewtab).toString()}
+      >
         <Block
           onMouseEnter={() => setHover(true)}
           onMouseLeave={() => setHover(false)}
