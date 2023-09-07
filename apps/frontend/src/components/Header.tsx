@@ -29,6 +29,7 @@ import { AlertType, Melding, MeldingStatus, MeldingType } from '../constants'
 import { getMeldingByType } from '../api/MeldingApi'
 import { Markdown } from './common/Markdown'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { ampli } from '../services/Amplitude'
 
 export const loginUrl = (location: Location, path?: string) => {
   const frontpage = window.location.href.substr(0, window.location.href.length - location.pathname.length)
@@ -205,7 +206,10 @@ const Menu = (props: { pages: MenuItem[][]; title: React.ReactNode; icon?: IconD
                     },
                   }}
                 >
-                  <RouteLink href={p.href} onClick={() => setOpen(false)} hideUnderline>
+                  <RouteLink href={p.href} onClick={() => {
+                    ampli.logEvent("navigere", {kilde: "header", app: "etterlevelse", url: p.href })
+                    setOpen(false)
+                  }} hideUnderline>
                     <Block>
                       <Block display={'flex'} alignItems={'center'}>
                         {p.icon && (

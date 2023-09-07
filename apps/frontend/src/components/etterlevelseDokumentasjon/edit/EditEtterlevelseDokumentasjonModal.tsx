@@ -387,7 +387,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                   <BoolField
                     label="Jeg vil legge til team fra teamkatalogen"
                     name="knytteTilTeam"
-                    tooltip="Legg til eksiterende team fra teamkatalogen for å automatisk filtrere teamets dokumentasjon. Dette er ikke nødvendig for å opprette etterlevelsedokumentasjonen, men anbefales."
+                    tooltip="Legg til eksisterende team fra teamkatalogen for å automatisk filtrere teamets dokumentasjon. Dette er ikke nødvendig for å opprette etterlevelsedokumentasjonen, men anbefales."
                   />
 
                   {values.knytteTilTeam && (
@@ -395,7 +395,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                       <FieldArray name="teamsData">
                         {(p: FieldArrayRenderProps) => {
                           return (
-                            <FormControl label={<LabelWithTooltip label="Legg til eksiterende team fra teamkatalogen" tooltip="" />}>
+                            <FormControl label={<LabelWithTooltip label="Legg til eksisterende team fra teamkatalogen" tooltip="" />}>
                               <Block>
                                 <Block display="flex">
                                   <CustomizedSelect
