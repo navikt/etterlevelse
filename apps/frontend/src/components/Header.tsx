@@ -174,6 +174,8 @@ type MenuItem = { label: React.ReactNode; href?: string; disabled?: boolean; ico
 const Menu = (props: { pages: MenuItem[][]; title: React.ReactNode; icon?: IconDefinition; kind?: 'primary' | 'secondary' | 'tertiary'; compact?: boolean }) => {
   const [open, setOpen] = useState(false)
 
+  const pathname = window.location.pathname;
+
   const allPages = props.pages.length
     ? props.pages
         .filter((p) => p.length)
@@ -207,7 +209,7 @@ const Menu = (props: { pages: MenuItem[][]; title: React.ReactNode; icon?: IconD
                   }}
                 >
                   <RouteLink href={p.href} onClick={() => {
-                    ampli.logEvent("navigere", {kilde: "header", app: "etterlevelse", url: p.href })
+                    ampli.logEvent("navigere", {kilde: "header", app: "etterlevelse", url: p.href, fra: pathname })
                     setOpen(false)
                   }} hideUnderline>
                     <Block>
