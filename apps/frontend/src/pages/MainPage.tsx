@@ -69,7 +69,7 @@ export const MainPage = () => {
               width={cardWidth}
               verticalMargin={theme.sizing.scale300}
               onClick={() => {
-                ampli.logEvent('navigere', { kilde: 'forside-panel', app: 'etterlevelse', url: '/tema', fra: '/' })
+                ampli.logEvent('navigere', { kilde: 'forside-panel', app: 'etterlevelse', til: '/tema', fra: '/' })
               }}
               href={'/tema'}
               tittel={'Forstå kravene'}
@@ -85,7 +85,7 @@ export const MainPage = () => {
               requireLogin
               href={'/dokumentasjoner'}
               onClick={() => {
-                ampli.logEvent('navigere', { kilde: 'forside-panel', app: 'etterlevelse', url: '/dokumentasjoner', fra: '/' })
+                ampli.logEvent('navigere', { kilde: 'forside-panel', app: 'etterlevelse', til: '/dokumentasjoner', fra: '/' })
               }}
               tittel={'Dokumentere etterlevelse'}
               icon={pageWidth && pageWidth >= 768 ? paperPenIconBg : paperPenIconBgSmall}
@@ -101,7 +101,7 @@ export const MainPage = () => {
                 ampli.logEvent('navigere', {
                   kilde: 'forside-panel',
                   app: 'etterlevelse',
-                  url: 'https://metabase.intern.nav.no/dashboard/117-dashboard-for-etterlevelse',
+                  til: 'https://metabase.intern.nav.no/dashboard/117-dashboard-for-etterlevelse',
                   fra: '/',
                 })
               }}

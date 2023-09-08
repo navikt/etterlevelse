@@ -211,7 +211,7 @@ const Menu = (props: { pages: MenuItem[][]; title: React.ReactNode; icon?: IconD
                   <RouteLink
                     href={p.href}
                     onClick={() => {
-                      ampli.logEvent('navigere', { kilde: 'header', app: 'etterlevelse', url: p.href, fra: pathname })
+                      ampli.logEvent('navigere', { kilde: 'header', app: 'etterlevelse', til: p.href, fra: pathname })
                       setOpen(false)
                     }}
                     hideUnderline
