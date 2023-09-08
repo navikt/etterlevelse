@@ -284,13 +284,7 @@ export const PanelLinkCard = ({
 
   return (
     <Block width={width} maxWidth={maxWidth} overrides={rootOverrides} marginRight={marginRight} height="inherit">
-      <RouteLink 
-        href={href} 
-        hideUnderline 
-        onClick={() => onClick && onClick()} 
-        requireLogin={requireLogin} 
-        openinnewtab={(!!openinnewtab).toString()}
-      >
+      <RouteLink href={href} hideUnderline onClick={() => onClick && onClick()} requireLogin={requireLogin} openinnewtab={(!!openinnewtab).toString()}>
         <Block
           onMouseEnter={() => setHover(true)}
           onMouseLeave={() => setHover(false)}

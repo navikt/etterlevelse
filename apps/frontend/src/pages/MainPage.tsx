@@ -68,7 +68,9 @@ export const MainPage = () => {
               height={cardHeight}
               width={cardWidth}
               verticalMargin={theme.sizing.scale300}
-              onClick={() => {ampli.logEvent("navigere", {kilde: "forside-panel", app: "etterlevelse", url: "/tema", fra: "/" })}}
+              onClick={() => {
+                ampli.logEvent('navigere', { kilde: 'forside-panel', app: 'etterlevelse', url: '/tema', fra: '/' })
+              }}
               href={'/tema'}
               tittel={'Forstå kravene'}
               icon={pageWidth && pageWidth >= 768 ? paragrafIconBg : paragrafIconBgSmall}
@@ -82,7 +84,9 @@ export const MainPage = () => {
               verticalMargin={theme.sizing.scale300}
               requireLogin
               href={'/dokumentasjoner'}
-              onClick={() => {ampli.logEvent("navigere", {kilde: "forside-panel", app: "etterlevelse", url: "/dokumentasjoner", fra: "/" })}}
+              onClick={() => {
+                ampli.logEvent('navigere', { kilde: 'forside-panel', app: 'etterlevelse', url: '/dokumentasjoner', fra: '/' })
+              }}
               tittel={'Dokumentere etterlevelse'}
               icon={pageWidth && pageWidth >= 768 ? paperPenIconBg : paperPenIconBgSmall}
               beskrivelse={'Se hvilke krav som gjelder din løsning og dokumenter hvordan løsningen etterlever kravene'}
@@ -93,7 +97,14 @@ export const MainPage = () => {
               width={cardWidth}
               verticalMargin={theme.sizing.scale300}
               href={'https://metabase.intern.nav.no/dashboard/116-dashboard-for-etterlevelse'}
-              onClick={() => {ampli.logEvent("navigere", {kilde: "forside-panel", app: "etterlevelse", url: "https://metabase.intern.nav.no/dashboard/117-dashboard-for-etterlevelse", fra: "/" })}}
+              onClick={() => {
+                ampli.logEvent('navigere', {
+                  kilde: 'forside-panel',
+                  app: 'etterlevelse',
+                  url: 'https://metabase.intern.nav.no/dashboard/117-dashboard-for-etterlevelse',
+                  fra: '/',
+                })
+              }}
               tittel={'Status i organisasjonen'}
               icon={pageWidth && pageWidth >= 768 ? grafIconBg : grafIconBgSmall}
               beskrivelse={'Følg med på status og se hvor godt NAV sine områder dokumenterer på kravene'}
