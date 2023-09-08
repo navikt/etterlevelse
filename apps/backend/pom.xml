@@ -27,7 +27,7 @@
         <graphql.version>21.0</graphql.version>
         <flexmark.version>0.64.8</flexmark.version>
 
-        <microsoft-graph.version>5.68.0</microsoft-graph.version>
+        <microsoft-graph.version>5.69.0</microsoft-graph.version>
         <msal4j.version>1.13.10</msal4j.version>
 
         <!-- transitive versions -->
@@ -164,7 +164,7 @@
         <dependency>
             <groupId>com.graphql-java</groupId>
             <artifactId>graphql-java</artifactId>
-            <version>21.0</version>
+            <version>21.1</version>
         </dependency>
 
         <!-- Security -->

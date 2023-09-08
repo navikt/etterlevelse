@@ -71,7 +71,7 @@ export const useEtterlevelseDokumentasjon = (etterlevelseDokumentasjonId?: strin
             await getVirkemiddel(etterlevelseDokumentasjon.virkemiddelId).then((virkemiddelResponse) => (virkmiddel = virkemiddelResponse))
           }
           const behandlinger = etterlevelseDokumentasjon.behandlinger
-          if(behandlinger && behandlinger.length > 0) {
+          if (behandlinger && behandlinger.length > 0) {
             behandlinger.map((b) => {
               b.navn = behandlingName(b)
             })

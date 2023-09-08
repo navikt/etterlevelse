@@ -185,6 +185,7 @@ export type PanelLinkCardOverrides = { Root?: BlockOverrides; Header?: BlockOver
 
 export const PanelLinkCard = ({
   href,
+  onClick,
   tittel,
   titleColor,
   beskrivelse,
@@ -206,6 +207,7 @@ export const PanelLinkCard = ({
   openinnewtab,
 }: {
   href?: string
+  onClick?: () => void
   tittel: string
   titleColor?: string
   beskrivelse?: string
@@ -282,13 +284,7 @@ export const PanelLinkCard = ({
 
   return (
     <Block width={width} maxWidth={maxWidth} overrides={rootOverrides} marginRight={marginRight} height="inherit">
-      <RouteLink 
-        href={href} 
-        hideUnderline 
-        onClick={() => ampli.logEvent("navigere", {kilde: "forside-panel", app: "etterlevelse", url: href })} 
-        requireLogin={requireLogin} 
-        openinnewtab={(!!openinnewtab).toString()}
-      >
+      <RouteLink href={href} hideUnderline onClick={() => onClick && onClick()} requireLogin={requireLogin} openinnewtab={(!!openinnewtab).toString()}>
         <Block
           onMouseEnter={() => setHover(true)}
           onMouseLeave={() => setHover(false)}
