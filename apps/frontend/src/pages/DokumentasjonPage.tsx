@@ -145,7 +145,7 @@ export const DokumentasjonPage = () => {
             </Block>
           ) : (
             <LabelSmall marginTop="0px" marginBottom="0px" marginRight="5px" $style={{ fontSize: '16px' }}>
-              Aktive filtre:
+              Aktive egenskaper:
             </LabelSmall>
           )}
 
