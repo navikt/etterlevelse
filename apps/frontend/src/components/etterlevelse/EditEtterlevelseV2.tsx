@@ -388,7 +388,7 @@ export const EditEtterlevelseV2 = ({
                 },
                 TabList: {
                   style: {
-                    width: pageWidth <= 960 ? 'calc(100% - 32px)' : 'calc(100% - 400px)',
+                    width: '100%',
                     paddingLeft: pageWidth <= 960 ? '16px' : '200px',
                     paddingRight: pageWidth <= 960 ? '16px' : '200px',
                     marginLeft: '0px',
@@ -434,7 +434,7 @@ export const EditEtterlevelseV2 = ({
                     <Block
                       display={'flex'}
                       justifyContent="center"
-                      width={responsiveWidthInnerPage}
+                      width="100%"
                       paddingLeft={responsivePaddingInnerPage}
                       paddingRight={responsivePaddingInnerPage}
                     >
@@ -449,7 +449,7 @@ export const EditEtterlevelseV2 = ({
                     <Block
                       display={'flex'}
                       justifyContent="center"
-                      width={responsiveWidthInnerPage}
+                      width="100%"
                       paddingLeft={responsivePaddingInnerPage}
                       paddingRight={responsivePaddingInnerPage}
                     >
