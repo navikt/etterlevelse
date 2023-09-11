@@ -1,13 +1,10 @@
-import React from 'react'
 import ReactMarkdown from 'react-markdown'
-import { HeadingLarge, HeadingMedium, ParagraphLarge, ParagraphMedium } from 'baseui/typography'
-import { StatefulTooltip } from 'baseui/tooltip'
 import { useDebouncedState } from '../../util/hooks'
 import MdEditor from 'react-markdown-editor-lite'
 import 'react-markdown-editor-lite/lib/index.css'
 import { Block } from 'baseui/block'
 import { theme } from '../../util'
-import { ExternalLink, ExternalLinkWrapper } from './RouteLink'
+import { ExternalLink } from './RouteLink'
 import { markdownLink } from '../../util/config'
 import remarkGfm from 'remark-gfm'
 import rehypeRaw from 'rehype-raw'
@@ -129,17 +126,9 @@ export const Markdown = ({
   const sources: string[] = sourcesOrig || (source ? [source] : [''])
   const htmlPlugins = escapeHtml ? [] : [rehypeRaw]
   return (
-    <Block
-      $style={{
-        // Fix font color in lists etc
-        color: theme.colors.contentPrimary,
-        fontFamily: theme.typography.font400.fontFamily,
-        fontWeight: theme.typography.font400.fontWeight,
-        maxWidth: maxWidth ? maxWidth : undefined,
-      }}
-    >
+    <div>
       <ReactMarkdown children={sources.join(vertical ? '\n\n' : ', ')} components={renderers} remarkPlugins={[remarkGfm]} rehypePlugins={htmlPlugins} />
-    </Block>
+    </div>
   )
 }
 
