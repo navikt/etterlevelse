@@ -4,7 +4,6 @@ import { useParams } from 'react-router-dom'
 import { deleteKrav, getKravByKravNummer, KravId as KravIdQueryVariables, KravIdParams, kravMapToFormVal } from '../api/KravApi'
 import React, { useEffect, useRef, useState } from 'react'
 import { Krav, KravId, KravQL, KravStatus, KravVersjon } from '../constants'
-import Button from '../components/common/Button'
 import { ViewKrav } from '../components/krav/ViewKrav'
 import { EditKrav } from '../components/krav/EditKrav'
 import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
@@ -27,6 +26,8 @@ import { Helmet } from 'react-helmet'
 import Etterlevelser from '../components/krav/Etterlevelser'
 import { ampli } from '../services/Amplitude'
 import { Markdown } from '../components/common/Markdown'
+import { PencilIcon, PlusIcon } from '@navikt/aksel-icons'
+import { Button } from '@navikt/ds-react'
 
 export const kravNumView = (it: { kravVersjon: number; kravNummer: number }) => `K${it.kravNummer}.${it.kravVersjon}`
 export const kravName = (krav: Krav) => `${kravNumView(krav)} ${krav.navn}`
@@ -202,7 +203,7 @@ export const KravPage = () => {
                       paths={getBreadcrumPaths()}
                     />
                   )}
-                  <Block display="flex" width="100%" justifyContent="flex-end" alignItems="center">
+                  <div className="flex gap-2 items-center">
                     {krav && (
                       <Block display="flex" width="100%" justifyContent="flex-end">
                         <Block $style={{ ...borderWidth('1px'), ...borderColor('#A0A0A0'), ...borderStyle('solid'), ...borderRadius('4px') }}>
@@ -217,31 +218,25 @@ export const KravPage = () => {
                     {krav?.id && ((user.isKraveier() && !hasKravExpired()) || user.isAdmin()) && (
                       <Block flex="1" display={['none', 'none', 'none', 'none', 'flex', 'flex']} justifyContent="flex-end">
                         {krav.status === KravStatus.AKTIV && (
-                          <Button
-                            startEnhancer={<img alt="add" src={plusIcon} />}
-                            onClick={newVersion}
-                            marginLeft
-                            size="compact"
-                            kind="tertiary"
-                            $style={{ color: '#F8F8F8', whiteSpace: 'nowrap', ':hover': { backgroundColor: 'transparent', textDecoration: 'underline 3px', whiteSpace: 'nowrap' } }}
-                          >
-                            Ny versjon
+                          <Button onClick={newVersion} variant="tertiary" className="text-white">
+                            <div className="flex flex-nowrap items-center whitespace-nowrap gap-1">
+                              <PlusIcon className="text-2xl" />
+                              Ny versjon
+                            </div>
                           </Button>
                         )}
                         {(user.isAdmin() || krav.status !== KravStatus.AKTIV) && <DeleteItem fun={() => deleteKrav(krav.id)} redirect={'/kravliste'} />}
-                        <Button
-                          startEnhancer={<img src={editIcon} alt="edit" />}
-                          size="compact"
-                          $style={{ color: '#F8F8F8', ':hover': { backgroundColor: 'transparent', textDecoration: 'underline 3px' } }}
-                          kind={'tertiary'}
+                        <Button variant="tertiary" className="text-white"
                           onClick={() => setEdit(!edit)}
-                          marginLeft
                         >
-                          Rediger
+                          <div className="flex flex-nowrap items-center gap-1">
+                            <PencilIcon className="text-2xl" />
+                            Rediger
+                          </div>
                         </Button>
                       </Block>
                     )}
-                  </Block>
+                  </div>
                 </Block>
               </Block>
             </Block>
