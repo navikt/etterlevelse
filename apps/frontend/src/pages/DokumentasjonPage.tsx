@@ -146,7 +146,7 @@ export const DokumentasjonPage = () => {
             </div>
           ) : (
             <Label size="small">
-              Aktive filtre:
+              Aktive egenskaper:
             </Label>
           )}
           {!etterlevelseDokumentasjon.irrelevansFor.length ? getRelevans() : getRelevans(etterlevelseDokumentasjon.irrelevansFor)}
