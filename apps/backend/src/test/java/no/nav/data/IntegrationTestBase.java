@@ -10,6 +10,7 @@ import no.nav.data.etterlevelse.arkivering.EtterlevelseArkivService;
 import no.nav.data.etterlevelse.behandling.BehandlingService;
 import no.nav.data.etterlevelse.codelist.CodelistStub;
 import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
 import no.nav.data.etterlevelse.etterlevelsemetadata.EtterlevelseMetadataService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -50,6 +51,8 @@ public abstract class IntegrationTestBase {
     protected JdbcTemplate jdbcTemplate;
     @Autowired
     protected BehandlingService behandlingService;
+    @Autowired
+    protected EtterlevelseDokumentasjonService etterlevelseDokumentasjonService;
     @Autowired
     protected EtterlevelseService etterlevelseService;
     @Autowired

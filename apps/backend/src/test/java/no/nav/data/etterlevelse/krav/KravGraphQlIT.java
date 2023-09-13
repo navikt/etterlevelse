@@ -5,6 +5,8 @@ import no.nav.data.TestConfig.MockFilter;
 import no.nav.data.etterlevelse.behandling.dto.Behandling;
 import no.nav.data.etterlevelse.behandling.dto.BehandlingRequest;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonRequest;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravStatus;
 import no.nav.data.etterlevelse.krav.domain.Regelverk;
@@ -87,8 +89,8 @@ class KravGraphQlIT extends GraphQLTestBase {
 
         @Test
         @SneakyThrows
-        void kravForBehandling() {
-            List<String> behandlingRelevans = List.of("SAK");
+        void kravForEtterlevelseDokumentasjon() {
+            List<String> EtterlevelseDokumentasjonRelevans = List.of("SAK");
 
             behandlingService.save(BehandlingRequest.builder()
                     .id(behandling.getId())
@@ -96,14 +98,31 @@ class KravGraphQlIT extends GraphQLTestBase {
                     .irrelevansFor(List.of("INNSYN"))
                     .build());
 
+
+            EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonService.save(
+                    EtterlevelseDokumentasjonRequest.builder()
+                            .title("test dokumentasjon")
+                            .etterlevelseNummer(101)
+                            .knyttetTilVirkemiddel(false)
+                            .virkemiddelId("")
+                            .knytteTilTeam(false)
+                            .teams(List.of(""))
+                            .irrelevansFor(List.of("INNSYN"))
+                            .update(false)
+                            .behandlerPersonopplysninger(true)
+                            .behandlingIds(List.of(behandling.getId()))
+                            .build()
+            );
+
             storageService.save(Krav.builder()
                     .navn("gammel versjon av krav 50").kravNummer(50).kravVersjon(1)
-                    .relevansFor(behandlingRelevans)
+                    .relevansFor(EtterlevelseDokumentasjonRelevans)
                     .status(KravStatus.AKTIV)
                     .build());
+
             var krav50RelevansMatch = storageService.save(Krav.builder()
                     .navn("Krav 1").kravNummer(50).kravVersjon(2)
-                    .relevansFor(behandlingRelevans)
+                    .relevansFor(EtterlevelseDokumentasjonRelevans)
                     .status(KravStatus.AKTIV)
                     .build());
             var krav51MedEtterlevelse = storageService.save(Krav.builder()
@@ -124,20 +143,20 @@ class KravGraphQlIT extends GraphQLTestBase {
             storageService.save(Krav.builder()
                     .navn("UTKAST").kravNummer(53).kravVersjon(1)
                     .status(KravStatus.UTKAST)
-                    .relevansFor(behandlingRelevans)
+                    .relevansFor(EtterlevelseDokumentasjonRelevans)
                     .build());
             storageService.save(Krav.builder()
                     .navn("UTGÅTT").kravNummer(54).kravVersjon(1)
                     .status(KravStatus.UTGAATT)
-                    .relevansFor(behandlingRelevans)
+                    .relevansFor(EtterlevelseDokumentasjonRelevans)
                     .build());
 
             storageService.save(Etterlevelse.builder()
                     .kravNummer(51).kravVersjon(1)
-                    .behandlingId(behandling.getId())
+                    .etterlevelseDokumentasjonId(String.valueOf(etterlevelseDokumentasjon.getId()))
                     .build());
 
-            var var = Map.of("behandlingId", behandling.getId());
+            var var = Map.of("etterlevelseDokumentasjonId", etterlevelseDokumentasjon.getId());
             var response = graphQLTestTemplate.perform("graphqltest/krav_filter.graphql", vars(var));
 
             assertThat(response, "krav")
@@ -150,7 +169,23 @@ class KravGraphQlIT extends GraphQLTestBase {
 
         @Test
         @SneakyThrows
-        void kravForBehandlingNoIrrelevans() {
+        void kravForEtterlevelseDokumentasjonNoIrrelevans() {
+
+            EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonService.save(
+                    EtterlevelseDokumentasjonRequest.builder()
+                            .title("test dokumentasjon")
+                            .etterlevelseNummer(101)
+                            .knyttetTilVirkemiddel(false)
+                            .virkemiddelId("")
+                            .knytteTilTeam(false)
+                            .teams(List.of(""))
+                            .irrelevansFor(List.of(""))
+                            .update(false)
+                            .behandlerPersonopplysninger(true)
+                            .behandlingIds(List.of(behandling.getId()))
+                            .build()
+            );
+
             var krav = storageService.save(Krav.builder()
                     .navn("Krav 1").kravNummer(50).kravVersjon(1)
                     .relevansFor(List.of("SAK"))
@@ -163,10 +198,10 @@ class KravGraphQlIT extends GraphQLTestBase {
                     .build());
             storageService.save(Etterlevelse.builder()
                     .kravNummer(50).kravVersjon(1)
-                    .behandlingId(behandling.getId())
+                    .etterlevelseDokumentasjonId(String.valueOf(etterlevelseDokumentasjon.getId()))
                     .build());
 
-            var var = Map.of("behandlingId", behandling.getId());
+            var var = Map.of("etterlevelseDokumentasjonId", String.valueOf(etterlevelseDokumentasjon.getId()));
             var response = graphQLTestTemplate.perform("graphqltest/krav_filter.graphql", vars(var));
 
             assertThat(response, "krav")
@@ -265,21 +300,37 @@ class KravGraphQlIT extends GraphQLTestBase {
 
         @Test
         @SneakyThrows
-        void kravForBehandlingOnlyRelevenatEtterlevelse() {
+        void kravForEtterlevelseDokOnlyRelevenatEtterlevelse() {
+
+            EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonService.save(
+                    EtterlevelseDokumentasjonRequest.builder()
+                            .title("test dokumentasjon")
+                            .etterlevelseNummer(101)
+                            .knyttetTilVirkemiddel(false)
+                            .virkemiddelId("")
+                            .knytteTilTeam(false)
+                            .teams(List.of(""))
+                            .irrelevansFor(List.of("INNSYN"))
+                            .update(false)
+                            .behandlerPersonopplysninger(true)
+                            .behandlingIds(List.of(behandling.getId()))
+                            .build()
+            );
+
             storageService.save(Krav.builder()
                     .navn("Krav 1").kravNummer(50).kravVersjon(1)
                     .relevansFor(List.of("SAK"))
                     .build());
             storageService.save(Etterlevelse.builder()
                     .kravNummer(50).kravVersjon(1)
-                    .behandlingId(behandling.getId())
+                    .etterlevelseDokumentasjonId(String.valueOf(etterlevelseDokumentasjon.getId()))
                     .build());
             storageService.save(Etterlevelse.builder()
                     .kravNummer(50).kravVersjon(1)
                     .build());
 
-            var var = Map.of("behandlingId", behandling.getId());
-            var response = graphQLTestTemplate.perform("graphqltest/krav_for_behandling.graphql", vars(var));
+            var var = Map.of("etterlevelseDokumentasjonId",String.valueOf(etterlevelseDokumentasjon.getId()));
+            var response = graphQLTestTemplate.perform("graphqltest/krav_for_etterlevelseDokumentasjon.graphql", vars(var));
 
             assertThat(response, "krav")
                     .hasNoErrors()
