@@ -54,7 +54,7 @@ jobs:
               run: CI=false yarn run build
 
             - name: Login to DockerHub
-              uses: docker/login-action@v2
+              uses: docker/login-action@v3
               with:
                 registry: ghcr.io
                 username: ${{ github.actor }}
