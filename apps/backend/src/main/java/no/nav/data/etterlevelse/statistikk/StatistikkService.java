@@ -153,7 +153,7 @@ public class StatistikkService {
             });
         });
 
-        return new PageImpl<>(behandlingStatistikkList.subList(page.getPageNumber() * page.getPageNumber(), (page.getPageNumber() * page.getPageNumber()) + page.getPageSize() - 1), page, totalElements.get());
+        return new PageImpl<>(behandlingStatistikkList.subList(page.getPageNumber() * page.getPageNumber(), (page.getPageNumber() * page.getPageNumber()) + page.getPageSize()), page, totalElements.get());
     }
 
     public KravStatistikkResponse toKravStatestikkResponse(Krav krav) {
