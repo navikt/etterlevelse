@@ -42,4 +42,7 @@ public interface EtterlevelseDokumentasjonRepo  extends JpaRepository<GenericSto
 
     @Query(value = "select * from generic_storage where type = 'EtterlevelseDokumentasjon'", nativeQuery = true )
     List<GenericStorage> getAllEtterlevelseDokumentasjoner();
+
+    @Query(value = "select * from generic_storage where type = 'EtterlevelseDokumentasjon' and data->> 'title' not ilike '%fant ikke behandling%' and data->'behandlingIds' != '[]'", nativeQuery = true)
+    List<GenericStorage> getAllEtterlevelseDokumentasjonWithValidBehandling();
 }
