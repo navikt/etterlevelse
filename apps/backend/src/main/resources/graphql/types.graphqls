@@ -28,7 +28,7 @@ type Krav {
     relevansFor: [Code!]!
     status: KravStatus!
 
-    etterlevelser(onlyForBehandling: Boolean, onlyForEtterlevelseDokumentasjon: Boolean): [Etterlevelse!]!
+    etterlevelser(onlyForEtterlevelseDokumentasjon: Boolean): [Etterlevelse!]!
     tilbakemeldinger: [Tilbakemelding!]!
     begreper: [Begrep!]!
     virkemidler: [Virkemiddel!]!
