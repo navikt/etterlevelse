@@ -1,16 +1,16 @@
 package no.nav.data.etterlevelse.statistikk;
 
 import lombok.extern.slf4j.Slf4j;
-import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.common.utils.StreamUtils;
 import no.nav.data.etterlevelse.behandling.BehandlingService;
 import no.nav.data.etterlevelse.behandling.dto.Behandling;
 import no.nav.data.etterlevelse.codelist.CodelistService;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
-import no.nav.data.etterlevelse.codelist.dto.CodelistResponse;
 import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.etterlevelse.domain.EtterlevelseStatus;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
 import no.nav.data.etterlevelse.krav.KravService;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravStatus;
@@ -21,7 +21,6 @@ import no.nav.data.etterlevelse.statistikk.domain.BehandlingStatistikk;
 import no.nav.data.etterlevelse.statistikk.dto.KravStatistikkResponse;
 import no.nav.data.integration.team.teamcat.TeamcatTeamClient;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -30,8 +29,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
-
-import static no.nav.data.common.utils.StreamUtils.convert;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Slf4j
 @Service
@@ -41,21 +39,22 @@ public class StatistikkService {
     private final KravService kravService;
     private final EtterlevelseService etterlevelseService;
 
+    private final EtterlevelseDokumentasjonService etterlevelseDokumentasjonService;
+
     private final TeamcatTeamClient teamService;
 
-    public StatistikkService(BehandlingService behandlingService, KravService kravService, EtterlevelseService etterlevelseService, TeamcatTeamClient teamService) {
+    public StatistikkService(BehandlingService behandlingService, KravService kravService, EtterlevelseService etterlevelseService,EtterlevelseDokumentasjonService etterlevelseDokumentasjonService, TeamcatTeamClient teamService) {
         this.behandlingService = behandlingService;
         this.kravService = kravService;
         this.etterlevelseService = etterlevelseService;
+        this.etterlevelseDokumentasjonService = etterlevelseDokumentasjonService;
         this.teamService = teamService;
     }
 
 
-    public int getAntallIkkeFiltrertKrav(List<Krav> aktivKravList, Behandling behandling, List<Etterlevelse> etterlevelseList) {
+    public int getAntallIkkeFiltrertKrav(List<Krav> aktivKravList, EtterlevelseDokumentasjon etterlevelseDokumentasjon, List<Etterlevelse> etterlevelseList) {
 
-        List<String> irrelevantFor = convert(behandling.getIrrelevansFor(), CodelistResponse::getCode);
-
-        List<Krav> valgteKrav = aktivKravList.stream().filter(krav -> !new HashSet<>(irrelevantFor).containsAll(krav.getRelevansFor()) || krav.getRelevansFor().isEmpty()
+        List<Krav> valgteKrav = aktivKravList.stream().filter(krav -> !new HashSet<>(etterlevelseDokumentasjon.getIrrelevansFor()).containsAll(krav.getRelevansFor()) || krav.getRelevansFor().isEmpty()
         ).toList();
 
         return valgteKrav.size() +
@@ -76,19 +75,21 @@ public class StatistikkService {
         return !etterlevelseList.isEmpty() ? etterlevelseList.get(etterlevelseList.size() - 1).getChangeStamp().getLastModifiedDate() : null;
     }
 
-    public Page<BehandlingStatistikk> getAllBehandlingStatistikk(Pageable page) {
+    public List<BehandlingStatistikk> getAllBehandlingStatistikk() {
         List<BehandlingStatistikk> behandlingStatistikkList = new ArrayList<>();
+
+        AtomicInteger totalElements = new AtomicInteger();
 
         List<Krav> aktivKravList = kravService.getByFilter(KravFilter.builder().status(List.of(KravStatus.AKTIV.name())).build());
 
-        RestResponsePage<Behandling> behandlinger = behandlingService.getAll(page);
+        List<EtterlevelseDokumentasjon> etterlevelseDokumentasjoner = etterlevelseDokumentasjonService.getAllWithValidBehandling();
 
+        etterlevelseDokumentasjoner.forEach(etterlevelseDokumentasjon -> {
 
-        behandlinger.getContent().forEach(behandling -> {
-            String behandlingNavn = "B" + behandling.getNummer() + " " + behandling.getNavn();
+            totalElements.addAndGet(etterlevelseDokumentasjon.getBehandlingIds().size());
 
             //Get all etterlevelse for behandling
-            List<Etterlevelse> etterlevelseList = etterlevelseService.getByBehandling(behandling.getId());
+            List<Etterlevelse> etterlevelseList = etterlevelseService.getByEtterlevelseDokumentasjon(String.valueOf(etterlevelseDokumentasjon.getId()));
 
             //Sort etterlevelse on created date to when the first documentation was created
             LocalDateTime opprettetDato = getCreatedDate(etterlevelseList);
@@ -101,7 +102,7 @@ public class StatistikkService {
                     aktivKravList.stream().anyMatch(krav -> krav.getKravNummer().equals(etterlevelse.getKravNummer()) && krav.getKravVersjon().equals(etterlevelse.getKravVersjon()))
             ).toList();
 
-            int antallIkkeFiltrertKrav = getAntallIkkeFiltrertKrav(aktivKravList, behandling, aktivEtterlevelseList);
+            int antallIkkeFiltrertKrav = getAntallIkkeFiltrertKrav(aktivKravList, etterlevelseDokumentasjon, aktivEtterlevelseList);
 
             List<Etterlevelse> antallFerdigDokumentert = aktivEtterlevelseList.stream()
                     .filter(etterlevelse ->
@@ -120,31 +121,38 @@ public class StatistikkService {
                     .toList();
 
             int antallUnderArbeidSize = antallUnderArbeid.stream().filter(etterlevelseUnderArbeid ->
-                        antallFerdigDokumentert.stream()
-                                .noneMatch(e -> e.getKravNummer().equals(etterlevelseUnderArbeid.getKravNummer())
-                                        && e.getKravVersjon().equals(etterlevelseUnderArbeid.getKravVersjon()))
-                    ).toList().size();
+                    antallFerdigDokumentert.stream()
+                            .noneMatch(e -> e.getKravNummer().equals(etterlevelseUnderArbeid.getKravNummer())
+                                    && e.getKravVersjon().equals(etterlevelseUnderArbeid.getKravVersjon()))
+            ).toList().size();
 
-            List<String> teamNames = behandling.getTeams().stream().map(t->teamService.getTeam(t).isPresent()?teamService.getTeam(t).get().getName():"").toList();
 
-            behandlingStatistikkList.add(
-                    BehandlingStatistikk.builder()
-                            .behandlingId(behandling.getId())
-                            .behandlingNavn(behandlingNavn)
-                            .totalKrav(aktivKravList.size())
-                            .antallIkkeFiltrertKrav(antallIkkeFiltrertKrav)
-                            .antallBortfiltrertKrav(aktivKravList.size() - antallIkkeFiltrertKrav)
-                            .antallFerdigDokumentert(antallFerdigDokumentert.size())
-                            .antallUnderArbeid(antallUnderArbeidSize)
-                            .antallIkkePaabegynt(antallIkkeFiltrertKrav - (antallFerdigDokumentert.size() + antallUnderArbeidSize))
-                            .endretDato(endretDato)
-                            .opprettetDato(opprettetDato)
-                            .team(teamNames)
-                            .build()
-            );
+            etterlevelseDokumentasjon.getBehandlingIds().forEach(behandlingId -> {
+                Behandling behandling = behandlingService.getBehandling(behandlingId);
+
+                String behandlingNavn = "B" + behandling.getNummer() + " " + behandling.getNavn();
+
+                List<String> teamNames = behandling.getTeams().stream().map(t->teamService.getTeam(t).isPresent()?teamService.getTeam(t).get().getName():"").toList();
+
+                behandlingStatistikkList.add(
+                        BehandlingStatistikk.builder()
+                                .behandlingId(behandling.getId())
+                                .behandlingNavn(behandlingNavn)
+                                .totalKrav(aktivKravList.size())
+                                .antallIkkeFiltrertKrav(antallIkkeFiltrertKrav)
+                                .antallBortfiltrertKrav(aktivKravList.size() - antallIkkeFiltrertKrav)
+                                .antallFerdigDokumentert(antallFerdigDokumentert.size())
+                                .antallUnderArbeid(antallUnderArbeidSize)
+                                .antallIkkePaabegynt(antallIkkeFiltrertKrav - (antallFerdigDokumentert.size() + antallUnderArbeidSize))
+                                .endretDato(endretDato)
+                                .opprettetDato(opprettetDato)
+                                .team(teamNames)
+                                .build()
+                );
+            });
         });
 
-        return new PageImpl<>(behandlingStatistikkList, page,behandlinger.getTotalElements());
+        return behandlingStatistikkList;
     }
 
     public KravStatistikkResponse toKravStatestikkResponse(Krav krav) {
