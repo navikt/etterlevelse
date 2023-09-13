@@ -113,7 +113,7 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
     }
 
     public List<EtterlevelseDokumentasjon> getAllWithValidBehandling(){
-        return GenericStorage.to(etterlevelseDokumentasjonRepo.getAllEtterlevelseDokumentasjonWithValidBehandling() ,EtterlevelseDokumentasjon.class)
+        return GenericStorage.to(etterlevelseDokumentasjonRepo.getAllEtterlevelseDokumentasjonWithValidBehandling() ,EtterlevelseDokumentasjon.class);
     }
 
     public EtterlevelseDokumentasjonResponse addBehandlingAndTeamsData(EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse){
