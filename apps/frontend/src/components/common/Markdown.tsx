@@ -127,7 +127,7 @@ export const Markdown = ({
   const htmlPlugins = escapeHtml ? [] : [rehypeRaw]
   return (
     <div>
-      <ReactMarkdown children={sources.join(vertical ? '\n\n' : ', ')} components={renderers} remarkPlugins={[remarkGfm]} rehypePlugins={htmlPlugins} />
+      <ReactMarkdown children={sources.join(vertical ? '\n\n' : ', ')} components={renderers} remarkPlugins={[remarkGfm]} rehypePlugins={htmlPlugins as any} />
     </div>
   )
 }
