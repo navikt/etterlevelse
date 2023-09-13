@@ -153,6 +153,9 @@ public class StatistikkService {
             });
         });
 
+        if((page.getPageNumber() * page.getPageSize()) > behandlingStatistikkList.size()) {
+            return new PageImpl<>(new ArrayList<>(), page, totalElements.get());
+        }
         if((page.getPageNumber() * page.getPageSize()) + page.getPageSize() >= behandlingStatistikkList.size()) {
             return new PageImpl<>(behandlingStatistikkList.subList(page.getPageNumber() * page.getPageSize(), behandlingStatistikkList.size()), page, totalElements.get());
         } else {
