@@ -74,7 +74,6 @@ public class BehandlingController {
     public ResponseEntity<RestResponsePage<Behandling>> searchBehandlinger(@PathVariable String search) {
         if (search == null || search.replace(" ", "").length() < 3) {
             return ResponseEntity.badRequest().build();
-
         }
         log.info("Search behandling by value={}", search);
         List<Behandling> behandlingList = service.findBehandlinger(search);

@@ -21,6 +21,7 @@ import no.nav.data.etterlevelse.statistikk.domain.BehandlingStatistikk;
 import no.nav.data.etterlevelse.statistikk.dto.KravStatistikkResponse;
 import no.nav.data.integration.team.teamcat.TeamcatTeamClient;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -75,7 +76,7 @@ public class StatistikkService {
         return !etterlevelseList.isEmpty() ? etterlevelseList.get(etterlevelseList.size() - 1).getChangeStamp().getLastModifiedDate() : null;
     }
 
-    public List<BehandlingStatistikk> getAllBehandlingStatistikk() {
+    public Page<BehandlingStatistikk> getAllBehandlingStatistikk(Pageable page) {
         List<BehandlingStatistikk> behandlingStatistikkList = new ArrayList<>();
 
         AtomicInteger totalElements = new AtomicInteger();
@@ -152,7 +153,11 @@ public class StatistikkService {
             });
         });
 
-        return behandlingStatistikkList;
+        if((page.getPageNumber() * page.getPageSize()) + page.getPageSize() >= behandlingStatistikkList.size()) {
+            return new PageImpl<>(behandlingStatistikkList.subList(page.getPageNumber() * page.getPageSize(), behandlingStatistikkList.size()), page, totalElements.get());
+        } else {
+            return new PageImpl<>(behandlingStatistikkList.subList(page.getPageNumber() * page.getPageSize(), (page.getPageNumber() * page.getPageSize()) + page.getPageSize()), page, totalElements.get());
+        }
     }
 
     public KravStatistikkResponse toKravStatestikkResponse(Krav krav) {

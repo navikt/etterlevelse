@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 @Slf4j
 @RestController
 @RequestMapping("/statistikk")
@@ -32,7 +30,7 @@ public class StatistikkController {
     @GetMapping("/behandling")
     public ResponseEntity<RestResponsePage<BehandlingStatistikk>>  getBehandlingStatistikk(PageParameters pageParameters) {
         log.info("Get all behandling statistikk");
-        List<BehandlingStatistikk> page = service.getAllBehandlingStatistikk();
+        Page<BehandlingStatistikk> page = service.getAllBehandlingStatistikk(pageParameters.createPage());
         return ResponseEntity.ok(new RestResponsePage<>(page));
     }
 
