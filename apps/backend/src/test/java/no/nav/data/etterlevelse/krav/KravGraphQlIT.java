@@ -53,6 +53,9 @@ class KravGraphQlIT extends GraphQLTestBase {
     @Test
     @SneakyThrows
     void getKrav() {
+
+        EtterlevelseDokumentasjon etterlevelseDokumentasjon = generateEtterlevelseDok(List.of(""));
+
         var krav = storageService.save(Krav.builder()
                 .navn("Krav 1").kravNummer(50).kravVersjon(1)
                 .relevansFor(List.of("SAK"))
@@ -61,7 +64,7 @@ class KravGraphQlIT extends GraphQLTestBase {
                 .build());
         storageService.save(Etterlevelse.builder()
                 .kravNummer(krav.getKravNummer()).kravVersjon(krav.getKravVersjon())
-                .behandlingId(behandling.getId())
+                .etterlevelseDokumentasjonId(etterlevelseDokumentasjon.getId().toString())
                 .build());
 
         var var = Map.of("nummer", krav.getKravNummer(), "versjon", krav.getKravVersjon());
@@ -74,8 +77,8 @@ class KravGraphQlIT extends GraphQLTestBase {
                 .hasField("varslingsadresser[0].adresse", "xyz")
                 .hasField("varslingsadresser[0].slackChannel.name", "XYZ channel")
                 .hasField("varslingsadresser[1].adresse", "notfound")
-                .hasField("etterlevelser[0].behandlingId", behandling.getId())
-                .hasField("etterlevelser[0].behandling.navn", behandling.getNavn());
+                .hasField("etterlevelser[0].etterlevelseDokumentasjonId", etterlevelseDokumentasjon.getId().toString())
+                .hasField("etterlevelser[0].etterlevelseDokumentasjon.title", etterlevelseDokumentasjon.getTitle());
     }
 
     @Nested

@@ -13,10 +13,10 @@ query getKrav($nummer: Int!, $versjon: Int!) {
         etterlevelser {
             id
             statusBegrunnelse
-            behandlingId
-            behandling {
-                navn
-                nummer
+            etterlevelseDokumentasjonId
+            etterlevelseDokumentasjon {
+                title
+                etterlevelseNummer
             }
         }
         varslingsadresser {
