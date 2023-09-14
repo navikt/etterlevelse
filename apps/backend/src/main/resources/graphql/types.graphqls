@@ -136,6 +136,7 @@ type Etterlevelse {
 
     behandlingId: String
     etterlevelseDokumentasjonId: String
+    behandling: Behandling
     kravNummer: Int!
     kravVersjon: Int!
 

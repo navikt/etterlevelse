@@ -1,11 +1,13 @@
 package no.nav.data.etterlevelse.etterlevelse.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import no.nav.data.common.rest.ChangeStampResponse;
+import no.nav.data.etterlevelse.behandling.dto.Behandling;
 import no.nav.data.etterlevelse.etterlevelse.domain.EtterlevelseStatus;
 
 import java.time.LocalDate;
@@ -34,5 +36,9 @@ public class EtterlevelseResponse {
     private LocalDate fristForFerdigstillelse;
     private EtterlevelseStatus status;
     private List<SuksesskriterieBegrunnelseResponse> suksesskriterieBegrunnelser;
+
+    // GraphQL only
+    @JsonIgnore
+    private Behandling behandling;
 
 }
