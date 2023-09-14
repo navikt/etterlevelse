@@ -10,10 +10,12 @@ import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.etterlevelse.behandling.BehandlingService;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
 import no.nav.data.etterlevelse.behandling.dto.Behandling;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseRequest;
 import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseResponse;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,6 +47,7 @@ public class  EtterlevelseController {
 
     private final EtterlevelseService service;
     private final BehandlingService behandlingService;
+    private final EtterlevelseDokumentasjonService etterlevelseDokumentasjonService;
 
     @Operation(summary = "Get All Etterlevelse")
     @ApiResponse(description = "ok")
@@ -69,16 +72,13 @@ public class  EtterlevelseController {
     public ResponseEntity<RestResponsePage<EtterlevelseResponse>> getById(@PathVariable Integer kravNummer, @PathVariable(required = false) Integer kravVersjon) {
         log.info("Get Etterlevelse for kravNummer={}", kravNummer);
         List<Etterlevelse> etterlevelseList = service.getByKravNummer(kravNummer, kravVersjon);
-        var behandlingIds = convert(etterlevelseList, Etterlevelse::getBehandlingId);
-        var behandlinger = behandlingService.findAllById(behandlingIds);
-        return ResponseEntity.ok(new RestResponsePage<>(etterlevelseList).convert(e -> toResponseWithBehandling(e, behandlinger)));
+        return ResponseEntity.ok(new RestResponsePage<>(etterlevelseList).convert(e -> toResponseWithEtterlevelseDokumentasjon(e)));
     }
 
-    private EtterlevelseResponse toResponseWithBehandling(Etterlevelse etterlevelse, List<Behandling> behandlinger) {
+    private EtterlevelseResponse toResponseWithEtterlevelseDokumentasjon(Etterlevelse etterlevelse) {
         EtterlevelseResponse response = etterlevelse.toResponse();
-        if (response.getBehandlingId() != null) {
-            tryFind(behandlinger, b -> b.getId().equals(response.getBehandlingId()))
-                    .ifPresent(response::setBehandling);
+        if(response.getEtterlevelseDokumentasjonId() != null && !response.getEtterlevelseDokumentasjonId().isEmpty())  {
+            response.setEtterlevelseDokumentasjon(etterlevelseDokumentasjonService.get(UUID.fromString(response.getEtterlevelseDokumentasjonId())).toResponse());
         }
         return response;
     }

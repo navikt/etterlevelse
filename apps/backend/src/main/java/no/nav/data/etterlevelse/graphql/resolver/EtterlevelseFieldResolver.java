@@ -7,36 +7,28 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.data.etterlevelse.behandling.dto.Behandling;
 import no.nav.data.etterlevelse.common.domain.ExternalCode;
 import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseResponse;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse;
 import no.nav.data.etterlevelse.graphql.DataLoaderReg;
 import no.nav.data.integration.team.dto.TeamResponse;
 import org.dataloader.DataLoader;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class EtterlevelseFieldResolver implements GraphQLResolver<EtterlevelseResponse> {
-    public CompletableFuture<Behandling> behandling(EtterlevelseResponse etterlevelse, DataFetchingEnvironment env) {
-        DataLoader<String, Behandling> loader = env.getDataLoader(DataLoaderReg.BEHANDLING);
-        if(etterlevelse.getBehandlingId() != null) {
-            return loader.load(etterlevelse.getBehandlingId());
+
+    public CompletableFuture<EtterlevelseDokumentasjonResponse> etterlevelseDokumentasjon(EtterlevelseResponse etterlevelse, DataFetchingEnvironment env) {
+        DataLoader<UUID, EtterlevelseDokumentasjonResponse> loader = env.getDataLoader(DataLoaderReg.ETTERLEVELSEDOKUMENTASJON);
+        if(etterlevelse.getEtterlevelseDokumentasjonId() != null) {
+            return loader.load( UUID.fromString(etterlevelse.getEtterlevelseDokumentasjonId()));
         } else {
-            CompletableFuture<Behandling> legacy_data = new CompletableFuture<>();
-            legacy_data.complete(Behandling.builder()
-                    .id("LEGACY_DATA")
-                    .nummer(0)
-                    .navn("LEGACY_DATA")
-                    .formaal("LEGACY_DATA")
-                    .teams(List.of("LEGACY_DATA"))
-                    .irrelevansFor(List.of())
-                    .linje(ExternalCode.builder().code("LEGACY_DATA").shortName("LEGACY_DATA").build())
-                    .overordnetFormaal(ExternalCode.builder().code("LEGACY_DATA").shortName("LEGACY_DATA").build())
-                    .system(ExternalCode.builder().code("LEGACY_DATA").shortName("LEGACY_DATA").build())
-                    .avdeling(ExternalCode.builder().code("LEGACY_DATA").shortName("LEGACY_DATA").build())
-                    .teamsData(List.of(TeamResponse.builder().id("LEGACY_DATA").name("LEGACY_DATA").build()))
+            CompletableFuture<EtterlevelseDokumentasjonResponse> legacy_data = new CompletableFuture<>();
+            legacy_data.complete(EtterlevelseDokumentasjonResponse.builder()
                     .build());
             return legacy_data;
         }

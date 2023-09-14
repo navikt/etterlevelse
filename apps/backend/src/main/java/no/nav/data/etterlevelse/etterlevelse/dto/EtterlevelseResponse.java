@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import no.nav.data.common.rest.ChangeStampResponse;
 import no.nav.data.etterlevelse.behandling.dto.Behandling;
 import no.nav.data.etterlevelse.etterlevelse.domain.EtterlevelseStatus;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -39,6 +40,6 @@ public class EtterlevelseResponse {
 
     // GraphQL only
     @JsonIgnore
-    private Behandling behandling;
+    private EtterlevelseDokumentasjonResponse etterlevelseDokumentasjon;
 
 }

@@ -29,10 +29,10 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Slf4j
+@RequiredArgsConstructor
 @RestController
 @Tag(name = "EtterlevelseDokumentasjon", description = "Etterlevelse Dokumentasjon")
 @RequestMapping("/etterlevelsedokumentasjon")
-@RequiredArgsConstructor
 public class EtterlevelseDokumentasjonController {
 
     private final EtterlevelseDokumentasjonService etterlevelseDokumentasjonService;
