@@ -139,11 +139,11 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
         startEnhancer={props.isEditButton ? <img src={editIcon} alt="edit icon" /> : <img src={plusIcon} alt="plus icon" />}
         size="compact"
       >
-        {props.isEditButton ? 'Rediger dokumentasjon' : 'Ny dokumentasjon'}
+        {props.isEditButton ? 'Rediger etterlevelsesdokumentet' : 'Nytt etterlevelsesdokument'}
       </Button>
 
       <CustomizedModal size="default" isOpen={!!isEtterlevelseDokumentasjonerModalOpen} onClose={() => setIsEtterlevelseDokumntasjonerModalOpen(false)} closeable={false}>
-        <ModalHeader>{props.isEditButton ? 'Rediger dokumentasjonen' : 'Opprett ny etterlevelsedokumentasjon'}</ModalHeader>
+        <ModalHeader>{props.isEditButton ? 'Rediger etterlevelsesdokumentet' : 'Opprett nytt etterlevelsesdokument'}</ModalHeader>
         <ModalBody>
           <Formik
             initialValues={etterlevelseDokumentasjonMapToFormVal(props.etterlevelseDokumentasjon ? props.etterlevelseDokumentasjon : {})}
@@ -155,7 +155,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
             {({ values, submitForm }) => {
               return (
                 <Form>
-                  <InputField disablePlaceHolder label="Tittel" name="title" tooltip="Skriv tittel for dokumentasjon" />
+                  <InputField disablePlaceHolder label="Skriv inn tittel på etterlevelsesdokumentet" name="title" />
 
                   {/* <BoolField label="Er produktet/systemet tilknyttet et virkemiddel?" name="knyttetTilVirkemiddel" /> */}
 
@@ -224,7 +224,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                   ) : ( */}
                   <>
                     <LabelWithTooltip
-                      tooltip="Ved å oppgi egenskaper til etterlevelsen, blir kun relevante krav synlig for dokumentasjon."
+                      tooltip="Kun krav fra egenskaper du velger som gjeldende vil være tilgjengelig for dokumentasjon."
                       label={'Hvilke egenskaper gjelder for etterlevelsen?'}
                     />
                     <FieldArray name="irrelevansFor">
@@ -338,9 +338,9 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                   {/* )} */}
 
                   <BoolField
-                    label="Behandler produktet/systemet du dokumenterer etterlevelse for personopplysninger?"
+                    label="Behandler løsningen du dokumenterer etterlevelse for personopplysninger?"
                     name="behandlerPersonopplysninger"
-                    tooltip="Hvis produktet/systemet behandler personopplysninger må du ha en behandling i behandligskatalogen. Det er mulig å opprette etterlevelse og legge til behandling etterpå."
+                    tooltip="Hvis produktet/systemet behandler personopplysninger må du ha en behandling i Behandlingskatalogen. Det er mulig å opprette etterlevelse og legge til behandling etterpå."
                   />
 
                   {values.behandlerPersonopplysninger && (
@@ -351,8 +351,8 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                             <FormControl
                               label={
                                 <LabelWithTooltip
-                                  label={'Legg til eksisterende behandling/behandlinger fra behandlingskatalogen'}
-                                  tooltip="Søk og legg til behandling/behandlinger fra Behandlingskatalog. Dette er ikke nødvendig for å opprette ny etterlevelse, men anbefales."
+                                  label={'Legg til behandlinger fra Behandlingskatalogen'}
+                                  tooltip="Siden løsningen behandler personopplysninger må du ha en behandling i Behandlingskatalogen. Du kan knytte én eller flere behandlinger til etterlevelsesdokumentet. Dette er ikke nødvendig for å opprette ny etterlevelse, men anbefales."
                                 />
                               }
                             >
@@ -385,9 +385,9 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                     </FieldWrapper>
                   )}
                   <BoolField
-                    label="Jeg vil legge til team fra teamkatalogen"
+                    label="Er etterlevelsesdokumentet knyttet til et team i Teamkatalogen?"
                     name="knytteTilTeam"
-                    tooltip="Legg til eksisterende team fra teamkatalogen for å automatisk filtrere teamets dokumentasjon. Dette er ikke nødvendig for å opprette etterlevelsedokumentasjonen, men anbefales."
+                    tooltip="Når du legger til et team vil medlemmene i det teamet kunne se dette dokumentet under «Mine dokumentasjoner». Dette er ikke nødvendig for å opprette etterlevelsesdokumentet, men anbefales."
                   />
 
                   {values.knytteTilTeam && (
@@ -395,7 +395,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                       <FieldArray name="teamsData">
                         {(p: FieldArrayRenderProps) => {
                           return (
-                            <FormControl label={<LabelWithTooltip label="Legg til eksisterende team fra teamkatalogen" tooltip="" />}>
+                            <FormControl label={<LabelWithTooltip label="Legg til team fra Teamkatalogen" tooltip="" />}>
                               <Block>
                                 <Block display="flex">
                                   <CustomizedSelect
