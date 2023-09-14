@@ -32,9 +32,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-import static no.nav.data.common.utils.StreamUtils.convert;
-import static no.nav.data.common.utils.StreamUtils.tryFind;
-
 @Slf4j
 @RequiredArgsConstructor
 @RestController
@@ -69,18 +66,7 @@ public class  EtterlevelseController {
     public ResponseEntity<RestResponsePage<EtterlevelseResponse>> getById(@PathVariable Integer kravNummer, @PathVariable(required = false) Integer kravVersjon) {
         log.info("Get Etterlevelse for kravNummer={}", kravNummer);
         List<Etterlevelse> etterlevelseList = service.getByKravNummer(kravNummer, kravVersjon);
-        var behandlingIds = convert(etterlevelseList, Etterlevelse::getBehandlingId);
-        var behandlinger = behandlingService.findAllById(behandlingIds);
-        return ResponseEntity.ok(new RestResponsePage<>(etterlevelseList).convert(e -> toResponseWithBehandling(e, behandlinger)));
-    }
-
-    private EtterlevelseResponse toResponseWithBehandling(Etterlevelse etterlevelse, List<Behandling> behandlinger) {
-        EtterlevelseResponse response = etterlevelse.toResponse();
-        if (response.getBehandlingId() != null) {
-            tryFind(behandlinger, b -> b.getId().equals(response.getBehandlingId()))
-                    .ifPresent(response::setBehandling);
-        }
-        return response;
+        return ResponseEntity.ok(new RestResponsePage<>(etterlevelseList).convert(Etterlevelse::toResponse));
     }
 
     @Operation(summary = "Get One Etterlevelse")
