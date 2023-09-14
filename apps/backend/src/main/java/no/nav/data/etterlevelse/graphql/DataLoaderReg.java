@@ -6,6 +6,8 @@ import no.nav.data.etterlevelse.behandling.BehandlingService;
 import no.nav.data.etterlevelse.behandling.dto.Behandling;
 import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse;
 import no.nav.data.integration.team.domain.Team;
 import no.nav.data.integration.team.dto.Resource;
 import no.nav.data.integration.team.dto.TeamResponse;
@@ -21,6 +23,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.function.Function;
@@ -37,6 +40,8 @@ public class DataLoaderReg {
     public static final String ETTERLEVELSER_FOR_BEHANDLING_LOADER = "ETTERLEVELSER_FOR_BEHANDLING_LOADER";
     public static final String ETTERLEVELSE_FOR_ETTERLEVELSEDOKUMENTASJON_LOADER = "ETTERLEVELSE_FOR_ETTERLEVELSEDOKUMENTASJON_LOADER";
 
+    public static final String ETTERLEVELSEDOKUMENTASJON = "ETTERLEVELSEDOKUMENTASJON_LOADER";
+
     public static final String BEHANDLING = "BEHANDLING_LOADER";
     public static final String RESOURCES = "RESOURCES_LOADER";
     public static final String TEAM = "TEAM_LOADER";
@@ -46,11 +51,13 @@ public class DataLoaderReg {
     private final EtterlevelseService etterlevelseService;
     private final TeamcatResourceClient resourceClient;
     private final TeamcatTeamClient teamClient;
+    private final EtterlevelseDokumentasjonService etterlevelseDokumentasjonService;
 
     public DataLoaderRegistry create() {
         return new DataLoaderRegistry()
                 .register(ETTERLEVELSER_FOR_BEHANDLING_LOADER, etterlevelserForBehandlingLoader())
                 .register(ETTERLEVELSE_FOR_ETTERLEVELSEDOKUMENTASJON_LOADER, etterlevelseForEtterlevelseDokumentasjonLoader())
+                .register(ETTERLEVELSEDOKUMENTASJON, etterlevelseDokumentasjonLoader())
                 .register(BEHANDLING, behandlingLoader())
                 .register(RESOURCES, resourcesLoader())
                 .register(TEAM, teamLoader());
@@ -68,6 +75,10 @@ public class DataLoaderReg {
         return loader(etterlevelseService::getByEtterlevelseDokumentasjoner);
     }
 
+    private DataLoader<UUID, EtterlevelseDokumentasjonResponse> etterlevelseDokumentasjonLoader(){
+        return loader(this::getEtterlevelseDokumentasjoner);
+    }
+
     private DataLoader<String, Resource> resourcesLoader() {
         return loader(resourceClient::getResources);
     }
@@ -80,6 +91,15 @@ public class DataLoaderReg {
         return DataLoaderFactory.newMappedDataLoader(
                 (Set<ID> set) -> CompletableFuture.supplyAsync(() -> supplier.apply(set), graphQLExecutor)
         );
+    }
+
+    private Map<UUID, EtterlevelseDokumentasjonResponse> getEtterlevelseDokumentasjoner(Collection<UUID> ids) {
+        List<EtterlevelseDokumentasjonResponse> etterlevelseDokumentasjonResponseList = new ArrayList<>();
+        ids.forEach(id -> {
+            etterlevelseDokumentasjonResponseList.add(etterlevelseDokumentasjonService.get(id).toResponse());
+        });
+        Map<UUID, EtterlevelseDokumentasjonResponse> map = toMap(etterlevelseDokumentasjonResponseList, EtterlevelseDokumentasjonResponse::getId);
+        return map;
     }
 
     private Map<String, TeamResponse> getTeams(Collection<String> ids) {

@@ -72,7 +72,7 @@ const kravtableQuery = gql`
 export type KravFilters = {
   relevans?: string[]
   nummer?: number
-  behandlingId?: string
+  etterlevelseDokumentasjonId?: string
   underavdeling?: string
   lov?: string
   status?: string[]
