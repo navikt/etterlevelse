@@ -352,7 +352,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                               label={
                                 <LabelWithTooltip
                                   label={'Legg til behandlinger fra Behandlingskatalogen'}
-                                  tooltip="Siden løsningen behandler personopplysninger må du ha en behandling i Behandlingskatalogen. Du kan knytte én eller flere behandlinger til etterlevelsesdokumentet. Dette er ikke nødvendig for å opprette ny etterlevelse, men anbefales."
+                                  tooltip="Siden løsningen behandler personopplysninger må du ha en behandling i Behandlingskatalogen. Du kan knytte én eller flere behandlinger til etterlevelsesdokumentet."
                                 />
                               }
                             >
