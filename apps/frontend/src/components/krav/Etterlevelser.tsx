@@ -42,9 +42,10 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
     }
   })
 
+
   const teams = _.sortedUniqBy(
     (etterlevelser
-      ?.map((e) => e.etterlevelseDokumentasjon.teamsData && e.etterlevelseDokumentasjon.teamsData[0])
+      ?.map((e) => e.etterlevelseDokumentasjon.teamsData && e.etterlevelseDokumentasjon.teamsData).flat()
       .sort((a, b) => (a?.name || '').localeCompare(b?.name || ''))
       .filter((team) => !!team) || []),
     (a) => a?.id,
@@ -60,11 +61,15 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
 
       <CustomizedAccordion accordion={false}>
         {teams.map((t) => {
-          const avdelingEtterlevelser = etterlevelser?.filter((e) => e.etterlevelseDokumentasjon.teamsData && t && e.etterlevelseDokumentasjon.teamsData[0].id === t.id)
-          const antall = avdelingEtterlevelser.length
+
+          const teamEtterlevelser = etterlevelser?.filter((e) => e.etterlevelseDokumentasjon.teamsData && t && 
+           e.etterlevelseDokumentasjon.teamsData.filter((team) => team.id === t.id).length > 0
+          )
+
+          const antall = teamEtterlevelser.length
           return (
-            <CustomizedPanel key={t && t.id} title={t ? t.name ? t.name : t.id : ''} HeaderActiveBackgroundColor={ettlevColors.green50}>
-              {avdelingEtterlevelser.map((e, i) => (
+            <CustomizedPanel key={t && t.id} title={t ? t.name ? t.name + ' ' + antall : t.id + ' ' + antall: ''} HeaderActiveBackgroundColor={ettlevColors.green50}>
+              {teamEtterlevelser.map((e, i) => (
                 <CustomPanelDivider key={e.id}>
                   {modalVersion ? (
                     <PanelButton
@@ -105,7 +110,7 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
                           <strong>
                             E{e.etterlevelseDokumentasjon.etterlevelseNummer}
                           </strong>
-                          : {e.etterlevelseDokumentasjon.title}
+                          : {e.etterlevelseDokumentasjon.title} 
                         </>
                       }
                       rightBeskrivelse={`Utfylt: ${moment(e.changeStamp.lastModifiedDate).format('ll')}`}
