@@ -421,7 +421,7 @@ export type KravQL = Replace<
 >
 
 export type EtterlevelseQL = Etterlevelse & {
-  behandling: BehandlingQL
+  etterlevelseDokumentasjon: EtterlevelseDokumentasjonQL
 }
 
 export type BehandlingQL = Behandling & {

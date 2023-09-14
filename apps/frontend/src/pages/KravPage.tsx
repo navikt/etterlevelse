@@ -473,21 +473,10 @@ export const query = gql`
       }
       etterlevelser {
         id
-        behandling {
+        etterlevelseDokumentasjon {
           id
-          nummer
-          navn
-          overordnetFormaal {
-            shortName
-          }
-          systemer {
-            code
-            shortName
-          }
-          avdeling {
-            code
-            shortName
-          }
+          etterlevelseNummer
+          title
           teamsData {
             id
             name
