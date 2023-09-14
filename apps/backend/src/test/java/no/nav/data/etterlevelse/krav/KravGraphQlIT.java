@@ -28,6 +28,23 @@ class KravGraphQlIT extends GraphQLTestBase {
 
     private final Behandling behandling = BkatMocks.processMockResponse().convertToBehandling();
 
+    private EtterlevelseDokumentasjon generateEtterlevelseDok(List<String> irrelevans) {
+        return etterlevelseDokumentasjonService.save(
+                EtterlevelseDokumentasjonRequest.builder()
+                        .title("test dokumentasjon")
+                        .etterlevelseNummer(101)
+                        .knyttetTilVirkemiddel(false)
+                        .virkemiddelId("")
+                        .knytteTilTeam(false)
+                        .teams(List.of(""))
+                        .irrelevansFor(irrelevans)
+                        .update(false)
+                        .behandlerPersonopplysninger(true)
+                        .behandlingIds(List.of(behandling.getId()))
+                        .build()
+        );
+    }
+
     @BeforeEach
     void setUp() {
         MockFilter.setUser(MockFilter.KRAVEIER);
@@ -98,21 +115,7 @@ class KravGraphQlIT extends GraphQLTestBase {
                     .irrelevansFor(List.of("INNSYN"))
                     .build());
 
-
-            EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonService.save(
-                    EtterlevelseDokumentasjonRequest.builder()
-                            .title("test dokumentasjon")
-                            .etterlevelseNummer(101)
-                            .knyttetTilVirkemiddel(false)
-                            .virkemiddelId("")
-                            .knytteTilTeam(false)
-                            .teams(List.of(""))
-                            .irrelevansFor(List.of("INNSYN"))
-                            .update(false)
-                            .behandlerPersonopplysninger(true)
-                            .behandlingIds(List.of(behandling.getId()))
-                            .build()
-            );
+            EtterlevelseDokumentasjon etterlevelseDokumentasjon = generateEtterlevelseDok(List.of("INNSYN"));
 
             storageService.save(Krav.builder()
                     .navn("gammel versjon av krav 50").kravNummer(50).kravVersjon(1)
@@ -171,20 +174,8 @@ class KravGraphQlIT extends GraphQLTestBase {
         @SneakyThrows
         void kravForEtterlevelseDokumentasjonNoIrrelevans() {
 
-            EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonService.save(
-                    EtterlevelseDokumentasjonRequest.builder()
-                            .title("test dokumentasjon")
-                            .etterlevelseNummer(101)
-                            .knyttetTilVirkemiddel(false)
-                            .virkemiddelId("")
-                            .knytteTilTeam(false)
-                            .teams(List.of(""))
-                            .irrelevansFor(List.of(""))
-                            .update(false)
-                            .behandlerPersonopplysninger(true)
-                            .behandlingIds(List.of(behandling.getId()))
-                            .build()
-            );
+            EtterlevelseDokumentasjon etterlevelseDokumentasjon = generateEtterlevelseDok(List.of(""));
+
 
             var krav = storageService.save(Krav.builder()
                     .navn("Krav 1").kravNummer(50).kravVersjon(1)
@@ -302,20 +293,7 @@ class KravGraphQlIT extends GraphQLTestBase {
         @SneakyThrows
         void kravForEtterlevelseDokOnlyRelevenatEtterlevelse() {
 
-            EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonService.save(
-                    EtterlevelseDokumentasjonRequest.builder()
-                            .title("test dokumentasjon")
-                            .etterlevelseNummer(101)
-                            .knyttetTilVirkemiddel(false)
-                            .virkemiddelId("")
-                            .knytteTilTeam(false)
-                            .teams(List.of(""))
-                            .irrelevansFor(List.of("INNSYN"))
-                            .update(false)
-                            .behandlerPersonopplysninger(true)
-                            .behandlingIds(List.of(behandling.getId()))
-                            .build()
-            );
+            EtterlevelseDokumentasjon etterlevelseDokumentasjon = generateEtterlevelseDok(List.of("INNSYN"));
 
             storageService.save(Krav.builder()
                     .navn("Krav 1").kravNummer(50).kravVersjon(1)
