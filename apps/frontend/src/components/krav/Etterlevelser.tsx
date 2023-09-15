@@ -61,14 +61,13 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
 
       <CustomizedAccordion accordion={false}>
         {teams.map((t) => {
-
           const teamEtterlevelser = etterlevelser?.filter((e) => e.etterlevelseDokumentasjon.teamsData && t && 
            e.etterlevelseDokumentasjon.teamsData.filter((team) => team.id === t.id).length > 0
           )
 
           const antall = teamEtterlevelser.length
           return (
-            <CustomizedPanel key={t && t.id} title={t ? t.name ? t.name + ' ' + antall : t.id + ' ' + antall: ''} HeaderActiveBackgroundColor={ettlevColors.green50}>
+            <CustomizedPanel key={t && t.id} title={t ? t.name ? t.name : t.id : ''} HeaderActiveBackgroundColor={ettlevColors.green50}>
               {teamEtterlevelser.map((e, i) => (
                 <CustomPanelDivider key={e.id}>
                   {modalVersion ? (
