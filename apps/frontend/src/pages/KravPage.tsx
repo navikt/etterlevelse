@@ -475,6 +475,8 @@ export const query = gql`
           teamsData {
             id
             name
+            productAreaId
+            productAreaName
           }
         }
         changeStamp {
