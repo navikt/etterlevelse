@@ -39,14 +39,14 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
         tags: [],
         members: [],
         productAreaId: 'INGEN_PO',
-        productAreaName: 'Ingen produktområdet'
+        productAreaName: 'Ingen produktområde'
       }]
     }
     
     e.etterlevelseDokumentasjon.teamsData && e.etterlevelseDokumentasjon.teamsData.forEach((t) => {
       if(!t.productAreaId && !t.productAreaName) {
         t.productAreaId = 'INGEN_PO'
-        t.productAreaName = 'Ingen produktområdet'
+        t.productAreaName = 'Ingen produktområde'
       }
     })
 
@@ -89,12 +89,12 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
                       hideBorderBottom={i !== antall - 1}
                       useUnderline
                       title={
-                        <>
+                        <span>
                           <strong>
                             E{e.etterlevelseDokumentasjon.etterlevelseNummer}
                           </strong>
                           : {e.etterlevelseDokumentasjon.title}
-                        </>
+                        </span>
                       }
                       rightTitle={!!e.etterlevelseDokumentasjon.teamsData && !!e.etterlevelseDokumentasjon.teamsData.length ? e.etterlevelseDokumentasjon.teamsData.map((t) => t.name ? t.name : t.id).join(', ') : 'Ingen team'}
                       rightBeskrivelse={`Utfylt: ${moment(e.changeStamp.lastModifiedDate).format('ll')}`}
@@ -115,12 +115,12 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
                       hideBorderBottom={i !== antall - 1}
                       useUnderline
                       title={
-                        <>
+                        <span>
                           <strong>
                             E{e.etterlevelseDokumentasjon.etterlevelseNummer}
                           </strong>
                           : {e.etterlevelseDokumentasjon.title} 
-                        </>
+                        </span>
                       }
                       rightTitle={!!e.etterlevelseDokumentasjon.teamsData && !!e.etterlevelseDokumentasjon.teamsData.length ? e.etterlevelseDokumentasjon.teamsData.map((t) =>  t.name ? t.name : t.id).join(', ') : 'Ingen team'}
                       rightBeskrivelse={`Utfylt: ${moment(e.changeStamp.lastModifiedDate).format('ll')}`}

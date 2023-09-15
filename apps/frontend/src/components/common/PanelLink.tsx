@@ -123,6 +123,7 @@ export const PanelButton = ({
       }}
     >
       <SimplePanel
+        button
         title={title}
         rightTitle={rightTitle}
         beskrivelse={beskrivelse}
@@ -362,6 +363,7 @@ export const Chevron = ({ hover, icon, distance, size, marginLeft }: { hover: bo
 )
 
 export const SimplePanel = ({
+  button,
   title,
   rightTitle,
   beskrivelse,
@@ -377,6 +379,7 @@ export const SimplePanel = ({
   hideBorderBottom,
   useUnderline,
 }: {
+  button?: boolean
   title: string | React.ReactNode
   rightTitle?: string
   beskrivelse?: string | React.ReactNode
@@ -434,11 +437,12 @@ export const SimplePanel = ({
       <Block
         marginLeft={theme.sizing.scale600}
         marginRight={theme.sizing.scale600}
-        $style={{ flexGrow: 1 }}
+        $style={{ flexGrow: 1, textAlign: 'left' }}
         display={'flex'}
         flexDirection={flip ? 'column-reverse' : 'column'}
         justifyContent={'center'}
         alignItems="flex-start"
+        maxWidth={button ? '537px' : '547px'}
       >
         <Block
           $style={{
@@ -485,6 +489,7 @@ export const SimplePanel = ({
                 display="flex"
                 flexDirection={flip ? 'column-reverse' : 'column'}
                 justifyContent="center"
+                $style={{textAlign: 'left'}}
                 marginLeft={[theme.sizing.scale600, theme.sizing.scale600, theme.sizing.scale600, '0px', '0px', '0px']}
                 marginTop={[theme.sizing.scale600, theme.sizing.scale600, theme.sizing.scale600, '0px', '0px', '0px']}
               >
