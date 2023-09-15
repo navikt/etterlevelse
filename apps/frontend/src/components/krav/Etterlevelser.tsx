@@ -35,20 +35,29 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
   etterlevelser.map((e) => {
     if (!e.etterlevelseDokumentasjon.teamsData || e.etterlevelseDokumentasjon.teamsData.length === 0) {
       e.etterlevelseDokumentasjon.teamsData = [{
-        id: 'INGEN', name: 'Ingen team', description: 'ingen',
+        id: 'INGEN_TEAM', name: 'Ingen team', description: 'ingen',
         tags: [],
-        members: []
+        members: [],
+        productAreaId: 'INGEN_PO',
+        productAreaName: 'Ingen produktområdet'
       }]
     }
+    
+    e.etterlevelseDokumentasjon.teamsData && e.etterlevelseDokumentasjon.teamsData.forEach((t) => {
+      if(!t.productAreaId && !t.productAreaName) {
+        t.productAreaId = 'INGEN_PO'
+        t.productAreaName = 'Ingen produktområdet'
+      }
+    })
+
   })
 
-
-  const teams = _.sortedUniqBy(
+  const productAreas = _.sortedUniqBy(
     (etterlevelser
       ?.map((e) => e.etterlevelseDokumentasjon.teamsData && e.etterlevelseDokumentasjon.teamsData).flat()
-      .sort((a, b) => (a?.name || '').localeCompare(b?.name || ''))
+      .sort((a, b) => (a?.productAreaName || '').localeCompare(b?.productAreaName || ''))
       .filter((team) => !!team) || []),
-    (a) => a?.id,
+    (a) => a?.productAreaId,
   )
 
   return (
@@ -60,15 +69,15 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
       )}
 
       <CustomizedAccordion accordion={false}>
-        {teams.map((t) => {
-          const teamEtterlevelser = etterlevelser?.filter((e) => e.etterlevelseDokumentasjon.teamsData && t && 
-           e.etterlevelseDokumentasjon.teamsData.filter((team) => team.id === t.id).length > 0
+        {productAreas.map((t) => {
+          const productAreaEtterlevelser = etterlevelser?.filter((e) => e.etterlevelseDokumentasjon.teamsData && t && 
+           e.etterlevelseDokumentasjon.teamsData.filter((team) => team.productAreaId === t.productAreaId).length > 0
           )
 
-          const antall = teamEtterlevelser.length
+          const antall = productAreaEtterlevelser.length
           return (
-            <CustomizedPanel key={t && t.id} title={t ? t.name ? t.name : t.id : ''} HeaderActiveBackgroundColor={ettlevColors.green50}>
-              {teamEtterlevelser.map((e, i) => (
+            <CustomizedPanel key={t && t.productAreaId} title={t ? t.productAreaName ? t.productAreaName : t.productAreaId : ''} HeaderActiveBackgroundColor={ettlevColors.green50}>
+              {productAreaEtterlevelser.map((e, i) => (
                 <CustomPanelDivider key={e.id}>
                   {modalVersion ? (
                     <PanelButton
@@ -87,6 +96,7 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
                           : {e.etterlevelseDokumentasjon.title}
                         </>
                       }
+                      rightTitle={!!e.etterlevelseDokumentasjon.teamsData && !!e.etterlevelseDokumentasjon.teamsData.length ? e.etterlevelseDokumentasjon.teamsData.map((t) => t.name ? t.name : t.id).join(', ') : 'Ingen team'}
                       rightBeskrivelse={`Utfylt: ${moment(e.changeStamp.lastModifiedDate).format('ll')}`}
                       overrides={{
                         Block: {
@@ -112,6 +122,7 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
                           : {e.etterlevelseDokumentasjon.title} 
                         </>
                       }
+                      rightTitle={!!e.etterlevelseDokumentasjon.teamsData && !!e.etterlevelseDokumentasjon.teamsData.length ? e.etterlevelseDokumentasjon.teamsData.map((t) =>  t.name ? t.name : t.id).join(', ') : 'Ingen team'}
                       rightBeskrivelse={`Utfylt: ${moment(e.changeStamp.lastModifiedDate).format('ll')}`}
                       overrides={{
                         Block: {
