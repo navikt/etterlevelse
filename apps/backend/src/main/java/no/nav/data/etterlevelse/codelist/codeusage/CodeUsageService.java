@@ -43,7 +43,6 @@ public class CodeUsageService {
 
     private final KravRepo kravRepo;
     private final EtterlevelseDokumentasjonRepo etterlevelseDokumentasjonRepo;
-    private final BehandlingRepo behandlingRepo;
     private final VirkemiddelRepo virkemiddelRepo;
 
     private final Summary summary;
@@ -52,7 +51,6 @@ public class CodeUsageService {
     public CodeUsageService(KravRepo kravRepo, EtterlevelseDokumentasjonRepo etterlevelseDokumentasjonRepo, BehandlingRepo behandlingRepo, VirkemiddelRepo virkemiddelRepo, @Lazy CodelistService codelistService) {
         this.kravRepo = kravRepo;
         this.etterlevelseDokumentasjonRepo = etterlevelseDokumentasjonRepo;
-        this.behandlingRepo = behandlingRepo;
         this.virkemiddelRepo = virkemiddelRepo;
         this.codelistService = codelistService;
         List<String[]> listnames = Stream.of(ListName.values()).map(e -> new String[]{e.name()}).collect(toList());
@@ -89,7 +87,6 @@ public class CodeUsageService {
             CodeUsage codeUsage = new CodeUsage(listName, code, codelist.getShortName());
             codeUsage.setKrav(findKrav(listName, code));
             codeUsage.setEtterlevelseDokumentasjoner(findEtterlevelseDokumentasjoner(listName, code));
-            codeUsage.setBehandlinger(findBehandlinger(listName, code));
             codeUsage.setVirkemidler(findVirkemiddel(listName, code));
             codeUsage.setCodelist(findCodelists(listName, code));
             return codeUsage;
@@ -104,7 +101,6 @@ public class CodeUsageService {
                 case RELEVANS -> {
                     usage.getKrav().forEach(gs -> gs.asType(k -> replaceAll(k.getRelevansFor(), oldCode, newCode), Krav.class));
                     usage.getEtterlevelseDokumentasjoner().forEach(gs -> gs.asType(ed -> replaceAll(ed.getIrrelevansFor(), oldCode, newCode), EtterlevelseDokumentasjon.class));
-                    usage.getBehandlinger().forEach(gs -> gs.asType(bd -> replaceAll(bd.getIrrelevansFor(), oldCode, newCode), BehandlingData.class));
                 }
                 case AVDELING -> usage.getKrav().forEach(gs -> gs.asType(k -> k.setAvdeling(newCode), Krav.class));
                 case UNDERAVDELING -> {
@@ -148,13 +144,6 @@ public class CodeUsageService {
     private List<GenericStorage> findEtterlevelseDokumentasjoner(ListName listName, String code) {
         return switch (listName) {
             case RELEVANS -> etterlevelseDokumentasjonRepo.findByIrrelevans(List.of(code));
-            case AVDELING, UNDERAVDELING, LOV, TEMA, VIRKEMIDDELTYPE -> List.of();
-        };
-    }
-
-    private List<GenericStorage> findBehandlinger(ListName listName, String code) {
-        return switch (listName) {
-            case RELEVANS -> behandlingRepo.findByIrrelevans(List.of(code));
             case AVDELING, UNDERAVDELING, LOV, TEMA, VIRKEMIDDELTYPE -> List.of();
         };
     }
