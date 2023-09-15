@@ -21,6 +21,7 @@ public class TeamResponse {
     private String description;
     private String slackChannel;
     private String productAreaId;
+    private String productAreaName;
     private List<String> tags;
     private List<MemberResponse> members;
 

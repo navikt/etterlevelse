@@ -246,6 +246,7 @@ type Team {
     description: String
     slackChannel: String
     productAreaId: String
+    productAreaName: String
     tags: [String!]
     members: [Member!]
 }
