@@ -7,7 +7,7 @@ env:
   - name: ETTERLEV_SECURITY_REDIRECT_URIS
     value: https://etterlevelse.intern.nav.no
   - name: CLIENT_TEAMCAT_URL
-    value: https://teamkatalog-api.prod-fss-pub.nais.io
+    value: https://teamkatalog-api.intern.nav.no
   - name: CLIENT_TEAMCAT_FRONTEND_URL
     value: https://teamkatalog.nav.no/
   - name: CLIENT_POLLY_URL
