@@ -5,14 +5,14 @@ replies:
   - https://etterlevelse.intern.dev.nav.no/oauth2/callback
   - http://localhost:8080/oauth2/callback
   - http://localhost:3000/oauth2/callback
-teamcat_ingress: teamkatalog-api.dev-fss-pub.nais.io
+teamcat_ingress: teamkatalog-api.intern.dev.nav.no
 env:
   - name: ETTERLEV_SECURITY_REDIRECT_URIS
     value: https://etterlevelse.intern.dev.nav.no,https://etterlevelse-api.intern.dev.nav.no,http://localhost:3000
   - name: CLIENT_TEAMCAT_URL
     value: https://teamkatalog-api.intern.dev.nav.no
   - name: CLIENT_TEAMCAT_FRONTEND_URL
-    value: https://teamkatalog.nav.no/
+    value: https://teamkatalog.intern.nav.no/
   - name: CLIENT_POLLY_URL
     value: http://behandlingskatalog-backend.teamdatajegerne
   - name: AZURE_CLIENT_GROUPS

@@ -2,14 +2,14 @@ ingresses:
   - https://etterlevelse-api.intern.nav.no
 replies:
   - https://etterlevelse.intern.nav.no/oauth2/callback
-teamcat_ingress: teamkatalog-api.prod-fss-pub.nais.io
+teamcat_ingress: teamkatalog-api.intern.nav.no
 env:
   - name: ETTERLEV_SECURITY_REDIRECT_URIS
     value: https://etterlevelse.intern.nav.no
   - name: CLIENT_TEAMCAT_URL
     value: https://teamkatalog-api.intern.nav.no
   - name: CLIENT_TEAMCAT_FRONTEND_URL
-    value: https://teamkatalog.nav.no/
+    value: https://teamkatalog.intern.nav.no/
   - name: CLIENT_POLLY_URL
     value: http://behandlingskatalog-backend.teamdatajegerne
   - name: AZURE_CLIENT_GROUPS
