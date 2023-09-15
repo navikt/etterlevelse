@@ -142,8 +142,8 @@ export const EtterlevelseEditFields = ({
           validateOnBlur={false}
         >
           {({ values, isSubmitting, submitForm, errors, setFieldError }: FormikProps<Etterlevelse>) => (
-            <div className="-mt-24">
-              <div className="w-full flex flex-col items-center">
+            <div className="lg:-mt-24 flex flex-col items-center">
+              <div className="w-8/12">
                 <Form>
                   <Block>
                     <Block>
