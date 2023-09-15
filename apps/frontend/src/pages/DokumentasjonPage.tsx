@@ -24,6 +24,8 @@ import { ArkiveringModal } from '../components/etterlevelseDokumentasjon/Arkiver
 import ExportEtterlevelseModalV2 from '../components/export/ExportEtterlevelseModalV2'
 import { isFerdigUtfylt } from './EtterlevelseDokumentasjonTemaPage'
 import { Spinner } from '../components/common/Spinner'
+import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons'
+import { BodyShort, Label } from '@navikt/ds-react'
 
 export const DokumentasjonPage = () => {
   const params = useParams<{ id?: string }>()
@@ -134,24 +136,21 @@ export const DokumentasjonPage = () => {
     const emptyRelevans = etterlevelseDokumentasjon.irrelevansFor.length === options.length ? true : false
 
     return (
-      <Block display="flex" width="100%" alignItems="center">
-        <Block width="100%" display="flex">
+        <div className="flex items-center gap-2">
           {emptyRelevans ? (
-            <Block display="flex" alignItems="center">
-              <img height="16px" width="16px" src={warningAlert} alt="warning icon" />
-              <LabelSmall color={ettlevColors.green600} marginTop="0px" marginBottom="0px" marginRight="5px" marginLeft="5px" $style={{ fontSize: '16px' }}>
+            <div className="flex items-center gap-1">
+              <ExclamationmarkTriangleFillIcon className="text-2xl text-icon-warning" />
+              <Label size="small">
                 Ingen egenskaper er oppgitt
-              </LabelSmall>
-            </Block>
+              </Label>
+            </div>
           ) : (
-            <LabelSmall marginTop="0px" marginBottom="0px" marginRight="5px" $style={{ fontSize: '16px' }}>
+            <Label size="small">
               Aktive egenskaper:
-            </LabelSmall>
+            </Label>
           )}
-
           {!etterlevelseDokumentasjon.irrelevansFor.length ? getRelevans() : getRelevans(etterlevelseDokumentasjon.irrelevansFor)}
-        </Block>
-      </Block>
+        </div>
     )
   }
 
@@ -206,36 +205,32 @@ export const DokumentasjonPage = () => {
 
   const getRelevans = (irrelevans?: Code[]) => {
     if (irrelevans?.length === options.length) {
-      return <ParagraphXSmall>For å filtrere bort krav som ikke er relevante, må dere oppgi egenskaper ved dokumentasjonen.</ParagraphXSmall>
+      return <BodyShort size="small">For å filtrere bort krav som ikke er relevante, må dere oppgi egenskaper ved dokumentasjonen.</BodyShort>
     }
 
     if (irrelevans) {
       const relevans = options.filter((n) => !irrelevans.map((ir: Code) => ir.code).includes(n.id))
 
       return (
-        <Block display={responsiveDisplayEtterlevelseDokumentasjonPage} flexWrap>
+        <div className="flex flex-wrap gap-1">
           {relevans.map((r, index) => (
-            <Block key={r.id} display="flex">
-              <ParagraphXSmall $style={{ ...marginZero, marginRight: '8px', lineHeight: '24px' }}>{r.label}</ParagraphXSmall>
-              <Block marginRight="8px" display={['none', 'none', 'none', 'none', 'block', 'block']}>
-                {index < relevans.length - 1 ? <img alt="dot" src={ellipse80} /> : undefined}
-              </Block>
-            </Block>
+            <div key={r.id} className="flex items-center gap-1">
+              <BodyShort size="small">{r.label}</BodyShort>
+              {index < relevans.length - 1 && <img alt="dot" src={ellipse80} />}
+            </div>
           ))}
-        </Block>
+        </div>
       )
     }
     return (
-      <Block display={responsiveDisplayEtterlevelseDokumentasjonPage} flexWrap>
+      <div className="flex flex-wrap gap-1">
         {options.map((o, index) => (
-          <Block key={o.id} display="flex">
-            <ParagraphXSmall $style={{ ...marginZero, marginRight: '8px', lineHeight: '24px' }}>{o.label}</ParagraphXSmall>
-            <Block marginRight="8px" display={['none', 'none', 'none', 'none', 'block', 'block']}>
-              {index < options.length - 1 ? <img alt="dot" src={ellipse80} /> : undefined}
-            </Block>
-          </Block>
+          <div key={o.id} className="flex items-center gap-1">
+            <BodyShort size="small">{o.label}</BodyShort>
+            {index < options.length - 1 && <img alt="dot" src={ellipse80} />}
+          </div>
         ))}
-      </Block>
+      </div>
     )
   }
 
@@ -260,7 +255,7 @@ export const DokumentasjonPage = () => {
         breadcrumbPaths={breadcrumbPaths}
       >
         <Block backgroundColor={ettlevColors.grey50} marginTop={theme.sizing.scale800}></Block>
-        {getRelevansContent(etterlevelseDokumentasjon)}¨
+        {getRelevansContent(etterlevelseDokumentasjon)}
         {loading ? (
           <Block display="flex" width="100%" justifyContent="center" marginTop={theme.sizing.scale550}>
             <Spinner size="50px" />

@@ -1,17 +1,16 @@
-import React from 'react'
 import ReactMarkdown from 'react-markdown'
-import {HeadingLarge, HeadingMedium, ParagraphLarge, ParagraphMedium} from 'baseui/typography'
-import {StatefulTooltip} from 'baseui/tooltip'
-import {useDebouncedState} from '../../util/hooks'
+import { useDebouncedState } from '../../util/hooks'
 import MdEditor from 'react-markdown-editor-lite'
 import 'react-markdown-editor-lite/lib/index.css'
-import {Block} from 'baseui/block'
-import {theme} from '../../util'
-import {ExternalLink, ExternalLinkWrapper} from './RouteLink'
-import {markdownLink} from '../../util/config'
+import { Block } from 'baseui/block'
+import { theme } from '../../util'
+import { ExternalLink } from './RouteLink'
+import { markdownLink } from '../../util/config'
 import remarkGfm from 'remark-gfm'
 import rehypeRaw from 'rehype-raw'
-import {ettlevColors} from '../../util/theme'
+import { ettlevColors } from '../../util/theme'
+import { BodyLong, BodyShort, Heading, Link, List } from '@navikt/ds-react'
+import { ExternalLinkIcon } from '@navikt/aksel-icons'
 
 export const Markdown = ({
   vertical,
@@ -43,62 +42,53 @@ export const Markdown = ({
       const { children } = parProps
       if (p1) {
         return (
-          <ParagraphLarge
-            $style={{ fontSize: fontSize ? fontSize : undefined }}
-            color={fontColor ? fontColor : ettlevColors.green800}
-            marginTop={noMargin ? 0 : undefined}
-            marginBottom={noMargin ? 0 : undefined}
-          >
+          <BodyLong>
             {children}
-          </ParagraphLarge>
+          </BodyLong>
         )
       }
       return (
-        <ParagraphMedium
-          $style={{ fontSize: fontSize ? fontSize : undefined }}
-          color={fontColor ? fontColor : ettlevColors.green800}
-          marginTop={noMargin ? 0 : undefined}
-          marginBottom={noMargin ? 0 : undefined}
-        >
+        <BodyLong>
           {children}
-        </ParagraphMedium>
+        </BodyLong>
       )
     },
+    h2: (headerProps: any) => {
+      const { children } = headerProps
+
+      return (
+        <Heading size="medium" level="2">{children}</Heading>
+      )
+    },
+
     h3: (headerProps: any) => {
       const { children } = headerProps
 
       return (
-        <HeadingLarge marginTop="48px" marginBottom="24px">
-          {children}
-        </HeadingLarge>
+        <Heading size="medium" level="3">{children}</Heading>
       )
     },
     h4: (headerProps: any) => {
       const { children } = headerProps
 
-      return <HeadingMedium marginBottom="24px">{children}</HeadingMedium>
+      return <Heading size="medium" level="4">{children}</Heading>
     },
     href: (linkProps: any) => {
       const { children, href, node } = linkProps
       const content = shortenLinks && node.children[0]?.value.indexOf('http') === 0 ? 'Lenke' : children
       return (
-        <StatefulTooltip content={href}>
-          <span>
-            <ExternalLink href={href}>
-              <ExternalLinkWrapper text={content} />
-            </ExternalLink>
-          </span>
-        </StatefulTooltip>
+        <Link href={href}>{content}</Link>
       )
     },
     a: (linkProps: any) => {
       const { children, href, node } = linkProps
       const content = shortenLinks && node.children[0]?.value.indexOf('http') === 0 ? 'Lenke' : children
+      const external = href.startsWith("http")
 
       return (
-        <ExternalLink href={href}>
-          <ExternalLinkWrapper text={content} fontSize={fontSize} />
-        </ExternalLink>
+        <Link href={href}>
+          {content} {external && <ExternalLinkIcon />}
+        </Link>
       )
     },
     code: (codeProps: any) => {
@@ -113,32 +103,32 @@ export const Markdown = ({
       const { children } = liProps
       if (p1) {
         return (
-          <li style={{ fontSize: '21px', lineHeight: '22px' }}>
-            <ParagraphLarge $style={{ fontSize: fontSize ? fontSize : undefined }} color={fontColor ? fontColor : ettlevColors.green800} marginTop={0} marginBottom={0}>
+          <List.Item>
+            <BodyShort>
               {children}
-            </ParagraphLarge>
-          </li>
+            </BodyShort>
+          </List.Item>
         )
       } else {
-        return <li style={{ lineHeight: '22px', marginBottom: '8px' }}>{children}</li>
+        return <List.Item>{children}</List.Item>
       }
     },
+    ul: (ulProps: any) => {
+      const { children } = ulProps
+      return (
+        <List>
+          {children}
+        </List>
+      )
+    }
   }
 
   const sources: string[] = sourcesOrig || (source ? [source] : [''])
   const htmlPlugins = escapeHtml ? [] : [rehypeRaw]
   return (
-    <Block
-      $style={{
-        // Fix font color in lists etc
-        color: theme.colors.contentPrimary,
-        fontFamily: theme.typography.font400.fontFamily,
-        fontWeight: theme.typography.font400.fontWeight,
-        maxWidth: maxWidth ? maxWidth : undefined,
-      }}
-    >
+    <div>
       <ReactMarkdown children={sources.join(vertical ? '\n\n' : ', ')} components={renderers} remarkPlugins={[remarkGfm]} rehypePlugins={htmlPlugins as any} />
-    </Block>
+    </div>
   )
 }
 

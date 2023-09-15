@@ -358,49 +358,21 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
         </Block>
       </Block>
       {systemVarsel && systemVarsel.meldingStatus === MeldingStatus.ACTIVE && (
-        <Block
-          overrides={{
-            Block: {
-              props: { role: 'complementary', 'aria-label': 'System varsel' },
-              style: {
-                ...borderWidth('1px'),
-                ...borderStyle('solid'),
-                ...borderColor(systemVarsel.alertType === AlertType.INFO ? ettlevColors.navDypBla : ettlevColors.navOransje),
-                backgroundColor: systemVarsel.alertType === AlertType.INFO ? ettlevColors.navLysBla : ettlevColors.warning50,
-              },
-            },
-          }}
-          backgroundColor={ettlevColors.white}
-          justifyContent="center"
-          display="flex"
-          alignItems="center"
-          width="calc(100%-2px)"
+        <div 
+          className={`flex flex-col items-center py-2 border-b border-t ${systemVarsel.alertType === "INFO" ? "bg-surface-info-subtle border-surface-info" : "bg-surface-warning-subtle border-surface-warning"}`}
+          aria-label="Systemvarsel"
+          role="complementary"
         >
-          <Block
-            justifyContent="center"
-            display="flex"
-            alignItems="flex-start"
-            paddingLeft={responsivePaddingSmall}
-            paddingRight={responsivePaddingSmall}
-            width={responsiveWidthSmall}
-            maxWidth={maxPageWidth}
-          >
-            <Block marginTop="18px" marginBottom="16px">
-              <img
-                src={systemVarsel.alertType === AlertType.INFO ? informationIcon : warningAlert}
-                width="20px"
-                height="20px"
-                alt={systemVarsel.alertType === AlertType.INFO ? 'information icon' : 'warning icon'}
-                style={{
-                  marginRight: '5px',
-                }}
-              />
-            </Block>
-            <Block>
-              <Markdown fontSize="16px" source={systemVarsel.melding} />
-            </Block>
-          </Block>
-        </Block>
+          <div className="flex gap-2">
+            <img
+              src={systemVarsel.alertType === AlertType.INFO ? informationIcon : warningAlert}
+              width="20px"
+              height="20px"
+              alt={systemVarsel.alertType === AlertType.INFO ? 'information icon' : 'warning icon'}
+            />
+            <Markdown source={systemVarsel.melding} />
+          </div>
+        </div>
       )}
     </Block>
   )

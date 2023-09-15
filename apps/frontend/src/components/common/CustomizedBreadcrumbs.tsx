@@ -1,9 +1,6 @@
-import React from 'react'
-import { Breadcrumbs, BreadcrumbsOverrides, BreadcrumbsProps } from 'baseui/breadcrumbs'
 import _ from 'lodash'
-import RouteLink from './RouteLink'
-import { Block } from 'baseui/block'
-import { ChevronRight } from 'baseui/icon'
+import { BodyShort, Link } from '@navikt/ds-react'
+import { ChevronRightIcon } from '@navikt/aksel-icons'
 
 export interface breadcrumbPaths {
   href: string
@@ -16,70 +13,29 @@ interface Props {
   fontColor?: string
 }
 
-type CustomizedProps = Props & BreadcrumbsProps
+type CustomizedProps = Props
 
 const CustomizedBreadcrumbs = (props: CustomizedProps) => {
-  const customOverrides: BreadcrumbsOverrides = {
-    Separator: {
-      style: {
-        color: props.fontColor ? props.fontColor : undefined,
-        marginBottom: '4px',
-      },
-    },
-    Root: {
-      style: {
-        color: props.fontColor ? props.fontColor : undefined,
-      },
-    },
-    ListItem: {
-      style: {
-        ':hover': {
-          textDecoration: 'underline',
-        },
-      },
-    },
-  }
-
-  const overrides = _.merge(customOverrides, props.overrides)
 
   const getName = (pathName: string) => (pathName.length > 25 ? pathName.substring(0, 25) + '...' : pathName)
-
-  const getBreadcrumbs = () => {
-    if (props.paths && props.paths.length) {
-      return props.paths.map((path) => {
-        return (
-          <RouteLink hideUnderline fontColor={props.fontColor} href={path.href} key={'breadcrumb_link_' + getName(path.pathName)}>
-            {getName(path.pathName)}
-          </RouteLink>
-        )
-      })
-    }
-  }
+  const linkColor = /^\/(lov|krav|etterlevelse)\//.test(window.location.pathname) 
+    ? "text-white" 
+    : "text-text-default"
 
   return (
-    <Block display="flex">
-      <Breadcrumbs overrides={overrides}>
-        <RouteLink hideUnderline fontColor={props.fontColor} href="/">
-          Forsiden
-        </RouteLink>
-        {getBreadcrumbs()}
-      </Breadcrumbs>
-      {props.currentPage && (
-        <Block
-          $style={{
-            color: props.fontColor ? props.fontColor : undefined,
-            fontFamily: 'Source Sans Pro',
-            fontWeight: 500,
-          }}
-          display={['none', 'none', 'none', 'flex', 'flex', 'flex']}
-        >
-          <Block marginLeft="8px" marginRight="8px" marginTop="4px" marginBottom="4px">
-            <ChevronRight />
-          </Block>
-          <Block>{getName(props.currentPage)}</Block>
-        </Block>
+      <div className="flex gap-1 items-center">
+        <Link href="/" className={`gap-1 flex ${linkColor}`}>
+          Forsiden <ChevronRightIcon />
+        </Link>
+        {props.paths?.map((path) => 
+          <Link href={path.href} key={'breadcrumb_link_' + getName(path.pathName)} className={`gap-1 flex ${linkColor}`}>
+            {getName(path.pathName)} <ChevronRightIcon />
+          </Link>
+        )}
+        {props.currentPage && (
+          <BodyShort className={linkColor}>{getName(props.currentPage)}</BodyShort>
       )}
-    </Block>
+      </div>
   )
 }
 

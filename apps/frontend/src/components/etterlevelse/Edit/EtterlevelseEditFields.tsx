@@ -97,19 +97,8 @@ export const EtterlevelseEditFields = ({
   }
 
   return (
-    <Block width="100%">
-      <Block
-        display="flex"
-        $style={{ flexDirection: 'row-reverse' }}
-        overrides={{
-          Block: {
-            style: {
-              float: 'right',
-              marginBottom: '15px',
-            },
-          },
-        }}
-      >
+    <div className="w-full">
+      <div className="flex flex-row-reverse">
         <Button
           notBold
           $style={{
@@ -121,12 +110,12 @@ export const EtterlevelseEditFields = ({
           }}
           onClick={() => setIsNotatfeltOpen(true)}
         >
-          <Block $style={{ ...padding('3px', '-1px') }}>
+          <div>
             <Block>{etterlevelseMetadata.notater ? <img src={notesWithContentIcon} alt="Notater med innohold" /> : <img src={notesIcon} alt="Notater" />}</Block>
             {etterlevelseMetadata.notater ? 'Vis arbeidsnotat' : 'Lag arbeidsnotat'}
-          </Block>
+          </div>
         </Button>
-      </Block>
+      </div>
       <EditNotatfelt
         isOpen={isNotatfeltOpen}
         setIsNotatfeltOpen={setIsNotatfeltOpen}
@@ -153,8 +142,8 @@ export const EtterlevelseEditFields = ({
           validateOnBlur={false}
         >
           {({ values, isSubmitting, submitForm, errors, setFieldError }: FormikProps<Etterlevelse>) => (
-            <Block>
-              <Block marginTop="32px" justifyContent="center" width={responsiveWidthInnerPage} paddingLeft={responsivePaddingInnerPage} paddingRight={responsivePaddingInnerPage}>
+            <div className="-mt-24">
+              <div className="w-full flex flex-col items-center">
                 <Form>
                   <Block>
                     <Block>
@@ -241,15 +230,12 @@ export const EtterlevelseEditFields = ({
                     </Block>
                   </Block>
                 </Form>
-              </Block>
+              </div>
 
               <Block width="100%" backgroundColor={kravFilter === KRAV_FILTER_TYPE.UTGAATE_KRAV ? 'transparent' : ettlevColors.green100}>
                 {!documentEdit && (
-                  <Block
-                    display={['block', 'block', 'block', 'block', 'flex', 'flex']}
-                    width={['calc(100% - 32px)', 'calc(100% - 32px)', 'calc(100% - 32px)', 'calc(100% - 32px)', 'calc(100% - 32px)', 'calc(100% - 224px)']}
-                    paddingLeft={responsivePaddingInnerPage}
-                    paddingRight={['16px', '16px', '16px', '16px', '16px', '24']}
+                  <div
+                    className="flex w-full items-center justify-end gap-12 px-8"
                   >
                     {kravFilter === KRAV_FILTER_TYPE.RELEVANTE_KRAV && (
                       <Block display="flex" flexDirection="column" paddingTop="27px" paddingBottom="24px" minWidth={'fit-content'}>
@@ -316,8 +302,8 @@ export const EtterlevelseEditFields = ({
                         )}
                       </Block>
                     )}
-                    <Block display="flex" $style={{ justifyContent: 'flex-end center' }} flexDirection="column" width="100%">
-                      <Block paddingTop="27px" paddingBottom="24px" display={['block', 'block', 'block', 'flex', 'flex', 'flex']} justifyContent="flex-end" width="100%">
+                    <div className="flex flex-col">
+                      <Block paddingTop="27px" paddingBottom="24px" width="100%">
                         <Button disabled={krav.status === KravStatus.UTGAATT ? false : disableEdit} type="button" kind="secondary" marginRight onClick={close}>
                           {krav.status === KravStatus.UTGAATT ? 'Lukk' : 'Avbryt og forkast endringene'}
                         </Button>
@@ -377,8 +363,8 @@ export const EtterlevelseEditFields = ({
                           </ParagraphXSmall>
                         </Block>
                       )}
-                    </Block>
-                  </Block>
+                    </div>
+                  </div>
                 )}
               </Block>
 
@@ -435,7 +421,7 @@ export const EtterlevelseEditFields = ({
                   </Block>
                 </Block>
               </CustomizedModal>
-            </Block>
+            </div>
           )}
         </Formik>
       ) : (
@@ -477,7 +463,7 @@ export const EtterlevelseEditFields = ({
           )}
         </Formik>
       )}
-    </Block>
+    </div>
   )
 }
 
