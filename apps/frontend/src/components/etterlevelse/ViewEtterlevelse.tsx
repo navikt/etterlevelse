@@ -225,12 +225,6 @@ export const ViewEtterlevelse = ({
               <Block marginBottom={theme.sizing.scale700} key={s.id}>
                 <Card
                   overrides={{
-                    Body: {
-                      style: {
-                        ...borderWidth('1px'),
-                        ...borderRadius('4px'),
-                      },
-                    },
                     Root: {
                       style: {
                         ...borderWidth('1px'),
@@ -240,7 +234,8 @@ export const ViewEtterlevelse = ({
                     },
                   }}
                 >
-                  <Block display="flex" justifyContent="center" marginTop={'32px'} marginBottom={'16px'}>
+                  <Block display="flex" justifyContent="center" marginTop={'32px'} marginBottom={'16px'} 
+                  >
                     <Block display="flex" flex="1">
                       <ParagraphMedium
                         $style={{
@@ -287,7 +282,7 @@ export const ViewEtterlevelse = ({
                         Header: {
                           style: {
                             backgroundColor: ettlevColors.white,
-                            maxWidth: '210px',
+                            maxWidth: '230px',
                             paddingLeft: '0px',
                             ':hover': {
                               boxShadow: 'none',
