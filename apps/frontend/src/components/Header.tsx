@@ -358,7 +358,11 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
         </Block>
       </Block>
       {systemVarsel && systemVarsel.meldingStatus === MeldingStatus.ACTIVE && (
-        <div className={`flex flex-col items-center py-2 border-b border-t ${systemVarsel.alertType === "INFO" ? "bg-surface-info-subtle border-surface-info" : "bg-surface-warning-subtle border-surface-warning"}`}>
+        <div 
+          className={`flex flex-col items-center py-2 border-b border-t ${systemVarsel.alertType === "INFO" ? "bg-surface-info-subtle border-surface-info" : "bg-surface-warning-subtle border-surface-warning"}`}
+          aria-label="Systemvarsel"
+          role="complementary"
+        >
           <div className="flex gap-2">
             <img
               src={systemVarsel.alertType === AlertType.INFO ? informationIcon : warningAlert}
