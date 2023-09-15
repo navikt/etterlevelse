@@ -98,12 +98,18 @@ export const useSearch = <T>(searchFunction: (term: string) => Promise<T[]>) => 
   const [searchResult, setSearchResult] = useState<T[]>([])
   const [loading, setLoading] = useState<boolean>(false)
 
+  const beginSearch = async () => {
+    setLoading(true)
+    setSearchResult(await searchFunction(search))
+    setLoading(false)
+  }
+
   useEffect(() => {
     ;(async () => {
-      if (search && search.length > 2) {
-        setLoading(true)
-        setSearchResult(await searchFunction(search))
-        setLoading(false)
+      if (search && search.match(/[a-zA-Z]\d/) && search.length > 3) {
+        beginSearch()
+      } else if (search && search.length > 2 && !search.match(/[a-zA-Z]\d/)) {
+        beginSearch()
       } else {
         setSearchResult([])
       }

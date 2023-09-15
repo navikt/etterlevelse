@@ -1,6 +1,5 @@
 package no.nav.data.etterlevelse.etterlevelseDokumentasjon;
 
-import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.auditing.domain.AuditVersionRepository;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.storage.domain.GenericStorage;
@@ -26,7 +25,6 @@ import java.util.UUID;
 
 import static no.nav.data.common.utils.StreamUtils.convert;
 
-@Slf4j
 @Service
 public class EtterlevelseDokumentasjonService extends DomainService<EtterlevelseDokumentasjon> {
 
@@ -112,6 +110,10 @@ public class EtterlevelseDokumentasjonService extends DomainService<Etterlevelse
     public EtterlevelseDokumentasjonResponse getEtterlevelseDokumentasjonWithTeamAndBehandlingData(UUID uuid) {
         EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse = get(uuid).toResponse();
         return addBehandlingAndTeamsData(etterlevelseDokumentasjonResponse);
+    }
+
+    public List<EtterlevelseDokumentasjon> getAllWithValidBehandling(){
+        return GenericStorage.to(etterlevelseDokumentasjonRepo.getAllEtterlevelseDokumentasjonWithValidBehandling() ,EtterlevelseDokumentasjon.class);
     }
 
     public EtterlevelseDokumentasjonResponse addBehandlingAndTeamsData(EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse){

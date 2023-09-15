@@ -29,7 +29,7 @@ import CustomizedModal from '../common/CustomizedModal'
 import { crossIcon } from '../Images'
 import { getEtterlevelseStatus } from './utils'
 
-export const filterForBehandling = (behandling: Behandling): KravFilters => ({ behandlingId: behandling.id })
+export const filterForBehandling = (behandling: Behandling): KravFilters => ({ etterlevelseDokumentasjonId: behandling.id })
 
 const modalPaddingRight = '104px'
 const modalPaddingLeft = '112px'
@@ -75,7 +75,7 @@ const KravTable = (props: { behandling: Behandling }) => {
   const variables = filterForBehandling(props.behandling)
   const { data: rawData, loading } = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
     variables,
-    skip: !variables?.behandlingId,
+    skip: !variables?.etterlevelseDokumentasjonId,
   })
   const [data, setData] = useState<KravTableData[]>([])
 

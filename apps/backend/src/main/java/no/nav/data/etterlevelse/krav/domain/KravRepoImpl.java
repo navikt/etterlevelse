@@ -64,40 +64,10 @@ public class KravRepoImpl implements KravRepoCustom {
             query += " and data -> 'kravNummer' = to_jsonb(:kravNummer) ";
             par.addValue("kravNummer", filter.getNummer());
         }
-        if (filter.getBehandlingId() != null && !filter.isBehandlingIrrevantKrav()) {
-            kravIdSafeList.addAll(convert(behandlingRepo.findKravIdsForBehandling(filter.getBehandlingId()), KravId::kravId));
-            query += """
-                    and (
-                     exists(select 1
-                               from generic_storage ettlev
-                               where ettlev.data ->> 'kravNummer' = krav.data ->> 'kravNummer'
-                                 and ettlev.data ->> 'kravVersjon' = krav.data ->> 'kravVersjon'
-                                 and type = 'Etterlevelse'
-                                 and data ->> 'behandlingId' = :behandlingId
-                            ) 
-                    or jsonb_array_length(data -> 'relevansFor') = 0
-                    or jsonb_array_length((data -> 'relevansFor') - array(select jsonb_array_elements_text(data -> 'irrelevansFor') 
-                        from generic_storage where data ->> 'behandlingId' = :behandlingId
-                        and type = 'BehandlingData')) > 0
-                    )
-                    """;
-            par.addValue("behandlingId", filter.getBehandlingId());
-        } else if (filter.getBehandlingId() != null && filter.isBehandlingIrrevantKrav()) {
-            kravIdSafeList.addAll(convert(behandlingRepo.findKravIdsForBehandling(filter.getBehandlingId()), KravId::kravId));
-            query += """
-                    and data -> 'relevansFor' ??| array(
-                     select jsonb_array_elements_text(data -> 'irrelevansFor')
-                      from generic_storage
-                      where data ->> 'behandlingId' = :behandlingId
-                        and type = 'BehandlingData')
-                    """;
-            par.addValue("behandlingId", filter.getBehandlingId());
-        }
 
-        if (filter.getEtterlevelseDokumentasjonId() != null && !filter.isEtterlevelseDokumentasjonIrrevantKrav()) {
-            kravIdSafeList.addAll(convert(etterlevelseDokumentasjonRepo.findKravIdsForEtterlevelseDokumentasjon(filter.getEtterlevelseDokumentasjonId()), KravId::kravId));
-            if (filter.getVirkemiddelId() != null && !filter.getVirkemiddelId().isEmpty()) {
-                query += """
+/*
+        if (filter.getVirkemiddelId() != null && !filter.getVirkemiddelId().isEmpty()) {
+            query += """
                         and (
                          exists(select 1
                                    from generic_storage ettlev
@@ -105,12 +75,29 @@ public class KravRepoImpl implements KravRepoCustom {
                                      and ettlev.data ->> 'kravVersjon' = krav.data ->> 'kravVersjon'
                                      and type = 'Etterlevelse'
                                      and data ->> 'etterlevelseDokumentasjonId' = :etterlevelseDokumentasjonId
-                                ) 
+                                )
                         or data->'virkemiddelIder' ??| array[ :virkemiddelId ]
                         )
                         """;
-                par.addValue("virkemiddelId", List.of(filter.getVirkemiddelId()));
-            } else {
+            par.addValue("virkemiddelId", List.of(filter.getVirkemiddelId()));
+        }
+
+        if (filter.getVirkemiddelId() != null && !filter.getVirkemiddelId().isEmpty()) {
+            query += """
+                        and (
+                        NOT(data -> 'virkemiddelIder' ??| array[ :virkemiddelId ])
+                        or jsonb_array_length(data -> 'virkemiddelIder') = 0
+                        or data->'virkemiddelIder' is null
+                        )
+                        """;
+            par.addValue("virkemiddelId", List.of(filter.getVirkemiddelId()));
+        }
+ */
+
+
+        if (filter.getEtterlevelseDokumentasjonId() != null ) {
+            kravIdSafeList.addAll(convert(etterlevelseDokumentasjonRepo.findKravIdsForEtterlevelseDokumentasjon(filter.getEtterlevelseDokumentasjonId()), KravId::kravId));
+            if (!filter.isEtterlevelseDokumentasjonIrrevantKrav()) {
                 query += """
                         and (
                          exists(select 1
@@ -126,19 +113,7 @@ public class KravRepoImpl implements KravRepoCustom {
                             and type = 'EtterlevelseDokumentasjon')) > 0
                         )
                         """;
-            }
-            par.addValue("etterlevelseDokumentasjonId", filter.getEtterlevelseDokumentasjonId());
-        } else if (filter.getEtterlevelseDokumentasjonId() != null && filter.isEtterlevelseDokumentasjonIrrevantKrav()) {
-            kravIdSafeList.addAll(convert(etterlevelseDokumentasjonRepo.findKravIdsForEtterlevelseDokumentasjon(filter.getEtterlevelseDokumentasjonId()), KravId::kravId));
-            if (filter.getVirkemiddelId() != null && !filter.getVirkemiddelId().isEmpty()) {
-                query += """
-                        and (
-                        NOT(data -> 'virkemiddelIder' ??| array[ :virkemiddelId ])
-                        or jsonb_array_length(data -> 'virkemiddelIder') = 0
-                        or data->'virkemiddelIder' is null
-                        )
-                        """;
-                par.addValue("virkemiddelId", List.of(filter.getVirkemiddelId()));
+                par.addValue("etterlevelseDokumentasjonId", filter.getEtterlevelseDokumentasjonId());
             } else {
                 query += """
                         and data -> 'relevansFor' ??| array(
@@ -147,8 +122,8 @@ public class KravRepoImpl implements KravRepoCustom {
                           where data ->> 'id' = :etterlevelseDokumentasjonId
                             and type = 'EtterlevelseDokumentasjon')
                         """;
+                par.addValue("etterlevelseDokumentasjonId", filter.getEtterlevelseDokumentasjonId());
             }
-            par.addValue("etterlevelseDokumentasjonId", filter.getEtterlevelseDokumentasjonId());
         }
 
         if (filter.getUnderavdeling() != null) {
@@ -230,8 +205,8 @@ public class KravRepoImpl implements KravRepoCustom {
             return true;
         }
 
-        // Filtrering for krav relevant for behandling
-        if (filter.getBehandlingId() != null) {
+        // Filtrering for krav relevant for etterlevelseDokumentasjon
+        if (filter.getEtterlevelseDokumentasjonId() != null) {
             var succeeded = exists(all, k2 -> k2.toKrav().supersedes(krav));
             return !succeeded && krav.getStatus().kanEtterleves();
         }

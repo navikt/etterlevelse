@@ -136,20 +136,12 @@ public class KravService extends DomainService<Krav> {
         return storage.delete(id, Krav.class);
     }
 
-    public List<Krav> findForBehandling(String behandlingId) {
-        return getByFilter(KravFilter.builder().behandlingId(behandlingId).build());
-    }
-
     public List<Krav> findForEtterlevelseDokumentasjon(String etterlevelseDokumentasjonId) {
         return getByFilter(KravFilter.builder().etterlevelseDokumentasjonId(etterlevelseDokumentasjonId).build());
     }
 
     public List<Krav> findForEtterlevelseDokumentasjon(String etterlevelseDokumentasjonId, String virkemiddelId) {
         return getByFilter(KravFilter.builder().etterlevelseDokumentasjonId(etterlevelseDokumentasjonId).virkemiddelId(virkemiddelId).build());
-    }
-
-    public List<Krav> findForBehandlingIrrelevans(String behandlingId) {
-        return getByFilter(KravFilter.builder().behandlingId(behandlingId).behandlingIrrevantKrav(true).build());
     }
 
     public List<Krav> findForEtterlevelseDokumentasjonIrrelevans(String etterlevelseDokumentasjonId) {

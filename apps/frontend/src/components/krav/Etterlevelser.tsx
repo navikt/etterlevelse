@@ -24,26 +24,31 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
   const etterlevelser = (krav.etterlevelser || [])
     .filter((e) => e.status === EtterlevelseStatus.FERDIG_DOKUMENTERT)
     .sort((a, b) => {
-      if (a.behandling && b.behandling) {
-        return a.behandling.navn.localeCompare(b.behandling.navn)
+      if (a.etterlevelseDokumentasjon && b.etterlevelseDokumentasjon) {
+        return a.etterlevelseDokumentasjon.title.localeCompare(b.etterlevelseDokumentasjon.title)
       } else {
         return -1
       }
     })
-    .filter((e) => e.behandling && e.behandling.navn !== 'LEGACY_DATA')
+    .filter((e) => e.etterlevelseDokumentasjon && e.etterlevelseDokumentasjon.title !== 'LEGACY_DATA')
 
   etterlevelser.map((e) => {
-    if (!e.behandling.avdeling) {
-      e.behandling.avdeling = { code: 'INGEN', shortName: 'Ingen avdeling' } as ExternalCode
+    if (!e.etterlevelseDokumentasjon.teamsData || e.etterlevelseDokumentasjon.teamsData.length === 0) {
+      e.etterlevelseDokumentasjon.teamsData = [{
+        id: 'INGEN', name: 'Ingen team', description: 'ingen',
+        tags: [],
+        members: []
+      }]
     }
   })
 
-  const avdelinger = _.sortedUniqBy(
+
+  const teams = _.sortedUniqBy(
     (etterlevelser
-      ?.map((e) => e.behandling.avdeling)
-      .sort((a, b) => (a?.shortName || '').localeCompare(b?.shortName || ''))
-      .filter((avdeling) => !!avdeling) || []) as ExternalCode[],
-    (a) => a.code,
+      ?.map((e) => e.etterlevelseDokumentasjon.teamsData && e.etterlevelseDokumentasjon.teamsData).flat()
+      .sort((a, b) => (a?.name || '').localeCompare(b?.name || ''))
+      .filter((team) => !!team) || []),
+    (a) => a?.id,
   )
 
   return (
@@ -55,17 +60,21 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
       )}
 
       <CustomizedAccordion accordion={false}>
-        {avdelinger.map((a) => {
-          const avdelingEtterlevelser = etterlevelser?.filter((e) => e.behandling.avdeling?.code === a.code)
-          const antall = avdelingEtterlevelser.length
+        {teams.map((t) => {
+
+          const teamEtterlevelser = etterlevelser?.filter((e) => e.etterlevelseDokumentasjon.teamsData && t && 
+           e.etterlevelseDokumentasjon.teamsData.filter((team) => team.id === t.id).length > 0
+          )
+
+          const antall = teamEtterlevelser.length
           return (
-            <CustomizedPanel key={a.code} title={a.shortName} HeaderActiveBackgroundColor={ettlevColors.green50}>
-              {avdelingEtterlevelser.map((e, i) => (
+            <CustomizedPanel key={t && t.id} title={t ? t.name ? t.name + ' ' + antall : t.id + ' ' + antall: ''} HeaderActiveBackgroundColor={ettlevColors.green50}>
+              {teamEtterlevelser.map((e, i) => (
                 <CustomPanelDivider key={e.id}>
                   {modalVersion ? (
                     <PanelButton
                       onClick={() => {
-                        setOpenEtterlevelse({ ...e, behandlingId: e.behandling.id })
+                        setOpenEtterlevelse({ ...e, etterlevelseDokumentasjonId: e.etterlevelseDokumentasjon.id })
                         setIsModalOpen(true)
                       }}
                       square
@@ -74,12 +83,11 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
                       title={
                         <>
                           <strong>
-                            B{e.behandling.nummer}-{e.behandling.overordnetFormaal.shortName}
+                            E{e.etterlevelseDokumentasjon.etterlevelseNummer}
                           </strong>
-                          : {e.behandling.navn}
+                          : {e.etterlevelseDokumentasjon.title}
                         </>
                       }
-                      rightTitle={!!e.behandling.teamsData.length ? e.behandling.teamsData.map((t) => t.name).join(', ') : 'Ingen team'}
                       rightBeskrivelse={`Utfylt: ${moment(e.changeStamp.lastModifiedDate).format('ll')}`}
                       overrides={{
                         Block: {
@@ -89,7 +97,7 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
                           },
                         },
                       }}
-                      // panelIcon={(hover) => <PageIcon hover={hover} />}
+                    // panelIcon={(hover) => <PageIcon hover={hover} />}
                     />
                   ) : (
                     <PanelLink
@@ -100,12 +108,11 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
                       title={
                         <>
                           <strong>
-                            B{e.behandling.nummer}-{e.behandling.overordnetFormaal.shortName}
+                            E{e.etterlevelseDokumentasjon.etterlevelseNummer}
                           </strong>
-                          : {e.behandling.navn}
+                          : {e.etterlevelseDokumentasjon.title} 
                         </>
                       }
-                      rightTitle={!!e.behandling.teamsData.length ? e.behandling.teamsData.map((t) => t.name).join(', ') : 'Ingen team'}
                       rightBeskrivelse={`Utfylt: ${moment(e.changeStamp.lastModifiedDate).format('ll')}`}
                       overrides={{
                         Block: {
@@ -114,7 +121,7 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
                           },
                         },
                       }}
-                      // panelIcon={(hover) => <PageIcon hover={hover} />}
+                    // panelIcon={(hover) => <PageIcon hover={hover} />}
                     />
                   )}
                 </CustomPanelDivider>
