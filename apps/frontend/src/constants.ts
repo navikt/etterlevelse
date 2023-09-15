@@ -377,6 +377,7 @@ export interface Team {
   name: string
   description: string
   productAreaId?: string
+  productAreaName?: string
   slackChannel?: string
   tags: string[]
   members: Member[]
