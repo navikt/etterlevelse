@@ -140,40 +140,8 @@ export const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVer
             })}
             {krav.versjonEndringer && (
               <Block marginTop={theme.sizing.scale900} marginBottom={theme.sizing.scale1600}>
-                <CustomizedAccordion>
-                  <CustomizedPanel
-                    title={<LabelSmall $style={{ color: ettlevColors.green800, marginRight: '7px' }}>Dette er nytt fra forrige versjon</LabelSmall>}
-                    overrides={{
-                      Header: {
-                        style: {
-                          backgroundColor: 'transparent',
-                          width: 'fit-content',
-                          paddingLeft: '0px',
-                          paddingBottom: '0px',
-                          ':hover': {
-                            boxShadow: 'none',
-                          },
-                        },
-                      },
-                      Content: {
-                        style: {
-                          backgroundColor: 'transparent',
-                          borderBottomWidth: 'none',
-                          borderBottomStyle: 'none',
-                          borderBottomColor: 'none',
-                        },
-                      },
-                      PanelContainer: {
-                        style: {
-                          ...borderStyle('hidden'),
-                          backgroundColor: 'transparent',
-                        },
-                      },
-                    }}
-                  >
-                    <Markdown source={krav.versjonEndringer} noMargin />
-                  </CustomizedPanel>
-                </CustomizedAccordion>
+                <LabelSmall>Dette er nytt fra forrige versjon</LabelSmall>
+                <Markdown source={krav.versjonEndringer} />
               </Block>
             )}
           </LabelAboveContent>
