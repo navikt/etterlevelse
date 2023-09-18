@@ -87,18 +87,6 @@ export const EtterlevelseDokumentasjonPageV2 = () => {
               </title>
             </Helmet>,
           )}
-          secondaryHeaderBackgroundColor={ettlevColors.green100}
-          secondaryHeader={
-            <EtterlevelseSecondaryHeaderV2
-              tab={tab}
-              setTab={setTab}
-              setNavigatePath={setNavigatePath}
-              etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-              temaData={temaData}
-              lovListe={lovListe}
-              kravId={kravId}
-            />
-          }
           childrenBackgroundColor={ettlevColors.grey25}
           currentPage={'K' + kravId?.kravNummer + '.' + kravId?.kravVersjon}
           breadcrumbPaths={breadcrumbPaths}

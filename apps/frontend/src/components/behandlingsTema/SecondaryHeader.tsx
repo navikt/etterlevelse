@@ -23,39 +23,6 @@ export const SecondaryHeader = ({ behandling, temaData, lovListe }: SecondaryHea
 
   return (
     <Block width="100%">
-      <Block marginTop="19px" width="fit-content">
-        <Button
-          kind="tertiary"
-          onClick={() => {
-            navigate(`/behandling/${behandling?.id}`)
-          }}
-          $style={{
-            ...paddingAll('0px'),
-            ':hover': {
-              backgroundColor: 'inherit',
-            },
-            ':focus': {
-              backgroundColor: 'inherit',
-            },
-          }}
-        >
-          <LabelSmall
-            $style={{
-              fontSize: '18px',
-              fontWeight: 400,
-              lineHeight: '22px',
-              color: ettlevColors.green600,
-              textDecoration: 'underline',
-              ':hover': {
-                color: ettlevColors.green400,
-              },
-            }}
-          >
-            Tema for dokumentasjon
-          </LabelSmall>
-        </Button>
-      </Block>
-
       <Block marginTop="0px" marginBottom="56px" display="flex" width={'100%'} alignItems="center" justifyContent="center">
         <Block display="flex" flex="1">
           <img src={angleIcon} alt="angle icon" />{' '}
