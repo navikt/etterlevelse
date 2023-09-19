@@ -12,6 +12,7 @@ import no.nav.data.etterlevelse.etterlevelse.domain.EtterlevelseStatus;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
 import no.nav.data.etterlevelse.krav.KravService;
+import no.nav.data.etterlevelse.krav.TilbakemeldingService;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravStatus;
 import no.nav.data.etterlevelse.krav.domain.Regelverk;
@@ -35,6 +36,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Slf4j
 @Service
 public class StatistikkService {
+    private final TilbakemeldingService tilbakemeldingService;
 
     private final BehandlingService behandlingService;
     private final KravService kravService;
@@ -44,7 +46,8 @@ public class StatistikkService {
 
     private final TeamcatTeamClient teamService;
 
-    public StatistikkService(BehandlingService behandlingService, KravService kravService, EtterlevelseService etterlevelseService,EtterlevelseDokumentasjonService etterlevelseDokumentasjonService, TeamcatTeamClient teamService) {
+    public StatistikkService(TilbakemeldingService tilbakemeldingService, BehandlingService behandlingService, KravService kravService, EtterlevelseService etterlevelseService, EtterlevelseDokumentasjonService etterlevelseDokumentasjonService, TeamcatTeamClient teamService) {
+        this.tilbakemeldingService = tilbakemeldingService;
         this.behandlingService = behandlingService;
         this.kravService = kravService;
         this.etterlevelseService = etterlevelseService;
