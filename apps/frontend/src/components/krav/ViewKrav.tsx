@@ -132,7 +132,7 @@ export const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVer
                 return (
                   <DotTag key={'kravVersjon_list_' + i}>
                     <ExternalLink href={'/krav/' + k.kravNummer + '/' + k.kravVersjon}>
-                      <ExternalLinkWrapper text={`K${k.kravNummer}.${k.kravVersjon}`} />
+                      {`K${k.kravNummer}.${k.kravVersjon}`}
                     </ExternalLink>
                   </DotTag>
                 )
@@ -176,7 +176,7 @@ export const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVer
                   <Block marginBottom={marginBottom} key={'kravVarsling_list_SLACK_' + i} display="flex">
                     <Block marginRight="4px">Slack:</Block>
                     <ExternalLink href={slackLink(va.adresse)}>
-                      <ExternalLinkWrapper text={`#${va.slackChannel?.name || va.adresse}`} />
+                      {`#${va.slackChannel?.name || va.adresse}`}
                     </ExternalLink>
                   </Block>
                 )
@@ -185,15 +185,15 @@ export const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVer
                   <Block marginBottom={marginBottom} key={'kravVarsling_list_SLACK_USER_' + i} display="flex">
                     <Block marginRight="4px">Slack:</Block>
                     <ExternalLink href={slackUserLink(va.adresse)}>
-                      <ExternalLinkWrapper text={`${va.slackUser?.name || va.adresse}`} />
+                      {`${va.slackUser?.name || va.adresse}`}
                     </ExternalLink>
                   </Block>
                 )
               return (
                 <Block marginBottom={marginBottom} key={'kravVarsling_list_EMAIL_' + i} display="flex">
                   <Block marginRight="4px">Epost:</Block>
-                  <ExternalLink href={`mailto:${va.adresse}`}>
-                    <ExternalLinkWrapper text={va.adresse} />
+                  <ExternalLink href={`mailto:${va.adresse}`} openOnSamePage>
+                    {va.adresse}
                   </ExternalLink>
                 </Block>
               )
@@ -224,7 +224,7 @@ const BegrepView = ({ begrep }: { begrep: Begrep }) => (
   <Block maxWidth={'650px'}>
     <DotTag>
       <ExternalLink href={termUrl(begrep.id)} label={'Link begrepskatalogen'}>
-        <ExternalLinkWrapper text={begrep.navn} />
+        {begrep.navn}
       </ExternalLink>{' '}
       - {begrep.beskrivelse}
     </DotTag>
@@ -241,7 +241,7 @@ const KravRelasjonView = ({ kravRelasjon }: { kravRelasjon: Partial<Krav> }) => 
   <Block maxWidth={'650px'}>
     <DotTag>
       <ExternalLink href={`/krav/${kravRelasjon.id}`} label={'Link til krav relasjon'}>
-        <ExternalLinkWrapper text={`K${kravRelasjon.kravNummer}.${kravRelasjon.kravVersjon}`} />
+        {`K${kravRelasjon.kravNummer}.${kravRelasjon.kravVersjon}`}
       </ExternalLink>{' '}
       - {kravRelasjon.navn}
     </DotTag>

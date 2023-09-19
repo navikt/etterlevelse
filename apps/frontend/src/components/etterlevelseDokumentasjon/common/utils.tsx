@@ -23,13 +23,11 @@ const getBehandlingLinks = (etterlevelseDokumentasjon: EtterlevelseDokumentasjon
           <Block key={'behandling_link_' + index}>
             {etterlevelseDokumentasjon.behandlinger && etterlevelseDokumentasjon.behandlinger[index].navn ? (
               <ExternalLink href={`${env.pollyBaseUrl}process/${behandlingId}`}>
-                <ExternalLinkWrapper
-                  text={
-                    etterlevelseDokumentasjon.behandlinger && etterlevelseDokumentasjon.behandlinger.length > 0
-                      ? `${etterlevelseDokumentasjon.behandlinger[index].navn}`
-                      : 'Ingen data'
-                  }
-                />
+                {
+                  etterlevelseDokumentasjon.behandlinger && etterlevelseDokumentasjon.behandlinger.length > 0
+                    ? `${etterlevelseDokumentasjon.behandlinger[index].navn}`
+                    : 'Ingen data'
+                }
               </ExternalLink>
             ) : (
               <Block $style={{ fontSize: '18px', lineHeight: '22px', fontFamily: 'Source Sans Pro', fontWeight: 'normal' }}>

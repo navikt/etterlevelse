@@ -45,38 +45,19 @@ export const Footer = () => {
           position="relative"
           $style={{ left: 0, right: 0, bottom: 0 }}
         >
-          <Block display="flex" width="100%" minHeight="100px" justifyContent="center" alignItems="center" overrides={{ Block: { props: { role: 'contentinfo' } } }}>
-            <Block
-              width="100%"
-              display={['block', 'block', 'flex', 'flex']}
-              justifyContent={['space-around']}
-              alignItems="center"
-              overrides={{ Block: { props: { role: 'navigation', 'aria-label': 'Ekstern lenker' } } }}
-            >
-              <ExternalLink href={datajegerSlackLink} hideUnderline openOnSamePage>
-                <Block display="flex" alignItems="center">
-                  <Block position="relative" display="flex" top={'1px'}>
-                    <img src={SlackLogo} width="60px" alt="slack logo" />
-                  </Block>
-                  <LabelMedium color="#F8F8F8">#etterlevelse </LabelMedium>
-                </Block>
+          <div className="w-full min-h-[100px] flex items-center">
+            <div className="w-full flex justify-around items-center">
+              <ExternalLink href={datajegerSlackLink} className="text-white" openOnSamePage>
+                  #etterlevelse på Slack
               </ExternalLink>
-
-              <StatefulTooltip content={`Versjon: ${env.githubVersion}`}>
-                <span>
-                  <ExternalLink fontColor="#F8F8F8" href={githubRepo} hideUnderline openOnSamePage>
-                    <FontAwesomeIcon color="#F8F8F8" icon={faCodeBranch} /> Github
-                  </ExternalLink>
-                </span>
-              </StatefulTooltip>
-
-              <ExternalLink href={documentationLink} hideUnderline openOnSamePage>
-                <LabelMedium color="#F8F8F8" marginLeft={theme.sizing.scale200}>
-                  Dokumentasjon
-                </LabelMedium>
+              <ExternalLink href={githubRepo} openOnSamePage className="text-white">
+                Github
               </ExternalLink>
-            </Block>
-          </Block>
+              <ExternalLink href={documentationLink} openOnSamePage className="text-white">
+                Dokumentasjon
+              </ExternalLink>
+            </div>
+          </div>
 
           {showButtonToTop && (
             <Block position="relative" display="flex" justifyContent="flex-end" $style={{ cursor: 'pointer', top: '-50px' }} onClick={() => window.scrollTo(0, 0)}>

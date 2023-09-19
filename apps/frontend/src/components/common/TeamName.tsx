@@ -15,7 +15,7 @@ export const TeamName = (props: { id: string; link?: boolean; fontColor?: string
   const mergedStyle = _.merge(customStyle, props.style)
   return props.link ? (
     <StyledLink rel="noopener noreferrer" target={'_blank'} href={teamKatTeamLink(props.id)} $style={mergedStyle}>
-      <ExternalLinkWrapper text={name} />
+      name
     </StyledLink>
   ) : (
     <>{name}</>

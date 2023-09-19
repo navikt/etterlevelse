@@ -62,7 +62,7 @@ const legalBasisLinkProcessor = (law: string, text?: string, openOnSamePage?: bo
       regex: /(.*) §(§§)?(§)?\s*(\d+(-\d+)?)/g,
       fn: (key: string, result: string[]) => (
         <CustomizedLink key={key} href={`${lovdataBase(law)}/§${result[4]}`} target={openOnSamePage ? '_self' : '_blank'} rel="noopener noreferrer">
-          {result[1]} {!result[2] && !result[3] && '§'} {result[3] && '§§'} {result[4]} {openOnSamePage ? '' : ' (ny fane)'}
+          {result[1]} {!result[2] && !result[3] && '§'} {result[3] && '§§'} {result[4]} {openOnSamePage ? '' : ' (åpnes i ny fane)'}
           {/* <FontAwesomeIcon size="xs" icon={faExternalLinkAlt} /> */}
         </CustomizedLink>
       ),
@@ -71,7 +71,7 @@ const legalBasisLinkProcessor = (law: string, text?: string, openOnSamePage?: bo
       regex: /(.*) kap(ittel)?\s*(\d+)/gi,
       fn: (key: string, result: string[]) => (
         <CustomizedLink key={key} href={`${lovdataBase(law)}/KAPITTEL_${result[3]}`} target={openOnSamePage ? '_self' : '_blank'} rel="noopener noreferrer">
-          {result[1]} Kapittel {result[3]} {openOnSamePage ? '' : ' (ny fane)'}
+          {result[1]} Kapittel {result[3]} {openOnSamePage ? '' : ' (åpnes i ny fane)'}
         </CustomizedLink>
       ),
     },
@@ -79,7 +79,7 @@ const legalBasisLinkProcessor = (law: string, text?: string, openOnSamePage?: bo
       regex: /(.*) art(ikkel)?\s*(\d+)/gi,
       fn: (key: string, result: string[]) => (
         <CustomizedLink key={key} href={`${lovdataBase(law)}/ARTIKKEL_${result[3]}`} target={openOnSamePage ? '_self' : '_blank'} rel="noopener noreferrer">
-          {result[1]} Artikkel {result[3]} {openOnSamePage ? '' : ' (ny fane)'}
+          {result[1]} Artikkel {result[3]} {openOnSamePage ? '' : ' (åpnes i ny fane)'}
         </CustomizedLink>
       ),
     },

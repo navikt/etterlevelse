@@ -11,6 +11,7 @@ import { user } from '../../services/User'
 import { loginUrl } from '../Header'
 import { ettlevColors } from '../../util/theme'
 import { externalLinkIcon } from '../Images'
+import { Link } from '@navikt/ds-react'
 
 type RouteLinkProps = {
   href?: string
@@ -136,12 +137,14 @@ export const ObjectLink = (props: ObjectLinkProps) => {
 export const ExternalLink = ({
   href,
   children,
+  className,
   hideUnderline,
   label,
   fontColor,
   openOnSamePage,
 }: {
   href: string
+  className?: string
   hideUnderline?: boolean
   label?: string
   children: React.ReactNode
@@ -149,15 +152,15 @@ export const ExternalLink = ({
   openOnSamePage?: boolean
 }) => {
   return (
-    <CustomizedLink
+    <Link
+      className={className}
       href={href}
       target={openOnSamePage ? '_self' : '_blank'}
       rel="noopener noreferrer"
-      style={{ color: fontColor ? fontColor : undefined, textDecoration: hideUnderline ? 'none' : undefined }}
       aria-label={label}
     >
-      {children}
-    </CustomizedLink>
+      {children} {!openOnSamePage && " (åpnes i ny fane)"}
+    </Link>
   )
 }
 

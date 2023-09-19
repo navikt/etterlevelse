@@ -37,7 +37,7 @@ export const getMainHeader = (behandling: Behandling, helmet?: ReactNode) => (
         </Block>
         <Block display="flex" justifyContent="flex-end" alignContent="center" $style={{ whiteSpace: 'nowrap' }}>
           <ExternalButton kind={'secondary'} href={`${env.pollyBaseUrl}process/${behandling.id}`} size="mini">
-            <ExternalLinkWrapper text="Til behandlingskatalogen" />
+            Til behandlingskatalogen
           </ExternalButton>
         </Block>
       </Block>
