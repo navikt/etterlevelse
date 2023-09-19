@@ -1,5 +1,6 @@
 package no.nav.data.etterlevelse.statistikk.dto;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 public class TilbakemeldingStatistikkResponse {
@@ -11,4 +12,6 @@ public class TilbakemeldingStatistikkResponse {
     private LocalDateTime besvart;
     private Boolean fortTilKravEndring;
     private String status;
+
+    private Duration duration;
 }

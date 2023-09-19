@@ -20,7 +20,9 @@ import no.nav.data.etterlevelse.krav.domain.Suksesskriterie;
 import no.nav.data.etterlevelse.krav.domain.dto.KravFilter;
 import no.nav.data.etterlevelse.statistikk.domain.BehandlingStatistikk;
 import no.nav.data.etterlevelse.statistikk.dto.KravStatistikkResponse;
+import no.nav.data.etterlevelse.statistikk.dto.TilbakemeldingStatistikkResponse;
 import no.nav.data.integration.team.teamcat.TeamcatTeamClient;
+import org.apache.commons.lang3.NotImplementedException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -69,14 +71,35 @@ public class StatistikkService {
                         ).toList().size();
     }
 
-    public LocalDateTime getCreatedDate(List<Etterlevelse> etterlevelseList){
+    public LocalDateTime getCreatedDate(List<Etterlevelse> etterlevelseList) {
         etterlevelseList.sort(Comparator.comparing(a -> a.getChangeStamp().getCreatedDate()));
         return !etterlevelseList.isEmpty() ? etterlevelseList.get(0).getChangeStamp().getCreatedDate() : null;
     }
 
-    public LocalDateTime getLastUpdatedDate(List<Etterlevelse> etterlevelseList){
+    public LocalDateTime getLastUpdatedDate(List<Etterlevelse> etterlevelseList) {
         etterlevelseList.sort(Comparator.comparing(a -> a.getChangeStamp().getLastModifiedDate()));
         return !etterlevelseList.isEmpty() ? etterlevelseList.get(etterlevelseList.size() - 1).getChangeStamp().getLastModifiedDate() : null;
+    }
+
+    public Page<TilbakemeldingStatistikkResponse> getAllTilbakemeldingStatistikk(Pageable pageable) {
+        var tilbakeMeldinger = tilbakemeldingService.getAll(pageable);
+
+
+        /*tilbakeMeldinger.forEach((t) => {
+          const kravNavn = tableContent.filter((k) => k.kravNummer === t.kravNummer && k.kravVersjon === t.kravVersjon)[0].navn
+          const kravTema = tableContent.filter((k) => k.kravNummer === t.kravNummer && k.kravVersjon === t.kravVersjon)[0].tema
+          const { status, sistMelding } = getMelderInfo(t)
+        kravMessages.push({
+            ...t,
+                kravNavn: kravNavn,
+                tidForSporsmaal: t.meldinger[0].tid,
+                tidForSvar: status === TilbakemeldingMeldingStatus.UBESVART ? undefined : sistMelding.tid,
+                melderNavn: <PersonName ident={t.melderIdent} />,
+        tema: kravTema,
+          })
+        })
+        setKravMessages(kravMessages)*/
+        throw new NotImplementedException();
     }
 
     public Page<BehandlingStatistikk> getAllBehandlingStatistikk(Pageable page) {
@@ -136,7 +159,7 @@ public class StatistikkService {
 
                 String behandlingNavn = "B" + behandling.getNummer() + " " + behandling.getNavn();
 
-                List<String> teamNames = behandling.getTeams().stream().map(t->teamService.getTeam(t).isPresent()?teamService.getTeam(t).get().getName():"").toList();
+                List<String> teamNames = behandling.getTeams().stream().map(t -> teamService.getTeam(t).isPresent() ? teamService.getTeam(t).get().getName() : "").toList();
 
                 behandlingStatistikkList.add(
                         BehandlingStatistikk.builder()
@@ -156,10 +179,10 @@ public class StatistikkService {
             });
         });
 
-        if((page.getPageNumber() * page.getPageSize()) > behandlingStatistikkList.size()) {
+        if ((page.getPageNumber() * page.getPageSize()) > behandlingStatistikkList.size()) {
             return new PageImpl<>(new ArrayList<>(), page, totalElements.get());
         }
-        if((page.getPageNumber() * page.getPageSize()) + page.getPageSize() >= behandlingStatistikkList.size()) {
+        if ((page.getPageNumber() * page.getPageSize()) + page.getPageSize() >= behandlingStatistikkList.size()) {
             return new PageImpl<>(behandlingStatistikkList.subList(page.getPageNumber() * page.getPageSize(), behandlingStatistikkList.size()), page, totalElements.get());
         } else {
             return new PageImpl<>(behandlingStatistikkList.subList(page.getPageNumber() * page.getPageSize(), (page.getPageNumber() * page.getPageSize()) + page.getPageSize()), page, totalElements.get());
@@ -169,30 +192,30 @@ public class StatistikkService {
     public KravStatistikkResponse toKravStatestikkResponse(Krav krav) {
         var regelverkResponse = StreamUtils.convert(krav.getRegelverk(), Regelverk::toResponse);
         String temaName = "Ingen";
-        if(regelverkResponse.size() > 0) {
+        if (regelverkResponse.size() > 0) {
             var temaData = CodelistService.getCodelist(ListName.TEMA, regelverkResponse.get(0).getLov().getData().get("tema").textValue());
-            if(temaData != null) {
+            if (temaData != null) {
                 temaName = temaData.getShortName();
             }
         }
         return KravStatistikkResponse.builder()
-        .id(krav.getId())
-        .lastModifedDate(krav.getChangeStamp().getLastModifiedDate())
-        .createdDate(krav.getChangeStamp().getCreatedDate())
-        .kravNummer(krav.getKravNummer())
-        .kravVersjon(krav.getKravVersjon())
-        .navn(krav.getNavn())
-        .regelverk(regelverkResponse)
-        .tagger(krav.getTagger())
-        .suksesskriterier(StreamUtils.convert(krav.getSuksesskriterier(), Suksesskriterie::toResponse ))
-        .kravIdRelasjoner(krav.getKravIdRelasjoner())
-        .avdeling(CodelistService.getCodelistResponse(ListName.AVDELING, krav.getAvdeling()))
-        .underavdeling(CodelistService.getCodelistResponse(ListName.UNDERAVDELING, krav.getUnderavdeling()))
-        .relevansFor(CodelistService.getCodelistResponseList(ListName.RELEVANS, krav.getRelevansFor()))
-        .status(krav.getStatus())
-        .aktivertDato(krav.getAktivertDato())
-        .tema(temaName)
-        .build();
+                .id(krav.getId())
+                .lastModifedDate(krav.getChangeStamp().getLastModifiedDate())
+                .createdDate(krav.getChangeStamp().getCreatedDate())
+                .kravNummer(krav.getKravNummer())
+                .kravVersjon(krav.getKravVersjon())
+                .navn(krav.getNavn())
+                .regelverk(regelverkResponse)
+                .tagger(krav.getTagger())
+                .suksesskriterier(StreamUtils.convert(krav.getSuksesskriterier(), Suksesskriterie::toResponse))
+                .kravIdRelasjoner(krav.getKravIdRelasjoner())
+                .avdeling(CodelistService.getCodelistResponse(ListName.AVDELING, krav.getAvdeling()))
+                .underavdeling(CodelistService.getCodelistResponse(ListName.UNDERAVDELING, krav.getUnderavdeling()))
+                .relevansFor(CodelistService.getCodelistResponseList(ListName.RELEVANS, krav.getRelevansFor()))
+                .status(krav.getStatus())
+                .aktivertDato(krav.getAktivertDato())
+                .tema(temaName)
+                .build();
     }
 
     public Page<Krav> getAllKravStatistics(Pageable page) {
