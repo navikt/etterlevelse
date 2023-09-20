@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 
 @Data
 @Builder
@@ -16,8 +16,8 @@ public class TilbakemeldingStatistikkResponse {
     private String kravTittel;
     private Integer kravNummer;
     private Integer kravVersjon;
-    private LocalDateTime mottattTid;
-    private LocalDateTime besvartTid;
+    private Timestamp mottattTid;
+    private Timestamp besvartTid;
     private Boolean fortTilKravEndring;
     private String status;
 }

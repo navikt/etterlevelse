@@ -29,6 +29,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -90,18 +91,16 @@ public class StatistikkService {
 
         tilbakeMeldinger.forEach(tb -> {
             var tempKrav = kravService.getByKravNummer(tb.getKravNummer(), tb.getKravVersjon());
-            if (tempKrav.isPresent()) {
-                tilbakemeldingStatistikkResponses.add(TilbakemeldingStatistikkResponse.builder()
-                        .id(tb.getId().toString())
-                        .kravTittel(tempKrav.get().getNavn())
-                        .kravNummer(tb.getKravNummer())
-                        .kravVersjon(tb.getKravVersjon())
-                        .mottattTid(tb.getMeldinger().get(0).getTid())
-                        .besvartTid(getTilbakemeldingStatus(tb) == TilbakemeldingStatus.UBESVART ? null : tb.getMeldinger().get(tb.getMeldinger().size() - 1).getTid())
-                        .fortTilKravEndring(tb.isEndretKrav())
-                        .status(getTilbakemeldingStatus(tb).name())
-                        .build());
-            }
+            tempKrav.ifPresent(krav -> tilbakemeldingStatistikkResponses.add(TilbakemeldingStatistikkResponse.builder()
+                    .id(tb.getId().toString())
+                    .kravTittel(krav.getNavn())
+                    .kravNummer(tb.getKravNummer())
+                    .kravVersjon(tb.getKravVersjon())
+                    .mottattTid(Timestamp.valueOf(tb.getMeldinger().get(0).getTid()))
+                    .besvartTid(getTilbakemeldingStatus(tb) == TilbakemeldingStatus.UBESVART ? null : Timestamp.valueOf(tb.getMeldinger().get(tb.getMeldinger().size() - 1).getTid()))
+                    .fortTilKravEndring(tb.isEndretKrav())
+                    .status(getTilbakemeldingStatus(tb).name())
+                    .build()));
         });
         return new PageImpl<>(tilbakemeldingStatistikkResponses, page, tilbakemeldingStatistikkResponses.size());
     }
