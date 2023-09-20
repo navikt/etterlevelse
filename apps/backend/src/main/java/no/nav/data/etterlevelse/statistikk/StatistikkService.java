@@ -17,12 +17,13 @@ import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravStatus;
 import no.nav.data.etterlevelse.krav.domain.Regelverk;
 import no.nav.data.etterlevelse.krav.domain.Suksesskriterie;
+import no.nav.data.etterlevelse.krav.domain.Tilbakemelding;
+import no.nav.data.etterlevelse.krav.domain.TilbakemeldingStatus;
 import no.nav.data.etterlevelse.krav.domain.dto.KravFilter;
 import no.nav.data.etterlevelse.statistikk.domain.BehandlingStatistikk;
 import no.nav.data.etterlevelse.statistikk.dto.KravStatistikkResponse;
 import no.nav.data.etterlevelse.statistikk.dto.TilbakemeldingStatistikkResponse;
 import no.nav.data.integration.team.teamcat.TeamcatTeamClient;
-import org.apache.commons.lang3.NotImplementedException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -39,16 +40,18 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Service
 public class StatistikkService {
     private final TilbakemeldingService tilbakemeldingService;
-
     private final BehandlingService behandlingService;
     private final KravService kravService;
     private final EtterlevelseService etterlevelseService;
-
     private final EtterlevelseDokumentasjonService etterlevelseDokumentasjonService;
-
     private final TeamcatTeamClient teamService;
 
-    public StatistikkService(TilbakemeldingService tilbakemeldingService, BehandlingService behandlingService, KravService kravService, EtterlevelseService etterlevelseService, EtterlevelseDokumentasjonService etterlevelseDokumentasjonService, TeamcatTeamClient teamService) {
+    public StatistikkService(TilbakemeldingService tilbakemeldingService,
+                             BehandlingService behandlingService,
+                             KravService kravService,
+                             EtterlevelseService etterlevelseService,
+                             EtterlevelseDokumentasjonService etterlevelseDokumentasjonService,
+                             TeamcatTeamClient teamService) {
         this.tilbakemeldingService = tilbakemeldingService;
         this.behandlingService = behandlingService;
         this.kravService = kravService;
@@ -81,25 +84,25 @@ public class StatistikkService {
         return !etterlevelseList.isEmpty() ? etterlevelseList.get(etterlevelseList.size() - 1).getChangeStamp().getLastModifiedDate() : null;
     }
 
-    public Page<TilbakemeldingStatistikkResponse> getAllTilbakemeldingStatistikk(Pageable pageable) {
-        var tilbakeMeldinger = tilbakemeldingService.getAll(pageable);
+    public Page<TilbakemeldingStatistikkResponse> getAllTilbakemeldingStatistikk(Pageable page) {
+        Page<Tilbakemelding> tilbakeMeldinger = tilbakemeldingService.getAll(page);
+        List<TilbakemeldingStatistikkResponse> tilbakemeldingStatistikkResponses = new ArrayList<>();
 
-
-        /*tilbakeMeldinger.forEach((t) => {
-          const kravNavn = tableContent.filter((k) => k.kravNummer === t.kravNummer && k.kravVersjon === t.kravVersjon)[0].navn
-          const kravTema = tableContent.filter((k) => k.kravNummer === t.kravNummer && k.kravVersjon === t.kravVersjon)[0].tema
-          const { status, sistMelding } = getMelderInfo(t)
-        kravMessages.push({
-            ...t,
-                kravNavn: kravNavn,
-                tidForSporsmaal: t.meldinger[0].tid,
-                tidForSvar: status === TilbakemeldingMeldingStatus.UBESVART ? undefined : sistMelding.tid,
-                melderNavn: <PersonName ident={t.melderIdent} />,
-        tema: kravTema,
-          })
-        })
-        setKravMessages(kravMessages)*/
-        throw new NotImplementedException();
+        tilbakeMeldinger.forEach(tb -> {
+            var tempKrav = kravService.getByKravNummer(tb.getKravNummer(), tb.getKravVersjon());
+            if (tempKrav.isPresent()) {
+                tilbakemeldingStatistikkResponses.add(TilbakemeldingStatistikkResponse.builder()
+                        .kravTittel(tempKrav.get().getNavn())
+                        .kravNummer(tb.getKravNummer())
+                        .kravVersjon(tb.getKravVersjon())
+                        .mottatt(tb.getMeldinger().get(0).getTid())
+                        .besvart(tb.getStatus() == TilbakemeldingStatus.UBESVART ? null : tb.getMeldinger().get(tb.getMeldinger().size() - 1).getTid())
+                        .fortTilKravEndring(tb.isEndretKrav())
+                        .status(tb.getStatus().toString())
+                        .build());
+            }
+        });
+        return new PageImpl<>(tilbakemeldingStatistikkResponses, page, tilbakemeldingStatistikkResponses.size());
     }
 
     public Page<BehandlingStatistikk> getAllBehandlingStatistikk(Pageable page) {
