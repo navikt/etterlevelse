@@ -96,8 +96,8 @@ public class StatistikkService {
                         .kravTittel(tempKrav.get().getNavn())
                         .kravNummer(tb.getKravNummer())
                         .kravVersjon(tb.getKravVersjon())
-                        .mottatt(tb.getMeldinger().get(0).getTid())
-                        .besvart(getTilbakemeldingStatus(tb) == TilbakemeldingStatus.UBESVART ? null : tb.getMeldinger().get(tb.getMeldinger().size() - 1).getTid())
+                        .mottattTid(tb.getMeldinger().get(0).getTid())
+                        .besvartTid(getTilbakemeldingStatus(tb) == TilbakemeldingStatus.UBESVART ? null : tb.getMeldinger().get(tb.getMeldinger().size() - 1).getTid())
                         .fortTilKravEndring(tb.isEndretKrav())
                         .status(getTilbakemeldingStatus(tb).name())
                         .build());

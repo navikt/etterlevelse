@@ -16,8 +16,8 @@ public class TilbakemeldingStatistikkResponse {
     private String kravTittel;
     private Integer kravNummer;
     private Integer kravVersjon;
-    private LocalDateTime mottatt;
-    private LocalDateTime besvart;
+    private LocalDateTime mottattTid;
+    private LocalDateTime besvartTid;
     private Boolean fortTilKravEndring;
     private String status;
 }
