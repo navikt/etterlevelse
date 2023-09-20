@@ -92,6 +92,7 @@ public class StatistikkService {
             var tempKrav = kravService.getByKravNummer(tb.getKravNummer(), tb.getKravVersjon());
             if (tempKrav.isPresent()) {
                 tilbakemeldingStatistikkResponses.add(TilbakemeldingStatistikkResponse.builder()
+                        .id(tb.getId().toString())
                         .kravTittel(tempKrav.get().getNavn())
                         .kravNummer(tb.getKravNummer())
                         .kravVersjon(tb.getKravVersjon())
@@ -226,9 +227,9 @@ public class StatistikkService {
     }
 
     private TilbakemeldingStatus getTilbakemeldingStatus(Tilbakemelding tilbakemelding) {
-        if(tilbakemelding.getStatus() != null) {
+        if (tilbakemelding.getStatus() != null) {
             return tilbakemelding.getStatus();
-        } else if(tilbakemelding.getMeldinger().get(tilbakemelding.getMeldinger().size() - 1).getRolle() == Tilbakemelding.Rolle.KRAVEIER){
+        } else if (tilbakemelding.getMeldinger().get(tilbakemelding.getMeldinger().size() - 1).getRolle() == Tilbakemelding.Rolle.KRAVEIER) {
             return TilbakemeldingStatus.BESVART;
         } else {
             return TilbakemeldingStatus.UBESVART;
