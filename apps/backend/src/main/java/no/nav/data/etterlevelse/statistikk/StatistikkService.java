@@ -96,9 +96,9 @@ public class StatistikkService {
                         .kravNummer(tb.getKravNummer())
                         .kravVersjon(tb.getKravVersjon())
                         .mottatt(tb.getMeldinger().get(0).getTid())
-                        .besvart(tb.getStatus() == TilbakemeldingStatus.UBESVART ? null : tb.getMeldinger().get(tb.getMeldinger().size() - 1).getTid())
+                        .besvart(getTilbakemeldingStatus(tb) == TilbakemeldingStatus.UBESVART ? null : tb.getMeldinger().get(tb.getMeldinger().size() - 1).getTid())
                         .fortTilKravEndring(tb.isEndretKrav())
-                        .status(tb.getStatus().toString())
+                        .status(getTilbakemeldingStatus(tb).name())
                         .build());
             }
         });
@@ -223,5 +223,15 @@ public class StatistikkService {
 
     public Page<Krav> getAllKravStatistics(Pageable page) {
         return kravService.getAllKravStatistics(page);
+    }
+
+    private TilbakemeldingStatus getTilbakemeldingStatus(Tilbakemelding tilbakemelding) {
+        if(tilbakemelding.getStatus() != null) {
+            return tilbakemelding.getStatus();
+        } else if(tilbakemelding.getMeldinger().get(tilbakemelding.getMeldinger().size() - 1).getRolle() == Tilbakemelding.Rolle.KRAVEIER){
+            return TilbakemeldingStatus.BESVART;
+        } else {
+            return TilbakemeldingStatus.UBESVART;
+        }
     }
 }
