@@ -46,7 +46,7 @@ public class StatistikkController {
 
     @Operation(summary = "Get tilbakemelding Statistics ")
     @ApiResponse(description = "ok")
-    @GetMapping("/tilbakemeldinger")
+    @GetMapping("/tilbakemelding")
     public ResponseEntity<RestResponsePage<TilbakemeldingStatistikkResponse>> getAllTilbakemeldingStatistics(PageParameters pageParameters) {
         log.info("Get tilbakemelding Statistics");
         Page<TilbakemeldingStatistikkResponse> page = service.getAllTilbakemeldingStatistikk(pageParameters.createPage());
