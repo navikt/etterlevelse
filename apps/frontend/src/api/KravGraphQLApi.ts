@@ -6,7 +6,6 @@ const kravtableQuery = gql`
   query getKravByFilter(
     $relevans: [String!]
     $nummer: Int
-    $behandlingId: String
     $underavdeling: String
     $lov: String
     $status: [String!]
@@ -20,7 +19,6 @@ const kravtableQuery = gql`
       filter: {
         relevans: $relevans
         nummer: $nummer
-        behandlingId: $behandlingId
         underavdeling: $underavdeling
         lov: $lov
         status: $status
