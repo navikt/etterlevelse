@@ -222,7 +222,9 @@ public class StatistikkService {
                             Objects.equals(audit.getData().get("data").get("status").toString(), KravStatus.AKTIV.name())
                       ).toList();
 
-             aktivertDato = LocalDateTime.parse(kravAudits.get(kravAudits.size() -1).getData().get("lastModifiedDate").asText());
+            if(!kravAudits.isEmpty()) {
+                aktivertDato = LocalDateTime.parse(kravAudits.get(kravAudits.size() - 1).getData().get("lastModifiedDate").asText());
+            }
         }
 
 
