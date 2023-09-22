@@ -284,8 +284,8 @@ export const PanelLinkCard = ({
   )
 
   return (
-    <Block width={width} maxWidth={maxWidth} overrides={rootOverrides} marginRight={marginRight} height="inherit">
-      <RouteLink href={href} hideUnderline onClick={() => onClick && onClick()} requireLogin={requireLogin} openinnewtab={(!!openinnewtab).toString()}>
+    <Block  onClick={() => onClick && onClick()} width={width} maxWidth={maxWidth} overrides={rootOverrides} marginRight={marginRight} height="inherit">
+      <RouteLink href={href} hideUnderline requireLogin={requireLogin} openinnewtab={(!!openinnewtab).toString()}>
         <Block
           onMouseEnter={() => setHover(true)}
           onMouseLeave={() => setHover(false)}
