@@ -218,15 +218,9 @@ public class StatistikkService {
         if(aktivertDato == null && krav.getStatus() == KravStatus.AKTIV) {
             List<AuditVersion> kravLog = auditVersionRepository.findByTableIdOrderByTimeDesc(krav.getId().toString());
             List<AuditResponse> kravAudits = new AuditLogResponse(krav.getId().toString(), convert(kravLog, AuditVersion::toResponse))
-                    .getAudits().stream().filter(audit -> {
-
-                        log.info("TEST krav audit");
-                        log.info(audit.getData().toString());
-                        log.info(audit.getData().get("data").toString());
-                        log.info(audit.getData().get("data").get("status").toString());
-
-                        return true;
-                    }).toList();
+                    .getAudits().stream().filter(audit ->
+                            Objects.equals(audit.getData().get("data").get("status").toString(), KravStatus.AKTIV.name())
+                      ).toList();
 
              aktivertDato = LocalDateTime.parse(kravAudits.get(kravAudits.size() -1).getData().get("lastModifiedDate").asText());
         }
