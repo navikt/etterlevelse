@@ -210,7 +210,7 @@ public class StatistikkService {
             }
         }
 
-        if(aktivertDato == null) {
+        if(aktivertDato == null && krav.getStatus() == KravStatus.AKTIV) {
             List<AuditVersion> kravLog = auditVersionRepository.findByTableIdOrderByTimeDesc(krav.getId().toString()).stream().filter(audit ->
                 JsonUtils.toJsonNode(audit.getData()).get("data").get("status").equals(KravStatus.AKTIV.name())
             ).toList();
