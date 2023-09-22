@@ -3,7 +3,7 @@ import { Block, BlockProps } from 'baseui/block'
 import { useEffect, useState } from 'react'
 import { HeadingXLarge, HeadingXXLarge, LabelLarge, LabelSmall, ParagraphMedium, ParagraphSmall, ParagraphXSmall } from 'baseui/typography'
 import { codelist, ListName, LovCode, TemaCode } from '../services/Codelist'
-import { ObjectLink, urlForObject } from '../components/common/RouteLink'
+import { urlForObject } from '../components/common/RouteLink'
 import { theme } from '../util'
 import { Markdown } from '../components/common/Markdown'
 import { ettlevColors } from '../util/theme'
@@ -27,6 +27,8 @@ import { sortKraverByPriority } from '../util/sort'
 import { getAllKravPriority } from '../api/KravPriorityApi'
 import { Helmet } from 'react-helmet'
 import { ampli } from '../services/Amplitude'
+import { Link } from '@navikt/ds-react'
+import { lovdataBase } from '../components/Lov'
 
 export const TemaPage = () => {
   const { tema } = useParams<{ tema: string }>()
@@ -73,9 +75,9 @@ export const getTemaMainHeader = (tema: TemaCode, lover: LovCode[], expand: bool
           <HeadingXLarge marginBottom={theme.sizing.scale200}>Lovdata</HeadingXLarge>
           {lover.map((l, index) => (
             <Block key={l.code + '_' + index} marginBottom={theme.sizing.scale200}>
-              <ObjectLink external type={ListName.LOV} id={l.code}>
+              <Link href={lovdataBase(l.code)}>
                 {l.shortName}
-              </ObjectLink>
+              </Link>
             </Block>
           ))}
         </Block>
@@ -109,7 +111,7 @@ const TemaSide = ({ tema }: { tema: TemaCode }) => {
 
   useEffect(() => {
     if (data && data.krav && data.krav.content && data.krav.content.length > 0) {
-      ;(async () => {
+      ; (async () => {
         const allKravPriority = await getAllKravPriority()
         const kraver = _.cloneDeep(data.krav.content)
         kraver.map((k) => {
