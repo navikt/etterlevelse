@@ -146,21 +146,3 @@ export const AuditView = (props: AuditViewProps) => {
     </Card>
   )
 }
-
-const test = { 
-  "id": "03ff5bb4-4d1d-4da2-b452-d6263657c317",
-   "data": { 
-    "id": "03ff5bb4-4d1d-4da2-b452-d6263657c317", 
-    "navn": "Fødselsnummer skal bare brukes der det er nødvendig for å oppnå sikker identifisering ", 
-    "status": "AKTIV",
-    "tagger": [], 
-    "hensikt": "Bruk av fødselsnummer er effektivt for å forhindre forveksling og vil dermed sikre kvalitet på personopplysningene. Samtidig muliggjør fødselsnummeret en sikker identifisering på tvers av systemer, og det legger til rette for enkel sammenstilling av personopplysninger fra forskjellige registre. Derfor må slik entydig identifisering være nødvendig for at vi kan bruke det.", "periode": { "slutt": null, "start": null, "active": true }, "avdeling": "KUN", "regelverk": [{ "lov": "PERSONOPPLYSNINGSLOVEN", "spesifisering": "§ 12" }, { "lov": "PERSONVERNFORORDNINGEN", "spesifisering": "artikkel 87" }], "begrepIder": ["BEGREP-168"], "kravNummer": 109, "beskrivelse": null, "kravVersjon": 1, "relevansFor": ["VEDTAKSBEHANDLING", "PERSONOPPLYSNINGER"], "rettskilder": [], "dokumentasjon": [], "underavdeling": "JURIDISK", "implementasjoner": [], "suksesskriterier": [{ "id": 1, "navn": "Vi har avklart etter en konkret vurdering at det er nødvendig å bruke fødselsnummer.", "beskrivelse": "### 1. Vi har avklart etter en konkret vurdering at det er nødvendig å bruke fødselsnummer. \n\n\nFødselsnummer regnes ikke som særlig kategori av personopplysninger, men det er likevel klare grenser for bruken av det. Vi kan bruke fødselsnummer der det er nødvendig for å skille enkeltmennesker fra hverandre på en sikker måte. I noen tilfeller vil det ikke være nødvendig å bruke fødselsnummer. Det kan for eksempel brukes fødselsdato, kundenummer, ansattnummer e.l. \nNAV vil i de fleste tilfeller ha saklig behov for å bruke fødselsnummer. \n  \nDe samme vilkårene gjelder for bruk av andre entydige identifikasjonsmidler, for eksempel D-nummer, fingeravtrykk, ansiktsgjenkjenning og andre biometriske data." }, { "id": 2, "navn": "Det er gjennomført tiltak for å sikre at fødselsnummer bare er tilgjengelig for mottakeren hvis det sendes i brev, e-post eller sms.", "beskrivelse": "### 2. Det er gjennomført tiltak for å sikre at fødselsnummer bare er tilgjengelig for mottakeren hvis det sendes i brev, e-post eller sms.\n\n\nNår fødselsnummer sendes, skal det ikke være tilgjengelig for andre enn mottakeren. \nBruk lukket konvolutt hvis dere sender fødselsnummer i et brev. Fødselsnummeret skal ikke være synlig i konvoluttvinduet eller være skrevet på utsiden av konvolutten. \nKrypter fødselsnummeret hvis dere sender det i e-post eller over internett. Alminnelig usikret e-post eller annen ukryptert internettkommunikasjon gir ikke tilfredsstillende informasjonssikkerhet." }], "versjonEndringer": null, "varslingsadresser": [{ "type": "EPOST", "adresse": "nav.personvern@nav.no" }],
-     "utdypendeBeskrivelse": null 
-    },
-     "type": "Krav", 
-     "version": 1, 
-     "createdBy": "S139733 - Sæther, Siv Mari", 
-     "createdDate": "2021-04-21T14:52:41.807329", 
-     "lastModifiedBy": "S139733 - Sæther, Siv Mari", 
-     "lastModifiedDate": "2021-05-06T08:51:44.119242289" 
-    }
