@@ -207,7 +207,7 @@ public class StatistikkService {
         String temaName = "Ingen";
         LocalDateTime aktivertDato = krav.getAktivertDato();
 
-        if (regelverkResponse.size() > 0) {
+        if (!regelverkResponse.isEmpty()) {
             var temaData = CodelistService.getCodelist(ListName.TEMA, regelverkResponse.get(0).getLov().getData().get("tema").textValue());
             if (temaData != null) {
                 temaName = temaData.getShortName();
@@ -218,13 +218,14 @@ public class StatistikkService {
             List<AuditVersion> kravLog = auditVersionRepository.findByTableIdOrderByTimeDesc(krav.getId().toString());
             List<AuditResponse> kravAudits = new AuditLogResponse(krav.getId().toString(), convert(kravLog, AuditVersion::toResponse))
                     .getAudits().stream().filter(audit -> {
-                log.info(JsonUtils.toJsonNode(audit.getData()).asText());
-                return JsonUtils.toJsonNode(audit.getData()).get("data").get("status").asText().equals(KravStatus.AKTIV.name());
+
+                log.info(audit.getData().asText());
+                return audit.getData().get("data").get("status").asText().equals(KravStatus.AKTIV.name());
 
                     }
             ).toList();
 
-             aktivertDato = LocalDateTime.parse(JsonUtils.toJsonNode(kravAudits.get(kravAudits.size() -1).getData()).get("data").get("lastModifiedDate").asText());
+             aktivertDato = LocalDateTime.parse(kravAudits.get(kravAudits.size() -1).getData().get("data").get("lastModifiedDate").asText());
         }
 
 
