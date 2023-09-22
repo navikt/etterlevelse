@@ -224,7 +224,7 @@ public class StatistikkService {
                     }
             ).toList();
 
-             aktivertDato = LocalDateTime.parse(JsonUtils.toJsonNode(kravAudits.get(kravLog.size() -1).getData()).get("data").get("lastModifiedDate").asText());
+             aktivertDato = LocalDateTime.parse(JsonUtils.toJsonNode(kravAudits.get(kravAudits.size() -1).getData()).get("data").get("lastModifiedDate").asText());
         }
 
 
