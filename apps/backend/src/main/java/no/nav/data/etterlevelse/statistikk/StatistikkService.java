@@ -3,6 +3,8 @@ package no.nav.data.etterlevelse.statistikk;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.auditing.domain.AuditVersion;
 import no.nav.data.common.auditing.domain.AuditVersionRepository;
+import no.nav.data.common.auditing.dto.AuditLogResponse;
+import no.nav.data.common.auditing.dto.AuditResponse;
 import no.nav.data.common.utils.JsonUtils;
 import no.nav.data.common.utils.StreamUtils;
 import no.nav.data.etterlevelse.behandling.BehandlingService;
@@ -38,6 +40,8 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import static no.nav.data.common.utils.StreamUtils.convert;
 
 @Slf4j
 @Service
@@ -211,15 +215,16 @@ public class StatistikkService {
         }
 
         if(aktivertDato == null && krav.getStatus() == KravStatus.AKTIV) {
-            List<AuditVersion> kravLog = auditVersionRepository.findByTableIdOrderByTimeDesc(krav.getId().toString()).stream().filter(audit -> {
+            List<AuditVersion> kravLog = auditVersionRepository.findByTableIdOrderByTimeDesc(krav.getId().toString());
+            List<AuditResponse> kravAudits = new AuditLogResponse(krav.getId().toString(), convert(kravLog, AuditVersion::toResponse))
+                    .getAudits().stream().filter(audit -> {
                 log.info(JsonUtils.toJsonNode(audit.getData()).asText());
                 return JsonUtils.toJsonNode(audit.getData()).get("data").get("status").asText().equals(KravStatus.AKTIV.name());
 
                     }
             ).toList();
 
-
-             aktivertDato = LocalDateTime.parse(JsonUtils.toJsonNode(kravLog.get(kravLog.size() -1).getData()).get("data").get("lastModifiedDate").asText());
+             aktivertDato = LocalDateTime.parse(JsonUtils.toJsonNode(kravAudits.get(kravLog.size() -1).getData()).get("data").get("lastModifiedDate").asText());
         }
 
 
