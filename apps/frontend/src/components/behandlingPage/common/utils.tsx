@@ -7,7 +7,6 @@ import { ettlevColors } from '../../../util/theme'
 import { Teams } from '../../common/TeamName'
 import { ExternalButton } from '../../common/Button'
 import { env } from '../../../util/env'
-import { ExternalLinkWrapper } from '../../common/RouteLink'
 
 export const responsiveDisplayBehandlingPage: Responsive<any> = ['block', 'block', 'block', 'block', 'flex', 'flex']
 

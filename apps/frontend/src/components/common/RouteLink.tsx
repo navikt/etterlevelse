@@ -163,9 +163,3 @@ export const ExternalLink = ({
     </Link>
   )
 }
-
-export const ExternalLinkWrapper = ({ text, fontSize }: { text: React.ReactNode; fontSize?: string }) => (
-  <span style={{ display: 'inline-flex', fontSize: fontSize ? fontSize : '18px', lineHeight: '22px' }}>
-    {text} <img alt="ny fane" width="inherit" height="inherit" style={{ marginLeft: '8px' }} src={externalLinkIcon} />
-  </span>
-)
