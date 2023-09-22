@@ -218,9 +218,12 @@ public class StatistikkService {
         if(aktivertDato == null && krav.getStatus() == KravStatus.AKTIV) {
             List<AuditVersion> kravLog = auditVersionRepository.findByTableIdOrderByTimeDesc(krav.getId().toString());
 
+            log.info("TEST");
+            log.info(kravLog.toString());
+
             List<AuditResponse> kravAudits = new AuditLogResponse(krav.getId().toString(), convert(kravLog, AuditVersion::toResponse))
                     .getAudits().stream().filter(audit -> {
-                        log.info("TEST");
+                        log.info("TEST krav audit");
                         log.info(audit.toString());
                         return true;
                     }).toList();
