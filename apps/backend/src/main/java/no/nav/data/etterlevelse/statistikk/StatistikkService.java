@@ -1,6 +1,9 @@
 package no.nav.data.etterlevelse.statistikk;
 
 import lombok.extern.slf4j.Slf4j;
+import no.nav.data.common.auditing.domain.AuditVersion;
+import no.nav.data.common.auditing.domain.AuditVersionRepository;
+import no.nav.data.common.utils.JsonUtils;
 import no.nav.data.common.utils.StreamUtils;
 import no.nav.data.etterlevelse.behandling.BehandlingService;
 import no.nav.data.etterlevelse.behandling.dto.Behandling;
@@ -46,18 +49,22 @@ public class StatistikkService {
     private final EtterlevelseDokumentasjonService etterlevelseDokumentasjonService;
     private final TeamcatTeamClient teamService;
 
+    private final AuditVersionRepository auditVersionRepository;
+
     public StatistikkService(TilbakemeldingService tilbakemeldingService,
                              BehandlingService behandlingService,
                              KravService kravService,
                              EtterlevelseService etterlevelseService,
                              EtterlevelseDokumentasjonService etterlevelseDokumentasjonService,
-                             TeamcatTeamClient teamService) {
+                             TeamcatTeamClient teamService,
+                             AuditVersionRepository auditVersionRepository) {
         this.tilbakemeldingService = tilbakemeldingService;
         this.behandlingService = behandlingService;
         this.kravService = kravService;
         this.etterlevelseService = etterlevelseService;
         this.etterlevelseDokumentasjonService = etterlevelseDokumentasjonService;
         this.teamService = teamService;
+        this.auditVersionRepository = auditVersionRepository;
     }
 
 
@@ -194,12 +201,25 @@ public class StatistikkService {
     public KravStatistikkResponse toKravStatestikkResponse(Krav krav) {
         var regelverkResponse = StreamUtils.convert(krav.getRegelverk(), Regelverk::toResponse);
         String temaName = "Ingen";
+        LocalDateTime aktivertDato = krav.getAktivertDato();
+
         if (regelverkResponse.size() > 0) {
             var temaData = CodelistService.getCodelist(ListName.TEMA, regelverkResponse.get(0).getLov().getData().get("tema").textValue());
             if (temaData != null) {
                 temaName = temaData.getShortName();
             }
         }
+
+        if(aktivertDato == null) {
+            List<AuditVersion> kravLog = auditVersionRepository.findByTableIdOrderByTimeDesc(krav.getId().toString()).stream().filter(audit ->
+                JsonUtils.toJsonNode(audit.getData()).get("data").get("status").equals(KravStatus.AKTIV.name())
+            ).toList();
+
+             aktivertDato = LocalDateTime.parse(JsonUtils.toJsonNode(kravLog.get(kravLog.size() -1).getData()).get("data").get("lastModifiedDate").asText());
+        }
+
+
+
         return KravStatistikkResponse.builder()
                 .id(krav.getId())
                 .lastModifedDate(krav.getChangeStamp().getLastModifiedDate())
@@ -215,7 +235,7 @@ public class StatistikkService {
                 .underavdeling(CodelistService.getCodelistResponse(ListName.UNDERAVDELING, krav.getUnderavdeling()))
                 .relevansFor(CodelistService.getCodelistResponseList(ListName.RELEVANS, krav.getRelevansFor()))
                 .status(krav.getStatus())
-                .aktivertDato(krav.getAktivertDato())
+                .aktivertDato(aktivertDato)
                 .tema(temaName)
                 .build();
     }
