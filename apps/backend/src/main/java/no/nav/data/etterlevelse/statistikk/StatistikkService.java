@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static no.nav.data.common.utils.StreamUtils.convert;
@@ -217,12 +218,8 @@ public class StatistikkService {
         if(aktivertDato == null && krav.getStatus() == KravStatus.AKTIV) {
             List<AuditVersion> kravLog = auditVersionRepository.findByTableIdOrderByTimeDesc(krav.getId().toString());
 
-            log.debug("KravLog: " + kravLog.toString());
-
             List<AuditResponse> kravAudits = new AuditLogResponse(krav.getId().toString(), convert(kravLog, AuditVersion::toResponse))
-                    .getAudits();
-
-            log.debug("KravAudits: " + kravAudits.toString());
+                    .getAudits().stream().filter(audit -> Objects.equals(audit.getData().get("status").asText(), KravStatus.AKTIV.name())).toList();
 
              aktivertDato = LocalDateTime.parse(kravAudits.get(kravAudits.size() -1).getData().get("lastModifiedDate").asText());
         }
