@@ -1,9 +1,9 @@
 import { useParams } from 'react-router-dom'
 import { Block, BlockProps } from 'baseui/block'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { HeadingXLarge, HeadingXXLarge, LabelLarge, LabelSmall, ParagraphMedium, ParagraphSmall, ParagraphXSmall } from 'baseui/typography'
 import { codelist, ListName, LovCode, TemaCode } from '../services/Codelist'
-import { ExternalLinkWrapper, ObjectLink, urlForObject } from '../components/common/RouteLink'
+import { ObjectLink, urlForObject } from '../components/common/RouteLink'
 import { theme } from '../util'
 import { Markdown } from '../components/common/Markdown'
 import { ettlevColors } from '../util/theme'
@@ -74,7 +74,7 @@ export const getTemaMainHeader = (tema: TemaCode, lover: LovCode[], expand: bool
           {lover.map((l, index) => (
             <Block key={l.code + '_' + index} marginBottom={theme.sizing.scale200}>
               <ObjectLink external type={ListName.LOV} id={l.code}>
-                <ExternalLinkWrapper text={l.shortName} fontSize="21px" />
+                {l.shortName}
               </ObjectLink>
             </Block>
           ))}

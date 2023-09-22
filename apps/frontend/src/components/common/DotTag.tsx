@@ -3,7 +3,7 @@ import { faCircle } from '@fortawesome/free-solid-svg-icons'
 import { Block } from 'baseui/block'
 import { theme } from '../../util'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { ExternalLink, ExternalLinkWrapper, urlForObject } from './RouteLink'
+import { ExternalLink, urlForObject } from './RouteLink'
 import { Markdown } from './Markdown'
 import { Code, codelist, ListName } from '../../services/Codelist'
 import { NavigableItem } from '../admin/audit/AuditTypes'
@@ -24,7 +24,7 @@ const Content = (props: { item: ReactNode | string; list?: ListName; linkCodelis
     if (linkCodelist)
       return (
         <ExternalLink href={urlForObject(list as ListName & NavigableItem, itemString)}>
-          <ExternalLinkWrapper text={codelist.getShortname(list as ListName & NavigableItem, itemString)} />
+          {codelist.getShortname(list as ListName & NavigableItem, itemString)}
         </ExternalLink>
       )
     return <>{codelist.getShortname(list, itemString)}</>

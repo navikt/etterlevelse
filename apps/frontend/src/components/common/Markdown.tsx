@@ -83,11 +83,10 @@ export const Markdown = ({
     a: (linkProps: any) => {
       const { children, href, node } = linkProps
       const content = shortenLinks && node.children[0]?.value.indexOf('http') === 0 ? 'Lenke' : children
-      const external = href.startsWith("http")
 
       return (
         <Link href={href}>
-          {content} {external && <ExternalLinkIcon />}
+          {content}
         </Link>
       )
     },
