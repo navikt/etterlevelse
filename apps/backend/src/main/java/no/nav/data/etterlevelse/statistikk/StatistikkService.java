@@ -206,8 +206,14 @@ public class StatistikkService {
         if (etterlevelse.getStatus() == EtterlevelseStatus.FERDIG_DOKUMENTERT || etterlevelse.getStatus() == EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) {
             List<AuditVersion> etterlevelseLog = auditVersionRepository.findByTableIdOrderByTimeDesc(etterlevelse.getId().toString());
             List<AuditResponse> etterlevelseAudits = new AuditLogResponse(etterlevelse.getId().toString(), convert(etterlevelseLog, AuditVersion::toResponse))
-                    .getAudits().stream().filter(audit ->
-                            Objects.equals(audit.getData().get("data").get("status").asText(), etterlevelse.getStatus().name())
+                    .getAudits().stream().filter(audit -> {
+
+                        log.debug("TEST");
+                        log.debug(audit.getData().get("data").get("status").asText());
+                        log.debug(etterlevelse.getStatus().name());
+
+                        return Objects.equals(audit.getData().get("data").get("status").asText(), etterlevelse.getStatus().name());
+                            }
                     ).toList();
 
             ferdigDokumentertDato = LocalDateTime.parse(etterlevelseAudits.get(etterlevelseAudits.size() - 1).getData().get("lastModifiedDate").asText()).withNano(0);
@@ -235,7 +241,7 @@ public class StatistikkService {
     public KravStatistikkResponse toKravStatestikkResponse(Krav krav) {
         var regelverkResponse = StreamUtils.convert(krav.getRegelverk(), Regelverk::toResponse);
         String temaName = "Ingen";
-        LocalDateTime aktivertDato = krav.getAktivertDato();
+        LocalDateTime aktivertDato = krav.getAktivertDato() == null ? null : krav.getAktivertDato().withNano(0);
 
         if (!regelverkResponse.isEmpty()) {
             var temaData = CodelistService.getCodelist(ListName.TEMA, regelverkResponse.get(0).getLov().getData().get("tema").textValue());
