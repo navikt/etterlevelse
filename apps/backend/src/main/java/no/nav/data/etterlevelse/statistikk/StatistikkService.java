@@ -203,7 +203,7 @@ public class StatistikkService {
         EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(UUID.fromString(etterlevelse.getEtterlevelseDokumentasjonId()));
         LocalDateTime ferdigDokumentertDato = null;
 
-        if (etterlevelse.getStatus().name().equals(EtterlevelseStatus.FERDIG_DOKUMENTERT.name()) || etterlevelse.getStatus().name().equals(EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT.name())) {
+        if (EtterlevelseStatus.FERDIG_DOKUMENTERT.equals(etterlevelse.getStatus()) || EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT.equals(etterlevelse.getStatus())) {
             List<AuditVersion> etterlevelseLog = auditVersionRepository.findByTableIdOrderByTimeDesc(etterlevelse.getId().toString());
             List<AuditResponse> test = new AuditLogResponse(etterlevelse.getId().toString(), convert(etterlevelseLog, AuditVersion::toResponse))
                     .getAudits();
@@ -211,15 +211,12 @@ public class StatistikkService {
                     .getAudits().stream().filter(audit ->
                          Objects.equals(audit.getData().get("data").get("status").asText(), etterlevelse.getStatus().name())
                     ).toList();
-
             try {
                 ferdigDokumentertDato = LocalDateTime.parse(etterlevelseAudits.get(etterlevelseAudits.size() - 1).getData().get("lastModifiedDate").asText()).withNano(0);
 
             } catch (Exception e) {
-                log.debug("Test");
-                log.debug(test.toString());
-                log.debug("FILTERED");
-                log.debug(etterlevelseAudits.toString());
+                log.debug("Test: " + test.toString());
+                log.debug("FILTERED: " + etterlevelseAudits);
             }
         }
 
@@ -239,9 +236,10 @@ public class StatistikkService {
                 .lastModifiedDate(etterlevelse.getChangeStamp().getLastModifiedDate().withNano(0))
                 .createdDate(etterlevelse.getChangeStamp().getCreatedDate().withNano(0))
                 .ferdigDokumentertDato(ferdigDokumentertDato)
-
                 .build();
     }
+
+
     public KravStatistikkResponse toKravStatestikkResponse(Krav krav) {
         var regelverkResponse = StreamUtils.convert(krav.getRegelverk(), Regelverk::toResponse);
         String temaName = "Ingen";
