@@ -5,7 +5,6 @@ import no.nav.data.common.auditing.domain.AuditVersion;
 import no.nav.data.common.auditing.domain.AuditVersionRepository;
 import no.nav.data.common.auditing.dto.AuditLogResponse;
 import no.nav.data.common.auditing.dto.AuditResponse;
-import no.nav.data.common.utils.JsonUtils;
 import no.nav.data.common.utils.StreamUtils;
 import no.nav.data.etterlevelse.behandling.BehandlingService;
 import no.nav.data.etterlevelse.behandling.dto.Behandling;
@@ -229,7 +228,7 @@ public class StatistikkService {
 
         return KravStatistikkResponse.builder()
                 .id(krav.getId())
-                .lastModifedDate(krav.getChangeStamp().getLastModifiedDate())
+                .lastModifiedDate(krav.getChangeStamp().getLastModifiedDate())
                 .createdDate(krav.getChangeStamp().getCreatedDate())
                 .kravNummer(krav.getKravNummer())
                 .kravVersjon(krav.getKravVersjon())

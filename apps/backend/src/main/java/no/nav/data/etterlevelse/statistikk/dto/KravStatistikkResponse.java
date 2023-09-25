@@ -21,7 +21,7 @@ import java.util.UUID;
 @JsonPropertyOrder({"UUID", "navn", "kravNummer", "kravVersjon"})
 public class KravStatistikkResponse {
     private UUID id;
-    private LocalDateTime lastModifedDate;
+    private LocalDateTime lastModifiedDate;
     private LocalDateTime createdDate;
     private Integer kravNummer;
     private Integer kravVersjon;
