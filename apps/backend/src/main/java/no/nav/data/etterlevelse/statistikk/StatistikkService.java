@@ -205,18 +205,22 @@ public class StatistikkService {
 
         if (etterlevelse.getStatus() == EtterlevelseStatus.FERDIG_DOKUMENTERT || etterlevelse.getStatus() == EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) {
             List<AuditVersion> etterlevelseLog = auditVersionRepository.findByTableIdOrderByTimeDesc(etterlevelse.getId().toString());
+            List<AuditResponse> test = new AuditLogResponse(etterlevelse.getId().toString(), convert(etterlevelseLog, AuditVersion::toResponse))
+                    .getAudits();
             List<AuditResponse> etterlevelseAudits = new AuditLogResponse(etterlevelse.getId().toString(), convert(etterlevelseLog, AuditVersion::toResponse))
-                    .getAudits().stream().filter(audit -> {
-
-                        log.debug("TEST");
-                        log.debug(audit.getData().get("data").get("status").asText());
-                        log.debug(etterlevelse.getStatus().name());
-
-                        return Objects.equals(audit.getData().get("data").get("status").asText(), etterlevelse.getStatus().name());
-                            }
+                    .getAudits().stream().filter(audit ->
+                         Objects.equals(audit.getData().get("data").get("status").asText(), etterlevelse.getStatus().name())
                     ).toList();
 
-            ferdigDokumentertDato = LocalDateTime.parse(etterlevelseAudits.get(etterlevelseAudits.size() - 1).getData().get("lastModifiedDate").asText()).withNano(0);
+            try {
+                ferdigDokumentertDato = LocalDateTime.parse(etterlevelseAudits.get(etterlevelseAudits.size() - 1).getData().get("lastModifiedDate").asText()).withNano(0);
+
+            } catch (Exception e) {
+                log.debug("Test");
+                log.debug(test.toString());
+                log.debug("FILTERED");
+                log.debug(etterlevelseAudits.toString());
+            }
         }
 
         return EtterlevelseStatistikkResponse.builder()
