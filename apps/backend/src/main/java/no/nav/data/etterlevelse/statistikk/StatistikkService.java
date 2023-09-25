@@ -103,8 +103,8 @@ public class StatistikkService {
                     .kravTittel(krav.getNavn())
                     .kravNummer(tb.getKravNummer())
                     .kravVersjon(tb.getKravVersjon())
-                    .mottattTid(tb.getMeldinger().get(0).getTid())
-                    .besvartTid(getTilbakemeldingStatus(tb) == TilbakemeldingStatus.UBESVART ? null : tb.getMeldinger().get(tb.getMeldinger().size() - 1).getTid())
+                    .mottattTid(tb.getMeldinger().get(0).getTid().withNano(0))
+                    .besvartTid(getTilbakemeldingStatus(tb) == TilbakemeldingStatus.UBESVART ? null : tb.getMeldinger().get(tb.getMeldinger().size() - 1).getTid().withNano(0))
                     .fortTilKravEndring(tb.isEndretKrav())
                     .status(getTilbakemeldingStatus(tb).name())
                     .build()));
@@ -181,8 +181,8 @@ public class StatistikkService {
                                 .antallFerdigDokumentert(antallFerdigDokumentert.size())
                                 .antallUnderArbeid(antallUnderArbeidSize)
                                 .antallIkkePaabegynt(antallIkkeFiltrertKrav - (antallFerdigDokumentert.size() + antallUnderArbeidSize))
-                                .endretDato(endretDato)
-                                .opprettetDato(opprettetDato)
+                                .endretDato(endretDato.withNano(0))
+                                .opprettetDato(opprettetDato.withNano(0))
                                 .team(teamNames)
                                 .build()
                 );
@@ -210,7 +210,7 @@ public class StatistikkService {
                             Objects.equals(audit.getData().get("data").get("status").asText(), etterlevelse.getStatus().name())
                     ).toList();
 
-            ferdigDokumentertDato = LocalDateTime.parse(etterlevelseAudits.get(etterlevelseAudits.size() - 1).getData().get("lastModifiedDate").asText());
+            ferdigDokumentertDato = LocalDateTime.parse(etterlevelseAudits.get(etterlevelseAudits.size() - 1).getData().get("lastModifiedDate").asText()).withNano(0);
         }
 
         return EtterlevelseStatistikkResponse.builder()
@@ -228,7 +228,7 @@ public class StatistikkService {
                 .statusBegrunnelse(etterlevelse.getStatusBegrunnelse())
                 .lastModifiedDate(etterlevelse.getChangeStamp().getLastModifiedDate().withNano(0))
                 .createdDate(etterlevelse.getChangeStamp().getCreatedDate().withNano(0))
-                .ferdigDokumentertDato(ferdigDokumentertDato != null ? ferdigDokumentertDato.withNano(0) : null)
+                .ferdigDokumentertDato(ferdigDokumentertDato)
 
                 .build();
     }
@@ -251,15 +251,15 @@ public class StatistikkService {
                             Objects.equals(audit.getData().get("data").get("status").asText(), KravStatus.AKTIV.name())
                       ).toList();
 
-                aktivertDato = LocalDateTime.parse(kravAudits.get(kravAudits.size() - 1).getData().get("lastModifiedDate").asText());
+                aktivertDato = LocalDateTime.parse(kravAudits.get(kravAudits.size() - 1).getData().get("lastModifiedDate").asText()).withNano(0);
         }
 
 
 
         return KravStatistikkResponse.builder()
                 .id(krav.getId())
-                .lastModifiedDate(krav.getChangeStamp().getLastModifiedDate())
-                .createdDate(krav.getChangeStamp().getCreatedDate())
+                .lastModifiedDate(krav.getChangeStamp().getLastModifiedDate().withNano(0))
+                .createdDate(krav.getChangeStamp().getCreatedDate().withNano(0))
                 .kravNummer(krav.getKravNummer())
                 .kravVersjon(krav.getKravVersjon())
                 .navn(krav.getNavn())
