@@ -226,9 +226,9 @@ public class StatistikkService {
                 .status(etterlevelse.getStatus())
                 .suksesskriterieBegrunnelser(etterlevelse.toResponse().getSuksesskriterieBegrunnelser())
                 .statusBegrunnelse(etterlevelse.getStatusBegrunnelse())
-                .lastModifiedDate(etterlevelse.getChangeStamp().getLastModifiedDate())
-                .createdDate(etterlevelse.getChangeStamp().getCreatedDate())
-                .ferdigDokumentertDato(ferdigDokumentertDato)
+                .lastModifiedDate(etterlevelse.getChangeStamp().getLastModifiedDate().withNano(0))
+                .createdDate(etterlevelse.getChangeStamp().getCreatedDate().withNano(0))
+                .ferdigDokumentertDato(ferdigDokumentertDato != null ? ferdigDokumentertDato.withNano(0) : null)
 
                 .build();
     }
