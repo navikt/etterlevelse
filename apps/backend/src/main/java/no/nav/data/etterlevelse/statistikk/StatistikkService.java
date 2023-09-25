@@ -203,7 +203,7 @@ public class StatistikkService {
         EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(UUID.fromString(etterlevelse.getEtterlevelseDokumentasjonId()));
         LocalDateTime ferdigDokumentertDato = null;
 
-        if (etterlevelse.getStatus() == EtterlevelseStatus.FERDIG_DOKUMENTERT || etterlevelse.getStatus() == EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) {
+        if (etterlevelse.getStatus().equals(EtterlevelseStatus.FERDIG_DOKUMENTERT) || etterlevelse.getStatus().equals(EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT)) {
             List<AuditVersion> etterlevelseLog = auditVersionRepository.findByTableIdOrderByTimeDesc(etterlevelse.getId().toString());
             List<AuditResponse> test = new AuditLogResponse(etterlevelse.getId().toString(), convert(etterlevelseLog, AuditVersion::toResponse))
                     .getAudits();
@@ -254,7 +254,7 @@ public class StatistikkService {
             }
         }
 
-        if(aktivertDato == null && (krav.getStatus() == KravStatus.AKTIV || krav.getStatus() == KravStatus.UTGAATT)) {
+        if(aktivertDato == null && (krav.getStatus().equals(KravStatus.AKTIV) || krav.getStatus().equals(KravStatus.UTGAATT))) {
             List<AuditVersion> kravLog = auditVersionRepository.findByTableIdOrderByTimeDesc(krav.getId().toString());
             List<AuditResponse> kravAudits = new AuditLogResponse(krav.getId().toString(), convert(kravLog, AuditVersion::toResponse))
                     .getAudits().stream().filter(audit ->
