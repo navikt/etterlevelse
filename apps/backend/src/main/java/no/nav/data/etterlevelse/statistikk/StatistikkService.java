@@ -203,7 +203,7 @@ public class StatistikkService {
         EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(UUID.fromString(etterlevelse.getEtterlevelseDokumentasjonId()));
         LocalDateTime ferdigDokumentertDato = null;
 
-        if (etterlevelse.getStatus().equals(EtterlevelseStatus.FERDIG_DOKUMENTERT) || etterlevelse.getStatus().equals(EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT)) {
+        if (etterlevelse.getStatus().name().equals(EtterlevelseStatus.FERDIG_DOKUMENTERT.name()) || etterlevelse.getStatus().name().equals(EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT.name())) {
             List<AuditVersion> etterlevelseLog = auditVersionRepository.findByTableIdOrderByTimeDesc(etterlevelse.getId().toString());
             List<AuditResponse> test = new AuditLogResponse(etterlevelse.getId().toString(), convert(etterlevelseLog, AuditVersion::toResponse))
                     .getAudits();

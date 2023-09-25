@@ -17,7 +17,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonPropertyOrder({"UUID", "kravNummer", "kravVersjon"})
+@JsonPropertyOrder({"UUID", "kravNummer", "kravVersjon", "status", "ferdigDokumentertDato"})
 public class EtterlevelseStatistikkResponse {
     private UUID id;
 
