@@ -203,7 +203,7 @@ public class StatistikkService {
         EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(UUID.fromString(etterlevelse.getEtterlevelseDokumentasjonId()));
         LocalDateTime ferdigDokumentertDato = null;
 
-        if (EtterlevelseStatus.FERDIG_DOKUMENTERT.equals(etterlevelse.getStatus()) || EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT.equals(etterlevelse.getStatus())) {
+        if (etterlevelse.getStatus() == EtterlevelseStatus.FERDIG_DOKUMENTERT || etterlevelse.getStatus() == EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT ) {
             List<AuditVersion> etterlevelseLog = auditVersionRepository.findByTableIdOrderByTimeDesc(etterlevelse.getId().toString());
             List<AuditResponse> test = new AuditLogResponse(etterlevelse.getId().toString(), convert(etterlevelseLog, AuditVersion::toResponse))
                     .getAudits();
@@ -211,12 +211,12 @@ public class StatistikkService {
                     .getAudits().stream().filter(audit ->
                          Objects.equals(audit.getData().get("data").get("status").asText(), etterlevelse.getStatus().name())
                     ).toList();
-            try {
-                ferdigDokumentertDato = LocalDateTime.parse(etterlevelseAudits.get(etterlevelseAudits.size() - 1).getData().get("lastModifiedDate").asText()).withNano(0);
 
-            } catch (Exception e) {
-                log.debug("Test: " + test.toString());
-                log.debug("FILTERED: " + etterlevelseAudits);
+            //Because of migration script some etterlevelser has no audit record of being set to ferdig_dokumentert or ikke_relevant_ferdig_dokumentert
+            if(!etterlevelseAudits.isEmpty()) {
+                ferdigDokumentertDato = LocalDateTime.parse(etterlevelseAudits.get(etterlevelseAudits.size() - 1).getData().get("lastModifiedDate").asText()).withNano(0);
+            } else {
+               ferdigDokumentertDato = etterlevelse.getChangeStamp().getLastModifiedDate().withNano(0);
             }
         }
 
