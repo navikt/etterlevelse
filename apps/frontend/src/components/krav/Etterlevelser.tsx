@@ -69,6 +69,8 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
           return e.status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT || e.suksesskriterieBegrunnelser.filter((s) => s.suksesskriterieStatus === SuksesskriterieStatus.IKKE_RELEVANT).length > 0
         } else if(filter[0].id === SuksesskriterieStatus.IKKE_OPPFYLT) {
           return e.suksesskriterieBegrunnelser.filter((s) => s.suksesskriterieStatus === SuksesskriterieStatus.IKKE_OPPFYLT).length > 0
+        } else if(filter[0].id === SuksesskriterieStatus.OPPFYLT) {
+          return e.suksesskriterieBegrunnelser.filter((s) => s.suksesskriterieStatus === SuksesskriterieStatus.OPPFYLT).length > 0
         } else {
           return e.status === filter[0].id
         }
