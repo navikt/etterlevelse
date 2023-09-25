@@ -9,6 +9,7 @@ import no.nav.data.etterlevelse.etterlevelse.domain.EtterlevelseRepo;
 import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseRequest;
 import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseRequest.Fields;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
@@ -88,6 +89,11 @@ public class EtterlevelseService extends DomainService<Etterlevelse> {
 
     public Etterlevelse delete(UUID id) {
         return storage.delete(id, Etterlevelse.class);
+    }
+
+    public Page<Etterlevelse> getAllEtterlevelseStatistics(Pageable page) {
+        Page<GenericStorage> all = etterlevelseRepo.findAll(page);
+        return all.map(GenericStorage::toEtterlevelse);
     }
 
     private void validateKrav(Validator<EtterlevelseRequest> validator) {

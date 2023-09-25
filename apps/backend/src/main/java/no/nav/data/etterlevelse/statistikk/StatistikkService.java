@@ -25,6 +25,7 @@ import no.nav.data.etterlevelse.krav.domain.Tilbakemelding;
 import no.nav.data.etterlevelse.krav.domain.TilbakemeldingStatus;
 import no.nav.data.etterlevelse.krav.domain.dto.KravFilter;
 import no.nav.data.etterlevelse.statistikk.domain.BehandlingStatistikk;
+import no.nav.data.etterlevelse.statistikk.dto.EtterlevelseStatistikkResponse;
 import no.nav.data.etterlevelse.statistikk.dto.KravStatistikkResponse;
 import no.nav.data.etterlevelse.statistikk.dto.TilbakemeldingStatistikkResponse;
 import no.nav.data.integration.team.teamcat.TeamcatTeamClient;
@@ -34,11 +35,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static no.nav.data.common.utils.StreamUtils.convert;
@@ -202,6 +199,39 @@ public class StatistikkService {
         }
     }
 
+    public EtterlevelseStatistikkResponse toEtterlevelseStatistikkResponse(Etterlevelse etterlevelse) {
+        EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(UUID.fromString(etterlevelse.getEtterlevelseDokumentasjonId()));
+        LocalDateTime ferdigDokumentertDato = null;
+
+        if (etterlevelse.getStatus() == EtterlevelseStatus.FERDIG_DOKUMENTERT || etterlevelse.getStatus() == EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) {
+            List<AuditVersion> etterlevelseLog = auditVersionRepository.findByTableIdOrderByTimeDesc(etterlevelse.getId().toString());
+            List<AuditResponse> etterlevelseAudits = new AuditLogResponse(etterlevelse.getId().toString(), convert(etterlevelseLog, AuditVersion::toResponse))
+                    .getAudits().stream().filter(audit ->
+                            Objects.equals(audit.getData().get("data").get("status").asText(), etterlevelse.getStatus().name())
+                    ).toList();
+
+            ferdigDokumentertDato = LocalDateTime.parse(etterlevelseAudits.get(etterlevelseAudits.size() - 1).getData().get("lastModifiedDate").asText());
+        }
+
+        return EtterlevelseStatistikkResponse.builder()
+                .id(etterlevelse.getId())
+                .etterlevelseDokumentasjonId(etterlevelse.getEtterlevelseDokumentasjonId())
+                .etterlevelseDokumentasjonTittel(etterlevelseDokumentasjon.getTitle())
+                .etterlevelseDokumentasjonNummer("E"+etterlevelseDokumentasjon.getEtterlevelseNummer().toString())
+                .kravNummer(etterlevelse.getKravNummer())
+                .kravVersjon(etterlevelse.getKravVersjon())
+                .etterleves(etterlevelse.isEtterleves())
+                .dokumentasjon(etterlevelse.getDokumentasjon())
+                .fristForFerdigstillelse(etterlevelse.getFristForFerdigstillelse())
+                .status(etterlevelse.getStatus())
+                .suksesskriterieBegrunnelser(etterlevelse.toResponse().getSuksesskriterieBegrunnelser())
+                .statusBegrunnelse(etterlevelse.getStatusBegrunnelse())
+                .lastModifiedDate(etterlevelse.getChangeStamp().getLastModifiedDate())
+                .createdDate(etterlevelse.getChangeStamp().getCreatedDate())
+                .ferdigDokumentertDato(ferdigDokumentertDato)
+
+                .build();
+    }
     public KravStatistikkResponse toKravStatestikkResponse(Krav krav) {
         var regelverkResponse = StreamUtils.convert(krav.getRegelverk(), Regelverk::toResponse);
         String temaName = "Ingen";
@@ -250,6 +280,9 @@ public class StatistikkService {
         return kravService.getAllKravStatistics(page);
     }
 
+    public Page<Etterlevelse> getAllEtterlevelseStatistics(Pageable page) {
+        return etterlevelseService.getAllEtterlevelseStatistics(page);
+    }
     private TilbakemeldingStatus getTilbakemeldingStatus(Tilbakemelding tilbakemelding) {
         if (tilbakemelding.getStatus() != null) {
             return tilbakemelding.getStatus();

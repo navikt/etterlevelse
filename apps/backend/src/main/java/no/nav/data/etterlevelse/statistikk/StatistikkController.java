@@ -7,8 +7,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
+import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.statistikk.domain.BehandlingStatistikk;
+import no.nav.data.etterlevelse.statistikk.dto.EtterlevelseStatistikkResponse;
 import no.nav.data.etterlevelse.statistikk.dto.KravStatistikkResponse;
 import no.nav.data.etterlevelse.statistikk.dto.TilbakemeldingStatistikkResponse;
 import org.springframework.data.domain.Page;
@@ -42,6 +44,15 @@ public class StatistikkController {
         log.info("Get Krav Statistics");
         Page<Krav> page = service.getAllKravStatistics(pageParameters.createPage());
         return ResponseEntity.ok(new RestResponsePage<>(page).convert(service::toKravStatestikkResponse));
+    }
+
+    @Operation(summary = "Get Etterlevelse Statistics ")
+    @ApiResponse(description = "ok")
+    @GetMapping("/etterlevelse")
+    public ResponseEntity<RestResponsePage<EtterlevelseStatistikkResponse>> getAllEtterlevelseStatistics(PageParameters pageParameters) {
+        log.info("Get Etterlevelse Statistics");
+        Page<Etterlevelse> page = service.getAllEtterlevelseStatistics(pageParameters.createPage());
+        return ResponseEntity.ok(new RestResponsePage<>(page).convert(service::toEtterlevelseStatistikkResponse));
     }
 
     @Operation(summary = "Get tilbakemelding Statistics ")
