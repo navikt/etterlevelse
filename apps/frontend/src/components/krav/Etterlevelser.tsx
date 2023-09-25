@@ -21,7 +21,7 @@ import CustomizedSelect from '../common/CustomizedSelect'
 
 const etterlevelseFilter = [
   { label: 'Alle', id: 'ALLE' },
-  { label: 'Oppfylt', id: EtterlevelseStatus.FERDIG_DOKUMENTERT },
+  { label: 'Oppfylt', id: SuksesskriterieStatus.OPPFYLT },
   { label: 'Ikke relevant', id: EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT },
   { label: 'Ikke oppfylt', id: SuksesskriterieStatus.IKKE_OPPFYLT}
 ]
@@ -188,8 +188,8 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
         </CustomizedAccordion>
       ) : (
         <div className="flex item-center">
-          <LabelLarge>Ingen etterlevelser med {filter[0].label} status</LabelLarge>
-        </div>
+          {etterlevelser.length >= 1 && <LabelLarge>Ingen etterlevelser med {filter[0].label} status</LabelLarge>}
+        </div> 
       )}
 
 
