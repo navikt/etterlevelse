@@ -10,6 +10,7 @@ import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.statistikk.domain.BehandlingStatistikk;
 import no.nav.data.etterlevelse.statistikk.dto.KravStatistikkResponse;
+import no.nav.data.etterlevelse.statistikk.dto.TilbakemeldingStatistikkResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,5 +42,14 @@ public class StatistikkController {
         log.info("Get Krav Statistics");
         Page<Krav> page = service.getAllKravStatistics(pageParameters.createPage());
         return ResponseEntity.ok(new RestResponsePage<>(page).convert(service::toKravStatestikkResponse));
+    }
+
+    @Operation(summary = "Get tilbakemelding Statistics ")
+    @ApiResponse(description = "ok")
+    @GetMapping("/tilbakemelding")
+    public ResponseEntity<RestResponsePage<TilbakemeldingStatistikkResponse>> getAllTilbakemeldingStatistics(PageParameters pageParameters) {
+        log.info("Get tilbakemelding Statistics");
+        Page<TilbakemeldingStatistikkResponse> page = service.getAllTilbakemeldingStatistikk(pageParameters.createPage());
+        return ResponseEntity.ok(new RestResponsePage<>(page));
     }
 }

@@ -284,8 +284,8 @@ export const PanelLinkCard = ({
   )
 
   return (
-    <Block width={width} maxWidth={maxWidth} overrides={rootOverrides} marginRight={marginRight} height="inherit">
-      <RouteLink href={href} hideUnderline onClick={() => onClick && onClick()} requireLogin={requireLogin} openinnewtab={(!!openinnewtab).toString()}>
+    <Block  onClick={() => onClick && onClick()} width={width} maxWidth={maxWidth} overrides={rootOverrides} marginRight={marginRight} height="inherit">
+      <RouteLink href={href} hideUnderline requireLogin={requireLogin} openinnewtab={(!!openinnewtab).toString()}>
         <Block
           onMouseEnter={() => setHover(true)}
           onMouseLeave={() => setHover(false)}
@@ -428,6 +428,7 @@ export const SimplePanel = ({
 
   return (
     <Block display={responsiveDisplay} overrides={mergedOverrides} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
+      <div className="flex gap-2">
       {panelIcon && (
         <Block display="flex" marginLeft="27px" alignItems="center">
           {typeof panelIcon === 'function' ? panelIcon(hover) : panelIcon}
@@ -465,6 +466,7 @@ export const SimplePanel = ({
           )}
         </Block>
       </Block>
+      </div>
 
       <Block display="flex">
         {statusText && (

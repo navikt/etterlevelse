@@ -7,7 +7,6 @@ import { ettlevColors } from '../../../util/theme'
 import { Teams } from '../../common/TeamName'
 import { ExternalButton } from '../../common/Button'
 import { env } from '../../../util/env'
-import { ExternalLinkWrapper } from '../../common/RouteLink'
 
 export const responsiveDisplayBehandlingPage: Responsive<any> = ['block', 'block', 'block', 'block', 'flex', 'flex']
 
@@ -37,7 +36,7 @@ export const getMainHeader = (behandling: Behandling, helmet?: ReactNode) => (
         </Block>
         <Block display="flex" justifyContent="flex-end" alignContent="center" $style={{ whiteSpace: 'nowrap' }}>
           <ExternalButton kind={'secondary'} href={`${env.pollyBaseUrl}process/${behandling.id}`} size="mini">
-            <ExternalLinkWrapper text="Til behandlingskatalogen" />
+            Til behandlingskatalogen
           </ExternalButton>
         </Block>
       </Block>

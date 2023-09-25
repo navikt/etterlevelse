@@ -29,6 +29,8 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { getFilterType, Section } from '../../pages/EtterlevelseDokumentasjonPage'
 import { syncEtterlevelseKriterieBegrunnelseWithKrav } from '../EtterlevelseDokumentasjonTema/common/utils'
 import EtterlevelseEditFields from './Edit/EtterlevelseEditFields'
+import moment from 'moment'
+import { Detail } from '@navikt/ds-react'
 
 type EditEttlevProps = {
   etterlevelse: Etterlevelse
@@ -220,8 +222,15 @@ export const EditEtterlevelseV2 = ({
                   />
                 )}
               </Block>
-              <HeadingXXLarge $style={{ marginTop: '0px', marginBottom: '0px', paddingBottom: '32px', color: ettlevColors.white }}>{krav.navn}</HeadingXXLarge>
-
+              <HeadingXXLarge $style={{ marginTop: '0px', marginBottom: '0px', color: ettlevColors.white }}>{krav.navn}</HeadingXXLarge>
+              {krav.aktivertDato !== null &&
+                <Detail className="text-white">
+                  {krav.kravVersjon > 1
+                    ? `Ny versjon av kravet ble publisert ${moment(krav.aktivertDato).format('ll')}`
+                    : `Kravet ble opprettet ${moment(krav.aktivertDato).format('ll')}`
+                  }
+                </Detail>
+              }
               {kravFilter === KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV && (
                 <ParagraphMedium
                   $style={{

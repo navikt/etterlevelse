@@ -1,6 +1,11 @@
 package no.nav.data.etterlevelse.statistikk;
 
 import lombok.extern.slf4j.Slf4j;
+import no.nav.data.common.auditing.domain.AuditVersion;
+import no.nav.data.common.auditing.domain.AuditVersionRepository;
+import no.nav.data.common.auditing.dto.AuditLogResponse;
+import no.nav.data.common.auditing.dto.AuditResponse;
+import no.nav.data.common.utils.JsonUtils;
 import no.nav.data.common.utils.StreamUtils;
 import no.nav.data.etterlevelse.behandling.BehandlingService;
 import no.nav.data.etterlevelse.behandling.dto.Behandling;
@@ -12,13 +17,17 @@ import no.nav.data.etterlevelse.etterlevelse.domain.EtterlevelseStatus;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
 import no.nav.data.etterlevelse.krav.KravService;
+import no.nav.data.etterlevelse.krav.TilbakemeldingService;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravStatus;
 import no.nav.data.etterlevelse.krav.domain.Regelverk;
 import no.nav.data.etterlevelse.krav.domain.Suksesskriterie;
+import no.nav.data.etterlevelse.krav.domain.Tilbakemelding;
+import no.nav.data.etterlevelse.krav.domain.TilbakemeldingStatus;
 import no.nav.data.etterlevelse.krav.domain.dto.KravFilter;
 import no.nav.data.etterlevelse.statistikk.domain.BehandlingStatistikk;
 import no.nav.data.etterlevelse.statistikk.dto.KravStatistikkResponse;
+import no.nav.data.etterlevelse.statistikk.dto.TilbakemeldingStatistikkResponse;
 import no.nav.data.integration.team.teamcat.TeamcatTeamClient;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -30,26 +39,37 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import static no.nav.data.common.utils.StreamUtils.convert;
 
 @Slf4j
 @Service
 public class StatistikkService {
-
+    private final TilbakemeldingService tilbakemeldingService;
     private final BehandlingService behandlingService;
     private final KravService kravService;
     private final EtterlevelseService etterlevelseService;
-
     private final EtterlevelseDokumentasjonService etterlevelseDokumentasjonService;
-
     private final TeamcatTeamClient teamService;
 
-    public StatistikkService(BehandlingService behandlingService, KravService kravService, EtterlevelseService etterlevelseService,EtterlevelseDokumentasjonService etterlevelseDokumentasjonService, TeamcatTeamClient teamService) {
+    private final AuditVersionRepository auditVersionRepository;
+
+    public StatistikkService(TilbakemeldingService tilbakemeldingService,
+                             BehandlingService behandlingService,
+                             KravService kravService,
+                             EtterlevelseService etterlevelseService,
+                             EtterlevelseDokumentasjonService etterlevelseDokumentasjonService,
+                             TeamcatTeamClient teamService,
+                             AuditVersionRepository auditVersionRepository) {
+        this.tilbakemeldingService = tilbakemeldingService;
         this.behandlingService = behandlingService;
         this.kravService = kravService;
         this.etterlevelseService = etterlevelseService;
         this.etterlevelseDokumentasjonService = etterlevelseDokumentasjonService;
         this.teamService = teamService;
+        this.auditVersionRepository = auditVersionRepository;
     }
 
 
@@ -66,14 +86,34 @@ public class StatistikkService {
                         ).toList().size();
     }
 
-    public LocalDateTime getCreatedDate(List<Etterlevelse> etterlevelseList){
+    public LocalDateTime getCreatedDate(List<Etterlevelse> etterlevelseList) {
         etterlevelseList.sort(Comparator.comparing(a -> a.getChangeStamp().getCreatedDate()));
         return !etterlevelseList.isEmpty() ? etterlevelseList.get(0).getChangeStamp().getCreatedDate() : null;
     }
 
-    public LocalDateTime getLastUpdatedDate(List<Etterlevelse> etterlevelseList){
+    public LocalDateTime getLastUpdatedDate(List<Etterlevelse> etterlevelseList) {
         etterlevelseList.sort(Comparator.comparing(a -> a.getChangeStamp().getLastModifiedDate()));
         return !etterlevelseList.isEmpty() ? etterlevelseList.get(etterlevelseList.size() - 1).getChangeStamp().getLastModifiedDate() : null;
+    }
+
+    public Page<TilbakemeldingStatistikkResponse> getAllTilbakemeldingStatistikk(Pageable page) {
+        Page<Tilbakemelding> tilbakeMeldinger = tilbakemeldingService.getAll(page);
+        List<TilbakemeldingStatistikkResponse> tilbakemeldingStatistikkResponses = new ArrayList<>();
+
+        tilbakeMeldinger.forEach(tb -> {
+            var tempKrav = kravService.getByKravNummer(tb.getKravNummer(), tb.getKravVersjon());
+            tempKrav.ifPresent(krav -> tilbakemeldingStatistikkResponses.add(TilbakemeldingStatistikkResponse.builder()
+                    .id(tb.getId().toString())
+                    .kravTittel(krav.getNavn())
+                    .kravNummer(tb.getKravNummer())
+                    .kravVersjon(tb.getKravVersjon())
+                    .mottattTid(tb.getMeldinger().get(0).getTid())
+                    .besvartTid(getTilbakemeldingStatus(tb) == TilbakemeldingStatus.UBESVART ? null : tb.getMeldinger().get(tb.getMeldinger().size() - 1).getTid())
+                    .fortTilKravEndring(tb.isEndretKrav())
+                    .status(getTilbakemeldingStatus(tb).name())
+                    .build()));
+        });
+        return new PageImpl<>(tilbakemeldingStatistikkResponses, page, tilbakemeldingStatistikkResponses.size());
     }
 
     public Page<BehandlingStatistikk> getAllBehandlingStatistikk(Pageable page) {
@@ -133,7 +173,7 @@ public class StatistikkService {
 
                 String behandlingNavn = "B" + behandling.getNummer() + " " + behandling.getNavn();
 
-                List<String> teamNames = behandling.getTeams().stream().map(t->teamService.getTeam(t).isPresent()?teamService.getTeam(t).get().getName():"").toList();
+                List<String> teamNames = behandling.getTeams().stream().map(t -> teamService.getTeam(t).isPresent() ? teamService.getTeam(t).get().getName() : "").toList();
 
                 behandlingStatistikkList.add(
                         BehandlingStatistikk.builder()
@@ -153,10 +193,10 @@ public class StatistikkService {
             });
         });
 
-        if((page.getPageNumber() * page.getPageSize()) > behandlingStatistikkList.size()) {
+        if ((page.getPageNumber() * page.getPageSize()) > behandlingStatistikkList.size()) {
             return new PageImpl<>(new ArrayList<>(), page, totalElements.get());
         }
-        if((page.getPageNumber() * page.getPageSize()) + page.getPageSize() >= behandlingStatistikkList.size()) {
+        if ((page.getPageNumber() * page.getPageSize()) + page.getPageSize() >= behandlingStatistikkList.size()) {
             return new PageImpl<>(behandlingStatistikkList.subList(page.getPageNumber() * page.getPageSize(), behandlingStatistikkList.size()), page, totalElements.get());
         } else {
             return new PageImpl<>(behandlingStatistikkList.subList(page.getPageNumber() * page.getPageSize(), (page.getPageNumber() * page.getPageSize()) + page.getPageSize()), page, totalElements.get());
@@ -166,33 +206,58 @@ public class StatistikkService {
     public KravStatistikkResponse toKravStatestikkResponse(Krav krav) {
         var regelverkResponse = StreamUtils.convert(krav.getRegelverk(), Regelverk::toResponse);
         String temaName = "Ingen";
-        if(regelverkResponse.size() > 0) {
+        LocalDateTime aktivertDato = krav.getAktivertDato();
+
+        if (!regelverkResponse.isEmpty()) {
             var temaData = CodelistService.getCodelist(ListName.TEMA, regelverkResponse.get(0).getLov().getData().get("tema").textValue());
-            if(temaData != null) {
+            if (temaData != null) {
                 temaName = temaData.getShortName();
             }
         }
+
+        if(aktivertDato == null && krav.getStatus() == KravStatus.AKTIV) {
+            List<AuditVersion> kravLog = auditVersionRepository.findByTableIdOrderByTimeDesc(krav.getId().toString());
+            List<AuditResponse> kravAudits = new AuditLogResponse(krav.getId().toString(), convert(kravLog, AuditVersion::toResponse))
+                    .getAudits().stream().filter(audit ->
+                            Objects.equals(audit.getData().get("data").get("status").asText(), KravStatus.AKTIV.name())
+                      ).toList();
+
+                aktivertDato = LocalDateTime.parse(kravAudits.get(kravAudits.size() - 1).getData().get("lastModifiedDate").asText());
+        }
+
+
+
         return KravStatistikkResponse.builder()
-        .id(krav.getId())
-        .lastModifedDate(krav.getChangeStamp().getLastModifiedDate())
-        .createdDate(krav.getChangeStamp().getCreatedDate())
-        .kravNummer(krav.getKravNummer())
-        .kravVersjon(krav.getKravVersjon())
-        .navn(krav.getNavn())
-        .regelverk(regelverkResponse)
-        .tagger(krav.getTagger())
-        .suksesskriterier(StreamUtils.convert(krav.getSuksesskriterier(), Suksesskriterie::toResponse ))
-        .kravIdRelasjoner(krav.getKravIdRelasjoner())
-        .avdeling(CodelistService.getCodelistResponse(ListName.AVDELING, krav.getAvdeling()))
-        .underavdeling(CodelistService.getCodelistResponse(ListName.UNDERAVDELING, krav.getUnderavdeling()))
-        .relevansFor(CodelistService.getCodelistResponseList(ListName.RELEVANS, krav.getRelevansFor()))
-        .status(krav.getStatus())
-        .aktivertDato(krav.getAktivertDato())
-        .tema(temaName)
-        .build();
+                .id(krav.getId())
+                .lastModifedDate(krav.getChangeStamp().getLastModifiedDate())
+                .createdDate(krav.getChangeStamp().getCreatedDate())
+                .kravNummer(krav.getKravNummer())
+                .kravVersjon(krav.getKravVersjon())
+                .navn(krav.getNavn())
+                .regelverk(regelverkResponse)
+                .tagger(krav.getTagger())
+                .suksesskriterier(StreamUtils.convert(krav.getSuksesskriterier(), Suksesskriterie::toResponse))
+                .kravIdRelasjoner(krav.getKravIdRelasjoner())
+                .avdeling(CodelistService.getCodelistResponse(ListName.AVDELING, krav.getAvdeling()))
+                .underavdeling(CodelistService.getCodelistResponse(ListName.UNDERAVDELING, krav.getUnderavdeling()))
+                .relevansFor(CodelistService.getCodelistResponseList(ListName.RELEVANS, krav.getRelevansFor()))
+                .status(krav.getStatus())
+                .aktivertDato(aktivertDato)
+                .tema(temaName)
+                .build();
     }
 
     public Page<Krav> getAllKravStatistics(Pageable page) {
         return kravService.getAllKravStatistics(page);
+    }
+
+    private TilbakemeldingStatus getTilbakemeldingStatus(Tilbakemelding tilbakemelding) {
+        if (tilbakemelding.getStatus() != null) {
+            return tilbakemelding.getStatus();
+        } else if (tilbakemelding.getMeldinger().get(tilbakemelding.getMeldinger().size() - 1).getRolle() == Tilbakemelding.Rolle.KRAVEIER) {
+            return TilbakemeldingStatus.BESVART;
+        } else {
+            return TilbakemeldingStatus.UBESVART;
+        }
     }
 }

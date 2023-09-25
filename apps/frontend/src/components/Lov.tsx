@@ -4,6 +4,7 @@ import { env } from '../util/env'
 import { Regelverk } from '../constants'
 import { Block } from 'baseui/block'
 import CustomizedLink from './common/CustomizedLink'
+import { Link } from '@navikt/ds-react'
 
 const reactProcessString = require('react-process-string')
 const processString = reactProcessString as (converters: { regex: RegExp; fn: (key: string, result: string[]) => JSX.Element | string }[]) => (input?: string) => JSX.Element[]
@@ -61,26 +62,25 @@ const legalBasisLinkProcessor = (law: string, text?: string, openOnSamePage?: bo
       // triple '§§§' is hidden, used as a trick in combination with rule 1 above
       regex: /(.*) §(§§)?(§)?\s*(\d+(-\d+)?)/g,
       fn: (key: string, result: string[]) => (
-        <CustomizedLink key={key} href={`${lovdataBase(law)}/§${result[4]}`} target={openOnSamePage ? '_self' : '_blank'} rel="noopener noreferrer">
-          {result[1]} {!result[2] && !result[3] && '§'} {result[3] && '§§'} {result[4]} {openOnSamePage ? '' : ' (ny fane)'}
-          {/* <FontAwesomeIcon size="xs" icon={faExternalLinkAlt} /> */}
-        </CustomizedLink>
+        <Link key={key} href={`${lovdataBase(law)}/§${result[4]}`} target={openOnSamePage ? '_self' : '_blank'} rel="noopener noreferrer">
+          {result[1]} {!result[2] && !result[3] && '§'} {result[3] && '§§'} {result[4]} {openOnSamePage ? '' : ' (åpnes i ny fane)'}
+        </Link>
       ),
     },
     {
       regex: /(.*) kap(ittel)?\s*(\d+)/gi,
       fn: (key: string, result: string[]) => (
-        <CustomizedLink key={key} href={`${lovdataBase(law)}/KAPITTEL_${result[3]}`} target={openOnSamePage ? '_self' : '_blank'} rel="noopener noreferrer">
-          {result[1]} Kapittel {result[3]} {openOnSamePage ? '' : ' (ny fane)'}
-        </CustomizedLink>
+        <Link key={key} href={`${lovdataBase(law)}/KAPITTEL_${result[3]}`} target={openOnSamePage ? '_self' : '_blank'} rel="noopener noreferrer">
+          {result[1]} Kapittel {result[3]} {openOnSamePage ? '' : ' (åpnes i ny fane)'}
+        </Link>
       ),
     },
     {
       regex: /(.*) art(ikkel)?\s*(\d+)/gi,
       fn: (key: string, result: string[]) => (
-        <CustomizedLink key={key} href={`${lovdataBase(law)}/ARTIKKEL_${result[3]}`} target={openOnSamePage ? '_self' : '_blank'} rel="noopener noreferrer">
-          {result[1]} Artikkel {result[3]} {openOnSamePage ? '' : ' (ny fane)'}
-        </CustomizedLink>
+        <Link key={key} href={`${lovdataBase(law)}/ARTIKKEL_${result[3]}`} target={openOnSamePage ? '_self' : '_blank'} rel="noopener noreferrer">
+          {result[1]} Artikkel {result[3]} {openOnSamePage ? '' : ' (åpnes i ny fane)'}
+        </Link>
       ),
     },
   ])(text)

@@ -135,7 +135,7 @@ export const AuditView = (props: AuditViewProps) => {
                     name={null}
                     shouldCollapse={(p) => p.name === null && !open[index]}
                     onSelect={(sel) => {
-                      ;(sel.name === 'id' || sel.name?.endsWith('Id')) && viewId(sel.value as string)
+                      ; (sel.name === 'id' || sel.name?.endsWith('Id')) && viewId(sel.value as string)
                     }}
                   />
                 </Block>
