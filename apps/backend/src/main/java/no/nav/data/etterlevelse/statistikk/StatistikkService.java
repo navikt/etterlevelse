@@ -215,7 +215,7 @@ public class StatistikkService {
             }
         }
 
-        if(aktivertDato == null && krav.getStatus() == KravStatus.AKTIV) {
+        if(aktivertDato == null && (krav.getStatus() == KravStatus.AKTIV || krav.getStatus() == KravStatus.UTGAATT)) {
             List<AuditVersion> kravLog = auditVersionRepository.findByTableIdOrderByTimeDesc(krav.getId().toString());
             List<AuditResponse> kravAudits = new AuditLogResponse(krav.getId().toString(), convert(kravLog, AuditVersion::toResponse))
                     .getAudits().stream().filter(audit ->
