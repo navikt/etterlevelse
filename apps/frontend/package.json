@@ -101,7 +101,7 @@
     "@types/react-dom": "^18.0.6",
     "@types/react-helmet": "^6.1.0",
     "@types/react-router-dom": "^5.3.3",
-    "@types/shortid": "^0.0.29",
+    "@types/shortid": "^0.0.30",
     "@types/styletron-react": "^5.0.2",
     "@types/yup": "^0.32.0",
     "autoprefixer": "^10.4.15",
