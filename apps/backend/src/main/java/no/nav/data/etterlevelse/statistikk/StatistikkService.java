@@ -205,8 +205,7 @@ public class StatistikkService {
 
         if (etterlevelse.getStatus() == EtterlevelseStatus.FERDIG_DOKUMENTERT || etterlevelse.getStatus() == EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT ) {
             List<AuditVersion> etterlevelseLog = auditVersionRepository.findByTableIdOrderByTimeDesc(etterlevelse.getId().toString());
-            List<AuditResponse> test = new AuditLogResponse(etterlevelse.getId().toString(), convert(etterlevelseLog, AuditVersion::toResponse))
-                    .getAudits();
+
             List<AuditResponse> etterlevelseAudits = new AuditLogResponse(etterlevelse.getId().toString(), convert(etterlevelseLog, AuditVersion::toResponse))
                     .getAudits().stream().filter(audit ->
                          Objects.equals(audit.getData().get("data").get("status").asText(), etterlevelse.getStatus().name())
