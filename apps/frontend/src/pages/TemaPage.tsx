@@ -3,7 +3,7 @@ import { Block, BlockProps } from 'baseui/block'
 import { useEffect, useState } from 'react'
 import { HeadingXLarge, HeadingXXLarge, LabelLarge, LabelSmall, ParagraphMedium, ParagraphSmall, ParagraphXSmall } from 'baseui/typography'
 import { codelist, ListName, LovCode, TemaCode } from '../services/Codelist'
-import { urlForObject } from '../components/common/RouteLink'
+import { ExternalLink, urlForObject } from '../components/common/RouteLink'
 import { theme } from '../util'
 import { Markdown } from '../components/common/Markdown'
 import { ettlevColors } from '../util/theme'
@@ -47,7 +47,7 @@ export const getTemaMainHeader = (tema: TemaCode, lover: LovCode[], expand: bool
           <HeadingXXLarge marginTop="0px">{tema.shortName}</HeadingXXLarge>
           <Helmet>
             <meta charSet="utf-8" />
-            <title>{tema.shortName} </title>
+            <title>{tema.shortName}</title>
           </Helmet>
         </>
       )}
@@ -65,19 +65,18 @@ export const getTemaMainHeader = (tema: TemaCode, lover: LovCode[], expand: bool
 
       {expand && (
         <Block marginBottom={theme.sizing.scale900}>
-          <HeadingXLarge marginBottom={theme.sizing.scale200}>Ansvarlig for lovtolkning</HeadingXLarge>
+          <h2 className="mt-7 mb-2 text-2xl font-black text-[#102723]">Ansvarlig for lovtolkning</h2>
           {_.uniq(lover.map((l) => l.data?.underavdeling)).map((code, index) => (
             <ParagraphMedium key={code + '_' + index} marginTop={0} marginBottom={theme.sizing.scale200} $style={{ fontSize: '21px' }}>
               {codelist.getCode(ListName.UNDERAVDELING, code)?.shortName}
             </ParagraphMedium>
           ))}
-
-          <HeadingXLarge marginBottom={theme.sizing.scale200}>Lovdata</HeadingXLarge>
+          <h2 className="mt-7 mb-2 text-2xl font-black text-[#102723]">Lovdata</h2>
           {lover.map((l, index) => (
             <Block key={l.code + '_' + index} marginBottom={theme.sizing.scale200}>
-              <Link href={lovdataBase(l.code)}>
+              <ExternalLink href={lovdataBase(l.code)}>
                 {l.shortName}
-              </Link>
+              </ExternalLink>
             </Block>
           ))}
         </Block>
