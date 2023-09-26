@@ -84,12 +84,12 @@ public class StatistikkService {
 
     public LocalDateTime getCreatedDate(List<Etterlevelse> etterlevelseList) {
         etterlevelseList.sort(Comparator.comparing(a -> a.getChangeStamp().getCreatedDate()));
-        return !etterlevelseList.isEmpty() ? etterlevelseList.get(0).getChangeStamp().getCreatedDate() : null;
+        return !etterlevelseList.isEmpty() ? etterlevelseList.get(0).getChangeStamp().getCreatedDate().withNano(0) : null;
     }
 
     public LocalDateTime getLastUpdatedDate(List<Etterlevelse> etterlevelseList) {
         etterlevelseList.sort(Comparator.comparing(a -> a.getChangeStamp().getLastModifiedDate()));
-        return !etterlevelseList.isEmpty() ? etterlevelseList.get(etterlevelseList.size() - 1).getChangeStamp().getLastModifiedDate() : null;
+        return !etterlevelseList.isEmpty() ? etterlevelseList.get(etterlevelseList.size() - 1).getChangeStamp().getLastModifiedDate().withNano(0) : null;
     }
 
     public Page<TilbakemeldingStatistikkResponse> getAllTilbakemeldingStatistikk(Pageable page) {
@@ -181,8 +181,8 @@ public class StatistikkService {
                                 .antallFerdigDokumentert(antallFerdigDokumentert.size())
                                 .antallUnderArbeid(antallUnderArbeidSize)
                                 .antallIkkePaabegynt(antallIkkeFiltrertKrav - (antallFerdigDokumentert.size() + antallUnderArbeidSize))
-                                .endretDato(endretDato.withNano(0))
-                                .opprettetDato(opprettetDato.withNano(0))
+                                .endretDato(endretDato)
+                                .opprettetDato(opprettetDato)
                                 .team(teamNames)
                                 .build()
                 );
