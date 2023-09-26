@@ -27,7 +27,7 @@ import { sortKraverByPriority } from '../util/sort'
 import { getAllKravPriority } from '../api/KravPriorityApi'
 import { Helmet } from 'react-helmet'
 import { ampli } from '../services/Amplitude'
-import { BodyShort, Heading } from "@navikt/ds-react";
+import {BodyShort, Heading} from '@navikt/ds-react'
 import { lovdataBase } from '../components/Lov'
 
 export const TemaPage = () => {
@@ -71,7 +71,7 @@ export const getTemaMainHeader = (tema: TemaCode, lover: LovCode[], expand: bool
               {codelist.getCode(ListName.UNDERAVDELING, code)?.shortName}
             </BodyShort>
           ))}
-          <Heading level="2" size="medium" spacing style={{color: ettlevColors.green800}}>Lovdata</Heading>
+          <Heading level="2" size="medium" spacing>Lovdata</Heading>
           {lover.map((l, index) => (
             <Block key={l.code + '_' + index} marginBottom={theme.sizing.scale200}>
               <ExternalLink href={lovdataBase(l.code)}>
