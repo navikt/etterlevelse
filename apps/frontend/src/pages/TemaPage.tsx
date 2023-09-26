@@ -27,7 +27,7 @@ import { sortKraverByPriority } from '../util/sort'
 import { getAllKravPriority } from '../api/KravPriorityApi'
 import { Helmet } from 'react-helmet'
 import { ampli } from '../services/Amplitude'
-import { Link } from '@navikt/ds-react'
+import { BodyShort, Heading } from "@navikt/ds-react";
 import { lovdataBase } from '../components/Lov'
 
 export const TemaPage = () => {
@@ -44,7 +44,7 @@ export const getTemaMainHeader = (tema: TemaCode, lover: LovCode[], expand: bool
     <>
       {!noHeader && (
         <>
-          <HeadingXXLarge marginTop="0px">{tema.shortName}</HeadingXXLarge>
+          <Heading level="1" size="large" spacing>{tema.shortName}</Heading>
           <Helmet>
             <meta charSet="utf-8" />
             <title>{tema.shortName}</title>
@@ -65,13 +65,13 @@ export const getTemaMainHeader = (tema: TemaCode, lover: LovCode[], expand: bool
 
       {expand && (
         <Block marginBottom={theme.sizing.scale900}>
-          <h2 className="mt-7 mb-2 text-2xl font-black text-[#102723]">Ansvarlig for lovtolkning</h2>
+          <Heading className="mt-7" level="2" size="medium" spacing>Ansvarlig for lovtolkning</Heading>
           {_.uniq(lover.map((l) => l.data?.underavdeling)).map((code, index) => (
-            <ParagraphMedium key={code + '_' + index} marginTop={0} marginBottom={theme.sizing.scale200} $style={{ fontSize: '21px' }}>
+            <BodyShort key={code + '_' + index} size="large" spacing>
               {codelist.getCode(ListName.UNDERAVDELING, code)?.shortName}
-            </ParagraphMedium>
+            </BodyShort>
           ))}
-          <h2 className="mt-7 mb-2 text-2xl font-black text-[#102723]">Lovdata</h2>
+          <Heading level="2" size="medium" spacing style={{color: ettlevColors.green800}}>Lovdata</Heading>
           {lover.map((l, index) => (
             <Block key={l.code + '_' + index} marginBottom={theme.sizing.scale200}>
               <ExternalLink href={lovdataBase(l.code)}>
