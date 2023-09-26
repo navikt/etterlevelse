@@ -1,6 +1,6 @@
 import moment from 'moment'
 import { Block } from 'baseui/block'
-import ReactJson from 'react-json-view'
+import ReactJson from '@microlink/react-json-view'
 import React, { useEffect, useState } from 'react'
 import { LabelLarge } from 'baseui/typography'
 import { AuditActionIcon, AuditLabel as Label } from './AuditComponents'
@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBinoculars, faExchangeAlt, faTimes } from '@fortawesome/free-solid-svg-icons'
 import { PLACEMENT, StatefulTooltip } from 'baseui/tooltip'
 import { StatefulPopover } from 'baseui/popover'
-import DiffViewer from 'react-diff-viewer'
+import DiffViewer, { DiffMethod } from 'react-diff-viewer-continued'
 import { Spinner } from 'baseui/spinner'
 import { useRefs } from '../../../util/hooks'
 import { theme } from '../../../util'
@@ -109,6 +109,8 @@ export const AuditView = (props: AuditViewProps) => {
                               rightTitle="Current"
                               oldValue={JSON.stringify(auditLog?.audits[index + 1]?.data, null, 2)}
                               newValue={JSON.stringify(audit.data, null, 2)}
+                              showDiffOnly={true}
+                              compareMethod={DiffMethod.LINES}
                             />
                           </Card>
                         )}
