@@ -1,6 +1,7 @@
 package no.nav.data.etterlevelse.statistikk;
 
 import lombok.extern.slf4j.Slf4j;
+import no.nav.data.common.auditing.domain.Action;
 import no.nav.data.common.auditing.domain.AuditVersion;
 import no.nav.data.common.auditing.domain.AuditVersionRepository;
 import no.nav.data.common.auditing.dto.AuditLogResponse;
@@ -242,7 +243,15 @@ public class StatistikkService {
     public KravStatistikkResponse toKravStatestikkResponse(Krav krav) {
         var regelverkResponse = StreamUtils.convert(krav.getRegelverk(), Regelverk::toResponse);
         String temaName = "Ingen";
+        boolean harNyVersjon = false;
+
         LocalDateTime aktivertDato = krav.getAktivertDato() == null ? null : krav.getAktivertDato().withNano(0);
+        List<AuditVersion> kravLog = auditVersionRepository.findByTableIdOrderByTimeDesc(krav.getId().toString());
+        AuditLogResponse kravAudits = new AuditLogResponse(krav.getId().toString(), convert(kravLog, AuditVersion::toResponse));
+
+        List<LocalDateTime> oppdateringsfrekvens = kravAudits.getAudits().stream()
+                .filter(audit -> audit.getAction().equals(Action.UPDATE))
+                .map(audit -> audit.getTime().withNano(0)).toList();
 
         if (!regelverkResponse.isEmpty()) {
             var temaData = CodelistService.getCodelist(ListName.TEMA, regelverkResponse.get(0).getLov().getData().get("tema").textValue());
@@ -252,15 +261,18 @@ public class StatistikkService {
         }
 
         if(aktivertDato == null && (krav.getStatus().equals(KravStatus.AKTIV) || krav.getStatus().equals(KravStatus.UTGAATT))) {
-            List<AuditVersion> kravLog = auditVersionRepository.findByTableIdOrderByTimeDesc(krav.getId().toString());
-            List<AuditResponse> kravAudits = new AuditLogResponse(krav.getId().toString(), convert(kravLog, AuditVersion::toResponse))
-                    .getAudits().stream().filter(audit ->
+            List<AuditResponse> filteredKravAudits = kravAudits.getAudits().stream().filter(audit ->
                             Objects.equals(audit.getData().get("data").get("status").asText(), KravStatus.AKTIV.name())
                       ).toList();
-
-                aktivertDato = LocalDateTime.parse(kravAudits.get(kravAudits.size() - 1).getData().get("lastModifiedDate").asText()).withNano(0);
+                aktivertDato = LocalDateTime.parse(filteredKravAudits.get(filteredKravAudits.size() - 1).getData().get("lastModifiedDate").asText()).withNano(0);
         }
 
+        if(krav.getStatus() == KravStatus.UTGAATT) {
+            Optional<Krav> nyKravVersjon = kravService.getByKravNummer(krav.getKravNummer(), krav.getKravVersjon() + 1);
+            if(nyKravVersjon.isPresent()) {
+                harNyVersjon = true;
+            }
+        }
 
 
         return KravStatistikkResponse.builder()
@@ -280,6 +292,8 @@ public class StatistikkService {
                 .status(krav.getStatus())
                 .aktivertDato(aktivertDato)
                 .tema(temaName)
+                .harNyVersjon(harNyVersjon)
+                .oppdateringsfrekvens(oppdateringsfrekvens)
                 .build();
     }
 
