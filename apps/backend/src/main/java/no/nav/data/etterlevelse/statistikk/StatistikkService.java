@@ -249,7 +249,7 @@ public class StatistikkService {
         List<AuditVersion> kravLog = auditVersionRepository.findByTableIdOrderByTimeDesc(krav.getId().toString());
         AuditLogResponse kravAudits = new AuditLogResponse(krav.getId().toString(), convert(kravLog, AuditVersion::toResponse));
 
-        List<LocalDateTime> oppdateringsfrekvens = kravAudits.getAudits().stream()
+        List<LocalDateTime> oppdateringsTidsPunkter = kravAudits.getAudits().stream()
                 .filter(audit -> audit.getAction().equals(Action.UPDATE))
                 .map(audit -> audit.getTime().withNano(0)).toList();
 
@@ -293,7 +293,7 @@ public class StatistikkService {
                 .aktivertDato(aktivertDato)
                 .tema(temaName)
                 .harNyVersjon(harNyVersjon)
-                .oppdateringsfrekvens(oppdateringsfrekvens)
+                .oppdateringsTidsPunkter(oppdateringsTidsPunkter)
                 .build();
     }
 
