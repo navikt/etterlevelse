@@ -8,7 +8,7 @@ import { theme } from '../../util'
 import { getKravByKravNumberAndVersion, KravId } from '../../api/KravApi'
 import { kravNumView, query } from '../../pages/KravPage'
 import { HeadingXLarge, HeadingXXLarge, LabelSmall, ParagraphMedium } from 'baseui/typography'
-import { ettlevColors, maxPageWidth, responsivePaddingExtraLarge, responsivePaddingInnerPage, responsiveWidthInnerPage } from '../../util/theme'
+import { ettlevColors, maxPageWidth, responsivePaddingExtraLarge, responsivePaddingInnerPage } from '../../util/theme'
 import { user } from '../../services/User'
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
 import { borderColor, borderRadius, borderStyle, borderWidth, marginAll, padding } from '../common/Style'
@@ -360,7 +360,7 @@ export const EditEtterlevelseV2 = ({
           </Block>
           <Block backgroundColor={ettlevColors.green100} paddingLeft={responsivePaddingInnerPage} paddingRight={responsivePaddingInnerPage}>
             <HeadingXLarge $style={{ marginTop: '0px', marginBottom: '0px', paddingBottom: '32px', paddingTop: '41px' }}>Hensikten med kravet</HeadingXLarge>
-            <Markdown noMargin p1 sources={Array.isArray(krav.hensikt) ? krav.hensikt : [krav.hensikt]} fontSize={'21px'} maxWidth={'800px'} />
+            <Markdown p1 sources={Array.isArray(krav.hensikt) ? krav.hensikt : [krav.hensikt]} />
           </Block>
 
           <Block

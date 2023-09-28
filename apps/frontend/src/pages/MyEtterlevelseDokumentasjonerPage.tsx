@@ -18,7 +18,7 @@ import moment from 'moment'
 import { useDebouncedState } from '../util/hooks'
 import { SkeletonPanel } from '../components/common/LoadingSkeleton'
 import { user } from '../services/User'
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { faExternalLinkAlt, faPlus } from '@fortawesome/free-solid-svg-icons'
 import { borderWidth } from '../components/common/Style'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
@@ -298,7 +298,7 @@ const Alle = () => {
   }
 
   useEffect(() => {
-    if (sok && pageNumber != 0) setPage(0)
+    if (sok && pageNumber !== 0) setPage(0)
   }, [sok])
 
   const getEtterlevelseDokumentasjonerWithoutDuplicates = () => {

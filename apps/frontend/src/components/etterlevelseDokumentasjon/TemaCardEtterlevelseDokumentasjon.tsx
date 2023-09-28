@@ -6,7 +6,6 @@ import { cardWidth, useKravCounter } from '../../pages/TemaPage'
 import { Block } from 'baseui/block'
 import { ParagraphXSmall } from 'baseui/typography'
 import { ProgressBar, SIZE } from 'baseui/progress-bar'
-import React from 'react'
 import { HeaderContent } from './HeaderContent'
 import { isFerdigUtfylt } from '../../pages/BehandlingTemaPage'
 import moment from 'moment'
@@ -26,14 +25,13 @@ export const TemaCardEtterlevelseDokumentasjon = (props: TemaCardEtterlevelseDok
   const lovcodes = lover.map((c) => c.code)
   const krav = stats.filter((k) => k.regelverk.map((r: any) => r.lov.code).some((r: any) => lovcodes.includes(r)))
   const utgaattKrav = utgaattStats.filter((k) => k.regelverk.map((r: any) => r.lov.code).some((r: any) => lovcodes.includes(r)))
-  const { data, loading } = useKravCounter({ lover: lover.map((c) => c.code) }, { skip: !lover.length })
+  const { data } = useKravCounter({ lover: lover.map((c) => c.code) }, { skip: !lover.length })
 
   let nyttKravCounter = 0
   let nyttKravVersjonCounter = 0
 
   let utfylt = 0
   let underArbeid = 0
-  let tilUtfylling = 0
 
   krav.forEach((k) => {
     const kravActivatedDate = moment(k.aktivertDato).toDate()
@@ -48,8 +46,6 @@ export const TemaCardEtterlevelseDokumentasjon = (props: TemaCardEtterlevelseDok
       utfylt += 1
     } else if (k.etterlevelser.length && !isFerdigUtfylt(k.etterlevelser[0].status)) {
       underArbeid += 1
-    } else {
-      tilUtfylling += 1
     }
   })
 

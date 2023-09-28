@@ -120,7 +120,7 @@ export const useTeam = () => {
 }
 
 export const useMyTeams = () => {
-  const [productAreas, productAreasLoading] = useMyProductAreas()
+  const [productAreas] = useMyProductAreas()
   const [data, setData] = useState<Team[]>([])
   const [loading, setLoading] = useState(true)
   const ident = user.getIdent()
@@ -149,7 +149,7 @@ export const useMyTeams = () => {
         .catch((e) => {
           setData([])
           setLoading(false)
-          console.log("couldn't find teams", e)
+          console.log('couldn\'t find teams', e)
         })
     !ident && setLoading(false)
   }, [ident, productAreas])

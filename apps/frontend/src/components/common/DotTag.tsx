@@ -29,7 +29,7 @@ const Content = (props: { item: ReactNode | string; list?: ListName; linkCodelis
       )
     return <>{codelist.getShortname(list, itemString)}</>
   }
-  if (markdown) return <Markdown source={item as string} noMargin />
+  if (markdown) return <Markdown source={item as string} />
   return <>{item}</>
 }
 

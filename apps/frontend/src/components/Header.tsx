@@ -24,7 +24,7 @@ import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
 import { faBars, faChevronDown, faChevronUp, faTimes } from '@fortawesome/free-solid-svg-icons'
 import { faUser } from '@fortawesome/free-regular-svg-icons'
 import SkipToContent from './common/SkipToContent/SkipToContent'
-import { borderColor, borderStyle, borderWidth, marginAll } from './common/Style'
+import { marginAll } from './common/Style'
 import { AlertType, Melding, MeldingStatus, MeldingType } from '../constants'
 import { getMeldingByType } from '../api/MeldingApi'
 import { Markdown } from './common/Markdown'
@@ -101,10 +101,6 @@ const LoggedInHeader = () => {
         // { label: intl.settings, href: '/admin/settings', disabled: true },
       ]
     : []
-  const otherPages = [
-    { label: 'Mine innstillinger', href: '/innstillinger', disabled: true },
-    { label: 'Hjelp', href: '/hjelp', disabled: true },
-  ]
 
   return (
     <Block display="flex" justifyContent="center" alignItems="center">
@@ -359,7 +355,7 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
       </Block>
       {systemVarsel && systemVarsel.meldingStatus === MeldingStatus.ACTIVE && (
         <div 
-          className={`flex flex-col items-center py-2 border-b border-t ${systemVarsel.alertType === "INFO" ? "bg-surface-info-subtle border-surface-info" : "bg-surface-warning-subtle border-surface-warning"}`}
+          className={`flex flex-col items-center py-2 border-b border-t ${systemVarsel.alertType === 'INFO' ? 'bg-surface-info-subtle border-surface-info' : 'bg-surface-warning-subtle border-surface-warning'}`}
           aria-label="Systemvarsel"
           role="complementary"
         >

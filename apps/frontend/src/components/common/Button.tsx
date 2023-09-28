@@ -173,7 +173,7 @@ export const ExternalButton = ({
   const underlineStyle = underlineHover ? 'underline-hover' : 'outline'
   const actualSize = size || 'compact'
   return (
-    <ExternalLink href={href} hideUnderline openOnSamePage={openOnSamePage}>
+    <ExternalLink href={href} openOnSamePage={openOnSamePage}>
       <Button kind={kind ? kind : underlineStyle} size={actualSize}>
         {children}
       </Button>

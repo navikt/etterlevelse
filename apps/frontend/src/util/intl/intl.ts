@@ -58,7 +58,7 @@ export const useLang = () => {
     if (lang !== momentlocale) console.warn('moment locale missing', lang)
     localStorageAvailable && localStorage.setItem('tcat-lang', lang)
     update()
-  }, [lang])
+  }, [lang, update])
 
   return setLang
 }

@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { useEffect, useState } from 'react'
 import { ettlevColors, maxPageWidth, responsivePaddingLarge, responsiveWidthLarge, theme } from '../util/theme'
 import { HeadingXLarge, HeadingXXLarge, ParagraphLarge, ParagraphSmall } from 'baseui/typography'
@@ -13,19 +12,16 @@ import moment from 'moment'
 import { user } from '../services/User'
 
 export const FAQ = () => {
-  const [isLoading, setLoading] = useState<boolean>(false)
   const [melding, setMelding] = useState<Melding>()
 
   useEffect(() => {
     ;(async () => {
-      setLoading(true)
       const response = await getMeldingByType(MeldingType.OM_ETTERLEVELSE)
       if (response.numberOfElements > 0) {
         setMelding(response.content[0])
       } else {
         setMelding(mapMeldingToFormValue({ meldingType: MeldingType.OM_ETTERLEVELSE }))
       }
-      setLoading(false)
     })()
   }, [])
 
@@ -69,7 +65,7 @@ export const FAQ = () => {
               <HeadingXLarge marginTop="56px" marginBottom="24px">
                 {melding?.secondaryTittel}
               </HeadingXLarge>
-              <Markdown source={melding?.secondaryMelding} fontSize="18px" fontColor={ettlevColors.green800} />
+              <Markdown source={melding?.secondaryMelding} fontColor={ettlevColors.green800} />
 
               {/*<ParagraphLarge $style={{ fontSize: '22px', color: ettlevColors.green800 }}>*/}
               {/*  Siden er under arbeid, og vi tar gjerne imot innspill på Slack <strong>#etterlevelse.</strong>*/}

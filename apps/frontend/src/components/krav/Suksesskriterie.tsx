@@ -32,7 +32,7 @@ export const SuksesskriterieCard = (props: { suksesskriterie: Suksesskriterie; n
           Suksesskriterium {num} av {totalt}
         </LabelLarge>
         <HeadingXLarge>{suksesskriterie.navn}</HeadingXLarge>
-        <Markdown source={suksesskriterie.beskrivelse} maxWidth={fullWidth ? '100%' : '650px'} />
+        <Markdown source={suksesskriterie.beskrivelse} />
       </Card>
     </Block>
   )

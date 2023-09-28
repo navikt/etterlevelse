@@ -1,7 +1,6 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from 'baseui/modal'
 import { useNavigate } from 'react-router-dom'
-import { deleteIcon } from './Images'
 import { Button } from '@navikt/ds-react'
 import { TrashIcon } from '@navikt/aksel-icons'
 

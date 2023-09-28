@@ -1,13 +1,12 @@
-import { AdresseType, Begrep, Krav, KravQL, KravVersjon, Virkemiddel } from '../../constants'
+import { AdresseType, Begrep, Krav, KravQL, KravVersjon } from '../../constants'
 import { Block, Responsive } from 'baseui/block'
 import React from 'react'
-import { kravStatus } from '../../pages/KravPage'
 import { theme } from '../../util'
 import moment from 'moment'
 import { DotTag, DotTags } from '../common/DotTag'
 import { ListName } from '../../services/Codelist'
 import { Label, LabelAboveContent } from '../common/PropertyLabel'
-import { ExternalLink, ObjectLink } from '../common/RouteLink'
+import { ExternalLink } from '../common/RouteLink'
 import { slackLink, slackUserLink, termUrl } from '../../util/config'
 import { user } from '../../services/User'
 import { LovViewList } from '../Lov'
@@ -42,17 +41,6 @@ export const ViewKrav = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVe
     </Block>
   )
 }
-
-const MediumInfo = ({ krav }: { krav: KravQL }) => (
-  <>
-    <Label title="Status">{kravStatus(krav.status)}</Label>
-    <Label title="Underavdeling">
-      <ObjectLink id={krav.underavdeling?.code} type={ListName.UNDERAVDELING}>
-        {krav.underavdeling?.shortName}
-      </ObjectLink>
-    </Label>
-  </>
-)
 
 export const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVersjoner: KravVersjon[] }) => {
   const hasKravExpired = () => {
@@ -134,6 +122,7 @@ export const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVer
                   </DotTag>
                 )
               }
+              return null
             })}
             {krav.versjonEndringer && (
               <Block marginTop={theme.sizing.scale900} marginBottom={theme.sizing.scale1600}>
@@ -225,12 +214,6 @@ const BegrepView = ({ begrep }: { begrep: Begrep }) => (
       </ExternalLink>{' '}
       - {begrep.beskrivelse}
     </DotTag>
-  </Block>
-)
-
-const VirkemiddelView = ({ virkemiddel }: { virkemiddel: Virkemiddel }) => (
-  <Block maxWidth={'650px'}>
-    <DotTag>{virkemiddel.navn}</DotTag>
   </Block>
 )
 

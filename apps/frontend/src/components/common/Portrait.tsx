@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { personImageLink } from '../../util/config'
 import { Block } from 'baseui/block'
 import { Spinner } from './Spinner'
@@ -6,8 +6,8 @@ import { avatarPlaceholder } from '../Images'
 
 export const Portrait = (props: { ident: string; size?: string }) => {
   const [loading, setLoading] = useState(true)
-  const [image, setImage] = React.useState(personImageLink(props.ident))
-  const [error, setError] = React.useState<boolean>(false)
+  const [image] = useState(personImageLink(props.ident))
+  const [error, setError] = useState<boolean>(false)
   const size = props.size || '42px'
   return (
     <Block width={size} height={size}>

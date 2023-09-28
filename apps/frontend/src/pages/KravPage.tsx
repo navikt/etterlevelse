@@ -14,7 +14,7 @@ import { DeleteItem } from '../components/DeleteItem'
 import { borderColor, borderRadius, borderStyle, borderWidth, padding } from '../components/common/Style'
 import { useQuery } from '@apollo/client'
 import { Tilbakemeldinger } from '../components/krav/tilbakemelding/Tilbakemelding'
-import { editIcon, informationIcon, pageIcon, plusIcon } from '../components/Images'
+import { informationIcon } from '../components/Images'
 import { CustomizedTabs } from '../components/common/CustomizedTabs'
 import { ettlevColors, maxPageWidth, pageWidth, responsivePaddingSmall, responsiveWidthSmall } from '../util/theme'
 import { useLocationState, useQueryParam } from '../util/hooks'
@@ -287,7 +287,7 @@ export const KravPage = () => {
               <Block width={responsiveWidthSmall} paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall} justifyContent="center" display="flex">
                 <Block marginTop="40px" width={pageWidth}>
                   <HeadingXLarge marginTop="0px">Hensikten med kravet</HeadingXLarge>
-                  <Markdown noMargin p1 sources={Array.isArray(krav.hensikt) ? krav.hensikt : [krav.hensikt]} fontSize={'21px'} maxWidth={'800px'} />
+                  <Markdown p1 sources={Array.isArray(krav.hensikt) ? krav.hensikt : [krav.hensikt]} />
                 </Block>
               </Block>
             </Block>
@@ -362,23 +362,6 @@ export const KravPage = () => {
   )
 }
 
-const PageIcon = (props: { hover: boolean }) => (
-  <Block
-    $style={{
-      ...borderRadius('100%'),
-      backgroundColor: props.hover ? ettlevColors.green100 : ettlevColors.green50,
-      minWidth: '38px',
-      maxWidth: '38px',
-      height: '38px',
-      display: 'flex',
-      alignSelf: 'center',
-      alignItems: 'center',
-      justifyContent: 'center',
-    }}
-  >
-    <img src={pageIcon} alt={'Page icon'} width={'22px'} height={'30px'} />
-  </Block>
-)
 
 export const query = gql`
   query getKravWithEtterlevelse($id: ID, $kravNummer: Int, $kravVersjon: Int) {

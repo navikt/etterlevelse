@@ -2,7 +2,7 @@ import * as React from 'react'
 import Button from '../../common/Button'
 import { ANCHOR, Drawer } from 'baseui/drawer'
 import { theme } from '../../../util'
-import { Block, BlockProps } from 'baseui/block'
+import { Block } from 'baseui/block'
 import { StyledLink } from 'baseui/link'
 import { HeadingXLarge, ParagraphMedium } from 'baseui/typography'
 import RouteLink from '../../common/RouteLink'
@@ -10,19 +10,9 @@ import { useLocation } from 'react-router-dom'
 import { env } from '../../../util/env'
 import { useStyletron } from 'styletron-react'
 import { user } from '../../../services/User'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBars, faChevronDown, faChevronRight, faTimes } from '@fortawesome/free-solid-svg-icons'
+import { faBars, faTimes } from '@fortawesome/free-solid-svg-icons'
 import { ettlevColors } from '../../../util/theme'
 import { arkPennIcon, exitIcon, grafIcon, husIcon, paragrafIcon } from '../../Images'
-
-const drawerFooterProps: BlockProps = {
-  display: 'flex',
-  width: '100%',
-  height: '100%',
-  bottom: '0',
-  alignItems: 'flex-end',
-  marginTop: theme.sizing.scale800,
-}
 
 const Brand = () => (
   <StyledLink style={{ textDecoration: 'none' }} href="/">
@@ -30,7 +20,7 @@ const Brand = () => (
   </StyledLink>
 )
 
-const MenuItem = (props: { to: string; text: string; icon: string; setShowMenu: Function }) => (
+const MenuItem = (props: { to: string, text: string, icon: string, setShowMenu: Function }) => (
   <Block
     display={'flex'}
     alignItems={'center'}
@@ -53,18 +43,6 @@ const MenuItem = (props: { to: string; text: string; icon: string; setShowMenu: 
       </Block>
     </RouteLink>
   </Block>
-)
-
-const NavItem = (props: { to: string; text: string }) => (
-  <RouteLink href={props.to} style={{ textDecoration: 'none' }}>
-    <Block display="flex" alignItems="center">
-      <Block marginRight={theme.sizing.scale500}>
-        <FontAwesomeIcon icon={useLocation().pathname.split('/')[1].includes(props.to.split('/')[1]) ? faChevronDown : faChevronRight} color="white" size="lg" />
-      </Block>
-
-      <ParagraphMedium color={ettlevColors.green800}>{props.text}</ParagraphMedium>
-    </Block>
-  </RouteLink>
 )
 
 const LoginButton = (props: { location: string }) => {

@@ -10,7 +10,6 @@ import _ from 'lodash'
 import { user } from '../../services/User'
 import { loginUrl } from '../Header'
 import { ettlevColors } from '../../util/theme'
-import { externalLinkIcon } from '../Images'
 import { Link } from '@navikt/ds-react'
 
 type RouteLinkProps = {
@@ -100,7 +99,7 @@ export const urlForObject = (type: NavigableItem | string, id: string, audit?: A
     case ObjectType.Melding:
       return '/admin/varsel'
   }
-  console.warn("couldn't find object type" + type)
+  console.warn('couldn\'t find object type' + type)
   return ''
 }
 
@@ -110,19 +109,12 @@ export const ObjectLink = (props: ObjectLinkProps) => {
 
   if (props.disable) {
     link = props.children
-  } else if (props.external) {
+  } else
     link = (
-      <ExternalLink fontColor={props.fontColor} href={urlForObject(props.type, props.id, props.audit)} hideUnderline={props.hideUnderline}>
+      <ExternalLink href={urlForObject(props.type, props.id, props.audit)}>
         {props.children}
       </ExternalLink>
     )
-  } else {
-    link = (
-      <RouteLink fontColor={props.fontColor} href={urlForObject(props.type, props.id, props.audit)} hideUnderline={props.hideUnderline}>
-        {props.children}
-      </RouteLink>
-    )
-  }
 
   return props.withHistory ? (
     <Block color={props.fontColor ? props.fontColor : ettlevColors.green800} display="flex" justifyContent="space-between" width="100%" alignItems="center">
@@ -138,17 +130,13 @@ export const ExternalLink = ({
   href,
   children,
   className,
-  hideUnderline,
   label,
-  fontColor,
   openOnSamePage,
 }: {
   href: string
   className?: string
-  hideUnderline?: boolean
   label?: string
   children: React.ReactNode
-  fontColor?: string
   openOnSamePage?: boolean
 }) => {
   return (
@@ -159,7 +147,7 @@ export const ExternalLink = ({
       rel="noopener noreferrer"
       aria-label={label}
     >
-      {children} {!openOnSamePage && " (åpnes i ny fane)"}
+      {children} {!openOnSamePage && ' (åpnes i ny fane)'}
     </Link>
   )
 }

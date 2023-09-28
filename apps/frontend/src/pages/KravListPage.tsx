@@ -1,6 +1,6 @@
-import { Block, Responsive } from 'baseui/block'
+import { Block } from 'baseui/block'
 import { HeadingXXLarge, LabelSmall, ParagraphMedium } from 'baseui/typography'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import Button from '../components/common/Button'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
 import CustomizedTabs from '../components/common/CustomizedTabs'
@@ -15,7 +15,6 @@ import { Krav, KravQL } from '../constants'
 import { SkeletonPanel } from '../components/common/LoadingSkeleton'
 import { codelist, ListName } from '../services/Codelist'
 import { borderColor, borderRadius, borderStyle, borderWidth } from '../components/common/Style'
-import { Option } from 'baseui/select'
 import { AllKrav } from '../components/kravList/AllKrav'
 import { SistRedigertKrav } from '../components/kravList/SisteRedigertKrav'
 import { TemaList } from '../components/kravList/TemaList'
@@ -27,14 +26,6 @@ import { ampli } from '../services/Amplitude'
 type Section = 'siste' | 'alle' | 'tema'
 
 const tabMarginBottom = '10px'
-const responsiveDisplay: Responsive<any> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
-
-type KravFilter = {
-  status: Option[]
-  relevans: Option[]
-  tema: Option[]
-  lover: Option[]
-}
 
 export const sortKrav = (kravene: KravQL[]) => {
   return [...kravene].sort((a, b) => {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Block } from 'baseui/block'
 import { useParams } from 'react-router-dom'
 import { ettlevColors } from '../util/theme'
@@ -11,7 +11,6 @@ import { ampli } from '../services/Amplitude'
 import { KRAV_FILTER_TYPE } from '../constants'
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
 import { getMainHeader } from '../components/etterlevelseDokumentasjon/common/utils'
-import { EtterlevelseSecondaryHeaderV2 } from '../components/etterlevelse/EtterlevelseSecondaryHeaderV2'
 import { KravView } from '../components/EtterlevelseDokumentasjonTema/KravView'
 
 export type Section = 'dokumentasjon' | 'etterlevelser' | 'tilbakemeldinger'
@@ -29,8 +28,7 @@ export const getFilterType = (id: string | number | undefined): KRAV_FILTER_TYPE
 export const EtterlevelseDokumentasjonPageV2 = () => {
   const params = useParams<{ id: string; tema: string; kravNummer: string; kravVersjon: string; filter: string }>()
   const temaData: TemaCode | undefined = codelist.getCode(ListName.TEMA, params.tema?.replace('i', ''))
-  const [etterlevelseDokumentasjon, setEtterkevekseDokumentasjon] = useEtterlevelseDokumentasjon(params.id)
-  const lovListe = codelist.getCodesForTema(temaData?.code)
+  const [etterlevelseDokumentasjon] = useEtterlevelseDokumentasjon(params.id)
 
   const [kravId, setKravId] = useState<KravId | undefined>()
 

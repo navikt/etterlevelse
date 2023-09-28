@@ -1,4 +1,3 @@
-import _ from 'lodash'
 import { BodyShort, Link } from '@navikt/ds-react'
 import { ChevronRightIcon } from '@navikt/aksel-icons'
 
@@ -19,8 +18,8 @@ const CustomizedBreadcrumbs = (props: CustomizedProps) => {
 
   const getName = (pathName: string) => (pathName.length > 25 ? pathName.substring(0, 25) + '...' : pathName)
   const linkColor = /^\/(lov|krav|etterlevelse)\//.test(window.location.pathname) 
-    ? "text-white" 
-    : "text-text-default"
+    ? 'text-white'
+    : 'text-text-default'
 
   return (
       <div className="flex gap-1 items-center">

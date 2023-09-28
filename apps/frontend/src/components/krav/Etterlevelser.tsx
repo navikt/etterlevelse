@@ -4,7 +4,7 @@ import { HeadingXLarge, HeadingXXLarge, LabelLarge, LabelSmall, ParagraphMedium 
 import _ from 'lodash'
 import moment from 'moment'
 import { useState } from 'react'
-import { Etterlevelse, EtterlevelseQL, EtterlevelseStatus, ExternalCode, Krav, KravQL, SuksesskriterieStatus } from '../../constants'
+import { Etterlevelse, EtterlevelseQL, EtterlevelseStatus, Krav, KravQL, SuksesskriterieStatus } from '../../constants'
 import { kravNumView } from '../../pages/KravPage'
 import { theme } from '../../util'
 import { ettlevColors, maxPageWidth, responsivePaddingExtraLarge } from '../../util/theme'
@@ -59,7 +59,7 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
         t.productAreaName = 'Ingen produktområde'
       }
     })
-
+    return e
   })
 
 

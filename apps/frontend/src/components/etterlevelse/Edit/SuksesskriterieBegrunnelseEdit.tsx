@@ -17,8 +17,6 @@ import { buttonContentStyle } from '../../common/Button'
 import { Markdown } from '../../common/Markdown'
 import { ALIGN, Radio, RadioGroup, RadioGroupOverrides, RadioOverrides } from 'baseui/radio'
 
-const paddingLeft = '30px'
-
 const radioButtonOverrides: RadioOverrides & RadioGroupOverrides = {
   Root: {
     style: ({ $isFocused, $checked }) => ({
@@ -289,7 +287,7 @@ const KriterieBegrunnelse = ({
             },
           }}
         >
-          <Markdown source={suksesskriterie.beskrivelse} fontSize="18px" maxWidth="650px" />
+          <Markdown source={suksesskriterie.beskrivelse} />
         </CustomizedPanel>
       </CustomizedAccordion>
 

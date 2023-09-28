@@ -1,5 +1,5 @@
 import { LabelLarge, LabelSmall } from 'baseui/typography'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import moment from 'moment'
 import { Pagination } from 'baseui/pagination'
 import { TriangleDown } from 'baseui/icon'
@@ -18,7 +18,6 @@ import { intl } from '../../../util/intl/intl'
 import { getAudits } from './AuditApi'
 import { Cell, Row, Table } from '../../common/Table'
 import * as _ from 'lodash'
-import randomColor from 'randomcolor'
 import { theme } from '../../../util'
 import ReactJson from '@microlink/react-json-view'
 import { ObjectLink } from '../../common/RouteLink'
@@ -31,14 +30,6 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: ObjectType 
   const [page, setPage] = useState(1)
   const [limit, setLimit] = useState(20)
   const [table, setTable] = useState<ObjectType | undefined>(props.tableType)
-
-  const colors = _.uniq(audits.content.map((a) => a.tableId)).reduce(
-    (val, id) => {
-      val[id] = randomColor({ seed: id, luminosity: 'dark' })
-      return val
-    },
-    {} as { [id: string]: string },
-  )
 
   useEffect(() => {
     ;(async () => {
