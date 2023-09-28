@@ -38,7 +38,23 @@ export const useBehandling = (id?: string) => {
   return [data, setData] as [Behandling | undefined, (behandling: Behandling | undefined) => void]
 }
 
-export const behandlingName = (behandling?: Behandling) => (behandling ? 'B' + behandling.nummer + ' ' + behandling.overordnetFormaal.shortName + ': ' + behandling.navn : '')
+export const behandlingName = (behandling?: Behandling) => {
+  let behandlingName = ''
+
+  if(behandling) {
+    if(behandling.nummer) {
+      behandlingName += 'B' + behandling.nummer + ' '
+    }
+    if(behandling.overordnetFormaal && behandling.overordnetFormaal.shortName) {
+      behandlingName += behandling.overordnetFormaal.shortName + ': '
+    } 
+    if(behandling.navn) {
+      behandlingName += behandling.navn
+    }
+}
+
+  return behandlingName
+}
 export const useSearchBehandling = () => useSearch(searchBehandling)
 
 export const useMyBehandlinger = () => {

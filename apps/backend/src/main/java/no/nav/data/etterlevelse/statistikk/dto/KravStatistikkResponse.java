@@ -36,4 +36,6 @@ public class KravStatistikkResponse {
     private KravStatus status;
     private LocalDateTime aktivertDato;
     private String tema;
+    private List<LocalDateTime> oppdateringsTidsPunkter;
+    private Boolean harNyVersjon;
 }
