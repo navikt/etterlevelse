@@ -14,6 +14,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BehandlingStatistikk {
+    private String etterlevelseDokumentasjonsId;
+    private String etterlevelseDokumentasjonTittel;
     private String behandlingId;
     private String behandlingNavn;
     private List<String> team;
@@ -28,6 +30,8 @@ public class BehandlingStatistikk {
 
 public BehandligStatistikkResponse toResponse() {
     return BehandligStatistikkResponse.builder()
+            .etterlevelseDokumentasjonsId(etterlevelseDokumentasjonsId)
+            .etterlevelseDokumentasjonTittel(etterlevelseDokumentasjonTittel)
             .behandlingId(behandlingId)
             .behandlingNavn(behandlingNavn)
             .team(team)

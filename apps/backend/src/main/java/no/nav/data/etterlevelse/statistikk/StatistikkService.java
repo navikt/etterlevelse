@@ -174,6 +174,8 @@ public class StatistikkService {
 
                 behandlingStatistikkList.add(
                         BehandlingStatistikk.builder()
+                                .etterlevelseDokumentasjonsId(etterlevelseDokumentasjon.getId().toString())
+                                .etterlevelseDokumentasjonTittel("E" + etterlevelseDokumentasjon.getEtterlevelseNummer() + " " + etterlevelseDokumentasjon.getTitle())
                                 .behandlingId(behandling.getId())
                                 .behandlingNavn(behandlingNavn)
                                 .totalKrav(aktivKravList.size())
