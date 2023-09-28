@@ -38,7 +38,7 @@
     "react-dom": "^18.2.0",
     "react-draft-wysiwyg": "^1.14.7",
     "react-json-view": "^1.21.1",
-    "react-markdown": "^8.0.0",
+    "react-markdown": "^9.0.0",
     "react-markdown-editor-lite": "^1.2.4",
     "react-player": "^2.9.0",
     "react-process-string": "^1.2.0",
