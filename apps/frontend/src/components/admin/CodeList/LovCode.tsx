@@ -9,10 +9,8 @@ import {
   LovCodeData,
   LovCodeRelevans,
   lovCodeRelevansToOptions,
-  lovCodeRelevansToText,
   TemaCodeData,
 } from '../../../services/Codelist'
-import * as React from 'react'
 import { SIZE as InputSIZE } from 'baseui/input'
 import { OptionList } from '../../common/Inputs'
 import { temaBilder } from '../../Images'

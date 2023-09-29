@@ -23,7 +23,7 @@ export const Label = (props: LabelProps) => {
     <DataText label={props.title} compact={props.compact} header={props.header} display={props.display}>
       {props.markdown ? (
         <Block marginTop={'-1rem'} marginBottom={'-1rem'}>
-          <Markdown p1={props.p1} sources={Array.isArray(props.markdown) ? props.markdown : [props.markdown]} vertical={props.vertical} shortenLinks maxWidth={props.maxWidth} />
+          <Markdown p1={props.p1} sources={Array.isArray(props.markdown) ? props.markdown : [props.markdown]} vertical={props.vertical} shortenLinks />
         </Block>
       ) : (
         props.children
@@ -38,7 +38,7 @@ export const LabelAboveContent = (props: LabelProps) => {
     <DataText notFlexed label={props.title} compact={props.compact} header={props.header} display={props.display} labelWidth={props.labelWidth}>
       {props.markdown ? (
         <Block marginTop={'-1rem'} marginBottom={'-1rem'}>
-          <Markdown p1={props.p1} sources={Array.isArray(props.markdown) ? props.markdown : [props.markdown]} vertical={props.vertical} shortenLinks maxWidth={props.maxWidth} />
+          <Markdown p1={props.p1} sources={Array.isArray(props.markdown) ? props.markdown : [props.markdown]} vertical={props.vertical} shortenLinks />
         </Block>
       ) : (
         props.children

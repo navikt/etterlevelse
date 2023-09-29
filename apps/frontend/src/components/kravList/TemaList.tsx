@@ -19,7 +19,6 @@ import { getAllKravPriority } from '../../api/KravPriorityApi'
 export const TemaList = () => {
   const [allActiveKrav, setAllActiveKrav] = useState<Krav[]>([])
   const [allDraftKrav, setAllDraftKrav] = useState<Krav[]>([])
-  const tema = codelist.getCodes(ListName.TEMA)
 
   useEffect(() => {
     fetchKrav()
@@ -34,6 +33,7 @@ export const TemaList = () => {
         const priority = allKravPriority.filter((kp) => kp.kravNummer === k.kravNummer && kp.kravVersjon === k.kravVersjon)
         k.prioriteringsId = priority.length ? priority[0].prioriteringsId : ''
         k.kravPriorityUID = priority.length ? priority[0].id : ''
+        return k
       })
 
       setAllActiveKrav(kraver.filter((k) => k.status === KravStatus.AKTIV))

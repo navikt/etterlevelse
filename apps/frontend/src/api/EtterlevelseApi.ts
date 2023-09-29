@@ -113,6 +113,7 @@ export const mapEtterlevelseToFormValue = (etterlevelse: Partial<Etterlevelse>, 
           if (sb.suksesskriterieId === s.id) {
             sb.behovForBegrunnelse = s.behovForBegrunnelse
           }
+          return sb
         })
       })
     } else {

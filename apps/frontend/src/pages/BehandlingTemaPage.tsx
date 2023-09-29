@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Block } from 'baseui/block'
-import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import { useLocation, useParams } from 'react-router-dom'
 import { HeadingXLarge, ParagraphMedium } from 'baseui/typography'
 import { ettlevColors } from '../util/theme'
 import { codelist, ListName, TemaCode } from '../services/Codelist'
 import { useBehandling } from '../api/BehandlingApi'
 import { Layout2 } from '../components/scaffold/Page'
-import { Etterlevelse, EtterlevelseStatus, Krav, KRAV_FILTER_TYPE, KravEtterlevelseData, KravPrioritering, KravQL, KravStatus, PageResponse } from '../constants'
+import { Etterlevelse, EtterlevelseStatus, KRAV_FILTER_TYPE, KravEtterlevelseData, KravPrioritering, KravQL, KravStatus, PageResponse } from '../constants'
 import { useQuery } from '@apollo/client'
-import { behandlingKravQuery, getAllKrav } from '../api/KravApi'
+import { behandlingKravQuery } from '../api/KravApi'
 import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 import { KravPanelHeaderWithSorting } from '../components/behandling/KravPanelHeader'
 import { Helmet } from 'react-helmet'
@@ -49,15 +49,13 @@ export const isFerdigUtfylt = (status: EtterlevelseStatus | undefined) => {
 export const BehandlingTemaPage = () => {
   const params = useParams<{ id?: string; tema?: string; filter?: string }>()
   const temaData: TemaCode | undefined = codelist.getCode(ListName.TEMA, params.tema)
-  const [behandling, setBehandling] = useBehandling(params.id)
+  const [behandling] = useBehandling(params.id)
   const lovListe = codelist.getCodesForTema(temaData?.code)
   const lover = lovListe.map((c) => c.code)
-  const [allKrav, setAllKrav] = useState<Krav[]>([])
   const variables = { behandlingId: params.id, lover: lover, gjeldendeKrav: true, behandlingIrrevantKrav: false, status: KravStatus.AKTIV }
   const [allKravPriority, setAllKravPriority] = useState<KravPrioritering[]>([])
   const location = useLocation()
-  const [temaPageUrl, setTemaPageUrl] = useState<string>(location.pathname)
-  const navigate = useNavigate()
+  const [temaPageUrl] = useState<string>(location.pathname)
 
   const { data: relevanteKraverGraphQLResponse, loading: relevanteKraverGraphQLLoading } = useQuery<{ krav: PageResponse<KravQL> }>(behandlingKravQuery, {
     variables,
@@ -84,7 +82,6 @@ export const BehandlingTemaPage = () => {
 
   useEffect(() => {
     ;(async () => {
-      setAllKrav(await getAllKrav())
       setAllKravPriority(await getAllKravPriority())
     })()
   }, [])

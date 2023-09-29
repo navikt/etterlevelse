@@ -60,7 +60,7 @@ export const getTemaMainHeader = (tema: TemaCode, lover: LovCode[], expand: bool
           maskImage: expand ? undefined : `linear-gradient(${ettlevColors.black} 40%, transparent)`,
         }}
       >
-        <Markdown source={tema.description} fontSize={'21px'} maxWidth={'800px'} p1 />
+        <Markdown source={tema.description} p1 />
       </Block>
 
       {expand && (
@@ -116,6 +116,7 @@ const TemaSide = ({ tema }: { tema: TemaCode }) => {
         kraver.map((k) => {
           const priority = allKravPriority.filter((kp) => kp.kravNummer === k.kravNummer && kp.kravVersjon === k.kravVersjon)
           k.prioriteringsId = priority.length ? priority[0].prioriteringsId : ''
+          return k
         })
         setKravList(sortKraverByPriority(kraver, tema.shortName))
       })()
@@ -330,7 +331,7 @@ export const TemaCard = ({ tema, relevans, setNum }: { tema: TemaCode; relevans:
           </Block>
         </SimpleTag>
 
-        <Markdown source={tema.data?.shortDesciption} fontSize={'18px'} />
+        <Markdown source={tema.data?.shortDesciption} />
       </Block>
     </PanelLinkCard>
   )

@@ -267,8 +267,7 @@ export const filterLovCodeListForRelevans = (codeList: LovCode[], relevantFor: L
       } else if (code.data.relevantFor === LovCodeRelevans.KRAV_OG_VIRKEMIDDEL || code.data.relevantFor === relevantFor) {
         return true
       }
-    } else {
-      return false
     }
+    return false
   })
 }

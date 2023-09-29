@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Block } from 'baseui/block'
 import { useParams } from 'react-router-dom'
 import { ettlevColors } from '../util/theme'
@@ -29,7 +29,7 @@ export const getFilterType = (id: string | number | undefined): KRAV_FILTER_TYPE
 export const EtterlevelseDokumentasjonPage = () => {
   const params = useParams<{ id: string; tema: string; kravNummer: string; kravVersjon: string; filter: string }>()
   const temaData: TemaCode | undefined = codelist.getCode(ListName.TEMA, params.tema?.replace('i', ''))
-  const [behandling, setBehandling] = useBehandling(params.id)
+  const [behandling] = useBehandling(params.id)
   const lovListe = codelist.getCodesForTema(temaData?.code)
 
   const [kravId, setKravId] = useState<KravId | undefined>()

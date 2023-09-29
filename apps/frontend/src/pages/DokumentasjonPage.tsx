@@ -2,15 +2,14 @@ import React, { useState } from 'react'
 import { Block } from 'baseui/block'
 import { useParams } from 'react-router-dom'
 import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
-import { HeadingXLarge, LabelSmall, ParagraphMedium, ParagraphXSmall } from 'baseui/typography'
+import { HeadingXLarge, ParagraphMedium } from 'baseui/typography'
 import { ettlevColors, theme } from '../util/theme'
 import { Layout2 } from '../components/scaffold/Page'
-import { arkPennIcon, ellipse80, saveArchiveIcon, warningAlert } from '../components/Images'
+import { arkPennIcon, ellipse80, saveArchiveIcon } from '../components/Images'
 import { EtterlevelseDokumentasjonQL, EtterlevelseDokumentasjonStats, KravQL, KravStatus, PageResponse } from '../constants'
 import { gql, useQuery } from '@apollo/client'
 import { Code, codelist, ListName } from '../services/Codelist'
 import { Button, KIND, SIZE } from 'baseui/button'
-import { marginZero } from '../components/common/Style'
 import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 
 import { ampli } from '../services/Amplitude'
@@ -19,7 +18,6 @@ import { user } from '../services/User'
 import { useArkiveringByEtterlevelseDokumentasjonId } from '../api/ArkiveringApi'
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
 import { TemaCardEtterlevelseDokumentasjon } from '../components/etterlevelseDokumentasjon/TemaCardEtterlevelseDokumentasjon'
-import EditEtterlevelseDokumentasjonModal from '../components/etterlevelseDokumentasjon/edit/EditEtterlevelseDokumentasjonModal'
 import { ArkiveringModal } from '../components/etterlevelseDokumentasjon/ArkiveringModal'
 import ExportEtterlevelseModalV2 from '../components/export/ExportEtterlevelseModalV2'
 import { isFerdigUtfylt } from './EtterlevelseDokumentasjonTemaPage'
@@ -41,10 +39,7 @@ export const DokumentasjonPage = () => {
     variables: { etterlevelseDokumentasjonId: etterlevelseDokumentasjon?.id },
   })
 
-  const [edit, setEdit] = useState(false)
-
   const [relevanteStats, setRelevanteStats] = useState<any[]>([])
-  const [irrelevanteStats, setIrrelevanteStats] = useState<any[]>([])
   const [utgaattStats, setUtgaattStats] = useState<any[]>([])
   const [arkivModal, setArkivModal] = useState<boolean>(false)
 
@@ -58,7 +53,6 @@ export const DokumentasjonPage = () => {
       | undefined,
   ) => {
     const relevanteStatusListe: any[] = []
-    const irrelevanteStatusListe: any[] = []
     const utgaattStatusListe: any[] = []
 
     unfilteredData?.etterlevelseDokumentasjon.content.forEach(({ stats }) => {
@@ -78,19 +72,7 @@ export const DokumentasjonPage = () => {
       })
     })
 
-    unfilteredData?.etterlevelseDokumentasjon.content.forEach(({ stats }) => {
-      stats.irrelevantKrav.forEach((k) => {
-        if (k.regelverk.length && k.status === KravStatus.AKTIV) {
-          irrelevanteStatusListe.push({ ...k, etterlevelser: k.etterlevelser.filter((e) => e.etterlevelseDokumentasjonId === etterlevelseDokumentasjon?.id) })
-        }
-      })
-    })
-
     relevanteStatusListe.sort((a, b) => {
-      return a.kravNummer - b.kravNummer
-    })
-
-    irrelevanteStatusListe.sort((a, b) => {
       return a.kravNummer - b.kravNummer
     })
 
@@ -101,13 +83,12 @@ export const DokumentasjonPage = () => {
       return a.kravNummer - b.kravNummer
     })
 
-    return [relevanteStatusListe, irrelevanteStatusListe, utgaattStatusListe]
+    return [relevanteStatusListe, utgaattStatusListe]
   }
 
   React.useEffect(() => {
-    const [relevanteStatusListe, irrelevanteStatusListe, utgaattStatusListe] = filterData(relevanteData)
+    const [relevanteStatusListe, utgaattStatusListe] = filterData(relevanteData)
     setRelevanteStats(relevanteStatusListe)
-    setIrrelevanteStats(irrelevanteStatusListe)
     setUtgaattStats(utgaattStatusListe)
   }, [relevanteData])
 
@@ -129,8 +110,6 @@ export const DokumentasjonPage = () => {
       antallFylttKrav += 1
     }
   })
-
-  const getPercentageUtfylt = relevanteStats && relevanteStats.length && (antallFylttKrav / relevanteStats.length) * 100
 
   const getRelevansContent = (etterlevelseDokumentasjon: EtterlevelseDokumentasjonQL) => {
     const emptyRelevans = etterlevelseDokumentasjon.irrelevansFor.length === options.length ? true : false

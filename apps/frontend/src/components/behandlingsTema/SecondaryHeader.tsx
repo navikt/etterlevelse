@@ -1,13 +1,12 @@
 import { Block } from 'baseui/block'
 import Button from '../common/Button'
-import { borderRadius, marginAll, paddingAll } from '../common/Style'
+import { borderRadius, marginAll } from '../common/Style'
 import { HeadingXXLarge, LabelSmall } from 'baseui/typography'
 import { ettlevColors, maxPageWidth, responsivePaddingExtraLarge } from '../../util/theme'
 import { angleIcon, page2Icon } from '../Images'
 import CustomizedModal from '../common/CustomizedModal'
 import { getTemaMainHeader } from '../../pages/TemaPage'
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useState } from 'react'
 import { Behandling } from '../../constants'
 import { LovCode, TemaCode } from '../../services/Codelist'
 
@@ -16,10 +15,8 @@ type SecondaryHeaderProps = {
   temaData: TemaCode | undefined
   lovListe: LovCode[]
 }
-export const SecondaryHeader = ({ behandling, temaData, lovListe }: SecondaryHeaderProps) => {
+export const SecondaryHeader = ({ temaData, lovListe }: SecondaryHeaderProps) => {
   const [isTemaModalOpen, setIsTemaModalOpen] = useState<boolean>(false)
-
-  const navigate = useNavigate()
 
   return (
     <Block width="100%">

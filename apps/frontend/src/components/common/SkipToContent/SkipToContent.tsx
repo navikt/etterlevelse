@@ -1,6 +1,5 @@
-import { Block, BlockProps } from 'baseui/block'
+import { Block } from 'baseui/block'
 import { LabelSmall } from 'baseui/typography'
-import React from 'react'
 import { StyleObject } from 'styletron-react'
 import { ettlevColors } from '../../../util/theme'
 import CustomizedLink from '../CustomizedLink'

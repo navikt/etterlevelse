@@ -24,8 +24,7 @@ type KravFilter = {
 
 export const AllKrav = () => {
   const pageSize = 20
-  const [pageNumber, setPage] = useState(0)
-  const [sorting, setSorting] = useState('sist')
+  const [sorting] = useState('sist')
   const [filter, setFilter] = useState<KravFilter>({
     status: [{ label: 'Alle statuser', id: 'alle' }],
     relevans: [{ label: 'Alle relevans', id: 'alle' }],

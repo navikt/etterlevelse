@@ -2,7 +2,7 @@ import { Block } from 'baseui/block'
 import { HeadingXXLarge, LabelSmall } from 'baseui/typography'
 import { useParams } from 'react-router-dom'
 import { useEtterlevelse } from '../api/EtterlevelseApi'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Etterlevelse, Krav } from '../constants'
 import { ViewEtterlevelse } from '../components/etterlevelse/ViewEtterlevelse'
 import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
@@ -23,7 +23,7 @@ export const kravLink = (kravNummer: string) => {
 export const EtterlevelsePage = () => {
   const params = useParams<{ id?: string }>()
   const [etterlevelse, setEtterlevelse] = useEtterlevelse(params.id)
-  const [edit, setEdit] = useState(etterlevelse && !etterlevelse.id)
+  const [edit] = useState(etterlevelse && !etterlevelse.id)
   const [krav, setKrav] = useState<Krav>()
   const [kravTema, setKravTema] = useState<TemaCode>()
 

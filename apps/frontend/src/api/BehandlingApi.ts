@@ -31,7 +31,7 @@ export const useBehandling = (id?: string) => {
         .then(setData)
         .catch((e) => {
           setData(undefined)
-          console.log("couldn't find behandling", e)
+          console.log('couldn\'t find behandling', e)
         })
   }, [id])
 
@@ -72,7 +72,7 @@ export const useMyBehandlinger = () => {
         .catch((e) => {
           setData([])
           setLoading(false)
-          console.log("couldn't find behandlinger", e)
+          console.log('couldn\'t find behandlinger', e)
         })
   }, [ident])
 

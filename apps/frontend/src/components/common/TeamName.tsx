@@ -3,7 +3,6 @@ import { teamKatTeamLink } from '../../util/config'
 import { Block } from 'baseui/block'
 import { theme } from '../../util'
 import { StyleObject } from 'styletron-react'
-import _ from 'lodash'
 import { Link } from '@navikt/ds-react'
 
 export const TeamName = (props: { id: string; link?: boolean; fontColor?: string; style?: StyleObject }) => {

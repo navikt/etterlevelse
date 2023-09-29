@@ -74,6 +74,7 @@ export const useEtterlevelseDokumentasjon = (etterlevelseDokumentasjonId?: strin
           if (behandlinger && behandlinger.length > 0) {
             behandlinger.map((b) => {
               b.navn = behandlingName(b)
+              return b
             })
           }
           setData({ ...etterlevelseDokumentasjon, behandlinger: behandlinger, virkemiddel: virkmiddel })

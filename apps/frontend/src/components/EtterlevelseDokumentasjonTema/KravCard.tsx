@@ -1,8 +1,7 @@
 import { EtterlevelseMetadata, KRAV_FILTER_TYPE, KravEtterlevelseData } from '../../constants'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { getEtterlevelseMetadataByEtterlevelseDokumentasjonAndKravNummerAndKravVersion, mapEtterlevelseMetadataToFormValue } from '../../api/EtterlevelseMetadataApi'
 import { Block } from 'baseui/block'
-import Button from '../common/Button'
 import { ettlevColors } from '../../util/theme'
 import { borderStyle, marginAll } from '../common/Style'
 import { LabelSmall, ParagraphXSmall } from 'baseui/typography'
@@ -12,7 +11,7 @@ import TildeltPopoever from '../etterlevelseMetadata/TildeltPopover'
 import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons'
 import { arkCheckIcon, arkPennIcon, warningAlert } from '../Images'
 import { getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber } from '../../api/EtterlevelseApi'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import { getNumberOfDaysBetween } from '../../util/checkAge'
 import { isFerdigUtfylt } from '../../pages/EtterlevelseDokumentasjonTemaPage'
 import { getEtterlevelseStatus, getStatusLabelColor } from '../etterlevelseDokumentasjon/common/utils'
@@ -21,7 +20,6 @@ import RouteLink from '../common/RouteLink'
 export const KravCard = (props: { krav: KravEtterlevelseData; noStatus?: boolean; etterlevelseDokumentasjonId: string; noVarsling?: boolean; kravFilter: KRAV_FILTER_TYPE }) => {
   const [nyVersionFlag, setNyVersionFlag] = useState<boolean>(false)
   const [hover, setHover] = useState(false)
-  const navigate = useNavigate()
   const location = useLocation()
   const [kravAge, setKravAge] = useState<number>(0)
 

@@ -31,8 +31,6 @@ import { intl } from '../../../util/intl/intl'
 import { SelectOverrides, TYPE } from 'baseui/select'
 import { useSearchTeam } from '../../../api/TeamApi'
 import { RenderTagList } from '../../common/TagList'
-import { useSearchVirkemiddel } from '../../../api/VirkemiddelApi'
-import { Checkbox, LABEL_PLACEMENT } from 'baseui/checkbox'
 import { useNavigate } from 'react-router-dom'
 import { updateBehandlingNameWithNumber } from '../common/utils'
 
@@ -84,7 +82,6 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
   const [hover, setHover] = useState<number>()
   const [isEtterlevelseDokumentasjonerModalOpen, setIsEtterlevelseDokumntasjonerModalOpen] = useState<boolean>(false)
   const [behandlingSearchResult, setBehandlingSearchResult, loadingBehandlingSearchResult] = useSearchBehandling()
-  const [virkemiddelSearchResult, setVirkemiddelSearchResult, loadingVirkemiddelSearchResult] = useSearchVirkemiddel()
   const [selectedVirkemiddel, setSelectedVirkemiddel] = useState<Virkemiddel>()
   const [teamSearchResult, setTeamSearchResult, loadingTeamSearchResult] = useSearchTeam()
   const navigate = useNavigate()

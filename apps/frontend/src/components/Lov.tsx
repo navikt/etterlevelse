@@ -1,9 +1,7 @@
-import React from 'react'
 import { codelist, ListName } from '../services/Codelist'
 import { env } from '../util/env'
 import { Regelverk } from '../constants'
 import { Block } from 'baseui/block'
-import CustomizedLink from './common/CustomizedLink'
 import { Link } from '@navikt/ds-react'
 
 const reactProcessString = require('react-process-string')

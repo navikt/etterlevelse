@@ -32,7 +32,6 @@ import { Modal as BaseModal, ModalBody, ModalHeader } from 'baseui/modal'
 import { EditKravRelasjoner } from './Edit/EditKravRelasjoner'
 import AlertUnsavedPopup from '../common/AlertUnsavedPopup'
 import _ from 'lodash'
-import { EditVirkemidler } from './Edit/KravEditVirkemidler'
 
 type EditKravProps = {
   krav: KravQL

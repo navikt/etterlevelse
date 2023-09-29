@@ -1,41 +1,30 @@
 import ReactMarkdown from 'react-markdown'
-import { useDebouncedState } from '../../util/hooks'
 import MdEditor from 'react-markdown-editor-lite'
 import 'react-markdown-editor-lite/lib/index.css'
 import { Block } from 'baseui/block'
-import { theme } from '../../util'
 import { ExternalLink } from './RouteLink'
 import { markdownLink } from '../../util/config'
 import remarkGfm from 'remark-gfm'
 import rehypeRaw from 'rehype-raw'
 import { ettlevColors } from '../../util/theme'
 import { BodyLong, BodyShort, Heading, Link, List } from '@navikt/ds-react'
-import { ExternalLinkIcon } from '@navikt/aksel-icons'
 
 export const Markdown = ({
   vertical,
   escapeHtml = true,
   shortenLinks,
-  noMargin,
   source,
   sources: sourcesOrig,
   p1,
   fontColor,
-  fontSize,
-  maxWidth,
-  externalLink,
 }: {
   source?: string
   sources?: string[]
   escapeHtml?: boolean
-  noMargin?: boolean
   shortenLinks?: boolean
   vertical?: boolean
   p1?: boolean
   fontColor?: string
-  fontSize?: string
-  maxWidth?: string
-  externalLink?: boolean
 }) => {
   const renderers = {
     p: (parProps: any) => {
@@ -140,15 +129,12 @@ type MarkdownEditorProps = {
 }
 
 export const MarkdownEditor = (props: MarkdownEditorProps) => {
-  // Reduce UI lag by only updating field at set interval
-  const [val, setVal] = useDebouncedState(props.initialValue, 500, props.setValue)
-
+  
   return (
     <MdEditor
       style={{ height: props.height || '500px' }}
       defaultValue={props.initialValue}
       renderHTML={(txt) => <Markdown source={txt} shortenLinks={props.shortenLinks} />}
-      onChange={(data) => setVal(data.text)}
       onImageUpload={props.onImageUpload}
     />
   )

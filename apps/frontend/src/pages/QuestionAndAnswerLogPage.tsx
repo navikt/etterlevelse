@@ -3,7 +3,7 @@ import { Block } from 'baseui/block'
 import { HeadingXXLarge, ParagraphMedium } from 'baseui/typography'
 import moment from 'moment'
 import * as React from 'react'
-import { useEffect, useState } from 'react'
+import { ReactNode, useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { getAllKrav, kravMapToFormVal } from '../api/KravApi'
 import { getTilbakemeldingForKrav } from '../api/TilbakemeldingApi'
@@ -18,7 +18,6 @@ import { ettlevColors, maxPageWidth } from '../util/theme'
 import { codelist, ListName } from '../services/Codelist'
 import { ampli } from '../services/Amplitude'
 import { Spinner } from '../components/common/Spinner'
-import { ReactNode } from 'react-markdown/lib/react-markdown'
 
 type SporsmaalOgSvarKrav = {
   kravNavn: string

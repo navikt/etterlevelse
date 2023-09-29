@@ -8,7 +8,6 @@ import { HeadingXLarge, LabelLarge, LabelSmall, ParagraphMedium, ParagraphSmall,
 import { arrowRightIcon, navChevronRightIcon } from '../Images'
 import * as _ from 'lodash'
 import Button from './Button'
-import { ampli } from '../../services/Amplitude'
 
 interface PanelProps {
   href: string
@@ -161,7 +160,7 @@ export const PanelExternalLink = ({
   hideChevron,
 }: PanelProps) => {
   return (
-    <ExternalLink href={href} hideUnderline>
+    <ExternalLink href={href}>
       <SimplePanel
         title={title}
         rightTitle={rightTitle}

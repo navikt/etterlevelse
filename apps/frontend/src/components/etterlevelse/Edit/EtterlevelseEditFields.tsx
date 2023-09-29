@@ -11,7 +11,7 @@ import { SuksesskriterierBegrunnelseEdit } from './SuksesskriterieBegrunnelseEdi
 import { KIND as NKIND, Notification } from 'baseui/notification'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons'
-import { borderColor, borderRadius, borderStyle, borderWidth, marginAll, padding } from '../../common/Style'
+import { borderColor, borderRadius, borderStyle, borderWidth, marginAll } from '../../common/Style'
 import moment from 'moment'
 import { CustomizedAccordion, CustomizedPanel } from '../../common/CustomizedAccordion'
 import { AllInfo } from '../../krav/ViewKrav'
@@ -69,10 +69,10 @@ export const EtterlevelseEditFields = ({
   setEtterlevelseMetadata,
   setIsFormDirty,
 }: EditProps) => {
-  const [etterlevelseStatus, setEtterlevelseStatus] = React.useState<string>(
+  const [etterlevelseStatus] = React.useState<string>(
     editedEtterlevelse ? editedEtterlevelse.status : etterlevelse.status || EtterlevelseStatus.UNDER_REDIGERING,
   )
-  const [radioHover, setRadioHover] = React.useState<string>('')
+  const [radioHover] = React.useState<string>('')
   const [isOppfylesSenere, setOppfylesSenere] = React.useState<boolean>(etterlevelseStatus === EtterlevelseStatus.OPPFYLLES_SENERE)
   const [isNotatfeltOpen, setIsNotatfeltOpen] = React.useState(false)
 

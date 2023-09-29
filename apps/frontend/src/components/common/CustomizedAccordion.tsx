@@ -26,9 +26,6 @@ type CustomProps = CustomizedPanelProps & PanelProps
 export const CustomizedPanel = (props: CustomProps) => {
   const { expanded } = props
 
-  const headerBackgroundColor = props.HeaderBackgroundColor ? props.HeaderBackgroundColor : ettlevColors.white
-  const headerActiveBackgroundColor = props.HeaderActiveBackgroundColor ? props.HeaderActiveBackgroundColor : ettlevColors.grey50
-
   const customOverrides: PanelOverrides = {
     ToggleIcon: {
       component: () => {

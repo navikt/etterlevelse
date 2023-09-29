@@ -1,6 +1,6 @@
 import { Etterlevelse, EtterlevelseStatus, Krav, SuksesskriterieStatus } from '../../constants'
 import { Block } from 'baseui/block'
-import React, { useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { theme } from '../../util'
 import moment from 'moment'
 import RouteLink from '../common/RouteLink'
@@ -18,8 +18,6 @@ import { borderColor, borderRadius, borderStyle, borderWidth, marginAll } from '
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCheck, faCircle } from '@fortawesome/free-solid-svg-icons'
 import { CustomizedAccordion, CustomizedPanel } from '../common/CustomizedAccordion'
-
-const formatDate = (date?: string) => date && moment(date).format('ll')
 
 const getHeaderText = (status: EtterlevelseStatus) => {
   switch (status) {
@@ -306,7 +304,7 @@ export const ViewEtterlevelse = ({
                         },
                       }}
                     >
-                      <Markdown source={s.beskrivelse} fontSize="18px" maxWidth="650px" />
+                      <Markdown source={s.beskrivelse} />
                     </CustomizedPanel>
                   </CustomizedAccordion>
 

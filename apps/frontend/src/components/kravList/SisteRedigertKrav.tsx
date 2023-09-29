@@ -11,7 +11,7 @@ import { KravPanels, sortKrav } from '../../pages/KravListPage'
 const responsiveDisplay: Responsive<any> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
 
 export const SistRedigertKrav = () => {
-  const [sorting, setSorting] = useState('sist')
+  const [sorting] = useState('sist')
   const [sortedKravList, setSortedKravList] = useState<KravQL[]>([])
   const res = useKravFilter({
     sistRedigert: 10,
@@ -20,7 +20,7 @@ export const SistRedigertKrav = () => {
     pageSize: 10,
   })
 
-  const { variables, data, loading, error } = res
+  const { data, loading, error } = res
 
   const kravene = data?.krav || emptyPage
 

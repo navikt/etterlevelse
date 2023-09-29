@@ -155,7 +155,7 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: NyTilbakemeldingMod
                             }
                           >
                             <Block width="100%">
-                              <Markdown source={s.beskrivelse} maxWidth="100%" />
+                              <Markdown source={s.beskrivelse} />
                             </Block>
                           </CustomizedPanel>
                         )

@@ -10,6 +10,7 @@ export const filterKrav = async (allKravPriority: KravPrioritering[], kravList?:
   unfilteredkraver.map((k) => {
     const priority = allKravPriority.filter((kp) => kp.kravNummer === k.kravNummer && kp.kravVersjon === k.kravVersjon)
     k.prioriteringsId = priority.length ? priority[0].prioriteringsId : ''
+    return k
   })
 
   const sortedKrav = sortKraverByPriority<KravQL>(unfilteredkraver, temaData?.shortName || '')

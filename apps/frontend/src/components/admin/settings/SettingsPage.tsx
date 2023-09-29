@@ -10,13 +10,11 @@ import { Markdown } from '../../common/Markdown'
 import { CustomizedStatefulTextarea } from '../../common/CustomizedTextarea'
 import { ettlevColors, responsivePaddingSmall, responsiveWidthSmall } from '../../../util/theme'
 import { Helmet } from 'react-helmet'
-import { useLocation } from 'react-router-dom'
 
 export const SettingsPage = () => {
   const [loading, setLoading] = React.useState<boolean>(true)
   const [error, setError] = useState()
   const [settings, setSettings] = useState<Settings>()
-  const location = useLocation()
 
   const load = async () => {
     setLoading(true)

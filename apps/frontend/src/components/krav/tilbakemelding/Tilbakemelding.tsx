@@ -1,4 +1,4 @@
-import { Krav, Tilbakemelding, TilbakemeldingMeldingStatus, TilbakemeldingRolle, TilbakemeldingType } from '../../../constants'
+import { Krav, Tilbakemelding, TilbakemeldingMeldingStatus, TilbakemeldingRolle } from '../../../constants'
 import {
   tilbakemeldingNewMelding,
   TilbakemeldingNewMeldingRequest,
@@ -69,7 +69,7 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
           <CustomizedAccordion>
             {tilbakemeldinger.slice(0, count).map((t) => {
               const focused = focusNr === t.id
-              const { status, ubesvartOgKraveier, melderOrKraveier, sistMelding } = getMelderInfo(t)
+              const { status, ubesvartOgKraveier, melderOrKraveier } = getMelderInfo(t)
 
               const statusView = (icon: React.ReactNode) => (
                 <Block width="100%" maxWidth="70px">
@@ -295,7 +295,7 @@ type TilbakemeldingSvarProps = {
 const TilbakemeldingSvar = ({ tilbakemelding, setFocusNummer, close, ubesvartOgKraveier, remove, replace }: TilbakemeldingSvarProps) => {
   const melderInfo = getMelderInfo(tilbakemelding)
   const [response, setResponse] = useState('')
-  const [replyRole, z] = useState(melderInfo.rolle)
+  const [replyRole] = useState(melderInfo.rolle)
   const [error, setError] = useState()
   const [loading, setLoading] = useState(false)
   const [deleteModal, setDeleteModal] = useState(false)
@@ -488,23 +488,4 @@ const TilbakemeldingSvar = ({ tilbakemelding, setFocusNummer, close, ubesvartOgK
       )}
     </Block>
   )
-}
-
-const rolleText = (rolle: TilbakemeldingRolle) => {
-  switch (rolle) {
-    case TilbakemeldingRolle.KRAVEIER:
-      return 'kraveier'
-    case TilbakemeldingRolle.MELDER:
-      return 'melder'
-  }
-}
-const typeText = (type: TilbakemeldingType) => {
-  switch (type) {
-    case TilbakemeldingType.GOD:
-      return 'God kravbeskrivelse'
-    case TilbakemeldingType.UKLAR:
-      return 'Uklar kravbeskrivelse'
-    case TilbakemeldingType.ANNET:
-      return 'Annet'
-  }
 }
