@@ -14,6 +14,8 @@ import no.nav.data.etterlevelse.codelist.domain.ListName;
 import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.etterlevelse.domain.EtterlevelseStatus;
+import no.nav.data.etterlevelse.etterlevelse.domain.SuksesskriterieBegrunnelse;
+import no.nav.data.etterlevelse.etterlevelse.domain.SuksesskriterieStatus;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
 import no.nav.data.etterlevelse.krav.KravService;
@@ -36,7 +38,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static no.nav.data.common.utils.StreamUtils.convert;
@@ -206,27 +214,26 @@ public class StatistikkService {
         EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(UUID.fromString(etterlevelse.getEtterlevelseDokumentasjonId()));
         LocalDateTime ferdigDokumentertDato = null;
 
-        if (etterlevelse.getStatus() == EtterlevelseStatus.FERDIG_DOKUMENTERT || etterlevelse.getStatus() == EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT ) {
+        if (etterlevelse.getStatus() == EtterlevelseStatus.FERDIG_DOKUMENTERT || etterlevelse.getStatus() == EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) {
             List<AuditVersion> etterlevelseLog = auditVersionRepository.findByTableIdOrderByTimeDesc(etterlevelse.getId().toString());
 
             List<AuditResponse> etterlevelseAudits = new AuditLogResponse(etterlevelse.getId().toString(), convert(etterlevelseLog, AuditVersion::toResponse))
                     .getAudits().stream().filter(audit ->
-                         Objects.equals(audit.getData().get("data").get("status").asText(), etterlevelse.getStatus().name())
+                            Objects.equals(audit.getData().get("data").get("status").asText(), etterlevelse.getStatus().name())
                     ).toList();
 
             //Because of migration script some etterlevelser has no audit record of being set to ferdig_dokumentert or ikke_relevant_ferdig_dokumentert
-            if(!etterlevelseAudits.isEmpty()) {
+            if (!etterlevelseAudits.isEmpty()) {
                 ferdigDokumentertDato = LocalDateTime.parse(etterlevelseAudits.get(etterlevelseAudits.size() - 1).getData().get("lastModifiedDate").asText()).withNano(0);
             } else {
-               ferdigDokumentertDato = etterlevelse.getChangeStamp().getLastModifiedDate().withNano(0);
+                ferdigDokumentertDato = etterlevelse.getChangeStamp().getLastModifiedDate().withNano(0);
             }
         }
-
         return EtterlevelseStatistikkResponse.builder()
                 .id(etterlevelse.getId())
                 .etterlevelseDokumentasjonId(etterlevelse.getEtterlevelseDokumentasjonId())
                 .etterlevelseDokumentasjonTittel(etterlevelseDokumentasjon.getTitle())
-                .etterlevelseDokumentasjonNummer("E"+etterlevelseDokumentasjon.getEtterlevelseNummer().toString())
+                .etterlevelseDokumentasjonNummer("E" + etterlevelseDokumentasjon.getEtterlevelseNummer().toString())
                 .kravNummer(etterlevelse.getKravNummer())
                 .kravVersjon(etterlevelse.getKravVersjon())
                 .etterleves(etterlevelse.isEtterleves())
@@ -238,6 +245,27 @@ public class StatistikkService {
                 .lastModifiedDate(etterlevelse.getChangeStamp().getLastModifiedDate().withNano(0))
                 .createdDate(etterlevelse.getChangeStamp().getCreatedDate().withNano(0))
                 .ferdigDokumentertDato(ferdigDokumentertDato)
+                .antallSuksesskriterie(etterlevelse.getSuksesskriterieBegrunnelser().size())
+                .oppfyltSuksesskriterieIder(
+                        etterlevelse.getSuksesskriterieBegrunnelser().stream()
+                                .filter(sb -> sb.getSuksesskriterieStatus() == SuksesskriterieStatus.OPPFYLT)
+                                .map(SuksesskriterieBegrunnelse::getSuksesskriterieId).toList()
+                )
+                .ikkeOppfyltSuksesskriterieIder(
+                        etterlevelse.getSuksesskriterieBegrunnelser().stream()
+                                .filter(sb -> sb.getSuksesskriterieStatus() == SuksesskriterieStatus.IKKE_OPPFYLT)
+                                .map(SuksesskriterieBegrunnelse::getSuksesskriterieId).toList()
+                )
+                .underArbeidSuksesskriterieIder(
+                        etterlevelse.getSuksesskriterieBegrunnelser().stream()
+                                .filter(sb -> sb.getSuksesskriterieStatus() == SuksesskriterieStatus.UNDER_ARBEID)
+                                .map(SuksesskriterieBegrunnelse::getSuksesskriterieId).toList()
+                )
+                .ikkeRelevantSuksesskriterieIder(
+                        etterlevelse.getSuksesskriterieBegrunnelser().stream()
+                                .filter(sb -> sb.getSuksesskriterieStatus() == SuksesskriterieStatus.IKKE_RELEVANT)
+                                .map(SuksesskriterieBegrunnelse::getSuksesskriterieId).toList()
+                )
                 .build();
     }
 
@@ -262,16 +290,16 @@ public class StatistikkService {
             }
         }
 
-        if(aktivertDato == null && (krav.getStatus().equals(KravStatus.AKTIV) || krav.getStatus().equals(KravStatus.UTGAATT))) {
+        if (aktivertDato == null && (krav.getStatus().equals(KravStatus.AKTIV) || krav.getStatus().equals(KravStatus.UTGAATT))) {
             List<AuditResponse> filteredKravAudits = kravAudits.getAudits().stream().filter(audit ->
-                            Objects.equals(audit.getData().get("data").get("status").asText(), KravStatus.AKTIV.name())
-                      ).toList();
-                aktivertDato = LocalDateTime.parse(filteredKravAudits.get(filteredKravAudits.size() - 1).getData().get("lastModifiedDate").asText()).withNano(0);
+                    Objects.equals(audit.getData().get("data").get("status").asText(), KravStatus.AKTIV.name())
+            ).toList();
+            aktivertDato = LocalDateTime.parse(filteredKravAudits.get(filteredKravAudits.size() - 1).getData().get("lastModifiedDate").asText()).withNano(0);
         }
 
-        if(krav.getStatus() == KravStatus.UTGAATT) {
+        if (krav.getStatus() == KravStatus.UTGAATT) {
             Optional<Krav> nyKravVersjon = kravService.getByKravNummer(krav.getKravNummer(), krav.getKravVersjon() + 1);
-            if(nyKravVersjon.isPresent()) {
+            if (nyKravVersjon.isPresent()) {
                 harNyVersjon = true;
             }
         }
@@ -306,6 +334,7 @@ public class StatistikkService {
     public Page<Etterlevelse> getAllEtterlevelseStatistics(Pageable page) {
         return etterlevelseService.getAllEtterlevelseStatistics(page);
     }
+
     private TilbakemeldingStatus getTilbakemeldingStatus(Tilbakemelding tilbakemelding) {
         if (tilbakemelding.getStatus() != null) {
             return tilbakemelding.getStatus();

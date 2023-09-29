@@ -33,6 +33,12 @@ public class EtterlevelseStatistikkResponse {
     private List<SuksesskriterieBegrunnelseResponse> suksesskriterieBegrunnelser;
     private String statusBegrunnelse;
 
+    private Integer antallSuksesskriterie;
+    private List<Integer> ikkeRelevantSuksesskriterieIder;
+    private List<Integer> underArbeidSuksesskriterieIder;
+    private List<Integer> oppfyltSuksesskriterieIder;
+    private List<Integer> ikkeOppfyltSuksesskriterieIder;
+
     private LocalDateTime lastModifiedDate;
     private LocalDateTime createdDate;
     private LocalDateTime ferdigDokumentertDato;
