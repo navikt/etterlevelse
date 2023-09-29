@@ -15,6 +15,8 @@ import java.util.List;
 @AllArgsConstructor
 @JsonPropertyOrder({"behandlingId", "behandlingNavn"})
 public class BehandligStatistikkResponse {
+    private String etterlevelseDokumentasjonsId;
+    private String etterlevelseDokumentasjonTittel;
     private String behandlingId;
     private String behandlingNavn;
     private List<String> team;
