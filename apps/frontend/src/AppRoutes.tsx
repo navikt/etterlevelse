@@ -34,6 +34,7 @@ import { searchEtterlevelsedokumentasjonByBehandlingId } from './api/Etterlevels
 import { Block } from 'baseui/block'
 import { Spinner } from './components/common/Spinner'
 import jumpToHash from './util/jumpToHash'
+import { ampli } from './services/Amplitude'
 
 const AppRoutes = (): JSX.Element => {
   useEffect(() => {
@@ -124,6 +125,8 @@ const RedirectToEtterlevelseDokumentasjonPage = () => {
   const { id, tema, filter, kravNummer, kravVersjon } = useParams()
   const [url, setUrl] = useState('')
   const [loading, setLoading] = useState(true)
+
+  ampli.logEvent('besøk', {type: 'redirect til etterlevelse'})
 
   useEffect(() => {
     if (id) {
