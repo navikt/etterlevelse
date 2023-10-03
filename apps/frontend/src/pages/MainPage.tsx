@@ -62,7 +62,7 @@ export const MainPage = () => {
     >
       <Block display={'flex'} flexDirection={'column'} alignItems={'center'} width={'100%'}>
         <Wide>
-          <Block display={'flex'} justifyContent={'center'} flexWrap>
+          <div className="flex gap-2 justify-center">
             <PanelLinkCard
               marginRight={cardMarginRight}
               height={cardHeight}
@@ -110,7 +110,7 @@ export const MainPage = () => {
               beskrivelse={'Følg med på status og se hvor godt NAV sine områder dokumenterer på kravene'}
               openinnewtab
             />
-          </Block>
+          </div>
         </Wide>
 
         <Narrow>

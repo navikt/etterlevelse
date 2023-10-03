@@ -119,7 +119,7 @@ export const Layout2 = (props: {
         <Block maxWidth={maxPageWidth} width="100%">
           <Block paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall} display="flex" flexDirection="column" justifyContent="center">
             <Block width="100%" justifyContent="center" marginTop="24px">
-              <Block flex="1" display="flex" justifyContent="flex-start">
+              <Block flex="1" justifyContent="flex-start">
                 {/* <RouteLink href={props.backBtnUrl} hideUnderline>
                   <Button
                     startEnhancer={<ChevronLeft fill={props.backBtnColor}/>}

@@ -323,7 +323,7 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
               <NavigationList $align="center" $style={{ justifyContent: 'center' }}>
                 {!props.noSearchBar && (
                   <NavigationItem $style={{ width: '100%', maxWidth: '600px' }}>
-                    <Block flex="1" display={['none', 'none', 'none', 'none', 'flex', 'flex']} overrides={{ Block: { props: { role: 'search' } } }}>
+                    <Block flex="1" display='flex' overrides={{ Block: { props: { role: 'search' } } }}>
                       <MainSearch />
                     </Block>
                   </NavigationItem>
@@ -331,7 +331,7 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
               </NavigationList>
 
               {!props.noLoginButton && (
-                <Block display={['none', 'none', 'none', 'none', 'none', 'flex']}>
+                <Block display='flex'>
                   <NavigationList $align={ALIGN.right}>
                     {!user.isLoggedIn() && (
                       <NavigationItem $style={{ paddingLeft: 0 }}>
@@ -346,7 +346,7 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
                   </NavigationList>
                 </Block>
               )}
-              <Block display={['block', 'block', 'block', 'block', 'block', 'none']}>
+              <Block display='none'>
                 <BurgerMenu />
               </Block>
             </HeaderNavigation>

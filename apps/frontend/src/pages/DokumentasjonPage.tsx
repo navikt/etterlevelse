@@ -240,7 +240,7 @@ export const DokumentasjonPage = () => {
             <Spinner size="50px" />
           </Block>
         ) : (
-          <Block display="flex" width="100%" justifyContent="space-between" flexWrap marginTop={theme.sizing.scale550}>
+          <div className="flex flex-row flex-wrap gap-2 w-full">
             {temaListe.map((tema) => (
               <TemaCardEtterlevelseDokumentasjon
                 tema={tema}
@@ -250,7 +250,7 @@ export const DokumentasjonPage = () => {
                 key={`${tema.shortName}_panel`}
               />
             ))}
-          </Block>
+          </div>
         )}
         {/*
         DISABLED TEMPORARY

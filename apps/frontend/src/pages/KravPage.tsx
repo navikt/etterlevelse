@@ -216,7 +216,7 @@ export const KravPage = () => {
                       </Block>
                     )}
                     {krav?.id && ((user.isKraveier() && !hasKravExpired()) || user.isAdmin()) && (
-                      <Block flex="1" display={['none', 'none', 'none', 'none', 'flex', 'flex']} justifyContent="flex-end">
+                      <Block flex="1" display='flex' justifyContent="flex-end">
                         {krav.status === KravStatus.AKTIV && (
                           <Button onClick={newVersion} variant="tertiary" className="text-white">
                             <div className="flex flex-nowrap items-center whitespace-nowrap gap-1">
