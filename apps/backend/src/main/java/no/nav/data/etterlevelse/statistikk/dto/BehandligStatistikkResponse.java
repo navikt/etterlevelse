@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.List;
 
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -20,6 +21,7 @@ public class BehandligStatistikkResponse {
     private String behandlingId;
     private String behandlingNavn;
     private List<String> team;
+    private List<String> teamId;
     private LocalDateTime opprettetDato;
     private LocalDateTime endretDato;
     private Integer totalKrav;
