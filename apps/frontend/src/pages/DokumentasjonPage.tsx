@@ -136,13 +136,12 @@ export const DokumentasjonPage = () => {
   const getSecondaryHeader = (etterlevelseDokumentasjon: EtterlevelseDokumentasjonQL) => (
     <Block width="100%" display={responsiveDisplayEtterlevelseDokumentasjonPage} alignItems="center" justifyContent="space-between" marginTop={'8px'} marginBottom={'8px'}>
       <Block display="flex" alignItems="center">
-        <Block marginRight="12px">
-          <img src={arkPennIcon} alt="penn ikon" height="32px" width="32px" />
-        </Block>
         <Block>
           <HeadingXLarge marginTop="0px" marginBottom="0px">
             Tema for dokumentasjon
           </HeadingXLarge>
+          { // TODO: overskriften er kjip, tenk på det
+          }
         </Block>
       </Block>
 

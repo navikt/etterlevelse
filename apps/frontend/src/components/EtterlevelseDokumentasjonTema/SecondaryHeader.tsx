@@ -23,7 +23,6 @@ export const SecondaryHeader = ({ etterlevelseDokumentasjon, temaData, lovListe 
       <div className="pt-4 pb-10">
         <Block display="flex" justifyContent="flex-end" width="100%">
           <Button
-            startEnhancer={<img src={page2Icon} alt="Om personvern og ansvarlig for tema" />}
             size="compact"
             $style={{
               fontSize: '18px',
@@ -37,7 +36,7 @@ export const SecondaryHeader = ({ etterlevelseDokumentasjon, temaData, lovListe 
             onClick={() => setIsTemaModalOpen(true)}
             marginLeft
           >
-            Om {temaData?.shortName.toLocaleLowerCase()} og ansvarlig for tema
+            Om {temaData?.shortName.toLocaleLowerCase()}, og ansvarlig for tema
           </Button>
         </Block>
       </div>
