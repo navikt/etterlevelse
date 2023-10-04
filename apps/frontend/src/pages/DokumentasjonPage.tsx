@@ -230,7 +230,7 @@ export const DokumentasjonPage = () => {
         secondaryHeaderBackgroundColor={ettlevColors.white}
         secondaryHeader={getSecondaryHeader(etterlevelseDokumentasjon)}
         childrenBackgroundColor={ettlevColors.grey25}
-        currentPage={'E' + etterlevelseDokumentasjon?.etterlevelseNummer}
+        currentPage={'Tema for dokumentasjon'}
         breadcrumbPaths={breadcrumbPaths}
       >
         <Block backgroundColor={ettlevColors.grey50} marginTop={theme.sizing.scale800}></Block>

@@ -59,7 +59,7 @@ export const EtterlevelseDokumentasjonPageV2 = () => {
       href: '/dokumentasjoner',
     },
     {
-      pathName: 'E' + etterlevelseDokumentasjon?.etterlevelseNummer.toString(),
+      pathName: 'Tema for dokumentasjon',
       href: '/dokumentasjon/' + etterlevelseDokumentasjon?.id,
     },
     {
