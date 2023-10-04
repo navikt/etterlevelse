@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes, useParams } from 'react-router-dom'
+import { Route, Routes, useNavigate, useParams } from 'react-router-dom'
 import { MainPage } from './pages/MainPage'
 import NotFound from './pages/NotFound'
 import CodeListPage from './components/admin/CodeList/CodelistPage'
@@ -29,16 +29,23 @@ import { EtterlevelseDokumentasjonTemaPage } from './pages/EtterlevelseDokumenta
 import { EtterlevelseDokumentasjonPageV2 } from './pages/EtterlevelseDokumentasjonPageV2'
 import { VirkemiddelListPage } from './pages/VirkemiddelListPage'
 import EtterlevelseDokumentasjonAdminPage from './pages/EtterlevelseDokumentasjonAdminPage'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { searchEtterlevelsedokumentasjonByBehandlingId } from './api/EtterlevelseDokumentasjonApi'
 import { Block } from 'baseui/block'
 import { Spinner } from './components/common/Spinner'
-import jumpToHash from './util/jumpToHash'
 import { ampli } from './services/Amplitude'
 
 const AppRoutes = (): JSX.Element => {
   useEffect(() => {
-    jumpToHash()
+    setTimeout(() => {
+      const hash = window.location.hash.slice(1) // Remove the '#' character from the hash
+      if (hash) {
+        const element = document.getElementById(hash)
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' })
+        }
+      }
+    }, 100)
   }, [])
 
   return (
@@ -123,41 +130,33 @@ const AppRoutes = (): JSX.Element => {
 
 const RedirectToEtterlevelseDokumentasjonPage = () => {
   const { id, tema, filter, kravNummer, kravVersjon } = useParams()
-  const [url, setUrl] = useState('')
-  const [loading, setLoading] = useState(true)
+  const navigate = useNavigate()
 
   ampli.logEvent('besøk', {type: 'redirect til etterlevelse'})
 
-  useEffect(() => {
-    if (id) {
-      ;(async () => {
-        setLoading(true)
-        await searchEtterlevelsedokumentasjonByBehandlingId(id).then((resp) => {
-          if (resp.length === 1) {
-            let redirectUrl = '/dokumentasjon/' + resp[0].id
-            if (tema && !filter) {
-              redirectUrl += '/' + tema.toUpperCase() + '/RELEVANTE_KRAV'
-            } else if (tema && filter) {
-              redirectUrl += '/' + tema.toUpperCase() + '/' + filter.toUpperCase()
-            }
-            if (kravNummer && kravVersjon) {
-              redirectUrl += '/krav/' + kravNummer + '/' + kravVersjon
-            }
-            setUrl(redirectUrl)
-          }
-        })
-        setLoading(false)
-      })()
-    } else {
-      setUrl('/dokumentasjoner')
-    }
-  }, [id])
+  if (id) {
+    searchEtterlevelsedokumentasjonByBehandlingId(id).then((resp) => {
+      if (resp.length === 1) {
+        let redirectUrl = '/dokumentasjon/' + resp[0].id
 
-  if (url) {
-    return <Navigate to={url} replace />
-  }
-  if (!loading && !url) {
-    return <Navigate to={'/dokumentasjoner/behandlingsok?behandlingId=' + id} replace />
+        if (tema && !filter) {
+          redirectUrl += '/' + tema.toUpperCase() + '/RELEVANTE_KRAV'
+        } else if (tema && filter) {
+          redirectUrl += '/' + tema.toUpperCase() + '/' + filter.toUpperCase()
+        }
+
+        if (kravNummer && kravVersjon) {
+          redirectUrl += '/krav/' + kravNummer + '/' + kravVersjon
+        }
+
+        navigate(redirectUrl, {replace: true})
+      }
+      else {
+        navigate('/dokumentasjoner/behandlingsok?behandlingId=' + id, {replace: true})
+      }
+    })
+  } else {
+      navigate('/dokumentasjoner', {replace: true})
   }
 
   return (
