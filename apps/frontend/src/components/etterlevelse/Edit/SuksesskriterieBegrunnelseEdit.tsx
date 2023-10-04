@@ -16,6 +16,7 @@ import { LabelAboveContent } from '../../common/PropertyLabel'
 import { buttonContentStyle } from '../../common/Button'
 import { Markdown } from '../../common/Markdown'
 import { ALIGN, Radio, RadioGroup, RadioGroupOverrides, RadioOverrides } from 'baseui/radio'
+import { Heading, ReadMore } from '@navikt/ds-react'
 
 const radioButtonOverrides: RadioOverrides & RadioGroupOverrides = {
   Root: {
@@ -252,44 +253,15 @@ const KriterieBegrunnelse = ({
         )}
       </Block>
 
-      <HeadingLarge color={ettlevColors.green800} marginTop="0px">
-        {suksesskriterie.navn}
-      </HeadingLarge>
+      <div className="flex flex-col gap-4">
+        <Heading size="medium">{suksesskriterie.navn}</Heading>
 
-      <CustomizedAccordion>
-        <CustomizedPanel
-          title={<LabelSmall $style={{ color: ettlevColors.green600 }}>Utfyllende om kriteriet</LabelSmall>}
-          overrides={{
-            Header: {
-              style: {
-                backgroundColor: getBackgroundColor(),
-                maxWidth: '210px',
-                paddingLeft: '0px',
-                ':hover': {
-                  boxShadow: 'none',
-                },
-              },
-            },
-            Content: {
-              style: {
-                backgroundColor: getBackgroundColor(),
-                borderBottomWidth: 'none',
-                borderBottomStyle: 'none',
-                borderBottomColor: 'none',
-                paddingLeft: '0px',
-              },
-            },
-            PanelContainer: {
-              style: {
-                ...borderStyle('hidden'),
-                backgroundColor: getBackgroundColor(),
-              },
-            },
-          }}
-        >
+        <ReadMore header="Utfyllende om kriteriet">
           <Markdown source={suksesskriterie.beskrivelse} />
-        </CustomizedPanel>
-      </CustomizedAccordion>
+        </ReadMore>
+
+      </div>
+
 
       <Block width="100%" height="1px" backgroundColor={ettlevColors.grey100} marginTop="24px" marginBottom="24px" />
 
