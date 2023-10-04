@@ -35,7 +35,7 @@ export const ViewKrav = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVe
         {/*  <LabelAboveContent header title='Beskrivelse' markdown={krav.beskrivelse} /> */}
         {<AllInfo krav={krav} alleKravVersjoner={alleKravVersjoner} />}
       </Block>
-      <Block display={['none', 'none', 'none', 'none', 'none', 'block']} position={'fixed'} right={'-211px'}>
+      <Block display='block' position={'fixed'} right={'-211px'}>
         <SidePanel />
       </Block>
     </Block>

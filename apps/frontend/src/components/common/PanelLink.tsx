@@ -297,8 +297,8 @@ export const PanelLinkCard = ({
         >
           <Block
             overrides={headerOverrides}
-            display={['flex', 'flex', 'flex', 'flex', 'block', 'block']}
-            marginBottom={[theme.sizing.scale800, theme.sizing.scale800, theme.sizing.scale800, theme.sizing.scale600, theme.sizing.scale600, theme.sizing.scale600]}
+            display='block'
+            marginBottom={theme.sizing.scale600}
           >
             {icon && (
               <Block display={'flex'} justifyContent={'center'} marginTop={theme.sizing.scale600} marginRight={theme.sizing.scale850}>
@@ -308,7 +308,7 @@ export const PanelLinkCard = ({
 
             <Block display="flex" alignItems="flex-end" height={headerContent ? '60%' : ''} marginRight={'auto'}>
               <HeadingXLarge
-                marginBottom={['0px', '0px', '0px', '0px', theme.sizing.scale700, theme.sizing.scale700]}
+                marginBottom={theme.sizing.scale700}
                 $style={{ textDecoration: href && hover ? '3px underline ' : undefined, color: titleColor ? titleColor : undefined }}
               >
                 {tittel}
@@ -472,11 +472,9 @@ export const SimplePanel = ({
           <Block
             minWidth="100px"
             display="flex"
-            flexDirection={['row', 'row', 'row', 'row-reverse', 'row-reverse', 'row-reverse']}
+            flexDirection='row-reverse'
             marginRight="20px"
             alignItems="center"
-            marginLeft={[theme.sizing.scale600, theme.sizing.scale600, theme.sizing.scale600, '0px', '0px', '0px']}
-            marginTop={[theme.sizing.scale600, theme.sizing.scale600, theme.sizing.scale600, '0px', '0px', '0px']}
           >
             {statusText instanceof String ? <LabelSmall>{statusText}</LabelSmall> : statusText}
           </Block>
@@ -491,8 +489,6 @@ export const SimplePanel = ({
                 flexDirection={flip ? 'column-reverse' : 'column'}
                 justifyContent="center"
                 $style={{textAlign: 'left'}}
-                marginLeft={[theme.sizing.scale600, theme.sizing.scale600, theme.sizing.scale600, '0px', '0px', '0px']}
-                marginTop={[theme.sizing.scale600, theme.sizing.scale600, theme.sizing.scale600, '0px', '0px', '0px']}
               >
                 {rightTitle && <LabelSmall $style={{ fontSize: '14px' }}>{rightTitle}</LabelSmall>}
                 {rightBeskrivelse && (

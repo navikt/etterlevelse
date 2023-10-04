@@ -198,7 +198,7 @@ export const BehandlingPage = () => {
           {relevans.map((r, index) => (
             <Block key={r.id} display="flex">
               <ParagraphXSmall $style={{ ...marginZero, marginRight: '8px', lineHeight: '24px' }}>{r.label}</ParagraphXSmall>
-              <Block marginRight="8px" display={['none', 'none', 'none', 'none', 'block', 'block']}>
+              <Block marginRight="8px" display='block'>
                 {index < relevans.length - 1 ? <img alt="dot" src={ellipse80} /> : undefined}
               </Block>
             </Block>

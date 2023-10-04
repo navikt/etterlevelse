@@ -195,6 +195,7 @@ public class StatistikkService {
                                 .endretDato(endretDato)
                                 .opprettetDato(opprettetDato)
                                 .team(teamNames)
+                                .teamId(behandling.getTeams())
                                 .build()
                 );
             });

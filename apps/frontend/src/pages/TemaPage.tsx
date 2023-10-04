@@ -133,7 +133,7 @@ const TemaSide = ({ tema }: { tema: TemaCode }) => {
       header={getTemaMainHeader(tema, lover, expand, setExpand)}
     >
       <Block>
-        <HeadingXLarge marginLeft={['27px', '27px', '27px', '27px', '0px', '0px']}>{loading ? '?' : data?.krav.numberOfElements || 0} krav</HeadingXLarge>
+        <HeadingXLarge marginLeft='0px'>{loading ? '?' : data?.krav.numberOfElements || 0} krav</HeadingXLarge>
         {loading && <SkeletonPanel count={10} />}
         {!loading &&
           kravList &&
@@ -236,8 +236,8 @@ const RelevansFilter = ({ onClickFilter, relevans, kravAntall }: { onClickFilter
   </Block>
 )
 
-export const cardWidth = ['98%', '98%', '98%', '98%', '48%', '32%']
-export const cardHeight = ['220px', '220px', '220px', '220px', '220px', '220px']
+export const cardWidth = '32%'
+export const cardHeight = '220px'
 export const cardMaxheight = '250px'
 const headerBgOverlap = '47px'
 
