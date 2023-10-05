@@ -11,7 +11,7 @@ import { EtterlevelseDokumentasjon } from '../../constants'
 import { LovCode, TemaCode } from '../../services/Codelist'
 import { KravId } from '../../api/KravApi'
 import { useParams } from 'react-router-dom'
-import { Section } from '../../pages/EtterlevelseDokumentasjonPageV2'
+import { Section } from '../../pages/EtterlevelseDokumentasjonPage'
 
 type EtterlevelseSecondaryHeaderProps = {
   tab: string

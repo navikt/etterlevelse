@@ -26,7 +26,7 @@ import ArkivAdminPage from './pages/ArkivAdminPage'
 import { MyEtterlevelseDokumentasjonerPage } from './pages/MyEtterlevelseDokumentasjonerPage'
 import { DokumentasjonPage } from './pages/DokumentasjonPage'
 import { EtterlevelseDokumentasjonTemaPage } from './pages/EtterlevelseDokumentasjonTemaPage'
-import { EtterlevelseDokumentasjonPageV2 } from './pages/EtterlevelseDokumentasjonPageV2'
+import { EtterlevelseDokumentasjonPage } from './pages/EtterlevelseDokumentasjonPage'
 import { VirkemiddelListPage } from './pages/VirkemiddelListPage'
 import EtterlevelseDokumentasjonAdminPage from './pages/EtterlevelseDokumentasjonAdminPage'
 import { useEffect } from 'react'
@@ -79,7 +79,7 @@ const AppRoutes = (): JSX.Element => {
 
         <Route
           path="/dokumentasjon/:id/:tema/:filter/krav/:kravNummer/:kravVersjon"
-          element={<PrivateRoute component={<EtterlevelseDokumentasjonPageV2 />} />}
+          element={<PrivateRoute component={<EtterlevelseDokumentasjonPage />} />}
           caseSensitive={true}
         />
         <Route path="/dokumentasjon/:id/:tema/" element={<PrivateRoute component={<EtterlevelseDokumentasjonTemaPage />} />} caseSensitive={true} />

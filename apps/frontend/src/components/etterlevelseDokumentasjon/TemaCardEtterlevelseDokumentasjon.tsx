@@ -7,7 +7,7 @@ import { Block } from 'baseui/block'
 import { ParagraphXSmall } from 'baseui/typography'
 import { ProgressBar, SIZE } from 'baseui/progress-bar'
 import { HeaderContent } from './HeaderContent'
-import { isFerdigUtfylt } from '../../pages/BehandlingTemaPage'
+import { isFerdigUtfylt } from '../../pages/EtterlevelseDokumentasjonTemaPage'
 import moment from 'moment'
 import { getNumberOfDaysBetween } from '../../util/checkAge'
 

@@ -6,7 +6,7 @@ import { theme } from '../../util'
 import { ettlevColors } from '../../util/theme'
 import CustomizedSelect from '../common/CustomizedSelect'
 import { Option } from 'baseui/select'
-import { kravRelevansOptions, sortingOptions } from '../../pages/BehandlingTemaPage'
+import { kravRelevansOptions, sortingOptions } from '../../pages/EtterlevelseDokumentasjonTemaPage'
 import { useNavigate } from 'react-router-dom'
 
 const responsiveBreakPoints: Responsive<any> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
