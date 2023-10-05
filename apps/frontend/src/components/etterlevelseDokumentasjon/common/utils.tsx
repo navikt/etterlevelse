@@ -129,7 +129,7 @@ export const getMainHeader = (etterlevelseDokumentasjon: EtterlevelseDokumentasj
         <Block display={'flex'} width="100%" alignItems="center">
           <LabelSmall $style={{ lineHeight: '22px', marginRight: '10px', fontSize: '16px', color: ettlevColors.green600 }}>Team: </LabelSmall>
           {etterlevelseDokumentasjon.teams.length > 0 ? (
-            <Teams teams={etterlevelseDokumentasjon.teams} link fontColor={ettlevColors.green800} style={{ fontSize: '16px', lineHeight: '22px', fontWeight: 400 }} />
+            <Teams teams={etterlevelseDokumentasjon.teams} link />
           ) : (
             <Block
               $style={{
