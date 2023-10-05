@@ -22,7 +22,7 @@ type EtterlevelseSecondaryHeaderProps = {
   kravId: KravId | undefined
   lovListe: LovCode[]
 }
-export const EtterlevelseSecondaryHeaderV2 = ({ tab, setTab, setNavigatePath, etterlevelseDokumentasjon, temaData, lovListe, kravId }: EtterlevelseSecondaryHeaderProps) => {
+export const EtterlevelseSecondaryHeader = ({ tab, setTab, setNavigatePath, etterlevelseDokumentasjon, temaData, lovListe, kravId }: EtterlevelseSecondaryHeaderProps) => {
   const [isTemaModalOpen, setIsTemaModalOpen] = useState<boolean>(false)
   const params = useParams<{ filter?: string }>()
 
