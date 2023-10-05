@@ -19,7 +19,7 @@ import { useArkiveringByEtterlevelseDokumentasjonId } from '../api/ArkiveringApi
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
 import { TemaCardEtterlevelseDokumentasjon } from '../components/etterlevelseDokumentasjon/TemaCardEtterlevelseDokumentasjon'
 import { ArkiveringModal } from '../components/etterlevelseDokumentasjon/ArkiveringModal'
-import ExportEtterlevelseModalV2 from '../components/export/ExportEtterlevelseModalV2'
+import ExportEtterlevelseModal from '../components/export/ExportEtterlevelseModal'
 import { isFerdigUtfylt } from './EtterlevelseDokumentasjonTemaPage'
 import { Spinner } from '../components/common/Spinner'
 import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons'
@@ -152,7 +152,7 @@ export const DokumentasjonPage = () => {
           </Button>
         )}
 
-        <ExportEtterlevelseModalV2 etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id} />
+        <ExportEtterlevelseModal etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id} />
 
         <Block display="flex" alignItems="baseline" marginRight="30px">
           <ParagraphMedium $style={{ fontWeight: 900, fontSize: '32px', marginTop: 0, marginBottom: 0 }} color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
