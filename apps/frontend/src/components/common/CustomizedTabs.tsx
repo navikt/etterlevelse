@@ -1,7 +1,6 @@
 import * as React from 'react'
 import { ReactNode, useState } from 'react'
 import { FILL, ORIENTATION, Tab, TabProps, Tabs, TabsOverrides } from 'baseui/tabs-motion'
-import { StyleObject } from 'styletron-standard'
 import { borderColor, borderStyle, borderWidth, marginZero, paddingZero } from './Style'
 import { theme } from '../../util'
 import { ettlevColors } from '../../util/theme'
@@ -43,7 +42,7 @@ export const CustomizedTabs = (props: CustomizedTabsProps) => {
   fontColor = fontColor || 'black'
   activeColor = activeColor || fontColor
 
-  const hoverAndFocusStyle: StyleObject = {
+  const hoverAndFocusStyle = {
     color: activeColor,
     borderBottomColor: fontColor,
     background: 'transparent',

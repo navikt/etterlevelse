@@ -53,7 +53,7 @@ const Tooltip = (props: TooltipProps) =>
 // outline button is a secondary button, but with a border
 const outlineWidth = '2px'
 const outlineStyle = 'solid'
-const outlineOverride: StyleObject = {
+const outlineOverride = {
   ...borderColor(ettlevColors.green600),
   backgroundColor: 'inherit',
   ...borderWidth(outlineWidth),
@@ -61,7 +61,7 @@ const outlineOverride: StyleObject = {
 }
 
 // underline-hover button is a tertiary with underline as hover effect
-const underlineOverride: StyleObject = {
+const underlineOverride = {
   ...paddingAll('0'),
   textDecorationThickness: '3px',
   ':hover': {

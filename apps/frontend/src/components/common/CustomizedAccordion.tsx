@@ -7,7 +7,6 @@ import * as React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { borderColor, borderRadius, borderStyle, borderWidth, paddingAll } from './Style'
 import _ from 'lodash'
-import { StyleObject } from 'styletron-react'
 
 export const CustomizedAccordion = (props: Partial<AccordionProps>) => {
   return <Accordion {...props} overrides={{}} />
@@ -18,7 +17,6 @@ interface CustomizedPanelProps {
   HeaderActiveBackgroundColor?: string
   noUnderLine?: boolean
   toggleIcon?: { expanded: React.ReactElement<any, any>; unexpanded: React.ReactElement<any, any> }
-  headerStyle?: StyleObject
 }
 
 type CustomProps = CustomizedPanelProps & PanelProps
@@ -94,7 +92,7 @@ export const CustomizedPanel = (props: CustomProps) => {
     } else {
       return (
         <Block>
-          <HeadingLarge marginTop={theme.sizing.scale100} marginBottom={theme.sizing.scale100} color={ettlevColors.green600} $style={props.headerStyle}>
+          <HeadingLarge marginTop={theme.sizing.scale100} marginBottom={theme.sizing.scale100} color={ettlevColors.green600}>
             {props.title}
           </HeadingLarge>
         </Block>

@@ -18,6 +18,7 @@ import { borderColor, borderRadius, borderStyle, borderWidth, marginAll } from '
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCheck, faCircle } from '@fortawesome/free-solid-svg-icons'
 import { CustomizedAccordion, CustomizedPanel } from '../common/CustomizedAccordion'
+import { ReadMore } from '@navikt/ds-react'
 
 const getHeaderText = (status: EtterlevelseStatus) => {
   switch (status) {
@@ -273,40 +274,9 @@ export const ViewEtterlevelse = ({
                   </Block>
                   <LabelSmall $style={{ fontSize: '21px', lineHeight: '30px', marginTop: '16px', marginBottom: '10px' }}>{s.navn}</LabelSmall>
 
-                  <CustomizedAccordion>
-                    <CustomizedPanel
-                      title={<LabelSmall $style={{ color: ettlevColors.green600 }}>Utfyllende om kriteriet</LabelSmall>}
-                      overrides={{
-                        Header: {
-                          style: {
-                            backgroundColor: ettlevColors.white,
-                            maxWidth: '230px',
-                            paddingLeft: '0px',
-                            ':hover': {
-                              boxShadow: 'none',
-                            },
-                          },
-                        },
-                        Content: {
-                          style: {
-                            backgroundColor: ettlevColors.white,
-                            borderBottomWidth: 'none',
-                            borderBottomStyle: 'none',
-                            borderBottomColor: 'none',
-                            paddingLeft: '0px',
-                          },
-                        },
-                        PanelContainer: {
-                          style: {
-                            ...borderStyle('hidden'),
-                            backgroundColor: ettlevColors.white,
-                          },
-                        },
-                      }}
-                    >
+                  <ReadMore header="Utfyllende om kriteriet">
                       <Markdown source={s.beskrivelse} />
-                    </CustomizedPanel>
-                  </CustomizedAccordion>
+                  </ReadMore>
 
                   <Block width="100%" height="1px" backgroundColor={ettlevColors.grey100} marginTop="15px" marginBottom="23px" />
 

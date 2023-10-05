@@ -91,13 +91,6 @@ export const KravCard = (props: { krav: KravEtterlevelseData; noStatus?: boolean
           }}
         >
           <Block display="flex" justifyContent="center" alignItems="center" width="100%" onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
-            <Block marginLeft="8px">
-              {props.krav.isIrrelevant || isFerdigUtfylt(props.krav.etterlevelseStatus) ? (
-                <img src={arkCheckIcon} alt="document check icon" />
-              ) : (
-                <img src={arkPennIcon} alt="document edit icon" />
-              )}
-            </Block>
             <Block marginLeft="14px">
               <Block display={'flex'} alignItems={'center'}>
                 <ParagraphXSmall

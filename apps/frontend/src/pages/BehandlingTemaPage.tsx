@@ -160,7 +160,7 @@ export const BehandlingTemaPage = () => {
       href: '/behandlinger',
     },
     {
-      pathName: 'B' + behandling?.nummer.toString(),
+      pathName: 'Tema for dokumentasjon',
       href: '/behandling/' + behandling?.id,
     },
   ]
