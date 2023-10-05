@@ -39,7 +39,7 @@ import { getParsedOptionsforTilbakeMelding, getTilbakeMeldingStatusToOption, til
 import { Select, SIZE } from 'baseui/select'
 import { customSelectOverrides } from '../Edit/RegelverkEdit'
 import { Checkbox } from 'baseui/checkbox'
-import { ShowWarningMessage } from '../../etterlevelseDokumentasjonTemaV/KravCard'
+import { ShowWarningMessage } from '../../etterlevelseDokumentasjonTema/KravCard'
 
 const DEFAULT_COUNT_SIZE = 5
 
