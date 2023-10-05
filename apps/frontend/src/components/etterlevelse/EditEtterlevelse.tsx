@@ -181,7 +181,7 @@ export const EditEtterlevelse = ({
           }}
         >
           <Block backgroundColor={ettlevColors.green800} paddingTop="32px" paddingBottom="32px">
-            <Block paddingLeft={responsivePaddingInnerPage} paddingRight={responsivePaddingInnerPage}>
+            <Block paddingLeft="200px" paddingRight="200px">
               <Block display={'flex'}>
                 <ParagraphMedium
                   $style={{
@@ -358,7 +358,7 @@ export const EditEtterlevelse = ({
               )}
             </Block>
           </Block>
-          <Block backgroundColor={ettlevColors.green100} paddingLeft={responsivePaddingInnerPage} paddingRight={responsivePaddingInnerPage}>
+          <Block backgroundColor={ettlevColors.green100} paddingLeft="200px" paddingRight="200px">
             <HeadingXLarge $style={{ marginTop: '0px', marginBottom: '0px', paddingBottom: '32px', paddingTop: '41px' }}>Hensikten med kravet</HeadingXLarge>
             <Markdown p1 sources={Array.isArray(krav.hensikt) ? krav.hensikt : [krav.hensikt]} />
           </Block>
@@ -444,8 +444,8 @@ export const EditEtterlevelse = ({
                       display={'flex'}
                       justifyContent="center"
                       width="100%"
-                      paddingLeft={responsivePaddingInnerPage}
-                      paddingRight={responsivePaddingInnerPage}
+                      paddingLeft="200px"
+                      paddingRight="200px"
                     >
                       <Etterlevelser loading={etterlevelserLoading} krav={krav} modalVersion />
                     </Block>
@@ -459,8 +459,8 @@ export const EditEtterlevelse = ({
                       display={'flex'}
                       justifyContent="center"
                       width="100%"
-                      paddingLeft={responsivePaddingInnerPage}
-                      paddingRight={responsivePaddingInnerPage}
+                      paddingLeft="200px"
+                      paddingRight="200px"
                     >
                       <Tilbakemeldinger krav={krav} hasKravExpired={false} />
                     </Block>
