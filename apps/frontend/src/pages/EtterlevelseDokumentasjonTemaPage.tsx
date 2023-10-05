@@ -19,9 +19,9 @@ import { getAllKravPriority } from '../api/KravPriorityApi'
 import { Spinner } from 'baseui/spinner'
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
 import { getMainHeader } from '../components/etterlevelseDokumentasjon/common/utils'
-import { SecondaryHeader } from '../components/etterlevelseDokumentasjonTema/SecondaryHeader'
-import { KravList } from '../components/etterlevelseDokumentasjonTema/KravList'
-import { filterKrav } from '../components/etterlevelseDokumentasjonTema/common/utils'
+import { SecondaryHeader } from '../components/etterlevelseDokumentasjonTemaV/SecondaryHeader'
+import { KravList } from '../components/etterlevelseDokumentasjonTemaV/KravList'
+import { filterKrav } from '../components/etterlevelseDokumentasjonTemaV/common/utils'
 import { KravPanelHeaderWithSorting } from '../components/etterlevelseDokumentasjon/KravPanelHeader'
 
 export const sortingOptions = [

@@ -11,7 +11,7 @@ import { ampli } from '../services/Amplitude'
 import { KRAV_FILTER_TYPE } from '../constants'
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
 import { getMainHeader } from '../components/etterlevelseDokumentasjon/common/utils'
-import { KravView } from '../components/etterlevelseDokumentasjonTema/KravView'
+import { KravView } from '../components/etterlevelseDokumentasjonTemaV/KravView'
 
 export type Section = 'dokumentasjon' | 'etterlevelser' | 'tilbakemeldinger'
 
