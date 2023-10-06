@@ -25,7 +25,7 @@ import { Checkbox } from 'baseui/checkbox'
 import { DateField } from '../../common/Inputs'
 import EditNotatfelt from '../../etterlevelseMetadata/EditNotatfelt'
 import { notesIcon, notesWithContentIcon } from '../../Images'
-import { syncEtterlevelseKriterieBegrunnelseWithKrav } from '../../behandlingsTema/utils'
+import { syncEtterlevelseKriterieBegrunnelseWithKrav } from '../../etterlevelseDokumentasjonTema/common/utils'
 
 type EditProps = {
   krav: KravQL

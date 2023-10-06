@@ -8,7 +8,7 @@ import { theme } from '../../util'
 
 import { Section } from '../../pages/EtterlevelseDokumentasjonPage'
 import { toKravId } from './common/utils'
-import { EditEtterlevelseV2 } from '../etterlevelse/EditEtterlevelseV2'
+import { EditEtterlevelse } from '../etterlevelse/EditEtterlevelse'
 
 export const KravView = (props: {
   kravId: KravId
@@ -68,7 +68,7 @@ export const KravView = (props: {
       )}
       {!loadingEtterlevelseData && etterlevelse && (
         <Block width="100%" display="flex" justifyContent="center">
-          <EditEtterlevelseV2
+          <EditEtterlevelse
             tidligereEtterlevelser={tidligereEtterlevelser}
             etterlevelseDokumentasjonTitle={props.etterlevelseDokumentasjonTitle}
             etterlevelseDokumentasjonId={props.etterlevelseDokumentasjonId}

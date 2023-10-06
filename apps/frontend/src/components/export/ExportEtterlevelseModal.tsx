@@ -19,7 +19,7 @@ import { KIND as NKIND, Notification } from 'baseui/notification'
 import { ParagraphMedium } from 'baseui/typography'
 
 type ExportEtterlevelseModalProps = {
-  behandlingId: String
+  etterlevelseDokumentasjonId: String
 }
 
 export const ExportEtterlevelseModal = (props: ExportEtterlevelseModalProps) => {
@@ -106,8 +106,8 @@ export const ExportEtterlevelseModal = (props: ExportEtterlevelseModalProps) => 
                       setErrorMessage('')
                       const exportUrl =
                         selectedTema.length > 0
-                          ? `${env.backendBaseUrl}/export/etterlevelse?behandlingId=${props.behandlingId}&temakode=${selectedTema[0].id}`
-                          : `${env.backendBaseUrl}/export/etterlevelse?behandlingId=${props.behandlingId}`
+                          ? `${env.backendBaseUrl}/export/etterlevelsedokumentasjon?etterlevelseDokumentasjonId=${props.etterlevelseDokumentasjonId}&temakode=${selectedTema[0].id}`
+                          : `${env.backendBaseUrl}/export/etterlevelsedokumentasjon?etterlevelseDokumentasjonId=${props.etterlevelseDokumentasjonId}`
 
                       axios
                         .get(exportUrl)

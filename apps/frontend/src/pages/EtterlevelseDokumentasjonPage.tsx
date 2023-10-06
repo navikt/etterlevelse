@@ -3,16 +3,15 @@ import { Block } from 'baseui/block'
 import { useParams } from 'react-router-dom'
 import { ettlevColors } from '../util/theme'
 import { codelist, ListName, TemaCode } from '../services/Codelist'
-import { useBehandling } from '../api/BehandlingApi'
 import { Layout2 } from '../components/scaffold/Page'
 import { KravId } from '../api/KravApi'
 import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 import { Helmet } from 'react-helmet'
-import { KravView } from '../components/behandlingsTema/KravView'
 import { ampli } from '../services/Amplitude'
-import { EtterlevelseSecondaryHeader } from '../components/etterlevelse/EtterlevelseSecondaryHeader'
 import { KRAV_FILTER_TYPE } from '../constants'
-import { getMainHeader } from '../components/behandlingPage/common/utils'
+import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
+import { getMainHeader } from '../components/etterlevelseDokumentasjon/common/utils'
+import { KravView } from '../components/etterlevelseDokumentasjonTema/KravView'
 
 export type Section = 'dokumentasjon' | 'etterlevelser' | 'tilbakemeldinger'
 
@@ -29,8 +28,7 @@ export const getFilterType = (id: string | number | undefined): KRAV_FILTER_TYPE
 export const EtterlevelseDokumentasjonPage = () => {
   const params = useParams<{ id: string; tema: string; kravNummer: string; kravVersjon: string; filter: string }>()
   const temaData: TemaCode | undefined = codelist.getCode(ListName.TEMA, params.tema?.replace('i', ''))
-  const [behandling] = useBehandling(params.id)
-  const lovListe = codelist.getCodesForTema(temaData?.code)
+  const [etterlevelseDokumentasjon] = useEtterlevelseDokumentasjon(params.id)
 
   const [kravId, setKravId] = useState<KravId | undefined>()
 
@@ -45,69 +43,58 @@ export const EtterlevelseDokumentasjonPage = () => {
   }, [params])
 
   useEffect(() => {
-    if (behandling && temaData && kravId) {
+    if (etterlevelseDokumentasjon && temaData && kravId) {
       ampli.logEvent('sidevisning', {
         side: 'Dokumentasjon side for etterlevelse',
-        sidetittel: `B${behandling.nummer.toString()} ${behandling.navn.toString()}`,
+        sidetittel: `E${etterlevelseDokumentasjon.etterlevelseNummer.toString()} ${etterlevelseDokumentasjon.title.toString()}`,
         section: `K${kravId.kravNummer}.${kravId.kravVersjon}`,
         temaKey: temaData.shortName.toString(),
       })
     }
-  }, [behandling])
+  }, [etterlevelseDokumentasjon])
 
   const breadcrumbPaths: breadcrumbPaths[] = [
     {
       pathName: 'Dokumenter etterlevelse',
-      href: '/behandlinger',
+      href: '/dokumentasjoner',
     },
     {
       pathName: 'Tema for dokumentasjon',
-      href: '/behandling/' + behandling?.id,
+      href: '/dokumentasjon/' + etterlevelseDokumentasjon?.id,
     },
     {
       pathName: temaData?.shortName || '',
-      href: '/behandling/' + behandling?.id + '/' + temaData?.code + '/' + params.filter,
+      href: '/dokumentasjon/' + etterlevelseDokumentasjon?.id + '/' + temaData?.code + '/' + params.filter,
     },
   ]
 
   return (
     <>
-      {behandling && (
+      {etterlevelseDokumentasjon && (
         <Layout2
           headerBackgroundColor="#F8F8F8"
           headerOverlap="31px"
           mainHeader={getMainHeader(
-            behandling,
+            etterlevelseDokumentasjon,
+            undefined,
             <Helmet>
               <meta charSet="utf-8" />
               <title>
-                K{kravId?.kravNummer?.toString()}.{kravId?.kravVersjon?.toString()} {temaData?.shortName} B{behandling.nummer.toString()} {behandling.navn.toString()}
+                K{kravId?.kravNummer?.toString()}.{kravId?.kravVersjon?.toString()} {temaData?.shortName} E{etterlevelseDokumentasjon.etterlevelseNummer.toString()}{' '}
+                {etterlevelseDokumentasjon.title.toString()}
               </title>
             </Helmet>,
           )}
-          secondaryHeaderBackgroundColor={ettlevColors.green100}
-          secondaryHeader={
-            <EtterlevelseSecondaryHeader
-              tab={tab}
-              setTab={setTab}
-              setNavigatePath={setNavigatePath}
-              behandling={behandling}
-              temaData={temaData}
-              lovListe={lovListe}
-              kravId={kravId}
-            />
-          }
           childrenBackgroundColor={ettlevColors.grey25}
           currentPage={'K' + kravId?.kravNummer + '.' + kravId?.kravVersjon}
           breadcrumbPaths={breadcrumbPaths}
         >
           <Block display="flex" width="100%" justifyContent="space-between" flexWrap marginBottom="64px">
-            {kravId && behandling && (
+            {kravId && etterlevelseDokumentasjon && (
               <KravView
-                behandlingNavn={behandling.navn}
-                behandlingId={behandling.id}
-                behandlingformaal={behandling.overordnetFormaal.shortName || ''}
-                behandlingNummer={behandling.nummer || 0}
+                etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+                etterlevelseDokumentasjonTitle={etterlevelseDokumentasjon.title}
+                etterlevelseNummer={etterlevelseDokumentasjon.etterlevelseNummer}
                 kravId={kravId}
                 navigatePath={navigatePath}
                 setNavigatePath={setNavigatePath}

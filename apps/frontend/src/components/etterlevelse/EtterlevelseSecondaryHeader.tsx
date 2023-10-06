@@ -7,22 +7,22 @@ import { angleIcon, page2Icon } from '../Images'
 import CustomizedModal from '../common/CustomizedModal'
 import { getTemaMainHeader } from '../../pages/TemaPage'
 import React, { useState } from 'react'
-import { Behandling } from '../../constants'
+import { EtterlevelseDokumentasjon } from '../../constants'
 import { LovCode, TemaCode } from '../../services/Codelist'
-import { Section } from '../../pages/EtterlevelseDokumentasjonPage'
 import { KravId } from '../../api/KravApi'
 import { useParams } from 'react-router-dom'
+import { Section } from '../../pages/EtterlevelseDokumentasjonPage'
 
 type EtterlevelseSecondaryHeaderProps = {
   tab: string
   setTab: React.Dispatch<React.SetStateAction<Section>>
   setNavigatePath: (state: string) => void
-  behandling: Behandling | undefined
+  etterlevelseDokumentasjon: EtterlevelseDokumentasjon | undefined
   temaData: TemaCode | undefined
   kravId: KravId | undefined
   lovListe: LovCode[]
 }
-export const EtterlevelseSecondaryHeader = ({ tab, setTab, setNavigatePath, behandling, temaData, lovListe, kravId }: EtterlevelseSecondaryHeaderProps) => {
+export const EtterlevelseSecondaryHeader = ({ tab, setTab, setNavigatePath, etterlevelseDokumentasjon, temaData, lovListe, kravId }: EtterlevelseSecondaryHeaderProps) => {
   const [isTemaModalOpen, setIsTemaModalOpen] = useState<boolean>(false)
   const params = useParams<{ filter?: string }>()
 
@@ -35,7 +35,7 @@ export const EtterlevelseSecondaryHeader = ({ tab, setTab, setNavigatePath, beha
             if (tab !== 'dokumentasjon') {
               setTab('dokumentasjon')
             }
-            setNavigatePath('/behandling/' + behandling?.id)
+            setNavigatePath('/dokumentasjon/' + etterlevelseDokumentasjon?.id)
           }}
           $style={{
             ...paddingAll('0px'),
@@ -72,7 +72,7 @@ export const EtterlevelseSecondaryHeader = ({ tab, setTab, setNavigatePath, beha
             if (tab !== 'dokumentasjon') {
               setTab('dokumentasjon')
             }
-            setNavigatePath(`/behandling/${behandling?.id}/${temaData?.code}/${params.filter}`)
+            setNavigatePath(`/dokumentasjon/${etterlevelseDokumentasjon?.id}/${temaData?.code}/${params.filter}`)
           }}
           $style={{
             ...paddingAll('0px'),
