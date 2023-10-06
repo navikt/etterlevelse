@@ -4,7 +4,6 @@ import com.graphql.spring.boot.test.GraphQLResponse;
 import lombok.SneakyThrows;
 import no.nav.data.TestConfig.MockFilter;
 import no.nav.data.etterlevelse.behandling.dto.Behandling;
-import no.nav.data.etterlevelse.behandling.dto.BehandlingRequest;
 import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseRequest;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravStatus;

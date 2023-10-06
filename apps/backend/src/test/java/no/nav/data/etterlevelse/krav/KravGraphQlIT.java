@@ -3,7 +3,6 @@ package no.nav.data.etterlevelse.krav;
 import lombok.SneakyThrows;
 import no.nav.data.TestConfig.MockFilter;
 import no.nav.data.etterlevelse.behandling.dto.Behandling;
-import no.nav.data.etterlevelse.behandling.dto.BehandlingRequest;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonRequest;

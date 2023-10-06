@@ -22,24 +22,6 @@ public class BehandlingRepoImpl implements BehandlingRepoCustom {
     private final GenericStorageRepository repository;
 
     @Override
-    public List<GenericStorage> findByRelevans(String code) {
-        return findBy(BehandlingFilter.builder().relevans(List.of(code)).build());
-    }
-
-    @Override
-    public List<GenericStorage> findByRelevans(List<String> codes) {
-        return findBy(BehandlingFilter.builder().relevans(codes).build());
-    }
-
-    @Override
-    public List<GenericStorage> findByIrrelevans(List<String> codes) {
-        var query = "select id from generic_storage where type = 'BehandlingData' and data -> 'irrelevansFor' ??| array[ :irrelevans ] ";
-        var par = new MapSqlParameterSource();
-        par.addValue("irrelevans", codes);
-        return fetch(jdbcTemplate.queryForList(query, par));
-    }
-
-    @Override
     public List<GenericStorage> findBy(BehandlingFilter filter) {
         var query = "select id from generic_storage where type = 'BehandlingData' ";
         var par = new MapSqlParameterSource();

@@ -34,18 +34,8 @@ public class Behandling {
     @Singular("team")
     private List<String> teams;
 
-    @Singular("relevansForSingle")
-    private List<CodelistResponse> irrelevansFor;
-
     @JsonIgnore
     private BehandlingData behandlingData;
     @JsonIgnore
     private List<TeamResponse> teamsData;
-    @JsonIgnore
-    private BehandlingStats stats;
-
-    public void includeData(BehandlingData bd) {
-        behandlingData = bd;
-        setIrrelevansFor(behandlingData.irrelevantForAsCodes());
-    }
 }

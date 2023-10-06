@@ -80,19 +80,6 @@ public class BehandlingController {
         return ResponseEntity.ok(new RestResponsePage<>(behandlingList));
     }
 
-/*    @Operation(summary = "Update Behandling")
-    @ApiResponse(description = "Behandling updated")
-    @PutMapping("/{id}")
-    public ResponseEntity<Behandling> updateBehandling(@PathVariable UUID id, @Valid @RequestBody BehandlingRequest request) {
-        log.info("Update Behandling id={}", id);
-        if (!Objects.equals(id, request.getIdAsUUID())) {
-            throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
-        }
-        var behandling = service.save(request);
-        return ResponseEntity.ok(behandling);
-    }*/
-
-
     static class BehandlingPage extends RestResponsePage<Behandling> {
 
     }
