@@ -8,8 +8,6 @@ import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.common.security.SecurityUtils;
 import no.nav.data.etterlevelse.behandling.BehandlingService;
-import no.nav.data.etterlevelse.behandling.dto.Behandling;
-import no.nav.data.etterlevelse.behandling.dto.BehandlingFilter;
 import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
 import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseResponse;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
@@ -78,29 +76,6 @@ public class QueryResolver implements GraphQLQueryResolver {
             return new RestResponsePage<>(filtered).convert(Krav::toResponse);
         }
         return pageInput.pageFrom(filtered).convert(Krav::toResponse);
-    }
-
-    public RestResponsePage<Behandling> behandling(BehandlingFilter filter, Integer page, Integer pageSize) {
-        log.info("behandling filter {}", filter);
-        var pageInput = new PageParameters(page, pageSize);
-
-        if (filter == null || filter.isEmpty()) {
-            var resp = behandlingService.getAll(pageInput.createPage());
-            return resp;
-        }
-        if (SecurityUtils.getCurrentUser().isEmpty() && filter.requiresLogin()) {
-            return new RestResponsePage<>();
-        }
-
-        List<Behandling> filtered = new ArrayList<>(behandlingService.getByFilter(filter));
-        if (filter.getSistRedigert() == null) {
-            filtered.sort(comparing(Behandling::getNummer));
-        }
-        var all = pageSize == 0;
-        if (all) {
-            return new RestResponsePage<>(filtered);
-        }
-        return pageInput.pageFrom(filtered);
     }
 
     public RestResponsePage<EtterlevelseDokumentasjonResponse> etterlevelseDokumentasjon(EtterlevelseDokumentasjonFilter filter, Integer page, Integer pageSize) {

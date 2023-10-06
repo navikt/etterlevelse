@@ -6,8 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.Singular;
-import no.nav.data.etterlevelse.behandling.domain.BehandlingData;
-import no.nav.data.etterlevelse.codelist.dto.CodelistResponse;
 import no.nav.data.etterlevelse.common.domain.ExternalCode;
 import no.nav.data.integration.team.dto.TeamResponse;
 
@@ -33,9 +31,6 @@ public class Behandling {
     private List<ExternalCode> systemer;
     @Singular("team")
     private List<String> teams;
-
-    @JsonIgnore
-    private BehandlingData behandlingData;
     @JsonIgnore
     private List<TeamResponse> teamsData;
 }

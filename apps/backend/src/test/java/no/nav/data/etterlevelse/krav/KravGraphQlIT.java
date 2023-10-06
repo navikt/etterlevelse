@@ -111,12 +111,6 @@ class KravGraphQlIT extends GraphQLTestBase {
         void kravForEtterlevelseDokumentasjon() {
             List<String> EtterlevelseDokumentasjonRelevans = List.of("SAK");
 
-            behandlingService.save(BehandlingRequest.builder()
-                    .id(behandling.getId())
-                    .update(true)
-                    .irrelevansFor(List.of("INNSYN"))
-                    .build());
-
             EtterlevelseDokumentasjon etterlevelseDokumentasjon = generateEtterlevelseDok(List.of("INNSYN"));
 
             storageService.save(Krav.builder()

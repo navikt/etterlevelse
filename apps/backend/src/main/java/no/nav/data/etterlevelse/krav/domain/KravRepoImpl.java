@@ -5,7 +5,6 @@ import no.nav.data.common.security.SecurityUtils;
 import no.nav.data.common.storage.domain.GenericStorage;
 import no.nav.data.common.storage.domain.GenericStorageRepository;
 import no.nav.data.common.utils.StreamUtils;
-import no.nav.data.etterlevelse.behandling.domain.BehandlingRepo;
 import no.nav.data.etterlevelse.common.domain.KravId;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonRepo;
 import no.nav.data.etterlevelse.krav.domain.dto.KravFilter;
@@ -29,7 +28,6 @@ public class KravRepoImpl implements KravRepoCustom {
 
     private final NamedParameterJdbcTemplate jdbcTemplate;
     private final GenericStorageRepository repository;
-    private final BehandlingRepo behandlingRepo;
 
     private final EtterlevelseDokumentasjonRepo etterlevelseDokumentasjonRepo;
 

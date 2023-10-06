@@ -3,17 +3,9 @@ package no.nav.data.etterlevelse.behandling;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.rest.RestResponsePage;
-import no.nav.data.common.storage.domain.GenericStorage;
-import no.nav.data.common.utils.StreamUtils;
-import no.nav.data.etterlevelse.behandling.domain.BehandlingData;
-import no.nav.data.etterlevelse.behandling.domain.BehandlingRepo;
 import no.nav.data.etterlevelse.behandling.dto.Behandling;
-import no.nav.data.etterlevelse.behandling.dto.BehandlingFilter;
 import no.nav.data.integration.behandling.BkatClient;
 import no.nav.data.integration.behandling.dto.BkatProcess;
-import no.nav.data.integration.team.domain.Team;
-import no.nav.data.integration.team.teamcat.TeamcatTeamClient;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -31,9 +23,6 @@ import static no.nav.data.common.utils.StreamUtils.convert;
 public class BehandlingService {
 
     private final BkatClient bkatClient;
-    private final TeamcatTeamClient teamcatTeamClient;
-    private final BehandlingRepo repo;
-
     public Behandling getBehandling(String id) {
         BkatProcess process = bkatClient.getProcess(id);
         if (process == null) {
@@ -57,35 +46,6 @@ public class BehandlingService {
     public Map<String, Behandling> findAllByIdMapped(Collection<String> ids) {
         return bkatClient.getProcessesById(ids).entrySet().stream()
                 .collect(Collectors.toMap(Entry::getKey, e -> e.getValue().convertToBehandling()));
-    }
-
-    public List<Behandling> getByFilter(BehandlingFilter filter) {
-        if (!StringUtils.isBlank(filter.getId())) {
-            BkatProcess process = bkatClient.getProcess(filter.getId());
-            if (process != null) {
-                return List.of(process.convertToBehandling());
-            }
-            return List.of();
-        } else if (filter.isGetMineBehandlinger()) {
-            filter.setTeams(convert(teamcatTeamClient.getMyTeams(), Team::getId));
-        }
-        if ((filter.getTeams() != null && !filter.getTeams().isEmpty())|| filter.isGetMineBehandlinger()) {
-            return filter.getTeams().parallelStream().map(this::getBehandlingerForTeam).flatMap(Collection::stream).toList();
-        }
-        if (filter.isSok()) {
-            return findBehandlinger(filter.getSok());
-        }
-        List<GenericStorage> datas = repo.findBy(filter);
-        List<String> behandlingIds = convert(GenericStorage.to(datas, BehandlingData.class), BehandlingData::getBehandlingId);
-        Collection<BkatProcess> processes = bkatClient.getProcessesById(behandlingIds).values();
-        return convert(processes, BkatProcess::convertToBehandling);
-    }
-
-    public List<Behandling> getAllBehandlingWithBehandlingData(){
-        List<GenericStorage> datas = repo.getAllBehandlingData();
-        List<String> behandlingIds = convert(GenericStorage.to(datas, BehandlingData.class), BehandlingData:: getBehandlingId);
-        Collection<BkatProcess> processes = bkatClient.getProcessesById(behandlingIds).values();
-        return convert(processes, BkatProcess::convertToBehandling);
     }
 
     public RestResponsePage<Behandling> getAll(Pageable page) {
