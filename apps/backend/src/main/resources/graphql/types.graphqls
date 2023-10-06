@@ -184,18 +184,8 @@ type Behandling {
     teams: [String!]!
     teamsData: [Team!]!
 
-    irrelevansFor: [Code!]!
-    stats: BehandlingStats!
-
     etterlevelser: [Etterlevelse!]!
     sistEndretEtterlevelse: DateTime
-}
-
-type BehandlingStats {
-    fyltKrav: [Krav!]!
-    ikkeFyltKrav: [Krav!]!
-    irrelevantKrav: [Krav!]!
-    lovStats: [LovStats!]!
 }
 
 type EtterlevelseDokumentasjonStats {
