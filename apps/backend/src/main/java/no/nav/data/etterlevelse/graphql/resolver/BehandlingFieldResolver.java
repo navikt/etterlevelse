@@ -29,53 +29,10 @@ import static no.nav.data.etterlevelse.graphql.DataLoaderReg.ETTERLEVELSER_FOR_B
 @RequiredArgsConstructor
 public class BehandlingFieldResolver implements GraphQLResolver<Behandling> {
 
-    private final KravService kravService;
-    private final EtterlevelseService etterlevelseService;
-
     public CompletableFuture<List<TeamResponse>> teamsData(Behandling behandling, DataFetchingEnvironment env) {
         DataLoader<String, TeamResponse> loader = env.getDataLoader(DataLoaderReg.TEAM);
         return loader.loadMany(behandling.getTeams());
     }
-
-  /*  public BehandlingStats stats(Behandling behandling) {
-        var relevans = behandling.getIrrelevansFor();
-
-        // Temporarily disabled
-        *//*
-       if (relevans.isEmpty()) {
-            return BehandlingStats.empty();
-        }
-        *//*
-
-        var etterlevelser = etterlevelseService.getByBehandling(behandling.getId());
-        var krav = convert(kravService.findForBehandling(behandling.getId()), Krav::toResponse);
-
-        krav.forEach(k -> {
-            if(k.getEtterlevelser() != null) {
-                k.setEtterlevelser(k.getEtterlevelser().stream().filter(e -> e.getBehandlingId().equals(behandling.getId())).toList());
-            }
-        });
-
-        var irrelevantKrav = convert(kravService.findForBehandlingIrrelevans(behandling.getId()), Krav::toResponse);
-
-        var fylt = filter(krav, k -> etterlevelser.stream().anyMatch(e -> e.isEtterleves() && e.kravId().equals(k.kravId())));
-        var ikkeFylt = filter(krav, k -> !fylt.contains(k));
-
-        var irrelevant = filter(irrelevantKrav, i -> !fylt.contains(i) && !ikkeFylt.contains(i));
-
-
-        return BehandlingStats.builder()
-                .fyltKrav(fylt)
-                .ikkeFyltKrav(ikkeFylt)
-                .irrelevantKrav(irrelevant)
-                .lovStats(convert(CodelistService.getCodelist(ListName.LOV), c -> LovStats.builder()
-                        .lovCode(c.toResponse())
-                        .fyltKrav(filter(fylt, k -> safeStream(k.getRegelverk()).anyMatch(r -> r.getLov().getCode().equals(c.getCode()))))
-                        .ikkeFyltKrav(filter(ikkeFylt, k -> safeStream(k.getRegelverk()).anyMatch(r -> r.getLov().getCode().equals(c.getCode()))))
-                        .irrelevantKrav(filter(irrelevant,k -> safeStream(k.getRegelverk()).anyMatch(r -> r.getLov().getCode().equals(c.getCode()))))
-                        .build()))
-                .build();
-    }*/
 
     public CompletableFuture<List<EtterlevelseResponse>> etterlevelser(Behandling behandling, DataFetchingEnvironment env) {
         return LoaderUtils.get(env, ETTERLEVELSER_FOR_BEHANDLING_LOADER, behandling.getId(), (List<Etterlevelse> e) -> convert(e, Etterlevelse::toResponse));
