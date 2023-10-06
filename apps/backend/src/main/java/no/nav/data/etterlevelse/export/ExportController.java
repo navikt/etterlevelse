@@ -45,29 +45,24 @@ public class ExportController {
     private final CodelistToDoc codelistToDoc;
     private final KravToDoc kravToDoc;
 
-    private final EtterlevelseToDoc etterlevelseToDoc;
     private final EtterlevelseDokumentasjonToDoc etterlevelseDokumentasjonToDoc;
     private final KravService kravService;
     private final CodelistService codelistService;
 
     private final CodeUsageService codeUsageService;
 
-    private final BehandlingService behandlingService;
-
     private final EtterlevelseService etterlevelseService;
 
     private final EtterlevelseDokumentasjonService etterlevelseDokumentasjonService;
 
-    public ExportController(CodelistToDoc codelistToDoc, KravToDoc kravToDoc, EtterlevelseToDoc etterlevelseToDoc, EtterlevelseDokumentasjonToDoc etterlevelseDokumentasjonToDoc, KravService kravService, CodelistService codelistService, CodeUsageService codeUsageService, BehandlingService behandlingService,
+    public ExportController(CodelistToDoc codelistToDoc, KravToDoc kravToDoc, EtterlevelseDokumentasjonToDoc etterlevelseDokumentasjonToDoc, KravService kravService, CodelistService codelistService, CodeUsageService codeUsageService,
                             EtterlevelseService etterlevelseService, EtterlevelseDokumentasjonService etterlevelseDokumentasjonService) {
         this.codelistToDoc = codelistToDoc;
         this.kravToDoc = kravToDoc;
-        this.etterlevelseToDoc = etterlevelseToDoc;
         this.etterlevelseDokumentasjonToDoc = etterlevelseDokumentasjonToDoc;
         this.kravService = kravService;
         this.codelistService = codelistService;
         this.codeUsageService = codeUsageService;
-        this.behandlingService = behandlingService;
         this.etterlevelseService = etterlevelseService;
         this.etterlevelseDokumentasjonService = etterlevelseDokumentasjonService;
     }
@@ -148,55 +143,6 @@ public class ExportController {
 
             doc = kravToDoc.generateDocFor(list, code, statusKoder);
             filename = "Dokumentajson for krav med " + list.name() + " " + code;
-        }
-
-        response.setContentType(WORDPROCESSINGML_DOCUMENT);
-        response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename);
-        StreamUtils.copy(doc, response.getOutputStream());
-        response.flushBuffer();
-    }
-
-    @Operation(summary = "Get export for etterlevelse")
-    @ApiResponse(description = "Doc fetched", content = @Content(schema = @Schema(implementation = byte[].class)))
-    @Transactional(readOnly = true)
-    @SneakyThrows
-    @GetMapping(value = "/etterlevelse", produces = WORDPROCESSINGML_DOCUMENT)
-    public void getEtterlevelse(
-            HttpServletResponse response,
-            @RequestParam(name = "etterlevelseId", required = false) UUID etterlevelseId,
-            @RequestParam(name = "behandlingId", required = false) UUID behandlingId,
-            @RequestParam(name = "statuskoder", required = false) List<String> statusKoder,
-            @RequestParam(name = "temakode", required = false) String temaKode
-    ) {
-        log.info("Exporting etterlevelse to doc");
-        String filename;
-        byte[] doc;
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy'-'MM'-'dd'_'HH'-'mm'-'ss");
-        Date date = new Date();
-
-
-        if (etterlevelseId != null) {
-            Etterlevelse etterlevelse = etterlevelseService.get(etterlevelseId);
-            filename = formatter.format(date) + "_Etterlevelse_B" + behandlingService.getBehandling(etterlevelse.getBehandlingId()).getNummer() +".docx";
-            log.info("Exporting 1 etterlevelse to doc");
-            doc = etterlevelseToDoc.generateDocForEtterlevelse(etterlevelseId);
-        } else if (behandlingId != null) {
-            log.info("Exporting list of etterlevelse for behandling with id " + behandlingId + " to doc");
-            Behandling behandling = behandlingService.getBehandling(behandlingId.toString());
-            filename = formatter.format(date) + "_Etterlevelse_B" + behandling.getNummer() + ".docx";
-            List<String> lover;
-
-            if(temaKode != null){
-                log.info("Exporting list of etterlevelse for behandling with id " + behandlingId + " to doc filtered by tema");
-                filename = formatter.format(date) + "_Etterlevelse_B" + behandling.getNummer() + "filtert_med_tema_" + temaKode +".docx";
-                codelistService.validateListNameAndCode(ListName.TEMA.name(), temaKode);
-                lover = codeUsageService.findCodeUsage(ListName.TEMA, temaKode).getCodelist().stream().map(Codelist::getCode).toList();
-            } else {
-                lover = new ArrayList<>();
-            }
-            doc = etterlevelseToDoc.generateDocFor(behandlingId, statusKoder, lover, temaKode);
-        } else {
-            throw new ValidationException("No paramater given");
         }
 
         response.setContentType(WORDPROCESSINGML_DOCUMENT);

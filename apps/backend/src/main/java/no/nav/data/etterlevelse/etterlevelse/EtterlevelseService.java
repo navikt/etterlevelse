@@ -55,10 +55,6 @@ public class EtterlevelseService extends DomainService<Etterlevelse> {
         return GenericStorage.to(repo.findByEtterlevelseDokumensjon(etterlevelseDokumentasjonId), Etterlevelse.class);
     }
 
-    public List<Etterlevelse> getByBehandlingsIdAndKravNummer(String behandlingsId, int kravNummer) {
-        return GenericStorage.to(repo.findByBehandlingsIdAndKravNummer(behandlingsId, kravNummer), Etterlevelse.class);
-    }
-
     public List<Etterlevelse> getByEtterlevelseDokumentasjonIdAndKravNummer(String etterlevelseDokumentasjonId, int kravNummer) {
         return GenericStorage.to(repo.findByEtterlevelseDokumentasjonIdAndKravNummer(etterlevelseDokumentasjonId, kravNummer), Etterlevelse.class);
     }
@@ -81,11 +77,6 @@ public class EtterlevelseService extends DomainService<Etterlevelse> {
 
         return storage.save(etterlevelse);
     }
-
-
-    public void updateEtterlevelseToNewBehandling(String oldBehandlingsId, String newBehandlinsId) {
-        etterlevelseRepo.updateEtterlevelseToNewBehandling(oldBehandlingsId, newBehandlinsId);
-    };
 
     public Etterlevelse delete(UUID id) {
         return storage.delete(id, Etterlevelse.class);

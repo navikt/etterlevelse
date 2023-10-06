@@ -54,11 +54,11 @@ public class  EtterlevelseController {
     @GetMapping
     public ResponseEntity<RestResponsePage<EtterlevelseResponse>> getAll(
             PageParameters pageParameters,
-            @RequestParam(required = false) String behandling
+            @RequestParam(required = false) String etterlevelseDokumentasjon
     ) {
-        if (behandling != null) {
-            log.info("Get all Etterlevelse for behandling={}", behandling);
-            List<Etterlevelse> etterlevelseList = service.getByBehandling(behandling);
+        if (etterlevelseDokumentasjon != null) {
+            log.info("Get all Etterlevelse for behandling={}", etterlevelseDokumentasjon);
+            List<Etterlevelse> etterlevelseList = service.getByEtterlevelseDokumentasjon(etterlevelseDokumentasjon);
             return ResponseEntity.ok(new RestResponsePage<>(etterlevelseList).convert(Etterlevelse::toResponse));
         }
         log.info("Get all Etterlevelse");
@@ -91,31 +91,12 @@ public class  EtterlevelseController {
         return ResponseEntity.ok(service.get(id).toResponse());
     }
 
-    @Operation(summary = "Get Etterlevelse by BehandlingsId and KravNummer")
-    @ApiResponse(description = "ok")
-    @GetMapping("/behandling/{behandlingsId}/{kravNummer}")
-    public ResponseEntity<RestResponsePage<EtterlevelseResponse>> getByBehandlingsIdAndKravNummer(@PathVariable String behandlingsId, @PathVariable Integer kravNummer) {
-        log.info("Get Etterlevelse by behandlingsId={} and kravNummer={}", behandlingsId, kravNummer);
-        List<Etterlevelse> etterlevelseList = service.getByBehandlingsIdAndKravNummer(behandlingsId, kravNummer);
-        return ResponseEntity.ok(new RestResponsePage<>(etterlevelseList).convert(Etterlevelse::toResponse));
-    }
-
-
     @Operation(summary = "Get Etterlevelse by etterlevelseDokumentasjonId and KravNummer")
     @ApiResponse(description = "ok")
     @GetMapping("/etterlevelseDokumentasjon/{etterlevelseDokumentasjonId}/{kravNummer}")
     public ResponseEntity<RestResponsePage<EtterlevelseResponse>> getByEtterlevelseDokumentasjonIdAndKravNummer(@PathVariable String etterlevelseDokumentasjonId, @PathVariable Integer kravNummer) {
         log.info("Get Etterlevelse by etterlevelseDokumentasjonId={} and kravNummer={}", etterlevelseDokumentasjonId, kravNummer);
         List<Etterlevelse> etterlevelseList = service.getByEtterlevelseDokumentasjonIdAndKravNummer(etterlevelseDokumentasjonId, kravNummer);
-        return ResponseEntity.ok(new RestResponsePage<>(etterlevelseList).convert(Etterlevelse::toResponse));
-    }
-
-    @Operation(summary = "Get Etterlevelse by BehandlingsId")
-    @ApiResponse(description = "ok")
-    @GetMapping("/behandling/{behandlingsId}")
-    public ResponseEntity<RestResponsePage<EtterlevelseResponse>> getByBehandlingsId(@PathVariable String behandlingsId) {
-        log.info("Get Etterlevelse by behandlingsId={}", behandlingsId);
-        List<Etterlevelse> etterlevelseList = service.getByBehandling(behandlingsId);
         return ResponseEntity.ok(new RestResponsePage<>(etterlevelseList).convert(Etterlevelse::toResponse));
     }
 
@@ -140,30 +121,6 @@ public class  EtterlevelseController {
 
         var krav = service.save(request);
         return new ResponseEntity<>(krav.toResponse(), HttpStatus.CREATED);
-    }
-
-    @Operation(summary = "Update Etterlevelse to new behandling")
-    @ApiResponse(responseCode = "201", description = "Etterlevelse updated")
-    @PostMapping("/update/behandlingid/{oldBehandlingsId}/{newBehandlingsId}")
-    public ResponseEntity<String> updateEtterlevelseToNewBehandling(@PathVariable String oldBehandlingsId, @PathVariable String newBehandlingsId) {
-        log.info("moving etterlevelse documentations to a new behandling");
-
-        List<Behandling> oldBehandling = behandlingService.findAllById(Collections.singletonList(oldBehandlingsId));
-        List<Behandling>  newBehandling = behandlingService.findAllById(Collections.singletonList(newBehandlingsId));
-
-        if(oldBehandling.size() == 0) {
-            log.info("Found no behandling with id: " + oldBehandlingsId);
-            return new ResponseEntity<>("Unable to find behandling with uid: " + oldBehandlingsId,HttpStatus.BAD_REQUEST);
-        }
-
-        if(newBehandling.size() == 0) {
-            log.info("Found no behandling with id: " + newBehandlingsId);
-            return new ResponseEntity<>("Unable to find behandling with uid: " + newBehandlingsId,HttpStatus.BAD_REQUEST);
-        }
-
-        service.updateEtterlevelseToNewBehandling(oldBehandlingsId, newBehandlingsId);
-
-        return new ResponseEntity<>("Successfully updated etterlevelses documetations to new behandlings uid: " + newBehandlingsId,HttpStatus.OK);
     }
 
     @Operation(summary = "Update Etterlevelse")
