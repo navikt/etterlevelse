@@ -2,12 +2,15 @@ package no.nav.data.integration.team.teamcat;
 
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
+import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.common.security.SecurityUtils;
 import no.nav.data.common.utils.MetricUtils;
 import no.nav.data.integration.team.domain.ProductArea;
 import no.nav.data.integration.team.domain.Team;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.Duration;
@@ -24,6 +27,7 @@ import static java.util.Objects.requireNonNull;
 import static no.nav.data.common.utils.StreamUtils.filter;
 import static no.nav.data.common.utils.StreamUtils.safeStream;
 
+@Slf4j
 @Service
 public class TeamcatTeamClient {
 
@@ -120,8 +124,14 @@ public class TeamcatTeamClient {
     }
 
     private Map<String, Team> getTeamsResponse() {
-        var response = restTemplate.getForEntity(properties.getTeamsUrl(), TeamPage.class);
-        List<TeamKatTeam> teams = response.hasBody() ? requireNonNull(response.getBody()).getContent() : List.of();
+        List<TeamKatTeam> teams = List.of();
+        try {
+            var response = restTemplate.getForEntity(properties.getTeamsUrl(), TeamPage.class);
+            teams = response.hasBody() ? requireNonNull(response.getBody()).getContent() : List.of();
+        } catch (RestClientException e) {
+            log.error("Unable to connect to teamkatalog, error: " + e);
+        }
+
         return safeStream(teams)
                 .map(TeamKatTeam::convertToTeam)
                 .collect(Collectors.toMap(Team::getId, Function.identity()));
