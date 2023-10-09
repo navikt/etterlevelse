@@ -12,7 +12,6 @@ import no.nav.data.common.utils.StreamUtils;
 import no.nav.data.etterlevelse.codelist.CodelistService;
 import no.nav.data.etterlevelse.codelist.codeusage.dto.InstanceId;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
-import no.nav.data.etterlevelse.common.domain.Periode;
 import no.nav.data.etterlevelse.krav.domain.dto.KravIdStatus;
 import no.nav.data.etterlevelse.krav.dto.KravRequest;
 import no.nav.data.etterlevelse.krav.dto.KravResponse;
@@ -53,7 +52,6 @@ public class Krav implements DomainObject, KravIdStatus {
     private List<String> rettskilder;
     private List<String> tagger;
     private List<Regelverk> regelverk;
-    private Periode periode;
 
     private List<Suksesskriterie> suksesskriterier;
 
@@ -91,7 +89,6 @@ public class Krav implements DomainObject, KravIdStatus {
         underavdeling = request.getUnderavdeling();
         relevansFor = copyOf(request.getRelevansFor());
         status = request.getStatus();
-        periode = request.getPeriode();
         notat = request.getNotat();
         varselMelding = request.getVarselMelding();
 
@@ -125,7 +122,6 @@ public class Krav implements DomainObject, KravIdStatus {
                 .notat(notat)
                 .varselMelding(varselMelding)
                 .suksesskriterier(StreamUtils.convert(suksesskriterier, Suksesskriterie::toResponse))
-                .periode(periode)
                 .avdeling(CodelistService.getCodelistResponse(ListName.AVDELING, avdeling))
                 .underavdeling(CodelistService.getCodelistResponse(ListName.UNDERAVDELING, underavdeling))
                 .relevansFor(CodelistService.getCodelistResponseList(ListName.RELEVANS, relevansFor))

@@ -9,7 +9,6 @@ import lombok.experimental.FieldNameConstants;
 import no.nav.data.common.validator.RequestElement;
 import no.nav.data.common.validator.Validator;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
-import no.nav.data.etterlevelse.common.domain.Periode;
 import no.nav.data.etterlevelse.krav.domain.KravStatus;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 
@@ -49,7 +48,6 @@ public class KravRequest implements RequestElement {
     private List<String> rettskilder;
     private List<String> tagger;
     private List<RegelverkRequest> regelverk;
-    private Periode periode;
 
     private List<SuksesskriterieRequest> suksesskriterier;
 
