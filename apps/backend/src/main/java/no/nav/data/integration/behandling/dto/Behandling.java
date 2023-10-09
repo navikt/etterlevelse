@@ -1,4 +1,4 @@
-package no.nav.data.etterlevelse.behandling.dto;
+package no.nav.data.integration.behandling.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;

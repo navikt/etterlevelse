@@ -1,9 +1,9 @@
 package no.nav.data.etterlevelse.behandling;
 
 import no.nav.data.IntegrationTestBase;
-import no.nav.data.etterlevelse.behandling.BehandlingController.BehandlingPage;
-import no.nav.data.etterlevelse.behandling.dto.Behandling;
 import no.nav.data.etterlevelse.common.domain.ExternalCode;
+import no.nav.data.integration.behandling.BehandlingController.BehandlingPage;
+import no.nav.data.integration.behandling.dto.Behandling;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;

@@ -9,8 +9,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.ValidationException;
-import no.nav.data.etterlevelse.behandling.BehandlingService;
-import no.nav.data.etterlevelse.behandling.dto.Behandling;
 import no.nav.data.etterlevelse.codelist.CodelistService;
 import no.nav.data.etterlevelse.codelist.codeusage.CodeUsageService;
 import no.nav.data.etterlevelse.codelist.domain.Codelist;

@@ -1,4 +1,4 @@
-package no.nav.data.etterlevelse.behandling;
+package no.nav.data.integration.behandling;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -9,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.NotFoundException;
 import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.common.utils.StreamUtils;
-import no.nav.data.etterlevelse.behandling.dto.Behandling;
+import no.nav.data.integration.behandling.dto.Behandling;
 import no.nav.data.integration.team.domain.Team;
 import no.nav.data.integration.team.teamcat.TeamcatTeamClient;
 import org.springframework.http.ResponseEntity;

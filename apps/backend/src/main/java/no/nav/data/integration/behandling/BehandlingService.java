@@ -1,10 +1,9 @@
-package no.nav.data.etterlevelse.behandling;
+package no.nav.data.integration.behandling;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.rest.RestResponsePage;
-import no.nav.data.etterlevelse.behandling.dto.Behandling;
-import no.nav.data.integration.behandling.BkatClient;
+import no.nav.data.integration.behandling.dto.Behandling;
 import no.nav.data.integration.behandling.dto.BkatProcess;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
