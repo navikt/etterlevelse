@@ -13,7 +13,7 @@ import {Button, KIND, SIZE} from 'baseui/button'
 import {breadcrumbPaths} from '../components/common/CustomizedBreadcrumbs'
 
 import {ampli} from '../services/Amplitude'
-import {getMainHeader, getNewestKravVersjon, responsiveDisplayEtterlevelseDokumentasjonPage} from '../components/etterlevelseDokumentasjon/common/utils'
+import {getMainHeader, getNewestKravVersjon} from '../components/etterlevelseDokumentasjon/common/utils'
 import {user} from '../services/User'
 import {useArkiveringByEtterlevelseDokumentasjonId} from '../api/ArkiveringApi'
 import {useEtterlevelseDokumentasjon} from '../api/EtterlevelseDokumentasjonApi'
@@ -134,7 +134,7 @@ export const DokumentasjonPage = () => {
   }
 
   const getSecondaryHeader = (etterlevelseDokumentasjon: EtterlevelseDokumentasjonQL) => (
-    <Block width="100%" display={responsiveDisplayEtterlevelseDokumentasjonPage} alignItems="center" justifyContent="space-between" marginTop={'8px'} marginBottom={'8px'}>
+    <Block width="100%" display="flex" alignItems="center" justifyContent="space-between" marginTop={'8px'} marginBottom={'8px'}>
       <Block display="flex" alignItems="center">
         <Block>
           <HeadingXLarge marginTop="0px" marginBottom="0px">
@@ -148,7 +148,7 @@ export const DokumentasjonPage = () => {
       <Block display="flex" alignItems="center">
         {user.isAdmin() && (
           <Button kind={KIND.tertiary} size={SIZE.compact} onClick={() => setArkivModal(true)} startEnhancer={<img src={saveArchiveIcon} alt="arkiv ikon"/>}>
-            Arkiver
+            Arkiver i Websak
           </Button>
         )}
 

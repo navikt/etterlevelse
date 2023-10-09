@@ -7,6 +7,7 @@ import moment from 'moment'
 import CustomizedModal from '../common/CustomizedModal'
 import { borderRadius } from '../common/Style'
 import Button from '../common/Button'
+import { BodyLong } from '@navikt/ds-react'
 
 type ArkiveringModalProps = {
   arkivModal: boolean
@@ -65,8 +66,12 @@ export const ArkiveringModal = ({ arkivModal, setArkivModal, etterlevelseDokumen
     >
       <ModalHeader>{etterlevelseArkiv && etterlevelseArkiv.status === EtterlevelseArkivStatus.TIL_ARKIVERING ? 'Arkivering bestilt' : 'Arkiver i Websak'}</ModalHeader>
       <ModalBody>
+        <BodyLong className="mb-4">
+          Arkiveringen skjer hver dag klokka 12.00 og 00.00. Du finner din etterlevelsesdokumentasjon i WebSak ved å søke på ditt etterlevelsesnummer. Etterlevelsesnummeret begynner med E etterfulgt av tre tall.
+          </BodyLong>
+        
         {etterlevelseArkiv && etterlevelseArkiv.status === EtterlevelseArkivStatus.IKKE_ARKIVER && (
-          <Block marginBottom={'16px'}>Arkivering av etterlevelsesdokumentasjon i Websak gir sporbarhet og dokumenterer grunnlaget for risikovurderinger og rapportering.</Block>
+          <BodyLong className="mb-4">Arkivering av etterlevelsesdokumentasjon i Websak gir sporbarhet og dokumenterer grunnlaget for risikovurderinger og rapportering.</BodyLong>
         )}
         <Block>{etterlevelseArkiv ? getStatustext(etterlevelseArkiv.status) : ''}</Block>
         {isArchivingCancelled && etterlevelseArkiv?.arkiveringAvbruttDato && <Block>Avbrutt dato: {moment(etterlevelseArkiv?.arkiveringAvbruttDato).format('lll')}</Block>}
@@ -110,7 +115,7 @@ export const ArkiveringModal = ({ arkivModal, setArkivModal, etterlevelseDokumen
                 padding: '14px 16px',
               }}
             >
-              {etterlevelseArkiv && etterlevelseArkiv.status === EtterlevelseArkivStatus.TIL_ARKIVERING ? 'Avbryt arkivering' : 'Arkiver'}
+              {etterlevelseArkiv && etterlevelseArkiv.status === EtterlevelseArkivStatus.TIL_ARKIVERING ? 'Avbryt arkivering i Websak' : 'Arkiver i Websak'}
             </Button>
           )}
           {etterlevelseArkiv && etterlevelseArkiv.status === EtterlevelseArkivStatus.TIL_ARKIVERING && (
