@@ -334,7 +334,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                       link
                       label="Lenke eller websaknr"
                       tooltip="Lenke til dokumentasjon"
-                      linkTooltip={'Legg inn referanse til utdypende dokumentasjon (lenke). Eksempelvis til navet, eksterne nettsider eller Websak.'}
+                      linkTooltip={'Legg inn referanse til utdypende dokumentasjon (lenke). Eksempelvis til navet, eksterne nettsider eller WebSak.'}
                       setErrors={() => setErrors({ dokumentasjon: 'Må ha navn på kilde.' })}
                     />
                     {errors.dokumentasjon && <ErrorMessageModal msg={errors.dokumentasjon} fullWidth={true} />}

@@ -148,7 +148,7 @@ export const DokumentasjonPage = () => {
       <Block display="flex" alignItems="center">
         {user.isAdmin() && (
           <Button kind={KIND.tertiary} size={SIZE.compact} onClick={() => setArkivModal(true)} startEnhancer={<img src={saveArchiveIcon} alt="arkiv ikon"/>}>
-            Arkiver i Websak
+            Arkivér i WebSak
           </Button>
         )}
 
