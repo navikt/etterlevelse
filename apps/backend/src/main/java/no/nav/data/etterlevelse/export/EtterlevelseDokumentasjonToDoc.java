@@ -102,7 +102,7 @@ public class EtterlevelseDokumentasjonToDoc {
         List<EtterlevelseMedKravData> etterlevelseMedKravData = new ArrayList<>();
 
         if (Objects.nonNull(statusKoder)) {
-            log.info("Exporting list of etterlevelse for behandling with id " + etterlevelseDokumentasjonId + " to doc filtered by status");
+            log.info("Exporting list of etterlevelseDokumentasjon with id " + etterlevelseDokumentasjonId + " to doc filtered by status");
             etterlevelser = etterlevelser.stream().filter(e -> statusKoder.contains(e.getStatus().toString())).toList();
         }
 

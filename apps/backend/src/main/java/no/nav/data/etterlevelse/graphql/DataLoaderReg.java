@@ -37,7 +37,6 @@ import static no.nav.data.common.utils.StreamUtils.toMap;
 @RequiredArgsConstructor
 public class DataLoaderReg {
 
-    public static final String ETTERLEVELSER_FOR_BEHANDLING_LOADER = "ETTERLEVELSER_FOR_BEHANDLING_LOADER";
     public static final String ETTERLEVELSE_FOR_ETTERLEVELSEDOKUMENTASJON_LOADER = "ETTERLEVELSE_FOR_ETTERLEVELSEDOKUMENTASJON_LOADER";
 
     public static final String ETTERLEVELSEDOKUMENTASJON = "ETTERLEVELSEDOKUMENTASJON_LOADER";

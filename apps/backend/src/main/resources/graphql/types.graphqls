@@ -182,9 +182,6 @@ type Behandling {
     systemer: [ExternalCode!]!
     teams: [String!]!
     teamsData: [Team!]!
-
-    etterlevelser: [Etterlevelse!]!
-    sistEndretEtterlevelse: DateTime
 }
 
 type EtterlevelseDokumentasjonStats {
