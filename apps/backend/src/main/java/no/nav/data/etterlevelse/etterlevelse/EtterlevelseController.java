@@ -58,13 +58,13 @@ public class  EtterlevelseController {
         return ResponseEntity.ok(new RestResponsePage<>(page).convert(Etterlevelse::toResponse));
     }
 
-    @Operation(summary = "Get Etterlevelse by KravNummer and KravVersjon, include behandling")
+    @Operation(summary = "Get Etterlevelse by KravNummer and KravVersjon, include etterlevelse dokumentajson metadata")
     @ApiResponse(description = "ok")
     @GetMapping({"/kravnummer/{kravNummer}/{kravVersjon}", "/kravnummer/{kravNummer}"})
     public ResponseEntity<RestResponsePage<EtterlevelseResponse>> getById(@PathVariable Integer kravNummer, @PathVariable(required = false) Integer kravVersjon) {
         log.info("Get Etterlevelse for kravNummer={}", kravNummer);
         List<Etterlevelse> etterlevelseList = service.getByKravNummer(kravNummer, kravVersjon);
-        return ResponseEntity.ok(new RestResponsePage<>(etterlevelseList).convert(e -> toResponseWithEtterlevelseDokumentasjon(e)));
+        return ResponseEntity.ok(new RestResponsePage<>(etterlevelseList).convert(this::toResponseWithEtterlevelseDokumentasjon));
     }
 
     private EtterlevelseResponse toResponseWithEtterlevelseDokumentasjon(Etterlevelse etterlevelse) {

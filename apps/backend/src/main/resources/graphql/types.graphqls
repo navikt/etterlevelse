@@ -20,7 +20,6 @@ type Krav {
     tagger: [String!]!
     regelverk: [Regelverk!]!
     varslingsadresser: [Varslingsadresse!]!
-    periode: Periode
     suksesskriterier: [Suksesskriterie!]!
 
     avdeling: Code
@@ -245,11 +244,6 @@ type Member {
     navIdent: String!
     name: String
     email: String
-}
-
-type Periode {
-    start: Date
-    slutt: Date
 }
 
 type ChangeStamp {

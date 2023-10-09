@@ -2,10 +2,6 @@ query getKravById($nummer: Int!, $versjon: Int!) {
     kravById(nummer: $nummer, versjon: $versjon) {
         id
         navn
-        periode {
-            start
-            slutt
-        }
         etterlevelser {
             id
             statusBegrunnelse

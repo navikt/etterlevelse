@@ -55,7 +55,6 @@ public class DataLoaderReg {
 
     public DataLoaderRegistry create() {
         return new DataLoaderRegistry()
-                .register(ETTERLEVELSER_FOR_BEHANDLING_LOADER, etterlevelserForBehandlingLoader())
                 .register(ETTERLEVELSE_FOR_ETTERLEVELSEDOKUMENTASJON_LOADER, etterlevelseForEtterlevelseDokumentasjonLoader())
                 .register(ETTERLEVELSEDOKUMENTASJON, etterlevelseDokumentasjonLoader())
                 .register(BEHANDLING, behandlingLoader())
@@ -65,10 +64,6 @@ public class DataLoaderReg {
 
     private DataLoader<String, Behandling> behandlingLoader() {
         return loader(behandlingService::findAllByIdMapped);
-    }
-
-    private DataLoader<String, List<Etterlevelse>> etterlevelserForBehandlingLoader() {
-        return loader(etterlevelseService::getByBehandlinger);
     }
 
     private DataLoader<String, List<Etterlevelse>> etterlevelseForEtterlevelseDokumentasjonLoader(){
