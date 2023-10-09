@@ -104,9 +104,12 @@ public class CodeUsageService {
                     usage.getKrav().forEach(gs -> gs.asType(k -> k.setUnderavdeling(newCode), Krav.class));
                     usage.getCodelist().forEach(c -> codelistService.replaceDataField(c, "underavdeling", oldCode, newCode));
                 }
-                case LOV -> usage.getKrav().forEach(gs -> gs.asType(k -> replaceLov(oldCode, newCode, k.getRegelverk()), Krav.class));
-                case TEMA -> usage.getCodelist().forEach(c -> codelistService.replaceDataField(c, "tema", oldCode, newCode));
-                case VIRKEMIDDELTYPE -> usage.getVirkemidler().forEach(gs -> gs.asType(v -> v.setVirkemiddelType(newCode), Virkemiddel.class));
+                case LOV ->
+                        usage.getKrav().forEach(gs -> gs.asType(k -> replaceLov(oldCode, newCode, k.getRegelverk()), Krav.class));
+                case TEMA ->
+                        usage.getCodelist().forEach(c -> codelistService.replaceDataField(c, "tema", oldCode, newCode));
+                case VIRKEMIDDELTYPE ->
+                        usage.getVirkemidler().forEach(gs -> gs.asType(v -> v.setVirkemiddelType(newCode), Virkemiddel.class));
             }
         }
         if (!usage.getCodelist().isEmpty()) {
