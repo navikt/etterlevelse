@@ -91,12 +91,12 @@ public class StatistikkService {
                         ).toList().size();
     }
 
-    public LocalDateTime getCreatedDate(List<Etterlevelse> etterlevelseList) {
+    public LocalDateTime getFirstCreatedDateForEtterlevelser(List<Etterlevelse> etterlevelseList) {
         etterlevelseList.sort(Comparator.comparing(a -> a.getChangeStamp().getCreatedDate()));
         return !etterlevelseList.isEmpty() ? etterlevelseList.get(0).getChangeStamp().getCreatedDate().withNano(0) : null;
     }
 
-    public LocalDateTime getLastUpdatedDate(List<Etterlevelse> etterlevelseList) {
+    public LocalDateTime getLastUpdatedDateForEtterlevelser(List<Etterlevelse> etterlevelseList) {
         etterlevelseList.sort(Comparator.comparing(a -> a.getChangeStamp().getLastModifiedDate()));
         return !etterlevelseList.isEmpty() ? etterlevelseList.get(etterlevelseList.size() - 1).getChangeStamp().getLastModifiedDate().withNano(0) : null;
     }
@@ -137,11 +137,9 @@ public class StatistikkService {
             //Get all etterlevelse for behandling
             List<Etterlevelse> etterlevelseList = etterlevelseService.getByEtterlevelseDokumentasjon(String.valueOf(etterlevelseDokumentasjon.getId()));
 
-            //Sort etterlevelse on created date to when the first documentation was created
-            LocalDateTime opprettetDato = getCreatedDate(etterlevelseList);
+            LocalDateTime opprettetDato = getFirstCreatedDateForEtterlevelser(etterlevelseList);
 
-            //Sort etterlevelse on updated date to when the documentation was last updated
-            LocalDateTime endretDato = getLastUpdatedDate(etterlevelseList);
+            LocalDateTime endretDato = getLastUpdatedDateForEtterlevelser(etterlevelseList);
 
             //Filter etterlevelse to only have documentation for active Krav
             List<Etterlevelse> aktivEtterlevelseList = etterlevelseList.stream().filter(etterlevelse ->
