@@ -80,7 +80,7 @@ public class BehandlingController {
         return ResponseEntity.ok(new RestResponsePage<>(behandlingList));
     }
 
-    static class BehandlingPage extends RestResponsePage<Behandling> {
+    public static class BehandlingPage extends RestResponsePage<Behandling> {
 
     }
 }
