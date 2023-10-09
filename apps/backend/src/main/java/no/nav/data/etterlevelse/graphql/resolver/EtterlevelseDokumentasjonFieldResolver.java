@@ -104,7 +104,7 @@ public class EtterlevelseDokumentasjonFieldResolver implements GraphQLResolver<E
                 .ikkeFyltKrav(ikkeFylt)
                 .irrelevantKrav(irrelevant)
                 .utgaattKrav(utgaattKrav)
-                .lovStats(convert(CodelistService.getCodelist(ListName.LOV), c -> EtterlevelseDokumentasjonStats.LovStatsDok.builder()
+                .lovStats(convert(CodelistService.getCodelist(ListName.LOV), c -> EtterlevelseDokumentasjonStats.LovStats.builder()
                         .lovCode(c.toResponse())
                         .fyltKrav(filter(fylt, k -> safeStream(k.getRegelverk()).anyMatch(r -> r.getLov().getCode().equals(c.getCode()))))
                         .ikkeFyltKrav(filter(ikkeFylt, k -> safeStream(k.getRegelverk()).anyMatch(r -> r.getLov().getCode().equals(c.getCode()))))

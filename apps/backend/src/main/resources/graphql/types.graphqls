@@ -189,7 +189,7 @@ type EtterlevelseDokumentasjonStats {
     ikkeFyltKrav: [Krav!]!
     irrelevantKrav: [Krav!]!
     utgaattKrav: [Krav!]!
-    lovStats: [LovStatsDok!]!
+    lovStats: [LovStats!]!
 }
 
 type EtterlevelseDokumentasjon {
@@ -212,13 +212,6 @@ type EtterlevelseDokumentasjon {
 }
 
 type LovStats {
-    lovCode: Code!
-    fyltKrav: [Krav!]!
-    ikkeFyltKrav: [Krav!]!
-    irrelevantKrav: [Krav!]!
-}
-
-type LovStatsDok {
     lovCode: Code!
     fyltKrav: [Krav!]!
     ikkeFyltKrav: [Krav!]!
