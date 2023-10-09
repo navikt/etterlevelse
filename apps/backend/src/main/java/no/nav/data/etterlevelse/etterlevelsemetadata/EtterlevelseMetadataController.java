@@ -70,17 +70,6 @@ public class EtterlevelseMetadataController {
         return ResponseEntity.ok(new RestResponsePage<>(etterlevelseMetadataList).convert(EtterlevelseMetadata::toResponse));
     }
 
-    @Operation(summary = "Get etterlevelsemetadata by behandlingId")
-    @ApiResponse(description = "ok")
-    @GetMapping({"/behandlingId/{behandlingId}"})
-    public ResponseEntity<RestResponsePage<EtterlevelseMetadataResponse>> getByBehandlingId(
-            @PathVariable String behandlingId
-    ) {
-        log.info("Get etterlevelsemetadatafor behandlingId={}", behandlingId);
-        List<EtterlevelseMetadata> etterlevelseMetadataList = service.getByBehandling(behandlingId);
-        return ResponseEntity.ok(new RestResponsePage<>(etterlevelseMetadataList).convert(EtterlevelseMetadata::toResponse));
-    }
-
     @Operation(summary = "Get etterlevelsemetadata by etterlevelseDokumentasjonId")
     @ApiResponse(description = "ok")
     @GetMapping({"/etterlevelseDokumentasjon/{etterlevelseDokumentasjonId}"})
@@ -92,22 +81,9 @@ public class EtterlevelseMetadataController {
         return ResponseEntity.ok(new RestResponsePage<>(etterlevelseMetadataList).convert(EtterlevelseMetadata::toResponse));
     }
 
-    @Operation(summary = "Get etterlevelsemetadata by behandling and krav")
-    @ApiResponse(description = "ok")
-    @GetMapping({"/behandlingId/{behandlingId}/{kravNummer}/{kravVersjon}" , "/behandlingId/{behandlingId}/{kravNummer}"})
-    public ResponseEntity<RestResponsePage<EtterlevelseMetadataResponse>> getByBehandlingAndKrav(
-            @PathVariable String behandlingId,
-            @PathVariable Integer kravNummer,
-            @PathVariable(required = false) Integer kravVersjon
-    ) {
-        log.info("Get etterlevelsemetadatafor behandlingId={}, kravNummer={}", behandlingId, kravNummer);
-        List<EtterlevelseMetadata> etterlevelseMetadataList = service.getByBehandlingAndKrav(behandlingId, kravNummer, kravVersjon);
-        return ResponseEntity.ok(new RestResponsePage<>(etterlevelseMetadataList).convert(EtterlevelseMetadata::toResponse));
-    }
-
     @Operation(summary = "Get etterlevelsemetadata by etterlevelseDokumentasjon and krav")
     @ApiResponse(description = "ok")
-    @GetMapping({"/etterlevelseDokumentasjon/{etterlevelseDokumentasjonId}/{kravNummer}/{kravVersjon}" , "/etterlevelseDokumentasjonId/{etterlevelseDokumentasjonId}/{kravNummer}"})
+    @GetMapping({"/etterlevelseDokumentasjon/{etterlevelseDokumentasjonId}/{kravNummer}/{kravVersjon}" , "/etterlevelseDokumentasjon/{etterlevelseDokumentasjonId}/{kravNummer}"})
     public ResponseEntity<RestResponsePage<EtterlevelseMetadataResponse>> getByEtterlevelseDokumentasjonAndKrav(
             @PathVariable String etterlevelseDokumentasjonId,
             @PathVariable Integer kravNummer,
