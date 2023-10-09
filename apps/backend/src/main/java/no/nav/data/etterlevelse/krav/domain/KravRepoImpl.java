@@ -5,7 +5,6 @@ import no.nav.data.common.security.SecurityUtils;
 import no.nav.data.common.storage.domain.GenericStorage;
 import no.nav.data.common.storage.domain.GenericStorageRepository;
 import no.nav.data.common.utils.StreamUtils;
-import no.nav.data.etterlevelse.behandling.domain.BehandlingRepo;
 import no.nav.data.etterlevelse.common.domain.KravId;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonRepo;
 import no.nav.data.etterlevelse.krav.domain.dto.KravFilter;
@@ -29,7 +28,6 @@ public class KravRepoImpl implements KravRepoCustom {
 
     private final NamedParameterJdbcTemplate jdbcTemplate;
     private final GenericStorageRepository repository;
-    private final BehandlingRepo behandlingRepo;
 
     private final EtterlevelseDokumentasjonRepo etterlevelseDokumentasjonRepo;
 
@@ -64,36 +62,6 @@ public class KravRepoImpl implements KravRepoCustom {
             query += " and data -> 'kravNummer' = to_jsonb(:kravNummer) ";
             par.addValue("kravNummer", filter.getNummer());
         }
-
-/*
-        if (filter.getVirkemiddelId() != null && !filter.getVirkemiddelId().isEmpty()) {
-            query += """
-                        and (
-                         exists(select 1
-                                   from generic_storage ettlev
-                                   where ettlev.data ->> 'kravNummer' = krav.data ->> 'kravNummer'
-                                     and ettlev.data ->> 'kravVersjon' = krav.data ->> 'kravVersjon'
-                                     and type = 'Etterlevelse'
-                                     and data ->> 'etterlevelseDokumentasjonId' = :etterlevelseDokumentasjonId
-                                )
-                        or data->'virkemiddelIder' ??| array[ :virkemiddelId ]
-                        )
-                        """;
-            par.addValue("virkemiddelId", List.of(filter.getVirkemiddelId()));
-        }
-
-        if (filter.getVirkemiddelId() != null && !filter.getVirkemiddelId().isEmpty()) {
-            query += """
-                        and (
-                        NOT(data -> 'virkemiddelIder' ??| array[ :virkemiddelId ])
-                        or jsonb_array_length(data -> 'virkemiddelIder') = 0
-                        or data->'virkemiddelIder' is null
-                        )
-                        """;
-            par.addValue("virkemiddelId", List.of(filter.getVirkemiddelId()));
-        }
- */
-
 
         if (filter.getEtterlevelseDokumentasjonId() != null ) {
             kravIdSafeList.addAll(convert(etterlevelseDokumentasjonRepo.findKravIdsForEtterlevelseDokumentasjon(filter.getEtterlevelseDokumentasjonId()), KravId::kravId));

@@ -52,11 +52,11 @@ class EtterlevelseMetadataControllerTest extends IntegrationTestBase {
     }
 
     @Test
-    void getByBehandlingAndKrav_createTwoEtterlevelsemetaDataWithDifferentBehandlingId_getOnlyOne() {
-        storageService.save(EtterlevelseMetadata.builder().behandlingId("test-1").kravNummer(200).build());
-        storageService.save(EtterlevelseMetadata.builder().behandlingId("test-2").kravNummer(200).build());
+    void getByEtterlevelseDokumentasjonAndKrav_createTwoEtterlevelsemetaDataWithDifferentEtterlevelseDokumentasjonId_getOnlyOne() {
+        storageService.save(EtterlevelseMetadata.builder().etterlevelseDokumentasjonId("test-1").kravNummer(200).build());
+        storageService.save(EtterlevelseMetadata.builder().etterlevelseDokumentasjonId("test-2").kravNummer(200).build());
 
-        var resp = restTemplate.getForEntity("/etterlevelsemetadata/behandlingId/test-1/200", EtterlevelseMetadataController.EtterlevelseMetadataPage.class);
+        var resp = restTemplate.getForEntity("/etterlevelsemetadata/etterlevelseDokumentasjon/test-1/200", EtterlevelseMetadataController.EtterlevelseMetadataPage.class);
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
         var etterlevelseMetadataResp = resp.getBody();
         assertThat(etterlevelseMetadataResp).isNotNull();
@@ -64,12 +64,12 @@ class EtterlevelseMetadataControllerTest extends IntegrationTestBase {
     }
 
     @Test
-    void getByBehandlingAndKrav_createTwoEtterlevelsemetaDataWithDifferentBehandlingId_getTwo() {
-        storageService.save(EtterlevelseMetadata.builder().behandlingId("test-1").etterlevelseDokumentasjonId("e1").kravNummer(200).kravVersjon(2).build());
-        storageService.save(EtterlevelseMetadata.builder().behandlingId("test-1").etterlevelseDokumentasjonId("e2").kravNummer(200).kravVersjon(1).build());
-        storageService.save(EtterlevelseMetadata.builder().behandlingId("test-2").etterlevelseDokumentasjonId("e3").kravNummer(200).build());
+    void getByEtterlevelseDokumentasjonAndKrav_createTwoEtterlevelsemetaDataWithDifferentEtterlevelseDokumentasjonId_getTwo() {
+        storageService.save(EtterlevelseMetadata.builder().etterlevelseDokumentasjonId("e1").kravNummer(200).kravVersjon(2).build());
+        storageService.save(EtterlevelseMetadata.builder().etterlevelseDokumentasjonId("e1").kravNummer(200).kravVersjon(1).build());
+        storageService.save(EtterlevelseMetadata.builder().etterlevelseDokumentasjonId("e2").kravNummer(200).build());
 
-        var resp = restTemplate.getForEntity("/etterlevelsemetadata/behandlingId/test-1/200", EtterlevelseMetadataController.EtterlevelseMetadataPage.class);
+        var resp = restTemplate.getForEntity("/etterlevelsemetadata/etterlevelseDokumentasjon/e1/200", EtterlevelseMetadataController.EtterlevelseMetadataPage.class);
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
         var etterlevelseMetadataResp = resp.getBody();
         assertThat(etterlevelseMetadataResp).isNotNull();
@@ -77,11 +77,11 @@ class EtterlevelseMetadataControllerTest extends IntegrationTestBase {
     }
 
     @Test
-    void getByBehandlingAndKrav_createTwoEtterlevelsemetaDataWithDifferentBehandlingIdAndKravNummerAndKravVersjon_getonlyOne() {
-        storageService.save(EtterlevelseMetadata.builder().behandlingId("test-1").etterlevelseDokumentasjonId("e1").kravNummer(200).kravVersjon(2).build());
-        storageService.save(EtterlevelseMetadata.builder().behandlingId("test-1").etterlevelseDokumentasjonId("e2").kravNummer(200).kravVersjon(1).build());
+    void getByEtterlevelseDokumentasjonAndKrav_createTwoEtterlevelsemetaDataWithDifferentEtterlevelseDokumentasjonIdAndKravNummerAndKravVersjon_getonlyOne() {
+        storageService.save(EtterlevelseMetadata.builder().etterlevelseDokumentasjonId("e1").kravNummer(200).kravVersjon(1).build());
+        storageService.save(EtterlevelseMetadata.builder().etterlevelseDokumentasjonId("e2").kravNummer(200).kravVersjon(1).build());
 
-        var resp = restTemplate.getForEntity("/etterlevelsemetadata/behandlingId/test-1/200/1", EtterlevelseMetadataController.EtterlevelseMetadataPage.class);
+        var resp = restTemplate.getForEntity("/etterlevelsemetadata/etterlevelseDokumentasjon/e1/200/1", EtterlevelseMetadataController.EtterlevelseMetadataPage.class);
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
         var etterlevelseMetadataResp = resp.getBody();
         assertThat(etterlevelseMetadataResp).isNotNull();
@@ -89,10 +89,10 @@ class EtterlevelseMetadataControllerTest extends IntegrationTestBase {
     }
 
     @Test
-    void getByBehandlingAndKrav_createTwoEtterlevelsemetaDataWithDifferentBehandlingIdAndKravNummer_getNone() {
-        storageService.save(EtterlevelseMetadata.builder().behandlingId("test-1").etterlevelseDokumentasjonId("e1").kravNummer(200).build());
+    void getByEtterlevelseDokumentasjonAndKrav_createOneEtterlevelsemetaData_getNone() {
+        storageService.save(EtterlevelseMetadata.builder().etterlevelseDokumentasjonId("e1").kravNummer(200).build());
 
-        var resp = restTemplate.getForEntity("/etterlevelsemetadata/behandlingId/test-2/200", EtterlevelseMetadataController.EtterlevelseMetadataPage.class);
+        var resp = restTemplate.getForEntity("/etterlevelsemetadata/etterlevelseDokumentasjon/e2/200", EtterlevelseMetadataController.EtterlevelseMetadataPage.class);
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
         var etterlevelseMetadataResp = resp.getBody();
         assertThat(etterlevelseMetadataResp).isNotNull();
@@ -100,10 +100,10 @@ class EtterlevelseMetadataControllerTest extends IntegrationTestBase {
     }
 
     @Test
-    void getByBehandlingAndKrav_createTwoEtterlevelsemetaDataWithDifferentBehandlingIdAndKravNummerAndKravVersjon_getNone() {
-        storageService.save(EtterlevelseMetadata.builder().behandlingId("test-1").etterlevelseDokumentasjonId("e1").kravNummer(200).kravVersjon(1).build());
+    void getByEtterlevelseDokumentasjonAndKrav_createOneEtterlevelsemetaDataWithKravNummerAndKravVersjon_getNone() {
+        storageService.save(EtterlevelseMetadata.builder().etterlevelseDokumentasjonId("e1").kravNummer(200).kravVersjon(1).build());
 
-        var resp = restTemplate.getForEntity("/etterlevelsemetadata/behandlingId/test-1/200/2", EtterlevelseMetadataController.EtterlevelseMetadataPage.class);
+        var resp = restTemplate.getForEntity("/etterlevelsemetadata/etterlevelseDokumentasjon/e2/200/2", EtterlevelseMetadataController.EtterlevelseMetadataPage.class);
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
         var etterlevelseMetadataResp = resp.getBody();
         assertThat(etterlevelseMetadataResp).isNotNull();
@@ -194,11 +194,11 @@ class EtterlevelseMetadataControllerTest extends IntegrationTestBase {
     }
 
     @Test
-    void getByBehandlingId_creatingTwoEtterlevelseMetadataWithSameBehadlingsId_getTwoOfThem() {
-        storageService.save(EtterlevelseMetadata.builder().behandlingId("test-b1").etterlevelseDokumentasjonId("e1").kravNummer(200).kravVersjon(1).build());
-        storageService.save(EtterlevelseMetadata.builder().behandlingId("test-b1").etterlevelseDokumentasjonId("e2").kravNummer(180).kravVersjon(2).build());
+    void getByEtterlevelseDokumentasjonId_creatingTwoEtterlevelseMetadataWithSameEtterlevelseDokumentasjonId_getTwoOfThem() {
+        storageService.save(EtterlevelseMetadata.builder().etterlevelseDokumentasjonId("e1").kravNummer(200).kravVersjon(1).build());
+        storageService.save(EtterlevelseMetadata.builder().etterlevelseDokumentasjonId("e1").kravNummer(180).kravVersjon(2).build());
 
-        var resp = restTemplate.getForEntity("/etterlevelsemetadata/behandlingId/test-b1", EtterlevelseMetadataController.EtterlevelseMetadataPage.class);
+        var resp = restTemplate.getForEntity("/etterlevelsemetadata/etterlevelseDokumentasjon/e1", EtterlevelseMetadataController.EtterlevelseMetadataPage.class);
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
         var etterlevelseMetadataResp = resp.getBody();
         assertThat(etterlevelseMetadataResp).isNotNull();
@@ -208,7 +208,6 @@ class EtterlevelseMetadataControllerTest extends IntegrationTestBase {
     @Test
     void createEtterlevelseMetadata() {
         var req = EtterlevelseMetadataRequest.builder()
-                .behandlingId("behandling1")
                 .etterlevelseDokumentasjonId("e1")
                 .kravNummer(200)
                 .kravVersjon(1)
@@ -230,7 +229,6 @@ class EtterlevelseMetadataControllerTest extends IntegrationTestBase {
         var etterlevelseMetadata = storageService.save(EtterlevelseMetadata.builder().kravNummer(200).kravVersjon(1).behandlingId("behandling1").etterlevelseDokumentasjonId("e1").tildeltMed(List.of("Y789012 - Doe, John")).build());
 
         var req = EtterlevelseMetadataRequest.builder()
-                .behandlingId("behandling1")
                 .etterlevelseDokumentasjonId("e1")
                 .kravNummer(200)
                 .kravVersjon(1)
@@ -254,7 +252,6 @@ class EtterlevelseMetadataControllerTest extends IntegrationTestBase {
         var etterlevelseMetadata = storageService.save(EtterlevelseMetadata.builder().kravNummer(200).kravVersjon(1).behandlingId("behandling1").etterlevelseDokumentasjonId("e1").tildeltMed(List.of("Y789012 - Doe, John")).build());
 
         var req = EtterlevelseMetadataRequest.builder()
-                .behandlingId("behandling1")
                 .etterlevelseDokumentasjonId("e1")
                 .kravNummer(200)
                 .kravVersjon(1)
@@ -279,7 +276,6 @@ class EtterlevelseMetadataControllerTest extends IntegrationTestBase {
         assertThat(etterlevelse.getChangeStamp()).isNotNull();
         assertThat(etterlevelse.getVersion()).isEqualTo(0);
 
-        assertThat(etterlevelse.getBehandlingId()).isEqualTo("behandling1");
         assertThat(etterlevelse.getKravNummer()).isEqualTo(200);
         assertThat(etterlevelse.getKravVersjon()).isEqualTo(1);
         assertThat(etterlevelse.getTildeltMed().size()).isEqualTo(1);

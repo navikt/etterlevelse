@@ -1,11 +1,9 @@
 package no.nav.data.etterlevelse.etterlevelse.domain;
 
-import jakarta.transaction.Transactional;
 import no.nav.data.common.storage.domain.GenericStorage;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
@@ -25,27 +23,13 @@ public interface EtterlevelseRepo extends JpaRepository<GenericStorage, UUID> {
     @Query(value = "select * from generic_storage where data -> 'kravNummer' = to_jsonb(?1) and data -> 'kravVersjon' = to_jsonb(?2) and type = 'Etterlevelse'", nativeQuery = true)
     List<GenericStorage> findByKravNummer(int nummer, int versjon);
 
-    @Query(value = "select * from generic_storage where data ->> 'behandlingId' = ?1 and type = 'Etterlevelse'", nativeQuery = true)
-    List<GenericStorage> findByBehandling(String behandlingId);
-
     @Query(value = "select * from generic_storage where data ->> 'etterlevelseDokumentasjonId' = ?1 and type = 'Etterlevelse'", nativeQuery = true)
     List<GenericStorage> findByEtterlevelseDokumensjon(String etterlevelseDokumentasjonId);
-
-    @Query(value = "select * from generic_storage where data ->> 'behandlingId' in ?1 and type = 'Etterlevelse'", nativeQuery = true)
-    List<GenericStorage> findByBehandlinger(List<String> behandlingIds);
 
     @Query(value = "select * from generic_storage where data ->> 'etterlevelseDokumentasjonId' in ?1 and type = 'Etterlevelse'", nativeQuery = true)
     List<GenericStorage> findByEtterlevelseDokumentasjoner(List<String> etterlevelseDokumentasjonIds);
 
-    @Query(value = "select * from generic_storage where data ->> 'behandlingId' = ?1 and data-> 'kravNummer' = to_jsonb(?2) and type = 'Etterlevelse'", nativeQuery = true)
-    List<GenericStorage> findByBehandlingsIdAndKravNummer(String behandlingsId, int nummer);
-
     @Query(value = "select * from generic_storage where data ->> 'etterlevelseDokumentasjonId' = ?1 and data-> 'kravNummer' = to_jsonb(?2) and type = 'Etterlevelse'", nativeQuery = true)
     List<GenericStorage> findByEtterlevelseDokumentasjonIdAndKravNummer(String etterlevelseDokumentasjonId, int nummer);
 
-
-    @Modifying(clearAutomatically = true)
-    @Transactional
-    @Query(value= "update generic_storage set DATA = jsonb_set(DATA, '{behandlingId}', to_jsonb(?2), false) where data ->> 'behandlingId' = ?1 and type = 'Etterlevelse'", nativeQuery = true)
-    void updateEtterlevelseToNewBehandling(String oldBehandlingsId, String newBehandlinsId);
 }

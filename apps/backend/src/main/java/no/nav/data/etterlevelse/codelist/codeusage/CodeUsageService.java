@@ -6,8 +6,6 @@ import no.nav.data.common.storage.domain.GenericStorage;
 import no.nav.data.common.utils.MetricUtils;
 import no.nav.data.common.utils.StreamUtils;
 import no.nav.data.common.validator.Validated;
-import no.nav.data.etterlevelse.behandling.domain.BehandlingData;
-import no.nav.data.etterlevelse.behandling.domain.BehandlingRepo;
 import no.nav.data.etterlevelse.codelist.CodelistService;
 import no.nav.data.etterlevelse.codelist.CodelistService.ListReq;
 import no.nav.data.etterlevelse.codelist.codeusage.dto.CodeUsage;
@@ -44,11 +42,10 @@ public class CodeUsageService {
     private final KravRepo kravRepo;
     private final EtterlevelseDokumentasjonRepo etterlevelseDokumentasjonRepo;
     private final VirkemiddelRepo virkemiddelRepo;
-
     private final Summary summary;
     private final CodelistService codelistService;
 
-    public CodeUsageService(KravRepo kravRepo, EtterlevelseDokumentasjonRepo etterlevelseDokumentasjonRepo, BehandlingRepo behandlingRepo, VirkemiddelRepo virkemiddelRepo, @Lazy CodelistService codelistService) {
+    public CodeUsageService(KravRepo kravRepo, EtterlevelseDokumentasjonRepo etterlevelseDokumentasjonRepo, VirkemiddelRepo virkemiddelRepo, @Lazy CodelistService codelistService) {
         this.kravRepo = kravRepo;
         this.etterlevelseDokumentasjonRepo = etterlevelseDokumentasjonRepo;
         this.virkemiddelRepo = virkemiddelRepo;
@@ -107,9 +104,12 @@ public class CodeUsageService {
                     usage.getKrav().forEach(gs -> gs.asType(k -> k.setUnderavdeling(newCode), Krav.class));
                     usage.getCodelist().forEach(c -> codelistService.replaceDataField(c, "underavdeling", oldCode, newCode));
                 }
-                case LOV -> usage.getKrav().forEach(gs -> gs.asType(k -> replaceLov(oldCode, newCode, k.getRegelverk()), Krav.class));
-                case TEMA -> usage.getCodelist().forEach(c -> codelistService.replaceDataField(c, "tema", oldCode, newCode));
-                case VIRKEMIDDELTYPE -> usage.getVirkemidler().forEach(gs -> gs.asType(v -> v.setVirkemiddelType(newCode), Virkemiddel.class));
+                case LOV ->
+                        usage.getKrav().forEach(gs -> gs.asType(k -> replaceLov(oldCode, newCode, k.getRegelverk()), Krav.class));
+                case TEMA ->
+                        usage.getCodelist().forEach(c -> codelistService.replaceDataField(c, "tema", oldCode, newCode));
+                case VIRKEMIDDELTYPE ->
+                        usage.getVirkemidler().forEach(gs -> gs.asType(v -> v.setVirkemiddelType(newCode), Virkemiddel.class));
             }
         }
         if (!usage.getCodelist().isEmpty()) {

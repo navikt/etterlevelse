@@ -60,7 +60,6 @@ public class WebSecurityConfig {
             allowGetAndOptions(http,
                     "/settings/**",
                     "/codelist/**",
-
                     "/krav/**",
                     "/kravprioritering/**",
                     "/etterlevelse/**",
@@ -82,13 +81,11 @@ public class WebSecurityConfig {
                     "/settings/**",
                     "/codelist/**",
                     "/export/codelist/**",
-                    "/etterlevelse/update/behandlingid/**",
                     "/etterlevelsearkiv/status/arkivert",
                     "/etterlevelsearkiv/admin/update"
             );
 
             http.authorizeHttpRequests(auth -> auth.requestMatchers(antMatcher("/krav/**")).hasAnyRole(AppRole.KRAVEIER.name(), AppRole.ADMIN.name()));
-
             http.authorizeHttpRequests(auth -> auth.requestMatchers(antMatcher("/tilbakemelding/**")).hasAnyRole(AppRole.WRITE.name(), AppRole.ADMIN.name(), AppRole.KRAVEIER.name()));
             http.authorizeHttpRequests(auth -> auth.requestMatchers(antMatcher("/tilbakemelding/status/**")).hasAnyRole(AppRole.ADMIN.name(), AppRole.KRAVEIER.name()));
             http.authorizeHttpRequests(auth -> auth.requestMatchers(antMatcher("/export/**")).hasAnyRole(AppRole.WRITE.name(), AppRole.ADMIN.name(), AppRole.KRAVEIER.name()));
@@ -99,7 +96,6 @@ public class WebSecurityConfig {
             http.authorizeHttpRequests(auth -> auth.requestMatchers(antMatcher("/etterlevelsemetadata/**")).hasAnyRole(AppRole.ADMIN.name(), AppRole.WRITE.name()));
             http.authorizeHttpRequests(auth -> auth.requestMatchers(antMatcher("/melding/**")).hasAnyRole(AppRole.ADMIN.name()));
             http.authorizeHttpRequests(auth -> auth.requestMatchers(antMatcher("/etterlevelsearkiv/**")).hasAnyRole(AppRole.WRITE.name()));
-            http.authorizeHttpRequests(auth -> auth.requestMatchers(antMatcher("/etterlevelse/update/behandlingid/**")).hasAnyRole(AppRole.ADMIN.name()));
             http.authorizeHttpRequests(auth -> auth.requestMatchers(antMatcher("/virkemiddel/**")).hasAnyRole(AppRole.KRAVEIER.name(), AppRole.ADMIN.name()));
 
             http.authorizeHttpRequests(auth -> auth.requestMatchers(antMatcher("/logout")).authenticated());

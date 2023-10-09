@@ -82,18 +82,18 @@ public class EtterlevelseIT extends IntegrationTestBase {
         }
 
         @Test
-        void getEtterlevelseByBehandlingsIdAndKravId_fetchEtterlevelseWithbehandlingIdAndKravNummer_OneEtterlevelse(){
+        void getEtterlevelseByEtterlevelseDokumentasjonIdAndKravId_fetchEtterlevelseWithEtterlevelseDokumentasjonIdAndKravNummer_OneEtterlevelse(){
             storageService.save(Etterlevelse.builder()
-                    .behandlingId("b1")
+                    .etterlevelseDokumentasjonId("ed1")
                     .kravNummer(50)
                     .kravVersjon(1)
                     .build());
             storageService.save(Etterlevelse.builder()
-                    .behandlingId("b2")
+                    .etterlevelseDokumentasjonId("ed2")
                     .kravNummer(50)
                     .kravVersjon(2)
                     .build());
-            var resp = restTemplate.getForEntity("/etterlevelse/behandling/b1/50", EtterlevelsePage.class);
+            var resp = restTemplate.getForEntity("/etterlevelse/etterlevelseDokumentasjon/ed1/50", EtterlevelsePage.class);
             assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
             assertThat(resp.getBody()).isNotNull();
             assertThat(resp.getBody().getNumberOfElements()).isOne();
@@ -101,39 +101,39 @@ public class EtterlevelseIT extends IntegrationTestBase {
         }
 
         @Test
-        void getEtterlevelseByBehandlingsIdAndKravId_fetchEtterlevelseWithbehandlingIdAndKravNummer_TwoEtterlevelse(){
+        void getEtterlevelseByEtterlevelseDokumentasjonsIdAndKravId_fetchEtterlevelseWithEtterlevelseDokumentasjonsIdAndKravNummer_TwoEtterlevelse(){
             storageService.save(Etterlevelse.builder()
-                    .behandlingId("b1")
+                    .etterlevelseDokumentasjonId("ed1")
                     .kravNummer(50)
                     .kravVersjon(1)
                     .build());
             storageService.save(Etterlevelse.builder()
-                    .behandlingId("b2")
+                    .etterlevelseDokumentasjonId("ed2")
                     .kravNummer(50)
                     .kravVersjon(2)
                     .build());
             storageService.save(Etterlevelse.builder()
-                    .behandlingId("b1")
+                    .etterlevelseDokumentasjonId("ed1")
                     .kravNummer(50)
                     .kravVersjon(3)
                     .build());
-            var resp = restTemplate.getForEntity("/etterlevelse/behandling/b1/50", EtterlevelsePage.class);
+            var resp = restTemplate.getForEntity("/etterlevelse/etterlevelseDokumentasjon/ed1/50", EtterlevelsePage.class);
             assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
             assertThat(resp.getBody()).isNotNull();
             assertThat(resp.getBody().getTotalElements()).isEqualTo(2L);
         }
 
         @Test
-        void getByBehandling() {
-            var b1 = storageService.save(Etterlevelse.builder().behandlingId("b1").build());
-            storageService.save(Etterlevelse.builder().behandlingId("b2").build());
+        void getByEtterlevelseDokumentasjon() {
+            var ed1 = storageService.save(Etterlevelse.builder().etterlevelseDokumentasjonId("ed1").build());
+            storageService.save(Etterlevelse.builder().etterlevelseDokumentasjonId("ed2").build());
 
-            var resp = restTemplate.getForEntity("/etterlevelse?behandling={behandling}", EtterlevelsePage.class, "b1");
+            var resp = restTemplate.getForEntity("/etterlevelse?etterlevelseDokumentasjon={etterlevelseDokumentasjon}", EtterlevelsePage.class, "ed1");
             assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
             var body = resp.getBody();
             assertThat(body).isNotNull();
             assertThat(body.getNumberOfElements()).isOne();
-            assertThat(body.getContent().get(0).getId()).isEqualTo(b1.getId());
+            assertThat(body.getContent().get(0).getId()).isEqualTo(ed1.getId());
         }
     }
 
@@ -144,7 +144,6 @@ public class EtterlevelseIT extends IntegrationTestBase {
         void createEtterlevelse() {
             var krav = storageService.save(Krav.builder().kravNummer(50).status(KravStatus.AKTIV).build());
             var req = EtterlevelseRequest.builder()
-                    .behandlingId("behandling1")
                     .kravNummer(krav.getKravNummer())
                     .kravVersjon(krav.getKravVersjon())
                     .etterlevelseDokumentasjonId("etterlevelseDok1")
@@ -170,7 +169,6 @@ public class EtterlevelseIT extends IntegrationTestBase {
             assertThat(etterlevelse.getChangeStamp()).isNotNull();
             assertThat(etterlevelse.getVersion()).isEqualTo(0);
 
-            assertThat(etterlevelse.getBehandlingId()).isEqualTo("behandling1");
             assertThat(etterlevelse.getEtterlevelseDokumentasjonId()).isEqualTo("etterlevelseDok1");
 
             assertThat(etterlevelse.getKravNummer()).isEqualTo(50);
@@ -218,10 +216,9 @@ public class EtterlevelseIT extends IntegrationTestBase {
     @Test
     void updateEtterlevelse() {
         var krav = storageService.save(Krav.builder().kravNummer(50).kravVersjon(1).status(KravStatus.AKTIV).build());
-        var etterlevelse = storageService.save(Etterlevelse.builder().behandlingId("b1").kravNummer(krav.getKravNummer()).kravVersjon(krav.getKravVersjon()).build());
+        var etterlevelse = storageService.save(Etterlevelse.builder().etterlevelseDokumentasjonId("ed1").kravNummer(krav.getKravNummer()).kravVersjon(krav.getKravVersjon()).build());
         var req = EtterlevelseRequest.builder()
-                .behandlingId("b2")
-                .etterlevelseDokumentasjonId("e2")
+                .etterlevelseDokumentasjonId("ed2")
                 .kravNummer(krav.getKravNummer())
                 .kravVersjon(krav.getKravVersjon())
                 .id(etterlevelse.getId().toString())
@@ -230,8 +227,7 @@ public class EtterlevelseIT extends IntegrationTestBase {
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
         EtterlevelseResponse etterlevelseResp = resp.getBody();
         assertThat(etterlevelseResp).isNotNull();
-        assertThat(etterlevelseResp.getBehandlingId()).isEqualTo("b2");
-        assertThat(etterlevelseResp.getEtterlevelseDokumentasjonId()).isEqualTo("e2");
+        assertThat(etterlevelseResp.getEtterlevelseDokumentasjonId()).isEqualTo("ed2");
     }
 
     @Test

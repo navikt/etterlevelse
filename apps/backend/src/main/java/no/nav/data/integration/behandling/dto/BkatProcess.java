@@ -5,14 +5,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.Singular;
-import no.nav.data.etterlevelse.behandling.dto.Behandling;
-import no.nav.data.etterlevelse.codelist.domain.Codelist;
-import no.nav.data.etterlevelse.codelist.domain.ListName;
 
 import java.util.List;
 
 import static no.nav.data.common.utils.StreamUtils.convert;
-import static no.nav.data.etterlevelse.codelist.CodelistService.getCodelistResponseList;
 import static no.nav.data.integration.behandling.dto.BkatCode.toCode;
 
 /**

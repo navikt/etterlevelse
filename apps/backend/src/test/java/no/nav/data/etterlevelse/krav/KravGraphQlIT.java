@@ -2,8 +2,6 @@ package no.nav.data.etterlevelse.krav;
 
 import lombok.SneakyThrows;
 import no.nav.data.TestConfig.MockFilter;
-import no.nav.data.etterlevelse.behandling.dto.Behandling;
-import no.nav.data.etterlevelse.behandling.dto.BehandlingRequest;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonRequest;
@@ -14,6 +12,7 @@ import no.nav.data.etterlevelse.varsel.domain.AdresseType;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 import no.nav.data.graphql.GraphQLTestBase;
 import no.nav.data.integration.behandling.BkatMocks;
+import no.nav.data.integration.behandling.dto.Behandling;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -111,12 +110,6 @@ class KravGraphQlIT extends GraphQLTestBase {
         @SneakyThrows
         void kravForEtterlevelseDokumentasjon() {
             List<String> EtterlevelseDokumentasjonRelevans = List.of("SAK");
-
-            behandlingService.save(BehandlingRequest.builder()
-                    .id(behandling.getId())
-                    .update(true)
-                    .irrelevansFor(List.of("INNSYN"))
-                    .build());
 
             EtterlevelseDokumentasjon etterlevelseDokumentasjon = generateEtterlevelseDok(List.of("INNSYN"));
 

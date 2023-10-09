@@ -18,7 +18,6 @@ import no.nav.data.common.security.azure.support.MailLog;
 import no.nav.data.common.utils.JsonUtils;
 import no.nav.data.common.utils.StreamUtils;
 import no.nav.data.etterlevelse.arkivering.domain.EtterlevelseArkiv;
-import no.nav.data.etterlevelse.behandling.domain.BehandlingData;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
 import no.nav.data.etterlevelse.etterlevelsemetadata.domain.EtterlevelseMetadata;
@@ -114,10 +113,6 @@ public class GenericStorage extends Auditable {
 
     public Etterlevelse toEtterlevelse() {
         return getDomainObjectData(Etterlevelse.class);
-    }
-
-    public BehandlingData toBehandlingData() {
-        return getDomainObjectData(BehandlingData.class);
     }
 
     public EtterlevelseMetadata toEtterlevelseMetadata() {

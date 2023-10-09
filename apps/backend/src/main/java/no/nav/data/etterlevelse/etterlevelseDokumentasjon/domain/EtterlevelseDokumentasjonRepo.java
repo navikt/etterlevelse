@@ -19,12 +19,9 @@ public interface EtterlevelseDokumentasjonRepo  extends JpaRepository<GenericSto
             nativeQuery = true)
     Page<GenericStorage> findAll(Pageable pageable);
 
-
     @Query(value = "select * from generic_storage where data ->> 'virkemiddelId' in ?1 and type = 'EtterlevelseDokumentasjon'", nativeQuery = true)
     List<GenericStorage> findByVirkemiddelIds(List<String> ids);
 
-
-    //must refactor KravRepoImpl to change usage of findBy, DO THIS AFTER MIGRATION
     @Query(value = """
             select 
              data ->> 'kravNummer' as kravNummer, data ->> 'kravVersjon' as kravVersjon

@@ -2,12 +2,12 @@ package no.nav.data.etterlevelse.graphql;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import no.nav.data.etterlevelse.behandling.BehandlingService;
-import no.nav.data.etterlevelse.behandling.dto.Behandling;
 import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse;
+import no.nav.data.integration.behandling.BehandlingService;
+import no.nav.data.integration.behandling.dto.Behandling;
 import no.nav.data.integration.team.domain.Team;
 import no.nav.data.integration.team.dto.Resource;
 import no.nav.data.integration.team.dto.TeamResponse;
@@ -37,7 +37,6 @@ import static no.nav.data.common.utils.StreamUtils.toMap;
 @RequiredArgsConstructor
 public class DataLoaderReg {
 
-    public static final String ETTERLEVELSER_FOR_BEHANDLING_LOADER = "ETTERLEVELSER_FOR_BEHANDLING_LOADER";
     public static final String ETTERLEVELSE_FOR_ETTERLEVELSEDOKUMENTASJON_LOADER = "ETTERLEVELSE_FOR_ETTERLEVELSEDOKUMENTASJON_LOADER";
 
     public static final String ETTERLEVELSEDOKUMENTASJON = "ETTERLEVELSEDOKUMENTASJON_LOADER";
@@ -55,7 +54,6 @@ public class DataLoaderReg {
 
     public DataLoaderRegistry create() {
         return new DataLoaderRegistry()
-                .register(ETTERLEVELSER_FOR_BEHANDLING_LOADER, etterlevelserForBehandlingLoader())
                 .register(ETTERLEVELSE_FOR_ETTERLEVELSEDOKUMENTASJON_LOADER, etterlevelseForEtterlevelseDokumentasjonLoader())
                 .register(ETTERLEVELSEDOKUMENTASJON, etterlevelseDokumentasjonLoader())
                 .register(BEHANDLING, behandlingLoader())
@@ -65,10 +63,6 @@ public class DataLoaderReg {
 
     private DataLoader<String, Behandling> behandlingLoader() {
         return loader(behandlingService::findAllByIdMapped);
-    }
-
-    private DataLoader<String, List<Etterlevelse>> etterlevelserForBehandlingLoader() {
-        return loader(etterlevelseService::getByBehandlinger);
     }
 
     private DataLoader<String, List<Etterlevelse>> etterlevelseForEtterlevelseDokumentasjonLoader(){

@@ -33,7 +33,6 @@ public class EtterlevelseMetadata implements DomainObject, KravId {
     public EtterlevelseMetadata convert(EtterlevelseMetadataRequest request) {
         kravNummer = request.getKravNummer();
         kravVersjon = request.getKravVersjon();
-        behandlingId = request.getBehandlingId();
         etterlevelseDokumentasjonId = request.getEtterlevelseDokumentasjonId();
         tildeltMed = copyOf(request.getTildeltMed());
         notater = request.getNotater();

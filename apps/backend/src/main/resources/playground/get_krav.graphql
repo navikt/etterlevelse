@@ -2,10 +2,6 @@ query getKravByFilter {
     krav(filter: {relevans: ["INTERN_SKJERMFLATE"], nummer: null}) {
         id
         navn
-        periode {
-            start
-            slutt
-        }
         varslingsadresser {
             adresse
             type

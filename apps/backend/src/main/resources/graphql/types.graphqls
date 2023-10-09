@@ -20,7 +20,6 @@ type Krav {
     tagger: [String!]!
     regelverk: [Regelverk!]!
     varslingsadresser: [Varslingsadresse!]!
-    periode: Periode
     suksesskriterier: [Suksesskriterie!]!
 
     avdeling: Code
@@ -183,19 +182,6 @@ type Behandling {
     systemer: [ExternalCode!]!
     teams: [String!]!
     teamsData: [Team!]!
-
-    irrelevansFor: [Code!]!
-    stats: BehandlingStats!
-
-    etterlevelser: [Etterlevelse!]!
-    sistEndretEtterlevelse: DateTime
-}
-
-type BehandlingStats {
-    fyltKrav: [Krav!]!
-    ikkeFyltKrav: [Krav!]!
-    irrelevantKrav: [Krav!]!
-    lovStats: [LovStats!]!
 }
 
 type EtterlevelseDokumentasjonStats {
@@ -203,7 +189,7 @@ type EtterlevelseDokumentasjonStats {
     ikkeFyltKrav: [Krav!]!
     irrelevantKrav: [Krav!]!
     utgaattKrav: [Krav!]!
-    lovStats: [LovStatsDok!]!
+    lovStats: [LovStats!]!
 }
 
 type EtterlevelseDokumentasjon {
@@ -230,13 +216,6 @@ type LovStats {
     fyltKrav: [Krav!]!
     ikkeFyltKrav: [Krav!]!
     irrelevantKrav: [Krav!]!
-}
-
-type LovStatsDok {
-    lovCode: Code!
-    fyltKrav: [Krav!]!
-    ikkeFyltKrav: [Krav!]!
-    irrelevantKrav: [Krav!]!
     utgaattKrav: [Krav!]!
 }
 
@@ -255,11 +234,6 @@ type Member {
     navIdent: String!
     name: String
     email: String
-}
-
-type Periode {
-    start: Date
-    slutt: Date
 }
 
 type ChangeStamp {

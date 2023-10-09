@@ -16,7 +16,6 @@ import no.nav.data.etterlevelse.arkivering.domain.EtterlevelseArkivStatus;
 import no.nav.data.etterlevelse.arkivering.dto.ArkiverRequest;
 import no.nav.data.etterlevelse.arkivering.dto.EtterlevelseArkivRequest;
 import no.nav.data.etterlevelse.arkivering.dto.EtterlevelseArkivResponse;
-import no.nav.data.etterlevelse.behandling.BehandlingService;
 import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
@@ -54,8 +53,6 @@ public class EtterlevelseArkivController {
     private final EtterlevelseService etterlevelseService;
 
     private final EtterlevelseDokumentasjonService etterlevelseDokumentasjonService;
-
-    private final BehandlingService behandlingService;
 
     @Operation(summary = "Get all etterlevelsearkiv")
     @ApiResponse(description = "Ok")

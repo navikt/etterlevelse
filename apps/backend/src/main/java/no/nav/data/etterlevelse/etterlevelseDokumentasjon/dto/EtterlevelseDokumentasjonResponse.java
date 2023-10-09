@@ -7,8 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.Singular;
 import no.nav.data.common.rest.ChangeStampResponse;
-import no.nav.data.etterlevelse.behandling.dto.Behandling;
 import no.nav.data.etterlevelse.codelist.dto.CodelistResponse;
+import no.nav.data.integration.behandling.dto.Behandling;
 import no.nav.data.integration.team.dto.TeamResponse;
 
 import java.util.List;

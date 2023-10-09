@@ -38,27 +38,12 @@ public class EtterlevelseMetadataService extends DomainService<EtterlevelseMetad
         return GenericStorage.to(repo.findByKravNummerOgKravVersjon(kravNummer, kravVersjon), EtterlevelseMetadata.class);
     }
 
-    public List<EtterlevelseMetadata> getByBehandling(String behandlingId) {
-        return GenericStorage.to(repo.findByBehandling(behandlingId), EtterlevelseMetadata.class);
-    }
-
     public List<EtterlevelseMetadata> getByEtterlevelseDokumentasjon(String etterlevelseDokumentasjonId) {
         return GenericStorage.to(repo.findByEtterlevelseDokumentasjon(etterlevelseDokumentasjonId), EtterlevelseMetadata.class);
     }
 
-    public List<EtterlevelseMetadata> getByBehandlingAndKravNummer(String behandlingId, int kravNummer) {
-        return GenericStorage.to(repo.findByBehandlingAndKravNummer(behandlingId, kravNummer), EtterlevelseMetadata.class);
-    }
-
     public List<EtterlevelseMetadata> getByEtterlevelseDokumentasjonAndKravNummer(String etterlevelseDokumentasjonId, int kravNummer) {
         return GenericStorage.to(repo.findByEtterlevelseDokumentasjonAndKravNummer(etterlevelseDokumentasjonId, kravNummer), EtterlevelseMetadata.class);
-    }
-
-    public List<EtterlevelseMetadata> getByBehandlingAndKrav(String behandlingId, int kravNummer, @Nullable Integer kravVersjon) {
-        if(kravVersjon == null) {
-            return getByBehandlingAndKravNummer(behandlingId, kravNummer);
-        }
-        return GenericStorage.to(repo.findByBehandlingAndKrav(behandlingId, kravNummer, kravVersjon), EtterlevelseMetadata.class);
     }
 
     public List<EtterlevelseMetadata> getByEtterlevelseDokumentasjonAndKrav(String etterlevelseDokumentasjonId, int kravNummer, @Nullable Integer kravVersjon) {

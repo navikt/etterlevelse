@@ -23,7 +23,6 @@ public class EtterlevelseMetadataRequest implements RequestElement, KravId {
     private String id;
     private Integer kravVersjon;
     private Integer kravNummer;
-    private String behandlingId;
     private String etterlevelseDokumentasjonId;
     private List<String> tildeltMed;
     private Boolean update;
@@ -40,7 +39,6 @@ public class EtterlevelseMetadataRequest implements RequestElement, KravId {
         validator.checkId(this);
         validator.checkNull(Fields.kravNummer, kravNummer);
         validator.checkNull(Fields.kravVersjon, kravVersjon);
-        validator.checkNull(Fields.behandlingId, behandlingId);
     }
 
 }

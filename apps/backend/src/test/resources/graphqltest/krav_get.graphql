@@ -2,10 +2,6 @@ query getKrav($nummer: Int!, $versjon: Int!) {
     kravById(nummer: $nummer, versjon: $versjon){
         id
         navn
-        periode {
-            start
-            slutt
-        }
         changeStamp {
             lastModifiedBy
             lastModifiedDate

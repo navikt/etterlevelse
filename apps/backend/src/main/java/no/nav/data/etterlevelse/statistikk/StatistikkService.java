@@ -7,8 +7,6 @@ import no.nav.data.common.auditing.domain.AuditVersionRepository;
 import no.nav.data.common.auditing.dto.AuditLogResponse;
 import no.nav.data.common.auditing.dto.AuditResponse;
 import no.nav.data.common.utils.StreamUtils;
-import no.nav.data.etterlevelse.behandling.BehandlingService;
-import no.nav.data.etterlevelse.behandling.dto.Behandling;
 import no.nav.data.etterlevelse.codelist.CodelistService;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
 import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
@@ -31,6 +29,8 @@ import no.nav.data.etterlevelse.statistikk.domain.BehandlingStatistikk;
 import no.nav.data.etterlevelse.statistikk.dto.EtterlevelseStatistikkResponse;
 import no.nav.data.etterlevelse.statistikk.dto.KravStatistikkResponse;
 import no.nav.data.etterlevelse.statistikk.dto.TilbakemeldingStatistikkResponse;
+import no.nav.data.integration.behandling.BehandlingService;
+import no.nav.data.integration.behandling.dto.Behandling;
 import no.nav.data.integration.team.teamcat.TeamcatTeamClient;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -91,12 +91,12 @@ public class StatistikkService {
                         ).toList().size();
     }
 
-    public LocalDateTime getCreatedDate(List<Etterlevelse> etterlevelseList) {
+    public LocalDateTime getFirstCreatedDateForEtterlevelser(List<Etterlevelse> etterlevelseList) {
         etterlevelseList.sort(Comparator.comparing(a -> a.getChangeStamp().getCreatedDate()));
         return !etterlevelseList.isEmpty() ? etterlevelseList.get(0).getChangeStamp().getCreatedDate().withNano(0) : null;
     }
 
-    public LocalDateTime getLastUpdatedDate(List<Etterlevelse> etterlevelseList) {
+    public LocalDateTime getLastUpdatedDateForEtterlevelser(List<Etterlevelse> etterlevelseList) {
         etterlevelseList.sort(Comparator.comparing(a -> a.getChangeStamp().getLastModifiedDate()));
         return !etterlevelseList.isEmpty() ? etterlevelseList.get(etterlevelseList.size() - 1).getChangeStamp().getLastModifiedDate().withNano(0) : null;
     }
@@ -137,11 +137,9 @@ public class StatistikkService {
             //Get all etterlevelse for behandling
             List<Etterlevelse> etterlevelseList = etterlevelseService.getByEtterlevelseDokumentasjon(String.valueOf(etterlevelseDokumentasjon.getId()));
 
-            //Sort etterlevelse on created date to when the first documentation was created
-            LocalDateTime opprettetDato = getCreatedDate(etterlevelseList);
+            LocalDateTime opprettetDato = getFirstCreatedDateForEtterlevelser(etterlevelseList);
 
-            //Sort etterlevelse on updated date to when the documentation was last updated
-            LocalDateTime endretDato = getLastUpdatedDate(etterlevelseList);
+            LocalDateTime endretDato = getLastUpdatedDateForEtterlevelser(etterlevelseList);
 
             //Filter etterlevelse to only have documentation for active Krav
             List<Etterlevelse> aktivEtterlevelseList = etterlevelseList.stream().filter(etterlevelse ->
