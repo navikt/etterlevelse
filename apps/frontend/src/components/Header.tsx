@@ -1,35 +1,35 @@
 import * as React from 'react'
-import { useState } from 'react'
-import { ALIGN, HeaderNavigation, HeaderNavigationProps, StyledNavigationItem as NavigationItem, StyledNavigationList as NavigationList } from 'baseui/header-navigation'
-import { Block } from 'baseui/block'
-import { Button as BaseUIButton, KIND, SIZE } from 'baseui/button'
-import Button, { buttonBorderStyle, buttonContentStyle } from './common/Button'
-import { StatefulPopover } from 'baseui/popover'
-import { Location, useLocation } from 'react-router-dom'
-import { StyledLink } from 'baseui/link'
-import { useQueryParam } from '../util/hooks'
-import { theme } from '../util'
-import { HeadingXLarge } from 'baseui/typography'
-import { intl } from '../util/intl/intl'
+import {useState} from 'react'
+import {ALIGN, HeaderNavigation, HeaderNavigationProps, StyledNavigationItem as NavigationItem, StyledNavigationList as NavigationList} from 'baseui/header-navigation'
+import {Block} from 'baseui/block'
+import {Button as BaseUIButton, KIND, SIZE} from 'baseui/button'
+import Button, {buttonBorderStyle, buttonContentStyle} from './common/Button'
+import {StatefulPopover} from 'baseui/popover'
+import {Location, useLocation} from 'react-router-dom'
+import {StyledLink} from 'baseui/link'
+import {useQueryParam} from '../util/hooks'
+import {theme} from '../util'
+import {HeadingXLarge} from 'baseui/typography'
+import {intl} from '../util/intl/intl'
 import BurgerMenu from './Navigation/Burger'
 import RouteLink from './common/RouteLink'
-import { user } from '../services/User'
-import { writeLog } from '../api/LogApi'
+import {user} from '../services/User'
+import {writeLog} from '../api/LogApi'
 import MainSearch from './search/MainSearch'
-import { arkPennIcon, grafIcon, handWithLeaf, husIcon, informationIcon, logo, paragrafIcon, warningAlert } from './Images'
-import { ettlevColors, maxPageWidth, responsivePaddingSmall, responsiveWidthSmall } from '../util/theme'
-import { Checkbox, STYLE_TYPE } from 'baseui/checkbox'
-import { Portrait } from './common/Portrait'
-import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
-import { faBars, faChevronDown, faChevronUp, faTimes } from '@fortawesome/free-solid-svg-icons'
-import { faUser } from '@fortawesome/free-regular-svg-icons'
+import {arkPennIcon, grafIcon, handWithLeaf, husIcon, informationIcon, logo, paragrafIcon, warningAlert} from './Images'
+import {ettlevColors, maxPageWidth, responsivePaddingSmall, responsiveWidthSmall} from '../util/theme'
+import {Checkbox, STYLE_TYPE} from 'baseui/checkbox'
+import {Portrait} from './common/Portrait'
+import {IconDefinition} from '@fortawesome/fontawesome-svg-core'
+import {faBars, faChevronDown, faChevronUp, faTimes} from '@fortawesome/free-solid-svg-icons'
+import {faUser} from '@fortawesome/free-regular-svg-icons'
 import SkipToContent from './common/SkipToContent/SkipToContent'
-import { marginAll } from './common/Style'
-import { AlertType, Melding, MeldingStatus, MeldingType } from '../constants'
-import { getMeldingByType } from '../api/MeldingApi'
-import { Markdown } from './common/Markdown'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { ampli } from '../services/Amplitude'
+import {marginAll} from './common/Style'
+import {AlertType, Melding, MeldingStatus, MeldingType} from '../constants'
+import {getMeldingByType} from '../api/MeldingApi'
+import {Markdown} from './common/Markdown'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {ampli} from '../services/Amplitude'
 
 export const loginUrl = (location: Location, path?: string) => {
   const frontpage = window.location.href.substr(0, window.location.href.length - location.pathname.length)
@@ -284,9 +284,6 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
   if (!sourceReported) {
     sourceReported = true
     writeLog('info', 'pageload', `pageload from ${source}`)
-    // if (source) {
-    //   ampli.logEvent('etterlevelse_source', { source })
-    // }
   }
 
   React.useEffect(() => {
@@ -353,7 +350,7 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
         </Block>
       </Block>
       {systemVarsel && systemVarsel.meldingStatus === MeldingStatus.ACTIVE && (
-        <div 
+        <div
           className={`flex flex-col items-center py-2 border-b border-t ${systemVarsel.alertType === 'INFO' ? 'bg-surface-info-subtle border-surface-info' : 'bg-surface-warning-subtle border-surface-warning'}`}
           aria-label="Systemvarsel"
           role="complementary"

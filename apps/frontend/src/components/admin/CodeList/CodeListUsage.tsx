@@ -1,28 +1,28 @@
 import * as React from 'react'
-import { useEffect, useState } from 'react'
-import { Block } from 'baseui/block'
-import { LabelMedium } from 'baseui/typography'
-import { Value } from 'baseui/select'
-import { Button } from 'baseui/button'
+import {useEffect, useState} from 'react'
+import {Block} from 'baseui/block'
+import {LabelMedium} from 'baseui/typography'
+import {Value} from 'baseui/select'
+import {Button} from 'baseui/button'
 
-import { Spinner } from 'baseui/spinner'
-import { Cell, Row, Table } from '../../common/Table'
-import { theme } from '../../../util'
-import { codelist, CodeUsage } from '../../../services/Codelist'
-import { ObjectLink } from '../../common/RouteLink'
-import { ObjectType } from '../audit/AuditTypes'
-import { replaceCodelistUsage } from '../../../api/CodelistApi'
+import {Spinner} from 'baseui/spinner'
+import {Cell, Row, Table} from '../../common/Table'
+import {theme} from '../../../util'
+import {codelist, CodeUsage} from '../../../services/Codelist'
+import {ObjectLink} from '../../common/RouteLink'
+import {ObjectType} from '../audit/AuditTypes'
+import {replaceCodelistUsage} from '../../../api/CodelistApi'
 import CustomizedSelect from '../../common/CustomizedSelect'
-import { ettlevColors } from '../../../util/theme'
-import { buttonContentStyle } from '../../common/Button'
+import {ettlevColors} from '../../../util/theme'
+import {buttonContentStyle} from '../../common/Button'
 
 const UsageTable = (props: { usage: CodeUsage }) => {
   const { usage } = props
   const krav = !!usage.krav.length
-  const behandlinger = !!usage.behandlinger.length
+  const etterlevelseDokumentasjoner = !!usage.etterlevelseDokumentasjoner.length
   const codelist = !!usage.codelist.length
 
-  const rows = usage ? Math.max(usage.krav.length, usage.behandlinger.length, usage.codelist.length) : -1
+  const rows = usage ? Math.max(usage.krav.length, usage.etterlevelseDokumentasjoner.length, usage.codelist.length) : -1
 
   return (
     <Table
@@ -31,14 +31,14 @@ const UsageTable = (props: { usage: CodeUsage }) => {
       data={usage.inUse ? [0] : []}
       headers={[
         { title: 'Krav', hide: !krav },
-        { title: 'Behandling', hide: !behandlinger },
+        { title: 'Etterlevelse Dokumentasjoner', hide: !etterlevelseDokumentasjoner },
         { title: 'Codelist', hide: !codelist },
       ].filter((v) => !!v)}
       render={(table) =>
         Array.from(Array(rows).keys()).map((index) => {
           const kr = usage.krav[index]
-          const be = usage.behandlinger[index]
-          const co = usage.codelist[index]
+          const ed = usage.etterlevelseDokumentasjoner[index]
+          const cl = usage.codelist[index]
           return (
             <Row key={index} $style={{ borderBottomStyle: 'none' }}>
               {krav && (
@@ -50,20 +50,20 @@ const UsageTable = (props: { usage: CodeUsage }) => {
                   )}
                 </Cell>
               )}
-              {behandlinger && (
+              {etterlevelseDokumentasjoner && (
                 <Cell>
-                  {be && (
-                    <ObjectLink id={be.id} type={ObjectType.Behandling} withHistory={true}>
-                      {be.name}
+                  {ed && (
+                    <ObjectLink id={ed.id} type={ObjectType.EtterlevelseDokumentasjon} withHistory={true}>
+                      {ed.name}
                     </ObjectLink>
                   )}
                 </Cell>
               )}
               {codelist && (
                 <Cell>
-                  {co && (
-                    <ObjectLink id={co.list} type={ObjectType.Codelist} withHistory={true}>
-                      {co.list} - {co.code}
+                  {cl && (
+                    <ObjectLink id={cl.list} type={ObjectType.Codelist} withHistory={true}>
+                      {cl.list} - {cl.code}
                     </ObjectLink>
                   )}
                 </Cell>

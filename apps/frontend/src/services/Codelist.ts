@@ -1,7 +1,7 @@
-import { AxiosResponse } from 'axios'
-import { getAllCodelists } from '../api/CodelistApi'
+import {AxiosResponse} from 'axios'
+import {getAllCodelists} from '../api/CodelistApi'
 import * as yup from 'yup'
-import { Replace } from '../constants'
+import {Replace} from '../constants'
 
 export enum ListName {
   AVDELING = 'AVDELING',
@@ -189,7 +189,7 @@ export interface CodeUsage {
   code: string
   inUse: boolean
   krav: [Use]
-  behandlinger: [Use]
+  etterlevelseDokumentasjoner: [Use]
   codelist: [Code]
 }
 
