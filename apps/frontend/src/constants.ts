@@ -1,5 +1,5 @@
-import { Code, LovCode } from './services/Codelist'
-import { Group } from './services/User'
+import {Code, LovCode} from './services/Codelist'
+import {Group} from './services/User'
 
 export type RecursivePartial<T> = {
   [P in keyof T]?: T[P] extends (infer U)[] ? RecursivePartial<U>[] : T[P] extends object ? RecursivePartial<T[P]> : T[P]
@@ -7,274 +7,6 @@ export type RecursivePartial<T> = {
 
 type Not<T> = { [key in keyof T]?: never }
 export type Or<T, U> = (T & Not<U>) | (U & Not<T>)
-
-export interface UserInfo {
-  loggedIn: boolean
-  groups: Group[]
-  ident?: string
-  name?: string
-  email?: string
-}
-
-export interface PageResponse<T> {
-  pageNumber: number
-  pageSize: number
-  pages: number
-  numberOfElements: number
-  totalElements: number
-  content: T[]
-}
-
-export interface ChangeStamp {
-  lastModifiedBy: string
-  lastModifiedDate: string
-  createdDate?: string
-}
-
-export interface DomainObject {
-  changeStamp: ChangeStamp
-  version: number
-}
-
-export interface KravPrioritering extends DomainObject {
-  id: string
-
-  kravVersjon: number
-  kravNummer: number
-  prioriteringsId: string
-}
-
-export interface KravId {
-  id: string
-  kravVersjon: number
-}
-
-export interface KravVersjon {
-  kravNummer: string | number
-  kravVersjon: string | number
-  kravStatus: string
-}
-
-export interface Krav extends DomainObject {
-  id: string
-
-  kravNummer: number
-  kravVersjon: number
-  navn: string
-  beskrivelse: string
-  hensikt: string
-  utdypendeBeskrivelse: string
-  versjonEndringer: string
-  dokumentasjon: string[]
-  implementasjoner: string
-  notat?: string
-  varselMelding?: string
-  prioriteringsId?: string
-  kravPriorityUID?: string
-  begrepIder: string[]
-  virkemiddelIder: string[]
-  varslingsadresser: Varslingsadresse[]
-  rettskilder: string[]
-  tagger: string[]
-  regelverk: Regelverk[]
-  periode: Periode
-  avdeling?: Code
-  underavdeling?: Code
-  relevansFor: Code[]
-  status: KravStatus
-  suksesskriterier: Suksesskriterie[]
-  tema?: string
-  nyKravVersjon: boolean
-  kravIdRelasjoner: string[]
-  aktivertDato: string
-}
-
-export interface Virkemiddel extends DomainObject {
-  id: string
-  navn: string
-  regelverk: Regelverk[]
-  virkemiddelType?: Code
-  livsSituasjon: string
-}
-
-export interface EtterlevelseMetadata extends DomainObject {
-  id: string
-  kravNummer: number
-  kravVersjon: number
-  etterlevelseDokumentasjonId: string
-
-  behandlingId: string
-  tildeltMed?: string[]
-  notater?: string
-}
-
-export interface Suksesskriterie {
-  id: number
-  navn: string
-  beskrivelse?: string
-  behovForBegrunnelse: boolean
-}
-
-export interface Regelverk {
-  lov: LovCode
-  spesifisering?: string
-}
-
-export interface Varslingsadresse {
-  adresse: string
-  type: AdresseType
-}
-
-export interface SlackChannel {
-  id: string
-  name?: string
-  numMembers?: number
-}
-
-export interface SlackUser {
-  id: string
-  name?: string
-}
-
-export enum AdresseType {
-  EPOST = 'EPOST',
-  SLACK = 'SLACK',
-  SLACK_USER = 'SLACK_USER',
-}
-
-export interface Etterlevelse extends DomainObject {
-  id: string
-
-  behandlingId: string
-  etterlevelseDokumentasjonId: string
-  kravNummer: number
-  kravVersjon: number
-  etterleves: boolean
-  statusBegrunnelse: string
-  dokumentasjon: string[]
-  fristForFerdigstillelse: string
-  status: EtterlevelseStatus
-  suksesskriterieBegrunnelser: SuksesskriterieBegrunnelse[]
-}
-
-export type KravEtterlevelseData = {
-  kravNummer: number
-  kravVersjon: number
-  navn: string
-  status: KravStatus
-  etterlevelseId?: string
-  etterleves: boolean
-  changeStamp: ChangeStamp
-  frist?: string
-  varselMelding?: string
-  prioriteringsId?: string
-  etterlevelseStatus?: EtterlevelseStatus
-  suksesskriterier: Suksesskriterie[]
-  gammelVersjon?: boolean
-  etterlevelseChangeStamp?: ChangeStamp
-  isIrrelevant?: boolean
-  aktivertDato: string
-}
-
-export interface SuksesskriterieBegrunnelse {
-  suksesskriterieId: number
-  begrunnelse: string
-  behovForBegrunnelse: boolean
-  suksesskriterieStatus: SuksesskriterieStatus
-}
-
-export enum SuksesskriterieStatus {
-  UNDER_ARBEID = 'UNDER_ARBEID',
-  OPPFYLT = 'OPPFYLT',
-  IKKE_RELEVANT = 'IKKE_RELEVANT',
-  IKKE_OPPFYLT = 'IKKE_OPPFYLT',
-}
-
-export interface Behandling extends BehandlingEtterlevData {
-  id: string
-  navn: string
-  nummer: number
-  overordnetFormaal: ExternalCode
-  formaal?: string
-  avdeling?: ExternalCode
-  linjer: ExternalCode[]
-  systemer: ExternalCode[]
-  teams: string[]
-}
-
-export interface BehandlingEtterlevData {
-  id: string
-  irrelevansFor: Code[]
-}
-
-export interface EtterlevelseDokumentasjon {
-  id: string
-  changeStamp: ChangeStamp
-  version: number
-  title: string
-  behandlingIds: string[]
-  virkemiddelId: string
-  irrelevansFor: Code[]
-  etterlevelseNummer: number
-  teams: string[]
-  //data field for frontend only
-  teamsData?: Team[]
-  behandlinger?: Behandling[]
-  behandlerPersonopplysninger: boolean
-  virkemiddel?: Virkemiddel
-  knyttetTilVirkemiddel: boolean
-  knytteTilTeam: boolean
-}
-
-export interface EtterlevelseDokumentasjonStats {
-  fyltKrav: KravQL[]
-  ikkeFyltKrav: KravQL[]
-  irrelevantKrav: KravQL[]
-  lovStats: LovStatsDok[]
-}
-
-export interface LovStatsDok {
-  lovCode: Code
-  fyltKrav: KravQL[]
-  ikkeFyltKrav: KravQL[]
-}
-
-export interface Periode {
-  start?: string
-  slutt?: string
-}
-
-export interface Tilbakemelding {
-  id: string
-  kravNummer: number
-  kravVersjon: number
-  type: TilbakemeldingType
-  melderIdent: string
-  meldinger: TilbakemeldingMelding[]
-  status: TilbakemeldingMeldingStatus
-  endretKrav: boolean
-}
-
-export interface TilbakemeldingMelding {
-  meldingNr: number
-  fraIdent: string
-  rolle: TilbakemeldingRolle
-  tid: string
-  innhold: string
-
-  endretTid?: string
-  endretAvIdent?: string
-}
-
-export interface Melding extends DomainObject {
-  id: string
-  melding: string
-  secondaryTittel: string
-  secondaryMelding: string
-  meldingType: MeldingType
-  meldingStatus: MeldingStatus
-  alertType: AlertType
-}
 
 export enum TilbakemeldingMeldingStatus {
   UBESVART = 'UBESVART',
@@ -362,6 +94,259 @@ export enum EtterlevelseArkivStatus {
   ERROR = 'ERROR',
 }
 
+export enum AdresseType {
+  EPOST = 'EPOST',
+  SLACK = 'SLACK',
+  SLACK_USER = 'SLACK_USER',
+}
+
+export enum SuksesskriterieStatus {
+  UNDER_ARBEID = 'UNDER_ARBEID',
+  OPPFYLT = 'OPPFYLT',
+  IKKE_RELEVANT = 'IKKE_RELEVANT',
+  IKKE_OPPFYLT = 'IKKE_OPPFYLT',
+}
+export interface UserInfo {
+  loggedIn: boolean
+  groups: Group[]
+  ident?: string
+  name?: string
+  email?: string
+}
+
+export interface PageResponse<T> {
+  pageNumber: number
+  pageSize: number
+  pages: number
+  numberOfElements: number
+  totalElements: number
+  content: T[]
+}
+
+export interface ChangeStamp {
+  lastModifiedBy: string
+  lastModifiedDate: string
+  createdDate?: string
+}
+
+export interface DomainObject {
+  changeStamp: ChangeStamp
+  version: number
+}
+
+export interface KravPrioritering extends DomainObject {
+  id: string
+
+  kravVersjon: number
+  kravNummer: number
+  prioriteringsId: string
+}
+
+export interface KravId {
+  id: string
+  kravVersjon: number
+}
+
+export interface KravVersjon {
+  kravNummer: string | number
+  kravVersjon: string | number
+  kravStatus: string
+}
+
+export interface Krav extends DomainObject {
+  id: string
+
+  kravNummer: number
+  kravVersjon: number
+  navn: string
+  beskrivelse: string
+  hensikt: string
+  utdypendeBeskrivelse: string
+  versjonEndringer: string
+  dokumentasjon: string[]
+  implementasjoner: string
+  notat?: string
+  varselMelding?: string
+  prioriteringsId?: string
+  kravPriorityUID?: string
+  begrepIder: string[]
+  virkemiddelIder: string[]
+  varslingsadresser: Varslingsadresse[]
+  rettskilder: string[]
+  tagger: string[]
+  regelverk: Regelverk[]
+  avdeling?: Code
+  underavdeling?: Code
+  relevansFor: Code[]
+  status: KravStatus
+  suksesskriterier: Suksesskriterie[]
+  tema?: string
+  nyKravVersjon: boolean
+  kravIdRelasjoner: string[]
+  aktivertDato: string
+}
+
+export interface Virkemiddel extends DomainObject {
+  id: string
+  navn: string
+  regelverk: Regelverk[]
+  virkemiddelType?: Code
+  livsSituasjon: string
+}
+
+export interface EtterlevelseMetadata extends DomainObject {
+  id: string
+  kravNummer: number
+  kravVersjon: number
+  etterlevelseDokumentasjonId: string
+  behandlingId: string
+  tildeltMed?: string[]
+  notater?: string
+}
+
+export interface Suksesskriterie {
+  id: number
+  navn: string
+  beskrivelse?: string
+  behovForBegrunnelse: boolean
+}
+
+export interface Regelverk {
+  lov: LovCode
+  spesifisering?: string
+}
+
+export interface Varslingsadresse {
+  adresse: string
+  type: AdresseType
+}
+
+export interface SlackChannel {
+  id: string
+  name?: string
+  numMembers?: number
+}
+
+export interface SlackUser {
+  id: string
+  name?: string
+}
+
+export interface Etterlevelse extends DomainObject {
+  id: string
+  behandlingId: string
+  etterlevelseDokumentasjonId: string
+  kravNummer: number
+  kravVersjon: number
+  etterleves: boolean
+  statusBegrunnelse: string
+  dokumentasjon: string[]
+  fristForFerdigstillelse: string
+  status: EtterlevelseStatus
+  suksesskriterieBegrunnelser: SuksesskriterieBegrunnelse[]
+}
+
+export type KravEtterlevelseData = {
+  kravNummer: number
+  kravVersjon: number
+  navn: string
+  status: KravStatus
+  etterlevelseId?: string
+  etterleves: boolean
+  changeStamp: ChangeStamp
+  frist?: string
+  varselMelding?: string
+  prioriteringsId?: string
+  etterlevelseStatus?: EtterlevelseStatus
+  suksesskriterier: Suksesskriterie[]
+  gammelVersjon?: boolean
+  etterlevelseChangeStamp?: ChangeStamp
+  isIrrelevant?: boolean
+  aktivertDato: string
+}
+
+export interface SuksesskriterieBegrunnelse {
+  suksesskriterieId: number
+  begrunnelse: string
+  behovForBegrunnelse: boolean
+  suksesskriterieStatus: SuksesskriterieStatus
+}
+
+export interface Behandling {
+  id: string
+  navn: string
+  nummer: number
+  overordnetFormaal: ExternalCode
+  formaal?: string
+  avdeling?: ExternalCode
+  linjer: ExternalCode[]
+  systemer: ExternalCode[]
+  teams: string[]
+}
+
+export interface EtterlevelseDokumentasjon {
+  id: string
+  changeStamp: ChangeStamp
+  version: number
+  title: string
+  behandlingIds: string[]
+  virkemiddelId: string
+  irrelevansFor: Code[]
+  etterlevelseNummer: number
+  teams: string[]
+  //data field for frontend only
+  teamsData?: Team[]
+  behandlinger?: Behandling[]
+  behandlerPersonopplysninger: boolean
+  virkemiddel?: Virkemiddel
+  knyttetTilVirkemiddel: boolean
+  knytteTilTeam: boolean
+}
+
+export interface EtterlevelseDokumentasjonStats {
+  fyltKrav: KravQL[]
+  ikkeFyltKrav: KravQL[]
+  irrelevantKrav: KravQL[]
+  lovStats: LovStats[]
+}
+
+export interface LovStats {
+  lovCode: Code
+  fyltKrav: KravQL[]
+  ikkeFyltKrav: KravQL[]
+}
+
+export interface Tilbakemelding {
+  id: string
+  kravNummer: number
+  kravVersjon: number
+  type: TilbakemeldingType
+  melderIdent: string
+  meldinger: TilbakemeldingMelding[]
+  status: TilbakemeldingMeldingStatus
+  endretKrav: boolean
+}
+
+export interface TilbakemeldingMelding {
+  meldingNr: number
+  fraIdent: string
+  rolle: TilbakemeldingRolle
+  tid: string
+  innhold: string
+  endretTid?: string
+  endretAvIdent?: string
+}
+
+export interface Melding extends DomainObject {
+  id: string
+  melding: string
+  secondaryTittel: string
+  secondaryMelding: string
+  meldingType: MeldingType
+  meldingStatus: MeldingStatus
+  alertType: AlertType
+}
+
 export const emptyPage = { content: [], numberOfElements: 0, pageNumber: 0, pages: 0, pageSize: 1, totalElements: 0 }
 
 export interface TeamResource {
@@ -410,7 +395,6 @@ export interface Begrep {
   beskrivelse: string
 }
 
-// export type KravQL = Omit<Krav, 'varslingsadresser'> & {
 export type KravQL = Replace<
   Krav,
   {
@@ -428,7 +412,6 @@ export type EtterlevelseQL = Etterlevelse & {
 
 export type BehandlingQL = Behandling & {
   teamsData: Team[]
-  sistEndretEtterlevelse?: string
 }
 
 export type EtterlevelseDokumentasjonQL = EtterlevelseDokumentasjon & {
@@ -441,19 +424,6 @@ export type EtterlevelseDokumentasjonQL = EtterlevelseDokumentasjon & {
 export type VarslingsadresseQL = Varslingsadresse & {
   slackChannel?: SlackChannel
   slackUser?: SlackUser
-}
-
-export interface BehandlingStats {
-  fyltKrav: KravQL[]
-  ikkeFyltKrav: KravQL[]
-  irrelevantKrav: KravQL[]
-  lovStats: LovStats[]
-}
-
-export interface LovStats {
-  lovCode: Code
-  fyltKrav: KravQL[]
-  ikkeFyltKrav: KravQL[]
 }
 
 export type Replace<T, K> = Omit<T, keyof K> & K
