@@ -27,7 +27,7 @@ export const ArkiveringModal = ({ arkivModal, setArkivModal, etterlevelseDokumen
         return (
           <>
             <Block>Bestilt: {moment(etterlevelseArkiv?.tilArkiveringDato).format('lll')}</Block>
-            <Block>Arkivert av: {etterlevelseArkiv?.arkivertAv.split('-')[1]}</Block>
+            <Block>Arkivert av: {etterlevelseArkiv?.arkivertAv?.split('-')[1]}</Block>
           </>
         )
       case EtterlevelseArkivStatus.ARKIVERT:
@@ -35,7 +35,7 @@ export const ArkiveringModal = ({ arkivModal, setArkivModal, etterlevelseDokumen
           <>
             <Block>Sist arkivert: {moment(etterlevelseArkiv?.arkiveringDato).format('lll')}</Block>
 
-            <Block>Arkivert av: {etterlevelseArkiv?.arkivertAv.split('-')[1]}</Block>
+            <Block>Arkivert av: {etterlevelseArkiv?.arkivertAv?.split('-')[1]}</Block>
           </>
         )
       case EtterlevelseArkivStatus.BEHANDLER_ARKIVERING:
