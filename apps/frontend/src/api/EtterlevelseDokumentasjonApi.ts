@@ -134,3 +134,9 @@ export const etterlevelseDokumentasjonSchema = () =>
       },
     }),
   })
+//graphql
+
+export type EtterlevelseDokumentasjonFilter = {
+  relevans?: string[]
+}
+

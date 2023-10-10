@@ -7,6 +7,7 @@ import {gql, useQuery} from '@apollo/client'
 import {EtterlevelseDokumentasjon, PageResponse} from '../../constants'
 import {DotTags} from "./DotTag";
 import {ListName} from "../../services/Codelist";
+import {EtterlevelseDokumentasjonFilter} from "../../api/EtterlevelseDokumentasjonApi";
 
 const query = gql`
   query getEtterlevelsedokumentasjon($relevans: [String!]) {
@@ -23,9 +24,8 @@ const query = gql`
     }
   }
 `
-
-export const EtterlevelseDokumentasjonFilterTable = (props: { emptyText?: string }) => {
-  const {data, loading} = useQuery<{ etterlevelseDokumentasjon: PageResponse<EtterlevelseDokumentasjon> }>(query)
+export const EtterlevelseDokumentasjonFilterTable = (props: {filter: EtterlevelseDokumentasjonFilter, emptyText?: string }) => {
+  const {data, loading} = useQuery<{ etterlevelseDokumentasjon: PageResponse<EtterlevelseDokumentasjon> }>(query, {variables:props.filter})
 
   return loading && !data ? (
     <Spinner size={theme.sizing.scale2400}/>
