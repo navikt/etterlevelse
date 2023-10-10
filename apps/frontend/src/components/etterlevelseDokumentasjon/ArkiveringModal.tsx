@@ -8,6 +8,7 @@ import CustomizedModal from '../common/CustomizedModal'
 import { borderRadius } from '../common/Style'
 import Button from '../common/Button'
 import { BodyLong } from '@navikt/ds-react'
+import { user } from '../../services/User'
 
 type ArkiveringModalProps = {
   arkivModal: boolean
@@ -26,7 +27,7 @@ export const ArkiveringModal = ({ arkivModal, setArkivModal, etterlevelseDokumen
         return (
           <>
             <Block>Bestilt: {moment(etterlevelseArkiv?.tilArkiveringDato).format('lll')}</Block>
-            <Block>Arkivert av: {etterlevelseArkiv?.changeStamp.lastModifiedBy.split('-')[1]}</Block>
+            <Block>Arkivert av: {etterlevelseArkiv?.arkivertAv.split('-')[1]}</Block>
           </>
         )
       case EtterlevelseArkivStatus.ARKIVERT:
@@ -34,7 +35,7 @@ export const ArkiveringModal = ({ arkivModal, setArkivModal, etterlevelseDokumen
           <>
             <Block>Sist arkivert: {moment(etterlevelseArkiv?.arkiveringDato).format('lll')}</Block>
 
-            <Block>Arkivert av: {etterlevelseArkiv?.changeStamp.lastModifiedBy.split('-')[1]}</Block>
+            <Block>Arkivert av: {etterlevelseArkiv?.arkivertAv.split('-')[1]}</Block>
           </>
         )
       case EtterlevelseArkivStatus.BEHANDLER_ARKIVERING:
@@ -81,8 +82,11 @@ export const ArkiveringModal = ({ arkivModal, setArkivModal, etterlevelseDokumen
           {etterlevelseArkiv && etterlevelseArkiv.status !== EtterlevelseArkivStatus.BEHANDLER_ARKIVERING && etterlevelseArkiv.status !== EtterlevelseArkivStatus.ERROR && (
             <Button
               onClick={() => {
+                console.log(user)
+                console.log(etterlevelseArkiv)
                 const newEtterlevelseArkivering = {
                   etterlevelseDokumentasjonId: etterlevelseDokumentasjonId,
+                  arkivertAv: user.getIdent() + ' - ' + user.getName(),
                   status:
                     etterlevelseArkiv && etterlevelseArkiv.status === EtterlevelseArkivStatus.TIL_ARKIVERING
                       ? EtterlevelseArkivStatus.IKKE_ARKIVER
@@ -93,6 +97,7 @@ export const ArkiveringModal = ({ arkivModal, setArkivModal, etterlevelseDokumen
                   if (etterlevelseArkiv && etterlevelseArkiv.id) {
                     await updateEtterlevelseArkiv({
                       ...etterlevelseArkiv,
+                      arkivertAv: user.getIdent() + ' - ' + user.getName(),
                       status:
                         etterlevelseArkiv && etterlevelseArkiv.status === EtterlevelseArkivStatus.TIL_ARKIVERING
                           ? EtterlevelseArkivStatus.IKKE_ARKIVER

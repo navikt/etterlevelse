@@ -288,6 +288,7 @@ export interface EtterlevelseArkiv extends DomainObject {
   etterlevelseDokumentasjonId: string
   status: EtterlevelseArkivStatus
   arkiveringDato: string
+  arkivertAv: string
   tilArkiveringDato: string
   arkiveringAvbruttDato: string
   webSakNummer: string

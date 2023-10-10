@@ -95,6 +95,7 @@ export const arkiveringMapToFormVal = (arkivering: Partial<EtterlevelseArkiv>): 
   etterlevelseDokumentasjonId: arkivering.etterlevelseDokumentasjonId || '',
   status: arkivering.status || EtterlevelseArkivStatus.IKKE_ARKIVER,
   arkiveringDato: arkivering.arkiveringDato || '',
+  arkivertAv: arkivering.arkivertAv || '',
   tilArkiveringDato: arkivering.tilArkiveringDato || '',
   arkiveringAvbruttDato: arkivering.arkiveringAvbruttDato || '',
   webSakNummer: arkivering.webSakNummer || '',
