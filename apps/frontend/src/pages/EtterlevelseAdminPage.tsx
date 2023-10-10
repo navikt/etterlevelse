@@ -3,7 +3,7 @@ import { Button } from 'baseui/button'
 import { HeadingXXLarge, LabelLarge } from 'baseui/typography'
 import { useState } from 'react'
 import { Helmet } from 'react-helmet'
-import { deleteEtterlevelse, updateEtterlevelseToNewBehandling } from '../api/EtterlevelseApi'
+import { deleteEtterlevelse} from '../api/EtterlevelseApi'
 import CustomizedInput from '../components/common/CustomizedInput'
 import { borderColor, paddingZero } from '../components/common/Style'
 import { Layout2 } from '../components/scaffold/Page'
@@ -31,57 +31,6 @@ export const EtterlevelseAdminPage = () => {
         </Block>
       }
     >
-      <LabelLarge>Oppdatere behandlings id til etterlevelses dokumentasjoner</LabelLarge>
-      <Block display="flex">
-        <CustomizedInput
-          value={oldBehandlingsId}
-          placeholder="Nåværende behandlings UID"
-          onChange={(e) => {
-            setOldBehandlingsId(e.target.value)
-          }}
-          overrides={{
-            Root: {
-              style: {
-                ...borderColor(ettlevColors.grey200),
-                marginRight: '5px',
-              },
-            },
-          }}
-        />
-
-        <CustomizedInput
-          value={newBehandlingsId}
-          placeholder="Ny behandlings UID"
-          onChange={(e) => {
-            setNewBehandlingsId(e.target.value)
-          }}
-          overrides={{
-            Root: {
-              style: {
-                ...borderColor(ettlevColors.grey200),
-                marginRight: '5px',
-              },
-            },
-          }}
-        />
-        <Button
-          disabled={!oldBehandlingsId || !newBehandlingsId}
-          onClick={() => {
-            setUpdateMessage('')
-            updateEtterlevelseToNewBehandling(oldBehandlingsId, newBehandlingsId)
-              .then(() => {
-                setUpdateMessage('Oppdatering er vellykket, byttet etterlevelses dokumentasjon med ny behandlings uid: ' + newBehandlingsId)
-                setNewBehandlingsId('')
-                setOldBehandlingsId('')
-              })
-              .catch((e) => {
-                setUpdateMessage('Oppdatering mislykket, error: ' + e)
-              })
-          }}
-        >
-          Oppdater
-        </Button>
-      </Block>
       <Block marginTop="20px">
         <LabelLarge>Slette etterlevelses dokumentasjon ved uid</LabelLarge>
         <Block display="flex">

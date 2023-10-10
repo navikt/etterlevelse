@@ -58,7 +58,7 @@ export const RelevansPage = () => {
 
           <Block marginTop={theme.sizing.scale1200}>
             <HeadingSmall marginBottom={theme.sizing.scale200}>Behandlinger</HeadingSmall>
-            <BehandlingFilterTable filter={{ relevans: [relevans] }} />
+            <BehandlingFilterTable/>
           </Block>
         </Block>
       </Block>

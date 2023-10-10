@@ -13,10 +13,6 @@ export const getEtterlevelseFor = async (query: { behandling: string }) => {
   return (await axios.get<PageResponse<Etterlevelse>>(`${env.backendBaseUrl}/etterlevelse?${queryString.stringify(query)}`)).data.content
 }
 
-export const updateEtterlevelseToNewBehandling = async (oldBehandlingsId: string, newBehandlingsId: string) => {
-  return (await axios.post(`${env.backendBaseUrl}/etterlevelse/update/behandlingid/${oldBehandlingsId}/${newBehandlingsId}`)).statusText
-}
-
 export const getEtterlevelse = async (id: string) => {
   return (await axios.get<Etterlevelse>(`${env.backendBaseUrl}/etterlevelse/${id}`)).data
 }
@@ -25,9 +21,6 @@ export const getEtterlevelserByKravNumberKravVersion = async (kravNummer: number
   return (await axios.get<PageResponse<Etterlevelse>>(`${env.backendBaseUrl}/etterlevelse/kravnummer/${kravNummer}/${kravVersjon}`)).data
 }
 
-export const getEtterlevelserByBehandlingsIdKravNumber = async (behandlingsId: string, kravNummer: number) => {
-  return (await axios.get<PageResponse<Etterlevelse>>(`${env.backendBaseUrl}/etterlevelse/behandling/${behandlingsId}/${kravNummer}`)).data
-}
 export const getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber = async (etterlevelseDokumentasjonId: string, kravNummer: number) => {
   return (await axios.get<PageResponse<Etterlevelse>>(`${env.backendBaseUrl}/etterlevelse/etterlevelseDokumentasjon/${etterlevelseDokumentasjonId}/${kravNummer}`)).data
 }
@@ -91,16 +84,6 @@ export const useEtterlevelse = (id?: string, behandlingId?: string, kravId?: Kra
   }, [id])
 
   return [data, setData] as [Etterlevelse | undefined, (k: Etterlevelse) => void]
-}
-
-export const useEtterlevelseForBehandling = (behandlingId?: string) => {
-  const [data, setData] = useState<Etterlevelse[]>([])
-
-  useEffect(() => {
-    behandlingId && getEtterlevelseFor({ behandling: behandlingId }).then(setData)
-  }, [behandlingId])
-
-  return data
 }
 
 export const mapEtterlevelseToFormValue = (etterlevelse: Partial<Etterlevelse>, krav?: Krav): Etterlevelse => {
