@@ -35,6 +35,7 @@ public class EtterlevelseArkiv implements DomainObject {
         behandlingId = request.getBehandlingId();
         etterlevelseDokumentasjonId = request.getEtterlevelseDokumentasjonId();
         arkiveringDato = request.getArkiveringDato();
+        arkivertAv = request.getArkivertAv();
         tilArkiveringDato = request.getTilArkiveringDato();
         arkiveringAvbruttDato = request.getArkiveringAvbruttDato();
         webSakNummer = request.getWebSakNummer();
@@ -51,6 +52,7 @@ public class EtterlevelseArkiv implements DomainObject {
                 .behandlingId(behandlingId)
                 .etterlevelseDokumentasjonId(etterlevelseDokumentasjonId)
                 .arkiveringDato(arkiveringDato)
+                .arkivertAv(arkivertAv)
                 .tilArkiveringDato(tilArkiveringDato)
                 .arkiveringAvbruttDato(arkiveringAvbruttDato)
                 .webSakNummer(webSakNummer)
