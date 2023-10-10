@@ -188,7 +188,6 @@ export const kravMapToFormVal = (krav: Partial<KravQL>): KravQL => ({
   varselMelding: krav.varselMelding || '',
   avdeling: krav.avdeling,
   underavdeling: krav.underavdeling,
-  periode: krav.periode || { start: undefined, slutt: undefined },
   relevansFor: krav.relevansFor || [],
   status: krav.status || KravStatus.UTKAST,
   suksesskriterier: krav.suksesskriterier || [],

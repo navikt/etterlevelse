@@ -1,9 +1,8 @@
 import axios from 'axios'
-import { Behandling, BehandlingEtterlevData, PageResponse } from '../constants'
+import { Behandling, PageResponse } from '../constants'
 import { env } from '../util/env'
 import { useSearch } from '../util/hooks'
 import { useEffect, useState } from 'react'
-import { user } from '../services/User'
 
 export const getBehandling = async (id: string) => {
   return (await axios.get<Behandling>(`${env.backendBaseUrl}/behandling/${id}`)).data
@@ -42,7 +41,7 @@ export const behandlingName = (behandling?: Behandling) => {
     }
     if(behandling.overordnetFormaal && behandling.overordnetFormaal.shortName) {
       behandlingName += behandling.overordnetFormaal.shortName + ': '
-    } 
+    }
     if(behandling.navn) {
       behandlingName += behandling.navn
     }
@@ -51,38 +50,3 @@ export const behandlingName = (behandling?: Behandling) => {
   return behandlingName
 }
 export const useSearchBehandling = () => useSearch(searchBehandling)
-
-export const useMyBehandlinger = () => {
-  const [data, setData] = useState<Behandling[]>([])
-  const [loading, setLoading] = useState(true)
-  const ident = user.getIdent()
-
-  useEffect(() => {
-    ident &&
-      getBehandlinger()
-        .then((r) => {
-          setData(r)
-          setLoading(false)
-        })
-        .catch((e) => {
-          setData([])
-          setLoading(false)
-          console.log('couldn\'t find behandlinger', e)
-        })
-  }, [ident])
-
-  return [data, loading] as [Behandling[], boolean]
-}
-
-export const mapToFormVal = (behandling: Partial<Behandling> & { id: string }): BehandlingEtterlevData => {
-  return {
-    id: behandling.id,
-    irrelevansFor: behandling.irrelevansFor || [],
-  }
-}
-
-// GraphQL
-
-export type BehandlingFilters = {
-  relevans?: string[]
-}

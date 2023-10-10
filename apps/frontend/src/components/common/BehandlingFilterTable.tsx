@@ -3,9 +3,6 @@ import { theme } from '../../util'
 import { Cell, Row, Table } from './Table'
 import RouteLink from './RouteLink'
 import React from 'react'
-import { ListName } from '../../services/Codelist'
-import { DotTags } from './DotTag'
-import { BehandlingFilters } from '../../api/BehandlingApi'
 import { gql, useQuery } from '@apollo/client'
 import { Behandling, PageResponse } from '../../constants'
 
@@ -16,10 +13,6 @@ const query = gql`
         id
         navn
         nummer
-        irrelevansFor {
-          code
-          shortName
-        }
         overordnetFormaal {
           shortName
         }
@@ -28,8 +21,8 @@ const query = gql`
   }
 `
 
-export const BehandlingFilterTable = (props: { filter: BehandlingFilters; emptyText?: string }) => {
-  const { data, loading } = useQuery<{ behandling: PageResponse<Behandling> }>(query, { variables: props.filter })
+export const BehandlingFilterTable = (props: {emptyText?: string }) => {
+  const { data, loading } = useQuery<{ behandling: PageResponse<Behandling> }>(query)
 
   return loading && !data ? (
     <Spinner size={theme.sizing.scale2400} />
@@ -41,7 +34,6 @@ export const BehandlingFilterTable = (props: { filter: BehandlingFilters; emptyT
         { title: 'Nummer', column: 'nummer', small: true },
         { title: 'Navn', column: 'navn' },
         { title: 'Overordnet formål', column: 'overordnetFormaal' },
-        { title: 'Relevans for', column: 'irrelevansFor' },
       ]}
       config={{
         initialSortColumn: 'nummer',
@@ -49,7 +41,6 @@ export const BehandlingFilterTable = (props: { filter: BehandlingFilters; emptyT
         sorting: {
           nummer: (a, b) => a.nummer - b.nummer,
           overordnetFormaal: (a, b) => a.overordnetFormaal.shortName.localeCompare(b.overordnetFormaal.shortName),
-          irrelevansFor: (a, b) => a.irrelevansFor.length - b.irrelevansFor.length,
         },
       }}
       render={(state) => {
@@ -61,9 +52,6 @@ export const BehandlingFilterTable = (props: { filter: BehandlingFilters; emptyT
                 <RouteLink href={`/behandling/${behnandling.id}`}>{behnandling.navn}</RouteLink>
               </Cell>
               <Cell>{behnandling.overordnetFormaal?.shortName}</Cell>
-              <Cell>
-                <DotTags list={ListName.RELEVANS} codes={behnandling.irrelevansFor} linkCodelist />
-              </Cell>
             </Row>
           )
         })
