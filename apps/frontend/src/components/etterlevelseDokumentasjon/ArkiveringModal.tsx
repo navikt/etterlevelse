@@ -82,8 +82,6 @@ export const ArkiveringModal = ({ arkivModal, setArkivModal, etterlevelseDokumen
           {etterlevelseArkiv && etterlevelseArkiv.status !== EtterlevelseArkivStatus.BEHANDLER_ARKIVERING && etterlevelseArkiv.status !== EtterlevelseArkivStatus.ERROR && (
             <Button
               onClick={() => {
-                console.log(user)
-                console.log(etterlevelseArkiv)
                 const newEtterlevelseArkivering = {
                   etterlevelseDokumentasjonId: etterlevelseDokumentasjonId,
                   arkivertAv: user.getIdent() + ' - ' + user.getName(),
