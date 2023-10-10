@@ -416,10 +416,6 @@ export const query = gql`
         spesifisering
       }
       tagger
-      periode {
-        start
-        slutt
-      }
 
       avdeling {
         code
