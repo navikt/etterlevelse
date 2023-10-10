@@ -25,6 +25,7 @@ public class EtterlevelseArkiv implements DomainObject {
     private String behandlingId;
     private EtterlevelseArkivStatus status;
     private LocalDateTime arkiveringDato;
+    private String arkivertAv;
     private LocalDateTime tilArkiveringDato;
     private LocalDateTime arkiveringAvbruttDato;
     private String webSakNummer;

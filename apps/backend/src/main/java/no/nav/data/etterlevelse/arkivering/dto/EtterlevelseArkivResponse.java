@@ -23,6 +23,7 @@ public class EtterlevelseArkivResponse {
     private String behandlingId;
     private String status;
     private LocalDateTime arkiveringDato;
+    private String arkivertAv;
     private LocalDateTime tilArkiveringDato;
     private LocalDateTime arkiveringAvbruttDato;
     private String webSakNummer;
