@@ -17,11 +17,6 @@ export const searchBehandling = async (name: string) => {
   return (await axios.get<PageResponse<Behandling>>(`${env.backendBaseUrl}/behandling/search/${name}`)).data.content
 }
 
-export const updateBehandling = async (behandling: BehandlingEtterlevData) => {
-  const dto = { id: behandling.id, irrelevansFor: behandling.irrelevansFor.map((c) => c.code) }
-  return (await axios.put<Behandling>(`${env.backendBaseUrl}/behandling/${behandling.id}`, dto)).data
-}
-
 export const useBehandling = (id?: string) => {
   const [data, setData] = useState<Behandling | undefined>(undefined)
 
