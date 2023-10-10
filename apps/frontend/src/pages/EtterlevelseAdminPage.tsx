@@ -1,18 +1,16 @@
-import { Block } from 'baseui/block'
-import { Button } from 'baseui/button'
-import { HeadingXXLarge, LabelLarge } from 'baseui/typography'
-import { useState } from 'react'
-import { Helmet } from 'react-helmet'
-import { deleteEtterlevelse} from '../api/EtterlevelseApi'
+import {Block} from 'baseui/block'
+import {Button} from 'baseui/button'
+import {HeadingXXLarge, LabelLarge} from 'baseui/typography'
+import {useState} from 'react'
+import {Helmet} from 'react-helmet'
+import {deleteEtterlevelse} from '../api/EtterlevelseApi'
 import CustomizedInput from '../components/common/CustomizedInput'
-import { borderColor, paddingZero } from '../components/common/Style'
-import { Layout2 } from '../components/scaffold/Page'
-import { ettlevColors, maxPageWidth } from '../util/theme'
-import { KIND as NKIND, Notification } from 'baseui/notification'
+import {borderColor, paddingZero} from '../components/common/Style'
+import {Layout2} from '../components/scaffold/Page'
+import {ettlevColors, maxPageWidth} from '../util/theme'
+import {KIND as NKIND, Notification} from 'baseui/notification'
 
 export const EtterlevelseAdminPage = () => {
-  const [oldBehandlingsId, setOldBehandlingsId] = useState<string>('')
-  const [newBehandlingsId, setNewBehandlingsId] = useState<string>('')
   const [updateMessage, setUpdateMessage] = useState<string>('')
   const [etterlevelseId, setEtterlevelseId] = useState<string>('')
 
