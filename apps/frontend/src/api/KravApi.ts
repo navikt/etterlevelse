@@ -256,10 +256,6 @@ export const kravFullQuery = gql`
         }
         spesifisering
       }
-      periode {
-        start
-        slutt
-      }
 
       avdeling {
         code
@@ -281,57 +277,6 @@ export const kravFullQuery = gql`
       }
       status
       aktivertDato
-    }
-  }
-`
-export const behandlingKravQuery = gql`
-  query getKravByFilter($behandlingId: String, $lover: [String!], $gjeldendeKrav: Boolean, $behandlingIrrevantKrav: Boolean, $status: [String!]) {
-    krav(filter: { behandlingId: $behandlingId, lover: $lover, gjeldendeKrav: $gjeldendeKrav, behandlingIrrevantKrav: $behandlingIrrevantKrav, status: $status }) {
-      content {
-        id
-        navn
-        kravNummer
-        kravVersjon
-        varselMelding
-        status
-        aktivertDato
-        kravIdRelasjoner
-        kravRelasjoner {
-          id
-          kravNummer
-          kravVersjon
-          navn
-        }
-        suksesskriterier {
-          id
-          navn
-          beskrivelse
-        }
-        relevansFor {
-          code
-        }
-        regelverk {
-          lov {
-            code
-            shortName
-          }
-        }
-        changeStamp {
-          lastModifiedBy
-          lastModifiedDate
-          createdDate
-        }
-        etterlevelser(onlyForBehandling: true) {
-          id
-          etterleves
-          fristForFerdigstillelse
-          status
-          changeStamp {
-            lastModifiedBy
-            lastModifiedDate
-          }
-        }
-      }
     }
   }
 `
