@@ -121,7 +121,7 @@ const LoggedInHeader = () => {
             },
           ],
           [{ label: 'Forsiden', href: '/', icon: husIcon }],
-          [{ label: 'Dokumentere etterlevelse', href: '/behandlinger', icon: arkPennIcon }],
+          [{ label: 'Dokumentere etterlevelse', href: '/dokumentasjoner', icon: arkPennIcon }],
           [{ label: 'Status i organisasjonen', href: '//metabase.intern.nav.no/dashboard/116-dashboard-for-etterlevelse', icon: grafIcon }],
           [{ label: 'Forstå kravene', href: '/tema', icon: paragrafIcon }],
           [{ label: 'Mer om etterlevelse i NAV', href: '/help', icon: handWithLeaf }],
