@@ -2,3 +2,4 @@
 @import "@navikt/ds-css";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
+@import "react18-json-view/src/style.css";

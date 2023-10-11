@@ -1,6 +1,6 @@
 import moment from 'moment'
 import { Block } from 'baseui/block'
-import ReactJson from '@microlink/react-json-view'
+import JsonView from 'react18-json-view'
 import React, { useEffect, useState } from 'react'
 import { LabelLarge } from 'baseui/typography'
 import { AuditActionIcon, AuditLabel as Label } from './AuditComponents'
@@ -26,20 +26,15 @@ type AuditViewProps = {
   viewId: (id: string) => void
 }
 
-function initialOpen(auditLog?: AuditLog, auditId?: string) {
-  return auditLog?.audits.map((o, i) => i === 0 || o.id === auditId) || []
-}
-
 export const AuditView = (props: AuditViewProps) => {
   const { auditLog, auditId, loading, viewId } = props
   const refs = useRefs<HTMLDivElement>(auditLog?.audits.map((al) => al.id) || [])
-  const [open, setOpen] = useState(initialOpen(auditLog, auditId))
+  const [openAll, setOpenAll] = useState(false)
 
   useEffect(() => {
     if (auditId && auditLog && refs[auditId] && auditId !== auditLog.audits[0].id) {
       refs[auditId].current!.scrollIntoView({ block: 'start' })
     }
-    setOpen(initialOpen(auditLog, auditId))
   }, [auditId, auditLog])
 
   const logFound = auditLog && !!auditLog.audits.length
@@ -59,8 +54,8 @@ export const AuditView = (props: AuditViewProps) => {
               <Label label={intl.audits}>{auditLog?.audits.length}</Label>
             </Block>
             <Block display="flex">
-              <Button size="compact" kind="tertiary" marginRight onClick={() => setOpen(auditLog!.audits.map(() => true))}>
-                Åpne alle
+              <Button size="compact" kind="tertiary" marginRight onClick={() => setOpenAll(!openAll)}>
+                {openAll ? 'Lukke' : 'Åpne'} alle
               </Button>
               {newestAudit?.action !== AuditAction.DELETE && (
                 <StatefulTooltip content={() => intl.view} placement={PLACEMENT.top}>
@@ -132,12 +127,14 @@ export const AuditView = (props: AuditViewProps) => {
                       </StatefulPopover>
                     </Block>
                   </Block>
-                  <ReactJson
+                  <JsonView
                     src={audit.data}
-                    name={null}
-                    shouldCollapse={(p) => p.name === null && !open[index]}
-                    onSelect={(sel) => {
-                      ; (sel.name === 'id' || sel.name?.endsWith('Id')) && viewId(sel.value as string)
+                    collapsed={() => {
+                      if(openAll) {
+                        return false
+                      } else {
+                        return index === 0 ? false : true
+                      }
                     }}
                   />
                 </Block>
