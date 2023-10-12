@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { ReactNode } from 'react'
-import { Button as BaseUIButton, KIND, SHAPE, SIZE } from 'baseui/button'
+import { KIND, SHAPE, SIZE } from 'baseui/button'
 import { PLACEMENT, StatefulTooltip } from 'baseui/tooltip'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
@@ -11,16 +11,25 @@ import { Block } from 'baseui/block'
 import { borderColor, borderRadius, borderStyle, borderWidth, padding, paddingAll } from './Style'
 import { ettlevColors } from '../../util/theme'
 import { ExternalLink } from './RouteLink'
+import {Button as AkselButton, ButtonProps} from '@navikt/ds-react'
 import _ from 'lodash'
 
 export type ButtonKind = (typeof KIND)[keyof typeof KIND] | 'outline' | 'underline-hover'
 
-interface ButtonProps {
-  kind?: ButtonKind
+interface CustomButtonProps extends ButtonProps {
+
+  kind?:
+    | "primary"
+    | "primary-neutral"
+    | "secondary"
+    | "secondary-neutral"
+    | "tertiary"
+    | "tertiary-neutral"
+    | "danger"
+    | "underline-hover"
+    | "outline"
   type?: 'submit' | 'reset' | 'button'
-  size?: (typeof SIZE)[keyof typeof SIZE]
   shape?: (typeof SHAPE)[keyof typeof SHAPE]
-  icon?: IconDefinition
   iconEnd?: IconDefinition
   inline?: boolean
   tooltip?: string
@@ -86,8 +95,8 @@ export const primaryFocusBorder = {
   },
 }
 
-const Button = (props: ButtonProps) => {
-  const baseuiKind = props.kind === 'outline' ? KIND.secondary : props.kind === 'underline-hover' ? KIND.tertiary : props.kind
+const Button = (props: CustomButtonProps) => {
+  const defaultVariant = props.kind === 'outline' ? 'secondary' : props.kind === 'underline-hover' ? 'tertiary' : props.kind
 
   const boxShadow =
     !props.kind || props.kind === 'primary' || props.kind === 'secondary'
@@ -124,21 +133,21 @@ const Button = (props: ButtonProps) => {
     <>
       <Block display="inline" marginLeft={props.marginLeft ? theme.sizing.scale400 : 0} />
       <Tooltip tooltip={props.tooltip}>
-        <BaseUIButton
-          kind={baseuiKind}
+        <AkselButton
+          variant={defaultVariant}
           size={props.size}
-          shape={props.shape}
           onClick={() => props.onClick?.()}
+          disabled={props.disabled}
+/*          shape={props.shape}
           overrides={{ BaseButton: overrides }}
           startEnhancer={props.startEnhancer}
-          disabled={props.disabled}
           type={props.type}
-          aria-label={props.label}
+          aria-label={props.label}*/
         >
           {props.icon && <FontAwesomeIcon icon={props.icon} style={{ marginRight: props.children ? '.5rem' : undefined }} fixedWidth />}
           {props.notBold ? props.children : <strong>{props.children}</strong>}
           {props.iconEnd && <FontAwesomeIcon icon={props.iconEnd} style={{ marginLeft: props.children ? '.5rem' : undefined }} fixedWidth />}
-        </BaseUIButton>
+        </AkselButton>
       </Tooltip>
       <Block display="inline" marginRight={props.marginRight ? theme.sizing.scale600 : 0} />
     </>
