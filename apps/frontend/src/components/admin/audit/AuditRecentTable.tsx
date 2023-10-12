@@ -19,7 +19,7 @@ import {getAudits} from '../../../api/AuditApi'
 import {Cell, Row, Table} from '../../common/Table'
 import * as _ from 'lodash'
 import {theme} from '../../../util'
-import JsonView from 'react18-json-view'
+import { JsonView} from 'react-json-view-lite'
 import {ObjectLink} from '../../common/RouteLink'
 import {CustomizedStatefulSelect} from '../../common/CustomizedSelect'
 import {buttonContentStyle} from '../../common/Button'
@@ -137,7 +137,7 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: ObjectType 
                       accessibilityType="tooltip"
                       overrides={{ Body: { style: { width: '80%' } } }}
                       placement={PLACEMENT.leftBottom}
-                      content={<JsonView src={audit.data}/>}
+                      content={<JsonView data={audit.data}/>}
                     >
                       <Button
                         size="compact"

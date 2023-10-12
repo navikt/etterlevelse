@@ -1,6 +1,6 @@
 import moment from 'moment'
 import { Block } from 'baseui/block'
-import JsonView from 'react18-json-view'
+import { JsonView} from 'react-json-view-lite'
 import React, { useEffect, useState } from 'react'
 import { LabelLarge } from 'baseui/typography'
 import { AuditActionIcon, AuditLabel as Label } from './AuditComponents'
@@ -128,12 +128,12 @@ export const AuditView = (props: AuditViewProps) => {
                     </Block>
                   </Block>
                   <JsonView
-                    src={audit.data}
-                    collapsed={() => {
+                    data={audit.data}
+                    shouldExpandNode={() => {
                       if(openAll) {
-                        return false
+                        return true
                       } else {
-                        return index === 0 ? false : true
+                        return index === 0 ? true : false
                       }
                     }}
                   />
