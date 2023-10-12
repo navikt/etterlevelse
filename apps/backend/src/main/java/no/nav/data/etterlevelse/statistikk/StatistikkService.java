@@ -172,30 +172,38 @@ public class StatistikkService {
 
 
             etterlevelseDokumentasjon.getBehandlingIds().forEach(behandlingId -> {
-                Behandling behandling = behandlingService.getBehandling(behandlingId);
+                Behandling behandling = new Behandling();
 
-                String behandlingNavn = "B" + behandling.getNummer() + " " + behandling.getNavn();
+                try {
+                    behandling = behandlingService.getBehandling(behandlingId);
+                } catch (Exception e) {
+                    log.error("failed to get behandling: " + e);
+                }
 
-                List<String> teamNames = behandling.getTeams().stream().map(t -> teamService.getTeam(t).isPresent() ? teamService.getTeam(t).get().getName() : "").toList();
+                if(behandling.getId() != null &&  !behandling.getId().isEmpty()) {
+                    String behandlingNavn = "B" + behandling.getNummer() + " " + behandling.getNavn();
 
-                behandlingStatistikkList.add(
-                        BehandlingStatistikk.builder()
-                                .etterlevelseDokumentasjonsId(etterlevelseDokumentasjon.getId().toString())
-                                .etterlevelseDokumentasjonTittel("E" + etterlevelseDokumentasjon.getEtterlevelseNummer() + " " + etterlevelseDokumentasjon.getTitle())
-                                .behandlingId(behandling.getId())
-                                .behandlingNavn(behandlingNavn)
-                                .totalKrav(aktivKravList.size())
-                                .antallIkkeFiltrertKrav(antallIkkeFiltrertKrav)
-                                .antallBortfiltrertKrav(aktivKravList.size() - antallIkkeFiltrertKrav)
-                                .antallFerdigDokumentert(antallFerdigDokumentert.size())
-                                .antallUnderArbeid(antallUnderArbeidSize)
-                                .antallIkkePaabegynt(antallIkkeFiltrertKrav - (antallFerdigDokumentert.size() + antallUnderArbeidSize))
-                                .endretDato(endretDato)
-                                .opprettetDato(opprettetDato)
-                                .team(teamNames)
-                                .teamId(behandling.getTeams())
-                                .build()
-                );
+                    List<String> teamNames = behandling.getTeams().stream().map(t -> teamService.getTeam(t).isPresent() ? teamService.getTeam(t).get().getName() : "").toList();
+
+                    behandlingStatistikkList.add(
+                            BehandlingStatistikk.builder()
+                                    .etterlevelseDokumentasjonsId(etterlevelseDokumentasjon.getId().toString())
+                                    .etterlevelseDokumentasjonTittel("E" + etterlevelseDokumentasjon.getEtterlevelseNummer() + " " + etterlevelseDokumentasjon.getTitle())
+                                    .behandlingId(behandling.getId())
+                                    .behandlingNavn(behandlingNavn)
+                                    .totalKrav(aktivKravList.size())
+                                    .antallIkkeFiltrertKrav(antallIkkeFiltrertKrav)
+                                    .antallBortfiltrertKrav(aktivKravList.size() - antallIkkeFiltrertKrav)
+                                    .antallFerdigDokumentert(antallFerdigDokumentert.size())
+                                    .antallUnderArbeid(antallUnderArbeidSize)
+                                    .antallIkkePaabegynt(antallIkkeFiltrertKrav - (antallFerdigDokumentert.size() + antallUnderArbeidSize))
+                                    .endretDato(endretDato)
+                                    .opprettetDato(opprettetDato)
+                                    .team(teamNames)
+                                    .teamId(behandling.getTeams())
+                                    .build()
+                    );
+                }
             });
         });
 
