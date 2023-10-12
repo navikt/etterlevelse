@@ -1,6 +1,5 @@
 import { ApolloProvider } from '@apollo/client'
 import { BaseProvider } from 'baseui'
-import { Block } from 'baseui/block'
 import { Helmet } from 'react-helmet'
 import { BrowserRouter } from 'react-router-dom'
 import { Client as Styletron } from 'styletron-engine-atomic'
@@ -12,7 +11,7 @@ import AppRoutes from './AppRoutes'
 import { codelist } from './services/Codelist'
 import { useAwait, useAwaitUser } from './util/hooks'
 import { useNetworkStatus } from './util/network'
-import { customTheme, ettlevColors } from './util/theme'
+import { customTheme } from './util/theme'
 
 const engine = new Styletron()
 
@@ -38,9 +37,6 @@ const Main = (props: any) => {
                   <AppRoutes />
               </div>
 
-              <Block backgroundColor={ettlevColors.grey25} height={'150px'} width={'100%'}>
-                {/* <HeadingLarge>Hvordan opplever du løsningen?</HeadingLarge> */}
-              </Block>
               <Footer />
             </div>
           </BrowserRouter>
