@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBinoculars, faExchangeAlt, faTimes } from '@fortawesome/free-solid-svg-icons'
 import { PLACEMENT, StatefulTooltip } from 'baseui/tooltip'
 import { StatefulPopover } from 'baseui/popover'
-import DiffViewer, { DiffMethod } from 'react-diff-viewer-continued'
+import {Differ, Viewer} from 'json-diff-kit'
 import { Spinner } from 'baseui/spinner'
 import { useRefs } from '../../../util/hooks'
 import { theme } from '../../../util'
@@ -99,13 +99,11 @@ export const AuditView = (props: AuditViewProps) => {
                         placement={PLACEMENT.left}
                         content={() => (
                           <Card>
-                            <DiffViewer
-                              leftTitle="Previous"
-                              rightTitle="Current"
-                              oldValue={JSON.stringify(auditLog?.audits[index + 1]?.data, null, 2)}
-                              newValue={JSON.stringify(audit.data, null, 2)}
-                              showDiffOnly={true}
-                              compareMethod={DiffMethod.LINES}
+                            <Viewer
+                              diff={new Differ().diff(auditLog && auditLog.audits[index + 1] ? auditLog.audits[index + 1].data : {},  audit.data)}
+                              highlightInlineDiff={true}
+                              lineNumbers={true}
+                              indent={4}
                             />
                           </Card>
                         )}
