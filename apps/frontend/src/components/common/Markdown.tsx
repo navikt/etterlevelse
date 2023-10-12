@@ -66,7 +66,9 @@ export const Markdown = ({
       const { children, href, node } = linkProps
       const content = shortenLinks && node.children[0]?.value.indexOf('http') === 0 ? 'Lenke' : children
       return (
-        <Link href={href}>{content}</Link>
+        <Link href={href} target="_blank" rel="noopener noreferrer">
+          {content} (åpnes i ny fane)
+        </Link>
       )
     },
     a: (linkProps: any) => {
@@ -74,10 +76,9 @@ export const Markdown = ({
       const content = shortenLinks && node.children[0]?.value.indexOf('http') === 0 ? 'Lenke' : children
 
       return (
-        <Link href={href}>
-          {content}
-        </Link>
-      )
+        <Link href={href} target="_blank" rel="noopener noreferrer">
+          {content} (åpnes i ny fane)
+        </Link>      )
     },
     code: (codeProps: any) => {
       const { node, inline, className, children, ...props } = codeProps

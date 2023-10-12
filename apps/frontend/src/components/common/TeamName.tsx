@@ -9,7 +9,7 @@ export const TeamName = (props: { id: string; link?: boolean }) => {
   
   return props.link ? (
     <Link rel="noopener noreferrer" target={'_blank'} href={teamKatTeamLink(props.id)}>
-      {name}
+      {name} (åpnes i ny fane)
     </Link>
   ) : (
     <>{name}</>
