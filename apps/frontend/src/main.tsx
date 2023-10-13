@@ -36,7 +36,7 @@ const Main = (props: any) => {
                   <Header />
                   <AppRoutes />
               </div>
-
+              <div className="h-36 bg-slate-100 w-full" />
               <Footer />
             </div>
           </BrowserRouter>
