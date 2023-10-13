@@ -82,7 +82,7 @@ const SelectType = (props: { type: SearchType; setType: (type: SearchType) => vo
       {!filter && (
         <Block width="100%" display="flex" flex="1" justifyContent="flex-end" marginBottom="-10px">
           <Button
-            size="mini"
+            size="xsmall"
             onClick={() => setFilter(!filter)}
             startEnhancer={<img alt="filter icon" src={filterIcon} />}
             kind="tertiary"
@@ -318,7 +318,7 @@ const MainSearchSelector = (props: SelectPropWithSetValue) => {
         overrides: {
           Svg: {
             component: () => (
-              <Button notBold size="compact" kind="tertiary" onClick={() => props.setValue([])}>
+              <Button notBold size="xsmall" kind="tertiary" onClick={() => props.setValue([])}>
                 <img src={clearSearchIcon} alt="tøm" />
               </Button>
             ),

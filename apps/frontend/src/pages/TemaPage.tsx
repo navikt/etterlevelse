@@ -1,34 +1,34 @@
-import { useParams } from 'react-router-dom'
-import { Block, BlockProps } from 'baseui/block'
-import { useEffect, useState } from 'react'
-import { HeadingXLarge, HeadingXXLarge, LabelLarge, LabelSmall, ParagraphMedium, ParagraphSmall, ParagraphXSmall } from 'baseui/typography'
-import { codelist, ListName, LovCode, TemaCode } from '../services/Codelist'
-import { ExternalLink, urlForObject } from '../components/common/RouteLink'
-import { theme } from '../util'
-import { Markdown } from '../components/common/Markdown'
-import { ettlevColors } from '../util/theme'
+import {useParams} from 'react-router-dom'
+import {Block, BlockProps} from 'baseui/block'
+import {useEffect, useState} from 'react'
+import {HeadingXLarge, HeadingXXLarge, LabelLarge, LabelSmall, ParagraphMedium, ParagraphSmall, ParagraphXSmall} from 'baseui/typography'
+import {codelist, ListName, LovCode, TemaCode} from '../services/Codelist'
+import {ExternalLink, urlForObject} from '../components/common/RouteLink'
+import {theme} from '../util'
+import {Markdown} from '../components/common/Markdown'
+import {ettlevColors} from '../util/theme'
 import Button from '../components/common/Button'
-import { KravFilters } from '../api/KravGraphQLApi'
-import { SkeletonPanel } from '../components/common/LoadingSkeleton'
-import { PanelLink, PanelLinkCard, PanelLinkCardOverrides } from '../components/common/PanelLink'
-import { kravNumView } from './KravPage'
+import {KravFilters} from '../api/KravGraphQLApi'
+import {SkeletonPanel} from '../components/common/LoadingSkeleton'
+import {PanelLink, PanelLinkCard, PanelLinkCardOverrides} from '../components/common/PanelLink'
+import {kravNumView} from './KravPage'
 import * as _ from 'lodash'
-import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons'
-import { Layout2, Page } from '../components/scaffold/Page'
-import { SimpleTag } from '../components/common/SimpleTag'
-import { Krav, KravQL, PageResponse } from '../constants'
-import { useQuery } from '@apollo/client'
-import { QueryHookOptions } from '@apollo/client/react/types/types'
-import { gql } from '@apollo/client/core'
-import { useForceUpdate } from '../util/hooks'
-import { borderRadius, margin } from '../components/common/Style'
-import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
-import { sortKraverByPriority } from '../util/sort'
-import { getAllKravPriority } from '../api/KravPriorityApi'
-import { Helmet } from 'react-helmet'
-import { ampli } from '../services/Amplitude'
+import {Layout2, Page} from '../components/scaffold/Page'
+import {SimpleTag} from '../components/common/SimpleTag'
+import {Krav, KravQL, PageResponse} from '../constants'
+import {useQuery} from '@apollo/client'
+import {QueryHookOptions} from '@apollo/client/react/types/types'
+import {gql} from '@apollo/client/core'
+import {useForceUpdate} from '../util/hooks'
+import {borderRadius, margin} from '../components/common/Style'
+import {breadcrumbPaths} from '../components/common/CustomizedBreadcrumbs'
+import {sortKraverByPriority} from '../util/sort'
+import {getAllKravPriority} from '../api/KravPriorityApi'
+import {Helmet} from 'react-helmet'
+import {ampli} from '../services/Amplitude'
 import {BodyShort, Heading} from '@navikt/ds-react'
-import { lovdataBase } from '../components/Lov'
+import {lovdataBase} from '../components/Lov'
+import {ChevronDownIcon, ChevronUpIcon} from "@navikt/aksel-icons";
 
 export const TemaPage = () => {
   const { tema } = useParams<{ tema: string }>()
@@ -84,7 +84,7 @@ export const getTemaMainHeader = (tema: TemaCode, lover: LovCode[], expand: bool
 
       {!noExpandButton && (
         <Block alignSelf={'flex-end'} marginTop={theme.sizing.scale600}>
-          <Button onClick={() => setExpand(!expand)} icon={expand ? faChevronUp : faChevronDown} kind={'underline-hover'}>
+          <Button onClick={() => setExpand(!expand)} icon={expand ? <ChevronUpIcon/> : <ChevronDownIcon/>} kind={'underline-hover'}>
             {expand ? 'Mindre' : 'Mer'} om tema
           </Button>
         </Block>

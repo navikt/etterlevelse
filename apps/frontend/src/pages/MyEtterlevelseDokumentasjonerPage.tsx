@@ -1,32 +1,33 @@
-import { HeadingLarge, HeadingXLarge, HeadingXXLarge, LabelLarge, LabelSmall, LabelXSmall, ParagraphSmall } from 'baseui/typography'
-import { Block } from 'baseui/block'
-import React, { useEffect, useState } from 'react'
-import { useMyTeams } from '../api/TeamApi'
-import { theme } from '../util'
-import Button, { ExternalButton } from '../components/common/Button'
-import { Spinner } from '../components/common/Spinner'
-import { emptyPage, EtterlevelseDokumentasjonQL, PageResponse, Team } from '../constants'
-import { StatefulInput } from 'baseui/input'
-import { gql, useQuery } from '@apollo/client'
-import { ettlevColors, maxPageWidth } from '../util/theme'
+import {HeadingLarge, HeadingXLarge, HeadingXXLarge, LabelLarge, LabelSmall, LabelXSmall, ParagraphSmall} from 'baseui/typography'
+import {Block} from 'baseui/block'
+import React, {useEffect, useState} from 'react'
+import {useMyTeams} from '../api/TeamApi'
+import {theme} from '../util'
+import Button, {ExternalButton} from '../components/common/Button'
+import {Spinner} from '../components/common/Spinner'
+import {emptyPage, EtterlevelseDokumentasjonQL, PageResponse, Team} from '../constants'
+import {StatefulInput} from 'baseui/input'
+import {gql, useQuery} from '@apollo/client'
+import {ettlevColors, maxPageWidth} from '../util/theme'
 import CustomizedTabs from '../components/common/CustomizedTabs'
-import { PanelLink } from '../components/common/PanelLink'
-import { arkPennIcon, bamseIcon, clearSearchIcon, searchIcon } from '../components/Images'
-import { env } from '../util/env'
-import { InfoBlock2 } from '../components/common/InfoBlock'
+import {PanelLink} from '../components/common/PanelLink'
+import {arkPennIcon, bamseIcon, clearSearchIcon, searchIcon} from '../components/Images'
+import {env} from '../util/env'
+import {InfoBlock2} from '../components/common/InfoBlock'
 import moment from 'moment'
-import { useDebouncedState } from '../util/hooks'
-import { SkeletonPanel } from '../components/common/LoadingSkeleton'
-import { user } from '../services/User'
-import { useNavigate, useParams } from 'react-router-dom'
-import { faExternalLinkAlt, faPlus } from '@fortawesome/free-solid-svg-icons'
-import { borderWidth } from '../components/common/Style'
+import {useDebouncedState} from '../util/hooks'
+import {SkeletonPanel} from '../components/common/LoadingSkeleton'
+import {user} from '../services/User'
+import {useNavigate, useParams} from 'react-router-dom'
+import {faExternalLinkAlt} from '@fortawesome/free-solid-svg-icons'
+import {borderWidth} from '../components/common/Style'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Helmet } from 'react-helmet'
-import { ampli } from '../services/Amplitude'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {Helmet} from 'react-helmet'
+import {ampli} from '../services/Amplitude'
 import EditEtterlevelseDokumentasjonModal from '../components/etterlevelseDokumentasjon/edit/EditEtterlevelseDokumentasjonModal'
 import BehandlingSok from '../components/etterlevelseDokumentasjon/tabs/BehandlingSok'
+import {PlusIcon} from "@navikt/aksel-icons";
 
 type Section = 'mine' | 'siste' | 'alle' | 'behandlingsok'
 
@@ -344,7 +345,7 @@ const Alle = () => {
                 overrides: {
                   Svg: {
                     component: (props: any) => (
-                      <Button notBold size="compact" kind="tertiary" onClick={() => props.onClick()}>
+                      <Button notBold size="xsmall" kind="tertiary" onClick={() => props.onClick()}>
                         <img src={clearSearchIcon} alt="tøm" />
                       </Button>
                     ),
@@ -390,9 +391,9 @@ const Alle = () => {
               <Block display="flex" alignItems="center">
                 <Button
                   onClick={lastMer}
-                  icon={faPlus}
+                  icon={<PlusIcon/>}
                   kind={'secondary'}
-                  size="compact"
+                  size="xsmall"
                   disabled={gqlLoading || etterlevelseDokumentasjoner.numberOfElements >= etterlevelseDokumentasjoner.totalElements}
                 >
                   Vis mer

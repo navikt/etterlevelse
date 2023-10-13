@@ -1,33 +1,26 @@
 import * as React from 'react'
-import { ReactNode } from 'react'
-import { KIND, SHAPE, SIZE } from 'baseui/button'
-import { PLACEMENT, StatefulTooltip } from 'baseui/tooltip'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
-import { theme } from '../../util'
-import { Override } from 'baseui/overrides'
-import { StyleObject } from 'styletron-react'
-import { Block } from 'baseui/block'
-import { borderColor, borderRadius, borderStyle, borderWidth, padding, paddingAll } from './Style'
-import { ettlevColors } from '../../util/theme'
-import { ExternalLink } from './RouteLink'
-import {Button as AkselButton, ButtonProps} from '@navikt/ds-react'
+import {ReactNode} from 'react'
+import {theme} from '../../util'
+import {Override} from 'baseui/overrides'
+import {StyleObject} from 'styletron-react'
+import {borderColor, borderRadius, borderStyle, borderWidth, padding, paddingAll} from './Style'
+import {ettlevColors} from '../../util/theme'
+import {ExternalLink} from './RouteLink'
+import {Button as AkselButton, ButtonProps, Tooltip as AkselTooltip, TooltipProps} from '@navikt/ds-react'
 import _ from 'lodash'
 
-export type ButtonKind = (typeof KIND)[keyof typeof KIND] | 'outline' | 'underline-hover'
+export type ButtonKind = 'primary'
+  | 'primary-neutral'
+  | 'secondary'
+  | 'secondary-neutral'
+  | 'tertiary'
+  | 'tertiary-neutral'
+  | 'danger'
+  | 'underline-hover'
+  | 'outline'
 
 interface CustomButtonProps extends ButtonProps {
-
-  kind?:
-    | 'primary'
-    | 'primary-neutral'
-    | 'secondary'
-    | 'secondary-neutral'
-    | 'tertiary'
-    | 'tertiary-neutral'
-    | 'danger'
-    | 'underline-hover'
-    | 'outline'
+  kind?: ButtonKind
   type?: 'submit' | 'reset' | 'button'
   inline?: boolean
   tooltip?: string
@@ -41,16 +34,11 @@ interface CustomButtonProps extends ButtonProps {
   notBold?: boolean
 }
 
-interface TooltipProps {
-  tooltip?: string
-  children: React.ReactElement
-}
-
 const Tooltip = (props: TooltipProps) =>
-  props.tooltip ? (
-    <StatefulTooltip content={props.tooltip} placement={PLACEMENT.top} focusLock={false}>
+  props.content !== '' ? (
+    <AkselTooltip content={props.content} placement="top">
       {props.children}
-    </StatefulTooltip>
+    </AkselTooltip>
   ) : (
     props.children
   )
@@ -84,51 +72,43 @@ export const buttonContentStyle = {
   ...padding('10px', '12px'),
 }
 
-export const primaryFocusBorder = {
-  ':focus': {
-    outlineStyle: 'solid',
-    outlineWidth: '2px',
-  },
-}
-
 const Button = (props: CustomButtonProps) => {
   const defaultVariant = props.kind === 'outline' ? 'secondary' : props.kind === 'underline-hover' ? 'tertiary' : props.kind
 
   const boxShadow =
     !props.kind || props.kind === 'primary' || props.kind === 'secondary'
       ? {
-          style: {
-            ...buttonContentStyle,
-            boxShadow: '0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 2px 0 rgba(0, 0, 0, .12)',
-            ':hover': { boxShadow: '0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 3px 0 rgba(0, 0, 0, .12)' },
-            ':active': { boxShadow: '0 2px 1px -2px rgba(0, 0, 0, .2), 0 1px 1px 0 rgba(0, 0, 0, .14), 0 1px 1px 0 rgba(0, 0, 0, .12)' },
-            ':focus': {
-              boxShadow: '0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 3px 0 rgba(0, 0, 0, .12)',
-              outlineWidth: '3px',
-              outlineStyle: 'solid',
-              outlineColor: ettlevColors.focusOutline,
-              outlineOffset: props.kind === 'primary' ? '2px' : undefined,
-            },
+        style: {
+          ...buttonContentStyle,
+          boxShadow: '0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 2px 0 rgba(0, 0, 0, .12)',
+          ':hover': {boxShadow: '0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 3px 0 rgba(0, 0, 0, .12)'},
+          ':active': {boxShadow: '0 2px 1px -2px rgba(0, 0, 0, .2), 0 1px 1px 0 rgba(0, 0, 0, .14), 0 1px 1px 0 rgba(0, 0, 0, .12)'},
+          ':focus': {
+            boxShadow: '0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 3px 0 rgba(0, 0, 0, .12)',
+            outlineWidth: '3px',
+            outlineStyle: 'solid',
+            outlineColor: ettlevColors.focusOutline,
+            outlineOffset: props.kind === 'primary' ? '2px' : undefined,
           },
-        }
+        },
+      }
       : {
-          style: {
-            buttonContentStyle,
-          },
-        }
+        style: {
+          buttonContentStyle,
+        },
+      }
 
   let overrides: Override<any> = boxShadow
   overrides.style = _.merge(overrides.style, props.kind === 'outline' ? outlineOverride : {})
   overrides.style = _.merge(overrides.style, props.kind === 'underline-hover' ? underlineOverride : {})
   overrides.style = _.merge(overrides.style, props.kind === 'secondary' ? buttonBorderStyle : {})
   overrides.style = _.merge(overrides.style, props.hidePadding ? paddingAll('0') : {})
-  overrides.style = _.merge(overrides.style, props.inline ? { paddingTop: theme.sizing.scale100, paddingBottom: theme.sizing.scale100 } : {})
+  overrides.style = _.merge(overrides.style, props.inline ? {paddingTop: theme.sizing.scale100, paddingBottom: theme.sizing.scale100} : {})
   overrides.style = _.merge(overrides.style, props.$style || {})
 
   return (
-    <>
-      <Block display="inline" marginLeft={props.marginLeft ? theme.sizing.scale400 : 0} />
-      <Tooltip tooltip={props.tooltip}>
+    <div className={`inline ${props.marginLeft ? 'ml-2.5' : ''} ${props.marginRight ? 'ml-4' : ''}`}>
+      <Tooltip content={props.tooltip || ''}>
         <AkselButton
           variant={defaultVariant}
           size={props.size}
@@ -141,8 +121,7 @@ const Button = (props: CustomButtonProps) => {
           {props.notBold ? props.children : <strong>{props.children}</strong>}
         </AkselButton>
       </Tooltip>
-      <Block display="inline" marginRight={props.marginRight ? theme.sizing.scale600 : 0} />
-    </>
+    </div>
   )
 }
 
@@ -157,22 +136,22 @@ export const buttonBorderStyle = {
 }
 
 export const ExternalButton = ({
-  href,
-  children,
-  underlineHover,
-  size,
-  openOnSamePage,
-  kind,
-}: {
+                                 href,
+                                 children,
+                                 underlineHover,
+                                 size,
+                                 openOnSamePage,
+                                 kind,
+                               }: {
   href: string
   children: React.ReactNode
   underlineHover?: boolean
-  size?: (typeof SIZE)[keyof typeof SIZE]
+  size?: 'medium' | 'small' | 'xsmall'
   openOnSamePage?: boolean
   kind?: ButtonKind
 }) => {
   const underlineStyle = underlineHover ? 'underline-hover' : 'outline'
-  const actualSize = size || 'compact'
+  const actualSize = size || 'xsmall'
   return (
     <ExternalLink href={href} openOnSamePage={openOnSamePage}>
       <Button kind={kind ? kind : underlineStyle} size={actualSize}>
