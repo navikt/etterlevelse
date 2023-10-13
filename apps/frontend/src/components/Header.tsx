@@ -21,7 +21,7 @@ import {ettlevColors, maxPageWidth, responsivePaddingSmall, responsiveWidthSmall
 import {Checkbox, STYLE_TYPE} from 'baseui/checkbox'
 import {Portrait} from './common/Portrait'
 import {IconDefinition} from '@fortawesome/fontawesome-svg-core'
-import {faBars, faChevronDown, faChevronUp, faTimes} from '@fortawesome/free-solid-svg-icons'
+import {faBars, faTimes} from '@fortawesome/free-solid-svg-icons'
 import {faUser} from '@fortawesome/free-regular-svg-icons'
 import SkipToContent from './common/SkipToContent/SkipToContent'
 import {marginAll} from './common/Style'
@@ -30,7 +30,7 @@ import {getMeldingByType} from '../api/MeldingApi'
 import {Markdown} from './common/Markdown'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {ampli} from '../services/Amplitude'
-import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons'
+import {ChevronDownIcon, ChevronUpIcon} from '@navikt/aksel-icons'
 
 export const loginUrl = (location: Location, path?: string) => {
   const frontpage = window.location.href.substr(0, window.location.href.length - location.pathname.length)
