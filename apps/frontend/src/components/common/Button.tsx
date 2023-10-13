@@ -19,28 +19,24 @@ export type ButtonKind = (typeof KIND)[keyof typeof KIND] | 'outline' | 'underli
 interface CustomButtonProps extends ButtonProps {
 
   kind?:
-    | "primary"
-    | "primary-neutral"
-    | "secondary"
-    | "secondary-neutral"
-    | "tertiary"
-    | "tertiary-neutral"
-    | "danger"
-    | "underline-hover"
-    | "outline"
+    | 'primary'
+    | 'primary-neutral'
+    | 'secondary'
+    | 'secondary-neutral'
+    | 'tertiary'
+    | 'tertiary-neutral'
+    | 'danger'
+    | 'underline-hover'
+    | 'outline'
   type?: 'submit' | 'reset' | 'button'
-  shape?: (typeof SHAPE)[keyof typeof SHAPE]
-  iconEnd?: IconDefinition
   inline?: boolean
   tooltip?: string
   children?: ReactNode
   onClick?: () => void
-  startEnhancer?: ReactNode
   disabled?: boolean
   $style?: StyleObject
   marginRight?: boolean
   marginLeft?: boolean
-  label?: string
   hidePadding?: boolean
   notBold?: boolean
 }
@@ -138,15 +134,11 @@ const Button = (props: CustomButtonProps) => {
           size={props.size}
           onClick={() => props.onClick?.()}
           disabled={props.disabled}
-/*          shape={props.shape}
-          overrides={{ BaseButton: overrides }}
-          startEnhancer={props.startEnhancer}
+          icon={props.icon}
+          iconPosition={props.iconPosition}
           type={props.type}
-          aria-label={props.label}*/
         >
-          {props.icon && <FontAwesomeIcon icon={props.icon} style={{ marginRight: props.children ? '.5rem' : undefined }} fixedWidth />}
           {props.notBold ? props.children : <strong>{props.children}</strong>}
-          {props.iconEnd && <FontAwesomeIcon icon={props.iconEnd} style={{ marginLeft: props.children ? '.5rem' : undefined }} fixedWidth />}
         </AkselButton>
       </Tooltip>
       <Block display="inline" marginRight={props.marginRight ? theme.sizing.scale600 : 0} />
