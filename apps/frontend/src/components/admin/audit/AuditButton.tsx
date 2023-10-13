@@ -6,6 +6,7 @@ import { user } from '../../../services/User'
 import RouteLink from '../../common/RouteLink'
 import Button from '../../common/Button'
 import { intl } from '../../../util/intl/intl'
+import { ClockDashedIcon } from '@navikt/aksel-icons'
 
 export const AuditButton = (props: {
   id: string
@@ -27,9 +28,9 @@ export const AuditButton = (props: {
             tooltip={intl.version}
             marginLeft={props.marginLeft}
             marginRight={props.marginRight}
-            size={ButtonSize.compact}
+            size={"small"}
             kind={props.kind || 'outline'}
-            label={'Versjonering'}
+            icon={<ClockDashedIcon title="Versjonering"/>}
           >
             <FontAwesomeIcon icon={faHistory} />
           </Button>

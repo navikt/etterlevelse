@@ -13,6 +13,7 @@ import { user } from '../../../services/User'
 import { faBars, faTimes } from '@fortawesome/free-solid-svg-icons'
 import { ettlevColors } from '../../../util/theme'
 import { arkPennIcon, exitIcon, grafIcon, husIcon, paragrafIcon } from '../../Images'
+import { LeaveIcon, MenuHamburgerIcon, XMarkIcon } from '@navikt/aksel-icons'
 
 const Brand = () => (
   <StyledLink style={{ textDecoration: 'none' }} href="/">
@@ -20,7 +21,7 @@ const Brand = () => (
   </StyledLink>
 )
 
-const MenuItem = (props: { to: string, text: string, icon: string, setShowMenu: Function }) => (
+const MenuItem = (props: { to: string; text: string; icon: string; setShowMenu: Function }) => (
   <Block
     display={'flex'}
     alignItems={'center'}
@@ -60,7 +61,7 @@ const SignOutButton = (props: { location: string }) => {
   const linkCss = useCss({ textDecoration: 'none', color: 'white' })
   return (
     <StyledLink href={`${env.backendBaseUrl}/logout?redirect_uri=${props.location}`} className={linkCss}>
-      <Button kind="secondary" startEnhancer={<img src={exitIcon} alt="exit icon" />}>
+      <Button kind="secondary" icon={<LeaveIcon />}>
         Logg ut
       </Button>
     </StyledLink>
@@ -80,7 +81,7 @@ const BurgerMenu = () => {
   return (
     <React.Fragment>
       {!showMenu && (
-        <Button kind="secondary" size="compact" onClick={() => setShowMenu(true)} icon={faBars}>
+        <Button kind="secondary" size="small" onClick={() => setShowMenu(true)} icon={<MenuHamburgerIcon />}>
           Meny
         </Button>
       )}
@@ -109,7 +110,7 @@ const BurgerMenu = () => {
         >
           <Block display="flex" flexDirection="column" height="100%">
             <Block width="100%" display="flex" justifyContent="flex-end" marginBottom={theme.sizing.scale1600}>
-              <Button kind="secondary" size="compact" onClick={() => setShowMenu(false)} icon={faTimes}>
+              <Button kind="secondary" size="small" onClick={() => setShowMenu(false)} icon={<XMarkIcon />}>
                 Meny
               </Button>
             </Block>

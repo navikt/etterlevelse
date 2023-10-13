@@ -54,14 +54,14 @@ export const AuditView = (props: AuditViewProps) => {
               <Label label={intl.audits}>{auditLog?.audits.length}</Label>
             </Block>
             <Block display="flex">
-              <Button size="compact" kind="tertiary" marginRight onClick={() => setOpenAll(!openAll)}>
+              <Button size="small" kind="tertiary" marginRight onClick={() => setOpenAll(!openAll)}>
                 {openAll ? 'Lukke' : 'Åpne'} alle
               </Button>
               {newestAudit?.action !== AuditAction.DELETE && (
                 <StatefulTooltip content={() => intl.view} placement={PLACEMENT.top}>
                   <Block>
                     <ObjectLink id={newestAudit!.tableId} type={newestAudit!.table} audit={newestAudit}>
-                      <Button size="compact" shape="round" kind="tertiary">
+                      <Button size="small" kind="tertiary">
                         <FontAwesomeIcon icon={faBinoculars} />
                       </Button>
                     </ObjectLink>
@@ -70,7 +70,7 @@ export const AuditView = (props: AuditViewProps) => {
               )}
               <StatefulTooltip content={() => intl.close} placement={PLACEMENT.top}>
                 <Block>
-                  <Button size="compact" shape="round" kind="tertiary" onClick={() => viewId('')}>
+                  <Button size="small" kind="tertiary" onClick={() => viewId('')}>
                     <FontAwesomeIcon icon={faTimes} />
                   </Button>
                 </Block>
@@ -118,7 +118,7 @@ export const AuditView = (props: AuditViewProps) => {
                         }}
                       >
                         <div>
-                          <Button size="compact" shape="round" kind="tertiary">
+                          <Button size="small" kind="tertiary">
                             <FontAwesomeIcon icon={faExchangeAlt} />
                           </Button>
                         </div>

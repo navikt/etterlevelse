@@ -21,6 +21,7 @@ import {clearSearchIcon, filterIcon, navChevronDownIcon, searchIcon} from '../Im
 import {ParagraphMedium} from 'baseui/typography'
 import {urlForObject} from '../common/RouteLink'
 import {etterlevelseDokumentasjonName, searchEtterlevelsedokumentasjon} from '../../api/EtterlevelseDokumentasjonApi'
+import { FilterIcon } from '@navikt/aksel-icons'
 
 type SearchItem = { id: string; sortKey: string; label: ReactElement; type: NavigableItem | string }
 
@@ -84,21 +85,12 @@ const SelectType = (props: { type: SearchType; setType: (type: SearchType) => vo
           <Button
             size="xsmall"
             onClick={() => setFilter(!filter)}
-            startEnhancer={<img alt="filter icon" src={filterIcon} />}
+            icon={<FilterIcon/>}
             kind="tertiary"
             marginRight
-            label="Filter søkeresultat"
             notBold
           >
-            <ParagraphMedium
-              $style={{
-                fontSize: theme.sizing.scale600,
-                marginTop: 0,
-                marginBottom: 0,
-              }}
-            >
               Vis filter
-            </ParagraphMedium>
           </Button>
         </Block>
       )}
