@@ -1,36 +1,30 @@
 import * as React from 'react'
-import {useState} from 'react'
-import {ALIGN, HeaderNavigation, HeaderNavigationProps, StyledNavigationItem as NavigationItem, StyledNavigationList as NavigationList} from 'baseui/header-navigation'
-import {Block} from 'baseui/block'
-import {Button as BaseUIButton, KIND, SIZE} from 'baseui/button'
-import Button, {buttonBorderStyle, buttonContentStyle} from './common/Button'
-import {StatefulPopover} from 'baseui/popover'
-import {Location, useLocation} from 'react-router-dom'
-import {StyledLink} from 'baseui/link'
-import {useQueryParam} from '../util/hooks'
-import {theme} from '../util'
-import {HeadingXLarge} from 'baseui/typography'
-import {intl} from '../util/intl/intl'
+import { useState } from 'react'
+import { ALIGN, HeaderNavigation, HeaderNavigationProps, StyledNavigationItem as NavigationItem, StyledNavigationList as NavigationList } from 'baseui/header-navigation'
+import { Block } from 'baseui/block'
+import Button, { buttonBorderStyle } from './common/Button'
+import { Location, useLocation } from 'react-router-dom'
+import { StyledLink } from 'baseui/link'
+import { useQueryParam } from '../util/hooks'
+import { theme } from '../util'
+import { HeadingXLarge } from 'baseui/typography'
+import { intl } from '../util/intl/intl'
 import BurgerMenu from './Navigation/Burger'
 import RouteLink from './common/RouteLink'
-import {user} from '../services/User'
-import {writeLog} from '../api/LogApi'
+import { user } from '../services/User'
+import { writeLog } from '../api/LogApi'
 import MainSearch from './search/MainSearch'
-import {arkPennIcon, grafIcon, handWithLeaf, husIcon, informationIcon, logo, paragrafIcon, warningAlert} from './Images'
-import {ettlevColors, maxPageWidth, responsivePaddingSmall, responsiveWidthSmall} from '../util/theme'
-import {Checkbox, STYLE_TYPE} from 'baseui/checkbox'
-import {Portrait} from './common/Portrait'
-import {IconDefinition} from '@fortawesome/fontawesome-svg-core'
-import {faBars, faChevronDown, faChevronUp, faTimes} from '@fortawesome/free-solid-svg-icons'
-import {faUser} from '@fortawesome/free-regular-svg-icons'
+import { informationIcon, logo, warningAlert } from './Images'
+import { ettlevColors, maxPageWidth, responsivePaddingSmall, responsiveWidthSmall } from '../util/theme'
+import { Checkbox, STYLE_TYPE } from 'baseui/checkbox'
+import { Portrait } from './common/Portrait'
 import SkipToContent from './common/SkipToContent/SkipToContent'
-import {marginAll} from './common/Style'
-import {AlertType, Melding, MeldingStatus, MeldingType} from '../constants'
-import {getMeldingByType} from '../api/MeldingApi'
-import {Markdown} from './common/Markdown'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {ampli} from '../services/Amplitude'
-import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons'
+import { AlertType, Melding, MeldingStatus, MeldingType } from '../constants'
+import { getMeldingByType } from '../api/MeldingApi'
+import { Markdown } from './common/Markdown'
+import { ampli } from '../services/Amplitude'
+import { BarChartIcon, ChevronDownIcon, ChevronUpIcon, DocPencilIcon, HouseIcon, InformationIcon, MenuHamburgerIcon, PersonIcon, ReceiptIcon } from '@navikt/aksel-icons'
+import { Dropdown, Link } from '@navikt/ds-react'
 
 export const loginUrl = (location: Location, path?: string) => {
   const frontpage = window.location.href.substr(0, window.location.href.length - location.pathname.length)
@@ -42,11 +36,11 @@ export const LoginButton = () => {
   // updates window.location on navigation
   const location = useLocation()
   return (
-    <StyledLink style={{ textDecoration: 'none' }} href={loginUrl(location, location.pathname)}>
-      <Button kind={KIND.secondary} $style={buttonBorderStyle}>
+    <Link underline={false} href={loginUrl(location, location.pathname)}>
+      <Button as="a" kind="secondary" $style={buttonBorderStyle}>
         <strong>Logg inn</strong>
       </Button>
-    </StyledLink>
+    </Link>
   )
 }
 
@@ -55,7 +49,7 @@ const LoggedInHeader = () => {
 
   const roller = (
     <Block>
-      <Button size={'xsmall'} kind={'underline-hover'} onClick={() => setViewRoller(!viewRoller)} icon={viewRoller ? <ChevronUpIcon/> : <ChevronDownIcon/>}>
+      <Button size={'xsmall'} kind={'underline-hover'} onClick={() => setViewRoller(!viewRoller)} icon={viewRoller ? <ChevronUpIcon /> : <ChevronDownIcon />}>
         Endre aktive roller
       </Button>
       <Block display={viewRoller ? 'block' : 'none'} marginTop={theme.sizing.scale200}>
@@ -85,32 +79,32 @@ const LoggedInHeader = () => {
 
   const kravPages = user.isKraveier()
     ? [
-        { label: 'Forvalte og opprette krav', href: '/kravliste' },
-        { label: 'Forvalte og opprette virkemiddel', href: '/virkemiddelliste' },
-      ]
+      { label: 'Forvalte og opprette krav', href: '/kravliste' },
+      { label: 'Forvalte og opprette virkemiddel', href: '/virkemiddelliste' },
+    ]
     : []
   const adminPages = user.isAdmin()
     ? [
-        { label: 'Administrere krav', href: '/admin/krav' },
-        { label: 'Administrere dokumentasjon', href: '/admin/dokumentasjon' },
-        { label: 'Administrere etterlevelse', href: '/admin/etterlevelse' },
-        { label: 'Administrere arkivering', href: '/admin/arkiv' },
-        { label: intl.audit, href: '/admin/audit' },
-        { label: 'Kodeverk', href: '/admin/codelist' },
-        { label: intl.questionAndAnswers, href: '/admin/messageslog' },
-        { label: intl.notifications, href: '/admin/varsel' },
-        // { label: intl.settings, href: '/admin/settings', disabled: true },
-      ]
+      { label: 'Administrere krav', href: '/admin/krav' },
+      { label: 'Administrere dokumentasjon', href: '/admin/dokumentasjon' },
+      { label: 'Administrere etterlevelse', href: '/admin/etterlevelse' },
+      { label: 'Administrere arkivering', href: '/admin/arkiv' },
+      { label: intl.audit, href: '/admin/audit' },
+      { label: 'Kodeverk', href: '/admin/codelist' },
+      { label: intl.questionAndAnswers, href: '/admin/messageslog' },
+      { label: intl.notifications, href: '/admin/varsel' },
+      // { label: intl.settings, href: '/admin/settings', disabled: true },
+    ]
     : []
 
   return (
     <Block display="flex" justifyContent="center" alignItems="center">
-      <Menu pages={[[{ label: <UserInfo /> }], kravPages, adminPages, [{ label: roller }]]} title={user.getIdent()} icon={faUser} kind={'tertiary'} />
+      <Menu pages={[[{ label: <UserInfo /> }], kravPages, adminPages, [{ label: roller }]]} title={user.getIdent()} icon={<PersonIcon />} kind={'tertiary'} />
 
       <Block width={theme.sizing.scale400} />
 
       <Menu
-        icon={faBars}
+        icon={<MenuHamburgerIcon />}
         pages={[
           [
             {
@@ -121,11 +115,11 @@ const LoggedInHeader = () => {
               ),
             },
           ],
-          [{ label: 'Forsiden', href: '/', icon: husIcon }],
-          [{ label: 'Dokumentere etterlevelse', href: '/dokumentasjoner', icon: arkPennIcon }],
-          [{ label: 'Status i organisasjonen', href: '//metabase.intern.nav.no/dashboard/116-dashboard-for-etterlevelse', icon: grafIcon }],
-          [{ label: 'Forstå kravene', href: '/tema', icon: paragrafIcon }],
-          [{ label: 'Mer om etterlevelse i NAV', href: '/help', icon: handWithLeaf }],
+          [{ label: 'Forsiden', href: '/', icon: <HouseIcon /> }],
+          [{ label: 'Dokumentere etterlevelse', href: '/dokumentasjoner', icon: <DocPencilIcon /> }],
+          [{ label: 'Status i organisasjonen', href: '//metabase.intern.nav.no/dashboard/116-dashboard-for-etterlevelse', icon: <BarChartIcon /> }],
+          [{ label: 'Forstå kravene', href: '/tema', icon: <ReceiptIcon /> }],
+          [{ label: 'Mer om etterlevelse i NAV', href: '/help', icon: <InformationIcon /> }],
         ]}
         compact
         title={'Meny'}
@@ -166,112 +160,59 @@ const UserInfo = () => {
   )
 }
 
-type MenuItem = { label: React.ReactNode; href?: string; disabled?: boolean; icon?: string }
+type MenuItem = { label: React.ReactNode; href?: string; disabled?: boolean; icon?: React.ReactNode }
 
-const Menu = (props: { pages: MenuItem[][]; title: React.ReactNode; icon?: IconDefinition; kind?: 'primary' | 'secondary' | 'tertiary'; compact?: boolean }) => {
-  const [open, setOpen] = useState(false)
-
+const Menu = (props: { pages: MenuItem[][]; title: React.ReactNode; icon?: React.ReactNode; kind?: 'primary' | 'secondary' | 'tertiary'; compact?: boolean }) => {
   const pathname = window.location.pathname
 
   const allPages = props.pages.length
     ? props.pages
-        .filter((p) => p.length)
-        .reduce((previousValue, currentValue) => [...((previousValue as MenuItem[]) || []), { label: <Divider compact={props.compact} /> }, ...(currentValue as MenuItem[])])
+      .filter((p) => p.length)
+      .reduce((previousValue, currentValue) => [...((previousValue as MenuItem[]) || []), { label: <Divider compact={props.compact} /> }, ...(currentValue as MenuItem[])])
     : []
 
   return (
-    <StatefulPopover
-      autoFocus
-      returnFocus
-      focusLock
-      showArrow
-      onClick={() => setOpen(!open)}
-      onClose={() => setOpen(false)}
-      overrides={{
-        Arrow: { style: { backgroundColor: ettlevColors.white } },
-        Body: { style: { ...marginAll(theme.sizing.scale900) } },
-      }}
-      content={
-        <Block padding={theme.sizing.scale900} backgroundColor={ettlevColors.white} display={'flex'} flexDirection={'column'}>
-          {allPages.map((p, i) => {
-            const item =
-              !!p.href && !p.disabled ? (
-                <Block
-                  display={'flex'}
-                  alignItems={'center'}
-                  $style={{
-                    ':hover': {
-                      textDecoration: '2px underline',
-                    },
-                  }}
-                >
-                  <RouteLink
+      <Dropdown>
+        <Button
+          as={Dropdown.Toggle}
+          kind={props.kind || 'secondary'}
+          icon={props.icon}
+        >
+          {props.title}
+        </Button>
+        <Dropdown.Menu className="min-w-max h-auto">
+          <Dropdown.Menu.List>
+            {allPages.map((p, i) => {
+              const item =
+                !!p.href && !p.disabled ? (
+                  <Dropdown.Menu.List.Item as={Link}
                     href={p.href}
                     onClick={() => {
                       ampli.logEvent('navigere', { kilde: 'header', app: 'etterlevelse', til: p.href, fra: pathname })
-                      setOpen(false)
                     }}
-                    hideUnderline
+                    underline={false}
                   >
-                    <Block>
-                      <Block display={'flex'} alignItems={'center'}>
-                        {p.icon && (
-                          <Block marginRight={theme.sizing.scale400}>
-                            <img src={p.icon} alt={'link ikon'} aria-hidden />
-                          </Block>
-                        )}
-                        <Block>{p.label}</Block>
-                      </Block>
-                    </Block>
-                  </RouteLink>
-                </Block>
-              ) : (
-                <Block $style={{ opacity: p.disabled ? 0.6 : 1 }}>{p.label}</Block>
+                    <div className="flex items-center">
+                      {p.icon && (
+                        <div className="mr-2">
+                          {p.icon}
+                        </div>
+                      )}
+                      {p.label}
+                    </div>
+                  </Dropdown.Menu.List.Item>
+                ) : (
+                  <Dropdown.Menu.GroupedList.Heading>{p.label}</Dropdown.Menu.GroupedList.Heading>
+                )
+              return (
+                <div key={i} className="my-1">
+                  {item}
+                </div>
               )
-            return (
-              <Block key={i} marginTop={theme.sizing.scale100} marginBottom={theme.sizing.scale100}>
-                {item}
-              </Block>
-            )
-          })}
-        </Block>
-      }
-    >
-      <BaseUIButton
-        size={SIZE.compact}
-        kind={props.kind || 'secondary'}
-        overrides={
-          props.kind !== 'tertiary'
-            ? {
-                BaseButton: {
-                  style: {
-                    ...buttonBorderStyle,
-                    ...buttonContentStyle,
-                    boxShadow: '0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 2px 0 rgba(0, 0, 0, .12)',
-                    ':hover': { boxShadow: '0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 3px 0 rgba(0, 0, 0, .12)' },
-                    ':active': { boxShadow: '0 2px 1px -2px rgba(0, 0, 0, .2), 0 1px 1px 0 rgba(0, 0, 0, .14), 0 1px 1px 0 rgba(0, 0, 0, .12)' },
-                    ':focus': {
-                      boxShadow: '0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 3px 0 rgba(0, 0, 0, .12)',
-                      outlineWidth: '3px',
-                      outlineStyle: 'solid',
-                      outlinwColor: ettlevColors.focusOutline,
-                    },
-                  },
-                },
-              }
-            : {
-                BaseButton: {
-                  style: {
-                    buttonContentStyle,
-                  },
-                },
-              }
-        }
-      >
-        {props.icon && <FontAwesomeIcon icon={open ? faTimes : props.icon} style={{ marginRight: '.5rem' }} fixedWidth />}
-        {props.title}
-      </BaseUIButton>
-    </StatefulPopover>
+            })}
+          </Dropdown.Menu.List>
+        </Dropdown.Menu>
+      </Dropdown>
   )
 }
 
@@ -288,7 +229,7 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
   }
 
   React.useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       await getMeldingByType(MeldingType.SYSTEM).then((r) => {
         if (r.numberOfElements > 0) {
           setSystemVarsel(r.content[0])
