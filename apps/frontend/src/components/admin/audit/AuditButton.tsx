@@ -28,7 +28,6 @@ export const AuditButton = (props: {
             tooltip={intl.version}
             marginLeft={props.marginLeft}
             marginRight={props.marginRight}
-            size={"small"}
             kind={props.kind || 'outline'}
             icon={<ClockDashedIcon title="Versjonering"/>}
           >

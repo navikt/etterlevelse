@@ -18,6 +18,7 @@ import { AuditAction, AuditLog } from './AuditTypes'
 import { ObjectLink } from '../../common/RouteLink'
 import Button from '../../common/Button'
 import { ettlevColors } from '../../../util/theme'
+import { ArrowRightLeftIcon, GlassesIcon, XMarkIcon } from '@navikt/aksel-icons'
 
 type AuditViewProps = {
   auditLog?: AuditLog
@@ -54,25 +55,21 @@ export const AuditView = (props: AuditViewProps) => {
               <Label label={intl.audits}>{auditLog?.audits.length}</Label>
             </Block>
             <Block display="flex">
-              <Button size="small" kind="tertiary" marginRight onClick={() => setOpenAll(!openAll)}>
+              <Button kind="tertiary" marginRight onClick={() => setOpenAll(!openAll)}>
                 {openAll ? 'Lukke' : 'Åpne'} alle
               </Button>
               {newestAudit?.action !== AuditAction.DELETE && (
                 <StatefulTooltip content={() => intl.view} placement={PLACEMENT.top}>
                   <Block>
                     <ObjectLink id={newestAudit!.tableId} type={newestAudit!.table} audit={newestAudit}>
-                      <Button size="small" kind="tertiary">
-                        <FontAwesomeIcon icon={faBinoculars} />
-                      </Button>
+                      <Button kind="tertiary" icon={<GlassesIcon title="Se forskjell"/>} />
                     </ObjectLink>
                   </Block>
                 </StatefulTooltip>
               )}
               <StatefulTooltip content={() => intl.close} placement={PLACEMENT.top}>
                 <Block>
-                  <Button size="small" kind="tertiary" onClick={() => viewId('')}>
-                    <FontAwesomeIcon icon={faTimes} />
-                  </Button>
+                  <Button kind="tertiary" onClick={() => viewId('')} icon={<XMarkIcon title="Lukk"/>} />
                 </Block>
               </StatefulTooltip>
             </Block>
@@ -118,9 +115,7 @@ export const AuditView = (props: AuditViewProps) => {
                         }}
                       >
                         <div>
-                          <Button size="small" kind="tertiary">
-                            <FontAwesomeIcon icon={faExchangeAlt} />
-                          </Button>
+                          <Button  kind="tertiary" icon={<ArrowRightLeftIcon title="Sammenling"/>} />
                         </div>
                       </StatefulPopover>
                     </Block>

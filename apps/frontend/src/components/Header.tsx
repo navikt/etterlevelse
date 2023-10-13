@@ -30,6 +30,7 @@ import {getMeldingByType} from '../api/MeldingApi'
 import {Markdown} from './common/Markdown'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {ampli} from '../services/Amplitude'
+import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons'
 
 export const loginUrl = (location: Location, path?: string) => {
   const frontpage = window.location.href.substr(0, window.location.href.length - location.pathname.length)
@@ -42,7 +43,7 @@ export const LoginButton = () => {
   const location = useLocation()
   return (
     <StyledLink style={{ textDecoration: 'none' }} href={loginUrl(location, location.pathname)}>
-      <Button size={SIZE.compact} kind={KIND.secondary} $style={buttonBorderStyle}>
+      <Button kind={KIND.secondary} $style={buttonBorderStyle}>
         <strong>Logg inn</strong>
       </Button>
     </StyledLink>
@@ -54,7 +55,7 @@ const LoggedInHeader = () => {
 
   const roller = (
     <Block>
-      <Button size={'mini'} kind={'underline-hover'} onClick={() => setViewRoller(!viewRoller)} icon={viewRoller ? faChevronUp : faChevronDown}>
+      <Button size={'xsmall'} kind={'underline-hover'} onClick={() => setViewRoller(!viewRoller)} icon={viewRoller ? <ChevronUpIcon/> : <ChevronDownIcon/>}>
         Endre aktive roller
       </Button>
       <Block display={viewRoller ? 'block' : 'none'} marginTop={theme.sizing.scale200}>

@@ -469,7 +469,6 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                       {krav.status === KravStatus.AKTIV && !newVersion && (
                         <Block marginRight="9px">
                           <Button
-                            size="compact"
                             kind="secondary"
                             onClick={() => {
                               setUtgaattKravMessage(true)
@@ -485,7 +484,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                       {user.isAdmin() && krav.status === KravStatus.UTGAATT && !newVersion && (
                         <Block marginRight="9px">
                           <Button
-                            size="compact"
+                            
                             kind="secondary"
                             onClick={() => {
                               setAktivKravMessage(true)
@@ -501,7 +500,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                       {user.isAdmin() && !newVersion && (
                         <Block marginRight="9px">
                           <Button
-                            size="compact"
+                            
                             kind="secondary"
                             onClick={() => {
                               values.status = KravStatus.UTKAST
@@ -586,12 +585,12 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                       </BaseModal>
                     </Block>
                     <Block display="flex" justifyContent="flex-end" width="100%">
-                      <Button size="compact" kind={'secondary'} type={'button'} onClick={close} marginLeft>
+                      <Button  kind={'secondary'} type={'button'} onClick={close} marginLeft>
                         Avbryt
                       </Button>
 
                       <Button
-                        size="compact"
+                        
                         kind="primary"
                         onClick={() => {
                           if (newVersion) {
@@ -610,7 +609,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
 
                       {(newVersion || krav.status === KravStatus.UTKAST) && (
                         <Button
-                          size="compact"
+                          
                           onClick={() => {
                             values.status = KravStatus.AKTIV
                             submitForm()

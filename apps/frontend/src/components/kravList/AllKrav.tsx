@@ -290,7 +290,7 @@ export const AllKrav = () => {
       {!loading && kravene.totalElements !== 0 && (
         <Block display={'flex'} justifyContent={'space-between'} marginTop={theme.sizing.scale1000}>
           <Block display="flex" alignItems="center">
-            <Button onClick={lastMer} icon={<PlusIcon/>} kind={'secondary'} size="small" disabled={gqlLoading || kravene.numberOfElements >= kravene.totalElements}>
+            <Button onClick={lastMer} icon={<PlusIcon/>} kind={'secondary'}  disabled={gqlLoading || kravene.numberOfElements >= kravene.totalElements}>
               Vis mer
             </Button>
 

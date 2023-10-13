@@ -35,7 +35,7 @@ export const EtterlevelseListPage = () => {
             <Block>
               {user.canWrite() && (
                 <RouteLink href={'/etterlevelse/ny'}>
-                  <Button size="small">Ny etterlevelse</Button>
+                  <Button >Ny etterlevelse</Button>
                 </RouteLink>
               )}
             </Block>
@@ -56,10 +56,10 @@ export const EtterlevelseListPage = () => {
             <LabelSmall marginRight={theme.sizing.scale400}>
               Side {etterlevelse.pageNumber + 1}/{etterlevelse.pages}
             </LabelSmall>
-            <Button onClick={prev} size="small" disabled={etterlevelse.pageNumber === 0}>
+            <Button onClick={prev}  disabled={etterlevelse.pageNumber === 0}>
               Forrige
             </Button>
-            <Button onClick={next} size="small" disabled={etterlevelse.pageNumber >= etterlevelse.pages - 1}>
+            <Button onClick={next}  disabled={etterlevelse.pageNumber >= etterlevelse.pages - 1}>
               Neste
             </Button>
           </Block>

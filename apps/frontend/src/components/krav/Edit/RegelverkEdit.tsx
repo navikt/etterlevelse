@@ -124,7 +124,7 @@ export const RegelverkEdit = ({ forVirkemiddel }: RegelverkEditProps) => {
                     </Block>
 
                     <Block minWidth="107px">
-                      <Button type="button" size="compact" onClick={add} marginLeft kind="secondary">
+                      <Button type="button"  onClick={add} marginLeft kind="secondary">
                         Legg til
                       </Button>
                     </Block>

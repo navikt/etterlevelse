@@ -22,7 +22,6 @@ export const SecondaryHeader = ({ etterlevelseDokumentasjon, temaData, lovListe 
       <div className="pt-4 pb-10">
         <Block display="flex" justifyContent="flex-end" width="100%">
           <Button
-            size="compact"
             $style={{
               fontSize: '18px',
               fontWeight: 600,

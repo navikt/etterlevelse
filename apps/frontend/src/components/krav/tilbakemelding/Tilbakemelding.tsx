@@ -208,7 +208,7 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
 
           {tilbakemeldinger.length > DEFAULT_COUNT_SIZE && (
             <Block $style={{ alignSelf: 'flex-end' }} marginTop={theme.sizing.scale400}>
-              <Button kind="tertiary" size="small" icon={<PlusIcon/>} onClick={() => setCount(count + DEFAULT_COUNT_SIZE)} disabled={tilbakemeldinger.length <= count}>
+              <Button kind="tertiary" icon={<PlusIcon/>} onClick={() => setCount(count + DEFAULT_COUNT_SIZE)} disabled={tilbakemeldinger.length <= count}>
                 Last flere
               </Button>
             </Block>
@@ -234,7 +234,7 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
             )}
 
             {user.canWrite() && (
-              <Button kind={'primary'} size="small" onClick={() => setAddTilbakemelding(true)}>
+              <Button kind={'primary'} onClick={() => setAddTilbakemelding(true)}>
                 Still et spørsmål
               </Button>
             )}
@@ -397,12 +397,11 @@ const TilbakemeldingSvar = ({ tilbakemelding, setFocusNummer, close, ubesvartOgK
               <ParagraphMedium $style={{ whiteSpace: 'pre-wrap', overflowWrap: 'break-word' }}>{tilbakemelding.meldinger[0].innhold}</ParagraphMedium>
             </ModalBody>
             <ModalFooter>
-              <Button kind={'secondary'} size={'small'} onClick={() => setDeleteModal(false)}>
+              <Button kind={'secondary'} onClick={() => setDeleteModal(false)}>
                 Avbryt
               </Button>
               <Button
                 kind={'primary'}
-                size={'small'}
                 marginLeft
                 onClick={() =>
                   tilbakemeldingslettMelding({ tilbakemeldingId: tilbakemelding.id, meldingNr: 1 }).then((t) => {
@@ -420,7 +419,7 @@ const TilbakemeldingSvar = ({ tilbakemelding, setFocusNummer, close, ubesvartOgK
       <Block display="flex" marginTop={'8px'} width={'100%'}>
         {user.isAdmin() && (
           <Block>
-            <Button size="small" icon={<TrashIcon/>} kind={'secondary'} onClick={() => setDeleteModal(true)}>
+            <Button icon={<TrashIcon/>} kind={'secondary'} onClick={() => setDeleteModal(true)}>
               Slett hele samtalen
             </Button>
           </Block>
@@ -454,7 +453,6 @@ const TilbakemeldingSvar = ({ tilbakemelding, setFocusNummer, close, ubesvartOgK
                 ) : (
                   <Button
                     kind="secondary"
-                    size={'small'}
                     marginLeft
                     onClick={() => {
                       setIsUpdatingStatus(true)
@@ -475,7 +473,7 @@ const TilbakemeldingSvar = ({ tilbakemelding, setFocusNummer, close, ubesvartOgK
                 )}
               </Block>
             )}
-            <Button kind="primary" size={'small'} marginLeft disabled={!response} onClick={submit}>
+            <Button kind="primary" marginLeft disabled={!response} onClick={submit}>
               {ubesvartOgKraveier ? 'Svar' : 'Send'}
               {user.isKraveier() ? ' og oppdater status' : ''}
             </Button>

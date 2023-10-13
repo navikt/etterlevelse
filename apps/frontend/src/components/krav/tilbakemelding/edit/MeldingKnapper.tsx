@@ -1,4 +1,3 @@
-import { faPencilAlt, faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 import { Block } from 'baseui/block'
 import Button from '../../../common/Button'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from 'baseui/modal'
@@ -48,12 +47,11 @@ export const MeldingKnapper = (props: {
             <ParagraphMedium $style={{ whiteSpace: 'pre-wrap', overflowWrap: 'break-word' }}>{melding.innhold}</ParagraphMedium>
           </ModalBody>
           <ModalFooter>
-            <Button kind={'secondary'} size={'small'} onClick={() => setDeleteModal(false)}>
+            <Button kind={'secondary'} onClick={() => setDeleteModal(false)}>
               Avbryt
             </Button>
             <Button
               kind={'primary'}
-              size={'small'}
               marginLeft
               onClick={() =>
                 tilbakemeldingslettMelding({ tilbakemeldingId, meldingNr }).then((t) => {

@@ -44,7 +44,7 @@ export const KravVarslingsadresserEdit = () => {
                   <Block marginBottom={theme.sizing.scale400}>
                     <Button
                       kind="secondary"
-                      size="compact"
+                      
                       type="button"
                       onClick={() => setAddSlackChannel(true)}
                       $style={{
@@ -60,7 +60,7 @@ export const KravVarslingsadresserEdit = () => {
                     </Button>
                     <Button
                       kind="secondary"
-                      size="compact"
+                      
                       marginLeft
                       type="button"
                       onClick={() => setAddSlackUser(true)}
@@ -77,7 +77,7 @@ export const KravVarslingsadresserEdit = () => {
                     </Button>
                     <Button
                       kind="secondary"
-                      size="compact"
+                      
                       marginLeft
                       type="button"
                       onClick={() => setAddEmail(true)}
@@ -121,7 +121,7 @@ const AddModal = ({ isOpen, close, title, children }: { isOpen: boolean; close: 
     <ModalHeader>{title}</ModalHeader>
     <ModalBody>{children}</ModalBody>
     <ModalFooter>
-      <Button kind="secondary" size="compact" type="button" onClick={close}>
+      <Button kind="secondary"  type="button" onClick={close}>
         Avbryt
       </Button>
     </ModalFooter>

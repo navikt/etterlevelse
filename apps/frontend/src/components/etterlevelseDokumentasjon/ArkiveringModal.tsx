@@ -112,7 +112,6 @@ export const ArkiveringModal = ({ arkivModal, setArkivModal, etterlevelseDokumen
                   setIsArchivingCancelled(false)
                 }
               }}
-              size={'compact'}
               kind={etterlevelseArkiv.status !== EtterlevelseArkivStatus.TIL_ARKIVERING ? 'primary' : 'secondary'}
               $style={{
                 borderWidth: '2px',
@@ -130,7 +129,6 @@ export const ArkiveringModal = ({ arkivModal, setArkivModal, etterlevelseDokumen
                 setArkivModal(false)
               }}
               kind="primary"
-              size="compact"
               $style={{
                 padding: '14px 16px',
               }}

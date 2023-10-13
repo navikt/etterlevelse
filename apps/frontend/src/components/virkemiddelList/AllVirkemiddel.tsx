@@ -133,7 +133,7 @@ export const AllVirkemiddel = ({ isCreateModalOpen, setIsCreateModalOpen }: AllV
                         component: (props: any) => (
                           <Button
                             notBold
-                            size="small"
+                            
                             kind="tertiary"
                             onClick={() => props.onClick()}
                             icon={<XMarkIcon title={'Tøm'}/> }

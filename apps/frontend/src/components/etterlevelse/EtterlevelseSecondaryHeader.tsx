@@ -112,8 +112,6 @@ export const EtterlevelseSecondaryHeader = ({ tab, setTab, setNavigatePath, ette
 
         <Block display="flex" justifyContent="flex-end" width="100%">
           <Button
-            startEnhancer={<img src={page2Icon} alt="Om personvern og ansvarlig for tema" />}
-            size="compact"
             $style={{
               fontSize: '18px',
               fontWeight: 600,

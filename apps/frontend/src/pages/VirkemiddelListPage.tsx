@@ -34,9 +34,9 @@ export const VirkemiddelListPage = () => {
                   <Block>
                     <Button
                       onClick={() => setIsCreateModalOpen(true)}
-                      iconPosition={"left"}
+                      iconPosition="left"
                       icon={<PlusIcon/>}
-                      size="small"
+                      
                     >
                       Nytt virkemiddel
                     </Button>
