@@ -6,7 +6,7 @@ import {StyleObject} from 'styletron-react'
 import {borderColor, borderRadius, borderStyle, borderWidth, padding, paddingAll} from './Style'
 import {ettlevColors} from '../../util/theme'
 import {ExternalLink} from './RouteLink'
-import {Button as AkselButton, ButtonProps, Tooltip as AkselTooltip, TooltipProps} from '@navikt/ds-react'
+import {Button as AkselButton, ButtonProps, Tooltip as AkselTooltip, TooltipProps, OverridableComponent} from '@navikt/ds-react'
 import _ from 'lodash'
 
 export type ButtonKind = 'primary'
@@ -72,7 +72,22 @@ export const buttonContentStyle = {
   ...padding('10px', '12px'),
 }
 
-const Button = (props: CustomButtonProps) => {
+const Button: OverridableComponent<CustomButtonProps, HTMLButtonElement> = (props: CustomButtonProps) => {
+  const { 
+    kind,
+    type,
+    inline,
+    tooltip,
+    children,
+    onClick,
+    disabled,
+    $style,
+    marginRight,
+    marginLeft,
+    hidePadding,
+    notBold,
+    ...restProps
+  } = props
   const defaultVariant = props.kind === 'outline' ? 'secondary' : props.kind === 'underline-hover' ? 'tertiary' : props.kind
 
   const boxShadow =
@@ -111,12 +126,10 @@ const Button = (props: CustomButtonProps) => {
       <Tooltip content={props.tooltip || ''}>
         <AkselButton
           variant={defaultVariant}
-          size={props.size}
-          onClick={() => props.onClick?.()}
-          disabled={props.disabled}
-          icon={props.icon}
-          iconPosition={props.iconPosition}
-          type={props.type}
+          onClick={() => onClick?.()}
+          disabled={disabled}
+          type={type}
+          {...restProps}
         >
           {props.notBold ? props.children : <strong>{props.children}</strong>}
         </AkselButton>
