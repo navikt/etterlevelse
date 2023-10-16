@@ -37,7 +37,6 @@ const Main = (props: any) => {
                   <AppRoutes />
               </div>
               <div className="h-36 bg-slate-100 w-full" />
-              <Footer />
             </div>
           </BrowserRouter>
           <ErrorModal />
