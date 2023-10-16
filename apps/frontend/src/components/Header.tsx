@@ -1,21 +1,13 @@
 import * as React from 'react'
 import { useState } from 'react'
-import { ALIGN, HeaderNavigation, HeaderNavigationProps, StyledNavigationItem as NavigationItem, StyledNavigationList as NavigationList } from 'baseui/header-navigation'
-import { Block } from 'baseui/block'
 import Button from './common/Button'
 import { Location, useLocation } from 'react-router-dom'
-import { StyledLink } from 'baseui/link'
 import { useQueryParam } from '../util/hooks'
-import { theme } from '../util'
-import { HeadingXLarge } from 'baseui/typography'
 import { intl } from '../util/intl/intl'
-import BurgerMenu from './Navigation/Burger'
-import RouteLink from './common/RouteLink'
 import { user } from '../services/User'
 import { writeLog } from '../api/LogApi'
 import MainSearch from './search/MainSearch'
 import { informationIcon, logo, warningAlert } from './Images'
-import { ettlevColors, maxPageWidth, responsivePaddingSmall, responsiveWidthSmall } from '../util/theme'
 import { Portrait } from './common/Portrait'
 import SkipToContent from './common/SkipToContent/SkipToContent'
 import { AlertType, Melding, MeldingStatus, MeldingType } from '../constants'
@@ -23,7 +15,7 @@ import { getMeldingByType } from '../api/MeldingApi'
 import { Markdown } from './common/Markdown'
 import { ampli } from '../services/Amplitude'
 import { BarChartIcon, ChevronDownIcon, ChevronUpIcon, DocPencilIcon, HouseIcon, InformationIcon, MenuHamburgerIcon, PersonIcon, ReceiptIcon } from '@navikt/aksel-icons'
-import { Checkbox, CheckboxGroup, Dropdown, Label, Link } from '@navikt/ds-react'
+import { Checkbox, Dropdown, InternalHeader, Label, Link, Spacer } from '@navikt/ds-react'
 
 export const loginUrl = (location: Location, path?: string) => {
   const frontpage = window.location.href.substr(0, window.location.href.length - location.pathname.length)
@@ -35,10 +27,10 @@ export const LoginButton = () => {
   // updates window.location on navigation
   const location = useLocation()
   return (
-    <Link underline={false} href={loginUrl(location, location.pathname)}>
-      <Button as="a" variant="secondary">
+    <Link  className="bg-white" underline={false} href={loginUrl(location, location.pathname)}>
+      <InternalHeader.Button as={Link} variant="secondary">
         <strong>Logg inn</strong>
-      </Button>
+      </InternalHeader.Button>
     </Link>
   )
 }
@@ -68,12 +60,14 @@ const LoggedInHeader = () => {
 
   const kravPages = user.isKraveier()
     ? [
+      { label: 'Kraveier meny' },
       { label: 'Forvalte og opprette krav', href: '/kravliste' },
       { label: 'Forvalte og opprette virkemiddel', href: '/virkemiddelliste' },
     ]
     : []
   const adminPages = user.isAdmin()
     ? [
+      { label: 'Admin meny' },
       { label: 'Administrere krav', href: '/admin/krav' },
       { label: 'Administrere dokumentasjon', href: '/admin/dokumentasjon' },
       { label: 'Administrere etterlevelse', href: '/admin/etterlevelse' },
@@ -101,8 +95,8 @@ const LoggedInHeader = () => {
           [{ label: 'Forstå kravene', href: '/tema', icon: <ReceiptIcon /> }],
           [{ label: 'Mer om etterlevelse i NAV', href: '/help', icon: <InformationIcon /> }],
         ]}
-        compact
         title={'Meny'}
+        kind="tertiary"
       />
     </div>
   )
@@ -130,57 +124,57 @@ const UserInfo = () => {
 
 type MenuItem = { label: React.ReactNode; href?: string; disabled?: boolean; icon?: React.ReactNode }
 
-const Menu = (props: { pages: MenuItem[][]; title: React.ReactNode; icon?: React.ReactNode; kind?: 'primary' | 'secondary' | 'tertiary'; compact?: boolean }) => {
+const Menu = (props: { pages: MenuItem[][]; title: React.ReactNode; icon?: React.ReactNode; kind?: 'secondary' | 'tertiary'; }) => {
   const pathname = window.location.pathname
 
   const allPages = props.pages.length
     ? props.pages
       .filter((p) => p.length)
-      .reduce((previousValue, currentValue) => [...((previousValue as MenuItem[]) || []), ...(currentValue as MenuItem[])])
+      .reduce((previousValue, currentValue) => [...((previousValue as MenuItem[]) || []), { label: <Dropdown.Menu.Divider /> }, ...(currentValue as MenuItem[])])
     : []
 
   return (
-      <Dropdown>
-        <Button
-          as={Dropdown.Toggle}
-          variant={props.kind || 'secondary'}
-          icon={props.icon}
-        >
-          {props.title}
-        </Button>
-        <Dropdown.Menu className="min-w-max h-auto">
-          <Dropdown.Menu.List>
-            {allPages.map((p, i) => {
-              const item =
-                !!p.href && !p.disabled ? (
-                  <Dropdown.Menu.List.Item as={Link}
-                    href={p.href}
-                    onClick={() => {
-                      ampli.logEvent('navigere', { kilde: 'header', app: 'etterlevelse', til: p.href, fra: pathname })
-                    }}
-                    underline={false}
-                  >
-                    <div className="flex items-center">
-                      {p.icon && (
-                        <div className="mr-2">
-                          {p.icon}
-                        </div>
-                      )}
-                      {p.label}
-                    </div>
-                  </Dropdown.Menu.List.Item>
-                ) : (
-                  <Dropdown.Menu.GroupedList.Heading>{p.label}</Dropdown.Menu.GroupedList.Heading>
-                )
-              return (
-                <div key={i} className="my-1">
-                  {item}
-                </div>
+    <Dropdown>
+      <Button
+        as={Dropdown.Toggle}
+        variant={props.kind || 'secondary'}
+        icon={props.icon}
+      >
+        {props.title}
+      </Button>
+      <Dropdown.Menu className="min-w-max h-auto">
+        <Dropdown.Menu.List>
+          {allPages.map((p, i) => {
+            const item =
+              !!p.href && !p.disabled ? (
+                <Dropdown.Menu.List.Item as={Link}
+                  href={p.href}
+                  onClick={() => {
+                    ampli.logEvent('navigere', { kilde: 'header', app: 'etterlevelse', til: p.href, fra: pathname })
+                  }}
+                  underline={false}
+                >
+                  <div className="flex items-center">
+                    {p.icon && (
+                      <div className="mr-2">
+                        {p.icon}
+                      </div>
+                    )}
+                    {p.label}
+                  </div>
+                </Dropdown.Menu.List.Item>
+              ) : (
+                <Dropdown.Menu.GroupedList.Heading>{p.label}</Dropdown.Menu.GroupedList.Heading>
               )
-            })}
-          </Dropdown.Menu.List>
-        </Dropdown.Menu>
-      </Dropdown>
+            return (
+              <div key={i} className="my-1">
+                {item}
+              </div>
+            )
+          })}
+        </Dropdown.Menu.List>
+      </Dropdown.Menu>
+    </Dropdown>
   )
 }
 
@@ -206,56 +200,39 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
     })()
   }, [location.pathname])
 
-  const headerNavigationProps: HeaderNavigationProps = {
-    overrides: { Root: { style: { borderBottomStyle: 'none', paddingBottom: '0px' } } },
-  }
   return (
-    <Block width="100%" backgroundColor={ettlevColors.white}>
-      <Block overrides={{ Block: { props: { role: 'banner' } } }} width="100%" display="flex" backgroundColor={ettlevColors.white} justifyContent="center">
+    <div className="w-full bg-white">
+      <div role="banner" className="w-full flex justify-center bg-white">
         <SkipToContent />
-        <Block width="100%" maxWidth={maxPageWidth}>
-          <Block paddingLeft={responsivePaddingSmall} paddingRight={responsivePaddingSmall} width={responsiveWidthSmall} height="76px">
-            <HeaderNavigation {...headerNavigationProps}>
-              <NavigationList $align={ALIGN.left} $style={{ paddingLeft: 0 }}>
-                <NavigationItem $style={{ paddingLeft: 0 }}>
-                  <Block display="flex" alignItems="center" $style={{}}>
-                    <RouteLink href={'/'} hideUnderline $style={{}}>
-                      <img src={logo} alt="Nav etterlevelse" height="44px" />
-                    </RouteLink>
-                  </Block>
-                </NavigationItem>
-              </NavigationList>
-
-              <NavigationList $align="center" $style={{ justifyContent: 'center' }}>
-                {!props.noSearchBar && (
-                  <NavigationItem $style={{ width: '100%', maxWidth: '600px' }}>
-                    <Block flex="1" display='flex' overrides={{ Block: { props: { role: 'search' } } }}>
-                      <MainSearch />
-                    </Block>
-                  </NavigationItem>
+        <div className="w-full max-w-7xl">
+          <InternalHeader className="bg-white">
+            <InternalHeader.Title>
+              <div className="flex items-center">
+                <Link href={'/'} underline={false}>
+                  <img src={logo} alt="Nav etterlevelse" height="44px" />
+                </Link>
+              </div>
+            </InternalHeader.Title>
+            <Spacer />
+            {!props.noSearchBar && (
+              <div className="flex w-full max-w-xl justify-center items-center" role="search">
+                <MainSearch />
+              </div>
+            )}
+            <Spacer />
+            {!props.noLoginButton && (
+              <div className="flex">
+                {!user.isLoggedIn() && (
+                  <LoginButton />
                 )}
-              </NavigationList>
-
-              {!props.noLoginButton && (
-                <Block display='flex'>
-                  <NavigationList $align={ALIGN.right}>
-                    {!user.isLoggedIn() && (
-                      <NavigationItem $style={{ paddingLeft: 0 }}>
-                        <LoginButton />
-                      </NavigationItem>
-                    )}
-                    {user.isLoggedIn() && (
-                      <NavigationItem $style={{ paddingLeft: 0 }}>
-                        <LoggedInHeader />
-                      </NavigationItem>
-                    )}
-                  </NavigationList>
-                </Block>
-              )}
-            </HeaderNavigation>
-          </Block>
-        </Block>
-      </Block>
+                {user.isLoggedIn() && (
+                  <LoggedInHeader />
+                )}
+              </div>
+            )}
+          </InternalHeader>
+        </div>
+      </div>
       {systemVarsel && systemVarsel.meldingStatus === MeldingStatus.ACTIVE && (
         <div
           className={`flex flex-col items-center py-2 border-b border-t ${systemVarsel.alertType === 'INFO' ? 'bg-surface-info-subtle border-surface-info' : 'bg-surface-warning-subtle border-surface-warning'}`}
@@ -273,7 +250,7 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
           </div>
         </div>
       )}
-    </Block>
+    </div>
   )
 }
 
