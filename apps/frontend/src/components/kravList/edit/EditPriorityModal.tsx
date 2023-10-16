@@ -249,8 +249,7 @@ export const EditPriorityModal = (props: { isOpen: boolean; setIsOpen: React.Dis
               className="krav-list-button-container"
             >
               <Button
-                
-                kind="secondary"
+                variant="secondary"
                 onClick={() => {
                   refresh()
                   close()

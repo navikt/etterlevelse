@@ -54,7 +54,7 @@ export const AlertUnsavedPopup = ({ isActive, isModalOpen, setIsModalOpen, onClo
           </Button>
           <Button
             marginLeft
-            kind="secondary"
+            variant="secondary"
             onClick={() => {
               setIsModalOpen(false)
             }}

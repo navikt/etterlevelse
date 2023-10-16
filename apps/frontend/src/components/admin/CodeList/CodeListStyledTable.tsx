@@ -92,7 +92,7 @@ const CodeListTable = ({ tableData, refresh }: TableCodelistProps) => {
                 <Block display="flex" justifyContent="flex-end" width="100%">
                   <Button
                     tooltip={'Vis bruk'}
-                    kind={row === selectedCode && showUsage ? 'primary' : 'tertiary'}
+                    variant={row === selectedCode && showUsage ? 'primary' : 'tertiary'}
                     onClick={() => {
                       setSelectedCode(row)
                       setShowUsage(true)
@@ -102,7 +102,7 @@ const CodeListTable = ({ tableData, refresh }: TableCodelistProps) => {
                   <AuditButton id={`${row.list}-${row.code}`} kind={'tertiary'} />
                   <Button
                     tooltip={'Rediger'}
-                    kind={"tertiary"}
+                    variant={"tertiary"}
                     onClick={() => {
                       setSelectedCode(row)
                       setShowEditModal(true)
@@ -111,7 +111,7 @@ const CodeListTable = ({ tableData, refresh }: TableCodelistProps) => {
                   />
                   <Button
                     tooltip={'Slett'}
-                    kind={"tertiary"}
+                    variant={"tertiary"}
                     onClick={() => {
                       setSelectedCode(row)
                       setShowDeleteModal(true)

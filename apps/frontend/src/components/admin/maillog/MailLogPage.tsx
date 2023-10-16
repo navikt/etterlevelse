@@ -16,7 +16,6 @@ import { Pagination } from 'baseui/pagination'
 import { Markdown } from '../../common/Markdown'
 import { responsivePaddingSmall, responsiveWidthSmall } from '../../../util/theme'
 import { Helmet } from 'react-helmet'
-import { buttonContentStyle } from '../../common/Button'
 
 interface MailLog {
   time: string
@@ -109,13 +108,6 @@ export const MailLogPage = () => {
           <Button
             kind={KIND.tertiary}
             endEnhancer={TriangleDown}
-            overrides={{
-              BaseButton: {
-                style: {
-                  ...buttonContentStyle,
-                },
-              },
-            }}
           >
             <strong>{`${limit} ${intl.rows}`}</strong>
           </Button>

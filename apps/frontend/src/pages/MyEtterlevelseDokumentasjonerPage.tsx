@@ -345,7 +345,7 @@ const Alle = () => {
                 overrides: {
                   Svg: {
                     component: (props: any) => (
-                      <Button notBold size="xsmall" kind="tertiary" onClick={() => props.onClick()}>
+                      <Button notBold size="xsmall" variant="tertiary" onClick={() => props.onClick()}>
                         <img src={clearSearchIcon} alt="tøm" />
                       </Button>
                     ),
@@ -392,7 +392,7 @@ const Alle = () => {
                 <Button
                   onClick={lastMer}
                   icon={<PlusIcon/>}
-                  kind={'secondary'}
+                  variant={'secondary'}
                   size="xsmall"
                   disabled={gqlLoading || etterlevelseDokumentasjoner.numberOfElements >= etterlevelseDokumentasjoner.totalElements}
                 >

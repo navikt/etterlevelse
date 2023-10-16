@@ -22,7 +22,6 @@ import {theme} from '../../../util'
 import { JsonView} from 'react-json-view-lite'
 import {ObjectLink} from '../../common/RouteLink'
 import {CustomizedStatefulSelect} from '../../common/CustomizedSelect'
-import {buttonContentStyle} from '../../common/Button'
 import {ampli} from '../../../services/Amplitude'
 
 export const AuditRecentTable = (props: { show: boolean; tableType?: ObjectType }) => {
@@ -122,13 +121,6 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: ObjectType 
                         shape="round"
                         kind="tertiary"
                         aria-label={'Gå til ID'}
-                        overrides={{
-                          BaseButton: {
-                            style: {
-                              ...buttonContentStyle,
-                            },
-                          },
-                        }}
                       >
                         <FontAwesomeIcon icon={faBinoculars} />
                       </Button>
@@ -144,13 +136,6 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: ObjectType 
                         shape="round"
                         kind="tertiary"
                         aria-label={'Vis kode'}
-                        overrides={{
-                          BaseButton: {
-                            style: {
-                              ...buttonContentStyle,
-                            },
-                          },
-                        }}
                       >
                         <FontAwesomeIcon icon={faCode} />
                       </Button>
@@ -184,13 +169,6 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: ObjectType 
           <Button
             kind={KIND.tertiary}
             endEnhancer={TriangleDown}
-            overrides={{
-              BaseButton: {
-                style: {
-                  ...buttonContentStyle,
-                },
-              },
-            }}
           >
             <strong>{`${limit} ${intl.rows}`}</strong>
           </Button>

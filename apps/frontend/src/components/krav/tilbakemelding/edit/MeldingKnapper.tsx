@@ -28,10 +28,10 @@ export const MeldingKnapper = (props: {
   return (
     <>
       <Block marginLeft={props.marginLeft ? '42px' : undefined} width="50%">
-        <Button kind={'underline-hover'} size={'xsmall'} icon={<PencilIcon/>} onClick={() => setEditModal(true)}>
+        <Button variant="tertiary" size={'xsmall'} icon={<PencilIcon/>} onClick={() => setEditModal(true)}>
           Rediger
         </Button>
-        <Button kind={'underline-hover'} size={'xsmall'} icon={<TrashIcon/>} marginLeft onClick={() => setDeleteModal(true)}>
+        <Button variant="tertiary" size={'xsmall'} icon={<TrashIcon/>} marginLeft onClick={() => setDeleteModal(true)}>
           Slett
         </Button>
       </Block>
@@ -47,11 +47,10 @@ export const MeldingKnapper = (props: {
             <ParagraphMedium $style={{ whiteSpace: 'pre-wrap', overflowWrap: 'break-word' }}>{melding.innhold}</ParagraphMedium>
           </ModalBody>
           <ModalFooter>
-            <Button kind={'secondary'} onClick={() => setDeleteModal(false)}>
+            <Button variant={'secondary'} onClick={() => setDeleteModal(false)}>
               Avbryt
             </Button>
             <Button
-              kind={'primary'}
               marginLeft
               onClick={() =>
                 tilbakemeldingslettMelding({ tilbakemeldingId, meldingNr }).then((t) => {

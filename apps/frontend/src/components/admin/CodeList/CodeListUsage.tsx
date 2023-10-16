@@ -14,7 +14,6 @@ import {ObjectType} from '../audit/AuditTypes'
 import {replaceCodelistUsage} from '../../../api/CodelistApi'
 import CustomizedSelect from '../../common/CustomizedSelect'
 import {ettlevColors} from '../../../util/theme'
-import {buttonContentStyle} from '../../common/Button'
 
 const UsageTable = (props: { usage: CodeUsage }) => {
   const { usage } = props
@@ -103,13 +102,6 @@ export const Usage = (props: { usage?: CodeUsage; refresh: () => void }) => {
             kind="secondary"
             size="compact"
             onClick={() => setShowReplace(true)}
-            overrides={{
-              BaseButton: {
-                style: {
-                  ...buttonContentStyle,
-                },
-              },
-            }}
           >
             <strong>Erstatt all bruk</strong>
           </Button>
@@ -132,13 +124,6 @@ export const Usage = (props: { usage?: CodeUsage; refresh: () => void }) => {
             size="compact"
             onClick={replace}
             disabled={!newValue.length}
-            overrides={{
-              BaseButton: {
-                style: {
-                  ...buttonContentStyle,
-                },
-              },
-            }}
           >
             <strong>Erstatt</strong>
           </Button>

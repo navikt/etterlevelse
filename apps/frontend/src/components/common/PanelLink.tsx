@@ -111,15 +111,7 @@ export const PanelButton = ({
     <Button
       notBold
       onClick={onClick}
-      kind="tertiary"
-      $style={{
-        ...paddingZero,
-        width: '100%',
-        boxShadow: 'unset',
-        ':hover': { boxShadow: 'unset' },
-        ':active': { boxShadow: 'unset' },
-        ':focus': { boxShadow: 'unset', outline: 'unset' },
-      }}
+      variant="tertiary"
     >
       <SimplePanel
         button

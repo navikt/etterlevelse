@@ -48,7 +48,7 @@ export const SettingsPage = () => {
           <FrontpageMessage message={settings?.frontpageMessage} setMessage={(frontpageMessage) => setSettings({ ...settings, frontpageMessage })} />
 
           <Block display="flex" justifyContent="flex-end" marginTop={theme.sizing.scale800}>
-            <Button type="button" kind="secondary" marginRight onClick={load}>
+            <Button type="button" variant="secondary" marginRight onClick={load}>
               {intl.abort}
             </Button>
             <Button type="button" onClick={save}>

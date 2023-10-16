@@ -28,11 +28,9 @@ export const AuditButton = (props: {
             tooltip={intl.version}
             marginLeft={props.marginLeft}
             marginRight={props.marginRight}
-            kind={props.kind || 'outline'}
+            variant={props.kind || 'secondary'}
             icon={<ClockDashedIcon title="Versjonering"/>}
-          >
-            <FontAwesomeIcon icon={faHistory} />
-          </Button>
+          />
         </>
       )}
     </RouteLink>

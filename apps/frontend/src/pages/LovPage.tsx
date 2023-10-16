@@ -145,10 +145,9 @@ const LovSide = ({ lov }: { lov: LovCode }) => {
 
           <Block alignSelf={'flex-end'} marginTop={theme.sizing.scale600}>
             <Button
-              $style={{ color: fontColor }}
               onClick={() => setExpand(!expand)}
               icon={expand ? <ChevronUpIcon/> : <ChevronDownIcon/>}
-              kind={'underline-hover'}>
+              variant="tertiary">
               {expand ? 'Mindre' : 'Mer'} om loven
             </Button>
           </Block>

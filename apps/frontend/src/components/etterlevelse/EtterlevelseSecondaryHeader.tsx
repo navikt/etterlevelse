@@ -1,9 +1,9 @@
 import { Block } from 'baseui/block'
 import Button from '../common/Button'
-import { borderRadius, marginAll, paddingAll } from '../common/Style'
+import { borderRadius, marginAll } from '../common/Style'
 import { HeadingXXLarge, LabelSmall } from 'baseui/typography'
 import { ettlevColors, maxPageWidth, responsivePaddingExtraLarge } from '../../util/theme'
-import { angleIcon, page2Icon } from '../Images'
+import { angleIcon } from '../Images'
 import CustomizedModal from '../common/CustomizedModal'
 import { getTemaMainHeader } from '../../pages/TemaPage'
 import React, { useState } from 'react'
@@ -30,21 +30,12 @@ export const EtterlevelseSecondaryHeader = ({ tab, setTab, setNavigatePath, ette
     <Block width="100%">
       <Block marginTop="19px" width="fit-content">
         <Button
-          kind="tertiary"
+          variant="tertiary"
           onClick={() => {
             if (tab !== 'dokumentasjon') {
               setTab('dokumentasjon')
             }
             setNavigatePath('/dokumentasjon/' + etterlevelseDokumentasjon?.id)
-          }}
-          $style={{
-            ...paddingAll('0px'),
-            ':hover': {
-              backgroundColor: 'inherit',
-            },
-            ':focus': {
-              backgroundColor: 'inherit',
-            },
           }}
         >
           <LabelSmall
@@ -67,21 +58,12 @@ export const EtterlevelseSecondaryHeader = ({ tab, setTab, setNavigatePath, ette
       <Block marginTop="8px">
         <img src={angleIcon} alt="angle icon" />{' '}
         <Button
-          kind="tertiary"
+          variant="tertiary"
           onClick={() => {
             if (tab !== 'dokumentasjon') {
               setTab('dokumentasjon')
             }
             setNavigatePath(`/dokumentasjon/${etterlevelseDokumentasjon?.id}/${temaData?.code}/${params.filter}`)
-          }}
-          $style={{
-            ...paddingAll('0px'),
-            ':hover': {
-              backgroundColor: 'inherit',
-            },
-            ':focus': {
-              backgroundColor: 'inherit',
-            },
           }}
         >
           <LabelSmall
@@ -112,15 +94,7 @@ export const EtterlevelseSecondaryHeader = ({ tab, setTab, setNavigatePath, ette
 
         <Block display="flex" justifyContent="flex-end" width="100%">
           <Button
-            $style={{
-              fontSize: '18px',
-              fontWeight: 600,
-              lineHeight: '22px',
-              color: ettlevColors.green600,
-              textUnderlineOffset: '2px',
-              ':hover': { backgroundColor: 'transparent', textDecoration: 'underline 3px' },
-            }}
-            kind={'tertiary'}
+            variant={'tertiary'}
             onClick={() => setIsTemaModalOpen(true)}
             marginLeft
           >

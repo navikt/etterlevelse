@@ -117,7 +117,7 @@ export const BehandlingSok = () => {
             <Button
               onClick={lastMer}
               icon={<PlusIcon/>}
-              kind={'secondary'}
+              variant={'secondary'}
               disabled={gqlLoading || etterlevelseDokumentasjoner.numberOfElements >= etterlevelseDokumentasjoner.totalElements}
             >
               Vis mer

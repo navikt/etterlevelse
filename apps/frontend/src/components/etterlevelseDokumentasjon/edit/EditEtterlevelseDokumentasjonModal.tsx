@@ -10,7 +10,7 @@ import {
 } from '../../../api/EtterlevelseDokumentasjonApi'
 import { Behandling, EtterlevelseDokumentasjonQL, Team, Virkemiddel } from '../../../constants'
 import { Code, codelist, ListName } from '../../../services/Codelist'
-import Button, { buttonContentStyle } from '../../common/Button'
+import Button from '../../common/Button'
 import CustomizedModal from '../../common/CustomizedModal'
 import { Button as BaseUIButton, KIND } from 'baseui/button'
 import { FieldArray, FieldArrayRenderProps, FieldProps, Form, Formik } from 'formik'
@@ -268,7 +268,6 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                                       overrides={{
                                         BaseButton: {
                                           style: {
-                                            ...buttonContentStyle,
                                             backgroundColor: selectedFilter.includes(i) ? ettlevColors.green100 : ettlevColors.white,
                                             ...borderWidth('1px'),
                                             ...borderStyle('solid'),
@@ -425,7 +424,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
                   )}
 
                   <Block display="flex" justifyContent="flex-end">
-                    <Button kind="secondary" type="button" onClick={() => setIsEtterlevelseDokumntasjonerModalOpen(false)}>
+                    <Button variant="secondary" type="button" onClick={() => setIsEtterlevelseDokumntasjonerModalOpen(false)}>
                       Avbryt
                     </Button>
                     <Button

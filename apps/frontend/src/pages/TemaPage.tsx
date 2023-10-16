@@ -84,7 +84,7 @@ export const getTemaMainHeader = (tema: TemaCode, lover: LovCode[], expand: bool
 
       {!noExpandButton && (
         <Block alignSelf={'flex-end'} marginTop={theme.sizing.scale600}>
-          <Button onClick={() => setExpand(!expand)} icon={expand ? <ChevronUpIcon/> : <ChevronDownIcon/>} kind={'underline-hover'}>
+          <Button onClick={() => setExpand(!expand)} icon={expand ? <ChevronUpIcon/> : <ChevronDownIcon/>} variant="tertiary">
             {expand ? 'Mindre' : 'Mer'} om tema
           </Button>
         </Block>

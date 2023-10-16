@@ -2,7 +2,7 @@ import * as React from 'react'
 import { useState } from 'react'
 import { ALIGN, HeaderNavigation, HeaderNavigationProps, StyledNavigationItem as NavigationItem, StyledNavigationList as NavigationList } from 'baseui/header-navigation'
 import { Block } from 'baseui/block'
-import Button, { buttonBorderStyle } from './common/Button'
+import Button from './common/Button'
 import { Location, useLocation } from 'react-router-dom'
 import { StyledLink } from 'baseui/link'
 import { useQueryParam } from '../util/hooks'
@@ -37,7 +37,7 @@ export const LoginButton = () => {
   const location = useLocation()
   return (
     <Link underline={false} href={loginUrl(location, location.pathname)}>
-      <Button as="a" kind="secondary" $style={buttonBorderStyle}>
+      <Button as="a" variant="secondary">
         <strong>Logg inn</strong>
       </Button>
     </Link>
@@ -49,7 +49,7 @@ const LoggedInHeader = () => {
 
   const roller = (
     <Block>
-      <Button size={'xsmall'} kind={'underline-hover'} onClick={() => setViewRoller(!viewRoller)} icon={viewRoller ? <ChevronUpIcon /> : <ChevronDownIcon />}>
+      <Button size={'xsmall'} variant="tertiary" onClick={() => setViewRoller(!viewRoller)} icon={viewRoller ? <ChevronUpIcon /> : <ChevronDownIcon />}>
         Endre aktive roller
       </Button>
       <Block display={viewRoller ? 'block' : 'none'} marginTop={theme.sizing.scale200}>
@@ -175,7 +175,7 @@ const Menu = (props: { pages: MenuItem[][]; title: React.ReactNode; icon?: React
       <Dropdown>
         <Button
           as={Dropdown.Toggle}
-          kind={props.kind || 'secondary'}
+          variant={props.kind || 'secondary'}
           icon={props.icon}
         >
           {props.title}

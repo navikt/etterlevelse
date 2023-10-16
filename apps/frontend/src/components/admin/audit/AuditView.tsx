@@ -55,21 +55,21 @@ export const AuditView = (props: AuditViewProps) => {
               <Label label={intl.audits}>{auditLog?.audits.length}</Label>
             </Block>
             <Block display="flex">
-              <Button kind="tertiary" marginRight onClick={() => setOpenAll(!openAll)}>
+              <Button variant="tertiary" marginRight onClick={() => setOpenAll(!openAll)}>
                 {openAll ? 'Lukke' : 'Åpne'} alle
               </Button>
               {newestAudit?.action !== AuditAction.DELETE && (
                 <StatefulTooltip content={() => intl.view} placement={PLACEMENT.top}>
                   <Block>
                     <ObjectLink id={newestAudit!.tableId} type={newestAudit!.table} audit={newestAudit}>
-                      <Button kind="tertiary" icon={<GlassesIcon title="Se forskjell"/>} />
+                      <Button variant="tertiary" icon={<GlassesIcon title="Se forskjell"/>} />
                     </ObjectLink>
                   </Block>
                 </StatefulTooltip>
               )}
               <StatefulTooltip content={() => intl.close} placement={PLACEMENT.top}>
                 <Block>
-                  <Button kind="tertiary" onClick={() => viewId('')} icon={<XMarkIcon title="Lukk"/>} />
+                  <Button variant="tertiary" onClick={() => viewId('')} icon={<XMarkIcon title="Lukk"/>} />
                 </Block>
               </StatefulTooltip>
             </Block>
@@ -115,7 +115,7 @@ export const AuditView = (props: AuditViewProps) => {
                         }}
                       >
                         <div>
-                          <Button  kind="tertiary" icon={<ArrowRightLeftIcon title="Sammenling"/>} />
+                          <Button  variant="tertiary" icon={<ArrowRightLeftIcon title="Sammenling"/>} />
                         </div>
                       </StatefulPopover>
                     </Block>

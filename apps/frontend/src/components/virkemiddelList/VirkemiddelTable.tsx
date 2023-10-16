@@ -72,7 +72,7 @@ export const VirkemiddelTable = ({ virkemidler, loading, refetchData }: Virkmidd
                 <Block display="flex" justifyContent="flex-end" width="100%">
                   <Button
                     tooltip={'Rediger'}
-                    kind={'tertiary'}
+                    variant={'tertiary'}
                     onClick={() => {
                       setSelectedVirkemiddel(virkemiddel)
                       setIsEditModalOpen(true)
@@ -81,7 +81,7 @@ export const VirkemiddelTable = ({ virkemidler, loading, refetchData }: Virkmidd
                   />
                   <Button
                     tooltip={'Slett'}
-                    kind={"tertiary"}
+                    variant={"tertiary"}
                     onClick={() => {
                       setSelectedVirkemiddel(virkemiddel)
                       setIsDeleteModalOpen(true)

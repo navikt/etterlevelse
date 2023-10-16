@@ -54,9 +54,7 @@ export const Footer = () => {
 
           {showButtonToTop && (
             <Block position="relative" display="flex" justifyContent="flex-end" $style={{ cursor: 'pointer', top: '-50px' }} onClick={() => window.scrollTo(0, 0)}>
-              <Button kind={KIND.tertiary} $style={{ ':hover': { backgroundColor: 'transparent' } }}>
-                <img src={ToTopCircle} alt="Til toppen av siden" />
-              </Button>
+              <Button variant="tertiary" icon={<img src={ToTopCircle} alt="Til toppen av siden" />} />
             </Block>
           )}
         </Block>

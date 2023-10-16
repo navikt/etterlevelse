@@ -19,8 +19,6 @@ import { RenderTagList } from '../../common/TagList'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
 import CustomizedInput from '../../common/CustomizedInput'
 import { CustomizedStatefulSelect } from '../../common/CustomizedSelect'
-import { borderColor, borderStyle, borderWidth } from '../../common/Style'
-import { ettlevColors } from '../../../util/theme'
 
 export const KravVarslingsadresserEdit = () => {
   const [addSlackChannel, setAddSlackChannel] = useState<boolean>(false)
@@ -43,50 +41,29 @@ export const KravVarslingsadresserEdit = () => {
                 <Block>
                   <Block marginBottom={theme.sizing.scale400}>
                     <Button
-                      kind="secondary"
-                      
+                      variant="secondary"
                       type="button"
                       onClick={() => setAddSlackChannel(true)}
-                      $style={{
-                        ...borderColor(p.form.errors['varslingsadresser'] ? ettlevColors.red600 : ettlevColors.green600),
-                        ...borderStyle(p.form.errors['varslingsadresser'] ? 'solid' : 'solid'),
-                        ...borderWidth(p.form.errors['varslingsadresser'] ? '2px' : '2px'),
-                        backgroundColor: p.form.errors['varslingsadresser'] ? ettlevColors.red50 : 'inherit',
-                      }}
                     >
                       <span>
                         <FontAwesomeIcon icon={faSlackHash} /> Legg til slack-kanal
                       </span>
                     </Button>
                     <Button
-                      kind="secondary"
-                      
+                      variant="secondary"
                       marginLeft
                       type="button"
                       onClick={() => setAddSlackUser(true)}
-                      $style={{
-                        ...borderColor(p.form.errors['varslingsadresser'] ? ettlevColors.red600 : ettlevColors.green600),
-                        ...borderStyle(p.form.errors['varslingsadresser'] ? 'solid' : 'solid'),
-                        ...borderWidth(p.form.errors['varslingsadresser'] ? '2px' : '2px'),
-                        backgroundColor: p.form.errors['varslingsadresser'] ? ettlevColors.red50 : 'inherit',
-                      }}
                     >
                       <span>
                         <FontAwesomeIcon icon={faUser} /> Legg til slack-bruker
                       </span>
                     </Button>
                     <Button
-                      kind="secondary"
-                      
+                      variant="secondary"
                       marginLeft
                       type="button"
                       onClick={() => setAddEmail(true)}
-                      $style={{
-                        ...borderColor(p.form.errors['varslingsadresser'] ? ettlevColors.red600 : ettlevColors.green600),
-                        ...borderStyle(p.form.errors['varslingsadresser'] ? 'solid' : 'solid'),
-                        ...borderWidth(p.form.errors['varslingsadresser'] ? '2px' : '2px'),
-                        backgroundColor: p.form.errors['varslingsadresser'] ? ettlevColors.red50 : 'inherit',
-                      }}
                     >
                       <span>
                         <FontAwesomeIcon icon={faEnvelope} /> Legg til epost
@@ -121,7 +98,7 @@ const AddModal = ({ isOpen, close, title, children }: { isOpen: boolean; close: 
     <ModalHeader>{title}</ModalHeader>
     <ModalBody>{children}</ModalBody>
     <ModalFooter>
-      <Button kind="secondary"  type="button" onClick={close}>
+      <Button variant="secondary"  type="button" onClick={close}>
         Avbryt
       </Button>
     </ModalFooter>

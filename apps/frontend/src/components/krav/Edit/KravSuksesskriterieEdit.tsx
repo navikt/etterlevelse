@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { KravStatus, Suksesskriterie } from '../../../constants'
 import { FormControl } from 'baseui/form-control'
 import { Block } from 'baseui/block'
-import Button, { buttonBorderStyle } from '../../common/Button'
+import Button from '../../common/Button'
 import * as _ from 'lodash'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
 import { faGripVertical, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons'
@@ -113,8 +113,7 @@ const KriterieList = ({ p, setIsFormDirty, newVersion }: { p: FieldArrayRenderPr
             type="button"
             icon={<PlusIcon/>}
             marginLeft
-            $style={buttonBorderStyle}
-            kind="secondary"
+            variant="secondary"
             disabled={suksesskriterier.length >= 15}
             onClick={() => p.push({ id: nextId(suksesskriterier), navn: '', beskrivelse: '', behovForBegrunnelse: 'true' })}
           >
@@ -170,7 +169,7 @@ const Kriterie = ({
       <Block position={'relative'} paddingTop={theme.sizing.scale100}>
         <Block display={'flex'} alignItems={'flex-start'} position={'absolute'} right={0} top={0}>
           {(p.form.values.status !== KravStatus.AKTIV || newVersion) && (
-            <Button type={'button'} kind={'tertiary'} $style={buttonBorderStyle} icon={<TrashIcon/>} onClick={remove} tooltip={'Fjern suksesskriterie'} />
+            <Button type={'button'} variant={'tertiary'} icon={<TrashIcon/>} onClick={remove} tooltip={'Fjern suksesskriterie'} />
           )}
           <Block width={theme.sizing.scale1000} />
           <Block {...dragHandleProps}>

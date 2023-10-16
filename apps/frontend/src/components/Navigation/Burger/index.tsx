@@ -51,7 +51,7 @@ const LoginButton = (props: { location: string }) => {
   const linkCss = useCss({ textDecoration: 'none', color: 'white' })
   return (
     <StyledLink href={`${env.backendBaseUrl}/login?redirect_uri=${props.location}`} className={linkCss}>
-      <Button kind="secondary">Logg inn</Button>
+      <Button variant="secondary">Logg inn</Button>
     </StyledLink>
   )
 }
@@ -61,7 +61,7 @@ const SignOutButton = (props: { location: string }) => {
   const linkCss = useCss({ textDecoration: 'none', color: 'white' })
   return (
     <StyledLink href={`${env.backendBaseUrl}/logout?redirect_uri=${props.location}`} className={linkCss}>
-      <Button kind="secondary" icon={<LeaveIcon />}>
+      <Button variant="secondary" icon={<LeaveIcon />}>
         Logg ut
       </Button>
     </StyledLink>
@@ -81,7 +81,7 @@ const BurgerMenu = () => {
   return (
     <React.Fragment>
       {!showMenu && (
-        <Button kind="secondary"  onClick={() => setShowMenu(true)} icon={<MenuHamburgerIcon />}>
+        <Button variant="secondary"  onClick={() => setShowMenu(true)} icon={<MenuHamburgerIcon />}>
           Meny
         </Button>
       )}
@@ -110,7 +110,7 @@ const BurgerMenu = () => {
         >
           <Block display="flex" flexDirection="column" height="100%">
             <Block width="100%" display="flex" justifyContent="flex-end" marginBottom={theme.sizing.scale1600}>
-              <Button kind="secondary"  onClick={() => setShowMenu(false)} icon={<XMarkIcon />}>
+              <Button variant="secondary"  onClick={() => setShowMenu(false)} icon={<XMarkIcon />}>
                 Meny
               </Button>
             </Block>

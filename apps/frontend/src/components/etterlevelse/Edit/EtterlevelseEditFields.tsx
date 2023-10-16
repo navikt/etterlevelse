@@ -101,13 +101,6 @@ export const EtterlevelseEditFields = ({
       <div className="flex flex-row-reverse">
         <Button
           notBold
-          $style={{
-            backgroundColor: ettlevColors.green50,
-            color: ettlevColors.green600,
-            ':hover': { backgroundColor: ettlevColors.green100 },
-            borderBottomRightRadius: '0px',
-            borderTopRightRadius: '0px',
-          }}
           onClick={() => setIsNotatfeltOpen(true)}
         >
           <div>
@@ -304,13 +297,13 @@ export const EtterlevelseEditFields = ({
                     )}
                     <div className="flex flex-col">
                       <Block paddingTop="27px" paddingBottom="24px" width="100%">
-                        <Button disabled={krav.status === KravStatus.UTGAATT ? false : disableEdit} type="button" kind="secondary" marginRight onClick={close}>
+                        <Button disabled={krav.status === KravStatus.UTGAATT ? false : disableEdit} type="button" variant="secondary" marginRight onClick={close}>
                           {krav.status === KravStatus.UTGAATT ? 'Lukk' : 'Avbryt og forkast endringene'}
                         </Button>
                         {kravFilter === KRAV_FILTER_TYPE.UTGAATE_KRAV && (
                           <Button
                             type="button"
-                            kind="secondary"
+                            variant="secondary"
                             marginRight
                             disabled={isSubmitting || disableEdit}
                             onClick={() => {
@@ -410,7 +403,7 @@ export const EtterlevelseEditFields = ({
                     </Button>
                     <Button
                       marginLeft
-                      kind="secondary"
+                      variant="secondary"
                       onClick={() => {
                         setNavigatePath('')
                         setIsAlertUnsavedModalOpen(false)

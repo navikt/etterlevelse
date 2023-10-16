@@ -151,10 +151,9 @@ export const EditMelding = ({melding, setMelding, isLoading, maxChar}: { melding
               <Block display="flex" width="100%">
                 <Block display="flex" width="100%">
                   <Button
-                    kind="underline-hover"
+                    variant="tertiary"
                     onClick={() => window.location.reload()}
                     icon={<TrashIcon title={'Delete'}/> }
-                    $style={{fontSize: '18px'}}
                   >
                     Forkast endringer
                   </Button>
@@ -164,7 +163,7 @@ export const EditMelding = ({melding, setMelding, isLoading, maxChar}: { melding
                   {melding.meldingStatus === MeldingStatus.ACTIVE && (
                     <Button
                       marginRight
-                      kind="secondary"
+                      variant="secondary"
                       disabled={disableEdit}
                       icon={<EyeSlashIcon title={'Hide icon'}/>}
                       onClick={() => {
