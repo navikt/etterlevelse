@@ -1,6 +1,5 @@
 import { Block } from 'baseui/block'
 import { ModalHeader } from 'baseui/modal'
-import { usePrompt } from '../../util/hooks/routerHooks'
 import Button from './Button'
 import CustomizedModal from './CustomizedModal'
 import { borderRadius, marginAll } from './Style'
@@ -14,8 +13,6 @@ type AlertUnsavedPopupProps = {
 }
 
 export const AlertUnsavedPopup = ({ isActive, isModalOpen, setIsModalOpen, onClose, onSubmit }: AlertUnsavedPopupProps) => {
-  usePrompt('You have unsaved changes, do you want to continue?', isActive)
-
   return (
     <CustomizedModal
       onClose={() => setIsModalOpen(false)}

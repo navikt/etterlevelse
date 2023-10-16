@@ -46,7 +46,6 @@ type EditProps = {
   kravFilter: KRAV_FILTER_TYPE
   etterlevelseMetadata: EtterlevelseMetadata
   setEtterlevelseMetadata: React.Dispatch<React.SetStateAction<EtterlevelseMetadata>>
-  setIsFormDirty: (v: boolean) => void
 }
 
 export const EtterlevelseEditFields = ({
@@ -67,7 +66,6 @@ export const EtterlevelseEditFields = ({
   kravFilter,
   etterlevelseMetadata,
   setEtterlevelseMetadata,
-  setIsFormDirty,
 }: EditProps) => {
   const [etterlevelseStatus] = React.useState<string>(
     editedEtterlevelse ? editedEtterlevelse.status : etterlevelse.status || EtterlevelseStatus.UNDER_REDIGERING,
@@ -159,7 +157,7 @@ export const EtterlevelseEditFields = ({
                         )}
                       </Block>
 
-                      <SuksesskriterierBegrunnelseEdit disableEdit={disableEdit} suksesskriterie={krav.suksesskriterier} viewMode={false} setIsFormDirty={setIsFormDirty} />
+                      <SuksesskriterierBegrunnelseEdit disableEdit={disableEdit} suksesskriterie={krav.suksesskriterier} viewMode={false} />
 
                       <Block marginBottom="24px">
                         <CustomizedAccordion>
@@ -236,7 +234,6 @@ export const EtterlevelseEditFields = ({
                           checked={isOppfylesSenere}
                           onChange={() => {
                             setOppfylesSenere(!isOppfylesSenere)
-                            setIsFormDirty(true)
                           }}
                           key={EtterlevelseStatus.OPPFYLLES_SENERE}
                           overrides={{
@@ -394,7 +391,6 @@ export const EtterlevelseEditFields = ({
                     <Button
                       marginLeft
                       onClick={() => {
-                        setIsFormDirty(false)
                         setIsAlertUnsavedModalOpen(false)
                         setTimeout(() => navigate(navigatePath), 1)
                       }}
@@ -436,7 +432,7 @@ export const EtterlevelseEditFields = ({
                         </Block>
                       )}
 
-                      <SuksesskriterierBegrunnelseEdit disableEdit={true} suksesskriterie={krav.suksesskriterier} viewMode={true} setIsFormDirty={setIsFormDirty} />
+                      <SuksesskriterierBegrunnelseEdit disableEdit={true} suksesskriterie={krav.suksesskriterier} viewMode={true} />
                       <Block marginBottom="24px">
                         <CustomizedAccordion>
                           <CustomizedPanel

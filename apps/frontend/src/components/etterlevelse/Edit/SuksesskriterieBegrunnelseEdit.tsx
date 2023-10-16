@@ -71,17 +71,15 @@ export const SuksesskriterierBegrunnelseEdit = ({
   suksesskriterie,
   disableEdit,
   viewMode,
-  setIsFormDirty,
 }: {
   suksesskriterie: Suksesskriterie[]
   disableEdit: boolean
   viewMode: boolean
-  setIsFormDirty?: (v: boolean) => void
 }) => {
   return (
     <FieldWrapper>
       <FieldArray name={'suksesskriterieBegrunnelser'}>
-        {(p) => <KriterieBegrunnelseList props={p} disableEdit={disableEdit} suksesskriterie={suksesskriterie} viewMode={viewMode} setIsFormDirty={setIsFormDirty} />}
+        {(p) => <KriterieBegrunnelseList props={p} disableEdit={disableEdit} suksesskriterie={suksesskriterie} viewMode={viewMode} />}
       </FieldArray>
     </FieldWrapper>
   )
@@ -92,13 +90,11 @@ const KriterieBegrunnelseList = ({
   suksesskriterie,
   disableEdit,
   viewMode,
-  setIsFormDirty,
 }: {
   props: FieldArrayRenderProps
   suksesskriterie: Suksesskriterie[]
   disableEdit: boolean
   viewMode: boolean
-  setIsFormDirty?: (v: boolean) => void
 }) => {
   const suksesskriterieBegrunnelser = props.form.values.suksesskriterieBegrunnelser as SuksesskriterieBegrunnelse[]
 
@@ -117,7 +113,6 @@ const KriterieBegrunnelseList = ({
               props={props}
               viewMode={viewMode}
               totalSuksesskriterie={suksesskriterie.length}
-              setIsFormDirty={setIsFormDirty}
             />
           </Block>
         )
@@ -136,7 +131,6 @@ const KriterieBegrunnelse = ({
   props,
   viewMode,
   totalSuksesskriterie,
-  setIsFormDirty,
 }: {
   suksesskriterie: Suksesskriterie
   index: number
@@ -147,7 +141,6 @@ const KriterieBegrunnelse = ({
   props: FieldArrayRenderProps
   viewMode: boolean
   totalSuksesskriterie: number
-  setIsFormDirty?: (v: boolean) => void
 }) => {
   const suksesskriterieBegrunnelse = getSuksesskriterieBegrunnelse(suksesskriterieBegrunnelser, suksesskriterie)
   const debounceDelay = 500
@@ -269,9 +262,6 @@ const KriterieBegrunnelse = ({
               value={suksessKriterieStatus}
               onChange={(e) => {
                 setSuksessKriterieStatus(e.currentTarget.value as SuksesskriterieStatus)
-                if (setIsFormDirty) {
-                  setIsFormDirty(true)
-                }
               }}
               name={'suksesskriterieStatus' + suksesskriterie.id}
               align={ALIGN.horizontal}
@@ -297,7 +287,7 @@ const KriterieBegrunnelse = ({
       {(!disableEdit || !viewMode) && suksesskriterie.behovForBegrunnelse && (
         <Block marginTop={theme.sizing.scale1000}>
           <FormControl label={<LabelWithToolTip label={getLabelForSuksessKriterie()} />}>
-            <TextEditor initialValue={begrunnelse} setValue={setBegrunnelse} height={'188px'} errors={props.form.errors} simple width="100%" setIsFormDirty={setIsFormDirty} />
+            <TextEditor initialValue={begrunnelse} setValue={setBegrunnelse} height={'188px'} errors={props.form.errors} simple width="100%"/>
           </FormControl>
           <Error fieldName={`suksesskriterieBegrunnelser[${index}].begrunnelse`} fullWidth={true} />
         </Block>

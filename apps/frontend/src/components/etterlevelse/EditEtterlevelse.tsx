@@ -24,7 +24,6 @@ import CustomizedModal from '../common/CustomizedModal'
 import { ampli } from '../../services/Amplitude'
 import StatusView from '../common/StatusTag'
 import { getPageWidth } from '../../util/pageWidth'
-import { usePrompt } from '../../util/hooks/routerHooks'
 import { useNavigate, useParams } from 'react-router-dom'
 import { getFilterType, Section } from '../../pages/EtterlevelseDokumentasjonPage'
 import { syncEtterlevelseKriterieBegrunnelseWithKrav } from '../etterlevelseDokumentasjonTema/common/utils'
@@ -78,9 +77,6 @@ export const EditEtterlevelse = ({
   const [editedEtterlevelse, setEditedEtterlevelse] = React.useState<Etterlevelse>()
   const etterlevelseFormRef: React.Ref<FormikProps<Etterlevelse> | undefined> = useRef()
   const [pageWidth, setPageWidth] = useState<number>(1276)
-  const [isFormDirty, setIsFormDirty] = useState<boolean>(false)
-
-  usePrompt('You have unsaved changes, do you want to continue?', isFormDirty)
 
   const [etterlevelseMetadata, setEtterlevelseMetadata] = useState<EtterlevelseMetadata>(
     mapEtterlevelseMetadataToFormValue({
@@ -126,7 +122,6 @@ export const EditEtterlevelse = ({
   })
 
   const submit = async (etterlevelse: Etterlevelse) => {
-    setIsFormDirty(false)
     const mutatedEtterlevelse = {
       ...etterlevelse,
       fristForFerdigstillelse: etterlevelse.status !== EtterlevelseStatus.OPPFYLLES_SENERE ? '' : etterlevelse.fristForFerdigstillelse,
@@ -417,7 +412,6 @@ export const EditEtterlevelse = ({
                       disableEdit={disableEdit}
                       documentEdit={documentEdit}
                       close={() => {
-                        setIsFormDirty(false)
                         setTimeout(() => navigate(`/dokumentasjon/${etterlevelseDokumentasjonId}/${params.tema}/${params.filter}`), 1)
                       }}
                       setIsAlertUnsavedModalOpen={setIsAlertUnsavedModalOpen}
@@ -428,7 +422,6 @@ export const EditEtterlevelse = ({
                       tidligereEtterlevelser={tidligereEtterlevelser}
                       etterlevelseMetadata={etterlevelseMetadata}
                       setEtterlevelseMetadata={setEtterlevelseMetadata}
-                      setIsFormDirty={setIsFormDirty}
                     />
                   ),
                 },
