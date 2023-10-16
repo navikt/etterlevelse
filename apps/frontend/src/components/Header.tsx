@@ -16,7 +16,6 @@ import { writeLog } from '../api/LogApi'
 import MainSearch from './search/MainSearch'
 import { informationIcon, logo, warningAlert } from './Images'
 import { ettlevColors, maxPageWidth, responsivePaddingSmall, responsiveWidthSmall } from '../util/theme'
-import { Checkbox, STYLE_TYPE } from 'baseui/checkbox'
 import { Portrait } from './common/Portrait'
 import SkipToContent from './common/SkipToContent/SkipToContent'
 import { AlertType, Melding, MeldingStatus, MeldingType } from '../constants'
@@ -24,7 +23,7 @@ import { getMeldingByType } from '../api/MeldingApi'
 import { Markdown } from './common/Markdown'
 import { ampli } from '../services/Amplitude'
 import { BarChartIcon, ChevronDownIcon, ChevronUpIcon, DocPencilIcon, HouseIcon, InformationIcon, MenuHamburgerIcon, PersonIcon, ReceiptIcon } from '@navikt/aksel-icons'
-import { Dropdown, Link } from '@navikt/ds-react'
+import { Checkbox, CheckboxGroup, Dropdown, Label, Link } from '@navikt/ds-react'
 
 export const loginUrl = (location: Location, path?: string) => {
   const frontpage = window.location.href.substr(0, window.location.href.length - location.pathname.length)
@@ -48,33 +47,23 @@ const LoggedInHeader = () => {
   const [viewRoller, setViewRoller] = useState(false)
 
   const roller = (
-    <Block>
+    <div>
       <Button size={'xsmall'} variant="tertiary" onClick={() => setViewRoller(!viewRoller)} icon={viewRoller ? <ChevronUpIcon /> : <ChevronDownIcon />}>
         Endre aktive roller
       </Button>
-      <Block display={viewRoller ? 'block' : 'none'} marginTop={theme.sizing.scale200}>
+      <div className={`mt-2 ${viewRoller ? 'block' : 'hidden'}`}>
+
         {user.getAvailableGroups().map((g) => (
           <Checkbox
             key={g.group}
             checked={user.hasGroup(g.group)}
-            checkmarkType={STYLE_TYPE.toggle_round}
             onChange={(e) => user.toggleGroup(g.group, (e.target as HTMLInputElement).checked)}
-            labelPlacement={'right'}
-            overrides={{
-              Checkmark: {
-                style: ({ $isFocused }) => ({
-                  outlineColor: $isFocused ? ettlevColors.focusOutline : undefined,
-                  outlineWidth: $isFocused ? '3px' : undefined,
-                  outlineStyle: $isFocused ? 'solid' : undefined,
-                }),
-              },
-            }}
           >
             {g.name}
           </Checkbox>
         ))}
-      </Block>
-    </Block>
+      </div>
+    </div>
   )
 
   const kravPages = user.isKraveier()
@@ -98,23 +87,14 @@ const LoggedInHeader = () => {
     : []
 
   return (
-    <Block display="flex" justifyContent="center" alignItems="center">
+    <div className="flex items-center justify-center">
       <Menu pages={[[{ label: <UserInfo /> }], kravPages, adminPages, [{ label: roller }]]} title={user.getIdent()} icon={<PersonIcon />} kind={'tertiary'} />
 
-      <Block width={theme.sizing.scale400} />
+      <div className="w-3" />
 
       <Menu
         icon={<MenuHamburgerIcon />}
         pages={[
-          [
-            {
-              label: (
-                <HeadingXLarge marginTop={0} marginBottom={theme.sizing.scale400}>
-                  Støtte til etterlevelse
-                </HeadingXLarge>
-              ),
-            },
-          ],
           [{ label: 'Forsiden', href: '/', icon: <HouseIcon /> }],
           [{ label: 'Dokumentere etterlevelse', href: '/dokumentasjoner', icon: <DocPencilIcon /> }],
           [{ label: 'Status i organisasjonen', href: '//metabase.intern.nav.no/dashboard/116-dashboard-for-etterlevelse', icon: <BarChartIcon /> }],
@@ -124,39 +104,27 @@ const LoggedInHeader = () => {
         compact
         title={'Meny'}
       />
-    </Block>
+    </div>
   )
 }
-
-const Divider = (props: { compact?: boolean }) => (
-  <Block minHeight={props.compact ? '5px' : '20px'} display={'flex'} flexDirection={'column'} justifyContent={'center'}>
-    <Block $style={{ borderBottom: '1px solid ' + ettlevColors.green50 }} width={'100%'} />
-  </Block>
-)
 
 const UserInfo = () => {
   const location = useLocation()
   const frontpage = window.location.href.substr(0, window.location.href.length - location.pathname.length)
   const path = location.pathname
   return (
-    <Block display={'flex'} marginBottom={theme.sizing.scale600}>
+    <div className="flex mb-4" >
       <Portrait ident={user.getIdent()} size={'48px'} />
-      <Block display={'flex'} flexDirection={'column'} marginLeft={theme.sizing.scale800}>
-        <Block
-          $style={{
-            fontWeight: 900,
-            fontSize: '24px',
-            lineHeight: '32px',
-          }}
-        >
+      <div className="flex flex-col ml-6">
+        <Label>
           {user.getName()}
-        </Block>
-        <Block>{user.isAdmin() ? 'Admin' : user.isKraveier() ? 'Kraveier' : user.canWrite() ? 'Etterlever' : 'Gjest'}</Block>
-      </Block>
-      <Block alignSelf={'flex-end'} marginLeft={theme.sizing.scale800}>
-        <StyledLink href={`/logout?redirect_uri=${frontpage}${path}`}>Logg ut</StyledLink>
-      </Block>
-    </Block>
+        </Label>
+        <Label size="small">{user.isAdmin() ? 'Admin' : user.isKraveier() ? 'Kraveier' : user.canWrite() ? 'Etterlever' : 'Gjest'}</Label>
+      </div>
+      <div className="flex self-end ml-6">
+        <Link href={`/logout?redirect_uri=${frontpage}${path}`}>Logg ut</Link>
+      </div>
+    </div>
   )
 }
 
@@ -168,7 +136,7 @@ const Menu = (props: { pages: MenuItem[][]; title: React.ReactNode; icon?: React
   const allPages = props.pages.length
     ? props.pages
       .filter((p) => p.length)
-      .reduce((previousValue, currentValue) => [...((previousValue as MenuItem[]) || []), { label: <Divider compact={props.compact} /> }, ...(currentValue as MenuItem[])])
+      .reduce((previousValue, currentValue) => [...((previousValue as MenuItem[]) || []), ...(currentValue as MenuItem[])])
     : []
 
   return (
@@ -284,9 +252,6 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
                   </NavigationList>
                 </Block>
               )}
-              <Block display='none'>
-                <BurgerMenu />
-              </Block>
             </HeaderNavigation>
           </Block>
         </Block>
