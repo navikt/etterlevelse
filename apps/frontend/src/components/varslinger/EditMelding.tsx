@@ -55,7 +55,7 @@ export const EditMelding = ({melding, setMelding, isLoading, maxChar}: { melding
   if (isLoading) {
     return (
       <Block display="flex" justifyContent="center">
-        <Spinner size={theme.sizing.scale2400}/>
+        <Spinner size={"large"}/>
       </Block>
     )
   }

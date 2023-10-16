@@ -1,24 +1,24 @@
-import { AdresseType, Krav, SlackChannel, SlackUser, TeamResource, Varslingsadresse, VarslingsadresseQL } from '../../../constants'
-import { getSlackChannelById, getSlackUserByEmail, getSlackUserById, usePersonSearch, useSlackChannelSearch } from '../../../api/TeamApi'
-import React, { ReactNode, useEffect, useState } from 'react'
-import { Block } from 'baseui/block'
-import { Spinner } from '../../common/Spinner'
-import { theme } from '../../../util'
-import { Notification } from 'baseui/notification'
+import {AdresseType, Krav, SlackChannel, SlackUser, TeamResource, Varslingsadresse, VarslingsadresseQL} from '../../../constants'
+import {getSlackChannelById, getSlackUserByEmail, getSlackUserById, usePersonSearch, useSlackChannelSearch} from '../../../api/TeamApi'
+import React, {ReactNode, useEffect, useState} from 'react'
+import {Block} from 'baseui/block'
+import {Spinner} from '../../common/Spinner'
+import {theme} from '../../../util'
+import {Notification} from 'baseui/notification'
 import * as yup from 'yup'
 import Button from '../../common/Button'
-import { user } from '../../../services/User'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEnvelope, faPlus, faUser } from '@fortawesome/free-solid-svg-icons'
-import { FieldWrapper } from '../../common/Inputs'
-import { FieldArray, FieldArrayRenderProps } from 'formik'
-import { FormControl } from 'baseui/form-control'
-import { faSlackHash } from '@fortawesome/free-brands-svg-icons'
-import { Modal, ModalBody, ModalFooter, ModalHeader } from 'baseui/modal'
-import { RenderTagList } from '../../common/TagList'
+import {user} from '../../../services/User'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faEnvelope, faPlus, faUser} from '@fortawesome/free-solid-svg-icons'
+import {FieldWrapper} from '../../common/Inputs'
+import {FieldArray, FieldArrayRenderProps} from 'formik'
+import {FormControl} from 'baseui/form-control'
+import {faSlackHash} from '@fortawesome/free-brands-svg-icons'
+import {Modal, ModalBody, ModalFooter, ModalHeader} from 'baseui/modal'
+import {RenderTagList} from '../../common/TagList'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
 import CustomizedInput from '../../common/CustomizedInput'
-import { CustomizedStatefulSelect } from '../../common/CustomizedSelect'
+import {CustomizedStatefulSelect} from '../../common/CustomizedSelect'
 
 export const KravVarslingsadresserEdit = () => {
   const [addSlackChannel, setAddSlackChannel] = useState<boolean>(false)
@@ -251,7 +251,7 @@ export const SlackUserSearch = ({ add, close }: AddVarslingsadresseProps) => {
           </Button>
         </Block>
       </Block>
-      {loadingSlackId && <Spinner size={theme.sizing.scale800} />}
+      {loadingSlackId && <Spinner size={"large"} />}
       {error && (
         <Notification kind="negative" overrides={{ Body: { style: { marginBottom: '-25px' } } }}>
           {error}

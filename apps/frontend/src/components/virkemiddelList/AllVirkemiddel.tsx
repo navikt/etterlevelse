@@ -4,7 +4,7 @@ import {VirkemiddelListFilter} from '../../constants'
 import {Block, Responsive, Scale} from 'baseui/block'
 import {Option} from 'baseui/select'
 import CustomizedSelect from '../common/CustomizedSelect'
-import {ettlevColors, theme} from '../../util/theme'
+import {ettlevColors} from '../../util/theme'
 import {Spinner} from '../common/Spinner'
 import {HeadingXLarge, LabelSmall, ParagraphMedium} from 'baseui/typography'
 import {borderColor, borderWidth} from '../common/Style'
@@ -92,7 +92,7 @@ export const AllVirkemiddel = ({ isCreateModalOpen, setIsCreateModalOpen }: AllV
   }
 
   return loading ? (
-    <Spinner size={theme.sizing.scale2400} />
+    <Spinner size={'large'} />
   ) : (
     <Block>
       <Block width="100%" justifyContent="center" marginTop="20px" marginBottom="20px">

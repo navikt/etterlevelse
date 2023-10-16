@@ -1,5 +1,4 @@
 import {Spinner} from './Spinner'
-import {theme} from '../../util'
 import {Cell, Row, Table} from './Table'
 import RouteLink from './RouteLink'
 import React from 'react'
@@ -28,7 +27,7 @@ export const EtterlevelseDokumentasjonFilterTable = (props: {filter: Etterlevels
   const {data, loading} = useQuery<{ etterlevelseDokumentasjon: PageResponse<EtterlevelseDokumentasjon> }>(query, {variables:props.filter})
 
   return loading && !data ? (
-    <Spinner size={theme.sizing.scale2400}/>
+    <Spinner size={"large"}/>
   ) : (
     <Table
       data={data!.etterlevelseDokumentasjon.content}

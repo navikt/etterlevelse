@@ -1,20 +1,19 @@
-import { useEffect, useState } from 'react'
-import { codelist, ListName } from '../../services/Codelist'
-import { useKravFilter } from '../../api/KravGraphQLApi'
-import { emptyPage, KravListFilter, KravQL, KravStatus } from '../../constants'
-import { Block, Responsive, Scale } from 'baseui/block'
-import { Option, SelectOverrides } from 'baseui/select'
+import {useEffect, useState} from 'react'
+import {codelist, ListName} from '../../services/Codelist'
+import {useKravFilter} from '../../api/KravGraphQLApi'
+import {emptyPage, KravListFilter, KravQL, KravStatus} from '../../constants'
+import {Block, Responsive, Scale} from 'baseui/block'
+import {Option, SelectOverrides} from 'baseui/select'
 import CustomizedSelect from '../common/CustomizedSelect'
-import { ettlevColors, theme } from '../../util/theme'
-import { Spinner } from '../common/Spinner'
-import { Notification } from 'baseui/notification'
-import { HeadingXLarge, LabelSmall, ParagraphMedium } from 'baseui/typography'
+import {ettlevColors, theme} from '../../util/theme'
+import {Spinner} from '../common/Spinner'
+import {Notification} from 'baseui/notification'
+import {HeadingXLarge, LabelSmall, ParagraphMedium} from 'baseui/typography'
 import Button from '../common/Button'
-import { faPlus } from '@fortawesome/free-solid-svg-icons'
-import { KravPanels, sortKrav } from '../../pages/KravListPage'
-import { borderColor } from '../common/Style'
-import { kravStatus } from '../../pages/KravPage'
-import { PlusIcon } from '@navikt/aksel-icons'
+import {KravPanels, sortKrav} from '../../pages/KravListPage'
+import {borderColor} from '../common/Style'
+import {kravStatus} from '../../pages/KravPage'
+import {PlusIcon} from '@navikt/aksel-icons'
 
 type KravFilter = {
   status: Option[]
@@ -213,7 +212,7 @@ export const AllKrav = () => {
   }
 
   return loading && !kravene.numberOfElements ? (
-    <Spinner size={theme.sizing.scale2400} />
+    <Spinner size={"large"} />
   ) : error ? (
     <Notification kind={'negative'}>{JSON.stringify(error, null, 2)}</Notification>
   ) : (
@@ -296,7 +295,7 @@ export const AllKrav = () => {
 
             {gqlLoading && (
               <Block marginLeft={theme.sizing.scale400}>
-                <Spinner size={theme.sizing.scale800} />
+                <Spinner size={"large"} />
               </Block>
             )}
           </Block>

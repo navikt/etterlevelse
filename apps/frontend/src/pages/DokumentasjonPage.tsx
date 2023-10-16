@@ -236,7 +236,7 @@ export const DokumentasjonPage = () => {
         {getRelevansContent(etterlevelseDokumentasjon)}
         {loading ? (
           <Block display="flex" width="100%" justifyContent="center" marginTop={theme.sizing.scale550}>
-            <Spinner size="50px"/>
+            <Spinner size={"large"}/>
           </Block>
         ) : (
           <div className="flex flex-row flex-wrap gap-2 w-full">

@@ -1,13 +1,12 @@
-import { Block } from 'baseui/block'
-import { Formik, FormikProps } from 'formik'
-import React, { useState } from 'react'
-import { createMelding, mapMeldingToFormValue, updateMelding } from '../../api/MeldingApi'
-import { AlertType, Melding, MeldingStatus } from '../../constants'
-import { InputField, TextAreaField } from '../common/Inputs'
+import {Block} from 'baseui/block'
+import {Formik, FormikProps} from 'formik'
+import React, {useState} from 'react'
+import {createMelding, mapMeldingToFormValue, updateMelding} from '../../api/MeldingApi'
+import {AlertType, Melding, MeldingStatus} from '../../constants'
+import {InputField, TextAreaField} from '../common/Inputs'
 import Button from '../common/Button'
-import { theme } from '../../util/theme'
-import { Spinner } from '../common/Spinner'
-import { HeadingXXLarge } from 'baseui/typography'
+import {Spinner} from '../common/Spinner'
+import {HeadingXXLarge} from 'baseui/typography'
 
 export const EditOmEtterlevelse = ({ melding, setMelding, isLoading, maxChar }: { melding: Melding | undefined; setMelding: Function; isLoading: boolean; maxChar?: number }) => {
   const [disableEdit, setDisableEdit] = useState<boolean>(false)
@@ -35,7 +34,7 @@ export const EditOmEtterlevelse = ({ melding, setMelding, isLoading, maxChar }: 
   if (isLoading) {
     return (
       <Block display="flex" justifyContent="center">
-        <Spinner size={theme.sizing.scale2400} />
+        <Spinner size={"large"} />
       </Block>
     )
   }

@@ -50,7 +50,7 @@ export const EtterlevelseListPage = () => {
                   </RouteLink>
                 </Block>
               ))}
-            {loading && <Spinner size={theme.sizing.scale2400} />}
+            {loading && <Spinner size={"large"} />}
           </Block>
           <Block display="flex" alignItems="center" marginTop={theme.sizing.scale1000}>
             <LabelSmall marginRight={theme.sizing.scale400}>

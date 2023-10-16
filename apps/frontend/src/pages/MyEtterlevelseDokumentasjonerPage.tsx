@@ -370,7 +370,7 @@ const Alle = () => {
           {loading && (
             <Block>
               <Block marginLeft={theme.sizing.scale400} marginTop={theme.sizing.scale400}>
-                <Spinner size={theme.sizing.scale1000} />
+                <Spinner size={'large'} />
               </Block>
             </Block>
           )}
@@ -401,7 +401,7 @@ const Alle = () => {
 
                 {gqlLoading && (
                   <Block marginLeft={theme.sizing.scale400}>
-                    <Spinner size={theme.sizing.scale800} />
+                    <Spinner size={'large'} />
                   </Block>
                 )}
               </Block>

@@ -101,7 +101,7 @@ export const ViewEtterlevelse = ({
           etterlevelse.behandlingId && (
             <Block>
               {' '}
-              <Spinner size={theme.sizing.scale600} />
+              <Spinner size={"large"} />
               {etterlevelse.behandlingId}
             </Block>
           )
