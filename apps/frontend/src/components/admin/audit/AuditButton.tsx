@@ -1,12 +1,10 @@
-import { KIND, SIZE as ButtonSize } from 'baseui/button'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faHistory } from '@fortawesome/free-solid-svg-icons'
+import {KIND} from 'baseui/button'
 import React from 'react'
-import { user } from '../../../services/User'
+import {user} from '../../../services/User'
 import RouteLink from '../../common/RouteLink'
 import Button from '../../common/Button'
-import { intl } from '../../../util/intl/intl'
-import { ClockDashedIcon } from '@navikt/aksel-icons'
+import {intl} from '../../../util/intl/intl'
+import {ClockDashedIcon} from '@navikt/aksel-icons'
 
 export const AuditButton = (props: {
   id: string
@@ -30,9 +28,7 @@ export const AuditButton = (props: {
             marginRight={props.marginRight}
             kind={props.kind || 'outline'}
             icon={<ClockDashedIcon title="Versjonering"/>}
-          >
-            <FontAwesomeIcon icon={faHistory} />
-          </Button>
+          />
         </>
       )}
     </RouteLink>
