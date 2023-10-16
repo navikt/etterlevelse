@@ -30,8 +30,6 @@ const Button: OverridableComponent<CustomButtonProps, HTMLButtonElement> = (prop
     onClick,
     ...restProps
   } = props
-  //const defaultVariant = props.kind === 'outline' ? 'secondary' : props.kind === 'underline-hover' ? 'tertiary' : props.kind
-
   return (
     <div className={`inline ${props.marginLeft ? 'ml-2.5' : ''} ${props.marginRight ? 'ml-4' : ''}`}>
       <Tooltip content={props.tooltip || ''}>
@@ -56,9 +54,7 @@ interface CustomExternalLinkButtonProps extends CustomButtonProps {
 }
 
 export const ExternalButton = (props: CustomExternalLinkButtonProps) => {
-
   const { href, underlineHover, openOnSamePage, ...restProps } = props
-
   return (
     <ExternalLink href={href} openOnSamePage={openOnSamePage}>
       <Button as="a" variant={underlineHover ? 'tertiary' : 'secondary'} {...restProps}>
