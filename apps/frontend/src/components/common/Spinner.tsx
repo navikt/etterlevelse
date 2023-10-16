@@ -1,9 +1,10 @@
-import { withStyle } from 'baseui'
-import { Spinner as BaseSpinner } from 'baseui/spinner'
 import React from 'react'
-import { ettlevColors } from '../../util/theme'
+import {Loader} from "@navikt/ds-react";
 
-export const Spinner = (props: { size?: string }) => {
-  const SpinnerStyled = withStyle(BaseSpinner, { width: props.size, height: props.size })
-  return <SpinnerStyled $color={ettlevColors.green400} />
+interface LoaderProps {
+  size?: "large" | "medium" | "small" | "3xlarge" | "2xlarge" | "xlarge" | "xsmall" | undefined
+}
+
+export const Spinner = (props: LoaderProps) => {
+  return <Loader size={props.size}/>
 }
