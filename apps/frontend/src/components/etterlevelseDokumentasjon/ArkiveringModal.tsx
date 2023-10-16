@@ -112,13 +112,7 @@ export const ArkiveringModal = ({ arkivModal, setArkivModal, etterlevelseDokumen
                   setIsArchivingCancelled(false)
                 }
               }}
-              size={'compact'}
-              kind={etterlevelseArkiv.status !== EtterlevelseArkivStatus.TIL_ARKIVERING ? 'primary' : 'secondary'}
-              $style={{
-                borderWidth: '2px',
-                marginRight: '16px',
-                padding: '14px 16px',
-              }}
+              variant={etterlevelseArkiv.status !== EtterlevelseArkivStatus.TIL_ARKIVERING ? 'primary' : 'secondary'}
             >
               {etterlevelseArkiv && etterlevelseArkiv.status === EtterlevelseArkivStatus.TIL_ARKIVERING ? 'Avbryt arkivering i WebSak' : 'Arkivér i WebSak'}
             </Button>
@@ -128,11 +122,6 @@ export const ArkiveringModal = ({ arkivModal, setArkivModal, etterlevelseDokumen
               onClick={() => {
                 setIsArchivingCancelled(false)
                 setArkivModal(false)
-              }}
-              kind="primary"
-              size="compact"
-              $style={{
-                padding: '14px 16px',
               }}
             >
               Lukk

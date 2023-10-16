@@ -1,23 +1,22 @@
 import moment from 'moment'
-import { Block } from 'baseui/block'
-import { JsonView} from 'react-json-view-lite'
-import React, { useEffect, useState } from 'react'
-import { LabelLarge } from 'baseui/typography'
-import { AuditActionIcon, AuditLabel as Label } from './AuditComponents'
-import { Card } from 'baseui/card'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBinoculars, faExchangeAlt, faTimes } from '@fortawesome/free-solid-svg-icons'
-import { PLACEMENT, StatefulTooltip } from 'baseui/tooltip'
-import { StatefulPopover } from 'baseui/popover'
+import {Block} from 'baseui/block'
+import {JsonView} from 'react-json-view-lite'
+import React, {useEffect, useState} from 'react'
+import {LabelLarge} from 'baseui/typography'
+import {AuditActionIcon, AuditLabel as Label} from './AuditComponents'
+import {Card} from 'baseui/card'
+import {PLACEMENT, StatefulTooltip} from 'baseui/tooltip'
+import {StatefulPopover} from 'baseui/popover'
 import {Differ, Viewer} from 'json-diff-kit'
-import { Spinner } from 'baseui/spinner'
-import { useRefs } from '../../../util/hooks'
-import { theme } from '../../../util'
-import { intl } from '../../../util/intl/intl'
-import { AuditAction, AuditLog } from './AuditTypes'
-import { ObjectLink } from '../../common/RouteLink'
+import {Spinner} from 'baseui/spinner'
+import {useRefs} from '../../../util/hooks'
+import {theme} from '../../../util'
+import {intl} from '../../../util/intl/intl'
+import {AuditAction, AuditLog} from './AuditTypes'
+import {ObjectLink} from '../../common/RouteLink'
 import Button from '../../common/Button'
-import { ettlevColors } from '../../../util/theme'
+import {ettlevColors} from '../../../util/theme'
+import {ArrowRightLeftIcon, GlassesIcon, XMarkIcon} from '@navikt/aksel-icons'
 
 type AuditViewProps = {
   auditLog?: AuditLog
@@ -54,25 +53,21 @@ export const AuditView = (props: AuditViewProps) => {
               <Label label={intl.audits}>{auditLog?.audits.length}</Label>
             </Block>
             <Block display="flex">
-              <Button size="compact" kind="tertiary" marginRight onClick={() => setOpenAll(!openAll)}>
+              <Button variant="tertiary" marginRight onClick={() => setOpenAll(!openAll)}>
                 {openAll ? 'Lukke' : 'Åpne'} alle
               </Button>
               {newestAudit?.action !== AuditAction.DELETE && (
                 <StatefulTooltip content={() => intl.view} placement={PLACEMENT.top}>
                   <Block>
                     <ObjectLink id={newestAudit!.tableId} type={newestAudit!.table} audit={newestAudit}>
-                      <Button size="compact" shape="round" kind="tertiary">
-                        <FontAwesomeIcon icon={faBinoculars} />
-                      </Button>
+                      <Button variant="tertiary" icon={<GlassesIcon title="Se forskjell"/>} />
                     </ObjectLink>
                   </Block>
                 </StatefulTooltip>
               )}
               <StatefulTooltip content={() => intl.close} placement={PLACEMENT.top}>
                 <Block>
-                  <Button size="compact" shape="round" kind="tertiary" onClick={() => viewId('')}>
-                    <FontAwesomeIcon icon={faTimes} />
-                  </Button>
+                  <Button variant="tertiary" onClick={() => viewId('')} icon={<XMarkIcon title="Lukk"/>} />
                 </Block>
               </StatefulTooltip>
             </Block>
@@ -118,9 +113,7 @@ export const AuditView = (props: AuditViewProps) => {
                         }}
                       >
                         <div>
-                          <Button size="compact" shape="round" kind="tertiary">
-                            <FontAwesomeIcon icon={faExchangeAlt} />
-                          </Button>
+                          <Button  variant="tertiary" icon={<ArrowRightLeftIcon title="Sammenling"/>} />
                         </div>
                       </StatefulPopover>
                     </Block>

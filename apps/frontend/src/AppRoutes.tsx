@@ -31,7 +31,6 @@ import { VirkemiddelListPage } from './pages/VirkemiddelListPage'
 import EtterlevelseDokumentasjonAdminPage from './pages/EtterlevelseDokumentasjonAdminPage'
 import { useEffect } from 'react'
 import { searchEtterlevelsedokumentasjonByBehandlingId } from './api/EtterlevelseDokumentasjonApi'
-import { Block } from 'baseui/block'
 import { Spinner } from './components/common/Spinner'
 import { ampli } from './services/Amplitude'
 
@@ -160,9 +159,9 @@ const RedirectToEtterlevelseDokumentasjonPage = () => {
   }
 
   return (
-    <Block display="flex" width="100%" justifyContent="center">
+    <div className="flex w-full justify-center">
       <Spinner size="50px" />
-    </Block>
+    </div>
   )
 }
 

@@ -297,11 +297,7 @@ export const EditEtterlevelse = ({
                   {krav.versjonEndringer && (
                     <Button
                       type="button"
-                      kind="underline-hover"
-                      $style={{
-                        marginLeft: '2px',
-                        ':hover': { textDecoration: 'none' },
-                      }}
+                      variant="tertiary"
                       onClick={() => setIsVersjonEndringerModalOpen(true)}
                     >
                       <ParagraphMedium

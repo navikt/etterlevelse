@@ -25,15 +25,8 @@ export const EtterlevelseCard = ({ etterlevelse }: { etterlevelse: Etterlevelse 
     <Block width="100%">
       <Button
         type="button"
-        kind={'underline-hover'}
+        variant="tertiary"
         onClick={() => setIsModalOpen(true)}
-        $style={{
-          textDecoration: 'underline 1px',
-          textUnderlineOffset: '1px',
-          ':hover': {
-            color: ettlevColors.green400,
-          },
-        }}
       >
         <ParagraphMedium
           marginTop="0px"

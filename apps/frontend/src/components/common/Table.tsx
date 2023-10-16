@@ -20,6 +20,7 @@ import { KIND } from 'baseui/button'
 import { Pagination } from 'baseui/pagination'
 import CustomizedInput from '../common/CustomizedInput'
 import { CustomizedStatefulSelect } from './CustomizedSelect'
+import { ChevronDownIcon } from '@navikt/aksel-icons'
 
 // Use this for entire app, or recreate maybe, added here as I needed it for audit
 
@@ -148,7 +149,7 @@ export const Table = <T, K extends keyof T>(props: TableProps<T, K>) => {
             placement={PLACEMENT.bottom}
           >
             <Block>
-              <Button kind={KIND.tertiary} iconEnd={faChevronDown}>{`${table.limit} ${intl.rows}`}</Button>
+              <Button variant={'tertiary'} iconPosition='right' icon={<ChevronDownIcon />}>{`${table.limit} ${intl.rows}`}</Button>
             </Block>
           </StatefulPopover>
           <Block>

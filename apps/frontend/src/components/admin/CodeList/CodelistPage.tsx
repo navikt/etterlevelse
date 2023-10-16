@@ -18,6 +18,7 @@ import CreateCodeListModal from './ModalCreateCodeList'
 import CodeListTable from './CodeListStyledTable'
 import { ettlevColors, responsivePaddingSmall, responsiveWidthSmall } from '../../../util/theme'
 import { Helmet } from 'react-helmet'
+import { PlusIcon } from '@navikt/aksel-icons'
 
 const CodeListPage = () => {
   const params = useParams<{ listname?: string }>()
@@ -87,7 +88,7 @@ const CodeListPage = () => {
           </Block>
           {listname && (
             <Block>
-              <Button tooltip="Legg til ny" icon={faPlus} size={ButtonSize.compact} kind={KIND.tertiary} onClick={() => setCreateCodeListModal(!createCodeListModal)}>
+              <Button tooltip="Legg til ny" icon={<PlusIcon/>} size={"small"} variant={"tertiary"} onClick={() => setCreateCodeListModal(!createCodeListModal)}>
                 Opprett ny kode
               </Button>
             </Block>

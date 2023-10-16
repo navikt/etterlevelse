@@ -343,7 +343,7 @@ export const MultiInputField = (props: {
                   </Block>
 
                   <Block minWidth="107px">
-                    <Button type="button" onClick={add} marginLeft label={'Legg til'} kind="secondary" size="compact">
+                    <Button type="button" onClick={add} marginLeft variant="secondary">
                       Legg til
                     </Button>
                   </Block>

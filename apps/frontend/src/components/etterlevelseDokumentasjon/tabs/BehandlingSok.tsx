@@ -14,6 +14,7 @@ import CustomizedSelect from '../../common/CustomizedSelect'
 import { intl } from '../../../util/intl/intl'
 import { TYPE } from 'baseui/select'
 import { updateBehandlingNameWithNumber } from '../common/utils'
+import { PlusIcon } from '@navikt/aksel-icons'
 
 export const BehandlingSok = () => {
   const pageSize = 20
@@ -115,9 +116,8 @@ export const BehandlingSok = () => {
           <Block display="flex" alignItems="center">
             <Button
               onClick={lastMer}
-              icon={faPlus}
-              kind={'secondary'}
-              size="compact"
+              icon={<PlusIcon/>}
+              variant={'secondary'}
               disabled={gqlLoading || etterlevelseDokumentasjoner.numberOfElements >= etterlevelseDokumentasjoner.totalElements}
             >
               Vis mer

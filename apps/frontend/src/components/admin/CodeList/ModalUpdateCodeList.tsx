@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { Modal, ModalBody, ModalButton, ModalFooter, ModalHeader, ROLE, SIZE } from 'baseui/modal'
 
 import { Field, FieldProps, Form, Formik, FormikProps } from 'formik'
@@ -13,7 +12,6 @@ import { LovCodeDataForm, TemaCodeDataForm } from './LovCode'
 import { MarkdownInfo } from '../../common/Markdown'
 import CustomizedInput from '../../common/CustomizedInput'
 import CustomizedTextarea from '../../common/CustomizedTextarea'
-import { buttonContentStyle } from '../../common/Button'
 
 const modalBlockProps: BlockProps = {
   width: '700px',
@@ -88,26 +86,12 @@ const UpdateCodeListModal = ({ title, initialValues, errorOnUpdate, isOpen, onCl
                     type="button"
                     kind={KIND.secondary}
                     onClick={() => onClose()}
-                    overrides={{
-                      BaseButton: {
-                        style: {
-                          ...buttonContentStyle,
-                        },
-                      },
-                    }}
                   >
                     <strong>Avbryt</strong>
                   </Button>
                   <ModalButton
                     type="button"
                     onClick={formik.submitForm}
-                    overrides={{
-                      BaseButton: {
-                        style: {
-                          ...buttonContentStyle,
-                        },
-                      },
-                    }}
                   >
                     <strong>Lagre</strong>
                   </ModalButton>

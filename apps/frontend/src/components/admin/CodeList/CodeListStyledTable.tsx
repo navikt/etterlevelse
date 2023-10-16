@@ -1,9 +1,6 @@
 import * as React from 'react'
 import { useEffect, useState } from 'react'
 import { Block } from 'baseui/block'
-import { KIND, SIZE as ButtonSize } from 'baseui/button'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEdit, faGhost, faTrash } from '@fortawesome/free-solid-svg-icons'
 import UpdateCodeListModal from './ModalUpdateCodeList'
 import DeleteCodeListModal from './ModalDeleteCodeList'
 import { Usage } from './CodeListUsage'
@@ -13,6 +10,7 @@ import { deleteCodelist, getCodelistUsage, updateCodelist } from '../../../api/C
 import { Cell, Row, Table } from '../../common/Table'
 import Button from '../../common/Button'
 import { theme } from '../../../util'
+import { DocPencilIcon, GlassesIcon, TrashIcon } from '@navikt/aksel-icons'
 
 type TableCodelistProps = {
   tableData: Code[]
@@ -29,7 +27,7 @@ const CodeListTable = ({ tableData, refresh }: TableCodelistProps) => {
 
   useEffect(() => {
     if (showUsage && selectedCode) {
-      ;(async () => {
+      ; (async () => {
         setUsage(undefined)
         const usage = await getCodelistUsage(selectedCode.list, selectedCode.code)
         setUsage(usage)
@@ -93,42 +91,33 @@ const CodeListTable = ({ tableData, refresh }: TableCodelistProps) => {
               <Cell small>
                 <Block display="flex" justifyContent="flex-end" width="100%">
                   <Button
-                    tooltip={'Bruk'}
-                    size={ButtonSize.compact}
-                    kind={row === selectedCode && showUsage ? KIND.primary : KIND.tertiary}
+                    tooltip={'Vis bruk'}
+                    variant={row === selectedCode && showUsage ? 'primary' : 'tertiary'}
                     onClick={() => {
                       setSelectedCode(row)
                       setShowUsage(true)
                     }}
-                    label={'Vis bruk'}
-                  >
-                    <FontAwesomeIcon icon={faGhost} />
-                  </Button>
-                  <AuditButton id={`${row.list}-${row.code}`} kind={KIND.tertiary} />
+                    icon={< GlassesIcon title="Vis bruk" />}
+                  />
+                  <AuditButton id={`${row.list}-${row.code}`} kind={'tertiary'} />
                   <Button
                     tooltip={'Rediger'}
-                    size={ButtonSize.compact}
-                    kind={KIND.tertiary}
+                    variant={"tertiary"}
                     onClick={() => {
                       setSelectedCode(row)
                       setShowEditModal(true)
                     }}
-                    label={'Rediger'}
-                  >
-                    <FontAwesomeIcon icon={faEdit} />
-                  </Button>
+                    icon={<DocPencilIcon title="Rediger" />}
+                  />
                   <Button
                     tooltip={'Slett'}
-                    size={ButtonSize.compact}
-                    kind={KIND.tertiary}
+                    variant={"tertiary"}
                     onClick={() => {
                       setSelectedCode(row)
                       setShowDeleteModal(true)
                     }}
-                    label={'Slett'}
-                  >
-                    <FontAwesomeIcon icon={faTrash} />
-                  </Button>
+                    icon={<TrashIcon title="Slett" />}
+                  />
                 </Block>
               </Cell>
             </Row>

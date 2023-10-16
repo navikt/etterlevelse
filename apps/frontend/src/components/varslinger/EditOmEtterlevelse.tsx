@@ -56,7 +56,7 @@ export const EditOmEtterlevelse = ({ melding, setMelding, isLoading, maxChar }: 
 
               <Block display="flex" justifyContent="flex-end" width="100%">
                 <Button
-                  kind="secondary"
+                  variant="secondary"
                   onClick={() => {
                     window.location.reload()
                   }}

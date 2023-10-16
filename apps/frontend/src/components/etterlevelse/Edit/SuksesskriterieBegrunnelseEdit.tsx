@@ -12,7 +12,6 @@ import {Error} from '../../common/ModalSchema'
 import LabelWithToolTip from '../../common/LabelWithTooltip'
 import {borderColor, borderRadius, borderStyle, borderWidth} from '../../common/Style'
 import {LabelAboveContent} from '../../common/PropertyLabel'
-import {buttonContentStyle} from '../../common/Button'
 import {Markdown} from '../../common/Markdown'
 import {ALIGN, Radio, RadioGroup, RadioGroupOverrides, RadioOverrides} from 'baseui/radio'
 import {Heading, ReadMore} from '@navikt/ds-react'
@@ -24,7 +23,6 @@ const radioButtonOverrides: RadioOverrides & RadioGroupOverrides = {
       ...borderStyle('solid'),
       ...borderWidth('1px'),
       ...borderRadius('4px'),
-      ...buttonContentStyle,
       backgroundColor: $checked ? ettlevColors.green100 : ettlevColors.white,
       marginRight: '16px',
       display: 'flex',

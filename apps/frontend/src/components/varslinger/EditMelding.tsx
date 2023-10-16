@@ -1,17 +1,16 @@
-import { Block } from 'baseui/block'
-import { Field, FieldProps, Formik, FormikProps } from 'formik'
-import React, { useEffect, useState } from 'react'
-import { createMelding, mapMeldingToFormValue, updateMelding } from '../../api/MeldingApi'
-import { AlertType, Melding, MeldingStatus, MeldingType } from '../../constants'
-import { FieldWrapper, TextAreaField } from '../common/Inputs'
+import {Block} from 'baseui/block'
+import {Field, FieldProps, Formik, FormikProps} from 'formik'
+import React, {useEffect, useState} from 'react'
+import {createMelding, mapMeldingToFormValue, updateMelding} from '../../api/MeldingApi'
+import {AlertType, Melding, MeldingStatus, MeldingType} from '../../constants'
+import {FieldWrapper, TextAreaField} from '../common/Inputs'
 import Button from '../common/Button'
-import { deleteIconGreen600, eyeSlash } from '../Images'
-import { borderColor } from '../common/Style'
-import { ettlevColors, theme } from '../../util/theme'
-import { Spinner } from '../common/Spinner'
-import { FormControl } from 'baseui/form-control'
-import { Radio, RadioGroup } from 'baseui/radio'
-import { ParagraphMedium } from 'baseui/typography'
+import {ettlevColors, theme} from '../../util/theme'
+import {Spinner} from '../common/Spinner'
+import {FormControl} from 'baseui/form-control'
+import {Radio, RadioGroup} from 'baseui/radio'
+import {ParagraphMedium} from 'baseui/typography'
+import {EyeSlashIcon, TrashIcon} from "@navikt/aksel-icons";
 
 export const getAlertTypeText = (type: AlertType) => {
   if (!type) return ''
@@ -25,7 +24,7 @@ export const getAlertTypeText = (type: AlertType) => {
   }
 }
 
-export const EditMelding = ({ melding, setMelding, isLoading, maxChar }: { melding: Melding | undefined; setMelding: Function; isLoading: boolean; maxChar?: number }) => {
+export const EditMelding = ({melding, setMelding, isLoading, maxChar}: { melding: Melding | undefined; setMelding: Function; isLoading: boolean; maxChar?: number }) => {
   const [disableEdit, setDisableEdit] = useState<boolean>(false)
   const [meldingAlertType, setMeldingAlertType] = useState<string>(AlertType.WARNING)
   const [radioHover, setRadioHover] = useState<string>('')
@@ -56,7 +55,7 @@ export const EditMelding = ({ melding, setMelding, isLoading, maxChar }: { meldi
   if (isLoading) {
     return (
       <Block display="flex" justifyContent="center">
-        <Spinner size={theme.sizing.scale2400} />
+        <Spinner size={theme.sizing.scale2400}/>
       </Block>
     )
   }
@@ -65,7 +64,7 @@ export const EditMelding = ({ melding, setMelding, isLoading, maxChar }: { meldi
     <Block>
       {melding && (
         <Formik onSubmit={submit} initialValues={mapMeldingToFormValue(melding)}>
-          {({ values, submitForm }: FormikProps<Melding>) => (
+          {({values, submitForm}: FormikProps<Melding>) => (
             <Block>
               <FieldWrapper>
                 <Field name="alertType">
@@ -125,8 +124,8 @@ export const EditMelding = ({ melding, setMelding, isLoading, maxChar }: { meldi
                                 },
                               }}
                             >
-                              <Block $style={{ textDecoration: radioHover === id ? 'underline' : 'none' }}>
-                                <ParagraphMedium $style={{ lineHeight: '22px' }} marginTop="0px" marginBottom="0px">
+                              <Block $style={{textDecoration: radioHover === id ? 'underline' : 'none'}}>
+                                <ParagraphMedium $style={{lineHeight: '22px'}} marginTop="0px" marginBottom="0px">
                                   {getAlertTypeText(id)}
                                 </ParagraphMedium>
                               </Block>
@@ -152,10 +151,9 @@ export const EditMelding = ({ melding, setMelding, isLoading, maxChar }: { meldi
               <Block display="flex" width="100%">
                 <Block display="flex" width="100%">
                   <Button
-                    kind="underline-hover"
+                    variant="tertiary"
                     onClick={() => window.location.reload()}
-                    startEnhancer={<img alt="delete" src={deleteIconGreen600} />}
-                    $style={{ fontSize: '18px' }}
+                    icon={<TrashIcon title={'Delete'}/> }
                   >
                     Forkast endringer
                   </Button>
@@ -165,15 +163,12 @@ export const EditMelding = ({ melding, setMelding, isLoading, maxChar }: { meldi
                   {melding.meldingStatus === MeldingStatus.ACTIVE && (
                     <Button
                       marginRight
-                      kind="secondary"
+                      variant="secondary"
                       disabled={disableEdit}
-                      startEnhancer={<img src={eyeSlash} alt="hide icon" />}
+                      icon={<EyeSlashIcon title={'Hide icon'}/>}
                       onClick={() => {
                         values.meldingStatus = MeldingStatus.DEACTIVE
                         submitForm()
-                      }}
-                      $style={{
-                        ...borderColor(ettlevColors.grey200),
                       }}
                     >
                       Skjul meldingen

@@ -14,6 +14,7 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import { KravPanels, sortKrav } from '../../pages/KravListPage'
 import { borderColor } from '../common/Style'
 import { kravStatus } from '../../pages/KravPage'
+import { PlusIcon } from '@navikt/aksel-icons'
 
 type KravFilter = {
   status: Option[]
@@ -289,7 +290,7 @@ export const AllKrav = () => {
       {!loading && kravene.totalElements !== 0 && (
         <Block display={'flex'} justifyContent={'space-between'} marginTop={theme.sizing.scale1000}>
           <Block display="flex" alignItems="center">
-            <Button onClick={lastMer} icon={faPlus} kind={'secondary'} size="compact" disabled={gqlLoading || kravene.numberOfElements >= kravene.totalElements}>
+            <Button onClick={lastMer} icon={<PlusIcon/>} variant={'secondary'}  disabled={gqlLoading || kravene.numberOfElements >= kravene.totalElements}>
               Vis mer
             </Button>
 

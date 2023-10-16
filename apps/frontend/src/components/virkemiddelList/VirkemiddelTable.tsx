@@ -1,18 +1,15 @@
-import { Block } from 'baseui/block'
-import React, { useState } from 'react'
+import {Block} from 'baseui/block'
+import React, {useState} from 'react'
 import moment from 'moment'
-import { Virkemiddel } from '../../constants'
-import { SkeletonPanel } from '../common/LoadingSkeleton'
-import { Cell, Row, Table } from '../common/Table'
+import {Virkemiddel} from '../../constants'
+import {SkeletonPanel} from '../common/LoadingSkeleton'
+import {Cell, Row, Table} from '../common/Table'
 import Button from '../common/Button'
-import { SIZE as ButtonSize } from 'baseui/button/constants'
-import { KIND } from 'baseui/button'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'
-import { ColumnCompares } from '../../util/hooks'
-import { EditVirkemiddelModal } from '../virkemiddel/edit/EditVirkemiddelModal'
+import {ColumnCompares} from '../../util/hooks'
+import {EditVirkemiddelModal} from '../virkemiddel/edit/EditVirkemiddelModal'
 import DeleteVirkemiddeltModal from '../virkemiddel/edit/DeleteVirkemiddelModal'
-import { LovView } from '../Lov'
+import {LovView} from '../Lov'
+import {DocPencilIcon, TrashIcon} from "@navikt/aksel-icons";
 
 type VirkmiddelTableProps = {
   virkemidler: Virkemiddel[]
@@ -75,28 +72,22 @@ export const VirkemiddelTable = ({ virkemidler, loading, refetchData }: Virkmidd
                 <Block display="flex" justifyContent="flex-end" width="100%">
                   <Button
                     tooltip={'Rediger'}
-                    size={ButtonSize.compact}
-                    kind={KIND.tertiary}
+                    variant={'tertiary'}
                     onClick={() => {
                       setSelectedVirkemiddel(virkemiddel)
                       setIsEditModalOpen(true)
                     }}
-                    label={'Rediger'}
-                  >
-                    <FontAwesomeIcon icon={faEdit} />
-                  </Button>
+                    icon={<DocPencilIcon title={'Rediger'}/>}
+                  />
                   <Button
                     tooltip={'Slett'}
-                    size={ButtonSize.compact}
-                    kind={KIND.tertiary}
+                    variant={"tertiary"}
                     onClick={() => {
                       setSelectedVirkemiddel(virkemiddel)
                       setIsDeleteModalOpen(true)
                     }}
-                    label={'Slett'}
-                  >
-                    <FontAwesomeIcon icon={faTrash} />
-                  </Button>
+                    icon={<TrashIcon title={"Slett"}/>}
+                  />
                 </Block>
               </Cell>
             </Row>

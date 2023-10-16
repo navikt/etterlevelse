@@ -22,16 +22,7 @@ export const SecondaryHeader = ({ etterlevelseDokumentasjon, temaData, lovListe 
       <div className="pt-4 pb-10">
         <Block display="flex" justifyContent="flex-end" width="100%">
           <Button
-            size="compact"
-            $style={{
-              fontSize: '18px',
-              fontWeight: 600,
-              lineHeight: '22px',
-              color: ettlevColors.green600,
-              textUnderlineOffset: '2px',
-              ':hover': { backgroundColor: 'transparent', textDecoration: 'underline 3px' },
-            }}
-            kind={'tertiary'}
+            variant={'tertiary'}
             onClick={() => setIsTemaModalOpen(true)}
             marginLeft
           >

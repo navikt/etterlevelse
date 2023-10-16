@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { KravStatus, Suksesskriterie } from '../../../constants'
 import { FormControl } from 'baseui/form-control'
 import { Block } from 'baseui/block'
-import Button, { buttonBorderStyle } from '../../common/Button'
+import Button from '../../common/Button'
 import * as _ from 'lodash'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
 import { faGripVertical, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons'
@@ -21,6 +21,7 @@ import { Error } from '../../common/ModalSchema'
 import { borderColor } from '../../common/Style'
 import { ALIGN, Radio, RadioGroup } from 'baseui/radio'
 import { LabelSmall } from 'baseui/typography'
+import { PlusIcon, TrashIcon } from '@navikt/aksel-icons'
 
 type KravSuksesskriterieEditProps = {
   setIsFormDirty?: (v: boolean) => void
@@ -110,12 +111,9 @@ const KriterieList = ({ p, setIsFormDirty, newVersion }: { p: FieldArrayRenderPr
         <Block alignSelf={'flex-end'} marginTop={theme.sizing.scale600} marginBottom={theme.sizing.scale600}>
           <Button
             type="button"
-            icon={faPlus}
+            icon={<PlusIcon/>}
             marginLeft
-            label={'Suksesskriterie'}
-            $style={buttonBorderStyle}
-            kind="secondary"
-            size="compact"
+            variant="secondary"
             disabled={suksesskriterier.length >= 15}
             onClick={() => p.push({ id: nextId(suksesskriterier), navn: '', beskrivelse: '', behovForBegrunnelse: 'true' })}
           >
@@ -171,7 +169,7 @@ const Kriterie = ({
       <Block position={'relative'} paddingTop={theme.sizing.scale100}>
         <Block display={'flex'} alignItems={'flex-start'} position={'absolute'} right={0} top={0}>
           {(p.form.values.status !== KravStatus.AKTIV || newVersion) && (
-            <Button type={'button'} size={'compact'} kind={'tertiary'} $style={buttonBorderStyle} icon={faTrash} onClick={remove} tooltip={'Fjern suksesskriterie'} />
+            <Button type={'button'} variant={'tertiary'} icon={<TrashIcon/>} onClick={remove} tooltip={'Fjern suksesskriterie'} />
           )}
           <Block width={theme.sizing.scale1000} />
           <Block {...dragHandleProps}>
