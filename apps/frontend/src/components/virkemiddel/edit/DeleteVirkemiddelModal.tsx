@@ -53,9 +53,7 @@ const DeleteVirkemiddeltModal = ({ isOpen, setIsOpen, virkemiddel, refetchData }
           >
             <strong>Avbryt</strong>
           </Button>
-          <Button
-            onClick={() => submit(virkemiddel?.id)}
-          >
+          <Button onClick={() => submit(virkemiddel?.id)}>
             <strong>Slett</strong>
           </Button>
         </Block>

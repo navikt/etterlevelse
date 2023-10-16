@@ -35,7 +35,7 @@ const LabelWithToolTip = (props: { label?: string; tooltip?: React.ReactNode; fo
             },
           }}
         >
-          <button type="button" style={{ border: 'none', background: 'none'}}>
+          <button type="button" style={{ border: 'none', background: 'none' }}>
             <img
               src={questionmarkIcon}
               alt={`Hjelpetekst for ${props.label}`}

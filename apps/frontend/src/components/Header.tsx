@@ -27,7 +27,7 @@ export const LoginButton = () => {
   // updates window.location on navigation
   const location = useLocation()
   return (
-    <Link  className="bg-white" underline={false} href={loginUrl(location, location.pathname)}>
+    <Link className="bg-white" underline={false} href={loginUrl(location, location.pathname)}>
       <InternalHeader.Button as={Link} variant="secondary">
         <strong>Logg inn</strong>
       </InternalHeader.Button>
@@ -44,13 +44,8 @@ const LoggedInHeader = () => {
         Endre aktive roller
       </Button>
       <div className={`mt-2 ${viewRoller ? 'block' : 'hidden'}`}>
-
         {user.getAvailableGroups().map((g) => (
-          <Checkbox
-            key={g.group}
-            checked={user.hasGroup(g.group)}
-            onChange={(e) => user.toggleGroup(g.group, (e.target as HTMLInputElement).checked)}
-          >
+          <Checkbox key={g.group} checked={user.hasGroup(g.group)} onChange={(e) => user.toggleGroup(g.group, (e.target as HTMLInputElement).checked)}>
             {g.name}
           </Checkbox>
         ))}
@@ -59,25 +54,21 @@ const LoggedInHeader = () => {
   )
 
   const kravPages = user.isKraveier()
-    ? [
-      { label: 'Kraveier meny' },
-      { label: 'Forvalte og opprette krav', href: '/kravliste' },
-      { label: 'Forvalte og opprette virkemiddel', href: '/virkemiddelliste' },
-    ]
+    ? [{ label: 'Kraveier meny' }, { label: 'Forvalte og opprette krav', href: '/kravliste' }, { label: 'Forvalte og opprette virkemiddel', href: '/virkemiddelliste' }]
     : []
   const adminPages = user.isAdmin()
     ? [
-      { label: 'Admin meny' },
-      { label: 'Administrere krav', href: '/admin/krav' },
-      { label: 'Administrere dokumentasjon', href: '/admin/dokumentasjon' },
-      { label: 'Administrere etterlevelse', href: '/admin/etterlevelse' },
-      { label: 'Administrere arkivering', href: '/admin/arkiv' },
-      { label: intl.audit, href: '/admin/audit' },
-      { label: 'Kodeverk', href: '/admin/codelist' },
-      { label: intl.questionAndAnswers, href: '/admin/messageslog' },
-      { label: intl.notifications, href: '/admin/varsel' },
-      // { label: intl.settings, href: '/admin/settings', disabled: true },
-    ]
+        { label: 'Admin meny' },
+        { label: 'Administrere krav', href: '/admin/krav' },
+        { label: 'Administrere dokumentasjon', href: '/admin/dokumentasjon' },
+        { label: 'Administrere etterlevelse', href: '/admin/etterlevelse' },
+        { label: 'Administrere arkivering', href: '/admin/arkiv' },
+        { label: intl.audit, href: '/admin/audit' },
+        { label: 'Kodeverk', href: '/admin/codelist' },
+        { label: intl.questionAndAnswers, href: '/admin/messageslog' },
+        { label: intl.notifications, href: '/admin/varsel' },
+        // { label: intl.settings, href: '/admin/settings', disabled: true },
+      ]
     : []
 
   return (
@@ -107,12 +98,10 @@ const UserInfo = () => {
   const frontpage = window.location.href.substr(0, window.location.href.length - location.pathname.length)
   const path = location.pathname
   return (
-    <div className="flex mb-4" >
+    <div className="flex mb-4">
       <Portrait ident={user.getIdent()} size={'48px'} />
       <div className="flex flex-col ml-6">
-        <Label>
-          {user.getName()}
-        </Label>
+        <Label>{user.getName()}</Label>
         <Label size="small">{user.isAdmin() ? 'Admin' : user.isKraveier() ? 'Kraveier' : user.canWrite() ? 'Etterlever' : 'Gjest'}</Label>
       </div>
       <div className="flex self-end ml-6">
@@ -124,22 +113,18 @@ const UserInfo = () => {
 
 type MenuItem = { label: React.ReactNode; href?: string; disabled?: boolean; icon?: React.ReactNode }
 
-const Menu = (props: { pages: MenuItem[][]; title: React.ReactNode; icon?: React.ReactNode; kind?: 'secondary' | 'tertiary'; }) => {
+const Menu = (props: { pages: MenuItem[][]; title: React.ReactNode; icon?: React.ReactNode; kind?: 'secondary' | 'tertiary' }) => {
   const pathname = window.location.pathname
 
   const allPages = props.pages.length
     ? props.pages
-      .filter((p) => p.length)
-      .reduce((previousValue, currentValue) => [...((previousValue as MenuItem[]) || []), { label: <Dropdown.Menu.Divider /> }, ...(currentValue as MenuItem[])])
+        .filter((p) => p.length)
+        .reduce((previousValue, currentValue) => [...((previousValue as MenuItem[]) || []), { label: <Dropdown.Menu.Divider /> }, ...(currentValue as MenuItem[])])
     : []
 
   return (
     <Dropdown>
-      <Button
-        as={Dropdown.Toggle}
-        variant={props.kind || 'secondary'}
-        icon={props.icon}
-      >
+      <Button as={Dropdown.Toggle} variant={props.kind || 'secondary'} icon={props.icon}>
         {props.title}
       </Button>
       <Dropdown.Menu className="min-w-max h-auto">
@@ -147,7 +132,8 @@ const Menu = (props: { pages: MenuItem[][]; title: React.ReactNode; icon?: React
           {allPages.map((p, i) => {
             const item =
               !!p.href && !p.disabled ? (
-                <Dropdown.Menu.List.Item as={Link}
+                <Dropdown.Menu.List.Item
+                  as={Link}
                   href={p.href}
                   onClick={() => {
                     ampli.logEvent('navigere', { kilde: 'header', app: 'etterlevelse', til: p.href, fra: pathname })
@@ -155,11 +141,7 @@ const Menu = (props: { pages: MenuItem[][]; title: React.ReactNode; icon?: React
                   underline={false}
                 >
                   <div className="flex items-center">
-                    {p.icon && (
-                      <div className="mr-2">
-                        {p.icon}
-                      </div>
-                    )}
+                    {p.icon && <div className="mr-2">{p.icon}</div>}
                     {p.label}
                   </div>
                 </Dropdown.Menu.List.Item>
@@ -191,7 +173,7 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
   }
 
   React.useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       await getMeldingByType(MeldingType.SYSTEM).then((r) => {
         if (r.numberOfElements > 0) {
           setSystemVarsel(r.content[0])
@@ -222,12 +204,8 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
             <Spacer />
             {!props.noLoginButton && (
               <div className="flex">
-                {!user.isLoggedIn() && (
-                  <LoginButton />
-                )}
-                {user.isLoggedIn() && (
-                  <LoggedInHeader />
-                )}
+                {!user.isLoggedIn() && <LoginButton />}
+                {user.isLoggedIn() && <LoggedInHeader />}
               </div>
             )}
           </InternalHeader>
@@ -235,7 +213,9 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
       </div>
       {systemVarsel && systemVarsel.meldingStatus === MeldingStatus.ACTIVE && (
         <div
-          className={`flex flex-col items-center py-2 border-b border-t ${systemVarsel.alertType === 'INFO' ? 'bg-surface-info-subtle border-surface-info' : 'bg-surface-warning-subtle border-surface-warning'}`}
+          className={`flex flex-col items-center py-2 border-b border-t ${
+            systemVarsel.alertType === 'INFO' ? 'bg-surface-info-subtle border-surface-info' : 'bg-surface-warning-subtle border-surface-warning'
+          }`}
           aria-label="Systemvarsel"
           role="complementary"
         >

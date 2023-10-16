@@ -1,6 +1,6 @@
-@import "tailwindcss/base";
-@import "@navikt/ds-css";
-@import "tailwindcss/components";
-@import "tailwindcss/utilities";
-@import "react-json-view-lite/dist/index.css";
-@import "json-diff-kit/dist/viewer.css";
+@import 'tailwindcss/base';
+@import '@navikt/ds-css';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+@import 'react-json-view-lite/dist/index.css';
+@import 'json-diff-kit/dist/viewer.css';

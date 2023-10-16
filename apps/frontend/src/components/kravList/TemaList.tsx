@@ -126,7 +126,7 @@ const KravTemaList = (props: { activeKraver: Krav[]; tema: string; refresh: Func
               paddingRight: '16px',
             }}
           >
-            <Button variant="secondary"  onClick={() => setIsEditPriorityModalOpen(true)}>
+            <Button variant="secondary" onClick={() => setIsEditPriorityModalOpen(true)}>
               Justere rekkefølgen på krav
             </Button>
           </Block>

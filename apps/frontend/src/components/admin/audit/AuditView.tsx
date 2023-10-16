@@ -1,22 +1,22 @@
 import moment from 'moment'
-import {Block} from 'baseui/block'
-import {JsonView} from 'react-json-view-lite'
-import React, {useEffect, useState} from 'react'
-import {LabelLarge} from 'baseui/typography'
-import {AuditActionIcon, AuditLabel as Label} from './AuditComponents'
-import {Card} from 'baseui/card'
-import {PLACEMENT, StatefulTooltip} from 'baseui/tooltip'
-import {StatefulPopover} from 'baseui/popover'
-import {Differ, Viewer} from 'json-diff-kit'
-import {Spinner} from 'baseui/spinner'
-import {useRefs} from '../../../util/hooks'
-import {theme} from '../../../util'
-import {intl} from '../../../util/intl/intl'
-import {AuditAction, AuditLog} from './AuditTypes'
-import {ObjectLink} from '../../common/RouteLink'
+import { Block } from 'baseui/block'
+import { JsonView } from 'react-json-view-lite'
+import React, { useEffect, useState } from 'react'
+import { LabelLarge } from 'baseui/typography'
+import { AuditActionIcon, AuditLabel as Label } from './AuditComponents'
+import { Card } from 'baseui/card'
+import { PLACEMENT, StatefulTooltip } from 'baseui/tooltip'
+import { StatefulPopover } from 'baseui/popover'
+import { Differ, Viewer } from 'json-diff-kit'
+import { Spinner } from 'baseui/spinner'
+import { useRefs } from '../../../util/hooks'
+import { theme } from '../../../util'
+import { intl } from '../../../util/intl/intl'
+import { AuditAction, AuditLog } from './AuditTypes'
+import { ObjectLink } from '../../common/RouteLink'
 import Button from '../../common/Button'
-import {ettlevColors} from '../../../util/theme'
-import {ArrowRightLeftIcon, GlassesIcon, XMarkIcon} from '@navikt/aksel-icons'
+import { ettlevColors } from '../../../util/theme'
+import { ArrowRightLeftIcon, GlassesIcon, XMarkIcon } from '@navikt/aksel-icons'
 
 type AuditViewProps = {
   auditLog?: AuditLog
@@ -60,14 +60,14 @@ export const AuditView = (props: AuditViewProps) => {
                 <StatefulTooltip content={() => intl.view} placement={PLACEMENT.top}>
                   <Block>
                     <ObjectLink id={newestAudit!.tableId} type={newestAudit!.table} audit={newestAudit}>
-                      <Button variant="tertiary" icon={<GlassesIcon title="Se forskjell"/>} />
+                      <Button variant="tertiary" icon={<GlassesIcon title="Se forskjell" />} />
                     </ObjectLink>
                   </Block>
                 </StatefulTooltip>
               )}
               <StatefulTooltip content={() => intl.close} placement={PLACEMENT.top}>
                 <Block>
-                  <Button variant="tertiary" onClick={() => viewId('')} icon={<XMarkIcon title="Lukk"/>} />
+                  <Button variant="tertiary" onClick={() => viewId('')} icon={<XMarkIcon title="Lukk" />} />
                 </Block>
               </StatefulTooltip>
             </Block>
@@ -95,7 +95,7 @@ export const AuditView = (props: AuditViewProps) => {
                         content={() => (
                           <Card>
                             <Viewer
-                              diff={new Differ().diff(auditLog && auditLog.audits[index + 1] ? auditLog.audits[index + 1].data : {},  audit.data)}
+                              diff={new Differ().diff(auditLog && auditLog.audits[index + 1] ? auditLog.audits[index + 1].data : {}, audit.data)}
                               highlightInlineDiff={true}
                               lineNumbers={true}
                               indent={4}
@@ -113,7 +113,7 @@ export const AuditView = (props: AuditViewProps) => {
                         }}
                       >
                         <div>
-                          <Button  variant="tertiary" icon={<ArrowRightLeftIcon title="Sammenling"/>} />
+                          <Button variant="tertiary" icon={<ArrowRightLeftIcon title="Sammenling" />} />
                         </div>
                       </StatefulPopover>
                     </Block>
@@ -121,7 +121,7 @@ export const AuditView = (props: AuditViewProps) => {
                   <JsonView
                     data={audit.data}
                     shouldExpandNode={() => {
-                      if(openAll) {
+                      if (openAll) {
                         return true
                       } else {
                         return index === 0 ? true : false

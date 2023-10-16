@@ -82,7 +82,7 @@ export const useArkiveringByEtterlevelseDokumentasjonId = (etterlevelseDokumenta
         .then((resp) => setData(arkiveringMapToFormVal(resp.content[0])))
         .catch((e) => {
           setData(arkiveringMapToFormVal({ id: '' }))
-          console.log('couldn\'t find arkivering with etterlevelse dokumentasjon id = ', e)
+          console.log("couldn't find arkivering with etterlevelse dokumentasjon id = ", e)
         })
   }, [etterlevelseDokumentasjonId])
 

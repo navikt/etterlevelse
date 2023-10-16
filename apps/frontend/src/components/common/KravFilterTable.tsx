@@ -1,13 +1,13 @@
-import {KravFilters, useKravFilter} from '../../api/KravGraphQLApi'
-import {Spinner} from './Spinner'
-import {Cell, Table} from './Table'
-import {Code, codelistCompareField, codelistsCompareField} from '../../services/Codelist'
+import { KravFilters, useKravFilter } from '../../api/KravGraphQLApi'
+import { Spinner } from './Spinner'
+import { Cell, Table } from './Table'
+import { Code, codelistCompareField, codelistsCompareField } from '../../services/Codelist'
 import RouteLink from './RouteLink'
-import {kravNumView, kravStatus} from '../../pages/KravPage'
+import { kravNumView, kravStatus } from '../../pages/KravPage'
 import React from 'react'
-import {KravQL, PageResponse} from '../../constants'
-import {QueryResult} from '@apollo/client'
-import {Notification} from 'baseui/notification'
+import { KravQL, PageResponse } from '../../constants'
+import { QueryResult } from '@apollo/client'
+import { Notification } from 'baseui/notification'
 
 type KravFilterTableProps = {
   emptyText?: string
@@ -30,7 +30,7 @@ export const KravTable = (props: KravTableProps) => {
   const { variables, data, loading, error } = props.queryResult
 
   return loading && !data?.krav?.numberOfElements ? (
-    <Spinner size={"large"} />
+    <Spinner size={'large'} />
   ) : error ? (
     <Notification kind={'negative'}>{JSON.stringify(error, null, 2)}</Notification>
   ) : (

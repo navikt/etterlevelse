@@ -6,9 +6,7 @@ const ErrorModal = (props: { isOpen: boolean; submit: Function; errorMessage: st
       <ModalHeader>Feilmelding</ModalHeader>
       <ModalBody>{props.errorMessage}</ModalBody>
       <ModalFooter>
-        <ModalButton
-          onClick={() => props.submit(false)}
-        >
+        <ModalButton onClick={() => props.submit(false)}>
           <strong>Lukk</strong>
         </ModalButton>
       </ModalFooter>

@@ -583,7 +583,7 @@ export const EditKrav = ({ krav, close, formRef, isOpen, setIsOpen, newVersion, 
                       </BaseModal>
                     </Block>
                     <Block display="flex" justifyContent="flex-end" width="100%">
-                      <Button  variant={'secondary'} type={'button'} onClick={close} marginLeft>
+                      <Button variant={'secondary'} type={'button'} onClick={close} marginLeft>
                         Avbryt
                       </Button>
 

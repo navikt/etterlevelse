@@ -1,21 +1,21 @@
-import {useEffect, useState} from 'react'
-import {codelist, ListName} from '../../services/Codelist'
-import {VirkemiddelListFilter} from '../../constants'
-import {Block, Responsive, Scale} from 'baseui/block'
-import {Option} from 'baseui/select'
+import { useEffect, useState } from 'react'
+import { codelist, ListName } from '../../services/Codelist'
+import { VirkemiddelListFilter } from '../../constants'
+import { Block, Responsive, Scale } from 'baseui/block'
+import { Option } from 'baseui/select'
 import CustomizedSelect from '../common/CustomizedSelect'
-import {ettlevColors} from '../../util/theme'
-import {Spinner} from '../common/Spinner'
-import {HeadingXLarge, LabelSmall, ParagraphMedium} from 'baseui/typography'
-import {borderColor, borderWidth} from '../common/Style'
-import {useVirkemiddelFilter} from '../../api/VirkemiddelApi'
-import {useDebouncedState} from '../../util/hooks'
-import {StatefulInput} from 'baseui/input'
+import { ettlevColors } from '../../util/theme'
+import { Spinner } from '../common/Spinner'
+import { HeadingXLarge, LabelSmall, ParagraphMedium } from 'baseui/typography'
+import { borderColor, borderWidth } from '../common/Style'
+import { useVirkemiddelFilter } from '../../api/VirkemiddelApi'
+import { useDebouncedState } from '../../util/hooks'
+import { StatefulInput } from 'baseui/input'
 import Button from '../common/Button'
-import {searchIcon} from '../Images'
-import {VirkemiddelTable} from './VirkemiddelTable'
-import {EditVirkemiddelModal} from '../virkemiddel/edit/EditVirkemiddelModal'
-import {XMarkIcon} from "@navikt/aksel-icons";
+import { searchIcon } from '../Images'
+import { VirkemiddelTable } from './VirkemiddelTable'
+import { EditVirkemiddelModal } from '../virkemiddel/edit/EditVirkemiddelModal'
+import { XMarkIcon } from '@navikt/aksel-icons'
 
 type VirkemiddelFilter = {
   virkemiddelType: Option[]
@@ -101,7 +101,7 @@ export const AllVirkemiddel = ({ isCreateModalOpen, setIsCreateModalOpen }: AllV
             {totalDataLength} Virkemiddel
           </HeadingXLarge>
         </Block>
-        <Block display='flex' justifyContent="center" alignContent="center" width="100%">
+        <Block display="flex" justifyContent="center" alignContent="center" width="100%">
           <Block display="flex" justifyContent="flex-start" width="100%" onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
             <StatefulInput
               size="compact"
@@ -130,14 +130,7 @@ export const AllVirkemiddel = ({ isCreateModalOpen, setIsCreateModalOpen }: AllV
                   props: {
                     overrides: {
                       Svg: {
-                        component: (props: any) => (
-                          <Button
-                            notBold
-                            variant="tertiary"
-                            onClick={() => props.onClick()}
-                            icon={<XMarkIcon title={'Tøm'}/> }
-                          />
-                        ),
+                        component: (props: any) => <Button notBold variant="tertiary" onClick={() => props.onClick()} icon={<XMarkIcon title={'Tøm'} />} />,
                       },
                     },
                   },

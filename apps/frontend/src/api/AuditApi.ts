@@ -1,8 +1,8 @@
 import axios from 'axios'
 import moment from 'moment'
-import {env} from '../util/env'
-import {AuditAction, AuditItem, AuditLog, ObjectType} from '../components/admin/audit/AuditTypes'
-import {PageResponse} from '../constants'
+import { env } from '../util/env'
+import { AuditAction, AuditItem, AuditLog, ObjectType } from '../components/admin/audit/AuditTypes'
+import { PageResponse } from '../constants'
 
 export const getAuditLog = async (id: string) => {
   const auditLog = (await axios.get<AuditLog>(`${env.backendBaseUrl}/audit/log/${id}`)).data

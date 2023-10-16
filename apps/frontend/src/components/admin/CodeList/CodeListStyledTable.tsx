@@ -27,7 +27,7 @@ const CodeListTable = ({ tableData, refresh }: TableCodelistProps) => {
 
   useEffect(() => {
     if (showUsage && selectedCode) {
-      ; (async () => {
+      ;(async () => {
         setUsage(undefined)
         const usage = await getCodelistUsage(selectedCode.list, selectedCode.code)
         setUsage(usage)
@@ -97,12 +97,12 @@ const CodeListTable = ({ tableData, refresh }: TableCodelistProps) => {
                       setSelectedCode(row)
                       setShowUsage(true)
                     }}
-                    icon={< GlassesIcon title="Vis bruk" />}
+                    icon={<GlassesIcon title="Vis bruk" />}
                   />
                   <AuditButton id={`${row.list}-${row.code}`} kind={'tertiary'} />
                   <Button
                     tooltip={'Rediger'}
-                    variant={"tertiary"}
+                    variant={'tertiary'}
                     onClick={() => {
                       setSelectedCode(row)
                       setShowEditModal(true)
@@ -111,7 +111,7 @@ const CodeListTable = ({ tableData, refresh }: TableCodelistProps) => {
                   />
                   <Button
                     tooltip={'Slett'}
-                    variant={"tertiary"}
+                    variant={'tertiary'}
                     onClick={() => {
                       setSelectedCode(row)
                       setShowDeleteModal(true)

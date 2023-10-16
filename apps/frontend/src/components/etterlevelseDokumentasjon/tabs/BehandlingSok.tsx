@@ -1,19 +1,19 @@
-import {useEffect, useState} from 'react'
-import {useSearchParams} from 'react-router-dom'
-import {Behandling, emptyPage, EtterlevelseDokumentasjonQL, PageResponse} from '../../../constants'
-import {EtterlevelseDokumentasjonerPanels, tabMarginBottom, Variables} from '../../../pages/MyEtterlevelseDokumentasjonerPage'
-import {gql, useQuery} from '@apollo/client'
-import {Block} from 'baseui/block'
-import {LabelLarge, LabelSmall} from 'baseui/typography'
-import {theme} from '../../../util'
-import {Spinner} from '../../common/Spinner'
+import { useEffect, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
+import { Behandling, emptyPage, EtterlevelseDokumentasjonQL, PageResponse } from '../../../constants'
+import { EtterlevelseDokumentasjonerPanels, tabMarginBottom, Variables } from '../../../pages/MyEtterlevelseDokumentasjonerPage'
+import { gql, useQuery } from '@apollo/client'
+import { Block } from 'baseui/block'
+import { LabelLarge, LabelSmall } from 'baseui/typography'
+import { theme } from '../../../util'
+import { Spinner } from '../../common/Spinner'
 import Button from '../../common/Button'
-import {getBehandling, useSearchBehandling} from '../../../api/BehandlingApi'
+import { getBehandling, useSearchBehandling } from '../../../api/BehandlingApi'
 import CustomizedSelect from '../../common/CustomizedSelect'
-import {intl} from '../../../util/intl/intl'
-import {TYPE} from 'baseui/select'
-import {updateBehandlingNameWithNumber} from '../common/utils'
-import {PlusIcon} from '@navikt/aksel-icons'
+import { intl } from '../../../util/intl/intl'
+import { TYPE } from 'baseui/select'
+import { updateBehandlingNameWithNumber } from '../common/utils'
+import { PlusIcon } from '@navikt/aksel-icons'
 
 export const BehandlingSok = () => {
   const pageSize = 20
@@ -99,7 +99,7 @@ export const BehandlingSok = () => {
       {loading && (
         <Block>
           <Block marginLeft={theme.sizing.scale400} marginTop={theme.sizing.scale400}>
-            <Spinner size={"large"} />
+            <Spinner size={'large'} />
           </Block>
         </Block>
       )}
@@ -115,7 +115,7 @@ export const BehandlingSok = () => {
           <Block display="flex" alignItems="center">
             <Button
               onClick={lastMer}
-              icon={<PlusIcon/>}
+              icon={<PlusIcon />}
               variant={'secondary'}
               disabled={gqlLoading || etterlevelseDokumentasjoner.numberOfElements >= etterlevelseDokumentasjoner.totalElements}
             >
@@ -124,7 +124,7 @@ export const BehandlingSok = () => {
 
             {gqlLoading && (
               <Block marginLeft={theme.sizing.scale400}>
-                <Spinner size={"large"} />
+                <Spinner size={'large'} />
               </Block>
             )}
           </Block>

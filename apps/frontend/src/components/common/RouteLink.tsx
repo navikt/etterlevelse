@@ -99,7 +99,7 @@ export const urlForObject = (type: NavigableItem | string, id: string, audit?: A
     case ObjectType.Melding:
       return '/admin/varsel'
   }
-  console.warn('couldn\'t find object type' + type)
+  console.warn("couldn't find object type" + type)
   return ''
 }
 
@@ -109,12 +109,7 @@ export const ObjectLink = (props: ObjectLinkProps) => {
 
   if (props.disable) {
     link = props.children
-  } else
-    link = (
-      <ExternalLink href={urlForObject(props.type, props.id, props.audit)}>
-        {props.children}
-      </ExternalLink>
-    )
+  } else link = <ExternalLink href={urlForObject(props.type, props.id, props.audit)}>{props.children}</ExternalLink>
 
   return props.withHistory ? (
     <Block color={props.fontColor ? props.fontColor : ettlevColors.green800} display="flex" justifyContent="space-between" width="100%" alignItems="center">
@@ -140,13 +135,7 @@ export const ExternalLink = ({
   openOnSamePage?: boolean
 }) => {
   return (
-    <Link
-      className={className}
-      href={href}
-      target={openOnSamePage ? '_self' : '_blank'}
-      rel="noopener noreferrer"
-      aria-label={label}
-    >
+    <Link className={className} href={href} target={openOnSamePage ? '_self' : '_blank'} rel="noopener noreferrer" aria-label={label}>
       {children} {!openOnSamePage && ' (åpnes i ny fane)'}
     </Link>
   )

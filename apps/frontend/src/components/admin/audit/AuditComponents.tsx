@@ -16,7 +16,7 @@ const labelBlockProps: BlockProps = {
 
 export const AuditLabel = (props: { label: string; children: any }) => {
   return (
-    <Block display='flex'>
+    <Block display="flex">
       <Block {...labelBlockProps}>
         <LabelMedium>{props.label}</LabelMedium>
       </Block>

@@ -58,7 +58,7 @@ export const EtterlevelseDokumentasjonTemaPage = () => {
   const [allKravPriority, setAllKravPriority] = useState<KravPrioritering[]>([])
   const location = useLocation()
   const [temaPageUrl] = useState<string>(location.pathname)
-  
+
   const { data: relevanteKraverGraphQLResponse, loading: relevanteKraverGraphQLLoading } = useQuery<{ krav: PageResponse<KravQL> }>(etterlevelseDokumentasjonKravQuery, {
     variables,
     skip: !params.id || !lover.length,

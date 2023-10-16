@@ -1,20 +1,20 @@
-import {Block} from 'baseui/block'
-import {FormControl} from 'baseui/form-control'
-import {ParagraphMedium} from 'baseui/typography'
-import {FieldArray, FieldArrayRenderProps} from 'formik'
+import { Block } from 'baseui/block'
+import { FormControl } from 'baseui/form-control'
+import { ParagraphMedium } from 'baseui/typography'
+import { FieldArray, FieldArrayRenderProps } from 'formik'
 import React from 'react'
-import {EtterlevelseStatus, Suksesskriterie, SuksesskriterieBegrunnelse, SuksesskriterieStatus} from '../../../constants'
-import {useDebouncedState} from '../../../util/hooks'
-import {ettlevColors, theme} from '../../../util/theme'
-import {FieldWrapper} from '../../common/Inputs'
+import { EtterlevelseStatus, Suksesskriterie, SuksesskriterieBegrunnelse, SuksesskriterieStatus } from '../../../constants'
+import { useDebouncedState } from '../../../util/hooks'
+import { ettlevColors, theme } from '../../../util/theme'
+import { FieldWrapper } from '../../common/Inputs'
 import TextEditor from '../../common/TextEditor/TextEditor'
-import {Error} from '../../common/ModalSchema'
+import { Error } from '../../common/ModalSchema'
 import LabelWithToolTip from '../../common/LabelWithTooltip'
-import {borderColor, borderRadius, borderStyle, borderWidth} from '../../common/Style'
-import {LabelAboveContent} from '../../common/PropertyLabel'
-import {Markdown} from '../../common/Markdown'
-import {ALIGN, Radio, RadioGroup, RadioGroupOverrides, RadioOverrides} from 'baseui/radio'
-import {Heading, ReadMore} from '@navikt/ds-react'
+import { borderColor, borderRadius, borderStyle, borderWidth } from '../../common/Style'
+import { LabelAboveContent } from '../../common/PropertyLabel'
+import { Markdown } from '../../common/Markdown'
+import { ALIGN, Radio, RadioGroup, RadioGroupOverrides, RadioOverrides } from 'baseui/radio'
+import { Heading, ReadMore } from '@navikt/ds-react'
 
 const radioButtonOverrides: RadioOverrides & RadioGroupOverrides = {
   Root: {
@@ -67,15 +67,7 @@ export const getSuksesskriterieBegrunnelse = (suksesskriterieBegrunnelser: Sukse
   }
 }
 
-export const SuksesskriterierBegrunnelseEdit = ({
-  suksesskriterie,
-  disableEdit,
-  viewMode,
-}: {
-  suksesskriterie: Suksesskriterie[]
-  disableEdit: boolean
-  viewMode: boolean
-}) => {
+export const SuksesskriterierBegrunnelseEdit = ({ suksesskriterie, disableEdit, viewMode }: { suksesskriterie: Suksesskriterie[]; disableEdit: boolean; viewMode: boolean }) => {
   return (
     <FieldWrapper>
       <FieldArray name={'suksesskriterieBegrunnelser'}>
@@ -249,9 +241,7 @@ const KriterieBegrunnelse = ({
         <ReadMore header="Utfyllende om kriteriet">
           <Markdown source={suksesskriterie.beskrivelse} />
         </ReadMore>
-
       </div>
-
 
       <Block width="100%" height="1px" backgroundColor={ettlevColors.grey100} marginTop="24px" marginBottom="24px" />
 
@@ -287,7 +277,7 @@ const KriterieBegrunnelse = ({
       {(!disableEdit || !viewMode) && suksesskriterie.behovForBegrunnelse && (
         <Block marginTop={theme.sizing.scale1000}>
           <FormControl label={<LabelWithToolTip label={getLabelForSuksessKriterie()} />}>
-            <TextEditor initialValue={begrunnelse} setValue={setBegrunnelse} height={'188px'} errors={props.form.errors} simple width="100%"/>
+            <TextEditor initialValue={begrunnelse} setValue={setBegrunnelse} height={'188px'} errors={props.form.errors} simple width="100%" />
           </FormControl>
           <Error fieldName={`suksesskriterieBegrunnelser[${index}].begrunnelse`} fullWidth={true} />
         </Block>

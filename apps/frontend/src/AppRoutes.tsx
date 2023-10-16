@@ -1,38 +1,38 @@
-import {Route, Routes, useNavigate, useParams} from 'react-router-dom'
-import {MainPage} from './pages/MainPage'
+import { Route, Routes, useNavigate, useParams } from 'react-router-dom'
+import { MainPage } from './pages/MainPage'
 import NotFound from './pages/NotFound'
 import CodeListPage from './components/admin/CodeList/CodelistPage'
-import {AuditPage} from './components/admin/audit/AuditPage'
-import {SettingsPage} from './components/admin/settings/SettingsPage'
-import {MailLogPage} from './components/admin/maillog/MailLogPage'
-import {KravListPage} from './pages/KravListPage'
-import {KravPage} from './pages/KravPage'
-import {EtterlevelseListPage} from './pages/EtterlevelseListPage'
-import {EtterlevelsePage} from './pages/EtterlevelsePage'
-import {RelevansPage} from './pages/RelevansPage'
-import {UnderavdelingPage} from './pages/UnderavdelingPage'
-import {TemaPage} from './pages/TemaPage'
-import {LovPage} from './pages/LovPage'
+import { AuditPage } from './components/admin/audit/AuditPage'
+import { SettingsPage } from './components/admin/settings/SettingsPage'
+import { MailLogPage } from './components/admin/maillog/MailLogPage'
+import { KravListPage } from './pages/KravListPage'
+import { KravPage } from './pages/KravPage'
+import { EtterlevelseListPage } from './pages/EtterlevelseListPage'
+import { EtterlevelsePage } from './pages/EtterlevelsePage'
+import { RelevansPage } from './pages/RelevansPage'
+import { UnderavdelingPage } from './pages/UnderavdelingPage'
+import { TemaPage } from './pages/TemaPage'
+import { LovPage } from './pages/LovPage'
 import ScrollToTop from './util/ScrollToTop'
-import {StatusPage} from './pages/StatusPage'
-import {KravTablePage} from './pages/KravTablePage'
-import {FAQ} from './pages/FAQ'
+import { StatusPage } from './pages/StatusPage'
+import { KravTablePage } from './pages/KravTablePage'
+import { FAQ } from './pages/FAQ'
 import QuestionAndAnswerLogPage from './pages/QuestionAndAnswerLogPage'
-import {VarselPage} from './pages/VarselPage'
+import { VarselPage } from './pages/VarselPage'
 import Forbidden from './pages/Forbidden'
 import EtterlevelseAdminPage from './pages/EtterlevelseAdminPage'
 import PrivateRoute from './util/PrivateRoute'
 import ArkivAdminPage from './pages/ArkivAdminPage'
-import {MyEtterlevelseDokumentasjonerPage} from './pages/MyEtterlevelseDokumentasjonerPage'
-import {DokumentasjonPage} from './pages/DokumentasjonPage'
-import {EtterlevelseDokumentasjonTemaPage} from './pages/EtterlevelseDokumentasjonTemaPage'
-import {EtterlevelseDokumentasjonPage} from './pages/EtterlevelseDokumentasjonPage'
-import {VirkemiddelListPage} from './pages/VirkemiddelListPage'
+import { MyEtterlevelseDokumentasjonerPage } from './pages/MyEtterlevelseDokumentasjonerPage'
+import { DokumentasjonPage } from './pages/DokumentasjonPage'
+import { EtterlevelseDokumentasjonTemaPage } from './pages/EtterlevelseDokumentasjonTemaPage'
+import { EtterlevelseDokumentasjonPage } from './pages/EtterlevelseDokumentasjonPage'
+import { VirkemiddelListPage } from './pages/VirkemiddelListPage'
 import EtterlevelseDokumentasjonAdminPage from './pages/EtterlevelseDokumentasjonAdminPage'
-import {useEffect} from 'react'
-import {searchEtterlevelsedokumentasjonByBehandlingId} from './api/EtterlevelseDokumentasjonApi'
-import {Spinner} from './components/common/Spinner'
-import {ampli} from './services/Amplitude'
+import { useEffect } from 'react'
+import { searchEtterlevelsedokumentasjonByBehandlingId } from './api/EtterlevelseDokumentasjonApi'
+import { Spinner } from './components/common/Spinner'
+import { ampli } from './services/Amplitude'
 
 const AppRoutes = (): JSX.Element => {
   useEffect(() => {
@@ -131,7 +131,7 @@ const RedirectToEtterlevelseDokumentasjonPage = () => {
   const { id, tema, filter, kravNummer, kravVersjon } = useParams()
   const navigate = useNavigate()
 
-  ampli.logEvent('besøk', {type: 'redirect til etterlevelse'})
+  ampli.logEvent('besøk', { type: 'redirect til etterlevelse' })
 
   if (id) {
     searchEtterlevelsedokumentasjonByBehandlingId(id).then((resp) => {
@@ -148,19 +148,18 @@ const RedirectToEtterlevelseDokumentasjonPage = () => {
           redirectUrl += '/krav/' + kravNummer + '/' + kravVersjon
         }
 
-        navigate(redirectUrl, {replace: true})
-      }
-      else {
-        navigate('/dokumentasjoner/behandlingsok?behandlingId=' + id, {replace: true})
+        navigate(redirectUrl, { replace: true })
+      } else {
+        navigate('/dokumentasjoner/behandlingsok?behandlingId=' + id, { replace: true })
       }
     })
   } else {
-      navigate('/dokumentasjoner', {replace: true})
+    navigate('/dokumentasjoner', { replace: true })
   }
 
   return (
     <div className="flex w-full justify-center">
-      <Spinner size={"large"} />
+      <Spinner size={'large'} />
     </div>
   )
 }

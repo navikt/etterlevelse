@@ -105,10 +105,7 @@ export const MailLogPage = () => {
           )}
           placement={PLACEMENT.bottom}
         >
-          <Button
-            kind={KIND.tertiary}
-            endEnhancer={TriangleDown}
-          >
+          <Button kind={KIND.tertiary} endEnhancer={TriangleDown}>
             <strong>{`${limit} ${intl.rows}`}</strong>
           </Button>
         </StatefulPopover>

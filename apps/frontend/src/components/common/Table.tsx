@@ -149,7 +149,7 @@ export const Table = <T, K extends keyof T>(props: TableProps<T, K>) => {
             placement={PLACEMENT.bottom}
           >
             <Block>
-              <Button variant={'tertiary'} iconPosition='right' icon={<ChevronDownIcon />}>{`${table.limit} ${intl.rows}`}</Button>
+              <Button variant={'tertiary'} iconPosition="right" icon={<ChevronDownIcon />}>{`${table.limit} ${intl.rows}`}</Button>
             </Block>
           </StatefulPopover>
           <Block>

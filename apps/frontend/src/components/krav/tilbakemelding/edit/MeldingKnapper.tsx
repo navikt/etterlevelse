@@ -28,10 +28,10 @@ export const MeldingKnapper = (props: {
   return (
     <>
       <Block marginLeft={props.marginLeft ? '42px' : undefined} width="50%">
-        <Button variant="tertiary" size={'xsmall'} icon={<PencilIcon/>} onClick={() => setEditModal(true)}>
+        <Button variant="tertiary" size={'xsmall'} icon={<PencilIcon />} onClick={() => setEditModal(true)}>
           Rediger
         </Button>
-        <Button variant="tertiary" size={'xsmall'} icon={<TrashIcon/>} marginLeft onClick={() => setDeleteModal(true)}>
+        <Button variant="tertiary" size={'xsmall'} icon={<TrashIcon />} marginLeft onClick={() => setDeleteModal(true)}>
           Slett
         </Button>
       </Block>

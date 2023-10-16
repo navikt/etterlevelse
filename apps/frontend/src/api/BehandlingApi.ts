@@ -25,7 +25,7 @@ export const useBehandling = (id?: string) => {
         .then(setData)
         .catch((e) => {
           setData(undefined)
-          console.log('couldn\'t find behandling', e)
+          console.log("couldn't find behandling", e)
         })
   }, [id])
 
@@ -35,17 +35,17 @@ export const useBehandling = (id?: string) => {
 export const behandlingName = (behandling?: Behandling) => {
   let behandlingName = ''
 
-  if(behandling) {
-    if(behandling.nummer) {
+  if (behandling) {
+    if (behandling.nummer) {
       behandlingName += 'B' + behandling.nummer + ' '
     }
-    if(behandling.overordnetFormaal && behandling.overordnetFormaal.shortName) {
+    if (behandling.overordnetFormaal && behandling.overordnetFormaal.shortName) {
       behandlingName += behandling.overordnetFormaal.shortName + ': '
     }
-    if(behandling.navn) {
+    if (behandling.navn) {
       behandlingName += behandling.navn
     }
-}
+  }
 
   return behandlingName
 }

@@ -28,15 +28,10 @@ const DeleteCodeListModal = ({ title, initialValues, isOpen, errorOnDelete, subm
       <ModalFooter>
         <Block display="flex" justifyContent="flex-end">
           <Block marginRight="auto">{errorOnDelete && <p>{errorOnDelete}</p>}</Block>
-          <Button
-            kind="secondary"
-            onClick={() => onClose()}
-          >
+          <Button kind="secondary" onClick={() => onClose()}>
             <strong>Avbryt</strong>
           </Button>
-          <Button
-            onClick={() => submit({ list: initialValues.list, code: initialValues.code })}
-          >
+          <Button onClick={() => submit({ list: initialValues.list, code: initialValues.code })}>
             <strong>Slett</strong>
           </Button>
         </Block>

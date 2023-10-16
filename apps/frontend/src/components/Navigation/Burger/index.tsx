@@ -81,7 +81,7 @@ const BurgerMenu = () => {
   return (
     <React.Fragment>
       {!showMenu && (
-        <Button variant="secondary"  onClick={() => setShowMenu(true)} icon={<MenuHamburgerIcon />}>
+        <Button variant="secondary" onClick={() => setShowMenu(true)} icon={<MenuHamburgerIcon />}>
           Meny
         </Button>
       )}
@@ -110,7 +110,7 @@ const BurgerMenu = () => {
         >
           <Block display="flex" flexDirection="column" height="100%">
             <Block width="100%" display="flex" justifyContent="flex-end" marginBottom={theme.sizing.scale1600}>
-              <Button variant="secondary"  onClick={() => setShowMenu(false)} icon={<XMarkIcon />}>
+              <Button variant="secondary" onClick={() => setShowMenu(false)} icon={<XMarkIcon />}>
                 Meny
               </Button>
             </Block>

@@ -30,23 +30,17 @@ export const Markdown = ({
     p: (parProps: any) => {
       const { children } = parProps
       if (p1) {
-        return (
-          <BodyLong>
-            {children}
-          </BodyLong>
-        )
+        return <BodyLong>{children}</BodyLong>
       }
-      return (
-        <BodyLong>
-          {children}
-        </BodyLong>
-      )
+      return <BodyLong>{children}</BodyLong>
     },
     h2: (headerProps: any) => {
       const { children } = headerProps
 
       return (
-        <Heading size="medium" level="2">{children}</Heading>
+        <Heading size="medium" level="2">
+          {children}
+        </Heading>
       )
     },
 
@@ -54,13 +48,19 @@ export const Markdown = ({
       const { children } = headerProps
 
       return (
-        <Heading size="medium" level="3">{children}</Heading>
+        <Heading size="medium" level="3">
+          {children}
+        </Heading>
       )
     },
     h4: (headerProps: any) => {
       const { children } = headerProps
 
-      return <Heading size="medium" level="4">{children}</Heading>
+      return (
+        <Heading size="medium" level="4">
+          {children}
+        </Heading>
+      )
     },
     href: (linkProps: any) => {
       const { children, href, node } = linkProps
@@ -78,7 +78,8 @@ export const Markdown = ({
       return (
         <Link href={href} target="_blank" rel="noopener noreferrer">
           {content} (åpnes i ny fane)
-        </Link>      )
+        </Link>
+      )
     },
     code: (codeProps: any) => {
       const { node, inline, className, children, ...props } = codeProps
@@ -93,9 +94,7 @@ export const Markdown = ({
       if (p1) {
         return (
           <List.Item>
-            <BodyShort>
-              {children}
-            </BodyShort>
+            <BodyShort>{children}</BodyShort>
           </List.Item>
         )
       } else {
@@ -104,12 +103,8 @@ export const Markdown = ({
     },
     ul: (ulProps: any) => {
       const { children } = ulProps
-      return (
-        <List>
-          {children}
-        </List>
-      )
-    }
+      return <List>{children}</List>
+    },
   }
 
   const sources: string[] = sourcesOrig || (source ? [source] : [''])
@@ -130,7 +125,6 @@ type MarkdownEditorProps = {
 }
 
 export const MarkdownEditor = (props: MarkdownEditorProps) => {
-  
   return (
     <MdEditor
       style={{ height: props.height || '500px' }}

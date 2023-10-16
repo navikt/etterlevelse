@@ -88,7 +88,7 @@ const CodeListPage = () => {
           </Block>
           {listname && (
             <Block>
-              <Button tooltip="Legg til ny" icon={<PlusIcon/>} size={"small"} variant={"tertiary"} onClick={() => setCreateCodeListModal(!createCodeListModal)}>
+              <Button tooltip="Legg til ny" icon={<PlusIcon />} size={'small'} variant={'tertiary'} onClick={() => setCreateCodeListModal(!createCodeListModal)}>
                 Opprett ny kode
               </Button>
             </Block>

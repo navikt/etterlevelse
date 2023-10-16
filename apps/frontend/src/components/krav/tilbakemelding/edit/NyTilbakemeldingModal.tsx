@@ -177,21 +177,21 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: NyTilbakemeldingMod
                             <Block display="flex" flexDirection="column" marginTop={theme.sizing.scale600}>
                               {adresseType === AdresseType.SLACK && <SlackChannelSearch add={setVarslingsadresse} />}
                               {adresseType !== AdresseType.SLACK && !values.varslingsadresse && (
-                                <Button variant="secondary"  type="button" icon={<FontAwesomeIcon icon={faSlackHash} />} onClick={() => setAdresseType(AdresseType.SLACK)}>
+                                <Button variant="secondary" type="button" icon={<FontAwesomeIcon icon={faSlackHash} />} onClick={() => setAdresseType(AdresseType.SLACK)}>
                                   Slack-kanal
                                 </Button>
                               )}
                               <Block marginTop={theme.sizing.scale400} />
                               {adresseType === AdresseType.SLACK_USER && <SlackUserSearch add={setVarslingsadresse} />}
                               {adresseType !== AdresseType.SLACK_USER && !values.varslingsadresse && (
-                                <Button variant="secondary"  marginLeft type="button" icon={<PersonIcon/>} onClick={() => setAdresseType(AdresseType.SLACK_USER)}>
+                                <Button variant="secondary" marginLeft type="button" icon={<PersonIcon />} onClick={() => setAdresseType(AdresseType.SLACK_USER)}>
                                   Slack-bruker
                                 </Button>
                               )}
                               <Block marginTop={theme.sizing.scale400} />
                               {adresseType === AdresseType.EPOST && <AddEmail add={setVarslingsadresse} />}
                               {adresseType !== AdresseType.EPOST && !values.varslingsadresse && (
-                                <Button variant="secondary"  marginLeft type="button" icon={<EnvelopeClosedIcon/>} onClick={() => setAdresseType(AdresseType.EPOST)}>
+                                <Button variant="secondary" marginLeft type="button" icon={<EnvelopeClosedIcon />} onClick={() => setAdresseType(AdresseType.EPOST)}>
                                   Epost
                                 </Button>
                               )}
@@ -227,7 +227,7 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: NyTilbakemeldingMod
                         </Notification>
                       )}
                     </Block>
-                    <Button variant="secondary"  type="button" onClick={close}>
+                    <Button variant="secondary" type="button" onClick={close}>
                       {' '}
                       Avbryt{' '}
                     </Button>

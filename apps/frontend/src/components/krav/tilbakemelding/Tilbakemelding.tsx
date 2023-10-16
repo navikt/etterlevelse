@@ -1,4 +1,4 @@
-import {Krav, Tilbakemelding, TilbakemeldingMeldingStatus, TilbakemeldingRolle} from '../../../constants'
+import { Krav, Tilbakemelding, TilbakemeldingMeldingStatus, TilbakemeldingRolle } from '../../../constants'
 import {
   tilbakemeldingNewMelding,
   TilbakemeldingNewMeldingRequest,
@@ -6,41 +6,41 @@ import {
   updateTilbakemeldingStatusOgEndretKrav,
   useTilbakemeldinger,
 } from '../../../api/TilbakemeldingApi'
-import React, {useEffect, useState} from 'react'
-import {Block} from 'baseui/block'
-import {theme} from '../../../util'
-import {HeadingMedium, HeadingXLarge, LabelSmall, ParagraphMedium, ParagraphSmall} from 'baseui/typography'
+import React, { useEffect, useState } from 'react'
+import { Block } from 'baseui/block'
+import { theme } from '../../../util'
+import { HeadingMedium, HeadingXLarge, LabelSmall, ParagraphMedium, ParagraphSmall } from 'baseui/typography'
 import Button from '../../common/Button'
-import {faChevronDown, faChevronUp} from '@fortawesome/free-solid-svg-icons'
-import {borderRadius} from '../../common/Style'
-import {Spinner} from '../../common/Spinner'
+import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons'
+import { borderRadius } from '../../common/Style'
+import { Spinner } from '../../common/Spinner'
 import moment from 'moment'
-import {user} from '../../../services/User'
-import {Notification} from 'baseui/notification'
-import {useLocation, useNavigate} from 'react-router-dom'
-import {useQueryParam, useRefs} from '../../../util/hooks'
-import {ettlevColors} from '../../../util/theme'
-import {mailboxPoppingIcon} from '../../Images'
-import {InfoBlock} from '../../common/InfoBlock'
-import {Portrait} from '../../common/Portrait'
-import {PersonName} from '../../common/PersonName'
+import { user } from '../../../services/User'
+import { Notification } from 'baseui/notification'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { useQueryParam, useRefs } from '../../../util/hooks'
+import { ettlevColors } from '../../../util/theme'
+import { mailboxPoppingIcon } from '../../Images'
+import { InfoBlock } from '../../common/InfoBlock'
+import { Portrait } from '../../common/Portrait'
+import { PersonName } from '../../common/PersonName'
 import CustomizedTextarea from '../../common/CustomizedTextarea'
 import * as _ from 'lodash'
-import {LoginButton} from '../../Header'
-import {CustomizedAccordion, CustomizedPanel} from '../../common/CustomizedAccordion'
+import { LoginButton } from '../../Header'
+import { CustomizedAccordion, CustomizedPanel } from '../../common/CustomizedAccordion'
 import StatusView from '../../common/StatusTag'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import ResponseMelding from './ResponseMelding'
 import EndretInfo from './edit/EndreInfo'
 import MeldingKnapper from './edit/MeldingKnapper'
 import NyTilbakemeldingModal from './edit/NyTilbakemeldingModal'
-import {Modal, ModalBody, ModalFooter, ModalHeader} from 'baseui/modal'
-import {getParsedOptionsforTilbakeMelding, getTilbakeMeldingStatusToOption, tilbakemeldingStatusToText} from './utils'
-import {Select, SIZE} from 'baseui/select'
-import {customSelectOverrides} from '../Edit/RegelverkEdit'
-import {Checkbox} from 'baseui/checkbox'
-import {ShowWarningMessage} from '../../etterlevelseDokumentasjonTema/KravCard'
-import {PlusIcon, TrashIcon} from '@navikt/aksel-icons'
+import { Modal, ModalBody, ModalFooter, ModalHeader } from 'baseui/modal'
+import { getParsedOptionsforTilbakeMelding, getTilbakeMeldingStatusToOption, tilbakemeldingStatusToText } from './utils'
+import { Select, SIZE } from 'baseui/select'
+import { customSelectOverrides } from '../Edit/RegelverkEdit'
+import { Checkbox } from 'baseui/checkbox'
+import { ShowWarningMessage } from '../../etterlevelseDokumentasjonTema/KravCard'
+import { PlusIcon, TrashIcon } from '@navikt/aksel-icons'
 
 const DEFAULT_COUNT_SIZE = 5
 
@@ -64,7 +64,7 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
 
   return (
     <Block width="100%">
-      {loading && <Spinner size={"large"} />}
+      {loading && <Spinner size={'large'} />}
       {!loading && !!tilbakemeldinger.length && (
         <Block display={'flex'} flexDirection={'column'}>
           <CustomizedAccordion>
@@ -208,7 +208,7 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
 
           {tilbakemeldinger.length > DEFAULT_COUNT_SIZE && (
             <Block $style={{ alignSelf: 'flex-end' }} marginTop={theme.sizing.scale400}>
-              <Button variant="tertiary" icon={<PlusIcon/>} onClick={() => setCount(count + DEFAULT_COUNT_SIZE)} disabled={tilbakemeldinger.length <= count}>
+              <Button variant="tertiary" icon={<PlusIcon />} onClick={() => setCount(count + DEFAULT_COUNT_SIZE)} disabled={tilbakemeldinger.length <= count}>
                 Last flere
               </Button>
             </Block>
@@ -233,11 +233,7 @@ export const Tilbakemeldinger = ({ krav, hasKravExpired }: { krav: Krav; hasKrav
               <ParagraphMedium>Du må være innlogget for å stille kraveier et spørsmål, og for å se tidligere spørsmål og svar.</ParagraphMedium>
             )}
 
-            {user.canWrite() && (
-              <Button onClick={() => setAddTilbakemelding(true)}>
-                Still et spørsmål
-              </Button>
-            )}
+            {user.canWrite() && <Button onClick={() => setAddTilbakemelding(true)}>Still et spørsmål</Button>}
             {!user.isLoggedIn() && <LoginButton />}
           </Block>
 
@@ -418,7 +414,7 @@ const TilbakemeldingSvar = ({ tilbakemelding, setFocusNummer, close, ubesvartOgK
       <Block display="flex" marginTop={'8px'} width={'100%'}>
         {user.isAdmin() && (
           <Block>
-            <Button icon={<TrashIcon/>} variant={'secondary'} onClick={() => setDeleteModal(true)}>
+            <Button icon={<TrashIcon />} variant={'secondary'} onClick={() => setDeleteModal(true)}>
               Slett hele samtalen
             </Button>
           </Block>
@@ -437,7 +433,7 @@ const TilbakemeldingSvar = ({ tilbakemelding, setFocusNummer, close, ubesvartOgK
             )} */}
         {loading && (
           <Block alignSelf="center" marginLeft={theme.sizing.scale400}>
-            <Spinner size={"large"} />
+            <Spinner size={'large'} />
           </Block>
         )}
 
@@ -447,7 +443,7 @@ const TilbakemeldingSvar = ({ tilbakemelding, setFocusNummer, close, ubesvartOgK
               <Block>
                 {isUpdatingStatus ? (
                   <Block alignSelf="center" marginLeft={theme.sizing.scale400}>
-                    <Spinner size={"large"} />
+                    <Spinner size={'large'} />
                   </Block>
                 ) : (
                   <Button

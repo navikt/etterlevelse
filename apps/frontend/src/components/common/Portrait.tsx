@@ -1,15 +1,15 @@
-import {useState} from 'react'
-import {personImageLink} from '../../util/config'
-import {Spinner} from './Spinner'
-import {avatarPlaceholder} from '../Images'
+import { useState } from 'react'
+import { personImageLink } from '../../util/config'
+import { Spinner } from './Spinner'
+import { avatarPlaceholder } from '../Images'
 
 export const Portrait = (props: { ident: string; size?: string }) => {
   const [loading, setLoading] = useState(true)
   const [image] = useState(personImageLink(props.ident))
   const [error, setError] = useState<boolean>(false)
   return (
-    <div className="w-11 h-11" >
-      {loading && <Spinner size={"large"} />}
+    <div className="w-11 h-11">
+      {loading && <Spinner size={'large'} />}
       {!error ? (
         <img
           onLoad={() => {

@@ -1,15 +1,15 @@
-import {Block} from 'baseui/block'
-import {HeadingXXLarge} from 'baseui/typography'
-import React, {useState} from 'react'
+import { Block } from 'baseui/block'
+import { HeadingXXLarge } from 'baseui/typography'
+import React, { useState } from 'react'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
-import {user} from '../services/User'
-import {theme} from '../util'
-import {ettlevColors, maxPageWidth, responsivePaddingLarge} from '../util/theme'
-import {Helmet} from 'react-helmet'
-import {ampli} from '../services/Amplitude'
-import {AllVirkemiddel} from '../components/virkemiddelList/AllVirkemiddel'
+import { user } from '../services/User'
+import { theme } from '../util'
+import { ettlevColors, maxPageWidth, responsivePaddingLarge } from '../util/theme'
+import { Helmet } from 'react-helmet'
+import { ampli } from '../services/Amplitude'
+import { AllVirkemiddel } from '../components/virkemiddelList/AllVirkemiddel'
 import Button from '../components/common/Button'
-import {PlusIcon} from "@navikt/aksel-icons";
+import { PlusIcon } from '@navikt/aksel-icons'
 
 export const VirkemiddelListPage = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false)
@@ -32,12 +32,7 @@ export const VirkemiddelListPage = () => {
               <Block display="flex" justifyContent="flex-end">
                 {user.isKraveier() && (
                   <Block>
-                    <Button
-                      onClick={() => setIsCreateModalOpen(true)}
-                      iconPosition="left"
-                      icon={<PlusIcon/>}
-                      
-                    >
+                    <Button onClick={() => setIsCreateModalOpen(true)} iconPosition="left" icon={<PlusIcon />}>
                       Nytt virkemiddel
                     </Button>
                   </Block>

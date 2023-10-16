@@ -84,7 +84,7 @@ export const en: IStrings = {
   mailLog: 'Mail log',
   nextButton: 'Next',
   prevButton: 'Prev',
-  pageNotFound: 'Oops 404! couldn\'t find page',
+  pageNotFound: "Oops 404! couldn't find page",
   rows: 'Rows',
   save: 'Save',
   searchId: 'Search for id',

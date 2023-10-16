@@ -132,10 +132,7 @@ export const EditEtterlevelseDokumentasjonModal = (props: EditEtterlevelseDokume
 
   return (
     <Block>
-      <Button
-        onClick={() => setIsEtterlevelseDokumntasjonerModalOpen(true)}
-        icon={props.isEditButton ? <DocPencilIcon /> : <PlusIcon />}
-      >
+      <Button onClick={() => setIsEtterlevelseDokumntasjonerModalOpen(true)} icon={props.isEditButton ? <DocPencilIcon /> : <PlusIcon />}>
         {props.isEditButton ? 'Rediger etterlevelsesdokumentet' : 'Nytt etterlevelsesdokument'}
       </Button>
 

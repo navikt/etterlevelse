@@ -1,7 +1,6 @@
 import { ExternalLink } from './RouteLink'
 import { Button as AkselButton, ButtonProps, Tooltip as AkselTooltip, TooltipProps, OverridableComponent, Link } from '@navikt/ds-react'
 
-
 interface CustomButtonProps extends ButtonProps {
   type?: 'submit' | 'reset' | 'button'
   tooltip?: string
@@ -21,23 +20,11 @@ const Tooltip = (props: TooltipProps) =>
   )
 
 const Button: OverridableComponent<CustomButtonProps, HTMLButtonElement> = (props: CustomButtonProps) => {
-  const {
-    type,
-    tooltip,
-    marginRight,
-    marginLeft,
-    notBold,
-    onClick,
-    ...restProps
-  } = props
+  const { type, tooltip, marginRight, marginLeft, notBold, onClick, ...restProps } = props
   return (
     <div className={`inline ${props.marginLeft ? 'ml-2.5' : ''} ${props.marginRight ? 'ml-4' : ''}`}>
       <Tooltip content={props.tooltip || ''}>
-        <AkselButton
-          type={type}
-          onClick={() => onClick?.()}
-          {...restProps}
-        >
+        <AkselButton type={type} onClick={() => onClick?.()} {...restProps}>
           {props.notBold ? props.children : <strong>{props.children}</strong>}
         </AkselButton>
       </Tooltip>

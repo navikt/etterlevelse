@@ -47,7 +47,7 @@ export const useTilbakemeldinger = (kravNummer: number, kravVersjon: number) => 
         .catch((e) => {
           setData([])
           setLoading(false)
-          console.error('couldn\'t find krav', e)
+          console.error("couldn't find krav", e)
         })
     }
   }, [kravNummer, kravVersjon])

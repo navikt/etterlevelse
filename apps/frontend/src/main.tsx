@@ -33,8 +33,8 @@ const Main = (props: any) => {
 
             <div className="min-h-screen relative items-center justify-center w-full bg-slate-100">
               <div className="flex flex-col items-center justify-center w-full bg-slate-100">
-                  <Header />
-                  <AppRoutes />
+                <Header />
+                <AppRoutes />
               </div>
               <div className="h-36 bg-slate-100 w-full" />
             </div>

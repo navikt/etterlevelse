@@ -1,15 +1,15 @@
-import {Block} from 'baseui/block'
-import React, {useState} from 'react'
+import { Block } from 'baseui/block'
+import React, { useState } from 'react'
 import moment from 'moment'
-import {Virkemiddel} from '../../constants'
-import {SkeletonPanel} from '../common/LoadingSkeleton'
-import {Cell, Row, Table} from '../common/Table'
+import { Virkemiddel } from '../../constants'
+import { SkeletonPanel } from '../common/LoadingSkeleton'
+import { Cell, Row, Table } from '../common/Table'
 import Button from '../common/Button'
-import {ColumnCompares} from '../../util/hooks'
-import {EditVirkemiddelModal} from '../virkemiddel/edit/EditVirkemiddelModal'
+import { ColumnCompares } from '../../util/hooks'
+import { EditVirkemiddelModal } from '../virkemiddel/edit/EditVirkemiddelModal'
 import DeleteVirkemiddeltModal from '../virkemiddel/edit/DeleteVirkemiddelModal'
-import {LovView} from '../Lov'
-import {DocPencilIcon, TrashIcon} from "@navikt/aksel-icons";
+import { LovView } from '../Lov'
+import { DocPencilIcon, TrashIcon } from '@navikt/aksel-icons'
 
 type VirkmiddelTableProps = {
   virkemidler: Virkemiddel[]
@@ -77,16 +77,16 @@ export const VirkemiddelTable = ({ virkemidler, loading, refetchData }: Virkmidd
                       setSelectedVirkemiddel(virkemiddel)
                       setIsEditModalOpen(true)
                     }}
-                    icon={<DocPencilIcon title={'Rediger'}/>}
+                    icon={<DocPencilIcon title={'Rediger'} />}
                   />
                   <Button
                     tooltip={'Slett'}
-                    variant={"tertiary"}
+                    variant={'tertiary'}
                     onClick={() => {
                       setSelectedVirkemiddel(virkemiddel)
                       setIsDeleteModalOpen(true)
                     }}
-                    icon={<TrashIcon title={"Slett"}/>}
+                    icon={<TrashIcon title={'Slett'} />}
                   />
                 </Block>
               </Cell>

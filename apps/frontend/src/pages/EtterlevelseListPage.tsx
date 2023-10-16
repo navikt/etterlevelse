@@ -1,16 +1,16 @@
-import {Block} from 'baseui/block'
-import {HeadingXLarge, LabelSmall} from 'baseui/typography'
-import React, {useEffect} from 'react'
-import {useEtterlevelsePage} from '../api/EtterlevelseApi'
+import { Block } from 'baseui/block'
+import { HeadingXLarge, LabelSmall } from 'baseui/typography'
+import React, { useEffect } from 'react'
+import { useEtterlevelsePage } from '../api/EtterlevelseApi'
 import Button from '../components/common/Button'
-import {theme} from '../util'
+import { theme } from '../util'
 import RouteLink from '../components/common/RouteLink'
-import {etterlevelseName} from './EtterlevelsePage'
-import {Spinner} from '../components/common/Spinner'
-import {user} from '../services/User'
-import {maxPageWidth, pageWidth, responsivePaddingSmall, responsiveWidthSmall} from '../util/theme'
-import {Helmet} from 'react-helmet'
-import {ampli} from '../services/Amplitude'
+import { etterlevelseName } from './EtterlevelsePage'
+import { Spinner } from '../components/common/Spinner'
+import { user } from '../services/User'
+import { maxPageWidth, pageWidth, responsivePaddingSmall, responsiveWidthSmall } from '../util/theme'
+import { Helmet } from 'react-helmet'
+import { ampli } from '../services/Amplitude'
 
 export const EtterlevelseListPage = () => {
   const [etterlevelse, prev, next, loading] = useEtterlevelsePage(20)
@@ -35,7 +35,7 @@ export const EtterlevelseListPage = () => {
             <Block>
               {user.canWrite() && (
                 <RouteLink href={'/etterlevelse/ny'}>
-                  <Button >Ny etterlevelse</Button>
+                  <Button>Ny etterlevelse</Button>
                 </RouteLink>
               )}
             </Block>
@@ -50,16 +50,16 @@ export const EtterlevelseListPage = () => {
                   </RouteLink>
                 </Block>
               ))}
-            {loading && <Spinner size={"large"} />}
+            {loading && <Spinner size={'large'} />}
           </Block>
           <Block display="flex" alignItems="center" marginTop={theme.sizing.scale1000}>
             <LabelSmall marginRight={theme.sizing.scale400}>
               Side {etterlevelse.pageNumber + 1}/{etterlevelse.pages}
             </LabelSmall>
-            <Button onClick={prev}  disabled={etterlevelse.pageNumber === 0}>
+            <Button onClick={prev} disabled={etterlevelse.pageNumber === 0}>
               Forrige
             </Button>
-            <Button onClick={next}  disabled={etterlevelse.pageNumber >= etterlevelse.pages - 1}>
+            <Button onClick={next} disabled={etterlevelse.pageNumber >= etterlevelse.pages - 1}>
               Neste
             </Button>
           </Block>

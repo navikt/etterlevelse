@@ -1,22 +1,22 @@
 import CustomizedModal from '../../common/CustomizedModal'
-import {Krav} from '../../../constants'
+import { Krav } from '../../../constants'
 import Button from '../../common/Button'
-import React, {ReactElement, useEffect} from 'react'
-import {FieldArray, Form, Formik} from 'formik'
-import {FieldWrapper} from '../../common/Inputs'
-import {arrayMove, List} from 'baseui/dnd-list'
-import {CustomPanelDivider} from '../../common/CustomizedAccordion'
-import {SimplePanel} from '../../common/PanelLink'
-import {HeadingXLarge, HeadingXXLarge, LabelSmall, ParagraphMedium} from 'baseui/typography'
+import React, { ReactElement, useEffect } from 'react'
+import { FieldArray, Form, Formik } from 'formik'
+import { FieldWrapper } from '../../common/Inputs'
+import { arrayMove, List } from 'baseui/dnd-list'
+import { CustomPanelDivider } from '../../common/CustomizedAccordion'
+import { SimplePanel } from '../../common/PanelLink'
+import { HeadingXLarge, HeadingXXLarge, LabelSmall, ParagraphMedium } from 'baseui/typography'
 import moment from 'moment'
 import StatusView from '../../common/StatusTag'
-import {borderRadius, borderStyle, paddingZero} from '../../common/Style'
-import {Spinner} from '../../common/Spinner'
-import {Block} from 'baseui/block'
-import {ettlevColors, responsivePaddingSmall} from '../../../util/theme'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faGripVertical} from '@fortawesome/free-solid-svg-icons'
-import {createKravPriority, kravMapToKravPrioriting, updateKravPriority} from '../../../api/KravPriorityApi'
+import { borderRadius, borderStyle, paddingZero } from '../../common/Style'
+import { Spinner } from '../../common/Spinner'
+import { Block } from 'baseui/block'
+import { ettlevColors, responsivePaddingSmall } from '../../../util/theme'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faGripVertical } from '@fortawesome/free-solid-svg-icons'
+import { createKravPriority, kravMapToKravPrioriting, updateKravPriority } from '../../../api/KravPriorityApi'
 import AlertUnsavedPopup from '../../common/AlertUnsavedPopup'
 
 export const kravListPriorityModal = () => document.querySelector('#krav-list-edit-priority-modal')
@@ -194,7 +194,7 @@ export const EditPriorityModal = (props: { isOpen: boolean; setIsOpen: React.Dis
             <Block>
               {loading ? (
                 <Block display="flex" justifyContent="center">
-                  <Spinner size={"large"} />
+                  <Spinner size={'large'} />
                 </Block>
               ) : (
                 <Form>
@@ -257,7 +257,7 @@ export const EditPriorityModal = (props: { isOpen: boolean; setIsOpen: React.Dis
               >
                 Avbryt
               </Button>
-              <Button  onClick={p.submitForm} disabled={loading} marginLeft>
+              <Button onClick={p.submitForm} disabled={loading} marginLeft>
                 Lagre
               </Button>
             </Block>

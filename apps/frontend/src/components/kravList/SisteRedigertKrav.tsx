@@ -1,11 +1,11 @@
-import {useEffect, useState} from 'react'
-import {emptyPage, KravQL} from '../../constants'
-import {useKravFilter} from '../../api/KravGraphQLApi'
-import {Spinner} from '../common/Spinner'
-import {Notification} from 'baseui/notification'
-import {Block, Responsive} from 'baseui/block'
-import {HeadingXLarge, ParagraphMedium} from 'baseui/typography'
-import {KravPanels, sortKrav} from '../../pages/KravListPage'
+import { useEffect, useState } from 'react'
+import { emptyPage, KravQL } from '../../constants'
+import { useKravFilter } from '../../api/KravGraphQLApi'
+import { Spinner } from '../common/Spinner'
+import { Notification } from 'baseui/notification'
+import { Block, Responsive } from 'baseui/block'
+import { HeadingXLarge, ParagraphMedium } from 'baseui/typography'
+import { KravPanels, sortKrav } from '../../pages/KravListPage'
 
 const responsiveDisplay: Responsive<any> = ['block', 'block', 'block', 'flex', 'flex', 'flex']
 
@@ -44,7 +44,7 @@ export const SistRedigertKrav = () => {
   }, [sorting])
 
   return loading && !data?.krav?.numberOfElements ? (
-    <Spinner size={"large"} />
+    <Spinner size={'large'} />
   ) : error ? (
     <Notification kind={'negative'}>{JSON.stringify(error, null, 2)}</Notification>
   ) : (

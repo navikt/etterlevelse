@@ -1,23 +1,23 @@
-import {Etterlevelse, EtterlevelseStatus, Krav, SuksesskriterieStatus} from '../../constants'
-import {Block} from 'baseui/block'
-import {useRef, useState} from 'react'
-import {theme} from '../../util'
+import { Etterlevelse, EtterlevelseStatus, Krav, SuksesskriterieStatus } from '../../constants'
+import { Block } from 'baseui/block'
+import { useRef, useState } from 'react'
+import { theme } from '../../util'
 import moment from 'moment'
 import RouteLink from '../common/RouteLink'
-import {useBehandling} from '../../api/BehandlingApi'
-import {Spinner} from '../common/Spinner'
-import {HeadingLarge, HeadingXLarge, LabelSmall, ParagraphMedium, ParagraphXSmall} from 'baseui/typography'
-import {Card} from 'baseui/card'
-import {ettlevColors} from '../../util/theme'
-import {getSuksesskriterieBegrunnelse} from './Edit/SuksesskriterieBegrunnelseEdit'
-import {FormikProps} from 'formik'
-import {useNavigate} from 'react-router-dom'
-import {Markdown} from '../common/Markdown'
+import { useBehandling } from '../../api/BehandlingApi'
+import { Spinner } from '../common/Spinner'
+import { HeadingLarge, HeadingXLarge, LabelSmall, ParagraphMedium, ParagraphXSmall } from 'baseui/typography'
+import { Card } from 'baseui/card'
+import { ettlevColors } from '../../util/theme'
+import { getSuksesskriterieBegrunnelse } from './Edit/SuksesskriterieBegrunnelseEdit'
+import { FormikProps } from 'formik'
+import { useNavigate } from 'react-router-dom'
+import { Markdown } from '../common/Markdown'
 import EditBegrunnelse from './Edit/EditBegrunnelse'
-import {borderColor, borderRadius, borderStyle, borderWidth, marginAll} from '../common/Style'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faCheck, faCircle} from '@fortawesome/free-solid-svg-icons'
-import {ReadMore} from '@navikt/ds-react'
+import { borderColor, borderRadius, borderStyle, borderWidth, marginAll } from '../common/Style'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCheck, faCircle } from '@fortawesome/free-solid-svg-icons'
+import { ReadMore } from '@navikt/ds-react'
 
 const getHeaderText = (status: EtterlevelseStatus) => {
   switch (status) {
@@ -101,7 +101,7 @@ export const ViewEtterlevelse = ({
           etterlevelse.behandlingId && (
             <Block>
               {' '}
-              <Spinner size={"large"} />
+              <Spinner size={'large'} />
               {etterlevelse.behandlingId}
             </Block>
           )
@@ -232,8 +232,7 @@ export const ViewEtterlevelse = ({
                     },
                   }}
                 >
-                  <Block display="flex" justifyContent="center" marginTop={'32px'} marginBottom={'16px'}
-                  >
+                  <Block display="flex" justifyContent="center" marginTop={'32px'} marginBottom={'16px'}>
                     <Block display="flex" flex="1">
                       <ParagraphMedium
                         $style={{
@@ -274,7 +273,7 @@ export const ViewEtterlevelse = ({
                   <LabelSmall $style={{ fontSize: '21px', lineHeight: '30px', marginTop: '16px', marginBottom: '10px' }}>{s.navn}</LabelSmall>
 
                   <ReadMore header="Utfyllende om kriteriet">
-                      <Markdown source={s.beskrivelse} />
+                    <Markdown source={s.beskrivelse} />
                   </ReadMore>
 
                   <Block width="100%" height="1px" backgroundColor={ettlevColors.grey100} marginTop="15px" marginBottom="23px" />

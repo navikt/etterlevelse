@@ -218,14 +218,13 @@ export const EditEtterlevelse = ({
                 )}
               </Block>
               <HeadingXXLarge $style={{ marginTop: '0px', marginBottom: '0px', color: ettlevColors.white }}>{krav.navn}</HeadingXXLarge>
-              {krav.aktivertDato !== null &&
+              {krav.aktivertDato !== null && (
                 <Detail className="text-white">
                   {krav.kravVersjon > 1
                     ? `Ny versjon av kravet ble publisert ${moment(krav.aktivertDato).format('ll')}`
-                    : `Kravet ble opprettet ${moment(krav.aktivertDato).format('ll')}`
-                  }
+                    : `Kravet ble opprettet ${moment(krav.aktivertDato).format('ll')}`}
                 </Detail>
-              }
+              )}
               {kravFilter === KRAV_FILTER_TYPE.BORTFILTTERTE_KRAV && (
                 <ParagraphMedium
                   $style={{
@@ -290,11 +289,7 @@ export const EditEtterlevelse = ({
                     </>
                   )}
                   {krav.versjonEndringer && (
-                    <Button
-                      type="button"
-                      variant="tertiary"
-                      onClick={() => setIsVersjonEndringerModalOpen(true)}
-                    >
+                    <Button type="button" variant="tertiary" onClick={() => setIsVersjonEndringerModalOpen(true)}>
                       <ParagraphMedium
                         $style={{
                           lineHeight: '22px',
@@ -429,13 +424,7 @@ export const EditEtterlevelse = ({
                   title: 'Hvordan har andre gjort det?',
                   key: 'etterlevelser',
                   content: (
-                    <Block
-                      display={'flex'}
-                      justifyContent="center"
-                      width="100%"
-                      paddingLeft="200px"
-                      paddingRight="200px"
-                    >
+                    <Block display={'flex'} justifyContent="center" width="100%" paddingLeft="200px" paddingRight="200px">
                       <Etterlevelser loading={etterlevelserLoading} krav={krav} modalVersion />
                     </Block>
                   ),
@@ -444,13 +433,7 @@ export const EditEtterlevelse = ({
                   title: 'Spørsmål og svar',
                   key: 'tilbakemeldinger',
                   content: (
-                    <Block
-                      display={'flex'}
-                      justifyContent="center"
-                      width="100%"
-                      paddingLeft="200px"
-                      paddingRight="200px"
-                    >
+                    <Block display={'flex'} justifyContent="center" width="100%" paddingLeft="200px" paddingRight="200px">
                       <Tilbakemeldinger krav={krav} hasKravExpired={false} />
                     </Block>
                   ),

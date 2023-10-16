@@ -1,28 +1,28 @@
-import React, {useState} from 'react'
-import {Block} from 'baseui/block'
-import {useParams} from 'react-router-dom'
-import {LoadingSkeleton} from '../components/common/LoadingSkeleton'
-import {HeadingXLarge, ParagraphMedium} from 'baseui/typography'
-import {ettlevColors, theme} from '../util/theme'
-import {Layout2} from '../components/scaffold/Page'
-import {ellipse80, saveArchiveIcon} from '../components/Images'
-import {EtterlevelseDokumentasjonQL, EtterlevelseDokumentasjonStats, KravQL, KravStatus, PageResponse} from '../constants'
-import {gql, useQuery} from '@apollo/client'
-import {Code, codelist, ListName} from '../services/Codelist'
-import {Button, KIND, SIZE} from 'baseui/button'
-import {breadcrumbPaths} from '../components/common/CustomizedBreadcrumbs'
+import React, { useState } from 'react'
+import { Block } from 'baseui/block'
+import { useParams } from 'react-router-dom'
+import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
+import { HeadingXLarge, ParagraphMedium } from 'baseui/typography'
+import { ettlevColors, theme } from '../util/theme'
+import { Layout2 } from '../components/scaffold/Page'
+import { ellipse80, saveArchiveIcon } from '../components/Images'
+import { EtterlevelseDokumentasjonQL, EtterlevelseDokumentasjonStats, KravQL, KravStatus, PageResponse } from '../constants'
+import { gql, useQuery } from '@apollo/client'
+import { Code, codelist, ListName } from '../services/Codelist'
+import { Button, KIND, SIZE } from 'baseui/button'
+import { breadcrumbPaths } from '../components/common/CustomizedBreadcrumbs'
 
-import {ampli} from '../services/Amplitude'
-import {getMainHeader, getNewestKravVersjon} from '../components/etterlevelseDokumentasjon/common/utils'
-import {user} from '../services/User'
-import {useArkiveringByEtterlevelseDokumentasjonId} from '../api/ArkiveringApi'
-import {useEtterlevelseDokumentasjon} from '../api/EtterlevelseDokumentasjonApi'
-import {TemaCardEtterlevelseDokumentasjon} from '../components/etterlevelseDokumentasjon/TemaCardEtterlevelseDokumentasjon'
-import {ArkiveringModal} from '../components/etterlevelseDokumentasjon/ArkiveringModal'
-import {isFerdigUtfylt} from './EtterlevelseDokumentasjonTemaPage'
-import {Spinner} from '../components/common/Spinner'
-import {ExclamationmarkTriangleFillIcon} from '@navikt/aksel-icons'
-import {BodyShort, Label} from '@navikt/ds-react'
+import { ampli } from '../services/Amplitude'
+import { getMainHeader, getNewestKravVersjon } from '../components/etterlevelseDokumentasjon/common/utils'
+import { user } from '../services/User'
+import { useArkiveringByEtterlevelseDokumentasjonId } from '../api/ArkiveringApi'
+import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
+import { TemaCardEtterlevelseDokumentasjon } from '../components/etterlevelseDokumentasjon/TemaCardEtterlevelseDokumentasjon'
+import { ArkiveringModal } from '../components/etterlevelseDokumentasjon/ArkiveringModal'
+import { isFerdigUtfylt } from './EtterlevelseDokumentasjonTemaPage'
+import { Spinner } from '../components/common/Spinner'
+import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons'
+import { BodyShort, Label } from '@navikt/ds-react'
 import ExportEtterlevelseModal from '../components/export/ExportEtterlevelseModal'
 
 export const DokumentasjonPage = () => {
@@ -36,7 +36,7 @@ export const DokumentasjonPage = () => {
     refetch: refetchRelevanteData,
     loading,
   } = useQuery<{ etterlevelseDokumentasjon: PageResponse<{ stats: EtterlevelseDokumentasjonStats }> }>(statsQuery, {
-    variables: {etterlevelseDokumentasjonId: etterlevelseDokumentasjon?.id},
+    variables: { etterlevelseDokumentasjonId: etterlevelseDokumentasjon?.id },
   })
 
   const [relevanteStats, setRelevanteStats] = useState<any[]>([])
@@ -46,28 +46,28 @@ export const DokumentasjonPage = () => {
   const filterData = (
     unfilteredData:
       | {
-      etterlevelseDokumentasjon: PageResponse<{
-        stats: EtterlevelseDokumentasjonStats
-      }>
-    }
+          etterlevelseDokumentasjon: PageResponse<{
+            stats: EtterlevelseDokumentasjonStats
+          }>
+        }
       | undefined,
   ) => {
     const relevanteStatusListe: any[] = []
     const utgaattStatusListe: any[] = []
 
-    unfilteredData?.etterlevelseDokumentasjon.content.forEach(({stats}) => {
+    unfilteredData?.etterlevelseDokumentasjon.content.forEach(({ stats }) => {
       stats.fyltKrav.forEach((k) => {
         if (k.regelverk.length && k.status === KravStatus.AKTIV) {
-          relevanteStatusListe.push({...k, etterlevelser: k.etterlevelser.filter((e) => e.etterlevelseDokumentasjonId === etterlevelseDokumentasjon?.id)})
+          relevanteStatusListe.push({ ...k, etterlevelser: k.etterlevelser.filter((e) => e.etterlevelseDokumentasjonId === etterlevelseDokumentasjon?.id) })
         } else if (k.regelverk.length && k.status === KravStatus.UTGAATT) {
-          utgaattStatusListe.push({...k, etterlevelser: k.etterlevelser.filter((e) => e.etterlevelseDokumentasjonId === etterlevelseDokumentasjon?.id)})
+          utgaattStatusListe.push({ ...k, etterlevelser: k.etterlevelser.filter((e) => e.etterlevelseDokumentasjonId === etterlevelseDokumentasjon?.id) })
         }
       })
       stats.ikkeFyltKrav.forEach((k) => {
         if (k.regelverk.length && k.status === KravStatus.AKTIV) {
-          relevanteStatusListe.push({...k, etterlevelser: k.etterlevelser.filter((e) => e.etterlevelseDokumentasjonId === etterlevelseDokumentasjon?.id)})
+          relevanteStatusListe.push({ ...k, etterlevelser: k.etterlevelser.filter((e) => e.etterlevelseDokumentasjonId === etterlevelseDokumentasjon?.id) })
         } else if (k.regelverk.length && k.status === KravStatus.UTGAATT) {
-          utgaattStatusListe.push({...k, etterlevelser: k.etterlevelser.filter((e) => e.etterlevelseDokumentasjonId === etterlevelseDokumentasjon?.id)})
+          utgaattStatusListe.push({ ...k, etterlevelser: k.etterlevelser.filter((e) => e.etterlevelseDokumentasjonId === etterlevelseDokumentasjon?.id) })
         }
       })
     })
@@ -118,15 +118,11 @@ export const DokumentasjonPage = () => {
       <div className="flex items-center gap-2">
         {emptyRelevans ? (
           <div className="flex items-center gap-1">
-            <ExclamationmarkTriangleFillIcon className="text-2xl text-icon-warning"/>
-            <Label size="small">
-              Ingen egenskaper er oppgitt
-            </Label>
+            <ExclamationmarkTriangleFillIcon className="text-2xl text-icon-warning" />
+            <Label size="small">Ingen egenskaper er oppgitt</Label>
           </div>
         ) : (
-          <Label size="small">
-            Aktive egenskaper:
-          </Label>
+          <Label size="small">Aktive egenskaper:</Label>
         )}
         {!etterlevelseDokumentasjon.irrelevansFor.length ? getRelevans() : getRelevans(etterlevelseDokumentasjon.irrelevansFor)}
       </div>
@@ -140,28 +136,29 @@ export const DokumentasjonPage = () => {
           <HeadingXLarge marginTop="0px" marginBottom="0px">
             Tema for dokumentasjon
           </HeadingXLarge>
-          { // TODO: overskriften er kjip, tenk på det
+          {
+            // TODO: overskriften er kjip, tenk på det
           }
         </Block>
       </Block>
 
       <Block display="flex" alignItems="center">
         {user.isAdmin() && (
-          <Button kind={KIND.tertiary} size={SIZE.compact} onClick={() => setArkivModal(true)} startEnhancer={<img src={saveArchiveIcon} alt="arkiv ikon"/>}>
+          <Button kind={KIND.tertiary} size={SIZE.compact} onClick={() => setArkivModal(true)} startEnhancer={<img src={saveArchiveIcon} alt="arkiv ikon" />}>
             Arkivér i WebSak
           </Button>
         )}
 
-        <ExportEtterlevelseModal etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}/>
+        <ExportEtterlevelseModal etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id} />
 
         <Block display="flex" alignItems="baseline" marginRight="30px">
-          <ParagraphMedium $style={{fontWeight: 900, fontSize: '32px', marginTop: 0, marginBottom: 0}} color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
+          <ParagraphMedium $style={{ fontWeight: 900, fontSize: '32px', marginTop: 0, marginBottom: 0 }} color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
             {getNewestKravVersjon(relevanteStats).length}
           </ParagraphMedium>
           <ParagraphMedium>krav</ParagraphMedium>
         </Block>
 
-        <Block $style={{border: '1px solid ' + ettlevColors.green50, background: '#102723'}} height="40px"/>
+        <Block $style={{ border: '1px solid ' + ettlevColors.green50, background: '#102723' }} height="40px" />
 
         <ArkiveringModal
           arkivModal={arkivModal}
@@ -172,7 +169,7 @@ export const DokumentasjonPage = () => {
         />
 
         <Block display="flex" alignItems="baseline" marginLeft="30px">
-          <ParagraphMedium $style={{fontWeight: 900, fontSize: '32px', marginTop: 0, marginBottom: 0}} color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
+          <ParagraphMedium $style={{ fontWeight: 900, fontSize: '32px', marginTop: 0, marginBottom: 0 }} color={ettlevColors.navOransje} marginRight={theme.sizing.scale300}>
             {antallFylttKrav}
           </ParagraphMedium>
           <ParagraphMedium>ferdig utfylt</ParagraphMedium>
@@ -194,7 +191,7 @@ export const DokumentasjonPage = () => {
           {relevans.map((r, index) => (
             <div key={r.id} className="flex items-center gap-1">
               <BodyShort size="small">{r.label}</BodyShort>
-              {index < relevans.length - 1 && <img alt="dot" src={ellipse80}/>}
+              {index < relevans.length - 1 && <img alt="dot" src={ellipse80} />}
             </div>
           ))}
         </div>
@@ -205,14 +202,14 @@ export const DokumentasjonPage = () => {
         {options.map((o, index) => (
           <div key={o.id} className="flex items-center gap-1">
             <BodyShort size="small">{o.label}</BodyShort>
-            {index < options.length - 1 && <img alt="dot" src={ellipse80}/>}
+            {index < options.length - 1 && <img alt="dot" src={ellipse80} />}
           </div>
         ))}
       </div>
     )
   }
 
-  if (!etterlevelseDokumentasjon) return <LoadingSkeleton header="Dokumentasjon"/>
+  if (!etterlevelseDokumentasjon) return <LoadingSkeleton header="Dokumentasjon" />
 
   const breadcrumbPaths: breadcrumbPaths[] = [
     {
@@ -236,7 +233,7 @@ export const DokumentasjonPage = () => {
         {getRelevansContent(etterlevelseDokumentasjon)}
         {loading ? (
           <Block display="flex" width="100%" justifyContent="center" marginTop={theme.sizing.scale550}>
-            <Spinner size={"large"}/>
+            <Spinner size={'large'} />
           </Block>
         ) : (
           <div className="flex flex-row flex-wrap gap-2 w-full">

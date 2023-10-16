@@ -216,7 +216,7 @@ export const KravPage = () => {
                       </Block>
                     )}
                     {krav?.id && ((user.isKraveier() && !hasKravExpired()) || user.isAdmin()) && (
-                      <Block flex="1" display='flex' justifyContent="flex-end">
+                      <Block flex="1" display="flex" justifyContent="flex-end">
                         {krav.status === KravStatus.AKTIV && (
                           <Button onClick={newVersion} variant="tertiary" className="text-white">
                             <div className="flex flex-nowrap items-center whitespace-nowrap gap-1">
@@ -226,9 +226,7 @@ export const KravPage = () => {
                           </Button>
                         )}
                         {(user.isAdmin() || krav.status !== KravStatus.AKTIV) && <DeleteItem fun={() => deleteKrav(krav.id)} redirect={'/kravliste'} />}
-                        <Button variant="tertiary" className="text-white"
-                          onClick={() => setEdit(!edit)}
-                        >
+                        <Button variant="tertiary" className="text-white" onClick={() => setEdit(!edit)}>
                           <div className="flex flex-nowrap items-center gap-1">
                             <PencilIcon className="text-2xl" />
                             Rediger
@@ -361,7 +359,6 @@ export const KravPage = () => {
     </Block>
   )
 }
-
 
 export const query = gql`
   query getKravWithEtterlevelse($id: ID, $kravNummer: Int, $kravVersjon: Int) {

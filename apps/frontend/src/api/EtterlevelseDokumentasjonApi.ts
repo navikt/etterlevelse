@@ -139,4 +139,3 @@ export const etterlevelseDokumentasjonSchema = () =>
 export type EtterlevelseDokumentasjonFilter = {
   relevans?: string[]
 }
-

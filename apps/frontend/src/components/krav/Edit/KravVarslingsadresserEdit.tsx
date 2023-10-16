@@ -1,24 +1,24 @@
-import {AdresseType, Krav, SlackChannel, SlackUser, TeamResource, Varslingsadresse, VarslingsadresseQL} from '../../../constants'
-import {getSlackChannelById, getSlackUserByEmail, getSlackUserById, usePersonSearch, useSlackChannelSearch} from '../../../api/TeamApi'
-import React, {ReactNode, useEffect, useState} from 'react'
-import {Block} from 'baseui/block'
-import {Spinner} from '../../common/Spinner'
-import {theme} from '../../../util'
-import {Notification} from 'baseui/notification'
+import { AdresseType, Krav, SlackChannel, SlackUser, TeamResource, Varslingsadresse, VarslingsadresseQL } from '../../../constants'
+import { getSlackChannelById, getSlackUserByEmail, getSlackUserById, usePersonSearch, useSlackChannelSearch } from '../../../api/TeamApi'
+import React, { ReactNode, useEffect, useState } from 'react'
+import { Block } from 'baseui/block'
+import { Spinner } from '../../common/Spinner'
+import { theme } from '../../../util'
+import { Notification } from 'baseui/notification'
 import * as yup from 'yup'
 import Button from '../../common/Button'
-import {user} from '../../../services/User'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faEnvelope, faPlus, faUser} from '@fortawesome/free-solid-svg-icons'
-import {FieldWrapper} from '../../common/Inputs'
-import {FieldArray, FieldArrayRenderProps} from 'formik'
-import {FormControl} from 'baseui/form-control'
-import {faSlackHash} from '@fortawesome/free-brands-svg-icons'
-import {Modal, ModalBody, ModalFooter, ModalHeader} from 'baseui/modal'
-import {RenderTagList} from '../../common/TagList'
+import { user } from '../../../services/User'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faEnvelope, faPlus, faUser } from '@fortawesome/free-solid-svg-icons'
+import { FieldWrapper } from '../../common/Inputs'
+import { FieldArray, FieldArrayRenderProps } from 'formik'
+import { FormControl } from 'baseui/form-control'
+import { faSlackHash } from '@fortawesome/free-brands-svg-icons'
+import { Modal, ModalBody, ModalFooter, ModalHeader } from 'baseui/modal'
+import { RenderTagList } from '../../common/TagList'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
 import CustomizedInput from '../../common/CustomizedInput'
-import {CustomizedStatefulSelect} from '../../common/CustomizedSelect'
+import { CustomizedStatefulSelect } from '../../common/CustomizedSelect'
 
 export const KravVarslingsadresserEdit = () => {
   const [addSlackChannel, setAddSlackChannel] = useState<boolean>(false)
@@ -40,31 +40,17 @@ export const KravVarslingsadresserEdit = () => {
               >
                 <Block>
                   <Block marginBottom={theme.sizing.scale400}>
-                    <Button
-                      variant="secondary"
-                      type="button"
-                      onClick={() => setAddSlackChannel(true)}
-                    >
+                    <Button variant="secondary" type="button" onClick={() => setAddSlackChannel(true)}>
                       <span>
                         <FontAwesomeIcon icon={faSlackHash} /> Legg til slack-kanal
                       </span>
                     </Button>
-                    <Button
-                      variant="secondary"
-                      marginLeft
-                      type="button"
-                      onClick={() => setAddSlackUser(true)}
-                    >
+                    <Button variant="secondary" marginLeft type="button" onClick={() => setAddSlackUser(true)}>
                       <span>
                         <FontAwesomeIcon icon={faUser} /> Legg til slack-bruker
                       </span>
                     </Button>
-                    <Button
-                      variant="secondary"
-                      marginLeft
-                      type="button"
-                      onClick={() => setAddEmail(true)}
-                    >
+                    <Button variant="secondary" marginLeft type="button" onClick={() => setAddEmail(true)}>
                       <span>
                         <FontAwesomeIcon icon={faEnvelope} /> Legg til epost
                       </span>
@@ -98,7 +84,7 @@ const AddModal = ({ isOpen, close, title, children }: { isOpen: boolean; close: 
     <ModalHeader>{title}</ModalHeader>
     <ModalBody>{children}</ModalBody>
     <ModalFooter>
-      <Button variant="secondary"  type="button" onClick={close}>
+      <Button variant="secondary" type="button" onClick={close}>
         Avbryt
       </Button>
     </ModalFooter>
@@ -251,7 +237,7 @@ export const SlackUserSearch = ({ add, close }: AddVarslingsadresseProps) => {
           </Button>
         </Block>
       </Block>
-      {loadingSlackId && <Spinner size={"large"} />}
+      {loadingSlackId && <Spinner size={'large'} />}
       {error && (
         <Notification kind="negative" overrides={{ Body: { style: { marginBottom: '-25px' } } }}>
           {error}

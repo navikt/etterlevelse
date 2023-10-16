@@ -118,9 +118,7 @@ export const EditNotatfelt = ({ isOpen, setIsNotatfeltOpen, etterlevelseMetadata
                   Lukk uten å lagre
                 </ParagraphMedium>
               </Button>
-              <Button
-                type={'submit'}
-              >
+              <Button type={'submit'}>
                 <ParagraphMedium margin={0} padding={0} color={ettlevColors.green50}>
                   Lagre og lukk
                 </ParagraphMedium>

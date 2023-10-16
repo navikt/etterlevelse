@@ -10,11 +10,7 @@ export const DeleteItem = (props: { fun: () => Promise<any>; redirect: string })
 
   return (
     <>
-      <Button
-        variant="tertiary"
-        className="text-white max-h-16"
-        onClick={() => setOpen(true)}
-      >
+      <Button variant="tertiary" className="text-white max-h-16" onClick={() => setOpen(true)}>
         <div className="flex flex-nowrap items-center gap-1">
           <TrashIcon className="text-2xl" />
           Slett
@@ -27,9 +23,7 @@ export const DeleteItem = (props: { fun: () => Promise<any>; redirect: string })
           <Button onClick={() => setOpen(false)} variant={'secondary'}>
             Avbryt
           </Button>
-          <Button onClick={() => props.fun().then(() => navigate(props.redirect))}>
-            Slett
-          </Button>
+          <Button onClick={() => props.fun().then(() => navigate(props.redirect))}>Slett</Button>
         </ModalFooter>
       </Modal>
     </>

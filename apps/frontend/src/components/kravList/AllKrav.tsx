@@ -1,19 +1,19 @@
-import {useEffect, useState} from 'react'
-import {codelist, ListName} from '../../services/Codelist'
-import {useKravFilter} from '../../api/KravGraphQLApi'
-import {emptyPage, KravListFilter, KravQL, KravStatus} from '../../constants'
-import {Block, Responsive, Scale} from 'baseui/block'
-import {Option, SelectOverrides} from 'baseui/select'
+import { useEffect, useState } from 'react'
+import { codelist, ListName } from '../../services/Codelist'
+import { useKravFilter } from '../../api/KravGraphQLApi'
+import { emptyPage, KravListFilter, KravQL, KravStatus } from '../../constants'
+import { Block, Responsive, Scale } from 'baseui/block'
+import { Option, SelectOverrides } from 'baseui/select'
 import CustomizedSelect from '../common/CustomizedSelect'
-import {ettlevColors, theme} from '../../util/theme'
-import {Spinner} from '../common/Spinner'
-import {Notification} from 'baseui/notification'
-import {HeadingXLarge, LabelSmall, ParagraphMedium} from 'baseui/typography'
+import { ettlevColors, theme } from '../../util/theme'
+import { Spinner } from '../common/Spinner'
+import { Notification } from 'baseui/notification'
+import { HeadingXLarge, LabelSmall, ParagraphMedium } from 'baseui/typography'
 import Button from '../common/Button'
-import {KravPanels, sortKrav} from '../../pages/KravListPage'
-import {borderColor} from '../common/Style'
-import {kravStatus} from '../../pages/KravPage'
-import {PlusIcon} from '@navikt/aksel-icons'
+import { KravPanels, sortKrav } from '../../pages/KravListPage'
+import { borderColor } from '../common/Style'
+import { kravStatus } from '../../pages/KravPage'
+import { PlusIcon } from '@navikt/aksel-icons'
 
 type KravFilter = {
   status: Option[]
@@ -212,20 +212,20 @@ export const AllKrav = () => {
   }
 
   return loading && !kravene.numberOfElements ? (
-    <Spinner size={"large"} />
+    <Spinner size={'large'} />
   ) : error ? (
     <Notification kind={'negative'}>{JSON.stringify(error, null, 2)}</Notification>
   ) : (
     <Block>
       <Block width="100%" justifyContent="center" marginTop="20px" marginBottom="20px">
-        <Block display='flex' justifyContent="center" alignContent="center" width="100%">
+        <Block display="flex" justifyContent="center" alignContent="center" width="100%">
           <Block display="flex" justifyContent="flex-start" width="100%">
             <HeadingXLarge marginTop="0px" marginBottom="0px">
               {kravene.totalElements ? kravene.totalElements : 0} Krav
             </HeadingXLarge>
           </Block>
           <Block display="flex" justifyContent="flex-end" width="100%" alignItems="center">
-            <Block display='flex' alignItems="center" justifyContent="flex-start" width="100%">
+            <Block display="flex" alignItems="center" justifyContent="flex-start" width="100%">
               <LabelSmall>Filter</LabelSmall>
               {/* {getSelector(filter.tema[0].id?.toString(), KravListFilter.TEMAER, getOptions(
                 'Alle tema',
@@ -289,13 +289,13 @@ export const AllKrav = () => {
       {!loading && kravene.totalElements !== 0 && (
         <Block display={'flex'} justifyContent={'space-between'} marginTop={theme.sizing.scale1000}>
           <Block display="flex" alignItems="center">
-            <Button onClick={lastMer} icon={<PlusIcon/>} variant={'secondary'}  disabled={gqlLoading || kravene.numberOfElements >= kravene.totalElements}>
+            <Button onClick={lastMer} icon={<PlusIcon />} variant={'secondary'} disabled={gqlLoading || kravene.numberOfElements >= kravene.totalElements}>
               Vis mer
             </Button>
 
             {gqlLoading && (
               <Block marginLeft={theme.sizing.scale400}>
-                <Spinner size={"large"} />
+                <Spinner size={'large'} />
               </Block>
             )}
           </Block>

@@ -1,15 +1,15 @@
-import {useParams} from 'react-router-dom'
-import {Block} from 'baseui/block'
+import { useParams } from 'react-router-dom'
+import { Block } from 'baseui/block'
 import React from 'react'
-import {HeadingMedium, HeadingSmall, ParagraphMedium} from 'baseui/typography'
-import {codelist, ListName} from '../services/Codelist'
+import { HeadingMedium, HeadingSmall, ParagraphMedium } from 'baseui/typography'
+import { codelist, ListName } from '../services/Codelist'
 import RouteLink from '../components/common/RouteLink'
-import {theme} from '../util'
-import {KravFilterTable} from '../components/common/KravFilterTable'
-import {EtterlevelseDokumentasjonFilterTable} from '../components/common/EtterlevelseDokumentasjonFilterTable'
-import {maxPageWidth, responsivePaddingSmall, responsiveWidthSmall} from '../util/theme'
-import {Helmet} from 'react-helmet'
-import {ampli} from '../services/Amplitude'
+import { theme } from '../util'
+import { KravFilterTable } from '../components/common/KravFilterTable'
+import { EtterlevelseDokumentasjonFilterTable } from '../components/common/EtterlevelseDokumentasjonFilterTable'
+import { maxPageWidth, responsivePaddingSmall, responsiveWidthSmall } from '../util/theme'
+import { Helmet } from 'react-helmet'
+import { ampli } from '../services/Amplitude'
 
 export const RelevansPage = () => {
   const { relevans } = useParams<{ relevans: string }>()
@@ -58,7 +58,7 @@ export const RelevansPage = () => {
 
           <Block marginTop={theme.sizing.scale1200}>
             <HeadingSmall marginBottom={theme.sizing.scale200}>Behandlinger</HeadingSmall>
-            <EtterlevelseDokumentasjonFilterTable filter={{relevans: [relevans]}}/>
+            <EtterlevelseDokumentasjonFilterTable filter={{ relevans: [relevans] }} />
           </Block>
         </Block>
       </Block>

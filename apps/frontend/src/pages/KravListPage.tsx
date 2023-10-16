@@ -1,27 +1,27 @@
-import {Block} from 'baseui/block'
-import {HeadingXXLarge, LabelSmall, ParagraphMedium} from 'baseui/typography'
-import {useEffect, useState} from 'react'
+import { Block } from 'baseui/block'
+import { HeadingXXLarge, LabelSmall, ParagraphMedium } from 'baseui/typography'
+import { useEffect, useState } from 'react'
 import Button from '../components/common/Button'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
 import CustomizedTabs from '../components/common/CustomizedTabs'
 import RouteLink from '../components/common/RouteLink'
-import {user} from '../services/User'
-import {theme} from '../util'
+import { user } from '../services/User'
+import { theme } from '../util'
 import moment from 'moment'
-import {ettlevColors, maxPageWidth, responsivePaddingLarge} from '../util/theme'
-import {PanelLink} from '../components/common/PanelLink'
-import {Krav, KravQL} from '../constants'
-import {SkeletonPanel} from '../components/common/LoadingSkeleton'
-import {codelist, ListName} from '../services/Codelist'
-import {borderColor, borderRadius, borderStyle, borderWidth} from '../components/common/Style'
-import {AllKrav} from '../components/kravList/AllKrav'
-import {SistRedigertKrav} from '../components/kravList/SisteRedigertKrav'
-import {TemaList} from '../components/kravList/TemaList'
+import { ettlevColors, maxPageWidth, responsivePaddingLarge } from '../util/theme'
+import { PanelLink } from '../components/common/PanelLink'
+import { Krav, KravQL } from '../constants'
+import { SkeletonPanel } from '../components/common/LoadingSkeleton'
+import { codelist, ListName } from '../services/Codelist'
+import { borderColor, borderRadius, borderStyle, borderWidth } from '../components/common/Style'
+import { AllKrav } from '../components/kravList/AllKrav'
+import { SistRedigertKrav } from '../components/kravList/SisteRedigertKrav'
+import { TemaList } from '../components/kravList/TemaList'
 import StatusView from '../components/common/StatusTag'
-import {useNavigate, useParams} from 'react-router-dom'
-import {Helmet} from 'react-helmet'
-import {ampli} from '../services/Amplitude'
-import {PlusIcon} from "@navikt/aksel-icons";
+import { useNavigate, useParams } from 'react-router-dom'
+import { Helmet } from 'react-helmet'
+import { ampli } from '../services/Amplitude'
+import { PlusIcon } from '@navikt/aksel-icons'
 
 type Section = 'siste' | 'alle' | 'tema'
 
@@ -59,7 +59,7 @@ export const KravListPage = () => {
               <Block display="flex" justifyContent="flex-end">
                 {user.isKraveier() && (
                   <RouteLink hideUnderline href={'/krav/ny'}>
-                    <Button iconPosition="left" icon={<PlusIcon/>} >
+                    <Button iconPosition="left" icon={<PlusIcon />}>
                       Nytt krav
                     </Button>
                   </RouteLink>

@@ -23,7 +23,7 @@ const etterlevelseFilter = [
   { label: 'Alle', id: 'ALLE' },
   { label: 'Oppfylt', id: SuksesskriterieStatus.OPPFYLT },
   { label: 'Ikke relevant', id: EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT },
-  { label: 'Ikke oppfylt', id: SuksesskriterieStatus.IKKE_OPPFYLT}
+  { label: 'Ikke oppfylt', id: SuksesskriterieStatus.IKKE_OPPFYLT },
 ]
 
 export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolean; krav: KravQL; modalVersion?: boolean }) => {
@@ -44,53 +44,60 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
 
   etterlevelser.map((e) => {
     if (!e.etterlevelseDokumentasjon.teamsData || e.etterlevelseDokumentasjon.teamsData.length === 0) {
-      e.etterlevelseDokumentasjon.teamsData = [{
-        id: 'INGEN_TEAM', name: 'Ingen team', description: 'ingen',
-        tags: [],
-        members: [],
-        productAreaId: 'INGEN_PO',
-        productAreaName: 'Ingen produktområde'
-      }]
+      e.etterlevelseDokumentasjon.teamsData = [
+        {
+          id: 'INGEN_TEAM',
+          name: 'Ingen team',
+          description: 'ingen',
+          tags: [],
+          members: [],
+          productAreaId: 'INGEN_PO',
+          productAreaName: 'Ingen produktområde',
+        },
+      ]
     }
 
-    e.etterlevelseDokumentasjon.teamsData && e.etterlevelseDokumentasjon.teamsData.forEach((t) => {
-      if (!t.productAreaId && !t.productAreaName) {
-        t.productAreaId = 'INGEN_PO'
-        t.productAreaName = 'Ingen produktområde'
-      }
-    })
+    e.etterlevelseDokumentasjon.teamsData &&
+      e.etterlevelseDokumentasjon.teamsData.forEach((t) => {
+        if (!t.productAreaId && !t.productAreaName) {
+          t.productAreaId = 'INGEN_PO'
+          t.productAreaName = 'Ingen produktområde'
+        }
+      })
     return e
   })
 
-
   const filteredEtterlevelse = etterlevelser.filter((e) => {
-      if (filter[0].id !== 'ALLE') {
-        if(filter[0].id === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) {
-          return e.status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT || e.suksesskriterieBegrunnelser.filter((s) => s.suksesskriterieStatus === SuksesskriterieStatus.IKKE_RELEVANT).length > 0
-        } else if(filter[0].id === SuksesskriterieStatus.IKKE_OPPFYLT) {
-          return e.suksesskriterieBegrunnelser.filter((s) => s.suksesskriterieStatus === SuksesskriterieStatus.IKKE_OPPFYLT).length > 0
-        } else if(filter[0].id === SuksesskriterieStatus.OPPFYLT) {
-          return e.suksesskriterieBegrunnelser.filter((s) => s.suksesskriterieStatus === SuksesskriterieStatus.OPPFYLT).length > 0
-        } else {
-          return e.status === filter[0].id
-        }
+    if (filter[0].id !== 'ALLE') {
+      if (filter[0].id === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) {
+        return (
+          e.status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT ||
+          e.suksesskriterieBegrunnelser.filter((s) => s.suksesskriterieStatus === SuksesskriterieStatus.IKKE_RELEVANT).length > 0
+        )
+      } else if (filter[0].id === SuksesskriterieStatus.IKKE_OPPFYLT) {
+        return e.suksesskriterieBegrunnelser.filter((s) => s.suksesskriterieStatus === SuksesskriterieStatus.IKKE_OPPFYLT).length > 0
+      } else if (filter[0].id === SuksesskriterieStatus.OPPFYLT) {
+        return e.suksesskriterieBegrunnelser.filter((s) => s.suksesskriterieStatus === SuksesskriterieStatus.OPPFYLT).length > 0
       } else {
-        return e.status === EtterlevelseStatus.FERDIG_DOKUMENTERT || e.status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT
+        return e.status === filter[0].id
       }
+    } else {
+      return e.status === EtterlevelseStatus.FERDIG_DOKUMENTERT || e.status === EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT
     }
-  )
+  })
 
   const productAreas = _.sortedUniqBy(
-    (filteredEtterlevelse
-      ?.map((e) => e.etterlevelseDokumentasjon.teamsData && e.etterlevelseDokumentasjon.teamsData).flat()
+    filteredEtterlevelse
+      ?.map((e) => e.etterlevelseDokumentasjon.teamsData && e.etterlevelseDokumentasjon.teamsData)
+      .flat()
       .sort((a, b) => (a?.productAreaName || '').localeCompare(b?.productAreaName || ''))
-      .filter((team) => !!team) || []),
+      .filter((team) => !!team) || [],
     (a) => a?.productAreaId,
   )
 
   return (
     <Block marginBottom="32px" width="100%">
-      <HeadingXLarge >Her kan du se hvordan andre team har dokumentert etterlevelse</HeadingXLarge>
+      <HeadingXLarge>Her kan du se hvordan andre team har dokumentert etterlevelse</HeadingXLarge>
       {!loading && etterlevelser.length > 0 && (
         <div className="flex items-center" style={{ paddingTop: '22px', paddingBottom: '22px' }}>
           <LabelSmall $style={{ fontSize: '16px', lineHeight: '18px' }}>Vis:</LabelSmall>
@@ -116,13 +123,17 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
       {productAreas.length > 0 ? (
         <CustomizedAccordion accordion={false}>
           {productAreas.map((t) => {
-            let productAreaEtterlevelser = filteredEtterlevelse?.filter((e) => e.etterlevelseDokumentasjon.teamsData && t &&
-              e.etterlevelseDokumentasjon.teamsData.filter((team) => team.productAreaId === t.productAreaId).length > 0
+            let productAreaEtterlevelser = filteredEtterlevelse?.filter(
+              (e) => e.etterlevelseDokumentasjon.teamsData && t && e.etterlevelseDokumentasjon.teamsData.filter((team) => team.productAreaId === t.productAreaId).length > 0,
             )
 
             const antall = productAreaEtterlevelser.length
             return (
-              <CustomizedPanel key={t && t.productAreaId} title={t ? t.productAreaName ? t.productAreaName : t.productAreaId : ''} HeaderActiveBackgroundColor={ettlevColors.green50}>
+              <CustomizedPanel
+                key={t && t.productAreaId}
+                title={t ? (t.productAreaName ? t.productAreaName : t.productAreaId) : ''}
+                HeaderActiveBackgroundColor={ettlevColors.green50}
+              >
                 {productAreaEtterlevelser.map((e, i) => (
                   <CustomPanelDivider key={e.id}>
                     {modalVersion ? (
@@ -136,13 +147,14 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
                         useUnderline
                         title={
                           <span>
-                            <strong>
-                              E{e.etterlevelseDokumentasjon.etterlevelseNummer}
-                            </strong>
-                            : {e.etterlevelseDokumentasjon.title}
+                            <strong>E{e.etterlevelseDokumentasjon.etterlevelseNummer}</strong>: {e.etterlevelseDokumentasjon.title}
                           </span>
                         }
-                        rightTitle={!!e.etterlevelseDokumentasjon.teamsData && !!e.etterlevelseDokumentasjon.teamsData.length ? e.etterlevelseDokumentasjon.teamsData.map((t) => t.name ? t.name : t.id).join(', ') : 'Ingen team'}
+                        rightTitle={
+                          !!e.etterlevelseDokumentasjon.teamsData && !!e.etterlevelseDokumentasjon.teamsData.length
+                            ? e.etterlevelseDokumentasjon.teamsData.map((t) => (t.name ? t.name : t.id)).join(', ')
+                            : 'Ingen team'
+                        }
                         rightBeskrivelse={`Utfylt: ${moment(e.changeStamp.lastModifiedDate).format('ll')}`}
                         overrides={{
                           Block: {
@@ -152,7 +164,7 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
                             },
                           },
                         }}
-                      // panelIcon={(hover) => <PageIcon hover={hover} />}
+                        // panelIcon={(hover) => <PageIcon hover={hover} />}
                       />
                     ) : (
                       <PanelLink
@@ -162,13 +174,14 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
                         useUnderline
                         title={
                           <span>
-                            <strong>
-                              E{e.etterlevelseDokumentasjon.etterlevelseNummer}
-                            </strong>
-                            : {e.etterlevelseDokumentasjon.title}
+                            <strong>E{e.etterlevelseDokumentasjon.etterlevelseNummer}</strong>: {e.etterlevelseDokumentasjon.title}
                           </span>
                         }
-                        rightTitle={!!e.etterlevelseDokumentasjon.teamsData && !!e.etterlevelseDokumentasjon.teamsData.length ? e.etterlevelseDokumentasjon.teamsData.map((t) => t.name ? t.name : t.id).join(', ') : 'Ingen team'}
+                        rightTitle={
+                          !!e.etterlevelseDokumentasjon.teamsData && !!e.etterlevelseDokumentasjon.teamsData.length
+                            ? e.etterlevelseDokumentasjon.teamsData.map((t) => (t.name ? t.name : t.id)).join(', ')
+                            : 'Ingen team'
+                        }
                         rightBeskrivelse={`Utfylt: ${moment(e.changeStamp.lastModifiedDate).format('ll')}`}
                         overrides={{
                           Block: {
@@ -177,7 +190,7 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
                             },
                           },
                         }}
-                      // panelIcon={(hover) => <PageIcon hover={hover} />}
+                        // panelIcon={(hover) => <PageIcon hover={hover} />}
                       />
                     )}
                   </CustomPanelDivider>
@@ -187,12 +200,8 @@ export const Etterlevelser = ({ loading, krav, modalVersion }: { loading: boolea
           })}
         </CustomizedAccordion>
       ) : (
-        <div className="flex item-center">
-          {etterlevelser.length >= 1 && <LabelLarge>Ingen etterlevelser med {filter[0].label} status</LabelLarge>}
-        </div> 
+        <div className="flex item-center">{etterlevelser.length >= 1 && <LabelLarge>Ingen etterlevelser med {filter[0].label} status</LabelLarge>}</div>
       )}
-
-
 
       {modalVersion && openEtterlse && krav && <EtterlevelseModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} etterlevelse={openEtterlse} kravData={krav} />}
     </Block>

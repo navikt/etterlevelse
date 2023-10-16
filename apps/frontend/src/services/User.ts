@@ -1,7 +1,7 @@
-import {AxiosResponse} from 'axios'
-import {UserInfo} from '../constants'
-import {getUserInfo} from '../api/UserApi'
-import {updateUser} from '../util/hooks'
+import { AxiosResponse } from 'axios'
+import { UserInfo } from '../constants'
+import { getUserInfo } from '../api/UserApi'
+import { updateUser } from '../util/hooks'
 
 export enum Group {
   READ = 'READ',

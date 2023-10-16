@@ -23,11 +23,7 @@ export const EtterlevelseCard = ({ etterlevelse }: { etterlevelse: Etterlevelse 
 
   return (
     <Block width="100%">
-      <Button
-        type="button"
-        variant="tertiary"
-        onClick={() => setIsModalOpen(true)}
-      >
+      <Button type="button" variant="tertiary" onClick={() => setIsModalOpen(true)}>
         <ParagraphMedium
           marginTop="0px"
           marginBottom="0px"

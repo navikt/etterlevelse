@@ -1,12 +1,12 @@
-import {Spinner} from './Spinner'
-import {Cell, Row, Table} from './Table'
+import { Spinner } from './Spinner'
+import { Cell, Row, Table } from './Table'
 import RouteLink from './RouteLink'
 import React from 'react'
-import {gql, useQuery} from '@apollo/client'
-import {EtterlevelseDokumentasjon, PageResponse} from '../../constants'
-import {DotTags} from "./DotTag";
-import {ListName} from "../../services/Codelist";
-import {EtterlevelseDokumentasjonFilter} from "../../api/EtterlevelseDokumentasjonApi";
+import { gql, useQuery } from '@apollo/client'
+import { EtterlevelseDokumentasjon, PageResponse } from '../../constants'
+import { DotTags } from './DotTag'
+import { ListName } from '../../services/Codelist'
+import { EtterlevelseDokumentasjonFilter } from '../../api/EtterlevelseDokumentasjonApi'
 
 const query = gql`
   query getEtterlevelsedokumentasjon($relevans: [String!]) {
@@ -23,19 +23,19 @@ const query = gql`
     }
   }
 `
-export const EtterlevelseDokumentasjonFilterTable = (props: {filter: EtterlevelseDokumentasjonFilter, emptyText?: string }) => {
-  const {data, loading} = useQuery<{ etterlevelseDokumentasjon: PageResponse<EtterlevelseDokumentasjon> }>(query, {variables:props.filter})
+export const EtterlevelseDokumentasjonFilterTable = (props: { filter: EtterlevelseDokumentasjonFilter; emptyText?: string }) => {
+  const { data, loading } = useQuery<{ etterlevelseDokumentasjon: PageResponse<EtterlevelseDokumentasjon> }>(query, { variables: props.filter })
 
   return loading && !data ? (
-    <Spinner size={"large"}/>
+    <Spinner size={'large'} />
   ) : (
     <Table
       data={data!.etterlevelseDokumentasjon.content}
       emptyText={props.emptyText || 'etterlevelseDokumentasjoner'}
       headers={[
-        {title: 'Etterlevelsenummer', column: 'etterlevelseNummer', small: true},
-        {title: 'Tittel', column: 'title'},
-        {title: 'Irrelevant for', column: 'irrelevansFor'}
+        { title: 'Etterlevelsenummer', column: 'etterlevelseNummer', small: true },
+        { title: 'Tittel', column: 'title' },
+        { title: 'Irrelevant for', column: 'irrelevansFor' },
       ]}
       config={{
         initialSortColumn: 'etterlevelseNummer',
@@ -43,7 +43,7 @@ export const EtterlevelseDokumentasjonFilterTable = (props: {filter: Etterlevels
         sorting: {
           title: (a, b) => a.title.localeCompare(b.title),
           etterlevelseNummer: (a, b) => a.etterlevelseNummer - b.etterlevelseNummer,
-          irrelevansFor: (a, b) => a.irrelevansFor.length - b.irrelevansFor.length
+          irrelevansFor: (a, b) => a.irrelevansFor.length - b.irrelevansFor.length,
         },
       }}
       render={(state) => {
@@ -55,7 +55,7 @@ export const EtterlevelseDokumentasjonFilterTable = (props: {filter: Etterlevels
                 <RouteLink href={`/dokumentasjon/${etterlevelseDokumentasjon.id}`}>{etterlevelseDokumentasjon.title}</RouteLink>
               </Cell>
               <Cell>
-                <DotTags list={ListName.RELEVANS} codes={etterlevelseDokumentasjon.irrelevansFor} linkCodelist/>
+                <DotTags list={ListName.RELEVANS} codes={etterlevelseDokumentasjon.irrelevansFor} linkCodelist />
               </Cell>
             </Row>
           )

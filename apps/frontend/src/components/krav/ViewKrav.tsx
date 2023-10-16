@@ -35,7 +35,7 @@ export const ViewKrav = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVe
         {/*  <LabelAboveContent header title='Beskrivelse' markdown={krav.beskrivelse} /> */}
         {<AllInfo krav={krav} alleKravVersjoner={alleKravVersjoner} />}
       </Block>
-      <Block display='block' position={'fixed'} right={'-211px'}>
+      <Block display="block" position={'fixed'} right={'-211px'}>
         <SidePanel />
       </Block>
     </Block>
@@ -116,9 +116,7 @@ export const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVer
               if (k.kravVersjon && parseInt(k.kravVersjon.toString()) < krav.kravVersjon) {
                 return (
                   <DotTag key={'kravVersjon_list_' + i}>
-                    <ExternalLink href={'/krav/' + k.kravNummer + '/' + k.kravVersjon}>
-                      {`K${k.kravNummer}.${k.kravVersjon}`}
-                    </ExternalLink>
+                    <ExternalLink href={'/krav/' + k.kravNummer + '/' + k.kravVersjon}>{`K${k.kravNummer}.${k.kravVersjon}`}</ExternalLink>
                   </DotTag>
                 )
               }
@@ -161,18 +159,14 @@ export const AllInfo = ({ krav, alleKravVersjoner }: { krav: KravQL; alleKravVer
                 return (
                   <Block marginBottom={marginBottom} key={'kravVarsling_list_SLACK_' + i} display="flex">
                     <Block marginRight="4px">Slack:</Block>
-                    <ExternalLink href={slackLink(va.adresse)}>
-                      {`#${va.slackChannel?.name || va.adresse}`}
-                    </ExternalLink>
+                    <ExternalLink href={slackLink(va.adresse)}>{`#${va.slackChannel?.name || va.adresse}`}</ExternalLink>
                   </Block>
                 )
               if (va.type === AdresseType.SLACK_USER)
                 return (
                   <Block marginBottom={marginBottom} key={'kravVarsling_list_SLACK_USER_' + i} display="flex">
                     <Block marginRight="4px">Slack:</Block>
-                    <ExternalLink href={slackUserLink(va.adresse)}>
-                      {`${va.slackUser?.name || va.adresse}`}
-                    </ExternalLink>
+                    <ExternalLink href={slackUserLink(va.adresse)}>{`${va.slackUser?.name || va.adresse}`}</ExternalLink>
                   </Block>
                 )
               return (

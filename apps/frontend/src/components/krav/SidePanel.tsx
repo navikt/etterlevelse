@@ -10,7 +10,7 @@ export const SidePanel = () => {
 
   return (
     <RouteLink href="/dokumentasjoner" hideUnderline onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
-      <Block marginLeft="24px" width="187px" display='flex'>
+      <Block marginLeft="24px" width="187px" display="flex">
         <Block width="120px">
           <LabelSmall
             $style={{

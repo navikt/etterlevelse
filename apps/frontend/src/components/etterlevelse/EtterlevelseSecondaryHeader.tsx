@@ -93,11 +93,7 @@ export const EtterlevelseSecondaryHeader = ({ tab, setTab, setNavigatePath, ette
         </Block>
 
         <Block display="flex" justifyContent="flex-end" width="100%">
-          <Button
-            variant={'tertiary'}
-            onClick={() => setIsTemaModalOpen(true)}
-            marginLeft
-          >
+          <Button variant={'tertiary'} onClick={() => setIsTemaModalOpen(true)} marginLeft>
             Om {temaData?.shortName.toLocaleLowerCase()} og ansvarlig for tema
           </Button>
         </Block>

@@ -111,7 +111,7 @@ const KriterieList = ({ p, setIsFormDirty, newVersion }: { p: FieldArrayRenderPr
         <Block alignSelf={'flex-end'} marginTop={theme.sizing.scale600} marginBottom={theme.sizing.scale600}>
           <Button
             type="button"
-            icon={<PlusIcon/>}
+            icon={<PlusIcon />}
             marginLeft
             variant="secondary"
             disabled={suksesskriterier.length >= 15}
@@ -169,7 +169,7 @@ const Kriterie = ({
       <Block position={'relative'} paddingTop={theme.sizing.scale100}>
         <Block display={'flex'} alignItems={'flex-start'} position={'absolute'} right={0} top={0}>
           {(p.form.values.status !== KravStatus.AKTIV || newVersion) && (
-            <Button type={'button'} variant={'tertiary'} icon={<TrashIcon/>} onClick={remove} tooltip={'Fjern suksesskriterie'} />
+            <Button type={'button'} variant={'tertiary'} icon={<TrashIcon />} onClick={remove} tooltip={'Fjern suksesskriterie'} />
           )}
           <Block width={theme.sizing.scale1000} />
           <Block {...dragHandleProps}>
