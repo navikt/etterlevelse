@@ -5,11 +5,12 @@ import { createMelding, mapMeldingToFormValue, updateMelding } from '../../api/M
 import { AlertType, Melding, MeldingStatus, MeldingType } from '../../constants'
 import { FieldWrapper, TextAreaField } from '../common/Inputs'
 import Button from '../common/Button'
+import { deleteIconGreen600, eyeSlash } from '../Images'
+import { borderColor } from '../common/Style'
 import { ettlevColors, theme } from '../../util/theme'
 import { FormControl } from 'baseui/form-control'
 import { Radio, RadioGroup } from 'baseui/radio'
 import { ParagraphMedium } from 'baseui/typography'
-import { EyeSlashIcon, TrashIcon } from '@navikt/aksel-icons'
 import { Loader } from '@navikt/ds-react'
 
 export const getAlertTypeText = (type: AlertType) => {
@@ -55,7 +56,7 @@ export const EditMelding = ({ melding, setMelding, isLoading, maxChar }: { meldi
   if (isLoading) {
     return (
       <Block display="flex" justifyContent="center">
-        <Loader size={'large'} />
+        <Loader size="large" />
       </Block>
     )
   }
@@ -150,7 +151,12 @@ export const EditMelding = ({ melding, setMelding, isLoading, maxChar }: { meldi
 
               <Block display="flex" width="100%">
                 <Block display="flex" width="100%">
-                  <Button variant="tertiary" onClick={() => window.location.reload()} icon={<TrashIcon title={'Delete'} />}>
+                  <Button
+                    kind="underline-hover"
+                    onClick={() => window.location.reload()}
+                    startEnhancer={<img alt="delete" src={deleteIconGreen600} />}
+                    $style={{ fontSize: '18px' }}
+                  >
                     Forkast endringer
                   </Button>
                 </Block>
@@ -159,12 +165,15 @@ export const EditMelding = ({ melding, setMelding, isLoading, maxChar }: { meldi
                   {melding.meldingStatus === MeldingStatus.ACTIVE && (
                     <Button
                       marginRight
-                      variant="secondary"
+                      kind="secondary"
                       disabled={disableEdit}
-                      icon={<EyeSlashIcon title={'Hide icon'} />}
+                      startEnhancer={<img src={eyeSlash} alt="hide icon" />}
                       onClick={() => {
                         values.meldingStatus = MeldingStatus.DEACTIVE
                         submitForm()
+                      }}
+                      $style={{
+                        ...borderColor(ettlevColors.grey200),
                       }}
                     >
                       Skjul meldingen

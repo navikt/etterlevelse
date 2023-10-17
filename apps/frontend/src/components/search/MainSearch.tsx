@@ -1,27 +1,26 @@
 import * as React from 'react'
-import { ReactElement, useEffect, useState } from 'react'
-import { Select, SelectOverrides, SelectProps, SIZE, TYPE, Value } from 'baseui/select'
-import { theme } from '../../util'
-import { useDebouncedState, useQueryParam } from '../../util/hooks'
-import { prefixBiasedSort } from '../../util/sort'
-import { Block } from 'baseui/block'
-import { useLocation, useNavigate } from 'react-router-dom'
+import {ReactElement, useEffect, useState} from 'react'
+import {Select, SelectOverrides, SelectProps, SIZE, TYPE, Value} from 'baseui/select'
+import {theme} from '../../util'
+import {useDebouncedState, useQueryParam} from '../../util/hooks'
+import {prefixBiasedSort} from '../../util/sort'
+import {Block} from 'baseui/block'
+import {useLocation, useNavigate} from 'react-router-dom'
 import Button from '../common/Button'
-import { Radio, RadioGroup } from 'baseui/radio'
-import { borderColor, borderRadius, borderStyle, borderWidth, padding, paddingZero } from '../common/Style'
+import {Radio, RadioGroup} from 'baseui/radio'
+import {borderColor, borderRadius, borderStyle, borderWidth, padding, paddingZero} from '../common/Style'
 import SearchLabel from './components/SearchLabel'
-import { NavigableItem, ObjectType } from '../admin/audit/AuditTypes'
-import { Behandling, EtterlevelseDokumentasjon, Krav, KravStatus } from '../../constants'
-import { ettlevColors, searchResultColor } from '../../util/theme'
-import { kravName } from '../../pages/KravPage'
-import { getKravByKravNumberAndVersion, searchKrav, searchKravByNumber } from '../../api/KravApi'
-import { behandlingName, searchBehandling } from '../../api/BehandlingApi'
-import { codelist, ListName } from '../../services/Codelist'
-import { clearSearchIcon, filterIcon, navChevronDownIcon, searchIcon } from '../Images'
-import { ParagraphMedium } from 'baseui/typography'
-import { urlForObject } from '../common/RouteLink'
-import { etterlevelseDokumentasjonName, searchEtterlevelsedokumentasjon } from '../../api/EtterlevelseDokumentasjonApi'
-import { FilterIcon } from '@navikt/aksel-icons'
+import {NavigableItem, ObjectType} from '../admin/audit/AuditTypes'
+import {Behandling, EtterlevelseDokumentasjon, Krav, KravStatus} from '../../constants'
+import {ettlevColors, searchResultColor} from '../../util/theme'
+import {kravName} from '../../pages/KravPage'
+import {getKravByKravNumberAndVersion, searchKrav, searchKravByNumber} from '../../api/KravApi'
+import {behandlingName, searchBehandling} from '../../api/BehandlingApi'
+import {codelist, ListName} from '../../services/Codelist'
+import {clearSearchIcon, filterIcon, navChevronDownIcon, searchIcon} from '../Images'
+import {ParagraphMedium} from 'baseui/typography'
+import {urlForObject} from '../common/RouteLink'
+import {etterlevelseDokumentasjonName, searchEtterlevelsedokumentasjon} from '../../api/EtterlevelseDokumentasjonApi'
 
 type SearchItem = { id: string; sortKey: string; label: ReactElement; type: NavigableItem | string }
 
@@ -82,8 +81,24 @@ const SelectType = (props: { type: SearchType; setType: (type: SearchType) => vo
     <Block width="100%" backgroundColor={ettlevColors.white}>
       {!filter && (
         <Block width="100%" display="flex" flex="1" justifyContent="flex-end" marginBottom="-10px">
-          <Button size="xsmall" onClick={() => setFilter(!filter)} icon={<FilterIcon />} variant="tertiary" marginRight notBold>
-            Vis filter
+          <Button
+            size="mini"
+            onClick={() => setFilter(!filter)}
+            startEnhancer={<img alt="filter icon" src={filterIcon} />}
+            kind="tertiary"
+            marginRight
+            label="Filter søkeresultat"
+            notBold
+          >
+            <ParagraphMedium
+              $style={{
+                fontSize: theme.sizing.scale600,
+                marginTop: 0,
+                marginBottom: 0,
+              }}
+            >
+              Vis filter
+            </ParagraphMedium>
           </Button>
         </Block>
       )}
@@ -303,7 +318,7 @@ const MainSearchSelector = (props: SelectPropWithSetValue) => {
         overrides: {
           Svg: {
             component: () => (
-              <Button notBold size="xsmall" variant="tertiary" onClick={() => props.setValue([])}>
+              <Button notBold size="compact" kind="tertiary" onClick={() => props.setValue([])}>
                 <img src={clearSearchIcon} alt="tøm" />
               </Button>
             ),

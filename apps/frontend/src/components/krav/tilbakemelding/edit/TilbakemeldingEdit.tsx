@@ -36,10 +36,10 @@ export const TilbakemeldingEdit = ({
     <Block alignItems="flex-end">
       <CustomizedTextarea rows={15} onChange={(e) => setResponse((e.target as HTMLTextAreaElement).value)} value={response} disabled={loading} />
       <Block marginTop={theme.sizing.scale400} display="flex" justifyContent={'flex-end'}>
-        <Button variant={'secondary'} onClick={() => setEditModal(false)}>
+        <Button kind={'secondary'} size={'compact'} onClick={() => setEditModal(false)}>
           Avbryt
         </Button>
-        <Button marginLeft disabled={!response || loading} onClick={submit}>
+        <Button marginLeft size="compact" disabled={!response || loading} onClick={submit}>
           Lagre
         </Button>
       </Block>

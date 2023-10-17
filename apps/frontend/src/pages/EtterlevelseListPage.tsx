@@ -35,7 +35,7 @@ export const EtterlevelseListPage = () => {
             <Block>
               {user.canWrite() && (
                 <RouteLink href={'/etterlevelse/ny'}>
-                  <Button>Ny etterlevelse</Button>
+                  <Button size="compact">Ny etterlevelse</Button>
                 </RouteLink>
               )}
             </Block>
@@ -50,16 +50,16 @@ export const EtterlevelseListPage = () => {
                   </RouteLink>
                 </Block>
               ))}
-            {loading && <Loader size={'large'} />}
+            {loading && <Loader size="large" />}
           </Block>
           <Block display="flex" alignItems="center" marginTop={theme.sizing.scale1000}>
             <LabelSmall marginRight={theme.sizing.scale400}>
               Side {etterlevelse.pageNumber + 1}/{etterlevelse.pages}
             </LabelSmall>
-            <Button onClick={prev} disabled={etterlevelse.pageNumber === 0}>
+            <Button onClick={prev} size="compact" disabled={etterlevelse.pageNumber === 0}>
               Forrige
             </Button>
-            <Button onClick={next} disabled={etterlevelse.pageNumber >= etterlevelse.pages - 1}>
+            <Button onClick={next} size="compact" disabled={etterlevelse.pageNumber >= etterlevelse.pages - 1}>
               Neste
             </Button>
           </Block>

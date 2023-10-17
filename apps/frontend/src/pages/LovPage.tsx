@@ -6,6 +6,7 @@ import { codelist, ListName, LovCode } from '../services/Codelist'
 import { ExternalLink, ObjectLink } from '../components/common/RouteLink'
 import { theme } from '../util'
 import { lovdataBase } from '../components/Lov'
+import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons'
 import { Markdown } from '../components/common/Markdown'
 import { ettlevColors, maxPageWidth } from '../util/theme'
 import Button from '../components/common/Button'
@@ -19,7 +20,6 @@ import { sortKraverByPriority } from '../util/sort'
 import { Krav } from '../constants'
 import { Helmet } from 'react-helmet'
 import { ampli } from '../services/Amplitude'
-import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons'
 
 const fontColor = ettlevColors.white
 
@@ -144,7 +144,7 @@ const LovSide = ({ lov }: { lov: LovCode }) => {
           )}
 
           <Block alignSelf={'flex-end'} marginTop={theme.sizing.scale600}>
-            <Button onClick={() => setExpand(!expand)} icon={expand ? <ChevronUpIcon /> : <ChevronDownIcon />} variant="tertiary">
+            <Button $style={{ color: fontColor }} onClick={() => setExpand(!expand)} icon={expand ? faChevronUp : faChevronDown} kind={'underline-hover'}>
               {expand ? 'Mindre' : 'Mer'} om loven
             </Button>
           </Block>

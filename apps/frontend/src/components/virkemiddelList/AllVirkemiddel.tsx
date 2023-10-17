@@ -4,17 +4,16 @@ import { VirkemiddelListFilter } from '../../constants'
 import { Block, Responsive, Scale } from 'baseui/block'
 import { Option } from 'baseui/select'
 import CustomizedSelect from '../common/CustomizedSelect'
-import { ettlevColors } from '../../util/theme'
+import { ettlevColors, theme } from '../../util/theme'
 import { HeadingXLarge, LabelSmall, ParagraphMedium } from 'baseui/typography'
 import { borderColor, borderWidth } from '../common/Style'
 import { useVirkemiddelFilter } from '../../api/VirkemiddelApi'
 import { useDebouncedState } from '../../util/hooks'
 import { StatefulInput } from 'baseui/input'
 import Button from '../common/Button'
-import { searchIcon } from '../Images'
+import { clearSearchIcon, searchIcon } from '../Images'
 import { VirkemiddelTable } from './VirkemiddelTable'
 import { EditVirkemiddelModal } from '../virkemiddel/edit/EditVirkemiddelModal'
-import { XMarkIcon } from '@navikt/aksel-icons'
 import { Loader } from '@navikt/ds-react'
 
 type VirkemiddelFilter = {
@@ -92,7 +91,7 @@ export const AllVirkemiddel = ({ isCreateModalOpen, setIsCreateModalOpen }: AllV
   }
 
   return loading ? (
-    <Loader size={'large'} />
+    <Loader size="large" />
   ) : (
     <Block>
       <Block width="100%" justifyContent="center" marginTop="20px" marginBottom="20px">
@@ -101,7 +100,7 @@ export const AllVirkemiddel = ({ isCreateModalOpen, setIsCreateModalOpen }: AllV
             {totalDataLength} Virkemiddel
           </HeadingXLarge>
         </Block>
-        <Block display="flex" justifyContent="center" alignContent="center" width="100%">
+        <Block display='flex' justifyContent="center" alignContent="center" width="100%">
           <Block display="flex" justifyContent="flex-start" width="100%" onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
             <StatefulInput
               size="compact"
@@ -130,7 +129,11 @@ export const AllVirkemiddel = ({ isCreateModalOpen, setIsCreateModalOpen }: AllV
                   props: {
                     overrides: {
                       Svg: {
-                        component: (props: any) => <Button notBold variant="tertiary" onClick={() => props.onClick()} icon={<XMarkIcon title={'Tøm'} />} />,
+                        component: (props: any) => (
+                          <Button notBold size="compact" kind="tertiary" onClick={() => props.onClick()}>
+                            <img src={clearSearchIcon} alt="tøm" />
+                          </Button>
+                        ),
                       },
                     },
                   },

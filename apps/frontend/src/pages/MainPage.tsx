@@ -10,6 +10,7 @@ import ReactPlayer from 'react-player'
 import { Button, SIZE } from 'baseui/button'
 import { faPlay } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { buttonBorderStyle, buttonContentStyle } from '../components/common/Button'
 import React, { useEffect, useState } from 'react'
 import { Markdown } from '../components/common/Markdown'
 import { AlertType, Melding, MeldingStatus, MeldingType } from '../constants'
@@ -165,7 +166,15 @@ export const MainPage = () => {
                     }}
                     kind="secondary"
                     size={SIZE.compact}
+                    style={buttonBorderStyle}
                     startEnhancer={<FontAwesomeIcon icon={faPlay} />}
+                    overrides={{
+                      BaseButton: {
+                        style: {
+                          ...buttonContentStyle,
+                        },
+                      },
+                    }}
                   >
                     {' '}
                     Se film{' '}

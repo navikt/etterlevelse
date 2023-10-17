@@ -5,11 +5,14 @@ import { Virkemiddel } from '../../constants'
 import { SkeletonPanel } from '../common/LoadingSkeleton'
 import { Cell, Row, Table } from '../common/Table'
 import Button from '../common/Button'
+import { SIZE as ButtonSize } from 'baseui/button/constants'
+import { KIND } from 'baseui/button'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { ColumnCompares } from '../../util/hooks'
 import { EditVirkemiddelModal } from '../virkemiddel/edit/EditVirkemiddelModal'
 import DeleteVirkemiddeltModal from '../virkemiddel/edit/DeleteVirkemiddelModal'
 import { LovView } from '../Lov'
-import { DocPencilIcon, TrashIcon } from '@navikt/aksel-icons'
 
 type VirkmiddelTableProps = {
   virkemidler: Virkemiddel[]
@@ -72,22 +75,28 @@ export const VirkemiddelTable = ({ virkemidler, loading, refetchData }: Virkmidd
                 <Block display="flex" justifyContent="flex-end" width="100%">
                   <Button
                     tooltip={'Rediger'}
-                    variant={'tertiary'}
+                    size={ButtonSize.compact}
+                    kind={KIND.tertiary}
                     onClick={() => {
                       setSelectedVirkemiddel(virkemiddel)
                       setIsEditModalOpen(true)
                     }}
-                    icon={<DocPencilIcon title={'Rediger'} />}
-                  />
+                    label={'Rediger'}
+                  >
+                    <FontAwesomeIcon icon={faEdit} />
+                  </Button>
                   <Button
                     tooltip={'Slett'}
-                    variant={'tertiary'}
+                    size={ButtonSize.compact}
+                    kind={KIND.tertiary}
                     onClick={() => {
                       setSelectedVirkemiddel(virkemiddel)
                       setIsDeleteModalOpen(true)
                     }}
-                    icon={<TrashIcon title={'Slett'} />}
-                  />
+                    label={'Slett'}
+                  >
+                    <FontAwesomeIcon icon={faTrash} />
+                  </Button>
                 </Block>
               </Cell>
             </Row>

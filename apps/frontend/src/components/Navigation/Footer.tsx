@@ -41,7 +41,7 @@ export const Footer = () => {
           <div className="w-full min-h-[100px] flex items-center">
             <div className="w-full flex justify-around items-center">
               <ExternalLink href={datajegerSlackLink} className="text-white" openOnSamePage>
-                #etterlevelse på Slack
+                  #etterlevelse på Slack
               </ExternalLink>
               <ExternalLink href={githubRepo} openOnSamePage className="text-white">
                 Github
@@ -54,7 +54,9 @@ export const Footer = () => {
 
           {showButtonToTop && (
             <Block position="relative" display="flex" justifyContent="flex-end" $style={{ cursor: 'pointer', top: '-50px' }} onClick={() => window.scrollTo(0, 0)}>
-              <Button variant="tertiary" icon={<img src={ToTopCircle} alt="Til toppen av siden" />} />
+              <Button kind={KIND.tertiary} $style={{ ':hover': { backgroundColor: 'transparent' } }}>
+                <img src={ToTopCircle} alt="Til toppen av siden" />
+              </Button>
             </Block>
           )}
         </Block>

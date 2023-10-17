@@ -18,7 +18,7 @@ import { useDebouncedState } from '../util/hooks'
 import { SkeletonPanel } from '../components/common/LoadingSkeleton'
 import { user } from '../services/User'
 import { useNavigate, useParams } from 'react-router-dom'
-import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons'
+import { faExternalLinkAlt, faPlus } from '@fortawesome/free-solid-svg-icons'
 import { borderWidth } from '../components/common/Style'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -26,7 +26,6 @@ import { Helmet } from 'react-helmet'
 import { ampli } from '../services/Amplitude'
 import EditEtterlevelseDokumentasjonModal from '../components/etterlevelseDokumentasjon/edit/EditEtterlevelseDokumentasjonModal'
 import BehandlingSok from '../components/etterlevelseDokumentasjon/tabs/BehandlingSok'
-import { PlusIcon } from '@navikt/aksel-icons'
 import { Loader } from '@navikt/ds-react'
 
 type Section = 'mine' | 'siste' | 'alle' | 'behandlingsok'
@@ -345,7 +344,7 @@ const Alle = () => {
                 overrides: {
                   Svg: {
                     component: (props: any) => (
-                      <Button notBold size="xsmall" variant="tertiary" onClick={() => props.onClick()}>
+                      <Button notBold size="compact" kind="tertiary" onClick={() => props.onClick()}>
                         <img src={clearSearchIcon} alt="tøm" />
                       </Button>
                     ),
@@ -370,7 +369,7 @@ const Alle = () => {
           {loading && (
             <Block>
               <Block marginLeft={theme.sizing.scale400} marginTop={theme.sizing.scale400}>
-                <Loader size={'large'} />
+                <Loader size="large" />
               </Block>
             </Block>
           )}
@@ -391,9 +390,9 @@ const Alle = () => {
               <Block display="flex" alignItems="center">
                 <Button
                   onClick={lastMer}
-                  icon={<PlusIcon />}
-                  variant={'secondary'}
-                  size="xsmall"
+                  icon={faPlus}
+                  kind={'secondary'}
+                  size="compact"
                   disabled={gqlLoading || etterlevelseDokumentasjoner.numberOfElements >= etterlevelseDokumentasjoner.totalElements}
                 >
                   Vis mer
@@ -401,7 +400,7 @@ const Alle = () => {
 
                 {gqlLoading && (
                   <Block marginLeft={theme.sizing.scale400}>
-                    <Loader size={'large'} />
+                    <Loader size="large" />
                   </Block>
                 )}
               </Block>

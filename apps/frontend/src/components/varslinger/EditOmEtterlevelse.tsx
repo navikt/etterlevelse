@@ -5,6 +5,7 @@ import { createMelding, mapMeldingToFormValue, updateMelding } from '../../api/M
 import { AlertType, Melding, MeldingStatus } from '../../constants'
 import { InputField, TextAreaField } from '../common/Inputs'
 import Button from '../common/Button'
+import { theme } from '../../util/theme'
 import { HeadingXXLarge } from 'baseui/typography'
 import { Loader } from '@navikt/ds-react'
 
@@ -34,7 +35,7 @@ export const EditOmEtterlevelse = ({ melding, setMelding, isLoading, maxChar }: 
   if (isLoading) {
     return (
       <Block display="flex" justifyContent="center">
-        <Loader size={'large'} />
+        <Loader size="large"/>
       </Block>
     )
   }
@@ -55,7 +56,7 @@ export const EditOmEtterlevelse = ({ melding, setMelding, isLoading, maxChar }: 
 
               <Block display="flex" justifyContent="flex-end" width="100%">
                 <Button
-                  variant="secondary"
+                  kind="secondary"
                   onClick={() => {
                     window.location.reload()
                   }}

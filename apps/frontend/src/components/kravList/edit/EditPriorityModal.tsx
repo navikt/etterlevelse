@@ -11,6 +11,7 @@ import { HeadingXLarge, HeadingXXLarge, LabelSmall, ParagraphMedium } from 'base
 import moment from 'moment'
 import StatusView from '../../common/StatusTag'
 import { borderRadius, borderStyle, paddingZero } from '../../common/Style'
+import { theme } from '../../../util'
 import { Block } from 'baseui/block'
 import { ettlevColors, responsivePaddingSmall } from '../../../util/theme'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -194,7 +195,7 @@ export const EditPriorityModal = (props: { isOpen: boolean; setIsOpen: React.Dis
             <Block>
               {loading ? (
                 <Block display="flex" justifyContent="center">
-                  <Loader size={'large'} />
+                  <Loader size="large" />
                 </Block>
               ) : (
                 <Form>
@@ -248,7 +249,8 @@ export const EditPriorityModal = (props: { isOpen: boolean; setIsOpen: React.Dis
               className="krav-list-button-container"
             >
               <Button
-                variant="secondary"
+                size="compact"
+                kind="secondary"
                 onClick={() => {
                   refresh()
                   close()
@@ -257,7 +259,7 @@ export const EditPriorityModal = (props: { isOpen: boolean; setIsOpen: React.Dis
               >
                 Avbryt
               </Button>
-              <Button onClick={p.submitForm} disabled={loading} marginLeft>
+              <Button size="compact" onClick={p.submitForm} disabled={loading} marginLeft>
                 Lagre
               </Button>
             </Block>

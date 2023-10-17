@@ -4,6 +4,7 @@ import { Modal, ModalBody, ModalFooter, ModalHeader } from 'baseui/modal'
 import { ParagraphMedium } from 'baseui/typography'
 import { Button } from 'baseui/button'
 import { Block } from 'baseui/block'
+import { buttonContentStyle } from '../../common/Button'
 import { Virkemiddel } from '../../../constants'
 import { deleteVirkemiddel } from '../../../api/VirkemiddelApi'
 
@@ -47,13 +48,23 @@ const DeleteVirkemiddeltModal = ({ isOpen, setIsOpen, virkemiddel, refetchData }
               BaseButton: {
                 style: {
                   marginRight: '1rem',
+                  ...buttonContentStyle,
                 },
               },
             }}
           >
             <strong>Avbryt</strong>
           </Button>
-          <Button onClick={() => submit(virkemiddel?.id)}>
+          <Button
+            onClick={() => submit(virkemiddel?.id)}
+            overrides={{
+              BaseButton: {
+                style: {
+                  ...buttonContentStyle,
+                },
+              },
+            }}
+          >
             <strong>Slett</strong>
           </Button>
         </Block>

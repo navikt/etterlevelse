@@ -9,7 +9,7 @@ import { Helmet } from 'react-helmet'
 import { ampli } from '../services/Amplitude'
 import { AllVirkemiddel } from '../components/virkemiddelList/AllVirkemiddel'
 import Button from '../components/common/Button'
-import { PlusIcon } from '@navikt/aksel-icons'
+import { plusIcon } from '../components/Images'
 
 export const VirkemiddelListPage = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false)
@@ -32,7 +32,7 @@ export const VirkemiddelListPage = () => {
               <Block display="flex" justifyContent="flex-end">
                 {user.isKraveier() && (
                   <Block>
-                    <Button onClick={() => setIsCreateModalOpen(true)} iconPosition="left" icon={<PlusIcon />}>
+                    <Button onClick={() => setIsCreateModalOpen(true)} startEnhancer={<img src={plusIcon} alt="plus icon" />} size="compact">
                       Nytt virkemiddel
                     </Button>
                   </Block>

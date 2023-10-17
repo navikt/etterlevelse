@@ -9,6 +9,7 @@ import { user } from '../services/User'
 import { theme } from '../util'
 import moment from 'moment'
 import { ettlevColors, maxPageWidth, responsivePaddingLarge } from '../util/theme'
+import { plusIcon } from '../components/Images'
 import { PanelLink } from '../components/common/PanelLink'
 import { Krav, KravQL } from '../constants'
 import { SkeletonPanel } from '../components/common/LoadingSkeleton'
@@ -21,7 +22,6 @@ import StatusView from '../components/common/StatusTag'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
 import { ampli } from '../services/Amplitude'
-import { PlusIcon } from '@navikt/aksel-icons'
 
 type Section = 'siste' | 'alle' | 'tema'
 
@@ -59,7 +59,7 @@ export const KravListPage = () => {
               <Block display="flex" justifyContent="flex-end">
                 {user.isKraveier() && (
                   <RouteLink hideUnderline href={'/krav/ny'}>
-                    <Button iconPosition="left" icon={<PlusIcon />}>
+                    <Button startEnhancer={<img src={plusIcon} alt="plus icon" />} size="compact">
                       Nytt krav
                     </Button>
                   </RouteLink>

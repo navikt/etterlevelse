@@ -1,6 +1,7 @@
 import axios from 'axios'
 import React, { useState } from 'react'
 import { Modal, ModalBody, ModalButton, ModalFooter, ModalHeader } from 'baseui/modal'
+import { buttonContentStyle } from '../components/common/Button'
 
 let done = false
 
@@ -33,7 +34,7 @@ export const useNetworkStatus = () => {
       <ModalHeader>{error?.message ? error?.message : 'Nettverksfeil'}</ModalHeader>
       <ModalBody>{error?.response?.data?.message ? error?.response?.data?.message : error?.toString()}</ModalBody>
       <ModalFooter>
-        <ModalButton onClick={clear}>
+        <ModalButton onClick={clear} overrides={{ BaseButton: { style: { ...buttonContentStyle } } }}>
           <strong>Lukk</strong>
         </ModalButton>
       </ModalFooter>

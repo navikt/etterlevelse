@@ -13,7 +13,6 @@ import { user } from '../../../services/User'
 import { faBars, faTimes } from '@fortawesome/free-solid-svg-icons'
 import { ettlevColors } from '../../../util/theme'
 import { arkPennIcon, exitIcon, grafIcon, husIcon, paragrafIcon } from '../../Images'
-import { LeaveIcon, MenuHamburgerIcon, XMarkIcon } from '@navikt/aksel-icons'
 
 const Brand = () => (
   <StyledLink style={{ textDecoration: 'none' }} href="/">
@@ -21,7 +20,7 @@ const Brand = () => (
   </StyledLink>
 )
 
-const MenuItem = (props: { to: string; text: string; icon: string; setShowMenu: Function }) => (
+const MenuItem = (props: { to: string, text: string, icon: string, setShowMenu: Function }) => (
   <Block
     display={'flex'}
     alignItems={'center'}
@@ -51,7 +50,7 @@ const LoginButton = (props: { location: string }) => {
   const linkCss = useCss({ textDecoration: 'none', color: 'white' })
   return (
     <StyledLink href={`${env.backendBaseUrl}/login?redirect_uri=${props.location}`} className={linkCss}>
-      <Button variant="secondary">Logg inn</Button>
+      <Button kind="secondary">Logg inn</Button>
     </StyledLink>
   )
 }
@@ -61,7 +60,7 @@ const SignOutButton = (props: { location: string }) => {
   const linkCss = useCss({ textDecoration: 'none', color: 'white' })
   return (
     <StyledLink href={`${env.backendBaseUrl}/logout?redirect_uri=${props.location}`} className={linkCss}>
-      <Button variant="secondary" icon={<LeaveIcon />}>
+      <Button kind="secondary" startEnhancer={<img src={exitIcon} alt="exit icon" />}>
         Logg ut
       </Button>
     </StyledLink>
@@ -81,7 +80,7 @@ const BurgerMenu = () => {
   return (
     <React.Fragment>
       {!showMenu && (
-        <Button variant="secondary" onClick={() => setShowMenu(true)} icon={<MenuHamburgerIcon />}>
+        <Button kind="secondary" size="compact" onClick={() => setShowMenu(true)} icon={faBars}>
           Meny
         </Button>
       )}
@@ -110,7 +109,7 @@ const BurgerMenu = () => {
         >
           <Block display="flex" flexDirection="column" height="100%">
             <Block width="100%" display="flex" justifyContent="flex-end" marginBottom={theme.sizing.scale1600}>
-              <Button variant="secondary" onClick={() => setShowMenu(false)} icon={<XMarkIcon />}>
+              <Button kind="secondary" size="compact" onClick={() => setShowMenu(false)} icon={faTimes}>
                 Meny
               </Button>
             </Block>
