@@ -53,11 +53,10 @@ const LoggedInHeader = () => {
   )
 
   const kravPages = user.isKraveier()
-    ? [{ label: 'Kraveier meny' }, { label: 'Forvalte og opprette krav', href: '/kravliste' }, { label: 'Forvalte og opprette virkemiddel', href: '/virkemiddelliste' }]
+    ? [{ label: 'Forvalte og opprette krav', href: '/kravliste' }, { label: 'Forvalte og opprette virkemiddel', href: '/virkemiddelliste' }]
     : []
   const adminPages = user.isAdmin()
     ? [
-        { label: 'Admin meny' },
         { label: 'Administrere krav', href: '/admin/krav' },
         { label: 'Administrere dokumentasjon', href: '/admin/dokumentasjon' },
         { label: 'Administrere etterlevelse', href: '/admin/etterlevelse' },
@@ -72,7 +71,7 @@ const LoggedInHeader = () => {
 
   return (
     <div className="flex items-center justify-center">
-      <Menu pages={[[{ label: <UserInfo /> }], kravPages, adminPages, [{ label: roller }]]} title={user.getIdent()} icon={<PersonIcon />} kind={'tertiary'} />
+      <Menu pages={[[{ label: <UserInfo /> }], kravPages, adminPages, [{ label: roller }]]} title={user.getIdent()} icon={<PersonIcon />} />
 
       <div className="w-3" />
 
@@ -86,8 +85,8 @@ const LoggedInHeader = () => {
           [{ label: 'Mer om etterlevelse i NAV', href: '/help', icon: <InformationIcon /> }],
         ]}
         title={'Meny'}
-        kind="tertiary"
       />
+      
     </div>
   )
 }
@@ -123,9 +122,9 @@ const Menu = (props: { pages: MenuItem[][]; title: React.ReactNode; icon?: React
 
   return (
     <Dropdown>
-      <Button as={Dropdown.Toggle} variant={props.kind || 'secondary'} icon={props.icon}>
-        {props.title}
-      </Button>
+      <InternalHeader.Button as={Dropdown.Toggle}>
+        {props.icon} {props.title}
+      </InternalHeader.Button>
       <Dropdown.Menu className="min-w-max h-auto">
         <Dropdown.Menu.List>
           {allPages.map((p, i) => {
@@ -182,17 +181,13 @@ const Header = (props: { noSearchBar?: boolean; noLoginButton?: boolean }) => {
   }, [location.pathname])
 
   return (
-    <div className="w-full bg-white">
-      <div role="banner" className="w-full flex justify-center bg-white">
+    <div className="w-full">
+      <div role="banner" className="w-full flex justify-center">
         <SkipToContent />
-        <div className="w-full max-w-7xl">
-          <InternalHeader className="bg-white">
-            <InternalHeader.Title>
-              <div className="flex items-center">
-                <Link href={'/'} underline={false}>
-                  <img src={logo} alt="Nav etterlevelse" height="44px" />
-                </Link>
-              </div>
+        <div className="w-full">
+          <InternalHeader >
+            <InternalHeader.Title as="h1">
+      Etterlevelse
             </InternalHeader.Title>
             <Spacer />
             {!props.noSearchBar && (
