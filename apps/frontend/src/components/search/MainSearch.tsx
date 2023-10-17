@@ -21,6 +21,7 @@ import { clearSearchIcon, filterIcon, navChevronDownIcon, searchIcon } from '../
 import { ParagraphMedium } from 'baseui/typography'
 import { urlForObject } from '../common/RouteLink'
 import { etterlevelseDokumentasjonName, searchEtterlevelsedokumentasjon } from '../../api/EtterlevelseDokumentasjonApi'
+import { BodyShort, Loader, Search } from '@navikt/ds-react'
 
 type SearchItem = { id: string; sortKey: string; label: ReactElement; type: NavigableItem | string }
 
@@ -199,88 +200,75 @@ const useMainSearch = (searchParam?: string) => {
 
   useEffect(() => {
     setSearchResult([])
+    if (search && search.replace(/ /g, '').length > 2) {
+      ; (async () => {
+        let results: SearchItem[] = []
+        let searches: Promise<any>[] = []
+        const compareFn = (a: SearchItem, b: SearchItem) => prefixBiasedSort(search, a.sortKey, b.sortKey)
+        const add = (items: SearchItem[]) => {
+          results = [...results, ...items]
+          results = results
+            .filter((item, index, self) => index === self.findIndex((searchItem) => searchItem.id === item.id))
+            .sort((a, b) => {
+              const same = a.type === b.type
+              const typeOrder = order(a.type) - order(b.type)
+              return same || typeOrder !== 0 ? typeOrder : compareFn(a, b)
+            })
+          setSearchResult(results)
+        }
+        setLoading(true)
 
-    if (type === ListName.UNDERAVDELING && search.length > 2) {
-      setSearchResult(getCodelist(search, ListName.UNDERAVDELING, 'Underavdeling'))
-    } else {
-      if (search && search.replace(/ /g, '').length > 2) {
-        ;(async () => {
-          let results: SearchItem[] = []
-          let searches: Promise<any>[] = []
-          const compareFn = (a: SearchItem, b: SearchItem) => prefixBiasedSort(search, a.sortKey, b.sortKey)
-          const add = (items: SearchItem[]) => {
-            results = [...results, ...items]
-            results = results
-              .filter((item, index, self) => index === self.findIndex((searchItem) => searchItem.id === item.id))
-              .sort((a, b) => {
-                const same = a.type === b.type
-                const typeOrder = order(a.type) - order(b.type)
-                return same || typeOrder !== 0 ? typeOrder : compareFn(a, b)
-              })
-            setSearchResult(results)
+        searches.push((async () => add((await searchKrav(search)).filter((k) => k.status !== KravStatus.UTGAATT).map(kravMap)))())
+
+        let kravNumber = search
+        if (kravNumber[0].toLowerCase() === 'k') {
+          kravNumber = kravNumber.substring(1)
+        }
+
+        if (Number.parseFloat(kravNumber) && Number.parseFloat(kravNumber) % 1 === 0) {
+          searches.push(
+            (async () =>
+              add(
+                (await searchKravByNumber(Number.parseFloat(kravNumber).toString()))
+                  .filter((k) => k.status !== KravStatus.UTGAATT)
+                  .sort((a, b) => {
+                    if (a.kravNummer === b.kravNummer) {
+                      return b.kravVersjon - a.kravVersjon
+                    } else {
+                      return b.kravNummer - a.kravNummer
+                    }
+                  })
+                  .map(kravMap),
+              ))(),
+          )
+        }
+
+        if (Number.parseFloat(kravNumber) && Number.parseFloat(kravNumber) % 1 !== 0) {
+          const kravNummerMedVersjon = kravNumber.split('.')
+          const searchResult = [await getKravByKravNumberAndVersion(kravNummerMedVersjon[0], kravNummerMedVersjon[1])].filter((k) => k && k.status !== KravStatus.UTGAATT)
+          if (typeof searchResult[0] !== 'undefined') {
+            const mappedResult = [
+              {
+                id: searchResult[0].id,
+                sortKey: searchResult[0].navn,
+                label: <SearchLabel name={kravName(searchResult[0])} type={'Krav'} backgroundColor={searchResultColor.kravBackground} />,
+                type: ObjectType.Krav,
+              },
+            ]
+
+            searches.push((async () => add(mappedResult))())
           }
-          setLoading(true)
+        }
 
-          if (type === 'all') {
-            add(searchCodelist(search, ListName.UNDERAVDELING, 'Underavdeling', searchResultColor.underavdelingBackground))
-          }
 
-          if (type === 'all' || type === ObjectType.Krav) {
-            searches.push((async () => add((await searchKrav(search)).filter((k) => k.status !== KravStatus.UTGAATT).map(kravMap)))())
+        searches.push((async () => add((await searchBehandling(search)).map(behandlingMap)))())
+        searches.push((async () => add((await searchEtterlevelsedokumentasjon(search)).map(EtterlevelseDokumentasjonMap)))())
 
-            let kravNumber = search
-            if (kravNumber[0].toLowerCase() === 'k') {
-              kravNumber = kravNumber.substring(1)
-            }
-
-            if (Number.parseFloat(kravNumber) && Number.parseFloat(kravNumber) % 1 === 0) {
-              searches.push(
-                (async () =>
-                  add(
-                    (await searchKravByNumber(Number.parseFloat(kravNumber).toString()))
-                      .filter((k) => k.status !== KravStatus.UTGAATT)
-                      .sort((a, b) => {
-                        if (a.kravNummer === b.kravNummer) {
-                          return b.kravVersjon - a.kravVersjon
-                        } else {
-                          return b.kravNummer - a.kravNummer
-                        }
-                      })
-                      .map(kravMap),
-                  ))(),
-              )
-            }
-
-            if (Number.parseFloat(kravNumber) && Number.parseFloat(kravNumber) % 1 !== 0) {
-              const kravNummerMedVersjon = kravNumber.split('.')
-              const searchResult = [await getKravByKravNumberAndVersion(kravNummerMedVersjon[0], kravNummerMedVersjon[1])].filter((k) => k && k.status !== KravStatus.UTGAATT)
-              if (typeof searchResult[0] !== 'undefined') {
-                const mappedResult = [
-                  {
-                    id: searchResult[0].id,
-                    sortKey: searchResult[0].navn,
-                    label: <SearchLabel name={kravName(searchResult[0])} type={'Krav'} backgroundColor={searchResultColor.kravBackground} />,
-                    type: ObjectType.Krav,
-                  },
-                ]
-
-                searches.push((async () => add(mappedResult))())
-              }
-            }
-          }
-
-          if (type === 'all' || type === ObjectType.Behandling) {
-            searches.push((async () => add((await searchBehandling(search)).map(behandlingMap)))())
-          }
-          if (type === 'all' || type === ObjectType.EtterlevelseDokumentasjon) {
-            searches.push((async () => add((await searchEtterlevelsedokumentasjon(search)).map(EtterlevelseDokumentasjonMap)))())
-          }
-
-          await Promise.all(searches)
-          setLoading(false)
-        })()
-      }
+        await Promise.all(searches)
+        setLoading(false)
+      })()
     }
+
   }, [search, type])
   return [setSearch, searchResult, loading, type, setType] as [(text: string) => void, SearchItem[], boolean, SearchType, (type: SearchType) => void]
 }
@@ -343,49 +331,26 @@ const MainSearchSelector = (props: SelectPropWithSetValue) => {
 
 const MainSearch = () => {
   const searchParam = useQueryParam('search')
-  const [setSearch, searchResult, loading, type, setType] = useMainSearch(searchParam)
-  const [filterClicked, setFilterClicked] = useState<boolean>(false)
-  const [value, setValue] = useState<Value>(searchParam ? [{ id: searchParam, label: searchParam }] : [])
-  const location = useLocation()
-  const navigate = useNavigate()
+  const [setSearch, searchResult, loading] = useMainSearch(searchParam)
+  const [value, setValue] = useState<String>('')
 
   const getNoResultMessage = () => {
     let msg = ''
-
-    if (!value.length || !value[0].id || (value[0].id && value[0].id.toString().length < 3)) {
+    if (value === '' || value.length < 3) {
       msg = 'Skriv minst tre bokstaver i søkefeltet.'
     } else if (!loading && !searchResult.length) {
-      msg = `Ingen treff: ${value[0].id}`
+      msg = `Ingen treff: ${value}`
     }
 
     return msg ? (
-      <Block
-        display="flex"
-        justifyContent="center"
-        color={ettlevColors.green800}
-        backgroundColor={ettlevColors.white}
-        $style={{
-          ...padding('12px', '24px'),
-          paddingTop: '0px',
-        }}
-      >
-        {msg}
-      </Block>
+      <div className="flex justify-center px-3">
+        <BodyShort className="text-surface-inverted">
+          {msg}
+        </BodyShort>
+      </div>
     ) : (
-      <Block />
+      <div />
     )
-  }
-
-  const filterOption = {
-    id: 'filter',
-    label: (
-      <Block>
-        <SelectType type={type} setType={setType} />
-        {getNoResultMessage()}
-      </Block>
-    ),
-    sortKey: 'filter',
-    type: '__ungrouped',
   }
 
   const [groupedSearchResult, setGroupedSearchResult] = useState<GroupedResult>({ __ungrouped: [] })
@@ -398,10 +363,6 @@ const MainSearch = () => {
       all: [],
       Behandling: [],
       Underavdeling: [],
-    }
-
-    if (value.length && value[0].id && value[0].id.toString().length > 2) {
-      groupedResults.__ungrouped.push(filterOption)
     }
 
     searchResult.forEach((r: SearchItem) => {
@@ -421,39 +382,74 @@ const MainSearch = () => {
     setGroupedSearchResult(groupedResults)
   }, [searchResult, loading])
 
+
   return (
-    <Block width="100%">
-      <Block display="flex" position="relative" alignItems="center" width={'100%'}>
-        <MainSearchSelector
-          id="search"
-          clearable
-          closeOnSelect={!filterClicked}
-          onClose={() => setType('all')}
-          size={SIZE.compact}
-          backspaceRemoves
-          startOpen={!!searchParam}
-          noResultsMsg={<Block color={ettlevColors.green800}>Skriv minst tre bokstaver i søkefeltet.</Block>}
-          autoFocus={location.pathname === '/'}
-          isLoading={loading}
-          maxDropdownHeight="400px"
-          searchable
-          type={TYPE.search}
-          options={groupedSearchResult}
-          placeholder={'Søk etter krav, dokumentasjon eller behandling'}
-          aria-label={'Søk etter krav, dokumentasjon eller behandling'}
-          value={value}
-          onOpen={() => setFilterClicked(true)}
-          onInputChange={(event) => {
-            if (event.currentTarget.value.toLowerCase().match(/b[0-9]+/)) {
-              setSearch('0' + event.currentTarget.value.substring(1))
+    <form
+      role="search"
+      onSubmit={(e) => e.preventDefault()}
+    >
+      <Search
+        label="Hoved søkefelt"
+        variant="simple"
+        placeholder="Søk"
+        size="medium"
+        onClear={() => { setValue('') }}
+        onChange={(params) => {
+          setValue(params)
+          if (params !== '' && params.length >= 3) {
+            if (params.toLowerCase().match(/b[0-9]+/)) {
+              setSearch('0' + params.substring(1))
             } else {
-              setSearch(event.currentTarget.value)
+              setSearch(params)
             }
-            setValue([{ id: event.currentTarget.value, label: event.currentTarget.value }])
-          }}
-          onChange={(params) => {
-            const item = params.value[0] as SearchItem
-            ;(async () => {
+          }
+        }}
+      />
+      <div>
+        {loading ?
+          <Loader size="medium" />
+          :
+          <div className="absolute bg-white">
+            {getNoResultMessage()}
+            <ul>
+
+            </ul>
+          </div>
+        }
+      </div>
+
+
+      {/* 
+      <MainSearchSelector
+        id="search"
+        clearable
+        closeOnSelect={!filterClicked}
+        onClose={() => setType('all')}
+        size={SIZE.compact}
+        backspaceRemoves
+        startOpen={!!searchParam}
+        noResultsMsg={<Block color={ettlevColors.green800}>Skriv minst tre bokstaver i søkefeltet.</Block>}
+        autoFocus={location.pathname === '/'}
+        isLoading={loading}
+        maxDropdownHeight="400px"
+        searchable
+        type={TYPE.search}
+        options={groupedSearchResult}
+        placeholder={'Søk etter krav, dokumentasjon eller behandling'}
+        aria-label={'Søk etter krav, dokumentasjon eller behandling'}
+        value={value}
+        onOpen={() => setFilterClicked(true)}
+        onInputChange={(event) => {
+          if (event.currentTarget.value.toLowerCase().match(/b[0-9]+/)) {
+            setSearch('0' + event.currentTarget.value.substring(1))
+          } else {
+            setSearch(event.currentTarget.value)
+          }
+          setValue([{ id: event.currentTarget.value, label: event.currentTarget.value }])
+        }}
+        onChange={(params) => {
+          const item = params.value[0] as SearchItem
+            ; (async () => {
               if (item && item.type !== '__ungrouped') {
                 setValue([item])
                 navigate(urlForObject(item.type, item.id))
@@ -462,12 +458,12 @@ const MainSearch = () => {
                 setFilterClicked(true)
               }
             })()
-          }}
-          filterOptions={(options) => options}
-          setValue={setValue}
-        />
-      </Block>
-    </Block>
+        }}
+        filterOptions={(options) => options}
+        setValue={setValue}
+      />
+       */}
+    </form>
   )
 }
 
